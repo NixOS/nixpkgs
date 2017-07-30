@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, kernel }:
+{ stdenv, fetchgit, fetchpatch, kernel }:
 
 stdenv.mkDerivation {
   name = "acpi-call-${kernel.version}";
@@ -8,6 +8,13 @@ stdenv.mkDerivation {
     rev = "ac67445bc75ec4fcf46ceb195fb84d74ad350d51";
     sha256 = "0jl19irz9x9pxab2qp4z8c3jijv2m30zhmnzi6ygbrisqqlg4c75";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/mkottman/acpi_call/pull/67.patch";
+      sha256 = "0z07apvdl8nvl8iwfk1sl1iidfjyx12fc0345bmp2nq1537kpbri";
+    })
+  ];
 
   hardeningDisable = [ "pic" ];
 

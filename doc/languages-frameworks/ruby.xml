@@ -4,10 +4,14 @@
 
 <title>Ruby</title>
 
-  <para>There currently is support to bundle applications that are packaged as Ruby gems. The utility "bundix" allows you to write a <filename>Gemfile</filename>, let bundler create a <filename>Gemfile.lock</filename>, and then convert
-  this into a nix expression that contains all Gem dependencies automatically.</para>
+<para>There currently is support to bundle applications that are packaged as
+Ruby gems. The utility "bundix" allows you to write a
+<filename>Gemfile</filename>, let bundler create a
+<filename>Gemfile.lock</filename>, and then convert this into a nix
+expression that contains all Gem dependencies automatically.
+</para>
 
-  <para>For example, to package sensu, we did:</para>
+<para>For example, to package sensu, we did:</para>
 
 <screen>
 <![CDATA[$ cd pkgs/servers/monitoring
@@ -38,14 +42,20 @@ bundlerEnv rec {
 }]]>
 </screen>
 
-<para>Please check in the <filename>Gemfile</filename>, <filename>Gemfile.lock</filename> and the <filename>gemset.nix</filename> so future updates can be run easily.
+<para>Please check in the <filename>Gemfile</filename>,
+<filename>Gemfile.lock</filename> and the
+<filename>gemset.nix</filename> so future updates can be run easily.
 </para>
 
-<para>For tools written in Ruby - i.e. where the desire is to install a package and then execute e.g. <command>rake</command> at the command line, there is an alternative builder called <literal>bundlerApp</literal>. Set up the <filename>gemset.nix</filename> the same way, and then, for example:
+<para>For tools written in Ruby - i.e. where the desire is to install
+a package and then execute e.g. <command>rake</command> at the command
+line, there is an alternative builder called <literal>bundlerApp</literal>.
+Set up the <filename>gemset.nix</filename> the same way, and then, for
+example:
 </para>
 
 <screen>
-  <![CDATA[{ lib, bundlerApp }:
+<![CDATA[{ lib, bundlerApp }:
 
 bundlerApp {
   pname = "corundum";
@@ -60,15 +70,33 @@ bundlerApp {
     platforms   = platforms.unix;
   };
 }]]>
+</screen>
 
-<para>The chief advantage of <literal>bundlerApp</literal> over <literal>bundlerEnv</literal> is the executables introduced in the environment are precisely those selected in the <literal>exes</literal> list, as opposed to <literal>bundlerEnv</literal> which adds all the executables made available by gems in the gemset, which can mean e.g. <command>rspec</command> or <command>rake</command> in unpredictable versions available from various packages.
+<para>The chief advantage of <literal>bundlerApp</literal> over
+<literal>bundlerEnv</literal> is the executables introduced in the
+environment are precisely those selected in the <literal>exes</literal>
+list, as opposed to <literal>bundlerEnv</literal> which adds all the
+executables made available by gems in the gemset, which can mean e.g.
+<command>rspec</command> or <command>rake</command> in unpredictable
+versions available from various packages.
+</para>
 
-<para>Resulting derivations for both builders also have two helpful attributes, <literal>env</literal> and <literal>wrapper</literal>. The first one allows one to quickly drop into
-<command>nix-shell</command> with the specified environment present. E.g. <command>nix-shell -A sensu.env</command> would give you an environment with Ruby preset
-so it has all the libraries necessary for <literal>sensu</literal> in its paths. The second one can be used to make derivations from custom Ruby scripts which have
-<filename>Gemfile</filename>s with their dependencies specified. It is a derivation with <command>ruby</command> wrapped so it can find all the needed dependencies.
-For example, to make a derivation <literal>my-script</literal> for a <filename>my-script.rb</filename> (which should be placed in <filename>bin</filename>) you should
-run <command>bundix</command> as specified above and then use <literal>bundlerEnv</literal> like this:</para>
+<para>Resulting derivations for both builders also have two helpful
+attributes, <literal>env</literal> and <literal>wrapper</literal>.
+The first one allows one to quickly drop into
+<command>nix-shell</command> with the specified environment present.
+E.g. <command>nix-shell -A sensu.env</command> would give you an
+environment with Ruby preset so it has all the libraries necessary
+for <literal>sensu</literal> in its paths. The second one can be
+used to make derivations from custom Ruby scripts which have
+<filename>Gemfile</filename>s with their dependencies specified. It is
+a derivation with <command>ruby</command> wrapped so it can find all
+the needed dependencies. For example, to make a derivation
+<literal>my-script</literal> for a <filename>my-script.rb</filename>
+(which should be placed in <filename>bin</filename>) you should run
+<command>bundix</command> as specified above and then use
+<literal>bundlerEnv</literal> like this:
+</para>
 
 <programlisting>
 <![CDATA[let env = bundlerEnv {

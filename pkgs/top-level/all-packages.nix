@@ -997,6 +997,8 @@ with pkgs;
 
   f3 = callPackage ../tools/filesystems/f3 { };
 
+  facedetect = callPackage ../tools/graphics/facedetect { };
+
   facter = callPackage ../tools/system/facter {
     boost = boost160;
   };
@@ -1909,7 +1911,7 @@ with pkgs;
   ferm = callPackage ../tools/networking/ferm { };
 
   fgallery = callPackage ../tools/graphics/fgallery {
-    inherit (perlPackages) ImageExifTool JSON;
+    inherit (perlPackages) ImageExifTool CpanelJSONXS;
   };
 
   flannel = callPackage ../tools/networking/flannel { };
@@ -13452,9 +13454,7 @@ with pkgs;
 
   batti = callPackage ../applications/misc/batti { };
 
-  baudline = callPackage ../applications/audio/baudline {
-    jack = jack1;
-  };
+  baudline = callPackage ../applications/audio/baudline { };
 
 
   bazaar = callPackage ../applications/version-management/bazaar { };

@@ -164,8 +164,6 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         path = [ data.package ];
-        restartTriggers = [ config.environment.etc."tinc/${network}/tinc.conf".source ]
-          ++ mapAttrsToList (host: _ : config.environment.etc."tinc/${network}/hosts/${host}".source) data.hosts;
         serviceConfig = {
           Type = "simple";
           PIDFile = "/run/tinc.${network}.pid";

@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   name = "slop-${version}";
-  version = "6.3.47";
+  version = "6.3.48";
 
   src = fetchFromGitHub {
     owner = "naelstrof";
     repo = "slop";
     rev = "v${version}";
-    sha256 = "05saxp5z2saq6b5hslxdc5kd7ln00svr5pazabcnchzydfhnkmsd";
+    sha256 = "152xnisdbwx2zh1wzspy8djm937d1cm9zvcz1x22z8ia50ajm107";
   };
 
   nativeBuildInputs = [ cmake ];
