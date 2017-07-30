@@ -20,12 +20,35 @@ in
 
   options = {
 
+    networking.fqdn = lib.mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "foo.example.com";
+      description = ''
+        Fully qualified domain name, if any.
+      '';
+    };
+
+    networking.hosts = lib.mkOption {
+      type = types.attrsOf ( types.listOf types.str );
+      default = {};
+      example = literalExample ''
+        {
+          "127.0.0.1" = [ "foo.bar.baz" ];
+          "192.168.0.2" = [ "fileserver.local" "nameserver.local" ];
+        };
+      '';
+      description = ''
+        Locally defined maps of hostnames to IP addresses.
+      '';
+    };
+
     networking.extraHosts = lib.mkOption {
       type = types.lines;
       default = "";
       example = "192.168.0.1 lanlocalhost";
       description = ''
-        Additional entries to be appended to <filename>/etc/hosts</filename>.
+        Additional verbatim entries to be appended to <filename>/etc/hosts</filename>.
       '';
     };
 
@@ -176,6 +199,9 @@ in
 
   config = {
 
+    warnings = optional (cfg.extraHosts != "")
+      "networking.extraHosts is deprecated, please use networking.hosts instead";
+
     environment.etc =
       { # /etc/services: TCP/UDP port assignments.
         "services".source = pkgs.iana-etc + "/etc/services";
@@ -188,11 +214,23 @@ in
 
         # /etc/hosts: Hostname-to-IP mappings.
         "hosts".text =
+          let oneToString = set : ip : ip + " " + concatStringsSep " " ( getAttr ip set );
+              allToString = set : concatMapStringsSep "\n" ( oneToString set ) ( attrNames set );
+              userLocalHosts = optionalString
+                ( builtins.hasAttr "127.0.0.1" cfg.hosts )
+                ( concatStringsSep " " ( remove "localhost" cfg.hosts."127.0.0.1" ));
+              userLocalHosts6 = optionalString
+                ( builtins.hasAttr "::1" cfg.hosts )
+                ( concatStringsSep " " ( remove "localhost" cfg.hosts."::1" ));
+              otherHosts = allToString ( removeAttrs cfg.hosts [ "127.0.0.1" "::1" ]);
+              maybeFQDN = optionalString ( cfg.fqdn != null ) cfg.fqdn;
+          in
           ''
-            127.0.0.1 localhost
+            127.0.0.1 ${maybeFQDN} ${userLocalHosts} localhost
             ${optionalString cfg.enableIPv6 ''
-              ::1 localhost
+              ::1 ${maybeFQDN} ${userLocalHosts6} localhost
             ''}
+            ${otherHosts}
             ${cfg.extraHosts}
           '';
 
