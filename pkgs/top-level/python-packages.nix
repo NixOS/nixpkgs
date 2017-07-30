@@ -1926,6 +1926,7 @@ in {
     meta = {
       description = "A comic strip downloader and archiver";
       homepage = http://dosage.rocks/;
+      broken = true; # ctypes error
     };
   };
 
