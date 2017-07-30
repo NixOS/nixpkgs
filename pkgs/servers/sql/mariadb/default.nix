@@ -128,9 +128,7 @@ everything = stdenv.mkDerivation (common // {
   buildInputs = common.buildInputs ++ [
     xz lzo lz4 bzip2 snappy
     libxml2 boost judy libevent cracklib
-  ]
-    ++ optionals (stdenv.isLinux && !stdenv.isArm) [ numactl ]
-    ;
+  ] ++ optionals (stdenv.isLinux && !stdenv.isArm) [ numactl ];
 
   cmakeFlags = common.cmakeFlags ++ [
     "-DMYSQL_DATADIR=/var/lib/mysql"
@@ -164,6 +162,8 @@ everything = stdenv.mkDerivation (common // {
     rm -r "$out"/{mysql-test,sql-bench,data} # Don't need testing data
     rm "$out"/share/man/man1/mysql-test-run.pl.1
   '';
+
+  CXXFLAGS = optionalString stdenv.isi686 "-fpermissive";
 });
 
 connector-c = stdenv.mkDerivation rec {
