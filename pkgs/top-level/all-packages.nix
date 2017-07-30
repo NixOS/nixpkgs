@@ -15740,6 +15740,8 @@ with pkgs;
     miniupnpc = miniupnpc_1;
   };
 
+  qdirstat = libsForQt5.callPackage ../applications/misc/qdirstat {};
+
   qemu = callPackage ../applications/virtualization/qemu {
     inherit (darwin.apple_sdk.frameworks) CoreServices Cocoa;
     inherit (darwin.stubs) rez setfile;
