@@ -5732,7 +5732,7 @@ with pkgs;
   jre = jre8;
   jre_headless = jre8_headless;
 
-  openshot-qt = libsForQt56.callPackage ../applications/video/openshot-qt { };
+  openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt { };
 
   oraclejdk = pkgs.jdkdistro true false;
 
