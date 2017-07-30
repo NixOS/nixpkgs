@@ -2491,7 +2491,7 @@ with pkgs;
 
   host = bind.host;
 
-  hotspot = libsForQt56.callPackage ../development/tools/analysis/hotspot { };
+  hotspot = libsForQt5.callPackage ../development/tools/analysis/hotspot { };
 
   hping = callPackage ../tools/networking/hping { };
 
