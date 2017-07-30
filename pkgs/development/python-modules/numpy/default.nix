@@ -21,6 +21,7 @@ buildPythonPackage rec {
 
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
+    export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
   '';
 
   preBuild = ''
@@ -31,6 +32,8 @@ buildPythonPackage rec {
     library_dirs = ${blas}/lib
     EOF
   '';
+
+  enableParallelBuilding = true;
 
   checkPhase = ''
     runHook preCheck
