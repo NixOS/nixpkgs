@@ -29,7 +29,7 @@ let
           for prg in *; do
             if [ -f "$prg" ]; then
               rm -f "$out/bin/$prg"
-              makeWrapper "$path/bin/$prg" "$out/bin/$prg" --set PYTHONHOME "$out"
+              makeWrapper "$path/bin/$prg" "$out/bin/$prg" --set PYTHONHOME "$out" --set PYTHONNOUSERSITE "true"
             fi
           done
         fi
