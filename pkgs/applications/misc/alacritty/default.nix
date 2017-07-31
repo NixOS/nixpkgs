@@ -47,6 +47,11 @@ buildRustPackage rec {
     pkgconfig
   ] ++ rpathLibs;
 
+  patchPhase = ''
+    substituteInPlace copypasta/src/x11.rs \
+      --replace Command::new\(\"xclip\"\) Command::new\(\"${xclip}/bin/xclip\"\)
+  '';
+
   installPhase = ''
     mkdir -p $out/bin
     for f in $(find target/release -maxdepth 1 -type f); do
