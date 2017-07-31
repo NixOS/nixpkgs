@@ -15396,7 +15396,9 @@ in
 
   pcm = callPackage ../os-specific/linux/pcm { };
 
-  ima-evm-utils = callPackage ../os-specific/linux/ima-evm-utils { };
+  ima-evm-utils = callPackage ../os-specific/linux/ima-evm-utils {
+    openssl = openssl_1_0_2;
+  };
 
   intel2200BGFirmware = callPackage ../os-specific/linux/firmware/intel2200BGFirmware { };
 
