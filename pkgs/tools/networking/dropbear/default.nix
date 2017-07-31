@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "dropbear-2016.74";
+  name = "dropbear-2017.75";
 
   src = fetchurl {
     url = "http://matt.ucc.asn.au/dropbear/releases/${name}.tar.bz2";
-    sha256 = "14c8f4gzixf0j9fkx68jgl85q7b05852kk0vf09gi6h0xmafl817";
+    sha256 = "1309cm2aw62n9m3h38prvgsqr8bj85hfasgnvwkd42cp3k5ivg3c";
   };
 
   dontDisableStatic = enableStatic;

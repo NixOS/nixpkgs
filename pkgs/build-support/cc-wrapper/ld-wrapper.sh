@@ -64,7 +64,9 @@ extra+=($NIX_LDFLAGS_AFTER $NIX_LDFLAGS_HARDEN)
 # Add all used dynamic libraries to the rpath.
 if [ "$NIX_DONT_SET_RPATH" != 1 ]; then
 
-    libPath=""
+    declare -A libDirsSeen
+    declare -a libDirs
+
     addToLibPath() {
         local path="$1"
         if [ "${path:0:1}" != / ]; then return 0; fi
@@ -76,29 +78,27 @@ if [ "$NIX_DONT_SET_RPATH" != 1 ]; then
                 fi
                 ;;
         esac
-        case $libPath in
-            *\ $path\ *) return 0 ;;
-        esac
-        libPath="$libPath $path "
+        if [[ -z ${libDirsSeen[$path]} ]]; then
+            libDirs+=("$path")
+            libDirsSeen[$path]=1
+        fi
     }
+
+    declare -A rpathsSeen
+    declare -a rpaths
 
     addToRPath() {
         # If the path is not in the store, don't add it to the rpath.
         # This typically happens for libraries in /tmp that are later
         # copied to $out/lib.  If not, we're screwed.
         if [ "${1:0:${#NIX_STORE}}" != "$NIX_STORE" ]; then return 0; fi
-        case $rpath in
-            *\ $1\ *) return 0 ;;
-        esac
-        rpath="$rpath $1 "
+        if [[ -z ${rpathsSeen[$1]} ]]; then
+            rpaths+=("$1")
+            rpathsSeen[$1]=1
+        fi
     }
 
-    libs=""
-    addToLibs() {
-        libs="$libs $1"
-    }
-
-    rpath=""
+    declare -a libs
 
     # First, find all -L... switches.
     allParams=("${params[@]}" ${extra[@]})
@@ -112,10 +112,10 @@ if [ "$NIX_DONT_SET_RPATH" != 1 ]; then
             addToLibPath ${p2}
             n=$((n + 1))
         elif [ "$p" = -l ]; then
-            addToLibs ${p2}
+            libs+=(${p2})
             n=$((n + 1))
         elif [ "${p:0:2}" = -l ]; then
-            addToLibs ${p:2}
+            libs+=(${p:2})
         elif [ "$p" = -dynamic-linker ]; then
             # Ignore the dynamic linker argument, or it
             # will get into the next 'elif'. We don't want
@@ -135,9 +135,8 @@ if [ "$NIX_DONT_SET_RPATH" != 1 ]; then
     # so, add the directory to the rpath.
     # It's important to add the rpath in the order of -L..., so
     # the link time chosen objects will be those of runtime linking.
-
-    for i in $libPath; do
-        for j in $libs; do
+    for i in ${libDirs[@]}; do
+        for j in ${libs[@]}; do
             if [ -f "$i/lib$j.so" ]; then
                 addToRPath $i
                 break
@@ -145,10 +144,9 @@ if [ "$NIX_DONT_SET_RPATH" != 1 ]; then
         done
     done
 
-
     # Finally, add `-rpath' switches.
-    for i in $rpath; do
-        extra+=(-rpath $i)
+    for i in ${rpaths[@]}; do
+        extra+=(-rpath "$i")
     done
 fi
 

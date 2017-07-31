@@ -13,7 +13,11 @@ in rec {
     };
 
     meta = with stdenv.lib; {
-      description = "The Official IDE for Android";
+      description = "The Official IDE for Android (stable version)";
+      longDescription = ''
+        Android Studio is the official IDE for Android app development, based on
+        IntelliJ IDEA.
+      '';
       homepage = https://developer.android.com/studio/index.html;
       license = licenses.asl20;
       platforms = [ "x86_64-linux" ];
@@ -27,17 +31,18 @@ in rec {
 
   preview = mkStudio rec {
     pname = "android-studio-preview";
-    version = "3.0.0.6";
-    build = "171.4182969";
+    version = "3.0.0.7"; # This is actually "Android Studio 3.0 Canary 8"
+    build = "171.4195411";
 
     src = fetchurl {
       url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.zip";
-      sha256 = "0s26k5qr0qg6az77yw2mvnhavwi4aza4ifvd45ljank8aqr6sp5i";
+      sha256 = "1yzhr845shjq2cd5hcanppxmnj34ky9ry755y4ywf5f1w5ha5xzj";
     };
 
     meta = stable.meta // {
+      description = "The Official IDE for Android (preview version)";
       homepage = https://developer.android.com/studio/preview/index.html;
-      maintainers = with stdenv.lib.maintainers; [ tomsmeets ];
+      maintainers = with stdenv.lib.maintainers; [ primeos tomsmeets ];
     };
   } {
     fontsConf = makeFontsConf {

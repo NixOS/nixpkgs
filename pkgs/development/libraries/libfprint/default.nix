@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libusb, pixman, glib, nss, nspr, gdk_pixbuf }:
 
 stdenv.mkDerivation rec {
-  name = "libfprint-0.6.0";
+  name = "libfprint-0.7.0";
 
   src = fetchurl {
-    url = "http://people.freedesktop.org/~hadess/${name}.tar.xz";
-    sha256 = "1giwh2z63mn45galsjb59rhyrvgwcy01hvvp4g01iaa2snvzr0r5";
+    url = "https://people.freedesktop.org/~anarsoul/${name}.tar.xz";
+    sha256 = "1wzi12zvdp8sw3w5pfbd9cwz6c71627bkr88rxv6gifbyj6fwgl6";
   };
 
   buildInputs = [ libusb pixman glib nss nspr gdk_pixbuf ];

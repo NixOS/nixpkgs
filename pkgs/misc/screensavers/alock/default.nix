@@ -2,16 +2,16 @@
 , libX11, pam, libgcrypt, libXrender, imlib2 }:
 
 stdenv.mkDerivation rec {
-  date = "20160713";
+  date = "20170720";
   name = "alock-${date}";
 
-  # Please consider https://github.com/Arkq/alock/issues/5
-  # before upgrading past this revision.
   src = fetchgit {
     url = https://github.com/Arkq/alock;
-    rev = "329ac152426639fe3c9e53debfc3f973c2988f50";
-    sha256 = "078nf2afyqv7hpk5kw50i57anm7qqd8jnczygnwimh2q40bljm7x";
+    rev = "2035e1d4a2293432f5503e82d10f899232eb0f38";
+    sha256 = "1by954fjn0ryqda89zlmq3gclakg3gz7zy1wjrbgw4lzsk538va6";
   };
+
+  PAM_DEFAULT_SERVICE = "login";
 
   configureFlags = [
     "--enable-pam"

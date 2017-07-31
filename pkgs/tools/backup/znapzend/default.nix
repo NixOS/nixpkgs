@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, zfs, mbuffer, perl, perlPackages, wget, autoconf, automake }:
 
 let
-  version = "0.15.7";
-  checksum = "1xb94kxfq9sm3g0s6wpyyz6h2aihgca5gyybg0a5r8sar7yz97j0";
+  version = "0.17.0";
+  checksum = "0cncwkiw0w2am7gwi01p6ln87zgg1x6blfyxx7n7x8m1mv6704hl";
 in
 stdenv.mkDerivation rec {
   name = "znapzend-${version}";

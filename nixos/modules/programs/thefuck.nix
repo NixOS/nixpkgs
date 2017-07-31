@@ -3,7 +3,12 @@
 with lib;
 
 let
-  cfg = config.programs.thefuck;
+  prg = config.programs;
+  cfg = prg.thefuck;
+
+  initScript = ''
+    eval $(${pkgs.thefuck}/bin/thefuck --alias ${cfg.alias})
+  '';
 in
   {
     options = {
@@ -24,8 +29,11 @@ in
 
     config = mkIf cfg.enable {
       environment.systemPackages = with pkgs; [ thefuck ];
-      environment.shellInit = ''
-        eval $(${pkgs.thefuck}/bin/thefuck --alias ${cfg.alias})
+      environment.shellInit = initScript;
+
+      programs.zsh.shellInit = mkIf prg.zsh.enable initScript;
+      programs.fish.shellInit = mkIf prg.fish.enable ''
+        ${pkgs.thefuck}/bin/thefuck --alias | source
       '';
     };
   }

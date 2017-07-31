@@ -1,3 +1,4 @@
+export PATH=
 for i in $initialPath; do
     if [ "$i" = / ]; then i=; fi
     PATH=$PATH${PATH:+:}$i/bin
@@ -15,5 +16,5 @@ cat "$setup" >> $out/setup
 # in stdenv.
 mkdir $out/nix-support
 if [ "$propagatedUserEnvPkgs" ]; then
-    printf '%s\n' $propagatedUserEnvPkgs > $out/nix-support/propagated-user-env-packages
+    printf '%s ' $propagatedUserEnvPkgs > $out/nix-support/propagated-user-env-packages
 fi

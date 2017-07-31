@@ -3,11 +3,11 @@ let
   s = # Generated upstream information
   rec {
     baseName="firejail";
-    version="0.9.44.10";
+    version="0.9.48";
     name="${baseName}-${version}";
-    hash="19wln3h54wcscqgcmkm8sprdh7vrn5k91rr0hagv055y1i52c7mj";
-    url="https://netix.dl.sourceforge.net/project/firejail/firejail/firejail-0.9.44.10.tar.xz";
-    sha256="19wln3h54wcscqgcmkm8sprdh7vrn5k91rr0hagv055y1i52c7mj";
+    hash="02a74nx8p2gbpd6ffnr52p02pxxllw3yy5fy4083a77r3wia8zb3";
+    url="https://vorboss.dl.sourceforge.net/project/firejail/firejail/firejail-0.9.48.tar.xz";
+    sha256="02a74nx8p2gbpd6ffnr52p02pxxllw3yy5fy4083a77r3wia8zb3";
   };
   buildInputs = [
     which
@@ -20,6 +20,13 @@ stdenv.mkDerivation {
     inherit (s) url sha256;
     name = "${s.name}.tar.bz2";
   };
+
+  prePatch = ''
+    # Allow whitelisting ~/.nix-profile
+    substituteInPlace etc/firejail.config --replace \
+      '# follow-symlink-as-user yes' \
+      'follow-symlink-as-user no'
+  '';
 
   preConfigure = ''
     sed -e 's@/bin/bash@${stdenv.shell}@g' -i $( grep -lr /bin/bash .)

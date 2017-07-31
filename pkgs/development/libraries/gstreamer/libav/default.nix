@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "http://gstreamer.freedesktop.org";
     license = stdenv.lib.licenses.lgpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 
   src = fetchurl {

@@ -55,7 +55,7 @@ while [ $n -lt ${#params[*]} ]; do
         nonFlagArgs=1
     elif [ "$p" = -m32 ]; then
         if [ -e @out@/nix-support/dynamic-linker-m32 ]; then
-            NIX_LDFLAGS="$NIX_LDFLAGS -dynamic-linker $(cat @out@/nix-support/dynamic-linker-m32)"
+            NIX_LDFLAGS+=" -dynamic-linker $(cat @out@/nix-support/dynamic-linker-m32)"
         fi
     fi
     n=$((n + 1))
@@ -111,9 +111,9 @@ fi
 
 if [[ "$isCpp" = 1 ]]; then
     if [[ "$cppInclude" = 1 ]]; then
-        NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE ${NIX_CXXSTDLIB_COMPILE-@default_cxx_stdlib_compile@}"
+        NIX_CFLAGS_COMPILE+=" ${NIX_CXXSTDLIB_COMPILE-@default_cxx_stdlib_compile@}"
     fi
-    NIX_CFLAGS_LINK="$NIX_CFLAGS_LINK $NIX_CXXSTDLIB_LINK"
+    NIX_CFLAGS_LINK+=" $NIX_CXXSTDLIB_LINK"
 fi
 
 LD=@ldPath@/ld

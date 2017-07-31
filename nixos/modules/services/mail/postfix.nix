@@ -267,7 +267,7 @@ let
       lines = [ sep (formatLine labels) (formatLine labelDefaults) sep ];
     in concatStringsSep "\n" lines;
 
-  in formattedLabels + "\n" + concatMapStringsSep "\n" formatLine masterCf + "\n";
+  in formattedLabels + "\n" + concatMapStringsSep "\n" formatLine masterCf + "\n" + cfg.extraMasterConf;
 
   headerCheckOptions = { ... }:
   {
@@ -838,6 +838,9 @@ in
     })
     (mkIf (cfg.extraConfig != "") {
       warnings = [ "The services.postfix.extraConfig option was deprecated. Please use services.postfix.config instead." ];
+    })
+    (mkIf (cfg.extraMasterConf != "") {
+      warnings = [ "The services.postfix.extraMasterConf option was deprecated. Please use services.postfix.masterConfig instead." ];
     })
   ]);
 }

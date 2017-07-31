@@ -22688,6 +22688,25 @@ in
     };
     production = true;
   };
+  dhcp = nodeEnv.buildNodePackage {
+    name = "dhcp";
+    packageName = "dhcp";
+    version = "0.2.9";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/dhcp/-/dhcp-0.2.9.tgz";
+      sha1 = "204208be1cef2788d528744fb263f60a528363a2";
+    };
+    dependencies = [
+      sources."minimist-1.2.0"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "A DHCP server written in JavaScript";
+      homepage = https://github.com/infusion/node-dhcp;
+      license = "MIT OR GPL-2.0";
+    };
+    production = true;
+  };
   dnschain = nodeEnv.buildNodePackage {
     name = "dnschain";
     packageName = "dnschain";

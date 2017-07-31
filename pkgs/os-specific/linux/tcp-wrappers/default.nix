@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
     patches="$(cat debian/patches/series | sed 's,^,debian/patches/,') $patches"
   '';
 
-  makeFlags = [ "REAL_DAEMON_DIR=$(out)/bin" "linux" ];
+  makeFlags = [ "STRINGS=" "REAL_DAEMON_DIR=$(out)/bin" "linux" ];
 
   installPhase = ''
     mkdir -p "$out/bin"

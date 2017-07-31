@@ -6,7 +6,7 @@
 let
   ghc = ghcWithPackages (pkgs: with pkgs; [
           network vector utf8-string bytestring-show random hslogger
-          dataenc SHA entropy zlib_0_5_4_2
+          dataenc SHA entropy pkgs.zlib
         ]);
 in
 stdenv.mkDerivation rec {
