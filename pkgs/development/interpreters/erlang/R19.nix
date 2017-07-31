@@ -7,4 +7,6 @@ mkDerivation rec {
   prePatch = ''
     substituteInPlace configure.in --replace '`sw_vers -productVersion`' '10.10'
   '';
+
+  meta.broken = true; # broken with openssl 1.1
 }

@@ -32,4 +32,5 @@ mkDerivation rec {
       ln -s "$i" "$out/share/man/''${prefix##*/}/''${i##*/}erl"
     done
   '';
+  meta.broken = true; # broken with openssl 1.1
 }
