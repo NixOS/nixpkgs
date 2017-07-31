@@ -9041,8 +9041,6 @@ with pkgs;
 
   libmrss = callPackage ../development/libraries/libmrss { };
 
-  libmsn = callPackage ../development/libraries/libmsn { };
-
   libmspack = callPackage ../development/libraries/libmspack { };
 
   libmusicbrainz2 = callPackage ../development/libraries/libmusicbrainz/2.x.nix { };
