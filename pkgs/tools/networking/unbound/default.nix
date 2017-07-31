@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, nettle, expat, libevent }:
+{ stdenv, fetchurl, openssl, nettle, expat, libevent, dns-root-data }:
 
 stdenv.mkDerivation rec {
   name = "unbound-${version}";
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--sbindir=\${out}/bin"
+    "--with-rootkey-file=${dns-root-data}/root.key"
     "--enable-pie"
     "--enable-relro-now"
   ];

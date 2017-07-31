@@ -97,6 +97,7 @@ let
       chmod +x configure
       substituteInPlace configure --replace /bin/bash "$shell"
       substituteInPlace hotspot/make/linux/adlc_updater --replace /bin/sh "$shell"
+      substituteInPlace hotspot/make/linux/makefiles/dtrace.make --replace /usr/include/sys/sdt.h "/no-such-path"
     '';
 
     configureFlags = [
@@ -202,7 +203,7 @@ let
       # any package that depends on the JRE has $CLASSPATH set up
       # properly.
       mkdir -p $jre/nix-support
-      echo -n "${setJavaClassPath}" > $jre/nix-support/propagated-native-build-inputs
+      printWords ${setJavaClassPath} > $jre/nix-support/propagated-native-build-inputs
 
       # Set JAVA_HOME automatically.
       mkdir -p $out/nix-support

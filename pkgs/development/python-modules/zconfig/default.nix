@@ -2,6 +2,8 @@
 , fetchPypi
 , buildPythonPackage
 , zope_testrunner
+, manuel
+, docutils
 }:
 
 buildPythonPackage rec {
@@ -16,6 +18,7 @@ buildPythonPackage rec {
 
   patches = [ ./skip-broken-test.patch ];
 
+  buildInputs = [ manuel docutils ];
   propagatedBuildInputs = [ zope_testrunner ];
 
   meta = with stdenv.lib; {

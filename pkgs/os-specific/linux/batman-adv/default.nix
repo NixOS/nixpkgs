@@ -1,13 +1,13 @@
 { stdenv, fetchurl, kernel }:
 
-let base = "batman-adv-2017.1"; in
+let base = "batman-adv-2017.2"; in
 
 stdenv.mkDerivation rec {
   name = "${base}-${kernel.version}";
 
   src = fetchurl {
     url = "http://downloads.open-mesh.org/batman/releases/${base}/${base}.tar.gz";
-    sha256 = "05cck0mlg8xsvbra69x6i25xclsq1xc49dggxq81gi086c14h67c";
+    sha256 = "0krr6waxkmms23cacfzngddxy1vq577s54wy2fgx6lyb4579g1yl";
   };
 
   hardeningDisable = [ "pic" ];

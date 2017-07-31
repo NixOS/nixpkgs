@@ -1,4 +1,4 @@
-{stdenv, fetchurl, openssl, perl}:
+{stdenv, fetchurl, openssl, perl, dns-root-data}:
 
 stdenv.mkDerivation rec {
   pname = "ldns";
@@ -15,15 +15,27 @@ stdenv.mkDerivation rec {
     patchShebangs doc/doxyparse.pl
   '';
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [ "out" "dev" "man" "examples" ];
 
   nativeBuildInputs = [ perl ];
   buildInputs = [ openssl ];
 
-  configureFlags = [ "--with-ssl=${openssl.dev}" "--with-drill"];
+  configureFlags = [
+    "--with-ssl=${openssl.dev}"
+    "--with-trust-anchor=${dns-root-data}/root.key"
+    "--with-drill"
+    "--disable-gost"
+  ];
 
   postInstall = ''
     moveToOutput "bin/ldns-config" "$dev"
+
+    pushd examples
+    configureFlagsArray+=( "--bindir=$examples/bin" )
+    configurePhase
+    make
+    make install
+    popd
   '';
 
   meta = with stdenv.lib; {

@@ -68,6 +68,8 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
   '';
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "Translator library for raster geospatial data formats";
     homepage = http://www.gdal.org/;

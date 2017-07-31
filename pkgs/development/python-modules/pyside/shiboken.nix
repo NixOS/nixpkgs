@@ -1,4 +1,4 @@
-{ lib, fetchurl, cmake, buildPythonPackage, libxml2, libxslt, pysideApiextractor, pysideGeneratorrunner, python, sphinx, qt4, isPy3k, isPy35 }:
+{ lib, fetchurl, cmake, buildPythonPackage, libxml2, libxslt, pysideApiextractor, pysideGeneratorrunner, python, sphinx, qt4, isPy3k, isPy35, isPy36 }:
 
 # This derivation provides a Python module and should therefore be called via `python-packages.nix`.
 # Python 3.5 is not supported: https://github.com/PySide/Shiboken/issues/77
@@ -23,7 +23,7 @@ with lib; buildPythonPackage rec {
     substituteInPlace generator/CMakeLists.txt --replace \
       \"$\{GENERATORRUNNER_PLUGIN_DIR}\" lib/generatorrunner/
   '';
-  patches = optional isPy35 ./shiboken_py35.patch;
+  patches = optional (isPy35 || isPy36) ./shiboken_py35.patch;
 
   cmakeFlags = optionals isPy3k [
     "-DUSE_PYTHON3=TRUE" "-DPYTHON3_LIBRARY=${python}/lib/libpython3.so"

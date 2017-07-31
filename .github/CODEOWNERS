@@ -1,0 +1,20 @@
+# CODEOWNERS file
+#
+# This file is used to describe who owns what in this repository. This file does not
+# replace `meta.maintainers` but is instead used for other things than derivations
+# and modules, like documentation, package sets, and other assets.
+#
+# For documentation on this file, see https://help.github.com/articles/about-codeowners/
+# Mentioned users will get code review requests.
+
+# Python-related code and docs
+pkgs/top-level/python-packages.nix	@FRidh
+pkgs/development/interpreters/python/*	@FRidh
+pkgs/development/python-modules/*	@FRidh
+doc/languages-frameworks/python.md	@FRidh
+
+# Darwin-related
+pkgs/stdenv/darwin/*    @copumpkin @LnL7
+pkgs/os-specific/darwin/*   @LnL7
+pkgs/os-specific/darwin/apple-source-releases/* @copumpkin
+

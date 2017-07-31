@@ -13,7 +13,11 @@ in rec {
     };
 
     meta = with stdenv.lib; {
-      description = "The Official IDE for Android";
+      description = "The Official IDE for Android (stable version)";
+      longDescription = ''
+        Android Studio is the official IDE for Android app development, based on
+        IntelliJ IDEA.
+      '';
       homepage = https://developer.android.com/studio/index.html;
       license = licenses.asl20;
       platforms = [ "x86_64-linux" ];
@@ -36,8 +40,9 @@ in rec {
     };
 
     meta = stable.meta // {
+      description = "The Official IDE for Android (preview version)";
       homepage = https://developer.android.com/studio/preview/index.html;
-      maintainers = with stdenv.lib.maintainers; [ tomsmeets ];
+      maintainers = with stdenv.lib.maintainers; [ primeos tomsmeets ];
     };
   } {
     fontsConf = makeFontsConf {

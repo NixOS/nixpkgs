@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jbidwatcher";
-  version = "2.5.2";
+  version = "2.5.6";
 
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "http://www.jbidwatcher.com/download/JBidwatcher-${version}.jar";
-    sha256 = "07w75ryn8inm5i1829gabr8lifbycz40ynzsyaw22yzqk5if1n9l";
+    sha256 = "1cw59wh72w1zzibs8x64dma3jc4hry64wjksqs52nc3vpnf0fzfr";
   };
 
   buildInputs = [ java ];
