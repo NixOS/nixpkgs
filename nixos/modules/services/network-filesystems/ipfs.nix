@@ -8,6 +8,7 @@ let
   cfg = config.services.ipfs;
 
   ipfsFlags = toString ([
+    (optionalString (cfg.serviceFdlimit != null) "--manage-fdlimit=true")
     (optionalString cfg.autoMount   "--mount")
     (optionalString cfg.autoMigrate "--migrate")
     (optionalString cfg.enableGC    "--enable-gc")
@@ -129,6 +130,15 @@ in
         default = [];
       };
 
+      serviceFdlimit = mkOption {
+        type = types.nullOr types.int;
+        default = null;
+        description = ''
+          The fdlimit for the IPFS systemd unit or `null` to have the daemon attempt to manage it.
+        '';
+        example = 256*1024;
+      };
+
     };
   };
 
@@ -219,7 +229,7 @@ in
         Group = cfg.group;
         Restart = "on-failure";
         RestartSec = 1;
-      };
+      } // optionalAttrs (cfg.serviceFdlimit != null) { LimitNOFILE = cfg.serviceFdlimit; };
     };
 
     systemd.services.ipfs-offline = {
@@ -242,7 +252,7 @@ in
         Group = cfg.group;
         Restart = "on-failure";
         RestartSec = 1;
-      };
+      } // optionalAttrs (cfg.serviceFdlimit != null) { LimitNOFILE = cfg.serviceFdlimit; };
     };
 
     systemd.services.ipfs-norouting = {
@@ -265,7 +275,7 @@ in
         Group = cfg.group;
         Restart = "on-failure";
         RestartSec = 1;
-      };
+      } // optionalAttrs (cfg.serviceFdlimit != null) { LimitNOFILE = cfg.serviceFdlimit; };
     };
 
   };
