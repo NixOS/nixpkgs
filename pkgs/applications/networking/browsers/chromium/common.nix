@@ -57,10 +57,11 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   gnSystemLibraries = [
-    "flac" "libwebp" "snappy" "yasm"
-  ]
-  # versions >= 59 don't build with system libxml / libxslt
-  ++ optionals (versionOlder upstream-info.version "59.0.0.0") [ "libxml" "libxslt" ];
+    "flac" "harfbuzz-ng" "libwebp" "libxslt" "yasm" "opus" "snappy" "libpng" "zlib"
+    # "libjpeg" # fails with multiple undefined references to chromium_jpeg_*
+    # "re2" # fails with linker errors
+    # "ffmpeg" # https://crbug.com/731766
+  ];
 
   opusWithCustomModes = libopus.override {
     withCustomModes = true;
@@ -72,9 +73,8 @@ let
     libpng libcap
     xdg_utils yasm minizip libwebp
     libusb1 re2 zlib
-  ]
-  # versions >= 59 don't build with system libxml / libxslt
-  ++ optionals (versionOlder upstream-info.version "59.0.0.0") [ libxml2 libxslt ];
+    ffmpeg harfbuzz-icu libxslt libxml2
+  ];
 
   # build paths and release info
   packageName = extraAttrs.packageName or extraAttrs.name;
@@ -158,9 +158,14 @@ let
       enable_hotwording = enableHotwording;
       enable_widevine = enableWideVine;
       use_cups = cupsSupport;
-    } // {
+
       treat_warnings_as_errors = false;
       is_clang = false;
+      clang_use_chrome_plugins = false;
+      remove_webcore_debug_symbols = true;
+      use_gtk3 = true;
+      enable_swiftshader = false;
+      fieldtrial_testing_like_official_build = true;
 
       # Google API keys, see:
       #   http://www.chromium.org/developers/how-tos/api-keys
