@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, qmake
-, coreutils, xdg_utils, bash, perl }:
+, coreutils, xdg_utils, bash
+, perl, makeWrapper, perlPackages }:
 
 let
   version = "1.4";
@@ -13,7 +14,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1ppasbr0mq301q6n3rm0bsmprs7vgkcjmmc0gbgqpgw84nmp9fqh";
   };
 
-  nativeBuildInputs = [ qmake ];
+  nativeBuildInputs = [ qmake makeWrapper ];
 
   buildInputs = [ perl ];
 
@@ -43,6 +44,11 @@ in stdenv.mkDerivation rec {
     done
     substituteInPlace src/StdCleanup.cpp \
       --replace /bin/bash ${bash}/bin/bash
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/qdirstat-cache-writer \
+      --set PERL5LIB "${stdenv.lib.makePerlPath [ perlPackages.URI ]}"
   '';
 
   meta = with stdenv.lib; {
