@@ -13943,7 +13943,9 @@ with pkgs;
 
   electrum-ltc = callPackage ../applications/misc/electrum-ltc { };
 
-  elinks = callPackage ../applications/networking/browsers/elinks { };
+  elinks = callPackage ../applications/networking/browsers/elinks {
+    openssl = openssl_1_0_2;
+  };
 
   elvis = callPackage ../applications/editors/elvis { };
 
