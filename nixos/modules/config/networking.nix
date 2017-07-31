@@ -190,6 +190,13 @@ in
 
   config = {
 
+    networking.hosts = {
+      "127.0.0.1" = [ "localhost" ];
+    } // optionalAttrs cfg.enableIPv6 {
+      "::1" = [ "localhost" ];
+    };
+
+
     environment.etc =
       { # /etc/services: TCP/UDP port assignments.
         "services".source = pkgs.iana-etc + "/etc/services";
@@ -201,25 +208,12 @@ in
         "rpc".source = pkgs.glibc.out + "/etc/rpc";
 
         # /etc/hosts: Hostname-to-IP mappings.
-        "hosts".text =
-          let oneToString = set : ip : ip + " " + concatStringsSep " " ( getAttr ip set );
-              allToString = set : concatMapStringsSep "\n" ( oneToString set ) ( attrNames set );
-              userLocalHosts = optionalString
-                ( builtins.hasAttr "127.0.0.1" cfg.hosts )
-                ( concatStringsSep " " ( remove "localhost" cfg.hosts."127.0.0.1" ));
-              userLocalHosts6 = optionalString
-                ( builtins.hasAttr "::1" cfg.hosts )
-                ( concatStringsSep " " ( remove "localhost" cfg.hosts."::1" ));
-              otherHosts = allToString ( removeAttrs cfg.hosts [ "127.0.0.1" "::1" ]);
-          in
-          ''
-            127.0.0.1 ${userLocalHosts} localhost
-            ${optionalString cfg.enableIPv6 ''
-              ::1 ${userLocalHosts6} localhost
-            ''}
-            ${otherHosts}
-            ${cfg.extraHosts}
-          '';
+        "hosts".text = let
+          mkEntry = ip: hosts: "${ip} ${concatStringsSep " " hosts}";
+        in ''
+          ${concatStringsSep "\n" (mapAttrsToList mkEntry cfg.hosts)}
+          ${cfg.extraHosts}
+        '';
 
         # /etc/host.conf: resolver configuration file
         "host.conf".text = cfg.hostConf;
