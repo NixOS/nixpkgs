@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "zerofree-${version}";
-  version = "1.0.4";
+  version = "1.1.0";
 
   src = fetchurl {
     url = "http://frippery.org/uml/${name}.tgz";
-    sha256 = "0f38mvn3wfacapayl54q04qlz4in417pfm6gapgm7dhyjs9y5yd7";
+    sha256 = "059g29x5r1xj6wcj4xj85l8w6qrxyl86yqbybjqqz6nxz4falxzf";
   };
 
   buildInputs = [ e2fsprogs ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 '';
 
   meta = {
-    homepage = http://frippery.org/uml/index.html;
+    homepage = https://frippery.org/uml/;
     description = "Zero free blocks from ext2, ext3 and ext4 file-systems";
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.theuni ];
