@@ -19224,4 +19224,6 @@ with pkgs;
   undaemonize = callPackage ../tools/system/undaemonize {};
 
   houdini = callPackage ../applications/misc/houdini {};
+
+  xtermcontrol = callPackage ../applications/misc/xtermcontrol {};
 }
