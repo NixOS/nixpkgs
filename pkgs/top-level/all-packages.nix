@@ -8532,9 +8532,7 @@ with pkgs;
   libappindicator-gtk2 = callPackage ../development/libraries/libappindicator { gtkVersion = "2"; };
   libappindicator-gtk3 = callPackage ../development/libraries/libappindicator { gtkVersion = "3"; };
 
-  libarchive = callPackage ../development/libraries/libarchive {
-    openssl = openssl_1_0_2;
-  };
+  libarchive = callPackage ../development/libraries/libarchive { };
 
   libasr = callPackage ../development/libraries/libasr { };
 
