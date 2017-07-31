@@ -47,7 +47,7 @@ in
 
     environment.etc = {
       zoneinfo.source = tzdir;
-    } // lib.optionalAttrs (config.time.timeZone == null) {
+    } // lib.optionalAttrs (config.time.timeZone != null) {
         localtime.source = "/etc/zoneinfo/${config.time.timeZone}";
         localtime.mode = "direct-symlink";
       };
