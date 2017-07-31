@@ -3,7 +3,7 @@
 , makeWrapper, callPackage, self, gdbm, db
 , python-setup-hook
 # For the Python package set
-, pkgs, pythonPackages, packageOverrides ? (self: super: {})
+, pkgs, packageOverrides ? (self: super: {})
 }:
 
 assert zlibSupport -> zlib != null;
@@ -16,6 +16,8 @@ let
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
   libPrefix = "pypy${majorVersion}";
   sitePackages = "site-packages";
+
+  pythonForPypy = python.withPackages (ppkgs: [ ppkgs.pycparser ]);
 
 in stdenv.mkDerivation rec {
     name = "pypy-${version}";
@@ -35,8 +37,7 @@ in stdenv.mkDerivation rec {
       substituteInPlace "lib-python/2.7/lib-tk/Tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
     '';
 
-    buildInputs = [ bzip2 openssl pkgconfig python libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 makeWrapper gdbm db ]
-      ++ (with pythonPackages; [ pycparser ])
+    buildInputs = [ bzip2 openssl pkgconfig pythonForPypy libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 makeWrapper gdbm db ]
       ++ stdenv.lib.optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc
       ++ stdenv.lib.optional zlibSupport zlib;
 
@@ -64,7 +65,7 @@ in stdenv.mkDerivation rec {
     '';
 
     buildPhase = ''
-      ${python.interpreter} rpython/bin/rpython --make-jobs="$NIX_BUILD_CORES" -Ojit --batch pypy/goal/targetpypystandalone.py --withmod-_minimal_curses --withmod-unicodedata --withmod-thread --withmod-bz2 --withmod-_multiprocessing
+      ${pythonForPypy.interpreter} rpython/bin/rpython --make-jobs="$NIX_BUILD_CORES" -Ojit --batch pypy/goal/targetpypystandalone.py --withmod-_minimal_curses --withmod-unicodedata --withmod-thread --withmod-bz2 --withmod-_multiprocessing
     '';
 
     setupHook = python-setup-hook sitePackages;
