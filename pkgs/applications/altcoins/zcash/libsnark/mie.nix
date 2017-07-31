@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/herumi/mie";
+    homepage = https://github.com/herumi/mie;
     maintainers = with maintainers; [ rht ];
     license = licenses.bsd3;
     platforms = platforms.unix;

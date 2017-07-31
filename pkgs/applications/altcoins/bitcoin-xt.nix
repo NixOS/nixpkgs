@@ -38,7 +38,7 @@ stdenv.mkDerivation rec{
       Core release, applying a series of patches, and then doing deterministic
       builds so anyone can check the downloads correspond to the source code. 
     '';
-    homepage = "https://bitcoinxt.software/";
+    homepage = https://bitcoinxt.software/;
     maintainers = with maintainers; [ jefdaj ];
     license = licenses.mit;
     platforms = platforms.unix;

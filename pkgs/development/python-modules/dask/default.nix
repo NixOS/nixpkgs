@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Minimal task scheduling abstraction";
-    homepage = "http://github.com/ContinuumIO/dask/";
+    homepage = http://github.com/ContinuumIO/dask/;
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

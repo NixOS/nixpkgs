@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "PKCS #11 implementation based on trusted platform module (TPM)";
-    homepage = "https://www.chromium.org/developers/design-documents/chaps-technical-design";
+    homepage = https://www.chromium.org/developers/design-documents/chaps-technical-design;
     maintainers = [ maintainers.tstrobel ];
     platforms = [ "x86_64-linux" ];
     license = licenses.bsd3;

@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "A web content scanner";
-    homepage = "http://dirb.sourceforge.net/";
+    homepage = http://dirb.sourceforge.net/;
     maintainers = with stdenv.lib.maintainers; [ bennofs ];
     license = with stdenv.lib.licenses; [ gpl2 ];
     platforms = stdenv.lib.platforms.unix;

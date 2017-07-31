@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Frank Wen's pro-quality GM/GS soundfont";
-    homepage = "http://www.hammersound.net/";
+    homepage = http://www.hammersound.net/;
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = with maintainers; [ abbradar ];

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://mini-httpd.nongnu.org/";
+    homepage = http://mini-httpd.nongnu.org/;
     description = "A minimalistic high-performance web server";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;

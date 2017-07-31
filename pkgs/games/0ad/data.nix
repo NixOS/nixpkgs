@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A free, open-source game of ancient warfare -- data files";
-    homepage = "http://wildfiregames.com/0ad/";
+    homepage = http://wildfiregames.com/0ad/;
     license = licenses.cc-by-sa-30;
     platforms = platforms.linux;
     hydraPlatforms = [];

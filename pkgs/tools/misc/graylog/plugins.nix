@@ -31,7 +31,7 @@ in {
       sha256 = "0wvdf2rnjrhdw1vp7bc7008s45rggzq57lh8k6s3q35rppligaqd";
     };
     meta = {
-      homepage = "https://github.com/Graylog2/graylog-plugin-auth-sso";
+      homepage = https://github.com/Graylog2/graylog-plugin-auth-sso;
       description = "SSO support for Graylog through trusted HTTP headers set by load balancers or authentication proxies";
     };
   };
@@ -44,7 +44,7 @@ in {
       sha256 = "1abl7wwr59k9vvr2fmrlrx4ipsjjl8xryqy19fy5irxhpwp93ixl";
     };
     meta = {
-      homepage = "https://github.com/graylog-labs/graylog-plugin-internal-logs";
+      homepage = https://github.com/graylog-labs/graylog-plugin-internal-logs;
       description = "Graylog plugin to record internal logs of Graylog efficiently instead of sending them over the network";
     };
   };
@@ -57,7 +57,7 @@ in {
       sha256 = "0hd66751hp97ddkn29s1cmjmc2h1nrp431bq7d2wq16iyxxlygri";
     };
     meta = {
-      homepage = "https://github.com/Graylog2/graylog-plugin-ipanonymizer";
+      homepage = https://github.com/Graylog2/graylog-plugin-ipanonymizer;
       description = "A graylog-server plugin that replaces the last octet of IP addresses in messages with xxx";
     };
   };
@@ -70,7 +70,7 @@ in {
       sha256 = "1r12hpjp2ggmhsapgrk829va94aw44qi2kqqkgf1fj9ih4k0c837";
     };
     meta = {
-      homepage = "https://github.com/Graylog2/graylog-plugin-jabber";
+      homepage = https://github.com/Graylog2/graylog-plugin-jabber;
       description = "Jabber Alarmcallback Plugin for Graylog";
     };
   };
@@ -83,7 +83,7 @@ in {
       sha256 = "1hadxyawdz234lal3dq5cy3zppl7ixxviw96iallyav83xyi23i8";
     };
     meta = {
-      homepage = "https://github.com/graylog-labs/graylog-plugin-mongodb-profiler";
+      homepage = https://github.com/graylog-labs/graylog-plugin-mongodb-profiler;
       description = "Graylog input plugin that reads MongoDB profiler data";
     };
   };
@@ -96,7 +96,7 @@ in {
       sha256 = "1pdv12f9dca1rxf62ds51n79cjhkkyj0gjny8kj1cq64vlayc9x9";
     };
     meta = {
-      homepage = "https://github.com/Graylog2/graylog-plugin-netflow";
+      homepage = https://github.com/Graylog2/graylog-plugin-netflow;
       description = "Graylog NetFlow plugin";
     };
   };
@@ -109,7 +109,7 @@ in {
       sha256 = "0hwz83m9gwx0fdapc63v3lr1q6acbphssqwp4qqzz78wg2w79xgi";
     };
     meta = {
-      homepage = "https://github.com/Graylog2/graylog-plugin-redis";
+      homepage = https://github.com/Graylog2/graylog-plugin-redis;
       description = "Redis plugin for Graylog";
     };
   };
@@ -122,7 +122,7 @@ in {
       sha256 = "1mwqy3fhyy4zdwyrzvbr565xwf96xs9d3l70l0khmrm848xf8wz4";
     };
     meta = {
-      homepage = "https://github.com/Graylog2/graylog-plugin-spaceweather";
+      homepage = https://github.com/Graylog2/graylog-plugin-spaceweather;
       description = "Correlate proton density to the response time of your app and the ion temperature to your exception rate.";
     };
   };
@@ -135,7 +135,7 @@ in {
       sha256 = "0clg0vy8aipw122rfqww1lnjriazlnnh77pqiy5vnmv6ycjw0y4i";
     };
     meta = {
-      homepage = "https://github.com/Graylog2/graylog-plugin-threatintel";
+      homepage = https://github.com/Graylog2/graylog-plugin-threatintel;
       description = "Graylog Processing Pipeline functions to enrich log messages with IoC information from threat intelligence databases";
     };
   };
@@ -148,7 +148,7 @@ in {
       sha256 = "1pi34swy9nzq35a823zzvqrjhb6wsg302z31vk2y656sw6ljjxyh";
     };
     meta = {
-      homepage = "https://github.com/Graylog2/graylog-plugin-twitter";
+      homepage = https://github.com/Graylog2/graylog-plugin-twitter;
       description = "Graylog input plugin that reads Twitter messages based on keywords in realtime";
     };
   };

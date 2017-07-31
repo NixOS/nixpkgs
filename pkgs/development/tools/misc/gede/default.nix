@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Graphical frontend (GUI) to GDB";
-    homepage = "http://gede.acidron.com";
+    homepage = http://gede.acidron.com;
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ juliendehos ];

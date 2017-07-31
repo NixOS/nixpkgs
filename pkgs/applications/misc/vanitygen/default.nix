@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
         the prefix is possible, will provide a difficulty estimate,
         and will run about 30% faster.
       '';
-      homepage = "https://github.com/samr7/vanitygen";
+      homepage = https://github.com/samr7/vanitygen;
       license = stdenv.lib.licenses.agpl3;
       platforms = stdenv.lib.platforms.all;
   };

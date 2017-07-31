@@ -36,6 +36,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.asl20;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = "https://www.washington.edu/alpine/";
+    homepage = https://www.washington.edu/alpine/;
   };
 }

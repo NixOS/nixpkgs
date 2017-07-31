@@ -66,7 +66,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "A library to allow applications to export a menu into the Unity Menu bar";
-    homepage = "https://launchpad.net/libappindicator";
+    homepage = https://launchpad.net/libappindicator;
     license = with licenses; [ lgpl21 lgpl3 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];

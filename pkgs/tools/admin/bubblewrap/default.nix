@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Unprivileged sandboxing tool";
-    homepage = "https://github.com/projectatomic/bubblewrap";
+    homepage = https://github.com/projectatomic/bubblewrap;
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ konimex ];
   };

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       Font Awesome gives you scalable vector icons that can instantly be customized.
       This package includes only the TTF font. For full CSS etc. see the project website.
     '';
-    homepage = "http://fortawesome.github.io/Font-Awesome/";
+    homepage = http://fortawesome.github.io/Font-Awesome/;
     license = licenses.ofl;
     platforms = platforms.all;
     maintainers = with maintainers; [ abaldeau ];

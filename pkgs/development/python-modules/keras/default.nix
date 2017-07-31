@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Deep Learning library for Theano and TensorFlow";
-    homepage = "https://keras.io";
+    homepage = https://keras.io;
     license = licenses.mit;
     maintainers = with maintainers; [ NikolaMandic ];
   };

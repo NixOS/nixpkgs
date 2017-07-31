@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://www.broadinstitute.org/igv/";
+    homepage = https://www.broadinstitute.org/igv/;
     description = "A visualization tool for interactive exploration of genomic datasets";
     license = licenses.lgpl21;
     platforms = platforms.unix;

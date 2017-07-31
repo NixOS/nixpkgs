@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Change the urxvt font size on the fly";
-    homepage = "https://github.com/majutsushi/urxvt-font-size";
+    homepage = https://github.com/majutsushi/urxvt-font-size;
     license = licenses.mit;
     maintainers = with maintainers; [ cstrahan ];
     platforms = with platforms; unix;

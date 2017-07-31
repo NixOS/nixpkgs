@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Portable file system cache diagnostics and control";
     longDescription = "vmtouch is a tool for learning about and controlling the file system cache of unix and unix-like systems.";
-    homepage = "http://hoytech.com/vmtouch/";
+    homepage = http://hoytech.com/vmtouch/;
     license = stdenv.lib.licenses.bsd3;
     maintainers = [ stdenv.lib.maintainers.garrison ];
     platforms = stdenv.lib.platforms.all;

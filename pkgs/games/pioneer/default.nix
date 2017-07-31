@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Pioneer is a space adventure game set in the Milky Way galaxy at the turn of the 31st century";
-    homepage = "http://pioneerspacesim.net";
+    homepage = http://pioneerspacesim.net;
     license = with licenses; [
         gpl3 cc-by-sa-30
     ];

@@ -56,7 +56,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "Library for raising indicators via DBus";
-    homepage = "https://launchpad.net/libindicate";
+    homepage = https://launchpad.net/libindicate;
     license = with licenses; [ lgpl21 lgpl3 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];

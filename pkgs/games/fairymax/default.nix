@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.free ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = "http://home.hccnet.nl/h.g.muller/dwnldpage.html";
+    homepage = http://home.hccnet.nl/h.g.muller/dwnldpage.html;
   };
 }

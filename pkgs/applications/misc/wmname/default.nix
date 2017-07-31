@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Prints or set the window manager name property of the root window";
-    homepage = "http://tools.suckless.org/wmname";
+    homepage = http://tools.suckless.org/wmname;
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;
   };

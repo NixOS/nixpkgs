@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 	LaTeX editing with completion, structure viewer, preview,
 	spell checking and support of any compilation chain.
 	'';
-    homepage = "http://www.xm1math.net/texmaker/";
+    homepage = http://www.xm1math.net/texmaker/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cfouche ];

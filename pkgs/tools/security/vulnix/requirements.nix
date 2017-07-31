@@ -22,7 +22,7 @@ rec {
     ]);
 
     meta = with stdenv.lib; {
-      homepage = "";
+      homepage = ;
       license = licenses.zpt21;
       description = "Zope Object Database: object database and persistence";
     };
@@ -41,7 +41,7 @@ rec {
       mock
     ];
     meta = with stdenv.lib; {
-      homepage = "";
+      homepage = ;
       license = licenses.zpt21;
       description = "Transaction management for Python";
     };

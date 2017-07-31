@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   ;
 
   meta = {
-    homepage = "http://www.jwz.org/xscreensaver/";
+    homepage = http://www.jwz.org/xscreensaver/;
     description = "A set of screensavers";
     maintainers = with stdenv.lib.maintainers; [ raskin ];
     platforms = with stdenv.lib.platforms; allBut cygwin;

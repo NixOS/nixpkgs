@@ -47,7 +47,7 @@ stdenv.mkDerivation {
                  + " " + optionalString installEmacsMode "install-emacs";
 
   meta = with stdenv.lib; {
-    homepage = "http://www.loria.fr/equipes/calligramme/acg";
+    homepage = http://www.loria.fr/equipes/calligramme/acg;
     description = "A toolkit for developing ACG signatures and lexicon";
     license = licenses.cecill20;
     platforms = ocaml.meta.platforms or [];

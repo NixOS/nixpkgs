@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   preConfigure = "./autogen.sh";
 
   meta = {
-    homepage = "http://joewing.net/projects/jwm/";
+    homepage = http://joewing.net/projects/jwm/;
     description = "Joe's Window Manager is a light-weight X11 window manager";
     license = stdenv.lib.licenses.gpl2;
     platforms   = stdenv.lib.platforms.unix;

@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       featureset might be considered "minimalistic", but not as minimalistic as
       being completely featureless.
     '';
-    homepage = "http://sourceforge.net/apps/trac/vimprobable";
+    homepage = http://sourceforge.net/apps/trac/vimprobable;
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.aforemny ];
     platforms = with stdenv.lib.platforms; linux;

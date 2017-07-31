@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = "http://wiki2.dovecot.org/Plugins/Antispam";
+    homepage = http://wiki2.dovecot.org/Plugins/Antispam;
     description = "An antispam plugin for the Dovecot IMAP server";
     license = licenses.gpl2;
     maintainers = with maintainers; [ abbradar ];

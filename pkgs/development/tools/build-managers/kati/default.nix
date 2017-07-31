@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An experimental GNU make clone";
-    homepage = "https://github.com/google/kati";
+    homepage = https://github.com/google/kati;
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.asl20;
   };

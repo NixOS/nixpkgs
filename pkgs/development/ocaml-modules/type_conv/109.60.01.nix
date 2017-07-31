@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta = {
-    homepage = "http://forge.ocamlcore.org/projects/type-conv/";
+    homepage = http://forge.ocamlcore.org/projects/type-conv/;
     description = "Support library for OCaml preprocessor type conversions";
     license = stdenv.lib.licenses.lgpl21;
     platforms = ocaml.meta.platforms or [];

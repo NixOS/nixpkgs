@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://www.nongnu.org/ratpoison/";
+    homepage = http://www.nongnu.org/ratpoison/;
     description = "Simple mouse-free tiling window manager";
     license = licenses.gpl2Plus;
 

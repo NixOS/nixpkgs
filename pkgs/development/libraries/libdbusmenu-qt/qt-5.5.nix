@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   cmakeFlags = "-DWITH_DOC=OFF";
 
   meta = with stdenv.lib; {
-    homepage = "http://launchpad.net/libdbusmenu-qt";
+    homepage = http://launchpad.net/libdbusmenu-qt;
     description = "Provides a Qt implementation of the DBusMenu spec";
     maintainers = [ maintainers.ttuegel ];
     inherit (qtbase.meta) platforms;

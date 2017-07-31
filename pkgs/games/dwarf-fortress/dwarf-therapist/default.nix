@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ the-kenny abbradar ];
     license = licenses.mit;
     platforms = platforms.linux;
-    homepage = "https://github.com/splintermind/Dwarf-Therapist";
+    homepage = https://github.com/splintermind/Dwarf-Therapist;
   };
 }
