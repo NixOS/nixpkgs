@@ -84,7 +84,7 @@ rec {
         mkdir -p $out/nix-support
         cp ${script} $out/nix-support/setup-hook
       '' + lib.optionalString (deps != []) ''
-        echo ${toString deps} > $out/nix-support/propagated-native-build-inputs
+        printWords ${toString deps} > $out/nix-support/propagated-native-build-inputs
       '' + lib.optionalString (substitutions != {}) ''
         substituteAll ${script} $out/nix-support/setup-hook
       '');

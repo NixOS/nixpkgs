@@ -16,6 +16,12 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lncurses";
 
+  preConfigure = ''
+    # If CPP is set explicitly, configure and make will not agree about which
+    # programs to use at different stages.
+    unset CPP
+  '';
+
   crossAttrs = {
     makeFlags = "CROSS_COMPILE=${stdenv.cc.prefix}";
   };
