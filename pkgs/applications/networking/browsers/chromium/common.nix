@@ -104,23 +104,22 @@ let
       nspr nss systemd
       utillinux alsaLib
       bison gperf kerberos
-      glib gtk2 dbus_glib
+      glib gtk2 gtk3 dbus_glib
       libXScrnSaver libXcursor libXtst mesa
       pciutils protobuf speechd libXdamage
     ] ++ optional gnomeKeyringSupport libgnome_keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
-      ++ optional pulseSupport libpulseaudio
-      ++ optional (versionAtLeast version "56.0.0.0") gtk3;
+      ++ optional pulseSupport libpulseaudio;
 
     patches = [
       ./patches/nix_plugin_paths_52.patch
+      ./patches/chromium-gn-bootstrap-r8.patch
       # To enable ChromeCast, go to chrome://flags and set "Load Media Router Component Extension" to Enabled
       # Fixes Chromecast: https://bugs.chromium.org/p/chromium/issues/detail?id=734325
       ./patches/fix_network_api_crash.patch
-      ./patches/chromium-59.0.3071.115-system_ffmpeg-1.patch
-    ] ++ optional (versionOlder version "57.0") ./patches/glibc-2.24.patch
-      ++ optional enableWideVine ./patches/widevine.patch;
+
+    ] ++ optional enableWideVine ./patches/widevine.patch;
 
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
