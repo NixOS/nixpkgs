@@ -8,8 +8,6 @@ stdenv.mkDerivation rec {
     sha256 = "b67fd2daae7a64b5ba862c66c07c1addb9e6b1b05c5f2049392cfd8a2172952e";
   };
 
-  patches = stdenv.lib.optional stdenv.isDarwin stdenv.secure-format-patch;
-
   nativeBuildInputs = [ m4 perl ] ++ stdenv.lib.optional stdenv.isSunOS help2man;
   propagatedBuildInputs = [ m4 ];
 
