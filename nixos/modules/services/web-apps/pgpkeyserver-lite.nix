@@ -36,8 +36,8 @@ in
       };     
 
       hkpAddress = mkOption {
-        default = sksCfg.hkpAddress;
-        type = types.listOf types.str;
+        default = builtins.head sksCfg.hkpAddress;
+        type = types.str;
         description = "
           Wich ip address the sks-keyserver is listening on.
         ";
@@ -58,14 +58,13 @@ in
     services.nginx.enable = true;
 
     services.nginx.virtualHosts = let
-      hkpAddress = builtins.concatStringsSep " " cfg.hkpAddress;
       hkpPort = builtins.toString cfg.hkpPort;
     in {
       "${cfg.hostname}" = {
         root = webPkg;
         locations = {
           "/pks".extraConfig = ''
-            proxy_pass         http://${hkpAddress}:${hkpPort};
+            proxy_pass         http://${cfg.hkpAddress}:${hkpPort};
             proxy_pass_header  Server;
             add_header         Via "1.1 ${cfg.hostname}";
           '';
