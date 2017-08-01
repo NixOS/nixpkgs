@@ -56,8 +56,9 @@ in stdenv.mkDerivation rec {
 
   dontUseCmakeConfigure = true;
 
-  buildInputs = [ cmake boost ffmpeg qtbase bullet mygui_ openscenegraph SDL2 unshield openal libXt
-    fakegit makeWrapper ncurses mesa_noglu ];
+  nativeBuildInputs = [ cmake makeWrapper fakegit ];
+  buildInputs = [ boost ffmpeg qtbase bullet mygui_ openscenegraph SDL2 unshield openal libXt
+    ncurses mesa_noglu ];
 
   buildPhase = ''
     mkdir dependencies keepers
@@ -71,7 +72,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace tes3mp-deploy.sh \
       --replace "-DBUILD_OPENCS=OFF" "-DBUILD_OPENCS=OFF -DCMAKE_INSTALL_PREFIX=$out"
     patchShebangs tes3mp-deploy.sh
-    echo y | ./tes3mp-deploy.sh -i #-c 1
+    echo y | ./tes3mp-deploy.sh -i -c $NIX_BUILD_CORES
   '';
 
   installPhase = ''
