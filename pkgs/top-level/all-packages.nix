@@ -10585,8 +10585,6 @@ with pkgs;
 
   wt = callPackage ../development/libraries/wt { };
 
-  wvstreams = callPackage ../development/libraries/wvstreams { };
-
   wxGTK = wxGTK28;
 
   wxGTK28 = callPackage ../development/libraries/wxwidgets/2.8 {
