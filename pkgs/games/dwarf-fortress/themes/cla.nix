@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "CLA graphics set for Dwarf Fortress";
-    homepage = "http://www.bay12forums.com/smf/index.php?topic=105376.0";
+    homepage = http://www.bay12forums.com/smf/index.php?topic=105376.0;
     platforms = platforms.all;
     maintainers = with maintainers; [ abbradar ];
     license = licenses.free;

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Terminal-emulator State Machine";
-    homepage = "http://www.freedesktop.org/wiki/Software/kmscon/libtsm/";
+    homepage = http://www.freedesktop.org/wiki/Software/kmscon/libtsm/;
     license = licenses.mit;
     maintainers = with maintainers; [ cstrahan ];
     platforms = with platforms; unix;

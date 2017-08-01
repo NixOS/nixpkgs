@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "stackprotector" ];
 
   meta = {
-    homepage = "http://www.gnu.org/software/bison/";
+    homepage = http://www.gnu.org/software/bison/;
     description = "Yacc-compatible parser generator";
     license = stdenv.lib.licenses.gpl3Plus;
 

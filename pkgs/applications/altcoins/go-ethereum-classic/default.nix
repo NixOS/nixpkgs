@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   meta = {
     description = "Golang implementation of Ethereum Classic";
-    homepage = "https://github.com/ethereumproject/go-ethereum";
+    homepage = https://github.com/ethereumproject/go-ethereum;
     license = with lib.licenses; [ lgpl3 gpl3 ];
   };
 }

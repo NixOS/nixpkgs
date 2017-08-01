@@ -45,7 +45,7 @@ stdenv.mkDerivation ({
 
   meta = {
     description = "Computer algebra system";
-    homepage = "http://maxima.sourceforge.net";
+    homepage = http://maxima.sourceforge.net;
     license = stdenv.lib.licenses.gpl2;
 
     longDescription = ''

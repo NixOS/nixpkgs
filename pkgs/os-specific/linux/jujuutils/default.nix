@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   buildInputs = [ linuxHeaders ];
 
   meta = {
-    homepage = "http://code.google.com/p/jujuutils/";
+    homepage = http://code.google.com/p/jujuutils/;
     description = "Utilities around FireWire devices connected to a Linux computer";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

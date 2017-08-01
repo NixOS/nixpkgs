@@ -16,7 +16,7 @@ buildPythonPackage rec {
   setupPyBuildFlags = [ "--slurm-lib=${slurm}/lib" "--slurm-inc=${slurm.dev}/include" ];
 
   meta = with lib; {
-    homepage = "https://github.com/PySlurm/pyslurm";
+    homepage = https://github.com/PySlurm/pyslurm;
     description = "Python bindings to Slurm";
     license = licenses.gpl2;
     maintainers = [ maintainers.veprbl ];

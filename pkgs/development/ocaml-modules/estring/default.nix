@@ -10,7 +10,7 @@ buildOcaml rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = "http://estring.forge.ocamlcore.org/";
+    homepage = http://estring.forge.ocamlcore.org/;
     description = "Extension for string literals";
     license = licenses.bsd3;
   };

@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       commands.
     '';
 
-    homepage = "https://www.ctan.org/pkg/latex2html";
+    homepage = https://www.ctan.org/pkg/latex2html;
 
     license = licenses.gpl2;
     platforms = with platforms; linux ++ darwin;

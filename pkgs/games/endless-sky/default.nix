@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A sandbox-style space exploration game similar to Elite, Escape Velocity, or Star Control";
-    homepage = "https://endless-sky.github.io/";
+    homepage = https://endless-sky.github.io/;
     license = with licenses; [
       gpl3Plus cc-by-sa-30 cc-by-sa-40 publicDomain
     ];

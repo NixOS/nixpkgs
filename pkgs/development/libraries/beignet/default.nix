@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = "https://cgit.freedesktop.org/beignet/";
+    homepage = https://cgit.freedesktop.org/beignet/;
     description = "OpenCL Library for Intel Ivy Bridge and newer GPUs";
     longDescription = ''
       The package provides an open source implementation of the OpenCL specification for Intel GPUs. 

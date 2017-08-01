@@ -23,7 +23,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Tool for service discovery, monitoring and configuration";
-    homepage = "https://www.consul.io/";
+    homepage = https://www.consul.io/;
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.mpl20;
     maintainers = with maintainers; [ pradeepchhetri ];

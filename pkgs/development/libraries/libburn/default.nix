@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = "http://libburnia-project.org/";
+    homepage = http://libburnia-project.org/;
     description = "A library by which preformatted data get onto optical media: CD, DVD, BD (Blu-Ray)";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ abbradar vrthra ];

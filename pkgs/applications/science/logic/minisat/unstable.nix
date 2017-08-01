@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ mic92 ];
     platforms = platforms.unix;
     license = licenses.mit;
-    homepage = "http://minisat.se/";
+    homepage = http://minisat.se/;
   };
 }

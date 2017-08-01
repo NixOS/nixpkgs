@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Share one mouse and keyboard between multiple computers";
-    homepage = "http://synergy-project.org/";
+    homepage = http://synergy-project.org/;
     license = licenses.gpl2;
     maintainers = [ maintainers.aszlig ];
     platforms = platforms.all;

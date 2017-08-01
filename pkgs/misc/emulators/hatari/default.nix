@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib SDL cmake ];
 
   meta = {
-    homepage = "http://hatari.tuxfamily.org/";
+    homepage = http://hatari.tuxfamily.org/;
     description = "Atari ST/STE/TT/Falcon emulator";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;

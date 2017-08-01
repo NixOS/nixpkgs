@@ -47,7 +47,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "http://finalterm.org";
+    homepage = http://finalterm.org;
     description = "A new breed of terminal emulator";
     longDescription = ''
       Final Term is a new breed of terminal emulator.

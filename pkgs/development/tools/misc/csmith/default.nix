@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A random generator of C programs";
-    homepage = "https://embed.cs.utah.edu/csmith";
+    homepage = https://embed.cs.utah.edu/csmith;
     # Officially, the license is this: https://github.com/csmith-project/csmith/blob/master/COPYING
     license = licenses.bsd2;
     longDescription = ''

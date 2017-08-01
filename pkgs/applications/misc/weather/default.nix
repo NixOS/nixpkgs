@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     '';
 
     meta = {
-        homepage = "http://fungi.yuggoth.org/weather";
+        homepage = http://fungi.yuggoth.org/weather;
         description = "Quick access to current weather conditions and forecasts";
         license = stdenv.lib.licenses.isc;
         maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "CAN userspace utilities and tools (for use with Linux SocketCAN)";
-    homepage = "https://github.com/linux-can/can-utils";
+    homepage = https://github.com/linux-can/can-utils;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

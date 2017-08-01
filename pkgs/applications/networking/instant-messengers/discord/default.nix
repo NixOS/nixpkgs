@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
     meta = with stdenv.lib; {
         description = "All-in-one voice and text chat for gamers that’s free, secure, and works on both your desktop and phone";
-        homepage = "https://discordapp.com/";
+        homepage = https://discordapp.com/;
         downloadPage = "https://github.com/crmarsh/discord-linux-bugs";
         license = licenses.unfree;
         maintainers = [ maintainers.ldesgoui ];

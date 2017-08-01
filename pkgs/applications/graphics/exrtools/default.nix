@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Collection of utilities for manipulating OpenEXR images";
-    homepage = "http://scanline.ca/exrtools";
+    homepage = http://scanline.ca/exrtools;
     platforms = platforms.linux;
     license = licenses.mit;
     maintainers = [ maintainers.juliendehos ];

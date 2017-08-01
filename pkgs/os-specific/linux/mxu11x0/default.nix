@@ -32,7 +32,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "MOXA UPort 11x0 USB to Serial Hub driver";
-    homepage = "https://github.com/ellysh/mxu11x0";
+    homepage = https://github.com/ellysh/mxu11x0;
     license = licenses.gpl1;
     maintainers = with maintainers; [ uralbash ];
     platforms = platforms.linux;

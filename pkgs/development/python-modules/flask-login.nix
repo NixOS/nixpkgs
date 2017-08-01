@@ -21,7 +21,7 @@ buildPythonPackage rec {
   doCheck = pythonAtLeast "3.3";
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/maxcountryman/flask-login";
+    homepage = https://github.com/maxcountryman/flask-login;
     description = "User session management for Flask";
     license = licenses.mit;
     platforms = platforms.all;

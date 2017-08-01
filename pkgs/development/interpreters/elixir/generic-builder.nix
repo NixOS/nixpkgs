@@ -59,7 +59,7 @@ in
     '';
 
     meta = with stdenv.lib; {
-      homepage = "http://elixir-lang.org/";
+      homepage = http://elixir-lang.org/;
       description = "A functional, meta-programming aware language built on top of the Erlang VM";
 
       longDescription = ''

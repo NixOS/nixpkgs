@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://www.coker.com.au/bonnie++/";
+    homepage = http://www.coker.com.au/bonnie++/;
     description = "Hard drive and file system benchmark suite";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;

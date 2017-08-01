@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
       '';
 
   meta = {
-    homepage = "http://haskell.org/ghc";
+    homepage = http://haskell.org/ghc;
     description = "The Glasgow Haskell Compiler";
     license = stdenv.lib.licenses.bsd3;
     platforms = ["x86_64-linux" "i686-linux"];

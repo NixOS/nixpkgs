@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A simple, Git-powered wiki";
-    homepage = "https://github.com/gollum/gollum";
+    homepage = https://github.com/gollum/gollum;
     license = licenses.mit;
     maintainers = with maintainers; [ jgillich primeos ];
     platforms = platforms.unix;

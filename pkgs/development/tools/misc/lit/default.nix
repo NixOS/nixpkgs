@@ -15,7 +15,7 @@ python2.pkgs.buildPythonApplication rec {
 
   meta = {
     description = "Portable tool for executing LLVM and Clang style test suites";
-    homepage = "http://llvm.org/docs/CommandGuide/lit.html";
+    homepage = http://llvm.org/docs/CommandGuide/lit.html;
     license = lib.licenses.ncsa;
     maintainers = with lib.maintainers; [ dtzWill ];
   };

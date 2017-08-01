@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig cmake gettext libgphoto2 gphoto2 libxml2 libv4l ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.qstopmotion.org";
+    homepage = http://www.qstopmotion.org;
     description = "Create stopmotion animation with a (web)camera";
     longDescription = ''
       Qstopmotion is a tool to create stopmotion

@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     substituteInPlace csrc/configure --replace "/usr/local" $out --replace "/usr/bin/env sh" "/bin/sh"
   '';
   meta = with stdenv.lib; {
-    homepage = "http://www.ccnx.org/";
+    homepage = http://www.ccnx.org/;
     description = "A Named Data Neworking (NDN) or Content Centric Networking (CCN) abstraction";
     longDescription = ''
       To address the Internet’s modern-day requirements with a better

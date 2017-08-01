@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       made for it. All of the original data files
       are required to do so
     '';
-    homepage = "https://github.com/gerstrong/Commander-Genius";
+    homepage = https://github.com/gerstrong/Commander-Genius;
     maintainers = with maintainers; [ hce ];
     license = licenses.gpl2;
     platforms = platforms.linux;

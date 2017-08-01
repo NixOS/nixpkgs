@@ -22,7 +22,7 @@ mkDerivation {
     websockets-snap
   ];
   jailbreak = true;
-  homepage = "http://elm-lang.org";
+  homepage = http://elm-lang.org;
   description = "Interactive development tool for Elm programs";
   license = stdenv.lib.licenses.bsd3;
 }
