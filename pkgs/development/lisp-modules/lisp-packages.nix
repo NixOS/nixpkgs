@@ -1,4 +1,4 @@
-{stdenv, clwrapper, pkgs}:
+{stdenv, clwrapper, pkgs, sbcl, coreutils, nix, asdf}:
 let lispPackages = rec {
   inherit pkgs clwrapper stdenv;
   nixLib = pkgs.lib;
@@ -20,7 +20,6 @@ let lispPackages = rec {
 
   clx-xkeyboard = buildLispPackage rec {
     baseName = "clx-xkeyboard";
-    testSystems = ["xkeyboard"];
     version = "git-20150523";
     description = "CLX support for X Keyboard extensions";
     deps = with (pkgs.quicklispPackagesFor clwrapper); [clx];
@@ -30,13 +29,14 @@ let lispPackages = rec {
       sha256 = "11b34da7d354a709a24774032e85a8947be023594f8a333eaff6d4aa79f2b3db";
       rev = ''11455d36283ef31c498bd58ffebf48c0f6b86ea6'';
     };
+    buildSystems = ["xkeyboard"];
   };
 
   quicklisp = buildLispPackage rec {
     baseName = "quicklisp";
     version = "2017-03-06";
 
-    testSystems = [];
+    buildSystems = [];
 
     description = "The Common Lisp package manager";
     deps = [];
@@ -50,8 +50,8 @@ let lispPackages = rec {
       quicklispdist = pkgs.fetchurl {
         # Will usually be replaced with a fresh version anyway, but needs to be
         # a valid distinfo.txt
-        url = "http://beta.quicklisp.org/dist/quicklisp/2016-03-18/distinfo.txt";
-        sha256 = "13mvign4rsicfvg3vs3vj1qcjvj2m1aqhq93ck0sgizxfcj5167m";
+        url = "http://beta.quicklisp.org/dist/quicklisp/2017-07-25/distinfo.txt";
+        sha256 = "165fd4a10zc3mxyy7wr4i2r3n6fzd1wd2hgzfyp32xlc41qj2ajf";
       };
       buildPhase = '' true; '';
       postInstall = ''
@@ -60,6 +60,47 @@ let lispPackages = rec {
         cp "${quicklispdist}" "$out/lib/common-lisp/quicklisp/quicklisp-distinfo.txt"
       '';
     };
+  };
+
+  quicklisp-to-nix-system-info = stdenv.mkDerivation rec {
+    name = "quicklisp-to-nix-system-info-${version}";
+    version = "1.0.0";
+    src = ./quicklisp-to-nix;
+    nativeBuildInputs = [sbcl];
+    buildInputs = [
+      lispPackages.quicklisp coreutils
+    ];
+    touch = coreutils;
+    nix-prefetch-url = nix;
+    inherit quicklisp;
+    buildPhase = ''
+      ${sbcl}/bin/sbcl --eval '(load #P"${asdf}/lib/common-lisp/asdf/build/asdf.lisp")' --load $src/system-info.lisp --eval '(ql-to-nix-system-info::dump-image)'
+    '';
+    installPhase = ''
+      mkdir -p $out/bin
+      cp quicklisp-to-nix-system-info $out/bin
+    '';
+    dontStrip = true;
+  };
+
+  quicklisp-to-nix = stdenv.mkDerivation rec {
+    name = "quicklisp-to-nix-${version}";
+    version = "1.0.0";
+    src = ./quicklisp-to-nix;
+    buildDependencies = [sbcl quicklisp-to-nix-system-info];
+    touch = coreutils;
+    nix-prefetch-url = nix;
+    inherit quicklisp;
+    deps = [];
+    system-info = quicklisp-to-nix-system-info;
+    buildPhase = ''
+      ${sbcl}/bin/sbcl --eval '(load #P"${asdf}/lib/common-lisp/asdf/build/asdf.lisp")' --load $src/ql-to-nix.lisp --eval '(ql-to-nix::dump-image)'
+    '';
+    installPhase = ''
+      mkdir -p $out/bin
+      cp quicklisp-to-nix $out/bin
+    '';
+    dontStrip = true;
   };
 };
 in lispPackages
