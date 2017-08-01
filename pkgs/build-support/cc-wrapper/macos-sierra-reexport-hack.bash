@@ -39,14 +39,17 @@ else
                 echo "cctools LD does not support '-L foo' or '-l foo'" >&2
                 exit 1
                 ;;
-            -lto_library)  allArgs+=("$1") ;;
-                # We aren't linking any "to_library"
-            -lSystem)      allArgs+=("$1") ;;
+            -lazy_library | -lazy_framework | -lto_library)
+                # We aren't linking any "azy_library", "to_library", etc.
+                allArgs+=("$1")
+                ;;
+            -lazy-l | -weak-l)    allArgs+=("$1") ;;
+                # We can't so easily prevent header issues from these.
+            -lSystem)             allArgs+=("$1") ;;
                 # Special case as indirection seems like a bad idea for something
                 # so fundamental. Can be removed for simplicity.
-            -l?*)          childrenLink+=("$1") ;;
-            -reexport-l?*) childrenLink+=("$1") ;;
-            *)             allArgs+=("$1") ;;
+            -l?* | -reexport-l?*) childrenLink+=("$1") ;;
+            *)                    allArgs+=("$1") ;;
         esac
 
         shift
