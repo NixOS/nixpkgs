@@ -59,8 +59,8 @@ in
 
     meta = with stdenv.lib; {
       homepage = https://www.keybase.io/;
-      description = "The Keybase official GUI.";
+      description = "The full Keybase client (CLI, GUI, and filesystem) updated nightly-ish";
       platforms = platforms.linux;
-      maintainers = with maintainers; [ puffnfresh np ];
+      maintainers = with maintainers; [ mpcsh ];
     };
   }
