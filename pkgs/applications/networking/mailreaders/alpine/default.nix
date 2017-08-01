@@ -3,33 +3,25 @@
 }:
 
 # NOTE: Please check if any changes here are applicable to ../realpine/ as well
-let
-  version = "2.00";
-  baseName = "alpine";
-in
-stdenv.mkDerivation {
-  name = "${baseName}-${version}";
+stdenv.mkDerivation rec {
+  name = "alpine-${version}";
+  version = "2.21";
 
   src = fetchurl {
-    url = "ftp://ftp.cac.washington.edu/alpine/alpine-${version}.tar.bz2";
-    sha256 = "19m2w21dqn55rhxbh5lr9qarc2fqa9wmpj204jx7a0zrb90bhpf8";
+    url = "http://alpine.freeiz.com/alpine/release/src/${name}.tar.xz";
+    sha256 = "0f3llxrmaxw7w9w6aixh752md3cdc91mwfmbarkm8s413f4bcc30";
   };
 
   buildInputs = [
     ncurses tcl openssl pam kerberos openldap
   ];
 
-  hardeningDisable = [ "format" "fortify" ];
+  hardeningDisable = [ "format" ];
 
   configureFlags = [
     "--with-ssl-include-dir=${openssl.dev}/include/openssl"
-    "--with-tcl-lib=${tcl.libPrefix}"
     "--with-passfile=.pine-passfile"
   ];
-
-  preConfigure = ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lgcc_s"
-  '';
 
   meta = {
     description = "Console mail reader";

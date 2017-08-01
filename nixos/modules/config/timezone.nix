@@ -14,13 +14,16 @@ in
     time = {
 
       timeZone = mkOption {
-        default = "UTC";
-        type = types.str;
+        default = null;
+        type = types.nullOr types.str;
         example = "America/New_York";
         description = ''
           The time zone used when displaying times and dates. See <link
           xlink:href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones"/>
           for a comprehensive list of possible values for this setting.
+
+          If null, the timezone will default to UTC and can be set imperatively
+          using timedatectl.
         '';
       };
 
@@ -40,13 +43,14 @@ in
     # This way services are restarted when tzdata changes.
     systemd.globalEnvironment.TZDIR = tzdir;
 
-    environment.etc.localtime =
-      { source = "/etc/zoneinfo/${config.time.timeZone}";
-        mode = "direct-symlink";
+    systemd.services.systemd-timedated.environment = lib.optionalAttrs (config.time.timeZone != null) { NIXOS_STATIC_TIMEZONE = "1"; };
+
+    environment.etc = {
+      zoneinfo.source = tzdir;
+    } // lib.optionalAttrs (config.time.timeZone != null) {
+        localtime.source = "/etc/zoneinfo/${config.time.timeZone}";
+        localtime.mode = "direct-symlink";
       };
-
-    environment.etc.zoneinfo.source = tzdir;
-
   };
 
 }

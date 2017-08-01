@@ -20,15 +20,6 @@ in
 
   options = {
 
-    networking.fqdn = lib.mkOption {
-      type = types.nullOr types.str;
-      default = null;
-      example = "foo.example.com";
-      description = ''
-        Fully qualified domain name, if any.
-      '';
-    };
-
     networking.hosts = lib.mkOption {
       type = types.attrsOf ( types.listOf types.str );
       default = {};
@@ -220,12 +211,11 @@ in
                 ( builtins.hasAttr "::1" cfg.hosts )
                 ( concatStringsSep " " ( remove "localhost" cfg.hosts."::1" ));
               otherHosts = allToString ( removeAttrs cfg.hosts [ "127.0.0.1" "::1" ]);
-              maybeFQDN = optionalString ( cfg.fqdn != null ) cfg.fqdn;
           in
           ''
-            127.0.0.1 ${maybeFQDN} ${userLocalHosts} localhost
+            127.0.0.1 ${userLocalHosts} localhost
             ${optionalString cfg.enableIPv6 ''
-              ::1 ${maybeFQDN} ${userLocalHosts6} localhost
+              ::1 ${userLocalHosts6} localhost
             ''}
             ${otherHosts}
             ${cfg.extraHosts}

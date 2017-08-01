@@ -13,8 +13,11 @@ pkgs/development/interpreters/python/*	@FRidh
 pkgs/development/python-modules/*	@FRidh
 doc/languages-frameworks/python.md	@FRidh
 
-# Darwin-related
-pkgs/stdenv/darwin/*    @copumpkin @LnL7
-pkgs/os-specific/darwin/*   @LnL7
-pkgs/os-specific/darwin/apple-source-releases/* @copumpkin
+# Boostraping and core infra
+pkgs/stdenv/	@Ericson2314
+pkgs/build-support/cc-wrapper/	@Ericson2314
 
+# Darwin-related
+pkgs/stdenv/darwin/*	@copumpkin @LnL7
+pkgs/os-specific/darwin/*	@LnL7
+pkgs/os-specific/darwin/apple-source-releases/*	@copumpkin
