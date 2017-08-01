@@ -56,8 +56,9 @@ in stdenv.mkDerivation rec {
 
   dontUseCmakeConfigure = true;
 
-  buildInputs = [ cmake boost ffmpeg qtbase bullet mygui_ openscenegraph SDL2 unshield openal libXt
-    fakegit makeWrapper ncurses mesa_noglu ];
+  nativeBuildInputs = [ cmake makeWrapper fakegit ];
+  buildInputs = [ boost ffmpeg qtbase bullet mygui_ openscenegraph SDL2 unshield openal libXt
+    ncurses mesa_noglu ];
 
   buildPhase = ''
     mkdir dependencies keepers
@@ -71,26 +72,35 @@ in stdenv.mkDerivation rec {
     substituteInPlace tes3mp-deploy.sh \
       --replace "-DBUILD_OPENCS=OFF" "-DBUILD_OPENCS=OFF -DCMAKE_INSTALL_PREFIX=$out"
     patchShebangs tes3mp-deploy.sh
-    echo y | ./tes3mp-deploy.sh -i #-c 1
+    echo y | ./tes3mp-deploy.sh -i -c $NIX_BUILD_CORES
   '';
 
   installPhase = ''
     prefix=$out/opt/tes3mp
-    mkdir -p $prefix $out/etc/openmw $out/bin
+    mkdir -p $prefix/build $out/etc/openmw $out/bin
+    for i in build/*; do
+      if [ -f "$i" ] && [ -x "$i" ]; then
+        mv "$i" $prefix/build
+      fi
+    done
+    mv build/resources $prefix/build
+    mv build/{settings-default.cfg,openmw.cfg,gamecontrollerdb.txt} $out/etc/openmw
+    mv keepers $prefix
 
-    mv build keepers $prefix
     for i in tes3mp.sh tes3mp-browser.sh tes3mp-server.sh
     do
-      substitute $i $out/bin/$i \
+      bin="$out/bin/''${i%.sh}"
+      mv $i $bin
+      substituteInPlace $bin \
         --replace build/ $prefix/build/
-      chmod +x $out/bin/$i
+      chmod +x $bin
     done
     ln -s $prefix/keepers/*.cfg $out/etc/openmw/
 
-    wrapProgram $out/bin/tes3mp-server.sh \
+    wrapProgram $out/bin/tes3mp-server \
       --run "mkdir -p ~/.config/openmw" \
       --run "cd ~/.config/openmw" \
-      --run "[ -d PluginKeepers ] || cp --no-preserve=mode -r $prefix/keepers/PluginExamples ." \
+      --run "[ -d PluginExamples ] || cp --no-preserve=mode -r $prefix/keepers/PluginExamples ." \
       --run "[ -f tes3mp-server.cfg ] || echo \"[Plugins] home = \$HOME/.config/openmw/PluginExamples\" > tes3mp-server.cfg"
   '';
 
