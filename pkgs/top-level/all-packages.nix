@@ -18313,7 +18313,9 @@ with pkgs;
 
   gap = callPackage ../applications/science/math/gap { };
 
-  geogebra = callPackage ../applications/science/math/geogebra { };
+  geogebra = callPackage ../applications/science/math/geogebra {
+    language = config.geogebra.language or "en";
+  };
 
   maxima = callPackage ../applications/science/math/maxima {
     sbcl = sbcl_1_3_12;
