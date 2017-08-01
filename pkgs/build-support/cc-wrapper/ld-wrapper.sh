@@ -62,7 +62,6 @@ fi
 
 extra+=($NIX_LDFLAGS_AFTER $NIX_LDFLAGS_HARDEN)
 
-declare -A rpaths
 declare -a libDirs
 declare -A libs
 relocatable=
@@ -78,9 +77,8 @@ if [ "$NIX_DONT_SET_RPATH" != 1 ] || [ "$NIX_SET_BUILD_ID" = 1 ]; then
             -l)
                 libs["lib${p}.so"]=1
                 ;;
-            -dynamic-linker)
-                # Ignore the dynamic linker argument, or it
-                # will match *.so and be added to rpath.
+            -dynamic-linker | -plugin)
+                # Ignore this argument, or it will match *.so and be added to rpath.
                 ;;
             *)
                 case "$p" in
@@ -91,13 +89,9 @@ if [ "$NIX_DONT_SET_RPATH" != 1 ] || [ "$NIX_SET_BUILD_ID" = 1 ]; then
                         libs["lib${p:2}.so"]=1
                         ;;
                     "$NIX_STORE"/*.so | "$NIX_STORE"/*.so.*)
-                        # This is a direct reference to a shared library, so add
-                        # its directory to the rpath.
-                        dir="${p%/*}"
-                        if [ ! "${rpaths[$dir]}" ]; then
-                            rpaths["$dir"]=1
-                            extra+=(-rpath "$dir")
-                        fi
+                        # This is a direct reference to a shared library.
+                        libDirs+=("${p%/*}")
+                        libs["${p##*/}"]=1
                         ;;
                     -r | --relocatable | -i)
                         relocatable=1
@@ -116,6 +110,7 @@ if [ "$NIX_DONT_SET_RPATH" != 1 ]; then
     # so, add the directory to the rpath.
     # It's important to add the rpath in the order of -L..., so
     # the link time chosen objects will be those of runtime linking.
+    declare -A rpaths
     for dir in "${libDirs[@]}"; do
         if [[ "$dir" =~ [/.][/.] ]] && dir2=$(readlink -f "$dir"); then
             dir="$dir2"
