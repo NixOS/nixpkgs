@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, which, pkgconfig, libiconv, libffi, libtasn1 }:
+{ stdenv, fetchFromGitHub, autoreconfHook, which, pkgconfig, libiconv
+, libffi, libtasn1, gtk_doc, libxslt, docbook_xsl }:
 
 stdenv.mkDerivation rec {
   name = "p11-kit-${version}";
@@ -14,7 +15,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
-  nativeBuildInputs = [ autoreconfHook which pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook which pkgconfig gtk_doc libxslt docbook_xsl ];
   buildInputs = [ libffi libtasn1 libiconv ];
 
   autoreconfPhase = ''
@@ -25,6 +26,7 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--without-trust-paths"
+    "--enable-doc"
   ];
 
   installFlags = [ "exampledir=\${out}/etc/pkcs11" ];
