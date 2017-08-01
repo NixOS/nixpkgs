@@ -9751,15 +9751,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   Mouse = buildPerlModule rec {
-    name = "Mouse-v2.4.5";
+    name = "Mouse-v2.4.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SY/SYOHEX/${name}.tar.gz";
-      sha256 = "1f4dps68f2w1fwqjfpr4kllbcbwd744v3h1r9rkpwc2fhvq3q8hl";
+      url = "mirror://cpan/authors/id/G/GF/GFUJI/${name}.tar.gz";
+      sha256 = "053d28c4v8kj7llwfwj5hjkvc1kcs6mvcn24yg7vxklgj6hxv5dr";
     };
     buildInputs = [
       ModuleBuildXSUtil TestException TestLeakTrace TestRequires TestOutput
       TestFatal
     ];
+    NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isi686 "-fno-stack-protector";
+    hardeningDisable = stdenv.lib.optional stdenv.isi686 "stackprotector";
   };
 
   MouseXNativeTraits = buildPerlPackage rec {
