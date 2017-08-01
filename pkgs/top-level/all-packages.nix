@@ -19223,4 +19223,9 @@ with pkgs;
   undaemonize = callPackage ../tools/system/undaemonize {};
 
   houdini = callPackage ../applications/misc/houdini {};
+
+  # No `recurseIntoAttrs` because there's no need to nix-env these.
+  tests = {
+    macOSSierraShared = callPackage ../test/macos-sierra-shared {};
+  };
 }

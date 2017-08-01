@@ -1,4 +1,4 @@
-{ lib, clangStdenv, clang-sierraHack-stdenv }:
+{ lib, clangStdenv, clang-sierraHack-stdenv, stdenvNoCC }:
 
 let
   makeBigExe = stdenv: prefix: rec {
@@ -22,6 +22,7 @@ let
         mkdir -p "$out/lib"
         mv lib${name}.dylib "$out/lib"
       '';
+      meta.platforms = lib.platforms.darwin;
     }) count;
 
     finalExe = stdenv.mkDerivation rec {
@@ -53,18 +54,36 @@ let
         EOF
       '';
       buildPhase = ''
-        $CXX -std=c++11 main.cxx ${toString (map (x: "-l${x.name}") sillyLibs)} -o asdf
+        $CXX -std=c++11 main.cxx ${toString (map (x: "-l${x.name}") sillyLibs)} -o ${prefix}-asdf
       '';
       buildInputs = sillyLibs;
       installPhase = ''
         mkdir -p "$out/bin"
-        mv asdf "$out/bin"
+        mv ${prefix}-asdf "$out/bin"
       '';
+      meta.platforms = lib.platforms.darwin;
     };
 
   };
 
-in {
   good = makeBigExe clang-sierraHack-stdenv "good";
+
   bad  = makeBigExe clangStdenv             "bad";
+
+in stdenvNoCC.mkDerivation {
+  name = "macos-sierra-shared-test";
+  buildInputs = [ good.finalExe bad.finalExe ];
+  # TODO(@Ericson2314): Be impure or require exact MacOS version of builder?
+  buildCommand = ''
+    if bad-asdf
+    then echo "bad-asdf can succeed on non-sierra, OK" >&2
+    else echo "bad-asdf should fail on sierra, OK" >&2
+    fi
+
+    # Must succeed on all supported MacOS versions
+    good-asdf
+
+    touch $out
+  '';
+  meta.platforms = lib.platforms.darwin;
 }
