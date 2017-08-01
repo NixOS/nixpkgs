@@ -130,6 +130,12 @@ rmdir /var/lib/ipfs/.ipfs
       instead. Refer to the description of the options for more details.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      <literal>tlsdate</literal> package and module were removed. This is due to the project
+      being dead and not building with openssl 1.1.
+    </para>
+  </listitem>
 </itemizedlist>
 
 <para>Other notable improvements:</para>
