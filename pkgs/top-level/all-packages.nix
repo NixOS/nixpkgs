@@ -18150,6 +18150,10 @@ with pkgs;
   coq_HEAD = callPackage ../applications/science/logic/coq/HEAD.nix {};
   coq = coqPackages.coq;
 
+  coq2html = callPackage ../applications/science/logic/coq2html {
+    make = pkgs.gnumake3;
+  };
+
   cryptoverif = callPackage ../applications/science/logic/cryptoverif { };
 
   cubicle = callPackage ../applications/science/logic/cubicle { };
