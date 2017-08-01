@@ -1011,6 +1011,8 @@ with pkgs;
     buildInputs = old.buildInputs ++ [phantomjs2];
   });
 
+  fd = callPackage ../tools/misc/fd { };
+
   filebench = callPackage ../tools/misc/filebench { };
 
   fsmon = callPackage ../tools/misc/fsmon { };
