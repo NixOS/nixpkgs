@@ -3,14 +3,14 @@
 
 assert enableSeccomp -> libseccomp != null;
 
-let version = "9.10.5-P2"; in
+let version = "9.10.6"; in
 
 stdenv.mkDerivation rec {
   name = "bind-${version}";
 
   src = fetchurl {
     url = "http://ftp.isc.org/isc/bind9/${version}/${name}.tar.gz";
-    sha256 = "0cwrwlkfd6wnkw2ylkz2iyqlz73s3kf6q0fxsfwnh3fhxps2i90r";
+    sha256 = "17g68zghy18d3qyhfj4h0w0f5g1riaz5s3dklidjzlxiswmwvfqp";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
