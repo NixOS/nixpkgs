@@ -14254,8 +14254,6 @@ with pkgs;
   wireshark-qt = wireshark-cli.override { withQt = true; };
   wireshark = wireshark-qt;
 
-  wvdial = callPackage ../os-specific/linux/wvdial { };
-
   fbida = callPackage ../applications/graphics/fbida { };
 
   fdupes = callPackage ../tools/misc/fdupes { };
