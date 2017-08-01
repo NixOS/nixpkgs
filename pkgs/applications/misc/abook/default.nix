@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, ncurses, readline }:
+{ stdenv, fetchurl, fetchpatch, pkgconfig, ncurses, readline, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "abook-0.6.0pre2";
+  name = "abook-0.6.1";
 
   src = fetchurl {
     url = "http://abook.sourceforge.net/devel/${name}.tar.gz";
-    sha256 = "11fkyq9bqw7s6jf38yglk8bsx0ar2wik0fq0ds0rdp8985849m2r";
+    sha256 = "1yf0ifyjhq2r003pnpn92mn0924bn9yxjifxxj2ldcsgd7w0vagh";
   };
 
   patches = [
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
      })
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [ ncurses readline ];
 
   meta = {
