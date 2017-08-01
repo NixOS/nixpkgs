@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, pkgconfig, pcre, perl, flex, bison, gettext, libpcap, libnl, c-ares
 , gnutls, libgcrypt, libgpgerror, geoip, openssl, lua5, makeDesktopItem, python, libcap, glib
-, libssh, zlib, cmake, extra-cmake-modules
+, libssh, zlib, cmake, extra-cmake-modules, fetchpatch
 , withGtk ? false, gtk3 ? null, librsvg ? null, gsettings_desktop_schemas ? null, wrapGAppsHook ? null
 , withQt ? false, qt5 ? null
 , ApplicationServices, SystemConfiguration, gmp
@@ -12,16 +12,18 @@ assert withQt  -> !withGtk && qt5  != null;
 with stdenv.lib;
 
 let
-  version = "2.2.7";
+  version = "2.4.0";
   variant = if withGtk then "gtk" else if withQt then "qt" else "cli";
 
 in stdenv.mkDerivation {
   name = "wireshark-${variant}-${version}";
 
   src = fetchurl {
-    url = "http://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.bz2";
-    sha256 = "1dfvhra5v6xhzbp097qsxi0zvirw0srbasl4v1wjf58v49idz7b8";
+    url = "http://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
+    sha256 = "011vvrj76z1azkpvyy2j40b1x1z56ymld508zfc4xw3gh8dv82w9";
   };
+
+  cmakeFlags = optional withGtk "-DBUILD_wireshark_gtk=TRUE";
 
   nativeBuildInputs = [
     bison cmake extra-cmake-modules flex
@@ -35,7 +37,19 @@ in stdenv.mkDerivation {
     ++ optionals stdenv.isLinux  [ libcap libnl ]
     ++ optionals stdenv.isDarwin [ SystemConfiguration ApplicationServices gmp ];
 
-  patches = [ ./wireshark-lookup-dumpcap-in-path.patch ];
+  patches = [ ./wireshark-lookup-dumpcap-in-path.patch
+
+              # Backported from master. Will probably have to be dropped during next
+              # update.
+              (fetchpatch {
+                 name = "AUTHORS_add_newline_after_bracket";
+                 url = "https://code.wireshark.org/review/gitweb?p=wireshark.git;a=patch;h=27c6b12626d6e7b8e4d7a11784c2c5e2bfb87fde";
+                 sha256 = "1x30rkrq7dzgdlwrjv2r5ibdpdgwnn5wzvki77rdf13b0547vcw3";
+               })
+              # A file is missing from distribution. This should be fixed in upcoming
+              # releases
+              ./add_missing_udpdump_pod.patch
+            ];
 
   postInstall = optionalString (withQt || withGtk) ''
     ${optionalString withGtk ''
