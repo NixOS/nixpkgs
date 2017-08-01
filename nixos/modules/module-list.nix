@@ -517,7 +517,6 @@
   ./services/networking/teamspeak3.nix
   ./services/networking/tinc.nix
   ./services/networking/tftpd.nix
-  ./services/networking/tlsdated.nix
   ./services/networking/tox-bootstrapd.nix
   ./services/networking/toxvpn.nix
   ./services/networking/tvheadend.nix

@@ -4476,8 +4476,6 @@ with pkgs;
 
   tiny8086 = callPackage ../applications/virtualization/8086tiny { };
 
-  tlsdate = callPackage ../tools/networking/tlsdate { };
-
   tldr = callPackage ../tools/misc/tldr { };
 
   tlspool = callPackage ../tools/networking/tlspool { };
