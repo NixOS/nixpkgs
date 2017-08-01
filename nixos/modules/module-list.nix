@@ -105,7 +105,6 @@
   ./programs/venus.nix
   ./programs/vim.nix
   ./programs/wireshark.nix
-  ./programs/wvdial.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
   ./programs/zsh/oh-my-zsh.nix
