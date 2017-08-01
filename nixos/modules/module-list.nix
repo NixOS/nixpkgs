@@ -43,6 +43,7 @@
   ./hardware/nitrokey.nix
   ./hardware/opengl.nix
   ./hardware/pcmcia.nix
+  ./hardware/raid/hpsa.nix
   ./hardware/usb-wwan.nix
   ./hardware/video/amdgpu.nix
   ./hardware/video/amdgpu-pro.nix
