@@ -43,7 +43,6 @@ buildRustPackage rec {
   buildInputs = [
     cmake
     makeWrapper
-    xclip
     pkgconfig
   ] ++ rpathLibs;
 
