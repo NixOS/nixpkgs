@@ -9,9 +9,9 @@
 #
 # See comment at the top of configuration-nix.nix for more information about this
 # distinction.
-{ pkgs }:
+{ pkgs, haskellLib }:
 
-with import ./lib.nix { inherit pkgs; };
+with haskellLib;
 
 self: super: {
 
