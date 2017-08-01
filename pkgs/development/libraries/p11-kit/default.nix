@@ -1,17 +1,25 @@
-{ stdenv, fetchurl, libiconv, pkgconfig, libffi, libtasn1 }:
+{ stdenv, fetchFromGitHub, autoreconfHook, which, pkgconfig, libiconv, libffi, libtasn1 }:
 
 stdenv.mkDerivation rec {
-  name = "p11-kit-0.23.2";
+  name = "p11-kit-${version}";
+  version = "0.23.7";
 
-  src = fetchurl {
-    url = "${meta.homepage}releases/${name}.tar.gz";
-    sha256 = "1w7szm190phlkg7qx05ychlj2dbvkgkhx9gw6dx4d5rw62l6wwms";
+  src = fetchFromGitHub {
+    owner = "p11-glue";
+    repo = "p11-kit";
+    rev = version;
+    sha256 = "1l8sg0g74k2mk0y6vz19hc103dzizxa0h579gdhvxifckglb01hy";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
-  buildInputs = [ pkgconfig libffi libtasn1 libiconv ];
+  nativeBuildInputs = [ autoreconfHook which pkgconfig ];
+  buildInputs = [ libffi libtasn1 libiconv ];
+
+  autoreconfPhase = ''
+    NOCONFIGURE=1 ./autogen.sh
+  '';
 
   configureFlags = [
     "--sysconfdir=/etc"
