@@ -17380,6 +17380,10 @@ with pkgs;
 
   openmw = callPackage ../games/openmw { };
 
+  openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix {
+    stdenv = overrideCC stdenv gcc7;
+  };
+
   openra = callPackage ../games/openra { lua = lua5_1; };
 
   openrw = callPackage ../games/openrw { };
