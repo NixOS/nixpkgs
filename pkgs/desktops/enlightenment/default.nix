@@ -1,7 +1,10 @@
 { callPackage, pkgs }:
 rec {
   #### CORE EFL
-  efl = callPackage ./efl.nix { openjpeg = pkgs.openjpeg_1; };
+  efl = callPackage ./efl.nix {
+    openjpeg = pkgs.openjpeg_1;
+    openssl = pkgs.openssl_1_0_2;
+  };
 
   #### WINDOW MANAGER
   enlightenment = callPackage ./enlightenment.nix { };

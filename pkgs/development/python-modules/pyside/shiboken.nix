@@ -2,7 +2,7 @@
 
 # This derivation provides a Python module and should therefore be called via `python-packages.nix`.
 # Python 3.5 is not supported: https://github.com/PySide/Shiboken/issues/77
-buildPythonPackage rec {
+with lib; buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "pyside-shiboken";
   version = "1.2.4";
@@ -23,15 +23,18 @@ buildPythonPackage rec {
     substituteInPlace generator/CMakeLists.txt --replace \
       \"$\{GENERATORRUNNER_PLUGIN_DIR}\" lib/generatorrunner/
   '';
-  patches = if (isPy35 || isPy36) then [ ./shiboken_py35.patch ] else null;
+  patches = optional (isPy35 || isPy36) ./shiboken_py35.patch;
 
-  cmakeFlags = if isPy3k then "-DUSE_PYTHON3=TRUE" else null;
+  cmakeFlags = optionals isPy3k [
+    "-DUSE_PYTHON3=TRUE" "-DPYTHON3_LIBRARY=${python}/lib/libpython3.so"
+    "-DPYTHON3_INCLUDE_DIR=${python}/include/${python.libPrefix}"
+  ];
 
   meta = {
     description = "Plugin (front-end) for pyside-generatorrunner, that generates bindings for C++ libraries using CPython source code";
-    license = lib.licenses.gpl2;
+    license = licenses.gpl2;
     homepage = "http://www.pyside.org/docs/shiboken/";
-    maintainers = [ lib.maintainers.chaoflow ];
-    platforms = lib.platforms.all;
+    maintainers = [ maintainers.chaoflow ];
+    platforms = platforms.all;
   };
 }

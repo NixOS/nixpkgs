@@ -80,5 +80,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.tstrobel ];
     platforms = [ "x86_64-linux" ];
     license = licenses.bsd3;
+    broken = true;  # build failure withn openssl 1.1
   };
 }

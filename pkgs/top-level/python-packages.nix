@@ -3602,12 +3602,12 @@ in {
   cryptography = buildPythonPackage rec {
     # also bump cryptography_vectors
     pname = "cryptography";
-    name = "${pname}${version}";
-    version = "1.8.1";
+    name = "${pname}-${version}";
+    version = "1.9";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "323524312bb467565ebca7e50c8ae5e9674e544951d28a2904a50012a8828190";
+      sha256 = "10j8r1s29f4h59kp3mla14g588rm7qpn90nrczijk03i49q3662m";
     };
 
     buildInputs = [ pkgs.openssl self.cryptography_vectors ]
@@ -3645,12 +3645,12 @@ in {
   cryptography_vectors = buildPythonPackage rec {
       # also bump cryptography
     pname = "cryptography_vectors";
-    name = "${pname}${version}";
-    version = "1.8.1";
+    name = "${pname}-${version}";
+    version = "1.9";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "2fd61facea08800ca98ac923f6d02f48a7ae6648025b29cdeb51987c1532add6";
+      sha256 = "1wvq1p1viam1diz9x6d61x1bsy6cninv7cjgd35x9ffig9r6gxxv";
     };
 
     # No tests included
@@ -12638,10 +12638,10 @@ in {
       sha256 = "1s2y0pf2zg7xf4nfwrw7zhwbk615r5a7bgi5wwkwzh6jl50n99c0";
     };
 
-    buildInputs = with self; [ pkgs.swig2 pkgs.openssl ];
+    buildInputs = with self; [ pkgs.swig2 pkgs.openssl_1_0_2 ];
 
     preConfigure = ''
-      substituteInPlace setup.py --replace "self.openssl = '/usr'" "self.openssl = '${pkgs.openssl.dev}'"
+      substituteInPlace setup.py --replace "self.openssl = '/usr'" "self.openssl = '${pkgs.openssl_1_0_2.dev}'"
     '';
 
     doCheck = false; # another test that depends on the network.
@@ -13922,9 +13922,9 @@ in {
       sha256 = "0x0c2jg0bb3pp84njaqiic050qkyd7ymwhfvhipnimg58yv40441";
     };
 
-    buildInputs = with self; [ nose pkgs.openssl ];
+    buildInputs = with self; [ nose ];
 
-    propagatedBuildInputs = with self; [ pkgs.mysql.lib pkgs.zlib ];
+    propagatedBuildInputs = with self; [ pkgs.mysql.connector-c ];
 
     meta = {
       description = "MySQL database binding for Python";

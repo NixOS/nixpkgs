@@ -76,7 +76,7 @@ in stdenv.mkDerivation rec {
       libmpeg2 libsamplerate libmad
       libogg libvorbis flac libxslt systemd
       lzo libcdio libmodplug libass libbluray
-      sqlite mysql.lib nasm avahi libdvdcss lame
+      sqlite mysql.connector-c nasm avahi libdvdcss lame
       curl bzip2 zip unzip glxinfo xdpyinfo
       libcec libcec_platform dcadec libuuid
       libcrossguid
@@ -101,6 +101,10 @@ in stdenv.mkDerivation rec {
         --replace 'usr/share/zoneinfo' 'etc/zoneinfo'
       substituteInPlace tools/depends/target/ffmpeg/autobuild.sh \
         --replace "/bin/bash" "${bash}/bin/bash -ex"
+      substituteInPlace xbmc/dbwrappers/mysqldataset.h \
+        --replace "mysql/mysql.h" "mysql.h"
+      substituteInPlace xbmc/dbwrappers/mysqldataset.cpp \
+        --replace "mysql/errmsg.h" "errmsg.h"
       cp ${ffmpeg_3_1_6} tools/depends/target/ffmpeg/ffmpeg-3.1.6-${rel}.tar.gz
       ln -s ${libdvdcss.src} tools/depends/target/libdvdcss/libdvdcss-master.tar.gz
       cp ${libdvdnav_src} tools/depends/target/libdvdnav/libdvdnav-master.tar.gz

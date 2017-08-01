@@ -8,7 +8,7 @@ buildPerlPackage rec {
     sha256 = "0h4h6zwzj8fwh9ljb8svnsa0a3ch4p10hp59kpdibdb4qh8xwxs7";
   };
 
-  buildInputs = [ mysql.lib ] ;
+  buildInputs = [ mysql.connector-c ] ;
   propagatedBuildInputs = [ DBI ];
 
   doCheck = false;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, file, wrapGAppsHook
+{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, file, wrapGAppsHook
 , openssl, curl, libevent, inotify-tools, systemd, zlib
 , enableGTK3 ? false, gtk3, hicolor_icon_theme
 , enableSystemd ? stdenv.isLinux
@@ -24,6 +24,13 @@ stdenv.mkDerivation rec {
     ++ optionals enableGTK3 [ gtk3 wrapGAppsHook hicolor_icon_theme ]
     ++ optionals enableSystemd [ systemd ]
     ++ optionals stdenv.isLinux [ inotify-tools ];
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/transmission/transmission/commit/eb8f5004e01e054c7dd4f5b93e7c0a4daed957f4.patch";
+      sha256 = "0kxyzd5b9p6bjznp5mh87108bc8h3mn3n4fyp8brcqvxm7c527xv";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace ./configure \

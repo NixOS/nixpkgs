@@ -223,7 +223,7 @@ stdenv.mkDerivation {
     [ bison flex gperf openssl ]
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
-    ++ lib.optional (mysql != null) mysql.lib
+    ++ lib.optional (mysql != null) mysql.connector-c
     ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs = [ lndir perl pkgconfig python2 ] ++ lib.optional (!stdenv.isDarwin) patchelf;

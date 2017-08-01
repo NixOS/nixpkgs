@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, xlibsWrapper, libX11, libXi, libXtst, libXrandr
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, xlibsWrapper, libX11, libXi, libXtst, libXrandr
 , xinput, curl, openssl, unzip }:
 
 with stdenv.lib;
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}-stable";
     sha256 = "0ksgr9hkf09h54572p7k7b9zkfhcdb2g2d5x7ixxn028y8i3jyp3";
   };
+
+  patches = [ ./openssl-1.1.patch ];
 
   postPatch = ''
     ${unzip}/bin/unzip -d ext/gmock-1.6.0 ext/gmock-1.6.0.zip

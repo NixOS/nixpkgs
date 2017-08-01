@@ -19,4 +19,6 @@ in mkDerivation rec {
     rmAndPwdPatch
     envAndCpPatch
   ];
+
+  meta.broken = true; # broken with openssl 1.1
 }

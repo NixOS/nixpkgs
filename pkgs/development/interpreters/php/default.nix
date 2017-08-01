@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, composableDerivation, autoconf, automake, flex, bison
+{ lib, stdenv, fetchurl, fetchpatch, composableDerivation, autoconf, automake, flex, bison
 , mysql, libxml2, readline, zlib, curl, postgresql, gettext
 , openssl, pkgconfig, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, freetds
@@ -10,7 +10,7 @@ let
     { version, sha256 }:
 
     let php7 = lib.versionAtLeast version "7.0";
-        mysqlHeaders = mysql.lib.dev or mysql;
+        mysqlHeaders = mysql.connector-c or mysql;
 
     in composableDerivation.composableDerivation {} (fixed: {
 
@@ -311,7 +311,12 @@ let
         outputsToInstall = [ "out" "dev" ];
       };
 
-      patches = if !php7 then [ ./fix-paths.patch ] else [ ./fix-paths-php7.patch ];
+      patches = if !php7 then [
+        ./fix-paths.patch
+        ./php-5.6-openssl-1.1.patch
+      ] else [
+        ./fix-paths-php7.patch
+      ];
 
       postPatch = lib.optional stdenv.isDarwin ''
         substituteInPlace configure --replace "-lstdc++" "-lc++"
