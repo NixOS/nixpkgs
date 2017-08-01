@@ -1,19 +1,23 @@
-{ stdenv, fetchgit, autoreconfHook, boost, curl, openssl, log4shib, xercesc, xml-security-c }:
+{ stdenv, fetchgit, fetchpatch, autoreconfHook, boost, curl, openssl, log4shib, xercesc, xml-security-c }:
 
 stdenv.mkDerivation rec {
   name = "xml-tooling-c-${version}";
-  version = "1.6.0";
+  version = "1.6.0+git-2017-05-31"; # many openssl 1.1 compatibility fixes
 
   src = fetchgit {
     url = "https://git.shibboleth.net/git/cpp-xmltooling.git";
-    rev = "db08101c3854518a59096be95ed6564838381744";
-    sha256 = "0rhzvxm4z3pm28kpk34hayhm12bjjms2kygv1z68vnz8ijzgcinq";
+    rev = "a31cae0d2e327011e3a67a576bfdff69911bf3c5";
+    sha256 = "1340j2fgkj6ai4sdnqjqfa4qf7srjn8425a25lyz7m10pxmy8ysm";
   };
 
   buildInputs = [ boost curl openssl log4shib xercesc xml-security-c ];
   nativeBuildInputs = [ autoreconfHook ];
 
   enableParallelBuilding = true;
+
+  postPatch = ''
+    sed 's/continue$/continue;/' -i xmltooling/util/ReloadableXMLFile.cpp
+  '';
 
   meta = with stdenv.lib; {
     description = "A low-level library that provides a high level interface to XML processing for OpenSAML 2";
