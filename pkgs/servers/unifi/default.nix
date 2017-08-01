@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   name = "unifi-controller-${version}";
-  version = "5.5.20-1ca8f95c98";
+  version = "5.5.20";
 
   src = fetchurl {
     url = "https://www.ubnt.com/downloads/unifi/${version}/unifi_sysvinit_all.deb";

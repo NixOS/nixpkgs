@@ -12,10 +12,7 @@ stdenv.mkDerivation rec {
     owner = "mikebrady";
   };
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkgconfig
-  ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   buildInputs = [
     openssl
@@ -40,6 +37,7 @@ stdenv.mkDerivation rec {
     inherit (src.meta) homepage;
     description = "Airtunes server and emulator with multi-room capabilities";
     license = licenses.mit;
+    maintainers =  with maintainers; [ lnl7 ];
     platforms = platforms.unix;
   };
 }

@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "numpy";
-  version = "1.12.1";
+  version = "1.13.1";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/n/numpy/numpy-${version}.zip";
-    sha256 = "a65266a4ad6ec8936a1bc85ce51f8600634a31a258b722c9274a80ff189d9542";
+    sha256 = "c9b0283776085cb2804efff73e9955ca279ba4edafd58d3ead70b61d209c4fbb";
   };
 
   disabled = isPyPy;
@@ -21,6 +21,7 @@ buildPythonPackage rec {
 
   preConfigure = ''
     sed -i 's/-faltivec//' numpy/distutils/system_info.py
+    export NPY_NUM_BUILD_JOBS=$NIX_BUILD_CORES
   '';
 
   preBuild = ''
@@ -31,6 +32,8 @@ buildPythonPackage rec {
     library_dirs = ${blas}/lib
     EOF
   '';
+
+  enableParallelBuilding = true;
 
   checkPhase = ''
     runHook preCheck

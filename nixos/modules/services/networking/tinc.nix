@@ -131,7 +131,7 @@ in
       (flip mapAttrsToList cfg.networks (network: data:
         flip mapAttrs' data.hosts (host: text: nameValuePair
           ("tinc/${network}/hosts/${host}")
-          ({ mode = "0444"; inherit text; })
+          ({ mode = "0644"; user = "tinc.${network}"; inherit text; })
         ) // {
           "tinc/${network}/tinc.conf" = {
             mode = "0444";
@@ -161,11 +161,9 @@ in
       ("tinc.${network}")
       ({
         description = "Tinc Daemon - ${network}";
-        wantedBy = [ "network.target" ];
-        after = [ "network-interfaces.target" ];
-        path = [ data.package pkgs.utillinux ];
-        restartTriggers = [ config.environment.etc."tinc/${network}/tinc.conf".source ]
-          ++ mapAttrsToList (host: _ : config.environment.etc."tinc/${network}/hosts/${host}".source) data.hosts;
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
+        path = [ data.package ];
         serviceConfig = {
           Type = "simple";
           PIDFile = "/run/tinc.${network}.pid";

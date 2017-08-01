@@ -136,6 +136,8 @@ in {
 
   emcee = callPackage ../development/python-modules/emcee { };
 
+  email_validator = callPackage ../development/python-modules/email-validator { };
+
   dbus-python = callPackage ../development/python-modules/dbus {
     dbus = pkgs.dbus;
   };
@@ -1903,33 +1905,7 @@ in {
     };
   };
 
-  cycler = buildPythonPackage rec {
-    name = "cycler-${version}";
-    version = "0.10.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/C/Cycler/${name}.tar.gz";
-      sha256 = "cd7b2d1018258d7247a71425e9f26463dfb444d411c39569972f4ce586b0c9d8";
-    };
-
-    buildInputs = with self; [ coverage nose ];
-    propagatedBuildInputs = with self; [ six ];
-
-    checkPhase = ''
-      ${python.interpreter} run_tests.py
-    '';
-
-    # Tests were not included in release.
-    # https://github.com/matplotlib/cycler/issues/31
-    doCheck = false;
-
-    meta = {
-      description = "Composable style cycles";
-      homepage = http://github.com/matplotlib/cycler;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  cycler = callPackage ../development/python-modules/cycler { };
 
   datadog = buildPythonPackage rec {
     name = "${pname}-${version}";
@@ -1990,6 +1966,7 @@ in {
     meta = {
       description = "A comic strip downloader and archiver";
       homepage = http://dosage.rocks/;
+      broken = true; # ctypes error
     };
   };
 
@@ -2173,55 +2150,7 @@ in {
     };
   };
 
-  blaze = buildPythonPackage rec {
-    name = "blaze-${version}";
-    version = "0.11.0";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/blaze/blaze/archive/${version}.tar.gz";
-      sha256 = "07zrrxkmdqk84xvdmp29859zcfzlpx5pz6g62l28nqp6n6a7yq9a";
-    };
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [
-      contextlib2
-      cytoolz
-      dask
-      datashape
-      flask
-      flask-cors
-      h5py
-      multipledispatch
-      numba
-      numpy
-      odo
-      pandas
-      psutil
-      pymongo
-      pyyaml
-      requests
-      sqlalchemy
-      tables
-      toolz
-    ];
-
-    # Failing test
-    # ERROR collecting blaze/tests/test_interactive.py
-    # E   networkx.exception.NetworkXNoPath: node <class 'list'> not
-    # reachable from <class 'dask.array.core.Array'>
-    doCheck = false;
-
-    checkPhase = ''
-      py.test blaze/tests
-    '';
-
-    meta = {
-      homepage = https://github.com/ContinuumIO/blaze;
-      description = "Allows Python users a familiar interface to query data living in other data storage systems";
-      license = licenses.bsdOriginal;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  blaze = callPackage ../development/python-modules/blaze { };
 
   # Needed for FlexGet 1.2.337 and calibre 2.76.0
   html5lib_0_9999999 = self.html5lib.override rec {
@@ -2898,6 +2827,12 @@ in {
       url = "mirror://pypi/c/celery/${name}.tar.gz";
       sha256 = "0kgmbs3fl9879n48p4m79nxy9by2yhvxq1jdvlnqzzvkdb2sdmg3";
     };
+
+    # Fixes testsuite for python-3.6
+    # From ubuntu packaging: https://launchpad.net/ubuntu/+archive/primary/+files/celery_4.0.2-0ubuntu1.debian.tar.xz
+    # (linked from https://launchpad.net/ubuntu/+source/celery)
+    # https://github.com/celery/celery/pull/3736#issuecomment-274155454 from upstream
+    patches = [ ../development/python-modules/celery/fix_endless_python3.6_loop_logger_isa.patch ];
 
     buildInputs = with self; [ pytest case ];
     propagatedBuildInputs = with self; [ kombu billiard pytz anyjson amqp eventlet ];
@@ -3615,50 +3550,7 @@ in {
     };
   };
 
-  cython = buildPythonPackage rec {
-    name = "Cython-${version}";
-    version = "0.25.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/C/Cython/${name}.tar.gz";
-      sha256 = "01h3lrf6d98j07iakifi81qjszh6faa37ibx7ylva1vsqbwx2hgi";
-    };
-
-    # With Python 2.x on i686-linux or 32-bit ARM this test fails because the
-    # result is "3L" instead of "3", so let's fix it in-place.
-    #
-    # Upstream issue: https://github.com/cython/cython/issues/1548
-    postPatch = optionalString ((stdenv.isi686 || stdenv.isArm) && !isPy3k) ''
-      sed -i -e 's/\(>>> *\)\(verify_resolution_GH1533()\)/\1int(\2)/' \
-        tests/run/cpdef_enums.pyx
-    '';
-
-    buildInputs = with self; [ pkgs.glibcLocales pkgs.pkgconfig pkgs.gdb ];
-    # For testing
-    nativeBuildInputs = with self; [ numpy pkgs.ncurses ];
-
-    LC_ALL = "en_US.UTF-8";
-
-    # cython's testsuite is not working very well with libc++
-    # We are however optimistic about things outside of testsuite still working
-    checkPhase = ''
-      export HOME="$NIX_BUILD_TOP"
-      ${python.interpreter} runtests.py \
-        ${if stdenv.cc.isClang or false then ''--exclude="(cpdef_extern_func|libcpp_algo)"'' else ""}
-    '';
-
-    # Disable tests temporarily
-    # https://github.com/cython/cython/issues/1676
-    doCheck = false;
-
-    meta = {
-      description = "An optimising static compiler for both the Python programming language and the extended Cython programming language";
-      platforms = platforms.all;
-      homepage = http://cython.org;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  cython = callPackage ../development/python-modules/Cython { };
 
   cytoolz = buildPythonPackage rec {
     name = "cytoolz-${version}";
@@ -5352,25 +5244,7 @@ in {
     };
   };
 
-  dns = buildPythonPackage rec {
-    name = "dnspython-${version}";
-    version = "1.14.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/dnspython/${name}.zip";
-      sha256 = "1p1i46fyhxfic8mfh3gfckpn2pn7282xqabhihiqymrp4sa8ni91";
-    };
-
-    # needs networking for some tests
-    doCheck = false;
-
-    meta = {
-      description = "A DNS toolkit for Python 3.x";
-      homepage = http://www.dnspython.org;
-      # BSD-like, check http://www.dnspython.org/LICENSE for details
-      license = licenses.free;
-    };
-  };
+  dns = callPackage ../development/python-modules/dns { };
 
   docker = callPackage ../development/python-modules/docker.nix {};
 
@@ -6008,22 +5882,7 @@ in {
     };
   };
 
-  faker = buildPythonPackage rec {
-    name = "faker-0.0.4";
-    disabled = isPy3k;
-    src = pkgs.fetchurl {
-      url = mirror://pypi/F/Faker/Faker-0.0.4.tar.gz;
-      sha256 = "09q5jna3j8di0gw5yjx0dvlndkrk2x9vvqzwyfsvg3nlp8h38js1";
-    };
-    buildInputs = with self; [ nose ];
-    meta = {
-      description = "A Python library for generating fake user data";
-      homepage    = http://pypi.python.org/pypi/Faker;
-      license     = licenses.mit;
-      maintainers = with maintainers; [ lovek323 ];
-      platforms   = platforms.unix;
-    };
-  };
+  faker = callPackage ../development/python-modules/faker { };
 
   fake_factory = buildPythonPackage rec {
     name = "fake-factory-${version}";
@@ -12252,6 +12111,14 @@ in {
       sha256 = "18hiricdnbnlz6hx3hbaa4dni6npv8rbid4dhf7k02k16qm6zz6h";
     };
 
+    # Backport fix for python-3.6 from master (see issue https://github.com/celery/kombu/issues/675)
+    # TODO remove at next update
+    patches = [ (pkgs.fetchpatch {
+      url = "https://github.com/celery/kombu/commit/dc3fceff59d79ceac3f8f11a5d697beabb4b7a7f.patch";
+      sha256 = "0s6gsihzjvmpffc7xrrcijw00r56yb74jg0sbjgng2v1324z1da9";
+      name = "don-t-modify-dict-size-while-iterating-over-it";
+    }) ];
+
     buildInputs = with self; [ pytest case pytz ];
 
     propagatedBuildInputs = with self; [ amqp ];
@@ -15217,13 +15084,13 @@ in {
   });
 
   osc = buildPythonPackage {
-    name = "osc-0.156.0-94-gd8ba394";
+    name = "osc-0.159.0-4-g2d44589";
     disabled = isPy3k;
     src = pkgs.fetchFromGitHub {
       owner = "openSUSE";
       repo = "osc";
-      rev = "d8ba39416bb193a15489cb2ae57847434adbf1c8";
-      sha256 = "0bxl1sjfpdrhyc0qljyqlkffyzn1iywjqgaz2z1y07zq59gc8wq0";
+      rev = "2d44589886845af7da911aaec9403344e396cd91";
+      sha256 = "0s8p7gkp64w6r5rnxpbvl2dgb5p85kq2skcqm6qxn5ddadhw2sfz";
     };
     buildInputs = with pkgs; [ bashInteractive ]; # needed for bash-completion helper
     propagatedBuildInputs = with self; [ urlgrabber m2crypto pyyaml ];
@@ -16118,30 +15985,7 @@ in {
     '';
   };
 
-  FormEncode = buildPythonPackage rec {
-    name = "FormEncode-${version}";
-    version = "1.3.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/F/FormEncode/${name}.zip";
-      sha256 = "0y5gywq0l79l85ylr55p4xy0h921zgmfw6zmrvlh83aa4j074xg6";
-    };
-
-    buildInputs = with self; [
-      dns pycountry nose
-    ];
-
-    preCheck = ''
-      # two tests require dns resolving
-      sed -i 's/test_cyrillic_email/noop/' formencode/tests/test_email.py
-      sed -i 's/test_unicode_ascii_subgroup/noop/' formencode/tests/test_email.py
-    '';
-
-    meta = with stdenv.lib; {
-      description = "FormEncode validates and converts nested structures";
-      homepage = "http://formencode.org";
-    };
-  };
+  FormEncode = callPackage ../development/python-modules/FormEncode { };
 
   pycountry = buildPythonPackage rec {
     name = "pycountry-${version}";
@@ -16324,6 +16168,8 @@ in {
       homepage = http://aioeventlet.readthedocs.org/;
     };
   };
+
+  olefile = callPackage ../development/python-modules/olefile { };
 
   oslo-log = buildPythonPackage rec {
     name = "oslo.log-${version}";
@@ -17333,61 +17179,9 @@ in {
 
   pystringtemplate = callPackage ../development/python-modules/stringtemplate { };
 
-  pillow = buildPythonPackage rec {
-    name = "Pillow-${version}";
-    version = "3.4.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/P/Pillow/${name}.tar.gz";
-      sha256 = "0ee9975c05602e755ff5000232e0335ba30d507f6261922a658ee11b1cec36d1";
-    };
-
-    doCheck = !stdenv.isDarwin && !isPyPy;
-
-    # Disable imagefont tests, because they don't work well with infinality:
-    # https://github.com/python-pillow/Pillow/issues/1259
-    postPatch = ''
-      rm Tests/test_imagefont.py
-    '';
-
-    buildInputs = with self; [
-      pkgs.freetype pkgs.libjpeg pkgs.zlib pkgs.libtiff pkgs.libwebp pkgs.tcl nose pkgs.lcms2 ]
-      ++ optionals (isPyPy) [ pkgs.tk pkgs.xorg.libX11 ];
-
-    # NOTE: we use LCMS_ROOT as WEBP root since there is not other setting for webp.
-    preConfigure = let
-      libinclude' = pkg: ''"${pkg.out}/lib", "${pkg.out}/include"'';
-      libinclude = pkg: ''"${pkg.out}/lib", "${pkg.dev}/include"'';
-    in ''
-      sed -i "setup.py" \
-          -e 's|^FREETYPE_ROOT =.*$|FREETYPE_ROOT = ${libinclude pkgs.freetype}|g ;
-              s|^JPEG_ROOT =.*$|JPEG_ROOT = ${libinclude pkgs.libjpeg}|g ;
-              s|^ZLIB_ROOT =.*$|ZLIB_ROOT = ${libinclude pkgs.zlib}|g ;
-              s|^LCMS_ROOT =.*$|LCMS_ROOT = ${libinclude pkgs.lcms2}|g ;
-              s|^TIFF_ROOT =.*$|TIFF_ROOT = ${libinclude pkgs.libtiff}|g ;
-              s|^TCL_ROOT=.*$|TCL_ROOT = ${libinclude' pkgs.tcl}|g ;'
-      export LDFLAGS="-L${pkgs.libwebp}/lib"
-      export CFLAGS="-I${pkgs.libwebp}/include"
-    ''
-    # Remove impurities
-    + stdenv.lib.optionalString stdenv.isDarwin ''
-      substituteInPlace setup.py \
-        --replace '"/Library/Frameworks",' "" \
-        --replace '"/System/Library/Frameworks"' ""
-    '';
-
-    meta = {
-      homepage = "https://python-pillow.github.io/";
-      description = "Fork of The Python Imaging Library (PIL)";
-      longDescription = ''
-        The Python Imaging Library (PIL) adds image processing
-        capabilities to your Python interpreter.  This library
-        supports many file formats, and provides powerful image
-        processing and graphics capabilities.
-      '';
-      license = "http://www.pythonware.com/products/pil/license.htm";
-      maintainers = with maintainers; [ goibhniu prikhi ];
-    };
+  pillow = callPackage ../development/python-modules/pillow {
+    inherit (pkgs) freetype libjpeg zlib libtiff libwebp tcl lcms2 tk;
+    inherit (pkgs.xorg) libX11;
   };
 
   pkgconfig = buildPythonPackage rec {
@@ -19099,23 +18893,7 @@ in {
     };
   };
 
-  pyparsing = buildPythonPackage rec {
-    name = "pyparsing-${version}";
-    version = "2.1.10";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyparsing/${name}.tar.gz";
-      sha256 = "811c3e7b0031021137fc83e051795025fcb98674d07eb8fe922ba4de53d39188";
-    };
-
-    # Not everything necessary to run the tests is included in the distribution
-    doCheck = false;
-
-    meta = {
-      homepage = http://pyparsing.wikispaces.com/;
-      description = "An alternative approach to creating and executing simple grammars, vs. the traditional lex/yacc approach, or the use of regular expressions";
-    };
-  };
+  pyparsing = callPackage ../development/python-modules/pyparsing { };
 
   pyparted = buildPythonPackage rec {
     name = "pyparted-${version}";
@@ -21985,14 +21763,23 @@ in {
   };
 
   sqlobject = buildPythonPackage rec {
-    version = "3.0.0";
-    name = "sqlobject-${version}";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/S/SQLObject/SQLObject-${version}.tar.gz";
-      sha256 = "15g3g7f4yiyplqf54px1dsnmrw3jb7xwx97z8qzgp9ijmm5vpr8r";
+    pname = "SQLObject";
+    version = "3.3.0";
+    name = "${pname}-${version}";
+
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0p2dxrxh7xrv5yys09v5z95d0z40w22aq3xc01ghdidd7hr79xy9";
     };
 
-    propagatedBuildInputs = with self; [ pydispatcher FormEncode ];
+    checkInputs = with self; [ pytest ];
+
+    propagatedBuildInputs = with self; [
+      FormEncode
+      PasteDeploy
+      paste
+      pydispatcher
+    ];
 
     meta = {
       description = "Object Relational Manager for providing an object interface to your database";
@@ -22107,31 +21894,7 @@ in {
     };
   };
 
-  sounddevice = buildPythonPackage rec {
-    name = "sounddevice-${version}";
-    version = "0.3.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sounddevice/${name}.tar.gz";
-      sha256 = "4ef39be2d13069fbad8c69ac259e018d96ce55c23b529a7e0be9bd9a76e2e8da";
-    };
-
-    propagatedBuildInputs = with self; [ cffi numpy pkgs.portaudio ];
-
-    # No tests included nor upstream available.
-    doCheck = false;
-
-    prePatch = ''
-      substituteInPlace sounddevice.py --replace "'portaudio'" "'${pkgs.portaudio}/lib/libportaudio.so.2'"
-    '';
-
-    meta = {
-      description = "Play and Record Sound with Python";
-      homepage = http://python-sounddevice.rtfd.org/;
-      license = with licenses; [ mit ];
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  sounddevice = callPackage ../development/python-modules/sounddevice { };
 
   stevedore = callPackage ../development/python-modules/stevedore {};
 
@@ -22753,13 +22516,13 @@ in {
   };
 
   supervisor = buildPythonPackage rec {
-    name = "supervisor-3.1.1";
+    name = "supervisor-3.1.4";
 
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/supervisor/${name}.tar.gz";
-      sha256 = "e3c3b35804c24b6325b5ba462553ebee80d5f4d1766274737b5c532cd4a11d59";
+      sha256 = "0kk0sv7780m4dzmrcb2m284krz907jh8jp7khz5a79qryy4m1xw2";
     };
 
     buildInputs = with self; [ mock ];
@@ -24326,6 +24089,8 @@ in {
 
   u-msgpack-python = callPackage ../development/python-modules/u-msgpack-python { };
 
+  ukpostcodeparser = callPackage ../development/python-modules/ukpostcodeparser { };
+
   umalqurra = buildPythonPackage rec {
     name = "umalqurra-${version}";
     version = "0.2";
@@ -24399,7 +24164,7 @@ in {
 
     postPatch = ''
       # argparse is needed for python < 2.7, which we do not support anymore.
-      substituteInPlace setup.py --replace "argparse"
+      substituteInPlace setup.py --replace "argparse" ""
 
       # # fixes a transient error when collecting tests, see https://bugs.launchpad.net/python-neutronclient/+bug/1508547
       sed -i '510i\        return None, False' unittest2/loader.py
@@ -25212,23 +24977,7 @@ EOF
   zconfig = callPackage ../development/python-modules/zconfig { };
 
 
-  zc_lockfile = buildPythonPackage rec {
-    name = "zc.lockfile-${version}";
-    version = "1.0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zc.lockfile/${name}.tar.gz";
-      sha256 = "96bb2aa0438f3e29a31e4702316f832ec1482837daef729a92e28c202d8fba5c";
-    };
-
-    meta = {
-      description = "Inter-process locks";
-      homepage =  http://www.python.org/pypi/zc.lockfile;
-      license = licenses.zpt20;
-      maintainers = with maintainers; [ goibhniu ];
-    };
-  };
-
+  zc_lockfile = callPackage ../development/python-modules/zc_lockfile { };
 
   zdaemon = buildPythonPackage rec {
     name = "zdaemon-${version}";
@@ -25330,40 +25079,11 @@ EOF
     };
   };
 
-  zodbpickle = self.buildPythonPackage rec {
-    name = "zodbpickle-0.5.2";
-    disabled = isPyPy; # https://github.com/zopefoundation/zodbpickle/issues/10
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zodbpickle/${name}.tar.gz";
-      sha256 = "f65c00fbc13523fced63de6cc11747aa1a6343aeb2895c89838ed55a5ab12cca";
-    };
-
-    # fails..
-    doCheck = false;
-
-    meta = {
-      homepage = http://pypi.python.org/pypi/zodbpickle;
-    };
-  };
+  zodbpickle = callPackage ../development/python-modules/zodbpickle {};
 
   BTrees = callPackage ../development/python-modules/btrees {};
 
-  persistent = self.buildPythonPackage rec {
-    name = "persistent-4.0.8";
-
-    propagatedBuildInputs = with self; [ zope_interface ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/persistent/${name}.tar.gz";
-      sha256 = "678902217c5370d33694c6dc95b89e1e6284b4dc41f04c056326194a3f6f3e22";
-    };
-
-    meta = {
-      description = "Automatic persistence for Python objects";
-      homepage = http://www.zope.org/Products/ZODB;
-    };
-  };
+  persistent = callPackage ../development/python-modules/persistent {};
 
   xdot = buildPythonPackage rec {
     name = "xdot-0.7";
@@ -25894,23 +25614,7 @@ EOF
     };
   };
 
-  tornado = buildPythonPackage rec {
-    name = "tornado-${version}";
-    version = "4.4.2";
-
-    propagatedBuildInputs = with self; [ backports_abc backports_ssl_match_hostname certifi singledispatch ];
-
-    # We specify the name of the test files to prevent
-    # https://github.com/NixOS/nixpkgs/issues/14634
-    checkPhase = ''
-      ${python.interpreter} -m unittest discover *_test.py
-    '';
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tornado/${name}.tar.gz";
-      sha256 = "1k7d90afm5pivam90a37nqiz9wlmakvnsfymp3p43kcqz29gk618";
-    };
-  };
+  tornado = callPackage ../development/python-modules/tornado { };
 
   tokenlib = buildPythonPackage rec {
     name = "tokenlib-${version}";
@@ -26889,42 +26593,6 @@ EOF
       description = "libvirt Python bindings";
       license = licenses.lgpl2;
       maintainers = [ maintainers.fpletz ];
-    };
-  };
-
-  searx = buildPythonPackage rec {
-    name = "searx-${version}";
-    version = "0.11.0";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "asciimoo";
-      repo = "searx";
-      rev = "v${version}";
-      sha256 = "1m6q7yd45lfk19yp30x1jmisff6npa1y348wqc9ixa3ywvb28ky8";
-    };
-
-    postPatch = ''
-      substituteInPlace requirements.txt \
-        --replace 'certifi==2016.9.26' 'certifi' \
-        --replace 'pyyaml==3.11' 'pyyaml' \
-        --replace 'lxml==3.7.1' 'lxml' \
-        --replace 'pyopenssl==16.2.0' 'pyopenssl' \
-        --replace 'requests[socks]==2.12.4' 'requests[socks]' \
-        --replace 'pygments==2.1.3' 'pygments>=2.1,<3.0' \
-        --replace 'python-dateutil==2.5.3' 'python-dateutil>=2.5,<3.0'
-    '';
-
-    propagatedBuildInputs = with self; [
-      pyyaml lxml grequests flaskbabel flask requests
-      gevent speaklater Babel pytz dateutil pygments
-      pyasn1 pyasn1-modules ndg-httpsclient certifi pysocks
-    ];
-
-    meta = {
-      homepage = https://github.com/asciimoo/searx;
-      description = "A privacy-respecting, hackable metasearch engine";
-      license = licenses.agpl3Plus;
-      maintainers = with maintainers; [ matejc fpletz profpatsch ];
     };
   };
 

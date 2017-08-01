@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, writeText, nss, python
+{ stdenv, fetchurl, writeText, nss, python3
 , blacklist ? []
 , includeEmail ? false
 }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = nss.src;
 
-  nativeBuildInputs = [ python ];
+  nativeBuildInputs = [ python3 ];
 
   configurePhase = ''
     ln -s nss/lib/ckfw/builtins/certdata.txt

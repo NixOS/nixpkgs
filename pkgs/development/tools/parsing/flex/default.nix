@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "flex-${version}";
-  version = "2.6.3";
+  version = "2.6.4";
 
   src = fetchurl {
     url = "https://github.com/westes/flex/releases/download/v${version}/flex-${version}.tar.gz";
-    sha256 = "1an2cn2z85mkpgqcinh1fhhcd7993qm2lil1yxic8iz76ci79ck8";
+    sha256 = "15g9bv236nzi665p9ggqjlfn4dwck5835vf0bbw2cz7h5c1swyp8";
   };
 
   buildInputs = [ bison ];

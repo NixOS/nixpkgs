@@ -34,7 +34,7 @@
 
 let
   androidStudio = stdenv.mkDerivation {
-    inherit src meta;
+    inherit src;
     name = "${pname}";
     buildInputs = [
       makeWrapper
@@ -103,12 +103,13 @@ let
     name = "${pname}-fhs-env";
   };
 
-in writeTextFile {
-  name = "${pname}-${version}";
-  destination = "/bin/${pname}";
-  executable = true;
-  text = ''
-    #!${bash}/bin/bash
-    ${fhsEnv}/bin/${pname}-fhs-env ${androidStudio}/bin/studio.sh
-  '';
-}
+in
+  writeTextFile {
+    name = "${pname}-${version}";
+    destination = "/bin/${pname}";
+    executable = true;
+    text = ''
+      #!${bash}/bin/bash
+      ${fhsEnv}/bin/${pname}-fhs-env ${androidStudio}/bin/studio.sh
+    '';
+  } // { inherit meta; }
