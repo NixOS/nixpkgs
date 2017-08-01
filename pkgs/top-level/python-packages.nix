@@ -22299,13 +22299,13 @@ in {
   };
 
   supervisor = buildPythonPackage rec {
-    name = "supervisor-3.1.1";
+    name = "supervisor-3.1.4";
 
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/supervisor/${name}.tar.gz";
-      sha256 = "e3c3b35804c24b6325b5ba462553ebee80d5f4d1766274737b5c532cd4a11d59";
+      sha256 = "0kk0sv7780m4dzmrcb2m284krz907jh8jp7khz5a79qryy4m1xw2";
     };
 
     buildInputs = with self; [ mock ];
