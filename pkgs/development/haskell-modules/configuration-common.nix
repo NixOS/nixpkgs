@@ -603,6 +603,14 @@ self: super: {
 
   # Fine-tune the build.
   structured-haskell-mode = (overrideCabal super.structured-haskell-mode (drv: {
+    src = pkgs.fetchFromGitHub {
+      owner = "chrisdone";
+      repo = "structured-haskell-mode";
+      rev = "bd08a0b2297667e2ac7896e3b480033ae5721d4d";
+      sha256 = "14rl739z19ns31h9fj48sx9ppca4g4mqkc7ccpacagwwf55m259c";
+    };
+    version = "20170523-git";
+    editedCabalFile = null;
     # Statically linked Haskell libraries make the tool start-up much faster,
     # which is important for use in Emacs.
     enableSharedExecutables = false;
