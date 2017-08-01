@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
                   gnome3.gnome_desktop wrapGAppsHook
                   python2Packages.pygobject3.dev pythonEnv gobjectIntrospection ];
 
-  PYTHONPATH = "$out/${pythonEnv.python.sitePackages}";
+  PYTHONPATH = "$out/${python2Packages.python.sitePackages}";
 
   wrapPrefixVariables = [ "PYTHONPATH" ];
 
