@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''fast-http'';
-  version = ''20170227-git'';
+  version = ''20170630-git'';
 
   description = ''A fast HTTP protocol parser in Common Lisp'';
 
-  deps = [ ];
+  deps = [ args."xsubseq" args."smart-buffer" args."proc-parse" args."cl-utilities" args."babel" args."alexandria" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/fast-http/2017-02-27/fast-http-20170227-git.tgz'';
-    sha256 = ''0kpfn4i5r12hfnb3j00cl9wq5dcl32n3q67lr2qsb6y3giz335hx'';
+    url = ''http://beta.quicklisp.org/archive/fast-http/2017-06-30/fast-http-20170630-git.tgz'';
+    sha256 = ''0fkqwbwqc9a783ynjbszimcrannpqq4ja6wcf8ybgizr4zvsgj29'';
   };
     
   packageName = "fast-http";
@@ -30,6 +30,9 @@ rec {
     '';
   };
 }
-/* (SYSTEM fast-http DESCRIPTION A fast HTTP protocol parser in Common Lisp SHA256 0kpfn4i5r12hfnb3j00cl9wq5dcl32n3q67lr2qsb6y3giz335hx URL
-    http://beta.quicklisp.org/archive/fast-http/2017-02-27/fast-http-20170227-git.tgz MD5 5c5e2073702e7504a30c739e25c47c69 NAME fast-http TESTNAME NIL FILENAME
-    fast-http DEPS NIL DEPENDENCIES NIL VERSION 20170227-git SIBLINGS (fast-http-test)) */
+/* (SYSTEM fast-http DESCRIPTION A fast HTTP protocol parser in Common Lisp SHA256 0fkqwbwqc9a783ynjbszimcrannpqq4ja6wcf8ybgizr4zvsgj29 URL
+    http://beta.quicklisp.org/archive/fast-http/2017-06-30/fast-http-20170630-git.tgz MD5 d117d59c1f71965e0c32b19e6790cf9a NAME fast-http TESTNAME NIL FILENAME
+    fast-http DEPS
+    ((NAME xsubseq FILENAME xsubseq) (NAME smart-buffer FILENAME smart-buffer) (NAME proc-parse FILENAME proc-parse) (NAME cl-utilities FILENAME cl-utilities)
+     (NAME babel FILENAME babel) (NAME alexandria FILENAME alexandria))
+    DEPENDENCIES (xsubseq smart-buffer proc-parse cl-utilities babel alexandria) VERSION 20170630-git SIBLINGS (fast-http-test)) */

@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''mssql'';
-  version = ''cl-20131003-git'';
+  version = ''cl-20170630-git'';
 
   description = '''';
 
   deps = [ args."cffi" args."garbage-pools" args."iterate" args."parse-number" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-mssql/2013-10-03/cl-mssql-20131003-git.tgz'';
-    sha256 = ''1ykk8g4h3n21ich60l495v6h5pplx9hfs0kasz8myc5xv8ndljnk'';
+    url = ''http://beta.quicklisp.org/archive/cl-mssql/2017-06-30/cl-mssql-20170630-git.tgz'';
+    sha256 = ''0vwssk39m8pqn8srwvbcnq43wkqlav5rvq64byrnpsrwlfcbfvxy'';
   };
     
   packageName = "mssql";
@@ -30,7 +30,7 @@ rec {
     '';
   };
 }
-/* (SYSTEM mssql DESCRIPTION NIL SHA256 1ykk8g4h3n21ich60l495v6h5pplx9hfs0kasz8myc5xv8ndljnk URL
-    http://beta.quicklisp.org/archive/cl-mssql/2013-10-03/cl-mssql-20131003-git.tgz MD5 3e9d85a3b0ae7e000723a857ce7c2d44 NAME mssql TESTNAME NIL FILENAME mssql
+/* (SYSTEM mssql DESCRIPTION NIL SHA256 0vwssk39m8pqn8srwvbcnq43wkqlav5rvq64byrnpsrwlfcbfvxy URL
+    http://beta.quicklisp.org/archive/cl-mssql/2017-06-30/cl-mssql-20170630-git.tgz MD5 88e65c72923896df603ecf20039ae305 NAME mssql TESTNAME NIL FILENAME mssql
     DEPS ((NAME cffi FILENAME cffi) (NAME garbage-pools FILENAME garbage-pools) (NAME iterate FILENAME iterate) (NAME parse-number FILENAME parse-number))
-    DEPENDENCIES (cffi garbage-pools iterate parse-number) VERSION cl-20131003-git SIBLINGS NIL) */
+    DEPENDENCIES (cffi garbage-pools iterate parse-number) VERSION cl-20170630-git SIBLINGS NIL) */

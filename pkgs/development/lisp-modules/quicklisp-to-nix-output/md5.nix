@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''md5'';
-  version = ''20170516-git'';
+  version = ''20170630-git'';
 
   description = ''The MD5 Message-Digest Algorithm RFC 1321'';
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/md5/2017-05-16/md5-20170516-git.tgz'';
-    sha256 = ''1jmhww8wvd66ky5vppr0g8hi52w6z3q7svsqcmdrgzifr01r0pcv'';
+    url = ''http://beta.quicklisp.org/archive/md5/2017-06-30/md5-20170630-git.tgz'';
+    sha256 = ''0pli483skkfbi9ln8ghxnvzw9p5srs8zyilkygsimkzy8fcc5hyx'';
   };
     
   packageName = "md5";
@@ -30,6 +30,6 @@ rec {
     '';
   };
 }
-/* (SYSTEM md5 DESCRIPTION The MD5 Message-Digest Algorithm RFC 1321 SHA256 1jmhww8wvd66ky5vppr0g8hi52w6z3q7svsqcmdrgzifr01r0pcv URL
-    http://beta.quicklisp.org/archive/md5/2017-05-16/md5-20170516-git.tgz MD5 1c90df8ab2c6d57b7abaac84cae30ab3 NAME md5 TESTNAME NIL FILENAME md5 DEPS NIL
-    DEPENDENCIES NIL VERSION 20170516-git SIBLINGS NIL) */
+/* (SYSTEM md5 DESCRIPTION The MD5 Message-Digest Algorithm RFC 1321 SHA256 0pli483skkfbi9ln8ghxnvzw9p5srs8zyilkygsimkzy8fcc5hyx URL
+    http://beta.quicklisp.org/archive/md5/2017-06-30/md5-20170630-git.tgz MD5 c6a5b3ca5a23fad3dfde23963db84910 NAME md5 TESTNAME NIL FILENAME md5 DEPS NIL
+    DEPENDENCIES NIL VERSION 20170630-git SIBLINGS NIL) */

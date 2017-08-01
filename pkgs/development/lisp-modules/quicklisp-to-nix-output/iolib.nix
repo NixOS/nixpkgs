@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''iolib'';
-  version = ''v0.8.2'';
+  version = ''v0.8.3'';
 
   description = ''I/O library.'';
 
-  deps = [ ];
+  deps = [ args."iolib_slash_streams" args."iolib_slash_sockets" args."iolib_slash_multiplex" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/iolib/2017-05-16/iolib-v0.8.2.tgz'';
-    sha256 = ''1k0wkkgzy6fmq28dw6xbx86l1j9x3nrmrzpv6jcmcdb078h820pr'';
+    url = ''http://beta.quicklisp.org/archive/iolib/2017-06-30/iolib-v0.8.3.tgz'';
+    sha256 = ''12gsvsjyxmclwidcjvyrfvd0773ib54a3qzmf33hmgc9knxlli7c'';
   };
     
   packageName = "iolib";
@@ -30,6 +30,8 @@ rec {
     '';
   };
 }
-/* (SYSTEM iolib DESCRIPTION I/O library. SHA256 1k0wkkgzy6fmq28dw6xbx86l1j9x3nrmrzpv6jcmcdb078h820pr URL
-    http://beta.quicklisp.org/archive/iolib/2017-05-16/iolib-v0.8.2.tgz MD5 cd2d4d2893b7e6d0502d9a16e717a2e9 NAME iolib TESTNAME NIL FILENAME iolib DEPS NIL
-    DEPENDENCIES NIL VERSION v0.8.2 SIBLINGS (iolib.asdf iolib.base iolib.common-lisp iolib.conf iolib.examples iolib.grovel iolib.tests)) */
+/* (SYSTEM iolib DESCRIPTION I/O library. SHA256 12gsvsjyxmclwidcjvyrfvd0773ib54a3qzmf33hmgc9knxlli7c URL
+    http://beta.quicklisp.org/archive/iolib/2017-06-30/iolib-v0.8.3.tgz MD5 fc28d4cad6f8e43972df3baa6a8ac45c NAME iolib TESTNAME NIL FILENAME iolib DEPS
+    ((NAME iolib/streams FILENAME iolib_slash_streams) (NAME iolib/sockets FILENAME iolib_slash_sockets) (NAME iolib/multiplex FILENAME iolib_slash_multiplex))
+    DEPENDENCIES (iolib/streams iolib/sockets iolib/multiplex) VERSION v0.8.3 SIBLINGS
+    (iolib.asdf iolib.base iolib.common-lisp iolib.conf iolib.examples iolib.grovel iolib.tests)) */

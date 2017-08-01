@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''cl+ssl'';
-  version = ''cl+ssl-20170403-git'';
+  version = ''cl+ssl-20170725-git'';
 
   description = ''Common Lisp interface to OpenSSL.'';
 
-  deps = [ args."uiop" args."trivial-gray-streams" args."trivial-garbage" args."flexi-streams" args."cffi" args."bordeaux-threads" ];
+  deps = [ args."uiop" args."trivial-gray-streams" args."trivial-garbage" args."trivial-features" args."flexi-streams" args."cffi" args."bordeaux-threads" args."alexandria" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl+ssl/2017-04-03/cl+ssl-20170403-git.tgz'';
-    sha256 = ''1f1nr1wy6nk0l2n249djcvygl0379ch3x4ndc243jcahcp44x18s'';
+    url = ''http://beta.quicklisp.org/archive/cl+ssl/2017-07-25/cl+ssl-20170725-git.tgz'';
+    sha256 = ''1p5886l5bwz4bj2xy8mpsjswg103b8saqdnw050a4wk9shpj1j69'';
   };
     
   packageName = "cl+ssl";
@@ -30,9 +30,11 @@ rec {
     '';
   };
 }
-/* (SYSTEM cl+ssl DESCRIPTION Common Lisp interface to OpenSSL. SHA256 1f1nr1wy6nk0l2n249djcvygl0379ch3x4ndc243jcahcp44x18s URL
-    http://beta.quicklisp.org/archive/cl+ssl/2017-04-03/cl+ssl-20170403-git.tgz MD5 e6d22f98947384d0e0bb2eb18230f72d NAME cl+ssl TESTNAME NIL FILENAME cl+ssl
+/* (SYSTEM cl+ssl DESCRIPTION Common Lisp interface to OpenSSL. SHA256 1p5886l5bwz4bj2xy8mpsjswg103b8saqdnw050a4wk9shpj1j69 URL
+    http://beta.quicklisp.org/archive/cl+ssl/2017-07-25/cl+ssl-20170725-git.tgz MD5 3458c83f442395e0492c7e9b9720a1f2 NAME cl+ssl TESTNAME NIL FILENAME cl+ssl
     DEPS
     ((NAME uiop FILENAME uiop) (NAME trivial-gray-streams FILENAME trivial-gray-streams) (NAME trivial-garbage FILENAME trivial-garbage)
-     (NAME flexi-streams FILENAME flexi-streams) (NAME cffi FILENAME cffi) (NAME bordeaux-threads FILENAME bordeaux-threads))
-    DEPENDENCIES (uiop trivial-gray-streams trivial-garbage flexi-streams cffi bordeaux-threads) VERSION cl+ssl-20170403-git SIBLINGS (cl+ssl.test)) */
+     (NAME trivial-features FILENAME trivial-features) (NAME flexi-streams FILENAME flexi-streams) (NAME cffi FILENAME cffi)
+     (NAME bordeaux-threads FILENAME bordeaux-threads) (NAME alexandria FILENAME alexandria))
+    DEPENDENCIES (uiop trivial-gray-streams trivial-garbage trivial-features flexi-streams cffi bordeaux-threads alexandria) VERSION cl+ssl-20170725-git
+    SIBLINGS (cl+ssl.test)) */

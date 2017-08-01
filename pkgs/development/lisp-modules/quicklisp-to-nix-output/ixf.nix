@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''ixf'';
-  version = ''cl-20170516-git'';
+  version = ''cl-20170630-git'';
 
   description = ''Tools to handle IBM PC version of IXF file format'';
 
-  deps = [ ];
+  deps = [ args."alexandria" args."babel" args."cl-ppcre" args."ieee-floats" args."local-time" args."md5" args."split-sequence" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-ixf/2017-05-16/cl-ixf-20170516-git.tgz'';
-    sha256 = ''0x32zlayynfj6g676afl0zna63jcgf333n3izapa84y5zgqp3nwf'';
+    url = ''http://beta.quicklisp.org/archive/cl-ixf/2017-06-30/cl-ixf-20170630-git.tgz'';
+    sha256 = ''1qfmsz3lbydas7iv0bxdl4gl5ah4ydjxxqfpyini7qy0cb4wplf2'';
   };
     
   packageName = "ixf";
@@ -30,6 +30,8 @@ rec {
     '';
   };
 }
-/* (SYSTEM ixf DESCRIPTION Tools to handle IBM PC version of IXF file format SHA256 0x32zlayynfj6g676afl0zna63jcgf333n3izapa84y5zgqp3nwf URL
-    http://beta.quicklisp.org/archive/cl-ixf/2017-05-16/cl-ixf-20170516-git.tgz MD5 1c4c5ff76bb6fa9c19fe47d064c512b9 NAME ixf TESTNAME NIL FILENAME ixf DEPS
-    NIL DEPENDENCIES NIL VERSION cl-20170516-git SIBLINGS NIL) */
+/* (SYSTEM ixf DESCRIPTION Tools to handle IBM PC version of IXF file format SHA256 1qfmsz3lbydas7iv0bxdl4gl5ah4ydjxxqfpyini7qy0cb4wplf2 URL
+    http://beta.quicklisp.org/archive/cl-ixf/2017-06-30/cl-ixf-20170630-git.tgz MD5 51db2caba094cac90982396cf552c847 NAME ixf TESTNAME NIL FILENAME ixf DEPS
+    ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel) (NAME cl-ppcre FILENAME cl-ppcre) (NAME ieee-floats FILENAME ieee-floats)
+     (NAME local-time FILENAME local-time) (NAME md5 FILENAME md5) (NAME split-sequence FILENAME split-sequence))
+    DEPENDENCIES (alexandria babel cl-ppcre ieee-floats local-time md5 split-sequence) VERSION cl-20170630-git SIBLINGS NIL) */

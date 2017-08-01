@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''clack'';
-  version = ''20170516-git'';
+  version = ''20170630-git'';
 
   description = ''Web application environment for Common Lisp'';
 
-  deps = [ ];
+  deps = [ args."uiop" args."lack-util" args."lack-middleware-backtrace" args."lack" args."bordeaux-threads" args."alexandria" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clack/2017-05-16/clack-20170516-git.tgz'';
-    sha256 = ''1161lsv739z02ijp0p95cb3vbybqhffp03sipb7l1vmmj24d8wgw'';
+    url = ''http://beta.quicklisp.org/archive/clack/2017-06-30/clack-20170630-git.tgz'';
+    sha256 = ''1z3xrwldfzd4nagk2d0gw5hspnr35r6kh19ksqr3kyf6wpn2lybg'';
   };
     
   packageName = "clack";
@@ -30,9 +30,11 @@ rec {
     '';
   };
 }
-/* (SYSTEM clack DESCRIPTION Web application environment for Common Lisp SHA256 1161lsv739z02ijp0p95cb3vbybqhffp03sipb7l1vmmj24d8wgw URL
-    http://beta.quicklisp.org/archive/clack/2017-05-16/clack-20170516-git.tgz MD5 ecda950881158c3bf209b29f4717fb0a NAME clack TESTNAME NIL FILENAME clack DEPS
-    NIL DEPENDENCIES NIL VERSION 20170516-git SIBLINGS
+/* (SYSTEM clack DESCRIPTION Web application environment for Common Lisp SHA256 1z3xrwldfzd4nagk2d0gw5hspnr35r6kh19ksqr3kyf6wpn2lybg URL
+    http://beta.quicklisp.org/archive/clack/2017-06-30/clack-20170630-git.tgz MD5 845b25a3cc6f3a1ee1dbd6de73dfb815 NAME clack TESTNAME NIL FILENAME clack DEPS
+    ((NAME uiop FILENAME uiop) (NAME lack-util FILENAME lack-util) (NAME lack-middleware-backtrace FILENAME lack-middleware-backtrace)
+     (NAME lack FILENAME lack) (NAME bordeaux-threads FILENAME bordeaux-threads) (NAME alexandria FILENAME alexandria))
+    DEPENDENCIES (uiop lack-util lack-middleware-backtrace lack bordeaux-threads alexandria) VERSION 20170630-git SIBLINGS
     (clack-handler-fcgi clack-handler-hunchentoot clack-handler-toot clack-handler-wookie clack-socket clack-test clack-v1-compat t-clack-handler-fcgi
      t-clack-handler-hunchentoot t-clack-handler-toot t-clack-handler-wookie t-clack-v1-compat clack-middleware-auth-basic clack-middleware-clsql
      clack-middleware-csrf clack-middleware-dbi clack-middleware-oauth clack-middleware-postmodern clack-middleware-rucksack clack-session-store-dbi
