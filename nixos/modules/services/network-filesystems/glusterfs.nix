@@ -194,6 +194,10 @@ in
 
       after = [ "syslog.target" "network.target" ];
 
+      preStart = ''
+        install -m 0755 -d /var/log/glusterfs
+      '';
+
       serviceConfig = {
         Type="simple";
         Environment="PYTHONPATH=${glusterfs}/usr/lib/python2.7/site-packages";
