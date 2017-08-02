@@ -39,6 +39,7 @@ let
 
     passthru = python.passthru // {
       interpreter = "${env}/bin/${python.executable}";
+      inherit python;
       env = stdenv.mkDerivation {
         name = "interactive-${python.name}-environment";
         nativeBuildInputs = [ env ];
