@@ -63,8 +63,6 @@ in
       user = config.users.users.sks.name;
     in {
       sks-keyserver = {
-        wants = [ "sks-init.service" ];
-        after = [ "sks-init.service" ];
         wantedBy = [ "multi-user.target" ];
         preStart = ''
           mkdir -p ${home}/dump
