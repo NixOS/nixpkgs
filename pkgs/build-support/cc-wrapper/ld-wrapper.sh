@@ -1,8 +1,13 @@
-#! @shell@ -e
+#! @shell@
+set -e -o pipefail
 shopt -s nullglob
+
 path_backup="$PATH"
+
+# phase separation makes this look useless
+# shellcheck disable=SC2157
 if [ -n "@coreutils_bin@" ]; then
-  PATH="@coreutils_bin@/bin"
+    PATH="@coreutils_bin@/bin"
 fi
 
 if [ -n "$NIX_LD_WRAPPER_START_HOOK" ]; then
@@ -18,14 +23,14 @@ source @out@/nix-support/utils.sh
 
 # Optionally filter out paths not refering to the store.
 expandResponseParams "$@"
-if [ "$NIX_ENFORCE_PURITY" = 1 -a -n "$NIX_STORE" \
-        -a \( -z "$NIX_IGNORE_LD_THROUGH_GCC" -o -z "$NIX_LDFLAGS_SET" \) ]; then
+if [[ "$NIX_ENFORCE_PURITY" = 1 && -n "$NIX_STORE"
+        && ( -z "$NIX_IGNORE_LD_THROUGH_GCC" || -z "$NIX_LDFLAGS_SET" ) ]]; then
     rest=()
     nParams=${#params[@]}
     declare -i n=0
-    while [ $n -lt $nParams ]; do
+    while [ "$n" -lt "$nParams" ]; do
         p=${params[n]}
-        p2=${params[$((n+1))]}
+        p2=${params[n+1]}
         if [ "${p:0:3}" = -L/ ] && badPath "${p:2}"; then
             skip "${p:2}"
         elif [ "$p" = -L ] && badPath "$p2"; then
@@ -49,18 +54,17 @@ if [ "$NIX_ENFORCE_PURITY" = 1 -a -n "$NIX_STORE" \
     params=("${rest[@]}")
 fi
 
-LD=@prog@
 source @out@/nix-support/add-hardening.sh
 
-extra=("${hardeningLDFlags[@]}")
+extraAfter=("${hardeningLDFlags[@]}")
 extraBefore=()
 
 if [ -z "$NIX_LDFLAGS_SET" ]; then
-    extra+=($NIX_LDFLAGS)
+    extraAfter+=($NIX_LDFLAGS)
     extraBefore+=($NIX_LDFLAGS_BEFORE)
 fi
 
-extra+=($NIX_LDFLAGS_AFTER $NIX_LDFLAGS_HARDEN)
+extraAfter+=($NIX_LDFLAGS_AFTER $NIX_LDFLAGS_HARDEN)
 
 declare -a libDirs
 declare -A libs
@@ -69,7 +73,7 @@ relocatable=
 # Find all -L... switches for rpath, and relocatable flags for build id.
 if [ "$NIX_DONT_SET_RPATH" != 1 ] || [ "$NIX_SET_BUILD_ID" = 1 ]; then
     prev=
-    for p in "${params[@]}" "${extra[@]}"; do
+    for p in "${extraBefore[@]}" "${params[@]}" "${extraAfter[@]}"; do
         case "$prev" in
             -L)
                 libDirs+=("$p")
@@ -127,7 +131,7 @@ if [ "$NIX_DONT_SET_RPATH" != 1 ]; then
                 libs["$file"]=
                 if [ ! "${rpaths[$dir]}" ]; then
                     rpaths["$dir"]=1
-                    extra+=(-rpath "$dir")
+                    extraAfter+=(-rpath "$dir")
                 fi
             fi
         done
@@ -138,16 +142,18 @@ fi
 # Only add --build-id if this is a final link. FIXME: should build gcc
 # with --enable-linker-build-id instead?
 if [ "$NIX_SET_BUILD_ID" = 1 ] && [ ! "$relocatable" ]; then
-    extra+=(--build-id)
+    extraAfter+=(--build-id)
 fi
 
 
 # Optionally print debug info.
 if [ -n "$NIX_DEBUG" ]; then
+    echo "extra flags before to @prog@:" >&2
+    printf "  %q\n" "${extraBefore[@]}"  >&2
     echo "original flags to @prog@:" >&2
     printf "  %q\n" "${params[@]}" >&2
-    echo "extra flags to @prog@:" >&2
-    printf "  %q\n" "${extraBefore[@]}" "${extra[@]}" >&2
+    echo "extra flags after to @prog@:" >&2
+    printf "  %q\n" "${extraAfter[@]}" >&2
 fi
 
 if [ -n "$NIX_LD_WRAPPER_EXEC_HOOK" ]; then
@@ -155,4 +161,4 @@ if [ -n "$NIX_LD_WRAPPER_EXEC_HOOK" ]; then
 fi
 
 PATH="$path_backup"
-exec @prog@ "${extraBefore[@]}" "${params[@]}" "${extra[@]}"
+exec @prog@ "${extraBefore[@]}" "${params[@]}" "${extraAfter[@]}"
