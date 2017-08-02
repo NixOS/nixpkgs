@@ -1,0 +1,20 @@
+diff -rc varnish-5.0.0/bin/varnishd/http1/cache_http1_vfp.c varnish-5.0.0-patched/bin/varnishd/http1/cache_http1_vfp.c
+*** varnish-5.0.0/bin/varnishd/http1/cache_http1_vfp.c	2016-09-15 11:24:09.000000000 +0200
+--- varnish-5.0.0-patched/bin/varnishd/http1/cache_http1_vfp.c	2017-08-02 14:52:08.310755766 +0200
+***************
+*** 155,161 ****
+  		if (q == NULL || *q != '\0')
+  			return (VFP_Error(vc, "chunked header number syntax"));
+  		cl = (ssize_t)cll;
+! 		if((uintmax_t)cl != cll)
+  			return (VFP_Error(vc, "bogusly large chunk size"));
+  
+  		vfe->priv2 = cl;
+--- 155,161 ----
+  		if (q == NULL || *q != '\0')
+  			return (VFP_Error(vc, "chunked header number syntax"));
+  		cl = (ssize_t)cll;
+!     if (cl < 0 || (uintmax_t)cl != cll)
+  			return (VFP_Error(vc, "bogusly large chunk size"));
+  
+  		vfe->priv2 = cl;
