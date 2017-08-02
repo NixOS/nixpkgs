@@ -33,7 +33,7 @@ let
 
     meta = with stdenv.lib; {
       inherit description;
-      homepage = "http://www.libretro.com/";
+      homepage = http://www.libretro.com/;
       license = licenses.gpl3Plus;
       maintainers = with maintainers; [ edwtjo hrdinka MP2E ];
       platforms = platforms.linux;

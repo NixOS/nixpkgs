@@ -37,7 +37,7 @@ stdenv.mkDerivation rec{
 
   meta = with stdenv.lib; {
     description = "a C++ library for zkSNARK proofs";
-    homepage = "https://github.com/zcash/libsnark";
+    homepage = https://github.com/zcash/libsnark;
     maintainers = with maintainers; [ rht ];
     license = licenses.mit;
     platforms = platforms.unix;

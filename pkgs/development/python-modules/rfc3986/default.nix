@@ -17,7 +17,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://rfc3986.readthedocs.org";
+    homepage = https://rfc3986.readthedocs.org;
     license = licenses.asl20;
     description = "Validating URI References per RFC 3986";
   };

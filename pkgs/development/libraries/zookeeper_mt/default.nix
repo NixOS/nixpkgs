@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
    buildInputs = [ zookeeper bash ];
 
    meta = with stdenv.lib; {
-   	homepage = "http://zookeeper.apache.org";
+   	homepage = http://zookeeper.apache.org;
    	description = "Apache Zookeeper";
    	license = licenses.asl20;
    	maintainers = [ maintainers.boothead ];	

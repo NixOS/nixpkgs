@@ -15,7 +15,7 @@ buildGoPackage rec {
   };
   meta = with stdenv.lib; {
     description = "A JMESPath implementation in Go";
-    homepage = "https://github.com/jmespath/go-jmespath";
+    homepage = https://github.com/jmespath/go-jmespath;
     maintainers = with maintainers; [ cransom ];
     license = licenses.asl20;
   };

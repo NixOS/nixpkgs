@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   # emacs highlighting */
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/erlang/otp";
+    homepage = http://github.com/erlang/otp;
     description = "Erlang mode for Emacs";
     license = licenses.asl20;
     platforms = platforms.unix;

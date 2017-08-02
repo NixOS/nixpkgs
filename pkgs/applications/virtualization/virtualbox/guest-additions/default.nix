@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "54df14f234b6aa484b94939ab0f435b5dd859417612b65a399ecc34a62060380";
+    sha256 = "0vxhavlh55fdlm4zhvi21fyxzdydbn56y499bq5aghvsdsmwiy3d";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/*/build";
@@ -62,9 +62,6 @@ stdenv.mkDerivation {
     for i in *
     do
         cd $i
-        # Files within the guest additions ISO are using DOS line endings
-        sed -re '/^(@@|---|\+\+\+)/!s/$/\r/' ${../linux-4.12.patch} \
-          | patch -d vboxguest -p4
         find . -type f | xargs sed 's/depmod -a/true/' -i
         make
         cd ..

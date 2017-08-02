@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Dynamic Tracing Tools for Linux";
-    homepage = "https://iovisor.github.io/bcc/";
+    homepage = https://iovisor.github.io/bcc/;
     license = licenses.asl20;
     maintainers = with maintainers; [ ragge ];
   };

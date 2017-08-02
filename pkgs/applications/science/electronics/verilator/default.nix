@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, flex_2_6_1, bison }:
+{ stdenv, fetchurl, perl, flex, bison }:
 
 stdenv.mkDerivation rec {
   name    = "verilator-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
-  buildInputs = [ perl flex_2_6_1 bison ];
+  buildInputs = [ perl flex bison ];
 
   postInstall = ''
     sed -i -e '3a\#!/usr/bin/env perl' -e '1,3d' $out/bin/{verilator,verilator_coverage,verilator_profcfunc}

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [libiconv zlib popt] ++ stdenv.lib.optional enableACLs acl;
   nativeBuildInputs = [perl];
 
-  configureFlags = ["--with-nobody-group=nogroup" "--without-included-zlib"];
+  configureFlags = ["--with-nobody-group=nogroup"];
 
   meta = base.meta // {
     description = "A fast incremental file transfer utility";

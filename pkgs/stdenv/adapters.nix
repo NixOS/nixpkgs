@@ -73,15 +73,8 @@ rec {
     };
   in stdenv // {
     mkDerivation =
-      { name ? "", buildInputs ? [], nativeBuildInputs ? []
+      { buildInputs ? [], nativeBuildInputs ? []
       , propagatedBuildInputs ? [], propagatedNativeBuildInputs ? []
-      , # Disabling the tests by default when cross compiling, as usually the
-        # tests rely on being able to run produced binaries.
-        doCheck ? false
-      , configureFlags ? []
-      , # Target is not included by default because most programs don't care.
-        # Including it then would cause needless massive rebuilds.
-        configurePlatforms   ? args.crossAttrs.configurePlatforms   or [ "build" "host" ]
       , selfNativeBuildInput ? args.crossAttrs.selfNativeBuildInput or false
       , ...
       } @ args:
@@ -106,7 +99,6 @@ rec {
         nativeInputsFromBuildInputs = stdenv.lib.filter hostAsNativeDrv buildInputsNotNull;
       in
         stdenv.mkDerivation (args // {
-          name = name + "-" + hostPlatform.config;
           nativeBuildInputs = nativeBuildInputs
             ++ nativeInputsFromBuildInputs
             ++ stdenv.lib.optional selfNativeBuildInput nativeDrv
@@ -115,15 +107,6 @@ rec {
             ++ stdenv.lib.optional (hostPlatform.config == "x86_64-w64-mingw32") pkgs.file
             ++ stdenv.lib.optional (hostPlatform.config == "aarch64-linux-gnu") pkgs.updateAutotoolsGnuConfigScriptsHook
             ;
-
-          inherit doCheck;
-
-          # This parameter is sometimes a string and sometimes a list, yuck
-          configureFlags = let inherit (stdenv.lib) optional elem; in
-            (if stdenv.lib.isString configureFlags then [configureFlags] else configureFlags)
-            ++ optional (elem "build"  configurePlatforms) "--build=${buildPlatform.config}"
-            ++ optional (elem "host"   configurePlatforms) "--host=${hostPlatform.config}"
-            ++ optional (elem "target" configurePlatforms) "--target=${targetPlatform.config}";
 
           # Cross-linking dynamic libraries, every buildInput should
           # be propagated because ld needs the -rpath-link to find

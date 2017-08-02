@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open source speech synthesizer that supports over 70 languages, based on eSpeak";
-    homepage = "https://github.com/espeak-ng/espeak-ng";
+    homepage = https://github.com/espeak-ng/espeak-ng;
     license = licenses.gpl3;
     maintainers = with maintainers; [ aske ];
     platforms = platforms.linux;

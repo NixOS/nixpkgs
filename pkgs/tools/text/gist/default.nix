@@ -19,7 +19,7 @@ buildRubyGem rec {
 
   meta = with lib; {
     description = "Upload code to https://gist.github.com (or github enterprise)";
-    homepage = "http://defunkt.io/gist/";
+    homepage = http://defunkt.io/gist/;
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
     platforms = ruby.meta.platforms;

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A more flexible replacement for libevent's httpd API";
-    homepage = "https://github.com/ellzey/libevhtp";
+    homepage = https://github.com/ellzey/libevhtp;
     license = licenses.bsd3;
     maintainers = with maintainers; [ edwtjo ];
     platforms = platforms.linux;

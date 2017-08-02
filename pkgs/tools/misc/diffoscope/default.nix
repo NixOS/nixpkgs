@@ -29,12 +29,10 @@ python3.pkgs.buildPythonApplication rec {
   # Still missing these tools: enjarify, otool & lipo (maybe OS X only), showttf
   # Also these libraries: python3-guestfs
   # FIXME: move xxd into a separate package so we don't have to pull in all of vim.
-  buildInputs =
-    map lib.getBin ([ acl binutils bzip2 cbfstool cdrkit cpio diffutils e2fsprogs file gettext
+  pythonPath = with python3.pkgs;
+    [ debian libarchive-c python_magic tlsh rpm cdrkit acl binutils bzip2 cbfstool cpio diffutils e2fsprogs file gettext
       gzip libcaca poppler_utils sng sqlite squashfsTools unzip vim xz colordiff
-    ] ++ lib.optionals enableBloat [ colord fpc ghc gnupg1 jdk mono pdftk ]);
-
-  pythonPath = with python3.pkgs; [ debian libarchive-c python_magic tlsh rpm ];
+    ] ++ lib.optionals enableBloat [ colord fpc ghc gnupg1 jdk mono pdftk ];
 
   doCheck = false; # Calls 'mknod' in squashfs tests, which needs root
 

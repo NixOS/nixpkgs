@@ -75,6 +75,7 @@
   berdario = "Dario Bertini <berdario@gmail.com>";
   bergey = "Daniel Bergey <bergey@teallabs.org>";
   bhipple = "Benjamin Hipple <bhipple@protonmail.com>";
+  binarin = "Alexey Lebedeff <binarin@binarin.ru>";
   bjg = "Brian Gough <bjg@gnu.org>";
   bjornfor = "Bjørn Forsman <bjorn.forsman@gmail.com>";
   bluescreen303 = "Mathijs Kwik <mathijs@bluescreen303.nl>";
@@ -135,6 +136,7 @@
   dbrock = "Daniel Brockman <daniel@brockman.se>";
   deepfire = "Kosyrev Serge <_deepfire@feelingofgreen.ru>";
   demin-dmitriy = "Dmitriy Demin <demindf@gmail.com>";
+  derchris = "Christian Gerbrandt <derchris@me.com>";
   DerGuteMoritz = "Moritz Heidkamp <moritz@twoticketsplease.de>";
   dermetfan = "Robin Stumm <serverkorken@gmail.com>";
   DerTim1 = "Tim Digel <tim.digel@active-group.de>";
@@ -248,7 +250,7 @@
   jammerful = "jammerful <jammerful@gmail.com>";
   jansol = "Jan Solanti <jan.solanti@paivola.fi>";
   javaguirre = "Javier Aguirre <contacto@javaguirre.net>";
-  jb55 = "William Casarin <bill@casarin.me>";
+  jb55 = "William Casarin <jb55@jb55.com>";
   jbedo = "Justin Bedő <cu@cua0.org>";
   jcumming = "Jack Cummings <jack@mudshark.org>";
   jdagilliland = "Jason Gilliland <jdagilliland@gmail.com>";
@@ -291,6 +293,7 @@
   kierdavis = "Kier Davis <kierdavis@gmail.com>";
   kkallio = "Karn Kallio <tierpluspluslists@gmail.com>";
   knedlsepp = "Josef Kemetmüller <josef.kemetmueller@gmail.com>";
+  konimex = "Muhammad Herdiansyah <herdiansyah@openmailbox.org>";
   koral = "Koral <koral@mailoo.org>";
   kovirobi = "Kovacsics Robert <kovirobi@gmail.com>";
   kragniz = "Louis Taylor <louis@kragniz.eu>";
@@ -405,6 +408,7 @@
   np = "Nicolas Pouillard <np.nix@nicolaspouillard.fr>";
   nslqqq = "Nikita Mikhailov <nslqqq@gmail.com>";
   nthorne = "Niklas Thörne <notrupertthorne@gmail.com>";
+  nyarly = "Judson Lester <nyarly@gmail.com>";
   obadz = "obadz <obadz-nixos@obadz.com>";
   ocharles = "Oliver Charles <ollie@ocharles.org.uk>";
   odi = "Oliver Dunkl <oliver.dunkl@gmail.com>";

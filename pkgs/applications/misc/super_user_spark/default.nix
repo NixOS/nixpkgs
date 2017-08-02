@@ -27,6 +27,6 @@ mkDerivation {
   jailbreak = true;
   description = "Configure your dotfile deployment with a DSL";
   license = stdenv.lib.licenses.mit;
-  homepage = "https://github.com/NorfairKing/super-user-spark";
+  homepage = https://github.com/NorfairKing/super-user-spark;
   maintainers = [ stdenv.lib.maintainers.badi ];
 }

@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "dropbear-2016.74";
+  name = "dropbear-2017.75";
 
   src = fetchurl {
     url = "http://matt.ucc.asn.au/dropbear/releases/${name}.tar.bz2";
-    sha256 = "14c8f4gzixf0j9fkx68jgl85q7b05852kk0vf09gi6h0xmafl817";
+    sha256 = "1309cm2aw62n9m3h38prvgsqr8bj85hfasgnvwkd42cp3k5ivg3c";
   };
 
   dontDisableStatic = enableStatic;
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ] ++ lib.optionals enableStatic [ glibc.static zlib.static ];
 
   meta = with stdenv.lib; {
-    homepage = "http://matt.ucc.asn.au/dropbear/dropbear.html";
+    homepage = http://matt.ucc.asn.au/dropbear/dropbear.html;
     description = "A small footprint implementation of the SSH 2 protocol";
     license = licenses.mit;
     maintainers = with maintainers; [ abbradar ];

@@ -24,6 +24,10 @@ let
           let pluginname = substitute(d, ".*/", "", "")
           if !has_key(seen, pluginname)
             exec 'set runtimepath^='.d
+            let after = d."/after"
+            if isdirectory(after)
+              exec 'set runtimepath^='.after
+            endif
             let seen[pluginname] = 1
           endif
         endfor

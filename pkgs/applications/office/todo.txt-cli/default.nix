@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
 
   meta = {
     description = "Simple plaintext todo list manager";
-    homepage = "http://todotxt.com";
+    homepage = http://todotxt.com;
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.all;
   };

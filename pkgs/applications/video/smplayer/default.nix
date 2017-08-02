@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A complete front-end for MPlayer";
-    homepage = "http://smplayer.sourceforge.net/";
+    homepage = http://smplayer.sourceforge.net/;
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.linux;
   };

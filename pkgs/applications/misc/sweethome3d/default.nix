@@ -61,7 +61,7 @@ let
     dontStrip = true;
 
     meta = {
-      homepage = "http://www.sweethome3d.com/index.jsp";
+      homepage = http://www.sweethome3d.com/index.jsp;
       inherit description;
       inherit license;
       maintainers = [ stdenv.lib.maintainers.edwtjo ];

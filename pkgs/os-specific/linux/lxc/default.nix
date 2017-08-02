@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://linuxcontainers.org/";
+    homepage = https://linuxcontainers.org/;
     description = "Userspace tools for Linux Containers, a lightweight virtualization system";
     license = licenses.lgpl21Plus;
 

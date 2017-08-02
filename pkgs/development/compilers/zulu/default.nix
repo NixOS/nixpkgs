@@ -54,7 +54,7 @@ in stdenv.mkDerivation rec {
     find $out -name "*.so" -exec patchelf --set-rpath "$rpath" {} \;
 
     mkdir -p $out/nix-support
-    printLines ${setJavaClassPath} > $out/nix-support/propagated-native-build-inputs
+    printWords ${setJavaClassPath} > $out/nix-support/propagated-native-build-inputs
 
     # Set JAVA_HOME automatically.
     cat <<EOF >> $out/nix-support/setup-hook

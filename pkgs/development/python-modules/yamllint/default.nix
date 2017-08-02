@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A linter for YAML files";
-    homepage = "https://github.com/adrienverge/yamllint";
+    homepage = https://github.com/adrienverge/yamllint;
     license = licenses.gpl3;
     maintainers = with maintainers; [ mikefaille ];
   };

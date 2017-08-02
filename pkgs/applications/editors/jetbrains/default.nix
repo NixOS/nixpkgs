@@ -17,7 +17,7 @@ let
       inherit name version src wmClass jdk;
       product = "CLion";
       meta = with stdenv.lib; {
-        homepage = "https://www.jetbrains.com/clion/";
+        homepage = https://www.jetbrains.com/clion/;
         inherit description license;
         longDescription = ''
           Enhancing productivity for every C and C++
@@ -50,6 +50,9 @@ let
 
           patchelf --set-interpreter $interp bin/gdb/bin/gdb
           patchelf --set-interpreter $interp bin/gdb/bin/gdbserver
+          patchelf --set-interpreter $interp \
+            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}:$lldbLibPath" \
+            bin/clang/clang-tidy
         )
       '';
     });
@@ -59,7 +62,7 @@ let
       inherit name version src wmClass jdk;
       product = "DataGrip";
       meta = with stdenv.lib; {
-        homepage = "https://www.jetbrains.com/datagrip/";
+        homepage = https://www.jetbrains.com/datagrip/;
         inherit description license;
         longDescription = ''
           DataGrip is a new IDE from JetBrains built for database admins.
@@ -76,7 +79,7 @@ let
       inherit name version src wmClass jdk;
       product = "Gogland";
       meta = with stdenv.lib; {
-        homepage = "https://www.jetbrains.com/go/";
+        homepage = https://www.jetbrains.com/go/;
         inherit description license;
         longDescription = ''
           Gogland is the codename for a new commercial IDE by JetBrains
@@ -94,7 +97,7 @@ let
       inherit name version src wmClass jdk;
       product = "IDEA";
       meta = with stdenv.lib; {
-        homepage = "https://www.jetbrains.com/idea/";
+        homepage = https://www.jetbrains.com/idea/;
         inherit description license;
         longDescription = ''
           IDE for Java SE, Groovy & Scala development Powerful
@@ -111,7 +114,7 @@ let
       inherit name version src wmClass jdk;
       product = "PhpStorm";
       meta = with stdenv.lib; {
-        homepage = "https://www.jetbrains.com/phpstorm/";
+        homepage = https://www.jetbrains.com/phpstorm/;
         inherit description license;
         longDescription = ''
           PhpStorm provides an editor for PHP, HTML and JavaScript
@@ -128,7 +131,7 @@ let
       inherit name version src wmClass jdk;
       product = "PyCharm";
       meta = with stdenv.lib; {
-        homepage = "https://www.jetbrains.com/pycharm/";
+        homepage = https://www.jetbrains.com/pycharm/;
         inherit description license;
         longDescription = ''
           Python IDE with complete set of tools for productive
@@ -155,7 +158,7 @@ let
       inherit name version src wmClass jdk;
       product = "Rider";
       meta = with stdenv.lib; {
-        homepage = "https://www.jetbrains.com/rider/";
+        homepage = https://www.jetbrains.com/rider/;
         inherit description license;
         longDescription = ''
           JetBrains Rider is a new .NET IDE based on the IntelliJ
@@ -181,7 +184,7 @@ let
       inherit name version src wmClass jdk;
       product = "RubyMine";
       meta = with stdenv.lib; {
-        homepage = "https://www.jetbrains.com/ruby/";
+        homepage = https://www.jetbrains.com/ruby/;
         inherit description license;
         longDescription = description;
         maintainers = with maintainers; [ edwtjo ];
@@ -194,7 +197,7 @@ let
       inherit name version src wmClass jdk;
       product = "WebStorm";
       meta = with stdenv.lib; {
-        homepage = "https://www.jetbrains.com/webstorm/";
+        homepage = https://www.jetbrains.com/webstorm/;
         inherit description license;
         longDescription = ''
           WebStorm provides an editor for HTML, JavaScript (incl. Node.js),
@@ -213,12 +216,12 @@ in
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "2017.1.3";
+    version = "2017.2"; /* updated by script */
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
-      sha256 = "045pkbbf4ypk9qkhldz08i7hbc6vaq68a8v9axnpndnvcrf0vf7g";
+      sha256 = "de7f47ec959be9653aa4d2028fb27f8327800d8370daa0ab2d1093f3469f4b49"; /* updated by script */
     };
     wmClass = "jetbrains-clion";
     update-channel = "CLion_Release"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
@@ -265,12 +268,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2017.1.5"; /* updated by script */
+    version = "2017.2";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "830c662c517e8d0131dc2df150d6f75adb3d8becaf9de96393730b0f4ae6ccf0"; /* updated by script */
+      sha256 = "0z5abj41f5l9ilznr34lm4fsivrl2yjdxb2kdcis5abij6zl0g3f";
     };
     wmClass = "jetbrains-idea-ce";
     update-channel = "IDEA_Release";

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
-    homepage = "http://ttylog.sourceforg.net";
+    homepage = http://ttylog.sourceforg.net;
     description = "Simple serial port logger";
     longDescription = ''
       A serial port logger which can be used to print everything to stdout

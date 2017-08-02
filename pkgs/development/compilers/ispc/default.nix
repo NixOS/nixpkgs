@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, bash, which, m4, python, bison, flex_2_6_1, llvmPackages, clangWrapSelf,
+{stdenv, fetchFromGitHub, bash, which, m4, python, bison, flex, llvmPackages, clangWrapSelf,
 testedTargets ? ["sse2" "host"] # the default test target is sse4, but that is not supported by all Hydra agents
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     m4
     python
     bison
-    flex_2_6_1
+    flex
     llvm
     llvmPackages.clang-unwrapped # we need to link against libclang, so we need the unwrapped
   ];

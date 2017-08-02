@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Fish shell like syntax highlighting for Zsh";
-    homepage = "https://github.com/zsh-users/zsh-syntax-highlighting";
+    homepage = https://github.com/zsh-users/zsh-syntax-highlighting;
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = [ maintainers.loskutov ];

@@ -3,22 +3,14 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "sysdig-${version}";
-  version = "0.16.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    sha256 = "1h3f9nkc5fkvks6va0maq377m9qxnsf4q3f2dc14rdzfvnzidy06";
+    sha256 = "0xw4in2yb3ynpc8jwl95j92kbyr7fzda3mab8nyxcyld7gshrlvd";
   };
-
-  patches = [
-    (fetchpatch {
-       # Sysdig fails to run on linux kernels with unified cgroups enabled
-       url = https://github.com/draios/sysdig/files/909689/0001-Fix-for-linux-kernels-with-cgroup-v2-API-enabled.patch.txt;
-       sha256 = "10nmisifa500hzpa3899rs837bcal72pnqidxmrnr1js187z8j84";
-    })
-  ];
 
   buildInputs = [
     cmake zlib luajit ncurses perl jsoncpp libb64 openssl curl jq gcc

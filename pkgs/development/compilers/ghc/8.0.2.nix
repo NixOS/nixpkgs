@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sha256 = "1c8qc4fhkycynk4g1f9hvk53dj6a1vvqi6bklqznns6hw59m8qhi";
   };
 
-  patches = []
+  patches = [ ./ghc-gold-linker.patch ]
     ++ stdenv.lib.optional stdenv.isLinux ./ghc-no-madv-free.patch
     ++ stdenv.lib.optional stdenv.isDarwin ./ghc-8.0.2-no-cpp-warnings.patch;
 
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = "http://haskell.org/ghc";
+    homepage = http://haskell.org/ghc;
     description = "The Glasgow Haskell Compiler";
     maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
     inherit (ghc.meta) license platforms;

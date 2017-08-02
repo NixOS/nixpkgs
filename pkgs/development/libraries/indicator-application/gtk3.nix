@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Indicator to take menus from applications and place them in the panel";
-    homepage = "https://launchpad.net/indicator-application";
+    homepage = https://launchpad.net/indicator-application;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];
