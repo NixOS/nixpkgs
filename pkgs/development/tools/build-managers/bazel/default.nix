@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, jdk, zip, unzip, bash, makeWrapper, which }:
+{ stdenv, fetchurl, jdk, zip, unzip, bash, makeWrapper, which, coreutils }:
 
 stdenv.mkDerivation rec {
 
-  version = "0.4.5";
+  version = "0.5.3";
 
   meta = with stdenv.lib; {
     homepage = http://github.com/bazelbuild/bazel/;
@@ -16,14 +16,17 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "0asmq3kxnl4326zhgh13mvcrc8jvmiswjj4ymrq0943q4vj7nwrb";
+    sha256 = "04jj0w9bkkmshb5qrv4d345lz4m9qiq1pmc5z1q6zk1wpf3pxlnn";
   };
 
   sourceRoot = ".";
 
+  # bazel expects bash to find coreutils when starting from an empty environment
   postPatch = ''
+    makeWrapper "${bash}/bin/bash" "$out/bin/bash" --argv0 '$0' --prefix PATH : ${coreutils}/bin
+
     for f in $(grep -l -r '#!/bin/bash'); do
-      substituteInPlace "$f" --replace '#!/bin/bash' '#!${bash}/bin/bash'
+      substituteInPlace "$f" --replace '#!/bin/bash' '#!'$out/bin/bash
     done
     for f in \
       src/main/java/com/google/devtools/build/lib/analysis/CommandHelper.java \
@@ -31,7 +34,7 @@ stdenv.mkDerivation rec {
       src/main/java/com/google/devtools/build/lib/bazel/rules/sh/BazelShRuleClasses.java \
       src/main/java/com/google/devtools/build/lib/rules/cpp/LinkCommandLine.java \
       ; do
-      substituteInPlace "$f" --replace /bin/bash ${bash}/bin/bash
+      substituteInPlace "$f" --replace /bin/bash $out/bin/bash
     done
   '';
 
