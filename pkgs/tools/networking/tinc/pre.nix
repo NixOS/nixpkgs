@@ -20,18 +20,6 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.ac --replace UNKNOWN ${version}
   '';
 
-  patches = [
-    # Avoid infinite loop with "Error while reading from Linux tun/tap device (tun mode) /dev/net/tun: File descriptor in bad state" on network restart
-    (fetchpatch {
-      url = https://github.com/gsliepen/tinc/compare/acefa66...e4544db.patch;
-      sha256 = "1jz7anqqzk7j96l5ifggc2knp14fmbsjdzfrbncxx0qhb6ihdcvn";
-    })
-    (fetchpatch {
-      url = "https://github.com/gsliepen/tinc/commit/323c17e232539f3f06e7cebc664ab48f60127e0e.patch";
-      sha256 = "1flnprxa0gviiih0lbpqa5kj41ndh1sylm5j9ibly7f8m5rg16rs";
-    })
-  ];
-
   postInstall = ''
     rm $out/bin/tinc-gui
   '';
