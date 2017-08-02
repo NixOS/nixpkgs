@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       Whilst Profanity will run against libstrophe, libmesode provides extra
       TLS functionality such as manual SSL certificate verification.
     '';
-    homepage = http://github.com/boothj5/libmesode/;
+    homepage = https://github.com/boothj5/libmesode/;
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.devhell ];

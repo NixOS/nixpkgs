@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Extensible Binary Meta Language library";
     license = licenses.lgpl21;
-    homepage = http://dl.matroska.org/downloads/libebml/;
+    homepage = https://dl.matroska.org/downloads/libebml/;
     maintainers = [ maintainers.spwhitt ];
     platforms = platforms.unix;
   };

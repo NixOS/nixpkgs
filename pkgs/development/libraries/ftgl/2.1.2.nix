@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://sourceforge.net/apps/mediawiki/ftgl/;
+    homepage = https://sourceforge.net/apps/mediawiki/ftgl/;
     description = "Font rendering library for OpenGL applications";
     license = stdenv.lib.licenses.gpl3Plus;
 

@@ -44,7 +44,7 @@ in
     };
 
     meta = {
-      homepage = http://github.com/phillipberndt/autorandr/;
+      homepage = https://github.com/phillipberndt/autorandr/;
       description = "Auto-detect the connect display hardware and load the appropiate X11 setup using xrandr";
       license = stdenv.lib.licenses.gpl3Plus;
       maintainers = [ stdenv.lib.maintainers.coroa ];

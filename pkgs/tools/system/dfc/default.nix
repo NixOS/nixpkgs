@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake gettext ];
 
   meta = {
-    homepage = http://projects.gw-computing.net/projects/dfc;
+    homepage = https://projects.gw-computing.net/projects/dfc;
     description = "Displays file system space usage using graphs and colors";
     license="free";
     maintainers = with stdenv.lib.maintainers; [qknight];

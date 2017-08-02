@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://opendyslexic.org/;
     description = "Font created to increase readability for readers with dyslexia";
-    license = "Bitstream Vera License (http://www.gnome.org/fonts/#Final_Bitstream_Vera_Fonts)";
+    license = "Bitstream Vera License (https://www.gnome.org/fonts/#Final_Bitstream_Vera_Fonts)";
     platforms = platforms.all;
     maintainers = [maintainers.rycee];
   };

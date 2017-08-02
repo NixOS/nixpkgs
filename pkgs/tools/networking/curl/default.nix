@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     optional gnutlsSupport gnutls ++
     optional scpSupport libssh2;
 
-  # for the second line see http://curl.haxx.se/mail/tracker-2014-03/0087.html
+  # for the second line see https://curl.haxx.se/mail/tracker-2014-03/0087.html
   preConfigure = ''
     sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
     rm src/tool_hugehelp.c
@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A command line tool for transferring files with URL syntax";
-    homepage    = http://curl.haxx.se/;
+    homepage    = https://curl.haxx.se/;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.all;
   };

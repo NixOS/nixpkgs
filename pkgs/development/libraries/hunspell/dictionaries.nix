@@ -75,7 +75,7 @@ let
       meta = with stdenv.lib; {
         inherit longDescription;
         description = "Hunspell dictionary for ${shortDescription} from Dicollecte";
-        homepage = http://www.dicollecte.org/home.php?prj=fr;
+        homepage = https://www.dicollecte.org/home.php?prj=fr;
         license = licenses.mpl20;
         maintainers = with maintainers; [ renzo ];
         platforms = platforms.all;
@@ -118,7 +118,7 @@ let
       name = "hunspell-dict-${shortName}-linguistico-${version}";
       readmeFile = dictFileName + "_README.txt";
       meta = with stdenv.lib; {
-        homepage = http://sourceforge.net/projects/linguistico/;
+        homepage = https://sourceforge.net/projects/linguistico/;
         license = licenses.gpl3;
         maintainers = with maintainers; [ renzo ];
         platforms = platforms.all;

@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Ghostscript and cups printer drivers";
-    homepage = http://sourceforge.net/projects/gimp-print/;
+    homepage = https://sourceforge.net/projects/gimp-print/;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

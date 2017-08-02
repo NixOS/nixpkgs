@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A multi-platform toolkit for creating graphical user interfaces";
-    homepage    = http://www.gtk.org/;
+    homepage    = https://www.gtk.org/;
     license     = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 raskin ];
     platforms   = platforms.all;

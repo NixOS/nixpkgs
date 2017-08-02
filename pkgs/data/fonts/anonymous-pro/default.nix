@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.marksimonson.com/fonts/view/anonymous-pro;
+    homepage = https://www.marksimonson.com/fonts/view/anonymous-pro;
     description = "TrueType font set intended for source code";
     longDescription = ''
       Anonymous Pro (2009) is a family of four fixed-width fonts

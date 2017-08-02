@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://sourceforge.net/projects/btanks/;
+    homepage = https://sourceforge.net/projects/btanks/;
     description = "Fast 2d tank arcade game";
     license = stdenv.lib.licenses.gpl2Plus;
   };

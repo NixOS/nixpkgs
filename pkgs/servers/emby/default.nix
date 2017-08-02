@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "MediaBrowser - Bring together your videos, music, photos, and live television";
-    homepage = http://emby.media/;
+    homepage = https://emby.media/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.fadenb ];
     platforms = stdenv.lib.platforms.all;

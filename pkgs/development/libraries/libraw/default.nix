@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Library for reading RAW files obtained from digital photo cameras (CRW/CR2, NEF, RAF, DNG, and others)";
-    homepage = http://www.libraw.org/;
+    homepage = https://www.libraw.org/;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;
   };

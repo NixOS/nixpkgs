@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "A set of monospaced OpenType fonts designed for coding environments";
     maintainers = with stdenv.lib.maintainers; [ relrod ];
     platforms = with stdenv.lib.platforms; all;
-    homepage = http://blog.typekit.com/2012/09/24/source-code-pro/;
+    homepage = https://blog.typekit.com/2012/09/24/source-code-pro/;
     license = stdenv.lib.licenses.ofl;
   };
 }

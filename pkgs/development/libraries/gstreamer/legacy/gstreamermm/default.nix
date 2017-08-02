@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C++ bindings for the GStreamer streaming multimedia library";
-    homepage = http://www.gtkmm.org/;
+    homepage = https://www.gtkmm.org/;
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ plcplc ];
     platforms = platforms.unix;

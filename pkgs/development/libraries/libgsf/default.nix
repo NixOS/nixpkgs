@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GNOME's Structured File Library";
-    homepage    = http://www.gnome.org/projects/libgsf;
+    homepage    = https://www.gnome.org/projects/libgsf;
     license     = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = stdenv.lib.platforms.unix;
