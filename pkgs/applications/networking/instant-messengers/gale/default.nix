@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   configureArgs = [ "--sysconfdir=/etc" ];
 
   meta = with stdenv.lib; {
-    homepage = "http://gale.org/";
+    homepage = http://gale.org/;
     description = "Chat/messaging system (server and client)";
     platforms = platforms.all;
     license = licenses.gpl2Plus;

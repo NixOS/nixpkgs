@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   meta = with stdenv.lib; {
-    homepage = "https://forge.ocamlcore.org/projects/ansiterminal";
+    homepage = https://forge.ocamlcore.org/projects/ansiterminal;
     description = "A module allowing to use the colors and cursor movements on ANSI terminals";
     longDescription = ''
       ANSITerminal is a module allowing to use the colors and cursor

@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
   version = "3.43.16";
 
   meta = {
-    homepage = "https://toolbelt.heroku.com";
+    homepage = https://toolbelt.heroku.com;
     description = "Everything you need to get started using Heroku";
     maintainers = with maintainers; [ aflatter mirdhyn peterhoeg ];
     license = licenses.mit;

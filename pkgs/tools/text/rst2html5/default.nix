@@ -15,7 +15,7 @@ pythonPackages.buildPythonPackage rec {
   [ docutils genshi pygments beautifulsoup4 ];
 
   meta = with stdenv.lib;{
-    homepage = "https://bitbucket.org/andre_felipe_dias/rst2html5";
+    homepage = https://bitbucket.org/andre_felipe_dias/rst2html5;
     description = "Converts ReSTructuredText to (X)HTML5";
     license = licenses.mit;
     maintainers = with maintainers; [ AndersonTorres ];

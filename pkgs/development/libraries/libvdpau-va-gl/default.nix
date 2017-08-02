@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 libpthreadstubs libXau libXdmcp libXext libvdpau glib libva ffmpeg mesa_glu ];
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/i-rinat/libvdpau-va-gl";
+    homepage = https://github.com/i-rinat/libvdpau-va-gl;
     description = "VDPAU driver with OpenGL/VAAPI backend";
     license = licenses.lgpl3;
     platforms = platforms.linux;

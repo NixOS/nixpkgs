@@ -32,7 +32,7 @@ stdenv.mkDerivation rec
 
   meta =
   {
-    homepage = "https://github.com/haiwen/seafile";
+    homepage = https://github.com/haiwen/seafile;
     description = "Shared components of Seafile: seafile-daemon, libseafile, libseafile python bindings, manuals, and icons";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;

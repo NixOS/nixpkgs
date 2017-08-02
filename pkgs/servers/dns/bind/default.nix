@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://www.isc.org/software/bind";
+    homepage = http://www.isc.org/software/bind;
     description = "Domain name server";
     license = stdenv.lib.licenses.isc;
 

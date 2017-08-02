@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A set of symbols and convenience functions for Ayatana indicators";
-    homepage = "https://launchpad.net/libindicator";
+    homepage = https://launchpad.net/libindicator;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];

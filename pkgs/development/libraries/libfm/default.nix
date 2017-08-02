@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   configureFlags = optional extraOnly "--with-extra-only";
 
   meta = with stdenv.lib; {
-    homepage = "http://blog.lxde.org/?cat=28/";
+    homepage = http://blog.lxde.org/?cat=28/;
     license = licenses.lgpl21Plus;
     description = "A glib-based library for file management";
     maintainers = [ maintainers.ttuegel ];

@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "L2TP plugin for NetworkManager";
     inherit (networkmanager.meta) platforms;
-    homepage = "https://github.com/seriyps/NetworkManager-l2tp";
+    homepage = https://github.com/seriyps/NetworkManager-l2tp;
     license = licenses.gpl2;
     maintainers = with maintainers; [ abbradar obadz ];
   };

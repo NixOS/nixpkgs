@@ -13,7 +13,7 @@ mkDerivation {
 
   meta = with lib; {
     platforms = platforms.linux ++ platforms.darwin;
-    homepage = "http://www.kde.org";
+    homepage = http://www.kde.org;
     license = licenses.bsd2;
     maintainers = [ maintainers.ttuegel ];
   };

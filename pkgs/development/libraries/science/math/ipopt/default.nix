@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A software package for large-scale nonlinear optimization";
-    homepage = "https://projects.coin-or.org/Ipopt";
+    homepage = https://projects.coin-or.org/Ipopt;
     license = licenses.epl10;
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];

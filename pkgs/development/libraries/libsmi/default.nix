@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A Library to Access SMI MIB Information";
-    homepage = "https://www.ibr.cs.tu-bs.de/projects/libsmi/index.html";
+    homepage = https://www.ibr.cs.tu-bs.de/projects/libsmi/index.html;
     license = licenses.free;
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };

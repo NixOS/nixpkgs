@@ -6002,7 +6002,9 @@ with pkgs;
   tbb = callPackage ../development/libraries/tbb { };
 
   terra = callPackage ../development/compilers/terra {
-    llvmPackages = llvmPackages_38;
+    llvmPackages = llvmPackages_38 // {
+      llvm = llvmPackages_38.llvm.override { enableSharedLibraries = false; };
+    };
     lua = lua5_1;
   };
 
@@ -17378,6 +17380,10 @@ with pkgs;
 
   openmw = callPackage ../games/openmw { };
 
+  openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix {
+    stdenv = overrideCC stdenv gcc7;
+  };
+
   openra = callPackage ../games/openra { lua = lua5_1; };
 
   openrw = callPackage ../games/openrw { };
@@ -18037,6 +18043,8 @@ with pkgs;
 
   plm = callPackage ../applications/science/programming/plm { };
 
+  scyther = callPackage ../applications/science/programming/scyther { };
+
   ### SCIENCE/LOGIC
 
   abc-verifier = callPackage ../applications/science/logic/abc {};
@@ -18149,6 +18157,10 @@ with pkgs;
   coq_8_6 = coqPackages_8_6.coq;
   coq_HEAD = callPackage ../applications/science/logic/coq/HEAD.nix {};
   coq = coqPackages.coq;
+
+  coq2html = callPackage ../applications/science/logic/coq2html {
+    make = pkgs.gnumake3;
+  };
 
   cryptoverif = callPackage ../applications/science/logic/cryptoverif { };
 

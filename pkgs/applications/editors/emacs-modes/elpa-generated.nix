@@ -1446,10 +1446,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20170724";
+        version = "20170731";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20170724.tar";
-          sha256 = "1f1szds6642427hrzagxgkr05z66sf57n5l2acvmpgw4z358ms0n";
+          url = "https://elpa.gnu.org/packages/org-20170731.tar";
+          sha256 = "1vf91r4ifnjg5r82l5ikq0bwsxd5dsbgywzmwaspm6ckx49nksnl";
         };
         packageRequires = [];
         meta = {
@@ -1785,10 +1785,10 @@
       }) {};
     sokoban = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "sokoban";
-        version = "1.4.4";
+        version = "1.4.5";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/sokoban-1.4.4.tar";
-          sha256 = "0lz0qxgs71yh23iayv50rb6qgqvgbz2bg2sgfxcps8wag643ns20";
+          url = "https://elpa.gnu.org/packages/sokoban-1.4.5.tar";
+          sha256 = "1hh35g1p2f5al88jsbgiz35bvhn7iw5sf9zhsjimiig5isv7khip";
         };
         packageRequires = [];
         meta = {

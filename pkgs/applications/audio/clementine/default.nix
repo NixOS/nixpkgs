@@ -59,7 +59,7 @@ let
         -e 's,-Wno-unused-private-field,,g'
     '';
     meta = with stdenv.lib; {
-      homepage = "http://www.clementine-player.org";
+      homepage = http://www.clementine-player.org;
       description = "A multiplatform music player";
       license = licenses.gpl3Plus;
       platforms = platforms.linux;
@@ -84,7 +84,7 @@ let
     '';
     enableParallelBuilding = true;
     meta = with stdenv.lib; {
-      homepage = "http://www.clementine-player.org";
+      homepage = http://www.clementine-player.org;
       description = "Spotify integration for Clementine";
       # The blob itself is Apache-licensed, although libspotify is unfree.
       license = licenses.asl20;
@@ -104,7 +104,7 @@ runCommand "clementine-${version}"
   dontPatchELF = true;
   dontStrip = true;
   meta = {
-    homepage = "http://www.clementine-player.org";
+    homepage = http://www.clementine-player.org;
     description = "A multiplatform music player"
       + " (" + (optionalString withSpotify "with Spotify, ")
       + "with gstreamer plugins: "

@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/arangodb/arangodb";
+    homepage = https://github.com/arangodb/arangodb;
     description = "A native multi-model database with flexible data models for documents, graphs, and key-values";
     license = licenses.asl20;
     platforms = platforms.linux;

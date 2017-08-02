@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://github.com/stark/siji";
+    homepage = https://github.com/stark/siji;
     description = "An iconic bitmap font based on Stlarch with additional glyphs";
     liscense = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.all;

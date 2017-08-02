@@ -10,7 +10,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = {
     description = "File manager with minimalistic curses interface";
-    homepage = "http://ranger.nongnu.org/";
+    homepage = http://ranger.nongnu.org/;
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.unix;
   };

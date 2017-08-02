@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A audio/video loudness scanner implementing ITU-R BS.1770";
     license = licenses.gpl2Plus;
-    homepage = "http://bs1770gain.sourceforge.net/";
+    homepage = http://bs1770gain.sourceforge.net/;
     platforms = platforms.all;
   };
 }

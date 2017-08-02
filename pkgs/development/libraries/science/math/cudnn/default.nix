@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "NVIDIA CUDA Deep Neural Network library (cuDNN)";
-    homepage = "https://developer.nvidia.com/cudnn";
+    homepage = https://developer.nvidia.com/cudnn;
     license = stdenv.lib.licenses.unfree;
   };
 }

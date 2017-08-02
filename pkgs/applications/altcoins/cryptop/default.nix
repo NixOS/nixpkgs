@@ -16,7 +16,7 @@ python2.pkgs.buildPythonApplication rec {
   doCheck = false;
 
   meta = {
-    homepage = "http://github.com/huwwp/cryptop";
+    homepage = http://github.com/huwwp/cryptop;
     description = "Command line Cryptocurrency Portfolio";
     license = with lib.licenses; [ mit ];
     maintainers = with lib.maintainers; [ bhipple ];

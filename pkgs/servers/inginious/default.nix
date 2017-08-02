@@ -66,7 +66,7 @@ in pythonPackages.buildPythonApplication rec {
 
   meta = {
     description = "An intelligent grader that allows secured and automated testing of code made by students";
-    homepage = "https://github.com/UCL-INGI/INGInious";
+    homepage = https://github.com/UCL-INGI/INGInious;
     license = licenses.agpl3;
     maintainers = with maintainers; [ layus ];
   };

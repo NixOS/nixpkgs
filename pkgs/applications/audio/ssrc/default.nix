@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     '';
 
     version = "${version}";
-    homepage = "http://shibatch.sourceforge.net/";
+    homepage = http://shibatch.sourceforge.net/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ leenaars];
     platforms = with platforms; [ linux ] ;

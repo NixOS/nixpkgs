@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zeromq ];
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/zeromq/cppzmq";
+    homepage = https://github.com/zeromq/cppzmq;
     license = licenses.bsd2;
     description = "C++ binding for 0MQ";
     maintainers = with maintainers; [ abbradar ];

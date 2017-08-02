@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   preConfigure = "./autogen.sh";
 
   meta = {
-    homepage = "http://gravit.slowchop.com";
+    homepage = http://gravit.slowchop.com;
     description = "Beautiful OpenGL-based gravity simulator";
     license = stdenv.lib.licenses.gpl2;
 

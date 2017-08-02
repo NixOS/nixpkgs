@@ -71,7 +71,7 @@ let
 
     meta = {
       description = "A fast, free distributed C/C++ compiler";
-      homepage = "http://distcc.org";
+      homepage = http://distcc.org;
       license = "GPL";
 
       platforms = stdenv.lib.platforms.linux;

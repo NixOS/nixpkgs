@@ -16,7 +16,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/pylast/pylast";
+    homepage = https://github.com/pylast/pylast;
     description = "A python interface to last.fm (and compatibles)";
     license = licenses.asl20;
     maintainers = with maintainers; [ rvolosatovs ];

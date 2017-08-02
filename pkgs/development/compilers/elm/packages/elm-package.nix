@@ -29,7 +29,7 @@ mkDerivation {
     zip-archive
   ];
   jailbreak = true;
-  homepage = "http://github.com/elm-lang/elm-package";
+  homepage = http://github.com/elm-lang/elm-package;
   description = "Package manager for Elm libraries";
   license = stdenv.lib.licenses.bsd3;
 }

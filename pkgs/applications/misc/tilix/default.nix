@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tiling terminal emulator following the Gnome Human Interface Guidelines.";
-    homepage = "https://gnunn1.github.io/tilix-web";
+    homepage = https://gnunn1.github.io/tilix-web;
     licence = licenses.mpl20;
     maintainer = with maintainers; [ midchildan ];
     platforms = platforms.linux;

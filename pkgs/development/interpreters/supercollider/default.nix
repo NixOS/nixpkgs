@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Programming language for real time audio synthesis";
-    homepage = "http://supercollider.sourceforge.net/";
+    homepage = http://supercollider.sourceforge.net/;
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.linux;
   };

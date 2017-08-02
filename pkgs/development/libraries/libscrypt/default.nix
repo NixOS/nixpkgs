@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Shared library that implements scrypt() functionality";
-    homepage = "https://lolware.net/2014/04/29/libscrypt.html";
+    homepage = https://lolware.net/2014/04/29/libscrypt.html;
     license = licenses.bsd2;
     maintainers = with maintainers; [ davidak ];
     platforms = platforms.unix;
