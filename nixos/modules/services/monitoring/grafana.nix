@@ -245,7 +245,17 @@ in {
       after = ["networking.target"];
       environment = mapAttrs' (n: v: nameValuePair "GF_${n}" (toString v)) envOptions;
       serviceConfig = {
-        ExecStart = "${cfg.package.bin}/bin/grafana-server -homepath ${cfg.dataDir}";
+        ExecStart = if (builtins.elem "keys" config.users.extraUsers.grafana.extraGroups) then (
+          pkgs.writeScript "grafana-server" ''
+          #!${pkgs.stdenv.shell} -e
+          export GF_DATABASE_PASSWORD=$(cat /run/keys/grafana-database)
+          export GF_SECURITY_ADMIN_PASSWORD=$(cat /run/keys/grafana-admin)
+          export GF_SECURITY_SECRET_KEY=$(cat /run/keys/grafana-secretkey)
+          exec ${cfg.package.bin}/bin/grafana-server -homepath ${cfg.dataDir}
+          ''
+        ) else (
+          "${cfg.package.bin}/bin/grafana-server -homepath ${cfg.dataDir}"
+        );
         WorkingDirectory = cfg.dataDir;
         User = "grafana";
       };
@@ -257,6 +267,8 @@ in {
 
     users.extraUsers.grafana = {
       uid = config.ids.uids.grafana;
+      group = "grafana";
+      extraGroups = [ "grafana" ];
       description = "Grafana user";
       home = cfg.dataDir;
       createHome = true;
