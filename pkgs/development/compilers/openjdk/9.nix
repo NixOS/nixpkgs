@@ -117,7 +117,7 @@ let
         # See https://www.mail-archive.com/openembedded-devel@lists.openembedded.org/msg49006.html
         "--with-extra-cflags=-Wno-error=deprecated-declarations -Wno-error=format-contains-nul -Wno-error=unused-result"
     ''
-    + lib.optionalString minimal "\"--disable-headful\""
+    + lib.optionalString minimal "\"--enable-headless-only\""
     + ");";
 
     NIX_LDFLAGS= lib.optionals (!minimal) [
@@ -144,14 +144,6 @@ let
       # jni.h expects jni_md.h to be in the header search path.
       ln -s $out/include/linux/*_md.h $out/include/
 
-      # Remove crap from the installation.
-      rm -rf $out/lib/openjdk/demo
-      ${lib.optionalString minimal ''
-        rm $out/lib/openjdk/jre/lib/${architecture}/{libjsound,libjsoundalsa,libsplashscreen,libawt*,libfontmanager}.so
-        rm $out/lib/openjdk/jre/bin/policytool
-        rm $out/lib/openjdk/bin/{policytool,appletviewer}
-      ''}
-
       # Copy the JRE to a separate output and setup fallback fonts
       cp -av build/*/images/jre $jre/lib/openjdk/
       mkdir $out/lib/openjdk/jre
@@ -159,9 +151,16 @@ let
         mkdir -p $jre/lib/openjdk/jre/lib/fonts/fallback
         lndir ${liberation_ttf}/share/fonts/truetype $jre/lib/openjdk/jre/lib/fonts/fallback
       ''}
-      lndir $jre/lib/openjdk/jre $out/lib/openjdk/jre
 
-      ln -s $out/lib/openjdk/bin $out/lib/openjdk/jre/bin
+      # Remove crap from the installation.
+      rm -rf $out/lib/openjdk/demo
+      ${lib.optionalString minimal ''
+        for d in $out/lib/openjdk/lib $jre/lib/openjdk/jre/lib; do
+          rm ''${d}/{libjsound,libjsoundalsa,libawt*,libfontmanager}.so
+        done
+      ''}
+
+      lndir $jre/lib/openjdk/jre $out/lib/openjdk/jre
 
       # Make sure cmm/*.pf are not symlinks:
       # https://youtrack.jetbrains.com/issue/IDEA-147272
