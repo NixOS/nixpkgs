@@ -25,7 +25,7 @@ stdenv.mkDerivation {
       analysis of profilometry data or thickness maps from imaging
       spectrophotometry.
     '';
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };
 }
