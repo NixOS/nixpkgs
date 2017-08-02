@@ -163,7 +163,7 @@ in
         description = "Tinc Daemon - ${network}";
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
-        path = [ data.package ];
+        path = [ data.package ] ++ optional data.chroot pkgs.utillinux;
         serviceConfig = {
           Type = "simple";
           PIDFile = "/run/tinc.${network}.pid";
