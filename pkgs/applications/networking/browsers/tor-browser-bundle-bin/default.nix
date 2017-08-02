@@ -183,6 +183,10 @@ stdenv.mkDerivation rec {
     lockPref("extensions.update.enabled", false);
     lockPref("extensions.torbutton.versioncheck_enabled", false);
 
+    // These preferences lock up the browser if set to true
+    lockPref("browser.tabs.remote.autostart", false);
+    lockPref("browser.tabs.remote.autostart.2", false);
+
     // User should never change these.  Locking prevents these
     // values from being written to prefs.js, avoiding Store
     // path capture.
