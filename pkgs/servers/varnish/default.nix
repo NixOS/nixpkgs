@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
     url = "http://repo.varnish-cache.org/source/${name}.tar.gz";
     sha256 = "0jizha1mwqk42zmkrh80y07vfl78mg1d9pp5w83qla4xn9ras0ai";
   };
+  patches = [
+    #https://varnish-cache.org/security/VSV00001.html
+    ./VSV00001.patch
+  ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
