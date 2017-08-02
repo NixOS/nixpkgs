@@ -2372,6 +2372,8 @@ with pkgs;
 
   gvolicon = callPackage ../tools/audio/gvolicon {};
 
+  gwyddion = callPackage ../applications/science/chemistry/gwyddion {};
+
   gzip = callPackage ../tools/compression/gzip { };
 
   gzrt = callPackage ../tools/compression/gzrt { };
@@ -5943,6 +5945,8 @@ with pkgs;
       };
 
     });
+
+  mkRustCrate = callPackage ../build-support/rust/rust-utils.nix { };
 
   rainicorn = callPackage ../development/tools/rust/rainicorn { };
   rustfmt = callPackage ../development/tools/rust/rustfmt { };
