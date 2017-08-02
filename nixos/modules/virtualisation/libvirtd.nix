@@ -168,8 +168,10 @@ in {
             # write back
             "${pkgs.xmlstarlet}/bin/xmlstarlet" edit --inplace --update "/domain/devices/emulator" -v "$new_emulator" "$file"
 
-            # Also refresh the OVMF path. Files with no matches are ignored.
-            "${pkgs.xmlstarlet}/bin/xmlstarlet" edit --inplace --update "/domain/os/loader" -v "${pkgs.OVMF.fd}/FV/OVMF_CODE.fd" "$file"
+            ${optionalString cfg.qemuOvmf ''
+              # Also refresh the OVMF path. Files with no matches are ignored.
+              "${pkgs.xmlstarlet}/bin/xmlstarlet" edit --inplace --update "/domain/os/loader" -v "${pkgs.OVMF.fd}/FV/OVMF_CODE.fd" "$file"
+            ''}
         done
       ''; # */
 
