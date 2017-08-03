@@ -602,6 +602,7 @@
   vdemeester = "Vincent Demeester <vincent@sbr.pm>";
   veprbl = "Dmitry Kalinkin <veprbl@gmail.com>";
   vifino = "Adrian Pistol <vifino@tty.sh>";
+  vinymeuh = "VinyMeuh <vinymeuh@gmail.com>";
   viric = "Lluís Batlle i Rossell <viric@viric.name>";
   vizanto = "Danny Wilson <danny@prime.vc>";
   vklquevs = "vklquevs <vklquevs@gmail.com>";
