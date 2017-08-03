@@ -151,38 +151,41 @@ in
 
   ###### implementation
 
-  config = mkIf config.networking.nat.enable {
+  config = mkMerge [
+    { networking.firewall.extraCommands = mkBefore flushNat; }
+    (mkIf config.networking.nat.enable {
 
-    environment.systemPackages = [ pkgs.iptables ];
+      environment.systemPackages = [ pkgs.iptables ];
 
-    boot = {
-      kernelModules = [ "nf_nat_ftp" ];
-      kernel.sysctl = {
-        "net.ipv4.conf.all.forwarding" = mkOverride 99 true;
-        "net.ipv4.conf.default.forwarding" = mkOverride 99 true;
-      };
-    };
-
-    networking.firewall = mkIf config.networking.firewall.enable {
-      extraCommands = mkMerge [ (mkBefore flushNat) setupNat ];
-      extraStopCommands = flushNat;
-    };
-
-    systemd.services = mkIf (!config.networking.firewall.enable) { nat = {
-      description = "Network Address Translation";
-      wantedBy = [ "network.target" ];
-      after = [ "network-pre.target" "systemd-modules-load.service" ];
-      path = [ pkgs.iptables ];
-      unitConfig.ConditionCapability = "CAP_NET_ADMIN";
-
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
+      boot = {
+        kernelModules = [ "nf_nat_ftp" ];
+        kernel.sysctl = {
+          "net.ipv4.conf.all.forwarding" = mkOverride 99 true;
+          "net.ipv4.conf.default.forwarding" = mkOverride 99 true;
+        };
       };
 
-      script = flushNat + setupNat;
+      networking.firewall = mkIf config.networking.firewall.enable {
+        extraCommands = setupNat;
+        extraStopCommands = flushNat;
+      };
 
-      postStop = flushNat;
-    }; };
-  };
+      systemd.services = mkIf (!config.networking.firewall.enable) { nat = {
+        description = "Network Address Translation";
+        wantedBy = [ "network.target" ];
+        after = [ "network-pre.target" "systemd-modules-load.service" ];
+        path = [ pkgs.iptables ];
+        unitConfig.ConditionCapability = "CAP_NET_ADMIN";
+
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+
+        script = flushNat + setupNat;
+
+        postStop = flushNat;
+      }; };
+    })
+  ];
 }
