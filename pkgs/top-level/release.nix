@@ -8,20 +8,23 @@
 
    $ nix-build pkgs/top-level/release.nix -A coreutils.x86_64-linux
 */
-
 { nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
 , officialRelease ? false
-, # The platforms for which we build Nixpkgs.
-  supportedSystems ? [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ]
-, # Strip most of attributes when evaluating to spare memory usage
-  scrubJobs ? true
-, # Attributes passed to nixpkgs. Don't build packages marked as unfree.
-  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
+  # The platforms for which we build Nixpkgs.
+, supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarchh64-linux" ]
+, limitedSupportedSystems ? [ "i686-linux" ]
+  # Strip most of attributes when evaluating to spare memory usage
+,  scrubJobs ? true
+  # Attributes passed to nixpkgs. Don't build packages marked as unfree.
+,  nixpkgsArgs ? { config = { allowUnfree = false; inHydra = true; }; }
 }:
 
 with import ./release-lib.nix { inherit supportedSystems scrubJobs nixpkgsArgs; };
 
 let
+
+  systemsWithAnySupport = supportedSystems ++ limitedSupportedSystems;
+
   jobs =
     { tarball = import ./make-tarball.nix { inherit pkgs nixpkgs officialRelease; };
 
@@ -55,43 +58,36 @@ let
               jobs.manual
               jobs.lib-tests
               jobs.stdenv.x86_64-linux
-              jobs.stdenv.i686-linux
               jobs.stdenv.x86_64-darwin
               jobs.linux.x86_64-linux
-              jobs.linux.i686-linux
               jobs.python.x86_64-linux
-              jobs.python.i686-linux
               jobs.python.x86_64-darwin
               jobs.python3.x86_64-linux
-              jobs.python3.i686-linux
               jobs.python3.x86_64-darwin
               # Many developers use nix-repl
               jobs.nix-repl.x86_64-linux
-              jobs.nix-repl.i686-linux
               jobs.nix-repl.x86_64-darwin
               # Needed by travis-ci to test PRs
-              jobs.nox.i686-linux
               jobs.nox.x86_64-linux
               jobs.nox.x86_64-darwin
               # Ensure that X11/GTK+ are in order.
               jobs.thunderbird.x86_64-linux
-              jobs.thunderbird.i686-linux
               # Ensure that basic stuff works on darwin
               jobs.git.x86_64-darwin
               jobs.mysql.x86_64-darwin
               jobs.vim.x86_64-darwin
             ] ++ lib.collect lib.isDerivation jobs.stdenvBootstrapTools;
         };
-    } // (lib.optionalAttrs (builtins.elem "i686-linux" supportedSystems) {
+    } // (lib.optionalAttrs (builtins.elem "i686-linux" systemsWithAnySupport) {
       stdenvBootstrapTools.i686-linux =
         { inherit (import ../stdenv/linux/make-bootstrap-tools.nix { system = "i686-linux"; }) dist test; };
-    }) // (lib.optionalAttrs (builtins.elem "x86_64-linux" supportedSystems) {
+    }) // (lib.optionalAttrs (builtins.elem "x86_64-linux" systemsWithAnySupport) {
       stdenvBootstrapTools.x86_64-linux =
         { inherit (import ../stdenv/linux/make-bootstrap-tools.nix { system = "x86_64-linux"; }) dist test; };
-    }) // (lib.optionalAttrs (builtins.elem "aarch64-linux" supportedSystems) {
+    }) // (lib.optionalAttrs (builtins.elem "aarch64-linux" systemsWithAnySupport) {
       stdenvBootstrapTools.aarch64-linux =
         { inherit (import ../stdenv/linux/make-bootstrap-tools.nix { system = "aarch64-linux"; }) dist test; };
-    }) // (lib.optionalAttrs (builtins.elem "x86_64-darwin" supportedSystems) {
+    }) // (lib.optionalAttrs (builtins.elem "x86_64-darwin" systemsWithAnySupport) {
       stdenvBootstrapTools.x86_64-darwin =
         let
           bootstrap = import ../stdenv/darwin/make-bootstrap-tools.nix { system = "x86_64-darwin"; };
