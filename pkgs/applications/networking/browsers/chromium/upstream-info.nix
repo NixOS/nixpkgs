@@ -6,13 +6,13 @@
     version = "60.0.3112.78";
   };
   dev = {
-    sha256 = "0b8bzxnnzfl17vw0gwds89zjc4z4zi6fdz8f97w3x8a5ad0c2h5i";
-    sha256bin64 = "1n1q6g7avw4yrzdhpzq0pfd12k1fb18hc01jqnq2ak0aisdaga72";
-    version = "61.0.3163.13";
+    sha256 = "0yan2dzx1854f3xslif5682rkb82a1li6vxj12z5s5fxqijhj1jq";
+    sha256bin64 = "0ddva2rqnid2gcx3qh72p41wc15869w2w9n0rbdpn662rpl041v1";
+    version = "61.0.3163.25";
   };
   stable = {
-    sha256 = "1sh3rq36sh4g7blajvqfvs06fs5sbrbdp50qq0cvcj4k3fmb4bd8";
-    sha256bin64 = "0wbqbbq9zxizfbjxj241nhk1qgjq91db0lzzbkm5hjvjhx6war4s";
-    version = "60.0.3112.78";
+    sha256 = "1rirhwvccidza4q4z1gqdwcd9v1bymh1m9r2cq8jhiabfrjpjbxl";
+    sha256bin64 = "1lw349ips0sgyls3arv864yq5xykfn9jilwkalvllaq6yvdvcvlk";
+    version = "60.0.3112.90";
   };
 }
