@@ -2372,6 +2372,8 @@ with pkgs;
 
   gvolicon = callPackage ../tools/audio/gvolicon {};
 
+  gwyddion = callPackage ../applications/science/chemistry/gwyddion {};
+
   gzip = callPackage ../tools/compression/gzip { };
 
   gzrt = callPackage ../tools/compression/gzrt { };
