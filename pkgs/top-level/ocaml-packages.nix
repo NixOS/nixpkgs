@@ -612,6 +612,8 @@ let
 
     vg = callPackage ../development/ocaml-modules/vg { };
 
+    wasm = callPackage ../development/ocaml-modules/wasm { };
+
     x509 = callPackage ../development/ocaml-modules/x509 { };
 
     xmlm = callPackage ../development/ocaml-modules/xmlm { };
