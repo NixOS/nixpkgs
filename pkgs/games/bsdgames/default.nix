@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses, openssl, flex, bison, less, miscfiles}:
+{ stdenv, fetchurl, ncurses, openssl, flex, bison, less, miscfiles }:
 
 stdenv.mkDerivation {
   name = "bsd-games-2.17";
@@ -18,6 +18,8 @@ stdenv.mkDerivation {
   ];
 
   hardeningDisable = [ "format" ];
+
+  makeFlags = [ "STRIP=" ];
 
   preConfigure = ''
     cat > config.params << EOF
