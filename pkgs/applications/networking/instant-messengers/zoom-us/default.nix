@@ -75,13 +75,12 @@ in stdenv.mkDerivation {
     #paxmark m $packagePath/QtWebEngineProcess # is this what dtzWill talked about?
 
     # RUNPATH set via patchelf is used only for half of libraries (why?), so wrap it
-    wrapProgram $packagePath/zoom \
+    makeWrapper $packagePath/zoom $out/bin/zoom-us \
         --prefix LD_LIBRARY_PATH : "$packagePath:$libPath" \
         --prefix LD_PRELOAD : "${libv4l}/lib/v4l1compat.so" \
         --set QT_PLUGIN_PATH "$packagePath/platforms" \
         --set QT_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb" \
         --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale"
-    ln -s "$packagePath/zoom" "$out/bin/zoom-us"
 
     cat > $packagePath/qt.conf <<EOF
     [Paths]
