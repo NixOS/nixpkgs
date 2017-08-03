@@ -15,7 +15,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Backport/clone of ChainMap";
-    homepage = "https://bitbucket.org/jeunice/chainmap";
+    homepage = https://bitbucket.org/jeunice/chainmap;
     license = licenses.psfl;
     maintainers = with maintainers; [ abbradar ];
   };

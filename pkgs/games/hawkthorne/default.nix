@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       to bring to life the video game used to determine the winner of Pierce
       Hawthorne's inheritance.
     '';
-    homepage = "http://www.reddit.com/r/hawkthorne";
+    homepage = http://www.reddit.com/r/hawkthorne;
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ campadrenalin ];
     broken = true;

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     maintainers = with maintainers; [ xvapx ];
     description = "Python bindings for libsodium based on ctypes";
-    homepage = "https://pypi.python.org/pypi/libnacl";
+    homepage = https://pypi.python.org/pypi/libnacl;
     license = licenses.asl20;
     platforms = platforms.linux;
   };

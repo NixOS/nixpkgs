@@ -1836,6 +1836,8 @@ with pkgs;
 
   entr = callPackage ../tools/misc/entr { };
 
+  envoy = callPackage ../tools/networking/envoy { };
+
   eot_utilities = callPackage ../tools/misc/eot-utilities { };
 
   eplot = callPackage ../tools/graphics/eplot { };
@@ -3630,8 +3632,6 @@ with pkgs;
   ossec = callPackage ../tools/security/ossec {};
 
   ostree = callPackage ../tools/misc/ostree { };
-
-  otfcc = callPackage ../tools/misc/otfcc {};
 
   otpw = callPackage ../os-specific/linux/otpw { };
 
@@ -6079,7 +6079,9 @@ with pkgs;
   tbb = callPackage ../development/libraries/tbb { };
 
   terra = callPackage ../development/compilers/terra {
-    llvmPackages = llvmPackages_38;
+    llvmPackages = llvmPackages_38 // {
+      llvm = llvmPackages_38.llvm.override { enableSharedLibraries = false; };
+    };
     lua = lua5_1;
   };
 
@@ -7552,6 +7554,8 @@ with pkgs;
   aws-sdk-cpp = callPackage ../development/libraries/aws-sdk-cpp { };
 
   babl = callPackage ../development/libraries/babl { };
+
+  backward-cpp = callPackage ../development/libraries/backward-cpp { };
 
   bctoolbox = callPackage ../development/libraries/bctoolbox {
     mbedtls = mbedtls_1_3;
@@ -9470,6 +9474,8 @@ with pkgs;
 
   lightlocker = callPackage ../misc/screensavers/light-locker { };
 
+  lightstep-tracer-cpp = callPackage ../development/libraries/lightstep-tracer-cpp { };
+
   linenoise = callPackage ../development/libraries/linenoise { };
 
   linenoise-ng = callPackage ../development/libraries/linenoise-ng { };
@@ -10158,6 +10164,8 @@ with pkgs;
 
   rabbitmq-java-client = callPackage ../development/libraries/rabbitmq-java-client {};
 
+  rapidjson = callPackage ../development/libraries/rapidjson {};
+
   raul = callPackage ../development/libraries/audio/raul { };
 
   readline = readline6;
@@ -10174,7 +10182,7 @@ with pkgs;
   readosm = callPackage ../development/libraries/readosm { };
 
   lambdabot = callPackage ../development/tools/haskell/lambdabot {
-    haskell-lib = haskell.lib;
+    haskellLib = haskell.lib;
   };
 
   lambda-mod-zsh-theme = callPackage ../shells/lambda-mod-zsh-theme/default.nix { };
@@ -17541,6 +17549,10 @@ with pkgs;
 
   openmw = callPackage ../games/openmw { };
 
+  openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix {
+    stdenv = overrideCC stdenv gcc7;
+  };
+
   openra = callPackage ../games/openra { lua = lua5_1; };
 
   openrct2 = callPackage_i686 ../games/openrct2 { };
@@ -17964,6 +17976,8 @@ with pkgs;
 
   numix-gtk-theme = callPackage ../misc/themes/numix { };
 
+  numix-sx-gtk-theme = callPackage ../misc/themes/numix-sx { };
+
   theme-vertex = callPackage ../misc/themes/vertex { };
 
   rox-filer = callPackage ../desktops/rox/rox-filer {
@@ -18202,6 +18216,8 @@ with pkgs;
 
   plm = callPackage ../applications/science/programming/plm { };
 
+  scyther = callPackage ../applications/science/programming/scyther { };
+
   ### SCIENCE/LOGIC
 
   abc-verifier = callPackage ../applications/science/logic/abc {};
@@ -18314,6 +18330,10 @@ with pkgs;
   coq_8_6 = coqPackages_8_6.coq;
   coq_HEAD = callPackage ../applications/science/logic/coq/HEAD.nix {};
   coq = coqPackages.coq;
+
+  coq2html = callPackage ../applications/science/logic/coq2html {
+    make = pkgs.gnumake3;
+  };
 
   cryptoverif = callPackage ../applications/science/logic/cryptoverif { };
 
@@ -19059,11 +19079,13 @@ with pkgs;
   inherit (callPackage ../applications/networking/cluster/terraform {})
     terraform_0_8_5
     terraform_0_8_8
-    terraform_0_9_11;
+    terraform_0_9_11
+    terraform_0_10_0;
 
   terraform_0_8 = terraform_0_8_8;
   terraform_0_9 = terraform_0_9_11;
-  terraform = terraform_0_9;
+  terraform_0_10 = terraform_0_10_0;
+  terraform = terraform_0_10;
 
   terraform-inventory = callPackage ../applications/networking/cluster/terraform-inventory {};
 

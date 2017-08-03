@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "GUI configuration tool for openbox";
-    homepage = "http://openbox.org/wiki/ObConf";
+    homepage = http://openbox.org/wiki/ObConf;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.lhvwb ];
     platforms = stdenv.lib.platforms.linux;

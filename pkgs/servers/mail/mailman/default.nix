@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
   makeFlags = [ "DIRSETGID=:" ];
 
   meta = {
-    homepage = "http://www.gnu.org/software/mailman/";
+    homepage = http://www.gnu.org/software/mailman/;
     description = "Free software for managing electronic mail discussion and e-newsletter lists";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;

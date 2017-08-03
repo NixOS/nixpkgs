@@ -52,7 +52,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Hierarchical datasets for Python";
-    homepage = "http://www.pytables.org/";
+    homepage = http://www.pytables.org/;
     license = stdenv.lib.licenses.bsd2;
   };
 }

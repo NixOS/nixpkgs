@@ -1,4 +1,0 @@
-altermime/0.3.10-7
-15_fix_snprintf.diff
-10_fix_printk_warnings.diff
-20_fix-unused-but-set-variables.diff

@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Mozilla Marionette protocol test automation harness";
-    homepage = "https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette";
+    homepage = https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette;
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ raskin ];
   };

@@ -22,7 +22,7 @@ buildGoPackage rec {
   buildInputs = [ glib libxml2 ];
 
   meta = {
-    homepage = "https://github.com/sloonz/ua";
+    homepage = https://github.com/sloonz/ua;
     license = stdenv.lib.licenses.isc;
     shortDescription = "Universal Aggregator";
     platforms = stdenv.lib.platforms.linux;

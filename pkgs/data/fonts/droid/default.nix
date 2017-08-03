@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Droid Family fonts by Google Android";
-    homepage = "https://github.com/google/fonts";
+    homepage = https://github.com/google/fonts;
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.all;
     maintainers = [];

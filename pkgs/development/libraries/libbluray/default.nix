@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
                  ;
 
   meta = with stdenv.lib; {
-    homepage = "http://www.videolan.org/developers/libbluray.html";
+    homepage = http://www.videolan.org/developers/libbluray.html;
     description = "Library to access Blu-Ray disks for video playback";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ abbradar ];

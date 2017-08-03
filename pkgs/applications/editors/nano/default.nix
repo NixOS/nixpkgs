@@ -27,8 +27,6 @@ in stdenv.mkDerivation rec {
     sha256 = "0xjpm2ka56x5ycrgjh06v110na13xlbm42bs8qibk7g578m9cils";
   };
 
-  patches = stdenv.lib.optional hostPlatform.isDarwin stdenv.secure-format-patch;
-
   nativeBuildInputs = [ texinfo ] ++ optional enableNls gettext;
   buildInputs = [ ncurses ];
 

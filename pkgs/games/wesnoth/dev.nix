@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       adventures.
     '';
 
-    homepage = "http://www.wesnoth.org/";
+    homepage = http://www.wesnoth.org/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;

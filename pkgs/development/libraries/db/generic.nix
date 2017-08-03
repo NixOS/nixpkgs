@@ -44,7 +44,7 @@ stdenv.mkDerivation (rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://www.oracle.com/technetwork/database/database-technologies/berkeleydb/index.html";
+    homepage = http://www.oracle.com/technetwork/database/database-technologies/berkeleydb/index.html;
     description = "Berkeley DB";
     license = license;
     platforms = platforms.unix;

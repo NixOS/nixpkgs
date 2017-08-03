@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A comprehensive update to the PLINK association analysis toolset";
-    homepage = "https://www.cog-genomics.org/plink2";
+    homepage = https://www.cog-genomics.org/plink2;
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.all;
   };

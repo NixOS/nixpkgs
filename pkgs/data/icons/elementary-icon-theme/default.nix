@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Elementary icon theme";
-    homepage = "https://launchpad.net/elementaryicons";
+    homepage = https://launchpad.net/elementaryicons;
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ simonvandel ];

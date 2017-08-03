@@ -102,7 +102,7 @@ in stdenv.mkDerivation ({
   setupHook = ./setup-hook.sh;
 
   meta = with stdenv.lib; {
-    homepage = "http://www.erlang.org/";
+    homepage = http://www.erlang.org/;
     downloadPage = "http://www.erlang.org/download.html";
     description = "Programming language used for massively scalable soft real-time systems";
 

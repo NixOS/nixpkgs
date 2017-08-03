@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open-source, single-player, role-playing roguelike game";
-    homepage = "http://crawl.develz.org/";
+    homepage = http://crawl.develz.org/;
     longDescription = ''
       Open-source, single-player, role-playing roguelike game of exploration and
       treasure-hunting in dungeons filled with dangerous and unfriendly monsters

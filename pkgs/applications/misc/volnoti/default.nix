@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Lightweight volume notification for Linux";
-    homepage = "https://github.com/davidbrazdil/volnoti";
+    homepage = https://github.com/davidbrazdil/volnoti;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.gilligan ];

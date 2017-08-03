@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "CLI PulseAudio Volume Control";
-    homepage = "http://github.com/falconindy/ponymix";
+    homepage = http://github.com/falconindy/ponymix;
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ericsagnes ];

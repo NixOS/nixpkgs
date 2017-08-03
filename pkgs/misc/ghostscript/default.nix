@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
   passthru = { inherit version; };
 
   meta = {
-    homepage = "http://www.ghostscript.com/";
+    homepage = http://www.ghostscript.com/;
     description = "PostScript interpreter (mainline version)";
 
     longDescription = ''

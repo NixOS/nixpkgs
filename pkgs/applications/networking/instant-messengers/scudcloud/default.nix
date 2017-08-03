@@ -13,7 +13,7 @@ in python3Packages.buildPythonPackage {
 
   meta = with stdenv.lib; {
     description = "Non-official desktop client for Slack";
-    homepage = "https://github.com/raelgc/scudcloud";
+    homepage = https://github.com/raelgc/scudcloud;
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ volhovm ];

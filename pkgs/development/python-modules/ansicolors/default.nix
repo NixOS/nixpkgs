@@ -11,7 +11,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/verigak/colors/";
+    homepage = https://github.com/verigak/colors/;
     description = "ANSI colors for Python";
     license = licenses.isc;
     maintainers = with maintainers; [ copumpkin ];

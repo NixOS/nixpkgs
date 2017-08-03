@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   buildInputs = [freetype mesa];
 
   meta = {
-    homepage = "http://sourceforge.net/apps/mediawiki/ftgl/";
+    homepage = http://sourceforge.net/apps/mediawiki/ftgl/;
     description = "Font rendering library for OpenGL applications";
     license = stdenv.lib.licenses.gpl3Plus;
 

@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://ipsec-tools.sourceforge.net/";
+    homepage = http://ipsec-tools.sourceforge.net/;
     description = "Port of KAME's IPsec utilities to the Linux-2.6 IPsec implementation";
     platforms = stdenv.lib.platforms.linux;
   };

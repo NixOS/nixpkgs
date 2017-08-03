@@ -61,7 +61,7 @@ python2Packages.buildPythonApplication rec {
       gPodder downloads and manages free audio and video content (podcasts)
       for you. Listen directly on your computer or on your mobile devices.
     '';
-    homepage = "http://gpodder.org/";
+    homepage = http://gpodder.org/;
     license = licenses.gpl3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ skeidel mic92 ];

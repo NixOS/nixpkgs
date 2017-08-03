@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = "http://tls.sourceforge.net/";
+    homepage = http://tls.sourceforge.net/;
     description = "An OpenSSL / RSA-bsafe Tcl extension";
     license = stdenv.lib.licenses.tcltk;
     platforms = stdenv.lib.platforms.unix;

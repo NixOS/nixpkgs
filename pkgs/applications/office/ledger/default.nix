@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "http://ledger-cli.org/";
+    homepage = http://ledger-cli.org/;
     description = "A double-entry accounting system with a command-line reporting interface";
     license = stdenv.lib.licenses.bsd3;
 

@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Base16 provides carefully chosen syntax highlighting and a default set of sixteen colors suitable for a wide range of applications. Base16 is both a color scheme and a template.";
-    homepage = "https://github.com/chriskempson/base16";
+    homepage = https://github.com/chriskempson/base16;
     license = licenses.mit;
     maintainers = with maintainers; [ garbas ];
     platforms = with platforms; unix;

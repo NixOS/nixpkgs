@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A tool to synchronise files between a PC and an Android devices using ADB (Android Debug Bridge)";
-    homepage = "https://github.com/google/adb-sync";
+    homepage = https://github.com/google/adb-sync;
     license = licenses.asl20;
     platforms = platforms.unix;
     hydraPlatforms = [];

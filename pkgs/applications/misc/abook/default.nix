@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses readline ];
 
   meta = {
-    homepage = "http://abook.sourceforge.net/";
+    homepage = http://abook.sourceforge.net/;
     description = "Text-based addressbook program designed to use with mutt mail client";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.edwtjo ];

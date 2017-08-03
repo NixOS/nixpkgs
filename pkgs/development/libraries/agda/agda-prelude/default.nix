@@ -14,7 +14,7 @@ agda.mkDerivation (self: rec {
   everythingFile = "src/Prelude.agda";
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/UlfNorell/agda-prelude";
+    homepage = https://github.com/UlfNorell/agda-prelude;
     description = "Programming library for Agda";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;

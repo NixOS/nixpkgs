@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "SQL powered operating system instrumentation, monitoring, and analytics";
-    homepage = "https://osquery.io/";
+    homepage = https://osquery.io/;
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];
