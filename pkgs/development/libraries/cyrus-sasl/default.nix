@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch, openssl, openldap, kerberos, db, gettext, pam
+{ lib, stdenv, fetchurl, fetchpatch, openssl, openldap, libkrb5, db, gettext, pam
 , fixDarwinDylibNames, autoreconfHook, enableLdap ? false }:
 
 with stdenv.lib;
@@ -13,8 +13,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
 
+  propagatedBuildInputs = [ libkrb5 ];
   buildInputs =
-    [ openssl db gettext kerberos ]
+    [ openssl db gettext ]
     ++ lib.optional enableLdap openldap
     ++ lib.optional stdenv.isFreeBSD autoreconfHook
     ++ lib.optional stdenv.isLinux pam
