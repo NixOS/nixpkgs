@@ -565,8 +565,9 @@ in
   };
 
   xf86videointel = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [xorg.libXfixes];
+    buildInputs = attrs.buildInputs ++ [xorg.libXfixes xorg.libXScrnSaver xorg.pixman];
     nativeBuildInputs = [args.autoreconfHook xorg.utilmacros];
+    configureFlags = "--with-default-dri=3 --enable-tools";
   };
 
   xf86videoxgi = attrs: attrs // {
