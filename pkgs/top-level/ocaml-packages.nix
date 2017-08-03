@@ -552,6 +552,8 @@ let
 
     ppx_tools_versioned = callPackage ../development/ocaml-modules/ppx_tools_versioned { };
 
+    process = callPackage ../development/ocaml-modules/process { };
+
     ptmap = callPackage ../development/ocaml-modules/ptmap { };
 
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
