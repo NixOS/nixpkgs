@@ -7730,9 +7730,7 @@ with pkgs;
 
   cxxtest = callPackage ../development/libraries/cxxtest { };
 
-  cyrus_sasl = callPackage ../development/libraries/cyrus-sasl {
-    kerberos = if stdenv.isFreeBSD then libheimdal else kerberos;
-  };
+  cyrus_sasl = callPackage ../development/libraries/cyrus-sasl { };
 
   # Make bdb5 the default as it is the last release under the custom
   # bsd-like license
