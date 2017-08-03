@@ -898,6 +898,8 @@ with pkgs;
 
   crudini = callPackage ../tools/misc/crudini { };
 
+  cucumber = callPackage ../development/tools/cucumber {};
+
   daemontools = callPackage ../tools/admin/daemontools { };
 
   dale = callPackage ../development/compilers/dale { };
