@@ -10,6 +10,7 @@
 , zlib ? null, extraPackages ? [], extraBuildCommands ? ""
 , dyld ? null # TODO: should this be a setup-hook on dyld?
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
+, useMacosReexportHack ? false
 }:
 
 with stdenv.lib;
@@ -177,7 +178,14 @@ stdenv.mkDerivation {
         ln -s $ldPath/as $out/bin/as
       fi
 
+    '' + (if !useMacosReexportHack then ''
       wrap ld ${./ld-wrapper.sh} ''${ld:-$ldPath/ld}
+    '' else ''
+      ldInner="ld-reexport-delegate"
+      wrap "$ldInner" ${./macos-sierra-reexport-hack.bash} ''${ld:-$ldPath/ld}
+      wrap ld ${./ld-wrapper.sh} "$out/bin/$ldInner"
+      unset ldInner
+    '') + ''
 
       if [ -e ${binutils_bin}/bin/ld.gold ]; then
         wrap ld.gold ${./ld-wrapper.sh} ${binutils_bin}/bin/ld.gold
@@ -299,5 +307,7 @@ stdenv.mkDerivation {
     { description =
         stdenv.lib.attrByPath ["meta" "description"] "System C compiler" cc_
         + " (wrapper script)";
+    } // optionalAttrs useMacosReexportHack {
+      platforms = stdenv.lib.platforms.darwin;
     };
 }
