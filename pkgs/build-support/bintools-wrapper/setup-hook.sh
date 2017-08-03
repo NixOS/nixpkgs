@@ -2,12 +2,17 @@
 #
 # See comments in cc-wrapper's setup hook. This works exactly the same way.
 
+set -u
+
+# Skip setup hook if we're not a build-time dep
+(( "$hostOffset" < 0 )) || return 0
+
 bintoolsWrapper_addLDVars () {
-    case $depOffset in
+    case $depHostOffset in
         -1) local role='BUILD_' ;;
         0)  local role='' ;;
         1)  local role='TARGET_' ;;
-        *)  echo "bintools-wrapper: Error: Cannot be used with $depOffset-offset deps, " >2;
+        *)  echo "bintools-wrapper: Error: Cannot be used with $depHostOffset-offset deps" >2;
             return 1 ;;
     esac
 
@@ -20,17 +25,29 @@ bintoolsWrapper_addLDVars () {
     fi
 }
 
-if [ -n "${crossConfig:-}" ]; then
-    export NIX_BINTOOLS_WRAPPER_@infixSalt@_TARGET_BUILD=1
-    role_pre='BUILD_'
-    role_post='_FOR_BUILD'
-else
-    export NIX_BINTOOLS_WRAPPER_@infixSalt@_TARGET_HOST=1
-    role_pre=""
-    role_post=''
-fi
+case $targetOffset in
+    -1)
+        export NIX_BINTOOLS_WRAPPER_@infixSalt@_TARGET_BUILD=1
+        role_pre='BUILD_'
+        role_post='_FOR_BUILD'
+        ;;
+    0)
+        export NIX_BINTOOLS_WRAPPER_@infixSalt@_TARGET_HOST=1
+        role_pre=''
+        role_post=''
+        ;;
+    1)
+        export NIX_BINTOOLS_WRAPPER_@infixSalt@_TARGET_TARGET=1
+        role_pre='TARGET_'
+        role_post='_FOR_TARGET'
+        ;;
+    *)
+        echo "cc-wrapper: used as improper sort of dependency" >2;
+        return 1
+        ;;
+esac
 
-envHooks+=(bintoolsWrapper_addLDVars)
+addEnvHooks "$targetOffset" bintoolsWrapper_addLDVars
 
 # shellcheck disable=SC2157
 if [ -n "@bintools_bin@" ]; then
@@ -65,3 +82,4 @@ done
 
 # No local scope in sourced file
 unset -v role_pre role_post cmd upper_case
+set +u

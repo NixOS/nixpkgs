@@ -326,6 +326,17 @@ declare -ra pkgTargetHookVars=(envTargetTargetHook)
 
 declare -ra pkgHookVarVars=(pkgBuildHookVars pkgHostHookVars pkgTargetHookVars)
 
+# Add env hooks for all sorts of deps with the specified host offset.
+addEnvHooks() {
+    local depHostOffset="$1"
+    shift
+    local pkgHookVarsSlice="${pkgHookVarVars[$depHostOffset + 1]}[@]"
+    local pkgHookVar
+    for pkgHookVar in "${!pkgHookVarsSlice}"; do
+        eval "${pkgHookVar}s"'+=("$@")'
+    done
+}
+
 
 # Propagated dep files
 
