@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner = "Openwsman";
     repo = "openwsman";
     rev = "032d85704ac630d4c6bc59961867cd1428d3ab1e";
-    sha256 = "sha256:1z8gsm213k5vsjg67smydm9f2m3jccayd2rjiik11prz0w8ixvig";
+    sha256 = "1z8gsm213k5vsjg67smydm9f2m3jccayd2rjiik11prz0w8ixvig";
   };
 
   buildInputs = [ autoconf automake libtool pkgconfig libxml2 curl cmake pam sblim-sfcc python ];
