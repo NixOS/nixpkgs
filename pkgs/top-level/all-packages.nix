@@ -5184,6 +5184,11 @@ with pkgs;
 
   clang = llvmPackages.clang;
 
+  clang-sierraHack = clang.override {
+    name = "clang-wrapper-with-reexport-hack";
+    useMacosReexportHack = true;
+  };
+
   clang_4  = llvmPackages_4.clang;
   clang_39 = llvmPackages_39.clang;
   clang_38 = llvmPackages_38.clang;
@@ -5211,6 +5216,7 @@ with pkgs;
 
   #Use this instead of stdenv to build with clang
   clangStdenv = if stdenv.isDarwin then stdenv else lowPrio llvmPackages.stdenv;
+  clang-sierraHack-stdenv = overrideCC stdenv clang-sierraHack;
   libcxxStdenv = lowPrio llvmPackages.libcxxStdenv;
 
   clean = callPackage ../development/compilers/clean { };
@@ -19254,4 +19260,9 @@ with pkgs;
   houdini = callPackage ../applications/misc/houdini {};
 
   xtermcontrol = callPackage ../applications/misc/xtermcontrol {};
+
+  # No `recurseIntoAttrs` because there's no need to nix-env these.
+  tests = {
+    macOSSierraShared = callPackage ../test/macos-sierra-shared {};
+  };
 }
