@@ -95,7 +95,7 @@ in stdenv.mkDerivation {
     homepage = https://zoom.us/;
     description = "zoom.us video conferencing application";
     license = stdenv.lib.licenses.unfree;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = builtins.attrNames srcs;
     maintainers = with stdenv.lib.maintainers; [ danbst ];
   };
 
