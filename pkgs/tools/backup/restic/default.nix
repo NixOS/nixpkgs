@@ -26,7 +26,7 @@ buildGoPackage rec {
   meta = with stdenv.lib; {
     homepage = https://restic.github.io;
     description = "A backup program that is fast, efficient and secure";
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd2;
     maintainers = [ maintainers.mbrgm ];
   };

@@ -6,6 +6,20 @@
 import ./make-test.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ? false, ... }:
   let
     unit = if withFirewall then "firewall" else "nat";
+
+    routerBase =
+      lib.mkMerge [
+        { virtualisation.vlans = [ 2 1 ];
+          networking.firewall.enable = withFirewall;
+          networking.firewall.allowPing = true;
+          networking.nat.internalIPs = [ "192.168.1.0/24" ];
+          networking.nat.externalInterface = "eth1";
+        }
+        (lib.optionalAttrs withConntrackHelpers {
+          networking.firewall.connectionTrackingModules = [ "ftp" ];
+          networking.firewall.autoLoadConntrackHelpers = true;
+        })
+      ];
   in
   {
     name = "nat" + (if withFirewall then "WithFirewall" else "Standalone")
@@ -30,20 +44,16 @@ import ./make-test.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ? false,
           ];
 
         router =
-          { config, pkgs, ... }:
-          lib.mkMerge [
-            { virtualisation.vlans = [ 2 1 ];
-              networking.firewall.enable = withFirewall;
-              networking.firewall.allowPing = true;
-              networking.nat.enable = true;
-              networking.nat.internalIPs = [ "192.168.1.0/24" ];
-              networking.nat.externalInterface = "eth1";
-            }
-            (lib.optionalAttrs withConntrackHelpers {
-              networking.firewall.connectionTrackingModules = [ "ftp" ];
-              networking.firewall.autoLoadConntrackHelpers = true;
-            })
-          ];
+        { config, pkgs, ... }: lib.mkMerge [
+          routerBase
+          { networking.nat.enable = true; }
+        ];
+
+        routerDummyNoNat =
+        { config, pkgs, ... }: lib.mkMerge [
+          routerBase
+          { networking.nat.enable = false; }
+        ];
 
         server =
           { config, pkgs, ... }:
@@ -57,9 +67,13 @@ import ./make-test.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ? false,
       };
 
     testScript =
-      { nodes, ... }:
-      ''
-        startAll;
+      { nodes, ... }: let
+        routerDummyNoNatClosure = nodes.routerDummyNoNat.config.system.build.toplevel;
+        routerClosure = nodes.router.config.system.build.toplevel;
+      in ''
+        $client->start;
+        $router->start;
+        $server->start;
 
         # The router should have access to the server.
         $server->waitForUnit("network.target");
@@ -87,13 +101,18 @@ import ./make-test.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ? false,
         $router->succeed("ping -c 1 client >&2");
 
         # If we turn off NAT, the client shouldn't be able to reach the server.
-        $router->succeed("iptables -t nat -D PREROUTING -j nixos-nat-pre");
-        $router->succeed("iptables -t nat -D POSTROUTING -j nixos-nat-post");
+        $router->succeed("${routerDummyNoNatClosure}/bin/switch-to-configuration test 2>&1");
+        # FIXME: this should not be necessary, but nat.service is not started because
+        #        network.target is not triggered
+        #        (https://github.com/NixOS/nixpkgs/issues/16230#issuecomment-226408359)
+        ${lib.optional (!withFirewall) ''
+          $router->succeed("systemctl start nat.service");
+        ''}
         $client->fail("curl --fail --connect-timeout 5 http://server/ >&2");
         $client->fail("ping -c 1 server >&2");
 
         # And make sure that reloading the NAT job works.
-        $router->succeed("systemctl restart ${unit}");
+        $router->succeed("${routerClosure}/bin/switch-to-configuration test 2>&1");
         $client->succeed("curl --fail http://server/ >&2");
         $client->succeed("ping -c 1 server >&2");
       '';

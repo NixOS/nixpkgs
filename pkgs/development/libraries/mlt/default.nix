@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open source multimedia framework, designed for television broadcasting";
-    homepage = http://www.mltframework.org/;
+    homepage = https://www.mltframework.org;
     license = licenses.gpl3;
     maintainers = [ maintainers.tohl ];
     platforms = platforms.linux;
