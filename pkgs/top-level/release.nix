@@ -42,7 +42,7 @@ let
               jobs.python.x86_64-darwin
               jobs.rustc.x86_64-darwin
               jobs.go.x86_64-darwin
-              jobs.tests.macOSSierraShared
+              jobs.tests.macOSSierraShared.x86_64-darwin
             ];
         };
 

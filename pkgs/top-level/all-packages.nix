@@ -19261,8 +19261,8 @@ with pkgs;
 
   xtermcontrol = callPackage ../applications/misc/xtermcontrol {};
 
-  # No `recurseIntoAttrs` because there's no need to nix-env these.
-  tests = {
+  # `recurseIntoAttrs` for sake of hydra, not nix-env
+  tests = recurseIntoAttrs {
     macOSSierraShared = callPackage ../test/macos-sierra-shared {};
   };
 }
