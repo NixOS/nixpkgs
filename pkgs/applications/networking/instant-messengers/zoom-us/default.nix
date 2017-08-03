@@ -92,7 +92,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://zoom.us;
+    homepage = https://zoom.us/;
     description = "zoom.us video conferencing application";
     license = stdenv.lib.licenses.unfree;
     platforms = stdenv.lib.platforms.linux;
