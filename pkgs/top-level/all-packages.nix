@@ -7702,7 +7702,6 @@ with pkgs;
 
   cyrus_sasl = callPackage ../development/libraries/cyrus-sasl {
     kerberos = if stdenv.isFreeBSD then libheimdal else kerberos;
-    openssl = openssl_1_0_2;
   };
 
   # Make bdb5 the default as it is the last release under the custom
