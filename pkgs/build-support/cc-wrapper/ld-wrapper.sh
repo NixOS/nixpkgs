@@ -10,12 +10,12 @@ if [ -n "@coreutils_bin@" ]; then
     PATH="@coreutils_bin@/bin"
 fi
 
-if [ -n "$NIX_LD_WRAPPER_@infixSalt@_START_HOOK" ]; then
-    source "$NIX_LD_WRAPPER_@infixSalt@_START_HOOK"
+if [ -z "${NIX_CC_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
+    source @out@/nix-support/add-flags.sh
 fi
 
-if [ -z "$NIX_CC_WRAPPER_@infixSalt@_FLAGS_SET" ]; then
-    source @out@/nix-support/add-flags.sh
+if [ -n "$NIX_LD_WRAPPER_@infixSalt@_START_HOOK" ]; then
+    source "$NIX_LD_WRAPPER_@infixSalt@_START_HOOK"
 fi
 
 source @out@/nix-support/utils.sh
@@ -23,14 +23,14 @@ source @out@/nix-support/utils.sh
 
 # Optionally filter out paths not refering to the store.
 expandResponseParams "$@"
-if [[ "$NIX_ENFORCE_PURITY" = 1 && -n "$NIX_STORE"
-        && ( -z "$NIX_@infixSalt@_IGNORE_LD_THROUGH_GCC" || -z "$NIX_@infixSalt@_LDFLAGS_SET" ) ]]; then
+if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "$NIX_STORE"
+        && ( -z "$NIX_@infixSalt@_IGNORE_LD_THROUGH_GCC" || -z "${NIX_@infixSalt@_LDFLAGS_SET:-}" ) ]]; then
     rest=()
     nParams=${#params[@]}
     declare -i n=0
     while [ "$n" -lt "$nParams" ]; do
         p=${params[n]}
-        p2=${params[n+1]}
+        p2=${params[n+1]:-} # handle `p` being last one
         if [ "${p:0:3}" = -L/ ] && badPath "${p:2}"; then
             skip "${p:2}"
         elif [ "$p" = -L ] && badPath "$p2"; then
@@ -59,7 +59,7 @@ source @out@/nix-support/add-hardening.sh
 extraAfter=("${hardeningLDFlags[@]}")
 extraBefore=()
 
-if [ -z "$NIX_@infixSalt@_LDFLAGS_SET" ]; then
+if [ -z "${NIX_@infixSalt@_LDFLAGS_SET:-}" ]; then
     extraAfter+=($NIX_@infixSalt@_LDFLAGS)
     extraBefore+=($NIX_@infixSalt@_LDFLAGS_BEFORE)
 fi
@@ -73,7 +73,11 @@ relocatable=
 # Find all -L... switches for rpath, and relocatable flags for build id.
 if [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ] || [ "$NIX_@infixSalt@_SET_BUILD_ID" = 1 ]; then
     prev=
+    # Old bash thinks empty arrays are undefined, ugh, so temporarily disable
+    # `set -u`.
+    set +u
     for p in "${extraBefore[@]}" "${params[@]}" "${extraAfter[@]}"; do
+        set -u
         case "$prev" in
             -L)
                 libDirs+=("$p")
@@ -119,7 +123,7 @@ if [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ]; then
         if [[ "$dir" =~ [/.][/.] ]] && dir2=$(readlink -f "$dir"); then
             dir="$dir2"
         fi
-        if [ "${rpaths[$dir]}" ] || [[ "$dir" != "$NIX_STORE"/* ]]; then
+        if [ -n "${rpaths[$dir]:-}" ] || [[ "$dir" != "$NIX_STORE"/* ]]; then
             # If the path is not in the store, don't add it to the rpath.
             # This typically happens for libraries in /tmp that are later
             # copied to $out/lib.  If not, we're screwed.
@@ -127,9 +131,9 @@ if [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ]; then
         fi
         for path in "$dir"/lib*.so; do
             file="${path##*/}"
-            if [ "${libs[$file]}" ]; then
+            if [ "${libs[$file]:-}" ]; then
                 libs["$file"]=
-                if [ ! "${rpaths[$dir]}" ]; then
+                if [ -z "${rpaths[$dir]:-}" ]; then
                     rpaths["$dir"]=1
                     extraAfter+=(-rpath "$dir")
                 fi
@@ -147,13 +151,15 @@ fi
 
 
 # Optionally print debug info.
-if [ -n "$NIX_DEBUG" ]; then
+if [ -n "${NIX_DEBUG:-}" ]; then
+    set +u # Old bash workaround, see above.
     echo "extra flags before to @prog@:" >&2
     printf "  %q\n" "${extraBefore[@]}"  >&2
     echo "original flags to @prog@:" >&2
     printf "  %q\n" "${params[@]}" >&2
     echo "extra flags after to @prog@:" >&2
     printf "  %q\n" "${extraAfter[@]}" >&2
+    set -u
 fi
 
 if [ -n "$NIX_LD_WRAPPER_@infixSalt@_EXEC_HOOK" ]; then
@@ -161,4 +167,5 @@ if [ -n "$NIX_LD_WRAPPER_@infixSalt@_EXEC_HOOK" ]; then
 fi
 
 PATH="$path_backup"
+set +u # Old bash workaround, see above.
 exec @prog@ "${extraBefore[@]}" "${params[@]}" "${extraAfter[@]}"

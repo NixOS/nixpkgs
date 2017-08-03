@@ -1,5 +1,5 @@
 #! @shell@
-set -e -o pipefail
+set -eu -o pipefail
 shopt -s nullglob
 
 path_backup="$PATH"
@@ -11,12 +11,12 @@ if [[ -n "@coreutils_bin@" && -n "@gnugrep_bin@" ]]; then
     PATH="@coreutils_bin@/bin:@gnugrep_bin@/bin"
 fi
 
-if [ -n "$NIX_CC_WRAPPER_@infixSalt@_START_HOOK" ]; then
-    source "$NIX_CC_WRAPPER_@infixSalt@_START_HOOK"
+if [ -z "${NIX_CC_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
+    source @out@/nix-support/add-flags.sh
 fi
 
-if [ -z "$NIX_CC_WRAPPER_@infixSalt@_FLAGS_SET" ]; then
-    source @out@/nix-support/add-flags.sh
+if [ -n "$NIX_CC_WRAPPER_@infixSalt@_START_HOOK" ]; then
+    source "$NIX_CC_WRAPPER_@infixSalt@_START_HOOK"
 fi
 
 source @out@/nix-support/utils.sh
@@ -36,7 +36,7 @@ declare -i n=0
 nParams=${#params[@]}
 while [ "$n" -lt "$nParams" ]; do
     p=${params[n]}
-    p2=${params[n+1]}
+    p2=${params[n+1]:-} # handle `p` being last one
     if [ "$p" = -c ]; then
         dontLink=1
     elif [ "$p" = -S ]; then
@@ -79,13 +79,13 @@ if [ "$nonFlagArgs" = 0 ]; then
 fi
 
 # Optionally filter out paths not refering to the store.
-if [[ "$NIX_ENFORCE_PURITY" = 1 && -n "$NIX_STORE" ]]; then
+if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "$NIX_STORE" ]]; then
     rest=()
     nParams=${#params[@]}
     declare -i n=0
     while [ "$n" -lt "$nParams" ]; do
         p=${params[n]}
-        p2=${params[n+1]}
+        p2=${params[n+1]:-} # handle `p` being last one
         if [ "${p:0:3}" = -L/ ] && badPath "${p:2}"; then
             skip "${p:2}"
         elif [ "$p" = -L ] && badPath "$p2"; then
@@ -162,13 +162,15 @@ if [ "$*" = -v ]; then
 fi
 
 # Optionally print debug info.
-if [ -n "$NIX_DEBUG" ]; then
+if [ -n "${NIX_DEBUG:-}" ]; then
+    set +u # Old bash workaround, see ld-wrapper for explanation.
     echo "extra flags before to @prog@:" >&2
     printf "  %q\n" "${extraBefore[@]}"  >&2
     echo "original flags to @prog@:" >&2
     printf "  %q\n" "${params[@]}" >&2
     echo "extra flags after to @prog@:" >&2
     printf "  %q\n" "${extraAfter[@]}" >&2
+    set -u
 fi
 
 if [ -n "$NIX_CC_WRAPPER_@infixSalt@_EXEC_HOOK" ]; then
@@ -176,4 +178,5 @@ if [ -n "$NIX_CC_WRAPPER_@infixSalt@_EXEC_HOOK" ]; then
 fi
 
 PATH="$path_backup"
+set +u # Old bash workaround, see above.
 exec @prog@ "${extraBefore[@]}" "${params[@]}" "${extraAfter[@]}"

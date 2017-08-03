@@ -1,6 +1,9 @@
 #! @shell@
-set -e -o pipefail
+set -eu -o pipefail
 shopt -s nullglob
+
+# N.B. Gnat is not used during bootstrapping, so we don't need to
+# worry about the old bash empty array `set -u` workarounds.
 
 path_backup="$PATH"
 
@@ -10,12 +13,12 @@ if [ -n "@coreutils_bin@" ]; then
     PATH="@coreutils_bin@/bin"
 fi
 
-if [ -n "$NIX_@infixSalt@_GNAT_WRAPPER_START_HOOK" ]; then
-    source "$NIX_@infixSalt@_GNAT_WRAPPER_START_HOOK"
+if [ -z "${NIX_@infixSalt@_GNAT_WRAPPER_FLAGS_SET:-}" ]; then
+    source @out@/nix-support/add-flags.sh
 fi
 
-if [ -z "$NIX_@infixSalt@_GNAT_WRAPPER_FLAGS_SET" ]; then
-    source @out@/nix-support/add-flags.sh
+if [ -n "$NIX_@infixSalt@_GNAT_WRAPPER_START_HOOK" ]; then
+    source "$NIX_@infixSalt@_GNAT_WRAPPER_START_HOOK"
 fi
 
 source @out@/nix-support/utils.sh
@@ -52,7 +55,7 @@ fi
 
 # Optionally filter out paths not refering to the store.
 params=("$@")
-if [[ "$NIX_ENFORCE_PURITY" = 1 && -n "$NIX_STORE" ]]; then
+if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "$NIX_STORE" ]]; then
     rest=()
     for p in "${params[@]}"; do
         if [ "${p:0:3}" = -L/ ] && badPath "${p:2}"; then
@@ -110,7 +113,7 @@ fi
 #fi
 
 # Optionally print debug info.
-if [ -n "$NIX_DEBUG" ]; then
+if [ -n "${NIX_DEBUG:-}" ]; then
     echo "extra flags before to @prog@:" >&2
     printf "  %q\n" "${extraBefore[@]}"  >&2
     echo "original flags to @prog@:" >&2

@@ -1,6 +1,9 @@
 #! @shell@
-set -e -o pipefail
+set -eu -o pipefail
 shopt -s nullglob
+
+# N.B. Gnat is not used during bootstrapping, so we don't need to
+# worry about the old bash empty array `set -u` workarounds.
 
 # Add the flags for the GNAT compiler proper.
 extraAfter=("--GCC=@out@/bin/gcc")
@@ -21,7 +24,7 @@ extraBefore=()
 #export NIX_@infixSalt@_LDFLAGS_SET=1
 
 # Optionally print debug info.
-if [ -n "$NIX_DEBUG" ]; then
+if [ -n "${NIX_DEBUG:-}" ]; then
     echo "extra flags before to @prog@:" >&2
     printf "  %q\n" "${extraBefore[@]}"  >&2
     echo "original flags to @prog@:" >&2
