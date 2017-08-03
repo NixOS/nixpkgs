@@ -3,7 +3,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "cyrus-sasl-${version}${optionalString (kerberos == null) "-without-kerberos"}";
+  name = "cyrus-sasl-${version}${optionalString (libkrb5 == null) "-without-kerberos"}";
   version = "2.1.27rc3";
 
   src = fetchurl {
