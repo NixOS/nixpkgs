@@ -4538,8 +4538,6 @@ with pkgs;
 
   tiny8086 = callPackage ../applications/virtualization/8086tiny { };
 
-  tlsdate = callPackage ../tools/networking/tlsdate { };
-
   tldr = callPackage ../tools/misc/tldr { };
 
   tlspool = callPackage ../tools/networking/tlspool { };
@@ -6513,7 +6511,7 @@ with pkgs;
     ruby_2_4_1;
 
   # Ruby aliases
-  ruby = ruby_2_3;
+  ruby = ruby_2_4;
   ruby_2_0 = ruby_2_0_0;
   ruby_2_1 = ruby_2_1_10;
   ruby_2_2 = ruby_2_2_7;
@@ -10688,8 +10686,6 @@ with pkgs;
 
   wt = callPackage ../development/libraries/wt { };
 
-  wvstreams = callPackage ../development/libraries/wvstreams { };
-
   wxGTK = wxGTK28;
 
   wxGTK28 = callPackage ../development/libraries/wxwidgets/2.8 {
@@ -14407,8 +14403,6 @@ with pkgs;
   wireshark-gtk = wireshark-cli.override { withGtk = true; };
   wireshark-qt = wireshark-cli.override { withQt = true; };
   wireshark = wireshark-qt;
-
-  wvdial = callPackage ../os-specific/linux/wvdial { };
 
   fbida = callPackage ../applications/graphics/fbida { };
 

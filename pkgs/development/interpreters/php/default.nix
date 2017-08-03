@@ -311,6 +311,10 @@ let
         outputsToInstall = [ "out" "dev" ];
       };
 
+      prePatch = ''
+        sed -i 's/\r//g' ext/openssl/tests/bug66501.phpt
+      '';
+
       patches = if !php7 then [
         ./fix-paths.patch
         ./php-5.6-openssl-1.1.patch
