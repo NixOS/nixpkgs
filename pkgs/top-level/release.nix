@@ -130,6 +130,8 @@ let
         scikitlearn = unix;
       };
 
+      # hack around broken eval of non-linux packages for now.
+      tests.macOSSierraShared = darwin;
     } ));
 
 in jobs
