@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://elpa.gnu.org/packages/let-alist.html";
+    homepage = http://elpa.gnu.org/packages/let-alist.html;
     description = "Easily let-bind values of an assoc-list by their names";
     license = stdenv.lib.licenses.gpl3Plus;
   };

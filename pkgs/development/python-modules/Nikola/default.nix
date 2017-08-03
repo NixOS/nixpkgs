@@ -51,7 +51,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    homepage = "https://getnikola.com/";
+    homepage = https://getnikola.com/;
     description = "A modular, fast, simple, static website and blog generator";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ jluttine ];

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib gtk2 intltool libfm libX11 pango pkgconfig ];
 
   meta = with stdenv.lib; {
-    homepage = "http://blog.lxde.org/?cat=28/";
+    homepage = http://blog.lxde.org/?cat=28/;
     license = licenses.gpl2Plus;
     description = "File manager with GTK+ interface";
     maintainers = [ maintainers.ttuegel ];

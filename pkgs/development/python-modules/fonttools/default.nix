@@ -26,7 +26,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    homepage = "https://github.com/fonttools/fonttools";
+    homepage = https://github.com/fonttools/fonttools;
     description = "A library to manipulate font files from Python";
   };
 }

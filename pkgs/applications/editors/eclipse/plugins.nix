@@ -416,7 +416,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = "http://scala-ide.org/";
+      homepage = http://scala-ide.org/;
       description = "The Scala IDE for Eclipse";
       license = licenses.bsd3;
       platforms = platforms.all;

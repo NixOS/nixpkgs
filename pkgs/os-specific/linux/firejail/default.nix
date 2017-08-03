@@ -43,7 +43,7 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl2Plus ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = "http://l3net.wordpress.com/projects/firejail/";
+    homepage = http://l3net.wordpress.com/projects/firejail/;
     downloadPage = "http://sourceforge.net/projects/firejail/files/firejail/";
   };
 }

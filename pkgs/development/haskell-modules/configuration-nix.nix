@@ -25,9 +25,9 @@
 # * enabling/disabling certain features in packages
 #
 # If you have an override of this kind, see configuration-common.nix instead.
-{ pkgs }:
+{ pkgs, haskellLib }:
 
-with import ./lib.nix { inherit pkgs; };
+with haskellLib;
 
 # All of the overrides in this set should look like:
 #

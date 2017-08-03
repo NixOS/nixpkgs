@@ -305,7 +305,7 @@ in rec {
     initialPath = import ../common-path.nix { inherit pkgs; };
     shell       = "${pkgs.bash}/bin/bash";
 
-    cc = import ../../build-support/cc-wrapper {
+    cc = lib.callPackageWith {} ../../build-support/cc-wrapper {
       inherit (pkgs) stdenv;
       inherit shell;
       nativeTools = false;

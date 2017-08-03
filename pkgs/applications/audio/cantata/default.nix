@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, vlc
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, vlc
 , withQt4 ? false, qt4
-, withQt5 ? true, qtbase, qtsvg, qttools
+, withQt5 ? true, qtbase, qtmultimedia, qtsvg, qttools
 
 # Cantata doesn't build with cdparanoia enabled so we disable that
 # default for now until I (or someone else) figure it out.
@@ -34,7 +34,7 @@ assert withOnlineServices -> withTaglib;
 assert withReplaygain -> withTaglib;
 
 let
-  version = "2.0.1";
+  version = "2.1.0";
   pname = "cantata";
   fstat = x: fn: "-DENABLE_" + fn + "=" + (if x then "ON" else "OFF");
   fstats = x: map (fstat x);
@@ -44,24 +44,27 @@ stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
-    owner = "CDrummond";
-    repo = "cantata";
-    rev = "v${version}";
-    sha256 = "18fiz3cav41dpap42qwj9hwxf2k9fmhyg2r34yggxqi2cjlsil36";
+    owner  = "CDrummond";
+    repo   = "cantata";
+    rev    = "v${version}";
+    sha256 = "1mwc3cyrvg8qxjn70h4i6kdkvz85xspb3wi8wrb56jrhil409fkh";
   };
 
-  buildInputs =
-    [ cmake vlc ]
-    ++ stdenv.lib.optional withQt4 qt4
-    ++ stdenv.lib.optionals withQt5 [ qtbase qtsvg qttools ]
+  buildInputs = [ vlc ]
+    ++ stdenv.lib.optional  withQt4 qt4
+    ++ stdenv.lib.optionals withQt5 [ qtbase qtmultimedia qtsvg qttools ]
     ++ stdenv.lib.optionals withTaglib [ taglib taglib_extras ]
     ++ stdenv.lib.optionals withReplaygain [ ffmpeg speex mpg123 ]
-    ++ stdenv.lib.optional withCdda cdparanoia
-    ++ stdenv.lib.optional withCddb libcddb
-    ++ stdenv.lib.optional withLame lame
-    ++ stdenv.lib.optional withMtp libmtp
-    ++ stdenv.lib.optional withMusicbrainz libmusicbrainz5
-    ++ stdenv.lib.optional (withTaglib && withDevices) udisks2;
+    ++ stdenv.lib.optional  withCdda cdparanoia
+    ++ stdenv.lib.optional  withCddb libcddb
+    ++ stdenv.lib.optional  withLame lame
+    ++ stdenv.lib.optional  withMtp libmtp
+    ++ stdenv.lib.optional  withMusicbrainz libmusicbrainz5
+    ++ stdenv.lib.optional  (withTaglib && withDevices) udisks2;
+
+  nativeBuildInputs = [ cmake pkgconfig ];
+
+  enableParallelBuilding = true;
 
   cmakeFlags = stdenv.lib.flatten [
     (fstat withQt5 "QT5")
@@ -94,6 +97,6 @@ stdenv.mkDerivation rec {
     # Technically Cantata can run on Windows so if someone wants to
     # bother figuring that one out, be my guest.
     platforms = platforms.linux;
-    maintainers = [ maintainers.fuuzetsu ];
+    maintainers = with maintainers; [ fuuzetsu ];
   };
 }

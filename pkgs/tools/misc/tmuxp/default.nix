@@ -26,7 +26,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Manage tmux workspaces from JSON and YAML";
-    homepage = "http://tmuxp.readthedocs.io";
+    homepage = http://tmuxp.readthedocs.io;
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jgeerds ];

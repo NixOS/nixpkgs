@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libmemcached patchedLibmilter openssl pcre opendkim glib ];
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/vstakhov/rmilter";
+    homepage = https://github.com/vstakhov/rmilter;
     license = licenses.asl20;
     description = ''
       Daemon to integrate rspamd and milter compatible MTA, for example

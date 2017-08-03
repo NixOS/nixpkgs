@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   meta = {
-    homepage = "http://leenissen.dk/fann/wp/";
+    homepage = http://leenissen.dk/fann/wp/;
     description = "Fast Artificial Neural Network Library";
     maintainers = with lib.maintainers; [ fpletz ];
     license = lib.licenses.lgpl21;

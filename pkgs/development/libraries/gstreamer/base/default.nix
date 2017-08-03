@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Base plugins and helper libraries";
-    homepage = "http://gstreamer.freedesktop.org";
+    homepage = http://gstreamer.freedesktop.org;
     license = stdenv.lib.licenses.lgpl2Plus;
     platforms = stdenv.lib.platforms.unix;
   };

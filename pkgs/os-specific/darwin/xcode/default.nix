@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://developer.apple.com/downloads/";
+    homepage = https://developer.apple.com/downloads/;
     description = "Apple's XCode SDK";
     license = stdenv.lib.licenses.unfree;
   };

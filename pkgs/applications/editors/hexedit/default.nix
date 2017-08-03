@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "View and edit files in hexadecimal or in ASCII";
-    homepage = "http://prigaux.chez.com/hexedit.html";
+    homepage = http://prigaux.chez.com/hexedit.html;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;
   };

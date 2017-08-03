@@ -10,11 +10,11 @@ assert withEditor -> wxGTK != null;
 
 stdenv.mkDerivation rec {
   name = "0ad-${version}";
-  version = "0.0.21";
+  version = "0.0.22";
 
   src = fetchurl {
     url = "http://releases.wildfiregames.com/0ad-${version}-alpha-unix-build.tar.xz";
-    sha256 = "1kw3hqnr737ipx4f03khz3hvsh3ha7r8iy9njppk2faa53j27gln";
+    sha256 = "1cgmr4g5g9wv36v7ylbrvqhsjwgcsdgbqwc8zlqmnayk9zgkdpgx";
   };
 
   nativeBuildInputs = [ python2 perl pkgconfig ];
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A free, open-source game of ancient warfare";
-    homepage = "http://wildfiregames.com/0ad/";
+    homepage = http://wildfiregames.com/0ad/;
     license = with licenses; [
       gpl2 lgpl21 mit cc-by-sa-30
       licenses.zlib # otherwise masked by pkgs.zlib

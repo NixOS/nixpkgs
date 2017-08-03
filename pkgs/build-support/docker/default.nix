@@ -497,16 +497,23 @@ rec {
         # Use the temp folder we've been working on to create a new image.
         mv temp image/$layerID
 
-        # Create image configuration file (used by registry v2) by using
-        # the configuration of the last layer
-        SHA_ARRAY=$(find ./ -name layer.tar | xargs sha256sum | cut -d" " -f1 | xargs -I{} echo -n '"sha256:{}" ' | sed 's/" "/","/g' | awk '{ print "["$1"]" }')
-        jq ". + {\"rootfs\": {\"diff_ids\": $SHA_ARRAY, \"type\": \"layers\"}}" image/$layerID/json > config.json
-        CONFIG_SHA=$(sha256sum config.json | cut -d ' ' -f1)
-        mv config.json image/$CONFIG_SHA.json
+        # Create image json and image manifest
+        imageJson=$(cat ${baseJson} | jq ". + {\"rootfs\": {\"diff_ids\": [], \"type\": \"layers\"}}")
+        manifestJson=$(jq -n "[{\"RepoTags\":[\"$imageName:$imageTag\"]}]")
+        currentID=$layerID
+        while [[ -n "$currentID" ]]; do
+          layerChecksum=$(sha256sum image/$currentID/layer.tar | cut -d ' ' -f1)
+          imageJson=$(echo "$imageJson" | jq ".history |= [{\"created\": \"${created}\"}] + .")
+          imageJson=$(echo "$imageJson" | jq ".rootfs.diff_ids |= [\"sha256:$layerChecksum\"] + .")
+          manifestJson=$(echo "$manifestJson" | jq ".[0].Layers |= [\"$currentID/layer.tar\"] + .")
 
-        # Create image manifest
-        LAYER_PATHS=$(find image/ -name layer.tar -printf '"%P" ' | sed 's/" "/","/g')
-        jq -n "[{\"Config\":\"$CONFIG_SHA.json\",\"RepoTags\":[\"$imageName:$imageTag\"],\"Layers\":[$LAYER_PATHS]}]" > image/manifest.json
+          currentID=$(cat image/$currentID/json | (jshon -e parent -u 2>/dev/null || true))
+        done
+
+        imageJsonChecksum=$(echo "$imageJson" | sha256sum | cut -d ' ' -f1)
+        echo "$imageJson" > "image/$imageJsonChecksum.json"
+        manifestJson=$(echo "$manifestJson" | jq ".[0].Config = \"$imageJsonChecksum.json\"")
+        echo "$manifestJson" > image/manifest.json
 
         # Store the json under the name image/repositories.
         jshon -n object \

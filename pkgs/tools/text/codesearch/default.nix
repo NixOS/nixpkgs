@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   meta = {
     description = "Fast, indexed regexp search over large file trees";
-    homepage = "https://github.com/google/codesearch";
+    homepage = https://github.com/google/codesearch;
     license = [ stdenv.lib.licenses.bsd3 ];
     maintainers = [ stdenv.lib.maintainers.bennofs ];
     platforms = stdenv.lib.platforms.unix;

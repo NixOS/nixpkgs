@@ -1,11 +1,12 @@
 { fetchurl, stdenv, perl, python2, zip, xmlto, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "zziplib-0.13.58";
+  name = "zziplib-${version}";
+  version = "0.13.66";
 
   src = fetchurl {
-    url = "mirror://sourceforge/zziplib/${name}.tar.bz2";
-    sha256 = "13j9f6i8rx0qd5m96iwrcha78h34qpfk5qzi7cv098pms6gq022m";
+    url = "mirror://sourceforge/zziplib/zziplib13/${version}/${name}.tar.gz";
+    sha256 = "0zdx0s19slzv79xplnr6jx0xjb01dd71jzpscf6vlj6k9ry8rcar";
   };
 
   patchPhase = ''

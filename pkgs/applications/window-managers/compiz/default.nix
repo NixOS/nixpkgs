@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Compoziting window manager";
-    homepage = "http://launchpad.net/compiz/";
+    homepage = http://launchpad.net/compiz/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;

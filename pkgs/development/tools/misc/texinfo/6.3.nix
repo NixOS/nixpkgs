@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     && !stdenv.isDarwin && !stdenv.isSunOS/*flaky*/;
 
   meta = with stdenv.lib; {
-    homepage = "http://www.gnu.org/software/texinfo/";
+    homepage = http://www.gnu.org/software/texinfo/;
     description = "The GNU documentation system";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

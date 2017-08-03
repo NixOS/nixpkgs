@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   configureScript = "./autogen.sh";
 
   meta = with stdenv.lib; {
-    homepage = "http://people.freedesktop.org/~hughsient/appdata";
+    homepage = http://people.freedesktop.org/~hughsient/appdata;
     description = "CLI designed to validate AppData descriptions for standards compliance and to the style guide";
     platforms = platforms.linux;
     license = licenses.gpl2;

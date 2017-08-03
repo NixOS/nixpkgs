@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl3 ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = "https://common-lisp.net/project/armedbear/";
+    homepage = https://common-lisp.net/project/armedbear/;
   };
 }

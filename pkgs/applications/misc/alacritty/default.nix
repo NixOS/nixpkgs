@@ -43,9 +43,13 @@ buildRustPackage rec {
   buildInputs = [
     cmake
     makeWrapper
-    xclip
     pkgconfig
   ] ++ rpathLibs;
+
+  patchPhase = ''
+    substituteInPlace copypasta/src/x11.rs \
+      --replace Command::new\(\"xclip\"\) Command::new\(\"${xclip}/bin/xclip\"\)
+  '';
 
   installPhase = ''
     mkdir -p $out/bin

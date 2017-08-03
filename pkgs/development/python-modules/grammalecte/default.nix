@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Grammalecte is an open source grammar checker for the French language";
-    homepage = "https://dicollecte.org/grammalecte/";
+    homepage = https://dicollecte.org/grammalecte/;
     license = with lib.licenses; [ gpl3 ];
     maintainers = with lib.maintainers; [ apeyroux ];
   };

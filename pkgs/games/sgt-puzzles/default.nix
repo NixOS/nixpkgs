@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
-    homepage = "http://www.chiark.greenend.org.uk/~sgtatham/puzzles/";
+    homepage = http://www.chiark.greenend.org.uk/~sgtatham/puzzles/;
   };
 }

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Qt library for accessing the online accounts database";
-    homepage = "http://code.google.com/p/accounts-sso/";
+    homepage = http://code.google.com/p/accounts-sso/;
     license = licenses.lgpl21;
     maintainers = with maintainers; [ nckx ];
     platforms = with platforms; linux;

@@ -12,6 +12,6 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A library that provides the `editor` module for programmatically";
-    homepage = "https://github.com/fmoo/python-editor";
+    homepage = https://github.com/fmoo/python-editor;
   };
 }

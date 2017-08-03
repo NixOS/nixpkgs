@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Static multicast routing daemon";
-    homepage = "http://troglobit.com/smcroute.html";
+    homepage = http://troglobit.com/smcroute.html;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fpletz ];
     platforms = with platforms; (linux ++ freebsd ++ netbsd ++ openbsd);

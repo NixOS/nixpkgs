@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl2;
     downloadPage = "http://vifm.info/downloads.shtml";
-    homepage = "http://vifm.info/";
+    homepage = http://vifm.info/;
     inherit version;
     updateWalker = true;
   };
