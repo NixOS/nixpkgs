@@ -634,6 +634,7 @@
   zauberpony = "Elmar Athmer <elmar@athmer.org>";
   zef = "Zef Hemel <zef@zef.me>";
   zimbatm = "zimbatm <zimbatm@zimbatm.com>";
+  Zimmi48 = "Théo Zimmermann <theo.zimmermann@univ-paris-diderot.fr>";
   zohl = "Al Zohali <zohl@fmap.me>";
   zoomulator = "Kim Simmons <zoomulator@gmail.com>";
   zraexy = "David Mell <zraexy@gmail.com>";

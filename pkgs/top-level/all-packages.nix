@@ -5229,13 +5229,10 @@ with pkgs;
 
   cmucl_binary = callPackage_i686 ../development/compilers/cmucl/binary.nix { };
 
-  compcert = callPackage ../development/compilers/compcert ((
-    if system == "x86_64-linux"
-    then { tools = pkgsi686Linux.stdenv.cc; }
-    else {}
-  ) // {
-    coq = coq_8_6;
-  });
+  compcert = callPackage ../development/compilers/compcert {
+    # Pin the version of coq used in compcert to 8.6 until the next release
+    coq = callPackage ../applications/science/logic/coq { version = "8.6"; };
+  };
 
 
   # Users installing via `nix-env` will likely be using the REPL,
