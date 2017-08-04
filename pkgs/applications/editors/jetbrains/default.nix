@@ -160,12 +160,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2017.1.5"; /* updated by script */
+    version = "2017.2.1";
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "830c662c517e8d0131dc2df150d6f75adb3d8becaf9de96393730b0f4ae6ccf0"; /* updated by script */
+      sha256 = "1z8gp209jpjzvllnrpxzmbhgaxkklxw8nkm3g2drb7nal2hhs113";
     };
     wmClass = "jetbrains-idea-ce";
   };
