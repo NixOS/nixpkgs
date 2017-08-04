@@ -8,6 +8,14 @@ stdenv.mkDerivation rec {
     sha256 = "091qvwk5dkcpp17ziabcnh3rg3m7qwzw2pihfcd1d5fdxgywzmnd";
   };
 
+  patches = [
+    (fetchurl {
+      url = "https://bz-attachments.freebsd.org/attachment.cgi?id=183223";
+      sha256 = "1fiy457hrxmydybjlvn8ypzlavz22cz31q2rga07n32dh4x759r3";
+    })
+  ];
+  patchFlags = [ "-p0" ];
+
   # TODO: separate "out" and "bin"
   outputs = [ "out" "dev" "man" "devdoc" ];
 
