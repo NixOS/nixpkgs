@@ -15532,6 +15532,8 @@ with pkgs;
 
   vivaldi = callPackage ../applications/networking/browsers/vivaldi {};
 
+  vivaldi-ffmpeg-codecs = callPackage ../applications/networking/browsers/vivaldi/ffmpeg-codecs.nix {};
+
   openmpt123 = callPackage ../applications/audio/openmpt123 {};
 
   opusfile = callPackage ../applications/audio/opusfile { };
