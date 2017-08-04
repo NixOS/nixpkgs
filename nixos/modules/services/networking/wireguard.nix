@@ -160,6 +160,14 @@ let
         interval of 25 seconds; however, most users will not need this.'';
       };
 
+      table = mkOption {
+        default = "main";
+        type = types.str;
+        description = ''The kernel routing table to add this peer's associated
+        routes to. Setting this is useful for e.g. policy routing ("ip rule")
+        or virtual routing and forwarding ("ip vrf"). Both numeric table IDs
+        and table names (/etc/rt_tables) can be used. Defaults to "main".'';
+      };
     };
 
   };
@@ -207,9 +215,11 @@ let
 
             "${ipCommand} link set up dev ${name}"
 
-            (map (peer: (map (ip:
-            "${ipCommand} route replace ${ip} dev ${name}"
-            ) peer.allowedIPs)) values.peers)
+            (map (peer:
+            (map (allowedIP:
+            "${ipCommand} route replace ${allowedIP} dev ${name} table ${peer.table}"
+            ) peer.allowedIPs)
+            ) values.peers)
 
             values.postSetup
           ]);
@@ -240,7 +250,8 @@ in
             peers = [
               { allowedIPs = [ "192.168.20.1/32" ];
                 publicKey  = "xTIBA5rboUvnH4htodjb6e697QjLERt1NAB4mZqp8Dg=";
-                endpoint   = "demo.wireguard.io:12913"; }
+                endpoint   = "demo.wireguard.io:12913";
+                table      = "42"; }
             ];
           };
         };
