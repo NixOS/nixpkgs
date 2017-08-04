@@ -8229,11 +8229,11 @@ in {
   };
 
   raven = buildPythonPackage rec {
-    name = "raven-3.4.1";
+    name = "raven-5.32.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/raven/${name}.tar.gz";
-      sha256 = "c27e40ab3ccf37f30a9f77acb4917370d9341e25abda8e94b9bd48c7127f7d48";
+      sha256 = "0mvllwl8n145n4ygkidbpqrqflqd5nzab3a5wk5g1mnl46zqprhk";
     };
 
     # way too many dependencies to run tests
