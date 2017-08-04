@@ -13034,7 +13034,7 @@ with pkgs;
 
   man-pages = callPackage ../data/documentation/man-pages { };
 
-  material-icons-ttf = callPackage ../data/fonts/material-icons-ttf { };
+  material-icons = callPackage ../data/fonts/material-icons { };
 
   meslo-lg = callPackage ../data/fonts/meslo-lg {};
 
