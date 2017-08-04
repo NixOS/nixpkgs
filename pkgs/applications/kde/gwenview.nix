@@ -3,7 +3,7 @@
   extra-cmake-modules, kdoctools,
   exiv2, lcms2,
   baloo, kactivities, kdelibs4support, kio, kipi-plugins, libkdcraw, libkipi,
-  phonon, qtimageformats, qtsvg, qtx11extras
+  phonon, qtimageformats, qtsvg, qtx11extras, kinit
 }:
 
 mkDerivation {
@@ -17,5 +17,5 @@ mkDerivation {
     baloo exiv2 kactivities kdelibs4support kio libkdcraw lcms2 libkipi phonon
     qtimageformats qtsvg qtx11extras
   ];
-  propagatedUserEnvPkgs = [ kipi-plugins libkipi ];
+  propagatedUserEnvPkgs = [ kipi-plugins libkipi (lib.getBin kinit) ];
 }
