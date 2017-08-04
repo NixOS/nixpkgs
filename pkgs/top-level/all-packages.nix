@@ -7113,6 +7113,10 @@ with pkgs;
   noweb = callPackage ../development/tools/literate-programming/noweb { };
   nuweb = callPackage ../development/tools/literate-programming/nuweb { tex = texlive.combined.scheme-small; };
 
+  obelisk = callPackage ../development/tools/ocaml/obelisk {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_03;
+  };
+
   obuild = callPackage ../development/tools/ocaml/obuild { };
 
   omake = callPackage ../development/tools/ocaml/omake {
