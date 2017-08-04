@@ -17,5 +17,5 @@ mkDerivation {
     baloo exiv2 kactivities kdelibs4support kio libkdcraw lcms2 libkipi phonon
     qtimageformats qtsvg qtx11extras
   ];
-  propagatedUserEnvPkgs = [ kipi-plugins ];
+  propagatedUserEnvPkgs = [ kipi-plugins libkipi ];
 }
