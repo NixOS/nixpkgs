@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     CONFIG_HS20=y
     CONFIG_P2P=y
     CONFIG_TDLS=y
+    CONFIG_BGSCAN_SIMPLE=y
   '' + optionalString (pcsclite != null) ''
     CONFIG_EAP_SIM=y
     CONFIG_EAP_AKA=y
