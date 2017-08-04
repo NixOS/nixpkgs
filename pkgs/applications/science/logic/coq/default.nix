@@ -9,7 +9,7 @@
 , ocamlPackages, ncurses
 , buildIde ? true
 , csdp ? null
-, version ? "8.6"
+, version ? "8.6.1"
 }:
 
 let
@@ -18,6 +18,7 @@ let
    "8.5pl2"	= "0wyywia0darak2zmc5v0ra9rn0b9whwdfiahralm8v5za499s8w3";
    "8.5pl3"	= "0fyk2a4fpifibq8y8jhx1891k55qnsnlygglch64sva0bph94nrh";
    "8.6"	= "1pw1xvy1657l1k69wrb911iqqflzhhp8wwsjvihbgc72r3skqg3f";
+   "8.6.1"      = "17cg2c40y9lskkiqfhngavp8yw3shpqgkpihh30xx0rlhn9amy1j";
   }."${version}";
   coq-version = builtins.substring 0 3 version;
   camlp5 = ocamlPackages.camlp5_transitional;
