@@ -1,7 +1,13 @@
-#! @shell@ -e
+#! @shell@
+set -e -o pipefail
+shopt -s nullglob
+
 path_backup="$PATH"
+
+# phase separation makes this look useless
+# shellcheck disable=SC2157
 if [ -n "@coreutils_bin@" ]; then
-  PATH="@coreutils_bin@/bin"
+    PATH="@coreutils_bin@/bin"
 fi
 
 if [ -n "$NIX_GNAT_WRAPPER_START_HOOK" ]; then
@@ -18,7 +24,6 @@ source @out@/nix-support/utils.sh
 # Figure out if linker flags should be passed.  GCC prints annoying
 # warnings when they are not needed.
 dontLink=0
-getVersion=0
 nonFlagArgs=0
 
 for i in "$@"; do
@@ -30,7 +35,7 @@ for i in "$@"; do
         nonFlagArgs=1
     elif [ "$i" = -m32 ]; then
         if [ -e @out@/nix-support/dynamic-linker-m32 ]; then
-            NIX_LDFLAGS="$NIX_LDFLAGS -dynamic-linker $(cat @out@/nix-support/dynamic-linker-m32)"
+            NIX_LDFLAGS+=" -dynamic-linker $(< @out@/nix-support/dynamic-linker-m32)"
         fi
     fi
 done
@@ -47,24 +52,20 @@ fi
 
 # Optionally filter out paths not refering to the store.
 params=("$@")
-if [ "$NIX_ENFORCE_PURITY" = 1 -a -n "$NIX_STORE" ]; then
+if [[ "$NIX_ENFORCE_PURITY" = 1 && -n "$NIX_STORE" ]]; then
     rest=()
-    n=0
-    while [ $n -lt ${#params[*]} ]; do
-        p=${params[n]}
-        p2=${params[$((n+1))]}
+    for p in "${params[@]}"; do
         if [ "${p:0:3}" = -L/ ] && badPath "${p:2}"; then
-            skip $p
+            skip "${p:2}"
         elif [ "${p:0:3}" = -I/ ] && badPath "${p:2}"; then
-            skip $p
+            skip "${p:2}"
         elif [ "${p:0:4}" = -aI/ ] && badPath "${p:3}"; then
-            skip $p
+            skip "${p:2}"
         elif [ "${p:0:4}" = -aO/ ] && badPath "${p:3}"; then
-            skip $p
+            skip "${p:2}"
         else
             rest+=("$p")
         fi
-        n=$((n + 1))
     done
     params=("${rest[@]}")
 fi
@@ -73,11 +74,11 @@ fi
 # Clear march/mtune=native -- they bring impurity.
 if [ "$NIX_ENFORCE_NO_NATIVE" = 1 ]; then
     rest=()
-    for i in "${params[@]}"; do
-        if [[ "$i" = -m*=native ]]; then
-            skip $i
+    for p in "${params[@]}"; do
+        if [[ "$p" = -m*=native ]]; then
+            skip "$p"
         else
-            rest+=("$i")
+            rest+=("$p")
         fi
     done
     params=("${rest[@]}")
@@ -88,30 +89,34 @@ fi
 extraAfter=($NIX_GNATFLAGS_COMPILE)
 extraBefore=()
 
-if [ "`basename $0`x" = "gnatmakex" ]; then
-  extraBefore=("--GNATBIND=@out@/bin/gnatbind --GNATLINK=@out@/bin/gnatlink ")
+if [ "$(basename "$0")x" = "gnatmakex" ]; then
+  extraBefore=("--GNATBIND=@out@/bin/gnatbind" "--GNATLINK=@out@/bin/gnatlink ")
 fi
 
-# Add the flags that should be passed to the linker (and prevent
-# `ld-wrapper' from adding NIX_LDFLAGS again).
-#for i in $NIX_LDFLAGS_BEFORE; do
-#    extraBefore=(${extraBefore[@]} "-largs $i")
-#done
+#if [ "$dontLink" != 1 ]; then
+#    # Add the flags that should be passed to the linker (and prevent
+#    # `ld-wrapper' from adding NIX_LDFLAGS again).
+#    for i in $NIX_LDFLAGS_BEFORE; do
+#        extraBefore+=("-largs" "$i")
+#    done
+#    for i in $NIX_LDFLAGS; do
+#        if [ "${i:0:3}" = -L/ ]; then
+#            extraAfter+=("$i")
+#        else
+#            extraAfter+=("-largs" "$i")
+#        fi
+#    done
+#    export NIX_LDFLAGS_SET=1
+#fi
 
 # Optionally print debug info.
 if [ -n "$NIX_DEBUG" ]; then
-  echo "original flags to @prog@:" >&2
-  for i in "${params[@]}"; do
-      echo "  $i" >&2
-  done
-  echo "extraBefore flags to @prog@:" >&2
-  for i in ${extraBefore[@]}; do
-      echo "  $i" >&2
-  done
-  echo "extraAfter flags to @prog@:" >&2
-  for i in ${extraAfter[@]}; do
-      echo "  $i" >&2
-  done
+    echo "extra flags before to @prog@:" >&2
+    printf "  %q\n" "${extraBefore[@]}"  >&2
+    echo "original flags to @prog@:" >&2
+    printf "  %q\n" "${params[@]}" >&2
+    echo "extra flags after to @prog@:" >&2
+    printf "  %q\n" "${extraAfter[@]}" >&2
 fi
 
 if [ -n "$NIX_GNAT_WRAPPER_EXEC_HOOK" ]; then
@@ -119,4 +124,4 @@ if [ -n "$NIX_GNAT_WRAPPER_EXEC_HOOK" ]; then
 fi
 
 PATH="$path_backup"
-exec @prog@ ${extraBefore[@]} "${params[@]}" ${extraAfter[@]}
+exec @prog@ "${extraBefore[@]}" "${params[@]}" "${extraAfter[@]}"
