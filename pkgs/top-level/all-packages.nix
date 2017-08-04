@@ -16961,6 +16961,23 @@ with pkgs;
 
   blas = callPackage ../development/libraries/science/math/blas { };
 
+  cactusdeps = callPackage ../applications/science/math/cactusdeps {
+    gcc = pkgs.gcc;
+    gfortran = pkgs.gfortran;
+    # gcc = pkgs.gcc6;
+    # gfortran = pkgs.gfortran6;
+    fftw = pkgs.fftw;
+    hdf5 = pkgs.hdf5;
+    hdf5-cpp = pkgs.hdf5-cpp;
+    hdf5-fortran = pkgs.hdf5-fortran;
+    hdf5-mpi = pkgs.hdf5-mpi;
+    hwloc = pkgs.hwloc;
+    openblas = pkgs.openblas;
+    openmpi = pkgs.openmpi;
+    openssl = pkgs.openssl;
+    zlib = pkgs.zlib;
+  };
+
   clblas-cuda = callPackage ../development/libraries/science/math/clblas/cuda {
     cudatoolkit = pkgs.cudatoolkit75;
     inherit (linuxPackages) nvidia_x11;

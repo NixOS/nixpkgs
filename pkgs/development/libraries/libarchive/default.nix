@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchurl {
       url = "https://github.com/libarchive/libarchive/commit/98dcbbf0bf4854bf987557e55e55fff7abbf3ea9.patch";
-      sha256 = "1934krf5imc9rq1av6immpsfn77pglanhz1csq8j22h9ab87n5z6";
+      # sha256 = "1934krf5imc9rq1av6immpsfn77pglanhz1csq8j22h9ab87n5z6";
+      sha256 = "0p1w1ikafkhb0lzsplpsks0zm0plxkn1mgnvwm5jvaqinw4l8db3";
     })
   ];
 
