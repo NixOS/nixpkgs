@@ -5221,13 +5221,9 @@ with pkgs;
 
   cmucl_binary = callPackage_i686 ../development/compilers/cmucl/binary.nix { };
 
-  compcert = callPackage ../development/compilers/compcert ((
-    if system == "x86_64-linux"
-    then { tools = pkgsi686Linux.stdenv.cc; }
-    else {}
-  ) // {
+  compcert = callPackage ../development/compilers/compcert {
     coq = coq_8_6;
-  });
+  };
 
 
   # Users installing via `nix-env` will likely be using the REPL,
