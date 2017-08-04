@@ -1051,6 +1051,8 @@ with pkgs;
 
   glock = callPackage ../development/tools/glock { };
 
+  glslviewer = callPackage ../development/tools/glslviewer { };
+  
   gmic = callPackage ../tools/graphics/gmic { };
 
   goa = callPackage ../development/tools/goa { };
