@@ -250,8 +250,7 @@ in
             peers = [
               { allowedIPs = [ "192.168.20.1/32" ];
                 publicKey  = "xTIBA5rboUvnH4htodjb6e697QjLERt1NAB4mZqp8Dg=";
-                endpoint   = "demo.wireguard.io:12913";
-                table      = "42"; }
+                endpoint   = "demo.wireguard.io:12913"; }
             ];
           };
         };
