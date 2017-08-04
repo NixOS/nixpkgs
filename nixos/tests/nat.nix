@@ -102,17 +102,17 @@ import ./make-test.nix ({ pkgs, lib, withFirewall, withConntrackHelpers ? false,
 
         # If we turn off NAT, the client shouldn't be able to reach the server.
         $router->succeed("${routerDummyNoNatClosure}/bin/switch-to-configuration test 2>&1");
-        # FIXME: this should not be necessary, but nat.service is not started because
-        #        network.target is not triggered
-        #        (https://github.com/NixOS/nixpkgs/issues/16230#issuecomment-226408359)
-        ${lib.optional (!withFirewall) ''
-          $router->succeed("systemctl start nat.service");
-        ''}
         $client->fail("curl --fail --connect-timeout 5 http://server/ >&2");
         $client->fail("ping -c 1 server >&2");
 
         # And make sure that reloading the NAT job works.
         $router->succeed("${routerClosure}/bin/switch-to-configuration test 2>&1");
+        # FIXME: this should not be necessary, but nat.service is not started because
+        #        network.target is not triggered
+        #        (https://github.com/NixOS/nixpkgs/issues/16230#issuecomment-226408359)
+        ${lib.optionalString (!withFirewall) ''
+          $router->succeed("systemctl start nat.service");
+        ''}
         $client->succeed("curl --fail http://server/ >&2");
         $client->succeed("ping -c 1 server >&2");
       '';
