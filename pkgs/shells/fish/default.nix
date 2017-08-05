@@ -85,88 +85,118 @@ let
         $__extra_confdir
     end
   '';
-in
 
-stdenv.mkDerivation rec {
-  name = "fish-${version}";
-  version = "2.6.0";
+  fish = stdenv.mkDerivation rec {
+    name = "fish-${version}";
+    version = "2.6.0";
 
-  etcConfigAppendix = builtins.toFile "etc-config.appendix.fish" etcConfigAppendixText;
+    etcConfigAppendix = builtins.toFile "etc-config.appendix.fish" etcConfigAppendixText;
 
-  src = fetchurl {
-    url = "http://fishshell.com/files/${version}/${name}.tar.gz";
-    sha256 = "1yzx73kg5ng5ivhi68756sl5hpb8869110l9fwim6gn7f7bbprby";
+    src = fetchurl {
+      url = "http://fishshell.com/files/${version}/${name}.tar.gz";
+      sha256 = "1yzx73kg5ng5ivhi68756sl5hpb8869110l9fwim6gn7f7bbprby";
+    };
+
+    buildInputs = [ ncurses libiconv pcre2 ];
+    configureFlags = [ "--without-included-pcre2" ];
+
+    # Required binaries during execution
+    # Python: Autocompletion generated from manpages and config editing
+    propagatedBuildInputs = [
+      coreutils gnugrep gnused bc
+      python3 groff gettext
+    ] ++ optional (!stdenv.isDarwin) man-db;
+
+    postInstall = ''
+      sed -r "s|command grep|command ${gnugrep}/bin/grep|" \
+          -i "$out/share/fish/functions/grep.fish"
+      sed -e "s|bc|${bc}/bin/bc|"                          \
+          -e "s|/usr/bin/seq|${coreutils}/bin/seq|"        \
+          -i "$out/share/fish/functions/seq.fish"          \
+            "$out/share/fish/functions/math.fish"
+      sed -i "s|which |${which}/bin/which |"               \
+              "$out/share/fish/functions/type.fish"
+      sed -e "s|\|cut|\|${coreutils}/bin/cut|"             \
+          -i "$out/share/fish/functions/fish_prompt.fish"
+      sed -e "s|gettext |${gettext}/bin/gettext |"         \
+          -e "s|which |${which}/bin/which |"               \
+          -i "$out/share/fish/functions/_.fish"
+      sed -e "s|uname|${coreutils}/bin/uname|"             \
+          -i "$out/share/fish/functions/__fish_pwd.fish"   \
+            "$out/share/fish/functions/prompt_pwd.fish"
+      sed -e "s|sed |${gnused}/bin/sed |"                  \
+          -i "$out/share/fish/functions/alias.fish"        \
+            "$out/share/fish/functions/prompt_pwd.fish"
+      sed -i "s|nroff |${groff}/bin/nroff |"               \
+            "$out/share/fish/functions/__fish_print_help.fish"
+      sed -i "s|/sbin /usr/sbin||" \
+            "$out/share/fish/functions/__fish_complete_subcommand_root.fish"
+      sed -e "s|clear;|${getBin ncurses}/bin/clear;|" \
+          -i "$out/share/fish/functions/fish_default_key_bindings.fish"
+      sed -e "s|python3|${getBin python3}/bin/python3|" \
+          -i $out/share/fish/functions/{__fish_config_interactive.fish,fish_config.fish,fish_update_completions.fish}
+
+    '' + optionalString stdenv.isLinux ''
+      sed -e "s| ul| ${utillinux}/bin/ul|" \
+          -i "$out/share/fish/functions/__fish_print_help.fish"
+      for cur in $out/share/fish/functions/*.fish; do
+        sed -e "s|/usr/bin/getent|${glibc.bin}/bin/getent|" \
+            -i "$cur"
+      done
+
+    '' + optionalString (!stdenv.isDarwin) ''
+      sed -i "s|(hostname\||(${nettools}/bin/hostname\||"           \
+            "$out/share/fish/functions/fish_prompt.fish"
+      sed -i "s|Popen(\['manpath'|Popen(\['${man-db}/bin/manpath'|" \
+              "$out/share/fish/tools/create_manpage_completions.py"
+      sed -i "s|command manpath|command ${man-db}/bin/manpath|"     \
+              "$out/share/fish/functions/man.fish"
+    '' + optionalString useOperatingSystemEtc ''
+      tee -a $out/etc/fish/config.fish < ${(writeText "config.fish.appendix" etcConfigAppendixText)}
+    '' + ''
+      tee -a $out/share/fish/__fish_build_paths.fish < ${(writeText "__fish_build_paths_suffix.fish" fishPreInitHooks)}
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Smart and user-friendly command line shell";
+      homepage = http://fishshell.com/;
+      license = licenses.gpl2;
+      platforms = platforms.unix;
+      maintainers = with maintainers; [ ocharles ];
+    };
+
+    passthru = {
+      shellPath = "/bin/fish";
+    };
   };
 
-  buildInputs = [ ncurses libiconv pcre2 ];
-  configureFlags = [ "--without-included-pcre2" ];
+  tests = {
 
-  # Required binaries during execution
-  # Python: Autocompletion generated from manpages and config editing
-  propagatedBuildInputs = [
-    coreutils gnugrep gnused bc
-    python3 groff gettext
-  ] ++ optional (!stdenv.isDarwin) man-db;
+    # Test the fish_config tool by checking the generated splash page.
+    # Since the webserver requires a port to run, it is not started.
+    fishConfig =
+      let fishScript = writeText "test.fish" ''
+        set -x __fish_bin_dir ${fish}/bin
+        echo $__fish_bin_dir
+        cp -r ${fish}/share/fish/tools/web_config/* .
+        chmod -R +w *
+        # we delete everything after the fileurl is assigned
+        sed -e '/fileurl =/q' -i webconfig.py
+        echo "print(fileurl)" >> webconfig.py
+        # and check whether the message appears on the page
+        cat (${python3}/bin/python ./webconfig.py \
+          | tail -n1 | sed -ne 's|.*\(/tmp/.*\)|\1|p' \
+        ) | grep 'a href="http://localhost.*Start the Fish Web config'
 
-  postInstall = ''
-    sed -r "s|command grep|command ${gnugrep}/bin/grep|" \
-        -i "$out/share/fish/functions/grep.fish"
-    sed -e "s|bc|${bc}/bin/bc|"                          \
-        -e "s|/usr/bin/seq|${coreutils}/bin/seq|"        \
-        -i "$out/share/fish/functions/seq.fish"          \
-           "$out/share/fish/functions/math.fish"
-    sed -i "s|which |${which}/bin/which |"               \
-            "$out/share/fish/functions/type.fish"
-    sed -e "s|\|cut|\|${coreutils}/bin/cut|"             \
-        -i "$out/share/fish/functions/fish_prompt.fish"
-    sed -e "s|gettext |${gettext}/bin/gettext |"         \
-        -e "s|which |${which}/bin/which |"               \
-        -i "$out/share/fish/functions/_.fish"
-    sed -e "s|uname|${coreutils}/bin/uname|"             \
-        -i "$out/share/fish/functions/__fish_pwd.fish"   \
-           "$out/share/fish/functions/prompt_pwd.fish"
-    sed -e "s|sed |${gnused}/bin/sed |"                  \
-        -i "$out/share/fish/functions/alias.fish"        \
-           "$out/share/fish/functions/prompt_pwd.fish"
-    sed -i "s|nroff |${groff}/bin/nroff |"               \
-           "$out/share/fish/functions/__fish_print_help.fish"
-    sed -i "s|/sbin /usr/sbin||" \
-           "$out/share/fish/functions/__fish_complete_subcommand_root.fish"
-    sed -e "s|clear;|${getBin ncurses}/bin/clear;|" \
-        -i "$out/share/fish/functions/fish_default_key_bindings.fish"
-    sed -e "s|python3|${getBin python3}/bin/python3|" \
-        -i $out/share/fish/functions/{__fish_config_interactive.fish,fish_config.fish,fish_update_completions.fish}
-
-  '' + optionalString stdenv.isLinux ''
-    sed -e "s| ul| ${utillinux}/bin/ul|" \
-        -i "$out/share/fish/functions/__fish_print_help.fish"
-    for cur in $out/share/fish/functions/*.fish; do
-      sed -e "s|/usr/bin/getent|${glibc.bin}/bin/getent|" \
-          -i "$cur"
-    done
-
-  '' + optionalString (!stdenv.isDarwin) ''
-    sed -i "s|(hostname\||(${nettools}/bin/hostname\||"           \
-           "$out/share/fish/functions/fish_prompt.fish"
-    sed -i "s|Popen(\['manpath'|Popen(\['${man-db}/bin/manpath'|" \
-            "$out/share/fish/tools/create_manpage_completions.py"
-    sed -i "s|command manpath|command ${man-db}/bin/manpath|"     \
-            "$out/share/fish/functions/man.fish"
-  '' + optionalString useOperatingSystemEtc ''
-    tee -a $out/etc/fish/config.fish < ${(writeText "config.fish.appendix" etcConfigAppendixText)}
-  '' + ''
-    tee -a $out/share/fish/__fish_build_paths.fish < ${(writeText "__fish_build_paths_suffix.fish" fishPreInitHooks)}
-  '';
-
-  meta = with stdenv.lib; {
-    description = "Smart and user-friendly command line shell";
-    homepage = http://fishshell.com/;
-    license = licenses.gpl2;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ ocharles ];
+        # cannot test the http server because it needs a localhost port
+      '';
+      in ''
+        HOME=$(mktemp -d)
+        ${fish}/bin/fish ${fishScript}
+      '';
   };
 
-  passthru = {
-    shellPath = "/bin/fish";
-  };
-}
+  # FIXME(Profpatsch) replace withTests stub
+  withTests = flip const;
+
+in withTests tests fish
