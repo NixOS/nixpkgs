@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = http://grml.org/zsh/;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainters; [ msteen rvolosatovs ];
+    maintainers = with maintainers; [ msteen rvolosatovs ];
   };
 }
