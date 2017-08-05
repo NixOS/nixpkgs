@@ -18603,6 +18603,8 @@ with pkgs;
 
   flat-plat = callPackage ../misc/themes/flat-plat { };
 
+  flockit = callPackage ../tools/backup/flockit { };
+
   foldingathome = callPackage ../misc/foldingathome { };
 
   foo2zjs = callPackage ../misc/drivers/foo2zjs {};
