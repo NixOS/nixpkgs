@@ -1,12 +1,12 @@
 { stdenv, fetchurl, coreutils, utillinux,
   nettools, kbd, bc, which, gnused, gnugrep,
   groff, man-db, glibc, libiconv, pcre2,
-  gettext, ncurses, python
+  gettext, ncurses, python3
 
   , writeText
 
   , useOperatingSystemEtc ? true
-  
+
 }:
 
 with stdenv.lib;
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
   # Python: Autocompletion generated from manpages and config editing
   propagatedBuildInputs = [
     coreutils gnugrep gnused bc
-    python groff gettext
+    python3 groff gettext
   ] ++ optional (!stdenv.isDarwin) man-db;
 
   postInstall = ''
@@ -132,8 +132,10 @@ stdenv.mkDerivation rec {
            "$out/share/fish/functions/__fish_print_help.fish"
     sed -i "s|/sbin /usr/sbin||" \
            "$out/share/fish/functions/__fish_complete_subcommand_root.fish"
-    sed -e "s|clear;|${ncurses.out}/bin/clear;|" \
-        -i "$out/share/fish/functions/fish_default_key_bindings.fish" \
+    sed -e "s|clear;|${getBin ncurses}/bin/clear;|" \
+        -i "$out/share/fish/functions/fish_default_key_bindings.fish"
+    sed -e "s|python3|${getBin python3}/bin/python3|" \
+        -i $out/share/fish/functions/{__fish_config_interactive.fish,fish_config.fish,fish_update_completions.fish}
 
   '' + optionalString stdenv.isLinux ''
     sed -e "s| ul| ${utillinux}/bin/ul|" \
