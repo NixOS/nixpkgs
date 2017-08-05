@@ -187,6 +187,17 @@ rmdir /var/lib/ipfs/.ipfs
       have therefore been removed.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The <option>time.timeZone</option> option now allows the value
+      <literal>null</literal> in addition to timezone strings, which sets the
+      timezone to UTC by default and allows changing it imperatively using
+      <command>timedatectl set-timezone</command>. This is additionally now the
+      default value for the option, which means that systems where the option
+      has not been set explicitly will continue to use UTC but allow imperative
+      timezone adjustments now.
+    </para>
+  </listitem>
 
 </itemizedlist>
 
