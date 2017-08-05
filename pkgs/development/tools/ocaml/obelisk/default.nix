@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 		owner = "Lelio-Brun";
 		repo = "Obelisk";
 		rev = "v${version}";
-		sha256 = "0qkxnv25rmqj7qhnw1fav88kr73ax9fjbzvkrwximz5477gjxx3p";
+		sha256 = "0kbadib53x7mzqri9asd8fmhl4xfgk4ajgzd7rlq3irf2j3bmcqp";
 	};
 
 	buildInputs = with ocamlPackages; [ ocaml findlib ocamlbuild menhir ];
