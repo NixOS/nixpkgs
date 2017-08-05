@@ -107,17 +107,64 @@ rec {
       merge = mergeEqualOption;
     };
 
-    int = mkOptionType rec {
-      name = "int";
-      description = "integer";
-      check = isInt;
-      merge = mergeOneOption;
-    };
+    int = ints.signed;
 
-    intBetween = min: max:
-      addCheck types.int (x: x >= min && x <= max) // {
-        name = "intBetween";
-        description = "integer between ${toString min} and ${toString max} (both inclusively)";
+    # specialized subdomains of int
+    ints =
+      let
+        int = mkOptionType rec {
+          name = "int";
+          description = "signed integer";
+          check = isInt;
+          merge = mergeOneOption;
+        };
+
+        betweenDesc = lowest: highest:
+          "${toString lowest} and ${toString highest} (both inclusive).";
+        between = lowest: highest: assert lowest <= highest;
+          addCheck int (x: x >= lowest && x <= highest) // {
+            name = "intBetween";
+            description = "Integer between ${betweenDesc lowest highest}";
+          };
+        ign = lowest: highest: name: docStart:
+          between lowest highest // {
+            inherit name;
+            description = docStart + " Between ${betweenDesc lowest highest}";
+          };
+        unsign = bit: range: ign 0 (range - 1)
+          "unsignedInt${toString bit}" "${toString bit} bit unsigned integer.";
+        sign = bit: range: ign (0 - (range / 2)) (range / 2 - 1)
+          "signedInt${toString bit}" "${toString bit} bit signed integer.";
+
+      in rec {
+        /* an int with a fixed range
+        *
+        * Example:
+        *   (ints.between 0 100).check (-1)
+        *   => false
+        *   (ints.between 0 100).check (101)
+        *   => false
+        *   (ints.between 0 0).check 0
+        *   => true
+        */
+        inherit between;
+
+        unsigned = addCheck types.int (x: x >= 0) // {
+          name = "unsignedInt";
+          description = "unsigned integer, meaning >=0";
+        };
+        unsigned8 = unsign 8 256;
+        unsigned16 = unsign 16 65536;
+        unsigned32 = unsign 32 4294967296;
+        # the biggest int the nix lexer accepts is 9223372036854775808
+        # the smallest int the nix lexer accepts is -9223372036854775807
+        # unsigned64 = unsign 64 18446744073709551616;
+
+        signed = int;
+        signed8 = sign 8 256;
+        signed16 = sign 16 65536;
+        signed32 = sign 32 4294967296;
+
       };
 
     str = mkOptionType {
