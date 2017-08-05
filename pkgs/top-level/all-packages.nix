@@ -6179,8 +6179,6 @@ with pkgs;
   rust = callPackage ../development/compilers/rust { };
   inherit (rust) cargo rustc;
 
-  rustRegistry = callPackage ./rust-packages.nix { };
-
   rustPlatform = recurseIntoAttrs (makeRustPlatform rust);
 
   makeRustPlatform = rust: lib.fix (self:

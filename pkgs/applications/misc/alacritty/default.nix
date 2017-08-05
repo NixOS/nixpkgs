@@ -38,7 +38,7 @@ buildRustPackage rec {
     sha256 = "0h37x12r33xwz9vf1n8y24c0ph5w17lhkpfi5q6lbpgidvbs6fyx";
   };
 
-  depsSha256 = "05gkl2zg546i2pm0gx11s56f7dk72qpm39kml1d2myj81s0vyb5z";
+  cargoSha256 = "0w3j92kd27pny37pfvlv6qsnbb1lgphmfbhvvng0z96r2b1wjviz";
 
   buildInputs = [
     cmake
@@ -69,6 +69,7 @@ buildRustPackage rec {
   dontPatchELF = true;
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "GPU-accelerated terminal emulator";
     homepage = https://github.com/jwilm/alacritty;
     license = with licenses; [ asl20 ];

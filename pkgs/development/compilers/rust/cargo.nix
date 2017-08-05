@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, file, curl, pkgconfig, python, openssl, cmake, zlib
 , makeWrapper, libiconv, cacert, rustPlatform, rustc, libgit2
-, version, srcSha, depsSha256
+, version, srcSha, cargoSha256
 , patches ? []}:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = srcSha;
   };
 
-  inherit depsSha256;
+  inherit cargoSha256;
   inherit patches;
 
   passthru.rustc = rustc;

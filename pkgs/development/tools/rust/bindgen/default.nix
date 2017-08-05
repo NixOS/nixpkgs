@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/bindgen --set LIBCLANG_PATH "${llvmPackages.clang-unwrapped}/lib"
   '';
 
-  depsSha256 = "06b5zyw9p7h73h30c1nlnwjb0zmkfx52wqsl9b14y9hx51g9bw0r";
+  cargoSha256 = "128skg31lc9v8i7ghfb3wyiazivqfvzhi1mvmjcl0gkx1hi5006v";
 
   doCheck = false; # A test fails because it can't find standard headers in NixOS
 
