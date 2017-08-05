@@ -1635,7 +1635,9 @@ with pkgs;
 
   ddrescue = callPackage ../tools/system/ddrescue { };
 
-  deluge = python2Packages.deluge; # Package should be moved out of python-packages.nix
+  deluge = callPackage ../applications/networking/p2p/deluge {
+    pythonPackages = python2Packages;
+  };
 
   desktop_file_utils = callPackage ../tools/misc/desktop-file-utils { };
 
