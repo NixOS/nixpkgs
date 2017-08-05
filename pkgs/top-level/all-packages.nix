@@ -12034,6 +12034,25 @@ with pkgs;
 
   klibcShrunk = lowPrio (callPackage ../os-specific/linux/klibc/shrunk.nix { });
 
+  linux_minipli = callPackage ../os-specific/linux/kernel/linux-minipli.nix {
+    kernelPatches = with kernelPatches; [
+      kernelPatches.bridge_stp_helper
+      kernelPatches.p9_fixes
+      kernelPatches.modinst_arg_list_too_long
+      kernelPatches.cpu-cgroup-v2."4.9"
+      kernelPatches.grsecurity_nixos_kmod
+    ]
+    ++ lib.optionals ((platform.kernelArch or null) == "mips")
+    [ kernelPatches.mips_fpureg_emu
+      kernelPatches.mips_fpu_sigill
+      kernelPatches.mips_ext3_n32
+    ];
+    extraConfig = import ../os-specific/linux/kernel/grsecurity-config.nix {
+      inherit stdenv;
+      inherit (linux) version;
+    };
+  };
+
   linux_hardened_copperhead = callPackage ../os-specific/linux/kernel/linux-hardened-copperhead.nix {
     kernelPatches = with kernelPatches; [
       kernelPatches.bridge_stp_helper
@@ -12307,6 +12326,7 @@ with pkgs;
 
   # Build the kernel modules for the some of the kernels.
   linuxPackages_hardened_copperhead = linuxPackagesFor pkgs.linux_hardened_copperhead;
+  linuxPackages_minipli = linuxPackagesFor pkgs.linux_minipli;
   linuxPackages_mptcp = linuxPackagesFor pkgs.linux_mptcp;
   linuxPackages_rpi = linuxPackagesFor pkgs.linux_rpi;
   linuxPackages_3_10 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_3_10);

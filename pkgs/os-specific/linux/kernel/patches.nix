@@ -156,4 +156,11 @@ rec {
         sha256 = "10dmv3d3gj8rvj9h40js4jh8xbr5wyaqiy0kd819mya441mj8ll2";
       };
     };
+
+  # This patch relaxes grsec constraints on the location of usermode helpers,
+  # e.g., modprobe, to allow calling into the Nix store.
+  grsecurity_nixos_kmod = {
+    name  = "grsecurity-nixos-kmod";
+    patch = ./grsecurity-nixos-kmod.patch;
+  };
 }

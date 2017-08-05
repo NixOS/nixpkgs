@@ -54,7 +54,7 @@ in
 
   config = mkIf cfg.enable {
 
-    boot.kernelPackages = mkForce pkgs.linuxPackages_grsec_nixos;
+    boot.kernelPackages = mkForce pkgs.linuxPackages_minipli;
 
     boot.kernelParams = [ "grsec_sysfs_restrict=0" ]
       ++ optional cfg.disableEfiRuntimeServices "noefi";

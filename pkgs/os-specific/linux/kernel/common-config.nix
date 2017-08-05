@@ -31,13 +31,16 @@ with stdenv.lib;
 
   # Debugging.
   DEBUG_KERNEL y
-  DYNAMIC_DEBUG y
   BACKTRACE_SELF_TEST n
   DEBUG_DEVRES n
   DEBUG_STACK_USAGE n
   DEBUG_STACKOVERFLOW n
   SCHEDSTATS n
   DETECT_HUNG_TASK y
+
+  ${optionalString (!features.grsecurity) ''
+    DYNAMIC_DEBUG y
+  ''}
 
   ${optionalString (versionOlder version "4.4") ''
     CPU_NOTIFIER_ERROR_INJECT? n
@@ -332,7 +335,7 @@ with stdenv.lib;
   NLS_ISO8859_1 m    # VFAT default for the iocharset= mount option
 
   # Runtime security tests
-  ${optionalString (versionOlder version "4.11") ''
+  ${optionalString ((versionOlder version "4.11") && (!features.grsecurity)) ''
     DEBUG_SET_MODULE_RONX? y # Detect writes to read-only module pages
   ''}
 
@@ -341,7 +344,11 @@ with stdenv.lib;
   STRICT_DEVMEM y # Filter access to /dev/mem
   SECURITY_SELINUX_BOOTPARAM_VALUE 0 # Disable SELinux by default
   SECURITY_YAMA? y # Prevent processes from ptracing non-children processes
-  DEVKMEM n # Disable /dev/kmem
+
+  ${optionalString (!features.grsecurity) ''
+    DEVKMEM n # Disable /dev/kmem
+  ''}
+
   ${if versionOlder version "3.14" then ''
     CC_STACKPROTECTOR? y # Detect buffer overflows on the stack
   '' else ''
@@ -445,7 +452,7 @@ with stdenv.lib;
   USB_EHCI_ROOT_HUB_TT y # Root Hub Transaction Translators
   USB_EHCI_TT_NEWSCHED y # Improved transaction translator scheduling
   ${optionalString (versionAtLeast version "4.3") ''
-    USERFAULTFD y
+    USERFAULTFD? y
   ''}
   X86_CHECK_BIOS_CORRUPTION y
   X86_MCE y
@@ -475,13 +482,16 @@ with stdenv.lib;
   CONNECTOR y
   PROC_EVENTS y
 
-  # Tracing.
-  FTRACE y
+  # Tracing
   KPROBES y
-  FUNCTION_TRACER y
-  FTRACE_SYSCALLS y
-  SCHED_TRACER y
-  STACK_TRACER y
+
+  ${optionalString (!features.grsecurity) ''
+    FTRACE y
+    FTRACE_SYSCALLS y
+    FUNCTION_TRACER y
+    SCHED_TRACER y
+    STACK_TRACER y
+  ''}
 
   ${if versionOlder version "4.11" then ''
     UPROBE_EVENT? y
@@ -491,16 +501,22 @@ with stdenv.lib;
 
   ${optionalString (versionAtLeast version "4.4") ''
     BPF_SYSCALL y
-    BPF_EVENTS y
   ''}
-  FUNCTION_PROFILER y
-  RING_BUFFER_BENCHMARK n
+
+  ${optionalString ((versionAtLeast version) "4.4" && (!features.grsecurity)) ''
+    BPF_EVENTS? y
+  ''}
+
+  ${optionalString (!features.grsecurity) ''
+    FUNCTION_PROFILER y
+    RING_BUFFER_BENCHMARK n
+
+    # Easier debugging of NFS issues.
+    SUNRPC_DEBUG y
+  ''}
 
   # Devtmpfs support.
   DEVTMPFS y
-
-  # Easier debugging of NFS issues.
-  SUNRPC_DEBUG y
 
   # Virtualisation.
   PARAVIRT? y
