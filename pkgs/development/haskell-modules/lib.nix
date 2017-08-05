@@ -91,7 +91,7 @@ rec {
     isLibrary = false;
     doHaddock = false;
     postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
-  } // lib.optionalAttrs (pkgs.hostPlatform.isDarwin) {
+  } // lib.optionalAttrs (pkgs.stdenv.isDarwin) {
     configureFlags = (drv.configureFlags or []) ++ ["--ghc-option=-optl=-dead_strip"];
   });
 
