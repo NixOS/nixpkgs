@@ -8038,6 +8038,8 @@ with pkgs;
   # A GMP fork
   mpir = callPackage ../development/libraries/mpir {};
 
+  gns3-gui = callPackage ../applications/networking/gns3/gui.nix { };
+
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection {
     nixStoreDir = config.nix.storeDir or builtins.storeDir;
     inherit (darwin) cctools;
