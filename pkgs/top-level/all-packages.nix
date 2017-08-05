@@ -1338,7 +1338,7 @@ with pkgs;
 
   clementine = callPackage ../applications/audio/clementine {
     boost = boost155;
-    gst_plugins = 
+    gst_plugins =
       with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly ];
   };
 
@@ -12040,10 +12040,11 @@ with pkgs;
       kernelPatches.p9_fixes
       kernelPatches.modinst_arg_list_too_long
       kernelPatches.cpu-cgroup-v2."4.11"
+      kernelPatches.tag_hardened
     ];
     extraConfig = import ../os-specific/linux/kernel/hardened-config.nix {
       inherit stdenv;
-      inherit (linux) version;
+      inherit (linux_hardened_copperhead) version;
     };
   };
 
