@@ -29,7 +29,7 @@ rec {
     version = "0.18.0";
     srcRev = "fe7b0cdcf5ca7aab81630706ce40b70f6aa2e666";
     srcSha = "164iywv1l3v87b0pznf5kkzxigd6w19myv9d7ka4c65zgrk9n9px";
-    depsSha256 = "1mrgd8ib48vxxbhkvsqqq4p19sc6b74x3cd8p6lhhlm6plrajrvm";
+    depsSha256 = "1ydlsxnklanmg0zskcxg9cfw0j0fvgncjvccirzml3h4cnl8ji5j";
 
     inherit rustc; # the rustc that will be wrapped by cargo
     inherit rustPlatform; # used to build cargo

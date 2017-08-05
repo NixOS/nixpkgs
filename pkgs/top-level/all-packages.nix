@@ -1052,7 +1052,7 @@ with pkgs;
   glock = callPackage ../development/tools/glock { };
 
   glslviewer = callPackage ../development/tools/glslviewer { };
-  
+
   gmic = callPackage ../tools/graphics/gmic { };
 
   goa = callPackage ../development/tools/goa { };
@@ -5904,8 +5904,6 @@ with pkgs;
   rtags = callPackage ../development/tools/rtags/default.nix {
     inherit (darwin) apple_sdk;
   };
-
-  rustRegistry = callPackage ./rust-packages.nix { };
 
   rust = rustStable;
   rustStable = callPackage ../development/compilers/rust {
