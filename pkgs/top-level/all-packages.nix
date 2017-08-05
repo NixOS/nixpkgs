@@ -18331,7 +18331,6 @@ with pkgs;
   geogebra = callPackage ../applications/science/math/geogebra { };
 
   maxima = callPackage ../applications/science/math/maxima {
-    sbcl = sbcl_1_3_12;
     ecl = null;
   };
   maxima-ecl = callPackage ../applications/science/math/maxima {
