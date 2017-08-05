@@ -34,6 +34,7 @@ in stdenv.mkDerivation {
   preConfigure = ''
     cd src
     sed -i "/^STRIP/d" configure
+    sed -i "/\$STRIP/d" configure
   '';
 
   configureFlags = [ "--enable-release" ];
