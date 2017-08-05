@@ -120,16 +120,16 @@ rec {
         };
 
         betweenDesc = lowest: highest:
-          "${toString lowest} and ${toString highest} (both inclusive).";
+          "${toString lowest} and ${toString highest} (both inclusive)";
         between = lowest: highest: assert lowest <= highest;
           addCheck int (x: x >= lowest && x <= highest) // {
             name = "intBetween";
-            description = "Integer between ${betweenDesc lowest highest}";
+            description = "Integer between ${betweenDesc lowest highest}.";
           };
         ign = lowest: highest: name: docStart:
           between lowest highest // {
             inherit name;
-            description = docStart + " Between ${betweenDesc lowest highest}";
+            description = docStart + " Between ${betweenDesc lowest highest}.";
           };
         unsign = bit: range: ign 0 (range - 1)
           "unsignedInt${toString bit}" "${toString bit} bit unsigned integer.";
@@ -137,7 +137,7 @@ rec {
           "signedInt${toString bit}" "${toString bit} bit signed integer.";
 
       in rec {
-        /* an int with a fixed range
+        /* An int with a fixed range.
         *
         * Example:
         *   (ints.between 0 100).check (-1)
@@ -166,6 +166,9 @@ rec {
         signed32 = sign 32 4294967296;
 
       };
+
+    /* A network port number */
+    port = ints.unsigned16;
 
     str = mkOptionType {
       name = "str";
