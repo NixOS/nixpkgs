@@ -611,9 +611,9 @@ with pkgs;
 
   inherit (androidenv) androidndk;
 
-  androidsdk = androidenv.androidsdk_7_1_1;
+  androidsdk = androidenv.androidsdk_8_0;
 
-  androidsdk_extras = self.androidenv.androidsdk_7_1_1_extras;
+  androidsdk_extras = self.androidenv.androidsdk_8_0_extras;
 
   arc-theme = callPackage ../misc/themes/arc { };
 
