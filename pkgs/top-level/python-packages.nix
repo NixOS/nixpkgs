@@ -24842,6 +24842,26 @@ EOF
     };
   });
 
+  zipstream = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "zipstream";
+    version = "1.1.4";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/z/${pname}/${name}.tar.gz";
+      sha256 = "01im5anqdyggmwkigqcjg0qw2a5bnn84h33mfaqjjd69a28lpwif";
+    };
+
+    buildInputs = with self; [ nose ];
+
+    meta = {
+      description = "A zip archive generator";
+      homepage = "https://github.com/allanlei/python-zipstream";
+      license = licenses.gpl3Plus;
+      maintainers = with maintainers; [ primeos ];
+    };
+  };
+
   zodb3 = buildPythonPackage rec {
     name = "zodb3-${version}";
     version = "3.11.0";
