@@ -292,13 +292,23 @@ in {
 
   aiofiles = callPackage ../development/python-modules/aiofiles { };
 
-  aiohttp = buildPythonPackage rec {
+  aiohttp =
+  let yarl_0_9_8 = self.yarl.overrideAttrs (old: rec {
+    pname = "yarl";
+    version = "0.9.8";
+    name = "${pname}-${version}";
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
+      sha256 = "1v2dsmr7bqp0yx51pwhbxyvzza8m2f88prsnbd926mi6ah38p0d7";
+    };
+  });
+  in buildPythonPackage rec {
     name = "aiohttp-${version}";
-    version = "1.1.6";
+    version = "1.3.5";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/aiohttp/${name}.tar.gz";
-      sha256 = "0742feb9759a5832aa4a30abf64e53055e139ed41e26f79b9558d08e05c74d60";
+      sha256 = "0hpqdiaifgyfqmxkyzwypwvrnvz5rqzgzylzhihfidc5ldfs856d";
     };
 
     disabled = pythonOlder "3.4";
@@ -306,10 +316,10 @@ in {
     doCheck = false; # Too many tests fail.
 
     buildInputs = with self; [ pytest gunicorn pytest-raisesregexp ];
-    propagatedBuildInputs = with self; [ async-timeout chardet multidict yarl ];
+    propagatedBuildInputs = with self; [ async-timeout chardet multidict yarl_0_9_8 ];
 
     meta = {
-      description = "http client/server for asyncio";
+      description = "Http client/server for asyncio";
       license = with licenses; [ asl20 ];
       homepage = https://github.com/KeepSafe/aiohttp/;
     };
