@@ -11,6 +11,8 @@ stdenv.mkDerivation {
     sha256 = "16lgbjzzfx0k4a1znsw8kq3lnkx17gw93zq2sn01sny11fj1y0vg";
   };
 
+  enableParallelBuilding = true;
+
   buildInputs = [zlib] ++ stdenv.lib.optional stdenv.isLinux utillinux;
 
   doCheck = stdenv.isLinux;
