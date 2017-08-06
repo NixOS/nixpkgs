@@ -40,7 +40,7 @@ in stdenv.mkDerivation rec {
   patches = [ ./D17533-1.patch ] ++
     stdenv.lib.optionals (!stdenv.isDarwin) [./fix-llvm-config.patch];
 
-  # hacky fix: New LLVM releases require a newer OS X SDK than
+  # hacky fix: New LLVM releases require a newer macOS SDK than
   # 10.9. This is a temporary measure until nixpkgs darwin support is
   # updated.
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''

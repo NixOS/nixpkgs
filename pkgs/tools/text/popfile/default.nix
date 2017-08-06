@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     homepage = http://getpopfile.org;
     license = stdenv.lib.licenses.gpl2;
 
-    # Should work on OS X, but havent tested it.
+    # Should work on macOS, but havent tested it.
     # Windows support is more complicated.
     # http://getpopfile.org/docs/faq:systemrequirements
     platforms = stdenv.lib.platforms.linux;

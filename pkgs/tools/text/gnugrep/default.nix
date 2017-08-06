@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   #doCheck = !stdenv.isDarwin && !stdenv.isSunOS && !stdenv.isCygwin && !stdenv.isFreeBSD;
   doCheck = false;
 
-  # On Mac OS X, force use of mkdir -p, since Grep's fallback
+  # On macOS, force use of mkdir -p, since Grep's fallback
   # (./install-sh) is broken.
   preConfigure = ''
     export MKDIR_P="mkdir -p"

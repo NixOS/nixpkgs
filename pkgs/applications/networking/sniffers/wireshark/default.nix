@@ -61,7 +61,7 @@ in stdenv.mkDerivation {
     longDescription = ''
       Wireshark (formerly known as "Ethereal") is a powerful network
       protocol analyzer developed by an international team of networking
-      experts. It runs on UNIX, OS X and Windows.
+      experts. It runs on UNIX, macOS and Windows.
     '';
 
     platforms = platforms.unix;

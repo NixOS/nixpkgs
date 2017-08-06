@@ -77,11 +77,11 @@ in
     meta = with stdenv.lib; {
       description = ''
         Open source source code editor developed by Microsoft for Windows,
-        Linux and OS X
+        Linux and macOS
       '';
       longDescription = ''
         Open source source code editor developed by Microsoft for Windows,
-        Linux and OS X. It includes support for debugging, embedded Git
+        Linux and macOS. It includes support for debugging, embedded Git
         control, syntax highlighting, intelligent code completion, snippets,
         and code refactoring. It is also customizable, so users can change the
         editor's theme, keyboard shortcuts, and preferences

@@ -618,7 +618,7 @@ in {
     };
 
     meta = {
-      description = "Disable App Nap on OS X";
+      description = "Disable App Nap on macOS";
       homepage    = https://pypi.python.org/pypi/appnope;
       platforms   = platforms.darwin;
       license     = licenses.bsd3;
@@ -756,7 +756,7 @@ in {
       sha256 = "136f2ec0f94ec77ff2990830feee965d608cab1e8922370e3abdded383d52001";
     };
 
-    # Mac OS X needs clang for testing
+    # macOS needs clang for testing
     buildInputs = with self; [ pytest hypothesis zope_interface
     pympler coverage ]
      ++ optionals (stdenv.isDarwin) [ pkgs.clang ];
@@ -28416,7 +28416,7 @@ EOF
     doCheck = false;
 
     meta = {
-      description = "Send file to trash natively under Mac OS X, Windows and Linux";
+      description = "Send file to trash natively under macOS, Windows and Linux";
       homepage = https://github.com/hsoft/send2trash;
       license = licenses.bsd3;
     };

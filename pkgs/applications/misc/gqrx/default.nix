@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     # Some of the code comes from the Cutesdr project, with a BSD license, but
     # it's currently unknown which version of the BSD license that is.
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;  # should work on Darwin / OS X too
+    platforms = platforms.linux;  # should work on Darwin / macOS too
     maintainers = with maintainers; [ bjornfor the-kenny fpletz ];
   };
 }
