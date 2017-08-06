@@ -5106,6 +5106,8 @@ with pkgs;
 
   oh = callPackage ../shells/oh { };
 
+  oil = callPackage ../shells/oil { };
+
   pash = callPackage ../shells/pash { };
 
   tcsh = callPackage ../shells/tcsh { };
