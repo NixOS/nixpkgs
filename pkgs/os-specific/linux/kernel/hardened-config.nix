@@ -5,6 +5,8 @@
 # Dangerous features that can be permanently (for the boot session) disabled at
 # boot via sysctl or kernel cmdline are left enabled here, for improved
 # flexibility.
+#
+# See also <nixos/modules/profiles/hardened.nix>
 
 { stdenv, version }:
 
@@ -22,7 +24,7 @@ ${optionalString (stdenv.system == "x86_64-linux") ''
   # Reduce attack surface by disabling various emulations
   IA32_EMULATION n
   X86_X32 n
-  MODIFY_LDT_SYSCALL n
+  MODIFY_LDT_SYSCALL? n
 
   VMAP_STACK y # Catch kernel stack overflows
 
@@ -30,45 +32,33 @@ ${optionalString (stdenv.system == "x86_64-linux") ''
   RANDOMIZE_BASE y
   RANDOMIZE_MEMORY y
 
-  # Modern libc no longer needs a fixed-position mapping in userspace, remove it as a possible target.
+  # Disable legacy virtual syscalls by default (modern glibc use vDSO instead).
+  #
+  # Note that the vanilla default is to *emulate* the legacy vsyscall mechanism,
+  # which is supposed to be safer than the native variant (wrt. ret2libc), so
+  # disabling it mainly helps reduce surface.
   LEGACY_VSYSCALL_NONE y
 ''}
 
-# Make sure kernel page tables have safe permissions.
-DEBUG_KERNEL y
-
+# Safer page access permissions (wrt. code injection).  Default on >=4.11.
 ${optionalString (versionOlder version "4.11") ''
   DEBUG_RODATA y
   DEBUG_SET_MODULE_RONX y
 ''}
 
-${optionalString (versionAtLeast version "4.11") ''
-  GCC_PLUGIN_STRUCTLEAK y # A port of the PaX structleak plugin
-''}
+DEBUG_WX y # boot-time warning on RWX mappings
 
-# Report any dangerous memory permissions (not available on all archs).
-DEBUG_WX y
-
-# Do not allow direct physical memory access (but if you must have it, at least enable STRICT mode...)
-# DEVMEM is not set
+# Stricter /dev/mem
 STRICT_DEVMEM y
 IO_STRICT_DEVMEM y
 
-# Perform additional validation of various commonly targeted structures.
+# Perform additional validation of commonly targeted structures.
 DEBUG_CREDENTIALS y
 DEBUG_NOTIFIERS y
 DEBUG_LIST y
 DEBUG_SG y
-BUG_ON_DATA_CORRUPTION y
 SCHED_STACK_END_CHECK y
-
-# Provide userspace with seccomp BPF API for syscall attack surface reduction.
-SECCOMP y
-SECCOMP_FILTER y
-
-# Provide userspace with ptrace ancestry protections.
-SECURITY y
-SECURITY_YAMA y
+BUG_ON_DATA_CORRUPTION y
 
 # Perform usercopy bounds checking.
 HARDENED_USERCOPY y
@@ -76,8 +66,7 @@ HARDENED_USERCOPY y
 # Randomize allocator freelists.
 SLAB_FREELIST_RANDOM y
 
-# Wipe higher-level memory allocations when they are freed (needs "page_poison 1" command line below).
-# (If you can afford even more performance penalty, leave PAGE_POISONING_NO_SANITY n)
+# Wipe higher-level memory allocations on free() with page_poison=1
 PAGE_POISONING y
 PAGE_POISONING_NO_SANITY y
 PAGE_POISONING_ZERO y
@@ -86,10 +75,11 @@ PAGE_POISONING_ZERO y
 PANIC_ON_OOPS y
 PANIC_TIMEOUT -1
 
-# Keep root from altering kernel memory via loadable modules.
-# MODULES is not set
-
 GCC_PLUGINS y # Enable gcc plugin options
+
+${optionalString (versionAtLeast version "4.11") ''
+  GCC_PLUGIN_STRUCTLEAK y # A port of the PaX structleak plugin
+''}
 
 # Disable various dangerous settings
 ACPI_CUSTOM_METHOD n # Allows writing directly to physical memory
