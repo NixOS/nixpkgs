@@ -68,7 +68,7 @@ let
     # pkgConfig might need to come from node-packages ?
   };
   ruby-env = bundlerEnv {
-    name = "gitlab";
+    name = "gitlab-env-0.2";
     inherit ruby;
     gemdir = ./.;
     meta = with lib; {
@@ -79,12 +79,7 @@ let
     };
   };
 
-  version = "9.3.4";
-
-  gitlabDeb = fetchurl {
-    url = "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/jessie/gitlab-ce_${version}-ce.0_amd64.deb/download";
-    sha256 = "1pr8nfnkzmicn5nxjkq48l4nfjsp6v5j3v8p7cp8r86lgfdc6as3";
-  };
+  version = "9.4.3";
 
 in
 
@@ -99,7 +94,7 @@ stdenv.mkDerivation rec {
     owner = "gitlabhq";
     repo = "gitlabhq";
     rev = "v${version}";
-    sha256 = "18mx0pfny26s0vv92w1lmmikhfn966bd6s2zzcdmsd1j3cxxdwbg";
+    sha256 = "1r4fvj94l73p3zqlcv80iw4gbsyq26d6x5d47v9zs3pjzkgz0891";
   };
 
   patches = [
@@ -134,18 +129,14 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     mv config/gitlab.yml.example config/gitlab.yml
 
-    dpkg -x ${gitlabDeb} .
-    mv -v opt/gitlab/embedded/service/gitlab-rails/public/assets public
-    rm -rf opt
-
-    export GITLAB_DATABASE_ADAPTER=nulldb
-    export SKIP_STORAGE_VALIDATION=true
-    # ;_;
-    #yarn install --production --pure-lockfile
+    # Emulate yarn install --production --pure-lockfile
     mkdir -p node_modules/
     ln -s ${node-env}/node_modules/* node_modules/
     ln -s ${node-env}/node_modules/.bin node_modules/
 
+    # Compile assets. We skip the yarn check because it fails
+    export GITLAB_DATABASE_ADAPTER=nulldb
+    export SKIP_STORAGE_VALIDATION=true
     rake rake:assets:precompile RAILS_ENV=production NODE_ENV=production
     rake webpack:compile RAILS_ENV=production NODE_ENV=production
     rake gitlab:assets:fix_urls RAILS_ENV=production NODE_ENV=production

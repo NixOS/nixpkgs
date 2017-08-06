@@ -22,6 +22,7 @@
 , pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
 , libmsgpack, qt48, libsodium, snappy, libossp_uuid, lxc, libpcap, xlibs, gtk2, buildRubyGem
+, re2
 }@args:
 
 let
@@ -194,6 +195,10 @@ in
     RBNACL_LIBSODIUM_GEM_LIB_PATH = '${libsodium.out}/lib/libsodium.${if stdenv.isDarwin then "dylib" else "so"}'
     "
     '';
+  };
+
+  re2 = attrs: {
+    buildInputs = [ re2 ];
   };
 
   rmagick = attrs: {

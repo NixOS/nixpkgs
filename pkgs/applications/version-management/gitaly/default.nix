@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitLab, git, go }:
 
 stdenv.mkDerivation rec {
-  version = "0.9.0";
+  version = "0.21.2";
   name = "gitaly-${version}";
 
   srcs = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "0dydlq33ly2f2b3iyg967i2fq1alh6wa7hsq4nh7lmgy8v0w38ab";
+    sha256 = "025r6vcra2bjm6xggcgnsqgkpvd7y2w73ff6lxrn06lbr4dfbfrf";
   };
 
   buildInputs = [ git go ];
