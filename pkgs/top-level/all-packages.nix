@@ -11991,6 +11991,8 @@ with pkgs;
 
   linuxConsoleTools = callPackage ../os-specific/linux/consoletools { };
 
+  openelec-dvb-firmware = callPackage ../os-specific/linux/firmware/openelec-dvb-firmware { };
+
   openiscsi = callPackage ../os-specific/linux/open-iscsi { };
 
   openisns = callPackage ../os-specific/linux/open-isns { };
