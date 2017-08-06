@@ -182,13 +182,7 @@ self: super: {
     else dontCheck super.fsnotify;
 
   double-conversion = if !pkgs.stdenv.isDarwin
-    then addExtraLibrary
-           # https://github.com/bos/double-conversion/pull/17
-           (appendPatch super.double-conversion (pkgs.fetchpatch {
-              url = "https://github.com/basvandijk/double-conversion/commit/0927e347d53dbd96d1949930e728cc2471dd4b14.patch";
-              sha256 = "042yqbq5p6nc9nymmbz9hgp51dlc5asaj9bf91kw5fph6dw2hwg9";
-           }))
-           pkgs.stdenv.cc.cc.lib
+    then super.double-conversion
     else addExtraLibrary (overrideCabal super.double-conversion (drv:
       {
         postPatch = ''
