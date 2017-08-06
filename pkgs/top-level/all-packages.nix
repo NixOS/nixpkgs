@@ -1338,7 +1338,7 @@ with pkgs;
 
   clementine = callPackage ../applications/audio/clementine {
     boost = boost155;
-    gst_plugins = 
+    gst_plugins =
       with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly ];
   };
 
@@ -14186,7 +14186,7 @@ with pkgs;
 
   gnuradio-osmosdr = callPackage ../applications/misc/gnuradio-osmosdr { };
 
-  goldendict = libsForQt56.callPackage ../applications/misc/goldendict { };
+  goldendict = libsForQt5.callPackage ../applications/misc/goldendict { };
 
   inherit (ocamlPackages) google-drive-ocamlfuse;
 
