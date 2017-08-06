@@ -13,6 +13,7 @@ stdenv.mkDerivation {
 
   configurePhase = ''
     makeFlagsArray=( CFLAGS="-I. -O3"
+                     STRIP="-s"
                      INSTALL="install"
                      BINDIR="$out/bin"
                      MANDIR="$out/share/man"

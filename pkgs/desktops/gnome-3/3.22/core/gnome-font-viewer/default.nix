@@ -1,6 +1,6 @@
 { stdenv, intltool, fetchurl
 , pkgconfig, gtk3, glib
-, bash, makeWrapper, itstool
+, bash, wrapGAppsHook, itstool
 , gnome3, librsvg, gdk_pixbuf }:
 
 stdenv.mkDerivation rec {
@@ -14,12 +14,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig gtk3 glib intltool itstool gnome3.gnome_desktop
                   gdk_pixbuf gnome3.defaultIconTheme librsvg
-                  gnome3.gsettings_desktop_schemas makeWrapper ];
+                  gnome3.gsettings_desktop_schemas wrapGAppsHook ];
 
   preFixup = ''
-    wrapProgram "$out/bin/gnome-font-viewer" \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share"
+    )
   '';
 
   meta = with stdenv.lib; {

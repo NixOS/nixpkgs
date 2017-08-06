@@ -54,4 +54,16 @@ in {
     # checks are failing again
     doCheck = false;
   };
+
+  terraform_0_10_0 = generic {
+    version = "0.10.0";
+    sha256 = "1z6pmyfh4z5w8k2j46ancc0m9lsiq6d0m56nxj1kawb3n5q9dgds";
+    # remove debugging and the -dev postfix in the version
+    preBuild = ''
+      buildFlagsArray=(
+        -ldflags
+        "-X github.com/hashicorp/terraform/terraform.VersionPrerelease= -s -w"
+      )
+    '';
+  };
 }

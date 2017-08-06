@@ -48,7 +48,7 @@ let
     # NAT from external ports to internal ports.
     ${concatMapStrings (fwd: ''
       iptables -w -t nat -A nixos-nat-pre \
-        -i ${cfg.externalInterface} -p tcp \
+        -i ${cfg.externalInterface} -p ${fwd.proto} \
         --dport ${builtins.toString fwd.sourcePort} \
         -j DNAT --to-destination ${fwd.destination}
     '') cfg.forwardPorts}
@@ -133,12 +133,19 @@ in
           destination = mkOption {
             type = types.str;
             example = "10.0.0.1:80";
-            description = "Forward tcp connection to destination ip:port";
+            description = "Forward connection to destination ip:port";
+          };
+
+          proto = mkOption {
+            type = types.str;
+            default = "tcp";
+            example = "udp";
+            description = "Protocol of forwarded connection";
           };
         };
       });
       default = [];
-      example = [ { sourcePort = 8080; destination = "10.0.0.1:80"; } ];
+      example = [ { sourcePort = 8080; destination = "10.0.0.1:80"; proto = "tcp"; } ];
       description =
         ''
           List of forwarded ports from the external interface to
@@ -151,38 +158,41 @@ in
 
   ###### implementation
 
-  config = mkIf config.networking.nat.enable {
+  config = mkMerge [
+    { networking.firewall.extraCommands = mkBefore flushNat; }
+    (mkIf config.networking.nat.enable {
 
-    environment.systemPackages = [ pkgs.iptables ];
+      environment.systemPackages = [ pkgs.iptables ];
 
-    boot = {
-      kernelModules = [ "nf_nat_ftp" ];
-      kernel.sysctl = {
-        "net.ipv4.conf.all.forwarding" = mkOverride 99 true;
-        "net.ipv4.conf.default.forwarding" = mkOverride 99 true;
-      };
-    };
-
-    networking.firewall = mkIf config.networking.firewall.enable {
-      extraCommands = mkMerge [ (mkBefore flushNat) setupNat ];
-      extraStopCommands = flushNat;
-    };
-
-    systemd.services = mkIf (!config.networking.firewall.enable) { nat = {
-      description = "Network Address Translation";
-      wantedBy = [ "network.target" ];
-      after = [ "network-pre.target" "systemd-modules-load.service" ];
-      path = [ pkgs.iptables ];
-      unitConfig.ConditionCapability = "CAP_NET_ADMIN";
-
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
+      boot = {
+        kernelModules = [ "nf_nat_ftp" ];
+        kernel.sysctl = {
+          "net.ipv4.conf.all.forwarding" = mkOverride 99 true;
+          "net.ipv4.conf.default.forwarding" = mkOverride 99 true;
+        };
       };
 
-      script = flushNat + setupNat;
+      networking.firewall = mkIf config.networking.firewall.enable {
+        extraCommands = setupNat;
+        extraStopCommands = flushNat;
+      };
 
-      postStop = flushNat;
-    }; };
-  };
+      systemd.services = mkIf (!config.networking.firewall.enable) { nat = {
+        description = "Network Address Translation";
+        wantedBy = [ "network.target" ];
+        after = [ "network-pre.target" "systemd-modules-load.service" ];
+        path = [ pkgs.iptables ];
+        unitConfig.ConditionCapability = "CAP_NET_ADMIN";
+
+        serviceConfig = {
+          Type = "oneshot";
+          RemainAfterExit = true;
+        };
+
+        script = flushNat + setupNat;
+
+        postStop = flushNat;
+      }; };
+    })
+  ];
 }

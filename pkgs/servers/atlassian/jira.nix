@@ -1,4 +1,7 @@
-{ stdenv, fetchurl }:
+{ stdenv, lib, fetchurl
+, enableSSO ? false
+, crowdProperties ? null
+}:
 
 stdenv.mkDerivation rec {
   name = "atlassian-jira-${version}";
@@ -17,6 +20,14 @@ stdenv.mkDerivation rec {
     rm -r logs; ln -sf /run/atlassian-jira/logs/ .
     rm -r work; ln -sf /run/atlassian-jira/work/ .
     rm -r temp; ln -sf /run/atlassian-jira/temp/ .
+  '' + lib.optionalString enableSSO ''
+    substituteInPlace atlassian-jira/WEB-INF/classes/seraph-config.xml \
+      --replace com.atlassian.jira.security.login.JiraSeraphAuthenticator \
+                com.atlassian.jira.security.login.SSOSeraphAuthenticator
+  '' + lib.optionalString (crowdProperties != null) ''
+    cat <<EOF > atlassian-jira/WEB-INF/classes/crowd.properties
+    ${crowdProperties}
+    EOF
   '';
 
   installPhase = ''

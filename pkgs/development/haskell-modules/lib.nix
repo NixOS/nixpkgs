@@ -1,7 +1,9 @@
-{ pkgs }:
+# TODO(@Ericson2314): Remove `pkgs` param, which is only used for
+# `buildStackProject` and `justStaticExecutables`
+{ pkgs, lib }:
 
 rec {
-  makePackageSet = pkgs.callPackage ./make-package-set.nix {};
+  makePackageSet = import ./make-package-set.nix;
 
   overrideCabal = drv: f: (drv.override (args: args // {
     mkDerivation = drv: (args.mkDerivation drv).override f;
@@ -25,7 +27,7 @@ rec {
   dontDistribute = drv: overrideCabal drv (drv: { hydraPlatforms = []; });
 
   appendConfigureFlag = drv: x: overrideCabal drv (drv: { configureFlags = (drv.configureFlags or []) ++ [x]; });
-  removeConfigureFlag = drv: x: overrideCabal drv (drv: { configureFlags = pkgs.stdenv.lib.remove x (drv.configureFlags or []); });
+  removeConfigureFlag = drv: x: overrideCabal drv (drv: { configureFlags = lib.remove x (drv.configureFlags or []); });
 
   addBuildTool = drv: x: addBuildTools drv [x];
   addBuildTools = drv: xs: overrideCabal drv (drv: { buildTools = (drv.buildTools or []) ++ xs; });
@@ -71,7 +73,7 @@ rec {
 
   disableHardening = drv: flags: overrideCabal drv (drv: { hardeningDisable = flags; });
 
-  sdistTarball = pkg: pkgs.lib.overrideDerivation pkg (drv: {
+  sdistTarball = pkg: lib.overrideDerivation pkg (drv: {
     name = "${drv.pname}-source-${drv.version}";
     buildPhase = "./Setup sdist";
     haddockPhase = ":";
@@ -89,12 +91,11 @@ rec {
     isLibrary = false;
     doHaddock = false;
     postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
-  } // (if pkgs.stdenv.isDarwin then {
+  } // lib.optionalAttrs (pkgs.hostPlatform.isDarwin) {
     configureFlags = (drv.configureFlags or []) ++ ["--ghc-option=-optl=-dead_strip"];
-  } else {})
-  );
+  });
 
-  buildFromSdist = pkg: pkgs.lib.overrideDerivation pkg (drv: {
+  buildFromSdist = pkg: lib.overrideDerivation pkg (drv: {
     unpackPhase = let src = sdistTarball pkg; tarname = "${pkg.pname}-${pkg.version}"; in ''
       echo "Source tarball is at ${src}/${tarname}.tar.gz"
       tar xf ${src}/${tarname}.tar.gz

@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdk:sdk-sys-img xmlns:sdk="http://schemas.android.com/sdk/android/sys-img/3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<!--Generated on 2017-06-07 21:04:43.770481 with ADRT.-->
+	<!--Generated on 2017-07-26 17:22:12.517198 with ADRT.-->
 	<sdk:license id="android-sdk-license" type="text">Terms and Conditions
 
 This is the Android Software Development Kit License Agreement
@@ -746,16 +746,16 @@ ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED â€œAS ISâ
 		<sdk:tag-id>default</sdk:tag-id>
 	</sdk:system-image>
 	<sdk:system-image>
-		<!--Generated from bid:3462041, branch:git_klp-emu-release-->
+		<!--Generated from bid:4174703, branch:git_klp-emu-release-->
 		<sdk:api-level>19</sdk:api-level>
 		<sdk:description>Intel x86 Atom System Image</sdk:description>
-		<sdk:revision>5</sdk:revision>
+		<sdk:revision>6</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Thu Nov 10 17:21:38 2016.-->
-				<sdk:size>183968605</sdk:size>
-				<sdk:checksum type="sha1">1d98426467580abfd03c724c5344450f5d0df379</sdk:checksum>
-				<sdk:url>x86-19_r05.zip</sdk:url>
+				<!--Built on: Thu Jul 13 12:41:20 2017.-->
+				<sdk:size>185886274</sdk:size>
+				<sdk:checksum type="sha1">2ac82153aae97f7eae4c5a0761224fe04321d03d</sdk:checksum>
+				<sdk:url>x86-19_r06.zip</sdk:url>
 			</sdk:archive>
 		</sdk:archives>
 		<sdk:uses-license ref="android-sdk-license"/>
@@ -763,33 +763,16 @@ ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED â€œAS ISâ
 		<sdk:tag-id>default</sdk:tag-id>
 	</sdk:system-image>
 	<sdk:system-image>
-		<!--Generated from bid:3079185, branch:git_lmp-emu-release-->
+		<!--Generated from bid:4174711, branch:git_lmp-emu-release-->
 		<sdk:api-level>21</sdk:api-level>
 		<sdk:description>Intel x86 Atom System Image</sdk:description>
-		<sdk:revision>4</sdk:revision>
-		<sdk:archives>
-			<sdk:archive>
-				<!--Built on: Fri Sep 16 16:12:20 2016.-->
-				<sdk:size>206305926</sdk:size>
-				<sdk:checksum type="sha1">c7732f45c931c0eaa064e57e8c054bce86c30e54</sdk:checksum>
-				<sdk:url>x86-21_r04.zip</sdk:url>
-			</sdk:archive>
-		</sdk:archives>
-		<sdk:uses-license ref="android-sdk-license"/>
-		<sdk:abi>x86</sdk:abi>
-		<sdk:tag-id>default</sdk:tag-id>
-	</sdk:system-image>
-	<sdk:system-image>
-		<!--Generated from bid:3079158, branch:git_lmp-mr1-emu-release-->
-		<sdk:api-level>22</sdk:api-level>
-		<sdk:description>Intel x86 Atom System Image</sdk:description>
 		<sdk:revision>5</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Fri Sep 16 16:12:40 2016.-->
-				<sdk:size>212327460</sdk:size>
-				<sdk:checksum type="sha1">7e2c93891ea9efec07dccccf6b9ab051a014dbdf</sdk:checksum>
-				<sdk:url>x86-22_r05.zip</sdk:url>
+				<!--Built on: Thu Jul 13 12:42:18 2017.-->
+				<sdk:size>208212529</sdk:size>
+				<sdk:checksum type="sha1">00f0eb0a1003efe3316347f762e20a85d8749cff</sdk:checksum>
+				<sdk:url>x86-21_r05.zip</sdk:url>
 			</sdk:archive>
 		</sdk:archives>
 		<sdk:uses-license ref="android-sdk-license"/>
@@ -797,16 +780,33 @@ ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED â€œAS ISâ
 		<sdk:tag-id>default</sdk:tag-id>
 	</sdk:system-image>
 	<sdk:system-image>
-		<!--Generated from bid:3079352, branch:git_mnc-emu-release-->
+		<!--Generated from bid:4174727, branch:git_lmp-mr1-emu-release-->
+		<sdk:api-level>22</sdk:api-level>
+		<sdk:description>Intel x86 Atom System Image</sdk:description>
+		<sdk:revision>6</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Thu Jul 13 12:43:18 2017.-->
+				<sdk:size>214268954</sdk:size>
+				<sdk:checksum type="sha1">e33e2a6cc3f1cc56b2019dbef3917d2eeb26f54e</sdk:checksum>
+				<sdk:url>x86-22_r06.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:abi>x86</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:4174734, branch:git_mnc-emu-release-->
 		<sdk:api-level>23</sdk:api-level>
 		<sdk:description>Intel x86 Atom System Image</sdk:description>
-		<sdk:revision>9</sdk:revision>
+		<sdk:revision>10</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Fri Sep 16 16:13:52 2016.-->
-				<sdk:size>260241399</sdk:size>
-				<sdk:checksum type="sha1">d7ee1118a73eb5c3e803d4dd3b96a124ac909ee1</sdk:checksum>
-				<sdk:url>x86-23_r09.zip</sdk:url>
+				<!--Built on: Thu Jul 13 12:44:25 2017.-->
+				<sdk:size>260804863</sdk:size>
+				<sdk:checksum type="sha1">f6c3e3dd7bd951454795aa75c3a145fd05ac25bb</sdk:checksum>
+				<sdk:url>x86-23_r10.zip</sdk:url>
 			</sdk:archive>
 		</sdk:archives>
 		<sdk:uses-license ref="android-sdk-license"/>
@@ -814,16 +814,16 @@ ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED â€œAS ISâ
 		<sdk:tag-id>default</sdk:tag-id>
 	</sdk:system-image>
 	<sdk:system-image>
-		<!--Generated from bid:3245079, branch:git_nyc-emu-release-->
+		<!--Generated from bid:4174735, branch:git_nyc-emu-release-->
 		<sdk:api-level>24</sdk:api-level>
 		<sdk:description>Intel x86 Atom System Image</sdk:description>
-		<sdk:revision>7</sdk:revision>
+		<sdk:revision>8</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Sep  6 08:29:27 2016.-->
-				<sdk:size>302213276</sdk:size>
-				<sdk:checksum type="sha1">566fdee283a907854bfa3c174265bc31f396eabd</sdk:checksum>
-				<sdk:url>x86-24_r07.zip</sdk:url>
+				<!--Built on: Thu Jul 13 12:45:47 2017.-->
+				<sdk:size>313489224</sdk:size>
+				<sdk:checksum type="sha1">c1cae7634b0216c0b5990f2c144eb8ca948e3511</sdk:checksum>
+				<sdk:url>x86-24_r08.zip</sdk:url>
 			</sdk:archive>
 		</sdk:archives>
 		<sdk:uses-license ref="android-sdk-license"/>
@@ -831,33 +831,16 @@ ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED â€œAS ISâ
 		<sdk:tag-id>default</sdk:tag-id>
 	</sdk:system-image>
 	<sdk:system-image>
-		<!--Generated from bid:3079185, branch:git_lmp-emu-release-->
+		<!--Generated from bid:4174711, branch:git_lmp-emu-release-->
 		<sdk:api-level>21</sdk:api-level>
 		<sdk:description>Intel x86 Atom_64 System Image</sdk:description>
-		<sdk:revision>4</sdk:revision>
-		<sdk:archives>
-			<sdk:archive>
-				<!--Built on: Fri Sep 16 16:08:22 2016.-->
-				<sdk:size>290608820</sdk:size>
-				<sdk:checksum type="sha1">9b2d64a69a72fa596c386899a742a404308f2c92</sdk:checksum>
-				<sdk:url>x86_64-21_r04.zip</sdk:url>
-			</sdk:archive>
-		</sdk:archives>
-		<sdk:uses-license ref="android-sdk-license"/>
-		<sdk:abi>x86_64</sdk:abi>
-		<sdk:tag-id>default</sdk:tag-id>
-	</sdk:system-image>
-	<sdk:system-image>
-		<!--Generated from bid:3079158, branch:git_lmp_mr1-emu-release-->
-		<sdk:api-level>22</sdk:api-level>
-		<sdk:description>Intel x86 Atom_64 System Image</sdk:description>
 		<sdk:revision>5</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Fri Sep 16 16:08:46 2016.-->
-				<sdk:size>297850561</sdk:size>
-				<sdk:checksum type="sha1">99d1d6c77e92284b4210640edf6c81eceb28520d</sdk:checksum>
-				<sdk:url>x86_64-22_r05.zip</sdk:url>
+				<!--Built on: Thu Jul 13 12:46:57 2017.-->
+				<sdk:size>292623982</sdk:size>
+				<sdk:checksum type="sha1">9078a095825a69e5e215713f0866c83cef65a342</sdk:checksum>
+				<sdk:url>x86_64-21_r05.zip</sdk:url>
 			</sdk:archive>
 		</sdk:archives>
 		<sdk:uses-license ref="android-sdk-license"/>
@@ -865,16 +848,33 @@ ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED â€œAS ISâ
 		<sdk:tag-id>default</sdk:tag-id>
 	</sdk:system-image>
 	<sdk:system-image>
-		<!--Generated from bid:3079352, branch:git_mnc-emu-release-->
+		<!--Generated from bid:4174727, branch:git_lmp-mr1-emu-release-->
+		<sdk:api-level>22</sdk:api-level>
+		<sdk:description>Intel x86 Atom_64 System Image</sdk:description>
+		<sdk:revision>6</sdk:revision>
+		<sdk:archives>
+			<sdk:archive>
+				<!--Built on: Thu Jul 13 12:48:15 2017.-->
+				<sdk:size>299976630</sdk:size>
+				<sdk:checksum type="sha1">5db3b27f78cd9c4c5092b1cad5a5dd479fb5b2e4</sdk:checksum>
+				<sdk:url>x86_64-22_r06.zip</sdk:url>
+			</sdk:archive>
+		</sdk:archives>
+		<sdk:uses-license ref="android-sdk-license"/>
+		<sdk:abi>x86_64</sdk:abi>
+		<sdk:tag-id>default</sdk:tag-id>
+	</sdk:system-image>
+	<sdk:system-image>
+		<!--Generated from bid:4174734, branch:git_mnc-emu-release-->
 		<sdk:api-level>23</sdk:api-level>
 		<sdk:description>Intel x86 Atom_64 System Image</sdk:description>
-		<sdk:revision>9</sdk:revision>
+		<sdk:revision>10</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Fri Sep 16 16:09:15 2016.-->
-				<sdk:size>363794271</sdk:size>
-				<sdk:checksum type="sha1">84cc076eacec043c8e88382c6ab391b0cd5c0695</sdk:checksum>
-				<sdk:url>x86_64-23_r09.zip</sdk:url>
+				<!--Built on: Thu Jul 13 12:49:37 2017.-->
+				<sdk:size>365009313</sdk:size>
+				<sdk:checksum type="sha1">7cbc291483ca07dc67b71268c5f08a5755f50f51</sdk:checksum>
+				<sdk:url>x86_64-23_r10.zip</sdk:url>
 			</sdk:archive>
 		</sdk:archives>
 		<sdk:uses-license ref="android-sdk-license"/>
@@ -882,16 +882,16 @@ ANY PRE-RELEASE MATERIALS ARE NON-QUALIFIED AND, AS SUCH, ARE PROVIDED â€œAS ISâ
 		<sdk:tag-id>default</sdk:tag-id>
 	</sdk:system-image>
 	<sdk:system-image>
-		<!--Generated from bid:3245079, branch:git_nyc-emu-release-->
+		<!--Generated from bid:4174735, branch:git_nyc-emu-release-->
 		<sdk:api-level>24</sdk:api-level>
 		<sdk:description>Intel x86 Atom_64 System Image</sdk:description>
-		<sdk:revision>7</sdk:revision>
+		<sdk:revision>8</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Sep  6 08:29:51 2016.-->
-				<sdk:size>407148033</sdk:size>
-				<sdk:checksum type="sha1">a379932395ced0a8f572b39c396d86e08827a9ba</sdk:checksum>
-				<sdk:url>x86_64-24_r07.zip</sdk:url>
+				<!--Built on: Thu Jul 13 12:51:15 2017.-->
+				<sdk:size>419261998</sdk:size>
+				<sdk:checksum type="sha1">f6559e1949a5879f31a9662f4f0e50ad60181684</sdk:checksum>
+				<sdk:url>x86_64-24_r08.zip</sdk:url>
 			</sdk:archive>
 		</sdk:archives>
 		<sdk:uses-license ref="android-sdk-license"/>

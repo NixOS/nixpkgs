@@ -215,6 +215,7 @@
   gilligan = "Tobias Pflug <tobias.pflug@gmail.com>";
   giogadi = "Luis G. Torres <lgtorres42@gmail.com>";
   gleber = "Gleb Peregud <gleber.p@gmail.com>";
+  glenns = "Glenn Searby <glenn.searby@gmail.com>";
   globin = "Robin Gloster <mail@glob.in>";
   gnidorah = "Alex Ivanov <yourbestfriend@opmbx.org>";
   goibhniu = "Cillian de Róiste <cillian.deroiste@gmail.com>";
@@ -314,6 +315,7 @@
   lihop = "Leroy Hopson <nixos@leroy.geek.nz>";
   linquize = "Linquize <linquize@yahoo.com.hk>";
   linus = "Linus Arver <linusarver@gmail.com>";
+  lluchs = "Lukas Werling <lukas.werling@gmail.com>";
   lnl7 = "Daiderd Jordan <daiderd@gmail.com>";
   loskutov = "Ignat Loskutov <ignat.loskutov@gmail.com>";
   lovek323 = "Jason O'Conal <jason@oconal.id.au>";
@@ -377,6 +379,7 @@
   MostAwesomeDude = "Corbin Simpson <cds@corbinsimpson.com>";
   mounium = "Katona László <muoniurn@gmail.com>";
   MP2E = "Cray Elliott <MP2E@archlinux.us>";
+  mpcsh = "Mark Cohen <m@mpc.sh>";
   mpscholten = "Marc Scholten <marc@mpscholten.de>";
   mpsyco = "Francis St-Amour <fr.st-amour@gmail.com>";
   msackman = "Matthew Sackman <matthew@wellquite.org>";
@@ -510,6 +513,7 @@
   samuelrivas = "Samuel Rivas <samuelrivas@gmail.com>";
   sander = "Sander van der Burg <s.vanderburg@tudelft.nl>";
   sargon = "Daniel Ehlers <danielehlers@mindeye.net>";
+  sauyon = "Sauyon Lee <s@uyon.co>";
   schmitthenner = "Fabian Schmitthenner <development@schmitthenner.eu>";
   schneefux = "schneefux <schneefux+nixos_pkg@schneefux.xyz>";
   schristo = "Scott Christopher <schristopher@konputa.com>";
@@ -631,6 +635,7 @@
   zauberpony = "Elmar Athmer <elmar@athmer.org>";
   zef = "Zef Hemel <zef@zef.me>";
   zimbatm = "zimbatm <zimbatm@zimbatm.com>";
+  Zimmi48 = "Théo Zimmermann <theo.zimmermann@univ-paris-diderot.fr>";
   zohl = "Al Zohali <zohl@fmap.me>";
   zoomulator = "Kim Simmons <zoomulator@gmail.com>";
   zraexy = "David Mell <zraexy@gmail.com>";

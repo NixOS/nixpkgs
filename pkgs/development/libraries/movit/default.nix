@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "High-performance, high-quality video filters for the GPU";
-    homepage = http://movits.sesse.net;
+    homepage = http://movit.sesse.net;
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

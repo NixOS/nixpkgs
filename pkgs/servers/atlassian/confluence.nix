@@ -1,4 +1,7 @@
-{ stdenv, fetchurl }:
+{ stdenv, lib, fetchurl
+, enableSSO ? false
+, crowdProperties ? null
+}:
 
 stdenv.mkDerivation rec {
   name = "atlassian-confluence-${version}";
@@ -19,6 +22,14 @@ stdenv.mkDerivation rec {
     rm -r logs; ln -sf /run/confluence/logs/ .
     rm -r work; ln -sf /run/confluence/work/ .
     rm -r temp; ln -sf /run/confluence/temp/ .
+  '' + lib.optionalString enableSSO ''
+    substituteInPlace confluence/WEB-INF/classes/seraph-config.xml \
+      --replace com.atlassian.confluence.user.ConfluenceAuthenticator\
+                com.atlassian.confluence.user.ConfluenceCrowdSSOAuthenticator
+  '' + lib.optionalString (crowdProperties != null) ''
+    cat <<EOF > confluence/WEB-INF/classes/crowd.properties
+    ${crowdProperties}
+    EOF
   '';
 
   installPhase = ''

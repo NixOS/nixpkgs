@@ -40,5 +40,6 @@ stdenv.mkDerivation {
     maintainers = [
       stdenv.lib.maintainers.z77z
     ];
+    broken = stdenv.lib.versionAtLeast ocaml.version "4.05";
   };
 }

@@ -4,7 +4,8 @@
 
 { nixpkgs ? { outPath = ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
-, supportedSystems ? [ "x86_64-linux" "i686-linux" ]
+, supportedSystems ? [ "x86_64-linux" ]
+, limitedSupportedSystems ? [ "i686-linux" ]
 }:
 
 let
@@ -19,10 +20,16 @@ let
       else pkgs.lib.mapAttrs (n: v: removeMaintainers v) set
     else set;
 
+  allSupportedNixpkgs = builtins.removeAttrs (removeMaintainers (import ../pkgs/top-level/release.nix {
+    supportedSystems = supportedSystems ++ limitedSupportedSystems;
+    nixpkgs = nixpkgsSrc;
+  })) [ "unstable" ];
+
 in rec {
 
   nixos = removeMaintainers (import ./release.nix {
-    inherit stableBranch supportedSystems;
+    inherit stableBranch;
+    supportedSystems = supportedSystems ++ limitedSupportedSystems;
     nixpkgs = nixpkgsSrc;
   });
 
@@ -38,8 +45,11 @@ in rec {
       maintainers = [ pkgs.lib.maintainers.eelco ];
     };
     constituents =
-      let all = x: map (system: x.${system}) supportedSystems; in
-      [ nixos.channel
+      let
+        all = x: map (system: x.${system})
+          (supportedSystems ++ limitedSupportedSystems);
+      in [
+        nixos.channel
         (all nixos.dummy)
         (all nixos.manual)
 
@@ -106,8 +116,8 @@ in rec {
         (all nixos.tests.xfce)
 
         nixpkgs.tarball
-        (all nixpkgs.emacs)
-        (all nixpkgs.jdk)
+        (all allSupportedNixpkgs.emacs)
+        (all allSupportedNixpkgs.jdk)
       ];
   });
 

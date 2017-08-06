@@ -1,20 +1,34 @@
 # This expression takes a file like `hackage-packages.nix` and constructs
 # a full package set out of that.
 
-# required dependencies:
-{ pkgs, stdenv, all-cabal-hashes }:
+{ # package-set used for non-haskell dependencies (all of nixpkgs)
+  pkgs
 
-# arguments:
-#  * ghc package to use
-#  * package-set: a function that takes { pkgs, stdenv, callPackage } as first arg and `self` as second
-#  * extensible-self: the final, fully overriden package set usable with the nixpkgs fixpoint overriding functionality
-{ ghc, package-set, extensible-self }:
+, # stdenv to use for building haskell packages
+  stdenv
+
+, haskellLib
+
+, # hashes for downloading Hackage packages
+  all-cabal-hashes
+
+, # compiler to use
+  ghc
+
+, # A function that takes `{ pkgs, stdenv, callPackage }` as the first arg and `self`
+  # as second, and returns a set of haskell packages
+  package-set
+
+, # The final, fully overriden package set usable with the nixpkgs fixpoint
+  # overriding functionality
+  extensible-self
+}:
 
 # return value: a function from self to the package set
 self: let
 
   inherit (stdenv.lib) fix' extends makeOverridable;
-  inherit (import ./lib.nix { inherit pkgs; }) overrideCabal;
+  inherit (haskellLib) overrideCabal;
 
   mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
     inherit stdenv;
