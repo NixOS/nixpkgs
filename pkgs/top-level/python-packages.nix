@@ -8354,11 +8354,11 @@ in {
   };
 
   raven = buildPythonPackage rec {
-    name = "raven-3.4.1";
+    name = "raven-6.1.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/raven/${name}.tar.gz";
-      sha256 = "c27e40ab3ccf37f30a9f77acb4917370d9341e25abda8e94b9bd48c7127f7d48";
+      sha256 = "1158fsjjl8byzl9nw52jhhdssjl6n7l0hjaxm5hdi69v2zxvzjh2";
     };
 
     # way too many dependencies to run tests
@@ -8366,7 +8366,7 @@ in {
     doCheck = false;
 
     meta = {
-      maintainers = with maintainers; [ domenkozar ];
+      maintainers = with maintainers; [ primeos ];
     };
   };
 
@@ -12412,6 +12412,8 @@ in {
       maintainers = with maintainers; [ nslqqq ];
     };
   };
+
+  linode-api = callPackage ../development/python-modules/linode-api { };
 
   livereload = buildPythonPackage rec {
     name = "livereload-${version}";

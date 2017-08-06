@@ -170,25 +170,8 @@ self: super: {
     # https://github.com/jaspervdj/hakyll/issues/491
     else dontCheck super.hakyll;
 
-  # cabal2nix likes to generate dependencies on hinotify when hfsevents is really required
-  # on darwin: https://github.com/NixOS/cabal2nix/issues/146.
-  hinotify = if pkgs.stdenv.isDarwin then self.hfsevents else super.hinotify;
-
-  # FSEvents API is very buggy and tests are unreliable. See
-  # http://openradar.appspot.com/10207999 and similar issues.
-  # https://github.com/haskell-fswatch/hfsnotify/issues/62
-  fsnotify = if pkgs.stdenv.isDarwin
-    then addBuildDepend (dontCheck super.fsnotify) pkgs.darwin.apple_sdk.frameworks.Cocoa
-    else dontCheck super.fsnotify;
-
   double-conversion = if !pkgs.stdenv.isDarwin
-    then addExtraLibrary
-           # https://github.com/bos/double-conversion/pull/17
-           (appendPatch super.double-conversion (pkgs.fetchpatch {
-              url = "https://github.com/basvandijk/double-conversion/commit/0927e347d53dbd96d1949930e728cc2471dd4b14.patch";
-              sha256 = "042yqbq5p6nc9nymmbz9hgp51dlc5asaj9bf91kw5fph6dw2hwg9";
-           }))
-           pkgs.stdenv.cc.cc.lib
+    then super.double-conversion
     else addExtraLibrary (overrideCabal super.double-conversion (drv:
       {
         postPatch = ''
@@ -720,7 +703,7 @@ self: super: {
           owner = "haskell-servant";
           repo = "servant";
           rev = "v${ver}";
-          sha256 = "09kjinnarf9q9l8irs46gcrai8bprq39n8pj43bmdv47hl38csa0";
+          sha256 = "0bwd5dy3crn08dijn06dr3mdsww98kqxfp8v5mvrdws5glvcxdsg";
         }}/doc";
         buildInputs = with pkgs.pythonPackages; [ sphinx recommonmark sphinx_rtd_theme ];
         makeFlags = "html";

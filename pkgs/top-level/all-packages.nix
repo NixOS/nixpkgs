@@ -616,9 +616,9 @@ with pkgs;
 
   inherit (androidenv) androidndk;
 
-  androidsdk = androidenv.androidsdk_7_1_1;
+  androidsdk = androidenv.androidsdk_8_0;
 
-  androidsdk_extras = self.androidenv.androidsdk_7_1_1_extras;
+  androidsdk_extras = self.androidenv.androidsdk_8_0_extras;
 
   arc-theme = callPackage ../misc/themes/arc { };
 
@@ -905,6 +905,8 @@ with pkgs;
 
   crudini = callPackage ../tools/misc/crudini { };
 
+  cucumber = callPackage ../development/tools/cucumber {};
+
   daemontools = callPackage ../tools/admin/daemontools { };
 
   dale = callPackage ../development/compilers/dale { };
@@ -1057,6 +1059,8 @@ with pkgs;
   glide = callPackage ../development/tools/glide { };
 
   glock = callPackage ../development/tools/glock { };
+
+  glslviewer = callPackage ../development/tools/glslviewer { };
 
   gmic = callPackage ../tools/graphics/gmic { };
 
@@ -1345,7 +1349,8 @@ with pkgs;
 
   clementine = callPackage ../applications/audio/clementine {
     boost = boost155;
-    gst_plugins = [ gst-plugins-base gst-plugins-good gst-plugins-ugly gst-ffmpeg ];
+    gst_plugins =
+      with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly ];
   };
 
   clementineFree = clementine.free;
@@ -2932,15 +2937,6 @@ with pkgs;
   };
 
   nodejs-slim-6_x = callPackage ../development/web/nodejs/v6.nix {
-    libtool = darwin.cctools;
-    enableNpm = false;
-  };
-
-  nodejs-7_x = callPackage ../development/web/nodejs/v7.nix {
-    libtool = darwin.cctools;
-  };
-
-  nodejs-slim-7_x = callPackage ../development/web/nodejs/v7.nix {
     libtool = darwin.cctools;
     enableNpm = false;
   };
@@ -5300,13 +5296,10 @@ with pkgs;
 
   cmucl_binary = callPackage_i686 ../development/compilers/cmucl/binary.nix { };
 
-  compcert = callPackage ../development/compilers/compcert ((
-    if system == "x86_64-linux"
-    then { tools = pkgsi686Linux.stdenv.cc; }
-    else {}
-  ) // {
-    coq = coq_8_6;
-  });
+  compcert = callPackage ../development/compilers/compcert {
+    # Pin the version of coq used in compcert to 8.6 until the next release
+    coq = callPackage ../applications/science/logic/coq { version = "8.6"; };
+  };
 
 
   # Users installing via `nix-env` will likely be using the REPL,
@@ -7188,6 +7181,10 @@ with pkgs;
   noweb = callPackage ../development/tools/literate-programming/noweb { };
   nuweb = callPackage ../development/tools/literate-programming/nuweb { tex = texlive.combined.scheme-small; };
 
+  obelisk = callPackage ../development/tools/ocaml/obelisk {
+    ocamlPackages = ocaml-ng.ocamlPackages_4_03;
+  };
+
   obuild = callPackage ../development/tools/ocaml/obuild { };
 
   omake = callPackage ../development/tools/ocaml/omake {
@@ -8123,6 +8120,8 @@ with pkgs;
 
   # A GMP fork
   mpir = callPackage ../development/libraries/mpir {};
+
+  gns3-gui = callPackage ../applications/networking/gns3/gui.nix { };
 
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection {
     nixStoreDir = config.nix.storeDir or builtins.storeDir;
@@ -13184,6 +13183,8 @@ with pkgs;
 
   man-pages = callPackage ../data/documentation/man-pages { };
 
+  material-icons = callPackage ../data/fonts/material-icons { };
+
   meslo-lg = callPackage ../data/fonts/meslo-lg {};
 
   miscfiles = callPackage ../data/misc/miscfiles { };
@@ -15693,6 +15694,8 @@ with pkgs;
   osmctools = callPackage ../applications/misc/osmctools { };
 
   vivaldi = callPackage ../applications/networking/browsers/vivaldi {};
+
+  vivaldi-ffmpeg-codecs = callPackage ../applications/networking/browsers/vivaldi/ffmpeg-codecs.nix {};
 
   openmpt123 = callPackage ../applications/audio/openmpt123 {};
 
@@ -18494,7 +18497,6 @@ with pkgs;
   geogebra = callPackage ../applications/science/math/geogebra { };
 
   maxima = callPackage ../applications/science/math/maxima {
-    sbcl = sbcl_1_3_12;
     ecl = null;
   };
   maxima-ecl = callPackage ../applications/science/math/maxima {
@@ -18772,6 +18774,8 @@ with pkgs;
   fceux = callPackage ../misc/emulators/fceux { };
 
   flat-plat = callPackage ../misc/themes/flat-plat { };
+
+  flockit = callPackage ../tools/backup/flockit { };
 
   foldingathome = callPackage ../misc/foldingathome { };
 
@@ -19080,7 +19084,7 @@ with pkgs;
   terraform_0_8 = terraform_0_8_8;
   terraform_0_9 = terraform_0_9_11;
   terraform_0_10 = terraform_0_10_0;
-  terraform = terraform_0_10;
+  terraform = terraform_0_9;
 
   terraform-inventory = callPackage ../applications/networking/cluster/terraform-inventory {};
 

@@ -552,6 +552,8 @@ let
 
     ppx_tools_versioned = callPackage ../development/ocaml-modules/ppx_tools_versioned { };
 
+    process = callPackage ../development/ocaml-modules/process { };
+
     ptmap = callPackage ../development/ocaml-modules/ptmap { };
 
     pycaml = callPackage ../development/ocaml-modules/pycaml { };
@@ -609,6 +611,8 @@ let
     variantslib_p4 = callPackage ../development/ocaml-modules/variantslib { };
 
     vg = callPackage ../development/ocaml-modules/vg { };
+
+    wasm = callPackage ../development/ocaml-modules/wasm { };
 
     x509 = callPackage ../development/ocaml-modules/x509 { };
 

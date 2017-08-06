@@ -26,6 +26,7 @@ rec {
     , text
     , executable ? false # run chmod +x ?
     , destination ? ""   # relative path appended to $out eg "/bin/foo"
+    , checkPhase ? ""    # syntax checks, e.g. for scripts
     }:
     runCommand name
       { inherit text executable;
@@ -44,6 +45,8 @@ rec {
           echo -n "$text" > "$n"
         fi
 
+        ${checkPhase}
+
         (test -n "$executable" && chmod +x "$n") || true
       '';
 
@@ -54,6 +57,20 @@ rec {
   writeScript = name: text: writeTextFile {inherit name text; executable = true;};
   writeScriptBin = name: text: writeTextFile {inherit name text; executable = true; destination = "/bin/${name}";};
 
+  # Create a Shell script, check its syntax
+  writeShellScriptBin = name : text :
+    writeTextFile {
+      inherit name;
+      executable = true;
+      destination = "/bin/${name}";
+      text = ''
+        #!${stdenv.shell}
+        ${text}
+        '';
+      checkPhase = ''
+        ${stdenv.shell} -n $out
+      '';
+    };
 
   # Create a forest of symlinks to the files in `paths'.
   symlinkJoin =

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace configure \
       --replace 'LIBINDICATOR_LIBS+="$LIBM"' 'LIBINDICATOR_LIBS+=" $LIBM"'
-    for f in {build-aux/ltmain.sh,configure,m4/libtool.m4}; do 
+    for f in {build-aux/ltmain.sh,configure,m4/libtool.m4}; do
       substituteInPlace $f\
         --replace /usr/bin/file ${file}/bin/file
     done

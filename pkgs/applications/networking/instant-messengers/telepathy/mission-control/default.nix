@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, telepathy_glib, libxslt, makeWrapper, upower }:
+{ stdenv, fetchurl, pkgconfig, gnome3, telepathy_glib, libxslt, makeWrapper, upower }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-5.16.3";
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram "$out/libexec/mission-control-5" \
+      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 

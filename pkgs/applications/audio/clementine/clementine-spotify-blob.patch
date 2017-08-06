@@ -1,25 +1,13 @@
-From d9ebe7ec09a48b1ea505ccc33686b72642f083f4 Mon Sep 17 00:00:00 2001
-From: Thomas Tuegel <ttuegel@gmail.com>
-Date: Mon, 4 May 2015 19:59:38 -0500
-Subject: [PATCH] Runtime selection of Spotify blob
-
----
- src/internet/spotifyservice.cpp | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/src/internet/spotifyservice.cpp b/src/internet/spotifyservice.cpp
-index 543744e..d987a36 100644
---- a/src/internet/spotifyservice.cpp
-+++ b/src/internet/spotifyservice.cpp
-@@ -65,7 +65,7 @@ SpotifyService::SpotifyService(Application* app, InternetModel* parent)
+diff --git a/src/internet/spotify/spotifyservice.cpp b/src/internet/spotify/spotifyservice.cpp
+index 88c7383..6e0893c 100644
+--- a/src/internet/spotify/spotifyservice.cpp
++++ b/src/internet/spotify/spotifyservice.cpp
+@@ -94,7 +94,7 @@ SpotifyService::SpotifyService(Application* app, InternetModel* parent)
    system_blob_path_ = QCoreApplication::applicationDirPath() +
-       "/../PlugIns/clementine-spotifyblob";
+                       "/../PlugIns/clementine-spotifyblob";
  #else
 -  system_blob_path_ = QCoreApplication::applicationDirPath() +
 +  system_blob_path_ = qgetenv("CLEMENTINE_SPOTIFYBLOB") +
-       "/clementine-spotifyblob" CMAKE_EXECUTABLE_SUFFIX;
+                       "/clementine-spotifyblob" CMAKE_EXECUTABLE_SUFFIX;
  #endif
  
--- 
-2.3.6
-

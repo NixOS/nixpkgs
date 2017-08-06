@@ -1,4 +1,5 @@
 #! @shell@ -e
+shopt -s nullglob
 path_backup="$PATH"
 if [ -n "@coreutils_bin@" ]; then
   PATH="@coreutils_bin@/bin"
@@ -20,18 +21,19 @@ expandResponseParams "$@"
 if [ "$NIX_ENFORCE_PURITY" = 1 -a -n "$NIX_STORE" \
         -a \( -z "$NIX_IGNORE_LD_THROUGH_GCC" -o -z "$NIX_LDFLAGS_SET" \) ]; then
     rest=()
-    n=0
-    while [ $n -lt ${#params[*]} ]; do
+    nParams=${#params[@]}
+    declare -i n=0
+    while [ $n -lt $nParams ]; do
         p=${params[n]}
         p2=${params[$((n+1))]}
         if [ "${p:0:3}" = -L/ ] && badPath "${p:2}"; then
-            skip $p
+            skip "${p:2}"
         elif [ "$p" = -L ] && badPath "$p2"; then
-            n=$((n + 1)); skip $p2
+            n+=1; skip "$p2"
         elif [ "$p" = -rpath ] && badPath "$p2"; then
-            n=$((n + 1)); skip $p2
+            n+=1; skip "$p2"
         elif [ "$p" = -dynamic-linker ] && badPath "$p2"; then
-            n=$((n + 1)); skip $p2
+            n+=1; skip "$p2"
         elif [ "${p:0:1}" = / ] && badPath "$p"; then
             # We cannot skip this; barf.
             echo "impure path \`$p' used in link" >&2
@@ -40,9 +42,9 @@ if [ "$NIX_ENFORCE_PURITY" = 1 -a -n "$NIX_STORE" \
             # Our ld is not built with sysroot support (Can we fix that?)
             :
         else
-            rest=("${rest[@]}" "$p")
+            rest+=("$p")
         fi
-        n=$((n + 1))
+        n+=1
     done
     params=("${rest[@]}")
 fi
@@ -50,7 +52,7 @@ fi
 LD=@prog@
 source @out@/nix-support/add-hardening.sh
 
-extra=(${hardeningLDFlags[@]})
+extra=("${hardeningLDFlags[@]}")
 extraBefore=()
 
 if [ -z "$NIX_LDFLAGS_SET" ]; then
@@ -60,122 +62,92 @@ fi
 
 extra+=($NIX_LDFLAGS_AFTER $NIX_LDFLAGS_HARDEN)
 
+declare -a libDirs
+declare -A libs
+relocatable=
+
+# Find all -L... switches for rpath, and relocatable flags for build id.
+if [ "$NIX_DONT_SET_RPATH" != 1 ] || [ "$NIX_SET_BUILD_ID" = 1 ]; then
+    prev=
+    for p in "${params[@]}" "${extra[@]}"; do
+        case "$prev" in
+            -L)
+                libDirs+=("$p")
+                ;;
+            -l)
+                libs["lib${p}.so"]=1
+                ;;
+            -dynamic-linker | -plugin)
+                # Ignore this argument, or it will match *.so and be added to rpath.
+                ;;
+            *)
+                case "$p" in
+                    -L/*)
+                        libDirs+=("${p:2}")
+                        ;;
+                    -l?*)
+                        libs["lib${p:2}.so"]=1
+                        ;;
+                    "$NIX_STORE"/*.so | "$NIX_STORE"/*.so.*)
+                        # This is a direct reference to a shared library.
+                        libDirs+=("${p%/*}")
+                        libs["${p##*/}"]=1
+                        ;;
+                    -r | --relocatable | -i)
+                        relocatable=1
+                esac
+                ;;
+        esac
+        prev="$p"
+    done
+fi
+
 
 # Add all used dynamic libraries to the rpath.
 if [ "$NIX_DONT_SET_RPATH" != 1 ]; then
-
-    declare -A libDirsSeen
-    declare -a libDirs
-
-    addToLibPath() {
-        local path="$1"
-        if [ "${path:0:1}" != / ]; then return 0; fi
-        case "$path" in
-            *..*|*./*|*/.*|*//*)
-                local path2
-                if path2=$(readlink -f "$path"); then
-                    path="$path2"
-                fi
-                ;;
-        esac
-        if [[ -z ${libDirsSeen[$path]} ]]; then
-            libDirs+=("$path")
-            libDirsSeen[$path]=1
-        fi
-    }
-
-    declare -A rpathsSeen
-    declare -a rpaths
-
-    addToRPath() {
-        # If the path is not in the store, don't add it to the rpath.
-        # This typically happens for libraries in /tmp that are later
-        # copied to $out/lib.  If not, we're screwed.
-        if [ "${1:0:${#NIX_STORE}}" != "$NIX_STORE" ]; then return 0; fi
-        if [[ -z ${rpathsSeen[$1]} ]]; then
-            rpaths+=("$1")
-            rpathsSeen[$1]=1
-        fi
-    }
-
-    declare -a libs
-
-    # First, find all -L... switches.
-    allParams=("${params[@]}" ${extra[@]})
-    n=0
-    while [ $n -lt ${#allParams[*]} ]; do
-        p=${allParams[n]}
-        p2=${allParams[$((n+1))]}
-        if [ "${p:0:3}" = -L/ ]; then
-            addToLibPath ${p:2}
-        elif [ "$p" = -L ]; then
-            addToLibPath ${p2}
-            n=$((n + 1))
-        elif [ "$p" = -l ]; then
-            libs+=(${p2})
-            n=$((n + 1))
-        elif [ "${p:0:2}" = -l ]; then
-            libs+=(${p:2})
-        elif [ "$p" = -dynamic-linker ]; then
-            # Ignore the dynamic linker argument, or it
-            # will get into the next 'elif'. We don't want
-            # the dynamic linker path rpath to go always first.
-            n=$((n + 1))
-        elif [[ "$p" =~ ^[^-].*\.so($|\.) ]]; then
-            # This is a direct reference to a shared library, so add
-            # its directory to the rpath.
-            path="$(dirname "$p")";
-            addToRPath "${path}"
-        fi
-        n=$((n + 1))
-    done
-
-    # Second, for each directory in the library search path (-L...),
+    # For each directory in the library search path (-L...),
     # see if it contains a dynamic library used by a -l... flag.  If
     # so, add the directory to the rpath.
     # It's important to add the rpath in the order of -L..., so
     # the link time chosen objects will be those of runtime linking.
-    for i in ${libDirs[@]}; do
-        for j in ${libs[@]}; do
-            if [ -f "$i/lib$j.so" ]; then
-                addToRPath $i
-                break
+    declare -A rpaths
+    for dir in "${libDirs[@]}"; do
+        if [[ "$dir" =~ [/.][/.] ]] && dir2=$(readlink -f "$dir"); then
+            dir="$dir2"
+        fi
+        if [ "${rpaths[$dir]}" ] || [[ "$dir" != "$NIX_STORE"/* ]]; then
+            # If the path is not in the store, don't add it to the rpath.
+            # This typically happens for libraries in /tmp that are later
+            # copied to $out/lib.  If not, we're screwed.
+            continue
+        fi
+        for path in "$dir"/lib*.so; do
+            file="${path##*/}"
+            if [ "${libs[$file]}" ]; then
+                libs["$file"]=
+                if [ ! "${rpaths[$dir]}" ]; then
+                    rpaths["$dir"]=1
+                    extra+=(-rpath "$dir")
+                fi
             fi
         done
-    done
-
-    # Finally, add `-rpath' switches.
-    for i in ${rpaths[@]}; do
-        extra+=(-rpath "$i")
     done
 fi
 
 
 # Only add --build-id if this is a final link. FIXME: should build gcc
 # with --enable-linker-build-id instead?
-if [ "$NIX_SET_BUILD_ID" = 1 ]; then
-    for p in "${params[@]}"; do
-        if [ "$p" = "-r" -o "$p" = "--relocatable" -o "$p" = "-i" ]; then
-            relocatable=1
-            break
-        fi
-    done
-    if [ -z "$relocatable" ]; then
-        extra+=(--build-id)
-    fi
+if [ "$NIX_SET_BUILD_ID" = 1 ] && [ ! "$relocatable" ]; then
+    extra+=(--build-id)
 fi
 
 
 # Optionally print debug info.
 if [ -n "$NIX_DEBUG" ]; then
-  echo "original flags to @prog@:" >&2
-  for i in "${params[@]}"; do
-      echo "  $i" >&2
-  done
-  echo "extra flags to @prog@:" >&2
-  for i in ${extra[@]}; do
-      echo "  $i" >&2
-  done
+    echo "original flags to @prog@:" >&2
+    printf "  %q\n" "${params[@]}" >&2
+    echo "extra flags to @prog@:" >&2
+    printf "  %q\n" "${extraBefore[@]}" "${extra[@]}" >&2
 fi
 
 if [ -n "$NIX_LD_WRAPPER_EXEC_HOOK" ]; then
@@ -183,4 +155,4 @@ if [ -n "$NIX_LD_WRAPPER_EXEC_HOOK" ]; then
 fi
 
 PATH="$path_backup"
-exec @prog@ ${extraBefore[@]} "${params[@]}" ${extra[@]}
+exec @prog@ "${extraBefore[@]}" "${params[@]}" "${extra[@]}"

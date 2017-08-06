@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
       --replace '=codegendir pygtk-2.0' '=codegendir pygobject-2.0' \
       --replace 'pyglib-2.0-python$PYTHON_VERSION' 'pyglib-2.0-python'
     autoconf
-    for f in {configure,ltmain.sh,m4/libtool.m4}; do 
+    for f in {configure,ltmain.sh,m4/libtool.m4}; do
       substituteInPlace $f \
         --replace /usr/bin/file ${file}/bin/file
     done

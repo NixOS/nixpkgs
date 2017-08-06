@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   patches = [ ./icon-names.diff ];
 
   buildInputs = with gst_all_1; [
-    glib dbus gtk3 librsvg libdbusmenu-gtk3 libappindicator-gtk3 gnome3.dconf
+    glib dbus gtk3 librsvg libdbusmenu-gtk3 libappindicator-gtk3 (stdenv.lib.getLib gnome3.dconf)
     gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav
   ] ++ optional pulseaudioSupport libpulseaudio;
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=('--prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"'
       '--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"'
-      '--prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules"')
+      '--prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules"')
   '';
 
   meta = with stdenv.lib; {

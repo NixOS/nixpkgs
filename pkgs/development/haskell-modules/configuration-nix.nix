@@ -408,6 +408,17 @@ self: super: builtins.intersectAttrs super {
     testHaskellDepends = (drv.testHaskellDepends or []) ++ [ self.test-framework self.test-framework-hunit ];
   });
 
+  # cabal2nix likes to generate dependencies on hinotify when hfsevents is really required
+  # on darwin: https://github.com/NixOS/cabal2nix/issues/146.
+  hinotify = if pkgs.stdenv.isDarwin then self.hfsevents else super.hinotify;
+
+  # FSEvents API is very buggy and tests are unreliable. See
+  # http://openradar.appspot.com/10207999 and similar issues.
+  # https://github.com/haskell-fswatch/hfsnotify/issues/62
+  fsnotify = if pkgs.stdenv.isDarwin
+    then addBuildDepend (dontCheck super.fsnotify) pkgs.darwin.apple_sdk.frameworks.Cocoa
+    else dontCheck super.fsnotify;
+
   hidapi = addExtraLibrary super.hidapi pkgs.libudev;
 
   hs-GeoIP = super.hs-GeoIP.override { GeoIP = pkgs.geoipWithDatabase; };
