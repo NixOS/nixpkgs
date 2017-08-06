@@ -11,7 +11,7 @@
 { nixpkgs ? { outPath = (import ../../lib).cleanSource ../..; revCount = 1234; shortRev = "abcdef"; }
 , officialRelease ? false
   # The platforms for which we build Nixpkgs.
-, supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarchh64-linux" ]
+, supportedSystems ? [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" ]
 , limitedSupportedSystems ? [ "i686-linux" ]
   # Strip most of attributes when evaluating to spare memory usage
 ,  scrubJobs ? true
@@ -58,6 +58,7 @@ let
               jobs.manual
               jobs.lib-tests
               jobs.stdenv.x86_64-linux
+              jobs.stdenv.i686-linux # most basic sanity check
               jobs.stdenv.x86_64-darwin
               jobs.linux.x86_64-linux
               jobs.python.x86_64-linux
