@@ -340,7 +340,7 @@ other packages we like to have in the environment, all specified with `propagate
 Indeed, we can just add any package we like to have in our environment to `propagatedBuildInputs`.
 
 ```nix
-with import <nixpkgs>;
+with import <nixpkgs> {};
 with pkgs.python35Packages;
 
 buildPythonPackage rec {
