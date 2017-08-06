@@ -79,6 +79,9 @@ let
                         then "package-db"
                         else "package-conf";
 
+  # the target dir for haddock documentation
+  docdir = docoutput: docoutput + "/share/doc";
+
   newCabalFileUrl = "http://hackage.haskell.org/package/${pname}-${version}/revision/${revision}.cabal";
   newCabalFile = fetchurl {
     url = newCabalFileUrl;
@@ -112,7 +115,7 @@ let
   defaultConfigureFlags = [
     "--verbose" "--prefix=$out" "--libdir=\\$prefix/lib/\\$compiler" "--libsubdir=\\$pkgid"
     (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghc.name}")
-    (optionalString enableSeparateDocOutput "--docdir=$doc/share/doc")
+    (optionalString enableSeparateDocOutput "--docdir=${docdir "$doc"}")
     "--with-gcc=$CC" # Clang won't work without that extra information.
     "--package-db=$packageConfDir"
     (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.name}/${pname}-${version}")
@@ -332,7 +335,7 @@ stdenv.mkDerivation ({
     ''}
 
     ${optionalString enableSeparateDocOutput ''
-    for x in $doc/share/doc/html/src/*.html; do
+    for x in ${docdir "$doc"}/html/src/*.html; do
       remove-references-to -t $out $x
     done
     mkdir -p $doc
@@ -348,6 +351,14 @@ stdenv.mkDerivation ({
 
     isHaskellLibrary = hasActiveLibrary;
 
+    # TODO: ask why the split outputs are configurable at all?
+    # TODO: include tests for split if possible
+    # Given the haskell package, returns
+    # the directory containing the haddock documentation.
+    # `null' if no haddock documentation was built.
+    # TODO: fetch the self from the fixpoint instead
+    haddockDir = self: if doHaddock then "${docdir self.doc}/html" else null;
+
     env = stdenv.mkDerivation {
       name = "interactive-${pname}-${version}-environment";
       nativeBuildInputs = [ ghcEnv systemBuildInputs ]
@@ -357,6 +368,7 @@ stdenv.mkDerivation ({
       shellHook = ''
         export NIX_${ghcCommandCaps}="${ghcEnv}/bin/${ghcCommand}"
         export NIX_${ghcCommandCaps}PKG="${ghcEnv}/bin/${ghcCommand}-pkg"
+        # TODO: is this still valid?
         export NIX_${ghcCommandCaps}_DOCDIR="${ghcEnv}/share/doc/ghc/html"
         export LD_LIBRARY_PATH="''${LD_LIBRARY_PATH:+''${LD_LIBRARY_PATH}:}${
           makeLibraryPath (filter (x: !isNull x) systemBuildInputs)
