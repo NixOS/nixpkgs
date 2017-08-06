@@ -9,7 +9,7 @@ in
 import ./generic.nix (args // {
   version = "${version}-${revision}";
   extraMeta.branch = "4.12";
-  modDirVersion = "${version}";
+  modDirVersion = "${version}-hardened";
 
   src = fetchFromGitHub {
     inherit sha256;
