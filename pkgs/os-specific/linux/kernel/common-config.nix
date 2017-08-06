@@ -450,8 +450,11 @@ with stdenv.lib;
   X86_CHECK_BIOS_CORRUPTION y
   X86_MCE y
 
-  # PCI-Expresscard hotplug support
-  ${optionalString (versionAtLeast version "3.12") "HOTPLUG_PCI_PCIE y"}
+  ${optionalString (versionAtLeast version "3.12") ''
+    HOTPLUG_PCI_ACPI y # PCI hotplug using ACPI
+    HOTPLUG_PCI_PCIE y # PCI-Expresscard hotplug support
+  ''}
+
 
   # Linux containers.
   NAMESPACES? y #  Required by 'unshare' used by 'nixos-install'
