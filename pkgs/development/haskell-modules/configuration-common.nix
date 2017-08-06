@@ -170,17 +170,6 @@ self: super: {
     # https://github.com/jaspervdj/hakyll/issues/491
     else dontCheck super.hakyll;
 
-  # cabal2nix likes to generate dependencies on hinotify when hfsevents is really required
-  # on darwin: https://github.com/NixOS/cabal2nix/issues/146.
-  hinotify = if pkgs.stdenv.isDarwin then self.hfsevents else super.hinotify;
-
-  # FSEvents API is very buggy and tests are unreliable. See
-  # http://openradar.appspot.com/10207999 and similar issues.
-  # https://github.com/haskell-fswatch/hfsnotify/issues/62
-  fsnotify = if pkgs.stdenv.isDarwin
-    then addBuildDepend (dontCheck super.fsnotify) pkgs.darwin.apple_sdk.frameworks.Cocoa
-    else dontCheck super.fsnotify;
-
   double-conversion = if !pkgs.stdenv.isDarwin
     then super.double-conversion
     else addExtraLibrary (overrideCabal super.double-conversion (drv:
