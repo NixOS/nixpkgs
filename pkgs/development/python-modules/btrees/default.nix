@@ -16,6 +16,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Scalable persistent components";
     homepage = http://packages.python.org/BTrees;
-    license = licenses.zpt21;
+    license = licenses.zpl21;
   };
 }
