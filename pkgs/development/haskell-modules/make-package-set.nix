@@ -25,7 +25,9 @@
 }:
 
 # return value: a function from self to the package set
-self: let
+self:
+
+let
 
   inherit (stdenv.lib) fix' extends makeOverridable;
   inherit (haskellLib) overrideCabal;

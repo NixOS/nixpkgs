@@ -1,6 +1,7 @@
 { stdenv, fetchurl, ghc, pkgconfig, glibcLocales, coreutils, gnugrep, gnused
 , jailbreak-cabal, hscolour, cpphs, nodejs, lib, removeReferencesTo
-}: let isCross = (ghc.cross or null) != null; in
+}:
+let isCross = (ghc.cross or null) != null; in
 
 { pname
 , dontStrip ? (ghc.isGhcjs or false)
