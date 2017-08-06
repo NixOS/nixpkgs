@@ -24854,6 +24854,7 @@ EOF
     preCheck = if isPy3k then ''
       # test failure on py3.4
       rm src/ZODB/tests/testDB.py
+      rm src/ZODB/tests/test_fsdump.py # Error with Python 3.6
     '' else "";
 
     meta = {
