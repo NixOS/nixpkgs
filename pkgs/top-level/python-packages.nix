@@ -29464,6 +29464,9 @@ EOF
     };
   };
 
+  # We need "normal" libxml2 and not the python package by the same name.
+  pywbem = callPackage ../development/python-modules/pywbem { libxml2 = pkgs.libxml2; };
+
   unicorn = buildPythonPackage rec {
     name  = "unicorn-${version}";
     version = "1.0.1";
