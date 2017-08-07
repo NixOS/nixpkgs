@@ -1001,9 +1001,7 @@ with pkgs;
 
   facedetect = callPackage ../tools/graphics/facedetect { };
 
-  facter = callPackage ../tools/system/facter {
-    boost = boost160;
-  };
+  facter = callPackage ../tools/system/facter { };
 
   fasd = callPackage ../tools/misc/fasd { };
 
@@ -2942,9 +2940,7 @@ with pkgs;
 
   leafpad = callPackage ../applications/editors/leafpad { };
 
-  leatherman = callPackage ../development/libraries/leatherman {
-    boost = boost160;
-  };
+  leatherman = callPackage ../development/libraries/leatherman { };
 
   leela = callPackage ../tools/graphics/leela { };
 
