@@ -154,6 +154,14 @@ rmdir /var/lib/ipfs/.ipfs
       variables as parameters.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      <literal>services.firefox.syncserver</literal> now runs by default as a
+      non-root user. To accomodate this change, the default sqlite database
+      location has also been changed. Migration should work automatically.
+      Refer to the description of the options for more details.
+    </para>
+  </listitem>
 </itemizedlist>
 
 <para>Other notable improvements:</para>
