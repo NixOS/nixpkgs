@@ -1001,9 +1001,7 @@ with pkgs;
 
   facedetect = callPackage ../tools/graphics/facedetect { };
 
-  facter = callPackage ../tools/system/facter {
-    boost = boost160;
-  };
+  facter = callPackage ../tools/system/facter { };
 
   fasd = callPackage ../tools/misc/fasd { };
 
