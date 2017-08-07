@@ -129,7 +129,7 @@ if [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ]; then
             # copied to $out/lib.  If not, we're screwed.
             continue
         fi
-        for path in "$dir"/lib*.so; do
+        for path in "$dir"/*; do
             file="${path##*/}"
             if [ "${libs[$file]:-}" ]; then
                 libs["$file"]=
