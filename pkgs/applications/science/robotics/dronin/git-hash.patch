@@ -1,0 +1,15 @@
+diff --git a/make/scripts/version-info.py b/make/scripts/version-info.py
+index eaa60774f..b4465c8bb 100644
+--- a/make/scripts/version-info.py
++++ b/make/scripts/version-info.py
+@@ -462,8 +462,8 @@ string given.
+         ORIGIN = r.origin(),
+         HASH = r.hash(),
+         HASH8 = r.hash(8),
+-        ANCESTOR16 = r.ancestor(16),
+-        ANCESTOR = r.ancestor(),
++        ANCESTOR16 = r.ancestor(16, none = '0' * 16),
++        ANCESTOR = r.ancestor(none = '0' * 40),
+         TAG = r.tag(''),
+         TAG_OR_BRANCH = r.tag(r.branch('unreleased')),
+         TAG_OR_HASH8 = r.tag(r.hash(8, 'untagged')),

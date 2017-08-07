@@ -15165,6 +15165,8 @@ with pkgs;
 
   qgroundcontrol = libsForQt56.callPackage ../applications/science/robotics/qgroundcontrol { };
 
+  dronin = callPackage ../applications/science/robotics/dronin { };
+
   qjackctl = libsForQt5.callPackage ../applications/audio/qjackctl { };
 
   qmetro = callPackage ../applications/misc/qmetro { };
