@@ -558,6 +558,7 @@ with stdenv.lib;
   ''}
 
   ${optionalString (versionAtLeast version "4.12") ''
+    BFQ_GROUP_IOSCHED y
     IOSCHED_BFQ m
     MQ_IOSCHED_KYBER y
   ''}
