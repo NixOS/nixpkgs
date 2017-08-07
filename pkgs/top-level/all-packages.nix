@@ -2942,9 +2942,7 @@ with pkgs;
 
   leafpad = callPackage ../applications/editors/leafpad { };
 
-  leatherman = callPackage ../development/libraries/leatherman {
-    boost = boost160;
-  };
+  leatherman = callPackage ../development/libraries/leatherman { };
 
   leela = callPackage ../tools/graphics/leela { };
 
