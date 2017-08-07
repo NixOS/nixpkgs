@@ -79,6 +79,16 @@ let
         description = "A list of commands called after shutting down the interface.";
       };
 
+      table = mkOption {
+        default = "main";
+        type = types.str;
+        description = ''The kernel routing table to add this interface's
+        associated routes to. Setting this is useful for e.g. policy routing
+        ("ip rule") or virtual routing and forwarding ("ip vrf"). Both numeric
+        table IDs and table names (/etc/rt_tables) can be used. Defaults to
+        "main".'';
+      };
+
       peers = mkOption {
         default = [];
         description = "Peers linked to the interface.";
@@ -160,14 +170,6 @@ let
         interval of 25 seconds; however, most users will not need this.'';
       };
 
-      table = mkOption {
-        default = "main";
-        type = types.str;
-        description = ''The kernel routing table to add this peer's associated
-        routes to. Setting this is useful for e.g. policy routing ("ip rule")
-        or virtual routing and forwarding ("ip vrf"). Both numeric table IDs
-        and table names (/etc/rt_tables) can be used. Defaults to "main".'';
-      };
     };
 
   };
@@ -217,7 +219,7 @@ let
 
             (map (peer:
             (map (allowedIP:
-            "${ipCommand} route replace ${allowedIP} dev ${name} table ${peer.table}"
+            "${ipCommand} route replace ${allowedIP} dev ${name} table ${values.table}"
             ) peer.allowedIPs)
             ) values.peers)
 
