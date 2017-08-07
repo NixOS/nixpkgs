@@ -33,6 +33,7 @@
 , "jshint"
 , "json"
 , "js-beautify"
+, "jsonlint"
 , "jsontool"
 , "json-refs"
 , "json-server"
