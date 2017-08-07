@@ -91,9 +91,11 @@ in rec {
     };
     ghcjs = packages.ghc7103.callPackage ../development/compilers/ghcjs {
       bootPkgs = packages.ghc7103;
+      nodejs = pkgs.nodejs-ghcjs;
     };
     ghcjsHEAD = packages.ghc802.callPackage ../development/compilers/ghcjs/head.nix {
       bootPkgs = packages.ghc802;
+      nodejs = pkgs.nodejs-ghcjs;
     };
     ghcHaLVM240 = callPackage ../development/compilers/halvm/2.4.0.nix rec {
       bootPkgs = packages.ghc802;
