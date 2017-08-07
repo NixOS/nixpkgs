@@ -1,4 +1,4 @@
-{ lib, stdenv, stdenvNoCC, lndir }:
+{ lib, stdenv, stdenvNoCC, lndir, shellcheck }:
 
 let
 
@@ -68,7 +68,7 @@ rec {
         ${text}
         '';
       checkPhase = ''
-        ${stdenv.shell} -n $out
+        ${shellcheck}/bin/shellcheck $out
       '';
     };
 
