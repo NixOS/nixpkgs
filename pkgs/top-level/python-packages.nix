@@ -12026,7 +12026,23 @@ in {
       sha256 = "1h780fbrv275dcik4cs3rincza805z6q726b48r4a0qmh5d8160c";
     };
 
-    propagatedBuildInputs = with self; [ configparser argparse six ];
+    propagatedBuildInputs = with self; [ configparser six ];
+
+    patches = [ (pkgs.writeText "konfig.patch" ''
+      diff --git a/setup.py b/setup.py
+      index 96fd858..bb4db06 100644
+      --- a/setup.py
+      +++ b/setup.py
+      @@ -20,7 +20,7 @@ setup(name='konfig',
+             author_email="tarek@mozilla.com",
+             include_package_data=True,
+             install_requires = [
+      -        'configparser', 'argparse', 'six'
+      +        'configparser', 'six'
+             ],
+             zip_safe=False,
+             classifiers=classifiers,
+    '') ];
 
     meta = {
       description = "Yet Another Config Parser";
