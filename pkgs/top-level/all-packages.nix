@@ -5106,6 +5106,8 @@ with pkgs;
 
   oh = callPackage ../shells/oh { };
 
+  oil = callPackage ../shells/oil { };
+
   pash = callPackage ../shells/pash { };
 
   tcsh = callPackage ../shells/tcsh { };
@@ -7140,7 +7142,7 @@ with pkgs;
 
   phantomjs = callPackage ../development/tools/phantomjs { };
 
-  phantomjs2 = callPackage ../development/tools/phantomjs2 { };
+  phantomjs2 = libsForQt5.callPackage ../development/tools/phantomjs2 { };
 
   pmccabe = callPackage ../development/tools/misc/pmccabe { };
 
@@ -8039,6 +8041,7 @@ with pkgs;
   mpir = callPackage ../development/libraries/mpir {};
 
   gns3-gui = callPackage ../applications/networking/gns3/gui.nix { };
+  gns3-server = callPackage ../applications/networking/gns3/server.nix { };
 
   gobjectIntrospection = callPackage ../development/libraries/gobject-introspection {
     nixStoreDir = config.nix.storeDir or builtins.storeDir;
@@ -12042,10 +12045,11 @@ with pkgs;
       kernelPatches.p9_fixes
       kernelPatches.modinst_arg_list_too_long
       kernelPatches.cpu-cgroup-v2."4.11"
+      kernelPatches.tag_hardened
     ];
     extraConfig = import ../os-specific/linux/kernel/hardened-config.nix {
       inherit stdenv;
-      inherit (linux) version;
+      inherit (linux_hardened_copperhead) version;
     };
   };
 
