@@ -58,7 +58,6 @@ for pre in "${role_prefixes[@]}"; do
     slurpUnsalted CFLAGS_LINK
     slurpUnsalted CXXSTDLIB_COMPILE
     slurpUnsalted CXXSTDLIB_LINK
-    slurpUnsalted DONT_SET_RPATH
     slurpUnsalted GNATFLAGS_COMPILE
     slurpUnsalted IGNORE_LD_THROUGH_GCC
     slurpUnsalted LDFLAGS
