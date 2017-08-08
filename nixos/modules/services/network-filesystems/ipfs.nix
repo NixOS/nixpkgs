@@ -7,7 +7,11 @@ let
 
   cfg = config.services.ipfs;
 
-  ipfsFlags = ''${if cfg.autoMigrate then "--migrate" else ""} ${if cfg.enableGC then "--enable-gc" else ""} ${toString cfg.extraFlags}'';
+  ipfsFlags = toString ([
+    (optionalString cfg.autoMount   "--mount")
+    (optionalString cfg.autoMigrate "--migrate")
+    (optionalString cfg.enableGC    "--enable-gc")
+  ] ++ cfg.extraFlags);
 
   # Before Version 17.09, ipfs would always use "/var/lib/ipfs/.ipfs" as it's dataDir
   defaultDataDir = if versionAtLeast config.system.stateVersion "17.09" then
@@ -17,7 +21,9 @@ let
   # Wrapping the ipfs binary with the environment variable IPFS_PATH set to dataDir because we can't set it in the user environment
   wrapped = runCommand "ipfs" { buildInputs = [ makeWrapper ]; } ''
     mkdir -p "$out/bin"
-    makeWrapper "${ipfs}/bin/ipfs" "$out/bin/ipfs" --set IPFS_PATH ${cfg.dataDir}
+    makeWrapper "${ipfs}/bin/ipfs" "$out/bin/ipfs" \
+      --set IPFS_PATH ${cfg.dataDir} \
+      --prefix PATH : /run/wrappers/bin
   '';
 in
 
@@ -61,6 +67,12 @@ in
         description = ''
           Whether IPFS should try to migrate the file system automatically.
         '';
+      };
+
+      autoMount = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether IPFS should try to mount /ipfs and /ipns at startup.";
       };
 
       gatewayAddress = mkOption {
@@ -133,12 +145,16 @@ in
       preStart = ''
         install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.dataDir}
       '';
-      script =  ''
+      script = ''
         if [[ ! -f ${cfg.dataDir}/config ]]; then
           ${ipfs}/bin/ipfs init ${optionalString cfg.emptyRepo "-e"}
         fi
         ${ipfs}/bin/ipfs --local config Addresses.API ${cfg.apiAddress}
         ${ipfs}/bin/ipfs --local config Addresses.Gateway ${cfg.gatewayAddress}
+      '' + optionalString cfg.autoMount ''
+        ${ipfs}/bin/ipfs --local config Mounts.FuseAllowOther --json true
+        mkdir -p $(${ipfs}/bin/ipfs --local config Mounts.IPFS)
+        mkdir -p $(${ipfs}/bin/ipfs --local config Mounts.IPNS)
       '';
 
       serviceConfig = {
