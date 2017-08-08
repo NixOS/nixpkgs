@@ -1,3 +1,12 @@
+# Assert that FILE exists and is executable
+#
+# assertExecutable FILE
+assertExecutable() {
+    local file="$1"
+    [[ -f "${file}" && -x "${file}" ]] || \
+        die "Cannot wrap ${file} because it is not an executable file"
+}
+
 # construct an executable file that wraps the actual executable
 # makeWrapper EXECUTABLE ARGS
 
@@ -23,6 +32,8 @@ makeWrapper() {
     local wrapper="$2"
     local params varName value command separator n fileNames
     local argv0 flagsBefore flags
+
+    assertExecutable "${file}"
 
     mkdir -p "$(dirname "$wrapper")"
 
@@ -119,6 +130,9 @@ filterExisting() {
 wrapProgram() {
     local prog="$1"
     local hidden
+
+    assertExecutable "${prog}"
+
     hidden="$(dirname "$prog")/.$(basename "$prog")"-wrapped
     while [ -e "$hidden" ]; do
       hidden="${hidden}_"
