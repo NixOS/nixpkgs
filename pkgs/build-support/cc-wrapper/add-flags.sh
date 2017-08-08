@@ -10,11 +10,12 @@ declare -a role_prefixes=()
 if [[ -n "${NIX_CC_WRAPPER_@infixSalt@_TARGET_BUILD:-}" ]]; then
     role_prefixes+=(_BUILD)
 fi
-if [[ -n "${NIX_CC_WRAPPER_@infixSalt@_TARGET_HOST:-}" ]]; then
-    role_prefixes+=('')
-fi
 if [[ -n "${NIX_CC_WRAPPER_@infixSalt@_TARGET_TARGET:-}" ]]; then
     role_prefixes+=(_TARGET)
+fi
+# use this as default if no role is inferred
+if [[ -n "${NIX_CC_WRAPPER_@infixSalt@_TARGET_HOST:-}" || ${#role_prefixes[@]} -eq 0 ]]; then
+    role_prefixes+=('')
 fi
 
 # For each role we serve, we accumulate the input parameters into our own
