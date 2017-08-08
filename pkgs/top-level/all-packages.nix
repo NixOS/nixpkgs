@@ -100,6 +100,8 @@ with pkgs;
 
   diffPlugins = (callPackage ../build-support/plugins.nix {}).diffPlugins;
 
+  dieHook = makeSetupHook {} ../build-support/setup-hooks/die.sh;
+
   dockerTools = callPackage ../build-support/docker { };
 
   docker_compose = pythonPackages.docker_compose;
@@ -287,7 +289,8 @@ with pkgs;
       inherit contents compressor prepend;
     };
 
-  makeWrapper = makeSetupHook { } ../build-support/setup-hooks/make-wrapper.sh;
+  makeWrapper = makeSetupHook { deps = [ dieHook ]; }
+                              ../build-support/setup-hooks/make-wrapper.sh;
 
   makeModulesClosure = { kernel, rootModules, allowMissing ? false }:
     callPackage ../build-support/kernel/modules-closure.nix {
