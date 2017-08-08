@@ -1004,9 +1004,7 @@ with pkgs;
 
   facedetect = callPackage ../tools/graphics/facedetect { };
 
-  facter = callPackage ../tools/system/facter {
-    boost = boost160;
-  };
+  facter = callPackage ../tools/system/facter { };
 
   fasd = callPackage ../tools/misc/fasd { };
 
@@ -1045,6 +1043,8 @@ with pkgs;
   gdrive = callPackage ../applications/networking/gdrive { };
 
   go-dependency-manager = callPackage ../development/tools/gdm { };
+
+  geekbench = callPackage ../tools/misc/geekbench { };
 
   gencfsm = callPackage ../tools/security/gencfsm { };
 
@@ -2945,9 +2945,7 @@ with pkgs;
 
   leafpad = callPackage ../applications/editors/leafpad { };
 
-  leatherman = callPackage ../development/libraries/leatherman {
-    boost = boost160;
-  };
+  leatherman = callPackage ../development/libraries/leatherman { };
 
   leela = callPackage ../tools/graphics/leela { };
 
@@ -6317,6 +6315,7 @@ with pkgs;
   pltScheme = racket; # just to be sure
 
   polyml = callPackage ../development/compilers/polyml { };
+  polyml56 = callPackage ../development/compilers/polyml/5.6.nix { };
 
   pure = callPackage ../development/interpreters/pure {
     llvm = llvm_35;
@@ -11592,7 +11591,7 @@ with pkgs;
 
   tt-rss = callPackage ../servers/tt-rss { };
 
-  searx = callPackages ../servers/web-apps/searx { };
+  searx = callPackage ../servers/web-apps/searx { };
 
   selfoss = callPackage ../servers/web-apps/selfoss { };
 
@@ -18201,6 +18200,7 @@ with pkgs;
   tini = callPackage ../applications/virtualization/tini {};
 
   isabelle = callPackage ../applications/science/logic/isabelle {
+    polyml = polyml56;
     java = if stdenv.isLinux then jre else jdk;
   };
 

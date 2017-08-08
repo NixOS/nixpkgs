@@ -9795,6 +9795,8 @@ in {
     };
   };
 
+  feedgen = callPackage ../development/python-modules/feedgen { };
+
   feedgenerator = callPackage ../development/python-modules/feedgenerator {
     inherit (pkgs) glibcLocales;
   };
