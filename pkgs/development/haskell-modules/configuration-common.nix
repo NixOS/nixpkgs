@@ -27,8 +27,10 @@ self: super: {
   ghcjs-base = null;
   ghcjs-prim = null;
 
-  # Some packages need a non-core version of Cabal.
-  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_1_24_2_0; });
+  # cabal-install needs Cabal 2.x. hackage-security's test suite does not compile with
+  # Cabal 2.x, though. See https://github.com/haskell/hackage-security/issues/188.
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_0_0_2; });
+  hackage-security = dontCheck super.hackage-security;
 
   # Link statically to avoid runtime dependency on GHC.
   jailbreak-cabal = (disableSharedExecutables super.jailbreak-cabal).override { Cabal = self.Cabal_1_20_0_4; };
