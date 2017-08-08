@@ -4682,6 +4682,8 @@ with pkgs;
     openssl = null;
   };
 
+  opencore-amr = callPackage ../development/libraries/libopencore { };
+  
   ding-libs = callPackage ../tools/misc/ding-libs { };
 
   sssd = callPackage ../os-specific/linux/sssd {
