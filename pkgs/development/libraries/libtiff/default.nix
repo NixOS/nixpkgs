@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   prePatch =let
       debian = fetchurl {
-        url = http://http.debian.net/debian/pool/main/t/tiff/tiff_4.0.8-2.debian.tar.xz;
+        url = http://snapshot.debian.org/archive/debian-debug/20170602T031313Z/pool/main/t/tiff/tiff_4.0.8-2.debian.tar.xz;
         sha256 = "1ssjh6vn9rvl2jwm34i3p89g8lj0c7fj3cziva9rj4vasfps58ng";
       };
     in ''
