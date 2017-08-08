@@ -23,7 +23,7 @@ source @out@/nix-support/utils.sh
 
 # Optionally filter out paths not refering to the store.
 expandResponseParams "$@"
-if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "$NIX_STORE"
+if [[ "${NIX_ENFORCE_PURITY:-}" = 1 && -n "${NIX_STORE:-}"
         && ( -z "$NIX_@infixSalt@_IGNORE_LD_THROUGH_GCC" || -z "${NIX_@infixSalt@_LDFLAGS_SET:-}" ) ]]; then
     rest=()
     nParams=${#params[@]}
@@ -96,7 +96,7 @@ if [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ] || [ "$NIX_@infixSalt@_SET_BUILD_I
                     -l?*)
                         libs["lib${p:2}.so"]=1
                         ;;
-                    "$NIX_STORE"/*.so | "$NIX_STORE"/*.so.*)
+                    "${NIX_STORE:-}"/*.so | "${NIX_STORE:-}"/*.so.*)
                         # This is a direct reference to a shared library.
                         libDirs+=("${p%/*}")
                         libs["${p##*/}"]=1
@@ -123,7 +123,7 @@ if [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ]; then
         if [[ "$dir" =~ [/.][/.] ]] && dir2=$(readlink -f "$dir"); then
             dir="$dir2"
         fi
-        if [ -n "${rpaths[$dir]:-}" ] || [[ "$dir" != "$NIX_STORE"/* ]]; then
+        if [ -n "${rpaths[$dir]:-}" ] || [[ "$dir" != "${NIX_STORE:-}"/* ]]; then
             # If the path is not in the store, don't add it to the rpath.
             # This typically happens for libraries in /tmp that are later
             # copied to $out/lib.  If not, we're screwed.
