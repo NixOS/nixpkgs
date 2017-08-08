@@ -7512,7 +7512,6 @@ with pkgs;
     db = if stdenv.isFreeBSD then db4 else db;
     # XXX: only the db_185 interface was available through
     #      apr with db58 on freebsd (nov 2015), for unknown reasons
-    openssl = openssl_1_0_2;
   };
 
   arb = callPackage ../development/libraries/arb {};
