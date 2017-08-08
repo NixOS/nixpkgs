@@ -119,13 +119,9 @@ rec {
         "fortify" "stackprotector" "pic" "strictoverflow" "format" "relro" "bindnow"
       ];
 
-      hardeningDisable =
-        let val  = attrs.hardeningDisable or [ ];
-        in if builtins.isList val then val else [ val ];
+      hardeningDisable = lib.toList (attrs.hardeningDisable or [ ]);
 
-      hardeningEnable =
-        let val = attrs.hardeningEnable or [ ];
-        in if builtins.isList val then val else [ val ];
+      hardeningEnable = lib.toList (attrs.hardeningEnable or [ ]);
 
       enabledHardeningOptions =
         if builtins.elem "all" hardeningDisable
