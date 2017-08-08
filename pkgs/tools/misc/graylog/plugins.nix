@@ -22,13 +22,26 @@ let
       };
     });
 in {
+  aggregates = glPlugin rec {
+    name = "graylog-aggregates-${version}";
+    pluginName = "graylog-plugin-aggregates";
+    version = "1.1.1";
+    src = fetchurl {
+      url = "https://github.com/cvtienhoven/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
+      sha256 = "1wx5i8ls7dgffsy35i91gkrj6p9nh2jbar9pgas190lfb9yk45bx";
+    };
+    meta = {
+      homepage = https://github.com/cvtienhoven/graylog-plugin-aggregates;
+      description = "SSO support for Graylog through trusted HTTP headers set by load balancers or authentication proxies";
+    };
+  };
   auth_sso = glPlugin rec {
     name = "graylog-auth-sso-${version}";
     pluginName = "graylog-plugin-auth-sso";
-    version = "1.0.6";
+    version = "2.3.0";
     src = fetchurl {
       url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "0wvdf2rnjrhdw1vp7bc7008s45rggzq57lh8k6s3q35rppligaqd";
+      sha256 = "110ag10y0xyf3za6663vf68r5rwdi92315a37vysqvj00y7yak0l";
     };
     meta = {
       homepage = https://github.com/Graylog2/graylog-plugin-auth-sso;
@@ -64,13 +77,13 @@ in {
   jabber = glPlugin rec {
     name = "graylog-jabber-${version}";
     pluginName = "graylog-plugin-jabber";
-    version = "1.2.1";
+    version = "2.0.0";
     src = fetchurl {
-      url = "https://github.com/Graylog2/${pluginName}/releases/download/v${version}/${pluginName}-${version}.jar";
-      sha256 = "1r12hpjp2ggmhsapgrk829va94aw44qi2kqqkgf1fj9ih4k0c837";
+      url = "https://github.com/graylog-labs/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
+      sha256 = "1bqj5g9zjnw08bva7379c2ar3nhmyiilj7kjxd16qvfdn2674r5h";
     };
     meta = {
-      homepage = https://github.com/Graylog2/graylog-plugin-jabber;
+      homepage = https://github.com/graylog-labs/graylog-plugin-jabber;
       description = "Jabber Alarmcallback Plugin for Graylog";
     };
   };
@@ -103,13 +116,13 @@ in {
   redis = glPlugin rec {
     name = "graylog-redis-${version}";
     pluginName = "graylog-plugin-redis";
-    version = "0.1.0";
+    version = "0.1.1";
     src = fetchurl {
-      url = "https://github.com/Graylog2/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
-      sha256 = "0hwz83m9gwx0fdapc63v3lr1q6acbphssqwp4qqzz78wg2w79xgi";
+      url = "https://github.com/graylog-labs/${pluginName}/releases/download/${version}/${pluginName}-${version}.jar";
+      sha256 = "0dfgh6w293ssagas5y0ixwn0vf54i5iv61r5p2q0rbv2da6xvhbw";
     };
     meta = {
-      homepage = https://github.com/Graylog2/graylog-plugin-redis;
+      homepage = https://github.com/graylog-labs/graylog-plugin-redis;
       description = "Redis plugin for Graylog";
     };
   };
