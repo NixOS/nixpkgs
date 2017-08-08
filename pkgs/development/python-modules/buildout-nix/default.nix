@@ -15,7 +15,7 @@ buildPythonPackage {
   meta = {
     homepage = http://www.buildout.org;
     description = "A software build and configuration system";
-    license = stdenv.lib.licenses.zpt21;
+    license = stdenv.lib.licenses.zpl21;
     maintainers = [ stdenv.lib.maintainers.goibhniu ];
   };
 }

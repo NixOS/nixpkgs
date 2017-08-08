@@ -39,7 +39,7 @@ wrapGAppsHook() {
     targetDirs=( "${prefix}/bin" "${prefix}/libexec" )
     for targetDir in "${targetDirs[@]}"; do
       if [[ -d "${targetDir}" ]]; then
-        find "${targetDir}" -type f -executable -print0 \
+        find -L "${targetDir}" -type f -executable -print0 \
           | while IFS= read -r -d '' file; do
           echo "Wrapping program ${file}"
           wrapProgram "${file}" "${gappsWrapperArgs[@]}"

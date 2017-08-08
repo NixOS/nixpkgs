@@ -33,6 +33,9 @@ stdenv.mkDerivation rec {
       $out/share/atom/resources/app/apm/bin/node
 
     find $out/share/atom -name "*.node" -exec patchelf --set-rpath "${atomEnv.libPath}:$out/share/atom" {} \;
+
+    paxmark m $out/share/atom/atom
+    paxmark m $out/share/atom/resources/app/apm/bin/node
   '';
 
   meta = with stdenv.lib; {

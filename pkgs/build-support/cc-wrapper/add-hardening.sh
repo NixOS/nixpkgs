@@ -1,18 +1,32 @@
 hardeningFlags=(fortify stackprotector pic strictoverflow format relro bindnow)
-hardeningFlags+=("${hardeningEnable[@]}")
+# Intentionally word-split in case 'hardeningEnable' is defined in Nix.
+hardeningFlags+=(${hardeningEnable[@]})
 hardeningCFlags=()
 hardeningLDFlags=()
-hardeningDisable=${hardeningDisable:-""}
 
-hardeningDisable+=" @hardening_unsupported_flags@"
+declare -A hardeningDisableMap
 
-if [[ -n "$NIX_DEBUG" ]]; then echo HARDENING: Value of '$hardeningDisable': $hardeningDisable >&2; fi
+# Intentionally word-split in case 'hardeningDisable' is defined in Nix. The
+# array expansion also prevents undefined variables from causing trouble with
+# `set -u`.
+for flag in ${hardeningDisable[@]} @hardening_unsupported_flags@
+do
+  hardeningDisableMap[$flag]=1
+done
 
-if [[ ! $hardeningDisable =~ "all" ]]; then
-  if [[ -n "$NIX_DEBUG" ]]; then echo 'HARDENING: Is active (not completely disabled with "all" flag)' >&2; fi
+if [[ -n "$NIX_DEBUG" ]]; then
+  printf 'HARDENING: disabled flags:' >&2
+  (( "${#hardeningDisableMap[@]}" )) && printf ' %q' "${!hardeningDisableMap[@]}" >&2
+  echo >&2
+fi
+
+if [[ -z "${hardeningDisableMap[all]}" ]]; then
+  if [[ -n "$NIX_DEBUG" ]]; then
+    echo 'HARDENING: Is active (not completely disabled with "all" flag)' >&2;
+  fi
   for flag in "${hardeningFlags[@]}"
   do
-    if [[ ! "${hardeningDisable}" =~ "$flag" ]]; then
+    if [[ -z "${hardeningDisableMap[$flag]}" ]]; then
       case $flag in
         fortify)
           if [[ -n "$NIX_DEBUG" ]]; then echo HARDENING: enabling fortify >&2; fi
@@ -20,7 +34,7 @@ if [[ ! $hardeningDisable =~ "all" ]]; then
           ;;
         stackprotector)
           if [[ -n "$NIX_DEBUG" ]]; then echo HARDENING: enabling stackprotector >&2; fi
-          hardeningCFlags+=('-fstack-protector-strong' '--param ssp-buffer-size=4')
+          hardeningCFlags+=('-fstack-protector-strong' '--param' 'ssp-buffer-size=4')
           ;;
         pie)
           if [[ -n "$NIX_DEBUG" ]]; then echo HARDENING: enabling CFlags -fPIE >&2; fi
