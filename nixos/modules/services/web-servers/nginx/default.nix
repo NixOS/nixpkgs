@@ -147,22 +147,23 @@ let
 
   vhosts = concatStringsSep "\n" (mapAttrsToList (vhostName: vhost:
     let
-        ssl = with vhost; addSSL || onlySSL || enableSSL;
+        onlySSL = vhost.onlySSL || vhost.enableSSL;
+        hasSSL = onlySSL || vhost.addSSL || vhost.forceSSL;
 
-        defaultListen = with vhost;
-          if listen != [] then listen
-          else if onlySSL || enableSSL then
-               singleton                          { addr = "0.0.0.0"; port = 443; ssl = true;  }
-               ++ optional enableIPv6             { addr = "[::]";    port = 443; ssl = true;  }
-          else singleton                          { addr = "0.0.0.0"; port = 80;  ssl = false; }
-               ++ optional enableIPv6             { addr = "[::]";    port = 80;  ssl = false; }
-               ++ optional addSSL                 { addr = "0.0.0.0"; port = 443; ssl = true;  }
-               ++ optional (enableIPv6 && addSSL) { addr = "[::]";    port = 443; ssl = true;  };
+        defaultListen =
+          if vhost.listen != [] then vhost.listen
+          else ((optionals hasSSL (
+            singleton                    { addr = "0.0.0.0"; port = 443; ssl = true; }
+            ++ optional enableIPv6 { addr = "[::]";    port = 443; ssl = true; }
+          )) ++ optionals (!onlySSL) (
+            singleton                    { addr = "0.0.0.0"; port = 80;  ssl = false; }
+            ++ optional enableIPv6 { addr = "[::]";    port = 80;  ssl = false; }
+          ));
 
         hostListen =
-          if !vhost.forceSSL
-            then defaultListen
-            else filter (x: x.ssl) defaultListen;
+          if vhost.forceSSL
+            then filter (x: x.ssl) defaultListen
+            else defaultListen;
 
         listenString = { addr, port, ssl, ... }:
           "listen ${addr}:${toString port} "
@@ -171,9 +172,6 @@ let
           + ";";
 
         redirectListen = filter (x: !x.ssl) defaultListen;
-
-        redirectListenString = { addr, ... }:
-          "listen ${addr}:80 ${optionalString vhost.default "default_server"};";
 
         acmeLocation = ''
           location /.well-known/acme-challenge {
@@ -192,7 +190,7 @@ let
       in ''
         ${optionalString vhost.forceSSL ''
           server {
-            ${concatMapStringsSep "\n" redirectListenString redirectListen}
+            ${concatMapStringsSep "\n" listenString redirectListen}
 
             server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
             ${optionalString vhost.enableACME acmeLocation}
@@ -208,9 +206,9 @@ let
           ${optionalString vhost.enableACME acmeLocation}
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
           ${optionalString (vhost.globalRedirect != null) ''
-            return 301 http${optionalString ssl "s"}://${vhost.globalRedirect}$request_uri;
+            return 301 http${optionalString hasSSL "s"}://${vhost.globalRedirect}$request_uri;
           ''}
-          ${optionalString ssl ''
+          ${optionalString hasSSL ''
             ssl_certificate ${vhost.sslCertificate};
             ssl_certificate_key ${vhost.sslCertificateKey};
           ''}
@@ -546,18 +544,15 @@ in
       }
 
       {
-        assertion = all (conf: with conf; !(addSSL && (onlySSL || enableSSL))) (attrValues virtualHosts);
+        assertion = all (conf: with conf;
+          !(addSSL && (onlySSL || enableSSL)) &&
+          !(forceSSL && (onlySSL || enableSSL)) &&
+          !(addSSL && forceSSL)
+        ) (attrValues virtualHosts);
         message = ''
-          Options services.nginx.service.virtualHosts.<name>.addSSL and
-          services.nginx.virtualHosts.<name>.onlySSL are mutually esclusive
-        '';
-      }
-
-      {
-        assertion = all (conf: with conf; forceSSL -> addSSL) (attrValues virtualHosts);
-        message = ''
-          Option services.nginx.virtualHosts.<name>.forceSSL requires
-          services.nginx.virtualHosts.<name>.addSSL set to true.
+          Options services.nginx.service.virtualHosts.<name>.addSSL,
+          services.nginx.virtualHosts.<name>.onlySSL and services.nginx.virtualHosts.<name>.forceSSL
+          are mutually exclusive.
         '';
       }
     ];
