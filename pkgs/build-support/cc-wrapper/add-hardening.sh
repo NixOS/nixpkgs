@@ -13,7 +13,7 @@ done
 # array expansion also prevents undefined variables from causing trouble with
 # `set -u`.
 for flag in ${NIX_HARDENING_ENABLE+}; do
-  if [[ -n "${hardeningDisableMap[$flag]}" ]]; then
+  if [[ -z "${hardeningDisableMap[$flag]}" ]]; then
     hardeningEnableMap[$flag]=1
   fi
 done
