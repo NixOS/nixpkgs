@@ -8179,6 +8179,9 @@ with pkgs;
   cairomm = callPackage ../development/libraries/cairomm { };
 
   pango = callPackage ../development/libraries/pango { };
+
+  pangolin = callPackage ../development/libraries/pangolin { };
+
   pangomm = callPackage ../development/libraries/pangomm {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
