@@ -84,7 +84,7 @@ in rec {
       selfPkgs = packages.ghc821;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix rec {
-      bootPkgs = packages.ghc7103;
+      bootPkgs = packages.ghc802;
       inherit (bootPkgs) alex happy;
       inherit buildPlatform targetPlatform;
       selfPkgs = packages.ghcHEAD;
