@@ -7846,6 +7846,8 @@ with pkgs;
 
   freetts = callPackage ../development/libraries/freetts { };
 
+  frog = self.languageMachines.frog;
+
   fstrm = callPackage ../development/libraries/fstrm { };
 
   cfitsio = callPackage ../development/libraries/cfitsio { };
@@ -8443,6 +8445,8 @@ with pkgs;
     inherit (darwin) bootstrap_cmds;
   };
   libkrb5 = krb5Full.override { type = "lib"; };
+
+  languageMachines = recurseIntoAttrs (import ../development/libraries/languagemachines/packages.nix { inherit callPackage; });
 
   lasso = callPackage ../development/libraries/lasso { };
 
