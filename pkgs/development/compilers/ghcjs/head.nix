@@ -1,9 +1,9 @@
-{ fetchgit, fetchFromGitHub, bootPkgs }:
+{ fetchgit, fetchFromGitHub, bootPkgs, nodejs }:
 
 bootPkgs.callPackage ./base.nix {
   version = "0.2.020170323";
 
-  inherit bootPkgs;
+  inherit bootPkgs nodejs;
 
   ghcjsSrc = fetchFromGitHub {
     # TODO: switch back to the regular ghcjs repo

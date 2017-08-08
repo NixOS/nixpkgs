@@ -1,6 +1,6 @@
-{ bootPkgs }:
+{ bootPkgs, nodejs }:
 
 bootPkgs.callPackage ./base.nix {
-  inherit bootPkgs;
+  inherit bootPkgs nodejs;
   broken = false;
 }

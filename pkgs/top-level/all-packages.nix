@@ -2628,6 +2628,12 @@ with pkgs;
     libtool = darwin.cctools;
   };
 
+  # Per https://github.com/ghcjs/ghcjs/issues/588#issuecomment-302891368 ghcjs
+  # is picky about the nodejs version.
+  nodejs-ghcjs = callPackage ../development/web/nodejs/v6-ghcjs.nix {
+    libtool = darwin.cctools;
+  };
+
   nodejs-slim-6_x = callPackage ../development/web/nodejs/v6.nix {
     libtool = darwin.cctools;
     enableNpm = false;
