@@ -4682,8 +4682,6 @@ with pkgs;
     openssl = null;
   };
 
-  opencore-amr = callPackage ../development/libraries/libopencore { };
-  
   ding-libs = callPackage ../tools/misc/ding-libs { };
 
   sssd = callPackage ../os-specific/linux/sssd {
@@ -9640,6 +9638,8 @@ with pkgs;
 
   opencollada = callPackage ../development/libraries/opencollada { };
 
+  opencore-amr = callPackage ../development/libraries/opencore-amr { };
+  
   opencsg = callPackage ../development/libraries/opencsg { };
 
   openct = callPackage ../development/libraries/openct { };
