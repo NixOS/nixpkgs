@@ -9633,6 +9633,8 @@ with pkgs;
 
   opencollada = callPackage ../development/libraries/opencollada { };
 
+  opencore-amr = callPackage ../development/libraries/opencore-amr { };
+  
   opencsg = callPackage ../development/libraries/opencsg { };
 
   openct = callPackage ../development/libraries/openct { };
