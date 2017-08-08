@@ -94,6 +94,7 @@
   campadrenalin = "Philip Horger <campadrenalin@gmail.com>";
   canndrew = "Andrew Cann <shum@canndrew.org>";
   carlsverre = "Carl Sverre <accounts@carlsverre.com>";
+  casey = "Casey Rodarmor <casey@rodarmor.net>";
   cdepillabout = "Dennis Gosnell <cdep.illabout@gmail.com>";
   cfouche = "Chaddaï Fouché <chaddai.fouche@gmail.com>";
   changlinli = "Changlin Li <mail@changlinli.com>";
