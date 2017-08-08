@@ -30,7 +30,8 @@ assertExecutable() {
 makeWrapper() {
     local original="$1"
     local wrapper="$2"
-    local params varName value command separator n fileNames
+    shift 2
+    local varName value command separator fileNames
     local argv0 flagsBefore flags
 
     assertExecutable "$original"
@@ -39,40 +40,38 @@ makeWrapper() {
 
     echo "#! $SHELL -e" > "$wrapper"
 
-    params=("$@")
-    for ((n = 2; n < ${#params[*]}; n += 1)); do
-        p="${params[$n]}"
-
-    case "$p" in
+    while (( $# )); do
+    case "$1" in
         --set)
-            varName="${params[$((n + 1))]}"
-            value="${params[$((n + 2))]}"
-            n=$((n + 2))
+            varName="$2"
+            value="$3"
+            shift 3
             echo "export $varName=${value@Q}" >> "$wrapper"
             ;;
         --set-default)
-            varName="${params[$((n + 1))]}"
-            value="${params[$((n + 2))]}"
-            n=$((n + 2))
+            varName="$2"
+            value="$3"
+            shift 3
             echo "export $varName=\${$varName-${value@Q}}" >> "$wrapper"
             ;;
         --unset)
-            varName="${params[$((n + 1))]}"
-            n=$((n + 1))
+            varName="$2"
+            shift 2
             echo "unset $varName" >> "$wrapper"
             ;;
         --run)
-            command="${params[$((n + 1))]}"
-            n=$((n + 1))
+            command="$2"
+            shift 2
             echo "$command" >> "$wrapper"
             ;;
         --suffix | --prefix)
-            varName="${params[$((n + 1))]}"
-            separator="${params[$((n + 2))]}"
-            value="${params[$((n + 3))]}"
-            n=$((n + 3))
+            flag="$1"
+            varName="$2"
+            separator="$3"
+            value="$4"
+            shift 4
             if test -n "$value"; then
-                if test "$p" = "--suffix"; then
+                if test "$flag" = "--suffix"; then
                     echo "export $varName=\$$varName\${$varName:+${separator@Q}}${value@Q}" >> "$wrapper"
                 else
                     echo "export $varName=${value@Q}\${$varName:+${separator@Q}}\$$varName" >> "$wrapper"
@@ -80,22 +79,23 @@ makeWrapper() {
             fi
             ;;
         --suffix-each)
-            varName="${params[$((n + 1))]}"
-            separator="${params[$((n + 2))]}"
-            values="${params[$((n + 3))]}"
-            n=$((n + 3))
+            varName="$2"
+            separator="$3"
+            values="$4"
+            shift 4
             for value in $values; do
                 echo "export $varName=\$$varName\${$varName:+$separator}${value@Q}" >> "$wrapper"
             done
             ;;
         --suffix-contents | --prefix-contents)
-            varName="${params[$((n + 1))]}"
-            separator="${params[$((n + 2))]}"
-            fileNames="${params[$((n + 3))]}"
-            n=$((n + 3))
+            flag="$1"
+            varName="$2"
+            separator="$3"
+            fileNames="$4"
+            shift 4
             for fileName in $fileNames; do
                 contents="$(cat "$fileName")"
-                if test "$p" = "--suffix-contents"; then
+                if test "$flag" = "--suffix-contents"; then
                     echo "export $varName=\$$varName\${$varName:+$separator}${contents@Q}" >> "$wrapper"
                 else
                     echo "export $varName=${contents@Q}\${$varName:+$separator}\$$varName" >> "$wrapper"
@@ -103,16 +103,16 @@ makeWrapper() {
             done
             ;;
         --add-flags)
-            flags="${params[$((n + 1))]}"
-            n=$((n + 1))
+            flags="$2"
+            shift 2
             flagsBefore="$flagsBefore $flags"
             ;;
         --argv0)
-            argv0="${params[$((n + 1))]}"
-            n=$((n + 1))
+            argv0="$2"
+            shift 2
             ;;
         *)
-            die "makeWrapper doesn't understand the arg $p"
+            die "makeWrapper doesn't understand the arg $1"
             ;;
     esac
     done
