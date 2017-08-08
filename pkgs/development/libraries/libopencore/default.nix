@@ -1,4 +1,4 @@
-{ stdenv, fetchurl };
+{ stdenv, fetchurl }:
 
 let
     version = "0.1.5";
