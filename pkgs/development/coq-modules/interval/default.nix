@@ -4,8 +4,8 @@ stdenv.mkDerivation {
   name = "coq${coq.coq-version}-interval-3.1.1";
 
   src = fetchurl {
-    url = https://gforge.inria.fr/frs/download.php/file/36342/interval-3.1.1.tar.gz;
-    sha256 = "0jzkb0xykiz9bfaminy9yd88b5w0gxcpw506yaaqmnmb43gdksyf";
+    url = https://gforge.inria.fr/frs/download.php/file/36723/interval-3.1.1.tar.gz;
+    sha256 = "1sqsf075c7s98mwi291bhnrv5fgd7brrqrzx51747394hndlvfw3";
   };
 
   nativeBuildInputs = [ which ];
