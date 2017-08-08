@@ -115,6 +115,23 @@ rec {
         ]
       ];
 
+      defaultHardeningFlags = [
+        "fortify" "stackprotector" "pic" "strictoverflow" "format" "relro" "bindnow"
+      ];
+
+      hardeningDisable =
+        let val  = attrs.hardeningDisable or [ ];
+        in if builtins.isList val then val else [ val ];
+
+      hardeningEnable =
+        let val = attrs.hardeningEnable or [ ];
+        in if builtins.isList val then val else [ val ];
+
+      enabledHardeningOptions =
+        if builtins.elem "all" hardeningDisable
+        then []
+        else lib.subtractLists hardeningDisable (defaultHardeningFlags ++ hardeningEnable);
+
       outputs' =
         outputs ++
         (if separateDebugInfo then assert stdenv.hostPlatform.isLinux; [ "debug" ] else []);
@@ -179,6 +196,8 @@ rec {
             ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
             ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
 
+        } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != []) {
+          NIX_HARDENING_ENABLE = enabledHardeningOptions;
         } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {
           # TODO: remove lib.unique once nix has a list canonicalization primitive
           __sandboxProfile =

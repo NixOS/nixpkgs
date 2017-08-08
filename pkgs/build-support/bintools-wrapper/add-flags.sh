@@ -5,6 +5,7 @@ var_templates_list=(
     NIX+LDFLAGS_BEFORE
     NIX+LDFLAGS_AFTER
     NIX+LDFLAGS_HARDEN
+    NIX+HARDENING_ENABLE
 )
 var_templates_bool=(
     NIX+SET_BUILD_ID
