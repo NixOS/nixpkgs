@@ -1,17 +1,16 @@
-{stdenv, fetchurl, unzip, cmake, python}:
+{stdenv, fetchFromGitHub, unzip, cmake, python}:
 
 stdenv.mkDerivation {
-  name = "flann-1.8.4";
+  name = "flann-1.9.1";
 
-  src = fetchurl {
-    url = http://people.cs.ubc.ca/~mariusm/uploads/FLANN/flann-1.8.4-src.zip;
-    sha256 = "022w8hph7bli5zbpnk3z1qh1c2sl5hm8fw2ccim651ynn0hr7fyz";
+  src = fetchFromGitHub {
+    owner = "mariusmuja";
+    repo = "flann";
+    rev = "1.9.1";
+    sha256 = "13lg9nazj5s9a41j61vbijy04v6839i67lqd925xmxsbybf36gjc";
   };
 
   buildInputs = [ unzip cmake python ];
-
-  # patch out examples in Darwin because they do not compile.
-  patches = stdenv.lib.optionals stdenv.isDarwin [ ./no-examples.patch ];
 
   meta = {
     homepage = http://people.cs.ubc.ca/~mariusm/flann/;
