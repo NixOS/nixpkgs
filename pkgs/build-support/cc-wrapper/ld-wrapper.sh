@@ -20,11 +20,6 @@ fi
 
 source @out@/nix-support/utils.sh
 
-# make set -u happy if the outside environment is unset
-# this should never happen, but does in an LLVM test
-if [ -z "${NIX_STORE:-}" ]; then
-    NIX_STORE=/nix/store
-fi
 
 # Optionally filter out paths not refering to the store.
 expandResponseParams "$@"
