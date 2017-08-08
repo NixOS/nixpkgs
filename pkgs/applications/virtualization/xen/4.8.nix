@@ -53,7 +53,7 @@ callPackage (import ./generic.nix (rec {
       patches = [
         (xsaPatch {
           name = "216-qemuu";
-          sha256 = "09gp980qdlfpfmxy0nk7ncyaa024jnrpzx9gpq2kah21xygy5ma1";
+          sha256 = "06w2iw1r5gip2bpbg19cziws965h9in0f6np74cr31f76yy30yxn";
         })
       ];
       meta.description = "Xen's fork of upstream Qemu";
