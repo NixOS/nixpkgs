@@ -1,10 +1,10 @@
 { lib, bundlerEnv, ruby, fetchFromGitHub }:
 
 bundlerEnv rec {
-  name = "git-fame-${version}";
-
-  version = "2.5.2";
   inherit ruby;
+
+  pname = "git_fame";
+
   gemdir = ./.;
 
   meta = with lib; {
