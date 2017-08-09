@@ -25060,29 +25060,6 @@ EOF
   };
 
 
-  zope_container = buildPythonPackage rec {
-    name = "zope.container-4.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zope.container/${name}.tar.gz";
-      sha256 = "5c04e61b52fd04d8b7103476532f557c2278c86281aae30d44f88a5fbe888940";
-    };
-
-    # a test is failing
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [
-      zodb3 zope_broken zope_dottedname zope_publisher
-      zope_filerepresentation zope_lifecycleevent zope_size
-      zope_traversing
-    ];
-
-    meta = {
-        maintainers = with maintainers; [ goibhniu ];
-    };
-  };
-
-
   zope_contenttype = buildPythonPackage rec {
     name = "zope.contenttype-4.0.1";
 
