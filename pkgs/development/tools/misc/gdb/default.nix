@@ -66,6 +66,13 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (!pythonSupport) "--without-python"
     ++ stdenv.lib.optional multitarget "--enable-targets=all";
 
+  preConfigure =
+    # Not sure why this is causing problems, now that the stdenv
+    # exports CPP=cpp the build fails with strange errors on darwin.
+    stdenv.lib.optionalString stdenv.cc.isClang ''
+      unset CPP
+    '';
+
   postInstall =
     '' # Remove Info files already provided by Binutils and other packages.
        rm -v $out/share/info/bfd.info
