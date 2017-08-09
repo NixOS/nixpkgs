@@ -24920,22 +24920,6 @@ EOF
   };
 
 
-  zope_browser = buildPythonPackage rec {
-    name = "zope.browser-2.0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zope.browser/${name}.zip";
-      sha256 = "0f9r5rn9lzgi4hvkhgb6vgw8kpz9sv16jsfb9ws4am8gbqcgv2iy";
-    };
-
-    propagatedBuildInputs = with self; [ zope_interface ];
-
-    meta = {
-        maintainers = with maintainers; [ goibhniu ];
-    };
-  };
-
-
   zope_component = buildPythonPackage rec {
     name = "zope.component-4.2.1";
 
