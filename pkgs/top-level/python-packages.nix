@@ -163,6 +163,8 @@ in {
 
   discordpy = callPackage ../development/python-modules/discordpy { };
 
+  distorm3 = callPackage ../development/python-modules/distorm3 { };
+
   h5py = callPackage ../development/python-modules/h5py {
     hdf5 = pkgs.hdf5;
   };
