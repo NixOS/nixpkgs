@@ -25224,26 +25224,6 @@ EOF
   };
 
 
-  zope_sqlalchemy = buildPythonPackage rec {
-    name = "zope.sqlalchemy-0.7.6";
-
-    doCheck = !isPyPy; # https://github.com/zopefoundation/zope.sqlalchemy/issues/12
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zope.sqlalchemy/${name}.zip";
-      sha256 = "0vxhpdvzihsmg63aralmc7hx62lzrsnlxvskvlcr4mkwzwb22haj";
-    };
-
-    buildInputs = with self; [ zope_testing zope_interface ];
-    propagatedBuildInputs = with self; [ sqlalchemy transaction ];
-
-    meta = {
-      maintainers = with maintainers; [ garbas domenkozar ];
-      platforms = platforms.all;
-    };
-  };
-
-
   zope_testing = buildPythonPackage rec {
     name = "zope.testing-${version}";
     version = "4.6.1";
