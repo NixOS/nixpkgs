@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   preFixup = ''
-    for f in "$out/libexec/"*; do
+    for f in $(find $out/libexec/ -type f -executable); do
       wrapProgram "$f" \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
         --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules"
