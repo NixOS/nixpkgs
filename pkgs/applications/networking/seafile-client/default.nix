@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, writeScript, pkgconfig, cmake, qtbase, qttools
-, seafile-shared, ccnet, makeWrapper, qtxmlpatterns }:
+, seafile-shared, ccnet, makeWrapper }:
 
 stdenv.mkDerivation rec {
   version = "6.1.0";
