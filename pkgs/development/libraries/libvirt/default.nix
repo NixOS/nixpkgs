@@ -4,7 +4,8 @@
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
-, curl, libiconv, gmp, xen, zfs, parted, fuse
+, curl, libiconv, gmp, zfs, parted, fuse
+, xen ? null, enableXen ? false
 }:
 
 with stdenv.lib;
@@ -27,10 +28,10 @@ stdenv.mkDerivation rec {
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap
   ] ++ optionals stdenv.isLinux [
     libpciaccess devicemapper lvm2 utillinux systemd libnl numad zfs
-    libapparmor libcap_ng numactl xen attr parted
+    libapparmor libcap_ng numactl attr parted
   ] ++ optionals stdenv.isDarwin [
      libiconv gmp
-  ];
+  ] ++ optional enableXen xen;
 
   preConfigure = optionalString stdenv.isLinux ''
     PATH=${stdenv.lib.makeBinPath [ iproute iptables ebtables lvm2 systemd ]}:$PATH
