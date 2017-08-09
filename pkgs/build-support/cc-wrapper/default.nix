@@ -150,7 +150,7 @@ stdenv.mkDerivation {
         echo $dynamicLinker > $out/nix-support/dynamic-linker
 
     '' + (if targetPlatform.isDarwin then ''
-        printf "export LD_DYLD_PATH+=%q\n" "$dynamicLinker" >> $out/nix-support/setup-hook
+        printf "export LD_DYLD_PATH=%q\n" "$dynamicLinker" >> $out/nix-support/setup-hook
     '' else ''
         if [ -e ${libc_lib}/lib/32/ld-linux.so.2 ]; then
           echo ${libc_lib}/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
