@@ -24809,26 +24809,6 @@ EOF
     };
   };
 
-  zodb3 = buildPythonPackage rec {
-    name = "zodb3-${version}";
-    version = "3.11.0";
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/Z/ZODB3/ZODB3-${version}.tar.gz";
-      sha256 = "b5767028e732c619f45c27189dd001e14ec155d7984807991fce751b35b4fcb0";
-    };
-
-    propagatedBuildInputs = with self; [ manuel transaction zc_lockfile zconfig zdaemon zope_interface zope_event BTrees persistent ZEO ];
-
-    meta = {
-      description = "An object-oriented database for Python";
-      homepage = http://pypi.python.org/pypi/ZODB3;
-      license = licenses.zpl20;
-      maintainers = with maintainers; [ goibhniu ];
-    };
-  };
-
   zodb = buildPythonPackage rec {
     name = "zodb-${version}";
     disabled = isPyPy;
