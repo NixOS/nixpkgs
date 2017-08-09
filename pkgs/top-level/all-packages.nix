@@ -3192,7 +3192,8 @@ with pkgs;
 
   minissdpd = callPackage ../tools/networking/minissdpd { };
 
-  inherit (callPackage ../tools/networking/miniupnpc { })
+  inherit (callPackage ../tools/networking/miniupnpc
+            { inherit (darwin) cctools; })
     miniupnpc_1 miniupnpc_2;
   miniupnpc = miniupnpc_1;
 
