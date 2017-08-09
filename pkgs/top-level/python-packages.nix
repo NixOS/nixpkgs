@@ -8549,21 +8549,6 @@ in {
     };
   };
 
-  ZEO = self.buildPythonPackage rec {
-    name = "ZEO-4.0.0";
-
-    propagatedBuildInputs = with self; [ random2 zodb six transaction persistent zc_lockfile zconfig zdaemon zope_interface ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/Z/ZEO/${name}.tar.gz";
-      sha256 = "63555b6d2b5f98d215c4b5fdce004fb0475daa6efc8b70f39c77d646c12d7e51";
-    };
-
-    meta = {
-      homepage = https://pypi.python.org/pypi/ZEO;
-    };
-  };
-
   random2 = self.buildPythonPackage rec {
     name = "random2-1.0.1";
 
