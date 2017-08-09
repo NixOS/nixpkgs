@@ -6334,7 +6334,6 @@ with pkgs;
   python2Full = python2.override{x11Support=true;};
   python27Full = python27.override{x11Support=true;};
   python3Full = python3.override{x11Support=true;};
-  python33Full = python33.override{x11Support=true;};
   python34Full = python34.override{x11Support=true;};
   python35Full = python35.override{x11Support=true;};
   python36Full = python36.override{x11Support=true;};
@@ -6346,10 +6345,6 @@ with pkgs;
 
   python27 = callPackage ../development/interpreters/python/cpython/2.7 {
     self = python27;
-    inherit (darwin) CF configd;
-  };
-  python33 = callPackage ../development/interpreters/python/cpython/3.3 {
-    self = python33;
     inherit (darwin) CF configd;
   };
   python34 = callPackage ../development/interpreters/python/cpython/3.4 {
@@ -9641,6 +9636,8 @@ with pkgs;
 
   opencollada = callPackage ../development/libraries/opencollada { };
 
+  opencore-amr = callPackage ../development/libraries/opencore-amr { };
+  
   opencsg = callPackage ../development/libraries/opencsg { };
 
   openct = callPackage ../development/libraries/openct { };
@@ -10916,8 +10913,6 @@ with pkgs;
   # Python package sets.
 
   python27Packages = lib.hiPrioSet (recurseIntoAttrs python27.pkgs);
-
-  python33Packages = python33.pkgs;
 
   python34Packages = python34.pkgs;
 
@@ -17452,6 +17447,8 @@ with pkgs;
   residualvm = callPackage ../games/residualvm {
     openglSupport = mesaSupported;
   };
+
+  rftg = callPackage ../games/rftg { };
 
   rigsofrods = callPackage ../games/rigsofrods {
     angelscript = angelscript_2_22;

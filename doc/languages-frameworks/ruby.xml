@@ -111,7 +111,6 @@ the needed dependencies. For example, to make a derivation
 in stdenv.mkDerivation {
   name = "my-script";
   buildInputs = [ env.wrappedRuby ];
-  phases = [ "installPhase" "fixupPhase" ];
   script = ./my-script.rb;
   buildCommand = ''
     install -D -m755 $script $out/bin/my-script
