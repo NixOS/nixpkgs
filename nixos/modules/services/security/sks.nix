@@ -28,7 +28,7 @@ in
       };
 
       hkpAddress = mkOption {
-        default = [ "127.0.0.1" "::1" ];
+        default = [ "::1" "127.0.0.1" ];
         type = types.listOf types.str;
         description = "
           Wich ip addresses the sks-keyserver is listening on.

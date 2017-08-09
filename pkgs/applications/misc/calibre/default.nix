@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     poppler_utils libpng imagemagick libjpeg
     fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils wrapGAppsHook
   ] ++ (with python2Packages; [
-    html5lib_0_9999999 # needs to be before mechanize ?
+    html5lib # needs to be before mechanize ?
     apsw cssselect cssutils dateutil lxml mechanize netifaces pillow
     python pyqt5 sip
     regex msgpack
