@@ -46,7 +46,21 @@ let
       ServerTransportPlugin obfs2,obfs3 exec ${pkgs.pythonPackages.obfsproxy}/bin/obfsproxy managed
     ''}
   ''
+  + hiddenServices
   + cfg.extraConfig;
+
+  hiddenServices = concatStrings (mapAttrsToList (hiddenServiceDir: hs:
+    let
+      hsports = concatStrings (map mkHiddenServicePort hs.hiddenServicePorts);
+    in
+      "HiddenServiceDir ${hiddenServiceDir}\n${hsports}\n${hs.extraConfig}\n"
+    ) cfg.hiddenServices);
+
+    mkHiddenServicePort = hsport: let
+      trgt = if (hsport.target != null) then
+        " " + hsport.target
+      else "";
+    in "HiddenServicePort ${toString hsport.virtualPort}${trgt}";
 
   torRcFile = pkgs.writeText "torrc" torRc;
 in
@@ -313,6 +327,68 @@ in
             those destinations are down.
           '';
         };
+      };
+
+      hiddenServices = mkOption {
+        type = types.attrsOf (types.submodule ({
+          options = {
+            hiddenServicePorts = mkOption {
+              type = types.listOf (types.submodule {
+                options = {
+                  virtualPort = mkOption {
+                    type = types.int;
+                    example = 80;
+                    description = "Virtual port.";
+                  };
+                  target = mkOption {
+                    type = types.nullOr types.str;
+                    default = null;
+                    example = "127.0.0.1:8080";
+                    description = ''
+                      Target virtual Port shall be mapped to.
+
+                      You may override the target port, address, or both by
+                      specifying a target of addr, port, addr:port, or
+                      unix:path. (You can specify an IPv6 target as
+                      [addr]:port. Unix paths may be quoted, and may use
+                      standard C escapes.)
+                    '';
+                  };
+                };
+              });
+              example = [ { virtualPort = 80; target = "127.0.0.1:8080"; } { virtualPort = 6667; } ];
+              description = ''
+                If target is <literal>null</literal> the virtual port is mapped
+                to the same port on 127.0.0.1 over TCP. You may use
+                <literal>target</literal> to overwrite this behaviour (see
+                description of target).
+
+                This corresponds to the <literal>HiddenServicePort VIRTPORT
+                [TARGET]</literal> option by looking at the tor manual
+                (<literal>man tor</literal>) for more information.
+              '';
+            };
+            extraConfig = mkOption {
+              type = types.str;
+              default = "";
+              description = ''
+                Extra configuration. Contents will be added in the current
+                hidden service context.
+              '';
+            };
+          };
+        }));
+        default = {
+          "/path/to/hidden/service/dir/" = {
+            hiddenServicePorts = [ { virtualPort = 80; } ];
+          };
+        };
+        description = ''
+          Configure hidden services.
+
+          Please consult the tor manual (<literal>man tor</literal>) for a more
+          detailed explanation. (search for 'HIDDEN').
+        '';
       };
     };
   };
