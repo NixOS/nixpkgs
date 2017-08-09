@@ -8366,21 +8366,6 @@ in {
     };
   };
 
-  hypatia = buildPythonPackage rec {
-    name = "hypatia-0.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/hypatia/${name}.tar.gz";
-      sha256 = "fb4d394eeac4b06ff2259cada6174aebbe77edd243ffd1deda320cb327f98bd9";
-    };
-
-    buildInputs = with self; [ zope_interface zodb ];
-
-    meta = {
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  };
-
 
   zope_copy = buildPythonPackage rec {
     name = "zope.copy-4.0.2";
