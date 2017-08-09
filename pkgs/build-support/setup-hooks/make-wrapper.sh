@@ -33,7 +33,7 @@ makeWrapper() {
     local params varName value command separator n fileNames
     local argv0 flagsBefore flags
 
-    assertExecutable "${file}"
+    assertExecutable "${original}"
 
     mkdir -p "$(dirname "$wrapper")"
 
