@@ -1,5 +1,5 @@
 { stdenv, fetchurl, apr, scons, openssl, aprutil, zlib, kerberos
-, pkgconfig, gnused, expat, openldap }:
+, pkgconfig, gnused, expat, openldap, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "serf-1.3.9";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ apr scons openssl aprutil zlib ]
+  buildInputs = [ apr scons openssl aprutil zlib libiconv ]
     ++ stdenv.lib.optional (!stdenv.isCygwin) kerberos;
 
   postPatch = ''
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     scons PREFIX="$out" OPENSSL="${openssl}" ZLIB="${zlib}" APR="$(echo "${apr.dev}"/bin/*-config)" CFLAGS="-I${zlib.dev}/include" \
-      LINKFLAGS="-L${zlib.out}/lib -L${expat}/lib -L${openldap}/lib" \
+      LINKFLAGS="-L${zlib.out}/lib -L${expat}/lib -L${openldap}/lib -L${libiconv}/lib" \
         APU="$(echo "${aprutil.dev}"/bin/*-config)" CC="${
           if stdenv.cc.isClang then "clang" else "${stdenv.cc}/bin/gcc"
         }" ${
