@@ -6492,11 +6492,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  HTMLParser = buildPerlPackage {
-    name = "HTML-Parser-3.71";
+  HTMLParser = buildPerlPackage rec {
+    name = "HTML-Parser-3.72";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/HTML-Parser-3.71.tar.gz;
-      sha256 = "00nqzdgl7c3jilx7mil19k5jwcw3as14pvkjgxi97zyk94vqp4dy";
+      url = "mirror://cpan/authors/id/G/GA/GAAS/${name}.tar.gz";
+      sha256 = "12v05ywlnsi9lc17z32k9jxx3sj1viy7y1wpl7n4az76v7hwfa7c";
     };
     propagatedBuildInputs = [ HTMLTagset ];
     meta = {
