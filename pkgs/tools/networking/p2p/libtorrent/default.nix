@@ -1,21 +1,25 @@
 { stdenv, fetchFromGitHub, pkgconfig
 , libtool, autoconf, automake, cppunit
-, openssl, libsigcxx, zlib }:
+, openssl, libsigcxx, zlib, boost, boost-build }:
 
 stdenv.mkDerivation rec {
   name = "libtorrent-${version}";
-  version = "0.13.6";
+  version = "1.1.14";
 
   src = fetchFromGitHub rec {
-    owner = "rakshasa";
+    owner = "arvidn";
     repo = "libtorrent";
-    rev = "${version}";
-    sha256 = "1rvrxgb131snv9r6ksgzmd74rd9z7q46bhky0zazz7dwqqywffcp";
+    rev = "libtorrent-1_1_4";
+    sha256 = "0h6gfj0swhjzxmpqgdma4i9kr99gsfhb6j3icpfbg09hcza3zhiv";
   };
 
-  buildInputs = [ pkgconfig libtool autoconf automake cppunit openssl libsigcxx zlib ];
+  buildInputs = [ pkgconfig libtool autoconf automake cppunit openssl libsigcxx zlib boost boost-build ];
 
-  preConfigure = "./autogen.sh";
+  # preConfigure = "./autotool.sh";
+
+  buildPhase = "bjam release";
+
+  installPhase = "bjam --prefix=$out release install";
 
   meta = with stdenv.lib; {
     homepage = http://www.libtorrent.org/;
