@@ -132,11 +132,14 @@ if [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ]; then
         for path in "$dir"/*; do
             file="${path##*/}"
             if [ "${libs[$file]:-}" ]; then
-                libs["$file"]=
-                if [ -z "${rpaths[$dir]:-}" ]; then
-                    rpaths["$dir"]=1
-                    extraAfter+=(-rpath "$dir")
-                fi
+                # This library may have been provided by a previous directory,
+                # but if that library file is inside an output of the current
+                # derivation, it can be deleted after this compilation and
+                # should be found in a later directory, so we add all
+                # directories that contain any of the libraries to rpath.
+                rpaths["$dir"]=1
+                extraAfter+=(-rpath "$dir")
+                break
             fi
         done
     done
