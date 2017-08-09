@@ -378,7 +378,8 @@ in
             };
           };
         }));
-        default = {
+        default = {};
+        example = {
           "/path/to/hidden/service/dir/" = {
             hiddenServicePorts = [ { virtualPort = 80; } ];
           };
