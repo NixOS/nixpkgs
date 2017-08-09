@@ -2540,6 +2540,7 @@ extra-packages:
   - tar < 0.4.2.0                       # later versions don't work with GHC < 7.6.x
   - transformers == 0.4.3.*             # the latest version isn't supported by mtl yet
   - vector < 0.10.10                    # newer versions don't work with GHC 6.12.3
+  - tasty-ant-xml == 1.0.5              # newer versions don't work with GHC 7.10.3
 
 package-maintainers:
   peti:

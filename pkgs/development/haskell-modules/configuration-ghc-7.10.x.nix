@@ -193,6 +193,8 @@ self: super: {
   semigroups = addBuildDepends super.semigroups (with self; [hashable tagged text unordered-containers]);
   texmath = addBuildDepend super.texmath self.network-uri;
   yesod-auth-oauth2 = overrideCabal super.yesod-auth-oauth2 (drv: { testDepends = (drv.testDepends or []) ++ [ self.load-env self.yesod ]; });
+  vector = addBuildDepend super.vector self.semigroups;
+  natural-transformation = addBuildDepend super.natural-transformation self.semigroups;
   # cereal must have `fail` in pre-ghc-8.0.x versions
   # also tests require bytestring>=0.10.8.1
   cereal = dontCheck (addBuildDepend super.cereal self.fail);
@@ -200,4 +202,6 @@ self: super: {
   # Moved out from common as no longer the case for GHC8
   ghc-mod = super.ghc-mod.override { cabal-helper = self.cabal-helper_0_6_3_1; };
 
+  # Newer version requires directory >= 1.2.3.0 which is not bundled with GHC 7.10
+  tasty-ant-xml = super.tasty-ant-xml_1_0_5;
 }
