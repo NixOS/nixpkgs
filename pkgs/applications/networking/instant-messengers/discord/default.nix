@@ -25,24 +25,22 @@ stdenv.mkDerivation rec {
      ];
 
     installPhase = ''
-        mkdir -p $out/{bin,share/pixmaps}
-        mv * $out
+        mkdir -p $out/{bin,opt,share/pixmaps}
+        mv * $out/opt
 
         # Copying how adobe-reader does it,
         # see pkgs/applications/misc/adobe-reader/builder.sh
         patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-                 --set-rpath "$out:$libPath"                                   \
-                 $out/Discord
+                 --set-rpath "$out/opt:$libPath"                                   \
+                 $out/opt/Discord
 
-        paxmark m $out/Discord
+        paxmark m $out/opt/Discord
 
-        wrapProgram $out/Discord --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH:${libcxx}/lib"
+        wrapProgram $out/opt/Discord --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH:${libcxx}/lib:${systemd.lib}/lib"
 
-        ln -s $out/Discord $out/bin/
-        ln -s $out/discord.png $out/share/pixmaps
+        ln -s $out/opt/Discord $out/bin/
+        ln -s $out/opt/discord.png $out/share/pixmaps
 
-        # Putting udev in the path won't work :(
-        ln -s ${systemd.lib}/lib/libudev.so.1 $out
         ln -s "${desktopItem}/share/applications" $out/share/
         '';
 
@@ -60,7 +58,7 @@ stdenv.mkDerivation rec {
         homepage = https://discordapp.com/;
         downloadPage = "https://github.com/crmarsh/discord-linux-bugs";
         license = licenses.unfree;
-        maintainers = [ maintainers.ldesgoui ];
+        maintainers = [ maintainers.ldesgoui maintainers.MP2E ];
         platforms = [ "x86_64-linux" ];
     };
 }
