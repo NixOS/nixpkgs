@@ -15332,27 +15332,7 @@ in {
     '';
   };
 
-  pecan = buildPythonPackage rec {
-    name = "pecan-${version}";
-    version = "1.0.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pecan/${name}.tar.gz";
-      sha256 = "04abmybab8jzbwgmrr0fcpcfhcvvkdsv9q135dss02wyk9q9jv4d";
-    };
-
-    propagatedBuildInputs = with self; [
-      singledispatch logutils
-    ];
-    buildInputs = with self; [
-      webtest Mako genshi Kajiki sqlalchemy gunicorn jinja2 virtualenv
-    ];
-
-    meta = with stdenv.lib; {
-      description = "Pecan";
-      homepage = "http://github.com/pecan/pecan";
-    };
-  };
+  pecan = callPackage ../development/python-modules/pecan { };
 
   kaitaistruct = buildPythonPackage rec {
     name = "kaitaistruct-${version}";
