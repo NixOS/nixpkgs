@@ -25,11 +25,13 @@ stdenv.mkDerivation rec {
     mv $out/share/bcc/man $out/share/
 
     for f in $out/share/bcc/tools\/*; do
-      ln -s $f $out/bin/$(basename $f)
-      wrapProgram $f \
-        --prefix LD_LIBRARY_PATH : $out/lib \
-        --prefix PYTHONPATH : $out/lib/python2.7/site-packages \
-        --prefix PYTHONPATH : :${pythonPackages.netaddr}/lib/${python.libPrefix}/site-packages
+      if [ -x $f ]; then
+        ln -s $f $out/bin/$(basename $f)
+        wrapProgram $f \
+          --prefix LD_LIBRARY_PATH : $out/lib \
+          --prefix PYTHONPATH : $out/lib/python2.7/site-packages \
+          --prefix PYTHONPATH : ${pythonPackages.netaddr}/lib/${python.libPrefix}/site-packages
+      fi
     done
   '';
 
