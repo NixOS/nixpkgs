@@ -8074,22 +8074,6 @@ in {
   };
 
 
-  pyramid_tm = buildPythonPackage rec {
-    name = "pyramid_tm-0.10";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyramid_tm/${name}.tar.gz";
-      sha256 = "99528c54accf2bd5860d10634fe8972e8375b2d0f50ee08f208ed0484ffafc1d";
-    };
-
-    propagatedBuildInputs = with self; [ transaction pyramid ];
-    meta = {
-      maintainers = with maintainers; [ garbas domenkozar matejc ];
-      platforms = platforms.all;
-    };
-  };
-
-
   pyramid_multiauth = buildPythonPackage rec {
     name = "pyramid_multiauth-${version}";
     version = "0.8.0";
