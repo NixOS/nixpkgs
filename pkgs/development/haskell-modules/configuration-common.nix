@@ -867,4 +867,10 @@ self: super: {
   # https://github.com/vincenthz/hs-tls/issues/247
   tls = dontCheck super.tls;
 
+  # missing dependencies: blaze-html >=0.5 && <0.9, blaze-markup >=0.5 && <0.8
+  digestive-functors-blaze = doJailbreak super.digestive-functors-blaze;
+
+  # missing dependencies: doctest ==0.12.*
+  html-entities = doJailbreak super.html-entities;
+
 }
