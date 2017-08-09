@@ -25017,24 +25017,6 @@ EOF
     };
   };
 
-  zope_browserresource = buildPythonPackage rec {
-    name = "zope.browserresource-4.0.1";
-
-    propagatedBuildInputs = with self; [
-      zope_component zope_configuration zope_contenttype zope_i18n
-      zope_interface zope_location zope_publisher zope_schema zope_traversing
-    ];
-
-    # all tests fail
-    doCheck = false;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zope.browserresource/zope.browserresource-4.0.1.zip";
-      sha256 = "d580184562e7098950ae377b5b37fbb88becdaa2256ac2a6760b69a3e86a99b2";
-    };
-  };
-
-
 
   zope_component = buildPythonPackage rec {
     name = "zope.component-4.2.1";
