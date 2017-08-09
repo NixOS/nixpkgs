@@ -11360,8 +11360,6 @@ with pkgs;
   munin = callPackage ../servers/monitoring/munin { };
 
   nagiosPluginsOfficial = callPackage ../servers/monitoring/nagios/plugins/official-2.x.nix { };
-  
-  checkSSLCert = callPackage ../servers/monitoring/nagios/plugins/check_ssl_cert.nix { };
 
   neo4j = callPackage ../servers/nosql/neo4j { };
 
