@@ -25248,24 +25248,6 @@ EOF
 
   zope_testrunner = callPackage ../development/python-modules/zope_testrunner { };
 
-  zope_traversing = buildPythonPackage rec {
-    name = "zope.traversing-4.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/zope.traversing/${name}.zip";
-      sha256 = "79d38b92ec1d9a2467966ee954b792d83ac66f22e45e928113d4b5dc1f5e74eb";
-    };
-
-    propagatedBuildInputs = with self; [ zope_location zope_security zope_publisher transaction zope_tales ];
-
-    # circular dependency on zope_browserresource
-    doCheck = false;
-
-    meta = {
-        maintainers = with maintainers; [ goibhniu ];
-    };
-  };
-
 
   zope_interface = callPackage ../development/python-modules/zope_interface { };
 
