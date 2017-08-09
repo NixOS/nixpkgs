@@ -1,7 +1,7 @@
 { stdenv, fetchurl, boost, cmake, chromaprint, gettext, gst_all_1, liblastfm
 , qt4, taglib, fftw, glew, qjson, sqlite, libgpod, libplist, usbmuxd, libmtp
 , libpulseaudio, gvfs, libcdio, libechonest, libspotify, pcre, protobuf
-, qca2, pkgconfig, sparsehash, config, makeWrapper, runCommand, gst_plugins }:
+, qca2, pkgconfig, sparsehash, config, wrapGAppsHook, runCommand, gst_plugins }:
 
 let
   withSpotify = config.clementine.spotify or false;
