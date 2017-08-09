@@ -106,15 +106,22 @@ in
       type = types.lines;
     };
 
-    environment.shellAliases = mkOption {
-      default = {};
+    environment.shellAliases = mkOption rec {
+      default = {
+        ls = "ls --color=tty";
+        ll = "ls -l";
+        l  = "ls -alh";
+      };
       example = { ll = "ls -l"; };
       description = ''
         An attribute set that maps aliases (the top level attribute names in
         this option) to command strings or directly to build outputs. The
         aliases are added to all users' shells.
       '';
-      type = types.attrs; # types.attrsOf types.stringOrPath;
+      type = types.attrs // {
+        # merge aliases defined by the user and the defaults
+        merge = loc: defs: default // types.attrs.merge loc defs;
+      };
     };
 
     environment.binsh = mkOption {
