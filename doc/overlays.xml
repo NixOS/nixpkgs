@@ -8,59 +8,62 @@
 overlays. Overlays are used to add layers in the fix-point used by Nixpkgs
 to compose the set of all packages.</para>
 
+<para>Nixpkgs can be configured with a list of overlays, which are
+applied in order. This means that the order of the overlays can be significant
+if multiple layers override the same package.</para>
+
 <!--============================================================-->
 
 <section xml:id="sec-overlays-install">
-<title>Installing Overlays</title>
+<title>Installing overlays</title>
 
-<para>The set of overlays is looked for in the following places. The
-first one present is considered, and all the rest are ignored:
+<para>The list of overlays is determined as follows:
 
 <orderedlist>
 
   <listitem>
+    <para>First, if an <varname>overlays</varname> argument to the nixpkgs function itself is given,
+    then that is used. This can be passed explicitly when importing nipxkgs, for example 
+    <literal>import &lt;nixpkgs> { overlays = [ overlay1 overlay2 ] }</literal>.</para>
 
-    <para>As an argument of the imported attribute set. When importing Nixpkgs,
-    the <varname>overlays</varname> attribute argument can be set to a list of
-    functions, which is described in <xref linkend="sec-overlays-layout"/>.</para>
-
+    <para>On a NixOS system the value of the <literal>nixpkgs.overlays</literal> option, if present, 
+    is passed to the system Nixpkgs in this way. Note that this does not affect the overlays for
+    non-NixOS operations (e.g. <literal>nix-env</literal>), which are looked up independently.</para>
   </listitem>
 
   <listitem>
+    <para>Otherwise, if the Nix path entry <literal>&lt;nixpkgs-overlays></literal> exists and is a 
+    directory, then the result is the set of overlays found in that directory, ordered lexicographically.</para> 
 
-    <para>In the directory pointed to by the Nix search path entry
-    <literal>&lt;nixpkgs-overlays></literal>.</para>
+    <para>See the section on <literal>NIX_PATH</literal> in the Nix manual for more details on how to 
+    set a value for <literal>&lt;nixpkgs-overlays>.</literal></para>
   </listitem>
 
   <listitem>
-
-    <para>In the directory <filename>~/.config/nixpkgs/overlays/</filename>.</para>
+    <para>Otherwise, if <filename>~/.config/nixpkgs/overlays/</filename> exists and is a directory, then
+    the result is the set of overlays found in that directory, ordered lexicographically.</para>
   </listitem>
 
 </orderedlist>
 </para>
 
-<para>For the second and third options, the directory should contain Nix expressions defining the
-overlays. Each overlay can be a file, a directory containing a
-<filename>default.nix</filename>, or a symlink to one of those. The expressions should follow
-the syntax described in <xref linkend="sec-overlays-layout"/>.</para>
+<para>For the second and third options overlays can be provided as files, 
+directories containing a <filename>default.nix</filename>, or symlinks to one of those.</para>
 
-<para>The order of the overlay layers can influence the recipe of packages if multiple layers override
-the same recipe. In the case where overlays are loaded from a directory, they are loaded in
-alphabetical order.</para>
-
-<para>To install an overlay using the last option, you can clone the overlay's repository and add
-a symbolic link to it in <filename>~/.config/nixpkgs/overlays/</filename> directory.</para>
+<para>The last option provides a convenient way to install an overlay from a repository, 
+by cloning the overlay's repository and adding a symbolic link to it in 
+<filename>~/.config/nixpkgs/overlays/</filename>.</para>
 
 </section>
 
 <!--============================================================-->
 
-<section xml:id="sec-overlays-layout">
-<title>Overlays Layout</title>
+<section xml:id="sec-overlays-definition">
+<title>Defining overlays</title>
 
-<para>Overlays are expressed as Nix functions which accept 2 arguments and return a set of
-packages.</para>
+<para>Overlays are Nix functions which accept two arguments, 
+conventionally called <varname>self</varname> and <varname>super</varname>, 
+and return a set of packages. For example, the following is a valid overlay.</para>
 
 <programlisting>
 self: super:
@@ -75,24 +78,30 @@ self: super:
 }
 </programlisting>
 
-<para>The first argument, usually named <varname>self</varname>, corresponds to the final package
+<para>The first argument (<varname>self</varname>) corresponds to the final package
 set. You should use this set for the dependencies of all packages specified in your
 overlay. For example, all the dependencies of <varname>rr</varname> in the example above come
 from <varname>self</varname>, as well as the overridden dependencies used in the
 <varname>boost</varname> override.</para>
 
-<para>The second argument, usually named <varname>super</varname>,
+<para>The second argument (<varname>super</varname>)
 corresponds to the result of the evaluation of the previous stages of
 Nixpkgs. It does not contain any of the packages added by the current
-overlay nor any of the following overlays. This set should be used either
+overlay, nor any of the following overlays. This set should be used either
 to refer to packages you wish to override, or to access functions defined
 in Nixpkgs. For example, the original recipe of <varname>boost</varname>
 in the above example, comes from <varname>super</varname>, as well as the
 <varname>callPackage</varname> function.</para>
 
 <para>The value returned by this function should be a set similar to
-<filename>pkgs/top-level/all-packages.nix</filename>, which contains
+<filename>pkgs/top-level/all-packages.nix</filename>, containing
 overridden and/or new packages.</para>
+
+<para>Overlays are similar to other methods for customizing Nixpkgs, in particular
+the <literal>packageOverrides</literal> attribute described in <xref linkend="sec-modify-via-packageOverrides"/>.
+Indeed, <literal>packageOverrides</literal> acts as an overlay with only the 
+<varname>super</varname> argument. It is therefore appropriate for basic use, 
+but overlays are more powerful and easier to distribute.</para>
 
 </section>
 
