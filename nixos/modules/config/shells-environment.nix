@@ -106,22 +106,29 @@ in
       type = types.lines;
     };
 
-    environment.shellAliases = mkOption rec {
+    environment.shellAliases = mkOption {
       default = {
         ls = "ls --color=tty";
         ll = "ls -l";
         l  = "ls -alh";
       };
-      example = { ll = "ls -l"; };
+      example = { gst = "git status"; };
       description = ''
         An attribute set that maps aliases (the top level attribute names in
         this option) to command strings or directly to build outputs. The
         aliases are added to all users' shells.
+
+        <note><para>
+        The defaults are there only as a suggestion and disappear when any alias is set.
+        To include the default aliases in your configuration use:
+        <code>
+        environment.shellAliases = {
+          gst = "git status";
+        } // options.environment.shellAliases.default;
+        </code>
+        </para></note>
       '';
-      type = types.attrs // {
-        # merge aliases defined by the user and the defaults
-        merge = loc: defs: default // types.attrs.merge loc defs;
-      };
+      type = types.attrs;
     };
 
     environment.binsh = mkOption {
