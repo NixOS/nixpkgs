@@ -8180,7 +8180,9 @@ with pkgs;
 
   pango = callPackage ../development/libraries/pango { };
 
-  pangolin = callPackage ../development/libraries/pangolin { };
+  pangolin = callPackage ../development/libraries/pangolin {
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
+  };
 
   pangomm = callPackage ../development/libraries/pangomm {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;

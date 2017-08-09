@@ -1,5 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, doxygen, mesa_noglu, glew, xorg
-, ffmpeg, python3 , libjpeg, libpng, libtiff, eigen }:
+{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, doxygen, mesa_noglu, glew
+, xorg , ffmpeg, python3 , libjpeg, libpng, libtiff, eigen
+, Carbon ? null, Cocoa ? null
+}:
 
 stdenv.mkDerivation rec {
   name = "pangolin-${version}";
@@ -25,7 +27,8 @@ stdenv.mkDerivation rec {
     libpng 
     libtiff 
     eigen 
-  ];
+  ]
+  ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa ];
 
   enableParallelBuilding = true;
 
