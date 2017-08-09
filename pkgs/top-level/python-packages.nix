@@ -356,7 +356,7 @@ in {
     # Requires network access
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ zodb3 aiohttp ]
+    propagatedBuildInputs = with self; [ aiohttp ]
       ++ optional (pythonOlder "3.5") typing;
 
     meta = {
