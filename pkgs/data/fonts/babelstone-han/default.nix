@@ -1,26 +1,19 @@
 {stdenv, fetchurl, unzip}:
 
-stdenv.mkDerivation rec {
-  name = "babelstone-han-${version}";
+let
   version = "10.0.0";
+in fetchurl {
+  name = "babelstone-han-${version}";
 
-  src = fetchurl {
-    url = http://www.babelstone.co.uk/Fonts/0816/BabelStoneHan.zip;
-    sha256 = "1vccpyk5fd35fq2mk48cdhzy5q6id1pzlski1knsiqamvyys4ykd";
-  };
-
-  buildInputs = [ unzip ];
-
-  sourceRoot = ".";
-
-  installPhase = ''
+  url = http://www.babelstone.co.uk/Fonts/0816/BabelStoneHan.zip;
+  downloadToTemp = true;
+  postFetch = ''
+    ${unzip}/bin/unzip $downloadedFile
     mkdir -p $out/share/fonts/truetype
     cp -v *.ttf $out/share/fonts/truetype
   '';
-
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "0648hv5c1hq3bq7mlk7bnmflzzqj4wh137bjqyrwj5hy3nqzvl5r";
+  recursiveHash = true;
+  sha256 = "0648hv5c1hq3bq7mlk7bnmflzzqj4wh137bjqyrwj5hy3nqzvl5r";
 
   meta = with stdenv.lib; {
     description = "Unicode CJK font with over 32600 Han characters";
