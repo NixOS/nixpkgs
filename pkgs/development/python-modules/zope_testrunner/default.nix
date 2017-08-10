@@ -6,7 +6,6 @@
 , zope_exceptions
 , zope_testing
 , six
-, subunit
 }:
 
 
@@ -21,7 +20,7 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
-  propagatedBuildInputs = [ zope_interface zope_exceptions zope_testing six ] ++ stdenv.lib.optional (!isPy3k) subunit;
+  propagatedBuildInputs = [ zope_interface zope_exceptions zope_testing six ];
 
   meta = with stdenv.lib; {
     description = "A flexible test runner with layer support";

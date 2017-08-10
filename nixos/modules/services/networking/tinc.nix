@@ -172,6 +172,7 @@ in
         };
         preStart = ''
           mkdir -p /etc/tinc/${network}/hosts
+          chown tinc.${network} /etc/tinc/${network}/hosts
 
           # Determine how we should generate our keys
           if type tinc >/dev/null 2>&1; then
