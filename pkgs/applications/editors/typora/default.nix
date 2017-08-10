@@ -3,18 +3,18 @@
 
 stdenv.mkDerivation rec {
   name = "typora-${version}";
-  version = "0.9.29";
+  version = "0.9.31";
 
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "https://www.typora.io/linux/typora_${version}_amd64.deb";
-        sha256 = "1d7a02ee603be871d6f8c25b5c11069267ec11644a4f513635c0769ce46a44a7";
+        sha256 = "8a68c4fb01316bda7c8291da22f539c70d09ca7af89190ad8705296b21f10758";
       }
     else
       fetchurl {
         url = "https://www.typora.io/linux/typora_${version}_i386.deb";
-        sha256 = "79834b0ccd2257c030aec850ebc81fe115f46891b482f1ffa41fcc19c5f29659";
+        sha256 = "16a1d1c9503f6fc2c62d0bad4ef4db68e0e70cbd430f05f923b83f869e3b3486";
       }
     ;
 
