@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     ''
       buildPythonPath "$out $pythonPath"
       gappsWrapperArgs+=(
-        --prefix PATH "$program_PATH"
+        --prefix PATH : "$program_PATH"
         --set CUPS_DATADIR "${cups-filters}/share/cups"
       )
 
