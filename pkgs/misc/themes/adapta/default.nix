@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "adapta-gtk-theme-${version}";
-  version = "3.91.1.47";
+  version = "3.91.2.10";
 
   src = fetchFromGitHub {
     owner = "tista500";
     repo = "Adapta";
     rev = version;
-    sha256 = "1w41xwhb93p999g0835cmlax55a5fyz9j4m5nn6nss2d6g6nrxap";
+    sha256 = "0bp5fnxgrrrs0ajqw2lbhbarbpvzvajnvcjip6fkl9aa76gz9czy";
   };
 
   preferLocalBuild = true;
@@ -36,7 +36,6 @@ stdenv.mkDerivation rec {
     "--disable-gtk_legacy"
     "--disable-gtk_next"
     "--disable-unity"
-    "--disable-parallel" # parallel build is not finishing
   ];
 
   meta = with stdenv.lib; {
