@@ -9,12 +9,12 @@ stdenv.mkDerivation rec {
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "https://www.typora.io/linux/typora_${version}_amd64.deb";
-        sha256 = "8a68c4fb01316bda7c8291da22f539c70d09ca7af89190ad8705296b21f10758";
+        sha256 = "786b5164d9c63ecc23eb427c5ff393285ce8fd540c5bfdd5c1464655fac87a42";
       }
     else
       fetchurl {
         url = "https://www.typora.io/linux/typora_${version}_i386.deb";
-        sha256 = "16a1d1c9503f6fc2c62d0bad4ef4db68e0e70cbd430f05f923b83f869e3b3486";
+        sha256 = "a8fe53f8984d9f8c4e06c14affbb616be58a91cd2b475b9681fb18a6e21930d1";
       }
     ;
 
