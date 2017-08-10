@@ -7,4 +7,4 @@ noDeprecatedDeclarations() {
   fi
 }
 
-envHooks+=(noDeprecatedDeclarations)
+addEnvHooks "$hostOffset" noDeprecatedDeclarations

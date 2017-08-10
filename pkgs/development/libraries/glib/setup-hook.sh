@@ -5,7 +5,7 @@ make_glib_find_gsettings_schemas() {
         addToSearchPath GSETTINGS_SCHEMAS_PATH "$1/share/gsettings-schemas/"*
     fi
 }
-envHooks+=(make_glib_find_gsettings_schemas)
+addEnvHooks "$hostOffset" make_glib_find_gsettings_schemas
 
 # Install gschemas, if any, in a package-specific directory
 glibPreInstallPhase() {
