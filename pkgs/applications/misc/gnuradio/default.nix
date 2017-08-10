@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     printf "backend : Qt4Agg\n" > "$out/share/gnuradio/matplotlibrc"
 
-    for file in "$out"/bin/* "$out"/share/gnuradio/examples/*/*.py; do
+    for file in $(find $out/bin $out/share/gnuradio/examples -type f -executable); do
         wrapProgram "$file" \
             --prefix PYTHONPATH : $PYTHONPATH:$(toPythonPath "$out") \
             --set MATPLOTLIBRC "$out/share/gnuradio"
