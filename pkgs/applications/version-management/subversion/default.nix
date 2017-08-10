@@ -104,8 +104,8 @@ let
 
 in {
   subversion18 = common {
-    version = "1.8.17";
-    sha256 = "1450fkj1jmxyphqn6cd95z1ykwsabajm9jw4i412qpwss8w9a4fy";
+    version = "1.8.18";
+    sha256 = "19lpqdrl86mjfdpayhn3f9rkmpb6zs2iny38cnxq6wcj7snh0sz5";
   };
 
   subversion19 = common {
