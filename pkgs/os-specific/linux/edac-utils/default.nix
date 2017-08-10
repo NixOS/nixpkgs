@@ -25,9 +25,7 @@ stdenv.mkDerivation {
 
   postInstall = ''
     wrapProgram "$out/sbin/edac-ctl" \
-      --set PATH : "" \
-      --prefix PATH : "${dmidecode}/bin" \
-      --prefix PATH : "${kmod}/bin"
+      --set PATH ${stdenv.lib.makeBinPath [ dmidecode kmod ]}
   '';
 
   meta = with stdenv.lib; {
