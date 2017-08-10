@@ -22,15 +22,20 @@ in {
         generated image. Glob patterns work.
       '';
     };
+
+    format = mkOption {
+      type = types.enum [ "raw" "qcow2" ];
+      default = "qcow2";
+      description = "The image format to output";
+    };
   };
 
   config.system.build.amazonImage = import ../../../lib/make-disk-image.nix {
     inherit lib config;
-    inherit (cfg) contents;
+    inherit (cfg) contents format;
     pkgs = import ../../../.. { inherit (pkgs) system; }; # ensure we use the regular qemu-kvm package
     partitioned = config.ec2.hvm;
     diskSize = if config.ec2.hvm then 2048 else 8192;
-    format = "qcow2";
     configFile = pkgs.writeText "configuration.nix"
       ''
         {
