@@ -168,8 +168,9 @@ in {
       serviceConfig = {
         Type = "notify";
         KillMode = "process"; # when stopping, leave the VMs alone
-        Restart = "on-failure";
+        Restart = "no";
       };
+      restartIfChanged = false;
     };
 
     systemd.services.libvirt-guests = {
@@ -187,6 +188,7 @@ in {
     systemd.services.virtlogd = {
       description = "Virtual machine log manager";
       serviceConfig.ExecStart = "@${pkgs.libvirt}/sbin/virtlogd virtlogd";
+      restartIfChanged = false;
     };
 
     systemd.sockets.virtlockd = {
@@ -198,6 +200,7 @@ in {
     systemd.services.virtlockd = {
       description = "Virtual machine lock manager";
       serviceConfig.ExecStart = "@${pkgs.libvirt}/sbin/virtlockd virtlockd";
+      restartIfChanged = false;
     };
   };
 }
