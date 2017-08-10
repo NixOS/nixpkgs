@@ -1,23 +1,17 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
-  name = "anonymousPro-${version}";
+let
   version = "1.002";
+in fetchzip rec {
+  name = "anonymousPro-${version}";
 
-  src = fetchurl {
-    url = "http://www.marksimonson.com/assets/content/fonts/AnonymousPro-${version}.zip";
-    sha256 = "1asj6lykvxh46czbal7ymy2k861zlcdqpz8x3s5bbpqwlm3mhrl6";
-  };
-
-  nativeBuildInputs = [ unzip ];
-  phases = [ "unpackPhase" "installPhase" ];
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    mkdir -p $out/share/doc/${name}
-    find . -name "*.ttf" -exec cp -v {} $out/share/fonts/truetype \;
-    find . -name "*.txt" -exec cp -v {} $out/share/doc/${name} \;
+  url = "http://www.marksimonson.com/assets/content/fonts/AnonymousPro-${version}.zip";
+  postFetch = ''
+    mkdir -p $out/share/{doc,fonts}
+    unzip -j $downloadedFile \*.ttf                           -d $out/share/fonts/truetype
+    unzip -j $downloadedFile \*.txt                           -d "$out/share/doc/${name}"
   '';
+  sha256 = "05rgzag38qc77b31sm5i2vwwrxbrvwzfsqh3slv11skx36pz337f";
 
   meta = with stdenv.lib; {
     homepage = http://www.marksimonson.com/fonts/view/anonymous-pro;

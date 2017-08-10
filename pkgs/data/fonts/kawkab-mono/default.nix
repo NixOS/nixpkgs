@@ -1,20 +1,16 @@
-{stdenv, fetchurl, unzip}:
+{stdenv, fetchzip}:
 
-stdenv.mkDerivation rec {
+fetchzip rec {
   name = "kawkab-mono-20151015";
 
-  src = fetchurl {
-    url = "http://makkuk.com/kawkab-mono/downloads/kawkab-mono-0.1.zip";
-    sha256 = "16pv9s4q7199aacbzfi2d10rcrq77vyfvzcy42g80nhfrkz1cb0m";
-  };
+  url = "http://makkuk.com/kawkab-mono/downloads/kawkab-mono-0.1.zip";
 
-  buildInputs = [ unzip ];
-  sourceRoot = ".";
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    cp *.ttf $out/share/fonts/truetype
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
   '';
+
+  sha256 = "1vfrb7xs817najplncg7zl9j5yxj8qnwb7aqm2v9p9xwafa4d2yd";
 
   meta = {
     description = "An arab fixed-width font";
