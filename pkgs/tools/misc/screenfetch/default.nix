@@ -21,17 +21,10 @@ stdenv.mkDerivation {
     # Fix all of the depedencies of screenfetch
     patchShebangs $out/bin/screenfetch
     wrapProgram "$out/bin/screenfetch" \
-      --set PATH : "" \
-      --prefix PATH : "${coreutils}/bin" \
-      --prefix PATH : "${gawk}/bin" \
-      --prefix PATH : "${procps}/bin" \
-      --prefix PATH : "${gnused}/bin" \
-      --prefix PATH : "${findutils}/bin" \
-      --prefix PATH : "${xdpyinfo}/bin" \
-      --prefix PATH : "${xprop}/bin" \
-      --prefix PATH : "${gnugrep}/bin" \
-      --prefix PATH : "${ncurses}/bin" \
-      --prefix PATH : "${bc}/bin"
+      --set PATH ${stdenv.lib.makeBinPath [
+        coreutils gawk procps gnused findutils xdpyinfo
+        xprop gnugrep ncurses bc
+      ]}
   '';
 
   meta = {

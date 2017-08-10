@@ -1,3 +1,12 @@
+# Assert that FILE exists and is executable
+#
+# assertExecutable FILE
+assertExecutable() {
+    local file="$1"
+    [[ -f "${file}" && -x "${file}" ]] || \
+        die "Cannot wrap ${file} because it is not an executable file"
+}
+
 # construct an executable file that wraps the actual executable
 # makeWrapper EXECUTABLE ARGS
 
@@ -24,6 +33,8 @@ makeWrapper() {
     local params varName value command separator n fileNames
     local argv0 flagsBefore flags
 
+    assertExecutable "${original}"
+
     mkdir -p "$(dirname "$wrapper")"
 
     echo "#! $SHELL -e" > "$wrapper"
@@ -32,26 +43,20 @@ makeWrapper() {
     for ((n = 2; n < ${#params[*]}; n += 1)); do
         p="${params[$n]}"
 
-        if test "$p" = "--set"; then
+        if [[ "$p" == "--set" ]]; then
             varName="${params[$((n + 1))]}"
             value="${params[$((n + 2))]}"
             n=$((n + 2))
             echo "export $varName=\"$value\"" >> "$wrapper"
-        fi
-
-        if test "$p" = "--unset"; then
+        elif [[ "$p" == "--unset" ]]; then
             varName="${params[$((n + 1))]}"
             n=$((n + 1))
             echo "unset $varName" >> "$wrapper"
-        fi
-
-        if test "$p" = "--run"; then
+        elif [[ "$p" == "--run" ]]; then
             command="${params[$((n + 1))]}"
             n=$((n + 1))
             echo "$command" >> "$wrapper"
-        fi
-
-        if test "$p" = "--suffix" -o "$p" = "--prefix"; then
+        elif [[ ("$p" == "--suffix") || ("$p" == "--prefix") ]]; then
             varName="${params[$((n + 1))]}"
             separator="${params[$((n + 2))]}"
             value="${params[$((n + 3))]}"
@@ -63,9 +68,7 @@ makeWrapper() {
                     echo "export $varName=$value\${$varName:+$separator}\$$varName" >> "$wrapper"
                 fi
             fi
-        fi
-
-        if test "$p" = "--suffix-each"; then
+        elif [[ "$p" == "--suffix-each" ]]; then
             varName="${params[$((n + 1))]}"
             separator="${params[$((n + 2))]}"
             values="${params[$((n + 3))]}"
@@ -73,9 +76,7 @@ makeWrapper() {
             for value in $values; do
                 echo "export $varName=\$$varName\${$varName:+$separator}$value" >> "$wrapper"
             done
-        fi
-
-        if test "$p" = "--suffix-contents" -o "$p" = "--prefix-contents"; then
+        elif [[ ("$p" == "--suffix-contents") || ("$p" == "--prefix-contents") ]]; then
             varName="${params[$((n + 1))]}"
             separator="${params[$((n + 2))]}"
             fileNames="${params[$((n + 3))]}"
@@ -87,17 +88,15 @@ makeWrapper() {
                     echo "export $varName=$(cat "$fileName")\${$varName:+$separator}\$$varName" >> "$wrapper"
                 fi
             done
-        fi
-
-        if test "$p" = "--add-flags"; then
+        elif [[ "$p" == "--add-flags" ]]; then
             flags="${params[$((n + 1))]}"
             n=$((n + 1))
             flagsBefore="$flagsBefore $flags"
-        fi
-
-        if test "$p" = "--argv0"; then
+        elif [[ "$p" == "--argv0" ]]; then
             argv0="${params[$((n + 1))]}"
             n=$((n + 1))
+        else
+            die "makeWrapper doesn't understand the arg $p"
         fi
     done
 
@@ -131,6 +130,9 @@ filterExisting() {
 wrapProgram() {
     local prog="$1"
     local hidden
+
+    assertExecutable "${prog}"
+
     hidden="$(dirname "$prog")/.$(basename "$prog")"-wrapped
     while [ -e "$hidden" ]; do
       hidden="${hidden}_"
@@ -138,5 +140,5 @@ wrapProgram() {
     mv "$prog" "$hidden"
     # Silence warning about unexpanded $0:
     # shellcheck disable=SC2016
-    makeWrapper "$hidden" "$prog" --argv0 '$0' "$@"
+    makeWrapper "$hidden" "$prog" --argv0 '$0' "${@:2}"
 }

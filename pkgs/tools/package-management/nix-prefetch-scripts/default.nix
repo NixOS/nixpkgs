@@ -19,7 +19,7 @@ let mkPrefetchScript = tool: src: deps:
       done
       wrapArgs="$wrapArgs --prefix PATH : ${gnused}/bin"
       wrapArgs="$wrapArgs --prefix PATH : ${nix.out}/bin" # For nix-hash
-      wrapArgs="$wrapArgs --set HOME : /homeless-shelter"
+      wrapArgs="$wrapArgs --set HOME /homeless-shelter"
       wrapProgram $out/bin/$name $wrapArgs
     '';
 
