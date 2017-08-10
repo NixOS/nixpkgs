@@ -11369,6 +11369,8 @@ with pkgs;
     openssl = openssl_1_0_2;
   };
 
+  fusionInventory = callPackage ../servers/monitoring/fusion-inventory { };
+
   gatling = callPackage ../servers/http/gatling { };
 
   glabels = callPackage ../applications/graphics/glabels { };

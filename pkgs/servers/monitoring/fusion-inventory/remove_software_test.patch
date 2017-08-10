@@ -1,0 +1,25 @@
+diff --git a/t/apps/agent.t b/t/apps/agent.t
+index c0f6fc52f..c83837d70 100755
+--- a/t/apps/agent.t
++++ b/t/apps/agent.t
+@@ -12,7 +12,7 @@ use XML::TreePP;
+ use FusionInventory::Agent::Tools;
+ use FusionInventory::Test::Utils;
+ 
+-plan tests => 34;
++plan tests => 33;
+ 
+ my ($content, $out, $err, $rc);
+ 
+@@ -72,11 +72,6 @@ subtest "first inventory execution and content" => sub {
+ };
+ 
+ ok(
+-    exists $content->{REQUEST}->{CONTENT}->{SOFTWARES},
+-    'inventory has software'
+-);
+-
+-ok(
+     exists $content->{REQUEST}->{CONTENT}->{ENVS},
+     'inventory has environment variables'
+ );
