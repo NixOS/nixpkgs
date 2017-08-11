@@ -3558,8 +3558,6 @@ with pkgs;
 
   opensp = callPackage ../tools/text/sgml/opensp { };
 
-  spCompat = callPackage ../tools/text/sgml/opensp/compat.nix { };
-
   opentracker = callPackage ../applications/networking/p2p/opentracker { };
 
   opentsdb = callPackage ../tools/misc/opentsdb {};
