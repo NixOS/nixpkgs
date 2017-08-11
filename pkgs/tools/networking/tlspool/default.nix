@@ -39,9 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/lib $out/sbin $out/man $out/etc/tlspool/ $out/include/${pname}/pulleyback
-    mkdir -p $out/${python.sitePackages}/tlspool
-    mkdir -p $out/bdb
+    mkdir -p $out/bin $out/lib $out/sbin $out/etc/tlspool/ $out/include/${pname}/pulleyback
     make DESTDIR=$out PREFIX=/ install
     cp -R etc/* $out/etc/tlspool/
     cp include/tlspool/*.h $out/include/${pname}
