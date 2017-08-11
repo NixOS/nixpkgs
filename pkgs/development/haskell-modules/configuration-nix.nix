@@ -64,8 +64,19 @@ self: super: builtins.intersectAttrs super {
       "--extra-include-dirs=${pkgs.cudatoolkit}/include"
     ];
     preConfigure = ''
-      unset CC          # unconfuse the haskell-cuda configure script
-      sed -i -e 's|/usr/local/cuda|${pkgs.cudatoolkit}|g' configure
+      export CUDA_PATH=${pkgs.cudatoolkit}
+    '';
+  });
+
+  nvvm = overrideCabal super.nvvm (drv: {
+    preConfigure = ''
+      export CUDA_PATH=${pkgs.cudatoolkit}
+    '';
+  });
+
+  cufft = overrideCabal super.cufft (drv: {
+    preConfigure = ''
+      export CUDA_PATH=${pkgs.cudatoolkit}
     '';
   });
 

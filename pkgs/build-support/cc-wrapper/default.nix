@@ -53,42 +53,13 @@ let
     "-isystem $(echo -n ${cc.gcc}/include/c++/*) -isystem $(echo -n ${cc.gcc}/include/c++/*)/$(${cc.gcc}/bin/gcc -dumpmachine)";
 
   dashlessTarget = stdenv.lib.replaceStrings ["-"] ["_"] targetPlatform.config;
-  # TODO(@Ericson2314) Make unconditional
-  infixSalt  = stdenv.lib.optionalString (targetPlatform != hostPlatform) dashlessTarget;
-  infixSalt_ = stdenv.lib.optionalString (targetPlatform != hostPlatform) (dashlessTarget + "_");
-  _infixSalt = stdenv.lib.optionalString (targetPlatform != hostPlatform) ("_" + dashlessTarget);
 
-  # We want to prefix all NIX_ flags with the target triple
-  preWrap = textFile:
-    # TODO: Do even when not cross on next mass-rebuild
-    # TODO: use @target_tripple@ for consistency
-    if targetPlatform == hostPlatform
-    then textFile
-    else runCommand "sed-nix-env-vars" {} (''
-      cp --no-preserve=mode ${textFile} $out
-
-      sed -i $out \
-        -e 's^NIX_^NIX_${infixSalt_}^g' \
-        -e 's^addCVars^addCVars${_infixSalt}^g' \
-        -e 's^\[ -z "\$crossConfig" \]^\[\[ "${builtins.toString (targetPlatform != hostPlatform)}" || -z "$crossConfig" \]\]^g'
-
-      # NIX_ things which we don't both use and define, we revert them
-      #asymmetric=$(
-      #  for pre in "" "\\$"
-      #  do
-      #    grep -E -ho $pre'NIX_[a-zA-Z_]*' ./* | sed 's/\$//' | sort | uniq
-      #  done | sort | uniq -c | sort -nr | sed -n 's/^1 NIX_//gp')
-
-      # hard-code for now
-      asymmetric=("CXXSTDLIB_COMPILE" "CC")
-
-      # The ([^a-zA-Z_]|$) bussiness is to ensure environment variables that
-      # begin with `NIX_CC` don't also get blacklisted.
-      for var in "''${asymmetric[@]}"
-      do
-        sed -i $out -E -e "s~NIX_${infixSalt_}$var([^a-zA-Z_]|$)~NIX_$var\1~g"
-      done
-    '');
+  # The "infix salt" is a arbitrary string added in the middle of env vars
+  # defined by cc-wrapper's hooks so that multiple cc-wrappers can be used
+  # without interfering. For the moment, it is defined as the target triple,
+  # adjusted to be a valid bash identifier. This should be considered an
+  # unstable implementation detail, however.
+  infixSalt = dashlessTarget;
 
   # The dynamic linker has different names on different platforms. This is a
   # shell glob that ought to match it.
@@ -129,20 +100,21 @@ stdenv.mkDerivation {
   gnugrep_bin = if nativeTools then "" else gnugrep;
 
   binPrefix = prefix;
+  inherit infixSalt;
 
   passthru = {
     inherit libc nativeTools nativeLibc nativePrefix isGNU isClang default_cxx_stdlib_compile
-            prefix infixSalt infixSalt_ _infixSalt;
+            prefix;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
       (mapc (lambda (arg)
         (when (file-directory-p (concat arg "/include"))
-          (setenv "NIX_${infixSalt_}CFLAGS_COMPILE" (concat (getenv "NIX_${infixSalt_}CFLAGS_COMPILE") " -isystem " arg "/include")))
+          (setenv "NIX_${infixSalt}_CFLAGS_COMPILE" (concat (getenv "NIX_${infixSalt}_CFLAGS_COMPILE") " -isystem " arg "/include")))
         (when (file-directory-p (concat arg "/lib"))
-          (setenv "NIX_${infixSalt_}LDFLAGS" (concat (getenv "NIX_${infixSalt_}LDFLAGS") " -L" arg "/lib")))
+          (setenv "NIX_${infixSalt}_LDFLAGS" (concat (getenv "NIX_${infixSalt}_LDFLAGS") " -L" arg "/lib")))
         (when (file-directory-p (concat arg "/lib64"))
-          (setenv "NIX_${infixSalt_}LDFLAGS" (concat (getenv "NIX_${infixSalt_}LDFLAGS") " -L" arg "/lib64")))) '(${concatStringsSep " " (map (pkg: "\"${pkg}\"") pkgs)}))
+          (setenv "NIX_${infixSalt}_LDFLAGS" (concat (getenv "NIX_${infixSalt}_LDFLAGS") " -L" arg "/lib64")))) '(${concatStringsSep " " (map (pkg: "\"${pkg}\"") pkgs)}))
     '';
   };
 
@@ -268,7 +240,7 @@ stdenv.mkDerivation {
       # Solaris needs an additional ld wrapper.
       ldPath="${nativePrefix}/bin"
       exec="$ldPath/${prefix}ld"
-      wrap ld-solaris ${preWrap ./ld-solaris-wrapper.sh}
+      wrap ld-solaris ${./ld-solaris-wrapper.sh}
     '')
 
     + ''
@@ -282,7 +254,6 @@ stdenv.mkDerivation {
     '' + (if !useMacosReexportHack then ''
       wrap ${prefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${prefix}ld}
     '' else ''
-      export binPrefix=${prefix}
       ldInner="${prefix}ld-reexport-delegate"
       wrap "$ldInner" ${./macos-sierra-reexport-hack.bash} ''${ld:-$ldPath/${prefix}ld}
       wrap "${prefix}ld" ${./ld-wrapper.sh} "$out/bin/$ldInner"
@@ -290,11 +261,11 @@ stdenv.mkDerivation {
     '') + ''
 
       if [ -e ${binutils_bin}/bin/${prefix}ld.gold ]; then
-        wrap ${prefix}ld.gold ${preWrap ./ld-wrapper.sh} ${binutils_bin}/bin/${prefix}ld.gold
+        wrap ${prefix}ld.gold ${./ld-wrapper.sh} ${binutils_bin}/bin/${prefix}ld.gold
       fi
 
       if [ -e ${binutils_bin}/bin/ld.bfd ]; then
-        wrap ${prefix}ld.bfd ${preWrap ./ld-wrapper.sh} ${binutils_bin}/bin/${prefix}ld.bfd
+        wrap ${prefix}ld.bfd ${./ld-wrapper.sh} ${binutils_bin}/bin/${prefix}ld.bfd
       fi
 
       # We export environment variables pointing to the wrapped nonstandard
@@ -306,49 +277,49 @@ stdenv.mkDerivation {
       export default_cxx_stdlib_compile="${default_cxx_stdlib_compile}"
 
       if [ -e $ccPath/${prefix}gcc ]; then
-        wrap ${prefix}gcc ${preWrap ./cc-wrapper.sh} $ccPath/${prefix}gcc
+        wrap ${prefix}gcc ${./cc-wrapper.sh} $ccPath/${prefix}gcc
         ln -s ${prefix}gcc $out/bin/${prefix}cc
         export named_cc=${prefix}gcc
         export named_cxx=${prefix}g++
       elif [ -e $ccPath/clang ]; then
-        wrap ${prefix}clang ${preWrap ./cc-wrapper.sh} $ccPath/clang
+        wrap ${prefix}clang ${./cc-wrapper.sh} $ccPath/clang
         ln -s ${prefix}clang $out/bin/${prefix}cc
         export named_cc=${prefix}clang
         export named_cxx=${prefix}clang++
       fi
 
       if [ -e $ccPath/${prefix}g++ ]; then
-        wrap ${prefix}g++ ${preWrap ./cc-wrapper.sh} $ccPath/${prefix}g++
+        wrap ${prefix}g++ ${./cc-wrapper.sh} $ccPath/${prefix}g++
         ln -s ${prefix}g++ $out/bin/${prefix}c++
       elif [ -e $ccPath/clang++ ]; then
-        wrap ${prefix}clang++ ${preWrap ./cc-wrapper.sh} $ccPath/clang++
+        wrap ${prefix}clang++ ${./cc-wrapper.sh} $ccPath/clang++
         ln -s ${prefix}clang++ $out/bin/${prefix}c++
       fi
 
       if [ -e $ccPath/cpp ]; then
-        wrap ${prefix}cpp ${preWrap ./cc-wrapper.sh} $ccPath/cpp
+        wrap ${prefix}cpp ${./cc-wrapper.sh} $ccPath/cpp
       fi
     ''
 
     + optionalString cc.langFortran or false ''
-      wrap ${prefix}gfortran ${preWrap ./cc-wrapper.sh} $ccPath/${prefix}gfortran
+      wrap ${prefix}gfortran ${./cc-wrapper.sh} $ccPath/${prefix}gfortran
       ln -sv ${prefix}gfortran $out/bin/${prefix}g77
       ln -sv ${prefix}gfortran $out/bin/${prefix}f77
     ''
 
     + optionalString cc.langJava or false ''
-      wrap ${prefix}gcj ${preWrap ./cc-wrapper.sh} $ccPath/${prefix}gcj
+      wrap ${prefix}gcj ${./cc-wrapper.sh} $ccPath/${prefix}gcj
     ''
 
     + optionalString cc.langGo or false ''
-      wrap ${prefix}gccgo ${preWrap ./cc-wrapper.sh} $ccPath/${prefix}gccgo
+      wrap ${prefix}gccgo ${./cc-wrapper.sh} $ccPath/${prefix}gccgo
     ''
 
     + optionalString cc.langAda or false ''
-      wrap ${prefix}gnatgcc ${preWrap ./cc-wrapper.sh} $ccPath/${prefix}gnatgcc
-      wrap ${prefix}gnatmake ${preWrap ./gnat-wrapper.sh} $ccPath/${prefix}gnatmake
-      wrap ${prefix}gnatbind ${preWrap ./gnat-wrapper.sh} $ccPath/${prefix}gnatbind
-      wrap ${prefix}gnatlink ${preWrap ./gnatlink-wrapper.sh} $ccPath/${prefix}gnatlink
+      wrap ${prefix}gnatgcc ${./cc-wrapper.sh} $ccPath/${prefix}gnatgcc
+      wrap ${prefix}gnatmake ${./gnat-wrapper.sh} $ccPath/${prefix}gnatmake
+      wrap ${prefix}gnatbind ${./gnat-wrapper.sh} $ccPath/${prefix}gnatbind
+      wrap ${prefix}gnatlink ${./gnatlink-wrapper.sh} $ccPath/${prefix}gnatlink
     ''
 
     + optionalString cc.langVhdl or false ''
@@ -356,7 +327,7 @@ stdenv.mkDerivation {
     ''
 
     + ''
-      substituteAll ${preWrap ./setup-hook.sh} $out/nix-support/setup-hook.tmp
+      substituteAll ${./setup-hook.sh} $out/nix-support/setup-hook.tmp
       cat $out/nix-support/setup-hook.tmp >> $out/nix-support/setup-hook
       rm $out/nix-support/setup-hook.tmp
 
@@ -375,9 +346,9 @@ stdenv.mkDerivation {
     ''
 
     + ''
-      substituteAll ${preWrap ./add-flags.sh} $out/nix-support/add-flags.sh
-      substituteAll ${preWrap ./add-hardening.sh} $out/nix-support/add-hardening.sh
-      substituteAll ${preWrap ./utils.sh} $out/nix-support/utils.sh
+      substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
+      substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
+      substituteAll ${./utils.sh} $out/nix-support/utils.sh
     ''
     + extraBuildCommands;
 

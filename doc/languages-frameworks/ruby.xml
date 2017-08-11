@@ -82,7 +82,7 @@ versions available from various packages.
 </para>
 
 <para>Resulting derivations for both builders also have two helpful
-attributes, <literal>env</literal> and <literal>wrapper</literal>.
+attributes, <literal>env</literal> and <literal>wrappedRuby</literal>.
 The first one allows one to quickly drop into
 <command>nix-shell</command> with the specified environment present.
 E.g. <command>nix-shell -A sensu.env</command> would give you an
@@ -110,15 +110,10 @@ the needed dependencies. For example, to make a derivation
 
 in stdenv.mkDerivation {
   name = "my-script";
-
-  buildInputs = [ env.wrapper ];
-
+  buildInputs = [ env.wrappedRuby ];
   script = ./my-script.rb;
-
   buildCommand = ''
-    mkdir -p $out/bin
     install -D -m755 $script $out/bin/my-script
-    patchShebangs $out/bin/my-script
   '';
 }]]>
 </programlisting>

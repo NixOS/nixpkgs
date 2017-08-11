@@ -2,6 +2,7 @@
 rec {
   atril = callPackage ./atril { };
   caja = callPackage ./caja { };
+  eom = callPackage ./eom { };
   pluma = callPackage ./pluma { };
   mate-common = callPackage ./mate-common { };
   mate-desktop = callPackage ./mate-desktop { };

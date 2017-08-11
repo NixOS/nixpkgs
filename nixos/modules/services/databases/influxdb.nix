@@ -68,9 +68,9 @@ let
 
     collectd = [{
       enabled = false;
-      typesdb = "${pkgs.collectd}/share/collectd/types.db";
+      typesdb = "${pkgs.collectd-data}/share/collectd/types.db";
       database = "collectd_db";
-      port = 25826;
+      bind-address = ":25826";
     }];
 
     opentsdb = [{
@@ -149,7 +149,6 @@ in
         type = types.attrs;
       };
     };
-
   };
 
 

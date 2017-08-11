@@ -1,22 +1,22 @@
-{stdenv, fetchurl}:
+{stdenv, fetchzip}:
 
-stdenv.mkDerivation rec {
-  name = "crimson-${version}";
+let
   version = "2014.10";
+in fetchzip rec {
+  name = "crimson-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/skosch/Crimson/archive/fonts-october2014.tar.gz";
-    sha256 = "0qyihrhqb89vwg9cfpaf5xqmcjvs4r4614bxy634vmqv9v1bzn5b";
-  };
+  url = "https://github.com/skosch/Crimson/archive/fonts-october2014.tar.gz";
 
-  phases = ["unpackPhase" "installPhase"];
+  postFetch = ''
+    tar -xzvf $downloadedFile --strip-components=1
 
-  installPhase = ''
     mkdir -p $out/share/fonts/opentype
     mkdir -p $out/share/doc/${name}
     cp -v "Desktop Fonts/OTF/"*.otf $out/share/fonts/opentype
     cp -v README.md $out/share/doc/${name}
   '';
+
+  sha256 = "0mg65f0ydyfmb43jqr1f34njpd10w8npw15cbb7z0nxmy4nkl842";
 
   meta = with stdenv.lib; {
     homepage = https://aldusleaf.org/crimson.html;

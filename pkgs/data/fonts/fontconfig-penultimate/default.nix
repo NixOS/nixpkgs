@@ -1,20 +1,17 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchzip }:
 
 let version = "0.3.5"; in
-stdenv.mkDerivation {
+fetchzip {
   name = "fontconfig-penultimate-${version}";
 
-  src = fetchFromGitHub {
-    owner = "ttuegel";
-    repo = "fontconfig-penultimate";
-    rev = version;
-    sha256 = "1xi664bs6n687s972nch87hi0iqkd6gr1l76zl58pymiw2132ks8";
-  };
+  url = "https://github.com/ttuegel/fontconfig-penultimate/archive/${version}.zip";
 
-  installPhase = ''
+  postFetch = ''
     mkdir -p $out/etc/fonts/conf.d
-    cp *.conf $out/etc/fonts/conf.d
+    unzip -j $downloadedFile \*.conf -d $out/etc/fonts/conf.d
   '';
+
+  sha256 = "1gfgl7qimp76q4z0nv55vv57yfs4kscdr329np701k0xnhncwvrk";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/ttuegel/fontconfig-penultimate;

@@ -213,8 +213,8 @@ let
         wakeupDefined = options.wakeup.isDefined;
         wakeupUCDefined = options.wakeupUnusedComponent.isDefined;
         finalValue = toString config.wakeup
-                   + optionalString (!config.wakeupUnusedComponent) "?";
-      in if wakeupDefined && wakeupUCDefined then finalValue else "-";
+                   + optionalString (wakeupUCDefined && !config.wakeupUnusedComponent) "?";
+      in if wakeupDefined then finalValue else "-";
 
     in [
       config.name

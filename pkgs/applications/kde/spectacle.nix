@@ -16,5 +16,5 @@ mkDerivation {
     kconfig kcoreaddons kdbusaddons kdeclarative kio knotifications
     kscreen kwidgetsaddons kwindowsystem kxmlgui libkipi qtx11extras
   ];
-  propagatedUserEnvPkgs = [ kipi-plugins ];
+  propagatedUserEnvPkgs = [ kipi-plugins libkipi ];
 }

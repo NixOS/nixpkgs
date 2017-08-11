@@ -99,6 +99,7 @@ let
         inherit developerBuild decryptSslTraffic;
       };
 
+      qtcharts = callPackage ./qtcharts.nix {};
       qtconnectivity = callPackage ./qtconnectivity.nix {};
       qtdeclarative = callPackage ./qtdeclarative {};
       qtdoc = callPackage ./qtdoc.nix {};
@@ -128,10 +129,10 @@ let
 
       env = callPackage ../qt-env.nix {};
       full = env "qt-${qtbase.version}" ([
-        qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
+        qtcharts qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
         qtimageformats qtlocation qtmultimedia qtquickcontrols qtscript
-        qtsensors qtserialport qtsvg qttools qttranslations
-        qtwebsockets qtx11extras qtxmlpatterns
+        qtsensors qtserialport qtsvg qttools qttranslations qtwebsockets
+        qtx11extras qtxmlpatterns
       ] ++ optional (!stdenv.isDarwin) qtwayland
         ++ optional (stdenv.isDarwin) qtmacextras);
 

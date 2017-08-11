@@ -336,8 +336,20 @@ fi
 
 # Set the relevant environment variables to point to the build inputs
 # found above.
+#
+# These `depOffset`s tell the env hook what sort of dependency
+# (ignoring propagatedness) is being passed to the env hook. In a real
+# language, we'd append a closure with this information to the
+# relevant env hook array, but bash doesn't have closures, so it's
+# easier to just pass this in.
+
 _addToNativeEnv() {
     local pkg="$1"
+    if [[ -n "${crossConfig:-}" ]]; then
+        local -i depOffset=-1
+    else
+        local -i depOffset=0
+    fi
 
     # Run the package-specific hooks set by the setup-hook scripts.
     runHook envHook "$pkg"
@@ -349,6 +361,7 @@ done
 
 _addToCrossEnv() {
     local pkg="$1"
+    local -i depOffset=0
 
     # Run the package-specific hooks set by the setup-hook scripts.
     runHook crossEnvHook "$pkg"

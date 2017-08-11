@@ -12,6 +12,7 @@ let
   dns =
     if cfg.useDnsmasq then "dnsmasq"
     else if config.services.resolved.enable then "systemd-resolved"
+    else if config.services.unbound.enable then "unbound"
     else "default";
 
   configFile = writeText "NetworkManager.conf" ''

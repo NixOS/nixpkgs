@@ -1,22 +1,21 @@
 { stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
-  name = "gentium-${version}";
+let
   version = "5.000";
+in fetchzip rec {
+  name = "gentium-${version}";
 
-  src = fetchzip {
-    url = "http://software.sil.org/downloads/d/gentium/GentiumPlus-${version}.zip";
-    sha256 = "0g9sx38wh7f0m16gr64g2xggjwak2q6jw9y4zhrvhmp4aq4xfqm6";
-  };
+  url = "http://software.sil.org/downloads/r/gentium/GentiumPlus-${version}.zip";
 
-  phases = [ "unpackPhase" "installPhase" ];
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    mkdir -p $out/share/doc/${name}
-    cp -v *.ttf $out/share/fonts/truetype/
-    cp -vr documentation/ FONTLOG.txt GENTIUM-FAQ.txt README.txt $out/share/doc/${name}
+  postFetch = ''
+    mkdir -p $out/share/{doc,fonts}
+    unzip -l $downloadedFile
+    unzip -j $downloadedFile \*.ttf                                          -d $out/share/fonts/truetype
+    unzip -j $downloadedFile \*/FONTLOG.txt \*/GENTIUM-FAQ.txt \*/README.txt -d $out/share/doc/${name}
+    unzip -j $downloadedFile \*/documentation/\*                             -d $out/share/doc/${name}/documentation
   '';
+
+  sha256 = "1qr2wjdmm93167b0w9cidlf3wwsyjx4838ja9jmm4jkyian5whhp";
 
   meta = with stdenv.lib; {
     homepage = http://software.sil.org/gentium/;
