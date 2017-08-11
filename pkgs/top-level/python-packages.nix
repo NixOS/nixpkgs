@@ -16142,6 +16142,8 @@ in {
     };
   };
 
+  paramz = callPackage ../development/python-modules/paramz { };
+
   parsel = buildPythonPackage rec {
     name = "parsel-${version}";
     version = "1.1.0";
