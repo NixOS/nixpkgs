@@ -18,7 +18,7 @@ import ./make-test.nix ({ pkgs, ...} :
     nixpkgs.config.packageOverrides = superPkgs: {
       fontconfig-penultimate = superPkgs.fontconfig-penultimate.override {
         version = "0.3.3";
-        sha256 = "0392lw31jps652dcjazln77ihb6bl7gk201gb7wb9i223avp86w9";
+        sha256 = "1z76jbkb0nhf4w7fy647yyayqr4q02fgk6w58k0yi700p0m3h4c9";
       };
     };
   };
