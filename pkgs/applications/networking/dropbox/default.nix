@@ -137,7 +137,7 @@ in stdenv.mkDerivation {
     paxmark m $out/${appdir}/dropbox
   '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "Online stored folders (daemon version)";
     homepage    = http://www.dropbox.com;
     maintainers = with maintainers; [ ttuegel ];
