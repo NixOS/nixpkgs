@@ -10,6 +10,8 @@
 stdenv.mkDerivation rec {
   name = "fontforge-${version}";
   version = "20160404";
+  versionModtime = "1459728000"; # unix timestamp of ${version}
+  versionModtimeStr = "00:00 UTC 04-Apr-2016";
 
   src = fetchFromGitHub {
     owner = "fontforge";
@@ -25,6 +27,15 @@ stdenv.mkDerivation rec {
     sha256 = "0n8i62qv2ygfii535rzp09vvjx4qf9zp5qq7qirrbzm1l9gykcjy";
   })];
   patchFlags = "-p0";
+
+  # fontforge's compilation timestamp leaks to font files it creates
+  # 1970-01-01 won't work here because font build scripts may check if fontforge is too old
+  # (yes, what they actually check is when fontforge was compiled)
+  postPatch = ''
+    sed -i -r 's@^FONTFORGE_VERSIONDATE=.+$@FONTFORGE_VERSIONDATE="${version}"@'           configure.ac
+    sed -i -r 's@^FONTFORGE_MODTIME=.+$@FONTFORGE_MODTIME="${versionModtime}"@'            configure.ac
+    sed -i -r 's@^FONTFORGE_MODTIME_STR=.+$@FONTFORGE_MODTIME_STR="${versionModtimeStr}"@' configure.ac
+  '';
 
   buildInputs = [
     autoconf automake gnum4 libtool perl pkgconfig gettext uthash
