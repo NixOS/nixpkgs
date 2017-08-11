@@ -46,6 +46,8 @@ stdenv.mkDerivation rec {
 
       # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
       ./dont_create_privsep_path.patch
+      # originally from https://src.fedoraproject.org/rpms/openssh/blob/fffad0579c5aa8c634ef50cd7b290d743e1a5471/f/openssh-7.3p1-openssl-1.1.0.patch
+      ./openssl-1.1.0.patch
     ]
     ++ optional withGssapiPatches gssapiSrc;
 
