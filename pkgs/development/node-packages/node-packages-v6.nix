@@ -26102,6 +26102,30 @@ in
     };
     production = true;
   };
+  jsonlint = nodeEnv.buildNodePackage {
+    name = "jsonlint";
+    packageName = "jsonlint";
+    version = "1.6.2";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/jsonlint/-/jsonlint-1.6.2.tgz";
+      sha1 = "5737045085f55eb455c68b1ff4ebc01bd50e8830";
+    };
+    dependencies = [
+      sources."nomnom-1.8.1"
+      sources."JSV-4.0.2"
+      sources."underscore-1.6.0"
+      sources."chalk-0.4.0"
+      sources."has-color-0.1.7"
+      sources."ansi-styles-1.0.0"
+      sources."strip-ansi-0.1.1"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "Validate JSON";
+      homepage = http://zaach.github.com/jsonlint/;
+    };
+    production = true;
+  };
   jsontool = nodeEnv.buildNodePackage {
     name = "jsontool";
     packageName = "jsontool";
