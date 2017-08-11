@@ -1,19 +1,16 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
+fetchzip rec {
   name = "ipaexfont-003.01";
 
-  src = fetchurl {
-    url = "http://dl.ipafont.ipa.go.jp/IPAexfont/IPAexfont00301.zip";
-    sha256 = "0nmfyh10rzkvp0qmrla0dahkmmxq47678y4v8fdm8fpdzmf0kpn7";
-  };
+  url = "http://dl.ipafont.ipa.go.jp/IPAexfont/IPAexfont00301.zip";
 
-  buildInputs = [ unzip ];
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/opentype/
-    cp *.ttf $out/share/fonts/opentype/
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/opentype
   '';
+
+  sha256 = "02a6sj990cnig5lq0m54nmbmfkr3s57jpxl9fiyzrjmigvd1qmhj";
 
   meta = with stdenv.lib; {
     description = "Japanese font package with Mincho and Gothic fonts";
