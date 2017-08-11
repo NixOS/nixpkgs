@@ -57,9 +57,7 @@ let
     ) cfg.hiddenServices);
 
     mkHiddenServicePort = hsport: let
-      trgt = if (hsport.target != null) then
-        " " + hsport.target
-      else "";
+      trgt = optionalString (hsport.target != null) (" " + hsport.target);
     in "HiddenServicePort ${toString hsport.virtualPort}${trgt}";
 
   torRcFile = pkgs.writeText "torrc" torRc;
@@ -243,11 +241,11 @@ in
           default = null;
           example = "450 GBytes";
           description = ''
-            Specify maximum bandwidth allowed during an accounting
-            period. This allows you to limit overall tor bandwidth
-            over some time period. See the
-            <literal>AccountingMax</literal> option by looking at the
-            tor manual (<literal>man tor</literal>) for more.
+            Specify maximum bandwidth allowed during an accounting period. This
+            allows you to limit overall tor bandwidth over some time period.
+            See the <literal>AccountingMax</literal> option by looking at the
+            tor manual <citerefentry><refentrytitle>tor</refentrytitle>
+            <manvolnum>1</manvolnum></citerefentry> for more.
 
             Note this limit applies individually to upload and
             download; if you specify <literal>"500 GBytes"</literal>
@@ -261,10 +259,11 @@ in
           default = null;
           example = "month 1 1:00";
           description = ''
-            Specify length of an accounting period. This allows you to
-            limit overall tor bandwidth over some time period. See the
-            <literal>AccountingStart</literal> option by looking at
-            the tor manual (<literal>man tor</literal>) for more.
+            Specify length of an accounting period. This allows you to limit
+            overall tor bandwidth over some time period. See the
+            <literal>AccountingStart</literal> option by looking at the tor
+            manual <citerefentry><refentrytitle>tor</refentrytitle>
+            <manvolnum>1</manvolnum></citerefentry> for more.
           '';
         };
 
@@ -293,9 +292,10 @@ in
           type    = types.str;
           example = "143";
           description = ''
-            What port to advertise for Tor connections. This corresponds
-            to the <literal>ORPort</literal> section in the Tor manual; see
-            <literal>man tor</literal> for more details.
+            What port to advertise for Tor connections. This corresponds to the
+            <literal>ORPort</literal> section in the Tor manual; see
+            <citerefentry><refentrytitle>tor</refentrytitle>
+            <manvolnum>1</manvolnum></citerefentry> for more details.
 
             At a minimum, you should just specify the port for the
             relay to listen on; a common one like 143, 22, 80, or 443
@@ -365,7 +365,8 @@ in
 
                 This corresponds to the <literal>HiddenServicePort VIRTPORT
                 [TARGET]</literal> option by looking at the tor manual
-                (<literal>man tor</literal>) for more information.
+                <citerefentry><refentrytitle>tor</refentrytitle>
+                <manvolnum>1</manvolnum></citerefentry> for more information.
               '';
             };
             extraConfig = mkOption {
@@ -387,8 +388,10 @@ in
         description = ''
           Configure hidden services.
 
-          Please consult the tor manual (<literal>man tor</literal>) for a more
-          detailed explanation. (search for 'HIDDEN').
+          Please consult the tor manual
+          <citerefentry><refentrytitle>tor</refentrytitle>
+          <manvolnum>1</manvolnum></citerefentry> for a more detailed
+          explanation. (search for 'HIDDEN').
         '';
       };
     };
