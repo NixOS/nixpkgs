@@ -4,16 +4,14 @@ stdenv.mkDerivation rec {
   name = "git-radar-${version}";
   version = "0.5";
 
-  phases = [ "unpackPhase" "installPhase" ];
-
-  dontInstallSrc = true;
-
   src = fetchFromGitHub {
     owner = "michaeldfallen";
     repo = "git-radar";
     rev = "v${version}";
     sha256 = "1915aqx8bfc4xmvhx2gfxv72p969a6rn436kii9w4yi38hibmqv9";
   };
+
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out/bin

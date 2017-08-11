@@ -11943,7 +11943,6 @@ with pkgs;
   iproute = callPackage ../os-specific/linux/iproute { };
 
   iputils = callPackage ../os-specific/linux/iputils {
-    sp = spCompat;
     inherit (perlPackages) SGMLSpm;
   };
 

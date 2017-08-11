@@ -6925,6 +6925,8 @@ in {
 
     propagatedBuildInputs = with self; [ six pycrypto ];
 
+    doCheck = false;
+
     meta = {
       description = "libthumbor is the python extension to thumbor";
       homepage = http://github.com/heynemann/libthumbor;
