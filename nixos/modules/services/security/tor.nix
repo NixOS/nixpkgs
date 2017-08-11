@@ -381,7 +381,7 @@ in
         }));
         default = {};
         example = {
-          "/path/to/hidden/service/dir/" = {
+          "/var/lib/tor/webserver" = {
             hiddenServicePorts = [ { virtualPort = 80; } ];
           };
         };
