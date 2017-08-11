@@ -6406,6 +6406,8 @@ in {
     '';
   };
 
+  gpy = callPackage ../development/python-modules/gpy { };
+
   gitdb = buildPythonPackage rec {
     name = "gitdb-0.6.4";
 
