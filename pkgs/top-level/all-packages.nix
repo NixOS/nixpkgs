@@ -17300,6 +17300,8 @@ with pkgs;
 
   minecraft-server = callPackage ../games/minecraft-server { };
 
+  moon-buggy = callPackage ../games/moon-buggy {};
+
   multimc = libsForQt5.callPackage ../games/multimc { };
 
   minetest = callPackage ../games/minetest {
