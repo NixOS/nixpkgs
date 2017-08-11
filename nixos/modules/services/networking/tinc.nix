@@ -166,7 +166,6 @@ in
         path = [ data.package ];
         serviceConfig = {
           Type = "simple";
-          PIDFile = "/run/tinc.${network}.pid";
           Restart = "always";
           RestartSec = "3";
         };
