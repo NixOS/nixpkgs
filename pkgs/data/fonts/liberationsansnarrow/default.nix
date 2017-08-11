@@ -1,39 +1,17 @@
-{stdenv, fetchurl, fontforge, pythonPackages, python}:
+{stdenv, liberation_ttf_v1_from_source}:
 
 stdenv.mkDerivation rec {
-  pname = "liberationsansnarrow";
-  version = "1.07.3";
-  name = "${pname}";
+  name = builtins.replaceStrings ["liberation-fonts"] ["liberationsansnarrow"] liberation_ttf_v1_from_source.name;
 
-  src = fetchurl {
-    url = "https://fedorahosted.org/releases/l/i/liberation-fonts/liberation-fonts-ttf-${version}.tar.gz";
-    sha256 = "0qkr7n97jmj4q85jr20nsf6n5b48j118l9hr88vijn22ikad4wsp";
-  };
-
-  buildInputs = [ fontforge pythonPackages.fonttools python ];
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    cp -v $(find . -name '*Narrow*.ttf') $out/share/fonts/truetype
-
-    mkdir -p "$out/doc/${name}"
-    cp -v AUTHORS ChangeLog COPYING License.txt README "$out/doc/${name}" || true
+  buildCommand = ''
+    mkdir -p $out/share/fonts/truetype $out/share/doc/${name}
+    cp ${liberation_ttf_v1_from_source}/share/fonts/truetype/*Narrow*.ttf $out/share/fonts/truetype/
+    cp ${liberation_ttf_v1_from_source}/share/doc/*/*                     $out/share/doc/${name}
   '';
 
-  meta = with stdenv.lib; {
-    description = "Liberation Sans Narrow Font Family is a replacement for Arial Narrow";
-    longDescription = ''
-      Liberation Sans Narrow is a font originally created by Ascender
-      Inc and licensed to Oracle Corporation under a GPLv2 license. It is
-      metrically compatible with the commonly used Arial Narrow fonts
-      on Microsoft systems. It is no longer distributed with the
-      latest versions of the Liberation Fonts, as Red Hat has changed the
-      license to the Open Font License.
-    '';
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "00irp47ji91i0ypffylldr6fkmf3nlsgbrcvljrnhgxlywd29jpz";
 
-    license = licenses.gpl2;
-    homepage = https://fedorahosted.org/liberation-fonts/;
-    maintainers = [ maintainers.leenaars
-    ];
-  };
+  inherit (liberation_ttf_v1_from_source) meta;
 }
