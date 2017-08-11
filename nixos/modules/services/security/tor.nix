@@ -51,7 +51,7 @@ let
 
   hiddenServices = concatStrings (mapAttrsToList (hiddenServiceDir: hs:
     let
-      hsports = concatStrings (map mkHiddenServicePort hs.hiddenServicePorts);
+      hsports = concatStringsSep "\n" (map mkHiddenServicePort hs.hiddenServicePorts);
     in
       "HiddenServiceDir ${hiddenServiceDir}\n${hsports}\n${hs.extraConfig}\n"
     ) cfg.hiddenServices);
