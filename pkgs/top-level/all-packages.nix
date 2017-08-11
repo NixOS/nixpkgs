@@ -1362,6 +1362,8 @@ with pkgs;
     libsigrok = libsigrok-0-3-0; # not compatible with >= 0.4.0 yet
   };
 
+  collectd-data = callPackage ../tools/system/collectd/data.nix { };
+
   colormake = callPackage ../development/tools/build-managers/colormake { };
 
   cpuminer = callPackage ../tools/misc/cpuminer { };
