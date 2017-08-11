@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Vim - the text editor - for Mac OS X";
+    description = "Vim - the text editor - for macOS";
     homepage    = https://github.com/b4winckler/macvim;
     license = licenses.vim;
     maintainers = with maintainers; [ cstrahan ];

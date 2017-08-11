@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       code format under the GNU Lesser General Public License.
 
       The library was written to compile and run on a Linux system but
-      should compile and run on just about any Unix (including MacOS X).
+      should compile and run on just about any Unix (including macOS).
       There are also pre-compiled binaries available for 32 and 64 bit
       windows.
 

@@ -1,4 +1,4 @@
-# On Mac OS X, frameworks are linked to the system CoreFoundation but
+# On macOS, frameworks are linked to the system CoreFoundation but
 # dynamic libraries built with nix use a pure version of CF this
 # causes segfaults for binaries that depend on it at runtime.  This
 # can be solved in two ways.

@@ -37,7 +37,7 @@ let
     sha256 = "1lynpbxz1jay3ya5y45zac5v8c6ifgk4ssn8d1chfdk3spi691jj";
   };
 
-  # This fixes the build on OS X.
+  # This fixes the build on macOS.
   # See: https://github.com/opencv/opencv_contrib/pull/926
   contribOSXFix = fetchpatch {
     url = "https://github.com/opencv/opencv_contrib/commit/abf44fcccfe2f281b7442dac243e37b7f436d961.patch";
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     (lib.optionalString enableContrib ''
       cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/opencv_contrib"
 
-      # This fixes the build on OS X.
+      # This fixes the build on macOS.
       patch -d "$NIX_BUILD_TOP/opencv_contrib" -p2 < "${contribOSXFix}"
 
       for name in vgg_generated_48.i \

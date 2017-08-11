@@ -21,7 +21,7 @@ let
         inherit description license;
         longDescription = ''
           Enhancing productivity for every C and C++
-          developer on Linux, OS X and Windows.
+          developer on Linux, macOS and Windows.
         '';
         maintainers = with maintainers; [ edwtjo mic92 ];
         platforms = platforms.linux;
