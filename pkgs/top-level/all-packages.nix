@@ -12007,14 +12007,6 @@ with pkgs;
 
   lkl = callPackage ../applications/virtualization/lkl { };
 
-  linuxHeaders_2_4 = callPackage ../os-specific/linux/kernel-headers/2.4.nix {
-    cross = if targetPlatform != hostPlatform then targetPlatform else null;
-  };
-
-  linuxHeaders_2_6 = callPackage ../os-specific/linux/kernel-headers/4.4.nix {
-    cross = if targetPlatform != hostPlatform then targetPlatform else null;
-  };
-
   linuxHeaders_4_4 = callPackage ../os-specific/linux/kernel-headers/4.4.nix {
     cross = if targetPlatform != hostPlatform then targetPlatform else null;
   };
@@ -12024,8 +12016,6 @@ with pkgs;
     if targetPlatform != hostPlatform
     then
       { # switch
-        "2.4" = linuxHeaders_2_4;
-        "2.6" = linuxHeaders_2_6;
         "4.4" = linuxHeaders_4_4;
       }.${targetPlatform.platform.kernelMajor}
         or (throw "Unknown linux kernel version")
