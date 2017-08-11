@@ -41,7 +41,7 @@ in {
     inherit (cfg) contents format;
     pkgs = import ../../../.. { inherit (pkgs) system; }; # ensure we use the regular qemu-kvm package
     partitioned = config.ec2.hvm;
-    diskSize = sizeMB;
+    diskSize = cfg.sizeMB;
     configFile = pkgs.writeText "configuration.nix"
       ''
         {
