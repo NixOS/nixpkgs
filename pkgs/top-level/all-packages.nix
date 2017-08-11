@@ -2639,11 +2639,21 @@ with pkgs;
     enableNpm = false;
   };
 
+  # 7 will be removed in 17.09
   nodejs-7_x = callPackage ../development/web/nodejs/v7.nix {
     libtool = darwin.cctools;
   };
 
   nodejs-slim-7_x = callPackage ../development/web/nodejs/v7.nix {
+    libtool = darwin.cctools;
+    enableNpm = false;
+  };
+
+  nodejs-8_x = callPackage ../development/web/nodejs/v8.nix {
+    libtool = darwin.cctools;
+  };
+
+  nodejs-slim-8_x = callPackage ../development/web/nodejs/v8.nix {
     libtool = darwin.cctools;
     enableNpm = false;
   };
