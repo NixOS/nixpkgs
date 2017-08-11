@@ -243,7 +243,7 @@ in
           };
         };
 
-        security.pam.services.sambda = {};
+        security.pam.services.samba = {};
 
       })
     ];
