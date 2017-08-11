@@ -1,19 +1,15 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
+let
   version = "2016-03-03";
+in fetchzip {
   name = "shrikhand-${version}";
 
-  src = fetchFromGitHub {
-    owner = "jonpinhorn";
-    repo = "shrikhand";
-    rev = "c11c9b0720fba977fad7cb4f339ebacdba1d1394";
-    sha256 = "1d21bvj4w8i0zrmkdrgbn0rpzac89iazfids1x273gsrsvvi45kk";
-  };
+  url = https://github.com/jonpinhorn/shrikhand/raw/c11c9b0720fba977fad7cb4f339ebacdba1d1394/build/Shrikhand-Regular.ttf;
 
-  installPhase = ''
-    install -D -m644 build/Shrikhand-Regular.ttf $out/share/fonts/truetype/Shrikhand-Regular.ttf
-  '';
+  postFetch = "install -D -m644 $downloadedFile $out/share/fonts/truetype/Shrikhand-Regular.ttf";
+
+  sha256 = "0s54k9cs1g2yz6lwg5gakqb12vg5qkfdz3pc8mh7mib2s6q926hs";
 
   meta = with stdenv.lib; {
     homepage = https://jonpinhorn.github.io/shrikhand/;

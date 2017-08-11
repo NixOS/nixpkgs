@@ -1,22 +1,19 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
-  name = "raleway-${version}";
+let
   version = "2016-08-30";
+in fetchzip {
+  name = "raleway-${version}";
 
-  src = fetchFromGitHub {
-    owner = "impallari";
-    repo = "Raleway";
-    rev = "fa27f47b087fc093c6ae11cfdeb3999ac602929a";
-    sha256 = "1i6a14ynm29gqjr7kfk118v69vjpd3g4ylwfvhwa66xax09jkhlr";
-  };
-  dontBuild = true;
+  url = https://github.com/impallari/Raleway/archive/fa27f47b087fc093c6ae11cfdeb3999ac602929a.zip;
 
-  installPhase = ''
-    mkdir -p $out/share/fonts/opentype
-    cp "$src/fonts/OTF v3.000 Fontlab"/*.otf $out/share/fonts/opentype
-    find -type f -maxdepth 1 -exec cp "{}" $out/ \;
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile \*-Original.otf  -d $out/share/fonts/opentype
+    unzip -j $downloadedFile \*.txt \*.md     -d $out
   '';
+
+  sha256 = "16jr7drqg2wib2q48ajlsa7rh1jxjibl1wd4rjndi49vfl463j60";
 
   meta = {
     description = "Raleway is an elegant sans-serif typeface family";
@@ -35,7 +32,7 @@ stdenv.mkDerivation rec {
       It also has a sister display family, Raleway Dots.
     '';
 
-    homepage = src.meta.homepage;
+    homepage = https://github.com/impallari/Raleway;
     license = stdenv.lib.licenses.ofl;
 
     maintainers = with stdenv.lib.maintainers; [ profpatsch ];

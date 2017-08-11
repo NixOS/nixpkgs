@@ -1,19 +1,16 @@
-{stdenv, fetchurl, unzip}:
+{stdenv, fetchzip}:
 
-stdenv.mkDerivation rec {
+fetchzip rec {
   name = "freefont-ttf-20120503";
 
-  src = fetchurl {
-    url = "mirror://gnu/freefont/${name}.zip";
-    sha256 = "1bw9mrf5pqi2a29b7qw4nhhj566aqqmi28hkbn2a38c2pzqvm1bw";
-  };
+  url = "mirror://gnu/freefont/${name}.zip";
 
-  buildInputs = [ unzip ];
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    cp *.ttf $out/share/fonts/truetype
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
   '';
+
+  sha256 = "0h0x2hhr7kvjiycf7fv800xxwa6hcpiz54bqx06wsqc7z61iklvd";
 
   meta = {
     description = "GNU Free UCS Outline Fonts";

@@ -1,25 +1,21 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
-  name = "orbitron-${version}";
+let
   version = "20110526";
+in fetchzip {
+  name = "orbitron-${version}";
 
-  src = fetchFromGitHub {
-    owner  = "theleagueof";
-    repo   = "orbitron";
-    rev    = "13e6a52";
-    sha256 = "1c6jb7ayr07j1pbnzf3jxng9x9bbqp3zydf8mqdw9ifln1b4ycyf";
-  };
+  url = https://github.com/theleagueof/orbitron/archive/13e6a52.zip;
 
-  phases = [ "unpackPhase" "installPhase" ];
-
-  installPhase = ''
+  postFetch = ''
     otfdir=$out/share/fonts/opentype/orbitron
     ttfdir=$out/share/fonts/ttf/orbitron
     mkdir -p $otfdir $ttfdir
-    cp -v Orbitron*.otf $otfdir
-    cp -v Orbitron*.ttf $ttfdir
+    unzip -j $downloadedFile \*/Orbitron\*.otf -d $otfdir
+    unzip -j $downloadedFile \*/Orbitron\*.ttf -d $ttfdir
   '';
+
+  sha256 = "1y9yzvpqs2v3ssnqk2iiglrh8amgsscnk8vmfgnqgqi9f4dhdvnv";
 
   meta = with stdenv.lib; {
     homepage = https://www.theleagueofmoveabletype.com/orbitron;
