@@ -19231,6 +19231,8 @@ with pkgs;
 
   hy = callPackage ../development/interpreters/hy {};
 
+  check-uptime = callPackage ../servers/monitoring/plugins/uptime.nix { };
+
   ghc-standalone-archive = callPackage ../os-specific/darwin/ghc-standalone-archive { inherit (darwin) cctools; };
 
   chrome-gnome-shell = callPackage  ../desktops/gnome-3/extensions/chrome-gnome-shell {};
