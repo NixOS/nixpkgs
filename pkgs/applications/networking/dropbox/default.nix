@@ -96,10 +96,10 @@ in mkDerivation {
 
     mkdir -p "$out/bin"
     RPATH="${ldpath}:$out/${appdir}"
+    chmod 755 $out/${appdir}/dropbox
     makeWrapper "$out/${appdir}/dropbox" "$out/bin/dropbox" \
       --prefix LD_LIBRARY_PATH : "$RPATH"
 
-    chmod 755 $out/${appdir}/dropbox
 
     rm $out/${appdir}/wmctrl
     ln -s ${wmctrl}/bin/wmctrl $out/${appdir}/wmctrl
