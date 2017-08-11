@@ -5,11 +5,6 @@ let inherit (pkgs) stdenv runCommand perl lib;
 in
 
 {
-
-  # description see mergeAttrsByVersion in lib/misc.nix
-  versionedDerivation = name: version: attrsByVersion: base:
-    pkgs.stdenv.mkDerivation (stdenv.lib.mergeAttrsByVersion name version attrsByVersion base);
-
   /*
     Usage example creating a derivation installing ruby, sup and a lib:
 
