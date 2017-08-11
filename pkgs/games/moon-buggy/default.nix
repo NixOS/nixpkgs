@@ -1,4 +1,5 @@
 {stdenv, fetchurl, ncurses}:
+
 stdenv.mkDerivation rec {
   baseName = "moon-buggy";
   version = "1.0.51";
@@ -9,8 +10,8 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "http://m.seehuhn.de/programs/moon-buggy-1.0.51.tar.gz";
-    sha256 = "352dc16ccae4c66f1e87ab071e6a4ebeb94ff4e4f744ce1b12a769d02fe5d23f";
+    url = "http://m.seehuhn.de/programs/${name}.tar.gz";
+    sha256 = "0gyjwlpx0sd728dwwi7pwks4zfdy9rm1w1xbhwg6zip4r9nc2b9m";
   };
 
   meta = {
