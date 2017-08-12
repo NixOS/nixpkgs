@@ -25,6 +25,12 @@ stdenv.mkDerivation rec {
     "-DSYSDIG_VERSION=${version}"
   ] ++ optional (kernel == null) "-DBUILD_DRIVER=OFF";
 
+  postPatch = ''
+    sed 's|curl/curlbuild\.h|curl/system.h|' -i \
+        userspace/libsinsp/marathon_http.cpp \
+        userspace/libsinsp/mesos_http.cpp
+ '';
+
   preConfigure = ''
     export INSTALL_MOD_PATH="$out"
   '' + optionalString (kernel != null) ''
