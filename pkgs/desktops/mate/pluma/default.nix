@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     python
     gnome3.gtksourceview
     gnome3.libpeas
+    gnome3.defaultIconTheme
     mate.mate-desktop
   ];
 
