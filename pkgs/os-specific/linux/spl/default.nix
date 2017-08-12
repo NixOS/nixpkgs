@@ -15,13 +15,13 @@ in
   assert buildKernel -> kernel != null;
 stdenv.mkDerivation rec {
   name = "spl-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "zfsonlinux";
     repo = "spl";
     rev = "spl-${version}";
-    sha256 = "05qqwhxc9nj94y28c97iwfz8gkjwicrhnkj425yb47gqa8rafazk";
+    sha256 = "0m8qhbdd8n40lbd91s30q4lrw8g169sha0410c8rwk2d5qfaxv9n";
   };
 
   patches = [ ./const.patch ./install_prefix.patch ];
