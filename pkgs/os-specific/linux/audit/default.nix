@@ -5,11 +5,11 @@
 assert enablePython -> python != null;
 
 stdenv.mkDerivation rec {
-  name = "audit-2.7.6";
+  name = "audit-2.7.7";
 
   src = fetchurl {
     url = "http://people.redhat.com/sgrubb/audit/${name}.tar.gz";
-    sha256 = "1rqlj15kbyfw4z88z8whf1q2rcg17vs439fvzdds55fwzyf2hrgs";
+    sha256 = "1vvqw5xgirap0jdmajw7l3pq563aycvy3hlqvj3k2cac8i4jbqlq";
   };
 
   outputs = [ "bin" "dev" "out" "man" "plugins" ];
