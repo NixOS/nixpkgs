@@ -142,6 +142,18 @@ let
     (assertValueOneOf "EmitTimezone" boolValues)
   ];
 
+  # .network files have a [Link] section with different options than in .netlink files
+  checkNetworkLink = checkUnitConfig "Link" [
+    (assertOnlyFields [
+      "MACAddress" "MTUBytes" "ARP" "Unmanaged"
+    ])
+    (assertMacAddress "MACAddress")
+    (assertByteFormat "MTUBytes")
+    (assertValueOneOf "ARP" boolValues)
+    (assertValueOneOf "Unmanaged" boolValues)
+  ];
+
+
   commonNetworkOptions = {
 
     enable = mkOption {
@@ -371,6 +383,18 @@ let
       '';
     };
 
+    linkConfig = mkOption {
+      default = {};
+      example = { Unmanaged = true; };
+      type = types.addCheck (types.attrsOf unitOption) checkNetworkLink;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Link]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     name = mkOption {
       type = types.nullOr types.str;
       default = null;
@@ -581,6 +605,12 @@ let
     { inherit (def) enable;
       text = commonMatchText def +
         ''
+          ${optionalString (def.linkConfig != { }) ''
+            [Link]
+            ${attrsToSection def.linkConfig}
+
+          ''}
+
           [Network]
           ${attrsToSection def.networkConfig}
           ${concatStringsSep "\n" (map (s: "Address=${s}") def.address)}

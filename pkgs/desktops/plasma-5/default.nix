@@ -90,7 +90,7 @@ let
               ];
               platforms = lib.platforms.linux;
               maintainers = with lib.maintainers; [ ttuegel ];
-              homepage = "http://www.kde.org";
+              homepage = http://www.kde.org;
             } // (args.meta or {});
           in
           mkDerivation (args // {

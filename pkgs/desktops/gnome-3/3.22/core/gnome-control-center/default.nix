@@ -39,6 +39,9 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = with gnome3; ''
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:${sound-theme-freedesktop}/share"
+    )
     for i in $out/share/applications/*; do
       substituteInPlace $i --replace "gnome-control-center" "$out/bin/gnome-control-center"
     done

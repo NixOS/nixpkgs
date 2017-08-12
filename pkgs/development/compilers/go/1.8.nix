@@ -128,6 +128,7 @@ stdenv.mkDerivation rec {
            else if stdenv.system == "i686-linux" then "386"
            else if stdenv.system == "x86_64-linux" then "amd64"
            else if stdenv.isArm then "arm"
+           else if stdenv.isAarch64 then "arm64"
            else throw "Unsupported system";
   GOARM = optionalString (stdenv.system == "armv5tel-linux") "5";
   GO386 = 387; # from Arch: don't assume sse2 on i686

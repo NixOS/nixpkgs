@@ -44,7 +44,7 @@ lib.overrideDerivation (mkDerivation rec {
     tasty tasty-hunit tasty-quickcheck text vector
   ];
 
-  homepage = "https://github.com/dapphub/hsevm";
+  homepage = https://github.com/dapphub/hsevm;
   description = "Ethereum virtual machine evaluator";
   license = stdenv.lib.licenses.agpl3;
   maintainers = [stdenv.lib.maintainers.dbrock];

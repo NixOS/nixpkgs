@@ -11,6 +11,8 @@
 
 # Additional dependencies for GNU/Hurd.
 , mig ? null, hurd ? null
+
+, setupDebugInfoDirs
 }:
 
 let
@@ -32,7 +34,9 @@ stdenv.mkDerivation rec {
     sha256 = "1vplyf8v70yn0rdqjx6awl9nmfbwaj5ynwwjxwa71rhp97z4z8pn";
   };
 
-  nativeBuildInputs = [ pkgconfig texinfo perl ]
+  patches = [ ./debug-info-from-env.patch ];
+
+  nativeBuildInputs = [ pkgconfig texinfo perl setupDebugInfoDirs ]
     # TODO(@Ericson2314) not sure if should be host or target
     ++ stdenv.lib.optional targetPlatform.isHurd mig;
 
@@ -40,6 +44,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional pythonSupport python
     ++ stdenv.lib.optional targetPlatform.isHurd hurd
     ++ stdenv.lib.optional doCheck dejagnu;
+
+  propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
   enableParallelBuilding = true;
 
@@ -59,6 +65,13 @@ stdenv.mkDerivation rec {
       "--with-separate-debug-dir=/run/current-system/sw/lib/debug"
     ++ stdenv.lib.optional (!pythonSupport) "--without-python"
     ++ stdenv.lib.optional multitarget "--enable-targets=all";
+
+  preConfigure =
+    # Not sure why this is causing problems, now that the stdenv
+    # exports CPP=cpp the build fails with strange errors on darwin.
+    stdenv.lib.optionalString stdenv.cc.isClang ''
+      unset CPP
+    '';
 
   postInstall =
     '' # Remove Info files already provided by Binutils and other packages.

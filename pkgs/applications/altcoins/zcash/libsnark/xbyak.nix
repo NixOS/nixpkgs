@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rc2nx8kj2lj13whxb9chhh79f4hmjjj4j1hpqsd0lbdb60jikrn";
   };
 
-  phases = ["unpackPhase" "installPhase"];
+  dontBuild = true;
 
   installPhase = ''
     mkdir -p $out/include
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "JIT assembler for x86, x64";
-    homepage = "https://github.com/herumi/xbyak";
+    homepage = https://github.com/herumi/xbyak;
     maintainers = with maintainers; [ rht ];
     license = licenses.bsd3;
     platforms = platforms.unix;

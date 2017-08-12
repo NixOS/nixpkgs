@@ -75,7 +75,7 @@ let
       meta = with stdenv.lib; {
         inherit longDescription;
         description = "Hunspell dictionary for ${shortDescription} from Dicollecte";
-        homepage = "http://www.dicollecte.org/home.php?prj=fr";
+        homepage = http://www.dicollecte.org/home.php?prj=fr;
         license = licenses.mpl20;
         maintainers = with maintainers; [ renzo ];
         platforms = platforms.all;

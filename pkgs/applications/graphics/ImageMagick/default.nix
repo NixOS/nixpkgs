@@ -13,8 +13,8 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "6.9.9-0";
-    sha256 = "02xnvgjnmz2d4yv4iy1kh7an5w631p1s319jw23c8zpmqhfhk2ha";
+    version = "6.9.9-3";
+    sha256 = "1bfg334nxkxhsm6h0hb0vwd9aiz031qa0w8w8hmhdk8m4wawshrg";
     patches = [];
   }
     # Freeze version on mingw so we don't need to port the patch too often.
@@ -85,7 +85,9 @@ stdenv.mkDerivation rec {
     moveToOutput "bin/*-config" "$dev"
     moveToOutput "lib/ImageMagick-*/config-Q16" "$dev" # includes configure params
     for file in "$dev"/bin/*-config; do
-      substituteInPlace "$file" --replace pkg-config \
+      substituteInPlace "$file" --replace "${pkgconfig}/bin/pkg-config -config" \
+        ${pkgconfig}/bin/pkg-config
+      substituteInPlace "$file" --replace ${pkgconfig}/bin/pkg-config \
         "PKG_CONFIG_PATH='$dev/lib/pkgconfig' '${pkgconfig}/bin/pkg-config'"
     done
   '' + lib.optionalString (ghostscript != null) ''

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, ghc, pkgconfig, glibcLocales, coreutils, gnugrep, gnused
-, jailbreak-cabal, hscolour, cpphs, nodejs, lib
+, jailbreak-cabal, hscolour, cpphs, nodejs, lib, removeReferencesTo
 }: let isCross = (ghc.cross or null) != null; in
 
 { pname
@@ -53,6 +53,8 @@
 , coreSetup ? false # Use only core packages to build Setup.hs.
 , useCpphs ? false
 , hardeningDisable ? lib.optional (ghc.isHaLVM or false) "all"
+, enableSeparateDataOutput ? false
+, enableSeparateDocOutput ? doHaddock
 } @ args:
 
 assert editedCabalFile != null -> revision != null;
@@ -108,6 +110,8 @@ let
 
   defaultConfigureFlags = [
     "--verbose" "--prefix=$out" "--libdir=\\$prefix/lib/\\$compiler" "--libsubdir=\\$pkgid"
+    (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghc.name}")
+    (optionalString enableSeparateDocOutput "--docdir=$doc/share/doc")
     "--with-gcc=$CC" # Clang won't work without that extra information.
     "--package-db=$packageConfDir"
     (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.name}/${pname}-${version}")
@@ -144,9 +148,9 @@ let
   allPkgconfigDepends = pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
                         optionals doCheck testPkgconfigDepends ++ optionals withBenchmarkDepends benchmarkPkgconfigDepends;
 
-  nativeBuildInputs = setupHaskellDepends ++ buildTools ++ libraryToolDepends ++ executableToolDepends;
+  nativeBuildInputs = buildTools ++ libraryToolDepends ++ executableToolDepends ++ [ removeReferencesTo ];
   propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends;
-  otherBuildInputs = extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++
+  otherBuildInputs = setupHaskellDepends ++ extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++
                      optionals (allPkgconfigDepends != []) ([pkgconfig] ++ allPkgconfigDepends) ++
                      optionals doCheck (testDepends ++ testHaskellDepends ++ testSystemDepends ++ testToolDepends) ++
                      # ghcjs's hsc2hs calls out to the native hsc2hs
@@ -172,6 +176,9 @@ assert allPkgconfigDepends != [] -> pkgconfig != null;
 
 stdenv.mkDerivation ({
   name = "${pname}-${version}";
+
+  outputs = if (args ? outputs) then args.outputs else ([ "out" ] ++ (optional enableSeparateDataOutput "data") ++ (optional enableSeparateDocOutput "doc"));
+  setOutputFlags = false;
 
   pos = builtins.unsafeGetAttrPos "pname" args;
 
@@ -211,7 +218,7 @@ stdenv.mkDerivation ({
     configureFlags="${concatStringsSep " " defaultConfigureFlags} $configureFlags"
 
     # nativePkgs defined in stdenv/setup.hs
-    for p in $nativePkgs; do
+    for p in "''${nativePkgs[@]}"; do
       if [ -d "$p/lib/${ghc.name}/package.conf.d" ]; then
         cp -f "$p/lib/${ghc.name}/package.conf.d/"*.conf $packageConfDir/
         continue
@@ -231,11 +238,11 @@ stdenv.mkDerivation ({
     # libraries) from all the dependencies.
     local dynamicLinksDir="$out/lib/links"
     mkdir -p $dynamicLinksDir
-    for d in $(grep dynamic-library-dirs $packageConfDir/*|awk '{print $2}'); do
-      ln -s $d/*.dylib $dynamicLinksDir
+    for d in $(grep dynamic-library-dirs "$packageConfDir/"*|awk '{print $2}'); do
+      ln -s "$d/"*.dylib $dynamicLinksDir
     done
     # Edit the local package DB to reference the links directory.
-    for f in $packageConfDir/*.conf; do
+    for f in "$packageConfDir/"*.conf; do
       sed -i "s,dynamic-library-dirs: .*,dynamic-library-dirs: $dynamicLinksDir," $f
     done
   '') + ''
@@ -311,7 +318,7 @@ stdenv.mkDerivation ({
     ${optionalString isGhcjs ''
       for exeDir in "$out/bin/"*.jsexe; do
         exe="''${exeDir%.jsexe}"
-        printf '%s\n' '#!${nodejs}/bin/node' > "$exe"
+        printWords '#!${nodejs}/bin/node' > "$exe"
         cat "$exeDir/all.js" >> "$exe"
         chmod +x "$exe"
       done
@@ -322,6 +329,14 @@ stdenv.mkDerivation ({
         install_name_tool -add_rpath "$out/lib/ghc-${ghc.version}/${pname}-${version}" "$exe"
       done
     ''}
+
+    ${optionalString enableSeparateDocOutput ''
+    for x in $doc/share/doc/html/src/*.html; do
+      remove-references-to -t $out $x
+    done
+    mkdir -p $doc
+    ''}
+    ${optionalString enableSeparateDataOutput "mkdir -p $data"}
 
     runHook postInstall
   '';

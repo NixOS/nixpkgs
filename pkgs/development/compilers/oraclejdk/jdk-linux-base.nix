@@ -27,7 +27,8 @@
 , mesa_noglu
 , freetype
 , fontconfig
-, gnome2
+, gtk2
+, pango
 , cairo
 , alsaLib
 , atk
@@ -165,7 +166,7 @@ let result = stdenv.mkDerivation rec {
     ln -s $jrePath/lib/${architecture}/libnpjp2.so $jrePath/lib/${architecture}/plugins
 
     mkdir -p $out/nix-support
-    echo -n "${setJavaClassPath}" > $out/nix-support/propagated-native-build-inputs
+    printWords ${setJavaClassPath} > $out/nix-support/propagated-native-build-inputs
 
     # Set JAVA_HOME automatically.
     cat <<EOF >> $out/nix-support/setup-hook
@@ -196,7 +197,7 @@ let result = stdenv.mkDerivation rec {
    * libXt is only needed on amd64
    */
   libraries =
-    [stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt mesa_noglu xorg.libXxf86vm alsaLib fontconfig freetype gnome2.pango gnome2.gtk cairo gdk_pixbuf atk] ++
+    [stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt mesa_noglu xorg.libXxf86vm alsaLib fontconfig freetype pango gtk2 cairo gdk_pixbuf atk] ++
     (if swingSupport then [xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXp xorg.libXt xorg.libXrender stdenv.cc.cc] else []);
 
   rpath = stdenv.lib.strings.makeLibraryPath libraries;

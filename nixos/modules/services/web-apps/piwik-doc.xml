@@ -23,16 +23,24 @@
       and enter those credentials in your browser.
       You can use passwordless database authentication via the UNIX_SOCKET authentication plugin
       with the following SQL commands:
+
       <programlisting>
+        # For MariaDB
         INSTALL PLUGIN unix_socket SONAME 'auth_socket';
-        ALTER USER root IDENTIFIED VIA unix_socket;
         CREATE DATABASE piwik;
-        CREATE USER 'piwik'@'localhost' IDENTIFIED VIA unix_socket;
+        CREATE USER 'piwik'@'localhost' IDENTIFIED WITH unix_socket;
+        GRANT ALL PRIVILEGES ON piwik.* TO 'piwik'@'localhost';
+
+        # For MySQL
+        INSTALL PLUGIN auth_socket SONAME 'auth_socket.so';
+        CREATE DATABASE piwik;
+        CREATE USER 'piwik'@'localhost' IDENTIFIED WITH auth_socket;
         GRANT ALL PRIVILEGES ON piwik.* TO 'piwik'@'localhost';
       </programlisting>
+
       Then fill in <literal>piwik</literal> as database user and database name, and leave the password field blank.
-      This works with MariaDB and MySQL. This authentication works by allowing only the <literal>piwik</literal> unix
-      user to authenticate as <literal>piwik</literal> database (without needing a password), but no other users.
+      This authentication works by allowing only the <literal>piwik</literal> unix user to authenticate as the 
+      <literal>piwik</literal> database user (without needing a password), but no other users.
       For more information on passwordless login, see
       <link xlink:href="https://mariadb.com/kb/en/mariadb/unix_socket-authentication-plugin/" />.
     </para>

@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Web and API based SMTP testing";
-    homepage = "https://github.com/mailhog/MailHog";
+    homepage = https://github.com/mailhog/MailHog;
     maintainers = with maintainers; [ disassembler ];
     license = licenses.mit;
   };

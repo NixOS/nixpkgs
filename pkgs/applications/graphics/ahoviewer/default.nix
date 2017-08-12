@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/ahodesuka/ahoviewer";
+    homepage = https://github.com/ahodesuka/ahoviewer;
     description = "A GTK2 image viewer, manga reader, and booru browser";
     maintainers = [ maintainers.skrzyp ];
     license = licenses.mit;

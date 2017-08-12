@@ -1,0 +1,65 @@
+From 0edeadc0d396aa713b808ae50a0058aca5d3837e Mon Sep 17 00:00:00 2001
+From: "H.J. Lu" <hjl.tools@gmail.com>
+Date: Wed, 26 Jul 2017 10:08:46 -0700
+Subject: [PATCH] Avoid .symver on common symbols [BZ #21666]
+
+The .symver directive on common symbol just creates a new common symbol,
+not an alias and the newer assembler with the bug fix for
+
+https://sourceware.org/bugzilla/show_bug.cgi?id=21661
+
+will issue an error.  Before the fix, we got
+
+$ readelf -sW libc.so | grep "loc[12s]"
+  5109: 00000000003a0608     8 OBJECT  LOCAL  DEFAULT   36 loc1
+  5188: 00000000003a0610     8 OBJECT  LOCAL  DEFAULT   36 loc2
+  5455: 00000000003a0618     8 OBJECT  LOCAL  DEFAULT   36 locs
+  6575: 00000000003a05f0     8 OBJECT  GLOBAL DEFAULT   36 locs@GLIBC_2.2.5
+  7156: 00000000003a05f8     8 OBJECT  GLOBAL DEFAULT   36 loc1@GLIBC_2.2.5
+  7312: 00000000003a0600     8 OBJECT  GLOBAL DEFAULT   36 loc2@GLIBC_2.2.5
+
+in libc.so.  The versioned loc1, loc2 and locs have the wrong addresses.
+After the fix, we got
+
+$ readelf -sW libc.so | grep "loc[12s]"
+  6570: 000000000039e3b8     8 OBJECT  GLOBAL DEFAULT   34 locs@GLIBC_2.2.5
+  7151: 000000000039e3c8     8 OBJECT  GLOBAL DEFAULT   34 loc1@GLIBC_2.2.5
+  7307: 000000000039e3c0     8 OBJECT  GLOBAL DEFAULT   34 loc2@GLIBC_2.2.5
+
+	[BZ #21666]
+	* misc/regexp.c (loc1): Add __attribute__ ((nocommon));
+	(loc2): Likewise.
+	(locs): Likewise.
+
+(cherry picked from commit 388b4f1a02f3a801965028bbfcd48d905638b797)
+---
+ ChangeLog     | 7 +++++++
+ misc/regexp.c | 9 +++++----
+ 2 files changed, 12 insertions(+), 4 deletions(-)
+
+diff --git a/misc/regexp.c b/misc/regexp.c
+index 19d76c0..eaea7c3 100644
+--- a/misc/regexp.c
++++ b/misc/regexp.c
+@@ -29,14 +29,15 @@
+
+ #if SHLIB_COMPAT (libc, GLIBC_2_0, GLIBC_2_23)
+
+-/* Define the variables used for the interface.  */
+-char *loc1;
+-char *loc2;
++/* Define the variables used for the interface.  Avoid .symver on common
++   symbol, which just creates a new common symbol, not an alias.  */
++char *loc1 __attribute__ ((nocommon));
++char *loc2 __attribute__ ((nocommon));
+ compat_symbol (libc, loc1, loc1, GLIBC_2_0);
+ compat_symbol (libc, loc2, loc2, GLIBC_2_0);
+
+ /* Although we do not support the use we define this variable as well.  */
+-char *locs;
++char *locs __attribute__ ((nocommon));
+ compat_symbol (libc, locs, locs, GLIBC_2_0);
+
+
+--
+2.9.3

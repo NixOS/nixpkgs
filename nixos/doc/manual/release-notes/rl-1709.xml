@@ -130,6 +130,30 @@ rmdir /var/lib/ipfs/.ipfs
       instead. Refer to the description of the options for more details.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      <literal>tlsdate</literal> package and module were removed. This is due to the project
+      being dead and not building with openssl 1.1.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>wvdial</literal> package and module were removed. This is due to the project
+      being dead and not building with openssl 1.1.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>cc-wrapper</literal>'s setup-hook now exports a number of
+      environment variables corresponding to binutils binaries,
+      (e.g. <envar>LD</envar>, <envar>STRIP</envar>, <envar>RANLIB</envar>,
+      etc). This is done to prevent packages' build systems guessing, which is
+      harder to predict, especially when cross-compiling. However, some packages
+      have broken due to this—their build systems either not supporting, or
+      claiming to support without adequate testing, taking such environment
+      variables as parameters.
+    </para>
+  </listitem>
 </itemizedlist>
 
 <para>Other notable improvements:</para>
@@ -155,6 +179,21 @@ rmdir /var/lib/ipfs/.ipfs
       other systems and hopefully with each font designer's intent. Some
       system-wide configuration has been removed from the Fontconfig NixOS
       module where user Fontconfig settings are available.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      ZFS/SPL have been updated to 0.7.0, <literal>zfsUnstable, splUnstable</literal>
+      have therefore been removed.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The <option>time.timeZone</option> option now allows the value
+      <literal>null</literal> in addition to timezone strings. This value
+      allows changing the timezone of a system imperatively using
+      <command>timedatectl set-timezone</command>. The default timezone
+      is still UTC.
     </para>
   </listitem>
 

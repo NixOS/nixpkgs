@@ -41,7 +41,7 @@ stdenv.mkDerivation rec{
 
   meta = {
     description = "Peer-to-peer, anonymous electronic cash system";
-    homepage = "https://z.cash/";
+    homepage = https://z.cash/;
     maintainers = with maintainers; [ rht ];
     license = licenses.mit;
     platforms = platforms.unix;

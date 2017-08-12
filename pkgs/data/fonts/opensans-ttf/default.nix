@@ -1,21 +1,17 @@
-{stdenv, fetchurl}:
+{stdenv, fetchzip}:
 
-# adapted from https://aur.archlinux.org/packages/tt/ttf-opensans/PKGBUILD
-
-stdenv.mkDerivation rec {
+fetchzip {
   name = "opensans-ttf-20140617";
 
-  src = fetchurl {
-    url = "https://hexchain.org/pub/archlinux/ttf-opensans/opensans.tar.gz";
-    sha256 = "1ycn39dijhd3lffmafminrnfmymdig2jvc6i47bb42fx777q97q4";
-  };
+  url = "http://web.archive.org/web/20150801161609/https://hexchain.org/pub/archlinux/ttf-opensans/opensans.tar.gz";
 
-  sourceRoot = ".";
-
-  installPhase = ''
+  postFetch = ''
+    tar -xzf $downloadedFile
     mkdir -p $out/share/fonts/truetype
     cp *.ttf $out/share/fonts/truetype
   '';
+
+  sha256 = "0zpzqw5y9g5jk7xjcxa12ds60ckvxmpw8p7bnkkmad53s94yr5wf";
 
   meta = {
     description = "Open Sans fonts";
@@ -23,7 +19,7 @@ stdenv.mkDerivation rec {
       Open Sans is a humanist sans serif typeface designed by Steve Matteson,
       Type Director of Ascender Corp.
     '';
-    homepage = "http://en.wikipedia.org/wiki/Open_Sans";
+    homepage = http://en.wikipedia.org/wiki/Open_Sans;
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.all;
     maintainers = [ ];

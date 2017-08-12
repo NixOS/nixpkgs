@@ -25,9 +25,9 @@
 # * enabling/disabling certain features in packages
 #
 # If you have an override of this kind, see configuration-common.nix instead.
-{ pkgs }:
+{ pkgs, haskellLib }:
 
-with import ./lib.nix { inherit pkgs; };
+with haskellLib;
 
 # All of the overrides in this set should look like:
 #
@@ -64,8 +64,19 @@ self: super: builtins.intersectAttrs super {
       "--extra-include-dirs=${pkgs.cudatoolkit}/include"
     ];
     preConfigure = ''
-      unset CC          # unconfuse the haskell-cuda configure script
-      sed -i -e 's|/usr/local/cuda|${pkgs.cudatoolkit}|g' configure
+      export CUDA_PATH=${pkgs.cudatoolkit}
+    '';
+  });
+
+  nvvm = overrideCabal super.nvvm (drv: {
+    preConfigure = ''
+      export CUDA_PATH=${pkgs.cudatoolkit}
+    '';
+  });
+
+  cufft = overrideCabal super.cufft (drv: {
+    preConfigure = ''
+      export CUDA_PATH=${pkgs.cudatoolkit}
     '';
   });
 
@@ -407,6 +418,17 @@ self: super: builtins.intersectAttrs super {
   either-unwrap = overrideCabal super.either-unwrap (drv: {
     testHaskellDepends = (drv.testHaskellDepends or []) ++ [ self.test-framework self.test-framework-hunit ];
   });
+
+  # cabal2nix likes to generate dependencies on hinotify when hfsevents is really required
+  # on darwin: https://github.com/NixOS/cabal2nix/issues/146.
+  hinotify = if pkgs.stdenv.isDarwin then self.hfsevents else super.hinotify;
+
+  # FSEvents API is very buggy and tests are unreliable. See
+  # http://openradar.appspot.com/10207999 and similar issues.
+  # https://github.com/haskell-fswatch/hfsnotify/issues/62
+  fsnotify = if pkgs.stdenv.isDarwin
+    then addBuildDepend (dontCheck super.fsnotify) pkgs.darwin.apple_sdk.frameworks.Cocoa
+    else dontCheck super.fsnotify;
 
   hidapi = addExtraLibrary super.hidapi pkgs.libudev;
 

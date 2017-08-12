@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "fzf-${version}";
-  version = "0.16.10";
+  version = "0.16.11";
   rev = "${version}";
 
   goPackagePath = "github.com/junegunn/fzf";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "junegunn";
     repo = "fzf";
-    sha256 = "0c9c9x2pim5g2jwy6jkdws2s7b1mw2qlnba1q46a1izswm7ljfq7";
+    sha256 = "1jm7v482ad85l627k7a265p2clzy2yk88hqqbjsihi53mj8agxa0";
   };
 
   outputs = [ "bin" "out" "man" ];
@@ -39,7 +39,15 @@ buildGoPackage rec {
     cp -r $src/man/man1 $man/share/man
     mkdir -p $out/share/vim-plugins
     ln -s $out/share/go/src/github.com/junegunn/fzf $out/share/vim-plugins/${name}
-    cp -R $src/shell $out/share/shell
+
+    cp -R $src/shell $bin/share/fzf
+    cat <<SCRIPT > $bin/bin/fzf-share
+    #!/bin/sh
+    # Run this script to find the fzf shared folder where all the shell
+    # integration scripts are living.
+    echo $bin/share/fzf
+    SCRIPT
+    chmod +x $bin/bin/fzf-share
   '';
 
   meta = with stdenv.lib; {

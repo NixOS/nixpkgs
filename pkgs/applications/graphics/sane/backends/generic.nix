@@ -67,7 +67,7 @@ stdenv.mkDerivation {
       video- and still-cameras, frame-grabbers, etc. For a list of supported
       scanners, see http://www.sane-project.org/sane-backends.html.
     '';
-    homepage = "http://www.sane-project.org/";
+    homepage = http://www.sane-project.org/;
     license = licenses.gpl2Plus;
 
     maintainers = with maintainers; [ nckx peti ];

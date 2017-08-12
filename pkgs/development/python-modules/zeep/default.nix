@@ -83,7 +83,7 @@ in buildPythonPackage {
   '';
 
   meta = with lib; {
-    homepage = "http://docs.python-zeep.org";
+    homepage = http://docs.python-zeep.org;
     license = licenses.mit;
     description = "A modern/fast Python SOAP client based on lxml / requests";
     maintainers = with maintainers; [ rvl ];

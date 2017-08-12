@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     maintainers = [ stdenv.lib.maintainers.raskin ];
     license = stdenv.lib.licenses.lgpl21;
     platforms = stdenv.lib.platforms.unix;
-    homepage = "http://geolite.maxmind.com/";
+    homepage = http://geolite.maxmind.com/;
     downloadPage = "http://geolite.maxmind.com/download/";
   };
 }

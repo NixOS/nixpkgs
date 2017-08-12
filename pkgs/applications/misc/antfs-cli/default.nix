@@ -4,7 +4,7 @@ pythonPackages.buildPythonApplication rec {
   name = "antfs-cli-unstable-2017-02-11";
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/Tigge/antfs-cli";
+    homepage = https://github.com/Tigge/antfs-cli;
     description = "Extracts FIT files from ANT-FS based sport watches";
     license = licenses.mit;
     platforms = platforms.linux;

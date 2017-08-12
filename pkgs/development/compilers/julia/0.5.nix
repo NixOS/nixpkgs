@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, fetchurl
+{ stdenv, fetchgit, fetchurl, fetchzip
 # build tools
 , gfortran, m4, makeWrapper, patchelf, perl, which, python2
 , runCommand
@@ -54,12 +54,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "julia";
-  version = "0.5.1";
+  version = "0.5.2";
   name = "${pname}-${version}";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/JuliaLang/${pname}/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "1a9m7hzzrwk71gvwwrd1p45s64yid61i41n95gm5pzbry6p9fpl0";
+    sha256 = "1616f53dj7xc0g2iys8qfbzal6dx55nswnws5g5r44dlbf4hcl0h";
   };
   prePatch = ''
     mkdir deps/srccache
@@ -166,6 +166,7 @@ stdenv.mkDerivation rec {
   preBuild = ''
     sed -e '/^install:/s@[^ ]*/doc/[^ ]*@@' -i Makefile
     sed -e '/[$](DESTDIR)[$](docdir)/d' -i Makefile
+    export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
   '';
 
   postInstall = ''
@@ -178,7 +179,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "High-level performance-oriented dynamical language for technical computing";
-    homepage = "http://julialang.org/";
+    homepage = http://julialang.org/;
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ raskin ];
     platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];

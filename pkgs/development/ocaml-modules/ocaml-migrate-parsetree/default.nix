@@ -6,13 +6,13 @@ else
 
 stdenv.mkDerivation rec {
    name = "ocaml${ocaml.version}-ocaml-migrate-parsetree-${version}";
-   version = "0.7";
+   version = "1.0";
 
    src = fetchFromGitHub {
      owner = "let-def";
      repo = "ocaml-migrate-parsetree";
      rev = "v${version}";
-     sha256 = "142svvixhz153argd3khk7sr38dhiy4w6sck4766f8b48p41pp3m";
+     sha256 = "0j1d3scakny2b656gyz5z2h8987b5aqw7iwssxgfbhwcszn6sps4";
    };
 
    buildInputs = [ ocaml findlib ocamlbuild jbuilder ];

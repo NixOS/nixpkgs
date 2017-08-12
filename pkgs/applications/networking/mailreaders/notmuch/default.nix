@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
     find test -type f -exec \
       sed -i \
         -e "1s|#!/usr/bin/env bash|#!${bash}/bin/bash|" \
-        -e "s|gpg |${gnupg}/bin/gpg2 |" \
-        -e "s| gpg| ${gnupg}/bin/gpg2|" \
+        -e "s|gpg |${gnupg}/bin/gpg |" \
+        -e "s| gpg| ${gnupg}/bin/gpg|" \
         -e "s|gpgsm |${gnupg}/bin/gpgsm |" \
         -e "s| gpgsm| ${gnupg}/bin/gpgsm|" \
-        -e "s|crypto.gpg_path=gpg|crypto.gpg_path=${gnupg}/bin/gpg2|" \
+        -e "s|crypto.gpg_path=gpg|crypto.gpg_path=${gnupg}/bin/gpg|" \
         "{}" ";"
 
     for src in \
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       emacs/notmuch-crypto.el
     do
       substituteInPlace "$src" \
-        --replace \"gpg\" \"${gnupg}/bin/gpg2\"
+        --replace \"gpg\" \"${gnupg}/bin/gpg\"
     done
   '';
 

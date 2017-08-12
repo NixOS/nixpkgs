@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "http://sourceforge.net/projects/bridge/";
-    homepage = "http://www.linux-foundation.org/en/Net:Bridge/";
+    homepage = http://www.linux-foundation.org/en/Net:Bridge/;
     license = "GPL";
     platforms = stdenv.lib.platforms.linux;
   };

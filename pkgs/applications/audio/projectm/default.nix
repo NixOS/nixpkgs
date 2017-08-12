@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Music Visualizer";
-    homepage = "http://projectm.sourceforge.net/";
+    homepage = http://projectm.sourceforge.net/;
     license = stdenv.lib.licenses.lgpl21Plus;
     platforms = stdenv.lib.platforms.linux;
   };

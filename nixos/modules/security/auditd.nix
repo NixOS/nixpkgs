@@ -13,6 +13,7 @@ with lib;
       unitConfig = {
         ConditionVirtualization = "!container";
         ConditionSecurity = [ "audit" ];
+        DefaultDependencies = false;
       };
 
       path = [ pkgs.audit ];

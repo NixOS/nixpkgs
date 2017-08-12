@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "http://github.com/opencollab/arpack-ng";
+    homepage = http://github.com/opencollab/arpack-ng;
     description = ''
       A collection of Fortran77 subroutines to solve large scale eigenvalue
       problems.

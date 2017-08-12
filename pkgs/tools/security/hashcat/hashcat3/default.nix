@@ -4,15 +4,15 @@ assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
   name    = "hashcat-${version}";
-  version = "3.10";
+  version = "3.6.0";
 
   src = fetchurl {
-    name = "${name}.tar.gz";
-    url = "https://hashcat.net/files_legacy/hashcat-${version}.tar.gz";
-    sha256 = "1sg30d9as6xsl7b0i7mz26igachbv0l0yimwb12nmarmgdgmwm9v";
+    url = "https://hashcat.net/files/hashcat-${version}.tar.gz";
+    sha256 = "127hdvq6ikah7r5vch63jnnkcsj7y61f9h8x79c3w25x9w55bxry";
   };
 
-  buildInputs = [ opencl-headers makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [ opencl-headers ];
 
   makeFlags = [ "OPENCL_HEADERS_KHRONOS=${opencl-headers}/include" ];
 

@@ -59,8 +59,12 @@ stdenv.mkDerivation {
     done
   '';
 
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "0baadsrgpqj15fgjmcn0aim0k0nk7mvivcxinw1zwg61kkcwhalx";
+
   meta = with stdenv.lib; {
-    homepage = "http://corefonts.sourceforge.net/";
+    homepage = http://corefonts.sourceforge.net/;
     description = "Microsoft's TrueType core fonts for the Web";
     platforms = platforms.all;
     license = licenses.unfreeRedistributable;

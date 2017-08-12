@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       QuiteRSS is a open-source cross-platform RSS/Atom news feeds reader
       written on Qt/C++
     '';
-    homepage = "https://quiterss.org";
+    homepage = https://quiterss.org;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

@@ -173,8 +173,8 @@ rec {
     version = "17.06.0-ce";
     rev = "02c1d876176546b5f069dae758d6a7d2ead6bd48"; # git commit
     sha256 = "0wrg4ygcq4c7f2bwa7pgc7y33idg0hijavx40588jaglz4k8sqpm";
-    runcRev = "992a5be178a62e026f4069f443c6164912adbf09";
-    runcSha256 = "0ylkbn5rprw5cgxazvrwj7balikpfm8vlybwdbfpwnsqk3gc6p8k";
+    runcRev = "2d41c047c83e09a6d61d464906feb2a2f3c52aa4";
+    runcSha256 = "0v5iv29ck6lkxvxh7a56gfrlgfs0bjvjhrq3p6qqv9qjzv825byq";
     containerdRev = "cfb82a876ecc11b5ca0977d1733adbe58599088a";
     containerdSha256 = "0rix0mv203fn3rcxmpqdpb54l1a0paqplg2xgldpd943qi1rm552";
     tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";

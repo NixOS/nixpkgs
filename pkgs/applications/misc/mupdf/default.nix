@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     # Don't remove mujs because upstream version is incompatible
-    rm -rf thirdparty/{curl,freetype,glfw,harfbuzz,jbig2dec,jpeg,openjpeg,zlib}
+    rm -rf thirdparty/{curl,freetype,glfw,harfbuzz,jbig2dec,libjpeg,openjpeg,zlib}
   '';
 
   postInstall = ''

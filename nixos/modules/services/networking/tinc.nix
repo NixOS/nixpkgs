@@ -131,7 +131,7 @@ in
       (flip mapAttrsToList cfg.networks (network: data:
         flip mapAttrs' data.hosts (host: text: nameValuePair
           ("tinc/${network}/hosts/${host}")
-          ({ mode = "0444"; inherit text; })
+          ({ mode = "0644"; user = "tinc.${network}"; inherit text; })
         ) // {
           "tinc/${network}/tinc.conf" = {
             mode = "0444";
@@ -164,15 +164,14 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         path = [ data.package ];
-        restartTriggers = [ config.environment.etc."tinc/${network}/tinc.conf".source ]
-          ++ mapAttrsToList (host: _ : config.environment.etc."tinc/${network}/hosts/${host}".source) data.hosts;
         serviceConfig = {
           Type = "simple";
-          PIDFile = "/run/tinc.${network}.pid";
-          Restart = "on-failure";
+          Restart = "always";
+          RestartSec = "3";
         };
         preStart = ''
           mkdir -p /etc/tinc/${network}/hosts
+          chown tinc.${network} /etc/tinc/${network}/hosts
 
           # Determine how we should generate our keys
           if type tinc >/dev/null 2>&1; then
@@ -193,6 +192,19 @@ in
         '';
       })
     );
+
+    environment.systemPackages = let
+      cli-wrappers = pkgs.stdenv.mkDerivation {
+        name = "tinc-cli-wrappers";
+        buildInputs = [ pkgs.makeWrapper ];
+        buildCommand = ''
+          mkdir -p $out/bin
+          ${concatStringsSep "\n" (mapAttrsToList (network: data: ''
+              makeWrapper ${data.package}/bin/tinc "$out/bin/tinc.${network}" --add-flags "--pidfile=/run/tinc.${network}.pid"
+            '') cfg.networks)}
+        '';
+      };
+    in [ cli-wrappers ];
 
     users.extraUsers = flip mapAttrs' cfg.networks (network: _:
       nameValuePair ("tinc.${network}") ({

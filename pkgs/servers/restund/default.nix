@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ;
   NIX_LDFLAGS='' -L${stdenv.lib.getLib mysql.client}/lib/mysql '';
   meta = {
-    homepage = "http://www.creytiv.com/restund.html";
+    homepage = http://www.creytiv.com/restund.html;
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [raskin];
     license = stdenv.lib.licenses.bsd3;

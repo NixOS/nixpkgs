@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = ''A wrapper to run browser plugins out-of-process'';
-    homepage = "http://nspluginwrapper.org/";
+    homepage = http://nspluginwrapper.org/;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.raskin ];

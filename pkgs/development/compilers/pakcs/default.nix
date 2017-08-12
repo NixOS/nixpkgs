@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
         base containers directory either filepath mtl pretty syb time
       ];
       testHaskellDepends = [ base Cabal filepath mtl ];
-      homepage = "http://curry-language.org";
+      homepage = http://curry-language.org;
       description = "Functions for manipulating Curry programs";
       license = "unknown";
 
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
         process syb transformers
       ];
       testHaskellDepends = [ base Cabal curryBase filepath ];
-      homepage = "http://curry-language.org";
+      homepage = http://curry-language.org;
       description = "Compile the functional logic language Curry to several intermediate formats";
       license = "unknown";
 
@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://www.informatik.uni-kiel.de/~pakcs/";
+    homepage = http://www.informatik.uni-kiel.de/~pakcs/;
     description = "An implementation of the multi-paradigm declarative language Curry";
     license = licenses.bsd3;
 

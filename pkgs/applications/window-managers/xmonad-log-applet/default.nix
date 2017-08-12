@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   patches = [ ./fix-paths.patch ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/alexkay/xmonad-log-applet";
+    homepage = http://github.com/alexkay/xmonad-log-applet;
     license = licenses.bsd3;
     description = "An applet that will display XMonad log information (${desktopSupport} version)";
     platforms = platforms.linux;

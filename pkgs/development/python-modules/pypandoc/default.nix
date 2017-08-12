@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Thin wrapper for pandoc";
-    homepage = "https://github.com/bebraw/pypandoc";
+    homepage = https://github.com/bebraw/pypandoc;
     license = licenses.mit;
     maintainers = with maintainers; [ bennofs kristoff3r ];
   };

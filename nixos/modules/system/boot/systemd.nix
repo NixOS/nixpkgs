@@ -593,7 +593,7 @@ in
     services.logind.extraConfig = mkOption {
       default = "";
       type = types.lines;
-      example = "HandleLidSwitch=ignore";
+      example = "IdleAction=lock";
       description = ''
         Extra config options for systemd-logind. See man logind.conf for
         available options.

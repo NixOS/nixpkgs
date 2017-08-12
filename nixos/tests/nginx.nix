@@ -3,7 +3,7 @@
 #      generated virtual hosts config.
 
 import ./make-test.nix ({ pkgs, ...} : {
-  name = "jenkins";
+  name = "nginx";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ mbbx6spp ];
   };

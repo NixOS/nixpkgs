@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
       --replace '../compiler_test.pl' $out/bin/compiler_test.pl \
       --replace '../$CONFIG_FILE' '$CONFIG_FILE'
 
-    wrapProgram $out/bin/launchn.pl --prefix PERL5LIB : "$PERL5LIB" $out/bin/launchn.pl
+    wrapProgram $out/bin/launchn.pl \
+      --prefix PERL5LIB : "$PERL5LIB"
 
     mkdir -p $out/share/csmith
     mv $out/bin/compiler_test.in $out/share/csmith/
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A random generator of C programs";
-    homepage = "https://embed.cs.utah.edu/csmith";
+    homepage = https://embed.cs.utah.edu/csmith;
     # Officially, the license is this: https://github.com/csmith-project/csmith/blob/master/COPYING
     license = licenses.bsd2;
     longDescription = ''

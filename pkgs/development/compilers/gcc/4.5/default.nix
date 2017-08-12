@@ -453,7 +453,7 @@ stdenv.mkDerivation ({
   '';
 
   meta = {
-    homepage = "http://ghdl.free.fr/";
+    homepage = http://ghdl.free.fr/;
     license = stdenv.lib.licenses.gpl2Plus;
     description = "Complete VHDL simulator, using the GCC technology (gcc ${version})";
     maintainers = with stdenv.lib.maintainers; [viric];

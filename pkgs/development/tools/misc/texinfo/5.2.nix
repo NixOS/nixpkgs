@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.isDarwin;
 
   meta = {
-    homepage = "http://www.gnu.org/software/texinfo/";
+    homepage = http://www.gnu.org/software/texinfo/;
     description = "The GNU documentation system";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

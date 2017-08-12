@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
   # FIXME needs gcc 4.9 in bootstrap tools
   hardeningDisable = [ "stackprotector" ];
 
-  patches = optional hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch;
+  patches = optional hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch
+    ++ optional hostPlatform.isDarwin stdenv.secure-format-patch;
 
   # The test tends to fail on btrfs and maybe other unusual filesystems.
   postPatch = optionalString (!hostPlatform.isDarwin) ''

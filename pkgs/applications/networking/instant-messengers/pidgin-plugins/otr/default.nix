@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libotr pidgin intltool ];
 
   meta = with stdenv.lib; {
-    homepage = "https://otr.cypherpunks.ca/";
+    homepage = https://otr.cypherpunks.ca/;
     description = "Plugin for Pidgin 2.x which implements OTR Messaging";
     license = licenses.gpl2;
     platforms = platforms.linux;

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec{
   installPhase = "mkdir -p $out/bin && cp ppsspp $out/bin";
 
   meta = {
-    homepage = "http://www.ppsspp.org/";
+    homepage = http://www.ppsspp.org/;
     description = "A PSP emulator, the Qt4 version";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fuuzetsu AndersonTorres ];

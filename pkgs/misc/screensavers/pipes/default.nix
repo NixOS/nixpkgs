@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/pipeseroni/pipes.sh";
+    homepage = https://github.com/pipeseroni/pipes.sh;
     description = "Animated pipes terminal screensaver";
     license = licenses.mit;
     maintainers = [ maintainers.matthiasbeyer ];

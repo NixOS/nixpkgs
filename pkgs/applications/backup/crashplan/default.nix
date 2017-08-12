@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An online/offline backup solution";
-    homepage = "http://www.crashplan.org";
+    homepage = http://www.crashplan.org;
     license = licenses.unfree;
     maintainers = with maintainers; [ sztupi domenkozar jerith666 ];
   };

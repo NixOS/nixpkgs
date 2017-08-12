@@ -32,6 +32,8 @@ in stdenv.mkDerivation (rec {
 
   postPatch = "patchShebangs .";
 
+  patches = [ ./ghc-gold-linker.patch ];
+
   preConfigure = commonPreConfigure;
 
   buildInputs = commonBuildInputs;
@@ -80,7 +82,7 @@ in stdenv.mkDerivation (rec {
   };
 
   meta = {
-    homepage = "http://haskell.org/ghc";
+    homepage = http://haskell.org/ghc;
     description = "The Glasgow Haskell Compiler";
     maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
     inherit (ghc.meta) license platforms;

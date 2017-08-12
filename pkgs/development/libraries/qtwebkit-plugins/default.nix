@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Spell checking plugin using Hunspell and HTML5 Notifications plugin for QtWebKit";
-    homepage = "https://github.com/QupZilla/qtwebkit-plugins";
+    homepage = https://github.com/QupZilla/qtwebkit-plugins;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
 
   meta = with stdenv.lib; {
-    homepage = "http://darwinsys.com/file";
+    homepage = http://darwinsys.com/file;
     description = "A program that shows the type of files";
     license = licenses.bsd2;
     platforms = platforms.all;

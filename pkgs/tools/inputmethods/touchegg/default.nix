@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://code.google.com/p/touchegg/";
+    homepage = https://code.google.com/p/touchegg/;
     description = "Macro binding for touch surfaces";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

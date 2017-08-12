@@ -5,11 +5,6 @@ let inherit (pkgs) stdenv runCommand perl lib;
 in
 
 {
-
-  # description see mergeAttrsByVersion in lib/misc.nix
-  versionedDerivation = name: version: attrsByVersion: base:
-    pkgs.stdenv.mkDerivation (stdenv.lib.mergeAttrsByVersion name version attrsByVersion base);
-
   /*
     Usage example creating a derivation installing ruby, sup and a lib:
 
@@ -23,7 +18,7 @@ in
   */
   collection = {list, name} : runCommand "collection-${name}" {} ''
     mkdir -p $out/nix-support
-    echo ${builtins.toString list} > $out/nix-support/propagated-user-env-packages
+    printWords ${builtins.toString list} > $out/nix-support/propagated-user-env-packages
   '';
 
   /* creates a derivation symlinking references C/C++ libs into one include and lib directory called $out/cdt-envs/${name}

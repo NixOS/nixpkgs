@@ -7,7 +7,7 @@ let
 in buildGoPackage rec {
 
   name = "journalbeat-${version}";
-  version = "5.4.1";
+  version = "5.5.0";
 
   goPackagePath = "github.com/mheese/journalbeat";
 
@@ -22,7 +22,7 @@ in buildGoPackage rec {
     owner = "mheese";
     repo = "journalbeat";
     rev = "v${version}";
-    sha256 = "14mhx3gqg19ljcr07ahbry9k5hkbj2mjji4qsjrbc7jknis6frz4";
+    sha256 = "134n1kg6nx5yycn2cyldiayaqm8zps94hz4zfz9klp2jzq68m35y";
   };
 
   meta = with lib; {

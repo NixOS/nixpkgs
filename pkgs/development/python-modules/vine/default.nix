@@ -3,14 +3,14 @@
 
 buildPythonPackage rec {
   pname = "vine";
-  version = "1.1.3";
+  version = "1.1.4";
   name = "${pname}-${version}";
 
   disable = pythonOlder "2.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0h94x9mc9bspg23lb1f73h7smdzc39ps7z7sm0q38ds9jahmvfc7";
+    sha256 = "52116d59bc45392af9fdd3b75ed98ae48a93e822cee21e5fda249105c59a7a72";
   };
 
   buildInputs = [ case pytest ];

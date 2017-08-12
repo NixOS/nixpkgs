@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The official C client library for MongoDB";
-    homepage = "https://github.com/mongodb/mongo-c-driver";
+    homepage = https://github.com/mongodb/mongo-c-driver;
     license = licenses.asl20;
     platforms = platforms.all;
   };

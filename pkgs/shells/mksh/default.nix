@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       also to be readily available under other UNIX(R)-like operating
       systems.
     '';
-    homepage = "https://www.mirbsd.org/mksh.htm";
+    homepage = https://www.mirbsd.org/mksh.htm;
     license = licenses.bsd3;
     maintainers = with maintainers; [ AndersonTorres nckx joachifm ];
     platforms = platforms.unix;

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = "https://wiki.gnome.org/Apps/Swell%20Foop";
+    homepage = https://wiki.gnome.org/Apps/Swell%20Foop;
     description = "Puzzle game, previously known as Same GNOME";
     maintainers = gnome3.maintainers;
     license = licenses.gpl2;
