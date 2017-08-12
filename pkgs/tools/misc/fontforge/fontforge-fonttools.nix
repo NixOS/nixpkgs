@@ -1,7 +1,15 @@
-{stdenv, fontforge, zlib}:
+{stdenv, fetchFromGitHub, zlib}:
+
 stdenv.mkDerivation rec {
-  name = "fontforge-fonttools-${fontforge.version}";
-  src = fontforge.src;
+  version = "20160404";
+  name = "fontforge-fonttools-${version}";
+
+  src = fetchFromGitHub {
+    owner = "fontforge";
+    repo = "fontforge";
+    rev = version;
+    sha256 = "15nacq84n9gvlzp3slpmfrrbh57kfb6lbdlc46i7aqgci4qv6fg0";
+  };
 
   buildInputs = [zlib];
 
