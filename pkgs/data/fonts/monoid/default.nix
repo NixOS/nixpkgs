@@ -31,6 +31,10 @@ stdenv.mkDerivation rec {
     cp -va Readme.md $out/share/doc
   '';
 
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "0ml61zym03n175gpx1gr7812f45lyjm0vzgbqjx91fi58rqlazvm";
+
   meta = with stdenv.lib; {
     homepage = http://larsenwork.com/monoid;
     description = "Customisable coding font with alternates, ligatures and contextual positioning";

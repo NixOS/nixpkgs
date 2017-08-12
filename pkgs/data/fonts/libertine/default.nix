@@ -8,11 +8,14 @@ stdenv.mkDerivation rec {
     sha256 = "0x7cz6hvhpil1rh03rax9zsfzm54bh7r4bbrq8rz673gl9h47v0v";
   };
 
-  setSourceRoot = "sourceRoot=`pwd`";
+  sourceRoot = ".";
 
   nativeBuildInputs = [ fontforge ];
 
   buildPhase = ''
+    # <nixpkgs/pkgs/build-support/setup-hooks/set-source-date-epoch-to-latest.sh> set it to mtime of ./env-vars, i.e. the current time
+    export SOURCE_DATE_EPOCH=$(stat -c '%Y' ChangeLog.txt)
+
     for i in *.sfd; do
       fontforge -lang=ff -c \
         'Open($1);
@@ -39,6 +42,10 @@ stdenv.mkDerivation rec {
     cp *.enc $out/share/texmf/fonts/enc
     cp *.map $out/share/texmf/fonts/map
   '';
+
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "1mj0j0hkp8pn7jcs4pvcan6whba60bfd671g3vhx3s9kxwf7xjvr";
 
   meta = {
     description = "Linux Libertine Fonts";
