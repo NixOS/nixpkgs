@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, lib, runCommand
+{ stdenv, fetchFromGitHub, fetchpatch, lib
 , autoconf, automake, gnum4, libtool, perl, gnulib, uthash, pkgconfig, gettext
 , python, freetype, zlib, glib, libungif, libpng, libjpeg, libtiff, libxml2, pango
 , withSpiro ? false, libspiro
@@ -10,9 +10,6 @@
 stdenv.mkDerivation rec {
   name = "fontforge-${version}";
   version = "20170730";
-
-  # The way $version propagates to $version of .pe-scripts (https://github.com/dejavu-fonts/dejavu-fonts/blob/358190f/scripts/generate.pe#L19)
-  SOURCE_DATE_EPOCH = lib.fileContents (runCommand "unixtime-of-${version}" {} "date -d ${version} +%s > $out");
 
   src = fetchFromGitHub {
     owner = "fontforge";
@@ -49,6 +46,9 @@ stdenv.mkDerivation rec {
 
   # work-around: git isn't really used, but configuration fails without it
   preConfigure = ''
+    # The way $version propagates to $version of .pe-scripts (https://github.com/dejavu-fonts/dejavu-fonts/blob/358190f/scripts/generate.pe#L19)
+    export SOURCE_DATE_EPOCH=$(date -d ${version} +%s)
+
     export GIT="$(type -P true)"
     cp -r "${gnulib}" ./gnulib
     chmod +w -R ./gnulib

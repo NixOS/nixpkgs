@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = ''Small font tools shipped in FontForge contrib'';
-    license = fontforge.meta.license;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ raskin ];
     platforms = with platforms; unix;
   };
