@@ -18596,8 +18596,6 @@ with pkgs;
 
   foomatic-filters = callPackage ../misc/drivers/foomatic-filters {};
 
-  freestyle = callPackage ../misc/freestyle { };
-
   gajim = callPackage ../applications/networking/instant-messengers/gajim { };
 
   gammu = callPackage ../applications/misc/gammu { };
