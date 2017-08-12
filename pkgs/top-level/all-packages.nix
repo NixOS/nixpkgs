@@ -19126,8 +19126,6 @@ with pkgs;
     inherit (gnome2) gtksourceview;
   };
 
-  misc = callPackage ../misc/misc.nix { };
-
   bullet = callPackage ../development/libraries/bullet {};
   bullet283 = callPackage ../development/libraries/bullet/bullet283.nix {};
 
