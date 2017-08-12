@@ -16283,7 +16283,7 @@ in {
 
    pasteScript = buildPythonPackage rec {
     version = "1.7.5";
-    name = "PasterScript-${version}";
+    name = "PasteScript-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PasteScript/${name}.tar.gz";
