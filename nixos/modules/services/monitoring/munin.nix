@@ -26,7 +26,12 @@ let
 
       for file in $out/*; do
         case "$file" in
-            plugin.sh) continue;;
+            */plugin.sh)
+              chmod +x $file
+              continue;;
+            */plugins.history)
+              chmod +x $file
+              continue;;
         esac
 
         # read magic makers from the file
