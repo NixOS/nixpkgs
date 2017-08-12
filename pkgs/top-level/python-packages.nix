@@ -23668,11 +23668,12 @@ in {
       sha256 = "211031a03576b7796bf277dbc9c9e3e754ba066bbb7fb601ab5c6291b8ec1918";
     };
 
+    hardeningDisable = [ "format" ];
+
     meta = {
       description = "Ultra fast memcache client written in highly optimized C++ with Python bindings";
       homepage = https://github.com/esnme/ultramemcache;
       license = licenses.bsdOriginal;
-      broken = true;
     };
   };
 
