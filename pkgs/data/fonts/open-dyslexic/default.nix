@@ -1,24 +1,19 @@
-{stdenv, fetchgit}:
+{stdenv, fetchzip}:
 
-stdenv.mkDerivation rec {
-  name = "open-dyslexic-${version}";
+let
   version = "2014-11-11";
+in fetchzip {
+  name = "open-dyslexic-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/antijingoist/open-dyslexic.git";
-    rev = "f4b5ba89018b44d633608907e15f93fb3fabbabc";
-    sha256 = "04pa7c2cary6pqxsmxqrg7wi19szg7xh8panmvqvmc7jas0mzg6q";
-  };
+  url = https://github.com/antijingoist/open-dyslexic/archive/f4b5ba89018b44d633608907e15f93fb3fabbabc.zip;
 
-  phases = ["unpackPhase" "installPhase"];
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/opentype
-    cp -v 'otf/'*.otf $out/share/fonts/opentype
-
-    mkdir -p $out/share/doc/open-dyslexic
-    cp -v README.md $out/share/doc/open-dyslexic
+  postFetch = ''
+    mkdir -p $out/share/{doc,fonts}
+    unzip -j $downloadedFile \*.otf       -d $out/share/fonts/opentype
+    unzip -j $downloadedFile \*/README.md -d $out/share/doc/open-dyslexic
   '';
+
+  sha256 = "045xc7kj56q4ygnjppm8f8fwqqvf21x1piabm4nh8hwgly42a3w2";
 
   meta = with stdenv.lib; {
     homepage = http://opendyslexic.org/;

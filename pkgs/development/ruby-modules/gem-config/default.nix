@@ -242,7 +242,7 @@ in
 
       substituteInPlace lib/sup/crypto.rb \
         --replace 'which gpg2' \
-                  '${which}/bin/which gpg2'
+                  '${which}/bin/which gpg'
     '';
   };
 

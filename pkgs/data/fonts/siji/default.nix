@@ -1,20 +1,18 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
-  name = "siji-${date}";
+let
   date = "2016-05-13";
+in fetchzip {
+  name = "siji-${date}";
 
-  src = fetchFromGitHub {
-    owner = "stark";
-    repo = "siji";
-    rev = "95369afac3e661cb6d3329ade5219992c88688c1";
-    sha256 = "1408g4nxwdd682vjqpmgv0cp0bfnzzzwls62cjs9zrds16xa9dpf";
-  };
+  url = https://github.com/stark/siji/archive/95369afac3e661cb6d3329ade5219992c88688c1.zip;
 
-  installPhase = ''
-    mkdir -p $out/share/fonts/pcf
-    cp -v */*.pcf $out/share/fonts/pcf
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile \*.pcf -d $out/share/fonts/pcf
   '';
+
+  sha256 = "1799hs7zd8w7qyja4mii9ggmrm786az7ldsqwx9mbi51b56ym640";
 
   meta = {
     homepage = https://github.com/stark/siji;

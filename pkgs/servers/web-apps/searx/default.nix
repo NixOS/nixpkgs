@@ -1,8 +1,9 @@
-{ stdenv, pythonPackages, fetchFromGitHub }:
+{ lib, pythonPackages, fetchFromGitHub }:
 
 pythonPackages.buildPythonApplication rec {
   name = "searx-${version}";
   version = "0.12.0";
+  namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "asciimoo";
@@ -25,10 +26,10 @@ pythonPackages.buildPythonApplication rec {
     pyasn1 pyasn1-modules ndg-httpsclient certifi pysocks
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://github.com/asciimoo/searx;
     description = "A privacy-respecting, hackable metasearch engine";
     license = licenses.agpl3Plus;
     maintainers = with maintainers; [ matejc fpletz profpatsch ];
   };
- }
+}

@@ -46,6 +46,14 @@ ${optionalString (versionOlder version "4.11") ''
   DEBUG_SET_MODULE_RONX y
 ''}
 
+# Mark LSM hooks read-only after init.  Conflicts with SECURITY_SELINUX_DISABLE
+# (disabling SELinux at runtime); hence, SELinux can only be disabled at boot
+# via the selinux=0 boot parameter.
+${optionalString (versionAtLeast version "4.12") ''
+  SECURITY_SELINUX_DISABLE n
+  SECURITY_WRITABLE_HOOKS n
+''}
+
 DEBUG_WX y # boot-time warning on RWX mappings
 
 # Stricter /dev/mem

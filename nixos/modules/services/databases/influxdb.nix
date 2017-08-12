@@ -68,7 +68,7 @@ let
 
     collectd = [{
       enabled = false;
-      typesdb = "${pkgs.collectd}/share/collectd/types.db";
+      typesdb = "${pkgs.collectd-data}/share/collectd/types.db";
       database = "collectd_db";
       bind-address = ":25826";
     }];
@@ -149,7 +149,6 @@ in
         type = types.attrs;
       };
     };
-
   };
 
 

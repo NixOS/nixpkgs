@@ -752,10 +752,10 @@
       }) {};
     exwm = callPackage ({ elpaBuild, fetchurl, lib, xelb }: elpaBuild {
         pname = "exwm";
-        version = "0.14";
+        version = "0.15";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/exwm-0.14.tar";
-          sha256 = "14hjjpbasm84p54fxy73fg7g1fdwqkvisdw8dwwgzkflmd647mkx";
+          url = "https://elpa.gnu.org/packages/exwm-0.15.tar";
+          sha256 = "1y7nqry9y0a99bsdqkk9f554vczfw4sz6raadw3138835qy697jg";
         };
         packageRequires = [ xelb ];
         meta = {
@@ -1446,10 +1446,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20170731";
+        version = "20170807";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20170731.tar";
-          sha256 = "1vf91r4ifnjg5r82l5ikq0bwsxd5dsbgywzmwaspm6ckx49nksnl";
+          url = "https://elpa.gnu.org/packages/org-20170807.tar";
+          sha256 = "185pyc0v4vwzvkygqhpld14lk62ygvfb9ycz609n99m0wqlamwz3";
         };
         packageRequires = [];
         meta = {

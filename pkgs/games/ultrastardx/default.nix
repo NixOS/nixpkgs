@@ -12,18 +12,16 @@ let
 
 in stdenv.mkDerivation rec {
   name = "ultrastardx-${version}";
-  version = "1.3.5-beta";
+  version = "2017.8.0";
   src = fetchFromGitHub {
     owner = "UltraStar-Deluxe";
     repo = "USDX";
     rev = "v${version}";
-    sha256 = "0qp64qsj29a08cbv3i52jm1w2pcklw6ya5sniycs24zxggza5pkn";
+    sha256 = "1zp0xfwzci3cjmwx3cprcxvm60cik5cvhvrz9n4d6yb8dv38nqzm";
   };
 
-  buildInputs = [
-    pkgconfig autoreconfHook
-    fpc libpng
-  ] ++ sharedLibs;
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  buildInputs = [ fpc libpng ] ++ sharedLibs;
 
   postPatch = ''
     # autoconf substitutes strange things otherwise

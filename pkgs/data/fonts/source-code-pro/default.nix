@@ -1,23 +1,18 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
-  name = "source-code-pro-${version}";
+let
   version = "2.030";
+in fetchzip {
+  name = "source-code-pro-${version}";
 
-  src = fetchFromGitHub {
-    owner = "adobe-fonts";
-    repo = "source-code-pro";
-    rev = "2.030R-ro/1.050R-it";
-    name = "2.030R-ro-1.050R-it";
-    sha256 = "0hc5kflr8xzqgdm0c3gbgb1paygznxmnivkylid69ipc7wnicx1n";
-  };
+  url = https://github.com/adobe-fonts/source-code-pro/archive/2.030R-ro/1.050R-it.zip;
 
-  phases = "unpackPhase installPhase";
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/opentype
-    find . -name "*.otf" -exec cp {} $out/share/fonts/opentype \;
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
   '';
+
+  sha256 = "0d8qwzjgnz264wlm4qim048z3236z4hbblvc6yplw13f6b65j6fv";
 
   meta = {
     description = "A set of monospaced OpenType fonts designed for coding environments";

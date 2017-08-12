@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
     cp ${italic} $out/share/fonts/opentype/Poly-Italic.otf
   '';
 
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "11d7ldryfxi0wzfrg1bhw23a668a44vdb8gggxryvahmp5ahmq2h";
+
   meta = {
     description = "Medium contrast serif font";
     longDescription = ''
