@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-fomit-frame-pointer";
 
   meta = {
-    homepage = "http://haskell.org/ghc";
+    homepage = http://haskell.org/ghc;
     description = "The Glasgow Haskell Compiler";
     platforms = ["x86_64-linux" "i686-linux"];  # Darwin is unsupported.
     inherit (ghc.meta) license;

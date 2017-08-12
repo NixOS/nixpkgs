@@ -16,14 +16,14 @@ in
 
 stdenv.mkDerivation rec {
   name = "x265-${version}";
-  version = "1.9";
+  version = "2.5";
 
   src = fetchurl {
     urls = [
       "http://get.videolan.org/x265/x265_${version}.tar.gz"
       "https://github.com/videolan/x265/archive/${version}.tar.gz"
     ];
-    sha256 = "1j0mbcf10aj6zi1nxql45f9817jd2ndcpd7x123sjmyr7q9m8iiy";
+    sha256 = "05rxbnfcc8yl05q3xqkl1kk90k7zn5ih305r46dxnzjaa2djalrf";
   };
 
   enableParallelBuilding = true;

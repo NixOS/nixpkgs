@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig pcre libxml2 zlib attr bzip2 which file openssl ]
              ++ stdenv.lib.optional enableMagnet lua5_1
-             ++ stdenv.lib.optional enableMysql mysql.lib;
+             ++ stdenv.lib.optional enableMysql mysql.connector-c;
 
   configureFlags = [ "--with-openssl" ]
                 ++ stdenv.lib.optional enableMagnet "--with-lua"
@@ -24,6 +24,15 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     sed -i "s:/usr/bin/file:${file}/bin/file:g" configure
+  '';
+
+  postInstall = ''
+    mkdir -p "$out/share/lighttpd/doc/config"
+    cp -vr doc/config "$out/share/lighttpd/doc/"
+    # Remove files that references needless store paths (dependency bloat)
+    rm "$out/share/lighttpd/doc/config/Makefile"*
+    rm "$out/share/lighttpd/doc/config/conf.d/Makefile"*
+    rm "$out/share/lighttpd/doc/config/vhosts.d/Makefile"*
   '';
 
   meta = with stdenv.lib; {

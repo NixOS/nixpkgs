@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     sha256 = "0xfnhaxmvxdxs3ic0qs5lwq3yl4pi5ib99p0p5lv3v2vldqlm4lc";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" ]; # "doc" was here but was not produced
 
   enableParallelBuilding = true;
   cmakeFlags = with stdenv.lib; [

@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation {
-  name = "powerline-fonts-2015-12-11";
+  name = "powerline-fonts-2017-05-25";
 
   src = fetchFromGitHub {
     owner = "powerline";
     repo = "fonts";
-    rev = "a44abd0e742ad6e7fd8d8bc4c3cad5155c9f3a92";
-    sha256 = "1pwz83yh28yd8aj6fbyfz8z3q3v67psszpd9mp4vv0ms9w8b5ajn";
+    rev = "fe396ef6f6b9b315f30af7d7229ff21f67a66e12";
+    sha256 = "1l72kf0zqdp52hbnphky5cl0a1p9fghldvq7ppbnnrhmcwvavprs";
   };
 
   dontBuild = true;

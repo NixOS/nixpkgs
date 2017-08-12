@@ -103,7 +103,7 @@ mkDerivation rec {
     description = "Telegram Desktop messaging app";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    homepage = "https://desktop.telegram.org/";
+    homepage = https://desktop.telegram.org/;
     maintainers = with maintainers; [ abbradar garbas ];
   };
 }

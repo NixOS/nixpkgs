@@ -1,15 +1,17 @@
-{ stdenv, fetchurl, perl, zlib, gnutls, gss, openssl, libssh2, libidn, libpsl, openldap }:
+{ stdenv, fetchurl, autoreconfHook, perl, zlib, gnutls, gss, openssl
+, libssh2, libidn, libpsl, openldap }:
 
 stdenv.mkDerivation rec {
-  version = "7.48.0";
+  version = "7.54.1";
 
   name = "libgnurl-${version}";
 
   src = fetchurl {
-    url = "https://gnunet.org/sites/default/files/gnurl-7_48_0.tar.bz2";
-    sha256 = "14gch4rdibrc8qs4mijsczxvl45dsclf234g17dk6c8nc2s4bm0a";
+    url = "https://gnunet.org/sites/default/files/gnurl-${version}.tar.bz2";
+    sha256 = "0szbj352h95sgc9kbx9wzkgjksmg3g5k6cvlc7hz3wrbdh5gb0a4";
   };
 
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ perl gnutls gss openssl zlib libidn libssh2 libpsl openldap ];
 
   preConfigure = ''

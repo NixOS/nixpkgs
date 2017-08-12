@@ -1,19 +1,21 @@
-{ lib, stdenv, fetchurl, openssl, openldap, kerberos, db, gettext, pam, fixDarwinDylibNames, autoreconfHook, enableLdap ? false }:
+{ lib, stdenv, fetchurl, fetchpatch, openssl, openldap, libkrb5, db, gettext, pam
+, fixDarwinDylibNames, autoreconfHook, enableLdap ? false }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "cyrus-sasl-${version}${optionalString (kerberos == null) "-without-kerberos"}";
-  version = "2.1.26";
+  name = "cyrus-sasl-${version}${optionalString (libkrb5 == null) "-without-kerberos"}";
+  version = "2.1.27rc3";
 
   src = fetchurl {
     url = "ftp://ftp.cyrusimap.org/cyrus-sasl/${name}.tar.gz";
-    sha256 = "1hvvbcsg21nlncbgs0cgn3iwlnb3vannzwsp6rwvnn9ba4v53g4g";
+    sha256 = "0aivwvkacfwhblqfl8xj006633dw85pxplgdy6wa64yk5822j3x5";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
 
+  propagatedBuildInputs = [ libkrb5 ];
   buildInputs =
-    [ openssl db gettext kerberos ]
+    [ openssl db gettext ]
     ++ lib.optional enableLdap openldap
     ++ lib.optional stdenv.isFreeBSD autoreconfHook
     ++ lib.optional stdenv.isLinux pam
@@ -49,7 +51,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://cyrusimap.web.cmu.edu/";
+    homepage = http://cyrusimap.web.cmu.edu/;
     description = "Library for adding authentication support to connection-based protocols";
     platforms = platforms.unix;
   };

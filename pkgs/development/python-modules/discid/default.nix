@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "discid";
-  version = "1.1.0";
+  version = "1.1.1";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b39d443051b26d0230be7a6c616243daae93337a8711dd5d4119bb6a0e516fa8";
+    sha256 = "78a3bf6c8377fdbe3d85e914a209ff97aa43e35605779639847b510ced31f7b9";
   };
 
   patchPhase = ''

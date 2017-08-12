@@ -43,7 +43,7 @@ buildGoPackage rec {
 
   meta = {
     description = "A painless self-hosted Git service";
-    homepage = "https://gogs.io";
+    homepage = https://gogs.io;
     license = licenses.mit;
     maintainers = [ maintainers.schneefux ];
   };

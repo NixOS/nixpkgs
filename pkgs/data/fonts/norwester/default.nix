@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://jamiewilson.io/norwester";
+    homepage = http://jamiewilson.io/norwester;
     description = "A condensed geometric sans serif by Jamie Wilson";
     maintainers = with maintainers; [ leenaars ];
     license = licenses.ofl;

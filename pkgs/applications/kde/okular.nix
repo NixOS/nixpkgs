@@ -18,7 +18,7 @@ mkDerivation {
   ];
   meta = {
     platforms = lib.platforms.linux;
-    homepage = "http://www.kde.org";
+    homepage = http://www.kde.org;
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 bsd3 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };

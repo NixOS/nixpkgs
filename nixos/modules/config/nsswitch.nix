@@ -28,7 +28,8 @@ let
   passwdArray = [ "files" ]
     ++ optional sssd "sss"
     ++ optionals ldap [ "ldap" ]
-    ++ optionals mymachines [ "mymachines" ];
+    ++ optionals mymachines [ "mymachines" ]
+    ++ [ "systemd" ];
 
   shadowArray = [ "files" ]
     ++ optional sssd "sss"

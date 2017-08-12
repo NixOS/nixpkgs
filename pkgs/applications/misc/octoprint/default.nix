@@ -97,7 +97,7 @@ in pythonPackages.buildPythonApplication rec {
   checkPhase = "nosetests";
 
   meta = with stdenv.lib; {
-    homepage = "http://octoprint.org/";
+    homepage = http://octoprint.org/;
     description = "The snappy web interface for your 3D printer";
     license = licenses.agpl3;
     maintainers = with maintainers; [ abbradar ];

@@ -43,8 +43,10 @@ in stdenv.mkDerivation rec {
     substituteInPlace configure.ac \
       --replace '=codegendir pygtk-2.0' '=codegendir pygobject-2.0'
     autoconf
-    substituteInPlace {configure,ltmain.sh,m4/libtool.m4} \
-      --replace /usr/bin/file ${file}/bin/file
+    for f in {configure,ltmain.sh,m4/libtool.m4}; do
+      substituteInPlace $f \
+        --replace /usr/bin/file ${file}/bin/file
+    done
   '';
 
   configureFlags = [
@@ -66,7 +68,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "A library to allow applications to export a menu into the Unity Menu bar";
-    homepage = "https://launchpad.net/libappindicator";
+    homepage = https://launchpad.net/libappindicator;
     license = with licenses; [ lgpl21 lgpl3 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];

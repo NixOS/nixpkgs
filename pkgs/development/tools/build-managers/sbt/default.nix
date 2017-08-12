@@ -2,11 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "sbt-${version}";
-  version = "0.13.15";
+  version = "0.13.16";
 
   src = fetchurl {
-    url = "https://dl.bintray.com/sbt/native-packages/sbt/${version}/${name}.tgz";
-    sha256 = "1vvsxpg1fwfzv3mcin69gnj44v6p7kfx3z9cm761sx01qbbp7q5n";
+    urls = [
+      "https://dl.bintray.com/sbt/native-packages/sbt/${version}/${name}.tgz"
+      "https://cocl.us/sbt01316tgz"
+    ];
+    sha256 = "033nvklclvbirhpsiy28d3ccmbm26zcs9vb7j8jndsc1ln09awi2";
   };
 
   patchPhase = ''

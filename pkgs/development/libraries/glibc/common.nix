@@ -64,6 +64,9 @@ stdenv.mkDerivation ({
       ./CVE-2017-1000366-rtld-LD_LIBRARY_PATH.patch
       ./CVE-2017-1000366-rtld-LD_PRELOAD.patch
       ./CVE-2017-1000366-rtld-LD_AUDIT.patch
+
+      /* https://sourceware.org/bugzilla/show_bug.cgi?id=21666 */
+      ./avoid-semver-on-common.patch
     ]
     ++ lib.optionals stdenv.isi686 [
       ./fix-i686-memchr.patch

@@ -14,7 +14,7 @@ let
   callPackage = pkgs.newScope self;
 
   version = "3.22";
-  maintainers = with pkgs.lib.maintainers; [ lethalman jgeerds ];
+  maintainers = with pkgs.lib.maintainers; [ lethalman ];
 
   corePackages = with gnome3; [
     pkgs.desktop_file_utils pkgs.ibus
@@ -376,7 +376,9 @@ let
 
   libgames-support = callPackage ./misc/libgames-support { };
 
-  libgda = callPackage ./misc/libgda { };
+  libgda = callPackage ./misc/libgda {
+    openssl = pkgs.openssl_1_0_2;
+  };
 
   libgit2-glib = callPackage ./misc/libgit2-glib { };
 

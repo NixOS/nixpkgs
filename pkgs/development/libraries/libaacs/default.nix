@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ yacc flex ];
 
   meta = with stdenv.lib; {
-    homepage = "https://www.videolan.org/developers/libaacs.html";
+    homepage = https://www.videolan.org/developers/libaacs.html;
     description = "Library to access AACS protected Blu-Ray disks";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ abbradar ];

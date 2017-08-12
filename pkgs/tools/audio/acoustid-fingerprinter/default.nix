@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   }) ];
 
   meta = with stdenv.lib; {
-    homepage = "http://acoustid.org/fingerprinter";
+    homepage = http://acoustid.org/fingerprinter;
     description = "Audio fingerprinting tool using chromaprint";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with maintainers; [ ehmry ];

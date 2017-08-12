@@ -6,11 +6,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gutenprint-5.2.11";
+  name = "gutenprint-5.2.13";
 
   src = fetchurl {
     url = "mirror://sourceforge/gimp-print/${name}.tar.bz2";
-    sha256 = "1yadw96rgp1z0jv1wxrz6cds36nb693w3xlv596xw9r5w394r8y1";
+    sha256 = "0hi7s0y59306p4kp06sankfa57k2805khbknkvl9d036hdfp9afr";
   };
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];

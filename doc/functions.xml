@@ -358,8 +358,8 @@
 <para>
   <varname>pkgs.dockerTools</varname> is a set of functions for creating and
   manipulating Docker images according to the
-  <link xlink:href="https://github.com/docker/docker/blob/master/image/spec/v1.md#docker-image-specification-v100">
-  Docker Image Specification v1.0.0
+  <link xlink:href="https://github.com/moby/moby/blob/master/image/spec/v1.2.md#docker-image-specification-v120">
+  Docker Image Specification v1.2.0
   </link>. Docker itself is not used to perform any of the operations done by these
   functions.
 </para>
@@ -493,8 +493,8 @@
     <varname>config</varname> is used to specify the configuration of the
     containers that will be started off the built image in Docker.
     The available options are listed in the
-    <link xlink:href="https://github.com/docker/docker/blob/master/image/spec/v1.md#container-runconfig-field-descriptions">
-      Docker Image Specification v1.0.0
+    <link xlink:href="https://github.com/moby/moby/blob/master/image/spec/v1.2.md#image-json-field-descriptions">
+      Docker Image Specification v1.2.0
     </link>.
     </para>
   </callout>

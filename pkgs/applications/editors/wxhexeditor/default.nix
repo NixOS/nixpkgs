@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
       a good reverse engineer tool like a good hex editor, you welcome.
       wxHexEditor could edit HDD/SDD disk devices or partitions in raw up to exabyte sizes.
     '';
-    homepage = "http://www.wxhexeditor.org/";
+    homepage = http://www.wxhexeditor.org/;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };

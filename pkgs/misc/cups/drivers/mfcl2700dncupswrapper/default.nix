@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Brother MFC-L2700DN CUPS wrapper driver";
-    homepage = "http://www.brother.com/";
+    homepage = http://www.brother.com/;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.tv ];
     platforms = stdenv.lib.platforms.linux;

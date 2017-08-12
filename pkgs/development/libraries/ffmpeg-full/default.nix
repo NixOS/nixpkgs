@@ -231,16 +231,21 @@ assert nvenc -> nvidia-video-sdk != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-full-${version}";
-  version = "3.3.2";
+  version = "3.3.3";
 
   src = fetchurl {
     url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.xz";
-    sha256 = "11974vcfsy8w0i6f4lfwqmg80xkfybqw7vw6zzrcn5i6ncddx60r";
+    sha256 = "07is8msrhxr1dk6vgwa192k2pl2a0in1h9w8f9cknlvbvhn01afj";
   };
 
   patchPhase = ''patchShebangs .
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i 's/#ifndef __MAC_10_11/#if 1/' ./libavcodec/audiotoolboxdec.c
+  '' + stdenv.lib.optionalString (frei0r != null) ''
+    substituteInPlace libavfilter/vf_frei0r.c \
+      --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
+    substituteInPlace doc/filters.texi \
+      --replace /usr/local/lib/frei0r-1 ${frei0r}/lib/frei0r-1
   '';
 
   configureFlags = [

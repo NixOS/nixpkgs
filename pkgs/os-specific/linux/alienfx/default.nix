@@ -31,7 +31,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Controls AlienFX lighting";
-    homepage = "https://github.com/tibz/alienfx";
+    homepage = https://github.com/tibz/alienfx;
     maintainers = [stdenv.lib.maintainers.tomberek];
     platforms = stdenv.lib.platforms.linux;
   };

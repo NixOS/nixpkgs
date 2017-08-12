@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
 
       # See discussion in https://github.com/NixOS/nixpkgs/pull/16966
       ./dont_create_privsep_path.patch
+      # originally from https://src.fedoraproject.org/rpms/openssh/blob/fffad0579c5aa8c634ef50cd7b290d743e1a5471/f/openssh-7.3p1-openssl-1.1.0.patch
+      ./openssl-1.1.0.patch
     ]
     ++ optional withGssapiPatches gssapiSrc;
 
@@ -58,6 +60,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib openssl libedit pkgconfig pam ]
     ++ optional withKerberos kerberos
     ++ optional hpnSupport autoreconfHook;
+
+  preConfigure = ''
+    # Setting LD causes `configure' and `make' to disagree about which linker
+    # to use: `configure' wants `gcc', but `make' wants `ld'.
+    unset LD
+  '';
 
   # I set --disable-strip because later we strip anyway. And it fails to strip
   # properly when cross building.
@@ -91,7 +99,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = "http://www.openssh.com/";
+    homepage = http://www.openssh.com/;
     description = "An implementation of the SSH protocol";
     license = stdenv.lib.licenses.bsd2;
     platforms = platforms.unix;

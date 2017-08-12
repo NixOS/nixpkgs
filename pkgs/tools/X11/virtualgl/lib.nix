@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = "http://www.virtualgl.org/";
+    homepage = http://www.virtualgl.org/;
     description = "X11 GL rendering in a remote computer with full 3D hw acceleration";
     license = licenses.free; # many parts under different free licenses
     platforms = platforms.linux;

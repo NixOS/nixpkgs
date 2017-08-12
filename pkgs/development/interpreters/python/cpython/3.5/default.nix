@@ -27,7 +27,7 @@ with stdenv.lib;
 
 let
   majorVersion = "3.5";
-  minorVersion = "3";
+  minorVersion = "4";
   minorVersionSuffix = "";
   pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
@@ -48,7 +48,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
-    sha256 = "1c6v1n9nz4mlx9mw1125fxpmbrgniqdbbx9hnqx44maqazb2mzpf";
+    sha256 = "0k68ai0a204piwibz013ds6ck7hgj9gk4nin2259y41vpgx3pncl";
   };
 
   NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
@@ -63,14 +63,6 @@ in stdenv.mkDerivation {
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
     substituteInPlace configure --replace '-Wl,-stack_size,1000000' ' '
   '';
-
-  patches = [
-    (fetchpatch {
-      name = "glibc-2.25-enosys.patch";
-      url = https://github.com/python/cpython/commit/035ba5da3e53e.patch;
-      sha256 = "1y74ir1w5cq542w27rgzgp70chhq2x047db9911mihpab8p2nj71";
-    })
-  ];
 
   postPatch = ''
     # Determinism

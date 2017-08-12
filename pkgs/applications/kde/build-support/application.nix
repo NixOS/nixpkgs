@@ -15,6 +15,6 @@ mkDerivation (args // {
 
   meta = {
     platforms = lib.platforms.linux;
-    homepage = "http://www.kde.org";
+    homepage = http://www.kde.org;
   } // (args.meta or {});
 })

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A console front-end for Pandora.com";
-    homepage = "http://6xq.net/projects/pianobar/";
+    homepage = http://6xq.net/projects/pianobar/;
     platforms = platforms.linux;
     license = licenses.mit; # expat version
     maintainers = with maintainers; [ eduarrrd ];

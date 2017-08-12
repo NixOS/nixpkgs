@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Korean font";
-    homepage = "http://kldp.net/projects/baekmuk/";
+    homepage = http://kldp.net/projects/baekmuk/;
     license = "BSD-like";
     platforms = stdenv.lib.platforms.linux;
   };

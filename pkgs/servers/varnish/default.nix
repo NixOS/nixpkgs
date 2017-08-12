@@ -2,12 +2,12 @@
 , python, pythonPackages, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "5.1.2";
+  version = "5.1.3";
   name = "varnish-${version}";
 
   src = fetchurl {
     url = "http://repo.varnish-cache.org/source/${name}.tar.gz";
-    sha256 = "1qzwljdwp830l41nw4ils9hxly077zqn6wzhhmy8m516gq9min1r";
+    sha256 = "0km50hzjzi1kq85lr3hq519nrp261wb91ixq48vhyd41llycjfbl";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Web application accelerator also known as a caching HTTP reverse proxy";
-    homepage = "https://www.varnish-cache.org";
+    homepage = https://www.varnish-cache.org;
     license = licenses.bsd2;
     maintainers = with maintainers; [ garbas fpletz ];
     platforms = platforms.linux;

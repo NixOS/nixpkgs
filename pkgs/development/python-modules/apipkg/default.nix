@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Namespace control and lazy-import mechanism";
-    homepage = "http://bitbucket.org/hpk42/apipkg";
+    homepage = http://bitbucket.org/hpk42/apipkg;
     license = licenses.mit;
   };
 }

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "JIT assembler for x86, x64";
-    homepage = "https://github.com/herumi/xbyak";
+    homepage = https://github.com/herumi/xbyak;
     maintainers = with maintainers; [ rht ];
     license = licenses.bsd3;
     platforms = platforms.unix;

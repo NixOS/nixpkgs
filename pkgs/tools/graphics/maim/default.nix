@@ -1,22 +1,22 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig
 , zlib, libpng, libjpeg
-, mesa, glm, libX11, libXext, libXfixes, libXrandr, libXcomposite, slop }:
+, mesa, glm, libX11, libXext, libXfixes, libXrandr, libXcomposite, slop, icu }:
 
 stdenv.mkDerivation rec {
   name = "maim-${version}";
-  version = "5.4.64";
+  version = "5.4.66";
 
   src = fetchFromGitHub {
     owner = "naelstrof";
     repo = "maim";
     rev = "v${version}";
-    sha256 = "16ipqs4s5hn7a7380n8w1ijj26d9n356bqwl1h8z5i1skbj4w7hj";
+    sha256 = "0aimci6n7dvfwa690rbcd6fdrsvcanxy53j752v3151x6gahw3gb";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs =
     [ zlib libpng libjpeg mesa glm libX11 libXext libXfixes libXrandr
-      libXcomposite slop ];
+      libXcomposite slop icu ];
 
   doCheck = false;
 

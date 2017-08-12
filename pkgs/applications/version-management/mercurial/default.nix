@@ -62,7 +62,7 @@ in python2Packages.buildPythonApplication {
   meta = {
     inherit version;
     description = "A fast, lightweight SCM system for very large distributed projects";
-    homepage = "http://mercurial.selenic.com/";
+    homepage = http://mercurial.selenic.com/;
     downloadPage = "http://mercurial.selenic.com/release/";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.eelco ];

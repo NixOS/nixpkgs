@@ -70,7 +70,7 @@ let
       enabled = false;
       typesdb = "${pkgs.collectd}/share/collectd/types.db";
       database = "collectd_db";
-      port = 25826;
+      bind-address = ":25826";
     }];
 
     opentsdb = [{

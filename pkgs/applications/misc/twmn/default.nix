@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A notification system for tiling window managers";
-    homepage = "https://github.com/sboli/twmn";
+    homepage = https://github.com/sboli/twmn;
     platforms = with stdenv.lib.platforms; linux;
     maintainers = [ stdenv.lib.maintainers.matejc ];
   };

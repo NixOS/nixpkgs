@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd2;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = "https://gist.githubusercontent.com/Tblue/62ff47bef7f894e92ed5";
+    homepage = https://gist.githubusercontent.com/Tblue/62ff47bef7f894e92ed5;
   };
 }

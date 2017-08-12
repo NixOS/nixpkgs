@@ -1,4 +1,4 @@
-{ pname, version, build, src, meta }:
+{ pname, version, build, sha256Hash, meta }:
 { bash
 , buildFHSUserEnv
 , coreutils
@@ -34,8 +34,13 @@
 
 let
   androidStudio = stdenv.mkDerivation {
-    inherit src meta;
     name = "${pname}";
+
+    src = fetchurl {
+      url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.zip";
+      sha256 = sha256Hash;
+    };
+
     buildInputs = [
       makeWrapper
       unzip
@@ -103,12 +108,13 @@ let
     name = "${pname}-fhs-env";
   };
 
-in writeTextFile {
-  name = "${pname}-${version}";
-  destination = "/bin/${pname}";
-  executable = true;
-  text = ''
-    #!${bash}/bin/bash
-    ${fhsEnv}/bin/${pname}-fhs-env ${androidStudio}/bin/studio.sh
-  '';
-}
+in
+  writeTextFile {
+    name = "${pname}-${version}";
+    destination = "/bin/${pname}";
+    executable = true;
+    text = ''
+      #!${bash}/bin/bash
+      ${fhsEnv}/bin/${pname}-fhs-env ${androidStudio}/bin/studio.sh
+    '';
+  } // { inherit meta; }

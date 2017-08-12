@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-udev-rules-dir=$(out)/lib/udev/rules.d" ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.freedesktop.org/wiki/Software/fprint/libfprint/";
+    homepage = http://www.freedesktop.org/wiki/Software/fprint/libfprint/;
     description = "A library designed to make it easy to add support for consumer fingerprint readers";
     license = licenses.lgpl2;
     platforms = platforms.linux;

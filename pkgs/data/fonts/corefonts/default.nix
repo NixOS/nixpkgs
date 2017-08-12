@@ -60,7 +60,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://corefonts.sourceforge.net/";
+    homepage = http://corefonts.sourceforge.net/;
     description = "Microsoft's TrueType core fonts for the Web";
     platforms = platforms.all;
     license = licenses.unfreeRedistributable;

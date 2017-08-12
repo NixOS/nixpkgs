@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchgit, fetchhg, fetchbzr, fetchsvn }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "openvpn_exporter-unstable-${version}";
@@ -7,9 +7,10 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/kumina/openvpn_exporter";
 
-  src = fetchgit {
+  src = fetchFromGitHub {
+    owner = "kumina";
+    repo = "openvpn_exporter";
     inherit rev;
-    url = "https://github.com/kumina/openvpn_exporter";
     sha256 = "1cjx7ascf532a20wwzrsx3qqs6dr04jyf700s3jvlvhhhx43l8m4";
   };
 

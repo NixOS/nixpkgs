@@ -34,6 +34,8 @@ rec {
 
   git = appendToName "minimal" gitBase;
 
+  git-fame = callPackage ./git-fame {};
+
   # The full-featured Git.
   gitFull = gitBase.override {
     svnSupport = true;
@@ -58,7 +60,9 @@ rec {
 
   git-cola = callPackage ./git-cola { };
 
-  git-crypt = callPackage ./git-crypt { };
+  git-crypt = callPackage ./git-crypt {
+    openssl = openssl_1_0_2;
+  };
 
   git-dit = callPackage ./git-dit { };
 

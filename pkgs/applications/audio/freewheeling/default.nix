@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
         software, released under the GNU GPL license.
     '' ;
 
-    homepage = "http://freewheeling.sourceforge.net";
+    homepage = http://freewheeling.sourceforge.net;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.sepi ];
     platforms = stdenv.lib.platforms.linux;

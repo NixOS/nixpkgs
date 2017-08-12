@@ -21,6 +21,21 @@ let
       };
     });
 in {
+  elasticsearch_river_jdbc = esPlugin rec {
+    name = "elasticsearch-river-jdbc-${version}";
+    pluginName = "elasticsearch-river-jdbc";
+    version = "1.5.0.5";
+    src = fetchurl {
+      url = "http://xbib.org/repository/org/xbib/elasticsearch/plugin/elasticsearch-river-jdbc/${version}/${name}-plugin.zip";
+      sha256 = "1p75l3vcnb90ar4j3dci2xf8dqnqyy31kc1r075fa2xqlsxgigcp";
+    };
+    meta = {
+      homepage = https://github.com/jprante/elasticsearch-river-jdbc;
+      description = "Plugin to fetch data from JDBC sources for indexing into Elasticsearch";
+      license = licenses.asl20;
+    };
+  };
+
   elasticsearch_analysis_lemmagen = esPlugin rec {
     name = "elasticsearch-analysis-lemmagen-${version}";
     pluginName = "elasticsearch-analysis-lemmagen";
@@ -30,7 +45,7 @@ in {
       sha256 = "bf7bf5ce3ccdd3afecd0e18cd6fce1ef56f824e41f4ef50553ae598caa5c366d";
     };
     meta = {
-      homepage = "https://github.com/vhyza/elasticsearch-analysis-lemmagen";
+      homepage = https://github.com/vhyza/elasticsearch-analysis-lemmagen;
       description = "LemmaGen Analysis plugin provides jLemmaGen lemmatizer as Elasticsearch token filter";
       license = licenses.asl20;
     };
@@ -71,21 +86,6 @@ in {
     };
   };
 
-  elasticsearch_river_jdbc = esPlugin rec {
-    name = "elasticsearch-river-jdbc-${version}";
-    pluginName = "elasticsearch-river-jdbc";
-    version = "1.5.0.5";
-    src = fetchurl {
-      url = "http://xbib.org/repository/org/xbib/elasticsearch/plugin/elasticsearch-river-jdbc/${version}/${name}-plugin.zip";
-      sha256 = "1p75l3vcnb90ar4j3dci2xf8dqnqyy31kc1r075fa2xqlsxgigcp";
-    };
-    meta = {
-      homepage = "https://github.com/jprante/elasticsearch-river-jdbc";
-      description = "Plugin to fetch data from JDBC sources for indexing into Elasticsearch";
-      license = licenses.asl20;
-    };
-  };
-
   elasticsearch_river_twitter = esPlugin rec {
     name = pname + "-" + version;
     pname = "elasticsearch-river-twitter";
@@ -98,7 +98,7 @@ in {
     };
 
     meta = {
-      homepage = "https://github.com/elasticsearch/elasticsearch-river-twitter";
+      homepage = https://github.com/elasticsearch/elasticsearch-river-twitter;
       description = "Twitter River Plugin for ElasticSearch";
       license = licenses.asl20;
       maintainers = [ maintainers.edwtjo ];

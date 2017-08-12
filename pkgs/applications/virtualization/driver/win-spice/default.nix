@@ -62,7 +62,7 @@ stdenv.mkDerivation  {
 
   meta = with stdenv.lib; {
     description = ''Windows SPICE Drivers'';
-    homepage = "http://www.spice-space.org";
+    homepage = http://www.spice-space.org;
     maintainers = [ maintainers.tstrobel ];
     platforms = platforms.linux;
   };

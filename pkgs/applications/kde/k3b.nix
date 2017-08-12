@@ -5,7 +5,7 @@
 , flac, lame, libmad, libmpcdec, libvorbis
 , libsamplerate, libsndfile, taglib
 , cdparanoia, cdrdao, cdrtools, dvdplusrwtools, libburn, libdvdcss, libdvdread, vcdimager
-, ffmpeg, libmusicbrainz2, normalize, sox, transcode, shared_mime_info
+, ffmpeg, libmusicbrainz2, normalize, sox, transcode, shared_mime_info, kinit
 }:
 
 mkDerivation {
@@ -30,6 +30,7 @@ mkDerivation {
     # others
     ffmpeg libmusicbrainz2 shared_mime_info
   ];
+  propagatedUserEnvPkgs = [ (lib.getBin kinit) ];
   postFixup =
     let k3bPath = lib.makeBinPath [
           cdrdao cdrtools dvdplusrwtools libburn normalize sox transcode

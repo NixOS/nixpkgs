@@ -1,6 +1,6 @@
-{ pkgs }:
+{ pkgs, haskellLib }:
 
-with import ./lib.nix { inherit pkgs; };
+with haskellLib;
 
 self: super: {
 
@@ -35,9 +35,6 @@ self: super: {
   transformers = null;
   unix = null;
   xhtml = null;
-
-  # Enable latest version of cabal-install.
-  cabal-install = (dontCheck (super.cabal-install)).overrideScope (self: super: { Cabal = self.Cabal_1_24_2_0; });
 
   # Build jailbreak-cabal with the latest version of Cabal.
   jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_24_2_0; };

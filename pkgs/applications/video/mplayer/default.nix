@@ -204,7 +204,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A movie player that supports many video formats";
-    homepage = "http://mplayerhq.hu";
+    homepage = http://mplayerhq.hu;
     license = "GPL";
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;

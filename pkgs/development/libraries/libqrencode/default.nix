@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = "http://fukuchi.org/works/qrencode/";
+    homepage = http://fukuchi.org/works/qrencode/;
     description = "A C library for encoding data in a QR Code symbol";
 
     longDescription = ''

@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A selection of themes for GTK3, gnome-shell and more";
-    homepage = "https://github.com/lassekongo83/zuki-themes";
+    homepage = https://github.com/lassekongo83/zuki-themes;
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.romildo ];

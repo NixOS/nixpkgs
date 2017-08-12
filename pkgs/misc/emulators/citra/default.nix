@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = "https://citra-emu.org/";
+    homepage = https://citra-emu.org/;
     description = "An open-source emulator for the Nintendo 3DS capable of playing many of your favorite games.";
     platforms = platforms.linux;
     license = licenses.gpl2;

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   patches = [ ./threads.patch ./pfstools.patch ];
 
   meta = with stdenv.lib; {
-    homepage = "http://pfstools.sourceforge.net/";
+    homepage = http://pfstools.sourceforge.net/;
     description = "Toolkit for manipulation of HDR images";
     platforms = platforms.linux;
     license = licenses.lgpl2;

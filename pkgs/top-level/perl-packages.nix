@@ -2483,6 +2483,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  CpanelJSONXS = buildPerlPackage rec {
+    name = "Cpanel-JSON-XS-3.0237";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/${name}.tar.gz";
+      sha256 = "da86fffdbe6c1b7a023e95e2b8db7d6b45a08871c8312f23e45253c78e662d07";
+    };
+    meta = {
+      description = "CPanel fork of JSON::XS, fast and correct serializing";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   CPANChanges = buildPerlPackage rec {
     name = "CPAN-Changes-0.400002";
     src = fetchurl {
@@ -2755,8 +2767,8 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/T/TT/TTAR/${name}.tar.gz";
       sha256 = "b66fab514edf97fc32f58da257582704a210c2b35e297d5c31b7fa2ffd08e908";
     };
-    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
+    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl_1_0_2.dev}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.openssl_1_0_2.out}/lib -lcrypto";
     meta = with stdenv.lib; {
       homepage = https://metacpan.org/release/Crypt-OpenSSL-AES;
       description = "Perl wrapper around OpenSSL's AES library";
@@ -2772,8 +2784,8 @@ let self = _self // overrides; _self = with self; {
       url    = "mirror://cpan/authors/id/I/IR/IROBERTS/${name}.tar.gz";
       sha256 = "18vg2bqyhc0ahfdh5dkbgph5nh92qcz5vi99jq8aam4h86if78bk";
     };
-    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
+    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl_1_0_2.dev}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.openssl_1_0_2.out}/lib -lcrypto";
   };
 
   CryptOpenSSLRandom = buildPerlPackage rec {
@@ -2793,8 +2805,8 @@ let self = _self // overrides; _self = with self; {
       sha256 = "5357f977464bb3a8184cf2d3341851a10d5515b4b2b0dfb88bf78995c0ded7be";
     };
     propagatedBuildInputs = [ CryptOpenSSLRandom ];
-    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl.dev}/include";
-    NIX_CFLAGS_LINK = "-L${pkgs.openssl.out}/lib -lcrypto";
+    NIX_CFLAGS_COMPILE = "-I${pkgs.openssl_1_0_2.dev}/include";
+    NIX_CFLAGS_LINK = "-L${pkgs.openssl_1_0_2.out}/lib -lcrypto";
   };
 
   CryptSSLeay = buildPerlPackage rec {
@@ -2803,7 +2815,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/N/NA/NANIS/${name}.tar.gz";
       sha256 = "1s7zm6ph37kg8jzaxnhi4ff4snxl7mi5h14arxbri0kp6s0lzlzm";
     };
-    makeMakerFlags = "--libpath=${pkgs.openssl.out}/lib --incpath=${pkgs.openssl.dev}/include";
+    makeMakerFlags = "--libpath=${pkgs.openssl_1_0_2.out}/lib --incpath=${pkgs.openssl_1_0_2.dev}/include";
     buildInputs = [ PathClass TryTiny ];
   };
 
@@ -9739,15 +9751,17 @@ let self = _self // overrides; _self = with self; {
   };
 
   Mouse = buildPerlModule rec {
-    name = "Mouse-v2.4.5";
+    name = "Mouse-v2.4.10";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SY/SYOHEX/${name}.tar.gz";
-      sha256 = "1f4dps68f2w1fwqjfpr4kllbcbwd744v3h1r9rkpwc2fhvq3q8hl";
+      url = "mirror://cpan/authors/id/G/GF/GFUJI/${name}.tar.gz";
+      sha256 = "053d28c4v8kj7llwfwj5hjkvc1kcs6mvcn24yg7vxklgj6hxv5dr";
     };
     buildInputs = [
       ModuleBuildXSUtil TestException TestLeakTrace TestRequires TestOutput
       TestFatal
     ];
+    NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isi686 "-fno-stack-protector";
+    hardeningDisable = stdenv.lib.optional stdenv.isi686 "stackprotector";
   };
 
   MouseXNativeTraits = buildPerlPackage rec {
@@ -14169,12 +14183,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   TextBibTeX = buildPerlModule rec {
-    name = "Text-BibTeX-0.72";
+    name = "Text-BibTeX-0.81";
     buildInputs = [ ConfigAutoConf ExtUtilsLibBuilder ];
     src = fetchurl {
       url = "mirror://cpan/authors/id/A/AM/AMBS/${name}.tar.gz";
-      sha256 = "0vfnj9ygdjympc8hsf38nc4a1lq45qbq7v6z6mrnfgr3k198b6gw";
+      sha256 = "0dig1zlglm8rwm8fhnz087lx6gixj9jx10kxn1fx3swdkfblhsmf";
     };
+    perlPreHook = "export LD=gcc";
     meta = {
       description = "Interface to read and parse BibTeX files";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];

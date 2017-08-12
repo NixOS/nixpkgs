@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/vstakhov/rspamd";
+    homepage = https://github.com/vstakhov/rspamd;
     license = licenses.asl20;
     description = "Advanced spam filtering system";
     maintainers = with maintainers; [ avnik fpletz ];

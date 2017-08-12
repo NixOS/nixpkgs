@@ -46,7 +46,7 @@ let
     meta = {
       description = "Package manager for the Erlang VM https://hex.pm";
       license = stdenv.lib.licenses.mit;
-      homepage = "https://github.com/hexpm/hex";
+      homepage = https://github.com/hexpm/hex;
       maintainers = with stdenv.lib.maintainers; [ ericbmerritt ];
     };
 

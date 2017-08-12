@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://www.paratype.ru/public/"; 
+    homepage = http://www.paratype.ru/public/; 
     description = "An open Paratype font";
 
     license = "Open Paratype license"; 

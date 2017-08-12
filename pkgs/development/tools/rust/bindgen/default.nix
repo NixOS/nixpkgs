@@ -4,13 +4,13 @@
 
 rustPlatform.buildRustPackage rec {
   name = "rust-bindgen-${version}";
-  version = "0.26.1";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
-    owner = "servo";
+    owner = "rust-lang-nursery";
     repo = "rust-bindgen";
     rev = "v${version}";
-    sha256 = "1w1vbfhmcrcl0vacxkivmavjp51cvpyq5lk75n9zs80q5x38ypna";
+    sha256 = "190nilbqch8w2hcdmzgkk2npgsn49a4y9c5r0mxa9d7nz7h0imxk";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -24,13 +24,13 @@ rustPlatform.buildRustPackage rec {
     wrapProgram $out/bin/bindgen --set LIBCLANG_PATH "${llvmPackages.clang-unwrapped}/lib"
   '';
 
-  depsSha256 = "0s1x4ygjwc14fbl2amz5g6n7lq07zy8b00mvwfw6vi6k4bq1g59i";
+  depsSha256 = "1y55xdqsk200hj5dhbigsgsx11w5cfxms84hhyl9y7w6jszbzxzw";
 
   doCheck = false; # A test fails because it can't find standard headers in NixOS
 
   meta = with stdenv.lib; {
-    description = "C binding generator";
-    homepage = https://github.com/servo/rust-bindgen;
+    description = "C and C++ binding generator";
+    homepage = https://github.com/rust-lang-nursery/rust-bindgen;
     license = with licenses; [ bsd3 ];
     maintainers = [ maintainers.ralith ];
   };

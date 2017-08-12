@@ -31,7 +31,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = {
     description = "Synchronize emails between two repositories, so that you can read the same mailbox from multiple computers";
-    homepage = "http://offlineimap.org";
+    homepage = http://offlineimap.org;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.garbas ];
   };

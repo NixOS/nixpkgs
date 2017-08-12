@@ -114,8 +114,12 @@ stdenv.mkDerivation {
   dontUseCmakeConfigure = true;
 
   # ps is needed for one of the test cases
-  nativeBuildInputs = [ file python2 procps rustPlatform.rust.rustc git cmake
-    which libffi gdb ];
+  nativeBuildInputs =
+    [ file python2 procps rustPlatform.rust.rustc git cmake
+      which libffi
+    ]
+    # Only needed for the debuginfo tests
+    ++ optional (!stdenv.isDarwin) gdb;
 
   buildInputs = [ ncurses ] ++ targetToolchains
     ++ optional (!forceBundledLLVM) llvmShared;

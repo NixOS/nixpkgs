@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec
 {
   version = "3.0.7";
-  seafileVersion = "5.0.7";
+  seafileVersion = "6.1.0";
   name = "libsearpc-${version}";
 
   src = fetchurl
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec
 
   meta =
   {
-    homepage = "https://github.com/haiwen/libsearpc";
+    homepage = https://github.com/haiwen/libsearpc;
     description = "A simple and easy-to-use C language RPC framework (including both server side & client side) based on GObject System";
     license = stdenv.lib.licenses.lgpl3;
     platforms = stdenv.lib.platforms.linux;

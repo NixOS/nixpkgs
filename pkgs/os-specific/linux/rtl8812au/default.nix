@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Driver for Realtek 802.11ac, rtl8812au, provides the 8812au mod";
-    homepage = "https://github.com/Grawp/rtl8812au_rtl8821au";
+    homepage = https://github.com/Grawp/rtl8812au_rtl8821au;
     license = stdenv.lib.licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
   };

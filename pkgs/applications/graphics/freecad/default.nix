@@ -5,11 +5,11 @@ let
   pythonPackages = python27Packages;
 in stdenv.mkDerivation rec {
   name = "freecad-${version}";
-  version = "0.16";
+  version = "0.16.6712";
 
   src = fetchurl {
     url = "https://github.com/FreeCAD/FreeCAD/archive/${version}.tar.gz";
-    sha256 = "02cfw5wlb04j0ymhk4skrm7rvbz13hpv995asf9v8q6wn2s1mivc";
+    sha256 = "14hs26gvv7gbg9misxq34v4nrds2sbxjhj4yyw5kq3zbvl517alp";
   };
 
   buildInputs = with pythonPackages; [ cmake coin3d xercesc ode eigen qt4 opencascade gts boost

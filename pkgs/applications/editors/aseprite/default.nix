@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Animated sprite editor & pixel art tool";
-    homepage = "http://www.aseprite.org/";
+    homepage = http://www.aseprite.org/;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
   };

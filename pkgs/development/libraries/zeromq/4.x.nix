@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     branch = "4";
-    homepage = "http://www.zeromq.org";
+    homepage = http://www.zeromq.org;
     description = "The Intelligent Transport Layer";
     license = licenses.gpl3;
     platforms = platforms.all;

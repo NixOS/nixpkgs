@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.bsd3 ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = "https://github.com/muquit/mailsend";
+    homepage = https://github.com/muquit/mailsend;
     downloadPage = "https://github.com/muquit/mailsend/releases";
   };
 }

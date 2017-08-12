@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://software.sil.org/gentium/";
+    homepage = http://software.sil.org/gentium/;
     description = "A high-quality typeface family for Latin, Cyrillic, and Greek";
     maintainers = with maintainers; [ ];
     license = licenses.ofl;

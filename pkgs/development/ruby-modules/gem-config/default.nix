@@ -130,11 +130,11 @@ in
   };
 
   mysql = attrs: {
-    buildInputs = [ mysql.lib zlib openssl ];
+    buildInputs = [ mysql.connector-c zlib openssl ];
   };
 
   mysql2 = attrs: {
-    buildInputs = [ mysql.lib zlib openssl ];
+    buildInputs = [ mysql.connector-c zlib openssl ];
   };
 
   ncursesw = attrs: {

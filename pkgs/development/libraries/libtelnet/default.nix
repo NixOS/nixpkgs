@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Simple RFC-complient TELNET implementation as a C library";
-    homepage = "https://github.com/seanmiddleditch/libtelnet";
+    homepage = https://github.com/seanmiddleditch/libtelnet;
     license = stdenv.lib.licenses.publicDomain;
     maintainers = [ stdenv.lib.maintainers.tomberek ];
     platforms = stdenv.lib.platforms.linux;

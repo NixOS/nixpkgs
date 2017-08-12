@@ -156,4 +156,9 @@ rec {
         sha256 = "10dmv3d3gj8rvj9h40js4jh8xbr5wyaqiy0kd819mya441mj8ll2";
       };
     };
+
+  tag_hardened = rec {
+    name = "tag-hardened";
+    patch = ./tag-hardened.patch;
+  };
 }

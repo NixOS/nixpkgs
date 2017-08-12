@@ -6,17 +6,18 @@
 , gstreamer, gst-plugins-base, libxml2
 , glib, gtk3, pango, gdk_pixbuf, cairo, atk, gnome3
 , nss, nspr
-, patchelf
+, patchelf, makeWrapper
+, proprietaryCodecs ? true, vivaldi-ffmpeg-codecs ? null
 }:
 
 stdenv.mkDerivation rec {
   name = "${product}-${version}";
   product = "vivaldi";
-  version = "1.10.867.38-1";
+  version = "1.10.867.48-1";
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/stable/${product}-stable_${version}_amd64.deb";
-    sha256 = "1h3iygzvw3rb5kmn0pam6gqy9baq6l630yllff1vnvychdg8d9vi";
+    sha256 = "1han45swvv0y2i2kg7xhml1wj5zyrf2c2hc5b07kqsjkfg9iz1lc";
   };
 
   unpackPhase = ''
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
     tar -xvf data.tar.xz
   '';
 
-  nativeBuildInputs = [ patchelf ];
+  nativeBuildInputs = [ patchelf makeWrapper ];
 
   buildInputs = [
     stdenv.cc.cc stdenv.cc.libc zlib libX11 libXt libXext libSM libICE libxcb
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     atk alsaLib dbus_libs cups gtk3 gdk_pixbuf libexif ffmpeg systemd
     freetype fontconfig libXrender libuuid expat glib nss nspr
     gstreamer libxml2 gst-plugins-base pango cairo gnome3.gconf
-  ];
+  ] ++ stdenv.lib.optional proprietaryCodecs vivaldi-ffmpeg-codecs;
 
   libPath = stdenv.lib.makeLibraryPath buildInputs
     + stdenv.lib.optionalString (stdenv.is64bit)
@@ -45,6 +46,10 @@ stdenv.mkDerivation rec {
       --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${libPath}" \
       opt/vivaldi/vivaldi-bin
+  '' + stdenv.lib.optionalString proprietaryCodecs ''
+    sed -i '/^VIVALDI_FFMPEG_FOUND/ a \
+    checkffmpeg "${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so"' opt/vivaldi/vivaldi
+  '' + ''
     echo "Finished patching Vivaldi binaries"
   '';
 
@@ -67,6 +72,8 @@ stdenv.mkDerivation rec {
         "$out"/opt/vivaldi/product_logo_''${d}.png \
         "$out"/share/icons/hicolor/''${d}x''${d}/apps/vivaldi.png
     done
+    wrapProgram "$out/bin/vivaldi" \
+      --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/
   '';
 
   meta = with stdenv.lib; {

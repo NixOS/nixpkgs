@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = "http://github.com/GaloisInc/HaLVM";
+    homepage = http://github.com/GaloisInc/HaLVM;
     description = "The Haskell Lightweight Virtual Machine (HaLVM): GHC running on Xen";
     platforms = ["x86_64-linux"];       # other platforms don't have Xen
     maintainers = with stdenv.lib.maintainers; [ dmjio ];

@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.free ; # 9menu derivative with 9menu license
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = "http://www.update.uu.se/~zrajm/programs/";
+    homepage = http://www.update.uu.se/~zrajm/programs/;
     downloadPage = "http://www.update.uu.se/~zrajm/programs/ratmen/";
     updateWalker = true;
   };

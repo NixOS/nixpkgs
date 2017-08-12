@@ -85,6 +85,8 @@ stdenv.mkDerivation rec {
        # See <http://www.mail-archive.com/qemu-devel@nongnu.org/msg22775.html>.
        sed -i "tests/util/grub-shell.in" \
            -e's/qemu-system-i386/qemu-system-x86_64 -nodefaults/g'
+
+      unset CPP # setting CPP intereferes with dependency calculation
     '';
 
   prePatch =

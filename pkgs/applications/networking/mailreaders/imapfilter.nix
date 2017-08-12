@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ openssl pcre lua ];
 
   meta = {
-    homepage = "https://github.com/lefcha/imapfilter";
+    homepage = https://github.com/lefcha/imapfilter;
     description = "Mail filtering utility";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;

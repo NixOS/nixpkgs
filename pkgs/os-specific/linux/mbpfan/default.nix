@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
   meta = with lib; {
     description = "Daemon that uses input from coretemp module and sets the fan speed using the applesmc module";
-    homepage = "https://github.com/dgraziotin/mbpfan";
+    homepage = https://github.com/dgraziotin/mbpfan;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

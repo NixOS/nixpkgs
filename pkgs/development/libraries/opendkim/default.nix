@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libbsd, openssl, libmilter
-, perl, makeWrapper }:
+, autoreconfHook, perl, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "opendkim-${version}";
@@ -12,9 +12,11 @@ stdenv.mkDerivation rec {
 
   configureFlags= [ "--with-milter=${libmilter}" ];
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig makeWrapper ];
 
   buildInputs = [ libbsd openssl libmilter perl ];
+
+  patches = [ ./openssl-1.1.patch ];
 
   postInstall = ''
     wrapProgram $out/sbin/opendkim-genkey \
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C library for producing DKIM-aware applications and an open source milter for providing DKIM service";
-    homepage = "http://www.opendkim.org/";
+    homepage = http://www.opendkim.org/;
     maintainers = with maintainers; [ abbradar ];
     license = licenses.bsd3;
     platforms = platforms.unix;

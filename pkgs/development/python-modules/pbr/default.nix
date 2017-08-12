@@ -14,7 +14,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = "http://docs.openstack.org/developer/pbr/";
+    homepage = http://docs.openstack.org/developer/pbr/;
     license = stdenv.lib.licenses.asl20;
     description = "Python Build Reasonableness";
   };

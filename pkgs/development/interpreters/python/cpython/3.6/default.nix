@@ -27,7 +27,7 @@ with stdenv.lib;
 
 let
   majorVersion = "3.6";
-  minorVersion = "1";
+  minorVersion = "2";
   minorVersionSuffix = "";
   pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
@@ -48,7 +48,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
-    sha256 = "0ha03sbakxblzyvlramx5fj0ranzmzx4pa2png6nn8gczkfi0650";
+    sha256 = "1ab4vlpdax1ihpiyiwchlgsk36apl4kgdw271wvl9l8ywhxpfacj";
   };
 
   NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
@@ -63,6 +63,10 @@ in stdenv.mkDerivation {
     substituteInPlace configure --replace '`/usr/bin/arch`' '"i386"'
     substituteInPlace configure --replace '-Wl,-stack_size,1000000' ' '
   '';
+
+  patches = [
+    ./no-ldconfig.patch
+  ];
 
   postPatch = ''
     # Determinism

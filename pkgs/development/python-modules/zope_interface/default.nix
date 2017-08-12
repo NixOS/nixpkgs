@@ -19,7 +19,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Zope.Interface";
     homepage = http://zope.org/Products/ZopeInterface;
-    license = licenses.zpt20;
+    license = licenses.zpl20;
     maintainers = [ maintainers.goibhniu ];
   };
 }

@@ -19,7 +19,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = "http://forum.kodi.tv/showthread.php?tid=85724";
+      homepage = http://forum.kodi.tv/showthread.php?tid=85724;
       description = "A program launcher for Kodi";
       longDescription = ''
         Advanced Launcher allows you to start any Linux, Windows and
@@ -49,7 +49,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = "http://forum.kodi.tv/showthread.php?tid=287826";
+      homepage = http://forum.kodi.tv/showthread.php?tid=287826;
       description = "A program launcher for Kodi";
       longDescription = ''
         Advanced Emulator Launcher is a multi-emulator front-end for Kodi
@@ -184,7 +184,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = "http://forum.kodi.tv/showthread.php?tid=67110";
+      homepage = http://forum.kodi.tv/showthread.php?tid=67110;
       description = "Watch content from SVT Play";
       longDescription = ''
         With this addon you can stream content from SVT Play
@@ -234,7 +234,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = "http://forum.kodi.tv/showthread.php?tid=157499";
+      homepage = http://forum.kodi.tv/showthread.php?tid=157499;
       description = "Launch Steam in Big Picture Mode from Kodi";
       longDescription = ''
         This add-on will close/minimise Kodi, launch Steam in Big

@@ -78,7 +78,7 @@ in stdenv.mkDerivation rec {
       daemons.
     '';
 
-    homepage = "https://sourceforge.net/projects/nfs/";
+    homepage = https://sourceforge.net/projects/nfs/;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

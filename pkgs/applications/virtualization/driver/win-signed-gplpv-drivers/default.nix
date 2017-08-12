@@ -38,7 +38,7 @@ stdenv.mkDerivation  {
       The drivers are signed by Univention with a Software Publishers
       Certificate obtained from the VeriSign CA.
       '';
-    homepage = "http://wiki.univention.de/index.php?title=Installing-signed-GPLPV-drivers";
+    homepage = http://wiki.univention.de/index.php?title=Installing-signed-GPLPV-drivers;
     maintainers = [ maintainers.tstrobel ];
     platforms = platforms.linux;
     license = licenses.gpl2;

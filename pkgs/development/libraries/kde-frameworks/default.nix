@@ -86,7 +86,7 @@ let
             setupHook = args.setupHook or defaultSetupHook;
 
             meta = {
-              homepage = "http://www.kde.org";
+              homepage = http://www.kde.org;
               license = with lib.licenses; [
                 lgpl21Plus lgpl3Plus bsd2 mit gpl2Plus gpl3Plus fdl12
               ];

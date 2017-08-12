@@ -60,7 +60,7 @@ let
 
     meta = {
       description = "Low-latency, high quality voice chat software";
-      homepage = "http://mumble.sourceforge.net/";
+      homepage = http://mumble.sourceforge.net/;
       license = licenses.bsd3;
       maintainers = with maintainers; [ viric jgeerds wkennington ];
       platforms = platforms.linux;

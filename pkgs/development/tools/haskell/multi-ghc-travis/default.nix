@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Generate .travis.yml for multiple ghc versions";
-    homepage = "https://github.com/hvr/multi-ghc-travis";
+    homepage = https://github.com/hvr/multi-ghc-travis;
     license = licenses.bsd3;
     platforms = ghc.meta.platforms;
     maintainers = with maintainers; [ jb55 peti ];

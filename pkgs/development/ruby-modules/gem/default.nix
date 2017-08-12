@@ -87,6 +87,7 @@ stdenv.mkDerivation (attrs // {
     ++ lib.optional stdenv.isDarwin darwin.libobjc
     ++ buildInputs;
 
+  #name = builtins.trace (attrs.name or "no attr.name" ) "${namePrefix}${gemName}-${version}";
   name = attrs.name or "${namePrefix}${gemName}-${version}";
 
   inherit src;

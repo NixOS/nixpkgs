@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A command-line oriented TCP/IP packet assembler/analyzer";
-    homepage = "http://www.hping.org/";
+    homepage = http://www.hping.org/;
     license = licenses.gpl2;
     platforms = platforms.all;
     broken = stdenv.isDarwin;

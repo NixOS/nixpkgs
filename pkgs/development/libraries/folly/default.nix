@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An open-source C++ library developed and used at Facebook";
-    homepage = "https://github.com/facebook/folly";
+    homepage = https://github.com/facebook/folly;
     license = licenses.asl20;
     # 32bit is not supported: https://github.com/facebook/folly/issues/103
     platforms = [ "x86_64-linux" ];

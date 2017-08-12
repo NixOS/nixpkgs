@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
       well-made, free & open-source, @font-face ready fonts.
     '';
 
-    homepage = "https://www.theleagueofmoveabletype.com/";
+    homepage = https://www.theleagueofmoveabletype.com/;
 
     license = stdenv.lib.licenses.ofl;
 

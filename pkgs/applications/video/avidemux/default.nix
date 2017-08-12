@@ -43,7 +43,7 @@ let
                   ;
 
     meta = {
-      homepage = "http://fixounet.free.fr/avidemux/";
+      homepage = http://fixounet.free.fr/avidemux/;
       description = "Free video editor designed for simple video editing tasks";
       maintainers = with stdenv.lib.maintainers; [ viric abbradar ];
       platforms = with stdenv.lib.platforms; linux;
