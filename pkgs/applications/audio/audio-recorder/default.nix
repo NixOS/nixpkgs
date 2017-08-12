@@ -34,9 +34,9 @@ stdenv.mkDerivation rec {
   '';
 
   preFixup = ''
-    gappsWrapperArgs+=('--prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"'
-      '--prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0"'
-      '--prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules"')
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : $out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH
+      --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : $GST_PLUGIN_SYSTEM_PATH_1_0
+      --prefix GIO_EXTRA_MODULES : ${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules)
   '';
 
   meta = with stdenv.lib; {
