@@ -235,14 +235,14 @@ let
 
   composer = pkgs.stdenv.mkDerivation rec {
     name = "composer-${version}";
-    version = "1.4.2";
+    version = "1.5.1";
 
     src = pkgs.fetchurl {
       url = "https://getcomposer.org/download/${version}/composer.phar";
-      sha256 = "1x467ngxb976ba2r9kqba7jpvm95a0db8nwaa2z14zs7xv1la6bb";
+      sha256 = "107v8hdgmi2s15zsd9ffrr3jyw01qkwv174y9gw9fbpdrjwffi97";
     };
+    unpackPhase = ":";
 
-    phases = [ "installPhase" ];
     buildInputs = [ pkgs.makeWrapper ];
 
     installPhase = ''
