@@ -18731,7 +18731,6 @@ with pkgs;
   mnemonicode = callPackage ../misc/mnemonicode { };
 
   mysql-workbench = newScope gnome2 ../applications/misc/mysql-workbench (let mysql = mysql57; in {
-    automake = automake113x;
     gdal = gdal.override {mysql = mysql // {lib = {dev = mysql;};};};
     mysql = mysql;
     pcre = pcre-cpp;
