@@ -1,12 +1,16 @@
-{stdenv, fetchgit, autoconf, automake, boost, zlib, libpng, libjpeg, libtiff}:
+{ stdenv, fetchFromGitHub, autoconf, automake, boost
+, zlib, libpng, libjpeg, libtiff
+}:
 
-stdenv.mkDerivation {
-  name = "povray-3.7";
+stdenv.mkDerivation rec {
+  name = "povray-${version}";
+  version = "3.7.0.3";
 
-  src = fetchgit {
-    url = "https://github.com/POV-Ray/povray.git";
-    rev = "39ce8a24e50651904010dda15872d63be15d7c37";
-    sha256 = "1nbs9vwf6fn3jkm0myfnbn7nrc17q8ppzmr4h7kj49nr0710ifw0";
+  src = fetchFromGitHub {
+    owner = "POV-Ray";
+    repo = "povray";
+    rev = "v${version}";
+    sha256 = "0mzkgk3gn8jfrw1fq0z3kqbysdfq8nwdl8a28l18v8gzb31bblhq";
   };
 
 
@@ -40,6 +44,6 @@ stdenv.mkDerivation {
     homepage = http://www.povray.org/;
     description = "Persistence of Vision Raytracer";
     license = licenses.free;
-	platforms = platforms.linux;
+    platforms = platforms.linux;
   };
 }
