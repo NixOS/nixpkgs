@@ -37,17 +37,17 @@ let
   });
 
   # Derivations built with `buildPythonPackage` can already be overriden with `override`, `overrideAttrs`, and `overrideDerivation`.
-  # This function introduces `overridePythonPackage` and it overrides the call to `buildPythonPackage`.
+  # This function introduces `overridePythonAttrs` and it overrides the call to `buildPythonPackage`.
   makeOverridablePythonPackage = f: origArgs:
     let
       ff = f origArgs;
       overrideWith = newArgs: origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs);
     in
       if builtins.isAttrs ff then (ff // {
-        overridePythonPackage = newArgs: makeOverridable f (overrideWith newArgs);
+        overridePythonAttrs = newArgs: makeOverridable f (overrideWith newArgs);
       })
       else if builtins.isFunction ff then {
-        overridePythonPackage = newArgs: makeOverridable f (overrideWith newArgs);
+        overridePythonAttrs = newArgs: makeOverridable f (overrideWith newArgs);
         __functor = self: ff;
       }
       else ff;
@@ -22204,7 +22204,7 @@ in {
 
   sphinx = callPackage ../development/python-modules/sphinx { };
 
-  sphinx_1_2 = self.sphinx.overridePythonPackage rec {
+  sphinx_1_2 = self.sphinx.overridePythonAttrs rec {
     name = "sphinx-1.2.3";
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sphinx/sphinx-1.2.3.tar.gz";
