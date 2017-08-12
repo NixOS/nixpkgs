@@ -1,5 +1,5 @@
 { stdenv, fetchurl, glib, intltool, libfm, libX11, pango, pkgconfig
-, withGtk3 ? true, gtk2, gtk3 }:
+, wrapGAppsHook, gnome3, withGtk3 ? true, gtk2, gtk3 }:
 
 let
   libfm' = libfm.override { inherit withGtk3; };
@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "0rxdh0dfzc84l85c54blq42gczygq8adhr3l9hqzy1dp530cm1hc";
   };
 
-  buildInputs = [ glib gtk intltool libfm' libX11 pango pkgconfig ];
+  buildInputs = [ glib gtk libfm' libX11 pango gnome3.defaultIconTheme ];
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook intltool ];
 
   configureFlags = optional withGtk3 "--with-gtk=3";
 
