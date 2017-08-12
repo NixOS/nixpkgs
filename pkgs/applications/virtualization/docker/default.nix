@@ -169,10 +169,25 @@ rec {
     };
   };
 
+  # Get revisions from
+  # https://github.com/docker/docker-ce/blob/v${version}/components/engine/hack/dockerfile/binaries-commits
+
   docker_17_06 = dockerGen rec {
     version = "17.06.1-ce";
     rev = "874a7374f31c77aca693d025101b2de1b20b96c2"; # git commit
     sha256 = "08xhww2rhpyj73zgh5maycs85zpc0sm3ak8yyyd92dwgncmyi2im";
+    runcRev = "2d41c047c83e09a6d61d464906feb2a2f3c52aa4";
+    runcSha256 = "0v5iv29ck6lkxvxh7a56gfrlgfs0bjvjhrq3p6qqv9qjzv825byq";
+    containerdRev = "3addd840653146c90a254301d6c3a663c7fd6429";
+    containerdSha256 = "0as4s5wd57pdh1cyavkccpgs46kvlhr41v07qrv0phzffdhq3d5j";
+    tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";
+    tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
+  };
+
+  docker_17_07 = dockerGen rec {
+    version = "17.07.0-ce";
+    rev = "87847530f7176a48348d196f7c23bbd058052af1"; # git commit
+    sha256 = "0zw9zlzbd7il33ch17ypwpa73gsb930sf2njnphg7ylvnqp8qzsp";
     runcRev = "2d41c047c83e09a6d61d464906feb2a2f3c52aa4";
     runcSha256 = "0v5iv29ck6lkxvxh7a56gfrlgfs0bjvjhrq3p6qqv9qjzv825byq";
     containerdRev = "3addd840653146c90a254301d6c3a663c7fd6429";
