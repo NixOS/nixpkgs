@@ -15,13 +15,13 @@ let
 
 in stdenv.mkDerivation rec {
   name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "zfsonlinux";
     repo = "zfs";
     rev = "zfs-${version}";
-    sha256 = "16z0fl282rsmvgk608ii7n410swivkrisp112n2fhhjc1fs0zall";
+    sha256 = "0czal6lpl8igrhwmqh5jcgx07rlcgnrfg6ywzf681vsyh3gaxj9n";
   };
 
   patches = [
