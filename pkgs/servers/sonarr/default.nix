@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "sonarr-${version}";
-  version = "2.0.0.4753";
+  version = "2.0.0.4928";
 
   src = fetchurl {
     url = "http://download.sonarr.tv/v2/master/mono/NzbDrone.master.${version}.mono.tar.gz";
-    sha256 = "1rhdnd37fd5a4wbnrd817bf7ln4095kzmv283kmm8fz93nmmc19c";
+    sha256 = "0wggh8z5dmkkcgbb1hzikia55djdqmbqz2dpzx1iyvgys7y5n8xm";
   };
 
   buildInputs = [
