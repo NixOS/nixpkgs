@@ -24,11 +24,11 @@ in
 , platform ? localSystem.platform
 , crossSystem ? null
 
-, # Fallback: The contents of the configuration file found at $NIXPKGS_CONFIG or
+, # Fallback: The contents of the configuration file found at <nixpkgs-config> or
   # $HOME/.config/nixpkgs/config.nix.
   config ? let
       isDir = path: pathExists (path + "/.");
-      configFile = getEnv "NIXPKGS_CONFIG";
+      configFile = try <nixpkgs-config> "";
       configFile2 = homeDir + "/.config/nixpkgs/config.nix";
       configFile3 = homeDir + "/.nixpkgs/config.nix"; # obsolete
     in

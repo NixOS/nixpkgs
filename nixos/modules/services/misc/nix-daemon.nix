@@ -330,6 +330,7 @@ in
         type = types.listOf types.str;
         default =
           [ "nixpkgs=/nix/var/nix/profiles/per-user/root/channels/nixos/nixpkgs"
+            "nixpkgs-config=/etc/nix/nixpkgs-config.nix"
             "nixos-config=/etc/nixos/configuration.nix"
             "/nix/var/nix/profiles/per-user/root/channels"
           ];

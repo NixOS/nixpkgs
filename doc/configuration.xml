@@ -48,10 +48,13 @@ configuration.</para>
   </listitem>
 
   <listitem>
-    <para>Otherwise, if the environment variable <varname>NIXPKGS_CONFIG</varname> is set and the path
-    exists, then it is imported and used as the nixpkgs configuration.</para>
+    <para>Otherwise, if the Nix path entry <literal>&lt;nixpkgs-config></literal> exists, 
+    then it is imported and used as the nixpkgs configuration.</para>
 
-    <para>On a NixOS system <varname>NIXPKGS_CONFIG</varname> is set to <filename>/etc/nix/nixpkgs-config.nix</filename>.
+    <para>See the section on <literal>NIX_PATH</literal> in the Nix manual for more details on how to 
+    set a value for <literal>&lt;nixpkgs-config></literal>.</para>
+
+    <para>On a NixOS system <literal>&lt;nixpkgs-config></literal> is set to <filename>/etc/nix/nixpkgs-config.nix</filename>.
     This can be used to set a global nixpkgs configuration for all users of that system.</para>
   </listitem>
 
