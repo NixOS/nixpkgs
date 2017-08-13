@@ -47,7 +47,7 @@ if multiple layers override the same package.</para>
 </orderedlist>
 </para>
 
-<para>For the second and third options overlays can be provided as files, 
+<para>For the second and third options, overlays are extracted from the given directory as files, 
 directories containing a <filename>default.nix</filename>, or symlinks to one of those.</para>
 
 <para>The last option provides a convenient way to install an overlay from a repository, 
