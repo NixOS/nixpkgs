@@ -33,27 +33,39 @@ that would be refused.
 <para>Each of these criteria can be altered in the nixpkgs
 configuration.</para>
 
-<para>The nixpkgs configuration for a NixOS system is set in the
-<literal>configuration.nix</literal>, as in the following example:
-<programlisting>
-{
-  nixpkgs.config = {
-    allowUnfree = true;
-  };
-}
-</programlisting>
-However, this does not allow unfree software for individual users.
-Their configurations are managed separately.</para>
+<para>The nixpkgs configuration to use is determined as follows:
 
-<para>A user's of nixpkgs configuration is stored in a user-specific
-configuration file located at
-<filename>~/.config/nixpkgs/config.nix</filename>. For example:
-<programlisting>
-{
-  allowUnfree = true;
-}
-</programlisting>
+<orderedlist>
+  <listitem>
+    <para>First, if a <varname>config</varname> argument is passed to the
+    nixpkgs function itself, then that is used. This can be passed explicitly
+    when importing nixpkgs, for example
+    <literal>import &lt;nixpkgs> { config = { allowUnfree = true; } }</literal>.</para> 
+
+    <para>On a NixOS system the value of the <literal>nixpkgs.config</literal> option, if present, 
+    is passed to the system Nixpkgs in this way. Note that this does not affect the config for
+    non-NixOS operations (e.g. <literal>nix-env</literal>), which are looked up independently.</para>
+  </listitem>
+
+  <listitem>
+    <para>Otherwise, if the environment variable <varname>NIXPKGS_CONFIG</varname> is set and the path
+    exists, then it is imported and used as the nixpkgs configuration.</para>
+
+    <para>On a NixOS system <varname>NIXPKGS_CONFIG</varname> is set to <filename>/etc/nix/nixpkgs-config.nix</filename>.
+    This can be used to set a global nixpkgs configuration for all users of that system.</para>
+  </listitem>
+
+  <listitem>
+    <para>Otherwise, if <filename>~/.config/nixpkgs/config.nix</filename> exists, then it is imported
+    and used as the nixpkgs configuration.</para>
+  </listitem>
+
+</orderedlist>
 </para>
+
+<para>This means that users should typically manage their nixpkgs config via <filename>~/.config/nixpkgs/config.nix</filename>,
+and NixOS system administrators should use <literal>nixpkgs.config</literal> and <filename>/etc/nix/nixpkgs-config.nix</filename>
+as appropriate.</para>
 
 <section xml:id="sec-allow-broken">
   <title>Installing broken packages</title>
@@ -226,8 +238,8 @@ configuration file located at
 packages via <literal>packageOverrides</literal></title>
 
 <para>You can define a function called
-<varname>packageOverrides</varname> in your local
-<filename>~/.config/nixpkgs/config.nix</filename> to override nix packages.  It
+<varname>packageOverrides</varname> in your nixpkgs config
+to override nix packages.  It
 must be a function that takes pkgs as an argument and return modified
 set of packages.
 
