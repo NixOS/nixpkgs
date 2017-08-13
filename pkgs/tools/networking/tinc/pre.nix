@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "05an2vj0a3wjv5w672wgzyixbydin5jpja5zv6x81bc72dms0ymc";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "man" "info" ];
 
   nativeBuildInputs = [ autoreconfHook texinfo ];
   buildInputs = [ ncurses readline zlib lzo openssl ];

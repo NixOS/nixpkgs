@@ -124,7 +124,7 @@ stdenv.mkDerivation {
   buildInputs = [ ncurses ] ++ targetToolchains
     ++ optional (!forceBundledLLVM) llvmShared;
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "man" "doc" ];
   setOutputFlags = false;
 
   # Disable codegen units for the tests.
