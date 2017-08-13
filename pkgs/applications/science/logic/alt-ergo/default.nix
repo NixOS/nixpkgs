@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.30";
 
   src = fetchurl {
-    url    = "http://alt-ergo.ocamlpro.com/download_manager.php?target=${name}.tar.gz";
+    url    = "https://alt-ergo.ocamlpro.com/download_manager.php?target=${name}.tar.gz";
     name   = "${name}.tar.gz";
     sha256 = "025pacb4ax864fn5x8k78mw6hiig4jcazblj18gzxspg4f1l5n1g";
   };
