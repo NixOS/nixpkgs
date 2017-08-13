@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, gettext, pkgconfig, glib, gtk2, libX11, libSM, libICE
+{ fetchurl, stdenv, gettext, pkgconfig, glib, gtk2, libX11, libSM, libICE, which
 , IOKit ? null }:
 
 with stdenv.lib;
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0rnpzjr0ys0ypm078y63q4aplcgdr5nshjzhmz330n6dmnxci7lb";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig which ];
   buildInputs = [gettext glib gtk2 libX11 libSM libICE]
     ++ optionals stdenv.isDarwin [ IOKit ];
 
@@ -26,9 +26,8 @@ stdenv.mkDerivation rec {
        sed -i "$i" -e "s|/usr/X11R6|${libX11.dev}|g ; s|-lICE|-lX11 -lICE|g"
      done '';
 
-   installPhase = ''
-     make DESTDIR=$out install
-     '';
+  makeFlags = [ "STRIP=-s" ];
+  installFlags = [ "DESTDIR=$(out)" ];
 
    meta = {
     description = "Themeable process stack of system monitors";
