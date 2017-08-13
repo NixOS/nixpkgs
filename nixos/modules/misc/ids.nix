@@ -335,7 +335,7 @@
       dialout = 27;
       #polkituser = 28; # currently unused, polkitd doesn't need a group
       utmp = 29;
-      #ddclient = 30; # unused
+      ddclient = 30;
       davfs2 = 31;
       disnix = 33;
       osgi = 34;
