@@ -20,6 +20,7 @@ in stdenv.mkDerivation rec {
     passthru = {
       mpiSupport = mpiSupport;
       inherit mpi;
+      inherit hdf5;
     };
 
     configureFlags = [

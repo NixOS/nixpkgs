@@ -562,6 +562,8 @@ in {
     };
   };
 
+  apptools = callPackage ../development/python-modules/apptools { };
+
   apsw = callPackage ../development/python-modules/apsw {};
 
   astor = callPackage ../development/python-modules/astor {};
@@ -12510,6 +12512,25 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
   };
 
+  mayavi = buildPythonPackage rec {
+    name = "mayavi-${version}";
+    version = "4.5.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/m/mayavi/${name}.tar.gz";
+      sha256 = "363dbd127477d9a6a7558ef852ecfe48f4688c3f631c1ede2dead78115e8f0a8";
+    };
+
+    buildInputs = [ pkgs.vtk ];
+    propagatedBuildInputs = with self; [ apptools traits traitsui numpy ];
+
+    meta = {
+      description = "The Mayavi scientific data 3-dimensional visualizer";
+      homepage = http://docs.enthought.com/mayavi/mayavi/;
+      license = licenses.bsd3;
+      maintainer = with maintainers; [ fridh ];
+    };
+  };
 
   mccabe = callPackage ../development/python-modules/mccabe { };
 
@@ -17896,6 +17917,8 @@ in {
   };
 
   pyext = callPackage ../development/python-modules/pyext { };
+
+  pyface = callPackage ../development/python-modules/pyface { };
 
   pyfantom = buildPythonPackage rec {
      name = "pyfantom-${version}";
@@ -23334,6 +23357,28 @@ in {
     };
   };
 
+  traitsui = buildPythonPackage rec {
+    name = "traitsui-${version}";
+    version = "5.1.0";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/t/traitsui/${name}.tar.gz";
+      sha256 = "8f68b4a4fcc23837fda89af66a0100fb23f0574204838b4790f5109a69924fb8";
+    };
+
+    buildInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [ traits pyface ];
+
+    checkPhase = ''
+      nosetests
+    '';
+
+    meta = {
+      description = "Traits-capable user interfaces";
+      homepage = https://docs.enthought.com/traitsui;
+      license = licenses.bsd3;
+    };
+  };
 
   transaction = callPackage ../development/python-modules/transaction { };
 
