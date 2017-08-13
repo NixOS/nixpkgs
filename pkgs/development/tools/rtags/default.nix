@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "rtags-${version}";
-  version = "2.11";
+  version = "2.12";
 
   buildInputs = [ cmake llvmPackages.llvm openssl llvmPackages.clang emacs ]
     ++ lib.optionals stdenv.isDarwin [ apple_sdk.libs.xpc apple_sdk.frameworks.CoreServices ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
     url = "https://github.com/andersbakken/rtags.git";
-    sha256 = "0965jn8zk3mh07yzw6jmwwp56xly1sihkn0vhv07izkh41mdkrvv";
+    sha256 = "0bgjcvyvkpqcgw4571iz39sqydmcaz6ymx7kxcmq6j7rffs6qs7l";
     # unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation
     postFetch = ''

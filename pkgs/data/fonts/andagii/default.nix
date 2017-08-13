@@ -1,22 +1,18 @@
 { stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
-  name = "andagii-${version}";
+let
   version = "1.0.2";
+in fetchzip {
+  name = "andagii-${version}";
 
-  src = fetchzip {
-    url = http://www.i18nguy.com/unicode/andagii.zip;
-    sha256 = "0a0c43y1fd5ksj50axhng7p00kgga0i15p136g68p35wj7kh5g2k";
-    stripRoot = false;
-    curlOpts = "--user-agent 'Mozilla/5.0'";
-  };
-
-  phases = [ "unpackPhase" "installPhase" ];
-
-  installPhase = ''
+  url = http://www.i18nguy.com/unicode/andagii.zip;
+  curlOpts = "--user-agent 'Mozilla/5.0'";
+  postFetch = ''
+    unzip $downloadedFile
     mkdir -p $out/share/fonts/truetype
     cp -v ANDAGII_.TTF $out/share/fonts/truetype/andagii.ttf
   '';
+  sha256 = "0j5kf2fmyqgnf5ji6h0h79lq9n9d85hkfrr4ya8hqj4gwvc0smb2";
 
   # There are multiple claims that the font is GPL, so I include the
   # package; but I cannot find the original source, so use it on your

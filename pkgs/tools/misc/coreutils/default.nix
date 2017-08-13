@@ -1,5 +1,5 @@
 { stdenv, lib, buildPackages
-, autoconf, automake114x, texinfo, fetchurl, perl, xz, libiconv, gmp ? null
+, autoreconfHook, texinfo, fetchurl, perl, xz, libiconv, gmp ? null
 , hostPlatform, buildPlatform
 , aclSupport ? false, acl ? null
 , attrSupport ? false, attr ? null
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gmp ]
     ++ optional aclSupport acl
     ++ optional attrSupport attr
-    ++ optionals hostPlatform.isCygwin [ autoconf automake114x texinfo ]   # due to patch
+    ++ optionals hostPlatform.isCygwin [ autoreconfHook texinfo ]   # due to patch
     ++ optionals selinuxSupport [ libselinux libsepol ]
        # TODO(@Ericson2314): Investigate whether Darwin could benefit too
     ++ optional (hostPlatform != buildPlatform && hostPlatform.libc != "glibc") libiconv;

@@ -4,15 +4,15 @@
 , libintlOrEmpty
 , intltool, python }:
 let
-  majorVersion = "2.56";
-  version = "${majorVersion}.1";
+  majorVersion = "2.59";
+  version = "${majorVersion}.90.1";
 in
 stdenv.mkDerivation {
   name = "libsoup-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libsoup/${majorVersion}/libsoup-${version}.tar.xz";
-    sha256 = "c32a46d77b4da433b51d8fd09a57a44b198e03bdc93e5219afcc687c7948eac3";
+    sha256 = "0bh8wa0szkm9bx2anfq655zshwf6jhxvrqwx8jyh8rqgi6z9dhz0";
   };
 
   prePatch = ''
