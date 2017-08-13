@@ -18,12 +18,12 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       name = "faac-mp4v2-1.9.patch";
-      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/mp4v2-1.9.patch?h=packages/faac";
+      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/mp4v2-1.9.patch?h=packages/faac&id=fd0ce84f05203c992bbcd43d07bc65def6cee388";
       sha256 = "1pja822zw9q3cg8bjkw5z0bpxsk4q92qix26zpiqbvi7vg314hyc";
     })
     (fetchpatch {
       name = "faac-mp4v2-2.0.0.patch";
-      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/mp4v2-2.0.0.patch?h=packages/faac";
+      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/mp4v2-2.0.0.patch?h=packages/faac&id=fd0ce84f05203c992bbcd43d07bc65def6cee388";
       sha256 = "07kmkrl0600rs01xqpkkw9n8p1215n485xqf8hwimp60dw3vc0wn";
       addPrefixes = true;
     })
