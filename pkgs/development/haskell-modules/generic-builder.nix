@@ -231,10 +231,10 @@ stdenv.mkDerivation ({
       fi
     done
   '' + (optionalString stdenv.isDarwin ''
-    # Work around a limit in the Mac OS X Sierra linker on the number of paths
+    # Work around a limit in the macOS Sierra linker on the number of paths
     # referenced by any one dynamic library:
     #
-    # Create a local directory with symlinks of the *.dylib (Mac OS X shared
+    # Create a local directory with symlinks of the *.dylib (macOS shared
     # libraries) from all the dependencies.
     local dynamicLinksDir="$out/lib/links"
     mkdir -p $dynamicLinksDir

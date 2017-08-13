@@ -11,7 +11,7 @@ a USB stick. You can use the <command>dd</command> utility to write the image:
 <command>dd if=<replaceable>path-to-image</replaceable>
 of=<replaceable>/dev/sdb</replaceable></command>. Be careful about specifying the
 correct drive; you can use the <command>lsblk</command> command to get a list of
-block devices. If you're on OS X you can run <command>diskutil list</command>
+block devices. If you're on macOS you can run <command>diskutil list</command>
 to see the list of devices; the device you'll use for the USB must be ejected
 before writing the image.</para>
 

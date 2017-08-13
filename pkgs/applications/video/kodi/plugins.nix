@@ -23,7 +23,7 @@ rec {
       description = "A program launcher for Kodi";
       longDescription = ''
         Advanced Launcher allows you to start any Linux, Windows and
-        OS X external applications (with command line support or not)
+        macOS external applications (with command line support or not)
         directly from the Kodi GUI. Advanced Launcher also give you
         the possibility to edit, download (from Internet resources)
         and manage all the meta-data (informations and images) related
