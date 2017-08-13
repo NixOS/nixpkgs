@@ -2608,15 +2608,18 @@ in {
 
 
   cairosvg = buildPythonPackage rec {
-    version = "1.0.18";
+    version = "2.0.1";
     name = "cairosvg-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/C/CairoSVG/CairoSVG-${version}.tar.gz";
-      sha256 = "01lpm38qp7xlnv8jv7qg48j44p5088dwfsrcllgs5fz355lrfds1";
+      sha256 = "99dc87de582f644f1f99f84d8f013ba79cc3c76e46cb74fd2b36ec7d6bc5c59d";
     };
 
-    propagatedBuildInputs = with self; [ cairocffi ];
+    # No tests.
+    doCheck = false;
+
+    propagatedBuildInputs = with self; [ cairocffi cssselect lxml pillow tinycss ];
 
     meta = {
       homepage = https://cairosvg.org;
@@ -4505,11 +4508,11 @@ in {
 
   tinycss = buildPythonPackage rec {
     name = "tinycss-${version}";
-    version = "0.3";
+    version = "0.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/tinycss/${name}.tar.gz";
-      sha256 = "1pichqra4wk86142hqgvy9s5x6c5k5zhy8l9qxr0620pqk8spbd4";
+      sha256 = "12306fb50e5e9e7eaeef84b802ed877488ba80e35c672867f548c0924a76716e";
     };
 
     buildInputs = with self; [ pytest ];
@@ -16730,6 +16733,8 @@ in {
     };
   };
 
+  Pyphen = callPackage ../development/python-modules/pyphen {};
+
   pysftp = buildPythonPackage rec {
     name = "pysftp-${version}";
     version = "0.2.9";
@@ -24128,6 +24133,8 @@ EOF
        platforms = platforms.all;
     };
   };
+
+  WeasyPrint = callPackage ../development/python-modules/weasyprint {};
 
   webassets = buildPythonPackage rec {
     name = "webassets-${version}";
