@@ -1049,6 +1049,8 @@ with pkgs;
 
   genromfs = callPackage ../tools/filesystems/genromfs { };
 
+  gh-ost = callPackage ../tools/misc/gh-ost { };
+
   gist = callPackage ../tools/text/gist { };
 
   glide = callPackage ../development/tools/glide { };
