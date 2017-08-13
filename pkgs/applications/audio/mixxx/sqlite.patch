@@ -1,0 +1,13 @@
+diff -urN old/src/library/trackcollection.h mixxx-2.0.0/src/library/trackcollection.h
+--- old/src/library/trackcollection.h	2017-07-30 00:04:48.511029517 -0400
++++ mixxx-2.0.0/src/library/trackcollection.h	2017-07-30 00:05:03.378699826 -0400
+@@ -34,8 +34,7 @@
+ #include "library/dao/libraryhashdao.h"
+
+ #ifdef __SQLITE3__
+-typedef struct sqlite3_context sqlite3_context;
+-typedef struct Mem sqlite3_value;
++#include <sqlite3.h>
+ #endif
+
+ class TrackInfoObject;
