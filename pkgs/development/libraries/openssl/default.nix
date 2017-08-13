@@ -24,6 +24,12 @@ let
       ++ optional (versionOlder version "1.0.2" && hostPlatform.isDarwin)
            ./darwin-arch.patch;
 
+  postPatch = if (versionAtLeast version "1.1.0" && stdenv.isMusl) then ''
+    substituteInPlace crypto/async/arch/async_posix.h \
+      --replace '!defined(__ANDROID__) && !defined(__OpenBSD__)' \
+                '!defined(__ANDROID__) && !defined(__OpenBSD__) && 0'
+  '' else null;
+
     outputs = [ "bin" "dev" "out" "man" ];
     setOutputFlags = false;
     separateDebugInfo = hostPlatform.isLinux;
