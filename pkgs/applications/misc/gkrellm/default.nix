@@ -20,22 +20,23 @@ stdenv.mkDerivation rec {
   # Makefiles are patched to fix references to `/usr/X11R6' and to add
   # `-lX11' to make sure libX11's store path is in the RPATH.
   patchPhase = ''
-     echo "patching makefiles..."
-     for i in Makefile src/Makefile server/Makefile
-     do
-       sed -i "$i" -e "s|/usr/X11R6|${libX11.dev}|g ; s|-lICE|-lX11 -lICE|g"
-     done '';
+    echo "patching makefiles..."
+    for i in Makefile src/Makefile server/Makefile
+    do
+      sed -i "$i" -e "s|/usr/X11R6|${libX11.dev}|g ; s|-lICE|-lX11 -lICE|g"
+    done
+  '';
 
   makeFlags = [ "STRIP=-s" ];
   installFlags = [ "DESTDIR=$(out)" ];
 
-   meta = {
+  meta = {
     description = "Themeable process stack of system monitors";
-    longDescription =
-      '' GKrellM is a single process stack of system monitors which supports
-         applying themes to match its appearance to your window manager, Gtk,
-         or any other theme.
-      '';
+    longDescription = ''
+      GKrellM is a single process stack of system monitors which
+      supports applying themes to match its appearance to your window
+      manager, Gtk, or any other theme.
+    '';
 
     homepage = http://gkrellm.srcbox.net;
     license = licenses.gpl3Plus;
