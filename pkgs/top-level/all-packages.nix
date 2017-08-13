@@ -13354,6 +13354,7 @@ with pkgs;
   multipath-tools = callPackage ../os-specific/linux/multipath-tools { };
 
   musl = callPackage ../os-specific/linux/musl { };
+  musl-fts = callPackage ../os-specific/linux/musl/fts.nix { };
 
   nettools = callPackage ../os-specific/linux/net-tools { };
 
