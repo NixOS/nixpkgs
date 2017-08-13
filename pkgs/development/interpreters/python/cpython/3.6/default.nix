@@ -123,13 +123,17 @@ in stdenv.mkDerivation {
     # We're also not interested in building Windows installers.
     find "$out" -name 'wininst*.exe' | xargs -r rm -f
 
+    linkIfExists () {
+      if [ -e "$1" ]; then ln -s "$1" "$2"; fi
+    }
+
     # Use Python3 as default python
-    ln -s "$out/bin/idle3" "$out/bin/idle"
-    ln -s "$out/bin/pip3" "$out/bin/pip"
-    ln -s "$out/bin/pydoc3" "$out/bin/pydoc"
-    ln -s "$out/bin/python3" "$out/bin/python"
-    ln -s "$out/bin/python3-config" "$out/bin/python-config"
-    ln -s "$out/lib/pkgconfig/python3.pc" "$out/lib/pkgconfig/python.pc"
+    linkIfExists "$out/bin/idle3" "$out/bin/idle"
+    linkIfExists "$out/bin/pip3" "$out/bin/pip"
+    linkIfExists "$out/bin/pydoc3" "$out/bin/pydoc"
+    linkIfExists "$out/bin/python3" "$out/bin/python"
+    linkIfExists "$out/bin/python3-config" "$out/bin/python-config"
+    linkIfExists "$out/lib/pkgconfig/python3.pc" "$out/lib/pkgconfig/python.pc"
 
     # Get rid of retained dependencies on -dev packages, and remove
     # some $TMPDIR references to improve binary reproducibility.
