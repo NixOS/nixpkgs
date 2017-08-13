@@ -1272,6 +1272,8 @@ with pkgs;
 
   atool = callPackage ../tools/archivers/atool { };
 
+  binder = callPackage ../development/tools/bindings/binder { };
+
   bsc = callPackage ../tools/compression/bsc { };
 
   bzip2 = callPackage ../tools/compression/bzip2 { };
@@ -15693,6 +15695,8 @@ with pkgs;
   puremapping = callPackage ../applications/audio/pd-plugins/puremapping { };
 
   pymol = callPackage ../applications/science/chemistry/pymol { };
+
+  pybind11 = callPackage ../development/libraries/pybind11 { };
 
   pybitmessage = callPackage ../applications/networking/instant-messengers/pybitmessage { };
 
