@@ -27,13 +27,23 @@ in
 , # Fallback: The contents of the configuration file found at $NIXPKGS_CONFIG or
   # $HOME/.config/nixpkgs/config.nix.
   config ? let
+      isDir = path: pathExists (path + "/.");
       configFile = getEnv "NIXPKGS_CONFIG";
       configFile2 = homeDir + "/.config/nixpkgs/config.nix";
       configFile3 = homeDir + "/.nixpkgs/config.nix"; # obsolete
     in
-      if configFile != "" && pathExists configFile then import configFile
-      else if homeDir != "" && pathExists configFile2 then import configFile2
-      else if homeDir != "" && pathExists configFile3 then import configFile3
+      if configFile != "" && pathExists configFile then
+        if isDir configFile then 
+          throw (configFile + " must be a file")
+        else import configFile
+      else if configFile2 != "" && pathExists configFile2 then
+        if isDir configFile2 then 
+          throw (configFile2 + " must be a file")
+        else import configFile2
+      else if configFile3 != "" && pathExists configFile3 then 
+        if isDir configFile3 then
+          throw (configFile3 + " must be a file")
+        else import configFile3
       else {}
 
 , # Overlays are used to extend Nixpkgs collection with additional
