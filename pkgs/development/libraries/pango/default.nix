@@ -6,14 +6,14 @@ with stdenv.lib;
 
 let
   ver_maj = "1.40";
-  ver_min = "6";
+  ver_min = "9";
 in
 stdenv.mkDerivation rec {
   name = "pango-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pango/${ver_maj}/${name}.tar.xz";
-    sha256 = "ca152b7383a1e9f7fd74ae96023dc6770dc5043414793bfe768ff06b6759e573";
+    sha256 = "9faea6535312fe4436b93047cf7a04af544eb52a079179bd3a33821aacce7e16";
   };
 
   outputs = [ "bin" "dev" "out" "devdoc" ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = false; # test-layout fails on 1.40.3 (fails to find font config)
+  doCheck = stdenv.host.isLinux;
   # jww (2014-05-05): The tests currently fail on Darwin:
   #
   # ERROR:testiter.c:139:iter_char_test: assertion failed: (extents.width == x1 - x0)
