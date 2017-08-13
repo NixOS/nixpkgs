@@ -115,6 +115,7 @@ stdenv.mkDerivation rec {
     moveToOutput "bin/clear" "$out"
     moveToOutput "bin/reset" "$out"
     moveToOutput "bin/tabs" "$out"
+    moveToOutput "bin/tic" "$out"
     moveToOutput "bin/tput" "$out"
     moveToOutput "bin/tset" "$out"
   '';
