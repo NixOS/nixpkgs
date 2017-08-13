@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://ioquake3.org/;
+    homepage = https://ioquake3.org/;
     description = "First person shooter engine based on the Quake 3: Arena and Quake 3: Team Arena";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;

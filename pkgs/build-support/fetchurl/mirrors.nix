@@ -132,7 +132,7 @@ rec {
     http://ftp.riken.jp/net/samba
   ];
 
-  # BitlBee mirrors, see http://www.bitlbee.org/main.php/mirrors.html .
+  # BitlBee mirrors, see https://www.bitlbee.org/main.php/mirrors.html .
   bitlbee = [
     http://get.bitlbee.org/
     http://get.bitlbee.be/

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "High-performance theorem prover and SMT solver";
-    homepage    = "http://alt-ergo.ocamlpro.com/";
+    homepage    = "https://alt-ergo.ocamlpro.com/";
     license     = stdenv.lib.licenses.cecill-c; # LGPL-2 compatible
     platforms   = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];

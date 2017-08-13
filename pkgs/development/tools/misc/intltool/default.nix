@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Translation helper tool";
-    homepage = http://launchpad.net/intltool/;
+    homepage = https://launchpad.net/intltool/;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.unix;
