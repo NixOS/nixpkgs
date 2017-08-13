@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, libxkbcommon, pkgconfig, autoconf, automake }:
+{ stdenv, lib, fetchurl, libxkbcommon, pkgconfig, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name = "libtsm-3";
@@ -9,12 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libxkbcommon pkgconfig ] ++ lib.optionals stdenv.isDarwin [
-    autoconf automake
-   ];
-
-  preConfigure = lib.optionalString stdenv.isDarwin ''
-    aclocal
-  '';
+    autoreconfHook
+  ];
 
   configureFlags = [ "--disable-debug" ];
 

@@ -16440,7 +16440,7 @@ in {
 
    pasteScript = buildPythonPackage rec {
     version = "1.7.5";
-    name = "PasterScript-${version}";
+    name = "PasteScript-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PasteScript/${name}.tar.gz";
@@ -26163,13 +26163,13 @@ EOF
   };
 
   libvirt = let
-    version = "3.5.0";
+    version = "3.6.0";
   in assert version == pkgs.libvirt.version; pkgs.stdenv.mkDerivation rec {
     name = "libvirt-python-${version}";
 
     src = pkgs.fetchurl {
       url = "http://libvirt.org/sources/python/${name}.tar.gz";
-      sha256 = "06mc0cm4k90z8vxaslk3ifpajg8w8dvm0m2mxwcd6fdzps8fwpsw";
+      sha256 = "1l0s9cx38qb6x5xj32r531xap11m93c3gag30idj8fzkn74cpfgc";
     };
 
     buildInputs = with self; [ python pkgs.pkgconfig pkgs.libvirt lxml ];

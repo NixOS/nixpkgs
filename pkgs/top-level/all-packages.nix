@@ -3874,9 +3874,7 @@ with pkgs;
 
   postscript-lexmark = callPackage ../misc/drivers/postscript-lexmark { };
 
-  povray = callPackage ../tools/graphics/povray {
-    automake = automake113x; # fails with 14
-  };
+  povray = callPackage ../tools/graphics/povray { };
 
   ppl = callPackage ../development/libraries/ppl { };
 
@@ -6677,12 +6675,6 @@ with pkgs;
 
   automake111x = callPackage ../development/tools/misc/automake/automake-1.11.x.nix { };
 
-  automake112x = callPackage ../development/tools/misc/automake/automake-1.12.x.nix { };
-
-  automake113x = callPackage ../development/tools/misc/automake/automake-1.13.x.nix { };
-
-  automake114x = callPackage ../development/tools/misc/automake/automake-1.14.x.nix { };
-
   automake115x = callPackage ../development/tools/misc/automake/automake-1.15.x.nix { };
 
   automoc4 = callPackage ../development/tools/misc/automoc4 { };
@@ -9319,9 +9311,7 @@ with pkgs;
 
   libtap = callPackage ../development/libraries/libtap { };
 
-  libtsm = callPackage ../development/libraries/libtsm {
-    automake = automake114x;
-  };
+  libtsm = callPackage ../development/libraries/libtsm { };
 
   libtunepimp = callPackage ../development/libraries/libtunepimp { };
 
@@ -12139,6 +12129,8 @@ with pkgs;
 
   linuxConsoleTools = callPackage ../os-specific/linux/consoletools { };
 
+  openelec-dvb-firmware = callPackage ../os-specific/linux/firmware/openelec-dvb-firmware { };
+
   openiscsi = callPackage ../os-specific/linux/open-iscsi { };
 
   openisns = callPackage ../os-specific/linux/open-isns { };
@@ -13600,6 +13592,8 @@ with pkgs;
   bevelbar = callPackage ../applications/window-managers/bevelbar { };
 
   bibletime = callPackage ../applications/misc/bibletime { };
+
+  bitcoinarmory = callPackage ../applications/misc/bitcoinarmory { pythonPackages = python2Packages; };
 
   bitkeeper = callPackage ../applications/version-management/bitkeeper {
     gperf = gperf_3_0;
@@ -17391,8 +17385,6 @@ with pkgs;
 
   gl117 = callPackage ../games/gl-117 {};
 
-  glestae = callPackage ../games/glestae {};
-
   globulation2 = callPackage ../games/globulation {
     boost = boost155;
   };
@@ -18903,7 +18895,6 @@ with pkgs;
   mnemonicode = callPackage ../misc/mnemonicode { };
 
   mysql-workbench = newScope gnome2 ../applications/misc/mysql-workbench (let mysql = mysql57; in {
-    automake = automake113x;
     gdal = gdal.override {mysql = mysql // {lib = {dev = mysql;};};};
     mysql = mysql;
     pcre = pcre-cpp;
@@ -19299,8 +19290,6 @@ with pkgs;
   higan = callPackage ../misc/emulators/higan {
     inherit (gnome2) gtksourceview;
   };
-
-  misc = callPackage ../misc/misc.nix { };
 
   bullet = callPackage ../development/libraries/bullet {};
   bullet283 = callPackage ../development/libraries/bullet/bullet283.nix {};

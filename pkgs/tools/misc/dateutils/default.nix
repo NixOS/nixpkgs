@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.1";
+  version = "0.4.2";
   name = "dateutils-${version}";
 
   src = fetchurl {
     url = "https://bitbucket.org/hroptatyr/dateutils/downloads/${name}.tar.xz";
-    sha256 = "0y2jsmvilljbid14lzmk3kgvasn4h7hr6y3wwbr3lkgwfn4y9k3c";
+    sha256 = "0sxl5rz9rw02dfn5mdww378hjgnnbxavs52viyfyx620b29finpc";
   };
 
   meta = with stdenv.lib; {
