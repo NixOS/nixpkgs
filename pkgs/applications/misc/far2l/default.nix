@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ wxGTK30 glib pcre ];
 
+  patches = [ ./add-nix-syntax-highlighting.patch ];
+
   postPatch = ''
     echo 'echo ${build}' > far2l/bootstrap/scripts/vbuild.sh
 
