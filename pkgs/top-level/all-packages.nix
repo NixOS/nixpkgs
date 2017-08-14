@@ -5264,7 +5264,7 @@ with pkgs;
   gambit = callPackage ../development/compilers/gambit { };
   gerbil = callPackage ../development/compilers/gerbil { };
 
-  gcc = gcc5;
+  gcc = gcc6;
   gcc-unwrapped = gcc.cc;
 
   wrapCCMulti = cc:
@@ -6462,7 +6462,6 @@ with pkgs;
 
   spidermonkey_1_8_5 = callPackage ../development/interpreters/spidermonkey/1.8.5.nix { };
   spidermonkey_17 = callPackage ../development/interpreters/spidermonkey/17.nix { };
-  spidermonkey_24 = callPackage ../development/interpreters/spidermonkey/24.nix { };
   spidermonkey_31 = callPackage ../development/interpreters/spidermonkey/31.nix { };
   spidermonkey_38 = callPackage ../development/interpreters/spidermonkey/38.nix { };
   spidermonkey = spidermonkey_31;

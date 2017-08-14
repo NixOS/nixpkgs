@@ -56,7 +56,6 @@ stdenv.mkDerivation rec {
     ./elf-check-orphan-placement.patch
   ];
 
-  # TODO: all outputs on all platform
   outputs = [ "out" ]
     ++ optional (targetPlatform == hostPlatform && !hostPlatform.isDarwin) "lib" # problems in Darwin stdenv
     ++ [ "info" ]
