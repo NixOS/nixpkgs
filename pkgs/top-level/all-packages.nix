@@ -12007,17 +12007,7 @@ with pkgs;
   linuxHeaders_4_4 = callPackage ../os-specific/linux/kernel-headers/4.4.nix {
     cross = if targetPlatform != hostPlatform then targetPlatform else null;
   };
-
-  # We can choose:
-  linuxHeaders =
-    if targetPlatform != hostPlatform
-    then
-      { # switch
-        "4.4" = linuxHeaders_4_4;
-      }.${targetPlatform.platform.kernelMajor}
-        or (throw "Unknown linux kernel version")
-    else
-      linuxHeaders_4_4;
+  linuxHeaders = linuxHeaders_4_4;
 
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
