@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://wammu.eu/gammu/;
+    homepage = https://wammu.eu/gammu/;
     description = "Command line utility and library to control mobile phones";
     license = licenses.gpl2;
     platforms = platforms.linux;

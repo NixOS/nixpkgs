@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Foreign function call library";
-    homepage = http://www.haible.de/bruno/packages-ffcall.html;
+    homepage = https://www.haible.de/bruno/packages-ffcall.html;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
   };

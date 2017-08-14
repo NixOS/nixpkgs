@@ -4,7 +4,7 @@
 }:
 
 # Note that since gst-libav-1.6, libav is actually ffmpeg. See
-# http://gstreamer.freedesktop.org/releases/1.6/ for more info.
+# https://gstreamer.freedesktop.org/releases/1.6/ for more info.
 
 assert withSystemLibav -> libav != null;
 

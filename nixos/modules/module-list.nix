@@ -185,6 +185,7 @@
   ./services/databases/neo4j.nix
   ./services/databases/openldap.nix
   ./services/databases/opentsdb.nix
+  ./services/databases/postage.nix
   ./services/databases/postgresql.nix
   ./services/databases/redis.nix
   ./services/databases/riak.nix

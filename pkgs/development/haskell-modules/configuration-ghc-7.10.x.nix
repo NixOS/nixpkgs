@@ -164,6 +164,12 @@ self: super: {
   vector-algorithms = addBuildDepends (dontCheck super.vector-algorithms)
     [ self.mtl self.mwc-random ];
 
+  # vector with ghc < 8.0 needs semigroups
+  vector = addBuildDepend super.vector self.semigroups;
+
+  # too strict dependency on directory
+  tasty-ant-xml = doJailbreak super.tasty-ant-xml;
+
   # https://github.com/thoughtpolice/hs-ed25519/issues/13
   ed25519 = dontCheck super.ed25519;
 

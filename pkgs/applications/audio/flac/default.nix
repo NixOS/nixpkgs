@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
   meta = with stdenv.lib; {
-    homepage = http://xiph.org/flac/;
+    homepage = https://xiph.org/flac/;
     description = "Library and tools for encoding and decoding the FLAC lossless audio file format";
     platforms = platforms.all;
     maintainers = [ maintainers.mornfall ];

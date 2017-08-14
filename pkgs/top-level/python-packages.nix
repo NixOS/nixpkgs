@@ -3333,7 +3333,7 @@ in {
     doCheck = false;
 
     meta = {
-      description = "Python client for Consul (http://www.consul.io/)";
+      description = "Python client for Consul (https://www.consul.io/)";
       homepage = https://github.com/cablehead/python-consul;
       license = licenses.mit;
       maintainers = with maintainers; [ desiderius ];
@@ -6393,7 +6393,7 @@ in {
     };
   };
 
-  gst-python = callPackage ../development/libraries/gstreamer/python {
+  gst-python = callPackage ../development/python-modules/gst-python {
     gst-plugins-base = pkgs.gst_all_1.gst-plugins-base;
   };
 
@@ -8969,6 +8969,8 @@ in {
       homepage = http://code.google.com/p/django-evolution/;
     };
   };
+
+  django_extensions = callPackage ../development/python-modules/django-extensions { };
 
   django_guardian = callPackage ../development/python-modules/django_guardian.nix { };
 
@@ -28717,6 +28719,19 @@ EOF
 
   gensim = callPackage  ../development/python-modules/gensim { };
 
+  cymem = callPackage ../development/python-modules/cymem { };
+
+  ftfy = callPackage ../development/python-modules/ftfy { };    
+
+  murmurhash = callPackage ../development/python-modules/murmurhash { };      
+
+  plac = callPackage ../development/python-modules/plac { };        
+  
+  preshed = callPackage ../development/python-modules/preshed { };
+
+  thinc = callPackage ../development/python-modules/thinc { };  
+
+  spacy = callPackage ../development/python-modules/spacy { };  
 });
 
 in fix' (extends overrides packages)

@@ -521,6 +521,7 @@
   schneefux = "schneefux <schneefux+nixos_pkg@schneefux.xyz>";
   schristo = "Scott Christopher <schristopher@konputa.com>";
   scolobb = "Sergiu Ivanov <sivanov@colimite.fr>";
+  sdll = "Sasha Illarionov <sasha.delly@gmail.com>";
   sepi = "Raffael Mancini <raffael@mancini.lu>";
   seppeljordan = "Sebastian Jordan <sebastian.jordan.mail@googlemail.com>";
   shanemikel = "Shane Pearlman <shanemikel1@gmail.com>";

@@ -198,7 +198,7 @@ EOF
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://git-scm.com/;
+    homepage = https://git-scm.com/;
     description = "Distributed version control system";
     license = stdenv.lib.licenses.gpl2;
 
