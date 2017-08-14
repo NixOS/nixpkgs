@@ -27,11 +27,11 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "busybox-1.26.2";
+  name = "busybox-1.27.1";
 
   src = fetchurl {
     url = "http://busybox.net/downloads/${name}.tar.bz2";
-    sha256 = "05mg6rh5smkzfwqfcazkpwy6h6555llsazikqnvwkaf17y8l8gns";
+    sha256 = "0dprylmcignrp29g41nkwr1b30v7i5x21lwymp3b93i1zd9sr468";
   };
 
   hardeningDisable = [ "format" ] ++ lib.optional enableStatic [ "fortify" ];
