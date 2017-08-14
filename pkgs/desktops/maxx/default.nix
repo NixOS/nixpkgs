@@ -1,8 +1,8 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, makeWrapper
 , libX11, libXext, libXi, libXau, libXrender, libXft, libXmu, libSM, libXcomposite, libXfixes, libXpm
 , libXinerama, libXdamage, libICE, libXtst, libXaw
 , fontconfig, pango, cairo, glib, libxml2, atk, gtk2, gdk_pixbuf, mesa_noglu, ncurses
-, bash }:
+, gcc, xclock, xsettingsd, bash, gtk-engine-murrine, gtk_engines, librsvg }:
 
 let
   version = "Indy-1.1.0";
@@ -26,6 +26,8 @@ in stdenv.mkDerivation {
     })
   ];
 
+  buildInputs = [ makeWrapper ];
+
   buildPhase = ''
     while IFS= read -r -d $'\0' i; do
       if isELF "$i"; then
@@ -47,7 +49,13 @@ in stdenv.mkDerivation {
 
     mv -- ./* "$maxx"
     ln -s $maxx/share/icons $out/share
+
+    wrapProgram $maxx/etc/skel/Xsession.dt \
+      --prefix GTK_PATH : "${gtk-engine-murrine}/lib/gtk-2.0:${gtk_engines}/lib/gtk-2.0" \
+      --prefix GDK_PIXBUF_MODULE_FILE : "$(echo ${librsvg.out}/lib/gdk-pixbuf-2.0/*/loaders.cache)"
   '';
+
+  propagatedUserEnvPkgs = [ gcc xclock xsettingsd ];
 
   meta = with stdenv.lib; {
     description = "A replica of IRIX Interactive Desktop";
