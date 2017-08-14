@@ -3,14 +3,16 @@
 
 let
   ver_maj = "2.36";
-  ver_min = "8";
+  ver_min = "7";
+  # TODO: since 2.36.8 gdk-pixbuf gets configured to use mime-type sniffing,
+  # which apparently requires access to shared_mime_info files during runtime.
 in
 stdenv.mkDerivation rec {
   name = "gdk-pixbuf-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gdk-pixbuf/${ver_maj}/${name}.tar.xz";
-    sha256 = "5d68e5283cdc0bf9bda99c3e6a1d52ad07a03364fa186b6c26cfc86fcd396a19";
+    sha256 = "1b6e5eef09d98f05f383014ecd3503e25dfb03d7e5b5f5904e5a65b049a6a4d8";
   };
 
   outputs = [ "out" "dev" "devdoc" ];
