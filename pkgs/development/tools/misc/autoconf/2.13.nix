@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
   nativebuildInputs = [ lzma ];
   buildInputs = [ m4 perl ];
 
+  configureFlags = [
+    "PERL=${perl}/bin/perl"
+    "M4=${m4}/bin/m4"
+  ];
+
   doCheck = true;
 
   # Don't fixup "#! /bin/sh" in Autoconf, otherwise it will use the

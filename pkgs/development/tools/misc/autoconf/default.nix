@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ m4 perl ];
 
+  configureFlags = [
+    "PERL=${perl}/bin/perl"
+    "M4=${m4}/bin/m4"
+  ];
+
   # Work around a known issue in Cygwin.  See
   # http://thread.gmane.org/gmane.comp.sysutils.autoconf.bugs/6822 for
   # details.

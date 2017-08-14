@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl help2man ];
   propagatedBuildInputs = [ m4 ];
 
+  configureFlags = [
+    "M4=${m4}/bin/m4"
+  ];
+
   # Don't fixup "#! /bin/sh" in Libtool, otherwise it will use the
   # "fixed" path in generated files!
   dontPatchShebangs = true;

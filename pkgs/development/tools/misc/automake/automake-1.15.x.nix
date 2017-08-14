@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl autoconf ];
 
+  configureFlags = [
+    "AUTOCONF=${autoconf}/bin/autoconf"
+    "PERL=${perl}/bin/perl"
+  ];
+
   setupHook = ./setup-hook.sh;
 
   # Disable indented log output from Make, otherwise "make.test" will
