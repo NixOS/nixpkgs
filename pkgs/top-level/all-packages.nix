@@ -14469,6 +14469,8 @@ with pkgs;
   graphicsmagick = callPackage ../applications/graphics/graphicsmagick { };
   graphicsmagick_q16 = callPackage ../applications/graphics/graphicsmagick { quantumdepth = 16; };
 
+  grisbi = callPackage ../applications/office/grisbi { gtk = gtk2; };
+
   gtkpod = callPackage ../applications/audio/gtkpod {
     gnome = gnome3;
     inherit (gnome2) libglade;
