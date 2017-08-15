@@ -95,7 +95,7 @@ rec {
 
 in rec {
 
-  tor-browser = common (rec {
+  tor-browser-6-5 = common (rec {
     pname = "tor-browser";
     version = "6.5.2";
     isTorBrowserLike = true;
@@ -112,5 +112,21 @@ in rec {
     stdenv = overrideCC stdenv gcc5;
     ffmpegSupport = false;
   };
+
+  tor-browser-7-0 = common (rec {
+    pname = "tor-browser";
+    version = "7.0.1";
+    isTorBrowserLike = true;
+
+    # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
+    src = fetchFromGitHub {
+      owner = "SLNOS";
+      repo  = "tor-browser";
+      rev   = "tor-browser-52.3.0esr-7.0-1-slnos";
+      sha256 = "0szbf8gjbl4dnrb4igy4mq5858i1y6ki4skhdw63iqqdd8w9v4yv";
+    };
+  } // commonAttrs) {};
+
+  tor-browser = tor-browser-7-0;
 
 })
