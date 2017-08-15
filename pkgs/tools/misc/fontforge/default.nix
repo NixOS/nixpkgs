@@ -18,15 +18,16 @@ stdenv.mkDerivation rec {
     sha256 = "15k6x97383p8l40jvcivalhwgbbcdg5vciyjz6m9r0lrlnjqkv99";
   };
 
-  patches = [
-    ./fontforge-20140813-use-system-uthash.patch
+  patches = [ ./fontforge-20140813-use-system-uthash.patch ];
 
-    (fetchpatch {
-       url = "https://github.com/fontforge/fontforge/compare/${version}...volth:rb-${version}.patch";
-       name = "fontforge-${version}-reproducible-build.patch";
-       sha256 = "089w94xnc0ik3rfx9b7q124x9n1nzbyzzcyynl1x31d22byxgl34";
-     })
-  ];
+  # use $SOURCE_DATE_EPOCH instead of non-determenistic timestamps
+  postPatch = ''
+    find . -type f -name '*.c' -exec sed -r -i 's#\btime\(&(.+)\)#if (getenv("SOURCE_DATE_EPOCH")) \1=atol(getenv("SOURCE_DATE_EPOCH")); else &#g' {} \;
+    sed -r -i 's#author\s*!=\s*NULL#& \&\& !getenv("SOURCE_DATE_EPOCH")#g'                            fontforge/cvexport.c fontforge/dumppfa.c fontforge/print.c fontforge/svg.c fontforge/splineutil2.c
+    sed -r -i 's#\bb.st_mtime#getenv("SOURCE_DATE_EPOCH") ? atol(getenv("SOURCE_DATE_EPOCH")) : &#g'  fontforge/parsepfa.c fontforge/sfd.c fontforge/svg.c
+    sed -r -i 's#^\s*ttf_fftm_dump#if (!getenv("SOURCE_DATE_EPOCH")) ttf_fftm_dump#g'                 fontforge/tottf.c
+    sed -r -i 's#sprintf\(.+ author \);#if (!getenv("SOURCE_DATE_EPOCH")) &#g'                        fontforgeexe/fontinfo.c
+  '';
 
   # do not use x87's 80-bit arithmetic, rouding errors result in very different font binaries
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.isi686 [ "-msse2" "-mfpmath=sse" ];
