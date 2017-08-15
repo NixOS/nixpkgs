@@ -60,7 +60,7 @@ let
 
   buildPythonApplication = args: buildPythonPackage ({namePrefix="";} // args );
 
-  graphiteVersion = "0.9.15";
+  graphiteVersion = "1.0.2";
 
   fetchPypi = {format ? "setuptools", ... } @attrs:
     let
@@ -25365,7 +25365,7 @@ EOF
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/w/whisper/${name}.tar.gz";
-      sha256 = "1chkphxwnwvy2cs7jc2h2i0lqqvi9jx6vqj3ly88lwk7m35r4ss2";
+      sha256 = "1v1bi3fl1i6p4z4ki692bykrkw6907dn3mfq0151f70lvi3zpns3";
     };
 
     # error: invalid command 'test'
@@ -25432,7 +25432,7 @@ EOF
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/carbon/${name}.tar.gz";
-      sha256 = "f01db6d37726c6fc0a8aaa66a7bf14436b0dd0d62ef3c20ecb31605a4d365d2e";
+      sha256 = "142smpmgbnjinvfb6s4ijazish4vfgzyd8zcmdkh55y051fkixkn";
     };
 
     propagatedBuildInputs = with self; [ whisper txamqp zope_interface twisted ];
@@ -25665,10 +25665,10 @@ EOF
 
     src = pkgs.fetchurl rec {
       url = "mirror://pypi/g/graphite-web/${name}.tar.gz";
-      sha256 = "1c0kclbv8shv9nvjx19wqm4asia58s3qmd9fapchc6y9fjpjax6q";
+      sha256 = "0q8bwlj75jqyzmazfsi5sa26xl58ssa8wdxm2l4j0jqyn8xpfnmc";
     };
 
-    propagatedBuildInputs = with self; [ django django_tagging_0_3 whisper pycairo ldap memcached pytz ];
+    propagatedBuildInputs = with self; [ django_1_8 (django_tagging.override { django = django_1_8; }) whisper pycairo ldap memcached pytz urllib3 cairocffi scandir pyparsing ];
 
     postInstall = ''
       wrapProgram $out/bin/run-graphite-devel-server.py \
@@ -25676,10 +25676,7 @@ EOF
     '';
 
     preConfigure = ''
-      substituteInPlace webapp/graphite/thirdparty/pytz/__init__.py --replace '/usr/share/zoneinfo' '/etc/zoneinfo'
-      substituteInPlace webapp/graphite/settings.py --replace "join(WEBAPP_DIR, 'content')" "join('$out', 'webapp', 'content')"
-      cp webapp/graphite/manage.py bin/manage-graphite.py
-      substituteInPlace bin/manage-graphite.py --replace 'settings' 'graphite.settings'
+      substituteInPlace setup.py --replace 'django-tagging==0.4.3' 'django-tagging>=0.4.3,<0.5'
     '';
 
     # error: invalid command 'test'

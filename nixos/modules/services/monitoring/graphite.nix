@@ -472,7 +472,7 @@ in {
           ExecStart = ''
             ${pkgs.python27Packages.waitress}/bin/waitress-serve \
             --host=${cfg.web.listenAddress} --port=${toString cfg.web.port} \
-            --call django.core.handlers.wsgi:WSGIHandler'';
+            --call django.core.wsgi:get_wsgi_application'';
           User = "graphite";
           Group = "graphite";
           PermissionsStartOnly = true;
@@ -483,7 +483,7 @@ in {
             chmod 0700 ${dataDir}/{whisper/,log/webapp/}
 
             # populate database
-            ${pkgs.python27Packages.graphite_web}/bin/manage-graphite.py syncdb --noinput
+            ${pkgs.python27Packages.django_1_8}/bin/django-admin.py syncdb --noinput
 
             # create index
             ${pkgs.python27Packages.graphite_web}/bin/build-index.sh
