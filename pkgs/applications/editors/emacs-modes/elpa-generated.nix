@@ -822,10 +822,10 @@
     gited = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "gited";
-        version = "0.3.2";
+        version = "0.3.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/gited-0.3.2.tar";
-          sha256 = "1y40zn1w5m2srrqffkpvvzk3j5zzq21smsqychyx2diggn4c0hgi";
+          url = "https://elpa.gnu.org/packages/gited-0.3.3.tar";
+          sha256 = "0h3ps26sy4wp1s9vpsj066fpqjqacjlprz3kb09macgsg88k2c1p";
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
@@ -1446,10 +1446,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20170807";
+        version = "20170814";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20170807.tar";
-          sha256 = "185pyc0v4vwzvkygqhpld14lk62ygvfb9ycz609n99m0wqlamwz3";
+          url = "https://elpa.gnu.org/packages/org-20170814.tar";
+          sha256 = "1rk3y4ns5f7f22vv0pg1x5mpn3vpm1123sxpd1ilbzajw3hfgwwn";
         };
         packageRequires = [];
         meta = {
