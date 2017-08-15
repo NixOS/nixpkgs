@@ -3393,6 +3393,8 @@ with pkgs;
 
   networkmanager = callPackage ../tools/networking/network-manager { };
 
+  networkmanager_iodine = callPackage ../tools/networking/network-manager/iodine.nix { };
+
   networkmanager_openvpn = callPackage ../tools/networking/network-manager/openvpn.nix { };
 
   networkmanager_pptp = callPackage ../tools/networking/network-manager/pptp.nix { };
