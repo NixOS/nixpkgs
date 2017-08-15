@@ -16183,6 +16183,8 @@ with pkgs;
 
   syncthing-inotify = callPackage ../applications/networking/syncthing/inotify.nix { };
 
+  syncthing-tray = callPackage ../applications/misc/syncthing-tray { };
+
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };
 
