@@ -1,5 +1,5 @@
 { pname, version, updateScript ? null
-, src, patches ? [], extraConfigureFlags ? [], overrides ? {}, meta
+, src, patches ? [], extraConfigureFlags ? [], extraMakeFlags ? [], overrides ? {}, meta
 , isTorBrowserLike ? false }:
 
 { lib, stdenv, pkgconfig, pango, perl, python, zip, libIDL
@@ -43,7 +43,7 @@
 # option. However, in Firefox's case, those binaries may not be
 # distributed without permission from the Mozilla Foundation, see
 # http://www.mozilla.org/foundation/trademarks/.
-, enableOfficialBranding ? false
+, enableOfficialBranding ? isTorBrowserLike
 }:
 
 assert stdenv.cc ? libc && stdenv.cc.libc != null;
@@ -157,6 +157,16 @@ stdenv.mkDerivation (rec {
                            "--enable-strip" ])
   ++ lib.optional enableOfficialBranding "--enable-official-branding"
   ++ extraConfigureFlags;
+
+  preBuild = lib.optionalString (enableOfficialBranding && isTorBrowserLike) ''
+    buildFlagsArray=("MOZ_APP_DISPLAYNAME=Tor Browser")
+  '';
+
+  makeFlags = lib.optionals enableOfficialBranding [
+    "MOZILLA_OFFICIAL=1"
+    "BUILD_OFFICIAL=1"
+  ]
+  ++ extraMakeFlags;
 
   enableParallelBuilding = true;
 
