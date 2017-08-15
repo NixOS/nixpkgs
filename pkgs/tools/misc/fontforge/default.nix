@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
 
   patches = [(fetchpatch {
     name = "use-system-uthash.patch";
-    url = "http://pkgs.fedoraproject.org/cgit/fontforge.git/plain/"
-      + "fontforge-20140813-use-system-uthash.patch?id=8bdf933";
-    sha256 = "0n8i62qv2ygfii535rzp09vvjx4qf9zp5qq7qirrbzm1l9gykcjy";
+    url = "https://src.fedoraproject.org/rpms/fontforge/raw/master/f/"
+        + "fontforge-20140813-use-system-uthash.patch";
+    sha256 = "0v56mrya2453ml30q3l4g0pmw7vm8hpllzl1y26parj3mv4529xc";
   })];
   patchFlags = "-p0";
 
