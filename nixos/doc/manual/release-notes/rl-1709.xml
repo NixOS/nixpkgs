@@ -154,6 +154,23 @@ rmdir /var/lib/ipfs/.ipfs
       variables as parameters.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The environment variable <varname>NIXPKGS_CONFIG</varname> is no longer 
+      used by Nixpkgs when determining its configuration, and so is no longer 
+      set by default in the NixOS environment.
+    </para>
+    <para>
+      The replacement in Nixpkgs is the Nix search path entry 
+      <literal>&lt;nixpkgs-config></literal>. This is now set by default in the
+      NixOS environment to be <filename>/etc/nix/nixpkgs-config.nix</filename>,
+      as <varname>NIXPKGS_CONFIG</varname> was.
+    </para>
+    <para>
+      Most users should not notice a difference, however, if you set 
+      <literal>nix.nixPath</literal> you may wish to include the new entry.
+    </para>
+  </listitem>
 </itemizedlist>
 
 <para>Other notable improvements:</para>
