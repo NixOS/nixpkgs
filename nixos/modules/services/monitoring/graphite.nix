@@ -417,7 +417,8 @@ in {
           ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
-          PIDFile="/run/${name}/${name}.pid";
+          PIDFile = "/run/${name}/${name}.pid";
+          RuntimeDirectory = name;
         };
         preStart = mkPidFileDir name;
       };
@@ -433,7 +434,8 @@ in {
           ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
-          PIDFile="/run/${name}/${name}.pid";
+          PIDFile = "/run/${name}/${name}.pid";
+          RuntimeDirectory = name;
         };
         preStart = mkPidFileDir name;
       };
