@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, pythonPackages, httpie }:
 
 pythonPackages.buildPythonApplication rec {
-  version = "0.9.1";
+  version = "0.10.2";
   name = "http-prompt";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     repo = "http-prompt";
     owner = "eliangcs";
-    sha256 = "0s2syjjz5n7256a4hn8gv3xfr0zd3qqimf4w8l188dbfvx8b8s06";
+    sha256 = "0c03n1ll61zd4f60kzih3skl0hspck5hhpcf74h5l6v5as7qdbi2";
   };
 
   propagatedBuildInputs = with pythonPackages; [
