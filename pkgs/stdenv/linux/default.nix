@@ -313,7 +313,8 @@ in
             glibc.out glibc.dev glibc.bin/*propagated from .dev*/ linuxHeaders
             gcc gcc.cc gcc.cc.lib gcc.expandResponseParams
           ]
-        ++ lib.optional (system == "aarch64-linux") prevStage.updateAutotoolsGnuConfigScriptsHook;
+          ++ lib.optionals (system == "aarch64-linux")
+            [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ];
 
       overrides = self: super: {
         inherit (prevStage)
