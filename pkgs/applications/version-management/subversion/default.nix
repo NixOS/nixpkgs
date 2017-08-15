@@ -109,7 +109,7 @@ in {
   };
 
   subversion19 = common {
-    version = "1.9.6";
-    sha256 = "06dfram53lyfyyqgz1r7c5323qqc6mjcpwi1j402y21lnqgwbjyv";
+    version = "1.9.7";
+    sha256 = "c3b118333ce12e501d509e66bb0a47bcc34d053990acab45559431ac3e491623";
   };
 }
