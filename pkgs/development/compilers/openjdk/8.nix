@@ -98,6 +98,10 @@ let
       substituteInPlace configure --replace /bin/bash "$shell"
       substituteInPlace hotspot/make/linux/adlc_updater --replace /bin/sh "$shell"
       substituteInPlace hotspot/make/linux/makefiles/dtrace.make --replace /usr/include/sys/sdt.h "/no-such-path"
+    ''
+    # https://bugzilla.redhat.com/show_bug.cgi?id=1306558
+    + stdenv.lib.optionalString stdenv.cc.isGNU ''
+      NIX_CFLAGS_COMPILE+=" -fno-lifetime-dse -fno-delete-null-pointer-checks"
     '';
 
     configureFlags = [
