@@ -8977,16 +8977,6 @@ in {
 
   django_tagging = callPackage ../development/python-modules/django_tagging { };
 
-  django_tagging_0_3 = self.django_tagging.overrideAttrs (attrs: rec {
-    name = "django-tagging-0.3.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-tagging/${name}.tar.gz";
-      sha256 = "03zlbq13rydfh28wh0jk3x3cjk9x6jjmqnx1i3ngjmfwbxf8x6j1";
-    };
-    propagatedBuildInputs = with self; [ django ];
-  });
-
   django_classytags = buildPythonPackage rec {
     name = "django-classy-tags-${version}";
     version = "0.6.1";
