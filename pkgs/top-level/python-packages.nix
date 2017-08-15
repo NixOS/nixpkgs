@@ -8178,6 +8178,8 @@ in {
       sha256 = "1158fsjjl8byzl9nw52jhhdssjl6n7l0hjaxm5hdi69v2zxvzjh2";
     };
 
+    buildInputs = stdenv.lib.optionals (pythonOlder "3.2") [ self.contextlib2 ];
+
     # way too many dependencies to run tests
     # see https://github.com/getsentry/raven-python/blob/master/setup.py
     doCheck = false;
