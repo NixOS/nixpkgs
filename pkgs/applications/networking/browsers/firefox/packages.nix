@@ -45,20 +45,9 @@ rec {
     };
   } {};
 
-  tor-browser = common rec {
-    pname = "tor-browser";
-    version = "6.5.2";
-    isTorBrowserLike = true;
-    extraConfigureFlags = [ "--disable-loop" ];
+} // (let
 
-    # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
-    src = fetchFromGitHub {
-      owner = "SLNOS";
-      repo  = "tor-browser";
-      rev   = "tor-browser-45.8.0esr-6.5-2";
-      sha256 = "0vbcp1qlxjlph0dqibylsyvb8iah3lnzdxc56hllpvbn51vrp39j";
-    };
-
+  commonAttrs = {
     overrides = {
       unpackPhase = ''
         # fetchFromGitHub produces ro sources, root dir gets a name that
@@ -102,9 +91,26 @@ rec {
       homepage = https://www.torproject.org/projects/torbrowser.html;
       platforms = lib.platforms.linux;
     };
-  } {
+  };
+
+in rec {
+
+  tor-browser = common (rec {
+    pname = "tor-browser";
+    version = "6.5.2";
+    isTorBrowserLike = true;
+    extraConfigureFlags = [ "--disable-loop" ];
+
+    # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
+    src = fetchFromGitHub {
+      owner = "SLNOS";
+      repo  = "tor-browser";
+      rev   = "tor-browser-45.8.0esr-6.5-2";
+      sha256 = "0vbcp1qlxjlph0dqibylsyvb8iah3lnzdxc56hllpvbn51vrp39j";
+    };
+  } // commonAttrs) {
     stdenv = overrideCC stdenv gcc5;
     ffmpegSupport = false;
   };
 
-}
+})
