@@ -34,6 +34,7 @@ with lib;
       networkmanager_openvpn = pkgs.networkmanager_openvpn.override { withGnome = false; };
       networkmanager_pptp = pkgs.networkmanager_pptp.override { withGnome = false; };
       networkmanager_vpnc = pkgs.networkmanager_vpnc.override { withGnome = false; };
+      networkmanager_iodine = pkgs.networkmanager_iodine.override { withGnome = false; };
       pinentry = pkgs.pinentry.override { gtk2 = null; qt4 = null; };
     };
   };
