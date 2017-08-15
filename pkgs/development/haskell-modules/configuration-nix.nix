@@ -489,4 +489,7 @@ self: super: builtins.intersectAttrs super {
   # Without this override, the builds lacks pkg-config.
   opencv-extra = addPkgconfigDepend super.opencv-extra (pkgs.opencv3.override { enableContrib = true; });
 
+  # Alex has some weird files in /usr/share that create a cyclic ref with
+  # its bin dir.
+  alex = hasNoBinOutput super.alex;
 }
