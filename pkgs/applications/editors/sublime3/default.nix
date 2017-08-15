@@ -31,20 +31,19 @@ in let
 
     dontStrip = true;
     dontPatchELF = true;
-    buildInputs = [ makeWrapper ];
+    buildInputs = [ makeWrapper zip unzip ];
 
     # make exec.py in Default.sublime-package use own bash with
     # an LD_PRELOAD instead of "/bin/bash"
     patchPhase = ''
       mkdir Default.sublime-package-fix
       ( cd Default.sublime-package-fix
-        ${unzip}/bin/unzip ../Packages/Default.sublime-package > /dev/null
+        unzip -q ../Packages/Default.sublime-package
         substituteInPlace "exec.py" --replace \
           "[\"/bin/bash\"" \
           "[\"$out/sublime_bash\""
+        zip -q ../Packages/Default.sublime-package **/*
       )
-      ${zip}/bin/zip -j Default.sublime-package.zip Default.sublime-package-fix/* > /dev/null
-      mv Default.sublime-package.zip Packages/Default.sublime-package
       rm -r Default.sublime-package-fix
     '';
 
@@ -85,14 +84,17 @@ in stdenv.mkDerivation {
   name = "sublimetext3-${build}";
 
   phases = [ "installPhase" ];
+
+  inherit sublime;
+
   installPhase = ''
     mkdir -p $out/bin
-    ln -s ${sublime}/sublime_text $out/bin/subl
-    ln -s ${sublime}/sublime_text $out/bin/sublime
-    ln -s ${sublime}/sublime_text $out/bin/sublime3
+    ln -s $sublime/sublime_text $out/bin/subl
+    ln -s $sublime/sublime_text $out/bin/sublime
+    ln -s $sublime/sublime_text $out/bin/sublime3
     mkdir -p $out/share/applications
-    ln -s ${sublime}/sublime_text.desktop $out/share/applications/sublime_text.desktop
-    ln -s ${sublime}/Icon/256x256/ $out/share/icons
+    ln -s $sublime/sublime_text.desktop $out/share/applications/sublime_text.desktop
+    ln -s $sublime/Icon/256x256/ $out/share/icons
   '';
 
   meta = with stdenv.lib; {
