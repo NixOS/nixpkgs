@@ -49,6 +49,7 @@ rec {
     pname = "tor-browser";
     version = "6.5.2";
     isTorBrowserLike = true;
+    extraConfigureFlags = [ "--disable-loop" ];
 
     # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
     src = fetchFromGitHub {
