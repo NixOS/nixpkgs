@@ -45,15 +45,6 @@ stdenv.mkDerivation rec {
     # there) and causes a cycle between the lib and bin outputs, so
     # get rid of it.
     ./no-plugins.patch
-
-    # remove after 2.29.1/2.30
-    (fetchurl {
-      url = "https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=patch;h=c6b78c965a96fb152fbd58926edccb5dee2707a5";
-      sha256 = "0rkbq5pf7ffgcggfk4czkxin1091bqjj92an9wxnqkgqwq6cx5yr";
-      name = "readelf-empty-sections.patch";
-    })
-    ./elf-check-orphan-input.patch
-    ./elf-check-orphan-placement.patch
   ];
 
   outputs = [ "out" ]
