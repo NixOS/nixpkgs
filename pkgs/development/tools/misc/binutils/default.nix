@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "2.28";
+  version = "2.28.1";
   basename = "binutils-${version}";
   inherit (stdenv.lib) optional optionals optionalString;
   # The prefix prepended to binary names to allow multiple binuntils on the
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
-    sha256 = "0wiasgns7i8km8nrxas265sh2dfpsw93b3qw195ipc90w4z475v2";
+    sha256 = "1sj234nd05cdgga1r36zalvvdkvpfbr12g5mir2n8i1dwsdrj939";
   };
 
   patches = [
