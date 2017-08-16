@@ -15887,6 +15887,7 @@ with pkgs;
 
   rxvt_unicode-with-plugins = callPackage ../applications/misc/rxvt_unicode/wrapper.nix {
     plugins = [
+      urxvt_autocomplete_all_the_things
       urxvt_perl
       urxvt_perls
       urxvt_tabbedex
@@ -15897,6 +15898,7 @@ with pkgs;
   };
 
   # urxvt plugins
+  urxvt_autocomplete_all_the_things = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-autocomplete-all-the-things { };
   urxvt_perl = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-perl { };
   urxvt_perls = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-perls { };
   urxvt_tabbedex = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-tabbedex { };
