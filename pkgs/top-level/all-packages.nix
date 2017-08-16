@@ -6418,6 +6418,8 @@ with pkgs;
 
   rascal = callPackage ../development/interpreters/rascal { };
 
+  red = callPackage ../development/interpreters/red { };
+
   regina = callPackage ../development/interpreters/regina { };
 
   inherit (ocamlPackages) reason;
