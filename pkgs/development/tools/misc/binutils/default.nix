@@ -5,6 +5,9 @@
 }:
 
 let
+  # Note to whoever is upgrading this: 2.29 is broken.
+  # ('nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test' segfaults on aarch64)
+  # Also glibc might need patching, see commit 733e20fee4a6700510f71fbe1a58ac23ea202f6a.
   version = "2.28.1";
   basename = "binutils-${version}";
   inherit (stdenv.lib) optional optionals optionalString;
