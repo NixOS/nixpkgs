@@ -17,7 +17,14 @@ stdenv.mkDerivation rec {
     sha256 = "1klh81xbm9ppzgqk339097i39b7fnpmlj8lzn8bpczl3aww6x5xm";
   };
 
-  patches = stdenv.lib.optional stdenv.isSunOS ./patch-ah.patch;
+  patches = [
+    (fetchpatch {
+      name = "CVE-2017-5029";
+      url = "https://git.gnome.org/browse/libxslt/"
+        + "patch/?id=08ab2774b870de1c7b5a48693df75e8154addae5";
+      sha256 = "10azfmyffjf9d7b5js4ipxw9f20qi0kw3zq34bpqmbcpq3l338ky";
+    })
+  ] ++ stdenv.lib.optional stdenv.isSunOS ./patch-ah.patch;
 
   # fixes: can't build x86_64-unknown-cygwin shared library unless -no-undefined is specified
   postPatch = optionalString hostPlatform.isCygwin ''
