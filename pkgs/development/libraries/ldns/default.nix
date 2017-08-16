@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
     make
     make install
     popd
+
+    sed -i "$out/lib/libldns.la" -e "s,-L${openssl.dev},-L${openssl.out},g"
   '';
 
   meta = with stdenv.lib; {

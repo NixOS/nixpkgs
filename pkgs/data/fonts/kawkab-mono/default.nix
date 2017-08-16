@@ -14,7 +14,7 @@ fetchzip rec {
 
   meta = {
     description = "An arab fixed-width font";
-    homepage = http://makkuk.com/kawkab-mono/;
+    homepage = https://makkuk.com/kawkab-mono/;
     license = stdenv.lib.licenses.ofl;
     platforms = stdenv.lib.platforms.unix;
   };

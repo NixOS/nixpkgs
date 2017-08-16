@@ -107,6 +107,8 @@ in stdenv.mkDerivation rec {
     rm -rf $out/share/zfs/zfs-tests
   '';
 
+  outputs = [ "out" ] ++ optionals buildUser [ "lib" "dev" ];
+
   meta = {
     description = "ZFS Filesystem Linux Kernel module";
     longDescription = ''

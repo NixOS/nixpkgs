@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
     sed -i setup.py -e "/'rpm-python',/d"
   '';
 
-  # Still missing these tools: enjarify, otool & lipo (maybe OS X only), showttf
+  # Still missing these tools: enjarify, otool & lipo (maybe macOS only), showttf
   # Also these libraries: python3-guestfs
   # FIXME: move xxd into a separate package so we don't have to pull in all of vim.
   pythonPath = with python3.pkgs;

@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
         improv. We leave mice and menus, and dive into our own process
         of making sound.
 
-        Freewheeling runs under Mac OS X and Linux, and is open source
+        Freewheeling runs under macOS and Linux, and is open source
         software, released under the GNU GPL license.
     '' ;
 

@@ -1,14 +1,14 @@
 { stdenv, lib, fetchFromGitHub, go, procps, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
-  version = "0.14.32";
+  version = "0.14.36";
   name = "syncthing-${version}";
 
   src = fetchFromGitHub {
     owner  = "syncthing";
     repo   = "syncthing";
     rev    = "v${version}";
-    sha256 = "1agjr3m4gnywbp40idi0pwy25cp836sdcar7r6r9hwcqxyyzz545";
+    sha256 = "1l4s74qlabwfkpi9lmm588ym0myavbs06a5gpp9nihzrsal18727";
   };
 
   buildInputs = [ go removeReferencesTo ];
@@ -21,13 +21,14 @@ stdenv.mkDerivation rec {
     # Syncthing's build.go script expects this working directory
     cd src/github.com/syncthing/syncthing
 
-    go run build.go -no-upgrade -version v${version} install all
+    go run build.go -no-upgrade -version v${version} build
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/lib/systemd/{system,user}
+    mkdir -p $out/lib/systemd/{system,user}
 
-    cp bin/* $out/bin
+    install -Dm755 syncthing $out/bin/syncthing
+
   '' + lib.optionalString (stdenv.isLinux) ''
     substitute etc/linux-systemd/system/syncthing-resume.service \
                $out/lib/systemd/system/syncthing-resume.service \

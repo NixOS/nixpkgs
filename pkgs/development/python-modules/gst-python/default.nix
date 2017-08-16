@@ -1,12 +1,11 @@
-{ fetchurl, stdenv, pkgconfig, pythonPackages
-, gst-plugins-base
-, ncurses
+{ fetchurl, stdenv, pkgconfig, python, pygobject3
+, gst-plugins-base, ncurses
 }:
 
-let
-  inherit (pythonPackages) python pygobject3;
-in stdenv.mkDerivation rec {
-  name = "gst-python-1.10.4";
+stdenv.mkDerivation rec {
+  pname = "gst-python";
+  version = "1.10.4";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     urls = [
@@ -26,10 +25,13 @@ in stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   preConfigure = ''
-    export configureFlags="$configureFlags --with-pygi-overrides-dir=$out/lib/${python.libPrefix}/site-packages/gi/overrides"
+    export configureFlags="$configureFlags --with-pygi-overrides-dir=$out/lib/${python.sitePackages}/gi/overrides"
   '';
 
   propagatedBuildInputs = [ gst-plugins-base pygobject3 ];
+
+  # Needed for python.buildEnv
+  passthru.pythonPath = [];
 
   meta = {
     homepage = http://gstreamer.freedesktop.org;

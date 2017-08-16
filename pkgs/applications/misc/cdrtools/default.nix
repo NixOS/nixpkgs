@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "INS_BASE=/" "INS_RBASE=/" "DESTDIR=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = http://sourceforge.net/projects/cdrtools/;
+    homepage = https://sourceforge.net/projects/cdrtools/;
     description = "Highly portable CD/DVD/BluRay command line recording software";
     license = with licenses; [ gpl2 lgpl2 cddl ];
     platforms = platforms.linux;

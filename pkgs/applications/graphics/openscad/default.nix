@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     description = "3D parametric model compiler";
     longDescription = ''
       OpenSCAD is a software for creating solid 3D CAD objects. It is free
-      software and available for Linux/UNIX, MS Windows and Mac OS X.
+      software and available for Linux/UNIX, MS Windows and macOS.
 
       Unlike most free software for creating 3D models (such as the famous
       application Blender) it does not focus on the artistic aspects of 3D

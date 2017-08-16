@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "General purpose Open Source 3D CAD/MCAD/CAx/CAE/PLM modeler";
-    homepage = http://www.freecadweb.org/;
+    homepage = https://www.freecadweb.org/;
     license = licenses.lgpl2Plus;
     maintainers = [ maintainers.viric ];
     platforms = platforms.linux;

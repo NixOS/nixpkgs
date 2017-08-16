@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A C++ SDK which contains an implementation of DAP";
-    homepage = http://www.opendap.org/download/libdap;
+    homepage = https://www.opendap.org/download/libdap;
     license = licenses.lgpl2;
     maintainers = [ maintainers.bzizou ];
     platforms = platforms.linux;

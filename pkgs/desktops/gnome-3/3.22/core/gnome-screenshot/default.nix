@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://en.wikipedia.org/wiki/GNOME_Screenshot;
+    homepage = https://en.wikipedia.org/wiki/GNOME_Screenshot;
     description = "Utility used in the GNOME desktop environment for taking screenshots";
     maintainers = gnome3.maintainers;
     license = licenses.gpl2;

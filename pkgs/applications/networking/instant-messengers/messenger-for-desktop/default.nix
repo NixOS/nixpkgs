@@ -89,7 +89,7 @@ in stdenv.mkDerivation {
     description = "Bring messenger.com to your Linux desktop.";
     longDescription = ''
       A simple & beautiful desktop client for Facebook Messenger. Chat without
-      distractions on OS X, Windows and Linux. Not affiliated with Facebook.
+      distractions on macOS, Windows and Linux. Not affiliated with Facebook.
       This is NOT an official product.
     '';
     homepage = https://messengerfordesktop.org;

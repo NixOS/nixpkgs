@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://curl.haxx.se/docs/caextract.html;
+    homepage = https://curl.haxx.se/docs/caextract.html;
     description = "A bundle of X.509 certificates of public Certificate Authorities (CA)";
     platforms = platforms.all;
     maintainers = with maintainers; [ wkennington fpletz ];

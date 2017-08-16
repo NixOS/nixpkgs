@@ -1,0 +1,157 @@
+diff --git a/colorer/configs/base/hrc/nix.hrc b/colorer/configs/base/hrc/nix.hrc
+new file mode 100644
+index 0000000..1bd9bb5
+--- /dev/null
++++ b/colorer/configs/base/hrc/nix.hrc
+@@ -0,0 +1,132 @@
++<?xml version="1.0" encoding="windows-1251"?>
++<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN"
++  "http://colorer.sf.net/2003/hrc.dtd">
++<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc"
++     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
++     xsi:schemaLocation="http://colorer.sf.net/2003/hrc http://colorer.sf.net/2003/hrc.xsd">
++
++  <type name="nix">
++
++    <annotation><documentation>
++        Nix
++    </documentation></annotation>
++
++    <import type="def"/>
++
++    <region name="Code" parent="def:Text"/>
++    <region name="StringEscape" parent="def:StringContent"/>
++    <region name='Import' parent='def:Directive'/>
++    <region name='ImportOutline' parent='def:Outlined'/>
++    <region name="Path"     parent="def:Path"/>
++    <region name="URL"      parent="def:String"/>
++    <region name="LiteralKeyword" parent="def:Keyword"/>
++    <region name='Interpolation' parent='def:StringEdge'/>
++    <region name="Ident" parent="def:Identifier"/> <!-- Label  -->
++
++    <scheme name="TabsAsErrors" if="tabs-as-errors">
++      <regexp match="/\t+/" region='def:Error'/>
++    </scheme>
++
++    <scheme name="SpacesAsErrors" if="spaces-as-errors">
++      <regexp match="/\x20+$/" region='def:Error'/>
++    </scheme>
++
++    <scheme name="NotNestedComment">
++      <inherit scheme="TabsAsErrors"/>
++      <inherit scheme="SpacesAsErrors"/>
++      <inherit scheme="Comment"/>
++    </scheme>
++
++    <scheme name="String">
++      <inherit scheme="TabsAsErrors"/>
++      <inherit scheme="SpacesAsErrors"/>
++<!--  <regexp match="/\\[xX]0*[\da-fA-F]{1,2}/"                   region0="StringEscape"/> -->
++      <regexp match="/\\./"                                       region0="StringEscape"/>
++      <block start="/(\$\{)/" end="/(\})/" scheme="NixExpression" region="Code" region00="Interpolation" region01="PairStart" region10="Interpolation" region11="PairEnd"/>
++    </scheme>
++
++    <scheme name="BlockString">
++      <inherit scheme="TabsAsErrors"/>
++      <inherit scheme="SpacesAsErrors"/>
++
++      <regexp match="/&apos;&apos;\$/"                                          region0="StringEscape"/>
++      <regexp match="/&apos;&apos;&apos;/"                                      region0="StringEscape"/>
++      <block start="/(\$\{)/" end="/(\})/" scheme="NixExpression" region="Code" region00="Interpolation" region01="PairStart" region10="Interpolation" region11="PairEnd"/>
++    </scheme>
++
++    <scheme name="NixIdent">
++      <regexp match="/\w[\w\d-]*'*/"           region0="Ident"/>
++    </scheme>
++
++    <scheme name="NixExpression">
++      <inherit scheme="TabsAsErrors"/>
++      <inherit scheme="SpacesAsErrors"/>
++
++      <inherit scheme="def:unixCommentDirective"/>
++      <block start="/#/"    end="/\s*$/"            scheme="Comment"          region="LineComment" region10="def:Error"/>
++      <block start="/\/\*/" end="/\*\//"            scheme="NotNestedComment" region="Comment"     region00="PairStart" region10="PairEnd"/>
++
++      <block start="/(\$\{)/" end="/(\})/" scheme="NixExpression" region00="Interpolation" region01="PairStart" region10="Interpolation" region11="PairEnd"/>
++      <block start="/(\{)/"   end="/(\})/" scheme="NixExpression" region00="Symbol"        region01="PairStart" region10="Symbol"        region11="PairEnd"/>
++      <block start="/(\()/"   end="/(\))/" scheme="NixExpression" region00="Symbol"        region01="PairStart" region10="Symbol"        region11="PairEnd"/>
++      <block start="/(\[)/"   end="/(\])/" scheme="NixExpression" region00="Symbol"        region01="PairStart" region10="Symbol"        region11="PairEnd"/>
++
++      <regexp match="/(\.\.|\.|\~|)\/[\w\d.+=?-]+(\/[\w\d.+=?-]+)*/"            region0="Path"/>
++      <regexp match="/&lt;[\w\d\/.-]+&gt;/"                                     region0="Path"/>
++      <regexp match="/(ftp|mirror|http|https|git):\/\/[\w\d\/:?=&amp;.~-]+/"    region0="URL"/>
++      <block start="/(&quot;)/"       end="/(&quot;)/"       scheme="String"      region="String" region00="def:StringEdge" region01="def:PairStart" region10="def:StringEdge" region11="def:PairEnd"/>
++      <block start="/(&apos;&apos;)/" end="/(&apos;&apos;)/" scheme="BlockString" region="String" region00="def:StringEdge" region01="def:PairStart" region10="def:StringEdge" region11="def:PairEnd"/>
++
++      <keywords region="Keyword">
++        <word name="assert"/>
++        <word name="else"/>
++        <word name="if"/>
++        <word name="in"/>
++        <word name="inherit"/>
++        <word name="import"/>
++        <word name="let"/>
++        <word name="rec"/>
++        <word name="then"/>
++        <word name="throw"/>
++        <word name="with"/>
++      </keywords>
++      <keywords region="LiteralKeyword">
++        <word name="true"/>
++        <word name="false"/>
++        <word name="null"/>
++      </keywords>
++      <keywords region="Symbol">
++        <symb name="."/>
++        <symb name=":"/>
++        <symb name=","/>
++        <symb name=";"/>
++
++        <symb name="*"/>
++        <symb name="/"/>
++        <symb name="%"/>
++        <symb name="+"/>
++        <symb name="-"/>
++        <symb name="!"/>
++        <symb name="?"/>
++        <symb name="@"/>
++        <symb name="&lt;"/>
++        <symb name="&gt;"/>
++        <symb name="&amp;"/>
++        <symb name="|"/>
++        <symb name="="/>
++        <symb name="..."/>
++      </keywords>
++
++      <inherit scheme="def:Number"/>
++      <inherit scheme="NixIdent"/>
++
++      <regexp match="/[^\)\}\]\s]/" region='def:Error'/>
++
++    </scheme>
++
++    <scheme name="nix">
++      <inherit scheme="NixExpression"/>
++    </scheme>
++
++  </type>
++</hrc>
+diff --git a/colorer/configs/base/hrc/proto.hrc b/colorer/configs/base/hrc/proto.hrc
+index 11e493b..2a67263 100644
+--- a/colorer/configs/base/hrc/proto.hrc
++++ b/colorer/configs/base/hrc/proto.hrc
+@@ -156,6 +156,14 @@
+     <location link="jar:common.jar!base/lua.hrc"/>
+     <filename>/\.(w?lua)$/i</filename>
+   </prototype>
++  <prototype name="nix" group="main" description="Nix">
++    <location link="nix.hrc"/>
++    <filename>/\.(nix)$/i</filename>
++    <parameters>
++      <param name="tabs-as-errors" value="true" description="Shows tabulation symbol as error"/>
++      <param name="spaces-as-errors" value="true" description="Shows trailing spaces as error"/>
++    </parameters>
++  </prototype>
+   <prototype name="ruby" group="main" description="Ruby">
+     <location link="jar:common.jar!base/ruby.hrc"/>
+     <filename>/\.(rb|rbw|ruby|rake)$/i</filename>
