@@ -4,7 +4,7 @@
 }:
 
 let
-  version = "4.3.0";
+  version = "4.4.0";
 
   deps = [
     alsaLib
@@ -46,7 +46,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/MarshallOfSound/Google-Play-Music-Desktop-Player-UNOFFICIAL-/releases/download/v${version}/google-play-music-desktop-player_${version}_amd64.deb";
-    sha256 = "0mbrfnsnajmpwyqyrjmcv84ywzimjmm2b8faxqiwfcikdgpm9amb";
+    sha256 = "01a52rsp0a9k47mm3wqnhnmlnd7fw6xmdrn882msldijjgwsq5cc";
   };
 
   dontBuild = true;
