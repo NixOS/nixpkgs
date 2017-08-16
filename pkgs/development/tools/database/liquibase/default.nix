@@ -35,6 +35,15 @@ stdenv.mkDerivation rec {
       mkdir -p $out/{bin,lib,sdk}
       mv ./* $out/
 
+      # Clean up documentation.
+      mkdir -p $out/share/doc/${name}
+      mv $out/LICENSE.txt \
+         $out/README.txt \
+         $out/share/doc/${name}
+
+      # Remove silly files.
+      rm $out/liquibase.bat $out/liquibase.spec
+
       # we provide our own script
       rm $out/liquibase
 
