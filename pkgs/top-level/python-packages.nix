@@ -21393,22 +21393,6 @@ in {
     };
   };
 
-  sqlmap = buildPythonPackage {
-    name = "sqlmap-1.0.11";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/sqlmap/sqlmap-1.0.11.tar.gz";
-      sha256 = "1x4amyjqnd9j5g2kp9nvg8pr5sqzbhr8gd0m6d671bshvgj568vr";
-    };
-
-    meta = with pkgs.stdenv.lib; {
-      homepage = "http://sqlmap.org";
-      license = licenses.gpl2;
-      description = "Automatic SQL injection and database takeover tool";
-      maintainers = with stdenv.lib.maintainers; [ bennofs ];
-    };
-  };
-
   pgpdump = self.buildPythonPackage rec {
     name = "pgpdump-1.5";
 
