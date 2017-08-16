@@ -44,10 +44,10 @@ rec {
     , ... } @ attrs:
     let
       dependencies = map lib.chooseDevOutputs [
-        (map (drv: drv.nativeDrv or drv) nativeBuildInputs
+        (map (drv: drv.nativeDrv or drv) (nativeBuildInputs ++ stdenv.defaultNativeBuildInputs)
            ++ lib.optional separateDebugInfo ../../build-support/setup-hooks/separate-debug-info.sh
            ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh)
-        (map (drv: drv.crossDrv or drv) buildInputs)
+        (map (drv: drv.crossDrv or drv) (buildInputs ++ stdenv.defaultBuildInputs))
       ];
       propagatedDependencies = map lib.chooseDevOutputs [
         (map (drv: drv.nativeDrv or drv) propagatedNativeBuildInputs)
@@ -65,11 +65,11 @@ rec {
            "sandboxProfile" "propagatedSandboxProfile"])
         // (let
           computedSandboxProfile =
-            lib.concatMap (input: input.__propagatedSandboxProfile or []) (stdenv.extraBuildInputs ++ lib.concatLists dependencies);
+            lib.concatMap (input: input.__propagatedSandboxProfile or []) (lib.concatLists dependencies);
           computedPropagatedSandboxProfile =
             lib.concatMap (input: input.__propagatedSandboxProfile or []) (lib.concatLists propagatedDependencies);
           computedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (stdenv.extraBuildInputs ++ lib.concatLists dependencies));
+            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (lib.concatLists dependencies));
           computedPropagatedImpureHostDeps =
             lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (lib.concatLists propagatedDependencies));
         in
