@@ -422,6 +422,9 @@ self: super: {
   # https://github.com/basvandijk/threads/issues/10
   threads = dontCheck super.threads;
 
+  # https://github.com/purescript/purescript/pull/3041
+  purescript = doJailbreak super.purescript;
+
   # Missing module.
   rematch = dontCheck super.rematch;            # https://github.com/tcrayford/rematch/issues/5
   rematch-text = dontCheck super.rematch-text;  # https://github.com/tcrayford/rematch/issues/6
