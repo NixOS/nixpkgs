@@ -36,8 +36,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://lynx.isc.org/;
     description = "A text-mode web browser";
+    homepage = http://lynx.invisible-island.net/;
+    license = licenses.gpl2Plus;
     platforms = platforms.unix;
   };
 }
