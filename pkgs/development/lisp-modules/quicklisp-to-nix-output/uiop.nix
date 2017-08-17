@@ -8,7 +8,7 @@ rec {
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/uiop/2017-05-16/uiop-3.2.1.tgz'';
+    url = ''http://beta.quicklisp.org/archive/uiop/2017-06-30/uiop-3.2.1.tgz'';
     sha256 = ''1zl661dkbg5clyl5fjj9466krk59xfdmmfzci5mj7n137m0zmf5v'';
   };
     
@@ -31,5 +31,5 @@ rec {
   };
 }
 /* (SYSTEM uiop DESCRIPTION NIL SHA256 1zl661dkbg5clyl5fjj9466krk59xfdmmfzci5mj7n137m0zmf5v URL
-    http://beta.quicklisp.org/archive/uiop/2017-05-16/uiop-3.2.1.tgz MD5 3e9ef02ecf9005240b66552d85719700 NAME uiop TESTNAME NIL FILENAME uiop DEPS NIL
+    http://beta.quicklisp.org/archive/uiop/2017-06-30/uiop-3.2.1.tgz MD5 3e9ef02ecf9005240b66552d85719700 NAME uiop TESTNAME NIL FILENAME uiop DEPS NIL
     DEPENDENCIES NIL VERSION 3.2.1 SIBLINGS (asdf-driver)) */

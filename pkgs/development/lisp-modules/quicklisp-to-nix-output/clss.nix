@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''clss'';
-  version = ''20170516-git'';
+  version = ''20170630-git'';
 
   description = ''A DOM tree searching engine based on CSS selectors.'';
 
-  deps = [ ];
+  deps = [ args."array-utils" args."plump" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clss/2017-05-16/clss-20170516-git.tgz'';
-    sha256 = ''1c3fizlf4509hj4l6m9gjc64ijvlwnavwvvw3198cvvn6lp49r5f'';
+    url = ''http://beta.quicklisp.org/archive/clss/2017-06-30/clss-20170630-git.tgz'';
+    sha256 = ''0kdkzx7z997lzbf331p4fkqhri0ind7agknl9y992x917m9y4rn0'';
   };
     
   packageName = "clss";
@@ -30,6 +30,6 @@ rec {
     '';
   };
 }
-/* (SYSTEM clss DESCRIPTION A DOM tree searching engine based on CSS selectors. SHA256 1c3fizlf4509hj4l6m9gjc64ijvlwnavwvvw3198cvvn6lp49r5f URL
-    http://beta.quicklisp.org/archive/clss/2017-05-16/clss-20170516-git.tgz MD5 2e69a5197694a9654c0e9c5fced4152f NAME clss TESTNAME NIL FILENAME clss DEPS NIL
-    DEPENDENCIES NIL VERSION 20170516-git SIBLINGS NIL) */
+/* (SYSTEM clss DESCRIPTION A DOM tree searching engine based on CSS selectors. SHA256 0kdkzx7z997lzbf331p4fkqhri0ind7agknl9y992x917m9y4rn0 URL
+    http://beta.quicklisp.org/archive/clss/2017-06-30/clss-20170630-git.tgz MD5 61bbadf22391940813bfc66dfd59d304 NAME clss TESTNAME NIL FILENAME clss DEPS
+    ((NAME array-utils FILENAME array-utils) (NAME plump FILENAME plump)) DEPENDENCIES (array-utils plump) VERSION 20170630-git SIBLINGS NIL) */
