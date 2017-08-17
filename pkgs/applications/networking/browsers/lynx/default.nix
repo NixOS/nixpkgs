@@ -9,11 +9,11 @@ assert sslSupport -> openssl != null;
 
 stdenv.mkDerivation rec {
   name = "lynx-${version}";
-  version = "2.8.9dev.11";
+  version = "2.8.9dev.16";
 
   src = fetchurl {
     url = "http://invisible-mirror.net/archives/lynx/tarballs/lynx${version}.tar.bz2";
-    sha256 = "1cqm1i7d209brkrpzaqqf2x951ra3l67dw8x9yg10vz7rpr9441a";
+    sha256 = "1j0vx871ghkm7fgrafnvd2ml3ywcl8d3gyhq02fhfb851c88lc84";
   };
 
   enableParallelBuilding = true;
