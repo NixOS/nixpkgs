@@ -13,7 +13,7 @@ rec {
 
   allPackages = args: packageSet (args // nixpkgsArgs);
 
-  pkgs = pkgsFor "x86_64-linux";
+  pkgs = packageSet (lib.recursiveUpdate { system = "x86_64-linux"; config.allowUnsupportedSystem = true; } nixpkgsArgs);
   inherit lib;
 
 
