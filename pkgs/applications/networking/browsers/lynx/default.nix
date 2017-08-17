@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "1cqm1i7d209brkrpzaqqf2x951ra3l67dw8x9yg10vz7rpr9441a";
   };
 
+  enableParallelBuilding = true;
+
   hardeningEnable = [ "pie" ];
 
   configureFlags = [ "--enable-widec" ] ++ stdenv.lib.optional sslSupport "--with-ssl";
