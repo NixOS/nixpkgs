@@ -4681,8 +4681,8 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestMore IOAll ];
     meta = with stdenv.lib; {
       homepage = http://www.matijs.net/software/msgconv/;
-      description = "Simply Sending Email";
-      license = licenses.perl;
+      description = "A .MSG to mbox converter";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ peterhoeg ];
     };
   };
