@@ -8317,6 +8317,8 @@ with pkgs;
 
   kustomize = callPackage ../development/tools/kustomize { };
 
+  kythe = callPackage ../development/tools/kythe { };
+
   Literate = callPackage ../development/tools/literate-programming/Literate {};
 
   lcov = callPackage ../development/tools/analysis/lcov { };
