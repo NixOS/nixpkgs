@@ -2,6 +2,7 @@
 , fetchurl, pkgconfig, ncurses, gzip
 , sslSupport ? true, openssl ? null
 , buildPlatform, hostPlatform
+, nukeReferences
 }:
 
 assert sslSupport -> openssl != null;
@@ -18,9 +19,17 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-widec" ] ++ stdenv.lib.optional sslSupport "--with-ssl";
 
   nativeBuildInputs = stdenv.lib.optional sslSupport pkgconfig
-    ++ stdenv.lib.optional (hostPlatform != buildPlatform) buildPackages.stdenv.cc;
+    ++ stdenv.lib.optional (hostPlatform != buildPlatform) buildPackages.stdenv.cc
+    ++ [ nukeReferences ];
 
   buildInputs = [ ncurses gzip ] ++ stdenv.lib.optional sslSupport openssl.dev;
+
+  # cfg_defs.h captures lots of references to build-only dependencies, derived
+  # from config.cache.
+  postConfigure = ''
+    make cfg_defs.h
+    nuke-refs cfg_defs.h
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://lynx.isc.org/;
