@@ -18,7 +18,7 @@ in fetchzip {
   # package; but I cannot find the original source, so use it on your
   # own risk Debian claims it is GPL - good enough for me.
   meta = with stdenv.lib; {
-    homepage = http://www.i18nguy.com/unicode/unicode-font.HTML;
+    homepage = http://www.i18nguy.com/unicode/unicode-font.html;
     description = "Unicode Plane 1 Osmanya script font";
     maintainers = with maintainers; [ raskin rycee ];
     license = "unknown";
