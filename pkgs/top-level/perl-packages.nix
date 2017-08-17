@@ -946,15 +946,15 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Carp = buildPerlPackage {
-    name = "Carp-1.36";
+  Carp = buildPerlPackage rec {
+    name = "Carp-1.38";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Carp-1.36.tar.gz;
-      sha256 = "dcc789935126461c80df0653f98c1d8d0b936dcc3d04174287cb02767eca123c";
+      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
+      sha256 = "00bijwwc0ix27h2ma3lvsf3b56biar96bl9dikxgx7cmpcycxad5";
     };
-    meta = {
+    meta = with stdenv.lib; {
       description = "Alternative warn and die for modules";
-      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      license = with licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -4664,6 +4664,26 @@ let self = _self // overrides; _self = with self; {
       description = "Simply Sending Email";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.rycee ];
+    };
+  };
+
+  EmailOutlookMessage = buildPerlPackage rec {
+    name = "Email-Outlook-Message-${version}";
+    version = "0.918";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MV/MVZ/${name}.tar.gz";
+      sha256 = "1w1s858xzp3vbi91qa01qnmk4n78fmvl4a7axrx2r15vr3s2k2pv";
+    };
+    propagatedBuildInputs = [
+      Carp Encode EmailMIME EmailMIMEContentType EmailSender
+      EmailSimple GetoptLong IOString OLEStorage_Lite PodUsage
+    ];
+    buildInputs = [ TestMore IOAll ];
+    meta = with stdenv.lib; {
+      homepage = http://www.matijs.net/software/msgconv/;
+      description = "A .MSG to mbox converter";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = with maintainers; [ peterhoeg ];
     };
   };
 

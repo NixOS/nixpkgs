@@ -5541,7 +5541,8 @@ with pkgs;
     sha256 = "1r0rqbnw7rf94f5bsa3gi8bick4xb7qnp1dkvdjfbvqjvysvc44r";
     ncurses = pkgsi686Linux.ncurses5;
   };
-  gcc-arm-embedded = gcc-arm-embedded-5;
+  gcc-arm-embedded-6 = callPackage ../development/compilers/gcc-arm-embedded/6 {};
+  gcc-arm-embedded = gcc-arm-embedded-6;
 
   gforth = callPackage ../development/compilers/gforth {};
 
@@ -6416,6 +6417,8 @@ with pkgs;
   };
 
   rascal = callPackage ../development/interpreters/rascal { };
+
+  red = callPackage ../development/interpreters/red { };
 
   regina = callPackage ../development/interpreters/regina { };
 
@@ -9650,7 +9653,7 @@ with pkgs;
   opencollada = callPackage ../development/libraries/opencollada { };
 
   opencore-amr = callPackage ../development/libraries/opencore-amr { };
-  
+
   opencsg = callPackage ../development/libraries/opencsg { };
 
   openct = callPackage ../development/libraries/openct { };
@@ -11361,11 +11364,18 @@ with pkgs;
 
   munin = callPackage ../servers/monitoring/munin { };
 
-  nagiosPluginsOfficial = callPackage ../servers/monitoring/nagios/plugins/official-2.x.nix { };
-  
+  monitoring-plugins = callPackage ../servers/monitoring/plugins { };
+  nagiosPluginsOfficial = monitoring-plugins;
+
+  inherit (callPackage ../servers/monitoring/plugins/labs_consol_de.nix { inherit (perlPackages) NetSNMP; })
+    check-nwc-health
+    check-ups-health;
+
   checkSSLCert = callPackage ../servers/monitoring/nagios/plugins/check_ssl_cert.nix { };
 
   neo4j = callPackage ../servers/nosql/neo4j { };
+
+  check-esxi-hardware = callPackage ../servers/monitoring/plugins/esxi.nix {};
 
   net_snmp = callPackage ../servers/monitoring/net-snmp {
     # https://sourceforge.net/p/net-snmp/bugs/2712/
@@ -12006,17 +12016,7 @@ with pkgs;
   linuxHeaders_4_4 = callPackage ../os-specific/linux/kernel-headers/4.4.nix {
     cross = if targetPlatform != hostPlatform then targetPlatform else null;
   };
-
-  # We can choose:
-  linuxHeaders =
-    if targetPlatform != hostPlatform
-    then
-      { # switch
-        "4.4" = linuxHeaders_4_4;
-      }.${targetPlatform.platform.kernelMajor}
-        or (throw "Unknown linux kernel version")
-    else
-      linuxHeaders_4_4;
+  linuxHeaders = linuxHeaders_4_4;
 
   kernelPatches = callPackage ../os-specific/linux/kernel/patches.nix { };
 
@@ -13278,6 +13278,8 @@ with pkgs;
     tcl = tcl-8_5;
   };
 
+  msgviewer = callPackage ../applications/networking/mailreaders/msgviewer { };
+
   amarok = kde4.callPackage ../applications/audio/amarok {
     ffmpeg = ffmpeg_2;
   };
@@ -14477,6 +14479,8 @@ with pkgs;
 
   graphicsmagick = callPackage ../applications/graphics/graphicsmagick { };
   graphicsmagick_q16 = callPackage ../applications/graphics/graphicsmagick { quantumdepth = 16; };
+
+  grisbi = callPackage ../applications/office/grisbi { gtk = gtk2; };
 
   gtkpod = callPackage ../applications/audio/gtkpod {
     gnome = gnome3;
@@ -15893,6 +15897,7 @@ with pkgs;
 
   rxvt_unicode-with-plugins = callPackage ../applications/misc/rxvt_unicode/wrapper.nix {
     plugins = [
+      urxvt_autocomplete_all_the_things
       urxvt_perl
       urxvt_perls
       urxvt_tabbedex
@@ -15903,6 +15908,7 @@ with pkgs;
   };
 
   # urxvt plugins
+  urxvt_autocomplete_all_the_things = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-autocomplete-all-the-things { };
   urxvt_perl = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-perl { };
   urxvt_perls = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-perls { };
   urxvt_tabbedex = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-tabbedex { };
@@ -16189,6 +16195,8 @@ with pkgs;
   syncthing013 = callPackage ../applications/networking/syncthing013 { };
 
   syncthing-inotify = callPackage ../applications/networking/syncthing/inotify.nix { };
+
+  syncthing-tray = callPackage ../applications/misc/syncthing-tray { };
 
   # linux only by now
   synergy = callPackage ../applications/misc/synergy { };

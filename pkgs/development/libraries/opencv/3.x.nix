@@ -17,6 +17,7 @@
 , enableEigen     ? false, eigen
 , enableOpenblas  ? false, openblas
 , enableCuda      ? false, cudatoolkit, gcc5
+, enableTesseract ? false, tesseract, leptonica
 , AVFoundation, Cocoa, QTKit
 }:
 
@@ -44,6 +45,9 @@ let
     sha256 = "11dsq8dwh1k6f7zglbc26xwsjw184ggf2531mhf7v77kd72k19fm";
   };
 
+  # Contrib must be built in order to enable Tesseract support:
+  buildContrib = enableContrib || enableTesseract;
+
   vggFiles = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv_3rdparty";
@@ -66,7 +70,7 @@ stdenv.mkDerivation rec {
   inherit version src;
 
   postUnpack =
-    (lib.optionalString enableContrib ''
+    (lib.optionalString buildContrib ''
       cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/opencv_contrib"
 
       # This fixes the build on macOS.
@@ -118,7 +122,7 @@ stdenv.mkDerivation rec {
           ln -s "${ippicv}" "${dir}/${name}"
         ''
     ) +
-    (lib.optionalString enableContrib ''
+    (lib.optionalString buildContrib ''
       cmakeFlagsArray+=("-DOPENCV_EXTRA_MODULES_PATH=$NIX_BUILD_TOP/opencv_contrib")
     '');
 
@@ -137,8 +141,12 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
     ++ lib.optional enableOpenblas openblas
+    # There is seemingly no compile-time flag for Tesseract.  It's
+    # simply enabled automatically if contrib is built, and it detects
+    # tesseract & leptonica.
+    ++ lib.optionals enableTesseract [ tesseract leptonica ]
     ++ lib.optionals enableCuda [ cudatoolkit gcc5 ]
-    ++ lib.optional enableContrib protobuf3_1
+    ++ lib.optional buildContrib protobuf3_1
     ++ lib.optionals stdenv.isDarwin [ AVFoundation Cocoa QTKit ];
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
@@ -158,7 +166,7 @@ stdenv.mkDerivation rec {
     (opencvFlag "CUDA" enableCuda)
     (opencvFlag "CUBLAS" enableCuda)
   ] ++ lib.optionals enableCuda [ "-DCUDA_FAST_MATH=ON" ]
-    ++ lib.optional enableContrib "-DBUILD_PROTOBUF=off"
+    ++ lib.optional buildContrib "-DBUILD_PROTOBUF=off"
     ++ lib.optionals stdenv.isDarwin ["-DWITH_OPENCL=OFF" "-DWITH_LAPACK=OFF"];
 
   enableParallelBuilding = true;
