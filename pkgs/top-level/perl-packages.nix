@@ -4667,6 +4667,26 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  EmailOutlookMessage = buildPerlPackage rec {
+    name = "Email-Outlook-Message-${version}";
+    version = "0.918";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MV/MVZ/${name}.tar.gz";
+      sha256 = "1w1s858xzp3vbi91qa01qnmk4n78fmvl4a7axrx2r15vr3s2k2pv";
+    };
+    propagatedBuildInputs = [
+      Carp Encode EmailMIME EmailMIMEContentType EmailSender
+      EmailSimple GetoptLong IOString OLEStorage_Lite PodUsage
+    ];
+    buildInputs = [ TestMore IOAll ];
+    meta = with stdenv.lib; {
+      homepage = http://www.matijs.net/software/msgconv/;
+      description = "Simply Sending Email";
+      license = licenses.perl;
+      maintainers = with maintainers; [ peterhoeg ];
+    };
+  };
+
   EmailSender = buildPerlPackage rec {
     name = "Email-Sender-1.300028";
     src = fetchurl {
