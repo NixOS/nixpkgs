@@ -7,11 +7,8 @@
 }:
 
 with stdenv.lib;
-let
-  xor = a: b: (a || b) && (!(a && b));
-in
 
-assert xor (libgcrypt != null) (libsodium != null);
+assert libgcrypt != null -> libsodium == null;
 
 stdenv.mkDerivation rec {
   version = "0.7.0";
@@ -66,5 +63,6 @@ stdenv.mkDerivation rec {
     description = "The USBGuard software framework helps to protect your computer against BadUSB.";
     homepage = "https://dkopecek.github.io/usbguard/";
     license = licenses.gpl2;
+    maintainers = [ maintainers.tnias ];
   };
 }
