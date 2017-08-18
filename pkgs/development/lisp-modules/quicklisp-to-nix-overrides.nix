@@ -15,6 +15,13 @@ in
       preConfigure = ''
         export configureFlags="$configureFlags --with-$NIX_LISP=common-lisp.sh";
       '';
+      postInstall = ''
+        "$out/bin/stumpwm-lisp-launcher.sh" --eval '(asdf:make :stumpwm)' \
+          --eval '(setf (asdf/system:component-entry-point (asdf:find-system :stumpwm)) (function stumpwm:stumpwm))' \
+          --eval '(asdf:perform (quote asdf:program-op) :stumpwm)'
+
+        cp "$out/lib/common-lisp/stumpwm/stumpwm" "$out/bin"
+      '';
     };
     propagatedBuildInputs = (x.propagatedBuildInputs or []) ++ (with qlnp; [
       alexandria cl-ppcre clx
