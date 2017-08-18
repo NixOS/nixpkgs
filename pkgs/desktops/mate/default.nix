@@ -3,6 +3,9 @@ rec {
   atril = callPackage ./atril { };
   caja = callPackage ./caja { };
   caja-extensions = callPackage ./caja-extensions { };
+  cajaWithExtensions = callPackage ./caja/cajaWithExtensions.nix {
+    extensions = [ caja-extensions ];
+  };
   eom = callPackage ./eom { };
   pluma = callPackage ./pluma { };
   mate-common = callPackage ./mate-common { };
