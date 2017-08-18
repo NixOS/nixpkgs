@@ -75,6 +75,9 @@ rec {
 
   sdistTarball = pkg: lib.overrideDerivation pkg (drv: {
     name = "${drv.pname}-source-${drv.version}";
+    # Since we disable the haddock phase, we also need to override the
+    # outputs since the separate doc output will not be produced.
+    outputs = ["out"];
     buildPhase = "./Setup sdist";
     haddockPhase = ":";
     checkPhase = ":";
