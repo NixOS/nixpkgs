@@ -14209,7 +14209,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/A/AM/AMBS/${name}.tar.gz";
       sha256 = "0dig1zlglm8rwm8fhnz087lx6gixj9jx10kxn1fx3swdkfblhsmf";
     };
-    perlPreHook = "export LD=gcc";
+    perlPreHook = "export LD=$CC";
     meta = {
       description = "Interface to read and parse BibTeX files";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
