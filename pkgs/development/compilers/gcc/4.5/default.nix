@@ -315,55 +315,8 @@ stdenv.mkDerivation ({
 
   /* For cross-built gcc (build != host == target) */
   crossAttrs = {
-    AR_FOR_BUILD = "ar";
-    AS_FOR_BUILD = "as";
-    LD_FOR_BUILD = "ld";
-    NM_FOR_BUILD = "nm";
-    OBJCOPY_FOR_BUILD = "objcopy";
-    OBJDUMP_FOR_BUILD = "objdump";
-    RANLIB_FOR_BUILD = "ranlib";
-    SIZE_FOR_BUILD = "size";
-    STRINGS_FOR_BUILD = "strings";
-    STRIP_FOR_BUILD = "strip";
-    CC_FOR_BUILD = "gcc";
-    CXX_FOR_BUILD = "g++";
-
-    AR = "${targetPlatform.config}-ar";
-    AS = "${targetPlatform.config}-as";
-    LD = "${targetPlatform.config}-ld";
-    NM = "${targetPlatform.config}-nm";
-    OBJCOPY = "${targetPlatform.config}-objcopy";
-    OBJDUMP = "${targetPlatform.config}-objdump";
-    RANLIB = "${targetPlatform.config}-ranlib";
-    SIZE = "${targetPlatform.config}-size";
-    STRINGS = "${targetPlatform.config}-strings";
-    STRIP = "${targetPlatform.config}-strip";
-    CC = "${targetPlatform.config}-gcc";
-    CXX = "${targetPlatform.config}-g++";
-
-    AR_FOR_TARGET = "${targetPlatform.config}-ar";
-    AS_FOR_TARGET = "${targetPlatform.config}-as";
-    LD_FOR_TARGET = "${targetPlatform.config}-ld";
-    NM_FOR_TARGET = "${targetPlatform.config}-nm";
-    OBJCOPY_FOR_TARGET = "${targetPlatform.config}-objcopy";
-    OBJDUMP_FOR_TARGET = "${targetPlatform.config}-objdump";
-    RANLIB_FOR_TARGET = "${targetPlatform.config}-ranlib";
-    SIZE_FOR_TARGET = "${targetPlatform.config}-size";
-    STRINGS_FOR_TARGET = "${targetPlatform.config}-strings";
-    STRIP_FOR_TARGET = "${targetPlatform.config}-strip";
-    CC_FOR_TARGET = "${targetPlatform.config}-gcc";
-    CXX_FOR_TARGET = "${targetPlatform.config}-g++";
-
     dontStrip = true;
   };
-
-  NIX_BUILD_BINTOOLS = buildPackages.stdenv.cc.bintools;
-  NIX_BUILD_CC = buildPackages.stdenv.cc;
-
-  # Needed for the cross compilation to work
-  AR = "ar";
-  LD = "ld";
-  CC = "gcc";
 
   # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
   # library headers and binaries, regarless of the language being compiled.
