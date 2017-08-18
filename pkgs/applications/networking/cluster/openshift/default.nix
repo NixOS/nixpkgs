@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, which, buildGoPackage }:
+{ stdenv, fetchFromGitHub, which, buildGoPackage, utillinux, coreutils }:
 
 let
   version = "3.6.0";
@@ -22,6 +22,17 @@ in buildGoPackage rec {
   goPackagePath = null;
   patchPhase = ''
     patchShebangs ./hack
+    substituteInPlace pkg/bootstrap/docker/host/host.go  \
+      --replace 'nsenter --mount=/rootfs/proc/1/ns/mnt findmnt' \
+      'nsenter --mount=/rootfs/proc/1/ns/mnt ${utillinux}/bin/findmnt'
+
+    substituteInPlace pkg/bootstrap/docker/host/host.go  \
+      --replace 'nsenter --mount=/rootfs/proc/1/ns/mnt mount' \
+      'nsenter --mount=/rootfs/proc/1/ns/mnt ${utillinux}/bin/mount'
+
+    substituteInPlace pkg/bootstrap/docker/host/host.go  \
+      --replace 'nsenter --mount=/rootfs/proc/1/ns/mnt mkdir' \
+      'nsenter --mount=/rootfs/proc/1/ns/mnt ${coreutils}/bin/mount'
   '';
 
   buildPhase = ''
