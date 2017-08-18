@@ -164,11 +164,11 @@ in
           "source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
         }
 
-        ${zshAliases}
-
         ${cfge.interactiveShellInit}
 
         ${cfg.interactiveShellInit}
+
+        ${zshAliases}
 
         ${cfg.promptInit}
 
