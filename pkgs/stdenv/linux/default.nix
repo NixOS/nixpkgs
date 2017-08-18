@@ -47,7 +47,7 @@ let
   # the bootstrap.  In all stages, we build an stdenv and the package
   # set that can be built with that stdenv.
   stageFun = prevStage:
-    { name, overrides ? (self: super: {}), extraNativeBuildInputs ? [] }:
+    { name, overrides ? (self: super: {}), extraBuildInputs ? [] }:
 
     let
 
@@ -56,7 +56,7 @@ let
         buildPlatform = localSystem;
         hostPlatform = localSystem;
         targetPlatform = localSystem;
-        inherit config extraNativeBuildInputs;
+        inherit config extraBuildInputs;
         preHook =
           ''
             # Don't patch #!/interpreter because it leads to retained
@@ -219,7 +219,7 @@ in
         isl = isl_0_14;
       };
     };
-    extraNativeBuildInputs = [ prevStage.patchelf prevStage.paxctl ] ++
+    extraBuildInputs = [ prevStage.patchelf prevStage.paxctl ] ++
       # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
       lib.optional (system == "aarch64-linux") prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
@@ -253,7 +253,7 @@ in
         shell = self.bash + "/bin/bash";
       };
     };
-    extraNativeBuildInputs = [ prevStage.patchelf prevStage.xz ] ++
+    extraBuildInputs = [ prevStage.patchelf prevStage.xz ] ++
       # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
       lib.optional (system == "aarch64-linux") prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
@@ -283,7 +283,7 @@ in
       initialPath =
         ((import ../common-path.nix) {pkgs = prevStage;});
 
-      extraNativeBuildInputs = [ prevStage.patchelf prevStage.paxctl ] ++
+      extraBuildInputs = [ prevStage.patchelf prevStage.paxctl ] ++
         # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
         lib.optional (system == "aarch64-linux") prevStage.updateAutotoolsGnuConfigScriptsHook;
 
