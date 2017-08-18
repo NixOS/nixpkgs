@@ -5119,6 +5119,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/A/AM/AMBS/ExtUtils/ExtUtils-LibBuilder-0.04.tar.gz;
       sha256 = "0j4rhx3w6nbvmxqjg6q09gm10nnpkcmqmh29cgxsfc9k14d8bb6w";
     };
+    perlPreHook = "export LD=$CC";
     meta = {
       description = "A tool to build C libraries";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
