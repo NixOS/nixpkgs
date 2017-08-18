@@ -12689,13 +12689,7 @@ with pkgs;
 
   upstart-check-config = callPackage ../os-specific/linux/upstart/check-config.nix {};
 
-  usbguard = usbguard_libgcrypt;
-
-  usbguard_libgcrypt = libsForQt5.callPackage ../os-specific/linux/usbguard {
-    libsodium = null;
-  };
-
-  usbguard_libsodium = libsForQt5.callPackage ../os-specific/linux/usbguard {
+  usbguard = libsForQt5.callPackage ../os-specific/linux/usbguard {
     libgcrypt = null;
   };
 
