@@ -96,7 +96,7 @@ let
     };
 
     meta = {
-      homepage = http://www.openssl.org/;
+      homepage = https://www.openssl.org/;
       description = "A cryptographic library that implements the SSL and TLS protocols";
       platforms = stdenv.lib.platforms.all;
       maintainers = [ stdenv.lib.maintainers.peti ];

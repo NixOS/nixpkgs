@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''babel-streams'';
-  version = ''babel-20170516-git'';
+  version = ''babel-20170630-git'';
 
   description = ''Some useful streams based on Babel's encoding code'';
 
-  deps = [ ];
+  deps = [ args."trivial-gray-streams" args."alexandria" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/babel/2017-05-16/babel-20170516-git.tgz'';
-    sha256 = ''0igl7vgbbpil8ksfsmj1055m6jcpmvf149zmmzsxr9h608siy7fk'';
+    url = ''http://beta.quicklisp.org/archive/babel/2017-06-30/babel-20170630-git.tgz'';
+    sha256 = ''0w1jfzdklk5zz9vgplr2a0vc6gybrwl8wa72nj6xs4ihp7spf0lx'';
   };
     
   packageName = "babel-streams";
@@ -30,6 +30,7 @@ rec {
     '';
   };
 }
-/* (SYSTEM babel-streams DESCRIPTION Some useful streams based on Babel's encoding code SHA256 0igl7vgbbpil8ksfsmj1055m6jcpmvf149zmmzsxr9h608siy7fk URL
-    http://beta.quicklisp.org/archive/babel/2017-05-16/babel-20170516-git.tgz MD5 d2ab5a273a436375ba40a8ec7f38d0a9 NAME babel-streams TESTNAME NIL FILENAME
-    babel-streams DEPS NIL DEPENDENCIES NIL VERSION babel-20170516-git SIBLINGS (babel-tests babel)) */
+/* (SYSTEM babel-streams DESCRIPTION Some useful streams based on Babel's encoding code SHA256 0w1jfzdklk5zz9vgplr2a0vc6gybrwl8wa72nj6xs4ihp7spf0lx URL
+    http://beta.quicklisp.org/archive/babel/2017-06-30/babel-20170630-git.tgz MD5 aa7eff848b97bb7f7aa6bdb43a081964 NAME babel-streams TESTNAME NIL FILENAME
+    babel-streams DEPS ((NAME trivial-gray-streams FILENAME trivial-gray-streams) (NAME alexandria FILENAME alexandria)) DEPENDENCIES
+    (trivial-gray-streams alexandria) VERSION babel-20170630-git SIBLINGS (babel-tests babel)) */

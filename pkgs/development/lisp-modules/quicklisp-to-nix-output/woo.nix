@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''woo'';
-  version = ''20170227-git'';
+  version = ''20170725-git'';
 
   description = ''An asynchronous HTTP server written in Common Lisp'';
 
-  deps = [ ];
+  deps = [ args."vom" args."uiop" args."trivial-utf-8" args."swap-bytes" args."static-vectors" args."smart-buffer" args."quri" args."lev" args."fast-io" args."fast-http" args."clack-socket" args."cffi-grovel" args."cffi" args."bordeaux-threads" args."alexandria" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/woo/2017-02-27/woo-20170227-git.tgz'';
-    sha256 = ''0myydz817mpkgs97p9y9n4z0kq00xxr2b65klsdkxasvvfyjw0d1'';
+    url = ''http://beta.quicklisp.org/archive/woo/2017-07-25/woo-20170725-git.tgz'';
+    sha256 = ''11cnqd058mjhkgxppsivbmd687429r4b62v7z5iav0wpha78qfgg'';
   };
     
   packageName = "woo";
@@ -30,6 +30,12 @@ rec {
     '';
   };
 }
-/* (SYSTEM woo DESCRIPTION An asynchronous HTTP server written in Common Lisp SHA256 0myydz817mpkgs97p9y9n4z0kq00xxr2b65klsdkxasvvfyjw0d1 URL
-    http://beta.quicklisp.org/archive/woo/2017-02-27/woo-20170227-git.tgz MD5 cc37270ad408e093bd28c025466d8f64 NAME woo TESTNAME NIL FILENAME woo DEPS NIL
-    DEPENDENCIES NIL VERSION 20170227-git SIBLINGS (clack-handler-woo woo-test)) */
+/* (SYSTEM woo DESCRIPTION An asynchronous HTTP server written in Common Lisp SHA256 11cnqd058mjhkgxppsivbmd687429r4b62v7z5iav0wpha78qfgg URL
+    http://beta.quicklisp.org/archive/woo/2017-07-25/woo-20170725-git.tgz MD5 bd901d8dfa7df3d19c6da73ea101f65b NAME woo TESTNAME NIL FILENAME woo DEPS
+    ((NAME vom FILENAME vom) (NAME uiop FILENAME uiop) (NAME trivial-utf-8 FILENAME trivial-utf-8) (NAME swap-bytes FILENAME swap-bytes)
+     (NAME static-vectors FILENAME static-vectors) (NAME smart-buffer FILENAME smart-buffer) (NAME quri FILENAME quri) (NAME lev FILENAME lev)
+     (NAME fast-io FILENAME fast-io) (NAME fast-http FILENAME fast-http) (NAME clack-socket FILENAME clack-socket) (NAME cffi-grovel FILENAME cffi-grovel)
+     (NAME cffi FILENAME cffi) (NAME bordeaux-threads FILENAME bordeaux-threads) (NAME alexandria FILENAME alexandria))
+    DEPENDENCIES
+    (vom uiop trivial-utf-8 swap-bytes static-vectors smart-buffer quri lev fast-io fast-http clack-socket cffi-grovel cffi bordeaux-threads alexandria)
+    VERSION 20170725-git SIBLINGS (clack-handler-woo woo-test)) */

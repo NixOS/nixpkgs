@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ docutils six sphinx ];
 
-  disabled = isPy3k;
+  doCheck = !isPy3k;
 
   meta = {
     homepage = https://github.com/michaeljones/breathe;

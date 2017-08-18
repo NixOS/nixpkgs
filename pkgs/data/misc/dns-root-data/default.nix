@@ -3,7 +3,7 @@
 let
 
   rootHints = fetchurl {
-    url = "http://www.internic.net/domain/named.root";
+    url = "https://www.internic.net/domain/named.root";
     sha256 = "0qsyxpj5b3i7n162qfyv76ljqbvnwjii7jk8mpfinklx0sk01473";
   };
 
