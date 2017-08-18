@@ -136,7 +136,6 @@ let version = "4.9.4";
         withFloat = if gccFloat != null then " --with-float=${gccFloat}" else "";
         withMode = if gccMode != null then " --with-mode=${gccMode}" else "";
       in
-        "--target=${targetPlatform.config}" +
         withArch +
         withCpu +
         withAbi +
@@ -317,6 +316,8 @@ stdenv.mkDerivation ({
 
   dontDisableStatic = true;
 
+  # TODO(@Ericson2314): Always pass "--target" and always prefix.
+  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
   configureFlags = "
     ${if hostPlatform.isSunOS then
       " --enable-long-long --enable-libssp --enable-threads=posix --disable-nls --enable-__cxa_atexit " +
@@ -434,7 +435,6 @@ stdenv.mkDerivation ({
         )
       }
       ${if langAda then " --enable-libada" else ""}
-      --target=${targetPlatform.config}
       ${xwithArch}
       ${xwithCpu}
       ${xwithAbi}
