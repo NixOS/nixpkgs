@@ -1182,7 +1182,7 @@ let
                                 systems to query, augment and transform data
                                 according to Elixir matching rules. '';
               license = stdenv.lib.licenses.mit;
-              homepage = "http://github.com/awetzel/adap";
+              homepage = "https://github.com/awetzel/adap";
             };
           } // packageOverrides)
       ) {};
@@ -6660,7 +6660,7 @@ let
                                 requests and responds to preflight requests
                                 (OPTIONS)'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "http://github.com/mschae/cors_plug";
+              homepage = "https://github.com/mschae/cors_plug";
             };
           } // packageOverrides)
       ) {};
@@ -9498,7 +9498,7 @@ let
                                 H-metric are abstracted away - you provide them
                                 as functions.'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "http://github.com/herenowcoder/eastar";
+              homepage = "https://github.com/herenowcoder/eastar";
             };
           } // packageOverrides)
       ) {};
@@ -12266,7 +12266,7 @@ let
                                 response. This project is a rewrite for Elixir
                                 and Plug of basho webmachine.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "http://github.com/awetzel/ewebmachine";
+              homepage = "https://github.com/awetzel/ewebmachine";
             };
           } // packageOverrides)
       ) {};
@@ -22613,7 +22613,7 @@ let
             meta = {
               description = ''JWT decoding library for Elixir'';
               license = stdenv.lib.licenses.mit;
-              homepage = "http://github.com/mschae/jwtex";
+              homepage = "https://github.com/mschae/jwtex";
             };
           } // packageOverrides)
       ) {};
@@ -30269,7 +30269,7 @@ let
                                 according to rfc7239 and fill `conn.remote_ip`
                                 with the root client ip.'';
               license = stdenv.lib.licenses.mit;
-              homepage = "http://github.com/awetzel/plug_forwarded_peer";
+              homepage = "https://github.com/awetzel/plug_forwarded_peer";
             };
           } // packageOverrides)
       ) {};
@@ -30472,7 +30472,7 @@ let
             meta = {
               description = ''An elixir plug that serves HTTP range requests'';
               license = stdenv.lib.licenses.mit;
-              homepage = "http://github.com/TheSquad/plug_range";
+              homepage = "https://github.com/TheSquad/plug_range";
             };
           } // packageOverrides)
       ) {};
@@ -36106,7 +36106,7 @@ let
                                 use a rails-like trailing format:
                                 http://api.dev/resources.format'';
               license = stdenv.lib.licenses.asl20;
-              homepage = "http://github.com/mschae/trailing_format_plug";
+              homepage = "https://github.com/mschae/trailing_format_plug";
             };
           } // packageOverrides)
       ) {};
@@ -38938,7 +38938,7 @@ let
             meta = {
               description = ''stream zip archives while building them'';
               license = stdenv.lib.licenses.bsd3;
-              homepage = "http://github.com/dgvncsz0f/zipflow";
+              homepage = "https://github.com/dgvncsz0f/zipflow";
             };
           } // packageOverrides)
       ) {};
