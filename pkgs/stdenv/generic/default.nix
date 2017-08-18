@@ -9,7 +9,6 @@ let lib = import ../../../lib; in lib.makeOverridable (
 
 , setupScript ? ./setup.sh
 
-, extraNativeBuildInputs ? []
 , extraBuildInputs ? []
 , __stdenvImpureHostDeps ? []
 , __extraImpureHostDeps ? []
@@ -42,7 +41,7 @@ let lib = import ../../../lib; in lib.makeOverridable (
 }:
 
 let
-  defaultNativeBuildInputs = extraNativeBuildInputs ++
+  defaultNativeBuildInputs = extraBuildInputs ++
     [ ../../build-support/setup-hooks/move-docs.sh
       ../../build-support/setup-hooks/compress-man-pages.sh
       ../../build-support/setup-hooks/strip.sh
@@ -59,16 +58,11 @@ let
       cc
     ];
 
-  defaultBuildInputs = extraBuildInputs;
-
   # The stdenv that we are producing.
   stdenv =
     derivation (
-    lib.optionalAttrs (allowedRequisites != null) {
-      allowedRequisites = allowedRequisites
-        ++ defaultNativeBuildInputs ++ defaultBuildInputs;
-    }
-    // {
+    (if isNull allowedRequisites then {} else { allowedRequisites = allowedRequisites ++ defaultNativeBuildInputs; }) //
+    {
       inherit name;
 
       # Nix itself uses the `system` field of a derivation to decide where to
@@ -81,8 +75,7 @@ let
 
       setup = setupScript;
 
-      inherit preHook initialPath shell
-        defaultNativeBuildInputs defaultBuildInputs;
+      inherit preHook initialPath shell defaultNativeBuildInputs;
     }
     // lib.optionalAttrs buildPlatform.isDarwin {
       __sandboxProfile = stdenvSandboxProfile;
@@ -98,8 +91,7 @@ let
 
       inherit buildPlatform hostPlatform targetPlatform;
 
-      inherit extraNativeBuildInputs extraBuildInputs
-        __extraImpureHostDeps extraSandboxProfile;
+      inherit extraBuildInputs __extraImpureHostDeps extraSandboxProfile;
 
       # Utility flags to test the type of platform.
       inherit (hostPlatform)

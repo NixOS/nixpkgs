@@ -59,12 +59,11 @@ in rec {
   stageFun = step: last: {shell             ? "${bootstrapTools}/bin/bash",
                           overrides         ? (self: super: {}),
                           extraPreHook      ? "",
-                          extraNativeBuildInputs,
                           extraBuildInputs,
                           allowedRequisites ? null}:
     let
       thisStdenv = import ../generic {
-        inherit config shell extraNativeBuildInputs extraBuildInputs;
+        inherit config shell extraBuildInputs;
         allowedRequisites = if allowedRequisites == null then null else allowedRequisites ++ [
           thisStdenv.cc.expand-response-params
         ];
@@ -163,7 +162,6 @@ in rec {
 
     };
 
-    extraNativeBuildInputs = [];
     extraBuildInputs = [];
   };
 
@@ -171,7 +169,6 @@ in rec {
 
   stage1 = prevStage: with prevStage; stageFun 1 prevStage {
     extraPreHook = "export NIX_CFLAGS_COMPILE+=\" -F${bootstrapTools}/Library/Frameworks\"";
-    extraNativeBuildInputs = [];
     extraBuildInputs = [ pkgs.libcxx ];
 
     allowedRequisites =
@@ -198,8 +195,7 @@ in rec {
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
 
-    extraNativeBuildInputs = [ pkgs.xz ];
-    extraBuildInputs = with pkgs; [ darwin.CF libcxx ];
+    extraBuildInputs = with pkgs; [ xz darwin.CF libcxx ];
 
     allowedRequisites =
       [ bootstrapTools ] ++
@@ -230,8 +226,7 @@ in rec {
     # enables patchShebangs above. Unfortunately, patchShebangs ignores our $SHELL setting
     # and instead goes by $PATH, which happens to contain bootstrapTools. So it goes and
     # patches our shebangs back to point at bootstrapTools. This makes sure bash comes first.
-    extraNativeBuildInputs = with pkgs; [ xz pkgs.bash ];
-    extraBuildInputs = with pkgs; [ darwin.CF libcxx ];
+    extraBuildInputs = with pkgs; [ xz darwin.CF libcxx pkgs.bash ];
 
     extraPreHook = ''
       export PATH=${pkgs.bash}/bin:$PATH
@@ -265,8 +260,7 @@ in rec {
 
   stage4 = prevStage: with prevStage; stageFun 4 prevStage {
     shell = "${pkgs.bash}/bin/bash";
-    extraNativeBuildInputs = with pkgs; [ xz pkgs.bash ];
-    extraBuildInputs = with pkgs; [ darwin.CF libcxx ];
+    extraBuildInputs = with pkgs; [ xz darwin.CF libcxx pkgs.bash ];
     extraPreHook = ''
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
@@ -327,7 +321,6 @@ in rec {
       libc = pkgs.darwin.Libsystem;
     };
 
-    extraNativeBuildInputs = [];
     extraBuildInputs = with pkgs; [ darwin.CF libcxx ];
 
     extraAttrs = {
