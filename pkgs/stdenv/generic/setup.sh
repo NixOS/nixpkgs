@@ -317,18 +317,17 @@ if [ -z "$crossConfig" ]; then
     # are handled identically to nativeBuildInputs
     declare -a nativePkgs
     for i in $nativeBuildInputs $buildInputs \
-             $defaultNativeBuildInputs $defaultBuildInputs \
              $propagatedNativeBuildInputs $propagatedBuildInputs; do
         findInputs "$i" nativePkgs propagated-native-build-inputs
     done
 else
     declare -a crossPkgs
-    for i in $buildInputs $defaultBuildInputs $propagatedBuildInputs; do
+    for i in $buildInputs $propagatedBuildInputs; do
         findInputs "$i" crossPkgs propagated-build-inputs
     done
 
     declare -a nativePkgs
-    for i in $nativeBuildInputs $defaultNativeBuildInputs $propagatedNativeBuildInputs; do
+    for i in $nativeBuildInputs $propagatedNativeBuildInputs; do
         findInputs "$i" nativePkgs propagated-native-build-inputs
     done
 fi

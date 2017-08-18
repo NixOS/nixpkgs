@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, unzip, cmake, python}:
+{ stdenv, fetchFromGitHub, unzip, cmake, python }:
 
 stdenv.mkDerivation {
   name = "flann-1.9.1";

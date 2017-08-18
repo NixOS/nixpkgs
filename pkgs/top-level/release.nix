@@ -109,8 +109,11 @@ let
       ocamlPackages = { };
       perlPackages = { };
 
-      # hack around broken eval of non-linux packages for now.
-      tests.macOSSierraShared = darwin;
+      darwin = packagePlatforms pkgs.darwin // {
+        cf-private = {};
+        osx_private_sdk = {};
+        xcode = {};
+      };
     } ));
 
 in jobs

@@ -125,7 +125,6 @@ in stdenv.mkDerivation {
 
     # Use Python3 as default python
     ln -s "$out/bin/idle3" "$out/bin/idle"
-    ln -s "$out/bin/pip3" "$out/bin/pip"
     ln -s "$out/bin/pydoc3" "$out/bin/pydoc"
     ln -s "$out/bin/python3" "$out/bin/python"
     ln -s "$out/bin/python3-config" "$out/bin/python-config"
