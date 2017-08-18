@@ -14957,9 +14957,7 @@ with pkgs;
 
   kipi-plugins = libsForQt5.callPackage ../applications/graphics/kipi-plugins { };
 
-  kiwix = callPackage ../applications/misc/kiwix {
-    stdenv = overrideCC stdenv gcc49;
-  };
+  kiwix = callPackage ../applications/misc/kiwix { };
 
   kmplayer = kde4.callPackage ../applications/video/kmplayer { };
 
