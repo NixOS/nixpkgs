@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt, expat
 , gd, geoip
-, withStream ? false
+, withStream ? true
 , withMail ? false
 , modules ? []
 , hardening ? true
