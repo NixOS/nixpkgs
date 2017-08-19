@@ -39,6 +39,8 @@ stdenv.mkDerivation {
     "--with-http_secure_link_module"
     "--with-http_degradation_module"
     "--with-http_stub_status_module"
+    "--with-threads"
+    "--with-pcre-jit"
     # Install destination problems
     # "--with-http_perl_module"
   ] ++ optional withStream "--with-stream"
