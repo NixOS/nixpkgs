@@ -851,6 +851,7 @@ self: super: {
 
   # build liquidhaskell with the proper (old) aeson version
   liquidhaskell = super.liquidhaskell.override { aeson = self.aeson_0_11_3_0; };
+  aeson_0_11_3_0 = super.aeson_0_11_3_0.override { base-orphans = self.base-orphans_0_5_4; };
 
   # Test suite fails: https://github.com/lymar/hastache/issues/46.
   # Don't install internal mkReadme tool.
