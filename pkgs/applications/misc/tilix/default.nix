@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     substituteInPlace $out/share/applications/com.gexperts.Tilix.desktop \
       --replace "Exec=tilix" "Exec=$out/bin/tilix"
+    sed -i '/^DBusActivatable=/d' $out/share/applications/com.gexperts.Tilix.desktop
   '';
 
   meta = with stdenv.lib; {
