@@ -121,7 +121,7 @@ if [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ]; then
     # It's important to add the rpath in the order of -L..., so
     # the link time chosen objects will be those of runtime linking.
     declare -A rpaths
-    for dir in "${libDirs[@]}"; do
+    for dir in ${libDirs+"${libDirs[@]}"}; do
         if [[ "$dir" =~ [/.][/.] ]] && dir2=$(readlink -f "$dir"); then
             dir="$dir2"
         fi
