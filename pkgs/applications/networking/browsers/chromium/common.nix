@@ -14,7 +14,7 @@
 , glib, gtk2, gtk3, dbus_glib
 , libXScrnSaver, libXcursor, libXtst, mesa
 , protobuf, speechd, libXdamage, cups
-, ffmpeg, harfbuzz, harfbuzz-icu, libxslt, libxml2
+, ffmpeg, harfbuzz, harfbuzz-icu
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
