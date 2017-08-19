@@ -18876,7 +18876,7 @@ with pkgs;
     terraform_0_9
     terraform_0_10;
 
-  terraform = terraform_0_9;
+  terraform = terraform_0_10;
 
   terraform-inventory = callPackage ../applications/networking/cluster/terraform-inventory {};
 
