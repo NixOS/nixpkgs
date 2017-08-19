@@ -1,6 +1,7 @@
 { stdenv, fetchurl, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt, expat
 , gd, geoip
 , withStream ? false
+, withMail ? false
 , modules ? []
 , hardening ? true
 , version, sha256, ...
@@ -49,6 +50,10 @@ stdenv.mkDerivation {
     "--with-stream_realip_module"
     "--with-stream_ssl_module"
     "--with-stream_ssl_preread_module"
+  ] ++ optional withMail [
+    "--with-mail"
+    "--with-mail_ssl_module"
+  ]
     ++ optional (gd != null) "--with-http_image_filter_module"
     ++ optional (elem stdenv.system (with platforms; linux ++ freebsd)) "--with-file-aio"
     ++ map (mod: "--add-module=${mod.src}") modules;
