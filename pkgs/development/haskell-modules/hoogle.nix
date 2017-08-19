@@ -74,7 +74,7 @@ stdenv.mkDerivation {
     mkdir -p $out/share/doc/hoogle
 
     echo importing builtin packages
-    for docdir in ${ghcDocLibDir}/*; do
+    for docdir in ${ghcDocLibDir}"/"*; do
       name="$(basename $docdir)"
       ${opts isGhcjs ''docdir="$docdir/html"''}
       if [[ -d $docdir ]]; then
@@ -99,8 +99,7 @@ stdenv.mkDerivation {
     cd $out/share/doc/hoogle
 
     args=
-    for hdfile in `ls -1 */*.haddock | grep -v '/ghc\.haddock' | sort`
-    do
+    for hdfile in $(ls -1 *"/"*.haddock | grep -v '/ghc\.haddock' | sort); do
         name_version=`echo "$hdfile" | sed 's#/.*##'`
         args="$args --read-interface=$name_version,$hdfile"
     done
