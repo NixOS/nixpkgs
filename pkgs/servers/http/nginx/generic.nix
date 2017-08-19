@@ -43,7 +43,12 @@ stdenv.mkDerivation {
     "--with-pcre-jit"
     # Install destination problems
     # "--with-http_perl_module"
-  ] ++ optional withStream "--with-stream"
+  ] ++ optional withStream [
+    "--with-stream"
+    "--with-stream_geoip_module"
+    "--with-stream_realip_module"
+    "--with-stream_ssl_module"
+    "--with-stream_ssl_preread_module"
     ++ optional (gd != null) "--with-http_image_filter_module"
     ++ optional (elem stdenv.system (with platforms; linux ++ freebsd)) "--with-file-aio"
     ++ map (mod: "--add-module=${mod.src}") modules;
