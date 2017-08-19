@@ -27064,6 +27064,8 @@ EOF
     };
   };
 
+  torchvision = callPackage ../development/python-modules/torchvision { };
+
   jenkinsapi = buildPythonPackage rec {
     name = "jenkinsapi-${version}";
     version = "0.2.32";
