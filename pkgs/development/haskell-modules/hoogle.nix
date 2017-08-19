@@ -87,7 +87,7 @@ stdenv.mkDerivation {
         ln -sfn ${el.haddockDir} "$out/share/doc/hoogle/${el.name}"
       '')
       (lib.filter (el: el.haddockDir != null)
-        (builtins.map (p: { haddockDir = p.haddockDir p;
+        (builtins.map (p: { haddockDir = if p ? haddockDir then p.haddockDir p else null;
                             name = p.pname; })
           docPackages))}
 
