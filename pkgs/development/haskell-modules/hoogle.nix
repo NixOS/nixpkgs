@@ -52,7 +52,10 @@ let
       This index includes documentation for many Haskell modules.
     '';
 
-  docPackages = lib.closePropagation packages;
+  # TODO: closePropagation is deprecated; replace
+  docPackages = lib.closePropagation
+    # we grab the doc outputs
+    (map (lib.getOutput "doc") packages);
 
 in
 stdenv.mkDerivation {
@@ -64,6 +67,10 @@ stdenv.mkDerivation {
   inherit docPackages;
 
   buildPhase = ''
+    ${lib.optionalString (packages != [] -> docPackages == [])
+       ("echo WARNING: localHoogle package list empty, even though"
+       + " the following were specified: "
+       + lib.concatMapStringsSep ", " (p: p.name) packages)}
     mkdir -p $out/share/doc/hoogle
 
     echo importing builtin packages
@@ -76,17 +83,13 @@ stdenv.mkDerivation {
     done
 
     echo importing other packages
-    for i in $docPackages; do
-      if [[ ! $i == $out ]]; then
-        for docdir in $i/share/doc/*-${ghcName}-*/* $i/share/doc/*; do
-          name="$(basename $docdir)"
-          docdir=$docdir/html
-          if [[ -d $docdir ]]; then
-            ln -sfn $docdir $out/share/doc/hoogle/$name
-          fi
-        done
-      fi
-    done
+    ${lib.concatMapStringsSep "\n" (el: ''
+        ln -sfn ${el.haddockDir} "$out/share/doc/hoogle/${el.name}"
+      '')
+      (lib.filter (el: el.haddockDir != null)
+        (builtins.map (p: { haddockDir = p.haddockDir p;
+                            name = p.pname; })
+          docPackages))}
 
     echo building hoogle database
     hoogle generate --database $out/share/doc/hoogle/default.hoo --local=$out/share/doc/hoogle
