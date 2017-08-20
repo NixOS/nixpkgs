@@ -1,19 +1,19 @@
 { stdenv, fetchgit, cmake, pkgconfig, zlib, libpng, cairo, freetype
-, json_c, fontconfig, gtkmm2, pangomm, glew, mesa_glu, xlibs, pcre
+, json_c, fontconfig, gtkmm3, pangomm, glew, mesa_glu, xlibs, pcre
 }:
 stdenv.mkDerivation rec {
-  name = "solvespace-2.3-20170416";
-  rev = "b1d87bf284b32e875c8edba592113e691ea10bcd";
+  name = "solvespace-2.3-20170808";
+  rev = "16540b1b2c540a4b44500ac02aaa4493bccfba7e";
   src = fetchgit {
     url = https://github.com/solvespace/solvespace;
     inherit rev;
-    sha256 = "160qam04pfrwkh9qskfmjkj01wrjwhl09xi6jjxi009yqg3cff9l";
+    sha256 = "1z10i21xf3yagd984lp1hwasnsizx2s3faq3wdzzjngrikr2zn70";
     fetchSubmodules = true;
   };
 
   buildInputs = [
     cmake pkgconfig zlib libpng cairo freetype
-    json_c fontconfig gtkmm2 pangomm glew mesa_glu
+    json_c fontconfig gtkmm3 pangomm glew mesa_glu
     xlibs.libpthreadstubs xlibs.libXdmcp pcre
   ];
   enableParallelBuilding = true;
