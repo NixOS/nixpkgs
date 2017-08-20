@@ -1,7 +1,7 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''cl-ppcre-template'';
-  version = ''cl-unification-20170516-git'';
+  version = ''cl-unification-20170630-git'';
 
   description = ''A system used to conditionally load the CL-PPCRE Template.
 
@@ -9,11 +9,11 @@ This system is not required and it is handled only if CL-PPCRE is
 available.  If it is, then the library provides the
 REGULAR-EXPRESSION-TEMPLATE.'';
 
-  deps = [ ];
+  deps = [ args."cl-ppcre" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-unification/2017-05-16/cl-unification-20170516-git.tgz'';
-    sha256 = ''0yg2i0vn11skfz0b1zc8wnsqr24gf7fc4hzmwrwj15iz3xzqy9b0'';
+    url = ''http://beta.quicklisp.org/archive/cl-unification/2017-06-30/cl-unification-20170630-git.tgz'';
+    sha256 = ''063xcf2ib3gdpjr39bgkaj6msylzdhbdjsj458w08iyidbxivwlz'';
   };
     
   packageName = "cl-ppcre-template";
@@ -39,6 +39,6 @@ REGULAR-EXPRESSION-TEMPLATE.'';
 This system is not required and it is handled only if CL-PPCRE is
 available.  If it is, then the library provides the
 REGULAR-EXPRESSION-TEMPLATE.
-    SHA256 0yg2i0vn11skfz0b1zc8wnsqr24gf7fc4hzmwrwj15iz3xzqy9b0 URL http://beta.quicklisp.org/archive/cl-unification/2017-05-16/cl-unification-20170516-git.tgz
-    MD5 70bcdd486f3444ddd41b5c2c3add119c NAME cl-ppcre-template TESTNAME NIL FILENAME cl-ppcre-template DEPS NIL DEPENDENCIES NIL VERSION
-    cl-unification-20170516-git SIBLINGS (cl-unification-lib cl-unification-test cl-unification)) */
+    SHA256 063xcf2ib3gdpjr39bgkaj6msylzdhbdjsj458w08iyidbxivwlz URL http://beta.quicklisp.org/archive/cl-unification/2017-06-30/cl-unification-20170630-git.tgz
+    MD5 f6bf197ca8c79c935efe3a3c25953044 NAME cl-ppcre-template TESTNAME NIL FILENAME cl-ppcre-template DEPS ((NAME cl-ppcre FILENAME cl-ppcre)) DEPENDENCIES
+    (cl-ppcre) VERSION cl-unification-20170630-git SIBLINGS (cl-unification-lib cl-unification-test cl-unification)) */

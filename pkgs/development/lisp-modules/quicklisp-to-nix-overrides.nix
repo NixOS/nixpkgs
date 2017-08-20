@@ -15,6 +15,13 @@ in
       preConfigure = ''
         export configureFlags="$configureFlags --with-$NIX_LISP=common-lisp.sh";
       '';
+      postInstall = ''
+        "$out/bin/stumpwm-lisp-launcher.sh" --eval '(asdf:make :stumpwm)' \
+          --eval '(setf (asdf/system:component-entry-point (asdf:find-system :stumpwm)) (function stumpwm:stumpwm))' \
+          --eval '(asdf:perform (quote asdf:program-op) :stumpwm)'
+
+        cp "$out/lib/common-lisp/stumpwm/stumpwm" "$out/bin"
+      '';
     };
     propagatedBuildInputs = (x.propagatedBuildInputs or []) ++ (with qlnp; [
       alexandria cl-ppcre clx
@@ -36,6 +43,25 @@ in
   };
   hunchentoot = addNativeLibs [pkgs.openssl];
   iolib = x: rec {
+    propagatedBuildInputs = (x.propagatedBuildInputs or [])
+     ++ (with pkgs; [libfixposix gcc])
+     ++ (with qlnp; [
+       alexandria split-sequence cffi bordeaux-threads idna swap-bytes
+     ])
+     ;
+    testSystems = ["iolib" "iolib/syscalls" "iolib/multiplex" "iolib/streams"
+      "iolib/zstreams" "iolib/sockets" "iolib/trivial-sockets"
+      "iolib/pathnames" "iolib/os"];
+
+    version = "0.8.3";
+    src = pkgs.fetchFromGitHub {
+      owner = "sionescu";
+      repo = "iolib";
+      rev = "v${version}";
+      sha256 = "0pa86bf3jrysnmhasbc0lm6cid9xzril4jsg02g3gziav1xw5x2m";
+    };
+  };
+  iolib_slash_syscalls = x: rec {
     propagatedBuildInputs = (x.propagatedBuildInputs or [])
      ++ (with pkgs; [libfixposix gcc])
      ++ (with qlnp; [

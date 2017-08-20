@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       "sed '/^SUBDIRS =/s/ test / /' -i Makefile.in";
 
   meta = with lib; {
-    homepage = http://poppler.freedesktop.org/;
+    homepage = https://poppler.freedesktop.org/;
     description = "A PDF rendering library";
 
     longDescription = ''

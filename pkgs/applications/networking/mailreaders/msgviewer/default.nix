@@ -20,9 +20,9 @@ in stdenv.mkDerivation rec {
     mv $dir/${uname}/* $dir
     rmdir $dir/${uname}
     cat <<_EOF > $out/bin/msgviewer
-#!${stdenv.shell} -eu
-${stdenv.lib.getBin jre}/bin/java -jar $dir/MSGViewer.jar $@
-_EOF
+    #!${stdenv.shell} -eu
+    exec ${stdenv.lib.getBin jre}/bin/java -jar $dir/MSGViewer.jar "\$@"
+    _EOF
     chmod 755 $out/bin/msgviewer
   '';
 

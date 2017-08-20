@@ -49,6 +49,24 @@
         (#\. "_dot_")
         (t x)))))
 
+(defun system-depends-on (system-name)
+  (labels
+      ((decode (name)
+         (typecase name
+           (string
+            name)
+           (cons
+            (ecase (car name)
+              (:version (second name)))))))
+    (let* ((asdf-dependencies (asdf:system-depends-on (asdf:find-system system-name)))
+           (decoded-asdf-dependencies (mapcar #'decode asdf-dependencies))
+           (clean-asdf-dependencies (remove-if-not 'ql-dist:find-system decoded-asdf-dependencies))
+           (ql-dependencies (ql-dist:required-systems (ql-dist:find-system system-name)))
+           (all-dependencies (concatenate 'list clean-asdf-dependencies ql-dependencies))
+           (sorted-dependencies (sort all-dependencies #'string<))
+           (unique-dependencies (remove-duplicates sorted-dependencies :test #'equal)))
+      unique-dependencies)))
+
 (defun system-data (system)
   (let*
     ((asdf-system
@@ -69,7 +87,7 @@
          (nix-prefetch-url local-url)))
      (ideal-md5 (ql-dist:archive-md5 ql-release))
      (file-md5 (getf archive-data :md5))
-     (raw-dependencies (ql-dist:required-systems ql-system))
+     (raw-dependencies (system-depends-on system))
      (name (string-downcase (format nil "~a" system)))
      (ql-sibling-names
        (remove name (mapcar 'ql-dist:name ql-sibling-systems)

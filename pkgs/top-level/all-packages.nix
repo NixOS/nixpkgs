@@ -1429,10 +1429,11 @@ with pkgs;
 
     m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n { };
 
-    mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc {
+    mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc rec {
+      clangStdenv = libcxxStdenv; # workaround for https://github.com/NixOS/nixpkgs/issues/28223
       python = python2;
       inherit (python2Packages) gyp;
-      protobuf = protobuf3_2.override { stdenv = clangStdenv; };
+      protobuf = protobuf3_2.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
     };
 
     table = callPackage ../tools/inputmethods/ibus-engines/ibus-table {
@@ -1902,10 +1903,11 @@ with pkgs;
 
     m17n = callPackage ../tools/inputmethods/fcitx-engines/fcitx-m17n { };
 
-    mozc = callPackage ../tools/inputmethods/fcitx-engines/fcitx-mozc {
+    mozc = callPackage ../tools/inputmethods/fcitx-engines/fcitx-mozc rec {
+      clangStdenv = libcxxStdenv; # workaround for https://github.com/NixOS/nixpkgs/issues/28223
       python = python2;
       inherit (python2Packages) gyp;
-      protobuf = protobuf3_2.override { stdenv = clangStdenv; };
+      protobuf = protobuf3_2.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
     };
 
     table-other = callPackage ../tools/inputmethods/fcitx-engines/fcitx-table-other { };
@@ -3828,6 +3830,8 @@ with pkgs;
   ponysay = callPackage ../tools/misc/ponysay { };
 
   popfile = callPackage ../tools/text/popfile { };
+
+  poretools = callPackage ../applications/science/biology/poretools { };
 
   postscript-lexmark = callPackage ../misc/drivers/postscript-lexmark { };
 
@@ -9729,6 +9733,8 @@ with pkgs;
   opensubdiv = callPackage ../development/libraries/opensubdiv {
     cmake = cmake_2_8;
   };
+
+  open-wbo = callPackage ../applications/science/logic/open-wbo {};
 
   openwsman = callPackage ../development/libraries/openwsman {};
 
@@ -16569,6 +16575,12 @@ with pkgs;
 
   vscode = callPackage ../applications/editors/vscode { };
 
+  vscode-with-extensions = callPackage ../applications/editors/vscode-with-extensions {};
+
+  vscode-utils = callPackage ../misc/vscode-extensions/vscode-utils.nix {};
+
+  vscode-extensions = recurseIntoAttrs (callPackage ../misc/vscode-extensions {});
+
   vue = callPackage ../applications/misc/vue { };
 
   vwm = callPackage ../applications/window-managers/vwm { };
@@ -19097,6 +19109,8 @@ with pkgs;
       enableWiimote = true;
     };
   };
+
+  xzoom = callPackage ../tools/X11/xzoom {};
 
   yabause = callPackage ../misc/emulators/yabause {
     qt = qt4;
