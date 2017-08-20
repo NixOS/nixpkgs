@@ -9731,6 +9731,8 @@ with pkgs;
     cmake = cmake_2_8;
   };
 
+  open-wbo = callPackage ../applications/science/logic/open-wbo {};
+
   openwsman = callPackage ../development/libraries/openwsman {};
 
   ortp = callPackage ../development/libraries/ortp { };
