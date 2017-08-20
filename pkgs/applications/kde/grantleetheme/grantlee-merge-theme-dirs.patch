@@ -44,17 +44,6 @@ Index: grantleetheme-17.04.0/src/grantleetheme.cpp
      loader->setTheme(dirName);
  
      if (!sEngine) {
-@@ -102,9 +105,7 @@ QString ThemePrivate::errorTemplate(cons
-     Grantlee::Context ctx = createContext();
-     ctx.insert(QStringLiteral("error"), reason);
-     ctx.insert(QStringLiteral("templateName"), origTemplateName);
--    const QString errorString = failedTemplate
--            ? failedTemplate->errorString()
--            : QStringLiteral("(null template)");
-+    const QString errorString = failedTemplate->errorString();
-     ctx.insert(QStringLiteral("errorMessage"), errorString);
-     return tpl->render(&ctx);
- }
 @@ -122,7 +123,7 @@ Theme::Theme(const QString &themePath, c
      KConfigGroup group(&config, QStringLiteral("Desktop Entry"));
      if (group.isValid()) {
