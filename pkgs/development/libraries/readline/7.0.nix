@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "readline-${version}";
-  version = "7.0p0";
+  version = "7.0p${toString (builtins.length upstreamPatches)}";
 
   src = fetchurl {
     url = "mirror://gnu/readline/readline-${meta.branch}.tar.gz";
@@ -15,13 +15,7 @@ stdenv.mkDerivation rec {
 
   patchFlags = "-p0";
 
-  patches =
-    [ ./link-against-ncurses.patch
-      ./no-arch_only-6.3.patch
-    ]
-    ;
-    /*
-    ++
+  upstreamPatches =
     (let
        patch = nr: sha256:
          fetchurl {
@@ -30,7 +24,12 @@ stdenv.mkDerivation rec {
          };
      in
        import ./readline-7.0-patches.nix patch);
-    */
+
+  patches =
+    [ ./link-against-ncurses.patch
+      ./no-arch_only-6.3.patch
+    ]
+    ++ upstreamPatches;
 
   # Don't run the native `strip' when cross-compiling.
   dontStrip = stdenv ? cross;
@@ -58,7 +57,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
 
-    maintainers = [ ];
+    maintainers = [ maintainers.vanschelven ];
 
     platforms = platforms.unix;
     branch = "7.0";

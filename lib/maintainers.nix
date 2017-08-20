@@ -510,6 +510,7 @@
   #urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>"; inactive since 2012
   uwap = "uwap <me@uwap.name>";
   vandenoever = "Jos van den Oever <jos@vandenoever.info>";
+  vanschelven = "Klaas van Schelven <klaas@vanschelven.com>";
   vanzef = "Ivan Solyankin <vanzef@gmail.com>";
   vbgl = "Vincent Laporte <Vincent.Laporte@gmail.com>";
   vbmithr = "Vincent Bernardoff <vb@luminar.eu.org>";
