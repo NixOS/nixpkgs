@@ -5457,6 +5457,8 @@ in {
     };
   };
 
+  easydict = callPackage ../development/python-modules/easydict { };
+  
   EasyProcess = buildPythonPackage rec {
     name = "EasyProcess-0.2.3";
 
