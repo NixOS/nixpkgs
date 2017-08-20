@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, bash-completion
+{ stdenv, fetchurl, bash-completion
 , glib, polkit, pkgconfig, intltool, gusb, libusb1, lcms2, sqlite, systemd, dbus
 , gtk_doc, gobjectIntrospection, argyllcms
 , libgudev, sane-backends }:
@@ -6,9 +6,9 @@
 stdenv.mkDerivation rec {
   name = "colord-1.2.12";
 
-  src = fetchzip {
+  src = fetchurl {
     url = "http://www.freedesktop.org/software/colord/releases/${name}.tar.xz";
-    sha256 = "0rvvbpxd5x479v4p6pck317mlf3j29s154i1n8hlx8n4znhwrb0k";
+    sha256 = "0flcsr148xshjbff030pgyk9ar25an901m9q1pjgjdvaq5j1h96m";
   };
 
   enableParallelBuilding = true;
