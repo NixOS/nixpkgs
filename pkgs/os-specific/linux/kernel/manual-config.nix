@@ -1,4 +1,4 @@
-{ stdenv, runCommand, nettools, bc, perl, gmp, libmpc, mpfr, kmod, openssl
+{ runCommand, nettools, bc, perl, gmp, libmpc, mpfr, kmod, openssl
 , writeTextFile, ubootChooser
 , hostPlatform
 }:
@@ -14,6 +14,8 @@ let
     echo "}" >> $out
   '').outPath;
 in {
+  # Allow overriding stdenv on each buildLinux call
+  stdenv,
   # The kernel version
   version,
   # The version of the kernel module directory

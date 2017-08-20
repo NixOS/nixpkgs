@@ -12281,7 +12281,7 @@ with pkgs;
 
   linuxPackages_custom = { version, src, configfile }:
     recurseIntoAttrs (linuxPackagesFor (pkgs.linuxManualConfig {
-      inherit version src configfile;
+      inherit version src configfile stdenv;
       allowImportFromDerivation = true;
     }));
 
