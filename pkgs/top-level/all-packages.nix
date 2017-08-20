@@ -539,6 +539,8 @@ with pkgs;
 
   apt = callPackage ../tools/package-management/apt {
     inherit (perlPackages) Po4a;
+    # include/c++/6.4.0/cstdlib:75:25: fatal error: stdlib.h: No such file or directory
+    stdenv = overrideCC stdenv gcc5;
   };
 
   autorevision = callPackage ../tools/misc/autorevision { };
