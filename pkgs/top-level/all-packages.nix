@@ -14961,6 +14961,8 @@ with pkgs;
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
     };
+    # checking whether g++ supports C++14 or C++11... configure: error: no
+    stdenv = overrideCC stdenv gcc5;
   });
 
   libreoffice-still = lowPrio (callPackage ../applications/office/libreoffice/still.nix {
@@ -14980,6 +14982,8 @@ with pkgs;
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
     };
+    # checking whether g++ supports C++14 or C++11... configure: error: no
+    stdenv = overrideCC stdenv gcc5;
   });
 
 
