@@ -1,6 +1,6 @@
-{ stdenv, fetchzip, fetchgit, bash-completion
+{ stdenv, fetchzip, bash-completion
 , glib, polkit, pkgconfig, intltool, gusb, libusb1, lcms2, sqlite, systemd, dbus
-, automake, autoconf, libtool, gtk_doc, which, gobjectIntrospection, argyllcms
+, gtk_doc, gobjectIntrospection, argyllcms
 , libgudev, sane-backends }:
 
 stdenv.mkDerivation rec {
@@ -23,12 +23,11 @@ stdenv.mkDerivation rec {
 
   # don't touch /var at install time, colord creates what it needs at runtime
   postPatch = ''
-    sed -i -e "s|if test -w .*;|if false;|" src/Makefile.in
-    sed -i -e "s|if test -w .*;|if false;|" src/Makefile.am
+    sed -e "s|if test -w .*;|if false;|" -i src/Makefile.{am,in}
   '';
 
   buildInputs = [ glib polkit pkgconfig intltool gusb libusb1 lcms2 sqlite systemd dbus gobjectIntrospection
-                  bash-completion argyllcms automake autoconf libgudev sane-backends ];
+                  bash-completion argyllcms libgudev sane-backends ];
 
   postInstall = ''
     mkdir -p $out/etc/bash_completion.d
