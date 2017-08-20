@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 
 with lib;
 
@@ -14,6 +14,10 @@ with lib;
     (mkRenamedOptionModule [ "networking" "enableRT73Firmware" ] [ "networking" "enableRalinkFirmware" ])
 
     (mkRenamedOptionModule [ "services" "cadvisor" "host" ] [ "services" "cadvisor" "listenAddress" ])
+    (mkChangedOptionModule [ "services" "printing" "gutenprint" ] [ "services" "printing" "drivers" ]
+      (config:
+        let enabled = getAttrFromPath [ "services" "printing" "gutenprint" ] config;
+        in if enabled then [ pkgs.gutenprint ] else [ ]))
     (mkRenamedOptionModule [ "services" "elasticsearch" "host" ] [ "services" "elasticsearch" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "graphite" "api" "host" ] [ "services" "graphite" "api" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "graphite" "web" "host" ] [ "services" "graphite" "web" "listenAddress" ])
