@@ -5,7 +5,7 @@
 , flac, lame, libmad, libmpcdec, libvorbis
 , libsamplerate, libsndfile, taglib
 , cdparanoia, cdrdao, cdrtools, dvdplusrwtools, libburn, libdvdcss, libdvdread, vcdimager
-, ffmpeg, libmusicbrainz2, normalize, sox, transcode, shared_mime_info, kinit
+, ffmpeg, libmusicbrainz2, normalize, sox, transcode, kinit
 }:
 
 mkDerivation {
@@ -15,7 +15,7 @@ mkDerivation {
     maintainers = with maintainers; [ sander phreedom ];
     platforms = platforms.linux;
   };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper shared_mime_info ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];
   propagatedBuildInputs = [
     # qt
     qtwebkit
