@@ -1,7 +1,7 @@
 { lib, python3Packages, fetchFromGitHub }:
 
 python3Packages.buildPythonPackage rec {
-  name = "mpfshell";
+  name = "mpfshell-${version}";
   version = "0.8.1";
 
   src = fetchFromGitHub {
