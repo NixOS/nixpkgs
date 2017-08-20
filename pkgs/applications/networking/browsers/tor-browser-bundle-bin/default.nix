@@ -328,7 +328,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/applications
     cp $desktopItem/share/applications"/"* $out/share/applications
     sed -i $out/share/applications/torbrowser.desktop \
-        -e "s,Exec=.*,Exec=$out/bin/tor-browser,"
+        -e "s,Exec=.*,Exec=$out/bin/tor-browser," \
+        -e "s,Icon=.*,Icon=$out/share/pixmaps/torbrowser.png,"
 
     # Install icons
     mkdir -p $out/share/pixmaps
