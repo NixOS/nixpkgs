@@ -1,3 +1,4 @@
+
 <chapter xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xml:id="chap-stdenv">
@@ -1153,7 +1154,7 @@ makeWrapper $out/bin/foo $wrapperfile --prefix PATH : ${lib.makeBinPath [ hello 
 
     </listitem>
   </varlistentry>
-  
+
 
   <varlistentry xml:id='fun-substitute'>
     <term><function>substitute</function>
@@ -1312,7 +1313,7 @@ someVar=$(stripHash $name)
 
     </para></listitem>
   </varlistentry>
-  
+
 
   <varlistentry xml:id='fun-wrapProgram'>
     <term><function>wrapProgram</function>
@@ -1342,12 +1343,34 @@ someVar=$(stripHash $name)
 <variablelist>
 
   <varlistentry>
-    <term>GCC wrapper</term>
-    <listitem><para>Adds the <filename>include</filename> subdirectory
-    of each build input to the <envar>NIX_CFLAGS_COMPILE</envar>
-    environment variable, and the <filename>lib</filename> and
-    <filename>lib64</filename> subdirectories to
-    <envar>NIX_LDFLAGS</envar>.</para></listitem>
+    <term>CC Wrapper</term>
+    <listitem>
+      <para>
+        CC Wrapper wraps a C toolchain for a bunch of miscellaneous purposes.
+        Specifically, a C compiler (GCC or Clang), Binutils (or the CCTools + binutils mashup when targetting Darwin), and a C standard library (glibc or Darwin's libSystem) are all fed in, and dependency finding, hardening (see below), and purity checks for each are handled by CC Wrapper.
+        Packages typically depend on only CC Wrapper, instead of those 3 inputs directly.
+      </para>
+      <para>
+        Dependency finding is undoubtedly the main task of CC wrapper.
+        It is currently accomplished by collecting directories of host-platform dependencies (i.e. <varname>buildInputs</varname> and <varname>nativeBuildInputs</varname>) in environment variables.
+        CC wrapper's setup hook causes any <filename>include</filename> subdirectory of such a dependency to be added to <envar>NIX_CFLAGS_COMPILE</envar>, and any <filename>lib</filename> and <filename>lib64</filename> subdirectories to <envar>NIX_LDFLAGS</envar>.
+        The setup hook itself contains some lengthy comments describing the exact convoluted mechanism by which this is accomplished.
+      </para>
+      <para>
+        A final task of the setup hook is defining a number of standard environment variables to tell build systems which executables full-fill which purpose.
+        They are defined to just be the base name of the tools, under the assumption that CC Wrapper's binaries will be on the path.
+        Firstly, this helps poorly-written packages, e.g. ones that look for just <command>gcc</command> when <envar>CC</envar> isn't defined yet <command>clang</command> is to be used.
+        Secondly, this helps packages not get confused when cross-compiling, in which case multiple CC wrappers may be simultaneous in use (targeting different platforms).
+        <envar>BUILD_</envar>- and <envar>TARGET_</envar>-prefixed versions of the normal environment variable are defined for the additional CC Wrappers, properly disambiguating them.
+      </para>
+      <para>
+        A problem with this final task is that CC Wrapper is honest and defines <envar>LD</envar> as <command>ld</command>.
+        Most packages, however, firstly use the C compiler for linking, secondly use <envar>LD</envar> anyways, defining it as the C compiler, and thirdly, only so define <envar>LD</envar> when it is undefined as a fallback.
+        This triple-threat means CC Wrapper will break those packages, as LD is already defined as the actually linker which the package won't override yet doesn't want to use.
+        The workaround is to define, just for the problematic package, <envar>LD</envar> as the C compiler.
+        A good way to do this would be <command>preConfigure = "LD=$CC"</command>.
+      </para>
+    </listitem>
   </varlistentry>
 
   <varlistentry>
