@@ -65,13 +65,21 @@ rec {
            "sandboxProfile" "propagatedSandboxProfile"])
         // (let
           computedSandboxProfile =
-            lib.concatMap (input: input.__propagatedSandboxProfile or []) (stdenv.extraBuildInputs ++ lib.concatLists dependencies);
+            lib.concatMap (input: input.__propagatedSandboxProfile or [])
+              (stdenv.extraNativeBuildInputs
+               ++ stdenv.extraBuildInputs
+               ++ lib.concatLists dependencies);
           computedPropagatedSandboxProfile =
-            lib.concatMap (input: input.__propagatedSandboxProfile or []) (lib.concatLists propagatedDependencies);
+            lib.concatMap (input: input.__propagatedSandboxProfile or [])
+              (lib.concatLists propagatedDependencies);
           computedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (stdenv.extraBuildInputs ++ lib.concatLists dependencies));
+            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
+              (stdenv.extraNativeBuildInputs
+               ++ stdenv.extraBuildInputs
+               ++ lib.concatLists dependencies));
           computedPropagatedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (lib.concatLists propagatedDependencies));
+            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or [])
+              (lib.concatLists propagatedDependencies));
         in
         {
           name = name + lib.optionalString
