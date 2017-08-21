@@ -144,6 +144,7 @@
   desiderius = "Didier J. Devroye <didier@devroye.name>";
   devhell = "devhell <\"^\"@regexmail.net>";
   dezgeg = "Tuomas Tynkkynen <tuomas.tynkkynen@iki.fi>";
+  dfordivam = "Divam <dfordivam+nixpkgs@gmail.com>";
   dfoxfranke = "Daniel Fox Franke <dfoxfranke@gmail.com>";
   dgonyeo = "Derek Gonyeo <derek@gonyeo.com>";
   dipinhora = "Dipin Hora <dipinhora+github@gmail.com>";

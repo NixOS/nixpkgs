@@ -19225,6 +19225,8 @@ with pkgs;
 
   xtermcontrol = callPackage ../applications/misc/xtermcontrol {};
 
+  openfst = callPackage ../development/libraries/openfst {};
+
   # `recurseIntoAttrs` for sake of hydra, not nix-env
   tests = recurseIntoAttrs {
     macOSSierraShared = callPackage ../test/macos-sierra-shared {};
