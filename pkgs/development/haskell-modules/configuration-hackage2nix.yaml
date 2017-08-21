@@ -786,7 +786,6 @@ default-package-overrides:
   - gio ==0.13.3.1
   - giphy-api ==0.5.2.0
   - git ==0.2.0
-  - git-annex ==6.20170520
   - github ==0.16.0
   - github-release ==1.0.5
   - github-types ==0.2.1
