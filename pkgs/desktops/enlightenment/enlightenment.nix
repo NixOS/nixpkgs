@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, efl, xcbutilkeysyms, libXrandr, libXdmcp,
 libxcb, libffi, pam, alsaLib, luajit, bzip2, libpthreadstubs, gdbm, libcap,
-mesa_glu , xkeyboard_config }:
+mesa_glu, xkeyboard_config }:
 
 stdenv.mkDerivation rec {
   name = "enlightenment-${version}";
-  version = "0.21.7";
+  version = "0.21.9";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/enlightenment/${name}.tar.xz";
-    sha256 = "1xvngjdsa0p901vfhrh2qpa50k32hwwhc8bgi16a9b5d9byzfhvn";
+    sha256 = "0w5f3707hyfc20i6xqh4jlr5p2yhy1z794061mjsz2rp4w00qmpb";
   };
 
   nativeBuildInputs = [ pkgconfig ];

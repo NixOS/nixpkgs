@@ -11,6 +11,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/cl-store/2016-05-31/cl-store-20160531-git.tgz'';
     sha256 = ''0j1pfgvzy6l7hb68xsz2dghsa94lip7caq6f6608jsqadmdswljz'';
   };
+    
+  packageName = "cl-store";
 
   overrides = x: {
     postInstall = ''

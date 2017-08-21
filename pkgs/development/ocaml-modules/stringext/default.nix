@@ -3,14 +3,14 @@
 , doCheck ? stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.01"
 }:
 
-let version = "1.4.0"; in
+let version = "1.4.3"; in
 
 stdenv.mkDerivation {
-  name = "ocaml-stringext-${version}";
+  name = "ocaml${ocaml.version}-stringext-${version}";
 
   src = fetchzip {
     url = "https://github.com/rgrinberg/stringext/archive/v${version}.tar.gz";
-    sha256 = "1jp0x9rkss8a48z9wbnc4v5zvmnysin30345psl3xnxb2aqzwlii";
+    sha256 = "121k79vjazvsd254yg391fp4spsd1p32amccrahd0g6hjhf5w6sl";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild ounit qcheck ];

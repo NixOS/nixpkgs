@@ -35,11 +35,15 @@ stdenv.mkDerivation rec {
     substituteInPlace ocaml/Makefile.in            --replace '$(DESTDIR)$(OCAMLLIB)' '$(out)/lib/ocaml'
     substituteInPlace v2v/test-harness/Makefile.am --replace '$(DESTDIR)$(OCAMLLIB)' '$(out)/lib/ocaml'
     substituteInPlace v2v/test-harness/Makefile.in --replace '$(DESTDIR)$(OCAMLLIB)' '$(out)/lib/ocaml'
+
+    # some scripts hardcore /usr/bin/env which is not available in the build env
+    patchShebangs .
   '';
   configureFlags = "--disable-appliance --disable-daemon";
   patches = [ ./libguestfs-syms.patch ];
   NIX_CFLAGS_COMPILE="-I${libxml2.dev}/include/libxml2/";
   installFlags = "REALLY_INSTALL=yes";
+  enableParallelBuilding = true;
 
   postInstall = ''
     for bin in $out/bin/*; do

@@ -11,6 +11,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/myway/2015-03-02/myway-20150302-git.tgz'';
     sha256 = ''1spab9zzhwjg3r5xncr5ncha7phw72wp49cxxncgphh1lfaiyblh'';
   };
+    
+  packageName = "myway";
 
   overrides = x: {
     postInstall = ''
@@ -30,5 +32,6 @@ rec {
 }
 /* (SYSTEM myway DESCRIPTION Sinatra-compatible routing library. SHA256 1spab9zzhwjg3r5xncr5ncha7phw72wp49cxxncgphh1lfaiyblh URL
     http://beta.quicklisp.org/archive/myway/2015-03-02/myway-20150302-git.tgz MD5 6a16b41eb3216c469bfc8783cce08b01 NAME myway TESTNAME NIL FILENAME myway DEPS
-    ((NAME quri) (NAME map-set) (NAME cl-utilities) (NAME cl-ppcre) (NAME alexandria)) DEPENDENCIES (quri map-set cl-utilities cl-ppcre alexandria) VERSION
-    20150302-git SIBLINGS (myway-test)) */
+    ((NAME quri FILENAME quri) (NAME map-set FILENAME map-set) (NAME cl-utilities FILENAME cl-utilities) (NAME cl-ppcre FILENAME cl-ppcre)
+     (NAME alexandria FILENAME alexandria))
+    DEPENDENCIES (quri map-set cl-utilities cl-ppcre alexandria) VERSION 20150302-git SIBLINGS (myway-test)) */

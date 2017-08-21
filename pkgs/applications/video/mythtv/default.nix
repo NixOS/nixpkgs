@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig which yasm libtool autoconf automake file ];
 
   meta = with stdenv.lib; {
-    homepage = "https://www.mythtv.org/";
+    homepage = https://www.mythtv.org/;
     description = "Open Source DVR";
     license = licenses.gpl2;
     meta.platforms = platforms.linux;

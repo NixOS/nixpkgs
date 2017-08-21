@@ -1,27 +1,32 @@
-{ stdenv, fetchurl, mpd_clientlib }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, mpd_clientlib }:
 
 stdenv.mkDerivation rec {
-  version = "0.27";
   name = "mpc-${version}";
+  version = "0.28";
 
-  src = fetchurl {
-    url = "http://www.musicpd.org/download/mpc/0/${name}.tar.xz";
-    sha256 = "0r10wsqxsi07gns6mfnicvpci0sbwwj4qa9iyr1ysrgadl5bx8j5";
+  src = fetchFromGitHub {
+    owner  = "MusicPlayerDaemon";
+    repo   = "mpc";
+    rev    = "v${version}";
+    sha256 = "1g8i4q5xsqdhidyjpvj6hzbhxacv27cb47ndv9k68whd80c5f9n9";
   };
 
   buildInputs = [ mpd_clientlib ];
 
-  preConfigure =
-    ''
-      export LIBMPDCLIENT_LIBS=${mpd_clientlib}/lib/libmpdclient.${if stdenv.isDarwin then mpd_clientlib.majorVersion + ".dylib" else "so." + mpd_clientlib.majorVersion + ".0." + mpd_clientlib.minorVersion}
-      export LIBMPDCLIENT_CFLAGS=${mpd_clientlib}
-    '';
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+
+  enableParallelBuilding = true;
+
+  preConfigure = ''
+    export LIBMPDCLIENT_LIBS=${mpd_clientlib}/lib/libmpdclient.${if stdenv.isDarwin then mpd_clientlib.majorVersion + ".dylib" else "so." + mpd_clientlib.majorVersion + ".0." + mpd_clientlib.minorVersion}
+    export LIBMPDCLIENT_CFLAGS=${mpd_clientlib}
+  '';
 
   meta = with stdenv.lib; {
     description = "A minimalist command line interface to MPD";
     homepage = http://www.musicpd.org/clients/mpc/;
     license = licenses.gpl2;
-    maintainers = [ maintainers.algorith ];
+    maintainers = with maintainers; [ algorith ];
     platforms = with platforms; linux ++ darwin;
   };
 }

@@ -11,6 +11,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/cl-async/2016-08-25/cl-async-20160825-git.tgz'';
     sha256 = ''104x6vw9zrmzz3sipmzn0ygil6ccyy8gpvvjxak2bfxbmxcl09pa'';
   };
+    
+  packageName = "cl-async-util";
 
   overrides = x: {
     postInstall = ''
@@ -30,5 +32,7 @@ rec {
 }
 /* (SYSTEM cl-async-util DESCRIPTION Internal utilities for cl-async. SHA256 104x6vw9zrmzz3sipmzn0ygil6ccyy8gpvvjxak2bfxbmxcl09pa URL
     http://beta.quicklisp.org/archive/cl-async/2016-08-25/cl-async-20160825-git.tgz MD5 18e1d6c54a27c8ba721ebaa3d8c6e112 NAME cl-async-util TESTNAME NIL
-    FILENAME cl-async-util DEPS ((NAME vom) (NAME fast-io) (NAME cl-ppcre) (NAME cl-libuv) (NAME cl-async-base) (NAME cffi)) DEPENDENCIES
-    (vom fast-io cl-ppcre cl-libuv cl-async-base cffi) VERSION cl-async-20160825-git SIBLINGS (cl-async-repl cl-async-ssl cl-async-test cl-async)) */
+    FILENAME cl-async-util DEPS
+    ((NAME vom FILENAME vom) (NAME fast-io FILENAME fast-io) (NAME cl-ppcre FILENAME cl-ppcre) (NAME cl-libuv FILENAME cl-libuv)
+     (NAME cl-async-base FILENAME cl-async-base) (NAME cffi FILENAME cffi))
+    DEPENDENCIES (vom fast-io cl-ppcre cl-libuv cl-async-base cffi) VERSION cl-async-20160825-git SIBLINGS (cl-async-repl cl-async-ssl cl-async-test cl-async)) */

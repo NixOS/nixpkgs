@@ -14,6 +14,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Jagged Alliance 2, with community fixes";
     license = "SFI Source Code license agreement";
-    homepage = "https://ja2-stracciatella.github.io/";
+    homepage = https://ja2-stracciatella.github.io/;
   };
 }

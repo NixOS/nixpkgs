@@ -9,8 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "0313xb2j6a4wihrw9gfd4rnyqw7zzv6wf3rfh2gglgnv356ic2kw";
   };
 
+  patches = stdenv.lib.optional stdenv.isLinux ./einval.patch
   # patchset from brew
-  patches = stdenv.lib.optionals stdenv.isDarwin [
+  ++ stdenv.lib.optionals stdenv.isDarwin [
     (fetchpatch {
       name = "0001-Implement-openat-2-wrapper-which-handles-optional-ar.patch";
       url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?msg=5;filename=0001-Implement-openat-2-wrapper-which-handles-optional-ar.patch;att=1;bug=766649";
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
       url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=2;bug=766649;filename=fakeroot-always-pass-mode.patch;msg=20";
       sha256 = "0i3zaca1v449dm9m1cq6wq4dy6hc2y04l05m9gg8d4y4swld637p";
     })
-    ];
+  ];
 
   buildInputs = [ getopt ]
     ++ stdenv.lib.optional (!stdenv.isDarwin) libcap

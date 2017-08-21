@@ -5,11 +5,11 @@
 assert enablePython -> python != null;
 
 stdenv.mkDerivation rec {
-  name = "audit-2.6.6";
+  name = "audit-2.7.7";
 
   src = fetchurl {
     url = "http://people.redhat.com/sgrubb/audit/${name}.tar.gz";
-    sha256 = "0jwrww1vn7yqxmb84n6y4p58z34gga0ic4rs2msvpzc2x1hxrn31";
+    sha256 = "1vvqw5xgirap0jdmajw7l3pq563aycvy3hlqvj3k2cac8i4jbqlq";
   };
 
   outputs = [ "bin" "dev" "out" "man" "plugins" ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Audit Library";
-    homepage = "http://people.redhat.com/sgrubb/audit/";
+    homepage = http://people.redhat.com/sgrubb/audit/;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];

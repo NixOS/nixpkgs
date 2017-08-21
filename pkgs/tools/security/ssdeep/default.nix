@@ -9,6 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "1igqy0j7jrklb8fdlrm6ald4cyl1fda5ipfl8crzyl6bax2ajk3f";
   };
 
+  # Hack to avoid TMPDIR in RPATHs.
+  preFixup = ''rm -rf "$(pwd)" '';
+
   # For some reason (probably a build system bug), the binary isn't
   # properly linked to $out/lib to find libfuzzy.so
   postFixup = stdenv.lib.optionalString (!stdenv.isDarwin) ''

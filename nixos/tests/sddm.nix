@@ -24,7 +24,7 @@ let
         user = nodes.machine.config.users.extraUsers.alice;
       in ''
         startAll;
-        $machine->waitForText(qr/ALICE/);
+        $machine->waitForText(qr/select your user/i);
         $machine->screenshot("sddm");
         $machine->sendChars("${user.password}\n");
         $machine->waitForFile("/home/alice/.Xauthority");

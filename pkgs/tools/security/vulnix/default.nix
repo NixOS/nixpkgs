@@ -1,10 +1,6 @@
-{ stdenv, pythonPackages, fetchurl, callPackage, nix, }:
+{ stdenv, pythonPackages, fetchurl, callPackage, nix }:
 
-let
-  external = callPackage ./requirements.nix {
-    inherit pythonPackages;
-  };
-in pythonPackages.buildPythonApplication rec{
+pythonPackages.buildPythonApplication rec {
   name = "${pname}-${version}";
   pname = "vulnix";
   version = "1.2.2";
@@ -27,8 +23,8 @@ in pythonPackages.buildPythonApplication rec{
     colorama
     lxml
     pyyaml
-    requests2
-    external.zodb
+    requests
+    zodb
   ]);
 
   checkPhase = "py.test";

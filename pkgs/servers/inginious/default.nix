@@ -37,7 +37,7 @@ in pythonPackages.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with pythonPackages; [
-    requests2
+    requests
     cgroup-utils docker_1_7_2 docutils PyLTI mock pygments
     pymongo pyyaml rpyc sh simpleldap sphinx_rtd_theme tidylib
     websocket_client watchdog webpy-custom flup
@@ -66,7 +66,7 @@ in pythonPackages.buildPythonApplication rec {
 
   meta = {
     description = "An intelligent grader that allows secured and automated testing of code made by students";
-    homepage = "https://github.com/UCL-INGI/INGInious";
+    homepage = https://github.com/UCL-INGI/INGInious;
     license = licenses.agpl3;
     maintainers = with maintainers; [ layus ];
   };

@@ -49,6 +49,9 @@ stdenv.mkDerivation rec {
     for bin in $out/bin/*; do
       wrapProgram $bin --set XAPPLRESDIR $out/lib/X11/app-defaults/
     done
+
+    install -D -t $out/share/applications xterm.desktop
+    install -D -t $out/share/icons/hicolor/48x48/apps icons/xterm-color_48x48.xpm
   '';
 
   meta = {

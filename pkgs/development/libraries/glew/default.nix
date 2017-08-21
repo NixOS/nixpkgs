@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, mesa_glu, xlibsWrapper, libXmu, libXi }:
+{ stdenv, fetchurl, mesa_glu, xlibsWrapper, libXmu, libXi
+, buildPlatform, hostPlatform
+}:
 
 with stdenv.lib;
 
@@ -17,7 +19,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     sed -i 's|lib64|lib|' config/Makefile.linux
-    ${optionalString (stdenv ? cross) ''
+    ${optionalString (hostPlatform != buildPlatform) ''
     sed -i -e 's/\(INSTALL.*\)-s/\1/' Makefile
     ''}
   '';
@@ -37,13 +39,9 @@ stdenv.mkDerivation rec {
     rm $out/lib/*.a
   '';
 
-  crossAttrs.makeFlags = [
-    "CC=${stdenv.cross.config}-gcc"
-    "LD=${stdenv.cross.config}-gcc"
-    "AR=${stdenv.cross.config}-ar"
-    "STRIP="
-  ] ++ optional (stdenv.cross.libc == "msvcrt") "SYSTEM=mingw"
-    ++ optional (stdenv.cross.libc == "libSystem") "SYSTEM=darwin";
+  makeFlags = [
+    "SYSTEM=${if hostPlatform.isMinGW then "mingw" else hostPlatform.parsed.kernel.name}"
+  ];
 
   meta = with stdenv.lib; {
     description = "An OpenGL extension loading library for C(++)";

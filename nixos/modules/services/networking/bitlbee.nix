@@ -7,6 +7,10 @@ let
   cfg = config.services.bitlbee;
   bitlbeeUid = config.ids.uids.bitlbee;
 
+  bitlbeePkg = if cfg.libpurple_plugins == []
+  then pkgs.bitlbee
+  else pkgs.bitlbee.override { enableLibPurple = true; };
+
   bitlbeeConfig = pkgs.writeText "bitlbee.conf"
     ''
     [settings]
@@ -24,6 +28,12 @@ let
     [defaults]
     ${cfg.extraDefaults}
     '';
+
+  purple_plugin_path =
+    lib.concatMapStringsSep ":"
+      (plugin: "${plugin}/lib/pidgin/")
+      cfg.libpurple_plugins
+    ;
 
 in
 
@@ -90,6 +100,15 @@ in
         '';
       };
 
+      libpurple_plugins = mkOption {
+        type = types.listOf types.package;
+        default = [];
+        example = literalExample "[ pkgs.purple-matrix ]";
+        description = ''
+          The list of libpurple plugins to install.
+        '';
+      };
+
       configDir = mkOption {
         default = "/var/lib/bitlbee";
         type = types.path;
@@ -144,14 +163,16 @@ in
       };
 
     systemd.services.bitlbee =
-      { description = "BitlBee IRC to other chat networks gateway";
+      {
+        environment.PURPLE_PLUGIN_PATH = purple_plugin_path;
+        description = "BitlBee IRC to other chat networks gateway";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         serviceConfig.User = "bitlbee";
-        serviceConfig.ExecStart = "${pkgs.bitlbee}/sbin/bitlbee -F -n -c ${bitlbeeConfig}";
+        serviceConfig.ExecStart = "${bitlbeePkg}/sbin/bitlbee -F -n -c ${bitlbeeConfig}";
       };
 
-    environment.systemPackages = [ pkgs.bitlbee ];
+    environment.systemPackages = [ bitlbeePkg ];
 
   };
 

@@ -21,6 +21,7 @@ rec {
 
   freicoin = callPackage ./freicoin.nix { boost = pkgs.boost155; };
   go-ethereum = callPackage ./go-ethereum.nix { };
+  go-ethereum-classic = callPackage ./go-ethereum-classic { };
 
   hivemind = callPackage ./hivemind.nix { withGui = true; };
   hivemindd = callPackage ./hivemind.nix { withGui = false; };
@@ -36,9 +37,19 @@ rec {
 
   ethabi = callPackage ./ethabi.nix { };
   ethrun = callPackage ./ethrun.nix { };
+  seth = callPackage ./seth.nix { };
+  dapp = callPackage ./dapp.nix { };
+
+  hsevm = (pkgs.haskellPackages.callPackage ./hsevm.nix {});
 
   primecoin  = callPackage ./primecoin.nix { withGui = true; };
   primecoind = callPackage ./primecoin.nix { withGui = false; };
 
   stellar-core = callPackage ./stellar-core.nix { };
+
+  zcash = callPackage ./zcash {
+    withGui = false;
+    openssl = pkgs.openssl_1_1_0;
+    boost = pkgs.boost163;
+  };
 }

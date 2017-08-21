@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake
 , extra-cmake-modules, qtbase, qtscript
 , ki18n, kio, knotifications, knotifyconfig, kdoctools, kross, kcmutils, kdelibs4support
-, libktorrent, boost, taglib
+, libktorrent, boost, taglib, libgcrypt, kplotting
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ cmake qtbase qtscript
       ki18n kio knotifications knotifyconfig kross kcmutils kdelibs4support
-      libktorrent taglib
+      libktorrent taglib libgcrypt kplotting
     ];
 
   enableParallelBuilding = true;

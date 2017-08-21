@@ -2,11 +2,11 @@
 , expat, libxml2, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "squid-4.0.17";
+  name = "squid-4.0.20";
 
   src = fetchurl {
     url = "http://www.squid-cache.org/Versions/v4/${name}.tar.xz";
-    sha256 = "1713fqw59r3d892p5hpbkhmfcaw6jzfnngfn5f4h46sx963k87wb";
+    sha256 = "1apb496psfv513fad82m52s6x7l74lsdq2dkzifmfgh3zrlc7r9i";
   };
 
   buildInputs = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A caching proxy for the Web supporting HTTP, HTTPS, FTP, and more";
-    homepage = "http://www.squid-cache.org";
+    homepage = http://www.squid-cache.org;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz raskin ];

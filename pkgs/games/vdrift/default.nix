@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     cp -r --reflink=auto $data data
     chmod -R +w data
     sed -i -e s,/usr/local,$out, SConstruct
+    export CXXFLAGS="$(pkg-config --cflags SDL2_image)"
     scons
   '';
   installPhase = "scons install";

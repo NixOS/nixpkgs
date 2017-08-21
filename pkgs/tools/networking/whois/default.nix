@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, perl, gettext }:
 
 stdenv.mkDerivation rec {
-  version = "5.2.14";
+  version = "5.2.17";
   name = "whois-${version}";
 
   src = fetchFromGitHub {
     owner = "rfc1036";
     repo = "whois";
     rev = "v${version}";
-    sha256 = "06nx295g03z7vzrrc3mhxikpw870zvkilrlxghd2rpcbm939iin5";
+    sha256 = "15jnzk0js8wxiapz1bw7jnck0fl3mcli56f9635z9x7vk63ss68z";
   };
 
   buildInputs = [ perl gettext ];

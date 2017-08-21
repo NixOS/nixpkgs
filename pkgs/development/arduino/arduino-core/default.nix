@@ -54,25 +54,25 @@ let
              + stdenv.lib.optionalString (!withGui) "-core";
 in
 stdenv.mkDerivation rec {
-  version = "1.6.12";
+  version = "1.8.2";
   name = "${flavor}-${version}";
 
   src = fetchFromGitHub {
     owner = "arduino";
     repo = "Arduino";
     rev = "${version}";
-    sha256 = "0rz8dv1mncwx2wkafakxqdi2y0rq3f72fr57cg0z5hgdgdm89lkh";
+    sha256 = "1ssznjmzmahayslj2xnci9b5wpsl53nyg85say54akng93qipmfb";
   };
 
   teensyduino_src = fetchurl {
-    url = "http://www.pjrc.com/teensy/td_131/TeensyduinoInstall.${teensy_architecture}";
+    url = "https://www.pjrc.com/teensy/td_136/TeensyduinoInstall.${teensy_architecture}";
     sha256 =
       lib.optionalString ("${teensy_architecture}" == "linux64")
-        "1q4wv6s0900hyv9z1mjq33fr2isscps4q3bsy0h12wi3l7ir94g9"
+        "0qvb5z9y6nsqy0kzib9fvvbn8dakl50vib6r3nm6bnpvyxzwjl2r"
       + lib.optionalString ("${teensy_architecture}" == "linux32")
-        "06fl951f44avqyqim5qmy73siylbqcnsmz55zmj2dzhgf4sflkvc"
+        "14ca62vq7cpx269vfd92shi80qj8spf0dzli8gfcb39ss2zc4jf1"
       + lib.optionalString ("${teensy_architecture}" == "linuxarm")
-        "0ldf33w8wkqwklcj8fn4p22f23ibpwpf7873dc6i2jfmmbx0yvxn";
+        "122z1gxcgkmwjb8wdklb2w8c3qkj5rc1ap5n4a8fi3kjz29va9rx";
   };
 
   buildInputs = [ jdk ant libusb libusb1 unzip zlib ncurses5 readline
@@ -92,6 +92,10 @@ stdenv.mkDerivation rec {
       download_dst=(''${download_dst[@]:1})
       cp -v $file_src $file_dst
     done
+
+    # Deliberately break build.xml's download statement in order to cause
+    # an error if anything needed is missing from download.nix.
+    substituteInPlace build/build.xml --replace "get src" "get error"
 
     cd ./arduino-core && ant
     cd ../build && ant 
@@ -208,7 +212,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Open-source electronics prototyping platform";
     homepage = http://arduino.cc/;
-    license = stdenv.lib.licenses.gpl2;
+    license = if withTeensyduino then licenses.unfreeRedistributable else licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ antono auntie robberer bjornfor ];
   };

@@ -12,14 +12,14 @@ pythonPackages.buildPythonApplication rec {
   propagatedBuildInputs = with pythonPackages; [
     click
     colorama
-    requests2
+    requests
     pygments
     prompt_toolkit
     six
   ];
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/donnemartin/haxor-news";
+    homepage = https://github.com/donnemartin/haxor-news;
     description = "Browse Hacker News like a haxor";
     license = licenses.asl20;
     maintainers = with maintainers; [ matthiasbeyer ];

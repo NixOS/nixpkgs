@@ -14,16 +14,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ libexif libjpeg libpng libungif freetype fontconfig libtiff
    libwebp imagemagick curl sane-backends libdrm libXpm epoxy poppler lirc ];
   
-  makeFlags = [ "prefix=$(out)" "verbose=yes" ];
+  makeFlags = [ "prefix=$(out)" "verbose=yes" "STRIP=" ];
 
   patchPhase =
     ''
     sed -e 's@ cpp\>@ gcc -E -@' -i GNUmakefile
     '';
-
-  crossAttrs = {
-    makeFlags = makeFlags ++ [ "CC=${stdenv.cross.config}-gcc" "STRIP=" ];
-  };
 
   meta = with stdenv.lib; {
     description = "Image viewing and manipulation programs";

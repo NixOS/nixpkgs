@@ -2,6 +2,7 @@
 , steam-runtime, steam-runtime-i686 ? null
 , withJava ? false
 , withPrimus ? false
+, extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , nativeOnly ? false
 , runtimeOnly ? false
 , newStdcpp ? false
@@ -37,7 +38,8 @@ let
       # Zoneinfo
       etc-zoneinfo
     ] ++ lib.optional withJava jdk
-      ++ lib.optional withPrimus primus2;
+      ++ lib.optional withPrimus primus2
+      ++ extraPkgs pkgs;
 
 in buildFHSUserEnv rec {
   name = "steam";

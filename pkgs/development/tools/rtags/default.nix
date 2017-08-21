@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "rtags-${version}";
-  version = "2.8-p1";
+  version = "2.12";
 
   buildInputs = [ cmake llvmPackages.llvm openssl llvmPackages.clang emacs ]
     ++ lib.optionals stdenv.isDarwin [ apple_sdk.libs.xpc apple_sdk.frameworks.CoreServices ];
@@ -12,12 +12,17 @@ stdenv.mkDerivation rec {
            LIBCLANG_LIBDIR="${llvmPackages.clang.cc}/lib"
   '';
 
+
   src = fetchgit {
-    # rev = "refs/tags/v${version}"; # TODO Renable if sha1 below is tagged as release
-    rev = "f85bd60f00d51748ea159b00fda7b5bfa78ef571";
+    rev = "refs/tags/v${version}";
     fetchSubmodules = true;
     url = "https://github.com/andersbakken/rtags.git";
-    sha256 = "0g9sgc763c5d695hjffhis19sbaqk8z4884szljf7kbrjxl17y78";
+    sha256 = "0bgjcvyvkpqcgw4571iz39sqydmcaz6ymx7kxcmq6j7rffs6qs7l";
+    # unicode file names lead to different checksums on HFS+ vs. other
+    # filesystems because of unicode normalisation
+    postFetch = ''
+      rm $out/src/rct/tests/testfile_*.txt
+    '';
   };
 
   enableParallelBuilding = true;

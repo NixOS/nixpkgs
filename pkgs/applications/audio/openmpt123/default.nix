@@ -9,7 +9,7 @@ in stdenv.mkDerivation rec {
     sha256 = "0qp2nnz6pnl1d7yv9hcjyim7q6yax5881k1jxm8jfgjqagmz5k6p";
   };
   buildInputs = [ SDL2 pkgconfig flac libsndfile ];
-  makeFlags = [ "NO_LTDL=1 TEST=0 EXAMPLES=0" ]
+  makeFlags = [ "NO_PULSEAUDIO=1 NO_LTDL=1 TEST=0 EXAMPLES=0" ]
   ++ stdenv.lib.optional (stdenv.isDarwin) "SHARED_SONAME=0";
   installFlags = "PREFIX=\${out}";
 

@@ -2,7 +2,7 @@
   makeWrapper, libXScrnSaver, libxkbfile }:
 
 let
-  version = "1.11.2";
+  version = "1.15.1";
   channel = "stable";
 
   plat = {
@@ -12,9 +12,9 @@ let
   }.${stdenv.system};
 
   sha256 = {
-    "i686-linux" = "0cd3iwd5aizixfxc6ayrpvx6k1zk8nsfhd8i3rgz4p4zzfnx6ri5";
-    "x86_64-linux" = "1y3qgm7p1vchh02mqgn8d8pxxnifxfs6hbv01q8zjw3gb7m4anw3";
-    "x86_64-darwin" = "1v8x466080rpm0rfiv1mr2adbpia6j5v9pbsspwm0ndc7ly0h71k";
+    "i686-linux" = "09vvq02bsq6fdb0ibshn97kll43dpfmyq2dahl9gj02jlwardq27";
+    "x86_64-linux" = "1kg25i4kavmgivnk4w3dsbsnn9vncl5d2m0ds93f8qvmxpizwg21";
+    "x86_64-darwin" = "1fgjg7c9appp8v0ir7m2r3a3x4z0gx4na0p3d8j1x4pcs0kqy0qp";
   }.${stdenv.system};
 
   archive_fmt = if stdenv.system == "x86_64-darwin" then "zip" else "tar.gz";
@@ -77,11 +77,11 @@ in
     meta = with stdenv.lib; {
       description = ''
         Open source source code editor developed by Microsoft for Windows,
-        Linux and OS X
+        Linux and macOS
       '';
       longDescription = ''
         Open source source code editor developed by Microsoft for Windows,
-        Linux and OS X. It includes support for debugging, embedded Git
+        Linux and macOS. It includes support for debugging, embedded Git
         control, syntax highlighting, intelligent code completion, snippets,
         and code refactoring. It is also customizable, so users can change the
         editor's theme, keyboard shortcuts, and preferences

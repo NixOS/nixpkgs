@@ -2,8 +2,8 @@
 
 buildGoPackage rec {
   name = "hound-unstable-${version}";
-  version = "20160919-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "f95e9a9224b8878b9cd8fac0afb6d31f83a65ca7";
+  version = "20170324";
+  rev = "effbe5873f329fcdf982e906b756b535e2804ebc";
 
   goPackagePath = "github.com/etsy/hound";
 
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "etsy";
     repo = "hound";
-    sha256 = "0d4mhka7f8x8xfjrjhl5l0v06ng8kc868jrajpv5bjkxsj71nwbg";
+    sha256 = "0zc769lygad5an63z5mivaggbmm07d9ynngi2jx3f7651wpji4aw";
   };
 
   goDeps = ./deps.nix;

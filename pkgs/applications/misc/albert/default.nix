@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, qtbase, qtsvg, qtx11extras, makeQtWrapper, muparser, cmake }:
+{ mkDerivation, lib, fetchFromGitHub, makeWrapper, qtbase, qtsvg, qtx11extras, muparser, cmake }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name    = "albert-${version}";
-  version = "0.11.1";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner  = "albertlauncher";
     repo   = "albert";
     rev    = "v${version}";
-    sha256 = "1ai0h3lbdac0a4xzd6pm3i0r8w0gfdnw9rdkj0szyzvm428f88s6";
+    sha256 = "120l7hli2l4qj2s126nawc4dsy4qvwvb0svc42hijry4l8imdhkq";
   };
 
-  nativeBuildInputs = [ cmake makeQtWrapper ];
+  nativeBuildInputs = [ cmake makeWrapper ];
 
   buildInputs = [ qtbase qtsvg qtx11extras muparser ];
 
@@ -31,11 +31,12 @@ stdenv.mkDerivation rec {
     rm "$out/lib"
   '';
 
-  fixupPhase = ''
-    wrapQtProgram $out/bin/albert
+  postInstall = ''
+    wrapProgram $out/bin/albert \
+      --prefix XDG_DATA_DIRS : $out/share
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage    = https://albertlauncher.github.io/;
     description = "Desktop agnostic launcher";
     license     = licenses.gpl3Plus;

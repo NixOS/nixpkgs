@@ -10,7 +10,8 @@ in
 stdenv.mkDerivation rec {
   name = "RStudio-${version}";
 
-  buildInputs = [ cmake boost163 zlib openssl R qt5.full qt5.qtwebkit qt5.qmakeHook libuuid unzip ant jdk makeWrapper pandoc ];
+  buildInputs = [ cmake boost163 zlib openssl R qt5.full qt5.qtwebkit libuuid unzip ant jdk makeWrapper pandoc ];
+  nativeBuildInputs = [ qt5.qmake ];
 
   src = fetchurl {
     url = "https://github.com/rstudio/rstudio/archive/v${version}.tar.gz";
@@ -90,7 +91,7 @@ stdenv.mkDerivation rec {
       cp ${pandoc}/bin/pandoc dependencies/common/pandoc/
     '';
 
-  cmakeFlags = [ "-DRSTUDIO_TARGET=Desktop" "-DQT_QMAKE_EXECUTABLE=${qt5.qmakeHook}/bin/qmake" ];
+  cmakeFlags = [ "-DRSTUDIO_TARGET=Desktop" "-DQT_QMAKE_EXECUTABLE=${qt5.qmake}/bin/qmake" ];
 
   desktopItem = makeDesktopItem {
     name = name;

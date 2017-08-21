@@ -1,6 +1,6 @@
 { stdenv
 , coreutils
-, fetchurl
+, fetchFromGitHub
 , makeWrapper
 , pkgconfig
 , clang
@@ -16,11 +16,13 @@ with stdenv.lib.strings;
 
 let
 
-  version = "2.0.a51";
+  version = "2.1.0";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/faudiostream/faust-${version}.tgz";
-    sha256 = "1yryjqfqmxs7lxy95hjgmrncvl9kig3rcsmg0v49ghzz7vs7haxf";
+  src = fetchFromGitHub {
+    owner = "grame-cncm";
+    repo = "faust";
+    rev = "v${builtins.replaceStrings ["."] ["-"] version}";
+    sha256 = "1pmiwy287g79ipz9pppnkfrdgls3l912kpkr7dfymk9wk5y5di9m";
   };
 
   meta = with stdenv.lib; {
@@ -67,7 +69,7 @@ let
       #
       # For now, fix this by 1) pinning the llvm version; 2) manually setting LLVM_VERSION
       # to something the makefile will recognize.
-      sed '52iLLVM_VERSION=3.8.0' -i compiler/Makefile.unix
+      sed '52iLLVM_VERSION=${stdenv.lib.getVersion llvm}' -i compiler/Makefile.unix
     '';
 
     # Remove most faust2appl scripts since they won't run properly
@@ -194,8 +196,8 @@ let
         # export parts of the build environment
         for script in "$out"/bin/*; do
           wrapProgram "$script" \
-            --set FAUSTLIB "${faust}/lib/faust" \
-            --set FAUST_LIB_PATH "${faust}/lib/faust" \
+            --set FAUSTLIB "${faust}/share/faust" \
+            --set FAUST_LIB_PATH "${faust}/share/faust" \
             --set FAUSTINC "${faust}/include/faust" \
             --prefix PATH : "$PATH" \
             --prefix PKG_CONFIG_PATH : "$PKG_CONFIG_PATH" \

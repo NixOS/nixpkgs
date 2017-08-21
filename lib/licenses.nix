@@ -45,6 +45,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Apple Public Source License 2.0";
   };
 
+  arphicpl = {
+    fullName = "Arphic Public License";
+    url = https://www.freedesktop.org/wiki/Arphic_Public_License/;
+  };
+
   artistic1 = spdx {
     spdxId = "Artistic-1.0";
     fullName = "Artistic License 1.0";
@@ -541,12 +546,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "zlib License";
   };
 
-  zpt20 = spdx { # FIXME: why zpt* instead of zpl*
+  zpl20 = spdx {
     spdxId = "ZPL-2.0";
     fullName = "Zope Public License 2.0";
   };
 
-  zpt21 = spdx {
+  zpl21 = spdx {
     spdxId = "ZPL-2.1";
     fullName = "Zope Public License 2.1";
   };

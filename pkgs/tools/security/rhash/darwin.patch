@@ -1,0 +1,38 @@
+diff --git a/Makefile b/Makefile
+index e40dbc3..e198b93 100644
+--- a/Makefile
++++ b/Makefile
+@@ -17,7 +17,7 @@ ALLCFLAGS = -pipe $(CFLAGS) $(ADDCFLAGS) \
+   -Wbad-function-cast -Wmissing-prototypes -Wmissing-declarations
+ LDLIBRHASH = -Llibrhash -lrhash
+ ALLLDFLAGS = $(LDLIBRHASH) $(LDFLAGS) $(ADDLDFLAGS)
+-SHAREDLIB  = librhash/librhash.so.0
++SHAREDLIB  = librhash/librhash.0.dylib
+ SHRDLFLAGS = $(LDFLAGS) $(ADDLDFLAGS)
+ HEADERS = calc_sums.h hash_print.h common_func.h hash_update.h file_mask.h file_set.h find_file.h hash_check.h output.h parse_cmdline.h rhash_main.h win_utils.h version.h
+ SOURCES = calc_sums.c hash_print.c common_func.c hash_update.c file_mask.c file_set.c find_file.c hash_check.c output.c parse_cmdline.c rhash_main.c win_utils.c
+diff --git a/librhash/Makefile b/librhash/Makefile
+index 2f9bcc9..0c5aaad 100644
+--- a/librhash/Makefile
++++ b/librhash/Makefile
+@@ -28,8 +28,8 @@ PREFIX  = /usr/local
+ INCDIR  = $(PREFIX)/include
+ LIBDIR  = $(PREFIX)/lib
+ LIBRARY = librhash.a
+-SONAME  = librhash.so.0
+-SOLINK  = librhash.so
++SONAME  = librhash.0.dylib
++SOLINK  = librhash.dylib
+ TEST_TARGET = test_hashes
+ TEST_SHARED = test_shared
+ # Set variables according to GNU coding standard
+@@ -182,8 +182,7 @@ test-dll: $(DLLNAME) test_hashes.o
+ 
+ # shared and static libraries
+ $(SONAME): $(SOURCES)
+-	sed -n '1s/.*/{ global:/p; s/^RHASH_API.* \([a-z0-9_]\+\)(.*/  \1;/p; $$s/.*/local: *; };/p' $(SO_HEADERS) > exports.sym
+-	$(CC) -fpic $(ALLCFLAGS) -shared $(SOURCES) -Wl,--version-script,exports.sym,-soname,$(SONAME) $(LIBLDFLAGS) -o $@
++	$(CC) -fpic $(ALLCFLAGS) -dynamiclib $(SOURCES) $(LIBLDFLAGS) -Wl,-install_name,$(PREFIX)/lib/$@ -o $@
+ 	ln -s $(SONAME) $(SOLINK)
+ # use 'nm -Cg --defined-only $@' to view exported symbols
+ 

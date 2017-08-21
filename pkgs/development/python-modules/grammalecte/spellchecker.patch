@@ -1,0 +1,13 @@
+diff --git a/spellchecker.py b/spellchecker.py
+index 37ac0ea..a60b3a9 100644
+--- a/spellchecker.py
++++ b/spellchecker.py
+@@ -2,7 +2,7 @@
+ # Wrapper for the IBDAWG class.
+ # Useful to check several dictionaries at once.
+ 
+-import ibdawg
++from grammalecte import ibdawg
+ 
+ 
+ dDictionaries = {

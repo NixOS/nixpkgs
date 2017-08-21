@@ -2,7 +2,8 @@
 
 buildPythonPackage rec {
   version = "0.8.1";
-  name = "ezdxf-${version}";
+  pname = "ezdxf";
+  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "mozman";

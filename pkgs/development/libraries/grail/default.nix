@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   configureFlags = stdenv.lib.optional enableX11 "--with-x11";
 
   meta = {
-    homepage = "https://launchpad.net/canonical-multitouch/grail";
+    homepage = https://launchpad.net/canonical-multitouch/grail;
     description = "Gesture Recognition And Instantiation Library";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/balabit/syslog-ng-incubator";
+    homepage = https://github.com/balabit/syslog-ng-incubator;
     description = "A collection of tools and modules for syslog-ng";
     license = licenses.gpl2;
     maintainers = [ maintainers.rickynils ];

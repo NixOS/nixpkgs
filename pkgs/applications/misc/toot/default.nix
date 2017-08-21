@@ -12,7 +12,7 @@ pythonPackages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with pythonPackages;
-    [ requests2 beautifulsoup4 future ];
+    [ requests beautifulsoup4 future ];
 
   meta = with stdenv.lib; {
     description = "Mastodon CLI interface";

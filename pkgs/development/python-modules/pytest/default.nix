@@ -1,7 +1,8 @@
 { stdenv, buildPythonPackage, fetchurl, isPy26, argparse, hypothesis, py }:
 buildPythonPackage rec {
-  name = "pytest-${version}";
   version = "3.0.7";
+  pname = "pytest";
+  name = "${pname}-${version}";
 
   preCheck = ''
     # don't test bash builtins

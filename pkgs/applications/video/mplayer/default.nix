@@ -10,6 +10,7 @@
 , vdpauSupport ? false, libvdpau ? null
 , cddaSupport ? !stdenv.isDarwin, cdparanoia ? null
 , dvdnavSupport ? !stdenv.isDarwin, libdvdnav ? null
+, dvdreadSupport ? true, libdvdread ? null
 , bluraySupport ? true, libbluray ? null
 , amrSupport ? false, amrnb ? null, amrwb ? null
 , cacaSupport ? true, libcaca ? null
@@ -25,6 +26,7 @@
 , libjpegSupport ? true, libjpeg ? null
 , useUnfreeCodecs ? false
 , darwin ? null
+, hostPlatform
 }:
 
 assert fontconfigSupport -> (fontconfig != null);
@@ -38,6 +40,7 @@ assert screenSaverSupport -> libXScrnSaver != null;
 assert vdpauSupport -> libvdpau != null;
 assert cddaSupport -> cdparanoia != null;
 assert dvdnavSupport -> libdvdnav != null;
+assert dvdreadSupport -> libdvdread != null;
 assert bluraySupport -> libbluray != null;
 assert amrSupport -> (amrnb != null && amrwb != null);
 assert cacaSupport -> libcaca != null;
@@ -93,6 +96,8 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     sed -i /^_install_strip/d configure
+
+    rm -rf ffmpeg
   '';
 
   buildInputs = with stdenv.lib;
@@ -107,6 +112,7 @@ stdenv.mkDerivation rec {
     ++ optional cacaSupport libcaca
     ++ optional xineramaSupport libXinerama
     ++ optional dvdnavSupport libdvdnav
+    ++ optional dvdreadSupport libdvdread
     ++ optional bluraySupport libbluray
     ++ optional cddaSupport cdparanoia
     ++ optional jackaudioSupport libjack2
@@ -159,6 +165,7 @@ stdenv.mkDerivation rec {
       ${optionalString stdenv.isLinux "--enable-vidix"}
       ${optionalString stdenv.isLinux "--enable-fbdev"}
       --disable-ossaudio
+      --disable-ffmpeg_a
     '';
 
   NIX_LDFLAGS = with stdenv.lib;
@@ -182,13 +189,14 @@ stdenv.mkDerivation rec {
     '';
 
   crossAttrs = {
-    dontSetConfigureCross = true;
+    configurePlatforms = [];
     # Some things (vidix) are nanonote specific. Once someone cares, we can make options from them.
+    # Note, the `target` vs `host` confusion is intensional.
     preConfigure = ''
       configureFlags="`echo $configureFlags |
         sed -e 's/--codecsdir[^ ]\+//' \
         -e 's/--enable-runtime-cpudetection//' `"
-      configureFlags="$configureFlags --target=${stdenv.cross.arch}-linux
+      configureFlags="$configureFlags --target=${hostPlatform.arch}-linux
         --enable-cross-compile --cc=$crossConfig-gcc --as=$crossConfig-as
         --disable-vidix-pcidb --with-vidix-drivers=no --host-cc=gcc"
     '';
@@ -196,7 +204,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A movie player that supports many video formats";
-    homepage = "http://mplayerhq.hu";
+    homepage = http://mplayerhq.hu;
     license = "GPL";
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;

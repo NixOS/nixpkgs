@@ -194,7 +194,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://pgp-tools.alioth.debian.org/";
+    homepage = https://pgp-tools.alioth.debian.org/;
     description = "A collection of several projects relating to OpenPGP";
     longDescription = ''
       This is a collection of several projects relating to OpenPGP.

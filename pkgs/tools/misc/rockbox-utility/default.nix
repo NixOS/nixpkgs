@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libusb1
-, qtbase, qttools, makeQtWrapper, qmakeHook
+, qtbase, qttools, makeWrapper, qmake
 , withEspeak ? false, espeak ? null }:
 
 stdenv.mkDerivation  rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation  rec {
 
   buildInputs = [ libusb1 qtbase qttools ]
     ++ stdenv.lib.optional withEspeak espeak;
-  nativeBuildInputs = [ makeQtWrapper pkgconfig qmakeHook ];
+  nativeBuildInputs = [ makeWrapper pkgconfig qmake ];
 
   preConfigure = ''
     cd rbutil/rbutilqt
@@ -24,7 +24,7 @@ stdenv.mkDerivation  rec {
 
     install -Dm755 RockboxUtility $out/bin/rockboxutility
     ln -s $out/bin/rockboxutility $out/bin/RockboxUtility
-    wrapQtProgram $out/bin/rockboxutility \
+    wrapProgram $out/bin/rockboxutility \
     ${stdenv.lib.optionalString withEspeak ''
       --prefix PATH : ${espeak}/bin
     ''}

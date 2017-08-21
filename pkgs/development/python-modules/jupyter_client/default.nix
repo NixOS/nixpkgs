@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "jupyter_client";
-  version = "5.0.1";
+  version = "5.1.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fe573880b5ca4469ed0bece098f4b910c373d349e12525e1ea3566f5a14536b";
+    sha256 = "08756b021765c97bc5665390700a4255c2df31666ead8bff116b368d09912aba";
   };
 
   buildInputs = [ nose ];

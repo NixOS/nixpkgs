@@ -5,6 +5,9 @@
 , unicode ? true
 
 , gpm
+
+, buildPlatform, hostPlatform
+, buildPackages
 }:
 let
   version = if abiVersion == "5" then "5.9" else "6.0";
@@ -35,7 +38,11 @@ stdenv.mkDerivation rec {
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
   CFLAGS = lib.optionalString stdenv.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkgconfig
+  ] ++ lib.optionals (buildPlatform != hostPlatform) [
+    buildPackages.ncurses buildPackages.stdenv.cc
+  ];
   buildInputs = lib.optional (mouseSupport && stdenv.isLinux) gpm;
 
   preConfigure = ''
@@ -54,11 +61,7 @@ stdenv.mkDerivation rec {
            -e '/CPPFLAGS="$CPPFLAGS/s/ -D_XOPEN_SOURCE_EXTENDED//' \
         configure
     CFLAGS=-D_XOPEN_SOURCE_EXTENDED
-  '' + lib.optionalString stdenv.isCygwin ''
-    sed -i -e 's,LIB_SUFFIX="t,LIB_SUFFIX=",' configure
   '';
-
-  selfNativeBuildInput = true;
 
   enableParallelBuilding = true;
 
@@ -117,7 +120,7 @@ stdenv.mkDerivation rec {
     moveToOutput "bin/tset" "$out"
   '';
 
-  preFixup = ''
+  preFixup = lib.optionalString (!hostPlatform.isCygwin) ''
     rm "$out"/lib/*.a
   '';
 

@@ -49,9 +49,22 @@ stdenv.mkDerivation rec {
     ]
     ++ optional withGssapiPatches gssapiSrc;
 
+  postPatch =
+    # On Hydra this makes installation fail (sometimes?),
+    # and nix store doesn't allow such fancy permission bits anyway.
+    ''
+      substituteInPlace Makefile.in --replace '$(INSTALL) -m 4711' '$(INSTALL) -m 0711'
+    '';
+
   buildInputs = [ zlib openssl libedit pkgconfig pam ]
     ++ optional withKerberos kerberos
     ++ optional hpnSupport autoreconfHook;
+
+  preConfigure = ''
+    # Setting LD causes `configure' and `make' to disagree about which linker
+    # to use: `configure' wants `gcc', but `make' wants `ld'.
+    unset LD
+  '';
 
   # I set --disable-strip because later we strip anyway. And it fails to strip
   # properly when cross building.
@@ -85,7 +98,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = "http://www.openssh.com/";
+    homepage = http://www.openssh.com/;
     description = "An implementation of the SSH protocol";
     license = stdenv.lib.licenses.bsd2;
     platforms = platforms.unix;

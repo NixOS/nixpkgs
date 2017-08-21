@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A GTK theme built to match KDE's breeze theme";
-    homepage = "https://github.com/dirruk1/gnome-breeze";
+    homepage = https://github.com/dirruk1/gnome-breeze;
     license = stdenv.lib.licenses.lgpl2;
     maintainers = with stdenv.lib.maintainers; [ bennofs ];
     platforms = stdenv.lib.platforms.all;

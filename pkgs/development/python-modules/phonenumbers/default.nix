@@ -1,7 +1,9 @@
 { stdenv, fetchurl, buildPythonPackage }:
 
 buildPythonPackage rec {
-  name = "phonenumbers-8.4.0";
+  pname = "phonenumbers";
+  version = "8.7.1";
+  name = "${pname}-${version}";
 
   meta = {
     description = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers";
@@ -12,6 +14,6 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "mirror://pypi/p/phonenumbers/${name}.tar.gz";
-    sha256 = "1c052gd7ra3v183jq2x5nwa428wxh1g3psfh0ay5jwwmcxy78vab";
+    sha256 = "1zmi2xvh6v4iyfxmrqhj2byfac9xk733w663a7phib7y6wkvqlgr";
   };
 }

@@ -2,8 +2,8 @@
   zope_interface, incremental, automat, constantly
 }:
 buildPythonPackage rec {
-
-  name = "Twisted-${version}";
+  pname = "Twisted";
+  name = "${pname}-${version}";
   version = "17.1.0";
 
   src = fetchurl {

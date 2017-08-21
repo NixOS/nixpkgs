@@ -9,19 +9,24 @@ let
   # /var/lib/misc is for dnsmasq.leases.
   stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc";
 
+  dns =
+    if cfg.useDnsmasq then "dnsmasq"
+    else if config.services.resolved.enable then "systemd-resolved"
+    else if config.services.unbound.enable then "unbound"
+    else "default";
+
   configFile = writeText "NetworkManager.conf" ''
     [main]
     plugins=keyfile
-    dns=${if cfg.useDnsmasq then "dnsmasq" else "default"}
+    dhcp=${cfg.dhcp}
+    dns=${dns}
 
     [keyfile]
-    ${optionalString (config.networking.hostName != "")
-      ''hostname=${config.networking.hostName}''}
     ${optionalString (cfg.unmanaged != [])
       ''unmanaged-devices=${lib.concatStringsSep ";" cfg.unmanaged}''}
 
     [logging]
-    level=WARN
+    level=${cfg.logLevel}
 
     [connection]
     ipv6.ip6-privacy=2
@@ -124,7 +129,7 @@ in {
         type = types.attrsOf types.package;
         default = { inherit networkmanager modemmanager wpa_supplicant
                             networkmanager_openvpn networkmanager_vpnc
-                            networkmanager_openconnect
+                            networkmanager_openconnect networkmanager_fortisslvpn
                             networkmanager_pptp networkmanager_l2tp; };
         internal = true;
       };
@@ -136,6 +141,22 @@ in {
           Extra packages that provide NetworkManager plugins.
         '';
         apply = list: (attrValues cfg.basePackages) ++ list;
+      };
+
+      dhcp = mkOption {
+        type = types.enum [ "dhclient" "dhcpcd" "internal" ];
+        default = "dhclient";
+        description = ''
+          Which program (or internal library) should be used for DHCP.
+        '';
+      };
+
+      logLevel = mkOption {
+        type = types.enum [ "OFF" "ERR" "WARN" "INFO" "DEBUG" "TRACE" ];
+        default = "WARN";
+        description = ''
+          Set the default logging verbosity level.
+        '';
       };
 
       appendNameservers = mkOption {
@@ -181,7 +202,7 @@ in {
             };
 
             type = mkOption {
-              type = types.enum (attrNames dispatcherTypesSubdirMap); 
+              type = types.enum (attrNames dispatcherTypesSubdirMap);
               default = "basic";
               description = ''
                 Dispatcher hook type. Only basic hooks are currently available.
@@ -222,6 +243,9 @@ in {
       { source = "${networkmanager_openconnect}/etc/NetworkManager/VPN/nm-openconnect-service.name";
         target = "NetworkManager/VPN/nm-openconnect-service.name";
       }
+      { source = "${networkmanager_fortisslvpn}/etc/NetworkManager/VPN/nm-fortisslvpn-service.name";
+        target = "NetworkManager/VPN/nm-fortisslvpn-service.name";
+      }
       { source = "${networkmanager_pptp}/etc/NetworkManager/VPN/nm-pptp-service.name";
         target = "NetworkManager/VPN/nm-pptp-service.name";
       }
@@ -235,7 +259,7 @@ in {
            { source = overrideNameserversScript;
              target = "NetworkManager/dispatcher.d/02overridedns";
            }
-      ++ lib.imap (i: s: {
+      ++ lib.imap1 (i: s: {
         inherit (s) source;
         target = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
       }) cfg.dispatcherScripts;

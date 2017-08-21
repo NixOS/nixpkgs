@@ -13,6 +13,7 @@ stdenv.mkDerivation (rec {
   buildInputs = [openssl libX11];
 
   configureFlags = [
+    "--with-ipv6"
     "--with-openssl=${openssl.dev}"
     "--disable-credssp"
     "--disable-smartcard"

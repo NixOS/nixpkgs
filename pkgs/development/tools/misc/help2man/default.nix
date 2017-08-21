@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, gettext, LocaleGettext, makeWrapper }:
+{ stdenv, hostPlatform, fetchurl, perl, gettext, LocaleGettext, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "help2man-1.47.4";
@@ -12,11 +12,12 @@ stdenv.mkDerivation rec {
 
   doCheck = false;                                # target `check' is missing
 
-  patches = if stdenv.isCygwin then [ ./1.40.4-cygwin-nls.patch ] else null;
+  patches = if hostPlatform.isCygwin then [ ./1.40.4-cygwin-nls.patch ] else null;
 
   postInstall =
     '' wrapProgram "$out/bin/help2man" \
-         --prefix PERL5LIB : "$(echo ${LocaleGettext}/lib/perl*/site_perl)"
+         --prefix PERL5LIB : "$(echo ${LocaleGettext}/lib/perl*/site_perl)" \
+         ${stdenv.lib.optionalString hostPlatform.isCygwin "--prefix PATH : ${gettext}/bin"}
     '';
 
 

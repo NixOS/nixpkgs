@@ -1,25 +1,19 @@
-{stdenv, fetchurl, unzip}:
+{stdenv, fetchzip}:
 
-stdenv.mkDerivation rec {
-  name = "liberastika-${version}";
+let
   version = "1.1.5";
+in fetchzip rec {
+  name = "liberastika-${version}";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/lib-ka/liberastika-ttf-${version}.zip";
-    sha256 = "0vg5ki120lb577ihvq8w0nxs8yacqzcvsmnsygksmn6281hyj0xj";
-  };
+  url = "mirror://sourceforge/project/lib-ka/liberastika-ttf-${version}.zip";
 
-  buildInputs = [ unzip ];
-
-  sourceRoot = ".";
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    cp -v $(find . -name '*.ttf') $out/share/fonts/truetype
-
-    mkdir -p "$out/doc/${name}"
-    cp -v AUTHORS ChangeLog COPYING README "$out/doc/${name}" || true
+  postFetch = ''
+    mkdir -p $out/share/{doc,fonts}
+    unzip -j $downloadedFile \*.ttf                           -d $out/share/fonts/truetype
+    unzip -j $downloadedFile AUTHORS ChangeLog COPYING README -d "$out/share/doc/${name}"
   '';
+
+  sha256 = "1a9dvl1pzch2vh8sqyyn1d1wz4n624ffazl6hzlc3s5k5lzrb6jp";
 
   meta = with stdenv.lib; {
     description = "Liberation Sans fork with improved cyrillic support";

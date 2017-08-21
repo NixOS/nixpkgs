@@ -15,7 +15,7 @@ pythonPackages.buildPythonApplication rec {
   propagatedBuildInputs = with pythonPackages; [
       dogpile_cache
       click
-      requests2
+      requests
       characteristic
     ];
 

@@ -4,14 +4,14 @@
   }:
 
 stdenv.mkDerivation rec {
-  version = "git-20160412";
+  version = "0.4.7.0";
   name = "rigsofrods-${version}";
 
   src = fetchFromGitHub {
     owner = "RigsOfRods";
     repo = "rigs-of-rods";
-    rev = "1ebd359dbd467b4c3171dd6d054e7d8ec39f78ba";
-    sha256 = "0h71nrgq5r5cnh20c7wl8jzyaf50dj1b5jdrwihnklpsfyfvjlw4";
+    rev = version;
+    sha256 = "0cb1il7qm45kfhh6h6jwfpxvjlh2dmg8z1yz9kj4d6098myf2lg4";
   };
 
   enableParallelBuilding = true;

@@ -1,16 +1,18 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''fast-io'';
-  version = ''20170124-git'';
+  version = ''20170630-git'';
 
   description = ''Alternative I/O mechanism to a stream or vector'';
 
   deps = [ args."trivial-gray-streams" args."static-vectors" args."alexandria" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/fast-io/2017-01-24/fast-io-20170124-git.tgz'';
-    sha256 = ''0w57iddbpdcchnv3zg7agd3ydm36aw2mni4iasi8wd628gq9a6i2'';
+    url = ''http://beta.quicklisp.org/archive/fast-io/2017-06-30/fast-io-20170630-git.tgz'';
+    sha256 = ''0wg40jv6hn4ijks026d2aaz5pr3zfxxzaakyzzjka6981g9rgkrg'';
   };
+    
+  packageName = "fast-io";
 
   overrides = x: {
     postInstall = ''
@@ -28,7 +30,8 @@ rec {
     '';
   };
 }
-/* (SYSTEM fast-io DESCRIPTION Alternative I/O mechanism to a stream or vector SHA256 0w57iddbpdcchnv3zg7agd3ydm36aw2mni4iasi8wd628gq9a6i2 URL
-    http://beta.quicklisp.org/archive/fast-io/2017-01-24/fast-io-20170124-git.tgz MD5 e9fa77c0e75a9f32e56c27ef6861bce2 NAME fast-io TESTNAME NIL FILENAME
-    fast-io DEPS ((NAME trivial-gray-streams) (NAME static-vectors) (NAME alexandria)) DEPENDENCIES (trivial-gray-streams static-vectors alexandria) VERSION
-    20170124-git SIBLINGS (fast-io-test)) */
+/* (SYSTEM fast-io DESCRIPTION Alternative I/O mechanism to a stream or vector SHA256 0wg40jv6hn4ijks026d2aaz5pr3zfxxzaakyzzjka6981g9rgkrg URL
+    http://beta.quicklisp.org/archive/fast-io/2017-06-30/fast-io-20170630-git.tgz MD5 34bfe5f306f2e0f6da128fe024ee242d NAME fast-io TESTNAME NIL FILENAME
+    fast-io DEPS
+    ((NAME trivial-gray-streams FILENAME trivial-gray-streams) (NAME static-vectors FILENAME static-vectors) (NAME alexandria FILENAME alexandria))
+    DEPENDENCIES (trivial-gray-streams static-vectors alexandria) VERSION 20170630-git SIBLINGS (fast-io-test)) */

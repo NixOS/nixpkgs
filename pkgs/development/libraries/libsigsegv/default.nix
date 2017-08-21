@@ -1,4 +1,6 @@
-{ fetchurl, stdenv }:
+{ stdenv, fetchurl
+, buildPlatform, hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   name = "libsigsegv-2.11";
@@ -8,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "063swdvq7mbmc1clv0rnh20grwln1zfc2qnm0sa1hivcxyr2wz6x";
   };
 
-  doCheck = true;
+  doCheck = hostPlatform == buildPlatform;
 
   meta = {
     homepage = http://www.gnu.org/software/libsigsegv/;

@@ -15,12 +15,17 @@ in
 stdenv.mkDerivation (edk2.setup "OvmfPkg/OvmfPkg${targetArch}.dsc" {
   name = "OVMF-${version}";
 
+  outputs = [ "out" "fd" ];
+
   # TODO: properly include openssl for secureBoot
   buildInputs = [nasm iasl] ++ stdenv.lib.optionals (secureBoot == true) [ openssl ];
 
   hardeningDisable = [ "stackprotector" "pic" "fortify" ];
 
   unpackPhase = ''
+    # $fd is overwritten during the build
+    export OUTPUT_FD=$fd
+
     for file in \
       "${edk2.src}"/{UefiCpuPkg,MdeModulePkg,IntelFrameworkModulePkg,PcAtChipsetPkg,FatBinPkg,EdkShellBinPkg,MdePkg,ShellPkg,OptionRomPkg,IntelFrameworkPkg};
     do
@@ -47,6 +52,13 @@ stdenv.mkDerivation (edk2.setup "OvmfPkg/OvmfPkg${targetArch}.dsc" {
     '' else ''
       build -D CSM_ENABLE -D FD_SIZE_2MB ${if secureBoot then "-DSECURE_BOOT_ENABLE=TRUE" else ""}
     '';
+
+  postFixup = ''
+    mkdir -vp $OUTPUT_FD/FV
+    mv -v $out/FV/OVMF{,_CODE,_VARS}.fd $OUTPUT_FD/FV
+  '';
+
+  dontPatchELF = true;
 
   meta = {
     description = "Sample UEFI firmware for QEMU and KVM";

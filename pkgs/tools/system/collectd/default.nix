@@ -35,12 +35,12 @@
 , libmnl ? null
 }:
 stdenv.mkDerivation rec {
-  version = "5.7.0";
+  version = "5.7.2";
   name = "collectd-${version}";
 
   src = fetchurl {
     url = "http://collectd.org/files/${name}.tar.bz2";
-    sha256 = "1cpjkv4d0iifngihxikzljavya0r2k3blarlahamgbdsqsymz815";
+    sha256 = "14p5cc3ys3qfg71xzxfvmxdmz5l4brpbhlmw1fwdda392lia084x";
   };
 
   buildInputs = [
@@ -52,12 +52,24 @@ stdenv.mkDerivation rec {
 
   # for some reason libsigrok isn't auto-detected
   configureFlags =
+    [ "--localstatedir=/var" ] ++
     stdenv.lib.optional (libsigrok != null) "--with-libsigrok" ++
     stdenv.lib.optional (python != null) "--with-python=${python}/bin/python";
 
+  # do not create directories in /var during installPhase
+  postConfigure = ''
+     substituteInPlace Makefile --replace '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/' '#'
+  '';
+
+  postInstall = ''
+    if [ -d $out/share/collectd/java ]; then
+      mv $out/share/collectd/java $out/share/
+    fi
+  '';
+
   meta = with stdenv.lib; {
     description = "Daemon which collects system performance statistics periodically";
-    homepage = http://collectd.org;
+    homepage = https://collectd.org;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor fpletz ];

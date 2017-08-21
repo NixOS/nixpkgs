@@ -1,14 +1,14 @@
 { stdenv, fetchurl
 , CoreServices ? null }:
 
-let version = "4.13.1"; in
+let version = "4.15"; in
 
 stdenv.mkDerivation {
   name = "nspr-${version}";
 
   src = fetchurl {
     url = "mirror://mozilla/nspr/releases/v${version}/src/nspr-${version}.tar.gz";
-    sha256 = "5e4c1751339a76e7c772c0c04747488d7f8c98980b434dc846977e43117833ab";
+    sha256 = "101dksqm1z0hzd7ap82ccbxjr48s6q3xhshdl81qkj6hqdmy1p97";
   };
 
   outputs = [ "out" "dev" ];

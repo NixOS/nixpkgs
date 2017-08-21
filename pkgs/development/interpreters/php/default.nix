@@ -274,9 +274,10 @@ let
 
         #[[ -z "$libxml2" ]] || addToSearchPath PATH $libxml2/bin
 
+        export EXTENSION_DIR=$out/lib/php/extensions
+
         configureFlags+=(--with-config-file-path=$out/etc \
-          --includedir=$dev/include \
-          EXTENSION_DIR=$out/lib/php/extensions)
+          --includedir=$dev/include)
       '';
 
       configureFlags = [
@@ -324,17 +325,17 @@ let
 
 in {
   php56 = generic {
-    version = "5.6.30";
-    sha256 = "01krq8r9xglq59x376zlg261yikckq179jmhnlcg3gqxza9w41d1";
+    version = "5.6.31";
+    sha256 = "03xixkvfp64bqp97p8vlj3hp63bpjw7hc16b7fgm7w35rdlp2fcg";
   };
 
   php70 = generic {
-    version = "7.0.16";
-    sha256 = "1awp6l5bs7qkvak9hgn1qbwkn6303mprslmgcfjyq3ywfmszbic3";
+    version = "7.0.22";
+    sha256 = "1ppxdlyb9vapcmzylml447vrlizam72h1w41vvn15pdbd5zv5q48";
   };
 
   php71 = generic {
-    version = "7.1.2";
-    sha256 = "013hlvzjmp7ilckqf3851xwmj37xzq6afsqm67i4whv64d723wp0";
+    version = "7.1.8";
+    sha256 = "1y527hs9yh9lmr38q3rf7gkhnvk49vh4nyhci6852mjhjh5a0r3h";
   };
 }

@@ -146,7 +146,7 @@ make_symlink(Path, TargetFile) ->
 
 %% @doc
 %% This takes an app name in the standard OTP <name>-<version> format
-%% and returns just the app name. Why? because rebar doesn't
+%% and returns just the app name. Why? Because rebar doesn't
 %% respect OTP conventions in some cases.
 -spec fixup_app_name(string()) -> string().
 fixup_app_name(FileName) ->
@@ -180,14 +180,14 @@ make_sure_registry_snapshot_exists(RegistrySnapshot) ->
             erlang:halt(1)
     end.
 
--spec gather_required_data_from_the_environment(#data{}) -> {ok, map()}.
+-spec gather_required_data_from_the_environment(#data{}) -> {ok, #data{}}.
 gather_required_data_from_the_environment(ArgData) ->
     {ok, ArgData#data{ version = guard_env("version")
-                     , erl_libs = os:getenv("ERL_LIBS", [])
-                     , plugins = os:getenv("buildPlugins", [])
+                     , erl_libs = get_env("ERL_LIBS", [])
+                     , plugins = get_env("buildPlugins", [])
                      , root = code:root_dir()
                      , name = guard_env("name")
-                     , compile_ports = nix2bool(os:getenv("compilePorts", ""))
+                     , compile_ports = nix2bool(get_env("compilePorts", ""))
                      , registry_snapshot = guard_env("HEX_REGISTRY_SNAPSHOT")}}.
 
 -spec nix2bool(any()) -> boolean().
@@ -196,9 +196,17 @@ nix2bool("1") ->
 nix2bool("") ->
     false.
 
+get_env(Name) ->
+    os:getenv(Name).
+get_env(Name, Def) ->
+    case get_env(Name) of
+        false -> Def;
+        Val ->   Val
+    end.
+
 -spec guard_env(string()) -> string().
 guard_env(Name) ->
-    case os:getenv(Name) of
+    case get_env(Name) of
         false ->
             stderr("Expected Environment variable ~s! Are you sure you are "
                    "running in a Nix environment? Either a nix-build, "

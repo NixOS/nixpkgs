@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "OCaml library to read and write configuration options in JSON syntax";
-    homepage = "https://zoggy.github.io/ocf/";
+    homepage = https://zoggy.github.io/ocf/;
     license = licenses.lgpl3;
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [ regnat ];

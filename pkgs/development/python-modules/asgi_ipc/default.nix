@@ -2,12 +2,13 @@
   asgiref, msgpack, posix_ipc
 }:
 buildPythonPackage rec {
-  name = "asgi_ipc-${version}";
-  version = "1.3.1";
+  version = "1.4.0";
+  pname = "asgi_ipc";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/a/asgi_ipc/${name}.tar.gz";
-    sha256 = "1dm8xvm1z28f421ck1ympxsq2sjm9xb7dla6p8yd2bz6gn6p5h7v";
+    sha256 = "1bae453d771eb92c0ec558b826fc0bce75a2a61bf21187784d4e4dc11710e588";
   };
 
   propagatedBuildInputs = [ asgiref msgpack posix_ipc ];

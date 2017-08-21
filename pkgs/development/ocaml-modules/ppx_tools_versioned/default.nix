@@ -2,7 +2,7 @@
 
 buildOcaml rec {
   name = "ppx_tools_versioned";
-  version = "5.0alpha";
+  version = "5.0.1";
 
   minimumSupportedOcamlVersion = "4.02";
 
@@ -10,7 +10,7 @@ buildOcaml rec {
     owner = "let-def";
     repo = "ppx_tools_versioned";
     rev = version;
-    sha256 = "0sa3w0plpa0s202s9yjgz7dbk32xd2s6fymkjijrhj4lkvh08mba";
+    sha256 = "1rpbxbhk3k7f61h7lr4qkllkc12gjpq0rg52q7i6hcrg2dxkhwh6";
   };
 
   propagatedBuildInputs = [ ocaml-migrate-parsetree ];

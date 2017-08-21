@@ -17,7 +17,7 @@ in runCommand name {
   };
   meta = with stdenv.lib; {
     description = "A postfix policy server to provide greylisting";
-    homepage = "https://postgrey.schweikert.ch/";
+    homepage = https://postgrey.schweikert.ch/;
     platforms = postfix.meta.platforms;
     licenses = licenses.gpl2;
   };

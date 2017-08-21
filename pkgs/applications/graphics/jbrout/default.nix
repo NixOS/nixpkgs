@@ -34,7 +34,7 @@ in pythonPackages.buildPythonApplication rec {
   propagatedBuildInputs = with pythonPackages; [ pillow lxml pyGtkGlade pyexiv2 fbida ];
 
   meta = {
-    homepage = "http://code.google.com/p/jbrout";
+    homepage = http://code.google.com/p/jbrout;
     description = "Photo manager";
     platforms = stdenv.lib.platforms.linux;
   };

@@ -6,7 +6,7 @@
 , sh
 , coverage
 , docopt
-, requests2
+, requests
 , git
 }:
 
@@ -38,7 +38,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     coverage
     docopt
-    requests2
+    requests
   ];
 
   meta = {

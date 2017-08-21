@@ -2,11 +2,11 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "radicale-${version}";
-  version = "1.1.1";
+  version = "1.1.4";
 
   src = fetchurl {
     url = "mirror://pypi/R/Radicale/Radicale-${version}.tar.gz";
-    sha256 = "1c5lv8qca21mndkx350wxv34qypqh6gb4rhzms4anr642clq3jg2";
+    sha256 = "17p0hayyw30pfb81xqvd7jhjm6yrk2dnbgvqagx1nqdsr89ar0ss";
   };
 
   propagatedBuildInputs = stdenv.lib.optionals (!pythonPackages.isPy3k) [

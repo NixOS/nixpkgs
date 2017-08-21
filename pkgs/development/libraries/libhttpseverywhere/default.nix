@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   major = "0.4";
-  minor = "2";
+  minor = "5";
   version = "${major}.${minor}";
 
   name = "libhttpseverywhere-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libhttpseverywhere/${major}/libhttpseverywhere-${version}.tar.xz";
-    sha256 = "0n850a4adsla6di8dylnadg07wblkdl28abrjvk6fzy8a1kjlx02";
+    sha256 = "07sgcw285rl9wqr5k7srs3fj7fhgrrw6w780jx8wy8jw2bfwlvj2";
   };
 
   nativeBuildInputs = [ gnome3.vala valadoc  gobjectIntrospection meson ninja pkgconfig ];

@@ -2,15 +2,13 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  # use unstable because it fixed some serious crashes,
-  # stable should be reconsidered in future
-  name = "lxcfs-unstable-2017-03-02";
+  name = "lxcfs-2.0.7";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxcfs";
-    sha256 = "1say5bf6gknzs0aymvrg2xiypc311gcdcfdmvb2vnz058pmianq9";
-    rev = "4a6707e130b4b65a33606ebc18a95ec471f4bf40";
+    rev = name;
+    sha256 = "1z6d52dc12rcplgc9jdgi3lbxm6ahlsjgs1k8v8kvn261xsq1m0a";
   };
 
   nativeBuildInputs = [ pkgconfig help2man autoreconfHook ];
@@ -34,6 +32,6 @@ stdenv.mkDerivation rec {
     description = "FUSE filesystem for LXC";
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mic92 ];
+    maintainers = with maintainers; [ mic92 fpletz ];
   };
 }

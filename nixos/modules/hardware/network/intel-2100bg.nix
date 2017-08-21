@@ -23,7 +23,7 @@
 
   config = lib.mkIf config.networking.enableIntel2100BGFirmware {
 
-    hardware.enableAllFirmware = true;
+    hardware.enableRedistributableFirmware = true;
 
   };
 

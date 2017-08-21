@@ -1,19 +1,19 @@
 { stdenv, fetchurl, buildPythonPackage, python, astroid, isort,
-  pytest,  mccabe, configparser, backports_functools_lru_cache }:
+  pytest, pytestrunner,  mccabe, configparser, backports_functools_lru_cache }:
 
   buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "pylint";
-    version = "1.6.5";
+    version = "1.7.2";
 
     src = fetchurl {
       url = "mirror://pypi/p/${pname}/${name}.tar.gz";
-      sha256 = "06b78nl996949a7h01c4ycy8779hl5cm7vpxij5lm3npim59hwx6";
+      sha256 = "ea6afb93a9ed810cf52ff3838eb3a15e2bf6a81b80de0eaede1ce442caa5ca69";
     };
 
-    buildInputs = [ pytest mccabe configparser backports_functools_lru_cache ];
+    buildInputs = [ pytest pytestrunner mccabe configparser backports_functools_lru_cache ];
 
-    propagatedBuildInputs = [ astroid isort ];
+    propagatedBuildInputs = [ astroid configparser isort ];
 
     postPatch = ''
       # Remove broken darwin tests

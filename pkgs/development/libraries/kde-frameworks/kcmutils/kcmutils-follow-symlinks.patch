@@ -1,0 +1,13 @@
+Index: kcmutils-5.33.0/src/kpluginselector.cpp
+===================================================================
+--- kcmutils-5.33.0.orig/src/kpluginselector.cpp
++++ kcmutils-5.33.0/src/kpluginselector.cpp
+@@ -305,7 +305,7 @@ void KPluginSelector::addPlugins(const Q
+     QStringList desktopFileNames;
+     const QStringList dirs = QStandardPaths::locateAll(QStandardPaths::GenericDataLocation, componentName + QStringLiteral("/kpartplugins"), QStandardPaths::LocateDirectory);
+     Q_FOREACH (const QString &dir, dirs) {
+-        QDirIterator it(dir, QStringList() << QStringLiteral("*.desktop"), QDir::NoFilter, QDirIterator::Subdirectories);
++      QDirIterator it(dir, QStringList() << QStringLiteral("*.desktop"), QDir::NoFilter, QDirIterator::Subdirectories | QDirIterator::FollowSymlinks);
+         while (it.hasNext()) {
+             desktopFileNames.append(it.next());
+         }

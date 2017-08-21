@@ -134,7 +134,6 @@ in with self; {
   CellMapper = derive2 { name="CellMapper"; version="1.0.0"; sha256="1ixii9ppg7jhwvazzzjy3dq01x35yc3k81j698988dfrdls0plcv"; depends=[S4Vectors]; };
   CellNOptR = derive2 { name="CellNOptR"; version="1.20.0"; sha256="1awz7k09rx03f8dq5g9mmnlizpx6232vvc03ycah3r1wwzgfzlhd"; depends=[ggplot2 graph hash RBGL RCurl Rgraphviz XML]; };
   CexoR = derive2 { name="CexoR"; version="1.12.0"; sha256="110c7p0y3l7b491bvr78n5z8f4gmfgfjndbd8pnhn0k7abb9bvs9"; depends=[genomation GenomeInfoDb GenomicRanges idr IRanges RColorBrewer Rsamtools rtracklayer S4Vectors]; };
-  ChAMP = derive2 { name="ChAMP"; version="2.6.4"; sha256="1f8ngnzp6yq4x746vid72ind2bi7l1wdfnipyj2wn0gsh2jpxa7c"; depends=[bumphunter ChAMPdata dendextend DMRcate DNAcopy doParallel FEM GenomicRanges goseq Illumina450ProbeVariants_db IlluminaHumanMethylation450kmanifest IlluminaHumanMethylationEPICmanifest impute isva limma marray matrixStats minfi plotly plyr preprocessCore quadprog qvalue RColorBrewer RefFreeEWAS RPMM shiny shinythemes sva wateRmelon]; };
   ChIPComp = derive2 { name="ChIPComp"; version="1.4.0"; sha256="0wr9qrw9mnjl28fw764vhjb2shif6fl3z0hbwkhrfiz1974rdw0v"; depends=[BiocGenerics BSgenome_Hsapiens_UCSC_hg19 BSgenome_Mmusculus_UCSC_mm9 GenomeInfoDb GenomicRanges IRanges limma Rsamtools rtracklayer S4Vectors]; };
   ChIPQC = derive2 { name="ChIPQC"; version="1.10.3"; sha256="1nabghyndp4bky6msb4k6gcxpgysz7rir545d5afrfi4gbk1rpfi"; depends=[Biobase BiocGenerics BiocParallel chipseq DiffBind GenomicAlignments GenomicFeatures GenomicRanges ggplot2 gtools IRanges Nozzle_R1 reshape2 Rsamtools S4Vectors TxDb_Celegans_UCSC_ce6_ensGene TxDb_Dmelanogaster_UCSC_dm3_ensGene TxDb_Hsapiens_UCSC_hg18_knownGene TxDb_Hsapiens_UCSC_hg19_knownGene TxDb_Hsapiens_UCSC_hg38_knownGene TxDb_Mmusculus_UCSC_mm10_knownGene TxDb_Mmusculus_UCSC_mm9_knownGene TxDb_Rnorvegicus_UCSC_rn4_ensGene]; };
   ChIPXpress = derive2 { name="ChIPXpress"; version="1.16.0"; sha256="19lx482jhh4h97nic57lk198a0x1xc51cnx79l9h6r9r86ncxl0w"; depends=[affy biganalytics bigmemory Biobase ChIPXpressData frma GEOquery]; };
@@ -350,6 +349,7 @@ in with self; {
   KCsmart = derive2 { name="KCsmart"; version="2.32.0"; sha256="1ppvnd6rs4bwxjr6qhhz5wd4fx9r3xg2mr0zjs8y7srm3k6k2djl"; depends=[BiocGenerics KernSmooth multtest siggenes]; };
   KEGGREST = derive2 { name="KEGGREST"; version="1.14.1"; sha256="0dcdmbkqxy0d4gg8lqlaflmjljzl9h1p2mlxnmvwgx34vnpx386y"; depends=[Biostrings httr png]; };
   KEGGgraph = derive2 { name="KEGGgraph"; version="1.32.0"; sha256="1r5ib197swfr38ia0g23d78kx0dkgjssjmi5fc18z3nfparhkxdq"; depends=[graph XML]; };
+  KEGGlincs = derive2 { name="KEGGlincs"; version="1.0.0"; sha256="0jrfzx0s3xkk19pzm7iffk2cx6njihrclrn3iw2d3zvd015k47l3"; depends=[AnnotationDbi gtools hgu133a_db httr igraph KEGGgraph KEGGREST KOdata org_Hs_eg_db plyr RJSONIO]; };
   KEGGprofile = derive2 { name="KEGGprofile"; version="1.16.0"; sha256="1ir3vma3n9bh8bkym0h5p2s6wbi7cjsvlz99mc34nkzqn0jxm0yl"; depends=[AnnotationDbi biomaRt KEGG_db KEGGREST png TeachingDemos XML]; };
   LBE = derive2 { name="LBE"; version="1.42.0"; sha256="103m1j86mlqrrjzy9w5zms0hksqjbn20jqnrf83fga4z958w32fa"; depends=[]; };
   LEA = derive2 { name="LEA"; version="1.6.0"; sha256="1ckygk393awmd963g7jykmfzcpysgi4d29psc5iqdz0h2cxrczjd"; depends=[]; };
@@ -736,6 +736,7 @@ in with self; {
   cancerclass = derive2 { name="cancerclass"; version="1.18.0"; sha256="1zff6wz0529gc22c9bfnwa95xxadyhfbxjvr1b51w4zgms2bicfr"; depends=[binom Biobase]; };
   casper = derive2 { name="casper"; version="2.8.0"; sha256="0ckqx8i7pgmjhznpw8pggc2f1147sd7vqhw2a4f0na9mv27l74iq"; depends=[Biobase BiocGenerics coda EBarrays gaga GenomeInfoDb GenomicFeatures GenomicRanges gtools IRanges limma mgcv Rsamtools rtracklayer S4Vectors sqldf survival VGAM]; };
   categoryCompare = derive2 { name="categoryCompare"; version="1.18.0"; sha256="0ppis6agdpccjg8bwr91axy770v67al93pg50zmk1rvbfl25b9gz"; depends=[annotate AnnotationDbi Biobase BiocGenerics Category colorspace GOstats graph GSEABase hwriter RCytoscape]; };
+  ccmap = derive2 { name="ccmap"; version="1.0.0"; sha256="1djajivpfz8cgdq5nnhyr48gvdq8igjqfkxbibw975y7ybsrc44z"; depends=[AnnotationDbi BiocInstaller ccdata data_table doParallel foreach xgboost]; };
   ccrepe = derive2 { name="ccrepe"; version="1.10.0"; sha256="14y97n28jqj78xscprgbnlwq4abf1vks3ipmp0w9y1yjj0jk0xl2"; depends=[infotheo]; };
   cellGrowth = derive2 { name="cellGrowth"; version="1.18.0"; sha256="1yxlcli3h35aw9nzffnpv4nby255bmlkrwcdh6rr7i04393qjpzc"; depends=[lattice locfit]; };
   cellHTS2 = derive2 { name="cellHTS2"; version="2.38.0"; sha256="117g37rvi92i21mg2ifxy9dxilvgf52nz3f51jdlcgf1w5zvm3n1"; depends=[Biobase Category genefilter GSEABase hwriter locfit prada RColorBrewer splots vsn]; };
@@ -750,6 +751,7 @@ in with self; {
   chroGPS = derive2 { name="chroGPS"; version="1.22.0"; sha256="0kq1dgik5dkhqb1as9zpwzpyhbw16c766vyn5all4frh0mpdiy0z"; depends=[Biobase changepoint cluster DPpackage GenomicRanges ICSNP MASS]; };
   chromDraw = derive2 { name="chromDraw"; version="2.4.0"; sha256="0rzrcjzwqjb40l8yc25gscl6hnxwprrv738p46kmdh3a08ghxv5v"; depends=[GenomicRanges Rcpp]; };
   chromPlot = derive2 { name="chromPlot"; version="1.2.0"; sha256="06wg345hkkpaq0m620sqgnwvk11qfkhn5yr8nyv9cbdbihqvg0if"; depends=[biomaRt GenomicRanges]; };
+  chromstaR = derive2 { name="chromstaR"; version="1.0.0"; sha256="1qyb07dsag64gspjk29nd3ppylzicsq7rnjafdfhs9pjqwv0vshf"; depends=[bamsignals chromstaRData doParallel foreach GenomeInfoDb GenomicAlignments GenomicRanges ggplot2 IRanges reshape2 Rsamtools S4Vectors]; };
   cisPath = derive2 { name="cisPath"; version="1.14.0"; sha256="108d1m3d07zblij9wsz2l6bw226bvwwl8w0gq3wdxjmgyjj48jzi"; depends=[]; };
   cleanUpdTSeq = derive2 { name="cleanUpdTSeq"; version="1.12.0"; sha256="09bbqapri4vw9mdlch0hw6v49mxqbknrrj5q9ssyzhjhikz954sq"; depends=[BiocGenerics BSgenome BSgenome_Drerio_UCSC_danRer7 e1071 GenomicRanges seqinr]; };
   cleaver = derive2 { name="cleaver"; version="1.12.0"; sha256="0dnl7ihxhl640k91div133rz9kxa43wkvfyxkyqv31winymk0fy4"; depends=[Biostrings IRanges S4Vectors]; };

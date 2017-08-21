@@ -53,6 +53,11 @@ in stdenv.mkDerivation rec {
     ln -sv $PWD/lib $out
   '';
 
+  patches = stdenv.lib.optionals (!stdenv.isDarwin) [
+    # llvm-config --libfiles returns (non-existing) static libs
+    ../fix-llvm-config.patch
+  ];
+
   cmakeFlags = with stdenv; [
     "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
     "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc

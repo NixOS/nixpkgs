@@ -309,3 +309,16 @@
  # else
  
    /* On old systems which lack it, use setlocale or getenv.  */
+diff --git a/glib/gtypes.h b/glib/gtypes.h
+index c18e0bf..816685a 100644
+--- a/glib/glib/gtypes.h
++++ b/glib/glib/gtypes.h
+@@ -462,7 +462,7 @@ G_END_DECLS
+  * properly get exported in Windows DLLs.
+  */
+ #ifndef GLIB_VAR
+-#  ifdef G_PLATFORM_WIN32
++#  ifdef G_OS_WIN32
+ #    ifdef GLIB_STATIC_COMPILATION
+ #      define GLIB_VAR extern
+ #    else /* !GLIB_STATIC_COMPILATION */

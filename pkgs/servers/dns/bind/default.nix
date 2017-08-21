@@ -1,14 +1,16 @@
 { stdenv, lib, fetchurl, openssl, libtool, perl, libxml2
-, libseccomp ? null }:
+, enableSeccomp ? false, libseccomp ? null }:
 
-let version = "9.10.4-P6"; in
+assert enableSeccomp -> libseccomp != null;
+
+let version = "9.11.2"; in
 
 stdenv.mkDerivation rec {
   name = "bind-${version}";
 
   src = fetchurl {
     url = "http://ftp.isc.org/isc/bind9/${version}/${name}.tar.gz";
-    sha256 = "0rgffdm0h6dks0np4h9q4kd8nyb3azrdxw2skqnjzd8ws78vzpx1";
+    sha256 = "0yn7wgi2y8mpmvbjbkl4va7p0xsnn48m4yjx6ynb1hzp423asikz";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -17,7 +19,7 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional stdenv.isDarwin ./darwin-openssl-linking-fix.patch;
 
   buildInputs = [ openssl libtool perl libxml2 ] ++
-    stdenv.lib.optional stdenv.isLinux libseccomp;
+    stdenv.lib.optional enableSeccomp libseccomp;
 
   STD_CDEFINES = [ "-DDIG_SIGCHASE=1" ]; # support +sigchase
 
@@ -35,7 +37,7 @@ stdenv.mkDerivation rec {
     "--without-pkcs11"
     "--without-purify"
     "--without-python"
-  ] ++ lib.optional (stdenv.isi686 || stdenv.isx86_64) "--enable-seccomp";
+  ] ++ lib.optional enableSeccomp "--enable-seccomp";
 
   postInstall = ''
     moveToOutput bin/bind9-config $dev
@@ -53,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://www.isc.org/software/bind";
+    homepage = http://www.isc.org/software/bind;
     description = "Domain name server";
     license = stdenv.lib.licenses.isc;
 

@@ -6,11 +6,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "thc-hydra-${version}";
-  version = "8.2";
+  version = "8.5";
 
   src = fetchurl {
     url = "http://www.thc.org/releases/hydra-${version}.tar.gz";
-    sha256 = "1i2a5glmrxdjr80gfppx6wgakflcpj3ksgng212fjzhxr9m4k24y";
+    sha256 = "0vfx6xwmw0r7nd0s232y7rckcj58fc1iqjgp4s56rakpz22b4yjm";
   };
 
   preConfigure = ''

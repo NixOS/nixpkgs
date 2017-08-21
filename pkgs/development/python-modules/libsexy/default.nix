@@ -1,7 +1,8 @@
 { stdenv, fetchurl, buildPythonPackage, libsexy, pkgconfig, libxml2, pygtk, pango, gtk2, glib }:
 
 buildPythonPackage rec {
-  name = "libsexy-${version}";
+  pname = "libsexy";
+  name = "${pname}-${version}";
   version = "0.1.9";
   format = "other";
 

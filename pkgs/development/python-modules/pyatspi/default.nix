@@ -1,8 +1,9 @@
 { stdenv, fetchurl, pkgconfig, at_spi2_core, pythonPackages }:
 
 stdenv.mkDerivation rec {
+  pname = "pyatspi";
   version = "2.18.0";
-  name = "pyatspi-${version}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pyatspi/2.18/${name}.tar.xz";

@@ -1,18 +1,20 @@
-{ stdenv, fetchFromGitHub, cmake, xlibsWrapper, libX11, libXi, libXtst, libXrandr
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, xlibsWrapper, libX11, libXi, libXtst, libXrandr
 , xinput, curl, openssl, unzip }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "synergy-${version}";
-  version = "1.7.6";
+  version = "1.8.8";
 
   src = fetchFromGitHub {
     owner = "symless";
     repo = "synergy";
     rev = "v${version}-stable";
-    sha256 = "1bjksvdr74mc3xh11z4fd6qlhgklny51q5r6gqg1bhnvn9dzyrxw";
+    sha256 = "0ksgr9hkf09h54572p7k7b9zkfhcdb2g2d5x7ixxn028y8i3jyp3";
   };
+
+  patches = [ ./openssl-1.1.patch ];
 
   postPatch = ''
     ${unzip}/bin/unzip -d ext/gmock-1.6.0 ext/gmock-1.6.0.zip
@@ -52,9 +54,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Share one mouse and keyboard between multiple computers";
-    homepage = "http://synergy-project.org/";
+    homepage = http://synergy-project.org/;
     license = licenses.gpl2;
     maintainers = [ maintainers.aszlig ];
     platforms = platforms.all;
+    broken = stdenv.isDarwin;
   };
 }

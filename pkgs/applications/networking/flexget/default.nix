@@ -41,7 +41,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = [
     feedparser sqlalchemy pyyaml
     beautifulsoup4 html5lib PyRSS2Gen pynzb
-    rpyc jinja2 requests2 dateutil jsonschema
+    rpyc jinja2 requests dateutil jsonschema
     pathpy guessit APScheduler
     terminaltables colorclass
     cherrypy flask flask-restful flask-restplus_0_8
@@ -53,7 +53,7 @@ buildPythonApplication rec {
   ++ lib.optional (transmission != null) transmissionrpc;
 
   meta = {
-    homepage = http://flexget.com/;
+    homepage = https://flexget.com/;
     description = "Multipurpose automation tool for content like torrents";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ domenkozar tari ];

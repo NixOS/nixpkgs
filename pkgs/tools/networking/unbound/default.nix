@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, openssl, nettle, expat, libevent }:
+{ stdenv, fetchurl, openssl, nettle, expat, libevent, dns-root-data }:
 
 stdenv.mkDerivation rec {
   name = "unbound-${version}";
-  version = "1.6.1";
+  version = "1.6.4";
 
   src = fetchurl {
     url = "http://unbound.net/downloads/${name}.tar.gz";
-    sha256 = "000lylg5qgriaxh6k78l2inb905qshx01kxgmqj89zn08gvn7ps2";
+    sha256 = "1vbzfzp932nhii5vq7z7rpczdyv624p17sy9hj1cn763ds0qh2nz";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--sbindir=\${out}/bin"
+    "--with-rootkey-file=${dns-root-data}/root.key"
     "--enable-pie"
     "--enable-relro-now"
   ];

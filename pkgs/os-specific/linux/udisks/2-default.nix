@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0spl155k0g2l2hvqf8xyjv08i68gfyhzpjva6cwlzxx0bz4gbify";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "man" ];
 
   patches = [ ./force-path.patch ];
 

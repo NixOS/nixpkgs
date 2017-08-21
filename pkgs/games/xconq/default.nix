@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     # Fix Makefiles
     find . -name 'Makefile.in' -exec sed -re 's@^        ( *)(cd|[&][&])@	\1\2@' -i '{}' ';'
     find . -name 'Makefile.in' -exec sed -e '/chown/d; /chgrp/d' -i '{}' ';'
+    # do not set sticky bit in nix store
+    find . -name 'Makefile.in' -exec sed -e 's/04755/755/g' -i '{}' ';'
     sed -e '/^			* *[$][(]tcltkdir[)]\/[*][.][*]/d' -i tcltk/Makefile.in
 
     # Fix C files

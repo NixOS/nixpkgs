@@ -56,16 +56,27 @@ rec {
 
   # Return a modified stdenv that adds a cross compiler to the
   # builds.
-  makeStdenvCross = stdenv: cross: binutils: gccCross: stdenv // {
+  makeStdenvCross = { stdenv
+                    , cc
+                    , buildPlatform, hostPlatform, targetPlatform
+                    } @ overrideArgs: let
+    stdenv = overrideArgs.stdenv.override {
+      inherit
+        buildPlatform hostPlatform targetPlatform
+        cc;
 
-    # Overrides are surely not valid as packages built with this run on a
-    # different platform.
-    overrides = _: _: {};
+      allowedRequisites = null;
 
+      # Overrides are surely not valid as packages built with this run on a
+      # different platform.
+      overrides = _: _: {};
+    };
+  in stdenv // {
     mkDerivation =
-      { name ? "", buildInputs ? [], nativeBuildInputs ? []
+      { buildInputs ? [], nativeBuildInputs ? []
       , propagatedBuildInputs ? [], propagatedNativeBuildInputs ? []
-      , selfNativeBuildInput ? false, ...
+      , selfNativeBuildInput ? args.crossAttrs.selfNativeBuildInput or false
+      , ...
       } @ args:
 
       let
@@ -88,15 +99,13 @@ rec {
         nativeInputsFromBuildInputs = stdenv.lib.filter hostAsNativeDrv buildInputsNotNull;
       in
         stdenv.mkDerivation (args // {
-          name = name + "-" + cross.config;
           nativeBuildInputs = nativeBuildInputs
             ++ nativeInputsFromBuildInputs
-            ++ [ gccCross binutils ]
             ++ stdenv.lib.optional selfNativeBuildInput nativeDrv
               # without proper `file` command, libtool sometimes fails
               # to recognize 64-bit DLLs
-            ++ stdenv.lib.optional (cross.config  == "x86_64-w64-mingw32") pkgs.file
-            ++ stdenv.lib.optional (cross.config  == "aarch64-linux-gnu") pkgs.updateAutotoolsGnuConfigScriptsHook
+            ++ stdenv.lib.optional (hostPlatform.config == "x86_64-w64-mingw32") pkgs.file
+            ++ stdenv.lib.optional (hostPlatform.config == "aarch64-linux-gnu") pkgs.updateAutotoolsGnuConfigScriptsHook
             ;
 
           # Cross-linking dynamic libraries, every buildInput should
@@ -107,12 +116,8 @@ rec {
           propagatedBuildInputs = propagatedBuildInputs ++ buildInputs;
           propagatedNativeBuildInputs = propagatedNativeBuildInputs;
 
-          crossConfig = cross.config;
+          crossConfig = hostPlatform.config;
         } // args.crossAttrs or {});
-
-    inherit gccCross binutils;
-    ccCross = gccCross;
-
   };
 
 

@@ -241,7 +241,7 @@ in
       description = ''
         The encrypted disk that should be opened before the root
         filesystem is mounted. Both LVM-over-LUKS and LUKS-over-LVM
-        setups are sypported. The unencrypted devices can be accessed as
+        setups are supported. The unencrypted devices can be accessed as
         <filename>/dev/mapper/<replaceable>name</replaceable></filename>.
       '';
 
@@ -434,7 +434,7 @@ in
       #!$out/bin/sh -e
       if [ -e /.luksopen_args ]; then
         cryptsetup \$(cat /.luksopen_args)
-        killall cryptsetup
+        killall -q cryptsetup
       else
         echo "Passphrase is not requested now"
         exit 1

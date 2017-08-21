@@ -1,8 +1,8 @@
-Index: qtbase-opensource-src-5.6.0/src/corelib/tools/qtimezoneprivate_tz.cpp
+Index: qtbase-opensource-src-5.6.2/src/corelib/tools/qtimezoneprivate_tz.cpp
 ===================================================================
---- qtbase-opensource-src-5.6.0.orig/src/corelib/tools/qtimezoneprivate_tz.cpp
-+++ qtbase-opensource-src-5.6.0/src/corelib/tools/qtimezoneprivate_tz.cpp
-@@ -62,7 +62,10 @@ typedef QHash<QByteArray, QTzTimeZone> Q
+--- qtbase-opensource-src-5.6.2.orig/src/corelib/tools/qtimezoneprivate_tz.cpp
++++ qtbase-opensource-src-5.6.2/src/corelib/tools/qtimezoneprivate_tz.cpp
+@@ -64,7 +64,10 @@ typedef QHash<QByteArray, QTzTimeZone> Q
  // Parse zone.tab table, assume lists all installed zones, if not will need to read directories
  static QTzTimeZoneHash loadTzTimeZones()
  {
@@ -14,7 +14,7 @@ Index: qtbase-opensource-src-5.6.0/src/corelib/tools/qtimezoneprivate_tz.cpp
      if (!QFile::exists(path))
          path = QStringLiteral("/usr/lib/zoneinfo/zone.tab");
  
-@@ -560,12 +563,18 @@ void QTzTimeZonePrivate::init(const QByt
+@@ -636,12 +639,18 @@ void QTzTimeZonePrivate::init(const QByt
          if (!tzif.open(QIODevice::ReadOnly))
              return;
      } else {

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ wrapGAppsHook ];
 
   pythonPath = with pythonPackages;
-    [ pycups pycurl dbus-python pygobject3 requests2 pycairo pythonPackages.pycurl ];
+    [ pycups pycurl dbus-python pygobject3 requests pycairo pythonPackages.pycurl ];
 
   configureFlags =
     [ "--with-udev-rules"
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     ''
       buildPythonPath "$out $pythonPath"
       gappsWrapperArgs+=(
-        --prefix PATH "$program_PATH"
+        --prefix PATH : "$program_PATH"
         --set CUPS_DATADIR "${cups-filters}/share/cups"
       )
 

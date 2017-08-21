@@ -18,11 +18,11 @@ let
     };
   };
 
-  version = "8.17.5";
+  version = "8.17.6";
 
   gitlabDeb = fetchurl {
     url = "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/jessie/gitlab-ce_${version}-ce.0_amd64.deb/download";
-    sha256 = "1ga5ki1bh66sdk5yizjy0dqcg85hrzkdp0ag3si942yv28sjy1xk";
+    sha256 = "1pr8nfnkzmicn5nxjkq48l4nfjsp6v5j3v8p7cp8r86lgfdc6as3";
   };
 
 in
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "gitlabhq";
     repo = "gitlabhq";
     rev = "v${version}";
-    sha256 = "0wvszxm28c80qwx6np5mi36saxzzg4n7jcp4ckvhhr3jvczn9m8g";
+    sha256 = "1yyyn2j0a457q2xbcxz6b33r23myr8kxbm9whj2dwrrbp4p273hr";
   };
 
   patches = [

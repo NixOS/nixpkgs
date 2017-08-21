@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     sha256 = "0i1y50mf559flhxgaxy2gdpa7dvpp12ix9xfzgxa61rc135x0im4";
   };
 
+  patches = [ ./linux_4_11_include_fix.patch ];
+
   preConfigure =
   ''
     cd ./src

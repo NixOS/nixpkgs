@@ -17,7 +17,7 @@ pythonPackages.buildPythonApplication rec {
   propagatedBuildInputs = with pythonPackages; [
     click click-log click-threading
     requests_toolbelt
-    requests2
+    requests
     atomicwrites
   ];
 

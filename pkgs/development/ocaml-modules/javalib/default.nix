@@ -1,16 +1,20 @@
 {stdenv, fetchurl, which, ocaml, findlib, camlzip, extlib, camlp4}:
 
+if !stdenv.lib.versionAtLeast ocaml.version "4"
+then throw "javalib not supported for ocaml ${ocaml.version}"
+else
+
 let
   pname = "javalib";
   webpage = "http://sawja.inria.fr/";
 in
 stdenv.mkDerivation rec {
-  name = "ocaml-${pname}-${version}";
-  version = "2.3";
+  name = "ocaml${ocaml.version}-${pname}-${version}";
+  version = "2.3.3";
 
   src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/33090/${pname}-${version}.tar.bz2";
-    sha256 = "1i8djcanzm250mwilm3jfy37cz0k0x7jbnrz8a5vvdi91kyzh52j";
+    url = https://gforge.inria.fr/frs/download.php/file/36307/javalib-2.3.3.tar.bz2;
+    sha256 = "0427n3vfb2h51gy2p4878gdwlp0mb03asn3g9kp9v4wfxmksjj11";
   };
 
   buildInputs = [ which ocaml findlib camlp4 ];

@@ -1,7 +1,9 @@
 { stdenv, fetchurl, buildPythonPackage, pycurl }:
 
 buildPythonPackage rec {
-  name = "koji-1.8";
+  pname = "koji";
+  version = "1.8";
+  name = "${pname}-${version}";
   format = "other";
 
   src = fetchurl {

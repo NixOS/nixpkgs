@@ -68,8 +68,7 @@
 
  <section><title>Value Types</title>
 
-   <para>Value types are type that take a value parameter. The only value type 
-     in the library is <literal>enum</literal>.</para>
+   <para>Value types are type that take a value parameter.</para>
 
 <variablelist>
   <varlistentry>
@@ -140,6 +139,17 @@
         <replaceable>t2</replaceable>, e.g. <literal>with types; either int 
           str</literal>. Multiple definitions cannot be 
         merged.</para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term><varname>types.coercedTo</varname> <replaceable>from</replaceable>
+        <replaceable>f</replaceable> <replaceable>to</replaceable></term>
+    <listitem><para>Type <replaceable>to</replaceable> or type
+        <replaceable>from</replaceable> which will be coerced to
+	type <replaceable>to</replaceable> using function
+	<replaceable>f</replaceable> which takes an argument of type
+        <replaceable>from</replaceable> and return a value of type
+	<replaceable>to</replaceable>. Can be used to preserve backwards
+        compatibility of an option if its type was changed.</para></listitem>
   </varlistentry>
 </variablelist>
 
@@ -282,7 +292,7 @@ config.mod.two = { foo = 2; bar = "two"; };</screen></example>
 <screen>
 byte = mkOption {
   description = "An integer between 0 and 255.";
-  type = addCheck (x: x &gt;= 0 &amp;&amp; x &lt;= 255) types.int;
+  type = addCheck types.int (x: x &gt;= 0 &amp;&amp; x &lt;= 255);
 };</screen></example>
 
 <example xml:id='ex-extending-type-check-2'><title>Overriding a type 
@@ -386,7 +396,7 @@ code before creating a new type.</para>
     <listitem><para>For composed types that can take a submodule as type 
         parameter, this function can be used to substitute the parameter of a 
         submodule type. It takes a module as parameter and return the type with 
-        the submodule options substituted. It is usally defined as a type 
+        the submodule options substituted. It is usually defined as a type 
         function call with a recursive call to 
         <literal>substSubModules</literal>, e.g for a type 
         <literal>composedType</literal> that take an <literal>elemtype</literal> 

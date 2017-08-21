@@ -11,15 +11,15 @@ diff --git a/src/serialport/qtudev_p.h b/src/serialport/qtudev_p.h
 index 6f2cabd..81b9849 100644
 --- a/src/serialport/qtudev_p.h
 +++ b/src/serialport/qtudev_p.h
-@@ -105,9 +105,9 @@ inline QFunctionPointer resolveSymbol(QLibrary *udevLibrary, const char *symbolN
+@@ -105,10 +105,9 @@ inline QFunctionPointer resolveSymbol(QLibrary *udevLibrary, const char *symbolN
  inline bool resolveSymbols(QLibrary *udevLibrary)
  {
      if (!udevLibrary->isLoaded()) {
 -        udevLibrary->setFileNameAndVersion(QStringLiteral("udev"), 1);
-+        udevLibrary->setFileNameAndVersion(QStringLiteral("@libudev@/lib/libudev"), 1);
++        udevLibrary->setFileNameAndVersion(QLatin1String(NIXPKGS_LIBUDEV), 1);
          if (!udevLibrary->load()) {
 -            udevLibrary->setFileNameAndVersion(QStringLiteral("udev"), 0);
-+            udevLibrary->setFileNameAndVersion(QStringLiteral("@libudev@/lib/libudev"), 0);
++            udevLibrary->setFileNameAndVersion(QLatin1String(NIXPKGS_LIBUDEV), 0);
              if (!udevLibrary->load()) {
                  qWarning("Failed to load the library: %s, supported version(s): %i and %i", qPrintable(udevLibrary->fileName()), 1, 0);
                  return false;

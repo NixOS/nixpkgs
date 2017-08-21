@@ -1,5 +1,5 @@
 { stdenv, lib, fetchgit, copyPathsToStore
-, srcs
+, srcs, qtCompatVersion
 
 , xlibs, libX11, libxcb, libXcursor, libXext, libXrender, libXi
 , xcbutil, xcbutilimage, xcbutilkeysyms, xcbutilwm, libxkbcommon
@@ -32,6 +32,7 @@ stdenv.mkDerivation {
 
   name = "qtbase-${srcs.qtbase.version}";
   inherit (srcs.qtbase) src version;
+  inherit qtCompatVersion;
 
   outputs = [ "out" "dev" ];
 
@@ -94,16 +95,26 @@ stdenv.mkDerivation {
     # Note on the above: \x27 is a way if including a single-quote
     # character in the sed string arguments.
 
+  qtPluginPrefix = "lib/qt-${qtCompatVersion}/plugins";
+  qtQmlPrefix = "lib/qt-${qtCompatVersion}/qml";
+  qtDocPrefix = "share/doc/qt-${qtCompatVersion}";
+
   setOutputFlags = false;
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/lib:$PWD/plugins/platforms:$LD_LIBRARY_PATH"
     export MAKEFLAGS=-j$NIX_BUILD_CORES
+    # We need to set LD to CXX or otherwise we get nasty compile errors
+    export LD=$CXX
 
     configureFlags+="\
-        -plugindir $out/lib/qt5/plugins \
-        -importdir $out/lib/qt5/imports \
-        -qmldir $out/lib/qt5/qml \
-        -docdir $out/share/doc/qt5"
+        -plugindir $out/$qtPluginPrefix \
+        -qmldir $out/$qtQmlPrefix \
+        -docdir $out/$qtDocPrefix"
+
+    NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
+    NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QPA_PLATFORM_PLUGIN_PATH=\"''${!outputLib}/$qtPluginPrefix/platforms\""
+
+    unset LD
   '';
 
   prefixKey = "-prefix ";
@@ -230,8 +241,9 @@ stdenv.mkDerivation {
   postInstall = ''
     find "$out" -name "*.cmake" | while read file; do
         substituteInPlace "$file" \
-            --subst-var-by NIX_OUT "$out" \
-            --subst-var-by NIX_DEV "$dev"
+            --subst-var-by NIX_OUT "''${!outputLib}" \
+            --subst-var-by NIX_DEV "''${!outputDev}" \
+            --subst-var-by NIX_BIN "''${!outputBin}"
     done
   '';
 

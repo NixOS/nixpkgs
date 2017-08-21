@@ -41,8 +41,9 @@ options = {
     <term><varname>default</varname></term>
     <listitem>
       <para>The default value used if no value is defined by any
-      module.  A default is not required; in that case, if the option
-      value is never used, an error will be thrown.</para>
+      module.  A default is not required; but if a default is not given,
+      then users of the module will have to define the value of the
+      option, otherwise an error will be thrown.</para>
     </listitem>
   </varlistentry>
 
@@ -95,7 +96,7 @@ options = {
   </itemizedlist>
   </para>
 
-  <para>Both approachs have problems.</para>
+  <para>Both approaches have problems.</para>
 
   <para>Making backends independent can quickly become hard to manage. For
     display managers, there can be only one enabled at a time, but the type

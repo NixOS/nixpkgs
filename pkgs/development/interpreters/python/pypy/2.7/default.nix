@@ -1,6 +1,7 @@
 { stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi
 , sqlite, openssl, ncurses, python, expat, tcl, tk, tix, xlibsWrapper, libX11
 , makeWrapper, callPackage, self, gdbm, db
+, python-setup-hook
 # For the Python package set
 , pkgs, packageOverrides ? (self: super: {})
 }:
@@ -14,6 +15,7 @@ let
   pythonVersion = "2.7";
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
   libPrefix = "pypy${majorVersion}";
+  sitePackages = "site-packages";
 
 in stdenv.mkDerivation rec {
     name = "pypy-${version}";
@@ -67,7 +69,7 @@ in stdenv.mkDerivation rec {
       ${python.interpreter} rpython/bin/rpython --make-jobs="$NIX_BUILD_CORES" -Ojit --batch pypy/goal/targetpypystandalone.py --withmod-_minimal_curses --withmod-unicodedata --withmod-thread --withmod-bz2 --withmod-_multiprocessing
     '';
 
-    setupHook = ./setup-hook.sh;
+    setupHook = python-setup-hook sitePackages;
 
     postBuild = ''
       cd ./lib_pypy
@@ -125,12 +127,11 @@ in stdenv.mkDerivation rec {
     passthru = let
       pythonPackages = callPackage ../../../../../top-level/python-packages.nix {python=self; overrides=packageOverrides;};
     in rec {
-      inherit zlibSupport libPrefix;
+      inherit zlibSupport libPrefix sitePackages;
       executable = "pypy";
       isPypy = true;
       buildEnv = callPackage ../../wrapper.nix { python = self; };
       interpreter = "${self}/bin/${executable}";
-      sitePackages = "site-packages";
       withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
       pkgs = pythonPackages;
     };

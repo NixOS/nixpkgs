@@ -1,4 +1,4 @@
-{ buildOcaml, opam, js_build_tools, ocaml_oasis_46, fetchurl } :
+{ buildOcaml, opam, js_build_tools, ocaml_oasis, fetchurl } :
 
 { name, version ? "113.33.03", buildInputs ? [],
   hash ? "",
@@ -14,7 +14,7 @@ buildOcaml (args // {
 
   hasSharedObjects = true;
 
-  buildInputs = [ ocaml_oasis_46 js_build_tools opam ] ++ buildInputs;
+  buildInputs = [ ocaml_oasis js_build_tools opam ] ++ buildInputs;
 
   dontAddPrefix = true;
 

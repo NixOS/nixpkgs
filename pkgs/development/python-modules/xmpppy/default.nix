@@ -1,6 +1,7 @@
 { stdenv, buildPythonPackage, fetchurl, isPy3k }:
 buildPythonPackage rec {
-  name = "xmpp.py-${version}";
+  pname = "xmpp.py";
+  name = "${pname}-${version}";
   version = "0.5.0rc1";
 
   patches = [ ./ssl.patch ];
@@ -19,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "XMPP python library";
-    homepage = "http://xmpppy.sourceforge.net/";
+    homepage = http://xmpppy.sourceforge.net/;
     license = licenses.gpl3;
     maintainers = [ maintainers.mic92 ];
   };

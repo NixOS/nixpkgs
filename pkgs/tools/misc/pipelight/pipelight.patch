@@ -62,7 +62,7 @@ diff -urN pipelight.old/configure pipelight.new/configure
 -	gpg_exec="/usr/bin/gpg"
 -fi
 +bash_interp=bash
-+gpg_exec=gpg2
++gpg_exec=gpg
  moz_plugin_path=""
  gcc_runtime_dlls=""
  so_mode="0644"

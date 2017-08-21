@@ -1,12 +1,13 @@
 { fetchurl, buildPythonPackage, isPy33, lib, six, pythonAtLeast, pythonOlder }:
 
 buildPythonPackage rec {
-  name = "nltk-${version}";
-  version = "3.2.2";
+  version = "3.2.4";
+  pname = "nltk";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/n/nltk/nltk-${version}.tar.gz";
-    sha256 = "13m8i393h5mhpyvh5rghxxpax3bscv8li3ynwfdiq0kh8wsdndqv";
+    sha256 = "8682ae52f5de4f2ba7b77bd78222a38575ad01ef29946214b254dfdf93a3a0eb";
   };
 
   propagatedBuildInputs = [ six ];

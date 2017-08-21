@@ -1,4 +1,5 @@
 { newScope, stdenv, makeWrapper, makeDesktopItem, ed
+, glib, gtk3, gnome3, gsettings_desktop_schemas
 
 # package customization
 , channel ? "stable"
@@ -62,10 +63,23 @@ let
 
   sandboxExecutableName = chromium.browser.passthru.sandboxExecutableName;
 
-in stdenv.mkDerivation {
-  name = "chromium${suffix}-${chromium.browser.version}";
+  version = chromium.browser.version;
 
-  buildInputs = [ makeWrapper ed ];
+  inherit (stdenv.lib) versionAtLeast;
+
+in stdenv.mkDerivation {
+  name = "chromium${suffix}-${version}";
+  inherit version;
+
+  buildInputs = [
+    makeWrapper ed
+
+    # needed for GSETTINGS_SCHEMAS_PATH
+    gsettings_desktop_schemas glib gtk3
+
+    # needed for XDG_ICON_DIRS
+    gnome3.defaultIconTheme
+  ];
 
   outputs = ["out" "sandbox"];
 
@@ -92,6 +106,8 @@ in stdenv.mkDerivation {
     # libredirect causes chromium to deadlock on startup
     export LD_PRELOAD="\$(echo -n "\$LD_PRELOAD" | tr ':' '\n' | grep -v /lib/libredirect\\\\.so$ | tr '\n' ':')"
 
+    export XDG_DATA_DIRS=$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH\''${XDG_DATA_DIRS:+:}\$XDG_DATA_DIRS
+
     .
     w
     EOF
@@ -107,7 +123,7 @@ in stdenv.mkDerivation {
     cp -v "${desktopItem}/share/applications/"* "$out/share/applications"
   '';
 
-  inherit (chromium.browser) meta packageName version;
+  inherit (chromium.browser) meta packageName;
 
   passthru = {
     inherit (chromium) upstream-info browser;

@@ -2,14 +2,16 @@
 , libX11, pam, libgcrypt, libXrender, imlib2 }:
 
 stdenv.mkDerivation rec {
-  date = "20150418";
+  date = "20170720";
   name = "alock-${date}";
 
   src = fetchgit {
     url = https://github.com/Arkq/alock;
-    rev = "69b547602d965733d415f877eb59d05966bd158d";
-    sha256 = "0lv2ng5qxzcq0vwbl61dbwigv79sin4zg90y9cgsz6ydvm4ncpas";
+    rev = "2035e1d4a2293432f5503e82d10f899232eb0f38";
+    sha256 = "1by954fjn0ryqda89zlmq3gclakg3gz7zy1wjrbgw4lzsk538va6";
   };
+
+  PAM_DEFAULT_SERVICE = "login";
 
   configureFlags = [
     "--enable-pam"
@@ -17,12 +19,13 @@ stdenv.mkDerivation rec {
     "--enable-xrender"
     "--enable-imlib2"
   ];
+
   buildInputs = [
     pkgconfig autoreconfHook libX11
     pam libgcrypt libXrender imlib2
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/Arkq/alock;
     description = "Simple screen lock application for X server";
     longDescription = ''
@@ -31,10 +34,10 @@ stdenv.mkDerivation rec {
       the X server is unlocked and the user can continue to work.
 
       alock does not provide any fancy animations like xlock or
-      xscreensaver and never will. Its just for locking the current
+      xscreensaver and never will. It's just for locking the current
       X session.
     '';
-    platforms = with stdenv.lib.platforms; allBut cygwin;
-    maintainers = [ stdenv.lib.maintainers.ftrvxmtrx ];
+    platforms = with platforms; allBut cygwin;
+    maintainers = with maintainers; [ ftrvxmtrx chris-martin ];
   };
 }

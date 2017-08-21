@@ -17,7 +17,7 @@
 , decorator
 , pathlib2
 , pickleshare
-, requests2
+, requests
 , simplegeneric
 , traitlets
 , prompt_toolkit
@@ -45,7 +45,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     backports_shutil_get_terminal_size decorator pickleshare prompt_toolkit
-    simplegeneric traitlets requests2 pathlib2 pexpect
+    simplegeneric traitlets requests pathlib2 pexpect
   ] ++ lib.optionals stdenv.isDarwin [ appnope ];
 
   LC_ALL="en_US.UTF-8";

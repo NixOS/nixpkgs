@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "4.5.0";
+  version = "4.8.0";
   name = "libpfm-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/perfmon2/libpfm4/${name}.tar.gz";
-    sha1 = "857eb066724e2a5b723d6802d217c8eddff79082";
+    sha256 = "0s6gcvrhj2h928cqc8399189annif7yl74k6wda446r0fdx7i4wi";
   };
 
   installFlags = "DESTDIR=\${out} PREFIX= LDCONFIG=true";

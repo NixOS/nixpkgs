@@ -137,4 +137,15 @@ in
     };
   };
 
+  source_25 = buildSource {
+    name = "android-source-25";
+    src = fetchurl {
+      url = https://dl.google.com/android/repository/sources-25_r01.zip;
+      sha1 = "bbc72efd1a9bad87cc507e308f0d29aad438c52c";
+    };
+    meta = {
+      description = "Source code for Android API 25";
+    };
+  };
+
 }

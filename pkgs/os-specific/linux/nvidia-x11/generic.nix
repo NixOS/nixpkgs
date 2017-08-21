@@ -6,9 +6,12 @@
 , useGLVND ? true
 , useProfiles ? true
 , preferGtk2 ? false
+
+, prePatch ? ""
+, patches ? []
 }:
 
-{ stdenv, callPackage, callPackage_i686, fetchurl
+{ stdenv, callPackage, callPackage_i686, fetchurl, fetchpatch
 , kernel ? null, xorg, zlib, perl, nukeReferences
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
@@ -42,25 +45,8 @@ let
         }
       else throw "nvidia-x11 does not support platform ${stdenv.system}";
 
-    # patch to get the nvidia and nvidiaBeta driver to compile on kernel 4.10
-    patches = if libsOnly
-              then null
-              else if versionOlder version "340"
-              then null
-              else if versionOlder version "375"
-              then [
-                     (fetchurl {
-                         url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/4.10.0_kernel.patch?h=packages/nvidia-340xx;
-                         sha256 = "08k2phr9kawg6a3v88d4zkj7gdlih29gm5a1gmhpgmvd926k0z5l";
-                     })
-                         # from https://git.archlinux.org/svntogit/packages.git/plain/trunk/fs52243.patch?h=packages/nvidia-340xx
-                         # with datestamps removed
-                     ./fs52243.patch
-                   ]
-              else [ (fetchurl {
-                      url = https://git.archlinux.org/svntogit/packages.git/plain/trunk/kernel_4.10.patch?h=packages/nvidia;  sha256 = "0zhpx3baq2pca2pmz1af5cp2nzjxjx0j9w5xrdy204mnv3v2708z";
-                     }) ];
-
+    patches = if libsOnly then null else patches;
+    inherit prePatch;
     inherit version useGLVND useProfiles;
     inherit (stdenv) system;
 

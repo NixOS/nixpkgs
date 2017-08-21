@@ -1,7 +1,10 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchurl, unzip
+, buildPlatform, hostPlatform
+}:
+
 let
-  s = # Generated upstream information
-  rec {
+  # Generated upstream information
+  s = rec {
     baseName="zpaqd";
     version="715";
     name="${baseName}-${version}";
@@ -9,15 +12,12 @@ let
     url="http://mattmahoney.net/dc/zpaqd715.zip";
     sha256="0868lynb45lm79yvx5f10lj5h6bfv0yck8whcls2j080vmk3n7rk";
   };
-  isUnix = with stdenv; isLinux || isGNU || isDarwin || isFreeBSD || isOpenBSD;
-  isx86 = stdenv.isi686 || stdenv.isx86_64;
-  compileFlags = with stdenv; ""
-    + (lib.optionalString (isUnix) " -Dunix -pthread")
-    + (lib.optionalString (isi686) " -march=i686")
-    + (lib.optionalString (isx86_64) " -march=nocona")
-    + (lib.optionalString (!isx86) " -DNOJIT")
-    + " -O3 -mtune=generic -DNDEBUG"
-    ;
+
+  compileFlags = stdenv.lib.concatStringsSep " " ([ "-O3" "-mtune=generic" "-DNDEBUG" ]
+    ++ stdenv.lib.optional (hostPlatform.isUnix) "-Dunix -pthread"
+    ++ stdenv.lib.optional (hostPlatform.isi686) "-march=i686"
+    ++ stdenv.lib.optional (hostPlatform.isx86_64) "-march=nocona"
+    ++ stdenv.lib.optional (!hostPlatform.isx86) "-DNOJIT");
 in
 stdenv.mkDerivation {
   inherit (s) name version;

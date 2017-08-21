@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, qtbase, qmakeHook, makeWrapper }:
+{ lib, stdenv, fetchurl, qtbase, qmake, makeWrapper }:
 
 stdenv.mkDerivation {
   name = "awesomebump-4.0";
@@ -10,7 +10,8 @@ stdenv.mkDerivation {
 
   setSourceRoot = "sourceRoot=$(echo */Sources)";
 
-  buildInputs = [ qtbase qmakeHook makeWrapper ];
+  nativeBuildInputs = [ makeWrapper qmake ];
+  buildInputs = [ qtbase ];
 
   enableParallelBuilding = true;
 

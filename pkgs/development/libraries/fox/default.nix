@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       Initially, it was developed for LINUX, but the scope of this project has in the course of time become somewhat more ambitious.
       Current aims are to make FOX completely platform independent, and thus programs written against the FOX library will be only a compile away from running on a variety of platforms.
     '';
-    homepage = "http://fox-toolkit.org";
+    homepage = http://fox-toolkit.org;
     license = licenses.lgpl3;
     maintainers = [];
     platforms = platforms.all;

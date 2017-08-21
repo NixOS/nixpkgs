@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library for access to chipcards";
-    homepage = "http://www2.aquamaniac.de/sites/download/packages.php?package=02&showall=1";
+    homepage = http://www2.aquamaniac.de/sites/download/packages.php?package=02&showall=1;
     license = licenses.lgpl21;
     maintainers = with maintainers; [ aszlig ];
     platforms = platforms.linux;

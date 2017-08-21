@@ -11,6 +11,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/cl-async/2016-08-25/cl-async-20160825-git.tgz'';
     sha256 = ''104x6vw9zrmzz3sipmzn0ygil6ccyy8gpvvjxak2bfxbmxcl09pa'';
   };
+    
+  packageName = "cl-async-ssl";
 
   overrides = x: {
     postInstall = ''
@@ -30,4 +32,5 @@ rec {
 }
 /* (SYSTEM cl-async-ssl DESCRIPTION SSL Wrapper around cl-async socket implementation. SHA256 104x6vw9zrmzz3sipmzn0ygil6ccyy8gpvvjxak2bfxbmxcl09pa URL
     http://beta.quicklisp.org/archive/cl-async/2016-08-25/cl-async-20160825-git.tgz MD5 18e1d6c54a27c8ba721ebaa3d8c6e112 NAME cl-async-ssl TESTNAME NIL
-    FILENAME cl-async-ssl DEPS ((NAME vom) (NAME cffi)) DEPENDENCIES (vom cffi) VERSION cl-async-20160825-git SIBLINGS (cl-async-repl cl-async-test cl-async)) */
+    FILENAME cl-async-ssl DEPS ((NAME vom FILENAME vom) (NAME cffi FILENAME cffi)) DEPENDENCIES (vom cffi) VERSION cl-async-20160825-git SIBLINGS
+    (cl-async-repl cl-async-test cl-async)) */

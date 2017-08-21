@@ -11,6 +11,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/do-urlencode/2013-07-20/do-urlencode-20130720-git.tgz'';
     sha256 = ''19l4rwqc52w7nrpy994b3n2dcv8pjgc530yn2xmgqlqabpxpz3xa'';
   };
+    
+  packageName = "do-urlencode";
 
   overrides = x: {
     postInstall = ''
@@ -30,4 +32,5 @@ rec {
 }
 /* (SYSTEM do-urlencode DESCRIPTION Percent Encoding (aka URL Encoding) library SHA256 19l4rwqc52w7nrpy994b3n2dcv8pjgc530yn2xmgqlqabpxpz3xa URL
     http://beta.quicklisp.org/archive/do-urlencode/2013-07-20/do-urlencode-20130720-git.tgz MD5 c8085e138711c225042acf83b4bf0507 NAME do-urlencode TESTNAME NIL
-    FILENAME do-urlencode DEPS ((NAME babel) (NAME babel-streams)) DEPENDENCIES (babel babel-streams) VERSION 20130720-git SIBLINGS NIL) */
+    FILENAME do-urlencode DEPS ((NAME babel FILENAME babel) (NAME babel-streams FILENAME babel-streams)) DEPENDENCIES (babel babel-streams) VERSION
+    20130720-git SIBLINGS NIL) */

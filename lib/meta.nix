@@ -17,6 +17,11 @@ rec {
     drv // { meta = (drv.meta or {}) // newAttrs; };
 
 
+  /* Disable Hydra builds of given derivation.
+  */
+  dontDistribute = drv: addMetaAttrs { hydraPlatforms = []; } drv;
+
+
   /* Change the symbolic name of a package for presentation purposes
      (i.e., so that nix-env users can tell them apart).
   */

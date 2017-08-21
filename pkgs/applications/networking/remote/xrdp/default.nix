@@ -3,13 +3,13 @@
 let
   xorgxrdp = stdenv.mkDerivation rec {
     name = "xorgxrdp-${version}";
-    version = "0.2.1";
-  
+    version = "0.2.3";
+
     src = fetchFromGitHub {
       owner = "neutrinolabs";
       repo = "xorgxrdp";
       rev = "v${version}";
-      sha256 = "13713qs1v79xa02iw6vaj9b2q62ix770a32z56ql05d6yvfdsfhi";
+      sha256 = "0l1b38j3q9mxyb8ffpdplbqs6rnabj92i8wngrwlkhfh2c88szn1";
     };
 
     nativeBuildInputs = [ pkgconfig autoconf automake which libtool nasm ];
@@ -34,16 +34,15 @@ let
   };
 
   xrdp = stdenv.mkDerivation rec {
-    version = "0.9.2";
-    rev = "48c26a3"; # Fixes https://github.com/neutrinolabs/xrdp/issues/609; not a patch on top of the official repo because "xorgxrdp.configureFlags" above includes "xrdp.src" which must be fixed already
-    name = "xrdp-${version}.${rev}";
-  
+    version = "0.9.3";
+    name = "xrdp-${version}";
+
     src = fetchFromGitHub {
       owner = "volth";
       repo = "xrdp";
-      rev = rev;
+      rev = "refs/heads/runtime-cfg-path-${version}";  # Fixes https://github.com/neutrinolabs/xrdp/issues/609; not a patch on top of the official repo because "xorgxrdp.configureFlags" above includes "xrdp.src" which must be patched already
       fetchSubmodules = true;
-      sha256 = "0zs03amshmvy65d26vsv31n9jflkjf43vsjhg4crzifka3vz9p16";
+      sha256 = "0xqyg3m688fj442zgg9fqmbz7nnzvqpd7a9ki2cwh1hyibacpmz7";
     };
 
     nativeBuildInputs = [ pkgconfig autoconf automake which libtool nasm ];
@@ -59,7 +58,7 @@ let
       ./bootstrap
     '';
     dontDisableStatic = true;
-    configureFlags = [ "--with-systemdsystemunitdir=./do-not-install" "--enable-ipv6" "--enable-jpeg" "--enable-fuse" "--enable-rfxcodec" "--enable-opus" ];
+    configureFlags = [ "--with-systemdsystemunitdir=/var/empty" "--enable-ipv6" "--enable-jpeg" "--enable-fuse" "--enable-rfxcodec" "--enable-opus" ];
 
     installFlags = [ "DESTDIR=$(out)" "prefix=" ];
 
@@ -73,12 +72,12 @@ let
 
       # remove all session types except Xorg (they are not supported by this setup)
       ${perl}/bin/perl -i -ne 'print unless /\[(X11rdp|Xvnc|console|vnc-any|sesman-any|rdp-any|neutrinordp-any)\]/ .. /^$/' $out/etc/xrdp/xrdp.ini
-   
+
       # remove all session types and then add Xorg
       ${perl}/bin/perl -i -ne 'print unless /\[(X11rdp|Xvnc|Xorg)\]/ .. /^$/' $out/etc/xrdp/sesman.ini
-   
+
       cat >> $out/etc/xrdp/sesman.ini <<EOF
-   
+
       [Xorg]
       param=${xorg.xorgserver}/bin/Xorg
       param=-modulepath

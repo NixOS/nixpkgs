@@ -439,7 +439,10 @@ in {
       environment.GITLAB_SHELL_CONFIG_PATH = gitlabEnv.GITLAB_SHELL_CONFIG_PATH;
       path = with pkgs; [
         gitAndTools.git
+        gnutar
+        gzip
         openssh
+        gitlab-workhorse
       ];
       preStart = ''
         mkdir -p /run/gitlab

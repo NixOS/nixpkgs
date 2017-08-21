@@ -13,6 +13,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # LLVM 4 doesn't allow ambigous type in std::abs argument
+  patches = stdenv.lib.optional stdenv.cc.isClang [ ./explicit_overloads.patch ];
+
   configureFlags = [
     "--with-sqlite3=${sqlite.dev}"
     "--enable-hepmc2=${hepmc}"

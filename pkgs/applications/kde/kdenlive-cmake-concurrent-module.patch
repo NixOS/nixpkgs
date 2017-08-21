@@ -1,0 +1,12 @@
+diff -Naur kdenlive-17.04.1-upstream/CMakeLists.txt kdenlive-17.04.1/CMakeLists.txt
+--- kdenlive-17.04.1-upstream/CMakeLists.txt	2017-06-10 00:06:44.773146595 -0400
++++ kdenlive-17.04.1/CMakeLists.txt	2017-06-10 00:07:35.766596566 -0400
+@@ -79,7 +79,7 @@
+ check_include_files(malloc.h HAVE_MALLOC_H)
+ check_include_files(pthread.h HAVE_PTHREAD_H)
+ 
+-find_package(Qt5 REQUIRED COMPONENTS Core DBus Widgets Script Svg Quick )
++find_package(Qt5 REQUIRED COMPONENTS Core Concurrent DBus Widgets Script Svg Quick )
+ find_package(Qt5 OPTIONAL_COMPONENTS WebKitWidgets QUIET)
+ 
+ find_package(KF5 5.23.0 OPTIONAL_COMPONENTS XmlGui QUIET)

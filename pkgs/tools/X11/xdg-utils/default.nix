@@ -29,15 +29,16 @@ stdenv.mkDerivation rec {
 
   postInstall = stdenv.lib.optionalString mimiSupport ''
     cp ${mimisrc}/xdg-open $out/bin/xdg-open
-  ''
-  + ''
-    for tool in "${coreutils}/bin/cut" "${gnused}/bin/sed" \
-      "${gnugrep}"/bin/{e,}grep "${file}/bin/file" \
-      ${stdenv.lib.optionalString mimiSupport
-        '' "${gawk}/bin/awk" "${coreutils}/bin/sort" ''} ;
-    do
-      sed "s# $(basename "$tool") # $tool #g" -i "$out"/bin/*
-    done
+  '' + ''
+    sed  '2s#.#\
+    cut()   { ${coreutils}/bin/cut  "$@"; }\
+    sed()   { ${gnused}/bin/sed     "$@"; }\
+    grep()  { ${gnugrep}/bin/grep   "$@"; }\
+    egrep() { ${gnugrep}/bin/egrep  "$@"; }\
+    file()  { ${file}/bin/file      "$@"; }\
+    awk()   { ${gawk}/bin/awk       "$@"; }\
+    sort()  { ${coreutils}/bin/sort "$@"; }\
+    &#' -i "$out"/bin/*
 
     substituteInPlace $out/bin/xdg-open \
       --replace "/usr/bin/printf" "${coreutils}/bin/printf"

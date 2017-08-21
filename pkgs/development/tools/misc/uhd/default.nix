@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   name = "uhd-${version}";
-  version = "3.10.1";
+  version = "3.10.1.1";
 
   # UHD seems to use three different version number styles: x.y.z, xxx_yyy_zzz
   # and xxx.yyy.zzz. Hrmpf...
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "EttusResearch";
     repo = "uhd";
-    rev = "release_003_010_001_000";
-    sha256 = "1wypn1cspwx331ah7awajjhnpyjykiif0h1l4fb3lahxvsnkwi51";
+    rev = "release_003_010_001_001";
+    sha256 = "009pynjfpwbf3vfyg4w5yhcn4xb93afagqb3p5svjxzswh90j1d2";
   };
 
   enableParallelBuilding = true;
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       USRP devices are designed and sold by Ettus Research, LLC and its parent
       company, National Instruments.
     '';
-    homepage = http://ettus-apps.sourcerepo.com/redmine/ettus/projects/uhd/wiki;
+    homepage = https://uhd.ettus.com/;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor fpletz ];

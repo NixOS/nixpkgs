@@ -9,6 +9,7 @@
 , which
 , python ? null
 , mpi ? null
+, iv
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,7 @@ stdenv.mkDerivation rec {
   version = "7.4";
 
   nativeBuildInputs = [ which pkgconfig automake autoconf libtool ];
-  buildInputs = [ ncurses readline python mpi  ];
+  buildInputs = [ ncurses readline python mpi iv ];
 
   src = fetchurl {
     url = "http://www.neuron.yale.edu/ftp/neuron/versions/v${version}/nrn-${version}.tar.gz";
@@ -45,7 +46,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = with stdenv.lib;
-                    [ "--without-x" "--with-readline=${readline}" ]
+                    [ "--with-readline=${readline}" "--with-iv=${iv}" ]
                     ++  optionals (python != null)  [ "--with-nrnpython=${python.interpreter}" ]
                     ++ (if mpi != null then ["--with-mpi" "--with-paranrn"]
                         else ["--without-mpi"]);

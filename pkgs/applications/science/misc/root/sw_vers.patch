@@ -25,7 +25,7 @@ diff --git a/cmake/modules/SetUpMacOS.cmake b/cmake/modules/SetUpMacOS.cmake
 -                  COMMAND cut -d . -f 2
 -                  OUTPUT_VARIABLE MACOSX_MINOR OUTPUT_STRIP_TRAILING_WHITESPACE)
 -
--  if(MACOSX_VERSION VERSION_GREATER 10.7 AND ${CMAKE_CXX_COMPILER_ID} STREQUAL Clang)
+-  if(MACOSX_VERSION VERSION_GREATER 10.7 AND ${CMAKE_CXX_COMPILER_ID} MATCHES Clang)
      set(libcxx ON CACHE BOOL "Build using libc++" FORCE)
 -  endif()
  

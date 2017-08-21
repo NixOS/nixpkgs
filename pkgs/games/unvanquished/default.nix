@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Unvanquished is a free, open-source first-person shooter
       combining real-time strategy elements with a futuristic, sci-fi
-      setting. It is available for Windows, Linux, and Mac OS X.
+      setting. It is available for Windows, Linux, and macOS.
 
       Features:
 

@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
     cp */share/fonts/opentype/*.otf $out/share/fonts/opentype
   '';
 
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "1gy959qhhdwm1phbrkab9isi0dmxcy0yizzncb0k49w88mc13vd0";
+
   meta = {
     description = "Font Collection by The League of Moveable Type";
 
@@ -36,7 +40,7 @@ stdenv.mkDerivation rec {
       well-made, free & open-source, @font-face ready fonts.
     '';
 
-    homepage = "https://www.theleagueofmoveabletype.com/";
+    homepage = https://www.theleagueofmoveabletype.com/;
 
     license = stdenv.lib.licenses.ofl;
 

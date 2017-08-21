@@ -20,6 +20,7 @@ let
   ''
     [mysqld]
     port = ${toString cfg.port}
+    ${optionalString (cfg.bind != null) "bind-address = ${cfg.bind}" }
     ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "log-bin=mysql-bin"}
     ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave") "server-id = ${toString cfg.replication.serverId}"}
     ${optionalString (cfg.replication.role == "slave" && !atLeast55)
@@ -58,6 +59,13 @@ in
         ";
       };
 
+      bind = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = literalExample "0.0.0.0";
+        description = "Address to bind to. The default it to bind to all addresses";
+      };
+
       port = mkOption {
         type = types.int;
         default = 3306;
@@ -72,7 +80,7 @@ in
 
       dataDir = mkOption {
         type = types.path;
-        default = "/var/mysql"; # !!! should be /var/db/mysql
+        example = "/var/lib/mysql";
         description = "Location where MySQL stores its table files";
       };
 
@@ -165,6 +173,10 @@ in
   ###### implementation
 
   config = mkIf config.services.mysql.enable {
+
+    services.mysql.dataDir =
+      mkDefault (if versionAtLeast config.system.stateVersion "17.09" then "/var/lib/mysql"
+                 else "/var/mysql");
 
     users.extraUsers.mysql = {
       description = "MySQL server user";

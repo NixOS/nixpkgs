@@ -1,6 +1,7 @@
 { stdenv, buildPythonPackage, fetchurl, six }:
 buildPythonPackage rec {
-  name = "dateutil-${version}";
+  pname = "dateutil";
+  name = "${pname}-${version}";
   version = "2.6.0";
 
   src = fetchurl {

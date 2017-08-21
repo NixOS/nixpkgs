@@ -73,11 +73,14 @@ in stdenv.mkDerivation rec {
   dontUseCmakeConfigure = true;
 
   # ICU 58, included in 5.3.x
-  patches = [(fetchurl {
-    url = "https://gerrit.libreoffice.org/gitweb?p=core.git;a=patch;h=3e42714c76b1347babfdea0564009d8d82a83af4";
-    sha256 = "10bid0jdw1rpdsqwzzk3r4rp6bjs2cvi82h7anz2m1amfjdv86my";
-    name = "libreoffice-5.2.x-icu4c-58.patch";
-  })];
+  patches = [
+    (fetchurl {
+      url = "https://gerrit.libreoffice.org/gitweb?p=core.git;a=patch;h=3e42714c76b1347babfdea0564009d8d82a83af4";
+      sha256 = "10bid0jdw1rpdsqwzzk3r4rp6bjs2cvi82h7anz2m1amfjdv86my";
+      name = "libreoffice-5.2.x-icu4c-58.patch";}
+    )
+    ./xdg-open.patch
+  ];
 
   postUnpack = ''
     mkdir -v $sourceRoot/src
@@ -160,7 +163,7 @@ in stdenv.mkDerivation rec {
 
     mkdir -p "$out/share/gsettings-schemas/collected-for-libreoffice/glib-2.0/schemas/"
 
-    for a in sbase scalc sdraw smath swriter spadmin simpress soffice; do
+    for a in sbase scalc sdraw smath swriter simpress soffice; do
       ln -s $out/lib/libreoffice/program/$a $out/bin/$a
       wrapProgram "$out/bin/$a" \
          --prefix XDG_DATA_DIRS : \

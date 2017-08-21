@@ -7,13 +7,13 @@
 
 let
   pname = "u-msgpack-python";
-  version = "2.3.0";
+  version = "2.4.1";
 in buildPythonPackage rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "d8df6bb0e2a838aa227c39cfd14aa147ab32b3df6871001874e9b9da9ce1760c";
+    sha256 = "2f31fc1b6dd8632c230ea7012470e40f77119f20999274dda6f1afa9c305e590";
   };
 
   LC_ALL="en_US.UTF-8";

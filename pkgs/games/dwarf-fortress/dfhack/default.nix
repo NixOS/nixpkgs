@@ -5,14 +5,12 @@
 
 let
   dfVersion = "0.43.05";
-  # version = "${dfVersion}-r1";
-  # rev = "refs/tags/${version}";
-  version = "${dfVersion}-alpha4";
+  version = "${dfVersion}-r2";
   rev = "refs/tags/${version}";
-  sha256 = "0wnwdapw955k69ds5xh5qsh7h0l547wjxgcy8hkvly6wp5c16sls";
+  sha256 = "18zbxri5rch750m431pdmlk4xi7nc14iif3i7glxrgy2h5nfaw5c";
 
   # revision of library/xml submodule
-  xmlRev = "bb4228f58b1601c4868c95be6763f5ff2e5d0a08";
+  xmlRev = "3322beb2e7f4b28ff8e573e9bec738c77026b8e9";
 
   arch =
     if stdenv.system == "x86_64-linux" then "64"
@@ -51,6 +49,12 @@ in stdenv.mkDerivation rec {
   # We don't use system libraries because dfhack needs old C++ ABI.
   buildInputs = [ zlib ];
 
+  preConfigure = ''
+    # Trick build system into believing we have .git
+    mkdir -p .git/modules/library/xml
+    touch .git/index .git/modules/library/xml/index
+  '';
+
   preBuild = ''
     export LD_LIBRARY_PATH="$PWD/depends/protobuf:$LD_LIBRARY_PATH"
   '';
@@ -63,7 +67,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Memory hacking library for Dwarf Fortress and a set of tools that use it";
-    homepage = "https://github.com/DFHack/dfhack/";
+    homepage = https://github.com/DFHack/dfhack/;
     license = licenses.zlib;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ robbinch a1russell abbradar ];

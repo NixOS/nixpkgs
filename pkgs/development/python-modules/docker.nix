@@ -1,19 +1,20 @@
 { stdenv, buildPythonPackage, fetchurl
-, six, requests2, websocket_client
+, six, requests, websocket_client
 , ipaddress, backports_ssl_match_hostname, docker_pycreds
 }:
 buildPythonPackage rec {
-  name = "docker-${version}";
-  version = "2.0.2";
+  version = "2.3.0";
+  pname = "docker";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/d/docker/${name}.tar.gz";
-    sha256 = "1m16n2r8is1gxwmyr6163na2jdyzsnhhk2qj12l7rzm1sr9nhx7z";
+    sha256 = "b0e3f353a3df3eedfbbcaf48235117263479b893edfa0cf6d8d056cca5edde1c";
   };
 
   propagatedBuildInputs = [
     six
-    requests2
+    requests
     websocket_client
     ipaddress
     backports_ssl_match_hostname

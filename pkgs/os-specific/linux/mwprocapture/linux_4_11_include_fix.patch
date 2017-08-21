@@ -1,0 +1,30 @@
+diff -Naur ProCaptureForLinux_3269/src/sources/avstream/capture.c ProCaptureForLinux_3269_new/src/sources/avstream/capture.c
+--- ProCaptureForLinux_3269/src/sources/avstream/capture.c	2016-12-12 17:17:18.000000000 -0800
++++ ProCaptureForLinux_3269_new/src/sources/avstream/capture.c	2017-05-02 23:58:28.270827491 -0700
+@@ -154,7 +154,9 @@
+     if (IS_ERR_OR_NULL(fp))
+         return IS_ERR(fp) ? PTR_ERR(fp) : -1;
+
+-#if LINUX_VERSION_CODE >= KERNEL_VERSION(3,9,0)
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,11,0)
++    ret = vfs_getattr(&fp->f_path, &stat, STATX_BASIC_STATS, AT_STATX_SYNC_AS_STAT);
++#elif LINUX_VERSION_CODE >= KERNEL_VERSION(3,9,0)
+     ret = vfs_getattr(&fp->f_path, &stat);
+ #else
+     ret = vfs_getattr(fp->f_path.mnt, fp->f_path.dentry, &stat);
+diff -Naur ProCaptureForLinux_3269/src/sources/ospi/ospi-linux.c ProCaptureForLinux_3269_new/src/sources/ospi/ospi-linux.c
+--- ProCaptureForLinux_3269/src/sources/ospi/ospi-linux.c	2016-12-12 17:17:18.000000000 -0800
++++ ProCaptureForLinux_3269_new/src/sources/ospi/ospi-linux.c	2017-05-02 23:51:02.197633628 -0700
+@@ -21,6 +21,12 @@
+ #include <linux/freezer.h>
+ #include <linux/pci.h>
+
++// some functions were moved from linux/sched.h out to their own headers in 4.11.x
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4,11,0)
++#include <linux/sched/signal.h>
++#include <linux/sched/debug.h>
++#endif
++
+ unsigned int debug_level = 0;
+
+ struct kmem_cache *g_spin_cache = NULL;

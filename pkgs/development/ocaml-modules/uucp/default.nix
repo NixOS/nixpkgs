@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opam, topkg, uchar }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, opam, topkg, uchar, uutf, uunf }:
 
 let
   pname = "uucp";
-  version = "2.0.0";
+  version = "10.0.1";
   webpage = "http://erratique.ch/software/${pname}";
 in
 
@@ -14,10 +14,10 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "07m7pfpcf03dqsbvqpq88y9hzic8fighlp4fgbav6n6xla35mk5k";
+    sha256 = "0qgbrx3lnrzii8a9f0hv4kp73y57q6fr79hskxxxs70q68j2xpfm";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild opam topkg ];
+  buildInputs = [ ocaml findlib ocamlbuild opam topkg uutf uunf ];
 
   propagatedBuildInputs = [ uchar ];
 
@@ -25,7 +25,9 @@ stdenv.mkDerivation {
 
   unpackCmd = "tar xjf $src";
 
-  inherit (topkg) buildPhase installPhase;
+  buildPhase = "${topkg.buildPhase} --with-cmdliner false";
+
+  inherit (topkg) installPhase;
 
   meta = with stdenv.lib; {
     description = "An OCaml library providing efficient access to a selection of character properties of the Unicode character database";

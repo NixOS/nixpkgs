@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
     ./install.sh ${withFont}
   '';
 
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "0bxna3llj6kf1rndvkw8w81blmgwy9l8kricynlf0l3mdd6li1f4";
+
   meta = with stdenv.lib; {
     description = ''
       Nerd Fonts is a project that attempts to patch as many developer targeted
@@ -27,7 +31,7 @@ stdenv.mkDerivation rec {
       number of additional glyphs from popular 'iconic fonts' such as Font
       Awesome, Devicons, Octicons, and others.
     '';
-    homepage = "https://github.com/ryanoasis/nerd-fonts";
+    homepage = https://github.com/ryanoasis/nerd-fonts;
     license = licenses.mit;
     maintainers = with maintainers; [ garbas ];
     platforms = with platforms; unix;

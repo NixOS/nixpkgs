@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "MPRISv2 plugin for the DeaDBeeF music player";
-    homepage = "https://github.com/Serranya/deadbeef-mpris2-plugin/";
+    homepage = https://github.com/Serranya/deadbeef-mpris2-plugin/;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.abbradar ];

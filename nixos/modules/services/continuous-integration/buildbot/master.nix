@@ -12,7 +12,7 @@ let
     factory = util.BuildFactory()
     c = BuildmasterConfig = dict(
      workers       = [${concatStringsSep "," cfg.workers}],
-     protocols     = { 'pb': {'port': ${cfg.bpPort} } },
+     protocols     = { 'pb': {'port': ${toString cfg.bpPort} } },
      title         = '${escapeStr cfg.title}',
      titleURL      = '${escapeStr cfg.titleUrl}',
      buildbotURL   = '${escapeStr cfg.buildbotUrl}',
@@ -62,7 +62,7 @@ in {
       extraConfig = mkOption {
         type = types.str;
         description = "Extra configuration to append to master.cfg";
-        default = "";
+        default = "c['buildbotNetUsageData'] = None";
       };
 
       masterCfg = mkOption {
@@ -92,10 +92,7 @@ in {
       workers = mkOption {
         type = types.listOf types.str;
         description = "List of Workers.";
-        default = [
-          "worker.Worker('example-worker', 'pass')"
-        ];
-        example = [ "worker.LocalWorker('example-worker')" ];
+        default = [ "worker.Worker('example-worker', 'pass')" ];
       };
 
       status = mkOption {
@@ -135,9 +132,8 @@ in {
       };
 
       bpPort = mkOption {
-        default = "9989";
-        type = types.string;
-        example = "tcp:10000:interface=127.0.0.1";
+        default = 9989;
+        type = types.int;
         description = "Port where the master will listen to Buildbot Worker.";
       };
 
@@ -179,14 +175,14 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.buildbot-ui;
-        defaultText = "pkgs.buildbot-ui";
+        default = pkgs.buildbot-full;
+        defaultText = "pkgs.buildbot-full";
         description = "Package to use for buildbot.";
         example = literalExample "pkgs.buildbot-full";
       };
 
       packages = mkOption {
-        default = [ ];
+        default = with pkgs; [ python27Packages.twisted git ];
         example = literalExample "[ pkgs.git ]";
         type = types.listOf types.package;
         description = "Packages to add to PATH for the buildbot process.";
@@ -212,9 +208,17 @@ in {
 
     systemd.services.buildbot-master = {
       description = "Buildbot Continuous Integration Server.";
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       path = cfg.packages;
+
+      preStart = ''
+        env > envvars
+        mkdir -vp ${cfg.buildbotDir}
+        ln -sfv ${masterCfg} ${cfg.buildbotDir}/master.cfg
+        rm -fv $cfg.buildbotDir}/buildbot.tac
+        ${cfg.package}/bin/buildbot create-master ${cfg.buildbotDir}
+      '';
 
       serviceConfig = {
         Type = "simple";
@@ -224,20 +228,9 @@ in {
         ExecStart = "${cfg.package}/bin/buildbot start --nodaemon ${cfg.buildbotDir}";
       };
 
-      preStart = ''
-        ${pkgs.coreutils}/bin/mkdir -vp ${cfg.buildbotDir}
-        ${pkgs.coreutils}/bin/ln -sfv ${masterCfg} ${cfg.buildbotDir}/master.cfg
-        ${cfg.package}/bin/buildbot create-master ${cfg.buildbotDir}
-      '';
-
-      postStart = ''
-        until [[ $(${pkgs.curl}/bin/curl -s --head -w '\n%{http_code}' http://localhost:${toString cfg.port} | tail -n1) =~ ^(200|403)$ ]]; do
-          sleep 1
-        done
-      '';
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ nand0p Mic92 ];
+  meta.maintainers = with lib.maintainers; [ nand0p mic92 ];
 
 }

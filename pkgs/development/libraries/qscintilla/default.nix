@@ -1,6 +1,6 @@
 { stdenv, fetchurl, unzip
 , qt4 ? null, qmake4Hook ? null
-, withQt5 ? false, qtbase ? null, qmakeHook ? null
+, withQt5 ? false, qtbase ? null, qmake ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = if withQt5 then [ qtbase ] else [ qt4 ];
-  nativeBuildInputs = [ unzip ] ++ (if withQt5 then [ qmakeHook ] else [ qmake4Hook ]);
+  nativeBuildInputs = [ unzip ] ++ (if withQt5 then [ qmake ] else [ qmake4Hook ]);
 
   enableParallelBuilding = true;
 

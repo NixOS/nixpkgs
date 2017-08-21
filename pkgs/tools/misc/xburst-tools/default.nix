@@ -1,5 +1,6 @@
 { stdenv, fetchgit, libusb, libusb1, autoconf, automake, confuse, pkgconfig
-, gccCross ? null }:
+, gccCross ? null, crossPrefix
+}:
 
 let
   version = "2011-12-26";
@@ -18,7 +19,7 @@ stdenv.mkDerivation {
   '';
 
   configureFlags = if gccCross != null then
-    "--enable-firmware CROSS_COMPILE=${gccCross.crossConfig}-"
+    "--enable-firmware CROSS_COMPILE=${crossPrefix}-"
     else "";
 
   # Not to strip cross build binaries (this is for the gcc-cross-wrapper)

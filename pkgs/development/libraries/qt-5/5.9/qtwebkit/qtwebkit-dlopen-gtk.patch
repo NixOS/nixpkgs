@@ -1,0 +1,64 @@
+Index: qtwebkit-opensource-src-5.8.0/Source/WebCore/plugins/qt/PluginPackageQt.cpp
+===================================================================
+--- qtwebkit-opensource-src-5.8.0.orig/Source/WebCore/plugins/qt/PluginPackageQt.cpp
++++ qtwebkit-opensource-src-5.8.0/Source/WebCore/plugins/qt/PluginPackageQt.cpp
+@@ -136,7 +136,11 @@ static void initializeGtk(QLibrary* modu
+         }
+     }
+ 
++#ifdef NIXPKGS_LIBGTK2
++    QLibrary library(QLatin1String(NIXPKGS_LIBGTK2), 0);
++#else
+     QLibrary library(QLatin1String("libgtk-x11-2.0"), 0);
++#endif
+     if (library.load()) {
+         typedef void *(*gtk_init_check_ptr)(int*, char***);
+         gtk_init_check_ptr gtkInitCheck = (gtk_init_check_ptr)library.resolve("gtk_init_check");
+Index: qtwebkit-opensource-src-5.8.0/Source/WebCore/plugins/qt/PluginViewQt.cpp
+===================================================================
+--- qtwebkit-opensource-src-5.8.0.orig/Source/WebCore/plugins/qt/PluginViewQt.cpp
++++ qtwebkit-opensource-src-5.8.0/Source/WebCore/plugins/qt/PluginViewQt.cpp
+@@ -697,7 +697,11 @@ static Display *getPluginDisplay()
+     // support gdk based plugins (like flash) that use a different X connection.
+     // The code below has the same effect as this one:
+     // Display *gdkDisplay = gdk_x11_display_get_xdisplay(gdk_display_get_default());
++#ifdef NIXPKGS_LIBGDK2
++    QLibrary library(QLatin1String(NIXPKGS_LIBGDK2), 0);
++#else
+     QLibrary library(QLatin1String("libgdk-x11-2.0"), 0);
++#endif
+     if (!library.load())
+         return 0;
+ 
+Index: qtwebkit-opensource-src-5.8.0/Source/WebKit2/WebProcess/Plugins/Netscape/x11/NetscapePluginX11.cpp
+===================================================================
+--- qtwebkit-opensource-src-5.8.0.orig/Source/WebKit2/WebProcess/Plugins/Netscape/x11/NetscapePluginX11.cpp
++++ qtwebkit-opensource-src-5.8.0/Source/WebKit2/WebProcess/Plugins/Netscape/x11/NetscapePluginX11.cpp
+@@ -64,7 +64,11 @@ static Display* getPluginDisplay()
+     // The code below has the same effect as this one:
+     // Display *gdkDisplay = gdk_x11_display_get_xdisplay(gdk_display_get_default());
+ 
++#ifdef NIXPKGS_LIBGDK2
++    QLibrary library(QLatin1String(NIXPKGS_LIBGDK2), 0);
++#else
+     QLibrary library(QLatin1String("libgdk-x11-2.0"), 0);
++#endif
+     if (!library.load())
+         return 0;
+ 
+Index: qtwebkit-opensource-src-5.8.0/Source/WebKit2/PluginProcess/qt/PluginProcessMainQt.cpp
+===================================================================
+--- qtwebkit-opensource-src-5.8.0.orig/Source/WebKit2/PluginProcess/qt/PluginProcessMainQt.cpp
++++ qtwebkit-opensource-src-5.8.0/Source/WebKit2/PluginProcess/qt/PluginProcessMainQt.cpp
+@@ -53,7 +53,11 @@ static void messageHandler(QtMsgType typ
+ 
+ static bool initializeGtk()
+ {
++#ifdef NIXPKGS_LIBGTK2
++    QLibrary gtkLibrary(QLatin1String(NIXPKGS_LIBGTK2), 0);
++#else
+     QLibrary gtkLibrary(QLatin1String("libgtk-x11-2.0"), 0);
++#endif
+     if (!gtkLibrary.load())
+         return false;
+     typedef void* (*gtk_init_ptr)(void*, void*);

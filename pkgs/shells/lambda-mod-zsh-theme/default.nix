@@ -1,16 +1,13 @@
 { stdenv, fetchFromGitHub }:
 
-let
-  repo = "lambda-mod-zsh-theme";
-  rev = "eceee68cf46bba9f7f42887c2128b48e8861e31b";
-in stdenv.mkDerivation {
-  name = "${repo}-${rev}";
+stdenv.mkDerivation {
+  name = "lambda-mod-zsh-theme-unstable-2017-07-05";
 
   src = fetchFromGitHub {
-    inherit rev repo;
-
     owner = "halfo";
-    sha256 = "1410ryc22i20na5ypa1q6f106lkjj8n1qfjmb77q4rspi0ydaiy4";
+    repo = "lambda-mod-zsh-theme";
+    sha256 = "03kdhifxsnfbly6hqpr1h6kf52kyhdbh82nvwkkyrz1lw2cxl89n";
+    rev = "ba7d5fea16db91fc8de887e69250f4e501b1e36d";
   };
 
   buildPhases = [ "unpackPhase" "installPhase" ];
@@ -22,7 +19,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A ZSH theme optimized for people who use Git & Unicode-compatible fonts and terminals";
-    homepage = "https://github.com/halfo/lambda-mod-zsh-theme/";
+    homepage = https://github.com/halfo/lambda-mod-zsh-theme/;
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ ma27 ];

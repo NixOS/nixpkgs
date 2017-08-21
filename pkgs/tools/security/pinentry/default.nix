@@ -10,11 +10,11 @@ let
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "pinentry-0.9.7";
+  name = "pinentry-1.0.0";
 
   src = fetchurl {
     url = "mirror://gnupg/pinentry/${name}.tar.bz2";
-    sha256 = "1cp7wjqr6nx31mdclr61s2h84ijqjl0ph99kgj4vyawpjj1j1633";
+    sha256 = "0ni7g4plq6x78p32al7m8h2zsakvg1rhfz0qbc3kdc7yq7nw4whn";
   };
 
   buildInputs = [ libgpgerror libassuan libcap gtk2 ncurses qt4 ];
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
 
   meta = {
-    homepage = "http://gnupg.org/aegypten2/";
+    homepage = http://gnupg.org/aegypten2/;
     description = "GnuPG's interface to passphrase input";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.all;

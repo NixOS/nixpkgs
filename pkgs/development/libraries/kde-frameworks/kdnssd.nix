@@ -1,15 +1,17 @@
-{ kdeFramework, lib
-, extra-cmake-modules, qttools
-, avahi, qtbase
+{
+  mkDerivation, lib,
+  extra-cmake-modules,
+  avahi, qtbase, qttools,
 }:
 
-kdeFramework {
+mkDerivation {
   name = "kdnssd";
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];
     broken = builtins.compareVersions qtbase.version "5.6.0" < 0;
   };
-  nativeBuildInputs = [ extra-cmake-modules qttools ];
-  propagatedBuildInputs = [ avahi ];
-  buildInputs = [ qtbase ];
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [ avahi qttools ];
+  propagatedBuildInputs = [ qtbase ];
+  outputs = [ "out" "dev" ];
 }

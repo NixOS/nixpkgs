@@ -2,17 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "capnproto-${version}";
-  version = "0.5.3";
+  version = "0.6.0";
 
   src = fetchurl {
     url = "https://capnproto.org/capnproto-c++-${version}.tar.gz";
-    sha256 = "1yvaadhgakskqq5wpv53hd6fc3pp17mrdldw4i5cvgck4iwprcfd";
+    sha256 = "0gpp1cxsb9nfd7qkjjykzknx03y0z0n4bq5q0fmxci7w38ci22g5";
   };
-
-  patches = [
-    # Remove once they release a version above 0.5.3. See https://github.com/sandstorm-io/capnproto/issues/433
-    ./clang4.patch
-  ];
 
   meta = with stdenv.lib; {
     homepage    = "http://kentonv.github.io/capnproto";

@@ -11,6 +11,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/cl-json/2014-12-17/cl-json-20141217-git.tgz'';
     sha256 = ''00cfppyi6njsbpv1x03jcv4zwplg0q1138174l3wjkvi3gsql17g'';
   };
+    
+  packageName = "cl-json";
 
   overrides = x: {
     postInstall = ''

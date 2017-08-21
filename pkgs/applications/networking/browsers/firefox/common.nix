@@ -19,7 +19,7 @@
 , alsaSupport ? true, alsaLib
 , pulseaudioSupport ? true, libpulseaudio
 , ffmpegSupport ? true, gstreamer, gst-plugins-base
-, gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
+, gtk3Support ? !isTorBrowserLike, gtk2, gtk3, wrapGAppsHook
 
 ## privacy-related options
 
@@ -113,7 +113,7 @@ stdenv.mkDerivation (rec {
     "--enable-system-sqlite"
     #"--enable-system-cairo"
     "--enable-startup-notification"
-    "--enable-content-sandbox" # available since 26.0, but not much info available
+    #"--enable-content-sandbox" # TODO: probably enable after 54
     "--disable-tests"
     "--disable-necko-wifi" # maybe we want to enable this at some point
     "--disable-updater"
@@ -153,7 +153,7 @@ stdenv.mkDerivation (rec {
   ++ lib.optional googleAPISupport "--with-google-api-keyfile=ga"
   ++ flag crashreporterSupport "crashreporter"
   ++ flag safeBrowsingSupport "safe-browsing"
-  ++ flag drmSupport "eme"
+  ++ lib.optional drmSupport "--enable-eme=widevine"
 
   ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
                     else [ "--disable-debug" "--enable-release"
@@ -200,6 +200,6 @@ stdenv.mkDerivation (rec {
     gtk = gtk2;
     inherit nspr;
     inherit ffmpegSupport;
-  };
+  } // lib.optionalAttrs gtk3Support { inherit gtk3; };
 
 } // overrides)

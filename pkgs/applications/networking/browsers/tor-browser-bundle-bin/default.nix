@@ -6,7 +6,6 @@
 , zlib
 
 # libxul run-time dependencies
-, alsaLib
 , atk
 , cairo
 , dbus
@@ -16,14 +15,15 @@
 , gdk_pixbuf
 , glib
 , gtk2
+, libxcb
 , libX11
 , libXext
 , libXrender
 , libXt
 , pango
 
-# Pulseaudio support
-, pulseaudioSupport ? mediaSupport
+, audioSupport ? mediaSupport
+, pulseaudioSupport ? audioSupport
 , libpulseaudio
 
 # Media support (implies pulseaudio support)
@@ -37,13 +37,15 @@
 
 # Pluggable transport dependencies
 , python27
+
+# Extra preferences
+, extraPrefs ? ""
 }:
 
 with stdenv.lib;
 
 let
   libPath = makeLibraryPath ([
-    alsaLib
     atk
     cairo
     dbus
@@ -53,6 +55,7 @@ let
     gdk_pixbuf
     glib
     gtk2
+    libxcb
     libX11
     libXext
     libXrender
@@ -81,19 +84,25 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "6.5.2";
+  version = "7.0.4";
 
   lang = "en-US";
 
   srcs = {
     "x86_64-linux" = fetchurl {
-      url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz";
-      sha256 = "0jn98arczlgjigpmql1qg5b7izabv4zy4mji6vvcg3b8g1ma108r";
+      urls = [
+        "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
+        "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
+      ];
+      sha256 = "17hz6nv7py80zbksk1dypmj8agr5jzsfrpjncphpsrflvbqzs2bx";
     };
 
     "i686-linux" = fetchurl {
-      url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz";
-      sha256 = "0micxgkbys0py4bj6csbc8xz4gq0x5v2zirgi38krnm5x5riqj3w";
+      urls = [
+        "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
+        "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
+      ];
+      sha256 = "0g8m5x891f4kdvb3fhmh98xfw569sbqd9wcadflabf9vc9bqv3al";
     };
   };
 in
@@ -105,6 +114,7 @@ stdenv.mkDerivation rec {
   src = srcs."${stdenv.system}" or (throw "unsupported system: ${stdenv.system}");
 
   preferLocalBuild = true;
+  allowSubstitutes = false;
 
   desktopItem = makeDesktopItem {
     name = "torbrowser";
@@ -166,11 +176,12 @@ stdenv.mkDerivation rec {
     cat >mozilla.cfg <<EOF
     // First line must be a comment
 
-    // Always update via Nix
+    // Always update via Nixpkgs
     lockPref("app.update.auto", false);
     lockPref("app.update.enabled", false);
     lockPref("extensions.update.autoUpdateDefault", false);
     lockPref("extensions.update.enabled", false);
+    lockPref("extensions.torbutton.versioncheck_enabled", false);
 
     // User should never change these.  Locking prevents these
     // values from being written to prefs.js, avoiding Store
@@ -183,6 +194,16 @@ stdenv.mkDerivation rec {
 
     // Stop obnoxious first-run redirection.
     lockPref("noscript.firstRunRedirection", false);
+
+    // Insist on using IPC for communicating with Tor
+    //
+    // Defaults to creating $TBB_HOME/TorBrowser/Data/Tor/{socks,control}.socket
+    lockPref("extensions.torlauncher.control_port_use_ipc", true);
+    lockPref("extensions.torlauncher.socks_port_use_ipc", true);
+
+    ${optionalString (extraPrefs != "") ''
+      ${extraPrefs}
+    ''}
     EOF
 
     # Hard-code path to TBB fonts; see also FONTCONFIG_FILE in
@@ -225,6 +246,9 @@ stdenv.mkDerivation rec {
 
     # Initialize the Tor data directory.
     mkdir -p "\$HOME/TorBrowser/Data/Tor"
+
+    # TBB will fail if ownership is too permissive
+    chmod 0700 "\$HOME/TorBrowser/Data/Tor"
 
     # Initialize the browser profile state.  Note that the only data
     # copied from the Store payload is the initial bookmark file, which is

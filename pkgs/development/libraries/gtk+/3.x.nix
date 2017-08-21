@@ -13,7 +13,7 @@ with stdenv.lib;
 
 let
   ver_maj = "3.22";
-  ver_min = "12";
+  ver_min = "18";
   version = "${ver_maj}.${ver_min}";
 in
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${ver_maj}/gtk+-${version}.tar.xz";
-    sha256 = "84fae0cefb6a11ee2b4e86b8ac42fe46a3d30b4ad16661d5fc51e8ae03e2a98c";
+    sha256 = "b64b1c2ec20adf128ac08ee704d1f4e7b0a8d3df097d51f62edb271c7bb1bf69";
   };
 
   outputs = [ "out" "dev" ];
@@ -65,6 +65,8 @@ stdenv.mkDerivation rec {
       --replace '-L${gmp.dev}/lib' '-L${gmp.out}/lib'
     # The updater is needed for nixos env and it's tiny.
     moveToOutput bin/gtk-update-icon-cache "$out"
+    # Launcher
+    moveToOutput bin/gtk-launch "$out"
   '';
 
   meta = with stdenv.lib; {
@@ -81,7 +83,7 @@ stdenv.mkDerivation rec {
       royalties.
     '';
 
-    homepage = http://www.gtk.org/;
+    homepage = https://www.gtk.org/;
 
     license = licenses.lgpl2Plus;
 

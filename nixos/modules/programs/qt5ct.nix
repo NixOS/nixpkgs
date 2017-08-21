@@ -26,6 +26,6 @@ with lib;
   ###### implementation
   config = mkIf config.programs.qt5ct.enable {
     environment.variables.QT_QPA_PLATFORMTHEME = "qt5ct";
-    environment.systemPackages = [ pkgs.qt5ct ];
+    environment.systemPackages = with pkgs; [ qt5ct libsForQt5.qtstyleplugins ];
   };
 }

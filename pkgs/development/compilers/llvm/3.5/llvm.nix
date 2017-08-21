@@ -53,7 +53,8 @@ in stdenv.mkDerivation rec {
     "-DCAN_TARGET_i386=false"
   ];
 
-  patches = [ ./fix-15974.patch ];
+  patches = [ ./fix-15974.patch ] ++
+    stdenv.lib.optionals (!stdenv.isDarwin) [../fix-llvm-config.patch ];
 
   postBuild = ''
     rm -fR $out

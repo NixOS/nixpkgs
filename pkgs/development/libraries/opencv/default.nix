@@ -35,6 +35,11 @@ stdenv.mkDerivation rec {
       ./no-build-info.patch
     ];
 
+  # This prevents cmake from using libraries in impure paths (which causes build failure on non NixOS)
+  postPatch = ''
+    sed -i '/Add these standard paths to the search paths for FIND_LIBRARY/,/^\s*$/{d}' CMakeLists.txt
+  '';
+
   outputs = [ "out" "dev" ];
 
   buildInputs =
@@ -82,7 +87,7 @@ stdenv.mkDerivation rec {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = http://opencv.org/;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ viric flosse ];
+    maintainers = with maintainers; [ viric ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

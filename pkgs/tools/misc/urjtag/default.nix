@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Enhanced, modern tool for communicating over JTAG with flash chips, CPUs,and many more";
-    homepage = "http://urjtag.org/";
+    homepage = http://urjtag.org/;
     license = with stdenv.lib.licenses; [ gpl2Plus lgpl21Plus ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
     maintainers = with stdenv.lib.maintainers; [ lowfatcomputing ];

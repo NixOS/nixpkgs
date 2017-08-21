@@ -13,6 +13,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/cxml/2011-06-19/cxml-20110619-git.tgz'';
     sha256 = ''04k6syn9p7qsazi84kab9n9ki2pb5hrcs0ilw7wikxfqnbabm2yk'';
   };
+    
+  packageName = "cxml-dom";
 
   overrides = x: {
     postInstall = ''
@@ -32,4 +34,4 @@ rec {
 }
 /* (SYSTEM cxml-dom DESCRIPTION NIL SHA256 04k6syn9p7qsazi84kab9n9ki2pb5hrcs0ilw7wikxfqnbabm2yk URL
     http://beta.quicklisp.org/archive/cxml/2011-06-19/cxml-20110619-git.tgz MD5 587755dff60416d4f716f4e785cf747e NAME cxml-dom TESTNAME cxml FILENAME cxml-dom
-    DEPS ((NAME cxml-xml)) DEPENDENCIES (cxml-xml) VERSION cxml-20110619-git SIBLINGS (cxml)) */
+    DEPS ((NAME cxml-xml FILENAME cxml-xml)) DEPENDENCIES (cxml-xml) VERSION cxml-20110619-git SIBLINGS (cxml)) */

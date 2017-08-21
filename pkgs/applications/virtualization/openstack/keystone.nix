@@ -30,7 +30,7 @@ python2Packages.buildPythonApplication rec {
 
   buildInputs = with python2Packages; [
     coverage fixtures mock subunit tempest-lib testtools testrepository
-    ldap ldappool webtest requests2 oslotest pep8 pymongo which
+    ldap ldappool webtest requests oslotest pep8 pymongo which
   ];
 
   makeWrapperArgs = ["--prefix PATH : '${openssl.bin}/bin:$PATH'"];

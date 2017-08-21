@@ -20,11 +20,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "mutt-${version}";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchurl {
     url = "http://ftp.mutt.org/pub/mutt/${name}.tar.gz";
-    sha256 = "0dgjjryp1ggbc6ivy9cfz5jl3gnbahb6d6hcwn7c7wk5npqpn18x";
+    sha256 = "0hpd896mw630sd6ps60hpka8cg691nvr627n8kmabv7zcxnp90cv";
   };
 
   patchPhase = optionalString (openssl != null) ''

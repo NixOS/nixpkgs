@@ -1,21 +1,36 @@
-{stdenv, menhir, easy-format, buildOcaml, fetchurl, which}:
+{ stdenv, menhir, easy-format, ocaml, findlib, fetchurl, jbuilder, which }:
 
-buildOcaml rec {
-  name = "atd";
-  version = "1.1.2";
+let param =
+  if stdenv.lib.versionAtLeast ocaml.version "4.02"
+  then {
+    version = "1.12.0";
+    sha256 = "1pcd4fqbilv8zm2mc1nj2s26vc5y8vnisg1q1y6bjx23wxidb09y";
+    buildPhase = "jbuilder build -p atd";
+    inherit (jbuilder) installPhase;
+  } else {
+    version = "1.1.2";
+    sha256 = "0ef10c63192aed75e9a4274e89c5f9ca27efb1ef230d9949eda53ad4a9a37291";
+    buildPhase = "";
+    installPhase = ''
+      mkdir -p $out/bin
+      make PREFIX=$out install
+    '';
+  };
+in
+
+stdenv.mkDerivation rec {
+  inherit (param) version buildPhase installPhase;
+  name = "ocaml${ocaml.version}-atd-${version}";
 
   src = fetchurl {
     url = "https://github.com/mjambon/atd/archive/v${version}.tar.gz";
-    sha256 = "0ef10c63192aed75e9a4274e89c5f9ca27efb1ef230d9949eda53ad4a9a37291";
+    inherit (param) sha256;
   };
 
-  installPhase = ''
-    mkdir -p $out/bin
-    make PREFIX=$out install
-  '';
+  createFindlibDestdir = true;
 
-  buildInputs = [ which ];
-  propagatedBuildInputs = [ menhir easy-format ];
+  buildInputs = [ which jbuilder ocaml findlib menhir ];
+  propagatedBuildInputs = [ easy-format ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/mjambon/atd;
