@@ -84,6 +84,8 @@ let
       # Work around "stdenv-darwin-boot-2 is not allowed to refer to path /nix/store/...-expand-response-params.c"
       cp "$src" expand-response-params.c
       "$CC" -std=c99 -O3 -o "$out" expand-response-params.c
+      strip -S $out
+      ${optionalString hostPlatform.isLinux "patchelf --shrink-rpath $out"}
     '';
   } else "";
 
@@ -101,6 +103,8 @@ stdenv.mkDerivation {
 
   binPrefix = prefix;
   inherit infixSalt;
+
+  outputs = [ "out" "man" ];
 
   passthru = {
     inherit libc nativeTools nativeLibc nativePrefix isGNU isClang default_cxx_stdlib_compile
@@ -120,7 +124,7 @@ stdenv.mkDerivation {
 
   buildCommand =
     ''
-      mkdir -p $out/bin $out/nix-support
+      mkdir -p $out/bin $out/nix-support $man/nix-support
 
       wrap() {
         local dst="$1"
@@ -231,7 +235,8 @@ stdenv.mkDerivation {
       # Propagate the wrapped cc so that if you install the wrapper,
       # you get tools like gcov, the manpages, etc. as well (including
       # for binutils and Glibc).
-      printWords ${cc} ${cc.man or ""} ${binutils_bin} ${if libc == null then "" else libc_bin} > $out/nix-support/propagated-user-env-packages
+      printWords ${cc} ${binutils_bin} ${if libc == null then "" else libc_bin} > $out/nix-support/propagated-user-env-packages
+      printWords ${cc.man or ""}  > $man/nix-support/propagated-user-env-packages
 
       printWords ${toString extraPackages} > $out/nix-support/propagated-native-build-inputs
     ''

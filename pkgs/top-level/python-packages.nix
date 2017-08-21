@@ -2085,6 +2085,8 @@ in {
     };
   };
 
+  html5-parser = callPackage ../development/python-modules/html5-parser {};
+
   httpserver = callPackage ../development/python-modules/httpserver {};
 
   bleach = buildPythonPackage rec {
@@ -12223,11 +12225,11 @@ in {
 
 
   lxml = buildPythonPackage ( rec {
-    name = "lxml-3.7.2";
+    name = "lxml-3.8.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/lxml/${name}.tar.gz";
-      sha256 = "02j1wf3sh2qmswcz3rh0xvsb8jm63ifaiz2bkng93hyvc1iignar";
+      sha256 = "15nvf6n285n282682qyw3wihsncb0x5amdhyi4b83bfa2nz74vvk";
     };
 
     buildInputs = with self; [ pkgs.libxml2 pkgs.libxslt ];

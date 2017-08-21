@@ -5268,7 +5268,7 @@ with pkgs;
   gambit = callPackage ../development/compilers/gambit { };
   gerbil = callPackage ../development/compilers/gerbil { };
 
-  gcc = gcc5;
+  gcc = gcc6;
   gcc-unwrapped = gcc.cc;
 
   wrapCCMulti = cc:
@@ -6469,7 +6469,6 @@ with pkgs;
 
   spidermonkey_1_8_5 = callPackage ../development/interpreters/spidermonkey/1.8.5.nix { };
   spidermonkey_17 = callPackage ../development/interpreters/spidermonkey/17.nix { };
-  spidermonkey_24 = callPackage ../development/interpreters/spidermonkey/24.nix { };
   spidermonkey_31 = callPackage ../development/interpreters/spidermonkey/31.nix { };
   spidermonkey_38 = callPackage ../development/interpreters/spidermonkey/38.nix { };
   spidermonkey = spidermonkey_31;
@@ -11774,7 +11773,7 @@ with pkgs;
 
   darwin = let
     apple-source-releases = callPackage ../os-specific/darwin/apple-source-releases { };
-  in apple-source-releases // rec {
+  in recurseIntoAttrs (apple-source-releases // rec {
     cctools = callPackage ../os-specific/darwin/cctools/port.nix {
       inherit libobjc;
       stdenv = if stdenv.isDarwin then stdenv else libcxxStdenv;
@@ -11818,7 +11817,7 @@ with pkgs;
     usr-include = callPackage ../os-specific/darwin/usr-include {};
 
     DarwinTools = callPackage ../os-specific/darwin/DarwinTools {};
-  };
+  });
 
   devicemapper = lvm2;
 
@@ -12126,6 +12125,8 @@ with pkgs;
                       kernelPatches.genksyms_fix_segfault
                       kernelPatches.DCCP_double_free_vulnerability_CVE-2017-6074
                     ];
+    # compiler-gcc.h:107:30: fatal error: linux/compiler-gcc6.h: No such file or directory
+    stdenv = overrideCC stdenv gcc5;
   };
 
   linux_chromiumos_latest = linux_chromiumos_3_18;
@@ -12288,7 +12289,7 @@ with pkgs;
 
   linuxPackages_custom = { version, src, configfile }:
     recurseIntoAttrs (linuxPackagesFor (pkgs.linuxManualConfig {
-      inherit version src configfile;
+      inherit version src configfile stdenv;
       allowImportFromDerivation = true;
     }));
 

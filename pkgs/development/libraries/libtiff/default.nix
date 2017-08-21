@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       patches="$patches $(cat debian/patches/series | sed 's|^|debian/patches/|')"
     '';
 
-  outputs = [ "bin" "dev" "out" "doc" ];
+  outputs = [ "bin" "dev" "out" "man" "doc" ];
 
   nativeBuildInputs = [ pkgconfig ];
 
