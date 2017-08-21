@@ -6063,7 +6063,6 @@ with pkgs;
     nativeLibc = stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
     cc = baseCC;
-    dyld = if stdenv.isDarwin then darwin.dyld else null;
     isGNU = baseCC.isGNU or false;
     isClang = baseCC.isClang or false;
     inherit libc extraBuildCommands;
@@ -6089,7 +6088,6 @@ with pkgs;
       nativeLibc = false;
       noLibc = (libc == null);
 
-      dyld = if stdenv.isDarwin then darwin.dyld else null;
       isGNU = cc.isGNU or false;
       isClang = cc.isClang or false;
 

@@ -79,8 +79,6 @@ let
           buildPackages = lib.optionalAttrs (prevStage ? stdenv) {
             inherit (prevStage) stdenv;
           };
-          hostPlatform = localSystem;
-          targetPlatform = localSystem;
           cc = prevStage.gcc-unwrapped;
           isGNU = true;
           libc = prevStage.glibc;
@@ -244,8 +242,6 @@ in
         buildPackages = {
           inherit (prevStage) stdenv;
         };
-        hostPlatform = localSystem;
-        targetPlatform = localSystem;
         cc = prevStage.gcc-unwrapped;
         libc = self.glibc;
         inherit (self) stdenv binutils coreutils gnugrep;
