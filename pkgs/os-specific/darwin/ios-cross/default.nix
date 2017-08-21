@@ -18,6 +18,11 @@
  * x86_64-apple-darwin14  | x86_64 | true
  */
 
+# Apple uses somewhat non-standard names for this. We could fall back on
+# `targetPlatform.parsed.cpu.name`, but that would be a more standard one and
+# likely to fail. Better just to require something manual.
+assert targetPlatform ? arch;
+
 let
 
   prefix = targetPlatform.config;
