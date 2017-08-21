@@ -544,6 +544,8 @@ with pkgs;
 
   apt = callPackage ../tools/package-management/apt {
     inherit (perlPackages) Po4a;
+    # include/c++/6.4.0/cstdlib:75:25: fatal error: stdlib.h: No such file or directory
+    stdenv = overrideCC stdenv gcc5;
   };
 
   autorevision = callPackage ../tools/misc/autorevision { };
@@ -1442,10 +1444,11 @@ with pkgs;
 
     m17n = callPackage ../tools/inputmethods/ibus-engines/ibus-m17n { };
 
-    mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc {
+    mozc = callPackage ../tools/inputmethods/ibus-engines/ibus-mozc rec {
+      clangStdenv = libcxxStdenv; # workaround for https://github.com/NixOS/nixpkgs/issues/28223
       python = python2;
       inherit (python2Packages) gyp;
-      protobuf = protobuf3_2.override { stdenv = clangStdenv; };
+      protobuf = protobuf3_2.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
     };
 
     table = callPackage ../tools/inputmethods/ibus-engines/ibus-table {
@@ -1922,10 +1925,11 @@ with pkgs;
 
     m17n = callPackage ../tools/inputmethods/fcitx-engines/fcitx-m17n { };
 
-    mozc = callPackage ../tools/inputmethods/fcitx-engines/fcitx-mozc {
+    mozc = callPackage ../tools/inputmethods/fcitx-engines/fcitx-mozc rec {
+      clangStdenv = libcxxStdenv; # workaround for https://github.com/NixOS/nixpkgs/issues/28223
       python = python2;
       inherit (python2Packages) gyp;
-      protobuf = protobuf3_2.override { stdenv = clangStdenv; };
+      protobuf = protobuf3_2.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
     };
 
     table-other = callPackage ../tools/inputmethods/fcitx-engines/fcitx-table-other { };
@@ -3873,6 +3877,8 @@ with pkgs;
   ponysay = callPackage ../tools/misc/ponysay { };
 
   popfile = callPackage ../tools/text/popfile { };
+
+  poretools = callPackage ../applications/science/biology/poretools { };
 
   postscript-lexmark = callPackage ../misc/drivers/postscript-lexmark { };
 
@@ -9819,6 +9825,8 @@ with pkgs;
     cmake = cmake_2_8;
   };
 
+  open-wbo = callPackage ../applications/science/logic/open-wbo {};
+
   openwsman = callPackage ../development/libraries/openwsman {};
 
   ortp = callPackage ../development/libraries/ortp { };
@@ -12254,6 +12262,8 @@ with pkgs;
                       kernelPatches.genksyms_fix_segfault
                       kernelPatches.DCCP_double_free_vulnerability_CVE-2017-6074
                     ];
+    # compiler-gcc.h:107:30: fatal error: linux/compiler-gcc6.h: No such file or directory
+    stdenv = overrideCC stdenv gcc5;
   };
 
   linux_chromiumos_latest = linux_chromiumos_3_18;
@@ -12416,7 +12426,7 @@ with pkgs;
 
   linuxPackages_custom = { version, src, configfile }:
     recurseIntoAttrs (linuxPackagesFor (pkgs.linuxManualConfig {
-      inherit version src configfile;
+      inherit version src configfile stdenv;
       allowImportFromDerivation = true;
     }));
 
@@ -15121,6 +15131,8 @@ with pkgs;
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
     };
+    # checking whether g++ supports C++14 or C++11... configure: error: no
+    stdenv = overrideCC stdenv gcc5;
   });
 
   libreoffice-still = lowPrio (callPackage ../applications/office/libreoffice/still.nix {
@@ -15140,6 +15152,8 @@ with pkgs;
     harfbuzz = harfbuzz.override {
       withIcu = true; withGraphite2 = true;
     };
+    # checking whether g++ supports C++14 or C++11... configure: error: no
+    stdenv = overrideCC stdenv gcc5;
   });
 
 
@@ -16724,6 +16738,12 @@ with pkgs;
   vorbis-tools = callPackage ../applications/audio/vorbis-tools { };
 
   vscode = callPackage ../applications/editors/vscode { };
+
+  vscode-with-extensions = callPackage ../applications/editors/vscode-with-extensions {};
+
+  vscode-utils = callPackage ../misc/vscode-extensions/vscode-utils.nix {};
+
+  vscode-extensions = recurseIntoAttrs (callPackage ../misc/vscode-extensions {});
 
   vue = callPackage ../applications/misc/vue { };
 
@@ -19257,6 +19277,8 @@ with pkgs;
       enableWiimote = true;
     };
   };
+
+  xzoom = callPackage ../tools/X11/xzoom {};
 
   yabause = callPackage ../misc/emulators/yabause {
     qt = qt4;

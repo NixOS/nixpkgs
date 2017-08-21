@@ -72,8 +72,7 @@ let version = "4.9.4";
       # target libraries and tools.
       ++ optional langAda ../gnat-cflags.patch
       ++ optional langFortran ../gfortran-driving.patch
-      # The NXConstStr.patch can be removed at 4.9.4
-      ++ optional hostPlatform.isDarwin ../gfortran-darwin-NXConstStr.patch;
+      ;
 
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
@@ -473,7 +472,7 @@ stdenv.mkDerivation ({
 
     # On GNU/Hurd glibc refers to Mach & Hurd
     # headers.
-    ++ optionals (libcCross != null && libcCross ? "propagatedBuildInputs" )
+    ++ optionals (libcCross != null && libcCross ? propagatedBuildInputs)
                  libcCross.propagatedBuildInputs);
 
   LIBRARY_PATH = makeLibraryPath ([]

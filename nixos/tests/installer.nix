@@ -270,7 +270,7 @@ in {
     };
 
   # Simple GPT/UEFI configuration using systemd-boot with 3 partitions: ESP, swap & root filesystem
-  simpleUefiGummiboot = makeInstallerTest "simpleUefiGummiboot"
+  simpleUefiSystemdBoot = makeInstallerTest "simpleUefiSystemdBoot"
     { createPartitions =
         ''
           $machine->succeed(

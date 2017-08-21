@@ -2108,7 +2108,7 @@ in {
   blaze = callPackage ../development/python-modules/blaze { };
 
   # Needed for FlexGet 1.2.337 and calibre 2.76.0
-  html5lib_0_9999999 = self.html5lib.override rec {
+  html5lib_0_9999999 = self.html5lib.overridePythonAttrs rec {
     name = "html5lib-${version}";
     buildInputs = with self; [ nose flake8 ];
     propagatedBuildInputs = with self; [ six ];
@@ -5497,6 +5497,8 @@ in {
     };
   };
 
+  easydict = callPackage ../development/python-modules/easydict { };
+  
   EasyProcess = buildPythonPackage rec {
     name = "EasyProcess-0.2.3";
 

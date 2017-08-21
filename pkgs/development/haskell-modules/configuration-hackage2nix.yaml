@@ -2594,6 +2594,8 @@ package-maintainers:
   abbradar:
     - Agda
     - lambdabot
+  alunduil:
+    - collection-json
 
 dont-distribute-packages:
   # hard restrictions that really belong into meta.platforms
@@ -3433,7 +3435,6 @@ dont-distribute-packages:
   collada-output:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   collada-types:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   collapse-util:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
-  collection-json:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   collections-api:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   collections-base-instances:                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   collections:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
