@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, lib, makeWrapper, gvfs, atomEnv}:
+{ stdenv, pkgs, fetchurl, lib, makeWrapper, gvfs, atomEnv}:
 
 stdenv.mkDerivation rec {
   name = "atom-${version}";
@@ -31,6 +31,9 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${atomEnv.libPath}" \
       $out/share/atom/resources/app/apm/bin/node
+
+    rm -f $out/share/atom/resources/app/node_modules/dugite/git/bin/git
+    ln -s ${pkgs.git}/bin/git $out/share/atom/resources/app/node_modules/dugite/git/bin/git
 
     find $out/share/atom -name "*.node" -exec patchelf --set-rpath "${atomEnv.libPath}:$out/share/atom" {} \;
   '';
