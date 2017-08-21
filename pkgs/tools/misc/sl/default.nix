@@ -13,17 +13,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "man" ];
 
-  patches = [(fetchpatch {
-    url = "https://patch-diff.githubusercontent.com/raw/mtoyoda/sl/pull/24.patch";
+  patches = [ (fetchpatch {
+    url = "https://github.com/mtoyoda/sl/pull/24.patch";
     sha256 = "0hv0rmq6cp60jg5f91lb10b1r6ynkpgk6p7x2cx2yn6xiiidn9gy";
-  })];
+  }) ];
 
   installPhase = ''
-    mkdir -p $out/bin $doc/share/man/man1
-    cp sl $out/bin
-    cp sl.1 $doc/share/man/man1
+    install -vD sl -t $out/bin
+    install -vD sl.1 -t $man/share/man/man1
   '';
 
   meta = {
