@@ -432,7 +432,7 @@ stdenv.mkDerivation ({
     # the directory containing the haddock documentation.
     # `null' if no haddock documentation was built.
     # TODO: fetch the self from the fixpoint instead
-    haddockDir = self: if doHaddock then "${docdir self.doc}/html" else null;
+    haddockDir = self: if doHaddock then "${docDir}/html" else null;
 
     env = stdenv.mkDerivation {
       name = "interactive-${pname}-${version}-environment";
