@@ -256,7 +256,7 @@ let
                   for uri in qemu:///system lxc:///; do
                     for dom in $(${pkgs.libvirt}/bin/virsh -c $uri list --name); do
                       ${pkgs.libvirt}/bin/virsh -c $uri dumpxml "$dom" | \
-                      ${pkgs.xmlstarlet}/bin/xmlstarlet sel -t -m "//domain/devices/interface[@type='bridge'][target/@dev][source/@bridge]" -v "concat('ip link set ',target/@dev,' master ',source/@bridge)" | \
+                      ${pkgs.xmlstarlet}/bin/xmlstarlet sel -t -m "//domain/devices/interface[@type='bridge'][source/@bridge='${n}'][target/@dev]" -v "concat('ip link set ',target/@dev,' master ',source/@bridge,';')" | \
                       ${pkgs.bash}/bin/bash
                     done
                   done
