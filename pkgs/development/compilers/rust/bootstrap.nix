@@ -13,16 +13,16 @@ let
     else throw "missing bootstrap url for platform ${stdenv.system}";
 
   # fetch hashes by patching print-hashes.sh to not use the "$DATE" variable
-  # then running `print-hashes.sh 1.16.0`
+  # then running `print-hashes.sh 1.18.0`
   bootstrapHash =
     if stdenv.system == "i686-linux"
-    then "b5859161ebb182d3b75fa14a5741e5de87b088146fb0ef4a30f3b2439c6179c5"
+    then "821ced1bd5a8e89322f20c3565ef50a3708faca047d21686d4a2139f6dc0b1d6"
     else if stdenv.system == "x86_64-linux"
-    then "48621912c242753ba37cad5145df375eeba41c81079df46f93ffb4896542e8fd"
+    then "abdc9f37870c979dd241ba8c7c06d8bb99696292c462ed852c0af7f988bb5887"
     else if stdenv.system == "i686-darwin"
-    then "26356b14164354725bd0351e8084f9b164abab134fb05cddb7758af35aad2065"
+    then "977aaad697a995e28c6d9511fd8301d236da48978f8f3b938d8f22f105e4bf2f"
     else if stdenv.system == "x86_64-darwin"
-    then "2d08259ee038d3a2c77a93f1a31fc59e7a1d6d1bbfcba3dba3c8213b2e5d1926"
+    then "30f210e3133121812d74995a2831cfb3fe79c271b3cb1721815943bd4f7eb297"
     else throw "missing bootstrap hash for platform ${stdenv.system}";
 
   src = fetchurl {
@@ -32,7 +32,7 @@ let
 
   # Note: the version  MUST be one version prior to the version we're
   # building
-  version = "1.16.0";
+  version = "1.18.0";
 in import ./binaryBuild.nix
   { inherit stdenv fetchurl makeWrapper cacert zlib curl;
     buildRustPackage = null;
