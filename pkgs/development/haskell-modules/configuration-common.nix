@@ -727,9 +727,8 @@ self: super: {
       '';
     });
 
-
-  # https://github.com/plow-technologies/servant-auth/issues/20
-  servant-auth = dontCheck super.servant-auth;
+  # Glob == 0.7.x
+  servant-auth = doJailbreak super.servant-auth;
 
   # https://github.com/pontarius/pontarius-xmpp/issues/105
   pontarius-xmpp = dontCheck super.pontarius-xmpp;
