@@ -1,8 +1,10 @@
-{ stdenv, fetchurl, qtbase, qtscript, cmake }:
+{ mkDerivation, lib, copyPathsToStore, fetchurl, qtbase, qtscript, cmake }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "grantlee-${version}";
   version = "5.1.0";
+  grantleeCompatVersion = "5.1";
+  grantleePluginPrefix = "lib/grantlee/${grantleeCompatVersion}";
 
   src = fetchurl {
     url = "https://github.com/steveire/grantlee/archive/v${version}.tar.gz";
@@ -13,7 +15,19 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase qtscript ];
   nativeBuildInputs = [ cmake ];
 
-  meta = {
+  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+
+  outputs = [ "out" "dev" ];
+  postFixup =
+    # Disabuse CMake of the notion that libraries are in $dev
+    ''
+      sed -i $dev/lib/cmake/Grantlee5/GrantleeTargets-release.cmake \
+          -e "s|\''${_IMPORT_PREFIX}|$out|"
+    '';
+
+  setupHook = ./setup-hook.sh;
+
+  meta = with lib; {
     description = "Qt5 port of Django template system";
     longDescription = ''
       Grantlee is a plugin based String Template system written using the Qt
@@ -25,7 +39,7 @@ stdenv.mkDerivation rec {
       and the design of Django is reused in Grantlee.'';
 
     homepage = http://gitorious.org/grantlee;
-    maintainers = [ ];
+    maintainers = [ maintainers.ttuegel ];
     inherit (qtbase.meta) platforms;
   };
 }
