@@ -2,15 +2,15 @@
   git, stdenv }:
 
 buildPythonPackage rec {
-  version = "0.1.12";
+  version = "0.2.0";
   pname = "pytorch";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
-    owner = "pytorch";
-    repo = "pytorch";
-    rev = "v${version}";
-    sha256 = "0r8mf4xya76gz83y5z3hfxh0rydkydafhipl8g7d0bfrgw961jy9";
+    owner  = "pytorch";
+    repo   = "pytorch";
+    rev    = "v${version}";
+    sha256 = "112mp3r70d8f15dhxm6k7912b5i6c2q8hv9462s808y84grr2jdm";
   };
 
   checkPhase = ''

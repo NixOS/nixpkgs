@@ -4,15 +4,65 @@ with lib;
 
 let
   cfg = config.services.gitlab-runner;
-  configFile = pkgs.writeText "config.toml" cfg.configText;
+  configFile =
+    if (cfg.configFile == null) then
+      (pkgs.runCommand "config.toml" {
+        buildInputs = [ pkgs.remarshal ];
+      } ''
+        remarshal -if json -of toml \
+          < ${pkgs.writeText "config.json" (builtins.toJSON cfg.configOptions)} \
+          > $out
+      '')
+    else
+      cfg.configFile;
   hasDocker = config.virtualisation.docker.enable;
 in
 {
   options.services.gitlab-runner = {
     enable = mkEnableOption "Gitlab Runner";
 
-    configText = mkOption {
-      description = "Verbatim config.toml to use";
+    configFile = mkOption {
+      default = null;
+      description = ''
+        Configuration file for gitlab-runner.
+        Use this option in favor of configOptions to avoid placing CI tokens in the nix store.
+
+        <option>configFile</option> takes precedence over <option>configOptions</option>.
+
+        Warning: Not using <option>configFile</option> will potentially result in secrets
+        leaking into the WORLD-READABLE nix store.
+      '';
+      type = types.nullOr types.path;
+    };
+
+    configOptions = mkOption {
+      description = ''
+        Configuration for gitlab-runner
+        <option>configFile</option> will take precedence over this option.
+
+        Warning: all Configuration, especially CI token, will be stored in a
+        WORLD-READABLE file in the Nix Store.
+
+        If you want to protect your CI token use <option>configFile</option> instead.
+      '';
+      type = types.attrs;
+      example = {
+        concurrent = 2;
+        runners = [{
+          name = "docker-nix-1.11";
+          url = "https://CI/";
+          token = "TOKEN";
+          executor = "docker";
+          builds_dir = "";
+          docker = {
+            host = "";
+            image = "nixos/nix:1.11";
+            privileged = true;
+            disable_cache = true;
+            cache_dir = "";
+          };
+        }];
+      };
     };
 
     gracefulTermination = mkOption {
