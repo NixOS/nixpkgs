@@ -1,0 +1,13 @@
+diff -ru -x '*~' openssl-1.1.0f-orig/crypto/cryptlib.h openssl-1.1.0f/crypto/cryptlib.h
+--- a/crypto/include/internal/cryptlib.h	2016-01-28 14:38:30.000000000 +0100
++++ b/crypto/include/internal/cryptlib.h	2016-02-03 12:54:29.193165176 +0100
+@@ -41,8 +41,8 @@
+ 
+ # ifndef OPENSSL_SYS_VMS
+ #  define X509_CERT_AREA          OPENSSLDIR
+ #  define X509_CERT_DIR           OPENSSLDIR "/certs"
+-#  define X509_CERT_FILE          OPENSSLDIR "/cert.pem"
++#  define X509_CERT_FILE          "/nix/var/nix/profiles/default/etc/ssl/certs/ca-bundle.crt"
+ #  define X509_PRIVATE_DIR        OPENSSLDIR "/private"
+ #  define CTLOG_FILE              OPENSSLDIR "/ct_log_list.cnf"
+ # else
