@@ -15,7 +15,7 @@ mkDerivation {
     maintainers = with maintainers; [ sander phreedom ];
     platforms = platforms.linux;
   };
-  nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools makeWrapper shared_mime_info ];
   propagatedBuildInputs = [
     # qt
     qtwebkit

@@ -6065,7 +6065,6 @@ with pkgs;
     nativeLibc = stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
     cc = baseCC;
-    dyld = if stdenv.isDarwin then darwin.dyld else null;
     isGNU = baseCC.isGNU or false;
     isClang = baseCC.isClang or false;
     inherit libc extraBuildCommands;
@@ -6091,7 +6090,6 @@ with pkgs;
       nativeLibc = false;
       noLibc = (libc == null);
 
-      dyld = if stdenv.isDarwin then darwin.dyld else null;
       isGNU = cc.isGNU or false;
       isClang = cc.isClang or false;
 
@@ -9971,7 +9969,7 @@ with pkgs;
     ### KDE APPLICATIONS
 
     inherit (kdeApplications.override { libsForQt5 = self; })
-      libkdcraw libkexiv2 libkipi libkomparediff2;
+      kholidays libkdcraw libkexiv2 libkipi libkomparediff2;
 
     ### LIBRARIES
 
@@ -9981,11 +9979,13 @@ with pkgs;
 
     qgpgme = callPackage ../development/libraries/gpgme { };
 
-    grantlee = callPackage ../development/libraries/grantlee/5.x.nix { };
+    grantlee = callPackage ../development/libraries/grantlee/5 { };
 
     inherit (callPackage ../development/libraries/kirigami { })
       kirigami_1
       kirigami_2;
+
+    kdiagram = callPackage ../development/libraries/kdiagram { };
 
     kirigami = kirigami_1;
 
@@ -11775,7 +11775,7 @@ with pkgs;
 
   darwin = let
     apple-source-releases = callPackage ../os-specific/darwin/apple-source-releases { };
-  in recurseIntoAttrs (apple-source-releases // rec {
+  in (apple-source-releases // rec {
     cctools = callPackage ../os-specific/darwin/cctools/port.nix {
       inherit libobjc;
       stdenv = if stdenv.isDarwin then stdenv else libcxxStdenv;
@@ -14843,8 +14843,8 @@ with pkgs;
 
   inherit (kdeApplications)
     akonadi ark dolphin ffmpegthumbs filelight gwenview kate kdenlive
-    kcachegrind kcalc kcolorchooser kcontacts kdf kgpg khelpcenter kig kmix
-    kolourpaint kompare konsole krfb kwalletmanager marble okteta okular
+    kcachegrind kcalc kcolorchooser kcontacts kdf kgpg khelpcenter kig kmail
+    kmix kolourpaint kompare konsole krfb kwalletmanager marble okteta okular
     spectacle;
 
   kdeconnect = libsForQt5.callPackage ../applications/misc/kdeconnect { };
@@ -15827,9 +15827,7 @@ with pkgs;
     rancher-compose
     rancher-compose_0_10;
 
-  renoise = callPackage ../applications/audio/renoise {
-    demo = false;
-  };
+  renoise = callPackage ../applications/audio/renoise {};
 
   rapcad = libsForQt56.callPackage ../applications/graphics/rapcad { boost = boost159; };
 

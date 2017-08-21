@@ -8,10 +8,8 @@
 { name ? "", stdenv, nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
 , cc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? stdenv.shell
 , zlib ? null, extraPackages ? [], extraBuildCommands ? ""
-, dyld ? null # TODO: should this be a setup-hook on dyld?
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
-, buildPackages ? {}, hostPlatform, targetPlatform
-, runCommand ? null
+, buildPackages ? {}
 , useMacosReexportHack ? false
 }:
 

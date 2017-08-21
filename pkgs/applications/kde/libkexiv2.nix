@@ -9,4 +9,5 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ qtbase ];
   propagatedBuildInputs = [ exiv2 ];
+  outputs = [ "out" "dev" ];
 }

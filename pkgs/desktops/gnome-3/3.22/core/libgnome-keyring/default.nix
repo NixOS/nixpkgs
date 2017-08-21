@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "c4c178fbb05f72acc484d22ddb0568f7532c409b0a13e06513ff54b91e947783";
   };
 
+  outputs = [ "out" "dev" ];
+
   propagatedBuildInputs = [ glib gobjectIntrospection dbus_libs libgcrypt ];
   nativeBuildInputs = [ pkgconfig intltool ];
 
