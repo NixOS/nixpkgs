@@ -11775,7 +11775,7 @@ with pkgs;
 
   darwin = let
     apple-source-releases = callPackage ../os-specific/darwin/apple-source-releases { };
-  in recurseIntoAttrs (apple-source-releases // rec {
+  in (apple-source-releases // rec {
     cctools = callPackage ../os-specific/darwin/cctools/port.nix {
       inherit libobjc;
       stdenv = if stdenv.isDarwin then stdenv else libcxxStdenv;
