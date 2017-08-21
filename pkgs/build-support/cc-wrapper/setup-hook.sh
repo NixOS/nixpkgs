@@ -97,10 +97,12 @@ ccWrapper_addCVars () {
 # setup-hook, which `role` tracks.
 if [ -n "${crossConfig:-}" ]; then
     export NIX_CC_WRAPPER_@infixSalt@_TARGET_BUILD=1
-    role="BUILD_"
+    role_pre='BUILD_'
+    role_post='_FOR_BUILD'
 else
     export NIX_CC_WRAPPER_@infixSalt@_TARGET_HOST=1
-    role=""
+    role_pre=''
+    role_post=''
 fi
 
 # Eventually the exact sort of env-hook we create will depend on the role. This
@@ -133,10 +135,12 @@ fi
 
 # Export tool environment variables so various build systems use the right ones.
 
-export NIX_${role}CC=@out@
+export NIX_${role_pre}CC=@out@
 
-export ${role}CC=@named_cc@
-export ${role}CXX=@named_cxx@
+export ${role_pre}CC=@named_cc@
+export ${role_pre}CXX=@named_cxx@
+export CC${role_post}=@named_cc@
+export CXX${role_post}=@named_cxx@
 
 for cmd in \
     ar as ld nm objcopy objdump readelf ranlib strip strings size windres
@@ -144,9 +148,11 @@ do
     if
         PATH=$_PATH type -p "@targetPrefix@${cmd}" > /dev/null
     then
-        export "${role}$(echo "$cmd" | tr "[:lower:]" "[:upper:]")=@targetPrefix@${cmd}";
+        upper_case="$(echo "$cmd" | tr "[:lower:]" "[:upper:]")"
+        export "${role_pre}${upper_case}=@targetPrefix@${cmd}";
+        export "${upper_case}${role_post}=@targetPrefix@${cmd}";
     fi
 done
 
 # No local scope in sourced file
-unset -v role cmd
+unset -v role_pre role_post cmd upper_case
