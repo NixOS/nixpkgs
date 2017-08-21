@@ -15823,9 +15823,7 @@ with pkgs;
     rancher-compose
     rancher-compose_0_10;
 
-  renoise = callPackage ../applications/audio/renoise {
-    demo = false;
-  };
+  renoise = callPackage ../applications/audio/renoise {};
 
   rapcad = libsForQt56.callPackage ../applications/graphics/rapcad { boost = boost159; };
 
