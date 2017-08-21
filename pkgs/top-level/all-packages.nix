@@ -10393,6 +10393,8 @@ with pkgs;
 
   tecla = callPackage ../development/libraries/tecla { };
 
+  tectonic = callPackage ../tools/typesetting/tectonic { };
+
   telepathy_glib = callPackage ../development/libraries/telepathy/glib { };
 
   telepathy_farstream = callPackage ../development/libraries/telepathy/farstream {};
