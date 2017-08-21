@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig
+{ fetchurl, fetchpatch, stdenv, lib, pkgconfig
 , libgpgerror, libassuan, libcap ? null, ncurses ? null, gtk2 ? null, qt4 ? null
 }:
 
@@ -22,6 +22,15 @@ stdenv.mkDerivation rec {
   prePatch = ''
     substituteInPlace pinentry/pinentry-curses.c --replace ncursesw ncurses
   '';
+
+  patches = lib.optionals (gtk2 != null) [
+    (fetchpatch {
+       url = https://anonscm.debian.org/cgit/pkg-gnupg/pinentry.git/plain/debian/patches/0006-gtk2-Fix-a-problem-with-fvwm.patch;
+       sha256 = "1w3y4brqp74hy3fbfxqnqp6jf985bd6667ivy1crz50r3z9zsy09";
+  })(fetchpatch {
+       url = https://anonscm.debian.org/cgit/pkg-gnupg/pinentry.git/plain/debian/patches/0007-gtk2-When-X11-input-grabbing-fails-try-again-over-0..patch;
+       sha256 = "046jy7k0n7fj74s5w1h6sq1ljg8y77i0xwi301kv53bhsp0xsirx";
+  })];
 
   # configure cannot find moc on its own
   preConfigure = stdenv.lib.optionalString (qt4 != null) ''
