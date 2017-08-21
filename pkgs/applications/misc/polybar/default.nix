@@ -1,6 +1,6 @@
 { cairo, cmake, fetchgit, libXdmcp, libpthreadstubs, libxcb, pcre, pkgconfig
 , python2 , stdenv, xcbproto, xcbutil, xcbutilimage, xcbutilrenderutil
-, xcbutilwm, xcbutilxrm
+, xcbutilwm, xcbutilxrm, fetchpatch
 
 # optional packages-- override the variables ending in 'Support' to enable or
 # disable modules
@@ -39,6 +39,14 @@ stdenv.mkDerivation rec {
       maintainers = [ maintainers.afldcr ];
       platforms = platforms.unix;
     };
+    # This patch should be removed with next stable release.
+    patches = [
+      (fetchpatch {
+        name = "polybar-remove-curlbuild.patch";
+        url = "https://github.com/jaagr/polybar/commit/d35abc7620c8f06618b4708d9a969dfa2f309e96.patch";
+        sha256 = "1h6z42ng7rr3yrqcr0g777773w9yzm800vfyqcypqr01vkgg69wj";
+      })
+    ];
 
     buildInputs = [
       cairo libXdmcp libpthreadstubs libxcb pcre python2 xcbproto xcbutil
