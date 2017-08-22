@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wfir1gvh5h7izgvx2kd1pr2k7wlncd33zq7qi9s9k2y0aza93yr";
   };
 
-  outputs = [ "out" "contrib" "doc" "info" ];
+  outputs = [ "out" "contrib" "man" "doc" "info" ];
 
   configureFlags = [
     # >=1.4.9 requires this even with readline in inputs

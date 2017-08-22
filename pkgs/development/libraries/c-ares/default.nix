@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A C library for asynchronous DNS requests";
-    homepage = http://c-ares.haxx.se;
+    homepage = https://c-ares.haxx.se;
     license = licenses.mit;
     platforms = platforms.all;
   };

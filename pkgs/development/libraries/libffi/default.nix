@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   patches = stdenv.lib.optional stdenv.isCygwin ./3.2.1-cygwin.patch;
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [ "out" "dev" "man" "info" ];
 
   buildInputs = stdenv.lib.optional doCheck dejagnu;
 

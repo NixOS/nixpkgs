@@ -55,7 +55,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   patches = [ ./no-etc-install.patch ]
-    ++ optional nixosTestRunner ./force-uid0-on-9p.patch;
+    ++ optional nixosTestRunner ./force-uid0-on-9p.patch
+    ++ optional pulseSupport ./fix-hda-recording.patch;
 
   hardeningDisable = [ "stackprotector" ];
 

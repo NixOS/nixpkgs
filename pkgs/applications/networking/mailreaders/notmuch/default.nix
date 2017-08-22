@@ -10,7 +10,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.24.2";
+  version = "0.25";
   name = "notmuch-${version}";
 
   passthru = {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "0lfchvapk11qazdgsxj42igp9mpp83zbd0h1jj6r3ifmhikajxma";
+    sha256 = "02z6d87ip1hkipz8d7w0sfklg8dd5fd5vlgp768640ixg0gqvlk5";
   };
 
   buildInputs = [
@@ -48,11 +48,11 @@ stdenv.mkDerivation rec {
     find test -type f -exec \
       sed -i \
         -e "1s|#!/usr/bin/env bash|#!${bash}/bin/bash|" \
-        -e "s|gpg |${gnupg}/bin/gpg2 |" \
-        -e "s| gpg| ${gnupg}/bin/gpg2|" \
+        -e "s|gpg |${gnupg}/bin/gpg |" \
+        -e "s| gpg| ${gnupg}/bin/gpg|" \
         -e "s|gpgsm |${gnupg}/bin/gpgsm |" \
         -e "s| gpgsm| ${gnupg}/bin/gpgsm|" \
-        -e "s|crypto.gpg_path=gpg|crypto.gpg_path=${gnupg}/bin/gpg2|" \
+        -e "s|crypto.gpg_path=gpg|crypto.gpg_path=${gnupg}/bin/gpg|" \
         "{}" ";"
 
     for src in \
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       emacs/notmuch-crypto.el
     do
       substituteInPlace "$src" \
-        --replace \"gpg\" \"${gnupg}/bin/gpg2\"
+        --replace \"gpg\" \"${gnupg}/bin/gpg\"
     done
   '';
 

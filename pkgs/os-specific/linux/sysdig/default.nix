@@ -29,6 +29,12 @@ stdenv.mkDerivation rec {
     "-DluaL_getn(L,i)=((int)lua_objlen(L,i))"
   ];
 
+  postPatch = ''
+    sed 's|curl/curlbuild\.h|curl/system.h|' -i \
+        userspace/libsinsp/marathon_http.cpp \
+        userspace/libsinsp/mesos_http.cpp
+ '';
+
   preConfigure = ''
     export INSTALL_MOD_PATH="$out"
   '' + optionalString (kernel != null) ''

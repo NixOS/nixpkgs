@@ -17,6 +17,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpng ];
 
   LDFLAGS = optional static "-static";
+  # Workaround for crash in cexcept.h. See
+  # https://github.com/NixOS/nixpkgs/issues/28106
+  preConfigure = ''
+    export LD=$CC
+  '';
+
   configureFlags = [
     "--with-system-zlib"
     "--with-system-libpng"

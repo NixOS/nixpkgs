@@ -20,6 +20,7 @@ let
     echo "export NIX_LDFLAGS='$NIX_LDFLAGS'\"\''${NIX_LDFLAGS:+ \$NIX_LDFLAGS}\"" >> "$config_script"
     echo "export NIX_LISP_COMMAND='$NIX_LISP_COMMAND'" >> "$config_script"
     echo "export NIX_LISP_ASDF='$NIX_LISP_ASDF'" >> "$config_script"
+    set | grep NIX_CC_WRAPPER_ | sed -e 's@^NIX_CC_WRAPPER@export &@' >> "$config_script"
     echo "export PATH=\"\''${PATH:+\$PATH:}$PATH\"" >> "$config_script"
     echo "echo \"\$ASDF_OUTPUT_TRANSLATIONS\" | grep -E '(^|:)$store_translation(:|\$)' >/dev/null || export ASDF_OUTPUT_TRANSLATIONS=\"\''${ASDF_OUTPUT_TRANSLATIONS:+\$ASDF_OUTPUT_TRANSLATIONS:}\"'$store_translation'" >> "$config_script"
     echo "source '$path_config_script'" >> "$config_script"

@@ -38,6 +38,10 @@ stdenv.mkDerivation rec {
     # cp $riqa/*.ttf $out/share/fonts/truetype
   '';
 
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "1wa0j65iz20ij37dazd1rjg8x625m6q1y8g5h7ia48pbc88sr01q";
+
   meta = {
     description = "OpenType Urdu font from the Center for Research in Urdu Language Processing";
     longDescription = ''

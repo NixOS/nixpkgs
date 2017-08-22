@@ -20,7 +20,7 @@ $ cd sensu
 $ cat > Gemfile
 source 'https://rubygems.org'
 gem 'sensu'
-$ $(nix-build '<nixpkgs>' -A bundix)/bin/bundix --magic
+$ $(nix-build '<nixpkgs>' -A bundix --no-out-link)/bin/bundix --magic
 $ cat > default.nix
 { lib, bundlerEnv, ruby }:
 
@@ -114,6 +114,7 @@ in stdenv.mkDerivation {
   script = ./my-script.rb;
   buildCommand = ''
     install -D -m755 $script $out/bin/my-script
+    patchShebangs $out/bin/my-script
   '';
 }]]>
 </programlisting>

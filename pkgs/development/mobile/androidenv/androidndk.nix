@@ -64,17 +64,17 @@ stdenv.mkDerivation rec {
     sed -i -e ${sed_script_2} ndk-which
     # a bash script
     patchShebangs ndk-which
+    # wrap
+    for i in ndk-build ndk-gdb ndk-gdb-py ndk-which
+    do
+        wrapProgram "$(pwd)/$i" --prefix PATH : "${runtime_paths}"
+    done
     # make some executables available in PATH
     mkdir -pv ${bin_path}
     for i in \
         ndk-build ndk-depends ndk-gdb ndk-gdb-py ndk-gdb.py ndk-stack ndk-which
     do
         ln -sf ${pkg_path}/$i ${bin_path}/$i
-    done
-    # wrap
-    for i in ndk-build ndk-gdb ndk-gdb-py ndk-which
-    do
-        wrapProgram "${bin_path}/$i" --prefix PATH : "${runtime_paths}"
     done
   '';
 

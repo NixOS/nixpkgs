@@ -40,18 +40,36 @@ in
   # collections of packages.  These collection of packages are part of the
   # fix-point made by Nixpkgs.
   overlays ? let
-      dirPath = try (if pathExists <nixpkgs-overlays> then <nixpkgs-overlays> else "") "";
-      dirHome = homeDir + "/.config/nixpkgs/overlays";
-      dirCheck = dir: dir != "" && pathExists (dir + "/.");
-      overlays = dir:
-        let content = readDir dir; in
-        map (n: import (dir + ("/" + n)))
-          (builtins.filter (n: builtins.match ".*\.nix" n != null || pathExists (dir + ("/" + n + "/default.nix")))
-            (attrNames content));
+      isDir = path: pathExists (path + "/.");
+      pathOverlays = try <nixpkgs-overlays> "";
+      homeOverlaysFile = homeDir + "/.config/nixpkgs/overlays.nix";
+      homeOverlaysDir = homeDir + "/.config/nixpkgs/overlays";
+      overlays = path:
+        # check if the path is a directory or a file
+        if isDir path then
+          # it's a directory, so the set of overlays from the directory, ordered lexicographically
+          let content = readDir path; in
+          map (n: import (path + ("/" + n)))
+            (builtins.filter (n: builtins.match ".*\.nix" n != null || pathExists (path + ("/" + n + "/default.nix")))
+              (attrNames content))
+        else 
+          # it's a file, so the result is the contents of the file itself
+          import path;
     in
-      if dirPath != "" then
-        overlays dirPath
-      else if dirCheck dirHome then overlays dirHome
+      if pathOverlays != "" && pathExists pathOverlays then overlays pathOverlays
+      else if pathExists homeOverlaysFile && pathExists homeOverlaysDir then 
+        throw ''
+          Nixpkgs overlays can be specified with ${homeOverlaysFile} or ${homeOverlaysDir}, but not both.
+          Please remove one of them and try again.
+        ''
+      else if pathExists homeOverlaysFile then 
+        if isDir homeOverlaysFile then 
+          throw (homeOverlaysFile + " should be a file")
+        else overlays homeOverlaysFile
+      else if pathExists homeOverlaysDir then
+        if !(isDir homeOverlaysDir) then 
+          throw (homeOverlaysDir + " should be a directory")
+        else overlays homeOverlaysDir
       else []
 
 , ...

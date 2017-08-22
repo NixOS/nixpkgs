@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''esrap'';
-  version = ''20170516-git'';
+  version = ''20170630-git'';
 
   description = ''A Packrat / Parsing Grammar / TDPL parser for Common Lisp.'';
 
-  deps = [ ];
+  deps = [ args."alexandria" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/esrap/2017-05-16/esrap-20170516-git.tgz'';
-    sha256 = ''06vksigkiprhmxkms2xfwq8ff09z4i4287k87n0m4id0nfl8rfq8'';
+    url = ''http://beta.quicklisp.org/archive/esrap/2017-06-30/esrap-20170630-git.tgz'';
+    sha256 = ''172ph55kb3yr0gciybza1rbi6khlnz4vriijvcjkn6m79kdnk1xh'';
   };
     
   packageName = "esrap";
@@ -30,6 +30,6 @@ rec {
     '';
   };
 }
-/* (SYSTEM esrap DESCRIPTION A Packrat / Parsing Grammar / TDPL parser for Common Lisp. SHA256 06vksigkiprhmxkms2xfwq8ff09z4i4287k87n0m4id0nfl8rfq8 URL
-    http://beta.quicklisp.org/archive/esrap/2017-05-16/esrap-20170516-git.tgz MD5 6116df281050ee58e6ba195727154ac0 NAME esrap TESTNAME NIL FILENAME esrap DEPS
-    NIL DEPENDENCIES NIL VERSION 20170516-git SIBLINGS NIL) */
+/* (SYSTEM esrap DESCRIPTION A Packrat / Parsing Grammar / TDPL parser for Common Lisp. SHA256 172ph55kb3yr0gciybza1rbi6khlnz4vriijvcjkn6m79kdnk1xh URL
+    http://beta.quicklisp.org/archive/esrap/2017-06-30/esrap-20170630-git.tgz MD5 bfabfebc5f5d49106df318ae2798ac45 NAME esrap TESTNAME NIL FILENAME esrap DEPS
+    ((NAME alexandria FILENAME alexandria)) DEPENDENCIES (alexandria) VERSION 20170630-git SIBLINGS NIL) */

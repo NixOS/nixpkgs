@@ -28,7 +28,7 @@ in runCommand "aspell-env" {
   pushd "${aspell}/bin"
   for prg in *; do
     if [ -f "$prg" ]; then
-      makeWrapper "${aspell}/bin/$prg" "$out/bin/$prg" --set ASPELL_CONF "data-dir ${dictEnv}/lib/aspell"
+      makeWrapper "${aspell}/bin/$prg" "$out/bin/$prg" --set ASPELL_CONF "dict-dir ${dictEnv}/lib/aspell"
     fi
   done
   popd

@@ -28,6 +28,10 @@ stdenv.mkDerivation rec {
       mkfontscale
     '';
 
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "1s7gpxxj760aw3rpk760s3w8qdkn819rs7si1qj4grm3s6hb2gd8";
+
   meta = with stdenv.lib; {
     description = "Unicode font for Base Multilingual Plane";
     homepage = http://unifoundry.com/unifont.html;

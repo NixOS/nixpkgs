@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
   postPatch = ''patchShebangs .'';
   inherit patches;
 
-  outputs = [ "bin" "dev" "out" ]
+  outputs = [ "bin" "dev" "out" "man" ]
     ++ optional (reqMin "1.0") "doc" ; # just dev-doc
   setOutputFlags = false; # doesn't accept all and stores configureFlags in libs!
 

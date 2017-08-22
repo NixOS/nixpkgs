@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     install -Dm 0755 screenfetch-dev $out/bin/screenfetch
-    install -Dm 0644 screenfetch.1 $out/man/man1/screenfetch.1
+    install -Dm 0644 screenfetch.1 $out/share/man/man1/screenfetch.1
 
     # Fix all of the depedencies of screenfetch
     patchShebangs $out/bin/screenfetch

@@ -161,7 +161,7 @@ rec {
     '';
 
     meta = {
-      homepage = http://www.docker.com/;
+      homepage = https://www.docker.com/;
       description = "An open source project to pack, ship and run any application as a lightweight container";
       license = licenses.asl20;
       maintainers = with maintainers; [ offline tailhook vdemeester ];

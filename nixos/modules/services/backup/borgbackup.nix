@@ -13,6 +13,7 @@ let
       "BORG_PASSPHRASE" = jobcfg.passphrase or "";
     };
     preStart = jobcfg.preBackup;
+    postStart = jobcfg.postBackup;
     script = ''
       echo Running borg create
       ${pkgs.borgbackup}/bin/borg create -v \
@@ -204,6 +205,12 @@ in
             type = types.lines;
             default = "";
             description = "Script to execute before the backup job.";
+          };
+
+          postBackup = mkOption {
+            type = types.lines;
+            default = "";
+            description = "Script to execute after the backup job.";
           };
 
           interval = mkOption {

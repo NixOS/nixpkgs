@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.madjar ];
     platforms = stdenv.lib.platforms.all;
-    homepage = http://gottcode.org/focuswriter/;
+    homepage = https://gottcode.org/focuswriter/;
   };
 }

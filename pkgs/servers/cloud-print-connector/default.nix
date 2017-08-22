@@ -24,11 +24,11 @@ buildGoPackage rec {
   buildInputs = [ avahi cups ];
 
   meta = with stdenv.lib; {
-    description = "Share printers from your Windows, Linux, FreeBSD or OS X computer with ChromeOS and Android devices, using the Cloud Print Connector";
+    description = "Share printers from your Windows, Linux, FreeBSD or macOS computer with ChromeOS and Android devices, using the Cloud Print Connector";
     homepage = https://github.com/google/cloud-print-connector;
     license = licenses.bsd3;
     maintainers = with maintainers; [ hodapp ];
-    # TODO: Fix broken build on OS X.  The GitHub presently lists the
+    # TODO: Fix broken build on macOS.  The GitHub presently lists the
     # FreeBSD build as broken too, but this may change in the future.
     platforms = platforms.linux;
   };

@@ -1,22 +1,21 @@
-{stdenv, fetchurl}:
+{stdenv, fetchzip}:
 
-stdenv.mkDerivation rec {
-  name = "carlito-${version}";
+let
   version = "20130920";
+in fetchzip rec {
+  name = "carlito-${version}";
 
-  src = fetchurl {
-    url = "https://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/crosextrafonts-carlito-${version}.tar.gz";
-    sha256 = "0nmgzp6gdvv4dipswrw0l1bfjp4jbic2qvm7dpqiq71jpin2plab";
-  };
+  url = "https://commondatastorage.googleapis.com/chromeos-localmirror/distfiles/crosextrafonts-carlito-${version}.tar.gz";
 
-  phases = ["unpackPhase" "installPhase"];
-
-  installPhase = ''
+  postFetch = ''
+    tar -xzvf $downloadedFile --strip-components=1
     mkdir -p $out/etc/fonts/conf.d
     mkdir -p $out/share/fonts/truetype
     cp -v *.ttf $out/share/fonts/truetype
     cp -v ${./calibri-alias.conf} $out/etc/fonts/conf.d/30-calibri.conf
   '';
+
+  sha256 = "0d72zy6kdmxgpi63r3yvi3jh1hb7lvlgv8hgd4ag0x10dz18mbzv";
 
   meta = with stdenv.lib; {
     # This font doesn't appear to have any official web site but this

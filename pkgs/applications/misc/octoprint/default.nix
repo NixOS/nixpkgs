@@ -60,7 +60,7 @@ in pythonPackages.buildPythonApplication rec {
     owner = "foosel";
     repo = "OctoPrint";
     rev = version;
-    sha256 = "06l8khbq3waaaa4cqpv6056w1ziylkfgzlb28v30i1h234rlkknq";
+    sha256 = "1hci8cfmbzcghla1vmrcn6zicm8nj50drm7gp2hkr0drglq5fgr2";
   };
 
   # We need old Tornado

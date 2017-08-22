@@ -69,7 +69,7 @@ stdenv.mkDerivation {
       CHICKEN is a compiler for the Scheme programming language.
       CHICKEN produces portable and efficient C, supports almost all
       of the R5RS Scheme language standard, and includes many
-      enhancements and extensions. CHICKEN runs on Linux, MacOS X,
+      enhancements and extensions. CHICKEN runs on Linux, macOS,
       Windows, and many Unix flavours.
     '';
   };

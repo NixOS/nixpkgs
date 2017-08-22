@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
     mate.mate-desktop
   ];
 
+  patches = [
+    ./caja-extension-dirs.patch
+  ];
+  
   configureFlags = [ "--disable-update-mimedb" ];
   
   meta = {

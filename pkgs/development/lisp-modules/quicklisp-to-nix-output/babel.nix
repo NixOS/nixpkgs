@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''babel'';
-  version = ''20170516-git'';
+  version = ''20170630-git'';
 
   description = ''Babel, a charset conversion library.'';
 
-  deps = [ ];
+  deps = [ args."trivial-features" args."alexandria" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/babel/2017-05-16/babel-20170516-git.tgz'';
-    sha256 = ''0igl7vgbbpil8ksfsmj1055m6jcpmvf149zmmzsxr9h608siy7fk'';
+    url = ''http://beta.quicklisp.org/archive/babel/2017-06-30/babel-20170630-git.tgz'';
+    sha256 = ''0w1jfzdklk5zz9vgplr2a0vc6gybrwl8wa72nj6xs4ihp7spf0lx'';
   };
     
   packageName = "babel";
@@ -30,6 +30,7 @@ rec {
     '';
   };
 }
-/* (SYSTEM babel DESCRIPTION Babel, a charset conversion library. SHA256 0igl7vgbbpil8ksfsmj1055m6jcpmvf149zmmzsxr9h608siy7fk URL
-    http://beta.quicklisp.org/archive/babel/2017-05-16/babel-20170516-git.tgz MD5 d2ab5a273a436375ba40a8ec7f38d0a9 NAME babel TESTNAME NIL FILENAME babel DEPS
-    NIL DEPENDENCIES NIL VERSION 20170516-git SIBLINGS (babel-streams babel-tests)) */
+/* (SYSTEM babel DESCRIPTION Babel, a charset conversion library. SHA256 0w1jfzdklk5zz9vgplr2a0vc6gybrwl8wa72nj6xs4ihp7spf0lx URL
+    http://beta.quicklisp.org/archive/babel/2017-06-30/babel-20170630-git.tgz MD5 aa7eff848b97bb7f7aa6bdb43a081964 NAME babel TESTNAME NIL FILENAME babel DEPS
+    ((NAME trivial-features FILENAME trivial-features) (NAME alexandria FILENAME alexandria)) DEPENDENCIES (trivial-features alexandria) VERSION 20170630-git
+    SIBLINGS (babel-streams babel-tests)) */

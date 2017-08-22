@@ -2,7 +2,7 @@
 , alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype, gdk_pixbuf
 , glib, gnome2, gtk2, libnotify, libX11, libXcomposite, libXcursor, libXdamage
 , libXext, libXfixes, libXi, libXrandr, libXrender, libXtst, nspr, nss, libxcb
-, pango, systemd, libXScrnSaver, libcxx }:
+, pango, systemd, libXScrnSaver, libcxx, libpulseaudio }:
 
 stdenv.mkDerivation rec {
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
         paxmark m $out/opt/Discord
 
-        wrapProgram $out/opt/Discord --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH:${libcxx}/lib:${systemd.lib}/lib"
+        wrapProgram $out/opt/Discord --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH:${libcxx}/lib:${systemd.lib}/lib:${libpulseaudio}/lib"
 
         ln -s $out/opt/Discord $out/bin/
         ln -s $out/opt/discord.png $out/share/pixmaps

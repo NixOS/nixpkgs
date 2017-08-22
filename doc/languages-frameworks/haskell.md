@@ -827,7 +827,7 @@ the work to be licensed" under the terms of the LGPL (including for free).
 
 The LGPL licensing for GMP is a problem for the overall licensing of binary
 programs compiled with GHC because most distributions (and builds) of GHC use
-static libraries. (Dynamic libraries are currently distributed only for OS X.)
+static libraries. (Dynamic libraries are currently distributed only for macOS.)
 The LGPL licensing situation may be worse: even though
 [The Glasgow Haskell Compiler License](https://www.haskell.org/ghc/license)
 is essentially a "free software" license (BSD3), according to

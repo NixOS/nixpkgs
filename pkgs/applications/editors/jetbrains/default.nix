@@ -21,7 +21,7 @@ let
         inherit description license;
         longDescription = ''
           Enhancing productivity for every C and C++
-          developer on Linux, OS X and Windows.
+          developer on Linux, macOS and Windows.
         '';
         maintainers = with maintainers; [ edwtjo mic92 ];
         platforms = platforms.linux;
@@ -307,12 +307,12 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2017.1.5";
+    version = "2017.2.1";
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}-no-jdk.tar.gz";
-      sha256 = "0gjj2g9fcrbbbp3v4clg0kj48qdw0gqcn9im4h8p3z2zscpg16ag";
+      sha256 = "0y3r82i229d7lywixyifv4kkrwivixl75flagaqbkzw3j9wklg3k";
     };
     wmClass = "jetbrains-idea";
     update-channel = "IDEA_Release";

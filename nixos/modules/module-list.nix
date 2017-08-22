@@ -186,6 +186,7 @@
   ./services/databases/neo4j.nix
   ./services/databases/openldap.nix
   ./services/databases/opentsdb.nix
+  ./services/databases/postage.nix
   ./services/databases/postgresql.nix
   ./services/databases/redis.nix
   ./services/databases/riak.nix
@@ -326,7 +327,6 @@
   ./services/misc/radarr.nix
   ./services/misc/redmine.nix
   ./services/misc/rippled.nix
-  ./services/misc/ripple-rest.nix
   ./services/misc/ripple-data-api.nix
   ./services/misc/rogue.nix
   ./services/misc/siproxd.nix

@@ -1,23 +1,19 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
-  pname = "norwester";
+let
   version = "1.2";
+  pname = "norwester";
+in fetchzip rec {
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "http://jamiewilson.io/norwester/assets/norwester.zip";
-    sha256 = "0syg8ss7mpli4cbxvh3ld7qrlbhb2dfv3wchm765iw6ndc05g92d";
-  };
+  url = "http://jamiewilson.io/norwester/assets/norwester.zip";
 
-  phases = [ "installPhase" ];
-
-  buildInputs = [ unzip ];
-
-  installPhase = ''
+  postFetch = ''
     mkdir -p $out/share/fonts/opentype
-    unzip -D -j $src ${pname}-v${version}/${pname}.otf -d $out/share/fonts/opentype/
+    unzip -D -j $downloadedFile ${pname}-v${version}/${pname}.otf -d $out/share/fonts/opentype/
   '';
+
+  sha256 = "1npsaiiz9g5z6315lnmynwcnrfl37fyxc7w1mhkw1xbzcnv74z4r";
 
   meta = with stdenv.lib; {
     homepage = http://jamiewilson.io/norwester;

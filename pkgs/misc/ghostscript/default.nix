@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "man" "doc" ];
 
   enableParallelBuilding = true;
 
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
   passthru = { inherit version; };
 
   meta = {
-    homepage = http://www.ghostscript.com/;
+    homepage = https://www.ghostscript.com/;
     description = "PostScript interpreter (mainline version)";
 
     longDescription = ''

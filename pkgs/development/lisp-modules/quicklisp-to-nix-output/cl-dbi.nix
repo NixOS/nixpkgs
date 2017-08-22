@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''cl-dbi'';
-  version = ''20170124-git'';
+  version = ''20170725-git'';
 
   description = '''';
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-dbi/2017-01-24/cl-dbi-20170124-git.tgz'';
-    sha256 = ''0aqfcxbxmc9q3lagaarx0bqncbwjjv0wrskm6lkzy1fp94sik0qj'';
+    url = ''http://beta.quicklisp.org/archive/cl-dbi/2017-07-25/cl-dbi-20170725-git.tgz'';
+    sha256 = ''1gmd5y44nidqmxw7zk0mxl4mgl3mcjf1v05gjdslp3ginzznrqzl'';
   };
     
   packageName = "cl-dbi";
@@ -30,6 +30,6 @@ rec {
     '';
   };
 }
-/* (SYSTEM cl-dbi DESCRIPTION NIL SHA256 0aqfcxbxmc9q3lagaarx0bqncbwjjv0wrskm6lkzy1fp94sik0qj URL
-    http://beta.quicklisp.org/archive/cl-dbi/2017-01-24/cl-dbi-20170124-git.tgz MD5 c48d284eda4aac1ff9a10891884f52e5 NAME cl-dbi TESTNAME NIL FILENAME cl-dbi
-    DEPS NIL DEPENDENCIES NIL VERSION 20170124-git SIBLINGS (dbd-mysql dbd-postgres dbd-sqlite3 dbi-test dbi)) */
+/* (SYSTEM cl-dbi DESCRIPTION NIL SHA256 1gmd5y44nidqmxw7zk0mxl4mgl3mcjf1v05gjdslp3ginzznrqzl URL
+    http://beta.quicklisp.org/archive/cl-dbi/2017-07-25/cl-dbi-20170725-git.tgz MD5 a9fe67b7fea2640cea9708342a1347bd NAME cl-dbi TESTNAME NIL FILENAME cl-dbi
+    DEPS NIL DEPENDENCIES NIL VERSION 20170725-git SIBLINGS (dbd-mysql dbd-postgres dbd-sqlite3 dbi-test dbi)) */

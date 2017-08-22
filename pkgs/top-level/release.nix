@@ -108,27 +108,12 @@ let
       #rPackages = packagePlatforms pkgs.rPackages;
       ocamlPackages = { };
       perlPackages = { };
-      pythonPackages = {
-        blaze = unix;
-        pandas = unix;
-        scikitlearn = unix;
-      };
-      python2Packages = { };
-      python27Packages = { };
-      python3Packages = { };
-      python35Packages = {
-        blaze = unix;
-        pandas = unix;
-        scikitlearn = unix;
-      };
-      python36Packages = {
-        blaze = unix;
-        pandas = unix;
-        scikitlearn = unix;
-      };
 
-      # hack around broken eval of non-linux packages for now.
-      tests.macOSSierraShared = darwin;
+      darwin = packagePlatforms pkgs.darwin // {
+        cf-private = {};
+        osx_private_sdk = {};
+        xcode = {};
+      };
     } ));
 
 in jobs

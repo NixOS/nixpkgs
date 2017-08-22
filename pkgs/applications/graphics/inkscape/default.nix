@@ -1,8 +1,8 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, perl, perlXMLParser, libXft
 , libpng, zlib, popt, boehmgc, libxml2, libxslt, glib, gtkmm2
-, glibmm, libsigcxx, lcms, boost, gettext, makeWrapper, intltool
+, glibmm, libsigcxx, lcms, boost, gettext, makeWrapper
 , gsl, python2, poppler, imagemagick, libwpg, librevenge
-, libvisio, libcdr, libexif, automake114x, potrace, cmake
+, libvisio, libcdr, libexif, potrace, cmake
 }:
 
 let
@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     pkgconfig perl perlXMLParser libXft libpng zlib popt boehmgc
     libxml2 libxslt glib gtkmm2 glibmm libsigcxx lcms boost gettext
-    makeWrapper intltool gsl poppler imagemagick libwpg librevenge
-    libvisio libcdr libexif automake114x potrace cmake python2Env
+    makeWrapper gsl poppler imagemagick libwpg librevenge
+    libvisio libcdr libexif potrace cmake python2Env
   ];
 
   enableParallelBuilding = true;

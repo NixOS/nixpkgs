@@ -3,7 +3,7 @@
 
 buildGoPackage rec {
   name = "machine-${version}";
-  version = "0.12.0";
+  version = "0.12.2";
 
   goPackagePath = "github.com/docker/machine";
 
@@ -11,7 +11,7 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "docker";
     repo = "machine";
-    sha256 = "08y87d0whag9sy1q5s84xrz95k12c9crh3zmdcr1ylrwqnszrn2y";
+    sha256 = "0ikgjb6x6h7f43vjabxnqgrrlq516zsz7vj945hca1w919jpdwhf";
   };
 
   postInstall = ''

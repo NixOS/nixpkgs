@@ -104,12 +104,12 @@ let
 
 in {
   subversion18 = common {
-    version = "1.8.17";
-    sha256 = "1450fkj1jmxyphqn6cd95z1ykwsabajm9jw4i412qpwss8w9a4fy";
+    version = "1.8.18";
+    sha256 = "19lpqdrl86mjfdpayhn3f9rkmpb6zs2iny38cnxq6wcj7snh0sz5";
   };
 
   subversion19 = common {
-    version = "1.9.5";
-    sha256 = "1ramwly6p74jhb2rdm5ygxjri7jds940cilyvnsdq60xzy5cckwa";
+    version = "1.9.6";
+    sha256 = "06dfram53lyfyyqgz1r7c5323qqc6mjcpwi1j402y21lnqgwbjyv";
   };
 }

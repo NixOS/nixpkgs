@@ -3,8 +3,8 @@
 # assertExecutable FILE
 assertExecutable() {
     local file="$1"
-    [[ -f "${file}" && -x "${file}" ]] || \
-        die "Cannot wrap ${file} because it is not an executable file"
+    [[ -f "$file" && -x "$file" ]] || \
+        die "Cannot wrap '$file' because it is not an executable file"
 }
 
 # construct an executable file that wraps the actual executable
@@ -33,7 +33,7 @@ makeWrapper() {
     local params varName value command separator n fileNames
     local argv0 flagsBefore flags
 
-    assertExecutable "${original}"
+    assertExecutable "$original"
 
     mkdir -p "$(dirname "$wrapper")"
 
@@ -131,7 +131,7 @@ wrapProgram() {
     local prog="$1"
     local hidden
 
-    assertExecutable "${prog}"
+    assertExecutable "$prog"
 
     hidden="$(dirname "$prog")/.$(basename "$prog")"-wrapped
     while [ -e "$hidden" ]; do

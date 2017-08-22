@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
   postInstall = ''
     for i in $out/lib/sawfish/sawfish-menu $out/bin/sawfish-about  $out/bin/sawfish-client $out/bin/sawfish-config $out/bin/sawfish; do
       wrapProgram $i \
-        --prefix REP_DL_LOAD_PATH "$out/lib/rep" \
-	--set REP_LOAD_PATH "$out/share/sawfish/lisp"
+        --prefix REP_DL_LOAD_PATH : "$out/lib/rep" \
+        --set REP_LOAD_PATH "$out/share/sawfish/lisp"
     done
   '';
 
