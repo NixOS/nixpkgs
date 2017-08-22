@@ -75,6 +75,6 @@ in buildPythonApplication {
     '';
 
     maintainers = [ stdenv.lib.maintainers.coroa ];
-    homepage = http://code.google.com/p/quodlibet/;
+    homepage = https://quodlibet.readthedocs.io/en/latest/;
   };
 }
