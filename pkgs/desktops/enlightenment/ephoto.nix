@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "ephoto-${version}";
-  version = "1.0";
+  version = "1.5";
   
   src = fetchurl {
     url = "http://www.smhouston.us/stuff/${name}.tar.gz";
-    sha256 = "0l6zrk22fap6pylmzxwp6nycy8l5wdc7jza890h4zrwmpfag8w31";
+    sha256 = "09kraa5zz45728h2dw1ssh23b87j01bkfzf977m48y1r507sy3vb";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
