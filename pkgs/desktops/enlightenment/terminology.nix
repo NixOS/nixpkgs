@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, efl, curl, makeWrapper }:
+{ stdenv, fetchurl, pkgconfig, efl, pcre, curl, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "terminology-${version}";
@@ -9,18 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "13rl1k22yf8qrpzdm5nh6ij641fibadr2ww1r7rnz7mbhzj3d4gb";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ (pkgconfig.override { vanilla = true; }) makeWrapper ];
 
-  buildInputs = [ efl curl ];
-
-  NIX_CFLAGS_COMPILE = [
-    "-I${efl}/include/ecore-con-1"
-    "-I${efl}/include/eldbus-1"
-    "-I${efl}/include/elocation-1"
-    "-I${efl}/include/emile-1"
-    "-I${efl}/include/eo-1"
-    "-I${efl}/include/ethumb-1"
-  ];
+  buildInputs = [ efl pcre curl ];
 
   postInstall = ''
     for f in $out/bin/*; do
