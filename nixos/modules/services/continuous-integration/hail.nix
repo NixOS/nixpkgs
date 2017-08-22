@@ -13,7 +13,10 @@ in {
     enable = mkOption {
       type = types.bool;
       default = false;
-      description = "Enable Hail Auto Update Service.";
+      description = ''
+        Enables the Hail Auto Update Service. Hail can automatically deploy artifacts
+        built by a Hydra Continous Integration server. A common use case is to provide
+        continous deployment for single services or a full NixOS configuration.'';
     };
     profile = mkOption {
       type = types.str;
