@@ -89,7 +89,7 @@ self: let
       };
     in stdenv.lib.makeOverridable drvScope (auto // manualArgs);
 
-  mkScope = scope: pkgs // pkgs.xorg // pkgs.gnome2 // scope;
+  mkScope = scope: pkgs // pkgs.xorg // pkgs.gnome2 // { inherit stdenv; } // scope;
   defaultScope = mkScope self;
   callPackage = drv: args: callPackageWithScope defaultScope drv args;
 
