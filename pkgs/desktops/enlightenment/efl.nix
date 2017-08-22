@@ -4,20 +4,15 @@
 , python27Packages, openjpeg, doxygen, expat, harfbuzz, jbig2dec, librsvg
 , dbus_libs, alsaLib, poppler, ghostscript, libraw, libspectre, xineLib, libwebp
 , curl, libinput, systemd, writeText
-# Support more than one version because for now ephoto does not work with efl-1.20.x
-, eflVersion ? "1.20.2"
 }:
 
 stdenv.mkDerivation rec {
   name = "efl-${version}";
-  version = eflVersion;
+  version = "1.20.2";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/efl/${name}.tar.xz";
-    sha256 = {
-      "1.19.1" = "0fndwraca9rg0bz3al4isdprvyw56szr88qiyvglb4j8ygsylscc";
-      "1.20.2" = "0zll6k4xbbdsxqg53g8jddgv889g5m1xh20i03iz5a52y2bcnh55";
-    }.${version};
+    sha256 = "0zll6k4xbbdsxqg53g8jddgv889g5m1xh20i03iz5a52y2bcnh55";
   };
 
   nativeBuildInputs = [ pkgconfig ];
