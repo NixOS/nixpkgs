@@ -110,6 +110,7 @@ let
       qtmultimedia = callPackage ./qtmultimedia.nix {
         inherit gstreamer gst-plugins-base;
       };
+      qtnetworkauth = callPackage ./qtnetworkauth.nix {};
       qtquick1 = null;
       qtquickcontrols = callPackage ./qtquickcontrols.nix {};
       qtquickcontrols2 = callPackage ./qtquickcontrols2.nix {};
@@ -130,9 +131,9 @@ let
       env = callPackage ../qt-env.nix {};
       full = env "qt-${qtbase.version}" ([
         qtcharts qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
-        qtimageformats qtlocation qtmultimedia qtquickcontrols qtscript
-        qtsensors qtserialport qtsvg qttools qttranslations qtwebsockets
-        qtx11extras qtxmlpatterns
+        qtimageformats qtlocation qtmultimedia qtnetworkauth qtquickcontrols
+        qtscript qtsensors qtserialport qtsvg qttools qttranslations
+        qtwebsockets qtx11extras qtxmlpatterns
       ] ++ optional (!stdenv.isDarwin) qtwayland
         ++ optional (stdenv.isDarwin) qtmacextras);
 
