@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "terminology-${version}";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/terminology/${name}.tar.xz";
-    sha256 = "1x4j2q4qqj10ckbka0zaq2r2zm66ff1x791kp8slv1ff7fw45vdz";
+    sha256 = "13rl1k22yf8qrpzdm5nh6ij641fibadr2ww1r7rnz7mbhzj3d4gb";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
