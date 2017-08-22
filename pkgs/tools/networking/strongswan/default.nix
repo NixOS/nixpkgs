@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, fetchpatch, gmp, pkgconfig, python, autoreconfHook
+{ stdenv, fetchurl, gmp, pkgconfig, python, autoreconfHook
 , curl, trousers, sqlite, iptables, libxml2, openresolv
 , ldns, unbound, pcsclite, openssl, systemd, pam
 , enableTNC ? false }:
 
 stdenv.mkDerivation rec {
   name = "strongswan-${version}";
-  version = "5.5.3";
+  version = "5.6.0";
 
   src = fetchurl {
     url = "http://download.strongswan.org/${name}.tar.bz2";
-    sha256 = "1m7qq0l5pwj1wy0f7h2b7msb1d98rx78z6xg27g0hiqpk6qm9sn5";
+    sha256 = "04vvha2zgsg1cq05cnn6sf7a4hq9ndnsfxpw1drm5v9l4vcw0kd1";
   };
 
   dontPatchELF = true;
@@ -21,10 +21,6 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals stdenv.isLinux [ systemd.dev pam ];
 
   patches = [
-    (fetchpatch {
-      url = "https://download.strongswan.org/security/CVE-2017-11185/strongswan-4.4.0-5.5.3_gmp_mpz_export.patch";
-      sha256 = "1vqf077dq71wai7ma3bpzv55i76b48gp2cf6507chgy4wj04gi73";
-    })
     ./ext_auth-path.patch
     ./firewall_defaults.patch
     ./updown-path.patch
