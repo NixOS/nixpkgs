@@ -2594,6 +2594,8 @@ package-maintainers:
   abbradar:
     - Agda
     - lambdabot
+  alunduil:
+    - collection-json
 
 dont-distribute-packages:
   # hard restrictions that really belong into meta.platforms
