@@ -16,10 +16,6 @@
     envHooks+=(addIdrisLibs)
   '';
 
-  configurePhase = ''
-    export TARGET=$out/lib/${idris.name}
-  '';
-
   buildPhase = ''
     ${idris}/bin/idris --build *.ipkg
   '';
@@ -33,7 +29,7 @@
   '';
 
   installPhase = ''
-    ${idris}/bin/idris --install *.ipkg
+    ${idris}/bin/idris --ibcsubdir $out/lib/${idris.name} --install *.ipkg
   '';
 
   buildInputs = [ gmp ];
