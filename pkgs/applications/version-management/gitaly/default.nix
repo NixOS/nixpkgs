@@ -1,19 +1,17 @@
 { stdenv, fetchFromGitLab, git, go }:
 
 stdenv.mkDerivation rec {
-  version = "2.3.0";
-  name = "gitlab-workhorse-${version}";
+  version = "0.21.2";
+  name = "gitaly-${version}";
 
   srcs = fetchFromGitLab {
     owner = "gitlab-org";
-    repo = "gitlab-workhorse";
+    repo = "gitaly";
     rev = "v${version}";
-    sha256 = "07b82kjfm8r3ql55ifl0zbifnnsbvng4zlzjpbsb7lisg26s97w8";
+    sha256 = "025r6vcra2bjm6xggcgnsqgkpvd7y2w73ff6lxrn06lbr4dfbfrf";
   };
 
   buildInputs = [ git go ];
-
-  patches = [ ./remove-hardcoded-paths.patch ];
 
   buildPhase = ''
     make PREFIX=$out
@@ -27,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://www.gitlab.com/;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ roblabla ];
     license = licenses.mit;
   };
 }
