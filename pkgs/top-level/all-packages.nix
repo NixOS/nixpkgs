@@ -17461,6 +17461,8 @@ with pkgs;
 
   sauerbraten = callPackage ../games/sauerbraten {};
 
+  scaleway-cli = callPackage ../tools/admin/scaleway-cli { };
+
   scid = callPackage ../games/scid {
     tcl = tcl-8_5;
     tk = tk-8_5;
