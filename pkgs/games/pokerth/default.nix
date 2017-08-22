@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage    = http://www.pokerth.net/;
+    homepage    = https://www.pokerth.net;
     description = "Open Source Poker client and server";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ obadz ];
