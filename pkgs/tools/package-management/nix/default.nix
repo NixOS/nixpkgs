@@ -116,7 +116,7 @@ let
         a package, multi-user package management and easy setup of build
         environments.
       '';
-      homepage = http://nixos.org/;
+      homepage = https://nixos.org/;
       license = stdenv.lib.licenses.lgpl2Plus;
       maintainers = [ stdenv.lib.maintainers.eelco ];
       platforms = stdenv.lib.platforms.all;
