@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Linux D-Bus Message Broker";
     homepage    = https://github.com/bus1/dbus-broker/wiki;
-    license     = licenses.apache2;
+    license     = licenses.asl20;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ peterhoeg ];
   };
