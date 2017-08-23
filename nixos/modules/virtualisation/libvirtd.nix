@@ -122,7 +122,6 @@ in {
       };
 
       path = with pkgs; [
-          "/run/current-system/sw"
           bridge-utils
           dmidecode
           dnsmasq
