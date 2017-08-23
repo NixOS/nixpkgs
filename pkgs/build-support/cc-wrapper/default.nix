@@ -342,7 +342,8 @@ stdenv.mkDerivation {
 
   inherit dynamicLinker expand-response-params;
 
-  expandResponseParams = expand-response-params; # for substitution in utils.sh
+  # for substitution in utils.sh
+  expandResponseParams = "${expand-response-params}/bin/expand-response-params";
 
   crossAttrs = {
     shell = shell.crossDrv + shell.crossDrv.shellPath;

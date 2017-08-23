@@ -310,7 +310,7 @@ in
         # More complicated cases
         ++ [
             glibc.out glibc.dev glibc.bin/*propagated from .dev*/ linuxHeaders
-            gcc gcc.cc gcc.cc.lib gcc.expandResponseParams
+            gcc gcc.cc gcc.cc.lib gcc.expand-response-params
           ]
           ++ lib.optionals (system == "aarch64-linux")
             [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ];
