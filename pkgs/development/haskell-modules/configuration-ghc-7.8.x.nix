@@ -160,5 +160,6 @@ self: super: {
 
   # The test suite requires Cabal 1.24.x or later to compile.
   comonad = dontCheck super.comonad;
+  semigroupoids = dontCheck super.semigroupoids;
 
 }
