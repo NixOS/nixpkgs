@@ -66,7 +66,7 @@ let
     else if targetPlatform.system == "i686-linux"     then "${libc_lib}/lib/ld-linux.so.2"
     else if targetPlatform.system == "x86_64-linux"   then "${libc_lib}/lib/ld-linux-x86-64.so.2"
     # ARM with a wildcard, which can be "" or "-armhf".
-    else if targetPlatform.isArm32                    then "${libc_lib}/lib/ld-linux*.so.3"
+    else if targetPlatform.isArm                      then "${libc_lib}/lib/ld-linux*.so.3"
     else if targetPlatform.system == "aarch64-linux"  then "${libc_lib}/lib/ld-linux-aarch64.so.1"
     else if targetPlatform.system == "powerpc-linux"  then "${libc_lib}/lib/ld.so.1"
     else if targetPlatform.system == "mips64el-linux" then "${libc_lib}/lib/ld.so.1"
