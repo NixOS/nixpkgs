@@ -77,6 +77,7 @@ self: super: {
   reflection = addBuildDepend super.reflection self.tagged;
   semigroups = addBuildDepend super.semigroups self.nats;
   optparse-applicative = addBuildDepend super.optparse-applicative self.semigroups;
+  text = addBuildDepend super.text self.bytestring-builder;
 
   # Newer versions don't compile any longer.
   network_2_6_3_1 = dontCheck super.network_2_6_3_1;
