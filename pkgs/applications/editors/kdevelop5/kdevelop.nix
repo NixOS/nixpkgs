@@ -2,7 +2,7 @@
 , qtquickcontrols, qtwebkit, qttools, kde-cli-tools
 , kconfig, kdeclarative, kdoctools, kiconthemes, ki18n, kitemmodels, kitemviews
 , kjobwidgets, kcmutils, kio, knewstuff, knotifyconfig, kparts, ktexteditor
-, threadweaver, kxmlgui, kwindowsystem, grantlee
+, threadweaver, kxmlgui, kwindowsystem, grantlee, kcrash, karchive, kguiaddons
 , plasma-framework, krunner, kdevplatform, kdevelop-pg-qt, shared_mime_info
 , libksysguard, konsole, llvmPackages, makeWrapper
 }:
@@ -34,7 +34,7 @@ mkDerivation rec {
     kconfig kdeclarative kdoctools kiconthemes ki18n kitemmodels kitemviews
     kjobwidgets kcmutils kio knewstuff knotifyconfig kparts ktexteditor
     threadweaver kxmlgui kwindowsystem grantlee plasma-framework krunner
-    kdevplatform shared_mime_info libksysguard konsole
+    kdevplatform shared_mime_info libksysguard konsole kcrash karchive kguiaddons
   ];
 
   postInstall = ''
