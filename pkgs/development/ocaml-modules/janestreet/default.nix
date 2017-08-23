@@ -316,7 +316,8 @@ rec {
 
   core = janePackage {
     name = "core";
-    hash = "0x05ky8l75k2dnpsa02vmqcr7p7q0vvc6279psq3iybrwcvab9yi";
+    version = "0.9.1";
+    hash = "1643r0namsgj8xwfr9niimcdwyyq4ddiwd02d73ipb4a8710aqi8";
     propagatedBuildInputs = [ core_kernel spawn ];
     meta.description = "Jane Street's standard library overlay";
   };

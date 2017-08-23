@@ -44,12 +44,6 @@ in python2Packages.buildPythonApplication {
           $WRAP_TK
       done
 
-      mkdir -p $out/etc/mercurial
-      cat >> $out/etc/mercurial/hgrc << EOF
-      [web]
-      cacerts = /etc/ssl/certs/ca-certificates.crt
-      EOF
-
       # copy hgweb.cgi to allow use in apache
       mkdir -p $out/share/cgi-bin
       cp -v hgweb.cgi contrib/hgweb.wsgi $out/share/cgi-bin

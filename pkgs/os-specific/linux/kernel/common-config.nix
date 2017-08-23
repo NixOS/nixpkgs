@@ -642,6 +642,10 @@ with stdenv.lib;
   TEST_USER_COPY? n
   XZ_DEC_TEST? n
 
+  ${optionalString (versionAtLeast version "4.13") ''
+    TEST_KMOD n
+  ''}
+
   ${optionalString (versionOlder version "4.4") ''
     EFI_TEST? n
     RCU_PERF_TEST? n

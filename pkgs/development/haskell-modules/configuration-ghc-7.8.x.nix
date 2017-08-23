@@ -144,17 +144,22 @@ self: super: {
   unordered-containers = dontCheck super.unordered-containers;
 
   # Needs additional inputs on old compilers.
-  semigroups = addBuildDepends super.semigroups (with self; [nats tagged unordered-containers]);
+  semigroups = addBuildDepends (dontCheck super.semigroups) (with self; [nats tagged unordered-containers]);
   lens = addBuildDepends super.lens (with self; [doctest generic-deriving nats simple-reflect]);
-  distributive = addBuildDepend super.distributive self.semigroups;
+  distributive = addBuildDepend (dontCheck super.distributive) self.semigroups;
   QuickCheck = addBuildDepends super.QuickCheck (with self; [nats semigroups]);
   void = addBuildDepends super.void (with self; [hashable semigroups]);
   optparse-applicative = addBuildDepend super.optparse-applicative self.semigroups;
+  vector = addBuildDepend super.vector self.semigroups;
 
   # Haddock doesn't cope with the new markup.
   bifunctors = dontHaddock super.bifunctors;
 
   # extra-test: <stdout>: hFlush: invalid argument (Bad file descriptor)
   extra = dontCheck super.extra;
+
+  # The test suite requires Cabal 1.24.x or later to compile.
+  comonad = dontCheck super.comonad;
+  semigroupoids = dontCheck super.semigroupoids;
 
 }

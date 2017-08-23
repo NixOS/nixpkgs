@@ -7286,6 +7286,28 @@ in {
     };
   };
 
+  logfury = buildPythonPackage rec {
+    name = "logfury-${version}";
+    version = "0.1.2";
+  
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/l/logfury/${name}.tar.gz";
+      sha256 = "1lywirv3d1lw691mc4mfpz7ak6r49klri43bbfgdnvsfppxminj2";
+    };
+  
+    buildInputs =
+      [ self.funcsigs
+        self.six
+      ];
+  
+    meta = with pkgs.stdenv.lib; {
+      description = "Logfury is for python library maintainers. It allows for responsible, low-boilerplate logging of method calls.";
+      homepage = "https://github.com/ppolewicz/logfury";
+      license = licenses.bsd3;
+      maintainers = with maintainers; [ jwiegley ];
+    };
+  };
+
   ndg-httpsclient = buildPythonPackage rec {
     version = "0.4.2";
     name = "ndg-httpsclient-${version}";
@@ -28706,6 +28728,8 @@ EOF
       maintainer = maintainers.fridh;
     };
   };
+
+  todoist = callPackage ../development/python-modules/todoist { };
 
   zxcvbn-python = callPackage ../development/python-modules/zxcvbn-python { };
 

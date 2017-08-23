@@ -137,8 +137,9 @@ stdenv.mkDerivation ({
 
   hardeningDisable = [ "format" ] ++ optional (name != "gnat") "all";
 
-  outputs = if (hostPlatform.is64bit && langAda) then [ "out" "doc" ]
-    else [ "out" "lib" "doc" ];
+  outputs = [ "out" "man" "info" ]
+    ++ optional (!(hostPlatform.is64bit && langAda)) "lib";
+
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
 

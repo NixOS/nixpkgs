@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "OCR engine";
-    homepage = http://code.google.com/p/tesseract-ocr/;
+    homepage = https://github.com/tesseract-ocr/tesseract;
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
