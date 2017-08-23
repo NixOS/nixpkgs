@@ -158,4 +158,7 @@ self: super: {
   # extra-test: <stdout>: hFlush: invalid argument (Bad file descriptor)
   extra = dontCheck super.extra;
 
+  # The test suite requires Cabal 1.24.x or later to compile.
+  comonad = dontCheck super.comonad;
+
 }
