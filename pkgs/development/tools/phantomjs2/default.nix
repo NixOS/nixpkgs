@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper
 , bison2, flex, fontconfig, freetype, gperf, icu, openssl, libjpeg
 , libpng, perl, python, ruby, sqlite, qtwebkit, qmake, qtbase
 , darwin, writeScriptBin, cups
@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ qmake ];
   buildInputs = [
     bison2 flex fontconfig freetype gperf icu openssl
-    libjpeg libpng perl python ruby sqlite qtwebkit qtbase
+    libjpeg libpng perl python ruby sqlite qtwebkit qtbase makeWrapper
   ] ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     AGL ApplicationServices AppKit Cocoa OpenGL
     darwin.libobjc fakeClang cups
@@ -102,6 +102,10 @@ in stdenv.mkDerivation rec {
 
   preFixup = ''
     rm -r ../__nix_qt5__
+  '';
+
+  postFixup = ''
+    wrapProgram $out/bin/phantomjs --set QT_QPA_PLATFORM_PLUGIN_PATH "${qtbase.bin}/lib/qt-5.9/plugins/platforms/"
   '';
 
   meta = with stdenv.lib; {
