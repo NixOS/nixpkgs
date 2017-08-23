@@ -114,4 +114,7 @@ self: super: {
   # Breaks a dependency cycle between QuickCheck and semigroups
   unordered-containers = dontCheck super.unordered-containers;
 
+  # The test suite requires Cabal 1.24.x or later to compile.
+  comonad = dontCheck super.comonad;
+
 }
