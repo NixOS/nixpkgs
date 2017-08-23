@@ -5410,12 +5410,12 @@ in {
 
   dropbox = buildPythonPackage rec {
     name = "dropbox-${version}";
-    version = "3.37";
-    #doCheck = false; # python 2.7.9 does verify ssl certificates
+    version = "8.0.0";
+    doCheck = false; # Set DROPBOX_TOKEN environment variable to a valid token.
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/dropbox/${name}.tar.gz";
-      sha256 = "f65c12bd97f09e29a951bc7cb30a74e005fc4b2f8bb48778796be3f73866b173";
+      sha256 = "0bixx80zjq0286dwm4zhg8bdhc8pqlrqy4n2jg7i6m6a4gv4gak5";
     };
 
     propagatedBuildInputs = with self; [ requests urllib3 mock setuptools ];
