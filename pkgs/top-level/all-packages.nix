@@ -9325,6 +9325,8 @@ with pkgs;
 
   libvisual = callPackage ../development/libraries/libvisual { };
 
+  libvmi = callPackage ../development/libraries/libvmi { };
+
   libvncserver = callPackage ../development/libraries/libvncserver {};
 
   libviper = callPackage ../development/libraries/libviper { };
