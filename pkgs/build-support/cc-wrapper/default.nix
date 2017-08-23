@@ -74,18 +74,10 @@ let
     else if stdenv.lib.hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
     else null;
 
-  expand-response-params = if buildPackages.stdenv.cc or null != null && buildPackages.stdenv.cc != "/dev/null"
-  then buildPackages.stdenv.mkDerivation {
-    name = "expand-response-params";
-    src = ./expand-response-params.c;
-    buildCommand = ''
-      # Work around "stdenv-darwin-boot-2 is not allowed to refer to path /nix/store/...-expand-response-params.c"
-      cp "$src" expand-response-params.c
-      "$CC" -std=c99 -O3 -o "$out" expand-response-params.c
-      strip -S $out
-      ${optionalString hostPlatform.isLinux "patchelf --shrink-rpath $out"}
-    '';
-  } else "";
+  expand-response-params =
+    if buildPackages.stdenv.cc or null != null && buildPackages.stdenv.cc != "/dev/null"
+    then import ../expand-response-params { inherit (buildPackages) stdenv; }
+    else "";
 
 in
 
