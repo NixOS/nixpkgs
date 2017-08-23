@@ -13,8 +13,11 @@ build-idris-package {
   inherit (idris) src;
 
   postUnpack = ''
-    mv $sourceRoot/libs/${name} $IDRIS_LIBRARY_PATH
-    sourceRoot=$IDRIS_LIBRARY_PATH/${name}
+    sourceRoot=$sourceRoot/libs/${name}
+  '';
+
+  postPatch = ''
+    sed -i ${name}.ipkg -e "/^opts/ s|-i \\.\\./|-i $IDRIS_LIBRARY_PATH/|g"
   '';
 
   meta = idris.meta // {
