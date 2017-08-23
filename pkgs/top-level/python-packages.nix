@@ -26836,15 +26836,17 @@ EOF
 
   thrift = buildPythonPackage rec {
     name = "thrift-${version}";
-    version = "0.9.3";
+    version = "0.10.0";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/t/thrift/${name}.tar.gz";
-      sha256 = "dfbc3d3bd19d396718dab05abaf46d93ae8005e2df798ef02e32793cd963877e";
+      url = "mirror://pypi/t/thrift/${name}.zip";
+      sha256 = "029jcdjdiw7pm1dllcvw3r4cg8542pf21yzr0fpnj49jan8w1xmp";
     };
 
     # No tests. Breaks when not disabling.
     doCheck = false;
+
+    propagatedBuildInputs = [ self.six ];
 
     meta = {
       description = "Python bindings for the Apache Thrift RPC system";
