@@ -114,6 +114,8 @@ stdenv.mkDerivation {
 
   buildCommand =
     ''
+      set -u
+
       mkdir -p $out/bin $out/nix-support $man/nix-support
 
       wrap() {
@@ -320,7 +322,7 @@ stdenv.mkDerivation {
       rm $out/nix-support/setup-hook.tmp
 
       # some linkers on some platforms don't support specific -z flags
-      hardening_unsupported_flags=""
+      export hardening_unsupported_flags=""
       if [[ "$($ldPath/${prefix}ld -z now 2>&1 || true)" =~ un(recognized|known)\ option ]]; then
         hardening_unsupported_flags+=" bindnow"
       fi
