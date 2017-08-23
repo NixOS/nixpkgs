@@ -28729,6 +28729,8 @@ EOF
     };
   };
 
+  todoist = callPackage ../development/python-modules/todoist { };
+
   zxcvbn-python = callPackage ../development/python-modules/zxcvbn-python { };
 
   incremental = callPackage ../development/python-modules/incremental { };
