@@ -29,11 +29,6 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     inherit (agpl3) url;
   };
 
-  apache2 = spdx {
-    spdxId = "Apache-2.0";
-    fullName = "Apache License 2.0";
-  };
-
   amazonsl = {
     fullName = "Amazon Software License";
     url = http://aws.amazon.com/asl/;
@@ -413,7 +408,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     url = "https://raw.githubusercontent.com/raboof/notion/master/LICENSE";
     fullName = "Notion modified LGPL";
   };
-
+  
   ofl = spdx {
     spdxId = "OFL-1.1";
     fullName = "SIL Open Font License 1.1";
