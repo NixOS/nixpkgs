@@ -144,7 +144,7 @@ self: super: {
   unordered-containers = dontCheck super.unordered-containers;
 
   # Needs additional inputs on old compilers.
-  semigroups = addBuildDepends super.semigroups (with self; [nats tagged unordered-containers]);
+  semigroups = addBuildDepends (dontCheck super.semigroups) (with self; [nats tagged unordered-containers]);
   lens = addBuildDepends super.lens (with self; [doctest generic-deriving nats simple-reflect]);
   distributive = addBuildDepend (dontCheck super.distributive) self.semigroups;
   QuickCheck = addBuildDepends super.QuickCheck (with self; [nats semigroups]);
