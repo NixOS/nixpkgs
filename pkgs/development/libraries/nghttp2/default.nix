@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig
+{ stdenv, fetchurl, pkgconfig, fetchurlBoot, python, makeWrapper
 
 # Optional Dependencies
 , openssl ? null, libev ? null, zlib ? null, c-ares ? null
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "out" "dev" "lib" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
   buildInputs = [ openssl libev zlib c-ares ]
     ++ optional enableHpack jansson
     ++ optional enableAsioLib boost
@@ -39,6 +39,18 @@ stdenv.mkDerivation rec {
     ++ optional enableAsioLib "--enable-asio-lib --with-boost-libdir=${boost}/lib";
 
   #doCheck = true;  # requires CUnit ; currently failing at test_util_localtime_date in util_test.cc
+
+  # nghttpx needs the python interpreter for cert ocsp stapling,
+  # otherwise it errors with /usr/bin/env python not found.
+  postInstall = 
+    let
+      pythonBoot = python.override {
+        fetchurl = fetchurlBoot;
+      };
+    in
+      ''
+        wrapProgram $bin/bin/nghttpx --prefix PATH : ${pythonBoot}/bin
+      '';
 
   meta = with stdenv.lib; {
     homepage = https://nghttp2.org/;
