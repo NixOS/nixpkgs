@@ -92,7 +92,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
           ((map (links "share/wine/gecko") geckos)
         ++ (map (links "share/wine/mono")  monos))}
   '' + lib.optionalString supportFlags.gstreamerSupport ''
-    for i in wine wine64; do
+    for i in wine ; do
       if [ -e "$out/bin/$i" ]; then
         wrapProgram "$out/bin/$i" \
           --argv0 "" \
