@@ -195,6 +195,7 @@ let
         unitConfig.Documentation = "man:wg(8) https://www.wireguard.io/";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
+        environment.DEVICE = name;
 
         serviceConfig = {
           Type = "oneshot";
