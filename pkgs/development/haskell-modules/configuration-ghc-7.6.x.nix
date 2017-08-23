@@ -101,6 +101,7 @@ self: super: {
   QuickCheck = addBuildDepend super.QuickCheck self.semigroups;
   void = addBuildDepends super.void (with self; [hashable semigroups]);
   optparse-applicative = addBuildDepend super.optparse-applicative self.semigroups;
+  vector = addBuildDepend super.vector self.semigroups;
 
   # Need a newer version of Cabal to interpret their build instructions.
   cmdargs = addSetupDepend super.cmdargs self.Cabal_1_24_2_0;
