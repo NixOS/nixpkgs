@@ -146,7 +146,7 @@ self: super: {
   # Needs additional inputs on old compilers.
   semigroups = addBuildDepends super.semigroups (with self; [nats tagged unordered-containers]);
   lens = addBuildDepends super.lens (with self; [doctest generic-deriving nats simple-reflect]);
-  distributive = addBuildDepend super.distributive self.semigroups;
+  distributive = addBuildDepend (dontCheck super.distributive) self.semigroups;
   QuickCheck = addBuildDepends super.QuickCheck (with self; [nats semigroups]);
   void = addBuildDepends super.void (with self; [hashable semigroups]);
   optparse-applicative = addBuildDepend super.optparse-applicative self.semigroups;
