@@ -100,6 +100,10 @@ qtSubmodule {
     xlibs.libXcomposite
   ];
   patches = optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch;
+
+  dontUseNinjaBuild = true;
+  dontUseNinjaInstall = true;
+
   postInstall = ''
     cat > $out/libexec/qt.conf <<EOF
     [Paths]
