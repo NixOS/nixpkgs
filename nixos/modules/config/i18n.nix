@@ -9,11 +9,8 @@ with lib;
 
     i18n = {
       glibcLocales = mkOption {
-        type = types.path;
-        default = pkgs.glibcLocales.override {
-          allLocales = any (x: x == "all") config.i18n.supportedLocales;
-          locales = config.i18n.supportedLocales;
-        };
+        type = types.nullOr types.package;
+        default = null;
         example = literalExample "pkgs.glibcLocales";
         description = ''
           Customized pkg.glibcLocales package.
@@ -116,6 +113,19 @@ with lib;
 
   config = {
 
+    nixpkgs.overlays = [
+      (self: super: {
+        glibcLocales =
+          if config.i18n.glibcLocales != null then
+            config.i18n.glibcLocales
+          else
+            super.glibcLocales.override {
+              allLocales = lib.any (x: x == "all") config.i18n.supportedLocales;
+              locales = config.i18n.supportedLocales;
+            };
+      })
+    ];
+
     i18n.consoleKeyMap = with config.services.xserver;
       mkIf config.i18n.consoleUseXkbConfig
         (pkgs.runCommand "xkb-console-keymap" { preferLocalBuild = true; } ''
@@ -124,7 +134,7 @@ with lib;
         '');
 
     environment.systemPackages =
-      optional (config.i18n.supportedLocales != []) config.i18n.glibcLocales;
+      optional (config.i18n.supportedLocales != []) pkgs.glibcLocales;
 
     environment.sessionVariables =
       { LANG = config.i18n.defaultLocale;
@@ -132,7 +142,7 @@ with lib;
       };
 
     systemd.globalEnvironment = mkIf (config.i18n.supportedLocales != []) {
-      LOCALE_ARCHIVE = "${config.i18n.glibcLocales}/lib/locale/locale-archive";
+      LOCALE_ARCHIVE = "${pkgs.glibcLocales}/lib/locale/locale-archive";
     };
 
     # ‘/etc/locale.conf’ is used by systemd.
