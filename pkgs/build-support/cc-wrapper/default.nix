@@ -217,13 +217,6 @@ stdenv.mkDerivation {
         echo "$gnatCFlags" > $out/nix-support/gnat-cflags
       ''}
 
-      if [ -e $ccPath/clang ]; then
-        # Need files like crtbegin.o from gcc
-        # It's unclear if these will ever be provided by an LLVM project
-        ccCFlags="$ccCFlags -B$basePath"
-        ccCFlags="$ccCFlags -isystem$cc/lib/clang/$ccVersion/include"
-      fi
-
       echo "$ccLDFlags" > $out/nix-support/cc-ldflags
       echo "$ccCFlags" > $out/nix-support/cc-cflags
 
