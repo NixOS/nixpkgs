@@ -150,6 +150,7 @@ self: super: {
   QuickCheck = addBuildDepends super.QuickCheck (with self; [nats semigroups]);
   void = addBuildDepends super.void (with self; [hashable semigroups]);
   optparse-applicative = addBuildDepend super.optparse-applicative self.semigroups;
+  vector = addBuildDepend super.vector self.semigroups;
 
   # Haddock doesn't cope with the new markup.
   bifunctors = dontHaddock super.bifunctors;
