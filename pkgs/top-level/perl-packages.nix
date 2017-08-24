@@ -2374,13 +2374,21 @@ let self = _self // overrides; _self = with self; {
   };
 
   Connector = buildPerlPackage rec {
-    name = "Connector-1.16";
+    name = "Connector-1.22";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MR/MRSCOTTY/${name}.tar.gz";
-      sha256 = "0rbx4n86y5sdkff37w8djw1ahxrg79bsfgbrph3kjhh4jzd20q09";
+      sha256 = "aa178d1865817ad2dea5c79645c8e6420ca2cfb951f20c98b5154307de219016";
     };
-    buildInputs = [ Moose ConfigStd YAML PathClass DateTime Log4Perl
-      ConfigVersioned TemplateToolkit];
+    buildInputs = [ ConfigMerge ConfigStd ConfigVersioned CryptSSLeay DBDSQLite DBI IOSocketSSL LWPProtocolhttps LWPUserAgent TemplateToolkit YAML ];
+    propagatedBuildInputs = [ LogLog4perl Moose ];
+    prePatch = ''
+      # Attempts to use network.
+      rm t/01-proxy-http.t
+    '';
+    meta = {
+      description = "A generic connection to a hierarchical-structured data set";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   ConvertASN1 = buildPerlPackage rec {
