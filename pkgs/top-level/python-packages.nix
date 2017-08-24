@@ -21027,19 +21027,6 @@ in {
 
   setuptools_scm = callPackage ../development/python-modules/setuptools_scm { };
 
-  setuptools_scm_18 = self.setuptools_scm.override rec {
-    name = "setuptools_scm-${version}";
-    version = "1.8.0";
-
-    # tests fail: ImportError: cannot import name 'find_files'
-    disabled = isPy35;
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/s/setuptools_scm/${name}.tar.bz2";
-      sha256 = "00p60v2yfqy1r58pjcx9wy6dvqd7wkpfs5z1dzwf7y75c1g3dgyx";
-    };
-  };
-
   setuptoolsDarcs = buildPythonPackage rec {
     name = "setuptools_darcs-${version}";
     version = "1.2.11";
