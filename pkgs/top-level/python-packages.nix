@@ -27578,6 +27578,8 @@ EOF
   pyhamcrest = callPackage ../development/python-modules/pyhamcrest { };
  
   parse = callPackage ../development/python-modules/parse { };
+  
+  parse-type = callPackage ../development/python-modules/parse-type { };
 });
 
 in fix' (extends overrides packages)
