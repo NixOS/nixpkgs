@@ -62,7 +62,7 @@ let
 
   graphiteVersion = "0.9.15";
 
-  fetchPypi = {format ? "setuptools", ... } @attrs:
+  fetchPypi = makeOverridable( {format ? "setuptools", ... } @attrs:
     let
       fetchWheel = {pname, version, sha256, python ? "py2.py3", abi ? "none", platform ? "any"}:
       # Fetch a wheel. By default we fetch an universal wheel.
@@ -78,7 +78,7 @@ let
       fetcher = (if format == "wheel" then fetchWheel
         else if format == "setuptools" then fetchSource
         else throw "Unsupported kind ${kind}");
-    in fetcher (builtins.removeAttrs attrs ["format"]);
+    in fetcher (builtins.removeAttrs attrs ["format"]) );
 
   # This should become part of stdenv!
   sharedLibraryExtension = if stdenv.isDarwin then ".dylib" else ".so";
