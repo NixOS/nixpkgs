@@ -5947,14 +5947,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  GitPurePerl = buildPerlPackage {
-    name = "Git-PurePerl-0.51";
+  GitPurePerl = buildPerlPackage rec {
+    name = "Git-PurePerl-0.53";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BR/BROQ/Git-PurePerl-0.51.tar.gz;
-      sha256 = "3775f385ae566ea392ece0913a06ffec46441a1273c19ba9a6d990574ec34d00";
+      url = "mirror://cpan/authors/id/B/BR/BROQ/${name}.tar.gz";
+      sha256 = "987c74366cc4c37ee084050f985fa254359c89c12507f5b8bfc6607de538d5a8";
     };
     buildInputs = [ Testutf8 ];
-    propagatedBuildInputs = [ ConfigGitLike DataStreamBulk DateTime FileFindRule IODigest Moose MooseXStrictConstructor MooseXTypesPathClass namespaceautoclean ];
+    propagatedBuildInputs = [ ArchiveExtract ConfigGitLike DataStreamBulk DateTime FileFindRule IODigest Moose MooseXStrictConstructor MooseXTypesPathClass namespaceautoclean ];
     doCheck = false;
     meta = {
       description = "A Pure Perl interface to Git repositories";
