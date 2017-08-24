@@ -4223,6 +4223,8 @@ in {
     };
   };
 
+  pytest-forked = callPackage ../development/python-modules/pytest-forked { };
+
   pytest-rerunfailures = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "pytest-rerunfailures";
