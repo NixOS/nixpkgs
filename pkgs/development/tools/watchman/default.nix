@@ -1,20 +1,22 @@
-{ stdenv, lib, config, fetchFromGitHub, autoconf, automake, pcre
-, confFile ? config.watchman.confFile or null
+{ stdenv, lib, config, fetchFromGitHub, autoconf, automake, pcre,
+  libtool, pkgconfig, openssl,
+  confFile ? config.watchman.confFile or null
 }:
 
 stdenv.mkDerivation rec {
   name = "watchman-${version}";
 
-  version = "4.7.0";
+  version = "4.9.0";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
     rev = "v${version}";
-    sha256 = "0xnd7jvrmyxhlw2ggd37swv1mk6vw9j91fdxps6njgvnlfg9zs5n";
+    sha256 = "0fdaj5pmicm6j17d5q7px800m5rmam1a400x3hv1iiifnmhgnkal";
   };
 
-  buildInputs = [ autoconf automake pcre ];
+  buildInputs = [ pcre openssl ];
+  nativeBuildInputs = [ autoconf automake pkgconfig libtool ];
 
   configureFlags = [
       "--enable-lenient"
@@ -25,6 +27,10 @@ stdenv.mkDerivation rec {
       # https://github.com/facebook/watchman/issues/178
       "--disable-statedir"
   ];
+
+  prePatch = ''
+    patchShebangs .
+  '';
 
   preConfigure = ''
     ./autogen.sh
