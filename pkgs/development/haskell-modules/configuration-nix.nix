@@ -499,7 +499,6 @@ self: super: builtins.intersectAttrs super {
   # Disable separate bin outputs for these specific packages that break with it.
   H = hasNoBinOutput super.H;
   cryptol = hasNoBinOutput super.cryptol;
-  git-annex = hasNoBinOutput super.git-annex;
   sproxy = hasNoBinOutput super.sproxy;
   sproxy2 = hasNoBinOutput super.sproxy2;
   sproxy-web = hasNoBinOutput super.sproxy-web;
@@ -507,6 +506,11 @@ self: super: builtins.intersectAttrs super {
   mywatch = hasNoBinOutput super.mywatch;
   sugarhaskell = hasNoBinOutput super.sugarhaskell;
   zerobin = hasNoBinOutput super.zerobin;
+
+  git-annex = overrideCabal super.git-annex (drv: {
+    enableSeparateBinOutput = false;
+    enableSeparateEtcOutput = false;
+  });
 
   # Override a number of packages with specific references to $out in their
   # derivations
