@@ -16478,7 +16478,11 @@ in {
   });
 
   protobuf = self.protobuf2_6;
-  # only required by tensorflow
+  protobuf3_3 = callPackage ../development/python-modules/protobuf.nix {
+    disabled = isPyPy;
+    doCheck = !isPy3k;
+    protobuf = pkgs.protobuf3_3;
+  };
   protobuf3_2 = callPackage ../development/python-modules/protobuf.nix {
     disabled = isPyPy;
     doCheck = !isPy3k;
