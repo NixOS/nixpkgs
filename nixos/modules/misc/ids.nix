@@ -479,7 +479,7 @@
       asterisk = 192;
       plex = 193;
       sabnzbd = 194;
-      #grafana = 196; #unused
+      grafana = 196;
       #skydns = 197; #unused
       #ripple-rest = 198; #unused
       #nix-serve = 199; #unused
