@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     "--disable-memconf"
     "--enable-ui"
     "--enable-python-library"
+    "--disable-emoji-dict"
     "--with-emoji-json-file=${nodePackages.emojione}/lib/node_modules/emojione/emoji.json"
   ];
 
