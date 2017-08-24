@@ -28657,9 +28657,12 @@ EOF
 
   preshed = callPackage ../development/python-modules/preshed { };
 
+  backports_weakref = callPackage ../development/python-modules/backports_weakref { }; 
+
   thinc = callPackage ../development/python-modules/thinc { };
 
   spacy = callPackage ../development/python-modules/spacy { };
+
 });
 
 in fix' (extends overrides packages)
