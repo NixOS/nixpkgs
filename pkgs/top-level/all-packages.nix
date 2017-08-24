@@ -11093,6 +11093,8 @@ with pkgs;
 
   dex-oidc = callPackage ../servers/dex { };
 
+  dgraph = callPackage ../servers/dgraph { };
+    
   dico = callPackage ../servers/dico { };
 
   dict = callPackage ../servers/dict {
