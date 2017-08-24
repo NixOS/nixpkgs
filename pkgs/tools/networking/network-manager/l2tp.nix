@@ -5,13 +5,13 @@
 stdenv.mkDerivation rec {
   name    = "${pname}${if withGnome then "-gnome" else ""}-${version}";
   pname   = "NetworkManager-l2tp";
-  version = "1.2.4";
+  version = "1.2.8";
 
   src = fetchFromGitHub {
     owner  = "nm-l2tp";
     repo   = "network-manager-l2tp";
     rev    = "${version}";
-    sha256 = "1mvn0z1vl4j9drl3dsw2dv0pppqvj29d2m07487dzzi8cbxrqj36";
+    sha256 = "ca39414a0282a2f3457df952bc2a5b386c21b4bd21582bbc6c48dadd5fb5dfff";
   };
 
   buildInputs = [ networkmanager ppp libsecret ]
