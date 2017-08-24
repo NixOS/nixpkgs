@@ -14228,7 +14228,7 @@ with pkgs;
     gtk2 = gtk2-x11;
   };
 
-  gqrx = callPackage ../applications/misc/gqrx { };
+  gqrx = qt5.callPackage ../applications/misc/gqrx { };
 
   grass = callPackage ../applications/gis/grass { };
 
