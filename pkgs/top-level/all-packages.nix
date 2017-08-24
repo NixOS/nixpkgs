@@ -11273,6 +11273,16 @@ with pkgs;
     modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders nginxModules.shibboleth ];
   };
 
+  nginxStableModSecurity-beta = callPackage ../servers/http/nginx/stable.nix {
+    modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders modsecurity-beta ];
+  };
+
+  nginxMainlineModSecurity-beta = callPackage ../servers/http/nginx/mainline.nix {
+    modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders modsecurity-beta ];
+  };
+
+  libmodsecurity = callPackage ../tools/security/libmodsecurity { };
+
   ngircd = callPackage ../servers/irc/ngircd { };
 
   nix-binary-cache = callPackage ../servers/http/nix-binary-cache {};

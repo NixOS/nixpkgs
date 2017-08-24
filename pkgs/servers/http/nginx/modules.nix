@@ -47,6 +47,16 @@
     '';
   };
 
+  modsecurity-beta = {
+    src = fetchFromGitHub {
+      owner = "SpiderLabs";
+      repo = "ModSecurity-nginx";
+      rev = "abbf2c47f6f3205484a1a9db618e067dce213b89";
+      sha256 = "04ar51bnqjca6g4p2irymgdmc8rh5nsi8ml43srm4krllnkvw8qn";
+    };
+    inputs = [ pkgs.curl pkgs.geoip pkgs.libmodsecurity pkgs.libxml2 pkgs.lmdb pkgs.yajl ];
+  };
+
   echo = {
     src = fetchFromGitHub {
       owner = "openresty";
