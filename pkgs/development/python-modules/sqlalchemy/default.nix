@@ -11,11 +11,11 @@
 buildPythonPackage rec {
   pname = "SQLAlchemy";
   name = "${pname}-${version}";
-  version = "1.1.12";
+  version = "1.1.13";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d501527319f51a3d9eb639b654222c6f67287228a98ba102b1d0b598eb3266c9";
+    sha256 = "2a98ac87b30eaa2bee1f1044848b9590e476e7f93d033c6542e60b993a5cf898";
   };
 
   checkInputs = [ pytest mock pytest_xdist ]

@@ -1,13 +1,13 @@
 { stdenv, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  version = "0.4";
+  version = "1.0.3";
   pname = "python-editor";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1gykxn16anmsbcrwhx3rrhwjif95mmwvq9gjcrr9bbzkdc8sf8a4";
+    sha256 = "a3c066acee22a1c94f63938341d4fb374e3fdd69366ed6603d7b24bed1efc565";
   };
 
   meta = with stdenv.lib; {

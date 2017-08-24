@@ -22,12 +22,12 @@ let
 in
 buildPythonPackage rec {
   pname = "pycuda";
-  version = "2017.1";
+  version = "2017.1.1";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "a92725ccd8515b4d7284b9127184b6fdb61f224daa086e7fc6b926e2094b055f";
+    sha256 = "6b5a9384e38c603ee429f8a6bee424532db7b3505027ce22f7e18ad19564b563";
   };
 
   preConfigure = ''

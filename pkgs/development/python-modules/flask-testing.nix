@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, buildPythonPackage, pythonOlder
+{ stdenv, fetchPypi, buildPythonPackage, pythonOlder
 , flask, blinker, twill }:
 
 with stdenv.lib;
 
 buildPythonPackage rec {
-  name = "Flask-Testing-0.6.1";
+  pname = "Flask-Testing";
+  version = "0.6.2";
+  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/F/Flask-Testing/${name}.tar.gz";
-    sha256 = "1ckmy7kz2qkggdlm9y5wx6gvd2x7qv921dyb059ywfh15hrkkxdb";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "f25effd266fce9b16482f4ce3423d5a7d25534aab77bc83caace5d9637bf0df0";
   };
 
   buildInputs = optionals (pythonOlder "3.0") [ twill ];
