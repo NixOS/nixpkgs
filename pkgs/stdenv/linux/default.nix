@@ -303,7 +303,10 @@ in
             gnumake gnused gnutar gnugrep gnupatch patchelf ed paxctl
           ]
         # Library dependencies
-        ++ map getLib [ attr acl zlib pcre libsigsegv ]
+        ++ map getLib (
+            [ attr acl zlib pcre ]
+            ++ lib.optional (gawk.libsigsegv != null) gawk.libsigsegv
+          )
         # More complicated cases
         ++ [
             glibc.out glibc.dev glibc.bin/*propagated from .dev*/ linuxHeaders
