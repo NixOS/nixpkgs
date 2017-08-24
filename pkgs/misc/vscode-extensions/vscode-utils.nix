@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, runCommand, vscode, which }:
+{ stdenv, lib, fetchurl, runCommand, vscode, unzip }:
 
 let
   extendedPkgVersion = lib.getVersion vscode;
@@ -7,13 +7,18 @@ let
   mktplcExtRefToFetchArgs = ext: {
     url = "https://${ext.publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${ext.publisher}/extension/${ext.name}/${ext.version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage";
     sha256 = ext.sha256;
-    name = "${ext.name}.vsix";
+    # The `*.vsix` file is in the end a simple zip file. Change the extension
+    # so that existing `unzip` hooks takes care of the unpacking.
+    name = "${ext.publisher}-${ext.name}.zip";
   };
 
   buildVscodeExtension = a@{
     name,
     namePrefix ? "${extendedPkgName}-extension-",
     src,
+    # Same as "Unique Identifier" on the extension's web page.
+    # For the moment, only serve as unique extension dir.
+    vscodeExtUniqueId,
     configurePhase ? ":",
     buildPhase ? ":",
     dontPatchELF ? true,
@@ -21,35 +26,18 @@ let
     buildInputs ? [],
     ...
   }:
-  stdenv.mkDerivation (a // {
+  stdenv.mkDerivation ((removeAttrs a [ "vscodeExtUniqueId" ]) //  {
 
     name = namePrefix + name;
 
+    inherit vscodeExtUniqueId;
     inherit configurePhase buildPhase dontPatchELF dontStrip;
 
-    # TODO: `which` is an encapsulation leak. It should have been hardwired
-    #       as part of the `code` wrapper. 
-    buildInputs = [ vscode which ] ++ buildInputs;
-
-    unpackPhase = ''
-      # TODO: Unfortunately, 'code' systematically creates its '.vscode' directory
-      # even tough it has nothing to write in it. We need to redirect this
-      # to a writeable location as the nix environment already has (but
-      # to a non writeable one) otherwise the write will fail.
-      # It would be preferrable if we could intercept / fix this at the source.
-      HOME="$PWD/code_null_home" code \
-        --extensions-dir "$PWD" \
-        --install-extension "${toString src}"
-
-      rm -Rf "$PWD/code_null_home"
-      cd "$(find . -mindepth 1 -type d -print -quit)"
-      ls -la
-    '';
-
+    buildInputs = [ unzip ] ++ buildInputs;
 
     installPhase = ''
-      mkdir -p "$out/share/${extendedPkgName}/extensions/${name}"
-      find . -mindepth 1 -maxdepth 1 | xargs mv -t "$out/share/${extendedPkgName}/extensions/${name}/"
+      mkdir -p "$out/share/${extendedPkgName}/extensions/${vscodeExtUniqueId}"
+      find . -mindepth 1 -maxdepth 1 | xargs mv -t "$out/share/${extendedPkgName}/extensions/${vscodeExtUniqueId}/"
     '';
 
   });
@@ -65,8 +53,9 @@ let
     ...
   }: assert "" == name; assert null == src;
   buildVscodeExtension ((removeAttrs a [ "mktplcRef" ]) // {
-    name = "${mktplcRef.name}-${mktplcRef.version}";
+    name = "${mktplcRef.publisher}-${mktplcRef.name}-${mktplcRef.version}";
     src = fetchVsixFromVscodeMarketplace mktplcRef;
+    vscodeExtUniqueId = "${mktplcRef.publisher}.${mktplcRef.name}";
   });
 
   mktplcRefAttrList = [
