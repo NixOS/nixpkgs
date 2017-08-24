@@ -177,7 +177,10 @@ connector-c = stdenv.mkDerivation rec {
   };
 
   # outputs = [ "dev" "out" ]; FIXME: cmake variables don't allow that < 3.0
-  cmakeFlags = [ "-DWITH_EXTERNAL_ZLIB=ON" ];
+  cmakeFlags = [
+    "-DWITH_EXTERNAL_ZLIB=ON"
+    "-DMYSQL_UNIX_ADDR=/run/mysqld/mysqld.sock"
+  ];
 
   nativeBuildInputs = [ cmake ];
   propagatedBuildInputs = [ openssl zlib ];
