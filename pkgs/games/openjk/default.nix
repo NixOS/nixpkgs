@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper cmake ];
   buildInputs = [ libjpeg zlib libpng mesa_noglu SDL2 ];
 
+  # move from $out/JediAcademy to $out/opt/JediAcademy
   preConfigure = ''
     cmakeFlagsArray=("-DCMAKE_INSTALL_PREFIX=$out/opt")
   '';
