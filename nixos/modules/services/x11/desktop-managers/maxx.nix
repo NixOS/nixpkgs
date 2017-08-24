@@ -13,12 +13,6 @@ in {
   config = mkIf (xcfg.enable && cfg.enable) {
     environment.systemPackages = [ pkgs.maxx ];
 
-    # there is hardcoded path in binaries
-    system.activationScripts.setup-maxx = ''
-      mkdir -p /opt
-      ln -sfn ${pkgs.maxx}/opt/MaXX /opt
-    '';
-
     services.xserver.desktopManager.session = [
     { name = "MaXX";
       start = ''

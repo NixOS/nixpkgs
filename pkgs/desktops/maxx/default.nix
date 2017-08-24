@@ -1,16 +1,21 @@
-{ stdenv, fetchurl, makeWrapper
+{ stdenv, fetchurl, makeWrapper, libredirect, gcc-unwrapped, bash, gtk-engine-murrine, gtk_engines, librsvg
+
 , libX11, libXext, libXi, libXau, libXrender, libXft, libXmu, libSM, libXcomposite, libXfixes, libXpm
-, libXinerama, libXdamage, libICE, libXtst, libXaw
-, fontconfig, pango, cairo, glib, libxml2, atk, gtk2, gdk_pixbuf, mesa_noglu, ncurses
-, gcc, xclock, xsettingsd, bash, gtk-engine-murrine, gtk_engines, librsvg }:
+, libXinerama, libXdamage, libICE, libXtst, libXaw, fontconfig, pango, cairo, glib, libxml2, atk, gtk2
+, gdk_pixbuf, mesa_noglu, ncurses
+
+, xclock, xsettingsd }:
 
 let
   version = "Indy-1.1.0";
 
   deps = [
-    libX11 libXext libXi libXau libXrender libXft libXmu libSM libXcomposite libXfixes libXpm
-    libXinerama libXdamage libICE libXtst libXaw
-    stdenv.cc.cc fontconfig pango cairo glib libxml2 atk gtk2 gdk_pixbuf mesa_noglu ncurses
+    stdenv.cc.cc libX11 libXext libXi libXau libXrender libXft libXmu libSM libXcomposite libXfixes libXpm
+    libXinerama libXdamage libICE libXtst libXaw fontconfig pango cairo glib libxml2 atk gtk2
+    gdk_pixbuf mesa_noglu ncurses
+  ];
+  runtime_deps = [
+    xclock xsettingsd
   ];
 in stdenv.mkDerivation {
   name = "MaXX-${version}";
@@ -26,15 +31,12 @@ in stdenv.mkDerivation {
     })
   ];
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   buildPhase = ''
     while IFS= read -r -d $'\0' i; do
-      if isELF "$i"; then
-        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$i" || true
-        patchelf --set-rpath "${stdenv.lib.makeLibraryPath deps}" "$i"
-      fi
-    done < <(find "." -type f -print0)
+      substituteInPlace "$i" --replace /opt/MaXX $out/opt/MaXX
+    done < <(find "." -type f -exec grep -Iq /opt/MaXX {} \; -and -print0)
 
     substituteInPlace bin/adminterm \
       --replace /bin/bash ${bash}/bin/bash
@@ -52,15 +54,37 @@ in stdenv.mkDerivation {
 
     wrapProgram $maxx/etc/skel/Xsession.dt \
       --prefix GTK_PATH : "${gtk-engine-murrine}/lib/gtk-2.0:${gtk_engines}/lib/gtk-2.0" \
-      --prefix GDK_PIXBUF_MODULE_FILE : "$(echo ${librsvg.out}/lib/gdk-pixbuf-2.0/*/loaders.cache)"
-  '';
+      --prefix GDK_PIXBUF_MODULE_FILE : "$(echo ${librsvg.out}/lib/gdk-pixbuf-2.0/*/loaders.cache)" \
+      --prefix PATH : ${stdenv.lib.makeBinPath runtime_deps}
 
-  propagatedUserEnvPkgs = [ gcc xclock xsettingsd ];
+    while IFS= read -r -d $'\0' i; do
+      if isELF "$i"; then
+        bin=`patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$i"; echo $?`
+        patchelf --set-rpath "${stdenv.lib.makeLibraryPath deps}" "$i"
+        if [ "$bin" -eq 0 ]; then
+          wrapProgram "$i" \
+            --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
+            --set NIX_REDIRECTS /opt/MaXX=$maxx
+        fi
+      fi
+    done < <(find "$maxx" -type f -print0)
+
+    cp ${gcc-unwrapped}/bin/cpp ${gcc-unwrapped}/libexec/gcc/*/*/cc1 $maxx/bin
+    for i in $maxx/bin/cpp $maxx/bin/cc1
+    do
+      wrapProgram "$i" \
+        --set LD_PRELOAD "${libredirect}/lib/libredirect.so" \
+        --set NIX_REDIRECTS /opt/MaXX=$maxx
+    done
+  '';
 
   meta = with stdenv.lib; {
     description = "A replica of IRIX Interactive Desktop";
     homepage = http://www.maxxinteractive.com;
-    license = licenses.free;
+    license = {
+      url = http://www.maxxinteractive.com/site/?page_id=97;
+      free = true;
+    };
     maintainers = [ maintainers.gnidorah ];
     platforms = ["x86_64-linux"];
     hydraPlatforms = [];
