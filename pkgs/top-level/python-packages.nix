@@ -5460,7 +5460,7 @@ in {
   };
 
   easydict = callPackage ../development/python-modules/easydict { };
-  
+
   EasyProcess = buildPythonPackage rec {
     name = "EasyProcess-0.2.3";
 
@@ -7289,17 +7289,17 @@ in {
   logfury = buildPythonPackage rec {
     name = "logfury-${version}";
     version = "0.1.2";
-  
+
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/logfury/${name}.tar.gz";
       sha256 = "1lywirv3d1lw691mc4mfpz7ak6r49klri43bbfgdnvsfppxminj2";
     };
-  
+
     buildInputs =
       [ self.funcsigs
         self.six
       ];
-  
+
     meta = with pkgs.stdenv.lib; {
       description = "Logfury is for python library maintainers. It allows for responsible, low-boilerplate logging of method calls.";
       homepage = "https://github.com/ppolewicz/logfury";
@@ -28755,17 +28755,17 @@ EOF
 
   cymem = callPackage ../development/python-modules/cymem { };
 
-  ftfy = callPackage ../development/python-modules/ftfy { };    
+  ftfy = callPackage ../development/python-modules/ftfy { };
 
-  murmurhash = callPackage ../development/python-modules/murmurhash { };      
+  murmurhash = callPackage ../development/python-modules/murmurhash { };
 
-  plac = callPackage ../development/python-modules/plac { };        
-  
+  plac = callPackage ../development/python-modules/plac { };
+
   preshed = callPackage ../development/python-modules/preshed { };
 
-  thinc = callPackage ../development/python-modules/thinc { };  
+  thinc = callPackage ../development/python-modules/thinc { };
 
-  spacy = callPackage ../development/python-modules/spacy { };  
+  spacy = callPackage ../development/python-modules/spacy { };
 });
 
 in fix' (extends overrides packages)
