@@ -1,6 +1,20 @@
-{ stdenv, fetchpatch, fetchFromGitHub, python3Packages }:
+{ stdenv, fetchpatch, fetchFromGitHub, python3 }:
 
-python3Packages.buildPythonPackage rec {
+let
+  # mitmproxy needs an older tornado version
+  python = python3.override {
+    packageOverrides = self: super: {
+      tornado = super.tornado.overridePythonAttrs (oldAttrs: rec {
+        version = "4.4.3";
+        name = "${oldAttrs.pname}-${version}";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "f267acc96d5cf3df0fd8a7bfb5a91c2eb4ec81d5962d1a7386ceb34c655634a8";
+        };
+      });
+    };
+  };
+in python.pkgs.buildPythonPackage rec {
   baseName = "mitmproxy";
   name = "${baseName}-${version}";
   version = "2.0.2";
@@ -21,7 +35,7 @@ python3Packages.buildPythonPackage rec {
     })
   ];
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with python.pkgs; [
     blinker click certifi construct cryptography
     cssutils editorconfig h2 html2text hyperframe
     jsbeautifier kaitaistruct passlib pyasn1 pyopenssl
