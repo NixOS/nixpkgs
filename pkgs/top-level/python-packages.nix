@@ -27571,6 +27571,8 @@ EOF
 
   preshed = callPackage ../development/python-modules/preshed { };
 
+  backports_weakref = callPackage ../development/python-modules/backports_weakref { }; 
+
   thinc = callPackage ../development/python-modules/thinc { };
 
   spacy = callPackage ../development/python-modules/spacy { };
@@ -27580,8 +27582,9 @@ EOF
   pyhamcrest = callPackage ../development/python-modules/pyhamcrest { };
  
   parse = callPackage ../development/python-modules/parse { };
-  
+
   parse-type = callPackage ../development/python-modules/parse-type { };
+
 });
 
 in fix' (extends overrides packages)
