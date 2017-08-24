@@ -28105,6 +28105,8 @@ EOF
   thinc = callPackage ../development/python-modules/thinc { };
 
   spacy = callPackage ../development/python-modules/spacy { };
+ 
+  parse = callPackage ../development/python-modules/parse { };
 });
 
 in fix' (extends overrides packages)
