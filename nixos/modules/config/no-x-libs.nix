@@ -30,6 +30,7 @@ with lib;
       dbus = pkgs.dbus.override { x11Support = false; };
       networkmanager_fortisslvpn = pkgs.networkmanager_fortisslvpn.override { withGnome = false; };
       networkmanager_l2tp = pkgs.networkmanager_l2tp.override { withGnome = false; };
+      networkmanager_sstp = pkgs.networkmanager_sstp.override { withGnome = false; };
       networkmanager_openconnect = pkgs.networkmanager_openconnect.override { withGnome = false; };
       networkmanager_openvpn = pkgs.networkmanager_openvpn.override { withGnome = false; };
       networkmanager_pptp = pkgs.networkmanager_pptp.override { withGnome = false; };

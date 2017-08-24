@@ -3378,6 +3378,8 @@ with pkgs;
 
   networkmanager_l2tp = callPackage ../tools/networking/network-manager/l2tp.nix { };
 
+  networkmanager_sstp = callPackage ../tools/networking/network-manager/sstp.nix { };
+
   networkmanager_vpnc = callPackage ../tools/networking/network-manager/vpnc.nix { };
 
   networkmanager_openconnect = callPackage ../tools/networking/network-manager/openconnect.nix { };
@@ -11096,7 +11098,7 @@ with pkgs;
   dex-oidc = callPackage ../servers/dex { };
 
   dgraph = callPackage ../servers/dgraph { };
-    
+
   dico = callPackage ../servers/dico { };
 
   dict = callPackage ../servers/dict {
@@ -18678,7 +18680,7 @@ with pkgs;
   hplip_3_15_9 = callPackage ../misc/drivers/hplip/3.15.9.nix { };
 
   hplipWithPlugin_3_15_9 = hplip_3_15_9.override { withPlugin = true; };
-  
+
   epkowa = callPackage ../misc/drivers/epkowa { };
 
   illum = callPackage ../tools/system/illum { };

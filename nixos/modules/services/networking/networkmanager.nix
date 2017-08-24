@@ -130,7 +130,8 @@ in {
         default = { inherit networkmanager modemmanager wpa_supplicant
                             networkmanager_openvpn networkmanager_vpnc
                             networkmanager_openconnect networkmanager_fortisslvpn
-                            networkmanager_pptp networkmanager_l2tp; };
+                            networkmanager_pptp networkmanager_l2tp
+                            networkmanager_sstp; };
         internal = true;
       };
 
@@ -251,6 +252,9 @@ in {
       }
       { source = "${networkmanager_l2tp}/etc/NetworkManager/VPN/nm-l2tp-service.name";
         target = "NetworkManager/VPN/nm-l2tp-service.name";
+      }
+      { source = "${networkmanager_sstp}/etc/NetworkManager/VPN/nm-sstp-service.name";
+        target = "NetworkManager/VPN/nm-sstp-service.name";
       }
       { source = "${networkmanager_strongswan}/etc/NetworkManager/VPN/nm-strongswan-service.name";
         target = "NetworkManager/VPN/nm-strongswan-service.name";
