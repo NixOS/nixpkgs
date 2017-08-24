@@ -21,8 +21,8 @@ let
   ''
   # Client connection config
   + optionalString cfg.client.enable  ''
-    SOCKSPort ${cfg.client.socksListenAddress} IsolateDestAddr
-    SOCKSPort ${cfg.client.socksListenAddressFaster}
+    SOCKSPort ${cfg.client.socksListenAddress}
+    SOCKSPort ${cfg.client.socksListenAddressFaster} NoIsolateClientAddr
     ${opt "SocksPolicy" cfg.client.socksPolicy}
   ''
   # Relay config
