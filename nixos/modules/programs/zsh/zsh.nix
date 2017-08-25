@@ -158,12 +158,12 @@ in
 
         HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
 
-        ${optionalString cfg.enableCompletion "autoload -U compinit && compinit"}
-
         # Tell zsh how to find installed completions
         for p in ''${(z)NIX_PROFILES}; do
           fpath+=($p/share/zsh/site-functions $p/share/zsh/$ZSH_VERSION/functions $p/share/zsh/vendor-completions)
         done
+
+        ${optionalString cfg.enableCompletion "autoload -U compinit && compinit"}
 
         ${optionalString (cfg.enableAutosuggestions)
           "source ${pkgs.zsh-autosuggestions}/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
@@ -174,6 +174,7 @@ in
         ${cfge.interactiveShellInit}
 
         ${cfg.interactiveShellInit}
+
         ${cfg.promptInit}
 
         # Read system-wide modifications.
