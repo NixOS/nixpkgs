@@ -25077,7 +25077,7 @@ EOF
     # Disable broken test
     # https://github.com/zeromq/pyzmq/issues/799
     checkPhase = ''
-      py.test $out/${python.sitePackages}/zmq/ -k "not test_large_send"
+      py.test $out/${python.sitePackages}/zmq/ -k "not test_large_send and not test_recv_json_cancelled"
     '';
   };
 
