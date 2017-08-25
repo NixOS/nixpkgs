@@ -619,6 +619,7 @@
   vrthra = "Rahul Gopinath <rahul@gopinath.org>";
   vyp = "vyp <elisp.vim@gmail.com>";
   wedens = "wedens <kirill.wedens@gmail.com>";
+  willibutz = "Willi Butz <willibutz@posteo.de>";
   willtim = "Tim Philip Williams <tim.williams.public@gmail.com>";
   winden = "Antonio Vargas Gonzalez <windenntw@gmail.com>";
   wizeman = "Ricardo M. Correia <rcorreia@wizy.org>";
