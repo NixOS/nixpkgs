@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, python2
+{ stdenv, fetchurl, fetchpatch, autoconf, automake, libtool, pkgconfig, python2
 , boost, db, openssl, geoip, libiconv, miniupnpc
 , srcOnly, fetchgit
 }:
@@ -36,6 +36,12 @@ in stdenv.mkDerivation rec {
     autoconf automake libtool pkgconfig python2
     boost db openssl geoip miniupnpc libiconv
   ];
+
+  patches = stdenv.lib.singleton (fetchpatch {
+    url = "https://github.com/miguelfreitas/twister-core/commit/"
+        + "dd4f5a176958ea6ed855dc3fcef79680c1c0c92c.patch";
+    sha256 = "06fgmqnjyl83civ3ixiq673k8zjgm8n2w4w46nsh810nprqim8s6";
+  });
 
   postPatch = ''
     sed -i -e '/-htmldir/s|(default: [^)]*)|(default: ${twisterHTML})|' \
