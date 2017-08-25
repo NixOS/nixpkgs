@@ -26213,6 +26213,8 @@ EOF
       paste six
     ];
 
+    disabled = isPy3k; # Judging from SyntaxError
+
     meta = with stdenv.lib; {
       description = "WSGIProxy gives tools to proxy arbitrary(ish) WSGI requests to other";
       homepage = "http://pythonpaste.org/wsgiproxy/";

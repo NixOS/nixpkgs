@@ -4,7 +4,7 @@
 
 with python.pkgs;
 
-buildPythonPackage rec {
+buildPythonApplication rec {
   pname = "bepasty";
   version = "0.4.0";
   name = "${pname}-${version}";
