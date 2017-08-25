@@ -1,10 +1,6 @@
-{ stdenv, callPackage, path, cacert, git, rust, rustRegistry }:
+{ fetchurl, stdenv, callPackage, path, cacert, git, rust }:
 
-let
-  rustRegistry' = rustRegistry;
-in
 { name, depsSha256
-, rustRegistry ? rustRegistry'
 , src ? null
 , srcs ? null
 , sourceRoot ? null
@@ -19,7 +15,7 @@ let
   lib = stdenv.lib;
 
   fetchDeps = import ./fetchcargo.nix {
-    inherit stdenv cacert git rust rustRegistry;
+    inherit fetchurl stdenv cacert git rust;
   };
 
   cargoDeps = fetchDeps {
@@ -28,7 +24,7 @@ let
   };
 
 in stdenv.mkDerivation (args // {
-  inherit cargoDeps rustRegistry;
+  inherit cargoDeps;
 
   patchRegistryDeps = ./patch-registry-deps;
 
@@ -43,49 +39,22 @@ in stdenv.mkDerivation (args // {
   postUnpack = ''
     eval "$cargoDepsHook"
 
-    echo "Using cargo deps from $cargoDeps"
+    mkdir .cargo
+    cat >.cargo/config <<-EOF
+      [source.crates-io]
+      registry = 'https://github.com/rust-lang/crates.io-index'
+      replace-with = 'local-registry'
 
-    cp -a "$cargoDeps" deps
-    chmod +w deps -R
-
-    # It's OK to use /dev/null as the URL because by the time we do this, cargo
-    # won't attempt to update the registry anymore, so the URL is more or less
-    # irrelevant
-
-    cat <<EOF > deps/config
-    [registry]
-    index = "file:///dev/null"
+      [source.local-registry]
+      local-registry = '$cargoDeps'
     EOF
 
-    export CARGO_HOME="$(realpath deps)"
+    export CARGO_HOME="$(pwd)/deps"
     export RUST_LOG=${logLevel}
     export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt
 
-    # Let's find out which $indexHash cargo uses for file:///dev/null
-    (cd $sourceRoot && cargo fetch &>/dev/null) || true
-    cd deps
-    indexHash="$(basename $(echo registry/index/*))"
-
-    echo "Using indexHash '$indexHash'"
-
-    rm -rf -- "registry/cache/$indexHash" \
-              "registry/index/$indexHash"
-
-    mv registry/cache/HASH "registry/cache/$indexHash"
-
-    echo "Using rust registry from $rustRegistry"
-    ln -s "$rustRegistry" "registry/index/$indexHash"
-
-    # Retrieved the Cargo.lock file which we saved during the fetch
-    cd ..
-    mv deps/Cargo.lock $sourceRoot/
-
-    (
-        cd $sourceRoot
-
-        cargo fetch
-        cargo clean
-    )
+    # Unpack crates. This is only needed for $patchRegistryDeps
+    cargo fetch --frozen --verbose --manifest-path "$sourceRoot/Cargo.toml"
   '' + (args.postUnpack or "");
 
   prePatch = ''
@@ -93,7 +62,7 @@ in stdenv.mkDerivation (args // {
     (
         set -euo pipefail
 
-        cd $NIX_BUILD_TOP/deps/registry/src/*
+        cd "$CARGO_HOME/registry/src/"*
 
         for script in $patchRegistryDeps/*; do
           # Run in a subshell so that directory changes and shell options don't
@@ -107,7 +76,7 @@ in stdenv.mkDerivation (args // {
   buildPhase = with builtins; args.buildPhase or ''
     runHook preBuild
     echo "Running cargo build --release ${concatStringsSep " " cargoBuildFlags}"
-    cargo build --release ${concatStringsSep " " cargoBuildFlags}
+    cargo build --release --frozen ${concatStringsSep " " cargoBuildFlags}
     runHook postBuild
   '';
 

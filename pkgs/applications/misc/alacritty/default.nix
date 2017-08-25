@@ -38,7 +38,7 @@ buildRustPackage rec {
     sha256 = "0h5hrb2g0fpc6xn94hmvxjj21cqbj4vgqkznvd64jl84qbyh1xjl";
   };
 
-  depsSha256 = "1pbb0swgpsbd6x3avxz6fv3q31dg801li47jibz721a4n9c0rssx";
+  depsSha256 = "broken see https://github.com/alexcrichton/cargo-local-registry/issues/9";
 
   buildInputs = [
     cmake
