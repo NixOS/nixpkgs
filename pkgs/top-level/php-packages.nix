@@ -29,6 +29,38 @@ let
     sha256 = "0vv2w5fkkw9n7qdmi5aq50416zxmvyzjym8kb6j1v8kd4xcsjjgw";
   };
 
+  couchbase = buildPecl rec {
+    name = "couchbase-${version}";
+    version = "2.3.4";
+
+    buildInputs = [ pkgs.libcouchbase pcs ];
+
+    src = pkgs.fetchFromGitHub {
+      owner = "couchbase";
+      repo = "php-couchbase";
+      rev = "v${version}";
+      sha256 = "0rdlrl7vh4kbxxj9yxp54xpnnrxydpa9fab7dy4nas474j5vb2bp";
+    };
+
+    configureFlags = [ "--with-couchbase" ];
+
+    patches = [
+      (pkgs.writeText "php-couchbase.patch" ''
+        --- a/config.m4
+        +++ b/config.m4
+        @@ -9,7 +9,7 @@ if test "$PHP_COUCHBASE" != "no"; then
+             LIBCOUCHBASE_DIR=$PHP_COUCHBASE
+           else
+             AC_MSG_CHECKING(for libcouchbase in default path)
+        -    for i in /usr/local /usr; do
+        +    for i in ${pkgs.libcouchbase}; do
+               if test -r $i/include/libcouchbase/couchbase.h; then
+                 LIBCOUCHBASE_DIR=$i
+                 AC_MSG_RESULT(found in $i)
+      '')
+    ];
+  };
+
   imagick = buildPecl {
     name = "imagick-3.4.3RC1";
     sha256 = "0siyxpszjz6s095s2g2854bhprjq49rf22v6syjiwvndg1pc9fsh";
