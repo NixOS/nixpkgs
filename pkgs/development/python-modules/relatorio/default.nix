@@ -1,4 +1,4 @@
-{ lib, fetchurl, buildPythonPackage, genshi, lxml }:
+{ lib, fetchurl, buildPythonPackage, genshi, lxml, python_magic }:
 
 buildPythonPackage rec {
   pname = "relatorio";
@@ -11,6 +11,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     genshi
     lxml
+    python_magic
   ];
   meta = {
     homepage = http://relatorio.tryton.org/;
