@@ -3,7 +3,7 @@
 
 buildPythonPackage rec {
   pname = "stripe";
-  version = "1.41.1";
+  version = "1.62.1";
   name = "${pname}-${version}";
 
   # Tests require network connectivity and there's no easy way to disable
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zvffvq933ia5w5ll6xhx2zgvppgc6zc2mxhc6f0kypw5g2fxvz5";
+    sha256 = "7cc83b8d405a48d8a792640761519c64e373ad3514ea8bb4a9a5128f98b0b679";
   };
 
   buildInputs = [ unittest2 mock ];

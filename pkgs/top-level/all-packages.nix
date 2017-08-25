@@ -1228,6 +1228,8 @@ with pkgs;
     pythonPackages = python2Packages;
   };
 
+  bepasty = callPackage ../tools/misc/bepasty { };
+
   bfg-repo-cleaner = gitAndTools.bfg-repo-cleaner;
 
   bgs = callPackage ../tools/X11/bgs { };
@@ -1266,9 +1268,7 @@ with pkgs;
 
   burp = callPackage ../tools/backup/burp { };
 
-  buku = callPackage ../applications/misc/buku {
-    pythonPackages = python3Packages;
-  };
+  buku = callPackage ../applications/misc/buku { };
 
   byzanz = callPackage ../applications/video/byzanz {};
 
@@ -9634,6 +9634,8 @@ with pkgs;
 
   nss_wrapper = callPackage ../development/libraries/nss_wrapper { };
 
+  ntbtls = callPackage ../development/libraries/ntbtls { };
+
   ntk = callPackage ../development/libraries/audio/ntk { };
 
   ntrack = callPackage ../development/libraries/ntrack { };
@@ -11093,6 +11095,8 @@ with pkgs;
 
   dex-oidc = callPackage ../servers/dex { };
 
+  dgraph = callPackage ../servers/dgraph { };
+    
   dico = callPackage ../servers/dico { };
 
   dict = callPackage ../servers/dict {
