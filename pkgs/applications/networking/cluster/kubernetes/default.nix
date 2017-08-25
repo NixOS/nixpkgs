@@ -60,6 +60,10 @@ stdenv.mkDerivation rec {
     $out/bin/kubectl completion bash > $out/share/bash-completion/completions/kubectl
   '';
 
+  preFixup = ''
+     find $out/bin -type f -exec remove-references-to -t ${go} '{}' +
+   '';
+
 
   meta = {
     description = "Production-Grade Container Scheduling and Management";
