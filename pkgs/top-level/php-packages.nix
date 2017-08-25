@@ -105,6 +105,36 @@ let
     checkTarget = "test";
   };
 
+  yaml = if isPhp7 then yaml20 else yaml13;
+
+  yaml13 = assert !isPhp7; buildPecl {
+    name = "yaml-1.3.1";
+
+    sha256 = "1fbmgsgnd6l0d4vbjaca0x9mrfgl99yix5yf0q0pfcqzfdg4bj8q";
+
+    configureFlags = [
+      "--with-yaml=${pkgs.libyaml}"
+    ];
+
+    buildInputs = [
+      pkgs.pkgconfig
+    ];
+  };
+
+  yaml20 = assert isPhp7; buildPecl {
+    name = "yaml-2.0.2";
+
+    sha256 = "0f80zy79kyy4hn6iigpgfkwppwldjfj5g7s4gddklv3vskdb1by3";
+
+    configureFlags = [
+      "--with-yaml=${pkgs.libyaml}"
+    ];
+
+    buildInputs = [
+      pkgs.pkgconfig
+    ];
+  };
+
   # Since PHP 5.5 OPcache is integrated in the core and has to be enabled via --enable-opcache during compilation.
   zendopcache = assert isPhpOlder55; buildPecl {
     name = "zendopcache-7.0.3";
