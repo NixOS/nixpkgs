@@ -66,7 +66,6 @@ let
   pythonPackages = pkgs.python27Packages.override {
     overrides = self: super: {
       django = super.django_1_8;
-      django_tagging = super.django_tagging.override { django = self.django; };
     };
   };
 
