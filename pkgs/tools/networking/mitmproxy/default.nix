@@ -19,6 +19,8 @@ python3Packages.buildPythonPackage rec {
       url = "https://patch-diff.githubusercontent.com/raw/mitmproxy/mitmproxy/pull/2252.patch";
       sha256 = "1smld21df79249qbh412w8gi2agcf4zjhxnlawy19yjl1fk2h67c";
     })
+    # Bump tornado dependency
+    ./tornado.patch
   ];
 
   propagatedBuildInputs = with python3Packages; [
