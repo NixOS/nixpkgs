@@ -17793,6 +17793,8 @@ with pkgs;
     callPackage = newScope pkgs.mate;
   });
 
+  maxx = callPackage ../desktops/maxx { };
+
   pantheon = recurseIntoAttrs rec {
     callPackage = newScope pkgs.pantheon;
     pantheon-terminal = callPackage ../desktops/pantheon/apps/pantheon-terminal { };
