@@ -412,6 +412,8 @@ with pkgs;
 
   airfield = callPackage ../tools/networking/airfield { };
 
+  airsonic = callPackage ../servers/misc/airsonic { };
+
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
 
   albert = libsForQt5.callPackage ../applications/misc/albert {};
