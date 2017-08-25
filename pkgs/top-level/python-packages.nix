@@ -25660,7 +25660,7 @@ EOF
       sha256 = "0q8bwlj75jqyzmazfsi5sa26xl58ssa8wdxm2l4j0jqyn8xpfnmc";
     };
 
-    propagatedBuildInputs = with self; [ django_1_8 (django_tagging.override { django = django_1_8; }) whisper pycairo ldap memcached pytz urllib3 cairocffi scandir pyparsing ];
+    propagatedBuildInputs = with self; [ django django_tagging whisper pycairo ldap memcached pytz urllib3 cairocffi scandir pyparsing ];
 
     postInstall = ''
       wrapProgram $out/bin/run-graphite-devel-server.py \
