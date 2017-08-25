@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchurl, isPy26, argparse, hypothesis, py
+{ stdenv, buildPythonPackage, fetchPypi, isPy26, argparse, hypothesis, py
 , setuptools_scm
 }:
 buildPythonPackage rec {
@@ -11,8 +11,8 @@ buildPythonPackage rec {
     rm testing/test_argcomplete.py
   '';
 
-  src = fetchurl {
-    url = "mirror://pypi/p/pytest/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "4c2159d2be2b4e13fa293e7a72bdf2f06848a017150d5c6d35112ce51cfd74ce";
   };
 
