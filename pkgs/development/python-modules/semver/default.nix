@@ -10,6 +10,9 @@ buildPythonPackage rec {
     sha256 = "20ffbb50248a6141bb9eba907db0e47ee4a239ddb55fe0ada8696fc241495a9d";
   };
 
+  # No tests in archive
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "Python package to work with Semantic Versioning (http://semver.org/)";
     homepage = https://github.com/k-bx/python-semver;
