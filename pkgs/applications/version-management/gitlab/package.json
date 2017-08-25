@@ -1,6 +1,4 @@
 {
-  "name": "gitlab",
-  "version": "0.0.0",
   "private": true,
   "scripts": {
     "dev-server": "nodemon --watch config/webpack.config.js -- ./node_modules/.bin/webpack-dev-server --config config/webpack.config.js",
@@ -15,6 +13,7 @@
   },
   "dependencies": {
     "babel-core": "^6.22.1",
+    "babel-eslint": "^7.2.1",
     "babel-loader": "^6.2.10",
     "babel-plugin-transform-define": "^1.2.0",
     "babel-preset-latest": "^6.24.0",
@@ -74,13 +73,13 @@
     "eslint-plugin-jasmine": "^2.1.0",
     "eslint-plugin-promise": "^3.5.0",
     "istanbul": "^0.4.5",
-    "jasmine-core": "^2.5.2",
+    "jasmine-core": "^2.6.3",
     "jasmine-jquery": "^2.1.1",
-    "karma": "^1.4.1",
+    "karma": "^1.7.0",
+    "karma-chrome-launcher": "^2.1.1",
     "karma-coverage-istanbul-reporter": "^0.2.0",
     "karma-jasmine": "^1.1.0",
     "karma-mocha-reporter": "^2.2.2",
-    "karma-phantomjs-launcher": "^1.0.2",
     "karma-sourcemap-loader": "^0.3.7",
     "karma-webpack": "^2.0.2",
     "nodemon": "^1.11.0",

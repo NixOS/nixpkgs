@@ -79,7 +79,7 @@ let
     };
   };
 
-  version = "9.4.3";
+  version = "9.4.5";
 
 in
 
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
     owner = "gitlabhq";
     repo = "gitlabhq";
     rev = "v${version}";
-    sha256 = "1r4fvj94l73p3zqlcv80iw4gbsyq26d6x5d47v9zs3pjzkgz0891";
+    sha256 = "1jdvgpzkrap9n9pclyi5ln5l5qfhj4y8ygb1w90jkgrd785bg573";
   };
 
   patches = [
@@ -137,10 +137,10 @@ stdenv.mkDerivation rec {
     # Compile assets. We skip the yarn check because it fails
     export GITLAB_DATABASE_ADAPTER=nulldb
     export SKIP_STORAGE_VALIDATION=true
+    rake gettext:compile RAILS_ENV=production
     rake rake:assets:precompile RAILS_ENV=production NODE_ENV=production
     rake webpack:compile RAILS_ENV=production NODE_ENV=production
     rake gitlab:assets:fix_urls RAILS_ENV=production NODE_ENV=production
-    rake gettext:compile RAILS_ENV=production
 
     mv config/gitlab.yml config/gitlab.yml.example
     rm config/secrets.yml
