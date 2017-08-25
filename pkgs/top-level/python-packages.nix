@@ -18145,6 +18145,9 @@ in {
     };
 
     disabled = !isPy3k;
+    
+    # No tests in archive
+    doCheck = false;
 
     meta = {
       description = "Python package for the generation of PostScript, PDF, and SVG files";
