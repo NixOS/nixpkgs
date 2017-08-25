@@ -2910,8 +2910,8 @@ in {
       py.test tests
     '';
 
-    # Python 3.5 str/bytes-like errors with reading files
-    doCheck = !isPy3k;
+    # https://github.com/pallets/click/issues/823
+    doCheck = false;
 
     meta = {
       homepage = http://click.pocoo.org/;
