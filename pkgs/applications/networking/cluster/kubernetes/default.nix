@@ -40,11 +40,6 @@ stdenv.mkDerivation rec {
     patchShebangs ./hack
   '';
 
-  preBuild = ''
-    echo "verion:"
-    go version
-  '';
-
   WHAT="--use_go_build ${concatStringsSep " " components}";
 
   postBuild = ''
