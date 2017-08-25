@@ -48,8 +48,6 @@ self: super: {
     sha256 = "026vv2k3ks73jngwifszv8l59clg88pcdr4mz0wr0gamivkfa1zy";
   });
 
-  ## GHC > 8.0.2
-
   # http://hub.darcs.net/dolio/vector-algorithms/issue/9#comment-20170112T145715
   vector-algorithms = dontCheck super.vector-algorithms;
 
@@ -62,5 +60,12 @@ self: super: {
   # Work around overly restrictive constraints on the version of 'base'.
   ChasingBottoms = doJailbreak super.ChasingBottoms;
   hashable = doJailbreak super.hashable;
+  protolude = doJailbreak super.protolude;
+  quickcheck-instances = doJailbreak super.quickcheck-instances;
+
+  # LTS-9 versions do not compile.
+  path = dontCheck super.path;
+  path-io = super.path-io_1_3_3;
+  trifecta = super.trifecta_1_7_1_1;
 
 }

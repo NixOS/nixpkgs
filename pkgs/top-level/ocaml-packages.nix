@@ -272,6 +272,8 @@ let
 
     js_of_ocaml = callPackage ../development/tools/ocaml/js_of_ocaml { lwt = lwt2; };
 
+    js_of_ocaml-compiler = callPackage ../development/tools/ocaml/js_of_ocaml-compiler {};
+
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
 
     lablgl = callPackage ../development/ocaml-modules/lablgl { };

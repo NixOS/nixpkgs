@@ -33,6 +33,7 @@
   algorith = "Dries Van Daele <dries_van_daele@telenet.be>";
   alibabzo = "Alistair Bill <alistair.bill@gmail.com>";
   all = "Nix Committers <nix-commits@lists.science.uu.nl>";
+  alunduil = "Alex Brandt <alunduil@alunduil.com>";
   ambrop72 = "Ambroz Bizjak <ambrop7@gmail.com>";
   amiddelk = "Arie Middelkoop <amiddelk@gmail.com>";
   amiloradovsky = "Andrew Miloradovsky <miloradovsky@gmail.com>";
@@ -619,6 +620,7 @@
   vrthra = "Rahul Gopinath <rahul@gopinath.org>";
   vyp = "vyp <elisp.vim@gmail.com>";
   wedens = "wedens <kirill.wedens@gmail.com>";
+  willibutz = "Willi Butz <willibutz@posteo.de>";
   willtim = "Tim Philip Williams <tim.williams.public@gmail.com>";
   winden = "Antonio Vargas Gonzalez <windenntw@gmail.com>";
   wizeman = "Ricardo M. Correia <rcorreia@wizy.org>";
