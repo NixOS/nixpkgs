@@ -78,6 +78,12 @@ let
     buildInputs = with pkgs; [ pkgconfig cyrus_sasl zlib ];
   };
 
+  pcs = buildPecl rec {
+    name = "pcs-1.3.3";
+
+    sha256 = "0d4p1gpl8gkzdiv860qzxfz250ryf0wmjgyc8qcaaqgkdyh5jy5p";
+  };
+
   # No support for PHP 7 yet (and probably never will be)
   spidermonkey = assert !isPhp7; buildPecl rec {
     name = "spidermonkey-1.0.0";
