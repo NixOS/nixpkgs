@@ -4,11 +4,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "highlight-${version}";
-  version = "3.35";
+  version = "3.39";
 
   src = fetchurl {
     url = "http://www.andre-simon.de/zip/${name}.tar.bz2";
-    sha256 = "8a14b49f5e0c07daa9f40b4ce674baa00bb20061079473a5d386656f6d236d05";
+    sha256 = "0z8gs69sqlyis4kvl8wwdgzywi199k73kkvn1mf9pf60npvcxwj4";
   };
 
   nativeBuildInputs = [ pkgconfig ] ++ optional stdenv.isDarwin  gcc ;
