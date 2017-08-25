@@ -17,13 +17,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "kubernetes-${version}";
-  version = "1.6.9";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "08qv2ljycxkhxam8lz8wv9gq5sxcwvg2pnxiqdy4f49ki1cdj0iq";
+    sha256 = "0jsn2l5y006dpfwsiz7npdqr10lrpj5zgr1bxlj86c59l58mvy9a";
   };
 
   buildInputs = [ removeReferencesTo makeWrapper which go rsync go-bindata ];
@@ -38,6 +38,11 @@ stdenv.mkDerivation rec {
     echo "true" > "hack/update-munge-docs.sh"
 
     patchShebangs ./hack
+  '';
+
+  preBuild = ''
+    echo "verion:"
+    go version
   '';
 
   WHAT="--use_go_build ${concatStringsSep " " components}";
