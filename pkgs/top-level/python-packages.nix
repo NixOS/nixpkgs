@@ -20319,6 +20319,10 @@ in {
       rm "$out/bin/"*.bat
     '';
 
+    postPatch = ''
+      substituteInPlace setup.py --replace "argparse" ""
+    '';
+
     meta = {
       description = "Test data generator for Robot Framework";
       homepage = https://github.com/mkorpela/RoboMachine;
