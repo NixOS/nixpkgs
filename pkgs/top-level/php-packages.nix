@@ -23,6 +23,12 @@ let
     sha256 = "0r5pfbjbmdj46h20jm3iqmy969qd27ajyf0phjhgykv6j0cqjlgd";
   };
 
+  ast = assert isPhp7; buildPecl {
+    name = "ast-0.1.5";
+
+    sha256 = "0vv2w5fkkw9n7qdmi5aq50416zxmvyzjym8kb6j1v8kd4xcsjjgw";
+  };
+
   imagick = buildPecl {
     name = "imagick-3.4.3RC1";
     sha256 = "0siyxpszjz6s095s2g2854bhprjq49rf22v6syjiwvndg1pc9fsh";
