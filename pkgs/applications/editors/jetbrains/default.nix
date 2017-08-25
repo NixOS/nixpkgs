@@ -242,12 +242,12 @@ in
 
   gogland = buildGogland rec {
     name = "gogland-${version}";
-    version = "171.4694.61"; /* updated by script */
+    version = "172.3757.46"; /* updated by script */
     description = "Up and Coming Go IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "8e9462fc7c5cc7dc110ea2257b920a55d7d52ea874a53567e5d19381a1fcb269"; /* updated by script */
+      sha256 = "0d6b710edc434ed5d5ea5c4734b9026e2caeba7e74a027c1eb6fd837c5d4f4fd"; /* updated by script */
     };
     wmClass = "jetbrains-gogland";
     update-channel = "gogland_1.0_EAP";
