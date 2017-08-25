@@ -2662,6 +2662,8 @@ dont-distribute-packages:
   ccelerate-cuda:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   cublas:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   cufft:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
+  cusolver:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
+  cusparse:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   gloss-raster-accelerate:                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   libnvvm:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   nvvm:                                         [ i686-linux, x86_64-linux, x86_64-darwin ]
