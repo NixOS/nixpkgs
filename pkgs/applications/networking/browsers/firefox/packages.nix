@@ -1,4 +1,4 @@
-{ lib, callPackage, stdenv, fetchurl, fetchFromGitHub, fetchpatch }:
+{ lib, callPackage, stdenv, overrideCC, gcc5, fetchurl, fetchFromGitHub, fetchpatch }:
 
 let common = opts: callPackage (import ./common.nix opts); in
 
@@ -102,6 +102,7 @@ rec {
       platforms = lib.platforms.linux;
     };
   } {
+    stdenv = overrideCC stdenv gcc5;
     ffmpegSupport = false;
   };
 
