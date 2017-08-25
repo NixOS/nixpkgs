@@ -158,6 +158,11 @@ in
 
         HELPDIR="${pkgs.zsh}/share/zsh/$ZSH_VERSION/help"
 
+        # Tell zsh how to find installed completions
+        for p in ''${(z)NIX_PROFILES}; do
+          fpath+=($p/share/zsh/site-functions $p/share/zsh/$ZSH_VERSION/functions $p/share/zsh/vendor-completions)
+        done
+
         ${optionalString cfg.enableCompletion "autoload -U compinit && compinit"}
 
         ${optionalString (cfg.enableAutosuggestions)
@@ -171,11 +176,6 @@ in
         ${cfg.interactiveShellInit}
 
         ${cfg.promptInit}
-
-        # Tell zsh how to find installed completions
-        for p in ''${(z)NIX_PROFILES}; do
-          fpath+=($p/share/zsh/site-functions $p/share/zsh/$ZSH_VERSION/functions $p/share/zsh/vendor-completions)
-        done
 
         # Read system-wide modifications.
         if test -f /etc/zshrc.local; then
