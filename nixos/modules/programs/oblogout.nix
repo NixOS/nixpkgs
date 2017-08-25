@@ -45,7 +45,7 @@ in
         description = ''
           Icon theme for the buttons, must be in the themes folder of
           the package, or in
-          <filename>~/.themes/<name>/oblogout/</filename>.
+          <filename>~/.themes/&lt;name&gt;/oblogout/</filename>.
         '';
       };
 
