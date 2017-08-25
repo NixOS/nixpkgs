@@ -27380,33 +27380,6 @@ EOF
     };
   };
 
-  bepasty-server = buildPythonPackage rec {
-    name = "bepasty-server-${version}";
-    version = "0.4.0";
-    propagatedBuildInputs = with self;[
-      flask
-      pygments
-      xstatic
-      xstatic-bootbox
-      xstatic-bootstrap
-      xstatic-jquery
-      xstatic-jquery-file-upload
-      xstatic-jquery-ui
-      xstatic-pygments
-    ];
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/bepasty/bepasty-${version}.tar.gz";
-      sha256 = "0bs79pgrjlnkmjfyj2hllbx3rw757va5w2g2aghi9cydmsl7gyi4";
-    };
-
-    meta = {
-      homepage = http://github.com/bepasty/bepasty-server;
-      description = "Binary pastebin server";
-      license = licenses.mit;
-      maintainers = [ maintainers.makefu ];
-    };
-  };
-
   xgboost = buildPythonPackage rec {
     name = "xgboost-${version}";
 

@@ -1228,6 +1228,8 @@ with pkgs;
     pythonPackages = python2Packages;
   };
 
+  bepasty = callPackage ../tools/misc/bepasty { };
+
   bfg-repo-cleaner = gitAndTools.bfg-repo-cleaner;
 
   bgs = callPackage ../tools/X11/bgs { };
