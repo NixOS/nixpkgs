@@ -10,6 +10,8 @@
   lib,
   pkgs,
   pigz,
+  nixUnstable,
+  perl,
   runCommand,
   rsync,
   shadow,
@@ -27,7 +29,7 @@
 rec {
 
   examples = import ./examples.nix {
-    inherit pkgs buildImage pullImage shadowSetup;
+    inherit pkgs buildImage pullImage shadowSetup buildImageWithNixDb;
   };
 
   pullImage =
@@ -237,6 +239,17 @@ rec {
       set -e
       export PATH=${coreutils}/bin:/bin
       ${text}
+    '';
+
+  nixRegistration = contents: runCommand "nix-registration" {
+    buildInputs = [ nixUnstable perl ];
+    # For obtaining the closure of `contents'.
+    exportReferencesGraph =
+      let contentsList = if builtins.isList contents then contents else [ contents ];
+      in map (x: [("closure-" + baseNameOf x) x]) contentsList;
+    }
+    ''
+      printRegistration=1 perl ${pkgs.pathsFromGraph} closure-* > $out
     '';
 
   # Create a "layer" (set of files).
@@ -544,4 +557,21 @@ rec {
 
     in
     result;
+
+  # Build an image and populate its nix database with the provided
+  # contents. The main purpose is to be able to use nix commands in
+  # the container.
+  # Be careful since this doesn't work well with multilayer.
+  buildImageWithNixDb = args@{ contents ? null, extraCommands ? "", ... }:
+    buildImage (args // {
+      extraCommands = ''
+        echo "Generating the nix database..."
+        echo "Warning: only the database of the deepest Nix layer is loaded."
+        echo "         If you want to use nix commands in the container, it would"
+        echo "         be better to only have one layer that contains a nix store."
+        # This requires Nix 1.12 or higher
+        export NIX_REMOTE=local?root=$PWD
+        ${nixUnstable}/bin/nix-store --load-db < ${nixRegistration contents}
+      '' + extraCommands;
+    });
 }
