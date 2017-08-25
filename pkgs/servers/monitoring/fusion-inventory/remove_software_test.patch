@@ -1,5 +1,34 @@
+diff --git a/t/agent/snmp/live.t b/t/agent/snmp/live.t
+index 8ee7ff02c..bd5551ab3 100755
+--- a/t/agent/snmp/live.t
++++ b/t/agent/snmp/live.t
+@@ -11,7 +11,7 @@ use Test::More;
+ use FusionInventory::Agent::XML::Response;
+ use FusionInventory::Agent::SNMP::Live;
+ 
+-plan tests => 12;
++plan tests => 11;
+ 
+ my $snmp;
+ throws_ok {
+@@ -52,15 +52,6 @@ throws_ok {
+ } qr/^Unable to resolve the UDP\/IPv4 address "none"/,
+ 'instanciation: unresolvable host';
+ 
+-throws_ok {
+-    $snmp = FusionInventory::Agent::SNMP::Live->new(
+-        version   => 1,
+-        community => 'public',
+-        hostname  => '1.1.1.1'
+-    );
+-} qr/no response from host 1.1.1.1/,
+-'instanciation: unresponding host';
+-
+ SKIP: {
+ skip 'live SNMP test disabled', 6 unless $ENV{TEST_LIVE_SNMP};
+ 
 diff --git a/t/apps/agent.t b/t/apps/agent.t
-index c0f6fc52f..c83837d70 100755
+index f417b4106..12207f192 100755
 --- a/t/apps/agent.t
 +++ b/t/apps/agent.t
 @@ -12,7 +12,7 @@ use XML::TreePP;
@@ -11,7 +40,7 @@ index c0f6fc52f..c83837d70 100755
  
  my ($content, $out, $err, $rc);
  
-@@ -72,11 +72,6 @@ subtest "first inventory execution and content" => sub {
+@@ -73,11 +73,6 @@ subtest "first inventory execution and content" => sub {
  };
  
  ok(

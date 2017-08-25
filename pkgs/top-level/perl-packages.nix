@@ -6862,6 +6862,8 @@ let self = _self // overrides; _self = with self; {
       description = "A pure Perl HTTP proxy";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    # tests fail because they require network access
+    doCheck = false;
   };
 
   HTTPRequestAsCGI = buildPerlPackage rec {
