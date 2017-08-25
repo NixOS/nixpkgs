@@ -138,10 +138,10 @@ stdenv.mkDerivation rec {
     # Compile assets. We skip the yarn check because it fails
     export GITLAB_DATABASE_ADAPTER=nulldb
     export SKIP_STORAGE_VALIDATION=true
+    rake gettext:compile RAILS_ENV=production
     rake rake:assets:precompile RAILS_ENV=production NODE_ENV=production
     rake webpack:compile RAILS_ENV=production NODE_ENV=production
     rake gitlab:assets:fix_urls RAILS_ENV=production NODE_ENV=production
-    rake gettext:compile RAILS_ENV=production
 
     mv config/gitlab.yml config/gitlab.yml.example
     rm config/secrets.yml
