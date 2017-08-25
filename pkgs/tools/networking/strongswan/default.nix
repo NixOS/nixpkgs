@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gmp, pkgconfig, python, autoreconfHook
+{ stdenv, fetchurl, fetchpatch, gmp, pkgconfig, python, autoreconfHook
 , curl, trousers, sqlite, iptables, libxml2, openresolv
 , ldns, unbound, pcsclite, openssl, systemd
 , enableTNC ? false }:
@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals enableTNC [ curl trousers sqlite libxml2 ];
 
   patches = [
+    (fetchpatch {
+      url = "https://download.strongswan.org/security/CVE-2017-11185/strongswan-4.4.0-5.5.3_gmp_mpz_export.patch";
+      sha256 = "1vqf077dq71wai7ma3bpzv55i76b48gp2cf6507chgy4wj04gi73";
+    })
     ./ext_auth-path.patch
     ./firewall_defaults.patch
     ./updown-path.patch
