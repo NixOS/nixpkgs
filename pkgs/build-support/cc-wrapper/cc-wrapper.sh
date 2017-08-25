@@ -138,7 +138,7 @@ if [ "$dontLink" != 1 ]; then
 
     # Add the flags that should only be passed to the compiler when
     # linking.
-    extraAfter+=($NIX_@infixSalt@_CFLAGS_LINK "${hardeningLDFlags[@]}")
+    extraAfter+=($NIX_@infixSalt@_CFLAGS_LINK)
 
     # Add the flags that should be passed to the linker (and prevent
     # `ld-wrapper' from adding NIX_@infixSalt@_LDFLAGS again).
