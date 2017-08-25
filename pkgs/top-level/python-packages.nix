@@ -8192,6 +8192,8 @@ in {
     # see https://github.com/getsentry/raven-python/blob/master/setup.py
     doCheck = false;
 
+    propagatedBuildInputs = optionals (!isPy3k) [ self.contextlib2 ];
+
     meta = {
       maintainers = with maintainers; [ primeos ];
     };
