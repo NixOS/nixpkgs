@@ -6785,22 +6785,7 @@ in {
     };
   };
 
-  jsonpatch = buildPythonPackage rec {
-    name = "jsonpatch-1.11";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jsonpatch/${name}.tar.gz";
-      sha256 = "22d0bc0f5522a4a03dd9fb4c4cdf7c1f03256546c88be4c61e5ceabd22280e47";
-    };
-
-    propagatedBuildInputs = with self; [ jsonpointer ];
-
-    meta = {
-      description = "Library to apply JSON Patches according to RFC 6902";
-      homepage = "https://github.com/stefankoegl/python-json-patch";
-      license = stdenv.lib.licenses.bsd2; # "Modified BSD license, says pypi"
-    };
-  };
+  jsonpatch = callPackage ../development/python-modules/jsonpatch { };
 
   jsonpointer = buildPythonPackage rec {
     name = "jsonpointer-1.9";
