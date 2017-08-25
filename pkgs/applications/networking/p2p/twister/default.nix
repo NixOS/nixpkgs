@@ -15,12 +15,12 @@ let
 
 in stdenv.mkDerivation rec {
   name = "twister-${version}";
-  version = "0.9.30";
+  version = "0.9.34";
 
   src = fetchurl {
     url = "https://github.com/miguelfreitas/twister-core/"
         + "archive/v${version}.tar.gz";
-    sha256 = "1i39iqq6z25rh869vi5k76g84rmyh30p05xid7z9sqjrqdfpyyzk";
+    sha256 = "1bi8libivd9y2bn9fc7vbc5q0jnal0pykpzgri6anqaww22y58jq";
   };
 
   configureFlags = [
