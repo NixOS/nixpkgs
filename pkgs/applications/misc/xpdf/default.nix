@@ -10,11 +10,11 @@ assert useT1Lib -> t1lib != null;
 assert !useT1Lib; # t1lib has multiple unpatched security vulnerabilities
 
 stdenv.mkDerivation {
-  name = "xpdf-3.04";
+  name = "xpdf-4.00";
 
-  src = fetchurl {
-    url = ftp://ftp.foolabs.com/pub/xpdf/xpdf-3.04.tar.gz;
-    sha256 = "1rbp54mr3z2x3a3a1qmz8byzygzi223vckfam9ib5g1sfds0qf8i";
+   src = fetchurl {
+    url = http://www.xpdfreader.com/dl/xpdf-4.00.tar.gz;
+    sha256 = "1mhn89738vjva14xr5gblc2zrdgzmpqbbjdflqdmpqv647294ggz";
   };
 
   buildInputs = [ zlib libpng ] ++
