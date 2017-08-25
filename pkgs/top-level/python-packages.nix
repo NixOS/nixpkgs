@@ -4129,7 +4129,7 @@ in {
     };
   };
 
-  pytest = self.pytest_30;
+  pytest = self.pytest_32;
 
   pytest_27 = callPackage ../development/python-modules/pytest/2_7.nix {};
 
@@ -4137,7 +4137,7 @@ in {
 
   pytest_29 = callPackage ../development/python-modules/pytest/2_9.nix {};
 
-  pytest_30 = callPackage ../development/python-modules/pytest{
+  pytest_32 = callPackage ../development/python-modules/pytest{
     hypothesis = self.hypothesis.override {
       # hypothesis requires pytest that causes dependency cycle
       doCheck = false;
