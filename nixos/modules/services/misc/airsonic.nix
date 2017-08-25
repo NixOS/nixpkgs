@@ -81,16 +81,6 @@ in {
       description = "Airsonic Media Server";
       after = [ "local-fs.target" "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      script = ''
-        ${pkgs.jre}/bin/java -Xmx${toString cfg.maxMemory}m \
-          -Dairsonic.home=${cfg.home} \
-          -Dserver.address=${cfg.listenAddress} \
-          -Dserver.port=${toString cfg.port} \
-          -Dairsonic.contextPath=${cfg.contextPath} \
-          -Djava.awt.headless=true \
-          -verbose:gc \
-          -jar ${pkgs.airsonic}/webapps/airsonic.war
-      '';
 
       preStart = ''
         # Install transcoders.
@@ -101,6 +91,16 @@ in {
         done
       '';
       serviceConfig = {
+        ExecStart = ''
+          ${pkgs.jre}/bin/java -Xmx${toString cfg.maxMemory}m \
+          -Dairsonic.home=${cfg.home} \
+          -Dserver.address=${cfg.listenAddress} \
+          -Dserver.port=${toString cfg.port} \
+          -Dairsonic.contextPath=${cfg.contextPath} \
+          -Djava.awt.headless=true \
+          -verbose:gc \
+          -jar ${pkgs.airsonic}/webapps/airsonic.war
+        '';
         Restart = "always";
         User = "airsonic";
         UMask = "0022";
