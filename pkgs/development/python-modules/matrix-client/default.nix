@@ -1,7 +1,8 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, pythonPackages
+, requests
+, tox, pytest, flake8, responses
 }:
 
 buildPythonPackage rec {
@@ -14,9 +15,9 @@ buildPythonPackage rec {
     sha256 = "15kx5px26hwr0sxpyjk4w61fjnabg1b57hwys1nyarc0jx4qjhiq";
   };
 
-  checkInputs = with pythonPackages; [ tox pytest flake8 responses ];
+  checkInputs = [ tox pytest flake8 responses ];
 
-  propagatedBuildInputs = with pythonPackages; [ requests ];
+  propagatedBuildInputs = [ requests ];
 
   checkPhase = ''
     pytest

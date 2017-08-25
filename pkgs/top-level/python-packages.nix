@@ -12539,7 +12539,7 @@ in {
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
   };
 
-  matrix-client = callPackage ../development/python-modules/matrix-client/default.nix { pythonPackages = self; };
+  matrix-client = callPackage ../development/python-modules/matrix-client/default.nix { };
 
   mccabe = callPackage ../development/python-modules/mccabe { };
 
