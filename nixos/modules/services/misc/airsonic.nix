@@ -84,10 +84,10 @@ in {
 
       preStart = ''
         # Install transcoders.
-        ${pkgs.coreutils}/bin/rm -rf ${cfg.home}/transcode
-        ${pkgs.coreutils}/bin/mkdir -p ${cfg.home}/transcode
+        rm -rf ${cfg.home}/transcode
+        mkdir -p ${cfg.home}/transcode
         for exe in ${toString cfg.transcoders}; do
-            ${pkgs.coreutils}/bin/ln -sf "$exe" ${cfg.home}/transcode
+          ln -sf "$exe" ${cfg.home}/transcode
         done
       '';
       serviceConfig = {
