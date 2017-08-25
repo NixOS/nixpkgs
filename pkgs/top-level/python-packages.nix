@@ -4191,6 +4191,9 @@ in {
 
     checkPhase = "make test";
 
+    # Requires pytest < 3.1
+    doCheck = false;
+
     meta = {
       license = licenses.mit;
       homepage = https://pypi.python.org/pypi/pytest-catchlog/;
