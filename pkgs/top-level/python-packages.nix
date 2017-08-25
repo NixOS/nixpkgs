@@ -1672,6 +1672,10 @@ in {
       sha256 = "1ck0aijzrg9xf6hjdxnynkapnyxw0y385jb0q7wyq4jf77ayfszc";
     };
 
+    postPatch = ''
+      substituteInPlace setup.py --replace "argparse" ""
+    '';
+
     meta = {
       description = "Utility tools for control groups of Linux";
       maintainers = with maintainers; [ layus ];
