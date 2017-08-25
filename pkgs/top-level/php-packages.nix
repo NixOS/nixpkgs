@@ -43,6 +43,8 @@ let
     sha256 = "04c35rj0cvq5ygn2jgmyvqcb0k8d03v4k642b6i37zgv7x15pbic";
 
     configureFlags = "--with-zlib-dir=${pkgs.zlib.dev}";
+
+    makeFlags = [ "CFLAGS=-fgnu89-inline" ];
   };
 
   memcached = if isPhp7 then memcachedPhp7 else memcached22;
