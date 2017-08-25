@@ -22,15 +22,10 @@ in {
 
     services.fusionInventory = {
 
-      enable = mkOption {
-        default = false;
-        description = ''
-          Whether to run the Fusion Inventory agent on this machine.
-        '';
-      };
+      enable = mkEnableOption "Fusion Inventory Agent";
 
       servers = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         description = ''
           The urls of the OCS/GLPI servers to connect to.
         '';
