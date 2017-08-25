@@ -43,6 +43,7 @@ if [[ -z "${hardeningDisableMap[all]:-}" ]]; then
           hardeningCFlags+=('-fPIE')
           if [[ ! ("$*" =~ " -shared " || "$*" =~ " -static ") ]]; then
             if [[ -n "${NIX_DEBUG:-}" ]]; then echo HARDENING: enabling LDFlags -pie >&2; fi
+            hardeningCFlags+=('-pie')
             hardeningLDFlags+=('-pie')
           fi
           ;;
