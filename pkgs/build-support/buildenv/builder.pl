@@ -141,11 +141,12 @@ sub addPkg {
     my $propagatedFN = "$pkgDir/nix-support/propagated-user-env-packages";
     if (-e $propagatedFN) {
         open PROP, "<$propagatedFN" or die;
-        while (my $p = <PROP>) {
-            chomp $p;
+        my $propagated = <PROP>;
+        close PROP;
+        my @propagated = split ' ', $propagated;
+        foreach my $p (@propagated) {
             $postponed{$p} = 1 unless defined $done{$p};
         }
-        close PROP;
     }
 }
 

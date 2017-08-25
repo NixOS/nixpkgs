@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "0vb71w1yq0xwwsclrn2jj9bk8w4n14rfv5c0aw46c11mp8xz7f71";
   };
 
+  patches = [ ./sqlite.patch ]; # from: https://bugs.gentoo.org/show_bug.cgi?id=622776
+
   buildInputs = [
     chromaprint fftw flac libid3tag libmad libopus libshout libsndfile
     libusb1 libvorbis pkgconfig portaudio portmidi protobuf qt4

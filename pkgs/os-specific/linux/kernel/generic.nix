@@ -103,7 +103,7 @@ let
   };
 
   kernel = buildLinux {
-    inherit version modDirVersion src kernelPatches;
+    inherit version modDirVersion src kernelPatches stdenv;
 
     configfile = configfile.nativeDrv or configfile;
 

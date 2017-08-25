@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''lquery'';
-  version = ''20170516-git'';
+  version = ''20170630-git'';
 
   description = ''A library to allow jQuery-like HTML/DOM manipulation.'';
 
-  deps = [ ];
+  deps = [ args."plump" args."form-fiddle" args."clss" args."array-utils" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/lquery/2017-05-16/lquery-20170516-git.tgz'';
-    sha256 = ''11i6kwz4d8918a32z826v85qs2alpsfkvlcha4j7mnbfnzgy7gy7'';
+    url = ''http://beta.quicklisp.org/archive/lquery/2017-06-30/lquery-20170630-git.tgz'';
+    sha256 = ''19lpzjidg31lw61b78vdsqzrsdw2js4a9s7zzr5049jpzbspszjm'';
   };
     
   packageName = "lquery";
@@ -30,6 +30,7 @@ rec {
     '';
   };
 }
-/* (SYSTEM lquery DESCRIPTION A library to allow jQuery-like HTML/DOM manipulation. SHA256 11i6kwz4d8918a32z826v85qs2alpsfkvlcha4j7mnbfnzgy7gy7 URL
-    http://beta.quicklisp.org/archive/lquery/2017-05-16/lquery-20170516-git.tgz MD5 2190045b167685bfffdd01f5af9aa9a1 NAME lquery TESTNAME NIL FILENAME lquery
-    DEPS NIL DEPENDENCIES NIL VERSION 20170516-git SIBLINGS (lquery-test)) */
+/* (SYSTEM lquery DESCRIPTION A library to allow jQuery-like HTML/DOM manipulation. SHA256 19lpzjidg31lw61b78vdsqzrsdw2js4a9s7zzr5049jpzbspszjm URL
+    http://beta.quicklisp.org/archive/lquery/2017-06-30/lquery-20170630-git.tgz MD5 aeb03cb5174d682092683da488531a9c NAME lquery TESTNAME NIL FILENAME lquery
+    DEPS ((NAME plump FILENAME plump) (NAME form-fiddle FILENAME form-fiddle) (NAME clss FILENAME clss) (NAME array-utils FILENAME array-utils)) DEPENDENCIES
+    (plump form-fiddle clss array-utils) VERSION 20170630-git SIBLINGS (lquery-test)) */

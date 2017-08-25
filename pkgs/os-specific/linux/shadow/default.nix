@@ -20,13 +20,13 @@ in
 
 stdenv.mkDerivation rec {
   name = "shadow-${version}";
-  version = "4.4";
+  version = "4.5";
 
   src = fetchFromGitHub {
     owner = "shadow-maint";
     repo = "shadow";
     rev = "${version}";
-    sha256 = "005qk3n86chc8mlg86qhrns2kpl52n5f3las3m5s6266xij3qwka";
+    sha256 = "1aj7s2arnsfqf34ak40is2zmwm666l28pay6rv1ffx46j0wj4hws";
   };
 
   buildInputs = stdenv.lib.optional (pam != null && stdenv.isLinux) pam;
@@ -37,10 +37,6 @@ stdenv.mkDerivation rec {
   patches =
     [ ./keep-path.patch
       dots_in_usernames
-      (fetchpatch {
-        url = https://github.com/shadow-maint/shadow/commit/507f96cdeb54079fb636c7ce21e371f7a16a520e.patch;
-        sha256 = "10k70fx3z051f83p1k7ljjaawbykhn7cy6fg1zy04jp3xkvdwxc7";
-      })
     ];
 
   # The nix daemon often forbids even creating set[ug]id files.

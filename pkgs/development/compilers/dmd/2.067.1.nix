@@ -1,47 +1,122 @@
-{ stdenv, fetchurl, unzip, makeWrapper }:
+{ stdenv, fetchFromGitHub
+, makeWrapper, unzip, which
+, curl, tzdata
+}:
 
-stdenv.mkDerivation {
-  name = "dmd-2.067.1";
+stdenv.mkDerivation rec {
+  name = "dmd-${version}";
+  # This is the last version of dmd which is buildable without a D compiler.
+  # So we use this as a bootstrap version.
+  # The DMD frontend has been ported to D in 2.069.0 but idgen was already
+  # ported in 2.068.0.
+  version = "2.067.1";
 
-  src = fetchurl {
-    url = http://downloads.dlang.org/releases/2015/dmd.2.067.1.zip;
-    sha256 = "0ny99vfllvvgcl79pwisxcdnb3732i827k9zg8c0j4s0n79k5z94";
-  };
+  srcs = [
+  (fetchFromGitHub {
+    owner = "dlang";
+    repo = "dmd";
+    rev = "v${version}";
+    sha256 = "0fm29lg8axfmzdaj0y6vg70lhwb5d9rv4aavnvdd15xjschinlcz";
+  })
+  (fetchFromGitHub {
+    owner = "dlang";
+    repo = "druntime";
+    rev = "v${version}";
+    sha256 = "1n2qfw9kmnql0fk2nxikispqs7vh85nhvyyr00fk227n9lgnqf02";
+  })
+  (fetchFromGitHub {
+    owner = "dlang";
+    repo = "phobos";
+    rev = "v${version}";
+    sha256 = "0fywgds9xvjcgnqxmpwr67p3wi2m535619pvj159cgwv5y0nr3p1";
+  })
+  ];
 
-  nativeBuildInputs = [ unzip makeWrapper ];
+  sourceRoot = ".";
 
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
-      # Allow to use "clang++", commented in Makefile
-      substituteInPlace src/dmd/posix.mak \
-          --replace g++ clang++ \
-          --replace MACOSX_DEPLOYMENT_TARGET MACOSX_DEPLOYMENT_TARGET_
+  postUnpack = ''
+      mv dmd-v${version}-src dmd
+      mv druntime-v${version}-src druntime
+      mv phobos-v${version}-src phobos
+  '';
 
-      # Was not able to compile on darwin due to "__inline_isnanl"
-      # being undefined.
-      substituteInPlace src/dmd/root/port.c --replace __inline_isnanl __inline_isnan
+  # Compile with PIC to prevent colliding modules with binutils 2.28.
+  # https://issues.dlang.org/show_bug.cgi?id=17375
+  usePIC = "-fPIC";
+
+  postPatch = ''
+      # Ugly hack so the dlopen call has a chance to succeed.
+      # https://issues.dlang.org/show_bug.cgi?id=15391
+      substituteInPlace phobos/std/net/curl.d \
+          --replace libcurl.so ${curl.out}/lib/libcurl.so
+
+      # Ugly hack to fix the hardcoded path to zoneinfo in the source file.
+      # https://issues.dlang.org/show_bug.cgi?id=15391
+      substituteInPlace phobos/std/datetime.d \
+          --replace /usr/share/zoneinfo/ ${tzdata}/share/zoneinfo/
+
+      substituteInPlace druntime/test/shared/Makefile \
+          --replace "DFLAGS:=" "DFLAGS:=${usePIC} "
+
+      # phobos uses curl, so we need to patch the path to the lib.
+      substituteInPlace phobos/posix.mak \
+          --replace "-soname=libcurl.so.4" "-soname=${curl.out}/lib/libcurl.so.4"
+
+      # Use proper C++ compiler
+      substituteInPlace dmd/src/posix.mak \
+          --replace g++ $CXX
   ''
-    + stdenv.lib.optionalString stdenv.isLinux ''
-        substituteInPlace src/dmd/root/port.c \
+
+    + stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
+        substituteInPlace dmd/src/root/port.c \
           --replace "#include <bits/mathdef.h>" "#include <complex.h>"
-      '';
+    ''
+
+    + stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
+        substituteInPlace dmd/src/posix.mak \
+            --replace MACOSX_DEPLOYMENT_TARGET MACOSX_DEPLOYMENT_TARGET_
+
+        # Was not able to compile on darwin due to "__inline_isnanl"
+        # being undefined.
+        substituteInPlace dmd/src/root/port.c --replace __inline_isnanl __inline_isnan
+    '';
+
+  nativeBuildInputs = [ makeWrapper unzip which ];
+  buildInputs = [ curl tzdata ];
 
   # Buid and install are based on http://wiki.dlang.org/Building_DMD
   buildPhase = ''
-      cd src/dmd
+      cd dmd
       make -f posix.mak INSTALL_DIR=$out
-      export DMD=$PWD/dmd
+      export DMD=$PWD/src/dmd
       cd ../druntime
-      make -f posix.mak INSTALL_DIR=$out DMD=$DMD
+      make -f posix.mak PIC=${usePIC} INSTALL_DIR=$out DMD=$DMD
       cd ../phobos
-      make -f posix.mak INSTALL_DIR=$out DMD=$DMD
-      cd ../..
+      make -f posix.mak PIC=${usePIC} INSTALL_DIR=$out DMD=$DMD
+      cd ..
+  '';
+
+  doCheck = true;
+
+  checkPhase = ''
+      cd dmd
+      export DMD=$PWD/src/dmd
+      cd ../druntime
+      make -f posix.mak unittest PIC=${usePIC} DMD=$DMD BUILD=release
+      cd ../phobos
+      make -f posix.mak unittest PIC=${usePIC} DMD=$DMD BUILD=release
+      cd ..
   '';
 
   installPhase = ''
-      cd src/dmd
+      cd dmd
       mkdir $out
       mkdir $out/bin
-      cp dmd $out/bin
+      cp $PWD/src/dmd $out/bin
+      mkdir -p $out/share/man/man1
+      mkdir -p $out/share/man/man5
+      cp -r docs/man/man1/* $out/share/man/man1/
+      cp -r docs/man/man5/* $out/share/man/man5/
 
       cd ../druntime
       mkdir $out/include
@@ -50,9 +125,11 @@ stdenv.mkDerivation {
 
       cd ../phobos
       mkdir $out/lib
-      ${let bits = if stdenv.is64bit then "64" else "32";
-            osname = if stdenv.isDarwin then "osx" else "linux"; in
-      "cp generated/${osname}/release/${bits}/libphobos2.a $out/lib"
+      ${
+          let bits = builtins.toString stdenv.hostPlatform.parsed.cpu.bits;
+          osname = if stdenv.hostPlatform.isDarwin then "osx" else stdenv.hostPlatform.parsed.kernel.name;
+          extension = if stdenv.hostPlatform.isDarwin then "a" else "{a,so}"; in
+          "cp generated/${osname}/release/${bits}/libphobos2.${extension} $out/lib"
       }
 
       cp -r std $out/include/d2
@@ -65,14 +142,17 @@ stdenv.mkDerivation {
       cd $out/bin
       tee dmd.conf << EOF
       [Environment]
-      DFLAGS=-I$out/include/d2 -L-L$out/lib ${stdenv.lib.optionalString (!stdenv.cc.isClang) "-L--no-warn-search-mismatch -L--export-dynamic"}
+      DFLAGS=-I$out/include/d2 -L-L$out/lib ${stdenv.lib.optionalString (!stdenv.cc.isClang) "-L--export-dynamic"} -fPIC
       EOF
   '';
 
   meta = with stdenv.lib; {
-    description = "D language compiler";
+    description = "Official reference compiler for the D language";
     homepage = http://dlang.org/;
-    license = licenses.free; # parts under different licenses
+    # Everything is now Boost licensed, even the backend.
+    # https://github.com/dlang/dmd/pull/6680
+    license = licenses.boost;
     platforms = platforms.unix;
   };
 }
+

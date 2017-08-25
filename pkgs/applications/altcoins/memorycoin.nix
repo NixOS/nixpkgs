@@ -22,7 +22,8 @@ stdenv.mkDerivation rec{
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
                      ++ optionals withGui [ "--with-gui=qt4" ];
 
-  preBuild = optional (!withGui) "cd src; cp makefile.unix Makefile";
+  preBuild = "unset AR;"
+             + (toString (optional (!withGui) "cd src; cp makefile.unix Makefile"));
 
   installPhase =
     if withGui

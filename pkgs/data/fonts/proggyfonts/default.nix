@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   name = "proggyfonts-0.1";
 
   src = fetchurl {
-    url = "http://kaictl.net/software/${name}.tar.gz";
+    url = "http://web.archive.org/web/20150801042353/http://kaictl.net/software/proggyfonts-0.1.tar.gz";
     sha256 = "1plcm1sjpa3hdqhhin48fq6zmz3ndm4md72916hd8ff0w6596q0n";
   };
 
@@ -30,6 +30,10 @@ stdenv.mkDerivation rec {
         mkfontdir
       done
     '';
+
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "06jsf3rw6q4l1jrw1161h4vxa1xbvpry5x12d8sh5g7hjk88p77g";
 
   meta = with stdenv.lib; {
     homepage = http://upperbounds.net;

@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
       "--disable-dependency-tracking"   # speeds up one-time build
       "--enable-modules"
       "--sysconfdir=/etc"
+      "--enable-crypt"
     ] ++ stdenv.lib.optional (openssl == null) "--without-tls"
       ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
       ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";

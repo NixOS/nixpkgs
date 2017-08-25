@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, writeText, nss, python3
+{ stdenv, fetchurl, writeText, nss, python
 , blacklist ? []
 , includeEmail ? false
 }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   src = nss.src;
 
-  nativeBuildInputs = [ python3 ];
+  nativeBuildInputs = [ python ];
 
   configurePhase = ''
     ln -s nss/lib/ckfw/builtins/certdata.txt
@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
     ${concatStringsSep "\n" (map (c: ''"${c}"'') blacklist)}
     EOF
 
-    cp ${certdata2pem} certdata2pem.py
+    cat ${certdata2pem} > certdata2pem.py
+    patch -p1 < ${./fix-unicode-ca-names.patch}
     ${optionalString includeEmail ''
       # Disable CAs used for mail signing
       substituteInPlace certdata2pem.py --replace \[\'CKA_TRUST_EMAIL_PROTECTION\'\] '''
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://curl.haxx.se/docs/caextract.html;
+    homepage = https://curl.haxx.se/docs/caextract.html;
     description = "A bundle of X.509 certificates of public Certificate Authorities (CA)";
     platforms = platforms.all;
     maintainers = with maintainers; [ wkennington fpletz ];

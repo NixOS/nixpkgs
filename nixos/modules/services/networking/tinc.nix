@@ -166,12 +166,12 @@ in
         path = [ data.package ];
         serviceConfig = {
           Type = "simple";
-          PIDFile = "/run/tinc.${network}.pid";
           Restart = "always";
           RestartSec = "3";
         };
         preStart = ''
           mkdir -p /etc/tinc/${network}/hosts
+          chown tinc.${network} /etc/tinc/${network}/hosts
 
           # Determine how we should generate our keys
           if type tinc >/dev/null 2>&1; then

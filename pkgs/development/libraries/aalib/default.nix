@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1vkh19gb76agvh4h87ysbrgy82hrw88lnsvhynjf4vng629dmpgv";
   };
 
-  outputs = [ "bin" "dev" "out" "doc" ];
+  outputs = [ "bin" "dev" "out" "man" "info" ];
   setOutputFlags = false; # Doesn't support all the flags
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./darwin.patch ];

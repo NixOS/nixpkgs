@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, libgpgerror, enableCapabilities ? false, libcap }:
+{ stdenv, fetchurl, libgpgerror, enableCapabilities ? false, libcap }:
 
 assert enableCapabilities -> stdenv.isLinux;
 
@@ -14,9 +14,13 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev";
 
-  buildInputs =
-    [ libgpgerror ]
-    ++ lib.optional enableCapabilities libcap;
+  # The CPU Jitter random number generator must not be compiled with
+  # optimizations and the optimize -O0 pragma only works for gcc.
+  # The build enables -O2 by default for everything else.
+  hardeningDisable = stdenv.lib.optional stdenv.cc.isClang "fortify";
+
+  buildInputs = [ libgpgerror ]
+    ++ stdenv.lib.optional enableCapabilities libcap;
 
   # Make sure libraries are correct for .pc and .la files
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config

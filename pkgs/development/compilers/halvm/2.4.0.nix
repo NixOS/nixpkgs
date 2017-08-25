@@ -44,10 +44,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = http://github.com/GaloisInc/HaLVM;
+    homepage = https://github.com/GaloisInc/HaLVM;
     description = "The Haskell Lightweight Virtual Machine (HaLVM): GHC running on Xen";
     platforms = ["x86_64-linux"];       # other platforms don't have Xen
     maintainers = with stdenv.lib.maintainers; [ dmjio ];
     inherit (bootPkgs.ghc.meta) license;
+    broken = true;  # https://nix-cache.s3.amazonaws.com/log/6i98mhbq9nzzhwr4svlivm4gz91l2w0f-HaLVM-2.4.0.drv
   };
 }

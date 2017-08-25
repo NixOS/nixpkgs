@@ -1,5 +1,5 @@
 { pkgs, stdenv, fetchurl, fetchFromGitHub, makeWrapper, gawk, gnum4, gnused
-, libxml2, libxslt, ncurses, openssl, perl, gcc, autoreconfHook
+, libxml2, libxslt, ncurses, openssl, perl, autoreconfHook
 , openjdk ? null # javacSupport
 , unixODBC ? null # odbcSupport
 , mesa ? null, wxGTK ? null, wxmac ? null, xorg ? null # wxSupport
@@ -47,9 +47,9 @@ in stdenv.mkDerivation ({
 
   inherit src version;
 
-  buildInputs =
-   [ perl gnum4 ncurses openssl autoreconfHook libxslt libxml2 makeWrapper gcc
-   ]
+  nativeBuildInputs = [ autoreconfHook makeWrapper perl ];
+
+  buildInputs = [ gnum4 ncurses openssl autoreconfHook libxslt libxml2 ]
     ++ optionals wxSupport wxPackages2
     ++ optionals odbcSupport odbcPackages
     ++ optionals javacSupport javacPackages

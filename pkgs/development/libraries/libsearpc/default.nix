@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec
 {
   version = "3.0.7";
-  seafileVersion = "5.0.7";
+  seafileVersion = "6.1.0";
   name = "libsearpc-${version}";
 
   src = fetchurl

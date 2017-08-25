@@ -73,11 +73,11 @@ assert drmSupport         -> available libdrm;
 let
   # Purity: Waf is normally downloaded by bootstrap.py, but
   # for purity reasons this behavior should be avoided.
-  wafVersion = "1.8.12";
+  wafVersion = "1.9.8";
   waf = fetchurl {
     urls = [ "http://waf.io/waf-${wafVersion}"
              "http://www.freehackers.org/~tnagy/release/waf-${wafVersion}" ];
-    sha256 = "12y9c352zwliw0zk9jm2lhynsjcf5jy0k1qch1c1av8hnbm2pgq1";
+    sha256 = "1gsd3zza1wixv2vhvq3inp4vb71i41a1kbwqnwixhnvdmcmw8z8n";
   };
 in stdenv.mkDerivation rec {
   name = "mpv-${version}";

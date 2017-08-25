@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional (hostPlatform.libc or null == "msvcrt")
       ./mingw-boolean.patch;
 
-  outputs = [ "bin" "dev" "out" "doc" ];
+  outputs = [ "bin" "dev" "out" "man" "doc" ];
 
   nativeBuildInputs = [ nasm ];
 

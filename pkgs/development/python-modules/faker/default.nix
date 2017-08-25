@@ -1,8 +1,10 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi,
+{ lib, buildPythonPackage, fetchPypi, pythonOlder,
   # Build inputs
-  dateutil, six,
+  dateutil, six, ipaddress ? null,
   # Test inputs
   email_validator, nose, mock, ukpostcodeparser }:
+
+assert pythonOlder "3.3" -> ipaddress != null;
 
 buildPythonPackage rec {
   pname = "Faker";
@@ -24,7 +26,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     dateutil
     six
-  ];
+  ] ++ lib.optional (pythonOlder "3.3") ipaddress;
 
   meta = with lib; {
     description = "A Python library for generating fake user data";

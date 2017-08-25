@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''pgloader'';
-  version = ''3.3.2'';
+  version = ''v3.4.1'';
 
   description = ''Load data into PostgreSQL'';
 
   deps = [ args."abnf" args."alexandria" args."cl-base64" args."cl-csv" args."cl-fad" args."cl-log" args."cl-markdown" args."cl-postgres" args."cl-ppcre" args."command-line-arguments" args."db3" args."drakma" args."esrap" args."flexi-streams" args."ixf" args."local-time" args."lparallel" args."metabang-bind" args."mssql" args."postmodern" args."py-configparser" args."qmynd" args."quri" args."simple-date" args."split-sequence" args."sqlite" args."trivial-backtrace" args."uiop" args."usocket" args."uuid" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/pgloader/2016-12-04/pgloader-3.3.2.tgz'';
-    sha256 = ''1riz76jvjlszic48lndwfxjn9i72251frivaqi10k61gjfbx03qv'';
+    url = ''http://beta.quicklisp.org/archive/pgloader/2017-07-25/pgloader-v3.4.1.tgz'';
+    sha256 = ''1z6p7dz1ir9cg4gl1vkvbc1f7pv1yfv1jgwjkw29v57fdg4faz9v'';
   };
     
   packageName = "pgloader";
@@ -30,8 +30,8 @@ rec {
     '';
   };
 }
-/* (SYSTEM pgloader DESCRIPTION Load data into PostgreSQL SHA256 1riz76jvjlszic48lndwfxjn9i72251frivaqi10k61gjfbx03qv URL
-    http://beta.quicklisp.org/archive/pgloader/2016-12-04/pgloader-3.3.2.tgz MD5 fb72ca0db46b80a74b7b31dc5b27e1b8 NAME pgloader TESTNAME NIL FILENAME pgloader
+/* (SYSTEM pgloader DESCRIPTION Load data into PostgreSQL SHA256 1z6p7dz1ir9cg4gl1vkvbc1f7pv1yfv1jgwjkw29v57fdg4faz9v URL
+    http://beta.quicklisp.org/archive/pgloader/2017-07-25/pgloader-v3.4.1.tgz MD5 6741f8e7d2d416942d5c4a1971576d33 NAME pgloader TESTNAME NIL FILENAME pgloader
     DEPS
     ((NAME abnf FILENAME abnf) (NAME alexandria FILENAME alexandria) (NAME cl-base64 FILENAME cl-base64) (NAME cl-csv FILENAME cl-csv)
      (NAME cl-fad FILENAME cl-fad) (NAME cl-log FILENAME cl-log) (NAME cl-markdown FILENAME cl-markdown) (NAME cl-postgres FILENAME cl-postgres)
@@ -44,4 +44,4 @@ rec {
     DEPENDENCIES
     (abnf alexandria cl-base64 cl-csv cl-fad cl-log cl-markdown cl-postgres cl-ppcre command-line-arguments db3 drakma esrap flexi-streams ixf local-time
      lparallel metabang-bind mssql postmodern py-configparser qmynd quri simple-date split-sequence sqlite trivial-backtrace uiop usocket uuid)
-    VERSION 3.3.2 SIBLINGS NIL) */
+    VERSION v3.4.1 SIBLINGS NIL) */

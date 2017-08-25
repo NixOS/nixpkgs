@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
       --replace '../compiler_test.pl' $out/bin/compiler_test.pl \
       --replace '../$CONFIG_FILE' '$CONFIG_FILE'
 
-    wrapProgram $out/bin/launchn.pl --prefix PERL5LIB : "$PERL5LIB" $out/bin/launchn.pl
+    wrapProgram $out/bin/launchn.pl \
+      --prefix PERL5LIB : "$PERL5LIB"
 
     mkdir -p $out/share/csmith
     mv $out/bin/compiler_test.in $out/share/csmith/

@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "tilix-${version}";
-  version = "1.6.1";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "gnunn1";
     repo = "tilix";
     rev = "${version}";
-    sha256 = "10nw3q6s941dm44bkfryl1xclr1xy1vjr2n8w7g6kfahpcazf8f8";
+    sha256 = "1vqi68jlbbaky1569kd4lr6p02zsiv7v2rfb8j1pzwj7gydblaac";
   };
 
   nativeBuildInputs = [
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     substituteInPlace $out/share/applications/com.gexperts.Tilix.desktop \
       --replace "Exec=tilix" "Exec=$out/bin/tilix"
+    sed -i '/^DBusActivatable=/d' $out/share/applications/com.gexperts.Tilix.desktop
   '';
 
   meta = with stdenv.lib; {

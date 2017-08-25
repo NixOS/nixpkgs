@@ -1,24 +1,19 @@
-{stdenv, fetchurl, unzip}:
+{stdenv, fetchzip}:
 
-stdenv.mkDerivation rec {
-  name = "hasklig-${version}";
+let
   version = "1.1";
+in fetchzip {
+  name = "hasklig-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/i-tu/Hasklig/releases/download/${version}/Hasklig-${version}.zip";
-    sha256 = "1hwmdbygallw2kjk0v3a3dl7w6b21wii3acrl0w3ibn05g1cxv4q";
-  };
+  url = "https://github.com/i-tu/Hasklig/releases/download/${version}/Hasklig-${version}.zip";
 
-  buildInputs = [ unzip ];
-
-  sourceRoot = ".";
-
-  phases = [ "unpackPhase" "installPhase" ];
-
-  installPhase = ''
+  postFetch = ''
+    unzip $downloadedFile
     mkdir -p $out/share/fonts/opentype
     cp *.otf $out/share/fonts/opentype
   '';
+
+  sha256 = "0xxyx0nkapviqaqmf3b610nq17k20afirvc72l32pfspsbxz8ybq";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/i-tu/Hasklig;

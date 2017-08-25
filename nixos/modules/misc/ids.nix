@@ -214,7 +214,7 @@
       plex = 193;
       grafana = 196;
       skydns = 197;
-      ripple-rest = 198;
+      # ripple-rest = 198; # unused, removed 2017-08-12
       nix-serve = 199;
       tvheadend = 200;
       uwsgi = 201;
@@ -335,7 +335,7 @@
       dialout = 27;
       #polkituser = 28; # currently unused, polkitd doesn't need a group
       utmp = 29;
-      #ddclient = 30; # unused
+      ddclient = 30;
       davfs2 = 31;
       disnix = 33;
       osgi = 34;
@@ -489,7 +489,7 @@
       sabnzbd = 194;
       #grafana = 196; #unused
       #skydns = 197; #unused
-      #ripple-rest = 198; #unused
+      # ripple-rest = 198; # unused, removed 2017-08-12
       #nix-serve = 199; #unused
       #tvheadend = 200; #unused
       uwsgi = 201;

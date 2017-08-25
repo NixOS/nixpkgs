@@ -24,7 +24,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Structured Configuration Library";
     homepage = http://pypi.python.org/pypi/ZConfig;
-    license = licenses.zpt20;
+    license = licenses.zpl20;
     maintainers = [ maintainers.goibhniu ];
   };
 }

@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   patches = [ ./dont-create-var.patch ];
 
   postPatch = ''
-    substituteInPlace ./src/bin/keactrl/Makefile.am '@sysconfdir@' "$out/etc"
-    substituteInPlace ./src/bin/keactrl/Makefile.am '@(sysconfdir)@' "$out/etc"
+    substituteInPlace ./src/bin/keactrl/Makefile.am --replace '@sysconfdir@' "$out/etc"
+    substituteInPlace ./src/bin/keactrl/Makefile.am --replace '@(sysconfdir)@' "$out/etc"
   '';
 
   configureFlags = [

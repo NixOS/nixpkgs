@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./upstream.patch ];
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [ "out" "dev" "doc" "info" ];
 
   # mpfr.h requires gmp.h
   propagatedBuildInputs = [ gmp ];

@@ -1,5 +1,5 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, clutter, dbus, pythonPackages, libxml2, autoconf
-, libxklavier, libXtst, gtk2, intltool, libxslt, at_spi2_core, automake }:
+{ fetchurl, stdenv, pkgconfig, gnome3, clutter, dbus, pythonPackages, libxml2
+, libxklavier, libXtst, gtk2, intltool, libxslt, at_spi2_core, autoreconfHook }:
 
 let
   majorVersion = "0.4";
@@ -12,13 +12,14 @@ stdenv.mkDerivation rec {
     sha256 = "0mfychh1q3dx0b96pjz9a9y112bm9yqyim40yykzxx1hppsdjhww";
   };
 
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = with gnome3;
-    [ glib pkgconfig gtk clutter at_spi2_core dbus pythonPackages.python automake
-      pythonPackages.pygobject3 libxml2 libXtst gtk2 intltool libxslt autoconf ];
+    [ glib gtk clutter at_spi2_core dbus pythonPackages.python
+      pythonPackages.pygobject3 libxml2 libXtst gtk2 intltool libxslt ];
 
   propagatedBuildInputs = [ gnome3.libgee libxklavier ];
 
-  preBuild = ''
+  postPatch = ''
     patchShebangs .
     substituteInPlace libcaribou/Makefile.am --replace "--shared-library=libcaribou.so.0" "--shared-library=$out/lib/libcaribou.so.0"
   '';

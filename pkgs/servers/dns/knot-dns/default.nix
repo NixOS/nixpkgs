@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, gnutls, jansson, liburcu, lmdb, libcap_ng, libidn
-, systemd, nettle, libedit, zlib, libiconv, fetchpatch
+, systemd, nettle, libedit, zlib, libiconv, libintlOrEmpty
 }:
 
 let inherit (stdenv.lib) optional optionals; in
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   ]
     # Use embedded lmdb there for now, as detection is broken on Darwin somehow.
     ++ optionals stdenv.isLinux [ libcap_ng systemd lmdb ]
+    ++ libintlOrEmpty
     ++ optional stdenv.isDarwin zlib; # perhaps due to gnutls
 
   # Not ideal but seems to work on Linux.

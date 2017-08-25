@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   #doCheck = true; # problems when loading libc.so.6
 
   meta = {
-    homepage = http://nixos.org/patchelf.html;
+    homepage = https://nixos.org/patchelf.html;
     license = "GPL";
     description = "A small utility to modify the dynamic linker and RPATH of ELF executables";
     maintainers = [ stdenv.lib.maintainers.eelco ];

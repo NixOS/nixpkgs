@@ -21,7 +21,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Inter-process locks";
     homepage =  http://www.python.org/pypi/zc.lockfile;
-    license = licenses.zpt20;
+    license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];
   };
 }

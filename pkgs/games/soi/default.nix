@@ -23,7 +23,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin nckx ];
     platforms = platforms.linux;
     license = licenses.free;
-    broken = true;
     downloadPage = http://sourceforge.net/projects/soi/files/;
   };
 }

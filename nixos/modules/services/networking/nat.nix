@@ -48,7 +48,7 @@ let
     # NAT from external ports to internal ports.
     ${concatMapStrings (fwd: ''
       iptables -w -t nat -A nixos-nat-pre \
-        -i ${cfg.externalInterface} -p tcp \
+        -i ${cfg.externalInterface} -p ${fwd.proto} \
         --dport ${builtins.toString fwd.sourcePort} \
         -j DNAT --to-destination ${fwd.destination}
     '') cfg.forwardPorts}
@@ -133,12 +133,19 @@ in
           destination = mkOption {
             type = types.str;
             example = "10.0.0.1:80";
-            description = "Forward tcp connection to destination ip:port";
+            description = "Forward connection to destination ip:port";
+          };
+
+          proto = mkOption {
+            type = types.str;
+            default = "tcp";
+            example = "udp";
+            description = "Protocol of forwarded connection";
           };
         };
       });
       default = [];
-      example = [ { sourcePort = 8080; destination = "10.0.0.1:80"; } ];
+      example = [ { sourcePort = 8080; destination = "10.0.0.1:80"; proto = "tcp"; } ];
       description =
         ''
           List of forwarded ports from the external interface to

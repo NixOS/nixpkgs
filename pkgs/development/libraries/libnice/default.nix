@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ glib gupnp_igd ];
 
   meta = {
-    homepage = http://nice.freedesktop.org/wiki/;
+    homepage = https://nice.freedesktop.org/wiki/;
     description = "The GLib ICE implementation";
     longDescription = ''
       Libnice is an implementation of the IETF's Interactice Connectivity
