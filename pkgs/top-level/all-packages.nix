@@ -12164,16 +12164,23 @@ with pkgs;
         # when adding a new linux version
         kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
-    ];
-  };
-
-  linux_samus_4_12 = callPackage ../os-specific/linux/kernel/linux-samus-4.12.nix {
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
         kernelPatches.mips_fpu_sigill
         kernelPatches.mips_ext3_n32
       ];
+  };
+
+  linux_samus_4_12 = callPackage ../os-specific/linux/kernel/linux-samus-4.12.nix {
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+        kernelPatches.p9_fixes
+        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
+        # when adding a new linux version
+        kernelPatches.cpu-cgroup-v2."4.11"
+        kernelPatches.modinst_arg_list_too_long
+    ];
   };
 
   linux_samus_latest = linux_samus_4_12;
