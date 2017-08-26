@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "libopcodes-${version}";
-  inherit (binutils-raw) version src;
+  inherit (binutils-raw.bintools) version src;
 
   outputs = [ "out" "dev" ];
 
-  patches = binutils-raw.patches ++ [
+  patches = binutils-raw.bintools.patches ++ [
     ../../tools/misc/binutils/build-components-separately.patch
   ];
 

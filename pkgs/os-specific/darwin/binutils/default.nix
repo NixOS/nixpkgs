@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   buildCommand = ''
     mkdir -p $out/bin $out/include
 
-    ln -s ${binutils-raw.out}/bin/${targetPrefix}c++filt $out/bin/${targetPrefix}c++filt
+    ln -s ${binutils-raw.bintools.out}/bin/${targetPrefix}c++filt $out/bin/${targetPrefix}c++filt
 
     # We specifically need:
     # - ld: binutils doesn't provide it on darwin
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     done
 
     # FIXME: this will give us incorrect man pages for bits of cctools
-    ln -s ${binutils-raw.out}/share $out/share
+    ln -s ${binutils-raw.bintools.out}/share $out/share
 
     ln -s ${cctools}/libexec $out/libexec
   '';

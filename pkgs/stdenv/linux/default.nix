@@ -80,9 +80,10 @@ let
             inherit (prevStage) stdenv;
           };
           cc = prevStage.gcc-unwrapped;
+          bintools = prevStage.binutils;
           isGNU = true;
           libc = prevStage.glibc;
-          inherit (prevStage) binutils coreutils gnugrep;
+          inherit (prevStage) coreutils gnugrep;
           name = name;
           stdenvNoCC = prevStage.ccWrapperStdenv;
         };
@@ -143,7 +144,15 @@ in
         '';
       };
       gcc-unwrapped = bootstrapTools;
-      binutils = bootstrapTools;
+      binutils = import ../../build-support/bintools-wrapper {
+        nativeTools = false;
+        nativeLibc = false;
+        buildPackages = { };
+        libc = self.glibc;
+        inherit (self) stdenvNoCC coreutils gnugrep;
+        bintools = bootstrapTools;
+        name = "bootstrap-binutils-wrapper";
+      };
       coreutils = bootstrapTools;
       gnugrep = bootstrapTools;
     };
@@ -165,7 +174,7 @@ in
 
     # Rebuild binutils to use from stage2 onwards.
     overrides = self: super: {
-      binutils = super.binutils.override { gold = false; };
+      binutils = super.binutils_nogold;
       inherit (prevStage)
         ccWrapperStdenv
         glibc gcc-unwrapped coreutils gnugrep;
@@ -188,9 +197,14 @@ in
     overrides = self: super: {
       inherit (prevStage)
         ccWrapperStdenv
-        binutils gcc-unwrapped coreutils gnugrep
+        gcc-unwrapped coreutils gnugrep
         perl paxctl gnum4 bison;
       # This also contains the full, dynamically linked, final Glibc.
+      binutils = prevStage.binutils.override {
+        # Rewrap the binutils with the new glibc, so both the next
+        # stage's wrappers use it.
+        libc = self.glibc;
+      };
     };
   })
 
@@ -235,6 +249,15 @@ in
       # other purposes (binutils and top-level pkgs) too.
       inherit (prevStage) gettext gnum4 bison gmp perl glibc zlib linuxHeaders;
 
+      binutils = super.binutils.override {
+        # Don't use stdenv's shell but our own
+        shell = self.bash + "/bin/bash";
+        # Build expand-response-params with last stage like below
+        buildPackages = {
+          inherit (prevStage) stdenv;
+        };
+      };
+
       gcc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
         nativeTools = false;
         nativeLibc = false;
@@ -243,8 +266,9 @@ in
           inherit (prevStage) stdenv;
         };
         cc = prevStage.gcc-unwrapped;
+        bintools = self.binutils;
         libc = self.glibc;
-        inherit (self) stdenvNoCC binutils coreutils gnugrep;
+        inherit (self) stdenvNoCC coreutils gnugrep;
         name = "";
         shell = self.bash + "/bin/bash";
       };
@@ -299,8 +323,8 @@ in
       allowedRequisites = with prevStage; with lib;
         # Simple executable tools
         concatMap (p: [ (getBin p) (getLib p) ])
-          [ gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
-            gnumake gnused gnutar gnugrep gnupatch patchelf ed paxctl
+          [ gzip bzip2 xz bash binutils.bintools coreutils diffutils findutils
+            gawk gnumake gnused gnutar gnugrep gnupatch patchelf ed paxctl
           ]
         # Library dependencies
         ++ map getLib (
@@ -310,7 +334,7 @@ in
         # More complicated cases
         ++ [
             glibc.out glibc.dev glibc.bin/*propagated from .dev*/ linuxHeaders
-            gcc gcc.cc gcc.cc.lib gcc.expand-response-params
+            binutils gcc gcc.cc gcc.cc.lib gcc.expand-response-params
           ]
           ++ lib.optionals localSystem.isAarch64
             [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ];
@@ -322,7 +346,7 @@ in
           attr acl paxctl zlib pcre;
       } // lib.optionalAttrs (super.targetPlatform == localSystem) {
         # Need to get rid of these when cross-compiling.
-        inherit (prevStage) binutils;
+        inherit (prevStage) binutils binutils-raw;
         gcc = cc;
       };
     };
