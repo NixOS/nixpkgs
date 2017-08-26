@@ -1141,6 +1141,8 @@ with pkgs;
 
   ring-daemon = callPackage ../applications/networking/instant-messengers/ring-daemon { };
 
+  riot-web = callPackage ../applications/networking/instant-messengers/riot/riot-web.nix { };
+
   rsyslog = callPackage ../tools/system/rsyslog {
     hadoop = null; # Currently Broken
     czmq = czmq3;
