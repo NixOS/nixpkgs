@@ -5,9 +5,9 @@
 , liblapack
 , python }:
 
-let version = "3.7.6";
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "petsc-${version}";
+  version = "3.7.6";
 
   src = fetchurl {
     url = "http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${version}.tar.gz";
@@ -16,15 +16,18 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ blas gfortran.cc.lib liblapack python ];
 
-  configurePhase = ''
-    ./configure --prefix=$out \
-      --CC=$CC \
-      --with-cxx=0 \
-      --with-fc=0 \
-      --with-mpi=0 \
-      --with-blas-lib=[${blas}/lib/libblas.a,${gfortran.cc.lib}/lib/libgfortran.a] \
-      --with-lapack-lib=[${liblapack}/lib/liblapack.a,${gfortran.cc.lib}/lib/libgfortran.a]
-    '';
+  preConfigure = ''
+    patchShebangs .
+    configureFlagsArray=(
+      $configureFlagsArray
+      "--CC=$CC"
+      "--with-cxx=0"
+      "--with-fc=0"
+      "--with-mpi=0"
+      "--with-blas-lib=[${blas}/lib/libblas.a,${gfortran.cc.lib}/lib/libgfortran.a]"
+      "--with-lapack-lib=[${liblapack}/lib/liblapack.a,${gfortran.cc.lib}/lib/libgfortran.a]"
+    )
+  '';
 
   meta = {
     description = "Library of linear algebra algorithms for solving partial differential equations";
