@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
       description = "A fast and easy-to-use tool for creatin status bars.";
       longDescription = ''
         Polybar aims to help users build beautiful and highly customizable
-        status bars for their desktop environment, without the need of 
+        status bars for their desktop environment, without the need of
         having a black belt in shell scripting.
-      ''; 
+      '';
       license = licenses.mit;
       maintainers = [ maintainers.afldcr ];
       platforms = platforms.unix;
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       (fetchpatch {
         name = "polybar-remove-curlbuild.patch";
         url = "https://github.com/jaagr/polybar/commit/d35abc7620c8f06618b4708d9a969dfa2f309e96.patch";
-        sha256 = "1h6z42ng7rr3yrqcr0g777773w9yzm800vfyqcypqr01vkgg69wj";
+        sha256 = "14xr65vsjvd51hzg9linj09w0nnixgn26dh9lqxy25bxachcyzxy";
       })
     ];
 
