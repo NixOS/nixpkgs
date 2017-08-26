@@ -114,7 +114,9 @@ let
       ./patches/fix_network_api_crash.patch
     ] ++ optional (versionOlder version "57.0") ./patches/glibc-2.24.patch
       ++ optional enableWideVine ./patches/widevine.patch
-      ++ optional (versionOlder version "59.0.0.0") ./patches/fix-bootstrap-gn.patch;
+      ++ optional (versionOlder version "59.0.0.0") ./patches/fix-bootstrap-gn.patch
+      ++ optional (versionAtLeast version "60.0.0.0" && versionOlder version "61.0.0.0")
+           ./patches/fix-bootstrap-gn-2.patch;
 
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
