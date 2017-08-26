@@ -11,16 +11,16 @@ let inherit (stdenv.lib) makeLibraryPath; in
 
 stdenv.mkDerivation rec {
   name = "android-sdk-${version}";
-  version = "25.2.3";
+  version = "25.2.5";
 
   src = if (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux")
     then fetchurl {
       url = "http://dl.google.com/android/repository/tools_r${version}-linux.zip";
-      sha256 = "0q5m8lqhj07c6izhc0b0d73820ma0flvrj30ckznss4s9swvqd8v";
+      sha256 = "0gnk49pkwy4m0nqwm1xnf3w4mfpi9w0kk7841xlawpwbkj0icxap";
     }
     else if stdenv.system == "x86_64-darwin" then fetchurl {
       url = "http://dl.google.com/android/repository/tools_r${version}-macosx.zip";
-      sha256 = "1ihxd2a37ald3sdd04i4yk85prw81h6gnch0bmq65cbsrba48dar";
+      sha256 = "0yg7wjmyw70xsh8k4hgbqb5rilam2a94yc8dwbh7fjwqcmpxgwqb";
     }
     else throw "platform not ${stdenv.system} supported!";
 

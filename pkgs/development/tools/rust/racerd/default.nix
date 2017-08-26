@@ -18,7 +18,7 @@ buildRustPackage rec {
 
   buildInputs = [ makeWrapper ];
 
-  RUST_SRC_PATH = ''${rustPlatform.rust.rustc.src}/src'';
+  RUST_SRC_PATH = rustPlatform.rustcSrc;
 
   installPhase = ''
     mkdir -p $out/bin
@@ -28,7 +28,7 @@ buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "JSON/HTTP Server based on racer for adding Rust support to editors and IDEs";
-    homepage = "https://github.com/jwilm/racerd";
+    homepage = https://github.com/jwilm/racerd;
     license = licenses.asl20;
     platforms = platforms.all;
   };

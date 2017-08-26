@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       a reports interface, a complete data modeling solution, and a migration
       platform for moving your 3rd party databases to Oracle.
     '';
-    homepage = "http://www.oracle.com/technetwork/developer-tools/sql-developer/overview/";
+    homepage = http://www.oracle.com/technetwork/developer-tools/sql-developer/overview/;
     license = licenses.unfree;
     maintainers = [ maintainers.ardumont ];
     platforms = platforms.linux;

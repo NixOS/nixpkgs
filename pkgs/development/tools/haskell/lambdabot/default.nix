@@ -1,4 +1,4 @@
-{ lib, haskell-lib, fetchpatch, makeWrapper, haskellPackages
+{ lib, haskellLib, fetchpatch, makeWrapper, haskellPackages
 , mueval
 , withDjinn ? true
 , aspell ? null
@@ -25,7 +25,7 @@ let allPkgs = pkgs: mueval.defaultPkgs pkgs ++ [ pkgs.lambdabot-trusted ] ++ pac
     modulesStr = lib.replaceChars ["\n"] [" "] modules;
     configStr = lib.replaceChars ["\n"] [" "] configuration;
 
-in haskell-lib.overrideCabal haskellPackages.lambdabot (self: {
+in haskellLib.overrideCabal haskellPackages.lambdabot (self: {
   patches = (self.patches or []) ++ [ ./custom-config.patch ];
   postPatch = (self.postPatch or "") + ''
     substituteInPlace src/Main.hs \

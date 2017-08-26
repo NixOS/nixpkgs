@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A full-featured file system for online data storage";
-    homepage = "https://bitbucket.org/nikratio/s3ql";
+    homepage = https://bitbucket.org/nikratio/s3ql;
     license = licenses.gpl3;
     maintainers = with maintainers; [ rushmorem ];
     platforms = platforms.linux;

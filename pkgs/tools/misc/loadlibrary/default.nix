@@ -22,7 +22,7 @@ stdenv_32bit.mkDerivation rec {
   '';
 
   meta = with stdenv_32bit.lib; {
-    homepage = "https://github.com/taviso/loadlibrary";
+    homepage = https://github.com/taviso/loadlibrary;
     description = "Porting Windows Dynamic Link Libraries to Linux";
     platforms = platforms.linux;
     maintainers = [ maintainers.eleanor ];

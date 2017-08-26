@@ -57,7 +57,7 @@ in stdenv.mkDerivation {
   buildInputs = [ patchelf makeWrapper ];
 
   meta = {
-    homepage = "https://spideroak.com";
+    homepage = https://spideroak.com;
     description = "Secure online backup and sychronization";
     license = stdenv.lib.licenses.unfree;
     maintainers = with stdenv.lib.maintainers; [ amorsillo ];

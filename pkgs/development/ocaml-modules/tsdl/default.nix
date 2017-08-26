@@ -1,44 +1,40 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, ctypes, result, SDL2, pkgconfig, opam }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, ctypes, result, SDL2, pkgconfig, opam, ocb-stubblr }:
+
+if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+then throw "tsdl is not available for OCaml ${ocaml.version}"
+else
 
 let
-  inherit (stdenv.lib) getVersion;
-
   pname = "tsdl";
-  version = "0.9.0";
+  version = "0.9.4";
   webpage = "http://erratique.ch/software/${pname}";
-
 in
 
 stdenv.mkDerivation {
-  name = "ocaml-${pname}-${version}";
+  name = "ocaml${ocaml.version}-${pname}-${version}";
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "02x0wsy5nxagxrh07yb2h4yqqy1bxryp2gwrylds0j6ybqsv4shm";
+    sha256 = "13af37w2wybx8yzgjr5zz5l50402ldl614qiwphl1q69hig5mag2";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild result pkgconfig opam ];
+  buildInputs = [ ocaml findlib ocamlbuild topkg result pkgconfig opam ocb-stubblr ];
   propagatedBuildInputs = [ SDL2 ctypes ];
 
   createFindlibDestdir = true;
 
   unpackCmd = "tar xjf $src";
 
-  buildPhase = ''
+  preConfigure = ''
     # The following is done to avoid an additional dependency (ncurses)
     # due to linking in the custom bytecode runtime. Instead, just
     # compile directly into a native binary, even if it's just a
     # temporary build product.
     substituteInPlace myocamlbuild.ml \
       --replace ".byte" ".native"
-
-    ocaml pkg/build.ml native=true native-dynlink=true
   '';
 
-  installPhase = ''
-    opam-installer --script --prefix=$out ${pname}.install | sh
-    ln -s $out/lib/${pname} $out/lib/ocaml/${getVersion ocaml}/site-lib/${pname}
-  '';
+  inherit (topkg) buildPhase installPhase;
 
   meta = with stdenv.lib; {
     homepage = "${webpage}";

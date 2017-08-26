@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://www.graphviz.org/";
+    homepage = http://www.graphviz.org/;
     description = "Open source graph visualization software";
 
     longDescription = ''

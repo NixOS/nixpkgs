@@ -1,4 +1,4 @@
-{ pkgs, stdenv, ghc, all-cabal-hashes
+{ pkgs, stdenv, lib, haskellLib, ghc, all-cabal-hashes
 , compilerConfig ? (self: super: {})
 , packageSetConfig ? (self: super: {})
 , overrides ? (self: super: {})
@@ -11,17 +11,17 @@ self: # Provided by `callPackageWithOutput`
 
 let
 
-  inherit (stdenv.lib) extends makeExtensible;
-  inherit (import ./lib.nix { inherit pkgs; }) overrideCabal makePackageSet;
+  inherit (lib) extends makeExtensible;
+  inherit (haskellLib) overrideCabal makePackageSet;
 
-  haskellPackages = makePackageSet {
+  haskellPackages = pkgs.callPackage makePackageSet {
     package-set = initialPackages;
     extensible-self = self;
-    inherit ghc;
+    inherit stdenv haskellLib ghc;
   };
 
-  commonConfiguration = configurationCommon { inherit pkgs; };
-  nixConfiguration = configurationNix { inherit pkgs; };
+  commonConfiguration = configurationCommon { inherit pkgs haskellLib; };
+  nixConfiguration = configurationNix { inherit pkgs haskellLib; };
 
 in (extends overrides
      (extends packageSetConfig

@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   buildInputs = [ nano ];
 
   meta = {
-    homepage = "http://cvs.nongnu.org";
+    homepage = http://cvs.nongnu.org;
     description = "Concurrent Versions System - a source control system";
     platforms = stdenv.lib.platforms.all;
   };

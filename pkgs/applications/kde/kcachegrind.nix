@@ -1,8 +1,7 @@
 {
   mkDerivation, lib,
   extra-cmake-modules, kdoctools,
-  kio, ki18n, karchive, qttools,
-  perl, python, php
+  karchive, ki18n, kio, perl, python, php, qttools,
 }:
 
 mkDerivation {
@@ -12,6 +11,5 @@ mkDerivation {
     maintainers = with lib.maintainers; [ orivej ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  propagatedBuildInputs = [ kio ];
-  buildInputs = [ perl python php ki18n karchive qttools ];
+  buildInputs = [ karchive ki18n kio perl python php qttools ];
 }

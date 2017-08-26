@@ -5,7 +5,7 @@ rec {
 
   description = ''Portable Unicode Library'';
 
-  deps = [ ];
+  deps = [ args."cl-unicode_slash_base" ];
 
   src = fetchurl {
     url = ''http://beta.quicklisp.org/archive/cl-unicode/2014-12-17/cl-unicode-0.1.5.tgz'';
@@ -32,4 +32,4 @@ rec {
 }
 /* (SYSTEM cl-unicode DESCRIPTION Portable Unicode Library SHA256 1jd5qq5ji6l749c4x415z22y9r0k9z18pdi9p9fqvamzh854i46n URL
     http://beta.quicklisp.org/archive/cl-unicode/2014-12-17/cl-unicode-0.1.5.tgz MD5 2fd456537bd670126da84466226bc5c5 NAME cl-unicode TESTNAME NIL FILENAME
-    cl-unicode DEPS NIL DEPENDENCIES NIL VERSION 0.1.5 SIBLINGS NIL) */
+    cl-unicode DEPS ((NAME cl-unicode/base FILENAME cl-unicode_slash_base)) DEPENDENCIES (cl-unicode/base) VERSION 0.1.5 SIBLINGS NIL) */

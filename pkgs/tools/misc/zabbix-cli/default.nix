@@ -4,15 +4,20 @@ let
 
 in pythonPackages.buildPythonApplication rec {
   name = "zabbix-cli-${version}";
-  version = "1.6.1";
+  version = "1.7.0";
 
-  propagatedBuildInputs = with pythonPackages; [ argparse requests ];
+  propagatedBuildInputs = with pythonPackages; [ ipaddr requests ];
+
+  # argparse is part of the standardlib
+  prePatch = ''
+    substituteInPlace setup.py --replace "'argparse'," ""
+  '';
 
   src = fetchFromGitHub {
     owner = "usit-gd";
     repo = "zabbix-cli";
     rev = version;
-    sha256 = "17ip3s8ifgj264zwxrr857wk02xmzmlsjrr613mdhkgdwizqbcs3";
+    sha256 = "0z33mv8xk0h72rn0iz1qrrkyz63w6cln8d5hqqddcvkxwnq0z6kx";
   };
 
   meta = with lib; {

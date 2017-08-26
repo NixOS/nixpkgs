@@ -37,7 +37,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "A free an open source painting application";
-    homepage = "https://krita.org/";
+    homepage = https://krita.org/;
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;
     license = licenses.gpl2;

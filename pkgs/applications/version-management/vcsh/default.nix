@@ -12,9 +12,15 @@ stdenv.mkDerivation rec {
   };
 
   patches =
-    [ (fetchpatch { url = "https://patch-diff.githubusercontent.com/raw/RichiH/vcsh/pull/222.patch";
-                    sha256 = "0grdbiwq04x5qj0a1yd9a78g5v28dxhwl6mwxvgvvmzs6k5wnl3k";
-                  })
+    [
+      (fetchpatch {
+        url = "https://patch-diff.githubusercontent.com/raw/RichiH/vcsh/pull/222.patch";
+        sha256 = "0grdbiwq04x5qj0a1yd9a78g5v28dxhwl6mwxvgvvmzs6k5wnl3k";
+      })
+      (fetchpatch {
+        url = "https://patch-diff.githubusercontent.com/raw/RichiH/vcsh/pull/228.patch";
+        sha256 = "0sdn4mzrhaynw85knia2iw5b6rgy0l1rd6dwh0lwspnh668wqgam";
+      })
     ];
 
   buildInputs = [ which git ronn perl ShellCommand TestMost ];

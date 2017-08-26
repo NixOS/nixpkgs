@@ -97,6 +97,7 @@ with stdenv.lib;
     MQ_IOSCHED_DEADLINE y
   ''}
   ${optionalString (versionAtLeast version "4.12") ''
+    BFQ_GROUP_IOSCHED y
     MQ_IOSCHED_KYBER y
     IOSCHED_BFQ m
   ''}
@@ -167,6 +168,7 @@ with stdenv.lib;
   BONDING m
   NET_L3_MASTER_DEV? y
   NET_FOU_IP_TUNNELS? y
+  IP_NF_TARGET_REDIRECT m
 
   # Wireless networking.
   CFG80211_WEXT? y # Without it, ipw2200 drivers don't build
@@ -302,7 +304,9 @@ with stdenv.lib;
   CIFS_UPCALL y
   CIFS_ACL y
   CIFS_DFS_UPCALL y
-  CIFS_SMB2 y
+  ${optionalString (versionOlder version "4.13") ''
+    CIFS_SMB2 y
+  ''}
   ${optionalString (versionAtLeast version "3.12") ''
     CEPH_FSCACHE y
   ''}
@@ -447,8 +451,11 @@ with stdenv.lib;
   X86_CHECK_BIOS_CORRUPTION y
   X86_MCE y
 
-  # PCI-Expresscard hotplug support
-  ${optionalString (versionAtLeast version "3.12") "HOTPLUG_PCI_PCIE y"}
+  ${optionalString (versionAtLeast version "3.12") ''
+    HOTPLUG_PCI_ACPI y # PCI hotplug using ACPI
+    HOTPLUG_PCI_PCIE y # PCI-Expresscard hotplug support
+  ''}
+
 
   # Linux containers.
   NAMESPACES? y #  Required by 'unshare' used by 'nixos-install'
@@ -521,27 +528,29 @@ with stdenv.lib;
   ${optionalString (versionAtLeast version "3.13") ''
     KVM_VFIO y
   ''}
-  XEN? y
-  XEN_DOM0? y
-  ${optionalString ((versionAtLeast version "3.18") && (features.xen_dom0 or false))  ''
-    PCI_XEN? y
-    HVC_XEN? y
-    HVC_XEN_FRONTEND? y
-    XEN_SYS_HYPERVISOR? y
-    SWIOTLB_XEN? y
-    XEN_BACKEND? y
-    XEN_BALLOON? y
-    XEN_BALLOON_MEMORY_HOTPLUG? y
-    XEN_EFI? y
-    XEN_HAVE_PVMMU? y
-    XEN_MCE_LOG? y
-    XEN_PVH? y
-    XEN_PVHVM? y
-    XEN_SAVE_RESTORE? y
-    XEN_SCRUB_PAGES? y
-    XEN_SELFBALLOONING? y
-    XEN_STUB? y
-    XEN_TMEM? y
+  ${optionalString (stdenv.isx86_64 || stdenv.isi686) ''
+    XEN? y
+    XEN_DOM0? y
+    ${optionalString ((versionAtLeast version "3.18") && (features.xen_dom0 or false))  ''
+      PCI_XEN? y
+      HVC_XEN? y
+      HVC_XEN_FRONTEND? y
+      XEN_SYS_HYPERVISOR? y
+      SWIOTLB_XEN? y
+      XEN_BACKEND? y
+      XEN_BALLOON? y
+      XEN_BALLOON_MEMORY_HOTPLUG? y
+      XEN_EFI? y
+      XEN_HAVE_PVMMU? y
+      XEN_MCE_LOG? y
+      XEN_PVH? y
+      XEN_PVHVM? y
+      XEN_SAVE_RESTORE? y
+      XEN_SCRUB_PAGES? y
+      XEN_SELFBALLOONING? y
+      XEN_STUB? y
+      XEN_TMEM? y
+    ''}
   ''}
   KSM y
   ${optionalString (!stdenv.is64bit) ''
@@ -632,6 +641,10 @@ with stdenv.lib;
   TEST_UDELAY? n
   TEST_USER_COPY? n
   XZ_DEC_TEST? n
+
+  ${optionalString (versionAtLeast version "4.13") ''
+    TEST_KMOD n
+  ''}
 
   ${optionalString (versionOlder version "4.4") ''
     EFI_TEST? n

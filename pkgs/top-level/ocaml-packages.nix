@@ -228,6 +228,8 @@ let
 
     inotify = callPackage ../development/ocaml-modules/inotify { };
 
+    integers = callPackage ../development/ocaml-modules/integers { };
+
     io-page = callPackage ../development/ocaml-modules/io-page { };
 
     ipaddr_p4 = callPackage ../development/ocaml-modules/ipaddr/2.6.1.nix { };
@@ -269,6 +271,8 @@ let
     };
 
     js_of_ocaml = callPackage ../development/tools/ocaml/js_of_ocaml { lwt = lwt2; };
+
+    js_of_ocaml-compiler = callPackage ../development/tools/ocaml/js_of_ocaml-compiler {};
 
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
 
@@ -534,6 +538,8 @@ let
       then callPackage ../development/ocaml-modules/ppx_blob {}
       else null;
 
+    ppx_derivers = callPackage ../development/ocaml-modules/ppx_derivers {};
+
     ppx_deriving =
       if lib.versionAtLeast ocaml.version "4.02"
       then callPackage ../development/ocaml-modules/ppx_deriving {}
@@ -549,6 +555,8 @@ let
       else null;
 
     ppx_tools_versioned = callPackage ../development/ocaml-modules/ppx_tools_versioned { };
+
+    process = callPackage ../development/ocaml-modules/process { };
 
     ptmap = callPackage ../development/ocaml-modules/ptmap { };
 
@@ -607,6 +615,8 @@ let
     variantslib_p4 = callPackage ../development/ocaml-modules/variantslib { };
 
     vg = callPackage ../development/ocaml-modules/vg { };
+
+    wasm = callPackage ../development/ocaml-modules/wasm { };
 
     x509 = callPackage ../development/ocaml-modules/x509 { };
 
@@ -939,7 +949,9 @@ in rec
 
   ocamlPackages_4_04 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.04.nix { }) (self: super: { });
 
-  ocamlPackages_latest = ocamlPackages_4_04;
+  ocamlPackages_4_05 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.05.nix { }) (self: super: { });
+
+  ocamlPackages_latest = ocamlPackages_4_05;
 
   ocamlPackages = ocamlPackages_4_02;
 }

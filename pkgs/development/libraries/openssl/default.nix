@@ -48,7 +48,8 @@ let
     ] ++ stdenv.lib.optionals withCryptodev [
       "-DHAVE_CRYPTODEV"
       "-DUSE_CRYPTODEV_DIGESTS"
-    ] ++ stdenv.lib.optional enableSSL2 "enable-ssl2";
+    ] ++ stdenv.lib.optional enableSSL2 "enable-ssl2"
+      ++ stdenv.lib.optional (versionAtLeast version "1.1.0" && stdenv.isAarch64) "no-afalgeng";
 
     makeFlags = [ "MANDIR=$(man)/share/man" ];
 
@@ -95,7 +96,7 @@ let
     };
 
     meta = {
-      homepage = http://www.openssl.org/;
+      homepage = https://www.openssl.org/;
       description = "A cryptographic library that implements the SSL and TLS protocols";
       platforms = stdenv.lib.platforms.all;
       maintainers = [ stdenv.lib.maintainers.peti ];

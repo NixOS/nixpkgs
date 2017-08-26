@@ -4,11 +4,11 @@
   buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "pylint";
-    version = "1.7.1";
+    version = "1.7.2";
 
     src = fetchurl {
       url = "mirror://pypi/p/${pname}/${name}.tar.gz";
-      sha256 = "8b4a7ab6cf5062e40e2763c0b4a596020abada1d7304e369578b522e46a6264a";
+      sha256 = "ea6afb93a9ed810cf52ff3838eb3a15e2bf6a81b80de0eaede1ce442caa5ca69";
     };
 
     buildInputs = [ pytest pytestrunner mccabe configparser backports_functools_lru_cache ];

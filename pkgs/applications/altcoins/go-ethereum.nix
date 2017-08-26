@@ -16,7 +16,7 @@ buildGoPackage rec {
   };
 
   meta = {
-    homepage = "https://ethereum.github.io/go-ethereum/";
+    homepage = https://ethereum.github.io/go-ethereum/;
     description = "Official golang implementation of the Ethereum protocol";
     license = with lib.licenses; [ lgpl3 gpl3 ];
   };

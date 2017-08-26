@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A QML port of qtermwidget";
-    homepage = "https://github.com/Swordfish90/qmltermwidget";
+    homepage = https://github.com/Swordfish90/qmltermwidget;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ skeidel ];

@@ -6,7 +6,22 @@ let
 
   cfg = config.services.jira;
 
-  pkg = pkgs.atlassian-jira;
+  pkg = pkgs.atlassian-jira.override {
+    enableSSO = cfg.sso.enable;
+    crowdProperties = ''
+      application.name                        ${cfg.sso.applicationName}
+      application.password                    ${cfg.sso.applicationPassword}
+      application.login.url                   ${cfg.sso.crowd}/console/
+
+      crowd.server.url                        ${cfg.sso.crowd}/services/
+      crowd.base.url                          ${cfg.sso.crowd}/
+
+      session.isauthenticated                 session.isauthenticated
+      session.tokenkey                        session.tokenkey
+      session.validationinterval              ${toString cfg.sso.validationInterval}
+      session.lastvalidation                  session.lastvalidation
+    '';
+  };
 
 in
 
@@ -79,6 +94,40 @@ in
           type = types.bool;
           default = true;
           description = "Whether the connections to the proxy should be considered secure.";
+        };
+      };
+
+      sso = {
+        enable = mkEnableOption "SSO with Atlassian Crowd";
+
+        crowd = mkOption {
+          type = types.str;
+          example = "http://localhost:8095/crowd";
+          description = "Crowd Base URL without trailing slash";
+        };
+
+        applicationName = mkOption {
+          type = types.str;
+          example = "jira";
+          description = "Exact name of this JIRA instance in Crowd";
+        };
+
+        applicationPassword = mkOption {
+          type = types.str;
+          description = "Application password of this JIRA instance in Crowd";
+        };
+
+        validationInterval = mkOption {
+          type = types.int;
+          default = 2;
+          example = 0;
+          description = ''
+            Set to 0, if you want authentication checks to occur on each
+            request. Otherwise set to the number of minutes between request
+            to validate if the user is logged in or out of the Crowd SSO
+            server. Setting this value to 1 or higher will increase the
+            performance of Crowd's integration.
+          '';
         };
       };
 

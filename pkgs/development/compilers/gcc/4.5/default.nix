@@ -138,8 +138,9 @@ stdenv.mkDerivation ({
 
   hardeningDisable = [ "format" ] ++ optional (name != "gnat") "all";
 
-  outputs = if (hostPlatform.is64bit && langAda) then [ "out" "doc" ]
-    else [ "out" "lib" "doc" ];
+  outputs = [ "out" "man" "info" ]
+    ++ optional (!(hostPlatform.is64bit && langAda)) "lib";
+
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
 
@@ -344,8 +345,7 @@ stdenv.mkDerivation ({
 
     # On GNU/Hurd glibc refers to Mach & Hurd
     # headers.
-    ++ optionals (libcCross != null &&
-                  hasAttr "propagatedBuildInputs" libcCross)
+    ++ optionals (libcCross != null && libcCross ? propagatedBuildInputs)
                  libcCross.propagatedBuildInputs);
 
   LIBRARY_PATH = makeLibraryPath ([]
@@ -453,7 +453,7 @@ stdenv.mkDerivation ({
   '';
 
   meta = {
-    homepage = "http://ghdl.free.fr/";
+    homepage = http://ghdl.free.fr/;
     license = stdenv.lib.licenses.gpl2Plus;
     description = "Complete VHDL simulator, using the GCC technology (gcc ${version})";
     maintainers = with stdenv.lib.maintainers; [viric];

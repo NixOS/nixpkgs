@@ -18,7 +18,7 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/mopidy/mopidy-local-sqlite";
+    homepage = https://github.com/mopidy/mopidy-local-sqlite;
     description = "Mopidy SQLite local library extension";
     license = licenses.asl20;
     maintainers = [ maintainers.rvolosatovs ];

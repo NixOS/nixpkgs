@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = "http://www.lua.org";
+    homepage = http://www.lua.org;
     description = "Powerful, fast, lightweight, embeddable scripting language";
     longDescription = ''
       Lua combines simple procedural syntax with powerful data

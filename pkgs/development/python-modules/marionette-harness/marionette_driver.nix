@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Mozilla Marionette driver";
-    homepage = "https://wiki.mozilla.org/Auto-tools/Projects/Marionette";
+    homepage = https://wiki.mozilla.org/Auto-tools/Projects/Marionette;
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ raskin ];
   };

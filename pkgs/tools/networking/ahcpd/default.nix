@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://www.pps.univ-paris-diderot.fr/~jch/software/ahcp/";
+    homepage = http://www.pps.univ-paris-diderot.fr/~jch/software/ahcp/;
     description = "Autoconfiguration protocol for IPv6 and dual-stack IPv6/IPv4 networks";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;

@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig, glib, libxslt, gtk, makeWrapper
+{ stdenv, fetchurl, pkgconfig, glib, libxslt, gtk, wrapGAppsHook
 , webkitgtk, json_glib, rest, libsecret, dbus_glib, gnome_common
-, telepathy_glib, intltool, dbus_libs, icu
+, telepathy_glib, intltool, dbus_libs, icu, glib_networking
 , libsoup, docbook_xsl_ns, docbook_xsl, gnome3
 }:
 
@@ -11,15 +11,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ pkgconfig glib libxslt gtk webkitgtk json_glib rest gnome_common makeWrapper
-                  libsecret dbus_glib telepathy_glib intltool icu libsoup
+  buildInputs = [ pkgconfig glib libxslt gtk webkitgtk json_glib rest gnome_common wrapGAppsHook
+                  libsecret dbus_glib telepathy_glib glib_networking intltool icu libsoup
                   docbook_xsl_ns docbook_xsl gnome3.defaultIconTheme ];
-
-  preFixup = ''
-    for f in "$out/libexec/"*; do
-      wrapProgram "$f" --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
-    done
-  '';
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

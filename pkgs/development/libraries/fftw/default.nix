@@ -4,7 +4,10 @@ with lib;
 
 assert elem precision [ "single" "double" "long-double" "quad-precision" ];
 
-let version = "3.3.6-pl1"; in
+let
+  version = "3.3.6-pl1";
+  withDoc = stdenv.cc.isGNU;
+in
 
 stdenv.mkDerivation rec {
   name = "fftw-${precision}-${version}";
@@ -14,7 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "0g8qk98lgq770ixdf7n36yd5xjsgm2v3wzvnphwmhy6r4y2amx0y";
   };
 
-  outputs = [ "out" "dev" "doc" ]; # it's dev-doc only
+  outputs = [ "out" "dev" "man" ]
+    ++ optional withDoc "info"; # it's dev-doc only
   outputBin = "dev"; # fftw-wisdom
 
   configureFlags =
@@ -27,7 +31,7 @@ stdenv.mkDerivation rec {
     ++ optional (stdenv.isx86_64 && (precision == "single" || precision == "double") )  "--enable-sse2"
     ++ optional stdenv.cc.isGNU "--enable-openmp"
     # doc generation causes Fortran wrapper generation which hard-codes gcc
-    ++ optional (!stdenv.cc.isGNU) "--disable-doc";
+    ++ optional (!withDoc) "--disable-doc";
 
   enableParallelBuilding = true;
 

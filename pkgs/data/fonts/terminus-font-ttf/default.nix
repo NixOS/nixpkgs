@@ -1,17 +1,15 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
-  name = "terminus-font-ttf-${version}";
+let
   version = "4.40.1";
+in fetchzip rec {
+  name = "terminus-font-ttf-${version}";
 
-  src = fetchurl {
-    url = "http://files.ax86.net/terminus-ttf/files/${version}/terminus-ttf-${version}.zip";
-    sha256 = "c3cb690c2935123035a0b1f3bfdd9511c282dab489cd423e161a47c592edf188";
-  };
+  url = "http://files.ax86.net/terminus-ttf/files/${version}/terminus-ttf-${version}.zip";
 
-  nativeBuildInputs = [ unzip ];
+  postFetch = ''
+    unzip -j $downloadedFile
 
-  installPhase = ''
     for i in *.ttf; do
       local destname="$(echo "$i" | sed -E 's|-[[:digit:].]+\.ttf$|.ttf|')"
       install -Dm 644 "$i" "$out/share/fonts/truetype/$destname"
@@ -19,6 +17,8 @@ stdenv.mkDerivation rec {
 
     install -Dm 644 COPYING "$out/share/doc/terminus-font-ttf/COPYING"
   '';
+
+  sha256 = "0cfkpgixdz47y94s9j26pm7n4hvad23vb2q4315kgahl4294zcpg";
 
   meta = with stdenv.lib; {
     description = "A clean fixed width TTF font";

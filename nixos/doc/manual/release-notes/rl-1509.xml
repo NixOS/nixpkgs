@@ -28,7 +28,7 @@ has the following highlights:</para>
     since version 0.0 as well as the most recent <link
     xlink:href="http://www.stackage.org/">Stackage Nightly</link>
     snapshot. The announcement <link
-    xlink:href="http://lists.science.uu.nl/pipermail/nix-dev/2015-September/018138.html">&quot;Full
+    xlink:href="https://nixos.org/nix-dev/2015-September/018138.html">&quot;Full
     Stackage Support in Nixpkgs&quot;</link> gives additional
     details.</para>
   </listitem>

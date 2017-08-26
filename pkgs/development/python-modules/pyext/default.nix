@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
     meta = with stdenv.lib; {
       description = "Simple Python extensions.";
-      homepage = "https://github.com/kirbyfan64/PyExt";
+      homepage = https://github.com/kirbyfan64/PyExt;
       license = licenses.mit;
       maintainers = with maintainers; [ edwtjo ];
     };

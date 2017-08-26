@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''dbd-sqlite3'';
-  version = ''cl-dbi-20170124-git'';
+  version = ''cl-dbi-20170725-git'';
 
   description = ''Database driver for SQLite3.'';
 
   deps = [ args."uiop" args."sqlite" args."cl-syntax-annot" args."cl-syntax" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-dbi/2017-01-24/cl-dbi-20170124-git.tgz'';
-    sha256 = ''0aqfcxbxmc9q3lagaarx0bqncbwjjv0wrskm6lkzy1fp94sik0qj'';
+    url = ''http://beta.quicklisp.org/archive/cl-dbi/2017-07-25/cl-dbi-20170725-git.tgz'';
+    sha256 = ''1gmd5y44nidqmxw7zk0mxl4mgl3mcjf1v05gjdslp3ginzznrqzl'';
   };
     
   packageName = "dbd-sqlite3";
@@ -30,8 +30,8 @@ rec {
     '';
   };
 }
-/* (SYSTEM dbd-sqlite3 DESCRIPTION Database driver for SQLite3. SHA256 0aqfcxbxmc9q3lagaarx0bqncbwjjv0wrskm6lkzy1fp94sik0qj URL
-    http://beta.quicklisp.org/archive/cl-dbi/2017-01-24/cl-dbi-20170124-git.tgz MD5 c48d284eda4aac1ff9a10891884f52e5 NAME dbd-sqlite3 TESTNAME NIL FILENAME
+/* (SYSTEM dbd-sqlite3 DESCRIPTION Database driver for SQLite3. SHA256 1gmd5y44nidqmxw7zk0mxl4mgl3mcjf1v05gjdslp3ginzznrqzl URL
+    http://beta.quicklisp.org/archive/cl-dbi/2017-07-25/cl-dbi-20170725-git.tgz MD5 a9fe67b7fea2640cea9708342a1347bd NAME dbd-sqlite3 TESTNAME NIL FILENAME
     dbd-sqlite3 DEPS
     ((NAME uiop FILENAME uiop) (NAME sqlite FILENAME sqlite) (NAME cl-syntax-annot FILENAME cl-syntax-annot) (NAME cl-syntax FILENAME cl-syntax)) DEPENDENCIES
-    (uiop sqlite cl-syntax-annot cl-syntax) VERSION cl-dbi-20170124-git SIBLINGS (cl-dbi dbd-mysql dbd-postgres dbi-test dbi)) */
+    (uiop sqlite cl-syntax-annot cl-syntax) VERSION cl-dbi-20170725-git SIBLINGS (cl-dbi dbd-mysql dbd-postgres dbi-test dbi)) */

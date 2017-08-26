@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
     description = "G'MIC is an open and full-featured framework for image processing";
     homepage = http://gmic.eu/;
     license = licenses.cecill20;
-    maintainers = [ maintainers.rycee ];
     platforms = platforms.unix;
   };
 }

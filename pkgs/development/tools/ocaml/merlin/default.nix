@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "An editor-independent tool to ease the development of programs in OCaml";
-    homepage = "http://the-lambda-church.github.io/merlin/";
+    homepage = http://the-lambda-church.github.io/merlin/;
     license = licenses.mit;
     maintainers = [ maintainers.vbgl ];
   };

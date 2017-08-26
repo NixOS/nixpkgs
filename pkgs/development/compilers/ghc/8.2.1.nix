@@ -9,8 +9,8 @@
 
 let
   inherit (bootPkgs) ghc;
-  version = "8.2.1-rc3";
-  preReleaseName = "ghc-8.2.0.20170704";
+  version = "8.2.1";
+  preReleaseName = "ghc-8.2.1";
   commonBuildInputs = [ alex autoconf automake ghc happy hscolour perl python3 sphinx ];
   commonPreConfigure =  ''
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
@@ -27,10 +27,12 @@ in stdenv.mkDerivation (rec {
 
   src = fetchurl {
     url = "https://downloads.haskell.org/~ghc/${version}/${preReleaseName}-src.tar.xz";
-    sha256 = "0ccfybbjrmd8yzqbfdqvb6clz2kd005wi8sx3mfjmbkmxv0l4jry";
+    sha256 = "1w4k0n23b9fg8kmarqhfamzpmf91p6jcdr6xlwzfmb4df2bd9hng";
   };
 
   postPatch = "patchShebangs .";
+
+  patches = [ ./ghc-gold-linker.patch ];
 
   preConfigure = commonPreConfigure;
 
@@ -80,7 +82,7 @@ in stdenv.mkDerivation (rec {
   };
 
   meta = {
-    homepage = "http://haskell.org/ghc";
+    homepage = http://haskell.org/ghc;
     description = "The Glasgow Haskell Compiler";
     maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
     inherit (ghc.meta) license platforms;

@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
       --prefix=$out \
       --moz-plugin-path=$out/${mozillaPluginPath} \
       --wine-path=${wine_custom} \
-      --gpg-exec=${gnupg}/bin/gpg2 \
+      --gpg-exec=${gnupg}/bin/gpg \
       --bash-interp=${bash}/bin/bash \
       --downloader=${curl.bin}/bin/curl
       $configureFlags
@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://pipelight.net/";
+    homepage = http://pipelight.net/;
     license = with stdenv.lib.licenses; [ mpl11 gpl2 lgpl21 ];
     description = "A wrapper for using Windows plugins in Linux browsers";
     maintainers = with stdenv.lib.maintainers; [ skeidel ];

@@ -18,6 +18,9 @@ let
             <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
           ];
 
+        # To ensure that we can rebuild the grub configuration on the nixos-rebuild
+        system.extraDependencies = with pkgs; [ stdenvNoCC ];
+
         ${optionalString (bootLoader == "grub") ''
           boot.loader.grub.version = ${toString grubVersion};
           ${optionalString (grubVersion == 1) ''
@@ -270,7 +273,7 @@ in {
     };
 
   # Simple GPT/UEFI configuration using systemd-boot with 3 partitions: ESP, swap & root filesystem
-  simpleUefiGummiboot = makeInstallerTest "simpleUefiGummiboot"
+  simpleUefiSystemdBoot = makeInstallerTest "simpleUefiSystemdBoot"
     { createPartitions =
         ''
           $machine->succeed(

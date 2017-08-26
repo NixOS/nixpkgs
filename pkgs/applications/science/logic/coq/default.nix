@@ -9,7 +9,7 @@
 , ocamlPackages, ncurses
 , buildIde ? true
 , csdp ? null
-, version ? "8.6"
+, version ? "8.6.1"
 }:
 
 let
@@ -18,9 +18,10 @@ let
    "8.5pl2"	= "0wyywia0darak2zmc5v0ra9rn0b9whwdfiahralm8v5za499s8w3";
    "8.5pl3"	= "0fyk2a4fpifibq8y8jhx1891k55qnsnlygglch64sva0bph94nrh";
    "8.6"	= "1pw1xvy1657l1k69wrb911iqqflzhhp8wwsjvihbgc72r3skqg3f";
+   "8.6.1"      = "17cg2c40y9lskkiqfhngavp8yw3shpqgkpihh30xx0rlhn9amy1j";
   }."${version}";
   coq-version = builtins.substring 0 3 version;
-  camlp5 = ocamlPackages.camlp5_transitional;
+  camlp5 = ocamlPackages.camlp5_strict;
   ideFlags = if buildIde then "-lablgtkdir ${ocamlPackages.lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt" else "";
   csdpPatch = if csdp != null then ''
     substituteInPlace plugins/micromega/sos.ml --replace "; csdp" "; ${csdp}/bin/csdp"
@@ -129,10 +130,10 @@ self = stdenv.mkDerivation {
       together with an environment for semi-interactive development of
       machine-checked proofs.
     '';
-    homepage = "http://coq.inria.fr";
+    homepage = http://coq.inria.fr;
     license = licenses.lgpl21;
     branch = coq-version;
-    maintainers = with maintainers; [ roconnor thoughtpolice vbgl ];
+    maintainers = with maintainers; [ roconnor thoughtpolice vbgl Zimmi48 ];
     platforms = platforms.unix;
   };
 }; in self

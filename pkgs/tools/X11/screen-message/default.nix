@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "execgamesdir=$(out)/bin" ];
 
   meta = {
-    homepage = "http://darcs.nomeata.de/cgi-bin/darcsweb.cgi?r=screen-message.debian";
+    homepage = http://darcs.nomeata.de/cgi-bin/darcsweb.cgi?r=screen-message.debian;
     description = "Displays a short text fullscreen in an X11 window";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.fpletz ];

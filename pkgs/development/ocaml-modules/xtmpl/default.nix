@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Xml template library for OCaml";
-    homepage = "https://zoggy.github.io/xtmpl/";
+    homepage = https://zoggy.github.io/xtmpl/;
     license = licenses.lgpl3;
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [ regnat ];

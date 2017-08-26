@@ -140,7 +140,7 @@ channel_closure="$tmpdir/channel.closure"
 nix-store --export $channel_root > $channel_closure
 
 # Populate the target root directory with the basics
-@prepare_root@/bin/nixos-prepare-root $mountPoint $channel_root $system_root @nixClosure@ $system_closure $channel_closure
+@prepare_root@/bin/nixos-prepare-root "$mountPoint" "$channel_root" "$system_root" @nixClosure@ "$system_closure" "$channel_closure"
 
 # nixos-prepare-root doesn't currently do anything with file ownership, so we set it up here instead
 chown @root_uid@:@nixbld_gid@ $mountPoint/nix/store

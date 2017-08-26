@@ -1,6 +1,6 @@
 <?xml version="1.0" ?>
 <sdk:sdk-addon xmlns:sdk="http://schemas.android.com/sdk/android/addon/7" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<!--Generated on 2017-06-07 21:05:03.785544 with ADRT.-->
+	<!--Generated on 2017-07-26 17:22:37.387749 with ADRT.-->
 	<sdk:license id="android-sdk-license" type="text">Terms and Conditions
 
 This is the Android Software Development Kit License Agreement
@@ -1317,16 +1317,16 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:path>m2repository</sdk:path>
 	</sdk:extra>
 	<sdk:extra>
-		<!--Generated from bid:158324354, branch:perforce-->
+		<!--Generated from bid:163087974, branch:perforce-->
 		<sdk:revision>
-			<sdk:major>53</sdk:major>
+			<sdk:major>57</sdk:major>
 		</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Wed Jun  7 15:15:19 2017.-->
-				<sdk:size>194148491</sdk:size>
-				<sdk:checksum type="sha1">9008082eb1e6ff5a78d32a1fed6915f266fc5013</sdk:checksum>
-				<sdk:url>google_m2repository_gms_v11_1_rc16_wear_2_0_3_rc1.zip</sdk:url>
+				<!--Built on: Tue Jul 25 14:44:09 2017.-->
+				<sdk:size>214565802</sdk:size>
+				<sdk:checksum type="sha1">4bc48d6d4d39944cf2b061e3f618cd9d447c75bb</sdk:checksum>
+				<sdk:url>google_m2repository_gms_v11_3_rc05_wear_2_0_4.zip</sdk:url>
 			</sdk:archive>
 		</sdk:archives>
 		<sdk:uses-license ref="android-sdk-license"/>
@@ -1401,16 +1401,16 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:path>google_play_services_froyo</sdk:path>
 	</sdk:extra>
 	<sdk:extra>
-		<!--Generated from bid:158051086, branch:perforce-->
+		<!--Generated from bid:163088463, branch:perforce-->
 		<sdk:revision>
-			<sdk:major>41</sdk:major>
+			<sdk:major>43</sdk:major>
 		</sdk:revision>
 		<sdk:archives>
 			<sdk:archive>
-				<!--Built on: Tue Jun  6 11:50:00 2017.-->
-				<sdk:size>13165315</sdk:size>
-				<sdk:checksum type="sha1">55be81c50041f6a8f62947418f74f683369c971f</sdk:checksum>
-				<sdk:url>google_play_services_v11_rc16.zip</sdk:url>
+				<!--Built on: Tue Jul 25 14:44:00 2017.-->
+				<sdk:size>21391284</sdk:size>
+				<sdk:checksum type="sha1">6b072d5b96fb8726405d363ccdbb4d26bec0b54f</sdk:checksum>
+				<sdk:url>google_play_services_v11_3_rc05.zip</sdk:url>
 			</sdk:archive>
 		</sdk:archives>
 		<sdk:uses-license ref="android-sdk-license"/>

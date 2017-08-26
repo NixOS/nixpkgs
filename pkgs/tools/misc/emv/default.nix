@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://www.i0i0.de/toolchest/emv";
+    homepage = http://www.i0i0.de/toolchest/emv;
     description = "Editor Move: Rename files with your favourite text editor";
     license = stdenv.lib.licenses.publicDomain;
     platforms = stdenv.lib.platforms.unix;

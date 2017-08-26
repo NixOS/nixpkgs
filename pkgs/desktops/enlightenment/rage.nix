@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, efl, gst_all_1, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, efl, gst_all_1, curl, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "rage-${version}";
@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-libav
+    curl
  ];
 
   NIX_CFLAGS_COMPILE = [
@@ -37,6 +38,10 @@ stdenv.mkDerivation rec {
     "-I${efl}/include/ethumb-1"
     "-I${efl}/include/ethumb-client-1"
   ];
+
+  postInstall = ''
+    wrapProgram $out/bin/rage --prefix LD_LIBRARY_PATH : ${curl.out}/lib
+  '';
 
   meta = {
     description = "Video + Audio player along the lines of mplayer";

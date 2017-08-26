@@ -137,8 +137,8 @@ rec {
       echo "Generate man pages from cobra"
       cd ./components/cli
       mkdir -p ./man/man1
-      go build -o /tmp/gen-manpages github.com/docker/cli/man
-      /tmp/gen-manpages --root . --target ./man/man1
+      go build -o ./gen-manpages github.com/docker/cli/man
+      ./gen-manpages --root . --target ./man/man1
 
       # Generate legacy pages from markdown
       echo "Generate legacy manpages"
@@ -161,7 +161,7 @@ rec {
     '';
 
     meta = {
-      homepage = http://www.docker.com/;
+      homepage = https://www.docker.com/;
       description = "An open source project to pack, ship and run any application as a lightweight container";
       license = licenses.asl20;
       maintainers = with maintainers; [ offline tailhook vdemeester ];
@@ -170,13 +170,13 @@ rec {
   };
 
   docker_17_06 = dockerGen rec {
-    version = "17.06.0-ce";
-    rev = "02c1d876176546b5f069dae758d6a7d2ead6bd48"; # git commit
-    sha256 = "0wrg4ygcq4c7f2bwa7pgc7y33idg0hijavx40588jaglz4k8sqpm";
-    runcRev = "992a5be178a62e026f4069f443c6164912adbf09";
-    runcSha256 = "0ylkbn5rprw5cgxazvrwj7balikpfm8vlybwdbfpwnsqk3gc6p8k";
-    containerdRev = "cfb82a876ecc11b5ca0977d1733adbe58599088a";
-    containerdSha256 = "0rix0mv203fn3rcxmpqdpb54l1a0paqplg2xgldpd943qi1rm552";
+    version = "17.06.1-ce";
+    rev = "874a7374f31c77aca693d025101b2de1b20b96c2"; # git commit
+    sha256 = "08xhww2rhpyj73zgh5maycs85zpc0sm3ak8yyyd92dwgncmyi2im";
+    runcRev = "2d41c047c83e09a6d61d464906feb2a2f3c52aa4";
+    runcSha256 = "0v5iv29ck6lkxvxh7a56gfrlgfs0bjvjhrq3p6qqv9qjzv825byq";
+    containerdRev = "3addd840653146c90a254301d6c3a663c7fd6429";
+    containerdSha256 = "0as4s5wd57pdh1cyavkccpgs46kvlhr41v07qrv0phzffdhq3d5j";
     tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";
     tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
   };

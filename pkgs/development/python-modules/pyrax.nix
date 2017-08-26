@@ -27,7 +27,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = "https://github.com/rackspace/pyrax";
+    homepage = https://github.com/rackspace/pyrax;
     license = lib.licenses.asl20;
     description = "Python API to interface with Rackspace";
     maintainers = with lib.maintainers; [ teh ];

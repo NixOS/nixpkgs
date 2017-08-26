@@ -29,7 +29,7 @@ in
     name = "gnome-dark-2015-02-27";
     description = "Gnome Dark background for Nix";
     src = fetchurl {
-      url = https://raw.githubusercontent.com/Nix/nixos-artwork/7ece5356398db14b5513392be4b31f8aedbb85a2/gnome/Gnome_Dark.png;
+      url = https://raw.githubusercontent.com/NixOS/nixos-artwork/7ece5356398db14b5513392be4b31f8aedbb85a2/gnome/Gnome_Dark.png;
       sha256 = "0c7sl9k4zdjwvdz3nhlm8i4qv4cjr0qagalaa1a438jigixx27l7";
     };
   };

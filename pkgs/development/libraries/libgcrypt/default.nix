@@ -1,22 +1,26 @@
-{ lib, stdenv, fetchurl, libgpgerror, enableCapabilities ? false, libcap }:
+{ stdenv, fetchurl, libgpgerror, enableCapabilities ? false, libcap }:
 
 assert enableCapabilities -> stdenv.isLinux;
 
 stdenv.mkDerivation rec {
   name = "libgcrypt-${version}";
-  version = "1.7.8";
+  version = "1.8.0";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${name}.tar.bz2";
-    sha256 = "16f1rsv4y4w2pk1il2jbcqggsb6mrlfva5vayd205fp68zm7d0ll";
+    sha256 = "06w97l88y2c29zf8p8cg0m4k2kiiyj6pqxdl0cxigi3wp2brdr13";
   };
 
   outputs = [ "out" "dev" "info" ];
   outputBin = "dev";
 
-  buildInputs =
-    [ libgpgerror ]
-    ++ lib.optional enableCapabilities libcap;
+  # The CPU Jitter random number generator must not be compiled with
+  # optimizations and the optimize -O0 pragma only works for gcc.
+  # The build enables -O2 by default for everything else.
+  hardeningDisable = stdenv.lib.optional stdenv.cc.isClang "fortify";
+
+  buildInputs = [ libgpgerror ]
+    ++ stdenv.lib.optional enableCapabilities libcap;
 
   # Make sure libraries are correct for .pc and .la files
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config

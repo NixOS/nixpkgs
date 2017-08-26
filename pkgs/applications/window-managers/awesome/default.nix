@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, luaPackages, cairo, librsvg, cmake, imagemagick, pkgconfig, gdk_pixbuf
+{ stdenv, fetchFromGitHub, luaPackages, cairo, librsvg, cmake, imagemagick, pkgconfig, gdk_pixbuf
 , xorg, libstartup_notification, libxdg_basedir, libpthreadstubs
 , xcb-util-cursor, makeWrapper, pango, gobjectIntrospection, unclutter
 , compton, procps, iproute, coreutils, curl, alsaUtils, findutils, xterm
@@ -9,13 +9,13 @@
 
 with luaPackages; stdenv.mkDerivation rec {
   name = "awesome-${version}";
-  version = "4.1";
+  version = "4.2";
   
   src = fetchFromGitHub {
     owner = "awesomewm";
     repo = "awesome";
     rev = "v${version}";
-    sha256 = "1qik8h5nwjq4535lpdpal85vas1k7am3s6l5r763kpdzxhfcyyaj";
+    sha256 = "1pcgagcvm6rdky8p8dd810j3ywaz0ncyk5xgaykslaixzrq60kff";
   };
 
   nativeBuildInputs = [
@@ -37,13 +37,6 @@ with luaPackages; stdenv.mkDerivation rec {
                   xorg.xcbutil xorg.xcbutilimage xorg.xcbutilkeysyms
                   xorg.xcbutilrenderutil xorg.xcbutilwm libxkbcommon
                   xcbutilxrm ];
-
-  patches = [
-    (fetchurl {
-      url = "https://patch-diff.githubusercontent.com/raw/awesomeWM/awesome/pull/1639.patch";
-      sha256 = "00piynmbxajd2xbg960gmf0zlqn7m489f4ww482y49ravfy1jhsj";
-    })
-  ];
 
   #cmakeFlags = "-DGENERATE_MANPAGES=ON";
 

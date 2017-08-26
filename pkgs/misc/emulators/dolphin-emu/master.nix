@@ -4,12 +4,12 @@
 , libpulseaudio ? null }:
 
 stdenv.mkDerivation rec {
-  name = "dolphin-emu-20170705";
+  name = "dolphin-emu-20170730";
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "29cc009706f133aac39ebaa7003d37555b926109";
-    sha256 = "0axd2z14lyqlaxrjssc0dkqnjdk3ccxh2fqrhya0jc2rsm8ighlz";
+    rev = "141fb0f03ca4e0d05f7ccbf3e020997097f60dbe";
+    sha256 = "1b4ygrfj1dpmyv7qqfnqrrvm96a3b68cwcnvv2pknrcpc17g52im";
   };
 
   cmakeFlags = ''

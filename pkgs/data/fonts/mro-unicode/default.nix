@@ -1,10 +1,13 @@
-{ lib, runCommand, fetchurl }:
+{ lib, fetchzip }:
 
-runCommand "mro-unicode-2013-05-25" {
-  src = fetchurl {
-    url = "https://github.com/phjamr/MroUnicode/raw/master/MroUnicode-Regular.ttf";
-    sha256 = "1za74ych0sh97ks6qp9iqq9jankgnkrq65s350wsbianwi72di45";
-  };
+fetchzip {
+  name = "mro-unicode-2013-05-25";
+
+  url = "https://github.com/phjamr/MroUnicode/raw/master/MroUnicode-Regular.ttf";
+
+  postFetch = "install -Dm644 $downloadedFile $out/share/fonts/truetype/MroUnicode-Regular.ttf";
+
+  sha256 = "1i71bjd9gdyn8ladfncbfhz6xz1h8xx8yf876j1z8lh719410c8g";
 
   meta = with lib; {
     homepage = https://github.com/phjamr/MroUnicode;
@@ -14,7 +17,3 @@ runCommand "mro-unicode-2013-05-25" {
     platforms = platforms.all;
   };
 }
-''
-  mkdir -p $out/share/fonts/truetype
-  cp $src $out/share/fonts/truetype/MroUnicode-Regular.ttf
-''

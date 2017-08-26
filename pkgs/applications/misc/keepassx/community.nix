@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch,
-  cmake, libgcrypt, zlib, libmicrohttpd, libXtst, qtbase, qttools, libgpgerror, glibcLocales
+  cmake, libgcrypt, zlib, libmicrohttpd, libXtst, qtbase, qttools, libgpgerror, glibcLocales, libyubikey, yubikey-personalization, libXi, qtx11extras
 , withKeePassHTTP ? true
 }:
 
@@ -16,7 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "0gg75mjy2p7lyh8nnivmyn7bjp1zyx26zm8s1fak7d2di2r0mnjc";
   };
 
-  cmakeFlags = [ "-DWITH_GUI_TESTS=ON" ] ++ (optional withKeePassHTTP "-DWITH_XC_HTTP=ON");
+  cmakeFlags = [ 
+    "-DWITH_GUI_TESTS=ON" 
+    "-DWITH_XC_AUTOTYPE=ON"
+    "-DWITH_XC_YUBIKEY=ON"
+  ] ++ (optional withKeePassHTTP "-DWITH_XC_HTTP=ON");
 
   doCheck = true;
   checkPhase = ''
@@ -24,7 +28,7 @@ stdenv.mkDerivation rec {
     make test ARGS+="-E testgui --output-on-failure"
   '';
 
-  buildInputs = [ cmake libgcrypt zlib qtbase qttools libXtst libmicrohttpd libgpgerror glibcLocales ];
+  buildInputs = [ cmake libgcrypt zlib qtbase qttools libXtst libmicrohttpd libgpgerror glibcLocales libyubikey yubikey-personalization libXi qtx11extras ];
 
   meta = {
     description = "Fork of the keepassX password-manager with additional http-interface to allow browser-integration an use with plugins such as PasslFox (https://github.com/pfn/passifox). See also keepassX2.";

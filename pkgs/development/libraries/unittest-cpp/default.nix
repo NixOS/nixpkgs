@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = {
-    homepage = "https://github.com/unittest-cpp/unittest-cpp";
+    homepage = https://github.com/unittest-cpp/unittest-cpp;
     description = "Lightweight unit testing framework for C++";
     license = licenses.mit;
     maintainers = [];

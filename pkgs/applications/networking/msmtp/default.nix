@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple and easy to use SMTP client with excellent sendmail compatibility";
-    homepage = "http://msmtp.sourceforge.net/";
+    homepage = http://msmtp.sourceforge.net/;
     license = licenses.gpl3;
     maintainers = with maintainers; [ garbas peterhoeg ];
     platforms = platforms.unix;

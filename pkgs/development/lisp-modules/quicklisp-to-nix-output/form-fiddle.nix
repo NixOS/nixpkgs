@@ -1,15 +1,15 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''form-fiddle'';
-  version = ''20170516-git'';
+  version = ''20170630-git'';
 
   description = ''A collection of utilities to destructure lambda forms.'';
 
-  deps = [ ];
+  deps = [ args."documentation-utils" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/form-fiddle/2017-05-16/form-fiddle-20170516-git.tgz'';
-    sha256 = ''00h38gh8absx9pclwlxgknbmbnj20sngkzaj2qa6whg5kgbgj4fh'';
+    url = ''http://beta.quicklisp.org/archive/form-fiddle/2017-06-30/form-fiddle-20170630-git.tgz'';
+    sha256 = ''0w4isi9y2h6vswq418hj50223aac89iadl71y86wxdlznm3kdvjf'';
   };
     
   packageName = "form-fiddle";
@@ -30,6 +30,6 @@ rec {
     '';
   };
 }
-/* (SYSTEM form-fiddle DESCRIPTION A collection of utilities to destructure lambda forms. SHA256 00h38gh8absx9pclwlxgknbmbnj20sngkzaj2qa6whg5kgbgj4fh URL
-    http://beta.quicklisp.org/archive/form-fiddle/2017-05-16/form-fiddle-20170516-git.tgz MD5 8f0d8b920f6da0c7fd939b7096c30235 NAME form-fiddle TESTNAME NIL
-    FILENAME form-fiddle DEPS NIL DEPENDENCIES NIL VERSION 20170516-git SIBLINGS NIL) */
+/* (SYSTEM form-fiddle DESCRIPTION A collection of utilities to destructure lambda forms. SHA256 0w4isi9y2h6vswq418hj50223aac89iadl71y86wxdlznm3kdvjf URL
+    http://beta.quicklisp.org/archive/form-fiddle/2017-06-30/form-fiddle-20170630-git.tgz MD5 9c8eb18dfedebcf43718cc259c910aa1 NAME form-fiddle TESTNAME NIL
+    FILENAME form-fiddle DEPS ((NAME documentation-utils FILENAME documentation-utils)) DEPENDENCIES (documentation-utils) VERSION 20170630-git SIBLINGS NIL) */

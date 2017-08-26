@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.netsurf-browser.org/";
+    homepage = http://www.netsurf-browser.org/;
     description = "Document Object Model library for netsurf browser";
     license = licenses.gpl2;
     maintainers = [ maintainers.vrthra ];

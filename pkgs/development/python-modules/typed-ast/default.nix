@@ -12,7 +12,7 @@ buildPythonPackage rec {
   # No tests in archive
   doCheck = false;
   meta = {
-    homepage = "https://pypi.python.org/pypi/typed-ast";
+    homepage = https://pypi.python.org/pypi/typed-ast;
     description = "a fork of Python 2 and 3 ast modules with type comment support";
     license = lib.licenses.asl20;
   };

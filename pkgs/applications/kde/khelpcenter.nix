@@ -1,16 +1,16 @@
 {
   mkDerivation,
   extra-cmake-modules, kdoctools,
-  grantlee, kconfig, kcoreaddons, kdbusaddons, ki18n, kinit, kcmutils,
-  kdelibs4support, khtml, kservice, xapian
+  grantlee, kcmutils, kconfig, kcoreaddons, kdbusaddons, kdelibs4support, ki18n,
+  kinit, khtml, kservice, xapian
 }:
 
 mkDerivation {
   name = "khelpcenter";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [ ki18n xapian ];
-  propagatedBuildInputs = [
-    grantlee kdelibs4support khtml kconfig kcoreaddons kdbusaddons
-    kinit kcmutils kservice
+  buildInputs = [
+    grantlee kcmutils kconfig kcoreaddons kdbusaddons kdelibs4support khtml
+    ki18n kinit kservice xapian
   ];
+  patches = [ ./khelpcenter_kcoreaddons.patch ];
 }

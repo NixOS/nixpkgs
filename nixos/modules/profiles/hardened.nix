@@ -59,4 +59,10 @@ with lib;
   # the feature at runtime.  Attempting to create a user namespace
   # with unshare will then fail with "no space left on device".
   boot.kernel.sysctl."user.max_user_namespaces" = mkDefault 0;
+
+  # Raise ASLR entropy for 64bit & 32bit, respectively.
+  #
+  # Note: mmap_rnd_compat_bits may not exist on 64bit.
+  boot.kernel.sysctl."vm.mmap_rnd_bits" = mkDefault 32;
+  boot.kernel.sysctl."vm.mmap_rnd_compat_bits" = mkDefault 16;
 }

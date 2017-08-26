@@ -12,12 +12,22 @@ rec {
   # * https://nixos.org/nix/manual/#ssec-derivation
   #   Explanation about derivations in general
   mkDerivation =
-    { nativeBuildInputs ? []
+    { name ? ""
+
+    , nativeBuildInputs ? []
     , buildInputs ? []
 
     , propagatedNativeBuildInputs ? []
     , propagatedBuildInputs ? []
 
+    , configureFlags ? []
+    , # Target is not included by default because most programs don't care.
+      # Including it then would cause needless mass rebuilds.
+      #
+      # TODO(@Ericson2314): Make [ "build" "host" ] always the default.
+      configurePlatforms ? lib.optionals
+        (stdenv.hostPlatform != stdenv.buildPlatform)
+        [ "build" "host" ]
     , crossConfig ? null
     , meta ? {}
     , passthru ? {}
@@ -33,30 +43,20 @@ rec {
     , propagatedSandboxProfile ? ""
     , ... } @ attrs:
     let
-      dependencies = [
-        (map (drv: drv.nativeDrv or drv) nativeBuildInputs)
+      dependencies = map lib.chooseDevOutputs [
+        (map (drv: drv.nativeDrv or drv) nativeBuildInputs
+           ++ lib.optional separateDebugInfo ../../build-support/setup-hooks/separate-debug-info.sh
+           ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh)
         (map (drv: drv.crossDrv or drv) buildInputs)
       ];
-      propagatedDependencies = [
+      propagatedDependencies = map lib.chooseDevOutputs [
         (map (drv: drv.nativeDrv or drv) propagatedNativeBuildInputs)
         (map (drv: drv.crossDrv or drv) propagatedBuildInputs)
       ];
-    in let
 
       outputs' =
         outputs ++
         (if separateDebugInfo then assert stdenv.hostPlatform.isLinux; [ "debug" ] else []);
-
-      dependencies' = let
-          justMap = map lib.chooseDevOutputs dependencies;
-          nativeBuildInputs = lib.elemAt justMap 0
-            ++ lib.optional stdenv.hostPlatform.isWindows ../../build-support/setup-hooks/win-dll-link.sh;
-          buildInputs = lib.elemAt justMap 1
-               # TODO(@Ericson2314): Should instead also be appended to `nativeBuildInputs`.
-            ++ lib.optional separateDebugInfo ../../build-support/setup-hooks/separate-debug-info.sh;
-        in [ nativeBuildInputs buildInputs ];
-
-      propagatedDependencies' = map lib.chooseDevOutputs propagatedDependencies;
 
       derivationArg =
         (removeAttrs attrs
@@ -64,17 +64,19 @@ rec {
            "__impureHostDeps" "__propagatedImpureHostDeps"
            "sandboxProfile" "propagatedSandboxProfile"])
         // (let
-          # TODO(@Ericson2314): Reversing of dep lists is just temporary to avoid Darwin mass rebuild.
           computedSandboxProfile =
-            lib.concatMap (input: input.__propagatedSandboxProfile or []) (stdenv.extraBuildInputs ++ lib.concatLists (lib.reverseList dependencies'));
+            lib.concatMap (input: input.__propagatedSandboxProfile or []) (stdenv.extraBuildInputs ++ lib.concatLists dependencies);
           computedPropagatedSandboxProfile =
-            lib.concatMap (input: input.__propagatedSandboxProfile or []) (lib.concatLists (lib.reverseList propagatedDependencies'));
+            lib.concatMap (input: input.__propagatedSandboxProfile or []) (lib.concatLists propagatedDependencies);
           computedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (stdenv.extraBuildInputs ++ lib.concatLists (lib.reverseList dependencies')));
+            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (stdenv.extraBuildInputs ++ lib.concatLists dependencies));
           computedPropagatedImpureHostDeps =
-            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (lib.concatLists (lib.reverseList propagatedDependencies')));
+            lib.unique (lib.concatMap (input: input.__propagatedImpureHostDeps or []) (lib.concatLists propagatedDependencies));
         in
         {
+          name = name + lib.optionalString
+            (stdenv.hostPlatform != stdenv.buildPlatform)
+            stdenv.hostPlatform.config;
           builder = attrs.realBuilder or stdenv.shell;
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
           inherit stdenv;
@@ -82,11 +84,21 @@ rec {
           userHook = config.stdenv.userHook or null;
           __ignoreNulls = true;
 
-          nativeBuildInputs = lib.elemAt dependencies' 0;
-          buildInputs = lib.elemAt dependencies' 1;
+          nativeBuildInputs = lib.elemAt dependencies 0;
+          buildInputs = lib.elemAt dependencies 1;
 
-          propagatedNativeBuildInputs = lib.elemAt propagatedDependencies' 0;
-          propagatedBuildInputs = lib.elemAt propagatedDependencies' 1;
+          propagatedNativeBuildInputs = lib.elemAt propagatedDependencies 0;
+          propagatedBuildInputs = lib.elemAt propagatedDependencies 1;
+
+          # This parameter is sometimes a string, sometimes null, and sometimes a list, yuck
+          configureFlags = let inherit (lib) optional elem; in
+            (/**/ if lib.isString configureFlags then [configureFlags]
+             else if configureFlags == null      then []
+             else                                     configureFlags)
+            ++ optional (elem "build"  configurePlatforms) "--build=${stdenv.buildPlatform.config}"
+            ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
+            ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
+
         } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {
           # TODO: remove lib.unique once nix has a list canonicalization primitive
           __sandboxProfile =

@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "An advanced and secure webserver";
     license = licenses.gpl2;
-    homepage = "https://www.hiawatha-webserver.org";
+    homepage = https://www.hiawatha-webserver.org;
     maintainer = [ maintainers.ndowens ];
   };
 

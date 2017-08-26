@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "bin" "dev" "out" "doc" ]
+  outputs = [ "bin" "dev" "out" "man" "doc" ]
     ++ lib.optional pythonSupport "py";
   propagatedBuildOutputs = "out bin" + lib.optionalString pythonSupport " py";
 

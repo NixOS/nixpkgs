@@ -1,17 +1,17 @@
 /*
-Requirements for Building TrueCrypt for Linux and Mac OS X:
+Requirements for Building TrueCrypt for Linux and macOS:
 -----------------------------------------------------------
 
 - GNU Make
 - GNU C++ Compiler 4.0 or compatible
-- Apple XCode (Mac OS X only)
+- Apple XCode (macOS only)
 - pkg-config
 - wxWidgets 2.8 library source code (available at http://www.wxwidgets.org)
 - FUSE library (available at http://fuse.sourceforge.net and
   http://code.google.com/p/macfuse)
 
 
-Instructions for Building TrueCrypt for Linux and Mac OS X:
+Instructions for Building TrueCrypt for Linux and macOS:
 -----------------------------------------------------------
 
 1) Change the current directory to the root of the TrueCrypt source code.

@@ -12,7 +12,7 @@
 }:
 
 let
-  version = "2.13.2";
+  version = "2.14.1";
   svn = subversionClient.override { perlBindings = true; };
 in
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "1rfx2gj7dw9rw0w22ihi940zv3wdrj1xmjv25djq2vs6a4vsq40d";
+    sha256 = "1iic3wiihxp3l3k6d4z886v3869c3dzgddjxnd5124wy1rnlqwkg";
   };
 
   hardeningDisable = [ "format" ];
@@ -198,7 +198,7 @@ EOF
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://git-scm.com/;
+    homepage = https://git-scm.com/;
     description = "Distributed version control system";
     license = stdenv.lib.licenses.gpl2;
 

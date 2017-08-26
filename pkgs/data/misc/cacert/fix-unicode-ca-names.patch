@@ -1,0 +1,20 @@
+--- a/certdata2pem.py	2017-08-01 23:10:00.000000000 +0300
++++ b/certdata2pem.py	2017-08-01 23:08:21.131297636 +0300
+@@ -88,7 +88,7 @@
+ \# Read blacklist.
+ blacklist = []
+ if os.path.exists('blacklist.txt'):
+-    for line in open('blacklist.txt', 'r'):
++    for line in io.open('blacklist.txt', 'r', encoding='utf-8'):
+         line = line.strip()
+         if line.startswith('#') or len(line) == 0:
+             continue
+@@ -101,7 +101,7 @@
+     if obj['CKA_CLASS'] != 'CKO_NSS_TRUST':
+         continue
+     if obj['CKA_LABEL'] in blacklist:
+-        print("Certificate %s blacklisted, ignoring." % obj['CKA_LABEL'])
++        print("Certificate %s blacklisted, ignoring." % unicode(obj['CKA_LABEL']).encode('utf-8'))
+     elif obj['CKA_TRUST_SERVER_AUTH'] == 'CKT_NSS_TRUSTED_DELEGATOR':
+         trust[obj['CKA_LABEL']] = True
+     elif obj['CKA_TRUST_EMAIL_PROTECTION'] == 'CKT_NSS_TRUSTED_DELEGATOR':

@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   preFixup = ''rm -rf "$(pwd)" '';
 
   meta = {
-    homepage = "http://linux.dell.com/libsmbios/main";
+    homepage = http://linux.dell.com/libsmbios/main;
     description = "A library to obtain BIOS information";
     license = stdenv.lib.licenses.gpl2Plus; # alternatively, under the Open Software License version 2.1
     platforms = stdenv.lib.platforms.linux;

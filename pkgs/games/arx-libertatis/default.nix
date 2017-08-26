@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       first-person role-playing game / dungeon crawler
       developed by Arkane Studios.
     '';
-    homepage = "http://arx-libertatis.org/";
+    homepage = http://arx-libertatis.org/;
     license = licenses.gpl3;
     maintainers = with maintainers; [ rnhmjoj ];
     platforms = platforms.linux;

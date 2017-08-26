@@ -14,7 +14,7 @@ stdenv.mkDerivation {
       -e "s|/bin/cp|cp|"  \
       -e "s|/bin/rm|rm|"
   '';
-  
+
   configureFlags = "--with-slang=${slang.dev}";
 
   buildInputs = [ slang ncurses ];
@@ -28,6 +28,6 @@ stdenv.mkDerivation {
     '';
     homepage = http://www.jedsoft.org/most/index.html;
     license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.gnu; # random choice
+    platforms = stdenv.lib.platforms.unix;
   };
 }
