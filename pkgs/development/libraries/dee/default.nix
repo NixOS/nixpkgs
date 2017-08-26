@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib gobjectIntrospection icu ];
   nativeBuildInputs = [ python pkgconfig ];
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=misleading-indentation" ]; # gcc-6
+
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
