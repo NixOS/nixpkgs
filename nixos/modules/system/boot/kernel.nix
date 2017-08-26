@@ -57,7 +57,6 @@ in
       type = types.listOf types.str;
       default = [ ];
       description = "Parameters added to the kernel command line.";
-      apply = list: attrNames (genAttrs list (_: true)); # dedup and sort to avoid restarting services on eval order change
     };
 
     boot.consoleLogLevel = mkOption {
