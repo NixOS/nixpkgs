@@ -9,17 +9,17 @@ let
   # /var/lib/misc is for dnsmasq.leases.
   stateDirs = "/var/lib/NetworkManager /var/lib/dhclient /var/lib/misc";
 
-  dns =
-    if cfg.useDnsmasq then "dnsmasq"
-    else if config.services.resolved.enable then "systemd-resolved"
-    else if config.services.unbound.enable then "unbound"
-    else "default";
+  useDnsmasq = cfg.dns == "dnsmasq";
+  useResolved = cfg.dns == "systemd-resolved";
+
+  rcman = if useResolved then "unmanaged" else "resolvconf";
 
   configFile = writeText "NetworkManager.conf" ''
     [main]
     plugins=keyfile
     dhcp=${cfg.dhcp}
-    dns=${dns}
+    dns=${cfg.dns}
+    rc-manager=${rcman}
 
     [keyfile]
     ${optionalString (cfg.unmanaged != [])
@@ -32,6 +32,8 @@ let
     ipv6.ip6-privacy=2
     ethernet.cloned-mac-address=${cfg.ethernet.macAddress}
     wifi.cloned-mac-address=${cfg.wifi.macAddress}
+
+    ${cfg.extraConfig}
   '';
 
   /*
@@ -144,6 +146,17 @@ in {
         apply = list: (attrValues cfg.basePackages) ++ list;
       };
 
+      dns = mkOption {
+        type = types.enum [ "default" "dnsmasq" "systemd-resolved" ];
+        default = "default";
+        description = ''
+          Enable NetworkManager's integration with other DNS resolvers. NetworkManager can run
+          dnsmasq as a local caching nameserver or systemd-resolved, using a "split DNS"
+          configuration if you are connected to a VPN, and then update
+          resolv.conf to point to the local nameserver.
+        '';
+      };
+
       dhcp = mkOption {
         type = types.enum [ "dhclient" "dhcpcd" "internal" ];
         default = "dhclient";
@@ -181,17 +194,6 @@ in {
       ethernet.macAddress = macAddressOpt;
       wifi.macAddress = macAddressOpt;
 
-      useDnsmasq = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Enable NetworkManager's dnsmasq integration. NetworkManager will run
-          dnsmasq as a local caching nameserver, using a "split DNS"
-          configuration if you are connected to a VPN, and then update
-          resolv.conf to point to the local nameserver.
-        '';
-      };
-
       dispatcherScripts = mkOption {
         type = types.listOf (types.submodule {
           options = {
@@ -215,6 +217,12 @@ in {
         description = ''
           A list of scripts which will be executed in response to  network  events.
         '';
+      };
+
+      extraConfig = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Additional configuration added verbatim to the configuration file.";
       };
     };
   };
@@ -289,10 +297,15 @@ in {
       group = "networkmanager";
     }];
 
+    services.resolved = lib.mkIf useResolved {
+      enable = true;
+    };
+
     systemd.packages = cfg.packages;
 
     systemd.services."network-manager" = {
       wantedBy = [ "network.target" ];
+      wants = lib.mkIf useResolved [ "systemd-resolved.service" ];
       restartTriggers = [ configFile ];
 
       preStart = ''
