@@ -9277,8 +9277,6 @@ with pkgs;
 
   libtsm = callPackage ../development/libraries/libtsm { };
 
-  libtunepimp = callPackage ../development/libraries/libtunepimp { };
-
   libtxc_dxtn = callPackage ../development/libraries/libtxc_dxtn { };
 
   libtxc_dxtn_s2tc = callPackage ../development/libraries/libtxc_dxtn_s2tc { };
