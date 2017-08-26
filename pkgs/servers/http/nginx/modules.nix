@@ -24,8 +24,8 @@
     src = fetchFromGitHub {
       owner = "arut";
       repo = "nginx-dav-ext-module";
-      rev = "v0.0.3";
-      sha256 = "1qck8jclxddncjad8yv911s9z7lrd58bp96jf13m0iqk54xghx91";
+      rev = "v0.1.0";
+      sha256 = "1ifahd69vz715g3zim618jbmxb7kcmzykc696grskxm0svpy294k";
     };
     inputs = [ pkgs.expat ];
   };
