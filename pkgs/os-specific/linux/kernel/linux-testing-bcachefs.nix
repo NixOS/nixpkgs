@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, perl, buildLinux, ... } @ args:
+{ stdenv, hostPlatform, fetchgit, perl, buildLinux, ... } @ args:
 
 import ./generic.nix (args // rec {
   version = "4.11-git";
