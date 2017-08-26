@@ -10,9 +10,9 @@ in
 
   apple_sdk = callPackage ../os-specific/darwin/apple-sdk { };
 
-  binutils = callPackage ../os-specific/darwin/binutils {
+  binutils = pkgs.wrapBinutils (callPackage ../os-specific/darwin/binutils {
     inherit (darwin) cctools;
-  };
+  });
 
   cctools = callPackage ../os-specific/darwin/cctools/port.nix {
     inherit (darwin) libobjc maloader;

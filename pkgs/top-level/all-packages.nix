@@ -5223,7 +5223,9 @@ with pkgs;
 
   clang-sierraHack = clang.override {
     name = "clang-wrapper-with-reexport-hack";
-    useMacosReexportHack = true;
+    binutils = clang.binutils.override {
+      useMacosReexportHack = true;
+    };
   };
 
   clang_4  = llvmPackages_4.clang;
@@ -6115,6 +6117,7 @@ with pkgs;
   };
 
   ccWrapperFun = callPackage ../build-support/cc-wrapper;
+  binutilsWrapperFun = callPackage ../build-support/binutils-wrapper;
 
   wrapCC = wrapCCWith stdenv.cc.libc "";
   # legacy version, used for gnat bootstrapping
@@ -6139,6 +6142,15 @@ with pkgs;
 
       inherit cc binutils libc shell name;
     };
+
+  wrapBinutils = baseBinutils: binutilsWrapperFun {
+    nativeTools = stdenv.cc.nativeTools or false;
+    nativeLibc = stdenv.cc.nativeLibc or false;
+    nativePrefix = stdenv.cc.nativePrefix or "";
+    libc = stdenv.cc.libc;
+    binutils = baseBinutils;
+    extraBuildCommands = "";
+  };
 
   # prolog
   yap = callPackage ../development/compilers/yap { };
@@ -6690,13 +6702,15 @@ with pkgs;
     then darwin.binutils
     else binutils-raw;
 
-  binutils-raw = callPackage ../development/tools/misc/binutils {
+  binutils-raw = wrapBinutils (callPackage ../development/tools/misc/binutils {
     # FHS sys dirs presumably only have stuff for the build platform
     noSysDirs = (targetPlatform != buildPlatform) || noSysDirs;
-  };
+  });
 
   binutils_nogold = lowPrio (binutils-raw.override {
-    gold = false;
+    binutils = binutils-raw.binutils.override {
+      gold = false;
+    };
   });
 
   bison2 = callPackage ../development/tools/parsing/bison/2.x.nix { };
