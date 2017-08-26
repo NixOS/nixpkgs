@@ -17513,6 +17513,8 @@ with pkgs;
 
   robotfindskitten = callPackage ../games/robotfindskitten { };
 
+  rocksndiamonds = callPackage ../games/rocksndiamonds { };
+
   saga = callPackage ../applications/gis/saga { };
 
   samplv1 = callPackage ../applications/audio/samplv1 { };
