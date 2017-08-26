@@ -12,12 +12,8 @@
       dontBuild = true;
       dontStrip = true;
       installPhase = ''
-        mkdir -pv $out/bin
-        mkdir -pv $out/share/flyway
-        cp -v -r sql $out/share/flyway
-        cp -v -r jars $out/share/flyway
-        cp -v -r lib $out/share/flyway
-        cp -v -r drivers $out/share/flyway
+        mkdir -p $out/bin $out/share/flyway
+        cp -r sql jars lib drivers $out/share/flyway
         makeWrapper "${jre_headless}/bin/java" $out/bin/flyway \
           --add-flags "-Djava.security.egd=file:/dev/../dev/urandom" \
           --add-flags "-cp '$out/share/flyway/lib/*:$out/share/flyway/drivers/*'" \
