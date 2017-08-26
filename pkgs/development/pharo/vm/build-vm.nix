@@ -123,10 +123,6 @@ stdenv.mkDerivation rec {
     homepage = http://pharo.org;
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.lukego ];
-    # Pharo VM sources are packaged separately for darwin (macOS)
-    platforms = with stdenv.lib;
-                  intersectLists
-                    platforms.mesaPlatforms
-                    (subtractLists platforms.darwin platforms.unix);
+    platforms = [ "i686-linux" "x86_64-linux" "i686-darwin" "x86_64-darwin" ];
   };
 }
