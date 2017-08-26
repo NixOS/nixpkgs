@@ -19,9 +19,9 @@
 } @ args:
 
 let
-  version = "2.25";
-  patchSuffix = "-49";
-  sha256 = "067bd9bb3390e79aa45911537d13c3721f1d9d3769931a30c2681bfee66f23a0";
+  version = "2.26";
+  patchSuffix = "-75";
+  sha256 = "1ggnj1hzjym7sn93rbwydcqd562q73lsb7g7kd199g6j9j9hlkp5";
   cross = if buildPlatform != hostPlatform then hostPlatform else null;
 in
 
@@ -46,7 +46,7 @@ stdenv.mkDerivation ({
           glibc-2.25-49-gbc5ace67fe
           $ git show --reverse glibc-2.25..release/2.25/master | gzip -n -9 --rsyncable - > 2.25-49.patch.gz
       */
-      ./2.25-49.patch.gz
+      ./2.26-75.patch.gz
 
       /* Have rpcgen(1) look for cpp(1) in $PATH.  */
       ./rpcgen-path.patch
@@ -100,15 +100,12 @@ stdenv.mkDerivation ({
       (if profilingLibraries
        then "--enable-profile"
        else "--disable-profile")
-    ] ++ lib.optionals (cross == null && withLinuxHeaders) [
-      "--enable-kernel=2.6.32"
+    ] ++ lib.optionals withLinuxHeaders [
+      "--enable-kernel=3.2.0" # can't get below with glibc >= 2.26
     ] ++ lib.optionals (cross != null) [
       (if cross.withTLS then "--with-tls" else "--without-tls")
       (if cross ? float && cross.float == "soft" then "--without-fp" else "--with-fp")
-    ] ++ lib.optionals (cross != null
-          && cross.platform ? kernelMajor
-          && cross.platform.kernelMajor == "2.6") [
-      "--enable-kernel=2.6.0"
+    ] ++ lib.optionals (cross != null) [
       "--with-__thread"
     ] ++ lib.optionals (cross == null && stdenv.isArm) [
       "--host=arm-linux-gnueabi"
