@@ -232,7 +232,10 @@ in rec {
     script = mkOption {
       type = types.lines;
       default = "";
-      description = "Shell commands executed as the service's main process.";
+      description = ''
+        Shell commands executed as the service's main process. Note that this is
+        functionally equivalent to <literal>serviceConfig.ExecStart</literal>.
+      '';
     };
 
     scriptArgs = mkOption {
