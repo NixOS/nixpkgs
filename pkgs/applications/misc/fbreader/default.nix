@@ -16,11 +16,13 @@ stdenv.mkDerivation {
 
   makeFlags = "INSTALLDIR=$(out)";
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=narrowing" ]; # since gcc-6
+
   patchPhase = ''
     # don't try to use ccache
     substituteInPlace makefiles/arch/desktop.mk \
       --replace "CCACHE = " "# CCACHE = "
-  
+
     substituteInPlace fbreader/desktop/Makefile \
       --replace "/usr/share" "$out/share"
   '';
