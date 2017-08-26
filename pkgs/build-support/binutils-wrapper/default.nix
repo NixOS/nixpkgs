@@ -84,7 +84,7 @@ stdenv.mkDerivation {
   outputs = [ "out" "man" ];
 
   passthru = {
-    inherit libc nativeTools nativeLibc nativePrefix prefix;
+    inherit binutils libc nativeTools nativeLibc nativePrefix prefix;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too

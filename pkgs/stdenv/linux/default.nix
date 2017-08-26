@@ -143,7 +143,16 @@ in
         '';
       };
       gcc-unwrapped = bootstrapTools;
-      binutils = bootstrapTools;
+      binutils = import ../../build-support/binutils-wrapper {
+        nativeTools = false;
+        nativeLibc = false;
+        buildPackages = { };
+        libc = self.glibc;
+        inherit (self) coreutils gnugrep;
+        binutils = bootstrapTools;
+        name = "bootstrap-binutils-wrapper";
+        stdenv = self.stdenv;
+      };
       coreutils = bootstrapTools;
       gnugrep = bootstrapTools;
     };
@@ -165,7 +174,7 @@ in
 
     # Rebuild binutils to use from stage2 onwards.
     overrides = self: super: {
-      binutils = super.binutils.override { gold = false; };
+      binutils = super.binutils_nogold;
       inherit (prevStage)
         ccWrapperStdenv
         glibc gcc-unwrapped coreutils gnugrep;
@@ -188,9 +197,14 @@ in
     overrides = self: super: {
       inherit (prevStage)
         ccWrapperStdenv
-        binutils gcc-unwrapped coreutils gnugrep
+        gcc-unwrapped coreutils gnugrep
         perl paxctl gnum4 bison;
       # This also contains the full, dynamically linked, final Glibc.
+      binutils = prevStage.binutils.override {
+        # Rewrap the binutils with the new glibc, so both the next
+        # stage's wrappers use it.
+        libc = self.glibc;
+      };
     };
   })
 
@@ -234,6 +248,15 @@ in
       # then if we already have a zlib we want to use that for the
       # other purposes (binutils and top-level pkgs) too.
       inherit (prevStage) gettext gnum4 bison gmp perl glibc zlib linuxHeaders;
+
+      binutils = super.binutils.override {
+        # Don't use stdenv's shell but our own
+        shell = self.bash + "/bin/bash";
+        # Build expand-response-params with last stage like below
+        buildPackages = {
+          inherit (prevStage) stdenv;
+        };
+      };
 
       gcc = lib.makeOverridable (import ../../build-support/cc-wrapper) {
         nativeTools = false;
@@ -299,8 +322,8 @@ in
       allowedRequisites = with prevStage; with lib;
         # Simple executable tools
         concatMap (p: [ (getBin p) (getLib p) ])
-          [ gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
-            gnumake gnused gnutar gnugrep gnupatch patchelf ed paxctl
+          [ gzip bzip2 xz bash binutils.binutils coreutils diffutils findutils
+            gawk gnumake gnused gnutar gnugrep gnupatch patchelf ed paxctl
           ]
         # Library dependencies
         ++ map getLib (
@@ -310,7 +333,7 @@ in
         # More complicated cases
         ++ [
             glibc.out glibc.dev glibc.bin/*propagated from .dev*/ linuxHeaders
-            gcc gcc.cc gcc.cc.lib gcc.expand-response-params
+            binutils gcc gcc.cc gcc.cc.lib gcc.expand-response-params
           ]
           ++ lib.optionals (system == "aarch64-linux")
             [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ];

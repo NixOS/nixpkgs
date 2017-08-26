@@ -6,18 +6,17 @@
 # compiler and the linker just "work".
 
 { name ? "", stdenv, nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
-, cc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? stdenv.shell
+, cc ? null, libc ? null, binutils, coreutils ? null, shell ? stdenv.shell
 , zlib ? null, extraPackages ? [], extraBuildCommands ? ""
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
-, useMacosReexportHack ? false
-} @ args:
+}:
 
 with stdenv.lib;
 
 assert nativeTools -> nativePrefix != "";
 assert !nativeTools ->
-  cc != null && binutils != null && coreutils != null && gnugrep != null;
+  cc != null && coreutils != null && gnugrep != null;
 assert !(nativeLibc && noLibc);
 assert (noLibc || nativeLibc) == (libc == null);
 
@@ -26,17 +25,6 @@ assert cc.langVhdl or false -> zlib != null;
 
 let
   inherit (stdenv) hostPlatform targetPlatform;
-
-  binutils = import ../binutils-wrapper {
-    inherit (args) binutils;
-    inherit # name
-      stdenv nativeTools noLibc nativeLibc nativePrefix
-      libc
-      coreutils shell gnugrep
-      extraPackages extraBuildCommands
-      buildPackages
-      useMacosReexportHack;
-  };
 
   # Prefix for binaries. Customarily ends with a dash separator.
   #
