@@ -41,21 +41,21 @@ let
     LABEL boot
     MENU LABEL NixOS ${config.system.nixosLabel}${config.isoImage.appendToMenuLabel}
     LINUX /boot/bzImage
-    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
+    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParamList}
     INITRD /boot/initrd
 
     # A variant to boot with 'nomodeset'
     LABEL boot-nomodeset
     MENU LABEL NixOS ${config.system.nixosVersion}${config.isoImage.appendToMenuLabel} (with nomodeset)
     LINUX /boot/bzImage
-    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} nomodeset
+    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParamList} nomodeset
     INITRD /boot/initrd
 
     # A variant to boot with 'copytoram'
     LABEL boot-copytoram
     MENU LABEL NixOS ${config.system.nixosVersion}${config.isoImage.appendToMenuLabel} (with copytoram)
     LINUX /boot/bzImage
-    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} copytoram
+    APPEND init=${config.system.build.toplevel}/init ${toString config.boot.kernelParamList} copytoram
     INITRD /boot/initrd
   '';
 
@@ -77,19 +77,19 @@ let
     echo "title NixOS Live CD" > $out/loader/entries/nixos-livecd.conf
     echo "linux /boot/bzImage" >> $out/loader/entries/nixos-livecd.conf
     echo "initrd /boot/initrd" >> $out/loader/entries/nixos-livecd.conf
-    echo "options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}" >> $out/loader/entries/nixos-livecd.conf
+    echo "options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParamList}" >> $out/loader/entries/nixos-livecd.conf
 
     # A variant to boot with 'nomodeset'
     echo "title NixOS Live CD (with nomodeset)" > $out/loader/entries/nixos-livecd-nomodeset.conf
     echo "linux /boot/bzImage" >> $out/loader/entries/nixos-livecd-nomodeset.conf
     echo "initrd /boot/initrd" >> $out/loader/entries/nixos-livecd-nomodeset.conf
-    echo "options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} nomodeset" >> $out/loader/entries/nixos-livecd-nomodeset.conf
+    echo "options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParamList} nomodeset" >> $out/loader/entries/nixos-livecd-nomodeset.conf
 
     # A variant to boot with 'copytoram'
     echo "title NixOS Live CD (with copytoram)" > $out/loader/entries/nixos-livecd-copytoram.conf
     echo "linux /boot/bzImage" >> $out/loader/entries/nixos-livecd-copytoram.conf
     echo "initrd /boot/initrd" >> $out/loader/entries/nixos-livecd-copytoram.conf
-    echo "options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} copytoram" >> $out/loader/entries/nixos-livecd-copytoram.conf
+    echo "options init=${config.system.build.toplevel}/init ${toString config.boot.kernelParamList} copytoram" >> $out/loader/entries/nixos-livecd-copytoram.conf
 
     echo "default nixos-livecd" > $out/loader/loader.conf
     echo "timeout ${builtins.toString config.boot.loader.timeout}" >> $out/loader/loader.conf

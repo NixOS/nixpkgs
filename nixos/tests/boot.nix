@@ -62,7 +62,7 @@ in {
         text = ''
           #!ipxe
           dhcp
-          kernel bzImage init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams} console=ttyS0
+          kernel bzImage init=${config.system.build.toplevel}/init ${toString config.boot.kernelParamList} console=ttyS0
           initrd initrd
           boot
         '';

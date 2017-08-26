@@ -54,9 +54,76 @@ in
     };
 
     boot.kernelParams = mkOption {
+      type = let
+        coerce = list: let
+          mkItem = item: let
+            splitted = builtins.match "([^=]*)=(.*)" item;
+          in if splitted == null then nameValuePair item true
+             else nameValuePair (head splitted) (last splitted);
+        in listToAttrs (map mkItem list);
+        targetType = with types; attrsOf (either (either bool int) str);
+      in with types; coercedTo (listOf str) coerce targetType;
+      default = {};
+      example = {
+        acpi_apic_instance = 2;
+        tmem = true;
+        nf_conntrack.acct = 1;
+        acpi_osi = "Windows 2000";
+      };
+      description = let
+        docUrl = "https://www.kernel.org/doc/html/latest/admin-guide/"
+               + "kernel-parameters.html";
+      in ''
+        An attribute set of kernel command line paramaters, where the attribute
+        name denotes a particular parameter. If the attribute value is
+        <literal>true</literal> the attribute name is passed verbatim and if
+        it's <literal>false</literal> the parameter is dropped entirely.
+
+        Have a look at the <link xlink:href="${docUrl}">documentation</link>
+        for possible values.
+      '';
+    };
+
+    boot.initArgs = mkOption {
       type = types.listOf types.str;
-      default = [ ];
-      description = "Parameters added to the kernel command line.";
+      default = [];
+      example = [ "--crash-shell" "--crash-vt=1" ];
+      description = ''
+        Arguments passed to <citerefentry>
+          <refentrytitle>init</refentrytitle>
+          <manvolnum>1</manvolnum>
+        </citerefentry> via kernel parameters.
+
+        You could directly use <option>boot.kernelParams</option> to do the
+        same thing, but if there are collisions with existing kernel parameters
+        it's very likely that the init argument is silently ignored.
+
+        Furthermore, passing init arguments via
+        <option>boot.kernelParams</option> will cause the arguments to be
+        sorted, so it's unsuitable if you use an init that depends on the order
+        of arguments.
+      '';
+    };
+
+    boot.kernelParamList = mkOption {
+      type = types.listOf types.str;
+      default = let
+        enabled = filterAttrs (const (v: v != false)) config.boot.kernelParams;
+        hasSpace = val: builtins.match ".* .*" val != null;
+        mkStrVal = val: if hasSpace val then "\"${val}\"" else val;
+        mkItem = key: val: if val == true then key
+                           else "${key}=${mkStrVal (toString val)}";
+        initArgSep = optional (config.boot.initArgs != []) "--";
+      in mapAttrsToList mkItem enabled ++ initArgSep ++ config.boot.initArgs;
+      internal = true;
+      readOnly = true;
+      description = ''
+        Kernel command line parameters provided as a list.
+
+        This option is only for internal purposes if you want to get the values
+        of <option>boot.kernelParams</option> as a list of strings with proper
+        quoting and handling of boolean options.
+      '';
     };
 
     boot.consoleLogLevel = mkOption {

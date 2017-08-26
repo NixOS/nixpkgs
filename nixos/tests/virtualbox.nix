@@ -123,7 +123,7 @@ let
 
     cat > /mnt/grub/grub.cfg <<GRUB
     set root=hd0,1
-    linux /linux ${concatStringsSep " " cfg.boot.kernelParams}
+    linux /linux ${concatStringsSep " " cfg.boot.kernelParamList}
     initrd /initrd
     boot
     GRUB

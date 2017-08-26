@@ -420,7 +420,7 @@ in {
         );
       '';
       extraConfig = ''
-        boot.kernelParams = lib.mkAfter [ "console=tty0" ];
+        boot.kernelParams.console = lib.mkForce "tty0";
       '';
       enableOCR = true;
       preBootCommands = ''
