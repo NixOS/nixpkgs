@@ -10046,6 +10046,8 @@ with pkgs;
       libva = libva-full; # also wants libva-x11
     };
 
+    libquvi-scripts = callPackage ../development/libraries/libquvi-scripts { };
+
     kpmcore = callPackage ../development/libraries/kpmcore { };
 
     mlt = callPackage ../development/libraries/mlt/qt-5.nix {
