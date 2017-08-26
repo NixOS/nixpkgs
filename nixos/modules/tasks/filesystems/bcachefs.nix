@@ -13,6 +13,8 @@ in
 
     system.fsPackages = [ pkgs.bcachefs-tools ];
 
+    # use kernel package with bcachefs support until it's in mainline
+    boot.kernelPackages = pkgs.linuxPackages_testing_bcachefs;
     boot.initrd.availableKernelModules = mkIf inInitrd [ "bcachefs" ];
 
     boot.initrd.extraUtilsCommands = mkIf inInitrd
