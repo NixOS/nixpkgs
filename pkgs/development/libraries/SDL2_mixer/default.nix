@@ -1,4 +1,6 @@
-{ stdenv, lib, fetchurl, SDL2, libogg, libvorbis, smpeg, flac, enableNativeMidi ? false, fluidsynth ? null }:
+{ stdenv, lib, fetchurl, autoconf, pkgconfig, which
+, SDL2, libogg, libvorbis, smpeg2, flac, libmodplug
+, enableNativeMidi ? false, fluidsynth ? null }:
 
 stdenv.mkDerivation rec {
   name = "SDL2_mixer-${version}";
@@ -9,7 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "0pv9jzjpcjlbiaybvwrb4avmv46qk7iqxlnqrd2dfj82c4mgc92s";
   };
 
-  propagatedBuildInputs = [ SDL2 libogg libvorbis fluidsynth smpeg flac ];
+  nativeBuildInputs = [ autoconf pkgconfig which ];
+
+  propagatedBuildInputs = [ SDL2 libogg libvorbis fluidsynth smpeg2 flac libmodplug ];
+
+  patches = [ ./libmodplug.patch ];
+
+  preConfigure = ''
+    ./autogen.sh
+  '';
 
   configureFlags = [ "--disable-music-ogg-shared" ] ++ lib.optional enableNativeMidi "--enable-music-native-midi-gpl";
 
