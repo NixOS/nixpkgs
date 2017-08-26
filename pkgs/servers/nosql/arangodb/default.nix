@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    openssl zlib go readline python
+    openssl zlib readline python
   ];
 
   nativeBuildInputs = [ cmake ];
