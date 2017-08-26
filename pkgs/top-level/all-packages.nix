@@ -1007,6 +1007,8 @@ with pkgs;
 
   ephemeralpg = callPackage ../applications/misc/ephemeralpg {};
 
+  et = callPackage ../applications/misc/et {};
+
   f3 = callPackage ../tools/filesystems/f3 { };
 
   facedetect = callPackage ../tools/graphics/facedetect { };
