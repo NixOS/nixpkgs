@@ -1,5 +1,5 @@
 { newScope, stdenv, makeWrapper, makeDesktopItem, ed
-, glib, gtk2, gtk3, gnome2, gnome3, gsettings_desktop_schemas
+, glib, gtk3, gnome3, gsettings_desktop_schemas
 
 # package customization
 , channel ? "stable"
@@ -67,8 +67,6 @@ let
 
   inherit (stdenv.lib) versionAtLeast;
 
-  gtk = if (versionAtLeast version "59.0.0.0") then gtk3 else gtk2;
-
 in stdenv.mkDerivation {
   name = "chromium${suffix}-${version}";
   inherit version;
@@ -77,10 +75,12 @@ in stdenv.mkDerivation {
     makeWrapper ed
 
     # needed for GSETTINGS_SCHEMAS_PATH
-    gsettings_desktop_schemas glib gtk
-  ] ++ stdenv.lib.optional (versionAtLeast version "59.0.0.0") gnome3.dconf
+    gsettings_desktop_schemas glib gtk3
+
     # needed for XDG_ICON_DIRS
-    ++ stdenv.lib.optional (versionAtLeast version "59.0.0.0") gnome3.defaultIconTheme;
+    gnome3.defaultIconTheme
+  ];
+
   outputs = ["out" "sandbox"];
 
   buildCommand = let
