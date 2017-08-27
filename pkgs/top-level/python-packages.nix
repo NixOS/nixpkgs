@@ -1259,6 +1259,8 @@ in {
     };
   };
 
+  backports_unittest-mock = callPackage ../development/python-modules/backports_unittest-mock {};
+
   babelfish = buildPythonPackage rec {
     version = "0.5.5";
     name = "babelfish-${version}";
