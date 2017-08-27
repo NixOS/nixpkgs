@@ -10549,6 +10549,9 @@ in {
 
   guessit = callPackage ../development/python-modules/guessit { };
 
+  # used by flexget
+  guessit_2_0 = callPackage ../development/python-modules/guessit/2.0.nix { };
+
   rebulk = callPackage ../development/python-modules/rebulk { };
 
   gunicorn = callPackage ../development/python-modules/gunicorn.nix { };
