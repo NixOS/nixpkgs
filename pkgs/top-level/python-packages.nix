@@ -23648,28 +23648,7 @@ EOF
     };
   };
 
-
-  werkzeug = buildPythonPackage rec {
-    name = "Werkzeug-0.11.10";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/W/Werkzeug/${name}.tar.gz";
-      sha256 = "1vpf98k4jp4yhbv2jbyq8dj5fdasrd26rkq34pacs5n7mkxxlr6c";
-    };
-
-    LC_ALL = "en_US.UTF-8";
-
-    propagatedBuildInputs = with self; [ itsdangerous ];
-    buildInputs = with self; [ pytest requests pkgs.glibcLocales ];
-
-
-
-    meta = {
-      homepage = http://werkzeug.pocoo.org/;
-      description = "A WSGI utility library for Python";
-      license = licenses.bsd3;
-    };
-  };
+  werkzeug = callPackage ../development/python-modules/werkzeug { };
 
   wheel = callPackage ../development/python-modules/wheel { };
 
