@@ -14,6 +14,7 @@ buildPythonPackage rec {
     sha256 = "1536f73a3353296d97a25e24f9554edf3e6a48126886f8d21282c3645ecb96a4";
   };
 
+
   enableParallelBuilding = true;
 
   buildInputs = [ cmake libxml2 libxslt pysideApiextractor pysideGeneratorrunner python sphinx qt4 ];
@@ -23,7 +24,9 @@ buildPythonPackage rec {
     substituteInPlace generator/CMakeLists.txt --replace \
       \"$\{GENERATORRUNNER_PLUGIN_DIR}\" lib/generatorrunner/
   '';
-  patches = if (isPy35 || isPy36) then [ ./shiboken_py35.patch ] else null;
+
+  # gcc6 patch was also sent upstream: https://github.com/pyside/Shiboken/pull/86
+  patches = [ ./gcc6.patch ] ++ (lib.optional (isPy35 || isPy36) ./shiboken_py35.patch);
 
   cmakeFlags = if isPy3k then "-DUSE_PYTHON3=TRUE" else null;
 

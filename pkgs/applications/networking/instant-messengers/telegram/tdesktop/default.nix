@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, fetchgit, pkgconfig, gyp, cmake
+{ mkDerivation, lib, fetchgit, pkgconfig, gyp, cmake
 , qtbase, qtimageformats
 , breakpad, gtk3, libappindicator-gtk3, dee
 , ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio
@@ -7,19 +7,20 @@
 
 mkDerivation rec {
   name = "telegram-desktop-${version}";
-  version = "1.1.7";
+  version = "1.1.19";
 
   # Submodules
   src = fetchgit {
-    url = "https://github.com/telegramdesktop/tdesktop";
-    rev = "refs/tags/v${version}";
-    sha256 = "0y0nc8d4vlhsmzayy26zdxc5jaiwcv0rb2s1v5fwnnx71gf89m2w";
+    url = "git://github.com/telegramdesktop/tdesktop";
+    rev = "v${version}";
+    sha256 = "1zpl71k2lq861k89yp6nzkm4jm6szxrzigmmbxx63rh4v03di3b6";
+    fetchSubmodules = true;
   };
 
   tgaur = fetchgit {
     url = "https://aur.archlinux.org/telegram-desktop-systemqt.git";
-    rev = "83af81905de7fc5dc9fbea8f5318d56fa8a6efc6";
-    sha256 = "0v7g7y5cmxzp2yrcj6ylwzxlzr9yrqs2badzplm7sg012nc69yf9";
+    rev = "a4ba392309116003bc2b75c1c4c12dc733168d6f";
+    sha256 = "1n0yar8pm050770x36kjr4iap773xjigfbnrk289b51i5vijwhsv";
   };
 
   buildInputs = [

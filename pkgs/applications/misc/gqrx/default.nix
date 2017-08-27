@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qt4, qmake4Hook, gnuradio, boost, gnuradio-osmosdr
+{ stdenv, fetchFromGitHub, cmake, qtbase, qtsvg, gnuradio, boost, gnuradio-osmosdr
 # drivers (optional):
 , rtl-sdr, hackrf
 , pulseaudioSupport ? true, libpulseaudio
@@ -8,29 +8,25 @@ assert pulseaudioSupport -> libpulseaudio != null;
 
 stdenv.mkDerivation rec {
   name = "gqrx-${version}";
-  version = "2.5.3";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner = "csete";
     repo = "gqrx";
     rev = "v${version}";
-    sha256 = "02pavd1kc0gsnrl18bfa01r2f3j4j05zly4a8zwss9yrsgf8432x";
+    sha256 = "1dslb8l8ggj6vf9257c2bj0z8z1wy9c6sr2zksp5jdgf8m4j71im";
   };
 
-  nativeBuildInputs = [ qmake4Hook ];
-
+  nativeBuildInputs = [ cmake ];
   buildInputs = [
-    qt4 gnuradio boost gnuradio-osmosdr rtl-sdr hackrf
+    qtbase qtsvg gnuradio boost gnuradio-osmosdr rtl-sdr hackrf
   ] ++ stdenv.lib.optionals pulseaudioSupport [ libpulseaudio ];
 
   enableParallelBuilding = true;
 
   postInstall = ''
-    mkdir -p "$out/share/applications"
-    mkdir -p "$out/share/icons"
-
-    cp gqrx.desktop "$out/share/applications/"
-    cp resources/icons/gqrx.svg "$out/share/icons/"
+    install -vD $src/gqrx.desktop -t "$out/share/applications/"
+    install -vD $src/resources/icons/gqrx.svg -t "$out/share/icons/"
   '';
 
   meta = with stdenv.lib; {

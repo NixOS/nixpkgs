@@ -182,7 +182,10 @@ let
 
     eff = callPackage ../development/interpreters/eff { };
 
-    eliom = callPackage ../development/ocaml-modules/eliom { lwt = lwt2; };
+    eliom = callPackage ../development/ocaml-modules/eliom {
+      lwt = lwt2;
+      js_of_ocaml = js_of_ocaml_2;
+    };
 
     enumerate = callPackage ../development/ocaml-modules/enumerate { };
 
@@ -270,7 +273,20 @@ let
       pcre = ocaml_pcre;
     };
 
-    js_of_ocaml = callPackage ../development/tools/ocaml/js_of_ocaml { lwt = lwt2; };
+    js_of_ocaml =
+    if lib.versionOlder "4.02" ocaml.version
+    then callPackage ../development/tools/ocaml/js_of_ocaml/3.0.nix { }
+    else js_of_ocaml_2;
+
+    js_of_ocaml_2 = callPackage ../development/tools/ocaml/js_of_ocaml { lwt = lwt2; };
+
+    js_of_ocaml-camlp4 = callPackage ../development/tools/ocaml/js_of_ocaml/camlp4.nix {};
+
+    js_of_ocaml-compiler = callPackage ../development/tools/ocaml/js_of_ocaml/compiler.nix {};
+
+    js_of_ocaml-ocamlbuild = callPackage ../development/tools/ocaml/js_of_ocaml/ocamlbuild.nix {};
+
+    js_of_ocaml-ppx = callPackage ../development/tools/ocaml/js_of_ocaml/ppx.nix {};
 
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
 
@@ -535,6 +551,8 @@ let
       if lib.versionAtLeast ocaml.version "4.02"
       then callPackage ../development/ocaml-modules/ppx_blob {}
       else null;
+
+    ppx_derivers = callPackage ../development/ocaml-modules/ppx_derivers {};
 
     ppx_deriving =
       if lib.versionAtLeast ocaml.version "4.02"

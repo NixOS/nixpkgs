@@ -14,10 +14,10 @@ let
   # instead, we download localkube ourselves and shove it into the minikube binary. The versions URL that minikube uses is
   # currently https://storage.googleapis.com/minikube/k8s_releases.json
 
-  localkube-version = "1.7.0";
+  localkube-version = "1.7.3";
   localkube-binary = fetchurl {
     url = "https://storage.googleapis.com/minikube/k8sReleases/v${localkube-version}/localkube-linux-amd64";
-    sha256 = "1pp5bi0bpxxzrshvkv47hqs20jfx3gp1i1p3pw1rvzm5n1fn2q1a";
+    sha256 = "1ay11321kg3waxzi9d885pr08hz97a8ajwk31kbfxlm3x5bk3jii";
   };
 in buildGoPackage rec {
   pname   = "minikube";

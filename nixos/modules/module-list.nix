@@ -43,6 +43,7 @@
   ./hardware/nitrokey.nix
   ./hardware/opengl.nix
   ./hardware/pcmcia.nix
+  ./hardware/raid/hpsa.nix
   ./hardware/usb-wwan.nix
   ./hardware/video/amdgpu.nix
   ./hardware/video/amdgpu-pro.nix
@@ -165,6 +166,7 @@
   ./services/continuous-integration/buildbot/master.nix
   ./services/continuous-integration/buildbot/worker.nix
   ./services/continuous-integration/buildkite-agent.nix
+  ./services/continuous-integration/hail.nix
   ./services/continuous-integration/hydra/default.nix
   ./services/continuous-integration/gitlab-runner.nix
   ./services/continuous-integration/gocd-agent/default.nix
@@ -268,6 +270,7 @@
   ./services/mail/rspamd.nix
   ./services/mail/rmilter.nix
   ./services/mail/nullmailer.nix
+  ./services/misc/airsonic.nix
   ./services/misc/apache-kafka.nix
   ./services/misc/autofs.nix
   ./services/misc/autorandr.nix
@@ -561,6 +564,7 @@
   ./services/security/tor.nix
   ./services/security/torify.nix
   ./services/security/torsocks.nix
+  ./services/security/usbguard.nix
   ./services/security/vault.nix
   ./services/system/cgmanager.nix
   ./services/system/cloud-init.nix

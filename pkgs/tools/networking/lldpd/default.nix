@@ -3,17 +3,18 @@
 
 stdenv.mkDerivation rec {
   name = "lldpd-${version}";
-  version = "0.9.7";
+  version = "0.9.8";
 
   src = fetchurl {
     url = "https://media.luffy.cx/files/lldpd/${name}.tar.gz";
-    sha256 = "1f0d5s4643pjmgycc5ssgl1pggyq5a7navhabkyhcg0aqdah6dmr";
+    sha256 = "0kwck17cr2f1a395a8bfmj7fz1n4i1hv429cbdbkhff33glr9r4y";
   };
 
   configureFlags = [
     "--localstatedir=/var"
     "--enable-pie"
     "--with-snmp"
+    "--with-systemdsystemunitdir=\${out}/lib/systemd/system"
   ];
 
   nativeBuildInputs = [ pkgconfig removeReferencesTo ];
