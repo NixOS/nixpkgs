@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "postage-${version}";
-  version = "3.2.17";
+  version = "3.2.18";
 
   src = fetchFromGitHub {
     owner  = "workflowproducts";
     repo   = "postage";
     rev    = "eV${version}";
-    sha256 = "1c9ss5vx8s05cgw68z7y224qq8z8kz8rxfgcayd2ny200kqyn5bl";
+    sha256 = "1kdg8pw2vxwkxw3b6dim4s740s60j3iyrh96524wi3lqkkq98krn";
   };
 
   buildInputs = [ postgresql openssl ];
