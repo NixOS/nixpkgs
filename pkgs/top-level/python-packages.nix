@@ -5347,38 +5347,7 @@ in {
     };
   };
 
-  urllib3 = let
-    disabled_tests = [
-      "test_headers" "test_headerdict" "test_can_validate_ip_san" "test_delayed_body_read_timeout"
-      "test_timeout_errors_cause_retries" "test_select_multiple_interrupts_with_event"
-    ];
-  in buildPythonPackage rec {
-    pname = "urllib3";
-    version = "1.20";
-    name = "${pname}-${version}";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0bx76if7shzlyykmaj4fhjkir5bswc4fdx5r4q0lrn3q51p2pvwp";
-    };
-
-    NOSE_EXCLUDE=concatStringsSep "," disabled_tests;
-
-    checkPhase = ''
-      nosetests -v --cover-min-percentage 1
-    '';
-
-    doCheck = false;
-
-    buildInputs = with self; [ coverage tornado mock nose psutil pysocks ];
-
-    meta = {
-      description = "A Python library for Dropbox's HTTP-based Core and Datastore APIs";
-      homepage = https://www.dropbox.com/developers/core/docs;
-      license = licenses.mit;
-    };
-  };
-
+  urllib3 = callPackage ../development/python-modules/urllib3 {};
 
   dropbox = buildPythonPackage rec {
     name = "dropbox-${version}";
