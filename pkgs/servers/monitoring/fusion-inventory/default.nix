@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnused, buildPerlPackage, perl, perlPackages
+{ stdenv, fetchurl, buildPerlPackage, perlPackages
 }:
 
 buildPerlPackage rec {
