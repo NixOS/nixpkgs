@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, efl, gst_all_1, curl, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, efl, gst_all_1, pcre, curl, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "rage-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    pkgconfig
+    (pkgconfig.override { vanilla = true; })
     wrapGAppsHook
   ];
 
@@ -21,23 +21,9 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-libav
+    pcre
     curl
  ];
-
-  NIX_CFLAGS_COMPILE = [
-    "-I${efl}/include/ecore-con-1"
-    "-I${efl}/include/ecore-evas-1"
-    "-I${efl}/include/ecore-file-1"
-    "-I${efl}/include/ecore-imf-1"
-    "-I${efl}/include/ecore-input-1"
-    "-I${efl}/include/eet-1"
-    "-I${efl}/include/efreet-1"
-    "-I${efl}/include/eldbus-1"
-    "-I${efl}/include/emile-1"
-    "-I${efl}/include/eo-1"
-    "-I${efl}/include/ethumb-1"
-    "-I${efl}/include/ethumb-client-1"
-  ];
 
   postInstall = ''
     wrapProgram $out/bin/rage --prefix LD_LIBRARY_PATH : ${curl.out}/lib

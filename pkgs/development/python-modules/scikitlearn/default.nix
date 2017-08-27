@@ -6,22 +6,14 @@
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "0.18.1";
+  version = "0.19.0";
   name = "${pname}-${version}";
   disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1eddfc27bb37597a5d514de1299981758e660e0af56981c0bfdf462c9568a60c";
+    sha256 = "07q261l9145c9xr8b4pcsa08ih1ifhclp05i4xwg43cyamkwpx94";
   };
-
-  patches = [
-    # python 3.6 test fixes (will be part of 0.18.2)
-    (fetchpatch {
-       url = https://github.com/scikit-learn/scikit-learn/pull/8123/commits/b77f28a7163cb4909da1b310f1fb741bee3cabfe.patch;
-       sha256 = "1rp6kr6hiabb6s0vh7mkgr10qwrqlq3z1fhpi0s011hg434ckh19";
-     })
-  ];
 
   buildInputs = [ nose pillow gfortran glibcLocales ];
   propagatedBuildInputs = [ numpy scipy numpy.blas ];

@@ -80,7 +80,7 @@ let
     };
 
     meta = with lib; {
-      homepage = http://www.postgresql.org/;
+      homepage = https://www.postgresql.org;
       description = "A powerful, open source object-relational database system";
       license = licenses.postgresql;
       maintainers = [ maintainers.ocharles ];

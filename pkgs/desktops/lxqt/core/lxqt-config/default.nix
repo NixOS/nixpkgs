@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, standardPatch, qtbase, qtx11extras, qttools, qtsvg, kwindowsystem, libkscreen, liblxqt, libqtxdg, libpthreadstubs, xorg }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, pkgconfig, lxqt-build-tools, standardPatch, qtbase, qtx11extras, qttools, qtsvg, kwindowsystem, libkscreen, liblxqt, libqtxdg, libpthreadstubs, xorg }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -45,4 +45,13 @@ stdenv.mkDerivation rec {
     platforms = with platforms; unix;
     maintainers = with maintainers; [ romildo ];
   };
+
+  patches = [
+    # Fixes a FTBFS with CMake v3.8
+    (fetchpatch {
+       url = https://github.com/lxde/lxqt-config/commit/bca652a75f8a497a69b1fbc1c7eaa353f6b4eef8.patch;
+       sha256 = "17k26xj97ks9gvcjhiwc5y39fciria4xyxrzcz67zj0flqm3cmrf";
+     })
+  ];
+
 }

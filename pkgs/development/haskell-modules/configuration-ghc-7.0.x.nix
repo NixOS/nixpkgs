@@ -64,21 +64,16 @@ self: super: {
   doctest = dontHaddock super.doctest;
   hsdns = dontHaddock super.hsdns;
 
-  # Needs hashable on pre 7.10.x compilers.
-  nats_1 = addBuildDepend super.nats_1 self.hashable;
-  nats = addBuildDepend super.nats self.hashable;
-
   # Newer versions require bytestring >=0.10.
   tar = super.tar_0_4_1_0;
 
-  # Needs void on pre 7.10.x compilers.
+  # These builds need additional dependencies on old compilers.
+  nats_1 = addBuildDepend super.nats_1 self.hashable;
+  nats = addBuildDepend super.nats self.hashable;
   conduit = addBuildDepend super.conduit self.void;
-
-  # Needs tagged on pre 7.6.x compilers.
   reflection = addBuildDepend super.reflection self.tagged;
-
-  # Needs nats on pre 7.6.x compilers.
   semigroups = addBuildDepend super.semigroups self.nats;
+  text = addBuildDepend super.text self.bytestring-builder;
 
   # Newer versions don't compile any longer.
   network_2_6_3_1 = dontCheck super.network_2_6_3_1;

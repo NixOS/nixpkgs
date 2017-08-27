@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, efl, xcbutilkeysyms, libXrandr, libXdmcp,
 libxcb, libffi, pam, alsaLib, luajit, bzip2, libpthreadstubs, gdbm, libcap,
-mesa_glu, xkeyboard_config }:
+mesa_glu, xkeyboard_config, pcre }:
 
 stdenv.mkDerivation rec {
   name = "enlightenment-${version}";
@@ -11,21 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "0w5f3707hyfc20i6xqh4jlr5p2yhy1z794061mjsz2rp4w00qmpb";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ (pkgconfig.override { vanilla = true; }) ];
 
   buildInputs = [
     efl libXdmcp libxcb xcbutilkeysyms libXrandr libffi pam alsaLib
-    luajit bzip2 libpthreadstubs gdbm
+    luajit bzip2 libpthreadstubs gdbm pcre
   ] ++
     stdenv.lib.optionals stdenv.isLinux [ libcap ];
-
-  NIX_CFLAGS_COMPILE = [
-    "-I${efl}/include/ecore-imf-1"
-    "-I${efl}/include/emile-1"
-    "-I${efl}/include/eo-1"
-    "-I${efl}/include/ethumb-1"
-    "-I${efl}/include/ethumb-client-1"
-  ];
 
   preConfigure = ''
     export USER_SESSION_DIR=$prefix/lib/systemd/user

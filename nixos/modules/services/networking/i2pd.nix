@@ -28,15 +28,15 @@ let
   };
 
   mkKeyedEndpointOpt = name: addr: port: keyFile:
-  (mkEndpointOpt name addr port) // {
-    keys = mkOption {
-      type = types.str;
-      default = "";
-      description = ''
-        File to persist ${lib.toUpper name} keys.
-      '';
+    (mkEndpointOpt name addr port) // {
+      keys = mkOption {
+        type = types.str;
+        default = "";
+        description = ''
+          File to persist ${lib.toUpper name} keys.
+        '';
+      };
     };
-  };
 
   commonTunOpts = let
     i2cpOpts = {
@@ -59,7 +59,7 @@ let
       description = "Number of ElGamal/AES tags to send.";
       default = 40;
     };
-   destination = mkOption {
+    destination = mkOption {
       type = types.str;
       description = "Remote endpoint, I2P hostname or b32.i2p address.";
     };
@@ -70,88 +70,91 @@ let
     };
   } // mkEndpointOpt name "127.0.0.1" 0;
 
-  i2pdConf = pkgs.writeText "i2pd.conf"
-  ''
-  ipv4 = ${boolToString cfg.enableIPv4}
-  ipv6 = ${boolToString cfg.enableIPv6}
-  notransit = ${boolToString cfg.notransit}
-  floodfill = ${boolToString cfg.floodfill}
-  netid = ${toString cfg.netid}
-  ${if isNull cfg.bandwidth then "" else "bandwidth = ${toString cfg.bandwidth}" }
-  ${if isNull cfg.port then "" else "port = ${toString cfg.port}"}
+  i2pdConf = pkgs.writeText "i2pd.conf" ''
+    # DO NOT EDIT -- this file has been generated automatically.
+    loglevel = ${cfg.logLevel}
 
-  [limits]
-  transittunnels = ${toString cfg.limits.transittunnels}
+    ipv4 = ${boolToString cfg.enableIPv4}
+    ipv6 = ${boolToString cfg.enableIPv6}
+    notransit = ${boolToString cfg.notransit}
+    floodfill = ${boolToString cfg.floodfill}
+    netid = ${toString cfg.netid}
+    ${if isNull cfg.bandwidth then "" else "bandwidth = ${toString cfg.bandwidth}" }
+    ${if isNull cfg.port then "" else "port = ${toString cfg.port}"}
 
-  [upnp]
-  enabled = ${boolToString cfg.upnp.enable}
-  name = ${cfg.upnp.name}
+    [limits]
+    transittunnels = ${toString cfg.limits.transittunnels}
 
-  [precomputation]
-  elgamal = ${boolToString cfg.precomputation.elgamal}
+    [upnp]
+    enabled = ${boolToString cfg.upnp.enable}
+    name = ${cfg.upnp.name}
 
-  [reseed]
-  verify = ${boolToString cfg.reseed.verify}
-  file = ${cfg.reseed.file}
-  urls = ${builtins.concatStringsSep "," cfg.reseed.urls}
+    [precomputation]
+    elgamal = ${boolToString cfg.precomputation.elgamal}
 
-  [addressbook]
-  defaulturl = ${cfg.addressbook.defaulturl}
-  subscriptions = ${builtins.concatStringsSep "," cfg.addressbook.subscriptions}
-  ${flip concatMapStrings
+    [reseed]
+    verify = ${boolToString cfg.reseed.verify}
+    file = ${cfg.reseed.file}
+    urls = ${builtins.concatStringsSep "," cfg.reseed.urls}
+
+    [addressbook]
+    defaulturl = ${cfg.addressbook.defaulturl}
+    subscriptions = ${builtins.concatStringsSep "," cfg.addressbook.subscriptions}
+
+    ${flip concatMapStrings
       (collect (proto: proto ? port && proto ? address && proto ? name) cfg.proto)
-      (proto: let portStr = toString proto.port; in
-        ''
-          [${proto.name}]
-          enabled = ${boolToString proto.enable}
-          address = ${proto.address}
-          port = ${toString proto.port}
-          ${if proto ? keys then "keys = ${proto.keys}" else ""}
-          ${if proto ? auth then "auth = ${boolToString proto.auth}" else ""}
-          ${if proto ? user then "user = ${proto.user}" else ""}
-          ${if proto ? pass then "pass = ${proto.pass}" else ""}
-          ${if proto ? outproxy then "outproxy = ${proto.outproxy}" else ""}
-          ${if proto ? outproxyPort then "outproxyport = ${toString proto.outproxyPort}" else ""}
-        '')
-      }
+      (proto: let portStr = toString proto.port; in ''
+        [${proto.name}]
+        enabled = ${boolToString proto.enable}
+        address = ${proto.address}
+        port = ${toString proto.port}
+        ${if proto ? keys then "keys = ${proto.keys}" else ""}
+        ${if proto ? auth then "auth = ${boolToString proto.auth}" else ""}
+        ${if proto ? user then "user = ${proto.user}" else ""}
+        ${if proto ? pass then "pass = ${proto.pass}" else ""}
+        ${if proto ? outproxy then "outproxy = ${proto.outproxy}" else ""}
+        ${if proto ? outproxyPort then "outproxyport = ${toString proto.outproxyPort}" else ""}
+      '')
+    }
   '';
 
   i2pdTunnelConf = pkgs.writeText "i2pd-tunnels.conf" ''
-  ${flip concatMapStrings
-    (collect (tun: tun ? port && tun ? destination) cfg.outTunnels)
-    (tun: let portStr = toString tun.port; in ''
-  [${tun.name}]
-  type = client
-  destination = ${tun.destination}
-  keys = ${tun.keys}
-  address = ${tun.address}
-  port = ${toString tun.port}
-  inbound.length = ${toString tun.inbound.length}
-  outbound.length = ${toString tun.outbound.length}
-  inbound.quantity = ${toString tun.inbound.quantity}
-  outbound.quantity = ${toString tun.outbound.quantity}
-  crypto.tagsToSend = ${toString tun.crypto.tagsToSend}
-  '')
-  }
-  ${flip concatMapStrings
-    (collect (tun: tun ? port && tun ? host) cfg.inTunnels)
-    (tun: let portStr = toString tun.port; in ''
-  [${tun.name}]
-  type = server
-  destination = ${tun.destination}
-  keys = ${tun.keys}
-  host = ${tun.address}
-  port = ${tun.port}
-  inport = ${tun.inPort}
-  accesslist = ${builtins.concatStringsSep "," tun.accessList}
-  '')
-  }
+    # DO NOT EDIT -- this file has been generated automatically.
+    ${flip concatMapStrings
+      (collect (tun: tun ? port && tun ? destination) cfg.outTunnels)
+      (tun: let portStr = toString tun.port; in ''
+        [${tun.name}]
+        type = client
+        destination = ${tun.destination}
+        keys = ${tun.keys}
+        address = ${tun.address}
+        port = ${toString tun.port}
+        inbound.length = ${toString tun.inbound.length}
+        outbound.length = ${toString tun.outbound.length}
+        inbound.quantity = ${toString tun.inbound.quantity}
+        outbound.quantity = ${toString tun.outbound.quantity}
+        crypto.tagsToSend = ${toString tun.crypto.tagsToSend}
+      '')
+    }
+    ${flip concatMapStrings
+      (collect (tun: tun ? port && tun ? host) cfg.inTunnels)
+      (tun: let portStr = toString tun.port; in ''
+        [${tun.name}]
+        type = server
+        destination = ${tun.destination}
+        keys = ${tun.keys}
+        host = ${tun.address}
+        port = ${tun.port}
+        inport = ${tun.inPort}
+        accesslist = ${builtins.concatStringsSep "," tun.accessList}
+      '')
+    }
   '';
 
   i2pdSh = pkgs.writeScriptBin "i2pd" ''
     #!/bin/sh
-    ${pkgs.i2pd}/bin/i2pd \
-      ${if isNull cfg.extIp then "" else "--host="+cfg.extIp} \
+    exec ${pkgs.i2pd}/bin/i2pd \
+      ${if isNull cfg.address then "" else "--host="+cfg.address} \
       --conf=${i2pdConf} \
       --tunconf=${i2pdTunnelConf}
   '';
@@ -176,11 +179,23 @@ in
         '';
       };
 
-      extIp = mkOption {
+      logLevel = mkOption {
+        type = types.enum ["debug" "info" "warn" "error"];
+        default = "error";
+        description = ''
+          The log level. <command>i2pd</command> defaults to "info"
+          but that generates copious amounts of log messages.
+
+          We default to "error" which is similar to the default log
+          level of <command>tor</command>.
+        '';
+      };
+
+      address = mkOption {
         type = with types; nullOr str;
         default = null;
         description = ''
-          Your external IP.
+          Your external IP or hostname.
         '';
       };
 
@@ -213,7 +228,7 @@ in
         default = null;
         description = ''
            Set a router bandwidth limit integer in KBps.
-           If not set, i2pd defaults to 32KBps.
+           If not set, <command>i2pd</command> defaults to 32KBps.
         '';
       };
 
@@ -261,9 +276,14 @@ in
 
       precomputation.elgamal = mkOption {
         type = types.bool;
-        default = false;
+        default = true;
         description = ''
-          Use ElGamal precomputated tables.
+          Whenever to use precomputated tables for ElGamal.
+          <command>i2pd</command> defaults to <literal>false</literal>
+          to save 64M of memory (and looses some performance).
+
+          We default to <literal>true</literal> as that is what most
+          users want anyway.
         '';
       };
 
@@ -353,7 +373,7 @@ in
         };
       };
 
-      proto.httpProxy = mkKeyedEndpointOpt "httpproxy" "127.0.0.1" 4446 "";
+      proto.httpProxy = mkKeyedEndpointOpt "httpproxy" "127.0.0.1" 4444 "";
       proto.socksProxy = (mkKeyedEndpointOpt "socksproxy" "127.0.0.1" 4447 "")
       // {
         outproxy = mkOption {

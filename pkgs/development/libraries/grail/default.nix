@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "grail-${version}";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchurl {
     url = "https://launchpad.net/grail/trunk/${version}/+download/${name}.tar.bz2";
-    sha256 = "c26dced1b3f4317ecf6af36db0e90294d87e43966d56aecc4e97b65368ab78b9";
+    sha256 = "1wwx5ibjdz5pyd0f5cd1n91y67r68dymxpm2lgd829041xjizvay";
   };
 
   buildInputs = [ pkgconfig python3 frame ]

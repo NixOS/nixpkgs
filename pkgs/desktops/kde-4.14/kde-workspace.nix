@@ -30,6 +30,8 @@ kde {
        --replace /usr/share/X11 ${xkeyboard_config}/etc/X11
    '';
 
+  NIX_CFLAGS_COMPILE = [ "-fpermissive" ]; # gcc-6
+
   enableParallelBuilding = false; # frequent problems on Hydra
 
   meta = {
