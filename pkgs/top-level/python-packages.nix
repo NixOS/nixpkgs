@@ -9671,29 +9671,7 @@ in {
 
   flask-pymongo = callPackage ../development/python-modules/Flask-PyMongo { };
 
-  flask-restful = buildPythonPackage rec {
-    name = "Flask-RESTful-${version}";
-    version = "0.3.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/F/Flask-RESTful/${name}.tar.gz";
-      sha256 = "cce4aeff959b571136b5af098bebe7d3deeca7eb1411c4e722ff2c5356ab4c42";
-    };
-
-    # TypeError: Only byte strings can be passed to C code
-    patchPhase = if isPy3k then ''
-      rm tests/test_crypto.py tests/test_paging.py
-    '' else null;
-    buildInputs = with self; [ nose mock blinker ];
-    propagatedBuildInputs = with self; [ flask six pytz aniso8601 pycrypto ];
-    PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
-
-    meta = {
-      homepage = "http://flask-restful.readthedocs.io/";
-      description = "REST API building blocks for Flask";
-      license = licenses.bsd3;
-    };
-  };
+  flask-restful = callPackage ../development/python-modules/flask-restful { };
 
   flask-restplus = callPackage ../development/python-modules/flask-restplus/default.nix { };
   # Exactly 0.8.6 is required by flexget
