@@ -11248,34 +11248,7 @@ in {
     };
   };
 
-  jinja2 = buildPythonPackage rec {
-    pname = "Jinja2";
-    version = "2.9.5";
-    name = "${pname}-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/J/Jinja2/${name}.tar.gz";
-      sha256 = "702a24d992f856fa8d5a7a36db6128198d0c21e1da34448ca236c42e92384825";
-    };
-
-    propagatedBuildInputs = with self; [ markupsafe ];
-
-    # No tests included
-    doCheck = false;
-
-    meta = {
-      homepage = http://jinja.pocoo.org/;
-      description = "Stand-alone template engine";
-      license = licenses.bsd3;
-      longDescription = ''
-        Jinja2 is a template engine written in pure Python. It provides a
-        Django inspired non-XML syntax but supports inline expressions and
-        an optional sandboxed environment.
-      '';
-      platforms = platforms.all;
-      maintainers = with maintainers; [ pierron garbas sjourdois ];
-    };
-  };
+  jinja2 = callPackage ../development/python-modules/jinja2 { };
 
   jinja2_time = buildPythonPackage rec {
     version = "0.2.0";
