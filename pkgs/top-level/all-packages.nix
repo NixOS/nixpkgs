@@ -14448,6 +14448,7 @@ with pkgs;
   gitMinimal = git.override {
     withManual = false;
     pythonSupport = false;
+    withpcre2 = false;
   };
 
   gitRepo = callPackage ../applications/version-management/git-repo {
