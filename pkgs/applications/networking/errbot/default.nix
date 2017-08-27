@@ -3,25 +3,14 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "errbot-${version}";
-  version = "5.0.1";
+  version = "5.1.2";
 
   src = fetchurl {
     url = "mirror://pypi/e/errbot/${name}.tar.gz";
-    sha256 = "16kswcf844cxxp7hm7mksmv9w3b501dyn3swm54vq69y99iiynvy";
+    sha256 = "1r9w7pmdw77h1hwxns6d0sdg8cndsq1lwkq0y5qiiqr91jz93ajm";
   };
 
   disabled = !pythonPackages.isPy3k;
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/mayflower/errbot/commit/3d360fded72cbd83376778bce124a0a2fcd7d621.patch";
-      sha256 = "0qlninni6rgwk5fvcybpan3zppmchs34p4v9rzwnqqzhn4429mfh";
-    })
-    (fetchpatch {
-      url = "https://github.com/mayflower/errbot/commit/87f3162e7b7809269e64453e7278022998dfe77e.patch";
-      sha256 = "1kpanqb93d4w7v578amwldnbm5hfb1kqg024flb83hjyanik8839";
-    })
-  ];
 
   LC_ALL = "en_US.utf8";
 
