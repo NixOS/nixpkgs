@@ -158,6 +158,7 @@ stdenv.mkDerivation rec {
     # Everything is now Boost licensed, even the backend.
     # https://github.com/dlang/dmd/pull/6680
     license = licenses.boost;
+    maintainers = with maintainers; [ ThomasMader ];
     platforms = platforms.unix;
   };
 }
