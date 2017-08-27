@@ -19269,25 +19269,7 @@ in {
   requests2 = throw "requests2 has been deprecated. Use requests instead.";
 
   # use requests, not requests_2
-  requests = buildPythonPackage rec {
-    name = "requests-${version}";
-    version = "2.13.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/requests/${name}.tar.gz";
-      sha256 = "5722cd09762faa01276230270ff16af7acf7c5c45d623868d9ba116f15791ce8";
-    };
-
-    nativeBuildInputs = [ self.pytest ];
-    # sadly, tests require networking
-    doCheck = false;
-
-    meta = {
-      description = "An Apache2 licensed HTTP library, written in Python, for human beings";
-      homepage = http://docs.python-requests.org/en/latest/;
-      license = licenses.asl20;
-    };
-  };
+  requests = callPackage ../development/python-modules/requests { };
 
   requests_download = buildPythonPackage rec {
     pname = "requests_download";
