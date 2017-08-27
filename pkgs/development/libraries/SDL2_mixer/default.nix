@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, autoconf, pkgconfig, which
+{ stdenv, lib, fetchurl, autoreconfHook, pkgconfig, which
 , SDL2, libogg, libvorbis, smpeg2, flac, libmodplug
 , enableNativeMidi ? false, fluidsynth ? null }:
 
@@ -11,17 +11,14 @@ stdenv.mkDerivation rec {
     sha256 = "0pv9jzjpcjlbiaybvwrb4avmv46qk7iqxlnqrd2dfj82c4mgc92s";
   };
 
-  nativeBuildInputs = [ autoconf pkgconfig which ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig which ];
 
   propagatedBuildInputs = [ SDL2 libogg libvorbis fluidsynth smpeg2 flac libmodplug ];
 
   patches = [ ./libmodplug.patch ];
 
-  preConfigure = ''
-    ./autogen.sh
-  '';
-
-  configureFlags = [ "--disable-music-ogg-shared" ] ++ lib.optional enableNativeMidi "--enable-music-native-midi-gpl";
+  configureFlags = [ "--disable-music-ogg-shared" ]
+    ++ lib.optional enableNativeMidi "--enable-music-native-midi-gpl";
 
   meta = with stdenv.lib; {
     description = "SDL multi-channel audio mixer library";
