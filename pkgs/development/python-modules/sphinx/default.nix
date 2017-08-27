@@ -21,6 +21,7 @@
 , imagesize
 , requests
 , sphinxcontrib-websupport
+, typing
 }:
 
 buildPythonPackage rec {
@@ -52,7 +53,7 @@ buildPythonPackage rec {
     imagesize
     requests
     sphinxcontrib-websupport
-  ];
+  ] ++ lib.optional (pythonOlder "3.5") typing;
 
   # Lots of tests. Needs network as well at some point.
   doCheck = false;
