@@ -9804,33 +9804,7 @@ in {
     };
   };
 
-  jsonschema = buildPythonPackage (rec {
-    version = "2.5.1";
-    name = "jsonschema-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jsonschema/jsonschema-${version}.tar.gz";
-      sha256 = "0hddbqjm4jq63y8jf44nswina1crjs16l9snb6m3vvgyg31klrrn";
-    };
-
-    buildInputs = with self; [ nose mock vcversioner ];
-    propagatedBuildInputs = with self; [ functools32 ];
-
-    patchPhase = ''
-      substituteInPlace jsonschema/tests/test_jsonschema_test_suite.py --replace "python" "${python}/bin/${python.executable}"
-    '';
-
-    checkPhase = ''
-      nosetests
-    '';
-
-    meta = {
-      homepage = https://github.com/Julian/jsonschema;
-      description = "An implementation of JSON Schema validation for Python";
-      license = licenses.mit;
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  });
+  jsonschema = callPackage ../development/python-modules/jsonschema { };
 
   vcversioner = buildPythonPackage rec {
     name = "vcversioner-${version}";
