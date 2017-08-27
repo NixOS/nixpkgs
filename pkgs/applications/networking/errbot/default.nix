@@ -2,14 +2,16 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "errbot-${version}";
-  version = "4.3.3";
+  version = "5.1.2";
 
   src = fetchurl {
     url = "mirror://pypi/e/errbot/${name}.tar.gz";
-    sha256 = "1z6xcm8jx22i56gpcrjym85a82swvaxh09zkryd5pdksi6k41rb4";
+    sha256 = "1r9w7pmdw77h1hwxns6d0sdg8cndsq1lwkq0y5qiiqr91jz93ajm";
   };
 
   disabled = !pythonPackages.isPy3k;
+
+  LC_ALL = "en_US.utf8";
 
   postPatch = ''
     substituteInPlace setup.py \
