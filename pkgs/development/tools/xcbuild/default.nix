@@ -50,6 +50,8 @@ in stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=strict-aliasing";
 
+  cmakeFlags = [ "-GNinja" ];
+
   buildInputs = [ cmake zlib libxml2 libpng ninja ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices CoreGraphics ImageIO ];
 

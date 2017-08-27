@@ -18,7 +18,6 @@ stdenv.mkDerivation rec {
   };
 
   cmakeFlags = "-G Ninja";
-  buildPhase = "ninja";
   installPhase = ''
     ninja install
     cd ..
