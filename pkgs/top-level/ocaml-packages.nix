@@ -137,6 +137,10 @@ let
       then callPackage ../development/ocaml-modules/cohttp { }
       else cohttp_p4;
 
+    cohttp-lwt = callPackage ../development/ocaml-modules/cohttp/lwt.nix { };
+
+    cohttp-lwt-unix = callPackage ../development/ocaml-modules/cohttp/lwt-unix.nix { };
+
     conduit_p4 = callPackage ../development/ocaml-modules/conduit/0.10.0.nix {
        lwt = lwt2;
     };
@@ -145,6 +149,10 @@ let
       if lib.versionOlder "4.03" ocaml.version
       then callPackage ../development/ocaml-modules/conduit { }
       else conduit_p4;
+
+    conduit-lwt = callPackage ../development/ocaml-modules/conduit/lwt.nix { };
+
+    conduit-lwt-unix = callPackage ../development/ocaml-modules/conduit/lwt-unix.nix { };
 
     config-file = callPackage ../development/ocaml-modules/config-file { };
 
