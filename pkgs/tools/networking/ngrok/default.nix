@@ -1,31 +1,31 @@
-{ stdenv, lib, pkgconfig, buildGoPackage, go-bindata, fetchFromGitHub }:
+{ stdenv, fetchurl, unzip }:
 
-buildGoPackage rec {
+stdenv.mkDerivation rec {
   name = "ngrok-${version}";
-  version = "1.7.1";
-  rev = "${version}";
+  version = "2.2.8";
 
-  goPackagePath = "ngrok";
+  src = if stdenv.system == "i686-linux" then fetchurl {
+    url = "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-i386.tgz";
+    sha256 = "0s5ymlaxrvm13q3mlvfirh74sx60qh56c5sgdma2r7q5qlsq41xg";
+  } else if stdenv.system == "x86_64-linux" then fetchurl {
+    url = "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-linux-amd64.tgz";
+    sha256 = "1mn9iwgy6xzrjihikwc2k2j59igqmph0cwx17qp0ziap9lp5xxad";
+  } else throw "platform ${stdenv.system} not supported!";
 
-  src = fetchFromGitHub {
-    inherit rev;
-    owner = "inconshreveable";
-    repo = "ngrok";
-    sha256 = "1r4nc9knp0nxg4vglg7v7jbyd1nh1j2590l720ahll8a4fbsx5a4";
-  };
+  sourceRoot = ".";
 
-  goDeps = ./deps.nix;
-
-  buildInputs = [ go-bindata ];
-
-  preConfigure = ''
-    sed -e '/jteeuwen\/go-bindata/d' \
-        -e '/export GOPATH/d' \
-        -e 's/go get/#go get/' \
-        -e 's|bin/go-bindata|go-bindata|' -i Makefile
-    make assets BUILDTAGS=release
-    export sourceRoot=$sourceRoot/src/ngrok
+  installPhase = ''
+    install -D ngrok $out/bin/ngrok
   '';
 
-  buildFlags = [ "-tags release" ];
+  meta = with stdenv.lib; {
+    description = "ngrok";
+    longDescription = ''
+      Allows you to expose a web server running on your local machine to the internet.
+    '';
+    homepage = https://ngrok.com/;
+    license = stdenv.lib.licenses.unfree;
+    platforms = [ "i686-linux" "x86_64-linux" ];
+    maintainers = [ maintainers.bobvanderlinden ];
+  };
 }
