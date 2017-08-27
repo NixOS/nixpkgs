@@ -17,6 +17,6 @@ python3Packages.buildPythonApplication rec {
     description = "Fast parallel feed updater for the Nextcloud news app";
     homepage = https://github.com/nextcloud/news-updater;
     license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ schneefux ];
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 }
