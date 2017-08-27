@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/libsigsegv/${name}.tar.gz";
     sha256 = "0fvcsq9msi63vrbpvks6mqkrnls5cfy6bzww063sqhk2h49vsyyg";
   };
+  
+  patches = if enableSigbusFix then [ ./sigbus_fix.patch ] else [ ];
 
   patches = stdenv.lib.optional enableSigbusFix ./sigbus_fix.patch;
 
