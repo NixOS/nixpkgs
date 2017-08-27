@@ -1,5 +1,5 @@
-{ lib, fetchurl, fetchpatch, stdenv, ncurses, python
-, IOKit }:
+{ lib, fetchurl, stdenv, ncurses,
+IOKit }:
 
 stdenv.mkDerivation rec {
   name = "htop-${version}";
@@ -11,17 +11,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ ncurses python ] ++
+    [ ncurses ] ++
     lib.optionals stdenv.isDarwin [ IOKit ];
-
-  patches = [
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/lheckemann/dotfiles/7fed34f49450d7589aaa60cb3e1263f983f4b8d6/htop-stripstore.patch";
-      sha256 = "0hsa7b41zi63jvly7dhslxkjc7php227jxqsq9kvykn2x895cf94";
-    })
-  ];
-
-  postPatch = "patchShebangs .";
 
   meta = with stdenv.lib; {
     description = "An interactive process viewer for Linux";
