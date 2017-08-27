@@ -9637,24 +9637,7 @@ in {
 
   flask-compress = callPackage ../development/python-modules/flask-compress { };
 
-  flask-cors = buildPythonPackage rec {
-    name = "Flask-Cors-${version}";
-    version = "2.1.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/F/Flask-Cors/${name}.tar.gz";
-      sha256 = "0fd618a4f88ykqx4x55viz47cm9rl214q1b45a0b4mz5vhxffqpj";
-    };
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ flask six ];
-
-    meta = {
-      description = "A Flask extension adding a decorator for CORS support";
-      homepage = https://github.com/corydolphin/flask-cors;
-      license = with licenses; [ mit ];
-    };
-  };
+  flask-cors = callPackage ../development/python-modules/flask-cors { };
 
   flask_elastic = callPackage ../development/python-modules/flask-elastic.nix { };
 
