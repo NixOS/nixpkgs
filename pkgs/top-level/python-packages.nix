@@ -4444,6 +4444,8 @@ in {
     };
   };
 
+  pytest-sugar = callPackage ../development/python-modules/pytest-sugar { };
+
   tinycss = buildPythonPackage rec {
     name = "tinycss-${version}";
     version = "0.3";
