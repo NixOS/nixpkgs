@@ -14878,8 +14878,6 @@ with pkgs;
     boost = boost155;
   };
 
-  k3b = kdeApplications.k3b;
-
   k9copy = libsForQt5.callPackage ../applications/video/k9copy {};
 
   kadu = kde4.callPackage ../applications/networking/instant-messengers/kadu { };
@@ -14900,10 +14898,10 @@ with pkgs;
       recurseIntoAttrs (makeOverridable mkApplications attrs);
 
   inherit (kdeApplications)
-    akonadi ark dolphin ffmpegthumbs filelight gwenview kate kdenlive
-    kcachegrind kcalc kcolorchooser kcontacts kdf kgpg khelpcenter kig kmail
-    kmix kolourpaint kompare konsole krfb kwalletmanager marble okteta okular
-    spectacle;
+    akonadi akregator ark dolphin ffmpegthumbs filelight gwenview k3b
+    kaddressbook kate kcachegrind kcalc kcolorchooser kcontacts kdenlive kdf
+    kgpg khelpcenter kig kleopatra kmail kmix kolourpaint kompare konsole
+    kontact korganizer krfb kwalletmanager marble okteta okular spectacle;
 
   kdeconnect = libsForQt5.callPackage ../applications/misc/kdeconnect { };
 
