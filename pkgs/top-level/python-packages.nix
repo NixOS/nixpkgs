@@ -1659,6 +1659,8 @@ in {
 
   channels = callPackage ../development/python-modules/channels {};
 
+  cheroot = callPackage ../development/python-modules/cheroot {};
+
   circus = buildPythonPackage rec {
     name = "circus-0.11.1";
 
