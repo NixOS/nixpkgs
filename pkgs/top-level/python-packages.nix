@@ -9806,19 +9806,7 @@ in {
 
   jsonschema = callPackage ../development/python-modules/jsonschema { };
 
-  vcversioner = buildPythonPackage rec {
-    name = "vcversioner-${version}";
-    version = "2.14.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/v/vcversioner/vcversioner-${version}.tar.gz";
-      sha256 = "11ivq1bm7v0yb4nsfbv9m7g7lyjn112gbvpjnjz8nv1fx633dm5c";
-    };
-
-    meta = with stdenv.lib; {
-      homepage = "https://github.com/habnabit/vcversioner";
-    };
-  };
+  vcversioner = callPackage ../development/python-modules/vcversioner { };
 
   falcon = buildPythonPackage (rec {
     name = "falcon-1.0.0";
