@@ -103,11 +103,32 @@ in
         '';
       };
 
+      extraConfig = mkOption {
+        type = types.attrs;
+        description = toString [
+          "Attrset of daemon configuration to set using `ipfs config`, every time the daemon starts."
+          "These are applied last, so may override configuration set by other options in this module."
+          "Keep in mind that this configuration is stateful; i.e., unsetting anything in here does not reset the value to the default!"
+        ];
+        default = {};
+        example = {
+          Datastore.StorageMax = "100GB";
+          Discovery.MDNS.Enabled = false;
+          Bootstrap = [
+            "/ip4/128.199.219.111/tcp/4001/ipfs/QmSoLSafTMBsPKadTEgaXctDQVcqN88CNLHXMkTNwMKPnu"
+            "/ip4/162.243.248.213/tcp/4001/ipfs/QmSoLueR4xBeUbY9WZ9xGUUxunbKWcrNFTDAadQJmocnWm"
+          ];
+          Swarm.AddrFilters = null;
+        };
+
+      };
+
       extraFlags = mkOption {
         type = types.listOf types.str;
         description = "Extra flags passed to the IPFS daemon";
         default = [];
       };
+
     };
   };
 
@@ -155,7 +176,19 @@ in
         ${ipfs}/bin/ipfs --local config Mounts.FuseAllowOther --json true
         mkdir -p $(${ipfs}/bin/ipfs --local config Mounts.IPFS)
         mkdir -p $(${ipfs}/bin/ipfs --local config Mounts.IPNS)
-      '';
+      '' + concatStringsSep "\n" (collect
+            isString
+            (mapAttrsRecursive
+              (path: value:
+              # Using heredoc below so that the value is never improperly quoted
+              ''
+                read value <<EOF
+                ${builtins.toJSON value}
+                EOF
+                ipfs --local config --json "${concatStringsSep "." path}" "$value"
+              '')
+              cfg.extraConfig)
+          );
 
       serviceConfig = {
         User = cfg.user;
