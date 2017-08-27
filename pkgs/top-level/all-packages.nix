@@ -3150,11 +3150,11 @@ with pkgs;
 
   ngrep = callPackage ../tools/networking/ngrep { };
 
-  ngrok = ngrok2;
+  ngrok = ngrok-2;
 
-  ngrok2 = callPackage ../tools/networking/ngrok { };
+  ngrok-2 = callPackage ../tools/networking/ngrok-2 { };
 
-  ngrok1 = callPackage ../tools/networking/ngrok1 { };
+  ngrok-1 = callPackage ../tools/networking/ngrok-1 { };
 
   noip = callPackage ../tools/networking/noip { };
 
