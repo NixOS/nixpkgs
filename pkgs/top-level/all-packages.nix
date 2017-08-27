@@ -3418,7 +3418,11 @@ with pkgs;
 
   ngrep = callPackage ../tools/networking/ngrep { };
 
-  ngrok = callPackage ../tools/networking/ngrok { };
+  ngrok = ngrok2;
+
+  ngrok2 = callPackage ../tools/networking/ngrok { };
+
+  ngrok1 = callPackage ../tools/networking/ngrok1 { };
 
   noice = callPackage ../applications/misc/noice { };
 
