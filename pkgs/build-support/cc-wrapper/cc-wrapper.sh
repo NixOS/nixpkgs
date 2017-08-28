@@ -13,6 +13,12 @@ fi
 
 source @out@/nix-support/utils.sh
 
+# Flirting with a layer violation here.
+if [ -z "${NIX_BINUTILS_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
+    source @binutils@/nix-support/add-flags.sh
+fi
+
+# Put this one second so libc ldflags take priority.
 if [ -z "${NIX_CC_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi

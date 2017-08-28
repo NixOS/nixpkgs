@@ -1,11 +1,11 @@
-hardeningFlags=(fortify stackprotector pic strictoverflow format relro bindnow)
+hardeningFlags=(relro bindnow)
 # Intentionally word-split in case 'hardeningEnable' is defined in
 # Nix. Also, our bootstrap tools version of bash is old enough that
 # undefined arrays trip `set -u`.
 if [[ -v hardeningEnable[@] ]]; then
   hardeningFlags+=(${hardeningEnable[@]})
 fi
-hardeningCFlags=()
+hardeningLDFlags=()
 
 declare -A hardeningDisableMap
 
@@ -29,33 +29,19 @@ if [[ -z "${hardeningDisableMap[all]:-}" ]]; then
   do
     if [[ -z "${hardeningDisableMap[$flag]:-}" ]]; then
       case $flag in
-        fortify)
-          if [[ -n "${NIX_DEBUG:-}" ]]; then echo HARDENING: enabling fortify >&2; fi
-          hardeningCFlags+=('-O2' '-D_FORTIFY_SOURCE=2')
-          ;;
-        stackprotector)
-          if [[ -n "${NIX_DEBUG:-}" ]]; then echo HARDENING: enabling stackprotector >&2; fi
-          hardeningCFlags+=('-fstack-protector-strong' '--param' 'ssp-buffer-size=4')
-          ;;
         pie)
-          if [[ -n "${NIX_DEBUG:-}" ]]; then echo HARDENING: enabling CFlags -fPIE >&2; fi
-          hardeningCFlags+=('-fPIE')
           if [[ ! ("$*" =~ " -shared " || "$*" =~ " -static ") ]]; then
             if [[ -n "${NIX_DEBUG:-}" ]]; then echo HARDENING: enabling LDFlags -pie >&2; fi
-            hardeningCFlags+=('-pie')
+            hardeningLDFlags+=('-pie')
           fi
           ;;
-        pic)
-          if [[ -n "${NIX_DEBUG:-}" ]]; then echo HARDENING: enabling pic >&2; fi
-          hardeningCFlags+=('-fPIC')
+        relro)
+          if [[ -n "${NIX_DEBUG:-}" ]]; then echo HARDENING: enabling relro >&2; fi
+          hardeningLDFlags+=('-z' 'relro')
           ;;
-        strictoverflow)
-          if [[ -n "${NIX_DEBUG:-}" ]]; then echo HARDENING: enabling strictoverflow >&2; fi
-          hardeningCFlags+=('-fno-strict-overflow')
-          ;;
-        format)
-          if [[ -n "${NIX_DEBUG:-}" ]]; then echo HARDENING: enabling format >&2; fi
-          hardeningCFlags+=('-Wformat' '-Wformat-security' '-Werror=format-security')
+        bindnow)
+          if [[ -n "${NIX_DEBUG:-}" ]]; then echo HARDENING: enabling bindnow >&2; fi
+          hardeningLDFlags+=('-z' 'now')
           ;;
         *)
           # Ignore unsupported. Checked in Nix that at least *some*
