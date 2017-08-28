@@ -1,20 +1,19 @@
 { config, lib, pkgs, ... }:
-
 with lib;
-
 let
   inherit (pkgs) ipfs runCommand makeWrapper;
 
   cfg = config.services.ipfs;
 
   ipfsFlags = toString ([
-    (optionalString (cfg.serviceFdlimit != null) "--manage-fdlimit=true")
-    (optionalString cfg.autoMount   "--mount")
-    (optionalString cfg.autoMigrate "--migrate")
-    (optionalString cfg.enableGC    "--enable-gc")
+    (optionalString  cfg.autoMount                   "--mount")
+    (optionalString  cfg.autoMigrate                 "--migrate")
+    (optionalString  cfg.enableGC                    "--enable-gc")
+    (optionalString (cfg.serviceFdlimit != null)     "--manage-fdlimit=false")
+    (optionalString (cfg.defaultMode == "offline")   "--offline")
+    (optionalString (cfg.defaultMode == "norouting") "--routing=none")
   ] ++ cfg.extraFlags);
 
-  # Before Version 17.09, ipfs would always use "/var/lib/ipfs/.ipfs" as it's dataDir
   defaultDataDir = if versionAtLeast config.system.stateVersion "17.09" then
     "/var/lib/ipfs" else
     "/var/lib/ipfs/.ipfs";
@@ -26,9 +25,24 @@ let
       --set IPFS_PATH ${cfg.dataDir} \
       --prefix PATH : /run/wrappers/bin
   '';
-in
 
-{
+
+  commonEnv = {
+    environment.IPFS_PATH = cfg.dataDir;
+    path = [ wrapped ];
+    serviceConfig.User = cfg.user;
+    serviceConfig.Group = cfg.group;
+  };
+
+  baseService = recursiveUpdate commonEnv {
+    wants = [ "ipfs-init.service" ];
+    serviceConfig = {
+      ExecStart = "${wrapped}/bin/ipfs daemon ${ipfsFlags}";
+      Restart = "on-failure";
+      RestartSec = 1;
+    } // optionalAttrs (cfg.serviceFdlimit != null) { LimitNOFILE = cfg.serviceFdlimit; };
+  };
+in {
 
   ###### interface
 
@@ -158,34 +172,28 @@ in
     };
 
     users.extraGroups = mkIf (cfg.group == "ipfs") {
-      ipfs = {
-        gid = config.ids.gids.ipfs;
-      };
+      ipfs.gid = config.ids.gids.ipfs;
     };
 
-    systemd.services.ipfs-init = {
+    systemd.services.ipfs-init = recursiveUpdate commonEnv {
       description = "IPFS Initializer";
 
       after = [ "local-fs.target" ];
       before = [ "ipfs.service" "ipfs-offline.service" ];
-
-      environment.IPFS_PATH = cfg.dataDir;
-
-      path  = [ pkgs.ipfs pkgs.su pkgs.bash ];
 
       preStart = ''
         install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.dataDir}
       '';
       script = ''
         if [[ ! -f ${cfg.dataDir}/config ]]; then
-          ${ipfs}/bin/ipfs init ${optionalString cfg.emptyRepo "-e"}
+          ipfs init ${optionalString cfg.emptyRepo "-e"}
         fi
-        ${ipfs}/bin/ipfs --local config Addresses.API ${cfg.apiAddress}
-        ${ipfs}/bin/ipfs --local config Addresses.Gateway ${cfg.gatewayAddress}
+        ipfs --local config Addresses.API ${cfg.apiAddress}
+        ipfs --local config Addresses.Gateway ${cfg.gatewayAddress}
       '' + optionalString cfg.autoMount ''
-        ${ipfs}/bin/ipfs --local config Mounts.FuseAllowOther --json true
-        mkdir -p $(${ipfs}/bin/ipfs --local config Mounts.IPFS)
-        mkdir -p $(${ipfs}/bin/ipfs --local config Mounts.IPNS)
+        ipfs --local config Mounts.FuseAllowOther --json true
+        mkdir -p $(ipfs --local config Mounts.IPFS)
+        mkdir -p $(ipfs --local config Mounts.IPNS)
       '' + concatStringsSep "\n" (collect
             isString
             (mapAttrsRecursive
@@ -201,81 +209,34 @@ in
           );
 
       serviceConfig = {
-        User = cfg.user;
-        Group = cfg.group;
         Type = "oneshot";
         RemainAfterExit = true;
         PermissionsStartOnly = true;
       };
     };
 
-    systemd.services.ipfs = {
+    # TODO These 3 definitions possibly be further abstracted through use of a function
+    # like: mutexServices "ipfs" [ "", "offline", "norouting" ] { ... shared conf here ... }
+
+    systemd.services.ipfs = recursiveUpdate baseService {
       description = "IPFS Daemon";
-
       wantedBy = mkIf (cfg.defaultMode == "online") [ "multi-user.target" ];
-
       after = [ "network.target" "local-fs.target" "ipfs-init.service" ];
-
       conflicts = [ "ipfs-offline.service" "ipfs-norouting.service"];
-      wants = [ "ipfs-init.service" ];
-
-      environment.IPFS_PATH = cfg.dataDir;
-
-      path  = [ pkgs.ipfs ];
-
-      serviceConfig = {
-        ExecStart = "${ipfs}/bin/ipfs daemon ${ipfsFlags}";
-        User = cfg.user;
-        Group = cfg.group;
-        Restart = "on-failure";
-        RestartSec = 1;
-      } // optionalAttrs (cfg.serviceFdlimit != null) { LimitNOFILE = cfg.serviceFdlimit; };
     };
 
-    systemd.services.ipfs-offline = {
+    systemd.services.ipfs-offline = recursiveUpdate baseService {
       description = "IPFS Daemon (offline mode)";
-
       wantedBy = mkIf (cfg.defaultMode == "offline") [ "multi-user.target" ];
-
       after = [ "local-fs.target" "ipfs-init.service" ];
-
       conflicts = [ "ipfs.service" "ipfs-norouting.service"];
-      wants = [ "ipfs-init.service" ];
-
-      environment.IPFS_PATH = cfg.dataDir;
-
-      path  = [ pkgs.ipfs ];
-
-      serviceConfig = {
-        ExecStart = "${ipfs}/bin/ipfs daemon ${ipfsFlags} --offline";
-        User = cfg.user;
-        Group = cfg.group;
-        Restart = "on-failure";
-        RestartSec = 1;
-      } // optionalAttrs (cfg.serviceFdlimit != null) { LimitNOFILE = cfg.serviceFdlimit; };
     };
 
-    systemd.services.ipfs-norouting = {
+    systemd.services.ipfs-norouting = recursiveUpdate baseService {
       description = "IPFS Daemon (no routing mode)";
-
       wantedBy = mkIf (cfg.defaultMode == "norouting") [ "multi-user.target" ];
-
       after = [ "local-fs.target" "ipfs-init.service" ];
-
       conflicts = [ "ipfs.service" "ipfs-offline.service"];
-      wants = [ "ipfs-init.service" ];
-
-      environment.IPFS_PATH = cfg.dataDir;
-
-      path  = [ pkgs.ipfs ];
-
-      serviceConfig = {
-        ExecStart = "${ipfs}/bin/ipfs daemon ${ipfsFlags} --routing=none";
-        User = cfg.user;
-        Group = cfg.group;
-        Restart = "on-failure";
-        RestartSec = 1;
-      } // optionalAttrs (cfg.serviceFdlimit != null) { LimitNOFILE = cfg.serviceFdlimit; };
     };
 
   };
