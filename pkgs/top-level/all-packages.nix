@@ -571,6 +571,8 @@ with pkgs;
 
   genymotion = callPackage ../development/mobile/genymotion { };
 
+  git-fire = callPackage ../tools/misc/git-fire { };
+
   grc = callPackage ../tools/misc/grc { };
 
   green-pdfviewer = callPackage ../applications/misc/green-pdfviewer {
