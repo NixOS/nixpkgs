@@ -506,10 +506,12 @@ activatePackage() {
 
     # Only dependencies whose host platform is guaranteed to match the
     # build platform are included here. That would be `depsBuild*`,
-    # and legacy `nativeBuildInputs`. Other aren't because of cross
-    # compiling, and we want to have consistent rules whether or not
-    # we are cross compiling.
-    if [[ "$hostOffset" -le -1 && -d "$pkg/bin" ]]; then
+    # and legacy `nativeBuildInputs`, in general. If we aren't cross
+    # compiling, however, everything can be put on the PATH. To ease
+    # the transition, we do include everything in thatcase.
+    #
+    # TODO(@Ericson2314): Don't special-case native compilation
+    if [[ ( -z "${crossConfig-}" ||  "$hostOffset" -le -1 ) && -d "$pkg/bin" ]]; then
         addToSearchPath _PATH "$pkg/bin"
     fi
 
@@ -559,11 +561,28 @@ _addToEnv() {
         for depTargetOffset in "${allPlatOffsets[@]}"; do
             (( "$depHostOffset" <= "$depTargetOffset" )) || continue
             local hookRef="${hookVar}[$depTargetOffset - $depHostOffset]"
-            local pkgsRef="${pkgsVar}[$depTargetOffset - $depHostOffset]"
-            local pkgsSlice="${!pkgsRef}[@]"
-            for pkg in ${!pkgsSlice+"${!pkgsSlice}"}; do
-                runHook "${!hookRef}" "$pkg"
-            done
+            if [[ -z "${crossConfig-}" ]]; then
+                # Apply environment hooks to all packages during native
+                # compilation to ease the transition.
+                #
+                # TODO(@Ericson2314): Don't special-case native compilation
+                for pkg in \
+                    ${pkgsBuildBuild+"${pkgsBuildBuild[@]}"} \
+                    ${pkgsBuildHost+"${pkgsBuildHost[@]}"} \
+                    ${pkgsBuildTarget+"${pkgsBuildTarget[@]}"} \
+                    ${pkgsHostHost+"${pkgsHostHost[@]}"} \
+                    ${pkgsHostTarget+"${pkgsHostTarget[@]}"} \
+                    ${pkgsTargetTarget+"${pkgsTargetTarget[@]}"}
+                do
+                    runHook "${!hookRef}" "$pkg"
+                done
+            else
+                local pkgsRef="${pkgsVar}[$depTargetOffset - $depHostOffset]"
+                local pkgsSlice="${!pkgsRef}[@]"
+                for pkg in ${!pkgsSlice+"${!pkgsSlice}"}; do
+                    runHook "${!hookRef}" "$pkg"
+                done
+            fi
         done
     done
 }

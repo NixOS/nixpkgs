@@ -56,8 +56,11 @@
 
 set -u
 
-# Skip setup hook if we're not a build-time dep
-(( "$hostOffset" < 0 )) || return 0
+# Skip setup hook if we're neither a build-time dep, nor, temporarily, doing a
+# native compile.
+#
+# TODO(@Ericson2314): No native exception
+[[ -z ${crossConfig-} ]] || (( "$hostOffset" < 0 )) || return 0
 
 # It's fine that any other cc-wrapper will redefine this. Bash functions close
 # over no state, and there's no @-substitutions within, so any redefined
