@@ -7971,23 +7971,7 @@ in {
 
   };
 
-
-  pyramid_beaker = buildPythonPackage rec {
-    name = "pyramid_beaker-0.8";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyramid_beaker/${name}.tar.gz";
-      sha256 = "0hflx3qkcdml1mwpq53sz46s7jickpfn0zy0ns2c7j445j66bp3p";
-    };
-
-    propagatedBuildInputs = with self; [ beaker pyramid ];
-
-    meta = {
-      maintainers = with maintainers; [ domenkozar ];
-      platforms = platforms.all;
-    };
-  };
-
+  pyramid_beaker = callPackage ../development/python-modules/pyramid_beaker { };
 
   pyramid_chameleon = buildPythonPackage rec {
     name = "pyramid_chameleon-0.3";
