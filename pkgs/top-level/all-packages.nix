@@ -6709,6 +6709,8 @@ with pkgs;
 
   bear = callPackage ../development/tools/build-managers/bear { };
 
+  behave = pythonPackages.behave;
+
   bin_replace_string = callPackage ../development/tools/misc/bin_replace_string { };
 
   binutils =
