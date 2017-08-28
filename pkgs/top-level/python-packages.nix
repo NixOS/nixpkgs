@@ -7385,23 +7385,6 @@ in {
     };
   };
 
-  oger = buildPythonPackage rec {
-    name = "oger-${version}";
-    version = "1.1.3";
-    src = pkgs.fetchurl {
-      url = "http://organic.elis.ugent.be/sites/organic.elis.ugent.be/files/Oger-${version}.tar.gz";
-      sha256 = "1k02ys812lz0x0yymljp102amkm8bvfgqsrphnk235xbcrb0akg5";
-    };
-
-    propagatedBuildInputs = with self; [ MDP scipy numpy matplotlib ];
-
-    meta = {
-      homepage = http://organic.elis.ugent.be/organic/engine;
-      description = "Rapidly build, train, and evalue modular learning architectures";
-      maintainers = with maintainers; [ nico202 ];
-      license = licenses.lgpl3;
-    };
-  };
 
   pamela = buildPythonPackage rec {
     name = "pamela-${version}";
