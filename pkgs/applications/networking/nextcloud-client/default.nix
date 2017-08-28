@@ -14,12 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig cmake ];
   buildInputs = [ qtbase qtwebkit qtkeychain sqlite ];
 
-  cmakeFlags = [
-    "-UCMAKE_INSTALL_LIBDIR"
-  ];
-
   preConfigure = ''
-    cmakeFlags="$cmakeFlags -DOEM_THEME_DIR=$(realpath ./nextcloudtheme) ../client"
+    cmakeFlagsArray+=("-UCMAKE_INSTALL_LIBDIR" "-DOEM_THEME_DIR=$(realpath ./nextcloudtheme)" "../client")
   '';
 
   meta = with stdenv.lib; {
