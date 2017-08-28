@@ -33,11 +33,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "racket-${version}";
-  version = "6.9";
+  version = "6.10";
 
   src = fetchurl {
     url = "http://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
-    sha256 = "1cd218ee2ba1dc683de858a866c6666eb72a11adee8d1df6cdd59c5c5a47b714";
+    sha256 = "1mqnyj3bawad12dygsb11f2dbnkjp7q6d7ra714rqyw8mxix5ws0";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -47,13 +47,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ fontconfig libffi libtool makeWrapper sqlite ];
 
   preConfigure = ''
+    unset AR
     substituteInPlace src/configure --replace /usr/bin/uname ${coreutils}/bin/uname
     mkdir src/build
     cd src/build
   '';
 
   shared = if stdenv.isDarwin then "dylib" else "shared";
-  configureFlags = [ "--enable-${shared}" "--enable-lt=${libtool}/bin/libtool" ]
+  configureFlags = [ "--enable-${shared}"  "--enable-lt=${libtool}/bin/libtool" ]
                    ++ stdenv.lib.optional disableDocs [ "--disable-docs" ]
                    ++ stdenv.lib.optional stdenv.isDarwin [ "--enable-xonx" ];
 

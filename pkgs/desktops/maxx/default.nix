@@ -34,7 +34,7 @@ in stdenv.mkDerivation {
   nativeBuildInputs = [ makeWrapper ];
 
   buildPhase = ''
-    while IFS= read -r -d $'\0' i; do
+    while IFS= read -r -d ''$'\0' i; do
       substituteInPlace "$i" --replace /opt/MaXX $out/opt/MaXX
     done < <(find "." -type f -exec grep -Iq /opt/MaXX {} \; -and -print0)
 
@@ -57,7 +57,7 @@ in stdenv.mkDerivation {
       --prefix GDK_PIXBUF_MODULE_FILE : "$(echo ${librsvg.out}/lib/gdk-pixbuf-2.0/*/loaders.cache)" \
       --prefix PATH : ${stdenv.lib.makeBinPath runtime_deps}
 
-    while IFS= read -r -d $'\0' i; do
+    while IFS= read -r -d ''$'\0' i; do
       if isELF "$i"; then
         bin=`patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$i"; echo $?`
         patchelf --set-rpath "${stdenv.lib.makeLibraryPath deps}" "$i"

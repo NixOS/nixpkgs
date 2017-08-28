@@ -25,21 +25,21 @@ stdenv.mkDerivation rec {
      ];
 
     installPhase = ''
-        mkdir -p $out/{bin,opt,share/pixmaps}
-        mv * $out/opt
+        mkdir -p $out/{bin,opt/discord,share/pixmaps}
+        mv * $out/opt/discord
 
         # Copying how adobe-reader does it,
         # see pkgs/applications/misc/adobe-reader/builder.sh
         patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-                 --set-rpath "$out/opt:$libPath"                                   \
-                 $out/opt/Discord
+                 --set-rpath "$out/opt/discord:$libPath"                                   \
+                 $out/opt/discord/Discord
 
-        paxmark m $out/opt/Discord
+        paxmark m $out/opt/discord/Discord
 
-        wrapProgram $out/opt/Discord --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH:${libcxx}/lib:${systemd.lib}/lib:${libpulseaudio}/lib"
+        wrapProgram $out/opt/discord/Discord --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH:${libcxx}/lib:${systemd.lib}/lib:${libpulseaudio}/lib"
 
-        ln -s $out/opt/Discord $out/bin/
-        ln -s $out/opt/discord.png $out/share/pixmaps
+        ln -s $out/opt/discord/Discord $out/bin/
+        ln -s $out/opt/discord/discord.png $out/share/pixmaps
 
         ln -s "${desktopItem}/share/applications" $out/share/
         '';

@@ -18,6 +18,8 @@ python3Packages.buildPythonApplication rec {
     popd
   '';
 
+  setupHook = ./setup-hook.sh;
+
   meta = with lib; {
     homepage = http://mesonbuild.com;
     description = "SCons-like build system that use python as a front-end language and Ninja as a building backend";
