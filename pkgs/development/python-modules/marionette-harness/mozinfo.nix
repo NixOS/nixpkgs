@@ -22,7 +22,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "System information utilities for Mozilla testing";
     homepage = https://wiki.mozilla.org/Auto-tools/Projects/Mozbase;
-    license = lib.licenses.mpl20;
-    maintainers = with lib.maintainers; [ raskin ];
+    license = licenses.mpl20;
+    maintainers = with maintainers; [ raskin ];
   };
 }
