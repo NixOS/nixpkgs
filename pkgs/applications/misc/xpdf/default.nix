@@ -1,9 +1,9 @@
 { enableGUI ? true, enablePDFtoPPM ? true, useT1Lib ? false
-, stdenv, fetchurl, zlib, libpng, xlibsWrapper ? null, motif ? null, freetype ? null, t1lib ? null
-, base14Fonts ? null
+, stdenv, fetchurl, zlib, libpng, freetype ? null, t1lib ? null
+, cmake, qtbase ? null
 }:
 
-assert enableGUI -> xlibsWrapper != null && motif != null && freetype != null;
+assert enableGUI -> qtbase != null && freetype != null;
 assert enablePDFtoPPM -> freetype != null;
 assert useT1Lib -> t1lib != null;
 
@@ -17,8 +17,12 @@ stdenv.mkDerivation {
     sha256 = "1mhn89738vjva14xr5gblc2zrdgzmpqbbjdflqdmpqv647294ggz";
   };
 
+  nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = ["-DSYSTEM_XPDFRC=/etc/xpdfrc" "-DA4_PAPER=ON"];
+
   buildInputs = [ zlib libpng ] ++
-    stdenv.lib.optionals enableGUI [xlibsWrapper motif] ++
+    stdenv.lib.optional enableGUI qtbase ++
     stdenv.lib.optional useT1Lib t1lib ++
     stdenv.lib.optional enablePDFtoPPM freetype;
 
@@ -26,14 +30,6 @@ stdenv.mkDerivation {
   CXXFLAGS = "-O2 -fpermissive";
 
   hardeningDisable = [ "format" ];
-
-  configureFlags = "--enable-a4-paper";
-
-  postInstall = stdenv.lib.optionalString (base14Fonts != null) ''
-    substituteInPlace $out/etc/xpdfrc \
-      --replace /usr/local/share/ghostscript/fonts ${base14Fonts} \
-      --replace '#fontFile' fontFile
-  '';
 
   meta = {
     homepage = http://www.foolabs.com/xpdf/;

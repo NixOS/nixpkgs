@@ -11098,7 +11098,7 @@ with pkgs;
   dex-oidc = callPackage ../servers/dex { };
 
   dgraph = callPackage ../servers/dgraph { };
-    
+
   dico = callPackage ../servers/dico { };
 
   dict = callPackage ../servers/dict {
@@ -16924,9 +16924,7 @@ with pkgs;
 
   apvlv = callPackage ../applications/misc/apvlv { };
 
-  xpdf = callPackage ../applications/misc/xpdf {
-    base14Fonts = "${ghostscript}/share/ghostscript/fonts";
-  };
+  xpdf = libsForQt5.callPackage ../applications/misc/xpdf { };
 
   xkb_switch = callPackage ../tools/X11/xkb-switch { };
 
@@ -18684,7 +18682,7 @@ with pkgs;
   hplip_3_15_9 = callPackage ../misc/drivers/hplip/3.15.9.nix { };
 
   hplipWithPlugin_3_15_9 = hplip_3_15_9.override { withPlugin = true; };
-  
+
   epkowa = callPackage ../misc/drivers/epkowa { };
 
   illum = callPackage ../tools/system/illum { };
