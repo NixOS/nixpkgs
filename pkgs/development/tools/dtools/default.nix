@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
 
       substituteInPlace posix.mak \
           --replace gcc $CC
+
+      # To fix rdmd test with newer phobos
+      substituteInPlace rdmd.d \
+          --replace " std.stdiobase," ""
   '';
 
   nativeBuildInputs = [ dmd ];
