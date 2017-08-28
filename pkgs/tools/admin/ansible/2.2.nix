@@ -9,7 +9,7 @@ with pythonPackages;
 let
   # Shouldn't be needed anymore in next version
   # https://github.com/NixOS/nixpkgs/pull/22345#commitcomment-20718521
-  jinja = (jinja2.override rec {
+  jinja = jinja2.overrideDerivation (old: rec {
     pname = "Jinja2";
     version = "2.8.1";
     name = "${pname}-${version}";
