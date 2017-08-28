@@ -12754,10 +12754,6 @@ with pkgs;
 
   upower = callPackage ../os-specific/linux/upower { };
 
-  upstart = callPackage ../os-specific/linux/upstart { };
-
-  upstart-check-config = callPackage ../os-specific/linux/upstart/check-config.nix {};
-
   usbguard = libsForQt5.callPackage ../os-specific/linux/usbguard {
     libgcrypt = null;
   };
