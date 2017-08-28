@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     mv config/gitlab.yml.example config/gitlab.yml
 
-    dpkg -x ${gitlabDeb} .
+    dpkg --fsys-tarfile ${gitlabDeb} | tar -x --no-same-permissions --no-same-owner
     mv -v opt/gitlab/embedded/service/gitlab-rails/public/assets public
     rm -rf opt
 
