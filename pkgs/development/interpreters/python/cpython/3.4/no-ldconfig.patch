@@ -1,66 +1,48 @@
-From 105621b99cc30615c79b5aa3d12d6732e14b0d59 Mon Sep 17 00:00:00 2001
+From 81bd99ad9058feb1d0361bc8862e8567c21a6142 Mon Sep 17 00:00:00 2001
 From: Frederik Rietdijk <fridh@fridh.nl>
 Date: Mon, 28 Aug 2017 09:24:06 +0200
 Subject: [PATCH] Don't use ldconfig and speed up uuid load
 
 ---
- Lib/ctypes/util.py | 70 ++----------------------------------------------------
- Lib/uuid.py        | 48 -------------------------------------
- 2 files changed, 2 insertions(+), 116 deletions(-)
+ Lib/ctypes/util.py | 52 ++--------------------------------------------------
+ Lib/uuid.py        | 50 ++------------------------------------------------
+ 2 files changed, 4 insertions(+), 98 deletions(-)
 
 diff --git a/Lib/ctypes/util.py b/Lib/ctypes/util.py
-index 339ae8aa8a..2944985c30 100644
+index 595113bffd..780cd5d21b 100644
 --- a/Lib/ctypes/util.py
 +++ b/Lib/ctypes/util.py
-@@ -85,46 +85,7 @@ elif os.name == "posix":
+@@ -88,28 +88,7 @@ elif os.name == "posix":
      import re, tempfile
  
      def _findLib_gcc(name):
--        # Run GCC's linker with the -t (aka --trace) option and examine the
--        # library name it prints out. The GCC command will fail because we
--        # haven't supplied a proper program with main(), but that does not
--        # matter.
--        expr = os.fsencode(r'[^\(\)\s]*lib%s\.[^\(\)\s]*' % re.escape(name))
--
--        c_compiler = shutil.which('gcc')
--        if not c_compiler:
--            c_compiler = shutil.which('cc')
--        if not c_compiler:
--            # No C compiler available, give up
--            return None
--
--        temp = tempfile.NamedTemporaryFile()
+-        expr = r'[^\(\)\s]*lib%s\.[^\(\)\s]*' % re.escape(name)
+-        fdout, ccout = tempfile.mkstemp()
+-        os.close(fdout)
+-        cmd = 'if type gcc >/dev/null 2>&1; then CC=gcc; elif type cc >/dev/null 2>&1; then CC=cc;else exit 10; fi;' \
+-              'LANG=C LC_ALL=C $CC -Wl,-t -o ' + ccout + ' 2>&1 -l' + name
 -        try:
--            args = [c_compiler, '-Wl,-t', '-o', temp.name, '-l' + name]
--
--            env = dict(os.environ)
--            env['LC_ALL'] = 'C'
--            env['LANG'] = 'C'
+-            f = os.popen(cmd)
 -            try:
--                proc = subprocess.Popen(args,
--                                        stdout=subprocess.PIPE,
--                                        stderr=subprocess.STDOUT,
--                                        env=env)
--            except OSError:  # E.g. bad executable
--                return None
--            with proc:
--                trace = proc.stdout.read()
+-                trace = f.read()
+-            finally:
+-                rv = f.close()
 -        finally:
 -            try:
--                temp.close()
+-                os.unlink(ccout)
 -            except FileNotFoundError:
--                # Raised if the file was already removed, which is the normal
--                # behaviour of GCC if linking fails
 -                pass
+-        if rv == 10:
+-            raise OSError('gcc or cc command not found')
 -        res = re.search(expr, trace)
 -        if not res:
 -            return None
--        return os.fsdecode(res.group(0))
+-        return res.group(0)
 +        return None
  
  
      if sys.platform == "sunos5":
-@@ -246,34 +207,7 @@ elif os.name == "posix":
+@@ -200,34 +179,7 @@ elif os.name == "posix":
      else:
  
          def _findSoname_ldconfig(name):
@@ -79,8 +61,8 @@ index 339ae8aa8a..2944985c30 100644
 -            abi_type = mach_map.get(machine, 'libc6')
 -
 -            # XXX assuming GLIBC's ldconfig (with option -p)
--            regex = r'\s+(lib%s\.[^\s]+)\s+\(%s'
--            regex = os.fsencode(regex % (re.escape(name), abi_type))
+-            regex = os.fsencode(
+-                '\s+(lib%s\.[^\s]+)\s+\(%s' % (re.escape(name), abi_type))
 -            try:
 -                with subprocess.Popen(['/sbin/ldconfig', '-p'],
 -                                      stdin=subprocess.DEVNULL,
@@ -94,39 +76,37 @@ index 339ae8aa8a..2944985c30 100644
 -                pass
 +            return None
  
-         def _findLib_ld(name):
-             # See issue #9998 for why this is needed
+         def find_library(name):
+             return _findSoname_ldconfig(name) or _get_soname(_findLib_gcc(name))
 diff --git a/Lib/uuid.py b/Lib/uuid.py
-index 200c800b34..31160ace95 100644
+index 1061bffc43..846f5819f5 100644
 --- a/Lib/uuid.py
 +++ b/Lib/uuid.py
-@@ -455,57 +455,9 @@ def _netbios_getnode():
-             continue
-         return int.from_bytes(bytes, 'big')
+@@ -451,57 +451,11 @@ def _netbios_getnode():
+         return ((bytes[0]<<40) + (bytes[1]<<32) + (bytes[2]<<24) +
+                 (bytes[3]<<16) + (bytes[4]<<8) + bytes[5])
  
 -# Thanks to Thomas Heller for ctypes and for his help with its use here.
  
 -# If ctypes is available, use it to find system routines for UUID generation.
 -# XXX This makes the module non-thread-safe!
- _uuid_generate_time = _UuidCreate = None
+ _uuid_generate_random = _uuid_generate_time = _UuidCreate = None
 -try:
 -    import ctypes, ctypes.util
--    import sys
  
 -    # The uuid_generate_* routines are provided by libuuid on at least
 -    # Linux and FreeBSD, and provided by libc on Mac OS X.
--    _libnames = ['uuid']
--    if not sys.platform.startswith('win'):
--        _libnames.append('c')
--    for libname in _libnames:
+-    for libname in ['uuid', 'c']:
 -        try:
 -            lib = ctypes.CDLL(ctypes.util.find_library(libname))
--        except Exception:
+-        except:
 -            continue
+-        if hasattr(lib, 'uuid_generate_random'):
+-            _uuid_generate_random = lib.uuid_generate_random
 -        if hasattr(lib, 'uuid_generate_time'):
 -            _uuid_generate_time = lib.uuid_generate_time
--            break
--    del _libnames
+-            if _uuid_generate_random is not None:
+-                break  # found everything we were looking for
 -
 -    # The uuid_generate_* functions are broken on MacOS X 10.5, as noted
 -    # in issue #8621 the function generates the same sequence of values
@@ -135,9 +115,11 @@ index 200c800b34..31160ace95 100644
 -    #
 -    # Assume that the uuid_generate functions are broken from 10.5 onward,
 -    # the test can be adjusted when a later version is fixed.
+-    import sys
 -    if sys.platform == 'darwin':
+-        import os
 -        if int(os.uname().release.split('.')[0]) >= 9:
--            _uuid_generate_time = None
+-            _uuid_generate_random = _uuid_generate_time = None
 -
 -    # On Windows prior to 2000, UuidCreate gives a UUID containing the
 -    # hardware address.  On Windows 2000 and later, UuidCreate makes a
@@ -155,6 +137,8 @@ index 200c800b34..31160ace95 100644
 -                          getattr(lib, 'UuidCreate', None))
 -except:
 -    pass
++_uuid_generate_time = _UuidCreate = None
++
  
  def _unixdll_getnode():
      """Get the hardware address on Unix using ctypes."""
