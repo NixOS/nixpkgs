@@ -15,11 +15,11 @@ mariadb = everything // {
 };
 
 common = rec { # attributes common to both builds
-  version = "10.2.7";
+  version = "10.2.8";
 
   src = fetchurl {
     url    = "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz/from/http%3A//ftp.hosteurope.de/mirror/archive.mariadb.org/?serve";
-    sha256 = "1g60fskf8w633icjjjj08a7h4ha6vaczyczlm4was9c3qjxs2nr2";
+    sha256 = "14r397rbk00647nkmbjzfcgicamgnyyqyi5ca9py51ghg7z51lld";
     name   = "mariadb-${version}.tar.gz";
   };
 
@@ -29,19 +29,11 @@ common = rec { # attributes common to both builds
   ] ++ stdenv.lib.optionals stdenv.isLinux [ libaio systemd ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ perl fixDarwinDylibNames cctools CoreServices ];
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/MariaDB/server/commit/7fc75c420a47fd29a399468b920641ebb43fa75c.patch";
-      sha256 = "0rgppcycw4gjkayz8fn4412dkplghpfzs3bq8ib1jqb9xzi3zvww";
-    })
-  ];
-
   prePatch = ''
     substituteInPlace cmake/libutils.cmake \
       --replace /usr/bin/libtool libtool
     sed -i 's,[^"]*/var/log,/var/log,g' storage/mroonga/vendor/groonga/CMakeLists.txt
   '';
-
 
   cmakeFlags = [
     "-DBUILD_CONFIG=mysql_release"
