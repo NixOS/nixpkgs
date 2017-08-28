@@ -48,11 +48,7 @@ in
   config = mkIf cfg.enable {
 
     environment.systemPackages = [ sksPkg ];
-<<<<<<< HEAD
 
-=======
-    
->>>>>>> origin/master
     users.users.sks = {
       createHome = true;
       home = "/var/db/sks";
