@@ -12,6 +12,13 @@ pythonPackages.buildPythonApplication rec {
 
   disabled = !pythonPackages.isPy3k;
 
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/mayflower/errbot/commit/3d360fded72cbd83376778bce124a0a2fcd7d621.patch";
+      sha256 = "0qlninni6rgwk5fvcybpan3zppmchs34p4v9rzwnqqzhn4429mfh";
+    })
+  ];
+
   LC_ALL = "en_US.utf8";
 
   postPatch = ''
