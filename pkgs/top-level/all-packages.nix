@@ -3414,6 +3414,8 @@ with pkgs;
 
   nextcloud = callPackage ../servers/nextcloud { };
 
+  nextcloud-client = libsForQt56.callPackage ../applications/networking/nextcloud-client { };
+
   nextcloud-news-updater = callPackage ../servers/nextcloud/news-updater.nix { };
 
   ngrep = callPackage ../tools/networking/ngrep { };
