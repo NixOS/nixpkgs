@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace configure \
       --replace '#define ELF_INTERPRETER "$interp"' \
-                "#define ELF_INTERPRETER \"$(cat $NIX_CC/nix-support/dynamic-linker)\""
+                "#define ELF_INTERPRETER \"$(cat $NIX_BINUTILS/nix-support/dynamic-linker)\""
   '';
 
   preConfigure = ''

@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     rm $out/bin/google-earth $out/opt/google/earth/free/google-earth
     ln -s $out/opt/google/earth/free/googleearth $out/bin/google-earth
 
-    patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+    patchelf --interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
       --set-rpath "${fullPath}:\$ORIGIN" \
       $out/opt/google/earth/free/googleearth-bin
 

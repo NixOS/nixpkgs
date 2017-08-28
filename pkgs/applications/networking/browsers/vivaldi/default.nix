@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     echo "Patching Vivaldi binaries"
     patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
       --set-rpath "${libPath}" \
       opt/vivaldi/vivaldi-bin
   '' + stdenv.lib.optionalString proprietaryCodecs ''

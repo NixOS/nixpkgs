@@ -130,7 +130,7 @@ in stdenv.mkDerivation rec {
 
     for elf in $out/share/google/$appname/{chrome,chrome-sandbox,nacl_helper}; do
       patchelf --set-rpath $rpath $elf
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $elf
+      patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" $elf
     done
   '';
 

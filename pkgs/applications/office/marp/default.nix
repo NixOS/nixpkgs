@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+    patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
       --set-rpath "${atomEnv.libPath}:${stdenv.lib.makeLibraryPath [ libXScrnSaver ]}:$out/lib/marp" \
       $out/bin/Marp
   '';

@@ -78,7 +78,7 @@ in stdenv.mkDerivation {
 
   postFixup = ''
      patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
       --set-rpath "$out/share/skypeforlinux:${rpath}" "$out/share/skypeforlinux/skypeforlinux"
 
     ln -s "$out/share/skypeforlinux/skypeforlinux" "$out/bin/skypeforlinux"

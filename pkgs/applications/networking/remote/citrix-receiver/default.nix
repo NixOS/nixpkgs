@@ -131,7 +131,7 @@ in stdenv.mkDerivation rec {
         echo "Patching ELF intrepreter and rpath for $f"
         chmod u+w "$f"
         patchelf \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+          --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) \
           --set-rpath "$ICAInstDir:$libPath" "$f"
       done
 

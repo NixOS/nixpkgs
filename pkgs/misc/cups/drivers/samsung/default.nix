@@ -69,7 +69,7 @@ in stdenv.mkDerivation rec {
 
   preFixup = ''
     for bin in "$out/bin/"*; do
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$bin"
+      patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" "$bin"
       patchelf --set-rpath "$out/lib:${stdenv.lib.getLib cups}/lib" "$bin"
     done
 

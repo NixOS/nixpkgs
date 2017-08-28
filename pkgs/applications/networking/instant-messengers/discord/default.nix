@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
         # Copying how adobe-reader does it,
         # see pkgs/applications/misc/adobe-reader/builder.sh
-        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
                  --set-rpath "$out/opt/discord:$libPath"                                   \
                  $out/opt/discord/Discord
 

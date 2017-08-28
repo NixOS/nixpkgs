@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     echo "export QT_XKB_CONFIG_ROOT="${xkeyboardconfig}/share/X11/xkb"" >> $out/houdini/sbin/app_init.sh
   '';
   postFixup = ''
-    INTERPRETER="$(cat "$NIX_CC"/nix-support/dynamic-linker)"
+    INTERPRETER="$(cat "$NIX_BINUTILS/nix-support/dynamic-linker")"
     for BIN in $(find $out/bin -type f -executable); do
       if patchelf $BIN 2>/dev/null ; then
         echo "Patching ELF $BIN"

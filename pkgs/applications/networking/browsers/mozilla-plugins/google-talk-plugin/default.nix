@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
       cp -prd opt/google/talkplugin/{data,GoogleTalkPlugin,locale,remoting24x24.png,windowpicker.glade} $out/libexec/google/talkplugin/
 
       patchelf \
-        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
         --set-rpath "${rpathProgram}:${stdenv.cc.cc.lib}/lib64" \
         $out/libexec/google/talkplugin/GoogleTalkPlugin
 

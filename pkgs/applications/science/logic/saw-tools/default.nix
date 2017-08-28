@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   fixupPhase = ''
     for x in bin/bcdump bin/extcore-info bin/jss bin/llvm-disasm bin/lss bin/saw; do
-      patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      patchelf --interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
         --set-rpath "$out/lib:${libPath}" $out/$x;
     done
   '';

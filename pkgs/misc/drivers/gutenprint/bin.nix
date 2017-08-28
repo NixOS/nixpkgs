@@ -53,7 +53,7 @@ stdenv.mkDerivation {
         $out/cups/lib/backend/{canon,epson} \
         $out/sbin/cups-genppd.5.0 \
       ; do
-      patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      patchelf --interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
           --set-rpath $libPath $p
     done
     

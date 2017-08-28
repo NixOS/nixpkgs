@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper ];
 
   postPatch = ''
-    patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" client/insync-portable
+    patchelf --interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" client/insync-portable
   '';
 
   installPhase = ''

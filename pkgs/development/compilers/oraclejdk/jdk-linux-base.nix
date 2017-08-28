@@ -179,7 +179,7 @@ let result = stdenv.mkDerivation rec {
 
     # set all the dynamic linkers
     find $out -type f -perm -0100 \
-        -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        -exec patchelf --interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
         --set-rpath "$rpath" {} \;
 
     find $out -name "*.so" -exec patchelf --set-rpath "$rpath" {} \;
