@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   checkPhase = ''
     # https://github.com/Pylons/pyramid_beaker/issues/29
-    py.test -k 'not test_includeme'
+    py.test -k 'not test_includeme' pyramid_beaker/tests.py
   '';
 
   buildInputs = [ pytest ];
