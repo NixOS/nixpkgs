@@ -9,15 +9,11 @@ stdenv.mkDerivation {
     rev = "d72b68ed356f726c77c60294f9220275f16c9931";
     sha256 = "1hdwkhyjjx31y0lpjkhbb4f5y9f7g70fnd4c2246cmk2rbsvj5b2";
   };
-  
-  unpackPhase = ":";
-  
+
   installPhase = ''
-    mkdir -p $out/bin 
-    cp $src/git-fire $out/bin
-    chmod +x $out/bin/git-fire
+    install -D -m755 $src/git-fire $out/bin/git-fire
   '';
-  
+
   meta = with stdenv.lib; {
     description = ''
       Push ALL changes in a git repository
