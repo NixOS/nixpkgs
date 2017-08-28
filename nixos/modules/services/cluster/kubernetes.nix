@@ -8,13 +8,6 @@ let
   skipAttrs = attrs: map (filterAttrs (k: v: k != "enable"))
     (filter (v: !(hasAttr "enable" v) || v.enable) attrs);
 
-  infraContainer = pkgs.dockerTools.buildImage {
-    name = "pause";
-    tag = "latest";
-    contents = cfg.package.pause;
-    config.Cmd = "/bin/pause";
-  };
-
   kubeconfig = pkgs.writeText "kubeconfig" (builtins.toJSON {
     apiVersion = "v1";
     kind = "Config";
@@ -601,7 +594,6 @@ in {
         after = [ "network.target" "docker.service" "kube-apiserver.service" ];
         path = with pkgs; [ gitMinimal openssh docker utillinux iproute ethtool thin-provisioning-tools iptables ];
         preStart = ''
-          docker load < ${infraContainer}
           rm /opt/cni/bin/* || true
           ${concatMapStringsSep "\n" (p: "ln -fs ${p.plugins}/* /opt/cni/bin") cfg.kubelet.cni.packages}
         '';
