@@ -12,7 +12,7 @@ fi
 
 source @out@/nix-support/utils.sh
 
-if [ -z "${NIX_CC_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
+if [ -z "${NIX_BINUTILS_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
 

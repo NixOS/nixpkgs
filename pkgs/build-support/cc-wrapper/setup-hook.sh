@@ -74,14 +74,6 @@ ccWrapper_addCVars () {
         export NIX_${role}CFLAGS_COMPILE+=" ${ccIncludeFlag:--isystem} $1/include"
     fi
 
-    if [[ -d "$1/lib64" && ! -L "$1/lib64" ]]; then
-        export NIX_${role}LDFLAGS+=" -L$1/lib64"
-    fi
-
-    if [[ -d "$1/lib" ]]; then
-        export NIX_${role}LDFLAGS+=" -L$1/lib"
-    fi
-
     if [[ -d "$1/Library/Frameworks" ]]; then
         export NIX_${role}CFLAGS_COMPILE+=" -F$1/Library/Frameworks"
     fi
@@ -117,11 +109,6 @@ if [ -n "@cc@" ]; then
 fi
 
 # shellcheck disable=SC2157
-if [ -n "@binutils_bin@" ]; then
-    addToSearchPath _PATH @binutils_bin@/bin
-fi
-
-# shellcheck disable=SC2157
 if [ -n "@libc_bin@" ]; then
     addToSearchPath _PATH @libc_bin@/bin
 fi
@@ -137,16 +124,6 @@ export NIX_${role}CC=@out@
 
 export ${role}CC=@named_cc@
 export ${role}CXX=@named_cxx@
-
-for CMD in \
-    ar as nm objcopy ranlib strip strings size ld windres
-do
-    if
-        PATH=$_PATH type -p "@binPrefix@$CMD" > /dev/null
-    then
-        export "${role}$(echo "$CMD" | tr "[:lower:]" "[:upper:]")=@binPrefix@${CMD}";
-    fi
-done
 
 # No local scope in sourced file
 unset role
