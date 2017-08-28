@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name    = "yices-${version}";
-  version = "2.5.2";
+  version = "2.5.3";
 
   src = fetchurl {
-    url = "http://yices.csl.sri.com/cgi-bin/yices2-newnewdownload.cgi?file=${name}-src.tar.gz&accept=I+Agree";
+    url = "https://github.com/SRI-CSL/yices2/archive/Yices-${version}.tar.gz";
     name = "${name}-src.tar.gz";
-    sha256 = "18mjnwg0pwc0fx4f99l7hxsi10mb5skkzk0k1m3xv5kx3qfnghs0";
+    sha256 = "0a3zzbvmgyiljzqn6xmc037gismm779p696jywk09j2pqbvp52ac";
   };
 
   patchPhase = ''patchShebangs tests/regress/check.sh'';
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   # only installing the libyices.so.2.5.1 file.
   installPhase = ''
       make install LDCONFIG=true
-      (cd $out/lib && ln -s -f libyices.so.2.5.2 libyices.so.2.5)
+      (cd $out/lib && ln -s -f libyices.so.2.5.3 libyices.so.2.5)
   '';
 
   meta = with stdenv.lib; {

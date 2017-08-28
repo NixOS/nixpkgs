@@ -28,7 +28,7 @@ in
       };
 
       hkpAddress = mkOption {
-        default = [ "::1" "127.0.0.1" ];
+        default = [ "127.0.0.1" "::1" ];
         type = types.listOf types.str;
         description = "
           Wich ip addresses the sks-keyserver is listening on.
@@ -48,7 +48,11 @@ in
   config = mkIf cfg.enable {
 
     environment.systemPackages = [ sksPkg ];
+<<<<<<< HEAD
 
+=======
+    
+>>>>>>> origin/master
     users.users.sks = {
       createHome = true;
       home = "/var/db/sks";

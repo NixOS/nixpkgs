@@ -13,13 +13,24 @@ python3Packages.buildPythonPackage rec {
   };
 
   patches = [
-    # Bump pyopenssl dependency
-    # https://github.com/mitmproxy/mitmproxy/pull/2252
+    # fix tests
     (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/mitmproxy/mitmproxy/pull/2252.patch";
-      sha256 = "1smld21df79249qbh412w8gi2agcf4zjhxnlawy19yjl1fk2h67c";
+      url = "https://github.com/mitmproxy/mitmproxy/commit/b3525570929ba47c10d9d08696876c39487f7000.patch";
+      sha256 = "111fld5gqdii7rs1jhqaqrxgbyhfn6qd0y7l15k4npamsnvdnv20";
     })
+    # bump pyOpenSSL
+    (fetchpatch {
+      url = https://github.com/mitmproxy/mitmproxy/commit/6af72160bf98b58682b8f9fc5aabf51928d2b1d3.patch;
+      sha256 = "1q4ml81pq9c8j9iscq8janbxf4s37w3bqskbs6r30yqzy63v54f2";
+    })
+    # https://github.com/mitmproxy/mitmproxy/commit/3d7cde058b7e6242d93b9bc9d3e17520ffb578a5
+    ./tornado-4.6.patch
   ];
+
+  checkPhase = ''
+    export HOME=$(mktemp -d)
+    LC_CTYPE=en_US.UTF-8 python setup.py pytest
+  '';
 
   propagatedBuildInputs = with python3Packages; [
     blinker click certifi construct cryptography
@@ -29,8 +40,9 @@ python3Packages.buildPythonPackage rec {
     urwid watchdog brotlipy sortedcontainers
   ];
 
-  # Tests fail due to an error with a decorator
-  doCheck = false;
+  buildInputs = with python3Packages; [
+    beautifulsoup4 flask pytz pytest pytestrunner protobuf3_2
+  ];
 
   meta = with stdenv.lib; {
     description = "Man-in-the-middle proxy";

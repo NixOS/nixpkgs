@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
     license = licenses.gpl3;
-    homepage = http://code.google.com/p/vacuum-im/;
+    homepage = http://www.vacuum-im.org;
   };
 }

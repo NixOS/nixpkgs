@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, perl, gettext }:
 
 stdenv.mkDerivation rec {
-  version = "5.2.17";
+  version = "5.2.18";
   name = "whois-${version}";
 
   src = fetchFromGitHub {
     owner = "rfc1036";
     repo = "whois";
     rev = "v${version}";
-    sha256 = "15jnzk0js8wxiapz1bw7jnck0fl3mcli56f9635z9x7vk63ss68z";
+    sha256 = "0jzyq1rj6balc6a28swzgspv55xhkc75dw6wsn159in4ap61bzmi";
   };
 
   buildInputs = [ perl gettext ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       select the appropriate WHOIS server for most queries.
     '';
 
-    homepage = http://packages.qa.debian.org/w/whois.html;
+    homepage = https://packages.qa.debian.org/w/whois.html;
     license = licenses.gpl2;
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.linux;

@@ -1,27 +1,25 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild
-, ppx_driver, ppx_sexp_conv
-, ipaddr, uri, logs
-, ocaml_lwt ? null
-, async ? null, async_ssl ? null
-, tls ? null
+{ stdenv, fetchFromGitHub, ocaml, findlib, jbuilder
+, ppx_sexp_conv
+, astring, ipaddr, uri
 }:
 
 stdenv.mkDerivation rec {
-	version = "0.15.4";
+	version = "1.0.0";
 	name = "ocaml${ocaml.version}-conduit-${version}";
 
 	src = fetchFromGitHub {
 		owner = "mirage";
 		repo = "ocaml-conduit";
 		rev = "v${version}";
-		sha256 = "1ya7jqvhl8hc22cid5myf31w5c473imdxjnl9785lavsqj3djjxq";
+		sha256 = "1ryigzh7sfif1mly624fpm87aw5h60n5wzdlrvqsf71qcpxc6iiz";
 	};
 
-	buildInputs = [ ocaml findlib ocamlbuild ppx_driver ppx_sexp_conv
-		ocaml_lwt async async_ssl tls ];
-	propagatedBuildInputs = [ ipaddr uri logs ];
+	buildInputs = [ ocaml findlib jbuilder ppx_sexp_conv ];
+	propagatedBuildInputs = [ astring ipaddr uri ];
 
-	createFindlibDestdir = true;
+	buildPhase = "jbuilder build -p conduit";
+
+	inherit (jbuilder) installPhase;
 
 	meta = {
 		description = "Network connection library for TCP and SSL";

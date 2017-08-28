@@ -1,12 +1,13 @@
 { fetchurl, stdenv, curl, openssl, zlib, expat, perl, python, gettext, cpio
 , gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
-, gzip, openssh
+, gzip, openssh, pcre2
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper, libiconv
 , svnSupport, subversionClient, perlLibs, smtpPerlLibs, gitwebPerlLibs
 , guiSupport
 , withManual ? true
 , pythonSupport ? true
+, withpcre2 ? true
 , sendEmailSupport
 , darwin
 }:
@@ -44,6 +45,7 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ]
     ++ stdenv.lib.optionals guiSupport [tcl tk]
+    ++ stdenv.lib.optionals withpcre2 [ pcre2 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.Security ];
 
 
@@ -70,7 +72,9 @@ stdenv.mkDerivation {
   # so that `SPARSE_FLAGS' corresponds to the current architecture...
   #doCheck = true;
 
-  installFlags = "NO_INSTALL_HARDLINKS=1";
+  installFlags = "NO_INSTALL_HARDLINKS=1"
+    + (if withpcre2 then " USE_LIBPCRE2=1" else "");
+
 
   preInstall = stdenv.lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/bin

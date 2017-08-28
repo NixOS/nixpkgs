@@ -71,6 +71,8 @@ let
       propagateBin = propagate "bin";
 
       callPackage = self.newScope {
+        inherit propagate propagateBin;
+
         mkDerivation = args:
           let
             inherit (args) name;

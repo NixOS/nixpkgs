@@ -67,10 +67,6 @@ stdenv.mkDerivation rec {
     export CMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH:$(echo "${jamomacore}/jamoma/share/cmake/Jamoma")"
   '';
 
-  preBuild = ''
-    ninja
-  '';
-
   installPhase = ''
     cmake --build . --target install
   '';
