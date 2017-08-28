@@ -1,6 +1,6 @@
 { stdenv, fetchurl, boost, cmake, chromaprint, gettext, gst_all_1, liblastfm
 , qt4, taglib, fftw, glew, qjson, sqlite, libgpod, libplist, usbmuxd, libmtp
-, libpulseaudio, gvfs, libcdio, libechonest, libspotify, pcre, protobuf
+, libpulseaudio, gvfs, libcdio, libechonest, libspotify, pcre, projectm, protobuf
 , qca2, pkgconfig, sparsehash, config, makeWrapper, runCommand, gst_plugins }:
 
 let
@@ -26,9 +26,10 @@ let
     ./clementine-spotify-blob-remove-from-build.patch
   ];
 
+  nativeBuildInputs = [ cmake pkgconfig ];
+
   buildInputs = [
     boost
-    cmake
     chromaprint
     fftw
     gettext
@@ -40,7 +41,7 @@ let
     liblastfm
     libpulseaudio
     pcre
-    pkgconfig
+    projectm
     protobuf
     qca2
     qjson
@@ -55,7 +56,10 @@ let
 
   free = stdenv.mkDerivation {
     name = "clementine-free-${version}";
-    inherit patches src buildInputs;
+    inherit src patches nativeBuildInputs buildInputs;
+
+    cmakeFlags = [ "-DUSE_SYSTEM_PROJECTM=ON" ];
+
     enableParallelBuilding = true;
     postPatch = ''
       sed -i src/CMakeLists.txt \
@@ -76,7 +80,7 @@ let
   blob = stdenv.mkDerivation {
     name = "clementine-blob-${version}";
     # Use the same patches and sources as Clementine
-    inherit src;
+    inherit src nativeBuildInputs;
 
     patches = [
       ./clementine-spotify-blob.patch
@@ -114,15 +118,13 @@ runCommand "clementine-${version}"
   dontPatchELF = true;
   dontStrip = true;
   meta = {
-    homepage = http://www.clementine-player.org;
     description = "A multiplatform music player"
       + " (" + (optionalString withSpotify "with Spotify, ")
       + "with gstreamer plugins: "
       + concatStrings (intersperse ", " (map (x: x.name) gst_plugins))
       + ")";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
-    maintainers = [ maintainers.ttuegel ];
+    inherit (free.meta) homepage platforms maintainers;
   };
 }
 ''
