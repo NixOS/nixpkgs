@@ -10,15 +10,8 @@ var_templates_list=(
     NIX+CXXSTDLIB_COMPILE
     NIX+CXXSTDLIB_LINK
     NIX+GNATFLAGS_COMPILE
-    NIX+IGNORE_LD_THROUGH_GCC
-    NIX+LDFLAGS
-    NIX+LDFLAGS_BEFORE
-    NIX+LDFLAGS_AFTER
 )
-
 var_templates_bool=(
-    NIX+SET_BUILD_ID
-    NIX+DONT_SET_RPATH
     NIX+ENFORCE_NO_NATIVE
 )
 
@@ -62,16 +55,8 @@ if [ -e @out@/nix-support/gnat-cflags ]; then
     NIX_@infixSalt@_GNATFLAGS_COMPILE="$(< @out@/nix-support/gnat-cflags) $NIX_@infixSalt@_GNATFLAGS_COMPILE"
 fi
 
-if [ -e @out@/nix-support/libc-ldflags ]; then
-    NIX_@infixSalt@_LDFLAGS+=" $(< @out@/nix-support/libc-ldflags)"
-fi
-
 if [ -e @out@/nix-support/cc-ldflags ]; then
     NIX_@infixSalt@_LDFLAGS+=" $(< @out@/nix-support/cc-ldflags)"
-fi
-
-if [ -e @out@/nix-support/libc-ldflags-before ]; then
-    NIX_@infixSalt@_LDFLAGS_BEFORE="$(< @out@/nix-support/libc-ldflags-before) $NIX_@infixSalt@_LDFLAGS_BEFORE"
 fi
 
 # That way forked processes will not extend these environment variables again.

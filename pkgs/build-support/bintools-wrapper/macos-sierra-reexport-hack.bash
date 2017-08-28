@@ -81,8 +81,10 @@ else
 
     symbolBloatObject=$outputNameLibless-symbol-hack.o
     if [[ ! -e $symbolBloatObject ]]; then
+        # `-Q` means use GNU Assembler rather than Clang, avoiding an awkward
+        # dependency cycle.
         printf '.private_extern _______child_hack_foo\nchild_hack_foo:\n' \
-            | @targetPrefix@as -- -o $symbolBloatObject
+            | @targetPrefix@as -Q -- -o $symbolBloatObject
     fi
 
     # first half of libs
