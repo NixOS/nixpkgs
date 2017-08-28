@@ -6618,8 +6618,11 @@ with pkgs;
 
   augeas = callPackage ../tools/system/augeas { };
 
-  ansible  = python2Packages.ansible2;
-  ansible2 = python2Packages.ansible2;
+  ansible_2_1 = callPackage ../tools/admin/ansible/2.1.nix {};
+  ansible_2_2 = callPackage ../tools/admin/ansible/2.2.nix {};
+  ansible_2_3 = callPackage ../tools/admin/ansible/2.3.nix {};
+  ansible  = ansible_2_3;
+  ansible2 = ansible_2_3;
 
   antlr = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
 

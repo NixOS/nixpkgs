@@ -519,13 +519,6 @@ in {
 
   amqplib = callPackage ../development/python-modules/amqplib {};
 
-  ansible  = self.ansible2;
-  ansible2 = self.ansible_2_3;
-
-  ansible_2_1 = callPackage ../development/python-modules/ansible/2.1.nix {};
-  ansible_2_2 = callPackage ../development/python-modules/ansible/2.2.nix {};
-  ansible_2_3 = callPackage ../development/python-modules/ansible/2.3.nix {};
-
   apipkg = callPackage ../development/python-modules/apipkg {};
 
   appdirs = callPackage ../development/python-modules/appdirs { };

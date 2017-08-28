@@ -1,18 +1,10 @@
-{ lib
+{ stdenv
 , fetchurl
-, buildPythonPackage
-, pycrypto
-, paramiko
-, jinja2
-, pyyaml
-, httplib2
-, boto
-, six
-, netaddr
-, dns
+, pythonPackages
 , windowsSupport ? false
-, pywinrm ? null
 }:
+
+with pythonPackages;
 
 let
   # Shouldn't be needed anymore in next version
@@ -46,17 +38,18 @@ in buildPythonPackage rec {
   dontPatchELF = true;
   dontPatchShebangs = false;
 
-  propagatedBuildInputs = [ pycrypto paramiko jinja pyyaml httplib2
-    boto six netaddr dns ] ++ lib.optional windowsSupport pywinrm;
+  propagatedBuildInputs = [
+    pycrypto paramiko jinja pyyaml httplib2 boto six netaddr dns
+  ] ++ stdenv.lib.optional windowsSupport pywinrm;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.ansible.com;
     description = "A simple automation tool";
-    license = with lib.licenses; [ gpl3] ;
-    maintainers = with lib.maintainers; [
+    license = with licenses; [ gpl3] ;
+    maintainers = with maintainers; [
       jgeerds
       joamaki
     ];
-    platforms = with lib.platforms; linux ++ darwin;
+    platforms = with platforms; linux ++ darwin;
   };
 }
