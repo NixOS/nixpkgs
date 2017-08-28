@@ -22972,41 +22972,6 @@ in {
    };
 
 
-  turses = buildPythonPackage (rec {
-    name = "turses-0.3.1";
-    disabled = isPyPy || isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/turses/${name}.tar.gz";
-      sha256 = "15mkhm3b5ka42h8qph0mhh8izfc1200v7651c62k7ldcs50ib9j6";
-    };
-
-    buildInputs = with self; [ mock pytest coverage tox ];
-    propagatedBuildInputs = with self; [ urwid tweepy future ] ++ optional isPy26 argparse;
-
-    checkPhase = ''
-      TMP_TURSES=`echo turses-$RANDOM`
-      mkdir $TMP_TURSES
-      HOME=$TMP_TURSES py.test tests/
-      rm -rf $TMP_TURSES
-    '';
-
-    patchPhase = ''
-      sed -i -e "s|future==0.14.3|future==${pkgs.lib.getVersion self.future}|" setup.py
-      sed -i -e "s|tweepy==3.3.0|tweepy==${pkgs.lib.getVersion self.tweepy}|" setup.py
-      sed -i -e "s|config.generate_config_file.assert_called_once()|assert config.generate_config_file.call_count == 1|" tests/test_config.py
-      sed -i -e "s|self.observer.update.assert_called_once()|assert self.observer.update.call_count == 1|" tests/test_meta.py
-    '';
-
-    meta = {
-      homepage = https://github.com/alejandrogomez/turses;
-      description = "A Twitter client for the console";
-      license = licenses.gpl3;
-      maintainers = with maintainers; [ garbas ];
-      platforms = platforms.linux;
-    };
-  });
-
   tweepy = buildPythonPackage (rec {
     name = "tweepy-3.5.0";
 
