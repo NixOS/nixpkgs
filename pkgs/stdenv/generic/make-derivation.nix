@@ -41,7 +41,20 @@ rec {
     , __propagatedImpureHostDeps ? []
     , sandboxProfile ? ""
     , propagatedSandboxProfile ? ""
+
+    , hardeningEnable ? []
+    , hardeningDisable ? []
     , ... } @ attrs:
+
+    # TODO(@Ericson2314): Make this more modular, and not O(n^2).
+    let allHardeningFlags = [
+      "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro"
+      "bindnow"
+    ];
+    in assert lib.all
+      (flag: lib.elem flag allHardeningFlags)
+      (hardeningEnable ++ hardeningDisable);
+
     let
       dependencies = map lib.chooseDevOutputs [
         (map (drv: drv.nativeDrv or drv) nativeBuildInputs

@@ -68,7 +68,8 @@ if [[ -z "${hardeningDisableMap[all]:-}" ]]; then
           hardeningLDFlags+=('-z' 'now')
           ;;
         *)
-          echo "Hardening flag unknown: $flag" >&2
+          # Ignore unsupported. Checked in Nix that at least *some*
+          # tool supports each flag.
           ;;
       esac
     fi
