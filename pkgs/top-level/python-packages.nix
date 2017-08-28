@@ -27575,6 +27575,8 @@ EOF
 
   spacy = callPackage ../development/python-modules/spacy { };
 
+  behave = callPackage ../development/python-modules/behave { };
+
   pyhamcrest = callPackage ../development/python-modules/pyhamcrest { };
  
   parse = callPackage ../development/python-modules/parse { };
