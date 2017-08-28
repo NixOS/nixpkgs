@@ -12,6 +12,7 @@ python2Packages.buildPythonApplication rec {
   doCheck = false;
 
   propagatedBuildInputs = with python2Packages; [
+    ansible2
     boto
     cffi
     cryptography
