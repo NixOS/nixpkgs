@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/libexec
 
     patchelf \
-      --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
       --set-rpath ${libPath} \
       ./q/l32/q
     mv ./q/l32/q $out/libexec/q

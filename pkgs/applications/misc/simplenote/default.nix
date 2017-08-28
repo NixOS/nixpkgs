@@ -47,7 +47,7 @@
 
     fixupPhase
 
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+    patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
       --set-rpath "${libPath}:$out/share/simplenote" \
       $out/share/simplenote/simplenote
 

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
       --set-rpath "${stdenv.lib.makeLibraryPath [ alsaLib qt48 SDL fontconfig freetype SDL_ttf xorg.libX11 xorg.libXinerama stdenv.cc.cc ]}" \
       share/sdlmame/sdlmame
 

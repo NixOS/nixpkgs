@@ -36,8 +36,8 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share/nwjs
     cp -R * $out/share/nwjs
 
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/share/nwjs/nw
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/share/nwjs/nwjc
+    patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" $out/share/nwjs/nw
+    patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" $out/share/nwjs/nwjc
 
     ln -s ${systemd.lib}/lib/libudev.so $out/share/nwjs/libudev.so.0
 

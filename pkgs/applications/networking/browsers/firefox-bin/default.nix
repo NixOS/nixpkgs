@@ -152,7 +152,7 @@ stdenv.mkDerivation {
         updater crashreporter webapprt-stub
       do
         if [ -e "$out/usr/lib/firefox-bin-${version}/$executable" ]; then
-          patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+          patchelf --interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
             "$out/usr/lib/firefox-bin-${version}/$executable"
         fi
       done

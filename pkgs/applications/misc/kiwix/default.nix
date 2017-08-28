@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     cp -r src/dependencies/xulrunner $out/lib/kiwix
 
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/lib/kiwix/xulrunner/xulrunner
+    patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" $out/lib/kiwix/xulrunner/xulrunner
 
     rm $out/bin/kiwix
     makeWrapper $out/lib/kiwix/kiwix-launcher $out/bin/kiwix \

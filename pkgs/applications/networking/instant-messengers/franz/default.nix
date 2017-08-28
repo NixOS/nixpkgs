@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" Franz
+    patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" Franz
     patchelf --set-rpath "$out/opt/franz:${stdenv.lib.makeLibraryPath deps}" Franz
 
     mkdir -p $out/bin $out/opt/franz

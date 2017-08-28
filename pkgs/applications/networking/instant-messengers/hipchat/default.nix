@@ -68,7 +68,7 @@ stdenv.mkDerivation {
     mv usr/share $out
 
     for file in $(find $d -type f); do
-        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $file || true
+        patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" $file || true
         patchelf --set-rpath ${rpath}:$out/libexec/hipchat/lib:\$ORIGIN $file || true
     done
 

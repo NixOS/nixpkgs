@@ -10,7 +10,7 @@ let
     ] + ":${stdenv.cc.cc.lib}/lib64";
 
   patchExe = x: ''
-    patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+    patchelf --interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
       --set-rpath ${libPath} ${x}
   '';
 in

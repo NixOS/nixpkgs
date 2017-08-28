@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
   buildCommand = ''
     # For convenience ...
     TBB_IN_STORE=$out/share/tor-browser
-    interp=$(< $NIX_CC/nix-support/dynamic-linker)
+    interp=$(< $NIX_BINUTILS/nix-support/dynamic-linker)
 
     # Unpack & enter
     mkdir -p "$TBB_IN_STORE"

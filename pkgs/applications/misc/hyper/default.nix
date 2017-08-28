@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
     mv opt "$out/"
     ln -s "$out/opt/Hyper/hyper" "$out/bin/hyper"
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" --set-rpath "${libPath}:\$ORIGIN" "$out/opt/Hyper/hyper"
+    patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" --set-rpath "${libPath}:\$ORIGIN" "$out/opt/Hyper/hyper"
     mv usr/* "$out/"
   '';
   dontPatchELF = true;

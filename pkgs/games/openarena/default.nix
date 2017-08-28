@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   installPhase = let
     gameDir = "$out/openarena-$version";
-    interpreter = "$(< \"$NIX_CC/nix-support/dynamic-linker\")";
+    interpreter = "$(< \"$NIX_BINUTILS/nix-support/dynamic-linker\")";
     libPath = stdenv.lib.makeLibraryPath [ SDL libogg libvorbis ];
   in ''
     mkdir -pv $out/bin

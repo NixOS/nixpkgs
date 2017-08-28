@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     cp ${r3} make/r3-make
     chmod 777 make/r3-make
-    patchelf  --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./make/r3-make
+    patchelf  --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" ./make/r3-make
     cd make
     perl -pi -e 's#-m32##g' makefile
     perl -pi -e 's#sudo .*#echo#g' makefile
