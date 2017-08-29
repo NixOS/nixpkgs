@@ -20969,20 +20969,19 @@ in {
 
   setuptools_scm = buildPythonPackage rec {
     name = "setuptools_scm-${version}";
-    version = "1.15.0";
+    version = "1.15.6";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/setuptools_scm/${name}.tar.gz";
-      sha256 = "0bwyc5markib0i7i2qlyhdzxhiywzxbkfiapldma8m91m82jvwfs";
+      sha256 = "0pzvfmx8s20yrgkgwfbxaspz2x1g38qv61jpm0ns91lrb22ldas9";
     };
 
     buildInputs = with self; [ pip ];
+    propagatedBuildInputs = [ pkgs.gitMinimal ] ++ optional (!isPy3k) pkgs.mercurial;
     checkInputs = with self; [ pytest ];
-    # Seems to fail due to chroot
-    doCheck = false;
 
     checkPhase = ''
-      py.test
+      py.test ${optionalString isPy3k "-k 'not test_mercurial'"}
     '';
 
     meta = with stdenv.lib; {
@@ -22224,7 +22223,8 @@ in {
       sha256 = "0fyniq37nnmhrk4j7mzvg6vfcpb624hb9x70g6mccyw4xrnhadv6";
     };
 
-    propagatedBuildInputs = with self; [setuptools_scm pyyaml jsonschema sphinxcontrib_httpdomain];
+    buildInputs = [ setuptools_scm ];
+    propagatedBuildInputs = with self; [pyyaml jsonschema sphinxcontrib_httpdomain];
   });
 
   sphinxcontrib_httpdomain = buildPythonPackage (rec {
@@ -24353,7 +24353,8 @@ EOF
     # Tests require `pyutil' so disable them to avoid circular references.
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ six setuptools_scm pkgs.xorg.libX11 ];
+    buildInputs = [ setuptools_scm ];
+    propagatedBuildInputs = with self; [ six pkgs.xorg.libX11 ];
 
     meta = {
       description = "Fully functional X client library for Python programs";
