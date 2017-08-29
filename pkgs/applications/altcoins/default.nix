@@ -14,6 +14,9 @@ rec {
   bitcoin-xt  = callPackage ./bitcoin-xt.nix { withGui = true; };
   bitcoind-xt = callPackage ./bitcoin-xt.nix { withGui = false; };
 
+  btc1 = callPackage ./btc1.nix { withGui = true; };
+  btc1d = callPackage ./btc1.nix { withGui = false; };
+
   dashpay = callPackage ./dashpay.nix { };
 
   dogecoin  = callPackage ./dogecoin.nix { withGui = true; };
