@@ -247,7 +247,7 @@ in stdenv.mkDerivation rec {
     homepage    = "http://mesos.apache.org";
     license     = licenses.asl20;
     description = "A cluster manager that provides efficient resource isolation and sharing across distributed applications, or frameworks";
-    maintainers = with maintainers; [ cstrahan kevincox offline rushmorem ];
+    maintainers = with maintainers; [ cstrahan kevincox offline ];
     platforms   = platforms.linux;
   };
 }
