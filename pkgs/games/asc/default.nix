@@ -1,13 +1,13 @@
 { fetchurl, stdenv, SDL, SDL_image, SDL_mixer, SDL_sound, libsigcxx, physfs
 , boost, expat, freetype, libjpeg, wxGTK, lua, perl, pkgconfig, zlib, zip, bzip2,
-libpng }:
+libpng, libtiff, fluidsynth, libmikmod }:
 
 stdenv.mkDerivation rec {
-  name = "asc-2.4.0.0";
+  name = "asc-2.6.0.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/asc-hq/${name}.tar.bz2";
-    sha256 = "1r011l4gsliky6szjvda8xzyhkkc50ahrr7p14911v5ydar0w3hh";
+    sha256 = "1fybasb6srqfg6pqbvh0s0vvzjq9r0n6aq0z44hs7n68kmaam775";
   };
 
   configureFlags = [ "--disable-paragui" "--disable-paraguitest" ];
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     SDL SDL_image SDL_mixer SDL_sound libsigcxx physfs boost expat
     freetype libjpeg wxGTK lua perl pkgconfig zlib zip bzip2 libpng
+    libtiff fluidsynth libmikmod
   ];
 
   meta = with stdenv.lib; {
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl2Plus;
 
-    maintainers = with maintainers; [ viric ];
+    maintainers = with maintainers; [ viric raskin ];
     platforms = platforms.linux;
   };
 }
