@@ -7817,8 +7817,6 @@ with pkgs;
 
   farbfeld = callPackage ../development/libraries/farbfeld { };
 
-  farsight2 = callPackage ../development/libraries/farsight2 { };
-
   farstream = callPackage ../development/libraries/farstream {
     inherit (gst_all_1)
       gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad
