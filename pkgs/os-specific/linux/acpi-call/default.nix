@@ -37,5 +37,6 @@ stdenv.mkDerivation {
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
     description = "A module allowing arbitrary ACPI calls; use case: hybrid video";
+    broken = kernel.features.chromiumos or false;
   };
 }
