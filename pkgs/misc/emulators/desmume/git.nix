@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchpatch
-, pkgconfig, libtool, intltool
+{ stdenv, fetchgit
+, autoreconfHook , pkgconfig, libtool, intltool
 , lua , libXmu, agg, alsaLib, soundtouch
 , gtk2, gtkglext, libglade, pangox_compat
 , openal , mesa_noglu, mesa_glu
@@ -10,24 +10,19 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "desmume-${version}";
-  version = "0.9.11";
+  version = "0.9.11-git-2017-09-16";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/desmume/desmume/${version}/${name}.tar.gz";
-    sha256 = "15l8wdw3q61fniy3h93d84dnm6s4pyadvh95a0j6d580rjk4pcrs";
+  src = fetchgit {
+    url = "https://github.com/TASVideos/desmume";
+    rev = "8f2c85fe86ec48da89f16f2830dea5560b7a029c";
+    sha256 = "1fh6h96wd7181nbckr07lq59n89r7i3g2nk48v6yym5qcjmgv53c";
+    fetchSubmodules = true;
   };
 
-  patches = [
-    (fetchpatch {
-      name = "gcc6_fixes.patch";
-      url = "https://anonscm.debian.org/viewvc/pkg-games/packages/trunk/desmume/debian/patches/gcc6_fixes.patch?revision=15925";
-      sha256 = "0j3fmxz0mfb3f4biks03pyz8f9hy958ks6qplisl60rzq9v9qpks";
-     })
-  ];
-
   buildInputs =
-  [ pkgconfig libtool intltool lua libXmu agg alsaLib
-    soundtouch gtk2 gtkglext libglade pangox_compat openal
+  [ autoreconfHook pkgconfig
+    libtool intltool lua libXmu agg alsaLib soundtouch
+    gtk2 gtkglext libglade pangox_compat openal
     mesa_glu mesa_noglu.osmesa SDL zziplib libpcap
     desktop_file_utils ];    
 
@@ -38,10 +33,14 @@ stdenv.mkDerivation rec {
     "--enable-glx"
     "--enable-openal"
     "--enable-glade"
-    "--enable-hud"
+    "--disable-hud"
     "--disable-wifi"
   ];
 
+  postUnpack = ''
+    export sourceRoot=$sourceRoot/desmume/src/frontend/posix/
+  '';
+  
   meta = {
     description = "An open-source Nintendo DS emulator";
     longDescription = ''
@@ -55,5 +54,11 @@ stdenv.mkDerivation rec {
     license = licenses.gpl1Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
+    broken = true;
   };
 }
+# TODO:
+# - According to Arch, HUD causes SIGSEGV in GTK version;
+# - CLI version also SIGSEGVs
+# - Only desmume-glade really works
+# - '--disable-hud' doesn't work; it is completely ignored
