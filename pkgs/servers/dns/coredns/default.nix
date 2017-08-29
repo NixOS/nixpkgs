@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "coredns-${version}";
-  version = "005";
+  version = "010";
 
   goPackagePath = "github.com/miekg/coredns";
   subPackages = [ "." ];
@@ -13,8 +13,6 @@ buildGoPackage rec {
     rev = "v${version}";
     sha256 = "11wvy3xp9in5ny6h7hp24dq6asc013vrwc6bqiky83dlzasjwkf6";
   };
-
-  goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
     homepage = https://coredns.io;
