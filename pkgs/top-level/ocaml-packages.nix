@@ -904,7 +904,9 @@ let
 
     # Apps / from all-packages
 
-    wyrd = callPackage ../tools/misc/wyrd { };
+    wyrd = callPackage ../tools/misc/wyrd {
+      ncurses = pkgs.ncurses5;
+    };
 
     haxe = callPackage ../development/compilers/haxe { };
 
