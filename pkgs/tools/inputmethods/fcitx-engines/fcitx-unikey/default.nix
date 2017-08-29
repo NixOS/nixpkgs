@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake fcitx gettext pkgconfig ];
 
+  NIX_CFLAGS_COMPILE = "-Wno-narrowing";
+
   preInstall = ''
     substituteInPlace src/cmake_install.cmake \
       --replace ${fcitx} $out
