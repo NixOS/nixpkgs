@@ -1,12 +1,16 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "pies-1.2";
+  name = "pies-1.3";
 
   src = fetchurl {
     url = "mirror://gnu/pies/${name}.tar.bz2";
-    sha256 = "18w0dbg77i56cx1bwa789w0qi3l4xkkbascxcv2b6gbm0zmjg1g6";
+    sha256 = "12r7rjjyibjdj08dvwbp0iflfpzl4s0zhn6cr6zj3hwf9gbzgl1g";
   };
+
+  configureFlags = ["--sysconfdir=/etc"];
+
+  hardeningDisable = [ "format" ];
 
   doCheck = true;
 
