@@ -17988,8 +17988,6 @@ with pkgs;
     withLapack = false;
   };
 
-  atlasWithLapack = atlas.override { withLapack = true; };
-
   blas = callPackage ../development/libraries/science/math/blas { };
 
   clblas-cuda = callPackage ../development/libraries/science/math/clblas/cuda {
