@@ -1,5 +1,7 @@
 { stdenv, fetchFromGitHub, gnome3 }:
-
+let
+  gnome3 = { version = "3.22"; }; # FIXME
+in
 stdenv.mkDerivation rec {
   name = "e17gtk-${version}";
   version = "${gnome3.version}.1";
