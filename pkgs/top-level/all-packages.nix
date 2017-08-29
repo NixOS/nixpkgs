@@ -565,6 +565,8 @@ with pkgs;
     gconf = gnome2.GConf;
  };
 
+ enchive = callPackage ../tools/security/enchive { };
+
   enpass = callPackage ../tools/security/enpass { };
 
   ezstream = callPackage ../tools/audio/ezstream { };
