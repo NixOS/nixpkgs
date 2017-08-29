@@ -36,6 +36,26 @@ let
 
   baseService = recursiveUpdate commonEnv {
     wants = [ "ipfs-init.service" ];
+    preStart = ''
+      ipfs --local config Addresses.API ${cfg.apiAddress}
+      ipfs --local config Addresses.Gateway ${cfg.gatewayAddress}
+    '' + optionalString cfg.autoMount ''
+      ipfs --local config Mounts.FuseAllowOther --json true
+      mkdir -p $(ipfs --local config Mounts.IPFS)
+      mkdir -p $(ipfs --local config Mounts.IPNS)
+    '' + concatStringsSep "\n" (collect
+          isString
+          (mapAttrsRecursive
+            (path: value:
+            # Using heredoc below so that the value is never improperly quoted
+            ''
+              read value <<EOF
+              ${builtins.toJSON value}
+              EOF
+              ipfs --local config --json "${concatStringsSep "." path}" "$value"
+            '')
+            cfg.extraConfig)
+        );
     serviceConfig = {
       ExecStart = "${wrapped}/bin/ipfs daemon ${ipfsFlags}";
       Restart = "on-failure";
@@ -188,25 +208,7 @@ in {
         if [[ ! -f ${cfg.dataDir}/config ]]; then
           ipfs init ${optionalString cfg.emptyRepo "-e"}
         fi
-        ipfs --local config Addresses.API ${cfg.apiAddress}
-        ipfs --local config Addresses.Gateway ${cfg.gatewayAddress}
-      '' + optionalString cfg.autoMount ''
-        ipfs --local config Mounts.FuseAllowOther --json true
-        mkdir -p $(ipfs --local config Mounts.IPFS)
-        mkdir -p $(ipfs --local config Mounts.IPNS)
-      '' + concatStringsSep "\n" (collect
-            isString
-            (mapAttrsRecursive
-              (path: value:
-              # Using heredoc below so that the value is never improperly quoted
-              ''
-                read value <<EOF
-                ${builtins.toJSON value}
-                EOF
-                ipfs --local config --json "${concatStringsSep "." path}" "$value"
-              '')
-              cfg.extraConfig)
-          );
+      '';
 
       serviceConfig = {
         Type = "oneshot";
