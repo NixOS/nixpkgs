@@ -3165,9 +3165,7 @@ with pkgs;
 
   memtest86 = callPackage ../tools/misc/memtest86 { };
 
-  memtest86plus = callPackage ../tools/misc/memtest86+ {
-    stdenv = overrideCC stdenv gcc5;
-  };
+  memtest86plus = callPackage ../tools/misc/memtest86+ { };
 
   meo = callPackage ../tools/security/meo {
     boost = boost155;
