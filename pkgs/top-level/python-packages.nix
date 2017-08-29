@@ -24556,6 +24556,8 @@ EOF
     };
   };
 
+  zetup = callPackage ../development/python-modules/zetup { };
+
   zope_broken = buildPythonPackage rec {
     name = "zope.broken-3.6.0";
 
