@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
       gmp libyaml libedit libvpx imagemagick fribidi gperf
     ];
 
+  patches = [
+    ./flexible-array-members-gcc6.patch
+  ];
+
   enableParallelBuilding = false; # occasional build problems;
   dontUseCmakeBuildDir = true;
   NIX_LDFLAGS = "-lpam -L${pam}/lib";
