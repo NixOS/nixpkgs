@@ -9,18 +9,19 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "vault-${version}";
-  version = "0.7.3";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "15wj1pfgzwzjfrqy7b5bx4y9f0hbpqlfif58l5xamwm88229qk4m";
+    sha256 = "19y688nvi0vr7cdnaa5sy2m65xicjwi5qgkgzyjvb7r3zb0dnli1";
   };
 
   nativeBuildInputs = [ go gox removeReferencesTo ];
 
   buildPhase = ''
+    patchShebangs ./
     substituteInPlace scripts/build.sh --replace 'git rev-parse HEAD' 'echo ${src.rev}'
 
     mkdir -p src/github.com/hashicorp
