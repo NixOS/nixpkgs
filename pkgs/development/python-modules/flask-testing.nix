@@ -4,14 +4,18 @@
 with stdenv.lib;
 
 buildPythonPackage rec {
+  name = "${pname}-${version}";
   pname = "Flask-Testing";
   version = "0.6.2";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f25effd266fce9b16482f4ce3423d5a7d25534aab77bc83caace5d9637bf0df0";
+    sha256 = "1w0dpwvrcpffm8ychyxpm8s5blm7slik9kplh9jb3sgwcv9gyppj";
   };
+
+  postPatch = ''
+    sed -i -e 's/twill==0.9.1/twill/' setup.py
+  '';
 
   buildInputs = optionals (pythonOlder "3.0") [ twill ];
   propagatedBuildInputs = [ flask blinker ];

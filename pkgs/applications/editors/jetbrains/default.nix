@@ -320,15 +320,15 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2017.1.4";
+    version = "2017.2.1"; /* updated by script */
     description = "Professional IDE for Web and PHP developers";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "0zrbcziznz6dwh56snr27752xcsnl2gsxzi6jiraplkd92f2xlaf";
+      sha256 = "2f1af9ef6e9cda25a809a19a25f2d4fbaef00edf9d1d5a195572ab5e04e71e5e"; /* updated by script */
     };
     wmClass = "jetbrains-phpstorm";
-    update-channel = "PS2017.1";
+    update-channel = "PS2017.2";
   };
 
   phpstorm10 = buildPhpStorm rec {
