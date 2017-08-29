@@ -1,14 +1,14 @@
 { stdenv, fetchurl, buildPythonPackage, python, pkgconfig, glib, gobjectIntrospection, pycairo, cairo, which, ncurses}:
 
 buildPythonPackage rec {
-  major = "3.22";
-  minor = "0";
+  major = "3.24";
+  minor = "1";
   name = "pygobject-${major}.${minor}";
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pygobject/${major}/${name}.tar.xz";
-    sha256 = "08b29cfb08efc80f7a8630a2734dec65a99c1b59f1e5771c671d2e4ed8a5cbe7";
+    sha256 = "1zdzznrj2s1gsrv2z4r0n88fzba8zjc1n2r313xi77lhl1daja56";
   };
 
   outputs = [ "out" "dev" ];
