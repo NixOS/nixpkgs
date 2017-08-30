@@ -2496,6 +2496,8 @@ with pkgs;
 
   gupnp_av = callPackage ../development/libraries/gupnp-av {};
 
+  gupnp_dlna = callPackage ../development/libraries/gupnp-dlna {};
+
   gupnp_igd = callPackage ../development/libraries/gupnp-igd {};
 
   gupnp-tools = callPackage ../tools/networking/gupnp-tools {};
