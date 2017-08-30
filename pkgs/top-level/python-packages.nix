@@ -6732,7 +6732,7 @@ in {
   jsbeautifier = callPackage ../development/python-modules/jsbeautifier {};
 
   jug = buildPythonPackage rec {
-    version = "1.4.0";
+    version = "1.6.1";
     name = "jug-${version}";
     buildInputs = with self; [ nose numpy ];
     propagatedBuildInputs = with self; [
@@ -6746,7 +6746,7 @@ in {
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/J/Jug/Jug-${version}.tar.gz";
-      sha256 = "0s9m34k8w59k32sjcg74qqdz8r492sxhsdmlhca1z7jazdk56dzb";
+      sha256 = "15lv998mz6kpp65kh8wsfnrl5ay02bk1lm07nbbdv2k455bhrn1i";
     };
 
     meta = {
