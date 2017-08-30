@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, pythonPackages, glibcLocales }:
 
 pythonPackages.buildPythonApplication rec {
   name = "errbot-${version}";
@@ -21,6 +21,7 @@ pythonPackages.buildPythonApplication rec {
   # tests folder is not included in release
   doCheck = false;
 
+  buildInputs = [ glibcLocales ];
   propagatedBuildInputs = with pythonPackages; [
     webtest bottle threadpool rocket-errbot requests jinja2
     pyopenssl colorlog Yapsy markdown ansi pygments dns pep8
