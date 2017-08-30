@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, libxml2, readline, zlib, perl, cairo, gtk2, gsl
-, pkgconfig, gtksourceview, pango, gettext, libglade
+{ stdenv, fetchurl, libxml2, readline, zlib, perl, cairo, gtk3, gsl
+, pkgconfig, gtksourceview, pango, gettext
 }:
 
 stdenv.mkDerivation rec {
-  name = "pspp-0.8.3";
+  name = "pspp-1.0.1";
 
   src = fetchurl {
     url = "mirror://gnu/pspp/${name}.tar.gz";
-    sha256 = "0vri2pzvmm38qaihfvwlry30f40lcnps4blg59ixic4q20ldxf5d";
+    sha256 = "1r8smr5057993h90nx0mdnff8nxw9x546zzh6qpy4h3xblp1la5s";
   };
 
-  buildInputs = [ libxml2 readline zlib perl cairo gtk2 gsl pkgconfig
-    gtksourceview pango gettext libglade ];
+  buildInputs = [ libxml2 readline zlib perl cairo gtk3 gsl pkgconfig
+    gtksourceview pango gettext ];
 
   doCheck = false;
 
