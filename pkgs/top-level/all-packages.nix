@@ -1798,7 +1798,7 @@ with pkgs;
   emscripten = callPackage ../development/compilers/emscripten { };
 
   emscriptenfastcomp-unwrapped = callPackage ../development/compilers/emscripten-fastcomp { };
-  emscriptenfastcomp-wrapped = wrapCCWith stdenv.cc.libc ''
+  emscriptenfastcomp-wrapped = wrapCCWith stdenv.cc.libc stdenv.cc.binutils ''
     # hardening flags break WASM support
     cat > $out/nix-support/add-hardening.sh
   '' emscriptenfastcomp-unwrapped;
@@ -5330,8 +5330,12 @@ with pkgs;
         extraBuildCommands = ''
           echo "dontMoveLib64=1" >> $out/nix-support/setup-hook
         '';
-      in wrapCCWith glibc_multi extraBuildCommands (cc.cc.override {
-        stdenv = overrideCC stdenv (wrapCCWith glibc_multi "" cc.cc);
+        # Binutils with glibc multi
+        binutils = cc.binutils.override {
+          libc = glibc_multi;
+        };
+      in wrapCCWith glibc_multi binutils extraBuildCommands (cc.cc.override {
+        stdenv = overrideCC stdenv (wrapCCWith glibc_multi binutils "" cc.cc);
         profiledCompiler = false;
         enableMultilib = true;
       }))
@@ -6125,20 +6129,20 @@ with pkgs;
 
   wla-dx = callPackage ../development/compilers/wla-dx { };
 
-  wrapCCWith = libc: extraBuildCommands: baseCC: ccWrapperFun {
+  wrapCCWith = libc: binutils: extraBuildCommands: baseCC: ccWrapperFun {
     nativeTools = stdenv.cc.nativeTools or false;
     nativeLibc = stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
     cc = baseCC;
     isGNU = baseCC.isGNU or false;
     isClang = baseCC.isClang or false;
-    inherit libc extraBuildCommands;
+    inherit libc binutils extraBuildCommands;
   };
 
   ccWrapperFun = callPackage ../build-support/cc-wrapper;
   binutilsWrapperFun = callPackage ../build-support/binutils-wrapper;
 
-  wrapCC = wrapCCWith stdenv.cc.libc "";
+  wrapCC = wrapCCWith stdenv.cc.libc stdenv.cc.binutils "";
   # legacy version, used for gnat bootstrapping
   wrapGCC-old = baseGCC: callPackage ../build-support/gcc-wrapper-old {
     nativeTools = stdenv.cc.nativeTools or false;
