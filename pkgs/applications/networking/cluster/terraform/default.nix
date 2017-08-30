@@ -40,25 +40,35 @@ let
 
   pluggable = terraform:
     let
-      withPlugins = plugins: stdenv.mkDerivation {
-        name = "${terraform.name}-with-plugins";
-        buildInputs = [ makeWrapper ];
+      withPlugins = plugins:
+        let
+          actualPlugins = plugins terraform.plugins;
 
-        buildCommand = ''
-          mkdir -p $out/bin/
-          makeWrapper "${terraform.bin}/bin/terraform" "$out/bin/terraform" \
-            --set NIX_TERRAFORM_PLUGIN_DIR "${buildEnv { name = "tf-plugin-env"; paths = plugins terraform.plugins; }}/bin"
-        '';
+          passthru = {
+            withPlugins = newplugins: withPlugins (x: newplugins x ++ actualPlugins);
 
-        passthru = {
-          withPlugins = newplugins: withPlugins (x: newplugins x ++ plugins x);
+            # Ouch
+            overrideDerivation = f: (pluggable (terraform.overrideDerivation f)).withPlugins plugins;
+            overrideAttrs = f: (pluggable (terraform.overrideAttrs f)).withPlugins plugins;
+            override = x: (pluggable (terraform.override x)).withPlugins plugins;
+          };
+        in
+          # Don't bother wrapping unless we actually have plugins, since the wrapper will stop automatic downloading
+          # of plugins, which might be counterintuitive if someone just wants a vanilla Terraform.
+          if actualPlugins == []
+            then terraform.overrideAttrs (orig: { passthru = orig.passthru // passthru; })
+            else stdenv.mkDerivation {
+              name = "${terraform.name}-with-plugins";
+              buildInputs = [ makeWrapper ];
 
-          # Ouch
-          overrideDerivation = f: (pluggable (terraform.overrideDerivation f)).withPlugins plugins;
-          overrideAttrs = f: (pluggable (terraform.overrideAttrs f)).withPlugins plugins;
-          override = x: (pluggable (terraform.override x)).withPlugins plugins;
-        };
-      };
+              buildCommand = ''
+                mkdir -p $out/bin/
+                makeWrapper "${terraform.bin}/bin/terraform" "$out/bin/terraform" \
+                  --set NIX_TERRAFORM_PLUGIN_DIR "${buildEnv { name = "tf-plugin-env"; paths = actualPlugins; }}/bin"
+              '';
+
+              inherit passthru;
+            };
     in withPlugins (_: []);
 
   plugins = {
