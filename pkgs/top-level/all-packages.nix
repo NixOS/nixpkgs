@@ -11863,53 +11863,8 @@ with pkgs;
 
   crda = callPackage ../os-specific/linux/crda { };
 
-  darwin = let
-    apple-source-releases = callPackage ../os-specific/darwin/apple-source-releases { };
-  in (apple-source-releases // rec {
-    cctools = callPackage ../os-specific/darwin/cctools/port.nix {
-      inherit libobjc;
-      stdenv = if stdenv.isDarwin then stdenv else libcxxStdenv;
-      inherit maloader;
-      xctoolchain = xcode.toolchain;
-    };
-
-    cf-private = callPackage ../os-specific/darwin/cf-private {
-      inherit (apple-source-releases) CF;
-      inherit osx_private_sdk;
-    };
-
-    maloader = callPackage ../os-specific/darwin/maloader {
-      inherit opencflite;
-    };
-
-    opencflite = callPackage ../os-specific/darwin/opencflite {};
-
-    swift-corefoundation = callPackage ../os-specific/darwin/swift-corefoundation {};
-
-    ios-cross = callPackage ../os-specific/darwin/ios-cross {
-      inherit (darwin) binutils;
-    };
-
-    xcode = callPackage ../os-specific/darwin/xcode {};
-
-    osx_private_sdk = callPackage ../os-specific/darwin/osx-private-sdk {};
-
-    security_tool = (newScope (darwin.apple_sdk.frameworks // darwin)) ../os-specific/darwin/security-tool {
-      Security-framework = darwin.apple_sdk.frameworks.Security;
-    };
-
-    binutils = callPackage ../os-specific/darwin/binutils { inherit cctools; };
-
-    apple_sdk = callPackage ../os-specific/darwin/apple-sdk {};
-
-    libobjc = apple-source-releases.objc4;
-
-    stubs = callPackages ../os-specific/darwin/stubs {};
-
-    usr-include = callPackage ../os-specific/darwin/usr-include {};
-
-    DarwinTools = callPackage ../os-specific/darwin/DarwinTools {};
-  });
+  # Darwin package set
+  darwin = callPackages ./darwin-packages.nix { };
 
   devicemapper = lvm2;
 
