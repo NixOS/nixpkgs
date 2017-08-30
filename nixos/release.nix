@@ -9,7 +9,7 @@ let
 
   version = fileContents ../.version;
   versionSuffix =
-    (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
+    (if stableBranch then "." else "beta") + "${toString (nixpkgs.revCount - 114283)}.${nixpkgs.shortRev}";
 
   forAllSystems = genAttrs supportedSystems;
 
