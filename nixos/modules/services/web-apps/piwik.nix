@@ -57,41 +57,20 @@ in {
       };
 
       nginx = mkOption {
-        # TODO: for maximum flexibility, it would be nice to use nginx's vhost_options module
-        #       but this only makes sense if we can somehow specify defaults suitable for piwik.
-        #       But users can always copy the piwik nginx config to their configuration.nix and customize it.
-        type = types.nullOr (types.submodule {
-          options = {
-            virtualHost = mkOption {
-              type = types.str;
-              default = "piwik.${config.networking.hostName}";
-              example = "piwik.$\{config.networking.hostName\}";
-              description = ''
-                  Name of the nginx virtualhost to use and set up.
-              '';
-            };
-            enableSSL = mkOption {
-              type = types.bool;
-              default = true;
-              description = "Whether to enable https.";
-            };
-            forceSSL = mkOption {
-              type = types.bool;
-              default = true;
-              description = "Whether to always redirect to https.";
-            };
-            enableACME = mkOption {
-              type = types.bool;
-              default = true;
-              description = "Whether to ask Let's Encrypt to sign a certificate for this vhost.";
-            };
-          };
-        });
+        type = types.nullOr (types.submodule (import ../web-servers/nginx/vhost-options.nix {
+          inherit config lib;
+        }));
         default = null;
-        example = { virtualHost = "stats.$\{config.networking.hostName\}"; };
+        example = {
+          serverName = "stats.$\{config.networking.hostName\}";
+          enableACME = false;
+        };
         description = ''
-            The options to use to configure an nginx virtualHost.
-            If null (the default), no nginx virtualHost will be configured.
+            With this option, you can customize an nginx virtualHost which already has sensible defaults for piwik.
+            Set this to {} to just enable the virtualHost if you don't need any customization.
+            If enabled, then by default, the serverName is piwik.$\{config.networking.hostName\}, SSL is active,
+            and certificates are acquired via ACME.
+            If this is set to null (the default), no nginx virtualHost will be configured.
         '';
       };
     };
@@ -170,11 +149,15 @@ in {
       # References:
       # https://fralef.me/piwik-hardening-with-nginx-and-php-fpm.html
       # https://github.com/perusio/piwik-nginx
-      ${cfg.nginx.virtualHost} = {
-        root = "${pkgs.piwik}/share";
-        enableSSL  = cfg.nginx.enableSSL;
-        enableACME = cfg.nginx.enableACME;
-        forceSSL   = cfg.nginx.forceSSL;
+      "${user}.${config.networking.hostName}" = mkMerge [ cfg.nginx {
+        # don't allow to override root, as it will almost certainly break piwik
+        root = mkForce "${pkgs.piwik}/share";
+
+        # allow to override SSL settings if necessary, i.e. when using another method than ACME
+        # but enable them by default, as sensitive login and piwik data should not be transmitted in clear text.
+        addSSL = mkDefault true;
+        forceSSL = mkDefault true;
+        enableACME = mkDefault true;
 
         locations."/" = {
           index = "index.php";
@@ -208,7 +191,7 @@ in {
         locations."= /piwik.js".extraConfig = ''
           expires 1M;
         '';
-      };
+      }];
     };
   };
 
