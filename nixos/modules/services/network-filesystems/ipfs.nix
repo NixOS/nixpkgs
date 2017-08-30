@@ -6,7 +6,7 @@ let
   cfg = config.services.ipfs;
 
   ipfsFlags = toString ([
-    (optionalString  cfg.autoMount                   "--mount")
+    #(optionalString  cfg.autoMount                   "--mount")
     (optionalString  cfg.autoMigrate                 "--migrate")
     (optionalString  cfg.enableGC                    "--enable-gc")
     (optionalString (cfg.serviceFdlimit != null)     "--manage-fdlimit=false")
@@ -39,10 +39,10 @@ let
     preStart = ''
       ipfs --local config Addresses.API ${cfg.apiAddress}
       ipfs --local config Addresses.Gateway ${cfg.gatewayAddress}
-    '' + optionalString cfg.autoMount ''
+    '' + optionalString false/*cfg.autoMount*/ ''
       ipfs --local config Mounts.FuseAllowOther --json true
-      mkdir -p $(ipfs --local config Mounts.IPFS)
-      mkdir -p $(ipfs --local config Mounts.IPNS)
+      ipfs --local config Mounts.IPFS ${cfg.ipfsMountDir}
+      ipfs --local config Mounts.IPNS ${cfg.ipnsMountDir}
     '' + concatStringsSep "\n" (collect
           isString
           (mapAttrsRecursive
@@ -104,10 +104,22 @@ in {
         '';
       };
 
-      autoMount = mkOption {
-        type = types.bool;
-        default = false;
-        description = "Whether IPFS should try to mount /ipfs and /ipns at startup.";
+      #autoMount = mkOption {
+      #  type = types.bool;
+      #  default = false;
+      #  description = "Whether IPFS should try to mount /ipfs and /ipns at startup.";
+      #};
+
+      ipfsMountDir = mkOption {
+        type = types.str;
+        default = "/ipfs";
+        description = "Where to mount the IPFS namespace to";
+      };
+
+      ipnsMountDir = mkOption {
+        type = types.str;
+        default = "/ipns";
+        description = "Where to mount the IPNS namespace to";
       };
 
       gatewayAddress = mkOption {
@@ -203,6 +215,9 @@ in {
 
       preStart = ''
         install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.dataDir}
+      '' + optionalString false/*cfg.autoMount*/ ''
+        install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.ipfsMountDir}
+        install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.ipnsMountDir}
       '';
       script = ''
         if [[ ! -f ${cfg.dataDir}/config ]]; then
