@@ -34,8 +34,9 @@
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Create a new release notes file for the upcoming release + 1, in this
-          case <literal>rl-1803.xml</literal>.
+          <link xlink:href="https://github.com/NixOS/nixpkgs/issues/13559">Create
+            an issue for tracking Zero Hydra Failures progress. ZHF is an effort
+            to get build failures down to zero.</link>
         </para>
       </listitem>
       <listitem>
@@ -95,9 +96,8 @@
       </listitem>
       <listitem>
         <para>
-          <link xlink:href="https://github.com/NixOS/nixpkgs/issues/13559">Create
-            an issue for tracking Zero Hydra Failures progress. ZHF is an effort
-            to get build failures down to zero.</link>
+          Create a new release notes file for the upcoming release + 1, in this
+          case <literal>rl-1803.xml</literal>.
         </para>
       </listitem>
       <listitem>
