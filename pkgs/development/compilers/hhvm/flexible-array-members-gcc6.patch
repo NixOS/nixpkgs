@@ -1,16 +1,3 @@
-diff --git a/hphp/runtime/vm/bytecode.h b/hphp/runtime/vm/bytecode.h
-index ddc7b69..edf807c 100644
---- a/hphp/runtime/vm/bytecode.h
-+++ b/hphp/runtime/vm/bytecode.h
-@@ -124,7 +124,7 @@ private:
-   static void* allocMem(unsigned nargs);
-
- private:
--  TypedValue m_extraArgs[];
-+  TypedValue m_extraArgs[0];
-   TYPE_SCAN_FLEXIBLE_ARRAY_FIELD(m_extraArgs);
- };
-
 diff --git a/third-party/re2/src/re2/dfa.cc b/third-party/re2/src/re2/dfa.cc
 index 483f678..3aa3610 100644
 --- a/third-party/re2/src/re2/dfa.cc
