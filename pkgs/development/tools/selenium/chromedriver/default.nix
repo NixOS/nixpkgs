@@ -22,6 +22,14 @@ let
 
   spec = allSpecs."${stdenv.system}"
     or (throw "missing chromedriver binary for ${stdenv.system}");
+
+  libs = stdenv.lib.makeLibraryPath [
+    stdenv.cc.cc.lib
+    cairo fontconfig freetype
+    gdk_pixbuf glib gtk2 gconf
+    libX11 nspr nss pango libXrender
+    gconf libXext libXi
+  ];
 in
 stdenv.mkDerivation rec {
   name = "chromedriver-${version}";
@@ -35,14 +43,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip makeWrapper ];
 
   unpackPhase = "unzip $src";
-
-  libs = stdenv.lib.makeLibraryPath [
-    stdenv.cc.cc.lib
-    cairo fontconfig freetype
-    gdk_pixbuf glib gtk2 gconf
-    libX11 nspr nss pango libXrender
-    gconf libXext libXi
-  ];
 
   installPhase = ''
     install -m755 -D chromedriver $out/bin/chromedriver
