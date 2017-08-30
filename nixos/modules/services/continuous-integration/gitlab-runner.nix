@@ -100,6 +100,7 @@ in
 
   config = mkIf cfg.enable {
     systemd.services.gitlab-runner = {
+      environment = config.networking.proxy.envVars;
       description = "Gitlab Runner";
       after = [ "network.target" ]
         ++ optional hasDocker "docker.service";
