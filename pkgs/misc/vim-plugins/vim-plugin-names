@@ -34,6 +34,7 @@
 "github:benekastah/neomake"
 "github:bitc/vim-hdevtools"
 "github:bronson/vim-trailing-whitespace"
+"github:chrisbra/Colorizer"
 "github:christoomey/vim-sort-motion"
 "github:christoomey/vim-tmux-navigator"
 "github:ctjhoa/spacevim"
