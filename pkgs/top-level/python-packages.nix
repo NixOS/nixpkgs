@@ -23782,6 +23782,8 @@ EOF
 
   wheel = callPackage ../development/python-modules/wheel { };
 
+  whitey = callPackage ../applications/video/whitey { };
+
   widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
 
 
