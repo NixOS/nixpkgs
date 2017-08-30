@@ -173,7 +173,6 @@ in {
 
         # allow to override SSL settings if necessary, i.e. when using another method than ACME
         # but enable them by default, as sensitive login and piwik data should not be transmitted in clear text.
-        addSSL = mkDefault true;
         forceSSL = mkDefault true;
         enableACME = mkDefault true;
 
