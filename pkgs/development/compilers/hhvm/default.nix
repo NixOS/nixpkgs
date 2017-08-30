@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   name    = "hhvm-${version}";
-  version = "3.15.0";
+  version = "3.15.8";
 
   # use git version since we need submodules
   src = fetchgit {
     url    = "https://github.com/facebook/hhvm.git";
-    rev    = "92a682ebaa3c85b84857852d8621f528607fe27d";
-    sha256 = "0mn3bfvhdf6b4lflyjfjyr7nppkq505xkaaagk111fqy91rdzd3b";
+    rev    = "983bdab781d9d7bff5f14a4a2827c2c217c500df";
+    sha256 = "0sbjwdy69x08c4w0vf83dcfx3fin8qqysl9pacy2j6p0hxvgn5r5";
     fetchSubmodules = true;
   };
 
