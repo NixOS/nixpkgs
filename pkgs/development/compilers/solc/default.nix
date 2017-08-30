@@ -33,7 +33,8 @@ stdenv.mkDerivation {
     "-DBoost_USE_STATIC_LIBS=OFF"
   ];
 
-  buildInputs = [ boost cmake z3 ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ boost z3 ];
 
   meta = {
     description = "Compiler for Ethereum smart contract language Solidity";
