@@ -11,7 +11,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake qt4 doxygen ];
 
-  patches = [ ./gcc-4.7.patch ];
+  patches = [ 
+    ./gcc-4.7.patch
+    (fetchurl {
+        name = "TorSettings.h.patch";
+        url = "https://aur.archlinux.org/cgit/aur.git/plain/TorSettings.h.patch?h=vidalia";
+        sha256 = "1yvgpq60mqschfawmc3l7l86w95mxc4nplj8rf7hh9z7xl9xcqii";
+    })
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://www.torproject.org/projects/vidalia.html.en;
