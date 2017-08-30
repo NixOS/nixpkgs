@@ -6,6 +6,8 @@ in
 
 (apple-source-releases // {
 
+  callPackage = newScope (darwin.apple_sdk.frameworks // darwin);
+
   apple_sdk = callPackage ../os-specific/darwin/apple-sdk { };
 
   binutils = callPackage ../os-specific/darwin/binutils {
@@ -39,7 +41,7 @@ in
 
   osx_private_sdk = callPackage ../os-specific/darwin/osx-private-sdk { };
 
-  security_tool = (newScope (darwin.apple_sdk.frameworks // darwin)) ../os-specific/darwin/security-tool {
+  security_tool = darwin.callPackage ../os-specific/darwin/security-tool {
     Security-framework = darwin.apple_sdk.frameworks.Security;
   };
 
