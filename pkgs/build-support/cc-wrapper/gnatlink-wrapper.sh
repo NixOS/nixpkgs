@@ -33,8 +33,4 @@ if [ -n "${NIX_DEBUG:-}" ]; then
     printf "  %q\n" "${extraAfter[@]}" >&2
 fi
 
-if [ -n "$NIX_@infixSalt@_GNAT_WRAPPER_EXEC_HOOK" ]; then
-    source "$NIX_@infixSalt@_GNAT_WRAPPER_EXEC_HOOK"
-fi
-
 exec @prog@ "${extraBefore[@]}" "$@" "${extraAfter[@]}"
