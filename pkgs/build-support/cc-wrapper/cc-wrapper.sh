@@ -15,10 +15,6 @@ if [ -z "${NIX_CC_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
 
-if [ -n "$NIX_CC_WRAPPER_@infixSalt@_START_HOOK" ]; then
-    source "$NIX_CC_WRAPPER_@infixSalt@_START_HOOK"
-fi
-
 source @out@/nix-support/utils.sh
 
 
@@ -173,10 +169,6 @@ if [ -n "${NIX_DEBUG:-}" ]; then
     printf "  %q\n" ${params+"${params[@]}"} >&2
     echo "extra flags after to @prog@:" >&2
     printf "  %q\n" ${extraAfter+"${extraAfter[@]}"} >&2
-fi
-
-if [ -n "$NIX_CC_WRAPPER_@infixSalt@_EXEC_HOOK" ]; then
-    source "$NIX_CC_WRAPPER_@infixSalt@_EXEC_HOOK"
 fi
 
 PATH="$path_backup"
