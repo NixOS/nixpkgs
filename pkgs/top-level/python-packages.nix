@@ -1730,6 +1730,8 @@ in {
     };
   };
 
+  comp = callPackage ../applications/video/comp { };
+
   constantly = callPackage ../development/python-modules/constantly { };
 
   cornice = buildPythonPackage rec {
