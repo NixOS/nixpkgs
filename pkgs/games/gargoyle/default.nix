@@ -19,13 +19,13 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "gargoyle-2017-05-17";
+  name = "gargoyle-2017-08-27";
 
   src = fetchFromGitHub {
     owner = "garglk";
     repo = "garglk";
-    rev = "2da2824748b0b99107f481801f818efc54a43d3a";
-    sha256 = "184lgylcbhj205pfccwgl7avs0pczwrc53nvkzhj2p5inxak20kk";
+    rev = "65c95166f53adaa2e5e1a5e0d8a34e9219d06de6";
+    sha256 = "1agnap38qdf2n1v37ka3ky44j56yhvln4lzf13diyqhjmh9lvfq5";
   };
 
   nativeBuildInputs = [ jam pkgconfig ] ++ stdenv.lib.optional stdenv.isDarwin libtool;
