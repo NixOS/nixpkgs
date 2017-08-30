@@ -13586,6 +13586,7 @@ with pkgs;
 
   calf = callPackage ../applications/audio/calf {
       inherit (gnome2) libglade;
+      stdenv = overrideCC stdenv gcc5;
   };
 
   calcurse = callPackage ../applications/misc/calcurse { };
