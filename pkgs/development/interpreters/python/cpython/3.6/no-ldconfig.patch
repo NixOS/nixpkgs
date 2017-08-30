@@ -1,12 +1,12 @@
-From a831df344ec1c883a0ef04d8cc8f5c53a942f6de Mon Sep 17 00:00:00 2001
+From 105621b99cc30615c79b5aa3d12d6732e14b0d59 Mon Sep 17 00:00:00 2001
 From: Frederik Rietdijk <fridh@fridh.nl>
-Date: Sat, 29 Jul 2017 20:17:40 +0200
+Date: Mon, 28 Aug 2017 09:24:06 +0200
 Subject: [PATCH] Don't use ldconfig and speed up uuid load
 
 ---
  Lib/ctypes/util.py | 70 ++----------------------------------------------------
- Lib/uuid.py        | 51 ---------------------------------------
- 2 files changed, 2 insertions(+), 119 deletions(-)
+ Lib/uuid.py        | 48 -------------------------------------
+ 2 files changed, 2 insertions(+), 116 deletions(-)
 
 diff --git a/Lib/ctypes/util.py b/Lib/ctypes/util.py
 index 339ae8aa8a..2944985c30 100644
@@ -97,22 +97,22 @@ index 339ae8aa8a..2944985c30 100644
          def _findLib_ld(name):
              # See issue #9998 for why this is needed
 diff --git a/Lib/uuid.py b/Lib/uuid.py
-index 200c800b34..a099ab4b4a 100644
+index 200c800b34..31160ace95 100644
 --- a/Lib/uuid.py
 +++ b/Lib/uuid.py
-@@ -455,57 +455,6 @@ def _netbios_getnode():
+@@ -455,57 +455,9 @@ def _netbios_getnode():
              continue
          return int.from_bytes(bytes, 'big')
  
 -# Thanks to Thomas Heller for ctypes and for his help with its use here.
--
+ 
 -# If ctypes is available, use it to find system routines for UUID generation.
 -# XXX This makes the module non-thread-safe!
--_uuid_generate_time = _UuidCreate = None
+ _uuid_generate_time = _UuidCreate = None
 -try:
 -    import ctypes, ctypes.util
 -    import sys
--
+ 
 -    # The uuid_generate_* routines are provided by libuuid on at least
 -    # Linux and FreeBSD, and provided by libc on Mac OS X.
 -    _libnames = ['uuid']
@@ -159,5 +159,5 @@ index 200c800b34..a099ab4b4a 100644
  def _unixdll_getnode():
      """Get the hardware address on Unix using ctypes."""
 -- 
-2.13.3
+2.14.1
 

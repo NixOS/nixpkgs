@@ -11,6 +11,7 @@ rec {
     PowerPC      = { cpu = cpuTypes.powerpc; };
     x86          = { cpu = { family = "x86"; }; };
     Arm          = { cpu = { family = "arm"; }; };
+    Aarch64      = { cpu = { family = "aarch64"; }; };
     Mips         = { cpu = { family = "mips"; }; };
     BigEndian    = { cpu = { significantByte = significantBytes.bigEndian; }; };
     LittleEndian = { cpu = { significantByte = significantBytes.littleEndian; }; };
@@ -28,9 +29,6 @@ rec {
     Windows      = { kernel = kernels.windows; };
     Cygwin       = { kernel = kernels.windows; abi = abis.cygnus; };
     MinGW        = { kernel = kernels.windows; abi = abis.gnu; };
-
-    Arm32        = recursiveUpdate Arm patterns."32bit";
-    Arm64        = recursiveUpdate Arm patterns."64bit";
   };
 
   matchAnyAttrs = patterns:

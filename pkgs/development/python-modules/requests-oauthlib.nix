@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchurl
+{ stdenv, buildPythonPackage, fetchPypi
 , oauthlib, requests }:
 
 buildPythonPackage rec {
@@ -6,8 +6,8 @@ buildPythonPackage rec {
   pname = "requests-oauthlib";
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "http://github.com/requests/requests-oauthlib/archive/v${version}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "18gg9dwral153c10f8bwhz2dy4nw7c6mws5a2g7gidk3z5xhqy4n";
   };
 

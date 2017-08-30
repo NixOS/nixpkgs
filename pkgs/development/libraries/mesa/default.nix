@@ -67,7 +67,7 @@ let
 in
 
 let
-  version = "17.1.6";
+  version = "17.1.7";
   branch  = head (splitString "." version);
   driverLink = "/run/opengl-driver" + optionalString stdenv.isi686 "-32";
 in
@@ -82,7 +82,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
     ];
-    sha256 = "0686deadde1f126b20aa67e47e8c50502043eee4ecdf60d5009ffda3cebfee50";
+    sha256 = "1xg5v61nvabjk3rx48cwmnwv6zpqdcnkxl8bz82284mifjl75x39";
   };
 
   prePatch = "patchShebangs .";

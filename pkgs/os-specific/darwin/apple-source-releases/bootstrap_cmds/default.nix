@@ -1,7 +1,7 @@
 { stdenv, appleDerivation, yacc, flex }:
 
 appleDerivation {
-  buildInputs = [ yacc flex ];
+  nativeBuildInputs = [ yacc flex ];
 
   buildPhase = ''
     cd migcom.tproj
