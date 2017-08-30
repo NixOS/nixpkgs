@@ -57,10 +57,6 @@ while (( "$n" < "$nParams" )); do
         cppInclude=0
     elif [ "${p:0:1}" != - ]; then
         nonFlagArgs=1
-    elif [ "$p" = -m32 ]; then
-        if [ -e @out@/nix-support/dynamic-linker-m32 ]; then
-            NIX_@infixSalt@_LDFLAGS+=" -dynamic-linker $(< @out@/nix-support/dynamic-linker-m32)"
-        fi
     fi
     n+=1
 done
