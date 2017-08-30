@@ -15097,7 +15097,9 @@ with pkgs;
 
   llpp = ocaml-ng.ocamlPackages_4_04.callPackage ../applications/misc/llpp { };
 
-  lmms = callPackage ../applications/audio/lmms { };
+  lmms = callPackage ../applications/audio/lmms {
+    stdenv = overrideCC stdenv gcc5;
+  };
 
   loxodo = callPackage ../applications/misc/loxodo { };
 
