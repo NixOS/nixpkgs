@@ -12250,8 +12250,6 @@ with pkgs;
 
     v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { };
 
-    frandom = callPackage ../os-specific/linux/frandom { };
-
     fusionio-vsl = callPackage ../os-specific/linux/fusionio/vsl.nix { };
 
     lttng-modules = callPackage ../os-specific/linux/lttng-modules { };
