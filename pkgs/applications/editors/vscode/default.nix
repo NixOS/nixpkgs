@@ -58,6 +58,9 @@ in
       '' else ''
         mkdir -p $out/lib/vscode $out/bin
         cp -r ./* $out/lib/vscode
+
+        substituteInPlace $out/lib/vscode/bin/code --replace '"$CLI" "$@"' '"$CLI" "--skip-getting-started" "$@"'
+
         ln -s $out/lib/vscode/bin/code $out/bin
 
         mkdir -p $out/share/applications

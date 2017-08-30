@@ -16,7 +16,7 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "natsort";
-  version = "5.0.3";
+  version = "5.1.0";
 
   buildInputs = [
     hypothesis
@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1h87n0jcsi6mgjx1pws6g1lmcn8jwabwxj8hq334jvziaq0plyym";
+    sha256 = "5db0fd17c9f8ef3d54962a6e46159ce4807c630f0931169cd15ce54f2ac395b9";
   };
 
   # do not run checks on nix_run_setup.py

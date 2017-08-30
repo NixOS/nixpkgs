@@ -42,6 +42,7 @@ stdenv.mkDerivation {
     '';
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ peti the-kenny jwiegley ];
+    maintainers = with stdenv.lib.maintainers; [ the-kenny jwiegley ];
+    broken = true;
   };
 }

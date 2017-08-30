@@ -1,13 +1,13 @@
 { stdenv, fetchurl, buildPythonPackage, swig, pcsclite }:
 
 buildPythonPackage rec {
-  version = "1.9.5";
+  version = "1.9.6";
   pname = "pyscard";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/p/pyscard/${name}.tar.gz";
-    sha256 = "7eef027e1939b7595fc13c03616f262f90d118594fdb6f7620af46b54fa06835";
+    sha256 = "6e28143c623e2b34200d2fa9178dbc80a39b9c068b693b2e6527cdae784c6c12";
   };
 
   patchPhase = ''

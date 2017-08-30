@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   name = "${pname}-${version}";
-  version = "0.9.4";
+  version = "0.11.0";
   pname = "confluent-kafka";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1v8apw9f8l01ql42jg1sfqv41yxvcbxn1a3ar01y0ni428swq6wk";
+    sha256 = "4c34bfe8f823ee3777d93820ec6578365d2bde3cd1302cbd0e44c86b68643667";
   };
 
   buildInputs = [ rdkafka requests ] ++ (if isPy3k then [ avro3k ] else [ avro ]) ;

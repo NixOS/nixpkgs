@@ -1,5 +1,5 @@
 # TODO(@Ericson2314): Remove `pkgs` param, which is only used for
-# `buildStackProject` and `justStaticExecutables`
+# `buildStackProject`, `justStaticExecutables` and `checkUnusedPackages`
 { pkgs, lib }:
 
 rec {
@@ -107,6 +107,22 @@ rec {
   });
 
   buildStrictly = pkg: buildFromSdist (appendConfigureFlag pkg "--ghc-option=-Wall --ghc-option=-Werror");
+
+  checkUnusedPackages =
+    { ignoreEmptyImports ? false
+    , ignoreMainModule   ? false
+    , ignorePackages     ? []
+    } : drv :
+      overrideCabal (appendConfigureFlag drv "--ghc-option=-ddump-minimal-imports") (_drv: {
+        postBuild = with lib;
+          let args = concatStringsSep " " (
+                       optional ignoreEmptyImports "--ignore-empty-imports" ++
+                       optional ignoreMainModule   "--ignore-main-module" ++
+                       map (pkg: "--ignore-package ${pkg}") ignorePackages
+                     );
+          in "${pkgs.haskellPackages.packunused}/bin/packunused" +
+             optionalString (args != "") " ${args}";
+      });
 
   buildStackProject = pkgs.callPackage ./generic-stack-builder.nix { };
 

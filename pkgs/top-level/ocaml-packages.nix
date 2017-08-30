@@ -663,7 +663,7 @@ let
     janePackage = callPackage ../development/ocaml-modules/janestreet/janePackage.nix {};
 
     janeStreet = import ../development/ocaml-modules/janestreet {
-      inherit lib janePackage ocamlbuild ctypes cryptokit magic-mime;
+      inherit lib janePackage ocaml ocamlbuild ctypes cryptokit magic-mime;
       inherit ocaml-migrate-parsetree octavius ounit ppx_deriving re zarith;
       inherit (pkgs) stdenv openssl;
     };
@@ -904,7 +904,9 @@ let
 
     # Apps / from all-packages
 
-    wyrd = callPackage ../tools/misc/wyrd { };
+    wyrd = callPackage ../tools/misc/wyrd {
+      ncurses = pkgs.ncurses5;
+    };
 
     haxe = callPackage ../development/compilers/haxe { };
 

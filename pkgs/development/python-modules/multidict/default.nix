@@ -7,13 +7,13 @@
 
 let
   pname = "multidict";
-  version = "2.1.6";
+  version = "3.1.3";
 in buildPythonPackage rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "9ec33a1da4d2096949e29ddd66a352aae57fad6b5483087d54566a2f6345ae10";
+    sha256 = "875f80a046e7799b40df4b015b8fc5dae91697936872a8d7362c909a02ec6d12";
   };
 
   buildInputs = [ pytest ];

@@ -1,4 +1,4 @@
-{ stdenv, lib, janePackage, ocamlbuild, cryptokit, ctypes, magic-mime,
+{ stdenv, lib, janePackage, ocaml, ocamlbuild, cryptokit, ctypes, magic-mime,
   ocaml-migrate-parsetree, octavius, ounit, ppx_deriving, re, zarith,
   openssl }:
 
@@ -572,6 +572,7 @@ rec {
     hash = "0ak93dyzi6sc6gb0j07fj85b24d8bv6g2hm7jj5xwb39kjwh51jl";
     propagatedBuildInputs = [ ppx_sexp_conv ];
     meta.description = "Binding to the posix *at functions";
+    meta.broken = lib.versionAtLeast ocaml.version "4.05";
   };
 
   rpc_parallel = janePackage {

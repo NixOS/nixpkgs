@@ -92,7 +92,7 @@ stdenv.mkDerivation {
       (if targetPlatform.system == "i686-linux"     then "ld-linux.so.2" else
        if targetPlatform.system == "x86_64-linux"   then "ld-linux-x86-64.so.2" else
        # ARM with a wildcard, which can be "" or "-armhf".
-       if targetPlatform.isArm32                    then "ld-linux*.so.3" else
+       if targetPlatform.isArm                      then "ld-linux*.so.3" else
        if targetPlatform.system == "aarch64-linux"  then "ld-linux-aarch64.so.1" else
        if targetPlatform.system == "powerpc-linux"  then "ld.so.1" else
        if targetPlatform.system == "mips64el-linux" then "ld.so.1" else

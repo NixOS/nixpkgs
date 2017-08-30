@@ -162,7 +162,8 @@ in stdenv.mkDerivation {
         # needed for some packages, especially packages that backport
         # functionality to 2.x from 3.x
         for item in $out/lib/python${majorVersion}/test/*; do
-          if [[ "$item" != */test_support.py* ]]; then
+          if [[ "$item" != */test_support.py*
+             && "$item" != */regrtest.py* ]]; then
             rm -rf "$item"
           else
             echo $item

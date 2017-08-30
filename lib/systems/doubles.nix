@@ -26,7 +26,7 @@ in rec {
   allBut = platforms: lists.filter (x: !(builtins.elem x platforms)) all;
   none = [];
 
-  arm     = filterDoubles predicates.isArm32;
+  arm     = filterDoubles predicates.isArm;
   i686    = filterDoubles predicates.isi686;
   mips    = filterDoubles predicates.isMips;
   x86_64  = filterDoubles predicates.isx86_64;

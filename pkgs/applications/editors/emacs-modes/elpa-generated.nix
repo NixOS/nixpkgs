@@ -1530,10 +1530,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20170821";
+        version = "20170828";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20170821.tar";
-          sha256 = "13214dfm6ixypsl0mj1wrdcs42w1qn5ig8m5sb6ih697i2kbxkgg";
+          url = "https://elpa.gnu.org/packages/org-20170828.tar";
+          sha256 = "0frjwgjyy7rwb7si57h6nd1p35a4gcd1dc0aka19kn8r59hbi08p";
         };
         packageRequires = [];
         meta = {
@@ -2321,10 +2321,10 @@
     yasnippet = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "yasnippet";
-        version = "0.12.1";
+        version = "0.12.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/yasnippet-0.12.1.tar";
-          sha256 = "01q1hn3w8w63s7cvr9bq6l5n4nyirnk8qfba60ajp3j6ndi2964n";
+          url = "https://elpa.gnu.org/packages/yasnippet-0.12.2.tar";
+          sha256 = "03cilldgq7fpzk9ix2a8q1ppilxp5gvyrym7krifvrg1g2rs1qv9";
         };
         packageRequires = [ cl-lib ];
         meta = {

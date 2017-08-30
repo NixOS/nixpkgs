@@ -54,7 +54,7 @@ in
              (hasAttr dev cfg.vswitches) ||
              (hasAttr dev cfg.wlanInterfaces)
           then [ "${dev}-netdev.service" ]
-          else optional (dev != null && !config.boot.isContainer) (subsystemDevice dev);
+          else optional (dev != null && dev != "lo" && !config.boot.isContainer) (subsystemDevice dev);
 
         networkLocalCommands = {
           after = [ "network-setup.service" ];

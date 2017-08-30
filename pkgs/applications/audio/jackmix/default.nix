@@ -7,6 +7,8 @@ stdenv.mkDerivation rec {
     sha256 = "18f5v7g66mgarhs476frvayhch7fy4nyjf2xivixc061ipn0m82j";
   };
 
+  patches = [ ./no_error.patch ];
+
   buildInputs = [
     pkgconfig
     scons
@@ -31,5 +33,3 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.linux;
   };
 }
-
-

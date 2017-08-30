@@ -74,7 +74,7 @@ let
       # Make sure that we get a login prompt etc.
       $machine->succeed("echo hello");
       #$machine->waitForUnit('getty@tty2');
-      $machine->waitForUnit("rogue");
+      #$machine->waitForUnit("rogue");
       $machine->waitForUnit("nixos-manual");
 
       # Wait for hard disks to appear in /dev

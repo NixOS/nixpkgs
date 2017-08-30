@@ -84,7 +84,12 @@ stdenv.mkDerivation rec {
     else "-static-libgcc";
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = stdenv.lib.optionals (targetPlatform != hostPlatform) [ "build" "host" "target" ];
+  configurePlatforms =
+    # TODO(@Ericson2314): Figure out what's going wrong with Arm
+    if hostPlatform == targetPlatform && targetPlatform.isArm
+    then []
+    else [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+
   configureFlags =
     [ "--enable-shared" "--enable-deterministic-archives" "--disable-werror" ]
     ++ optional (stdenv.system == "mips64el-linux") "--enable-fix-loongson2f-nop"

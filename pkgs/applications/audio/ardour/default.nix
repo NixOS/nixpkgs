@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ alsaLib aubio boost cairomm curl doxygen dbus fftw fftwSinglePrec flac glibc
+    [ alsaLib aubio boost cairomm curl doxygen dbus fftw fftwSinglePrec flac 
       glibmm graphviz gtkmm2 libjack2 libgnomecanvas libgnomecanvasmm liblo
       libmad libogg librdf librdf_raptor librdf_rasqal libsamplerate
       libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv lv2

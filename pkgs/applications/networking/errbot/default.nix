@@ -1,5 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pythonPackages, glibcLocales
-, withGraphicalBackend ? false }:
+{ stdenv, fetchurl, pythonPackages, glibcLocales }:
 
 pythonPackages.buildPythonApplication rec {
   name = "errbot-${version}";
@@ -35,7 +34,7 @@ pythonPackages.buildPythonApplication rec {
     pyopenssl colorlog Yapsy markdown ansi pygments dns pep8
     daemonize pygments-markdown-lexer telegram irc slackclient
     sleekxmpp hypchat pytest
-  ] ++ stdenv.lib.optional withGraphicalBackend pyside;
+  ];
 
   meta = with stdenv.lib; {
     description = "Chatbot designed to be simple to extend with plugins written in Python";

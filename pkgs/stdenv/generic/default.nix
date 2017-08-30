@@ -104,9 +104,7 @@ let
       # Utility flags to test the type of platform.
       inherit (hostPlatform)
         isDarwin isLinux isSunOS isHurd isCygwin isFreeBSD isOpenBSD
-        isi686 isx86_64 is64bit isMips isBigEndian;
-      isArm = hostPlatform.isArm32;
-      isAarch64 = hostPlatform.isArm64;
+        isi686 isx86_64 is64bit isArm isAarch64 isMips isBigEndian;
 
       # Whether we should run paxctl to pax-mark binaries.
       needsPax = isLinux;

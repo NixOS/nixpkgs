@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "keystoneauth1";
-  version = "1.1.0";
+  version = "3.1.0";
   name = "${pname}-${version}";
   disabled = isPyPy; # a test fails
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05fc6xsp5mal52ijvj84sf7mrw706ihadfdf5mnq9zxn7pfl4118";
+    sha256 = "e5abfa8bbe866d52ca56afbe528d15214a60033cc1dc9804478cae7424f0f8fb";
   };
 
   buildInputs = [ pbr testtools testresources testrepository mock
