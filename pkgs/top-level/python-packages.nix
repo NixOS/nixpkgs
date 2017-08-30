@@ -18237,7 +18237,7 @@ in {
       homepage = https://pypi.python.org/pypi/PyICU/;
       description = "Python extension wrapping the ICU C++ API";
       license = licenses.mit;
-      platforms = platforms.all;
+      platforms = with platforms; allBut darwin;
       maintainers = [ maintainers.rycee ];
     };
   };
