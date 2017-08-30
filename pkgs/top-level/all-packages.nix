@@ -2177,6 +2177,8 @@ with pkgs;
 
   genimage = callPackage ../tools/filesystems/genimage { };
 
+  gerrit = callPackage ../applications/version-management/gerrit { };
+
   geteltorito = callPackage ../tools/misc/geteltorito { };
 
   getmail = callPackage ../tools/networking/getmail { };
