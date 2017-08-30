@@ -24,14 +24,17 @@ in {
         default = false;
         description = ''
           Enable piwik web analytics with php-fpm backend.
+          Either the nginx option or the webServerUser option is mandatory.
         '';
       };
 
       webServerUser = mkOption {
-        type = types.str;
-        example = "nginx";
+        type = types.nullOr types.str;
+        default = null;
+        example = "lighttpd";
         description = ''
-          Name of the owner of the ${phpSocket} fastcgi socket for piwik.
+          Name of the web server user that forwards requests to the ${phpSocket} fastcgi socket for piwik if the nginx
+          option is not used. Either this option or the nginx option is mandatory.
           If you want to use another webserver than nginx, you need to set this to that server's user
           and pass fastcgi requests to `index.php` and `piwik.php` to this socket.
         '';
@@ -67,6 +70,7 @@ in {
         };
         description = ''
             With this option, you can customize an nginx virtualHost which already has sensible defaults for piwik.
+            Either this option or the webServerUser option is mandatory.
             Set this to {} to just enable the virtualHost if you don't need any customization.
             If enabled, then by default, the serverName is piwik.$\{config.networking.hostName\}, SSL is active,
             and certificates are acquired via ACME.
@@ -77,6 +81,14 @@ in {
   };
 
   config = mkIf cfg.enable {
+    warnings = mkIf (cfg.nginx != null && cfg.webServerUser != null) [
+      "If services.piwik.nginx is set, services.piwik.nginx.webServerUser is ignored and should be removed."
+    ];
+
+    assertions = [ {
+        assertion = cfg.nginx != null || cfg.webServerUser != null;
+        message = "Either services.piwik.nginx or services.piwik.nginx.webServerUser is mandatory";
+    }];
 
     users.extraUsers.${user} = {
       isSystemUser = true;
@@ -132,10 +144,16 @@ in {
       serviceConfig.UMask = "0007";
     };
 
-    services.phpfpm.poolConfigs = {
+    services.phpfpm.poolConfigs = let
+      # workaround for when both are null and need to generate a string,
+      # which is illegal, but as assertions apparently are being triggered *after* config generation,
+      # we have to avoid already throwing errors at this previous stage.
+      socketOwner = if (cfg.nginx != null) then config.services.nginx.user
+      else if (cfg.webServerUser != null) then cfg.webServerUser else "";
+    in {
       ${pool} = ''
         listen = "${phpSocket}"
-        listen.owner = ${cfg.webServerUser}
+        listen.owner = ${socketOwner}
         listen.group = root
         listen.mode = 0600
         user = ${user}
