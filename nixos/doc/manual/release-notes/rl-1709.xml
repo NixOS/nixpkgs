@@ -165,6 +165,12 @@ rmdir /var/lib/ipfs/.ipfs
       Refer to the description of the options for more details.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The <literal>compiz</literal> window manager and package was
+      removed. The system support had been broken for several years.
+    </para>
+  </listitem>
 </itemizedlist>
 
 <para>Other notable improvements:</para>
@@ -210,7 +216,7 @@ rmdir /var/lib/ipfs/.ipfs
   <listitem>
     <para>
       Nixpkgs overlays may now be specified with a file as well as a directory. The
-      value of <literal>&lt;nixpkgs-overlays></literal> may be a file, and 
+      value of <literal>&lt;nixpkgs-overlays></literal> may be a file, and
       <filename>~/.config/nixpkgs/overlays.nix</filename> can be used instead of the
       <filename>~/.config/nixpkgs/overalys</filename> directory.
     </para>
