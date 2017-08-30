@@ -25585,27 +25585,7 @@ EOF
 
   };
 
-  service-identity = buildPythonPackage rec {
-    name = "service-identity-${version}";
-    version = "16.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/service_identity/service_identity-${version}.tar.gz";
-      sha256 = "0dih7i7d36nbllcxgfkvbnaj1wlzhwfnpr4b97dz74czylif4c06";
-    };
-
-    propagatedBuildInputs = with self; [
-      characteristic pyasn1 pyasn1-modules pyopenssl idna attrs
-    ];
-
-    buildInputs = with self; [
-      pytest
-    ];
-
-    checkPhase = ''
-      py.test
-    '';
-  };
+  service-identity = callPackage ../development/python-modules/service_identity { };
 
   signedjson = buildPythonPackage rec {
     name = "signedjson-${version}";
