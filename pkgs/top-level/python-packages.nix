@@ -11503,27 +11503,6 @@ in {
     inherit (self) systemd pytest;
   };
 
-  jrnl = buildPythonPackage rec {
-    name = "jrnl-1.9.7";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jrnl/${name}.tar.gz";
-      sha256 = "af599a863ac298533685a7236fb86307eebc00a38eb8bb96f4f67b5d83227ec8";
-    };
-
-    propagatedBuildInputs = with self; [
-      pytz six tzlocal keyring argparse dateutil_1_5
-      parsedatetime
-    ];
-
-    meta = {
-      homepage = http://maebert.github.io/jrnl/;
-      description = "A simple command line journal application that stores your journal in a plain text file";
-      license = licenses.mit;
-    };
-  };
-
   jsonnet = buildPythonPackage {
     inherit (pkgs.jsonnet) name src;
   };
