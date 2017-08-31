@@ -269,7 +269,16 @@ in rec {
     extraPreHook = ''
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
-    overrides = persistent;
+    overrides = self: super: (persistent self super) // {
+      # Hack to make sure we don't link ncurses in bootstrap tools. The proper
+      # solution is to avoid passing -L/nix-store/...-bootstrap-tools/lib,
+      # quite a sledgehammer just to get the C runtime.
+      gettext = super.gettext.overrideAttrs (old: {
+         configureFlags = old.configureFlags ++ [
+           "--disable-curses"
+         ];
+      });
+    };
   };
 
   stdenvDarwin = prevStage: let
