@@ -13,6 +13,7 @@ rec {
   libmatekbd = callPackage ./libmatekbd { };
   libmatemixer = callPackage ./libmatemixer { };
   libmateweather = callPackage ./libmateweather { };
+  marco = callPackage ./marco { };
   mate-common = callPackage ./mate-common { };
   mate-desktop = callPackage ./mate-desktop { };
   mate-icon-theme = callPackage ./mate-icon-theme { };
@@ -27,6 +28,7 @@ rec {
     libmatekbd
     libmatemixer
     libmateweather
+    marco
     mate-common
     mate-desktop
     mate-icon-theme
