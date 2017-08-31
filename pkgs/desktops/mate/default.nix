@@ -17,6 +17,7 @@ rec {
   mate-desktop = callPackage ./mate-desktop { };
   mate-icon-theme = callPackage ./mate-icon-theme { };
   mate-icon-theme-faenza = callPackage ./mate-icon-theme-faenza { };
+  mate-menus = callPackage ./mate-menus { };
   mate-terminal = callPackage ./mate-terminal { };
   mate-themes = callPackage ./mate-themes { };
   pluma = callPackage ./pluma { };
@@ -29,6 +30,7 @@ rec {
     mate-common
     mate-desktop
     mate-icon-theme
+    mate-menus
     mate-themes
   ];
 
