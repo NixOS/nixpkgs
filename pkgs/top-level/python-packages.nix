@@ -8642,6 +8642,8 @@ in {
 
   django-pglocks = callPackage ../development/python-modules/django-pglocks { };
 
+  django-picklefield = callPackage ../development/python-modules/django-picklefield { };
+
   django_polymorphic = callPackage ../development/python-modules/django-polymorphic { };
 
   django_tagging = callPackage ../development/python-modules/django_tagging { };
