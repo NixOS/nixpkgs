@@ -60,7 +60,10 @@ in
       '';
     };
 
-    environment.systemPackages =
+    environment.systemPackages = [
+      pkgs.hicolor_icon_theme
+      pkgs.mate.mate-icon-theme
+    ]  ++
       pkgs.mate.basePackages ++
       (removePackagesByName
         pkgs.mate.extraPackages
@@ -73,7 +76,7 @@ in
 
     services.gnome3.gnome-keyring.enable = true;
 
-    environment.pathsToLink = [ "/share" ];    
+    environment.pathsToLink = [ "/share" ];
   };
 
 }
