@@ -36,16 +36,7 @@ fi
 # We need to mangle names for hygiene, but also take parameters/overrides
 # from the environment.
 for var in "${var_templates[@]}"; do
-    outputVar="${var/+/_@infixSalt@_}"
-    export ${outputVar}+=''
-    # For each role we serve, we accumulate the input parameters into our own
-    # cc-wrapper-derivation-specific environment variables.
-    for infix in "${role_infixes[@]}"; do
-        inputVar="${var/+/${infix}}"
-        if [ -v "$inputVar" ]; then
-            export ${outputVar}+="${!outputVar:+ }${!inputVar}"
-        fi
-    done
+    mangleVarList "$var" "${role_infixes[@]}"
 done
 
 # `-B@out@/bin' forces cc to use ld-wrapper.sh when calling ld.
