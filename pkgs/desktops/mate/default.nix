@@ -20,6 +20,7 @@ rec {
   mate-icon-theme = callPackage ./mate-icon-theme { };
   mate-icon-theme-faenza = callPackage ./mate-icon-theme-faenza { };
   mate-menus = callPackage ./mate-menus { };
+  mate-panel = callPackage ./mate-panel { };
   mate-settings-daemon = callPackage ./mate-settings-daemon { };
   mate-terminal = callPackage ./mate-terminal { };
   mate-themes = callPackage ./mate-themes { };
@@ -36,6 +37,7 @@ rec {
     mate-desktop
     mate-icon-theme
     mate-menus
+    mate-panel
     mate-settings-daemon
     mate-themes
   ];
