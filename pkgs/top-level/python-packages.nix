@@ -5462,6 +5462,8 @@ in {
     };
   };
 
+  easy-thumbnails = callPackage ../development/python-modules/easy-thumbnails { };
+
   eccodes = if (isPy27) then
       (pkgs.eccodes.overrideAttrs (oldattrs: {
     name = "${python.libPrefix}-" + oldattrs.name;
