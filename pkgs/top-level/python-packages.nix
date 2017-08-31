@@ -28015,21 +28015,7 @@ EOF
     propagatedBuildInputs = with self; [ websocket_client requests ];
   };
 
-  tempora = buildPythonPackage rec {
-    name = "tempora-${version}";
-    version = "1.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tempora/${name}.tar.gz";
-      sha256 = "0ysvns22i5hzhl5ln4n86bq10j8xwvd09z8qw1zjr3s0fj3lynza";
-    };
-
-    doCheck = false;
-
-    buildInputs = with self; [ setuptools_scm ];
-
-    propagatedBuildInputs = with self; [ six ];
-  };
+  tempora= callPackage ../development/python-modules/tempora { };
 
   hypchat = buildPythonPackage rec {
     name = "hypchat-${version}";
