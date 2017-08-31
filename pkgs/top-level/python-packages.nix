@@ -24116,27 +24116,6 @@ EOF
 
   widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
 
-  willie = buildPythonPackage rec {
-    name = "willie-${version}";
-    version = "5.5.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/w/willie/${name}.tar.gz";
-      sha256 = "e03dd26ea694b877a2b3b7b4dcca8e79420e7f346abab34292bff43d992a8cc5";
-    };
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ feedparser pytz lxml praw pyenchant pygeoip backports_ssl_match_hostname ];
-    checkPhase = ''
-      py.test test
-    '';
-
-    meta = {
-      description = "A simple, lightweight, open source, easy-to-use IRC utility bot, written in Python";
-      homepage = http://willie.dftba.net/;
-      license = licenses.efl20;
-    };
-  };
 
   wokkel = buildPythonPackage (rec {
     url = "http://wokkel.ik.nu/releases/0.7.0/wokkel-0.7.0.tar.gz";
