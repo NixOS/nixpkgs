@@ -28278,20 +28278,7 @@ EOF
     };
   };
 
-  ROPGadget = buildPythonPackage rec {
-    name = "ROPGadget-5.4";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/R/ROPGadget/${name}.tar.gz";
-      sha256 = "19wly4x3mq73c91pplqjk0c7sx6710887czh514qk5l7j0ky6dxg";
-    };
-    propagatedBuildInputs = with self; [ capstone ];
-    meta = with pkgs.stdenv.lib; {
-      description = "Tool to search for gadgets in binaries to facilitate ROP exploitation";
-      homepage = "http://shell-storm.org/project/ROPgadget/";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ bennofs ];
-    };
-  };
+  ROPGadget = callPackage ../development/python-modules/ROPGadget { };
 
   # We need "normal" libxml2 and not the python package by the same name.
   pywbem = callPackage ../development/python-modules/pywbem { libxml2 = pkgs.libxml2; };
