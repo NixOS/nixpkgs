@@ -61,7 +61,7 @@ if [ -z "${NIX_@infixSalt@_LDFLAGS_SET:-}" ]; then
     extraBefore+=($NIX_@infixSalt@_LDFLAGS_BEFORE)
 fi
 
-extraAfter+=($NIX_@infixSalt@_LDFLAGS_AFTER $NIX_@infixSalt@_LDFLAGS_HARDEN)
+extraAfter+=($NIX_@infixSalt@_LDFLAGS_AFTER)
 
 declare -a libDirs
 declare -A libs
