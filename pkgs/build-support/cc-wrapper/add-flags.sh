@@ -4,7 +4,7 @@
 # that case, it is cheaper/better to not repeat this step and let the forked
 # wrapped binary just inherit the work of the forker's wrapper script.
 
-var_templates=(
+var_templates_list=(
     NIX+CFLAGS_COMPILE
     NIX+CFLAGS_LINK
     NIX+CXXSTDLIB_COMPILE
@@ -14,7 +14,9 @@ var_templates=(
     NIX+LDFLAGS
     NIX+LDFLAGS_BEFORE
     NIX+LDFLAGS_AFTER
+)
 
+var_templates_bool=(
     NIX+SET_BUILD_ID
     NIX+DONT_SET_RPATH
     NIX+ENFORCE_NO_NATIVE
@@ -35,8 +37,11 @@ fi
 
 # We need to mangle names for hygiene, but also take parameters/overrides
 # from the environment.
-for var in "${var_templates[@]}"; do
+for var in "${var_templates_list[@]}"; do
     mangleVarList "$var" "${role_infixes[@]}"
+done
+for var in "${var_templates_bool[@]}"; do
+    mangleVarBool "$var" "${role_infixes[@]}"
 done
 
 # `-B@out@/bin' forces cc to use ld-wrapper.sh when calling ld.
