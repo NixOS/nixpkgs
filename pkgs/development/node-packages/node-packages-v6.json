@@ -45,6 +45,7 @@
 , "livedown"
 , "meat"
 , "mocha"
+, "multi-file-swagger"
 , "nijs"
 , "node2nix"
 , "node-gyp"

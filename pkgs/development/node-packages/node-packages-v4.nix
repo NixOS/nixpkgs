@@ -4954,13 +4954,13 @@ let
         sha512 = "2x19fs1qvg7ifsdvii4g8kqpa5hir1lm0k0y0fz6dhm5c8gh4z9il4wqczl078p2ikmrav23dmj86cxy8y1j22k4mv59d8qq6c8wx1n";
       };
     };
-    "supports-color-4.3.0" = {
+    "supports-color-4.4.0" = {
       name = "supports-color";
       packageName = "supports-color";
-      version = "4.3.0";
+      version = "4.4.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/supports-color/-/supports-color-4.3.0.tgz";
-        sha512 = "3zlrvz89lkcf45xbbwx5lx216ics9xnmn7jg3rwlwfh6q2wrpd08xys3jj70c4qi6ipapd19n4brkz3nvzxi8fdlqj56rp0hd8vrzv1";
+        url = "https://registry.npmjs.org/supports-color/-/supports-color-4.4.0.tgz";
+        sha512 = "1flwwfdd7gg94xrc0b2ard3qjx4cpy600q49gx43y8pzvs7j56q78bjhv8mk18vgbggr4fd11jda8ck5cdrkc5jcjs04nlp7kwbg85c";
       };
     };
     "color-convert-1.9.0" = {
@@ -8276,7 +8276,7 @@ in
                     ];
                   })
                   sources."escape-string-regexp-1.0.5"
-                  (sources."supports-color-4.3.0" // {
+                  (sources."supports-color-4.4.0" // {
                     dependencies = [
                       sources."has-flag-2.0.0"
                     ];
