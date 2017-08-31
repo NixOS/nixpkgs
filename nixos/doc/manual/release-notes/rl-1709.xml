@@ -176,6 +176,14 @@ rmdir /var/lib/ipfs/.ipfs
       removed. The system support had been broken for several years.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      Touchpad support should now be enabled through
+      <literal>libinput</literal> as <literal>synaptics</literal> is
+      now deprecated. See the option
+      <literal>services.xserver.libinput.enable</literal>.
+    </para>
+  </listitem>
 </itemizedlist>
 
 <para>Other notable improvements:</para>
