@@ -530,15 +530,6 @@ substituteInPlace() {
     substitute "$fileName" "$fileName" "$@"
 }
 
-# List the names of the environment variables that are valid Bash names.
-listVars() {
-    # "export" prints "declare -x name=value", quoted for eval.
-    declare() {
-        echo "${2%%=*}"
-    }
-    eval "$(export)"
-    unset declare
-}
 
 # Substitute all environment variables that start with a lowercase character and
 # are valid Bash names.
@@ -547,9 +538,9 @@ substituteAll() {
     local output="$2"
     local -a args=()
 
-    for varName in $(listVars | grep '^[a-z]'); do
+    for varName in $(awk 'BEGIN { for (v in ENVIRON) if (v ~ /^[a-z][a-zA-Z0-9_]*$/) print v }'); do
         if [ "${NIX_DEBUG:-}" = "1" ]; then
-            echo "@${varName}@ -> '${!varName}'"
+            printf "@%s@ -> %q\n" "${varName}" "${!varName}"
         fi
         args+=("--subst-var" "$varName")
     done
