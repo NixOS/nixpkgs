@@ -17821,9 +17821,7 @@ with pkgs;
     inherit (lib) makeScope;
   });
 
-  mate = recurseIntoAttrs (callPackage ../desktops/mate {
-    callPackage = newScope pkgs.mate;
-  });
+  mate = recurseIntoAttrs (callPackage ../desktops/mate { });
 
   maxx = callPackage ../desktops/maxx { };
 
