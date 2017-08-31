@@ -15,6 +15,7 @@ rec {
   libmateweather = callPackage ./libmateweather { };
   marco = callPackage ./marco { };
   mate-common = callPackage ./mate-common { };
+  mate-control-center = callPackage ./mate-control-center { };
   mate-desktop = callPackage ./mate-desktop { };
   mate-icon-theme = callPackage ./mate-icon-theme { };
   mate-icon-theme-faenza = callPackage ./mate-icon-theme-faenza { };
@@ -31,6 +32,7 @@ rec {
     libmateweather
     marco
     mate-common
+    mate-control-center
     mate-desktop
     mate-icon-theme
     mate-menus
