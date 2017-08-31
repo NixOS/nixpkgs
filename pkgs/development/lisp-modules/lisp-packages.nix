@@ -18,20 +18,6 @@ let lispPackages = rec {
     };
   };
 
-  clx-xkeyboard = buildLispPackage rec {
-    baseName = "clx-xkeyboard";
-    version = "git-20150523";
-    description = "CLX support for X Keyboard extensions";
-    deps = with (pkgs.quicklispPackagesFor clwrapper); [clx];
-    # Source type: git
-    src = pkgs.fetchgit {
-      url = ''https://github.com/filonenko-mikhail/clx-xkeyboard'';
-      sha256 = "11b34da7d354a709a24774032e85a8947be023594f8a333eaff6d4aa79f2b3db";
-      rev = ''11455d36283ef31c498bd58ffebf48c0f6b86ea6'';
-    };
-    buildSystems = ["xkeyboard"];
-  };
-
   quicklisp = buildLispPackage rec {
     baseName = "quicklisp";
     version = "2017-03-06";

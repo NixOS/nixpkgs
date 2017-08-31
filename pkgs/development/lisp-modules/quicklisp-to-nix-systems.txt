@@ -110,6 +110,7 @@ uffi
 usocket
 woo
 wookie
+xkeyboard
 xmls
 xsubseq
 yason
