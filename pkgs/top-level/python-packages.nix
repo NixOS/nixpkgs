@@ -8650,6 +8650,8 @@ in {
 
   django-sites = callPackage ../development/python-modules/django-sites { };
 
+  django-sr = callPackage ../development/python-modules/django-sr { };
+
   django_tagging = callPackage ../development/python-modules/django_tagging { };
 
   django_tagging_0_3 = self.django_tagging.overrideAttrs (attrs: rec {
