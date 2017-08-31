@@ -154,10 +154,10 @@ in rec {
   nix = nixStable;
 
   nixStable = (common rec {
-    name = "nix-1.11.13";
+    name = "nix-1.11.14";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "0913975e262f8069fde6e71a5fae757bb3aef558c51d1711034c525146ea5913";
+      sha256 = "26593c831addf1d40f6b7d131f394cb0f9fbec9e46471369faed16eaa2c4b7e4";
     };
   }) // { perl-bindings = nixStable; };
 
