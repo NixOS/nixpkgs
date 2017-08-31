@@ -15668,7 +15668,7 @@ with pkgs;
 
   pflask = callPackage ../os-specific/linux/pflask {};
 
-  photoqt = libsForQt5.callPackage ../applications/graphics/photoqt { };
+  photoqt = libsForQt56.callPackage ../applications/graphics/photoqt { };
 
   phototonic = libsForQt5.callPackage ../applications/graphics/phototonic { };
 
