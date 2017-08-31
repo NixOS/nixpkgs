@@ -8901,6 +8901,8 @@ in {
     };
   };
 
+  djmail = callPackage ../development/python-modules/djmail { };
+
   pillowfight = buildPythonPackage rec {
     name = "pillowfight-${version}";
     version = "0.2";
