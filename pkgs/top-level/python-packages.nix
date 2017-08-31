@@ -251,6 +251,8 @@ in {
     libglade = pkgs.gnome2.libglade;
   };
 
+  pyjwkest = callPackage ../development/python-modules/pyjwkest { };
+
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
     pythonPackages = self;
   };
