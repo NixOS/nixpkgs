@@ -8638,6 +8638,8 @@ in {
 
   django-ipware = callPackage ../development/python-modules/django-ipware { };
 
+  django-jinja = callPackage ../development/python-modules/django-jinja2 { };
+
   django_polymorphic = callPackage ../development/python-modules/django-polymorphic { };
 
   django_tagging = callPackage ../development/python-modules/django_tagging { };
