@@ -1,0 +1,344 @@
+From 4434512eb2f80eb47f9ac9050ef5aee3d0202117 Mon Sep 17 00:00:00 2001
+From: John Ralls <jralls@ceridwen.us>
+Date: Tue, 16 May 2017 13:33:12 -0700
+Subject: [PATCH] CoreText: Remove absolute size and scaling to screen
+ resolution.
+
+Cairo's CGFont backend already handles scaling fonts to the display
+resolution, so scaling to the screen screen resolution in Pango's
+CoreText backend generates double-sized text on a Retina display.
+
+The layout test depended on providing a (bogus) resolution of 96DPI and
+scaling the font to it in order to obtain the "expected" layout results.
+This is replaced by adjusting the font size in test-layout.c if Pango is
+compiled for CoreText.
+
+https://bugzilla.gnome.org/show_bug.cgi?id=782393
+---
+ pango/pangocairo-coretextfont.c    | 22 ++----------
+ pango/pangocairo-coretextfontmap.c |  2 +-
+ pango/pangocoretext-fontmap.c      | 69 ++++++++++++++------------------------
+ pango/pangocoretext-private.h      |  2 +-
+ pango/pangocoretext.c              |  4 +++
+ tests/test-layout.c                | 11 +++++-
+ 6 files changed, 44 insertions(+), 66 deletions(-)
+
+diff --git a/pango/pangocairo-coretextfont.c b/pango/pangocairo-coretextfont.c
+index 0f2a9ef1..c07f1c77 100644
+--- a/pango/pangocairo-coretextfont.c
++++ b/pango/pangocairo-coretextfont.c
+@@ -36,8 +36,6 @@ struct _PangoCairoCoreTextFont
+ {
+   PangoCoreTextFont font;
+   PangoCairoFontPrivate cf_priv;
+-
+-  int abs_size;
+ };
+ 
+ struct _PangoCairoCoreTextFontClass
+@@ -164,18 +162,6 @@ pango_cairo_core_text_font_create_base_metrics_for_context (PangoCairoFont *font
+   return metrics;
+ }
+ 
+-static PangoFontDescription *
+-pango_cairo_core_text_font_describe_absolute (PangoFont *font)
+-{
+-  PangoFontDescription *desc;
+-  PangoCairoCoreTextFont *cafont = (PangoCairoCoreTextFont *) font;
+-
+-  desc = pango_font_describe (font);
+-  pango_font_description_set_absolute_size (desc, cafont->abs_size);
+-
+-  return desc;
+-}
+-
+ static void
+ pango_cairo_core_text_font_finalize (GObject *object)
+ {
+@@ -196,7 +182,6 @@ pango_cairo_core_text_font_class_init (PangoCairoCoreTextFontClass *class)
+ 
+   font_class->get_glyph_extents = pango_cairo_core_text_font_get_glyph_extents;
+   font_class->get_metrics = _pango_cairo_font_get_metrics;
+-  font_class->describe_absolute = pango_cairo_core_text_font_describe_absolute;
+ }
+ 
+ static void
+@@ -214,11 +199,10 @@ _pango_cairo_core_text_font_new (PangoCairoCoreTextFontMap  *cafontmap,
+   CTFontRef font_ref;
+   CTFontDescriptorRef ctdescriptor;
+   CGFontRef font_id;
+-  double size, abs_size;
++  double size;
+   cairo_matrix_t font_matrix;
+ 
+-  abs_size = pango_core_text_font_key_get_absolute_size (key);
+-  size = pango_units_to_double (abs_size);
++  size = pango_units_to_double (pango_core_text_font_key_get_size (key));
+ 
+   size /= pango_matrix_get_font_scale_factor (pango_core_text_font_key_get_matrix (key));
+ 
+@@ -235,8 +219,6 @@ _pango_cairo_core_text_font_new (PangoCairoCoreTextFontMap  *cafontmap,
+   cafont = g_object_new (PANGO_TYPE_CAIRO_CORE_TEXT_FONT, NULL);
+   cfont = PANGO_CORE_TEXT_FONT (cafont);
+ 
+-  cafont->abs_size = abs_size;
+-
+   _pango_core_text_font_set_ctfont (cfont, font_ref);
+ 
+   if (synthesize_italic)
+diff --git a/pango/pangocairo-coretextfontmap.c b/pango/pangocairo-coretextfontmap.c
+index 5054b7a8..ba5dcec0 100644
+--- a/pango/pangocairo-coretextfontmap.c
++++ b/pango/pangocairo-coretextfontmap.c
+@@ -186,5 +186,5 @@ static void
+ pango_cairo_core_text_font_map_init (PangoCairoCoreTextFontMap *cafontmap)
+ {
+   cafontmap->serial = 1;
+-  cafontmap->dpi = 96.;
++  cafontmap->dpi = 72.;
+ }
+diff --git a/pango/pangocoretext-fontmap.c b/pango/pangocoretext-fontmap.c
+index 6cd9fe9f..4d101847 100644
+--- a/pango/pangocoretext-fontmap.c
++++ b/pango/pangocoretext-fontmap.c
+@@ -827,12 +827,6 @@ get_scaled_size (PangoCoreTextFontMap       *fontmap,
+ {
+   double size = pango_font_description_get_size (desc);
+ 
+-  if (!pango_font_description_get_size_is_absolute (desc))
+-    {
+-      double dpi = pango_core_text_font_map_get_resolution (fontmap, context);
+-      size = size * dpi / 72.;
+-    }
+-
+   return .5 + pango_matrix_get_font_scale_factor (pango_context_get_matrix (context)) * size;
+ }
+ 
+@@ -846,7 +840,7 @@ struct _PangoCoreTextFontsetKey
+   PangoLanguage *language;
+   PangoFontDescription *desc;
+   PangoMatrix matrix;
+-  int pixelsize;
++  int pointsize;
+   double resolution;
+   PangoGravity gravity;
+   gpointer context_key;
+@@ -865,7 +859,7 @@ pango_core_text_fontset_key_init (PangoCoreTextFontsetKey    *key,
+   key->fontmap = fontmap;
+   get_context_matrix (context, &key->matrix);
+   key->language = language;
+-  key->pixelsize = get_scaled_size (fontmap, context, desc);
++  key->pointsize = get_scaled_size (fontmap, context, desc);
+   key->resolution = pango_core_text_font_map_get_resolution (fontmap, context);
+   key->gravity = pango_context_get_gravity (context);
+   key->desc = pango_font_description_copy_static (desc);
+@@ -885,7 +879,7 @@ pango_core_text_fontset_key_copy (const PangoCoreTextFontsetKey *old)
+   key->fontmap = old->fontmap;
+   key->matrix = old->matrix;
+   key->language = old->language;
+-  key->pixelsize = old->pixelsize;
++  key->pointsize = old->pointsize;
+   key->resolution = old->resolution;
+   key->gravity = old->gravity;
+   key->desc = pango_font_description_copy (old->desc);
+@@ -929,7 +923,7 @@ pango_core_text_fontset_key_equal (const PangoCoreTextFontsetKey *key_a,
+                                    const PangoCoreTextFontsetKey *key_b)
+ {
+   if (key_a->language == key_b->language &&
+-      key_a->pixelsize == key_b->pixelsize &&
++      key_a->pointsize == key_b->pointsize &&
+       key_a->resolution == key_b->resolution &&
+       key_a->gravity == key_b->gravity &&
+       pango_font_description_equal (key_a->desc, key_b->desc) &&
+@@ -979,7 +973,7 @@ struct _PangoCoreTextFontKey
+   CTFontDescriptorRef ctfontdescriptor;
+   PangoMatrix matrix;
+   PangoGravity gravity;
+-  int pixelsize;
++  int pointsize;
+   double resolution;
+   gboolean synthetic_italic;
+   gpointer context_key;
+@@ -995,7 +989,7 @@ pango_core_text_font_key_init (PangoCoreTextFontKey    *key,
+   key->fontmap = ctfontmap;
+   key->ctfontdescriptor = ctdescriptor;
+   key->matrix = *pango_core_text_fontset_key_get_matrix (fontset_key);
+-  key->pixelsize = fontset_key->pixelsize;
++  key->pointsize = fontset_key->pointsize;
+   key->resolution = fontset_key->resolution;
+   key->synthetic_italic = synthetic_italic;
+   key->gravity = pango_core_text_fontset_key_get_gravity (fontset_key);
+@@ -1011,7 +1005,7 @@ pango_core_text_font_key_copy (const PangoCoreTextFontKey *old)
+   key->ctfontdescriptor = old->ctfontdescriptor;
+   CFRetain (key->ctfontdescriptor);
+   key->matrix = old->matrix;
+-  key->pixelsize = old->pixelsize;
++  key->pointsize = old->pointsize;
+   key->resolution = old->resolution;
+   key->synthetic_italic = old->synthetic_italic;
+   key->gravity = old->gravity;
+@@ -1057,7 +1051,7 @@ pango_core_text_font_key_equal (const PangoCoreTextFontKey *key_a,
+   if (CFEqual (key_a->ctfontdescriptor, key_b->ctfontdescriptor) &&
+       memcmp (&key_a->matrix, &key_b->matrix, 4 * sizeof (double)) == 0 &&
+       key_a->gravity == key_b->gravity &&
+-      key_a->pixelsize == key_b->pixelsize &&
++      key_a->pointsize == key_b->pointsize &&
+       key_a->resolution == key_b->resolution &&
+       key_a->synthetic_italic == key_b->synthetic_italic)
+     {
+@@ -1073,9 +1067,9 @@ pango_core_text_font_key_equal (const PangoCoreTextFontKey *key_a,
+ }
+ 
+ int
+-pango_core_text_font_key_get_absolute_size (const PangoCoreTextFontKey *key)
++pango_core_text_font_key_get_size (const PangoCoreTextFontKey *key)
+ {
+-  return key->pixelsize;
++  return key->pointsize;
+ }
+ 
+ double
+@@ -1162,32 +1156,34 @@ pango_core_text_font_map_new_font (PangoCoreTextFontMap    *fontmap,
+ static gboolean
+ find_best_match (PangoCoreTextFamily         *font_family,
+                  const PangoFontDescription  *description,
+-                 PangoFontDescription       **best_description,
+                  PangoCoreTextFace          **best_face)
+ {
+   PangoFontDescription *new_desc;
++  PangoFontDescription *best_description = NULL;
+   int i;
+ 
+-  *best_description = NULL;
+   *best_face = NULL;
+ 
+   for (i = 0; i < font_family->n_faces; i++)
+     {
+       new_desc = pango_font_face_describe (font_family->faces[i]);
+ 
+-      if (pango_font_description_better_match (description, *best_description, new_desc))
++      if (pango_font_description_better_match (description, best_description,
++                                               new_desc))
+ 	{
+-	  pango_font_description_free (*best_description);
+-	  *best_description = new_desc;
++	  pango_font_description_free (best_description);
++	  best_description = new_desc;
+ 	  *best_face = (PangoCoreTextFace *)font_family->faces[i];
+ 	}
+       else
+ 	pango_font_description_free (new_desc);
+     }
+ 
+-  if (*best_description)
+-    return TRUE;
+-
++  if (best_description)
++    {
++      pango_font_description_free (best_description);
++      return TRUE;
++    }
+   return FALSE;
+ }
+ 
+@@ -1557,33 +1553,20 @@ pango_core_text_fontset_new (PangoCoreTextFontsetKey    *key,
+ 
+   if (font_family)
+     {
+-      PangoFontDescription *best_description;
+       PangoCoreTextFace *best_face;
+-      gint size;
+-      gboolean is_absolute;
+ 
+       /* Force a listing of the available faces */
+       pango_font_family_list_faces ((PangoFontFamily *)font_family, NULL, NULL);
+ 
+-      if (!find_best_match (font_family, description, &best_description, &best_face))
++      if (!find_best_match (font_family, description, &best_face))
+ 	return NULL;
+ 
+-      size = pango_font_description_get_size (description);
+-      if (size < 0)
+-        return NULL;
+-
+-      is_absolute = pango_font_description_get_size_is_absolute (description);
+-      if (is_absolute)
+-        pango_font_description_set_absolute_size (best_description, size);
+-      else
+-        pango_font_description_set_size (best_description, size);
++      best_font =
++           pango_core_text_font_map_new_font (key->fontmap,
++                                              key,
++                                              best_face->ctfontdescriptor,
++                                              best_face->synthetic_italic);
+ 
+-      best_font = pango_core_text_font_map_new_font (key->fontmap,
+-                                                     key,
+-                                                     best_face->ctfontdescriptor,
+-                                                     best_face->synthetic_italic);
+-
+-      pango_font_description_free (best_description);
+     }
+   else
+     return NULL;
+diff --git a/pango/pangocoretext-private.h b/pango/pangocoretext-private.h
+index d7775871..10b3e4f8 100644
+--- a/pango/pangocoretext-private.h
++++ b/pango/pangocoretext-private.h
+@@ -100,7 +100,7 @@ void                  _pango_core_text_font_set_ctfont           (PangoCoreTextF
+ PangoFontDescription *_pango_core_text_font_description_from_ct_font_descriptor (CTFontDescriptorRef desc);
+ 
+ _PANGO_EXTERN
+-int                   pango_core_text_font_key_get_absolute_size    (const PangoCoreTextFontKey *key);
++int                   pango_core_text_font_key_get_size    (const PangoCoreTextFontKey *key);
+ _PANGO_EXTERN
+ double                pango_core_text_font_key_get_resolution       (const PangoCoreTextFontKey *key);
+ _PANGO_EXTERN
+diff --git a/pango/pangocoretext.c b/pango/pangocoretext.c
+index a8c0b5d2..2fb57dbb 100644
+--- a/pango/pangocoretext.c
++++ b/pango/pangocoretext.c
+@@ -225,6 +225,10 @@ pango_core_text_font_class_init (PangoCoreTextFontClass *class)
+   object_class->finalize = pango_core_text_font_finalize;
+ 
+   font_class->describe = pango_core_text_font_describe;
++  /* There's no such thing as "absolute" with CoreText, so just return
++   * the regular description.
++   */
++  font_class->describe_absolute = pango_core_text_font_describe;
+   font_class->get_coverage = pango_core_text_font_get_coverage;
+   font_class->find_shaper = pango_core_text_font_find_shaper;
+   font_class->get_font_map = pango_core_text_font_get_font_map;
+diff --git a/tests/test-layout.c b/tests/test-layout.c
+index 75af21bd..a066e87f 100644
+--- a/tests/test-layout.c
++++ b/tests/test-layout.c
+@@ -24,6 +24,7 @@
+ #include <unistd.h>
+ #include <locale.h>
+ 
++#include "config.h"
+ #include <pango/pangocairo.h>
+ #include "test-common.h"
+ 
+@@ -261,8 +262,16 @@ test_file (const gchar *filename, GString *string)
+   parse_params (contents, &width, &ellipsize_at, &ellipsize, &wrap);
+ 
+   layout = pango_layout_new (context);
+-
++/* The layout tests are predicated on scaling fonts to 90 DPI, but
++ * Apple's font APIs (CoreText and CoreGraphics) don't work that way
++ * so we have to use a bigger font to get the results to agree with
++ * the expected values.
++ */
++#if defined (HAVE_CORE_TEXT) && defined (HAVE_CAIRO_QUARTZ)
++  desc = pango_font_description_from_string ("Cantarell 14.5");
++#else
+   desc = pango_font_description_from_string ("Cantarell 11");
++#endif
+   pango_layout_set_font_description (layout, desc);
+   pango_font_description_free (desc); 
+ 
+-- 
+2.11.0 (Apple Git-81)
+
