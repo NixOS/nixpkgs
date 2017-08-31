@@ -28183,9 +28183,7 @@ EOF
     propagatedBuildInputs = with self; [ websocket_client requests ];
   };
 
-  tempora = buildPythonPackage rec {
-    name = "tempora-${version}";
-    version = "1.4";
+  tempora= callPackage ../development/python-modules/tempora { };
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/tempora/${name}.tar.gz";
