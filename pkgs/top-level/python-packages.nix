@@ -17760,139 +17760,21 @@ in {
      };
    };
 
-  pyfeed = buildPythonPackage rec {
-    url = "http://www.blarg.net/%7Esteveha/pyfeed-0.7.4.tar.gz";
-    name = stdenv.lib.nameFromURL url ".tar";
-    src = pkgs.fetchurl {
-      inherit url;
-      sha256 = "1h4msq573m7wm46h3cqlx4rsn99f0l11rhdqgf50lv17j8a8vvy1";
-    };
-    propagatedBuildInputs = with self; [xe];
+  pyfeed = callPackage ../development/python-modules/pyfeed { };
 
-    # error: invalid command 'test'
-    doCheck = false;
+  pyfftw = callPackage ../development/python-modules/pyfftw { };
 
-    meta = {
-      homepage = "http://home.blarg.net/~steveha/pyfeed.html";
-      description = "Tools for syndication feeds";
-    };
-  };
-
-  pyfftw = buildPythonPackage rec {
-    name = "pyfftw-${version}";
-    version = "0.10.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyFFTW/pyFFTW-${version}.tar.gz";
-      sha256 = "739b436b7c0aeddf99a48749380260364d2dc027cf1d5f63dafb5f50068ede1a";
-    };
-
-    buildInputs = [ pkgs.fftw pkgs.fftwFloat pkgs.fftwLongDouble];
-
-    propagatedBuildInputs = with self; [ numpy scipy ];
-
-    # Tests cannot import pyfftw. pyfftw works fine though.
-    doCheck = false;
-
-    preConfigure = ''
-      export LDFLAGS="-L${pkgs.fftw.out}/lib -L${pkgs.fftwFloat.out}/lib -L${pkgs.fftwLongDouble.out}/lib"
-      export CFLAGS="-I${pkgs.fftw.dev}/include -I${pkgs.fftwFloat.dev}/include -I${pkgs.fftwLongDouble.dev}/include"
-    '';
-    #+ optionalString isDarwin ''
-    #  export DYLD_LIBRARY_PATH="${pkgs.fftw.out}/lib"
-    #'';
-
-    meta = {
-      description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
-      homepage = http://hgomersall.github.com/pyFFTW/;
-      license = with licenses; [ bsd2 bsd3 ];
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
-
-  pyfiglet = buildPythonPackage rec {
-    name = "pyfiglet-${version}";
-    version = "0.7.5";
-
-    src = pkgs.fetchurl {
-      url    = "mirror://pypi/p/pyfiglet/${name}.tar.gz";
-      sha256 = "04jy4182hn5xfs6jf432gxclfj1rhssd7bsf0b4gymrjzkhr8qa4";
-    };
-
-    doCheck = false;
-
-    meta = {
-      description = "FIGlet in pure Python";
-      license     = licenses.gpl2Plus;
-      maintainers = with maintainers; [ thoughtpolice ];
-    };
-  };
+  pyfiglet = callPackage ../development/python-modules/pyfiglet { };
 
   pyflakes = callPackage ../development/python-modules/pyflakes { };
 
-  pyftgl = buildPythonPackage rec {
-    name = "pyftgl-0.4b";
+  pyftgl = callPackage ../development/python-modules/pyftgl { };
 
-    src = pkgs.fetchFromGitHub {
-      owner = "umlaeute";
-      repo = "pyftgl";
-      rev = "0.4b";
-      sha256 = "12zcjv4cwwjihiaf74kslrdmmk4bs47h7006gyqfwdfchfjdgg4r";
-    };
-
-    buildInputs = with self; [ boost pkgs.freetype pkgs.ftgl pkgs.mesa ];
-
-    meta = {
-      description = "Python bindings for FTGL (FreeType for OpenGL)";
-      license = licenses.gpl2Plus;
-    };
-  };
-
-  pygeoip = buildPythonPackage rec {
-    name = "pygeoip-0.3.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pygeoip/pygeoip-0.3.2.tar.gz";
-      sha256 = "f22c4e00ddf1213e0fae36dc60b46ee7c25a6339941ec1a975539014c1f9a96d";
-    };
-
-    # requires geoip samples
-    doCheck = false;
-
-    buildInputs = with self; [ nose ];
-
-    meta = {
-      description = "Pure Python GeoIP API";
-      homepage = https://github.com/appliedsec/pygeoip;
-      license = licenses.lgpl3Plus;
-    };
-  };
+  pygeoip = callPackage ../development/python-modules/pygeoip {};
 
   PyGithub = callPackage ../development/python-modules/pyGithub {};
 
-  pyglet = buildPythonPackage rec {
-    name = "pyglet-${version}";
-    version = "1.2.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyglet/pyglet-${version}.tar.gz";
-      sha256 = "9f62ffbbcf2b202d084bf158685e77d28b8f4f5f2738f4c5e63a947a07503445";
-    };
-
-    patchPhase = let
-      libs = [ pkgs.mesa pkgs.xorg.libX11 pkgs.freetype pkgs.fontconfig ];
-      paths = concatStringsSep "," (map (l: "\"${l}/lib\"") libs);
-    in "sed -i -e 's|directories\.extend.*lib[^]]*|&,${paths}|' pyglet/lib.py";
-
-    doCheck = false;
-
-    meta = {
-      homepage = "http://www.pyglet.org/";
-      description = "A cross-platform windowing and multimedia library";
-      license = licenses.bsd3;
-      platforms = platforms.mesaPlatforms;
-    };
-  };
+  pyglet = callPackage ../development/python-modules/pyglet {};
 
   pygments = callPackage ../development/python-modules/Pygments { };
 
@@ -17907,28 +17789,7 @@ in {
     };
   });
 
-  pygpgme = buildPythonPackage rec {
-    version = "0.3";
-    name = "pygpgme-${version}";
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "https://launchpad.net/pygpgme/trunk/${version}/+download/${name}.tar.gz";
-      sha256 = "5fd887c407015296a8fd3f4b867fe0fcca3179de97ccde90449853a3dfb802e1";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ pkgs.gpgme ];
-
-    meta = {
-      homepage = "https://launchpad.net/pygpgme";
-      description = "A Python wrapper for the GPGME library";
-      license = licenses.lgpl21;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
+  pygpgme = callPackage ../development/python-modules/pygpgme { };
 
   pylint = callPackage ../development/python-modules/pylint { };
 
@@ -17940,42 +17801,9 @@ in {
     proj = null;
   };
 
-  pyrr = buildPythonPackage rec {
-    name = "pyrr-${version}";
-    version = "0.7.2";
+  pyrr = callPackage ../development/python-modules/pyrr { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyrr/pyrr-${version}.tar.gz";
-      sha256 = "04a65a9fb5c746b41209f55b21abf47a0ef80a4271159d670ca9579d9be3b4fa";
-    };
-
-    buildInputs = with self; [ setuptools ];
-    propagatedBuildInputs = with self; [ multipledispatch numpy ];
-
-    meta = {
-      description = "3D mathematical functions using NumPy";
-      homepage = https://github.com/adamlwgriffiths/Pyrr/;
-      license = licenses.bsd2;
-    };
-  };
-
-  pyshp = buildPythonPackage rec {
-    name = "pyshp-${version}";
-    version = "1.2.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyshp/pyshp-${version}.tar.gz";
-      sha256 = "e18cc19659dadc5ddaa891eb780a6958094da0cf105a1efe0f67e75b4fa1cdf9";
-    };
-
-    buildInputs = with self; [ setuptools ];
-
-    meta = {
-      description = "Pure Python read/write support for ESRI Shapefile format";
-      homepage = https://github.com/GeospatialPython/pyshp;
-      license = licenses.mit;
-    };
-  };
+  pyshp = callPackage ../development/python-modules/pyshp { };
 
   pyspread = callPackage ../development/python-modules/pyspread { };
 
@@ -28146,33 +27974,9 @@ EOF
     propagatedBuildInputs = with self; [ websocket_client requests ];
   };
 
-  tempora = buildPythonPackage rec {
-    name = "tempora-${version}";
-    version = "1.4";
+  tempora= callPackage ../development/python-modules/tempora { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tempora/${name}.tar.gz";
-      sha256 = "0ysvns22i5hzhl5ln4n86bq10j8xwvd09z8qw1zjr3s0fj3lynza";
-    };
-
-    doCheck = false;
-
-    buildInputs = with self; [ setuptools_scm ];
-
-    propagatedBuildInputs = with self; [ six ];
-  };
-
-  hypchat = buildPythonPackage rec {
-    name = "hypchat-${version}";
-    version = "0.21";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/hypchat/${name}.tar.gz";
-      sha256 = "1sd8f3gihagaqd848dqy6xw457fa4f9bla1bfyni7fq3h76sjdzg";
-    };
-
-    propagatedBuildInputs = with self; [ requests six dateutil ];
-  };
+  hypchat = callPackage ../development/python-modules/hypchat { };
 
   pivy = buildPythonPackage rec {
     version = "20101207";
@@ -28186,22 +27990,7 @@ EOF
     buildInputs = with self; [ pkgs.swig1 pkgs.coin3d pkgs.soqt pkgs.mesa pkgs.xorg.libXi ];
   };
 
-  smugpy = buildPythonPackage rec {
-    name    = pname + "-" + version;
-    pname   = "smugpy";
-    version = "20131218";
-
-    src = pkgs.fetchFromGitHub {
-      owner  = "chrishoffman";
-      repo   = pname;
-      rev    = "f698d6749ce446e3d6c7d925b2cd1cd5b3d695ea";
-      sha256 = "029x6hm1744iznv4sw8sfyl974wmx1sqnr1k5dvzzwpk3ja49a1y";
-    };
-
-    doCheck = false; # Tries to login to Smugmug…
-
-    propagatedBuildInputs = with self; [ ];
-  };
+  smugpy = callPackage ../development/python-modules/smugpy { };
 
   smugline = stdenv.mkDerivation rec {
     name    = pname + "-" + version;
@@ -28231,31 +28020,7 @@ EOF
 
   txaio = callPackage ../development/python-modules/txaio { };
 
-  ramlfications = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "ramlfications";
-    version = "0.1.9";
-
-    meta = {
-      description = "A Python RAML parser.";
-      homepage    = "https://ramlfications.readthedocs.org";
-      license     = licenses.asl20;
-      maintainers = with maintainers; [ nand0p ];
-      platforms   = platforms.all;
-    };
-
-    doCheck = false;
-    # [darwin]  AssertionError: Expected 'update_mime_types' to have been called once. Called 0 times.
-
-    buildInputs = with self; [ mock pytest pytest-mock pytest-server-fixtures pytest-localserver ];
-
-    propagatedBuildInputs = with self; [ termcolor click markdown2 six jsonref pyyaml xmltodict attrs ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/${pname}/${name}.tar.gz";
-      sha256 = "0xvnna7kaq4nm5nfnwcwbr5bcm2s532hgyp7kq4v9iivn48rrf3v";
-    };
-  };
+  ramlfications = callPackage ../development/python-modules/ramlfications { };
 
   yapf = callPackage ../development/python-modules/yapf { };
 
@@ -28304,20 +28069,7 @@ EOF
     };
   };
 
-  ROPGadget = buildPythonPackage rec {
-    name = "ROPGadget-5.4";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/R/ROPGadget/${name}.tar.gz";
-      sha256 = "19wly4x3mq73c91pplqjk0c7sx6710887czh514qk5l7j0ky6dxg";
-    };
-    propagatedBuildInputs = with self; [ capstone ];
-    meta = with pkgs.stdenv.lib; {
-      description = "Tool to search for gadgets in binaries to facilitate ROP exploitation";
-      homepage = "http://shell-storm.org/project/ROPgadget/";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ bennofs ];
-    };
-  };
+  ROPGadget = callPackage ../development/python-modules/ROPGadget { };
 
   # We need "normal" libxml2 and not the python package by the same name.
   pywbem = callPackage ../development/python-modules/pywbem { libxml2 = pkgs.libxml2; };
