@@ -17778,24 +17778,7 @@ in {
 
   pyfeed = callPackage ../development/python-modules/pyfeed { };
 
-    meta = {
-      description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
-      homepage = http://hgomersall.github.com/pyFFTW/;
-      license = with licenses; [ bsd2 bsd3 ];
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
-
-  pyfiglet = buildPythonPackage rec {
-    name = "pyfiglet-${version}";
-    version = "0.7.5";
-
-    src = pkgs.fetchurl {
-      url    = "mirror://pypi/p/pyfiglet/${name}.tar.gz";
-      sha256 = "04jy4182hn5xfs6jf432gxclfj1rhssd7bsf0b4gymrjzkhr8qa4";
-    };
-
-    doCheck = false;
+  pyfftw = callPackage ../development/python-modules/pyfftw { };
 
     meta = {
       description = "FIGlet in pure Python";
