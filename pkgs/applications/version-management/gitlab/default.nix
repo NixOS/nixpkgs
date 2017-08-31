@@ -18,11 +18,11 @@ let
     };
   };
 
-  version = "8.17.6";
+  version = "8.17.8";
 
   gitlabDeb = fetchurl {
     url = "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/jessie/gitlab-ce_${version}-ce.0_amd64.deb/download";
-    sha256 = "1pr8nfnkzmicn5nxjkq48l4nfjsp6v5j3v8p7cp8r86lgfdc6as3";
+    sha256 = "0r4f1illaalhrvc6zgq19g4jcs77jf665l8bgx6pyvw45yn6wv7h";
   };
 
 in
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "gitlabhq";
     repo = "gitlabhq";
     rev = "v${version}";
-    sha256 = "1yyyn2j0a457q2xbcxz6b33r23myr8kxbm9whj2dwrrbp4p273hr";
+    sha256 = "041ld3na8m42akqpljipid984d0mv0wzk2p1630fncc1w3iaq06d";
   };
 
   patches = [
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     mv config/gitlab.yml.example config/gitlab.yml
 
-    dpkg -x ${gitlabDeb} .
+    dpkg --fsys-tarfile ${gitlabDeb} | tar -x --no-same-permissions --no-same-owner
     mv -v opt/gitlab/embedded/service/gitlab-rails/public/assets public
     rm -rf opt
 
