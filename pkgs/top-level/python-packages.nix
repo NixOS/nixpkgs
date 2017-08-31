@@ -17776,47 +17776,7 @@ in {
      };
    };
 
-  pyfeed = buildPythonPackage rec {
-    url = "http://www.blarg.net/%7Esteveha/pyfeed-0.7.4.tar.gz";
-    name = stdenv.lib.nameFromURL url ".tar";
-    src = pkgs.fetchurl {
-      inherit url;
-      sha256 = "1h4msq573m7wm46h3cqlx4rsn99f0l11rhdqgf50lv17j8a8vvy1";
-    };
-    propagatedBuildInputs = with self; [xe];
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    meta = {
-      homepage = "http://home.blarg.net/~steveha/pyfeed.html";
-      description = "Tools for syndication feeds";
-    };
-  };
-
-  pyfftw = buildPythonPackage rec {
-    name = "pyfftw-${version}";
-    version = "0.10.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyFFTW/pyFFTW-${version}.tar.gz";
-      sha256 = "739b436b7c0aeddf99a48749380260364d2dc027cf1d5f63dafb5f50068ede1a";
-    };
-
-    buildInputs = [ pkgs.fftw pkgs.fftwFloat pkgs.fftwLongDouble];
-
-    propagatedBuildInputs = with self; [ numpy scipy ];
-
-    # Tests cannot import pyfftw. pyfftw works fine though.
-    doCheck = false;
-
-    preConfigure = ''
-      export LDFLAGS="-L${pkgs.fftw.out}/lib -L${pkgs.fftwFloat.out}/lib -L${pkgs.fftwLongDouble.out}/lib"
-      export CFLAGS="-I${pkgs.fftw.dev}/include -I${pkgs.fftwFloat.dev}/include -I${pkgs.fftwLongDouble.dev}/include"
-    '';
-    #+ optionalString isDarwin ''
-    #  export DYLD_LIBRARY_PATH="${pkgs.fftw.out}/lib"
-    #'';
+  pyfeed = callPackage ../development/python-modules/pyfeed { };
 
     meta = {
       description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
