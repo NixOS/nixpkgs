@@ -8640,6 +8640,8 @@ in {
 
   django-jinja = callPackage ../development/python-modules/django-jinja2 { };
 
+  django-pglocks = callPackage ../development/python-modules/django-pglocks { };
+
   django_polymorphic = callPackage ../development/python-modules/django-polymorphic { };
 
   django_tagging = callPackage ../development/python-modules/django_tagging { };
