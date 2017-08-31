@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, glibcLocales }:
+{ stdenv, fetchurl, fetchpatch, pythonPackages, glibcLocales }:
 
 pythonPackages.buildPythonApplication rec {
   name = "errbot-${version}";
