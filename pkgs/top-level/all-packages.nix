@@ -9498,6 +9498,8 @@ with pkgs;
 
   luabind_luajit = callPackage ../development/libraries/luabind { lua = luajit; };
 
+  luaffi = callPackage ../development/libraries/luaffi { lua = lua5_1; };
+
   lzo = callPackage ../development/libraries/lzo { };
 
   mapnik = callPackage ../development/libraries/mapnik { };
