@@ -76,6 +76,7 @@ let
     azurerm = import providers/azurerm.nix { inherit stdenv lib buildGoPackage fetchFromGitHub; };
     google = import providers/google.nix { inherit stdenv lib buildGoPackage fetchFromGitHub; };
     kubernetes = import providers/kubernetes.nix { inherit stdenv lib buildGoPackage fetchFromGitHub; };
+    template = import providers/template.nix { inherit stdenv lib buildGoPackage fetchFromGitHub; };
   };
 in {
   terraform_0_8_5 = generic {
