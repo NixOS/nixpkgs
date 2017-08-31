@@ -17786,40 +17786,7 @@ in {
 
   pyftgl = callPackage ../development/python-modules/pyftgl { };
 
-    src = pkgs.fetchFromGitHub {
-      owner = "umlaeute";
-      repo = "pyftgl";
-      rev = "0.4b";
-      sha256 = "12zcjv4cwwjihiaf74kslrdmmk4bs47h7006gyqfwdfchfjdgg4r";
-    };
-
-    buildInputs = with self; [ boost pkgs.freetype pkgs.ftgl pkgs.mesa ];
-
-    meta = {
-      description = "Python bindings for FTGL (FreeType for OpenGL)";
-      license = licenses.gpl2Plus;
-    };
-  };
-
-  pygeoip = buildPythonPackage rec {
-    name = "pygeoip-0.3.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pygeoip/pygeoip-0.3.2.tar.gz";
-      sha256 = "f22c4e00ddf1213e0fae36dc60b46ee7c25a6339941ec1a975539014c1f9a96d";
-    };
-
-    # requires geoip samples
-    doCheck = false;
-
-    buildInputs = with self; [ nose ];
-
-    meta = {
-      description = "Pure Python GeoIP API";
-      homepage = https://github.com/appliedsec/pygeoip;
-      license = licenses.lgpl3Plus;
-    };
-  };
+  pygeoip = callPackage ../development/python-modules/pygeoip {};
 
   PyGithub = callPackage ../development/python-modules/pyGithub {};
 
