@@ -173,6 +173,8 @@ in {
 
   distorm3 = callPackage ../development/python-modules/distorm3 { };
 
+  diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
+
   h5py = callPackage ../development/python-modules/h5py {
     hdf5 = pkgs.hdf5;
   };
