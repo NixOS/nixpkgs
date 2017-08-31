@@ -225,6 +225,8 @@ in {
 
   pycryptodome = callPackage ../development/python-modules/pycryptodome { };
 
+  pycryptodomex = callPackage ../development/python-modules/pycryptodomex { };
+
   PyChromecast = callPackage ../development/python-modules/pychromecast {
     protobuf = self.protobuf3_2;
   };
