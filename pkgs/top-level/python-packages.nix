@@ -24040,11 +24040,11 @@ EOF
 
   libarchive-c = buildPythonPackage rec {
     name = "libarchive-c-${version}";
-    version = "2.5";
+    version = "2.7";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/libarchive-c/${name}.tar.gz";
-      sha256 = "98660daa2501d2da51ab6f39893dc24e88916e72b2d80c205641faa5bce66859";
+      sha256 = "011bfsmqpcwd6920kckllh7zhw2y4rrasgmddb7wjzn2hg1xpsjn";
     };
 
     LC_ALL="en_US.UTF-8";
