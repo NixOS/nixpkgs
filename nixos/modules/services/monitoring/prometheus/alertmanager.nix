@@ -99,6 +99,14 @@ in {
           Open port in firewall for incoming connections.
         '';
       };
+
+      meshPeers = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Initial peers for HA mesh cluster.
+        '';
+      };
     };
   };
 
@@ -111,11 +119,12 @@ in {
       after    = [ "network.target" ];
       script = ''
         ${pkgs.prometheus-alertmanager.bin}/bin/alertmanager \
-        --config.file ${alertmanagerYml} \
-        --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
-        --log.level ${cfg.logLevel} \
-        ${optionalString (cfg.webExternalUrl != null) ''--web.external-url ${cfg.webExternalUrl} \''}
-        ${optionalString (cfg.logFormat != null) "--log.format ${cfg.logFormat}"}
+          --config.file ${alertmanagerYml} \
+          --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
+          --log.level ${cfg.logLevel} \
+          ${optionalString (cfg.webExternalUrl != null) ''--web.external-url ${cfg.webExternalUrl}''} \
+          ${optionalString (cfg.logFormat != null) "--log.format ${cfg.logFormat}"} \
+          ${toString (map (peer: "--mesh.peer ${peer}:6783") cfg.meshPeers)}
       '';
 
       serviceConfig = {
