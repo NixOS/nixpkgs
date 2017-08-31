@@ -15,11 +15,11 @@ if [[ -n "@coreutils_bin@" && -n "@gnugrep_bin@" ]]; then
     PATH="@coreutils_bin@/bin:@gnugrep_bin@/bin"
 fi
 
+source @out@/nix-support/utils.sh
+
 if [ -z "${NIX_CC_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
-
-source @out@/nix-support/utils.sh
 
 
 # Parse command line options and set several variables.

@@ -1,3 +1,20 @@
+mangleVarList() {
+    declare var="$1"
+    shift
+    declare -a role_infixes=("$@")
+
+    outputVar="${var/+/_@infixSalt@_}"
+    export ${outputVar}+=''
+    # For each role we serve, we accumulate the input parameters into our own
+    # cc-wrapper-derivation-specific environment variables.
+    for infix in "${role_infixes[@]}"; do
+        inputVar="${var/+/${infix}}"
+        if [ -v "$inputVar" ]; then
+            export ${outputVar}+="${!outputVar:+ }${!inputVar}"
+        fi
+    done
+}
+
 skip () {
     if (( "${NIX_DEBUG:-0}" >= 1 )); then
         echo "skipping impure path $1" >&2

@@ -17,11 +17,11 @@ if [ -n "@coreutils_bin@" ]; then
     PATH="@coreutils_bin@/bin"
 fi
 
+source @out@/nix-support/utils.sh
+
 if [ -z "${NIX_@infixSalt@_GNAT_WRAPPER_FLAGS_SET:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
-
-source @out@/nix-support/utils.sh
 
 
 # Figure out if linker flags should be passed.  GCC prints annoying
