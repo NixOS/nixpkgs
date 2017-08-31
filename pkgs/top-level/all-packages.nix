@@ -2658,6 +2658,8 @@ with pkgs;
 
   ipcalc = callPackage ../tools/networking/ipcalc {};
 
+  netmask = callPackage ../tools/networking/netmask {};
+
   ipv6calc = callPackage ../tools/networking/ipv6calc {};
 
   ipxe = callPackage ../tools/misc/ipxe { };
