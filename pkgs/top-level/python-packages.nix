@@ -8859,6 +8859,8 @@ in {
 
   django_guardian = callPackage ../development/python-modules/django_guardian.nix { };
 
+  django-pglocks = callPackage ../development/python-modules/django-pglocks { };
+
   django_polymorphic = callPackage ../development/python-modules/django-polymorphic { };
 
   django_tagging = callPackage ../development/python-modules/django_tagging { };
