@@ -121,6 +121,8 @@ in {
 
   ansicolor = callPackage ../development/python-modules/ansicolor { };
 
+  asana = callPackage ../development/python-modules/asana { };
+
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
 
   astropy = callPackage ../development/python-modules/astropy {  };
