@@ -11,6 +11,7 @@ rec {
   engrampa = callPackage ./engrampa { };
   eom = callPackage ./eom { };
   libmatekbd = callPackage ./libmatekbd { };
+  libmatemixer = callPackage ./libmatemixer { };
   mate-common = callPackage ./mate-common { };
   mate-desktop = callPackage ./mate-desktop { };
   mate-icon-theme = callPackage ./mate-icon-theme { };
@@ -22,6 +23,7 @@ rec {
   basePackages = [
     caja
     libmatekbd
+    libmatemixer
     mate-common
     mate-desktop
     mate-icon-theme
