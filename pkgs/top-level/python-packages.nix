@@ -8646,6 +8646,8 @@ in {
 
   django_polymorphic = callPackage ../development/python-modules/django-polymorphic { };
 
+  django-sampledatahelper = callPackage ../development/python-modules/django-sampledatahelper { };
+
   django_tagging = callPackage ../development/python-modules/django_tagging { };
 
   django_tagging_0_3 = self.django_tagging.overrideAttrs (attrs: rec {
