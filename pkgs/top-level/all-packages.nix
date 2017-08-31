@@ -16696,6 +16696,10 @@ with pkgs;
     guile = guile_2_0;
   };
 
+  weechat-matrix-bridge = callPackage ../applications/networking/instant-messengers/weechat-matrix-bridge {
+    inherit (luaPackages) cjson;
+  };
+
   westonLite = callPackage ../applications/window-managers/weston {
     pango = null;
     freerdp = null;
