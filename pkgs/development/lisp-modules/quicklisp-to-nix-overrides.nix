@@ -84,6 +84,39 @@ in
     };
   };
   sqlite = addNativeLibs [pkgs.sqlite];
+  swank = x: {
+    overrides = y: (x.overrides y) // {
+      postPatch = ''
+        patch <<EOD
+        --- swank-loader.lisp	2017-08-30 16:46:16.554076684 -0700
+        +++ swank-loader-new.lisp	2017-08-30 16:49:23.333450928 -0700
+        @@ -155,7 +155,7 @@
+                          ,(unique-dir-name)))
+            (user-homedir-pathname)))
+         
+        -(defvar *fasl-directory* (default-fasl-dir)
+        +(defvar *fasl-directory* #P"$out/lib/common-lisp/swank/fasl/"
+           "The directory where fasl files should be placed.")
+         
+         (defun binary-pathname (src-pathname binary-dir)
+        @@ -277,12 +277,7 @@
+                          (contrib-dir src-dir))))
+         
+         (defun delete-stale-contrib-fasl-files (swank-files contrib-files fasl-dir)
+        -  (let ((newest (reduce #'max (mapcar #'file-write-date swank-files))))
+        -    (dolist (src contrib-files)
+        -      (let ((fasl (binary-pathname src fasl-dir)))
+        -        (when (and (probe-file fasl)
+        -                   (<= (file-write-date fasl) newest))
+        -          (delete-file fasl))))))
+        +  (declare (ignore swank-files contrib-files fasl-dir)))
+         
+         (defun compile-contribs (&key (src-dir (contrib-dir *source-directory*))
+                                    (fasl-dir (contrib-dir *fasl-directory*))
+        EOD
+      '';
+    };
+  };
   uiop = x: {
     parasites = (x.parasites or []) ++ [
       "uiop/version"
@@ -100,4 +133,9 @@ in
     };
   };
   mssql = addNativeLibs [pkgs.freetds];
+  cl-unification = x: {
+    asdFilesToKeep = (x.asdFilesToKeep or []) ++ [
+      "cl-unification-lib.asd"
+    ];
+  };
 }
