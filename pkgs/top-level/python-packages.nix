@@ -18005,7 +18005,7 @@ in {
     };
 
     disabled = !isPy3k;
-    
+
     # No tests in archive
     doCheck = false;
 
@@ -24875,11 +24875,11 @@ EOF
 
   libarchive-c = buildPythonPackage rec {
     name = "libarchive-c-${version}";
-    version = "2.5";
+    version = "2.7";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/libarchive-c/${name}.tar.gz";
-      sha256 = "98660daa2501d2da51ab6f39893dc24e88916e72b2d80c205641faa5bce66859";
+      sha256 = "011bfsmqpcwd6920kckllh7zhw2y4rrasgmddb7wjzn2hg1xpsjn";
     };
 
     LC_ALL="en_US.UTF-8";
@@ -24889,7 +24889,8 @@ EOF
         "find_library('archive')" "'${pkgs.libarchive.lib}/lib/libarchive.so'"
     '';
     checkPhase = ''
-      py.test tests -k 'not test_check_archiveentry_with_unicode_entries_and_name_zip'
+      py.test tests \
+        -k 'not test_check_archiveentry_with_unicode_entries_and_name_zip and not test_check_archiveentry_using_python_testtar'
     '';
 
     buildInputs = with self; [ pytest pkgs.glibcLocales ];
