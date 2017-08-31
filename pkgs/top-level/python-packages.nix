@@ -28229,31 +28229,7 @@ EOF
 
   txaio = callPackage ../development/python-modules/txaio { };
 
-  ramlfications = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "ramlfications";
-    version = "0.1.9";
-
-    meta = {
-      description = "A Python RAML parser.";
-      homepage    = "https://ramlfications.readthedocs.org";
-      license     = licenses.asl20;
-      maintainers = with maintainers; [ nand0p ];
-      platforms   = platforms.all;
-    };
-
-    doCheck = false;
-    # [darwin]  AssertionError: Expected 'update_mime_types' to have been called once. Called 0 times.
-
-    buildInputs = with self; [ mock pytest pytest-mock pytest-server-fixtures pytest-localserver ];
-
-    propagatedBuildInputs = with self; [ termcolor click markdown2 six jsonref pyyaml xmltodict attrs ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/${pname}/${name}.tar.gz";
-      sha256 = "0xvnna7kaq4nm5nfnwcwbr5bcm2s532hgyp7kq4v9iivn48rrf3v";
-    };
-  };
+  ramlfications = callPackage ../development/python-modules/ramlfications { };
 
   yapf = callPackage ../development/python-modules/yapf { };
 
