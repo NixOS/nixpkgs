@@ -65,6 +65,7 @@
 , "react-tools"
 , "s3http"
 , "semver"
+, "serve"
 , "sinopia"
 , "sloc"
 , "smartdc"
