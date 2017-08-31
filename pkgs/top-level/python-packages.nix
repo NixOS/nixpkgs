@@ -17784,8 +17784,7 @@ in {
 
   pyflakes = callPackage ../development/python-modules/pyflakes { };
 
-  pyftgl = buildPythonPackage rec {
-    name = "pyftgl-0.4b";
+  pyftgl = callPackage ../development/python-modules/pyftgl { };
 
     src = pkgs.fetchFromGitHub {
       owner = "umlaeute";
