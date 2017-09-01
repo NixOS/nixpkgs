@@ -531,6 +531,17 @@ rec {
 
   };
 
+  Colorizer = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "Colorizer-2017-08-21";
+    src = fetchgit {
+      url = "https://github.com/chrisbra/Colorizer";
+      rev = "786ba4b43283ff5f6591c1dd17afdadbcdc2de61";
+      sha256 = "01s3rfcviy4q8nqsc15pbzdw6kdx83hpg9wah5w09n3gx48r1h2v";
+    };
+    dependencies = [];
+
+  };
+
   vim-sort-motion = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-sort-motion-2017-04-27";
     src = fetchgit {
