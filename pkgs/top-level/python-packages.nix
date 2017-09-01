@@ -21107,10 +21107,11 @@ in {
 
   tabulate = buildPythonPackage rec {
     version = "0.7.7";
-    name = "tabulate-${version}";
+    pname = "tabulate";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tabulate/${name}.tar.gz";
+    src = fetchPypi {
+      inherit pname version;
       sha256 = "83a0b8e17c09f012090a50e1e97ae897300a72b35e0c86c0b53d3bd2ae86d8c6";
     };
 
