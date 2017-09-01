@@ -2812,6 +2812,7 @@ in {
   });
 
   cheroot = callPackage ../development/python-modules/cheroot {};
+  portend = callPackage ../development/python-modules/portend {};
 
   cjson = buildPythonPackage rec {
     name = "python-cjson-${version}";
