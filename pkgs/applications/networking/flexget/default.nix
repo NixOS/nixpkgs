@@ -9,14 +9,14 @@
 with python.pkgs;
 
 buildPythonApplication rec {
-  version = "2.10.40";
+  version = "2.10.83";
   name = "FlexGet-${version}";
 
   src = fetchFromGitHub {
     owner = "Flexget";
     repo = "Flexget";
     rev = version;
-    sha256 = "0hh21yv1lvdfi198snwjabfsdh04fnpjszpgg28wvg5pd1qq8lqv";
+    sha256 = "08r99259zg4czkyzlkg87bn9v7lfkgc71kf1v41cps7k2pq817wh";
   };
 
   doCheck = true;
@@ -27,14 +27,15 @@ buildPythonApplication rec {
     sed -i '/def test_non_ascii/i\    import pytest\
         @pytest.mark.skip' flexget/tests/test_filesystem.py
 
-    substituteInPlace requirements.txt --replace "guessit<=2.0.4" "guessit"
+    substituteInPlace requirements.txt --replace "sqlalchemy==1.1.10" "sqlalchemy"
+    substituteInPlace requirements.txt --replace "chardet==3.0.3" "chardet"
   '';
 
   # Disable 3 failing tests caused by guessit upgrade
   # https://github.com/Flexget/Flexget/issues/1804
   checkPhase = ''
     export HOME=.
-    py.test --disable-pytest-warnings -k "not test_date_options and not test_ep_as_quality and not testFromGroup"
+    py.test --disable-pytest-warnings
   '';
 
   buildInputs = [ pytest mock vcrpy pytest-catchlog boto3 ];
@@ -42,9 +43,10 @@ buildPythonApplication rec {
     feedparser sqlalchemy pyyaml
     beautifulsoup4 html5lib PyRSS2Gen pynzb
     rpyc jinja2 requests dateutil jsonschema
-    pathpy guessit APScheduler
-    terminaltables colorclass
-    cherrypy flask flask-restful flask-restplus_0_8
+    pathpy guessit_2_0 APScheduler pytz
+    terminaltables colorclass tempora
+    cherrypy cheroot rebulk_0_8 portend
+    flask flask-restful flask-restplus
     flask-compress flask_login flask-cors
     pyparsing safe future zxcvbn-python ]
   ++ lib.optional (pythonOlder "3.4") pathlib

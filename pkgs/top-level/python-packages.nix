@@ -1358,11 +1358,12 @@ in {
   });
 
   beautifulsoup4 = buildPythonPackage (rec {
-    name = "beautifulsoup4-4.5.3";
+    name = "beautifulsoup4-${version}";
+    version = "4.6.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/beautifulsoup4/${name}.tar.gz";
-      sha256 = "0glaw1vyxnbp03fni7h5496n6iib0n5iim4gax1n0ngscs9s075j";
+      sha256 = "12cf0ygpz9srpfh9gx2f9ba0swa1rzypv3sm4r0hmjyw6b4nm2w0";
     };
 
     buildInputs = [ self.nose ];
@@ -2792,17 +2793,17 @@ in {
 
   cherrypy = buildPythonPackage (rec {
     name = "cherrypy-${version}";
-    version = "8.7.0";
+    version = "10.2.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/C/CherryPy/CherryPy-${version}.tar.gz";
-      sha256 = "cbf418bf46458a67eb841944f2d414c23bf59d090baf2a28704bd67243e6a79f";
+      sha256 = "1y4gx8zg4s1awvz52vagrkq51s1k6djan598sbapyp3nvws37n9j";
     };
 
     # wsgiserver.ssl_pyopenssl is broken on py3k.
     doCheck = !isPy3k;
     buildInputs = with self; [ pytest setuptools_scm pytestrunner ];
-    propagatedBuildInputs = with self; [ six ];
+    propagatedBuildInputs = with self; [ six cheroot portend ];
 
     meta = {
       homepage = "http://www.cherrypy.org";
@@ -2810,6 +2811,8 @@ in {
     };
   });
 
+  cheroot = callPackage ../development/python-modules/cheroot {};
+  portend = callPackage ../development/python-modules/portend {};
 
   cjson = buildPythonPackage rec {
     name = "python-cjson-${version}";
@@ -5354,12 +5357,12 @@ in {
     ];
   in buildPythonPackage rec {
     pname = "urllib3";
-    version = "1.20";
+    version = "1.22";
     name = "${pname}-${version}";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0bx76if7shzlyykmaj4fhjkir5bswc4fdx5r4q0lrn3q51p2pvwp";
+      sha256 = "0kyvc9zdlxr5r96bng5rhm9a6sfqidrbvvkz64s76qs5267dli6c";
     };
 
     NOSE_EXCLUDE=concatStringsSep "," disabled_tests;
@@ -8745,12 +8748,15 @@ in {
   };
 
   chardet = buildPythonPackage rec {
-    name = "chardet-2.3.0";
+    name = "chardet-${version}";
+    version = "3.0.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/chardet/${name}.tar.gz";
-      sha256 = "e53e38b3a4afe6d1132de62b7400a4ac363452dc5dfcf8d88e8e0cce663c68aa";
+      sha256 = "1bpalpia6r5x1kknbk11p1fzph56fmmnp405ds8icksd3knr5aw4";
     };
+
+    buildInputs = with self; [ pytest pytestrunner hypothesis ];
 
     meta = {
       homepage = https://github.com/chardet/chardet;
@@ -9627,12 +9633,13 @@ in {
     };
   };
 
-  flask = buildPythonPackage {
-    name = "flask-0.12";
+  flask = buildPythonPackage rec {
+    name = "flask-${version}";
+    version = "0.12.2";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/F/Flask/Flask-0.12.tar.gz";
-      sha256 = "12yasybryp33rdchsqgckf15zj4pjfam7ly5spmn2sijpv6h7s4k";
+      url = "mirror://pypi/F/Flask/Flask-${version}.tar.gz";
+      sha256 = "1hfs2jr2m5lr51xd4gblb28rncd0xrpycz6c07cyqsbv4dhl9x29";
     };
 
     propagatedBuildInputs = with self; [ itsdangerous click werkzeug jinja2 ];
@@ -9682,11 +9689,11 @@ in {
 
   flask-compress = buildPythonPackage rec {
     name = "Flask-Compress-${version}";
-    version = "1.3.2";
+    version = "1.4.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/F/Flask-Compress/${name}.tar.gz";
-      sha256 = "4fbb53e7f6ce8b1458a2c3d7a528564912f2641ab2f9f43819fc96ed7f770734";
+      sha256 = "1cxdbdiyxkspg7vkchfmaqr7c6q79gwvakna3fjcc6nivps971j6";
     };
 
     propagatedBuildInputs = with self; [ flask ];
@@ -9700,11 +9707,11 @@ in {
 
   flask-cors = buildPythonPackage rec {
     name = "Flask-Cors-${version}";
-    version = "2.1.2";
+    version = "3.0.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/F/Flask-Cors/${name}.tar.gz";
-      sha256 = "0fd618a4f88ykqx4x55viz47cm9rl214q1b45a0b4mz5vhxffqpj";
+      sha256 = "1mnsyyqn8akin2vz98b9fbv63hcvwmfkaapsglw5jizdkmaz628a";
     };
 
     buildInputs = with self; [ nose ];
@@ -9751,11 +9758,11 @@ in {
 
   flask-restful = buildPythonPackage rec {
     name = "Flask-RESTful-${version}";
-    version = "0.3.5";
+    version = "0.3.6";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/F/Flask-RESTful/${name}.tar.gz";
-      sha256 = "cce4aeff959b571136b5af098bebe7d3deeca7eb1411c4e722ff2c5356ab4c42";
+      sha256 = "01rlvl2iq074ciyn4schmjip7cyplkwkysbb8f610zil06am35ap";
     };
 
     # TypeError: Only byte strings can be passed to C code
@@ -9774,8 +9781,6 @@ in {
   };
 
   flask-restplus = callPackage ../development/python-modules/flask-restplus/default.nix { };
-  # Exactly 0.8.6 is required by flexget
-  flask-restplus_0_8 = callPackage ../development/python-modules/flask-restplus/0.8.nix { };
 
   flask_script = buildPythonPackage rec {
     name = "Flask-Script-${version}";
@@ -9953,12 +9958,12 @@ in {
   };
 
   jsonschema = buildPythonPackage (rec {
-    version = "2.5.1";
+    version = "2.6.0";
     name = "jsonschema-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jsonschema/jsonschema-${version}.tar.gz";
-      sha256 = "0hddbqjm4jq63y8jf44nswina1crjs16l9snb6m3vvgyg31klrrn";
+      sha256 = "00kf3zmpp9ya4sydffpifn0j0mzm342a2vzh82p6r0vh10cg7xbg";
     };
 
     buildInputs = with self; [ nose mock vcversioner ];
@@ -9982,11 +9987,11 @@ in {
 
   vcversioner = buildPythonPackage rec {
     name = "vcversioner-${version}";
-    version = "2.14.0.0";
+    version = "2.16.0.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/v/vcversioner/vcversioner-${version}.tar.gz";
-      sha256 = "11ivq1bm7v0yb4nsfbv9m7g7lyjn112gbvpjnjz8nv1fx633dm5c";
+      sha256 = "16z10sm78jd7ca3jbkgc3q5i8a8q7y1h21q1li21yy3rlhbhrrns";
     };
 
     meta = with stdenv.lib; {
@@ -10734,8 +10739,10 @@ in {
   };
 
   guessit = callPackage ../development/python-modules/guessit { };
+  guessit_2_0 = callPackage ../development/python-modules/guessit/2_0.nix {};
 
   rebulk = callPackage ../development/python-modules/rebulk { };
+  rebulk_0_8 = callPackage ../development/python-modules/rebulk/0_8.nix {};
 
   gunicorn = callPackage ../development/python-modules/gunicorn.nix { };
 
@@ -11436,12 +11443,12 @@ in {
 
   jinja2 = buildPythonPackage rec {
     pname = "Jinja2";
-    version = "2.9.5";
+    version = "2.9.6";
     name = "${pname}-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/J/Jinja2/${name}.tar.gz";
-      sha256 = "702a24d992f856fa8d5a7a36db6128198d0c21e1da34448ca236c42e92384825";
+      sha256 = "1zzrkywhziqffrzks14kzixz7nd4yh2vc0fb04a68vfd2ai03anx";
     };
 
     propagatedBuildInputs = with self; [ markupsafe ];
@@ -19151,11 +19158,11 @@ in {
 
   pytz = buildPythonPackage rec {
     name = "pytz-${version}";
-    version = "2016.6.1";
+    version = "2017.2";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytz/${name}.tar.gz";
-      sha256 = "6f57732f0f8849817e9853eb9d50d85d1ebb1404f702dbc44ee627c642a486ca";
+      url = "mirror://pypi/p/pytz/${name}.zip";
+      sha256 = "12cmd3j46d2gcw08bspvp6s9icfcvx88zjz52n1bli9dyvl5dh7m";
     };
 
     checkPhase = ''
@@ -19453,14 +19460,15 @@ in {
   # use requests, not requests_2
   requests = buildPythonPackage rec {
     name = "requests-${version}";
-    version = "2.13.0";
+    version = "2.18.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/requests/${name}.tar.gz";
-      sha256 = "5722cd09762faa01276230270ff16af7acf7c5c45d623868d9ba116f15791ce8";
+      sha256 = "0zi3v9nsmv9j27d0c0m1dvqyvaxz53g8m0aa1h3qanxs4irkwi4w";
     };
 
     nativeBuildInputs = [ self.pytest ];
+    propagatedBuildInputs = with self; [ certifi chardet idna urllib3 ];
     # sadly, tests require networking
     doCheck = false;
 
@@ -23209,13 +23217,13 @@ in {
   twisted = callPackage ../development/python-modules/twisted { };
 
   tzlocal = buildPythonPackage rec {
-    name = "tzlocal-1.2.2";
+    name = "tzlocal-1.4";
 
     propagatedBuildInputs = with self; [ pytz ];
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/tzlocal/${name}.tar.gz";
-      sha256 = "0paj7vlsb0np8b5sp4bv64wxv7qk2piyp7xg29pkhdjwsbls9fnb";
+      sha256 = "0n9hw4kqblyc0avzwi26rqmvyk9impb608rvy11qifmigy7r18h5";
     };
 
      # test fail (timezone test fail)
@@ -23903,11 +23911,12 @@ EOF
 
 
   werkzeug = buildPythonPackage rec {
-    name = "Werkzeug-0.11.10";
+    name = "Werkzeug-${version}";
+    version = "0.12.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/W/Werkzeug/${name}.tar.gz";
-      sha256 = "1vpf98k4jp4yhbv2jbyq8dj5fdasrd26rkq34pacs5n7mkxxlr6c";
+      sha256 = "09mv4cya3lywkn4mi3qrqmjgwiw99kdk03dk912j8da6ny3pnflh";
     };
 
     LC_ALL = "en_US.UTF-8";
