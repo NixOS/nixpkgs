@@ -1603,6 +1603,8 @@ in {
     };
   };
 
+  cement = callPackage ../development/python-modules/cement {};
+
   cgroup-utils = callPackage ../development/python-modules/cgroup-utils {};
     postPatch = ''
       substituteInPlace setup.py --replace "argparse" ""
