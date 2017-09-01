@@ -23910,11 +23910,12 @@ EOF
 
 
   werkzeug = buildPythonPackage rec {
-    name = "Werkzeug-0.11.10";
+    name = "Werkzeug-${version}";
+    version = "0.12.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/W/Werkzeug/${name}.tar.gz";
-      sha256 = "1vpf98k4jp4yhbv2jbyq8dj5fdasrd26rkq34pacs5n7mkxxlr6c";
+      sha256 = "09mv4cya3lywkn4mi3qrqmjgwiw99kdk03dk912j8da6ny3pnflh";
     };
 
     LC_ALL = "en_US.UTF-8";
