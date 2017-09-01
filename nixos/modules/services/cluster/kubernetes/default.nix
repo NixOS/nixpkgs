@@ -587,7 +587,7 @@ in {
 
       clusterDomain = mkOption {
         description = "Use alternative domain.";
-        default = "cluster.local";
+        default = config.services.kubernetes.addons.dns.clusterDomain;
         type = types.str;
       };
 
@@ -705,16 +705,10 @@ in {
         type = types.bool;
       };
 
-      versionTag = mkOption {
-        description = "Version tag of Kubernetes addon manager image.";
-        default = "v6.4-beta.1";
-        type = types.str;
-      };
-
       addons = mkOption {
         description = "Kubernetes addons (any kind of Kubernetes resource can be an addon).";
         default = { };
-        type = types.attrsOf types.attrs;
+        type = types.attrsOf (types.either types.attrs (types.listOf types.attrs));
         example = literalExample ''
           {
             "my-service" = {
@@ -729,30 +723,6 @@ in {
           }
           // import <nixpkgs/nixos/modules/services/cluster/kubernetes/dashboard.nix> { cfg = config.services.kubernetes; };
         '';
-      };
-    };
-
-    dns = {
-      enable = mkEnableOption "Kubernetes DNS service.";
-
-      port = mkOption {
-        description = "Kubernetes DNS listening port.";
-        default = 53;
-        type = types.int;
-      };
-
-      domain = mkOption  {
-        description = "Kubernetes DNS domain under which to create names.";
-        default = cfg.kubelet.clusterDomain;
-        type = types.str;
-      };
-
-      kubeconfig = mkKubeConfigOptions "Kubernetes dns";
-
-      extraOpts = mkOption {
-        description = "Kubernetes DNS extra command line options.";
-        default = "";
-        type = types.str;
       };
     };
 
@@ -1052,8 +1022,8 @@ in {
       services.kubernetes.apiserver.enable = mkDefault true;
       services.kubernetes.scheduler.enable = mkDefault true;
       services.kubernetes.controllerManager.enable = mkDefault true;
-      services.kubernetes.dns.enable = mkDefault true;
       services.etcd.enable = mkDefault (cfg.etcd.servers == ["http://127.0.0.1:2379"]);
+      services.kubernetes.addonManager.enable = mkDefault true;
     })
 
     # if this node is only a master make it unschedulable by default
@@ -1074,47 +1044,24 @@ in {
 
       services.kubernetes.kubelet.enable = mkDefault true;
       services.kubernetes.proxy.enable = mkDefault true;
-      services.kubernetes.dns.enable = mkDefault true;
     })
 
     (mkIf cfg.addonManager.enable {
-      services.kubernetes.kubelet.manifests = import ./kube-addon-manager.nix { inherit cfg addons; };
       environment.etc."kubernetes/addons".source = "${addons}/";
-    })
 
-    (mkIf cfg.dns.enable {
-      systemd.services.kube-dns = {
-        description = "Kubernetes DNS Service";
+      systemd.services.kube-addon-manager = {
+        description = "Kubernetes addon manager";
         wantedBy = [ "kubernetes.target" ];
         after = [ "kube-apiserver.service" ];
+        environment.ADDON_PATH = "/etc/kubernetes/addons/";
         serviceConfig = {
           Slice = "kubernetes.slice";
-          ExecStart = ''${pkgs.kube-dns}/bin/kube-dns \
-            --kubecfg-file=${mkKubeConfig "kube-dns" cfg.dns.kubeconfig} \
-            --dns-port=${toString cfg.dns.port} \
-            --domain=${cfg.dns.domain} \
-            ${optionalString cfg.verbose "--v=6"} \
-            ${optionalString cfg.verbose "--log-flush-frequency=1s"} \
-            ${cfg.dns.extraOpts}
-          '';
+          ExecStart = "${cfg.package}/bin/kube-addons";
           WorkingDirectory = cfg.dataDir;
           User = "kubernetes";
           Group = "kubernetes";
-          AmbientCapabilities = "cap_net_bind_service";
-          SendSIGHUP = true;
-          RestartSec = "30s";
-          Restart = "always";
-          StartLimitInterval = "1m";
         };
       };
-
-      networking.firewall.extraCommands = ''
-        # allow container to host communication for DNS traffic
-        ${pkgs.iptables}/bin/iptables -I nixos-fw -p tcp -m tcp -d ${cfg.clusterCidr} --dport 53 -j nixos-fw-accept
-        ${pkgs.iptables}/bin/iptables -I nixos-fw -p udp -m udp -d ${cfg.clusterCidr} --dport 53 -j nixos-fw-accept
-      '';
-
-      services.kubernetes.dns.kubeconfig = kubeConfigDefaults;
     })
 
     (mkIf (
@@ -1122,8 +1069,7 @@ in {
         cfg.scheduler.enable ||
         cfg.controllerManager.enable ||
         cfg.kubelet.enable ||
-        cfg.proxy.enable ||
-        cfg.dns.enable
+        cfg.proxy.enable
     ) {
       systemd.targets.kubernetes = {
         description = "Kubernetes";
@@ -1147,6 +1093,9 @@ in {
         createHome = true;
       };
       users.extraGroups.kubernetes.gid = config.ids.gids.kubernetes;
+
+			# dns addon is enabled by default
+      services.kubernetes.addons.dns.enable = mkDefault true;
     })
 
     (mkIf cfg.flannel.enable {
