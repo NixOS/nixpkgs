@@ -215,6 +215,8 @@ in {
 
   pycryptodome = callPackage ../development/python-modules/pycryptodome { };
 
+  pycryptodomex = callPackage ../development/python-modules/pycryptodomex { };
+
   PyChromecast = callPackage ../development/python-modules/pychromecast {
     protobuf = self.protobuf3_2;
   };
@@ -238,6 +240,8 @@ in {
   pyGtkGlade = self.pygtk.override {
     libglade = pkgs.gnome2.libglade;
   };
+
+  pyjwkest = callPackage ../development/python-modules/pyjwkest { };
 
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
     pythonPackages = self;
