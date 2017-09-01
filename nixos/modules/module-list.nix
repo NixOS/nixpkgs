@@ -151,6 +151,7 @@
   ./services/backup/almir.nix
   ./services/backup/bacula.nix
   ./services/backup/crashplan.nix
+  ./services/backup/duplicity-backup.nix
   ./services/backup/mysql-backup.nix
   ./services/backup/postgresql-backup.nix
   ./services/backup/rsnapshot.nix
