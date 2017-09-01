@@ -15660,6 +15660,105 @@ let
         sha1 = "415a9852badb14fa008fa3ef1e31608db6761325";
       };
     };
+    "connect-3.5.1" = {
+      name = "connect";
+      packageName = "connect";
+      version = "3.5.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/connect/-/connect-3.5.1.tgz";
+        sha1 = "6d30d7a63c7f170857a6b3aa6b363d973dca588e";
+      };
+    };
+    "event-stream-3.3.4" = {
+      name = "event-stream";
+      packageName = "event-stream";
+      version = "3.3.4";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/event-stream/-/event-stream-3.3.4.tgz";
+        sha1 = "4ab4c9a0f5a54db9338b4c34d86bfce8f4b35571";
+      };
+    };
+    "http-auth-3.1.3" = {
+      name = "http-auth";
+      packageName = "http-auth";
+      version = "3.1.3";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/http-auth/-/http-auth-3.1.3.tgz";
+        sha1 = "945cfadd66521eaf8f7c84913d377d7b15f24e31";
+      };
+    };
+    "proxy-middleware-0.15.0" = {
+      name = "proxy-middleware";
+      packageName = "proxy-middleware";
+      version = "0.15.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/proxy-middleware/-/proxy-middleware-0.15.0.tgz";
+        sha1 = "a3fdf1befb730f951965872ac2f6074c61477a56";
+      };
+    };
+    "serve-index-1.9.0" = {
+      name = "serve-index";
+      packageName = "serve-index";
+      version = "1.9.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/serve-index/-/serve-index-1.9.0.tgz";
+        sha1 = "d2b280fc560d616ee81b48bf0fa82abed2485ce7";
+      };
+    };
+    "finalhandler-0.5.1" = {
+      name = "finalhandler";
+      packageName = "finalhandler";
+      version = "0.5.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/finalhandler/-/finalhandler-0.5.1.tgz";
+        sha1 = "2c400d8d4530935bc232549c5fa385ec07de6fcd";
+      };
+    };
+    "apache-crypt-1.2.1" = {
+      name = "apache-crypt";
+      packageName = "apache-crypt";
+      version = "1.2.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/apache-crypt/-/apache-crypt-1.2.1.tgz";
+        sha1 = "d6fc72aa6d27d99c95a94fd188d731eefffa663c";
+      };
+    };
+    "apache-md5-1.1.2" = {
+      name = "apache-md5";
+      packageName = "apache-md5";
+      version = "1.1.2";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/apache-md5/-/apache-md5-1.1.2.tgz";
+        sha1 = "ee49736b639b4f108b6e9e626c6da99306b41692";
+      };
+    };
+    "bcryptjs-2.4.3" = {
+      name = "bcryptjs";
+      packageName = "bcryptjs";
+      version = "2.4.3";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/bcryptjs/-/bcryptjs-2.4.3.tgz";
+        sha1 = "9ab5627b93e60621ff7cdac5da9733027df1d0cb";
+      };
+    };
+    "unix-crypt-td-js-1.0.0" = {
+      name = "unix-crypt-td-js";
+      packageName = "unix-crypt-td-js";
+      version = "1.0.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/unix-crypt-td-js/-/unix-crypt-td-js-1.0.0.tgz";
+        sha1 = "1c0824150481bc7a01d49e98f1ec668d82412f3b";
+      };
+    };
+    "batch-0.6.1" = {
+      name = "batch";
+      packageName = "batch";
+      version = "0.6.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/batch/-/batch-0.6.1.tgz";
+        sha1 = "dc34314f4e679318093fc760272525f94bf25c16";
+      };
+    };
     "express-2.5.11" = {
       name = "express";
       packageName = "express";
@@ -16236,15 +16335,6 @@ let
         sha1 = "e531c27644cf8b57a99e17ed95b35c748789392e";
       };
     };
-    "event-stream-3.3.4" = {
-      name = "event-stream";
-      packageName = "event-stream";
-      version = "3.3.4";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/event-stream/-/event-stream-3.3.4.tgz";
-        sha1 = "4ab4c9a0f5a54db9338b4c34d86bfce8f4b35571";
-      };
-    };
     "nopt-1.0.10" = {
       name = "nopt";
       packageName = "nopt";
@@ -16252,15 +16342,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/nopt/-/nopt-1.0.10.tgz";
         sha1 = "6ddd21bd2a31417b92727dd585f8a6f37608ebee";
-      };
-    };
-    "bcryptjs-2.4.3" = {
-      name = "bcryptjs";
-      packageName = "bcryptjs";
-      version = "2.4.3";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/bcryptjs/-/bcryptjs-2.4.3.tgz";
-        sha1 = "9ab5627b93e60621ff7cdac5da9733027df1d0cb";
       };
     };
     "cheerio-0.22.0" = {
@@ -19205,15 +19286,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/express-handlebars/-/express-handlebars-3.0.0.tgz";
         sha1 = "80a070bb819b09e4af2ca6d0780f75ce05e75c2f";
-      };
-    };
-    "finalhandler-0.5.1" = {
-      name = "finalhandler";
-      packageName = "finalhandler";
-      version = "0.5.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/finalhandler/-/finalhandler-0.5.1.tgz";
-        sha1 = "2c400d8d4530935bc232549c5fa385ec07de6fcd";
       };
     };
     "mediawiki-title-0.5.6" = {
@@ -28251,6 +28323,264 @@ in
     meta = {
       description = "Live Markdown previews for your favourite editor.";
       homepage = https://github.com/shime/livedown;
+      license = "MIT";
+    };
+    production = true;
+  };
+  live-server = nodeEnv.buildNodePackage {
+    name = "live-server";
+    packageName = "live-server";
+    version = "1.2.0";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/live-server/-/live-server-1.2.0.tgz";
+      sha1 = "4498644bbf81a66f18dd8dffdef61c4c1c374ca3";
+    };
+    dependencies = [
+      sources."chokidar-1.7.0"
+      sources."colors-1.1.2"
+      (sources."connect-3.5.1" // {
+        dependencies = [
+          sources."debug-2.2.0"
+          sources."ms-0.7.1"
+        ];
+      })
+      sources."cors-2.8.4"
+      sources."event-stream-3.3.4"
+      sources."faye-websocket-0.11.1"
+      sources."http-auth-3.1.3"
+      sources."morgan-1.8.2"
+      sources."object-assign-4.1.1"
+      sources."opn-5.1.0"
+      sources."proxy-middleware-0.15.0"
+      sources."send-0.15.4"
+      sources."serve-index-1.9.0"
+      sources."anymatch-1.3.2"
+      sources."async-each-1.0.1"
+      sources."glob-parent-2.0.0"
+      sources."inherits-2.0.3"
+      sources."is-binary-path-1.0.1"
+      sources."is-glob-2.0.1"
+      sources."path-is-absolute-1.0.1"
+      sources."readdirp-2.1.0"
+      sources."fsevents-1.1.2"
+      sources."micromatch-2.3.11"
+      sources."normalize-path-2.1.1"
+      sources."arr-diff-2.0.0"
+      sources."array-unique-0.2.1"
+      sources."braces-1.8.5"
+      sources."expand-brackets-0.1.5"
+      sources."extglob-0.3.2"
+      sources."filename-regex-2.0.1"
+      sources."is-extglob-1.0.0"
+      sources."kind-of-3.2.2"
+      sources."object.omit-2.0.1"
+      sources."parse-glob-3.0.4"
+      sources."regex-cache-0.4.3"
+      sources."arr-flatten-1.1.0"
+      sources."expand-range-1.8.2"
+      sources."preserve-0.2.0"
+      sources."repeat-element-1.1.2"
+      sources."fill-range-2.2.3"
+      sources."is-number-2.1.0"
+      sources."isobject-2.1.0"
+      (sources."randomatic-1.1.7" // {
+        dependencies = [
+          (sources."is-number-3.0.0" // {
+            dependencies = [
+              sources."kind-of-3.2.2"
+            ];
+          })
+          sources."kind-of-4.0.0"
+        ];
+      })
+      sources."repeat-string-1.6.1"
+      sources."isarray-1.0.0"
+      sources."is-buffer-1.1.5"
+      sources."is-posix-bracket-0.1.1"
+      sources."for-own-0.1.5"
+      sources."is-extendable-0.1.1"
+      sources."for-in-1.0.2"
+      sources."glob-base-0.3.0"
+      sources."is-dotfile-1.0.3"
+      sources."is-equal-shallow-0.1.3"
+      sources."is-primitive-2.0.0"
+      sources."remove-trailing-separator-1.1.0"
+      sources."binary-extensions-1.10.0"
+      sources."graceful-fs-4.1.11"
+      sources."minimatch-3.0.4"
+      sources."readable-stream-2.3.3"
+      sources."set-immediate-shim-1.0.1"
+      sources."brace-expansion-1.1.8"
+      sources."balanced-match-1.0.0"
+      sources."concat-map-0.0.1"
+      sources."core-util-is-1.0.2"
+      sources."process-nextick-args-1.0.7"
+      sources."safe-buffer-5.1.1"
+      sources."string_decoder-1.0.3"
+      sources."util-deprecate-1.0.2"
+      sources."nan-2.7.0"
+      sources."node-pre-gyp-0.6.36"
+      sources."mkdirp-0.5.1"
+      sources."nopt-4.0.1"
+      sources."npmlog-4.1.2"
+      (sources."rc-1.2.1" // {
+        dependencies = [
+          sources."minimist-1.2.0"
+        ];
+      })
+      sources."request-2.81.0"
+      sources."rimraf-2.6.1"
+      sources."semver-5.4.1"
+      sources."tar-2.2.1"
+      sources."tar-pack-3.4.0"
+      sources."minimist-0.0.8"
+      sources."abbrev-1.1.0"
+      sources."osenv-0.1.4"
+      sources."os-homedir-1.0.2"
+      sources."os-tmpdir-1.0.2"
+      sources."are-we-there-yet-1.1.4"
+      sources."console-control-strings-1.1.0"
+      sources."gauge-2.7.4"
+      sources."set-blocking-2.0.0"
+      sources."delegates-1.0.0"
+      sources."aproba-1.1.2"
+      sources."has-unicode-2.0.1"
+      sources."signal-exit-3.0.2"
+      sources."string-width-1.0.2"
+      sources."strip-ansi-3.0.1"
+      sources."wide-align-1.1.2"
+      sources."code-point-at-1.1.0"
+      sources."is-fullwidth-code-point-1.0.0"
+      sources."number-is-nan-1.0.1"
+      sources."ansi-regex-2.1.1"
+      sources."deep-extend-0.4.2"
+      sources."ini-1.3.4"
+      sources."strip-json-comments-2.0.1"
+      sources."aws-sign2-0.6.0"
+      sources."aws4-1.6.0"
+      sources."caseless-0.12.0"
+      sources."combined-stream-1.0.5"
+      sources."extend-3.0.1"
+      sources."forever-agent-0.6.1"
+      sources."form-data-2.1.4"
+      sources."har-validator-4.2.1"
+      sources."hawk-3.1.3"
+      sources."http-signature-1.1.1"
+      sources."is-typedarray-1.0.0"
+      sources."isstream-0.1.2"
+      sources."json-stringify-safe-5.0.1"
+      sources."mime-types-2.1.16"
+      sources."oauth-sign-0.8.2"
+      sources."performance-now-0.2.0"
+      sources."qs-6.4.0"
+      sources."stringstream-0.0.5"
+      sources."tough-cookie-2.3.2"
+      sources."tunnel-agent-0.6.0"
+      sources."uuid-3.1.0"
+      sources."delayed-stream-1.0.0"
+      sources."asynckit-0.4.0"
+      sources."ajv-4.11.8"
+      sources."har-schema-1.0.5"
+      sources."co-4.6.0"
+      sources."json-stable-stringify-1.0.1"
+      sources."jsonify-0.0.0"
+      sources."hoek-2.16.3"
+      sources."boom-2.10.1"
+      sources."cryptiles-2.0.5"
+      sources."sntp-1.0.9"
+      sources."assert-plus-0.2.0"
+      (sources."jsprim-1.4.1" // {
+        dependencies = [
+          sources."assert-plus-1.0.0"
+        ];
+      })
+      (sources."sshpk-1.13.1" // {
+        dependencies = [
+          sources."assert-plus-1.0.0"
+        ];
+      })
+      sources."extsprintf-1.3.0"
+      sources."json-schema-0.2.3"
+      (sources."verror-1.10.0" // {
+        dependencies = [
+          sources."assert-plus-1.0.0"
+        ];
+      })
+      sources."asn1-0.2.3"
+      (sources."dashdash-1.14.1" // {
+        dependencies = [
+          sources."assert-plus-1.0.0"
+        ];
+      })
+      (sources."getpass-0.1.7" // {
+        dependencies = [
+          sources."assert-plus-1.0.0"
+        ];
+      })
+      sources."jsbn-0.1.1"
+      sources."tweetnacl-0.14.5"
+      sources."ecc-jsbn-0.1.1"
+      sources."bcrypt-pbkdf-1.0.1"
+      sources."mime-db-1.29.0"
+      sources."punycode-1.4.1"
+      sources."glob-7.1.2"
+      sources."fs.realpath-1.0.0"
+      sources."inflight-1.0.6"
+      sources."once-1.4.0"
+      sources."wrappy-1.0.2"
+      sources."block-stream-0.0.9"
+      sources."fstream-1.0.11"
+      sources."debug-2.6.8"
+      sources."fstream-ignore-1.0.5"
+      sources."uid-number-0.0.6"
+      sources."ms-2.0.0"
+      (sources."finalhandler-0.5.1" // {
+        dependencies = [
+          sources."debug-2.2.0"
+          sources."ms-0.7.1"
+        ];
+      })
+      sources."parseurl-1.3.1"
+      sources."utils-merge-1.0.0"
+      sources."escape-html-1.0.3"
+      sources."on-finished-2.3.0"
+      sources."statuses-1.3.1"
+      sources."unpipe-1.0.0"
+      sources."ee-first-1.1.1"
+      sources."vary-1.1.1"
+      sources."through-2.3.8"
+      sources."duplexer-0.1.1"
+      sources."from-0.1.7"
+      sources."map-stream-0.1.0"
+      sources."pause-stream-0.0.11"
+      sources."split-0.3.3"
+      sources."stream-combiner-0.0.4"
+      sources."websocket-driver-0.6.5"
+      sources."websocket-extensions-0.1.1"
+      sources."apache-crypt-1.2.1"
+      sources."apache-md5-1.1.2"
+      sources."bcryptjs-2.4.3"
+      sources."unix-crypt-td-js-1.0.0"
+      sources."basic-auth-1.1.0"
+      sources."depd-1.1.1"
+      sources."on-headers-1.0.1"
+      sources."is-wsl-1.1.0"
+      sources."destroy-1.0.4"
+      sources."encodeurl-1.0.1"
+      sources."etag-1.8.0"
+      sources."fresh-0.5.0"
+      sources."http-errors-1.6.2"
+      sources."mime-1.3.4"
+      sources."range-parser-1.2.0"
+      sources."setprototypeof-1.0.3"
+      sources."accepts-1.3.4"
+      sources."batch-0.6.1"
+      sources."negotiator-0.6.1"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "simple development http server with live reload capability";
+      homepage = "https://github.com/tapio/live-server#readme";
       license = "MIT";
     };
     production = true;
