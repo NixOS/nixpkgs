@@ -8746,12 +8746,15 @@ in {
   };
 
   chardet = buildPythonPackage rec {
-    name = "chardet-2.3.0";
+    name = "chardet-${version}";
+    version = "3.0.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/chardet/${name}.tar.gz";
-      sha256 = "e53e38b3a4afe6d1132de62b7400a4ac363452dc5dfcf8d88e8e0cce663c68aa";
+      sha256 = "1bpalpia6r5x1kknbk11p1fzph56fmmnp405ds8icksd3knr5aw4";
     };
+
+    buildInputs = with self; [ pytest pytestrunner hypothesis ];
 
     meta = {
       homepage = https://github.com/chardet/chardet;
