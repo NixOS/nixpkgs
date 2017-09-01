@@ -9958,12 +9958,12 @@ in {
   };
 
   jsonschema = buildPythonPackage (rec {
-    version = "2.5.1";
+    version = "2.6.0";
     name = "jsonschema-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jsonschema/jsonschema-${version}.tar.gz";
-      sha256 = "0hddbqjm4jq63y8jf44nswina1crjs16l9snb6m3vvgyg31klrrn";
+      sha256 = "00kf3zmpp9ya4sydffpifn0j0mzm342a2vzh82p6r0vh10cg7xbg";
     };
 
     buildInputs = with self; [ nose mock vcversioner ];
