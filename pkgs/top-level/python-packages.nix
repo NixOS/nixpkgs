@@ -9781,8 +9781,6 @@ in {
   };
 
   flask-restplus = callPackage ../development/python-modules/flask-restplus/default.nix { };
-  # Exactly 0.8.6 is required by flexget
-  flask-restplus_0_8 = callPackage ../development/python-modules/flask-restplus/0.8.nix { };
 
   flask_script = buildPythonPackage rec {
     name = "Flask-Script-${version}";
