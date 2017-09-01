@@ -10082,6 +10082,8 @@ in {
     };
   });
 
+  fn = callPackage ../development/python-modules/fn { };
+
   folium = callPackage ../development/python-modules/folium { };
 
   fontforge = pkgs.fontforge.override {
