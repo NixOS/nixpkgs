@@ -60,6 +60,7 @@ buildPythonApplication rec {
     description = "A smart, quick launcher";
     homepage    = "https://kupferlauncher.github.io/";
     license     = licenses.gpl3;
+    maintainers = with maintainers; [ cobbal ];
     platforms   = platforms.linux;
   };
 }
