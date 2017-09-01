@@ -9687,11 +9687,11 @@ in {
 
   flask-compress = buildPythonPackage rec {
     name = "Flask-Compress-${version}";
-    version = "1.3.2";
+    version = "1.4.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/F/Flask-Compress/${name}.tar.gz";
-      sha256 = "4fbb53e7f6ce8b1458a2c3d7a528564912f2641ab2f9f43819fc96ed7f770734";
+      sha256 = "1cxdbdiyxkspg7vkchfmaqr7c6q79gwvakna3fjcc6nivps971j6";
     };
 
     propagatedBuildInputs = with self; [ flask ];
