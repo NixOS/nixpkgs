@@ -157,6 +157,8 @@
   ./services/backup/znapzend.nix
   ./services/cluster/fleet.nix
   ./services/cluster/kubernetes/default.nix
+  ./services/cluster/kubernetes/dns.nix
+  ./services/cluster/kubernetes/dashboard.nix
   ./services/cluster/panamax.nix
   ./services/computing/boinc/client.nix
   ./services/computing/torque/server.nix
