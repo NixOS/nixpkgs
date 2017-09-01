@@ -505,6 +505,12 @@ in {
         type = types.listOf types.str;
       };
 
+      seedDockerImages = mkOption {
+        description = "List of docker images to preload on system";
+        default = [];
+        type = types.listOf types.package;
+      };
+
       registerNode = mkOption {
         description = "Whether to auto register kubelet with API server.";
         default = true;
@@ -774,16 +780,36 @@ in {
 
   config = mkMerge [
     (mkIf cfg.kubelet.enable {
+      services.kubernetes.kubelet.seedDockerImages = [infraContainer];
+
+      systemd.services.kubelet-bootstrap = {
+        description = "Boostrap Kubelet";
+        wantedBy = ["kubernetes.target"];
+        after = ["docker.service" "network.target"];
+        path = with pkgs; [ docker ];
+        script = ''
+          ${concatMapStrings (img: ''
+            echo "Seeding docker image: ${img}"
+            docker load <${img}
+          '') cfg.kubelet.seedDockerImages}
+
+          rm /opt/cni/bin/* || true
+          ${concatMapStrings (package: ''
+            echo "Linking cni package: ${package}"
+            ln -fs ${package.plugins}/* /opt/cni/bin
+          '') cfg.kubelet.cni.packages}
+        '';
+        serviceConfig = {
+          Slice = "kubernetes.slice";
+          Type = "oneshot";
+        };
+      };
+
       systemd.services.kubelet = {
         description = "Kubernetes Kubelet Service";
         wantedBy = [ "kubernetes.target" ];
-        after = [ "network.target" "docker.service" "kube-apiserver.service" ];
+        after = [ "network.target" "docker.service" "kube-apiserver.service" "kubelet-bootstrap.service" ];
         path = with pkgs; [ gitMinimal openssh docker utillinux iproute ethtool thin-provisioning-tools iptables socat ] ++ cfg.path;
-        preStart = ''
-          docker load < ${infraContainer}
-          rm /opt/cni/bin/* || true
-          ${concatMapStringsSep "\n" (p: "ln -fs ${p.plugins}/* /opt/cni/bin") cfg.kubelet.cni.packages}
-        '';
         serviceConfig = {
           Slice = "kubernetes.slice";
           ExecStart = ''${cfg.package}/bin/kubelet \
