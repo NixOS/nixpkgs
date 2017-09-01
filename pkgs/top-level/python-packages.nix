@@ -5355,12 +5355,12 @@ in {
     ];
   in buildPythonPackage rec {
     pname = "urllib3";
-    version = "1.20";
+    version = "1.22";
     name = "${pname}-${version}";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0bx76if7shzlyykmaj4fhjkir5bswc4fdx5r4q0lrn3q51p2pvwp";
+      sha256 = "0kyvc9zdlxr5r96bng5rhm9a6sfqidrbvvkz64s76qs5267dli6c";
     };
 
     NOSE_EXCLUDE=concatStringsSep "," disabled_tests;
