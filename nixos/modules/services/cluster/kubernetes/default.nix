@@ -194,11 +194,23 @@ in {
       type = types.path;
     };
 
+    featureGates = mkOption {
+      description = "List set of feature gates";
+      default = [];
+      type = types.listOf types.str;
+    };
+
     apiserver = {
       enable = mkOption {
         description = "Whether to enable Kubernetes apiserver.";
         default = false;
         type = types.bool;
+      };
+
+      featureGates = mkOption {
+        description = "List set of feature gates";
+        default = cfg.featureGates;
+        type = types.listOf types.str;
       };
 
       address = mkOption {
@@ -389,6 +401,12 @@ in {
         type = types.bool;
       };
 
+      featureGates = mkOption {
+        description = "List set of feature gates";
+        default = cfg.featureGates;
+        type = types.listOf types.str;
+      };
+
       address = mkOption {
         description = "Kubernetes scheduler listening address.";
         default = "127.0.0.1";
@@ -421,6 +439,12 @@ in {
         description = "Whether to enable Kubernetes controller manager.";
         default = false;
         type = types.bool;
+      };
+
+      featureGates = mkOption {
+        description = "List set of feature gates";
+        default = cfg.featureGates;
+        type = types.listOf types.str;
       };
 
       address = mkOption {
@@ -473,6 +497,12 @@ in {
         description = "Whether to enable Kubernetes kubelet.";
         default = false;
         type = types.bool;
+      };
+
+      featureGates = mkOption {
+        description = "List set of feature gates";
+        default = cfg.featureGates;
+        type = types.listOf types.str;
       };
 
       registerNode = mkOption {
@@ -641,6 +671,12 @@ in {
         type = types.bool;
       };
 
+      featureGates = mkOption {
+        description = "List set of feature gates";
+        default = cfg.featureGates;
+        type = types.listOf types.str;
+      };
+
       address = mkOption {
         description = "Kubernetes proxy listening address.";
         default = "0.0.0.0";
@@ -783,6 +819,8 @@ in {
             --hairpin-mode=hairpin-veth \
             ${optionalString (cfg.kubelet.nodeIp != null)
               "--node-ip=${cfg.kubelet.nodeIp}"} \
+            ${optionalString (cfg.kubelet.featureGates != [])
+              "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.kubelet.featureGates}"} \
             ${optionalString cfg.verbose "--v=6 --log_flush_frequency=1s"} \
             ${cfg.kubelet.extraOpts}
           '';
@@ -868,6 +906,8 @@ in {
             ${optionalString cfg.verbose "--v=6"} \
             ${optionalString cfg.verbose "--log-flush-frequency=1s"} \
             --storage-backend=${cfg.apiserver.storageBackend} \
+            ${optionalString (cfg.kubelet.featureGates != [])
+              "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.kubelet.featureGates}"} \
             ${cfg.apiserver.extraOpts}
           '';
           WorkingDirectory = cfg.dataDir;
@@ -894,6 +934,8 @@ in {
             --kubeconfig=${mkKubeConfig "kube-scheduler" cfg.scheduler.kubeconfig} \
             ${optionalString cfg.verbose "--v=6"} \
             ${optionalString cfg.verbose "--log-flush-frequency=1s"} \
+            ${optionalString (cfg.scheduler.featureGates != [])
+              "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.scheduler.featureGates}"} \
             ${cfg.scheduler.extraOpts}
           '';
           WorkingDirectory = cfg.dataDir;
@@ -928,6 +970,8 @@ in {
             ${optionalString (cfg.clusterCidr!=null)
               "--cluster-cidr=${cfg.clusterCidr}"} \
             --allocate-node-cidrs=true \
+            ${optionalString (cfg.controllerManager.featureGates != [])
+              "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.controllerManager.featureGates}"} \
             ${optionalString cfg.verbose "--v=6"} \
             ${optionalString cfg.verbose "--log-flush-frequency=1s"} \
             ${cfg.controllerManager.extraOpts}
@@ -952,6 +996,8 @@ in {
           ExecStart = ''${cfg.package}/bin/kube-proxy \
             --kubeconfig=${mkKubeConfig "kube-proxy" cfg.proxy.kubeconfig} \
             --bind-address=${cfg.proxy.address} \
+            ${optionalString (cfg.proxy.featureGates != [])
+              "--feature-gates=${concatMapStringsSep "," (feature: "${feature}=true") cfg.proxy.featureGates}"} \
             ${optionalString cfg.verbose "--v=6"} \
             ${optionalString cfg.verbose "--log-flush-frequency=1s"} \
             ${optionalString (cfg.clusterCidr!=null)
