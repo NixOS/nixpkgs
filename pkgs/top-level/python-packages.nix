@@ -20318,9 +20318,12 @@ in {
   };
 
   semantic-version = buildPythonPackage rec {
-    name = "semantic_version-2.4.2";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/semantic_version/${name}.tar.gz";
+    pname = "semantic_version";
+    version = "2.4.2";
+    name = "${pname}${version}";
+
+    src = self.fetchPypi {
+      inherit pname version;
       sha256 = "7e8b7fa74a3bc9b6e90b15b83b9bc2377c78eaeae3447516425f475d5d6932d2";
     };
 
