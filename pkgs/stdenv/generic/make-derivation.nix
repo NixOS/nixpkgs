@@ -47,15 +47,14 @@ rec {
     , ... } @ attrs:
 
     # TODO(@Ericson2314): Make this more modular, and not O(n^2).
-    let allHardeningFlags = [
-      "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro"
-      "bindnow"
-    ];
-    in assert lib.all
-      (flag: lib.elem flag allHardeningFlags)
-      (hardeningEnable ++ hardeningDisable);
-
     let
+      supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
+      erroneousHardeningFlags = lib.subtractLists supportedHardeningFlags (hardeningEnable ++ lib.remove "all" hardeningDisable);
+    in if builtins.length erroneousHardeningFlags != 0
+    then abort ("mkDerivation was called with unsupported hardening flags: " + lib.generators.toPretty {} {
+      inherit erroneousHardeningFlags hardeningDisable hardeningEnable supportedHardeningFlags;
+    })
+    else let
       dependencies = map lib.chooseDevOutputs [
         (map (drv: drv.nativeDrv or drv) nativeBuildInputs
            ++ lib.optional separateDebugInfo ../../build-support/setup-hooks/separate-debug-info.sh
