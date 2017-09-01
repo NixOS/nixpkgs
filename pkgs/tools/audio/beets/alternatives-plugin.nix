@@ -13,6 +13,7 @@ pythonPackages.buildPythonApplication rec {
 
   postPatch = ''
     sed -i -e '/install_requires/,/\]/{/beets/d}' setup.py
+    sed -i -e '/test_suite/d' setup.py
   '';
 
   propagatedBuildInputs = with pythonPackages; [ futures ];
