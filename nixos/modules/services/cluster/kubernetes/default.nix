@@ -308,7 +308,7 @@ in {
       authorizationPolicy = mkOption {
         description = ''
           Kubernetes apiserver authorization policy file. See
-          <link xlink:href="http://kubernetes.io/v1.0/docs/admin/authorization.html"/>
+          <link xlink:href="http://kubernetes.io/docs/admin/authorization.html"/>
         '';
         default = [];
         type = types.listOf types.attrs;
@@ -332,7 +332,7 @@ in {
       runtimeConfig = mkOption {
         description = ''
           Api runtime configuration. See
-          <link xlink:href="http://kubernetes.io/v1.0/docs/admin/cluster-management.html"/>
+          <link xlink:href="http://kubernetes.io/docs/admin/cluster-management.html"/>
         '';
         default = "";
         example = "api/all=false,api/v1=true";
