@@ -334,7 +334,7 @@ in {
           Api runtime configuration. See
           <link xlink:href="http://kubernetes.io/docs/admin/cluster-management.html"/>
         '';
-        default = "";
+        default = "authentication.k8s.io/v1beta1=true";
         example = "api/all=false,api/v1=true";
         type = types.str;
       };
@@ -532,6 +532,12 @@ in {
       tlsKeyFile = mkOption {
         description = "File containing x509 private key matching tlsCertFile.";
         default = null;
+        type = types.nullOr types.path;
+      };
+
+      clientCaFile = mkOption {
+        description = "Kubernetes apiserver CA file for client authentication.";
+        default = cfg.caFile;
         type = types.nullOr types.path;
       };
 
@@ -794,6 +800,11 @@ in {
               "--tls-cert-file=${cfg.kubelet.tlsCertFile}"} \
             ${optionalString (cfg.kubelet.tlsKeyFile != null)
               "--tls-private-key-file=${cfg.kubelet.tlsKeyFile}"} \
+            ${optionalString (cfg.kubelet.clientCaFile != null)
+              "--client-ca-file=${cfg.kubelet.clientCaFile}"} \
+            --authentication-token-webhook \
+            --authentication-token-webhook-cache-ttl="10s" \
+            --authorization-mode=Webhook \
             --healthz-bind-address=${cfg.kubelet.healthz.bind} \
             --healthz-port=${toString cfg.kubelet.healthz.port} \
             --hostname-override=${cfg.kubelet.hostname} \
