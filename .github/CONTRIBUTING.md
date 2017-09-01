@@ -23,7 +23,7 @@ under the terms of [COPYING](../COPYING), which is an MIT-like license.
   Examples:
 
   * nginx: init at 2.0.1
-  * firefox: 3.0 -> 3.1.1
+  * firefox: 54.0.1 -> 55.0
   * nixos/hydra: add bazBaz option
   
     Dual baz behavior is needed to do foo.
