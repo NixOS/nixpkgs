@@ -11911,6 +11911,8 @@ in {
 
   marshmallow = callPackage ../development/python-modules/marshmallow { };
 
+  marshmallow-sqlalchemy = callPackage ../development/python-modules/marshmallow-sqlalchemy { };
+
   manuel = buildPythonPackage rec {
     name = "manuel-${version}";
     version = "1.8.0";
