@@ -1513,6 +1513,8 @@ in {
     };
   };
 
+  blessed = callPackage ../development/python-modules/blessed {};
+
   # Build boost for this specific Python version
   # TODO: use separate output for libboost_python.so
   boost = pkgs.boost.override {inherit python;};
