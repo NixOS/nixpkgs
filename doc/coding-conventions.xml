@@ -365,7 +365,7 @@ splitting up an existing category.</para>
   <varlistentry>
     <term>If it’s a (set of) <emphasis>tool(s)</emphasis>:</term>
     <listitem>
-      <para>(A tool is a relatively small program, especially one intented
+      <para>(A tool is a relatively small program, especially one intended
       to be used non-interactively.)</para>
       <variablelist>
         <varlistentry>
@@ -608,7 +608,7 @@ evaluate correctly.</para>
 </section>
 <section xml:id="sec-sources"><title>Fetching Sources</title>
   <para>There are multiple ways to fetch a package source in nixpkgs. The
-    general guidline is that you should package sources with a high degree of
+    general guideline is that you should package sources with a high degree of
     availability. Right now there is only one fetcher which has mirroring
     support and that is <literal>fetchurl</literal>. Note that you should also
     prefer protocols which have a corresponding proxy environment variable.
