@@ -9989,11 +9989,11 @@ in {
 
   vcversioner = buildPythonPackage rec {
     name = "vcversioner-${version}";
-    version = "2.14.0.0";
+    version = "2.16.0.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/v/vcversioner/vcversioner-${version}.tar.gz";
-      sha256 = "11ivq1bm7v0yb4nsfbv9m7g7lyjn112gbvpjnjz8nv1fx633dm5c";
+      sha256 = "16z10sm78jd7ca3jbkgc3q5i8a8q7y1h21q1li21yy3rlhbhrrns";
     };
 
     meta = with stdenv.lib; {
