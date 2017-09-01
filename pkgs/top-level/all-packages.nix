@@ -2045,7 +2045,9 @@ with pkgs;
 
   freeipmi = callPackage ../tools/system/freeipmi {};
 
-  freetalk = callPackage ../applications/networking/instant-messengers/freetalk { };
+  freetalk = callPackage ../applications/networking/instant-messengers/freetalk {
+    guile = guile_2_0;
+  };
 
   freetds = callPackage ../development/libraries/freetds { };
 
