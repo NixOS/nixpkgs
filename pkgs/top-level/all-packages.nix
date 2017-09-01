@@ -1755,6 +1755,8 @@ with pkgs;
 
   dleyna-renderer = callPackage ../development/libraries/dleyna-renderer { };
 
+  dleyna-server = callPackage ../development/libraries/dleyna-server { };
+
   dmd_2_067_1 = callPackage ../development/compilers/dmd/2.067.1.nix {
     stdenv = if stdenv.hostPlatform.isDarwin then
                stdenv
