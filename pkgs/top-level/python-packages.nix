@@ -2811,6 +2811,7 @@ in {
     };
   });
 
+  cheroot = callPackage ../development/python-modules/cheroot {};
 
   cjson = buildPythonPackage rec {
     name = "python-cjson-${version}";
