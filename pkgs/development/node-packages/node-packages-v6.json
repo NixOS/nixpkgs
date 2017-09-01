@@ -43,6 +43,7 @@
 , "lerna"
 , "lcov-result-merger"
 , "livedown"
+, "live-server"
 , "meat"
 , "mocha"
 , "multi-file-swagger"
