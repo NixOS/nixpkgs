@@ -9472,6 +9472,8 @@ in {
 
   flask_mail = callPackage ../development/python-modules/flask-mail { };
 
+  flask_marshmallow = callPackage ../development/python-modules/flask-marshmallow { };
+
   flask_migrate = callPackage ../development/python-modules/flask-migrate { };
 
   flask_oauthlib = callPackage ../development/python-modules/flask-oauthlib.nix { };
