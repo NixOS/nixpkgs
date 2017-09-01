@@ -9756,11 +9756,11 @@ in {
 
   flask-restful = buildPythonPackage rec {
     name = "Flask-RESTful-${version}";
-    version = "0.3.5";
+    version = "0.3.6";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/F/Flask-RESTful/${name}.tar.gz";
-      sha256 = "cce4aeff959b571136b5af098bebe7d3deeca7eb1411c4e722ff2c5356ab4c42";
+      sha256 = "01rlvl2iq074ciyn4schmjip7cyplkwkysbb8f610zil06am35ap";
     };
 
     # TypeError: Only byte strings can be passed to C code
