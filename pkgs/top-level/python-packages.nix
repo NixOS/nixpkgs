@@ -20206,6 +20206,8 @@ in {
     '';
   };
 
+  serpy = callPackage ../development/python-modules/serpy { };
+
   setuptools_scm = callPackage ../development/python-modules/setuptools_scm { };
 
   setuptoolsDarcs = buildPythonPackage rec {
