@@ -20080,6 +20080,8 @@ in {
     propagatedBuildInputs = [ self.cffi ];
   };
 
+  sampledata = callPackage ../development/python-modules/sampledata { };
+
   scapy = buildPythonPackage rec {
     name = "scapy-2.2.0";
 
