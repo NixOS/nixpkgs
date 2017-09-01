@@ -7,6 +7,7 @@ self = rec {
     gcc stdenv
     openssl fuse libuv mariadb libfixposix libev sqlite
     freetds
+    lispPackages.quicklisp-to-nix lispPackages.quicklisp-to-nix-system-info
   ];
   CPATH = "${libfixposix}/include";
   LD_LIBRARY_PATH = "${openssl.out}/lib:${fuse}/lib:${libuv}/lib:${libev}/lib:${mariadb}/lib:${sqlite.out}/lib:${libfixposix}/lib:${freetds}/lib";
