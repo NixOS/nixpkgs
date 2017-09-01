@@ -9705,11 +9705,11 @@ in {
 
   flask-cors = buildPythonPackage rec {
     name = "Flask-Cors-${version}";
-    version = "2.1.2";
+    version = "3.0.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/F/Flask-Cors/${name}.tar.gz";
-      sha256 = "0fd618a4f88ykqx4x55viz47cm9rl214q1b45a0b4mz5vhxffqpj";
+      sha256 = "1mnsyyqn8akin2vz98b9fbv63hcvwmfkaapsglw5jizdkmaz628a";
     };
 
     buildInputs = with self; [ nose ];
