@@ -10741,6 +10741,7 @@ in {
   };
 
   guessit = callPackage ../development/python-modules/guessit { };
+  guessit_2_0 = callPackage ../development/python-modules/guessit/2_0.nix {};
 
   rebulk = callPackage ../development/python-modules/rebulk { };
 
