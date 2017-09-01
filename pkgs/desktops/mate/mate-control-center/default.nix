@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, dbus_glib, libxklavier, libcanberra_gtk3, desktop_file_utils, gnome3, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, dbus_glib, libxklavier, libcanberra_gtk3, librsvg, desktop_file_utils, gnome3, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "mate-control-center-${version}";
@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     dbus_glib
     libxklavier
     libcanberra_gtk3
+    librsvg
     gnome3.gtk
     gnome3.dconf
     mate.mate-desktop
