@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     "--enable-locations-compression"
   ];
 
+  preFixup = "rm -f $out/share/icons/mate/icon-theme.cache";
+
   meta = with stdenv.lib; {
     description = "Library to access weather information from online services for MATE";
     homepage = https://github.com/mate-desktop/libmateweather;

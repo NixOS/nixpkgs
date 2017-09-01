@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, dbus_glib, exempi, lcms2, libexif, libjpeg, librsvg, libxml2, shared_mime_info, gnome3, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, dbus_glib, exempi, lcms2, libexif, libjpeg, librsvg, libxml2, shared_mime_info, gnome3, mate, hicolor_icon_theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "eom-${version}";
@@ -15,6 +15,7 @@ stdenv.mkDerivation rec {
     pkgconfig
     intltool
     itstool
+    hicolor_icon_theme
     wrapGAppsHook
   ];
 
