@@ -73,6 +73,17 @@ rec {
 
   disableHardening = drv: flags: overrideCabal drv (drv: { hardeningDisable = flags; });
 
+  # Controls if Nix should strip the binary files (removes debug symbols)
+  doStrip = drv: overrideCabal drv (drv: { dontStrip = false; });
+  dontStrip = drv: overrideCabal drv (drv: { dontStrip = true; });
+
+  # Useful for debugging segfaults with gdb. 
+  # -g: enables debugging symbols
+  # --disable-*-stripping: tell GHC not to strip resulting binaries
+  # dontStrip: see above
+  enableDWARFDebugging = drv:
+   appendConfigureFlag (dontStrip drv) "--ghc-options=-g --disable-executable-stripping --disable-library-stripping";
+
   sdistTarball = pkg: lib.overrideDerivation pkg (drv: {
     name = "${drv.pname}-source-${drv.version}";
     # Since we disable the haddock phase, we also need to override the
