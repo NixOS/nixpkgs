@@ -19460,14 +19460,15 @@ in {
   # use requests, not requests_2
   requests = buildPythonPackage rec {
     name = "requests-${version}";
-    version = "2.13.0";
+    version = "2.18.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/requests/${name}.tar.gz";
-      sha256 = "5722cd09762faa01276230270ff16af7acf7c5c45d623868d9ba116f15791ce8";
+      sha256 = "0zi3v9nsmv9j27d0c0m1dvqyvaxz53g8m0aa1h3qanxs4irkwi4w";
     };
 
     nativeBuildInputs = [ self.pytest ];
+    propagatedBuildInputs = with self; [ certifi chardet idna urllib3 ];
     # sadly, tests require networking
     doCheck = false;
 
