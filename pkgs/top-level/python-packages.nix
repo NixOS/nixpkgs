@@ -16436,6 +16436,8 @@ in {
     };
   };
 
+  premailer = callPackage ../development/python-modules/premailer { };
+
   prettytable = buildPythonPackage rec {
     name = "prettytable-0.7.1";
 
