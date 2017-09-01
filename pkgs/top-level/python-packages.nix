@@ -11443,12 +11443,12 @@ in {
 
   jinja2 = buildPythonPackage rec {
     pname = "Jinja2";
-    version = "2.9.5";
+    version = "2.9.6";
     name = "${pname}-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/J/Jinja2/${name}.tar.gz";
-      sha256 = "702a24d992f856fa8d5a7a36db6128198d0c21e1da34448ca236c42e92384825";
+      sha256 = "1zzrkywhziqffrzks14kzixz7nd4yh2vc0fb04a68vfd2ai03anx";
     };
 
     propagatedBuildInputs = with self; [ markupsafe ];
