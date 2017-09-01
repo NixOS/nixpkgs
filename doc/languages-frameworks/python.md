@@ -590,7 +590,7 @@ By default tests are run because `doCheck = true`. Test dependencies, like
 e.g. the test runner, should be added to `buildInputs`.
 
 By default `meta.platforms` is set to the same value
-as the interpreter unless overriden otherwise.
+as the interpreter unless overridden otherwise.
 
 ##### `buildPythonPackage` parameters
 
