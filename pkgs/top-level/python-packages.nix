@@ -2793,17 +2793,17 @@ in {
 
   cherrypy = buildPythonPackage (rec {
     name = "cherrypy-${version}";
-    version = "8.7.0";
+    version = "10.2.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/C/CherryPy/CherryPy-${version}.tar.gz";
-      sha256 = "cbf418bf46458a67eb841944f2d414c23bf59d090baf2a28704bd67243e6a79f";
+      sha256 = "1y4gx8zg4s1awvz52vagrkq51s1k6djan598sbapyp3nvws37n9j";
     };
 
     # wsgiserver.ssl_pyopenssl is broken on py3k.
     doCheck = !isPy3k;
     buildInputs = with self; [ pytest setuptools_scm pytestrunner ];
-    propagatedBuildInputs = with self; [ six ];
+    propagatedBuildInputs = with self; [ six cheroot portend ];
 
     meta = {
       homepage = "http://www.cherrypy.org";
