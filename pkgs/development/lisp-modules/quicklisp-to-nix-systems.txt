@@ -59,6 +59,7 @@ dexador
 documentation-utils
 drakma
 esrap
+esrap-peg
 external-program
 fast-http
 fast-io
