@@ -21,10 +21,12 @@ pythonPackages.buildPythonApplication rec {
       --replace 'print "It looks like building the package failed.\n" \' pass \
       --replace '    "You may be missing a C++ compiler and the OpenSSL headers."' pass
 
-  '';
+    substituteInPlace src/pyelliptic/openssl.py \
+      --replace "libdir.append(find_library('ssl'))" "libdir.append('${openssl.out}/lib/libssl.so')"
 
-  makeWrapperArgs = ''
-    --prefix LD_LIBRARY_PATH : "${openssl.out}/lib/"
+    substituteInPlace src/depends.py \
+      --replace "ctypes.util.find_library('ssl')" "'${openssl.out}/lib/libssl.so'"
+
   '';
 
   meta = with stdenv.lib; {
