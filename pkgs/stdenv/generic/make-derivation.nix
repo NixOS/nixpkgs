@@ -49,6 +49,7 @@ rec {
     # TODO(@Ericson2314): Make this more modular, and not O(n^2).
     let
       supportedHardeningFlags = [ "fortify" "stackprotector" "pie" "pic" "strictoverflow" "format" "relro" "bindnow" ];
+      # hardeningDisable additionally supports "all".
       erroneousHardeningFlags = lib.subtractLists supportedHardeningFlags (hardeningEnable ++ lib.remove "all" hardeningDisable);
     in if builtins.length erroneousHardeningFlags != 0
     then abort ("mkDerivation was called with unsupported hardening flags: " + lib.generators.toPretty {} {
