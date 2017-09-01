@@ -1749,6 +1749,8 @@ with pkgs;
     gnupg = gnupg1;
   };
 
+  duplicity-backup-sh = callPackage ../tools/backup/duplicity-backup-sh { };
+
   duply = callPackage ../tools/backup/duply { };
 
   dvdisaster = callPackage ../tools/cd-dvd/dvdisaster { };
