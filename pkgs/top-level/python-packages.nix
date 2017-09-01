@@ -16950,6 +16950,8 @@ in {
     protobuf = pkgs.protobuf2_5;
   };
 
+  psd-tools = callPackage ../development/python-modules/psd-tools { };
+
   psutil = buildPythonPackage rec {
     name = "psutil-${version}";
     version = "4.3.0";
