@@ -889,4 +889,7 @@ self: super: {
   # Needs a version that's newer than what we have in lts-9.
   sbv = super.sbv.override { doctest = self.doctest_0_13_0; };
 
+  # https://github.com/takano-akio/filelock/issues/5
+  filelock = dontCheck super.filelock;
+
 }
