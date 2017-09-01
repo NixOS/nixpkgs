@@ -12293,6 +12293,8 @@ in {
     };
   };
 
+  marshmallow = callPackage ../development/python-modules/marshmallow { };
+
   manuel = buildPythonPackage rec {
     name = "manuel-${version}";
     version = "1.8.0";
