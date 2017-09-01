@@ -19158,11 +19158,11 @@ in {
 
   pytz = buildPythonPackage rec {
     name = "pytz-${version}";
-    version = "2016.6.1";
+    version = "2017.2";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytz/${name}.tar.gz";
-      sha256 = "6f57732f0f8849817e9853eb9d50d85d1ebb1404f702dbc44ee627c642a486ca";
+      url = "mirror://pypi/p/pytz/${name}.zip";
+      sha256 = "12cmd3j46d2gcw08bspvp6s9icfcvx88zjz52n1bli9dyvl5dh7m";
     };
 
     checkPhase = ''
