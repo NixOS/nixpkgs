@@ -24,7 +24,7 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ wrapGAppsHook intltool ];
   buildInputs = [ hicolor_icon_theme docutils libwnck3 keybinder3 ];
-  propagatedBuildInputs = [ pygobject3 gtk3 pyxdg dbus-python ];
+  propagatedBuildInputs = [ pygobject3 gtk3 pyxdg dbus-python pycairo ];
 
   configurePhase = ''
     runHook preConfigure
@@ -47,7 +47,7 @@ buildPythonApplication rec {
     python ./waf install
 
     gappsWrapperArgs+=(
-      "--prefix" "PYTHONPATH" : pythonPath
+      "--prefix" "PYTHONPATH" : "${pythonPath}"
       "--set" "PYTHONNOUSERSITE" "1"
     )
 
