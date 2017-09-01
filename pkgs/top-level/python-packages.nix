@@ -23216,13 +23216,13 @@ in {
   twisted = callPackage ../development/python-modules/twisted { };
 
   tzlocal = buildPythonPackage rec {
-    name = "tzlocal-1.2.2";
+    name = "tzlocal-1.4";
 
     propagatedBuildInputs = with self; [ pytz ];
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/tzlocal/${name}.tar.gz";
-      sha256 = "0paj7vlsb0np8b5sp4bv64wxv7qk2piyp7xg29pkhdjwsbls9fnb";
+      sha256 = "0n9hw4kqblyc0avzwi26rqmvyk9impb608rvy11qifmigy7r18h5";
     };
 
      # test fail (timezone test fail)
