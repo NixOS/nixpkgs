@@ -1351,32 +1351,63 @@ someVar=$(stripHash $name)
 <variablelist>
 
   <varlistentry>
+    <term>Bintools Wrapper</term>
+    <listitem>
+      <para>
+        Bintools Wrapper wraps the binary utilities for a bunch of miscellaneous purposes.
+        These are GNU Binutils when targetting Linux, and a mix of cctools and GNU binutils for Darwin.
+        [The "Bintools" name is supposed to be a compromise between "Binutils" and "cctools" not denoting any specific implementation.]
+        Specifically, the underlying bintools package, and a C standard library (glibc or Darwin's libSystem, just for the dynamic loader) are all fed in, and dependency finding, hardening (see below), and purity checks for each are handled by Bintools Wrapper.
+        Packages typically depend on CC Wrapper, which in turn (at run time) depends on Bintools Wrapper.
+      </para>
+      <para>
+        Bintools Wrapper was only just recently split off from CC Wrapper, so the division of labor is still being worked out.
+        For example, it shouldn't care about about the C standard library, but just take a derivation with the dynamic loader (which happens to be the glibc on linux).
+        Dependency finding however is a task both wrappers will continue to need to share, and probably the most important to understand.
+        It is currently accomplished by collecting directories of host-platform dependencies (i.e. <varname>buildInputs</varname> and <varname>nativeBuildInputs</varname>) in environment variables.
+        Bintools Wrapper's setup hook causes any <filename>lib</filename> and <filename>lib64</filename> subdirectories to be added to <envar>NIX_LDFLAGS</envar>.
+        Since CC Wrapper and Bintools Wrapper use the same strategy, most of the Bintools Wrapper code is sparsely commented and refers to CC Wrapper.
+        But CC Wrapper's code, by contrast, has quite lengthy comments.
+        Bintools Wrapper merely cites those, rather than repeating them, to avoid falling out of sync.
+      </para>
+      <para>
+        A final task of the setup hook is defining a number of standard environment variables to tell build systems which executables full-fill which purpose.
+        They are defined to just be the base name of the tools, under the assumption that Bintools Wrapper's binaries will be on the path.
+        Firstly, this helps poorly-written packages, e.g. ones that look for just <command>gcc</command> when <envar>CC</envar> isn't defined yet <command>clang</command> is to be used.
+        Secondly, this helps packages not get confused when cross-compiling, in which case multiple Bintools Wrappers may simultaneously be in use.
+        <footnote><para>
+          Each wrapper targets a single platform, so if binaries for multiple platforms are needed, the underlying binaries must be wrapped multiple times.
+          As this is a property of the wrapper itself, the multiple wrappings are needed whether or not the same underlying binaries can target multiple platforms.
+        </para></footnote>
+        <envar>BUILD_</envar>- and <envar>TARGET_</envar>-prefixed versions of the normal environment variable are defined for the additional Bintools Wrappers, properly disambiguating them.
+      </para>
+      <para>
+        A problem with this final task is that Bintools Wrapper is honest and defines <envar>LD</envar> as <command>ld</command>.
+        Most packages, however, firstly use the C compiler for linking, secondly use <envar>LD</envar> anyways, defining it as the C compiler, and thirdly, only so define <envar>LD</envar> when it is undefined as a fallback.
+        This triple-threat means Bintools Wrapper will break those packages, as LD is already defined as the actual linker which the package won't override yet doesn't want to use.
+        The workaround is to define, just for the problematic package, <envar>LD</envar> as the C compiler.
+        A good way to do this would be <command>preConfigure = "LD=$CC"</command>.
+      </para>
+    </listitem>
+  </varlistentry>
+
+  <varlistentry>
     <term>CC Wrapper</term>
     <listitem>
       <para>
         CC Wrapper wraps a C toolchain for a bunch of miscellaneous purposes.
-        Specifically, a C compiler (GCC or Clang), Binutils (or the CCTools + binutils mashup when targetting Darwin), and a C standard library (glibc or Darwin's libSystem) are all fed in, and dependency finding, hardening (see below), and purity checks for each are handled by CC Wrapper.
-        Packages typically depend on only CC Wrapper, instead of those 3 inputs directly.
+        Specifically, a C compiler (GCC or Clang), wrapped binary tools, and a C standard library (glibc or Darwin's libSystem, just for the dynamic loader) are all fed in, and dependency finding, hardening (see below), and purity checks for each are handled by CC Wrapper.
+        Packages typically depend on CC Wrapper, which in turn (at run time) depends on Bintools Wrapper.
       </para>
       <para>
-        Dependency finding is undoubtedly the main task of CC wrapper.
-        It is currently accomplished by collecting directories of host-platform dependencies (i.e. <varname>buildInputs</varname> and <varname>nativeBuildInputs</varname>) in environment variables.
-        CC wrapper's setup hook causes any <filename>include</filename> subdirectory of such a dependency to be added to <envar>NIX_CFLAGS_COMPILE</envar>, and any <filename>lib</filename> and <filename>lib64</filename> subdirectories to <envar>NIX_LDFLAGS</envar>.
+        Dependency finding is undoubtedly the main task of CC Wrapper.
+        This works just like Bintools Wrapper, except that any <filename>include</filename> subdirectory of any relevant dependency is added to <envar>NIX_CFLAGS_COMPILE</envar>.
         The setup hook itself contains some lengthy comments describing the exact convoluted mechanism by which this is accomplished.
       </para>
       <para>
-        A final task of the setup hook is defining a number of standard environment variables to tell build systems which executables full-fill which purpose.
-        They are defined to just be the base name of the tools, under the assumption that CC Wrapper's binaries will be on the path.
-        Firstly, this helps poorly-written packages, e.g. ones that look for just <command>gcc</command> when <envar>CC</envar> isn't defined yet <command>clang</command> is to be used.
-        Secondly, this helps packages not get confused when cross-compiling, in which case multiple CC wrappers may be simultaneous in use (targeting different platforms).
-        <envar>BUILD_</envar>- and <envar>TARGET_</envar>-prefixed versions of the normal environment variable are defined for the additional CC Wrappers, properly disambiguating them.
-      </para>
-      <para>
-        A problem with this final task is that CC Wrapper is honest and defines <envar>LD</envar> as <command>ld</command>.
-        Most packages, however, firstly use the C compiler for linking, secondly use <envar>LD</envar> anyways, defining it as the C compiler, and thirdly, only so define <envar>LD</envar> when it is undefined as a fallback.
-        This triple-threat means CC Wrapper will break those packages, as LD is already defined as the actually linker which the package won't override yet doesn't want to use.
-        The workaround is to define, just for the problematic package, <envar>LD</envar> as the C compiler.
-        A good way to do this would be <command>preConfigure = "LD=$CC"</command>.
+        CC Wrapper also like Bintools Wrapper defines standard environment variables with the names of the tools it wraps, for the same reasons described above.
+        Importantly, while it includes a <command>cc</command> symlink to the c compiler for portability, the <envar>CC</envar> will be defined using the compiler's "real name" (i.e. <command>gcc</command> or <command>clang</command>).
+        This helps lousy build systems that inspect on the name of the compiler rather than run it.
       </para>
     </listitem>
   </varlistentry>
