@@ -1,0 +1,82 @@
+#!/usr/bin/env nix-shell
+#! nix-shell -i bash -p bash coreutils curl jq nix
+# vim: ft=sh sw=2 et
+#
+# This scripts scans the github terraform-providers repo for new releases,
+# generates the corresponding nix code and finally generates an index of
+# all the providers.
+set -euo pipefail
+
+GET() {
+  local url=$1
+  echo "fetching $url" >&2
+  curl -#fL "$url"
+}
+
+get_org_repos() {
+  local org=$1
+  GET "https://api.github.com/orgs/$org/repos" | jq -r '.[].name'
+}
+
+get_repo_tags() {
+  local owner=$1
+  local repo=$2
+  GET "https://api.github.com/repos/$owner/$repo/git/refs/tags" | \
+    jq -r '.[].ref' | \
+    cut -d '/' -f 3- | \
+    sort --version-sort
+}
+
+prefetch_github() {
+  local owner=$1
+  local repo=$2
+  local rev=$3
+  nix-prefetch-url --unpack "https://github.com/$owner/$repo/archive/$rev.tar.gz"
+}
+
+echo_entry() {
+  local owner=$1
+  local repo=$2
+  local rev=$3
+  local sha256=$4
+  local version=${3:1}
+  cat <<EOF
+{
+  pname = "$repo";
+  version = "$version";
+  src = {
+    owner  = "$owner";
+    repo   = "$repo";
+    rev    = "$rev";
+    sha256 = "$sha256";
+  };
+};
+EOF
+}
+
+indent() { sed 's/^/    /'; }
+
+org=terraform-providers
+
+repos=$(get_org_repos "$org" | grep terraform-provider- | sort)
+
+
+# Get all the providers with index
+
+echo -n > data.nix
+
+echo "{" >> data.nix
+for repo in $repos; do
+  echo "*** $repo ***"
+  name=$(echo "$repo" | cut -d - -f 3-)
+  last_tag=$(get_repo_tags "$org" "$repo" | tail -1)
+  last_tag_sha256=$(prefetch_github "$org" "$repo" "$last_tag")
+
+  {
+    echo "  $name ="
+    echo_entry "$org" "$repo" "$last_tag" "$last_tag_sha256" | indent
+  } >> data.nix
+done
+echo "}" >> data.nix
+
+echo Done.
