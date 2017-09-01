@@ -9723,6 +9723,8 @@ in {
 
   flask_ldap_login = callPackage ../development/python-modules/flask-ldap-login.nix { };
 
+  flask_marshmallow = callPackage ../development/python-modules/flask-marshmallow { };
+
   flask_migrate = callPackage ../development/python-modules/flask-migrate { };
 
   flask_oauthlib = callPackage ../development/python-modules/flask-oauthlib.nix { };
@@ -12260,6 +12262,10 @@ in {
       maintainers = with maintainers; [ domenkozar garbas ];
     };
   };
+
+  marshmallow = callPackage ../development/python-modules/marshmallow { };
+
+  marshmallow-sqlalchemy = callPackage ../development/python-modules/marshmallow-sqlalchemy { };
 
   manuel = buildPythonPackage rec {
     name = "manuel-${version}";
