@@ -6674,6 +6674,8 @@ with pkgs;
 
   svg2tikz = python27Packages.svg2tikz;
 
+  svgbob = callPackage ../applications/misc/svgbobrus { };
+
   pyrex = pyrex095;
 
   pyrex095 = callPackage ../development/interpreters/pyrex/0.9.5.nix { };
