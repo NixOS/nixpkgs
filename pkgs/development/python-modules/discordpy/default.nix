@@ -31,6 +31,9 @@ in buildPythonPackage rec {
 
   disabled = pythonOlder "3.5";
 
+  # No tests in archive
+  doCheck = false;
+
   meta = {
     description = "A python wrapper for the Discord API";
     homepage    = "https://discordpy.rtfd.org/";
