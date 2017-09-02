@@ -12439,15 +12439,6 @@ with pkgs;
   linuxPackages_hardened =
     recurseIntoAttrs (linuxPackagesFor linux_hardened);
 
-  # Grsecurity packages
-
-  linux_grsec_nixos = kernelPatches.grsecurity_testing;
-
-  linuxPackages_grsec_nixos =
-    recurseIntoAttrs (linuxPackagesFor linux_grsec_nixos);
-
-  linux_grsec_server_xen = linux_grsec_nixos;
-
   # Samus kernels
   linuxPackages_samus_4_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_samus_4_12);
   linuxPackages_samus_latest = recurseIntoAttrs (linuxPackagesFor pkgs.linux_samus_latest);
