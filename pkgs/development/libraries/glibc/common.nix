@@ -19,6 +19,7 @@
 let
   inherit (buildPackages) linuxHeaders;
   version = "2.25";
+  patchSuffix = "-49";
   sha256 = "067bd9bb3390e79aa45911537d13c3721f1d9d3769931a30c2681bfee66f23a0";
   cross = if buildPlatform != hostPlatform then hostPlatform else null;
 in
@@ -38,7 +39,15 @@ stdenv.mkDerivation ({
   enableParallelBuilding = true;
 
   patches =
-    [ /* Have rpcgen(1) look for cpp(1) in $PATH.  */
+    [
+      /*  No tarballs for stable upstream branch, only https://sourceware.org/git/?p=glibc.git
+          $ git co release/2.25/master; git describe
+          glibc-2.25-49-gbc5ace67fe
+          $ git show --reverse glibc-2.25..release/2.25/master | gzip -n -9 --rsyncable - > 2.25-49.patch.gz
+      */
+      ./2.25-49.patch.gz
+
+      /* Have rpcgen(1) look for cpp(1) in $PATH.  */
       ./rpcgen-path.patch
 
       /* Allow NixOS and Nix to handle the locale-archive. */
@@ -59,15 +68,6 @@ stdenv.mkDerivation ({
          "/bin:/usr/bin", which is inappropriate on NixOS machines. This
          patch extends the search path by "/run/current-system/sw/bin". */
       ./fix_path_attribute_in_getconf.patch
-
-      /* Stack Clash */
-      ./CVE-2017-1000366-rtld-LD_LIBRARY_PATH.patch
-      ./CVE-2017-1000366-rtld-LD_PRELOAD.patch
-      ./CVE-2017-1000366-rtld-LD_AUDIT.patch
-    ]
-    ++ lib.optionals stdenv.isi686 [
-      ./fix-i686-memchr.patch
-      ./i686-fix-vectorized-strcspn.patch
     ]
     ++ lib.optional stdenv.isx86_64 ./fix-x64-abi.patch;
 
@@ -145,7 +145,7 @@ stdenv.mkDerivation ({
 // (removeAttrs args [ "withLinuxHeaders" "withGd" ]) //
 
 {
-  name = name + "-${version}" +
+  name = name + "-${version}${patchSuffix}" +
     lib.optionalString (cross != null) "-${cross.config}";
 
   src = fetchurl {
