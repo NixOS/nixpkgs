@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ stdenv, fetchFromGitHub, beets, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   name = "beets-alternatives-${version}";
@@ -15,6 +15,10 @@ pythonPackages.buildPythonApplication rec {
     sed -i -e '/install_requires/,/\]/{/beets/d}' setup.py
     sed -i -e '/test_suite/d' setup.py
   '';
+
+  nativeBuildInputs = [ beets pythonPackages.nose ];
+
+  checkPhase = "nosetests";
 
   propagatedBuildInputs = with pythonPackages; [ futures ];
 
