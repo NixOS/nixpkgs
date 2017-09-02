@@ -13,11 +13,11 @@ assert selinuxSupport -> libselinux != null && libsepol != null;
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "coreutils-8.26";
+  name = "coreutils-8.28";
 
   src = fetchurl {
     url = "mirror://gnu/coreutils/${name}.tar.xz";
-    sha256 = "13lspazc7xkviy93qz7ks9jv4sldvgmwpq36ghrbrqpq93br8phm";
+    sha256 = "0r8c1bgm68kl70j1lgd0rv12iykw6143k4m9a56xip9rc2hv25qi";
   };
 
   # FIXME needs gcc 4.9 in bootstrap tools
