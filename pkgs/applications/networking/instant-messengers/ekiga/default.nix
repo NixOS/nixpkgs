@@ -1,4 +1,4 @@
-{ stdenv, glib, fetchurl, cyrus_sasl, gettext, openldap, ptlib, opal, libXv, rarian, intltool
+{ stdenv, glib, fetchurl, fetchpatch, cyrus_sasl, gettext, openldap, ptlib, opal, libXv, rarian, intltool
 , perl, perlXMLParser, evolution_data_server, gnome_doc_utils, avahi, autoreconfHook
 , libsigcxx, gtk, dbus_glib, libnotify, libXext, xextproto, gnome3, boost, libsecret
 , pkgconfig, libxml2, videoproto, unixODBC, db, nspr, nss, zlib, hicolor_icon_theme
@@ -34,7 +34,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patches = [ ./autofoo.patch ./boost.patch ];
+  patches = [
+    ./autofoo.patch
+    ./boost.patch
+    (fetchpatch { url = https://src.fedoraproject.org/rpms/ekiga/raw/dbf5f5ba449d22bd79f0394cddb7d4d8a88ec6ac/f/ekiga-4.0.1-libresolv.patch;
+      sha256 = "18wc68im8422ibpa0gkrkgjq41m7hikaha3xqmjs2km45i1cwcaz";
+    })
+  ];
 
   postInstall = ''
     wrapProgram "$out"/bin/ekiga \
@@ -45,7 +51,6 @@ stdenv.mkDerivation rec {
     description = "VOIP/Videoconferencing app with full SIP and H.323 support";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
-    broken = true; # because of glibc-2.25
   };
 
   passthru = {
