@@ -131,11 +131,11 @@
     };
   };
   kscreenlocker = {
-    version = "5.10.5";
+    version = "5.10.5.1";
     src = fetchurl {
-      url = "${mirror}/stable/plasma/5.10.5/kscreenlocker-5.10.5.tar.xz";
-      sha256 = "07c8x4pj9adwwm5036wbrrw2sj8xi9d8b6d7qya6bam9xrq0mxkb";
-      name = "kscreenlocker-5.10.5.tar.xz";
+      url = "${mirror}/stable/plasma/5.10.5/kscreenlocker-5.10.5.1.tar.xz";
+      sha256 = "03ih0dyyjljv40wl7mpbssfirkkljw8mnpjjhzk357lzadkplzvp";
+      name = "kscreenlocker-5.10.5.1.tar.xz";
     };
   };
   ksshaskpass = {
