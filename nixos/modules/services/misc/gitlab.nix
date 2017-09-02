@@ -14,6 +14,7 @@ let
 
   gitlabSocket = "${cfg.statePath}/tmp/sockets/gitlab.socket";
   pathUrlQuote = url: replaceStrings ["/"] ["%2F"] url;
+  pgSuperUser = config.services.postgresql.superUser;
 
   databaseYml = ''
     production:
@@ -532,14 +533,14 @@ in {
 
         if [ "${cfg.databaseHost}" = "127.0.0.1" ]; then
           if ! test -e "${cfg.statePath}/db-created"; then
-            ${pkgs.sudo}/bin/sudo -u postgres psql postgres -c "CREATE ROLE ${cfg.databaseUsername} WITH LOGIN NOCREATEDB NOCREATEROLE ENCRYPTED PASSWORD '${cfg.databasePassword}'"
-            ${pkgs.sudo}/bin/sudo -u postgres ${config.services.postgresql.package}/bin/createdb --owner ${cfg.databaseUsername} ${cfg.databaseName}
+            ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql postgres -c "CREATE ROLE ${cfg.databaseUsername} WITH LOGIN NOCREATEDB NOCREATEROLE ENCRYPTED PASSWORD '${cfg.databasePassword}'"
+            ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} ${config.services.postgresql.package}/bin/createdb --owner ${cfg.databaseUsername} ${cfg.databaseName}
             touch "${cfg.statePath}/db-created"
           fi
         fi
 
         # enable required pg_trgm extension for gitlab
-        ${pkgs.sudo}/bin/sudo -u postgres psql gitlab -c "CREATE EXTENSION IF NOT EXISTS pg_trgm"
+        ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql gitlab -c "CREATE EXTENSION IF NOT EXISTS pg_trgm"
         # Always do the db migrations just to be sure the database is up-to-date
         ${gitlab-rake}/bin/gitlab-rake db:migrate RAILS_ENV=production
 
