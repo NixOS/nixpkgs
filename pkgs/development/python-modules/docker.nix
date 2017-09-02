@@ -3,13 +3,13 @@
 , ipaddress, backports_ssl_match_hostname, docker_pycreds
 }:
 buildPythonPackage rec {
-  version = "2.3.0";
+  version = "2.5.1";
   pname = "docker";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/d/docker/${name}.tar.gz";
-    sha256 = "b0e3f353a3df3eedfbbcaf48235117263479b893edfa0cf6d8d056cca5edde1c";
+    sha256 = "b876e6909d8d2360e0540364c3a952a62847137f4674f2439320ede16d6db880";
   };
 
   propagatedBuildInputs = [

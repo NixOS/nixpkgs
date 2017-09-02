@@ -1,13 +1,14 @@
 { lib, stdenv, fetchFromGitHub, kernel, kmod }:
 
 stdenv.mkDerivation rec {
-  name = "ena-20160629-${kernel.version}";
+  version = "1.2.0";
+  name = "ena-${version}-${kernel.version}";
 
   src = fetchFromGitHub {
     owner = "amzn";
     repo = "amzn-drivers";
-    rev = "b594ac1ea9e0c70e8e95803a0cfd9f5f06ac097e";
-    sha256 = "03w6xgv3lfn28n38mj9cdi3px5zjyrbxnflpd3ggivkv6grf9fp7";
+    rev = "ena_linux_${version}";
+    sha256 = "0m0jqd6gyk4r43w6p5dvp1djg2qgvyhnzmg53sszlh55mlgla714";
   };
 
   hardeningDisable = [ "pic" ];

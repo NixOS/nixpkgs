@@ -14,6 +14,9 @@ rec {
   bitcoin-xt  = callPackage ./bitcoin-xt.nix { withGui = true; };
   bitcoind-xt = callPackage ./bitcoin-xt.nix { withGui = false; };
 
+  btc1 = callPackage ./btc1.nix { withGui = true; };
+  btc1d = callPackage ./btc1.nix { withGui = false; };
+
   dashpay = callPackage ./dashpay.nix { };
 
   dogecoin  = callPackage ./dogecoin.nix { withGui = true; };
@@ -23,8 +26,8 @@ rec {
   go-ethereum = callPackage ./go-ethereum.nix { };
   go-ethereum-classic = callPackage ./go-ethereum-classic { };
 
-  hivemind = callPackage ./hivemind.nix { withGui = true; };
-  hivemindd = callPackage ./hivemind.nix { withGui = false; };
+  hivemind = callPackage ./hivemind.nix { withGui = true; boost = pkgs.boost162; };
+  hivemindd = callPackage ./hivemind.nix { withGui = false; boost = pkgs.boost162; };
 
   litecoin  = callPackage ./litecoin.nix { withGui = true; };
   litecoind = callPackage ./litecoin.nix { withGui = false; };

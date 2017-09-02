@@ -7,17 +7,17 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "mayflower";
     repo = "maympd";
-    rev = "772f5af4c4a79cf2187b83a29b684c619507876d";
-    sha256 = "1ah94xf9pxwmrzbhb069qk6sy3v9qm6arg08mj6awicvych2k6c4";
+    rev = "25e428289a31433482b1e7cafbf572496943d193";
+    sha256 = "0sg8r4fpb4gja8adz6043h1qsl7z626llzqysr87q8rrl9ij1j8g";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ mpd_clientlib openssl ];
 
-  meta = {
-    homepage = http://www.ympd.org;
+  meta = with stdenv.lib; {
+    homepage = https://www.ympd.org;
     description = "Standalone MPD Web GUI written in C, utilizing Websockets and Bootstrap/JS";
-    maintainers = [ stdenv.lib.maintainers.siddharthist ];
-    platforms = stdenv.lib.platforms.unix;
+    maintainers = with maintainers; [ siddharthist ];
+    platforms = platforms.unix;
   };
 }

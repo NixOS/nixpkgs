@@ -12,6 +12,11 @@ has the following highlights: </para>
 <itemizedlist>
   <listitem>
     <para>
+      The GNOME version is now 3.24.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
       The user handling now keeps track of deallocated UIDs/GIDs. When a user
       or group is revived, this allows it to be allocated the UID/GID it had before.
       A consequence is that UIDs and GIDs are no longer reused.
@@ -101,6 +106,9 @@ rmdir /var/lib/ipfs/.ipfs
     <para>
       The <literal>mysql</literal> default <literal>dataDir</literal> has changed from <literal>/var/mysql</literal> to <literal>/var/lib/mysql</literal>.
     </para>
+    <para>
+      Radicale's default package has changed from 1.x to 2.x. Instructions to migrate can be found <link xlink:href="http://radicale.org/1to2/"> here </link>. It is also possible to use the newer version by setting the <literal>package</literal> to <literal>radicale2</literal>, which is done automatically when <literal>stateVersion</literal> is 17.09 or higher.
+    </para>
   </listitem>
   <listitem>
     <para>
@@ -154,6 +162,28 @@ rmdir /var/lib/ipfs/.ipfs
       variables as parameters.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      <literal>services.firefox.syncserver</literal> now runs by default as a
+      non-root user. To accomodate this change, the default sqlite database
+      location has also been changed. Migration should work automatically.
+      Refer to the description of the options for more details.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The <literal>compiz</literal> window manager and package was
+      removed. The system support had been broken for several years.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      Touchpad support should now be enabled through
+      <literal>libinput</literal> as <literal>synaptics</literal> is
+      now deprecated. See the option
+      <literal>services.xserver.libinput.enable</literal>.
+    </para>
+  </listitem>
 </itemizedlist>
 
 <para>Other notable improvements:</para>
@@ -199,7 +229,7 @@ rmdir /var/lib/ipfs/.ipfs
   <listitem>
     <para>
       Nixpkgs overlays may now be specified with a file as well as a directory. The
-      value of <literal>&lt;nixpkgs-overlays></literal> may be a file, and 
+      value of <literal>&lt;nixpkgs-overlays></literal> may be a file, and
       <filename>~/.config/nixpkgs/overlays.nix</filename> can be used instead of the
       <filename>~/.config/nixpkgs/overalys</filename> directory.
     </para>

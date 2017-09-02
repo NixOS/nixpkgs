@@ -1,11 +1,11 @@
 { mkDerivation, lib
-, extra-cmake-modules, kdoctools, makeWrapper
+, extra-cmake-modules, kdoctools, makeWrapper, shared_mime_info
 , qtwebkit
 , libkcddb, karchive, kcmutils, kfilemetadata, knewstuff, knotifyconfig, solid, kxmlgui
 , flac, lame, libmad, libmpcdec, libvorbis
 , libsamplerate, libsndfile, taglib
 , cdparanoia, cdrdao, cdrtools, dvdplusrwtools, libburn, libdvdcss, libdvdread, vcdimager
-, ffmpeg, libmusicbrainz2, normalize, sox, transcode, shared_mime_info, kinit
+, ffmpeg, libmusicbrainz3, normalize, sox, transcode, kinit
 }:
 
 mkDerivation {
@@ -28,7 +28,7 @@ mkDerivation {
     # cd/dvd
     cdparanoia libdvdcss libdvdread
     # others
-    ffmpeg libmusicbrainz2 shared_mime_info
+    ffmpeg libmusicbrainz3 shared_mime_info
   ];
   propagatedUserEnvPkgs = [ (lib.getBin kinit) ];
   postFixup =

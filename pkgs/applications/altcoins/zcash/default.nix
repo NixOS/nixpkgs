@@ -1,27 +1,27 @@
 { stdenv, libsodium, fetchFromGitHub, wget, pkgconfig, autoreconfHook, openssl, db62, boost
-, zlib, gtest, gmock, miniupnpc, callPackage, gmp, qt4, utillinux, protobuf, qrencode, libevent
+, zlib, gtest, gmock, callPackage, gmp, qt4, utillinux, protobuf, qrencode, libevent
 , withGui }:
 
 let libsnark     = callPackage ./libsnark { inherit boost openssl; };
     librustzcash = callPackage ./librustzcash {};
 in
 with stdenv.lib;
-stdenv.mkDerivation rec{
+stdenv.mkDerivation rec {
 
   name = "zcash" + (toString (optional (!withGui) "d")) + "-" + version;
-  version = "1.0.8";
+  version = "1.0.11";
 
   src = fetchFromGitHub {
     owner = "zcash";
     repo  = "zcash";
-    rev = "f630519d865ce22a6cf72a29785f2a876902f8e1";
-    sha256 = "1zjxg3dp0amjfs67469yp9b223v9hx29lkxid9wz2ivxj3paq7bv";
+    rev = "v${version}";
+    sha256 = "09474jdhsg30maqrwfxigbw3llqi8axhh82lz3a23ii2gj68ni55";
   };
 
   enableParallelBuilding = true;
 
   buildInputs = [ pkgconfig gtest gmock gmp libsnark autoreconfHook openssl wget db62 boost zlib
-                  miniupnpc protobuf libevent libsodium librustzcash ]
+                  protobuf libevent libsodium librustzcash ]
                   ++ optionals stdenv.isLinux [ utillinux ]
                   ++ optionals withGui [ qt4 qrencode ];
 

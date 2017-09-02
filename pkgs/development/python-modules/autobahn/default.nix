@@ -6,11 +6,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "autobahn";
-  version = "17.5.1";
+  version = "17.8.1";
 
   src = fetchurl {
     url = "mirror://pypi/a/${pname}/${name}.tar.gz";
-    sha256 = "0p2xx20g0rj6pnp4h3231mn8zk4ag8msv69f93gai2hzl5vglcia";
+    sha256 = "72b1b1e30bd41d52e7454ef6fe78fe80ebf2341a747616e2cd854a76203a0ec4";
   };
 
   # Upstream claim python2 support, but tests require pytest-asyncio which

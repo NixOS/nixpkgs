@@ -23,6 +23,44 @@ let
     sha256 = "0r5pfbjbmdj46h20jm3iqmy969qd27ajyf0phjhgykv6j0cqjlgd";
   };
 
+  ast = assert isPhp7; buildPecl {
+    name = "ast-0.1.5";
+
+    sha256 = "0vv2w5fkkw9n7qdmi5aq50416zxmvyzjym8kb6j1v8kd4xcsjjgw";
+  };
+
+  couchbase = buildPecl rec {
+    name = "couchbase-${version}";
+    version = "2.3.4";
+
+    buildInputs = [ pkgs.libcouchbase pcs ];
+
+    src = pkgs.fetchFromGitHub {
+      owner = "couchbase";
+      repo = "php-couchbase";
+      rev = "v${version}";
+      sha256 = "0rdlrl7vh4kbxxj9yxp54xpnnrxydpa9fab7dy4nas474j5vb2bp";
+    };
+
+    configureFlags = [ "--with-couchbase" ];
+
+    patches = [
+      (pkgs.writeText "php-couchbase.patch" ''
+        --- a/config.m4
+        +++ b/config.m4
+        @@ -9,7 +9,7 @@ if test "$PHP_COUCHBASE" != "no"; then
+             LIBCOUCHBASE_DIR=$PHP_COUCHBASE
+           else
+             AC_MSG_CHECKING(for libcouchbase in default path)
+        -    for i in /usr/local /usr; do
+        +    for i in ${pkgs.libcouchbase}; do
+               if test -r $i/include/libcouchbase/couchbase.h; then
+                 LIBCOUCHBASE_DIR=$i
+                 AC_MSG_RESULT(found in $i)
+      '')
+    ];
+  };
+
   imagick = buildPecl {
     name = "imagick-3.4.3RC1";
     sha256 = "0siyxpszjz6s095s2g2854bhprjq49rf22v6syjiwvndg1pc9fsh";
@@ -37,6 +75,8 @@ let
     sha256 = "04c35rj0cvq5ygn2jgmyvqcb0k8d03v4k642b6i37zgv7x15pbic";
 
     configureFlags = "--with-zlib-dir=${pkgs.zlib.dev}";
+
+    makeFlags = [ "CFLAGS=-fgnu89-inline" ];
   };
 
   memcached = if isPhp7 then memcachedPhp7 else memcached22;
@@ -72,6 +112,12 @@ let
     buildInputs = with pkgs; [ pkgconfig cyrus_sasl zlib ];
   };
 
+  pcs = buildPecl rec {
+    name = "pcs-1.3.3";
+
+    sha256 = "0d4p1gpl8gkzdiv860qzxfz250ryf0wmjgyc8qcaaqgkdyh5jy5p";
+  };
+
   # No support for PHP 7 yet (and probably never will be)
   spidermonkey = assert !isPhp7; buildPecl rec {
     name = "spidermonkey-1.0.0";
@@ -103,6 +149,36 @@ let
 
     doCheck = true;
     checkTarget = "test";
+  };
+
+  yaml = if isPhp7 then yaml20 else yaml13;
+
+  yaml13 = assert !isPhp7; buildPecl {
+    name = "yaml-1.3.1";
+
+    sha256 = "1fbmgsgnd6l0d4vbjaca0x9mrfgl99yix5yf0q0pfcqzfdg4bj8q";
+
+    configureFlags = [
+      "--with-yaml=${pkgs.libyaml}"
+    ];
+
+    buildInputs = [
+      pkgs.pkgconfig
+    ];
+  };
+
+  yaml20 = assert isPhp7; buildPecl {
+    name = "yaml-2.0.2";
+
+    sha256 = "0f80zy79kyy4hn6iigpgfkwppwldjfj5g7s4gddklv3vskdb1by3";
+
+    configureFlags = [
+      "--with-yaml=${pkgs.libyaml}"
+    ];
+
+    buildInputs = [
+      pkgs.pkgconfig
+    ];
   };
 
   # Since PHP 5.5 OPcache is integrated in the core and has to be enabled via --enable-opcache during compilation.

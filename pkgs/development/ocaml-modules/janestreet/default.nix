@@ -1,4 +1,4 @@
-{ stdenv, lib, janePackage, ocamlbuild, cryptokit, ctypes, magic-mime,
+{ stdenv, lib, janePackage, ocaml, ocamlbuild, cryptokit, ctypes, magic-mime,
   ocaml-migrate-parsetree, octavius, ounit, ppx_deriving, re, zarith,
   openssl }:
 
@@ -8,15 +8,15 @@ rec {
 
   sexplib = janePackage {
     name = "sexplib";
-    version = "0.9.1";
-    hash = "087md38l73lp24j2lmwi053jjav00k11r06s6whmff1xlhj70wdj";
+    version = "0.9.2";
+    hash = "0szj7gi5ksy7kif5g71rkr6xhxc41xl8hq6s5zz610cjyngzyzjl";
     meta.description = "Automated S-expression conversion";
   };
 
   base = janePackage {
     name = "base";
-    version = "0.9.1";
-    hash = "09gj30zyv23gv3gkf2pb3d3ywmkgd74dq8sfaps5xarr3grvndhm";
+    version = "0.9.3";
+    hash = "14v3zsr7za9h1gkxdmkk1yagnrfjk3y9snraywv9hsqbhv39ajvv";
     propagatedBuildInputs = [ sexplib ];
     meta.description = "Full standard library replacement for OCaml";
   };
@@ -65,7 +65,8 @@ rec {
 
   ppx_driver = janePackage {
     name = "ppx_driver";
-    hash = "1w3khwnvy18nkh673zrbhcs6051hs7z5z5dib7npkvpxndw22hwj";
+    version = "0.9.1";
+    hash = "1amz49x6v4sh1v2my6618cah0zv5i7jmsapbk9ydps6419g5asay";
     buildInputs = [ ocamlbuild ];
     propagatedBuildInputs = [ ppx_optcomp ];
     meta.description = "Feature-full driver for OCaml AST transformers";
@@ -173,7 +174,8 @@ rec {
 
   bin_prot = janePackage {
     name = "bin_prot";
-    hash = "0cy6lhksx4jypkrnj3ha31p97ghslki0bx5rpnzc2v28mfp6pzh1";
+    version = "0.9.1";
+    hash = "1bgcmkgz6b5i522996x589zsaiy5b3h37887lwbqvpps8by2ayvk";
     propagatedBuildInputs = [ ppx_compare ppx_custom_printf ppx_fields_conv ppx_variants_conv ];
     meta.description = "Binary protocol generator";
   };
@@ -203,7 +205,8 @@ rec {
 
   ppx_inline_test = janePackage {
     name = "ppx_inline_test";
-    hash = "01xml88ahrzqnc7g1ib184jbqxpdfx4gn2wdvi09dpi4i0jahy33";
+    version = "0.9.2";
+    hash = "17j36ihiqprbpa2bk02449k93vaidid2sly5djrk848ccjq8n5aa";
     propagatedBuildInputs = [ ppx_metaquot ];
     meta.description = "Syntax extension for writing in-line tests in OCaml code";
   };
@@ -316,7 +319,8 @@ rec {
 
   core = janePackage {
     name = "core";
-    hash = "0x05ky8l75k2dnpsa02vmqcr7p7q0vvc6279psq3iybrwcvab9yi";
+    version = "0.9.1";
+    hash = "1643r0namsgj8xwfr9niimcdwyyq4ddiwd02d73ipb4a8710aqi8";
     propagatedBuildInputs = [ core_kernel spawn ];
     meta.description = "Jane Street's standard library overlay";
   };
@@ -568,6 +572,7 @@ rec {
     hash = "0ak93dyzi6sc6gb0j07fj85b24d8bv6g2hm7jj5xwb39kjwh51jl";
     propagatedBuildInputs = [ ppx_sexp_conv ];
     meta.description = "Binding to the posix *at functions";
+    meta.broken = lib.versionAtLeast ocaml.version "4.05";
   };
 
   rpc_parallel = janePackage {

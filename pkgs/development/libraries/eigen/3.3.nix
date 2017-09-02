@@ -13,7 +13,11 @@ stdenv.mkDerivation {
   };
   
   nativeBuildInputs = [ cmake ];
-  
+
+  postInstall = ''
+    sed -e '/Cflags:/s@''${prefix}/@@' -i "$out"/share/pkgconfig/eigen3.pc
+  '';
+   
   meta = with stdenv.lib; {
     description = "C++ template library for linear algebra: vectors, matrices, and related algorithms";
     license = licenses.lgpl3Plus;

@@ -17,6 +17,8 @@ rec {
     (type == "directory" && (baseName == ".git" || baseName == ".svn" || baseName == "CVS" || baseName == ".hg")) ||
     # Filter out backup files.
     lib.hasSuffix "~" baseName ||
+    builtins.match "^.*\.sw[a-z]$" baseName != null ||
+
     # Filter out generates files.
     lib.hasSuffix ".o" baseName ||
     lib.hasSuffix ".so" baseName ||

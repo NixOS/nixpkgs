@@ -8,10 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "14cng9l857np42zixp440mbc8y5675frb6lhsds53j1cws9cncw9";
   };
 
-  buildInputs = with xorg; [ shhmsg shhopt libX11 libXt libXpm libXaw libXext];
+  buildInputs = with xorg; [ shhmsg shhopt libX11 libXt libXpm libXaw libXext ];
 
   preInstall = ''
-    substituteInPlace Makefile --replace "-o \$(OWNER) -g \$(GROUP)" ""
+    substituteInPlace Makefile \
+      --replace "-o \$(OWNER) -g \$(GROUP)" "" \
+      --replace "4755" "755"
   '';
   
   installFlags = [ "INSTLIBDIR=$(out)/lib"

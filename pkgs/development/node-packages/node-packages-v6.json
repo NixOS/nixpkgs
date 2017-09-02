@@ -42,6 +42,7 @@
 , { "kibana-authentication-proxy": "git://github.com/fangli/kibana-authentication-proxy.git" }
 , "lerna"
 , "lcov-result-merger"
+, "livedown"
 , "meat"
 , "mocha"
 , "nijs"
@@ -55,6 +56,7 @@
 , "npm"
 , { "npm2nix": "git://github.com/NixOS/npm2nix.git#5.12.0" }
 , "npm-check-updates"
+, "ocaml-language-server"
 , "parsoid"
 , "peerflix"
 , "peerflix-server"

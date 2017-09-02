@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig
+{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig, substituteAll
 , alsaLib, ffmpeg_2, glib, openssl, pcre, zlib
 , libX11, libXcursor, libXdamage, libXext, libXi, libXinerama, libXrandr, libXrender, libXv
 , libxkbcommon, libxkbfile
@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation rec {
   name = "freerdp-git-${version}";
-  version = "20170502";
+  version = "20170724";
 
   src = fetchFromGitHub {
     owner  = "FreeRDP";
     repo   = "FreeRDP";
-    rev    = "8569102c3a011602de3a1cdf69f7c69adbb864ee";
-    sha256 = "0m61aiy8l3ybnk2d2kjmpp9ql31zfs63gjixyj9x95jd4m507j67";
+    rev    = "2.0.0-rc0";
+    sha256 = "0ngwdy0lfv2k59z1z8yq1wj5zbhqigpyfqbgh38m9p35yzh33lv1";
   };
 
   # outputs = [ "bin" "out" "dev" ];

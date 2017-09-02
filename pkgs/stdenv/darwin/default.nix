@@ -78,7 +78,6 @@ in rec {
         cc = if isNull last then "/dev/null" else import ../../build-support/cc-wrapper {
           inherit shell;
           inherit (last) stdenv;
-          inherit (last.pkgs.darwin) dyld;
 
           nativeTools  = true;
           nativePrefix = bootstrapTools;
@@ -86,8 +85,6 @@ in rec {
           buildPackages = lib.optionalAttrs (last ? stdenv) {
             inherit (last) stdenv;
           };
-          hostPlatform = localSystem;
-          targetPlatform = localSystem;
           libc         = last.pkgs.darwin.Libsystem;
           isClang      = true;
           cc           = { name = "clang-9.9.9"; outPath = bootstrapTools; };
@@ -320,10 +317,7 @@ in rec {
       buildPackages = {
         inherit (prevStage) stdenv;
       };
-      hostPlatform = localSystem;
-      targetPlatform = localSystem;
       inherit (pkgs) coreutils binutils gnugrep;
-      inherit (pkgs.darwin) dyld;
       cc   = pkgs.llvmPackages.clang-unwrapped;
       libc = pkgs.darwin.Libsystem;
     };

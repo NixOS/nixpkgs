@@ -6,11 +6,11 @@
 buildPythonPackage rec {
   pname = "audioread";
   name = "${pname}-${version}";
-  version = "2.1.1";
+  version = "2.1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ffb601de7a9e40850d4ec3256a3a6bbe8fa40466dafb5c65f41b08e4bb963f1e";
+    sha256 = "36c3b118f097c58ba073b7d040c4319eff200756f094295677567e256282d0d7";
   };
 
   # No tests, need to disable or py3k breaks

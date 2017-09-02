@@ -1,16 +1,16 @@
-{ stdenv, fetchPypi, buildPythonPackage, isPy3k, execnet, pytest, setuptools_scm }:
+{ stdenv, fetchPypi, buildPythonPackage, isPy3k, execnet, pytest, setuptools_scm, pytest-forked }:
 
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "pytest-xdist";
-  version = "1.18.2";
+  version = "1.20.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "10468377901b80255cf192c4603a94ffe8b1f071f5c912868da5f5cb91170dae";
+    sha256 = "7924d45c2430191fe3679a58116c74ceea13307d7822c169d65fd59a24b3a4fe";
   };
 
-  buildInputs = [ pytest setuptools_scm ];
+  buildInputs = [ pytest setuptools_scm pytest-forked];
   propagatedBuildInputs = [ execnet ];
 
   postPatch = ''

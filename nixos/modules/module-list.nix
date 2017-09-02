@@ -43,6 +43,7 @@
   ./hardware/nitrokey.nix
   ./hardware/opengl.nix
   ./hardware/pcmcia.nix
+  ./hardware/raid/hpsa.nix
   ./hardware/usb-wwan.nix
   ./hardware/video/amdgpu.nix
   ./hardware/video/amdgpu-pro.nix
@@ -166,6 +167,7 @@
   ./services/continuous-integration/buildbot/master.nix
   ./services/continuous-integration/buildbot/worker.nix
   ./services/continuous-integration/buildkite-agent.nix
+  ./services/continuous-integration/hail.nix
   ./services/continuous-integration/hydra/default.nix
   ./services/continuous-integration/gitlab-runner.nix
   ./services/continuous-integration/gocd-agent/default.nix
@@ -271,6 +273,7 @@
   ./services/mail/rspamd.nix
   ./services/mail/rmilter.nix
   ./services/mail/nullmailer.nix
+  ./services/misc/airsonic.nix
   ./services/misc/apache-kafka.nix
   ./services/misc/autofs.nix
   ./services/misc/autorandr.nix
@@ -558,7 +561,6 @@
   ./services/security/fail2ban.nix
   ./services/security/fprintd.nix
   ./services/security/fprot.nix
-  ./services/security/frandom.nix
   ./services/security/haka.nix
   ./services/security/haveged.nix
   ./services/security/hologram-server.nix
@@ -572,6 +574,7 @@
   ./services/security/tor.nix
   ./services/security/torify.nix
   ./services/security/torsocks.nix
+  ./services/security/usbguard.nix
   ./services/security/vault.nix
   ./services/system/cgmanager.nix
   ./services/system/cloud-init.nix
@@ -639,7 +642,6 @@
   ./services/x11/redshift.nix
   ./services/x11/urxvtd.nix
   ./services/x11/window-managers/awesome.nix
-  #./services/x11/window-managers/compiz.nix
   ./services/x11/window-managers/default.nix
   ./services/x11/window-managers/fluxbox.nix
   ./services/x11/window-managers/icewm.nix
@@ -689,6 +691,7 @@
   ./tasks/cpu-freq.nix
   ./tasks/encrypted-devices.nix
   ./tasks/filesystems.nix
+  ./tasks/filesystems/bcachefs.nix
   ./tasks/filesystems/btrfs.nix
   ./tasks/filesystems/cifs.nix
   ./tasks/filesystems/exfat.nix

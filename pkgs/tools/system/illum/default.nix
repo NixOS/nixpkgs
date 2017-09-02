@@ -17,10 +17,6 @@ stdenv.mkDerivation rec {
     bash ./configure
   '';
 
-  buildPhase = ''
-    ninja
-  '';
-
   installPhase = ''
     mkdir -p $out/bin
     mv illum-d $out/bin

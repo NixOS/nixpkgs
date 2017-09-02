@@ -224,6 +224,133 @@ Additional information.
 </section>
 
 <section>
+  <title>Pull Request Template</title>
+  <para>
+    The pull request template helps determine what steps have been made for a
+    contribution so far, and will help guide maintainers on the status of a
+    change. The motivation section of the PR should include any extra details
+    the title does not address and link any existing issues related to the pull
+    request.
+  </para>
+  <para>When a PR is created, it will be pre-populated with some checkboxes detailed below:
+  </para>
+  <section>
+    <title>Tested using sandboxing</title>
+    <para>
+      When sandbox builds are enabled, Nix will setup an isolated environment
+      for each build process. It is used to remove further hidden dependencies
+      set by the build environment to improve reproducibility. This includes
+      access to the network during the build outside of
+      <function>fetch*</function> functions and files outside the Nix store.
+      Depending on the operating system access to other resources are blocked
+      as well (ex. inter process communication is isolated on Linux); see <link
+      xlink:href="https://nixos.org/nix/manual/#description-45">build-use-sandbox</link>
+      in Nix manual for details.
+    </para>
+    <para>
+      Sandboxing is not enabled by default in Nix due to a small performance
+      hit on each build.  In pull requests for <link
+        xlink:href="https://github.com/NixOS/nixpkgs/">nixpkgs</link> people
+      are asked to test builds with sandboxing enabled (see <literal>Tested
+        using sandboxing</literal> in the pull request template) because
+      in<link
+        xlink:href="https://nixos.org/hydra/">https://nixos.org/hydra/</link>
+      sandboxing is also used.
+    </para>
+    <para>
+      Depending if you use NixOS or other platforms you can use one of the
+      following methods to enable sandboxing <emphasis role="bold">before</emphasis> building the package:
+      <itemizedlist>
+        <listitem>
+          <para>
+            <emphasis role="bold">Globally enable sandboxing on NixOS</emphasis>:
+            add the following to 
+            <filename>configuration.nix</filename>
+            <screen>nix.useSandbox = true;</screen>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <emphasis role="bold">Globally enable sandboxing on non-NixOS platforms</emphasis>:
+            add the following to: <filename>/etc/nix/nix.conf</filename>
+            <screen>build-use-sandbox = true</screen>
+          </para>
+        </listitem>
+      </itemizedlist>
+    </para>
+    
+  </section>
+  <section>
+    <title>Built on platform(s)</title>
+    <para>
+      Many Nix packages are designed to run on multiple
+      platforms. As such, it's important to let the maintainer know which
+      platforms your changes have been tested on. It's not always practical to
+      test a change on all platforms, and is not required for a pull request to
+      be merged. Only check the systems you tested the build on in this
+      section.
+    </para>
+  </section>
+  <section>
+    <title>Tested via one or more NixOS test(s) if existing and applicable for the change (look inside nixos/tests)</title>
+    <para>
+      Packages with automated tests are much more likely to be merged in a
+      timely fashion because it doesn't require as much manual testing by the
+      maintainer to verify the functionality of the package. If there are
+      existing tests for the package, they should be run to verify your changes
+      do not break the tests. Tests only apply to packages with NixOS modules
+      defined and can only be run on Linux. For more details on writing and
+      running tests, see the <link
+        xlink:href="https://nixos.org/nixos/manual/index.html#sec-nixos-tests">section
+        in the NixOS manual</link>.
+    </para>
+  </section>
+  <section>
+    <title>Tested compilation of all pkgs that depend on this change using <command>nox-review</command></title>
+    <para>
+      If you are updating a package's version, you can use nox to make sure all
+      packages that depend on the updated package still compile correctly. This
+      can be done using the nox utility. The <command>nox-review</command>
+      utility can look for and build all dependencies either based on
+      uncommited changes with the <literal>wip</literal> option or specifying a
+      github pull request number.
+    </para>
+    <para>
+      review uncommitted changes:
+      <screen>nix-shell -p nox --run nox-review wip</screen>
+    </para>
+    <para>
+      review changes from pull request number 12345:
+      <screen>nix-shell -p nox --run nox-review pr 12345</screen>
+    </para>
+  </section>
+  <section>
+    <title>Tested execution of all binary files (usually in <filename>./result/bin/</filename>)</title>
+    <para>
+      It's important to test any executables generated by a build when you
+      change or create a package in nixpkgs. This can be done by looking in
+      <filename>./result/bin</filename> and running any files in there, or at a
+      minimum, the main executable for the package. For example, if you make a change
+      to <package>texlive</package>, you probably would only check the binaries
+      associated with the change you made rather than testing all of them.
+    </para>
+  </section>
+  <section>
+    <title>Meets nixpkgs contribution standards</title>
+    <para>
+      The last checkbox is fits <link
+        xlink:href="https://github.com/NixOS/nixpkgs/blob/master/.github/CONTRIBUTING.md">CONTRIBUTING.md</link>.
+      The contributing document has detailed information on standards the Nix
+      community has for commit messages, reviews, licensing of contributions
+      you make to the project, etc... Everyone should read and understand the
+      standards the community has for contributing before submitting a pull
+      request.
+    </para>
+    
+  </section>
+</section>
+
+<section>
 <title>Hotfixing pull requests</title>
 
 <itemizedlist>

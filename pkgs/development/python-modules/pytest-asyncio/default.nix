@@ -2,13 +2,13 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "pytest-asyncio";
-  version = "0.5.0";
+  version = "0.6.0";
 
   disabled = !isPy3k;
 
   src = fetchurl {
     url = "mirror://pypi/p/${pname}/${name}.tar.gz";
-    sha256 = "03sxq8fglr4lw4y6wqlbli9ypr65fxzx6hlpn5wpccx8v5472iff";
+    sha256 = "e5c6786ece4b3bbb0cca1bf68bf089756a62760e3764dc84eaee39bfab70289b";
   };
 
   buildInputs = [ pytest ];

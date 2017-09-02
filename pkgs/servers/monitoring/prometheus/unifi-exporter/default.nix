@@ -2,8 +2,8 @@
 
 buildGoPackage rec {
   name = "unifi-exporter-${version}";
-  version = "0.4.0+21";
-  rev = "1a38790c49f06d64c517cd88de9e3f9d2677e105";
+  version = "0.4.0+git1";
+  rev = "9a4e69fdea91dd0033bda4842998d751b40a6130";
 
   goPackagePath = "github.com/mdlayher/unifi_exporter";
 
@@ -11,10 +11,8 @@ buildGoPackage rec {
     inherit rev;
     owner = "mdlayher";
     repo = "unifi_exporter";
-    sha256 = "1692w9hzl3xqywn3p6zdi2l77f3xy7j42429wy2c0ny0mljbzv7p";
+    sha256 = "08zqvwvdqnc301f8jfh7bdvc138szw6xszx884b2v8w2x38w3rmn";
   };
-
-  goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
     description = "Prometheus exporter that exposes metrics from a Ubiquiti UniFi Controller and UniFi devices";

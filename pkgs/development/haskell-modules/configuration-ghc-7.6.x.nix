@@ -82,8 +82,9 @@ self: super: {
     postPatch = "sed -i -e 's|base ==4.8.*,|base,|' sandi.cabal";
   });
 
-  # blaze-builder requires an additional build input on older compilers.
+  # These packages require additional build inputs on older compilers.
   blaze-builder = addBuildDepend super.blaze-builder super.bytestring-builder;
+  text = addBuildDepend super.text self.bytestring-builder;
 
   # available convertible package won't build with the available
   # bytestring and ghc-mod won't build without convertible
@@ -96,10 +97,11 @@ self: super: {
   # Needs additional inputs on old compilers.
   semigroups = addBuildDepends super.semigroups (with self; [bytestring-builder nats tagged unordered-containers transformers]);
   lens = addBuildDepends super.lens (with self; [doctest generic-deriving nats simple-reflect]);
-  distributive = addBuildDepend super.distributive self.semigroups;
+  distributive = addBuildDepend (dontCheck super.distributive) self.semigroups;
   QuickCheck = addBuildDepend super.QuickCheck self.semigroups;
   void = addBuildDepends super.void (with self; [hashable semigroups]);
   optparse-applicative = addBuildDepend super.optparse-applicative self.semigroups;
+  vector = addBuildDepend super.vector self.semigroups;
 
   # Need a newer version of Cabal to interpret their build instructions.
   cmdargs = addSetupDepend super.cmdargs self.Cabal_1_24_2_0;
@@ -111,5 +113,9 @@ self: super: {
 
   # Breaks a dependency cycle between QuickCheck and semigroups
   unordered-containers = dontCheck super.unordered-containers;
+
+  # The test suite requires Cabal 1.24.x or later to compile.
+  comonad = dontCheck super.comonad;
+  semigroupoids = dontCheck super.semigroupoids;
 
 }

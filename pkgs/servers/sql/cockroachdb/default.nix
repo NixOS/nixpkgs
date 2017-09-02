@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   name = "cockroach-${version}";
-  version = "v1.0.2";
+  version = "v1.0.5";
 
   goPackagePath = "github.com/cockroachdb/cockroach";
 
   src = fetchurl {
     url = "https://binaries.cockroachdb.com/cockroach-${version}.src.tgz";
-    sha256 = "0xq5lg9a2lxn89lilq3zzcd4kph0a5sga3b5bb9xv6af87igy6zp";
+    sha256 = "0jjl6zb8pyxws3i020h98vdr217railca8h6n3xijkvcqy9dj8wa";
   };
 
   buildInputs = [ cmake xz which ];
@@ -26,10 +26,12 @@ buildGoPackage rec {
 
   installPhase =
     ''
-      mkdir -p $bin/{bin,share,etc/bash_completion.d}
-      mv cockroach $bin/bin
-      mv man $bin/share
-      mv cockroach.bash $bin/etc/bash_completion.d
+      mkdir -p $bin/{bin,share}
+      mv cockroach $bin/bin/
+      mv man $bin/share/
+
+      mkdir -p $out/share/bash-completion/completions
+      mv cockroach.bash $out/share/bash-completion/completions
     '';
 
   meta = with stdenv.lib; {
