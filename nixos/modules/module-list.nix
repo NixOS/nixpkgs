@@ -226,6 +226,7 @@
   ./services/hardware/brltty.nix
   ./services/hardware/freefall.nix
   ./services/hardware/illum.nix
+  ./services/hardware/interception-tools.nix
   ./services/hardware/irqbalance.nix
   ./services/hardware/nvidia-optimus.nix
   ./services/hardware/pcscd.nix
