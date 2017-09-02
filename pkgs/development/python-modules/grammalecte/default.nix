@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "grammalecte";
-  version = "0.5.17";
+  version = "0.5.18";
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://www.dicollecte.org/grammalecte/oxt/Grammalecte-fr-v${version}.zip";
-    sha256 = "0ccvj8p8bwvrj8bp370dzjs16pwm755a7364lvk8bp4505n7g0b6";
+    url = "http://www.dicollecte.org/grammalecte/zip/Grammalecte-fr-v${version}.zip";
+    sha256 = "0izfsqsj8w4awhmwmn4x8wwpqsmqbnfvfafzk93i6yj0l3fn3i97";
   };
 
   propagatedBuildInputs = [ bottle ];
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Grammalecte is an open source grammar checker for the French language";
-    homepage = "https://dicollecte.org/grammalecte/";
+    homepage = https://dicollecte.org/grammalecte/;
     license = with lib.licenses; [ gpl3 ];
     maintainers = with lib.maintainers; [ apeyroux ];
   };

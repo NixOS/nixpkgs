@@ -1,8 +1,8 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    msgpack (1.0.2)
-    neovim (0.3.1)
+    msgpack (1.1.0)
+    neovim (0.5.0)
       msgpack (~> 1.0)
 
 PLATFORMS
@@ -12,4 +12,4 @@ DEPENDENCIES
   neovim
 
 BUNDLED WITH
-   1.12.5
+   1.15.1

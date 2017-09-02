@@ -1,16 +1,12 @@
 { stdenv, fetchurl }:
 
-let
-  checksums = {
-    "4.8.1" = "09phylg8ih1crgxjadkdb8idbpj9ap62a7cbh8qdx2gyvh5mqf9c";
-  };
-in stdenv.mkDerivation rec {
-  version = "4.8.1";
+stdenv.mkDerivation rec {
+  version = "4.8.2";
   name = "debianutils-${version}";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/debianutils/debianutils_${version}.tar.xz";
-    sha256 = checksums."${version}";
+    sha256 = "0s3w3svcsh984zinkxvpzxi7dc0ginqk0nk299fkrr6k7wlmzssd";
   };
 
   meta = {

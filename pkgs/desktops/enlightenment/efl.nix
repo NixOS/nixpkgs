@@ -8,26 +8,26 @@
 
 stdenv.mkDerivation rec {
   name = "efl-${version}";
-  version = "1.19.1";
+  version = "1.20.2";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/efl/${name}.tar.xz";
-    sha256 = "0fndwraca9rg0bz3al4isdprvyw56szr88qiyvglb4j8ygsylscc";
+    sha256 = "0zll6k4xbbdsxqg53g8jddgv889g5m1xh20i03iz5a52y2bcnh55";
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ openssl zlib lz4 freetype fontconfig fribidi SDL2 SDL mesa
+  buildInputs = [ openssl zlib lz4 freetype fontconfig SDL mesa
     giflib libpng libtiff glib gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
     gst_all_1.gst-libav libpulseaudio libsndfile xorg.libXcursor xorg.printproto
-    xorg.libX11 udev utillinux systemd ];
+    xorg.libX11 udev systemd ];
 
   propagatedBuildInputs = [ libxkbcommon python27Packages.dbus-python dbus libjpeg xorg.libXcomposite
     xorg.libXdamage xorg.libXinerama xorg.libXp xorg.libXtst xorg.libXi xorg.libXext
     bullet xorg.libXScrnSaver xorg.libXrender xorg.libXfixes xorg.libXrandr
     xorg.libxkbfile xorg.libxcb xorg.xcbutilkeysyms openjpeg doxygen expat luajit
     harfbuzz jbig2dec librsvg dbus_libs alsaLib poppler ghostscript libraw libspectre xineLib libwebp curl libdrm
-    libinput ];
+    libinput utillinux fribidi SDL2 ];
 
   # ac_ct_CXX must be set to random value, because then it skips some magic which does alternative searching for g++
   configureFlags = [

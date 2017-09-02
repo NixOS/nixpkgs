@@ -22,7 +22,7 @@ buildGoPackage rec {
       the missing features are deliberately omitted since it is better if they
       are handled by external tools.
     '';
-    homepage = "https://godoc.org/github.com/gokcehan/lf";
+    homepage = https://godoc.org/github.com/gokcehan/lf;
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

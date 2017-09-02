@@ -6,7 +6,9 @@
 , stdenv
 , coreutils
 , gnugrep
-, hostPlatform, targetPlatform
+, buildPackages
+, hostPlatform
+, targetPlatform
 }:
 
 /* As of this writing, known-good prefix/arch/simulator triples:
@@ -15,6 +17,11 @@
  * i386-apple-darwin11    | i386   | true
  * x86_64-apple-darwin14  | x86_64 | true
  */
+
+# Apple uses somewhat non-standard names for this. We could fall back on
+# `targetPlatform.parsed.cpu.name`, but that would be a more standard one and
+# likely to fail. Better just to require something manual.
+assert targetPlatform ? arch;
 
 let
 
@@ -29,7 +36,7 @@ let
   sdk = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhone${sdkType}.platform/Developer/SDKs/iPhone${sdkType}${sdkVer}.sdk";
 
 in (import ../../../build-support/cc-wrapper {
-    inherit stdenv coreutils gnugrep runCommand;
+    inherit stdenv coreutils gnugrep runCommand buildPackages;
     nativeTools = false;
     nativeLibc = false;
     inherit binutils;

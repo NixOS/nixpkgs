@@ -123,7 +123,7 @@ stdenv.mkDerivation {
   inherit src patches;
 
   meta = {
-    homepage = "http://boost.org/";
+    homepage = http://boost.org/;
     description = "Collection of C++ libraries";
     license = stdenv.lib.licenses.boost;
 

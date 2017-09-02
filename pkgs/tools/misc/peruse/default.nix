@@ -1,7 +1,7 @@
 {
   mkDerivation, fetchFromGitHub, fetchurl, lib,
   extra-cmake-modules, kdoctools, wrapGAppsHook,
-  baloo, kconfig, kfilemetadata, kinit, kirigami, knewstuff, plasma-framework
+  baloo, karchive, kconfig, kcrash, kfilemetadata, kinit, kirigami, knewstuff, plasma-framework
 }:
 
 let
@@ -23,7 +23,7 @@ in mkDerivation rec {
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
 
-  propagatedBuildInputs = [ baloo kconfig kfilemetadata kinit kirigami knewstuff plasma-framework ];
+  propagatedBuildInputs = [ baloo karchive kconfig kcrash kfilemetadata kinit kirigami knewstuff plasma-framework ];
 
   pathsToLink = [ "/etc/xdg/peruse.knsrc"];
 

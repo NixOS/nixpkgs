@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libplist ];
 
   meta = {
-    homepage = "http://www.libimobiledevice.org";
+    homepage = http://www.libimobiledevice.org;
     platforms = stdenv.lib.platforms.unix;
   };
 }

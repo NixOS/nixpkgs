@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchurl
+{ stdenv, buildPythonPackage, fetchPypi
 , oauthlib, requests }:
 
 buildPythonPackage rec {
@@ -6,9 +6,9 @@ buildPythonPackage rec {
   pname = "requests-oauthlib";
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "http://github.com/requests/requests-oauthlib/archive/v${version}.tar.gz";
-    sha256 = "883ac416757eada6d3d07054ec7092ac21c7f35cb1d2cf82faf205637081f468";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0s7lh5q661gjza1czlmibkrwf8dcj9qfqm3hs39sdbbyflbc8fl8";
   };
 
   doCheck = false;        # Internet tests fail when building in chroot

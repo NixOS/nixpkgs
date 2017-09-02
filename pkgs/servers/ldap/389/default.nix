@@ -2,14 +2,14 @@
 , db, cyrus_sasl, svrcore, icu, net_snmp, kerberos, pcre, perlPackages
 }:
 let
-  version = "1.3.5.15";
+  version = "1.3.5.19";
 in
 stdenv.mkDerivation rec {
   name = "389-ds-base-${version}";
 
   src = fetchurl {
     url = "http://directory.fedoraproject.org/binaries/${name}.tar.bz2";
-    sha256 = "1z17nnr4axndjyp413kyxb6iwdfky7nlsjhlc0klvdi2ai983p91";
+    sha256 = "1r1n44xfvy51r4r1180dfmjziyj3pqxwmnv6rjvvvjjm87fslmdd";
   };
 
   buildInputs = [

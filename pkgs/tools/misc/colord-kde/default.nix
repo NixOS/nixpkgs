@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "https://projects.kde.org/projects/playground/graphics/colord-kde";
+    homepage = https://projects.kde.org/projects/playground/graphics/colord-kde;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ttuegel ];
   };

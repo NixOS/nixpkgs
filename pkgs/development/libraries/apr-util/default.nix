@@ -13,11 +13,11 @@ assert ldapSupport -> openldap != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "apr-util-1.5.4";
+  name = "apr-util-1.6.0";
 
   src = fetchurl {
     url = "mirror://apache/apr/${name}.tar.bz2";
-    sha256 = "0bn81pfscy9yjvbmyx442svf43s6dhrdfcsnkpxz43fai5qk5kx6";
+    sha256 = "0k6a90d67xl36brz69s7adgkswjmw7isnjblm1naqmjblwzwjx44";
   };
 
   patches = optional stdenv.isFreeBSD ./include-static-dependencies.patch;

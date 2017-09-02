@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     version = version;
     # This package contains vendored dependencies. All have free licenses.
     license = licenses.free;
-    homepage = "https://cloud.google.com/sdk/";
+    homepage = https://cloud.google.com/sdk/;
     maintainers = with maintainers; [stephenmw zimbatm];
     platforms = with platforms; linux ++ darwin;
   };

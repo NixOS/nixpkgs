@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "ML-like functional programming language aimed at program verification";
-    homepage = "https://www.fstar-lang.org";
+    homepage = https://www.fstar-lang.org;
     license = licenses.asl20;
     platforms = with platforms; darwin ++ linux;
   };

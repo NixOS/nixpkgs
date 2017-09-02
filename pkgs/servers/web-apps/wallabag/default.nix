@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   ''; # exposes $WALLABAG_DATA
 
   installPhase = ''
-    mv docs $doc/
+    mkdir -p $doc/share/doc
+    mv docs $doc/share/doc/wallabag
     mkdir $out/
     cp -R * $out/
   '';

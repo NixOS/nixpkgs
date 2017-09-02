@@ -1,25 +1,30 @@
-{ stdenv, fetchurl, makeDesktopItem, cmake, boost163, zlib, openssl,
+{ stdenv, fetchurl, fetchpatch, makeDesktopItem, cmake, boost163, zlib, openssl,
 R, qt5, libuuid, hunspellDicts, unzip, ant, jdk, gnumake, makeWrapper, pandoc
 }:
 
 let
-  version = "1.1.216";
+  version = "1.1.351";
   ginVer = "1.5";
   gwtVer = "2.7.0";
 in
 stdenv.mkDerivation rec {
   name = "RStudio-${version}";
 
-  buildInputs = [ cmake boost163 zlib openssl R qt5.full qt5.qtwebkit libuuid unzip ant jdk makeWrapper pandoc ];
-  nativeBuildInputs = [ qt5.qmake ];
+  buildInputs = [ cmake boost163 zlib openssl R qt5.full qt5.qtwebkit qt5.qtwebchannel libuuid unzip ant jdk makeWrapper pandoc ];
 
   src = fetchurl {
     url = "https://github.com/rstudio/rstudio/archive/v${version}.tar.gz";
-    sha256 = "07lp2ybvj7ippdrp7fv7j54dp0mm6k19j1vqdvjdk95acg3xgcjf";
+    sha256 = "0dpzmkq7jkdndidmmgdcr849q33ypmzkqwx22fraaqcy7w4f0pcn";
   };
 
   # Hack RStudio to only use the input R.
-  patches = [ ./r-location.patch ];
+  patches = [ 
+    ./r-location.patch 
+    (fetchpatch {
+      url = https://aur.archlinux.org/cgit/aur.git/plain/socketproxy-openssl.patch?h=rstudio-desktop-git;
+      sha256 = "0ywq9rk14s5961l6hvd3cw70jsm73r16h0bsh4yp52vams7cwy9d";
+    })
+  ];
   postPatch = "substituteInPlace src/cpp/core/r_util/REnvironmentPosix.cpp --replace '@R@' ${R}";
 
   inherit ginVer;
@@ -91,7 +96,7 @@ stdenv.mkDerivation rec {
       cp ${pandoc}/bin/pandoc dependencies/common/pandoc/
     '';
 
-  cmakeFlags = [ "-DRSTUDIO_TARGET=Desktop" "-DQT_QMAKE_EXECUTABLE=${qt5.qmake}/bin/qmake" ];
+  cmakeFlags = [ "-DRSTUDIO_TARGET=Desktop" "-DQT_QMAKE_EXECUTABLE=$NIX_QT5_TMP/bin/qmake" ];
 
   desktopItem = makeDesktopItem {
     name = name;
@@ -116,7 +121,7 @@ stdenv.mkDerivation rec {
     { description = "Set of integrated tools for the R language";
       homepage = http://www.rstudio.com/;
       license = licenses.agpl3;
-      maintainers = [ maintainers.ehmry maintainers.changlinli ];
+      maintainers = with maintainers; [ ehmry changlinli ciil ];
       platforms = platforms.linux;
     };
 }

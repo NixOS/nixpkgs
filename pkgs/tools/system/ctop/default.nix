@@ -18,7 +18,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Concise commandline monitoring for containers";
-    homepage = "http://ctop.sh/";
+    homepage = http://ctop.sh/;
     license = licenses.mit;
     maintainers = with maintainers; [ apeyroux ];
   };

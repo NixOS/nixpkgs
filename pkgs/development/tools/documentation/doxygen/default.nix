@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     license = stdenv.lib.licenses.gpl2Plus;
-    homepage = "http://doxygen.org/";
+    homepage = http://doxygen.org/;
     description = "Source code documentation generator tool";
 
     longDescription = ''

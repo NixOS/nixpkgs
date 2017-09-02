@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, makeWrapper
-, llvmPackages_4, hiredis, z3_opt, gtest
+, llvmPackages_4, hiredis, z3, gtest
 }:
 
 let
@@ -46,7 +46,7 @@ in stdenv.mkDerivation rec {
       cp -v ./souper       $out/bin/
       cp -v ./clang-souper $out/bin/
       wrapProgram "$out/bin/souper" \
-          --add-flags "-z3-path=\"${z3_opt}/bin/z3\""
+          --add-flags "-z3-path=\"${z3}/bin/z3\""
   '';
 
   meta = with stdenv.lib; {

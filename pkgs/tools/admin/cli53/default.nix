@@ -1,6 +1,6 @@
-{ lib, python2Packages, fetchurl }:
+{ lib, python2, fetchurl }:
 
-python2Packages.buildPythonApplication rec {
+python2.pkgs.buildPythonApplication rec {
   name = "cli53-${version}";
   version = "0.4.4";
 
@@ -9,7 +9,18 @@ python2Packages.buildPythonApplication rec {
     sha256 = "0s9jzigq6a16m2c3qklssx2lz16cf13g5zh80vh24kxazaxqzbig";
   };
 
-  propagatedBuildInputs = with python2Packages; [
+  postPatch = ''
+    substituteInPlace setup.py --replace "'argparse', " ""
+  '';
+
+  checkPhase = ''
+    ${python2.interpreter} -m unittest discover -s tests
+  '';
+
+  # Tests do not function
+  doCheck = false;
+
+  propagatedBuildInputs = with python2.pkgs; [
     argparse
     boto
     dns

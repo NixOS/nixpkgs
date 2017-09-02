@@ -1,8 +1,10 @@
-{ stdenv, lib, bundlerEnv, ruby_2_2, curl }:
+{ stdenv, lib, bundlerEnv, ruby, curl }:
 
-bundlerEnv rec {
+bundlerEnv {
   pname = "asciidoctor";
-  ruby = ruby_2_2;
+
+  inherit ruby;
+
   gemdir = ./.;
 
   meta = with lib; {

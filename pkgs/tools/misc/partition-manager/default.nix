@@ -1,7 +1,7 @@
 { mkDerivation, fetchurl, lib
 , extra-cmake-modules, kdoctools, wrapGAppsHook
-, kconfig, kinit, kpmcore
-, kcrash, eject, libatasmart }:
+, kconfig, kcrash, kinit, kpmcore
+, eject, libatasmart }:
 
 let
   pname = "partitionmanager";

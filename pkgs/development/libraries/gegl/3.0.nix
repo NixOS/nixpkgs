@@ -2,11 +2,11 @@
 , librsvg, pango, gtk, bzip2, json_glib, intltool, autoreconfHook, libraw }:
 
 stdenv.mkDerivation rec {
-  name = "gegl-0.3.6";
+  name = "gegl-0.3.18";
 
   src = fetchurl {
     url = "http://download.gimp.org/pub/gegl/0.3/${name}.tar.bz2";
-    sha256 = "08m7dlf2kwmp7jw3qskwxas192swhn1g4jcd8aldg9drfjygprvh";
+    sha256 = "1ywihjav9yhmsvbrdyx9c5q71rqdkjg8l66ywca6s4yydvr8x1fp";
   };
 
   hardeningDisable = [ "format" ];

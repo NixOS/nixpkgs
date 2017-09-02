@@ -43,7 +43,7 @@ let
   '';
 
   ver_maj = "2.52";
-  ver_min = "1";
+  ver_min = "3";
 in
 
 stdenv.mkDerivation rec {
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${ver_maj}/${name}.tar.xz";
-    sha256 = "948c26b817f2d77e2a6cdd5082c60a51bf5dea854890286a1d5d4ccde5ce586f";
+    sha256 = "0a71wkkhkvad84gm30w13micxxgqqw3sxhybj7nd9z60lwspdvi5";
   };
 
   patches = optional stdenv.isDarwin ./darwin-compilation.patch ++ optional doCheck ./skip-timer-test.patch;
@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C library of programming buildings blocks";
-    homepage    = http://www.gtk.org/;
+    homepage    = https://www.gtk.org/;
     license     = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 raskin ];
     platforms   = platforms.unix;

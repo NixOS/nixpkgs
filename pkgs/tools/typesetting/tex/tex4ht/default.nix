@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://tug.org/tex4ht/";
+    homepage = http://tug.org/tex4ht/;
     description = "A system to convert (La)TeX documents to HTML and various other formats";
     license = stdenv.lib.licenses.lppl12;
     platforms = stdenv.lib.platforms.unix;

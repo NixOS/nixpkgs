@@ -13,11 +13,11 @@ let
   package = pythonPackages.buildPythonApplication (rec {
     name = "${pname}-${version}";
     pname = "buildbot";
-    version = "0.9.7";
+    version = "0.9.9.post2";
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "0cwy39ap2v9kni3zm92633cnqf7qsnb4zlargx060pbfagkg1jwg";
+      sha256 = "0g932pvkxqq3ijwkwwa29jd9sp5895gv40c3k7m2acc5dp8ygb9w";
     };
 
     buildInputs = with pythonPackages; [
@@ -83,7 +83,7 @@ let
 
     meta = with stdenv.lib; {
       homepage = http://buildbot.net/;
-      description = "Continuous integration system that automates the build/test cycle";
+      description = "Buildbot is an open-source continuous integration framework for automating software build, test, and release processes";
       maintainers = with maintainers; [ nand0p ryansydnor ];
       license = licenses.gpl2;
     };

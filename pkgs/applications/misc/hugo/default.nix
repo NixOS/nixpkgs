@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "hugo-${version}";
-  version = "0.24.1";
+  version = "0.26";
 
   goPackagePath = "github.com/gohugoio/hugo";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "gohugoio";
     repo = "hugo";
     rev = "v${version}";
-    sha256 = "0zphxi11rny6wh1ysz7508fdrsbxj3n138q2bkkqaz0rrdab710a";
+    sha256 = "1g2brxhc6lyl2qa41lrqw2hadl601inmshsxlpmv99ax67sa19d1";
   };
 
   goDeps = ./deps.nix;

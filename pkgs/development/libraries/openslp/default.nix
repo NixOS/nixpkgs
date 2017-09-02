@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   ];
 
   meta = with stdenv.lib; {
-    homepage = "http://openslp.org/";
+    homepage = http://openslp.org/;
     description = "An open-source implementation of the IETF Service Location Protocol";
     maintainers = with maintainers; [ ttuegel ];
     license = licenses.bsd3;

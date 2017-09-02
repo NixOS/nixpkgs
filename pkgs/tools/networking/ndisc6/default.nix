@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
+    "--disable-suid-install"
   ];
 
   installFlags = [
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.remlab.net/ndisc6/;
+    homepage = https://www.remlab.net/ndisc6/;
     description = "A small collection of useful tools for IPv6 networking";
     maintainers = with maintainers; [ eelco wkennington ];
     platforms = platforms.linux;

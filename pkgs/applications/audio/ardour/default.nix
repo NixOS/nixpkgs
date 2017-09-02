@@ -16,7 +16,7 @@ let
   # "git describe" when _not_ on an annotated tag(!): MAJOR.MINOR-REV-HASH.
 
   # Version to build.
-  tag = "5.10";
+  tag = "5.11";
 
 in
 
@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
-    rev = "9c629c0c76808cc3e8f05e43bc760f849566dce6";
-    sha256 = "062igiaaj18kbismrpzbafyq1ryyqj3lh0ajqqs2s8ms675x33sl";
+    rev = "bd40b9132cbac2d2b79ba0ef480bd41d837f8f71";
+    sha256 = "0xxxjg90jzj5cj364mlhk8srkgaghxif2jj1015bra25pffk41ay";
   };
 
   buildInputs =
-    [ alsaLib aubio boost cairomm curl doxygen dbus fftw fftwSinglePrec flac glibc
+    [ alsaLib aubio boost cairomm curl doxygen dbus fftw fftwSinglePrec flac 
       glibmm graphviz gtkmm2 libjack2 libgnomecanvas libgnomecanvasmm liblo
       libmad libogg librdf librdf_raptor librdf_rasqal libsamplerate
       libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv lv2

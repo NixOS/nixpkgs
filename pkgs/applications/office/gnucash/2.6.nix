@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
         --prefix PERL5LIB ":" "$PERL5LIB"                               \
         --set GCONF_CONFIG_SOURCE 'xml::~/.gconf'                       \
         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${name}" \
-        --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"  \
+        --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules"  \
         --prefix PATH ":" "$out/bin:${stdenv.lib.makeBinPath [ perl gconf ]}"
     done
 
@@ -91,7 +91,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       GnuCash is personal and small-business financial-accounting software,
       freely licensed under the GNU GPL and available for GNU/Linux, BSD,
-      Solaris, Mac OS X and Microsoft Windows.
+      Solaris, macOS and Microsoft Windows.
 
       Designed to be easy to use, yet powerful and flexible, GnuCash allows
       you to track bank accounts, stocks, income and expenses.  As quick and

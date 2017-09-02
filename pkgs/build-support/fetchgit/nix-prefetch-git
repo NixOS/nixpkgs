@@ -283,8 +283,8 @@ _clone_user_rev() {
             if test -z "$(echo "$rev" | tr -d 0123456789abcdef)"; then
                 clone "$dir" "$url" "$rev" "" 1>&2
             else
-                echo 1>&2 "Bad commit hash or bad reference."
-                exit 1
+                # if revision is not hexadecimal it might be a tag
+                clone "$dir" "$url" "" "refs/tags/$rev" 1>&2
             fi;;
     esac
 

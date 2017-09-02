@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://www.cabextract.org.uk/;
+    homepage = https://www.cabextract.org.uk/;
     description = "Free Software for extracting Microsoft cabinet files";
     platforms = platforms.all;
     license = licenses.gpl3;

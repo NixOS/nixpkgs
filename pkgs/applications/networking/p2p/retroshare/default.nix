@@ -1,40 +1,44 @@
-{ stdenv, fetchurl, cmake, qt4, qmake4Hook, libupnp, gpgme, gnome3, glib, libssh, pkgconfig, protobuf, bzip2
-, libXScrnSaver, speex, curl, libxml2, libxslt }:
+{ stdenv, fetchFromGitHub, cmake, libupnp, gpgme, gnome3, glib, libssh, pkgconfig, protobuf, bzip2
+, libXScrnSaver, speex, curl, libxml2, libxslt, sqlcipher, libmicrohttpd, opencv, qmake, ffmpeg
+, qtmultimedia, qtx11extras, qttools }:
 
-stdenv.mkDerivation {
-  name = "retroshare-0.5.5c";
+stdenv.mkDerivation rec {
+  name = "retroshare-${version}";
+  version = "0.6.2";
 
-  src = fetchurl {
-    url = mirror://sourceforge/project/retroshare/RetroShare/0.5.5c/retroshare_0.5.5-0.7068.tar.gz;
-    sha256 = "0l2n4pr1hq66q6qa073hrdx3s3d7iw54z8ay1zy82zhk2rwhsavp";
+  src = fetchFromGitHub {
+    owner = "RetroShare";
+    repo = "RetroShare";
+    rev = "v${version}";
+    sha256 = "0hly2x87wdvqzzwf3wjzi7092bj8fk4xs6302rkm8gp9bkkmiiw8";
   };
 
-  NIX_CFLAGS_COMPILE = [ "-I${glib.dev}/include/glib-2.0" "-I${glib.dev}/lib/glib-2.0/include" "-I${libxml2.dev}/include/libxml2" ];
+  # NIX_CFLAGS_COMPILE = [ "-I${glib.dev}/include/glib-2.0" "-I${glib.dev}/lib/glib-2.0/include" "-I${libxml2.dev}/include/libxml2" "-I${sqlcipher}/include/sqlcipher" ];
 
   patchPhase = ''
+    # Fix build error
     sed -i 's/UpnpString_get_String(es_event->PublisherUrl)/es_event->PublisherUrl/' \
       libretroshare/src/upnp/UPnPBase.cpp
-    # Extensions get installed 
-    sed -i "s,/usr/lib/retroshare/extensions/,$out/share/retroshare," \
-      libretroshare/src/rsserver/rsinit.cc
-    # For bdboot.txt
-    sed -i "s,/usr/share/RetroShare,$out/share/retroshare," \
-      libretroshare/src/rsserver/rsinit.cc
   '';
 
-  buildInputs = [ speex qt4 qmake4Hook libupnp gpgme gnome3.libgnome_keyring glib libssh pkgconfig
-                  protobuf bzip2 libXScrnSaver curl libxml2 libxslt ];
-
-  sourceRoot = "retroshare-0.5.5/src";
+  nativeBuildInputs = [ pkgconfig qmake ];
+  buildInputs = [
+    speex libupnp gpgme gnome3.libgnome_keyring glib libssh qtmultimedia qtx11extras qttools
+    protobuf bzip2 libXScrnSaver curl libxml2 libxslt sqlcipher libmicrohttpd opencv ffmpeg
+  ];
 
   preConfigure = ''
     qmakeFlags="$qmakeFlags DESTDIR=$out"
   '';
 
+  # gui/settings/PluginsPage.h:25:28: fatal error: ui_PluginsPage.h: No such file or directory
+  enableParallelBuilding = false;
+
   postInstall = ''
     mkdir -p $out/bin
-    mv $out/retroshare-nogui $out/bin
-    mv $out/RetroShare $out/bin
+    mv $out/RetroShare06-nogui $out/bin/RetroShare-nogui
+    mv $out/RetroShare06 $out/bin/Retroshare
+    ln -s $out/bin/RetroShare-nogui $out/bin/retroshare-nogui
 
     # plugins
     mkdir -p $out/share/retroshare
@@ -47,7 +51,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "";
     homepage = http://retroshare.sourceforge.net/;
-    #license = licenses.bsd2;
+    license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.domenkozar ];
   };

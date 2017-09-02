@@ -477,4 +477,12 @@ rec {
   */
   subtractLists = e: filter (x: !(elem x e));
 
+  /* Test if two lists have no common element.
+     It should be slightly more efficient than (intersectLists a b == [])
+  */
+  mutuallyExclusive = a: b:
+    (builtins.length a) == 0 ||
+    (!(builtins.elem (builtins.head a) b) &&
+     mutuallyExclusive (builtins.tail a) b);
+
 }

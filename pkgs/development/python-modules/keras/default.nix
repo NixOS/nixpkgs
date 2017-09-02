@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "Keras";
-  version = "2.0.5";
+  version = "2.0.7";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cbce24758530e070fe1b403d6d21391cbea78c037b70bf6afc1ca9f1f8269eff";
+    sha256 = "a6c72ee2b94be1ffefe7e77b69582b9827211f0c356b2189459711844d3634c0";
   };
 
   checkInputs = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Deep Learning library for Theano and TensorFlow";
-    homepage = "https://keras.io";
+    homepage = https://keras.io;
     license = licenses.mit;
     maintainers = with maintainers; [ NikolaMandic ];
   };

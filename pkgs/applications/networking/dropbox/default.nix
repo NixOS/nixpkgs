@@ -24,30 +24,27 @@
 let
   # NOTE: When updating, please also update in current stable,
   # as older versions stop working
-  version = "29.4.20";
-  sha256 =
-    {
-      "x86_64-linux" = "0w8n8q846mqq8f3yisn9xazf323sn579zyp1kwrdrmmqalwiwcl2";
-      "i686-linux"   = "0zgdnpizgkw2q6wglkdhpzzrhnpplfi2ldcw1z0k9r6slici5mfk";
-    }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
+  version = "33.4.23";
+  sha256 = {
+    "x86_64-linux" = "0z8sd71v0xfbq4x8gw0rjhg7kbd7r0465b1cqk1ls2fivb25qqxz";
+    "i686-linux"   = "07sj1ixpml56bx83jawslak6scb12wxwn53nnabvgnivhb9vzq97";
+  }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
-  arch =
-    {
-      "x86_64-linux" = "x86_64";
-      "i686-linux"   = "x86";
-    }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
+  arch = {
+    "x86_64-linux" = "x86_64";
+    "i686-linux"   = "x86";
+  }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
   # relative location where the dropbox libraries are stored
   appdir = "opt/dropbox";
 
-  libs =
-    [
-      dbus_libs fontconfig freetype gcc.cc glib libdrm libffi libICE libSM
-      libX11 libXcomposite libXext libXmu libXrender libxcb libxml2 libxslt
-      ncurses zlib
+  libs = [
+    dbus_libs fontconfig freetype gcc.cc glib libdrm libffi libICE libSM
+    libX11 libXcomposite libXext libXmu libXrender libxcb libxml2 libxslt
+    ncurses zlib
 
-      qtbase qtdeclarative qtwebkit
-    ];
+    qtbase qtdeclarative qtwebkit
+  ];
   ldpath = stdenv.lib.makeLibraryPath libs;
 
   desktopItem = makeDesktopItem {
@@ -99,10 +96,10 @@ in mkDerivation {
 
     mkdir -p "$out/bin"
     RPATH="${ldpath}:$out/${appdir}"
+    chmod 755 $out/${appdir}/dropbox
     makeWrapper "$out/${appdir}/dropbox" "$out/bin/dropbox" \
       --prefix LD_LIBRARY_PATH : "$RPATH"
 
-    chmod 755 $out/${appdir}/dropbox
 
     rm $out/${appdir}/wmctrl
     ln -s ${wmctrl}/bin/wmctrl $out/${appdir}/wmctrl
@@ -141,11 +138,11 @@ in mkDerivation {
     paxmark m $out/${appdir}/dropbox
   '';
 
-  meta = {
-    homepage = "http://www.dropbox.com";
+  meta = with lib; {
     description = "Online stored folders (daemon version)";
-    maintainers = with lib.maintainers; [ ttuegel ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
-    license = lib.licenses.unfree;
+    homepage    = http://www.dropbox.com;
+    maintainers = with maintainers; [ ttuegel ];
+    license     = licenses.unfree;
+    platforms   = [ "i686-linux" "x86_64-linux" ];
   };
 }

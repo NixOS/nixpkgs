@@ -1,20 +1,18 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
-  name = "source-serif-pro-${version}";
+let
   version = "1.017";
+in fetchzip {
+  name = "source-serif-pro-${version}";
 
-  src = fetchurl rec {
-    url = "https://github.com/adobe-fonts/source-serif-pro/archive/${version}R.tar.gz";
-    sha256 = "04h24iywjl4fd08x22ypdb3sm979wjfq4wk95r3rk8w376spakrg";
-  };
+  url = "https://github.com/adobe-fonts/source-serif-pro/archive/${version}R.zip";
 
-  phases = "unpackPhase installPhase";
-
-  installPhase = ''
+  postFetch = ''
     mkdir -p $out/share/fonts/opentype
-    find . -name "*.otf" -exec cp {} $out/share/fonts/opentype \;
+    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
   '';
+
+  sha256 = "04447fbj7lwr2qmmvy7d7624qdh4in7hp627nsc8vbpxmb7bbmn1";
 
   meta = with stdenv.lib; {
     homepage = http://sourceforge.net/adobe/sourceserifpro;

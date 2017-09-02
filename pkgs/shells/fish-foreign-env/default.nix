@@ -11,14 +11,16 @@ stdenv.mkDerivation rec {
     sha256 = "0lwp6hy3kfk7xfx4xvbk1ir8zkzm7gfjbm4bf6xg1y6iw9jq9dnl";
   };
 
-  buildCommand = ''
+  installPhase = ''
     mkdir -p $out/share/fish-foreign-env/functions/
-    cp $src/functions/* $out/share/fish-foreign-env/functions/
+    cp functions/* $out/share/fish-foreign-env/functions/
     sed -e "s|sed|${gnused}/bin/sed|" \
         -e "s|bash|${bash}/bin/bash|" \
         -e "s|\| tr|\| ${coreutils}/bin/tr|" \
         -i $out/share/fish-foreign-env/functions/*
   '';
+
+  patches = [ ./hide-path-warnings.patch ];
 
   meta = with stdenv.lib; {
     description = "A foreign environment interface for Fish shell";

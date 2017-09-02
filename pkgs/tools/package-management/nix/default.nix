@@ -79,6 +79,9 @@ let
 
     doInstallCheck = true;
 
+    # socket path becomes too long otherwise
+    preInstallCheck = lib.optional stdenv.isDarwin "export TMPDIR=/tmp";
+
     separateDebugInfo = stdenv.isLinux;
 
     crossAttrs = {
@@ -113,7 +116,7 @@ let
         a package, multi-user package management and easy setup of build
         environments.
       '';
-      homepage = http://nixos.org/;
+      homepage = https://nixos.org/;
       license = stdenv.lib.licenses.lgpl2Plus;
       maintainers = [ stdenv.lib.maintainers.eelco ];
       platforms = stdenv.lib.platforms.all;
@@ -149,21 +152,21 @@ in rec {
   nix = nixStable;
 
   nixStable = (common rec {
-    name = "nix-1.11.11";
+    name = "nix-1.11.14";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "f5b9da21fb412e4c35b6e2bc771cfbf4ca44746be5d99868ff29d6e7604760e5";
+      sha256 = "26593c831addf1d40f6b7d131f394cb0f9fbec9e46471369faed16eaa2c4b7e4";
     };
   }) // { perl-bindings = nixStable; };
 
   nixUnstable = (lib.lowPrio (common rec {
     name = "nix-1.12${suffix}";
-    suffix = "pre5413_b4b1f452";
+    suffix = "pre5511_c94f3d55";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "b4b1f4525f8dc8f320d666c208bff5cb36777580";
-      sha256 = "0qb18k2rp6bbg8g50754srl95dq0lr96i297856yhrx1hh1ja37z";
+      rev = "c94f3d5575d7af5403274d1e9e2f3c9d72989751";
+      sha256 = "1akfzzm4f07wj6l7za916xv5rnh71pk3vl8dphgradjfqb37bv18";
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings { nix = nixUnstable; }; };

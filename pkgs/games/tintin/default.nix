@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A free MUD client for Mac OS X, Linux and Windows";
+    description = "A free MUD client for macOS, Linux and Windows";
     homepage    = http://tintin.sourceforge.net;
     license     = licenses.gpl2;
     maintainers = with maintainers; [ lovek323 ];

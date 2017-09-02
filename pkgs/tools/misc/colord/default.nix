@@ -1,17 +1,24 @@
-{ stdenv, fetchzip, fetchgit, bash-completion
+{ stdenv, fetchurl, bash-completion
 , glib, polkit, pkgconfig, intltool, gusb, libusb1, lcms2, sqlite, systemd, dbus
-, automake, autoconf, libtool, gtk_doc, which, gobjectIntrospection, argyllcms
+, gtk_doc, gobjectIntrospection, argyllcms, autoreconfHook
 , libgudev, sane-backends }:
 
 stdenv.mkDerivation rec {
   name = "colord-1.2.12";
 
-  src = fetchzip {
+  src = fetchurl {
     url = "http://www.freedesktop.org/software/colord/releases/${name}.tar.xz";
-    sha256 = "0rvvbpxd5x479v4p6pck317mlf3j29s154i1n8hlx8n4znhwrb0k";
+    sha256 = "0flcsr148xshjbff030pgyk9ar25an901m9q1pjgjdvaq5j1h96m";
   };
+   nativeBuildInputs = [ autoreconfHook intltool ];
 
   enableParallelBuilding = true;
+
+  # Version mismatch requires intltoolize to overwrite
+  # with newer version.
+  preConfigure = ''
+    intltoolize --force
+  '';
 
   configureFlags = [
     "--enable-sane"
@@ -21,14 +28,14 @@ stdenv.mkDerivation rec {
     "--disable-bash-completion"
   ];
 
+
   # don't touch /var at install time, colord creates what it needs at runtime
   postPatch = ''
-    sed -i -e "s|if test -w .*;|if false;|" src/Makefile.in
-    sed -i -e "s|if test -w .*;|if false;|" src/Makefile.am
+    sed -e "s|if test -w .*;|if false;|" -i src/Makefile.{am,in}
   '';
 
-  buildInputs = [ glib polkit pkgconfig intltool gusb libusb1 lcms2 sqlite systemd dbus gobjectIntrospection
-                  bash-completion argyllcms automake autoconf libgudev sane-backends ];
+  buildInputs = [ glib polkit pkgconfig gusb libusb1 lcms2 sqlite systemd dbus gobjectIntrospection
+                  bash-completion argyllcms libgudev sane-backends ];
 
   postInstall = ''
     mkdir -p $out/etc/bash_completion.d

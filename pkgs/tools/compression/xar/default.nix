@@ -1,18 +1,18 @@
 { stdenv, fetchurl, libxml2, openssl, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
-  version = "1.5.2";
+  version = "1.6.1";
   name    = "xar-${version}";
 
   src = fetchurl {
-    url    = "https://xar.googlecode.com/files/${name}.tar.gz";
-    sha256 = "1rp3va6akzlh35yqrapfqnbxaxa0zi8wyr93swbapprwh215cpac";
+    url    = "https://github.com/downloads/mackyle/xar/${name}.tar.gz";
+    sha256 = "0ghmsbs6xwg1092v7pjcibmk5wkyifwxw6ygp08gfz25d2chhipf";
   };
 
   buildInputs = [ libxml2 openssl zlib bzip2 ];
 
   meta = {
-    homepage    = https://code.google.com/p/xar/;
+    homepage    = https://mackyle.github.io/xar/;
     description = "Extensible Archiver";
 
     longDescription =

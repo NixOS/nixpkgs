@@ -225,11 +225,7 @@ in {
         User = cfg.user;
         Group = cfg.group;
         WorkingDirectory = cfg.home;
-        Environment = "PYTHONPATH=${cfg.package}/lib/python2.7/site-packages:${pkgs.buildbot-plugins.www}/lib/python2.7/site-packages:${pkgs.buildbot-plugins.waterfall-view}/lib/python2.7/site-packages:${pkgs.buildbot-plugins.console-view}/lib/python2.7/site-packages:${pkgs.python27Packages.future}/lib/python2.7/site-packages:${pkgs.python27Packages.dateutil}/lib/python2.7/site-packages:${pkgs.python27Packages.six}/lib/python2.7/site-packages:${pkgs.python27Packages.sqlalchemy}/lib/python2.7/site-packages:${pkgs.python27Packages.jinja2}/lib/python2.7/site-packages:${pkgs.python27Packages.markupsafe}/lib/python2.7/site-packages:${pkgs.python27Packages.sqlalchemy_migrate}/lib/python2.7/site-packages:${pkgs.python27Packages.tempita}/lib/python2.7/site-packages:${pkgs.python27Packages.decorator}/lib/python2.7/site-packages:${pkgs.python27Packages.sqlparse}/lib/python2.7/site-packages:${pkgs.python27Packages.txaio}/lib/python2.7/site-packages:${pkgs.python27Packages.autobahn}/lib/python2.7/site-packages:${pkgs.python27Packages.pyjwt}/lib/python2.7/site-packages:${pkgs.python27Packages.distro}/lib/python2.7/site-packages:${pkgs.python27Packages.pbr}/lib/python2.7/site-packages:${pkgs.python27Packages.urllib3}/lib/python2.7/site-packages";
-
-        # NOTE: call twistd directly with stdout logging for systemd
-        #ExecStart = "${cfg.package}/bin/buildbot start --nodaemon ${cfg.buildbotDir}";
-        ExecStart = "${pkgs.python27Packages.twisted}/bin/twistd -n -l - -y ${cfg.buildbotDir}/buildbot.tac";
+        ExecStart = "${cfg.package}/bin/buildbot start --nodaemon ${cfg.buildbotDir}";
       };
 
     };

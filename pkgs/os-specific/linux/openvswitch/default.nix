@@ -70,7 +70,7 @@ in stdenv.mkDerivation rec {
       support distribution across multiple physical servers similar
       to VMware's vNetwork distributed vswitch or Cisco's Nexus 1000V.
       '';
-    homepage = "http://openvswitch.org/";
+    homepage = http://openvswitch.org/;
     license = licenses.asl20;
   };
 }

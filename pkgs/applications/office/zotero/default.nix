@@ -73,7 +73,7 @@ stdenv.mkDerivation {
   installCheckPhase = "$out/bin/zotero --version";
 
   meta = with stdenv.lib; {
-    homepage = "https://www.zotero.org";
+    homepage = https://www.zotero.org;
     description = "Collect, organize, cite, and share your research sources";
     license = licenses.agpl3;
     platforms = platforms.linux;

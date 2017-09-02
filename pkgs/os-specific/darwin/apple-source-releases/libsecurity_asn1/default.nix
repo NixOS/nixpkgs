@@ -1,4 +1,4 @@
-{ appleDerivation, libsecurity_cdsa_utilities, libsecurity_utilities, osx_private_sdk }:
+{ appleDerivation, libsecurity_cdsa_utilities, libsecurity_utilities }:
 appleDerivation {
   __propagatedImpureHostDeps = [
     "/System/Library/Frameworks/Security.framework/Security"

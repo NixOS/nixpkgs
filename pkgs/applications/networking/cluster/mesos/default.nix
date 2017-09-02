@@ -1,5 +1,5 @@
 { stdenv, lib, makeWrapper, fetchurl, curl, sasl, openssh, autoconf
-, automake115x, libtool, unzip, gnutar, jdk, maven, python, wrapPython
+, automake, libtool, unzip, gnutar, jdk, maven, python, wrapPython
 , setuptools, boto, pythonProtobuf, apr, subversion, gzip, systemd
 , leveldb, glog, perf, utillinux, libnl, iproute, openssl, libevent
 , ethtool, coreutils, which, iptables
@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    makeWrapper autoconf automake115x libtool curl sasl jdk maven
+    makeWrapper autoconf automake libtool curl sasl jdk maven
     python wrapPython boto setuptools leveldb
     subversion apr glog openssl libevent
   ] ++ lib.optionals stdenv.isLinux [
@@ -247,7 +247,7 @@ in stdenv.mkDerivation rec {
     homepage    = "http://mesos.apache.org";
     license     = licenses.asl20;
     description = "A cluster manager that provides efficient resource isolation and sharing across distributed applications, or frameworks";
-    maintainers = with maintainers; [ cstrahan kevincox offline rushmorem ];
+    maintainers = with maintainers; [ cstrahan kevincox offline ];
     platforms   = platforms.linux;
   };
 }

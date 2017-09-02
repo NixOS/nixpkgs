@@ -6,6 +6,7 @@ with lib;
 let
 
   cfg = config.hardware.pulseaudio;
+  alsaCfg = config.sound;
 
   systemWide = cfg.enable && cfg.systemWide;
   nonSystemWide = cfg.enable && !cfg.systemWide;
@@ -76,6 +77,7 @@ let
     ctl.!default {
       type pulse
     }
+    ${alsaCfg.extraConfig}
   '');
 
 in {
@@ -222,7 +224,7 @@ in {
       # Allow PulseAudio to get realtime priority using rtkit.
       security.rtkit.enable = true;
 
-      systemd.packages = [ cfg.package ];
+      systemd.packages = [ overriddenPackage ];
     })
 
     (mkIf hasZeroconf {

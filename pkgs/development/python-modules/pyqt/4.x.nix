@@ -19,7 +19,7 @@ in buildPythonPackage {
 
     export PYTHONPATH=$PYTHONPATH:$out/lib/${python.libPrefix}/site-packages
     ${stdenv.lib.optionalString stdenv.isDarwin ''
-      export QMAKESPEC="unsupported/macx-clang-libc++" # OS X target after bootstrapping phase \
+      export QMAKESPEC="unsupported/macx-clang-libc++" # macOS target after bootstrapping phase \
     ''}
 
     substituteInPlace configure.py \

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A clean C library for processing UTF-8 Unicode data";
-    homepage = http://julialang.org/utf8proc;
+    homepage = https://julialang.org/utf8proc;
     license = licenses.mit;
     platforms = platforms.all;
     maintainers = [ maintainers.ftrvxmtrx ];

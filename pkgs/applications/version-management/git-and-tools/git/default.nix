@@ -1,17 +1,19 @@
 { fetchurl, stdenv, curl, openssl, zlib, expat, perl, python, gettext, cpio
-, gnugrep, gzip, openssh
+, gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
+, gzip, openssh, pcre2
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper, libiconv
 , svnSupport, subversionClient, perlLibs, smtpPerlLibs, gitwebPerlLibs
 , guiSupport
 , withManual ? true
 , pythonSupport ? true
+, withpcre2 ? true
 , sendEmailSupport
 , darwin
 }:
 
 let
-  version = "2.13.2";
+  version = "2.14.1";
   svn = subversionClient.override { perlBindings = true; };
 in
 
@@ -20,7 +22,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "1rfx2gj7dw9rw0w22ihi940zv3wdrj1xmjv25djq2vs6a4vsq40d";
+    sha256 = "1iic3wiihxp3l3k6d4z886v3869c3dzgddjxnd5124wy1rnlqwkg";
   };
 
   hardeningDisable = [ "format" ];
@@ -43,6 +45,7 @@ stdenv.mkDerivation {
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ]
     ++ stdenv.lib.optionals guiSupport [tcl tk]
+    ++ stdenv.lib.optionals withpcre2 [ pcre2 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.Security ];
 
 
@@ -69,7 +72,9 @@ stdenv.mkDerivation {
   # so that `SPARSE_FLAGS' corresponds to the current architecture...
   #doCheck = true;
 
-  installFlags = "NO_INSTALL_HARDLINKS=1";
+  installFlags = "NO_INSTALL_HARDLINKS=1"
+    + (if withpcre2 then " USE_LIBPCRE2=1" else "");
+
 
   preInstall = stdenv.lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/bin
@@ -104,11 +109,24 @@ stdenv.mkDerivation {
           --replace ' grep' ' ${gnugrep}/bin/grep' \
           --replace ' egrep' ' ${gnugrep}/bin/egrep'
 
-      # Fix references to the perl binary. Note that the tab character
-      # in the patterns is important.
-      sed -i -e 's|	perl -ne|	${perl}/bin/perl -ne|g' \
-             -e 's|	perl -e|	${perl}/bin/perl -e|g' \
-             $out/libexec/git-core/{git-am,git-submodule}
+      # Fix references to the perl, sed, awk and various coreutil binaries used by
+      # shell scripts that git calls (e.g. filter-branch)
+      SCRIPT="$(cat <<'EOS'
+        BEGIN{
+          @a=(
+            '${perl}/bin/perl', '${gnugrep}/bin/grep', '${gnused}/bin/sed', '${gawk}/bin/awk',
+            '${coreutils}/bin/cut', '${coreutils}/bin/basename', '${coreutils}/bin/dirname',
+            '${coreutils}/bin/wc', '${coreutils}/bin/tr'
+          );
+        }
+        foreach $c (@a) {
+          $n=(split("/", $c))[-1];
+          s|(?<=[^#][^/.-])\b''${n}(?=\s)|''${c}|g
+        }
+      EOS
+      )"
+      perl -0777 -i -pe "$SCRIPT" \
+        $out/libexec/git-core/git-{sh-setup,filter-branch,merge-octopus,mergetool,quiltimport,request-pull,stash,submodule,subtree,web--browse}
 
       # Fix references to gettext.
       substituteInPlace $out/libexec/git-core/git-sh-i18n \
@@ -184,7 +202,7 @@ EOF
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://git-scm.com/;
+    homepage = https://git-scm.com/;
     description = "Distributed version control system";
     license = stdenv.lib.licenses.gpl2;
 

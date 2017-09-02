@@ -448,6 +448,8 @@ def cli(ctx):
     """
     Manage Taskserver users and certificates
     """
+    if not IS_AUTO_CONFIG:
+        return
     for path in (CA_KEY, CA_CERT, CRL_FILE):
         if not os.path.exists(path):
             msg = "CA setup not done or incomplete, missing file {}."

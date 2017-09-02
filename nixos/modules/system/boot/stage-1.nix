@@ -207,7 +207,7 @@ let
       preLVMCommands preDeviceCommands postDeviceCommands postMountCommands preFailCommands kernelModules;
 
     resumeDevices = map (sd: if sd ? device then sd.device else "/dev/disk/by-label/${sd.label}")
-                    (filter (sd: hasPrefix "/dev/" sd.device && !sd.randomEncryption
+                    (filter (sd: hasPrefix "/dev/" sd.device && !sd.randomEncryption.enable
                              # Don't include zram devices
                              && !(hasPrefix "/dev/zram" sd.device)
                             ) config.swapDevices);

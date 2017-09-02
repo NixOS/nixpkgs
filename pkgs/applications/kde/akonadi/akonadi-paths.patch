@@ -33,7 +33,7 @@ Index: akonadi-17.04.0/src/server/storage/dbconfigmysql.cpp
 -    }
  
 -    const QString mysqladminPath = XdgBaseDirs::findExecutableFile(QStringLiteral("mysqladmin"), mysqldSearchPath);
-+    const QString mysqladminPath = QStringLiteral(NIXPKGS_MYSQL_MYSQLADMIN);
++    const QString mysqladminPath = QLatin1String(NIXPKGS_MYSQL_MYSQLADMIN);
      if (!mysqladminPath.isEmpty()) {
  #ifndef Q_OS_WIN
          defaultCleanShutdownCommand = QStringLiteral("%1 --defaults-file=%2/mysql.conf --socket=%3/mysql.socket shutdown")
@@ -42,11 +42,11 @@ Index: akonadi-17.04.0/src/server/storage/dbconfigmysql.cpp
      }
  
 -    mMysqlInstallDbPath = XdgBaseDirs::findExecutableFile(QStringLiteral("mysql_install_db"), mysqldSearchPath);
-+    mMysqlInstallDbPath = QStringLiteral(NIXPKGS_MYSQL_MYSQL_INSTALL_DB);
++    mMysqlInstallDbPath = QLatin1String(NIXPKGS_MYSQL_MYSQL_INSTALL_DB);
      qCDebug(AKONADISERVER_LOG) << "Found mysql_install_db: " << mMysqlInstallDbPath;
  
 -    mMysqlCheckPath = XdgBaseDirs::findExecutableFile(QStringLiteral("mysqlcheck"), mysqldSearchPath);
-+    mMysqlCheckPath = QStringLiteral(NIXPKGS_MYSQL_MYSQLCHECK);
++    mMysqlCheckPath = QLatin1String(NIXPKGS_MYSQL_MYSQLCHECK);
      qCDebug(AKONADISERVER_LOG) << "Found mysqlcheck: " << mMysqlCheckPath;
  
      mInternalServer = settings.value(QStringLiteral("QMYSQL/StartServer"), defaultInternalServer).toBool();
@@ -55,7 +55,7 @@ Index: akonadi-17.04.0/src/server/storage/dbconfigmysql.cpp
      mPassword = settings.value(QStringLiteral("Password")).toString();
      mConnectionOptions = settings.value(QStringLiteral("Options"), defaultOptions).toString();
 -    mMysqldPath = settings.value(QStringLiteral("ServerPath"), defaultServerPath).toString();
-+    mMysqldPath = QStringLiteral(NIXPKGS_MYSQL_MYSQLD);
++    mMysqldPath = QLatin1String(NIXPKGS_MYSQL_MYSQLD);
      mCleanServerShutdownCommand = settings.value(QStringLiteral("CleanServerShutdownCommand"), defaultCleanShutdownCommand).toString();
      settings.endGroup();
  
@@ -84,7 +84,7 @@ Index: akonadi-17.04.0/src/server/storage/dbconfigmysql.cpp
  
      // generate config file
 -    const QString globalConfig = XdgBaseDirs::findResourceFile("config", QStringLiteral("akonadi/mysql-global.conf"));
-+    const QString globalConfig = QStringLiteral(NIX_OUT "/etc/xdg/akonadi/mysql-global.conf");
++    const QString globalConfig = QLatin1String(NIX_OUT "/etc/xdg/akonadi/mysql-global.conf");
      const QString localConfig  = XdgBaseDirs::findResourceFile("config", QStringLiteral("akonadi/mysql-local.conf"));
      const QString actualConfig = StandardDirs::saveDir("data") + QLatin1String("/mysql.conf");
      if (globalConfig.isEmpty()) {
@@ -133,7 +133,7 @@ Index: akonadi-17.04.0/src/server/storage/dbconfigpostgresql.cpp
 -
 -        defaultServerPath = XdgBaseDirs::findExecutableFile(QStringLiteral("pg_ctl"), postgresSearchPath);
 -        defaultInitDbPath = XdgBaseDirs::findExecutableFile(QStringLiteral("initdb"), postgresSearchPath);
-+        defaultInitDbPath = QStringLiteral(NIXPKGS_POSTGRES_INITDB);
++        defaultInitDbPath = QLatin1String(NIXPKGS_POSTGRES_INITDB);
          defaultHostName = Utils::preferredSocketDirectory(StandardDirs::saveDir("data", QStringLiteral("db_misc")));
          defaultPgData = StandardDirs::saveDir("data", QStringLiteral("db_data"));
      }
@@ -145,7 +145,7 @@ Index: akonadi-17.04.0/src/server/storage/dbconfigpostgresql.cpp
 -    if (mInternalServer && mServerPath.isEmpty()) {
 -        mServerPath = defaultServerPath;
 -    }
-+    mServerPath = QStringLiteral(NIXPKGS_POSTGRES_PG_CTL);
++    mServerPath = QLatin1String(NIXPKGS_POSTGRES_PG_CTL);
      qCDebug(AKONADISERVER_LOG) << "Found pg_ctl:" << mServerPath;
      mInitDbPath = settings.value(QStringLiteral("InitDbPath"), defaultInitDbPath).toString();
      if (mInternalServer && mInitDbPath.isEmpty()) {
@@ -166,7 +166,7 @@ Index: akonadi-17.04.0/src/akonadicontrol/agentprocessinstance.cpp
          Q_ASSERT(agentInfo.launchMethod == AgentType::Launcher);
          const QStringList arguments = QStringList() << executable << identifier();
 -        const QString agentLauncherExec = XdgBaseDirs::findExecutableFile(QStringLiteral("akonadi_agent_launcher"));
-+        const QString agentLauncherExec = QStringLiteral(NIX_OUT "/bin/akonadi_agent_launcher");
++        const QString agentLauncherExec = QLatin1String(NIX_OUT "/bin/akonadi_agent_launcher");
          mController->start(agentLauncherExec, arguments);
      }
      return true;
@@ -179,13 +179,13 @@ Index: akonadi-17.04.0/src/akonadicontrol/agentmanager.cpp
      mStorageController->setShutdownTimeout(15 * 1000);   // the server needs more time for shutdown if we are using an internal mysqld
      connect(mStorageController, &Akonadi::ProcessControl::unableToStart, this, &AgentManager::serverFailure);
 -    mStorageController->start(QStringLiteral("akonadiserver"), serviceArgs, Akonadi::ProcessControl::RestartOnCrash);
-+    mStorageController->start(QStringLiteral(NIX_OUT "/bin/akonadiserver"), serviceArgs, Akonadi::ProcessControl::RestartOnCrash);
++    mStorageController->start(QLatin1String(NIX_OUT "/bin/akonadiserver"), serviceArgs, Akonadi::ProcessControl::RestartOnCrash);
  
      if (mAgentServerEnabled) {
          mAgentServer = new Akonadi::ProcessControl;
          connect(mAgentServer, &Akonadi::ProcessControl::unableToStart, this, &AgentManager::agentServerFailure);
 -        mAgentServer->start(QStringLiteral("akonadi_agent_server"), serviceArgs, Akonadi::ProcessControl::RestartOnCrash);
-+        mAgentServer->start(QStringLiteral(NIX_OUT "/bin/akonadi_agent_server"), serviceArgs, Akonadi::ProcessControl::RestartOnCrash);
++        mAgentServer->start(QLatin1String(NIX_OUT "/bin/akonadi_agent_server"), serviceArgs, Akonadi::ProcessControl::RestartOnCrash);
      }
  
  #ifndef QT_NO_DEBUG

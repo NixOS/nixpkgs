@@ -45,7 +45,7 @@ Author: Robin Gloster <mail@glob.in>
  {
    if (!show)
 -    return false;
-+    return NULL;
++    return nullptr;
    const std::vector<PolygonItem *>& items = poly->GetItem();
    WeaponMenuItem * tmp;
    Interface::GetInstance()->SetCurrentOverflyWeapon(NULL);

@@ -12,6 +12,11 @@ has the following highlights: </para>
 <itemizedlist>
   <listitem>
     <para>
+      The GNOME version is now 3.24.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
       The user handling now keeps track of deallocated UIDs/GIDs. When a user
       or group is revived, this allows it to be allocated the UID/GID it had before.
       A consequence is that UIDs and GIDs are no longer reused.
@@ -86,6 +91,10 @@ rmdir /var/lib/ipfs/.ipfs
   </listitem>
   <listitem>
     <para>
+      The following changes apply if the <literal>stateVersion</literal> is changed to 17.09 or higher.
+      For <literal>stateVersion = "17.03</literal> or lower the old behavior is preserved.
+    </para>
+    <para>
       The <literal>postgres</literal> default version was changed from 9.5 to 9.6.
     </para>
     <para>
@@ -93,6 +102,12 @@ rmdir /var/lib/ipfs/.ipfs
     </para>
     <para>
       The <literal>postgres</literal> default <literal>dataDir</literal> has changed from <literal>/var/db/postgres</literal> to <literal>/var/lib/postgresql/$psqlSchema</literal> where $psqlSchema is 9.6 for example.
+    </para>
+    <para>
+      The <literal>mysql</literal> default <literal>dataDir</literal> has changed from <literal>/var/mysql</literal> to <literal>/var/lib/mysql</literal>.
+    </para>
+    <para>
+      Radicale's default package has changed from 1.x to 2.x. Instructions to migrate can be found <link xlink:href="http://radicale.org/1to2/"> here </link>. It is also possible to use the newer version by setting the <literal>package</literal> to <literal>radicale2</literal>, which is done automatically when <literal>stateVersion</literal> is 17.09 or higher.
     </para>
   </listitem>
   <listitem>
@@ -113,8 +128,72 @@ rmdir /var/lib/ipfs/.ipfs
       also serve as a SSH agent if <literal>enableSSHSupport</literal> is set.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The <literal>services.tinc.networks.&lt;name&gt;.listenAddress</literal>
+      option had a misleading name that did not correspond to its behavior. It
+      now correctly defines the ip to listen for incoming connections on. To
+      keep the previous behaviour, use
+      <literal>services.tinc.networks.&lt;name&gt;.bindToAddress</literal>
+      instead. Refer to the description of the options for more details.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>tlsdate</literal> package and module were removed. This is due to the project
+      being dead and not building with openssl 1.1.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>wvdial</literal> package and module were removed. This is due to the project
+      being dead and not building with openssl 1.1.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>cc-wrapper</literal>'s setup-hook now exports a number of
+      environment variables corresponding to binutils binaries,
+      (e.g. <envar>LD</envar>, <envar>STRIP</envar>, <envar>RANLIB</envar>,
+      etc). This is done to prevent packages' build systems guessing, which is
+      harder to predict, especially when cross-compiling. However, some packages
+      have broken due to this—their build systems either not supporting, or
+      claiming to support without adequate testing, taking such environment
+      variables as parameters.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>services.firefox.syncserver</literal> now runs by default as a
+      non-root user. To accomodate this change, the default sqlite database
+      location has also been changed. Migration should work automatically.
+      Refer to the description of the options for more details.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The <literal>compiz</literal> window manager and package was
+      removed. The system support had been broken for several years.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      Touchpad support should now be enabled through
+      <literal>libinput</literal> as <literal>synaptics</literal> is
+      now deprecated. See the option
+      <literal>services.xserver.libinput.enable</literal>.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      grsecurity/PaX support has been dropped, following upstream's
+      decision to cease free support.  See
+      <link xlink:href="https://grsecurity.net/passing_the_baton.php">
+      upstream's announcement</link> for more information.
+      No complete replacement for grsecurity/PaX is available presently.
+    </para>
+  </listitem>
 </itemizedlist>
-
 
 <para>Other notable improvements:</para>
 
@@ -139,6 +218,32 @@ rmdir /var/lib/ipfs/.ipfs
       other systems and hopefully with each font designer's intent. Some
       system-wide configuration has been removed from the Fontconfig NixOS
       module where user Fontconfig settings are available.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      ZFS/SPL have been updated to 0.7.0, <literal>zfsUnstable, splUnstable</literal>
+      have therefore been removed.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The <option>time.timeZone</option> option now allows the value
+      <literal>null</literal> in addition to timezone strings. This value
+      allows changing the timezone of a system imperatively using
+      <command>timedatectl set-timezone</command>. The default timezone
+      is still UTC.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      Nixpkgs overlays may now be specified with a file as well as a directory. The
+      value of <literal>&lt;nixpkgs-overlays></literal> may be a file, and
+      <filename>~/.config/nixpkgs/overlays.nix</filename> can be used instead of the
+      <filename>~/.config/nixpkgs/overalys</filename> directory.
+    </para>
+    <para>
+      See the overlays chapter of the Nixpkgs manual for more details.
     </para>
   </listitem>
 

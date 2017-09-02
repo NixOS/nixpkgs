@@ -73,7 +73,6 @@ let version = "4.5.4";
     crossMingw = (targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt");
 
     crossConfigureFlags =
-      "--target=${targetPlatform.config}" +
       withArch +
       withCpu +
       withAbi +
@@ -138,8 +137,9 @@ stdenv.mkDerivation ({
 
   hardeningDisable = [ "format" ] ++ optional (name != "gnat") "all";
 
-  outputs = if (hostPlatform.is64bit && langAda) then [ "out" "doc" ]
-    else [ "out" "lib" "doc" ];
+  outputs = [ "out" "man" "info" ]
+    ++ optional (!(hostPlatform.is64bit && langAda)) "lib";
+
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
 
@@ -231,6 +231,13 @@ stdenv.mkDerivation ({
     ++ (optionals langVhdl [gnat])
     ;
 
+  # TODO(@Ericson2314): Always pass "--target" and always prefix.
+  configurePlatforms =
+    # TODO(@Ericson2314): Figure out what's going wrong with Arm
+    if hostPlatform == targetPlatform && targetPlatform.isArm
+    then []
+    else [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+
   configureFlags = "
     ${if enableMultilib then "" else "--disable-multilib"}
     ${if enableShared then "" else "--disable-shared"}
@@ -313,7 +320,6 @@ stdenv.mkDerivation ({
       ${if langAda then " --enable-libada" else ""}
       ${if targetplatform == hostPlatform && targetPlatform.isi686 then "--with-arch=i686" else ""}
       ${if targetPlatform != hostPlatform then crossConfigureFlags else ""}
-      --target=${targetPlatform.config}
     '';
   };
  
@@ -344,8 +350,7 @@ stdenv.mkDerivation ({
 
     # On GNU/Hurd glibc refers to Mach & Hurd
     # headers.
-    ++ optionals (libcCross != null &&
-                  hasAttr "propagatedBuildInputs" libcCross)
+    ++ optionals (libcCross != null && libcCross ? propagatedBuildInputs)
                  libcCross.propagatedBuildInputs);
 
   LIBRARY_PATH = makeLibraryPath ([]
@@ -453,7 +458,7 @@ stdenv.mkDerivation ({
   '';
 
   meta = {
-    homepage = "http://ghdl.free.fr/";
+    homepage = http://ghdl.free.fr/;
     license = stdenv.lib.licenses.gpl2Plus;
     description = "Complete VHDL simulator, using the GCC technology (gcc ${version})";
     maintainers = with stdenv.lib.maintainers; [viric];

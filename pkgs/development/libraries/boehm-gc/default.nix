@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
 
   outputs = [ "out" "dev" "doc" ];
+  separateDebugInfo = stdenv.isLinux;
 
   configureFlags =
     [ "--enable-cplusplus" ]

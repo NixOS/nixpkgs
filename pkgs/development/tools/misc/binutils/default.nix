@@ -5,7 +5,10 @@
 }:
 
 let
-  version = "2.28";
+  # Note to whoever is upgrading this: 2.29 is broken.
+  # ('nix-build pkgs/stdenv/linux/make-bootstrap-tools.nix -A test' segfaults on aarch64)
+  # Also glibc might need patching, see commit 733e20fee4a6700510f71fbe1a58ac23ea202f6a.
+  version = "2.28.1";
   basename = "binutils-${version}";
   inherit (stdenv.lib) optional optionals optionalString;
   # The prefix prepended to binary names to allow multiple binuntils on the
@@ -18,7 +21,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
-    sha256 = "0wiasgns7i8km8nrxas265sh2dfpsw93b3qw195ipc90w4z475v2";
+    sha256 = "1sj234nd05cdgga1r36zalvvdkvpfbr12g5mir2n8i1dwsdrj939";
   };
 
   patches = [
@@ -47,7 +50,6 @@ stdenv.mkDerivation rec {
     ./no-plugins.patch
   ];
 
-  # TODO: all outputs on all platform
   outputs = [ "out" ]
     ++ optional (targetPlatform == hostPlatform && !hostPlatform.isDarwin) "lib" # problems in Darwin stdenv
     ++ [ "info" ]
@@ -82,7 +84,12 @@ stdenv.mkDerivation rec {
     else "-static-libgcc";
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+  configurePlatforms =
+    # TODO(@Ericson2314): Figure out what's going wrong with Arm
+    if hostPlatform == targetPlatform && targetPlatform.isArm
+    then []
+    else [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+
   configureFlags =
     [ "--enable-shared" "--enable-deterministic-archives" "--disable-werror" ]
     ++ optional (stdenv.system == "mips64el-linux") "--enable-fix-loongson2f-nop"

@@ -1,30 +1,23 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
+fetchzip rec {
   name = "paratype-pt-mono";
 
-  src = fetchurl rec {
-    url = "http://www.paratype.ru/uni/public/PTMono.zip";
-    sha256 = "1wqaai7d6xh552vvr5svch07kjn1q89ab5jimi2z0sbd0rbi86vl";
-  };
+  url = "http://www.paratype.ru/uni/public/PTMono.zip";
 
-  buildInputs = [unzip];
-
-  phases = "unpackPhase installPhase";
-  sourceRoot = ".";
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    mkdir -p $out/share/doc/paratype
-    cp *.ttf $out/share/fonts/truetype
-    cp *.txt $out/share/doc/paratype
+  postFetch = ''
+    mkdir -p $out/share/{doc,fonts}
+    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
+    unzip -j $downloadedFile \*.txt -d $out/share/doc/paratype
   '';
 
+  sha256 = "07kl82ngby55khvzsvn831ddpc0q8djgz2y6gsjixkyjfdk2xjjm";
+
   meta = with stdenv.lib; {
-    homepage = "http://www.paratype.ru/public/"; 
+    homepage = http://www.paratype.ru/public/; 
     description = "An open Paratype font";
 
-    license = "Open Paratype license"; 
+    license = "Open Paratype license";
     # no commercial distribution of the font on its own
     # must rename on modification
     # http://www.paratype.ru/public/pt_openlicense.asp

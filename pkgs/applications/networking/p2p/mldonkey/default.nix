@@ -1,14 +1,20 @@
-{stdenv, fetchurl, ocaml, zlib, bzip2, ncurses, file, gd, libpng, libjpeg }:
+{ stdenv, fetchurl, ocamlPackages, zlib, bzip2, ncurses, file, gd, libpng, libjpeg }:
 
 stdenv.mkDerivation (rec {
-  name = "mldonkey-3.1.5";
+  name = "mldonkey-3.1.6";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mldonkey/${name}.tar.bz2";
-    sha256 = "1jqik6b09p27ckssppfiqpph7alxbgpnf9w1s0lalmi3qyyd9ybl";
+    url = https://github.com/ygrek/mldonkey/releases/download/release-3-1-6/mldonkey-3.1.6.tar.bz2;
+    sha256 = "0g84islkj72ymp0zzppcj9n4r21h0vlghnq87hv2wg580mybadhv";
   };
 
-  buildInputs = [ ocaml zlib ncurses bzip2 file gd libpng libjpeg ];
+  preConfigure = stdenv.lib.optionalString (ocamlPackages.camlp4 != null) ''
+    substituteInPlace Makefile --replace '+camlp4' \
+      '${ocamlPackages.camlp4}/lib/ocaml/${ocamlPackages.ocaml.version}/site-lib/camlp4'
+  '';
+
+  buildInputs = [ zlib ncurses bzip2 file gd libpng libjpeg ] ++
+  (with ocamlPackages; [ ocaml camlp4 ]);
   configureFlags = [ "--disable-gui" ];
 
   meta = {
@@ -17,7 +23,7 @@ stdenv.mkDerivation (rec {
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
   };
-} // (if !ocaml.nativeCompilers then
+} // (if !ocamlPackages.ocaml.nativeCompilers then
 {
   # Byte code compilation (the ocaml opt compiler is not supported in some platforms)
   buildPhase = "make mlnet.byte";

@@ -1,14 +1,14 @@
 { stdenv, fetchurl, fetchpatch, cmake, pcre, pkgconfig, python2
 , libX11, libXpm, libXft, libXext, mesa, zlib, libxml2, lzma, gsl
-, Cocoa, OpenGL }:
+, Cocoa, OpenGL, noSplash ? false }:
 
 stdenv.mkDerivation rec {
   name = "root-${version}";
-  version = "6.10.00";
+  version = "6.10.04";
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    sha256 = "1rxqcpqf1b3sxig5xbh3mkvarhg9lgj2f0gv0j48klfw8kgfwlsp";
+    sha256 = "0nwg4bw02v6vahm2rwfaj7fzp3ffhjg5jk7h20il4246swhxw6s6";
   };
 
   buildInputs = [ cmake pcre pkgconfig python2 zlib libxml2 lzma gsl ]
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     patchShebangs build/unix/
+  '' + stdenv.lib.optionalString noSplash ''
+    substituteInPlace rootx/src/rootx.cxx --replace "gNoLogo = false" "gNoLogo = true"
   '';
 
   cmakeFlags = [
@@ -71,7 +73,7 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    homepage = "https://root.cern.ch/";
+    homepage = https://root.cern.ch/;
     description = "A data analysis framework";
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ veprbl ];

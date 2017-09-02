@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 
 with lib;
 
@@ -14,17 +14,23 @@ with lib;
     (mkRenamedOptionModule [ "networking" "enableRT73Firmware" ] [ "networking" "enableRalinkFirmware" ])
 
     (mkRenamedOptionModule [ "services" "cadvisor" "host" ] [ "services" "cadvisor" "listenAddress" ])
+    (mkChangedOptionModule [ "services" "printing" "gutenprint" ] [ "services" "printing" "drivers" ]
+      (config:
+        let enabled = getAttrFromPath [ "services" "printing" "gutenprint" ] config;
+        in if enabled then [ pkgs.gutenprint ] else [ ]))
     (mkRenamedOptionModule [ "services" "elasticsearch" "host" ] [ "services" "elasticsearch" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "graphite" "api" "host" ] [ "services" "graphite" "api" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "graphite" "web" "host" ] [ "services" "graphite" "web" "listenAddress" ])
-    (mkRenamedOptionModule [ "services" "logstash" "address" ] [ "services" "logstash" "listenAddress" ])
+    (mkRenamedOptionModule [ "services" "i2pd" "extIp" ] [ "services" "i2pd" "address" ])
     (mkRenamedOptionModule [ "services" "kibana" "host" ] [ "services" "kibana" "listenAddress" ])
+    (mkRenamedOptionModule [ "services" "logstash" "address" ] [ "services" "logstash" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "mpd" "network" "host" ] [ "services" "mpd" "network" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "neo4j" "host" ] [ "services" "neo4j" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "shout" "host" ] [ "services" "shout" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "sslh" "host" ] [ "services" "sslh" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "statsd" "host" ] [ "services" "statsd" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "subsonic" "host" ] [ "services" "subsonic" "listenAddress" ])
+    (mkRenamedOptionModule [ "services" "tor" "relay" "portSpec" ] [ "services" "tor" "relay" "port" ])
     (mkRenamedOptionModule [ "jobs" ] [ "systemd" "services" ])
 
     (mkRenamedOptionModule [ "services" "gitlab" "stateDir" ] [ "services" "gitlab" "statePath" ])
@@ -118,26 +124,6 @@ with lib;
     (mkRenamedOptionModule [ "services" "iodined" "extraConfig" ] [ "services" "iodine" "server" "extraConfig" ])
     (mkRemovedOptionModule [ "services" "iodined" "client" ] "")
 
-    # Grsecurity
-    (mkRemovedOptionModule [ "security" "grsecurity" "kernelPatch" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "mode" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "priority" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "system" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "virtualisationConfig" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "hardwareVirtualisation" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "virtualisationSoftware" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "sysctl" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "denyChrootChmod" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "denyChrootCaps" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "denyUSB" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "restrictProc" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "restrictProcWithGroup" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "unrestrictProcGid" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "disableRBAC" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "disableSimultConnect" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "verboseVersion" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "kernelExtraConfig" ] "")
-
     # Unity3D
     (mkRenamedOptionModule [ "programs" "unity3d" "enable" ] [ "security" "chromiumSuidSandbox" "enable" ])
 
@@ -195,6 +181,8 @@ with lib;
     (mkRemovedOptionModule [ "services" "openvpn" "enable" ] "")
     (mkRemovedOptionModule [ "services" "printing" "cupsFilesConf" ] "")
     (mkRemovedOptionModule [ "services" "printing" "cupsdConf" ] "")
+    (mkRemovedOptionModule [ "services" "tor" "relay" "isBridge" ] "Use services.tor.relay.role instead.")
+    (mkRemovedOptionModule [ "services" "tor" "relay" "isExit" ] "Use services.tor.relay.role instead.")
     (mkRemovedOptionModule [ "services" "xserver" "startGnuPGAgent" ]
       "See the 16.09 release notes for more information.")
     (mkRemovedOptionModule [ "services" "phpfpm" "phpIni" ] "")
@@ -204,6 +192,7 @@ with lib;
       "Set the option `services.xserver.displayManager.sddm.package' instead.")
     (mkRemovedOptionModule [ "fonts" "fontconfig" "forceAutohint" ] "")
     (mkRemovedOptionModule [ "fonts" "fontconfig" "renderMonoTTFAsBitmap" ] "")
+    (mkRemovedOptionModule [ "boot" "zfs" "enableUnstable" ] "0.7.0 is now the default")
 
     # ZSH
     (mkRenamedOptionModule [ "programs" "zsh" "enableSyntaxHighlighting" ] [ "programs" "zsh" "syntaxHighlighting" "enable" ])

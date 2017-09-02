@@ -17,6 +17,7 @@
 , enableEigen     ? false, eigen
 , enableOpenblas  ? false, openblas
 , enableCuda      ? false, cudatoolkit, gcc5
+, enableTesseract ? false, tesseract, leptonica
 , AVFoundation, Cocoa, QTKit
 }:
 
@@ -37,12 +38,15 @@ let
     sha256 = "1lynpbxz1jay3ya5y45zac5v8c6ifgk4ssn8d1chfdk3spi691jj";
   };
 
-  # This fixes the build on OS X.
+  # This fixes the build on macOS.
   # See: https://github.com/opencv/opencv_contrib/pull/926
   contribOSXFix = fetchpatch {
     url = "https://github.com/opencv/opencv_contrib/commit/abf44fcccfe2f281b7442dac243e37b7f436d961.patch";
     sha256 = "11dsq8dwh1k6f7zglbc26xwsjw184ggf2531mhf7v77kd72k19fm";
   };
+
+  # Contrib must be built in order to enable Tesseract support:
+  buildContrib = enableContrib || enableTesseract;
 
   vggFiles = fetchFromGitHub {
     owner  = "opencv";
@@ -66,10 +70,10 @@ stdenv.mkDerivation rec {
   inherit version src;
 
   postUnpack =
-    (lib.optionalString enableContrib ''
+    (lib.optionalString buildContrib ''
       cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/opencv_contrib"
 
-      # This fixes the build on OS X.
+      # This fixes the build on macOS.
       patch -d "$NIX_BUILD_TOP/opencv_contrib" -p2 < "${contribOSXFix}"
 
       for name in vgg_generated_48.i \
@@ -90,9 +94,14 @@ stdenv.mkDerivation rec {
       done
     '');
 
-  # This prevents cmake from using libraries in impure paths (which causes build failure on non NixOS)
+  # This prevents cmake from using libraries in impure paths (which
+  # causes build failure on non NixOS)
+  # Also, work around https://github.com/NixOS/nixpkgs/issues/26304 with
+  # what appears to be some stray headers in dnn/misc/tensorflow
+  # in contrib when generating the Python bindings:
   postPatch = ''
     sed -i '/Add these standard paths to the search paths for FIND_LIBRARY/,/^\s*$/{d}' CMakeLists.txt
+    sed -i -e 's|if len(decls) == 0:|if len(decls) == 0 or "opencv2/" not in hdr:|' ./modules/python/src2/gen2.py
   '';
 
   preConfigure =
@@ -113,7 +122,7 @@ stdenv.mkDerivation rec {
           ln -s "${ippicv}" "${dir}/${name}"
         ''
     ) +
-    (lib.optionalString enableContrib ''
+    (lib.optionalString buildContrib ''
       cmakeFlagsArray+=("-DOPENCV_EXTRA_MODULES_PATH=$NIX_BUILD_TOP/opencv_contrib")
     '');
 
@@ -132,8 +141,12 @@ stdenv.mkDerivation rec {
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
     ++ lib.optional enableOpenblas openblas
+    # There is seemingly no compile-time flag for Tesseract.  It's
+    # simply enabled automatically if contrib is built, and it detects
+    # tesseract & leptonica.
+    ++ lib.optionals enableTesseract [ tesseract leptonica ]
     ++ lib.optionals enableCuda [ cudatoolkit gcc5 ]
-    ++ lib.optional enableContrib protobuf3_1
+    ++ lib.optional buildContrib protobuf3_1
     ++ lib.optionals stdenv.isDarwin [ AVFoundation Cocoa QTKit ];
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
@@ -153,7 +166,7 @@ stdenv.mkDerivation rec {
     (opencvFlag "CUDA" enableCuda)
     (opencvFlag "CUBLAS" enableCuda)
   ] ++ lib.optionals enableCuda [ "-DCUDA_FAST_MATH=ON" ]
-    ++ lib.optional enableContrib "-DBUILD_PROTOBUF=off"
+    ++ lib.optional buildContrib "-DBUILD_PROTOBUF=off"
     ++ lib.optionals stdenv.isDarwin ["-DWITH_OPENCL=OFF" "-DWITH_LAPACK=OFF"];
 
   enableParallelBuilding = true;

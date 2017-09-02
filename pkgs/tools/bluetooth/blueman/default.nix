@@ -31,14 +31,15 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [ (lib.enableFeature withPulseAudio "pulseaudio") ];
 
-  preFixup = ''
+  postFixup = ''
     makeWrapperArgs="--prefix PATH ':' ${binPath}"
-    wrapPythonProgramsIn "$out/bin" "$pythonPath"
-    wrapPythonProgramsIn "$out/libexec" "$pythonPath"
+    # This mimics ../../../development/interpreters/python/wrap.sh
+    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
+    wrapPythonProgramsIn "$out/libexec" "$out $pythonPath"
   '';
 
   meta = with lib; {
-    homepage = "https://github.com/blueman-project/blueman";
+    homepage = https://github.com/blueman-project/blueman;
     description = "GTK+-based Bluetooth Manager";
     license = licenses.gpl3;
     platforms = platforms.linux;

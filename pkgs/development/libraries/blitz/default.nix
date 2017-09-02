@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Fast multi-dimensional array library for C++";
-    homepage = http://sourceforge.net/projects/blitz/;
+    homepage = https://sourceforge.net/projects/blitz/;
     license = stdenv.lib.licenses.lgpl3;
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     maintainers = [ stdenv.lib.maintainers.aherrmann ];
