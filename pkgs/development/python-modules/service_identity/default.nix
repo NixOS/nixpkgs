@@ -12,13 +12,13 @@
 
 buildPythonPackage rec {
   pname = "service_identity";
-  version = "16.0.0";
+  version = "17.0.0";
   name = "${pname}-${version}";
 
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dih7i7d36nbllcxgfkvbnaj1wlzhwfnpr4b97dz74czylif4c06";
+    sha256 = "4001fbb3da19e0df22c47a06d29681a398473af4aa9d745eca525b3b2c2302ab";
   };
 
   propagatedBuildInputs = [
@@ -32,4 +32,7 @@ buildPythonPackage rec {
   checkPhase = ''
     py.test
   '';
+
+  # Tests not included in archive
+  doCheck = false;
 }
