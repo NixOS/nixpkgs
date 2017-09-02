@@ -4,30 +4,35 @@
 
 buildPythonPackage rec {
   name = "pyocr-${version}";
-  version = "0.4.6";
+  version = "0.4.7";
 
   # Don't fetch from PYPI because it doesn't contain tests.
   src = fetchFromGitHub {
     owner = "jflesch";
     repo = "pyocr";
     rev = version;
-    sha256 = "0amyhkkm400qzbw65ivyzrzxl2r7vxqgsgqm7ml95m7gwkwhnzz0";
+    sha256 = "1iw73r8yrgjf8g00yzpz62ymqbf89cqhyhl9g430srmsrq7mn2yd";
   };
 
-  patches = [ ./tesseract.patch ];
+  NIX_CUNEIFORM_CMD = "${cuneiform}/bin/cuneiform";
+  NIX_CUNEIFORM_DATA = "${cuneiform}/share/cuneiform";
+  NIX_LIBTESSERACT_PATH = "${tesseract}/lib/libtesseract.so";
+  NIX_TESSDATA_PREFIX = "${tesseract}/share/tessdata";
+  NIX_TESSERACT_CMD = "${tesseract}/bin/tesseract";
+
+  patches = [ ./paths.patch ];
 
   postPatch = ''
-    sed -i \
-      -e 's,^\(TESSERACT_CMD *= *\).*,\1"${tesseract}/bin/tesseract",' \
-      -e 's,^\(CUNEIFORM_CMD *= *\).*,\1"${cuneiform}/bin/cuneiform",' \
-      -e '/^CUNIFORM_POSSIBLE_PATHS *= *\[/,/^\]$/ {
-        c CUNIFORM_POSSIBLE_PATHS = ["${cuneiform}/share/cuneiform"]
-      }' src/pyocr/{tesseract,cuneiform}.py
+    substituteInPlace src/pyocr/cuneiform.py \
+      --subst-var NIX_CUNEIFORM_CMD \
+      --subst-var NIX_CUNEIFORM_CMD
 
-    sed -i -r \
-      -e 's,"libtesseract\.so\.3","${tesseract}/lib/libtesseract.so",' \
-      -e 's,^(TESSDATA_PREFIX *=).*,\1 "${tesseract}/share/tessdata",' \
-      src/pyocr/libtesseract/tesseract_raw.py
+    substituteInPlace src/pyocr/tesseract.py \
+      --subst-var NIX_TESSERACT_CMD
+
+    substituteInPlace src/pyocr/libtesseract/tesseract_raw.py \
+      --subst-var NIX_TESSDATA_PREFIX \
+      --subst-var NIX_LIBTESSERACT_PATH
 
     # Disable specific tests that are probably failing because of this issue:
     # https://github.com/jflesch/pyocr/issues/52
