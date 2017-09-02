@@ -1259,6 +1259,8 @@ in {
     };
   };
 
+  backports_unittest-mock = callPackage ../development/python-modules/backports_unittest-mock {};
+
   babelfish = buildPythonPackage rec {
     version = "0.5.5";
     name = "babelfish-${version}";
@@ -1357,26 +1359,7 @@ in {
     };
   });
 
-  beautifulsoup4 = buildPythonPackage (rec {
-    name = "beautifulsoup4-4.5.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/beautifulsoup4/${name}.tar.gz";
-      sha256 = "0glaw1vyxnbp03fni7h5496n6iib0n5iim4gax1n0ngscs9s075j";
-    };
-
-    buildInputs = [ self.nose ];
-    checkPhase = ''
-      nosetests build/
-    '';
-
-    meta = {
-      homepage = http://crummy.com/software/BeautifulSoup/bs4/;
-      description = "HTML and XML parser";
-      license = licenses.mit;
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  });
+  beautifulsoup4 = callPackage ../development/python-modules/beautifulsoup4 { };
 
   beaker = buildPythonPackage rec {
     name = "Beaker-${version}";
@@ -1656,6 +1639,8 @@ in {
 
 
   channels = callPackage ../development/python-modules/channels {};
+
+  cheroot = callPackage ../development/python-modules/cheroot {};
 
   circus = buildPythonPackage rec {
     name = "circus-0.11.1";
@@ -2789,27 +2774,7 @@ in {
     };
   };
 
-
-  cherrypy = buildPythonPackage (rec {
-    name = "cherrypy-${version}";
-    version = "8.7.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/C/CherryPy/CherryPy-${version}.tar.gz";
-      sha256 = "cbf418bf46458a67eb841944f2d414c23bf59d090baf2a28704bd67243e6a79f";
-    };
-
-    # wsgiserver.ssl_pyopenssl is broken on py3k.
-    doCheck = !isPy3k;
-    buildInputs = with self; [ pytest setuptools_scm pytestrunner ];
-    propagatedBuildInputs = with self; [ six ];
-
-    meta = {
-      homepage = "http://www.cherrypy.org";
-      description = "A pythonic, object-oriented HTTP framework";
-    };
-  });
-
+  cherrypy = callPackage ../development/python-modules/cherrypy {};
 
   cjson = buildPythonPackage rec {
     name = "python-cjson-${version}";
@@ -4267,6 +4232,8 @@ in {
     };
   };
 
+  pytest-warnings = callPackage ../development/python-modules/pytest-warnings { };
+
   pytestpep8 = buildPythonPackage rec {
     name = "pytest-pep8";
     src = pkgs.fetchurl {
@@ -4476,6 +4443,8 @@ in {
       license = licenses.publicDomain;
     };
   };
+
+  pytest-sugar = callPackage ../development/python-modules/pytest-sugar { };
 
   tinycss = buildPythonPackage rec {
     name = "tinycss-${version}";
@@ -5347,38 +5316,7 @@ in {
     };
   };
 
-  urllib3 = let
-    disabled_tests = [
-      "test_headers" "test_headerdict" "test_can_validate_ip_san" "test_delayed_body_read_timeout"
-      "test_timeout_errors_cause_retries" "test_select_multiple_interrupts_with_event"
-    ];
-  in buildPythonPackage rec {
-    pname = "urllib3";
-    version = "1.20";
-    name = "${pname}-${version}";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0bx76if7shzlyykmaj4fhjkir5bswc4fdx5r4q0lrn3q51p2pvwp";
-    };
-
-    NOSE_EXCLUDE=concatStringsSep "," disabled_tests;
-
-    checkPhase = ''
-      nosetests -v --cover-min-percentage 1
-    '';
-
-    doCheck = false;
-
-    buildInputs = with self; [ coverage tornado mock nose psutil pysocks ];
-
-    meta = {
-      description = "A Python library for Dropbox's HTTP-based Core and Datastore APIs";
-      homepage = https://www.dropbox.com/developers/core/docs;
-      license = licenses.mit;
-    };
-  };
-
+  urllib3 = callPackage ../development/python-modules/urllib3 {};
 
   dropbox = buildPythonPackage rec {
     name = "dropbox-${version}";
@@ -8744,21 +8682,7 @@ in {
     };
   };
 
-  chardet = buildPythonPackage rec {
-    name = "chardet-2.3.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/chardet/${name}.tar.gz";
-      sha256 = "e53e38b3a4afe6d1132de62b7400a4ac363452dc5dfcf8d88e8e0cce663c68aa";
-    };
-
-    meta = {
-      homepage = https://github.com/chardet/chardet;
-      description = "Universal encoding detector";
-      license = licenses.lgpl2;
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  };
+  chardet = callPackage ../development/python-modules/chardet { };
 
   django = self.django_1_11;
 
@@ -9627,22 +9551,7 @@ in {
     };
   };
 
-  flask = buildPythonPackage {
-    name = "flask-0.12";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/F/Flask/Flask-0.12.tar.gz";
-      sha256 = "12yasybryp33rdchsqgckf15zj4pjfam7ly5spmn2sijpv6h7s4k";
-    };
-
-    propagatedBuildInputs = with self; [ itsdangerous click werkzeug jinja2 ];
-
-    meta = {
-      homepage = http://flask.pocoo.org/;
-      description = "A microframework based on Werkzeug, Jinja 2, and good intentions";
-      license = licenses.bsd3;
-    };
-  };
+  flask = callPackage ../development/python-modules/flask { };
 
   flask_assets = buildPythonPackage rec {
     name = "Flask-Assets-${version}";
@@ -9680,42 +9589,9 @@ in {
     };
   };
 
-  flask-compress = buildPythonPackage rec {
-    name = "Flask-Compress-${version}";
-    version = "1.3.2";
+  flask-compress = callPackage ../development/python-modules/flask-compress { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/F/Flask-Compress/${name}.tar.gz";
-      sha256 = "4fbb53e7f6ce8b1458a2c3d7a528564912f2641ab2f9f43819fc96ed7f770734";
-    };
-
-    propagatedBuildInputs = with self; [ flask ];
-
-    meta = {
-      description = "Compress responses in your Flask app with gzip";
-      homepage = "https://libwilliam.github.io/flask-compress/";
-      license = licenses.mit;
-    };
-  };
-
-  flask-cors = buildPythonPackage rec {
-    name = "Flask-Cors-${version}";
-    version = "2.1.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/F/Flask-Cors/${name}.tar.gz";
-      sha256 = "0fd618a4f88ykqx4x55viz47cm9rl214q1b45a0b4mz5vhxffqpj";
-    };
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ flask six ];
-
-    meta = {
-      description = "A Flask extension adding a decorator for CORS support";
-      homepage = https://github.com/corydolphin/flask-cors;
-      license = with licenses; [ mit ];
-    };
-  };
+  flask-cors = callPackage ../development/python-modules/flask-cors { };
 
   flask_elastic = callPackage ../development/python-modules/flask-elastic.nix { };
 
@@ -9749,33 +9625,9 @@ in {
 
   flask-pymongo = callPackage ../development/python-modules/Flask-PyMongo { };
 
-  flask-restful = buildPythonPackage rec {
-    name = "Flask-RESTful-${version}";
-    version = "0.3.5";
+  flask-restful = callPackage ../development/python-modules/flask-restful { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/F/Flask-RESTful/${name}.tar.gz";
-      sha256 = "cce4aeff959b571136b5af098bebe7d3deeca7eb1411c4e722ff2c5356ab4c42";
-    };
-
-    # TypeError: Only byte strings can be passed to C code
-    patchPhase = if isPy3k then ''
-      rm tests/test_crypto.py tests/test_paging.py
-    '' else null;
-    buildInputs = with self; [ nose mock blinker ];
-    propagatedBuildInputs = with self; [ flask six pytz aniso8601 pycrypto ];
-    PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
-
-    meta = {
-      homepage = "http://flask-restful.readthedocs.io/";
-      description = "REST API building blocks for Flask";
-      license = licenses.bsd3;
-    };
-  };
-
-  flask-restplus = callPackage ../development/python-modules/flask-restplus/default.nix { };
-  # Exactly 0.8.6 is required by flexget
-  flask-restplus_0_8 = callPackage ../development/python-modules/flask-restplus/0.8.nix { };
+  flask-restplus = callPackage ../development/python-modules/flask-restplus { };
 
   flask_script = buildPythonPackage rec {
     name = "Flask-Script-${version}";
@@ -9952,47 +9804,9 @@ in {
     };
   };
 
-  jsonschema = buildPythonPackage (rec {
-    version = "2.5.1";
-    name = "jsonschema-${version}";
+  jsonschema = callPackage ../development/python-modules/jsonschema { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jsonschema/jsonschema-${version}.tar.gz";
-      sha256 = "0hddbqjm4jq63y8jf44nswina1crjs16l9snb6m3vvgyg31klrrn";
-    };
-
-    buildInputs = with self; [ nose mock vcversioner ];
-    propagatedBuildInputs = with self; [ functools32 ];
-
-    patchPhase = ''
-      substituteInPlace jsonschema/tests/test_jsonschema_test_suite.py --replace "python" "${python}/bin/${python.executable}"
-    '';
-
-    checkPhase = ''
-      nosetests
-    '';
-
-    meta = {
-      homepage = https://github.com/Julian/jsonschema;
-      description = "An implementation of JSON Schema validation for Python";
-      license = licenses.mit;
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  });
-
-  vcversioner = buildPythonPackage rec {
-    name = "vcversioner-${version}";
-    version = "2.14.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/v/vcversioner/vcversioner-${version}.tar.gz";
-      sha256 = "11ivq1bm7v0yb4nsfbv9m7g7lyjn112gbvpjnjz8nv1fx633dm5c";
-    };
-
-    meta = with stdenv.lib; {
-      homepage = "https://github.com/habnabit/vcversioner";
-    };
-  };
+  vcversioner = callPackage ../development/python-modules/vcversioner { };
 
   falcon = buildPythonPackage (rec {
     name = "falcon-1.0.0";
@@ -10735,6 +10549,9 @@ in {
 
   guessit = callPackage ../development/python-modules/guessit { };
 
+  # used by flexget
+  guessit_2_0 = callPackage ../development/python-modules/guessit/2.0.nix { };
+
   rebulk = callPackage ../development/python-modules/rebulk { };
 
   gunicorn = callPackage ../development/python-modules/gunicorn.nix { };
@@ -11434,34 +11251,7 @@ in {
     };
   };
 
-  jinja2 = buildPythonPackage rec {
-    pname = "Jinja2";
-    version = "2.9.5";
-    name = "${pname}-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/J/Jinja2/${name}.tar.gz";
-      sha256 = "702a24d992f856fa8d5a7a36db6128198d0c21e1da34448ca236c42e92384825";
-    };
-
-    propagatedBuildInputs = with self; [ markupsafe ];
-
-    # No tests included
-    doCheck = false;
-
-    meta = {
-      homepage = http://jinja.pocoo.org/;
-      description = "Stand-alone template engine";
-      license = licenses.bsd3;
-      longDescription = ''
-        Jinja2 is a template engine written in pure Python. It provides a
-        Django inspired non-XML syntax but supports inline expressions and
-        an optional sandboxed environment.
-      '';
-      platforms = platforms.all;
-      maintainers = with maintainers; [ pierron garbas sjourdois ];
-    };
-  };
+  jinja2 = callPackage ../development/python-modules/jinja2 { };
 
   jinja2_time = buildPythonPackage rec {
     version = "0.2.0";
@@ -16736,6 +16526,8 @@ in {
     };
   };
 
+  portend = callPackage ../development/python-modules/portend { };
+
   powerline = callPackage ../development/python-modules/powerline { };
 
   pox = buildPythonPackage rec {
@@ -19068,18 +18860,19 @@ in {
     };
   };
 
-
   pytz = buildPythonPackage rec {
-    name = "pytz-${version}";
-    version = "2016.6.1";
+    name = "${pname}-${version}";
+    pname = "pytz";
+    version = "2017.2";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytz/${name}.tar.gz";
-      sha256 = "6f57732f0f8849817e9853eb9d50d85d1ebb1404f702dbc44ee627c642a486ca";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "12cmd3j46d2gcw08bspvp6s9icfcvx88zjz52n1bli9dyvl5dh7m";
+      extension = "zip";
     };
 
     checkPhase = ''
-      ${python.interpreter} -m unittest discover -s pytz/tests
+      python -m unittest discover -s pytz/tests
     '';
 
     meta = {
@@ -19088,7 +18881,6 @@ in {
       license = licenses.mit;
     };
   };
-
 
   pyutil = buildPythonPackage (rec {
     name = "pyutil-2.0.0";
@@ -19371,25 +19163,7 @@ in {
   requests2 = throw "requests2 has been deprecated. Use requests instead.";
 
   # use requests, not requests_2
-  requests = buildPythonPackage rec {
-    name = "requests-${version}";
-    version = "2.13.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/requests/${name}.tar.gz";
-      sha256 = "5722cd09762faa01276230270ff16af7acf7c5c45d623868d9ba116f15791ce8";
-    };
-
-    nativeBuildInputs = [ self.pytest ];
-    # sadly, tests require networking
-    doCheck = false;
-
-    meta = {
-      description = "An Apache2 licensed HTTP library, written in Python, for human beings";
-      homepage = http://docs.python-requests.org/en/latest/;
-      license = licenses.asl20;
-    };
-  };
+  requests = callPackage ../development/python-modules/requests { };
 
   requests_download = buildPythonPackage rec {
     pname = "requests_download";
@@ -23093,25 +22867,7 @@ in {
 
   twisted = callPackage ../development/python-modules/twisted { };
 
-  tzlocal = buildPythonPackage rec {
-    name = "tzlocal-1.2.2";
-
-    propagatedBuildInputs = with self; [ pytz ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tzlocal/${name}.tar.gz";
-      sha256 = "0paj7vlsb0np8b5sp4bv64wxv7qk2piyp7xg29pkhdjwsbls9fnb";
-    };
-
-     # test fail (timezone test fail)
-     doCheck = false;
-
-    meta = with pkgs.stdenv.lib; {
-      description = "Tzinfo object for the local timezone";
-      homepage = https://github.com/regebro/tzlocal;
-      license = licenses.cddl;
-    };
-  };
+  tzlocal = callPackage ../development/python-modules/tzlocal { };
 
   u-msgpack-python = callPackage ../development/python-modules/u-msgpack-python { };
 
@@ -23786,28 +23542,7 @@ EOF
     };
   };
 
-
-  werkzeug = buildPythonPackage rec {
-    name = "Werkzeug-0.11.10";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/W/Werkzeug/${name}.tar.gz";
-      sha256 = "1vpf98k4jp4yhbv2jbyq8dj5fdasrd26rkq34pacs5n7mkxxlr6c";
-    };
-
-    LC_ALL = "en_US.UTF-8";
-
-    propagatedBuildInputs = with self; [ itsdangerous ];
-    buildInputs = with self; [ pytest requests pkgs.glibcLocales ];
-
-
-
-    meta = {
-      homepage = http://werkzeug.pocoo.org/;
-      description = "A WSGI utility library for Python";
-      license = licenses.bsd3;
-    };
-  };
+  werkzeug = callPackage ../development/python-modules/werkzeug { };
 
   wheel = callPackage ../development/python-modules/wheel { };
 
