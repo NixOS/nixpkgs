@@ -2,6 +2,8 @@
 , buildPythonPackage
 , fetchPypi
 , rtl-sdr
+, pypandoc
+, pandoc
 }:
 
 buildPythonPackage rec {
@@ -13,6 +15,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "dd041143b68628c713c2227c78c40b0b4a0cb5d08df116f7bdc5f83c529be0e4";
   };
+
+  buildInputs = [ pypandoc pandoc ];
 
   postPatch = ''
     sed "s|driver_files =.*|driver_files = ['${rtl-sdr}/lib/librtlsdr.so']|" -i rtlsdr/librtlsdr.py
