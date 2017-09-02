@@ -138,7 +138,7 @@ let
       makeWrapper ${cfg.packages.gitlab.ruby-env}/bin/bundle $out/bin/gitlab-bundle \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
           --set GITLAB_CONFIG_PATH '${cfg.statePath}/config' \
-          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip config.services.postgresql.package ]}:$PATH' \
+          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar config.services.postgresql.package ]}:$PATH' \
           --set RAKEOPT '-f ${cfg.packages.gitlab}/share/gitlab/Rakefile' \
           --run 'cd ${cfg.packages.gitlab}/share/gitlab'
       makeWrapper $out/bin/gitlab-bundle $out/bin/gitlab-rake \
@@ -559,7 +559,6 @@ in {
         mkdir -p ${gitlabEnv.HOME}/.ssh
         touch ${gitlabEnv.HOME}/.ssh/authorized_keys
         chown -R ${cfg.user}:${cfg.group} ${gitlabEnv.HOME}/
-        chmod -R u+rwX,go-rwx+X ${gitlabEnv.HOME}/
 
         cp -rf ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
         ${optionalString cfg.smtp.enable ''
@@ -607,7 +606,8 @@ in {
         # Change permissions in the last step because some of the
         # intermediary scripts like to create directories as root.
         chown -R ${cfg.user}:${cfg.group} ${cfg.statePath}
-        chmod -R u+rwX,go-rwx+X ${cfg.statePath}
+        chmod -R ug+rwX,o-rwx+X ${cfg.statePath}
+        chmod -R u+rwX,go-rwx+X ${gitlabEnv.HOME}
       '';
 
       serviceConfig = {
