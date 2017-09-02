@@ -19327,6 +19327,10 @@ with pkgs;
 
   # `recurseIntoAttrs` for sake of hydra, not nix-env
   tests = recurseIntoAttrs {
+    cc-wrapper = callPackage ../test/cc-wrapper { };
+    cc-wrapper-clang = callPackage ../test/cc-wrapper { stdenv = clangStdenv; };
+    cc-wrapper-libcxx = callPackage ../test/cc-wrapper { stdenv = libcxxStdenv; };
+
     macOSSierraShared = callPackage ../test/macos-sierra-shared {};
   };
 }
