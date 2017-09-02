@@ -14259,30 +14259,7 @@ in {
     doCheck = false;
   };
 
-  openpyxl = buildPythonPackage rec {
-    version = "2.3.5";
-    name = "openpyxl-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/openpyxl/${name}.tar.gz";
-      sha256 = "0qj7d8l1qc6cjwk1ps01dyh53b3p2k2k7hwmj98y2257jj5mf1s3";
-    };
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ jdcal et_xmlfile lxml ];
-
-    # Tests are not included in archive.
-    # https://bitbucket.org/openpyxl/openpyxl/issues/610
-    doCheck = false;
-
-    meta = {
-      description = "A Python library to read/write Excel 2007 xlsx/xlsm files";
-      homepage = https://openpyxl.readthedocs.org;
-      license = licenses.mit;
-      maintainers = with maintainers; [ lihop sjourdois ];
-      platforms = platforms.all;
-    };
-  };
+  openpyxl = callPackage ../development/python-modules/openpyxl { };
 
   ordereddict = buildPythonPackage rec {
     name = "ordereddict-${version}";
