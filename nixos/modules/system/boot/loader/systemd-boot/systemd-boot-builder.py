@@ -12,6 +12,9 @@ import warnings
 import ctypes
 libc = ctypes.CDLL("libc.so.6")
 import re
+import datetime
+import glob
+import os.path
 
 def copy_if_not_exists(source, dest):
     if not os.path.exists(dest):
@@ -24,7 +27,7 @@ def system_dir(profile, generation):
         return "/nix/var/nix/profiles/system-%d-link" % (generation)
 
 BOOT_ENTRY = """title NixOS{profile}
-version Generation {generation}
+version Generation {generation} {description}
 linux {kernel}
 initrd {initrd}
 options {kernel_params}
@@ -54,6 +57,26 @@ def copy_from_profile(profile, generation, name, dry_run=False):
         copy_if_not_exists(store_file_path, "@efiSysMountPoint@%s" % (efi_file_path))
     return efi_file_path
 
+def describe_generation(generation_dir):
+    try:
+        with open("%s/nixos-version" % generation_dir) as f:
+            nixos_version = f.read()
+    except IOError:
+        nixos_version = "Unknown"
+
+    kernel_dir = os.path.dirname(os.path.realpath("%s/kernel" % generation_dir))
+    module_dir = glob.glob("%s/lib/modules/*" % kernel_dir)[0]
+    kernel_version = os.path.basename(module_dir)
+
+    build_time = int(os.path.getctime(generation_dir))
+    build_date = datetime.datetime.fromtimestamp(build_time).strftime('%F')
+
+    description = "NixOS {}, Linux Kernel {}, Built on {}".format(
+        nixos_version, kernel_version, build_date
+    )
+
+    return description
+
 def write_entry(profile, generation, machine_id):
     kernel = copy_from_profile(profile, generation, "kernel")
     initrd = copy_from_profile(profile, generation, "initrd")
@@ -69,6 +92,7 @@ def write_entry(profile, generation, machine_id):
     generation_dir = os.readlink(system_dir(profile, generation))
     tmp_path = "%s.tmp" % (entry_file)
     kernel_params = "systemConfig=%s init=%s/init " % (generation_dir, generation_dir)
+
     with open("%s/kernel-params" % (generation_dir)) as params_file:
         kernel_params = kernel_params + params_file.read()
     with open(tmp_path, 'w') as f:
@@ -76,7 +100,8 @@ def write_entry(profile, generation, machine_id):
                     generation=generation,
                     kernel=kernel,
                     initrd=initrd,
-                    kernel_params=kernel_params))
+                    kernel_params=kernel_params,
+                    description=describe_generation(generation_dir)))
         if machine_id is not None:
             f.write("machine-id %s\n" % machine_id)
     os.rename(tmp_path, entry_file)
