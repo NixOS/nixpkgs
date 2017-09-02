@@ -19670,6 +19670,8 @@ in {
     };
   };
 
+  restructuredtext_lint = callPackage ../development/python-modules/restructuredtext_lint { };
+
   robomachine = buildPythonPackage rec {
     name = "robomachine-0.6";
 
