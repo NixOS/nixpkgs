@@ -15616,8 +15616,11 @@ in {
       sed -i 's@python@${python.interpreter}@' .testr.conf
     '';
 
-    buildInputs = with self; [ pbr Babel six wrapt testtools testscenarios
-      testrepository subunit coverage oslotest ];
+    buildInputs = with self; [ pbr ];
+    propagatedBuildInputs = with self; [ wrapt Babel six doc8 ];
+    checkInputs = with self; [ pbr Babel six wrapt testtools testscenarios
+       testrepository subunit coverage oslotest ];
+    doCheck = false; # oslo is broken
   };
 
   doc8 = callPackage ../development/python-modules/doc8 { };
