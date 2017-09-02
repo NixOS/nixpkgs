@@ -35,8 +35,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   patches = [
-    ./autofoo.patch
-    ./boost.patch
+    (fetchpatch { url = https://sources.debian.net/data/main/e/ekiga/4.0.1-7/debian/patches/autofoo.patch;
+      sha256 = "1vyagslws4mm9yfz1m5p1kv9sxmk5lls9vxpm6j72q2ahsgydzx4";
+    })
+    (fetchpatch { url = https://sources.debian.net/data/main/e/ekiga/4.0.1-7/debian/patches/boost.patch;
+      sha256 = "01k0rw8ibrrf9zn9lx6dzbrgy58w089hqxqxqdv9whb65cldlj5s";
+    })
     (fetchpatch { url = https://src.fedoraproject.org/rpms/ekiga/raw/dbf5f5ba449d22bd79f0394cddb7d4d8a88ec6ac/f/ekiga-4.0.1-libresolv.patch;
       sha256 = "18wc68im8422ibpa0gkrkgjq41m7hikaha3xqmjs2km45i1cwcaz";
     })
