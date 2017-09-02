@@ -22312,28 +22312,7 @@ in {
     };
   };
 
-  testtools = buildPythonPackage rec {
-    name = "testtools-${version}";
-    version = "1.8.0";
-
-    # Python 2 only judging from SyntaxError
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/testtools/${name}.tar.gz";
-      sha256 = "15yxz8d70iy1b1x6gd7spvblq0mjxjardl4vnaqasxafzc069zca";
-    };
-
-    propagatedBuildInputs = with self; [ pbr python_mimeparse extras lxml unittest2 ];
-    buildInputs = with self; [ traceback2 ];
-    patches = [ ../development/python-modules/testtools_support_unittest2.patch ];
-
-    meta = {
-      description = "A set of extensions to the Python standard library's unit testing framework";
-      homepage = http://pypi.python.org/pypi/testtools;
-      license = licenses.mit;
-    };
-  };
+  testtools = callPackage ../development/python-modules/testtools { };
 
   traitlets = buildPythonPackage rec {
     pname = "traitlets";
