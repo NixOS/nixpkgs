@@ -25,6 +25,13 @@ with lib;
     "nohibernate"
   ];
 
+  boot.blacklistedKernelModules = [
+    # Obscure network protocols
+    "ax25"
+    "netrom"
+    "rose"
+  ];
+
   # Restrict ptrace() usage to processes with a pre-defined relationship
   # (e.g., parent/child)
   boot.kernel.sysctl."kernel.yama.ptrace_scope" = mkOverride 500 1;
