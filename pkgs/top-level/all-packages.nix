@@ -7510,6 +7510,8 @@ with pkgs;
 
   afflib = callPackage ../development/libraries/afflib { };
 
+  aften = callPackage ../development/libraries/aften { };
+
   alure = callPackage ../development/libraries/alure { };
 
   agg = callPackage ../development/libraries/agg { };
