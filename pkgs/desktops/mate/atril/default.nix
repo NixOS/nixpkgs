@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libxml2, libsecret, poppler, itstool, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libxml2, libsecret, poppler, itstool, mate, hicolor_icon_theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "atril-${version}";
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     libsecret
     libxml2
     poppler
+    hicolor_icon_theme
     mate.mate-desktop
   ];
 

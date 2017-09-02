@@ -60,10 +60,7 @@ in
       '';
     };
 
-    environment.systemPackages = [
-      pkgs.hicolor_icon_theme
-      pkgs.mate.mate-icon-theme
-    ]  ++
+    environment.systemPackages =
       pkgs.mate.basePackages ++
       (removePackagesByName
         pkgs.mate.extraPackages
