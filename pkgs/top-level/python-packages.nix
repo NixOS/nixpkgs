@@ -3447,7 +3447,7 @@ in {
   cryptography = buildPythonPackage rec {
     # also bump cryptography_vectors
     pname = "cryptography";
-    name = "${pname}${version}";
+    name = "${pname}-${version}";
     version = "1.8.1";
 
     src = fetchPypi {
