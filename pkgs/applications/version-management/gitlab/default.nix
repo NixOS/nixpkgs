@@ -72,10 +72,9 @@ let
     inherit ruby;
     gemdir = ./.;
     meta = with lib; {
-      broken = true;
       homepage = http://www.gitlab.com/;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ fpletz ];
+      maintainers = with maintainers; [ fpletz globin ];
       license = licenses.mit;
     };
   };
