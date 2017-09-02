@@ -15620,6 +15620,8 @@ in {
       testrepository subunit coverage oslotest ];
   };
 
+  doc8 = callPackage ../development/python-modules/doc8 { };
+
   wrapt = buildPythonPackage rec {
     name = "wrapt-${version}";
     version = "1.10.5";
