@@ -19412,6 +19412,7 @@ with pkgs;
     cc-wrapper = callPackage ../test/cc-wrapper { };
     cc-wrapper-clang = callPackage ../test/cc-wrapper { stdenv = clangStdenv; };
     cc-wrapper-libcxx = callPackage ../test/cc-wrapper { stdenv = libcxxStdenv; };
+    stdenv-inputs = callPackage ../test/stdenv-inputs { };
 
     macOSSierraShared = callPackage ../test/macos-sierra-shared {};
   };
