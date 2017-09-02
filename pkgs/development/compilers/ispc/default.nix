@@ -1,5 +1,5 @@
-{stdenv, fetchFromGitHub, bash, which, m4, python, bison, flex, llvmPackages, clangWrapSelf,
-testedTargets ? ["sse2" "host"] # the default test target is sse4, but that is not supported by all Hydra agents
+{stdenv, fetchFromGitHub, bash, which, m4, python, bison, flex, llvmPackages,
+testedTargets ? ["sse2" "host"], ncurses
 }:
 
 # TODO: patch LLVM so Skylake-EX works better (patch included in ispc github) - needed for LLVM 3.9?
@@ -24,14 +24,18 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  buildInputs = with llvmPackages; [
+  buildInputs = [
     which
     m4
     python
+    llvmPackages.llvm
+    llvmPackages.clang
     bison
     flex
-    llvm
-    llvmPackages.clang-unwrapped # we need to link against libclang, so we need the unwrapped
+    ncurses
+  ];
+  makeFlags = [
+    "CLANG_INCLUDE=${llvmPackages.clang-unwrapped}/include"
   ];
 
   postPatch = "sed -i -e 's/\\/bin\\///g' -e 's/-lcurses/-lncurses/g' Makefile";
@@ -58,12 +62,6 @@ stdenv.mkDerivation rec {
       fgrep -q "No new fails"  test_output.log || exit 1
     done
   '';
-
-  makeFlags = [
-    "CXX=${llvmPackages.clang}/bin/clang++"
-    "CLANG=${llvmPackages.clang}/bin/clang"
-    "CLANG_INCLUDE=${llvmPackages.clang-unwrapped}/include"
-    ];
 
   meta = with stdenv.lib; {
     homepage = https://ispc.github.io/ ;
