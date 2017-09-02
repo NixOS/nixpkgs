@@ -3448,11 +3448,11 @@ in {
     # also bump cryptography_vectors
     pname = "cryptography";
     name = "${pname}-${version}";
-    version = "1.8.1";
+    version = "2.0.3";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "323524312bb467565ebca7e50c8ae5e9674e544951d28a2904a50012a8828190";
+      sha256 = "d04bb2425086c3fe86f7bc48915290b13e798497839fbb18ab7f6dffcf98cc3a";
     };
 
     buildInputs = [ pkgs.openssl self.cryptography_vectors ]
@@ -3495,7 +3495,7 @@ in {
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "2fd61facea08800ca98ac923f6d02f48a7ae6648025b29cdeb51987c1532add6";
+      sha256 = "beb831aa73663a224f4d7520483ed02da544533bb03b26ec07a5f9a0dd0941e1";
     };
 
     # No tests included
