@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, intltool, gperf, libcap, kmod
+{ stdenv, fetchFromGitHub, fetchurl, pkgconfig, intltool, gperf, libcap, kmod
 , zlib, xz, pam, acl, cryptsetup, libuuid, m4, utillinux, libffi
 , glib, kbd, libxslt, coreutils, libgcrypt, libgpgerror, libapparmor, audit, lz4
 , kexectools, libmicrohttpd, linuxHeaders ? stdenv.cc.libc.linuxHeaders, libseccomp
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   patches = [
     # TODO: Remove this patch when we have a systemd version
     # with https://github.com/systemd/systemd/pull/6678
-    (fetchpatch {
+    (fetchurl {
         url = "https://github.com/systemd/systemd/commit/58a78ae77063eddfcd23ea272bd2e0ddc9ea3ff7.patch";
         sha256 = "1y09n176f0389qrfrs3fsxj4hly1y1xfnb52rhbgj34704adp5m1";
     })
