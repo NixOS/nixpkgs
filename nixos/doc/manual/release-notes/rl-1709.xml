@@ -184,6 +184,15 @@ rmdir /var/lib/ipfs/.ipfs
       <literal>services.xserver.libinput.enable</literal>.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      grsecurity/PaX support has been dropped, following upstream's
+      decision to cease free support.  See
+      <link xlink:href="https://grsecurity.net/passing_the_baton.php">
+      upstream's announcement</link> for more information.
+      No complete replacement for grsecurity/PaX is available presently.
+    </para>
+  </listitem>
 </itemizedlist>
 
 <para>Other notable improvements:</para>
