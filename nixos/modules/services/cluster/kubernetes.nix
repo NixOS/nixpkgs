@@ -633,7 +633,6 @@ in {
             ${optionalString (cfg.kubelet.networkPlugin != null)
               "--network-plugin=${cfg.kubelet.networkPlugin}"} \
             --cni-conf-dir=${cniConfig} \
-            --reconcile-cidr \
             --hairpin-mode=hairpin-veth \
             ${optionalString cfg.verbose "--v=6 --log_flush_frequency=1s"} \
             ${cfg.kubelet.extraOpts}
@@ -795,7 +794,7 @@ in {
         after = [ "kube-apiserver.service" ];
         serviceConfig = {
           Slice = "kubernetes.slice";
-          ExecStart = ''${cfg.package}/bin/kube-dns \
+          ExecStart = ''${cfg.package.dns}/bin/kube-dns \
             --kubecfg-file=${kubeconfig} \
             --dns-port=${toString cfg.dns.port} \
             --domain=${cfg.dns.domain} \
