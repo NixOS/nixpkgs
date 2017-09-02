@@ -8407,7 +8407,7 @@ with pkgs;
 
   haxor-news = callPackage ../applications/misc/haxor-news { };
 
-  herqq = callPackage ../development/libraries/herqq { };
+  herqq = libsForQt5.callPackage ../development/libraries/herqq { };
 
   heyefi = haskellPackages.heyefi;
 
