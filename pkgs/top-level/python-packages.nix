@@ -3490,8 +3490,8 @@ in {
   cryptography_vectors = buildPythonPackage rec {
       # also bump cryptography
     pname = "cryptography_vectors";
-    name = "${pname}${version}";
-    version = "1.8.1";
+    version = self.cryptography.version;
+    name = "${pname}-${version}";
 
     src = fetchPypi {
       inherit pname version;
