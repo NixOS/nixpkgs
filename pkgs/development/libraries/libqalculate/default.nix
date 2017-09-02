@@ -1,19 +1,31 @@
-{ stdenv, fetchurl, cln, libxml2, glib, intltool, pkgconfig, doxygen, autoreconfHook, readline }:
+{ stdenv, fetchurl, mpfr, libxml2, intltool, pkgconfig, doxygen,
+  autoreconfHook, readline, libiconv, icu, curl, gnuplot, gettext }:
 
 stdenv.mkDerivation rec {
   name = "libqalculate-${version}";
-  version = "1.0.0a";
+  version = "2.0.0";
 
   src = fetchurl {
     url = "https://github.com/Qalculate/libqalculate/archive/v${version}.tar.gz";
-    sha256 = "12igmd1rn6zwrsg0mmn5pwy2bqj2gmc08iry0vcdxgzi7jc9x7ix";
+    sha256 = "1ziw48djccsgfcjd1h3834sihr89pyb3mna096cpm47bc71saqvh";
   };
 
   outputs = [ "out" "dev" "doc" ];
 
   nativeBuildInputs = [ intltool pkgconfig autoreconfHook doxygen ];
-  buildInputs = [ readline ];
-  propagatedBuildInputs = [ cln libxml2 glib ];
+  buildInputs = [ curl gettext libiconv readline ];
+  propagatedBuildInputs = [ libxml2 mpfr icu ];
+  enableParallelBuilding = true;
+
+  preConfigure = ''
+    intltoolize -f
+  '';
+
+  patchPhase = ''
+    substituteInPlace libqalculate/Calculator.cc \
+      --replace 'commandline = "gnuplot"' 'commandline = "${gnuplot}/bin/gnuplot"' \
+      --replace '"gnuplot -"' '"${gnuplot}/bin/gnuplot -"'
+  '';
 
   preBuild = ''
     pushd docs/reference

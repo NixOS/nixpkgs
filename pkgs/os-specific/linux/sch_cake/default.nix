@@ -3,13 +3,13 @@
 assert stdenv.lib.versionAtLeast kernel.version "4.4";
 
 stdenv.mkDerivation {
-  name = "sch_cake-2017-01-28";
+  name = "sch_cake-2017-07-16";
 
   src = fetchFromGitHub {
     owner = "dtaht";
     repo = "sch_cake";
-    rev = "9789742cfc596d48583ba4cdbc8f38d026121fa6";
-    sha256 = "03xgkqrv8d9q8rr21awbld0kvwglyinpm71nk16gvm4rd37c5h76";
+    rev = "e641a56f27b6848736028f87eda65ac3df9f99f7";
+    sha256 = "08582jy01j32b3mj8hf6m8687qrcz64zv2m236j24inlkmd94q21";
   };
 
   hardeningDisable = [ "pic" ];

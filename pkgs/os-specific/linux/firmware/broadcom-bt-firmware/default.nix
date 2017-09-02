@@ -5,11 +5,11 @@
 # see: https://github.com/NixOS/nixpkgs/pull/25478#issuecomment-299034865
 stdenv.mkDerivation rec {
   name = "broadcom-bt-firmware-${version}";
-  version = "12.0.1.1011";
+  version = "12.0.1.1012";
 
   src = fetchurl {
-    url = "http://download.windowsupdate.com/d/msdownload/update/driver/drvs/2016/11/200033618_94cfea9130b30c04bc602cd3dcc1f9a793fc75bb.cab";
-    sha256 = "6091e49c9d9c71cbe3aed2db3c0d60994ff562804c3b40e1e8bcbb818180987b";
+    url = "http://download.windowsupdate.com/c/msdownload/update/driver/drvs/2017/04/852bb503-de7b-4810-a7dd-cbab62742f09_7cf83a4c194116648d17707ae37d564f9c70bec2.cab";
+    sha256 = "1b1qjwxjk4y91l3iz157kms8601n0mmiik32cs6w9b1q4sl4pxx9";
   };
 
   nativeBuildInputs = [ cabextract bt-fw-converter ];

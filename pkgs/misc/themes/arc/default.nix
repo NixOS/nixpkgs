@@ -3,22 +3,22 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "arc-theme";
-  version = "2016-11-25";
+  version = "2017-05-12";
 
   src = fetchFromGitHub {
     owner = "horst3180";
     repo = pname;
-    rev = "d641d3de1641a9aa0a0f6ac1bacec91d9fdd3326";
-    sha256 = "06ysd19bpqsng2bp2gqzn0wpjhldxgwvlzngrs6mkm9hr7ky5z00";
+    rev = "8290cb813f157a22e64ae58ac3dfb5983b0416e6";
+    sha256 = "1lxiw5iq9n62xzs0fks572c5vkz202jigndxaankxb44wcgn9zyf";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  buildInputs = [ gtk-engine-murrine ];
+  buildInputs = [ gtk-engine-murrine gnome3.gtk ];
 
   preferLocalBuild = true;
 
-  configureFlags = [ "--disable-unity" "--with-gnome=${gnome3.version}" ];
+  configureFlags = [ "--disable-unity" ];
 
   postInstall = ''
     mkdir -p $out/share/plank/themes

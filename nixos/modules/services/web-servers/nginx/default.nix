@@ -19,6 +19,24 @@ let
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;
 
+  recommendedProxyConfig = pkgs.writeText "nginx-recommended-proxy-headers.conf" ''
+    proxy_set_header        Host $host;
+    proxy_set_header        X-Real-IP $remote_addr;
+    proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header        X-Forwarded-Proto $scheme;
+    proxy_set_header        X-Forwarded-Host $host;
+    proxy_set_header        X-Forwarded-Server $host;
+    proxy_set_header        Accept-Encoding "";
+  '';
+
+  upstreamConfig = toString (flip mapAttrsToList cfg.upstreams (name: upstream: ''
+    upstream ${name} {
+      ${toString (flip mapAttrsToList upstream.servers (name: server: ''
+        server ${name} ${optionalString server.backup "backup"};
+      ''))}
+    }
+  ''));
+
   configFile = pkgs.writeText "nginx.conf" ''
     user ${cfg.user} ${cfg.group};
     error_log stderr;
@@ -41,6 +59,7 @@ let
       ${optionalString (cfg.resolver.addresses != []) ''
         resolver ${toString cfg.resolver.addresses} ${optionalString (cfg.resolver.valid != "") "valid=${cfg.resolver.valid}"};
       ''}
+      ${upstreamConfig}
 
       ${optionalString (cfg.recommendedOptimisation) ''
         # optimisation
@@ -74,21 +93,19 @@ let
       ''}
 
       ${optionalString (cfg.recommendedProxySettings) ''
-        proxy_set_header        Host $host;
-        proxy_set_header        X-Real-IP $remote_addr;
-        proxy_set_header        X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header        X-Forwarded-Proto $scheme;
-        proxy_set_header        X-Forwarded-Host $host;
-        proxy_set_header        X-Forwarded-Server $host;
-        proxy_set_header        Accept-Encoding "";
-
         proxy_redirect          off;
         proxy_connect_timeout   90;
         proxy_send_timeout      90;
         proxy_read_timeout      90;
         proxy_http_version      1.0;
+        include ${recommendedProxyConfig};
       ''}
 
+      # $connection_upgrade is used for websocket proxying
+      map $http_upgrade $connection_upgrade {
+          default upgrade;
+          '''      close;
+      }
       client_max_body_size ${cfg.clientMaxBodySize};
 
       server_tokens ${if cfg.serverTokens then "on" else "off"};
@@ -130,22 +147,23 @@ let
 
   vhosts = concatStringsSep "\n" (mapAttrsToList (vhostName: vhost:
     let
-        ssl = with vhost; addSSL || onlySSL || enableSSL;
+        onlySSL = vhost.onlySSL || vhost.enableSSL;
+        hasSSL = onlySSL || vhost.addSSL || vhost.forceSSL;
 
-        defaultListen = with vhost;
-          if listen != [] then listen
-          else if onlySSL || enableSSL then
-               singleton                          { addr = "0.0.0.0"; port = 443; ssl = true;  }
-               ++ optional enableIPv6             { addr = "[::]";    port = 443; ssl = true;  }
-          else singleton                          { addr = "0.0.0.0"; port = 80;  ssl = false; }
-               ++ optional enableIPv6             { addr = "[::]";    port = 80;  ssl = false; }
-               ++ optional addSSL                 { addr = "0.0.0.0"; port = 443; ssl = true;  }
-               ++ optional (enableIPv6 && addSSL) { addr = "[::]";    port = 443; ssl = true;  };
+        defaultListen =
+          if vhost.listen != [] then vhost.listen
+          else ((optionals hasSSL (
+            singleton                    { addr = "0.0.0.0"; port = 443; ssl = true; }
+            ++ optional enableIPv6 { addr = "[::]";    port = 443; ssl = true; }
+          )) ++ optionals (!onlySSL) (
+            singleton                    { addr = "0.0.0.0"; port = 80;  ssl = false; }
+            ++ optional enableIPv6 { addr = "[::]";    port = 80;  ssl = false; }
+          ));
 
         hostListen =
-          if !vhost.forceSSL
-            then defaultListen
-            else filter (x: x.ssl) defaultListen;
+          if vhost.forceSSL
+            then filter (x: x.ssl) defaultListen
+            else defaultListen;
 
         listenString = { addr, port, ssl, ... }:
           "listen ${addr}:${toString port} "
@@ -154,9 +172,6 @@ let
           + ";";
 
         redirectListen = filter (x: !x.ssl) defaultListen;
-
-        redirectListenString = { addr, ... }:
-          "listen ${addr}:80 ${optionalString vhost.default "default_server"};";
 
         acmeLocation = ''
           location /.well-known/acme-challenge {
@@ -175,7 +190,7 @@ let
       in ''
         ${optionalString vhost.forceSSL ''
           server {
-            ${concatMapStringsSep "\n" redirectListenString redirectListen}
+            ${concatMapStringsSep "\n" listenString redirectListen}
 
             server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
             ${optionalString vhost.enableACME acmeLocation}
@@ -191,9 +206,9 @@ let
           ${optionalString vhost.enableACME acmeLocation}
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
           ${optionalString (vhost.globalRedirect != null) ''
-            return 301 http${optionalString ssl "s"}://${vhost.globalRedirect}$request_uri;
+            return 301 http${optionalString hasSSL "s"}://${vhost.globalRedirect}$request_uri;
           ''}
-          ${optionalString ssl ''
+          ${optionalString hasSSL ''
             ssl_certificate ${vhost.sslCertificate};
             ssl_certificate_key ${vhost.sslCertificateKey};
           ''}
@@ -208,12 +223,24 @@ let
   ) virtualHosts);
   mkLocations = locations: concatStringsSep "\n" (mapAttrsToList (location: config: ''
     location ${location} {
-      ${optionalString (config.proxyPass != null) "proxy_pass ${config.proxyPass};"}
+      ${optionalString (config.proxyPass != null && !cfg.proxyResolveWhileRunning)
+        "proxy_pass ${config.proxyPass};"
+      }
+      ${optionalString (config.proxyPass != null && cfg.proxyResolveWhileRunning) ''
+        set $nix_proxy_target "${config.proxyPass}";
+        proxy_pass $nix_proxy_target;
+      ''}
+      ${optionalString config.proxyWebsockets ''
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection $connection_upgrade;
+      ''}
       ${optionalString (config.index != null) "index ${config.index};"}
       ${optionalString (config.tryFiles != null) "try_files ${config.tryFiles};"}
       ${optionalString (config.root != null) "root ${config.root};"}
       ${optionalString (config.alias != null) "alias ${config.alias};"}
       ${config.extraConfig}
+      ${optionalString (config.proxyPass != null && cfg.recommendedProxySettings) "include ${recommendedProxyConfig};"}
     }
   '') locations);
   mkBasicAuth = vhostName: authDef: let
@@ -405,6 +432,16 @@ in
         description = "Path to DH parameters file.";
       };
 
+      proxyResolveWhileRunning = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Resolves domains of proxyPass targets at runtime
+          and not only at start, you have to set
+          services.nginx.resolver, too.
+        '';
+      };
+
       resolver = mkOption {
         type = types.submodule {
           options = {
@@ -427,6 +464,35 @@ in
         };
         description = ''
           Configures name servers used to resolve names of upstream servers into addresses
+        '';
+        default = {};
+      };
+
+      upstreams = mkOption {
+        type = types.attrsOf (types.submodule {
+          options = {
+            servers = mkOption {
+              type = types.attrsOf (types.submodule {
+                options = {
+                  backup = mkOption {
+                    type = types.bool;
+                    default = false;
+                    description = ''
+                      Marks the server as a backup server. It will be passed
+                      requests when the primary servers are unavailable.
+                    '';
+                  };
+                };
+              });
+              description = ''
+                Defines the address and other parameters of the upstream servers.
+              '';
+              default = {};
+            };
+          };
+        });
+        description = ''
+          Defines a group of servers to use as proxy target.
         '';
         default = {};
       };
@@ -478,18 +544,15 @@ in
       }
 
       {
-        assertion = all (conf: with conf; !(addSSL && (onlySSL || enableSSL))) (attrValues virtualHosts);
+        assertion = all (conf: with conf;
+          !(addSSL && (onlySSL || enableSSL)) &&
+          !(forceSSL && (onlySSL || enableSSL)) &&
+          !(addSSL && forceSSL)
+        ) (attrValues virtualHosts);
         message = ''
-          Options services.nginx.service.virtualHosts.<name>.addSSL and
-          services.nginx.virtualHosts.<name>.onlySSL are mutually esclusive
-        '';
-      }
-
-      {
-        assertion = all (conf: with conf; forceSSL -> addSSL) (attrValues virtualHosts);
-        message = ''
-          Option services.nginx.virtualHosts.<name>.forceSSL requires
-          services.nginx.virtualHosts.<name>.addSSL set to true.
+          Options services.nginx.service.virtualHosts.<name>.addSSL,
+          services.nginx.virtualHosts.<name>.onlySSL and services.nginx.virtualHosts.<name>.forceSSL
+          are mutually exclusive.
         '';
       }
     ];

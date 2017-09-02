@@ -11,8 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "12iv2y4dan962fs7vkkxbjkp77pbvjnwfa43ggr0zkdsc3ydjbbg";
   };
 
-  propagatedUserEnvPkgs = [
-    gnome3.gnome_themes_standard
+  nativeBuildInputs = [
+    pkgconfig
+    intltool
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -21,10 +23,8 @@ stdenv.mkDerivation rec {
     gnome3.defaultIconTheme
   ];
 
-  nativeBuildInputs = [
-    pkgconfig
-    intltool
-    wrapGAppsHook
+  propagatedUserEnvPkgs = [
+    gnome3.gnome_themes_standard
   ];
 
   meta = with stdenv.lib; {
@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     homepage = http://mate-desktop.org;
     license = licenses.gpl2;
     platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
   };
 }

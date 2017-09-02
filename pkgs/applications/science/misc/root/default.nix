@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, cmake, pcre, pkgconfig, python2
 , libX11, libXpm, libXft, libXext, mesa, zlib, libxml2, lzma, gsl
-, Cocoa, OpenGL }:
+, Cocoa, OpenGL, noSplash ? false }:
 
 stdenv.mkDerivation rec {
   name = "root-${version}";
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     patchShebangs build/unix/
+  '' + stdenv.lib.optionalString noSplash ''
+    substituteInPlace rootx/src/rootx.cxx --replace "gNoLogo = false" "gNoLogo = true"
   '';
 
   cmakeFlags = [

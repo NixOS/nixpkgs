@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pytest
+, glibcLocales
 }:
 
 buildPythonPackage rec {
@@ -14,10 +15,10 @@ buildPythonPackage rec {
     sha256 = "7abb618cac6470ebbd142e59c23daec5e6e063bfcecc8a43a037d2ab57276f4e";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest glibcLocales ];
 
   checkPhase = ''
-    py.test test
+    LC_ALL="en_US.UTF-8" py.test test
   '';
 
   # 7 failed

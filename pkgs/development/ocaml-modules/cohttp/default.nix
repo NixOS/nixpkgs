@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, jbuilder
-, ppx_fields_conv, ppx_sexp_conv
+, ppx_fields_conv, ppx_sexp_conv, ppx_deriving
 , base64, fieldslib, jsonm, logs, re, stringext, uri
 }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
 	buildInputs = [ ocaml findlib jbuilder jsonm ppx_fields_conv ppx_sexp_conv ];
 
-	propagatedBuildInputs = [ base64 fieldslib re stringext uri ];
+	propagatedBuildInputs = [ ppx_deriving base64 fieldslib re stringext uri ];
 
 	buildPhase = "jbuilder build -p cohttp";
 

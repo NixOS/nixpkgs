@@ -1,9 +1,9 @@
-{ stdenv, fetchgit, curl, cmake, boost, gcc5, protobuf, pkgconfig, jsoncpp
+{ stdenv, fetchgit, curl, cmake, boost, gcc, protobuf, pkgconfig, jsoncpp
 , libusb1, libmicrohttpd
 }:
 
 let
-  version = "1.2.0";
+  version = "1.2.1";
 in
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url    = "https://github.com/trezor/trezord";
     rev    = "refs/tags/v${version}";
-    sha256 = "1606j5cfngryk4q21yiga1zvc3zpx4q8vqn6ljrvr679hpvlwni4";
+    sha256 = "1iaxmwyidjdcrc6jg0859v6v5x3qnz5b0p78pq0bypvmgyijhpm4";
   };
 
   meta = with stdenv.lib; {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    gcc5
+    gcc
     pkgconfig
   ];
 

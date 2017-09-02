@@ -1,21 +1,27 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchFromGitHub, python3Packages }:
 
-pythonPackages.buildPythonApplication rec {
+let
+  version = "2.1.2";
+  sha256 = "0gmbnvm17j0ilcnci1k2jh0vkbz5g8xlk9lgia5mlx790048hlm8";
+in
+
+python3Packages.buildPythonApplication {
   name = "radicale-${version}";
-  version = "1.1.4";
+  inherit version;
 
-  src = fetchurl {
-    url = "mirror://pypi/R/Radicale/Radicale-${version}.tar.gz";
-    sha256 = "17p0hayyw30pfb81xqvd7jhjm6yrk2dnbgvqagx1nqdsr89ar0ss";
+  src = fetchFromGitHub {
+    owner = "Kozea";
+    repo = "Radicale";
+    rev = version;
+    inherit sha256;
   };
 
-  propagatedBuildInputs = stdenv.lib.optionals (!pythonPackages.isPy3k) [
-    pythonPackages.flup
-    pythonPackages.ldap
-    pythonPackages.sqlalchemy
-  ];
+  doCheck = false;
 
-  doCheck = !pythonPackages.isPy3k;
+  propagatedBuildInputs = with python3Packages; [
+    vobject
+    passlib
+  ];
 
   meta = with stdenv.lib; {
     homepage = http://www.radicale.org/;
@@ -29,6 +35,6 @@ pythonPackages.buildPythonApplication rec {
     '';
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ edwtjo pSub aneeshusa ];
+    maintainers = with maintainers; [ edwtjo pSub aneeshusa infinisil ];
   };
 }

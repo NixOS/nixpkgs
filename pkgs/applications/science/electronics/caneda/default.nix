@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake qt4 libxml2 libxslt ];
 
+  patches = [
+    ./gcc6.patch
+  ];
+
   postInstall = ''
     mkdir $out/share/caneda/components
     cp -R ${srcComponents}/* $out/share/caneda/components

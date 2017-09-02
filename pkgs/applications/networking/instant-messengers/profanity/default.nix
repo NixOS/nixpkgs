@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://profanity.im/;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.devhell ];
     updateWalker = true;
   };

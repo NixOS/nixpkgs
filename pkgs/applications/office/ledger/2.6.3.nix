@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.peti ];
+    broken = true; # https://hydra.nixos.org/build/59124559/nixlog/1
   };
 }
