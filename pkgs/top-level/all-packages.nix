@@ -11324,6 +11324,7 @@ with pkgs;
 
   mattermost = callPackage ../servers/mattermost { };
   matterircd = callPackage ../servers/mattermost/matterircd.nix { };
+  matterbridge = callPackage ../servers/matterbridge { };
 
   mediatomb = callPackage ../servers/mediatomb { };
 
