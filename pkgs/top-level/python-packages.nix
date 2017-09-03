@@ -9917,6 +9917,8 @@ in {
     };
   };
 
+  fiona = callPackage ../development/python-modules/fiona { gdal = pkgs.gdal; };
+
   flake8 = callPackage ../development/python-modules/flake8 { };
 
   flake8-blind-except = callPackage ../development/python-modules/flake8-blind-except { };
