@@ -590,7 +590,7 @@ By default tests are run because `doCheck = true`. Test dependencies, like
 e.g. the test runner, should be added to `buildInputs`.
 
 By default `meta.platforms` is set to the same value
-as the interpreter unless overriden otherwise.
+as the interpreter unless overridden otherwise.
 
 ##### `buildPythonPackage` parameters
 
@@ -773,6 +773,21 @@ The `buildPythonPackage` function sets `DETERMINISTIC_BUILD=1` and
 [PYTHONHASHSEED=0](https://docs.python.org/3.5/using/cmdline.html#envvar-PYTHONHASHSEED).
 Both are also exported in `nix-shell`.
 
+
+### Automatic tests
+
+It is recommended to test packages as part of the build process.
+Source distributions (`sdist`) often include test files, but not always.
+
+By default the command `python setup.py test` is run as part of the
+`checkPhase`, but often it is necessary to pass a custom `checkPhase`. An
+example of such a situation is when `py.test` is used.
+
+#### Common issues
+
+- Non-working tests can often be deselected. In the case of `py.test`: `py.test -k 'not function_name and not other_function'`.
+- Unicode issues can typically be fixed by including `glibcLocales` in `buildInputs` and exporting `LC_ALL=en_US.utf-8`.
+- Tests that attempt to access `$HOME` can be fixed by using the following work-around before running tests (e.g. `preCheck`): `export HOME=$(mktemp -d)`
 
 ## FAQ
 
@@ -985,8 +1000,9 @@ rec {
 
 Following rules are desired to be respected:
 
-* Python libraries are supposed to be called from `python-packages.nix` and packaged with `buildPythonPackage`. The expression of a library should be in `pkgs/development/python-modules/<name>/default.nix`. Libraries in `pkgs/top-level/python-packages.nix` are sorted quasi-alphabetically to avoid merge conflicts.
+* Python libraries are called from `python-packages.nix` and packaged with `buildPythonPackage`. The expression of a library should be in `pkgs/development/python-modules/<name>/default.nix`. Libraries in `pkgs/top-level/python-packages.nix` are sorted quasi-alphabetically to avoid merge conflicts.
 * Python applications live outside of `python-packages.nix` and are packaged with `buildPythonApplication`.
 * Make sure libraries build for all Python interpreters.
 * By default we enable tests. Make sure the tests are found and, in the case of libraries, are passing for all interpreters. If certain tests fail they can be disabled individually. Try to avoid disabling the tests altogether. In any case, when you disable tests, leave a comment explaining why.
-* Commit names of Python libraries should include `pythonPackages`, for example `pythonPackages.numpy: 1.11 -> 1.12`.
+* Commit names of Python libraries should reflect that they are Python libraries, so write for example `pythonPackages.numpy: 1.11 -> 1.12`.
+

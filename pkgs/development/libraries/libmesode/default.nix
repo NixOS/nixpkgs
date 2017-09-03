@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/boothj5/libmesode/;
     license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.devhell ];
   };
 }

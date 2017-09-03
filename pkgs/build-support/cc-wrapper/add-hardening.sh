@@ -43,6 +43,7 @@ if [[ -z "${hardeningDisableMap[all]:-}" ]]; then
           hardeningCFlags+=('-fPIE')
           if [[ ! ("$*" =~ " -shared " || "$*" =~ " -static ") ]]; then
             if [[ -n "${NIX_DEBUG:-}" ]]; then echo HARDENING: enabling LDFlags -pie >&2; fi
+            hardeningCFlags+=('-pie')
             hardeningLDFlags+=('-pie')
           fi
           ;;
@@ -67,7 +68,8 @@ if [[ -z "${hardeningDisableMap[all]:-}" ]]; then
           hardeningLDFlags+=('-z' 'now')
           ;;
         *)
-          echo "Hardening flag unknown: $flag" >&2
+          # Ignore unsupported. Checked in Nix that at least *some*
+          # tool supports each flag.
           ;;
       esac
     fi

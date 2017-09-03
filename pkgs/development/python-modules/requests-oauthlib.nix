@@ -8,7 +8,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18gg9dwral153c10f8bwhz2dy4nw7c6mws5a2g7gidk3z5xhqy4n";
+    sha256 = "0s7lh5q661gjza1czlmibkrwf8dcj9qfqm3hs39sdbbyflbc8fl8";
   };
 
   doCheck = false;        # Internet tests fail when building in chroot

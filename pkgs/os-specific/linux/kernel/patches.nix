@@ -51,14 +51,6 @@ rec {
       patch = ./modinst-arg-list-too-long.patch;
     };
 
-  grsecurity_testing = throw ''
-    Upstream has ceased free support for grsecurity/PaX.
-
-    See https://grsecurity.net/passing_the_baton.php
-    and https://grsecurity.net/passing_the_baton_faq.php
-    for more information.
-  '';
-
   genksyms_fix_segfault =
     { name = "genksyms-fix-segfault";
       patch = ./genksyms-fix-segfault.patch;

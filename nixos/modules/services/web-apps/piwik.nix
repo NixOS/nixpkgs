@@ -60,9 +60,17 @@ in {
       };
 
       nginx = mkOption {
-        type = types.nullOr (types.submodule (import ../web-servers/nginx/vhost-options.nix {
-          inherit config lib;
-        }));
+        type = types.nullOr (types.submodule (
+          recursiveUpdate
+            (import ../web-servers/nginx/vhost-options.nix { inherit config lib; })
+            {
+              # enable encryption by default,
+              # as sensitive login and piwik data should not be transmitted in clear text.
+              options.forceSSL.default = true;
+              options.enableACME.default = true;
+            }
+        )
+        );
         default = null;
         example = {
           serverName = "stats.$\{config.networking.hostName\}";
@@ -168,14 +176,14 @@ in {
       # https://fralef.me/piwik-hardening-with-nginx-and-php-fpm.html
       # https://github.com/perusio/piwik-nginx
       "${user}.${config.networking.hostName}" = mkMerge [ cfg.nginx {
-        # don't allow to override root, as it will almost certainly break piwik
+        # don't allow to override the root easily, as it will almost certainly break piwik.
+        # disadvantage: not shown as default in docs.
         root = mkForce "${pkgs.piwik}/share";
 
-        # allow to override SSL settings if necessary, i.e. when using another method than ACME
-        # but enable them by default, as sensitive login and piwik data should not be transmitted in clear text.
-        forceSSL = mkDefault true;
-        enableACME = mkDefault true;
-
+        # define locations here instead of as the submodule option's default
+        # so that they can easily be extended with additional locations if required
+        # without needing to redefine the piwik ones.
+        # disadvantage: not shown as default in docs.
         locations."/" = {
           index = "index.php";
         };

@@ -26,7 +26,7 @@
 , toluapp ? null
 
 , wirelessSupport     ? true      , wirelesstools ? null
-, nvidiaSupport       ? true      , libXNVCtrl ? null
+, nvidiaSupport       ? false     , libXNVCtrl ? null
 
 , curlSupport         ? true      , curl ? null
 , rssSupport          ? curlSupport

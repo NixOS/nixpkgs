@@ -2067,7 +2067,9 @@ with pkgs;
 
   freeipmi = callPackage ../tools/system/freeipmi {};
 
-  freetalk = callPackage ../applications/networking/instant-messengers/freetalk { };
+  freetalk = callPackage ../applications/networking/instant-messengers/freetalk {
+    guile = guile_2_0;
+  };
 
   freetds = callPackage ../development/libraries/freetds { };
 
@@ -2760,6 +2762,8 @@ with pkgs;
   jq = callPackage ../development/tools/jq { };
 
   jo = callPackage ../development/tools/jo { };
+
+  jrnl = callPackage ../applications/misc/jrnl { };
 
   jscoverage = callPackage ../development/tools/misc/jscoverage { };
 
@@ -4670,6 +4674,8 @@ with pkgs;
 
   ttylog = callPackage ../tools/misc/ttylog { };
 
+  turses = callPackage ../applications/networking/instant-messengers/turses { };
+
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
   twitterBootstrap3 = callPackage ../development/web/twitter-bootstrap/v3.nix {};
 
@@ -5310,7 +5316,13 @@ with pkgs;
   clang_38 = llvmPackages_38.clang;
   clang_37 = llvmPackages_37.clang;
   clang_35 = wrapCC llvmPackages_35.clang;
-  clang_34 = wrapCC llvmPackages_34.clang;
+  clang_34 = (wrapCC llvmPackages_34.clang).override {
+    # Default cc-wrapper's hardening flags don't work with clang-3.4,
+    # so just remove it entirely for this wrapper.
+    extraBuildCommands = ''
+    :> $out/nix-support/add-hardening.sh
+    '';
+  };
 
   clang-tools = callPackage ../development/tools/clang-tools { };
 
@@ -8480,7 +8492,7 @@ with pkgs;
 
   hwloc = callPackage ../development/libraries/hwloc {};
 
-  hydra = callPackage ../development/tools/misc/hydra { stdenv = overrideCC stdenv gcc6; };
+  hydra = callPackage ../development/tools/misc/hydra { };
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
 
@@ -12536,15 +12548,6 @@ with pkgs;
   linuxPackages_hardened =
     recurseIntoAttrs (linuxPackagesFor linux_hardened);
 
-  # Grsecurity packages
-
-  linux_grsec_nixos = kernelPatches.grsecurity_testing;
-
-  linuxPackages_grsec_nixos =
-    recurseIntoAttrs (linuxPackagesFor linux_grsec_nixos);
-
-  linux_grsec_server_xen = linux_grsec_nixos;
-
   # Samus kernels
   linuxPackages_samus_4_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_samus_4_12);
   linuxPackages_samus_latest = recurseIntoAttrs (linuxPackagesFor pkgs.linux_samus_latest);
@@ -16502,7 +16505,6 @@ with pkgs;
 
   tdesktop = qt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop {
     inherit (pythonPackages) gyp;
-    gcc = gcc6;
   };
 
   telegram-cli = callPackage ../applications/networking/instant-messengers/telegram/telegram-cli { };
@@ -18533,7 +18535,6 @@ with pkgs;
   };
 
   z3 = callPackage ../applications/science/logic/z3 {};
-  z3_opt = callPackage ../applications/science/logic/z3_opt {};
 
   boolector = callPackage ../applications/science/logic/boolector {};
 

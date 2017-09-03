@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "server" ];
 
-  qmakeFlags = [ "pokerth.pro" ];
+  qmakeFlags = [ "pokerth.pro" "DEFINES+=_WEBSOCKETPP_NOEXCEPT_TOKEN_=noexcept" ];
 
   NIX_CFLAGS_COMPILE = [ "-I${SDL.dev}/include/SDL" ];
 

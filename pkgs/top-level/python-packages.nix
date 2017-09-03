@@ -2083,22 +2083,6 @@ in {
 
   blaze = callPackage ../development/python-modules/blaze { };
 
-  # Needed for FlexGet 1.2.337 and calibre 2.76.0
-  html5lib_0_9999999 = self.html5lib.overridePythonAttrs rec {
-    name = "html5lib-${version}";
-    buildInputs = with self; [ nose flake8 ];
-    propagatedBuildInputs = with self; [ six ];
-    checkPhase = ''
-      nosetests
-    '';
-
-    version = "0.9999999";
-    src = pkgs.fetchurl {
-      url = "https://github.com/html5lib/html5lib-python/archive/0.9999999.tar.gz";
-      sha256 = "1s6wdbrjzw5jhyfbskf4nj1i5bjpjqq9f89a7r1rl59rhpwmfhhq";
-    };
-  };
-
   html5-parser = callPackage ../development/python-modules/html5-parser {};
 
   httpserver = callPackage ../development/python-modules/httpserver {};
@@ -8192,13 +8176,13 @@ in {
 
   pytools = buildPythonPackage rec {
     name = "pytools-${version}";
-    version = "2016.2.1";
+    version = "2017.4";
 
     src = pkgs.fetchFromGitHub {
       owner = "inducer";
       repo = "pytools";
-      rev = "e357a9de14d0ff5131284f369d220d8b439a7906";
-      sha256 = "0g5w1cira1bl9f2ji11cbr9daj947nrfydydymjp4bbxbpl2jnaq";
+      rev = "8078e74265bb5a3c9676c698595ab5450cd2bfe7";
+      sha256 = "17q61l79fcxkj5jxg3fnymi652sdjp5s6kpsabgxp22kma9crr28";
     };
 
     buildInputs = with self; [
@@ -11635,27 +11619,6 @@ in {
 
   journalwatch = callPackage ../tools/system/journalwatch {
     inherit (self) systemd pytest;
-  };
-
-  jrnl = buildPythonPackage rec {
-    name = "jrnl-1.9.7";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jrnl/${name}.tar.gz";
-      sha256 = "af599a863ac298533685a7236fb86307eebc00a38eb8bb96f4f67b5d83227ec8";
-    };
-
-    propagatedBuildInputs = with self; [
-      pytz six tzlocal keyring argparse dateutil_1_5
-      parsedatetime
-    ];
-
-    meta = {
-      homepage = http://maebert.github.io/jrnl/;
-      description = "A simple command line journal application that stores your journal in a plain text file";
-      license = licenses.mit;
-    };
   };
 
   jsonnet = buildPythonPackage {
@@ -18182,7 +18145,7 @@ in {
     };
 
     disabled = !isPy3k;
-    
+
     # No tests in archive
     doCheck = false;
 
@@ -18514,66 +18477,7 @@ in {
     };
   };
 
-  pyocr = buildPythonPackage rec {
-    name = "pyocr-${version}";
-    version = "0.4.6";
-
-    # Don't fetch from PYPI because it doesn't contain tests.
-    src = pkgs.fetchFromGitHub {
-      owner = "jflesch";
-      repo = "pyocr";
-      rev = version;
-      sha256 = "0amyhkkm400qzbw65ivyzrzxl2r7vxqgsgqm7ml95m7gwkwhnzz0";
-    };
-
-    patches = [ ../development/python-modules/pyocr-tesseract.patch ];
-
-    postPatch = ''
-      sed -i \
-        -e 's,^\(TESSERACT_CMD *= *\).*,\1"${pkgs.tesseract}/bin/tesseract",' \
-        -e 's,^\(CUNEIFORM_CMD *= *\).*,\1"${pkgs.cuneiform}/bin/cuneiform",' \
-        -e '/^CUNIFORM_POSSIBLE_PATHS *= *\[/,/^\]$/ {
-          c CUNIFORM_POSSIBLE_PATHS = ["${pkgs.cuneiform}/share/cuneiform"]
-        }' src/pyocr/{tesseract,cuneiform}.py
-
-      sed -i -r \
-        -e 's,"libtesseract\.so\.3","${pkgs.tesseract}/lib/libtesseract.so",' \
-        -e 's,^(TESSDATA_PREFIX *=).*,\1 "${pkgs.tesseract}/share/tessdata",' \
-        src/pyocr/libtesseract/tesseract_raw.py
-
-      # Disable specific tests that are probably failing because of this issue:
-      # https://github.com/jflesch/pyocr/issues/52
-      for test in $disabledTests; do
-        file="''${test%%:*}"
-        fun="''${test#*:}"
-        echo "$fun = unittest.skip($fun)" >> "tests/tests_$file.py"
-      done
-    '';
-
-    disabledTests = [
-      "cuneiform:TestTxt.test_basic"
-      "cuneiform:TestTxt.test_european"
-      "cuneiform:TestTxt.test_french"
-      "cuneiform:TestWordBox.test_basic"
-      "cuneiform:TestWordBox.test_european"
-      "cuneiform:TestWordBox.test_french"
-      "libtesseract:TestBasicDoc.test_basic"
-      "libtesseract:TestDigitLineBox.test_digits"
-      "libtesseract:TestLineBox.test_japanese"
-      "libtesseract:TestTxt.test_japanese"
-      "libtesseract:TestWordBox.test_japanese"
-      "tesseract:TestDigitLineBox.test_digits"
-      "tesseract:TestTxt.test_japanese"
-    ];
-
-    propagatedBuildInputs = [ self.pillow self.six ];
-
-    meta = {
-      homepage = "https://github.com/jflesch/pyocr";
-      description = "A Python wrapper for Tesseract and Cuneiform";
-      license = licenses.gpl3Plus;
-    };
-  };
+  pyocr = callPackage ../development/python-modules/pyocr { };
 
   pyparsing = callPackage ../development/python-modules/pyparsing { };
 
@@ -23377,41 +23281,6 @@ in {
    };
 
 
-  turses = buildPythonPackage (rec {
-    name = "turses-0.3.1";
-    disabled = isPyPy || isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/turses/${name}.tar.gz";
-      sha256 = "15mkhm3b5ka42h8qph0mhh8izfc1200v7651c62k7ldcs50ib9j6";
-    };
-
-    buildInputs = with self; [ mock pytest coverage tox ];
-    propagatedBuildInputs = with self; [ urwid tweepy future ] ++ optional isPy26 argparse;
-
-    checkPhase = ''
-      TMP_TURSES=`echo turses-$RANDOM`
-      mkdir $TMP_TURSES
-      HOME=$TMP_TURSES py.test tests/
-      rm -rf $TMP_TURSES
-    '';
-
-    patchPhase = ''
-      sed -i -e "s|future==0.14.3|future==${pkgs.lib.getVersion self.future}|" setup.py
-      sed -i -e "s|tweepy==3.3.0|tweepy==${pkgs.lib.getVersion self.tweepy}|" setup.py
-      sed -i -e "s|config.generate_config_file.assert_called_once()|assert config.generate_config_file.call_count == 1|" tests/test_config.py
-      sed -i -e "s|self.observer.update.assert_called_once()|assert self.observer.update.call_count == 1|" tests/test_meta.py
-    '';
-
-    meta = {
-      homepage = https://github.com/alejandrogomez/turses;
-      description = "A Twitter client for the console";
-      license = licenses.gpl3;
-      maintainers = with maintainers; [ garbas ];
-      platforms = platforms.linux;
-    };
-  });
-
   tweepy = buildPythonPackage (rec {
     name = "tweepy-3.5.0";
 
@@ -24333,27 +24202,6 @@ EOF
 
   widgetsnbextension = callPackage ../development/python-modules/widgetsnbextension { };
 
-  willie = buildPythonPackage rec {
-    name = "willie-${version}";
-    version = "5.5.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/w/willie/${name}.tar.gz";
-      sha256 = "e03dd26ea694b877a2b3b7b4dcca8e79420e7f346abab34292bff43d992a8cc5";
-    };
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ feedparser pytz lxml praw pyenchant pygeoip backports_ssl_match_hostname ];
-    checkPhase = ''
-      py.test test
-    '';
-
-    meta = {
-      description = "A simple, lightweight, open source, easy-to-use IRC utility bot, written in Python";
-      homepage = http://willie.dftba.net/;
-      license = licenses.efl20;
-    };
-  };
 
   wokkel = buildPythonPackage (rec {
     url = "http://wokkel.ik.nu/releases/0.7.0/wokkel-0.7.0.tar.gz";
@@ -28471,7 +28319,8 @@ EOF
     installPhase = ''
       mkdir -p $out/bin $out/libexec
       cp smugline.py $out/libexec
-      makeWrapper "${python.interpreter} $out/libexec/smugline.py" $out/bin/smugline \
+      makeWrapper ${python.interpreter} $out/bin/smugline \
+        --add-flags "$out/libexec/smugline.py" \
         --prefix PYTHONPATH : "$PYTHONPATH"
     '';
   };
