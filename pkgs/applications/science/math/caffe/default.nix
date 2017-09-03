@@ -1,24 +1,26 @@
-{ stdenv
-, openblas
-, boost
-, cudaSupport ? true
-, cudnnSupport ? false
-, cudnn ? null
-, cudatoolkit
+{ stdenv, lib
 , fetchFromGitHub
+, cmake
+, boost
 , google-gflags
 , glog
-, hdf5
+, hdf5-cpp
 , leveldb
 , lmdb
 , opencv
 , protobuf
 , snappy
+, atlas
+, doxygen
+, cudaSupport ? true, cudatoolkit
+, cudnnSupport ? false, cudnn ? null
+, pythonSupport ? false, python ? null, numpy ? null
 }:
 
+assert cudnnSupport -> cudaSupport;
+assert pythonSupport -> (python != null && numpy != null);
 
-let optional = stdenv.lib.optional;
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "caffe-${version}";
   version = "1.0-rc5";
 
@@ -29,32 +31,34 @@ in stdenv.mkDerivation rec {
     sha256 = "0lfmmc0n6xvkpygvxclzrvd0zigb4yfc5612anv2ahlxpfi9031c";
   };
 
-  preConfigure = "mv Makefile.config.example Makefile.config";
-
-  makeFlags = [ "BLAS=open"
-                (if !cudaSupport then "CPU_ONLY=1" else "CUDA_DIR=${cudatoolkit}") ]
-              ++ optional cudnnSupport "USE_CUDNN=1";
-
-  # too many issues with tests to run them for now
-  doCheck = false;
-  checkTarget = "runtest";
-
   enableParallelBuilding = true;
 
-  buildInputs = [ openblas boost google-gflags glog hdf5 leveldb lmdb opencv
-                  protobuf snappy ]
-                ++ optional cudaSupport cudatoolkit
-                ++ optional cudnnSupport cudnn;
+  nativeBuildInputs = [ cmake doxygen ];
 
-  installPhase = ''
-    mkdir -p $out/{bin,share,lib}
-    for bin in $(find build/tools -executable -type f -name '*.bin');
-    do
-      cp $bin $out/bin/$(basename $bin .bin)
-    done
+  cmakeFlags = [ "-DCUDA_ARCH_NAME=All" ]
+               ++ lib.optional (!cudaSupport) "-DCPU_ONLY=ON"
+               ++ lib.optional (!pythonSupport) "-DBUILD_python=OFF";
 
-    cp -r build/examples $out/share
-    cp -r build/lib $out
+  buildInputs = [ boost google-gflags glog protobuf hdf5-cpp lmdb leveldb snappy opencv atlas ]
+                ++ lib.optional cudaSupport cudatoolkit
+                ++ lib.optional cudnnSupport cudnn
+                ++ lib.optionals pythonSupport [ python numpy ];
+
+  propagatedBuildInputs = lib.optional pythonSupport python.pkgs.protobuf;
+
+  outputs = [ "out" "bin" ];
+  # Don't propagate bin.
+  outputBin = "out";
+
+  postInstall = ''
+    # Internal static library.
+    rm $out/lib/libproto.a
+
+    moveToOutput "bin" "$bin"
+  '' + lib.optionalString pythonSupport ''
+    mkdir -p $out/${python.sitePackages}
+    mv $out/python/caffe $out/${python.sitePackages}
+    rm -rf $out/python
   '';
 
   meta = with stdenv.lib; {
