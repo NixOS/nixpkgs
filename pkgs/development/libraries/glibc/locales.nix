@@ -3,7 +3,7 @@
    locales are included; otherwise, just the locales listed in
    `locales'.  See localedata/SUPPORTED in the Glibc source tree for
    the list of all supported locales:
-   http://sourceware.org/cgi-bin/cvsweb.cgi/libc/localedata/SUPPORTED?cvsroot=glibc
+   https://sourceware.org/git/?p=glibc.git;a=blob;f=localedata/SUPPORTED
 */
 
 { lib, stdenv, fetchurl, writeText, allLocales ? true, locales ? ["en_US.UTF-8/UTF-8"] }:
