@@ -1,6 +1,6 @@
 perl:
 
-{ buildInputs ? [], name, ... } @ attrs:
+{ nativeBuildInputs ? [], buildInputs ? [], name, ... } @ attrs:
 
 perl.stdenv.mkDerivation (
   {
@@ -27,6 +27,7 @@ perl.stdenv.mkDerivation (
   {
     name = "perl-" + name;
     builder = ./builder.sh;
+    nativeBuildInputs = nativeBuildInputs ++ [ perl ];
     buildInputs = buildInputs ++ [ perl ];
   }
 )

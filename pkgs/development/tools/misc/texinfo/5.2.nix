@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1njfwh2z34r2c4r0iqa7v24wmjzvsfyz4vplzry8ln3479lfywal";
   };
 
+  # TODO(@Ericson2314): Not sure whether Perl is actually needed at build-time.
+  nativeBuildInputs = [ perl ];
   buildInputs = [ perl xz.bin ]
     ++ optional interactive ncurses
     ++ optional doCheck procps; # for tests

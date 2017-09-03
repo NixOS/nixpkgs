@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0fpr9kdjjl6nj2pc50k2zr7134hvqz8bi8pfqa7131a9lpzz6v14";
   };
 
+  # TODO(@Ericson2314): Not sure whether Perl is actually needed at build-time.
+  nativeBuildInputs = [ perl ];
   buildInputs = [ perl xz ]
     ++ optionals stdenv.isSunOS [ libiconv gawk ]
     ++ optional interactive ncurses
