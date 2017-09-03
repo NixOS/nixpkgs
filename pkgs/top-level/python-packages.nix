@@ -1565,6 +1565,13 @@ in {
     };
   };
 
+  caffe = pkgs.caffe.override {
+    python = self.python;
+    boost = self.boost;
+    numpy = self.numpy;
+    pythonSupport = true;
+  };
+
   capstone = buildPythonPackage rec {
     name = "capstone-3.0.4";
     src = pkgs.fetchurl {
