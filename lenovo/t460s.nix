@@ -27,9 +27,6 @@
     { version = "4.6";   msg = "Suspending the T460s by closing the lid when running on battery causes the machine to freeze up entirely."; }
   ];
 
-  # For the wifi (intel iwlwifi)
-  hardware.enableAllFirmware = true;
-
   # For the screen. I don't know what to do with this information, but
   # the hiDPI support is far from perfect (as of July 2016):
 

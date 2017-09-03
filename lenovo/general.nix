@@ -7,4 +7,6 @@ with lib;
     enable = true;
     emulateWheel = true;
   };
+
+  hardware.enableAllFirmware = true;
 }
