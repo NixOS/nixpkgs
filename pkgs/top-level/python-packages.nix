@@ -3042,6 +3042,8 @@ in {
     };
   };
 
+  click-plugins = callPackage ../development/python-modules/click-plugins {};
+
   click-threading = buildPythonPackage rec {
     version = "0.4.2";
     name = "click-threading-${version}";
