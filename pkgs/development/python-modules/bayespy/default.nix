@@ -1,5 +1,6 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, nose, numpy, scipy
-, matplotlib, h5py }:
+{ stdenv, buildPythonPackage, fetchPypi, pythonOlder
+, pytest, glibcLocales
+, numpy, scipy, matplotlib, h5py }:
 
 buildPythonPackage rec {
   pname = "bayespy";
@@ -15,16 +16,11 @@ buildPythonPackage rec {
     sha256 = "01cwd88ri29zy6qpvnqzljkgc44n7a17yijizr73blcnh4dz5n1w";
   };
 
-  buildInputs = [ nose ];
+  checkInputs = [ pytest glibcLocales ];
   propagatedBuildInputs = [ numpy scipy matplotlib h5py ];
 
-  # We have to move to some other directory, otherwise the tests are run on the
-  # source package, not the installed package. Also, ignore the image comparison
-  # tests as, for some reason, some of them didn't work.
   checkPhase = ''
-    mkdir temp
-    cd temp
-    nosetests --ignore-files="test_plot.py" bayespy
+    LC_ALL=en_US.utf-8 pytest -k 'not test_message_to_parents'
   '';
 
   meta = with stdenv.lib; {
