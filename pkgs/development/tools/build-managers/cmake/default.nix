@@ -12,8 +12,8 @@ with stdenv.lib;
 
 let
   os = stdenv.lib.optionalString;
-  majorVersion = "3.8";
-  minorVersion = "2";
+  majorVersion = "3.9";
+  minorVersion = "1";
   version = "${majorVersion}.${minorVersion}";
 in
 
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}files/v${majorVersion}/cmake-${version}.tar.gz";
-    # from https://cmake.org/files/v3.8/cmake-3.8.2-SHA-256.txt
-    sha256 = "da3072794eb4c09f2d782fcee043847b99bb4cf8d4573978d9b2024214d6e92d";
+    # from https://cmake.org/files/v3.9/cmake-3.9.1-SHA-256.txt
+    sha256 = "d768ee83d217f91bb597b3ca2ac663da7a8603c97e1f1a5184bc01e0ad2b12bb";
   };
 
   prePatch = optionalString (!useSharedLibraries) ''
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   # Don't search in non-Nix locations such as /usr, but do search in our libc.
-  patches = [ ./search-path-3.2.patch ]
+  patches = [ ./search-path-3.9.patch ]
     ++ optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
   outputs = [ "out" ];
