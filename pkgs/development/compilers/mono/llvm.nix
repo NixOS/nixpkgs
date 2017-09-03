@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = with stdenv; [
     "-DLLVM_ENABLE_FFI=ON"
-    "-DLLVM_BINUTILS_INCDIR=${binutils.dev}/include"
+    "-DLLVM_BINUTILS_INCDIR=${binutils.binutils.dev}/include"
     "-DCMAKE_CXX_FLAGS=-std=c++11"
   ] ++ stdenv.lib.optional (!isDarwin) "-DBUILD_SHARED_LIBS=ON";
 

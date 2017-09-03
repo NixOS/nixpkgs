@@ -89,7 +89,7 @@ stdenv.mkDerivation {
       rpath="$out/share/spotify:$libdir"
 
       patchelf \
-        --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
         --set-rpath $rpath $out/share/spotify/spotify
 
       librarypath="${stdenv.lib.makeLibraryPath deps}:$libdir"

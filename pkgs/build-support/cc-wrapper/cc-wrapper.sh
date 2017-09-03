@@ -11,11 +11,17 @@ if [[ -n "@coreutils_bin@" && -n "@gnugrep_bin@" ]]; then
     PATH="@coreutils_bin@/bin:@gnugrep_bin@/bin"
 fi
 
+source @out@/nix-support/utils.sh
+
+# Flirting with a layer violation here.
+if [ -z "${NIX_BINUTILS_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
+    source @binutils@/nix-support/add-flags.sh
+fi
+
+# Put this one second so libc ldflags take priority.
 if [ -z "${NIX_CC_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
-
-source @out@/nix-support/utils.sh
 
 
 # Parse command line options and set several variables.
@@ -57,10 +63,6 @@ while (( "$n" < "$nParams" )); do
         cppInclude=0
     elif [ "${p:0:1}" != - ]; then
         nonFlagArgs=1
-    elif [ "$p" = -m32 ]; then
-        if [ -e @out@/nix-support/dynamic-linker-m32 ]; then
-            NIX_@infixSalt@_LDFLAGS+=" -dynamic-linker $(< @out@/nix-support/dynamic-linker-m32)"
-        fi
     fi
     n+=1
 done

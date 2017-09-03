@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
       $out/lib${lib_suffix}/kde4/kcm_adobe_flash_player.so
 
     patchelf \
-      --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+      --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) \
       --set-rpath "$rpath" \
       $out/bin/flash-player-properties
   '';

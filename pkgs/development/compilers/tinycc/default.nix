@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     echo ${version} > VERSION
 
     configureFlagsArray+=("--cc=cc")
-    configureFlagsArray+=("--elfinterp=$(< $NIX_CC/nix-support/dynamic-linker)")
+    configureFlagsArray+=("--elfinterp=$(< $NIX_BINUTILS/nix-support/dynamic-linker)")
     configureFlagsArray+=("--crtprefix=${getLib stdenv.cc.libc}/lib")
     configureFlagsArray+=("--sysincludepaths=${getDev stdenv.cc.libc}/include:{B}/include")
     configureFlagsArray+=("--libpaths=${getLib stdenv.cc.libc}/lib")

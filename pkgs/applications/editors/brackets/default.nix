@@ -36,11 +36,11 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+    patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
       --set-rpath "${bracketsLibs}:$out/opt/brackets/lib" \
       $out/opt/brackets/Brackets
 
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+    patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
       --set-rpath "${bracketsLibs}" \
       $out/opt/brackets/Brackets-node
 

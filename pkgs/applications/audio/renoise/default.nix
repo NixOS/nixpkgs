@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     mkdir $out/bin
     ln -s $out/renoise $out/bin/renoise
 
-    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --set-rpath $out/lib $out/renoise
+    patchelf --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) --set-rpath $out/lib $out/renoise
   '';
 
   meta = {

@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       $out/etc/bash_completion.d/yandex-disk-completion.bash
 
     ${patchelf}/bin/patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
       --set-rpath "${zlib.out}/lib:${p.gcclib}" \
       $out/bin/yandex-disk
   '';

@@ -25,13 +25,13 @@ stdenv.mkDerivation {
     ''
       echo "patching ts3server"
       patchelf \
-        --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
         --set-rpath $(cat $NIX_CC/nix-support/orig-cc)/${libDir} \
         --force-rpath \
         ts3server
       cp tsdns/tsdnsserver tsdnsserver
       patchelf \
-        --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
         --set-rpath $(cat $NIX_CC/nix-support/orig-cc)/${libDir} \
         --force-rpath \
         tsdnsserver

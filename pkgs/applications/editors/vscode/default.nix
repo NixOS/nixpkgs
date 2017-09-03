@@ -72,7 +72,7 @@ in
 
     postFixup = lib.optionalString (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") ''
       patchelf \
-        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
         --set-rpath "${rpath}" \
         $out/lib/vscode/code
     '';

@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     mv ./${name}-linux/* $out/share/LightTable
 
     patchelf \
-      --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
       --set-rpath ${libPath}:${libPath}/lib64:$out/share/LightTable \
       $out/share/LightTable/LightTable
 

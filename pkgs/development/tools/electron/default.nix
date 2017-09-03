@@ -31,7 +31,7 @@ let
       fixupPhase
 
       patchelf \
-        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
         --set-rpath "${atomEnv.libPath}:$out/lib/electron" \
         $out/lib/electron/electron
 

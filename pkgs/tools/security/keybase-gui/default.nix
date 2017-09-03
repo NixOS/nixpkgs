@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     chmod +x $out/bin/keybase-gui
   '';
   postFixup = ''
-    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --set-rpath "${libPath}:\$ORIGIN" "$out/share/keybase/Keybase"
+    patchelf --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) --set-rpath "${libPath}:\$ORIGIN" "$out/share/keybase/Keybase"
   '';
 
   meta = with stdenv.lib; {

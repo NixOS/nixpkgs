@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     cp -pv flashplayer${lib.optionalString debug "debugger"} $out/bin
 
     patchelf \
-      --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+      --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) \
       --set-rpath "$rpath" \
       $out/bin/flashplayer${lib.optionalString debug "debugger"}
   '';

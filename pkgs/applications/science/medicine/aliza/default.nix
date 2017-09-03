@@ -29,11 +29,11 @@ stdenv.mkDerivation {
     libs = stdenv.lib.makeLibraryPath [ qt4 zlib stdenv.cc.cc libSM libICE libX11 libXext libXt mesa ];
   in ''
     ${patchelf}/bin/patchelf \
-      --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
       $out/bin/aliza
 
     ${patchelf}/bin/patchelf \
-      --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+      --interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
       $out/bin/aliza-vtkvol
 
     wrapProgram $out/bin/aliza \

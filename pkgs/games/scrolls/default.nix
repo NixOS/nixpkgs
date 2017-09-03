@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     cp -r ../Scrolls_Data "$out/opt/Scrolls/"
     chmod +x "$out/opt/Scrolls/Scrolls"
 
-    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+    patchelf --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) \
       --set-rpath "$libPath" "$out/opt/Scrolls/Scrolls"
 
     mkdir "$out/bin"
