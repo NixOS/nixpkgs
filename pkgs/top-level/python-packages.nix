@@ -22736,6 +22736,8 @@ in {
 
   twisted = callPackage ../development/python-modules/twisted { };
 
+  txtorcon = callPackage ../development/python-modules/txtorcon { };
+
   tzlocal = callPackage ../development/python-modules/tzlocal { };
 
   u-msgpack-python = callPackage ../development/python-modules/u-msgpack-python { };
