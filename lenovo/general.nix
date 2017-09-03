@@ -9,4 +9,5 @@ with lib;
   };
 
   hardware.enableAllFirmware = true;
+  services.tlp.enable = true;
 }

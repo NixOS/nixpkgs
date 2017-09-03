@@ -11,9 +11,6 @@
     extraModulePackages = [ config.boot.kernelPackages.tp_smapi ];
   };
 
-  # TLP Linux Advanced Power Management
-  services.tlp.enable = true;
-
   # hard disk protection if the laptop falls
   services.hdapsd.enable = true;
 
