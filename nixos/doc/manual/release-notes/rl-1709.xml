@@ -193,6 +193,15 @@ rmdir /var/lib/ipfs/.ipfs
       No complete replacement for grsecurity/PaX is available presently.
     </para>
   </listitem>
+    <listitem>
+    <para>
+      The <literal>gnupg</literal> package used to suffix its programs
+      with <literal>2</literal>, like <command>gpg2</command> and
+      <command>gpgv2</command>. This suffix has since been dropped,
+      and the programs are now simply <command>gpg</command>,
+      <command>gpgv</command>, etc.
+    </para>
+  </listitem>
 </itemizedlist>
 
 <para>Other notable improvements:</para>
