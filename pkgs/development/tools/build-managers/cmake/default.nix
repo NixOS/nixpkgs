@@ -6,7 +6,11 @@
 , useSharedLibraries ? (!isBootstrap && !stdenv.isCygwin)
 , useNcurses ? false, ncurses
 , useQt4 ? false, qt4
+, withQt5 ? false, qtbase
 }:
+
+assert withQt5 -> useQt4 == false;
+assert useQt4 -> withQt5 == false;
 
 with stdenv.lib;
 
@@ -18,7 +22,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "cmake-${os isBootstrap "boot-"}${os useNcurses "cursesUI-"}${os useQt4 "qt4UI-"}${version}";
+  name = "cmake-${os isBootstrap "boot-"}${os useNcurses "cursesUI-"}${os withQt5 "qt5UI-"}${os useQt4 "qt4UI-"}${version}";
 
   inherit majorVersion;
 
@@ -46,7 +50,8 @@ stdenv.mkDerivation rec {
     [ setupHook pkgconfig ]
     ++ optionals useSharedLibraries [ bzip2 curl expat libarchive xz zlib libuv rhash ]
     ++ optional useNcurses ncurses
-    ++ optional useQt4 qt4;
+    ++ optional useQt4 qt4
+    ++ optional withQt5 qtbase;
 
   propagatedBuildInputs = optional stdenv.isDarwin ps;
 
@@ -63,7 +68,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--docdir=share/doc/${name}" ]
     ++ (if useSharedLibraries then [ "--no-system-jsoncpp" "--system-libs" ] else [ "--no-system-libs" ]) # FIXME: cleanup
-    ++ optional useQt4 "--qt-gui"
+    ++ optional (useQt4 || withQt5) "--qt-gui"
     ++ optionals (!useNcurses) [ "--" "-DBUILD_CursesDialog=OFF" ];
 
   dontUseCmakeConfigure = true;
