@@ -1,25 +1,27 @@
-{ stdenv, lib, pkgs, buildPythonPackage, dbus-python, python, cryptography }:
+{ stdenv, fetchFromGitHub, buildPythonPackage
+, dbus-python, cryptography }:
 
 buildPythonPackage rec {
   pname = "secretstorage";
   version = "2.3.1";
   name = "${pname}-${version}";
 
-  src = pkgs.fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "mitya57";
     repo = "secretstorage";
-    rev = "2636a47b45aff51a21dfaf1cbd9f1f3c1347f7f4";
-    sha256 = "1xs35ywqxxriwhm79kvivad0hszcm4ah29v34vbshlqvc66qr171";
+    rev = version;
+    sha256 = "1sjd2jjbxgkkxyrfwx89x0hsnn39w2cr2qkxbg1iz52znr4sqism";
   };
 
   postPatch = "patchShebangs .";
   propagatedBuildInputs = [ dbus-python cryptography ];
-  doCheck = false;
+
+  doCheck = false; # requires dbus session
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/mitya57/secretstorage";
     description = "Python bindings to FreeDesktop.org Secret Service API";
-    license = lib.licenses.bsdOriginal;
+    license = licenses.bsdOriginal;
     platforms = platforms.linux;
   };
 }
