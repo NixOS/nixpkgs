@@ -8,8 +8,10 @@ buildPythonPackage rec {
   inherit (protobuf) name src;
   inherit disabled doCheck;
 
-  # work around python distutils compiling C++ with $CC
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";
+  NIX_CFLAGS_COMPILE =
+    # work around python distutils compiling C++ with $CC
+    optional stdenv.isDarwin "-I${libcxx}/include/c++/v1"
+    ++ optional (versionOlder protobuf.version "2.7.0") "-std=c++98";
 
   propagatedBuildInputs = [ protobuf google_apputils ];
   buildInputs = [ google_apputils pyext ];
