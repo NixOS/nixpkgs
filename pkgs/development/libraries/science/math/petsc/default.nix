@@ -29,6 +29,13 @@ stdenv.mkDerivation rec {
     )
   '';
 
+  postInstall = ''
+    rm $out/bin/petscmpiexec
+    rm $out/bin/popup
+    rm $out/bin/uncrustify.cfg
+    rm -rf $out/bin/win32fe
+  '';
+
   meta = {
     description = "Library of linear algebra algorithms for solving partial differential equations";
     homepage = https://www.mcs.anl.gov/petsc/index.html;
