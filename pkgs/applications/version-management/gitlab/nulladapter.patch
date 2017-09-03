@@ -1,15 +1,17 @@
 diff --git a/Gemfile b/Gemfile
-index 3748ae7aee..25d2938b78 100644
+index 4861171ef5..f6e701c548 100644
 --- a/Gemfile
 +++ b/Gemfile
-@@ -389,3 +389,5 @@ gem 'toml-rb', '~> 0.3.15', require: false
- # Feature toggles
- gem 'flipper', '~> 0.10.2'
- gem 'flipper-active_record', '~> 0.10.2'
-+
+@@ -1,5 +1,7 @@
+ source 'https://rubygems.org'
+ 
 +gem 'activerecord-nulldb-adapter'
++
+ gem 'rails', '4.2.8'
+ gem 'rails-deprecated_sanitizer', '~> 1.0.3'
+ 
 diff --git a/Gemfile.lock b/Gemfile.lock
-index 0de8746109..f263c643bd 100644
+index 38944248f9..08ce4486ba 100644
 --- a/Gemfile.lock
 +++ b/Gemfile.lock
 @@ -32,6 +32,8 @@ GEM
@@ -21,7 +23,7 @@ index 0de8746109..f263c643bd 100644
      activerecord_sane_schema_dumper (0.2)
        rails (>= 4, < 5)
      activesupport (4.2.8)
-@@ -906,6 +908,7 @@ PLATFORMS
+@@ -926,6 +928,7 @@ PLATFORMS
  DEPENDENCIES
    RedCloth (~> 4.3.2)
    ace-rails-ap (~> 4.1.0)

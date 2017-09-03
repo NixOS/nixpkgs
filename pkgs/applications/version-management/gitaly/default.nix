@@ -1,26 +1,34 @@
-{ stdenv, fetchFromGitLab, git, go }:
+{ stdenv, fetchFromGitLab, buildGoPackage, ruby, bundlerEnv }:
 
-stdenv.mkDerivation rec {
-  version = "0.21.2";
+let
+  rubyEnv = bundlerEnv {
+    name = "gitaly-env";
+    inherit ruby;
+    gemdir = ./.;
+  };
+in buildGoPackage rec {
+  version = "0.33.0";
   name = "gitaly-${version}";
 
-  srcs = fetchFromGitLab {
+  src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "025r6vcra2bjm6xggcgnsqgkpvd7y2w73ff6lxrn06lbr4dfbfrf";
+    sha256 = "1x23z3a0svychs1kc9cbiskl0dp7ji9ddzqr6md22jiy6vgwx2wa";
   };
 
-  buildInputs = [ git go ];
+  goPackagePath = "gitlab.com/gitlab-org/gitaly";
 
-  buildPhase = ''
-    make PREFIX=$out
+  passthru = {
+    inherit rubyEnv;
+  };
+
+  postInstall = ''
+    mkdir -p $ruby
+    cp -rv $src/ruby/{bin,lib,vendor} $ruby
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin
-    make install PREFIX=$out
-  '';
+  outputs = [ "bin" "out" "ruby" ];
 
   meta = with stdenv.lib; {
     homepage = http://www.gitlab.com/;
