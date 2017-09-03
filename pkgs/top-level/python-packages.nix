@@ -10725,6 +10725,8 @@ in {
 
   };
 
+  geopandas = callPackage ../development/python-modules/geopandas { };
+
   gevent-websocket = buildPythonPackage rec {
     name = "gevent-websocket-0.9.3";
 
