@@ -135,6 +135,8 @@ in {
     bap = pkgs.ocamlPackages_4_02.bap;
   };
 
+  bayespy = callPackage ../development/python-modules/bayespy { };
+
   bitcoin-price-api = callPackage ../development/python-modules/bitcoin-price-api { };
 
   blivet = callPackage ../development/python-modules/blivet { };
