@@ -18105,6 +18105,8 @@ with pkgs;
 
   nauty = callPackage ../applications/science/math/nauty {};
 
+  petsc = callPackage ../development/libraries/science/math/petsc { };
+
   sage = callPackage ../applications/science/math/sage { };
 
   suitesparse_4_2 = callPackage ../development/libraries/science/math/suitesparse/4.2.nix { };
