@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, vala_0_32, glib, gjs, mutter
-, pango, gtk3, gnome3, dbus, clutter, appstream-glib, makeWrapper, systemd, gobjectIntrospection }:
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, vala, glib, gjs, mutter
+, pango, gtk3, gnome3, dbus, clutter, appstream-glib, wrapGAppsHook, systemd, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   version = "3.24.2";
@@ -10,28 +10,16 @@ stdenv.mkDerivation rec {
     sha256 = "16142jfpkz8qfs7zp9k3c5l9pnvxbr5yygj8jdpx6by1142s6340";
   };
 
-  buildInputs = [ autoreconfHook pkgconfig vala_0_32 glib gjs mutter
+  nativeBuildInputs = [ autoreconfHook pkgconfig vala wrapGAppsHook ];
+  buildInputs = [ glib gjs mutter gnome3.adwaita-icon-theme
                   gtk3 gnome3.gnome_control_center dbus
-                  clutter pango appstream-glib makeWrapper systemd gobjectIntrospection ];
+                  clutter pango appstream-glib systemd gobjectIntrospection ];
 
   configureFlags = [ "--with-controlcenterdir=$(out)/gnome-control-center/keybindings"
                      "--with-dbusservicesdir=$(out)/share/dbus-1/services"
                      "--with-systemduserunitdir=$(out)/etc/systemd/user" ];
 
   enableParallelBuilding = true;
-
-  preFixup =
-    let
-      libPath = stdenv.lib.makeLibraryPath
-        [ glib gtk3 clutter pango ];
-    in
-    ''
-      for i in $out/libexec/gpaste/*; do
-        wrapProgram $i \
-          --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-          --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH"
-      done
-    '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/Keruspe/GPaste;
