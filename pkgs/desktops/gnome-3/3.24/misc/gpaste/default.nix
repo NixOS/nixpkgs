@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig vala wrapGAppsHook ];
-  buildInputs = [ glib gjs mutter
+  buildInputs = [ glib gjs mutter gnome3.adwaita-icon-theme
                   gtk3 gnome3.gnome_control_center dbus
                   clutter pango appstream-glib systemd gobjectIntrospection ];
 
