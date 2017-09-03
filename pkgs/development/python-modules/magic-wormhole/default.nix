@@ -17,6 +17,7 @@
 , humanize
 , pyopenssl
 , service-identity
+, txtorcon
 }:
 
 buildPythonPackage rec {
@@ -31,14 +32,11 @@ buildPythonPackage rec {
 
   checkInputs = [ mock ];
   buildInputs = [ nettools glibcLocales ];
-  propagatedBuildInputs = [ autobahn cffi click hkdf pynacl spake2 tqdm ipaddress humanize pyopenssl service-identity ];
+  propagatedBuildInputs = [ autobahn cffi click hkdf pynacl spake2 tqdm ipaddress humanize pyopenssl service-identity txtorcon ];
 
   postPatch = ''
     sed -i -e "s|'ifconfig'|'${nettools}/bin/ifconfig'|" src/wormhole/ipaddrs.py
-    sed -i -e "s|if (os.path.dirname(os.path.abspath(wormhole))|if not os.path.abspath(wormhole).startswith('/nix/store') and (os.path.dirname(os.path.abspath(wormhole))|" src/wormhole/test/test_scripts.py
-    # XXX: disable one test due to warning:
-    # setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
-    sed -i -e "s|def test_text_subprocess|def skip_test_text_subprocess|" src/wormhole/test/test_scripts.py
+    sed -i -e "s|if (os.path.dirname(os.path.abspath(wormhole))|if not os.path.abspath(wormhole).startswith('/nix/store') and (os.path.dirname(os.path.abspath(wormhole))|" src/wormhole/test/test_cli.py
   '' + lib.optionalString (pythonAtLeast "3.3") ''
     sed -i -e 's|"ipaddress",||' setup.py
   '';
