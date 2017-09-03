@@ -23,6 +23,7 @@ let
     mate-icon-theme = callPackage ./mate-icon-theme { };
     mate-icon-theme-faenza = callPackage ./mate-icon-theme-faenza { };
     mate-menus = callPackage ./mate-menus { };
+    mate-notification-daemon = callPackage ./mate-notification-daemon { };
     mate-panel = callPackage ./mate-panel { };
     mate-session-manager = callPackage ./mate-session-manager { };
     mate-settings-daemon = callPackage ./mate-settings-daemon { };
@@ -41,6 +42,7 @@ let
       mate-desktop
       mate-icon-theme
       mate-menus
+      mate-notification-daemon
       mate-panel
       mate-session-manager
       mate-settings-daemon

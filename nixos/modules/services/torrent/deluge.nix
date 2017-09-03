@@ -57,7 +57,7 @@ in {
       after = [ "network.target" ];
       description = "Deluge BitTorrent WebUI";
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.pythonPackages.deluge ];
+      path = [ pkgs.deluge ];
       serviceConfig.ExecStart = "${pkgs.deluge}/bin/deluge --ui web";
       serviceConfig.User = "deluge";
       serviceConfig.Group = "deluge";

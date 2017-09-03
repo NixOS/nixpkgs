@@ -27898,7 +27898,8 @@ EOF
     installPhase = ''
       mkdir -p $out/bin $out/libexec
       cp smugline.py $out/libexec
-      makeWrapper "${python.interpreter} $out/libexec/smugline.py" $out/bin/smugline \
+      makeWrapper ${python.interpreter} $out/bin/smugline \
+        --add-flags "$out/libexec/smugline.py" \
         --prefix PYTHONPATH : "$PYTHONPATH"
     '';
   };

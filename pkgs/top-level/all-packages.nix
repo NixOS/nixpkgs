@@ -2050,7 +2050,9 @@ with pkgs;
 
   freeipmi = callPackage ../tools/system/freeipmi {};
 
-  freetalk = callPackage ../applications/networking/instant-messengers/freetalk { };
+  freetalk = callPackage ../applications/networking/instant-messengers/freetalk {
+    guile = guile_2_0;
+  };
 
   freetds = callPackage ../development/libraries/freetds { };
 
@@ -2179,6 +2181,8 @@ with pkgs;
   gitlab-shell = callPackage ../applications/version-management/gitlab-shell { };
 
   gitlab-workhorse = callPackage ../applications/version-management/gitlab-workhorse { };
+
+  gitaly = callPackage ../applications/version-management/gitaly { };
 
   gitstats = callPackage ../applications/version-management/gitstats { };
 
@@ -8418,7 +8422,7 @@ with pkgs;
 
   hwloc = callPackage ../development/libraries/hwloc {};
 
-  hydra = callPackage ../development/tools/misc/hydra { stdenv = overrideCC stdenv gcc6; };
+  hydra = callPackage ../development/tools/misc/hydra { };
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
 
@@ -11912,7 +11916,7 @@ with pkgs;
 
   dstat = callPackage ../os-specific/linux/dstat { };
 
-  fwupd = callPackage ../os-specific/linux/firmware/fwupd { inherit (gnome2) gtk_doc; };
+  fwupd = callPackage ../os-specific/linux/firmware/fwupd { inherit (gnome2) gtk_doc; inherit (python3Packages) pygobject3 pillow; };
 
   fwupdate = callPackage ../os-specific/linux/firmware/fwupdate { };
 
@@ -12391,15 +12395,6 @@ with pkgs;
 
   linuxPackages_hardened =
     recurseIntoAttrs (linuxPackagesFor linux_hardened);
-
-  # Grsecurity packages
-
-  linux_grsec_nixos = kernelPatches.grsecurity_testing;
-
-  linuxPackages_grsec_nixos =
-    recurseIntoAttrs (linuxPackagesFor linux_grsec_nixos);
-
-  linux_grsec_server_xen = linux_grsec_nixos;
 
   # Samus kernels
   linuxPackages_samus_4_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_samus_4_12);
@@ -14991,6 +14986,8 @@ with pkgs;
     go = go_1_7;
   };
 
+  kupfer = callPackage ../applications/misc/kupfer { };
+
   lame = callPackage ../development/libraries/lame { };
 
   larswm = callPackage ../applications/window-managers/larswm { };
@@ -16329,7 +16326,6 @@ with pkgs;
 
   tdesktop = qt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop {
     inherit (pythonPackages) gyp;
-    gcc = gcc6;
   };
 
   telegram-cli = callPackage ../applications/networking/instant-messengers/telegram/telegram-cli { };
@@ -18360,7 +18356,6 @@ with pkgs;
   };
 
   z3 = callPackage ../applications/science/logic/z3 {};
-  z3_opt = callPackage ../applications/science/logic/z3_opt {};
 
   boolector = callPackage ../applications/science/logic/boolector {};
 

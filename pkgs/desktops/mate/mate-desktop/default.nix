@@ -20,11 +20,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gnome3.dconf
     gnome3.gtk
-    gnome3.defaultIconTheme
-  ];
-
-  propagatedUserEnvPkgs = [
-    gnome3.gnome_themes_standard
   ];
 
   meta = with stdenv.lib; {

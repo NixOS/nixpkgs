@@ -30,6 +30,7 @@ let
     inherit bin combinePkgs buildEnv fastUnique lib makeWrapper writeText
       stdenv python ruby;
     perl = perl522; # avoid issues like #26890, probably remove after texlive upgrade
+    ghostscript = ghostscriptX; # could be without X, probably, but we use X above
   };
 
   # the set of TeX Live packages, collections, and schemes; using upstream naming
