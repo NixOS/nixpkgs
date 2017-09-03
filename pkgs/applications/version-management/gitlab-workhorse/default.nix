@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitLab, git, go }:
 
 stdenv.mkDerivation rec {
-  version = "2.3.0";
+  version = "3.0.0";
   name = "gitlab-workhorse-${version}";
 
   srcs = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-workhorse";
     rev = "v${version}";
-    sha256 = "07b82kjfm8r3ql55ifl0zbifnnsbvng4zlzjpbsb7lisg26s97w8";
+    sha256 = "0lz3bgwww640c7gh97vf40a8h6cz4znscl0r00z6iiwkc0xxzp7j";
   };
 
   buildInputs = [ git go ];
