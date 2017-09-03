@@ -18329,6 +18329,8 @@ with pkgs;
 
   ### SCIENCE / ELECTRONICS
 
+  adms = callPackage ../applications/science/electronics/adms { };
+
   eagle = callPackage ../applications/science/electronics/eagle { };
 
   caneda = callPackage ../applications/science/electronics/caneda { };
@@ -18351,6 +18353,7 @@ with pkgs;
   pcb = callPackage ../applications/science/electronics/pcb { };
 
   qucs = callPackage ../applications/science/electronics/qucs { };
+
 
   xoscope = callPackage ../applications/science/electronics/xoscope { };
 
