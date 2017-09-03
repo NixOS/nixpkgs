@@ -212,6 +212,7 @@
   fuuzetsu = "Mateusz Kowalczyk <fuuzetsu@fuuzetsu.co.uk>";
   fuzzy-id = "Thomas Bach <hacking+nixos@babibo.de>";
   fxfactorial = "Edgar Aroutiounian <edgar.factorial@gmail.com>";
+  gabesoft = "Gabriel Adomnicai <gabesoft@gmail.com>";
   gal_bolle = "Florent Becker <florent.becker@ens-lyon.org>";
   garbas = "Rok Garbas <rok@garbas.si>";
   garrison = "Jim Garrison <jim@garrison.cc>";

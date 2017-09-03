@@ -20,5 +20,6 @@ buildGoPackage rec {
     description = "Mmake is a small program which wraps make to provide additional functionality, such as user-friendly help output, remote includes, and eventually more. It otherwise acts as a pass-through to standard make.";
     license = licenses.mit;
     platforms = platforms.all;
+    maintainers = [ maintainers.gabesoft ];
   };
 }
