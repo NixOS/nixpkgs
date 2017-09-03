@@ -4,7 +4,7 @@
 , cudaSupport ? true
 , cudnnSupport ? false
 , cudnn ? null
-, cudatoolkit7
+, cudatoolkit
 , fetchFromGitHub
 , google-gflags
 , glog
@@ -19,29 +19,31 @@
 
 let optional = stdenv.lib.optional;
 in stdenv.mkDerivation rec {
-  # Use git revision because latest "release" is really old
-  name = "caffe-git-2015-07-02";
+  name = "caffe-${version}";
+  version = "1.0-rc5";
 
   src = fetchFromGitHub {
     owner = "BVLC";
     repo = "caffe";
-    rev = "77d66dfc907dd875d69bb9fc12dd950b531e464f";
-    sha256 = "0vd4qrc49dhsawj298xpkd5mvi35sh56kdswx3yp8ya4fjajwakx";
+    rev = "rc5";
+    sha256 = "0lfmmc0n6xvkpygvxclzrvd0zigb4yfc5612anv2ahlxpfi9031c";
   };
 
   preConfigure = "mv Makefile.config.example Makefile.config";
 
-  makeFlags = "BLAS=open " +
-              (if !cudaSupport then "CPU_ONLY=1 " else "CUDA_DIR=${cudatoolkit7} ") +
-              (if cudnnSupport then "USE_CUDNN=1 " else "");
+  makeFlags = [ "BLAS=open"
+                (if !cudaSupport then "CPU_ONLY=1" else "CUDA_DIR=${cudatoolkit}") ]
+              ++ optional cudnnSupport "USE_CUDNN=1";
 
   # too many issues with tests to run them for now
   doCheck = false;
-  checkPhase = "make runtest ${makeFlags}";
+  checkTarget = "runtest";
+
+  enableParallelBuilding = true;
 
   buildInputs = [ openblas boost google-gflags glog hdf5 leveldb lmdb opencv
                   protobuf snappy ]
-                ++ optional cudaSupport cudatoolkit7
+                ++ optional cudaSupport cudatoolkit
                 ++ optional cudnnSupport cudnn;
 
   installPhase = ''
