@@ -1,0 +1,29 @@
+--- a/app/workers/post_receive.rb
++++ b/app/workers/post_receive.rb
+@@ -3,7 +3,9 @@ class PostReceive
+   include DedicatedSidekiqQueue
+
+   def perform(gl_repository, identifier, changes)
+-    project, is_wiki = Gitlab::GlRepository.parse(gl_repository)
++    # XXX: https://gitlab.com/gitlab-org/gitlab-ce/issues/36783
++    # project, is_wiki = Gitlab::GlRepository.parse(gl_repository)
++    project, is_wiki = parse_project_identifier(gl_repository)
+
+     if project.nil?
+       log("Triggered hook for non-existing project with gl_repository \"#{gl_repository}\"")
+@@ -59,6 +61,15 @@ class PostReceive
+     # Nothing defined here yet.
+   end
+
++  # XXX: https://gitlab.com/gitlab-org/gitlab-ce/issues/36783
++  def parse_project_identifier(project_identifier)
++    if project_identifier.start_with?('/')
++      Gitlab::RepoPath.parse(project_identifier)
++    else
++      Gitlab::GlRepository.parse(project_identifier)
++    end
++  end
++
+   def log(message)
+     Gitlab::GitLogger.error("POST-RECEIVE: #{message}")
+   end

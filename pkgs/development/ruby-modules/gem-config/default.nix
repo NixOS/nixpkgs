@@ -90,6 +90,8 @@ in
 
   gio2 = attrs: { buildInputs = [ gtk2 pcre pkgconfig ]; };
 
+  gitlab-markup = attrs: { meta.priority = 1; };
+
   glib2 = attrs: { buildInputs = [ gtk2 pcre pkgconfig ]; };
 
   gtk2 = attrs: {
