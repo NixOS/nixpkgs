@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, SDL2, alsaLib, gtk3, mesa_glu,
-  makeWrapper, mesa, libarchive, libao, unzip, xdg_utils, gsettings_desktop_schemas,
-  epoxy, gdk_pixbuf
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, SDL2, alsaLib, gtk3, mesa_glu
+, makeWrapper, mesa, libarchive, libao, unzip, xdg_utils, gsettings_desktop_schemas
+, epoxy, gdk_pixbuf, gnome3, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   buildInputs = [
-    pkgconfig
     SDL2
     alsaLib
     epoxy
@@ -28,12 +27,17 @@ stdenv.mkDerivation rec {
     gdk_pixbuf
     mesa_glu
     mesa
-    makeWrapper
     libarchive
     libao
     unzip
     xdg_utils
-    gsettings_desktop_schemas
+    gnome3.adwaita-icon-theme
+  ];
+
+  nativeBuildInputs = [
+    pkgconfig
+    makeWrapper
+    wrapGAppsHook
   ];
 
   installPhase = ''
