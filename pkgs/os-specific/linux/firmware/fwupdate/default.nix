@@ -23,6 +23,7 @@ let version = "8"; in
           linux/libfwup.c
         sed -i 's|/usr/share|$(prefix)share|' linux/Makefile
         sed -i "s|/usr/include|$out/include|" linux/fwup.pc.in
+        find . -type f -print0 | xargs -0 sed -i -e 's|/boot/efi|/boot|g' -e 's|/boot/efi/EFI|/boot/EFI|g'
       '';
       configurePhase = ''
         arch=$(cc -dumpmachine | cut -f1 -d- | sed 's,i[3456789]86,ia32,' )
