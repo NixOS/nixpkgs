@@ -23210,6 +23210,8 @@ in {
 
   twisted = callPackage ../development/python-modules/twisted { };
 
+  txtorcon = callPackage ../development/python-modules/txtorcon { };
+
   tzlocal = buildPythonPackage rec {
     name = "tzlocal-1.2.2";
 
