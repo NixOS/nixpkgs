@@ -37,11 +37,4 @@
   # Aspect Ratio: 16 × 9 (1.78:1)
   # Pixel Count: 3,686,400
   # Megapixels: 3.69MP
-
-  # Use libinput to let the physical middle button be used to scroll
-  # with the trackpoint
-  services.xserver = {
-    libinput.enable = true;
-    synaptics.enable = false;
-  };
 }

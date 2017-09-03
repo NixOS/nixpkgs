@@ -10,4 +10,9 @@ with lib;
 
   hardware.enableAllFirmware = true;
   services.tlp.enable = true;
+
+  services.xserver = {
+    synaptics.enable = false;
+    libinput.enable = true;
+  };
 }

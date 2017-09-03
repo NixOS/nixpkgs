@@ -14,9 +14,6 @@
   # hard disk protection if the laptop falls
   services.hdapsd.enable = true;
 
-  # alternatively, touchpad with two-finger scrolling
-  #services.xserver.libinput.enable = true;
-
   # enable volume control buttons
   sound.enableMediaKeys = true;
 
