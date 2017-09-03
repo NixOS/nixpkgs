@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 
 {
+  imports = [ ./general.nix ];
+
   # TPM chip countains a RNG
   security.rngd.enable = true;
 
@@ -14,10 +16,6 @@
 
   # hard disk protection if the laptop falls
   services.hdapsd.enable = true;
-
-  # trackpoint support (touchpad disabled in this config)
-  hardware.trackpoint.enable = true;
-  hardware.trackpoint.emulateWheel = true;
 
   # alternatively, touchpad with two-finger scrolling
   #services.xserver.libinput.enable = true;

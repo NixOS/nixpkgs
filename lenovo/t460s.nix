@@ -3,6 +3,7 @@
 {
   imports =
     [ ../lib/kernel-version.nix
+      ./general.nix
     ];
 
   ## BEGIN from generated hardware-configuration
@@ -45,15 +46,5 @@
   services.xserver = {
     libinput.enable = true;
     synaptics.enable = false;
-
-    config = ''
-      Section "InputClass"
-        Identifier     "Enable libinput for TrackPoint"
-        MatchIsPointer "on"
-        Driver         "libinput"
-        Option         "ScrollMethod" "button"
-        Option         "ScrollButton" "8"
-      EndSection
-    '';
   };
 }
