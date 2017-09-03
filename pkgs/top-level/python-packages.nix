@@ -1751,6 +1751,12 @@ in {
 
   cycler = callPackage ../development/python-modules/cycler { };
 
+  dlib = buildPythonPackage rec {
+    inherit (pkgs.dlib) name src nativeBuildInputs meta;
+
+    buildInputs = pkgs.dlib.buildInputs ++ [ self.boost ];
+  };
+
   datadog = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "datadog";
