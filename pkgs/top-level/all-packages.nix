@@ -3860,14 +3860,16 @@ with pkgs;
   pinentry = callPackage ../tools/security/pinentry {
     libcap = if stdenv.isDarwin then null else libcap;
     qt4 = null;
+    gtk2 = null;
+    gcr = gnome3.gcr;
   };
 
   pinentry_ncurses = pinentry.override {
-    gtk2 = null;
+    gcr = null;
   };
 
-  pinentry_gnome = pinentry_ncurses.override {
-    gcr = gnome3.gcr;
+  pinentry_gtk2 = pinentry_ncurses.override {
+    inherit gtk2;
   };
 
   pinentry_qt4 = pinentry_ncurses.override {
