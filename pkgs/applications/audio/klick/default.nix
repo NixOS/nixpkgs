@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ scons pkgconfig libsamplerate libsndfile liblo libjack2 boost ];
+  NIX_CFLAGS_COMPILE = "-fpermissive";
 
   buildPhase = ''
     mkdir -p $out
