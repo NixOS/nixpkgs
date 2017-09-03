@@ -647,29 +647,7 @@ in {
     };
   });
 
-  attrs = buildPythonPackage (rec {
-    name = "attrs-${version}";
-    version = "16.2.0";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/attrs/${name}.tar.gz";
-      sha256 = "136f2ec0f94ec77ff2990830feee965d608cab1e8922370e3abdded383d52001";
-    };
-
-    # macOS needs clang for testing
-    buildInputs = with self; [ pytest hypothesis zope_interface
-    pympler coverage ]
-     ++ optionals (stdenv.isDarwin) [ pkgs.clang ];
-
-    checkPhase = ''
-      py.test
-    '';
-
-    meta = {
-      description = "Python attributes without boilerplate";
-      homepage = https://github.com/hynek/attrs;
-      license = licenses.mit;
-    };
-   });
+  attrs = callPackage ../development/python-modules/attrs { };
 
   audioread = callPackage ../development/python-modules/audioread { };
 
