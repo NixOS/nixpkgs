@@ -1,5 +1,5 @@
-{ stdenv, lib, bundler, fetchurl, fetchFromGitHub, bundlerEnv, libiconv, ruby
-, tzdata, git, nodejs, procps, dpkg
+{ pkgs, stdenv, lib, bundler, fetchurl, fetchFromGitHub, bundlerEnv, libiconv
+, ruby, tzdata, git, nodejs, procps, dpkg, yarn
 }:
 
 /* When updating the Gemfile add `gem "activerecord-nulldb-adapter"`
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
   name = "gitlab-${version}";
 
   buildInputs = [
-    env ruby bundler tzdata git nodejs procps dpkg
+    ruby-env ruby bundler tzdata git nodejs procps dpkg yarn
   ];
 
   src = fetchFromGitHub {
@@ -159,7 +159,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit env;
+    inherit ruby-env;
     inherit ruby;
   };
 }

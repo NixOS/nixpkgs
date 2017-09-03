@@ -1,4 +1,4 @@
-{ stdenv, ruby, bundler, fetchFromGitLab }:
+{ stdenv, ruby, bundler, fetchFromGitLab, go }:
 
 stdenv.mkDerivation rec {
   version = "5.3.1";
@@ -12,12 +12,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    ruby bundler
+    ruby bundler go
   ];
 
-  patches = [ ./remove-hardcoded-locations.patch ];
+  patches = [ ./remove-hardcoded-locations.patch ./fixes.patch ];
 
   installPhase = ''
+    ruby bin/compile
     mkdir -p $out/
     cp -R . $out/
 
