@@ -3071,6 +3071,8 @@ in {
     };
   };
 
+  cligj = callPackage ../development/python-modules/cligj { };
+
   clepy = buildPythonPackage rec {
     name = "clepy-0.3.20";
 
