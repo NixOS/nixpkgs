@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchFromGitHub, python3Packages }:
+{ stdenv, fetchpatch, fetchFromGitHub, python3Packages, glibcLocales }:
 
 python3Packages.buildPythonPackage rec {
   baseName = "mitmproxy";
@@ -29,7 +29,8 @@ python3Packages.buildPythonPackage rec {
 
   checkPhase = ''
     export HOME=$(mktemp -d)
-    LC_CTYPE=en_US.UTF-8 python setup.py pytest
+    # test_echo resolves hostnames
+    LC_CTYPE=en_US.UTF-8 pytest -k 'not test_echo'
   '';
 
   propagatedBuildInputs = with python3Packages; [
@@ -41,7 +42,7 @@ python3Packages.buildPythonPackage rec {
   ];
 
   buildInputs = with python3Packages; [
-    beautifulsoup4 flask pytz pytest pytestrunner protobuf3_2
+    beautifulsoup4 flask pytz pytest pytestrunner protobuf3_2 glibcLocales
   ];
 
   meta = with stdenv.lib; {
