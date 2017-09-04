@@ -1,22 +1,25 @@
 { stdenv, fetchgit, perl, makeWrapper, makeDesktopItem
-, which, perlPackages
+, which, perlPackages, fetchFromGitHub, boost, linuxHeaders
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.9";
+  version = "1.3.0-dev";
   name = "slic3r-${version}";
 
-  src = fetchgit {
-    url = "git://github.com/alexrj/Slic3r";
-    rev = "refs/tags/${version}";
-    sha256 = "1z8h11k29b7z49z5k8ikyfiijyycy1q3krlzi8hfd0vdybvymw21";
+  src = fetchFromGitHub {
+    owner = "alexrj";
+    repo = "Slic3r";
+    rev = "c3e6f398dbce8e1ef105695517a8b5b9267757d4";
+    sha256 = "1955xixh0sc2pa7fykdyyrci2180qwfqbj1j88fx84y1q0vdfxri";
   };
 
   buildInputs = with perlPackages; [ perl makeWrapper which
-    EncodeLocale MathClipper ExtUtilsXSpp threads
+    EncodeLocale MathClipper ExtUtilsXSpp threads locallib
     MathConvexHullMonotoneChain MathGeometryVoronoi MathPlanePath Moo
     IOStringy ClassXSAccessor Wx GrowlGNTP NetDBus ImportInto XMLSAX
-    ExtUtilsMakeMaker OpenGL WxGLCanvas ModuleBuild LWP
+    ExtUtilsMakeMaker OpenGL WxGLCanvas ModuleBuild LWP DevelChecklib
+    Socket ClassAccessor
+    boost linuxHeaders
   ];
 
   desktopItem = makeDesktopItem {
@@ -30,11 +33,16 @@ stdenv.mkDerivation rec {
   };
 
   buildPhase = ''
+    export BOOST_INCLUDEPATH="${boost.dev}/include"
+    export BOOST_LIBRARYPATH="${boost}/lib"
     export SLIC3R_NO_AUTO=true
     export PERL5LIB="./xs/blib/arch/:./xs/blib/lib:$PERL5LIB"
+    export LD=$CXX
+
+    substituteInPlace xs/src/libslic3r/GCodeSender.cpp \
+      --replace "/usr/include/asm-generic/ioctls.h" "${linuxHeaders}/include/asm-generic/ioctls.h"
 
     substituteInPlace Build.PL \
-      --replace "0.9918" "0.9923" \
       --replace "eval" ""
 
     pushd xs
