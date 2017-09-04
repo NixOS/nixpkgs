@@ -8723,8 +8723,6 @@ with pkgs;
 
   libctemplate = callPackage ../development/libraries/libctemplate { };
 
-  libctemplate_2_2 = callPackage ../development/libraries/libctemplate/2.2.nix { };
-
   libcouchbase = callPackage ../development/libraries/libcouchbase { };
 
   libcue = callPackage ../development/libraries/libcue { };
