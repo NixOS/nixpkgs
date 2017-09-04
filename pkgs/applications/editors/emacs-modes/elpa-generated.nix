@@ -674,10 +674,10 @@
     ebdb = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib, seq }:
     elpaBuild {
         pname = "ebdb";
-        version = "0.2";
+        version = "0.3.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ebdb-0.2.tar";
-          sha256 = "177qrjpdg14dpip2cn18csnlidv5f8cj3xpayz6jlpbfqzyfx8bi";
+          url = "https://elpa.gnu.org/packages/ebdb-0.3.1.tar";
+          sha256 = "1g8chkw302nhjj8n6v7j3xfcw24wpn43pcp8f3bh4s4haw1l75q3";
         };
         packageRequires = [ cl-lib emacs seq ];
         meta = {
@@ -702,10 +702,10 @@
     ebdb-i18n-chn = callPackage ({ ebdb, elpaBuild, fetchurl, lib, pyim }:
     elpaBuild {
         pname = "ebdb-i18n-chn";
-        version = "1.0.1";
+        version = "1.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ebdb-i18n-chn-1.0.1.el";
-          sha256 = "1g84xllw2dz6lhzschkyflqpsh3xx167161y6vjzq6yqkfy3gh1r";
+          url = "https://elpa.gnu.org/packages/ebdb-i18n-chn-1.1.el";
+          sha256 = "0pf7qp15z9wp41dazvi4bhdz7y13h9k5nnghhsb0nvknn6if0k4m";
         };
         packageRequires = [ ebdb pyim ];
         meta = {
@@ -1530,10 +1530,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20170828";
+        version = "20170904";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20170828.tar";
-          sha256 = "0frjwgjyy7rwb7si57h6nd1p35a4gcd1dc0aka19kn8r59hbi08p";
+          url = "https://elpa.gnu.org/packages/org-20170904.tar";
+          sha256 = "1nbdphd102lwkj0sg1lywydkc547fzc8p1n8y507xwvxdjazdnyb";
         };
         packageRequires = [];
         meta = {
@@ -2029,10 +2029,10 @@
       }) {};
     tiny = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "tiny";
-        version = "0.1.1";
+        version = "0.2.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/tiny-0.1.1.tar";
-          sha256 = "1nhg8375qdn457wj0xmfaj72s87xbabk2w1nl6q7rjvwxv08yyn7";
+          url = "https://elpa.gnu.org/packages/tiny-0.2.1.tar";
+          sha256 = "1cr73a8gba549ja55x0c2s554f3zywf69zbnd7v82jz5q1k9wd2v";
         };
         packageRequires = [];
         meta = {
@@ -2143,6 +2143,19 @@
         packageRequires = [ emacs hydra ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/vdiff.html";
+          license = lib.licenses.free;
+        };
+      }) {};
+    vigenere = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
+        pname = "vigenere";
+        version = "1.0";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/vigenere-1.0.el";
+          sha256 = "1i5s6h1nngcp74gf53dw9pvj5y0ywk9j8pyvkfr7gqq49bz22hmm";
+        };
+        packageRequires = [ emacs ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/vigenere.html";
           license = lib.licenses.free;
         };
       }) {};
