@@ -16954,9 +16954,10 @@ with pkgs;
 
   xiphos = callPackage ../applications/misc/xiphos {
     gconf = gnome2.GConf;
-    inherit (gnome2) gtkhtml libgtkhtml libglade scrollkeeper;
+    inherit (gnome2) libglade scrollkeeper;
+    gtkhtml = gnome2.gtkhtml4;
+    webkitgtk = webkitgtk217x;
     python = python27;
-    webkitgtk = webkitgtk24x-gtk2;
   };
 
   xournal = callPackage ../applications/graphics/xournal {
