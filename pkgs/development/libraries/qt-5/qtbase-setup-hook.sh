@@ -146,3 +146,10 @@ EOF
     export QMAKE="$NIX_QT5_TMP/bin/qmake"
 fi
 
+_qtShellCleanupHook () {
+    rm -fr $NIX_QT5_TMP
+}
+
+if [ -n "$IN_NIX_SHELL" ]; then
+    trap _qtShellCleanupHook EXIT
+fi
