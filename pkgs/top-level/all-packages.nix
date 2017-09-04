@@ -18202,29 +18202,9 @@ with pkgs;
     ynot = callPackage ../development/coq-modules/ynot {};
   };
 
-  mkCoqPackages_8_5 = self: let callPackage = newScope self; in rec {
-    inherit callPackage;
-    coq = coq_8_5;
-    coqPackages = coqPackages_8_5;
-
-    autosubst = callPackage ../development/coq-modules/autosubst {};
-    coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
-    coquelicot = callPackage ../development/coq-modules/coquelicot {};
-    dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
-    flocq = callPackage ../development/coq-modules/flocq {};
-    interval = callPackage ../development/coq-modules/interval {};
-    mathcomp = callPackage ../development/coq-modules/mathcomp { };
-    paco = callPackage ../development/coq-modules/paco {};
-    math-classes = callPackage ../development/coq-modules/math-classes { };
-    ssreflect = callPackage ../development/coq-modules/ssreflect { };
-    QuickChick = callPackage ../development/coq-modules/QuickChick {};
-    fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
-  };
-
-  mkCoqPackages_8_6 = self: let callPackage = newScope self; in rec {
-    inherit callPackage;
-    coq = coq_8_6;
-    coqPackages = coqPackages_8_6;
+  mkCoqPackages = self: coq: let callPackage = newScope self; in rec {
+    inherit callPackage coq;
+    coqPackages = self;
 
     autosubst = callPackage ../development/coq-modules/autosubst {};
     coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
@@ -18243,8 +18223,8 @@ with pkgs;
   };
 
   coqPackages_8_4 = mkCoqPackages_8_4 coqPackages_8_4;
-  coqPackages_8_5 = mkCoqPackages_8_5 coqPackages_8_5;
-  coqPackages_8_6 = mkCoqPackages_8_6 coqPackages_8_6;
+  coqPackages_8_5 = mkCoqPackages coqPackages_8_5 coq_8_5;
+  coqPackages_8_6 = mkCoqPackages coqPackages_8_6 coq_8_6;
   coqPackages = coqPackages_8_6;
   coq = coqPackages.coq;
 
