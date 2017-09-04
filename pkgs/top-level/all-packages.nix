@@ -94,7 +94,7 @@ with pkgs;
   cmark = callPackage ../development/libraries/cmark { };
 
   dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
-    inherit (haskellPackages) dhall-nix;
+    inherit dhall-nix;
   };
 
   diffPlugins = (callPackage ../build-support/plugins.nix {}).diffPlugins;
@@ -6211,6 +6211,16 @@ with pkgs;
   clojure = callPackage ../development/interpreters/clojure { };
 
   clooj = callPackage ../development/interpreters/clojure/clooj.nix { };
+
+  dhall = haskell.lib.justStaticExecutables haskellPackages.dhall;
+
+  dhall-nix = haskell.lib.justStaticExecutables haskellPackages.dhall-nix;
+
+  dhall-bash = haskell.lib.justStaticExecutables haskellPackages.dhall-bash;
+
+  dhall-json = haskell.lib.justStaticExecutables haskellPackages.dhall-json;
+
+  dhall-text = haskell.lib.justStaticExecutables haskellPackages.dhall-text;
 
   beam = callPackage ./beam-packages.nix { };
 
