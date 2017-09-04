@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "06jsf3rw6q4l1jrw1161h4vxa1xbvpry5x12d8sh5g7hjk88p77g";
+  outputHash = "19m6h9hvdb2p99yrh3pk8gagb8y4w6sd6k4k0ycxz6wj4q8ccggs";
 
   meta = with stdenv.lib; {
     homepage = http://upperbounds.net;
