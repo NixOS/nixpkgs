@@ -9116,7 +9116,9 @@ with pkgs;
 
   libmatchbox = callPackage ../development/libraries/libmatchbox { };
 
-  libmatheval = callPackage ../development/libraries/libmatheval { };
+  libmatheval = callPackage ../development/libraries/libmatheval {
+    guile = guile_2_0;
+  };
 
   libmatthew_java = callPackage ../development/libraries/java/libmatthew-java { };
 
