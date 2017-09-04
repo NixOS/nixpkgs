@@ -11,7 +11,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       { config, pkgs, ... }:
         {
           virtualisation.docker.enable = true;
-          virtualisation.docker.package = pkgs.docker;
+          virtualisation.docker.package = pkgs.docker-edge;
 
           users.users = {
             noprivs = {
@@ -42,6 +42,6 @@ import ./make-test.nix ({ pkgs, ...} : {
     $docker->succeed("docker stop sleeping");
 
     # Must match version twice to ensure client and server versions are correct
-    $docker->succeed('[ $(docker version | grep ${pkgs.docker.version} | wc -l) = "2" ]');
+    $docker->succeed('[ $(docker version | grep ${pkgs.docker-edge.version} | wc -l) = "2" ]');
   '';
 })
