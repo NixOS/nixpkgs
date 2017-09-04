@@ -3,12 +3,14 @@
 , openssl ? null
 , cyrus_sasl ? null
 , gpgme ? null
+, kerberos ? null
 , headerCache  ? true
 , sslSupport   ? true
 , saslSupport  ? true
 , gpgmeSupport ? true
 , imapSupport  ? true
 , withSidebar  ? true
+, gssSupport   ? true
 }:
 
 assert headerCache  -> gdbm       != null;
@@ -35,6 +37,7 @@ stdenv.mkDerivation rec {
     [ ncurses which perl ]
     ++ optional headerCache  gdbm
     ++ optional sslSupport   openssl
+    ++ optional gssSupport   kerberos
     ++ optional saslSupport  cyrus_sasl
     ++ optional gpgmeSupport gpgme;
 
@@ -58,6 +61,7 @@ stdenv.mkDerivation rec {
     # I set the value 'mailbox' because it is a default in the configure script
     "--with-homespool=mailbox"
   ] ++ optional sslSupport  "--with-ssl"
+    ++ optional gssSupport  "--with-gss"
     ++ optional saslSupport "--with-sasl";
 
   meta = {
