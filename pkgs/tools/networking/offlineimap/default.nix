@@ -21,7 +21,7 @@ pythonPackages.buildPythonApplication rec {
   doCheck = false;
 
   nativeBuildInputs = [ asciidoc libxml2 libxslt docbook_xml_xslt ];
-  propagatedBuildInputs = [ pythonPackages.six ];
+  propagatedBuildInputs = [ pythonPackages.six pythonPackages.kerberos ];
 
   postInstall = ''
     make -C docs man
