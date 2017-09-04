@@ -49,9 +49,6 @@ assert libelf != null -> zlib != null;
 # Make sure we get GNU sed.
 assert hostPlatform.isDarwin -> gnused != null;
 
-# Need c++filt on darwin
-assert hostPlatform.isDarwin -> targetPackages.stdenv.cc.bintools or null != null;
-
 # The go frontend is written in c++
 assert langGo -> langCC;
 
@@ -282,8 +279,18 @@ stdenv.mkDerivation ({
     ++ (optional (perl != null) perl)
     ++ (optional javaAwtGtk pkgconfig);
 
-  buildInputs = [ gmp mpfr libmpc libelf ]
-    ++ (optional (isl != null) isl)
+  # For building runtime libs
+  depsBuildTarget =
+    if hostPlatform == buildPlatform then [
+      targetPackages.stdenv.cc.bintools # newly-built gcc will be used
+    ] else assert targetPlatform == hostPlatform; [ # build != host == target
+      stdenv.cc
+    ];
+
+  buildInputs = [
+    gmp mpfr libmpc libelf
+    targetPackages.stdenv.cc.bintools # For linking code at run-time
+  ] ++ (optional (isl != null) isl)
     ++ (optional (zlib != null) zlib)
     ++ (optionals langJava [ boehmgc zip unzip ])
     ++ (optionals javaAwtGtk ([ gtk2 libart_lgpl ] ++ xlibs))

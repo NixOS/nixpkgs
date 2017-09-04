@@ -233,8 +233,18 @@ stdenv.mkDerivation ({
   nativeBuildInputs = [ texinfo which gettext ]
     ++ optional (perl != null) perl;
 
-  buildInputs = [ gmp mpfr libmpc libelf ]
-    ++ (optional (ppl != null) ppl)
+  # For building runtime libs
+  depsBuildTarget =
+    if hostPlatform == buildPlatform then [
+      targetPackages.stdenv.cc.bintools # newly-built gcc will be used
+    ] else assert targetPlatform == hostPlatform; [ # build != host == target
+      stdenv.cc
+    ];
+
+  buildInputs = [
+    gmp mpfr libmpc libelf
+    targetPackages.stdenv.cc.bintools # For linking code at run-time
+  ] ++ (optional (ppl != null) ppl)
     ++ (optional (cloogppl != null) cloogppl)
     ++ (optional (zlib != null) zlib)
     ++ (optional langJava boehmgc)
