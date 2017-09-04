@@ -1,4 +1,4 @@
-{ stdenv, pkgconfig, fetchFromGitHub
+{ stdenv, pkgconfig, fetchFromGitHub, fetchpatch
 , cmake, boost
 , portmidi, sqlite
 , freetype, libpng, pngpp, zlib
@@ -21,6 +21,17 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/lenmus/lenmus/commit/421760d84694a0e6e72d0e9b1d4fd30a7e129c6f.patch";
+      sha256 = "1z1wwh0pcr8w1zlr8swx99si9y2kxx5bmavgwvy6bvdhxgm58yqs";
+    })
+    (fetchpatch {
+      url = "https://github.com/lenmus/lenmus/commit/6613d20d4051effc782203c9c6d92962a3f66b5f.patch";
+      sha256 = "01vvzzpamv90jpqbbq1f2m2b4gb9xab9z70am8i41d90nqvg6agn";
+    })
+  ];
 
   buildInputs = [
     pkgconfig
