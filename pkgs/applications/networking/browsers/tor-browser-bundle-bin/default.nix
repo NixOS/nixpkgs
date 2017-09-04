@@ -299,7 +299,10 @@ stdenv.mkDerivation rec {
       \
       PULSE_SERVER="\''${PULSE_SERVER:-}" \
       PULSE_COOKIE="\''${PULSE_COOKIE:-}" \
+      \
       TOR_SKIP_LAUNCH="\''${TOR_SKIP_LAUNCH:-}" \
+      TOR_CONTROL_PORT="\''${TOR_CONTROL_PORT:-}" \
+      TOR_SOCKS_PORT="\''${TOR_SOCKS_PORT:-}" \
       \
       GST_PLUGIN_SYSTEM_PATH="${optionalString mediaSupport gstPluginsPath}" \
       GST_REGISTRY="/dev/null" \
