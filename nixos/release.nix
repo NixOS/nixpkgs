@@ -312,6 +312,7 @@ in rec {
   tests.virtualbox = callSubTests tests/virtualbox.nix { system = "x86_64-linux"; };
   tests.wordpress = callTest tests/wordpress.nix {};
   tests.xfce = callTest tests/xfce.nix {};
+  tests.xmonad = callTest tests/xmonad.nix {};
 
 
   /* Build a bunch of typical closures so that Hydra can keep track of
