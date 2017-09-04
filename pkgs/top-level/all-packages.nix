@@ -10703,6 +10703,11 @@ with pkgs;
     gst-plugins-base = gst_all_1.gst-plugins-base;
   };
 
+  webkitgtk217x = callPackage ../development/libraries/webkitgtk/2.17.nix {
+    harfbuzz = harfbuzz-icu;
+    gst-plugins-base = gst_all_1.gst-plugins-base;
+  };
+
   webkitgtk24x-gtk2 = webkitgtk24x-gtk3.override {
     withGtk2 = true;
     enableIntrospection = false;
