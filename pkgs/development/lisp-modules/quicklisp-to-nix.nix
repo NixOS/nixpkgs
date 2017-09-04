@@ -540,14 +540,6 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
-  "md5" = buildLispPackage
-    ((f: x: (x // (f x)))
-       (qlOverrides."md5" or (x: {}))
-       (import ./quicklisp-to-nix-output/md5.nix {
-         inherit fetchurl;
-       }));
-
-
   "cl-postgres" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."cl-postgres" or (x: {}))
@@ -614,6 +606,24 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."cl-anonfun" or (x: {}))
        (import ./quicklisp-to-nix-output/cl-anonfun.nix {
          inherit fetchurl;
+       }));
+
+
+  "md5" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."md5" or (x: {}))
+       (import ./quicklisp-to-nix-output/md5.nix {
+         inherit fetchurl;
+       }));
+
+
+  "clsql-uffi" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."clsql-uffi" or (x: {}))
+       (import ./quicklisp-to-nix-output/clsql-uffi.nix {
+         inherit fetchurl;
+           "clsql" = quicklisp-to-nix-packages."clsql";
+           "uffi" = quicklisp-to-nix-packages."uffi";
        }));
 
 
@@ -1928,6 +1938,28 @@ let quicklisp-to-nix-packages = rec {
          inherit fetchurl;
            "array-utils" = quicklisp-to-nix-packages."array-utils";
            "plump" = quicklisp-to-nix-packages."plump";
+       }));
+
+
+  "clsql-postgresql-socket" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."clsql-postgresql-socket" or (x: {}))
+       (import ./quicklisp-to-nix-output/clsql-postgresql-socket.nix {
+         inherit fetchurl;
+           "clsql" = quicklisp-to-nix-packages."clsql";
+           "md5" = quicklisp-to-nix-packages."md5";
+           "uffi" = quicklisp-to-nix-packages."uffi";
+       }));
+
+
+  "clsql-postgresql" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."clsql-postgresql" or (x: {}))
+       (import ./quicklisp-to-nix-output/clsql-postgresql.nix {
+         inherit fetchurl;
+           "clsql" = quicklisp-to-nix-packages."clsql";
+           "clsql-uffi" = quicklisp-to-nix-packages."clsql-uffi";
+           "uffi" = quicklisp-to-nix-packages."uffi";
        }));
 
 
