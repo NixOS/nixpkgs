@@ -1,0 +1,10 @@
+--- a/common/mk/cflags.mk.orig	2017-09-04 10:32:46.834540915 -0400
++++ b/common/mk/cflags.mk	2017-09-04 10:32:50.168528033 -0400
+@@ -98,6 +98,7 @@
+ CFLAGSBASE += -Wparentheses
+ # warn about missing declarations
+ CFLAGSBASE += -Wmissing-declarations
++CFLAGSBASE += -Wno-error=nonnull-compare
+ 
+ CFLAGS=$(CFLAGSBASE)
+ LDFLAGS=$(LDFLAGSBASE)

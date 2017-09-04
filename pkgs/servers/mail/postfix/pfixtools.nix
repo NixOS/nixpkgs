@@ -26,7 +26,8 @@ stdenv.mkDerivation {
 
   src = pfixtoolsSrc;
 
-  patches = [ ./0001-Fix-build-with-unbound-1.6.1.patch ];
+  patches = [ ./0001-Fix-build-with-unbound-1.6.1.patch
+              ./suppress-nonnull-compare-err.patch ];
 
   buildInputs = [git gperf pcre unbound libev tokyocabinet pkgconfig bash libsrs2];
 
@@ -49,5 +50,6 @@ stdenv.mkDerivation {
     license = with lib.licenses; [ bsd3 ];
     homepage = https://github.com/Fruneau/pfixtools;
     platforms = stdenv.lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jerith666 ];
   };
 }
