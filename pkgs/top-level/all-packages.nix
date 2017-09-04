@@ -11882,7 +11882,11 @@ with pkgs;
   crda = callPackage ../os-specific/linux/crda { };
 
   # Darwin package set
-  darwin = callPackages ./darwin-packages.nix { };
+  #
+  # Even though this is a set of packages not single package, use `callPackage`
+  # not `callPackages` so the per-package callPackages don't have their
+  # `.override` clobbered. C.F. `llvmPackages` which does the same.
+  darwin = callPackage ./darwin-packages.nix { };
 
   devicemapper = lvm2;
 
