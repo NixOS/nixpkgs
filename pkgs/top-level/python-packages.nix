@@ -8352,14 +8352,15 @@ in {
   };
 
   py3status = buildPythonPackage rec {
-    version = "3.0";
+    version = "3.6";
     name = "py3status-${version}";
     src = pkgs.fetchFromGitHub {
       owner = "ultrabug";
       repo = "py3status";
       rev = version;
-      sha256 = "1mnl0rfbnimcpp7q9hva0x9jfa58j4nc27r9kvaii8869kzssw48";
+      sha256 = "01qvrwgkphb0lr7g9dm0hncbxcds05kg4qgbsrvnc7d5j2vhfdkr";
     };
+    doCheck = false;
     propagatedBuildInputs = with self; [ requests ];
     prePatch = ''
       sed -i -e "s|\[\"acpi\"|\[\"${pkgs.acpi}/bin/acpi\"|" py3status/modules/battery_level.py
