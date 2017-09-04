@@ -1,0 +1,14 @@
+diff --git a/src/app/resources/browser/welcome.html b/src/app/resources/browser/welcome.html
+index afe9e2a..490a0fb 100644
+--- a/src/app/resources/browser/welcome.html
++++ b/src/app/resources/browser/welcome.html
+@@ -34,9 +34,6 @@
+     <div class="hero-foot">
+       <div class="container">
+         <div class="content has-text-centered">
+-          <div id="carbon" class="box">
+-            <script async type="text/javascript" src="https://cdn.carbonads.com/carbon.js?zoneid=1673&serve=C6AILKT&placement=zealdocsforwindowsorg" id="_carbonads_js"></script>
+-          </div>
+           <p>
+             <a class="icon" href="https://github.com/zealdocs/zeal">
+               <i class="fa fa-github"></i>
