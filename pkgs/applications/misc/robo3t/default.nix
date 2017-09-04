@@ -2,25 +2,25 @@
   freetype, xkeyboard_config, makeDesktopItem, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "robomongo-${version}";
-  version = "0.9.0";
+  name = "robo3t-${version}";
+  version = "1.1.1";
 
   src = fetchurl {
-    url = "https://download.robomongo.org/${version}/linux/robomongo-${version}-linux-x86_64-0786489.tar.gz";
-    sha256 = "1q8ahdz3afcw002p8dl2pybzkq4srk6bnikrz216yx1gswivdcad";
+    url = "https://download.robomongo.org/1.1.1/linux/robo3t-1.1.1-linux-x86_64-c93c6b0.tar.gz";
+    sha256 = "140cn80vg7c8vpdjasqi4b3kyqj4n033lcm3ikz5674x3jr7r5zs";
   };
 
   icon = fetchurl {
-    url = "https://github.com/Studio3T/robomongo/raw/${version}/trash/install/linux/robomongo.png";
+    url = "https://github.com/Studio3T/robomongo/raw/v1.1.1/trash/install/linux/robomongo.png";
     sha256 = "15li8536x600kkfkb3h6mw7y0f2ljkv951pc45dpiw036vldibv2";
   };
 
   desktopItem = makeDesktopItem {
-    name = "robomongo";
-    exec = "robomongo";
+    name = "robo3t";
+    exec = "robo3t";
     icon = icon;
     comment = "Query GUI for mongodb";
-    desktopName = "Robomongo";
+    desktopName = "Robo 3T";
     genericName = "MongoDB management tool";
     categories = "Development;IDE;mongodb;";
   };
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    BASEDIR=$out/lib/robomongo
+    BASEDIR=$out/lib/robo3t
 
     mkdir -p $BASEDIR/bin
     cp bin/* $BASEDIR/bin
@@ -56,13 +56,13 @@ stdenv.mkDerivation rec {
     cp $desktopItem/share/applications/* $out/share/applications
 
     mkdir -p $out/share/icons
-    cp ${icon} $out/share/icons/robomongo.png
+    cp ${icon} $out/share/icons/robo3t.png
 
-    patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 $BASEDIR/bin/robomongo
+    patchelf --set-interpreter ${stdenv.glibc}/lib/ld-linux-x86-64.so.2 $BASEDIR/bin/robo3t
 
     mkdir $out/bin
 
-    makeWrapper $BASEDIR/bin/robomongo $out/bin/robomongo \
+    makeWrapper $BASEDIR/bin/robo3t $out/bin/robo3t \
       --suffix LD_LIBRARY_PATH : ${ldLibraryPath} \
       --suffix QT_XKB_CONFIG_ROOT : ${xkeyboard_config}/share/X11/xkb
   '';
