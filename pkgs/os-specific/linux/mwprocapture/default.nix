@@ -16,14 +16,14 @@ let
 in
 stdenv.mkDerivation rec {
   name = "mwprocapture-1.2.${version}-${kernel.version}";
-  version = "3269";
+  version = "3589";
 
   src = fetchurl {
     url = "http://www.magewell.com/files/ProCaptureForLinux_${version}.tar.gz";
-    sha256 = "0i1y50mf559flhxgaxy2gdpa7dvpp12ix9xfzgxa61rc135x0im4";
+    sha256 = "1arwnwrq52rs8g9zfxw8saip40vc3201sf7qnbqd2p23h8vzwb8i";
   };
 
-  patches = [ ./linux_4_11_include_fix.patch ];
+  patches = [ ./linux_4_13_fix.patch ];
 
   preConfigure =
   ''
