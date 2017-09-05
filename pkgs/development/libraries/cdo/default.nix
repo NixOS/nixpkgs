@@ -7,8 +7,8 @@
 stdenv.mkDerivation rec {
   version = "1.7.2";
   name = "cdo-${version}";
-  
-  # Dependencies 
+
+  # Dependencies
   buildInputs = [ curl netcdf hdf5 ];
 
   src = fetchurl {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "4c43eba7a95f77457bfe0d30fb82382b3b5f2b0cf90aca6f0f0a008f6cc7e697";
   };
 
- # Configure phase 
+ # Configure phase
  configureFlags = [
    "--with-netcdf=${netcdf}" "--with-hdf5=${hdf5}"]
    ++ stdenv.lib.optional (enable_cdi_lib) "--enable-cdi-lib"
@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = https://code.zmaw.de/projects/cdo/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.ltavard ];
-    platforms = stdenv.lib.platforms.linux;
-    };
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
+  };
 }
