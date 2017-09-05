@@ -16457,41 +16457,14 @@ in {
   };
 
 
-  prompt_toolkit = buildPythonPackage rec {
-    name = "prompt_toolkit-${version}";
-    version = "1.0.14";
+  prompt_toolkit = callPackage ../development/python-modules/prompt_toolkit { };
 
-    src = pkgs.fetchurl {
-      sha256 = "cc66413b1b4b17021675d9f2d15d57e640b06ddfd99bb724c73484126d22622f";
-      url = "mirror://pypi/p/prompt_toolkit/${name}.tar.gz";
-    };
-    checkPhase = ''
-      rm prompt_toolkit/win32_types.py
-      py.test -k 'not test_pathcompleter_can_expanduser'
-    '';
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ docopt six wcwidth pygments ];
-
-    meta = {
-      description = "Python library for building powerful interactive command lines";
-      longDescription = ''
-        prompt_toolkit could be a replacement for readline, but it can be
-        much more than that. It is cross-platform, everything that you build
-        with it should run fine on both Unix and Windows systems. Also ships
-        with a nice interactive Python shell (called ptpython) built on top.
-      '';
-      homepage = https://github.com/jonathanslenders/python-prompt-toolkit;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ nckx ];
-    };
-  };
-  prompt_toolkit_52 = self.prompt_toolkit.override(self: rec {
-    name = "prompt_toolkit-${version}";
+  prompt_toolkit_52 = self.prompt_toolkit.overridePythonAttrs(oldAttrs: rec {
+    name = "${oldAttrs.pname}-${version}";
     version = "0.52";
-    src = pkgs.fetchurl {
+    src = oldAttrs.src.override {
+      inherit version;
       sha256 = "00h9ldqmb33nhg2kpks7paldf3n3023ipp124alwp96yz16s7f1m";
-      url = "mirror://pypi/p/prompt_toolkit/${name}.tar.gz";
     };
 
     # No tests included in archive
