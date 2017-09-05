@@ -211,7 +211,10 @@ self: super: builtins.intersectAttrs super {
 
   # wxc supports wxGTX >= 3.0, but our current default version points to 2.8.
   # http://hydra.cryp.to/build/1331287/log/raw
-  wxc = (addBuildDepend super.wxc self.split).override { wxGTK = pkgs.wxGTK30; };
+  wxc = (overrideCabal super.wxc (drv: {
+      buildDepends = (drv.buildDepends or []) ++ [self.split];
+      postInstall = "cp -v dist/build/libwxc.so.0.92.3.0 $lib/lib/libwxc.so";
+    })).override { wxGTK = pkgs.wxGTK30; };
   wxcore = super.wxcore.override { wxGTK = pkgs.wxGTK30; };
 
   # Test suite wants to connect to $DISPLAY.
@@ -488,5 +491,47 @@ self: super: builtins.intersectAttrs super {
 
   # Without this override, the builds lacks pkg-config.
   opencv-extra = addPkgconfigDepend super.opencv-extra (pkgs.opencv3.override { enableContrib = true; });
+
+  # Alex has some weird files in /usr/share that create a cyclic ref with
+  # its bin dir.
+  alex = hasNoBinOutput super.alex;
+
+  # Disable separate bin outputs for these specific packages that break with it.
+  H = hasNoBinOutput super.H;
+  cryptol = hasNoBinOutput super.cryptol;
+  sproxy = hasNoBinOutput super.sproxy;
+  sproxy2 = hasNoBinOutput super.sproxy2;
+  sproxy-web = hasNoBinOutput super.sproxy-web;
+  juandelacosa = hasNoBinOutput super.juandelacosa;
+  mywatch = hasNoBinOutput super.mywatch;
+  sugarhaskell = hasNoBinOutput super.sugarhaskell;
+  zerobin = hasNoBinOutput super.zerobin;
+
+  git-annex = overrideCabal super.git-annex (drv: {
+    enableSeparateBinOutput = false;
+    enableSeparateEtcOutput = false;
+  });
+
+  # Override a number of packages with specific references to $out in their
+  # derivations
+  stack = overrideCabal super.stack (drv: {
+    postInstall = ''
+      exe=$bin/bin/stack
+      mkdir -p $bin/share/bash-completion/completions
+      $exe --bash-completion-script $exe >$bin/share/bash-completion/completions/stack
+    '';
+  });
+  Agda = overrideCabal super.Agda (drv: {
+    postInstall = ''
+      files=("$out/share/"*"-ghc-"*"/Agda-"*"/lib/prim/Agda/"{Primitive.agda,Builtin"/"*.agda})
+      for f in "''${files[@]}" ; do
+        $bin/bin/agda $f
+      done
+      for f in "''${files[@]}" ; do
+        $bin/bin/agda -c --no-main $f
+      done
+      $bin/bin/agda-mode compile
+    '';
+  });
 
 }

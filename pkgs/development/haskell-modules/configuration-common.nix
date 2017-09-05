@@ -862,6 +862,7 @@ self: super: {
   # Don't install internal mkReadme tool.
   hastache = overrideCabal super.hastache (drv: {
     doCheck = false;
+    enableSeparateBinOutput = false;
     postInstall = "rm $out/bin/mkReadme && rmdir $out/bin";
   });
 
@@ -899,4 +900,8 @@ self: super: {
     sha256 = "1vss7b99zrhw3r29krl1b60r4qk0m2mpwmrz8q8zdxrh33hb8pd7";
   });
 
+  # Has extra data files which are referred to from the binary output,
+  # creating a store reference cycle. Putting data in separate output
+  # solves the problem.
+  happy = overrideCabal super.happy (drv: { enableSeparateDataOutput = true; });
 }
