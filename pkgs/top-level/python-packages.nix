@@ -1222,6 +1222,28 @@ in {
 
   backports_unittest-mock = callPackage ../development/python-modules/backports_unittest-mock {};
 
+  backports_weakref = buildPythonPackage rec {
+    name = "backports.weakref-${version}";
+    version = "1.0rc1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/b/backports.weakref/${name}.tar.gz";
+      sha256 = "14i8m3lspykdfpzf50grij3z286j9q8f32f2bnwdicv659qvy4w8";
+    };
+
+    buildInputs = with self; [ setuptools_scm ];
+
+    checkPhase = ''
+      ${python.interpreter} -m unittest discover
+    '';
+
+    meta = {
+      homepage = "https://github.com/pjdelport/backports.weakref";
+      license = licenses.psfl;
+      description = "Backport of new features in Python's weakref module";
+    };
+  };
+
   babelfish = buildPythonPackage rec {
     version = "0.5.5";
     name = "babelfish-${version}";
