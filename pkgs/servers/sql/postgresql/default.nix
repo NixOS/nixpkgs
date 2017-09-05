@@ -92,9 +92,9 @@ let
 in {
 
   postgresql93 = common {
-    version = "9.3.17";
+    version = "9.3.19";
     psqlSchema = "9.3";
-    sha256 = "9c03e5f280cfe9bd202fa01af773eb146abd8ab3065f7279d574c568f6948dbe";
+    sha256 = "1d9gmi1psg4aa6h6ylvsrdm5jnnb7p36pn4h2qrvl9z9v4n8g7pv";
   };
 
   postgresql94 = common {
