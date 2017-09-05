@@ -30,12 +30,6 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional enableFB "--with-fb"
     ++ stdenv.lib.optional enableDirectFB "--with-directfb";
 
-  crossAttrs = {
-    preConfigure = ''
-      export CC=$crossConfig-gcc
-    '';
-  };
-
   meta = with stdenv.lib; {
     homepage = http://links.twibright.com/;
     description = "A small browser with some graphics support";
