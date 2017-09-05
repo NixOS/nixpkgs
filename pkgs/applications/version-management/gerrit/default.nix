@@ -11,10 +11,11 @@ stdenv.mkDerivation rec {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "1wg7bbhwgi9sxn7skxb9gwaydq9jzpdhglwgq5kihj7r269fmr4k";
+  outputHash = "1j1afxv7yj2fxaw0wy8kmxi6sl9fwj8xsxs5kzg9qz5gzayb26kp";
 
   buildCommand = ''
-    install -D ${src} "$out"/webapps/gerrit-${version}.war
+    mkdir -p "$out"/webapps/
+    ln -s ${src} "$out"/webapps/gerrit-${version}.war
   '';
 
   meta = with stdenv.lib; {
