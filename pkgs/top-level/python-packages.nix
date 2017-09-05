@@ -1998,6 +1998,24 @@ in {
     };
   };
 
+  # needed for tensorflow-tensorboard
+  bleach_1_5_0 = self.bleach.overridePythonAttrs rec {
+    version = "1.5.0";
+    pname = "bleach";
+    name = "${pname}-${version}";
+
+    propagatedBuildInputs = with self; [ six html5lib_0_9999999 ];
+
+    preCheck = ''
+      sed -i 's,pytest==[0-9.]*,pytest,' setup.py
+    '';
+
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0rdwb3piwwl30wfqg4ywm07276w7090xfq71lb5d6k5mk62pb3lp";
+    };
+  };
+
   blinker = buildPythonPackage rec {
     name = "blinker-${version}";
     version = "1.4";
