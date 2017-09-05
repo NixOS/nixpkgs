@@ -16,9 +16,9 @@ let
   #    where the ultimate "_" (before the version) is changed to a "-".
   binDists = {
     x86_64-linux = let bdist = bdistForArch { inUrl = "linux64"; inTar = "x64"; }; in {
-      alpha    = bdist { sha256 = "1m2r0n99ngqq47s9fzr09d347i15an6x9v1qlij8yf8w7lyrdy4z"; fetcher = authenticatedFetch; };
-      headless = bdist { sha256 = "17x0dlmfd7jwmpmn5i8wag28rl01iysqz3ri6g6msxjnvj5l6byn"; };
-      demo     = bdist { sha256 = "03nwn4838yhqq0r76pf2m4wxi32rsq0knsxmq3qq4ycji89q1dyc"; };
+      alpha    = bdist { sha256 = "0phikwv00mbwpz4207wm6gz6blarm0b9p1f013ha2w5g7c2dxq4s"; fetcher = authenticatedFetch; };
+      headless = bdist { sha256 = "1m170cl8ji6k3d3jm6n48wx3b7xfsxp4wkaixh0qszaqzafsglp0"; };
+      demo     = bdist { sha256 = "03nwn4838yhqq0r76pf2m4wxi32rsq0knsxmq3qq4ycji89q1dyc"; version = "0.15.33"; };
     };
     i686-linux = let bdist = bdistForArch { inUrl = "linux32"; inTar = "i386"; }; in {
       alpha    = bdist { sha256 = "0nnfkxxqnywx1z05xnndgh71gp4izmwdk026nnjih74m2k5j086l"; version = "0.14.23"; nameMut = asGz; };
@@ -29,7 +29,7 @@ let
   actual = binDists.${stdenv.system}.${releaseType};
 
   bdistForArch = arch: { sha256 ? null
-                       , version ? "0.15.33"
+                       , version ? "0.15.34"
                        , fetcher ? fetchurl
                        , nameMut ? x: x
                        }:
