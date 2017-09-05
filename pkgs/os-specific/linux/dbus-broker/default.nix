@@ -22,19 +22,11 @@ stdenv.mkDerivation rec {
       --replace "dep_systemd.get_pkgconfig_variable('systemduserunitdir')"   "'$out/lib/systemd/user'"
   '';
 
-  preConfigure = ''
-    mkdir build
-    meson --prefix "$out" --buildtype=release build/
+  postInstall = ''
+    install -Dm644 ../README $out/share/doc/dbus-broker/README
   '';
 
-  buildPhase = "ninja -C build";
-
-  installPhase = ''
-    ninja -C build install
-    install -Dm644 README $out/share/doc/dbus-broker/README
-  '';
-
-  checkPhase = "ninja -C build test";
+  checkPhase = "ninja test";
 
   doCheck = true;
 
