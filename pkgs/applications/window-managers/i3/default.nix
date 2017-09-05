@@ -49,6 +49,8 @@ stdenv.mkDerivation rec {
     for program in $out/bin/i3-sensible-*; do
       sed -i 's/which/command -v/' $program
     done
+
+    install -vD -t $out/share/man/man1 man/*.1
   '';
 
   separateDebugInfo = true;
