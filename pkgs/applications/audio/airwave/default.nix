@@ -16,11 +16,11 @@ let
   stdenv_multi = overrideCC stdenv gcc_multi;
 
   vst-sdk = stdenv.mkDerivation rec {
-    name = "vstsdk366_27_06_2016_build_61";
+    name = "vstsdk367_03_03_2017_build_352";
     src = requireFile {
       name = "${name}.zip";
       url = "http://www.steinberg.net/en/company/developers.html";
-      sha256 = "05gsr13bpi2hhp34rvhllsvmn44rqvmjdpg9fsgfzgylfkz0kiki";
+      sha256 = "5e8f1058177472f6dd3b5c1e7f8e0e76f37c5f751fed65936e04ff2441ce831a";
     };
     nativeBuildInputs = [ unzip ];
     installPhase = "cp -r . $out";
