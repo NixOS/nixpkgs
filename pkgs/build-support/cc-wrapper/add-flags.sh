@@ -15,6 +15,9 @@ var_templates_bool=(
     NIX+ENFORCE_NO_NATIVE
 )
 
+# Include the default stdlib unless is defined NIX_CXXSTDLIB_COMPILE.
+export NIX_CXXSTDLIB_COMPILE=${NIX_CXXSTDLIB_COMPILE-@default_cxx_stdlib_compile@}
+
 # Accumulate infixes for taking in the right input parameters. See setup-hook
 # for details.
 declare -a role_infixes=()
