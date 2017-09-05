@@ -2109,6 +2109,7 @@ in {
   bokeh = buildPythonPackage rec {
     name = "bokeh-${version}";
     version = "0.12.3";
+  bkcharts = callPackage ../development/python-modules/bkcharts { };
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/bokeh/${name}.tar.gz";
