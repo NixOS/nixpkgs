@@ -32,7 +32,10 @@ buildPythonApplication rec {
       --replace "rebulk==0.8.2" "rebulk" \
       --replace "cherrypy==10.2.2" "cherrypy" \
       --replace "portend==1.8" "portend" \
-      --replace "sqlalchemy==1.1.10" "sqlalchemy"
+      --replace "sqlalchemy==1.1.10" "sqlalchemy" \
+      --replace "zxcvbn-python==4.4.15" "zxcvbn-python" \
+      --replace "flask-cors==3.0.2" "flask-cors" \
+      --replace "certifi==2017.4.17" "certifi"
   '';
 
   checkPhase = ''
