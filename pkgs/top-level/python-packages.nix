@@ -2926,6 +2926,8 @@ in {
     };
   };
 
+  click-plugins = callPackage ../development/python-modules/click-plugins {};
+
   click-threading = buildPythonPackage rec {
     version = "0.4.2";
     name = "click-threading-${version}";
@@ -2952,6 +2954,8 @@ in {
       maintainers = with maintainers; [ ];
     };
   };
+
+  cligj = callPackage ../development/python-modules/cligj { };
 
   clepy = buildPythonPackage rec {
     name = "clepy-0.3.20";
@@ -8711,6 +8715,8 @@ in {
     };
   });
 
+  descartes = callPackage ../development/python-modules/descartes { };
+
   distutils_extra = buildPythonPackage rec {
     name = "distutils-extra-${version}";
     version = "2.39";
@@ -9602,6 +9608,8 @@ in {
     };
   };
 
+  fiona = callPackage ../development/python-modules/fiona { gdal = pkgs.gdal; };
+
   flake8 = callPackage ../development/python-modules/flake8 { };
 
   flake8-blind-except = callPackage ../development/python-modules/flake8-blind-except { };
@@ -10391,6 +10399,8 @@ in {
     propagatedBuildInputs = with self; [ gevent ];
 
   };
+
+  geopandas = callPackage ../development/python-modules/geopandas { };
 
   gevent-websocket = buildPythonPackage rec {
     name = "gevent-websocket-0.9.3";
@@ -20986,40 +20996,7 @@ in {
     };
   };
 
-  shapely = buildPythonPackage rec {
-    name = "Shapely-${version}";
-    version = "1.5.15";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/S/Shapely/${name}.tar.gz";
-      sha256 = "0lfqxb3kpdn0g9zzlhzg79yc8iyy4fpsk0p5nd80gar1mmhr8pg7";
-    };
-
-    buildInputs = with self; [ pkgs.geos pkgs.glibcLocales pytest cython ];
-
-    propagatedBuildInputs = with self; [ numpy ];
-
-    preConfigure = ''
-      export LANG="en_US.UTF-8";
-    '';
-
-    patchPhase = ''
-      sed -i "s|_lgeos = load_dll('geos_c', fallbacks=.*)|_lgeos = load_dll('geos_c', fallbacks=['${pkgs.geos}/lib/libgeos_c.so'])|" shapely/geos.py
-    '';
-
-    # tests/test_voctorized fails because the vectorized extension is not
-    # available in when running tests
-    checkPhase = ''
-      py.test --ignore tests/test_vectorized.py
-    '';
-
-    meta = {
-      description = "Geometric objects, predicates, and operations";
-      homepage = "https://pypi.python.org/pypi/Shapely/";
-    };
-  };
-
-
+  shapely = callPackage ../development/python-modules/shapely { };
 
   sopel = buildPythonPackage rec {
     name = "sopel-6.3.1";
