@@ -4449,6 +4449,8 @@ with pkgs;
     w3m = w3m-batch;
   };
 
+  netalyzr = callPackage ../tools/networking/netalyzr { };
+
   swaks = callPackage ../tools/networking/swaks { };
 
   swiften = callPackage ../development/libraries/swiften { };
