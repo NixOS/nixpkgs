@@ -1,7 +1,7 @@
 { stdenv, nixUnstable, perlPackages, buildEnv, releaseTools, fetchFromGitHub
 , makeWrapper, autoconf, automake, libtool, unzip, pkgconfig, sqlite, libpqxx
 , gitAndTools, mercurial, darcs, subversion, bazaar, openssl, bzip2, libxslt
-, guile, perl, postgresql92, aws-sdk-cpp, nukeReferences, git, boehmgc
+, guile, perl, postgresql, aws-sdk-cpp, nukeReferences, git, boehmgc
 , docbook_xsl, openssh, gnused, coreutils, findutils, gzip, lzma, gnutar
 , rpm, dpkg, cdrkit, fetchpatch, pixz }:
 
@@ -78,7 +78,7 @@ in releaseTools.nixBuild rec {
       gitAndTools.topGit mercurial darcs subversion bazaar openssl bzip2 libxslt
       guile # optional, for Guile + Guix support
       perlDeps perl nixUnstable
-      postgresql92 # for running the tests
+      postgresql # for running the tests
       (lib.overrideDerivation (aws-sdk-cpp.override {
         apis = ["s3"];
         customMemoryManagement = false;
