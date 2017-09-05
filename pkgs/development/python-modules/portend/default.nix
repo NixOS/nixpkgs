@@ -18,6 +18,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Monitor TCP ports for bound or unbound states";
     homepage = https://github.com/jaraco/portend;
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
   };
 }

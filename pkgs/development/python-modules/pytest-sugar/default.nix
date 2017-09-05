@@ -15,6 +15,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "A plugin that changes the default look and feel of py.test";
     homepage = https://github.com/Frozenball/pytest-sugar;
-    license = lib.licenses.bsd3;
+    license = licenses.bsd3;
   };
 }

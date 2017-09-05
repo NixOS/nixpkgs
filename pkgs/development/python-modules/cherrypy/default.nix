@@ -20,6 +20,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     homepage = "http://www.cherrypy.org";
     description = "A pythonic, object-oriented HTTP framework";
-    license = licenses.mit.bsd3;
+    license = licenses.bsd3;
   };
 }

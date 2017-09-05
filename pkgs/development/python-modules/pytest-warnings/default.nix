@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest }:
+{ lib, buildPythonPackage, fetchPypi, pytest }:
 
 buildPythonPackage rec {
   name = "${pname}-${version}";
@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pytest ];
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Plugin to list Python warnings in pytest report";
     homepage = github.com/fschulze/pytest-warnings;
     license = lib.licenses.mit;
