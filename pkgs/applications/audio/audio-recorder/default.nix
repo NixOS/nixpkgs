@@ -8,17 +8,15 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "audio-recorder-${version}";
-  version = "1.9.4";
+  version = "1.9.7";
 
   src = fetchurl {
     name = "${name}-zesty.tar.gz";
     url = "${meta.homepage}/+archive/ubuntu/ppa/+files/audio-recorder_${version}%7Ezesty.tar.gz";
-    sha256 = "062bad38cz4fqzv418wza0x8sa4m5mqr3xsisrr1qgkqj9hg1f6x";
+    sha256 = "163c0vs5qj72y62731yp6sl6s0indh2szhjg02mxigv9b68dx89c";
   };
 
   nativeBuildInputs = [ pkgconfig intltool autoconf wrapGAppsHook ];
-
-  patches = [ ./icon-names.diff ];
 
   buildInputs = with gst_all_1; [
     glib dbus gtk3 librsvg libdbusmenu-gtk3 libappindicator-gtk3 (stdenv.lib.getLib gnome3.dconf)

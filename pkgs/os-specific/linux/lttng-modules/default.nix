@@ -29,9 +29,7 @@ stdenv.mkDerivation rec {
     license = with licenses; [ lgpl21 gpl2 mit ];
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
-    broken =
-      (builtins.compareVersions kernel.version "3.18" == -1) ||
-      (kernel.features.chromiumos or false);
+    broken = builtins.compareVersions kernel.version "3.18" == -1;
   };
 
 }

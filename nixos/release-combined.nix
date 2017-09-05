@@ -91,6 +91,8 @@ in rec {
         (all nixos.tests.keymap.neo)
         (all nixos.tests.keymap.qwertz)
         (all nixos.tests.plasma5)
+        (all nixos.tests.kernel-latest)
+        (all nixos.tests.kernel-lts)
         #(all nixos.tests.lightdm)
         (all nixos.tests.login)
         (all nixos.tests.misc)

@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
     popd
   '';
 
+  patches = [
+    ./gcc6.patch
+  ];
+
   buildInputs = [ cmake boost ogre mygui ois SDL2 libvorbis pkgconfig 
     makeWrapper enet libXcursor bullet openal
   ];
