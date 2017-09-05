@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "15q2kkrv4mfsivfdzjgpxr7s2amw7d501q2ayjl3ff4vmvfn5516";
   };
 
-  buildInputs = [ pkgconfig gettext gtk2 gconf curl libexif sqlite libxml2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gettext gtk2 gconf curl libexif sqlite libxml2 ];
 
   # bogus includes fail with newer library version
   postPatch = ''

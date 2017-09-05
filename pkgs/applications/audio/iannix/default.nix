@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ qmake ];
-  buildInputs = [ alsaLib pkgconfig qtbase qtscript ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ alsaLib qtbase qtscript ];
 
   qmakeFlags = [ "PREFIX=/" ];
 

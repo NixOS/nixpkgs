@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "1rvrxgb131snv9r6ksgzmd74rd9z7q46bhky0zazz7dwqqywffcp";
   };
 
-  buildInputs = [ pkgconfig libtool autoconf automake cppunit openssl libsigcxx zlib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libtool autoconf automake cppunit openssl libsigcxx zlib ];
 
   preConfigure = "./autogen.sh";
 

@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "cfa880573941f37868269bcc443a09fecd2a141a78556383d2213f6c9f45ddd9";
   };
 
-  buildInputs = [ pkgconfig pure ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ pure ];
   makeFlags = "libdir=$(out)/lib prefix=$(out)/";
 
   meta = {

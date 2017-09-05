@@ -49,7 +49,8 @@ in stdenv.mkDerivation ({
 
   nativeBuildInputs = [ autoreconfHook makeWrapper perl ];
 
-  buildInputs = [ gnum4 ncurses openssl autoreconfHook libxslt libxml2 ]
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ gnum4 ncurses openssl libxslt libxml2 ]
     ++ optionals wxSupport wxPackages2
     ++ optionals odbcSupport odbcPackages
     ++ optionals javacSupport javacPackages

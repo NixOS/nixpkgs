@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "1sfhicmxppkvdd4z9klfn63snb71gr9hff6xij1gzk94xg6m0ycc";
   };
 
-  buildInputs = [ autoreconfHook pkgconfig fuse ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ fuse ];
 
   meta = {
     description = "Automounter in userspace";

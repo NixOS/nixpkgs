@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "074px4ygmv4ydy2pqwxwnz17f0hfswqkz5kc9qfz0iby3h5i3fyl";
   };
 
-  buildInputs = [ autoreconfHook openssl protobufc libconfig ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ openssl protobufc libconfig ];
 
   configureFlags = [
     "--with-ssl=openssl"

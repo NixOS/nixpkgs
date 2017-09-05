@@ -11,6 +11,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [ python pkgconfig popt atk gtk libX11 libICE libXtst libXi
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ python popt atk gtk libX11 libICE libXtst libXi
                   intltool libbonobo ORBit2 GConf dbus_glib ];
 }

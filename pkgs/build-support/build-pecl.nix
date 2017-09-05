@@ -15,7 +15,8 @@ stdenv.mkDerivation (args // {
 
   inherit src;
 
-  buildInputs = [ php autoreconfHook ] ++ buildInputs;
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ php ] ++ buildInputs;
 
   makeFlags = [ "EXTENSION_DIR=$(out)/lib/php/extensions" ] ++ makeFlags;
 

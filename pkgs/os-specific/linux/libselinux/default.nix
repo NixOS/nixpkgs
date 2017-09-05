@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "0yqg73ns97jwjh1iyv0jr5qxb8k5sqq5ywfkx11lzfn5yj8k0126";
   };
 
-  buildInputs = [ pkgconfig libsepol pcre ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libsepol pcre ]
              ++ optionals enablePython [ swig python ];
 
   # Avoid this false warning:

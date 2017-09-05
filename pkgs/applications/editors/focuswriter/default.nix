@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1i58jxbiy95ijf81g8c3gwxhcg3irzssna3wv7vhrd57g4lcfj0w";
   };
 
-  buildInputs = [ qt4 qmake4Hook pkgconfig hunspell ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ qt4 qmake4Hook hunspell ];
   
   qmakeFlags = [ "PREFIX=/" ];
 

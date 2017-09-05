@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
               then [ ./sdcv.cpp.patch-darwin ./utils.hpp.patch ]
               else [ ./sdcv.cpp.patch ] );
 
-  buildInputs = [ pkgconfig glib gettext ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib gettext ];
 
   preBuild = ''
     sed -i 's/guint32 page_size/size_t page_size/' src/lib/lib.cpp

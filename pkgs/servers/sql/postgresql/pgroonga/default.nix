@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "07afgwll8nxfb7ziw3qrvw0ryjjw3994vj2f6alrjwpg7ynb46ag";
   };
 
-  buildInputs = [ postgresql pkgconfig libmsgpack groonga ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ postgresql libmsgpack groonga ];
 
   makeFlags = [ "HAVE_MSGPACK=1" ];
 

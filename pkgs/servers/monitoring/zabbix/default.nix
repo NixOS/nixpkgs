@@ -29,7 +29,8 @@ in
 
     configureFlags = "--enable-agent --enable-server --with-pgsql --with-libcurl";
 
-    buildInputs = [ pkgconfig postgresql curl openssl zlib ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ postgresql curl openssl zlib ];
 
     postInstall =
       ''

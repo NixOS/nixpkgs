@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = "substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file";
 
-  buildInputs = [ pkgconfig gtk3 intltool itstool glib appdata-tools
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk3 intltool itstool glib appdata-tools
                   gnome3.yelp_tools libxml2 file desktop_file_utils
                   gnome3.gsettings_desktop_schemas makeWrapper ];
 

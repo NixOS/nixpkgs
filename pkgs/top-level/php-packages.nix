@@ -91,7 +91,8 @@ let
       "--with-libmemcached-dir=${pkgs.libmemcached}"
     ];
 
-    buildInputs = with pkgs; [ pkgconfig cyrus_sasl zlib ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = with pkgs; [ cyrus_sasl zlib ];
   };
 
   # Not released yet
@@ -109,7 +110,8 @@ let
       "--with-libmemcached-dir=${pkgs.libmemcached}"
     ];
 
-    buildInputs = with pkgs; [ pkgconfig cyrus_sasl zlib ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = with pkgs; [ cyrus_sasl zlib ];
   };
 
   pcs = buildPecl rec {
@@ -197,7 +199,8 @@ let
       "--with-zmq=${pkgs.zeromq}"
     ];
 
-    buildInputs = [ pkgs.pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ pkgs. ];
   };
 
   # No support for PHP 7 and probably never will be

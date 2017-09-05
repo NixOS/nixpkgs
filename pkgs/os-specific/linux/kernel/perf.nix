@@ -24,7 +24,8 @@ stdenv.mkDerivation {
   # binutils is required for libbfd.
   nativeBuildInputs = [ asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt
       flex bison libiberty libaudit makeWrapper ];
-  buildInputs = [ elfutils python perl newt slang pkgconfig libunwind binutils zlib ] ++
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ elfutils python perl newt slang libunwind binutils zlib ] ++
     stdenv.lib.optional withGtk gtk2;
 
   # Note: we don't add elfutils to buildInputs, since it provides a

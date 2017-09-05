@@ -18,7 +18,8 @@ in stdenv.mkDerivation rec {
     ./vte-0.28.2-limit-arguments.patch
   ];
 
-  buildInputs = [ intltool pkgconfig glib gtk ncurses ] ++
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool glib gtk ncurses ] ++
                 stdenv.lib.optionals pythonSupport [python pygtk];
 
   configureFlags = ''

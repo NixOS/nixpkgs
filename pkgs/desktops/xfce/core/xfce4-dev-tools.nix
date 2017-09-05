@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1jxmyp80pwbfgmqmwpjxs7z5dmm6pyf3qj62z20xy44izraadqz2";
   };
 
-  buildInputs = [ pkgconfig glib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib ];
 
   # not needed to build it but to use it
   propagatedBuildInputs = [ autoconf automake libtool intltool ];

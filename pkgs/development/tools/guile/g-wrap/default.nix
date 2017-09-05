@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
 
   # Note: Glib support is optional, but it's quite useful (e.g., it's
   # used by Guile-GNOME).
-  buildInputs = [ guile pkgconfig glib guile_lib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ guile glib guile_lib ];
 
   propagatedBuildInputs = [ libffi ];
 

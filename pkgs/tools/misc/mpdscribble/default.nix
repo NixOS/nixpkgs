@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0hgb7xh3w455m00lpldwkyrc5spjn3q1pl2ry3kf7w3hiigjpphw";
   };
 
-  buildInputs = [ mpd_clientlib curl glib pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ mpd_clientlib curl glib ];
 
   preConfigure = ''
     export LIBMPDCLIENT_LIBS=${mpd_clientlib}/lib/libmpdclient.so.${mpd_clientlib.majorVersion}.0.${mpd_clientlib.minorVersion}

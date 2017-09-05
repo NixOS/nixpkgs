@@ -20,7 +20,8 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  buildInputs = [ trousers pkgconfig gtk3 gtkspell3 ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ trousers gtk3 gtkspell3 ]
     ++ stdenv.lib.optional isx86_64 dclxvi
     ++ stdenv.lib.optionals gui [ wrapGAppsHook ];
   buildFlags = stdenv.lib.optionalString (!gui) "-tags nogui";

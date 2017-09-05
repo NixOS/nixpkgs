@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [automake autoconf libtool ];
 
-  buildInputs = [ boost pkgconfig openssl zlib python libiconv geoip ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ boost openssl zlib python libiconv geoip ];
 
   preConfigure = "./autotool.sh";
 

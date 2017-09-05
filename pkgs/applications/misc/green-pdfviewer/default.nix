@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0d0lv33flhgsxhc77kfp2avdz5gvml04r8l1j95yjz2rr096lzlj";
   };
 
-  buildInputs = [ poppler pkgconfig gdk_pixbuf SDL gtk2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ poppler gdk_pixbuf SDL gtk2 ];
 
   patches = [
     ./gdk-libs.patch

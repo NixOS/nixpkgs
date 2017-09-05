@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
       sha256 = "10vspwsgr8pwf3qp2bviw6b2l8prgdiswgv7qiqiyr0h1mmk487y";
     };
     patches = [ ./libmpd-11.8.17-remove-strndup.patch ];
-    buildInputs = [ pkgconfig glib ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ glib ];
   };
 
   src = fetchurl {

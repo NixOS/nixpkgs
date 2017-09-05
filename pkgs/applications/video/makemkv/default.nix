@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "ab028ba05364f2d899b76e6a7392c9ef555379de2ef4732e1de27c23fd78d235";
   };
 
-  buildInputs = [openssl qt4 mesa zlib pkgconfig libav];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [openssl qt4 mesa zlib libav];
 
   libPath = stdenv.lib.makeLibraryPath [stdenv.cc.cc openssl mesa qt4 zlib ]
           + ":" + stdenv.cc.cc + "/lib64";

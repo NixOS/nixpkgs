@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
 
   configurePhase = "scons config";
 
-  buildInputs = [ gettext glib json_glib libelf pkgconfig scons sphinx utillinux ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gettext glib json_glib libelf scons sphinx utillinux ];
 
   buildPhase = "scons";
 

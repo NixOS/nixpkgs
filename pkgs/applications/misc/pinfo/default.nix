@@ -10,7 +10,8 @@ stdenv.mkDerivation {
     sha256 = "0p8wyrpz9npjcbx6c973jspm4c3xz4zxx939nngbq49xqah8088j";
   };
 
-  buildInputs = [ autoreconfHook gettext texinfo ncurses readline ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ gettext texinfo ncurses readline ];
 
   configureFlags = [ "--with-curses=${ncurses.dev}" "--with-readline=${readline.dev}" ];
 

@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     substituteInPlace src/mednaffe.c --replace "binpath = NULL" "binpath = g_strdup( \"${mednafen}/bin/mednafen\" )"
   '';
 
-  buildInputs = [ pkgconfig gtk2 mednafen ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 mednafen ];
 
   meta = with stdenv.lib; {
     description = "A GTK based frontend for mednafen";

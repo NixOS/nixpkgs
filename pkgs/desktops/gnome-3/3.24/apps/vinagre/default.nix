@@ -4,7 +4,8 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  buildInputs = [ pkgconfig gtk3 vte libxml2 gtkvnc intltool libsecret
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk3 vte libxml2 gtkvnc intltool libsecret
                   itstool makeWrapper gnome3.defaultIconTheme librsvg ];
 
   preFixup = ''

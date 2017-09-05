@@ -13,7 +13,8 @@ stdenv.mkDerivation {
 
   patches = [ ./install_introspection_to_prefix.patch ];
 
-  buildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool ];
   propagatedBuildInputs = [ libX11 gtk3 ];
 
   meta = {

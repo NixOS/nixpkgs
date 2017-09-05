@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1qpmbdlyhfbrdsq4vkb6cb3b8mh27fpizb71q4a21ala56g08yms";
   };
 
-  buildInputs = [SDL2 SDL2_image mesa cmake physfs boost zip zlib pkgconfig
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [SDL2 SDL2_image mesa cmake physfs boost zip zlib
     unzip];
 
   preConfigure=''

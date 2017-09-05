@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     branch = "net.venge.monotone.guitone";
   };
 
-  buildInputs = [ qt4 qmake4Hook pkgconfig graphviz ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ qt4 qmake4Hook graphviz ];
 
   qmakeFlags = [ "guitone.pro" ];
 

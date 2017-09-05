@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [pkgconfig readline libusb perl]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ readline libusb perl]
     ++ optional useX11 [gtkdialog vte gtk2]
     ++ optional rubyBindings [ruby]
     ++ optional pythonBindings [python]

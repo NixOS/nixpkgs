@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
-  buildInputs = [ autoreconfHook pkgconfig pcre zlib lzma ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ pcre zlib lzma ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/ggreer/the_silver_searcher/;

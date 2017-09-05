@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ibfdib277fhbqvxzan0bmglwnsl1y1rw2g8skvz82l1sfmmn752";
   };
 
-  buildInputs = [ autoreconfHook mesa ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ mesa ];
 
   meta = {
     description = "A patent-free S3TC compatible implementation";

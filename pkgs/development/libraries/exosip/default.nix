@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
   };
  
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libosip openssl pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libosip openssl ];
       
   meta = with stdenv.lib; {
     license = licenses.gpl2Plus;

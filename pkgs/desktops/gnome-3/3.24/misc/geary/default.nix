@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
-  buildInputs = [ intltool pkgconfig gtk3 makeWrapper cmake desktop_file_utils gnome_doc_utils
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool gtk3 makeWrapper cmake desktop_file_utils gnome_doc_utils
                   vala_0_32 webkitgtk libnotify libcanberra_gtk3 gnome3.libgee libsecret gmime sqlite
                   libpthreadstubs gnome3.gsettings_desktop_schemas gnome3.gcr
                   gdk_pixbuf librsvg gnome3.defaultIconTheme ];

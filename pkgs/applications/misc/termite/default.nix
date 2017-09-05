@@ -17,7 +17,8 @@ let
 
     makeFlags = [ "VERSION=v${version}" "PREFIX=" "DESTDIR=$(out)" ];
 
-    buildInputs = [ pkgconfig vte gtk3 ncurses ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ vte gtk3 ncurses ];
 
     outputs = [ "out" "terminfo" ];
 

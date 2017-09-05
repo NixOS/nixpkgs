@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
   LC_ALL = "en_US.UTF-8";
   propagatedBuildInputs = [dbus_glib glib gobjectIntrospection];
 
-  buildInputs = [pkgconfig libxslt glibcLocales python2 ] ++ stdenv.lib.optional valaSupport vala_0_23;
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libxslt glibcLocales python2 ] ++ stdenv.lib.optional valaSupport vala_0_23;
 
   preConfigure = ''
     substituteInPlace telepathy-glib/telepathy-glib.pc.in --replace Requires.private Requires

@@ -9,7 +9,8 @@ let
     url="http://fbterm.googlecode.com/files/fbterm-1.7.0.tar.gz";
     sha256="0pciv5by989vzvjxsv1jsv4bdp4m8j0nfbl29jm5fwi12w4603vj";
   };
-  buildInputs = [gpm freetype fontconfig pkgconfig ncurses libx86];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [gpm freetype fontconfig ncurses libx86];
 in
 stdenv.mkDerivation {
   inherit (s) name version;

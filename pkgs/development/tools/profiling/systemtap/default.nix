@@ -14,7 +14,8 @@ let
   stapBuild = stdenv.mkDerivation {
     name = "systemtap-${version}";
     src = fetchgit { inherit url rev sha256; };
-    buildInputs = [ elfutils pkgconfig gettext python2 pythonPackages.setuptools ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ elfutils gettext python2 pythonPackages.setuptools ];
     # FIXME: Workaround for bug in kbuild, where quoted -I"/foo" flags would get mangled in out-of-tree kbuild dirs
     postPatch = ''
       substituteInPlace buildrun.cxx --replace \

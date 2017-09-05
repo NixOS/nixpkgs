@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1dh52xcvxkjb3mj80wlm20grz8cqf5wipx2ksi91ascz12b5pym6";
   };
 
-  buildInputs = [ cmake pkgconfig libusb1 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake libusb1 ];
 
   # TODO: get these fixes upstream:
   # * Building with -DINSTALL_UDEV_RULES=ON tries to install udev rules to

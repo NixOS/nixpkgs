@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
 
   prePatch = "patchShebangs .";
 
-  buildInputs = [ autoconf automake utillinux openssl libuuid gnu-efi binutils pkgconfig help2man ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake utillinux openssl libuuid gnu-efi binutils help2man ];
 
   configurePhase = ''
     substituteInPlace configure.ac --replace "@@NIX_GNUEFI@@" "${gnu-efi}"

@@ -7,7 +7,8 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/xzgv/xzgv-${version}.tar.gz";
     sha256 = "1rh432wnvzs434knzbda0fslhfx0gngryrrnqkfm6gwd2g5mxcph";
   };
-  buildInputs = [ gtk2 pkgconfig texinfo ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 texinfo ];
   patches = [ ./fix-linker-paths.patch ];
   postPatch = ''
     substituteInPlace config.mk \

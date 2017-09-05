@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  buildInputs = [ pkgconfig glib libtool m4 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib libtool m4 ];
   propagatedBuildInputs = [ exiv2 ];
 
   meta = with stdenv.lib; {

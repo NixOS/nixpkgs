@@ -18,7 +18,8 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ perl ];
 
-  buildInputs = [ pkgconfig zlib libjpeg freetype giflib libpng ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ zlib libjpeg freetype giflib libpng ]
     ++ stdenv.lib.optional enableSDL SDL
     ++ stdenv.lib.optionals enableX11 (with xorg; [
       xproto libX11 libXext #xextproto

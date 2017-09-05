@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
       --replace 'tmpnam(b)' '"'$TMPDIR'/foo"'
   '';
 
-  buildInputs = [ autoreconfHook zlib ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ zlib ];
 
   enableParallelBuilding = true;
 

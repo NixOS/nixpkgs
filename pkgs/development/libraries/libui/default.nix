@@ -13,7 +13,8 @@ in
       sha256 = "1lpbfa298c61aarlzgp7vghrmxg1274pzxh1j9isv8x758gk6mfn";
     };
 
-    buildInputs = [ cmake pkgconfig ] ++
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ cmake ] ++
       (if stdenv.isDarwin then [darwin.apple_sdk.frameworks.Cocoa] else [gtk3]);
 
     preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''

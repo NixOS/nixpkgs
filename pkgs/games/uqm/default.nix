@@ -59,7 +59,8 @@ in stdenv.mkDerivation rec {
     library can be found. Obviously, though, this is a hack. */
   NIX_LDFLAGS="-lgcc_s";
 
-  buildInputs = [SDL SDL_image libpng libvorbis libogg libmikmod unzip pkgconfig mesa];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [SDL SDL_image libpng libvorbis libogg libmikmod unzip mesa];
 
   postUnpack = ''
     mkdir -p uqm-${version}/content/packages

@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1y00hqsmqaix4dql8mb75zx87zvn8b483yxv53x9qyjspksbs60c";
   };
 
-  buildInputs = [ pkgconfig cmake git doxygen help2man tecla libusb1 udev ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake git doxygen help2man tecla libusb1 udev ];
 
   # Fixup shebang
   prePatch = "patchShebangs host/utilities/bladeRF-cli/src/cmd/doc/generate.bash";

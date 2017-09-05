@@ -15,7 +15,8 @@ let
     name = "nant-bootstrapped-${version}";
     inherit src;
 
-    buildInputs = [ pkgconfig mono makeWrapper ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ mono makeWrapper ];
 
     buildFlags = "bootstrap";
 
@@ -35,7 +36,8 @@ in stdenv.mkDerivation {
   name = "nant-${version}";
   inherit src;
 
-  buildInputs = [ pkgconfig mono makeWrapper nant-bootstrapped ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ mono makeWrapper nant-bootstrapped ];
 
   dontStrip = true;
 

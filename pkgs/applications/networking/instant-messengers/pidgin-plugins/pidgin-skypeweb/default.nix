@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "skype4pidgin-${version}-src/skypeweb";
 
-  buildInputs = [ pkgconfig pidgin json_glib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ pidgin json_glib ];
 
   makeFlags = [
     "PLUGIN_DIR_PURPLE=/lib/pidgin/"

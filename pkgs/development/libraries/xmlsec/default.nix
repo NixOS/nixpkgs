@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1lpwj8dxwhha54sby0v5axjk79h56jnhjjiwiasbbk15vwzahz4n";
   };
 
-  buildInputs = [ makeWrapper libxml2 gnutls libxslt pkgconfig libgcrypt libtool openssl nss ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ makeWrapper libxml2 gnutls libxslt libgcrypt libtool openssl nss ];
   enableParallelBuilding = true;
   doCheck = true;
 

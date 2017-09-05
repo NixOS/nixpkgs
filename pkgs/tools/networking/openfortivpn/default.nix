@@ -15,7 +15,8 @@ in stdenv.mkDerivation {
     sha256 = "1a1l9f6zivfyxg9g2x7kzkvcyh84s7l6v0kimihhrd19zl0m41jn";
   };
 
-  buildInputs = [ openssl ppp autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ openssl ppp ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
 

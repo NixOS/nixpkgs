@@ -6,7 +6,8 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  buildInputs = [ pkgconfig gtk3 glib intltool wrapGAppsHook gnome-video-effects itstool
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk3 glib intltool wrapGAppsHook gnome-video-effects itstool
                   gdk_pixbuf adwaita-icon-theme librsvg udev gst_all_1.gstreamer libxml2
                   gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good gnome_desktop
                   gst_all_1.gst-plugins-bad clutter_gtk clutter-gst

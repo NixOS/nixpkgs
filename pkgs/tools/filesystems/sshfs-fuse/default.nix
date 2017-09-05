@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1dmw4kx6vyawcywiv8drrajnam0m29mxfswcp4209qafzx3mjlp1";
   };
   
-  buildInputs = [ pkgconfig glib fuse autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ glib fuse ];
 
   postInstall = ''
     mkdir -p $out/sbin

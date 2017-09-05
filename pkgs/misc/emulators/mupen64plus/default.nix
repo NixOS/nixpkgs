@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0rmsvfn4zfvbhz6gf1xkb7hnwflv6sbklwjz2xk4dlpj4vcbjxcw";
   };
 
-  buildInputs = [ boost dash freetype libpng pkgconfig SDL which zlib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ boost dash freetype libpng SDL which zlib ];
 
   buildPhase = ''
     dash m64p_build.sh PREFIX="$out" COREDIR="$out/lib/" PLUGINDIR="$out/lib/mupen64plus" SHAREDIR="$out/share/mupen64plus"

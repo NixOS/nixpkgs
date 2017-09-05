@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
     name = "factorimage";
   };
 
-  buildInputs = [ git rlwrap curl pkgconfig perl makeWrapper
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ git rlwrap curl perl makeWrapper
     libX11 pango cairo gtk2 gdk_pixbuf gtkglext
     mesa libXmu libXt libICE libSM ];
 

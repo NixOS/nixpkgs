@@ -30,7 +30,8 @@ buildPythonPackage rec {
       tests/run/cpdef_enums.pyx
   '';
 
-  buildInputs = [ glibcLocales pkgconfig gdb ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glibcLocales gdb ];
   # For testing
   nativeBuildInputs = [ numpy ncurses ];
 

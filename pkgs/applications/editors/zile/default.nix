@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "03mcg0bxkzprlsx8y6h22w924pzx4a9zr7zm3g11j8j3x9lz75f7";
   };
 
-  buildInputs = [ pkgconfig ncurses boehmgc ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ncurses boehmgc ];
   nativeBuildInputs = [ perl ]
     # `help2man' wants to run Zile, which won't work when the
     # newly-produced binary can't be run at build-time.

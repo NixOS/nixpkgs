@@ -10,7 +10,8 @@ stdenv.mkDerivation {
     sha256 = "1f3x4yn9a9p4f4wk4l8pv7hxfjc8q7cv20xzf7ky735sq1hj0xcg";
   };
 
-  buildInputs = [libdnet pkgconfig libpcap];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [libdnet libpcap];
 
   meta = {
     description = "";

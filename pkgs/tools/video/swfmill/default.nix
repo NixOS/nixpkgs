@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
   # Fixes build with GCC 6
   NIX_CFLAGS_COMPILE = "-std=c++03";
 
-  buildInputs = [ pkgconfig libxslt freetype libpng libxml2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libxslt freetype libpng libxml2 ];
 
   meta = {
     description = "An xml2swf and swf2xml processor with import functionalities";

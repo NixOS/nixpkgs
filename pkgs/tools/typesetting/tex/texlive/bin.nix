@@ -209,7 +209,8 @@ dvisvgm = stdenv.mkDerivation {
 
   inherit (common) src;
 
-  buildInputs = [ pkgconfig core/*kpathsea*/ ghostscript zlib freetype potrace ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ core/*kpathsea*/ ghostscript zlib freetype potrace ];
 
   preConfigure = "cd texk/dvisvgm";
 
@@ -225,7 +226,8 @@ dvipng = stdenv.mkDerivation {
 
   inherit (common) src;
 
-  buildInputs = [ pkgconfig core/*kpathsea*/ zlib libpng freetype gd ghostscript makeWrapper ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ core/*kpathsea*/ zlib libpng freetype gd ghostscript makeWrapper ];
 
   preConfigure = "cd texk/dvipng";
 
@@ -247,7 +249,8 @@ bibtex8 = stdenv.mkDerivation {
 
   inherit (common) src;
 
-  buildInputs = [ pkgconfig core/*kpathsea*/ icu ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ core/*kpathsea*/ icu ];
 
   preConfigure = "cd texk/bibtex-x";
 
@@ -263,7 +266,8 @@ xdvi = stdenv.mkDerivation {
 
   inherit (common) src;
 
-  buildInputs = [ pkgconfig core/*kpathsea*/ freetype ghostscript ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ core/*kpathsea*/ freetype ghostscript ]
     ++ (with xorg; [ libX11 libXaw libXi libXpm libXmu libXaw libXext libXfixes ]);
 
   preConfigure = "cd texk/xdvik";

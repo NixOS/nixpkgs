@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "10msplyn535hmzbmbdnx4zc20hkaw6d81if5lzxs82k8sq2mkx9k";
   };
 
-  buildInputs = [ libX11 libXi libXtst pkgconfig xextproto ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libX11 libXi libXtst xextproto ];
 
   meta = with stdenv.lib; {
     description = "X virtual keyboard library";

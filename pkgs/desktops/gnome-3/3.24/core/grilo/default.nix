@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  buildInputs = [ pkgconfig file intltool glib libxml2 libsoup
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ file intltool glib libxml2 libsoup
                   gnome3.totem-pl-parser ];
 
   propagatedBuildInputs = [ python3Packages.pygobject3 gobjectIntrospection ];

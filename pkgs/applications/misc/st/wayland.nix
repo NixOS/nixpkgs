@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
   configFile = optionalString (conf!=null) (writeText "config.def.h" conf);
   preBuild = optionalString (conf!=null) "cp ${configFile} config.def.h";
 
-  buildInputs = [ pkgconfig ncurses wayland wld libxkbcommon fontconfig pixman ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ncurses wayland wld libxkbcommon fontconfig pixman ];
 
   NIX_LDFLAGS = "-lfontconfig";
 

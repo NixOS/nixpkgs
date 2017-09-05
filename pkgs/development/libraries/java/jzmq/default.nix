@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ pkgconfig zeromq3 jdk ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ zeromq3 jdk ];
 
   preConfigure = ''
     ${if stdenv.system == "x86_64-darwin" then

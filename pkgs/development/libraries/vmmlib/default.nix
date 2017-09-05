@@ -3,7 +3,8 @@
 stdenv.mkDerivation rec {
   version = "1.6.2";
   name = "vmmlib-${version}";
-  buildInputs = [ stdenv pkgconfig cmake boost blas ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ stdenv cmake boost blas ];
 
   src = fetchFromGitHub {
     owner = "VMML";

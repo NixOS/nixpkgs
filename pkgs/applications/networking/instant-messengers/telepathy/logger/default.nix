@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${dbus_glib.dev}/include/dbus-1.0 -I${dbus_libs.dev}/include/dbus-1.0";
 
-  buildInputs = [ dbus_glib libxml2 sqlite telepathy_glib pkgconfig intltool makeWrapper
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ dbus_glib libxml2 sqlite telepathy_glib intltool makeWrapper
                   gobjectIntrospection dbus_libs telepathy_glib.python (stdenv.lib.getLib gnome3.dconf) ];
 
   nativeBuildInputs = [ libxslt ];

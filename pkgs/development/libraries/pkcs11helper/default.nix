@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "17a2cssycl7fh44xikmhszigx57vvn0h2sjsnmsy3772kfj796b1";
   };
 
-  buildInputs = [ pkgconfig openssl autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ openssl ];
 
   meta = with stdenv.lib; {
     homepage = https://www.opensc-project.org/opensc/wiki/pkcs11-helper;

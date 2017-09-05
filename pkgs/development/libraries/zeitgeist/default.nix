@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-session-bus-services-dir=$(out)/share/dbus-1/services" ];
 
-  buildInputs = [ pkgconfig glib sqlite gnome3.gnome_common intltool
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib sqlite gnome3.gnome_common intltool
                   libtool dbus_libs telepathy_glib vala_0_23 dbus_glib
                   gtk3 json_glib librdf_raptor2 python2Packages.rdflib ];
 

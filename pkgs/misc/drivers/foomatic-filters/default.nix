@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1qrkgbm5jay2r7sh9qbyf0aiyrsl1mdc844hxf7fhw95a0zfbqm2";
   };
 
-  buildInputs = [ pkgconfig perl cups dbus enscript ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ perl cups dbus enscript ];
 
   preConfigure =
     ''

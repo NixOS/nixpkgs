@@ -8,5 +8,6 @@ stdenv.mkDerivation {
     sha256 = "0spl8vinb5n6n1krnfnr61dwaxidg67h8j94z9p59k2xdsvfashm";
   };
 
-  buildInputs = [ pkgconfig gtk gettext intltool libgnomecanvas libgnomeprint gnomeicontheme];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk gettext intltool libgnomecanvas libgnomeprint gnomeicontheme];
 }

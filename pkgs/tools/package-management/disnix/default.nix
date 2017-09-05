@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "1cgf7hgqrwsqgyc77sis0hr7cwgk3vx8cd4msgq11qbwywi3b6id";
   };
   
-  buildInputs = [ pkgconfig glib libxml2 libxslt getopt nixUnstable libintlOrEmpty libiconv dysnomia ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib libxml2 libxslt getopt nixUnstable libintlOrEmpty libiconv dysnomia ];
 
   meta = {
     description = "A Nix-based distributed service deployment tool";

@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ libbson ];
-  buildInputs = [ openssl perl pkgconfig which ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl perl which ];
 
   meta = with stdenv.lib; {
     description = "The official C client library for MongoDB";

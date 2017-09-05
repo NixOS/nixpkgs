@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ enchant ]; # required for pkgconfig
 
-  buildInputs = [ pkgconfig glib gtk3 isocodes vala ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib gtk3 isocodes vala ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

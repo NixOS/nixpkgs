@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
     ./gcc6.patch
   ];
 
-  buildInputs = [ cmake boost ogre mygui ois SDL2 libvorbis pkgconfig 
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake boost ogre mygui ois SDL2 libvorbis 
     makeWrapper enet libXcursor bullet openal
   ];
 

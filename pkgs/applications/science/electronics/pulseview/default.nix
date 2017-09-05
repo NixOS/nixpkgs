@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1f8f2342d5yam98mmcb8f9g2vslcwv486bmi4x45pxn68l82ky3q";
   };
 
-  buildInputs = [ pkgconfig cmake glib qt5.full boost libsigrok
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake glib qt5.full boost libsigrok
     libsigrokdecode libserialport libzip udev libusb1 libftdi1 glibmm
   ];
 

@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "0k1f4pb7azrm6ajncvg7vni7ixfmn6fssd5ld4xddbi6jqbsf9rd";
   };
-  buildInputs = [autoreconfHook givaro (liblapack.override {shared = true;}) openblas];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ givaro (liblapack.override {shared = true;}) openblas];
   nativeBuildInputs = [pkgconfig];
   configureFlags = "--with-blas-libs=-lopenblas --with-lapack-libs=-llapack";
   meta = {

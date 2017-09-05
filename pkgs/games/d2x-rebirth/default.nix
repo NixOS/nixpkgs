@@ -7,7 +7,8 @@ stdenv.mkDerivation rec {
     sha256 = "08mg831afc1v068c0ds70lhmxk8a54494jls7s9hwf02ffhv3sx8";
   };
 
-  buildInputs = [ scons pkgconfig SDL mesa physfs SDL_mixer ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ scons SDL mesa physfs SDL_mixer ];
 
   installPhase = ''
     scons prefix=$out install

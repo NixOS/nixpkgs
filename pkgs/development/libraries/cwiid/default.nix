@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
     sed -i -e '/$(LDCONFIG)/d' common/include/lib.mak.in
   '';
 
-  buildInputs = [ autoreconfHook bison flex bluez pkgconfig gtk2 ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ bison flex bluez gtk2 ];
 
   postInstall = ''
     # Some programs (for example, cabal-install) have problems with the double 0

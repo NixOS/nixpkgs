@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ telepathy_idle telepathy_logger ];
 
-  buildInputs = [ pkgconfig gtk3 glib intltool itstool adwaita-icon-theme wrapGAppsHook gnome3.gsettings_desktop_schemas
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk3 glib intltool itstool adwaita-icon-theme wrapGAppsHook gnome3.gsettings_desktop_schemas
                   telepathy_glib telepathy_logger gjs gspell gdk_pixbuf librsvg libxml2 libsecret libsoup ];
 
   enableParallelBuilding = true;

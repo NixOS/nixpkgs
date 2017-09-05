@@ -456,7 +456,8 @@ let
       platforms   = platforms.unix;
     };
 
-    buildInputs = [ glib gobjectIntrospection lua pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ glib gobjectIntrospection lua ];
 
     makeFlags = [ "LUA_VERSION=${lua.luaversion}" ];
 
@@ -469,7 +470,8 @@ let
     name = "lua-mpack-${libmpack.version}";
     src = libmpack.src;
     sourceRoot = "libmpack-${libmpack.rev}-src/binding/lua";
-    buildInputs = [ libmpack ]; #libtool lua pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libmpack ]; #libtool lua ];
     dontBuild = true;
     preInstall = ''
       mkdir -p $out/lib/lua/${lua.luaversion}

@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0yp8vmj3yc564hcmhx46ssyn8qayywnsrg4wg67qk6jw967qgwsn";
   };
 
-  buildInputs = [ zlib perl pkgconfig python ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ zlib perl python ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow";
 

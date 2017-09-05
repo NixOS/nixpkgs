@@ -21,7 +21,8 @@ in buildGoPackage rec {
     sha256 = "0p173x2s0km7a43h6ihir5p19fdlkkb9lc9120k9hccr33iws25z";
   };
 
-  buildInputs = [pkgconfig openssl];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl];
 
   goDeps = ./deps.nix;
 

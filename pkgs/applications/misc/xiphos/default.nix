@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
     sha256 = "02xyy6rxxxaqbjbhdp813f0vp1jpfzqscjdbdc0qcd4yvi3baj5f";
   };
 
-  buildInputs = [ pkgconfig python intltool docbook2x docbook_xml_dtd_412 libxslt
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ python intltool docbook2x docbook_xml_dtd_412 libxslt
                   sword clucene_core biblesync gnome_doc_utils libgsf gconf gtkhtml
                   libglade scrollkeeper webkitgtk dbus_glib enchant isocodes libuuid icu ];
 

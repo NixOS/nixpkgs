@@ -34,7 +34,8 @@ stdenv.mkDerivation rec {
     sed -e "s|if test -w .*;|if false;|" -i src/Makefile.{am,in}
   '';
 
-  buildInputs = [ glib polkit pkgconfig gusb libusb1 lcms2 sqlite systemd dbus gobjectIntrospection
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib polkit gusb libusb1 lcms2 sqlite systemd dbus gobjectIntrospection
                   bash-completion argyllcms libgudev sane-backends ];
 
   postInstall = ''

@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1ipykzqpfvlr84j38hr7q2cag4imrn1gql10slp8bfrs4h1si3vh";
   };
 
-  buildInputs = [ smartmontools gtkmm2 libglademm pkgconfig pcre ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ smartmontools gtkmm2 libglademm pcre ];
 
   #installTargets = "install datainstall";
 

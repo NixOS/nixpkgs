@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
-  buildInputs = [ pkgconfig intltool exo gtk vte libxfce4util ncurses dbus_glib libxfce4ui ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool exo gtk vte libxfce4util ncurses dbus_glib libxfce4ui ];
 
   meta = {
     homepage = http://www.xfce.org/projects/terminal;

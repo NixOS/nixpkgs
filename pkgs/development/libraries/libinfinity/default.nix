@@ -18,7 +18,8 @@ in stdenv.mkDerivation rec {
     sha256 = "1idsxb6rz4i55g3vi2sv7hmm57psbccpb57yc4jgphaq6ydgqsr6";
   };
 
-  buildInputs = [ pkgconfig glib libxml2 gsasl libidn gss libintlOrEmpty ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib libxml2 gsasl libidn gss libintlOrEmpty ]
     ++ optional gtkWidgets gtk2
     ++ optional documentation gtkdoc
     ++ optional avahiSupport avahi

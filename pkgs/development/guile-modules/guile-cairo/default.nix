@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1f5nd9n46n6cwfl1byjml02q3y2hgn7nkx98km1czgwarxl7ws3x";
   };
 
-  buildInputs = [ guile pkgconfig cairo expat ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ guile cairo expat ]
     ++ stdenv.lib.optional doCheck guile_lib;
 
   doCheck = true;

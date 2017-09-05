@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
       "--with-openssl=${openssl.dev}"
     ] ++ stdenv.lib.optional stdenv.isLinux "--with-mnttab=/proc/mounts";
 
-  buildInputs = [ autoreconfHook file perl unzip openssl ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ file perl unzip openssl ];
 
   enableParallelBuilding = true;
 

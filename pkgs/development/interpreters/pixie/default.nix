@@ -33,7 +33,8 @@ let
     name = "pixie-${version}";
     version = "0-r${commit-count}-${variant}";
     nativeBuildInputs = libs;
-    buildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ makeWrapper ];
     PYTHON = if buildWithPypy
       then "${pypy}/pypy-c/.pypy-c-wrapped"
       else "${python2.interpreter}";

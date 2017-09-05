@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ qmake ];
-  buildInputs = [ qtbase qtsvg pkgconfig boost qwt6 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ qtbase qtsvg boost qwt6 ];
 
   patches = [ ./0001-unbundled-qwt.patch ];
 

@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "9f7c5d2d0fa3fe753611cf94e8879b73b8bb3c0eab97cdbcb6ab7376efa78dc3";
   };
 
-  buildInputs = [ nasm SDL zlib libpng ncurses mesa intltool gtk2 pkgconfig libxml2 xlibsWrapper libpulseaudio];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ nasm SDL zlib libpng ncurses mesa intltool gtk2 libxml2 xlibsWrapper libpulseaudio];
 
   sourceRoot = "snes9x-${version}-src/gtk";
 

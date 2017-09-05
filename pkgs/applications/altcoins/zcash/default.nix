@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ pkgconfig gtest gmock gmp libsnark autoreconfHook openssl wget db62 boost zlib
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ gtest gmock gmp libsnark openssl wget db62 boost zlib
                   protobuf libevent libsodium librustzcash ]
                   ++ optionals stdenv.isLinux [ utillinux ]
                   ++ optionals withGui [ qt4 qrencode ];

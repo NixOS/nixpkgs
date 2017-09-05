@@ -40,7 +40,8 @@ stdenv.mkDerivation rec {
     })
   ] ++ optional (graphicsSupport && !x11Support) [ ./no-x11.patch ];
 
-  buildInputs = [ pkgconfig ncurses boehmgc gettext zlib ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ncurses boehmgc gettext zlib ]
     ++ optional sslSupport openssl
     ++ optional mouseSupport gpm-ncurses
     ++ optional graphicsSupport imlib2
