@@ -12011,6 +12011,8 @@ with pkgs;
 
   unifi = callPackage ../servers/unifi { };
 
+  unified-remote = callPackage ../servers/unified-remote {};
+
   virtuoso6 = callPackage ../servers/sql/virtuoso/6.x.nix { };
 
   virtuoso7 = callPackage ../servers/sql/virtuoso/7.x.nix { };
