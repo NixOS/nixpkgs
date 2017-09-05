@@ -281,7 +281,7 @@ foreach my $pkg (sort (keys %pkgURLs)) {
       url = $pkgURLs{$pkg};
       sha256 = "$pkgHashes{$pkg}";
     };
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ $inputs];$extraAttrs
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit $inputs;};

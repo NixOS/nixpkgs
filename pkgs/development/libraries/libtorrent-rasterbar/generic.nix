@@ -15,9 +15,7 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [automake autoconf libtool ];
-
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
   buildInputs = [ boost openssl zlib python libiconv geoip ];
 
   preConfigure = "./autotool.sh";

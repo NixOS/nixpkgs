@@ -9895,9 +9895,8 @@ let self = _self // overrides; _self = with self; {
     # Build.PL in this package uses which to find pkg-config -- make it use path instead
     patchPhase = ''sed -ie 's/`which pkg-config`/"pkg-config"/' Build.PL'';
     doCheck = false; # The main test performs network access
+    nativeBuildInputs = [ pkgs.pkgconfig ];
     #buildInputs = [ TestMore TestPod ];
-  nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ pkgs. ];
     propagatedBuildInputs = [ pkgs.libdiscid ];
   };
 
@@ -12787,8 +12786,8 @@ let self = _self // overrides; _self = with self; {
       sha256 = "18v8x0514in0zpvq1rv78hmvhpij1xjh5xn0wa6wmg2swky54sp4";
     };
     propagatedBuildInputs = [XMLXPath];
-  nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [TestPodCoverage TimeHiRes TestPod pkgs. pkgs.libvirt];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = [TestPodCoverage TimeHiRes TestPod pkgs.libvirt];
     meta = {
       platforms = stdenv.lib.platforms.linux;
     };

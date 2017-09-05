@@ -24,8 +24,7 @@ stdenv.mkDerivation {
     sha256 = "0zginnakxw7m79zrdvfdvliaiyg78zgqfqkks9z5d1rjj5w13xig";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [ bash iproute iptables systemd coreutils gnused gawk gmp unbound bison flex pam libevent
                   libcap_ng curl nspr nss python ]
                 ++ optional docs xmlto;

@@ -13,9 +13,8 @@ with pkgs; rec {
     pythonSupport = false;
   }).overrideDerivation
     (old: { 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+      nativeBuildInputs = old.nativeBuildInputs ++ [ autoreconfHook pkgconfig ];
       buildInputs = old.buildInputs ++ [ zlib nodejs ];
-      nativeBuildInputs = old.nativeBuildInputs ++ [ zlib pkgconfig ];
       # just override it with nothing so it does not fail
       autoreconfPhase = "echo autoreconfPhase not used..."; 
       checkPhase = ''

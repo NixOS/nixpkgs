@@ -23,8 +23,7 @@ stdenv.mkDerivation {
   # perf refers both to newt and slang
   # binutils is required for libbfd.
   nativeBuildInputs = [ asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt
-      flex bison libiberty libaudit makeWrapper ];
-  nativeBuildInputs = [ pkgconfig ];
+      flex bison libiberty libaudit makeWrapper pkgconfig ];
   buildInputs = [ elfutils python perl newt slang libunwind binutils zlib ] ++
     stdenv.lib.optional withGtk gtk2;
 

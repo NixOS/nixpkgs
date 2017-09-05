@@ -11,8 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1wlzs604mgmqmrgpk4pljx2nrlxzdfi3r8k59qlm90fx8qkqkc63";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ zeromq3 jdk ];
 
   preConfigure = ''

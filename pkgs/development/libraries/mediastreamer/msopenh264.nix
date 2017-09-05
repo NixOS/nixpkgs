@@ -12,9 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "001km4xy1ifwbg1c19ncc75h867fzfcxy9pxvl4pxqb64169xc1k";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook cmake pkgconfig ];
   buildInputs = [ mediastreamer openh264 ];
-  nativeBuildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
     description = "H.264 encoder/decoder plugin for mediastreamer2";

@@ -16,9 +16,8 @@ stdenv.mkDerivation {
     inherit (s) url sha256;
   };
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ perl pkgconfig ];
 
-  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ zlib libjpeg freetype giflib libpng ]
     ++ stdenv.lib.optional enableSDL SDL
     ++ stdenv.lib.optionals enableX11 (with xorg; [

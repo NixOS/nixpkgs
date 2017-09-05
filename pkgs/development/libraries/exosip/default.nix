@@ -10,7 +10,6 @@ stdenv.mkDerivation rec {
   };
  
   nativeBuildInputs = [ pkgconfig ];
-  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libosip openssl ];
       
   meta = with stdenv.lib; {

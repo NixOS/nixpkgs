@@ -7166,8 +7166,8 @@ in {
     };
 
     NIX_CFLAGS_COMPILE="-I${pkgs.poppler.dev}/include/poppler/";
-  nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ pkgs. pkgs.poppler.dev ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = [ pkgs.poppler.dev ];
     propagatedBuildInputs = with self; [ pycairo pygobject2 ];
 
     patches = [
@@ -9448,8 +9448,8 @@ in {
       sha256 = "06rmp1ap6flh64m81j0n3a357ij2vj9zwcvvw0p31y6hz1id9shi";
     };
 
-  nativeBuildInputs = [ pkgconfig ];
-    buildInputs = with self; [ pkgs. pkgs.fuse ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with self; [ pkgs.fuse ];
 
     meta = {
       description = "Python bindings for FUSE";
@@ -11193,8 +11193,8 @@ in {
       sha256 = "1li7q04ljrvwharw4fblcbfhvk6s0l3lnv8yqb4c22lcgbkiqlps";
     };
 
-  nativeBuildInputs = [ pkgconfig ];
-    buildInputs = with self; [ pytest pkgs. pkgs.fuse pkgs.attr pkgs.which ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with self; [ pytest pkgs.fuse pkgs.attr pkgs.which ];
 
     propagatedBuildInputs = with self; [ contextlib2 ];
 
@@ -13138,8 +13138,8 @@ in {
         configure
     '';
 
-  nativeBuildInputs = [ pkgconfig ];
-    buildInputs = with self; [ python pkgs. pkgs.libnotify pygobject2 pygtk pkgs.glib pkgs.gtk2 pkgs.dbus_glib ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with self; [ python pkgs.libnotify pygobject2 pygtk pkgs.glib pkgs.gtk2 pkgs.dbus_glib ];
 
     postInstall = "cd $out/lib/python*/site-packages && ln -s gtk-*/pynotify .";
 
@@ -16424,8 +16424,8 @@ in {
       patchShebangs .
     '';
 
-  nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ self.setuptools self.nose pkgs. pkgs.swig pkgs.libcdio ]
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = [ self.setuptools self.nose pkgs.swig pkgs.libcdio ]
       ++ stdenv.lib.optional stdenv.isDarwin pkgs.libiconv;
 
     patches = [ ../development/python-modules/pycdio/add-cdtext-toc.patch ];
@@ -17125,8 +17125,7 @@ in {
       PATH="${pkgs.parted}/sbin:$PATH"
     '';
 
-  nativeBuildInputs = [ pkgconfig ];
-    buildInputs = with self; [ pkgs. ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
 
     propagatedBuildInputs = with self; [ pkgs.parted ];
 
@@ -20290,8 +20289,8 @@ in {
       sha256 = "0zrjxvzxqm4bz2jcy8sras8jircgbs6dkrw8j3nc6jhvzlikwwxl";
     };
 
-  nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ pkgs. self.pytest_28 self.pytestrunner ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = [ self.pytest_28 self.pytestrunner ];
     propagatedBuildInputs = [ self.cffi pkgs.secp256k1 ];
 
     # Tests are not included in archive
@@ -20373,9 +20372,9 @@ in {
       sha256 = "1q35kgz151rr99240jq55rs39y741m8shh9yihl3x95rkjxchji4";
     };
 
-    propagatedBuildInputs = with self; [ cython pkgs.openssl dns dateutil xcaplib msrplib lxml python-otr ];
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = with pkgs; [ alsaLib ffmpeg libv4l sqlite libvpx ];
+    propagatedBuildInputs = with self; [ cython pkgs.openssl dns dateutil xcaplib msrplib lxml python-otr ];
   };
 
 
@@ -20964,8 +20963,8 @@ in {
     src = pkgs.subunit.src;
 
     propagatedBuildInputs = with self; [ testtools testscenarios ];
-  nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ pkgs. pkgs.check pkgs.cppunit ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = [ pkgs.check pkgs.cppunit ];
 
     patchPhase = ''
       sed -i 's/version=VERSION/version="${pkgs.subunit.version}"/' setup.py
@@ -24109,8 +24108,8 @@ EOF
       sha256 = "1l0s9cx38qb6x5xj32r531xap11m93c3gag30idj8fzkn74cpfgc";
     };
 
-  nativeBuildInputs = [ pkgconfig ];
-    buildInputs = with self; [ python pkgs. pkgs.libvirt lxml ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with self; [ python pkgs.libvirt lxml ];
 
     buildPhase = "${python.interpreter} setup.py build";
 
@@ -24249,8 +24248,8 @@ EOF
     preBuild = "${python}/bin/${python.executable} setup.py build_ext";
     installPhase= "${python}/bin/${python.executable} setup.py install --prefix=$out";
 
-  nativeBuildInputs = [ pkgconfig ];
-    buildInputs = with self; [ pkgs. pkgs.enlightenment.efl ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with self; [ pkgs.enlightenment.efl ];
     doCheck = false;
 
     meta = {

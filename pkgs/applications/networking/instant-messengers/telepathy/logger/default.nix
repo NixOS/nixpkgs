@@ -12,11 +12,9 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${dbus_glib.dev}/include/dbus-1.0 -I${dbus_libs.dev}/include/dbus-1.0";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ dbus_glib libxml2 sqlite telepathy_glib intltool makeWrapper
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  buildInputs = [ dbus_glib libxml2 sqlite telepathy_glib intltool libxslt 
                   gobjectIntrospection dbus_libs telepathy_glib.python (stdenv.lib.getLib gnome3.dconf) ];
-
-  nativeBuildInputs = [ libxslt ];
 
   configureFlags = "--enable-call";
 

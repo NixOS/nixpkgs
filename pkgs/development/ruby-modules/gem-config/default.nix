@@ -39,8 +39,10 @@ let
 in
 
 {
-  nativeBuildInputs = [ pkgconfig ];
-  atk = attrs: { buildInputs = [ gtk2 pcre ]; };
+  atk = attrs: {
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ gtk2 pcre ];
+  };
 
   bundler = attrs:
     let
@@ -58,7 +60,7 @@ in
     };
 
   cairo = attrs: {
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ gtk2 pcre xlibs.libpthreadstubs xlibs.libXdmcp];
   };
 
@@ -91,16 +93,20 @@ in
     buildInputs = [ gpgme ];
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  gio2 = attrs: { buildInputs = [ gtk2 pcre ]; };
+  gio2 = attrs: {
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ gtk2 pcre ];
+  };
 
   gitlab-markup = attrs: { meta.priority = 1; };
 
-  nativeBuildInputs = [ pkgconfig ];
-  glib2 = attrs: { buildInputs = [ gtk2 pcre ]; };
+  glib2 = attrs: {
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ gtk2 pcre ];
+  };
 
   gtk2 = attrs: {
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ gtk2 pcre xlibs.libpthreadstubs xlibs.libXdmcp];
     # CFLAGS must be set for this gem to detect gdkkeysyms.h correctly
     CFLAGS = "-I${gtk2.dev}/include/gtk-2.0 -I/non-existent-path";
