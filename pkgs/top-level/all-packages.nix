@@ -11561,8 +11561,6 @@ with pkgs;
   postgresql = postgresql95;
 
   inherit (callPackages ../servers/sql/postgresql { })
-    postgresql91
-    postgresql92
     postgresql93
     postgresql94
     postgresql95
