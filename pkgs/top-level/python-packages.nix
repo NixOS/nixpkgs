@@ -228,9 +228,7 @@ in {
 
   pycryptodomex = callPackage ../development/python-modules/pycryptodomex { };
 
-  PyChromecast = callPackage ../development/python-modules/pychromecast {
-    protobuf = self.protobuf3_2;
-  };
+  PyChromecast = callPackage ../development/python-modules/pychromecast { };
 
   pyexiv2 = if (!isPy3k) then callPackage ../development/python-modules/pyexiv2 {} else throw "pyexiv2 not supported for interpreter ${python.executable}";
 
@@ -5917,7 +5915,7 @@ in {
       validictory
       decorator
       mutagen
-      protobuf3_0
+      protobuf
       setuptools
       requests
       dateutil
@@ -7537,7 +7535,7 @@ in {
       sha256 = "09bf5gfip9x2wr0ij43p39ac6z2iqzn7kgpi2jjbwpnhs0vwkycs";
     };
 
-    propagatedBuildInputs = with self; [ python-axolotl-curve25519 protobuf3_0 pycrypto ];
+    propagatedBuildInputs = with self; [ python-axolotl-curve25519 protobuf pycrypto ];
     # IV == 0 in tests is not supported by pycrytpodom (our pycrypto drop-in)
     doCheck = !isPy3k;
 
@@ -16343,8 +16341,7 @@ in {
 
   });
 
-  protobuf = self.protobuf2_6;
-  # only required by tensorflow
+  protobuf = self.protobuf3_4;
   protobuf3_4 = callPackage ../development/python-modules/protobuf.nix {
     disabled = isPyPy;
     doCheck = !isPy3k;
@@ -23898,9 +23895,7 @@ EOF
     inherit (pkgs) libasyncns pkgconfig;
   };
 
-  libarcus = callPackage ../development/python-modules/libarcus {
-    protobuf = self.protobuf3_0;
-  };
+  libarcus = callPackage ../development/python-modules/libarcus { };
 
   pybrowserid = buildPythonPackage rec {
     name = "PyBrowserID-${version}";
@@ -24182,7 +24177,7 @@ EOF
     '';
 
     buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ noise numpy pyplatec protobuf3_2 purepng argparse h5py gdal ];
+    propagatedBuildInputs = with self; [ noise numpy pyplatec protobuf purepng argparse h5py gdal ];
 
     prePatch = ''
       substituteInPlace setup.py \

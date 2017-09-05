@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook bison flex pkgconfig perl ];
   buildInputs = [ libuuid cppunit protobuf zlib avahi libmicrohttpd python3 ];
-  propagatedBuildInputs = with python3Packages; [ protobuf3_2 numpy ];
+  propagatedBuildInputs = with python3Packages; [ protobuf numpy ];
 
   configureFlags = [ "--enable-python-libs" ];
 

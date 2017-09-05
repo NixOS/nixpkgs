@@ -1451,7 +1451,7 @@ with pkgs;
       clangStdenv = libcxxStdenv; # workaround for https://github.com/NixOS/nixpkgs/issues/28223
       python = python2;
       inherit (python2Packages) gyp;
-      protobuf = protobuf3_2.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
+      protobuf = pkgs.protobuf.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
     };
 
     table = callPackage ../tools/inputmethods/ibus-engines/ibus-table {
@@ -1938,7 +1938,7 @@ with pkgs;
       clangStdenv = libcxxStdenv; # workaround for https://github.com/NixOS/nixpkgs/issues/28223
       python = python2;
       inherit (python2Packages) gyp;
-      protobuf = protobuf3_2.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
+      protobuf = pkgs.protobuf.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
     };
 
     table-other = callPackage ../tools/inputmethods/fcitx-engines/fcitx-table-other { };
@@ -9987,7 +9987,7 @@ with pkgs;
 
   postgis = callPackage ../development/libraries/postgis { };
 
-  protobuf = protobuf2_6;
+  protobuf = protobuf3_4;
   protobuf3_0 = lowPrio (callPackage ../development/libraries/protobuf/3.0.nix { });
   protobuf3_1 = callPackage ../development/libraries/protobuf/3.1.nix { };
   protobuf3_2 = callPackage ../development/libraries/protobuf/3.2.nix { };
