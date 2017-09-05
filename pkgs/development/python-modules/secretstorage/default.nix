@@ -13,7 +13,6 @@ buildPythonPackage rec {
     sha256 = "1sjd2jjbxgkkxyrfwx89x0hsnn39w2cr2qkxbg1iz52znr4sqism";
   };
 
-  postPatch = "patchShebangs .";
   propagatedBuildInputs = [ dbus-python cryptography ];
 
   doCheck = false; # requires dbus session
@@ -23,5 +22,6 @@ buildPythonPackage rec {
     description = "Python bindings to FreeDesktop.org Secret Service API";
     license = licenses.bsdOriginal;
     platforms = platforms.linux;
+    maintainer = with maintainers; [ teto ];
   };
 }
