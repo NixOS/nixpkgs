@@ -499,6 +499,7 @@ self: super: builtins.intersectAttrs super {
   # Disable separate bin outputs for these specific packages that break with it.
   H = hasNoBinOutput super.H;
   cryptol = hasNoBinOutput super.cryptol;
+  hscolour = hasNoBinOutput super.hscolour;
   sproxy = hasNoBinOutput super.sproxy;
   sproxy2 = hasNoBinOutput super.sproxy2;
   sproxy-web = hasNoBinOutput super.sproxy-web;
