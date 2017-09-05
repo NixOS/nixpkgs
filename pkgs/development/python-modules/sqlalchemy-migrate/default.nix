@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "0ld2bihp9kmf57ykgzrfgxs4j9kxlw79sgdj9sfn47snw3izb2p6";
   };
 
-  buildInputs = [ unittest2 scripttest pytz pylint tempest-lib mock testtools ];
+  checkInputs = [ unittest2 scripttest pytz pylint  mock testtools ];
   propagatedBuildInputs = [ pbr tempita decorator sqlalchemy six sqlparse ];
 
   checkPhase = ''
@@ -26,6 +26,9 @@ buildPythonPackage rec {
     substituteInPlace migrate/tests/versioning/test_util.py --replace "test_load_model" "noop"
     ${python.interpreter} setup.py test
   '';
+
+  # Tests require tempest-lib which requires the broken oslo-config
+  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = http://code.google.com/p/sqlalchemy-migrate/;
