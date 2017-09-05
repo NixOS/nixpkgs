@@ -82,6 +82,7 @@ in rec {
         (all nixos.tests.boot-stage1)
         nixos.tests.hibernate.x86_64-linux # i686 is flaky, see #23107
         (all nixos.tests.ecryptfs)
+        (all nixos.tests.env)
         (all nixos.tests.ipv6)
         (all nixos.tests.i3wm)
         (all nixos.tests.keymap.azerty)
