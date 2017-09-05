@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl ];
   buildInputs = [ trousers openssl opencryptoki ];
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=misleading-indentation" ];
+
   meta = with stdenv.lib; {
     description = "Management tools for TPM hardware";
     longDescription = ''
