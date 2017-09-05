@@ -4946,24 +4946,7 @@ in {
   };
 
 
-  dill = buildPythonPackage rec {
-    name = "dill-${version}";
-    version = "0.2.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/dill/${name}.zip";
-      sha256 = "6c1ccca68be483fa8c66e85a89ffc850206c26373aa77a97b83d8d0994e7f1fd";
-    };
-
-    # TypeError: don't know how to make test from: {'byref': False, 'recurse': False, 'protocol': 3, 'fmode': 0}
-    doCheck = false;
-
-    meta = {
-      description = "Serialize all of python (almost)";
-      homepage = http://www.cacr.caltech.edu/~mmckerns/dill.htm;
-      license = licenses.bsd3;
-    };
-  };
+  dill = callPackage ../development/python-modules/dill { };
 
   discogs_client = buildPythonPackage rec {
     name = "discogs-client-2.0.2";
