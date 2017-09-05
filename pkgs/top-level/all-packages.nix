@@ -93,8 +93,6 @@ with pkgs;
 
   cmark = callPackage ../development/libraries/cmark { };
 
-  dhall = haskell.lib.justStaticExecutables haskellPackages.dhall;
-
   dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
     inherit (haskellPackages) dhall-nix;
   };
