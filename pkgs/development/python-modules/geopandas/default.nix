@@ -1,15 +1,23 @@
-{ stdenv, buildPythonPackage, fetchPypi,
-  pandas, shapely, fiona, descartes, pyproj }:
+{ stdenv, buildPythonPackage, fetchFromGitHub
+, pandas, shapely, fiona, descartes, pyproj
+, pytest }:
 
 buildPythonPackage rec {
-  pname = "geopandas";
+  name = "geopandas-${version}";
   version = "0.3.0";
-  name = "${pname}-${version}";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "02wj58aqyq1nr0axz2vci72zvpkmalrj570lrndqqvai7qmb6fz6";
+  src = fetchFromGitHub {
+    owner = "geopandas";
+    repo = "geopandas";
+    rev = "v${version}";
+    sha256 = "0maafafr7sjjmlg2f19bizg06c8a5z5igmbcgq6kgmi7rklx8xxz";
   };
+
+  checkInputs = [ pytest ];
+
+  checkPhase = ''
+    py.test geopandas
+  '';
 
   propagatedBuildInputs = [
     pandas
