@@ -97,8 +97,8 @@ in
   };
 
   asterisk-stable = common {
-    version = "14.6.0";
-    sha256 = "1d3jjdapfv169d8yhfi92j75iwk9726brv1rjjy288d47jn3sm26";
+    version = "14.6.1";
+    sha256 = "0xg26p8rx9gw1ym9xdnpxr7bqp0kp76afy7f4ywmh25ki41inz08";
     externals = {
       "externals_cache/pjproject-2.6.tar.bz2" = pjproject-26;
       "addons/mp3" = mp3-202;
