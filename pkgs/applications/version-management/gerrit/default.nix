@@ -6,12 +6,15 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://gerrit-releases.storage.googleapis.com/gerrit-${version}.war";
-    sha256 = "db602d06b11bfa81f1cb016c4717a99699828eda08afb2caa504175a2ea4b9c3";
+    sha256 = "1hxrlhp5l5q4lp5b5bq8va7856cnm4blfv01rgqq3yhvn432sq6v";
   };
 
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "1wg7bbhwgi9sxn7skxb9gwaydq9jzpdhglwgq5kihj7r269fmr4k";
+
   buildCommand = ''
-    mkdir -p "$out"/webapps
-    cp "${src}" "$out"/webapps/gerrit-${version}.war
+    install -D ${src} "$out"/webapps/gerrit-${version}.war
   '';
 
   meta = with stdenv.lib; {
