@@ -14,6 +14,8 @@ let
     inherit paths;
     inherit ignoreCollisions;
 
+    extraOutputsToInstall = [ "out" "lib" ];
+
     postBuild = ''
       . "${makeWrapper}/nix-support/setup-hook"
 
