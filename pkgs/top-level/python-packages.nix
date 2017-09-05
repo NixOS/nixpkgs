@@ -2106,55 +2106,9 @@ in {
     };
   };
 
-  bokeh = buildPythonPackage rec {
-    name = "bokeh-${version}";
-    version = "0.12.3";
   bkcharts = callPackage ../development/python-modules/bkcharts { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/bokeh/${name}.tar.gz";
-      sha256 = "e138941b62f59bc48bc5b8d249e90c03fed31c1d5abe47ab2ce9e4c83202f73c";
-    };
-
-    disabled = isPyPy;
-
-    # Some test that uses tornado fails
-    doCheck = false;
-
-    buildInputs = with self; [ mock pytest ];
-
-    propagatedBuildInputs = with self; [
-      flask
-      jinja2
-      markupsafe
-      werkzeug
-      itsdangerous
-      dateutil
-      requests
-      six
-      pygments
-      pystache
-      markdown
-      pyyaml
-      pyzmq
-      tornado
-      colorama
-      ]
-      ++ optionals ( !isPy3k ) [ futures ]
-      ++ optionals ( isPy26 ) [ argparse ]
-      ++ optionals ( !isPy3k && !isPyPy ) [ websocket_client ]
-      ++ optionals ( !isPyPy ) [ numpy pandas greenlet ];
-
-    checkPhase = ''
-      ${python.interpreter} -m unittest discover -s bokeh/tests
-    '';
-
-    meta = {
-      description = "Statistical and novel interactive HTML plots for Python";
-      homepage = "http://github.com/bokeh/bokeh";
-      license = licenses.bsd3;
-    };
-  };
+  bokeh = callPackage ../development/python-modules/bokeh { };
 
   boto = buildPythonPackage rec {
     name = "boto-${version}";
