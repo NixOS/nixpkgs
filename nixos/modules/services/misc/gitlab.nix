@@ -10,7 +10,7 @@ let
   ruby = cfg.packages.gitlab.ruby;
   bundler = pkgs.bundler;
 
-  gemHome = "${cfg.packages.gitlab.ruby-env}/${ruby.gemPath}";
+  gemHome = "${cfg.packages.gitlab.rubyEnv}/${ruby.gemPath}";
 
   gitlabSocket = "${cfg.statePath}/tmp/sockets/gitlab.socket";
   gitalySocket = "${cfg.statePath}/tmp/sockets/gitaly.socket";
@@ -29,7 +29,13 @@ let
 
   gitalyToml = pkgs.writeText "gitaly.toml" ''
     socket_path = "${lib.escape ["\""] gitalySocket}"
-    # prometheus metrics
+    prometheus_listen_addr = "localhost:9236"
+
+    [gitaly-ruby]
+    dir = "${cfg.packages.gitaly.ruby}"
+
+    [gitlab-shell]
+    dir = "${cfg.packages.gitlab-shell}"
 
     ${concatStringsSep "\n" (attrValues (mapAttrs (k: v: ''
     [[storage]]
@@ -52,6 +58,11 @@ let
       port: 6379
       database: 0
       namespace: resque:gitlab
+  '';
+
+  redisYml = ''
+    production:
+      url: redis://localhost:6379/
   '';
 
   secretsYml = ''
@@ -101,10 +112,21 @@ let
         upload_pack = true;
         receive_pack = true;
       };
+      workhorse = {
+        secret_file = "${cfg.statePath}/.gitlab_workhorse_secret";
+      };
       git = {
         bin_path = "git";
         max_size = 20971520; # 20MB
         timeout = 10;
+      };
+      monitoring = {
+        ip_whitelist = [ "127.0.0.0/8" "::1/128" ];
+        sidekiq_exporter = {
+          enable = true;
+          address = "localhost";
+          port = 3807;
+        };
       };
       extra = {};
     };
@@ -123,6 +145,8 @@ let
     GITLAB_SHELL_CONFIG_PATH = "${cfg.statePath}/home/config.yml";
     GITLAB_SHELL_SECRET_PATH = "${cfg.statePath}/config/gitlab_shell_secret";
     GITLAB_SHELL_HOOKS_PATH = "${cfg.statePath}/home/hooks";
+    GITLAB_REDIS_CONFIG_FILE = pkgs.writeText "gitlab-redis.yml" redisYml;
+    prometheus_multiproc_dir = "/run/gitlab";
     RAILS_ENV = "production";
   };
 
@@ -130,12 +154,12 @@ let
 
   gitlab-rake = pkgs.stdenv.mkDerivation rec {
     name = "gitlab-rake";
-    buildInputs = [ cfg.packages.gitlab cfg.packages.gitlab.ruby-env pkgs.makeWrapper ];
+    buildInputs = [ cfg.packages.gitlab cfg.packages.gitlab.rubyEnv pkgs.makeWrapper ];
     phases = "installPhase fixupPhase";
     buildPhase = "";
     installPhase = ''
       mkdir -p $out/bin
-      makeWrapper ${cfg.packages.gitlab.ruby-env}/bin/bundle $out/bin/gitlab-bundle \
+      makeWrapper ${cfg.packages.gitlab.rubyEnv}/bin/bundle $out/bin/gitlab-bundle \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
           --set GITLAB_CONFIG_PATH '${cfg.statePath}/config' \
           --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar config.services.postgresql.package ]}:$PATH' \
@@ -455,6 +479,7 @@ in {
         ruby
         openssh
         nodejs
+        gnupg
       ];
       serviceConfig = {
         Type = "simple";
@@ -463,7 +488,7 @@ in {
         TimeoutSec = "300";
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
-        ExecStart="${cfg.packages.gitlab.ruby-env}/bin/bundle exec \"sidekiq -C \"${cfg.packages.gitlab}/share/gitlab/config/sidekiq_queues.yml\" -e production -P ${cfg.statePath}/tmp/sidekiq.pid\"";
+        ExecStart="${cfg.packages.gitlab.rubyEnv}/bin/bundle exec \"sidekiq -C \"${cfg.packages.gitlab}/share/gitlab/config/sidekiq_queues.yml\" -e production -P ${cfg.statePath}/tmp/sidekiq.pid\"";
       };
     };
 
@@ -471,7 +496,7 @@ in {
       after = [ "network.target" "gitlab.service" ];
       wantedBy = [ "multi-user.target" ];
       environment.HOME = gitlabEnv.HOME;
-      path = with pkgs; [ gitAndTools.git ];
+      path = with pkgs; [ gitAndTools.git cfg.packages.gitaly.rubyEnv ];
       serviceConfig = {
         #PermissionsStartOnly = true; # preStart must be run as root
         Type = "simple";
@@ -515,7 +540,7 @@ in {
           + "-listenAddr /run/gitlab/gitlab-workhorse.socket "
           + "-authSocket ${gitlabSocket} "
           + "-documentRoot ${cfg.packages.gitlab}/share/gitlab/public "
-          + "-secretPath ${cfg.packages.gitlab}/share/gitlab/.gitlab_workhorse_secret";
+          + "-secretPath ${cfg.statePath}/.gitlab_workhorse_secret";
       };
     };
 
@@ -551,7 +576,8 @@ in {
         # symlinked in the gitlab package to /run/gitlab/uploads to make it
         # configurable
         mkdir -p /run/gitlab
-        mkdir -p ${cfg.statePath}/uploads
+        mkdir -p ${cfg.statePath}/{log,uploads}
+        ln -sf ${cfg.statePath}/log /run/gitlab/log
         ln -sf ${cfg.statePath}/uploads /run/gitlab/uploads
         chown -R ${cfg.user}:${cfg.group} /run/gitlab
 
@@ -599,7 +625,7 @@ in {
         # up the initial database
         if ! test -e "${cfg.statePath}/db-seeded"; then
           ${gitlab-rake}/bin/gitlab-rake db:seed_fu RAILS_ENV=production \
-            GITLAB_ROOT_PASSWORD="${cfg.initialRootPassword}" GITLAB_ROOT_EMAIL="${cfg.initialRootEmail}"
+            GITLAB_ROOT_PASSWORD='${cfg.initialRootPassword}' GITLAB_ROOT_EMAIL='${cfg.initialRootEmail}'
           touch "${cfg.statePath}/db-seeded"
         fi
 
@@ -618,7 +644,7 @@ in {
         TimeoutSec = "300";
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
-        ExecStart = "${cfg.packages.gitlab.ruby-env}/bin/bundle exec \"unicorn -c ${cfg.statePath}/config/unicorn.rb -E production\"";
+        ExecStart = "${cfg.packages.gitlab.rubyEnv}/bin/bundle exec \"unicorn -c ${cfg.statePath}/config/unicorn.rb -E production\"";
       };
 
     };

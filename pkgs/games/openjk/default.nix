@@ -1,6 +1,25 @@
-{ stdenv, fetchFromGitHub, makeWrapper, cmake, libjpeg, zlib, libpng, mesa_noglu, SDL2 }:
+{ stdenv, fetchFromGitHub, makeDesktopItem, makeWrapper, cmake, libjpeg, zlib, libpng, mesa_noglu, SDL2 }:
 
-stdenv.mkDerivation rec {
+let
+  jamp = makeDesktopItem rec {
+    name = "jamp";
+    exec = name;
+    icon = "OpenJK_Icon_128";
+    comment = "Open Source Jedi Academy game released by Raven Software";
+    desktopName = "Jedi Academy (Multi Player)";
+    genericName = "Jedi Academy";
+    categories = "Game;";
+  };
+  jasp = makeDesktopItem rec {
+    name = "jasp";
+    exec = name;
+    icon = "OpenJK_Icon_128";
+    comment = "Open Source Jedi Academy game released by Raven Software";
+    desktopName = "Jedi Academy (Single Player)";
+    genericName = "Jedi Academy";
+    categories = "Game;";
+  };
+in stdenv.mkDerivation rec {
   name = "OpenJK-2017-08-11";
 
   src = fetchFromGitHub {
@@ -22,11 +41,16 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    mkdir -p $out/bin
+    mkdir -p $out/bin $out/share/applications $out/share/icons/hicolor/128x128/apps
     prefix=$out/opt/JediAcademy
+
     makeWrapper $prefix/openjk.* $out/bin/jamp --run "cd $prefix"
     makeWrapper $prefix/openjk_sp.* $out/bin/jasp --run "cd $prefix"
     makeWrapper $prefix/openjkded.* $out/bin/openjkded --run "cd $prefix"
+
+    cp $src/shared/icons/OpenJK_Icon_128.png $out/share/icons/hicolor/128x128/apps
+    ln -s ${jamp}/share/applications/* $out/share/applications
+    ln -s ${jasp}/share/applications/* $out/share/applications
   '';
 
   meta = with stdenv.lib; {

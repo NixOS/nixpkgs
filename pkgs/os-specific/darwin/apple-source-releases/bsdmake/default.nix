@@ -42,4 +42,8 @@ appleDerivation {
   preFixup = ''
     wrapProgram "$out/bin/bsdmake" --add-flags "-m $out/share/mk"
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.darwin;
+  };
 }

@@ -862,6 +862,7 @@ self: super: {
   # Don't install internal mkReadme tool.
   hastache = overrideCabal super.hastache (drv: {
     doCheck = false;
+    enableSeparateBinOutput = false;
     postInstall = "rm $out/bin/mkReadme && rmdir $out/bin";
   });
 
@@ -886,4 +887,21 @@ self: super: {
   # missing dependencies: doctest ==0.12.*
   html-entities = doJailbreak super.html-entities;
 
+  # Needs a version that's newer than what we have in lts-9.
+  sbv = super.sbv.override { doctest = self.doctest_0_13_0; };
+
+  # https://github.com/takano-akio/filelock/issues/5
+  filelock = dontCheck super.filelock;
+
+  # https://github.com/alpmestan/taggy/issues/{19,20}
+  taggy = appendPatch super.taggy (pkgs.fetchpatch {
+    name = "blaze-markup.patch";
+    url = "https://github.com/alpmestan/taggy/commit/5456c2fa4d377f7802ec5df3d5f50c4ccab2e8ed.patch";
+    sha256 = "1vss7b99zrhw3r29krl1b60r4qk0m2mpwmrz8q8zdxrh33hb8pd7";
+  });
+
+  # Has extra data files which are referred to from the binary output,
+  # creating a store reference cycle. Putting data in separate output
+  # solves the problem.
+  happy = overrideCabal super.happy (drv: { enableSeparateDataOutput = true; });
 }

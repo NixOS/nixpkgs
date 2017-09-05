@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isLinux ./ghc-no-madv-free.patch
     ++ stdenv.lib.optional stdenv.isDarwin ./ghc-8.0.2-no-cpp-warnings.patch;
 
-  buildInputs = [ ghc perl hscolour sphinx ];
+  buildInputs = [ ghc perl (stdenv.lib.getBin hscolour) sphinx ];
 
   enableParallelBuilding = true;
 

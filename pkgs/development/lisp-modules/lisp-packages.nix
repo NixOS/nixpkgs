@@ -62,6 +62,7 @@ let lispPackages = rec {
     version = "1.0.0";
     src = ./quicklisp-to-nix;
     buildDependencies = [sbcl quicklisp-to-nix-system-info];
+    buildInputs = with pkgs.lispPackages; [md5 cl-emb alexandria external-program];
     touch = coreutils;
     nix-prefetch-url = nix;
     inherit quicklisp;
