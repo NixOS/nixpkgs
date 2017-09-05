@@ -574,6 +574,7 @@
   taku0 = "Takuo Yonezawa <mxxouy6x3m_github@tatapa.org>";
   tari = "Peter Marheine <peter@taricorp.net>";
   tavyc = "Octavian Cerna <octavian.cerna@gmail.com>";
+  ltavard = "Laure Tavard <laure.tavard@univ-grenoble-alpes.fr>";
   teh = "Tom Hunger <tehunger@gmail.com>";
   telotortium = "Robert Irelan <rirelan@gmail.com>";
   thall = "Niclas Thall <niclas.thall@gmail.com>";
