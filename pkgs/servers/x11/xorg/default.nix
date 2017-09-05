@@ -26,7 +26,7 @@ let
       url = mirror://xorg/X11R7.7/src/everything/applewmproto-1.4.2.tar.bz2;
       sha256 = "1zi4p07mp6jmk030p4gmglwxcwp0lzs5mi31y1b4rp8lsqxdxizw";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -59,7 +59,7 @@ let
       url = mirror://xorg/X11R7.7/src/everything/bigreqsproto-1.1.2.tar.bz2;
       sha256 = "07hvfm84scz8zjw14riiln2v4w03jlhp756ypwhq27g48jmic8a6";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -70,7 +70,7 @@ let
       url = mirror://xorg/X11R7.7/src/everything/compositeproto-0.4.2.tar.bz2;
       sha256 = "1z0crmf669hirw4s7972mmp8xig80kfndja9h559haqbpvq5k4q4";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -81,7 +81,7 @@ let
       url = mirror://xorg/X11R7.7/src/everything/damageproto-1.2.1.tar.bz2;
       sha256 = "0nzwr5pv9hg7c21n995pdiv0zqhs91yz3r8rn3aska4ykcp12z2w";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -92,7 +92,7 @@ let
       url = mirror://xorg/X11R7.7/src/everything/dmxproto-2.3.1.tar.bz2;
       sha256 = "02b5x9dkgajizm8dqyx2w6hmqx3v25l67mgf35nj6sz0lgk52877";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -103,7 +103,7 @@ let
       url = mirror://xorg/individual/proto/dri2proto-2.8.tar.bz2;
       sha256 = "015az1vfdqmil1yay5nlsmpf6cf7vcbpslxjb72cfkzlvrv59dgr";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -114,7 +114,7 @@ let
       url = mirror://xorg/individual/proto/dri3proto-1.0.tar.bz2;
       sha256 = "0x609xvnl8jky5m8jdklw4nymx3irkv32w99dfd8nl800bblkgh1";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -125,7 +125,7 @@ let
       url = mirror://xorg/X11R7.7/src/everything/encodings-1.0.4.tar.bz2;
       sha256 = "0ffmaw80vmfwdgvdkp6495xgsqszb6s0iira5j0j6pd4i0lk3mnf";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -202,7 +202,7 @@ let
       url = mirror://xorg/X11R7.7/src/everything/font-alias-1.0.3.tar.bz2;
       sha256 = "16ic8wfwwr3jicaml7b5a0sk6plcgc1kg84w02881yhwmqm3nicb";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -499,7 +499,7 @@ let
       url = mirror://xorg/individual/proto/fontsproto-2.1.3.tar.bz2;
       sha256 = "1f2sdsd74y34nnaf4m1zlcbhyv8xb6irnisc99f84c4ivnq4d415";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -521,7 +521,7 @@ let
       url = mirror://xorg/individual/font/font-util-1.3.1.tar.bz2;
       sha256 = "08drjb6cf84pf5ysghjpb4i7xkd2p86k3wl2a0jxs1jif6qbszma";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -554,7 +554,7 @@ let
       url = mirror://xorg/individual/util/gccmakedep-1.0.3.tar.bz2;
       sha256 = "1r1fpy5ni8chbgx7j5sz0008fpb6vbazpy1nifgdhgijyzqxqxdj";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -565,7 +565,7 @@ let
       url = mirror://xorg/individual/proto/glproto-1.4.17.tar.bz2;
       sha256 = "0h5ykmcddwid5qj6sbrszgkcypwn3mslvswxpgy2n2iixnyr9amd";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -598,7 +598,7 @@ let
       url = mirror://xorg/individual/proto/inputproto-2.3.2.tar.bz2;
       sha256 = "07gk7v006zqn3dcfh16l06gnccy7xnqywf3vl9c209ikazsnlfl9";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -609,7 +609,7 @@ let
       url = mirror://xorg/individual/proto/kbproto-1.0.7.tar.bz2;
       sha256 = "0mxqj1pzhjpz9495vrjnpi10kv2n1s4vs7di0sh3yvipfq5j30pq";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -1027,7 +1027,7 @@ let
       url = http://xcb.freedesktop.org/dist/libpthread-stubs-0.4.tar.bz2;
       sha256 = "0cz7s9w8lqgzinicd4g36rjg08zhsbyngh0w68c3np8nlc8mkl74";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -1104,7 +1104,7 @@ let
       url = mirror://xorg/X11R7.7/src/everything/mkfontdir-1.0.7.tar.bz2;
       sha256 = "0c3563kw9fg15dpgx4dwvl12qz6sdqdns1pxa574hc7i5m42mman";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -1126,7 +1126,7 @@ let
       url = mirror://xorg/individual/proto/presentproto-1.1.tar.bz2;
       sha256 = "1f96dlgfwhsd0834z8ydjzjnb0cwha5r6lxgia4say4zhsl276zn";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -1148,7 +1148,7 @@ let
       url = mirror://xorg/individual/proto/randrproto-1.5.0.tar.bz2;
       sha256 = "0s4496z61y5q45q20gldwpf788b9nsa8hb13gnck1mwwwwrmarsc";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -1159,7 +1159,7 @@ let
       url = mirror://xorg/X11R7.7/src/everything/recordproto-1.14.2.tar.bz2;
       sha256 = "0w3kgr1zabwf79bpc28dcnj0fpni6r53rpi82ngjbalj5s6m8xx7";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -1170,7 +1170,7 @@ let
       url = mirror://xorg/X11R7.7/src/everything/renderproto-0.11.1.tar.bz2;
       sha256 = "0dr5xw6s0qmqg0q5pdkb4jkdhaja0vbfqla79qh5j1xjj9dmlwq6";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -1181,7 +1181,7 @@ let
       url = mirror://xorg/X11R7.7/src/everything/resourceproto-1.2.0.tar.bz2;
       sha256 = "0638iyfiiyjw1hg3139pai0j6m65gkskrvd9684zgc6ydcx00riw";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -1192,7 +1192,7 @@ let
       url = mirror://xorg/X11R7.7/src/everything/scrnsaverproto-1.2.2.tar.bz2;
       sha256 = "0rfdbfwd35d761xkfifcscx56q0n56043ixlmv70r4v4l66hmdwb";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -1247,7 +1247,7 @@ let
       url = mirror://xorg/individual/util/util-macros-1.19.1.tar.bz2;
       sha256 = "19h6wflpmh7xxqr6lk5z8pds6r9r0dn7ijbvaacymx2q0m05km0q";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -1258,7 +1258,7 @@ let
       url = mirror://xorg/individual/proto/videoproto-2.3.3.tar.bz2;
       sha256 = "00m7rh3pwmsld4d5fpii3xfk5ciqn17kkk38gfpzrrh8zn4ki067";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -1269,7 +1269,7 @@ let
       url = mirror://xorg/X11R7.7/src/everything/windowswmproto-1.0.4.tar.bz2;
       sha256 = "0syjxgy4m8l94qrm03nvn5k6bkxc8knnlld1gbllym97nvnv0ny0";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -1313,7 +1313,7 @@ let
       url = mirror://xorg/X11R7.7/src/everything/xbitmaps-1.1.1.tar.bz2;
       sha256 = "178ym90kwidia6nas4qr5n5yqh698vv8r02js0r4vg3b6lsb0w9n";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -1423,7 +1423,7 @@ let
       url = mirror://xorg/X11R7.7/src/everything/xcmiscproto-1.2.2.tar.bz2;
       sha256 = "1pyjv45wivnwap2wvsbrzdvjc5ql8bakkbkrvcv6q9bjjf33ccmi";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -1522,7 +1522,7 @@ let
       url = mirror://xorg/individual/proto/xextproto-7.3.0.tar.bz2;
       sha256 = "1c2vma9gqgc2v06rfxdiqgwhxmzk2cbmknwf1ng3m76vr0xb5x7k";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -1544,7 +1544,7 @@ let
       url = mirror://xorg/X11R7.7/src/everything/xf86bigfontproto-1.2.0.tar.bz2;
       sha256 = "0j0n7sj5xfjpmmgx6n5x556rw21hdd18fwmavp95wps7qki214ms";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -1555,7 +1555,7 @@ let
       url = mirror://xorg/X11R7.7/src/everything/xf86dgaproto-2.1.tar.bz2;
       sha256 = "0l4hx48207mx0hp09026r6gy9nl3asbq0c75hri19wp1118zcpmc";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -1566,7 +1566,7 @@ let
       url = mirror://xorg/X11R7.7/src/everything/xf86driproto-2.1.1.tar.bz2;
       sha256 = "07v69m0g2dfzb653jni4x656jlr7l84c1k39j8qc8vfb45r8sjww";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -1665,7 +1665,7 @@ let
       url = mirror://xorg/individual/proto/xf86miscproto-0.9.3.tar.bz2;
       sha256 = "15dhcdpv61fyj6rhzrhnwri9hlw8rjfy05z1vik118lc99mfrf25";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -2127,7 +2127,7 @@ let
       url = mirror://xorg/X11R7.7/src/everything/xf86vidmodeproto-2.3.1.tar.bz2;
       sha256 = "0w47d7gfa8zizh2bshdr2rffvbr4jqjv019mdgyh6cmplyd4kna5";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -2182,7 +2182,7 @@ let
       url = mirror://xorg/X11R7.7/src/everything/xineramaproto-1.2.1.tar.bz2;
       sha256 = "0ns8abd27x7gbp4r44z3wc5k9zqxxj8zjnazqpcyr4n17nxp8xcp";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -2347,7 +2347,7 @@ let
       url = mirror://xorg/individual/util/xorg-cf-files-1.0.6.tar.bz2;
       sha256 = "0kckng0zs1viz0nr84rdl6dswgip7ndn4pnh5nfwnviwpsfmmksd";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -2358,7 +2358,7 @@ let
       url = mirror://xorg/individual/doc/xorg-docs-1.7.1.tar.bz2;
       sha256 = "0jrc4jmb4raqawx0j9jmhgasr0k6sxv0bm2hrxjh9hb26iy6gf14";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -2380,7 +2380,7 @@ let
       url = mirror://xorg/X11R7.7/src/everything/xorg-sgml-doctools-1.11.tar.bz2;
       sha256 = "0k5pffyi5bx8dmfn033cyhgd3gf6viqj3x769fqixifwhbgy2777";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -2413,7 +2413,7 @@ let
       url = mirror://xorg/individual/proto/xproto-7.0.31.tar.bz2;
       sha256 = "0ivpxz0rx2a7nahkpkhfgymz7j0pwzaqvyqpdgw9afmxl1yp9yf6";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
@@ -2479,7 +2479,7 @@ let
       url = mirror://xorg/individual/lib/xtrans-1.3.5.tar.bz2;
       sha256 = "00c3ph17acnsch3gbdmx33b9ifjnl5w7vx8hrmic1r1cjcv3pgdd";
     };
-    buildInputs = [pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 

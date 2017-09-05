@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1ivg9zn7f1ks31ixxwywifwhzxn6py8s5ky1djyxnb0s60zckfjg";
   };
 
-  nativebuildInputs = [ pkgconfig ];
+  nativenativeBuildInputs = [ pkgconfig ];
   buildInputs = [ postgresql ];
 
   installPhase = ''

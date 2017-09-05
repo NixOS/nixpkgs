@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "817ae9fa5f443a8c478a6770f36091e3cf99f3515c74e00d09ca958dead1e7eb";
   };
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ pure portmidi ];
   makeFlags = "libdir=$(out)/lib prefix=$(out)/";
   setupHook = ../generic-setup-hook.sh;

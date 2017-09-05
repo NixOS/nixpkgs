@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     "--without-openssl-version-check"
   ];
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ vpnc openssl gnutls gmp libxml2 stoken zlib ];
 
   meta = {

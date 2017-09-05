@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "05bgcsxwkp63rlr8wg6znd46cfbhrzc5wh70jabsi654pxxjb39d";
   };
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [
     pygtk libsexy gtk2 glib pango libxml2
