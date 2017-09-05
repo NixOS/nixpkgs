@@ -962,7 +962,7 @@ default-package-overrides:
   - happstack-jmacro ==7.0.12
   - happstack-server ==7.4.6.4
   - happstack-server-tls ==7.1.6.4
-  - happy ==1.19.6
+  - happy >1.19.6
   - harp ==0.4.2
   - hasbolt ==0.1.2.1
   - hashable ==1.2.6.1
