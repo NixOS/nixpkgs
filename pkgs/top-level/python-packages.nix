@@ -1944,6 +1944,23 @@ in {
 
   blaze = callPackage ../development/python-modules/blaze { };
 
+  # Needed for bleach 1.5.0
+  html5lib_0_9999999 = self.html5lib.overridePythonAttrs rec {
+    name = "html5lib-${version}";
+    disabled = isPy3k && pythonAtLeast "3.6";
+    buildInputs = with self; [ nose flake8 ];
+    propagatedBuildInputs = with self; [ six ];
+    checkPhase = ''
+      nosetests
+    '';
+
+    version = "0.9999999";
+    src = pkgs.fetchurl {
+      url = "https://github.com/html5lib/html5lib-python/archive/0.9999999.tar.gz";
+      sha256 = "1s6wdbrjzw5jhyfbskf4nj1i5bjpjqq9f89a7r1rl59rhpwmfhhq";
+    };
+  };
+
   html5-parser = callPackage ../development/python-modules/html5-parser {};
 
   httpserver = callPackage ../development/python-modules/httpserver {};
@@ -16808,7 +16825,7 @@ in {
     };
 
     disabled = !isPy3k;
-
+    
     # No tests in archive
     doCheck = false;
 
