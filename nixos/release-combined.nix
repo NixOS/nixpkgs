@@ -93,6 +93,7 @@ in rec {
         (all nixos.tests.plasma5)
         (all nixos.tests.kernel-latest)
         (all nixos.tests.kernel-lts)
+        (all nixos.tests.kernel-params)
         #(all nixos.tests.lightdm)
         (all nixos.tests.login)
         (all nixos.tests.misc)
