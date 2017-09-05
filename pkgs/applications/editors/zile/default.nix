@@ -11,9 +11,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig ncurses boehmgc ];
   nativeBuildInputs = [ help2man perl ];
 
-  # `help2man' wants to run Zile, which fails when cross-compiling.
-  crossAttrs.nativeBuildInputs = [];
-
   # Tests can't be run because most of them rely on the ability to
   # fiddle with the terminal.
   doCheck = false;
