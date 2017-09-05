@@ -41,4 +41,8 @@ appleDerivation {
       --replace '/bin/rmdir' "rmdir" \
       --replace 'C=''${MIGCC}' "C=cc"
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.darwin;
+  };
 }

@@ -129,7 +129,7 @@ stdenv.mkDerivation rec {
   buildCommand = ''
     # For convenience ...
     TBB_IN_STORE=$out/share/tor-browser
-    interp=$(< $NIX_CC/nix-support/dynamic-linker)
+    interp=$(< $NIX_BINUTILS/nix-support/dynamic-linker)
 
     # Unpack & enter
     mkdir -p "$TBB_IN_STORE"
@@ -299,6 +299,10 @@ stdenv.mkDerivation rec {
       \
       PULSE_SERVER="\''${PULSE_SERVER:-}" \
       PULSE_COOKIE="\''${PULSE_COOKIE:-}" \
+      \
+      TOR_SKIP_LAUNCH="\''${TOR_SKIP_LAUNCH:-}" \
+      TOR_CONTROL_PORT="\''${TOR_CONTROL_PORT:-}" \
+      TOR_SOCKS_PORT="\''${TOR_SOCKS_PORT:-}" \
       \
       GST_PLUGIN_SYSTEM_PATH="${optionalString mediaSupport gstPluginsPath}" \
       GST_REGISTRY="/dev/null" \

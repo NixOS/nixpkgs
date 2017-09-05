@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -D btsync "$out/bin/btsync"
-    patchelf --interpreter "$(< $NIX_CC/nix-support/dynamic-linker)" --set-rpath ${libPath} "$out/bin/btsync"
+    patchelf --interpreter "$(< $NIX_BINUTILS/nix-support/dynamic-linker)" --set-rpath ${libPath} "$out/bin/btsync"
   '';
 
   meta = {

@@ -93,6 +93,8 @@ with pkgs;
 
   cmark = callPackage ../development/libraries/cmark { };
 
+  dhall = haskell.lib.justStaticExecutables haskellPackages.dhall;
+
   dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
     inherit (haskellPackages) dhall-nix;
   };
@@ -1817,7 +1819,7 @@ with pkgs;
   emscripten = callPackage ../development/compilers/emscripten { };
 
   emscriptenfastcomp-unwrapped = callPackage ../development/compilers/emscripten-fastcomp { };
-  emscriptenfastcomp-wrapped = wrapCCWith stdenv.cc.libc ''
+  emscriptenfastcomp-wrapped = wrapCCWith stdenv.cc.libc stdenv.cc.binutils ''
     # hardening flags break WASM support
     cat > $out/nix-support/add-hardening.sh
   '' emscriptenfastcomp-unwrapped;
@@ -5308,7 +5310,9 @@ with pkgs;
 
   clang-sierraHack = clang.override {
     name = "clang-wrapper-with-reexport-hack";
-    useMacosReexportHack = true;
+    binutils = clang.binutils.override {
+      useMacosReexportHack = true;
+    };
   };
 
   clang_4  = llvmPackages_4.clang;
@@ -5400,8 +5404,12 @@ with pkgs;
         extraBuildCommands = ''
           echo "dontMoveLib64=1" >> $out/nix-support/setup-hook
         '';
-      in wrapCCWith glibc_multi extraBuildCommands (cc.cc.override {
-        stdenv = overrideCC stdenv (wrapCCWith glibc_multi "" cc.cc);
+        # Binutils with glibc multi
+        binutils = cc.binutils.override {
+          libc = glibc_multi;
+        };
+      in wrapCCWith glibc_multi binutils extraBuildCommands (cc.cc.override {
+        stdenv = overrideCC stdenv (wrapCCWith glibc_multi binutils "" cc.cc);
         profiledCompiler = false;
         enableMultilib = true;
       }))
@@ -6195,19 +6203,20 @@ with pkgs;
 
   wla-dx = callPackage ../development/compilers/wla-dx { };
 
-  wrapCCWith = libc: extraBuildCommands: baseCC: ccWrapperFun {
+  wrapCCWith = libc: binutils: extraBuildCommands: baseCC: ccWrapperFun {
     nativeTools = stdenv.cc.nativeTools or false;
     nativeLibc = stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
     cc = baseCC;
     isGNU = baseCC.isGNU or false;
     isClang = baseCC.isClang or false;
-    inherit libc extraBuildCommands;
+    inherit libc binutils extraBuildCommands;
   };
 
   ccWrapperFun = callPackage ../build-support/cc-wrapper;
+  binutilsWrapperFun = callPackage ../build-support/binutils-wrapper;
 
-  wrapCC = wrapCCWith stdenv.cc.libc "";
+  wrapCC = wrapCCWith stdenv.cc.libc stdenv.cc.binutils "";
   # legacy version, used for gnat bootstrapping
   wrapGCC-old = baseGCC: callPackage ../build-support/gcc-wrapper-old {
     nativeTools = stdenv.cc.nativeTools or false;
@@ -6230,6 +6239,15 @@ with pkgs;
 
       inherit cc binutils libc shell name;
     };
+
+  wrapBinutils = baseBinutils: binutilsWrapperFun {
+    nativeTools = stdenv.cc.nativeTools or false;
+    nativeLibc = stdenv.cc.nativeLibc or false;
+    nativePrefix = stdenv.cc.nativePrefix or "";
+    libc = stdenv.cc.libc;
+    binutils = baseBinutils;
+    extraBuildCommands = "";
+  };
 
   # prolog
   yap = callPackage ../development/compilers/yap { };
@@ -6783,13 +6801,15 @@ with pkgs;
     then darwin.binutils
     else binutils-raw;
 
-  binutils-raw = callPackage ../development/tools/misc/binutils {
+  binutils-raw = wrapBinutils (callPackage ../development/tools/misc/binutils {
     # FHS sys dirs presumably only have stuff for the build platform
     noSysDirs = (targetPlatform != buildPlatform) || noSysDirs;
-  };
+  });
 
   binutils_nogold = lowPrio (binutils-raw.override {
-    gold = false;
+    binutils = binutils-raw.binutils.override {
+      gold = false;
+    };
   });
 
   bison2 = callPackage ../development/tools/parsing/bison/2.x.nix { };
@@ -9182,7 +9202,9 @@ with pkgs;
 
   libmatchbox = callPackage ../development/libraries/libmatchbox { };
 
-  libmatheval = callPackage ../development/libraries/libmatheval { };
+  libmatheval = callPackage ../development/libraries/libmatheval {
+    guile = guile_2_0;
+  };
 
   libmatthew_java = callPackage ../development/libraries/java/libmatthew-java { };
 
@@ -11996,53 +12018,12 @@ with pkgs;
 
   crda = callPackage ../os-specific/linux/crda { };
 
-  darwin = let
-    apple-source-releases = callPackage ../os-specific/darwin/apple-source-releases { };
-  in (apple-source-releases // rec {
-    cctools = callPackage ../os-specific/darwin/cctools/port.nix {
-      inherit libobjc;
-      stdenv = if stdenv.isDarwin then stdenv else libcxxStdenv;
-      inherit maloader;
-      xctoolchain = xcode.toolchain;
-    };
-
-    cf-private = callPackage ../os-specific/darwin/cf-private {
-      inherit (apple-source-releases) CF;
-      inherit osx_private_sdk;
-    };
-
-    maloader = callPackage ../os-specific/darwin/maloader {
-      inherit opencflite;
-    };
-
-    opencflite = callPackage ../os-specific/darwin/opencflite {};
-
-    swift-corefoundation = callPackage ../os-specific/darwin/swift-corefoundation {};
-
-    ios-cross = callPackage ../os-specific/darwin/ios-cross {
-      inherit (darwin) binutils;
-    };
-
-    xcode = callPackage ../os-specific/darwin/xcode {};
-
-    osx_private_sdk = callPackage ../os-specific/darwin/osx-private-sdk {};
-
-    security_tool = (newScope (darwin.apple_sdk.frameworks // darwin)) ../os-specific/darwin/security-tool {
-      Security-framework = darwin.apple_sdk.frameworks.Security;
-    };
-
-    binutils = callPackage ../os-specific/darwin/binutils { inherit cctools; };
-
-    apple_sdk = callPackage ../os-specific/darwin/apple-sdk {};
-
-    libobjc = apple-source-releases.objc4;
-
-    stubs = callPackages ../os-specific/darwin/stubs {};
-
-    usr-include = callPackage ../os-specific/darwin/usr-include {};
-
-    DarwinTools = callPackage ../os-specific/darwin/DarwinTools {};
-  });
+  # Darwin package set
+  #
+  # Even though this is a set of packages not single package, use `callPackage`
+  # not `callPackages` so the per-package callPackages don't have their
+  # `.override` clobbered. C.F. `llvmPackages` which does the same.
+  darwin = callPackage ./darwin-packages.nix { };
 
   devicemapper = lvm2;
 
@@ -12318,6 +12299,22 @@ with pkgs;
       ];
   };
 
+  linux_4_13 = callPackage ../os-specific/linux/kernel/linux-4.13.nix {
+    kernelPatches =
+      [ kernelPatches.bridge_stp_helper
+        kernelPatches.p9_fixes
+        # See pkgs/os-specific/linux/kernel/cpu-cgroup-v2-patches/README.md
+        # when adding a new linux version
+        kernelPatches.cpu-cgroup-v2."4.11"
+        kernelPatches.modinst_arg_list_too_long
+      ]
+      ++ lib.optionals ((platform.kernelArch or null) == "mips")
+      [ kernelPatches.mips_fpureg_emu
+        kernelPatches.mips_fpu_sigill
+        kernelPatches.mips_ext3_n32
+      ];
+  };
+
   linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -12511,7 +12508,7 @@ with pkgs;
   linux = linuxPackages.kernel;
 
   # Update this when adding the newest kernel major version!
-  linuxPackages_latest = linuxPackages_4_12;
+  linuxPackages_latest = linuxPackages_4_13;
   linux_latest = linuxPackages_latest.kernel;
 
   # Build the kernel modules for the some of the kernels.
@@ -12520,6 +12517,7 @@ with pkgs;
   linuxPackages_rpi = linuxPackagesFor pkgs.linux_rpi;
   linuxPackages_4_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_9);
   linuxPackages_4_12 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_12);
+  linuxPackages_4_13 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_13);
   # Don't forget to update linuxPackages_latest!
 
   # Intentionally lacks recurseIntoAttrs, as -rc kernels will quite likely break out-of-tree modules and cause failed Hydra builds.
@@ -18372,29 +18370,9 @@ with pkgs;
     ynot = callPackage ../development/coq-modules/ynot {};
   };
 
-  mkCoqPackages_8_5 = self: let callPackage = newScope self; in rec {
-    inherit callPackage;
-    coq = coq_8_5;
-    coqPackages = coqPackages_8_5;
-
-    autosubst = callPackage ../development/coq-modules/autosubst {};
-    coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
-    coquelicot = callPackage ../development/coq-modules/coquelicot {};
-    dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
-    flocq = callPackage ../development/coq-modules/flocq {};
-    interval = callPackage ../development/coq-modules/interval {};
-    mathcomp = callPackage ../development/coq-modules/mathcomp { };
-    paco = callPackage ../development/coq-modules/paco {};
-    math-classes = callPackage ../development/coq-modules/math-classes { };
-    ssreflect = callPackage ../development/coq-modules/ssreflect { };
-    QuickChick = callPackage ../development/coq-modules/QuickChick {};
-    fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
-  };
-
-  mkCoqPackages_8_6 = self: let callPackage = newScope self; in rec {
-    inherit callPackage;
-    coq = coq_8_6;
-    coqPackages = coqPackages_8_6;
+  mkCoqPackages = self: coq: let callPackage = newScope self; in rec {
+    inherit callPackage coq;
+    coqPackages = self;
 
     autosubst = callPackage ../development/coq-modules/autosubst {};
     coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
@@ -18413,8 +18391,8 @@ with pkgs;
   };
 
   coqPackages_8_4 = mkCoqPackages_8_4 coqPackages_8_4;
-  coqPackages_8_5 = mkCoqPackages_8_5 coqPackages_8_5;
-  coqPackages_8_6 = mkCoqPackages_8_6 coqPackages_8_6;
+  coqPackages_8_5 = mkCoqPackages coqPackages_8_5 coq_8_5;
+  coqPackages_8_6 = mkCoqPackages coqPackages_8_6 coq_8_6;
   coqPackages = coqPackages_8_6;
   coq = coqPackages.coq;
 

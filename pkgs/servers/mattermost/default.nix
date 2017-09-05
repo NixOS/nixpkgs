@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/bin/platform
+    patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" $out/bin/platform
   '';
 
   meta = with stdenv.lib; {

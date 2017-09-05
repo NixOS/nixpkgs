@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     GenericName=Digital Audio Workstation
     Comment=Multitrack harddisk recorder
     Exec=$out/bin/ardour5
-    Icon=$out/share/ardour5/icons/ardour_icon_256px.png
+    Icon=$out/share/ardour5/resources/Ardour-icon_256px.png
     Terminal=false
     Type=Application
     X-MultipleArgs=false

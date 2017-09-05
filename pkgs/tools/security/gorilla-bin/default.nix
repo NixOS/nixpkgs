@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = let
-    interpreter = "$(< \"$NIX_CC/nix-support/dynamic-linker\")";
+    interpreter = "$(< \"$NIX_BINUTILS/nix-support/dynamic-linker\")";
     libPath = stdenv.lib.makeLibraryPath [ libXft libX11 freetype fontconfig libXrender libXScrnSaver libXext ];
   in ''
     mkdir -p $out/opt/password-gorilla

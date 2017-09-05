@@ -65,7 +65,7 @@ let version = "4.5.4";
 
     /* Cross-gcc settings */
     gccArch = stdenv.lib.attrByPath [ "gcc" "arch" ] null targetPlatform;
-    gccCpu = stdenv.lib.attrByPath [ "gcc" "cpu" ] null targetPlatformt;
+    gccCpu = stdenv.lib.attrByPath [ "gcc" "cpu" ] null targetPlatform;
     gccAbi = stdenv.lib.attrByPath [ "gcc" "abi" ] null targetPlatform;
     withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
     withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";

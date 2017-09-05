@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
       echo "Patching $exe"
       patchelf \
         --set-rpath ${libPath} \
-        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+        --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) \
         $exe
     done
     unset GLOBIGNORE

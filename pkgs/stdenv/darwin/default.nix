@@ -63,10 +63,40 @@ in rec {
                           extraBuildInputs,
                           allowedRequisites ? null}:
     let
+      buildPackages = lib.optionalAttrs (last ? stdenv) {
+        inherit (last) stdenv;
+      };
+
+      coreutils = { name = "coreutils-9.9.9"; outPath = bootstrapTools; };
+      gnugrep   = { name = "gnugrep-9.9.9";   outPath = bootstrapTools; };
+
+      binutils = import ../../build-support/binutils-wrapper {
+        inherit shell;
+        inherit (last) stdenv;
+
+        nativeTools  = false;
+        nativeLibc   = false;
+        inherit buildPackages coreutils gnugrep;
+        libc         = last.pkgs.darwin.Libsystem;
+        binutils     = { name = "binutils-9.9.9";  outPath = bootstrapTools; };
+      };
+
+      cc = if isNull last then "/dev/null" else import ../../build-support/cc-wrapper {
+        inherit shell;
+        inherit (last) stdenv;
+
+        nativeTools  = false;
+        nativeLibc   = false;
+        inherit buildPackages coreutils gnugrep binutils;
+        libc         = last.pkgs.darwin.Libsystem;
+        isClang      = true;
+        cc           = { name = "clang-9.9.9";     outPath = bootstrapTools; };
+      };
+
       thisStdenv = import ../generic {
         inherit config shell extraNativeBuildInputs extraBuildInputs;
         allowedRequisites = if allowedRequisites == null then null else allowedRequisites ++ [
-          thisStdenv.cc.expand-response-params
+          cc.expand-response-params cc.binutils
         ];
 
         name = "stdenv-darwin-boot-${toString step}";
@@ -75,22 +105,9 @@ in rec {
         hostPlatform = localSystem;
         targetPlatform = localSystem;
 
-        cc = if isNull last then "/dev/null" else import ../../build-support/cc-wrapper {
-          inherit shell;
-          inherit (last) stdenv;
+        inherit cc;
 
-          nativeTools  = true;
-          nativePrefix = bootstrapTools;
-          nativeLibc   = false;
-          buildPackages = lib.optionalAttrs (last ? stdenv) {
-            inherit (last) stdenv;
-          };
-          libc         = last.pkgs.darwin.Libsystem;
-          isClang      = true;
-          cc           = { name = "clang-9.9.9"; outPath = bootstrapTools; };
-        };
-
-        preHook = stage0.stdenv.lib.optionalString (shell == "${bootstrapTools}/bin/bash") ''
+        preHook = lib.optionalString (shell == "${bootstrapTools}/bin/bash") ''
           # Don't patch #!/interpreter because it leads to retained
           # dependencies on the bootstrapTools in the final stdenv.
           dontPatchShebangs=1
@@ -267,7 +284,16 @@ in rec {
     extraPreHook = ''
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
-    overrides = persistent;
+    overrides = self: super: (persistent self super) // {
+      # Hack to make sure we don't link ncurses in bootstrap tools. The proper
+      # solution is to avoid passing -L/nix-store/...-bootstrap-tools/lib,
+      # quite a sledgehammer just to get the C runtime.
+      gettext = super.gettext.overrideAttrs (old: {
+         configureFlags = old.configureFlags ++ [
+           "--disable-curses"
+         ];
+      });
+    };
   };
 
   stdenvDarwin = prevStage: let
@@ -338,8 +364,8 @@ in rec {
       xz.out xz.bin libcxx libcxxabi gmp.out gnumake findutils bzip2.out
       bzip2.bin llvmPackages.llvm llvmPackages.llvm.lib zlib.out zlib.dev libffi.out coreutils ed diffutils gnutar
       gzip ncurses.out ncurses.dev ncurses.man gnused bash gawk
-      gnugrep llvmPackages.clang-unwrapped patch pcre.out binutils-raw.out
-      binutils-raw.dev binutils gettext
+      gnugrep llvmPackages.clang-unwrapped patch pcre.out gettext
+      binutils-raw.binutils.out binutils-raw.binutils.dev binutils binutils.binutils
       cc.expand-response-params
     ]) ++ (with pkgs.darwin; [
       dyld Libsystem CF cctools ICU libiconv locale

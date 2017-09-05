@@ -67,7 +67,7 @@ in stdenv.mkDerivation rec {
     done
 
     for exe in $out/bin/sqlplus; do
-      patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+      patchelf --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) \
                --force-rpath --set-rpath "$out/lib:${libaio}/lib" \
                $exe
     done

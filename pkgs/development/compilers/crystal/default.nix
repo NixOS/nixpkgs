@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
         --suffix DYLD_LIBRARY_PATH : $libPath
   ''
   else ''
-    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+    patchelf --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) \
       crystal-${version}-1/embedded/bin/crystal
     patchelf --set-rpath ${ stdenv.lib.makeLibraryPath [ stdenv.cc.cc ] } \
       crystal-${version}-1/embedded/bin/crystal

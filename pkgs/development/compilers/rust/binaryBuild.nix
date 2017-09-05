@@ -42,17 +42,17 @@ rec {
 
       ${optionalString (needsPatchelf && bootstrapping) ''
         patchelf \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+          --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) \
           "$out/bin/rustdoc"
         patchelf \
           --set-rpath "${stdenv.lib.makeLibraryPath [ curl zlib ]}" \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+          --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) \
           "$out/bin/cargo"
       ''}
 
       ${optionalString needsPatchelf ''
         patchelf \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+          --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) \
           "$out/bin/rustc"
 
       # Do NOT, I repeat, DO NOT use `wrapProgram` on $out/bin/rustc
@@ -88,7 +88,7 @@ rec {
       ${optionalString needsPatchelf ''
         patchelf \
           --set-rpath "${stdenv.lib.makeLibraryPath [ curl zlib ]}" \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+          --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) \
           "$out/bin/cargo"
       ''}
 

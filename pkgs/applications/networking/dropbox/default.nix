@@ -108,7 +108,7 @@ in mkDerivation {
   '';
 
   preFixup = ''
-    INTERP=$(cat $NIX_CC/nix-support/dynamic-linker)
+    INTERP=$(cat $NIX_BINUTILS/nix-support/dynamic-linker)
     RPATH="${ldpath}:$out/${appdir}"
     getType='s/ *Type: *\([A-Z]*\) (.*/\1/'
     find "$out/${appdir}" -type f -print | while read obj; do

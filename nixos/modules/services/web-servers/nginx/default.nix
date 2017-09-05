@@ -507,7 +507,6 @@ in
         example = literalExample ''
           {
             "hydra.example.com" = {
-              addSSL = true;
               forceSSL = true;
               enableACME = true;
               locations."/" = {
