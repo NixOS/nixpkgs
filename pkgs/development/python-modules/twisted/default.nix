@@ -1,5 +1,15 @@
-{ stdenv, buildPythonPackage, fetchurl, python,
-  zope_interface, incremental, automat, constantly, hyperlink
+{ stdenv
+, buildPythonPackage
+, fetchurl
+, python
+, zope_interface
+, incremental
+, automat
+, constantly
+, hyperlink
+, pyopenssl
+, service-identity
+, idna
 }:
 buildPythonPackage rec {
   pname = "Twisted";
@@ -12,6 +22,8 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink ];
+
+  passthru.extras.tls = [ pyopenssl service-identity idna ];
 
   # Patch t.p._inotify to point to libc. Without this,
   # twisted.python.runtime.platform.supportsINotify() == False

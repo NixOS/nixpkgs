@@ -19,4 +19,7 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace requirements.txt --replace "argparse" ""
   '';
+
+  # Requires a bunch of new packages
+  meta.broken = true;
 }

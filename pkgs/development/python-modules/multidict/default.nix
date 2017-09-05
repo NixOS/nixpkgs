@@ -3,6 +3,7 @@
 , buildPythonPackage
 , pytest
 , isPy3k
+, psutil
 }:
 
 let
@@ -16,7 +17,7 @@ in buildPythonPackage rec {
     sha256 = "875f80a046e7799b40df4b015b8fc5dae91697936872a8d7362c909a02ec6d12";
   };
 
-  buildInputs = [ pytest ];
+  checkInputs = [ pytest psutil ];
 
   checkPhase = ''
     py.test
