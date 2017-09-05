@@ -56,16 +56,6 @@ rec {
       patch = ./genksyms-fix-segfault.patch;
     };
 
-  chromiumos_Kconfig_fix_entries_3_18 =
-    { name = "Kconfig_fix_entries_3_18";
-      patch = ./chromiumos-patches/fix-double-Kconfig-entry-3.18.patch;
-    };
-
-  chromiumos_no_link_restrictions =
-    { name = "chromium-no-link-restrictions";
-      patch = ./chromiumos-patches/no-link-restrictions.patch;
-    };
-
   cpu-cgroup-v2 = import ./cpu-cgroup-v2-patches;
 
   DCCP_double_free_vulnerability_CVE-2017-6074 = rec
