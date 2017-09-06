@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool_2
 , llvm, libcxx, libcxxabi, clang, libuuid
 , libobjc ? null
+, enableDumpNormalizedLibArgs ? false
 }:
 
 let
@@ -26,7 +27,7 @@ let
       # See https://github.com/tpoechtrager/cctools-port/issues/24. Remove when that's fixed.
       ./undo-unknown-triple.patch
       ./ld-tbd-v2.patch
-    ];
+    ] ++ stdenv.lib.optional enableDumpNormalizedLibArgs ./ld-dump-normalized-args.patch;
 
     enableParallelBuilding = true;
 
