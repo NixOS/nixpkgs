@@ -37,6 +37,7 @@ let
   baseService = recursiveUpdate commonEnv {
     wants = [ "ipfs-init.service" ];
     preStart = ''
+      ipfs repo fsck # workaround for BUG #4212 (https://github.com/ipfs/go-ipfs/issues/4214)
       ipfs --local config Addresses.API ${cfg.apiAddress}
       ipfs --local config Addresses.Gateway ${cfg.gatewayAddress}
     '' + optionalString false/*cfg.autoMount*/ ''
@@ -91,17 +92,15 @@ in {
       };
 
       defaultMode = mkOption {
-        description = "systemd service that is enabled by default";
         type = types.enum [ "online" "offline" "norouting" ];
         default = "online";
+        description = "systemd service that is enabled by default";
       };
 
       autoMigrate = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          Whether IPFS should try to migrate the file system automatically.
-        '';
+        description = "Whether IPFS should try to migrate the file system automatically";
       };
 
       #autoMount = mkOption {
@@ -137,26 +136,22 @@ in {
       enableGC = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          Whether to enable automatic garbage collection.
-        '';
+        description = "Whether to enable automatic garbage collection";
       };
 
       emptyRepo = mkOption {
         type = types.bool;
         default = false;
-        description = ''
-          If set to true, the repo won't be initialized with help files
-        '';
+        description = "If set to true, the repo won't be initialized with help files";
       };
 
       extraConfig = mkOption {
         type = types.attrs;
-        description = toString [
-          "Attrset of daemon configuration to set using `ipfs config`, every time the daemon starts."
-          "These are applied last, so may override configuration set by other options in this module."
-          "Keep in mind that this configuration is stateful; i.e., unsetting anything in here does not reset the value to the default!"
-        ];
+        description = ''
+          Attrset of daemon configuration to set using <command>ipfs config</command>, every time the daemon starts.
+          These are applied last, so may override configuration set by other options in this module.
+          Keep in mind that this configuration is stateful; i.e., unsetting anything in here does not reset the value to the default!
+        '';
         default = {};
         example = {
           Datastore.StorageMax = "100GB";
@@ -179,10 +174,8 @@ in {
       serviceFdlimit = mkOption {
         type = types.nullOr types.int;
         default = null;
-        description = ''
-          The fdlimit for the IPFS systemd unit or `null` to have the daemon attempt to manage it.
-        '';
-        example = 256*1024;
+        description = "The fdlimit for the IPFS systemd unit or <literal>null</literal> to have the daemon attempt to manage it";
+        example = 64*1024;
       };
 
     };
@@ -211,7 +204,7 @@ in {
       description = "IPFS Initializer";
 
       after = [ "local-fs.target" ];
-      before = [ "ipfs.service" "ipfs-offline.service" ];
+      before = [ "ipfs.service" "ipfs-offline.service" "ipfs-norouting.service" ];
 
       preStart = ''
         install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.dataDir}
