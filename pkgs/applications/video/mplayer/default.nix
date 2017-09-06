@@ -102,8 +102,7 @@ stdenv.mkDerivation rec {
     rm -rf ffmpeg
   '';
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ pkgconfig yasm ];
+  nativeBuildInputs = [ buildPackages.stdenv.cc pkgconfig yasm ];
   buildInputs = with stdenv.lib;
     [ freetype ffmpeg ]
     ++ optional aalibSupport aalib

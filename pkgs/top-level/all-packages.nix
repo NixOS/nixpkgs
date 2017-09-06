@@ -394,7 +394,9 @@ with pkgs;
 
   afio = callPackage ../tools/archivers/afio { };
 
-  afl = callPackage ../tools/security/afl { };
+  afl = callPackage ../tools/security/afl {
+    stdenv = clangStdenv;
+  };
 
   afpfs-ng = callPackage ../tools/filesystems/afpfs-ng/default.nix { };
 
@@ -794,10 +796,10 @@ with pkgs;
     enableSharedExecutables = false;
     executableToolDepends = [ makeWrapper ];
     postInstall = ''
-      exe=$libexec/bin/${drv.pname}-${drv.version}/${drv.pname}
-      install -D $bin/bin/${drv.pname} $exe
-      rm -rf $bin/bin $out/lib $out/share
-      makeWrapper $exe $bin/bin/${drv.pname} \
+      exe=$out/libexec/${drv.pname}-${drv.version}/${drv.pname}
+      install -D $out/bin/${drv.pname} $exe
+      rm -rf $out/{bin,lib,share}
+      makeWrapper $exe $out/bin/${drv.pname} \
         --prefix PATH ":" "${nix}/bin" \
         --prefix PATH ":" "${nix-prefetch-scripts}/bin"
       mkdir -p $out/share/bash-completion/completions
@@ -809,7 +811,7 @@ with pkgs;
     executableToolDepends = [ makeWrapper ];
     postInstall = ''
       wrapProgram $out/bin/stack2nix \
-        ${lib.makeBinPath [ git cabal2nix cabal-install stack ]}
+        --prefix PATH ":" "${git}/bin:${cabal2nix}/bin:${cabal-install}/bin:${stack}/bin"
     '';
   });
 
@@ -5364,6 +5366,10 @@ with pkgs;
 
   gccApple = throw "gccApple is no longer supported";
 
+  libstdcxxHook = makeSetupHook
+    { substitutions = { gcc = gcc-unwrapped; }; }
+    ../development/compilers/gcc/libstdc++-hook.sh;
+
   # Can't just overrideCC, because then the stdenv-cross mkDerivation will be
   # thrown away. TODO: find a better solution for this.
   crossLibcStdenv = buildPackages.makeStdenvCross {
@@ -5697,7 +5703,11 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security Foundation;
   };
 
-  go = go_1_8;
+  go_1_9 = callPackage ../development/compilers/go/1.9.nix {
+    inherit (darwin.apple_sdk.frameworks) Security Foundation;
+  };
+
+  go = go_1_9;
 
   go-repo-root = callPackage ../development/tools/go-repo-root { };
 
@@ -10370,7 +10380,6 @@ with pkgs;
 
   shhopt = callPackage ../development/libraries/shhopt { };
 
-  silgraphite = callPackage ../development/libraries/silgraphite {};
   graphite2 = callPackage ../development/libraries/silgraphite/graphite2.nix {};
 
   simavr = callPackage ../development/tools/simavr { };

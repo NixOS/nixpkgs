@@ -1,4 +1,8 @@
-{ lowPrio, newScope, stdenv, cmake, libxml2, python2, isl, fetchurl, overrideCC, wrapCC, darwin, ccWrapperFun }:
+{ lowPrio, newScope, stdenv, targetPlatform, cmake, libstdcxxHook
+, libxml2, python2, isl, fetchurl, overrideCC, wrapCC, ccWrapperFun
+, darwin
+}:
+
 let
   callPackage = newScope (self // { inherit stdenv cmake libxml2 python2 isl release_version version fetch; });
 
@@ -46,7 +50,12 @@ let
       extraPackages = [ self.libcxx self.libcxxabi ];
     };
 
-    stdenv = overrideCC stdenv self.clang;
+    stdenv = stdenv.override (drv: {
+      allowedRequisites = null;
+      cc = self.clang;
+      # Use the gcc libstdc++ when targeting linux.
+      extraBuildInputs = if stdenv.cc.isGNU then [ libstdcxxHook ] else drv.extraBuildInputs;
+    });
 
     libcxxStdenv = overrideCC stdenv self.libcxxClang;
 
@@ -58,4 +67,5 @@ let
 
     libcxxabi = callPackage ./libc++abi.nix {};
   };
+
 in self
