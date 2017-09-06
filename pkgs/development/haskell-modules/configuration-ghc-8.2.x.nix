@@ -67,5 +67,6 @@ self: super: {
   path = dontCheck super.path;
   path-io = super.path-io_1_3_3;
   trifecta = super.trifecta_1_7_1_1;
+  aeson-compat = dontCheck super.aeson-compat_0_3_7_1;  # test suite needs QuickCheck 2.10.*
 
 }
