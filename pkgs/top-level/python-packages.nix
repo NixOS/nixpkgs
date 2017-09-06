@@ -117,7 +117,11 @@ in {
 
   agate-sql = callPackage ../development/python-modules/agate-sql { };
 
+  aioamqp = callPackage ../development/python-modules/aioamqp { };
+
   ansicolor = callPackage ../development/python-modules/ansicolor { };
+
+  asana = callPackage ../development/python-modules/asana { };
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
 
@@ -169,6 +173,8 @@ in {
 
   distorm3 = callPackage ../development/python-modules/distorm3 { };
 
+  diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
+
   h5py = callPackage ../development/python-modules/h5py {
     hdf5 = pkgs.hdf5;
   };
@@ -219,6 +225,8 @@ in {
 
   pycryptodome = callPackage ../development/python-modules/pycryptodome { };
 
+  pycryptodomex = callPackage ../development/python-modules/pycryptodomex { };
+
   PyChromecast = callPackage ../development/python-modules/pychromecast {
     protobuf = self.protobuf3_2;
   };
@@ -242,6 +250,8 @@ in {
   pyGtkGlade = self.pygtk.override {
     libglade = pkgs.gnome2.libglade;
   };
+
+  pyjwkest = callPackage ../development/python-modules/pyjwkest { };
 
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
     pythonPackages = self;
@@ -5258,6 +5268,8 @@ in {
     };
   };
 
+  easy-thumbnails = callPackage ../development/python-modules/easy-thumbnails { };
+
   eccodes = if (isPy27) then
       (pkgs.eccodes.overrideAttrs (oldattrs: {
     name = "${python.libPrefix}-" + oldattrs.name;
@@ -8623,7 +8635,21 @@ in {
 
   django_guardian = callPackage ../development/python-modules/django_guardian.nix { };
 
+  django-ipware = callPackage ../development/python-modules/django-ipware { };
+
+  django-jinja = callPackage ../development/python-modules/django-jinja2 { };
+
+  django-pglocks = callPackage ../development/python-modules/django-pglocks { };
+
+  django-picklefield = callPackage ../development/python-modules/django-picklefield { };
+
   django_polymorphic = callPackage ../development/python-modules/django-polymorphic { };
+
+  django-sampledatahelper = callPackage ../development/python-modules/django-sampledatahelper { };
+
+  django-sites = callPackage ../development/python-modules/django-sites { };
+
+  django-sr = callPackage ../development/python-modules/django-sr { };
 
   django_tagging = callPackage ../development/python-modules/django_tagging { };
 
@@ -8873,6 +8899,8 @@ in {
       homepage = https://github.com/djblets/djblets;
     };
   };
+
+  djmail = callPackage ../development/python-modules/djmail { };
 
   pillowfight = buildPythonPackage rec {
     name = "pillowfight-${version}";
@@ -9441,6 +9469,10 @@ in {
 
   flask_ldap_login = callPackage ../development/python-modules/flask-ldap-login.nix { };
 
+  flask_mail = callPackage ../development/python-modules/flask-mail { };
+
+  flask_marshmallow = callPackage ../development/python-modules/flask-marshmallow { };
+
   flask_migrate = callPackage ../development/python-modules/flask-migrate { };
 
   flask_oauthlib = callPackage ../development/python-modules/flask-oauthlib.nix { };
@@ -9705,6 +9737,8 @@ in {
       description = "FastCGI Python module set";
     };
   });
+
+  fn = callPackage ../development/python-modules/fn { };
 
   folium = callPackage ../development/python-modules/folium { };
 
@@ -11873,6 +11907,10 @@ in {
       maintainers = with maintainers; [ domenkozar garbas ];
     };
   };
+
+  marshmallow = callPackage ../development/python-modules/marshmallow { };
+
+  marshmallow-sqlalchemy = callPackage ../development/python-modules/marshmallow-sqlalchemy { };
 
   manuel = buildPythonPackage rec {
     name = "manuel-${version}";
@@ -16397,6 +16435,8 @@ in {
     };
   };
 
+  premailer = callPackage ../development/python-modules/premailer { };
+
   prettytable = buildPythonPackage rec {
     name = "prettytable-0.7.1";
 
@@ -16457,6 +16497,8 @@ in {
     disabled = isPy3k || isPyPy;
     protobuf = pkgs.protobuf2_5;
   };
+
+  psd-tools = callPackage ../development/python-modules/psd-tools { };
 
   psutil = buildPythonPackage rec {
     name = "psutil-${version}";
@@ -20037,6 +20079,8 @@ in {
     propagatedBuildInputs = [ self.cffi ];
   };
 
+  sampledata = callPackage ../development/python-modules/sampledata { };
+
   scapy = buildPythonPackage rec {
     name = "scapy-2.2.0";
 
@@ -20160,6 +20204,8 @@ in {
       cp -v x_ignore_nofocus.so py/selenium/webdriver/firefox/${if pkgs.stdenv.is64bit then "amd64" else "x86"}/
     '';
   };
+
+  serpy = callPackage ../development/python-modules/serpy { };
 
   setuptools_scm = callPackage ../development/python-modules/setuptools_scm { };
 
