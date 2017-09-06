@@ -577,6 +577,7 @@
   tavyc = "Octavian Cerna <octavian.cerna@gmail.com>";
   ltavard = "Laure Tavard <laure.tavard@univ-grenoble-alpes.fr>";
   teh = "Tom Hunger <tehunger@gmail.com>";
+  teto = "Matthieu Coudron <mcoudron@hotmail.com>";
   telotortium = "Robert Irelan <rirelan@gmail.com>";
   thall = "Niclas Thall <niclas.thall@gmail.com>";
   thammers = "Tobias Hammerschmidt <jawr@gmx.de>";
