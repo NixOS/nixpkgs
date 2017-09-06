@@ -18235,6 +18235,9 @@ with pkgs;
     version = "8.5pl3";
   };
   coq_8_6 = callPackage ../applications/science/logic/coq {};
+  coq_8_7 = callPackage ../applications/science/logic/coq {
+    version = "8.7+beta1";
+  };
   coq_HEAD = callPackage ../applications/science/logic/coq/HEAD.nix {};
 
   mkCoqPackages_8_4 = self: let callPackage = newScope self; in {
