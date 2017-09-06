@@ -1374,6 +1374,17 @@ rec {
 
   };
 
+  vim-devicons = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-devicons-2017-05-29";
+    src = fetchgit {
+      url = "https://github.com/ryanoasis/vim-devicons";
+      rev = "153266275acc4f4615407a18e90f58780ebaef92";
+      sha256 = "1zjrra0q5c7lmgxzlz7ddd7vi6k2vhz69fdy2s7d873nnmmd7kgn";
+    };
+    dependencies = [];
+
+  };
+
   neoformat = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "neoformat-2017-07-22";
     src = fetchgit {

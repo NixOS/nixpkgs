@@ -108,6 +108,7 @@
 "github:raichoo/purescript-vim"
 "github:rhysd/vim-grammarous"
 "github:rodjek/vim-puppet"
+"github:ryanoasis/vim-devicons"
 "github:rust-lang/rust.vim"
 "github:sbdchd/neoformat"
 "github:sebastianmarkow/deoplete-rust"
