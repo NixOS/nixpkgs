@@ -7195,23 +7195,7 @@ in {
     };
   };
 
-  passlib = buildPythonPackage rec {
-    version = "1.6.5";
-    name    = "passlib-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/passlib/passlib-${version}.tar.gz";
-      sha256 = "1z27wdxs5rj5xhhqfzvzn3yg682irkxw6dcs5jj7mcf97psk8gd8";
-    };
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ bcrypt ];
-
-    meta = {
-      description = "A password hashing library for Python";
-      homepage    = https://code.google.com/p/passlib/;
-    };
-  };
+  passlib = callPackage ../development/python-modules/passlib { };
 
   path-and-address = buildPythonPackage rec {
     version = "2.0.1";
