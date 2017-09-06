@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, libxml2
+{ stdenv, buildPythonPackage, fetchFromGitHub, fetchpatch, libxml2
 , m2crypto, ply, pyyaml, six
 , httpretty, lxml, mock, pytest, requests
 }:
@@ -13,6 +13,15 @@ buildPythonPackage rec {
     rev    = "v${version}";
     sha256 = "0jcwklip03xcni0dvsk9va8ilqz21g4fxwqd5kzvv91slaadfcym";
   };
+
+  patches = [
+    # fix timezone handling so the tests pass again. Can go when 0.11.0 is released
+    # https://github.com/pywbem/pywbem/issues/755#issuecomment-327508681
+    (fetchpatch {
+      url = "https://github.com/pywbem/pywbem/commit/bb7fa19d636d999bf844d80939e155b8f212ef3e.patch";
+      sha256 = "1c5fsz4zdbgwwni7njdixbwhb5i9bw11mabqpzivrh7z9wna6ab9";
+    })
+  ];
 
   propagatedBuildInputs = [ m2crypto ply pyyaml six ];
 
