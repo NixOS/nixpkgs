@@ -6882,13 +6882,14 @@ with pkgs;
     inherit (darwin) ps;
   };
 
-  cmake = callPackage ../development/tools/build-managers/cmake {
+  cmake = libsForQt5.callPackage ../development/tools/build-managers/cmake {
     inherit (darwin) ps;
   };
 
   cmakeCurses = cmake.override { useNcurses = true; };
 
-  cmakeWithGui = cmakeCurses.override { useQt4 = true; };
+  cmakeWithGui = cmakeCurses.override { withQt5 = true; };
+  cmakeWithQt4Gui = cmakeCurses.override { useQt4 = true; };
 
   # Does not actually depend on Qt 5
   inherit (kdeFrameworks) extra-cmake-modules kapidox kdoctools;
