@@ -8,7 +8,7 @@ with lib;
     emulateWheel = true;
   };
 
-  hardware.enableAllFirmware = true;
+  hardware.enableRedistributableFirmware = mkDefault true;
   services.tlp.enable = true;
 
   services.xserver = {
