@@ -69,7 +69,7 @@ with pkgs;
   ### BUILD SUPPORT
 
   autoreconfHook = makeSetupHook
-    { substitutions = { inherit autoconf automake gettext libtool; }; }
+    { deps = [ autoconf automake gettext libtool ]; }
     ../build-support/setup-hooks/autoreconf.sh;
 
   ensureNewerSourcesHook = { year }: makeSetupHook {}
