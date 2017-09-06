@@ -5396,6 +5396,7 @@ in {
       sha256 = "0bixx80zjq0286dwm4zhg8bdhc8pqlrqy4n2jg7i6m6a4gv4gak5";
     };
 
+    buildInputs = with self; [ pytestrunner ];
     propagatedBuildInputs = with self; [ requests urllib3 mock setuptools ];
 
     meta = {
