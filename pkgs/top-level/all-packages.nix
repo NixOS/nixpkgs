@@ -5325,6 +5325,11 @@ with pkgs;
   clang-sierraHack = clang.override {
     name = "clang-wrapper-with-reexport-hack";
     useMacosReexportHack = true;
+    binutils = darwin.binutils.override {
+      cctools = darwin.cctools.override {
+        enableDumpNormalizedLibArgs = true;
+      };
+    };
   };
 
   clang_5  = llvmPackages_5.clang;
