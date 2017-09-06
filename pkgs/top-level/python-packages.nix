@@ -145,7 +145,9 @@ in {
 
   breathe = callPackage ../development/python-modules/breathe { };
 
-  browsermob-proxy = callPackage ../development/python-modules/browsermob-proxy {};
+  browsermob-proxy = if ! isPy3k then
+    callPackage ../development/python-modules/browsermob-proxy {}
+  else throw "browsermob-proxy is not supported for ${python.executable}";
 
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
 
