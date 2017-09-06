@@ -11893,12 +11893,12 @@ in {
   };
 
   markdown = buildPythonPackage rec {
-    version = "2.6.7";
+    version = "2.6.8";
     name = "markdown-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/M/Markdown/Markdown-${version}.tar.gz";
-      sha256 = "1h055llfd0ps0ig7qb3v1j9068xv90dc9s7xkhkgz9zg8r4g5sys";
+      sha256 = "0cqfhr1km2s5d8jm6hbwgkrrj9hvkjf2gab3s2axlrw1clgaij0a";
     };
 
     # error: invalid command 'test'
@@ -16437,7 +16437,11 @@ in {
   });
 
   protobuf = self.protobuf2_6;
-  # only required by tensorflow
+  protobuf3_3 = callPackage ../development/python-modules/protobuf.nix {
+    disabled = isPyPy;
+    doCheck = !isPy3k;
+    protobuf = pkgs.protobuf3_3;
+  };
   protobuf3_2 = callPackage ../development/python-modules/protobuf.nix {
     disabled = isPyPy;
     doCheck = !isPy3k;
@@ -27522,9 +27526,12 @@ EOF
 
   preshed = callPackage ../development/python-modules/preshed { };
 
+  backports_weakref = callPackage ../development/python-modules/backports_weakref { }; 
+
   thinc = callPackage ../development/python-modules/thinc { };
 
   spacy = callPackage ../development/python-modules/spacy { };
+
 });
 
 in fix' (extends overrides packages)
