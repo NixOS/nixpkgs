@@ -13900,6 +13900,7 @@ with pkgs;
   docker-edge = docker_17_07;
 
   docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
+  docker-lvm-plugin = callPackage ../applications/virtualization/docker/lvm.nix {};
 
   docker-gc = callPackage ../applications/virtualization/docker/gc.nix { };
 
