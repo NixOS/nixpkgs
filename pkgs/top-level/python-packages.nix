@@ -15497,7 +15497,7 @@ in {
       sha256 = "1vmyvynqzx5zvbipaxff4fnzy3h3dvl3zicyr15yb816j93jl2ca";
     };
 
-    buildInputs = with self; [ mock nose pep8 pylint ];
+    buildInputs = with self; [ mock nose pep8 pylint mccabe ];
 
     meta = {
       description = "RabbitMQ Focused AMQP low-level library";
