@@ -95,9 +95,10 @@ stdenv.mkDerivation rec {
     sed -i 's,/_go_os_test,'"$TMPDIR"'/_go_os_test,' src/os/path_test.go
 
     sed -i '/TestChdirAndGetwd/areturn' src/os/os_test.go
-    sed -i '/TestRead0/areturn' src/os/os_test.go
-    sed -i '/TestNohup/areturn' src/os/signal/signal_test.go
+    sed -i '/TestCredentialNoSetGroups/areturn' src/os/exec/exec_posix_test.go
     sed -i '/TestCurrent/areturn' src/os/user/user_test.go
+    sed -i '/TestNohup/areturn' src/os/signal/signal_test.go
+    sed -i '/TestRead0/areturn' src/os/os_test.go
     sed -i '/TestSystemRoots/areturn' src/crypto/x509/root_darwin_test.go
 
     sed -i '/TestGoInstallRebuildsStalePackagesInOtherGOPATH/areturn' src/cmd/go/go_test.go
@@ -106,7 +107,6 @@ stdenv.mkDerivation rec {
     sed -i '/TestDisasmExtld/areturn' src/cmd/objdump/objdump_test.go
 
     sed -i 's/unrecognized/unknown/' src/cmd/link/internal/ld/lib.go
-    sed -i 's/unrecognized/unknown/' src/cmd/go/build.go
 
     touch $TMPDIR/group $TMPDIR/hosts $TMPDIR/passwd
 
