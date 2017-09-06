@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       sed -i 's/which/command -v/' $program
     done
 
-    install -vD -t $out/share/man/man1 man/*.1
+    install -vD -t $out/share/man/man1 man/*.{1,man}
   '';
 
   separateDebugInfo = true;
