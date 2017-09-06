@@ -81,6 +81,8 @@ in rec {
         (all nixos.tests.boot.uefiUsb)
         (all nixos.tests.boot-stage1)
         nixos.tests.hibernate.x86_64-linux # i686 is flaky, see #23107
+        nixos.tests.docker.x86_64-linux
+        nixos.tests.docker-edge.x86_64-linux
         (all nixos.tests.ecryptfs)
         (all nixos.tests.ipv6)
         (all nixos.tests.i3wm)

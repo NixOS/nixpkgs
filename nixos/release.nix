@@ -234,6 +234,7 @@ in rec {
   tests.containers-hosts = callTest tests/containers-hosts.nix {};
   tests.containers-macvlans = callTest tests/containers-macvlans.nix {};
   tests.docker = hydraJob (import tests/docker.nix { system = "x86_64-linux"; });
+  tests.docker-edge = hydraJob (import tests/docker-edge.nix { system = "x86_64-linux"; });
   tests.dnscrypt-proxy = callTest tests/dnscrypt-proxy.nix { system = "x86_64-linux"; };
   tests.ecryptfs = callTest tests/ecryptfs.nix {};
   tests.etcd = hydraJob (import tests/etcd.nix { system = "x86_64-linux"; });
