@@ -199,6 +199,7 @@ self: super: {
   semigroups = addBuildDepends (dontCheck super.semigroups) (with self; [hashable tagged text unordered-containers]);
   texmath = addBuildDepend super.texmath self.network-uri;
   yesod-auth-oauth2 = overrideCabal super.yesod-auth-oauth2 (drv: { testDepends = (drv.testDepends or []) ++ [ self.load-env self.yesod ]; });
+  natural-transformation = addBuildDepend super.natural-transformation self.semigroups;
   # cereal must have `fail` in pre-ghc-8.0.x versions
   # also tests require bytestring>=0.10.8.1
   cereal = dontCheck (addBuildDepend super.cereal self.fail);
