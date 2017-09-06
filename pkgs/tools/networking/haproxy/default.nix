@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://www.haproxy.org/download/${majorVersion}/src/${name}.tar.gz";
+    url = "https://www.haproxy.org/download/${majorVersion}/src/${name}.tar.gz";
     sha256 = "0hp1k957idaphhmw4m0x8cdzdw9ga1mzgsnk2m0as86xrqy1b47c";
   };
 
