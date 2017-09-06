@@ -10333,7 +10333,6 @@ with pkgs;
 
   shhopt = callPackage ../development/libraries/shhopt { };
 
-  silgraphite = callPackage ../development/libraries/silgraphite {};
   graphite2 = callPackage ../development/libraries/silgraphite/graphite2.nix {};
 
   simavr = callPackage ../development/tools/simavr { };
