@@ -3351,6 +3351,8 @@ with pkgs;
 
   munge = callPackage ../tools/security/munge { };
 
+  mycli = callPackage ../tools/admin/mycli { };
+
   mysql2pgsql = callPackage ../tools/misc/mysql2pgsql { };
 
   mysqltuner = callPackage ../tools/misc/mysqltuner { };

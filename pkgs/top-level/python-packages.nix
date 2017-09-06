@@ -15984,39 +15984,6 @@ in {
     };
   };
 
-
-  mycli = buildPythonPackage rec {
-    name = "mycli-${version}";
-    version = "1.6.0";
-    disabled = isPy35;
-
-    src = pkgs.fetchFromGitHub {
-      sha256 = "0vvl36gxawa0h36v119j47fdylj8k73ak6hv04s5cjqn5adcjjbh";
-      rev = "v${version}";
-      repo = "mycli";
-      owner = "dbcli";
-    };
-
-    propagatedBuildInputs = with self; [
-      pymysql configobj sqlparse prompt_toolkit pygments click pycrypto
-    ];
-
-    postPatch = ''
-      substituteInPlace setup.py --replace "==" ">="
-    '';
-
-    meta = {
-      inherit version;
-      description = "Command-line interface for MySQL";
-      longDescription = ''
-        Rich command-line interface for MySQL with auto-completion and
-        syntax highlighting.
-      '';
-      homepage = http://mycli.net;
-      license = licenses.bsd3;
-    };
-  };
-
   pickleshare = buildPythonPackage rec {
     version = "0.7.4";
     name = "pickleshare-${version}";
