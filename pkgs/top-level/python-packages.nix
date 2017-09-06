@@ -20085,6 +20085,8 @@ in {
     inherit (pkgs) gfortran glibcLocales;
   };
 
+  scitools = callPackage ../development/python-modules/scitools { };
+
   scripttest = buildPythonPackage rec {
     version = "1.3";
     name = "scripttest-${version}";
