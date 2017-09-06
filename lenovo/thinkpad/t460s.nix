@@ -3,7 +3,7 @@
 {
   imports =
     [ ../lib/kernel-version.nix
-      ./general.nix
+      ./general-intel.nix
     ];
 
   ## BEGIN from generated hardware-configuration

@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ ./general.nix ];
+  imports = [ ./general-intel.nix ];
 
   boot = {
     kernelParams = [

@@ -1,7 +1,7 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ ./general.nix ];
+  imports = [ ./general-intel.nix ];
 
   # TPM chip countains a RNG
   security.rngd.enable = true;
