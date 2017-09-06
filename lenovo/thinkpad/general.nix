@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ pkgs, lib, ... }:
 
 with lib;
 
@@ -15,4 +15,6 @@ with lib;
     synaptics.enable = false;
     libinput.enable = true;
   };
+
+  environment.systemPackages = [ pkgs.acpi ];
 }
