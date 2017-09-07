@@ -13,6 +13,10 @@ buildPythonPackage rec {
     sha256 = "c20044779ff848f67f89c56a0e4624c04298cd476e25253ac0c36f910a1a11d8";
   };
 
+  checkPhase = ''
+    py.test
+  '';
+
   buildInputs = [ pytest mock pytestrunner ];
   propagatedBuildInputs = [ pyflakes pycodestyle mccabe ]
     ++ stdenv.lib.optionals (pythonOlder "3.4") [ enum34 ]
