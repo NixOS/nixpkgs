@@ -31,6 +31,7 @@
 "github:alvan/vim-closetag"
 "github:andviro/flake8-vim"
 "github:ap/vim-css-color"
+"github:autozimu/LanguageClient-neovim"
 "github:bbchung/clighter8"
 "github:benekastah/neomake"
 "github:bitc/vim-hdevtools"

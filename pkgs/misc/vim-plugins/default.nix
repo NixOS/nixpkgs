@@ -495,6 +495,17 @@ rec {
 
   };
 
+  LanguageClient-neovim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "LanguageClient-neovim-2017-09-05";
+    src = fetchgit {
+      url = "https://github.com/autozimu/LanguageClient-neovim";
+      rev = "5bfc3492d50c3c48c6e0b0d1899ed2bbca2cf48f";
+      sha256 = "1zi3v4yx4hgzfr23377z84yngiqvdwjpdpkn12lpi6irb04q6641";
+    };
+    dependencies = [];
+
+  };
+
   clighter8 = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "clighter8-2017-07-23";
     src = fetchgit {
