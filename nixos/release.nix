@@ -264,9 +264,9 @@ in rec {
   tests.keymap = callSubTests tests/keymap.nix {};
   tests.initrdNetwork = callTest tests/initrd-network.nix {};
   tests.kernel-copperhead = tests/kernel-copperhead.nix {};
-  tests.kernel-latest = tests/kernel-latest.nix {};
-  tests.kernel-lts = tests/kernel-lts.nix {};
-  tests.kernel-params = tests/kernel-params.nix {};
+  tests.kernel-latest = callTest tests/kernel-latest.nix {};
+  tests.kernel-lts = callTest tests/kernel-lts.nix {};
+  tests.kernel-params = callTest tests/kernel-params.nix {};
   tests.keystone = callTest tests/keystone.nix {};
   tests.kubernetes = hydraJob (import tests/kubernetes.nix { system = "x86_64-linux"; });
   tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
