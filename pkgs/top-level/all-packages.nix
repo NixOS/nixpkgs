@@ -105,6 +105,8 @@ with pkgs;
 
   docker_compose = pythonPackages.docker_compose;
 
+  dotfiles = callPackage ../applications/misc/dotfiles { };
+
   dotnetenv = callPackage ../build-support/dotnetenv {
     dotnetfx = dotnetfx40;
   };
