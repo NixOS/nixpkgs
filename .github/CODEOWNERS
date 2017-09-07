@@ -7,6 +7,9 @@
 # For documentation on this file, see https://help.github.com/articles/about-codeowners/
 # Mentioned users will get code review requests.
 
+# This file
+.github/CODEOWNERS @edolstra
+
 # Boostraping and core infra
 pkgs/stdenv/    @edolstra
 pkgs/build-support/cc-wrapper/  @edolstra
