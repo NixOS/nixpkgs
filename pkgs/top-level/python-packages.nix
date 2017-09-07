@@ -19136,31 +19136,7 @@ in {
   };
 
 
-  restview = buildPythonPackage rec {
-    name = "restview-${version}";
-    version = "2.5.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/restview/${name}.tar.gz";
-      sha256 = "0gmdmnlhiy6lagi17maiz312374hk6g6x90fhjwnbrwxif4r9bd5";
-    };
-
-    propagatedBuildInputs = with self; [ docutils readme pygments ];
-    buildInputs = with self; [ mock ];
-
-    patchPhase = ''
-      # dict order breaking tests
-      sed -i 's@<a href="http://www.example.com" rel="nofollow">@...@' src/restview/tests.py
-    '';
-
-    meta = {
-      description = "ReStructuredText viewer";
-      homepage = http://mg.pov.lt/restview/;
-      license = licenses.gpl2;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ koral ];
-    };
-  };
+  restview = callPackage ../development/python-modules/restview { };
 
   readme = buildPythonPackage rec {
     name = "readme-${version}";
