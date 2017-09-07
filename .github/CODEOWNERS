@@ -24,9 +24,11 @@ pkgs/development/python-modules/*	@FRidh
 doc/languages-frameworks/python.md	@FRidh
 
 # Haskell
-pkgs/development/haskell-modules/default.nix  @Profpatsch
-pkgs/development/haskell-modules/generic-builder.nix  @Profpatsch
-pkgs/development/haskell-modules/hoogle.nix  @Profpatsch
+pkgs/development/compilers/ghc @peti
+pkgs/development/haskell-modules @peti
+pkgs/development/haskell-modules/default.nix  @Profpatsch @peti
+pkgs/development/haskell-modules/generic-builder.nix  @Profpatsch @peti
+pkgs/development/haskell-modules/hoogle.nix  @Profpatsch @peti
 
 # Darwin-related
 pkgs/stdenv/darwin/*	@copumpkin @LnL7
