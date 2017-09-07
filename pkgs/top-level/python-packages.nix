@@ -4529,6 +4529,8 @@ in {
 
   libtmux = callPackage ../development/python-modules/libtmux { };
 
+  linuxfd = callPackage ../development/python-modules/linuxfd { };
+
   locket = buildPythonPackage rec {
     name = "locket-${version}";
     version = "0.2.0";
