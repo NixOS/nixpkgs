@@ -26,7 +26,7 @@ let
       demo     = bdist { };
     };
   };
-  actual = binDists.${stdenv.system}.${releaseType} or throw "Factorio: unsupported platform";
+  actual = binDists.${stdenv.system}.${releaseType} or (throw "Factorio: unsupported platform");
 
   bdistForArch = arch: { sha256 ? null
                        , version ? "0.15.34"
