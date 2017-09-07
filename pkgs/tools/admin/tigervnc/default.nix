@@ -5,7 +5,7 @@
 , cmake, gettext, libtool
 , glproto, mesa_glu
 , gnutls, pam, nettle
-, xterm }:
+, xterm, openssh }:
 
 with stdenv.lib;
 
@@ -90,6 +90,11 @@ stdenv.mkDerivation rec {
   propagatedNativeBuildInputs = xorg.xorgserver.propagatedNativeBuildInputs;
 
   enableParallelBuilding = true;
+
+  postPatch = ''
+    substituteInPlace vncviewer/vncviewer.cxx \
+     --replace '"/usr/bin/ssh' '"${openssh}/bin/ssh'
+     '';
 
   meta = {
     homepage = http://www.tigervnc.org/;
