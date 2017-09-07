@@ -18,5 +18,7 @@ buildPythonPackage rec {
   meta = {
     description = "Python library for scientific computing";
     homepage = https://github.com/hplgit/scitools;
+    license = stdenv.lib.licenses.bsd3;
+    maintainers = with stdenv.lib.maintainers; [ jamtrott ];
   };
 }
