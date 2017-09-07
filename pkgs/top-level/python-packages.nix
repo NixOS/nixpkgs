@@ -5119,23 +5119,6 @@ in {
     };
   };
 
-  dotfiles = buildPythonPackage rec {
-    name = "dotfiles-0.6.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/dotfiles/${name}.tar.gz";
-      sha256 = "03qis6m9r2qh00sqbgwsm883s4bj1ibwpgk86yh4l235mdw8jywv";
-    };
-
-    doCheck = true;
-
-    meta = {
-      description = "Easily manage your dotfiles";
-      homepage = https://github.com/jbernard/dotfiles;
-      license = licenses.isc;
-    };
-  };
-
   dopy = buildPythonPackage rec {
     version = "2016-01-04";
     name = "dopy-${version}";
