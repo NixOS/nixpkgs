@@ -11297,8 +11297,6 @@ with pkgs;
 
   meteor = callPackage ../servers/meteor/default.nix { };
 
-  mfi = callPackage ../servers/mfi { };
-
   minio = callPackage ../servers/minio { };
 
   # Backwards compatibility.
