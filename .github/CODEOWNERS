@@ -8,8 +8,8 @@
 # Mentioned users will get code review requests.
 
 # Boostraping and core infra
-pkgs/stdenv/	@Ericson2314
-pkgs/build-support/cc-wrapper/	@Ericson2314
+pkgs/stdenv/    @Ericson2314
+pkgs/build-support/cc-wrapper/  @Ericson2314
 
 # Libraries
 lib/  @Profpatsch
@@ -18,10 +18,10 @@ lib/  @Profpatsch
 pkgs/build-support  @Profpatsch
 
 # Python-related code and docs
-pkgs/top-level/python-packages.nix	@FRidh
-pkgs/development/interpreters/python/*	@FRidh
-pkgs/development/python-modules/*	@FRidh
-doc/languages-frameworks/python.md	@FRidh
+pkgs/top-level/python-packages.nix      @FRidh
+pkgs/development/interpreters/python/*  @FRidh
+pkgs/development/python-modules/*       @FRidh
+doc/languages-frameworks/python.md      @FRidh
 
 # Haskell
 pkgs/development/compilers/ghc @peti
@@ -35,6 +35,6 @@ pkgs/applications/science/math/R @peti
 pkgs/development/r-modules @peti
 
 # Darwin-related
-pkgs/stdenv/darwin/*	@copumpkin @LnL7
-pkgs/os-specific/darwin/*	@LnL7
-pkgs/os-specific/darwin/apple-source-releases/*	@copumpkin
+pkgs/stdenv/darwin/*    @copumpkin @LnL7
+pkgs/os-specific/darwin/*       @LnL7
+pkgs/os-specific/darwin/apple-source-releases/* @copumpkin
