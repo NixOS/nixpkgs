@@ -1,13 +1,15 @@
-{lib, fetchurl, python, buildPythonPackage, numpy, matplotlib}:
+{stdenv, fetchFromGitHub, python, buildPythonPackage, numpy, matplotlib}:
 
 buildPythonPackage rec {
   pname = "scitools";
   version = "0.9.0";
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/hplgit/scitools/archive/scitools-${version}.tar.gz";
-    sha256 = "1aj3i56aim542krynza46plxbci7dfhq9rq7hwfw4946rjbm3klc";
+  src = fetchFromGitHub {
+    owner = "hplgit";
+    repo = "scitools";
+    rev = "${name}";
+    sha256 = "07yxbc7spr7vy72lg3czv4r4q2f0wq17vszlnsfmsb2ix8jajp4d";
   };
 
   buildInputs = [ matplotlib ];
