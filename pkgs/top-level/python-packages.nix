@@ -34,6 +34,7 @@ let
   bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { };
 
   mkPythonDerivation = makeOverridable( callPackage ../development/interpreters/python/mk-python-derivation.nix {
+    distutils-cfg = callPackage ../development/python-modules/distutils-cfg { };
   });
 
   # Derivations built with `buildPythonPackage` can already be overriden with `override`, `overrideAttrs`, and `overrideDerivation`.
