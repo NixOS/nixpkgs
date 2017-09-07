@@ -1363,6 +1363,17 @@ rec {
 
   };
 
+  nvim-completion-manager = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "nvim-completion-manager-2017-09-05";
+    src = fetchgit {
+      url = "https://github.com/roxma/nvim-completion-manager";
+      rev = "d9db97f7e5a4ab8af905bc00a4501d770368dee4";
+      sha256 = "1aaclyz1ss2iv0lwcxkz8x5x4wivsixmlk5xakwy989q9g9ps2f1";
+    };
+    dependencies = [];
+
+  };
+
   rust-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "rust-vim-2017-07-14";
     src = fetchgit {
