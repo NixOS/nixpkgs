@@ -99,10 +99,10 @@ in stdenv.mkDerivation rec {
       if [[ "$ftype" =~ LSB\ .*dynamically\ linked ]]; then
         if [[ "$ftype" =~ 32-bit ]]; then
           rpath="${libPath32}"
-          intp="$(cat $NIX_BINUTILS/nix-support/dynamic-linker-m32)"
+          intp="$(cat $NIX_CC/nix-support/dynamic-linker-m32)"
         else
           rpath="${libPath64}"
-          intp="$(cat $NIX_BINUTILS/nix-support/dynamic-linker)"
+          intp="$(cat $NIX_CC/nix-support/dynamic-linker)"
         fi
 
         oldRpath="$(patchelf --print-rpath "$1")"

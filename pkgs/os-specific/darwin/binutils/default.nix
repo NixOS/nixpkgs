@@ -2,15 +2,12 @@
 , hostPlatform, targetPlatform
 }:
 
-# despite the name, binutils-raw is in fact wrapped.
-let binutils-unwrapped = binutils-raw.binutils; in
-
 # Make sure both underlying packages claim to have prepended their binaries
 # with the same prefix.
-assert binutils-unwrapped.prefix == cctools.prefix;
+assert binutils-raw.prefix == cctools.prefix;
 
 let
-  inherit (binutils-unwrapped) prefix;
+  inherit (binutils-raw) prefix;
   cmds = [
     "ar" "ranlib" "as" "dsymutil" "install_name_tool"
     "ld" "strip" "otool" "lipo" "nm" "strings" "size"
@@ -23,7 +20,7 @@ stdenv.mkDerivation {
   buildCommand = ''
     mkdir -p $out/bin $out/include
 
-    ln -s ${binutils-unwrapped.out}/bin/${prefix}c++filt $out/bin/${prefix}c++filt
+    ln -s ${binutils-raw.out}/bin/${prefix}c++filt $out/bin/${prefix}c++filt
 
     # We specifically need:
     # - ld: binutils doesn't provide it on darwin
@@ -40,7 +37,7 @@ stdenv.mkDerivation {
       ln -sf "${cctools}/bin/$i" "$out/bin/$i"
     done
 
-    for i in ${binutils-unwrapped.dev or binutils-unwrapped.out}/include/*.h; do
+    for i in ${binutils-raw.dev or binutils-raw.out}/include/*.h; do
       ln -s "$i" "$out/include/$(basename $i)"
     done
 
@@ -49,8 +46,8 @@ stdenv.mkDerivation {
     done
 
     # FIXME: this will give us incorrect man pages for bits of cctools
-    ln -s ${binutils-unwrapped.out}/share $out/share
-    ln -s ${binutils-unwrapped.out}/lib $out/lib
+    ln -s ${binutils-raw.out}/share $out/share
+    ln -s ${binutils-raw.out}/lib $out/lib
 
     ln -s ${cctools}/libexec $out/libexec
   '';

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
     for f in $out/bin/*; do
       if isELF "$f"; then
-        patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" "$f"
+        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$f"
         patchelf --set-rpath "$out/lib" "$f"
       fi
     done

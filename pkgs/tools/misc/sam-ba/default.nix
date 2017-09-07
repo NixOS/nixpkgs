@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin/" \
              "$out/opt/sam-ba/"
     cp -a . "$out/opt/sam-ba/"
-    patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" "$out/opt/sam-ba/sam-ba${maybe64}"
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$out/opt/sam-ba/sam-ba${maybe64}"
     cat > "$out/bin/sam-ba" << EOF
     export LD_LIBRARY_PATH="${libPath}"
     exec "$out/opt/sam-ba/sam-ba${maybe64}"

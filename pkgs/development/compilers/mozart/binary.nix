@@ -39,7 +39,7 @@ stdenv.mkDerivation {
     tar xvf $src -C $out --strip-components=1
 
     for exe in $out/bin/{ozemulator,ozwish} ; do
-      patchelf --set-interpreter $(< $NIX_BINUTILS/nix-support/dynamic-linker) \
+      patchelf --set-interpreter $(< $NIX_CC/nix-support/dynamic-linker) \
                --set-rpath $libPath \
                $exe
     done

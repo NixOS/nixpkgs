@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
     binName=${if commercialVersion then "AndYetItMoves" else "AndYetItMovesDemo"}
 
-    patchelf --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) --set-rpath $fullPath $out/opt/andyetitmoves/lib/$binName
+    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --set-rpath $fullPath $out/opt/andyetitmoves/lib/$binName
     cat > $out/bin/$binName << EOF
     #!/bin/sh
     cd $out/opt/andyetitmoves

@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
   installPhase = ''
     install -D rslsync "$out/bin/rslsync"
     patchelf \
-      --interpreter "$(< $NIX_BINUTILS/nix-support/dynamic-linker)" \
+      --interpreter "$(< $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath ${libPath} "$out/bin/rslsync"
   '';
 

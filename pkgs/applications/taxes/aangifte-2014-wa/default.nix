@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     ''
       for i in bin/*; do
           patchelf \
-              --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
+              --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
               --set-rpath ${stdenv.lib.makeLibraryPath [ libX11 libXext libSM ]}:$(cat $NIX_CC/nix-support/orig-cc)/lib \
               $i
       done

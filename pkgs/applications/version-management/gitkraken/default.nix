@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    patchelf --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) \
+    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
              --set-rpath "$libPath:$out/opt/gitkraken" "$out/opt/gitkraken/gitkraken"
     wrapProgram $out/opt/gitkraken/gitkraken \
       --prefix LD_PRELOAD : "${makeLibraryPath [ curl ]}/libcurl.so.4" \

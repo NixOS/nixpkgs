@@ -134,7 +134,7 @@ stdenv.mkDerivation {
       for executable in \
         thunderbird crashreporter thunderbird-bin plugin-container updater
       do
-        patchelf --interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
+        patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           "$out/usr/lib/thunderbird-bin-${version}/$executable"
       done
 

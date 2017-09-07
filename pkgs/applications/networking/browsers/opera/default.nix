@@ -114,7 +114,7 @@ in stdenv.mkDerivation {
     | while read f
       do
         patchelf \
-          --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
+          --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath "$out/lib:${rpath}" \
           "$f"
       done

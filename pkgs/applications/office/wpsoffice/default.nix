@@ -53,7 +53,7 @@ in stdenv.mkDerivation rec{
     mkdir $out/bin
     for i in wps wpp et; do
       patchelf \
-        --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
+        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --force-rpath --set-rpath "$prefix/office6:$libPath" \
         $prefix/office6/$i
 

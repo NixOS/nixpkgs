@@ -33,7 +33,7 @@ stdenv.mkDerivation {
     cp usr/bin/rescuetime $out/bin
 
     ${patchelf}/bin/patchelf \
-      --interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
+      --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       $out/bin/rescuetime
 
     wrapProgram $out/bin/rescuetime \

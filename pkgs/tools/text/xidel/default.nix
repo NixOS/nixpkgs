@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p "$out/bin"
     cp -a usr/* "$out/"
-    patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" "$out/bin/xidel"
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$out/bin/xidel"
   '';
 
   meta = with stdenv.lib; {

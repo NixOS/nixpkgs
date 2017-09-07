@@ -73,7 +73,7 @@ let
       	$out/share/applications/enpass.desktop
 
       for i in $out/bin/{Enpass,EnpassHelper/EnpassHelper}; do
-        patchelf --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) $i
+        patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $i
       done
 
       # The helper's sha256 sum must match, hence the use of libredirect.

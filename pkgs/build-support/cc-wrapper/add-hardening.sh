@@ -6,6 +6,7 @@ if [[ -v hardeningEnable[@] ]]; then
   hardeningFlags+=(${hardeningEnable[@]})
 fi
 hardeningCFlags=()
+hardeningLDFlags=()
 
 declare -A hardeningDisableMap
 
@@ -43,6 +44,7 @@ if [[ -z "${hardeningDisableMap[all]:-}" ]]; then
           if [[ ! ("$*" =~ " -shared " || "$*" =~ " -static ") ]]; then
             if [[ -n "${NIX_DEBUG:-}" ]]; then echo HARDENING: enabling LDFlags -pie >&2; fi
             hardeningCFlags+=('-pie')
+            hardeningLDFlags+=('-pie')
           fi
           ;;
         pic)
@@ -56,6 +58,14 @@ if [[ -z "${hardeningDisableMap[all]:-}" ]]; then
         format)
           if [[ -n "${NIX_DEBUG:-}" ]]; then echo HARDENING: enabling format >&2; fi
           hardeningCFlags+=('-Wformat' '-Wformat-security' '-Werror=format-security')
+          ;;
+        relro)
+          if [[ -n "${NIX_DEBUG:-}" ]]; then echo HARDENING: enabling relro >&2; fi
+          hardeningLDFlags+=('-z' 'relro')
+          ;;
+        bindnow)
+          if [[ -n "${NIX_DEBUG:-}" ]]; then echo HARDENING: enabling bindnow >&2; fi
+          hardeningLDFlags+=('-z' 'now')
           ;;
         *)
           # Ignore unsupported. Checked in Nix that at least *some*

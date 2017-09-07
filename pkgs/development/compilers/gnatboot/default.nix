@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     cp -R * $out
     set +e
     for a in $out/bin/* ; do
-      patchelf --interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) \
+      patchelf --interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
         --set-rpath $(cat $NIX_CC/nix-support/orig-libc)/lib:$(cat $NIX_CC/nix-support/orig-cc)/lib64:$(cat $NIX_CC/nix-support/orig-cc)/lib $a
     done
     set -e

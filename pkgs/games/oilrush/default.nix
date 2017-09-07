@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     cd bin
     for f in launcher_$arch libQtCoreUnigine_$arch.so.4 OilRush_$arch
     do
-      patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" $f
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $f
     done
     patchelf --set-rpath ${stdenv.cc.cc.lib}/lib64:${makeLibraryPath [ stdenv.cc.cc libX11 libXext libXrender fontconfig freetype ]}\
              launcher_$arch

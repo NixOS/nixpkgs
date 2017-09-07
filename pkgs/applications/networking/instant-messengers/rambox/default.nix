@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   installPhase = ''
-    patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" rambox
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" rambox
     patchelf --set-rpath "$out/opt/rambox:${stdenv.lib.makeLibraryPath deps}" rambox
 
     mkdir -p $out/bin $out/opt/rambox
