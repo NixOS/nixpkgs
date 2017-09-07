@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "fixtures";
-  version = "1.4.0";
+  version = "3.0.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0djxvdwm8s60dbfn7bhf40x6g818p3b3mlwijm1c3bqg7msn271y";
+    sha256 = "fcf0d60234f1544da717a9738325812de1f42c2fa085e2d9252d8fff5712b2ef";
   };
 
   propagatedBuildInputs = [ pbr testtools mock ];
