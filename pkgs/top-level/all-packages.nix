@@ -10731,6 +10731,11 @@ with pkgs;
     gst-plugins-base = gst_all_1.gst-plugins-base;
   };
 
+  webkitgtk217x = callPackage ../development/libraries/webkitgtk/2.17.nix {
+    harfbuzz = harfbuzz-icu;
+    gst-plugins-base = gst_all_1.gst-plugins-base;
+  };
+
   webkitgtk24x-gtk2 = webkitgtk24x-gtk3.override {
     withGtk2 = true;
     enableIntrospection = false;
@@ -17034,9 +17039,10 @@ with pkgs;
 
   xiphos = callPackage ../applications/misc/xiphos {
     gconf = gnome2.GConf;
-    inherit (gnome2) gtkhtml libgtkhtml libglade scrollkeeper;
+    inherit (gnome2) libglade scrollkeeper;
+    gtkhtml = gnome2.gtkhtml4;
+    webkitgtk = webkitgtk217x;
     python = python27;
-    webkitgtk = webkitgtk24x-gtk2;
   };
 
   xournal = callPackage ../applications/graphics/xournal {

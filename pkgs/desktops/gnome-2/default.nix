@@ -66,6 +66,8 @@ let overridden = set // overrides; set = with overridden; {
 
   gtkhtml = callPackage ./platform/gtkhtml { };
 
+  gtkhtml4 = callPackage ./platform/gtkhtml/4.x.nix { };
+
   # Required for nautilus
   inherit (libunique);
 
