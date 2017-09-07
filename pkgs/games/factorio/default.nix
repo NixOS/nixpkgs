@@ -9,6 +9,8 @@
 assert releaseType == "alpha"
     || releaseType == "headless"
     || releaseType == "demo";
+assert stdenv.system == "x86_64-linux"
+    || stdenv.system == "i686-linux";
 
 let
 
