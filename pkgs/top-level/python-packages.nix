@@ -19253,27 +19253,7 @@ in {
     };
   };
 
-  django-multiselectfield = buildPythonPackage rec {
-    name = "django-multiselectfield-${version}";
-    version = "0.1.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-multiselectfield/django-multiselectfield-${version}.tar.gz";
-      sha256 = "0v7wf82f8688srdsym9ajv1j54bxfxwvydypc03f8xyl4c1raziv";
-    };
-
-    propagatedBuildInputs = with self; [
-
-    ];
-    buildInputs = with self; [
-
-    ];
-
-    meta = with stdenv.lib; {
-      description = "django-multiselectfield";
-      homepage = "https://github.com/goinnn/django-multiselectfield";
-    };
-  };
+  django-multiselectfield = callPackage ../development/python-modules/django-multiselectfield { };
 
   reviewboard = buildPythonPackage rec {
     name = "ReviewBoard-2.5.1.1";
