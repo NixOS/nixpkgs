@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, pycurl }:
+{ stdenv, fetchurl, buildPythonPackage, pycurl, isPy3k }:
 
 buildPythonPackage rec {
   pname = "koji";
@@ -7,11 +7,14 @@ buildPythonPackage rec {
   format = "other";
 
   src = fetchurl {
-    url = "https://fedorahosted.org/released/koji/koji-1.8.0.tar.bz2";
-    sha256 = "10dph209h4jgajb5jmbjhqy4z4hd22i7s2d93vm3ikdf01i8iwf1";
+    url = "https://github.com/koji-project/koji/archive/koji-1.8.0.tar.gz";
+    sha256 = "17rkipdxccdccbbb70f9wx91cq9713psmq23j7lgb4mlnwan926h";
   };
 
   propagatedBuildInputs = [ pycurl ];
+
+  # Judging from SyntaxError
+  disabled = isPy3k;
 
   makeFlags = "DESTDIR=$(out)";
 
