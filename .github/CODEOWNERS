@@ -8,14 +8,11 @@
 # Mentioned users will get code review requests.
 
 # Boostraping and core infra
-pkgs/stdenv/    @Ericson2314
-pkgs/build-support/cc-wrapper/  @Ericson2314
+pkgs/stdenv/    @edolstra
+pkgs/build-support/cc-wrapper/  @edolstra
 
 # Libraries
-lib/  @Profpatsch
-
-# Build-Support
-pkgs/build-support  @Profpatsch
+lib/  @edolstra
 
 # Python-related code and docs
 pkgs/top-level/python-packages.nix      @FRidh
