@@ -1563,6 +1563,10 @@ with pkgs;
     cudatoolkit = cudatoolkit8;
   };
 
+  cudnn60_cudatoolkit80 = callPackage ../development/libraries/science/math/cudnn/8.0-6.0 {
+    cudatoolkit = cudatoolkit8;
+  };
+
   curlFull = curl.override {
     idnSupport = true;
     ldapSupport = true;
@@ -3344,6 +3348,8 @@ with pkgs;
   });
 
   munge = callPackage ../tools/security/munge { };
+
+  mycli = callPackage ../tools/admin/mycli { };
 
   mysql2pgsql = callPackage ../tools/misc/mysql2pgsql { };
 
@@ -10000,10 +10006,9 @@ with pkgs;
 
   protobuf = protobuf2_6;
   protobuf3_0 = lowPrio (callPackage ../development/libraries/protobuf/3.0.nix { });
-  # 3.0.0-beta-2 is only introduced for tensorflow. remove this version when tensorflow is moved to 3.0.
-  protobuf3_0_0b2 = lowPrio (callPackage ../development/libraries/protobuf/3.0.0-beta-2.nix { });
   protobuf3_1 = callPackage ../development/libraries/protobuf/3.1.nix { };
   protobuf3_2 = callPackage ../development/libraries/protobuf/3.2.nix { };
+  protobuf3_3 = callPackage ../development/libraries/protobuf/3.3.nix { };
   protobuf2_6 = callPackage ../development/libraries/protobuf/2.6.nix { };
   protobuf2_5 = callPackage ../development/libraries/protobuf/2.5.nix { };
 
@@ -13384,7 +13389,7 @@ with pkgs;
   abook = callPackage ../applications/misc/abook { };
 
   acd-cli = callPackage ../applications/networking/sync/acd_cli {
-    inherit (python35Packages)
+    inherit (python3Packages)
       buildPythonApplication appdirs colorama dateutil
       requests requests_toolbelt sqlalchemy fusepy;
   };
@@ -18211,6 +18216,9 @@ with pkgs;
     version = "8.5pl3";
   };
   coq_8_6 = callPackage ../applications/science/logic/coq {};
+  coq_8_7 = callPackage ../applications/science/logic/coq {
+    version = "8.7+beta1";
+  };
   coq_HEAD = callPackage ../applications/science/logic/coq/HEAD.nix {};
 
   mkCoqPackages_8_4 = self: let callPackage = newScope self; in {
@@ -18393,6 +18401,8 @@ with pkgs;
 
   ### SCIENCE / ELECTRONICS
 
+  adms = callPackage ../applications/science/electronics/adms { };
+
   eagle = callPackage ../applications/science/electronics/eagle { };
 
   caneda = callPackage ../applications/science/electronics/caneda { };
@@ -18415,6 +18425,7 @@ with pkgs;
   pcb = callPackage ../applications/science/electronics/pcb { };
 
   qucs = callPackage ../applications/science/electronics/qucs { };
+
 
   xoscope = callPackage ../applications/science/electronics/xoscope { };
 

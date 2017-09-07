@@ -1,5 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi
-, coverage, tornado, mock, nose, psutil, pysocks }:
+, pytest, mock, tornado, pyopenssl, cryptography
+, idna, certifi, ipaddress, pysocks }:
 
 buildPythonPackage rec {
   pname = "urllib3";
@@ -22,11 +23,12 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  buildInputs = [ coverage tornado mock nose psutil pysocks ];
+  checkInputs = [ pytest mock tornado ];
+  propagatedBuildInputs = [ pyopenssl cryptography idna certifi ipaddress pysocks ];
 
   meta = with stdenv.lib; {
-    description = "A Python library for Dropbox's HTTP-based Core and Datastore APIs";
-    homepage = https://www.dropbox.com/developers/core/docs;
+    description = "Powerful, sanity-friendly HTTP client for Python";
+    homepage = https://github.com/shazow/urllib3;
     license = licenses.mit;
   };
 }

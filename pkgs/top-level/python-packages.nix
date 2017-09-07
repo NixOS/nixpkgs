@@ -117,7 +117,11 @@ in {
 
   agate-sql = callPackage ../development/python-modules/agate-sql { };
 
+  aioamqp = callPackage ../development/python-modules/aioamqp { };
+
   ansicolor = callPackage ../development/python-modules/ansicolor { };
+
+  asana = callPackage ../development/python-modules/asana { };
 
   asn1crypto = callPackage ../development/python-modules/asn1crypto { };
 
@@ -169,6 +173,8 @@ in {
 
   distorm3 = callPackage ../development/python-modules/distorm3 { };
 
+  diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
+
   h5py = callPackage ../development/python-modules/h5py {
     hdf5 = pkgs.hdf5;
   };
@@ -219,6 +225,8 @@ in {
 
   pycryptodome = callPackage ../development/python-modules/pycryptodome { };
 
+  pycryptodomex = callPackage ../development/python-modules/pycryptodomex { };
+
   PyChromecast = callPackage ../development/python-modules/pychromecast {
     protobuf = self.protobuf3_2;
   };
@@ -242,6 +250,8 @@ in {
   pyGtkGlade = self.pygtk.override {
     libglade = pkgs.gnome2.libglade;
   };
+
+  pyjwkest = callPackage ../development/python-modules/pyjwkest { };
 
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
     pythonPackages = self;
@@ -2633,34 +2643,6 @@ in {
   certifi = callPackage ../development/python-modules/certifi { };
 
   characteristic = callPackage ../development/python-modules/characteristic { };
-
-  # This package is no longer actively maintained and can be removed if it becomes broken.
-  cgkit = buildPythonPackage rec {
-    version = "2.0.0";
-    name = "cgkit-${version}";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://sourceforge/project/cgkit/cgkit/cgkit-${version}/cgkit-${version}-py2k.tar.gz";
-      sha256 = "0vvllc42mdyma3c7yqhahs4bfxymm2kvmc4va7dxqr5x0rzh6rd6";
-    };
-
-    patches = [ ../development/python-modules/cgkit/scons-env.patch ];
-
-    buildInputs = with pkgs; [ scons boost mesa ];
-
-    preBuild = ''
-      cd supportlib
-      scons
-      cd -
-    '';
-
-    meta = {
-      homepage = http://cgkit.sourceforge.net;
-      description = "Python Computer Graphics Kit";
-      maintainers = with maintainers; [ expipiplus1 ];
-    };
-  };
 
   cheetah = buildPythonPackage rec {
     version = "2.4.4";
@@ -5196,6 +5178,7 @@ in {
       sha256 = "0bixx80zjq0286dwm4zhg8bdhc8pqlrqy4n2jg7i6m6a4gv4gak5";
     };
 
+    buildInputs = with self; [ pytestrunner ];
     propagatedBuildInputs = with self; [ requests urllib3 mock setuptools ];
 
     meta = {
@@ -5257,6 +5240,8 @@ in {
       maintainers = with maintainers; [ layus ];
     };
   };
+
+  easy-thumbnails = callPackage ../development/python-modules/easy-thumbnails { };
 
   eccodes = if (isPy27) then
       (pkgs.eccodes.overrideAttrs (oldattrs: {
@@ -7151,23 +7136,7 @@ in {
     };
   };
 
-  pathspec = buildPythonPackage rec {
-    pname   = "pathspec";
-    version = "0.5.2";
-    name    = "${pname}-${version}";
-
-    src = self.fetchPypi {
-      inherit pname version;
-      sha256 = "f9fdf4408f4adb30e9f507f61d3a41c968e9c6e6c519d4bbd2a189627b5e86f0";
-    };
-
-    meta = {
-      description = "Utility library for gitignore-style pattern matching of file paths";
-      homepage = "https://github.com/cpburnz/python-path-specification";
-      license = licenses.mpl20;
-      maintainers = with maintainers; [ copumpkin ];
-    };
-  };
+  pathspec = callPackage ../development/python-modules/pathspec { };
 
   pathtools = buildPythonPackage rec {
     name = "pathtools-${version}";
@@ -7210,23 +7179,7 @@ in {
     };
   };
 
-  passlib = buildPythonPackage rec {
-    version = "1.6.5";
-    name    = "passlib-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/passlib/passlib-${version}.tar.gz";
-      sha256 = "1z27wdxs5rj5xhhqfzvzn3yg682irkxw6dcs5jj7mcf97psk8gd8";
-    };
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ bcrypt ];
-
-    meta = {
-      description = "A password hashing library for Python";
-      homepage    = https://code.google.com/p/passlib/;
-    };
-  };
+  passlib = callPackage ../development/python-modules/passlib { };
 
   path-and-address = buildPythonPackage rec {
     version = "2.0.1";
@@ -8623,7 +8576,21 @@ in {
 
   django_guardian = callPackage ../development/python-modules/django_guardian.nix { };
 
+  django-ipware = callPackage ../development/python-modules/django-ipware { };
+
+  django-jinja = callPackage ../development/python-modules/django-jinja2 { };
+
+  django-pglocks = callPackage ../development/python-modules/django-pglocks { };
+
+  django-picklefield = callPackage ../development/python-modules/django-picklefield { };
+
   django_polymorphic = callPackage ../development/python-modules/django-polymorphic { };
+
+  django-sampledatahelper = callPackage ../development/python-modules/django-sampledatahelper { };
+
+  django-sites = callPackage ../development/python-modules/django-sites { };
+
+  django-sr = callPackage ../development/python-modules/django-sr { };
 
   django_tagging = callPackage ../development/python-modules/django_tagging { };
 
@@ -8873,6 +8840,8 @@ in {
       homepage = https://github.com/djblets/djblets;
     };
   };
+
+  djmail = callPackage ../development/python-modules/djmail { };
 
   pillowfight = buildPythonPackage rec {
     name = "pillowfight-${version}";
@@ -9441,6 +9410,10 @@ in {
 
   flask_ldap_login = callPackage ../development/python-modules/flask-ldap-login.nix { };
 
+  flask_mail = callPackage ../development/python-modules/flask-mail { };
+
+  flask_marshmallow = callPackage ../development/python-modules/flask-marshmallow { };
+
   flask_migrate = callPackage ../development/python-modules/flask-migrate { };
 
   flask_oauthlib = callPackage ../development/python-modules/flask-oauthlib.nix { };
@@ -9705,6 +9678,8 @@ in {
       description = "FastCGI Python module set";
     };
   });
+
+  fn = callPackage ../development/python-modules/fn { };
 
   folium = callPackage ../development/python-modules/folium { };
 
@@ -11139,6 +11114,8 @@ in {
 
   jsonnet = buildPythonPackage {
     inherit (pkgs.jsonnet) name src;
+    # Python 3 is not yet supported https://github.com/google/jsonnet/pull/335
+    disabled = isPy3k;
   };
 
   jupyter_client = callPackage ../development/python-modules/jupyter_client { };
@@ -11874,6 +11851,10 @@ in {
     };
   };
 
+  marshmallow = callPackage ../development/python-modules/marshmallow { };
+
+  marshmallow-sqlalchemy = callPackage ../development/python-modules/marshmallow-sqlalchemy { };
+
   manuel = buildPythonPackage rec {
     name = "manuel-${version}";
     version = "1.8.0";
@@ -11893,12 +11874,12 @@ in {
   };
 
   markdown = buildPythonPackage rec {
-    version = "2.6.7";
+    version = "2.6.8";
     name = "markdown-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/M/Markdown/Markdown-${version}.tar.gz";
-      sha256 = "1h055llfd0ps0ig7qb3v1j9068xv90dc9s7xkhkgz9zg8r4g5sys";
+      sha256 = "0cqfhr1km2s5d8jm6hbwgkrrj9hvkjf2gab3s2axlrw1clgaij0a";
     };
 
     # error: invalid command 'test'
@@ -15496,7 +15477,7 @@ in {
       sha256 = "1vmyvynqzx5zvbipaxff4fnzy3h3dvl3zicyr15yb816j93jl2ca";
     };
 
-    buildInputs = with self; [ mock nose pep8 pylint ];
+    buildInputs = with self; [ mock nose pep8 pylint mccabe ];
 
     meta = {
       description = "RabbitMQ Focused AMQP low-level library";
@@ -15973,39 +15954,6 @@ in {
     };
   };
 
-
-  mycli = buildPythonPackage rec {
-    name = "mycli-${version}";
-    version = "1.6.0";
-    disabled = isPy35;
-
-    src = pkgs.fetchFromGitHub {
-      sha256 = "0vvl36gxawa0h36v119j47fdylj8k73ak6hv04s5cjqn5adcjjbh";
-      rev = "v${version}";
-      repo = "mycli";
-      owner = "dbcli";
-    };
-
-    propagatedBuildInputs = with self; [
-      pymysql configobj sqlparse prompt_toolkit pygments click pycrypto
-    ];
-
-    postPatch = ''
-      substituteInPlace setup.py --replace "==" ">="
-    '';
-
-    meta = {
-      inherit version;
-      description = "Command-line interface for MySQL";
-      longDescription = ''
-        Rich command-line interface for MySQL with auto-completion and
-        syntax highlighting.
-      '';
-      homepage = http://mycli.net;
-      license = licenses.bsd3;
-    };
-  };
-
   pickleshare = buildPythonPackage rec {
     version = "0.7.4";
     name = "pickleshare-${version}";
@@ -16397,6 +16345,8 @@ in {
     };
   };
 
+  premailer = callPackage ../development/python-modules/premailer { };
+
   prettytable = buildPythonPackage rec {
     name = "prettytable-0.7.1";
 
@@ -16437,7 +16387,11 @@ in {
   });
 
   protobuf = self.protobuf2_6;
-  # only required by tensorflow
+  protobuf3_3 = callPackage ../development/python-modules/protobuf.nix {
+    disabled = isPyPy;
+    doCheck = !isPy3k;
+    protobuf = pkgs.protobuf3_3;
+  };
   protobuf3_2 = callPackage ../development/python-modules/protobuf.nix {
     disabled = isPyPy;
     doCheck = !isPy3k;
@@ -16457,6 +16411,8 @@ in {
     disabled = isPy3k || isPyPy;
     protobuf = pkgs.protobuf2_5;
   };
+
+  psd-tools = callPackage ../development/python-modules/psd-tools { };
 
   psutil = buildPythonPackage rec {
     name = "psutil-${version}";
@@ -16870,7 +16826,7 @@ in {
     preConfigure = ''
       substituteInPlace setup.py \
         --replace '"/usr/include"' '"${pkgs.gdb}/include"' \
-        --replace '"/usr/lib"' '"${pkgs.binutils.out}/lib"'
+        --replace '"/usr/lib"' '"${pkgs.binutils.lib}/lib"'
     '';
 
     meta = {
@@ -20037,6 +19993,8 @@ in {
     propagatedBuildInputs = [ self.cffi ];
   };
 
+  sampledata = callPackage ../development/python-modules/sampledata { };
+
   scapy = buildPythonPackage rec {
     name = "scapy-2.2.0";
 
@@ -20160,6 +20118,8 @@ in {
       cp -v x_ignore_nofocus.so py/selenium/webdriver/firefox/${if pkgs.stdenv.is64bit then "amd64" else "x86"}/
     '';
   };
+
+  serpy = callPackage ../development/python-modules/serpy { };
 
   setuptools_scm = callPackage ../development/python-modules/setuptools_scm { };
 
@@ -20903,6 +20863,8 @@ in {
       maintainers = with maintainers; [ domenkozar ];
     };
   };
+
+  secretstorage = callPackage ../development/python-modules/secretstorage { };
 
   semantic = buildPythonPackage rec {
     name = "semantic-1.0.3";
@@ -23991,11 +23953,11 @@ EOF
 
   libarchive-c = buildPythonPackage rec {
     name = "libarchive-c-${version}";
-    version = "2.5";
+    version = "2.7";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/libarchive-c/${name}.tar.gz";
-      sha256 = "98660daa2501d2da51ab6f39893dc24e88916e72b2d80c205641faa5bce66859";
+      sha256 = "011bfsmqpcwd6920kckllh7zhw2y4rrasgmddb7wjzn2hg1xpsjn";
     };
 
     LC_ALL="en_US.UTF-8";
@@ -24005,7 +23967,7 @@ EOF
         "find_library('archive')" "'${pkgs.libarchive.lib}/lib/libarchive.so'"
     '';
     checkPhase = ''
-      py.test tests -k 'not test_check_archiveentry_with_unicode_entries_and_name_zip'
+      py.test tests -k 'not test_check_archiveentry_with_unicode_entries_and_name_zip and not test_check_archiveentry_using_python_testtar'
     '';
 
     buildInputs = with self; [ pytest pkgs.glibcLocales ];
@@ -27522,9 +27484,20 @@ EOF
 
   preshed = callPackage ../development/python-modules/preshed { };
 
+  backports_weakref = callPackage ../development/python-modules/backports_weakref { }; 
+
   thinc = callPackage ../development/python-modules/thinc { };
 
   spacy = callPackage ../development/python-modules/spacy { };
+
+  behave = callPackage ../development/python-modules/behave { };
+
+  pyhamcrest = callPackage ../development/python-modules/pyhamcrest { };
+ 
+  parse = callPackage ../development/python-modules/parse { };
+
+  parse-type = callPackage ../development/python-modules/parse-type { };
+
 });
 
 in fix' (extends overrides packages)
