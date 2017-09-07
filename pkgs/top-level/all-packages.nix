@@ -1861,7 +1861,9 @@ with pkgs;
 
   entr = callPackage ../tools/misc/entr { };
 
-  envoy = callPackage ../tools/networking/envoy { };
+  envoy = callPackage ../tools/networking/envoy {
+    bazel = bazel_0_4_5;
+  };
 
   eot_utilities = callPackage ../tools/misc/eot-utilities { };
 
@@ -6742,6 +6744,7 @@ with pkgs;
   bam = callPackage ../development/tools/build-managers/bam {};
 
   bazel = callPackage ../development/tools/build-managers/bazel { };
+  bazel_0_4_5 = callPackage ../development/tools/build-managers/bazel/0.4.5.nix { };
 
   bear = callPackage ../development/tools/build-managers/bear { };
 
