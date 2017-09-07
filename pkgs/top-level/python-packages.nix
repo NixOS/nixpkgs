@@ -15757,22 +15757,7 @@ in {
 
   pbr = callPackage ../development/python-modules/pbr { };
 
-  fixtures = buildPythonPackage rec {
-    name = "fixtures-1.4.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/fixtures/${name}.tar.gz";
-      sha256 = "0djxvdwm8s60dbfn7bhf40x6g818p3b3mlwijm1c3bqg7msn271y";
-    };
-
-    buildInputs = with self; [ pbr testtools mock ];
-
-    meta = {
-      description = "Reusable state for writing clean tests and more";
-      homepage = "https://pypi.python.org/pypi/fixtures";
-      license = licenses.asl20;
-    };
-  };
+  fixtures = callPackage ../development/python-modules/fixtures { };
 
   pelican = callPackage ../development/python-modules/pelican {
     inherit (pkgs) glibcLocales pandoc git;
