@@ -11190,32 +11190,7 @@ in {
     };
   };
 
-  keyring = buildPythonPackage rec {
-    name = "keyring-${version}";
-    version = "10.4.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/k/keyring/${name}.tar.gz";
-      sha256 = "09iv50c14mdmdk7sjd6bb47yg7347gymh6r8c0q4gfnzs173y6lh";
-    };
-
-    buildInputs = with self;
-      [ fs gdata python_keyczar mock pyasn1 pycrypto pytest_28 six setuptools_scm pytestrunner ];
-
-    propagatedBuildInputs = [ self.secretstorage ];
-
-    checkPhase = ''
-      py.test $out
-    '';
-
-    meta = {
-      description = "Store and access your passwords safely";
-      homepage    = "https://pypi.python.org/pypi/keyring";
-      license     = licenses.psfl;
-      maintainers = with maintainers; [ lovek323 ];
-      platforms   = platforms.unix;
-    };
-  };
+  keyring = callPackage ../development/python-modules/keyring { };
 
   klaus = buildPythonPackage rec {
     version = "0.9.1";
@@ -27487,7 +27462,7 @@ EOF
 
   preshed = callPackage ../development/python-modules/preshed { };
 
-  backports_weakref = callPackage ../development/python-modules/backports_weakref { }; 
+  backports_weakref = callPackage ../development/python-modules/backports_weakref { };
 
   thinc = callPackage ../development/python-modules/thinc { };
 
@@ -27496,7 +27471,7 @@ EOF
   behave = callPackage ../development/python-modules/behave { };
 
   pyhamcrest = callPackage ../development/python-modules/pyhamcrest { };
- 
+
   parse = callPackage ../development/python-modules/parse { };
 
   parse-type = callPackage ../development/python-modules/parse-type { };
