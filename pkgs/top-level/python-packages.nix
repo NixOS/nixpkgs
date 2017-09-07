@@ -19189,6 +19189,8 @@ in {
     };
   };
 
+  readme_renderer = callPackage ../development/python-modules/readme_renderer { };
+
   rjsmin = callPackage ../development/python-modules/rjsmin { };
 
   pysolr = buildPythonPackage rec {
