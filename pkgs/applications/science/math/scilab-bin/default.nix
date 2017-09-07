@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
     fullLibPath="$sci/lib/scilab:$sci/lib/thirdparty:$libPath"
     fullLibPath="$fullLibPath:$sci/lib/thirdparty/redist"
 
-    patchelf --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) \
+    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
              --set-rpath "$fullLibPath" bin/scilab-bin
     find . -name '*.so' -type f | while read file; do
       patchelf --set-rpath "$fullLibPath" "$file" 2>/dev/null

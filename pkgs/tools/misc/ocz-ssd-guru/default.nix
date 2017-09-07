@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     cp ${system}/SSDGuru $out/bin/
     rm -rf linux{32,64}
     patchelf \
-      --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
+      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath $libPath:$out \
       $out/bin/SSDGuru
 

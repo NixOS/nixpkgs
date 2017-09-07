@@ -21,8 +21,8 @@ stdenv.mkDerivation rec {
     # Fix "/lib64/ld-linux-x86-64.so.2" like references in ELF executables.
     find "$out" | while read filepath; do
       if file "$filepath" | grep -q "ELF.*executable"; then
-        echo "setting interpreter $(cat "$NIX_BINUTILS/nix-support/dynamic-linker") in $filepath"
-        patchelf --set-interpreter "$(cat "$NIX_BINUTILS/nix-support/dynamic-linker")" "$filepath"
+        echo "setting interpreter $(cat "$NIX_CC"/nix-support/dynamic-linker) in $filepath"
+        patchelf --set-interpreter "$(cat "$NIX_CC"/nix-support/dynamic-linker)" "$filepath"
         test $? -eq 0 || { echo "patchelf failed to process $filepath"; exit 1; }
       fi
     done

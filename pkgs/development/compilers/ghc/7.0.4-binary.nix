@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
     # find editline/gmp.
     stdenv.lib.optionalString stdenv.isLinux ''
       find . -type f -perm -0100 \
-          -exec patchelf --interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
+          -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath "${stdenv.lib.makeLibraryPath [ ncurses5 gmp ]}" {} \;
       sed -i "s|/usr/bin/perl|perl\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
       sed -i "s|/usr/bin/gcc|gcc\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2

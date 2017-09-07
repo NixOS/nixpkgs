@@ -131,7 +131,7 @@ in stdenv.mkDerivation rec {
       "install -Dm444 usr/src/amdgpu-pro-${build}/${m}.xz $out/lib/modules/${kernel.modDirVersion}/kernel/drivers/gpu/drm/${m}.xz\n") modules)
   + ''
     mv $out/etc/vulkan $out/share
-    interpreter="$(cat $NIX_BINUTILS/nix-support/dynamic-linker)"
+    interpreter="$(cat $NIX_CC/nix-support/dynamic-linker)"
     libPath="$out/lib:$out/lib/gbm:$depLibPath"
   '' + optionalString (!stdenv.is64bit) ''
     for prog in clinfo modetest vbltest kms-universal-planes kms-steal-crtc modeprint amdgpu_test kmstest proptest; do

@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = stdenv.lib.optionalString (!stdenv.isArm && stdenv.isLinux) ''
-    patchelf --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) $out/share/sbcl/sbcl
+    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $out/share/sbcl/sbcl
   '';
 
   meta = with stdenv.lib; {

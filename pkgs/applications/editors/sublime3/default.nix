@@ -50,7 +50,7 @@ in let
     buildPhase = ''
       for i in sublime_text plugin_host crash_reporter; do
         patchelf \
-          --interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
+          --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath ${libPath}:${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"} \
           $i
       done

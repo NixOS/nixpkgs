@@ -68,7 +68,7 @@ in stdenv.mkDerivation {
     chmod -R g-w $out
 
     for file in $(find $out -type f \( -perm /0111 -o -name \*.so\* \) ); do
-      patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" "$file" || true
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
       patchelf --set-rpath ${rpath}:$out/lib/slack $file || true
     done
 

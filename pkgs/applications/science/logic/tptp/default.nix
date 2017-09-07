@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $sharedir/TPTP2X/tptp2X_install --replace /bin/mv mv
     tcsh $sharedir/TPTP2X/tptp2X_install -default
 
-    patchelf --interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) $sharedir/Scripts/tptp4X
+    patchelf --interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $sharedir/Scripts/tptp4X
 
     mkdir -p $out/bin
     ln -s $sharedir/TPTP2X/tptp2X $out/bin

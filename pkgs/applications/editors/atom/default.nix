@@ -25,10 +25,10 @@ stdenv.mkDerivation rec {
 
     fixupPhase
 
-    patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${atomEnv.libPath}:$out/share/atom" \
       $out/share/atom/atom
-    patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       --set-rpath "${atomEnv.libPath}" \
       $out/share/atom/resources/app/apm/bin/node
 

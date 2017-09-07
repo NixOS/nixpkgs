@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/bin
     mkdir -p $out/libexec/thrust
     unzip -d $out/libexec/thrust/ $src
-    patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
       $out/libexec/thrust/thrust_shell
     wrapProgram $out/libexec/thrust/thrust_shell \
       --prefix "LD_LIBRARY_PATH" : "${thrustEnv}/lib:${thrustEnv}/lib64"

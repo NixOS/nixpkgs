@@ -135,7 +135,7 @@ stdenv.mkDerivation rec {
       cp ${teensyduino_src} ./TeensyduinoInstall.${teensy_architecture}
       chmod +w ./TeensyduinoInstall.${teensy_architecture}
       upx -d ./TeensyduinoInstall.${teensy_architecture}
-      patchelf --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) \
+      patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
           --set-rpath "${teensy_libpath}" \
           ./TeensyduinoInstall.${teensy_architecture}
       chmod +x ./TeensyduinoInstall.${teensy_architecture}
@@ -181,7 +181,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     for file in $(find $out -type f \( -perm /0111 -o -name \*.so\* \) ); do
-        patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" "$file" || true
+        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
         patchelf --set-rpath ${rpath}:$out/lib $file || true
     done
 
@@ -203,7 +203,7 @@ stdenv.mkDerivation rec {
     ${stdenv.lib.optionalString withTeensyduino ''
       # Patch the Teensy loader binary
       patchelf --debug \
-          --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) \
+          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
           --set-rpath "${teensy_libpath}" \
           $out/share/arduino/hardware/tools/teensy
     ''}

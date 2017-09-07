@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     install -Dm755 English/rastertokpsl $out/lib/cups/filter/rastertokpsl
     patchelf \
       --set-rpath ${libPath} \
-      --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) \
+      --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
       $out/lib/cups/filter/rastertokpsl
 
     mkdir -p $out/share/cups/model/Kyocera

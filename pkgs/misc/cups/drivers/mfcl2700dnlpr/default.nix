@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
         coreutils ghostscript gnugrep gnused which
       ]}
 
-    interpreter=$(cat $NIX_BINUTILS/nix-support/dynamic-linker)
+    interpreter=$(cat $NIX_CC/nix-support/dynamic-linker)
     patchelf --set-interpreter "$interpreter" $dir/inf/braddprinter
     patchelf --set-interpreter "$interpreter" $dir/lpd/brprintconflsr3
     patchelf --set-interpreter "$interpreter" $dir/lpd/rawtobr3

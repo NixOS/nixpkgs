@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
     for b in fdr4 _fdr4 refines _refines cspmprofiler cspmexplorerprof
     do
-      patchelf --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) \
+      patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
         --set-rpath "$libPath:$out/lib" \
         "$out/bin/$b"
     done

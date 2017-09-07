@@ -34,7 +34,7 @@ in
 
     postFixup = ''
       find $out -type f -exec \
-        patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" {} \
+        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" {} \
         patchelf --set-rpath ${rpath} {} \;
     '';
 

@@ -78,9 +78,9 @@ stdenv.mkDerivation rec {
         ${coreutils}/bin/cp "\$MDIR/moneyplex" "\$MDIR/moneyplex.patched"
         ${coreutils}/bin/chmod 0755 "\$MDIR/moneyplex.patched"
     fi
-    if [ ! \`${patchelf}/bin/patchelf --print-interpreter \$MDIR/moneyplex.patched\` = $(cat $NIX_BINUTILS/nix-support/dynamic-linker) ] ||
+    if [ ! \`${patchelf}/bin/patchelf --print-interpreter \$MDIR/moneyplex.patched\` = $(cat $NIX_CC/nix-support/dynamic-linker) ] ||
        [ ! \`${patchelf}/bin/patchelf --print-rpath \$MDIR/moneyplex.patched\` = "${libPath}" ]; then
-        ${patchelf}/bin/patchelf --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) --set-rpath "${libPath}" "\$MDIR/moneyplex.patched"
+        ${patchelf}/bin/patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --set-rpath "${libPath}" "\$MDIR/moneyplex.patched"
     fi
 
     exec \$MDIR/moneyplex.patched

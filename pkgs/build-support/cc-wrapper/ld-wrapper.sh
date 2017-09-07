@@ -10,11 +10,11 @@ if [ -n "@coreutils_bin@" ]; then
     PATH="@coreutils_bin@/bin"
 fi
 
-source @out@/nix-support/utils.sh
-
-if [ -z "${NIX_BINUTILS_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
+if [ -z "${NIX_CC_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
+
+source @out@/nix-support/utils.sh
 
 
 # Optionally filter out paths not refering to the store.
@@ -62,21 +62,6 @@ if [ -z "${NIX_@infixSalt@_LDFLAGS_SET:-}" ]; then
 fi
 
 extraAfter+=($NIX_@infixSalt@_LDFLAGS_AFTER)
-
-# Choose 32-bit dynamic linker if needed
-if [ -e @out@/nix-support/dynamic-linker-m32 ]; then
-    prev=
-    for p in ${params+"${params[@]}"}; do
-        if [[ "$prev" = "-m" && "$p" = "elf_i386" ]]; then
-           extraAfter+=(
-               '-dynamic-linker'
-               "$(< @out@/nix-support/dynamic-linker-m32)"
-           )
-           break
-        fi
-        prev="$p"
-    done
-fi
 
 declare -a libDirs
 declare -A libs

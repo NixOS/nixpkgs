@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
     cp -v lib* $out/lib
     ln -sv ${systemd.lib}/lib/libudev.so.1 $out/lib/libudev.so.0
 
-    patchelf --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) \
+    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
              --set-rpath $out/lib:${rpath} \
              $out/bin/encryptr
   '';
