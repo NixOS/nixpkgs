@@ -6,6 +6,8 @@
 , setuptools
 , unzip
 , ensureNewerSourcesHook
+# Prevent impurities by blocking setuptools/easy-install from downloading sdists
+, distutils-cfg
 }:
 
 { name
@@ -60,7 +62,7 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "checkInputs"
 
   inherit pythonPath;
 
-  buildInputs = [ wrapPython ] ++ buildInputs ++ pythonPath
+  buildInputs = [ distutils-cfg wrapPython ] ++ buildInputs ++ pythonPath
     ++ [ (ensureNewerSourcesHook { year = "1980"; }) ]
     ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip)
     ++ lib.optionals doCheck checkInputs;
