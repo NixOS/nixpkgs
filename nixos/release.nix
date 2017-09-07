@@ -263,7 +263,7 @@ in rec {
   tests.plasma5 = callTest tests/plasma5.nix {};
   tests.keymap = callSubTests tests/keymap.nix {};
   tests.initrdNetwork = callTest tests/initrd-network.nix {};
-  tests.kernel-copperhead = tests/kernel-copperhead.nix {};
+  tests.kernel-copperhead = callTest tests/kernel-copperhead.nix {};
   tests.kernel-latest = callTest tests/kernel-latest.nix {};
   tests.kernel-lts = callTest tests/kernel-lts.nix {};
   tests.kernel-params = callTest tests/kernel-params.nix {};
