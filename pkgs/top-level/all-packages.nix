@@ -10630,10 +10630,6 @@ with pkgs;
     gnutls = gnutls;
   });
 
-  v8_3_14 = callPackage ../development/libraries/v8/3.14.nix {
-    inherit (python2Packages) python gyp;
-  };
-
   v8_3_16_14 = callPackage ../development/libraries/v8/3.16.14.nix {
     inherit (python2Packages) python gyp;
     cctools = darwin.cctools;
@@ -11336,8 +11332,6 @@ with pkgs;
 
   meteor = callPackage ../servers/meteor/default.nix { };
 
-  mfi = callPackage ../servers/mfi { };
-
   minio = callPackage ../servers/minio { };
 
   # Backwards compatibility.
@@ -11478,8 +11472,6 @@ with pkgs;
     boost = boost160;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-
-  mongodb248 = callPackage ../servers/nosql/mongodb/2.4.8.nix { };
 
   percona-server56 = callPackage ../servers/sql/percona/5.6.x.nix { };
   percona-server = percona-server56;

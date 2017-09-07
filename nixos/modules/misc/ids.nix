@@ -254,7 +254,6 @@
       hydra-queue-runner = 235;
       hydra-www = 236;
       syncthing = 237;
-      mfi = 238;
       caddy = 239;
       taskd = 240;
       factorio = 241;
@@ -522,7 +521,6 @@
       octoprint = 230;
       radicale = 234;
       syncthing = 237;
-      #mfi = 238; # unused
       caddy = 239;
       taskd = 240;
       factorio = 241;
