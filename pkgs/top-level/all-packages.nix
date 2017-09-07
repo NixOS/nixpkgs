@@ -11479,8 +11479,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  mongodb248 = callPackage ../servers/nosql/mongodb/2.4.8.nix { };
-
   percona-server56 = callPackage ../servers/sql/percona/5.6.x.nix { };
   percona-server = percona-server56;
 
