@@ -11191,15 +11191,18 @@ in {
   };
 
   keyring = buildPythonPackage rec {
-    name = "keyring-8.4.1";
+    name = "keyring-${version}";
+    version = "10.4.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/k/keyring/${name}.tar.gz";
-      sha256 = "1286sh5g53168qxbl4g5bmns9ci0ld0jl3h44b7h8is5nw1421ar";
+      sha256 = "09iv50c14mdmdk7sjd6bb47yg7347gymh6r8c0q4gfnzs173y6lh";
     };
 
     buildInputs = with self;
       [ fs gdata python_keyczar mock pyasn1 pycrypto pytest_28 six setuptools_scm pytestrunner ];
+
+    propagatedBuildInputs = [ self.secretstorage ];
 
     checkPhase = ''
       py.test $out
