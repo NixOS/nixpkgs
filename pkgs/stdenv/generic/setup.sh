@@ -1016,6 +1016,10 @@ genericBuild() {
         if [[ "$curPhase" = installCheckPhase && -z "${doInstallCheck:-}" ]]; then continue; fi
         if [[ "$curPhase" = distPhase && -z "${doDist:-}" ]]; then continue; fi
 
+        if [[ -n $NIX_LOG_FD ]]; then
+            echo "@nix { \"action\": \"setPhase\", \"phase\": \"$curPhase\" }" >&$NIX_LOG_FD
+        fi
+
         showPhaseHeader "$curPhase"
         dumpVars
 
