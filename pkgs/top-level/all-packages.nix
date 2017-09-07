@@ -11736,6 +11736,8 @@ with pkgs;
 
   s6-rc = callPackage ../tools/system/s6-rc { };
 
+  supervise = callPackage ../tools/system/supervise { };
+
   spamassassin = callPackage ../servers/mail/spamassassin {
     inherit (perlPackages) HTMLParser NetDNS NetAddrIP DBFile
       HTTPDate MailDKIM LWP IOSocketSSL;
