@@ -9,9 +9,13 @@ stdenv.mkDerivation rec {
     sha256 = "1hmj5f14qpq58018q2jmdd4j36v2idsbb9caiakxfy08gppzhz00";
   };
 
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "11vy3wsc9b45146ninynq18ip2d99wfbl2sas9h1i418jxw88lf5";
+
   buildCommand = ''
-    mkdir -p "$out/webapps"
-    cp "$src" "$out/webapps/jenkins.war"
+    mkdir -p "$out/webapps/"
+    ln -s "${src}" "$out/webapps/jenkins.war"
   '';
 
   meta = with stdenv.lib; {
