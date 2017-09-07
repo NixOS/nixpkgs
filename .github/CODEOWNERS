@@ -30,6 +30,10 @@ pkgs/development/haskell-modules/default.nix  @Profpatsch @peti
 pkgs/development/haskell-modules/generic-builder.nix  @Profpatsch @peti
 pkgs/development/haskell-modules/hoogle.nix  @Profpatsch @peti
 
+# R
+pkgs/applications/science/math/R @peti
+pkgs/development/r-modules @peti
+
 # Darwin-related
 pkgs/stdenv/darwin/*	@copumpkin @LnL7
 pkgs/os-specific/darwin/*	@LnL7
