@@ -63,6 +63,9 @@ self: super: {
   protolude = doJailbreak super.protolude;
   quickcheck-instances = doJailbreak super.quickcheck-instances;
 
+  # https://github.com/aristidb/aws/issues/238
+  aws = doJailbreak super.aws;
+
   # LTS-9 versions do not compile.
   path = dontCheck super.path;
   path-io = super.path-io_1_3_3;
