@@ -2,18 +2,18 @@
 
 let
 
-  version = "1.0.1";
+  version = "1.1.1";
   rev = "v${version}";
 
   aptlySrc = fetchFromGitHub {
     inherit rev;
     owner = "smira";
     repo = "aptly";
-    sha256 = "0rqxdhy2mlwndxhqb447gz626q92zd09rpvhysr2g1rx9nxa039p";
+    sha256 = "197a7nh8li20slqxgn8s8xm13x5b8ansmabk8rx32sngb73hp4av";
   };
 
   aptlyCompletionSrc = fetchFromGitHub {
-    rev = version;
+    rev = "1.0.1";
     owner = "aptly-dev";
     repo = "aptly-bash-completion";
     sha256 = "0dkc4z687yk912lpv8rirv0nby7iny1zgdvnhdm5b47qmjr1sm5q";

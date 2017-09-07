@@ -59,7 +59,7 @@ in
 
       package = mkOption {
         type = types.package;
-        example = literalExample "pkgs.postgresql92";
+        example = literalExample "pkgs.postgresql96";
         description = ''
           PostgreSQL package to use.
         '';

@@ -1,6 +1,27 @@
-{ stdenv, fetchpatch, fetchFromGitHub, python3Packages, glibcLocales }:
+{ stdenv, fetchpatch, fetchFromGitHub, python3, glibcLocales }:
 
-python3Packages.buildPythonPackage rec {
+let
+  p = python3.override {
+    packageOverrides = self: super: {
+      cryptography = super.cryptography.overridePythonAttrs (oldAttrs: rec {
+        version = "1.8.2";
+        name = "${oldAttrs.pname}-${version}";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "8e88ebac371a388024dab3ccf393bf3c1790d21bc3c299d5a6f9f83fb823beda";
+        };
+      });
+      cryptography_vectors = super.cryptography_vectors.overridePythonAttrs (oldAttrs: rec {
+        version = self.cryptography.version;
+        name = "${oldAttrs.pname}-${version}";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "00daa04c9870345f56605d91d7d4897bc1b16f6fff7c74cb602b08ef16c0fb43";
+        };
+      });
+    };
+  };
+in p.pkgs.buildPythonPackage rec {
   baseName = "mitmproxy";
   name = "${baseName}-${version}";
   version = "2.0.2";
@@ -33,7 +54,7 @@ python3Packages.buildPythonPackage rec {
     LC_CTYPE=en_US.UTF-8 pytest -k 'not test_echo'
   '';
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = with p.pkgs; [
     blinker click certifi construct cryptography
     cssutils editorconfig h2 html2text hyperframe
     jsbeautifier kaitaistruct passlib pyasn1 pyopenssl
@@ -41,7 +62,7 @@ python3Packages.buildPythonPackage rec {
     urwid watchdog brotlipy sortedcontainers
   ];
 
-  buildInputs = with python3Packages; [
+  buildInputs = with p.pkgs; [
     beautifulsoup4 flask pytz pytest pytestrunner protobuf3_2 glibcLocales
   ];
 

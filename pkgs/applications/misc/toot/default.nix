@@ -1,18 +1,24 @@
 { stdenv, fetchFromGitHub, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
-  version = "0.8.0";
+  version = "0.13.0";
   name    = "toot-${version}";
 
   src = fetchFromGitHub {
     owner  = "ihabunek";
     repo   = "toot";
     rev    = "${version}";
-    sha256 = "1y1jz4f53njq94zab0icf7jhd4jp10ywm508l4lw6spb69wr7rdy";
+    sha256 = "0gbsq43qv5qg4avx7czs57k40m8lzh8f1z5yizqqc7r02p2sacnc";
   };
+
+  checkInputs = with pythonPackages; [ pytest ];
 
   propagatedBuildInputs = with pythonPackages;
     [ requests beautifulsoup4 future ];
+
+  checkPhase = ''
+    py.test
+  '';
 
   meta = with stdenv.lib; {
     description = "Mastodon CLI interface";
