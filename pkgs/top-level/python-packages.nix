@@ -5120,11 +5120,11 @@ in {
   };
 
   dotfiles = buildPythonPackage rec {
-    name = "dotfiles-0.6.3";
+    name = "dotfiles-0.6.4";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/dotfiles/${name}.tar.gz";
-      sha256 = "45ecfd7f2ed9d0f2a7ac632c9bd0ebdca758d8bbc2b6f11562579d525f0467b8";
+      sha256 = "03qis6m9r2qh00sqbgwsm883s4bj1ibwpgk86yh4l235mdw8jywv";
     };
 
     doCheck = true;
