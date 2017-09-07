@@ -26,6 +26,7 @@
 , "gulp"
 , "hipache"
 , "htmlhint"
+, "ionic"
 , "ios-deploy"
 , "istanbul"
 , "javascript-typescript-langserver"
