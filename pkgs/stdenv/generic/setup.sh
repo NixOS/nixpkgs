@@ -1016,11 +1016,6 @@ genericBuild() {
         if [[ "$curPhase" = installCheckPhase && -z "${doInstallCheck:-}" ]]; then continue; fi
         if [[ "$curPhase" = distPhase && -z "${doDist:-}" ]]; then continue; fi
 
-        if [[ -n "${tracePhases:-}" ]]; then
-            echo
-            echo "@ phase-started $out $curPhase"
-        fi
-
         showPhaseHeader "$curPhase"
         dumpVars
 
@@ -1033,11 +1028,6 @@ genericBuild() {
 
         if [ "$curPhase" = unpackPhase ]; then
             cd "${sourceRoot:-.}"
-        fi
-
-        if [ -n "${tracePhases:-}" ]; then
-            echo
-            echo "@ phase-succeeded $out $curPhase"
         fi
     done
 }
