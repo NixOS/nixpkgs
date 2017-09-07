@@ -36,6 +36,8 @@ cl-ppcre-unicode
 cl-reexport
 cl-smtp
 clsql
+clsql-postgresql
+clsql-postgresql-socket
 clss
 cl+ssl
 cl-syntax-annot
@@ -69,7 +71,6 @@ form-fiddle
 fset
 http-body
 hu.dwim.asdf
-hu.dwim.def
 hunchentoot
 idna
 ieee-floats

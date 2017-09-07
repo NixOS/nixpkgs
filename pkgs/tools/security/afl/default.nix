@@ -1,5 +1,6 @@
 { stdenv, fetchurl, bash, callPackage, makeWrapper
-, clang, llvm, which, libcgroup }:
+, clang, llvm, which, libcgroup
+}:
 
 let
   afl-qemu = callPackage ./qemu.nix {};
@@ -7,6 +8,7 @@ let
     else if stdenv.system == "i686-linux" then "qemu-i386"
     else throw "afl: no support for ${stdenv.system}!";
 in
+
 stdenv.mkDerivation rec {
   name    = "afl-${version}";
   version = "2.48b";
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
   buildPhase   = ''
     make PREFIX=$out
     cd llvm_mode
-    make PREFIX=$out CC=${clang}/bin/clang CXX=${clang}/bin/clang++
+    make PREFIX=$out
     cd ..
   '';
   installPhase = ''

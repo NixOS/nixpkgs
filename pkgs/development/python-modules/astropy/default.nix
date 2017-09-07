@@ -2,9 +2,7 @@
 , fetchPypi
 , buildPythonPackage
 , numpy
-, cython
-, h5py
-, scipy }:
+, pytest }:
 
 buildPythonPackage rec {
   
@@ -17,7 +15,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "25e0881a392a2e03b4a705cf9592f01894d23f64797323b21387efa8ea9ec03e";
   };
-  propagatedBuildInputs = [ numpy cython h5py scipy ];
+
+  propagatedBuildInputs = [ pytest numpy ]; # yes it really has pytest in install_requires
 
 
   meta = {

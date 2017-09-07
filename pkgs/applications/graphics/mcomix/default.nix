@@ -11,6 +11,10 @@ python27Packages.buildPythonApplication rec {
 
     propagatedBuildInputs = with python27Packages; [ pygtk pillow ];
 
+    postPatch = ''
+      sed -i -e '/test_suite/d' setup.py
+    '';
+
     meta = {
       description = "Image viewer designed to handle comic books";
 

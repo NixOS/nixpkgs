@@ -67,10 +67,12 @@ in
       postInstall = ((x.overrides y).postInstall or "") + ''
         export CL_SOURCE_REGISTRY="$CL_SOURCE_REGISTRY:$out/lib/common-lisp/query-fs"
 	export HOME=$PWD
-	build-with-lisp.sh sbcl \
-	  ":query-fs $(echo "$linkedSystems" | sed -re 's/(^| )([^ :])/ :\2/g')" \
-	  "$out/bin/query-fs" \
-	  "(query-fs:run-fs-with-cmdline-args)"
+        "$out/bin/query-fs-lisp-launcher.sh" --eval '(asdf:make :query-fs)' \
+          --eval "(progn $(for i in $linkedSystems; do echo "(asdf:make :$i)"; done) )" \
+          --eval '(setf (asdf/system:component-entry-point (asdf:find-system :query-fs))
+                           (function query-fs:run-fs-with-cmdline-args))' \
+          --eval '(asdf:perform (quote asdf:program-op) :query-fs)'
+	cp "$out/lib/common-lisp/query-fs/query-fs" "$out/bin/"
       '';
     };
   };

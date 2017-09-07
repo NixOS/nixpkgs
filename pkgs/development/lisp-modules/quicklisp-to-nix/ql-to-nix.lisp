@@ -310,10 +310,8 @@ Arguments:
 
 (defun dump-image ()
   "Make an executable"
-  (with-quicklisp (dir) ()
-    (declare (ignore dir))
-    (dolist (system *required-systems*)
-      (funcall (sym :ql :quickload) system)))
+  (dolist (system *required-systems*)
+    (asdf:make system))
   (register-emb "nix-package" (merge-pathnames #p"nix-package.emb" (this-file)))
   (register-emb "invocation" (merge-pathnames #p"invocation.emb" (this-file)))
   (register-emb "parasitic-invocation" (merge-pathnames #p"parasitic-invocation.emb" (this-file)))

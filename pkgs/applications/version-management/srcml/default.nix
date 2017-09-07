@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, cmake, libxml2, libxslt, boost, libarchive, python, antlr }:
+{ stdenv, fetchurl, cmake, libxml2, libxslt, boost, libarchive, python, antlr,
+  curl
+}:
 
 with stdenv.lib;
 
@@ -16,8 +18,12 @@ stdenv.mkDerivation rec {
     substituteInPlace CMake/install.cmake --replace /usr/local $out
     '';
 
+  patches = [
+    ./gcc6.patch
+  ];
+
   nativeBuildInputs = [ cmake antlr ];
-  buildInputs = [ libxml2 libxslt boost libarchive python ];
+  buildInputs = [ libxml2 libxslt boost libarchive python curl ];
 
   meta = {
     description = "Infrastructure for exploration, analysis, and manipulation of source code";

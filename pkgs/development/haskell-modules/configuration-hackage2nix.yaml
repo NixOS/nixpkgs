@@ -37,7 +37,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 9.2
+  # LTS Haskell 9.3
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -57,7 +57,7 @@ default-package-overrides:
   - aeson-diff ==1.1.0.3
   - aeson-extra ==0.4.0.0
   - aeson-generic-compat ==0.0.1.0
-  - aeson-injector ==1.0.8.0
+  - aeson-injector ==1.0.10.0
   - aeson-lens ==0.5.0.0
   - aeson-pretty ==0.8.5
   - aeson-qq ==0.8.2
@@ -66,7 +66,7 @@ default-package-overrides:
   - airship ==0.6.0
   - alarmclock ==0.4.0.3
   - alerta ==0.1.0.4
-  - alex ==3.2.1
+  - alex ==3.2.2
   - algebraic-graphs ==0.0.5
   - alsa-core ==0.5.0.1
   - alsa-mixer ==0.2.0.3
@@ -201,7 +201,7 @@ default-package-overrides:
   - attoparsec-binary ==0.2
   - attoparsec-expr ==0.1.1.2
   - attoparsec-iso8601 ==1.0.0.0
-  - attoparsec-time ==0.1.3.2
+  - attoparsec-time ==0.1.4
   - audacity ==0.0.1.2
   - authenticate ==1.3.3.2
   - authenticate-oauth ==1.6
@@ -352,7 +352,7 @@ default-package-overrides:
   - cgi ==3001.3.0.2
   - ChannelT ==0.0.0.4
   - charset ==0.3.7.1
-  - charsetdetect-ae ==1.1.0.2
+  - charsetdetect-ae ==1.1.0.3
   - Chart ==1.8.2
   - Chart-cairo ==1.8.2
   - Chart-diagrams ==1.8.2
@@ -504,7 +504,7 @@ default-package-overrides:
   - data-diverse-lens ==0.1.1.0
   - data-dword ==0.3.1.1
   - data-endian ==0.1.1
-  - data-fix ==0.0.4
+  - data-fix ==0.0.6
   - data-has ==0.2.1.0
   - data-hash ==0.2.0.1
   - data-inttrie ==0.1.2
@@ -561,10 +561,10 @@ default-package-overrides:
   - disposable ==0.2.0.4
   - distance ==0.1.0.0
   - distributed-closure ==0.3.4.0
-  - distributed-static ==0.3.7
+  - distributed-static ==0.3.8
   - distribution ==1.1.1.0
   - distributive ==0.5.3
-  - diversity ==0.8.0.2
+  - diversity ==0.8.1.0
   - djinn-ghc ==0.0.2.3
   - djinn-lib ==0.0.1.2
   - dlist ==0.8.0.3
@@ -673,6 +673,7 @@ default-package-overrides:
   - extensible-exceptions ==0.1.1.4
   - extra ==1.5.3
   - extract-dependencies ==0.2.0.1
+  - extractable-singleton ==0.0.1
   - fail ==4.9.0.0
   - farmhash ==0.1.0.5
   - fast-builder ==0.0.0.6
@@ -711,7 +712,7 @@ default-package-overrides:
   - flexible-defaults ==0.0.1.2
   - floatshow ==0.2.4
   - flock ==0.3.1.8
-  - flow ==1.0.8
+  - flow ==1.0.9
   - fmlist ==0.9
   - fmt ==0.3.0.0
   - fn ==0.3.0.1
@@ -760,7 +761,7 @@ default-package-overrides:
   - getopt-generics ==0.13.0.1
   - ghc-events ==0.6.0
   - ghc-exactprint ==0.5.5.0
-  - ghc-heap-view ==0.5.9
+  - ghc-heap-view ==0.5.10
   - ghc-paths ==0.1.0.9
   - ghc-prof ==1.4.0.2
   - ghc-syb-utils ==0.2.3.2
@@ -789,7 +790,7 @@ default-package-overrides:
   - giphy-api ==0.5.2.0
   - git ==0.2.0
   - github ==0.16.0
-  - github-release ==1.0.5
+  - github-release ==1.0.6
   - github-types ==0.2.1
   - github-webhook-handler ==0.0.8
   - github-webhook-handler-snap ==0.0.7
@@ -931,7 +932,7 @@ default-package-overrides:
   - groundhog-sqlite ==0.8
   - groundhog-th ==0.8.0.1
   - group-by-date ==0.1.0.1
-  - grouped-list ==0.2.1.2
+  - grouped-list ==0.2.1.3
   - groupoids ==4.0
   - groups ==0.4.0.0
   - gtk ==0.14.6
@@ -961,7 +962,7 @@ default-package-overrides:
   - happstack-jmacro ==7.0.12
   - happstack-server ==7.4.6.4
   - happstack-server-tls ==7.1.6.4
-  - happy ==1.19.5
+  - happy >1.19.6
   - harp ==0.4.2
   - hasbolt ==0.1.2.1
   - hashable ==1.2.6.1
@@ -1081,7 +1082,7 @@ default-package-overrides:
   - hruby ==0.3.4.4
   - hs-bibutils ==5.5
   - hs-GeoIP ==0.3
-  - hsass ==0.4.1
+  - hsass ==0.4.2
   - hsb2hs ==0.3.1
   - hscolour ==1.24.1
   - hscurses ==1.4.2.0
@@ -1254,14 +1255,14 @@ default-package-overrides:
   - jmacro-rpc-snap ==0.3
   - jni ==0.3.1
   - jose ==0.6.0.3
-  - jose-jwt ==0.7.6
+  - jose-jwt ==0.7.7
   - js-flot ==0.8.3
   - js-jquery ==3.2.1
   - json ==0.9.1
   - json-builder ==0.3
   - json-rpc-generic ==0.2.1.2
   - json-schema ==0.7.4.1
-  - json-stream ==0.4.1.3
+  - json-stream ==0.4.1.4
   - JuicyPixels ==3.2.8.3
   - JuicyPixels-extra ==0.2.1
   - JuicyPixels-scale-dct ==0.1.1.2
@@ -1281,7 +1282,7 @@ default-package-overrides:
   - koofr-client ==1.0.0.3
   - kraken ==0.0.3
   - l10n ==0.1.0.1
-  - labels ==0.3.2
+  - labels ==0.3.3
   - lackey ==0.4.3
   - lame ==0.1.1
   - language-c ==0.6.1
@@ -1434,6 +1435,7 @@ default-package-overrides:
   - model ==0.3
   - modify-fasta ==0.8.2.3
   - monad-control ==1.0.2.2
+  - monad-control-aligned ==0.0.1
   - monad-coroutine ==0.9.0.3
   - monad-extras ==0.6.0
   - monad-http ==0.1.0.0
@@ -1488,7 +1490,7 @@ default-package-overrides:
   - mysql ==0.1.4
   - mysql-haskell ==0.8.0.0
   - mysql-haskell-openssl ==0.8.0.0
-  - mysql-simple ==0.4.0.1
+  - mysql-simple ==0.4.1.0
   - nagios-check ==0.3.2
   - names-th ==0.2.0.3
   - nano-erl ==0.1.0.1
@@ -1534,7 +1536,7 @@ default-package-overrides:
   - non-negative ==0.1.1.2
   - nonce ==1.0.4
   - nondeterminism ==1.4
-  - NoTrace ==0.3.0.1
+  - NoTrace ==0.3.0.2
   - nsis ==0.3.1
   - numbers ==3000.2.0.1
   - numeric-extras ==0.1
@@ -1825,10 +1827,10 @@ default-package-overrides:
   - regex-tdfa-text ==1.0.0.3
   - regex-with-pcre ==1.0.1.3
   - reinterpret-cast ==0.1.0
-  - relational-query ==0.9.4.1
-  - relational-query-HDBC ==0.6.4.0
+  - relational-query ==0.9.5.0
+  - relational-query-HDBC ==0.6.4.1
   - relational-record ==0.1.8.0
-  - relational-schemas ==0.1.4.0
+  - relational-schemas ==0.1.4.1
   - renderable ==0.2.0.1
   - RepLib ==0.5.4
   - repline ==0.1.6.0
@@ -1878,7 +1880,7 @@ default-package-overrides:
   - scalpel-core ==0.5.1
   - scanner ==0.2
   - schematic ==0.1.6.0
-  - scientific ==0.3.5.1
+  - scientific ==0.3.5.2
   - scotty ==0.11.0
   - scrape-changes ==0.1.0.5
   - scrypt ==0.5.0
@@ -1910,14 +1912,14 @@ default-package-overrides:
   - servant-cassava ==0.9
   - servant-checked-exceptions ==0.4.0.0
   - servant-client ==0.11
-  - servant-docs ==0.10.0.1
+  - servant-docs ==0.11
   - servant-elm ==0.4.0.1
   - servant-foreign ==0.10.1
   - servant-js ==0.9.3
   - servant-JuicyPixels ==0.3.0.3
   - servant-lucid ==0.7.1
   - servant-mock ==0.8.2
-  - servant-purescript ==0.8.0.0
+  - servant-purescript ==0.8.0.1
   - servant-ruby ==0.2.1.0
   - servant-server ==0.11
   - servant-static-th ==0.1.0.5
@@ -2039,7 +2041,7 @@ default-package-overrides:
   - storable-tuple ==0.0.3.2
   - storablevector ==0.2.12.1
   - storablevector-carray ==0.0
-  - store ==0.4.3.1
+  - store ==0.4.3.2
   - store-core ==0.4.1
   - Strafunski-StrategyLib ==5.0.0.10
   - stratosphere ==0.6.0
@@ -2179,7 +2181,7 @@ default-package-overrides:
   - thread-local-storage ==0.1.1
   - threads ==0.5.1.5
   - threepenny-editors ==0.4.1
-  - threepenny-gui ==0.8.0.1
+  - threepenny-gui ==0.8.1.0
   - threepenny-gui-flexbox ==0.4.2
   - through-text ==0.1.0.0
   - throwable-exceptions ==0.1.0.8
@@ -2289,7 +2291,7 @@ default-package-overrides:
   - uri-bytestring ==0.2.3.3
   - uri-bytestring-aeson ==0.1.0.2
   - uri-encode ==1.5.0.5
-  - uri-templater ==0.2.1.0
+  - uri-templater ==0.2.2.0
   - url ==2.1.3
   - urlpath ==5.0.0.1
   - users ==0.5.0.0
@@ -2343,7 +2345,7 @@ default-package-overrides:
   - wai-middleware-caching-lru ==0.1.0.0
   - wai-middleware-caching-redis ==0.2.0.0
   - wai-middleware-consul ==0.1.0.2
-  - wai-middleware-content-type ==0.5.0.1
+  - wai-middleware-content-type ==0.5.1
   - wai-middleware-crowd ==0.1.4.2
   - wai-middleware-metrics ==0.2.4
   - wai-middleware-rollbar ==0.4.0
@@ -2452,15 +2454,15 @@ default-package-overrides:
   - yackage ==0.8.1
   - yahoo-finance-api ==0.2.0.2
   - yaml ==0.8.23.3
-  - Yampa ==0.10.6.1
+  - Yampa ==0.10.6.2
   - YampaSynth ==0.2
   - yes-precure5-command ==5.5.3
   - yesod ==1.4.5
-  - yesod-auth ==1.4.17.3
+  - yesod-auth ==1.4.18
   - yesod-auth-account ==1.4.3
   - yesod-auth-basic ==0.1.0.2
   - yesod-auth-fb ==1.8.1
-  - yesod-auth-hashdb ==1.6.1
+  - yesod-auth-hashdb ==1.6.2
   - yesod-bin ==1.5.2.5
   - yesod-core ==1.4.36
   - yesod-default ==1.2.0

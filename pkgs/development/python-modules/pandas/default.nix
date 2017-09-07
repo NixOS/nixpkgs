@@ -76,8 +76,13 @@ in buildPythonPackage rec {
     chmod a+x pbcopy pbpaste
     export PATH=$(pwd):$PATH
   '' + ''
+    # since dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
+    # was supposed to be solved by https://github.com/dateutil/dateutil/issues/321, but is not the case
     py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network \
-      ${if isDarwin then "-k 'not test_locale and not test_clipboard'" else ""}
+      -k "not test_fallback_plural and \
+          not test_ambiguous_flags and \
+          not test_ambiguous_compat \
+          ${optionalString isDarwin "and not test_locale and not test_clipboard"}"
     runHook postCheck
   '';
 

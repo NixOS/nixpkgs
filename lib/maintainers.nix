@@ -212,6 +212,7 @@
   fuuzetsu = "Mateusz Kowalczyk <fuuzetsu@fuuzetsu.co.uk>";
   fuzzy-id = "Thomas Bach <hacking+nixos@babibo.de>";
   fxfactorial = "Edgar Aroutiounian <edgar.factorial@gmail.com>";
+  gabesoft = "Gabriel Adomnicai <gabesoft@gmail.com>";
   gal_bolle = "Florent Becker <florent.becker@ens-lyon.org>";
   garbas = "Rok Garbas <rok@garbas.si>";
   garrison = "Jim Garrison <jim@garrison.cc>";
@@ -252,6 +253,7 @@
   igsha = "Igor Sharonov <igor.sharonov@gmail.com>";
   ikervagyok = "Balázs Lengyel <ikervagyok@gmail.com>";
   infinisil = "Silvan Mosberger <infinisil@icloud.com>";
+  ironpinguin = "Michele Catalano <michele@catalano.de>";
   ivan-tkatchev = "Ivan Tkatchev <tkatchev@gmail.com>";
   j-keck = "Jürgen Keck <jhyphenkeck@gmail.com>";
   jagajaga = "Arseniy Seroka <ars.seroka@gmail.com>";
@@ -573,7 +575,9 @@
   taku0 = "Takuo Yonezawa <mxxouy6x3m_github@tatapa.org>";
   tari = "Peter Marheine <peter@taricorp.net>";
   tavyc = "Octavian Cerna <octavian.cerna@gmail.com>";
+  ltavard = "Laure Tavard <laure.tavard@univ-grenoble-alpes.fr>";
   teh = "Tom Hunger <tehunger@gmail.com>";
+  teto = "Matthieu Coudron <mcoudron@hotmail.com>";
   telotortium = "Robert Irelan <rirelan@gmail.com>";
   thall = "Niclas Thall <niclas.thall@gmail.com>";
   thammers = "Tobias Hammerschmidt <jawr@gmx.de>";

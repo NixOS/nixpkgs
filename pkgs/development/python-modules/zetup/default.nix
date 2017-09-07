@@ -16,7 +16,7 @@ buildPythonPackage rec {
     py.test test
   '';
 
-  buildInputs = [ pytest pathpy nbconvert ];
+  checkInputs = [ pytest pathpy nbconvert ];
   propagatedBuildInputs = [ setuptools_scm ];
 
   meta = with stdenv.lib; {

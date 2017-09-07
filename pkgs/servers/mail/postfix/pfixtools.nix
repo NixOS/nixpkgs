@@ -40,7 +40,7 @@ stdenv.mkDerivation {
                       --replace /bin/bash ${bash}/bin/bash;
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
+  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result -Wno-error=nonnull-compare";
 
   makeFlags = "DESTDIR=$(out) prefix=";
 
@@ -49,5 +49,6 @@ stdenv.mkDerivation {
     license = with lib.licenses; [ bsd3 ];
     homepage = https://github.com/Fruneau/pfixtools;
     platforms = stdenv.lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jerith666 ];
   };
 }
