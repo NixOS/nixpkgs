@@ -13448,6 +13448,7 @@ with pkgs;
 
   amarok = kde4.callPackage ../applications/audio/amarok {
     ffmpeg = ffmpeg_2;
+    stdenv = overrideCC stdenv gcc5;
   };
 
   AMB-plugins = callPackage ../applications/audio/AMB-plugins { };
