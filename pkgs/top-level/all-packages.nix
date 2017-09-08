@@ -1296,7 +1296,9 @@ with pkgs;
 
   atool = callPackage ../tools/archivers/atool { };
 
-  bsc = callPackage ../tools/compression/bsc { };
+  bsc = callPackage ../tools/compression/bsc {
+    inherit (llvmPackages) openmp;
+  };
 
   bzip2 = callPackage ../tools/compression/bzip2 { };
 

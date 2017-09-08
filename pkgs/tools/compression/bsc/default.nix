@@ -1,4 +1,4 @@
-{ stdenv, fetchurl } :
+{ stdenv, fetchurl, openmp ? null }:
 
 stdenv.mkDerivation rec {
   name = "bsc-${version}";
@@ -10,6 +10,13 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
+
+  buildInputs = stdenv.lib.optional stdenv.isDarwin openmp;
+
+  prePatch = ''
+    substituteInPlace makefile \
+        --replace 'g++' '$(CXX)'
+  '';
 
   preInstall = ''
     makeFlagsArray+=("PREFIX=$out")
