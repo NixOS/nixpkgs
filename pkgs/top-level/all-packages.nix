@@ -1988,6 +1988,8 @@ with pkgs;
 
   iprange = callPackage ../applications/networking/firehol/iprange.nix {};
 
+  firehol = callPackage ../applications/networking/firehol {};
+
   fio = callPackage ../tools/system/fio { };
 
   flamerobin = callPackage ../applications/misc/flamerobin { };
