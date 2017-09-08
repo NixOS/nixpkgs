@@ -10,6 +10,7 @@
     "plugin/cmd/kube-scheduler"
     "federation/cmd/federation-apiserver"
     "federation/cmd/federation-controller-manager"
+    "test/e2e/e2e.test"
   ]
 }:
 
