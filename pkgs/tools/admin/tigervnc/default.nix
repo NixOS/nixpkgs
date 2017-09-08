@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   inherit fontDirectories;
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${xkeyboard_config}/etc/X11/xkb";' unix/vncserver
     fontPath=
     for i in $fontDirectories; do
@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
       done
     done
     sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -fp '"$fontPath"'";' unix/vncserver
+    substituteInPlace vncviewer/vncviewer.cxx \
+       --replace '"/usr/bin/ssh' '"${openssh}/bin/ssh'
   '';
 
   dontUseCmakeBuildDir = true;
@@ -90,11 +92,6 @@ stdenv.mkDerivation rec {
   propagatedNativeBuildInputs = xorg.xorgserver.propagatedNativeBuildInputs;
 
   enableParallelBuilding = true;
-
-  postPatch = ''
-    substituteInPlace vncviewer/vncviewer.cxx \
-     --replace '"/usr/bin/ssh' '"${openssh}/bin/ssh'
-     '';
 
   meta = {
     homepage = http://www.tigervnc.org/;
