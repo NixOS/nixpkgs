@@ -1,24 +1,26 @@
-{ stdenv, fetchurl, qt4, pkgconfig, ladspaPlugins, ladspaH,
+{ stdenv, fetchurl, cmake, qt4, pkgconfig, ladspaPlugins, ladspaH,
   dssi, liblo, liblrdf, fftwSinglePrec, libsndfile,
   libsamplerate, perl, makedepend, libjack2,
   withLirc ? false, lirc ? null } :
 
 stdenv.mkDerivation (rec {
-  version = "15.08";
+  version = "17.04";
   name = "rosegarden-${version}";
+
   src = fetchurl {
     url  = "mirror://sourceforge/rosegarden/${name}.tar.bz2";
-    sha256 = "1pk24bhpsmvn6rkqgll31na44w03banra1y7kiqd0gajlnw7wlls";
+    sha256 = "1khfcj22asdhjh0jvhkqsz200wgmigkhsrcz09ffia5hqm0n32lq";
   };
 
-  QTDIR=qt4;
-  
-  buildInputs = [ qt4 pkgconfig ladspaPlugins ladspaH dssi liblo liblrdf fftwSinglePrec
-                  libsndfile libsamplerate perl makedepend libjack2 ]
-		++ stdenv.lib.optional withLirc [ lirc ];
-  
-  #enableParallelBuilding = true; issues on hydra
-  
+  QTDIR = qt4;
+
+  buildInputs = [
+    cmake qt4 pkgconfig ladspaPlugins ladspaH dssi liblo liblrdf fftwSinglePrec
+    libsndfile libsamplerate perl makedepend libjack2
+  ] ++ stdenv.lib.optional withLirc [ lirc ];
+
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     homepage = http://www.rosegardenmusic.com/;
     description = "Music composition and editing environment";
