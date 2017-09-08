@@ -139,8 +139,14 @@ rec {
     # Luckily, `libexec` scripts are never supposed to be invoked straight from PATH,
     # instead they are invoked directly from `gluster` or `glusterd`, which is why it is
     # sufficient to set PYTHONPATH for those executables.
+    #
+    # Exceptions to these rules are the `glusterfind` `brickfind.py` and `changelog.py`
+    # crawlers, which are directly invoked on other gluster nodes using a remote SSH command
+    # issues by `glusterfind`.
 
     wrapProgram $out/share/glusterfs/scripts/eventsdash.py --set PATH "$GLUSTER_PATH" --set PYTHONPATH "$GLUSTER_PYTHONPATH" --set LD_LIBRARY_PATH "$GLUSTER_LD_LIBRARY_PATH"
+    wrapProgram $out/libexec/glusterfs/glusterfind/brickfind.py --set PATH "$GLUSTER_PATH" --set PYTHONPATH "$GLUSTER_PYTHONPATH" --set LD_LIBRARY_PATH "$GLUSTER_LD_LIBRARY_PATH"
+    wrapProgram $out/libexec/glusterfs/glusterfind/changelog.py --set PATH "$GLUSTER_PATH" --set PYTHONPATH "$GLUSTER_PYTHONPATH" --set LD_LIBRARY_PATH "$GLUSTER_LD_LIBRARY_PATH"
     '';
 
   doInstallCheck = true;
