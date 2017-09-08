@@ -16133,7 +16133,13 @@ with pkgs;
 
   siproxd = callPackage ../applications/networking/siproxd { };
 
-  skypeforlinux = callPackage ../applications/networking/instant-messengers/skypeforlinux { };
+  inherit (callPackage ../applications/networking/instant-messengers/skypeforlinux {})
+    skypeforlinux_5_x
+    skypeforlinux_8_x
+  ;
+
+
+  skypeforlinux = skypeforlinux_5_x;
 
   skype4pidgin = callPackage ../applications/networking/instant-messengers/pidgin-plugins/skype4pidgin { };
 
