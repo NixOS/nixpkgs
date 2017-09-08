@@ -1079,6 +1079,8 @@ with pkgs;
 
   gorilla-bin = callPackage ../tools/security/gorilla-bin { };
 
+  gosu = callPackage ../tools/misc/gosu { };
+
   gringo = callPackage ../tools/misc/gringo { };
 
   gti = callPackage ../tools/misc/gti { };
@@ -10629,10 +10631,6 @@ with pkgs;
     gnutls = gnutls;
   });
 
-  v8_3_14 = callPackage ../development/libraries/v8/3.14.nix {
-    inherit (python2Packages) python gyp;
-  };
-
   v8_3_16_14 = callPackage ../development/libraries/v8/3.16.14.nix {
     inherit (python2Packages) python gyp;
     cctools = darwin.cctools;
@@ -10730,6 +10728,11 @@ with pkgs;
   };
 
   webkitgtk216x = callPackage ../development/libraries/webkitgtk/2.16.nix {
+    harfbuzz = harfbuzz-icu;
+    gst-plugins-base = gst_all_1.gst-plugins-base;
+  };
+
+  webkitgtk217x = callPackage ../development/libraries/webkitgtk/2.17.nix {
     harfbuzz = harfbuzz-icu;
     gst-plugins-base = gst_all_1.gst-plugins-base;
   };
@@ -11335,8 +11338,6 @@ with pkgs;
 
   meteor = callPackage ../servers/meteor/default.nix { };
 
-  mfi = callPackage ../servers/mfi { };
-
   minio = callPackage ../servers/minio { };
 
   # Backwards compatibility.
@@ -11477,8 +11478,6 @@ with pkgs;
     boost = boost160;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-
-  mongodb248 = callPackage ../servers/nosql/mongodb/2.4.8.nix { };
 
   percona-server56 = callPackage ../servers/sql/percona/5.6.x.nix { };
   percona-server = percona-server56;
@@ -13406,6 +13405,7 @@ with pkgs;
 
   amarok = kde4.callPackage ../applications/audio/amarok {
     ffmpeg = ffmpeg_2;
+    stdenv = overrideCC stdenv gcc5;
   };
 
   AMB-plugins = callPackage ../applications/audio/AMB-plugins { };
@@ -16999,9 +16999,10 @@ with pkgs;
 
   xiphos = callPackage ../applications/misc/xiphos {
     gconf = gnome2.GConf;
-    inherit (gnome2) gtkhtml libgtkhtml libglade scrollkeeper;
+    inherit (gnome2) libglade scrollkeeper;
+    gtkhtml = gnome2.gtkhtml4;
+    webkitgtk = webkitgtk217x;
     python = python27;
-    webkitgtk = webkitgtk24x-gtk2;
   };
 
   xournal = callPackage ../applications/graphics/xournal {
@@ -18414,8 +18415,10 @@ with pkgs;
 
   ### SCIENCE / MATH
 
-  caffe = callPackage ../applications/science/math/caffe {
-    cudaSupport = config.caffe.cudaSupport or config.cudaSupport or true;
+  caffe = callPackage ../applications/science/math/caffe rec {
+    cudaSupport = config.caffe.cudaSupport or config.cudaSupport or false;
+    # CUDA 8 doesn't support GCC 6.
+    stdenv = if cudaSupport then overrideCC pkgs.stdenv gcc5 else pkgs.stdenv;
   };
 
   ecm = callPackage ../applications/science/math/ecm { };

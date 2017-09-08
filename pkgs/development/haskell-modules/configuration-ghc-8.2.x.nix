@@ -36,6 +36,11 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # Make sure we can still build Cabal 1.x.
+  Cabal_1_24_2_0 = overrideCabal super.Cabal_1_24_2_0 (drv: {
+    prePatch = "sed -i -e 's/process.*< 1.5,/process,/g' Cabal.cabal";
+  });
+
   # cabal-install can use the native Cabal library.
   cabal-install = super.cabal-install.override { Cabal = null; };
 
@@ -63,9 +68,26 @@ self: super: {
   protolude = doJailbreak super.protolude;
   quickcheck-instances = doJailbreak super.quickcheck-instances;
 
+  # https://github.com/aristidb/aws/issues/238
+  aws = doJailbreak super.aws;
+
+  # https://github.com/jgm/pandoc/issues/3876
+  pandoc = let fixSetup = pkgs.fetchpatch {
+                            url = "https://github.com/jgm/pandoc/pull/3899.patch";
+                            sha256 = "0lk9vs2l1wc1kr0y8fkdcarfi4sjd3dl81r52n39r25xx9kqawv7";
+                          };
+           in overrideCabal super.pandoc (drv: {
+                editedCabalFile = null;
+                patches = drv.patches or [] ++ [fixSetup];
+                setupHaskellDepends = drv.setupHaskellDepends or [self.Cabal_1_24_2_0];
+                preCompileBuildDriver = "setupCompileFlags+=' -package=Cabal-1.24.2.0'";
+              });
+
   # LTS-9 versions do not compile.
   path = dontCheck super.path;
   path-io = super.path-io_1_3_3;
   trifecta = super.trifecta_1_7_1_1;
+  aeson-compat = dontCheck super.aeson-compat_0_3_7_1;  # test suite needs QuickCheck 2.10.*
+  binary-orphans = dontCheck super.binary-orphans_0_1_7_0; # test suite needs QuickCheck 2.10.*
 
 }

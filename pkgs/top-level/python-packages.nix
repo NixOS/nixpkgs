@@ -1565,6 +1565,13 @@ in {
     };
   };
 
+  caffe = pkgs.caffe.override {
+    python = self.python;
+    boost = self.boost;
+    numpy = self.numpy;
+    pythonSupport = true;
+  };
+
   capstone = buildPythonPackage rec {
     name = "capstone-3.0.4";
     src = pkgs.fetchurl {
@@ -1745,6 +1752,12 @@ in {
   };
 
   cycler = callPackage ../development/python-modules/cycler { };
+
+  dlib = buildPythonPackage rec {
+    inherit (pkgs.dlib) name src nativeBuildInputs meta;
+
+    buildInputs = pkgs.dlib.buildInputs ++ [ self.boost ];
+  };
 
   datadog = buildPythonPackage rec {
     name = "${pname}-${version}";
@@ -7005,27 +7018,7 @@ in {
     };
   };
 
-  logfury = buildPythonPackage rec {
-    name = "logfury-${version}";
-    version = "0.1.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/logfury/${name}.tar.gz";
-      sha256 = "1lywirv3d1lw691mc4mfpz7ak6r49klri43bbfgdnvsfppxminj2";
-    };
-
-    buildInputs =
-      [ self.funcsigs
-        self.six
-      ];
-
-    meta = with pkgs.stdenv.lib; {
-      description = "Logfury is for python library maintainers. It allows for responsible, low-boilerplate logging of method calls.";
-      homepage = "https://github.com/ppolewicz/logfury";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ jwiegley ];
-    };
-  };
+  logfury = callPackage ../development/python-modules/logfury { };
 
   ndg-httpsclient = buildPythonPackage rec {
     version = "0.4.2";
@@ -11190,29 +11183,7 @@ in {
     };
   };
 
-  keyring = buildPythonPackage rec {
-    name = "keyring-8.4.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/k/keyring/${name}.tar.gz";
-      sha256 = "1286sh5g53168qxbl4g5bmns9ci0ld0jl3h44b7h8is5nw1421ar";
-    };
-
-    buildInputs = with self;
-      [ fs gdata python_keyczar mock pyasn1 pycrypto pytest_28 six setuptools_scm pytestrunner ];
-
-    checkPhase = ''
-      py.test $out
-    '';
-
-    meta = {
-      description = "Store and access your passwords safely";
-      homepage    = "https://pypi.python.org/pypi/keyring";
-      license     = licenses.psfl;
-      maintainers = with maintainers; [ lovek323 ];
-      platforms   = platforms.unix;
-    };
-  };
+  keyring = callPackage ../development/python-modules/keyring { };
 
   klaus = buildPythonPackage rec {
     version = "0.9.1";
@@ -15777,22 +15748,7 @@ in {
 
   pbr = callPackage ../development/python-modules/pbr { };
 
-  fixtures = buildPythonPackage rec {
-    name = "fixtures-1.4.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/fixtures/${name}.tar.gz";
-      sha256 = "0djxvdwm8s60dbfn7bhf40x6g818p3b3mlwijm1c3bqg7msn271y";
-    };
-
-    buildInputs = with self; [ pbr testtools mock ];
-
-    meta = {
-      description = "Reusable state for writing clean tests and more";
-      homepage = "https://pypi.python.org/pypi/fixtures";
-      license = licenses.asl20;
-    };
-  };
+  fixtures = callPackage ../development/python-modules/fixtures { };
 
   pelican = callPackage ../development/python-modules/pelican {
     inherit (pkgs) glibcLocales pandoc git;
@@ -19156,31 +19112,7 @@ in {
   };
 
 
-  restview = buildPythonPackage rec {
-    name = "restview-${version}";
-    version = "2.5.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/restview/${name}.tar.gz";
-      sha256 = "0gmdmnlhiy6lagi17maiz312374hk6g6x90fhjwnbrwxif4r9bd5";
-    };
-
-    propagatedBuildInputs = with self; [ docutils readme pygments ];
-    buildInputs = with self; [ mock ];
-
-    patchPhase = ''
-      # dict order breaking tests
-      sed -i 's@<a href="http://www.example.com" rel="nofollow">@...@' src/restview/tests.py
-    '';
-
-    meta = {
-      description = "ReStructuredText viewer";
-      homepage = http://mg.pov.lt/restview/;
-      license = licenses.gpl2;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ koral ];
-    };
-  };
+  restview = callPackage ../development/python-modules/restview { };
 
   readme = buildPythonPackage rec {
     name = "readme-${version}";
@@ -19208,6 +19140,8 @@ in {
       homepage = "https://github.com/pypa/readme";
     };
   };
+
+  readme_renderer = callPackage ../development/python-modules/readme_renderer { };
 
   rjsmin = callPackage ../development/python-modules/rjsmin { };
 
@@ -19295,27 +19229,7 @@ in {
     };
   };
 
-  django-multiselectfield = buildPythonPackage rec {
-    name = "django-multiselectfield-${version}";
-    version = "0.1.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-multiselectfield/django-multiselectfield-${version}.tar.gz";
-      sha256 = "0v7wf82f8688srdsym9ajv1j54bxfxwvydypc03f8xyl4c1raziv";
-    };
-
-    propagatedBuildInputs = with self; [
-
-    ];
-    buildInputs = with self; [
-
-    ];
-
-    meta = with stdenv.lib; {
-      description = "django-multiselectfield";
-      homepage = "https://github.com/goinnn/django-multiselectfield";
-    };
-  };
+  django-multiselectfield = callPackage ../development/python-modules/django-multiselectfield { };
 
   reviewboard = buildPythonPackage rec {
     name = "ReviewBoard-2.5.1.1";
@@ -27484,7 +27398,7 @@ EOF
 
   preshed = callPackage ../development/python-modules/preshed { };
 
-  backports_weakref = callPackage ../development/python-modules/backports_weakref { }; 
+  backports_weakref = callPackage ../development/python-modules/backports_weakref { };
 
   thinc = callPackage ../development/python-modules/thinc { };
 
@@ -27493,7 +27407,7 @@ EOF
   behave = callPackage ../development/python-modules/behave { };
 
   pyhamcrest = callPackage ../development/python-modules/pyhamcrest { };
- 
+
   parse = callPackage ../development/python-modules/parse { };
 
   parse-type = callPackage ../development/python-modules/parse-type { };

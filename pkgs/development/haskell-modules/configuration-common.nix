@@ -899,4 +899,7 @@ self: super: {
     sha256 = "1vss7b99zrhw3r29krl1b60r4qk0m2mpwmrz8q8zdxrh33hb8pd7";
   });
 
+  # happy 1.19.6 and later break some packages.
+  Agda = super.Agda.override { happy = self.happy_1_19_5; };
+
 }
