@@ -17,7 +17,7 @@
 
 let
   basename = "gdb-${version}";
-  version = "8.0";
+  version = "8.0.1";
 in
 
 assert targetPlatform.isHurd -> mig != null && hurd != null;
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}.tar.xz";
-    sha256 = "1vplyf8v70yn0rdqjx6awl9nmfbwaj5ynwwjxwa71rhp97z4z8pn";
+    sha256 = "1qwmcbaxf0jc7yjl0fimgcfj2yqcrl6h7azgs1d838kbwf9mzg9x";
   };
 
   patches = [ ./debug-info-from-env.patch ];
