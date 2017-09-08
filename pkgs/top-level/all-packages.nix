@@ -5231,9 +5231,7 @@ with pkgs;
     stdenv = overrideCC stdenv gcc49;
   };
 
-  bigloo = callPackage ../development/compilers/bigloo {
-    stdenv = overrideCC stdenv gcc49;
-  };
+  bigloo = callPackage ../development/compilers/bigloo { };
 
   binaryen = callPackage ../development/compilers/binaryen { };
 
