@@ -24,9 +24,9 @@ stdenv.mkDerivation rec {
   # XXX: in the Libs.private field of python3.pc
   buildInputs = [ ncurses ];
 
-  preConfigure = ''
-    export configureFlags="$configureFlags --with-pygi-overrides-dir=$out/lib/${python.sitePackages}/gi/overrides"
-  '';
+  configureFlags = [
+    "--with-pygi-overrides-dir=$(out)/${python.sitePackages}/gi/overrides"
+  ];
 
   propagatedBuildInputs = [ gst-plugins-base pygobject3 ];
 
