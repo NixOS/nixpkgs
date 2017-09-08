@@ -587,7 +587,7 @@ in {
 
       clusterDns = mkOption {
         description = "Use alternative DNS.";
-        default = "10.10.0.1";
+        default = "10.1.0.1";
         type = types.str;
       };
 
@@ -1031,6 +1031,7 @@ in {
       services.kubernetes.controllerManager.enable = mkDefault true;
       services.etcd.enable = mkDefault (cfg.etcd.servers == ["http://127.0.0.1:2379"]);
       services.kubernetes.addonManager.enable = mkDefault true;
+      services.kubernetes.proxy.enable = mkDefault true;
     })
 
     # if this node is only a master make it unschedulable by default
