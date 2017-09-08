@@ -16341,35 +16341,16 @@ in {
 
   });
 
-  protobuf = self.protobuf3_4;
-  protobuf3_4 = callPackage ../development/python-modules/protobuf.nix {
+  protobuf = callPackage ../development/python-modules/protobuf.nix {
     disabled = isPyPy;
     doCheck = !isPy3k;
-    protobuf = pkgs.protobuf3_4;
+    protobuf = pkgs.protobuf;
   };
-  protobuf3_3 = callPackage ../development/python-modules/protobuf.nix {
+
+  protobuf3_1 = callPackage ../development/python-modules/protobuf.nix {
     disabled = isPyPy;
     doCheck = !isPy3k;
-    protobuf = pkgs.protobuf3_3;
-  };
-  protobuf3_2 = callPackage ../development/python-modules/protobuf.nix {
-    disabled = isPyPy;
-    doCheck = !isPy3k;
-    protobuf = pkgs.protobuf3_2;
-  };
-  protobuf3_0 = callPackage ../development/python-modules/protobuf.nix {
-    disabled = isPyPy;
-    doCheck = !isPy3k;
-    protobuf = pkgs.protobuf3_0;
-  };
-  protobuf2_6 = callPackage ../development/python-modules/protobuf.nix {
-    disabled = isPy3k || isPyPy;
-    doCheck = false;
-    protobuf = pkgs.protobuf2_6;
-  };
-  protobuf2_5 = callPackage ../development/python-modules/protobuf.nix {
-    disabled = isPy3k || isPyPy;
-    protobuf = pkgs.protobuf2_5;
+    protobuf = pkgs.protobuf3_1;
   };
 
   psd-tools = callPackage ../development/python-modules/psd-tools { };

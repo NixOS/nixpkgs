@@ -6354,7 +6354,7 @@ with pkgs;
   mesos = callPackage ../applications/networking/cluster/mesos {
     sasl = cyrus_sasl;
     inherit (pythonPackages) python boto setuptools wrapPython;
-    pythonProtobuf = pythonPackages.protobuf2_6;
+    pythonProtobuf = pythonPackages.protobuf;
     perf = linuxPackages.perf;
   };
 
@@ -9987,17 +9987,11 @@ with pkgs;
 
   postgis = callPackage ../development/libraries/postgis { };
 
-  protobuf = protobuf3_4;
-  protobuf3_0 = lowPrio (callPackage ../development/libraries/protobuf/3.0.nix { });
-  protobuf3_1 = callPackage ../development/libraries/protobuf/3.1.nix { };
-  protobuf3_2 = callPackage ../development/libraries/protobuf/3.2.nix { };
-  protobuf3_3 = callPackage ../development/libraries/protobuf/3.3.nix { };
-  protobuf3_4 = callPackage ../development/libraries/protobuf/3.4.nix { };
-  protobuf2_6 = callPackage ../development/libraries/protobuf/2.6.nix { };
-  protobuf2_5 = callPackage ../development/libraries/protobuf/2.5.nix { };
+  protobuf = callPackage ../development/libraries/protobuf/3.4.nix { };
 
-  protobufc = protobufc1_3;
-  protobufc1_3 = callPackage ../development/libraries/protobufc/1.3.nix { };
+  protobuf3_1 = callPackage ../development/libraries/protobuf/3.1.nix { };
+
+  protobufc = callPackage ../development/libraries/protobufc/1.3.nix { };
 
   flatbuffers = callPackage ../development/libraries/flatbuffers { };
 
