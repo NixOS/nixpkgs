@@ -39,6 +39,8 @@ postFixup() {
     fi
 }
 
+unset LD
+
 if test -n "$perlPreHook"; then
     eval "$perlPreHook"
 fi
