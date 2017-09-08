@@ -2747,12 +2747,12 @@ in {
   };
 
   click-log = buildPythonPackage rec {
-    version = "0.1.3";
+    version = "0.2.0";
     name = "click-log-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/click-log/${name}.tar.gz";
-      sha256 = "0kdd1vminxpcfczxl2kkf285n0dr1gxh2cdbx1p6vkj7b7bci3gx";
+      sha256 = "1bjrfxji1yv4fj0g78ri2yfgn2wbivn8g69fxfinxvxpmighhshp";
     };
 
     propagatedBuildInputs = with self; [ click ];
