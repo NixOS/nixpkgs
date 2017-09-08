@@ -4,107 +4,121 @@
 
 let
 
-  version = "8.6.76.56247";
+  skype = {version, sha256, ...}:
+    let
+      rpath = stdenv.lib.makeLibraryPath [
+             alsaLib
+             atk
+             cairo
+             cups
+             curl
+             dbus
+             expat
+             fontconfig
+             freetype
+             glib
+             libsecret
+             glibc
+             libstdcxx5
+         
+             gnome2.GConf
+             gnome2.gdk_pixbuf
+             gnome2.gtk
+             gnome2.pango
+         
+             gnome2.gnome_keyring
+         
+             libnotify
+             nspr
+             nss
+             stdenv.cc.cc
+             systemd
+             libv4l
+         
+             xorg.libxkbfile
+             xorg.libX11
+             xorg.libXcomposite
+             xorg.libXcursor
+             xorg.libXdamage
+             xorg.libXext
+             xorg.libXfixes
+             xorg.libXi
+             xorg.libXrandr
+             xorg.libXrender
+             xorg.libXtst
+             xorg.libXScrnSaver
+             xorg.libxcb
+           ] + ":${stdenv.cc.cc.lib}/lib64";
+         
+      src =
+             if stdenv.system == "x86_64-linux" then
+               fetchurl {
+                 url = "https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb";
+                 sha256 = sha256;
+               }
+             else
+               throw "Skype for linux is not supported on ${stdenv.system}";
+         
+      in stdenv.mkDerivation {
+           name = "skypeforlinux-${version}";
+         
+           system = "x86_64-linux";
+         
+           inherit src;
+         
+           buildInputs = [ dpkg makeWrapper ];
+         
+           unpackPhase = "true";
+           installPhase = ''
+             mkdir -p $out
+             dpkg -x $src $out
+             cp -av $out/usr/* $out
+             rm -rf $out/opt $out/usr
+             rm $out/bin/skypeforlinux
+         
+             # Otherwise it looks "suspicious"
+             chmod -R g-w $out
+         
+             
+           '';
+         
+           postFixup = ''
 
-  rpath = stdenv.lib.makeLibraryPath [
-    alsaLib
-    atk
-    cairo
-    cups
-    curl
-    dbus
-    expat
-    fontconfig
-    freetype
-    glib
-    libsecret
-    glibc
-    libstdcxx5
+              for file in $(find $out -type f \( -perm /0111 -o -name \*.so\* -or -name \*.node\* \) ); do
+                patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
+                patchelf --set-rpath ${rpath}:$out/share/skypeforlinux $file || true
+              done
+         
+             ln -s "$out/share/skypeforlinux/skypeforlinux" "$out/bin/skypeforlinux"
+         
+             # Fix the desktop link
+             substituteInPlace $out/share/applications/skypeforlinux.desktop \
+               --replace /usr/bin/ $out/bin/ \
+               --replace /usr/share/ $out/share/
+         
+           '';
+         
+           meta = with stdenv.lib; {
+             description = "Linux client for skype";
+             homepage = https://www.skype.com;
+             license = licenses.unfree;
+             maintainers = with stdenv.lib.maintainers; [ panaeon ];
+             platforms = [ "x86_64-linux" ];
+           };
+      };
 
-    gnome2.GConf
-    gnome2.gdk_pixbuf
-    gnome2.gtk
-    gnome2.pango
+  
 
-    gnome2.gnome_keyring
+in {
+  skypeforlinux_5_4 = skype {
+    version = "5.4.0.1";
+    sha256 = "1idjgmn0kym7jml30xq6zrcp8qinx64kgnxlw8m0ys4z6zlw0c8z";
+  };
 
-    libnotify
-    nspr
-    nss
-    stdenv.cc.cc
-    systemd
-    libv4l
-
-    xorg.libxkbfile
-    xorg.libX11
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXfixes
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libXrender
-    xorg.libXtst
-    xorg.libXScrnSaver
-    xorg.libxcb
-  ] + ":${stdenv.cc.cc.lib}/lib64";
-
-  src =
-    if stdenv.system == "x86_64-linux" then
-      fetchurl {
-        url = "https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb";
-        sha256 = "0ycl2l38jp6dl4gfavirc25c5rsgsmcsfiqpa0bb72pgxjqpwgzh";
-      }
-    else
-      throw "Skype for linux is not supported on ${stdenv.system}";
-
-in stdenv.mkDerivation {
-  name = "skypeforlinux-${version}";
-
-  system = "x86_64-linux";
-
-  inherit src;
-
-  buildInputs = [ dpkg makeWrapper ];
-
-  unpackPhase = "true";
-  installPhase = ''
-    mkdir -p $out
-    dpkg -x $src $out
-    cp -av $out/usr/* $out
-    rm -rf $out/opt $out/usr
-    rm $out/bin/skypeforlinux
-
-    # Otherwise it looks "suspicious"
-    chmod -R g-w $out
-
-     for file in $(find $out -type f  ); do
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
-      patchelf --set-rpath ${rpath}:$out/share/skypeforlinux $file || true
-    done
-  '';
-
-  postFixup = ''
-     patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "$out/share/skypeforlinux:${rpath}" "$out/share/skypeforlinux/skypeforlinux"
-
-    ln -s "$out/share/skypeforlinux/skypeforlinux" "$out/bin/skypeforlinux"
-
-    # Fix the desktop link
-    substituteInPlace $out/share/applications/skypeforlinux.desktop \
-      --replace /usr/bin/ $out/bin/ \
-      --replace /usr/share/ $out/share/
-
-  '';
-
-  meta = with stdenv.lib; {
-    description = "Linux client for skype";
-    homepage = https://www.skype.com;
-    license = licenses.unfree;
-    maintainers = with stdenv.lib.maintainers; [ panaeon ];
-    platforms = [ "x86_64-linux" ];
+  skypeforlinux_8_6 = skype {
+    version = "8.6.76.56247";
+    sha256 = "0ycl2l38jp6dl4gfavirc25c5rsgsmcsfiqpa0bb72pgxjqpwgzh";
   };
 }
+     
 
