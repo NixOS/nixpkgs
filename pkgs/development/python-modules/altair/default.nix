@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ stdenv, buildPythonPackage, fetchPypi, isPy36
 , pytest, vega, pandas, ipython, traitlets }:
 
 buildPythonPackage rec {
@@ -13,9 +13,11 @@ buildPythonPackage rec {
 
   buildInputs = [ pytest ];
 
+  doCheck = !(isPy36);
+
   checkPhase = ''
     export LANG=en_US.UTF-8
-    py.test altair --doctest-modules
+    py.test altair --doctest-modules -k "not test_schema"
   '';
 
   propagatedBuildInputs = [ vega pandas ipython traitlets ];
