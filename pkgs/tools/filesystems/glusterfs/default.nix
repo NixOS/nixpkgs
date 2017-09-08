@@ -28,7 +28,7 @@ let
       pkgs.flask
       pkgs.prettytable
       pkgs.requests
-      pkgs.xattr
+      pkgs.pyxattr
     ]))
     # NOTE: `python2` has to be *AFTER* the above `python2.withPackages`,
     #       to ensure that the packages are available but the `toPythonPath`
