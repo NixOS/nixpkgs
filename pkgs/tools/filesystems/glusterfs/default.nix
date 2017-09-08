@@ -73,6 +73,9 @@ rec {
     ./glusterfs-use-PATH-instead-of-hardcodes.patch
     ./glusterfs-fix-unsubstituted-autoconf-macros.patch
     ./glusterfs-python-remove-find_library.patch
+    # Remove when https://bugzilla.redhat.com/show_bug.cgi?id=1489610 is fixed
+    ./glusterfs-fix-bug-1489610-glusterfind-var-data-under-prefix.patch
+    ./glusterfs-glusterfind-log-remote-node_cmd-error.patch
   ];
 
    # Note that the VERSION file is something that is present in release tarballs
