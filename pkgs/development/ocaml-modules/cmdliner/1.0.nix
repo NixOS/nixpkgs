@@ -8,11 +8,11 @@ assert stdenv.lib.versionAtLeast ocaml.version "4.01.0";
 
 stdenv.mkDerivation rec {
   name = "ocaml-${pname}-${version}";
-  version = "1.0.0";
+  version = "1.0.2";
 
   src = fetchurl {
     url = "http://erratique.ch/software/${pname}/releases/${pname}-${version}.tbz";
-    sha256 = "1ryn7qis0izg0wcal8zdlikzzl689l75y6f4zc6blrm93y5agy9x";
+    sha256 = "18jqphjiifljlh9jg8zpl6310p3iwyaqphdkmf89acyaix0s4kj1";
   };
 
   unpackCmd = "tar xjf $src";
