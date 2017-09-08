@@ -2,17 +2,16 @@
  python27, python27Packages}:
 
 stdenv.mkDerivation rec {
-  version = "201409.1";
-  build_nr = "13892";
+  version = "201707";
+  build_nr = "1";
   name = "mcrl2-${version}";
 
   src = fetchurl {
-    url = "http://www.mcrl2.org/download/devel/mcrl2-${version}.${build_nr}.tar.gz";
-    sha256 = "0cknpind6rma12q93rbm638ijhy8sj8nd20wnw8l0f651wm0x036";
+    url = "http://www.mcrl2.org/download/release/mcrl2-${version}.${build_nr}.tar.gz";
+    sha256 = "1c8h94ja7271ph61zrcgnjgblxppld6v22f7f900prjgzbcfy14m";
   };
 
-  buildInputs = [ xlibs.libX11 cmake subversion mesa qt5.qtbase boost
-                  python27 python27Packages.pyyaml python27Packages.psutil ];
+  buildInputs = [ cmake mesa qt5.qtbase boost ];
 
   enableParallelBuilding = true;
 
