@@ -46,6 +46,8 @@ in stdenv.mkDerivation rec {
     dbus-python
   ]);
 
+  PYTHONPATH = "${python3Packages.gst-python}/lib/${python3Packages.python.sitePackages}";
+
   meta = with stdenv.lib; {
     description = "Non-Linear video editor utilizing the power of GStreamer";
     homepage    = "http://pitivi.org/";
