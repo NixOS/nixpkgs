@@ -1,0 +1,24 @@
+--- execinfo.c.orig
++++ execinfo.c
+@@ -26,6 +26,7 @@
+  * $Id: execinfo.c,v 1.3 2004/07/19 05:21:09 sobomax Exp $
+  */
+ 
++#define _GNU_SOURCE
+ #include <sys/types.h>
+ #include <sys/uio.h>
+ #include <dlfcn.h>
+--- stacktraverse.c.orig
++++ stacktraverse.c
+@@ -1,3 +1,4 @@
++#define _GNU_SOURCE
+ #include <stddef.h>
+ 
+ #include "stacktraverse.h"
+--- test.c.orig
++++ test.c
+@@ -1,3 +1,4 @@
++#define _GNU_SOURCE
+ #include <stdio.h>
+ #include <stdlib.h>
+ 
