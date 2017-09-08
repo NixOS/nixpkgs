@@ -151,12 +151,12 @@ let
           sed -i "s|'--with-baseruby=${baseruby}/bin/ruby'||" $rbConfig
         '';
 
-        meta = {
-          license = stdenv.lib.licenses.ruby;
-          homepage = http://www.ruby-lang.org/en/;
+        meta = with stdenv.lib; {
           description = "The Ruby language";
-          maintainers = with stdenv.lib.maintainers; [ vrthra manveru ];
-          platforms = stdenv.lib.platforms.all;
+          homepage    = http://www.ruby-lang.org/en/;
+          license     = licenses.ruby;
+          maintainers = with maintainers; [ vrthra manveru ];
+          platforms   = platforms.all;
         };
 
         passthru = rec {
