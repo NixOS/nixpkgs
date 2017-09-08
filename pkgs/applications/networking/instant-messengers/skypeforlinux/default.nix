@@ -1,10 +1,10 @@
 { stdenv, fetchurl, dpkg, makeWrapper
-, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib, gnome2
-, libnotify, nspr, nss, systemd, xorg }:
+, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib, glibc, gnome2, libsecret
+, libnotify, nspr, nss, systemd, xorg, libv4l, libstdcxx5 }:
 
 let
 
-  version = "5.3.0.1";
+  version = "5.4.0.1";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
@@ -17,6 +17,9 @@ let
     fontconfig
     freetype
     glib
+    libsecret
+    glibc
+    libstdcxx5
 
     gnome2.GConf
     gnome2.gdk_pixbuf
@@ -30,6 +33,7 @@ let
     nss
     stdenv.cc.cc
     systemd
+    libv4l
 
     xorg.libxkbfile
     xorg.libX11
@@ -50,7 +54,7 @@ let
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb";
-        sha256 = "08sf9nqnznsydw4965w7ixwwba54hjc02ga7vcnz9vpx5hln3nrz";
+        sha256 = "1idjgmn0kym7jml30xq6zrcp8qinx64kgnxlw8m0ys4z6zlw0c8z";
       }
     else
       throw "Skype for linux is not supported on ${stdenv.system}";
@@ -77,9 +81,10 @@ in stdenv.mkDerivation {
   '';
 
   postFixup = ''
-     patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "$out/share/skypeforlinux:${rpath}" "$out/share/skypeforlinux/skypeforlinux"
+    for file in $(find $out -type f \( -perm /0111 -o -name \*.so\* -or -name \*.node\* \) ); do
+                patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$file" || true
+                patchelf --set-rpath ${rpath}:$out/share/skypeforlinux $file || true
+    done
 
     ln -s "$out/share/skypeforlinux/skypeforlinux" "$out/bin/skypeforlinux"
 
