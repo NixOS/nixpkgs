@@ -2746,24 +2746,7 @@ in {
     };
   };
 
-  click-log = buildPythonPackage rec {
-    version = "0.2.0";
-    name = "click-log-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/click-log/${name}.tar.gz";
-      sha256 = "1bjrfxji1yv4fj0g78ri2yfgn2wbivn8g69fxfinxvxpmighhshp";
-    };
-
-    propagatedBuildInputs = with self; [ click ];
-
-    meta = {
-      homepage = https://github.com/click-contrib/click-log/;
-      description = "Logging integration for Click";
-      license = licenses.mit;
-      maintainers = with maintainers; [ ];
-    };
-  };
+  click-log = callPackage ../development/python-modules/click-log {};
 
   click-plugins = callPackage ../development/python-modules/click-plugins {};
 
