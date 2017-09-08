@@ -11,6 +11,7 @@
     "cmd/kube-dns"
     "federation/cmd/federation-apiserver"
     "federation/cmd/federation-controller-manager"
+    "test/e2e/e2e.test"
   ]
 }:
 
