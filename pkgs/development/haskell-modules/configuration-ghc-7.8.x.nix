@@ -162,4 +162,7 @@ self: super: {
   comonad = dontCheck super.comonad;
   semigroupoids = dontCheck super.semigroupoids;
 
+  # https://github.com/simonmar/happy/issues/103
+  happy = super.happy.override { mtl = self.mtl_2_2_1; };
+
 }

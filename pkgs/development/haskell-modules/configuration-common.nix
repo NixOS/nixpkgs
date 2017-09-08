@@ -886,4 +886,20 @@ self: super: {
   # missing dependencies: doctest ==0.12.*
   html-entities = doJailbreak super.html-entities;
 
+  # Needs a version that's newer than what we have in lts-9.
+  sbv = super.sbv.override { doctest = self.doctest_0_13_0; };
+
+  # https://github.com/takano-akio/filelock/issues/5
+  filelock = dontCheck super.filelock;
+
+  # https://github.com/alpmestan/taggy/issues/{19,20}
+  taggy = appendPatch super.taggy (pkgs.fetchpatch {
+    name = "blaze-markup.patch";
+    url = "https://github.com/alpmestan/taggy/commit/5456c2fa4d377f7802ec5df3d5f50c4ccab2e8ed.patch";
+    sha256 = "1vss7b99zrhw3r29krl1b60r4qk0m2mpwmrz8q8zdxrh33hb8pd7";
+  });
+
+  # happy 1.19.6 and later break some packages.
+  Agda = super.Agda.override { happy = self.happy_1_19_5; };
+
 }
