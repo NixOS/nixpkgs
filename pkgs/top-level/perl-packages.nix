@@ -229,6 +229,10 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/P/PH/PHRED/Apache-Test-1.38.tar.gz;
       sha256 = "321717f58636ed0aa85cba6d69fc01e2ccbc90ba71ec2dcc2134d8401af65145";
     };
+    meta = {
+      # tests fail
+      broken = true;
+
   };
 
   AppCLI = buildPerlPackage {
