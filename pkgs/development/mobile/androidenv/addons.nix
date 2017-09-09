@@ -305,4 +305,16 @@ in
     };
   };
 
+  instant_apps = buildGoogleApis {
+    name = "instant_apps_sdk";
+    src = fetchurl {
+      url = https://dl.google.com/android/repository/aiasdk-1.0.0.zip;
+      sha1 = "50074a0f0312ee1d0d81d2cddc3d84a8a9e97a53";
+    };
+    meta = {
+      description = "Android Instant Apps Development SDK";
+      url = "https://developer.android.com/";
+    };
+  };
+
 }
