@@ -1,14 +1,6 @@
-{ system ? builtins.currentSystem }:
-
-with import ../../lib/testing.nix { inherit system; };
-with import ../../lib/qemu-flags.nix;
-with pkgs.lib;
-
+{ system ? builtins.currentSystem, pkgs ? import <nixpkgs> { inherit system; } }:
+with import ./base.nix { inherit system; };
 let
-  servers.master = "192.168.1.1";
-  servers.one = "192.168.1.10";
-
-  certs = import ./certs.nix { inherit servers; };
 
   roServiceAccount = pkgs.writeText "ro-service-account.json" (builtins.toJSON {
     kind = "ServiceAccount";
@@ -20,21 +12,21 @@ let
   });
 
   roRoleBinding = pkgs.writeText "ro-role-binding.json" (builtins.toJSON {
-    "apiVersion" = "rbac.authorization.k8s.io/v1beta1";
-    "kind" = "RoleBinding";
-    "metadata" = {
-      "name" = "read-pods";
-      "namespace" = "default";
+    apiVersion = "rbac.authorization.k8s.io/v1beta1";
+    kind = "RoleBinding";
+    metadata = {
+      name = "read-pods";
+      namespace = "default";
     };
-    "roleRef" = {
-      "apiGroup" = "rbac.authorization.k8s.io";
-      "kind" = "Role";
-      "name" = "pod-reader";
+    roleRef = {
+      apiGroup = "rbac.authorization.k8s.io";
+      kind = "Role";
+      name = "pod-reader";
     };
-    "subjects" = [{
-      "kind" = "ServiceAccount";
-      "name" = "read-only";
-      "namespace" = "default";
+    subjects = [{
+      kind = "ServiceAccount";
+      name = "read-only";
+      namespace = "default";
     }];
   });
 
@@ -62,7 +54,7 @@ let
     spec.containers = [{
       name = "kubectl";
       image = "kubectl:latest";
-      command = ["${pkgs.busybox}/bin/tail" "-f"];
+      command = ["/bin/tail" "-f"];
       imagePullPolicy = "Never";
       tty = true;
     }];
@@ -78,71 +70,68 @@ let
     spec.containers = [{
       name = "kubectl-2";
       image = "kubectl:latest";
-      command = ["${pkgs.busybox}/bin/tail" "-f"];
+      command = ["/bin/tail" "-f"];
       imagePullPolicy = "Never";
       tty = true;
     }];
   });
 
+  kubectl = pkgs.runCommand "copy-kubectl" { buildInputs = [ pkgs.kubernetes ]; } ''
+    mkdir -p $out/bin
+    cp ${pkgs.kubernetes}/bin/kubectl $out/bin/kubectl
+  '';
+
   kubectlImage = pkgs.dockerTools.buildImage {
     name = "kubectl";
     tag = "latest";
-    contents = [ pkgs.kubernetes pkgs.busybox kubectlPod2 ];  # certs kubeconfig
-    config.Entrypoint = "${pkgs.busybox}/bin/sh";
+    contents = [ kubectl pkgs.busybox kubectlPod2 ];
+    config.Entrypoint = "/bin/sh";
   };
 
-  test = ''
-    $master->waitUntilSucceeds("kubectl get node master.nixos.xyz | grep Ready");
-    $master->waitUntilSucceeds("kubectl get node one.nixos.xyz | grep Ready");
-
-    $one->execute("docker load < ${kubectlImage}");
-
-    $master->waitUntilSucceeds("kubectl apply -f ${roServiceAccount}");
-    $master->waitUntilSucceeds("kubectl apply -f ${roRole}");
-    $master->waitUntilSucceeds("kubectl apply -f ${roRoleBinding}");
-    $master->waitUntilSucceeds("kubectl create -f ${kubectlPod} || kubectl apply -f ${kubectlPod}");
-
-    $master->waitUntilSucceeds("kubectl get pod kubectl | grep Running");
-
-    $master->succeed("kubectl exec -ti kubectl -- kubectl get pods");
-    $master->fail("kubectl exec -ti kubectl -- kubectl create -f /kubectl-pod-2.json");
-    $master->fail("kubectl exec -ti kubectl -- kubectl delete pods -l name=kubectl");
-  '';
-
-in makeTest {
-  name = "kubernetes-rbac";
-
-  nodes = {
-    master =
-      { config, pkgs, lib, nodes, ... }:
-        mkMerge [
-          {
-            virtualisation.memorySize = 768;
-            virtualisation.diskSize = 4096;
-            networking.interfaces.eth1.ip4 = mkForce [{address = servers.master; prefixLength = 24;}];
-            networking.primaryIPAddress = mkForce servers.master;
-          }
-          (import ./kubernetes-common.nix { inherit pkgs config certs servers; })
-          (import ./kubernetes-master.nix { inherit pkgs config certs; })
-        ];
-
-    one =
-      { config, pkgs, lib, nodes, ... }:
-        mkMerge [
-          {
-            virtualisation.memorySize = 768;
-            virtualisation.diskSize = 4096;
-            networking.interfaces.eth1.ip4 = mkForce [{address = servers.one; prefixLength = 24;}];
-            networking.primaryIPAddress = mkForce servers.one;
-            services.kubernetes.roles = ["node"];
-          }
-          (import ./kubernetes-common.nix { inherit pkgs config certs servers; })
-        ];
+  base = {
+    name = "rbac";
   };
 
-  testScript = ''
-    startAll;
+  singlenode = base // {
+    test = ''
+      $machine1->waitUntilSucceeds("kubectl get node machine1.my.zyx | grep -w Ready");
 
-    ${test}
-  '';
+      $machine1->execute("docker load < ${kubectlImage}");
+
+      $machine1->waitUntilSucceeds("kubectl apply -f ${roServiceAccount}");
+      $machine1->waitUntilSucceeds("kubectl apply -f ${roRole}");
+      $machine1->waitUntilSucceeds("kubectl apply -f ${roRoleBinding}");
+      $machine1->waitUntilSucceeds("kubectl create -f ${kubectlPod}");
+
+      $machine1->waitUntilSucceeds("kubectl get pod kubectl | grep Running");
+
+      $machine1->succeed("kubectl exec -ti kubectl -- kubectl get pods");
+      $machine1->fail("kubectl exec -ti kubectl -- kubectl create -f /kubectl-pod-2.json");
+      $machine1->fail("kubectl exec -ti kubectl -- kubectl delete pods -l name=kubectl");
+    '';
+  };
+
+  multinode = base // {
+    test = ''
+      $machine1->waitUntilSucceeds("kubectl get node machine1.my.zyx | grep -w Ready");
+      $machine1->waitUntilSucceeds("kubectl get node machine2.my.zyx | grep -w Ready");
+
+      $machine2->execute("docker load < ${kubectlImage}");
+
+      $machine1->waitUntilSucceeds("kubectl apply -f ${roServiceAccount}");
+      $machine1->waitUntilSucceeds("kubectl apply -f ${roRole}");
+      $machine1->waitUntilSucceeds("kubectl apply -f ${roRoleBinding}");
+      $machine1->waitUntilSucceeds("kubectl create -f ${kubectlPod}");
+
+      $machine1->waitUntilSucceeds("kubectl get pod kubectl | grep Running");
+
+      $machine1->succeed("kubectl exec -ti kubectl -- kubectl get pods");
+      $machine1->fail("kubectl exec -ti kubectl -- kubectl create -f /kubectl-pod-2.json");
+      $machine1->fail("kubectl exec -ti kubectl -- kubectl delete pods -l name=kubectl");
+    '';
+  };
+
+in {
+  singlenode = mkKubernetesSingleNodeTest singlenode;
+  multinode = mkKubernetesMultiNodeTest multinode;
 }

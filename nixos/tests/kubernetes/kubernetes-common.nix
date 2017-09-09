@@ -1,72 +1,59 @@
-{ config, pkgs, certs, servers }:
-
+{ roles, config, pkgs, certs }:
+with pkgs.lib;
 let
-  etcd_key = "${certs}/etcd-key.pem";
-  etcd_cert = "${certs}/etcd.pem";
-  ca_pem = "${certs}/ca.pem";
-  etcd_client_cert = "${certs}/etcd-client.crt";
-  etcd_client_key = "${certs}/etcd-client-key.pem";
+  base = {
+    inherit roles;
+    featureGates = ["AllAlpha"];
+    flannel.enable = true;
+    addons.dashboard.enable = true;
+    verbose = true;
 
-  worker_key = "${certs}/worker-key.pem";
-  worker_cert = "${certs}/worker.pem";
-
-  rootCaFile = pkgs.writeScript "rootCaFile.pem" ''
-    ${pkgs.lib.readFile "${certs}/ca.pem"}
-
-    ${pkgs.lib.readFile ("${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt")}
-  '';
-
-  mkHosts =
-    pkgs.lib.concatMapStringsSep "\n" (v: "${v.ip} ${v.name}.nixos.xyz") (pkgs.lib.mapAttrsToList (n: v: {name = n; ip = v;}) servers);
-
-in
-{
-  programs.bash.enableCompletion = true;
-  environment.systemPackages = with pkgs; [ netcat bind etcd.bin ];
-
-  networking = {
-    firewall.allowedTCPPorts = [
-      10250 # kubelet
-    ];
-    extraHosts = ''
-      # register "external" domains
-      ${servers.master} etcd.kubernetes.nixos.xyz
-      ${servers.master} kubernetes.nixos.xyz
-      ${mkHosts}
-    '';
-  };
-  services.flannel.iface = "eth1";
-  environment.variables = {
-    ETCDCTL_CERT_FILE = "${etcd_client_cert}";
-    ETCDCTL_KEY_FILE = "${etcd_client_key}";
-    ETCDCTL_CA_FILE = "${rootCaFile}";
-    ETCDCTL_PEERS = "https://etcd.kubernetes.nixos.xyz:2379";
-  };
-
-  services.kubernetes = {
-    kubelet = {
-      tlsKeyFile = worker_key;
-      tlsCertFile = worker_cert;
-      hostname = "${config.networking.hostName}.nixos.xyz";
-      nodeIp = config.networking.primaryIPAddress;
+    caFile = "${certs.master}/ca.pem";
+    apiserver = {
+      tlsCertFile = "${certs.master}/kube-apiserver.pem";
+      tlsKeyFile = "${certs.master}/kube-apiserver-key.pem";
+      kubeletClientCertFile = "${certs.master}/kubelet-client.pem";
+      kubeletClientKeyFile = "${certs.master}/kubelet-client-key.pem";
+      serviceAccountKeyFile = "${certs.master}/kube-service-accounts.pem";
     };
     etcd = {
-      servers = ["https://etcd.kubernetes.nixos.xyz:2379"];
-      keyFile = etcd_client_key;
-      certFile = etcd_client_cert;
-      caFile = ca_pem;
+      servers = ["https://etcd.${config.networking.domain}:2379"];
+      certFile = "${certs.worker}/etcd-client.pem";
+      keyFile = "${certs.worker}/etcd-client-key.pem";
     };
     kubeconfig = {
-      server = "https://kubernetes.nixos.xyz";
-      caFile = rootCaFile;
-      certFile = worker_cert;
-      keyFile = worker_key;
+      server = "https://api.${config.networking.domain}";
     };
-    flannel.enable = true;
-
-    dns.port = 4453;
+    kubelet = {
+      tlsCertFile = "${certs.worker}/kubelet.pem";
+      tlsKeyFile = "${certs.worker}/kubelet-key.pem";
+      hostname = "${config.networking.hostName}.${config.networking.domain}";
+      kubeconfig = {
+        certFile = "${certs.worker}/apiserver-client-kubelet.pem";
+        keyFile = "${certs.worker}/apiserver-client-kubelet-key.pem";
+      };
+    };
+    controllerManager = {
+      serviceAccountKeyFile = "${certs.master}/kube-service-accounts-key.pem";
+      kubeconfig = {
+        certFile = "${certs.master}/apiserver-client-kube-controller-manager.pem";
+        keyFile = "${certs.master}/apiserver-client-kube-controller-manager-key.pem";
+      };
+    };
+    scheduler = {
+      kubeconfig = {
+        certFile = "${certs.master}/apiserver-client-kube-scheduler.pem";
+        keyFile = "${certs.master}/apiserver-client-kube-scheduler-key.pem";
+      };
+    };
+    proxy = {
+      kubeconfig = {
+        certFile = "${certs.worker}/apiserver-client-kube-proxy.pem";
+        keyFile = "${certs.worker}//apiserver-client-kube-proxy-key.pem";
+      };
+    };
   };
 
-  services.dnsmasq.enable = true;
-  services.dnsmasq.servers = ["/${config.services.kubernetes.dns.domain}/127.0.0.1#4453"];
+in {
+  services.kubernetes = base;
 }
