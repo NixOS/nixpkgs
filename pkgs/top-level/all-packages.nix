@@ -10125,6 +10125,8 @@ with pkgs;
 
     kdiagram = callPackage ../development/libraries/kdiagram { };
 
+    kproperty = callPackage ../development/libraries/kproperty { };
+
     kirigami = kirigami_1;
 
     libcommuni = callPackage ../development/libraries/libcommuni { };
