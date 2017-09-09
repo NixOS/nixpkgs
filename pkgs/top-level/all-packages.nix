@@ -1459,7 +1459,7 @@ with pkgs;
       clangStdenv = libcxxStdenv; # workaround for https://github.com/NixOS/nixpkgs/issues/28223
       python = python2;
       inherit (python2Packages) gyp;
-      protobuf = protobuf3_2.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
+      protobuf = pkgs.protobuf.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
     };
 
     table = callPackage ../tools/inputmethods/ibus-engines/ibus-table {
@@ -1946,7 +1946,7 @@ with pkgs;
       clangStdenv = libcxxStdenv; # workaround for https://github.com/NixOS/nixpkgs/issues/28223
       python = python2;
       inherit (python2Packages) gyp;
-      protobuf = protobuf3_2.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
+      protobuf = pkgs.protobuf.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
     };
 
     table-other = callPackage ../tools/inputmethods/fcitx-engines/fcitx-table-other { };
@@ -6360,7 +6360,7 @@ with pkgs;
   mesos = callPackage ../applications/networking/cluster/mesos {
     sasl = cyrus_sasl;
     inherit (pythonPackages) python boto setuptools wrapPython;
-    pythonProtobuf = pythonPackages.protobuf2_6;
+    pythonProtobuf = pythonPackages.protobuf;
     perf = linuxPackages.perf;
   };
 
@@ -9995,17 +9995,11 @@ with pkgs;
 
   postgis = callPackage ../development/libraries/postgis { };
 
-  protobuf = protobuf2_6;
-  protobuf3_0 = lowPrio (callPackage ../development/libraries/protobuf/3.0.nix { });
-  protobuf3_1 = callPackage ../development/libraries/protobuf/3.1.nix { };
-  protobuf3_2 = callPackage ../development/libraries/protobuf/3.2.nix { };
-  protobuf3_3 = callPackage ../development/libraries/protobuf/3.3.nix { };
-  protobuf2_6 = callPackage ../development/libraries/protobuf/2.6.nix { };
-  protobuf2_5 = callPackage ../development/libraries/protobuf/2.5.nix { };
+  protobuf = callPackage ../development/libraries/protobuf/3.4.nix { };
 
-  protobufc = protobufc1_1;
-  protobufc1_1 = callPackage ../development/libraries/protobufc/1.1.nix { };
-  protobufc1_0 = callPackage ../development/libraries/protobufc/1.0.nix { };
+  protobuf3_1 = callPackage ../development/libraries/protobuf/3.1.nix { };
+
+  protobufc = callPackage ../development/libraries/protobufc/1.3.nix { };
 
   flatbuffers = callPackage ../development/libraries/flatbuffers { };
 

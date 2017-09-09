@@ -8,7 +8,7 @@
 , linuxPackages ? null
 , numpy
 , six
-, protobuf3_2
+, protobuf
 , swig
 , werkzeug
 , mock
@@ -94,7 +94,7 @@ buildPythonPackage rec {
     );
 
   propagatedBuildInputs = with stdenv.lib;
-    [ numpy six protobuf3_2 swig werkzeug mock ]
+    [ numpy six protobuf swig werkzeug mock ]
     ++ optionals cudaSupport [ cudatoolkit cudnn stdenv.cc ];
 
   # Note that we need to run *after* the fixup phase because the

@@ -8,7 +8,7 @@
 , enableJPEG2K    ? true, jasper
 
 , enableIpp       ? false
-, enableContrib   ? false, protobuf3_1
+, enableContrib   ? false, protobuf
 , enablePython    ? false, pythonPackages
 , enableGtk2      ? false, gtk2
 , enableGtk3      ? false, gtk3
@@ -146,7 +146,7 @@ stdenv.mkDerivation rec {
     # tesseract & leptonica.
     ++ lib.optionals enableTesseract [ tesseract leptonica ]
     ++ lib.optionals enableCuda [ cudatoolkit gcc5 ]
-    ++ lib.optional buildContrib protobuf3_1
+    ++ lib.optional buildContrib protobuf
     ++ lib.optionals stdenv.isDarwin [ AVFoundation Cocoa QTKit ];
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;

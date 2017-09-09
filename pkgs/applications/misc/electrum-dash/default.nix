@@ -13,7 +13,7 @@ python2Packages.buildPythonApplication rec {
     dns
     ecdsa
     pbkdf2
-    protobuf3_2
+    protobuf
     pyasn1
     pyasn1-modules
     pycrypto
