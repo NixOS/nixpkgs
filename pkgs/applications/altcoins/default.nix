@@ -8,8 +8,8 @@ rec {
   bitcoin-unlimited  = callPackage ./bitcoin-unlimited.nix { withGui = true; };
   bitcoind-unlimited = callPackage ./bitcoin-unlimited.nix { withGui = false; };
 
-  bitcoin-classic  = callPackage ./bitcoin-classic.nix { withGui = true; };
-  bitcoind-classic = callPackage ./bitcoin-classic.nix { withGui = false; };
+  bitcoin-classic  = callPackage ./bitcoin-classic.nix { withGui = true; boost = pkgs.boost; };
+  bitcoind-classic = callPackage ./bitcoin-classic.nix { withGui = false; boost = pkgs.boost; };
 
   bitcoin-xt  = callPackage ./bitcoin-xt.nix { withGui = true; };
   bitcoind-xt = callPackage ./bitcoin-xt.nix { withGui = false; };
