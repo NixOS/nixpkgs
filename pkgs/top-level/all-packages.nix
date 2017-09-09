@@ -10123,6 +10123,8 @@ with pkgs;
       kirigami_1
       kirigami_2;
 
+    kdb = callPackage ../development/libraries/kdb { };
+
     kdiagram = callPackage ../development/libraries/kdiagram { };
 
     kproperty = callPackage ../development/libraries/kproperty { };
