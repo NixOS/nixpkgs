@@ -1,16 +1,11 @@
-{ system ? builtins.currentSystem }:
-
-with import ../../lib/testing.nix { inherit system; };
-with import ../../lib/qemu-flags.nix;
-with pkgs.lib;
-
+{ system ? builtins.currentSystem, pkgs ? import <nixpkgs> { inherit system; } }:
+with import ./base.nix { inherit system; };
 let
-  servers.master = "192.168.1.1";
-  servers.one = "192.168.1.10";
+  domain = "my.zyx";
 
-  certs = import ./certs.nix { inherit servers; };
+  certs = import ./certs.nix { externalDomain = domain; };
 
-  redisPod = pkgs.writeText "redis-master-pod.json" (builtins.toJSON {
+  redisPod = pkgs.writeText "redis-pod.json" (builtins.toJSON {
     kind = "Pod";
     apiVersion = "v1";
     metadata.name = "redis";
@@ -40,64 +35,93 @@ let
   redisImage = pkgs.dockerTools.buildImage {
     name = "redis";
     tag = "latest";
-    contents = [ pkgs.redis pkgs.bind.dnsutils pkgs.coreutils pkgs.inetutils pkgs.nmap ];
+    contents = [ pkgs.redis pkgs.bind.host ];
     config.Entrypoint = "/bin/redis-server";
   };
 
-  test = ''
-    $master->waitUntilSucceeds("kubectl get node master.nixos.xyz | grep Ready");
-    $master->waitUntilSucceeds("kubectl get node one.nixos.xyz | grep Ready");
+  probePod = pkgs.writeText "probe-pod.json" (builtins.toJSON {
+    kind = "Pod";
+    apiVersion = "v1";
+    metadata.name = "probe";
+    metadata.labels.name = "probe";
+    spec.containers = [{
+      name = "probe";
+      image = "probe";
+      args = [ "-f" ];
+      tty = true;
+      imagePullPolicy = "Never";
+    }];
+  });
 
-    $one->execute("docker load < ${redisImage}");
-
-    $master->waitUntilSucceeds("kubectl create -f ${redisPod} || kubectl apply -f ${redisPod}");
-    $master->waitUntilSucceeds("kubectl create -f ${redisService} || kubectl apply -f ${redisService}");
-
-    $master->waitUntilSucceeds("kubectl get pod redis | grep Running");
-
-    $master->succeed("dig \@192.168.1.1 redis.default.svc.cluster.local");
-    $one->succeed("dig \@192.168.1.10 redis.default.svc.cluster.local");
-
-
-    $master->succeed("kubectl exec -ti redis -- cat /etc/resolv.conf | grep 'nameserver 192.168.1.10'");
-
-    $master->succeed("kubectl exec -ti redis -- dig \@192.168.1.10 redis.default.svc.cluster.local");
-  '';
-
-in makeTest {
-  name = "kubernetes-dns";
-
-  nodes = {
-    master =
-      { config, pkgs, lib, nodes, ... }:
-        mkMerge [
-          {
-            virtualisation.memorySize = 768;
-            virtualisation.diskSize = 4096;
-            networking.interfaces.eth1.ip4 = mkForce [{address = servers.master; prefixLength = 24;}];
-            networking.primaryIPAddress = mkForce servers.master;
-          }
-          (import ./kubernetes-common.nix { inherit pkgs config certs servers; })
-          (import ./kubernetes-master.nix { inherit pkgs config certs; })
-        ];
-
-    one =
-      { config, pkgs, lib, nodes, ... }:
-        mkMerge [
-          {
-            virtualisation.memorySize = 768;
-            virtualisation.diskSize = 4096;
-            networking.interfaces.eth1.ip4 = mkForce [{address = servers.one; prefixLength = 24;}];
-            networking.primaryIPAddress = mkForce servers.one;
-            services.kubernetes.roles = ["node"];
-          }
-          (import ./kubernetes-common.nix { inherit pkgs config certs servers; })
-        ];
+  probeImage = pkgs.dockerTools.buildImage {
+    name = "probe";
+    tag = "latest";
+    contents = [ pkgs.bind.host pkgs.busybox ];
+    config.Entrypoint = "/bin/tail";
   };
 
-  testScript = ''
-    startAll;
+  extraConfiguration = { config, pkgs, lib, nodes, ... }: {
+    environment.systemPackages = [ pkgs.bind.host ];
+    # virtualisation.docker.extraOptions = "--dns=${config.services.kubernetes.addons.dns.clusterIp}";
+    services.dnsmasq.enable = true;
+    services.dnsmasq.servers = [
+      "/cluster.local/${config.services.kubernetes.addons.dns.clusterIp}#53"
+    ];
+  };
 
-    ${test}
-  '';
+  base = {
+    name = "dns";
+    inherit domain certs extraConfiguration;
+  };
+
+  singleNodeTest = {
+    test = ''
+      # prepare machine1 for test
+      $machine1->waitUntilSucceeds("kubectl get node machine1.${domain} | grep -w Ready");
+      $machine1->execute("docker load < ${redisImage}");
+      $machine1->waitUntilSucceeds("kubectl create -f ${redisPod}");
+      $machine1->waitUntilSucceeds("kubectl create -f ${redisService}");
+      $machine1->execute("docker load < ${probeImage}");
+      $machine1->waitUntilSucceeds("kubectl create -f ${probePod}");
+
+      # check if pods are running
+      $machine1->waitUntilSucceeds("kubectl get pod redis | grep Running");
+      $machine1->waitUntilSucceeds("kubectl get pod probe | grep Running");
+      $machine1->waitUntilSucceeds("kubectl get pods -n kube-system | grep 'kube-dns.*3/3'");
+
+      # check dns on host (dnsmasq)
+      $machine1->succeed("host redis.default.svc.cluster.local");
+
+      # check dns inside the container
+      $machine1->succeed("kubectl exec -ti probe -- /bin/host redis.default.svc.cluster.local");
+    '';
+  };
+
+  multiNodeTest = {
+    test = ''
+      # prepare machines for test
+      $machine1->waitUntilSucceeds("kubectl get node machine1.${domain} | grep -w Ready");
+      $machine1->waitUntilSucceeds("kubectl get node machine2.${domain} | grep -w Ready");
+      $machine2->execute("docker load < ${redisImage}");
+      $machine1->waitUntilSucceeds("kubectl create -f ${redisPod}");
+      $machine1->waitUntilSucceeds("kubectl create -f ${redisService}");
+      $machine2->execute("docker load < ${probeImage}");
+      $machine1->waitUntilSucceeds("kubectl create -f ${probePod}");
+
+      # check if pods are running
+      $machine1->waitUntilSucceeds("kubectl get pod redis | grep Running");
+      $machine1->waitUntilSucceeds("kubectl get pod probe | grep Running");
+      $machine1->waitUntilSucceeds("kubectl get pods -n kube-system | grep 'kube-dns.*3/3'");
+
+      # check dns on hosts (dnsmasq)
+      $machine1->succeed("host redis.default.svc.cluster.local");
+      $machine2->succeed("host redis.default.svc.cluster.local");
+
+      # check dns inside the container
+      $machine1->succeed("kubectl exec -ti probe -- /bin/host redis.default.svc.cluster.local");
+    '';
+  };
+in {
+  singlenode = mkKubernetesSingleNodeTest (base // singleNodeTest);
+  multinode = mkKubernetesMultiNodeTest (base // multiNodeTest);
 }
