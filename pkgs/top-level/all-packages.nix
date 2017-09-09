@@ -16112,7 +16112,7 @@ with pkgs;
   seafile-client = libsForQt5.callPackage ../applications/networking/seafile-client { };
 
   seeks = callPackage ../tools/networking/p2p/seeks {
-    protobuf = protobuf2_5;
+    protobuf = protobuf3_1;
   };
 
   seg3d = callPackage ../applications/graphics/seg3d {
