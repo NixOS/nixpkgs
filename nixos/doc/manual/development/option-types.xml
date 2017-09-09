@@ -175,7 +175,6 @@
 <example xml:id='ex-submodule-direct'><title>Directly defined submodule</title>
 <screen>
 options.mod = mkOption {
-  name = "mod";
   description = "submodule example";
   type = with types; listOf (submodule {
     options = {
