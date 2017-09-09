@@ -10324,6 +10324,8 @@ with pkgs;
 
     kproperty = callPackage ../development/libraries/kproperty { };
 
+    kreport = callPackage ../development/libraries/kreport { };
+
     kirigami = kirigami_1;
 
     libcommuni = callPackage ../development/libraries/libcommuni { };
