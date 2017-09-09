@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchbzr, cmake, mesa, wxGTK, zlib, libX11, gettext, glew, cairo, curl, openssl, boost, pkgconfig, doxygen }:
 
 stdenv.mkDerivation rec {
-  name = "kicad-${series}";
+  name = "kicad-${version}";
   series = "4.0";
   version = "4.0.6";
 
