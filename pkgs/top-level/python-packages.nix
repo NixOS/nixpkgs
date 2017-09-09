@@ -25389,10 +25389,14 @@ EOF
       sha256 = "99ab03bffdb30d9ec98724898f428f8e73129483417d5892799a0f0d2249f233";
     };
 
+    patchPhase = ''
+      substituteInPlace setup.py --replace '"argparse",' ""
+    '';
+
     # ImportError: No module named tests
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ ofxhome ofxparse beautifulsoup keyring argparse ];
+    propagatedBuildInputs = with self; [ ofxhome ofxparse beautifulsoup keyring ];
   };
 
   ofxhome = buildPythonPackage rec {
