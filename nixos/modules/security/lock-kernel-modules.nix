@@ -21,15 +21,15 @@ with lib;
       description = "Disable kernel module loading";
 
       wantedBy = [ config.systemd.defaultUnit ];
-      after = [ "systemd-udev-settle.service" "firewall.service" "systemd-modules-load.service" ] ++ wantedBy;
 
-      script = "echo -n 1 > /proc/sys/kernel/modules_disabled";
+      after = [ "systemd-udev-settle.service" "firewall.service" "systemd-modules-load.service" ] ++ wantedBy;
 
       unitConfig.ConditionPathIsReadWrite = "/proc/sys/kernel";
 
       serviceConfig = {
         Type = "oneshot";
         RemainAfterExit = true;
+        ExecStart = "/bin/sh -c 'echo -n 1 >/proc/sys/kernel/modules_disabled'";
       };
     };
   };
