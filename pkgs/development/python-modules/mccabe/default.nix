@@ -10,6 +10,10 @@ buildPythonPackage rec {
     sha256 = "07w3p1qm44hgxf3vvwz84kswpsx6s7kvaibzrsx5dzm0hli1i3fx";
   };
 
+  checkPhase = ''
+    py.test test_mccabe.py
+  '';
+
   buildInputs = [ pytest pytestrunner ];
 
   meta = with stdenv.lib; {
