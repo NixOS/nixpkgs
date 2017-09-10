@@ -2805,6 +2805,10 @@ with pkgs;
 
   kpcli = callPackage ../tools/security/kpcli { };
 
+  # kget is part of kde-applications but the released version is still for KDE 4
+  # This needs to move to the proper place when the "frameworks" branch is released
+  kget = libsForQt5.callPackage ../applications/networking/kget { };
+
   krename = libsForQt5.callPackage ../applications/misc/krename { };
 
   kronometer = libsForQt5.callPackage ../tools/misc/kronometer { };
