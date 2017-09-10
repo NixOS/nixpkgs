@@ -157,16 +157,16 @@
 
 <section xml:id='section-option-types-submodule'><title>Submodule</title>
 
-  <para>Submodule is a very powerful type that defines a set of sub-options that
-    are handled like a separate module.</para>
+  <para><literal>submodule</literal> is a very powerful type that defines a set
+    of sub-options that are handled like a separate module.</para>
 
-  <para>The <literal>submodule</literal> type takes a parameter
-    <replaceable>o</replaceable>, that should be a set, or a function returning a
-    set with an <literal>options</literal> key defining the sub-options.
-    Submodule option definitions are type-checked accordingly to the options
-    declarations.
-    It is possible to declare submodule options inside a submodule sub-options
-    for even higher modularity.</para>
+  <para>It takes a parameter <replaceable>o</replaceable>, that should be a set,
+    or a function returning a set with an <literal>options</literal> key
+    defining the sub-options.
+    Submodule option definitions are type-checked accordingly to the
+    <literal>options</literal> declarations.
+    Of course, you can nest submodule option definitons for even higher
+    modularity.</para>
 
   <para>The option set can be defined directly
     (<xref linkend='ex-submodule-direct' />) or as reference
@@ -208,8 +208,9 @@ options.mod = mkOption {
   type = with types; submodule modOptions;
 };</screen></example>
 
-  <para> The submodule type is especially interesting when used with composed
-    types like <literal>attrsOf</literal> or <literal>listOf</literal>.
+  <para>The <literal>submodule</literal> type is especially interesting when
+    used with composed types like <literal>attrsOf</literal> or
+    <literal>listOf</literal>.
     When composed with <literal>listOf</literal>
     (<xref linkend='ex-submodule-listof-declaration' />),
     <literal>submodule</literal> allows multiple definitions of the submodule
@@ -217,7 +218,7 @@ options.mod = mkOption {
     
 
 <example xml:id='ex-submodule-listof-declaration'><title>Declaration of a list 
-    of submodules</title>
+    nof submodules</title>
 <screen>
 options.mod = mkOption {
   description = "submodule example";
