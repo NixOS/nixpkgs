@@ -20,6 +20,8 @@ let
         inherit callPackage erlang;
         beamPackages = self;
 
+        hexRegistrySnapshot = callPackage ./hex-registry-snapshot.nix { };
+
         rebar = callPackage ../tools/build-managers/rebar { };
         rebar3-open = callPackage ../tools/build-managers/rebar3 {
           hermeticRebar3 = false;
@@ -28,7 +30,10 @@ let
           hermeticRebar3 = true;
         };
 
-        hexRegistrySnapshot = callPackage ./hex-registry-snapshot.nix { };
+        # rebar3 port compiler plugin is required by buildRebar3
+        pc_1_6_0 = callPackage ./pc {};
+        pc = pc_1_6_0;
+
         fetchHex = callPackage ./fetch-hex.nix { };
 
         buildRebar3 = callPackage ./build-rebar3.nix {};
@@ -57,12 +62,16 @@ let
         lfe = lfe_1_2;
         lfe_1_2 = lib.callLFE ../interpreters/lfe/1.2.nix { inherit erlang buildRebar3 buildHex; };
 
-        # Non hex packages
+        # Non hex packages. Examples how to build Rebar/Mix packages with and
+        # without helper functions buildRebar3 and buildMix.
         hex = callPackage ./hex {};
         webdriver = callPackage ./webdriver {};
-
-        hex2nix = callPackage ../tools/erlang/hex2nix {};
-        cuter = callPackage ../tools/erlang/cuter {};
         relxExe = callPackage ../tools/erlang/relx-exe {};
+
+        # The tool used to upgrade hex-packages.nix.
+        hex2nix = callPackage ../tools/erlang/hex2nix {};
+
+        # An example of Erlang/C++ package.
+        cuter = callPackage ../tools/erlang/cuter {};
       };
 in makeExtensible packages
