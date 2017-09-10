@@ -17824,11 +17824,11 @@ in {
 
   python_simple_hipchat = buildPythonPackage rec {
     name = "python-simple-hipchat-${version}";
-    version = "0.1";
+    version = "0.4.0";
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-simple-hipchat/python-simple-hipchat-${version}.zip";
-      sha256 = "404e5ff7187abb09c2227f22063d06baf0fd525725e9c9ad280176bed1c94a3f";
+      url = "mirror://pypi/p/python-simple-hipchat/python-simple-hipchat-${version}.tar.gz";
+      sha256 = "0zy6prrj85jjc4xmxgfg8h94j81k6zhfxfffcbvq9b10jis1rgav";
     };
 
     buildInputs = [ pkgs.unzip ];
