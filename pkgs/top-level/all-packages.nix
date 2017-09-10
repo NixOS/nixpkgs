@@ -16026,6 +16026,7 @@ with pkgs;
 
   seeks = callPackage ../tools/networking/p2p/seeks {
     protobuf = protobuf2_5;
+    stdenv = overrideCC stdenv gcc5;
   };
 
   seg3d = callPackage ../applications/graphics/seg3d {
