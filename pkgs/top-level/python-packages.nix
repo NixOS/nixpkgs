@@ -27490,21 +27490,7 @@ EOF
   # We need "normal" libxml2 and not the python package by the same name.
   pywbem = callPackage ../development/python-modules/pywbem { libxml2 = pkgs.libxml2; };
 
-  unicorn = buildPythonPackage rec {
-    name  = "unicorn-${version}";
-    version = "1.0.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/u/unicorn/${name}.tar.gz";
-      sha256 = "0a5b4vh734b3wfkgapzzf8x18rimpmzvwwkly56da84n27wfw9bg";
-    };
-    setupPyBuildFlags = [ "--plat-name" "linux" ];
-    meta = with pkgs.stdenv.lib; {
-      description = "Unicorn CPU emulator engine";
-      homepage = "http://www.unicorn-engine.org/";
-      license = [ licenses.gpl2 ];
-      maintainers = [ maintainers.bennofs ];
-    };
-  };
+  unicorn = callPackage ../development/python-modules/unicorn { };
 
   intervaltree = callPackage ../development/python-modules/intervaltree { };
 
