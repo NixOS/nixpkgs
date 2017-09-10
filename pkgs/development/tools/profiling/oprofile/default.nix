@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, binutils, popt, zlib, pkgconfig, linuxHeaders
+{ stdenv, fetchurl, binutils, popt, zlib, pkgconfig, linuxHeaders, coreutils
 , libiberty_static, withGUI ? false , qt4 ? null}:
 
 # libX11 is needed because the Qt build stuff automatically adds `-lX11'.
@@ -11,6 +11,12 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/oprofile/${name}.tar.gz";
     sha256 = "0zd5ih6gmm1pkqavd9laa93iff7qv5jkbfjznhlyxl5p826gk5gb";
   };
+
+  postPatch = ''
+    substituteInPlace opjitconv/opjitconv.c \
+      --replace "/bin/rm" "${coreutils}/bin/rm" \
+      --replace "/bin/cp" "${coreutils}/bin/cp"
+  '';
 
   buildInputs = [ binutils zlib popt pkgconfig linuxHeaders libiberty_static ]
     ++ stdenv.lib.optionals withGUI [ qt4 ];
