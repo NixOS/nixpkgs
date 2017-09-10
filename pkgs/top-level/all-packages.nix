@@ -105,6 +105,8 @@ with pkgs;
 
   docker_compose = pythonPackages.docker_compose;
 
+  dotfiles = callPackage ../applications/misc/dotfiles { };
+
   dotnetenv = callPackage ../build-support/dotnetenv {
     dotnetfx = dotnetfx40;
   };
@@ -789,7 +791,9 @@ with pkgs;
 
   burpsuite = callPackage ../tools/networking/burpsuite {};
 
-  c3d = callPackage ../applications/graphics/c3d {};
+  c3d = callPackage ../applications/graphics/c3d {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   cabal2nix = haskell.lib.overrideCabal haskellPackages.cabal2nix (drv: {
     isLibrary = false;
@@ -1294,7 +1298,9 @@ with pkgs;
 
   atool = callPackage ../tools/archivers/atool { };
 
-  bsc = callPackage ../tools/compression/bsc { };
+  bsc = callPackage ../tools/compression/bsc {
+    inherit (llvmPackages) openmp;
+  };
 
   bzip2 = callPackage ../tools/compression/bzip2 { };
 
@@ -1451,7 +1457,7 @@ with pkgs;
       clangStdenv = libcxxStdenv; # workaround for https://github.com/NixOS/nixpkgs/issues/28223
       python = python2;
       inherit (python2Packages) gyp;
-      protobuf = protobuf3_2.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
+      protobuf = pkgs.protobuf.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
     };
 
     table = callPackage ../tools/inputmethods/ibus-engines/ibus-table {
@@ -1938,7 +1944,7 @@ with pkgs;
       clangStdenv = libcxxStdenv; # workaround for https://github.com/NixOS/nixpkgs/issues/28223
       python = python2;
       inherit (python2Packages) gyp;
-      protobuf = protobuf3_2.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
+      protobuf = pkgs.protobuf.overrideDerivation (oldAttrs: { stdenv = clangStdenv; });
     };
 
     table-other = callPackage ../tools/inputmethods/fcitx-engines/fcitx-table-other { };
@@ -2796,6 +2802,10 @@ with pkgs;
   partition-manager = libsForQt5.callPackage ../tools/misc/partition-manager { };
 
   kpcli = callPackage ../tools/security/kpcli { };
+
+  # kget is part of kde-applications but the released version is still for KDE 4
+  # This needs to move to the proper place when the "frameworks" branch is released
+  kget = libsForQt5.callPackage ../applications/networking/kget { };
 
   krename = libsForQt5.callPackage ../applications/misc/krename { };
 
@@ -5229,9 +5239,7 @@ with pkgs;
     stdenv = overrideCC stdenv gcc49;
   };
 
-  bigloo = callPackage ../development/compilers/bigloo {
-    stdenv = overrideCC stdenv gcc49;
-  };
+  bigloo = callPackage ../development/compilers/bigloo { };
 
   binaryen = callPackage ../development/compilers/binaryen { };
 
@@ -5500,7 +5508,7 @@ with pkgs;
     isl = isl_0_17;
   }));
 
-  gfortran = gfortran5;
+  gfortran = gfortran6;
 
   gfortran48 = wrapCC (gcc48.cc.override {
     name = "gfortran";
@@ -6354,7 +6362,7 @@ with pkgs;
   mesos = callPackage ../applications/networking/cluster/mesos {
     sasl = cyrus_sasl;
     inherit (pythonPackages) python boto setuptools wrapPython;
-    pythonProtobuf = pythonPackages.protobuf2_6;
+    pythonProtobuf = pythonPackages.protobuf;
     perf = linuxPackages.perf;
   };
 
@@ -7546,6 +7554,8 @@ with pkgs;
   adns = callPackage ../development/libraries/adns { };
 
   afflib = callPackage ../development/libraries/afflib { };
+
+  aften = callPackage ../development/libraries/aften { };
 
   alure = callPackage ../development/libraries/alure { };
 
@@ -9988,17 +9998,11 @@ with pkgs;
 
   postgis = callPackage ../development/libraries/postgis { };
 
-  protobuf = protobuf2_6;
-  protobuf3_0 = lowPrio (callPackage ../development/libraries/protobuf/3.0.nix { });
-  protobuf3_1 = callPackage ../development/libraries/protobuf/3.1.nix { };
-  protobuf3_2 = callPackage ../development/libraries/protobuf/3.2.nix { };
-  protobuf3_3 = callPackage ../development/libraries/protobuf/3.3.nix { };
-  protobuf2_6 = callPackage ../development/libraries/protobuf/2.6.nix { };
-  protobuf2_5 = callPackage ../development/libraries/protobuf/2.5.nix { };
+  protobuf = callPackage ../development/libraries/protobuf/3.4.nix { };
 
-  protobufc = protobufc1_1;
-  protobufc1_1 = callPackage ../development/libraries/protobufc/1.1.nix { };
-  protobufc1_0 = callPackage ../development/libraries/protobufc/1.0.nix { };
+  protobuf3_1 = callPackage ../development/libraries/protobuf/3.1.nix { };
+
+  protobufc = callPackage ../development/libraries/protobufc/1.3.nix { };
 
   flatbuffers = callPackage ../development/libraries/flatbuffers { };
 
@@ -16070,7 +16074,7 @@ with pkgs;
   seafile-client = libsForQt5.callPackage ../applications/networking/seafile-client { };
 
   seeks = callPackage ../tools/networking/p2p/seeks {
-    protobuf = protobuf2_5;
+    protobuf = protobuf3_1;
   };
 
   seg3d = callPackage ../applications/graphics/seg3d {

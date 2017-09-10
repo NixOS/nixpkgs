@@ -63,7 +63,7 @@ in p.pkgs.buildPythonPackage rec {
   ];
 
   buildInputs = with p.pkgs; [
-    beautifulsoup4 flask pytz pytest pytestrunner protobuf3_2 glibcLocales
+    beautifulsoup4 flask pytz pytest pytestrunner protobuf glibcLocales
   ];
 
   meta = with stdenv.lib; {

@@ -1,0 +1,27 @@
+From 965eb1e08e10ff82bb91d485dc24672acc7c72cf Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Niklas=20Hamb=C3=BCchen?= <mail@nh2.me>
+Date: Fri, 8 Sep 2017 00:51:53 +0200
+Subject: [PATCH] Fix "glusterfind saves var data under $prefix instead of
+ localstatedir". Fixes #1489610
+
+Change-Id: I6d71297fb7a5a9d12cc3726b4a4ad94efcd644f9
+---
+ configure.ac | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/configure.ac b/configure.ac
+index 0c3a38689..d508fda71 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1057,7 +1057,7 @@ if test "x$prefix" = xNONE; then
+ 	prefix=$ac_default_prefix
+ fi
+ GLUSTERFS_LIBEXECDIR="$(eval echo $prefix)/libexec/glusterfs"
+-GLUSTERFSD_MISCDIR="$(eval echo $prefix)/var/lib/misc/glusterfsd"
++GLUSTERFSD_MISCDIR="$(eval echo $localstatedir)/var/lib/misc/glusterfsd"
+ prefix=$old_prefix
+ 
+ ### Dirty hacky stuff to make LOCALSTATEDIR work
+-- 
+2.12.0
+

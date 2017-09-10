@@ -227,9 +227,7 @@ in {
 
   pycryptodomex = callPackage ../development/python-modules/pycryptodomex { };
 
-  PyChromecast = callPackage ../development/python-modules/pychromecast {
-    protobuf = self.protobuf3_2;
-  };
+  PyChromecast = callPackage ../development/python-modules/pychromecast { };
 
   pyexiv2 = if (!isPy3k) then callPackage ../development/python-modules/pyexiv2 {} else throw "pyexiv2 not supported for interpreter ${python.executable}";
 
@@ -261,7 +259,7 @@ in {
     pythonPackages = self;
   };
 
-  pyscard = callPackage ../development/python-modules/pyscard { };
+  pyscard = callPackage ../development/python-modules/pyscard { inherit (pkgs.darwin.apple_sdk.frameworks) PCSC; };
 
   pyside = callPackage ../development/python-modules/pyside { };
 
@@ -4528,6 +4526,8 @@ in {
 
   libtmux = callPackage ../development/python-modules/libtmux { };
 
+  linuxfd = callPackage ../development/python-modules/linuxfd { };
+
   locket = buildPythonPackage rec {
     name = "locket-${version}";
     version = "0.2.0";
@@ -5116,23 +5116,6 @@ in {
       description = "A 'dogpile' lock, typically used as a component of a larger caching solution";
       homepage = http://bitbucket.org/zzzeek/dogpile.core;
       license = licenses.bsd3;
-    };
-  };
-
-  dotfiles = buildPythonPackage rec {
-    name = "dotfiles-0.6.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/dotfiles/${name}.tar.gz";
-      sha256 = "45ecfd7f2ed9d0f2a7ac632c9bd0ebdca758d8bbc2b6f11562579d525f0467b8";
-    };
-
-    doCheck = true;
-
-    meta = {
-      description = "Easily manage your dotfiles";
-      homepage = https://github.com/jbernard/dotfiles;
-      license = licenses.isc;
     };
   };
 
@@ -5916,7 +5899,7 @@ in {
       validictory
       decorator
       mutagen
-      protobuf3_0
+      protobuf
       setuptools
       requests
       dateutil
@@ -7536,7 +7519,7 @@ in {
       sha256 = "09bf5gfip9x2wr0ij43p39ac6z2iqzn7kgpi2jjbwpnhs0vwkycs";
     };
 
-    propagatedBuildInputs = with self; [ python-axolotl-curve25519 protobuf3_0 pycrypto ];
+    propagatedBuildInputs = with self; [ python-axolotl-curve25519 protobuf pycrypto ];
     # IV == 0 in tests is not supported by pycrytpodom (our pycrypto drop-in)
     doCheck = !isPy3k;
 
@@ -10099,14 +10082,14 @@ in {
 
   glances = buildPythonPackage rec {
     name = "glances-${version}";
-    version = "2.11";
+    version = "2.11.1";
     disabled = isPyPy;
 
     src = pkgs.fetchFromGitHub {
       owner = "nicolargo";
       repo = "glances";
       rev = "v${version}";
-      sha256 = "01vnrr37jbpzrz6w670l3g3bv60xl50w41rn1dl99wp2fr460ndn";
+      sha256 = "1n3x0bkydlqmxdr0wdgfgichp8fyldzkaijj618y5ns2k5qiwsxr";
     };
 
     doCheck = false;
@@ -10122,7 +10105,7 @@ in {
       homepage = "https://nicolargo.github.io/glances/";
       description = "Cross-platform curses-based monitoring tool";
       license = licenses.lgpl3;
-      maintainers = with maintainers; [ koral ];
+      maintainers = with maintainers; [ primeos koral ];
     };
   };
 
@@ -15031,7 +15014,7 @@ in {
     };
 
     propagatedBuildInputs = with self; [
-      pbr argparse six webob
+      pbr six webob
     ];
     buildInputs = with self; [
       oslosphinx coverage mock subunit testrepository testtools
@@ -15039,6 +15022,7 @@ in {
 
     patchPhase = ''
       sed -i 's@python@${python.interpreter}@' .testr.conf
+      substituteInPlace requirements.txt --replace "argparse" ""
     '';
   };
 
@@ -16342,30 +16326,16 @@ in {
 
   });
 
-  protobuf = self.protobuf2_6;
-  protobuf3_3 = callPackage ../development/python-modules/protobuf.nix {
+  protobuf = callPackage ../development/python-modules/protobuf.nix {
     disabled = isPyPy;
     doCheck = !isPy3k;
-    protobuf = pkgs.protobuf3_3;
+    protobuf = pkgs.protobuf;
   };
-  protobuf3_2 = callPackage ../development/python-modules/protobuf.nix {
+
+  protobuf3_1 = callPackage ../development/python-modules/protobuf.nix {
     disabled = isPyPy;
     doCheck = !isPy3k;
-    protobuf = pkgs.protobuf3_2;
-  };
-  protobuf3_0 = callPackage ../development/python-modules/protobuf.nix {
-    disabled = isPyPy;
-    doCheck = !isPy3k;
-    protobuf = pkgs.protobuf3_0;
-  };
-  protobuf2_6 = callPackage ../development/python-modules/protobuf.nix {
-    disabled = isPy3k || isPyPy;
-    doCheck = false;
-    protobuf = pkgs.protobuf2_6;
-  };
-  protobuf2_5 = callPackage ../development/python-modules/protobuf.nix {
-    disabled = isPy3k || isPyPy;
-    protobuf = pkgs.protobuf2_5;
+    protobuf = pkgs.protobuf3_1;
   };
 
   psd-tools = callPackage ../development/python-modules/psd-tools { };
@@ -23891,9 +23861,7 @@ EOF
     inherit (pkgs) libasyncns pkgconfig;
   };
 
-  libarcus = callPackage ../development/python-modules/libarcus {
-    protobuf = self.protobuf3_0;
-  };
+  libarcus = callPackage ../development/python-modules/libarcus { };
 
   pybrowserid = buildPythonPackage rec {
     name = "PyBrowserID-${version}";
@@ -24175,7 +24143,7 @@ EOF
     '';
 
     buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ noise numpy pyplatec protobuf3_2 purepng argparse h5py gdal ];
+    propagatedBuildInputs = with self; [ noise numpy pyplatec protobuf purepng argparse h5py gdal ];
 
     prePatch = ''
       substituteInPlace setup.py \
@@ -24267,11 +24235,15 @@ EOF
     };
 
     # Fix the USB backend library lookup
-    postPatch = ''
-      libusb=${pkgs.libusb1.out}/lib/libusb-1.0.so
-      test -f $libusb || { echo "ERROR: $libusb doesn't exist, please update/fix this build expression."; exit 1; }
-      sed -i -e "s|find_library=None|find_library=lambda _:\"$libusb\"|" usb/backend/libusb1.py
-    '';
+    postPatch =
+      let
+        # This should really be in the stdenv somewhere
+        soext = if stdenv.isLinux then "so" else if stdenv.isDarwin then "dylib" else throw "Unsupported platform";
+      in ''
+        libusb=${pkgs.libusb1.out}/lib/libusb-1.0.${soext}
+        test -f $libusb || { echo "ERROR: $libusb doesn't exist, please update/fix this build expression."; exit 1; }
+        sed -i -e "s|find_library=None|find_library=lambda _:\"$libusb\"|" usb/backend/libusb1.py
+      '';
 
     propagatedBuildInputs = [ pkgs.libusb ];
 
@@ -25422,10 +25394,14 @@ EOF
       sha256 = "99ab03bffdb30d9ec98724898f428f8e73129483417d5892799a0f0d2249f233";
     };
 
+    patchPhase = ''
+      substituteInPlace setup.py --replace '"argparse",' ""
+    '';
+
     # ImportError: No module named tests
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ ofxhome ofxparse beautifulsoup keyring argparse ];
+    propagatedBuildInputs = with self; [ ofxhome ofxparse beautifulsoup keyring ];
   };
 
   ofxhome = buildPythonPackage rec {

@@ -902,4 +902,7 @@ self: super: {
   # happy 1.19.6 and later break some packages.
   Agda = super.Agda.override { happy = self.happy_1_19_5; };
 
+  # https://github.com/jtdaugherty/text-zipper/issues/11
+  text-zipper = dontCheck super.text-zipper;
+
 }

@@ -5159,10 +5159,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ExtUtilsParseXS = buildPerlPackage rec {
-    name = "ExtUtils-ParseXS-3.24";
+    name = "ExtUtils-ParseXS-3.35";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SM/SMUELLER/${name}.tar.gz";
-      sha256 = "07ipa2ssflw3ais8gbjdk4l8z2k1p65nfjwkxm37g6zw1210pdih";
+      sha256 = "077fqiyabydm8j34wxzxwxskyidh8nmwq9gskaxai8kq298z1pj1";
     };
   };
 
@@ -5218,10 +5218,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   ExtUtilsXSpp = buildPerlModule rec {
-    name = "ExtUtils-XSpp-0.1700";
+    name = "ExtUtils-XSpp-0.18";
     src = fetchurl {
       url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
-      sha256 = "1msp79bdjzi59vignfz1cxwk5a2cjiahblvi0ka60pi8nnn0alrm";
+      sha256 = "1zx84f93lkymqz7qa4d63gzlnhnkxm5i3gvsrwkvvqr9cxjasxli";
     };
     buildInputs = [ Spiffy TestBase TestDifferences ];
   };
@@ -5528,11 +5528,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  FileModified = buildPerlPackage {
-    name = "File-Modified-0.07";
+  FileModified = buildPerlPackage rec {
+    name = "File-Modified-0.10";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CO/CORION/File-Modified-0.07.tar.gz;
-      sha256 = "11zkg171fa5vdbyrbfcay134hhgyf4yaincjxwspwznrfmkpi49h";
+      url = "mirror://cpan/authors/id/N/NE/NEILB/${name}.tar.gz";
+      sha256 = "6b50b1aab6ec6998a017f6403c2735b3bc1e1cf46187bd134d7eb6df3fc45144";
+    };
+    meta = {
+      homepage = https://github.com/neilbowers/File-Modified;
+      description = "Checks intelligently if files have changed";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -5755,10 +5760,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   FilterSimple = buildPerlPackage {
-    name = "Filter-Simple-0.91";
+    name = "Filter-Simple-0.94";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SM/SMUELLER/Filter-Simple-0.91.tar.gz;
-      sha256 = "c75a4945e94ecfe97e1409f49df036700d2e072e288497e205c4d319a80f694d";
+      url = mirror://cpan/authors/id/S/SM/SMUELLER/Filter-Simple-0.94.tar.gz;
+      sha256 = "1lkrgsqaxf595ha1y29gxqqf4kf8cpm5yzr4gg7zngbq1nb0pz6g";
     };
     meta = {
       description = "Simplified source filtering";
