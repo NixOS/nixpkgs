@@ -190,6 +190,14 @@ in
 
   config = {
 
+    assertions = [
+      {
+        # Don't silently ignore the users nameserver configuration.
+        assertion =  hasLocalResolver -> cfg.nameservers == null;
+        message = "Can't specify nameservers when Bind or Dnsmasq local resolver is enabled";
+      }
+    ];
+
     environment.etc =
       { # /etc/services: TCP/UDP port assignments.
         "services".source = pkgs.iana-etc + "/etc/services";
