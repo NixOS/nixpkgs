@@ -14321,6 +14321,8 @@ with pkgs;
 
   gopher = callPackage ../applications/networking/gopher/gopher { };
 
+  gopherclient = libsForQt5.callPackage ../applications/networking/gopher/gopherclient { };
+
   gpa = callPackage ../applications/misc/gpa { };
 
   gpicview = callPackage ../applications/graphics/gpicview {
