@@ -9647,7 +9647,9 @@ with pkgs;
 
   libmpc = callPackage ../development/libraries/libmpc { };
 
-  mpich2 = callPackage ../development/libraries/mpich2 { };
+  mpich2 = callPackage ../development/libraries/mpich2 {
+    gfortran = gfortran5;
+  };
 
   mstpd = callPackage ../os-specific/linux/mstpd { };
 
