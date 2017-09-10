@@ -1027,9 +1027,7 @@ with pkgs;
 
   fastJson = callPackage ../development/libraries/fastjson { };
 
-  fast-cli = nodePackages.fast-cli.overrideDerivation (old: {
-    buildInputs = old.buildInputs ++ [phantomjs2];
-  });
+  fast-cli = nodePackages.fast-cli;
 
   fd = callPackage ../tools/misc/fd { };
 
