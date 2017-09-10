@@ -261,7 +261,7 @@ in
             "freenode" = {
               server = "chat.freenode.net";
               port = 6697;
-              ssl = true;
+              useSSL = true;
               modules = [ "simple_away" ];
             };
           };
