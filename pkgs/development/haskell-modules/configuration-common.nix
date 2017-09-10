@@ -908,4 +908,9 @@ self: super: {
   # https://github.com/jtdaugherty/text-zipper/issues/11
   text-zipper = dontCheck super.text-zipper;
 
+  # cryptonite == 0.24.x, protolude == 0.2.x
+  wai-secure-cookies = super.wai-secure-cookies.override {
+    cryptonite = super.cryptonite_0_24;
+    protolude = super.protolude_0_2;
+  };
 }
