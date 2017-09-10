@@ -80,6 +80,7 @@ let
           version = "0.8.2";
           sha256 = "1xw30h59zbw957cyjd8n50hf9y09jnv9dyry6x3avfwzcyrnsvkk";
         };
+
         # Non hex packages. Examples how to build Rebar/Mix packages with and
         # without helper functions buildRebar3 and buildMix.
         hex = callPackage ./hex {};
