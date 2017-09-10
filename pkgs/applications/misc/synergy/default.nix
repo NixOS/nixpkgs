@@ -1,7 +1,52 @@
 { stdenv, fetchFromGitHub, fetchpatch, cmake, xlibsWrapper, libX11, libXi, libXtst, libXrandr
-, xinput, curl, openssl, unzip }:
+, xinput, curl, openssl, unzip, writeScriptBin }:
 
 with stdenv.lib;
+
+let certgenScript = writeScriptBin "synergy-generate-certs" ''
+  #! ${stdenv.shell}
+  set -e -u
+  pem=~/.synergy/SSL/Synergy.pem
+  fp_file=~/.synergy/SSL/Fingerprints/Local.txt
+
+  mkdir -p ~/.synergy/SSL/Fingerprints
+  if [ -e "$pem" ]; then
+    echo "$pem already exists; _not_ overwriting it" 1>&2
+  else
+    ${openssl}/bin/openssl req \
+        -x509 -nodes \
+        -subj '/CN=Synergy' \
+        -newkey rsa:1024 \
+        -keyout "$pem" -out "$pem"
+    echo "Installed a new cert bundle at $pem" 1>&2
+  fi
+
+  fingerprint=$(
+    ${openssl}/bin/openssl x509 -fingerprint -sha1 -noout -in "$pem" \
+        | cut -d= -f2
+  )
+
+  if [ -e "$fp_file" ]; then
+    echo "$fp_file already exists; _not_ overwriting it" 1>&2
+  else
+    echo "$fingerprint" > "$fp_file"
+  fi
+
+  fp_verify=$(cat "$fp_file")
+
+  if [ "$fingerprint" != "$fp_verify" ]; then
+    echo "$fp_file contents and the actual key fingerprint do not match!" 1>&2
+    echo "Please remove it and re-run this script." 1>&2
+    exit 1
+  fi
+
+
+  echo "On the synergy _client_ system(s), copy this fingerprint into"\
+       "~/.synergy/SSL/Fingerprints/TrustedServers.txt:"
+  echo "$fingerprint"
+'';
+
+in
 
 stdenv.mkDerivation rec {
   name = "synergy-${version}";
@@ -53,6 +98,7 @@ stdenv.mkDerivation rec {
     cp ../bin/synergyc $out/bin
     cp ../bin/synergys $out/bin
     cp ../bin/synergyd $out/bin
+    cp ${certgenScript}/bin/synergy-generate-certs $out/bin
   '';
 
   doCheck = true;

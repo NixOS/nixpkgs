@@ -86,11 +86,9 @@ in
           default = false;
           type = types.bool;
           description = ''
-            Whether to enable SSL encryption of the Synergy connection. You
-            will need to prepare an x509 certificate pair, install it at
-            ~/.synergy/SSL/Synergy.pem, and store its fingerprint in
-            ~/.synergy/SSL/Fingerprints/Local.txt.  Please refer to the synergy
-            wiki for details.
+            Whether to enable SSL encryption of the Synergy connection.  The
+            service will generate an SSL keypair on first startup for each user
+            and store its fingerprint in ~/.synergy/SSL/Fingerprints/Local.txt.
           '';
         };
       };
@@ -125,7 +123,9 @@ in
         partOf = optional cfgS.autoStart "graphical-session.target";
         path = [ pkgs.synergy ];
         serviceConfig.ExecStart =
-          "${pkgs.synergy}/bin/synergys -c ${cfgS.configFile} --no-daemon"
+            optionalString (cfgS.enableCrypto)
+                           "${pkgs.synergy}/bin/synergy-generate-certs && "
+          + "${pkgs.synergy}/bin/synergys -c ${cfgS.configFile} --no-daemon"
           + optionalString (cfgS.address != "")    " -a ${cfgS.address}"
           + optionalString (cfgS.screenName != "") " -n ${cfgS.screenName}"
           + optionalString (cfgS.enableCrypto)     " --enable-crypto";
