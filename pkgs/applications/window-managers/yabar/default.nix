@@ -1,49 +1,10 @@
-{ stdenv, fetchFromGitHub, cairo, gdk_pixbuf, libconfig, pango, pkgconfig
-, xcbutilwm, alsaLib, wirelesstools, asciidoc, libxslt, makeWrapper
-, configFile ? null, lib
-}:
+{ callPackage, attrs ? {} }:
 
-stdenv.mkDerivation rec {
-  name    = "yabar-${version}";
-  version = "2017-09-09";
+let
+  overrides = {
+    version = "0.4.0";
 
-  src = fetchFromGitHub {
-    owner  = "geommer";
-    repo   = "yabar";
-    rev    = "d3934344ba27f5bdf122bf74daacee6d49284dab";
-    sha256 = "14zrlzva8i83ffg426mrf6yli8afwq6chvc7yi78ngixyik5gzhx";
-  };
-
-  buildInputs = [
-    cairo gdk_pixbuf libconfig pango pkgconfig xcbutilwm
-    alsaLib wirelesstools asciidoc libxslt makeWrapper
-  ];
-
-  postPatch = ''
-    substituteInPlace ./Makefile \
-      --replace "\$(shell git describe)" "${version}" \
-      --replace "a2x" "${asciidoc}/bin/a2x --no-xmllint"
-  '';
-
-  makeFlags = [ "DESTDIR=$(out)" "PREFIX=/" ];
-
-  postInstall = ''
-    mkdir -p $out/share/yabar/examples
-    cp -v examples/*.config $out/share/yabar/examples
-
-    ${lib.optionalString (configFile != null)
-      ''
-        wrapProgram "$out/bin/yabar" \
-          --add-flags "-c ${configFile}"
-      ''
-    }
-  '';
-
-  meta = with stdenv.lib; {
-    description = "A modern and lightweight status bar for X window managers";
-    homepage    = https://github.com/geommer/yabar;
-    license     = licenses.mit;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ ma27 ];
-  };
-}
+    rev = "746387f0112f9b7aa2e2e27b3d69cb2892d8c63b";
+    sha256 = "1nw9dar1caqln5fr0dqk7dg6naazbpfwwzxwlkxz42shsc3w30a6";
+  } // attrs;
+in callPackage ./build.nix overrides
