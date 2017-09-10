@@ -15026,7 +15026,7 @@ in {
     };
 
     propagatedBuildInputs = with self; [
-      pbr argparse six webob
+      pbr six webob
     ];
     buildInputs = with self; [
       oslosphinx coverage mock subunit testrepository testtools
@@ -15034,6 +15034,7 @@ in {
 
     patchPhase = ''
       sed -i 's@python@${python.interpreter}@' .testr.conf
+      substituteInPlace requirements.txt --replace "argparse" ""
     '';
   };
 
@@ -25589,10 +25590,14 @@ EOF
       sha256 = "99ab03bffdb30d9ec98724898f428f8e73129483417d5892799a0f0d2249f233";
     };
 
+    patchPhase = ''
+      substituteInPlace setup.py --replace '"argparse",' ""
+    '';
+
     # ImportError: No module named tests
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ ofxhome ofxparse beautifulsoup keyring argparse ];
+    propagatedBuildInputs = with self; [ ofxhome ofxparse beautifulsoup keyring ];
   };
 
   ofxhome = buildPythonPackage rec {
