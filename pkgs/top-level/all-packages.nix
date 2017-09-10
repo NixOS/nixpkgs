@@ -1077,7 +1077,9 @@ with pkgs;
 
   glock = callPackage ../development/tools/glock { };
 
-  glslviewer = callPackage ../development/tools/glslviewer { };
+  glslviewer = callPackage ../development/tools/glslviewer {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   gmic = callPackage ../tools/graphics/gmic { };
 
