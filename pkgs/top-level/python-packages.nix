@@ -27498,6 +27498,7 @@ EOF
       sha256 = "0a5b4vh734b3wfkgapzzf8x18rimpmzvwwkly56da84n27wfw9bg";
     };
     setupPyBuildFlags = [ "--plat-name" "linux" ];
+    buildInputs = [ pkgs.python2 ];
     meta = with pkgs.stdenv.lib; {
       description = "Unicorn CPU emulator engine";
       homepage = "http://www.unicorn-engine.org/";
