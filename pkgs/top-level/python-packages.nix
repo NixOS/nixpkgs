@@ -17987,7 +17987,7 @@ in {
     '';
   });
 
-  python-simple-hipchat = callPackage ../development/python-modules/python-simple-hipchat {}
+  python-simple-hipchat = callPackage ../development/python-modules/python-simple-hipchat {};
   python_simple_hipchat = python-simple-hipchat;
 
   python_keyczar = buildPythonPackage rec {
