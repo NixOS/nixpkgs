@@ -27,6 +27,8 @@ let
     proxy_set_header        X-Forwarded-Host $host;
     proxy_set_header        X-Forwarded-Server $host;
     proxy_set_header        Accept-Encoding "";
+    proxy_set_header        Upgrade $http_upgrade;
+    proxy_set_header        Connection "upgrade";
   '';
 
   upstreamConfig = toString (flip mapAttrsToList cfg.upstreams (name: upstream: ''
@@ -97,7 +99,7 @@ let
         proxy_connect_timeout   90;
         proxy_send_timeout      90;
         proxy_read_timeout      90;
-        proxy_http_version      1.0;
+        proxy_http_version      1.1;
         include ${recommendedProxyConfig};
       ''}
 
