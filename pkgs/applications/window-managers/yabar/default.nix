@@ -1,38 +1,41 @@
-{ stdenv, fetchFromGitHub, cairo, gdk_pixbuf, libconfig, pango, pkgconfig, xcbutilwm }:
+{ stdenv, fetchFromGitHub, cairo, gdk_pixbuf, libconfig, pango, pkgconfig
+, xcbutilwm, alsaLib, wirelesstools, asciidoc, libxslt
+}:
 
 stdenv.mkDerivation rec {
   name    = "yabar-${version}";
-  version = "0.4.0";
+  version = "2017-09-09";
 
   src = fetchFromGitHub {
     owner  = "geommer";
     repo   = "yabar";
-    rev    = "746387f0112f9b7aa2e2e27b3d69cb2892d8c63b";
-    sha256 = "1nw9dar1caqln5fr0dqk7dg6naazbpfwwzxwlkxz42shsc3w30a6";
+    rev    = "d3934344ba27f5bdf122bf74daacee6d49284dab";
+    sha256 = "14zrlzva8i83ffg426mrf6yli8afwq6chvc7yi78ngixyik5gzhx";
   };
 
-  buildInputs = [ cairo gdk_pixbuf libconfig pango pkgconfig xcbutilwm ];
-
-  hardeningDisable = [ "format" ];
+  buildInputs = [
+    cairo gdk_pixbuf libconfig pango pkgconfig xcbutilwm
+    alsaLib wirelesstools asciidoc libxslt
+  ];
 
   postPatch = ''
-    substituteInPlace ./Makefile --replace "\$(shell git describe)" "${version}"
+    substituteInPlace ./Makefile \
+      --replace "\$(shell git describe)" "${version}" \
+      --replace "a2x" "${asciidoc}/bin/a2x --no-xmllint"
   '';
 
-  buildPhase = ''
-    make DESTDIR=$out PREFIX=/
-  '';
+  makeFlags = [ "DESTDIR=$(out)" "PREFIX=/" ];
 
-  installPhase = ''
-    make DESTDIR=$out PREFIX=/ install
+  postInstall = ''
     mkdir -p $out/share/yabar/examples
     cp -v examples/*.config $out/share/yabar/examples
   '';
 
   meta = with stdenv.lib; {
     description = "A modern and lightweight status bar for X window managers";
-    homepage    = "https://github.com/geommer/yabar";
+    homepage    = https://github.com/geommer/yabar;
     license     = licenses.mit;
     platforms   = platforms.linux;
+    maintainers = with maintainers; [ ma27 ];
   };
 }
