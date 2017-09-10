@@ -102,6 +102,14 @@ self: super: {
   # https://github.com/froozen/kademlia/issues/2
   kademlia = dontCheck super.kademlia;
 
+  # https://github.com/haskell-works/hw-xml/issues/23
+  # Disable building the hw-xml-example executable:
+  hw-xml = (overrideCabal super.hw-xml (drv: {
+    postPatch = "sed -i 's/  hs-source-dirs:       app/" +
+                          "  hs-source-dirs:       app\\n" +
+                          "  buildable:            false/' hw-xml.cabal";
+  }));
+
   hzk = dontCheck super.hzk;
   haskakafka = dontCheck super.haskakafka;
 
