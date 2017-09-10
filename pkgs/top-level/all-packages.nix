@@ -2048,7 +2048,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  fox_1_6 = callPackage ../development/libraries/fox/fox-1.6.nix { };
+  fox_1_6 = callPackage ../development/libraries/fox/fox-1.6.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   fping = callPackage ../tools/networking/fping {};
 
