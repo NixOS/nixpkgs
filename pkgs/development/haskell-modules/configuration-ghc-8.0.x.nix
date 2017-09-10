@@ -44,6 +44,9 @@ self: super: {
     sha256 = "026vv2k3ks73jngwifszv8l59clg88pcdr4mz0wr0gamivkfa1zy";
   });
 
+  # Requires ghc 8.2
+  ghc-proofs = dontDistribute super.ghc-proofs;
+
   # http://hub.darcs.net/dolio/vector-algorithms/issue/9#comment-20170112T145715
   vector-algorithms = dontCheck super.vector-algorithms;
 
