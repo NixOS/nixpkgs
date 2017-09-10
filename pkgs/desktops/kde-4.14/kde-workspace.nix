@@ -1,7 +1,7 @@
 { stdenv, kde, kdelibs, qimageblitz, libdbusmenu_qt, xorg, lm_sensors
 , pciutils, libraw1394, libusb1, python, libqalculate, akonadi
 , xkeyboard_config, kdepimlibs, pam, boost, gpsd, prison
-, libjpeg, pkgconfig, kactivities, qjson, udev, fetchurl
+, libjpeg, pkgconfig, kactivities, qjson, udev, fetchurl, cln
 }:
 
 kde {
@@ -11,11 +11,11 @@ kde {
     [ kdelibs qimageblitz libdbusmenu_qt xorg.libxcb xorg.xcbutilimage libjpeg
       xorg.xcbutilrenderutil xorg.xcbutilkeysyms xorg.libpthreadstubs xorg.libXdmcp
       xorg.libxkbfile xorg.libXcomposite  xorg.libXtst
-      xorg.libXdamage xorg.libXft
+      xorg.libXdamage xorg.libXft xorg.libXScrnSaver
 
       python boost qjson lm_sensors /* gpsd */ libraw1394 pciutils udev
       akonadi pam libusb1 libqalculate kdepimlibs  prison
-      kactivities
+      kactivities cln
     ];
 
   patches = [ ./files/ksysguard-0001-disable-signalplottertest.patch ];
