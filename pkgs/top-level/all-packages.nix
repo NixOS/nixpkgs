@@ -11121,7 +11121,7 @@ with pkgs;
     go = go_1_9;
   };
 
-  buildGoPackage = buildGo18Package;
+  buildGoPackage = buildGo19Package;
 
   go2nix = callPackage ../development/tools/go2nix { };
 
