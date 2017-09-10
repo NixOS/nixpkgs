@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   }.${stdenv.hostPlatform.system}
     or (throw "cannot bootstrap GHC on this platform"));
 
-  buildInputs = [perl];
+  nativeBuildInputs = [ perl ];
 
   postUnpack =
     # Strip is harmful, see also below. It's important that this happens
@@ -48,9 +48,11 @@ stdenv.mkDerivation rec {
       done
     '';
 
-  configurePhase = ''
-    ./configure --prefix=$out --with-gmp-libraries=${stdenv.lib.getLib gmp}/lib --with-gmp-includes=${stdenv.lib.getDev gmp}/include
-  '';
+  configurePlatforms = [ ];
+  configureFlags = [
+    "--with-gmp-libraries=${stdenv.lib.getLib gmp}/lib"
+    "--with-gmp-includes=${stdenv.lib.getDev gmp}/include"
+  ];
 
   # Stripping combined with patchelf breaks the executables (they die
   # with a segfault or the kernel even refuses the execve). (NIXPKGS-85)
@@ -63,7 +65,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # bah, the passing gmp doesn't work, so let's add it to the final package.conf in a quick but dirty way
     sed -i "s@^\(.*pkgName = PackageName \"rts\".*\libraryDirs = \\[\)\(.*\)@\\1\"${gmp.out}/lib\",\2@" $out/lib/ghc-${version}/package.conf
+  '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
     # Sanity check, can ghc create executables?
     cd $TMP
     mkdir test-ghc; cd test-ghc
