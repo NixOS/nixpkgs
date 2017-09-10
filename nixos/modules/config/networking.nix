@@ -194,7 +194,7 @@ in
       {
         # Don't silently ignore the users nameserver configuration.
         assertion =  hasLocalResolver -> cfg.nameservers == null;
-        message = "Can't specify nameservers when Bind or Dnsmasq local resolver is enabled";
+        message = "Can't specify networking.nameservers when Bind or Dnsmasq localResolver is enabled";
       }
     ];
 
