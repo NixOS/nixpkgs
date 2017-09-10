@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, cairo, gdk_pixbuf, libconfig, pango, pkgconfig
-, xcbutilwm, alsaLib, wirelesstools, asciidoc, libxslt
+, xcbutilwm, alsaLib, wirelesstools, asciidoc, libxslt, makeWrapper
+, configFile ? null, lib
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cairo gdk_pixbuf libconfig pango pkgconfig xcbutilwm
-    alsaLib wirelesstools asciidoc libxslt
+    alsaLib wirelesstools asciidoc libxslt makeWrapper
   ];
 
   postPatch = ''
@@ -29,6 +30,13 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share/yabar/examples
     cp -v examples/*.config $out/share/yabar/examples
+
+    ${lib.optionalString (configFile != null)
+      ''
+        wrapProgram "$out/bin/yabar" \
+          --add-flags "-c ${configFile}"
+      ''
+    }
   '';
 
   meta = with stdenv.lib; {
