@@ -1,5 +1,8 @@
 {stdenv, fetchurl, libedit, ghc, perl, gmp, ncurses}:
 
+# TODO(@Ericson2314): Cross compilation support
+assert stdenv.targetPlatform == stdenv.hostPlatform;
+
 stdenv.mkDerivation rec {
   version = "6.10.4";
 
@@ -21,6 +24,8 @@ stdenv.mkDerivation rec {
   ];
 
   NIX_CFLAGS_COMPILE = "-fomit-frame-pointer";
+
+  passthru = { prefix = ""; };
 
   meta = {
     homepage = http://haskell.org/ghc;

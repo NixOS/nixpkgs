@@ -1,5 +1,8 @@
 { stdenv, fetchurl, ghc, perl, gmp, ncurses, libiconv }:
 
+# TODO(@Ericson2314): Cross compilation support
+assert stdenv.targetPlatform == stdenv.hostPlatform;
+
 stdenv.mkDerivation rec {
   version = "7.0.4";
   name = "ghc-${version}";
@@ -41,6 +44,8 @@ stdenv.mkDerivation rec {
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
   stripDebugFlags=["-S" "--keep-file-symbols"];
+
+  passthru = { prefix = ""; };
 
   meta = {
     homepage = http://haskell.org/ghc;
