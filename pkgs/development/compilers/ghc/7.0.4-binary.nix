@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   }.${stdenv.hostPlatform.system}
     or (throw "cannot bootstrap GHC on this platform"));
 
-  buildInputs = [perl];
+  nativeBuildInputs = [ perl ];
 
   postUnpack =
     # GHC has dtrace probes, which causes ld to try to open /usr/lib/libdtrace.dylib
@@ -87,11 +87,11 @@ stdenv.mkDerivation rec {
       done
     '';
 
-  configurePhase = ''
-    ./configure --prefix=$out \
-      --with-gmp-libraries=${gmp.out or gmp}/lib --with-gmp-includes=${gmp.dev or gmp}/include \
-      ${stdenv.lib.optionalString stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}"}
-  '';
+  configurePlatforms = [ ];
+  configureFlags = [
+    "--with-gmp-libraries=${stdenv.lib.getLib gmp}/lib"
+    "--with-gmp-includes=${stdenv.lib.getDev gmp}/include"
+  ] ++ stdenv.lib.optional stdenv.isDarwin "--with-gcc=${./gcc-clang-wrapper.sh}";
 
   # Stripping combined with patchelf breaks the executables (they die
   # with a segfault or the kernel even refuses the execve). (NIXPKGS-85)
@@ -101,7 +101,8 @@ stdenv.mkDerivation rec {
   # calls install-strip ...
   dontBuild = true;
 
-  postInstall = ''
+  doInstallCheck = true;
+  installCheckPhase = ''
     # Sanity check, can ghc create executables?
     cd $TMP
     mkdir test-ghc; cd test-ghc
