@@ -908,4 +908,6 @@ self: super: {
   # https://github.com/jtdaugherty/text-zipper/issues/11
   text-zipper = dontCheck super.text-zipper;
 
+  # https://github.com/graknlabs/grakn-haskell/pull/1
+  grakn = dontCheck (doJailbreak super.grakn);
 }
