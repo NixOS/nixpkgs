@@ -15,6 +15,13 @@ with haskellLib;
 
 self: super: {
 
+  attoparsec-time_1 = super.attoparsec-time_1.override {
+    doctest = super.doctest_0_13_0;
+  };
+  attoparsec-data = super.attoparsec-data.override {
+    attoparsec-time = self.attoparsec-time_1;
+  };
+
   # This used to be a core package provided by GHC, but then the compiler
   # dropped it. We define the name here to make sure that old packages which
   # depend on this library still evaluate (even though they won't compile
