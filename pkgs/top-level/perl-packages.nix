@@ -224,11 +224,16 @@ let self = _self // overrides; _self = with self; {
   };
 
   ApacheTest = buildPerlPackage {
-    name = "Apache-Test-1.38";
+    name = "Apache-Test-1.40";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PH/PHRED/Apache-Test-1.38.tar.gz;
-      sha256 = "321717f58636ed0aa85cba6d69fc01e2ccbc90ba71ec2dcc2134d8401af65145";
+      url = mirror://cpan/authors/id/S/SH/SHAY/Apache-Test-1.40.tar.gz;
+      sha256 = "0h5fsi0is6nhclsd3wwkkqx2hfgl3bpdazxycafm9sqxr3qkgx9w";
     };
+    checkPhase = ''
+      make test \
+        NIX_REDIRECTS=/etc/protocols=${pkgs.iana-etc}/etc/protocols \
+        LD_PRELOAD=${pkgs.libredirect}/lib/libredirect.so
+    '';
   };
 
   AppCLI = buildPerlPackage {
