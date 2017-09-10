@@ -276,6 +276,14 @@ in
           '';
         };
 
+        openFirewall = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Whether to open ports in the firewall for ZNC.
+          '';
+        };
+
         passBlock = mkOption {
           example = defaultPassBlock;
           type = types.string;
@@ -349,6 +357,10 @@ in
   ###### Implementation
 
   config = mkIf cfg.enable {
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.port ];
+    };
 
     systemd.services.znc = {
       description = "ZNC Server";

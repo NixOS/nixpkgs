@@ -122,7 +122,6 @@ in rec {
         (all nixos.tests.sysctl)
         (all nixos.tests.udisks2)
         (all nixos.tests.xfce)
-        (all nixos.tests.xmonad)
 
         nixpkgs.tarball
         (all allSupportedNixpkgs.emacs)

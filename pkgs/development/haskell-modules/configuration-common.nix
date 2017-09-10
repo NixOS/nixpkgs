@@ -56,6 +56,13 @@ self: super: {
   # segfault due to missing return: https://github.com/haskell/c2hs/pull/184
   c2hs = dontCheck super.c2hs;
 
+  # https://github.com/gilith/hol/pull/1
+  hol = appendPatch (doJailbreak super.hol) (pkgs.fetchpatch {
+    name = "hol.patch";
+    url = "https://github.com/gilith/hol/commit/a5171bdcacdbe93c46c9f82ec5a38f2a2b69e632.patch";
+    sha256 = "0xkgbhc4in38hspxgz2wcvk56pjalw43gig7lzkjfhgavwxv3jyj";
+  });
+
   # This test keeps being aborted because it runs too quietly for too long
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
 
@@ -123,6 +130,8 @@ self: super: {
     '';
     extraLibraries = [ pkgs.openblasCompat ];
   });
+
+  LambdaHack = super.LambdaHack.override { sdl2-ttf = super.sdl2-ttf_2_0_1; };
 
   # The Haddock phase fails for one reason or another.
   acme-one = dontHaddock super.acme-one;
@@ -913,4 +922,8 @@ self: super: {
     cryptonite = super.cryptonite_0_24;
     protolude = super.protolude_0_2;
   };
+
+  # https://github.com/graknlabs/grakn-haskell/pull/1
+  grakn = dontCheck (doJailbreak super.grakn);
+
 }
