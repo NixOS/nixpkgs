@@ -57,7 +57,12 @@ let
       extraBuildInputs = if stdenv.cc.isGNU then [ libstdcxxHook ] else drv.extraBuildInputs;
     });
 
-    libcxxStdenv = overrideCC stdenv self.libcxxClang;
+    libcxxStdenv = stdenv.override (drv: {
+      allowedRequisites = null;
+      cc = self.libcxxClang;
+      # Don't include the libc++ and libc++abi from the original stdenv.
+      extraBuildInputs = stdenv.lib.optional stdenv.isDarwin darwin.CF;
+    });
 
     lld = callPackage ./lld.nix {};
 
