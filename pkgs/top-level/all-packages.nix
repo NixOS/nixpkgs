@@ -740,9 +740,7 @@ with pkgs;
 
   bubblewrap = callPackage ../tools/admin/bubblewrap { };
 
-  borgbackup = callPackage ../tools/backup/borg {
-    python3Packages = python34Packages;
-  };
+  borgbackup = callPackage ../tools/backup/borg { };
 
   boomerang = callPackage ../development/tools/boomerang { };
 
