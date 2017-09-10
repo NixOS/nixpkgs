@@ -5186,7 +5186,9 @@ with pkgs;
 
   rush = callPackage ../shells/rush { };
 
-  xonsh = callPackage ../shells/xonsh { };
+  xonsh = callPackage ../shells/xonsh {
+    python3Packages = python35Packages;
+  };
 
   zsh = callPackage ../shells/zsh { };
 
