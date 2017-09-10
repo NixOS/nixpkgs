@@ -124,6 +124,8 @@ self: super: {
     extraLibraries = [ pkgs.openblasCompat ];
   });
 
+  LambdaHack = super.LambdaHack.override { sdl2-ttf = super.sdl2-ttf_2_0_1; };
+
   # The Haddock phase fails for one reason or another.
   acme-one = dontHaddock super.acme-one;
   attoparsec-conduit = dontHaddock super.attoparsec-conduit;
