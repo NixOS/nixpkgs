@@ -10645,14 +10645,6 @@ with pkgs;
     inherit (python2Packages) python gyp;
   };
 
-  v8_3_30_33 = callPackage ../development/libraries/v8/3.30.33.nix {
-    inherit (python2Packages) python gyp;
-  };
-
-  v8_4_5 = callPackage ../development/libraries/v8/4.5.nix {
-    inherit (python2Packages) python gyp;
-  };
-
   v8 = callPackage ../development/libraries/v8 {
     inherit (python2Packages) python gyp;
     cctools = darwin.cctools;
