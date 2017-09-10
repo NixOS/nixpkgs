@@ -350,6 +350,8 @@ in
 
   config = mkIf cfg.enable {
 
+    networking.firewall.allowedTCPPorts = [ cfg.port ];
+
     systemd.services.znc = {
       description = "ZNC Server";
       wantedBy = [ "multi-user.target" ];
