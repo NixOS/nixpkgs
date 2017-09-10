@@ -115,7 +115,6 @@ in rec {
         (all nixos.tests.slim)
         (all nixos.tests.udisks2)
         (all nixos.tests.xfce)
-        (all nixos.tests.xmonad)
 
         nixpkgs.tarball
         (all allSupportedNixpkgs.emacs)
