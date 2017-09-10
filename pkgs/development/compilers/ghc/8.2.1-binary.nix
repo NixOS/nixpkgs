@@ -3,6 +3,9 @@
 , ncurses5, gmp, libiconv
 }:
 
+# Prebuilt only does native
+assert stdenv.targetPlatform == stdenv.hostPlatform;
+
 let
   libPath = stdenv.lib.makeLibraryPath ([
     ncurses5 gmp
@@ -150,6 +153,8 @@ stdenv.mkDerivation rec {
     echo compilation ok
     [ $(./main) == "yes" ]
   '';
+
+  passthru = { targetPrefix = ""; };
 
   meta.license = stdenv.lib.licenses.bsd3;
   meta.platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin" "armv7l-linux" "aarch64-linux"];
