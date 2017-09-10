@@ -36,9 +36,8 @@ let
   isHaLVM       = ghc.isHaLVM or false;
   ghc761OrLater = isGhcjs || isHaLVM || lib.versionOlder "7.6.1" ghc.version;
   packageDBFlag = if ghc761OrLater then "--global-package-db" else "--global-conf";
-  ghcCommand'   = if isGhcjs then "ghcjs" else "ghc";
-  crossPrefix = if (ghc.cross or null) != null then "${ghc.cross.config}-" else "";
-  ghcCommand = "${crossPrefix}${ghcCommand'}";
+  ghcCommand'    = if isGhcjs then "ghcjs" else "ghc";
+  ghcCommand = "${ghc.prefix}${ghcCommand'}";
   ghcCommandCaps= lib.toUpper ghcCommand';
   libDir        = if isHaLVM then "$out/lib/HaLVM-${ghc.version}" else "$out/lib/${ghcCommand}-${ghc.version}";
   docDir        = "$out/share/doc/ghc/html";

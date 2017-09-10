@@ -1,7 +1,14 @@
-{ stdenv, fetchurl, ghc, pkgconfig, glibcLocales, coreutils, gnugrep, gnused
-, jailbreak-cabal, hscolour, cpphs, nodejs, lib, removeReferencesTo
+{ stdenv, buildPackages, ghc
+, jailbreak-cabal, hscolour, cpphs, nodejs
+, buildPlatform, hostPlatform
 }:
-let isCross = (ghc.cross or null) != null; in
+
+let
+  isCross = buildPlatform != hostPlatform;
+  inherit (buildPackages)
+    fetchurl removeReferencesTo
+    pkgconfig binutils coreutils gnugrep gnused glibcLocales;
+in
 
 { pname
 , dontStrip ? (ghc.isGhcjs or false)
@@ -20,8 +27,8 @@ let isCross = (ghc.cross or null) != null; in
 , enableLibraryProfiling ? false
 , enableExecutableProfiling ? false
 # TODO enable shared libs for cross-compiling
-, enableSharedExecutables ? !isCross && (((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version))
-, enableSharedLibraries ? !isCross && (((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version))
+, enableSharedExecutables ? ((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version)
+, enableSharedLibraries ? ((ghc.isGhcjs or false) || stdenv.lib.versionOlder "7.7" ghc.version)
 , enableSplitObjs ? null # OBSOLETE, use enableDeadCodeElimination
 , enableDeadCodeElimination ? (!stdenv.isDarwin)  # TODO: use -dead_strip  for darwin
 , enableStaticLibraries ? true
@@ -53,7 +60,7 @@ let isCross = (ghc.cross or null) != null; in
 , shellHook ? ""
 , coreSetup ? false # Use only core packages to build Setup.hs.
 , useCpphs ? false
-, hardeningDisable ? lib.optional (ghc.isHaLVM or false) "all"
+, hardeningDisable ? stdenv.lib.optional (ghc.isHaLVM or false) "all"
 , enableSeparateDataOutput ? false
 , enableSeparateDocOutput ? doHaddock
 } @ args:
@@ -102,11 +109,12 @@ let
   enableParallelBuilding = (versionOlder "7.8" ghc.version && !hasActiveLibrary) || versionOlder "8.0.1" ghc.version;
 
   crossCabalFlags = [
-    "--with-ghc=${ghc.cross.config}-ghc"
-    "--with-ghc-pkg=${ghc.cross.config}-ghc-pkg"
-    "--with-gcc=${ghc.cc}"
-    "--with-ld=${ghc.ld}"
+    "--with-ghc=${ghc.prefix}ghc"
+    "--with-ghc-pkg=${ghc.prefix}ghc-pkg"
+    "--with-gcc=${ghc.prefix}cc"
+    "--with-ld=${ghc.prefix}ld"
     "--with-hsc2hs=${nativeGhc}/bin/hsc2hs"
+    "--with-strip=${binutils}/bin/${ghc.prefix}strip"
   ] ++ (if isHaLVM then [] else ["--hsc2hs-options=--cross-compile"]);
 
   crossCabalFlagsString =
@@ -135,7 +143,7 @@ let
   ] ++ optionals isGhcjs [
     "--ghcjs"
   ] ++ optionals isCross ([
-    "--configure-option=--host=${ghc.cross.config}"
+    "--configure-option=--host=${hostPlatform.config}"
   ] ++ crossCabalFlags);
 
   setupCompileFlags = [
@@ -170,8 +178,7 @@ let
   setupBuilder = if isCross then "${nativeGhc}/bin/ghc" else ghcCommand;
   setupCommand = "./Setup";
   ghcCommand' = if isGhcjs then "ghcjs" else "ghc";
-  crossPrefix = if (ghc.cross or null) != null then "${ghc.cross.config}-" else "";
-  ghcCommand = "${crossPrefix}${ghcCommand'}";
+  ghcCommand = "${ghc.prefix}${ghcCommand'}";
   ghcCommandCaps= toUpper ghcCommand';
 
 in
@@ -267,6 +274,8 @@ stdenv.mkDerivation ({
 
     runHook postCompileBuildDriver
   '';
+
+  inherit configureFlags;
 
   configurePhase = ''
     runHook preConfigure
@@ -393,7 +402,6 @@ stdenv.mkDerivation ({
 // optionalAttrs (postCompileBuildDriver != "") { inherit postCompileBuildDriver; }
 // optionalAttrs (preUnpack != "")      { inherit preUnpack; }
 // optionalAttrs (postUnpack != "")     { inherit postUnpack; }
-// optionalAttrs (configureFlags != []) { inherit configureFlags; }
 // optionalAttrs (patches != [])        { inherit patches; }
 // optionalAttrs (patchPhase != "")     { inherit patchPhase; }
 // optionalAttrs (preConfigure != "")   { inherit preConfigure; }
@@ -412,5 +420,5 @@ stdenv.mkDerivation ({
 // optionalAttrs (postFixup != "")      { inherit postFixup; }
 // optionalAttrs (dontStrip)            { inherit dontStrip; }
 // optionalAttrs (hardeningDisable != []) { inherit hardeningDisable; }
-// optionalAttrs (stdenv.isLinux)       { LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
+// optionalAttrs (buildPlatform.isLinux){ LOCALE_ARCHIVE = "${glibcLocales}/lib/locale/locale-archive"; }
 )
