@@ -21,6 +21,12 @@ let
   targetPrefix = stdenv.lib.optionalString
     (targetPlatform != hostPlatform)
     "${targetPlatform.config}-";
+
+  buildMK = stdenv.lib.optionalString enableIntegerSimple ''
+    INTEGER_LIBRARY = integer-simple
+  '' + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
+    BuildFlavour = perf-cross
+  '';
 in
 stdenv.mkDerivation rec {
   version = "8.0.2";
@@ -42,13 +48,12 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" "doc" ];
 
   preConfigure = ''
+    echo "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
+    export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
-  '' + stdenv.lib.optionalString enableIntegerSimple ''
-    echo "INTEGER_LIBRARY=integer-simple" > mk/build.mk
   '';
 
   configureFlags = [

@@ -28,6 +28,12 @@ let
     sha256 = "1j45z4kcd3w1rzm4hapap2xc16bbh942qnzzdbdjcwqznsccznf0";
   };
 
+  buildMK = stdenv.lib.optionalString enableIntegerSimple ''
+    INTEGER_LIBRARY = integer-simple
+  '' + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
+    BuildFlavour = perf-cross
+  '';
+
 in
 
 stdenv.mkDerivation rec {
@@ -51,13 +57,12 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "doc" ];
 
   preConfigure = ''
+    echo "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
+    export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
-  '' + stdenv.lib.optionalString enableIntegerSimple ''
-    echo "INTEGER_LIBRARY=integer-simple" > mk/build.mk
   '';
 
   configureFlags = [

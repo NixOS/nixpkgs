@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       libraries/base_CONFIGURE_OPTS += --configure-option=--with-iconv-libraries="${libiconv}/lib"
     ''}
   '' + (if enableIntegerSimple then ''
-    INTEGER_LIBRARY=integer-simple
+    INTEGER_LIBRARY = integer-simple
   '' else ''
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-libraries="${gmp.out}/lib"
     libraries/integer-gmp_CONFIGURE_OPTS += --configure-option=--with-gmp-includes="${gmp.dev}/include"
