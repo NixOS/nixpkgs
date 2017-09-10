@@ -102,14 +102,6 @@ self: super: {
   # https://github.com/froozen/kademlia/issues/2
   kademlia = dontCheck super.kademlia;
 
-  # https://github.com/haskell-works/hw-xml/issues/23
-  # Disable building the hw-xml-example executable:
-  hw-xml = (overrideCabal super.hw-xml (drv: {
-    postPatch = "sed -i 's/  hs-source-dirs:       app/" +
-                          "  hs-source-dirs:       app\\n" +
-                          "  buildable:            false/' hw-xml.cabal";
-  }));
-
   hzk = dontCheck super.hzk;
   haskakafka = dontCheck super.haskakafka;
 
@@ -925,6 +917,13 @@ self: super: {
   # https://github.com/jtdaugherty/text-zipper/issues/11
   text-zipper = dontCheck super.text-zipper;
 
+  # cryptonite == 0.24.x, protolude == 0.2.x
+  wai-secure-cookies = super.wai-secure-cookies.override {
+    cryptonite = super.cryptonite_0_24;
+    protolude = super.protolude_0_2;
+  };
+
   # https://github.com/graknlabs/grakn-haskell/pull/1
   grakn = dontCheck (doJailbreak super.grakn);
+
 }
