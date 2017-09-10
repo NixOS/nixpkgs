@@ -32,7 +32,7 @@ in buildGoPackage rec {
 
     substituteInPlace pkg/bootstrap/docker/host/host.go  \
       --replace 'nsenter --mount=/rootfs/proc/1/ns/mnt mkdir' \
-      'nsenter --mount=/rootfs/proc/1/ns/mnt ${coreutils}/bin/mount'
+      'nsenter --mount=/rootfs/proc/1/ns/mnt ${utillinux}/bin/mount'
   '';
 
   buildPhase = ''
