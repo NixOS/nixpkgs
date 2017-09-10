@@ -17822,17 +17822,8 @@ in {
     '';
   });
 
-  python_simple_hipchat = buildPythonPackage rec {
-    name = "python-simple-hipchat-${version}";
-    version = "0.4.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-simple-hipchat/python-simple-hipchat-${version}.tar.gz";
-      sha256 = "0zy6prrj85jjc4xmxgfg8h94j81k6zhfxfffcbvq9b10jis1rgav";
-    };
-
-    buildInputs = [ pkgs.unzip ];
-  };
+  python-simple-hipchat = callPackage ../development/python-modules/python-simple-hipchat {}
+  python_simple_hipchat = python-simple-hipchat;
 
   python_keyczar = buildPythonPackage rec {
     name = "python-keyczar-0.71c";
@@ -24530,7 +24521,7 @@ EOF
     buildInputs = with self; [ nose mock ];
     propagatedBuildInputs = with self; [
       jinja2 pyyaml redis requests pagerduty
-      python_simple_hipchat pushbullet
+      python-simple-hipchat pushbullet
     ];
 
     patchPhase = "> requirements.txt";
