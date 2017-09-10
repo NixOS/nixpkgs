@@ -1,11 +1,9 @@
 { stdenv, lib, perl, pkgs, steam-runtime
 , nativeOnly ? false
 , runtimeOnly ? false
-, newStdcpp ? false
 }:
 
 assert !(nativeOnly && runtimeOnly);
-assert newStdcpp -> !runtimeOnly;
 
 let 
   runtimePkgs = with pkgs; [
@@ -79,7 +77,7 @@ let
     SDL2_mixer
     gstreamer
     gst-plugins-base
-  ] ++ lib.optional (!newStdcpp) gcc48.cc;
+  ];
 
   overridePkgs = with pkgs; [
     libgpgerror
@@ -88,7 +86,8 @@ let
     openalSoft
     libva
     vulkan-loader
-  ] ++ lib.optional newStdcpp gcc.cc;
+    gcc.cc
+  ];
 
   ourRuntime = if runtimeOnly then []
                else if nativeOnly then runtimePkgs ++ overridePkgs
