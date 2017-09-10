@@ -26,20 +26,6 @@ let
   targetPrefix = stdenv.lib.optionalString
     (targetPlatform != hostPlatform)
     "${targetPlatform.config}-";
-
-  commonBuildInputs = [ ghc perl autoconf automake happy alex python3 ];
-  commonPreConfigure =  ''
-    echo ${version} >VERSION
-    echo ${rev} >GIT_COMMIT_ID
-    ./boot
-    sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
-  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
-    export NIX_LDFLAGS+=" -no_dtrace_dof"
-  '' + stdenv.lib.optionalString enableIntegerSimple ''
-    echo "INTEGER_LIBRARY=integer-simple" > mk/build.mk
-  '';
 in
 stdenv.mkDerivation (rec {
   inherit version rev;
@@ -53,9 +39,22 @@ stdenv.mkDerivation (rec {
 
   postPatch = "patchShebangs .";
 
-  preConfigure = commonPreConfigure;
+  preConfigure = ''
+    echo ${version} >VERSION
+    echo ${rev} >GIT_COMMIT_ID
+    ./boot
+    sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
+  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
+    export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    export NIX_LDFLAGS+=" -no_dtrace_dof"
+  '' + stdenv.lib.optionalString enableIntegerSimple ''
+    echo "INTEGER_LIBRARY=integer-simple" > mk/build.mk
+  '' + stdenv.lib.optionalString (targetPlatform != hostPlatform) ''
+    sed 's|#BuildFlavour  = quick-cross|BuildFlavour  = perf-cross|' mk/build.mk.sample > mk/build.mk
+  '';
 
-  buildInputs = commonBuildInputs;
+  buildInputs = [ ghc perl autoconf automake happy alex python3 ];
 
   enableParallelBuilding = true;
 
@@ -110,10 +109,6 @@ stdenv.mkDerivation (rec {
 } // stdenv.lib.optionalAttrs (cross != null) {
   name = "${cross.config}-ghc-${version}";
 
-  preConfigure = commonPreConfigure + ''
-    sed 's|#BuildFlavour  = quick-cross|BuildFlavour  = perf-cross|' mk/build.mk.sample > mk/build.mk
-  '';
-
   configureFlags = [
     "CC=${stdenv.cc}/bin/${cross.config}-cc"
     "LD=${stdenv.cc.bintools}/bin/${cross.config}-ld"
@@ -125,8 +120,6 @@ stdenv.mkDerivation (rec {
   ] ++
     # fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
     stdenv.lib.optional (cross.config or null == "aarch64-apple-darwin14") "--disable-large-address-space";
-
-  buildInputs = commonBuildInputs;
 
   configurePlatforms = [];
 
