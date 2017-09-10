@@ -16269,6 +16269,7 @@ with pkgs;
 
   snapper = callPackage ../tools/misc/snapper {
     btrfs-progs = btrfs-progs_4_4_1;
+    stdenv = overrideCC stdenv gcc5;
   };
 
   snd = callPackage ../applications/audio/snd { };
