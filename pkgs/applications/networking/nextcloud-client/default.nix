@@ -1,4 +1,5 @@
-{ stdenv, fetchgit, cmake, pkgconfig, qtbase, qtwebkit, qtkeychain, sqlite }:
+{ stdenv, fetchgit, cmake, pkgconfig, qtbase, qtwebkit, qtkeychain, sqlite
+, inotify-tools }:
 
 stdenv.mkDerivation rec {
   name = "nextcloud-client-${version}";
@@ -12,7 +13,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig cmake ];
-  buildInputs = [ qtbase qtwebkit qtkeychain sqlite ];
+  buildInputs = [ qtbase qtwebkit qtkeychain sqlite ]
+    ++ stdenv.lib.optional stdenv.isLinux inotify-tools;
 
   dontUseCmakeBuildDir = true;
 
@@ -22,6 +24,9 @@ stdenv.mkDerivation rec {
     "-UCMAKE_INSTALL_LIBDIR"
     "-DCMAKE_BUILD_TYPE=Release"
     "-DOEM_THEME_DIR=${src}/nextcloudtheme"
+  ] ++ stdenv.lib.optionals stdenv.isLinux [
+    "-DINOTIFY_LIBRARY=${inotify-tools}/lib/libinotifytools.so"
+    "-DINOTIFY_INCLUDE_DIR=${inotify-tools}/include"
   ];
 
   meta = with stdenv.lib; {
