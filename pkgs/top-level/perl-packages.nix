@@ -4000,6 +4000,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  DevelNYTProf = buildPerlPackage rec {
+    name = "Devel-NYTProf-6.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TI/TIMB/${name}.tar.gz";
+      sha256 = "c04c9f03663b7e4e9cc159f30bcdc0bab5652889c88c425ec157e831318d4891";
+    };
+    propagatedBuildInputs = [ FileWhich JSONMaybeXS TestDifferences ];
+    meta = {
+      homepage = https://code.google.com/p/perl-devel-nytprof/;
+      description = "Powerful fast feature-rich Perl source code profiler";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   DevelPartialDump = buildPerlPackage {
     name = "Devel-PartialDump-0.15";
     src = fetchurl {
