@@ -107,7 +107,7 @@ let
       backup.path = "${cfg.backupPath}";
       gitlab_shell = {
         path = "${cfg.packages.gitlab-shell}";
-        hooks_path = "${cfg.statePath}/shell/hooks";
+        hooks_path = "${cfg.packages.gitlab-shell}/shell/hooks";
         secret_file = "${cfg.statePath}/config/gitlab_shell_secret";
         upload_pack = true;
         receive_pack = true;
