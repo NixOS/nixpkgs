@@ -11,8 +11,8 @@ rec {
   bitcoin-classic  = callPackage ./bitcoin-classic.nix { withGui = true; boost = boost162; };
   bitcoind-classic = callPackage ./bitcoin-classic.nix { withGui = false; boost = boost162; };
 
-  bitcoin-xt  = callPackage ./bitcoin-xt.nix { withGui = true; };
-  bitcoind-xt = callPackage ./bitcoin-xt.nix { withGui = false; };
+  bitcoin-xt  = callPackage ./bitcoin-xt.nix { withGui = true; boost = pkgs.boost; };
+  bitcoind-xt = callPackage ./bitcoin-xt.nix { withGui = false; boost = pkgs.boost; };
 
   btc1 = callPackage ./btc1.nix { withGui = true; };
   btc1d = callPackage ./btc1.nix { withGui = false; };
