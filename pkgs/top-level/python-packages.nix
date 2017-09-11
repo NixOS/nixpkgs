@@ -8019,6 +8019,7 @@ in {
 
     buildInputs = with pkgs; [ ssdeep ];
     propagatedBuildInputs = with self; [ cffi six ];
+    meta.broken = true; # Tests fail, and no reverse-dependencies anyway
   };
 
 
