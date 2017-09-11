@@ -14610,6 +14610,8 @@ with pkgs;
 
   mi2ly = callPackage ../applications/audio/mi2ly {};
 
+  moe =  callPackage ../applications/editors/moe { };
+
   praat = callPackage ../applications/audio/praat { };
 
   quvi = callPackage ../applications/video/quvi/tool.nix {
