@@ -2958,10 +2958,14 @@ let self = _self // overrides; _self = with self; {
   };
 
   DataDumperConcise = buildPerlPackage rec {
-    name = "Data-Dumper-Concise-2.022";
+    name = "Data-Dumper-Concise-2.023";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Data/${name}.tar.gz";
-      sha256 = "0z7vxgk1f2kw2zpiimdsyf7jq9f4s5dhh3dlimq5yrirypnk03sc";
+      url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
+      sha256 = "a6c22f113caf31137590def1b7028a7e718eface3228272d0672c25e035d5853";
+    };
+    meta = {
+      description = "Less indentation and newlines plus sub deparsing";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
