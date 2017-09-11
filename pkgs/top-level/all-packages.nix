@@ -13440,9 +13440,7 @@ with pkgs;
 
   atom = callPackage ../applications/editors/atom { };
 
-  aseprite = callPackage ../applications/editors/aseprite {
-    giflib = giflib_4_1;
-  };
+  aseprite = callPackage ../applications/editors/aseprite { };
 
   astroid = callPackage ../applications/networking/mailreaders/astroid { };
 
