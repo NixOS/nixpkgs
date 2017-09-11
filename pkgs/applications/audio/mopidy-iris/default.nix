@@ -2,12 +2,12 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "mopidy-iris-${version}";
-  version = "3.3.3";
+  version = "3.4.1";
 
   src = pythonPackages.fetchPypi {
     inherit version;
     pname = "Mopidy-Iris";
-    sha256 = "1lfqkmjvdmc2pb3xx9z21ay095b2bk5cvdwharxqqx8fjq6n27hq";
+    sha256 = "04fjj2n5v53ykxnjgna1y8bvk7g3x0yiqisvzrdva693lfz9cbgx";
   };
 
   propagatedBuildInputs = [
