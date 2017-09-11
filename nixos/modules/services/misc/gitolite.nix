@@ -70,6 +70,7 @@ in
     systemd.services."gitolite-init" = {
       description = "Gitolite initialization";
       wantedBy    = [ "multi-user.target" ];
+      unitConfig.RequiresMountsFor = cfg.dataDir;
 
       serviceConfig.User = "${cfg.user}";
       serviceConfig.Type = "oneshot";
