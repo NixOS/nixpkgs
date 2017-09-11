@@ -1827,11 +1827,15 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ClassAutouse = buildPerlPackage {
-    name = "Class-Autouse-1.99_02";
+  ClassAutouse = buildPerlPackage rec {
+    name = "Class-Autouse-2.01";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AD/ADAMK/Class-Autouse-1.99_02.tar.gz;
-      sha256 = "1jkhczx2flxrz154ps90fj9wcchkpmnp5sapwc0l92rpn7jpsf08";
+      url = "mirror://cpan/authors/id/A/AD/ADAMK/${name}.tar.gz";
+      sha256 = "c05b3236c05719d819c20db0fdeb6d0954747e43d7a738294eed7fbcf36ecf1b";
+    };
+    meta = {
+      description = "Run-time load a class the first time you call a method in it";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
