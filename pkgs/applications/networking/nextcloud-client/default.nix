@@ -14,9 +14,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig cmake ];
   buildInputs = [ qtbase qtwebkit qtkeychain sqlite ];
 
-  preConfigure = ''
-    cmakeFlagsArray+=("-UCMAKE_INSTALL_LIBDIR" "-DOEM_THEME_DIR=$(realpath ./nextcloudtheme)" "../client")
-  '';
+  dontUseCmakeBuildDir = true;
+
+  cmakeDir = "client";
+
+  cmakeFlags = [
+    "-UCMAKE_INSTALL_LIBDIR"
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DOEM_THEME_DIR=${src}/nextcloudtheme"
+  ];
 
   meta = with stdenv.lib; {
     description = "Nextcloud themed desktop client";
