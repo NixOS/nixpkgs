@@ -52,7 +52,12 @@
 
 
 <para>
-  This example, extracted from the <link xlink:href="https://github.com/NixOS/nixpkgs/blob/release-17.09/nixos/modules/services/logging/syslogd.nix"><literal>syslogd</literal> module</link> shows how to use <literal>assertions</literal>. Since there can only be one active syslog daemon at a time, an assertion is useful to prevent such a broken system from being built.
+  This example, extracted from the
+  <link xlink:href="https://github.com/NixOS/nixpkgs/blob/release-17.09/nixos/modules/services/logging/syslogd.nix">
+    <literal>syslogd</literal> module
+  </link> shows how to use <literal>assertions</literal>. Since there
+  can only be one active syslog daemon at a time, an assertion is useful to
+  prevent such a broken system from being built.
 </para>
 
 <programlisting>
