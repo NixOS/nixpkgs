@@ -1,47 +1,49 @@
-{ stdenv, fetchurl, cmake, pkgconfig
-, giflib, libjpeg, zlib, libpng, tinyxml, allegro
-, libX11, libXext, libXcursor, libXpm, libXxf86vm, libXxf86dga
+{ stdenv, fetchFromGitHub, cmake, pkgconfig
+, curl, freetype, giflib, libjpeg, libpng, libwebp, pixman, tinyxml, zlib
+, libX11, libXext, libXcursor, libXxf86vm
 }:
 
 stdenv.mkDerivation rec {
-  name = "aseprite-0.9.5";
+  name = "aseprite-${version}";
+  version = "1.1.7";
 
-  src = fetchurl {
-    url = "http://aseprite.googlecode.com/files/${name}.tar.xz";
-    sha256 = "0m7i6ybj2bym4w9rybacnnaaq2jjn76vlpbp932xcclakl6kdq41";
+  src = fetchFromGitHub {
+    owner = "aseprite";
+    repo = "aseprite";
+    rev = "v${version}";
+    fetchSubmodules = true;
+    sha256 = "0gd49lns2bpzbkwax5jf9x1xmg1j8ij997kcxr2596cwiswnw4di";
   };
 
+  nativeBuildInputs = [ cmake pkgconfig ];
+
   buildInputs = [
-    cmake pkgconfig
-    giflib libjpeg zlib libpng tinyxml allegro
-    libX11 libXext libXcursor libXpm libXxf86vm libXxf86dga
+    curl freetype giflib libjpeg libpng libwebp pixman tinyxml zlib
+    libX11 libXext libXcursor libXxf86vm
   ];
 
-  patchPhase = ''
-    sed -i '/^find_unittests/d' src/CMakeLists.txt
-    sed -i '/include_directories(.*third_party\/gtest.*)/d' src/CMakeLists.txt
-    sed -i '/add_subdirectory(gtest)/d' third_party/CMakeLists.txt
-    sed -i 's/png_\(sizeof\)/\1/g' src/file/png_format.cpp
-  '';
-
   cmakeFlags = ''
+    -DENABLE_UPDATER=OFF
+    -DUSE_SHARED_CURL=ON
+    -DUSE_SHARED_FREETYPE=ON
     -DUSE_SHARED_GIFLIB=ON
     -DUSE_SHARED_JPEGLIB=ON
-    -DUSE_SHARED_ZLIB=ON
     -DUSE_SHARED_LIBPNG=ON
-    -DUSE_SHARED_LIBLOADPNG=ON
+    -DUSE_SHARED_LIBWEBP=ON
+    -DUSE_SHARED_PIXMAN=ON
     -DUSE_SHARED_TINYXML=ON
-    -DUSE_SHARED_GTEST=ON
-    -DUSE_SHARED_ALLEGRO4=ON
-    -DENABLE_UPDATER=OFF
+    -DUSE_SHARED_ZLIB=ON
+    -DWITH_DESKTOP_INTEGRATION=ON
+    -DWITH_WEBP_SUPPORT=ON
   '';
 
-  NIX_LDFLAGS = "-lX11";
+  enableParallelBuilding = true;
 
-  meta = {
-    description = "Animated sprite editor & pixel art tool";
+  meta = with stdenv.lib; {
     homepage = https://www.aseprite.org/;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    description = "Animated sprite editor & pixel art tool";
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ orivej ];
+    platforms = platforms.linux;
   };
 }
