@@ -35,8 +35,8 @@ rec {
   memorycoin  = callPackage ./memorycoin.nix { withGui = true; };
   memorycoind = callPackage ./memorycoin.nix { withGui = false; };
 
-  namecoin  = callPackage ./namecoin.nix  { inherit namecoind; };
-  namecoind = callPackage ./namecoind.nix { };
+  namecoin = callPackage ./namecoin.nix { withGui = true; boost = pkgs.boost; };
+  namecoind = callPackage ./namecoin.nix { withGui = false; boost = pkgs.boost; };
 
   ethabi = callPackage ./ethabi.nix { };
   ethrun = callPackage ./ethrun.nix { };
