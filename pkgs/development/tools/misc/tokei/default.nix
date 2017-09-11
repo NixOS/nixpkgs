@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   name = "tokei-${version}";
-  version = "6.0.1";
+  version = "6.1.2";
 
   src = fetchFromGitHub {
     owner = "Aaronepower";
     repo = "tokei";
     rev = "v${version}";
-    sha256 = "1v9h45vspsqsy86fm78bc2g5byqa4cd9b9fbmv7imi87yjbm8i7x";
+    sha256 = "1bzs3mr6f9bna39b9ddwwq0raas07nbn106mnq3widxg59i0gxhd";
   };
 
-  depsSha256 = "0jqzk5qlrc7pm3s7jf8130vgnrcd54izw3mx84m9b5lhf3rz98hm";
+  depsSha256 = "1cz93mrpxmyrza0ipdyg2a6mynl66plpsb446wxnmmy7y7zd6xbf";
 
   installPhase = ''
     mkdir -p $out/bin
