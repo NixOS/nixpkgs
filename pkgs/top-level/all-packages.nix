@@ -2760,6 +2760,8 @@ with pkgs;
 
   jucipp = callPackage ../applications/editors/jucipp { };
 
+  jupp = callPackage ../applications/editors/jupp { };
+
   jwhois = callPackage ../tools/networking/jwhois { };
 
   k2pdfopt = callPackage ../applications/misc/k2pdfopt { };
