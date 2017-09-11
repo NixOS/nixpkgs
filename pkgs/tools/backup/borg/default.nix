@@ -22,8 +22,6 @@ python3Packages.buildPythonApplication rec {
     cython msgpack llfuse
   ]);
 
-  doCheck = false;
-
   preConfigure = ''
     export BORG_OPENSSL_PREFIX="${openssl.dev}"
     export BORG_LZ4_PREFIX="${lz4.dev}"
