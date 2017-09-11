@@ -33,44 +33,37 @@ in {
         '';
       };
 
-      collectdBinary = mkOption {
-        description = ''
-          Configure collection via the collectd binary network protocol.
-        '';
-        type = (types.submodule {
-          options = {
-            enable = mkEnableOption "collectd binary protocol receiver";
+      collectdBinary = {
+        enable = mkEnableOption "collectd binary protocol receiver";
 
-            authFile = mkOption {
-              default = null;
-              type = types.nullOr types.path;
-              description = "File mapping user names to pre-shared keys (passwords).";
-            };
+        authFile = mkOption {
+          default = null;
+          type = types.nullOr types.path;
+          description = "File mapping user names to pre-shared keys (passwords).";
+        };
 
-            port = mkOption {
-              type = types.int;
-              default = 25826;
-              description = ''Network address on which to accept collectd binary network packets.'';
-            };
+        port = mkOption {
+          type = types.int;
+          default = 25826;
+          description = ''Network address on which to accept collectd binary network packets.'';
+        };
 
-            listenAddress = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              example = "0.0.0.0";
-              description = ''
-                Address to listen on for binary network packets.
-              '';
-            };
+        listenAddress = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          example = "0.0.0.0";
+          description = ''
+            Address to listen on for binary network packets.
+            '';
+        };
 
-            securityLevel = mkOption {
-              type = types.enum ["None" "Sign" "Encrypt"];
-              default = "None";
-              description = ''
-                Minimum required security level for accepted packets.
-              '';
-            };
-          };
-        });
+        securityLevel = mkOption {
+          type = types.enum ["None" "Sign" "Encrypt"];
+          default = "None";
+          description = ''
+            Minimum required security level for accepted packets.
+            '';
+        };
       };
 
       extraFlags = mkOption {
@@ -109,7 +102,8 @@ in {
   };
 
   config = mkIf cfg.enable {
-    networking.firewall.allowedTCPPorts = (optional cfg.openFirewall cfg.port) ++ (optional (cfg.openFirewall && cfg.collectdBinary.enable) cfg.collectdBinary.port);
+    networking.firewall.allowedTCPPorts = (optional cfg.openFirewall cfg.port) ++
+      (optional (cfg.openFirewall && cfg.collectdBinary.enable) cfg.collectdBinary.port);
 
     systemd.services.prometheus-collectd-exporter = {
       description = "Prometheus exporter for Collectd metrics";
