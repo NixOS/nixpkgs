@@ -7914,18 +7914,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  LogContextual = buildPerlPackage {
-    name = "Log-Contextual-0.006003";
+  LogContextual = buildPerlPackage rec {
+    name = "Log-Contextual-0.007001";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FR/FREW/Log-Contextual-0.006003.tar.gz;
-      sha256 = "0940s910n67arqvz7aji4z6vgzzl52aq3l3jg8vq4ygnkn7c9k21";
+      url = "mirror://cpan/authors/id/F/FR/FREW/${name}.tar.gz";
+      sha256 = "163c46f9cf4ed921356d300925a1c3ec4d7e0d20d1c678ade9ccc24efd990cd6";
     };
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ DataDumperConcise ExporterDeclare Moo ];
     meta = {
+      homepage = https://github.com/frioux/Log-Contextual;
       description = "Simple logging interface with a contextual log";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
     };
   };
