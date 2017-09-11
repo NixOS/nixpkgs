@@ -65,6 +65,7 @@
 , "peerflix-server"
 , "phantomjs"
 , "prettier"
+, "pulp"
 , "react-tools"
 , "s3http"
 , "semver"
