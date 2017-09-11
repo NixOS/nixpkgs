@@ -2655,13 +2655,15 @@ with pkgs;
 
   intecture-cli = callPackage ../tools/admin/intecture/cli.nix { };
 
+  iodine = callPackage ../tools/networking/iodine { };
+
   ioping = callPackage ../tools/system/ioping { };
 
   iops = callPackage ../tools/system/iops { };
 
   ior = callPackage ../tools/system/ior { };
 
-  iodine = callPackage ../tools/networking/iodine { };
+  iouyap = callPackage ../tools/networking/iouyap { };
 
   ip2location = callPackage ../tools/networking/ip2location { };
 
