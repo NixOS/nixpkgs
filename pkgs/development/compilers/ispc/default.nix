@@ -2,11 +2,9 @@
 testedTargets ? ["sse2" "host"] # the default test target is sse4, but that is not supported by all Hydra agents
 }:
 
-# TODO: patch LLVM so Skylake-EX works better (patch included in ispc github) - needed for LLVM 3.9?
-
 stdenv.mkDerivation rec {
-  version = "1.9.1";
-  rev = "v${version}";
+  version = "20170807";
+  rev = "6e0fc2f148e95afad998a7c7f4d7908d29fd8e44";
 
   inherit testedTargets;
 
@@ -16,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "ispc";
     repo = "ispc";
     inherit rev;
-    sha256 = "1wwsyvn44hd5iyi5779l5378x096307slpyl29wrsmfp66796693";
+    sha256 = "17fwnfm8a329lgfhjwcvji4h1fm4iqmc28wz23hvgqbpj8lk6qgh";
   };
 
   # there are missing dependencies in the Makefile, causing sporadic build failures
@@ -60,8 +58,8 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [
-    "CXX=${llvmPackages.clang}/bin/clang++"
-    "CLANG=${llvmPackages.clang}/bin/clang"
+    "CXX=${stdenv.cc}/bin/clang++"
+    "CLANG=${stdenv.cc}/bin/clang"
     "CLANG_INCLUDE=${llvmPackages.clang-unwrapped}/include"
     ];
 

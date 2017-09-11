@@ -35,7 +35,7 @@ let
           ln -s ${cmake} bin/cmake
 
           lldbLibPath=$out/clion-${version}/bin/lldb/lib
-          interp="$(cat $NIX_BINUTILS/nix-support/dynamic-linker)"
+          interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
           ln -s ${ncurses.out}/lib/libncurses.so $lldbLibPath/libtinfo.so.5
 
           patchelf --set-interpreter $interp \

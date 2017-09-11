@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     mkdir $out/bin
     for exe in DraftSight dsHttpApiController dsHttpApiService FxCrashRptApp HelpGuide; do
       echo "Patching $exe..."
-      patchelf --interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
+      patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
                --set-rpath $libPath:\$ORIGIN/../Libraries \
                $out/draftsight/opt/dassault-systemes/DraftSight/Linux/$exe
       makeWrapper $out/draftsight/opt/dassault-systemes/DraftSight/Linux/$exe \

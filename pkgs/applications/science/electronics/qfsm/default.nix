@@ -10,7 +10,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt4 cmake graphviz pkgconfig ];
 
-  patches = [ ./drop-hardcoded-prefix.patch ];
+  patches = [
+    ./drop-hardcoded-prefix.patch
+    ./gcc6-fixes.patch
+  ];
 
   hardeningDisable = [ "format" ];
 

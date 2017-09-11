@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     cp  xflux "$out/bin"
   '';
   postFixup = ''
-    patchelf --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker) --set-rpath "$libPath" "$out/bin/xflux"
+    patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) --set-rpath "$libPath" "$out/bin/xflux"
   '';
   meta = {
     description = "Adjusts your screen to emit warmer light at night";

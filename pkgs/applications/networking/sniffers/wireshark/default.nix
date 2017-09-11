@@ -12,7 +12,7 @@ assert withQt  -> !withGtk && qt5  != null;
 with stdenv.lib;
 
 let
-  version = "2.4.0";
+  version = "2.4.1";
   variant = if withGtk then "gtk" else if withQt then "qt" else "cli";
 
 in stdenv.mkDerivation {
@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
-    sha256 = "011vvrj76z1azkpvyy2j40b1x1z56ymld508zfc4xw3gh8dv82w9";
+    sha256 = "1k8zj44pkb2ny2x46f100y7cxddm1kh0zh7f6qggm78gn7wvrp82";
   };
 
   cmakeFlags = optional withGtk "-DBUILD_wireshark_gtk=TRUE";
@@ -37,19 +37,7 @@ in stdenv.mkDerivation {
     ++ optionals stdenv.isLinux  [ libcap libnl ]
     ++ optionals stdenv.isDarwin [ SystemConfiguration ApplicationServices gmp ];
 
-  patches = [ ./wireshark-lookup-dumpcap-in-path.patch
-
-              # Backported from master. Will probably have to be dropped during next
-              # update.
-              (fetchpatch {
-                 name = "AUTHORS_add_newline_after_bracket";
-                 url = "https://code.wireshark.org/review/gitweb?p=wireshark.git;a=patch;h=27c6b12626d6e7b8e4d7a11784c2c5e2bfb87fde";
-                 sha256 = "1x30rkrq7dzgdlwrjv2r5ibdpdgwnn5wzvki77rdf13b0547vcw3";
-               })
-              # A file is missing from distribution. This should be fixed in upcoming
-              # releases
-              ./add_missing_udpdump_pod.patch
-            ];
+  patches = [ ./wireshark-lookup-dumpcap-in-path.patch ];
 
   postInstall = optionalString (withQt || withGtk) ''
     ${optionalString withGtk ''

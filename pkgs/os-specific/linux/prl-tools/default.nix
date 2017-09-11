@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
 
         for i in $out/bin/* $out/sbin/*; do
           patchelf \
-            --interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
+            --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
             --set-rpath "$out/lib:$libPath" \
             $i
         done

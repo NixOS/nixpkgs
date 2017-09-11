@@ -45,6 +45,9 @@ stdenv.mkDerivation rec {
       substitute $f $out/lib/systemd/user/$(basename $f) \
         --replace /usr/bin $out/bin
     done
+
+    # add gpg2 symlink to make sure git does not break when signing commits
+    ln -s $out/bin/gpg $out/bin/gpg2
   '';
 
   meta = with stdenv.lib; {

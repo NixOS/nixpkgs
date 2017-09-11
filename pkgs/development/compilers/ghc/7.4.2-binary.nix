@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       mkdir -p "$out/lib"
       ln -sv "${ncurses5.out}/lib/libncurses.so" "$out/lib/libncurses${stdenv.lib.optionalString stdenv.is64bit "w"}.so.5"
       find . -type f -perm -0100 \
-          -exec patchelf --interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
+          -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath "${stdenv.lib.makeLibraryPath [ "$out" gmp ]}" {} \;
 
       paxmark m ./ghc-${version}/ghc/stage2/build/tmp/ghc-stage2

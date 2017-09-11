@@ -145,7 +145,9 @@ in {
 
   breathe = callPackage ../development/python-modules/breathe { };
 
-  browsermob-proxy = callPackage ../development/python-modules/browsermob-proxy {};
+  browsermob-proxy = if ! isPy3k then
+    callPackage ../development/python-modules/browsermob-proxy {}
+  else throw "browsermob-proxy is not supported for ${python.executable}";
 
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
 
@@ -259,7 +261,7 @@ in {
     pythonPackages = self;
   };
 
-  pyscard = callPackage ../development/python-modules/pyscard { };
+  pyscard = callPackage ../development/python-modules/pyscard { inherit (pkgs.darwin.apple_sdk.frameworks) PCSC; };
 
   pyside = callPackage ../development/python-modules/pyside { };
 
@@ -1599,6 +1601,13 @@ in {
     };
   };
 
+  caffe = pkgs.caffe.override {
+    python = self.python;
+    boost = self.boost;
+    numpy = self.numpy;
+    pythonSupport = true;
+  };
+
   capstone = buildPythonPackage rec {
     name = "capstone-3.0.4";
     src = pkgs.fetchurl {
@@ -1779,6 +1788,12 @@ in {
   };
 
   cycler = callPackage ../development/python-modules/cycler { };
+
+  dlib = buildPythonPackage rec {
+    inherit (pkgs.dlib) name src nativeBuildInputs meta;
+
+    buildInputs = pkgs.dlib.buildInputs ++ [ self.boost ];
+  };
 
   datadog = buildPythonPackage rec {
     name = "${pname}-${version}";
@@ -4544,6 +4559,8 @@ in {
 
   libtmux = callPackage ../development/python-modules/libtmux { };
 
+  linuxfd = callPackage ../development/python-modules/linuxfd { };
+
   locket = buildPythonPackage rec {
     name = "locket-${version}";
     version = "0.2.0";
@@ -5132,23 +5149,6 @@ in {
       description = "A 'dogpile' lock, typically used as a component of a larger caching solution";
       homepage = http://bitbucket.org/zzzeek/dogpile.core;
       license = licenses.bsd3;
-    };
-  };
-
-  dotfiles = buildPythonPackage rec {
-    name = "dotfiles-0.6.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/dotfiles/${name}.tar.gz";
-      sha256 = "45ecfd7f2ed9d0f2a7ac632c9bd0ebdca758d8bbc2b6f11562579d525f0467b8";
-    };
-
-    doCheck = true;
-
-    meta = {
-      description = "Easily manage your dotfiles";
-      homepage = https://github.com/jbernard/dotfiles;
-      license = licenses.isc;
     };
   };
 
@@ -7121,27 +7121,7 @@ in {
     };
   };
 
-  logfury = buildPythonPackage rec {
-    name = "logfury-${version}";
-    version = "0.1.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/logfury/${name}.tar.gz";
-      sha256 = "1lywirv3d1lw691mc4mfpz7ak6r49klri43bbfgdnvsfppxminj2";
-    };
-
-    buildInputs =
-      [ self.funcsigs
-        self.six
-      ];
-
-    meta = with pkgs.stdenv.lib; {
-      description = "Logfury is for python library maintainers. It allows for responsible, low-boilerplate logging of method calls.";
-      homepage = "https://github.com/ppolewicz/logfury";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ jwiegley ];
-    };
-  };
+  logfury = callPackage ../development/python-modules/logfury { };
 
   ndg-httpsclient = buildPythonPackage rec {
     version = "0.4.2";
@@ -8163,6 +8143,7 @@ in {
 
     buildInputs = with pkgs; [ ssdeep ];
     propagatedBuildInputs = with self; [ cffi six ];
+    meta.broken = true; # Tests fail, and no reverse-dependencies anyway
   };
 
 
@@ -10209,14 +10190,14 @@ in {
 
   glances = buildPythonPackage rec {
     name = "glances-${version}";
-    version = "2.11";
+    version = "2.11.1";
     disabled = isPyPy;
 
     src = pkgs.fetchFromGitHub {
       owner = "nicolargo";
       repo = "glances";
       rev = "v${version}";
-      sha256 = "01vnrr37jbpzrz6w670l3g3bv60xl50w41rn1dl99wp2fr460ndn";
+      sha256 = "1n3x0bkydlqmxdr0wdgfgichp8fyldzkaijj618y5ns2k5qiwsxr";
     };
 
     doCheck = false;
@@ -10232,7 +10213,7 @@ in {
       homepage = "https://nicolargo.github.io/glances/";
       description = "Cross-platform curses-based monitoring tool";
       license = licenses.lgpl3;
-      maintainers = with maintainers; [ koral ];
+      maintainers = with maintainers; [ primeos koral ];
     };
   };
 
@@ -15202,7 +15183,7 @@ in {
     };
 
     propagatedBuildInputs = with self; [
-      pbr argparse six webob
+      pbr six webob
     ];
     buildInputs = with self; [
       oslosphinx coverage mock subunit testrepository testtools
@@ -15210,6 +15191,7 @@ in {
 
     patchPhase = ''
       sed -i 's@python@${python.interpreter}@' .testr.conf
+      substituteInPlace requirements.txt --replace "argparse" ""
     '';
   };
 
@@ -15919,22 +15901,7 @@ in {
 
   pbr = callPackage ../development/python-modules/pbr { };
 
-  fixtures = buildPythonPackage rec {
-    name = "fixtures-1.4.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/fixtures/${name}.tar.gz";
-      sha256 = "0djxvdwm8s60dbfn7bhf40x6g818p3b3mlwijm1c3bqg7msn271y";
-    };
-
-    buildInputs = with self; [ pbr testtools mock ];
-
-    meta = {
-      description = "Reusable state for writing clean tests and more";
-      homepage = "https://pypi.python.org/pypi/fixtures";
-      license = licenses.asl20;
-    };
-  };
+  fixtures = callPackage ../development/python-modules/fixtures { };
 
   pelican = callPackage ../development/python-modules/pelican {
     inherit (pkgs) glibcLocales pandoc git;
@@ -16988,7 +16955,7 @@ in {
     preConfigure = ''
       substituteInPlace setup.py \
         --replace '"/usr/include"' '"${pkgs.gdb}/include"' \
-        --replace '"/usr/lib"' '"${pkgs.binutils}/lib"'
+        --replace '"/usr/lib"' '"${pkgs.binutils.lib}/lib"'
     '';
 
     meta = {
@@ -16996,7 +16963,6 @@ in {
       description = "A Python interface to the GNU Binary File Descriptor (BFD) library";
       license = licenses.gpl2;
       platforms = platforms.linux;
-      broken = true; # Needs binutils libraries, which output?
     };
   };
 
@@ -18234,17 +18200,8 @@ in {
     '';
   });
 
-  python_simple_hipchat = buildPythonPackage rec {
-    name = "python-simple-hipchat-${version}";
-    version = "0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-simple-hipchat/python-simple-hipchat-${version}.zip";
-      sha256 = "404e5ff7187abb09c2227f22063d06baf0fd525725e9c9ad280176bed1c94a3f";
-    };
-
-    buildInputs = [ pkgs.unzip ];
-  };
+  python-simple-hipchat = callPackage ../development/python-modules/python-simple-hipchat {};
+  python_simple_hipchat = self.python-simple-hipchat;
 
   python_keyczar = buildPythonPackage rec {
     name = "python-keyczar-0.71c";
@@ -19498,31 +19455,7 @@ in {
   };
 
 
-  restview = buildPythonPackage rec {
-    name = "restview-${version}";
-    version = "2.5.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/restview/${name}.tar.gz";
-      sha256 = "0gmdmnlhiy6lagi17maiz312374hk6g6x90fhjwnbrwxif4r9bd5";
-    };
-
-    propagatedBuildInputs = with self; [ docutils readme pygments ];
-    buildInputs = with self; [ mock ];
-
-    patchPhase = ''
-      # dict order breaking tests
-      sed -i 's@<a href="http://www.example.com" rel="nofollow">@...@' src/restview/tests.py
-    '';
-
-    meta = {
-      description = "ReStructuredText viewer";
-      homepage = http://mg.pov.lt/restview/;
-      license = licenses.gpl2;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ koral ];
-    };
-  };
+  restview = callPackage ../development/python-modules/restview { };
 
   readme = buildPythonPackage rec {
     name = "readme-${version}";
@@ -19550,6 +19483,8 @@ in {
       homepage = "https://github.com/pypa/readme";
     };
   };
+
+  readme_renderer = callPackage ../development/python-modules/readme_renderer { };
 
   rjsmin = callPackage ../development/python-modules/rjsmin { };
 
@@ -19637,27 +19572,7 @@ in {
     };
   };
 
-  django-multiselectfield = buildPythonPackage rec {
-    name = "django-multiselectfield-${version}";
-    version = "0.1.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-multiselectfield/django-multiselectfield-${version}.tar.gz";
-      sha256 = "0v7wf82f8688srdsym9ajv1j54bxfxwvydypc03f8xyl4c1raziv";
-    };
-
-    propagatedBuildInputs = with self; [
-
-    ];
-    buildInputs = with self; [
-
-    ];
-
-    meta = with stdenv.lib; {
-      description = "django-multiselectfield";
-      homepage = "https://github.com/goinnn/django-multiselectfield";
-    };
-  };
+  django-multiselectfield = callPackage ../development/python-modules/django-multiselectfield { };
 
   reviewboard = buildPythonPackage rec {
     name = "ReviewBoard-2.5.1.1";
@@ -24728,11 +24643,15 @@ EOF
     };
 
     # Fix the USB backend library lookup
-    postPatch = ''
-      libusb=${pkgs.libusb1.out}/lib/libusb-1.0.so
-      test -f $libusb || { echo "ERROR: $libusb doesn't exist, please update/fix this build expression."; exit 1; }
-      sed -i -e "s|find_library=None|find_library=lambda _:\"$libusb\"|" usb/backend/libusb1.py
-    '';
+    postPatch =
+      let
+        # This should really be in the stdenv somewhere
+        soext = if stdenv.isLinux then "so" else if stdenv.isDarwin then "dylib" else throw "Unsupported platform";
+      in ''
+        libusb=${pkgs.libusb1.out}/lib/libusb-1.0.${soext}
+        test -f $libusb || { echo "ERROR: $libusb doesn't exist, please update/fix this build expression."; exit 1; }
+        sed -i -e "s|find_library=None|find_library=lambda _:\"$libusb\"|" usb/backend/libusb1.py
+      '';
 
     propagatedBuildInputs = [ pkgs.libusb ];
 
@@ -25019,7 +24938,7 @@ EOF
     buildInputs = with self; [ nose mock ];
     propagatedBuildInputs = with self; [
       jinja2 pyyaml redis requests pagerduty
-      python_simple_hipchat pushbullet
+      python-simple-hipchat pushbullet
     ];
 
     patchPhase = "> requirements.txt";
@@ -25883,10 +25802,14 @@ EOF
       sha256 = "99ab03bffdb30d9ec98724898f428f8e73129483417d5892799a0f0d2249f233";
     };
 
+    patchPhase = ''
+      substituteInPlace setup.py --replace '"argparse",' ""
+    '';
+
     # ImportError: No module named tests
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ ofxhome ofxparse beautifulsoup keyring argparse ];
+    propagatedBuildInputs = with self; [ ofxhome ofxparse beautifulsoup keyring ];
   };
 
   ofxhome = buildPythonPackage rec {
@@ -27772,21 +27695,7 @@ EOF
   # We need "normal" libxml2 and not the python package by the same name.
   pywbem = callPackage ../development/python-modules/pywbem { libxml2 = pkgs.libxml2; };
 
-  unicorn = buildPythonPackage rec {
-    name  = "unicorn-${version}";
-    version = "1.0.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/u/unicorn/${name}.tar.gz";
-      sha256 = "0a5b4vh734b3wfkgapzzf8x18rimpmzvwwkly56da84n27wfw9bg";
-    };
-    setupPyBuildFlags = [ "--plat-name" "linux" ];
-    meta = with pkgs.stdenv.lib; {
-      description = "Unicorn CPU emulator engine";
-      homepage = "http://www.unicorn-engine.org/";
-      license = [ licenses.gpl2 ];
-      maintainers = [ maintainers.bennofs ];
-    };
-  };
+  unicorn = callPackage ../development/python-modules/unicorn { };
 
   intervaltree = callPackage ../development/python-modules/intervaltree { };
 

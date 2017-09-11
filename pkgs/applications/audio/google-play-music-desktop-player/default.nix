@@ -61,7 +61,7 @@ stdenv.mkDerivation {
     cp -r ./usr/share $out
     cp -r ./usr/bin $out
 
-    patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
              "$out/share/google-play-music-desktop-player/Google Play Music Desktop Player"
 
     wrapProgram $out/bin/google-play-music-desktop-player \

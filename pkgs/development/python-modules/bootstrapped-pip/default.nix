@@ -9,16 +9,16 @@ let
   };
   setuptools_source = fetchPypi {
     pname = "setuptools";
-    version = "36.0.1";
+    version = "36.4.0";
     format = "wheel";
-    sha256 = "f2900e560efc479938a219433c48f15a4ff4ecfe575a65de385eeb44f2425587";
+    sha256 = "4d54c0bfee283e78609169213f9c075827d5837086f58b588b417b093c23464b";
   };
 
   # TODO: Shouldn't be necessary anymore for pip > 9.0.1!
   # https://github.com/NixOS/nixpkgs/issues/26392
   # https://github.com/pypa/setuptools/issues/885
   pkg_resources = fetchurl {
-    url = https://raw.githubusercontent.com/pypa/setuptools/v36.0.1/pkg_resources/__init__.py;
+    url = "https://raw.githubusercontent.com/pypa/setuptools/v36.4.0/pkg_resources/__init__.py";
     sha256 = "1wdnq3mammk75mifkdmmjx7yhnpydvnvi804na8ym4mj934l2jkv";
   };
 

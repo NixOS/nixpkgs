@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   fixupPhase = ''
     patchInterpreter() {
-      patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         "$out/libexec/genymotion/$1"
     }
 

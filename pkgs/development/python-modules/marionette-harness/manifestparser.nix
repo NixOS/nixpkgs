@@ -2,12 +2,15 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "manifestparser";
   version = "1.1";
   name = "${pname}-${version}";
+
+  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;

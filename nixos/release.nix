@@ -239,7 +239,7 @@ in rec {
   tests.etcd = hydraJob (import tests/etcd.nix { system = "x86_64-linux"; });
   tests.ec2-nixops = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-nixops;
   tests.ec2-config = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-config;
-  tests.elk = callTest tests/elk.nix {};
+  tests.elk = hydraJob (import tests/elk.nix { system = "x86_64-linux"; });
   tests.ferm = callTest tests/ferm.nix {};
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};
@@ -312,6 +312,7 @@ in rec {
   tests.virtualbox = callSubTests tests/virtualbox.nix { system = "x86_64-linux"; };
   tests.wordpress = callTest tests/wordpress.nix {};
   tests.xfce = callTest tests/xfce.nix {};
+  tests.xmonad = callTest tests/xmonad.nix {};
 
 
   /* Build a bunch of typical closures so that Hydra can keep track of

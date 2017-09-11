@@ -261,7 +261,7 @@ in
             "freenode" = {
               server = "chat.freenode.net";
               port = 6697;
-              ssl = true;
+              useSSL = true;
               modules = [ "simple_away" ];
             };
           };
@@ -273,6 +273,14 @@ in
           type = types.string;
           description = ''
             The IRC nick.
+          '';
+        };
+
+        openFirewall = mkOption {
+          type = types.bool;
+          default = false;
+          description = ''
+            Whether to open ports in the firewall for ZNC.
           '';
         };
 
@@ -349,6 +357,10 @@ in
   ###### Implementation
 
   config = mkIf cfg.enable {
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.port ];
+    };
 
     systemd.services.znc = {
       description = "ZNC Server";

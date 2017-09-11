@@ -67,7 +67,7 @@ let
       postFixup = ''
         for f in $out/lib/haxe/${withCommas libname}/${withCommas version}/{,project/libs/nekoapi/}bin/Linux{,64}/*; do
           chmod +w "$f"
-          patchelf --set-interpreter $(cat $NIX_BINUTILS/nix-support/dynamic-linker)   "$f" || true
+          patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker)   "$f" || true
           patchelf --set-rpath ${ stdenv.lib.makeLibraryPath [ stdenv.cc.cc ] }  "$f" || true
         done
       '';

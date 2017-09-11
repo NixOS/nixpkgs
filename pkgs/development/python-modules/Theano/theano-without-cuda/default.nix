@@ -31,7 +31,7 @@ buildPythonPackage rec {
   # the fix for which hasn't been merged yet.
 
   # keep Nose around since running the tests by hand is possible from Python or bash
-  propagatedBuildInputs = [ stdenv nose numpy numpy.blas pydot_ng scipy six ];
+  propagatedBuildInputs = [ nose numpy numpy.blas pydot_ng scipy six ];
 
   meta = {
     homepage = http://deeplearning.net/software/theano/;

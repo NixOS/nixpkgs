@@ -59,7 +59,7 @@ in stdenv.mkDerivation {
 
     while IFS= read -r -d ''$'\0' i; do
       if isELF "$i"; then
-        bin=`patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" "$i"; echo $?`
+        bin=`patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" "$i"; echo $?`
         patchelf --set-rpath "${stdenv.lib.makeLibraryPath deps}" "$i"
         if [ "$bin" -eq 0 ]; then
           wrapProgram "$i" \

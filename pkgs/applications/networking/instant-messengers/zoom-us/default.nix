@@ -65,10 +65,10 @@ in stdenv.mkDerivation {
     mkdir -p $out/bin
     cp -ar * $packagePath
 
-    patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)"  $packagePath/zoom
-    patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)"  $packagePath/QtWebEngineProcess
-    patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)"  $packagePath/qtdiag
-    patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)"  $packagePath/zopen
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)"  $packagePath/zoom
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)"  $packagePath/QtWebEngineProcess
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)"  $packagePath/qtdiag
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)"  $packagePath/zopen
     # included from https://github.com/NixOS/nixpkgs/commit/fc218766333a05c9352b386e0cbb16e1ae84bf53
     # it works for me without it, but, well...
     paxmark m $packagePath/zoom

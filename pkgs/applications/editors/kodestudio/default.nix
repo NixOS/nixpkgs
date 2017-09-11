@@ -50,31 +50,31 @@ in
     postFixup = lib.optionalString (stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux") ''
       # Patch Binaries
       patchelf \
-          --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
+          --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath "$out:${atomEnv.libPath}" \
           $out/kodestudio
       patchelf \
-          --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
+          --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath ".:${stdenv.cc.libc}/lib:${xorg.libXinerama}/lib:${xorg.libX11}/lib:${alsaLib}/lib:${mesa}/lib:${openssl.out}/lib" \
           $out/resources/app/extensions/krom/Krom/linux/Krom
       patchelf \
-          --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
+          --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath ".:${stdenv.cc.libc}/lib" \
           $out/resources/app/extensions/kha/Kha/Kore/Tools/krafix/krafix-linux64
       patchelf \
-          --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
+          --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath ".:${stdenv.cc.libc}/lib" \
           $out/resources/app/extensions/kha/Kha/Kore/Tools/kraffiti/kraffiti-linux64
       patchelf \
-          --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
+          --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath ".:${stdenv.cc.libc}/lib:${stdenv.cc.cc.lib}/lib" \
           $out/resources/app/extensions/kha/Kha/Tools/kravur/kravur-linux64
       patchelf \
-          --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
+          --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath ".:${stdenv.cc.libc}/lib:${zlib}/lib" \
           $out/resources/app/extensions/kha/Kha/Tools/haxe/haxe-linux64
       patchelf \
-          --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
+          --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath ".:${stdenv.cc.libc}/lib:${libvorbis}/lib:${libogg}/lib:${flac.out}/lib" \
           $out/resources/app/extensions/kha/Kha/Tools/oggenc/oggenc-linux64
 
