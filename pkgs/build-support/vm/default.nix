@@ -1689,7 +1689,7 @@ rec {
           })
           (fetchurl {
             url = mirror://ubuntu/dists/trusty-updates/main/binary-amd64/Packages.bz2;
-            sha256 = "0hrrcx9kqszla5qkd31gjm87b7hnvjin9vvpga2skb9wl3h7ys2f";
+            sha256 = "03vd582p8b78s8sq6hz3nynn9vr7syccmn77i5mzayvsadb74cfy";
           })
         ];
       urlPrefix = mirror://ubuntu;
