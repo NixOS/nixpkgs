@@ -16,6 +16,9 @@ stdenv.mkDerivation rec {
       sha256 = "076dyc52swk8qc7ylps53fg6iqmd52x8s7m18i80x49dd109yw20";
     })
     ./gcc-4.8.patch # taken from FC-17 source rpm
+    # see https://bitbucket.org/Coin3D/coin/issues/128/crash-in-cc_memalloc_deallocate
+    # patch adapted from https://bitbucket.org/Coin3D/coin/pull-requests/75/added-fix-for-issue-128-provided-by-fedora/diff
+    ./sbhashentry.patch
   ];
 
   buildInputs = [ mesa ];

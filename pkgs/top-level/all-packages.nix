@@ -738,9 +738,7 @@ with pkgs;
 
   bubblewrap = callPackage ../tools/admin/bubblewrap { };
 
-  borgbackup = callPackage ../tools/backup/borg {
-    python3Packages = python34Packages;
-  };
+  borgbackup = callPackage ../tools/backup/borg { };
 
   boomerang = callPackage ../development/tools/boomerang { };
 
@@ -1027,9 +1025,7 @@ with pkgs;
 
   fastJson = callPackage ../development/libraries/fastjson { };
 
-  fast-cli = nodePackages.fast-cli.overrideDerivation (old: {
-    buildInputs = old.buildInputs ++ [phantomjs2];
-  });
+  fast-cli = nodePackages.fast-cli;
 
   fd = callPackage ../tools/misc/fd { };
 
@@ -1075,7 +1071,9 @@ with pkgs;
 
   glock = callPackage ../development/tools/glock { };
 
-  glslviewer = callPackage ../development/tools/glslviewer { };
+  glslviewer = callPackage ../development/tools/glslviewer {
+    inherit (darwin.apple_sdk.frameworks) Cocoa;
+  };
 
   gmic = callPackage ../tools/graphics/gmic { };
 
@@ -2048,7 +2046,9 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  fox_1_6 = callPackage ../development/libraries/fox/fox-1.6.nix { };
+  fox_1_6 = callPackage ../development/libraries/fox/fox-1.6.nix {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   fping = callPackage ../tools/networking/fping {};
 
@@ -2653,13 +2653,15 @@ with pkgs;
 
   intecture-cli = callPackage ../tools/admin/intecture/cli.nix { };
 
+  iodine = callPackage ../tools/networking/iodine { };
+
   ioping = callPackage ../tools/system/ioping { };
 
   iops = callPackage ../tools/system/iops { };
 
   ior = callPackage ../tools/system/ior { };
 
-  iodine = callPackage ../tools/networking/iodine { };
+  iouyap = callPackage ../tools/networking/iouyap { };
 
   ip2location = callPackage ../tools/networking/ip2location { };
 
@@ -2757,6 +2759,8 @@ with pkgs;
   jsduck = callPackage ../development/tools/jsduck { };
 
   jucipp = callPackage ../applications/editors/jucipp { };
+
+  jupp = callPackage ../applications/editors/jupp { };
 
   jwhois = callPackage ../tools/networking/jwhois { };
 
@@ -8522,7 +8526,8 @@ with pkgs;
   isocodes = callPackage ../development/libraries/iso-codes { };
 
   ispc = callPackage ../development/compilers/ispc {
-    llvmPackages = llvmPackages_39;
+    llvmPackages = llvmPackages_4;
+    stdenv = llvmPackages_4.stdenv;
   };
 
   itk = callPackage ../development/libraries/itk { };
@@ -9687,7 +9692,9 @@ with pkgs;
 
   libmpc = callPackage ../development/libraries/libmpc { };
 
-  mpich2 = callPackage ../development/libraries/mpich2 { };
+  mpich2 = callPackage ../development/libraries/mpich2 {
+    gfortran = gfortran5;
+  };
 
   mstpd = callPackage ../os-specific/linux/mstpd { };
 
@@ -10638,18 +10645,12 @@ with pkgs;
   v8_3_16_14 = callPackage ../development/libraries/v8/3.16.14.nix {
     inherit (python2Packages) python gyp;
     cctools = darwin.cctools;
+    stdenv = overrideCC stdenv gcc5;
   };
 
   v8_3_24_10 = callPackage ../development/libraries/v8/3.24.10.nix {
     inherit (python2Packages) python gyp;
-  };
-
-  v8_3_30_33 = callPackage ../development/libraries/v8/3.30.33.nix {
-    inherit (python2Packages) python gyp;
-  };
-
-  v8_4_5 = callPackage ../development/libraries/v8/4.5.nix {
-    inherit (python2Packages) python gyp;
+    stdenv = overrideCC stdenv gcc5;
   };
 
   v8 = callPackage ../development/libraries/v8 {
@@ -13910,6 +13911,8 @@ with pkgs;
     patches = config.dwm.patches or [];
   };
 
+  dynamips = callPackage ../applications/virtualization/dynamips { };
+
   evilwm = callPackage ../applications/window-managers/evilwm {
     patches = config.evilwm.patches or [];
   };
@@ -14564,6 +14567,8 @@ with pkgs;
   manul = callPackage ../development/tools/manul { };
 
   mi2ly = callPackage ../applications/audio/mi2ly {};
+
+  moe =  callPackage ../applications/editors/moe { };
 
   praat = callPackage ../applications/audio/praat { };
 
@@ -16227,6 +16232,7 @@ with pkgs;
 
   snapper = callPackage ../tools/misc/snapper {
     btrfs-progs = btrfs-progs_4_4_1;
+    stdenv = overrideCC stdenv gcc5;
   };
 
   snd = callPackage ../applications/audio/snd { };
@@ -16641,6 +16647,8 @@ with pkgs;
       then pkgsi686Linux.virtualglLib
       else null;
   };
+
+  vpcs = callPackage ../applications/virtualization/vpcs { };
 
   primusLib = callPackage ../tools/X11/primus/lib.nix {
     nvidia_x11 = linuxPackages.nvidia_x11.override { libsOnly = true; };
@@ -18806,9 +18814,7 @@ with pkgs;
 
   mongoc = callPackage ../development/libraries/mongoc { };
 
-  mupen64plus = callPackage ../misc/emulators/mupen64plus {
-    stdenv = overrideCC stdenv gcc49;
-  };
+  mupen64plus = callPackage ../misc/emulators/mupen64plus { };
 
   mynewt-newt = callPackage ../tools/package-management/mynewt-newt { };
 
@@ -19369,6 +19375,11 @@ with pkgs;
 
   # `recurseIntoAttrs` for sake of hydra, not nix-env
   tests = recurseIntoAttrs {
+    cc-wrapper = callPackage ../test/cc-wrapper { };
+    cc-wrapper-clang = callPackage ../test/cc-wrapper { stdenv = clangStdenv; };
+    cc-wrapper-libcxx = callPackage ../test/cc-wrapper { stdenv = libcxxStdenv; };
+    stdenv-inputs = callPackage ../test/stdenv-inputs { };
+
     macOSSierraShared = callPackage ../test/macos-sierra-shared {};
   };
 }

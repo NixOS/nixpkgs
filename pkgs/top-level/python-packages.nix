@@ -8023,6 +8023,7 @@ in {
 
     buildInputs = with pkgs; [ ssdeep ];
     propagatedBuildInputs = with self; [ cffi six ];
+    meta.broken = true; # Tests fail, and no reverse-dependencies anyway
   };
 
 
@@ -17822,17 +17823,8 @@ in {
     '';
   });
 
-  python_simple_hipchat = buildPythonPackage rec {
-    name = "python-simple-hipchat-${version}";
-    version = "0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-simple-hipchat/python-simple-hipchat-${version}.zip";
-      sha256 = "404e5ff7187abb09c2227f22063d06baf0fd525725e9c9ad280176bed1c94a3f";
-    };
-
-    buildInputs = [ pkgs.unzip ];
-  };
+  python-simple-hipchat = callPackage ../development/python-modules/python-simple-hipchat {};
+  python_simple_hipchat = self.python-simple-hipchat;
 
   python_keyczar = buildPythonPackage rec {
     name = "python-keyczar-0.71c";
@@ -18724,6 +18716,8 @@ in {
       url = "mirror://pypi/r/recaptcha-client/${name}.tar.gz";
       sha256 = "28c6853c1d13d365b7dc71a6b05e5ffb56471f70a850de318af50d3d7c0dea2f";
     };
+
+    disabled = isPy35 || isPy36;
 
     meta = {
       description = "A CAPTCHA for Python using the reCAPTCHA service";
@@ -24530,7 +24524,7 @@ EOF
     buildInputs = with self; [ nose mock ];
     propagatedBuildInputs = with self; [
       jinja2 pyyaml redis requests pagerduty
-      python_simple_hipchat pushbullet
+      python-simple-hipchat pushbullet
     ];
 
     patchPhase = "> requirements.txt";
@@ -27232,21 +27226,7 @@ EOF
   # We need "normal" libxml2 and not the python package by the same name.
   pywbem = callPackage ../development/python-modules/pywbem { libxml2 = pkgs.libxml2; };
 
-  unicorn = buildPythonPackage rec {
-    name  = "unicorn-${version}";
-    version = "1.0.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/u/unicorn/${name}.tar.gz";
-      sha256 = "0a5b4vh734b3wfkgapzzf8x18rimpmzvwwkly56da84n27wfw9bg";
-    };
-    setupPyBuildFlags = [ "--plat-name" "linux" ];
-    meta = with pkgs.stdenv.lib; {
-      description = "Unicorn CPU emulator engine";
-      homepage = "http://www.unicorn-engine.org/";
-      license = [ licenses.gpl2 ];
-      maintainers = [ maintainers.bennofs ];
-    };
-  };
+  unicorn = callPackage ../development/python-modules/unicorn { };
 
   intervaltree = callPackage ../development/python-modules/intervaltree { };
 

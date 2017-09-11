@@ -117,7 +117,9 @@ rec {
     '';
   });
 
-  buildStrictly = pkg: buildFromSdist (appendConfigureFlag pkg "--ghc-option=-Wall --ghc-option=-Werror");
+  buildStrictly = pkg: buildFromSdist (failOnAllWarnings pkg);
+
+  failOnAllWarnings = drv: appendConfigureFlag drv "--ghc-option=-Wall --ghc-option=-Werror";
 
   checkUnusedPackages =
     { ignoreEmptyImports ? false

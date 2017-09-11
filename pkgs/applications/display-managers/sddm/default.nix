@@ -5,13 +5,7 @@
 
 let
 
-  version = "0.14.0";
-
-  /* Fix display of user avatars. */
-  patchFixUserAvatars = fetchpatch {
-    url = https://github.com/sddm/sddm/commit/ecb903e48822bd90650bdd64fe80754e3e9664cb.patch;
-    sha256 = "0zm88944pwdad8grmv0xwnxl23xml85ryc71x2xac233jxdyx6ms";
-  };
+  version = "0.15.0";
 
 in mkDerivation rec {
   name = "sddm-${version}";
@@ -20,12 +14,11 @@ in mkDerivation rec {
     owner = "sddm";
     repo = "sddm";
     rev = "v${version}";
-    sha256 = "0wwid23kw0725zpw67zchalg9mmharr7sn4yzhijq7wqpsczjfxj";
+    sha256 = "1wissgl7wd7fblq8ghz8n2fr6wqip7h88p9fiarfpvi1918fgng8";
   };
 
   patches =
-    copyPathsToStore (lib.readPathsFromFile ./. ./series)
-    ++ [ patchFixUserAvatars ];
+    copyPathsToStore (lib.readPathsFromFile ./. ./series);
 
   postPatch =
     # Module Qt5::Test must be included in `find_package` before it is used.
