@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ qtbase qtwebkit qtkeychain sqlite ]
     ++ stdenv.lib.optional stdenv.isLinux inotify-tools;
 
+  enableParallelBuilding = true;
+
   dontUseCmakeBuildDir = true;
 
   cmakeDir = "client";
