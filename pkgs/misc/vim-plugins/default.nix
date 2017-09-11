@@ -473,6 +473,17 @@ rec {
 
   };
 
+  flake8-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "flake8-vim-2017-02-17";
+    src = fetchgit {
+      url = "https://github.com/andviro/flake8-vim";
+      rev = "01c4af4c68f33b2b3785314bfbf5b3d8d1451795";
+      sha256 = "14rv0p1vx4njlplkc72gz7r8sy9vc6n8x9l00zc777x5zzrhgz3g";
+    };
+    dependencies = [];
+
+  };
+
   vim-css-color = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-css-color-2017-02-09";
     src = fetchgit {
