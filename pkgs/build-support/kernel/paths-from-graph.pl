@@ -70,7 +70,8 @@ elsif ($ENV{"printRegistration"} eq "1") {
     # --hash-given' / `nix-store --load-db'.
     foreach my $storePath (sort (keys %storePaths)) {
         print "$storePath\n";
-        print "0000000000000000000000000000000000000000000000000000000000000000\n"; # !!! fix
+        my $nixHash = "nix-hash --type sha256 " . $storePath;
+        print `$nixHash`;
         print "0\n"; # !!! fix	
         print "\n"; # don't care about preserving the deriver
         print scalar(@{$refs{$storePath}}), "\n";
