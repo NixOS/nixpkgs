@@ -11973,6 +11973,7 @@ let self = _self // overrides; _self = with self; {
       description = "Networking constants and support functions";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    doCheck = false;
   };
 
   Socket6 = buildPerlPackage rec {
