@@ -435,6 +435,7 @@ in {
     meta = {
       homepage = https://github.com/pazz/alot;
       description = "Terminal MUA using notmuch mail";
+      platforms = platforms.linux;
       maintainers = with maintainers; [ garbas profpatsch ];
     };
   };
