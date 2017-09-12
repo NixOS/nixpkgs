@@ -1,8 +1,5 @@
 { stdenv, fetchurl }:
 
-let
-  SHLIB_EXT = if stdenv.isDarwin then "dylib" else "so";
-in
 stdenv.mkDerivation {
   name = "tbb-4.4-u2";
 
@@ -16,7 +13,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/{lib,share/doc}
-    cp "build/"*release*"/"*${SHLIB_EXT}* $out/lib/
+    cp "build/"*release*"/"*${stdenv.hostPlatform.extensions.sharedLibrary}* $out/lib/
     mv include $out/
     rm $out/include/index.html
     mv doc/html $out/share/doc/tbb
