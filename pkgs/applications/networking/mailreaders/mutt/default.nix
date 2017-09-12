@@ -3,12 +3,14 @@
 , openssl ? null
 , cyrus_sasl ? null
 , gpgme ? null
+, kerberos ? null
 , headerCache  ? true
 , sslSupport   ? true
 , saslSupport  ? true
 , gpgmeSupport ? true
 , imapSupport  ? true
 , withSidebar  ? true
+, gssSupport   ? true
 }:
 
 assert headerCache  -> gdbm       != null;
@@ -20,11 +22,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "mutt-${version}";
-  version = "1.8.3";
+  version = "1.9.0";
 
   src = fetchurl {
     url = "http://ftp.mutt.org/pub/mutt/${name}.tar.gz";
-    sha256 = "0hpd896mw630sd6ps60hpka8cg691nvr627n8kmabv7zcxnp90cv";
+    sha256 = "1m72z5schbagd0a00fv8q0nrnkz9zrgvmdb5yplnmwm1sfapavgc";
   };
 
   patchPhase = optionalString (openssl != null) ''
@@ -35,6 +37,7 @@ stdenv.mkDerivation rec {
     [ ncurses which perl ]
     ++ optional headerCache  gdbm
     ++ optional sslSupport   openssl
+    ++ optional gssSupport   kerberos
     ++ optional saslSupport  cyrus_sasl
     ++ optional gpgmeSupport gpgme;
 
@@ -58,6 +61,7 @@ stdenv.mkDerivation rec {
     # I set the value 'mailbox' because it is a default in the configure script
     "--with-homespool=mailbox"
   ] ++ optional sslSupport  "--with-ssl"
+    ++ optional gssSupport  "--with-gss"
     ++ optional saslSupport "--with-sasl";
 
   meta = {

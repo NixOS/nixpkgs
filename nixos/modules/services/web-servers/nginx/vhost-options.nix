@@ -96,8 +96,9 @@ with lib;
       default = false;
       description = ''
         Whether to add a separate nginx server block that permanently redirects (301)
-        all plain HTTP traffic to HTTPS. This option needs <literal>addSSL</literal>
-        to be set to true.
+        all plain HTTP traffic to HTTPS. This will set defaults for
+        <literal>listen</literal> to listen on all interfaces on the respective default
+        ports (80, 443), where the non-SSL listens are used for the redirect vhosts.
       '';
     };
 

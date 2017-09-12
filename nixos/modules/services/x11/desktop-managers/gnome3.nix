@@ -186,7 +186,8 @@ in {
     networking.networkmanager.basePackages =
       { inherit (pkgs) networkmanager modemmanager wpa_supplicant;
         inherit (gnome3) networkmanager_openvpn networkmanager_vpnc
-                         networkmanager_openconnect networkmanager_fortisslvpn networkmanager_pptp
+                         networkmanager_openconnect networkmanager_fortisslvpn
+                         networkmanager_pptp networkmanager_iodine
                          networkmanager_l2tp; };
 
     # Needed for themes and backgrounds

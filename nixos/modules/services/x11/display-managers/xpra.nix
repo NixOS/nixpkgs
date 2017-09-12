@@ -34,6 +34,12 @@ in
       };
 
       pulseaudio = mkEnableOption "pulseaudio audio streaming.";
+
+      extraOptions = mkOption {
+        description = "Extra xpra options";
+        default = [];
+        type = types.listOf types.str;
+      };
     };
   };
 
@@ -233,7 +239,8 @@ in
           --socket-dirs=/var/run/xpra \
           --xvfb="xpra_Xdummy ${concatStringsSep " " dmcfg.xserverArgs}" \
           ${optionalString (cfg.bindTcp != null) "--bind-tcp=${cfg.bindTcp}"} \
-          --auth=${cfg.auth}
+          --auth=${cfg.auth} \
+          ${concatStringsSep " " cfg.extraOptions}
       '';
     };
 

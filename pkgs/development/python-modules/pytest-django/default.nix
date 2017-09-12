@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchurl
+{ stdenv, buildPythonPackage, fetchPypi
 , pytest, django, setuptools_scm
 , fetchpatch
 }:
@@ -7,8 +7,8 @@ buildPythonPackage rec {
   name = "${pname}-${version}";
   version = "3.1.2";
 
-  src = fetchurl {
-    url = "mirror://pypi/p/pytest-django/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "02932m2sr8x22m4az8syr8g835g4ak77varrnw71n6xakmdcr303";
   };
 

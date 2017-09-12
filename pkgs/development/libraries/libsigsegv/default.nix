@@ -1,5 +1,6 @@
 { stdenv, fetchurl
 , buildPlatform, hostPlatform
+, enableSigbusFix ? false # required by kernels < 3.18.6
 }:
 
 stdenv.mkDerivation rec {
@@ -9,6 +10,8 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/libsigsegv/${name}.tar.gz";
     sha256 = "063swdvq7mbmc1clv0rnh20grwln1zfc2qnm0sa1hivcxyr2wz6x";
   };
+
+  patches = if enableSigbusFix then [ ./sigbus_fix.patch ] else null;
 
   doCheck = hostPlatform == buildPlatform;
 

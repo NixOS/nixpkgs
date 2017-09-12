@@ -14,10 +14,6 @@ if [ -z "${NIX_CC_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
 
-if [ -n "$NIX_LD_WRAPPER_@infixSalt@_START_HOOK" ]; then
-    source "$NIX_LD_WRAPPER_@infixSalt@_START_HOOK"
-fi
-
 source @out@/nix-support/utils.sh
 
 
@@ -65,7 +61,7 @@ if [ -z "${NIX_@infixSalt@_LDFLAGS_SET:-}" ]; then
     extraBefore+=($NIX_@infixSalt@_LDFLAGS_BEFORE)
 fi
 
-extraAfter+=($NIX_@infixSalt@_LDFLAGS_AFTER $NIX_@infixSalt@_LDFLAGS_HARDEN)
+extraAfter+=($NIX_@infixSalt@_LDFLAGS_AFTER)
 
 declare -a libDirs
 declare -A libs
@@ -121,7 +117,7 @@ if [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ]; then
     # It's important to add the rpath in the order of -L..., so
     # the link time chosen objects will be those of runtime linking.
     declare -A rpaths
-    for dir in "${libDirs[@]}"; do
+    for dir in ${libDirs+"${libDirs[@]}"}; do
         if [[ "$dir" =~ [/.][/.] ]] && dir2=$(readlink -f "$dir"); then
             dir="$dir2"
         fi
@@ -145,6 +141,10 @@ if [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ]; then
             fi
         done
     done
+
+    if [ -n "${NIX_COREFOUNDATION_RPATH:-}" ]; then
+      extraAfter+=(-rpath $NIX_COREFOUNDATION_RPATH)
+    fi
 fi
 
 
@@ -164,10 +164,6 @@ if [ -n "${NIX_DEBUG:-}" ]; then
     printf "  %q\n" ${params+"${params[@]}"} >&2
     echo "extra flags after to @prog@:" >&2
     printf "  %q\n" ${extraAfter+"${extraAfter[@]}"} >&2
-fi
-
-if [ -n "$NIX_LD_WRAPPER_@infixSalt@_EXEC_HOOK" ]; then
-    source "$NIX_LD_WRAPPER_@infixSalt@_EXEC_HOOK"
 fi
 
 PATH="$path_backup"

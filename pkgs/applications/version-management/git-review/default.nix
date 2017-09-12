@@ -8,12 +8,16 @@ pythonPackages.buildPythonApplication rec {
   # upstream repository (and we are installing from tarball instead)
   PBR_VERSION = "${version}";
 
+  postPatch = ''
+    sed -i -e '/argparse/d' requirements.txt
+  '';
+
   src = fetchurl rec {
     url = "https://github.com/openstack-infra/git-review/archive/${version}.tar.gz";
     sha256 = "aa594690ed586041a524d6e5ae76152cbd53d4f03a98b20b213d15cecbe128ce";
   };
 
-  propagatedBuildInputs = [ pythonPackages.pbr pythonPackages.requests pythonPackages.argparse pythonPackages.setuptools ];
+  propagatedBuildInputs = with pythonPackages; [ pbr requests setuptools ];
 
   # Don't do tests because they require gerrit which is not packaged
   doCheck = false;

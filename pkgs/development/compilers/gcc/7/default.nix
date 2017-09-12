@@ -59,7 +59,7 @@ assert langGo -> langCC;
 with stdenv.lib;
 with builtins;
 
-let version = "7.1.0";
+let version = "7.2.0";
 
     # Whether building a cross-compiler for GNU/Hurd.
     crossGNU = targetPlatform != hostPlatform && targetPlatform.config == "i586-pc-gnu";
@@ -137,7 +137,6 @@ let version = "7.1.0";
         withFloat = if gccFloat != null then " --with-float=${gccFloat}" else "";
         withMode = if gccMode != null then " --with-mode=${gccMode}" else "";
       in
-        "--target=${targetPlatform.config}" +
         withArch +
         withCpu +
         withAbi +
@@ -214,8 +213,8 @@ stdenv.mkDerivation ({
   builder = ../builder.sh;
 
   src = fetchurl {
-    url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.bz2";
-    sha256 = "05xwps0ci7wgxh50askpa2r9p8518qxdgh6ad7pnyk7n6p13d0ca";
+    url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
+    sha256 = "16j7i0888j2f1yp9l0nhji6cq65dy6y4nwy8868a8njbzzwavxqw";
   };
 
   inherit patches;
@@ -327,6 +326,13 @@ stdenv.mkDerivation ({
   '';
 
   dontDisableStatic = true;
+
+  # TODO(@Ericson2314): Always pass "--target" and always prefix.
+  configurePlatforms =
+    # TODO(@Ericson2314): Figure out what's going wrong with Arm
+    if hostPlatform == targetPlatform && targetPlatform.isArm
+    then []
+    else [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
 
   configureFlags = "
     ${if hostPlatform.isSunOS then
@@ -445,7 +451,6 @@ stdenv.mkDerivation ({
         )
       }
       ${if langAda then " --enable-libada" else ""}
-      --target=${targetPlatform.config}
       ${xwithArch}
       ${xwithCpu}
       ${xwithAbi}

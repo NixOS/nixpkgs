@@ -40,7 +40,7 @@ rec {
     armv6l   = { bits = 32; significantByte = littleEndian; family = "arm"; };
     armv7a   = { bits = 32; significantByte = littleEndian; family = "arm"; };
     armv7l   = { bits = 32; significantByte = littleEndian; family = "arm"; };
-    aarch64  = { bits = 64; significantByte = littleEndian; family = "arm"; };
+    aarch64  = { bits = 64; significantByte = littleEndian; family = "aarch64"; };
     i686     = { bits = 32; significantByte = littleEndian; family = "x86"; };
     x86_64   = { bits = 64; significantByte = littleEndian; family = "x86"; };
     mips64el = { bits = 32; significantByte = littleEndian; family = "mips"; };

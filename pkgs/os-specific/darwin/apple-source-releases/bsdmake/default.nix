@@ -1,7 +1,7 @@
 { stdenv, appleDerivation, fetchurl, fetchpatch, makeWrapper }:
 
 appleDerivation {
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   patchPhase = ''
     substituteInPlace mk/bsd.prog.mk \
@@ -27,9 +27,9 @@ appleDerivation {
     for file in $(find . -name '*.c'); do
       obj="$(basename "$file" .c).o"
       objs+=("$obj")
-      cc -c "$file" -o "$obj" -DDEFSHELLNAME='"sh"' -D__FBSDID=__RCSID -mdynamic-no-pic -g
+      $CC -c "$file" -o "$obj" -DDEFSHELLNAME='"sh"' -D__FBSDID=__RCSID -mdynamic-no-pic -g
     done
-    cc "''${objs[@]}" -o bsdmake
+    $CC "''${objs[@]}" -o bsdmake
   '';
 
   installPhase = ''
@@ -42,4 +42,8 @@ appleDerivation {
   preFixup = ''
     wrapProgram "$out/bin/bsdmake" --add-flags "-m $out/share/mk"
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.darwin;
+  };
 }

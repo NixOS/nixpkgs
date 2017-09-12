@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     sed -e "s@/lib/modules/\$(.*)@${kernel.dev}/lib/modules/${kernel.modDirVersion}@" -i Makefile
     sed -e 's@acpi/acpi[.]h@linux/acpi.h@g' -i acpi_call.c
   '';
- 
+
   installPhase = ''
     mkdir -p $out/lib/modules/${kernel.modDirVersion}/misc
     cp acpi_call.ko $out/lib/modules/${kernel.modDirVersion}/misc

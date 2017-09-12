@@ -29,16 +29,16 @@ let
 in
 
 buildRustPackage rec {
-  name = "alacritty-unstable-2017-07-25";
+  name = "alacritty-unstable-2017-09-02";
 
   src = fetchFromGitHub {
     owner = "jwilm";
     repo = "alacritty";
-    rev = "49c73f6d55e5a681a0e0f836cd3e9fe6af30788f";
-    sha256 = "0h5hrb2g0fpc6xn94hmvxjj21cqbj4vgqkznvd64jl84qbyh1xjl";
+    rev = "22fa4260fc9210fbb5288090df79c92e7b3788e4";
+    sha256 = "0jjvvm0fm25p1h1rgfqlnhq4bwrjdxpb2pgnmpik9pl7qwy3q7s1";
   };
 
-  depsSha256 = "1pbb0swgpsbd6x3avxz6fv3q31dg801li47jibz721a4n9c0rssx";
+  depsSha256 = "19lrj4i6vzmf22r6xg99zcwvzjpiar8pqin1m2nvv78xzxx5yvgb";
 
   buildInputs = [
     cmake

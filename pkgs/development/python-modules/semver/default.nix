@@ -3,12 +3,15 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "semver";
-  version = "2.2.1";
+  version = "2.7.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "161gvsfpw0l8lnf1v19rvqc8b9f8n70cc8ppya4l0n6rwc1c1n4m";
+    sha256 = "a6212f5c552452e306502ac8476bbca48af62db29c4528fdd91d319d0a44b07b";
   };
+
+  # No tests in archive
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Python package to work with Semantic Versioning (http://semver.org/)";

@@ -70,6 +70,16 @@ rec {
   min = x: y: if x < y then x else y;
   max = x: y: if x > y then x else y;
 
+  /* Integer modulus
+
+     Example:
+       mod 11 10
+       => 1
+       mod 1 10
+       => 1
+  */
+  mod = base: int: base - (int * (builtins.div base int));
+
   /* Reads a JSON file. */
   importJSON = path:
     builtins.fromJSON (builtins.readFile path);

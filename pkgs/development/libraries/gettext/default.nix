@@ -45,7 +45,9 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  nativeBuildInputs = [ xz xz.bin ] ++ stdenv.lib.optional (!stdenv.isLinux && !hostPlatform.isCygwin) libiconv; # HACK, see #10874 (and 14664)
+  nativeBuildInputs = [ xz xz.bin ];
+  # HACK, see #10874 (and 14664)
+  buildInputs = stdenv.lib.optional (!stdenv.isLinux && !hostPlatform.isCygwin) libiconv;
 
   enableParallelBuilding = true;
 

@@ -81,7 +81,10 @@ in rec {
         (all nixos.tests.boot.uefiUsb)
         (all nixos.tests.boot-stage1)
         nixos.tests.hibernate.x86_64-linux # i686 is flaky, see #23107
+        nixos.tests.docker
+        nixos.tests.docker-edge
         (all nixos.tests.ecryptfs)
+        (all nixos.tests.env)
         (all nixos.tests.ipv6)
         (all nixos.tests.i3wm)
         (all nixos.tests.keymap.azerty)
@@ -90,7 +93,10 @@ in rec {
         (all nixos.tests.keymap.dvp)
         (all nixos.tests.keymap.neo)
         (all nixos.tests.keymap.qwertz)
-        (all nixos.tests.plasma5)
+        nixos.tests.plasma5.x86_64-linux # avoid big build on i686
+        (all nixos.tests.kernel-latest)
+        (all nixos.tests.kernel-lts)
+        (all nixos.tests.kernel-params)
         #(all nixos.tests.lightdm)
         (all nixos.tests.login)
         (all nixos.tests.misc)
@@ -113,6 +119,7 @@ in rec {
         (all nixos.tests.sddm.default)
         (all nixos.tests.simple)
         (all nixos.tests.slim)
+        nixos.tests.sysctl.x86_64-linux # i686 fails
         (all nixos.tests.udisks2)
         (all nixos.tests.xfce)
 

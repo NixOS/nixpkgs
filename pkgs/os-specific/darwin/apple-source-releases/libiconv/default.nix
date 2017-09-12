@@ -13,4 +13,8 @@ appleDerivation {
       -Wl,-reexport_library -Wl,$out/lib/libiconv-nocharset.dylib \
       -Wl,-reexport_library -Wl,$out/lib/libcharset.dylib
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.darwin;
+  };
 }

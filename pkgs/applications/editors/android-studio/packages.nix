@@ -27,9 +27,9 @@ in rec {
 
   preview = mkStudio rec {
     pname = "android-studio-preview";
-    version = "3.0.0.10"; # "Android Studio 3.0 Beta 2"
-    build = "171.4263559";
-    sha256Hash = "0bya69qa50s6dbvlzb198b5w6ixs21y6b56v3v1xjb3kndf9y44w";
+    version = "3.0.0.13"; # "Android Studio 3.0 Beta 5"
+    build = "171.4316950";
+    sha256Hash = "0aj6mkc5pb8ws3ff8hcphdvymlysjmhx507r7wkqrk0b4ylbijmc";
 
     meta = stable.meta // {
       description = "The Official IDE for Android (preview version)";

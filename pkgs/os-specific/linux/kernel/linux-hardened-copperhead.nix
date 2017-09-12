@@ -1,15 +1,25 @@
 { stdenv, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
-let
-  version = "4.12.8";
-  revision = "a";
-  sha256 = "03ldbgs4w70q756bl5gsxr2z428njnlslh6293y34r54gz5li9a3";
-in
+with stdenv.lib;
 
+let
+  version = "4.13.1";
+  revision = "a";
+  sha256 = "19x3rg75r4xm67wbr54iypbjsrfka7mz2vp3yswp4x4x94g457bh";
+
+  # modVersion needs to be x.y.z, will automatically add .0 if needed
+  modVersion = concatStrings (intersperse "." (take 3 (splitString "." "${version}.0")));
+
+  # branchVersion needs to be x.y
+  branchVersion = concatStrings (intersperse "." (take 2 (splitString "." version)));
+
+  modDirVersion = "${modVersion}-hardened";
+in
 import ./generic.nix (args // {
+  inherit modDirVersion;
+
   version = "${version}-${revision}";
-  extraMeta.branch = "4.12";
-  modDirVersion = "${version}-hardened";
+  extraMeta.branch = "${branchVersion}";
 
   src = fetchFromGitHub {
     inherit sha256;

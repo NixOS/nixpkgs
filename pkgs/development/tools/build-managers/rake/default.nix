@@ -1,7 +1,7 @@
 { lib, bundlerEnv, ruby }:
 
 bundlerEnv {
-  name = "rake-11.1.1";
+  name = "rake-${(import ./gemset.nix).rake.version}";
 
   inherit ruby;
   gemdir = ./.;

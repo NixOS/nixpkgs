@@ -15,10 +15,6 @@ if [ -z "${NIX_CC_WRAPPER_@infixSalt@_FLAGS_SET:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
 
-if [ -n "$NIX_CC_WRAPPER_@infixSalt@_START_HOOK" ]; then
-    source "$NIX_CC_WRAPPER_@infixSalt@_START_HOOK"
-fi
-
 source @out@/nix-support/utils.sh
 
 
@@ -138,7 +134,7 @@ if [ "$dontLink" != 1 ]; then
 
     # Add the flags that should only be passed to the compiler when
     # linking.
-    extraAfter+=($NIX_@infixSalt@_CFLAGS_LINK "${hardeningLDFlags[@]}")
+    extraAfter+=($NIX_@infixSalt@_CFLAGS_LINK)
 
     # Add the flags that should be passed to the linker (and prevent
     # `ld-wrapper' from adding NIX_@infixSalt@_LDFLAGS again).
@@ -173,10 +169,6 @@ if [ -n "${NIX_DEBUG:-}" ]; then
     printf "  %q\n" ${params+"${params[@]}"} >&2
     echo "extra flags after to @prog@:" >&2
     printf "  %q\n" ${extraAfter+"${extraAfter[@]}"} >&2
-fi
-
-if [ -n "$NIX_CC_WRAPPER_@infixSalt@_EXEC_HOOK" ]; then
-    source "$NIX_CC_WRAPPER_@infixSalt@_EXEC_HOOK"
 fi
 
 PATH="$path_backup"

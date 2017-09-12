@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "aafigure";
-  version = "0.5";
+  version = "0.6";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "090c88beb091d28a233f854e239713aa15d8d1906ea16211855345c912e8a091";
+    sha256 = "49f2c1fd2b579c1fffbac1386a2670b3f6f475cc7ff6cc04d8b984888c2d9e1e";
   };
 
   propagatedBuildInputs = [ pillow ];

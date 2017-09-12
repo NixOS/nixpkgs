@@ -43,6 +43,7 @@
   ./hardware/nitrokey.nix
   ./hardware/opengl.nix
   ./hardware/pcmcia.nix
+  ./hardware/raid/hpsa.nix
   ./hardware/usb-wwan.nix
   ./hardware/video/amdgpu.nix
   ./hardware/video/amdgpu-pro.nix
@@ -120,7 +121,6 @@
   ./security/chromium-suid-sandbox.nix
   ./security/dhparams.nix
   ./security/duosec.nix
-  ./security/grsecurity.nix
   ./security/hidepid.nix
   ./security/lock-kernel-modules.nix
   ./security/oath.nix
@@ -204,6 +204,7 @@
   ./services/desktops/gnome3/gnome-online-miners.nix
   ./services/desktops/gnome3/gnome-terminal-server.nix
   ./services/desktops/gnome3/gnome-user-share.nix
+  ./services/desktops/gnome3/gpaste.nix
   ./services/desktops/gnome3/gvfs.nix
   ./services/desktops/gnome3/seahorse.nix
   ./services/desktops/gnome3/sushi.nix
@@ -225,6 +226,7 @@
   ./services/hardware/brltty.nix
   ./services/hardware/freefall.nix
   ./services/hardware/illum.nix
+  ./services/hardware/interception-tools.nix
   ./services/hardware/irqbalance.nix
   ./services/hardware/nvidia-optimus.nix
   ./services/hardware/pcscd.nix
@@ -361,6 +363,7 @@
   ./services/monitoring/prometheus/default.nix
   ./services/monitoring/prometheus/alertmanager.nix
   ./services/monitoring/prometheus/blackbox-exporter.nix
+  ./services/monitoring/prometheus/collectd-exporter.nix
   ./services/monitoring/prometheus/fritzbox-exporter.nix
   ./services/monitoring/prometheus/json-exporter.nix
   ./services/monitoring/prometheus/nginx-exporter.nix
@@ -456,7 +459,6 @@
   ./services/networking/lldpd.nix
   ./services/networking/logmein-hamachi.nix
   ./services/networking/mailpile.nix
-  ./services/networking/mfi.nix
   ./services/networking/mjpg-streamer.nix
   ./services/networking/minidlna.nix
   ./services/networking/miniupnpd.nix
@@ -549,7 +551,6 @@
   ./services/security/fail2ban.nix
   ./services/security/fprintd.nix
   ./services/security/fprot.nix
-  ./services/security/frandom.nix
   ./services/security/haka.nix
   ./services/security/haveged.nix
   ./services/security/hologram-server.nix
@@ -587,6 +588,7 @@
   ./services/web-apps/frab.nix
   ./services/web-apps/mattermost.nix
   ./services/web-apps/nixbot.nix
+  ./services/web-apps/nexus.nix
   ./services/web-apps/pgpkeyserver-lite.nix
   ./services/web-apps/piwik.nix
   ./services/web-apps/pump.io.nix
@@ -630,7 +632,6 @@
   ./services/x11/redshift.nix
   ./services/x11/urxvtd.nix
   ./services/x11/window-managers/awesome.nix
-  #./services/x11/window-managers/compiz.nix
   ./services/x11/window-managers/default.nix
   ./services/x11/window-managers/fluxbox.nix
   ./services/x11/window-managers/icewm.nix
@@ -680,6 +681,7 @@
   ./tasks/cpu-freq.nix
   ./tasks/encrypted-devices.nix
   ./tasks/filesystems.nix
+  ./tasks/filesystems/bcachefs.nix
   ./tasks/filesystems/btrfs.nix
   ./tasks/filesystems/cifs.nix
   ./tasks/filesystems/exfat.nix

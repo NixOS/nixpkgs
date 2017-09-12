@@ -24,13 +24,13 @@
 
 let
   pname = "zeep";
-  version = "2.0.0";
+  version = "2.3.0";
 in buildPythonPackage {
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5b9bd6b8772d6b505118c11d6924eb7df0decf12bbbeb43b1c27d781817361ad";
+    sha256 = "b01d81c61d7b7858b7be001615d3c995a371815f5e6902c914fea9beba30b716";
   };
 
   propagatedBuildInputs = [

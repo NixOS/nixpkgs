@@ -14,7 +14,17 @@ with lib;
       default = null;
       example = "http://www.example.org/";
       description = ''
-        Adds proxy_pass directive.
+        Adds proxy_pass directive and sets recommended proxy headers if
+        recommendedProxySettings is enabled.
+      '';
+    };
+
+    proxyWebsockets = mkOption {
+      type = types.bool;
+      default = false;
+      example = true;
+      description = ''
+        Whether to supporty proxying websocket connections with HTTP/1.1.
       '';
     };
 

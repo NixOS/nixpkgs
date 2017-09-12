@@ -4,7 +4,7 @@
   qtwebengine,
   kcmutils, kcrash, kdbusaddons, kwindowsystem,
   akonadi, grantleetheme, kdepim-apps-libs, kontactinterface, kpimtextedit,
-  mailcommon,
+  mailcommon, libkdepim
 }:
 
 mkDerivation {
@@ -18,6 +18,6 @@ mkDerivation {
     qtwebengine
     kcmutils kcrash kdbusaddons kwindowsystem
     akonadi grantleetheme kdepim-apps-libs kontactinterface kpimtextedit
-    mailcommon
+    mailcommon libkdepim
   ];
 }

@@ -112,6 +112,7 @@ mapAliases (rec {
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatexSF = pidginlatex; # added 2014-11-02
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
+  prometheus-statsd-bridge = prometheus-statsd-exporter;  # added 2017-08-27
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
   QmidiNet = qmidinet;  # added 2016-05-22
   qt_gstreamer = qt-gstreamer;  # added 2017-02

@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, jdk, zip, unzip, bash, makeWrapper, which }:
+{ stdenv, lib, fetchurl, jdk, zip, unzip, bash, writeScriptBin, coreutils, makeWrapper, which, python }:
 
 stdenv.mkDerivation rec {
 
-  version = "0.4.5";
+  version = "0.5.4";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/bazelbuild/bazel/;
+    homepage = "https://github.com/bazelbuild/bazel/";
     description = "Build tool that builds code quickly and reliably";
     license = licenses.asl20;
     maintainers = [ maintainers.philandstuff ];
@@ -16,40 +16,38 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "0asmq3kxnl4326zhgh13mvcrc8jvmiswjj4ymrq0943q4vj7nwrb";
+    sha256 = "1jdb8zbgafhz2qi0ajk34845kpmfhxchdimvwkq6lkb1159v0mr1";
   };
 
   sourceRoot = ".";
 
+  # Bazel expects several utils to be available in Bash even without PATH. Hence this hack.
+
+  customBash = writeScriptBin "bash" ''
+    #!${stdenv.shell}
+    PATH="$PATH:${lib.makeBinPath [ coreutils ]}" exec ${bash}/bin/bash "$@"
+  '';
+
   postPatch = ''
-    for f in $(grep -l -r '#!/bin/bash'); do
-      substituteInPlace "$f" --replace '#!/bin/bash' '#!${bash}/bin/bash'
+    find src/main/java/com/google/devtools -type f -print0 | while IFS="" read -r -d "" path; do
+      substituteInPlace "$path" \
+        --replace /bin/bash ${customBash}/bin/bash \
+        --replace /usr/bin/env ${coreutils}/bin/env
     done
-    for f in \
-      src/main/java/com/google/devtools/build/lib/analysis/CommandHelper.java \
-      src/main/java/com/google/devtools/build/lib/bazel/rules/BazelConfiguration.java \
-      src/main/java/com/google/devtools/build/lib/bazel/rules/sh/BazelShRuleClasses.java \
-      src/main/java/com/google/devtools/build/lib/rules/cpp/LinkCommandLine.java \
-      ; do
-      substituteInPlace "$f" --replace /bin/bash ${bash}/bin/bash
-    done
+    patchShebangs .
   '';
 
   buildInputs = [
-    stdenv.cc
-    stdenv.cc.cc.lib
     jdk
+  ];
+
+  nativeBuildInputs = [
     zip
+    python
     unzip
     makeWrapper
     which
-  ];
-
-  # These must be propagated since the dependency is hidden in a compressed
-  # archive.
-
-  propagatedBuildInputs = [
-    bash
+    customBash
   ];
 
   # If TMPDIR is in the unpack dir we run afoul of blaze's infinite symlink
@@ -80,7 +78,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     mv output/bazel $out/bin
-    wrapProgram "$out/bin/bazel" --prefix PATH : "${stdenv.cc}/bin:${jdk}/bin"
+    wrapProgram "$out/bin/bazel" --prefix PATH : "${lib.makeBinPath [ stdenv.cc jdk ]}"
     mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
     mv output/bazel-complete.bash $out/share/bash-completion/completions/
     cp scripts/zsh_completion/_bazel $out/share/zsh/site-functions/

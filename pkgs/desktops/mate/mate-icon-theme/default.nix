@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, iconnamingutils, hicolor_icon_theme }:
+{ stdenv, fetchurl, pkgconfig, intltool, iconnamingutils, librsvg, hicolor_icon_theme, gtk3 }:
 
 stdenv.mkDerivation rec {
   name = "mate-icon-theme-${version}";
@@ -13,8 +13,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool iconnamingutils ];
 
-  buildInputs = [ hicolor_icon_theme ];
-
+  buildInputs = [ librsvg hicolor_icon_theme ];
+  
+  postInstall = ''
+    for theme in "$out"/share/icons/*; do
+      "${gtk3.out}/bin/gtk-update-icon-cache" "$theme"
+    done
+  '';
+  
   meta = {
     description = "Icon themes from MATE";
     homepage = http://mate-desktop.org;

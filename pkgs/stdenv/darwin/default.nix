@@ -59,11 +59,12 @@ in rec {
   stageFun = step: last: {shell             ? "${bootstrapTools}/bin/bash",
                           overrides         ? (self: super: {}),
                           extraPreHook      ? "",
+                          extraNativeBuildInputs,
                           extraBuildInputs,
                           allowedRequisites ? null}:
     let
       thisStdenv = import ../generic {
-        inherit config shell extraBuildInputs;
+        inherit config shell extraNativeBuildInputs extraBuildInputs;
         allowedRequisites = if allowedRequisites == null then null else allowedRequisites ++ [
           thisStdenv.cc.expand-response-params
         ];
@@ -78,15 +79,17 @@ in rec {
           inherit shell;
           inherit (last) stdenv;
 
-          nativeTools  = true;
-          nativePrefix = bootstrapTools;
+          nativeTools  = false;
           nativeLibc   = false;
           buildPackages = lib.optionalAttrs (last ? stdenv) {
             inherit (last) stdenv;
           };
           libc         = last.pkgs.darwin.Libsystem;
           isClang      = true;
-          cc           = { name = "clang-9.9.9"; outPath = bootstrapTools; };
+          cc           = { name = "clang-9.9.9";     outPath = bootstrapTools; };
+          binutils     = { name = "binutils-9.9.9";  outPath = bootstrapTools; };
+          coreutils    = { name = "coreutils-9.9.9"; outPath = bootstrapTools; };
+          gnugrep      = { name = "gnugrep-9.9.9";   outPath = bootstrapTools; };
         };
 
         preHook = stage0.stdenv.lib.optionalString (shell == "${bootstrapTools}/bin/bash") ''
@@ -159,6 +162,7 @@ in rec {
 
     };
 
+    extraNativeBuildInputs = [];
     extraBuildInputs = [];
   };
 
@@ -166,6 +170,7 @@ in rec {
     persistent = _: _: {};
   in with prevStage; stageFun 1 prevStage {
     extraPreHook = "export NIX_CFLAGS_COMPILE+=\" -F${bootstrapTools}/Library/Frameworks\"";
+    extraNativeBuildInputs = [];
     extraBuildInputs = [ pkgs.libcxx ];
 
     allowedRequisites =
@@ -192,7 +197,8 @@ in rec {
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
 
-    extraBuildInputs = with pkgs; [ xz darwin.CF libcxx ];
+    extraNativeBuildInputs = [ pkgs.xz ];
+    extraBuildInputs = with pkgs; [ darwin.CF libcxx ];
 
     allowedRequisites =
       [ bootstrapTools ] ++
@@ -223,7 +229,8 @@ in rec {
     # enables patchShebangs above. Unfortunately, patchShebangs ignores our $SHELL setting
     # and instead goes by $PATH, which happens to contain bootstrapTools. So it goes and
     # patches our shebangs back to point at bootstrapTools. This makes sure bash comes first.
-    extraBuildInputs = with pkgs; [ xz darwin.CF libcxx pkgs.bash ];
+    extraNativeBuildInputs = with pkgs; [ xz pkgs.bash ];
+    extraBuildInputs = with pkgs; [ darwin.CF libcxx ];
 
     extraPreHook = ''
       export PATH=${pkgs.bash}/bin:$PATH
@@ -257,11 +264,21 @@ in rec {
     };
   in with prevStage; stageFun 4 prevStage {
     shell = "${pkgs.bash}/bin/bash";
-    extraBuildInputs = with pkgs; [ xz darwin.CF libcxx pkgs.bash ];
+    extraNativeBuildInputs = with pkgs; [ xz pkgs.bash ];
+    extraBuildInputs = with pkgs; [ darwin.CF libcxx ];
     extraPreHook = ''
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
-    overrides = persistent;
+    overrides = self: super: (persistent self super) // {
+      # Hack to make sure we don't link ncurses in bootstrap tools. The proper
+      # solution is to avoid passing -L/nix-store/...-bootstrap-tools/lib,
+      # quite a sledgehammer just to get the C runtime.
+      gettext = super.gettext.overrideAttrs (old: {
+         configureFlags = old.configureFlags ++ [
+           "--disable-curses"
+         ];
+      });
+    };
   };
 
   stdenvDarwin = prevStage: let
@@ -294,6 +311,7 @@ in rec {
     targetPlatform = localSystem;
 
     preHook = commonPreHook + ''
+      export NIX_COREFOUNDATION_RPATH=${pkgs.darwin.CF}/Library/Frameworks
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
 
@@ -316,6 +334,7 @@ in rec {
       libc = pkgs.darwin.Libsystem;
     };
 
+    extraNativeBuildInputs = [];
     extraBuildInputs = with pkgs; [ darwin.CF libcxx ];
 
     extraAttrs = {

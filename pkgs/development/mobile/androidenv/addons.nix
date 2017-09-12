@@ -296,12 +296,24 @@ in
   google_play_services = buildGoogleApis {
     name = "google_play_services";
     src = fetchurl {
-      url = https://dl.google.com/android/repository/google_play_services_v11_3_rc05.zip;
-      sha1 = "6b072d5b96fb8726405d363ccdbb4d26bec0b54f";
+      url = https://dl.google.com/android/repository/google_play_services_v12_1_rc11.zip;
+      sha1 = "d2bb583a3f62b068d448df10544c1852d910526f";
     };
     meta = {
       description = "Google Play services client library and sample code";
       url = http://developer.android.com/;
+    };
+  };
+
+  instant_apps = buildGoogleApis {
+    name = "instant_apps_sdk";
+    src = fetchurl {
+      url = https://dl.google.com/android/repository/aiasdk-1.0.0.zip;
+      sha1 = "50074a0f0312ee1d0d81d2cddc3d84a8a9e97a53";
+    };
+    meta = {
+      description = "Android Instant Apps Development SDK";
+      url = "https://developer.android.com/";
     };
   };
 

@@ -1,6 +1,6 @@
-{ stdenv, pythonPackages, fetchFromGitHub }:
+{ stdenv, python3, fetchFromGitHub }:
 
-with pythonPackages; buildPythonApplication rec {
+with python3.pkgs; buildPythonApplication rec {
   version = "3.0"; # When updating to 3.1, make sure to remove the marked line in preCheck
   name = "buku-${version}";
 

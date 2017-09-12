@@ -6,19 +6,19 @@ let
     src = fetchFromGitHub {
       owner = "OpenMW";
       repo = "osg";
-      rev = "c0adcc0b43f37931ccb70e3e2b4227c4a86cfaaf";
-      sha256 = "12nrpayms0jl2knkv4kax93si1510hjyl1g3i1b73ydnzhvr3x02";
+      rev = "35f1a459a4ab6da9d70427e6539bdf4faae4cc91";
+      sha256 = "1s3a9dpbcc6v8d05pqin4xfv36i2031xpdja1vl8x11cw05fln91";
     };
   });
 in stdenv.mkDerivation rec {
-  version = "0.41.0";
+  version = "0.42.0";
   name = "openmw-${version}";
 
   src = fetchFromGitHub {
     owner = "OpenMW";
     repo = "openmw";
     rev = name;
-    sha256 = "1qay278965i7ja2rjllhcqfq7zpbapd7w57xly02apniadyfg0yz";
+    sha256 = "0lj8v81hk807dy0wcdhfp0iyn4l5yag53hx1a6xm44gh2dpyil43";
   };
 
   enableParallelBuilding = true;

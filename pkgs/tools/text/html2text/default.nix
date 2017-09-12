@@ -9,7 +9,9 @@ stdenv.mkDerivation {
   };
 
   preConfigure = ''
-    sed -i s,/bin/echo,echo, configure
+    substituteInPlace configure \
+        --replace /bin/echo echo \
+        --replace CXX=unknown ':'
   '';
 
   # the --prefix has no effect

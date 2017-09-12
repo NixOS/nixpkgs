@@ -61,7 +61,7 @@ let
 
   mkDerivation = makeOverridable mkDerivationImpl;
 
-  mkScope = scope: pkgs // pkgs.xorg // pkgs.gnome2 // scope;
+  mkScope = scope: pkgs // pkgs.xorg // pkgs.gnome2 // { inherit stdenv; } // scope;
   defaultScope = mkScope self;
   callPackage = drv: args: callPackageWith defaultScope drv args;
 

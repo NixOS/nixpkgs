@@ -13,7 +13,7 @@ buildRustPackage rec {
     sha256 = "0z1z3b6nzaid510jaikkawvpmv4kjphzz84p0hppq6vcp5jy00s2";
   };
 
-  depsSha256 = "013hy835871zxdnakwsr4bjm4krahlz4aqk5lh0rw78avfla89q9q";
+  depsSha256 = "13hy835871zxdnakwsr4bjm4krahlz4aqk5lh0rw78avfla89q9q";
 
   meta = with stdenv.lib; {
     description = "A fast CSV toolkit written in Rust";

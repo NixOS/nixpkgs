@@ -1,4 +1,4 @@
-{ lib, ... }:
+{ lib, pkgs, ... }:
 
 with lib;
 
@@ -14,6 +14,10 @@ with lib;
     (mkRenamedOptionModule [ "networking" "enableRT73Firmware" ] [ "networking" "enableRalinkFirmware" ])
 
     (mkRenamedOptionModule [ "services" "cadvisor" "host" ] [ "services" "cadvisor" "listenAddress" ])
+    (mkChangedOptionModule [ "services" "printing" "gutenprint" ] [ "services" "printing" "drivers" ]
+      (config:
+        let enabled = getAttrFromPath [ "services" "printing" "gutenprint" ] config;
+        in if enabled then [ pkgs.gutenprint ] else [ ]))
     (mkRenamedOptionModule [ "services" "elasticsearch" "host" ] [ "services" "elasticsearch" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "graphite" "api" "host" ] [ "services" "graphite" "api" "listenAddress" ])
     (mkRenamedOptionModule [ "services" "graphite" "web" "host" ] [ "services" "graphite" "web" "listenAddress" ])
@@ -119,26 +123,6 @@ with lib;
     (mkRenamedOptionModule [ "services" "iodined" "ip" ] [ "services" "iodine" "server" "ip" ])
     (mkRenamedOptionModule [ "services" "iodined" "extraConfig" ] [ "services" "iodine" "server" "extraConfig" ])
     (mkRemovedOptionModule [ "services" "iodined" "client" ] "")
-
-    # Grsecurity
-    (mkRemovedOptionModule [ "security" "grsecurity" "kernelPatch" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "mode" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "priority" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "system" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "virtualisationConfig" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "hardwareVirtualisation" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "virtualisationSoftware" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "sysctl" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "denyChrootChmod" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "denyChrootCaps" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "denyUSB" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "restrictProc" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "restrictProcWithGroup" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "unrestrictProcGid" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "disableRBAC" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "disableSimultConnect" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "verboseVersion" ] "")
-    (mkRemovedOptionModule [ "security" "grsecurity" "config" "kernelExtraConfig" ] "")
 
     # Unity3D
     (mkRenamedOptionModule [ "programs" "unity3d" "enable" ] [ "security" "chromiumSuidSandbox" "enable" ])

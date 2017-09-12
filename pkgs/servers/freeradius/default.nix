@@ -40,11 +40,11 @@ assert withCollectd -> collectd != null;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "freeradius-${version}";
-  version = "3.0.14";
+  version = "3.0.15";
 
   src = fetchurl {
     url = "ftp://ftp.freeradius.org/pub/freeradius/freeradius-server-${version}.tar.gz";
-    sha256 = "02ar0xn4dfrs95cmd4c798k95rmnzzvcryyyl2vjv53ak16igmpw";
+    sha256 = "1qygf5if2xjzl7kfzwl428ydz5q1m0j5sx077n12v7znlgnwaagx";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -76,10 +76,10 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://freeradius.org/;
+    homepage = https://freeradius.org/;
     description = "A modular, high performance free RADIUS suite";
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with maintainers; [ sheenobu ];
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ sheenobu willibutz ];
     platforms = with platforms; linux;
   };
 

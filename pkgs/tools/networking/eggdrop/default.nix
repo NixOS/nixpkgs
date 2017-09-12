@@ -1,5 +1,9 @@
 { stdenv, fetchFromGitHub, tcl }:
 
+let
+  shlib = if stdenv.isDarwin then "dylib" else "so";
+in
+
 stdenv.mkDerivation rec {
   name = "eggdrop-${version}";
   version = "1.6.21-nix1";
@@ -25,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--with-tcllib=${tcl}/lib/lib${tcl.libPrefix}.so"
+    "--with-tcllib=${tcl}/lib/lib${tcl.libPrefix}.${shlib}"
     "--with-tclinc=${tcl}/include/tcl.h"
   ];
 

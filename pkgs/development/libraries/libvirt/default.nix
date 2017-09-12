@@ -85,8 +85,8 @@ stdenv.mkDerivation rec {
     sed -e "/gettext\.sh/a \\\n# Added in nixpkgs:\ngettext() { \"${gettext}/bin/gettext\" \"\$@\"; }" \
         -i "$out/libexec/libvirt-guests.sh"
 
-    substituteInPlace $out/lib/systemd/system/libvirtd.service --replace /bin/kill ${coreutils}/bin/kill
   '' + optionalString stdenv.isLinux ''
+    substituteInPlace $out/lib/systemd/system/libvirtd.service --replace /bin/kill ${coreutils}/bin/kill
     rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
     wrapProgram $out/sbin/libvirtd \
       --prefix PATH : ${makeBinPath [ iptables iproute pmutils numad numactl ]}

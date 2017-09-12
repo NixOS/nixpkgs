@@ -6,12 +6,12 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "dmenu-wayland-${version}";
-  version = "git-2014-11-02";
-  rev = "6e08b77428cc3c406ed2e90d4cae6c41df76341e";
+  version = "git-2017-04-07";
+  rev = "f385d9d18813071b4b4257bf8d4d572daeda0e70";
 
   src = fetchurl {
     url = "https://github.com/michaelforney/dmenu/archive/${rev}.tar.gz";
-    sha256 = "d0f73e442baf44a93a3b9d41a72e9cfa14f54af6049c90549f516722e3f88019";
+    sha256 = "0y1jvh2815c005ns0bsjxsmz82smw22n6jsfg2g03a1pacakp6ys";
   };
 
   buildInputs = [ swc wld wayland libxkbcommon pixman fontconfig ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = [
-    ''sed -i "s@PREFIX = /usr/local@PREFIX = $out@g; s@/usr/share/swc@$(echo "$nativeBuildInputs" | grep -o '[^ ]*-swc-[^ ]*')/share/swc@g" config.mk''
+    ''sed -i "s@PREFIX = /usr/local@PREFIX = $out@g; s@/usr/share/swc@${swc}/share/swc@g" config.mk''
   ];
 
   meta = {

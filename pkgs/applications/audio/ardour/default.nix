@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ alsaLib aubio boost cairomm curl doxygen dbus fftw fftwSinglePrec flac glibc
+    [ alsaLib aubio boost cairomm curl doxygen dbus fftw fftwSinglePrec flac 
       glibmm graphviz gtkmm2 libjack2 libgnomecanvas libgnomecanvasmm liblo
       libmad libogg librdf librdf_raptor librdf_rasqal libsamplerate
       libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv lv2
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     GenericName=Digital Audio Workstation
     Comment=Multitrack harddisk recorder
     Exec=$out/bin/ardour5
-    Icon=$out/share/ardour5/icons/ardour_icon_256px.png
+    Icon=$out/share/ardour5/resources/Ardour-icon_256px.png
     Terminal=false
     Type=Application
     X-MultipleArgs=false

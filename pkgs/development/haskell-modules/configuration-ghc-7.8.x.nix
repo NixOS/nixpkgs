@@ -37,6 +37,9 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # Requires ghc 8.2
+  ghc-proofs = dontDistribute super.ghc-proofs;
+
   # https://github.com/peti/jailbreak-cabal/issues/9
   jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_20_0_4; };
 
@@ -161,5 +164,8 @@ self: super: {
   # The test suite requires Cabal 1.24.x or later to compile.
   comonad = dontCheck super.comonad;
   semigroupoids = dontCheck super.semigroupoids;
+
+  # https://github.com/simonmar/happy/issues/103
+  happy = super.happy.override { mtl = self.mtl_2_2_1; };
 
 }

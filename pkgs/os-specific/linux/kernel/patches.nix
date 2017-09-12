@@ -51,27 +51,9 @@ rec {
       patch = ./modinst-arg-list-too-long.patch;
     };
 
-  grsecurity_testing = throw ''
-    Upstream has ceased free support for grsecurity/PaX.
-
-    See https://grsecurity.net/passing_the_baton.php
-    and https://grsecurity.net/passing_the_baton_faq.php
-    for more information.
-  '';
-
   genksyms_fix_segfault =
     { name = "genksyms-fix-segfault";
       patch = ./genksyms-fix-segfault.patch;
-    };
-
-  chromiumos_Kconfig_fix_entries_3_18 =
-    { name = "Kconfig_fix_entries_3_18";
-      patch = ./chromiumos-patches/fix-double-Kconfig-entry-3.18.patch;
-    };
-
-  chromiumos_no_link_restrictions =
-    { name = "chromium-no-link-restrictions";
-      patch = ./chromiumos-patches/no-link-restrictions.patch;
     };
 
   cpu-cgroup-v2 = import ./cpu-cgroup-v2-patches;
