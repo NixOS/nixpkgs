@@ -355,6 +355,10 @@ with pkgs;
 
   iconConvTools = callPackage ../build-support/icon-conv-tools {};
 
+  ### OVERLAYS (n.b.: don't add to these without consulting the community; they can be expensive)
+
+  headless-overlay = import ./headless.nix;
+  headless = lib.lowPrioSet (recurseIntoAttrs (import path { overlays = [ headless-overlay ]; }));
 
   ### TOOLS
 
