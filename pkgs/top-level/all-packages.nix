@@ -17119,6 +17119,8 @@ with pkgs;
 
   yabar = callPackage ../applications/window-managers/yabar { };
 
+  yabar-unstable = callPackage ../applications/window-managers/yabar/unstable.nix { };
+
   yakuake = libsForQt5.callPackage ../applications/misc/yakuake {
     inherit (kdeApplications) konsole;
   };
