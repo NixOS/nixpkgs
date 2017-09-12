@@ -53,9 +53,16 @@ stdenv.mkDerivation rec {
     "-DENABLE_TAR=OFF"
   ];
 
-  postInstall = lib.optionalString unfree ''
+  postInstall = ''
+    # Install desktop icons.
+    src="$out/share/aseprite/data/icons"
+    for size in 16 32 48 64; do
+      dst="$out"/share/icons/hicolor/"$size"x"$size"
+      install -Dm644 "$src"/ase"$size".png "$dst"/apps/aseprite.png
+      install -Dm644 "$src"/doc"$size".png "$dst"/mimetypes/aseprite.png
+    done
     # Delete unneeded artifacts of bundled libraries.
-    rm -rf $out/include $out/lib
+    rm -rf "$out"/include "$out"/lib
   '';
 
   enableParallelBuilding = true;
