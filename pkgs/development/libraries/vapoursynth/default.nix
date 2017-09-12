@@ -35,9 +35,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A video processing framework with the future in mind";
-    homepage = http://www.vapoursynth.com/;
-    license   = licenses.lgpl21;
-    platforms = platforms.unix;
+    homepage    = http://www.vapoursynth.com/;
+    license     = licenses.lgpl21;
+    platforms   = platforms.unix;
     maintainers = with maintainers; [ rnhmjoj ];
   };
 
