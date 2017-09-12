@@ -11419,6 +11419,8 @@ with pkgs;
 
   mailman = callPackage ../servers/mail/mailman/2.nix { };
   mailman3 = callPackage ../servers/mail/mailman { };
+  postorius = callPackage ../servers/mail/mailman/postorius.nix { };
+  hyperkitty = callPackage ../servers/mail/mailman/hyperkitty.nix { };
 
   mattermost = callPackage ../servers/mattermost { };
   matterircd = callPackage ../servers/mattermost/matterircd.nix { };

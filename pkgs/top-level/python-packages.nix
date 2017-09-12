@@ -141,6 +141,8 @@ in {
 
   bitcoin-price-api = callPackage ../development/python-modules/bitcoin-price-api { };
 
+  blessed = callPackage ../development/python-modules/blessed { };
+
   blivet = callPackage ../development/python-modules/blivet { };
 
   breathe = callPackage ../development/python-modules/breathe { };
@@ -150,6 +152,8 @@ in {
   else throw "browsermob-proxy is not supported for ${python.executable}";
 
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
+
+  cssmin = callPackage ../development/python-modules/cssmin { };
 
   dbf = callPackage ../development/python-modules/dbf { };
 
@@ -275,6 +279,8 @@ in {
     slurm = pkgs.slurm;
   };
 
+  python3-openid = callPackage ../development/python-modules/python3-openid { };
+
   python-sql = callPackage ../development/python-modules/python-sql { };
 
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
@@ -289,6 +295,7 @@ in {
 
   pyzufall = callPackage ../development/python-modules/pyzufall { };
 
+  robot-detection = callPackage ../development/python-modules/robot-detection { };
   rhpl = if !isPy3k then callPackage ../development/python-modules/rhpl {} else throw "rhpl not supported for interpreter ${python.executable}";
 
   simpleeval = callPackage ../development/python-modules/simpleeval { };
@@ -354,15 +361,16 @@ in {
 
   aiosmtpd = buildPythonPackage rec {
     name = "aiosmtpd-${version}";
-    version = "1.0a4";
+    version = "1.0a5";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/aiosmtpd/${name}.tar.gz";
-      sha256 = "09wbnsrng5igb09s2pqlkvsgsfvrsy8z9lq5mpyw2kk1r8k1xwjz";
+      sha256 = "0185m6aflhpnm4bk5nq0lm4hvxglrlyyb2pxwgsmp84giiz0kk0q";
     };
 
     propagatedBuildInputs = [ self.atpublic ];
 
+    # network access
     doCheck = false;
 
     meta = {
@@ -5739,12 +5747,14 @@ in {
   };
 
   flufl-lock = buildPythonPackage rec {
-    name = "flufl.lock-2.4.1";
+    name = "flufl.lock-3.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/flufl.lock/${name}.tar.gz";
-      sha256 = "0chhmkf2sg0vh00z6hr82m9387398aq4cwsw2bprldzh7v59lqvj";
+      sha256 = "0nzzd6l30ff6cwsrlrb94xzfja4wkyrqv3ydc6cz0hdbr766mmm8";
     };
+
+    propagatedBuildInputs = [ self.atpublic ];
 
     meta = with pkgs.stdenv.lib; {
       homepage = "https://pypi.python.org/pypi/flufl.lock";
@@ -5753,16 +5763,15 @@ in {
   };
 
   flufl-testing = buildPythonPackage rec {
-    name = "flufl.testing-0.4";
+    name = "flufl.testing-0.7";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/flufl.testing/${name}.tar.gz";
-      sha256 = "0kri9d2y4w58k9b7zq94xisicqjag8zfkdfvjsjpz6dxcz17achp";
+      sha256 = "0l02kyfxg0wkn85zznpfx3d7qbhjxhmy6002xp8q0a94nnfrv6if";
     };
 
-    buildInputs = [ self.nose ];
-
-    doCheck = false;
+    # does not have any tests
+    doCheck = false; 
 
     meta = with pkgs.stdenv.lib; {
       homepage = "https://pypi.python.org/pypi/flufl.testing";
@@ -8602,6 +8611,8 @@ in {
     };
   };
 
+  django-allauth = callPackage ../development/python-modules/django-allauth { };
+
   django_appconf = callPackage ../development/python-modules/django_appconf { };
 
   django_colorful = buildPythonPackage rec {
@@ -8669,17 +8680,23 @@ in {
 
   django_extensions = callPackage ../development/python-modules/django-extensions { };
 
+  django-gravatar2 = callPackage ../development/python-modules/django-gravatar2 { };
+
   django_guardian = callPackage ../development/python-modules/django_guardian.nix { };
 
   django-ipware = callPackage ../development/python-modules/django-ipware { };
 
   django-jinja = callPackage ../development/python-modules/django-jinja2 { };
 
+  django-paintstore = callPackage ../development/python-modules/django-paintstore { };
+
   django-pglocks = callPackage ../development/python-modules/django-pglocks { };
 
   django-picklefield = callPackage ../development/python-modules/django-picklefield { };
 
   django_polymorphic = callPackage ../development/python-modules/django-polymorphic { };
+
+  django-q = callPackage ../development/python-modules/django-q { };
 
   django-sampledatahelper = callPackage ../development/python-modules/django-sampledatahelper { };
 
@@ -8724,6 +8741,8 @@ in {
   # Override the package set and set e.g. `django = super.django_1_9`.
   # See the Nixpkgs manual for examples on how to override the package set.
   django_hijack = callPackage ../development/python-modules/django-hijack { };
+
+  django-mailman3 = callPackage ../development/python-modules/django-mailman3 { };
 
   django_nose = buildPythonPackage rec {
     name = "django-nose-${version}";
@@ -11457,11 +11476,11 @@ in {
 
   lazr-config = buildPythonPackage rec {
     name = "lazr.config-${version}";
-    version = "2.1";
+    version = "2.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/lazr.config/${name}.tar.gz";
-      sha256 = "1286jwkq3pk7g0n8psiq3nxdqn74f98bbxc3fkdy1wnixxfhyf2z";
+      sha256 = "0xyphxcpld2wa4nm6i4a82vrsvrvy69z7q2q46km6riym4ivpii1";
     };
 
     propagatedBuildInputs = [ self.lazr-delegates ];
@@ -19512,23 +19531,23 @@ in {
 
   django-haystack = buildPythonPackage rec {
     name = "django-haystack-${version}";
-    version = "2.4.1";
+    version = "2.6.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/django-haystack/django-haystack-${version}.tar.gz";
-      sha256 = "04cva8qg79xig4zqhb4dwkpm7734dvhzqclzvrdz70fh59ki5b4f";
+      sha256 = "0bn50656gh6mda9ypp2ax6ifssakkwz0i4mb53l2vr0ia9iizj8b";
     };
 
     doCheck = false;  # no tests in source
 
-    buildInputs = with self; [ coverage mock nose geopy ];
     propagatedBuildInputs = with self; [
-      django dateutil_1_5 whoosh pysolr elasticsearch
+      django dateutil whoosh pysolr elasticsearch setuptools_scm
     ];
 
     patchPhase = ''
       sed -i 's/geopy==/geopy>=/' setup.py
       sed -i 's/whoosh==/Whoosh>=/' setup.py
+      sed -i 's/<1.11/<1.12/' setup.py
     '';
 
     meta = with stdenv.lib; {

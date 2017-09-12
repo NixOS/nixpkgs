@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitLab, python3Packages }:
+{ stdenv, fetchFromGitLab, python3 }:
 
-python3Packages.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   name = "mailman-${version}";
-  version = "3.0.3";
+  version = "3.1.0";
 
   src = fetchFromGitLab {
     owner = "mailman";
     repo = "mailman";
-    rev = "cdd24f88bd36aa2bd87252618e98b80aa7cc1bf1";
-    sha256 = "0rkcv8wp52vbb8xxcf2166pjl175shv86cjii6kh32ysvplbi0qw";
+    rev = version;
+    sha256 = "1y38ajlvcq7lfz2cbdsr32f70qxizkwgski1fg4kv1p39sam47nq";
   };
 
   postPatch = ''
@@ -18,10 +18,15 @@ python3Packages.buildPythonApplication rec {
       --replace "config.BIN_DIR, 'runner'" "config.BIN_DIR, '.runner-wrapped'"
   '';
 
-  propagatedBuildInputs = with python3Packages; [
-    aiosmtpd alembic atpublic falcon flufl-bounce flufl-i18n flufl-lock flufl-testing
-    httplib2 lazr-config lazr-smtptest nose nose2 passlib psycopg2 requests2 zope_component
+  propagatedBuildInputs = with python3.pkgs; [
+    aiosmtpd alembic atpublic falcon flufl-bounce flufl-i18n flufl-lock flufl-testing dns
+    httplib2 lazr-config lazr-smtptest nose nose2 passlib psycopg2 requests zope_component
   ];
+
+  # checkPhase = ''
+  #   python -m nose2 -v
+  # '';
+  doCheck = false;
 
   makeFlags = [ "DIRSETGID=:" ];
 
