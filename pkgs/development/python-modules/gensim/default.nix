@@ -38,6 +38,6 @@ buildPythonPackage rec {
     description = "Topic-modelling library";
     homepage = https://radimrehurek.com/gensim/;
     license = lib.licenses.lgpl21;
-    maintainers = with lib.maintainers; [ jpbernardy ];
+    maintainers = with lib.maintainers; [ jyp ];
   };
 }
