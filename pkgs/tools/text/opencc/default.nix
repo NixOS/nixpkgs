@@ -9,9 +9,13 @@ stdenv.mkDerivation {
 
   buildInputs = [ cmake python ];
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=OFF"
+  makeFlags = [
+    # let intermediate tools find intermediate library
+    "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(CURDIR)/src"
   ];
+
+  # Parallel building occasionaly fails with: Error copying file "/tmp/nix-build-opencc-1.0.5.drv-0/OpenCC-ver.1.0.5/build/src/libopencc.so.1.0.0" to "/tmp/nix-build-opencc-1.0.5.drv-0/OpenCC-ver.1.0.5/build/src/tools".
+  enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/BYVoid/OpenCC;
