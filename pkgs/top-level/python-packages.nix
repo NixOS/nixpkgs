@@ -676,6 +676,7 @@ in {
     meta = {
       description = "Utilities and Python modules for handling audio";
       homepage = "http://audiotools.sourceforge.net/";
+      platforms = platforms.linux;
       license = licenses.gpl2Plus;
     };
   };
