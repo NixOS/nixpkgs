@@ -12062,6 +12062,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  SpreadsheetReadSXC = buildPerlPackage rec {
+    name = "Spreadsheet-ReadSXC-0.20";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TE/TERHECHTE/${name}.tar.gz";
+      sha256 = "1dimnb1a1jjkrfbvy63qxa13i3b8x9ly1j2bpr23hfs58qfdvr5j";
+    };
+    propagatedBuildInputs = [ TestMore XMLParser ArchiveZip ];
+    meta = {
+      description = "Extract OpenOffice 1.x spreadsheet data";
+    };
+  };
+
   SQLAbstract = buildPerlPackage rec {
     name = "SQL-Abstract-1.81";
     src = fetchurl {
