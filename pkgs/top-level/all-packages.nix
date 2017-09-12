@@ -9748,6 +9748,8 @@ with pkgs;
 
   mapnik = callPackage ../development/libraries/mapnik { };
 
+  marisa = callPackage ../development/libraries/marisa {};
+
   matio = callPackage ../development/libraries/matio { };
 
   mbedtls = callPackage ../development/libraries/mbedtls { };
