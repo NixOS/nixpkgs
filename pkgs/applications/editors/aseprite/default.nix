@@ -1,18 +1,26 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
+{ stdenv, lib, fetchFromGitHub, cmake, pkgconfig
 , curl, freetype, giflib, libjpeg, libpng, libwebp, pixman, tinyxml, zlib
 , libX11, libXext, libXcursor, libXxf86vm
+, unfree ? false
+, cmark
 }:
+
+# Unfree version is not redistributable:
+# https://dev.aseprite.org/2016/09/01/new-source-code-license/
+# Consider supporting the developer: https://aseprite.org/#buy
 
 stdenv.mkDerivation rec {
   name = "aseprite-${version}";
-  version = "1.1.7";
+  version = if unfree then "1.2-beta12" else "1.1.7";
 
   src = fetchFromGitHub {
     owner = "aseprite";
     repo = "aseprite";
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "0gd49lns2bpzbkwax5jf9x1xmg1j8ij997kcxr2596cwiswnw4di";
+    sha256 = if unfree
+      then "1zgsr03d4vwdj2qyiwfwfqsbqngp85n13i3xwbkfkbja036c5yhc"
+      else "0gd49lns2bpzbkwax5jf9x1xmg1j8ij997kcxr2596cwiswnw4di";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -20,29 +28,42 @@ stdenv.mkDerivation rec {
   buildInputs = [
     curl freetype giflib libjpeg libpng libwebp pixman tinyxml zlib
     libX11 libXext libXcursor libXxf86vm
+  ] ++ lib.optionals unfree [ cmark ];
+
+  cmakeFlags = [
+    "-DENABLE_UPDATER=OFF"
+    "-DUSE_SHARED_CURL=ON"
+    "-DUSE_SHARED_FREETYPE=ON"
+    "-DUSE_SHARED_GIFLIB=ON"
+    "-DUSE_SHARED_JPEGLIB=ON"
+    "-DUSE_SHARED_LIBPNG=ON"
+    "-DUSE_SHARED_LIBWEBP=ON"
+    "-DUSE_SHARED_PIXMAN=ON"
+    "-DUSE_SHARED_TINYXML=ON"
+    "-DUSE_SHARED_ZLIB=ON"
+    "-DWITH_DESKTOP_INTEGRATION=ON"
+    "-DWITH_WEBP_SUPPORT=ON"
+  ] ++ lib.optionals unfree [
+    "-DUSE_SHARED_CMARK=ON"
+    # Aseprite needs internal freetype headers.
+    "-DUSE_SHARED_FREETYPE=OFF"
+    # Disable libarchive programs.
+    "-DENABLE_CAT=OFF"
+    "-DENABLE_CPIO=OFF"
+    "-DENABLE_TAR=OFF"
   ];
 
-  cmakeFlags = ''
-    -DENABLE_UPDATER=OFF
-    -DUSE_SHARED_CURL=ON
-    -DUSE_SHARED_FREETYPE=ON
-    -DUSE_SHARED_GIFLIB=ON
-    -DUSE_SHARED_JPEGLIB=ON
-    -DUSE_SHARED_LIBPNG=ON
-    -DUSE_SHARED_LIBWEBP=ON
-    -DUSE_SHARED_PIXMAN=ON
-    -DUSE_SHARED_TINYXML=ON
-    -DUSE_SHARED_ZLIB=ON
-    -DWITH_DESKTOP_INTEGRATION=ON
-    -DWITH_WEBP_SUPPORT=ON
+  postInstall = lib.optionalString unfree ''
+    # Delete unneeded artifacts of bundled libraries.
+    rm -rf $out/include $out/lib
   '';
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://www.aseprite.org/;
     description = "Animated sprite editor & pixel art tool";
-    license = licenses.gpl2;
+    license = if unfree then licenses.unfree else licenses.gpl2;
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;
   };
