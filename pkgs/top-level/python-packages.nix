@@ -11175,6 +11175,8 @@ in {
     buildInputs = with self;
       [ fs gdata python_keyczar mock pyasn1 pycrypto pytest_28 six setuptools_scm pytestrunner ];
 
+    doCheck = !stdenv.isDarwin;
+
     checkPhase = ''
       py.test $out
     '';
