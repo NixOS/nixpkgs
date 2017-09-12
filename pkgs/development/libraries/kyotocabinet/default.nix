@@ -17,7 +17,11 @@ stdenv.mkDerivation rec {
       --replace tr1::unordered_set std::unordered_set
 
     substituteInPlace lab/kcdict/Makefile --replace stdc++ c++
-    substituteInPlace configure --replace stdc++ c++
+    substituteInPlace configure \
+        --replace /usr/local/bin:/usr/local/sbin: "" \
+        --replace /usr/bin:/usr/sbin: "" \
+        --replace /bin:/sbin: "" \
+        --replace stdc++ c++
   '';
 
   patches = [(fetchurl {
