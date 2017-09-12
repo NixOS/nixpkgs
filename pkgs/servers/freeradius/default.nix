@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://freeradius.org/;
+    homepage = https://freeradius.org/;
     description = "A modular, high performance free RADIUS suite";
     license = licenses.gpl2;
     maintainers = with maintainers; [ sheenobu willibutz ];

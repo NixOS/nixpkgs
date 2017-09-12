@@ -233,7 +233,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./nixos.patch ];
 
-  hardeningDisable = "all";
+  hardeningDisable = [ "all" ];
   dontPatchELF = true;
   dontStrip = true;
 

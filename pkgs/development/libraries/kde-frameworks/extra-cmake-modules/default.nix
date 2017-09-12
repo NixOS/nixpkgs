@@ -7,7 +7,7 @@ mkDerivation {
 
   outputs = [ "out" ];  # this package has no runtime components
 
-  propagatedNativeBuildInputs = [ cmake pkgconfig ];
+  propagatedBuildInputs = [ cmake pkgconfig ];
 
   setupHook = ./setup-hook.sh;
 
