@@ -1,5 +1,5 @@
 { stdenv, fetchgit, cmake, pkgconfig, qtbase, qtwebkit, qtkeychain, sqlite
-, inotify-tools }:
+, inotify-tools, withGnomeKeyring ? false, makeWrapper, libgnome_keyring }:
 
 stdenv.mkDerivation rec {
   name = "nextcloud-client-${version}";
@@ -13,8 +13,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig cmake ];
+
   buildInputs = [ qtbase qtwebkit qtkeychain sqlite ]
-    ++ stdenv.lib.optional stdenv.isLinux inotify-tools;
+    ++ stdenv.lib.optional stdenv.isLinux inotify-tools
+    ++ stdenv.lib.optional withGnomeKeyring makeWrapper;
 
   enableParallelBuilding = true;
 
@@ -30,6 +32,11 @@ stdenv.mkDerivation rec {
     "-DINOTIFY_LIBRARY=${inotify-tools}/lib/libinotifytools.so"
     "-DINOTIFY_INCLUDE_DIR=${inotify-tools}/include"
   ];
+
+  postInstall = stdenv.lib.optionalString (withGnomeKeyring) ''
+    wrapProgram "$out/bin/nextcloud" \
+      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ libgnome_keyring ]}
+  '';
 
   meta = with stdenv.lib; {
     description = "Nextcloud themed desktop client";
