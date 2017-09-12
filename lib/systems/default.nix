@@ -28,6 +28,15 @@ rec {
         else if final.isLinux  then "glibc"
         # TODO(@Ericson2314) think more about other operating systems
         else                        "native/impure";
+      extensions = {
+        sharedLibrary =
+          /**/ if final.isDarwin  then ".dylib"
+          else if final.isWindows then ".dll"
+          else                         ".so";
+        executable =
+          /**/ if final.isWindows then ".exe"
+          else                         "";
+      };
     } // mapAttrs (n: v: v final.parsed) inspect.predicates
       // args;
   in final;
