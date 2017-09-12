@@ -6633,7 +6633,13 @@ with pkgs;
     samples = true;
   };
 
-  avrgcclibc = callPackage ../development/misc/avr-gcc-with-avr-libc {};
+  avrgcclibc = throw "avrgcclibs are now separate packages, install avrbinutils, avrgcc and avrlibc";
+
+  avrbinutils = callPackage ../development/misc/avr/binutils {};
+
+  avrgcc      = callPackage ../development/misc/avr/gcc {};
+
+  avrlibc     = callPackage ../development/misc/avr/libc {};
 
   avr8burnomat = callPackage ../development/misc/avr8-burn-omat { };
 
