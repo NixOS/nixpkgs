@@ -12048,6 +12048,20 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  SpreadsheetRead = buildPerlPackage rec {
+    name = "Spreadsheet-Read-0.74";
+    src = fetchFromGitHub {
+      owner = "Tux";
+      repo = "Spreadsheet-Read";
+      rev = "0.74";
+      sha256 = "0bx03r4yliv1vgmcxw21v900xxhcj0sqqj3cx28g8rfsb82jf9iz";
+    };
+    propagatedBuildInputs = [ TestNoWarnings ];
+    meta = {
+      description = "Read the data from a spreadsheet";
+    };
+  };
+
   SQLAbstract = buildPerlPackage rec {
     name = "SQL-Abstract-1.81";
     src = fetchurl {
