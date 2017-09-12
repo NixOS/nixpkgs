@@ -87,7 +87,8 @@ in {
     hardware.pulseaudio = {
       enable = mkOption {
         type = types.bool;
-        default = true;
+        default = config.sound.enable;
+        defaultText = "config.sound.enable";
         description = ''
           Whether to enable the PulseAudio sound server.
         '';
