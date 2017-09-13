@@ -5316,7 +5316,7 @@ with pkgs;
   #Use this instead of stdenv to build with clang
   clangStdenv = if stdenv.isDarwin then stdenv else lowPrio llvmPackages.stdenv;
   clang-sierraHack-stdenv = overrideCC stdenv clang-sierraHack;
-  libcxxStdenv = lowPrio llvmPackages.libcxxStdenv;
+  libcxxStdenv = if stdenv.isDarwin then stdenv else lowPrio llvmPackages.libcxxStdenv;
 
   clean = callPackage ../development/compilers/clean { };
 
@@ -19391,8 +19391,10 @@ with pkgs;
   # `recurseIntoAttrs` for sake of hydra, not nix-env
   tests = recurseIntoAttrs {
     cc-wrapper = callPackage ../test/cc-wrapper { };
-    cc-wrapper-clang = callPackage ../test/cc-wrapper { stdenv = clangStdenv; };
-    cc-wrapper-libcxx = callPackage ../test/cc-wrapper { stdenv = libcxxStdenv; };
+    cc-wrapper-clang = callPackage ../test/cc-wrapper { stdenv = llvmPackages.stdenv; };
+    cc-wrapper-libcxx = callPackage ../test/cc-wrapper { stdenv = llvmPackages.libcxxStdenv; };
+    cc-wrapper-clang-39 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_39.stdenv; };
+    cc-wrapper-libcxx-39 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_39.libcxxStdenv; };
     stdenv-inputs = callPackage ../test/stdenv-inputs { };
 
     macOSSierraShared = callPackage ../test/macos-sierra-shared {};
