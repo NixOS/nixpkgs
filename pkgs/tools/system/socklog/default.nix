@@ -16,7 +16,13 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" "doc" ];
 
   postPatch = ''
-    sed -i src/TARGETS -e '/^chkshsgr/d'
+    # Fails to run as user without supplementary groups
+    echo "int main() { return 0; }" >src/chkshsgr.c
+
+    # Fixup implicit function declarations
+    sed -i src/pathexec_run.c -e '1i#include <unistd.h>'
+    sed -i src/prot.c -e '1i#include <unistd.h>' -e '2i#include <grp.h>'
+    sed -i src/seek_set.c -e '1i#include <unistd.h>'
   '';
 
   configurePhase = ''
@@ -27,8 +33,6 @@ stdenv.mkDerivation rec {
   buildPhase = ''package/compile'';
 
   installPhase = ''
-    runHook preInstall
-
     mkdir -p $out/bin
     mv command"/"* $out/bin
 
@@ -39,8 +43,6 @@ stdenv.mkDerivation rec {
 
     mkdir -p $doc/share/doc/socklog/html
     mv doc/*.html $doc/share/doc/socklog/html/
-
-    runHook postInstall
   '';
 
   checkPhase = ''package/check'';
