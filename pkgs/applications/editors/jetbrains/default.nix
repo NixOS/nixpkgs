@@ -372,15 +372,15 @@ in
 
   rider = buildRider rec {
     name = "rider-${version}";
-    version = "171.4456.1432"; /* updated by script */
+    version = "171.4456.3271"; /* updated by script */
     description = "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
-      url = "https://download.jetbrains.com/resharper/Rider-RC-${version}.tar.gz";
-      sha256 = "37bad69cdfcc4f297b2500a7bb673af7ef8f1fd45baa4eb2fa388d2c4bcb41ee"; /* updated by script */
+      url = "https://download.jetbrains.com/resharper/JetBrains.Rider-${version}.tar.gz";
+      sha256 = "2979efedd0ada257191d928aafa682af299c536ad0cc47fe764fb4038f493d5d"; /* updated by script */
     };
     wmClass = "jetbrains-rider";
-    update-channel = "rider_2017_1_eap";
+    update-channel = "rider_2017_2_eap";
   };
 
   ruby-mine = buildRubyMine rec {

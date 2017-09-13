@@ -27,24 +27,29 @@ sub get_latest_versions {
     next unless $latest_build;
 
     # version as in download url
+    my ($version) = $latest_build =~ /^<build [^>]*version="([^"]+)"/;
+    my ($fullNumber) = $latest_build =~ /^<build [^>]*fullNumber="([^"]+)"/;
+    my $latest_version_full1 = "$version-$fullNumber";
+    $latest_version_full1 =~ s/\s*EAP//;
+
     my ($latest_version) = $latest_build =~ /^<build [^>]*version="([^"]+)"/;
     ($latest_version) = $latest_build =~ /^<build [^>]*fullNumber="([^"]+)"/ if $latest_version =~ / /;
 
     $h{$id} = $latest_version;
+    $h{"full1_" . $id} = $latest_version_full1;
   }
   return %h;
 }
 
 my %latest_versions = get_latest_versions();
-#for my $ch (sort keys %latest_versions) {
+# for my $ch (sort keys %latest_versions) {
 #  print("$ch $latest_versions{$ch}\n");
-#}
+# }
 
 sub update_nix_block {
   my ($block) = @_;
   my ($channel) = $block =~ /update-channel\s*=\s*"([^"]+)"/;
   if ($channel) {
-      print "channel is $channel\n";
     if ($latest_versions{$channel}) {
       my ($version) = $block =~ /version\s*=\s*"([^"]+)"/;
       die "no version in $block" unless $version;
@@ -59,10 +64,14 @@ sub update_nix_block {
 	$url =~ s/\$\{name\}/$name/;
 	$url =~ s/\$\{version\}/$latest_versions{$channel}/;
 	die "$url still has some interpolation" if $url =~ /\$/;
-
 	my ($sha256) = get("$url.sha256") =~ /^([0-9a-f]{64})/;
-	die "invalid sha256 in $url.sha256" unless $sha256;
-
+	unless ( $sha256 ) {
+	    my $full_version = $latest_versions{"full1_" . $channel};
+	    my $last_version_try = $latest_versions{$channel};
+            $url =~ s/$last_version_try/$full_version/;
+	}
+	($sha256) = get("$url.sha256") =~ /^([0-9a-f]{64})/;
+        die "invalid sha256 in $url.sha256" unless $sha256;
 	$block =~ s#version\s*=\s*"([^"]+)".+$#version = "$latest_versions{$channel}"; /* updated by script */#m;
 	$block =~ s#sha256\s*=\s*"([^"]+)".+$#sha256 = "$sha256"; /* updated by script */#m;
       }
