@@ -24,7 +24,7 @@ let
 
       for file in $out/bin/*; do
         chmod +w $file
-        patchelf --set-interpreter "$(cat $NIX_BINUTILS/nix-support/dynamic-linker)" \
+        patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
                  --set-rpath ${lib.makeLibraryPath [ pkgs.stdenv.cc.cc ]} \
                  $file
       done
