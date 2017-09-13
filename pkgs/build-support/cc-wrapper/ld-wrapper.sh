@@ -85,10 +85,10 @@ if [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ] || [ "$NIX_@infixSalt@_SET_BUILD_I
                 libDirs+=("$p")
                 ;;
             -l)
-                libs["lib${p}.so"]=1
+                libs["lib${p}@slext@"]=1
                 ;;
             -dynamic-linker | -plugin)
-                # Ignore this argument, or it will match *.so and be added to rpath.
+                # Ignore this argument, or it will match *@slext@ and be added to rpath.
                 ;;
             *)
                 case "$p" in
@@ -96,9 +96,9 @@ if [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ] || [ "$NIX_@infixSalt@_SET_BUILD_I
                         libDirs+=("${p:2}")
                         ;;
                     -l?*)
-                        libs["lib${p:2}.so"]=1
+                        libs["lib${p:2}@slext@"]=1
                         ;;
-                    "${NIX_STORE:-}"/*.so | "${NIX_STORE:-}"/*.so.*)
+                    "${NIX_STORE:-}"/*@slext@ | "${NIX_STORE:-}"/*@slext@.*)
                         # This is a direct reference to a shared library.
                         libDirs+=("${p%/*}")
                         libs["${p##*/}"]=1

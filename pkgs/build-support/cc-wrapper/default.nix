@@ -386,6 +386,8 @@ stdenv.mkDerivation {
   # for substitution in utils.sh
   expandResponseParams = "${expand-response-params}/bin/expand-response-params";
 
+  slext = targetPlatform.extensions.sharedLibrary;
+
   crossAttrs = {
     shell = shell.crossDrv + shell.crossDrv.shellPath;
   };
