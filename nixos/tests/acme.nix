@@ -14,10 +14,10 @@ let
 
       pythonPackages = (super.python.override {
         packageOverrides = lib.const (pysuper: {
-          requests = pysuper.requests.overrideDerivation (drv: {
+          certifi = pysuper.certifi.overrideDerivation (drv: {
             postPatch = (drv.postPatch or "") + ''
               cat "${self.cacert}/etc/ssl/certs/ca-bundle.crt" \
-                > requests/cacert.pem
+                > certifi/cacert.pem
             '';
           });
         });
