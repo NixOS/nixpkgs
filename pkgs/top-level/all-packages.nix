@@ -4786,6 +4786,11 @@ with pkgs;
   clang-sierraHack = clang.override {
     name = "clang-wrapper-with-reexport-hack";
     useMacosReexportHack = true;
+    binutils = binutils.override {
+      cctools = darwin.cctools.override {
+        enableDumpNormalizedLibArgs = true;
+      };
+    };
   };
 
   clang_4  = llvmPackages_4.clang;
@@ -11095,13 +11100,13 @@ with pkgs;
     cmdline = callPackage ../os-specific/darwin/command-line-tools {};
     apple-source-releases = callPackage ../os-specific/darwin/apple-source-releases { };
   in apple-source-releases // rec {
-    cctools_cross = callPackage (forcedNativePackages.callPackage ../os-specific/darwin/cctools/port.nix {}).cross {
+    cctools_cross = callPackage (forcedNativePackages.callPackages ../os-specific/darwin/cctools/port.nix {}).cross {
       cross = assert targetPlatform != buildPlatform; targetPlatform;
       inherit maloader;
       xctoolchain = xcode.toolchain;
     };
 
-    cctools = (callPackage ../os-specific/darwin/cctools/port.nix {
+    cctools = (callPackages ../os-specific/darwin/cctools/port.nix {
       inherit libobjc;
       stdenv = if stdenv.isDarwin then stdenv else libcxxStdenv;
     }).native;

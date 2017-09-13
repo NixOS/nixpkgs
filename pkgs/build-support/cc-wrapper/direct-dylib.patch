@@ -1,0 +1,22 @@
+diff --git a/pkgs/build-support/cc-wrapper/ld-wrapper.sh b/pkgs/build-support/cc-wrapper/ld-wrapper.sh
+index 056cfa9..42952f8 100644
+--- a/ld-wrapper.sh
++++ b/ld-wrapper.sh
+@@ -121,7 +121,7 @@ if [ "$NIX_DONT_SET_RPATH" != 1 ]; then
+             # will get into the next 'elif'. We don't want
+             # the dynamic linker path rpath to go always first.
+             n=$((n + 1))
+-        elif [[ "$p" =~ ^[^-].*\.so($|\.) ]]; then
++        elif [[ "$p" =~ ^[^-].*\.(so|dylib)($|\.) ]]; then
+             # This is a direct reference to a shared library, so add
+             # its directory to the rpath.
+             path="$(dirname "$p")";
+@@ -138,7 +138,7 @@ if [ "$NIX_DONT_SET_RPATH" != 1 ]; then
+ 
+     for i in $libPath; do
+         for j in $libs; do
+-            if [ -f "$i/lib$j.so" ]; then
++            if [[ -f "$i/lib$j.so" || -f "$i/lib$j.dylib" ]]; then
+                 addToRPath $i
+                 break
+             fi

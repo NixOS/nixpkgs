@@ -183,7 +183,9 @@ stdenv.mkDerivation {
     '' else ''
       ldInner="ld-reexport-delegate"
       wrap "$ldInner" ${./macos-sierra-reexport-hack.bash} ''${ld:-$ldPath/ld}
-      wrap ld ${./ld-wrapper.sh} "$out/bin/$ldInner"
+      cp ${./ld-wrapper.sh} ./ld-wrapper.sh
+      patch < ${./direct-dylib.patch}
+      wrap ld ./ld-wrapper.sh "$out/bin/$ldInner"
       unset ldInner
     '') + ''
 
