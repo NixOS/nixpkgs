@@ -6723,12 +6723,12 @@ in {
   };
 
   jupyter_console = buildPythonPackage rec {
-    version = "5.0.0";
+    version = "5.1.0";
     name = "jupyter_console-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jupyter_console/${name}.tar.gz";
-      sha256 = "7ddfc8cc49921b0ed852500928922e637f9188358c94b5c76339a5a8f9ac4c11";
+      sha256 = "1myg8fs7ffvy3jm3pvx86xgzpkwa68csh3v9sply22q7zr6sxd6h";
     };
 
     buildInputs = with self; [ nose ];
