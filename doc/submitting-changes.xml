@@ -61,7 +61,7 @@ $ git checkout -b 'fix/pkg-name-update'
 <listitem>
 <para>Format the commit in a following way:</para>
 <programlisting>
-(pkg-name | service-name): (from -> to | init at version | refactor | etc)
+(pkg-name | nixos/&lt;module>): (from -> to | init at version | refactor | etc)
 Additional information.
 </programlisting>
 
@@ -84,13 +84,13 @@ Additional information.
 
 <listitem>
 <para>
-<command>hydra service: add bazBaz option</command>
+<command>nixos/hydra: add bazBaz option</command>
 </para>
 </listitem>
 
 <listitem>
 <para>
-<command>nginx service: refactor config generation</command>
+<command>nixos/nginx: refactor config generation</command>
 </para>
 </listitem>
 </itemizedlist>
@@ -196,7 +196,7 @@ Additional information.
 
 <itemizedlist>
 <listitem>
-<para>Write the title in format <command>(pkg-name | service): improvement</command>.
+<para>Write the title in format <command>(pkg-name | nixos/&lt;module>): improvement</command>.
 
 <itemizedlist>
 <listitem>
