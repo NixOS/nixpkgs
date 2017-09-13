@@ -103,9 +103,9 @@ in
       };
 
       authPassFile = mkOption {
-        type = types.nullOr types.str;
+        type = types.nullOr (types.either types.str types.path);
         default = null;
-        example = "/run/keys/ssmtp-authpass";
+        example = /home/user/locally-stored-pass-file;
         description = ''
           Path to a file that contains the password used for SMTP auth. The file
           should not contain a trailing newline, if the password does not contain one.
