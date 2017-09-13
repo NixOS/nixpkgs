@@ -27,9 +27,8 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share/plank/themes
     cp -r extra/*-Plank $out/share/plank/themes
-    mkdir -p $out/share/doc/$pname/Chrome
-    cp -r extra/Chrome/*.crx $out/share/doc/$pname/Chrome
-    cp AUTHORS README.md $out/share/doc/$pname/
+    install -Dm644 -t $out/share/doc/${pname}/Chrome extra/Chrome/*.crx
+    install -Dm644 -t $out/share/doc/${pname}        AUTHORS *.md
   '';
 
   meta = with stdenv.lib; {
