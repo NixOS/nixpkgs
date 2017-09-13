@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, maintainers, platforms, licenses, pkgs, self }:
+{ stdenv, buildPythonPackage, fetchPypi, maintainers, platforms, licenses, pkgs, self }:
 
 # From the 1.10.0 documentation:
 # "This version of Kivy requires at least Cython version 0.23, and has been
@@ -12,10 +12,12 @@ assert stdenv.lib.versionAtLeast self.cython.version "0.23";
 # assert stdenv.lib.versionOlder self.cython.version "0.25.3";
 
 buildPythonPackage rec {
-  name = "Kivy-1.10.0";
+  pname = "Kivy";
+  version = "1.10.0";
+  name = "${pname}-${version}";
 
-  src = pkgs.fetchurl {
-    url = "mirror://pypi/k/kivy/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "1394zh6kvf7k5d8vlzxcsfcailr3q59xwg9b1n7qaf25bvyq1h98";
   };
 
@@ -48,6 +50,7 @@ buildPythonPackage rec {
     # https://kivy.org/docs/installation/installation-linux.html
 
     pkgs.mesa
+    pkgs.mtdev
 
     pkgs.SDL2
     pkgs.SDL2_image
@@ -69,7 +72,6 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = with self; [
     pillow
-    pkgs.mtdev
     ] ;
 
   # We're not currently running tests, because there are 38 errors and 1 failure
