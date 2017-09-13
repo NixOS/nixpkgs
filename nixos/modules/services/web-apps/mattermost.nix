@@ -185,7 +185,7 @@ in
         '' + lib.optionalString cfg.localDatabaseCreate ''
           if ! test -e "${cfg.statePath}/.db-created"; then
             ${config.services.postgresql.package}/bin/psql postgres -c \
-              "CREATE ROLE ${cfg.localDatabaseUser} WITH LOGIN NOCREATEDB NOCREATEROLE NOCREATEUSER ENCRYPTED PASSWORD '${cfg.localDatabasePassword}'"
+              "CREATE ROLE ${cfg.localDatabaseUser} WITH LOGIN NOCREATEDB NOCREATEROLE ENCRYPTED PASSWORD '${cfg.localDatabasePassword}'"
             ${config.services.postgresql.package}/bin/createdb \
               --owner ${cfg.localDatabaseUser} ${cfg.localDatabaseName}
             touch ${cfg.statePath}/.db-created
