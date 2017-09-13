@@ -4,15 +4,7 @@
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.00";
 
 let
-  version = if lib.versionOlder (lib.getVersion ocaml) "4.02.0"
-  then
-    "2.3.1"
-  else
-    "2.5.4";
-  hashes = {
-    "2.3.1" = "192jamcc7rmvadlqqsjkzsl6hlgwhg9my1qc89fxh1lmd4qdsrpn";
-    "2.5.4" = "101vk16c5wayd51s8w0mvy99bk7q3gm2gz8i8616wa1lmyszjknh";
-  };
+  version = "3.0.2";
 in
 
 stdenv.mkDerivation {
@@ -20,8 +12,8 @@ stdenv.mkDerivation {
   name = "merlin-${version}";
 
   src = fetchzip {
-    url = "https://github.com/the-lambda-church/merlin/archive/v${version}.tar.gz";
-    sha256 = hashes."${version}";
+    url = "https://github.com/ocaml/merlin/archive/v${version}.tar.gz";
+    sha256 = "0lcgafs5ip8vhvrp1d7yv6mzjsirmayd83cj4wwq6zxcrl7yv4x8";
   };
 
   buildInputs = [ ocaml findlib yojson ]
