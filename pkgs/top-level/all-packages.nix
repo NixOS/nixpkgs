@@ -4658,6 +4658,8 @@ with pkgs;
 
   turses = callPackage ../applications/networking/instant-messengers/turses { };
 
+  oysttyer = callPackage ../applications/networking/instant-messengers/oysttyer { };
+
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
   twitterBootstrap3 = callPackage ../development/web/twitter-bootstrap/v3.nix {};
 
