@@ -44,26 +44,31 @@ sub update_nix_block {
   my ($block) = @_;
   my ($channel) = $block =~ /update-channel\s*=\s*"([^"]+)"/;
   if ($channel) {
-    die "unknown update-channel $channel" unless $latest_versions{$channel};
-    my ($version) = $block =~ /version\s*=\s*"([^"]+)"/;
-    die "no version in $block" unless $version;
-    if ($version eq $latest_versions{$channel}) {
-      print("$channel is up to date at $version\n");
-    } else {
-      print("updating $channel: $version -> $latest_versions{$channel}\n");
-      my ($url) = $block =~ /url\s*=\s*"([^"]+)"/;
-      # try to interpret some nix
-      my ($name) = $block =~ /name\s*=\s*"([^"]+)"/;
-      $name =~ s/\$\{version\}/$latest_versions{$channel}/;
-      $url =~ s/\$\{name\}/$name/;
-      $url =~ s/\$\{version\}/$latest_versions{$channel}/;
-      die "$url still has some interpolation" if $url =~ /\$/;
+      print "channel is $channel\n";
+    if ($latest_versions{$channel}) {
+      my ($version) = $block =~ /version\s*=\s*"([^"]+)"/;
+      die "no version in $block" unless $version;
+      if ($version eq $latest_versions{$channel}) {
+	print("$channel is up to date at $version\n");
+      } else {
+	print("updating $channel: $version -> $latest_versions{$channel}\n");
+	my ($url) = $block =~ /url\s*=\s*"([^"]+)"/;
+	# try to interpret some nix
+	my ($name) = $block =~ /name\s*=\s*"([^"]+)"/;
+	$name =~ s/\$\{version\}/$latest_versions{$channel}/;
+	$url =~ s/\$\{name\}/$name/;
+	$url =~ s/\$\{version\}/$latest_versions{$channel}/;
+	die "$url still has some interpolation" if $url =~ /\$/;
 
-      my ($sha256) = get("$url.sha256") =~ /^([0-9a-f]{64})/;
-      die "invalid sha256 in $url.sha256" unless $sha256;
+	my ($sha256) = get("$url.sha256") =~ /^([0-9a-f]{64})/;
+	die "invalid sha256 in $url.sha256" unless $sha256;
 
-      $block =~ s#version\s*=\s*"([^"]+)".+$#version = "$latest_versions{$channel}"; /* updated by script */#m;
-      $block =~ s#sha256\s*=\s*"([^"]+)".+$#sha256 = "$sha256"; /* updated by script */#m;
+	$block =~ s#version\s*=\s*"([^"]+)".+$#version = "$latest_versions{$channel}"; /* updated by script */#m;
+	$block =~ s#sha256\s*=\s*"([^"]+)".+$#sha256 = "$sha256"; /* updated by script */#m;
+      }
+    }
+    else {
+      warn "unknown update-channel $channel";
     }
   }
   return $block;
