@@ -217,6 +217,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "GNU Free Documentation License v1.3";
   };
 
+  ffsl = {
+    fullName = "Floodgap Free Software License";
+    url = http://www.floodgap.com/software/ffsl/license.html;
+  };
+
   free = {
     fullName = "Unspecified free software license";
   };
