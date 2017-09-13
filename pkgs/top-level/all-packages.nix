@@ -4566,6 +4566,8 @@ with pkgs;
 
   tldr = callPackage ../tools/misc/tldr { };
 
+  tldr-hs = haskellPackages.tldr;
+
   tlspool = callPackage ../tools/networking/tlspool { };
 
   tmate = callPackage ../tools/misc/tmate { };
