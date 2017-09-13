@@ -16,7 +16,13 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" "doc" ];
 
   postPatch = ''
+    # Fails to run as user without supplementary groups
     echo "int main() { return 0; }" >src/chkshsgr.c
+
+    # Fixup implicit function declarations
+    sed -i src/pathexec_run.c -e '1i#include <unistd.h>'
+    sed -i src/prot.c -e '1i#include <unistd.h>' -e '2i#include <grp.h>'
+    sed -i src/seek_set.c -e '1i#include <unistd.h>'
   '';
 
   configurePhase = ''
