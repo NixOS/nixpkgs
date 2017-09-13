@@ -214,6 +214,7 @@ in rec {
   # Run the tests for each platform.  You can run a test by doing
   # e.g. ‘nix-build -A tests.login.x86_64-linux’, or equivalently,
   # ‘nix-build tests/login.nix -A result’.
+  tests.acme = callTest tests/acme.nix {};
   tests.avahi = callTest tests/avahi.nix {};
   tests.bittorrent = callTest tests/bittorrent.nix {};
   tests.blivet = callTest tests/blivet.nix {};
