@@ -6722,32 +6722,7 @@ in {
     };
   };
 
-  jupyter_console = buildPythonPackage rec {
-    version = "5.0.0";
-    name = "jupyter_console-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jupyter_console/${name}.tar.gz";
-      sha256 = "7ddfc8cc49921b0ed852500928922e637f9188358c94b5c76339a5a8f9ac4c11";
-    };
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [
-      jupyter_client
-      ipython
-      ipykernel
-    ];
-
-    # ValueError: underlying buffer has been detached
-    doCheck = false;
-
-    meta = {
-      description = "Jupyter terminal console";
-      homepage = "http://jupyter.org/";
-      license = licenses.bsd3;
-      platforms = platforms.all;
-    };
-  };
+  jupyter_console = callPackage ../development/python-modules/jupyter_console { };
 
   jupyterlab = buildPythonPackage rec {
     name = "jupyterlab-${version}";
