@@ -7285,6 +7285,8 @@ in {
 
   podcastparser = callPackage ../development/python-modules/podcastparser { };
 
+  pomegranate = callPackage ../development/python-modules/pomegranate { };
+
   poppler-qt4 = buildPythonPackage rec {
     name = "poppler-qt4-${version}";
     version = "0.18.1";
