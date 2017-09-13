@@ -27277,6 +27277,8 @@ EOF
 
   spacy = callPackage ../development/python-modules/spacy { };
 
+  spacy_models = callPackage ../development/python-modules/spacy/models.nix { };
+
   textacy = callPackage ../development/python-modules/textacy { };
 
   pyemd  = callPackage ../development/python-modules/pyemd { };
