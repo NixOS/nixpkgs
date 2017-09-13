@@ -1,3 +1,8 @@
+# Copyright 2017 Pierre-Étienne Meunier
+#
+# This file is licensed under the Apache-2.0 license, and under the
+# MIT license, at your convenience.
+
 { lib, buildPlatform, stdenv }:
 
 let buildCrate = { crateName, crateVersion, dependencies, complete, crateFeatures, libName, build, release, libPath, crateType, metadata, crateBin, finalBins, verboseBuild }:
@@ -54,7 +59,7 @@ let buildCrate = { crateName, crateVersion, dependencies, complete, crateFeature
       if [[ ! -z "${build}" ]] ; then
          echo "$boldgreen" "Building ${build} (${libName})" "$norm"
          mkdir -p target/build/${crateName}
-         rustc --crate-name build_script_build ${build} --crate-type bin ${rustcOpts} ${crateFeatures} --out-dir target/build/${crateName} --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow
+         rustc --crate-name build_script_build ${build} --crate-type bin ${rustcOpts} ${crateFeatures} --out-dir target/build/${crateName} --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow $(cat target/link)
          mkdir -p target/build/${crateName}.out
          export RUST_BACKTRACE=1
          BUILD_OUT_DIR="-L $OUT_DIR"
