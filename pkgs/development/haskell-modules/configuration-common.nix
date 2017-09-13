@@ -104,6 +104,10 @@ self: super: {
   # Fix test trying to access /home directory
   shell-conduit = (overrideCabal super.shell-conduit (drv: {
     postPatch = "sed -i s/home/tmp/ test/Spec.hs";
+
+    # the tests for shell-conduit on Darwin illegitimatey assume non-GNU echo
+    # see: https://github.com/psibi/shell-conduit/issues/12
+    doCheck = !pkgs.stdenv.hostPlatform.isDarwin;
   }));
 
   # https://github.com/froozen/kademlia/issues/2
