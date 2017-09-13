@@ -16,8 +16,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   patches = [
-    # Ignore different link counts - doesn't work with 85
-    # ./ignore_links.patch
+    ./ignore_links.patch
   ];
 
   postPatch = ''
