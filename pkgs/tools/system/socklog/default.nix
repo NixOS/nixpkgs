@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" "doc" ];
 
   postPatch = ''
-    sed -i src/TARGETS -e '/^chkshsgr/d'
+    echo "int main() { return 0; }" >src/chkshsgr.c
   '';
 
   configurePhase = ''
@@ -27,8 +27,6 @@ stdenv.mkDerivation rec {
   buildPhase = ''package/compile'';
 
   installPhase = ''
-    runHook preInstall
-
     mkdir -p $out/bin
     mv command"/"* $out/bin
 
@@ -39,8 +37,6 @@ stdenv.mkDerivation rec {
 
     mkdir -p $doc/share/doc/socklog/html
     mv doc/*.html $doc/share/doc/socklog/html/
-
-    runHook postInstall
   '';
 
   checkPhase = ''package/check'';
