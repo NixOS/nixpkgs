@@ -50,7 +50,7 @@ in
           # it's a directory, so the set of overlays from the directory, ordered lexicographically
           let content = readDir path; in
           map (n: import (path + ("/" + n)))
-            (builtins.filter (n: builtins.match ".*\.nix" n != null || pathExists (path + ("/" + n + "/default.nix")))
+            (builtins.filter (n: builtins.match ".*\\.nix" n != null || pathExists (path + ("/" + n + "/default.nix")))
               (attrNames content))
         else 
           # it's a file, so the result is the contents of the file itself
