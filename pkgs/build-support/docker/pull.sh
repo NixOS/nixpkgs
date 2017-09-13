@@ -25,7 +25,7 @@ done
 # run docker daemon
 dockerd -H tcp://127.0.0.1:5555 -H unix:///var/run/docker.sock &
 
-until $(curl --output /dev/null --silent --connect-timeout 2 http://127.0.0.1:5555); do
+until docker ps 2>/dev/null; do
   printf '.'
   sleep 1
 done
