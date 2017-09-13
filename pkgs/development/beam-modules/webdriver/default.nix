@@ -2,9 +2,9 @@
 
 let
   shell = drv: stdenv.mkDerivation {
-          name = "interactive-shell-${drv.name}";
-          buildInputs = [ drv ];
-    };
+    name = "interactive-shell-${drv.name}";
+    buildInputs = [ drv ];
+  };
 
   pkg = self: stdenv.mkDerivation rec {
     name = "webdriver";

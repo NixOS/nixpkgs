@@ -7,12 +7,12 @@
 , psutil
 , memory_profiler
 , pytest_xdist
-, sharedLibraryExtension
 }:
 
 let
-  magick_wand_library = "${imagemagick}/lib/libMagickWand-6.Q16${sharedLibraryExtension}";
-  imagemagick_library = "${imagemagick}/lib/libMagickCore-6.Q16${sharedLibraryExtension}";
+  soext = stdenv.hostPlatform.extensions.sharedLibrary;
+  magick_wand_library = "${imagemagick}/lib/libMagickWand-6.Q16${soext}";
+  imagemagick_library = "${imagemagick}/lib/libMagickCore-6.Q16${soext}";
 in buildPythonPackage rec {
   pname = "Wand";
   version = "0.4.4";

@@ -8,8 +8,8 @@ rec {
   bitcoin-unlimited  = callPackage ./bitcoin-unlimited.nix { withGui = true; };
   bitcoind-unlimited = callPackage ./bitcoin-unlimited.nix { withGui = false; };
 
-  bitcoin-classic  = callPackage ./bitcoin-classic.nix { withGui = true; boost = boost162; };
-  bitcoind-classic = callPackage ./bitcoin-classic.nix { withGui = false; boost = boost162; };
+  bitcoin-classic  = callPackage ./bitcoin-classic.nix { withGui = true; };
+  bitcoind-classic = callPackage ./bitcoin-classic.nix { withGui = false; };
 
   bitcoin-xt  = callPackage ./bitcoin-xt.nix { withGui = true; };
   bitcoind-xt = callPackage ./bitcoin-xt.nix { withGui = false; };
@@ -26,8 +26,8 @@ rec {
   go-ethereum = callPackage ./go-ethereum.nix { };
   go-ethereum-classic = callPackage ./go-ethereum-classic { };
 
-  hivemind = callPackage ./hivemind.nix { withGui = true; boost = boost162; };
-  hivemindd = callPackage ./hivemind.nix { withGui = false; boost = boost162; };
+  hivemind = callPackage ./hivemind.nix { withGui = true; };
+  hivemindd = callPackage ./hivemind.nix { withGui = false; };
 
   litecoin  = callPackage ./litecoin.nix { withGui = true; };
   litecoind = callPackage ./litecoin.nix { withGui = false; };
@@ -35,8 +35,8 @@ rec {
   memorycoin  = callPackage ./memorycoin.nix { withGui = true; };
   memorycoind = callPackage ./memorycoin.nix { withGui = false; };
 
-  namecoin  = callPackage ./namecoin.nix  { inherit namecoind; };
-  namecoind = callPackage ./namecoind.nix { };
+  namecoin  = callPackage ./namecoin.nix  { withGui = true; };
+  namecoind = callPackage ./namecoin.nix { withGui = false; };
 
   ethabi = callPackage ./ethabi.nix { };
   ethrun = callPackage ./ethrun.nix { };

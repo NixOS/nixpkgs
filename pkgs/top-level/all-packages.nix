@@ -6631,7 +6631,13 @@ with pkgs;
     samples = true;
   };
 
-  avrgcclibc = callPackage ../development/misc/avr-gcc-with-avr-libc {};
+  avrgcclibc = throw "avrgcclibs are now separate packages, install avrbinutils, avrgcc and avrlibc";
+
+  avrbinutils = callPackage ../development/misc/avr/binutils {};
+
+  avrgcc      = callPackage ../development/misc/avr/gcc {};
+
+  avrlibc     = callPackage ../development/misc/avr/libc {};
 
   avr8burnomat = callPackage ../development/misc/avr8-burn-omat { };
 
@@ -6797,7 +6803,7 @@ with pkgs;
     pythonPackages = python2Packages;
   };
   buildbot-ui = buildbot.withPlugins (with self.buildbot-plugins; [ www ]);
-  buildbot-full = buildbot.withPlugins (with self.buildbot-plugins; [ www console-view waterfall-view grid-view ]);
+  buildbot-full = buildbot.withPlugins (with self.buildbot-plugins; [ www console-view waterfall-view grid-view wsgi-dashboards ]);
 
   buildkite-agent = callPackage ../development/tools/continuous-integration/buildkite-agent { };
 
@@ -11277,7 +11283,7 @@ with pkgs;
 
   fingerd_bsd = callPackage ../servers/fingerd/bsd-fingerd { };
 
-  firebird = callPackage ../servers/firebird { icu = null; };
+  firebird = callPackage ../servers/firebird { icu = null; stdenv = overrideCC stdenv gcc5; };
   firebirdSuper = callPackage ../servers/firebird { superServer = true; };
 
   fleet = callPackage ../servers/fleet { };
@@ -13452,9 +13458,7 @@ with pkgs;
 
   atom = callPackage ../applications/editors/atom { };
 
-  aseprite = callPackage ../applications/editors/aseprite {
-    giflib = giflib_4_1;
-  };
+  aseprite = callPackage ../applications/editors/aseprite { };
 
   astroid = callPackage ../applications/networking/mailreaders/astroid { };
 
@@ -13471,9 +13475,7 @@ with pkgs;
 
   schismtracker = callPackage ../applications/audio/schismtracker { };
 
-  altcoins = recurseIntoAttrs ( callPackage ../applications/altcoins {
-    callPackage = newScope { boost = boost155; };
-  } );
+  altcoins = recurseIntoAttrs ( callPackage ../applications/altcoins { } );
   bitcoin = altcoins.bitcoin;
   bitcoin-xt = altcoins.bitcoin-xt;
 
@@ -14285,6 +14287,8 @@ with pkgs;
   google-musicmanager = callPackage ../applications/audio/google-musicmanager { };
 
   gopher = callPackage ../applications/networking/gopher/gopher { };
+
+  gopherclient = libsForQt5.callPackage ../applications/networking/gopher/gopherclient { };
 
   gpa = callPackage ../applications/misc/gpa { };
 
@@ -17112,6 +17116,8 @@ with pkgs;
   xzgv = callPackage ../applications/graphics/xzgv { };
 
   yabar = callPackage ../applications/window-managers/yabar { };
+
+  yabar-unstable = callPackage ../applications/window-managers/yabar/unstable.nix { };
 
   yakuake = libsForQt5.callPackage ../applications/misc/yakuake {
     inherit (kdeApplications) konsole;

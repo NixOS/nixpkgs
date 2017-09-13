@@ -1,5 +1,8 @@
 { stdenv, fetchurl, writeScript, pkgconfig, cmake, qtbase, qttools
-, seafile-shared, ccnet, makeWrapper }:
+, seafile-shared, ccnet, makeWrapper
+, withShibboleth ? true, qtwebengine }:
+
+with stdenv.lib;
 
 stdenv.mkDerivation rec {
   version = "6.1.0";
@@ -11,7 +14,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig cmake makeWrapper ];
-  buildInputs = [ qtbase qttools seafile-shared ];
+  buildInputs = [ qtbase qttools seafile-shared ]
+    ++ optional withShibboleth qtwebengine;
+
+  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ]
+    ++ optional withShibboleth "-DBUILD_SHIBBOLETH_SUPPORT=ON";
 
   postInstall = ''
     wrapProgram $out/bin/seafile-applet \

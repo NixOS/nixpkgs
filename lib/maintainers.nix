@@ -284,9 +284,9 @@
   johnramsden = "John Ramsden <johnramsden@riseup.net>";
   joko = "Ioannis Koutras <ioannis.koutras@gmail.com>";
   jonafato = "Jon Banafato <jon@jonafato.com>";
-  jpbernardy = "Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>";
   jpierre03 = "Jean-Pierre PRUNARET <nix@prunetwork.fr>";
   jpotier = "Martin Potier <jpo.contributes.to.nixos@marvid.fr>";
+  jyp = "Jean-Philippe Bernardy <jeanphilippe.bernardy@gmail.com>";
   jraygauthier = "Raymond Gauthier <jraygauthier@gmail.com>";
   jtojnar = "Jan Tojnar <jtojnar@gmail.com>";
   juliendehos = "Julien Dehos <dehos@lisic.univ-littoral.fr>";
