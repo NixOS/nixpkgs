@@ -2,7 +2,7 @@
   mkDerivation, lib, copyPathsToStore,
   extra-cmake-modules, perl,
   karchive, kconfig, kguiaddons, ki18n, kiconthemes, kio, kparts, libgit2,
-  qtscript, qtxmlpatterns, sonnet, syntax-highlighting, qtquickcontrols
+  qtscript, qtxmlpatterns, sonnet, syntax-highlighting
 }:
 
 mkDerivation {
@@ -11,7 +11,7 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules perl ];
   buildInputs = [
     karchive kconfig kguiaddons ki18n kiconthemes kio libgit2 qtscript
-    qtxmlpatterns sonnet syntax-highlighting qtquickcontrols
+    qtxmlpatterns sonnet syntax-highlighting
   ];
   propagatedBuildInputs = [ kparts ];
 }
