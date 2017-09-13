@@ -371,13 +371,15 @@ in {
     services.nginx.enable = true;
     services.nginx.recommendedProxySettings = true;
     services.nginx.virtualHosts.${wfeDomain} = {
-      enableSSL = true;
+      onlySSL = true;
+      enableACME = false;
       sslCertificate = wfeCertFile;
       sslCertificateKey = wfeKeyFile;
       locations."/".proxyPass = "http://127.0.0.1:80";
     };
     services.nginx.virtualHosts.${siteDomain} = {
-      enableSSL = true;
+      onlySSL = true;
+      enableACME = false;
       sslCertificate = siteCertFile;
       sslCertificateKey = siteKeyFile;
       locations.${tosPath}.extraConfig = "alias ${tosFile};";
