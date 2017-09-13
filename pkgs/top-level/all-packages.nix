@@ -13082,6 +13082,8 @@ with pkgs;
 
   bgnet = callPackage ../data/documentation/bgnet { };
 
+  brise = callPackage ../data/misc/brise { };
+
   inherit (kdeFrameworks) breeze-icons;
 
   cacert = callPackage ../data/misc/cacert { };
