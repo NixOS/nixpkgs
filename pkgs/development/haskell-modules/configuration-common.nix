@@ -929,6 +929,9 @@ self: super: {
   # https://hydra.nixos.org/build/60678124
   Agda = markBroken (super.Agda.override { happy = self.happy_1_19_5; });
 
+  # cryptol-2.5.0 doesn't want happy 1.19.6+.
+  cryptol = super.cryptol.override { happy = self.happy_1_19_5; };
+
   # https://github.com/jtdaugherty/text-zipper/issues/11
   text-zipper = dontCheck super.text-zipper;
 
