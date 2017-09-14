@@ -44,9 +44,9 @@ perlPackages.buildPerlPackage rec {
     mkdir -p "$bin/bin"
     ln -s "$out/wwwroot/cgi-bin/awstats.pl" "$bin/bin/awstats"
 
-    mkdir -p "$doc/share/"
+    mkdir -p "$doc/share/doc"
     mv README.md docs/
-    mv docs "$doc/share/awstats"
+    mv docs "$doc/share/doc/awstats"
   '';
 
   meta = with stdenv.lib; {

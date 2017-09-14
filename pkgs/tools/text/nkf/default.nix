@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Tool for converting encoding of Japanese text";
-    homepage = "http://sourceforge.jp/projects/nkf/";
+    homepage = http://sourceforge.jp/projects/nkf/;
     license = stdenv.lib.licenses.zlib;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.auntie ];

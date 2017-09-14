@@ -1,5 +1,6 @@
 { stdenv, fetchurl, xlibsWrapper, libpng, libjpeg, libtiff, zlib, bzip2, libXcursor
-, libXrandr, mesa, libXft, libXfixes, xinput }:
+, libXrandr, mesa, libXft, libXfixes, xinput
+, CoreServices }:
 
 let
   version = "1.6.49";
@@ -13,8 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "03m9wm8hpzh1i0fxx5mpvjr67384pfm9hn7gzdcq55b4639fqy9n";
   };
 
-  buildInputs = [ xlibsWrapper libpng libjpeg libtiff zlib bzip2 libXcursor libXrandr
-      libXft mesa libXfixes xinput ];
+  buildInputs = [
+    xlibsWrapper libpng libjpeg libtiff zlib bzip2 libXcursor libXrandr
+    libXft mesa libXfixes xinput
+  ] ++ stdenv.lib.optional stdenv.isDarwin CoreServices;
 
   doCheck = true;
 
@@ -31,7 +34,7 @@ stdenv.mkDerivation rec {
         Initially, it was developed for LINUX, but the scope of this project has in the course of time become somewhat more ambitious.
         Current aims are to make FOX completely platform independent, and thus programs written against the FOX library will be only a compile away from running on a variety of platforms.
       '';
-    homepage = "http://fox-toolkit.org";
+    homepage = http://fox-toolkit.org;
     license = stdenv.lib.licenses.lgpl3;
     maintainers = [];
     platforms = stdenv.lib.platforms.mesaPlatforms;

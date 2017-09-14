@@ -53,4 +53,12 @@ nodePackages // {
       export PATH="$PATH:$tmp"
     '';
   });
+
+  fast-cli = nodePackages.fast-cli.override (oldAttrs: {
+    preRebuild = ''
+      # Simply ignore the phantomjs --version check. It seems to need a display but it is safe to ignore
+      sed -i -e "s|console.error('Error verifying phantomjs, continuing', err)|console.error('Error verifying phantomjs, continuing', err); return true;|" node_modules/phantomjs-prebuilt/lib/util.js
+    '';
+    buildInputs = oldAttrs.buildInputs ++ [ pkgs.phantomjs2 ];
+  });
 }

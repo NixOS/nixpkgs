@@ -18,7 +18,7 @@
 <para>The high change rate of nixpkgs make any pull request that is open for 
   long enough subject to conflicts that will require extra work from the 
   submitter or the merger. Reviewing pull requests in a timely manner and being 
-  responsive to the comments is the key to avoid these. Github provides sort 
+  responsive to the comments is the key to avoid these. GitHub provides sort 
   filters that can be used to see the <link 
     xlink:href="https://github.com/NixOS/nixpkgs/pulls?q=is%3Apr+is%3Aopen+sort%3Aupdated-desc">most 
     recently</link> and the <link 

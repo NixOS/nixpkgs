@@ -1,11 +1,12 @@
 { lib, fetchurl, buildPythonPackage }:
 
 buildPythonPackage rec {
-  name = "python-sql-${version}";
-  version = "0.8";
+  pname = "python-sql";
+  name = "${pname}-${version}";
+  version = "0.9";
   src = fetchurl {
     url = "mirror://pypi/p/python-sql/${name}.tar.gz";
-    sha256 = "0xik939sxqfqqbpgcsnfjnws692bjip32khgwhq1ycphfy7df3h2";
+    sha256 = "07b51cc1c977ef5480fe671cae5075ad4b68a6fc67f4569782e06f012456d35c";
   };
   meta = {
     homepage = http://python-sql.tryton.org/;

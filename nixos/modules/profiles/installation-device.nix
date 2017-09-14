@@ -28,7 +28,7 @@ with lib;
     services.nixosManual.showManual = true;
 
     # Let the user play Rogue on TTY 8 during the installation.
-    services.rogue.enable = true;
+    #services.rogue.enable = true;
 
     # Disable some other stuff we don't need.
     security.sudo.enable = false;

@@ -1,0 +1,13 @@
+diff --git a/configure.ac b/configure.ac
+index a254bbe..fe0247b 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -1,6 +1,6 @@
+ define(pkg_major, 1)
+-define(pkg_minor, 2.1)
+-define(pkg_extra, )
++define(pkg_minor, 2)
++define(pkg_extra, 1)
+ define(pkg_maintainer, libunwind-devel@nongnu.org)
+ define(mkvers, $1.$2$3)
+ dnl Process this file with autoconf to produce a configure script.

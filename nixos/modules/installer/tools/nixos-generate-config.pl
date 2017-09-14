@@ -605,6 +605,9 @@ $bootLoaderConfig
   # services.xserver.layout = "us";
   # services.xserver.xkbOptions = "eurosign:e";
 
+  # Enable touchpad support.
+  # services.xserver.libinput.enable = true;
+
   # Enable the KDE Desktop Environment.
   # services.xserver.displayManager.sddm.enable = true;
   # services.xserver.desktopManager.plasma5.enable = true;
@@ -615,8 +618,11 @@ $bootLoaderConfig
   #   uid = 1000;
   # };
 
-  # The NixOS release to be compatible with for stateful data such as databases.
-  system.stateVersion = "${\(qw(@nixosRelease@))}";
+  # This value determines the NixOS release with which your system is to be
+  # compatible, in order to avoid breaking some software such as database
+  # servers. You should change this only after NixOS release notes say you
+  # should.
+  system.stateVersion = "${\(qw(@nixosRelease@))}"; # Did you read the comment?
 
 }
 EOF

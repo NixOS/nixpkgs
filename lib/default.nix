@@ -5,8 +5,9 @@
  */
 let
 
-  # trivial, often used functions
+  # often used, or depending on very little
   trivial = import ./trivial.nix;
+  fixedPoints = import ./fixed-points.nix;
 
   # datatypes
   attrsets = import ./attrsets.nix;
@@ -42,7 +43,7 @@ let
   filesystem = import ./filesystem.nix;
 
 in
-  { inherit trivial
+  { inherit trivial fixedPoints
             attrsets lists strings stringsWithDeps
             customisation maintainers meta sources
             modules options types
@@ -55,6 +56,7 @@ in
   }
   # !!! don't include everything at top-level; perhaps only the most
   # commonly used functions.
-  // trivial // lists // strings // stringsWithDeps // attrsets // sources
+  // trivial // fixedPoints
+  // lists // strings // stringsWithDeps // attrsets // sources
   // options // types // meta // debug // misc // modules
   // customisation

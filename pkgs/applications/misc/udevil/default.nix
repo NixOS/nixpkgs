@@ -7,8 +7,9 @@ stdenv.mkDerivation {
   };
   buildInputs = [ intltool glib pkgconfig udev ];
   configurePhase = ''
-    substituteInPlace src/Makefile.am --replace "-o root -g root" ""
     substituteInPlace src/Makefile.in --replace "-o root -g root" ""
+    # do not set setuid bit in nix store
+    substituteInPlace src/Makefile.in --replace 4755 0755
     ./configure \
       --prefix=$out \
       --with-mount-prog=${utillinux}/bin/mount \
@@ -16,10 +17,6 @@ stdenv.mkDerivation {
       --with-losetup-prog=${utillinux}/bin/losetup \
       --with-setfacl-prog=${acl.bin}/bin/setfacl \
       --sysconfdir=$prefix/etc
-  '';
-  preConfigure = ''
-    cat src/Makefile.am
-    exit 2
   '';
   patches = [ ./device-info-sys-stat.patch ];
   meta = {

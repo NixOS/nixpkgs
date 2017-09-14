@@ -11,13 +11,13 @@
 buildPythonPackage rec {
   pname = "llvmlite";
   name = "${pname}-${version}";
-  version = "0.16.0";
+  version = "0.19.0";
 
   disabled = isPyPy;
 
   src = fetchurl {
     url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "ef3bae32482f91742d91571b5225a6943804291eb9405b98090a7b50942ec5e9";
+    sha256 = "fbaeb3d584e0f6bac82a33776e9b5f0b5b4a3415a03edeff5d66f6176f0edbe2";
   };
 
   propagatedBuildInputs = [ llvm ] ++ stdenv.lib.optional (pythonOlder "3.4") enum34;
@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A lightweight LLVM python binding for writing JIT compilers";
-    homepage = "http://llvmlite.pydata.org/";
+    homepage = http://llvmlite.pydata.org/;
     license = stdenv.lib.licenses.bsd2;
     maintainers = with stdenv.lib.maintainers; [ fridh ];
   };

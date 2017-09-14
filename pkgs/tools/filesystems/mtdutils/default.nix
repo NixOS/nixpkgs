@@ -15,10 +15,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libuuid lzo zlib acl ];
 
-  crossAttrs = {
-    makeFlags = "CC=${stdenv.cross.config}-gcc";
-  };
-
   meta = {
     description = "Tools for MTD filesystems";
     license = stdenv.lib.licenses.gpl2Plus;

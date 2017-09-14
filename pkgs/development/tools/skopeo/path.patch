@@ -1,25 +1,38 @@
 diff --git a/cmd/skopeo/main.go b/cmd/skopeo/main.go
-index 51f918d..6681d73 100644
+index 50e29b2..7108df5 100644
 --- a/cmd/skopeo/main.go
 +++ b/cmd/skopeo/main.go
 @@ -3,6 +3,7 @@ package main
  import (
  	"fmt"
  	"os"
-+  "path/filepath"
-
++	"path/filepath"
+ 
  	"github.com/Sirupsen/logrus"
  	"github.com/containers/image/signature"
-@@ -84,6 +85,12 @@ func getPolicyContext(c *cli.Context) (*signature.PolicyContext, error) {
+@@ -88,6 +89,11 @@ func getPolicyContext(c *cli.Context) (*signature.PolicyContext, error) {
  	policyPath := c.GlobalString("policy")
  	var policy *signature.Policy // This could be cached across calls, if we had an application context.
  	var err error
-+  var dir string
-+  if policyPath == "" {
-+    dir, err = filepath.Abs(filepath.Dir(os.Args[0]))
-+    policyPath = dir + "/../etc/default-policy.json"
-+  }
-+
- 	if policyPath == "" {
- 		policy, err = signature.DefaultPolicy(nil)
- 	} else {
++	var dir string
++	if policyPath == "" {
++		dir, err = filepath.Abs(filepath.Dir(os.Args[0]))
++		policyPath = dir + "/../etc/default-policy.json"
++	}
+ 	if c.GlobalBool("insecure-policy") {
+ 		policy = &signature.Policy{Default: []signature.PolicyRequirement{signature.NewPRInsecureAcceptAnything()}}
+ 	} else if policyPath == "" {
+diff --git a/vendor/github.com/containers/image/docker/docker_client.go b/vendor/github.com/containers/image/docker/docker_client.go
+index b989770..697d2ee 100644
+--- a/vendor/github.com/containers/image/docker/docker_client.go
++++ b/vendor/github.com/containers/image/docker/docker_client.go
+@@ -154,6 +154,9 @@ func setupCertificates(dir string, tlsc *tls.Config) error {
+ 		if os.IsNotExist(err) {
+ 			return nil
+ 		}
++		if os.IsPermission(err) {
++			return nil
++		}
+ 		return err
+ 	}
+ 

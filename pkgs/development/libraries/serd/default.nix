@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "serd-${version}";
-  version = "0.24.0";
+  version = "0.26.0";
 
   src = fetchurl {
     url = "http://download.drobilla.net/${name}.tar.bz2";
-    sha256 = "0v3a9xss5ailrnb3flfjyl6l9pmp51dc02p0lr6phvwsipg8mywc";
+    sha256 = "164j43am4hka2vbzw4n52zy7rafgp6kmkgbcbvap368az644mr73";
   };
 
   buildInputs = [ pcre pkgconfig python ];

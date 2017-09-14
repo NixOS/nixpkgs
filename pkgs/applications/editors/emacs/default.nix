@@ -5,7 +5,7 @@
 , withX ? !stdenv.isDarwin
 , withGTK2 ? false, gtk2 ? null
 , withGTK3 ? true, gtk3 ? null, gsettings_desktop_schemas ? null
-, withXwidgets ? false, webkitgtk24x ? null, wrapGAppsHook ? null, glib_networking ? null
+, withXwidgets ? false, webkitgtk24x-gtk3 ? null, wrapGAppsHook ? null, glib_networking ? null
 , withCsrc ? true
 , srcRepo ? false, autoconf ? null, automake ? null, texinfo ? null
 }:
@@ -16,7 +16,7 @@ assert withGTK2 -> withX || stdenv.isDarwin;
 assert withGTK3 -> withX || stdenv.isDarwin;
 assert withGTK2 -> !withGTK3 && gtk2 != null;
 assert withGTK3 -> !withGTK2 && gtk3 != null;
-assert withXwidgets -> withGTK3 && webkitgtk24x != null;
+assert withXwidgets -> withGTK3 && webkitgtk24x-gtk3 != null;
 
 let
   toolkit =
@@ -26,12 +26,12 @@ let
 in
 stdenv.mkDerivation rec {
   name = "emacs-${version}${versionModifier}";
-  version = "25.2";
+  version = "25.3";
   versionModifier = "";
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${name}.tar.xz";
-    sha256 = "1ykkq0xl28ljdg61bm6gzy04ww86ajms98gix72qg6cpr6a53dar";
+    sha256 = "02y00y9q42g1iqgz5qhmsja75hwxd88yrn9zp14lanay0zkwafi5";
   };
 
   patches = (lib.optional stdenv.isDarwin ./at-fdcwd.patch);
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (withX && withGTK2) gtk2
     ++ lib.optionals (withX && withGTK3) [ gtk3 gsettings_desktop_schemas ]
     ++ lib.optional (stdenv.isDarwin && withX) cairo
-    ++ lib.optionals (withX && withXwidgets) [ webkitgtk24x glib_networking ];
+    ++ lib.optionals (withX && withXwidgets) [ webkitgtk24x-gtk3 glib_networking ];
 
   propagatedBuildInputs = lib.optionals stdenv.isDarwin [ AppKit GSS ImageIO ];
 

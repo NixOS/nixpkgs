@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Perl Compatible Regular Expressions";
-    homepage = "http://www.pcre.org/";
+    homepage = http://www.pcre.org/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ ttuegel ];
     platforms = platforms.all;

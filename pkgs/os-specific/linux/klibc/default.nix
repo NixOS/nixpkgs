@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, linuxHeaders, perl }:
+{ stdenv, fetchurl, linuxHeaders, perl
+, buildPlatform, hostPlatform
+}:
 
 let
   commonMakeFlags = [
@@ -23,17 +25,12 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" "stackprotector" ];
 
   makeFlags = commonMakeFlags ++ [
-    "KLIBCARCH=${stdenv.platform.kernelArch}"
+    "KLIBCARCH=${hostPlatform.platform.kernelArch}"
     "KLIBCKERNELSRC=${linuxHeaders}"
-  ] ++ stdenv.lib.optional (stdenv.platform.kernelArch == "arm") "CONFIG_AEABI=y";
-
-  crossAttrs = {
-    makeFlags = commonMakeFlags ++ [
-      "KLIBCARCH=${stdenv.cross.platform.kernelArch}"
-      "KLIBCKERNELSRC=${linuxHeaders.crossDrv}"
-      "CROSS_COMPILE=${stdenv.cross.config}-"
-    ] ++ stdenv.lib.optional (stdenv.cross.platform.kernelArch == "arm") "CONFIG_AEABI=y";
-  };
+  ] # TODO(@Ericson2314): We now can get the ABI from
+    # `hostPlatform.parsed.abi`, is this still a good idea?
+    ++ stdenv.lib.optional (hostPlatform.platform.kernelArch == "arm") "CONFIG_AEABI=y"
+    ++ stdenv.lib.optional (hostPlatform != buildPlatform) "CROSS_COMPILE=${stdenv.cc.prefix}";
 
   # Install static binaries as well.
   postInstall = ''

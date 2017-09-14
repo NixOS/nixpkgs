@@ -1,17 +1,17 @@
 { stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
 , libtiff, ncurses, pango, pcre, perl, readline, tcl, texLive, tk, xz, zlib
 , less, texinfo, graphviz, icu, pkgconfig, bison, imake, which, jdk, openblas
-, curl, Cocoa, Foundation, cf-private, libobjc, tzdata
+, curl, Cocoa, Foundation, cf-private, libobjc, tzdata, fetchpatch
 , withRecommendedPackages ? true
 , enableStrictBarrier ? false
 }:
 
 stdenv.mkDerivation rec {
-  name = "R-3.4.0";
+  name = "R-3.4.1";
 
   src = fetchurl {
     url = "http://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "14cb8bwi3akvdb6934kqic2862f2qgav6cq4g0h7gi2p4ka9x3i8";
+    sha256 = "0y7wlfk3cn1dxn2mpnxwvsk31s0599crbsyah8srm5pa2mfi7c82";
   };
 
   buildInputs = [
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = with stdenv.lib; {
-    homepage = "http://www.r-project.org/";
+    homepage = http://www.r-project.org/;
     description = "Free software environment for statistical computing and graphics";
     license = licenses.gpl2Plus;
 

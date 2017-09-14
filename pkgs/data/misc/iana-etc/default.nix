@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "iana-etc-${version}";
-  version = "20170417";
+  version = "20170512";
 
   src = fetchurl {
     url = "https://github.com/Mic92/iana-etc/releases/download/${version}/iana-etc-${version}.tar.gz";
-    sha256 = "0gzv8ldyf3g70m4k3m50p2gbqwvxa343v2q4xcnl1jqfgw9db5wf";
+    sha256 = "0zx2ag894qldvrv8f4hs84644kdcp8a83gjg33xsw8rrn38gll2a";
   };
 
   installPhase = ''

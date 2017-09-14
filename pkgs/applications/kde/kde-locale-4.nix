@@ -1,8 +1,8 @@
 name: args:
 
-{ kdeApp, automoc4, cmake, gettext, kdelibs, perl }:
+{ mkDerivation, automoc4, cmake, gettext, kdelibs, perl }:
 
-kdeApp (args // {
+mkDerivation (args // {
   sname = "kde-l10n-${name}";
   name = "kde-l10n-${name}-qt4";
 

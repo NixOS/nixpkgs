@@ -12,6 +12,9 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
+  # Hack to avoid TMPDIR in RPATHs.
+  preFixup = ''rm -rf "$(pwd)" '';
+
   meta = {
     description = "Library reading dwg files";
     homepage = http://libdwg.sourceforge.net/en/;

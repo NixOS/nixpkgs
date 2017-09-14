@@ -40,11 +40,11 @@ let
   });
 
   policyFile = pkgs.writeText "kube-policy"
-    concatStringsSep "\n" (map (builtins.toJSON cfg.apiserver.authorizationPolicy));
+    (concatStringsSep "\n" (map builtins.toJSON cfg.apiserver.authorizationPolicy));
 
   cniConfig = pkgs.buildEnv {
     name = "kubernetes-cni-config";
-    paths = imap (i: entry:
+    paths = imap1 (i: entry:
       pkgs.writeTextDir "${toString (10+i)}-${entry.type}.conf" (builtins.toJSON entry)
     ) cfg.kubelet.cni.config;
   };

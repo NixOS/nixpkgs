@@ -73,7 +73,7 @@ in
   libxcb = attrs : attrs // {
     nativeBuildInputs = [ args.python ];
     configureFlags = "--enable-xkb --enable-xinput";
-    outputs = [ "out" "dev" "doc" ];
+    outputs = [ "out" "dev" "man" "doc" ];
   };
 
   xcbproto = attrs : attrs // {
@@ -177,7 +177,7 @@ in
   };
 
   libXext = attrs: attrs // {
-    outputs = [ "out" "dev" "doc" ];
+    outputs = [ "out" "dev" "man" "doc" ];
     propagatedBuildInputs = [ xorg.xproto xorg.libXau ];
     preConfigure = setMalloc0ReturnsNullCrossCompiling;
   };
@@ -187,7 +187,7 @@ in
   };
 
   libXi = attrs: attrs // {
-    outputs = [ "out" "dev" "doc" ];
+    outputs = [ "out" "dev" "man" "doc" ];
     propagatedBuildInputs = [ xorg.libXfixes ];
   };
 
@@ -316,6 +316,11 @@ in
   };
 
   xf86inputlibinput = attrs: attrs // {
+    name = "xf86-input-libinput-0.25.1";
+    src = args.fetchurl {
+      url = mirror://xorg/individual/driver/xf86-input-libinput-0.25.1.tar.bz2;
+      sha256 = "1q67hjd67ni1nq7kgxdrrdgkyhzaqvvn2vlnsiiq9w4y3icpv7s8";
+    };
     buildInputs = attrs.buildInputs ++ [ args.libinput ];
     installFlags = "sdkdir=\${out}/include/xorg";
   };
@@ -560,8 +565,9 @@ in
   };
 
   xf86videointel = attrs: attrs // {
-    buildInputs = attrs.buildInputs ++ [xorg.libXfixes];
+    buildInputs = attrs.buildInputs ++ [xorg.libXfixes xorg.libXScrnSaver xorg.pixman];
     nativeBuildInputs = [args.autoreconfHook xorg.utilmacros];
+    configureFlags = "--with-default-dri=3 --enable-tools";
   };
 
   xf86videoxgi = attrs: attrs // {

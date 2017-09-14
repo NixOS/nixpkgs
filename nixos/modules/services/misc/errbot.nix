@@ -84,7 +84,7 @@ in {
       dataDir = if !isNull instanceCfg.dataDir then instanceCfg.dataDir else
         "/var/lib/errbot/${name}";
     in {
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         mkdir -p ${dataDir}

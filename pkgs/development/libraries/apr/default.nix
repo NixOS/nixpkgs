@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "apr-1.5.2";
+  name = "apr-1.6.2";
 
   src = fetchurl {
     url = "mirror://apache/apr/${name}.tar.bz2";
-    sha256 = "0ypn51xblix5ys9xy7da3ngdydip0qqh9rdq8nz54w9aq8lys0vx";
+    sha256 = "1gffipa87pflvgvw01dbkvgh75p8n2sr56m1pcl01avv6zm9q409";
   };
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./is-this-a-compiler-bug.patch ];

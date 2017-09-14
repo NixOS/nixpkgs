@@ -4,11 +4,11 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "bzflag";
-  version = "2.4.8";
+  version = "2.4.10";
 
   src = fetchurl {
     url = "https://download.bzflag.org/${pname}/source/${version}/${name}.tar.bz2";
-    sha256 = "08iiw0i0vx68d73hliiylswsm0nvnm849k37xc7iii6sflblvjj3";
+    sha256 = "1ylyd5safpraaym9fvnrqj2506dqrraaaqhrb2aa9zmjwi54aiqa";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Multiplayer 3D Tank game";
-    homepage = http://bzflag.org/;
+    homepage = https://bzflag.org/;
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ fpletz ];

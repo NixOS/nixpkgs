@@ -8,15 +8,48 @@ date: 2016-06-25
 You'll get a vim(-your-suffix) in PATH also loading the plugins you want.
 Loading can be deferred; see examples.
 
-VAM (=vim-addon-manager) and Pathogen plugin managers are supported.
-Vundle, NeoBundle could be your turn.
+Vim packages, VAM (=vim-addon-manager) and Pathogen are supported to load
+packages.
 
-## dependencies by Vim plugins
+## Custom configuration
+
+Adding custom .vimrc lines can be done using the following code:
+
+```
+vim_configurable.customize {
+  name = "vim-with-plugins";
+
+  vimrcConfig.customRC = ''
+    set hidden
+  '';
+}
+```
+
+## Vim packages
+
+To store you plugins in Vim packages the following example can be used:
+
+```
+vim_configurable.customize {
+  vimrcConfig.packages.myVimPackage = with pkgs.vimPlugins; {
+    # loaded on launch
+    start = [ youcompleteme fugitive ];
+    # manually loadable by calling `:packadd $plugin-name`
+    opt = [ phpCompletion elm-vim ];
+    # To automatically load a plugin when opening a filetype, add vimrc lines like:
+    # autocmd FileType php :packadd phpCompletion
+  }
+};
+```
+
+## VAM
+
+### dependencies by Vim plugins
 
 VAM introduced .json files supporting dependencies without versioning
 assuming that "using latest version" is ok most of the time.
 
-## HOWTO
+### Example
 
 First create a vim-scripts file having one plugin name per line. Example:
 

@@ -1,12 +1,13 @@
-{ stdenv, buildPythonPackage, fetchurl,
+{ stdenv, buildPythonPackage, fetchPypi,
   mistune, docutils } :
 buildPythonPackage rec {
-  name = "m2r-${version}";
-  version = "0.1.5";
+  pname = "m2r";
+  name = "${pname}-${version}";
+  version = "0.1.11";
 
-  src = fetchurl {
-    url = "mirror://pypi/m/m2r/${name}.tar.gz";
-    sha256 = "08rjn3x1qag60wawjnq95wmgijrn33apr4fhj01s2p6hmrqgfj1l";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "7e69fe9b2752926c33399709e354da3bcca60043c7bf5e727b7126ec3a5db7db";
   };
 
   propagatedBuildInputs = [ mistune docutils ];

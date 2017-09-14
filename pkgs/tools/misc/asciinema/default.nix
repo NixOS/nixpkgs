@@ -7,7 +7,7 @@ in pythonPackages.buildPythonApplication rec {
   version = "1.4.0";
 
   buildInputs = with pythonPackages; [ nose ];
-  propagatedBuildInputs = with pythonPackages; [ requests2 ];
+  propagatedBuildInputs = with pythonPackages; [ requests ];
 
   src = fetchFromGitHub {
     owner = "asciinema";

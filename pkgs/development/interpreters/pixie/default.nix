@@ -77,9 +77,9 @@ let
     '';
     meta = {
       description = "A clojure-like lisp, built with the pypy vm toolkit";
-      homepage = "https://github.com/pixie-lang/pixie";
+      homepage = https://github.com/pixie-lang/pixie;
       license = stdenv.lib.licenses.lgpl3;
-      platforms = stdenv.lib.platforms.linux;
+      platforms = ["x86_64-linux" "i686-linux"];
     };
   };
 in build (builtins.getAttr variant variants)

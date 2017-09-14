@@ -1,0 +1,243 @@
+#! /usr/bin/env nix-shell
+#! nix-shell -i python3 -p 'python3.withPackages(ps: with ps; [ requests toolz ])'
+
+"""
+Update a Python package expression by passing in the `.nix` file, or the directory containing it.
+You can pass in multiple files or paths.
+
+You'll likely want to use
+``
+  $ ./update-python-libraries ../../pkgs/development/python-modules/*
+``
+to update all libraries in that folder.
+"""
+
+import argparse
+import logging
+import os
+import re
+import requests
+import toolz
+
+INDEX = "https://pypi.io/pypi"
+"""url of PyPI"""
+
+EXTENSIONS = ['tar.gz', 'tar.bz2', 'tar', 'zip', '.whl']
+"""Permitted file extensions. These are evaluated from left to right and the first occurance is returned."""
+
+import logging
+logging.basicConfig(level=logging.INFO)
+
+
+def _get_values(attribute, text):
+    """Match attribute in text and return all matches.
+
+    :returns: List of matches.
+    """
+    regex = '{}\s+=\s+"(.*)";'.format(attribute)
+    regex = re.compile(regex)
+    values = regex.findall(text)
+    return values
+
+def _get_unique_value(attribute, text):
+    """Match attribute in text and return unique match.
+
+    :returns: Single match.
+    """
+    values = _get_values(attribute, text)
+    n = len(values)
+    if n > 1:
+        raise ValueError("found too many values for {}".format(attribute))
+    elif n == 1:
+        return values[0]
+    else:
+        raise ValueError("no value found for {}".format(attribute))
+
+def _get_line_and_value(attribute, text):
+    """Match attribute in text. Return the line and the value of the attribute."""
+    regex = '({}\s+=\s+"(.*)";)'.format(attribute)
+    regex = re.compile(regex)
+    value = regex.findall(text)
+    n = len(value)
+    if n > 1:
+        raise ValueError("found too many values for {}".format(attribute))
+    elif n == 1:
+        return value[0]
+    else:
+        raise ValueError("no value found for {}".format(attribute))
+
+
+def _replace_value(attribute, value, text):
+    """Search and replace value of attribute in text."""
+    old_line, old_value = _get_line_and_value(attribute, text)
+    new_line = old_line.replace(old_value, value)
+    new_text = text.replace(old_line, new_line)
+    return new_text
+
+def _fetch_page(url):
+    r = requests.get(url)
+    if r.status_code == requests.codes.ok:
+        return r.json()
+    else:
+        raise ValueError("request for {} failed".format(url))
+
+def _get_latest_version_pypi(package, extension):
+    """Get latest version and hash from PyPI."""
+    url = "{}/{}/json".format(INDEX, package)
+    json = _fetch_page(url)
+
+    version = json['info']['version']
+    for release in json['releases'][version]:
+        if release['filename'].endswith(extension):
+            # TODO: In case of wheel we need to do further checks!
+            sha256 = release['digests']['sha256']
+            break
+    else:
+        sha256 = None
+    return version, sha256
+
+
+def _get_latest_version_github(package, extension):
+    raise ValueError("updating from GitHub is not yet supported.")
+
+
+FETCHERS = {
+    'fetchFromGitHub'   :   _get_latest_version_github,
+    'fetchPypi'         :   _get_latest_version_pypi,
+    'fetchurl'          :   _get_latest_version_pypi,
+}
+
+
+DEFAULT_SETUPTOOLS_EXTENSION = 'tar.gz'
+
+
+FORMATS = {
+    'setuptools'        :   DEFAULT_SETUPTOOLS_EXTENSION,
+    'wheel'             :   'whl'
+}
+
+def _determine_fetcher(text):
+    # Count occurences of fetchers.
+    nfetchers = sum(text.count('src = {}'.format(fetcher)) for fetcher in FETCHERS.keys())
+    if nfetchers == 0:
+        raise ValueError("no fetcher.")
+    elif nfetchers > 1:
+        raise ValueError("multiple fetchers.")
+    else:
+        # Then we check which fetcher to use.
+        for fetcher in FETCHERS.keys():
+            if 'src = {}'.format(fetcher) in text:
+                return fetcher
+
+
+def _determine_extension(text, fetcher):
+    """Determine what extension is used in the expression.
+
+    If we use:
+    - fetchPypi, we check if format is specified.
+    - fetchurl, we determine the extension from the url.
+    - fetchFromGitHub we simply use `.tar.gz`.
+    """
+    if fetcher == 'fetchPypi':
+        try:
+            format = _get_unique_value('format', text)
+        except ValueError as e:
+            format = None   # format was not given
+
+        try:
+            extension = _get_unique_value('extension', text)
+        except ValueError as e:
+            extension = None    # extension was not given
+
+        if extension is None:
+            if format is None:
+                format = 'setuptools'
+            extension = FORMATS[format]
+
+    elif fetcher == 'fetchurl':
+        url = _get_unique_value('url', text)
+        extension = os.path.splitext(url)[1]
+        if 'pypi' not in url:
+            raise ValueError('url does not point to PyPI.')
+
+    elif fetcher == 'fetchFromGitHub':
+        raise ValueError('updating from GitHub is not yet implemented.')
+
+    return extension
+
+
+def _update_package(path):
+
+
+
+    # Read the expression
+    with open(path, 'r') as f:
+        text = f.read()
+
+    # Determine pname.
+    pname = _get_unique_value('pname', text)
+
+    # Determine version.
+    version = _get_unique_value('version', text)
+
+    # First we check how many fetchers are mentioned.
+    fetcher = _determine_fetcher(text)
+
+    extension = _determine_extension(text, fetcher)
+
+    new_version, new_sha256 = _get_latest_version_pypi(pname, extension)
+
+    if new_version == version:
+        logging.info("Path {}: no update available for {}.".format(path, pname))
+        return False
+    if not new_sha256:
+        raise ValueError("no file available for {}.".format(pname))
+
+    text = _replace_value('version', new_version, text)
+    text = _replace_value('sha256', new_sha256, text)
+
+    with open(path, 'w') as f:
+        f.write(text)
+
+        logging.info("Path {}: updated {} from {} to {}".format(path, pname, version, new_version))
+
+    return True
+
+
+def _update(path):
+
+    # We need to read and modify a Nix expression.
+    if os.path.isdir(path):
+        path = os.path.join(path, 'default.nix')
+
+    # If a default.nix does not exist, we quit.
+    if not os.path.isfile(path):
+        logging.info("Path {}: does not exist.".format(path))
+        return False
+
+    # If file is not a Nix expression, we quit.
+    if not path.endswith(".nix"):
+        logging.info("Path {}: does not end with `.nix`.".format(path))
+        return False
+
+    try:
+        return _update_package(path)
+    except ValueError as e:
+        logging.warning("Path {}: {}".format(path, e))
+        return False
+
+def main():
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('package', type=str, nargs='+')
+
+    args = parser.parse_args()
+
+    packages = map(os.path.abspath, args.package)
+
+    count = list(map(_update, packages))
+
+    logging.info("{} package(s) updated".format(sum(count)))
+
+if __name__ == '__main__':
+    main()

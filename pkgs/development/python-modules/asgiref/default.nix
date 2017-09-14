@@ -1,11 +1,12 @@
 { stdenv, buildPythonPackage, fetchurl, six }:
 buildPythonPackage rec {
-  name = "asgiref-${version}";
-  version = "1.1.1";
+  version = "1.1.2";
+  pname = "asgiref";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/a/asgiref/${name}.tar.gz";
-    sha256 = "0gayxnysknwg8hxb5kvmi2mmd5dnrhgza23daf8j25w3nj2drars";
+    sha256 = "8b46c3d6e2ad354d9da3cfb9873f9bd46fe1b768fbc11065275ba5430a46700c";
   };
 
   propagatedBuildInputs = [ six ];

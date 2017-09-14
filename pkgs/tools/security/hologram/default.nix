@@ -15,6 +15,10 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
+  preConfigure = ''
+    sed -i 's|cacheTimeout != 3600|cacheTimeout != 0|' cmd/hologram-server/main.go
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://github.com/AdRoll/hologram/;
     description = "Easy, painless AWS credentials on developer laptops.";

@@ -5,21 +5,29 @@ with self;
 let
   # Removing recurseForDerivation prevents derivations of aliased attribute
   # set to appear while listing all the packages available.
-  removeRecurseForDerivations = _n: alias: with lib;
+  removeRecurseForDerivations = alias: with lib;
     if alias.recurseForDerivations or false then
       removeAttrs alias ["recurseForDerivations"]
     else alias;
 
-  doNotDisplayTwice = aliases:
-    lib.mapAttrs removeRecurseForDerivations aliases;
+  # Disabling distribution prevents top-level aliases for non-recursed package
+  # sets from building on Hydra.
+  removeDistribute = alias: with lib;
+    if isDerivation alias then
+      dontDistribute alias
+    else alias;
+
+  mapAliases = aliases:
+    lib.mapAttrs (n: alias: removeDistribute (removeRecurseForDerivations alias)) aliases;
 in
 
   ### Deprecated aliases - for backward compatibility
 
-doNotDisplayTwice rec {
+mapAliases (rec {
   accounts-qt = libsForQt5.accounts-qt;  # added 2015-12-19
   adobeReader = adobe-reader;
   aircrackng = aircrack-ng; # added 2016-01-14
+  ammonite-repl = ammonite; # added 2017-05-02
   arduino_core = arduino-core;  # added 2015-02-04
   asciidocFull = asciidoc-full;  # added 2014-06-22
   bar = lemonbar;  # added 2015-01-16
@@ -104,6 +112,7 @@ doNotDisplayTwice rec {
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatexSF = pidginlatex; # added 2014-11-02
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
+  prometheus-statsd-bridge = prometheus-statsd-exporter;  # added 2017-08-27
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
   QmidiNet = qmidinet;  # added 2016-05-22
   qt_gstreamer = qt-gstreamer;  # added 2017-02
@@ -111,6 +120,7 @@ doNotDisplayTwice rec {
   quake3game = ioquake3; # added 2016-01-14
   qwt6 = libsForQt5.qwt;  # added 2015-12-19
   rdiff_backup = rdiff-backup;  # added 2014-11-23
+  rdmd = dtools;  # added 2017-08-19
   rssglx = rss-glx; #added 2015-03-25
   rubygems = throw "deprecated 2016-03-02: rubygems is now bundled with ruby";
   rustUnstable = rustNightly; # added 2016-11-29
@@ -121,6 +131,7 @@ doNotDisplayTwice rec {
   saneFrontends = sane-frontends; # added 2016-01-02
   scim = sc-im; # added 2016-01-22
   skrooge2 = skrooge; # added 2017-02-18
+  skype = skypeforlinux; # added 2017-07-27
   spaceOrbit = space-orbit; # addewd 2016-05-23
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
@@ -130,6 +141,7 @@ doNotDisplayTwice rec {
   telepathy_qt5 = libsForQt5.telepathy;  # added 2015-12-19
   tftp_hpa = tftp-hpa; # added 2015-04-03
   ucsFonts = ucs-fonts; # added 2016-07-15
+  ultrastardx-beta = ultrastardx; # added 2017-08-12
   usb_modeswitch = usb-modeswitch; # added 2016-05-10
   vimbWrapper = vimb; # added 2015-01
   vimprobable2Wrapper = vimprobable2; # added 2015-01
@@ -139,6 +151,12 @@ doNotDisplayTwice rec {
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
   xlibs = xorg; # added 2015-09
   youtubeDL = youtube-dl;  # added 2014-10-26
+
+  # added 2017-05-27
+  wineMinimal = winePackages.minimal;
+  wineFull = winePackages.full;
+  wineStable = winePackages.stable;
+  wineUnstable = winePackages.unstable;
 
   inherit (ocaml-ng) # added 2016-09-14
     ocamlPackages_3_10_0 ocamlPackages_3_11_2 ocamlPackages_3_12_1
@@ -155,4 +173,4 @@ doNotDisplayTwice rec {
   ocaml_4_02   = ocamlPackages_4_02.ocaml;
   ocaml_4_03   = ocamlPackages_4_03.ocaml;
   ocaml        = ocamlPackages.ocaml;
-})
+}))

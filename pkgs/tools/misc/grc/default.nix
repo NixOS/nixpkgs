@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name    = "grc-${version}";
-  version = "1.11";
+  version = "1.11.1";
 
   src = fetchFromGitHub {
     owner  = "garabik";
     repo   = "grc";
     rev    = "v${version}";
-    sha256 = "0slxkjg8xf5rg5pqgh4g2p1qxr5m9f6ds7zg7vh2xqzkmwqv18kp";
+    sha256 = "10h65qmv2cymixzfsckfcn6f01xsjzfq1x303rv01nibniwbq5z9";
   };
 
   buildInputs = with python3Packages; [ wrapPython makeWrapper ];

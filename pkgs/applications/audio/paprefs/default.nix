@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       dialog for the PulseAudio sound server.
     '';
 
-    homepage = "http://freedesktop.org/software/pulseaudio/paprefs/";
+    homepage = http://freedesktop.org/software/pulseaudio/paprefs/;
 
     license = licenses.gpl2Plus;
 

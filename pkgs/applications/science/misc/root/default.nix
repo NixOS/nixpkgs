@@ -1,18 +1,19 @@
 { stdenv, fetchurl, fetchpatch, cmake, pcre, pkgconfig, python2
-, libX11, libXpm, libXft, libXext, zlib, lzma, gsl, Cocoa }:
+, libX11, libXpm, libXft, libXext, mesa, zlib, libxml2, lzma, gsl
+, Cocoa, OpenGL, noSplash ? false }:
 
 stdenv.mkDerivation rec {
   name = "root-${version}";
-  version = "6.08.02";
+  version = "6.10.04";
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    sha256 = "0530v1r4rvds52hgb13f00l3phhn76z6vii550mwv8bj3sl5070k";
+    sha256 = "0nwg4bw02v6vahm2rwfaj7fzp3ffhjg5jk7h20il4246swhxw6s6";
   };
 
-  buildInputs = [ cmake pcre pkgconfig python2 zlib lzma gsl ]
-    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext ]
-    ++ stdenv.lib.optionals (stdenv.isDarwin) [ Cocoa ]
+  buildInputs = [ cmake pcre pkgconfig python2 zlib libxml2 lzma gsl ]
+    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext mesa ]
+    ++ stdenv.lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
     ;
 
   patches = [
@@ -20,10 +21,15 @@ stdenv.mkDerivation rec {
 
     # this prevents thisroot.sh from setting $p, which interferes with stdenv setup
     ./thisroot.patch
+
+    # https://sft.its.cern.ch/jira/browse/ROOT-8728
+    ./ROOT-8728-extra.patch
   ];
 
   preConfigure = ''
     patchShebangs build/unix/
+  '' + stdenv.lib.optionalString noSplash ''
+    substituteInPlace rootx/src/rootx.cxx --replace "gNoLogo = false" "gNoLogo = true"
   '';
 
   cmakeFlags = [
@@ -39,6 +45,7 @@ stdenv.mkDerivation rec {
     "-Dfftw3=OFF"
     "-Dfitsio=OFF"
     "-Dfortran=OFF"
+    "-Dimt=OFF"
     "-Dgfal=OFF"
     "-Dgviz=OFF"
     "-Dhdfs=OFF"
@@ -47,7 +54,7 @@ stdenv.mkDerivation rec {
     "-Dmonalisa=OFF"
     "-Dmysql=OFF"
     "-Dodbc=OFF"
-    "-Dopengl=OFF"
+    "-Dopengl=ON"
     "-Doracle=OFF"
     "-Dpgsql=OFF"
     "-Dpythia6=OFF"
@@ -55,17 +62,18 @@ stdenv.mkDerivation rec {
     "-Drfio=OFF"
     "-Dsqlite=OFF"
     "-Dssl=OFF"
-    "-Dxml=OFF"
+    "-Dxml=ON"
     "-Dxrootd=OFF"
   ]
-  ++ stdenv.lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.lib.getDev stdenv.cc.libc}/include";
+  ++ stdenv.lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.lib.getDev stdenv.cc.libc}/include"
+  ++ stdenv.lib.optional stdenv.isDarwin "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks";
 
   enableParallelBuilding = true;
 
   setupHook = ./setup-hook.sh;
 
   meta = {
-    homepage = "https://root.cern.ch/";
+    homepage = https://root.cern.ch/;
     description = "A data analysis framework";
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ veprbl ];

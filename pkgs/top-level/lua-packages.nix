@@ -71,6 +71,32 @@ let
     };
   };
 
+  luacheck = buildLuaPackage rec {
+    pname = "luacheck";
+    version = "0.20.0";
+    name = "${pname}${version}";
+
+    src = fetchFromGitHub {
+      owner = "mpeterv";
+      repo = "luacheck";
+      rev = "${version}";
+      sha256 = "0ahfkmqcjhlb7r99bswy1sly6d7p4pyw5f4x4fxnxzjhbq0c5qcs";
+    };
+
+    propagatedBuildInputs = [ lua ];
+
+    installPhase = ''
+      ${lua}/bin/lua install.lua $out
+      '';
+
+    meta = with stdenv.lib; {
+      description = "A tool for linting and static analysis of Lua code";
+      homepage = https://github.com/mpeterv/luacheck;
+      license = licenses.mit;
+      platforms = platforms.unix;
+    };
+  };
+
   luaevent = buildLuaPackage rec {
     version = "0.4.3";
     name = "luaevent-${version}";
@@ -311,24 +337,23 @@ let
 
   lrexlib = buildLuaPackage rec {
     name = "lrexlib-${version}";
-    version = "2.7.2";
+    version = "2.8.0";
     src = fetchzip {
-      url = "https://github.com/rrthomas/lrexlib/archive/150c251be57c4e569da0f48bf6b01fbca97179fe.zip";
-      sha256 = "0acb3258681bjq61piz331r99bdff6cnkjaigq5phg3699iz5h75";
+      url = "https://github.com/rrthomas/lrexlib/archive/rel-2-8-0.zip";
+      sha256 = "1c62ny41b1ih6iddw5qn81gr6dqwfffzdp7q6m8x09zzcdz78zhr";
     };
     buildInputs = [ unzip luastdlib pcre luarocks oniguruma gnulib tre glibc ];
 
     buildPhase = let
-      luaVariable = "LUA_PATH=${luastdlib}/share/lua/${lua.luaversion}/?.lua";
+      luaVariable = ''LUA_PATH="${luastdlib}/share/lua/${lua.luaversion}/?/init.lua;${luastdlib}/share/lua/${lua.luaversion}/?.lua"'';
 
-      pcreVariable = "PCRE_DIR=${pcre.dev}";
+      pcreVariable = "PCRE_DIR=${pcre.out} PCRE_INCDIR=${pcre.dev}/include";
       onigVariable = "ONIG_DIR=${oniguruma}";
       gnuVariable = "GNU_INCDIR=${gnulib}/lib";
       treVariable = "TRE_DIR=${tre}";
       posixVariable = "POSIX_DIR=${glibc.dev}";
     in ''
-      sed -e 's@$(LUAROCKS) $(LUAROCKS_COMMAND) $$i;@$(LUAROCKS) $(LUAROCKS_COMMAND) $$i ${pcreVariable} ${onigVariable} ${gnuVariable} ${treVariable} ${posixVariable};@' \
-          -i Makefile
+      sed -e 's@$(LUAROCKS) $(LUAROCKS_COMMAND) $$i;@$(LUAROCKS) $(LUAROCKS_COMMAND) $$i ${pcreVariable} ${onigVariable} ${gnuVariable} ${treVariable} ${posixVariable};@' -i Makefile
       ${luaVariable} make
     '';
 
@@ -341,7 +366,6 @@ let
       homepage = "https://github.com/lua-stdlib/lua-stdlib/";
       platforms = stdenv.lib.platforms.linux;
       license = stdenv.lib.licenses.mit;
-      broken = true;
     };
   };
 

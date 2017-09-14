@@ -1,21 +1,26 @@
-{ stdenv, buildPythonPackage, fetchurl, isPy3k,
-  unittest2, mock, pytest, trollius, pytest-asyncio,
-  six, twisted, txaio
+{ stdenv, buildPythonPackage, fetchurl, isPy3k, isPy33,
+  unittest2, mock, pytest, trollius, asyncio,
+  pytest-asyncio, futures,
+  six, twisted, txaio, zope_interface
 }:
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "autobahn";
-  version = "0.18.2";
+  version = "17.8.1";
 
   src = fetchurl {
     url = "mirror://pypi/a/${pname}/${name}.tar.gz";
-    sha256 = "1alp71plqnrak5nm2vn9mmkxayjb081c1kihqwf60wdpvv0w7y14";
+    sha256 = "72b1b1e30bd41d52e7454ef6fe78fe80ebf2341a747616e2cd854a76203a0ec4";
   };
 
-  buildInputs = [ unittest2 mock pytest trollius pytest-asyncio ];
-  propagatedBuildInputs = [ six twisted txaio ];
+  # Upstream claim python2 support, but tests require pytest-asyncio which
+  # is pythn3 only. Therefore, tests are skipped for python2.
+  doCheck = isPy3k;
+  buildInputs = stdenv.lib.optionals isPy3k [ unittest2 mock pytest pytest-asyncio ];
+  propagatedBuildInputs = [ six twisted zope_interface txaio ] ++
+    (stdenv.lib.optional isPy33 asyncio) ++
+    (stdenv.lib.optionals (!isPy3k) [ trollius futures ]);
 
-  disabled = !isPy3k;
   checkPhase = ''
     py.test $out
   '';

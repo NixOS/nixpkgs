@@ -84,6 +84,8 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "-j 3" "-j $NIX_BUILD_CORES"
     # Remove tiff, jpg and png to be sure the nixpkgs-provided ones are used
     rm -rf tiff jpg png
+
+    unset AR
   '';
 
   buildInputs = [

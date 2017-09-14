@@ -1,21 +1,23 @@
 { stdenv, fetchFromGitHub, makeWrapper, cmake, pkgconfig, wxGTK30, glib, pcre, m4, bash,
-  xdg_utils, xterm, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz }:
+  xdg_utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick }:
 
 stdenv.mkDerivation rec {
-  rev = "c2f2b89db31b1c3cb9bed53267873f4cd7bc996d";
-  build = "2017-03-18-${builtins.substring 0 10 rev}";
+  rev = "de5554dbc0ec69329b75777d4a3b2f01851fc5ed";
+  build = "unstable-2017-07-13.git${builtins.substring 0 7 rev}";
   name = "far2l-2.1.${build}";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
     rev = rev;
-    sha256 = "1172ajg4n8g4ag14b6nb9lclwh2r6v7ccndmvhnj066w35ixnqgb";
+    sha256 = "07l8w9p6zxm9qgh9wlci584lgv8gd4aw742jaqh9acgkxy9caih8";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig m4 makeWrapper ];
+  nativeBuildInputs = [ cmake pkgconfig m4 makeWrapper imagemagick ];
 
   buildInputs = [ wxGTK30 glib pcre ];
+
+  patches = [ ./add-nix-syntax-highlighting.patch ];
 
   postPatch = ''
     echo 'echo ${build}' > far2l/bootstrap/scripts/vbuild.sh
@@ -23,8 +25,7 @@ stdenv.mkDerivation rec {
     substituteInPlace far2l/bootstrap/open.sh              \
       --replace 'gvfs-trash'  '${gvfs}/bin/gvfs-trash'
     substituteInPlace far2l/bootstrap/open.sh              \
-      --replace 'xdg-open'    '${xdg_utils}/bin/xdg-open'  \
-      --replace 'xterm'       '${xterm}/bin/xterm'
+      --replace 'xdg-open'    '${xdg_utils}/bin/xdg-open'
     substituteInPlace far2l/vtcompletor.cpp                \
       --replace '"/bin/bash"' '"${bash}/bin/bash"'
     substituteInPlace multiarc/src/formats/zip/zip.cpp     \
@@ -41,12 +42,20 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/{bin,share}
-    rm install/{far2l_askpass,far2l_sudoapp}
-    mv install/far2l $out/bin/far2l
-    mv install $out/share/far2l
-    ln -s -r $out/bin/far2l $out/share/far2l/far2l_askpass
-    ln -s -r $out/bin/far2l $out/share/far2l/far2l_sudoapp
+    mkdir -p $out/bin $out/share/applications $out/share/icons/hicolor/scalable/apps
+    cp -dpR install $out/share/far2l
+    mv $out/share/far2l/far2l $out/bin/
+    ln -s -r --force $out/bin/far2l $out/share/far2l/far2l_askpass
+    ln -s -r --force $out/bin/far2l $out/share/far2l/far2l_sudoapp
+
+    sed "s,/usr/bin/,$out/bin/," ../far2l/DE/far2l.desktop > $out/share/applications/far2l.desktop
+
+    cp ../far2l/DE/icons/hicolor/1024x1024/apps/far2l.svg $out/share/icons/hicolor/scalable/apps/
+    convert -size 128x128 ../far2l/DE/icons/far2l.svg $out/share/icons/far2l.png
+    for size in 16x16 24x24 32x32 48x48 64x64 72x72 96x96 128x128 192x192 256x256 512x512 1024x1024; do
+      mkdir -p $out/share/icons/hicolor/$size/apps
+      convert -size $size ../far2l/DE/icons/hicolor/$size/apps/far2l.svg $out/share/icons/hicolor/$size/apps/far2l.png
+    done
   '';
 
   stripDebugList = "bin share";
@@ -55,7 +64,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An orthodox file manager";
-    homepage = http://github.com/elfmz/far2l;
+    homepage = https://github.com/elfmz/far2l;
     license = licenses.gpl2;
     maintainers = [ maintainers.volth ];
     platforms = platforms.all;

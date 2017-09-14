@@ -1,27 +1,38 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, gcc }:
+{ stdenv, buildGoPackage, fetchurl, cmake, xz, which }:
 
 buildGoPackage rec {
   name = "cockroach-${version}";
-  version = "beta-20160915";
+  version = "v1.0.5";
 
   goPackagePath = "github.com/cockroachdb/cockroach";
-  subPackages = [ "." ];
 
-  src = fetchFromGitHub {
-    owner = "cockroachdb";
-    repo = "cockroach";
-    rev = version;
-    sha256 = "11camp588vsccxlc138l7x4qws2fj5wpx1177irzayqdng8dilx3";
+  src = fetchurl {
+    url = "https://binaries.cockroachdb.com/cockroach-${version}.src.tgz";
+    sha256 = "0jjl6zb8pyxws3i020h98vdr217railca8h6n3xijkvcqy9dj8wa";
   };
 
-  buildFlagsArray = ''
-    -ldflags=
-      -X github.com/cockroachdb/cockroach/build.tag=${version}
-  '';
+  buildInputs = [ cmake xz which ];
 
-  buildInputs = [ gcc ];
+  buildPhase =
+    ''
+      cd $NIX_BUILD_TOP/go/src/${goPackagePath}
+      patchShebangs ./
+      make buildoss
+      cd src/${goPackagePath}
+      for asset in man autocomplete; do
+        ./cockroach gen $asset
+      done
+    '';
 
-  goDeps = ./deps.nix;
+  installPhase =
+    ''
+      mkdir -p $bin/{bin,share}
+      mv cockroach $bin/bin/
+      mv man $bin/share/
+
+      mkdir -p $out/share/bash-completion/completions
+      mv cockroach.bash $out/share/bash-completion/completions
+    '';
 
   meta = with stdenv.lib; {
     homepage = https://www.cockroachlabs.com;

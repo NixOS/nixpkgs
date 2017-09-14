@@ -3,6 +3,8 @@
 , fetchPypi
 , cython
 , isPyPy
+, ipython
+, python
 }:
 
 buildPythonPackage rec {
@@ -17,7 +19,13 @@ buildPythonPackage rec {
 
   buildInputs = [ cython ];
 
+  propagatedBuildInputs = [ ipython ];
+
   disabled = isPyPy;
+
+  checkPhase = ''
+    ${python.interpreter} -m unittest discover -s tests
+  '';
 
   meta = {
     description = "Line-by-line profiler";

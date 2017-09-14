@@ -2,11 +2,11 @@
 
 python2Packages.buildPythonApplication rec {
   name = "electrum-${version}";
-  version = "2.8.2";
+  version = "2.9.3";
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "01xphbi7lx64s9380zjfakz5h8blqmxp0ryqlll7px66qpmjn5fq";
+    sha256 = "0d0fzb653g7b8ka3x90nl21md4g3n1fv11czdxpdq3s9yr6js6f2";
   };
 
   propagatedBuildInputs = with python2Packages; [
@@ -14,7 +14,7 @@ python2Packages.buildPythonApplication rec {
     ecdsa
     jsonrpclib
     pbkdf2
-    protobuf3_0
+    protobuf
     pyaes
     pycrypto
     pyqt4

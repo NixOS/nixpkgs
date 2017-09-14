@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library of Assorted Spiffy Things";
-    homepage = "http://www.eterm.org";
+    homepage = http://www.eterm.org;
     license = licenses.bsd2;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.unix;

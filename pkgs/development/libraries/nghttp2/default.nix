@@ -17,15 +17,14 @@ let inherit (stdenv.lib) optional; in
 
 stdenv.mkDerivation rec {
   name = "nghttp2-${version}";
-  version = "1.20.0";
+  version = "1.24.0";
 
-  # Don't use fetchFromGitHub since this needs a bootstrap curl
   src = fetchurl {
     url = "https://github.com/nghttp2/nghttp2/releases/download/v${version}/nghttp2-${version}.tar.bz2";
-    sha256 = "fb29d0500b194f11680203aed21aafab241063ec1397cc51ab5cc0957341141b";
+    sha256 = "18ys6p39yvm9wjjzhhlw35c9m8f5gf4dk9jbshibj19q4js1pnv9";
   };
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [ "bin" "out" "dev" "lib" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl libev zlib c-ares ]
@@ -36,11 +35,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = [ "--with-spdylay=no" "--disable-examples" "--disable-python-bindings" ]
+  configureFlags = [ "--with-spdylay=no" "--disable-examples" "--disable-python-bindings" "--enable-app" ]
     ++ optional enableAsioLib "--enable-asio-lib --with-boost-libdir=${boost}/lib";
 
   #doCheck = true;  # requires CUnit ; currently failing at test_util_localtime_date in util_test.cc
-
 
   meta = with stdenv.lib; {
     homepage = https://nghttp2.org/;

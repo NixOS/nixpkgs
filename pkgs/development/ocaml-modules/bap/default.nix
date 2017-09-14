@@ -58,5 +58,6 @@ buildOcaml rec {
     homepage = https://github.com/BinaryAnalysisPlatform/bap/;
     maintainers = [ maintainers.maurer ];
     license = licenses.mit;
+    broken = versionAtLeast ocaml.version "4.03";
   };
 }

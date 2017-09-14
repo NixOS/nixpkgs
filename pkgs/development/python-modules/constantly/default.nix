@@ -1,7 +1,8 @@
 { stdenv, buildPythonPackage, fetchurl
 }:
 buildPythonPackage rec {
-  name = "constantly-${version}";
+  pname = "constantly";
+  name = "${pname}-${version}";
   version = "15.1.0";
 
   src = fetchurl {

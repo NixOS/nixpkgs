@@ -1,33 +1,24 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''md5'';
-  version = ''20150804-git'';
+  version = ''20170630-git'';
 
   description = ''The MD5 Message-Digest Algorithm RFC 1321'';
 
   deps = [ ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/md5/2015-08-04/md5-20150804-git.tgz'';
-    sha256 = ''1sf79pjip19sx7zmznz1wm4563qc208lq49m0jnhxbv09wmm4vc5'';
+    url = ''http://beta.quicklisp.org/archive/md5/2017-06-30/md5-20170630-git.tgz'';
+    sha256 = ''0pli483skkfbi9ln8ghxnvzw9p5srs8zyilkygsimkzy8fcc5hyx'';
   };
 
-  overrides = x: {
-    postInstall = ''
-      find "$out/lib/common-lisp/" -name '*.asd' | grep -iv '/md5[.]asd${"$"}' |
-        while read f; do
-          env -i \
-          NIX_LISP="$NIX_LISP" \
-          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(progn
-            (asdf:load-system :$(basename "$f" .asd))
-            (asdf:perform (quote asdf:compile-bundle-op) :$(basename "$f" .asd))
-            (ignore-errors (asdf:perform (quote asdf:deliver-asd-op) :$(basename "$f" .asd)))
-            )'" \
-            "$out"/bin/*-lisp-launcher.sh ||
-          mv "$f"{,.sibling}; done || true
-    '';
-  };
+  packageName = "md5";
+
+  asdFilesToKeep = ["md5.asd"];
+  overrides = x: x;
 }
-/* (SYSTEM md5 DESCRIPTION The MD5 Message-Digest Algorithm RFC 1321 SHA256 1sf79pjip19sx7zmznz1wm4563qc208lq49m0jnhxbv09wmm4vc5 URL
-    http://beta.quicklisp.org/archive/md5/2015-08-04/md5-20150804-git.tgz MD5 69331e0d326cbc3286ac447e2868e7fd NAME md5 TESTNAME NIL FILENAME md5 DEPS NIL
-    DEPENDENCIES NIL VERSION 20150804-git SIBLINGS NIL) */
+/* (SYSTEM md5 DESCRIPTION The MD5 Message-Digest Algorithm RFC 1321 SHA256
+    0pli483skkfbi9ln8ghxnvzw9p5srs8zyilkygsimkzy8fcc5hyx URL
+    http://beta.quicklisp.org/archive/md5/2017-06-30/md5-20170630-git.tgz MD5
+    c6a5b3ca5a23fad3dfde23963db84910 NAME md5 FILENAME md5 DEPS NIL
+    DEPENDENCIES NIL VERSION 20170630-git SIBLINGS NIL PARASITES NIL) */

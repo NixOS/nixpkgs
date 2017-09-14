@@ -1,10 +1,10 @@
 {
-  plasmaPackage, extra-cmake-modules,
+  mkDerivation, extra-cmake-modules,
   kcoreaddons, kconfig, kcrash, kdbusaddons, ki18n, kiconthemes, knotifications,
   kwidgetsaddons, kwindowsystem, polkit-qt
 }:
 
-plasmaPackage {
+mkDerivation {
   name = "polkit-kde-agent";
   nativeBuildInputs = [ extra-cmake-modules ];
   propagatedBuildInputs = [

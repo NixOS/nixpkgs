@@ -1,0 +1,59 @@
+From 60abf3ee8864980a95b32e2d6cf60e26b49654c0 Mon Sep 17 00:00:00 2001
+From: joachim schiele <js@lastlog.de>
+Date: Wed, 7 Jun 2017 22:15:39 +0200
+Subject: [PATCH 2/2] Adding --siteconfigpath to not be forced to use global /etc/spamasassin configuration directory but to provide an alternative location.
+
+---
+ sa-update.raw | 5 +++++
+ lib/Mail/SpamAssassin/PerMsgStatus.pm | 2 +
+ 2 file changed, 7 insertions(+), 1 deletion(-)
+
+diff --git a/sa-update.raw b/sa-update.raw
+index bb7396d..39f681f 100755
+--- a/sa-update.raw
++++ b/sa-update.raw
+@@ -196,6 +196,7 @@ GetOptions(
+   'gpgkeyfile=s'			=> \$opt{'gpgkeyfile'},
+   'channelfile=s'			=> \$opt{'channelfile'},
+   'updatedir=s'				=> \$opt{'updatedir'},
++  'siteconfigpath=s'                           => \$opt{'siteconfigpath'},
+   'gpg!'				=> \$GPG_ENABLED,
+ 
+   '4'                                   => sub { $opt{'force_pf'} = 'inet' },
+@@ -267,6 +268,9 @@ else {
+   $opt{'updatedir'} = $SA->sed_path('__local_state_dir__/__version__');
+ }
+ 
++if (defined $opt{'siteconfigpath'}) {
++  $LOCAL_RULES_DIR = untaint_file_path($opt{'siteconfigpath'});
++}
+ 
+ # check only disabled gpg
+ # https://issues.apache.org/SpamAssassin/show_bug.cgi?id=5854
+@@ -1808,6 +1812,7 @@ Options:
+   --updatedir path        Directory to place updates, defaults to the
+                           SpamAssassin site rules directory
+                           (default: @@LOCAL_STATE_DIR@@/@@VERSION@@)
++  --siteconfigpath=path   Path for site configs
+   --refreshmirrors        Force the MIRRORED.BY file to be updated
+   -D, --debug [area=n,...]  Print debugging messages
+   -v, --verbose           Be verbose, like print updated channel names;
+-- 
+diff --git a/lib/Mail/SpamAssassin/PerMsgStatus.pm b/lib/Mail/SpamAssassin/PerMsgStatus.pm
+index 6d8beaa..6ad87dc 100644
+--- a/lib/Mail/SpamAssassin/PerMsgStatus.pm
++++ b/lib/Mail/SpamAssassin/PerMsgStatus.pm
+@@ -389,7 +389,8 @@ sub check_timed {
+     if (!$self->{main}->have_plugin("check_main")) {
+       die "check: no loaded plugin implements 'check_main': cannot scan!\n".
+             "Check that the necessary '.pre' files are in the config directory.\n".
+-              "At a minimum, v320.pre loads the Check plugin which is required.\n";
++              "At a minimum, v320.pre loads the Check plugin which is required.\n".
++              "NixOS: Since there is no '/etc/spamassassin' simply restart 'spamd.service' which on its behalf will run 'sa-learn --siteconfigpath=/nix/store/l4hr4yxk8mb4wbkha6vm6rh92pj19rj6-spamd-env ...' to update the /var/lib/spamassassin configs.\n";
+     }
+   }
+ 
+-- 
+
+2.12.2
+

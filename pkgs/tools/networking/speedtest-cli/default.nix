@@ -2,13 +2,13 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "speedtest-cli-${version}";
-  version = "1.0.4";
-  
+  version = "1.0.6";
+
   src = fetchFromGitHub {
     owner = "sivel";
     repo = "speedtest-cli";
     rev = "v${version}";
-    sha256 = "13i7bvhvwv8h2lxnz9pfxq6jv915lb948d6xjiy5p7rqbki40ng2";
+    sha256 = "008a0wymn06h93gdkxwlgxg8039ybdni96i4blhpayj52jkbflnv";
   };
 
   meta = with stdenv.lib; {

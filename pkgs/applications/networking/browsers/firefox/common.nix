@@ -1,5 +1,5 @@
 { pname, version, updateScript ? null
-, src, patches ? [], overrides ? {}, meta
+, src, patches ? [], extraConfigureFlags ? [], extraMakeFlags ? [], overrides ? {}, meta
 , isTorBrowserLike ? false }:
 
 { lib, stdenv, pkgconfig, pango, perl, python, zip, libIDL
@@ -19,7 +19,7 @@
 , alsaSupport ? true, alsaLib
 , pulseaudioSupport ? true, libpulseaudio
 , ffmpegSupport ? true, gstreamer, gst-plugins-base
-, gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
+, gtk3Support ? !isTorBrowserLike, gtk2, gtk3, wrapGAppsHook
 
 ## privacy-related options
 
@@ -29,7 +29,6 @@
 # Set to `privacySupport` or `false`.
 
 , webrtcSupport ? !privacySupport
-, loopSupport ? !privacySupport || !isTorBrowserLike
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , crashreporterSupport ? false
@@ -44,11 +43,10 @@
 # option. However, in Firefox's case, those binaries may not be
 # distributed without permission from the Mozilla Foundation, see
 # http://www.mozilla.org/foundation/trademarks/.
-, enableOfficialBranding ? false
+, enableOfficialBranding ? isTorBrowserLike
 }:
 
 assert stdenv.cc ? libc && stdenv.cc.libc != null;
-assert !isTorBrowserLike -> loopSupport; # can't be disabled on firefox :(
 
 let
   flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
@@ -113,7 +111,7 @@ stdenv.mkDerivation (rec {
     "--enable-system-sqlite"
     #"--enable-system-cairo"
     "--enable-startup-notification"
-    "--enable-content-sandbox" # available since 26.0, but not much info available
+    #"--enable-content-sandbox" # TODO: probably enable after 54
     "--disable-tests"
     "--disable-necko-wifi" # maybe we want to enable this at some point
     "--disable-updater"
@@ -147,19 +145,28 @@ stdenv.mkDerivation (rec {
   ++ flag ffmpegSupport "ffmpeg"
   ++ lib.optional (!ffmpegSupport) "--disable-gstreamer"
   ++ flag webrtcSupport "webrtc"
-  ++ lib.optionals isTorBrowserLike
-       (flag loopSupport "loop")
   ++ flag geolocationSupport "mozril-geoloc"
   ++ lib.optional googleAPISupport "--with-google-api-keyfile=ga"
   ++ flag crashreporterSupport "crashreporter"
   ++ flag safeBrowsingSupport "safe-browsing"
-  ++ flag drmSupport "eme"
+  ++ lib.optional drmSupport "--enable-eme=widevine"
 
   ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
                     else [ "--disable-debug" "--enable-release"
                            "--enable-optimize"
                            "--enable-strip" ])
-  ++ lib.optional enableOfficialBranding "--enable-official-branding";
+  ++ lib.optional enableOfficialBranding "--enable-official-branding"
+  ++ extraConfigureFlags;
+
+  preBuild = lib.optionalString (enableOfficialBranding && isTorBrowserLike) ''
+    buildFlagsArray=("MOZ_APP_DISPLAYNAME=Tor Browser")
+  '';
+
+  makeFlags = lib.optionals enableOfficialBranding [
+    "MOZILLA_OFFICIAL=1"
+    "BUILD_OFFICIAL=1"
+  ]
+  ++ extraMakeFlags;
 
   enableParallelBuilding = true;
 
@@ -200,6 +207,6 @@ stdenv.mkDerivation (rec {
     gtk = gtk2;
     inherit nspr;
     inherit ffmpegSupport;
-  };
+  } // lib.optionalAttrs gtk3Support { inherit gtk3; };
 
 } // overrides)

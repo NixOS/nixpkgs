@@ -20,7 +20,7 @@
 +	$(INSTALL) -m 755 -d $(IROOT)$(sbindir)
 +	$(INSTALL) -m 755 -d $(IROOT)$(docdir)
 +	$(INSTALL) -m 755 -d $(IROOT)$(atdocdir)
-+	$(INSTALL) -m 6755 -s at $(IROOT)$(bindir)
++	$(INSTALL) -m 0755 -s at $(IROOT)$(bindir)
  	$(LN_S) -f at $(IROOT)$(bindir)/atq
  	$(LN_S) -f at $(IROOT)$(bindir)/atrm
 -	$(INSTALL) -g root -o root -m 755 batch $(IROOT)$(bindir)

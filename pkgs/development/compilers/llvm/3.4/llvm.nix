@@ -29,11 +29,15 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs =
-    [ perl groff cmake libxml2 libffi ]
-    ++ stdenv.lib.optional (!stdenv.isDarwin) python2 /*
+    [ perl groff cmake libxml2 libffi python2 ] /*
     ++ stdenv.lib.optional stdenv.isLinux valgrind */;
 
   propagatedBuildInputs = [ ncurses zlib ];
+
+  patches = stdenv.lib.optionals (!stdenv.isDarwin) [
+    # llvm-config --libfiles returns (non-existing) static libs
+    ../fix-llvm-config.patch
+  ];
 
   # hacky fix: created binaries need to be run before installation
   preBuild = ''
@@ -48,7 +52,7 @@ in stdenv.mkDerivation rec {
     "-DLLVM_REQUIRES_RTTI=1"
     "-DLLVM_BINUTILS_INCDIR=${binutils.dev or binutils}/include"
     "-DCMAKE_CXX_FLAGS=-std=c++11"
-  ] ++ stdenv.lib.optional (!isDarwin) "-DBUILD_SHARED_LIBS=ON";
+  ] ++ stdenv.lib.optional (!stdenv.isDarwin) "-DBUILD_SHARED_LIBS=ON";
 
   postBuild = ''
     rm -fR $out

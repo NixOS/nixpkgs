@@ -1,25 +1,36 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, opam, js_of_ocaml
-, jsooSupport ? !(stdenv.lib.versionAtLeast ocaml.version "4.04")
+{ stdenv, lib, fetchurl, ocaml, findlib, ocamlbuild, topkg, opam, js_of_ocaml
+, jsooSupport ? true
 }:
 
 with lib;
 
+let param =
+  if versionAtLeast ocaml.version "4.03"
+  then {
+    version = "1.1.0";
+    sha256 = "1qb4ljwirrc3g8brh97s76rjky2cpmy7zm87y7iqd6pxix52ydk3";
+  } else {
+    version = "0.8.4";
+    sha256 = "1adm8sc3lkjly99hyi5gqnxas748k7h62ljgn8x423nkn8gyp8dh";
+  };
+in
+
 stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-mtime-0.8.3";
+  name = "ocaml${ocaml.version}-mtime-${param.version}";
 
   src = fetchurl {
-    url = http://erratique.ch/software/mtime/releases/mtime-0.8.3.tbz;
-    sha256 = "1hfx4ny2dkw6jf3jppz0640dafl5xgn8r2si9kpwzhmibal8qrah";
+    url = "http://erratique.ch/software/mtime/releases/mtime-${param.version}.tbz";
+    inherit (param) sha256;
   };
 
   unpackCmd = "tar xjf $src";
 
-  buildInputs = [ ocaml findlib ocamlbuild opam ]
+  buildInputs = [ ocaml findlib ocamlbuild opam topkg ]
   ++ stdenv.lib.optional jsooSupport js_of_ocaml;
 
-  buildPhase = "ocaml pkg/build.ml native=true native-dynlink=true jsoo=${boolToString jsooSupport}";
+  buildPhase = "${topkg.buildPhase} --with-js_of_ocaml ${boolToString jsooSupport}";
 
-  installPhase = "opam-installer -i --prefix=$out --libdir=$OCAMLFIND_DESTDIR";
+  inherit (topkg) installPhase;
 
   meta = {
     description = "Monotonic wall-clock time for OCaml";

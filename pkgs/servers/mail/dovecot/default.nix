@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withSQLite "--with-sqlite";
 
   meta = {
-    homepage = "http://dovecot.org/";
+    homepage = http://dovecot.org/;
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
     maintainers = with stdenv.lib.maintainers; [viric peti rickynils];
     platforms = stdenv.lib.platforms.unix;

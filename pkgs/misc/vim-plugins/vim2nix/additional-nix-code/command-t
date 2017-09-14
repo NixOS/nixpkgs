@@ -1,7 +1,6 @@
-    buildInputs = [ perl ruby ];
+    buildInputs = [ perl ruby git ];
     buildPhase = ''
       pushd ruby/command-t
-      ruby extconf.rb
-      make
+      gem build ./command-t.gemspec
       popd
     '';

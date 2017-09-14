@@ -1,20 +1,22 @@
 {
-  kdeApp, lib, extra-cmake-modules,
-  cups, kconfig, kconfigwidgets, kdbusaddons, kiconthemes, ki18n, kcmutils, kio,
+  mkDerivation, lib,
+  extra-cmake-modules,
+  cups, ki18n,
+  kconfig, kconfigwidgets, kdbusaddons, kiconthemes, kcmutils, kio,
   knotifications, kwidgetsaddons, kwindowsystem, kitemviews, plasma-framework,
   qtdeclarative
 }:
 
-kdeApp {
+mkDerivation {
   name = "print-manager";
   meta = {
     license = [ lib.licenses.gpl2 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [ cups ki18n ];
   propagatedBuildInputs = [
-    cups kconfig kconfigwidgets kdbusaddons kiconthemes kcmutils knotifications
-    kwidgetsaddons kitemviews ki18n kio kwindowsystem plasma-framework
-    qtdeclarative
+    kconfig kconfigwidgets kdbusaddons kiconthemes kcmutils knotifications
+    kwidgetsaddons kitemviews kio kwindowsystem plasma-framework qtdeclarative
   ];
 }

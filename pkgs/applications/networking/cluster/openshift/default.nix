@@ -36,7 +36,7 @@ in buildGoPackage rec {
 
   installPhase = ''
     mkdir -p "$bin/bin"
-    cp "_output/local/bin/$(go env GOOS)/$(go env GOARCH)/"* "$bin/bin/"
+    cp -a "_output/local/bin/$(go env GOOS)/$(go env GOARCH)/"* "$bin/bin/"
   '';
 
   meta = with stdenv.lib; {

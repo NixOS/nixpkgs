@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "libnacl";
-  version = "1.5.0";
+  version = "1.5.2";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ph042x0cfysj16mmjif40pxn505rg5c9n94s972dgc0mfgvrwhs";
+    sha256 = "c58390b0d191db948fc9ab681f07fdfce2a573cd012356bada47d56795d00ee2";
   };
 
   buildInputs = [ pytest ];
@@ -24,7 +24,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     maintainers = with maintainers; [ xvapx ];
     description = "Python bindings for libsodium based on ctypes";
-    homepage = "https://pypi.python.org/pypi/libnacl";
+    homepage = https://pypi.python.org/pypi/libnacl;
     license = licenses.asl20;
     platforms = platforms.linux;
   };

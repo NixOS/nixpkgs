@@ -6,11 +6,12 @@
 , decorator
 , httpbin
 , six
-, requests2
+, requests
 }:
 
 buildPythonPackage rec {
-  name = "pytest-httpbin-${version}";
+  pname = "pytest-httpbin";
+  name = "${pname}-${version}";
   version = "0.2.3";
 
   src = fetchFromGitHub {
@@ -25,7 +26,7 @@ buildPythonPackage rec {
   '';
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ flask decorator httpbin six requests2 ];
+  propagatedBuildInputs = [ flask decorator httpbin six requests ];
 
   meta = {
     description = "Easily test your HTTP library against a local copy of httpbin.org";

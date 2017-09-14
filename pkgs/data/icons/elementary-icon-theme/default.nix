@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "4.0.3";
+  version = "4.2.0";
 
   package-name = "elementary-icon-theme";
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://launchpad.net/elementaryicons/4.x/${version}/+download/${name}.tar.xz";
-    sha256 = "0i3cp0wiy4g6d6symyfv3hvmw97109lfakd4qyphabbqllc9xlxb";
+    sha256 = "0w1l9hlih4ddkdjpha5lsyf6iagv436nhm4aphak8w8jyycg81bm";
   };
 
   dontBuild = true;
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Elementary icon theme";
-    homepage = "https://launchpad.net/elementaryicons";
+    homepage = https://launchpad.net/elementaryicons;
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = with maintainers; [ simonvandel ];

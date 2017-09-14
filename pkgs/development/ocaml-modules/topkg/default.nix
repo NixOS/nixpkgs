@@ -1,5 +1,9 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, result, opam }:
 
+if !stdenv.lib.versionAtLeast ocaml.version "4.01"
+then throw "topkg is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-topkg-${version}";
   version = "0.8.1";

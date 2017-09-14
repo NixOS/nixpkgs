@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
   meta = with lib; {
     description = "Unix command line queue utility";
-    homepage = "https://github.com/chneukirchen/nq";
+    homepage = https://github.com/chneukirchen/nq;
     license = licenses.publicDomain;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

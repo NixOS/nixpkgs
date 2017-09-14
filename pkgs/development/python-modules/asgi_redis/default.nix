@@ -2,12 +2,13 @@
   asgiref, asgi_ipc, msgpack, six, redis, cryptography
 }:
 buildPythonPackage rec {
-  name = "asgi_redis-${version}";
-  version = "1.3.0";
+  version = "1.4.2";
+  pname = "asgi_redis";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/a/asgi_redis/${name}.tar.gz";
-    sha256 = "0zhv51w0fx3i8m0032nk9v00l6mxaswyi95yzy7p7fjww4q74ncl";
+    sha256 = "aa8e9342a3e66c4e7f9035b074f6f66b92e5f1cf8022f1446106ed6dd004a274";
   };
 
   # Requires a redis server available

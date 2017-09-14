@@ -57,7 +57,7 @@ Thus, if something went wrong, you can get status info using
 
 </para>
 
-<para>If the container has started succesfully, you can log in as
+<para>If the container has started successfully, you can log in as
 root using the <command>root-login</command> operation:
 
 <screen>

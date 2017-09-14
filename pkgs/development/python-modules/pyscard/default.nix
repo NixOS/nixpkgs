@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, buildPythonPackage, swig, pcsclite }:
+{ stdenv, fetchurl, buildPythonPackage, swig, pcsclite, PCSC }:
 
 buildPythonPackage rec {
-  name = "pyscard-${version}";
-  version = "1.9.4";
+  version = "1.9.6";
+  pname = "pyscard";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/p/pyscard/${name}.tar.gz";
-    sha256 = "0gn0p4p8dhk99g8vald0dcnh45jbf82bj72n4djyr8b4hawkck4v";
+    sha256 = "6e28143c623e2b34200d2fa9178dbc80a39b9c068b693b2e6527cdae784c6c12";
   };
 
   patchPhase = ''
@@ -17,10 +18,10 @@ buildPythonPackage rec {
   NIX_CFLAGS_COMPILE = "-isystem ${pcsclite}/include/PCSC/";
 
   propagatedBuildInputs = [ pcsclite ];
-  buildInputs = [ swig ];
+  buildInputs = [ swig ] ++ stdenv.lib.optional stdenv.isDarwin PCSC;
 
   meta = {
-    homepage = "https://pyscard.sourceforge.io/";
+    homepage = https://pyscard.sourceforge.io/;
     description = "Smartcard library for python";
     license = stdenv.lib.licenses.lgpl21;
     maintainers = with stdenv.lib.maintainers; [ layus ];

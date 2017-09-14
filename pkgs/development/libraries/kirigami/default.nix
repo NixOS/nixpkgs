@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, extra-cmake-modules, pkgconfig
-, plasma-framework, qtbase
+, plasma-framework, qtbase, qttranslations
 , qtquickcontrols ? null
 , qtquickcontrols2 ? null }:
 
@@ -15,7 +15,7 @@ let
       inherit sha256;
     };
 
-    buildInputs = [ plasma-framework qtbase qtqc ];
+    buildInputs = [ plasma-framework qtbase qtqc qttranslations ];
 
     nativeBuildInputs = [ cmake pkgconfig extra-cmake-modules ];
 

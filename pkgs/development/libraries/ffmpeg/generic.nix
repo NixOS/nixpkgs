@@ -2,6 +2,7 @@
 , alsaLib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
 , libtheora, libva, libvorbis, libvpx, lzma, libpulseaudio, soxr
 , x264, x265, xvidcore, zlib, libopus
+, hostPlatform
 , openglSupport ? false, mesa ? null
 # Build options
 , runtimeCpuDetectBuild ? true # Detect CPU capabilities at runtime
@@ -55,6 +56,8 @@ let
 
   # Disable dependency that needs fixes before it will work on Darwin or Arm
   disDarwinOrArmFix = origArg: minVer: fixArg: if ((isDarwin || isArm) && reqMin minVer) then fixArg else origArg;
+
+  vaapiSupport = reqMin "0.6" && ((isLinux || isFreeBSD) && !isArm);
 in
 
 assert openglSupport -> mesa != null;
@@ -72,7 +75,7 @@ stdenv.mkDerivation rec {
   postPatch = ''patchShebangs .'';
   inherit patches;
 
-  outputs = [ "bin" "dev" "out" ]
+  outputs = [ "bin" "dev" "out" "man" ]
     ++ optional (reqMin "1.0") "doc" ; # just dev-doc
   setOutputFlags = false; # doesn't accept all and stores configureFlags in libs!
 
@@ -121,7 +124,7 @@ stdenv.mkDerivation rec {
       "--enable-libmp3lame"
       (ifMinVer "1.2" "--enable-iconv")
       "--enable-libtheora"
-      (ifMinVer "0.6" (enableFeature (isLinux || isFreeBSD) "vaapi"))
+      (ifMinVer "0.6" (enableFeature vaapiSupport "vaapi"))
       "--enable-vdpau"
       "--enable-libvorbis"
       (disDarwinOrArmFix (ifMinVer "0.6" "--enable-libvpx") "0.6" "--disable-libvpx")
@@ -167,38 +170,20 @@ stdenv.mkDerivation rec {
 
   /* Cross-compilation is untested, consider this an outline, more work
      needs to be done to portions of the build to get it to work correctly */
-  crossAttrs = let
-    os = ''
-      if [ "${stdenv.cross.config}" = "*cygwin*" ] ; then
-        # Probably should look for mingw too
-        echo "cygwin"
-      elif [ "${stdenv.cross.config}" = "*darwin*" ] ; then
-        echo "darwin"
-      elif [ "${stdenv.cross.config}" = "*freebsd*" ] ; then
-        echo "freebsd"
-      elif [ "${stdenv.cross.config}" = "*linux*" ] ; then
-        echo "linux"
-      elif [ "${stdenv.cross.config}" = "*netbsd*" ] ; then
-        echo "netbsd"
-      elif [ "${stdenv.cross.config}" = "*openbsd*" ] ; then
-        echo "openbsd"
-      fi
-    '';
-  in {
-    dontSetConfigureCross = true;
+  crossAttrs = {
+    configurePlatforms = [];
     configureFlags = configureFlags ++ [
-      "--cross-prefix=${stdenv.cross.config}-"
+      "--cross-prefix=${stdenv.cc.prefix}"
       "--enable-cross-compile"
-      "--target_os=${os}"
-      "--arch=${stdenv.cross.arch}"
+      "--target_os=${hostPlatform.parsed.kernel}"
+      "--arch=${hostPlatform.arch}"
     ];
   };
 
   installFlags = [ "install-man" ];
 
   passthru = {
-    vaapiSupport = if reqMin "0.6" && ((isLinux || isFreeBSD) && !isArm) then true else false;
-    inherit vdpauSupport;
+    inherit vaapiSupport vdpauSupport;
   };
 
   meta = with stdenv.lib; {

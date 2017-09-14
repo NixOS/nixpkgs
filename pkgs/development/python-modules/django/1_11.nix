@@ -3,13 +3,15 @@
   geos, gdal, pytz
 }:
 buildPythonPackage rec {
-  name = "Django-${version}";
-  version = "1.11";
+  pname = "Django";
+  name = "${pname}-${version}";
+  version = "1.11.5";
+
   disabled = pythonOlder "2.7";
 
   src = fetchurl {
     url = "http://www.djangoproject.com/m/releases/1.11/${name}.tar.gz";
-    sha256 = "0c1c2n05wv1br651hfbvnxw8ymcn4q8m56893pyv8xj2jijbiwxn";
+    sha256 = "0a9bk1a0n0264lcr67fmwzqyhkhy6bqdzkxsj9a8dpyzca0qfdhq";
   };
 
   patches = [

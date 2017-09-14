@@ -4,7 +4,8 @@ with lib;
 
 let
   cfg = config.services.gitolite;
-  pubkeyFile = pkgs.writeText "gitolite-admin.pub" cfg.adminPubkey;
+  # Use writeTextDir to not leak Nix store hash into file name
+  pubkeyFile = (pkgs.writeTextDir "gitolite-admin.pub" cfg.adminPubkey) + "/gitolite-admin.pub";
   hooks = lib.concatMapStrings (hook: "${hook} ") cfg.commonHooks;
 in
 {
@@ -70,6 +71,7 @@ in
     systemd.services."gitolite-init" = {
       description = "Gitolite initialization";
       wantedBy    = [ "multi-user.target" ];
+      unitConfig.RequiresMountsFor = cfg.dataDir;
 
       serviceConfig.User = "${cfg.user}";
       serviceConfig.Type = "oneshot";

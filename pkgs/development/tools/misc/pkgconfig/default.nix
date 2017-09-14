@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-internal-glib" ]
     ++ optional (stdenv.isSunOS) [ "--with-libiconv=gnu" "--with-system-library-path" "--with-system-include-path" "CFLAGS=-DENABLE_NLS" ];
 
-  postInstall = ''rm "$out"/bin/*-pkg-config''; # clean the duplicate file
+  postInstall = ''rm -f "$out"/bin/*-pkg-config''; # clean the duplicate file
 
   meta = {
     description = "A tool that allows packages to find out information about other packages";

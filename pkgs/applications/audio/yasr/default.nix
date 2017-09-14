@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   ]; # taken from the debian yasr package
 
   meta = {
-    homepage = "http://yasr.sourceforge.net";
+    homepage = http://yasr.sourceforge.net;
     description = "A general-purpose console screen reader";
     longDescription = "Yasr is a general-purpose console screen reader for GNU/Linux and other Unix-like operating systems.";
     platforms = stdenv.lib.platforms.linux;

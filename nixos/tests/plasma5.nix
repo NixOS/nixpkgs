@@ -13,6 +13,14 @@ import ./make-test.nix ({ pkgs, ...} :
     services.xserver.desktopManager.plasma5.enable = true;
     services.xserver.desktopManager.default = "plasma5";
     virtualisation.memorySize = 1024;
+
+    # fontconfig-penultimate-0.3.3 -> 0.3.4 broke OCR apparently, but no idea why.
+    nixpkgs.config.packageOverrides = superPkgs: {
+      fontconfig-penultimate = superPkgs.fontconfig-penultimate.override {
+        version = "0.3.3";
+        sha256 = "1z76jbkb0nhf4w7fy647yyayqr4q02fgk6w58k0yi700p0m3h4c9";
+      };
+    };
   };
 
   enableOCR = true;

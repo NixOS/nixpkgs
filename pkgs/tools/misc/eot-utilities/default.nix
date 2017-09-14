@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgconfig ];
 
   meta = {
-    homepage = "http://www.w3.org/Tools/eot-utils/";
+    homepage = http://www.w3.org/Tools/eot-utils/;
     description = "Create Embedded Open Type from OpenType or TrueType font";
     license = stdenv.lib.licenses.w3c;
     maintainers = with stdenv.lib.maintainers; [ leenaars ];

@@ -1,6 +1,10 @@
 { stdenv, fetchurl, bash, ocaml, findlib, ocamlbuild, camlp4, ocaml_react
-, lambdaTerm, ocaml_lwt, camomile, zed, cppo, ppx_tools
+, lambdaTerm, ocaml_lwt, camomile, zed, cppo, ppx_tools, makeWrapper
 }:
+
+if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+then throw "utop is not available for OCaml ${ocaml.version}"
+else
 
 stdenv.mkDerivation rec {
   version = "1.19.3";
@@ -11,6 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "16z02vp9n97iax4fqpbi7v86r75vbabxvnd1rirh8w2miixs1g4x";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ ocaml findlib ocamlbuild cppo camlp4 ppx_tools ];
 
   propagatedBuildInputs = [ lambdaTerm ocaml_lwt ];
@@ -60,8 +65,8 @@ stdenv.mkDerivation rec {
       --argv0 "" \
       --prefix CAML_LD_LIBRARY_PATH ":" "${get "CAML_LD_LIBRARY_PATH"}" \
       --prefix OCAMLPATH ":" "${get "OCAMLPATH"}" \
-      --prefix OCAMLPATH ":" $(unset OCAMLPATH; addOCamlPath "$out"; printf %s "$OCAMLPATH")
-
+      --prefix OCAMLPATH ":" $(unset OCAMLPATH; addOCamlPath "$out"; printf %s "$OCAMLPATH") \
+      --add-flags "-I ${findlib}/lib/ocaml/${stdenv.lib.getVersion ocaml}/site-lib"
    done
    '';
 

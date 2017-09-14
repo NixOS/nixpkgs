@@ -1,12 +1,12 @@
-{ stdenv, appleDerivation, icu, dyld, libdispatch, launchd, libclosure }:
+{ stdenv, appleDerivation, ICU, dyld, libdispatch, libplatform, launchd, libclosure }:
 
 # this project uses blocks, a clang-only extension
 assert stdenv.cc.isClang;
 
 appleDerivation {
-  buildInputs = [ dyld icu libdispatch launchd libclosure ];
+  buildInputs = [ dyld ICU libdispatch libplatform launchd libclosure ];
 
-  patches = [ ./add-cf-initialize.patch ./add-cfmachport.patch ./cf-bridging.patch ];
+  patches = [ ./add-cfmachport.patch ./cf-bridging.patch ./remove-xpc.patch ];
 
   __propagatedImpureHostDeps = [ "/System/Library/Frameworks/CoreFoundation.framework/CoreFoundation" ];
 
@@ -18,8 +18,7 @@ appleDerivation {
       --replace "/usr/sbin/" "" \
       --replace "/bin/" "" \
       --replace "INSTALLNAME=/System" "INSTALLNAME=$out" \
-      --replace "install_name_tool -id /System" "install_name_tool -id $out" \
-      --replace "-licucore.A" "-licui18n -licuuc" \
+      --replace "install_name_tool -id /System/Library/Frameworks" "install_name_tool -id @rpath" \
       --replace 'chown -RH -f root:wheel $(DSTBASE)/CoreFoundation.framework' "" \
       --replace 'chmod -RH' 'chmod -R'
 

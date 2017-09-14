@@ -186,10 +186,10 @@ in mkDerivation (rec {
     };
   };
 
-  homepage = "https://github.com/ghcjs/ghcjs";
+  homepage = https://github.com/ghcjs/ghcjs;
   description = "A Haskell to JavaScript compiler that uses the GHC API";
   license = stdenv.lib.licenses.bsd3;
   platforms = ghc.meta.platforms;
-  maintainers = with stdenv.lib.maintainers; [ jwiegley cstrahan ];
+  maintainers = with stdenv.lib.maintainers; [ jwiegley cstrahan dmjio ];
   inherit broken;
 })

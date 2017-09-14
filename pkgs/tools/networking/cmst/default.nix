@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, qtbase, qmakeHook, makeWrapper, libX11 }:
+{ stdenv, fetchFromGitHub, qtbase, qmake, makeWrapper, libX11 }:
 
 stdenv.mkDerivation rec {
   name = "cmst-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0lsg8ya36df48ij0jawgli3f63hy6mn9zcla48whb1l4r7cih545";
   };
 
-  nativeBuildInputs = [ makeWrapper qmakeHook ];
+  nativeBuildInputs = [ makeWrapper qmake ];
 
   buildInputs = [ qtbase ];
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "QT GUI for Connman with system tray icon";
-    homepage = "https://github.com/andrew-bibb/cmst";
+    homepage = https://github.com/andrew-bibb/cmst;
     maintainers = [ stdenv.lib.maintainers.matejc ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.mit;

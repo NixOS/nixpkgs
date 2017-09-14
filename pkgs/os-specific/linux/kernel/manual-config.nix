@@ -1,4 +1,7 @@
-{ stdenv, runCommand, nettools, bc, perl, kmod, openssl, writeTextFile, ubootChooser }:
+{ runCommand, nettools, bc, perl, gmp, libmpc, mpfr, kmod, openssl
+, writeTextFile, ubootChooser
+, hostPlatform
+}:
 
 let
   readConfig = configfile: import (runCommand "config.nix" {} ''
@@ -11,6 +14,8 @@ let
     echo "}" >> $out
   '').outPath;
 in {
+  # Allow overriding stdenv on each buildLinux call
+  stdenv,
   # The kernel version
   version,
   # The version of the kernel module directory
@@ -204,7 +209,7 @@ let
             + stdenv.lib.concatStrings (stdenv.lib.intersperse ", " (map (x: x.name) kernelPatches))
             + ")");
         license = stdenv.lib.licenses.gpl2;
-        homepage = http://www.kernel.org/;
+        homepage = https://www.kernel.org/;
         repositories.git = https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git;
         maintainers = [
           maintainers.thoughtpolice
@@ -219,7 +224,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ perl bc nettools openssl ] ++ optional (stdenv.platform.uboot != null)
+  nativeBuildInputs = [ perl bc nettools openssl gmp libmpc mpfr ] ++ optional (stdenv.platform.uboot != null)
     (ubootChooser stdenv.platform.uboot);
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" ];
@@ -230,7 +235,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
 
   karch = stdenv.platform.kernelArch;
 
-  crossAttrs = let cp = stdenv.cross.platform; in
+  crossAttrs = let cp = hostPlatform.platform; in
     (drvAttrs crossConfig cp (kernelPatches ++ crossKernelPatches) crossConfigfile) // {
       makeFlags = commonMakeFlags ++ [
         "ARCH=${cp.kernelArch}"

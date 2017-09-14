@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       Due to its simplicity and lack of dependencies it runs well on
       GNU/Linux, Windows and older PC hardware.
     '';
-    homepage = "http://mtpaint.sourceforge.net/";
+    homepage = http://mtpaint.sourceforge.net/;
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.vklquevs ];

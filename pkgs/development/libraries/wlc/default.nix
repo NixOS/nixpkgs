@@ -6,12 +6,12 @@
 
 stdenv.mkDerivation rec {
   name = "wlc-${version}";
-  version = "0.0.8";
+  version = "0.0.9";
 
   src = fetchgit {
     url = "https://github.com/Cloudef/wlc";
     rev = "refs/tags/v${version}";
-    sha256 = "1lkxbqnxfmbk9j9k8wq2fl5z0a9ihzalad3x1pp8w2riz41j3by6";
+    sha256 = "1r6jf64gs7n9a8129wsc0mdwhcv44p8k87kg0714rhx3g2w22asg";
     fetchSubmodules = true;
    };
 

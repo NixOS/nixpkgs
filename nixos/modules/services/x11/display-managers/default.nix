@@ -122,6 +122,9 @@ let
           source ~/.xprofile
       fi
 
+      # Start systemd user services for graphical sessions
+      ${config.systemd.package}/bin/systemctl --user start graphical-session.target
+
       # Allow the user to setup a custom session type.
       if test -x ~/.xsession; then
           exec ~/.xsession
@@ -164,6 +167,9 @@ let
       ''}
 
       test -n "$waitPID" && wait "$waitPID"
+
+      ${config.systemd.package}/bin/systemctl --user stop graphical-session.target
+
       exit 0
     '';
 
@@ -325,6 +331,13 @@ in
 
   config = {
     services.xserver.displayManager.xserverBin = "${xorg.xorgserver.out}/bin/X";
+
+    systemd.user.targets.graphical-session = {
+      unitConfig = {
+        RefuseManualStart = false;
+        StopWhenUnneeded = false;
+      };
+    };
   };
 
   imports = [

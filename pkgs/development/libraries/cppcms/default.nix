@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = "http://cppcms.com";
+    homepage = http://cppcms.com;
     description = "High Performance C++ Web Framework";
     platforms = platforms.linux ;
     license = licenses.lgpl3;

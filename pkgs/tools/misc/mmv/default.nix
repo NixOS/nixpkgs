@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://linux.maruhn.com/sec/mmv.html";
+    homepage = http://linux.maruhn.com/sec/mmv.html;
     description = "Utility for wildcard renaming, copying, etc";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

@@ -1,0 +1,20 @@
+Index: qtdeclarative-opensource-src-5.6.2/src/qml/qml/qqmlimport.cpp
+===================================================================
+--- qtdeclarative-opensource-src-5.6.2.orig/src/qml/qml/qqmlimport.cpp
++++ qtdeclarative-opensource-src-5.6.2/src/qml/qml/qqmlimport.cpp
+@@ -1568,6 +1568,15 @@ QQmlImportDatabase::QQmlImportDatabase(Q
+     QString installImportsPath =  QLibraryInfo::location(QLibraryInfo::Qml2ImportsPath);
+     addImportPath(installImportsPath);
+ 
++    // Add import paths derived from PATH
++    const QStringList paths = QFile::decodeName(qgetenv("PATH")).split(':');
++    const QString qmldir = QStringLiteral("../" NIXPKGS_QML2_IMPORT_PREFIX);
++    for (const QString &path: paths) {
++        if (!path.isEmpty()) {
++            addImportPath(QDir::cleanPath(path + QDir::separator() + qmldir));
++        }
++    }
++
+     // env import paths
+     if (Q_UNLIKELY(!qEnvironmentVariableIsEmpty("QML2_IMPORT_PATH"))) {
+         const QByteArray envImportPath = qgetenv("QML2_IMPORT_PATH");

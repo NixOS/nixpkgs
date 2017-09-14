@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "gbenchmark-${version}";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "benchmark";
     rev = "v${version}";
-    sha256 = "1y7k73kyxx1jlph23csnhdac76px6ghhwwxbcf0133m4rg0wmpn5";
+    sha256 = "1gld3zdxgc0c0466qvnsi70h2ksx8qprjrx008rypdhzp6660m48";
   };
 
   buildInputs = [ cmake ];
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A microbenchmark support library";
-    homepage = "https://github.com/google/benchmark";
+    homepage = https://github.com/google/benchmark;
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

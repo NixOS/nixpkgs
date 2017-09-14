@@ -1,17 +1,20 @@
-{ stdenv, fetchdarcs, ocaml, findlib,  lablgl, camlimages, mesa, freeglut, ocaml_mysql, mysql, mlgmp, mpfr, gmp, libtiff, libjpeg, libpng, giflib }:
+{ stdenv, fetchurl, ocamlPackages, mesa, freeglut
+, mysql, mpfr, gmp, libtiff, libjpeg, libpng, giflib
+}:
 
 stdenv.mkDerivation {
-  name = "glsurf-3.3";
+  name = "glsurf-3.3.1";
 
-  src = fetchdarcs {
-    url = "http://lama.univ-savoie.fr/~raffalli/GlSurf";
-    rev = "3.3";
-    sha256 = "0ljvvzz31j7l8rvsv63x1kj70nhw3al3k294m79hpmwjvym1mzfa";
+  src = fetchurl {
+    url = "http://lama.univ-savoie.fr/~raffalli/glsurf/glsurf-3.3.1.tar.gz";
+    sha256 = "0w8xxfnw2snflz8wdr2ca9f5g91w5vbyp1hwlx1v7vg83d4bwqs7";
   };
 
-  buildInputs = [ ocaml findlib freeglut mesa
-  	          lablgl camlimages ocaml_mysql mysql.lib mlgmp mpfr gmp
-		  libtiff libjpeg libpng giflib ];
+  buildInputs = [ freeglut mesa mysql.lib mpfr gmp
+    libtiff libjpeg libpng giflib ]
+  ++ (with ocamlPackages; [
+    ocaml findlib ocaml_mysql lablgl camlimages_4_0 mlgmpidl
+  ]);
 
   installPhase = ''
     mkdir -p $out/bin $out/share/doc/glsurf
@@ -23,6 +26,5 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://www.lama.univ-savoie.fr/~raffalli/glsurf;
     description = "A program to draw implicit surfaces and curves";
-    broken = true;
   };
 }

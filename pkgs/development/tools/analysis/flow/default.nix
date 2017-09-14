@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, lib, ocaml, libelf, cf-private, CoreServices }:
+{ stdenv, fetchFromGitHub, lib, ocaml, libelf, cf-private, CoreServices, findlib, camlp4, sedlex, ocamlbuild }:
 
 with lib;
 
 stdenv.mkDerivation rec {
-  version = "0.42.0";
+  version = "0.54.0";
   name = "flow-${version}";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "flow";
     rev = "v${version}";
-    sha256 = "1mzl13z3c512b3jrrkzm5wmd9wjpnr173pan0vvpgf23333yvigq";
+    sha256 = "02z3jrfrr6gn056wplwkhymd1nyncjs67yl3vhv6n27jr3572npn";
   };
 
   installPhase = ''
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     cp bin/flow $out/bin/
   '';
 
-  buildInputs = [ ocaml libelf ]
+  buildInputs = [ ocaml libelf findlib camlp4 sedlex ocamlbuild ]
     ++ optionals stdenv.isDarwin [ cf-private CoreServices ];
 
   meta = with stdenv.lib; {

@@ -134,7 +134,7 @@ let
     propagatedBuildInputs = deps;
 
     # don't use pure CF for dylibs that depend on frameworks
-    setupHook = ../../../build-support/setup-hooks/fix-darwin-frameworks.sh;
+    setupHook = ./framework-setup-hook.sh;
 
     # allows building the symlink tree
     __impureHostDeps = [ "/System/Library/Frameworks/${name}.framework" ];

@@ -26,7 +26,13 @@ stdenv.mkDerivation rec {
     }' run/*.conf
   '';
 
-  preConfigure = "cd src";
+  preConfigure = ''
+    cd src
+    # Makefile.in depends on AS and LD being set to CC, which is set by default in configure.ac.
+    # This ensures we override the environment variables set in cc-wrapper/setup-hook.sh
+    export AS=$CC
+    export LD=$CC
+  '';
   configureFlags = [ "--disable-native-macro" ];
 
   buildInputs = [ openssl nss nspr kerberos gmp zlib libpcap re2 gcc ];

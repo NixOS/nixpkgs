@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://spruce.sourceforge.net/gmime/;
-    description = "A C/C++ library for manipulating MIME messages";
+    homepage = https://github.com/jstedfast/gmime/;
+    description = "A C/C++ library for creating, editing and parsing MIME messages and structures";
     maintainers = [ stdenv.lib.maintainers.chaoflow ];
     platforms = stdenv.lib.platforms.unix;
   };

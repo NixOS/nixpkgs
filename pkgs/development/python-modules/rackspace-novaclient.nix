@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchurl, isPy3k, requests2, novaclient, six, lib }:
+{ buildPythonPackage, fetchurl, isPy3k, requests, novaclient, six, lib }:
 let
 os-virtual-interfacesv2-python-novaclient-ext = buildPythonPackage rec {
   name = "os_virtual_interfacesv2_python_novaclient_ext-0.20";
@@ -129,7 +129,7 @@ buildPythonPackage rec {
 
   disabled = isPy3k;
   propagatedBuildInputs = [
-    requests2
+    requests
     novaclient
     six
     # extensions

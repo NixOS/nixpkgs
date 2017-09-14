@@ -13,7 +13,7 @@ standard Go programs.
 deis = buildGoPackage rec {
   name = "deis-${version}";
   version = "1.13.0";
-  
+
   goPackagePath = "github.com/deis/deis"; <co xml:id='ex-buildGoPackage-1' />
   subPackages = [ "client" ]; <co xml:id='ex-buildGoPackage-2' />
 
@@ -130,6 +130,9 @@ the following arguments are of special significance to the function:
 
 </para>
 
+<para>To extract dependency information from a Go package in automated way use <link xlink:href="https://github.com/kamilchm/go2nix">go2nix</link>.
+  It can produce complete derivation and <varname>goDeps</varname> file for Go programs.</para>
+
 <para>
   <varname>buildGoPackage</varname> produces <xref linkend='chap-multiple-output' xrefstyle="select: title" />
   where <varname>bin</varname> includes program binaries. You can test build a Go binary as follows:
@@ -160,7 +163,4 @@ done
 </screen>
 </para>
 
-<para>To extract dependency information from a Go package in automated way use <link xlink:href="https://github.com/kamilchm/go2nix">go2nix</link>.
-  It can produce complete derivation and <varname>goDeps</varname> file for Go programs.</para>
 </section>
-

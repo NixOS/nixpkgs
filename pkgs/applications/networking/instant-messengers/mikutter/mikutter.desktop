@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=mikutter
+Comment=Twitter Client
+Type=Application
+Exec=@out@/bin/mikutter
+Icon=@out@/core/skin/data/icon.png
+Terminal=false
+Categories=Network;
+Keywords=Twitter;

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, which }:
 stdenv.mkDerivation rec {
   name = "eprover-${version}";
-  version = "1.9.1";
+  version = "2.0";
 
   src = fetchurl {
     url = "http://wwwlehre.dhbw-stuttgart.de/~sschulz/WORK/E_DOWNLOAD/V_${version}/E.tgz";
-    sha256 = "1vi977mdfqnj04m590aw4896nqzlc4c5rqadjzk86z1zvj7mqnqw";
+    sha256 = "1xmwr32pd8lv3f6yh720mdqhi3na505y3zbgcsgh2hwb7b5i3ngb";
   };
 
   buildInputs = [ which ];

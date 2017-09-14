@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "pachyderm-${version}";
-  version = "1.3.0";
+  version = "1.4.6";
   rev = "v${version}";
 
   goPackagePath = "github.com/pachyderm/pachyderm";
@@ -12,7 +12,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "pachyderm";
     repo = "pachyderm";
-    sha256 = "0y25xh6h7p8hg0bzrjlschmz62r6dwh5mrvbnni1hb1pm0w9jb6g";
+    sha256 = "1fivihn9s04lmzdiwg0f05qm708fb14xy81pbc31wxdyjw28m8ns";
   };
 
   meta = with lib; {

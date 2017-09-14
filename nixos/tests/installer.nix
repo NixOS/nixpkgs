@@ -18,6 +18,9 @@ let
             <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
           ];
 
+        # To ensure that we can rebuild the grub configuration on the nixos-rebuild
+        system.extraDependencies = with pkgs; [ stdenvNoCC ];
+
         ${optionalString (bootLoader == "grub") ''
           boot.loader.grub.version = ${toString grubVersion};
           ${optionalString (grubVersion == 1) ''
@@ -63,7 +66,7 @@ let
         (if system == "x86_64-linux" then "-m 768 " else "-m 512 ") +
         (optionalString (system == "x86_64-linux") "-cpu kvm64 ");
       hdFlags = ''hda => "vm-state-machine/machine.qcow2", hdaInterface => "${iface}", ''
-        + optionalString (bootLoader == "systemd-boot") ''bios => "${pkgs.OVMF}/FV/OVMF.fd", '';
+        + optionalString (bootLoader == "systemd-boot") ''bios => "${pkgs.OVMF.fd}/FV/OVMF.fd", '';
     in
     ''
       $machine->start;
@@ -71,7 +74,7 @@ let
       # Make sure that we get a login prompt etc.
       $machine->succeed("echo hello");
       #$machine->waitForUnit('getty@tty2');
-      $machine->waitForUnit("rogue");
+      #$machine->waitForUnit("rogue");
       $machine->waitForUnit("nixos-manual");
 
       # Wait for hard disks to appear in /dev
@@ -171,6 +174,7 @@ let
 
   makeInstallerTest = name:
     { createPartitions, preBootCommands ? "", extraConfig ? ""
+    , extraInstallerConfig ? {}
     , bootLoader ? "grub" # either "grub" or "systemd-boot"
     , grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid"
     , enableOCR ? false, meta ? {}
@@ -192,6 +196,7 @@ let
           { imports =
               [ ../modules/profiles/installation-device.nix
                 ../modules/profiles/base.nix
+                extraInstallerConfig
               ];
 
             virtualisation.diskSize = 8 * 1024;
@@ -221,7 +226,7 @@ let
                 docbook5_xsl
                 unionfs-fuse
                 ntp
-                nixos-artwork
+                nixos-artwork.wallpapers.gnome-dark
                 perlPackages.XMLLibXML
                 perlPackages.ListCompare
 
@@ -268,7 +273,7 @@ in {
     };
 
   # Simple GPT/UEFI configuration using systemd-boot with 3 partitions: ESP, swap & root filesystem
-  simpleUefiGummiboot = makeInstallerTest "simpleUefiGummiboot"
+  simpleUefiSystemdBoot = makeInstallerTest "simpleUefiSystemdBoot"
     { createPartitions =
         ''
           $machine->succeed(
@@ -328,6 +333,43 @@ in {
               "mkfs.vfat -n BOOT /dev/vda1",
               "mkdir -p /mnt/boot",
               "mount LABEL=BOOT /mnt/boot",
+          );
+        '';
+    };
+
+  # zfs on / with swap
+  zfsroot = makeInstallerTest "zfs-root"
+    {
+      extraInstallerConfig = {
+        boot.supportedFilesystems = [ "zfs" ];
+      };
+
+      extraConfig = ''
+        boot.supportedFilesystems = [ "zfs" ];
+
+        # Using by-uuid overrides the default of by-id, and is unique
+        # to the qemu disks, as they don't produce by-id paths for
+        # some reason.
+        boot.zfs.devNodes = "/dev/disk/by-uuid/";
+        networking.hostId = "00000000";
+      '';
+
+      createPartitions =
+        ''
+          $machine->succeed(
+              "parted /dev/vda mklabel msdos",
+              "parted /dev/vda -- mkpart primary linux-swap 1M 1024M",
+              "parted /dev/vda -- mkpart primary 1024M -1s",
+              "udevadm settle",
+
+              "mkswap /dev/vda1 -L swap",
+              "swapon -L swap",
+
+              "zpool create rpool /dev/vda2",
+              "zfs create -o mountpoint=legacy rpool/root",
+              "mount -t zfs rpool/root /mnt",
+
+              "udevadm settle"
           );
         '';
     };

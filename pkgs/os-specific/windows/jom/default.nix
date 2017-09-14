@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   QTDIR = qt48;
   
   crossAttrs = {
-    # cmakeFlags = "-DWIN32=1 -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_RC_COMPILER=${stdenv.cross.config}-windres";
+    # cmakeFlags = "-DWIN32=1 -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_RC_COMPILER=${stdenv.cc.prefix}windres";
     QTDIR = qt48.crossDrv;
     preBuild = ''
       export NIX_CROSS_CFLAGS_COMPILE=-fpermissive

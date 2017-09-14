@@ -10,7 +10,7 @@ let
     sha256 = "1vmbrw686f41n6xfjphfshn96vl07ynvnsyjdw9yfn9bfnldcjcq";
   };
 
-  srcRoot = "pfixtools-${pfixtoolsSrc.rev}-src";
+  srcRoot = pfixtoolsSrc.name;
 
   libCommonSrc = fetchFromGitHub {
     owner = "Fruneau";
@@ -40,7 +40,7 @@ stdenv.mkDerivation {
                       --replace /bin/bash ${bash}/bin/bash;
   '';
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
+  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result -Wno-error=nonnull-compare";
 
   makeFlags = "DESTDIR=$(out) prefix=";
 
@@ -49,5 +49,6 @@ stdenv.mkDerivation {
     license = with lib.licenses; [ bsd3 ];
     homepage = https://github.com/Fruneau/pfixtools;
     platforms = stdenv.lib.platforms.linux;
+    maintainers = with lib.maintainers; [ jerith666 ];
   };
 }

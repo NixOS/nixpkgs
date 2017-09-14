@@ -36,7 +36,8 @@ let
         ./no-sys-dirs.patch
       ]
       ++ optional stdenv.isSunOS ./ld-shared.patch
-      ++ optional stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ];
+      ++ optional stdenv.isDarwin ./cpp-precomp.patch
+      ++ optional (stdenv.isDarwin && versionAtLeast version "5.24") ./sw_vers.patch;
 
     postPatch = ''
       pwd="$(type -P pwd)"
@@ -93,23 +94,23 @@ let
 
     passthru.libPrefix = "lib/perl5/site_perl";
 
-  # TODO: it seems like absolute paths to some coreutils is required.
-  postInstall =
-    ''
-      # Remove dependency between "out" and "man" outputs.
-      rm "$out"/lib/perl5/*/*/.packlist
+    # TODO: it seems like absolute paths to some coreutils is required.
+    postInstall =
+      ''
+        # Remove dependency between "out" and "man" outputs.
+        rm "$out"/lib/perl5/*/*/.packlist
 
-      # Remove dependencies on glibc and gcc
-      sed "/ *libpth =>/c    libpth => ' '," \
-        -i "$out"/lib/perl5/*/*/Config.pm
-      # TODO: removing those paths would be cleaner than overwriting with nonsense.
-      substituteInPlace "$out"/lib/perl5/*/*/Config_heavy.pl \
-        --replace "${libcInc}" /no-such-path \
-        --replace "${
-            if stdenv.cc.cc or null != null then stdenv.cc.cc else "/no-such-path"
-          }" /no-such-path \
-        --replace "$man" /no-such-path
-    ''; # */
+        # Remove dependencies on glibc and gcc
+        sed "/ *libpth =>/c    libpth => ' '," \
+          -i "$out"/lib/perl5/*/*/Config.pm
+        # TODO: removing those paths would be cleaner than overwriting with nonsense.
+        substituteInPlace "$out"/lib/perl5/*/*/Config_heavy.pl \
+          --replace "${libcInc}" /no-such-path \
+          --replace "${
+              if stdenv.cc.cc or null != null then stdenv.cc.cc else "/no-such-path"
+            }" /no-such-path \
+          --replace "$man" /no-such-path
+      ''; # */
 
     meta = {
       homepage = https://www.perl.org/;
@@ -124,13 +125,13 @@ in rec {
   perl = perl524;
 
   perl522 = common {
-    version = "5.22.3";
-    sha256 = "10q087l1ffdy3gpryr8z540jcnsr0dhm37raicyfqqkyvys1yd8v";
+    version = "5.22.4";
+    sha256 = "1yk1xn4wmnrf2ph02j28khqarpyr24qwysjzkjnjv7vh5dygb7ms";
   };
 
   perl524 = common {
-    version = "5.24.1";
-    sha256 = "1bqqb5ghfj4486nqr77kgsd8aff6a289jy7n2cdkznwvn34qbhg6";
+    version = "5.24.2";
+    sha256 = "1x4yj814a79lcarwb3ab6bbcb36hvb5n4ph4zg3yb0nabsjfi6v0";
   };
 
 }

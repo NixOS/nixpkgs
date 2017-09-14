@@ -11,13 +11,14 @@ let
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "${type}heimdal-2015-09-13";
+  name = "${type}heimdal-${version}";
+  version = "7.4.0";
 
   src = fetchFromGitHub {
     owner = "heimdal";
     repo = "heimdal";
-    rev = "c81572ab5dcee3062e715b9e25ca7a20f6ec456b";
-    sha256 = "1r60i4v6y5lpll0l2qpn0ycp6q6f1xjg7k1csi547zls8k96yk9s";
+    rev = "heimdal-${version}";
+    sha256 = "01ch6kqjrxi9fki54yjj2fhxhdkxijz161w2inh5k8mcixlf67vp";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig python2 perl yacc flex ]

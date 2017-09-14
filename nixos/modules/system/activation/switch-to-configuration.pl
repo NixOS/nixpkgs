@@ -147,10 +147,15 @@ my $activePrev = getActiveUnits;
 while (my ($unit, $state) = each %{$activePrev}) {
     my $baseUnit = $unit;
 
-    # Recognise template instances.
-    $baseUnit = "$1\@.$2" if $unit =~ /^(.*)@[^\.]*\.(.*)$/;
     my $prevUnitFile = "/etc/systemd/system/$baseUnit";
     my $newUnitFile = "$out/etc/systemd/system/$baseUnit";
+
+    # Detect template instances.
+    if (!-e $prevUnitFile && !-e $newUnitFile && $unit =~ /^(.*)@[^\.]*\.(.*)$/) {
+      $baseUnit = "$1\@.$2";
+      $prevUnitFile = "/etc/systemd/system/$baseUnit";
+      $newUnitFile = "$out/etc/systemd/system/$baseUnit";
+    }
 
     my $baseName = $baseUnit;
     $baseName =~ s/\.[a-z]*$//;

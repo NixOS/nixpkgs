@@ -6,7 +6,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A collection of video game music chip emulators";
-    homepage = "https://bitbucket.org/mpyne/game-music-emu/overview";
+    homepage = https://bitbucket.org/mpyne/game-music-emu/overview;
     license = licenses.lgpl21;
     platforms = platforms.all;
     maintainers = with maintainers; [ lheckemann ];

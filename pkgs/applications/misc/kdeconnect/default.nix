@@ -2,7 +2,6 @@
 , lib
 , fetchurl
 , extra-cmake-modules
-, makeQtWrapper
 , kcmutils
 , kconfigwidgets
 , kdbusaddons
@@ -12,6 +11,7 @@
 , qca-qt5
 , libfakekey
 , libXtst
+, qtx11extras
 }:
 
 stdenv.mkDerivation rec {
@@ -33,16 +33,10 @@ stdenv.mkDerivation rec {
     knotifications
     libfakekey
     libXtst
+    qtx11extras
   ];
 
-  nativeBuildInputs = [
-    extra-cmake-modules
-    makeQtWrapper
-  ];
-
-  postInstall = ''
-    wrapQtProgram "$out/bin/kdeconnect-cli"
-  '';
+  nativeBuildInputs = [ extra-cmake-modules ];
 
   meta = {
     description = "KDE Connect provides several features to integrate your phone and your computer";

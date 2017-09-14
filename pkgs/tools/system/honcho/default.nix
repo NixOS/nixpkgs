@@ -1,25 +1,44 @@
 { stdenv, fetchFromGitHub, pythonPackages }:
 
-let honcho = pythonPackages.buildPythonApplication rec {
-  name = "honcho-${version}";
-  version = "0.6.6";
+let
+  inherit (pythonPackages) python;
+  pname = "honcho";
+
+in
+
+pythonPackages.buildPythonApplication rec {
+  name = "${pname}-${version}";
+  version = "1.0.1";
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "nickstenning";
     repo = "honcho";
     rev = "v${version}";
-    sha256 = "0lawwcyrrsd9z9jcr94qn1yabl9bzc529jkpc51jq720fhdlfcr0";
+    sha256 = "11bd87474qpif20xdcn0ra1idj5k16ka51i658wfpxwc6nzsn92b";
   };
 
-  buildInputs = with pythonPackages; [ nose mock jinja2 ];
-  checkPhase = ''
-    runHook preCheck
-    nosetests
-    runHook postCheck
+  buildInputs = with pythonPackages; [ jinja2 pytest mock coverage ];
+
+  buildPhase = ''
+    ${python.interpreter} setup.py build
   '';
 
-  doCheck = false;
+  installPhase = ''
+    mkdir -p "$out/lib/${python.libPrefix}/site-packages"
+
+    export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
+
+    ${python}/bin/${python.executable} setup.py install \
+      --install-lib=$out/lib/${python.libPrefix}/site-packages \
+      --prefix="$out"
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+    PATH=$out/bin:$PATH coverage run -m pytest
+    runHook postCheck
+  '';
 
   meta = with stdenv.lib; {
     description = "A Python clone of Foreman, a tool for managing Procfile-based applications";
@@ -28,11 +47,4 @@ let honcho = pythonPackages.buildPythonApplication rec {
     maintainers = with maintainers; [ benley ];
     platforms = platforms.unix;
   };
-};
-
-in
-
-# Some of honcho's tests require that honcho be installed in the environment in
-# order to work. This is a trick to build it without running tests, then pass
-# it to itself as a buildInput so the tests work.
-honcho.overrideDerivation (x: { buildInputs = [ honcho ]; doCheck = true; })
+}

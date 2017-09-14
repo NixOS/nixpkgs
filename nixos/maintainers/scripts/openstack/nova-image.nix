@@ -1,3 +1,5 @@
+# nix-build '<nixpkgs/nixos>' -A config.system.build.novaImage --arg configuration "{ imports = [ ./nixos/maintainers/scripts/openstack/nova-image.nix ]; }"
+
 { config, lib, pkgs, ... }:
 
 with lib;

@@ -1,7 +1,8 @@
 { lib, fetchurl, buildPythonPackage, isPy3k }:
 
 buildPythonPackage rec {
-  name = "PyWebDAV-${version}";
+  pname = "pywebdav";
+  name = "${pname}-${version}";
   version = "0.9.8";
   disabled = isPy3k;
   src = fetchurl {

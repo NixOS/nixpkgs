@@ -2,15 +2,15 @@
 
 buildGoPackage rec {
   name = "hugo-${version}";
-  version = "0.20.6";
+  version = "0.27.1";
 
-  goPackagePath = "github.com/spf13/hugo";
+  goPackagePath = "github.com/gohugoio/hugo";
 
   src = fetchFromGitHub {
-    owner = "spf13";
+    owner = "gohugoio";
     repo = "hugo";
     rev = "v${version}";
-    sha256 = "1r8sjx7rbrjk2a3x3x6cd987xykm2j06jbnwxxsn4rs6yym0yjl8";
+    sha256 = "0vxzjwm9dsan314cz0gnj4spssg4w8y6ywsak8n9c6w0l45xf07p";
   };
 
   goDeps = ./deps.nix;

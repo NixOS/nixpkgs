@@ -1,18 +1,26 @@
-{ stdenv, fetchurl, pkgconfig, glib, ncurses, mpd_clientlib, libintlOrEmpty }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, ncurses, mpd_clientlib, libintlOrEmpty }:
 
 stdenv.mkDerivation rec {
-  version = "0.24";
   name = "ncmpc-${version}";
+  version = "0.27";
 
-  src = fetchurl {
-    url = "http://www.musicpd.org/download/ncmpc/0/ncmpc-${version}.tar.xz";
-    sha256 = "1sf3nirs3mcx0r5i7acm9bsvzqzlh730m0yjg6jcyj8ln6r7cvqf";
+  src = fetchFromGitHub {
+    owner  = "MusicPlayerDaemon";
+    repo   = "ncmpc";
+    rev    = "v${version}";
+    sha256 = "0sfal3wadqvy6yas4xzhw35awdylikci8kbdcmgm4l2afpmc1lrr";
   };
 
-  buildInputs = [ pkgconfig glib ncurses mpd_clientlib ]
-    ++ libintlOrEmpty;
+  buildInputs = [ glib ncurses mpd_clientlib ];
+    # ++ libintlOrEmpty;
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+
+  # without this, po/Makefile.in.in is not being created
+  preAutoreconf = ''
+    ./autogen.sh
+  '';
 
   configureFlags = [
     "--enable-colors"

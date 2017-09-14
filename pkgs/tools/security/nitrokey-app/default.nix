@@ -1,29 +1,27 @@
-{ stdenv, cmake, fetchFromGitHub, libusb1, pkgconfig, qt5 }:
+{ stdenv, cmake, fetchgit, hidapi, libusb1, pkgconfig, qt5 }:
 
 stdenv.mkDerivation rec {
   name = "nitrokey-app";
-  version = "0.6.3";
+  version = "1.1";
 
-  src = fetchFromGitHub {
-    owner = "Nitrokey";
-    repo = "nitrokey-app";
-    rev = "v${version}";
-    sha256 = "1l5l4lwxmyd3jrafw19g12sfc42nd43sv7h7i4krqxnkk6gfx11q";
+  src = fetchgit {
+    url = "https://github.com/Nitrokey/nitrokey-app.git";
+    rev = "refs/tags/v${version}";
+    sha256 = "11pz1p5qgghkr5f8s2wg34zqhxk2vq465i73w1h479j88x35rdp0";
   };
 
   buildInputs = [
+    hidapi
     libusb1
     qt5.qtbase
+    qt5.qttranslations
   ];
   nativeBuildInputs = [
     cmake
     pkgconfig
   ];
-  patches = [
-     ./FixInstallDestination.patch
-     ./HeaderPath.patch
-  ];
   cmakeFlags = "-DHAVE_LIBAPPINDICATOR=NO";
+
   meta = with stdenv.lib; {
     description      = "Provides extra functionality for the Nitrokey Pro and Storage";
     longDescription  = ''
@@ -34,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage         = https://github.com/Nitrokey/nitrokey-app;
     repositories.git = https://github.com/Nitrokey/nitrokey-app.git;
     license          = licenses.gpl3;
-    maintainer       = maintainers.kaiha;
+    maintainers      = with maintainers; [ kaiha fpletz ];
   };
 }

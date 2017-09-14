@@ -6,11 +6,11 @@
 
 stdenv.mkDerivation rec {
   name = "bitwig-studio-${version}";
-  version = "2.0";
+  version = "2.1.3";
 
   src = fetchurl {
     url = "https://downloads.bitwig.com/stable/${version}/bitwig-studio-${version}.deb";
-    sha256 = "1m7wdr0f9xi9s7q8vd66hy7fj1k0j3y5ln2yqbjwr76r9g6gkzas";
+    sha256 = "0blfw7dayl1wzys11mdixlkbr1p1d5rnwrvim1hblfpnw2zmlslb";
   };
 
   nativeBuildInputs = [ dpkg makeWrapper ];
@@ -80,6 +80,9 @@ stdenv.mkDerivation rec {
     ln -s $out/libexec/bitwig-studio $out/bin/bitwig-studio
 
     cp -r usr/share $out/share
+    substitute usr/share/applications/bitwig-studio.desktop \
+      $out/share/applications/bitwig-studio.desktop \
+      --replace /usr/bin/bitwig-studio $out/bin/bitwig-studio
   '';
 
   meta = with stdenv.lib; {

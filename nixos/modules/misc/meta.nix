@@ -17,7 +17,7 @@ let
     #   }
     merge = loc: defs:
       zipAttrs
-        (flatten (imap (n: def: imap (m: def':
+        (flatten (imap1 (n: def: imap1 (m: def':
           maintainer.merge (loc ++ ["[${toString n}-${toString m}]"])
             [{ inherit (def) file; value = def'; }]) def.value) defs));
   };

@@ -9,11 +9,11 @@
 
 stdenv.mkDerivation rec {
   name = "openscenegraph-${version}";
-  version = "3.2.3";
+  version = "3.4.0";
 
   src = fetchurl {
     url = "http://trac.openscenegraph.org/downloads/developer_releases/OpenSceneGraph-${version}.zip";
-    sha256 = "0gic1hy7fhs27ipbsa5862q120a9y4bx176nfaw2brcjp522zvb9";
+    sha256 = "03h4wfqqk7rf3mpz0sa99gy715cwpala7964z2npd8jxfn27swjw";
   };
 
   nativeBuildInputs = [ pkgconfig cmake doxygen unzip ];

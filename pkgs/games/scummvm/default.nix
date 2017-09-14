@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, SDL, zlib, libmpeg2, libmad, libogg, libvorbis, flac, alsaLib, mesa }:
+{ stdenv
+, fetchurl, SDL, zlib, libmpeg2, libmad, libogg, libvorbis, flac, alsaLib, mesa
+, hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   name = "scummvm-1.9.0";
@@ -16,7 +19,7 @@ stdenv.mkDerivation rec {
     preConfigure = ''
       # Remove the --build flag set by the gcc cross wrapper setup
       # hook
-      export configureFlags="--host=${stdenv.cross.config}"
+      export configureFlags="--host=${hostPlatform.config}"
     '';
     postConfigure = ''
       # They use 'install -s', that calls the native strip instead of the cross

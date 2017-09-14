@@ -8,12 +8,12 @@
 
 let
   pname = "yarl";
-  version = "0.8.1";
+  version = "0.12.0";
 in buildPythonPackage rec {
   name = "${pname}-${version}";
   src = fetchurl {
     url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "9f0397ae540124bf16a8a5b89bc3ea1c07f8ae70c3e44231a40a9edd254d5712";
+    sha256 = "fc0f71ffdce882b4d4b287b0b3a68d9f2557ab14cc2c10ce4df714c42512cbde";
   };
 
   buildInputs = [ pytest pytestrunner ];

@@ -246,6 +246,10 @@ in {
     };
 
     subtest "check manual configuration", sub {
+      # Remove the keys from automatic CA creation, to make sure the new
+      # generation doesn't use keys from before.
+      $server->succeed('rm -rf ${cfg.dataDir}/keys/* >&2');
+
       $server->succeed('${switchToNewServer} >&2');
       $server->waitForUnit("taskserver.service");
       $server->waitForOpenPort(${portStr});

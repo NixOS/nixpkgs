@@ -1,12 +1,11 @@
 { stdenv, fetchurl, ncurses, pcre }:
 
 let
-
-  version = "5.3.1";
+  version = "5.4.2";
 
   documentation = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}-doc.tar.gz";
-    sha256 = "0hbqn1zg3x5i9klqfzhizk88jzy8pkg65r9k41b3cn42lg3ncsy1";
+    sha256 = "1703g6vfz2vpb866wgl71nvg0ynjq0zvrjwkqbv7v6q3606jbmn3";
   };
 
 in
@@ -16,7 +15,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}.tar.gz";
-    sha256 = "03h42gjqx7yb7qggi7ha0ndsggnnav1qm9vx737jwmiwzy8ab51x";
+    sha256 = "1jdcfinzmki2w963msvsanv29vqqfmdfm4rncwpw0r3zqnrcsywm";
   };
 
   buildInputs = [ ncurses pcre ];
@@ -76,7 +75,7 @@ EOF
       a host of other features.
     '';
     license = "MIT-like";
-    homepage = "http://www.zsh.org/";
+    homepage = http://www.zsh.org/;
     maintainers = with stdenv.lib.maintainers; [ chaoflow pSub ];
     platforms = stdenv.lib.platforms.unix;
   };

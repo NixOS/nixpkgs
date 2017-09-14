@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   stripDebugFlags=["-S" "--keep-file-symbols"];
 
   meta = {
-    homepage = "http://haskell.org/ghc";
+    homepage = http://haskell.org/ghc;
     description = "The Glasgow Haskell Compiler";
     maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
     platforms = ["x86_64-linux" "i686-linux"];  # Darwin is unsupported.

@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, mono, libmediainfo, sqlite, makeWrapper }:
+{ stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "radarr-${version}";
-  version = "0.2.0.654";
+  version = "0.2.0.846";
 
   src = fetchurl {
     url = "https://github.com/Radarr/Radarr/releases/download/v${version}/Radarr.develop.${version}.linux.tar.gz";
-    sha256 = "05sb3zk8gvydmkiy7g9ha5cmiqzqfwcydljm401zjndzwzhkz698";
+    sha256 = "1lpr05aaf6a9p2msmsh0j8krxk83sf5d3avrh5qpyjap5j3phvky";
   };
 
   buildInputs = [ makeWrapper ];
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
 
     makeWrapper "${mono}/bin/mono" $out/bin/Radarr \
       --add-flags "$out/share/${name}/Radarr.exe" \
-      --prefix LD_LIBRARY_PATH ':' "${sqlite.out}/lib" \
-      --prefix LD_LIBRARY_PATH ':' "${libmediainfo}/lib"
+      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [
+          curl sqlite libmediainfo ]}
   '';
 
   meta = with stdenv.lib; {

@@ -1,33 +1,36 @@
-{ stdenv, lib, fetchFromGitHub, fetchgit, pkgconfig, gyp, cmake
-, qtbase, qtimageformats, makeQtWrapper
+{ mkDerivation, lib, fetchgit, pkgconfig, gyp, cmake
+, qtbase, qtimageformats
 , breakpad, gtk3, libappindicator-gtk3, dee
-, ffmpeg, openalSoft, minizip
+, ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio
+, gcc
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "telegram-desktop-${version}";
-  version = "1.0.27";
+  version = "1.1.19";
 
   # Submodules
   src = fetchgit {
-    url = "https://github.com/telegramdesktop/tdesktop";
-    rev = "refs/tags/v${version}";
-    sha256 = "05g88g6h2a7f9biliicg81fqssx0y3akd3y5r2q2b5h8q3igqrfc";
+    url = "git://github.com/telegramdesktop/tdesktop";
+    rev = "v${version}";
+    sha256 = "1zpl71k2lq861k89yp6nzkm4jm6szxrzigmmbxx63rh4v03di3b6";
+    fetchSubmodules = true;
   };
 
   tgaur = fetchgit {
     url = "https://aur.archlinux.org/telegram-desktop-systemqt.git";
-    rev = "b4d169076ed12ec01941a95499774d5caa6fc00e";
-    sha256 = "0pmm6slabg9xazgs0ffnp8v0hx3vnpdfgymvapwqpm3h9mwk22x9";
+    rev = "a4ba392309116003bc2b75c1c4c12dc733168d6f";
+    sha256 = "1n0yar8pm050770x36kjr4iap773xjigfbnrk289b51i5vijwhsv";
   };
 
   buildInputs = [
     gtk3 libappindicator-gtk3 dee qtbase qtimageformats ffmpeg openalSoft minizip
+    libopus alsaLib libpulseaudio
   ];
 
-  nativeBuildInputs = [ pkgconfig gyp cmake makeQtWrapper ];
+  nativeBuildInputs = [ pkgconfig gyp cmake gcc ];
 
-  patches = [ "${tgaur}/aur-build-fixes.patch" ];
+  patches = [ "${tgaur}/tdesktop.patch" ];
 
   enableParallelBuilding = true;
 
@@ -48,10 +51,18 @@ stdenv.mkDerivation rec {
     "-I${qtbase.dev}/include/${x}"
     "-I${qtbase.dev}/include/${x}/${qtbase.version}"
     "-I${qtbase.dev}/include/${x}/${qtbase.version}/${x}"
+    "-I${libopus.dev}/include/opus"
+    "-I${alsaLib.dev}/include/alsa"
+    "-I${libpulseaudio.dev}/include/pulse"
   ]) [ "QtCore" "QtGui" ];
   CPPFLAGS = NIX_CFLAGS_COMPILE;
 
   preConfigure = ''
+
+    pushd "Telegram/ThirdParty/libtgvoip"
+    patch -Np1 -i "${tgaur}/libtgvoip.patch"
+    popd
+
     sed -i Telegram/gyp/telegram_linux.gypi \
       -e 's,/usr,/does-not-exist,g' \
       -e 's,appindicator-0.1,appindicator3-0.1,g' \
@@ -63,6 +74,7 @@ stdenv.mkDerivation rec {
       -e "s,/usr/bin/rcc,rcc,g"
 
     gyp \
+      -Dbuild_defines=${GYP_DEFINES} \
       -Gconfig=Release \
       --depth=Telegram/gyp \
       --generator-output=../.. \
@@ -86,14 +98,13 @@ stdenv.mkDerivation rec {
     for icon_size in 16 32 48 64 128 256 512; do
       install -Dm644 "../../../Telegram/Resources/art/icon''${icon_size}.png" "$out/share/icons/hicolor/''${icon_size}x''${icon_size}/apps/telegram-desktop.png"
     done
-    wrapQtProgram $out/bin/telegram-desktop
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Telegram Desktop messaging app";
     license = licenses.gpl3;
     platforms = platforms.linux;
-    homepage = "https://desktop.telegram.org/";
+    homepage = https://desktop.telegram.org/;
     maintainers = with maintainers; [ abbradar garbas ];
   };
 }

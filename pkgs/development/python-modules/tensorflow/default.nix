@@ -1,24 +1,22 @@
 { stdenv
 , fetchurl
 , buildPythonPackage
-, isPy35, isPy27
+, isPy36, isPy35, isPy27
 , cudaSupport ? false
 , cudatoolkit ? null
 , cudnn ? null
-, gcc49 ? null
 , linuxPackages ? null
 , numpy
 , six
-, protobuf3_2
+, protobuf
 , swig
+, werkzeug
 , mock
-, gcc
 , zlib
 }:
 
 assert cudaSupport -> cudatoolkit != null
                    && cudnn != null
-                   && gcc49 != null
                    && linuxPackages != null;
 
 # unsupported combination
@@ -31,10 +29,10 @@ assert ! (stdenv.isDarwin && cudaSupport);
 
 buildPythonPackage rec {
   pname = "tensorflow";
-  version = "1.0.0";
+  version = "1.1.0";
   name = "${pname}-${version}";
   format = "wheel";
-  disabled = ! (isPy35 || isPy27);
+  disabled = ! (isPy36 || isPy35 || isPy27);
 
   src = let
       tfurl = sys: proc: pykind:
@@ -49,45 +47,59 @@ buildPythonPackage rec {
         darwin.cpu = {
           py2 = {
             url = tfurl "mac" "cpu" "py2-none-any" ;
-            sha256 = "15ayil28p20wkgpwkr4mz0imjxnf049xx4117jspg1qkjg2bn1b2";
+            sha256 = "1fgf26lw0liqxc9pywc8y2mj8l1mv48nhkav0pag9vavdacb9mqr";
           };
           py3 = {
             url = tfurl "mac" "cpu" "py3-none-any" ;
-            sha256 = "1ynyhbm7yrp421364s49a1r3p83zxy74iiy5c4hx2xm5c4gs29an";
+            sha256 = "0z5p1fra7bih0vqn618i2w3vyy8d1rkc72k7bmjq0rw8msl717ia";
           };
         };
         linux-x86_64.cpu = {
           py2 = {
             url = tfurl "linux" "cpu" "cp27-none-linux_x86_64";
-            sha256 = "1hwhq1qhjrfkqfkxpsrq6mdmdibnqr3n7xvzkxp6gaqj73vn5ch2";
+            sha256 = "0ld3hqx3idxk0zcrvn3p9yqnmx09zsj3mw66jlfw6fkv5hznx8j2";
           };
-          py3 = {
+          py35 = {
             url = tfurl "linux" "cpu" "cp35-cp35m-linux_x86_64";
-            sha256 = "0jx2mmlw0nxah9l25r46i7diqiv31qcz7855n250lsxfwcppy7y3";
+            sha256 = "0ahz9222rzqrk43lb9w4m351klkm6mlnnvw8xfqip28vbmymw90b";
           };
+          py36 = {
+            url = tfurl "linux" "cpu" "cp36-cp36m-linux_x86_64";
+            sha256 = "1a2cc8ihl94iqff76nxg6bq85vfb7sj5cvvi9sxy2f43k32fi4lv";
+          };
+
         };
         linux-x86_64.cuda = {
           py2 = {
             url = tfurl "linux" "gpu" "cp27-none-linux_x86_64";
-            sha256 = "0l8f71x3ama5a6idj05jrswlmp4yg37fxhz8lx2xmgk14aszbcy5";
+            sha256 = "1baa9jwr6f8f62dyx6isbw8yyrd0pi1dz1srjblfqsyk1x3pnfvh";
           };
-          py3 = {
+          py35 = {
             url = tfurl "linux" "gpu" "cp35-cp35m-linux_x86_64";
-            sha256 = "12q7s0yk0h3r4glh0fhl1fcdx7jl8xikwwp04a1lcagasr51s36m";
+            sha256 = "0606m2awy0ifhniy8lsyhd0xc388dgrwksn87989xlgy90wpxi92";
           };
+          py36 = {
+            url = tfurl "linux" "gpu" "cp36-cp36m-linux_x86_64";
+            sha256 = "0lvbmfa87qzrajadpsf13gi3l71vryzkryzqfvkykivqrdjsvj8q";
+          };
+
         };
       };
     in
     fetchurl (
       if stdenv.isDarwin then
-        if isPy35 then
-          dls.darwin.cpu.py3
-        else
+        if isPy27 then
           dls.darwin.cpu.py2
+        else
+          dls.darwin.cpu.py3
+      else if isPy36 then
+        if cudaSupport then
+          dls.linux-x86_64.cuda.py36
+        else dls.linux-x86_64.cpu.py36
       else if isPy35 then
         if cudaSupport then
-          dls.linux-x86_64.cuda.py3
-        else dls.linux-x86_64.cpu.py3
+          dls.linux-x86_64.cuda.py35
+        else dls.linux-x86_64.cpu.py35
       else
         if cudaSupport then
           dls.linux-x86_64.cuda.py2
@@ -96,8 +108,8 @@ buildPythonPackage rec {
     );
 
   propagatedBuildInputs = with stdenv.lib;
-    [ numpy six protobuf3_2 swig mock ]
-    ++ optionals cudaSupport [ cudatoolkit cudnn gcc49 ];
+    [ numpy six protobuf swig werkzeug mock ]
+    ++ optionals cudaSupport [ cudatoolkit cudnn stdenv.cc ];
 
   # Note that we need to run *after* the fixup phase because the
   # libraries are loaded at runtime. If we run in preFixup then
@@ -105,10 +117,10 @@ buildPythonPackage rec {
   postFixup = let
     rpath = stdenv.lib.makeLibraryPath
       (if cudaSupport then
-        [ gcc49.cc.lib zlib cudatoolkit cudnn
+        [ stdenv.cc.cc.lib zlib cudatoolkit cudnn
           linuxPackages.nvidia_x11 ]
       else
-        [ gcc.cc.lib zlib ]
+        [ stdenv.cc.cc.lib zlib ]
       );
   in
   ''
@@ -121,6 +133,7 @@ buildPythonPackage rec {
     description = "TensorFlow helps the tensors flow";
     homepage = http://tensorflow.org;
     license = licenses.asl20;
+    maintainers = with maintainers; [ jyp ];
     platforms = with platforms; if cudaSupport then linux else linux ++ darwin;
   };
 }

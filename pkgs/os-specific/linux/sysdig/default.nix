@@ -1,17 +1,15 @@
 {stdenv, fetchurl, fetchFromGitHub, cmake, luajit, kernel, zlib, ncurses, perl, jsoncpp, libb64, openssl, curl, jq, gcc, fetchpatch}:
 
-let
-  inherit (stdenv.lib) optional optionalString;
-  baseName = "sysdig";
-  version = "0.15.0";
-in
+with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "${baseName}-${version}";
+  name = "sysdig-${version}";
+  version = "0.17.0";
 
-  src = fetchurl {
-    name = "${name}.tar.gz";
-    url = "https://github.com/draios/sysdig/archive/${version}.tar.gz";
-    sha256 = "08spprzgx6ksd7sjp5nk7z5szdlixh2sb0bsb9mfaq4xr12gsjw2";
+  src = fetchFromGitHub {
+    owner = "draios";
+    repo = "sysdig";
+    rev = version;
+    sha256 = "0xw4in2yb3ynpc8jwl95j92kbyr7fzda3mab8nyxcyld7gshrlvd";
   };
 
   buildInputs = [
@@ -31,13 +29,19 @@ stdenv.mkDerivation rec {
     "-DluaL_getn(L,i)=((int)lua_objlen(L,i))"
   ];
 
+  postPatch = ''
+    sed 's|curl/curlbuild\.h|curl/system.h|' -i \
+        userspace/libsinsp/marathon_http.cpp \
+        userspace/libsinsp/mesos_http.cpp
+ '';
+
   preConfigure = ''
     export INSTALL_MOD_PATH="$out"
   '' + optionalString (kernel != null) ''
     export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   '';
 
-  libPath = stdenv.lib.makeLibraryPath [
+  libPath = makeLibraryPath [
     zlib
     luajit
     ncurses
@@ -67,7 +71,7 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "A tracepoint-based system tracing tool for Linux (with clients for other OSes)";
     license = licenses.gpl2;
     maintainers = [maintainers.raskin];

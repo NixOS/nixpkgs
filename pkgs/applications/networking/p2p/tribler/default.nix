@@ -1,17 +1,15 @@
-{ stdenv, fetchgit, pythonPackages, makeWrapper, nettools, libtorrentRasterbar, imagemagick
-, enablePlayer ? true, vlc ? null }:
+{ stdenv, fetchurl, pythonPackages, makeWrapper, nettools, libtorrentRasterbar, imagemagick
+, enablePlayer ? true, vlc ? null, qt5 }:
 
 stdenv.mkDerivation rec {
   pname = "tribler";
   name = "${pname}-${version}";
-  version = "7.0.0-beta";
+  version = "7.0.0-rc2";
   revision = "1d3ddb8";
 
-  src = fetchgit {
-    url = "https://github.com/Tribler/tribler";
-    rev = revision;
-    sha256 = "16mk76qgg7fgca11yvpygicxqbkc0kn6r82x73fly2310pagd845";
-    fetchSubmodules = true;
+  src = fetchurl {
+    url = "https://github.com/Tribler/tribler/releases/download/v${version}/Tribler-v${version}.tar.xz";
+    sha256 = "0wlv32cw52c5khnrm218dccgn2l177933p4dhp7m50hipqfb0ly2";
   };
 
   buildInputs = [
@@ -41,6 +39,7 @@ stdenv.mkDerivation rec {
     pythonPackages.plyvel
     pythonPackages.decorator
     pythonPackages.feedparser
+    pythonPackages.service-identity
   ];
 
   postPatch = ''
@@ -58,6 +57,7 @@ stdenv.mkDerivation rec {
     wrapPythonPrograms
     cp -prvd ./* $out/
     makeWrapper ${pythonPackages.python}/bin/python $out/bin/tribler \
+        --set QT_QPA_PLATFORM_PLUGIN_PATH ${qt5.qtbase.bin}/lib/qt-*/plugins/platforms \
         --set _TRIBLERPATH $out \
         --set PYTHONPATH $out:$program_PYTHONPATH \
         --set NO_AT_BRIDGE 1 \

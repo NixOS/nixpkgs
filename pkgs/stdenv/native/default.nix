@@ -66,7 +66,7 @@ let
     export lt_cv_deplibs_check_method=pass_all
   '';
 
-  extraBuildInputsCygwin = [
+  extraNativeBuildInputsCygwin = [
     ../cygwin/all-buildinputs-as-runtimedep.sh
     ../cygwin/wrap-exes-to-find-dlls.sh
   ] ++ (if system == "i686-cygwin" then [
@@ -81,6 +81,10 @@ let
     { cc, fetchurl, extraPath ? [], overrides ? (self: super: { }) }:
 
     import ../generic {
+      buildPlatform = localSystem;
+      hostPlatform = localSystem;
+      targetPlatform = localSystem;
+
       preHook =
         if system == "i686-freebsd" then prehookFreeBSD else
         if system == "x86_64-freebsd" then prehookFreeBSD else
@@ -90,16 +94,16 @@ let
         if system == "x86_64-cygwin" then prehookCygwin else
         prehookBase;
 
-      extraBuildInputs =
-        if system == "i686-cygwin" then extraBuildInputsCygwin else
-        if system == "x86_64-cygwin" then extraBuildInputsCygwin else
+      extraNativeBuildInputs =
+        if system == "i686-cygwin" then extraNativeBuildInputsCygwin else
+        if system == "x86_64-cygwin" then extraNativeBuildInputsCygwin else
         [];
 
       initialPath = extraPath ++ path;
 
       fetchurlBoot = fetchurl;
 
-      inherit system shell cc overrides config;
+      inherit shell cc overrides config;
     };
 
 in
@@ -135,9 +139,6 @@ in
 
   # First build a stdenv based only on tools outside the store.
   (prevStage: {
-    buildPlatform = localSystem;
-    hostPlatform = localSystem;
-    targetPlatform = localSystem;
     inherit config overlays;
     stdenv = makeStdenv {
       inherit (prevStage) cc fetchurl;
@@ -147,9 +148,6 @@ in
   # Using that, build a stdenv that adds the ‘xz’ command (which most systems
   # don't have, so we mustn't rely on the native environment providing it).
   (prevStage: {
-    buildPlatform = localSystem;
-    hostPlatform = localSystem;
-    targetPlatform = localSystem;
     inherit config overlays;
     stdenv = makeStdenv {
       inherit (prevStage.stdenv) cc fetchurl;
