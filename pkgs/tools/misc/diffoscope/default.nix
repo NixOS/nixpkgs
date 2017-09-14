@@ -28,10 +28,13 @@ python3Packages.buildPythonApplication rec {
   # Still missing these tools: docx2txt enjarify js-beautify oggDump Rscript
   # Also these libraries: python3-guestfs
   pythonPath = with python3Packages; [ debian libarchive-c python_magic tlsh rpm ] ++ [
-      acl binutils bzip2 cbfstool cdrkit colordiff coreutils cpio diffutils dtc e2fsprogs file findutils
-      fontforge-fonttools gettext gnutar gzip libarchive libcaca pgpdump poppler_utils sng sqlite
+      acl binutils bzip2 cdrkit colordiff coreutils cpio diffutils dtc e2fsprogs file findutils
+      fontforge-fonttools gettext gnutar gzip libarchive libcaca pgpdump sng sqlite
       squashfsTools unzip xxd xz
-    ] ++ lib.optionals enableBloat [ apktool colord fpc ghc ghostscriptX giflib gnupg1 imagemagick llvm jdk mono openssh pdftk tcpdump unoconv ];
+    ] ++ lib.optionals enableBloat [
+      apktool cbfstool colord fpc ghc ghostscriptX giflib gnupg1 imagemagick
+      llvm jdk mono openssh pdftk poppler_utils tcpdump unoconv
+    ];
 
   doCheck = false; # Calls 'mknod' in squashfs tests, which needs root
 
