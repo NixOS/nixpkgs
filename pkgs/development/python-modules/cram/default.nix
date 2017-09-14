@@ -26,7 +26,7 @@ buildPythonPackage rec {
     #COVERAGE=${coverage}/bin/coverage $out/bin/cram tests
     #${coverage}/bin/coverage report --fail-under=100
     COVERAGE=coverage $out/bin/cram tests
-    coverage report --fail-under=100 --omit="*/_encoding.py"
+    coverage report --fail-under=100 --omit="*/_encoding.py,*/__main__.py"
   '';
 
   meta = {
