@@ -5,11 +5,11 @@
 
 python2Packages.buildPythonApplication rec {
   name = "mailnag-${version}";
-  version = "1.1.0";
+  version = "1.2.1";
 
   src = fetchurl {
     url = "https://github.com/pulb/mailnag/archive/v${version}.tar.gz";
-    sha256 = "0li4kvxjmbz3nqg6bysgn2wdazqrd7gm9fym3rd7148aiqqwa91r";
+    sha256 = "ec7ac027d93bc7d88fc270858f5a181453a6ff07f43cab20563d185818801fee";
   };
 
   buildInputs = [
@@ -29,6 +29,12 @@ python2Packages.buildPythonApplication rec {
         --prefix PYTHONPATH : "$PYTHONPATH"
     done
   '';
+
+  buildPhase = "";
+
+  installPhase = "python2 setup.py install --prefix=$out";
+
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "An extensible mail notification daemon";
