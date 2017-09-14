@@ -20533,7 +20533,7 @@ in {
     version = "2.1.1";
 
     src = pkgs.fetchurl {
-      url = " mirror://pypi/p/python-daemon/${name}.tar.gz";
+      url = "mirror://pypi/p/python-daemon/${name}.tar.gz";
       sha256 = "17v80qb98p1gv4j9mq6wb55cv7hc4j1hzw5y2f4s5hrpxs3w3a2q";
     };
 
