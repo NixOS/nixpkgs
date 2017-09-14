@@ -9878,40 +9878,7 @@ in {
     };
   };
 
-  gevent = buildPythonPackage rec {
-    name = "gevent-1.1.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/gevent/${name}.tar.gz";
-      sha256 = "cb15cf73d69a2eeefed330858f09634e2c50bf46da9f9e7635730fcfb872c02c";
-    };
-
-    # Why do we have this patch?
-    postPatch = ''
-      substituteInPlace libev/ev.c --replace \
-        "ecb_inline void ecb_unreachable (void) ecb_noreturn" \
-        "ecb_inline ecb_noreturn void ecb_unreachable (void)"
-    '';
-
-    buildInputs = with self; [ pkgs.libev ];
-    propagatedBuildInputs = with self; optionals (!isPyPy) [ greenlet ];
-
-    checkPhase = ''
-      cd greentest
-      ${python.interpreter} testrunner.py
-    '';
-
-    # Bunch of failures.
-    doCheck = false;
-
-    meta = {
-      description = "Coroutine-based networking library";
-      homepage = http://www.gevent.org/;
-      license = licenses.mit;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ bjornfor ];
-    };
-  };
+  gevent = callPackage ../development/python-modules/gevent {};
 
   geventhttpclient = buildPythonPackage rec {
     name = "geventhttpclient-${version}";
@@ -11523,7 +11490,7 @@ in {
       sha256 = "c9ca6fdfe6a6fb187a3d54ddf9b1518196348e8f20537f0a14ca81a264ffafa2";
     };
 
-    propagatedBuildInputs = [ self.msgpack self.requests self.flask self.gevent self.pyzmq ];
+    propagatedBuildInputs = [ self.msgpack self.requests self.flask self.gevent_1_2_2 self.pyzmq ];
     buildInputs = [ self.mock self.unittest2 ];
 
     meta = {
