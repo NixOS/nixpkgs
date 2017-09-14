@@ -17,6 +17,14 @@ stdenv.mkDerivation rec {
     sha256 = "1km0mzfl6in7l5vz9kl09a88ajx562rw93ng9h2jqavrailvsbgd";
   };
 
+  patches = [
+    # CVE-2017-14166
+    (fetchurl {
+       url = "https://github.com/libarchive/libarchive/commit/fa7438a0ff4033e4741c807394a9af6207940d71.patch";
+       sha256 = "1f1np428qzdc8w290swcjrk63sr9fk2fqm4fj1zvvsr6b96qk705";
+    })
+  ];
+
   outputs = [ "out" "lib" "dev" ];
 
   nativeBuildInputs = [ pkgconfig ];
