@@ -3626,27 +3626,7 @@ in {
     };
   };
 
-  MDP = buildPythonPackage rec {
-    version = "3.5";
-    name = "MDP-${version}";
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/M/MDP/${name}.tar.gz";
-      sha256 = "0aw1zxmyvx6gfmmnixbqmdaah28jl7rmqkzhxv53091asc23iw9k";
-    };
-
-    buildInputs = with self; [ pytest_29 ];
-    propagatedBuildInputs = with self; [ future numpy ];
-
-    doCheck = true;
-
-    meta = {
-      description = "Library for building complex data processing software by combining widely used machine learning algorithms";
-      homepage = http://mdp-toolkit.sourceforge.net;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ nico202 ];
-    };
-  };
+  MDP = callPackage ../development/python-modules/mdp {};
 
   minidb = buildPythonPackage rec {
     name = "minidb-2.0.1";
