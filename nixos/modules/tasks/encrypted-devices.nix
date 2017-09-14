@@ -36,7 +36,7 @@ let
 
       keyFile = mkOption {
         default = null;
-        example = "/root/.swapkey";
+        example = "/mnt-root/.swapkey";
         type = types.nullOr types.str;
         description = "File system location of keyfile. This unlocks the drive after the root has been mounted to <literal>/mnt-root</literal>.";
       };
