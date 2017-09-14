@@ -13021,10 +13021,11 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ TermProgressBarQuiet ];
   };
 
-  TermReadKey = buildPerlPackage {
-    name = "TermReadKey-2.31";
+  TermReadKey = buildPerlPackage rec {
+    name = "TermReadKey-${version}";
+    version = "2.37";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JS/JSTOWE/TermReadKey-2.31.tar.gz;
+      url = "mirror://cpan/authors/id/J/JS/JSTOWE/${name}.tar.gz";
       sha256 = "1czarrdxgnxmmbaasjnq3sj14nf1cvzhm37padq6xvl7h7r2acb2";
     };
   };
