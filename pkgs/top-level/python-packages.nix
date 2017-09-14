@@ -24545,29 +24545,7 @@ EOF
     };
   };
 
-  ws4py = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "ws4py";
-    version = "0.4.2";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0zr3254ky6r7q15l3dhdczfa8i723055zdkqssjifsgcwvirriks";
-    };
-
-    buildInputs = with self; [ pytest mock ];
-    propagatedBuildInputs = with self; [ asyncio cherrypy gevent tornado ];
-
-    checkPhase = ''
-      pytest test
-    '';
-
-    meta = {
-      homepage = https://ws4py.readthedocs.org;
-      description = "A WebSocket package for Python";
-      maintainers = with maintainers; [ rickynils ];
-    };
-  };
+  ws4py = callPackage ../development/python-modules/ws4py {};
 
   gdata = buildPythonPackage rec {
     name = "gdata-${version}";
