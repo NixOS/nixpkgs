@@ -14,8 +14,8 @@ let
 
       pythonPackages = (super.python.override {
         packageOverrides = lib.const (pysuper: {
-          certifi = pysuper.certifi.overrideDerivation (drv: {
-            postPatch = (drv.postPatch or "") + ''
+          certifi = pysuper.certifi.overridePythonAttrs (attrs: {
+            postPatch = (attrs.postPatch or "") + ''
               cat "${self.cacert}/etc/ssl/certs/ca-bundle.crt" \
                 > certifi/cacert.pem
             '';
