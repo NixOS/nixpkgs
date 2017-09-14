@@ -190,7 +190,7 @@ in
     services.xserver.displayManager.slim.enable = false;
 
     services.xserver.displayManager.job = {
-      logsXsession = true;
+      logToFile = true;
 
       # lightdm relaunches itself via just `lightdm`, so needs to be on the PATH
       execCmd = ''
