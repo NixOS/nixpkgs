@@ -20,9 +20,6 @@ stdenv.mkDerivation rec {
 
   doCheck = hostPlatform == buildPlatform;
 
-  # FIXME needs gcc 4.9 in bootstrap tools
-  hardeningDisable = [ "stackprotector" ];
-
   meta = {
     description = "Library for multiprecision complex arithmetic with exact rounding";
 

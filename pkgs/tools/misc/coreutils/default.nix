@@ -21,9 +21,6 @@ stdenv.mkDerivation rec {
     sha256 = "0r8c1bgm68kl70j1lgd0rv12iykw6143k4m9a56xip9rc2hv25qi";
   };
 
-  # FIXME needs gcc 4.9 in bootstrap tools
-  hardeningDisable = [ "stackprotector" ];
-
   patches = optional hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch;
 
   # The test tends to fail on btrfs and maybe other unusual filesystems.

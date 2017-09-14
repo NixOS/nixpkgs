@@ -69,9 +69,6 @@ let
 
     enableParallelBuilding = true;
 
-    # FIXME needs gcc 4.9 in bootstrap tools
-    hardeningDisable = [ "stackprotector" ];
-
     preConfigure =
       ''
         configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3"
