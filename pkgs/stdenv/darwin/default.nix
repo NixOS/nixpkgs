@@ -260,7 +260,7 @@ in rec {
     };
 
     darwin = super.darwin // {
-      inherit (darwin) dyld Libsystem cctools libiconv;
+      inherit (darwin) dyld Libsystem binutils cctools libiconv;
     };
   };
 
