@@ -101,7 +101,7 @@ in {
 
   py3to2 = callPackage ../development/python-modules/3to2 { };
   # Left for backwards compatibility
-  "3to2" = callPackage ../development/python-modules/3to2 { };
+  "3to2" = self.py3to2;
 
   aenum = callPackage ../development/python-modules/aenum { };
 
