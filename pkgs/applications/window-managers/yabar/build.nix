@@ -16,8 +16,9 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cairo gdk_pixbuf libconfig pango pkgconfig xcbutilwm docbook_xsl
+    cairo gdk_pixbuf libconfig pango xcbutilwm docbook_xsl
     alsaLib wirelesstools asciidoc libxslt makeWrapper
   ];
 
