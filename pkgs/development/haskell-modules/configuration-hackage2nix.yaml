@@ -1594,7 +1594,7 @@ default-package-overrides:
   - pagerduty ==0.0.8
   - pagination ==0.2.1
   - palette ==0.1.0.5
-  - pandoc ==1.19.2.3
+  - pandoc ==1.19.2.4
   - pandoc-citeproc ==0.10.5.1
   - pandoc-types ==1.17.0.5
   - pango ==0.13.3.1
