@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
     "--enable-utf8"
   ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig
     geoipWithDatabase
     ncurses
     glib

@@ -20,8 +20,9 @@ stdenv.mkDerivation rec {
     sha256 = "0nabl6949s7awy7rnr4ck52v50xr0hwr280fyzsqixgp8w369jn0";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig autoreconfHook
+    autoreconfHook
     zimg libass tesseract yasm
     (python3.withPackages (ps: with ps; [ sphinx cython ]))
   ] ++ optional ocrSupport   tesseract

@@ -13,8 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "1wjwf1lgfkqz87s0j251g625mw9xmx79zzgrjyhq3wlii73m6qwp";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig autoreconfHook
+    autoreconfHook
     yasm vapoursynth fftwFloat
   ];
 

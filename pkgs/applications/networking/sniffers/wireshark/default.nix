@@ -26,11 +26,11 @@ in stdenv.mkDerivation {
   cmakeFlags = optional withGtk "-DBUILD_wireshark_gtk=TRUE";
 
   nativeBuildInputs = [
-    bison cmake extra-cmake-modules flex
+    bison cmake extra-cmake-modules flex pkgconfig
   ] ++ optional withGtk wrapGAppsHook;
 
   buildInputs = [
-    gettext pcre perl pkgconfig libpcap lua5 libssh openssl libgcrypt
+    gettext pcre perl libpcap lua5 libssh openssl libgcrypt
     libgpgerror gnutls geoip c-ares python glib zlib
   ] ++ optionals withQt  (with qt5; [ qtbase qtmultimedia qtsvg qttools ])
     ++ optionals withGtk [ gtk3 librsvg gsettings_desktop_schemas ]

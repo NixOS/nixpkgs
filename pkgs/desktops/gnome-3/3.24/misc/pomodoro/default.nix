@@ -16,8 +16,9 @@ stdenv.mkDerivation rec {
 
   configureScript = ''./autogen.sh'';
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    which intltool glib gobjectIntrospection pkgconfig libtool
+    which intltool glib gobjectIntrospection libtool
     makeWrapper dbus_glib libcanberra_gtk2 vala_0_32 gst_all_1.gstreamer
     gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
     gnome3.gsettings_desktop_schemas gnome3.gnome_desktop

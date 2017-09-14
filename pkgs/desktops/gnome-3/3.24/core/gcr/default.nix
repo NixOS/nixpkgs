@@ -5,8 +5,9 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig intltool gnupg glib gobjectIntrospection libxslt
+    intltool gnupg glib gobjectIntrospection libxslt
     libgcrypt libtasn1 dbus_glib gtk pango gdk_pixbuf atk makeWrapper vala_0_32
   ];
 

@@ -61,8 +61,8 @@ core = stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig
     /*teckit*/ zziplib poppler mpfr gmp
     pixman potrace gd freetype libpng libpaper zlib
     perl

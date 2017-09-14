@@ -25,9 +25,11 @@ in stdenv.mkDerivation rec {
 	--replace http://www.oasis-open.org/docbook/xml/4.5/ent/isogrk1.ent ${isogrk1}
   '';
 
+  nativeBuildInputs = [ pkgconfig ];
+
   # ToDo: optional libgda, introspection?
   buildInputs = [
-    pkgconfig intltool perl perlXMLParser bison
+    intltool perl perlXMLParser bison
     goffice gtk3 makeWrapper gnome3.defaultIconTheme
     python pygobject3 itstool
   ];

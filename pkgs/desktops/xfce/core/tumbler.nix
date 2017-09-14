@@ -15,8 +15,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "devdoc" ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig intltool dbus_glib gdk_pixbuf curl freetype
+    intltool dbus_glib gdk_pixbuf curl freetype
     poppler libgsf bzip2
   ];
 

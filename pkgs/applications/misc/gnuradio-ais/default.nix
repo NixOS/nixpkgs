@@ -16,8 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "1vl3kk8xr2mh5lf31zdld7yzmwywqffffah8iblxdzblgsdwxfl6";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cmake pkgconfig boost gnuradio makeWrapper cppunit gnuradio-osmosdr
+    cmake boost gnuradio makeWrapper cppunit gnuradio-osmosdr
   ] ++ stdenv.lib.optionals pythonSupport [ python swig ];
 
   postInstall = ''

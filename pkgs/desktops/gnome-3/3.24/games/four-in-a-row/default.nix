@@ -4,8 +4,9 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig gtk3 wrapGAppsHook intltool itstool libcanberra_gtk3 librsvg
+    gtk3 wrapGAppsHook intltool itstool libcanberra_gtk3 librsvg
     libxml2 gnome3.defaultIconTheme
   ];
 

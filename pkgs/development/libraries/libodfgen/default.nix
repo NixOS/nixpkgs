@@ -9,13 +9,14 @@ let
     url="mirror://sourceforge/project/libwpd/libodfgen/libodfgen-0.1.6/libodfgen-0.1.6.tar.xz";
     sha256="1sdr42f0bigip14zhs51m0zdwwzzl1mwmk882l4khpph8jmi1ch3";
   };
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    boost pkgconfig cppunit zlib libwpg libwpd librevenge
+    boost cppunit zlib libwpg libwpd librevenge
   ];
 in
 stdenv.mkDerivation {
   inherit (s) name version;
-  inherit buildInputs;
+  inherit nativeBuildInputs buildInputs;
   src = fetchurl {
     inherit (s) url sha256;
   };

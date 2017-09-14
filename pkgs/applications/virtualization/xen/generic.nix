@@ -53,8 +53,9 @@ stdenv.mkDerivation (rec {
 
   hardeningDisable = [ "stackprotector" "fortify" "pic" ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cmake pkgconfig which
+    cmake which
 
     # Xen
     bison bzip2 checkpolicy dev86 figlet flex gettext glib iasl libaio

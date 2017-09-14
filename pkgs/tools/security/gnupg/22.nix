@@ -22,8 +22,9 @@ stdenv.mkDerivation rec {
     sha256 = "1rj538kp3wsdq7rhl8sy1wpwhlsbxcch0cwk64kgz8gpw05lllfl";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig libgcrypt libassuan libksba libiconv npth gettext texinfo
+    libgcrypt libassuan libksba libiconv npth gettext texinfo
     readline libusb gnutls adns openldap zlib bzip2 sqlite
   ];
 

@@ -14,8 +14,9 @@ stdenv.mkDerivation (rec {
 
   QTDIR = qt4;
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cmake qt4 pkgconfig ladspaPlugins ladspaH dssi liblo liblrdf fftwSinglePrec
+    cmake qt4 ladspaPlugins ladspaH dssi liblo liblrdf fftwSinglePrec
     libsndfile libsamplerate perl makedepend libjack2
   ] ++ stdenv.lib.optional withLirc [ lirc ];
 

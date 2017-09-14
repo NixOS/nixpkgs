@@ -13,8 +13,9 @@ stdenv.mkDerivation rec {
   # fix linking error: undefined reference to pcre_info
   patches = [ ./pcre_info.patch ]; # inspired by https://bugs.php.net/bug.php?id=60986
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig libglade bzip2 libart intltool gettext
+    libglade bzip2 libart intltool gettext
     gconf libgnomeui pcre
   ];
 

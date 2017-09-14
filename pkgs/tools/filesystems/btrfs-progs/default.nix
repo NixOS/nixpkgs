@@ -12,8 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "0pswcfmdnfc586770h74abp67gn2xv8fd46vxlimnmn837sj7h41";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig attr acl zlib libuuid e2fsprogs lzo
+    attr acl zlib libuuid e2fsprogs lzo
     asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt
   ];
 
