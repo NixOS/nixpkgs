@@ -1,4 +1,4 @@
-{ fetchFromGitHub, pkgs }:
+{ fetchFromGitHub, fetchpatch, pkgs }:
 
 {
   brotli = {
