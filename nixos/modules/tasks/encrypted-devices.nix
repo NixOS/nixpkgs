@@ -61,6 +61,7 @@ in
         devices =
           map (dev: { name = dev.encrypted.label; device = dev.encrypted.blkDev; } ) keylessEncDevs;
         cryptoModules = [ "aes" "sha256" "sha1" "xts" ];
+        forceLuksSupportInInitrd = true;
       };
       postMountCommands =
         concatMapStrings (dev: "cryptsetup luksOpen --key-file ${dev.encrypted.keyFile} ${dev.encrypted.blkDev} ${dev.encrypted.label};\n") keyedEncDevs;

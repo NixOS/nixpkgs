@@ -235,6 +235,16 @@ in
       '';
     };
 
+    boot.initrd.luks.forceLuksSupportInInitrd = mkOption {
+      type = types.bool;
+      default = false;
+      internal = true;
+      description = ''
+        Whether to configure luks support in the initrd, when no luks
+        devices are configured.
+      '';
+    };
+
     boot.initrd.luks.devices = mkOption {
       default = { };
       example = { "luksroot".device = "/dev/disk/by-uuid/430e9eff-d852-4f68-aa3b-2fa3599ebe08"; };
@@ -417,7 +427,7 @@ in
     };
   };
 
-  config = mkIf (luks.devices != {}) {
+  config = mkIf (luks.devices != {} || luks.forceLuksSupportInInitrd) {
 
     # actually, sbp2 driver is the one enabling the DMA attack, but this needs to be tested
     boot.blacklistedKernelModules = optionals luks.mitigateDMAAttacks
