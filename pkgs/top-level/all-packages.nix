@@ -7133,7 +7133,7 @@ with pkgs;
   };
 
   include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
-    llvmPackages = llvmPackages_38;
+    llvmPackages = llvmPackages_4;
   };
 
   indent = callPackage ../development/tools/misc/indent { };
