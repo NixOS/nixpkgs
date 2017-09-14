@@ -1,20 +1,18 @@
-{ stdenv, pythonPackages, fetchFromGitHub }:
+{ stdenv, buildPythonPackage, fetchPypi, numpy, scipy, cython, networkx, joblib, nose }:
 
-pythonPackages.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "pomegranate";
   version = "0.7.7";
   name  = "${pname}-${version}";
 
-  src = fetchFromGitHub {
-    repo = "pomegranate";
-    owner = "jmschrei";
-    rev = version;
-    sha256 = "07zkg9jxjql00ppmkc4wsm2xidx58xnkmbbqaqv8jmh67y80yx75";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "b5b7a6256778fc4097ee77caec28ec845ec1fee3d701f3f26f83860b2d45c453";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ numpy scipy cython networkx joblib ];
+  propagatedBuildInputs = [ numpy scipy cython networkx joblib ];
 
-  buildInputs = [ pythonPackages.nose ];
+  checkInputs = [ nose ];
 
   meta = with stdenv.lib; {
     description = "Probabilistic and graphical models for Python, implemented in cython for speed";
