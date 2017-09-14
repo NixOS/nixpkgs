@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "2.12";
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ llvmPackages.clang-unwrapped llvmPackages.llvm openssl emacs ]
+  buildInputs = [ llvmPackages.llvm openssl emacs ]
+    ++ lib.optionals stdenv.cc.isGNU [ llvmPackages.clang-unwrapped ]
     ++ lib.optionals stdenv.isDarwin [ apple_sdk.libs.xpc apple_sdk.frameworks.CoreServices ];
 
 
