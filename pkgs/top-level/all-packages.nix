@@ -13198,8 +13198,11 @@ with pkgs;
     };
   });
 
-  linuxPackages_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_latest);
+  linuxPackages_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux);
   linux_hardened = linuxPackages_hardened.kernel;
+
+  linuxPackages_latest_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_latest);
+  linux_latest_hardened = linuxPackages_latest_hardened.kernel;
 
   linuxPackages_copperhead_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_copperhead);
   linux_copperhead_hardened = linuxPackages_copperhead_hardened.kernel;
