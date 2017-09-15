@@ -68,6 +68,10 @@ DEBUG_SG y
 SCHED_STACK_END_CHECK y
 BUG_ON_DATA_CORRUPTION y
 
+${optionalString (versionAtLeast version "4.13") ''
+  REFCOUNT_FULL y
+''}
+
 # Perform usercopy bounds checking.
 HARDENED_USERCOPY y
 
