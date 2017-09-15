@@ -320,12 +320,12 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2017.2.3"; /* updated by script */
+    version = "2017.2.4"; /* updated by script */
     description = "Professional IDE for Web and PHP developers";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "ee2fb52218a4d81d72d1fbab84ff9cc905695b6c2bafb5747daea8ee1487e782"; /* updated by script */
+      sha256 = "7ee7afac677dd62d67d70f9fbf2e634ccf06bd80d8750babd0e78b1679e9c342"; /* updated by script */
     };
     wmClass = "jetbrains-phpstorm";
     update-channel = "PS2017.2";
@@ -372,7 +372,7 @@ in
 
   rider = buildRider rec {
     name = "rider-${version}";
-    version = "171.4456.3271"; /* updated by script */
+    version = "2017.2-171.4456.3271"; /* updated by script */
     description = "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
