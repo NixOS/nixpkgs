@@ -110,8 +110,9 @@ let
     "--enable-shared"
     "--with-threads"
     "--enable-unicode=ucs4"
-  ] ++ optionals hostPlatform.isCygwin [
+  ] ++ optionals (hostPlatform.isCygwin || hostPlatform.isAarch64) [
     "--with-system-ffi"
+  ] ++ optionals hostPlatform.isCygwin [
     "--with-system-expat"
     "ac_cv_func_bind_textdomain_codeset=yes"
   ] ++ optionals stdenv.isDarwin [
@@ -125,7 +126,8 @@ let
   buildInputs =
     optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc ++
     [ bzip2 openssl zlib ]
-    ++ optionals hostPlatform.isCygwin [ expat libffi ]
+    ++ optional (hostPlatform.isCygwin || hostPlatform.isAarch64) libffi
+    ++ optional hostPlatform.isCygwin expat
     ++ [ db gdbm ncurses sqlite readline ]
     ++ optionals x11Support [ tcl tk xlibsWrapper libX11 ]
     ++ optionals stdenv.isDarwin [ CF configd ];
