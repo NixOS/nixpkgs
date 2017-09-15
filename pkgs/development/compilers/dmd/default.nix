@@ -160,6 +160,5 @@ stdenv.mkDerivation rec {
     license = licenses.boost;
     maintainers = with maintainers; [ ThomasMader ];
     platforms = platforms.unix;
-    broken = true;
   };
 }
