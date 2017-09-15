@@ -1,30 +1,18 @@
-{ stdenv, __targetPackages
-, buildPlatform, hostPlatform, targetPlatform
+{ stdenv, lib, fetchurl, fetchpatch, bootPkgs, perl, ncurses, libiconv, binutils, coreutils
+, hscolour, patchutils, sphinx
 
-# build-tools
-, bootPkgs, hscolour
-, binutils, coreutils, fetchurl, fetchpatch, patchutils, perl, sphinx
-
-, libiconv, ncurses
-
-, # If enabled GHC will be build with the GPL-free but slower integer-simple
+  # If enabled GHC will be build with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? false, gmp ? null
+, enableIntegerSimple ? false, gmp
+, cross ? null
 }:
-
-assert !enableIntegerSimple -> gmp != null;
 
 let
   inherit (bootPkgs) ghc;
-
-  # TODO(@Ericson2314) Make unconditional
-  prefix = stdenv.lib.optionalString
-    (targetPlatform != hostPlatform)
-    "${targetPlatform.config}-";
 in
 stdenv.mkDerivation rec {
   version = "8.0.2";
-  name = "${prefix}ghc-${version}";
+  name = "ghc-${version}";
 
   src = fetchurl {
     url = "https://downloads.haskell.org/~ghc/8.0.2/${name}-src.tar.xz";
@@ -59,20 +47,19 @@ stdenv.mkDerivation rec {
     "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
   ] ++ stdenv.lib.optional stdenv.isDarwin [
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
-  ] ++ stdenv.lib.optionals (targetPlatform.isDarwin && targetPlatform.isAarch64) [
+  ] ++
     # fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
-    "--disable-large-address-space"
-  ];
+    lib.optional (cross.config or null == "aarch64-apple-darwin14") "--disable-large-address-space";
 
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!stdenv.isDarwin) "--keep-file-symbols";
 
   postInstall = ''
-    paxmark m $out/lib/${name}/bin/${if targetPlatform != hostPlatform then "ghc" else "{ghc,haddock}"}
+    paxmark m $out/lib/${name}/bin/{ghc,haddock}
 
     # Install the bash completion file.
-    install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${prefix}ghc
+    install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/ghc
 
     # Patch scripts to include "readelf" and "cat" in $PATH.
     for i in "$out/bin/"*; do
@@ -83,7 +70,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit bootPkgs prefix;
+    inherit bootPkgs;
   };
 
   meta = {
