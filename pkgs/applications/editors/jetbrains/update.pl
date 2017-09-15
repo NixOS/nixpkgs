@@ -70,8 +70,8 @@ sub update_nix_block {
         unless ( $sha256 ) {
           my $full_version = $latest_versions{"full1_" . $channel};
           $url =~ s/$version_string/$full_version/;
-	  ($sha256) = get("$url.sha256") =~ /^([0-9a-f]{64})/;
-	  $version_string = $full_version;
+          ($sha256) = get("$url.sha256") =~ /^([0-9a-f]{64})/;
+          $version_string = $full_version;
         }
         die "invalid sha256 in $url.sha256" unless $sha256;
         $block =~ s#version\s*=\s*"([^"]+)".+$#version = "$version_string"; /* updated by script */#m;
