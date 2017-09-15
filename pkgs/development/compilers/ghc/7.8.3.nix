@@ -1,13 +1,9 @@
 { stdenv, fetchurl, ghc, perl, ncurses, libiconv
 
-, # If enabled GHC will be build with the GPL-free but slower integer-simple
+  # If enabled GHC will be build with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? false, gmp ? null
+, enableIntegerSimple ? false, gmp
 }:
-
-# TODO(@Ericson2314): Cross compilation support
-assert stdenv.targetPlatform == stdenv.hostPlatform;
-assert !enableIntegerSimple -> gmp != null;
 
 stdenv.mkDerivation rec {
   version = "7.8.3";
@@ -52,8 +48,6 @@ stdenv.mkDerivation rec {
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!stdenv.isDarwin) "--keep-file-symbols";
-
-  passthru = { prefix = ""; };
 
   meta = {
     homepage = http://haskell.org/ghc;

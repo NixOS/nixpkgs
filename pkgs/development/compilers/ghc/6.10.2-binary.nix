@@ -1,29 +1,24 @@
-{ stdenv
-, fetchurl, perl
-, libedit, ncurses5, gmp
-}:
-
-# Prebuilt only does native
-assert stdenv.targetPlatform == stdenv.hostPlatform;
+{stdenv, lib, fetchurl, perl, libedit, ncurses5, gmp}:
 
 stdenv.mkDerivation rec {
   version = "6.10.2";
 
   name = "ghc-${version}-binary";
 
-  src = {
-      "i686-linux" = fetchurl {
+  src =
+    if stdenv.system == "i686-linux" then
+      fetchurl {
         # This binary requires libedit.so.0 (rather than libedit.so.2).
         url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-unknown-linux.tar.bz2";
         sha256 = "1fw0zr2qshlpk8s0d16k27zcv5263nqdg2xds5ymw8ff6qz9rz9b";
-      };
-      "x86_64-linux" = fetchurl {
+      }
+    else if stdenv.system == "x86_64-linux" then
+      fetchurl {
         # Idem.
         url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-unknown-linux.tar.bz2";
         sha256 = "1rd2j7lmcfsm2rdfb5g6q0l8dz3sxadk5m3d2f69d4a6g4p4h7jj";
-      };
-    }.${stdenv.hostPlatform.system}
-      or (throw "cannot bootstrap GHC on this platform");
+      }
+    else throw "cannot bootstrap GHC on this platform";
 
   buildInputs = [perl];
 
@@ -42,17 +37,17 @@ stdenv.mkDerivation rec {
      '' +
     # On Linux, use patchelf to modify the executables so that they can
     # find editline/gmp.
-    stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
+    (if stdenv.isLinux then ''
       find . -type f -perm -0100 \
           -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
           --set-rpath "${lib.makeLibraryPath [ libedit ncurses5 gmp ]}" {} \;
       for prog in ld ar gcc strip ranlib; do
         find . -name "setup-config" -exec sed -i "s@/usr/bin/$prog@$(type -p $prog)@g" {} \;
       done
-     '';
+     '' else "");
 
   configurePhase = ''
-    ./configure --prefix=$out --with-gmp-libraries=${stdenv.lib.getLib gmp}/lib --with-gmp-includes=${stdenv.lib.getDev gmp}/include
+    ./configure --prefix=$out --with-gmp-libraries=${lib.getLib gmp}/lib --with-gmp-includes=${lib.getDev gmp}/include
   '';
 
   # Stripping combined with patchelf breaks the executables (they die
@@ -67,7 +62,7 @@ stdenv.mkDerivation rec {
   # and create some wrapper scripts that set DYLD_FRAMEWORK_PATH so
   # that the executables work with no special setup.
   postInstall =
-    stdenv.lib.optionalString stdenv.hostPlatform.isDarwin
+    (if stdenv.isDarwin then
       ''
         mkdir -p $out/frameworks/GMP.framework/Versions/A
         ln -s ${gmp.out}/lib/libgmp.dylib $out/frameworks/GMP.framework/GMP
@@ -84,7 +79,7 @@ stdenv.mkDerivation rec {
             echo \"DYLD_FRAMEWORK_PATH=$out/frameworks exec $out/bin-orig/$i -framework-path $out/frameworks \\\"\\$@\\\"\" >> $out/bin/$i
             chmod +x $out/bin/$i
         done
-      ''
+      '' else "")
     +
       ''
         # bah, the passing gmp doesn't work, so let's add it to the final package.conf in a quick but dirty way
