@@ -12,7 +12,7 @@ mkChromiumDerivation (base: rec {
   sandboxExecutableName = "__chromium-suid-sandbox";
 
   installPhase = ''
-    mkdir -p "$libExecPath "
+    mkdir -p "$libExecPath/chromium"
     cp -v "$buildPath/"*.pak "$buildPath/"*.bin "$libExecPath/"
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
