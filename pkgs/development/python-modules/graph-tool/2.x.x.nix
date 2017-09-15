@@ -3,7 +3,7 @@ pkgconfig, boost, expat, scipy, numpy, cgal, gmp, mpfr, lndir,
 gobjectIntrospection, pygobject3, gtk3, matplotlib }:
 
 stdenv.mkDerivation rec {
-  version = "2.16";
+  version = "2.22";
   name = "${python.libPrefix}-graph-tool-${version}";
 
   meta = with stdenv.lib; {
@@ -16,11 +16,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";
-    sha256 = "03b1pmh2gvsgyq491gvskx8fwgqy9k942faymdnhwpbbbfhx911p";
+    sha256 = "1070lp8nzsg9lw6f0qaw6zn7v7mmvn65nf1sic9rriv34xb1n4jp";
   };
 
   configureFlags = [
     "--with-python-module-path=$(out)/${python.sitePackages}"
+    "--with-expat=${expat}"
     "--enable-openmp"
   ];
 
