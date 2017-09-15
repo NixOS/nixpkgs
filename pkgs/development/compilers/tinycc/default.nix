@@ -2,10 +2,10 @@
 with stdenv.lib;
 
 let
-  date = "20170821";
+  date = "20170911";
+  rev = "870271ea071971002fa556e09e1873db316fa1a9";
+  sha256 = "1a9djm0p7cd5nzqdhch9y48c4wai76x6d4nwx0bj5jz46ws39bs9";
   version = "0.9.27pre-${date}";
-  rev = "b8fe8fc2105455eb5004be89fa8575aa928a18f3";
-  sha256 = "0rsv5pikm7ai2n7r93qlbvkyky23dsgc3sdc83crbcxjjk6xh378";
 in
 
 stdenv.mkDerivation rec {
