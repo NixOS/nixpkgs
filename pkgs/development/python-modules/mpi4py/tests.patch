@@ -1,0 +1,13 @@
+diff --git i/test/test_dl.py w/test/test_dl.py
+index a3211a3..9d25569 100644
+--- i/test/test_dl.py
++++ w/test/test_dl.py
+@@ -12,7 +12,7 @@ class TestDL(unittest.TestCase):
+         if sys.platform == 'darwin':
+             libm = 'libm.dylib'
+         else:
+-            libm = 'libm.so'
++            libm = 'libm.so.6'
+ 
+         handle = dl.dlopen(libm, dl.RTLD_LOCAL|dl.RTLD_LAZY)
+         self.assertTrue(handle != 0)
