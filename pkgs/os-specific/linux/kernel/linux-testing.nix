@@ -10,11 +10,6 @@ import ./generic.nix (args // rec {
     sha256 = "0dhcsjgcy28pyyzwf2s0862p92bwb324kapli2y9n90bw0kl53gi";
   };
 
-  features.iwlwifi = true;
-  features.efiBootStub = true;
-  features.needsCifsUtils = true;
-  features.netfilterRPFilter = true;
-
   # Should the testing kernels ever be built on Hydra?
   extraMeta.hydraPlatforms = [];
 

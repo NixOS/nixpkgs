@@ -27,11 +27,4 @@ import ./generic.nix (args // {
     repo = "linux-hardened";
     rev = "${version}.${revision}";
   };
-
-  kernelPatches = args.kernelPatches;
-
-  features.iwlwifi = true;
-  features.efiBootStub = true;
-  features.needsCifsUtils = true;
-  features.netfilterRPFilter = true;
 } // (args.argsOverride or {}))
