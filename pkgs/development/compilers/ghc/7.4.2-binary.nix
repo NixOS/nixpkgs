@@ -1,35 +1,32 @@
-{ stdenv
-, fetchurl, perl, makeWrapper
-, ncurses5, gmp, libiconv
-}:
-
-# Prebuilt only does native
-assert stdenv.targetPlatform == stdenv.hostPlatform;
+{stdenv, fetchurl, perl, ncurses5, gmp, libiconv, makeWrapper}:
 
 stdenv.mkDerivation rec {
   version = "7.4.2";
 
   name = "ghc-${version}-binary";
 
-  src = {
-      "i686-linux" = fetchurl {
+  src =
+    if stdenv.system == "i686-linux" then
+      fetchurl {
         url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-unknown-linux.tar.bz2";
         sha256 = "0gny7knhss0w0d9r6jm1gghrcb8kqjvj94bb7hxf9syrk4fxlcxi";
-      };
-      "x86_64-linux" = fetchurl {
+      }
+    else if stdenv.system == "x86_64-linux" then
+      fetchurl {
         url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-unknown-linux.tar.bz2";
         sha256 = "043jabd0lh6n1zlqhysngbpvlsdznsa2mmsj08jyqgahw9sjb5ns";
-      };
-      "i686-darwin" =  fetchurl {
+      }
+    else if stdenv.system == "i686-darwin" then
+      fetchurl {
         url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-apple-darwin.tar.bz2";
         sha256 = "1vrbs3pzki37hzym1f1nh07lrqh066z3ypvm81fwlikfsvk4djc0";
-      };
-      "x86_64-darwin" = fetchurl {
+      }
+    else if stdenv.system == "x86_64-darwin" then
+      fetchurl {
         url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-apple-darwin.tar.bz2";
         sha256 = "1imzqc0slpg0r6p40n5a9m18cbcm0m86z8dgyhfxcckksw54mzwf";
-      };
-    }.${stdenv.hostPlatform.system}
-      or (throw "cannot bootstrap GHC on this platform");
+      }
+    else throw "cannot bootstrap GHC on this platform";
 
   buildInputs = [perl];
 
