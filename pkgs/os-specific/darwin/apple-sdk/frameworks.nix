@@ -46,7 +46,8 @@ with frameworks; with libs; {
   ExceptionHandling       = [];
   FWAUserLib              = [];
   ForceFeedback           = [ CF IOKit ];
-  Foundation              = [ CF libobjc Security ApplicationServices SystemConfiguration ];
+  # cf-private was moved first in list because of https://github.com/NixOS/nixpkgs/pull/28635
+  Foundation              = [ cf-private CF libobjc Security ApplicationServices SystemConfiguration ];
   GLKit                   = [ CF ];
   GLUT                    = [ OpenGL ];
   GSS                     = [];

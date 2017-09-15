@@ -583,6 +583,7 @@
   thammers = "Tobias Hammerschmidt <jawr@gmx.de>";
   the-kenny = "Moritz Ulrich <moritz@tarn-vedra.de>";
   theuni = "Christian Theune <ct@flyingcircus.io>";
+  ThomasMader = "Thomas Mader <thomas.mader@gmail.com>";
   thoughtpolice = "Austin Seipp <aseipp@pobox.com>";
   timbertson = "Tim Cuthbertson <tim@gfxmonk.net>";
   titanous = "Jonathan Rudenberg <jonathan@titanous.com>";
