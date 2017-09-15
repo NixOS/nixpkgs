@@ -18,6 +18,10 @@ assert (versionAtLeast version "4.9");
 # Report BUG() conditions and kill the offending process.
 BUG y
 
+${optionalString (versionAtLeast version "4.10") ''
+  BUG_ON_DATA_CORRUPTION y
+''}
+
 ${optionalString (stdenv.system == "x86_64-linux") ''
   DEFAULT_MMAP_MIN_ADDR 65536 # Prevent allocation of first 64K of memory
 
@@ -66,7 +70,6 @@ DEBUG_NOTIFIERS y
 DEBUG_LIST y
 DEBUG_SG y
 SCHED_STACK_END_CHECK y
-BUG_ON_DATA_CORRUPTION y
 
 ${optionalString (versionAtLeast version "4.13") ''
   REFCOUNT_FULL y
