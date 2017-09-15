@@ -159,6 +159,5 @@ stdenv.mkDerivation rec {
     # https://github.com/dlang/dmd/pull/6680
     license = licenses.boost;
     platforms = platforms.unix;
-    broken = true;
   };
 }
