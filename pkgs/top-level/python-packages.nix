@@ -7431,6 +7431,8 @@ in {
     inherit pythonOlder;
   };
 
+  pyphen = callPackage ../development/python-modules/pyphen {};
+
   pypoppler = buildPythonPackage rec {
     name = "pypoppler-${version}";
     version = "0.12.2";
