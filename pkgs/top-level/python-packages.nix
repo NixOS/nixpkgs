@@ -321,30 +321,7 @@ in {
 
   aiohttp = callPackage ../development/python-modules/aiohttp { };
 
-  aiohttp-cors = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "aiohttp-cors";
-    # 0.5.3 is the current version but gns3-server requires 0.5.1
-    version = "0.5.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/${pname}/${name}.tar.gz";
-      sha256 = "0szma27ri25fq4nwwvs36myddggw3jz4pyzmq63yz4xpw0jjdxck";
-    };
-
-    # Requires network access
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ aiohttp ]
-      ++ optional (pythonOlder "3.5") typing;
-
-    meta = {
-      description = "CORS support for aiohttp";
-      homepage = "https://github.com/aio-libs/aiohttp-cors";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ primeos ];
-    };
-  };
+  aiohttp-cors = callPackage ../development/python-modules/aiohttp/cors.nix { };
 
   alabaster = callPackage ../development/python-modules/alabaster {};
 
