@@ -5,39 +5,79 @@ with lib;
 let
   luks = config.boot.initrd.luks;
 
-  openCommand = name': { name, device, header, keyFile, keyFileSize, keyFileOffset, allowDiscards, yubikey, fallbackToPassword, ... }: assert name' == name; ''
+  commonFunctions = ''
+    die() {
+      echo "$@" >&2
+      exit 1
+    }
 
-    # Wait for a target (e.g. device, keyFile, header, ...) to appear.
     wait_target() {
         local name="$1"
         local target="$2"
+        local secs="''${3:-10}"
+        local desc="''${4:-$name $target to appear}"
 
         if [ ! -e $target ]; then
-            echo -n "Waiting 10 seconds for $name $target to appear"
+            echo -n "Waiting $secs seconds for $desc..."
             local success=false;
-            for try in $(seq 10); do
+            for try in $(seq $secs); do
                 echo -n "."
                 sleep 1
-                if [ -e $target ]; then success=true break; fi
+                if [ -e $target ]; then
+                    success=true
+                    break
+                fi
             done
-            if [ $success = true ]; then
+            if [ $success == true ]; then
                 echo " - success";
+                return 0
             else
                 echo " - failure";
+                return 1
             fi
         fi
+        return 0
     }
 
+    wait_yubikey() {
+      local secs="''${1:-10}"
+
+      ykinfo -v 1>/dev/null 2>&1
+      if [ $? != 0 ]; then
+          echo -n "Waiting $secs seconds for Yubikey to appear..."
+          local success=false
+          for try in $(seq $secs); do
+              echo -n .
+              sleep 1
+              ykinfo -v 1>/dev/null 2>&1
+              if [ $? == 0 ]; then
+                  success=true
+                  break
+              fi
+          done
+          if [ $success == true ]; then
+              echo " - success";
+              return 0
+          else
+              echo " - failure";
+              return 1
+          fi
+      fi
+      return 0
+    }
+  '';
+
+  openCommand = name': { name, device, header, keyFile, keyFileSize, keyFileOffset, allowDiscards, yubikey, fallbackToPassword, ... }: assert name' == name; ''
     # Wait for luksRoot (and optionally keyFile and/or header) to appear, e.g.
     # if on a USB drive.
-    wait_target "device" ${device}
-
-    ${optionalString (keyFile != null) ''
-      wait_target "key file" ${keyFile}
-    ''}
+    wait_target "device" ${device} || die "${device} is unavailable"
 
     ${optionalString (header != null) ''
-      wait_target "header" ${header}
+      wait_target "header" ${header} || die "${header} is unavailable"
+    ''}
+
+    ${optionalString (keyFile != null) ''
+      wait_target "key file" ${keyFile} || die "${keyFile} is unavailable"
     ''}
 
     open_normally() {
@@ -70,7 +110,6 @@ let
     }
 
     open_yubikey() {
-
         # Make all of these local to this function
         # to prevent their values being leaked
         local salt
@@ -95,10 +134,9 @@ let
         response="$(ykchalresp -${toString yubikey.slot} -x $challenge 2>/dev/null)"
 
         for try in $(seq 3); do
-
             ${optionalString yubikey.twoFactor ''
             echo -n "Enter two-factor passphrase: "
-            read -s k_user
+            read -rs k_user
             echo
             ''}
 
@@ -110,7 +148,7 @@ let
 
             echo -n "$k_luks" | hextorb | cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} --key-file=-
 
-            if [ $? == "0" ]; then
+            if [ $? == 0 ]; then
                 opened=true
                 break
             else
@@ -121,8 +159,7 @@ let
 
         if [ "$opened" == false ]; then
             umount ${yubikey.storage.mountPoint}
-            echo "Maximum authentication errors reached"
-            exit 1
+            die "Maximum authentication errors reached"
         fi
 
         echo -n "Gathering entropy for new salt (please enter random keys to generate entropy if this blocks for long)..."
@@ -157,7 +194,7 @@ let
         echo -n "$new_k_luks" | hextorb > ${yubikey.ramfsMountPoint}/new_key
         echo -n "$k_luks" | hextorb | cryptsetup luksChangeKey ${device} --key-file=- ${yubikey.ramfsMountPoint}/new_key
 
-        if [ $? == "0" ]; then
+        if [ $? == 0 ]; then
             echo -ne "$new_salt\n$new_iterations" > ${yubikey.storage.mountPoint}${yubikey.storage.path}
         else
             echo "Warning: Could not update LUKS key, current challenge persists!"
@@ -170,38 +207,11 @@ let
         umount ${yubikey.storage.mountPoint}
     }
 
-    ${optionalString (yubikey.gracePeriod > 0) ''
-    echo -n "Waiting ${toString yubikey.gracePeriod} seconds as grace..."
-    for i in $(seq ${toString yubikey.gracePeriod}); do
-        sleep 1
-        echo -n .
-    done
-    echo "ok"
-    ''}
-
-    yubikey_missing=true
-    ykinfo -v 1>/dev/null 2>&1
-    if [ $? != "0" ]; then
-        echo -n "waiting 10 seconds for yubikey to appear..."
-        for try in $(seq 10); do
-            sleep 1
-            ykinfo -v 1>/dev/null 2>&1
-            if [ $? == "0" ]; then
-                yubikey_missing=false
-                break
-            fi
-            echo -n .
-        done
-        echo "ok"
+    if wait_yubikey ${toString yubikey.gracePeriod}; then
+        open_yubikey
     else
-        yubikey_missing=false
-    fi
-
-    if [ "$yubikey_missing" == true ]; then
         echo "no yubikey found, falling back to non-yubikey open procedure"
         open_normally
-    else
-        open_yubikey
     fi
     ''}
 
@@ -397,9 +407,9 @@ in
                 };
 
                 gracePeriod = mkOption {
-                  default = 2;
+                  default = 10;
                   type = types.int;
-                  description = "Time in seconds to wait before attempting to find the Yubikey.";
+                  description = "Time in seconds to wait for the Yubikey.";
                 };
 
                 ramfsMountPoint = mkOption {
@@ -520,8 +530,8 @@ in
       ''}
     '';
 
-    boot.initrd.preLVMCommands = concatStrings (mapAttrsToList openCommand preLVM);
-    boot.initrd.postDeviceCommands = concatStrings (mapAttrsToList openCommand postLVM);
+    boot.initrd.preLVMCommands = commonFunctions + concatStrings (mapAttrsToList openCommand preLVM);
+    boot.initrd.postDeviceCommands = commonFunctions + concatStrings (mapAttrsToList openCommand postLVM);
 
     environment.systemPackages = [ pkgs.cryptsetup ];
   };
