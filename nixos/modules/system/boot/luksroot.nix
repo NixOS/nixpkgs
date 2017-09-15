@@ -67,7 +67,25 @@ let
     }
   '';
 
-  openCommand = name': { name, device, header, keyFile, keyFileSize, keyFileOffset, allowDiscards, yubikey, fallbackToPassword, ... }: assert name' == name; ''
+  preCommands = ''
+    # A place to store crypto things
+
+    # A ramfs is used here to ensure that the file used to update
+    # the key slot with cryptsetup will never get swapped out.
+    # Warning: Do NOT replace with tmpfs!
+    mkdir -p /crypt-ramfs
+    mount -t ramfs none /crypt-ramfs
+  '';
+
+  postCommands = ''
+    umount /crypt-ramfs 2>/dev/null
+  '';
+
+  openCommand = name': { name, device, header, keyFile, keyFileSize, keyFileOffset, allowDiscards, yubikey, fallbackToPassword, ... }: assert name' == name;
+  let
+    csopen   = "cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} ${optionalString (header != null) "--header=${header}"}";
+    cschange = "cryptsetup luksChangeKey ${device} ${optionalString (header != null) "--header=${header}"}";
+  in ''
     # Wait for luksRoot (and optionally keyFile and/or header) to appear, e.g.
     # if on a USB drive.
     wait_target "device" ${device} || die "${device} is unavailable"
@@ -76,31 +94,72 @@ let
       wait_target "header" ${header} || die "${header} is unavailable"
     ''}
 
-    ${optionalString (keyFile != null) ''
-      wait_target "key file" ${keyFile} || die "${keyFile} is unavailable"
-    ''}
+    do_open_passphrase() {
+        local passphrase
 
-    open_normally() {
-        echo luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} \
-          ${optionalString (header != null) "--header=${header}"} \
-          > /.luksopen_args
-        ${optionalString (keyFile != null) ''
-        ${optionalString fallbackToPassword "if [ -e ${keyFile} ]; then"}
-            echo " --key-file=${keyFile} ${optionalString (keyFileSize != null) "--keyfile-size=${toString keyFileSize}"}" \
-                 "${optionalString (keyFileOffset != null) "--keyfile-offset=${toString keyFileOffset}"}" \
-                 >> /.luksopen_args
-        ${optionalString fallbackToPassword ''
-        else
-            echo "keyfile ${keyFile} not found -- fallback to interactive unlocking"
-        fi
-        ''}
-        ''}
-        cryptsetup-askpass
-        rm /.luksopen_args
+        while true; do
+            echo -n "Passphrase for ${device}: "
+            passphrase=
+            while true; do
+                if [ -e /crypt-ramfs/passphrase ]; then
+                    echo "reused"
+                    passphrase=$(cat /crypt-ramfs/passphrase)
+                    break
+                else
+                    # ask cryptsetup-askpass
+                    echo -n "${device}" > /crypt-ramfs/device
+
+                    # and try reading it from /dev/console
+                    IFS= read -t 1 -rs passphrase
+                    if [ -n "$passphrase" ]; then
+                       ${if luks.reusePassphrases then ''
+                         # remember it for the next device
+                         echo -n "$passphrase" > /crypt-ramfs/passphrase
+                       '' else ''
+                         # Don't save it to ramfs. We are very paranoid
+                       ''}
+                       echo
+                       break
+                    fi
+                fi
+            done
+            echo -n "Verifiying passphrase for ${device}..."
+            echo -n "$passphrase" | ${csopen} --key-file=-
+            if [ $? == 0 ]; then
+                echo " - success"
+                ${if luks.reusePassphrases then ''
+                  # we don't rm here because we might reuse it for the next device
+                '' else ''
+                  rm -f /crypt-ramfs/passphrase
+                ''}
+                break
+            else
+                echo " - failure"
+                # ask for a different one
+                rm -f /crypt-ramfs/passphrase
+            fi
+        done
     }
 
-    ${optionalString (luks.yubikeySupport && (yubikey != null)) ''
+    # LUKS
+    open_normally() {
+        ${if (keyFile != null) then ''
+        if wait_target "key file" ${keyFile}; then
+            ${csopen} --key-file=${keyFile} \
+              ${optionalString (keyFileSize != null) "--keyfile-size=${toString keyFileSize}"} \
+              ${optionalString (keyFileOffset != null) "--keyfile-offset=${toString keyFileOffset}"}
+        else
+            ${if fallbackToPassword then "echo" else "die"} "${keyFile} is unavailable"
+            echo " - failing back to interactive password prompt"
+            do_open_passphrase
+        fi
+        '' else ''
+        do_open_passphrase
+        ''}
+    }
 
+    ${if luks.yubikeySupport && (yubikey != null) then ''
+    # Yubikey
     rbtohex() {
         ( od -An -vtx1 | tr -d ' \n' )
     }
@@ -109,7 +168,7 @@ let
         ( tr '[:lower:]' '[:upper:]' | sed -e 's/\([0-9A-F]\{2\}\)/\\\\\\x\1/gI' | xargs printf )
     }
 
-    open_yubikey() {
+    do_open_yubikey() {
         # Make all of these local to this function
         # to prevent their values being leaked
         local salt
@@ -146,7 +205,7 @@ let
                 k_luks="$(echo | pbkdf2-sha512 ${toString yubikey.keyLength} $iterations $response | rbtohex)"
             fi
 
-            echo -n "$k_luks" | hextorb | cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} --key-file=-
+            echo -n "$k_luks" | hextorb | ${csopen} --key-file=-
 
             if [ $? == 0 ]; then
                 opened=true
@@ -192,7 +251,7 @@ let
         mount -t ramfs none ${yubikey.ramfsMountPoint}
 
         echo -n "$new_k_luks" | hextorb > ${yubikey.ramfsMountPoint}/new_key
-        echo -n "$k_luks" | hextorb | cryptsetup luksChangeKey ${device} --key-file=- ${yubikey.ramfsMountPoint}/new_key
+        echo -n "$k_luks" | hextorb | ${cschange} --key-file=- ${yubikey.ramfsMountPoint}/new_key
 
         if [ $? == 0 ]; then
             echo -ne "$new_salt\n$new_iterations" > ${yubikey.storage.mountPoint}${yubikey.storage.path}
@@ -207,18 +266,37 @@ let
         umount ${yubikey.storage.mountPoint}
     }
 
-    if wait_yubikey ${toString yubikey.gracePeriod}; then
-        open_yubikey
-    else
-        echo "no yubikey found, falling back to non-yubikey open procedure"
-        open_normally
-    fi
-    ''}
+    open_yubikey() {
+        if wait_yubikey ${toString yubikey.gracePeriod}; then
+            do_open_yubikey
+        else
+            echo "No yubikey found, falling back to non-yubikey open procedure"
+            open_normally
+        fi
+    }
 
-    # open luksRoot and scan for logical volumes
-    ${optionalString ((!luks.yubikeySupport) || (yubikey == null)) ''
+    open_yubikey
+    '' else ''
     open_normally
     ''}
+  '';
+
+  askPass = pkgs.writeScriptBin "cryptsetup-askpass" ''
+    #!/bin/sh
+
+    ${commonFunctions}
+
+    while true; do
+        wait_target "luks" /crypt-ramfs/device 10 "LUKS to request a passphrase" || die "Passphrase is not requested now"
+        device=$(cat /crypt-ramfs/device)
+
+        echo -n "Passphrase for $device: "
+        IFS= read -rs passphrase
+        echo
+
+        rm /crypt-ramfs/device
+        echo -n "$passphrase" > /crypt-ramfs/passphrase
+    done
   '';
 
   preLVM = filterAttrs (n: v: v.preLVM) luks.devices;
@@ -263,6 +341,22 @@ in
       description = ''
         Whether to configure luks support in the initrd, when no luks
         devices are configured.
+      '';
+    };
+
+    boot.initrd.luks.reusePassphrases = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        When opening a new LUKS device try reusing last successful
+        passphrase.
+
+        Useful for mounting a number of devices that use the same
+        passphrase without retyping it several times.
+
+        Such setup can be useful if you use <command>cryptsetup
+        luksSuspend</command>. Different LUKS devices will still have
+        different master keys even when using the same passphrase.
       '';
     };
 
@@ -487,18 +581,8 @@ in
     # copy the cryptsetup binary and it's dependencies
     boot.initrd.extraUtilsCommands = ''
       copy_bin_and_libs ${pkgs.cryptsetup}/bin/cryptsetup
-
-      cat > $out/bin/cryptsetup-askpass <<EOF
-      #!$out/bin/sh -e
-      if [ -e /.luksopen_args ]; then
-        cryptsetup \$(cat /.luksopen_args)
-        killall -q cryptsetup
-      else
-        echo "Passphrase is not requested now"
-        exit 1
-      fi
-      EOF
-      chmod +x $out/bin/cryptsetup-askpass
+      copy_bin_and_libs ${askPass}/bin/cryptsetup-askpass
+      sed -i s,/bin/sh,$out/bin/sh, $out/bin/cryptsetup-askpass
 
       ${optionalString luks.yubikeySupport ''
         copy_bin_and_libs ${pkgs.yubikey-personalization}/bin/ykchalresp
@@ -530,8 +614,9 @@ in
       ''}
     '';
 
-    boot.initrd.preLVMCommands = commonFunctions + concatStrings (mapAttrsToList openCommand preLVM);
-    boot.initrd.postDeviceCommands = commonFunctions + concatStrings (mapAttrsToList openCommand postLVM);
+    boot.initrd.preFailCommands = postCommands;
+    boot.initrd.preLVMCommands = commonFunctions + preCommands + concatStrings (mapAttrsToList openCommand preLVM) + postCommands;
+    boot.initrd.postDeviceCommands = commonFunctions + preCommands + concatStrings (mapAttrsToList openCommand postLVM) + postCommands;
 
     environment.systemPackages = [ pkgs.cryptsetup ];
   };
