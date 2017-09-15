@@ -1,7 +1,8 @@
 { stdenv, fetchurl, pkgconfig, glib, zlib, libgpgerror, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
-  name = "gmime-2.6.23";
+  version = "2.6.23";
+  name = "gmime-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gmime/2.6/${name}.tar.xz";
