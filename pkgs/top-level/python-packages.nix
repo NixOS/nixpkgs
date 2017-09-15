@@ -25773,6 +25773,36 @@ EOF
     };
   };
 
+  poezio-git = buildPythonApplication rec {
+    name = "poezio-${version}";
+    version = "0.11-44-gc88459c";
+    src = pkgs.fetchgit {
+      url = "git://git.poez.io/poezio/";
+      rev = "v${version}";
+      sha256 = "0zhf84c6mk3zf1xpx2kd89ax05k4ngw5v51w99jdfxllfg74k2xi";
+    };
+
+    disabled = pythonOlder "3.4";
+
+    buildInputs = with self; [ pytest ];
+    propagatedBuildInputs = with self ; [ aiodns slixmpp pyinotify potr mpd2 ];
+
+    patches = [
+      ../development/python-modules/poezio/fix_gnupg_import.patch
+    ];
+
+    checkPhase = ''
+      py.test
+    '';
+
+    meta = {
+      description = "Free console XMPP client";
+      homepage = http://poez.io;
+      license = licenses.mit;
+      maintainers = with maintainers; [ lsix woffs ];
+    };
+  };
+
   potr = buildPythonPackage rec {
     version = "1.0.1";
     name = "potr-${version}";
