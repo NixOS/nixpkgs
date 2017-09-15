@@ -27,7 +27,8 @@ in
   boot.loader.generic-extlinux-compatible.enable = true;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelParams = ["console=ttyS0,115200n8" "console=tty0"];
+  # Increase the amount of CMA to ensure the virtual console on the RPi3 works.
+  boot.kernelParams = ["cma=32M" "console=ttyS0,115200n8" "console=tty0"];
   boot.consoleLogLevel = 7;
 
   # FIXME: this probably should be in installation-device.nix
