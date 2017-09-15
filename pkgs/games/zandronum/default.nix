@@ -1,31 +1,40 @@
 { stdenv, lib, fetchhg, cmake, pkgconfig, makeWrapper, callPackage
-, soundfont-fluid, SDL, mesa, bzip2, zlib, libjpeg, fluidsynth, openssl, sqlite-amalgamation, gtk2
+, soundfont-fluid, SDL, mesa, glew, bzip2, zlib, libjpeg, fluidsynth, openssl, gtk2, python3
 , serverOnly ? false
 }:
 
 let
   suffix = lib.optionalString serverOnly "-server";
   fmod = callPackage ./fmod.nix { };
+  sqlite = callPackage ./sqlite.nix { };
 
 # FIXME: drop binary package when upstream fixes their protocol versioning
 in stdenv.mkDerivation {
-  name = "zandronum${suffix}-2.1.2";
+  name = "zandronum${suffix}-3.0";
 
   src = fetchhg {
     url = "https://bitbucket.org/Torr_Samaho/zandronum-stable";
-    rev = "a3663b0061d5";
-    sha256 = "0qwsnbwhcldwrirfk6hpiklmcj3a7dzh6pn36nizci6pcza07p56";
+    rev = "dd3c3b57023f";
+    sha256 = "1f8pd8d2zjwdp6v9anp9yrkdbfhd2mp7svmnna0jiqgxjw6wkyls";
   };
+
+  # zandronum tries to download sqlite now when running cmake, don't let it
+
+  # it also needs the current mercurial revision info embedded in gitinfo.h
+  # otherwise, the client will fail to connect to servers because the
+  # protocol version doesn't match.
+
+  patches = [ ./zan_configure_impurity.patch ./add_gitinfo.patch ./dont_update_gitinfo.patch ];
 
   # I have no idea why would SDL and libjpeg be needed for the server part!
   # But they are.
-  buildInputs = [ openssl bzip2 zlib SDL libjpeg ]
-             ++ lib.optionals (!serverOnly) [ mesa fmod fluidsynth gtk2 ];
+  buildInputs = [ openssl bzip2 zlib SDL libjpeg sqlite ]
+             ++ lib.optionals (!serverOnly) [ mesa glew fmod fluidsynth gtk2 ];
 
-  nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
+  nativeBuildInputs = [ cmake pkgconfig makeWrapper python3 ];
 
   preConfigure = ''
-    ln -s ${sqlite-amalgamation}/* sqlite/
+    ln -s ${sqlite}/* sqlite/
     sed -ie 's| restrict| _restrict|g' dumb/include/dumb.h \
                                        dumb/src/it/*.c
   '' + lib.optionalString serverOnly ''
@@ -53,7 +62,7 @@ in stdenv.mkDerivation {
        $out/lib/zandronum
 
     # For some reason, while symlinks work for binary version, they don't for source one.
-    makeWrapper $out/lib/zandronum/zandronum${suffix} $out/bin/zandronum${suffix}
+    makeWrapper $out/lib/zandronum/zandronum${suffix} $out/bin/zandronum${suffix} --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH:${fluidsynth}/lib"
   '';
 
   postFixup = lib.optionalString (!serverOnly) ''
