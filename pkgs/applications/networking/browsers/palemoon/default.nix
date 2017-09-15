@@ -5,7 +5,7 @@
 , gtk2, hunspell, icu, libevent, libjpeg, libnotify
 , libstartup_notification, libvpx, makeWrapper, mesa
 , nspr, nss, pango, perl, python, libpulseaudio, sqlite
-, unzip, xlibs, which, yasm, zip, zlib, gcc
+, unzip, xlibs, which, yasm, zip, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     gst-plugins-base gstreamer gst_all_1.gst-plugins-base gtk2
     hunspell icu libevent libjpeg libnotify libstartup_notification
     libvpx makeWrapper mesa nspr nss pango perl pkgconfig python
-    libpulseaudio sqlite unzip which yasm zip zlib gcc
+    libpulseaudio sqlite unzip which yasm zip zlib
   ] ++ (with xlibs; [
     libX11 libXext libXft libXi libXrender libXScrnSaver
     libXt pixman scrnsaverproto xextproto
