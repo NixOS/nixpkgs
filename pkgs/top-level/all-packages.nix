@@ -13674,8 +13674,13 @@ with pkgs;
 
   calibre = libsForQt5.callPackage ../applications/misc/calibre { };
 
-  calligra = kde4.callPackage ../applications/office/calligra {
+  calligra2 = kde4.callPackage ../applications/office/calligra/2.nix {
     vc = vc_0_7;
+  };
+
+  calligra = libsForQt5.callPackage ../applications/office/calligra {
+    inherit (kdeApplications) akonadi-calendar akonadi-contacts;
+    openjpeg = openjpeg_1;
   };
 
   camlistore = callPackage ../applications/misc/camlistore { };
