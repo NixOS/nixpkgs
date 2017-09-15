@@ -6323,6 +6323,8 @@ in {
     };
   };
 
+  ijson = callPackage ../development/python-modules/ijson/default.nix {};
+
   imagesize = buildPythonPackage rec {
     name = "imagesize-${version}";
     version = "0.7.0";
