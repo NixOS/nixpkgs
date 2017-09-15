@@ -25130,65 +25130,7 @@ EOF
     };
   };
 
-  trollius = buildPythonPackage rec {
-    version = "1.0.4";
-    name = "trollius-${version}";
-    disabled = isPy34;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/trollius/${name}.tar.gz";
-      sha256 = "8884cae4ec6a2d593abcffd5e700626ad4618f42b11beb2b75998f2e8247de76";
-    };
-
-    buildInputs = with self; [ mock ]
-      ++ optional isPy26 unittest2;
-
-    propagatedBuildInputs = with self; []
-      ++ optional isPy26 ordereddict
-      ++ optional (isPy26 || isPy27 || isPyPy) futures;
-
-    # Some of the tests fail on darwin with `error: AF_UNIX path too long'
-    # because of the *long* path names for sockets
-    patchPhase = optionalString stdenv.isDarwin ''
-      sed -i -e "s|test_create_ssl_unix_connection|skip_test_create_ssl_unix_connection|" tests/test_events.py
-      sed -i -e "s|test_create_unix_connection|skip_test_create_unix_connection|" tests/test_events.py
-      sed -i -e "s|test_create_unix_connection|skip_test_create_unix_connection|" tests/test_events.py
-      sed -i -e "s|test_create_unix_connection|skip_test_create_unix_connection|" tests/test_events.py
-      sed -i -e "s|test_create_unix_server_existing_path_nonsock|skip_test_create_unix_server_existing_path_nonsock|" tests/test_unix_events.py
-      sed -i -e "s|test_create_unix_server_existing_path_sock|skip_test_create_unix_server_existing_path_sock|" tests/test_unix_events.py
-      sed -i -e "s|test_create_unix_server_ssl_verified|skip_test_create_unix_server_ssl_verified|" tests/test_events.py
-      sed -i -e "s|test_create_unix_server_ssl_verified|skip_test_create_unix_server_ssl_verified|" tests/test_events.py
-      sed -i -e "s|test_create_unix_server_ssl_verified|skip_test_create_unix_server_ssl_verified|" tests/test_events.py
-      sed -i -e "s|test_create_unix_server_ssl_verify_failed|skip_test_create_unix_server_ssl_verify_failed|" tests/test_events.py
-      sed -i -e "s|test_create_unix_server_ssl_verify_failed|skip_test_create_unix_server_ssl_verify_failed|" tests/test_events.py
-      sed -i -e "s|test_create_unix_server_ssl_verify_failed|skip_test_create_unix_server_ssl_verify_failed|" tests/test_events.py
-      sed -i -e "s|test_create_unix_server_ssl|skip_test_create_unix_server_ssl|" tests/test_events.py
-      sed -i -e "s|test_create_unix_server_ssl|skip_test_create_unix_server_ssl|" tests/test_events.py
-      sed -i -e "s|test_create_unix_server_ssl|skip_test_create_unix_server_ssl|" tests/test_events.py
-      sed -i -e "s|test_create_unix_server|skip_test_create_unix_server|" tests/test_events.py
-      sed -i -e "s|test_create_unix_server|skip_test_create_unix_server|" tests/test_events.py
-      sed -i -e "s|test_create_unix_server|skip_test_create_unix_server|" tests/test_events.py
-      sed -i -e "s|test_open_unix_connection_error|skip_test_open_unix_connection_error|" tests/test_streams.py
-      sed -i -e "s|test_open_unix_connection_no_loop_ssl|skip_test_open_unix_connection_no_loop_ssl|" tests/test_streams.py
-      sed -i -e "s|test_open_unix_connection|skip_test_open_unix_connection|" tests/test_streams.py
-      sed -i -e "s|test_pause_reading|skip_test_pause_reading|" tests/test_subprocess.py
-      sed -i -e "s|test_read_pty_output|skip_test_read_pty_output|" tests/test_events.py
-      sed -i -e "s|test_start_unix_server|skip_test_start_unix_server|" tests/test_streams.py
-      sed -i -e "s|test_unix_sock_client_ops|skip_test_unix_sock_client_ops|" tests/test_events.py
-      sed -i -e "s|test_unix_sock_client_ops|skip_test_unix_sock_client_ops|" tests/test_events.py
-      sed -i -e "s|test_unix_sock_client_ops|skip_test_unix_sock_client_ops|" tests/test_events.py
-      sed -i -e "s|test_write_pty|skip_test_write_pty|" tests/test_events.py
-    '' + optionalString isPy26 ''
-      sed -i -e "s|test_env_var_debug|skip_test_env_var_debug|" tests/test_tasks.py
-    '';
-
-    meta = {
-      description = "Port of the Tulip project (asyncio module, PEP 3156) on Python 2";
-      homepage = "https://bitbucket.org/enovance/trollius";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
+  trollius = callPackage ../development/python-modules/trollius {};
 
   neovim = buildPythonPackage rec {
     version = "0.1.13";
