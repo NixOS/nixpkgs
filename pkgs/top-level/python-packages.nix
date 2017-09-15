@@ -20228,12 +20228,17 @@ in {
 
   sqlmap = callPackage ../development/python-modules/sqlmap { };
   pgpdump = self.buildPythonPackage rec {
-    name = "pgpdump-1.5";
+    pname = "pgpdump";
+    version = "1.5";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pgpdump/pgpdump-1.5.tar.gz";
-      sha256 = "1c4700857bf7ba735b08cfe4101aa3a4f5fd839657af249c17b2697c20829668";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0s4nh8h7qsdj2yf29bspjs1zvxd4lcd11r6g11dp7fppgf2h0iqw";
     };
+
+    # Disabling check because of: https://github.com/toofishes/python-pgpdump/issues/18
+    doCheck = false;
 
     meta = {
       description = "Python library for parsing PGP packets";
