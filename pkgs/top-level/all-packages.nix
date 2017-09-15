@@ -15019,6 +15019,8 @@ with pkgs;
 
   kermit = callPackage ../tools/misc/kermit { };
 
+  kexi = libsForQt5.callPackage ../applications/office/kexi { };
+
   keyfinder = libsForQt5.callPackage ../applications/audio/keyfinder { };
 
   keyfinder-cli = libsForQt5.callPackage ../applications/audio/keyfinder-cli { };
