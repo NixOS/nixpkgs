@@ -106,4 +106,9 @@ INET_DIAG n # Has been used for heap based attacks in the past
 # Use -fstack-protector-strong (gcc 4.9+) for best stack canary coverage.
 CC_STACKPROTECTOR_REGULAR n
 CC_STACKPROTECTOR_STRONG y
+
+# Enable compile/run-time buffer overflow detection ala glibc's _FORTIFY_SOURCE
+${optionalString (versionAtLeast version "4.13") ''
+  FORTIFY_SOURCE y
+''}
 ''
