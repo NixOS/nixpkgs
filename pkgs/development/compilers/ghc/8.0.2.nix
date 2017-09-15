@@ -3,7 +3,7 @@
 
 # build-tools
 , bootPkgs, hscolour
-, coreutils, fetchurl, perl, sphinx
+, coreutils, fetchpatch, fetchurl, perl, sphinx
 
 , libffi, libiconv ? null, ncurses
 
@@ -75,8 +75,15 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "doc" ];
 
-  patches = [ ./ghc-gold-linker.patch ]
-    ++ stdenv.lib.optional stdenv.isLinux ./ghc-no-madv-free.patch
+  patches = [
+    ./ghc-gold-linker.patch
+    (fetchpatch { # Unreleased 1.24.x commit
+      url = "https://github.com/haskell/cabal/commit/6394cb0b6eba91a8692a3d04b2b56935aed7cccd.patch";
+      sha256 = "14xxjg0nb1j1pw0riac3v385ka92qhxxblfmwyvbghz7kry6axy0";
+      stripLen = 1;
+      extraPrefix = "libraries/Cabal/";
+    })
+  ] ++ stdenv.lib.optional stdenv.isLinux ./ghc-no-madv-free.patch
     ++ stdenv.lib.optional stdenv.isDarwin ./ghc-8.0.2-no-cpp-warnings.patch;
 
   # GHC is a bit confused on its cross terminology.
