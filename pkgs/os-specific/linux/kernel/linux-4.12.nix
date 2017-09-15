@@ -8,11 +8,4 @@ import ./generic.nix (args // rec {
     url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";
     sha256 = "09zxmknh6awhqmj8dyq95bdlwcasryy35hkjxjlzixdgn52kzaw6";
   };
-
-  kernelPatches = args.kernelPatches;
-
-  features.iwlwifi = true;
-  features.efiBootStub = true;
-  features.needsCifsUtils = true;
-  features.netfilterRPFilter = true;
 } // (args.argsOverride or {}))
