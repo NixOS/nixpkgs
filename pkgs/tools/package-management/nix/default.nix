@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, perl, curl, bzip2, sqlite, openssl ? null, xz
 , pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli, readline
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
-, libseccomp, busybox
+, libseccomp, busybox, nlohmann_json
 , hostPlatform
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
@@ -39,7 +39,7 @@ let
 
     buildInputs = [ curl openssl sqlite xz ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-      ++ lib.optionals fromGit [ brotli readline ] # Since 1.12
+      ++ lib.optionals fromGit [ brotli readline nlohmann_json ] # Since 1.12
       ++ lib.optional stdenv.isLinux libseccomp
       ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && is112)
           (aws-sdk-cpp.override {
@@ -161,12 +161,12 @@ in rec {
 
   nixUnstable = (lib.lowPrio (common rec {
     name = "nix-1.12${suffix}";
-    suffix = "pre5511_c94f3d55";
+    suffix = "pre5619_346aeee1";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "c94f3d5575d7af5403274d1e9e2f3c9d72989751";
-      sha256 = "1akfzzm4f07wj6l7za916xv5rnh71pk3vl8dphgradjfqb37bv18";
+      rev = "346aeee1cb21b5cab5ddc3e8658c88321f513761";
+      sha256 = "0lyrs0mqnh89w1nzrqpxvnh7bdjpg8j22xaidql47f1nwbblmn3f";
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings { nix = nixUnstable; }; };
