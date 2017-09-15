@@ -1,27 +1,20 @@
 { lib, stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation {
-  name = "sqlite-amalgamation-201505302257";
+  name = "sqlite-zandronum-3.0";
 
   src = fetchurl {
-    url = "https://www.sqlite.org/snapshot/sqlite-amalgamation-201505302257.zip";
-    sha256 = "0488wjrpnxd61g7pcka6fckx0q8yl1k26i6q5hrmkm92qcpml76h";
+    url = "https://www.sqlite.org/2017/sqlite-autoconf-3180000.tar.gz";
+    sha256 = "0p5cx7nbjxk7glcm277ypi5w4gv144qazw79ql47svlpccj62mrp";
   };
 
   phases = [ "unpackPhase" "buildPhase" ];
-
-  buildInputs = [ unzip ];
-
-  unpackPhase = ''
-    unzip $src
-  '';
 
   buildPhase = ''
     mkdir -p $out
     cp sqlite3.c $out/
     cp sqlite3.h $out/
     cp sqlite3ext.h $out/
-    cp shell.c $out/
   '';
 
   meta = {
