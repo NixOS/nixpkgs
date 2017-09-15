@@ -362,6 +362,8 @@ with pkgs;
 
   a2ps = callPackage ../tools/text/a2ps { };
 
+  abcmidi = callPackage ../tools/audio/abcmidi { };
+
   abduco = callPackage ../tools/misc/abduco { };
 
   acbuild = callPackage ../applications/misc/acbuild { };
