@@ -1,5 +1,6 @@
 { gui ? true,
   buildPythonPackage, fetchFromGitHub, lib,
+  isPy34,
   sphinx_1_2, lxml, isodate, numpy, pytest,
   tkinter ? null, py3to2,
   ... }:
@@ -20,6 +21,10 @@ in
 
 buildPythonPackage {
   name = "arelle-${version}${lib.optionalString (!gui) "-headless"}";
+  # Python 3.4 is the 'officially supported' version,
+  # see http://arelle.org/download/
+  # Python 2.7 seems feasible, but did not work out of the box.
+  disabled = !isPy34;
   inherit src;
   outputs = ["out" "doc"];
   postPatch = "rm testParser2.py";
