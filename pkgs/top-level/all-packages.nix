@@ -15805,6 +15805,7 @@ with pkgs;
   pmenu = callPackage ../applications/misc/pmenu { };
 
   poezio = python3Packages.poezio;
+  poezio-git = python3Packages.poezio-git;
 
   pommed = callPackage ../os-specific/linux/pommed {};
 
