@@ -2,8 +2,7 @@
 { haskellPackages, src, deps ? p : [], name }: let
   inherit (haskellPackages) ghc ghcWithPackages;
   with-env = ghcWithPackages deps;
-  crossPrefix = if (ghc.cross or null) != null then "${ghc.cross.config}-" else "";
-  ghcName = "${crossPrefix}ghc";
+  ghcName = "${ghc.prefix}ghc";
 in runCommand name { buildInputs = [ with-env cctools ]; } ''
   mkdir -p $out/lib
   mkdir -p $out/include

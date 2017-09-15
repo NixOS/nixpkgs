@@ -1,13 +1,27 @@
-{ stdenv, fetchurl, fetchpatch, bootPkgs, perl, ncurses, libiconv, binutils, coreutils
-, libxml2, libxslt, docbook_xsl, docbook_xml_dtd_45, docbook_xml_dtd_42, hscolour
+{ stdenv, __targetPackages
+, buildPlatform, hostPlatform, targetPlatform
 
-  # If enabled GHC will be build with the GPL-free but slower integer-simple
+# build-tools
+, bootPkgs, hscolour
+, binutils, coreutils, fetchurl, fetchpatch, perl
+, docbook_xsl, docbook_xml_dtd_45, docbook_xml_dtd_42, libxml2, libxslt
+
+, ncurses, libiconv
+
+, # If enabled GHC will be build with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-, enableIntegerSimple ? false, gmp
+  enableIntegerSimple ? false, gmp ? null
 }:
+
+assert !enableIntegerSimple -> gmp != null;
 
 let
   inherit (bootPkgs) ghc;
+
+  # TODO(@Ericson2314) Make unconditional
+  prefix = stdenv.lib.optionalString
+    (targetPlatform != hostPlatform)
+    "${targetPlatform.config}-";
 
   buildMK = ''
     libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-includes="${ncurses.dev}/include"
@@ -27,7 +41,7 @@ in
 
 stdenv.mkDerivation rec {
   version = "7.10.2";
-  name = "ghc-${version}";
+  name = "${prefix}ghc-${version}";
 
   src = fetchurl {
     url = "https://downloads.haskell.org/~ghc/7.10.2/${name}-src.tar.xz";
@@ -64,7 +78,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     # Install the bash completion file.
-    install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/ghc
+    install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${prefix}ghc
 
     # Patch scripts to include "readelf" and "cat" in $PATH.
     for i in "$out/bin/"*; do
@@ -75,7 +89,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit bootPkgs;
+    inherit bootPkgs prefix;
   };
 
   meta = {

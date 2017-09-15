@@ -1,20 +1,33 @@
-{ stdenv, lib, fetchgit, bootPkgs, perl, ncurses, libiconv, binutils, coreutils
-, autoconf, automake, happy, alex, python3, buildPlatform, targetPlatform
+{ stdenv, __targetPackages
+, buildPlatform, hostPlatform, targetPlatform
 , selfPkgs, cross ? null
 
-  # If enabled GHC will be build with the GPL-free but slower integer-simple
+# build-tools
+, bootPkgs, alex, happy
+, autoconf, automake, binutils, coreutils, fetchgit, perl, python3
+
+, libiconv ? null, ncurses
+
+, # If enabled, GHC will be build with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-, enableIntegerSimple ? false, gmp
+  enableIntegerSimple ? false, gmp ? null
+
 , version ? "8.3.20170808"
 }:
+
+assert !enableIntegerSimple -> gmp != null;
 
 let
   inherit (bootPkgs) ghc;
 
-  commonBuildInputs = [ ghc perl autoconf automake happy alex python3 ];
-
   rev = "14457cf6a50f708eecece8f286f08687791d51f7";
 
+  # TODO(@Ericson2314) Make unconditional
+  prefix = stdenv.lib.optionalString
+    (targetPlatform != hostPlatform)
+    "${targetPlatform.config}-";
+
+  commonBuildInputs = [ ghc perl autoconf automake happy alex python3 ];
   commonPreConfigure =  ''
     echo ${version} >VERSION
     echo ${rev} >GIT_COMMIT_ID
@@ -27,7 +40,8 @@ let
   '' + stdenv.lib.optionalString enableIntegerSimple ''
     echo "INTEGER_LIBRARY=integer-simple" > mk/build.mk
   '';
-in stdenv.mkDerivation (rec {
+in
+stdenv.mkDerivation (rec {
   inherit version rev;
   name = "ghc-${version}";
 
@@ -57,15 +71,17 @@ in stdenv.mkDerivation (rec {
 
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
-  stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!stdenv.isDarwin) "--keep-file-symbols";
+  stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!targetPlatform.isDarwin) "--keep-file-symbols";
 
   checkTarget = "test";
 
+  # zsh and other shells are smart about `{ghc}` but bash isn't, and doesn't
+  # treat that as a unary `{x,y,z,..}` repetition.
   postInstall = ''
-    paxmark m $out/lib/${name}/bin/{ghc,haddock}
+    paxmark m $out/lib/${name}/bin/${if targetPlatform != hostPlatform then "ghc" else "{ghc,haddock}"}
 
     # Install the bash completion file.
-    install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/ghc
+    install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${prefix}ghc
 
     # Patch scripts to include "readelf" and "cat" in $PATH.
     for i in "$out/bin/"*; do
@@ -78,7 +94,7 @@ in stdenv.mkDerivation (rec {
   outputs = [ "out" "doc" ];
 
   passthru = {
-    inherit bootPkgs;
+    inherit bootPkgs prefix;
   } // stdenv.lib.optionalAttrs (targetPlatform != buildPlatform) {
     crossCompiler = selfPkgs.ghc.override {
       cross = targetPlatform;
@@ -110,7 +126,7 @@ in stdenv.mkDerivation (rec {
     "--enable-bootstrap-with-devel-snapshot"
   ] ++
     # fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
-    lib.optional (cross.config or null == "aarch64-apple-darwin14") "--disable-large-address-space";
+    stdenv.lib.optional (cross.config or null == "aarch64-apple-darwin14") "--disable-large-address-space";
 
   buildInputs = commonBuildInputs;
 
