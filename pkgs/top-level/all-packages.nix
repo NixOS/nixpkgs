@@ -18472,6 +18472,8 @@ with pkgs;
     sbcl = null;
   };
 
+  mxnet = callPackage ../applications/science/math/mxnet { };
+
   wxmaxima = callPackage ../applications/science/math/wxmaxima { wxGTK = wxGTK30; };
 
   pari = callPackage ../applications/science/math/pari { tex = texlive.combined.scheme-basic; };
