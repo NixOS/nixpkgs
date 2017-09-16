@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, six, glibcLocales, pytest }:
+{ stdenv, pythonOlder, buildPythonPackage, fetchPypi, six, glibcLocales, pytest }:
 
 buildPythonPackage rec {
   pname = "hcs_utils";
@@ -12,7 +12,15 @@ buildPythonPackage rec {
 
   LC_ALL="en_US.UTF-8";
 
-  buildInputs = [ six glibcLocales pytest ];
+  checkPhase = ''
+    # root does not has /root as home in sandbox
+    py.test -k 'not test_expand' hcs_utils/test
+  '';
+
+  buildInputs = [ six glibcLocales ];
+  checkInputs = [ pytest ];
+
+  disabled = pythonOlder "3.4";
 
   meta = with stdenv.lib; {
     description = "Library collecting some useful snippets";
