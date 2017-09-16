@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, xorg, mesa_glu
+{ lib, stdenv, stdenv_gcc5, fetchurl, fetchFromGitHub, cmake, pkgconfig, xorg, mesa_glu
 , mesa_noglu, glew, ocl-icd, python3
 , cudaSupport ? false, cudatoolkit
 }:
 
-stdenv.mkDerivation rec {
+(if cudaSupport then stdenv_gcc5 else stdenv).mkDerivation rec {
   name = "opensubdiv-${version}";
   version = "3.2.0";
 
