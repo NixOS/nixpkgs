@@ -19462,6 +19462,8 @@ in {
 
   rpm = (pkgs.rpm.override{inherit python;});
 
+  rpmfluff = callPackage ../development/python-modules/rpmfluff {};
+
   rpy2 = buildPythonPackage rec {
     name = "rpy2-2.8.2";
     disabled = isPyPy;
