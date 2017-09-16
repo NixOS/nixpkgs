@@ -5560,21 +5560,6 @@ in {
     buildInputs = with self; [ fudge_9 nose ];
   };
 
-  fedora_cert = buildPythonPackage rec {
-    name = "fedora-cert-0.5.9.2";
-    meta.maintainers = with maintainers; [ mornfall ];
-    format = "other";
-
-    src = pkgs.fetchurl {
-      url = "https://fedorahosted.org/releases/f/e/fedora-packager/fedora-packager-0.5.9.2.tar.bz2";
-      sha256 = "105swvzshgn3g6bjwk67xd8pslnhpxwa63mdsw6cl4c7cjp2blx9";
-    };
-
-    propagatedBuildInputs = with self; [ python_fedora pyopenssl ];
-    postInstall = "mv $out/bin/fedpkg $out/bin/fedora-cert-fedpkg";
-    doCheck = false;
-  };
-
   fedpkg = buildPythonPackage (rec {
     name = "fedpkg-1.14";
     meta.maintainers = with maintainers; [ mornfall ];
