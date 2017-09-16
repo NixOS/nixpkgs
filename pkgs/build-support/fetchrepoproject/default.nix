@@ -1,4 +1,4 @@
-{ stdenv, git, gitRepo, gnupg ? null, cacert, copyPathsToStore }:
+{ stdenv, gitRepo, cacert, copyPathsToStore }:
 
 { name, manifest, rev ? "HEAD", sha256
 , repoRepoURL ? "", repoRepoRev ? "", referenceDir ? ""
@@ -45,11 +45,14 @@ in stdenv.mkDerivation {
     "GIT_PROXY_COMMAND" "SOCKS_SERVER"
   ];
 
-  buildInputs = [ git gitRepo cacert ] ++ optional (gnupg != null) [ gnupg ];
+  buildInputs = [ gitRepo cacert ];
 
   GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   buildCommand = ''
+    # Path must be absolute (e.g. for GnuPG: ~/.repoconfig/gnupg/pubring.kbx)
+    export HOME="$(pwd)"
+
     mkdir .repo
     ${optionalString (local_manifests != []) ''
       mkdir .repo/local_manifests
@@ -58,7 +61,6 @@ in stdenv.mkDerivation {
       done
     ''}
 
-    export HOME=.repo
     repo init ${concatStringsSep " " repoInitFlags}
     repo sync --jobs=$NIX_BUILD_CORES --current-branch
     ${optionalString (!createMirror) "rm -rf $out/.repo"}
