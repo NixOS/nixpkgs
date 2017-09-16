@@ -26,6 +26,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       users.users.sybil = { isNormalUser = true; group = "wheel"; };
       security.sudo = { enable = true; wheelNeedsPassword = false; };
       boot.kernel.sysctl."vm.swappiness" = 1;
+      boot.kernelParams = [ "vsyscall=emulate" ];
     };
 
   testScript =
@@ -125,6 +126,11 @@ import ./make-test.nix ({ pkgs, ...} : {
           $machine->succeed('[ `sysctl -ne vm.swappiness` = 1 ]');
           $machine->execute('sysctl vm.swappiness=60');
           $machine->succeed('[ `sysctl -ne vm.swappiness` = 60 ]');
+      };
+
+      # Test boot parameters
+      subtest "bootparam", sub {
+          $machine->succeed('grep -Fq vsyscall=emulate /proc/cmdline');
       };
     '';
 })

@@ -96,7 +96,6 @@ in rec {
         nixos.tests.plasma5.x86_64-linux # avoid big build on i686
         (all nixos.tests.kernel-latest)
         (all nixos.tests.kernel-lts)
-        (all nixos.tests.kernel-params)
         #(all nixos.tests.lightdm)
         (all nixos.tests.login)
         (all nixos.tests.misc)
