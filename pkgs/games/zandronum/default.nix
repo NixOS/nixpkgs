@@ -8,7 +8,6 @@ let
   fmod = callPackage ./fmod.nix { };
   sqlite = callPackage ./sqlite.nix { };
 
-# FIXME: drop binary package when upstream fixes their protocol versioning
 in stdenv.mkDerivation {
   name = "zandronum${suffix}-3.0";
 
@@ -37,7 +36,7 @@ in stdenv.mkDerivation {
     ln -s ${sqlite}/* sqlite/
     sed -ie 's| restrict| _restrict|g' dumb/include/dumb.h \
                                        dumb/src/it/*.c
-  '' + lib.optionalString serverOnly ''
+  '' + lib.optionalString (!serverOnly) ''
     sed -i \
       -e "s@/usr/share/sounds/sf2/@${soundfont-fluid}/share/soundfonts/@g" \
       -e "s@FluidR3_GM.sf2@FluidR3_GM2-2.sf2@g" \
@@ -60,10 +59,10 @@ in stdenv.mkDerivation {
        *.pk3 \
        ${lib.optionalString (!serverOnly) "liboutput_sdl.so"} \
        $out/lib/zandronum
-
-    # For some reason, while symlinks work for binary version, they don't for source one.
-    makeWrapper $out/lib/zandronum/zandronum${suffix} $out/bin/zandronum${suffix} --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH:${fluidsynth}/lib"
-  '';
+  '' + (if (!serverOnly) then
+          ''makeWrapper $out/lib/zandronum/zandronum $out/bin/zandronum --prefix LD_LIBRARY_PATH : "$LD_LIBRARY_PATH:${fluidsynth}/lib"''
+        else
+          ''makeWrapper $out/lib/zandronum/zandronum${suffix} $out/bin/zandronum${suffix}'');
 
   postFixup = lib.optionalString (!serverOnly) ''
     patchelf --set-rpath $(patchelf --print-rpath $out/lib/zandronum/zandronum):$out/lib/zandronum \
@@ -73,7 +72,7 @@ in stdenv.mkDerivation {
   meta = with stdenv.lib; {
     homepage = http://zandronum.com/;
     description = "Multiplayer oriented port, based off Skulltag, for Doom and Doom II by id Software";
-    maintainers = with maintainers; [ lassulus ];
+    maintainers = with maintainers; [ lassulus MP2E ];
     license = licenses.unfreeRedistributable;
     platforms = platforms.linux;
   };
