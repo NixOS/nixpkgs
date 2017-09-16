@@ -305,6 +305,7 @@
   #./services/misc/ihaskell.nix
   ./services/misc/irkerd.nix
   ./services/misc/jackett.nix
+  ./services/misc/logkeys.nix
   ./services/misc/leaps.nix
   ./services/misc/mantisbt.nix
   ./services/misc/mathics.nix
