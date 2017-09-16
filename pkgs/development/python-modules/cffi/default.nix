@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, isPyPy, fetchPypi, libffi, pycparser, pytest }:
+{ stdenv, buildPythonPackage, isPyPy, fetchPypi, libffi, pycparser, pytest }:
 
 if isPyPy then null else buildPythonPackage rec {
   pname = "cffi";
@@ -13,15 +13,14 @@ if isPyPy then null else buildPythonPackage rec {
   propagatedBuildInputs = [ libffi pycparser ];
   buildInputs = [ pytest ];
 
-  patchPhase = ''
-    substituteInPlace testing/cffi0/test_ownlib.py --replace "gcc" "cc"
-  '';
+  # The tests use -Werror but with python3.6 clang detects some unreachable code.
+  NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.cc.isClang "-Wno-unreachable-code";
 
   checkPhase = ''
     py.test
   '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     maintainers = with maintainers; [ domenkozar ];
     homepage = https://cffi.readthedocs.org/;
     license = with licenses; [ mit ];
