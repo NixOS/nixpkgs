@@ -6,7 +6,7 @@ let
   cfg = config.services.ipfs;
 
   ipfsFlags = toString ([
-    #(optionalString  cfg.autoMount                   "--mount")
+    (optionalString  cfg.autoMount                   "--mount")
     (optionalString  cfg.autoMigrate                 "--migrate")
     (optionalString  cfg.enableGC                    "--enable-gc")
     (optionalString (cfg.serviceFdlimit != null)     "--manage-fdlimit=false")
@@ -40,7 +40,7 @@ let
       ipfs repo fsck # workaround for BUG #4212 (https://github.com/ipfs/go-ipfs/issues/4214)
       ipfs --local config Addresses.API ${cfg.apiAddress}
       ipfs --local config Addresses.Gateway ${cfg.gatewayAddress}
-    '' + optionalString false/*cfg.autoMount*/ ''
+    '' + optionalString cfg.autoMount ''
       ipfs --local config Mounts.FuseAllowOther --json true
       ipfs --local config Mounts.IPFS ${cfg.ipfsMountDir}
       ipfs --local config Mounts.IPNS ${cfg.ipnsMountDir}
@@ -103,11 +103,11 @@ in {
         description = "Whether IPFS should try to migrate the file system automatically";
       };
 
-      #autoMount = mkOption {
-      #  type = types.bool;
-      #  default = false;
-      #  description = "Whether IPFS should try to mount /ipfs and /ipns at startup.";
-      #};
+      autoMount = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether IPFS should try to mount /ipfs and /ipns at startup.";
+      };
 
       ipfsMountDir = mkOption {
         type = types.str;
@@ -185,6 +185,9 @@ in {
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ wrapped ];
+    environment.etc."fuse.conf" = mkIf cfg.autoMount { text = ''
+      user_allow_other
+    ''; };
 
     users.extraUsers = mkIf (cfg.user == "ipfs") {
       ipfs = {
@@ -208,7 +211,7 @@ in {
 
       preStart = ''
         install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.dataDir}
-      '' + optionalString false/*cfg.autoMount*/ ''
+      '' + optionalString cfg.autoMount ''
         install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.ipfsMountDir}
         install -m 0755 -o ${cfg.user} -g ${cfg.group} -d ${cfg.ipnsMountDir}
       '';
