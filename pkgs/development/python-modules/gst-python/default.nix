@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-python";
-  version = "1.10.4";
+  version = "1.12.2";
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
       "${meta.homepage}/src/gst-python/${name}.tar.xz"
       "mirror://gentoo/distfiles/${name}.tar.xz"
       ];
-    sha256 = "04l2hvvz9b0f3nyds1k3yfk5di8a91fpr6maj19c11mwp1s82l2r";
+    sha256 = "0iwy0v2k27wd3957ich6j5f0f04b0wb2mb175ypf2lx68snk5k7l";
   };
 
   patches = [ ./different-path-with-pygobject.patch ];
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   passthru.pythonPath = [];
 
   meta = {
-    homepage = http://gstreamer.freedesktop.org;
+    homepage = https://gstreamer.freedesktop.org;
 
     description = "Python bindings for GStreamer";
 
