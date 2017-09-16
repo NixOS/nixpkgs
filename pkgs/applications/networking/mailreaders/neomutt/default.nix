@@ -2,14 +2,14 @@
 , cyrus_sasl, gss, gpgme, kerberos, libidn, notmuch, openssl, lmdb, libxslt, docbook_xsl }:
 
 stdenv.mkDerivation rec {
-  version = "20170907";
+  version = "20170912";
   name = "neomutt-${version}";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = "neomutt-${version}";
-    sha256 = "0j2k5d77j5dvfh0yqihgvynnxxv2s5lf3pl50dr8b5b4jk04b961";
+    sha256 = "0qndszmaihly3pp2wqiqm31nxbv9ys3j05kzffaqhzngfilmar9g";
   };
 
   nativeBuildInputs = [ autoreconfHook docbook_xsl libxslt.bin which ];
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A small but very powerful text-based mail client";
     homepage    = http://www.neomutt.org;
-    license     = stdenv.lib.licenses.gpl2Plus;
+    license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ cstrahan erikryb jfrankenau vrthra ];
     platforms   = platforms.unix;
   };

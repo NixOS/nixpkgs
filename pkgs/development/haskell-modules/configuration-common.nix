@@ -104,6 +104,10 @@ self: super: {
   # Fix test trying to access /home directory
   shell-conduit = (overrideCabal super.shell-conduit (drv: {
     postPatch = "sed -i s/home/tmp/ test/Spec.hs";
+
+    # the tests for shell-conduit on Darwin illegitimatey assume non-GNU echo
+    # see: https://github.com/psibi/shell-conduit/issues/12
+    doCheck = !pkgs.stdenv.hostPlatform.isDarwin;
   }));
 
   # https://github.com/froozen/kademlia/issues/2
@@ -400,6 +404,12 @@ self: super: {
   th-printf = dontCheck super.th-printf;
   thumbnail-plus = dontCheck super.thumbnail-plus;
   tickle = dontCheck super.tickle;
+  tldr = super.tldr.override {
+    # shell-conduit determines what commands are available at compile-time, so
+    # that tldr will not compile unless the shell-conduit it uses is compiled
+    # with git in its environment.
+    shell-conduit = addBuildTool self.shell-conduit pkgs.git;
+  };
   tpdb = dontCheck super.tpdb;
   translatable-intset = dontCheck super.translatable-intset;
   ua-parser = dontCheck super.ua-parser;
@@ -928,6 +938,9 @@ self: super: {
   # during the install phase for no apparent reason:
   # https://hydra.nixos.org/build/60678124
   Agda = markBroken (super.Agda.override { happy = self.happy_1_19_5; });
+
+  # cryptol-2.5.0 doesn't want happy 1.19.6+.
+  cryptol = super.cryptol.override { happy = self.happy_1_19_5; };
 
   # https://github.com/jtdaugherty/text-zipper/issues/11
   text-zipper = dontCheck super.text-zipper;

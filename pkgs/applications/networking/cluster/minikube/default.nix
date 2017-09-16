@@ -15,15 +15,15 @@ let
   # instead, we download localkube ourselves and shove it into the minikube binary. The versions URL that minikube uses is
   # currently https://storage.googleapis.com/minikube/k8s_releases.json
 
-  localkube-version = "1.7.4";
+  localkube-version = "1.7.5";
   localkube-binary = fetchurl {
     url = "https://storage.googleapis.com/minikube/k8sReleases/v${localkube-version}/localkube-linux-amd64";
-    sha256 = "1v9zq6ivcs2qvdmhidvvp0krd1sxgqvqpp4bcl9is85vpdxhk95b";
+    sha256 = "1kn4lwnn961r19hqnkgr13np80zqk2fhp8xkhrvxzq6v6shk7gfz";
   };
 in buildGoPackage rec {
   pname   = "minikube";
   name    = "${pname}-${version}";
-  version = "0.22.0";
+  version = "0.22.1";
 
   goPackagePath = "k8s.io/minikube";
 
@@ -31,7 +31,7 @@ in buildGoPackage rec {
     owner  = "kubernetes";
     repo   = "minikube";
     rev    = "v${version}";
-    sha256 = "118l98kxzn6npq67nmylanfy9pvd1vd9hvsr2rkzrsvhzzk13kh4";
+    sha256 = "015ffsb7xx82y0dl38gayv2v9v33v99qmssd5djl21dhb3j79yba";
   };
 
   # kubernetes is here only to shut up a loud warning when generating the completions below. minikube checks very eagerly

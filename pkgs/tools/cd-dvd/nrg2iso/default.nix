@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "0.4";
 
   src = fetchurl {
-    url = "gregory.kokanosky.free.fr/v4/linux/${name}.tar.gz";
+    url = "http://gregory.kokanosky.free.fr/v4/linux/${name}.tar.gz";
     sha256 = "18sam7yy50rbfhjixwd7wx7kmfn1x1y5j80vwfxi5v408s39s115";
   };
 

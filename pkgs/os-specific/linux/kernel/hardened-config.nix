@@ -68,6 +68,10 @@ DEBUG_SG y
 SCHED_STACK_END_CHECK y
 BUG_ON_DATA_CORRUPTION y
 
+${optionalString (versionAtLeast version "4.13") ''
+  REFCOUNT_FULL y
+''}
+
 # Perform usercopy bounds checking.
 HARDENED_USERCOPY y
 
@@ -89,6 +93,11 @@ ${optionalString (versionAtLeast version "4.11") ''
   GCC_PLUGIN_STRUCTLEAK y # A port of the PaX structleak plugin
 ''}
 
+${optionalString (versionAtLeast version "4.13") ''
+  GCC_PLUGIN_RANDSTRUCT y # A port of the PaX randstruct plugin
+  GCC_PLUGIN_RANDSTRUCT_PERFORMANCE y
+''}
+
 # Disable various dangerous settings
 ACPI_CUSTOM_METHOD n # Allows writing directly to physical memory
 PROC_KCORE n # Exposes kernel text image layout
@@ -97,4 +106,9 @@ INET_DIAG n # Has been used for heap based attacks in the past
 # Use -fstack-protector-strong (gcc 4.9+) for best stack canary coverage.
 CC_STACKPROTECTOR_REGULAR n
 CC_STACKPROTECTOR_STRONG y
+
+# Enable compile/run-time buffer overflow detection ala glibc's _FORTIFY_SOURCE
+${optionalString (versionAtLeast version "4.13") ''
+  FORTIFY_SOURCE y
+''}
 ''

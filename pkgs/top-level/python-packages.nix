@@ -99,7 +99,9 @@ in {
 
   acoustics = callPackage ../development/python-modules/acoustics { };
 
-  "3to2" = callPackage ../development/python-modules/3to2 { };
+  py3to2 = callPackage ../development/python-modules/3to2 { };
+  # Left for backwards compatibility
+  "3to2" = self.py3to2;
 
   aenum = callPackage ../development/python-modules/aenum { };
 
@@ -202,8 +204,6 @@ in {
   nltk = callPackage ../development/python-modules/nltk.nix { };
 
   ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
-
-  pitz = callPackage ../applications/misc/pitz { };
 
   plantuml = callPackage ../tools/misc/plantuml { };
 
@@ -1704,29 +1704,7 @@ in {
 
   csvkit =  callPackage ../development/python-modules/csvkit { };
 
-  cx_Freeze = buildPythonPackage rec {
-    name = "cx_freeze-${version}";
-    version = "4.3.4";
-
-    # build failures
-    disabled = isPyPy || isPy35;
-
-    # timestamp need to come after 1980 for zipfiles and nix store is set to epoch
-    prePatch = ''
-      substituteInPlace cx_Freeze/freezer.py --replace "os.stat(module.file).st_mtime" "time.time()"
-    '';
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/cx_Freeze/cx_Freeze-${version}.tar.gz";
-      sha256 = "1qhv0gq3ggr06k8cvzphma29zfqdajkx2yfzbw89s4vy23xbpis0";
-    };
-
-    meta = {
-      description = "A set of scripts and modules for freezing Python scripts into executables";
-      homepage = "http://cx-freeze.sourceforge.net/";
-      license = licenses.psfl;
-    };
-  };
+  cx_Freeze = callPackage ../development/python-modules/cx_freeze {};
 
   cvxopt = buildPythonPackage rec {
     name = "${pname}-${version}";
@@ -2696,6 +2674,8 @@ in {
     };
   };
 
+  cld2-cffi = callPackage ../development/python-modules/cld2-cffi {};
+
   clf = buildPythonPackage rec {
     name = "clf-${version}";
     version = "0.5.2";
@@ -2821,23 +2801,6 @@ in {
   };
 
   cligj = callPackage ../development/python-modules/cligj { };
-
-  clepy = buildPythonPackage rec {
-    name = "clepy-0.3.20";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/clepy/${name}.tar.gz";
-      sha256 = "16vibfxms5z4ld8gbkra6dkhqm2cc3jnn0fwp7mw70nlwxnmm51c";
-    };
-
-    buildInputs = with self; [ self.mock self.nose self.decorator ];
-
-    meta = {
-      homepage = http://code.google.com/p/clepy/;
-      description = "Utilities created by the Cleveland Python users group";
-    };
-  };
-
 
   clientform = buildPythonPackage (rec {
     name = "clientform-0.2.10";
@@ -3063,6 +3026,13 @@ in {
       sha256 = "11wcni2xmfmy001rj62q2pwf305vvngkrfm5c4zlwvgbvlsrvnnw";
     };
 
+    patches = [
+      (pkgs.fetchpatch {
+          url = "https://github.com/stefanofontanelli/ColanderAlchemy/commit/b45fe35f2936a5ccb705e9344075191e550af6c9.patch";
+          sha256 = "1kf278wjq49zd6fhpp55vdcawzdd107767shzfck522sv8gr6qvx";
+      })
+    ];
+
     buildInputs = with self; [ unittest2 ];
     propagatedBuildInputs = with self; [ colander sqlalchemy ];
 
@@ -3254,27 +3224,7 @@ in {
     };
   };
 
-  credstash = buildPythonPackage rec {
-    pname    = "credstash";
-    version = "1.13.2";
-    name = "${pname}-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-      sha256 = "b6283e565e3e441e8f74efcca54ece9697db16ce2e930fb5b6f7c0ab929c377e";
-    };
-
-    propagatedBuildInputs = with self; [ cryptography boto3 pyyaml docutils ];
-
-    # No tests in archive
-    doCheck = false;
-
-    meta = {
-      description = "A utility for managing secrets in the cloud using AWS KMS and DynamoDB";
-      homepage = https://github.com/LuminalOSS/credstash;
-      license = licenses.asl20;
-    };
-  };
+  credstash = callPackage ../development/python-modules/credstash { };
 
   cython = callPackage ../development/python-modules/Cython { };
 
@@ -3637,27 +3587,7 @@ in {
     };
   };
 
-  MDP = buildPythonPackage rec {
-    version = "3.5";
-    name = "MDP-${version}";
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/M/MDP/${name}.tar.gz";
-      sha256 = "0aw1zxmyvx6gfmmnixbqmdaah28jl7rmqkzhxv53091asc23iw9k";
-    };
-
-    buildInputs = with self; [ pytest_29 ];
-    propagatedBuildInputs = with self; [ future numpy ];
-
-    doCheck = true;
-
-    meta = {
-      description = "Library for building complex data processing software by combining widely used machine learning algorithms";
-      homepage = http://mdp-toolkit.sourceforge.net;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ nico202 ];
-    };
-  };
+  MDP = callPackage ../development/python-modules/mdp {};
 
   minidb = buildPythonPackage rec {
     name = "minidb-2.0.1";
@@ -3697,6 +3627,25 @@ in {
     };
   };
 
+  mxnet = buildPythonPackage rec {
+    inherit (pkgs.mxnet) name version src meta;
+
+    buildInputs = [ pkgs.mxnet ];
+    propagatedBuildInputs = with self; [ requests numpy graphviz ];
+
+    LD_LIBRARY_PATH = makeLibraryPath [ pkgs.mxnet ];
+
+    doCheck = !isPy3k;
+
+    preConfigure = ''
+      cd python
+    '';
+
+    postInstall = ''
+      rm -rf $out/mxnet
+      ln -s ${pkgs.mxnet}/lib/libmxnet.so $out/${python.sitePackages}/mxnet
+    '';
+  };
 
   pkginfo = buildPythonPackage rec {
     version = "1.3.2";
@@ -6321,6 +6270,8 @@ in {
     };
   };
 
+  ijson = callPackage ../development/python-modules/ijson/default.nix {};
+
   imagesize = buildPythonPackage rec {
     name = "imagesize-${version}";
     version = "0.7.0";
@@ -6925,6 +6876,7 @@ in {
       description = "Library for parsing MediaWiki articles and converting them to different output formats";
       homepage = "http://pediapress.com/code/";
       license = licenses.bsd3;
+      broken = true; # Requires different versions of packages
     };
   };
 
@@ -7426,6 +7378,8 @@ in {
     inherit (pkgs.stdenv) mkDerivation;
     inherit pythonOlder;
   };
+
+  pyphen = callPackage ../development/python-modules/pyphen {};
 
   pypoppler = buildPythonPackage rec {
     name = "pypoppler-${version}";
@@ -12384,27 +12338,7 @@ in {
 
   moretools = callPackage ../development/python-modules/moretools { };
 
-  moto = buildPythonPackage rec {
-    version = "0.4.25";
-    name    = "moto-${version}";
-    src = pkgs.fetchurl {
-      url    = "http://pypi.python.org/packages/df/9e/0b22ac0abf61711c86ae75a0548825e19cc123b522ff3508cbc43924969d/moto-0.4.25.tar.gz";
-      sha256 = "1gqm7h6bm5xkspd07bnjwdr2q6cvpxkayx0hkgk8fhkawbg0fqq7";
-    };
-
-    propagatedBuildInputs = with self; [
-      # Main dependencies
-      jinja2 werkzeug flask requests six boto httpretty xmltodict
-      # For tests
-      nose sure boto3 freezegun
-    ];
-
-    checkPhase = "nosetests";
-
-    # TODO: make this true; I think lots of the tests want network access but we can probably run the others
-    doCheck = false;
-  };
-
+  moto = callPackage ../development/python-modules/moto {};
 
   mox = buildPythonPackage rec {
     name = "mox-0.5.3";
@@ -13242,36 +13176,7 @@ in {
     };
   };
 
-  nilearn = buildPythonPackage rec {
-    version = "0.2.5";
-    name = "nilearn-${version}";
-
-    # package seems to attempt Python 3 compatibility, but throws UnicodeDecodeError when building:
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nilearn/${name}.tar.gz";
-      sha256 = "1lmkrzr5x2yp129v2fvckrbdzf2kpcivdg9cacl519l3mb0acdv9";
-    };
-
-    checkPhase = "nosetests --exclude with_expand_user nilearn/tests";
-
-    buildInputs = with self; [ nose ];
-
-    propagatedBuildInputs = with self; [
-      matplotlib
-      nibabel
-      numpy
-      scikitlearn
-      scipy
-    ];
-
-    meta = {
-      homepage = http://nilearn.github.io;
-      description = "A module for statistical learning on neuroimaging data";
-      license = licenses.bsd3;
-    };
-  };
+  nilearn = callPackage ../development/python-modules/nilearn {};
 
   nipy = buildPythonPackage rec {
     version = "0.4.0";
@@ -14289,7 +14194,7 @@ in {
        oslo-serialization oslo-utils iso8601 oslo-log oslo-i18n webob
      ];
      buildInputs = with self; [
-       oslo-middleware cachetools oslo-service futurist anyjson oslosphinx
+       oslo-middleware cachetools_1 oslo-service futurist anyjson oslosphinx
        testtools oslotest
      ];
 
@@ -14298,20 +14203,8 @@ in {
      };
    };
 
-   cachetools = buildPythonPackage rec {
-     name = "cachetools-${version}";
-     version = "1.1.3";
-     disabled = isPyPy;  # a test fails
-
-     src = pkgs.fetchurl {
-       url = "mirror://pypi/c/cachetools/${name}.tar.gz";
-       sha256 = "0js7qx5pa8ibr8487lcf0x3a7w0xml0wa17snd6hjs0857kqhn20";
-     };
-
-     meta = with stdenv.lib; {
-       homepage = "https://github.com/tkem/cachetools";
-     };
-   };
+   cachetools_1 = callPackage ../development/python-modules/cachetools/1.nix {};
+   cachetools = callPackage ../development/python-modules/cachetools {};
 
    futurist = buildPythonPackage rec {
      name = "futurist-${version}";
@@ -14347,7 +14240,7 @@ in {
     propagatedBuildInputs = with self; [
       pbr oslo-config oslo-context oslo-log oslo-utils oslo-serialization
       oslo-i18n stevedore six eventlet greenlet webob pyyaml kombu_3 trollius
-      aioeventlet cachetools oslo-middleware futurist redis oslo-service
+      aioeventlet cachetools_1 oslo-middleware futurist redis oslo-service
       eventlet pyzmq
     ];
 
@@ -14754,7 +14647,7 @@ in {
     };
 
     propagatedBuildInputs = with self; [
-      pbr futures enum34 debtcollector cachetools oslo-serialization oslo-utils
+      pbr futures enum34 debtcollector cachetools_1 oslo-serialization oslo-utils
       jsonschema monotonic stevedore networkx futurist pbr automaton fasteners
     ];
     buildInputs = with self; [
@@ -16340,22 +16233,7 @@ in {
     };
   };
 
-  ptpython = buildPythonPackage rec {
-    name = "ptpython-0.35";
-    propagatedBuildInputs = with self;
-        [ wcwidth six prompt_toolkit docopt jedi pygments];
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/ptpython/${name}.tar.gz";
-      sha256 = "e0d380fbccb03ed33a7f33d96988e66fbd286bc813c9ceea84a1b3b5615a5660";
-    };
-
-    meta = {
-      description = "An advanced Python REPL";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ mlieberman85 ];
-      platforms = platforms.all;
-    };
-  };
+  ptpython = callPackage ../development/python-modules/ptpython {};
 
   publicsuffix = buildPythonPackage rec {
     name = "publicsuffix-${version}";
@@ -18545,44 +18423,6 @@ in {
 
   pywinrm = callPackage ../development/python-modules/pywinrm { };
 
-  PyXAPI = stdenv.mkDerivation rec {
-    name = "PyXAPI-0.1";
-
-    src = pkgs.fetchurl {
-      url = "http://www.pps.univ-paris-diderot.fr/~ylg/PyXAPI/${name}.tar.gz";
-      sha256 = "19lblwfq24bgsgfy7hhqkxdf4bxl40chcxdlpma7a0wfa0ngbn26";
-    };
-
-    buildInputs = [ self.python ];
-
-    installPhase = ''
-      mkdir -p "$out/lib/${python.libPrefix}/site-packages"
-
-      export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-
-      ${python}/bin/${python.executable} setup.py install \
-        --install-lib=$out/lib/${python.libPrefix}/site-packages \
-        --prefix="$out"
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Python socket module extension & RFC3542 IPv6 Advanced Sockets API";
-      longDescription = ''
-        PyXAPI consists of two modules: `socket_ext' and `rfc3542'.
-        `socket_ext' extends the Python module `socket'. `socket' objects have
-        two new methods: `recvmsg' and `sendmsg'. It defines `ancillary data'
-        objects and some functions related to. `socket_ext' module also provides
-        functions to manage interfaces indexes defined in RFC3494 and not
-        available from standard Python module `socket'.
-        `rfc3542' is a full implementation of RFC3542 (Advanced Sockets
-        Application Program Interface (API) for IPv6).
-      '';
-      homepage = http://www.pps.univ-paris-diderot.fr/~ylg/PyXAPI/;
-      license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ nckx ];
-    };
-  };
-
   pyxattr = buildPythonPackage (rec {
     name = "pyxattr-0.5.1";
 
@@ -20295,12 +20135,17 @@ in {
 
   sqlmap = callPackage ../development/python-modules/sqlmap { };
   pgpdump = self.buildPythonPackage rec {
-    name = "pgpdump-1.5";
+    pname = "pgpdump";
+    version = "1.5";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pgpdump/pgpdump-1.5.tar.gz";
-      sha256 = "1c4700857bf7ba735b08cfe4101aa3a4f5fd839657af249c17b2697c20829668";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0s4nh8h7qsdj2yf29bspjs1zvxd4lcd11r6g11dp7fppgf2h0iqw";
     };
+
+    # Disabling check because of: https://github.com/toofishes/python-pgpdump/issues/18
+    doCheck = false;
 
     meta = {
       description = "Python library for parsing PGP packets";
@@ -20545,7 +20390,7 @@ in {
     version = "2.1.1";
 
     src = pkgs.fetchurl {
-      url = " mirror://pypi/p/python-daemon/${name}.tar.gz";
+      url = "mirror://pypi/p/python-daemon/${name}.tar.gz";
       sha256 = "17v80qb98p1gv4j9mq6wb55cv7hc4j1hzw5y2f4s5hrpxs3w3a2q";
     };
 
@@ -24149,26 +23994,7 @@ EOF
   };
 
 
-  unidecode = buildPythonPackage rec {
-    name = "Unidecode-0.04.18";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/U/Unidecode/${name}.tar.gz";
-      sha256 = "12hhblqy1ajvidm38im4171x4arg83pfmziyn53nizp29p3m14gi";
-    };
-
-    LC_ALL="en_US.UTF-8";
-
-    buildInputs = [ pkgs.glibcLocales ];
-
-    meta = {
-      homepage = http://pypi.python.org/pypi/Unidecode/;
-      description = "ASCII transliterations of Unicode text";
-      license = licenses.gpl2;
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  };
-
+  unidecode = callPackage ../development/python-modules/unidecode {};
 
   pyusb = buildPythonPackage rec {
     name = "pyusb-1.0.0";
@@ -24545,29 +24371,7 @@ EOF
     };
   };
 
-  ws4py = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "ws4py";
-    version = "0.4.2";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0zr3254ky6r7q15l3dhdczfa8i723055zdkqssjifsgcwvirriks";
-    };
-
-    buildInputs = with self; [ pytest mock ];
-    propagatedBuildInputs = with self; [ asyncio cherrypy gevent tornado ];
-
-    checkPhase = ''
-      pytest test
-    '';
-
-    meta = {
-      homepage = https://ws4py.readthedocs.org;
-      description = "A WebSocket package for Python";
-      maintainers = with maintainers; [ rickynils ];
-    };
-  };
+  ws4py = callPackage ../development/python-modules/ws4py {};
 
   gdata = buildPythonPackage rec {
     name = "gdata-${version}";
@@ -27307,6 +27111,12 @@ EOF
   thinc = callPackage ../development/python-modules/thinc { };
 
   spacy = callPackage ../development/python-modules/spacy { };
+
+  spacy_models = callPackage ../development/python-modules/spacy/models.nix { };
+
+  textacy = callPackage ../development/python-modules/textacy { };
+
+  pyemd  = callPackage ../development/python-modules/pyemd { };
 
   behave = callPackage ../development/python-modules/behave { };
 

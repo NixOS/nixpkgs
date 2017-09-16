@@ -1687,10 +1687,6 @@ rec {
             url = mirror://ubuntu/dists/trusty/universe/binary-amd64/Packages.bz2;
             sha256 = "558637eeb8e340b871653e2060effe36e064677eca4eae62d9e4138dd402a610";
           })
-          (fetchurl {
-            url = mirror://ubuntu/dists/trusty-updates/main/binary-amd64/Packages.bz2;
-            sha256 = "03vd582p8b78s8sq6hz3nynn9vr7syccmn77i5mzayvsadb74cfy";
-          })
         ];
       urlPrefix = mirror://ubuntu;
       packages = commonDebPackages ++ [ "diffutils" "libc-bin" ];
