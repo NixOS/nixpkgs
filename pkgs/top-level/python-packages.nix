@@ -2676,6 +2676,8 @@ in {
     };
   };
 
+  cld2-cffi = callPackage ../development/python-modules/cld2-cffi {};
+
   clf = buildPythonPackage rec {
     name = "clf-${version}";
     version = "0.5.2";
@@ -6287,6 +6289,8 @@ in {
     };
   };
 
+  ijson = callPackage ../development/python-modules/ijson/default.nix {};
+
   imagesize = buildPythonPackage rec {
     name = "imagesize-${version}";
     version = "0.7.0";
@@ -7393,6 +7397,8 @@ in {
     inherit (pkgs.stdenv) mkDerivation;
     inherit pythonOlder;
   };
+
+  pyphen = callPackage ../development/python-modules/pyphen {};
 
   pypoppler = buildPythonPackage rec {
     name = "pypoppler-${version}";
@@ -14227,7 +14233,7 @@ in {
        oslo-serialization oslo-utils iso8601 oslo-log oslo-i18n webob
      ];
      buildInputs = with self; [
-       oslo-middleware cachetools oslo-service futurist anyjson oslosphinx
+       oslo-middleware cachetools_1 oslo-service futurist anyjson oslosphinx
        testtools oslotest
      ];
 
@@ -14236,20 +14242,8 @@ in {
      };
    };
 
-   cachetools = buildPythonPackage rec {
-     name = "cachetools-${version}";
-     version = "1.1.3";
-     disabled = isPyPy;  # a test fails
-
-     src = pkgs.fetchurl {
-       url = "mirror://pypi/c/cachetools/${name}.tar.gz";
-       sha256 = "0js7qx5pa8ibr8487lcf0x3a7w0xml0wa17snd6hjs0857kqhn20";
-     };
-
-     meta = with stdenv.lib; {
-       homepage = "https://github.com/tkem/cachetools";
-     };
-   };
+   cachetools_1 = callPackage ../development/python-modules/cachetools/1.nix {};
+   cachetools = callPackage ../development/python-modules/cachetools {};
 
    futurist = buildPythonPackage rec {
      name = "futurist-${version}";
@@ -14285,7 +14279,7 @@ in {
     propagatedBuildInputs = with self; [
       pbr oslo-config oslo-context oslo-log oslo-utils oslo-serialization
       oslo-i18n stevedore six eventlet greenlet webob pyyaml kombu_3 trollius
-      aioeventlet cachetools oslo-middleware futurist redis oslo-service
+      aioeventlet cachetools_1 oslo-middleware futurist redis oslo-service
       eventlet pyzmq
     ];
 
@@ -14692,7 +14686,7 @@ in {
     };
 
     propagatedBuildInputs = with self; [
-      pbr futures enum34 debtcollector cachetools oslo-serialization oslo-utils
+      pbr futures enum34 debtcollector cachetools_1 oslo-serialization oslo-utils
       jsonschema monotonic stevedore networkx futurist pbr automaton fasteners
     ];
     buildInputs = with self; [
@@ -24077,26 +24071,7 @@ EOF
   };
 
 
-  unidecode = buildPythonPackage rec {
-    name = "Unidecode-0.04.18";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/U/Unidecode/${name}.tar.gz";
-      sha256 = "12hhblqy1ajvidm38im4171x4arg83pfmziyn53nizp29p3m14gi";
-    };
-
-    LC_ALL="en_US.UTF-8";
-
-    buildInputs = [ pkgs.glibcLocales ];
-
-    meta = {
-      homepage = http://pypi.python.org/pypi/Unidecode/;
-      description = "ASCII transliterations of Unicode text";
-      license = licenses.gpl2;
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  };
-
+  unidecode = callPackage ../development/python-modules/unidecode {};
 
   pyusb = buildPythonPackage rec {
     name = "pyusb-1.0.0";
@@ -27213,6 +27188,12 @@ EOF
   thinc = callPackage ../development/python-modules/thinc { };
 
   spacy = callPackage ../development/python-modules/spacy { };
+
+  spacy_models = callPackage ../development/python-modules/spacy/models.nix { };
+
+  textacy = callPackage ../development/python-modules/textacy { };
+
+  pyemd  = callPackage ../development/python-modules/pyemd { };
 
   behave = callPackage ../development/python-modules/behave { };
 
