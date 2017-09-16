@@ -1,5 +1,6 @@
 { stdenv, python, buildEnv, makeWrapper
 , extraLibs ? []
+, extraOutputsToInstall ? []
 , postBuild ? ""
 , ignoreCollisions ? false }:
 
@@ -12,7 +13,7 @@ let
     name = "${python.name}-env";
 
     inherit paths;
-    inherit ignoreCollisions;
+    inherit ignoreCollisions extraOutputsToInstall;
 
     postBuild = ''
       . "${makeWrapper}/nix-support/setup-hook"
