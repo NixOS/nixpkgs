@@ -3644,6 +3644,25 @@ in {
     };
   };
 
+  mxnet = buildPythonPackage rec {
+    inherit (pkgs.mxnet) name version src meta;
+
+    buildInputs = [ pkgs.mxnet ];
+    propagatedBuildInputs = with self; [ requests numpy graphviz ];
+
+    LD_LIBRARY_PATH = makeLibraryPath [ pkgs.mxnet ];
+
+    doCheck = !isPy3k;
+
+    preConfigure = ''
+      cd python
+    '';
+
+    postInstall = ''
+      rm -rf $out/mxnet
+      ln -s ${pkgs.mxnet}/lib/libmxnet.so $out/${python.sitePackages}/mxnet
+    '';
+  };
 
   pkginfo = buildPythonPackage rec {
     version = "1.3.2";
