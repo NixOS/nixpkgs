@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, buildPythonPackage, pycurl, isPy3k }:
+{ stdenv, fetchurl, buildPythonPackage, pycurl, six, rpm, dateutil }:
 
 buildPythonPackage rec {
   pname = "koji";
-  version = "1.8";
+  version = "1.13.0";
   name = "${pname}-${version}";
   format = "other";
 
   src = fetchurl {
-    url = "https://github.com/koji-project/koji/archive/koji-1.8.0.tar.gz";
-    sha256 = "17rkipdxccdccbbb70f9wx91cq9713psmq23j7lgb4mlnwan926h";
+    url = "https://releases.pagure.org/koji/${name}.tar.bz2";
+    sha256 = "18b18rcbdqqw33g7h20hf5bpbci2ixdi05yda1fvpv30c1kkzd8w";
   };
 
-  propagatedBuildInputs = [ pycurl ];
+  propagatedBuildInputs = [ pycurl six rpm dateutil ];
 
   # Judging from SyntaxError
-  disabled = isPy3k;
+  #disabled = isPy3k;
 
   makeFlags = "DESTDIR=$(out)";
 
