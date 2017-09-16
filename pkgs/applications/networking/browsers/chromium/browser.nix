@@ -12,11 +12,10 @@ mkChromiumDerivation (base: rec {
   sandboxExecutableName = "__chromium-suid-sandbox";
 
   installPhase = ''
-    mkdir -p "$libExecPath/swiftshader"
+    mkdir -p "$libExecPath"
     cp -v "$buildPath/"*.pak "$buildPath/"*.bin "$libExecPath/"
     cp -v "$buildPath/icudtl.dat" "$libExecPath/"
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
-    cp -v "$buildPath/swiftshader/"*.so "$libExecPath/swiftshader/"
     cp -v "$buildPath/chrome" "$libExecPath/$packageName"
 
     if [ -e "$buildPath/libwidevinecdmadapter.so" ]; then
