@@ -1,7 +1,8 @@
 { stdenv
+, lib
 , fetchurl
 , buildPythonPackage
-, isPy36, isPy27
+, isPy3k, isPy35, isPy36, isPy27
 , cudaSupport ? false
 , cudatoolkit ? null
 , cudnn ? null
@@ -12,6 +13,7 @@
 , mock
 , backports_weakref
 , zlib
+, tensorflow-tensorboard
 }:
 
 assert cudaSupport -> cudatoolkit != null
@@ -31,7 +33,7 @@ buildPythonPackage rec {
   version = "1.3.0";
   name = "${pname}-${version}";
   format = "wheel";
-  disabled = ! (isPy36 || isPy27);
+  disabled = ! (isPy35 || isPy36 || isPy27);
 
   src = let
       tfurl = sys: proc: pykind:
@@ -58,7 +60,11 @@ buildPythonPackage rec {
             url = tfurl "linux" "cpu" "cp27-none-linux_x86_64";
             sha256 = "09pcyx0yfil4dm6cij8n3907pfgva07a38avrbai4qk5h6hxm8w9";
           };
-          py3 = {
+          py35 = {
+            url = tfurl "linux" "cpu" "cp35-cp35m-linux_x86_64";
+            sha256 = "0p10zcf41pi33bi025fibqkq9rpd3v0rrbdmc9i9yd7igy076a07";
+          };
+          py36 = {
             url = tfurl "linux" "cpu" "cp36-cp36m-linux_x86_64";
             sha256 = "1qm8lm2f6bf9d462ybgwrz0dn9i6cnisgwdvyq9ssmy2f1gp8hxk";
           };
@@ -68,7 +74,11 @@ buildPythonPackage rec {
             url = tfurl "linux" "gpu" "cp27-none-linux_x86_64";
             sha256 = "10yyyn4g2fsv1xgmw99bbr0fg7jvykay4gb5pxrrylh7h38h6wah";
           };
-          py3 = {
+          py35 = {
+            url = tfurl "linux" "gpu" "cp35-cp35m-linux_x86_64";
+            sha256 = "0icwnhkcf3fxr6bmbihqzipnn4pxybd06qv7l3k0p4xdgycwzmzk";
+          };
+          py36 = {
             url = tfurl "linux" "gpu" "cp36-cp36m-linux_x86_64";
             sha256 = "12g3akkr083gs3sisjbmm0lpsk8phn3dvy7jjfadfxshqc7za14i";
           };
@@ -77,31 +87,38 @@ buildPythonPackage rec {
     in
     fetchurl (
       if stdenv.isDarwin then
-        if isPy36 then
+        if isPy3k then
           dls.darwin.cpu.py3
         else
           dls.darwin.cpu.py2
-      else if isPy36 then
-        if cudaSupport then
-          dls.linux-x86_64.cuda.py3
-        else dls.linux-x86_64.cpu.py3
       else
-        if cudaSupport then
-          dls.linux-x86_64.cuda.py2
+        if isPy35 then
+          if cudaSupport then
+            dls.linux-x86_64.cuda.py35
+          else
+            dls.linux-x86_64.cpu.py35
+        else if isPy36 then
+          if cudaSupport then
+            dls.linux-x86_64.cuda.py36
+          else
+            dls.linux-x86_64.cpu.py36
         else
-          dls.linux-x86_64.cpu.py2
+          if cudaSupport then
+            dls.linux-x86_64.cuda.py2
+          else
+            dls.linux-x86_64.cpu.py2
     );
 
-  propagatedBuildInputs = with stdenv.lib;
-    [ numpy six protobuf mock ]
-    ++ optionals cudaSupport [ cudatoolkit cudnn stdenv.cc ];
+  propagatedBuildInputs =
+    [ numpy six protobuf mock backports_weakref ]
+    ++ lib.optional (!isPy36) tensorflow-tensorboard
+    ++ lib.optionals cudaSupport [ cudatoolkit cudnn stdenv.cc ];
 
-  installFlags = "--no-dependencies";
   # tensorflow-gpu depends on tensorflow_tensorboard, which cannot be
   # built at the moment (some of its dependencies do not build
   # [htlm5lib9999999 (seven nines) -> tensorboard], and it depends on an old version of
   # bleach) Hence we disable dependency checking for now.
-
+  installFlags = lib.optional isPy36 "--no-dependencies";
 
   # Note that we need to run *after* the fixup phase because the
   # libraries are loaded at runtime. If we run in preFixup then
