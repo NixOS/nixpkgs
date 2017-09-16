@@ -5543,13 +5543,7 @@ with pkgs;
   clang_38 = llvmPackages_38.clang;
   clang_37 = llvmPackages_37.clang;
   clang_35 = wrapCC llvmPackages_35.clang;
-  clang_34 = (wrapCC llvmPackages_34.clang).override {
-    # Default cc-wrapper's hardening flags don't work with clang-3.4,
-    # so just remove it entirely for this wrapper.
-    extraBuildCommands = ''
-    :> $out/nix-support/add-hardening.sh
-    '';
-  };
+  clang_34 = wrapCC llvmPackages_34.clang;
 
   clang-tools = callPackage ../development/tools/clang-tools { };
 
