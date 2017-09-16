@@ -10274,27 +10274,7 @@ in {
 
   hmmlearn = callPackage ../development/python-modules/hmmlearn { };
 
-  hcs_utils = buildPythonPackage rec {
-    name = "hcs_utils-1.5";
-
-    src = pkgs.fetchurl {
-      url    = "mirror://pypi/h/hcs_utils/${name}.tar.gz";
-      sha256 = "1d2za9crkgzildx610w3zif2i8phcqhh6n8nzg3yvy2mg0s18mkl";
-    };
-
-    LC_ALL="en_US.UTF-8";
-
-    buildInputs = with self; [ six pkgs.glibcLocales ];
-
-    meta = {
-      description = "Library collecting some useful snippets";
-      homepage    = https://pypi.python.org/pypi/hcs_utils/1.3;
-      license     = licenses.isc;
-      maintainers = with maintainers; [ lovek323 ];
-      platforms   = platforms.unix;
-    };
-  };
-
+  hcs_utils = callPackage ../development/python-modules/hcs_utils { };
 
   hetzner = buildPythonPackage rec {
     name = "hetzner-${version}";
