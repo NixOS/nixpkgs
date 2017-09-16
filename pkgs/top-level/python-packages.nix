@@ -8044,6 +8044,8 @@ in {
     };
   };
 
+  schema = callPackage ../development/python-modules/schema {};
+
   svg-path = buildPythonPackage rec {
     name = "svg.path-${version}";
     version = "2.0b1";
