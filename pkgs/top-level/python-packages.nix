@@ -2576,6 +2576,8 @@ in {
     };
   };
 
+  cccolutils = callPackage ../development/python-modules/cccolutils/default.nix {};
+
   CDDB = buildPythonPackage rec {
     name = "CDDB-1.4";
 
