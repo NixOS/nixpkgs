@@ -5,6 +5,8 @@ python34Packages.buildPythonPackage rec {
   pname = "gns3-server";
   version = "2.0.3";
 
+  broken = true;
+
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = pname;
