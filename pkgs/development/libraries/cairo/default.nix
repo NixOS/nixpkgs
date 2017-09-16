@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkgconfig, libiconv
-, libintlOrEmpty, expat, zlib, libpng, pixman, fontconfig, freetype, xorg
+{ stdenv, fetchgit, fetchpatch, pkgconfig, libiconv, libintlOrEmpty, expat
+, zlib, libpng, pixman, fontconfig, freetype, xorg
 , gobjectSupport ? true, glib
 , xcbSupport ? true # no longer experimental since 1.12
 , glSupport ? true, mesa_noglu ? null # mesa is no longer a big dependency
@@ -12,11 +12,14 @@ assert glSupport -> mesa_noglu != null;
 let inherit (stdenv.lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  name = "cairo-1.14.10";
+  pname = "cairo";
+  version = "1.15.8";
+  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "http://cairographics.org/releases/${name}.tar.xz";
-    sha256 = "02banr0wxckq62nbhc3mqidfdh2q956i2r7w2hd9bjgjb238g1vy";
+  src = fetchgit {
+    url = "https://anongit.freedesktop.org/git/${pname}";
+    rev = version;
+    sha256 = "0fi68c72b2vi7f07mflikn8dga622492rhlv5sx500glsn1svy1j";
   };
 
   patches = [
@@ -99,6 +102,8 @@ stdenv.mkDerivation rec {
     homepage = http://cairographics.org/;
 
     license = with licenses; [ lgpl2Plus mpl10 ];
+
+    maintainers = with maintainers; [ vyp ];
 
     platforms = platforms.all;
   };
