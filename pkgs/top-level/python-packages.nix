@@ -133,6 +133,8 @@ in {
 
   # packages defined elsewhere
 
+  backports_csv = callPackage ../development/python-modules/backports_csv {};
+
   bap = callPackage ../development/python-modules/bap {
     bap = pkgs.ocamlPackages_4_02.bap;
   };
