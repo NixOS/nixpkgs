@@ -199,8 +199,10 @@ in
         buildInputs = [ pkgs.makeWrapper ];
         buildCommand = ''
           mkdir -p $out/bin
-          ${concatStringsSep "\n" (mapAttrsToList (network: data: ''
-              makeWrapper ${data.package}/bin/tinc "$out/bin/tinc.${network}" --add-flags "--pidfile=/run/tinc.${network}.pid"
+          ${concatStringsSep "\n" (mapAttrsToList (network: data:
+            optionalString (versionAtLeast data.package.version "1.1pre") ''
+              makeWrapper ${data.package}/bin/tinc "$out/bin/tinc.${network}" \
+                --add-flags "--pidfile=/run/tinc.${network}.pid"
             '') cfg.networks)}
         '';
       };
