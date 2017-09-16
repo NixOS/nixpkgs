@@ -21,8 +21,6 @@ let
     "--manifest-url=${manifest}"
     "--manifest-branch=${rev}"
     "--depth=1"
-    #TODO: fetching clone.bundle seems to fail spectacularly inside a sandbox.
-    "--no-clone-bundle"
     (optionalString createMirror "--mirror")
     (optionalString useArchive "--archive")
   ] ++ extraRepoInitFlags;
