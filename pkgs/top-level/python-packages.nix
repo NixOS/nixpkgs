@@ -12338,27 +12338,7 @@ in {
 
   moretools = callPackage ../development/python-modules/moretools { };
 
-  moto = buildPythonPackage rec {
-    version = "0.4.25";
-    name    = "moto-${version}";
-    src = pkgs.fetchurl {
-      url    = "http://pypi.python.org/packages/df/9e/0b22ac0abf61711c86ae75a0548825e19cc123b522ff3508cbc43924969d/moto-0.4.25.tar.gz";
-      sha256 = "1gqm7h6bm5xkspd07bnjwdr2q6cvpxkayx0hkgk8fhkawbg0fqq7";
-    };
-
-    propagatedBuildInputs = with self; [
-      # Main dependencies
-      jinja2 werkzeug flask requests six boto httpretty xmltodict
-      # For tests
-      nose sure boto3 freezegun
-    ];
-
-    checkPhase = "nosetests";
-
-    # TODO: make this true; I think lots of the tests want network access but we can probably run the others
-    doCheck = false;
-  };
-
+  moto = callPackage ../development/python-modules/moto {};
 
   mox = buildPythonPackage rec {
     name = "mox-0.5.3";
