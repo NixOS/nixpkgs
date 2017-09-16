@@ -19294,6 +19294,10 @@ with pkgs;
     inherit (darwin) libobjc;
   };
 
+  vpnkit = callPackage ../applications/virtualization/vpnkit { };
+
+  go-vpnkit = callPackage ../applications/virtualization/go-vpnkit { };
+
   xinput_calibrator = callPackage ../tools/X11/xinput_calibrator { };
 
   xmagnify = callPackage ../tools/X11/xmagnify { };
