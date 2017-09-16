@@ -9,7 +9,9 @@ let
   cfg = config.networking;
   dnsmasqResolve = config.services.dnsmasq.enable &&
                    config.services.dnsmasq.resolveLocalQueries;
-  hasLocalResolver = cfg.nameservers == [] && ( config.services.bind.enable || dnsmasqResolve );
+  bindResolve =    config.services.bind.enable &&
+                   config.services.bind.resolveLocalQueries;
+  hasLocalResolver = bindResolve || dnsmasqResolve;
 
   resolvconfOptions = cfg.resolvconfOptions
     ++ optional cfg.dnsSingleRequest "single-request"
@@ -189,6 +191,14 @@ in
   };
 
   config = {
+
+    assertions = [
+      {
+        # Setting nameservers is mutually exclusive with running bind or dnsmasq as local resolver."
+        assertion =  hasLocalResolver -> cfg.nameservers == [];
+        message = "Can't specify networking.nameservers when bind.resolveLocalQueries or dnsmasq.resolveLocalQueries is set to true";
+      }
+    ];
 
     environment.etc =
       { # /etc/services: TCP/UDP port assignments.
