@@ -203,8 +203,6 @@ in {
 
   ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
 
-  pitz = callPackage ../applications/misc/pitz { };
-
   plantuml = callPackage ../tools/misc/plantuml { };
 
   Pmw = callPackage ../development/python-modules/Pmw { };
@@ -2821,23 +2819,6 @@ in {
   };
 
   cligj = callPackage ../development/python-modules/cligj { };
-
-  clepy = buildPythonPackage rec {
-    name = "clepy-0.3.20";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/clepy/${name}.tar.gz";
-      sha256 = "16vibfxms5z4ld8gbkra6dkhqm2cc3jnn0fwp7mw70nlwxnmm51c";
-    };
-
-    buildInputs = with self; [ self.mock self.nose self.decorator ];
-
-    meta = {
-      homepage = http://code.google.com/p/clepy/;
-      description = "Utilities created by the Cleveland Python users group";
-    };
-  };
-
 
   clientform = buildPythonPackage (rec {
     name = "clientform-0.2.10";
