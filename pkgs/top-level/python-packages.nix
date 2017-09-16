@@ -22523,28 +22523,7 @@ in {
     };
   };
 
-  urlgrabber =  buildPythonPackage rec {
-    name = "urlgrabber-3.9.1";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "http://urlgrabber.baseurl.org/download/${name}.tar.gz";
-      sha256 = "4437076c8708e5754ea04540e46c7f4f233734ee3590bb8a96389264fb0650d0";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ pycurl ];
-
-    meta = {
-      homepage = "urlgrabber.baseurl.org";
-      license = licenses.lgpl2Plus;
-      description = "Python module for downloading files";
-      maintainers = with maintainers; [ qknight ];
-    };
-  };
-
+  urlgrabber = callPackage ../development/python-modules/urlgrabber {};
 
   urwid = buildPythonPackage (rec {
     name = "urwid-1.3.1";
