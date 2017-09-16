@@ -38,6 +38,7 @@ with stdenv.lib;
   DEBUG_STACKOVERFLOW n
   SCHEDSTATS n
   DETECT_HUNG_TASK y
+  DEBUG_INFO n # Not until we implement a separate debug output
 
   ${optionalString (versionOlder version "4.4") ''
     CPU_NOTIFIER_ERROR_INJECT? n
