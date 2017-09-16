@@ -3529,6 +3529,8 @@ in {
     pythonPackages = self;
   };
 
+  openidc-client = callPackage ../development/python-modules/openidc-client/default.nix {};
+
   openstackclient = buildPythonPackage rec {
     name = "openstackclient-${version}";
     version = "1.7.1";
