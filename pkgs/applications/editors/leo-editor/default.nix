@@ -1,20 +1,20 @@
-{ stdenv, python3Packages, fetchFromGitHub, makeWrapper, makeDesktopItem }:
+{ stdenv, python3, fetchFromGitHub, makeWrapper, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   name = "leo-editor-${version}";
-  version = "5.5";
+  version = "5.6";
 
   src = fetchFromGitHub {
     owner = "leo-editor";
     repo = "leo-editor";
     rev = version;
-    sha256 = "0crzljirzfiy9xn02ydd23clmd8bzdjxkyxdqsvdkgfy9j41b8hr";
+    sha256 = "1k6q3gvaf05bi0mzkmmb1p6wrgxwri7ivn38p6f0m0wfd3f70x2j";
   };
 
   dontBuild = true;
 
-  nativeBuildInputs = [ makeWrapper python3Packages.python ];
-  propagatedBuildInputs = with python3Packages; [ pyqt5 ];
+  nativeBuildInputs = [ makeWrapper python3 ];
+  propagatedBuildInputs = with python3.pkgs; [ pyqt56 docutils ];
 
   desktopItem = makeDesktopItem rec {
     name = "leo-editor";
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/leo-editor
     mv * $out/share/leo-editor
 
-    makeWrapper ${python3Packages.python.interpreter} $out/bin/leo \
+    makeWrapper ${python3.interpreter} $out/bin/leo \
       --set PYTHONPATH "$PYTHONPATH:$out/share/leo-editor" \
       --add-flags "-O $out/share/leo-editor/launchLeo.py"
   '';
