@@ -32,5 +32,15 @@ import ./make-test.nix ({ pkgs, ...} : {
       subtest "userns", sub {
           $machine->fail("unshare --user");
       };
+
+      # Test dmesg restriction
+      subtest "dmesg", sub {
+          $machine->fail("su -l alice -c dmesg");
+      };
+
+      # Test access to kcore
+      subtest "kcore", sub {
+          $machine->fail("cat /proc/kcore");
+      };
     '';
 })
