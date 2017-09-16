@@ -29,9 +29,6 @@ stdenv.mkDerivation rec {
   setOutputFlags = false;
   outputDoc = "dev"; # single tiny man3 page
 
-  # FIXME needs gcc 4.9 in bootstrap tools
-  hardeningDisable = [ "stackprotector" ];
-
   configureFlags = stdenv.lib.optional (!static) "--shared";
 
   postInstall = ''

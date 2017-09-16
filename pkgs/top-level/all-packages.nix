@@ -69,7 +69,7 @@ with pkgs;
   ### BUILD SUPPORT
 
   autoreconfHook = makeSetupHook
-    { substitutions = { inherit autoconf automake gettext libtool; }; }
+    { deps = [ autoconf automake gettext libtool ]; }
     ../build-support/setup-hooks/autoreconf.sh;
 
   ensureNewerSourcesHook = { year }: makeSetupHook {}
@@ -361,6 +361,8 @@ with pkgs;
   _9pfs = callPackage ../tools/filesystems/9pfs { };
 
   a2ps = callPackage ../tools/text/a2ps { };
+
+  abcmidi = callPackage ../tools/audio/abcmidi { };
 
   abduco = callPackage ../tools/misc/abduco { };
 
@@ -1702,7 +1704,14 @@ with pkgs;
 
   disper = callPackage ../tools/misc/disper { };
 
-  dmd_2_067_1 = callPackage ../development/compilers/dmd/2.067.1.nix { };
+  dmd_2_067_1 = callPackage ../development/compilers/dmd/2.067.1.nix {
+    stdenv = if stdenv.hostPlatform.isDarwin then
+               stdenv
+             else
+               # Doesn't build with gcc6 on linux
+               overrideCC stdenv gcc5;
+  };
+
   dmd = callPackage ../development/compilers/dmd {
     bootstrapDmd = dmd_2_067_1;
   };
@@ -1814,21 +1823,9 @@ with pkgs;
 
   emscripten = callPackage ../development/compilers/emscripten { };
 
-  emscriptenfastcomp-unwrapped = callPackage ../development/compilers/emscripten-fastcomp { };
-  emscriptenfastcomp-wrapped = wrapCCWith stdenv.cc.libc ''
-    # hardening flags break WASM support
-    cat > $out/nix-support/add-hardening.sh
-  '' emscriptenfastcomp-unwrapped;
-  emscriptenfastcomp = symlinkJoin {
-    name = "emscriptenfastcomp";
-    paths = [ emscriptenfastcomp-wrapped emscriptenfastcomp-unwrapped ];
-    preferLocalBuild = false;
-    allowSubstitutes = true;
-    postBuild = ''
-      # replace unwrapped clang-3.9 binary by wrapper
-      ln -sf $out/bin/clang $out/bin/clang-[0-9]*
-    '';
-  };
+  emscriptenfastcompPackages = callPackage ../development/compilers/emscripten-fastcomp { };
+
+  emscriptenfastcomp = emscriptenfastcompPackages.emscriptenfastcomp;
 
   emscriptenPackages = recurseIntoAttrs (callPackage ./emscripten-packages.nix { });
 
@@ -2829,6 +2826,8 @@ with pkgs;
 
   kytea = callPackage ../tools/text/kytea { };
 
+  ldc = callPackage ../development/compilers/ldc { };
+
   lbreakout2 = callPackage ../games/lbreakout2 { };
 
   leocad = callPackage ../applications/graphics/leocad { };
@@ -3796,6 +3795,8 @@ with pkgs;
 
   pdf2svg = callPackage ../tools/graphics/pdf2svg { };
 
+  fmodex = callPackage ../games/zandronum/fmod.nix { };
+
   pdfmod = callPackage ../applications/misc/pdfmod { };
 
   jbig2enc = callPackage ../tools/graphics/jbig2enc { };
@@ -4567,6 +4568,8 @@ with pkgs;
 
   tldr = callPackage ../tools/misc/tldr { };
 
+  tldr-hs = haskellPackages.tldr;
+
   tlspool = callPackage ../tools/networking/tlspool { };
 
   tmate = callPackage ../tools/misc/tmate { };
@@ -4657,6 +4660,8 @@ with pkgs;
   ttylog = callPackage ../tools/misc/ttylog { };
 
   turses = callPackage ../applications/networking/instant-messengers/turses { };
+
+  oysttyer = callPackage ../applications/networking/instant-messengers/oysttyer { };
 
   twitterBootstrap = callPackage ../development/web/twitter-bootstrap {};
   twitterBootstrap3 = callPackage ../development/web/twitter-bootstrap/v3.nix {};
@@ -5316,7 +5321,7 @@ with pkgs;
   #Use this instead of stdenv to build with clang
   clangStdenv = if stdenv.isDarwin then stdenv else lowPrio llvmPackages.stdenv;
   clang-sierraHack-stdenv = overrideCC stdenv clang-sierraHack;
-  libcxxStdenv = lowPrio llvmPackages.libcxxStdenv;
+  libcxxStdenv = if stdenv.isDarwin then stdenv else lowPrio llvmPackages.libcxxStdenv;
 
   clean = callPackage ../development/compilers/clean { };
 
@@ -6571,7 +6576,7 @@ with pkgs;
     ruby_2_1_10
     ruby_2_2_7
     ruby_2_3_4
-    ruby_2_4_1;
+    ruby_2_4_2;
 
   # Ruby aliases
   ruby = ruby_2_3;
@@ -6579,7 +6584,7 @@ with pkgs;
   ruby_2_1 = ruby_2_1_10;
   ruby_2_2 = ruby_2_2_7;
   ruby_2_3 = ruby_2_3_4;
-  ruby_2_4 = ruby_2_4_1;
+  ruby_2_4 = ruby_2_4_2;
 
   scsh = callPackage ../development/interpreters/scsh { };
 
@@ -7131,7 +7136,7 @@ with pkgs;
   };
 
   include-what-you-use = callPackage ../development/tools/analysis/include-what-you-use {
-    llvmPackages = llvmPackages_38;
+    llvmPackages = llvmPackages_4;
   };
 
   indent = callPackage ../development/tools/misc/indent { };
@@ -8185,7 +8190,9 @@ with pkgs;
 
   glui = callPackage ../development/libraries/glui {};
 
-  gmime = callPackage ../development/libraries/gmime { };
+  gmime2 = callPackage ../development/libraries/gmime/2.nix { };
+  gmime3 = callPackage ../development/libraries/gmime/3.nix { };
+  gmime = gmime2;
 
   gmm = callPackage ../development/libraries/gmm { };
 
@@ -10483,8 +10490,6 @@ with pkgs;
 
   sqlite3_analyzer = lowPrio (callPackage ../development/libraries/sqlite/sqlite3_analyzer.nix { });
 
-  sqlite-amalgamation = callPackage ../development/libraries/sqlite-amalgamation { };
-
   sqlite-interactive = appendToName "interactive" (sqlite.override { interactive = true; }).bin;
 
   sqlcipher = lowPrio (callPackage ../development/libraries/sqlcipher {
@@ -12375,10 +12380,12 @@ with pkgs;
 
     sch_cake = callPackage ../os-specific/linux/sch_cake { };
 
-    spl = callPackage ../os-specific/linux/spl {
+    inherit (callPackage ../os-specific/linux/spl {
       configFile = "kernel";
       inherit kernel;
-    };
+    }) splStable splUnstable;
+
+    spl = splStable;
 
     sysdig = callPackage ../os-specific/linux/sysdig {};
 
@@ -12402,10 +12409,12 @@ with pkgs;
 
     x86_energy_perf_policy = callPackage ../os-specific/linux/x86_energy_perf_policy { };
 
-    zfs = callPackage ../os-specific/linux/zfs {
+    inherit (callPackage ../os-specific/linux/zfs {
       configFile = "kernel";
       inherit kernel spl;
-    };
+     }) zfsStable zfsUnstable;
+
+     zfs = zfsStable;
   });
 
   # The current default kernel / kernel modules.
@@ -12703,9 +12712,9 @@ with pkgs;
 
   statifier = callPackage ../os-specific/linux/statifier { };
 
-  spl = callPackage ../os-specific/linux/spl {
+  inherit (callPackage ../os-specific/linux/spl {
     configFile = "user";
-  };
+  }) splStable splUnstable;
 
   sysdig = callPackage ../os-specific/linux/sysdig {
     kernel = null;
@@ -12909,9 +12918,11 @@ with pkgs;
 
   zd1211fw = callPackage ../os-specific/linux/firmware/zd1211 { };
 
-  zfs = callPackage ../os-specific/linux/zfs {
+  inherit (callPackage ../os-specific/linux/zfs {
     configFile = "user";
-  };
+  }) zfsStable zfsUnstable;
+
+  zfs = zfsStable;
 
   ### DATA
 
@@ -14961,8 +14972,6 @@ with pkgs;
 
   kanboard = callPackage ../applications/misc/kanboard { };
 
-  kde-telepathy = kde4.callPackage ../applications/networking/instant-messengers/telepathy/kde {};
-
   kdeApplications =
     let
       mkApplications = import ../applications/kde;
@@ -15578,7 +15587,9 @@ with pkgs;
 
   notepadqq = libsForQt56.callPackage ../applications/editors/notepadqq { };
 
-  notmuch = callPackage ../applications/networking/mailreaders/notmuch { };
+  notmuch = callPackage ../applications/networking/mailreaders/notmuch {
+    gmime = gmime3;
+  };
 
   notmuch-mutt = callPackage ../applications/networking/mailreaders/notmuch/mutt.nix { };
 
@@ -17825,15 +17836,11 @@ with pkgs;
 
   xsokoban = callPackage ../games/xsokoban { };
 
-  zandronum = callPackage ../games/zandronum {
-    cmake = cmake_2_8;
-  };
+  zandronum = callPackage ../games/zandronum { };
 
   zandronum-server = zandronum.override {
     serverOnly = true;
   };
-
-  zandronum-bin = hiPrio (callPackage ../games/zandronum/bin.nix { });
 
   zangband = callPackage ../games/zangband { };
 
@@ -17853,7 +17860,7 @@ with pkgs;
 
   ### DESKTOP ENVIRONMENTS
 
-  clearlooks-phenix = callPackage ../misc/themes/gtk3/clearlooks-phenix { };
+  clearlooks-phenix = callPackage ../misc/themes/clearlooks-phenix { };
 
   enlightenment = recurseIntoAttrs (callPackage ../desktops/enlightenment {
     callPackage = newScope pkgs.enlightenment;
@@ -18469,6 +18476,8 @@ with pkgs;
     sbcl = null;
   };
 
+  mxnet = callPackage ../applications/science/math/mxnet { };
+
   wxmaxima = callPackage ../applications/science/math/wxmaxima { wxGTK = wxGTK30; };
 
   pari = callPackage ../applications/science/math/pari { tex = texlive.combined.scheme-basic; };
@@ -18657,6 +18666,8 @@ with pkgs;
   terminal-parrot = callPackage ../applications/misc/terminal-parrot { };
 
   e17gtk = callPackage ../misc/themes/e17gtk { };
+
+  epson-alc1100 = callPackage ../misc/drivers/epson-alc1100 { };
 
   epson-escpr = callPackage ../misc/drivers/epson-escpr { };
 
@@ -19391,10 +19402,14 @@ with pkgs;
   # `recurseIntoAttrs` for sake of hydra, not nix-env
   tests = recurseIntoAttrs {
     cc-wrapper = callPackage ../test/cc-wrapper { };
-    cc-wrapper-clang = callPackage ../test/cc-wrapper { stdenv = clangStdenv; };
-    cc-wrapper-libcxx = callPackage ../test/cc-wrapper { stdenv = libcxxStdenv; };
+    cc-wrapper-clang = callPackage ../test/cc-wrapper { stdenv = llvmPackages.stdenv; };
+    cc-wrapper-libcxx = callPackage ../test/cc-wrapper { stdenv = llvmPackages.libcxxStdenv; };
+    cc-wrapper-clang-39 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_39.stdenv; };
+    cc-wrapper-libcxx-39 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_39.libcxxStdenv; };
     stdenv-inputs = callPackage ../test/stdenv-inputs { };
 
     macOSSierraShared = callPackage ../test/macos-sierra-shared {};
   };
+
+  duti = callPackage ../os-specific/darwin/duti {};
 }

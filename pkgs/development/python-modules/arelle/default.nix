@@ -1,7 +1,7 @@
 { gui ? true,
   buildPythonPackage, fetchFromGitHub, lib,
   sphinx_1_2, lxml, isodate, numpy, pytest,
-  tkinter ? null,
+  tkinter ? null, py3to2,
   ... }:
 
 let
@@ -26,6 +26,7 @@ buildPythonPackage {
   buildInputs = [
     sphinx_1_2
     pytest
+    py3to2
   ];
   propagatedBuildInputs = [
     lxml

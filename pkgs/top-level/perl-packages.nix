@@ -6745,6 +6745,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  HTTPDAV = buildPerlPackage rec {
+    name = "HTTP-DAV-0.44";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/O/OP/OPERA/${name}.tar.gz";
+      sha256 = "1pp7xbfn6yr87cqy2m2kl2v5zgvmmikhl7wmaw6c5nksj4wi9xq1";
+    };
+    buildInputs = [ LWP XMLDOM ];
+    meta = {
+      description = "WebDAV client library.";
+    };
+  };
+
   HTTPHeaderParserXS = buildPerlPackage rec {
     name = "HTTP-HeaderParser-XS-0.20";
     src = fetchurl {
@@ -11193,6 +11205,26 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ IPCSignal ];
   };
 
+  ProtocolWebSocket = buildPerlModule rec {
+    name = "Protocol-WebSocket-0.20";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/V/VT/VTI/${name}.tar.gz";
+      sha256 = "00ga7sjrqcbr46kwfbaa37lxqqbp9z5gymjckzps6ll2jf7k58mx";
+    };
+    buildInputs = [ ModuleBuildTiny ];
+  };
+
+  ProtocolHTTP2 = buildPerlModule rec {
+    name = "Protocol-HTTP2-1.08";
+
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CR/CRUX/${name}.tar.gz";
+      sha256 = "06y1djgzbn340hixav85728dvp8mj2mx2qf5fzkqxh145g5q860g";
+    };
+    buildInputs = [ ModuleBuildTiny TestLeakTrace  TestTCP ];
+    propagatedBuildInputs = [ AnyEvent NetSSLeay ];
+  };
+
   PSGI = buildPerlPackage rec {
     name = "PSGI-1.102";
     src = fetchurl {
@@ -11817,6 +11849,16 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/Z/ZE/ZEFRAM/${name}.tar.gz";
       sha256 = "d3a45cc137bb9f7d8848d5a10a5142d275a98f8dcfd3adb60593cee9d33fa6ae";
     };
+    buildInputs = [ ModuleBuild ];
+  };
+
+  SCGI = buildPerlPackage rec {
+    name = "SCGI-0.6";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/V/VI/VIPERCODE/${name}.tar.gz";
+      sha256 = "196rj47mh4fq2vlnw595q391zja5v6qg7s3sy0vy8igfyid8rdsq";
+    };
+    preConfigure = "export HOME=$(mktemp -d)";
     buildInputs = [ ModuleBuild ];
   };
 
@@ -13021,10 +13063,11 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ TermProgressBarQuiet ];
   };
 
-  TermReadKey = buildPerlPackage {
-    name = "TermReadKey-2.31";
+  TermReadKey = buildPerlPackage rec {
+    name = "TermReadKey-${version}";
+    version = "2.37";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JS/JSTOWE/TermReadKey-2.31.tar.gz;
+      url = "mirror://cpan/authors/id/J/JS/JSTOWE/${name}.tar.gz";
       sha256 = "1czarrdxgnxmmbaasjnq3sj14nf1cvzhm37padq6xvl7h7r2acb2";
     };
   };
@@ -13055,6 +13098,21 @@ let self = _self // overrides; _self = with self; {
     meta = {
       homepage = http://sourceforge.net/projects/perl-trg/;
       description = "Perl extension for the GNU Readline/History Library";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TermReadLineTTYtter = buildPerlPackage rec {
+    name = "Term-ReadLine-TTYtter-1.4";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CK/CKAISER/Term-ReadLine-TTYtter-1.4.tar.gz";
+      sha256 = "14xcqhg1vrwgv65nd2z8xzn0wgb18i17pzkkh8m15cp1rqrk2dxc";
+    };
+
+    outputs = [ "out" ];
+
+    meta = {
+      description = "a modified version of T::RL::Perl with several new nonstandard features specific to TTYtter";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };

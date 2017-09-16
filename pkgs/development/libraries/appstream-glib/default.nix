@@ -28,7 +28,11 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs = [ gtk3 ];
   mesonFlags = [ "-Denable-rpm=false" "-Denable-stemmer=false" "-Denable-dep11=false" ];
 
-  postFixup = "patchelf --set-rpath ${rpath} $out/lib/libappstream-glib.so";
+  postFixup = ''
+    for elf in "$out"/bin/* "$out"/lib/*.so; do
+      patchelf --set-rpath '${rpath}':"$out/lib" "$elf"
+    done
+  '';
 
   meta = with stdenv.lib; {
     description = "Objects and helper methods to read and write AppStream metadata";

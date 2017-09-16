@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
 
       substituteInPlace posix.mak \
           --replace gcc $CC
+
+      # To fix rdmd test with newer phobos
+      substituteInPlace rdmd.d \
+          --replace " std.stdiobase," ""
   '';
 
   nativeBuildInputs = [ dmd ];
@@ -45,10 +49,11 @@ stdenv.mkDerivation rec {
     }
 	'';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Ancillary tools for the D programming language compiler";
     homepage = https://github.com/dlang/tools;
     license = lib.licenses.boost;
+    maintainers = with maintainers; [ ThomasMader ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

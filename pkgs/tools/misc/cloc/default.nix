@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "cloc-${version}";
-  version = "1.72";
+  version = "1.74";
 
   src = fetchFromGitHub {
     owner = "AlDanial";
     repo = "cloc";
-    rev = "v${version}";
-    sha256 = "192z3fzib71y3sjic03ll67xv51igdlpvfhx12yv9wnzkir7lx02";
+    rev = version;
+    sha256 = "1ihma4f6f92jp1mvzr4rjrgyh9m5wzrlxngaxfn7g0a8r2kyi65b";
   };
 
-  sourceRoot = "cloc-v${version}-src/Unix";
+  sourceRoot = "cloc-${version}-src/Unix";
 
   buildInputs = [ makeWrapper perl AlgorithmDiff RegexpCommon ];
 
@@ -24,6 +24,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/AlDanial/cloc;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ fuuzetsu rycee ];
   };
 }
