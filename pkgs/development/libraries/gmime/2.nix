@@ -1,7 +1,8 @@
 { stdenv, fetchurl, pkgconfig, glib, zlib, libgpgerror, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
-  name = "gmime-2.6.23";
+  version = "2.6.23";
+  name = "gmime-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gmime/2.6/${name}.tar.xz";
@@ -16,10 +17,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/jstedfast/gmime/;
     description = "A C/C++ library for creating, editing and parsing MIME messages and structures";
-    maintainers = [ stdenv.lib.maintainers.chaoflow ];
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [ chaoflow ];
+    platforms = platforms.unix;
   };
 }
