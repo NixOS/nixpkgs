@@ -1582,23 +1582,23 @@ with pkgs;
 
   cudatoolkit = cudatoolkit9;
 
-  cudnn = callPackage ../development/libraries/science/math/cudnn/default.nix {};
+  cudnn_cudatoolkit7 = callPackage ../development/libraries/science/math/cudnn/7.0-4.0 {
+    cudatoolkit = cudatoolkit7;
+  };
 
-  cudnn5_cudatoolkit75 = callPackage ../development/libraries/science/math/cudnn/7.5-5.0 {
+  cudnn_cudatoolkit75 = callPackage ../development/libraries/science/math/cudnn/7.5-6.0 {
     cudatoolkit = cudatoolkit75;
   };
 
-  cudnn5_cudatoolkit80 = callPackage ../development/libraries/science/math/cudnn/8.0-5.0 {
+  cudnn_cudatoolkit8 = callPackage ../development/libraries/science/math/cudnn/8.0-7.0 {
     cudatoolkit = cudatoolkit8;
   };
 
-  cudnn51_cudatoolkit80 = callPackage ../development/libraries/science/math/cudnn/8.0-5.1 {
-    cudatoolkit = cudatoolkit8;
+  cudnn_cudatoolkit9 = callPackage ../development/libraries/science/math/cudnn/9.0-7.0 {
+    cudatoolkit = cudatoolkit9;
   };
 
-  cudnn60_cudatoolkit80 = callPackage ../development/libraries/science/math/cudnn/8.0-6.0 {
-    cudatoolkit = cudatoolkit8;
-  };
+  cudnn = cudnn_cudatoolkit9;
 
   curlFull = curl.override {
     idnSupport = true;
