@@ -25980,14 +25980,16 @@ EOF
 
   tensorflow-tensorboard = callPackage ../development/python-modules/tensorflow-tensorboard { };
 
-  tensorflow = self.tensorflowWithoutCuda;
+  tensorflow = callPackage ../development/python-modules/tensorflow {
+    cudaSupport = pkgs.config.cudaSupport or false;
+  };
 
-  tensorflowWithoutCuda = callPackage ../development/python-modules/tensorflow { };
+  tensorflowWithoutCuda = self.tensorflow.override {
+    cudaSupport = false;
+  };
 
-  tensorflowWithCuda = callPackage ../development/python-modules/tensorflow {
+  tensorflowWithCuda = self.tensorflow.override {
     cudaSupport = true;
-    cudatoolkit = pkgs.cudatoolkit8;
-    cudnn = pkgs.cudnn60_cudatoolkit80;
   };
 
   tflearn = buildPythonPackage rec {

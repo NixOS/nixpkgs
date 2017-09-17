@@ -10013,6 +10013,7 @@ with pkgs;
   };
 
   opencv3 = callPackage ../development/libraries/opencv/3.x.nix {
+    enableCuda = config.cudaSupport or false;
     inherit (darwin.apple_sdk.frameworks) AVFoundation Cocoa QTKit;
   };
 
@@ -10076,6 +10077,7 @@ with pkgs;
 
   opensubdiv = callPackage ../development/libraries/opensubdiv {
     stdenv_gcc5 = overrideCC stdenv gcc5;
+    cudaSupport = config.cudaSupport or false;
     cmake = cmake_2_8;
   };
 
@@ -13813,6 +13815,7 @@ with pkgs;
 
   blender = callPackage  ../applications/misc/blender {
     stdenv_gcc5 = overrideCC stdenv gcc5;
+    cudaSupport = config.cudaSupport or false;
     python = python35;
   };
 
@@ -18730,8 +18733,7 @@ with pkgs;
 
   caffe = callPackage ../applications/science/math/caffe rec {
     cudaSupport = config.caffe.cudaSupport or config.cudaSupport or false;
-    # CUDA 8 doesn't support GCC 6.
-    stdenv = if cudaSupport then overrideCC pkgs.stdenv gcc5 else pkgs.stdenv;
+    cudnnSupport = cudaSupport;
   };
 
   ecm = callPackage ../applications/science/math/ecm { };
@@ -18755,7 +18757,9 @@ with pkgs;
     sbcl = null;
   };
 
-  mxnet = callPackage ../applications/science/math/mxnet {
+  mxnet = callPackage ../applications/science/math/mxnet rec {
+    cudaSupport = config.cudaSupport or false;
+    cudnnSupport = cudaSupport;
     inherit (linuxPackages) nvidia_x11;
   };
 
