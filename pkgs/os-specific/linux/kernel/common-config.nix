@@ -565,7 +565,9 @@ with stdenv.lib;
   # Media support.
   MEDIA_DIGITAL_TV_SUPPORT y
   MEDIA_CAMERA_SUPPORT y
-  MEDIA_RC_SUPPORT y
+  ${optionalString (versionOlder version "4.14") ''
+    MEDIA_RC_SUPPORT y
+  ''}
   MEDIA_USB_SUPPORT y
   MEDIA_PCI_SUPPORT y
 
