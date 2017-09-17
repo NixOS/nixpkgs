@@ -18559,7 +18559,9 @@ with pkgs;
     sbcl = null;
   };
 
-  mxnet = callPackage ../applications/science/math/mxnet { };
+  mxnet = callPackage ../applications/science/math/mxnet {
+    inherit (linuxPackages) nvidia_x11;
+  };
 
   wxmaxima = callPackage ../applications/science/math/wxmaxima { wxGTK = wxGTK30; };
 
