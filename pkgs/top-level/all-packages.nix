@@ -1577,9 +1577,10 @@ with pkgs;
     cudatoolkit65
     cudatoolkit7
     cudatoolkit75
-    cudatoolkit8;
+    cudatoolkit8
+    cudatoolkit9;
 
-  cudatoolkit = cudatoolkit8;
+  cudatoolkit = cudatoolkit9;
 
   cudnn = callPackage ../development/libraries/science/math/cudnn/default.nix {};
 
