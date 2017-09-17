@@ -133,6 +133,8 @@ in {
 
   # packages defined elsewhere
 
+  backports_csv = callPackage ../development/python-modules/backports_csv {};
+
   bap = callPackage ../development/python-modules/bap {
     bap = pkgs.ocamlPackages_4_02.bap;
   };
@@ -6378,27 +6380,7 @@ in {
     };
   };
 
-  internetarchive = let ver = "0.8.3"; in buildPythonPackage rec {
-    name = "internetarchive-${ver}";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/jjjake/internetarchive/archive/v${ver}.tar.gz";
-      sha256 = "0j3l13zvbx50j66l6pnf8y8y8m6gk1sc3yssvfd2scvmv4gnmm8n";
-    };
-
-    # It is hardcoded to specific versions, I don't know why.
-    preConfigure = ''
-        sed 's/==/>=/' -i setup.py
-    '';
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ six clint pyyaml docopt requests jsonpatch args ];
-
-    meta = with stdenv.lib; {
-      description = "A python wrapper for the various Internet Archive APIs";
-      homepage = "https://github.com/jjjake/internetarchive";
-    };
-  };
+  internetarchive = callPackage ../development/python-modules/internetarchive {};
 
   jsbeautifier = callPackage ../development/python-modules/jsbeautifier {};
 
@@ -8004,6 +7986,8 @@ in {
       license = licenses.mit;
     };
   };
+
+  schema = callPackage ../development/python-modules/schema {};
 
   svg-path = buildPythonPackage rec {
     name = "svg.path-${version}";
