@@ -61,9 +61,9 @@ in
         default = null;
         type = types.nullOr (types.submodule {
           options = {
-            tlsKey = mkOption {
+            tlsKeyPath = mkOption {
               default = null;
-              type = types.path;
+              type = types.str;
               description = "Path to the private key used for TLS.";
             };
 
@@ -93,7 +93,7 @@ in
 
     environment.etc = mkIf (cfg.tlsSettings != null) {
       "ssl/glusterfs.pem".source = cfg.tlsSettings.tlsPem;
-      "ssl/glusterfs.key".source = cfg.tlsSettings.tlsKey;
+      "ssl/glusterfs.key".source = cfg.tlsSettings.tlsKeyPath;
       "ssl/glusterfs.ca".source = cfg.tlsSettings.caCert;
     };
 
