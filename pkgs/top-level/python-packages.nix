@@ -17083,6 +17083,7 @@ in {
     };
   };
 
+  pyobjc = callPackage ../development/python-modules/pyobjc {};
 
   pyodbc = buildPythonPackage rec {
     name = "pyodbc-3.0.7";
