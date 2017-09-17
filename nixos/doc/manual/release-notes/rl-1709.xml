@@ -255,6 +255,15 @@ rmdir /var/lib/ipfs/.ipfs
       See the overlays chapter of the Nixpkgs manual for more details.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      <literal>sha256</literal> argument value of
+      <literal>dockerTools.pullImage</literal> expression must be
+      updated since the mechanism to download the image has been
+      changed. Skopeo is now used to pull the image instead of the
+      Docker daemon.
+    </para>
+  </listitem>
 
 </itemizedlist>
 

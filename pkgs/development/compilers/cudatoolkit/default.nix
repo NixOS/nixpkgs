@@ -22,7 +22,7 @@ let
           }
         else throw "cudatoolkit does not support platform ${stdenv.system}";
 
-      outputs = [ "out" "doc" ];
+      outputs = [ "out" "lib" "doc" ];
 
       buildInputs = [ perl ];
 
@@ -51,7 +51,11 @@ let
             patchelf \
               --set-interpreter "''$(cat $NIX_CC/nix-support/dynamic-linker)" $i
           fi
-          rpath2=$rpath:$lib/lib:$out/jre/lib/amd64/jli:$out/lib:$out/lib64:$out/nvvm/lib:$out/nvvm/lib64
+          if [[ $i =~ libcudart ]]; then
+            rpath2=
+          else
+            rpath2=$rpath:$lib/lib:$out/jre/lib/amd64/jli:$out/lib:$out/lib64:$out/nvvm/lib:$out/nvvm/lib64
+          fi
           patchelf --set-rpath $rpath2 --force-rpath $i
         done < <(find . -type f -print0)
       '';
@@ -79,6 +83,11 @@ let
         # Ensure that cmake can find CUDA.
         mkdir -p $out/nix-support
         echo "cmakeFlags+=' -DCUDA_TOOLKIT_ROOT_DIR=$out'" >> $out/nix-support/setup-hook
+
+        # Move some libraries to the lib output so that programs that
+        # depend on them don't pull in this entire monstrosity.
+        mkdir -p $lib/lib
+        mv -v $out/lib64/libcudart* $lib/lib/
 
         # Remove OpenCL libraries as they are provided by ocl-icd and driver.
         rm -f $out/lib64/libOpenCL*

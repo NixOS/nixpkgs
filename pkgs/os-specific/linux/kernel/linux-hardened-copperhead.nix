@@ -3,9 +3,9 @@
 with stdenv.lib;
 
 let
-  version = "4.13.1";
-  revision = "b";
-  sha256 = "0l64r4978ynwpikw9fvhzzyrhvxhl7chwkbns1064c1dhr6j0zg6";
+  version = "4.13.2";
+  revision = "a";
+  sha256 = "1srglf014a2ra4sgzwrf53wdc3rrr5lx8dcx57xm4lpvrc4r66y6";
 
   # modVersion needs to be x.y.z, will automatically add .0 if needed
   modVersion = concatStrings (intersperse "." (take 3 (splitString "." "${version}.0")));
@@ -27,11 +27,4 @@ import ./generic.nix (args // {
     repo = "linux-hardened";
     rev = "${version}.${revision}";
   };
-
-  kernelPatches = args.kernelPatches;
-
-  features.iwlwifi = true;
-  features.efiBootStub = true;
-  features.needsCifsUtils = true;
-  features.netfilterRPFilter = true;
 } // (args.argsOverride or {}))

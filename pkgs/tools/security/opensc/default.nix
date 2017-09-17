@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, zlib, readline, openssl
 , libiconv, pcsclite, libassuan, libXt
 , docbook_xsl, libxslt, docbook_xml_dtd_412
+, Carbon
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     autoreconfHook pkgconfig zlib readline openssl pcsclite libassuan
     libXt libxslt libiconv docbook_xml_dtd_412
-  ];
+  ] ++ stdenv.lib.optional stdenv.isDarwin Carbon;
 
   configureFlags = [
     "--enable-zlib"
@@ -36,8 +37,6 @@ stdenv.mkDerivation rec {
   installFlags = [
     "sysconfdir=$(out)/etc"
   ];
-
-  
 
   meta = with stdenv.lib; {
     description = "Set of libraries and utilities to access smart cards";

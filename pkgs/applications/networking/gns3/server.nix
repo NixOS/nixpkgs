@@ -1,20 +1,25 @@
-{ stdenv, python34Packages, fetchFromGitHub }:
+{ stdenv, python3Packages, fetchFromGitHub }:
 
-python34Packages.buildPythonPackage rec {
+python3Packages.buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "gns3-server";
-  version = "2.0.3";
+  version = "2.1.0rc1";
 
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1c7mzj1r2zh90a7vs3s17jakfp9s43b8nnj29rpamqxvl3qhbdy7";
+    sha256 = "181689fpjxq4hy2lyxk4zciqhgnhj5srvb4xsxdlbf68n89fj2zf";
   };
 
-  propagatedBuildInputs = with python34Packages; [
-    aiohttp jinja2 psutil zipstream aiohttp-cors raven jsonschema
+  propagatedBuildInputs = with python3Packages; [
+    aiohttp jinja2 psutil zipstream aiohttp-cors raven jsonschema yarl typing
+    prompt_toolkit
   ];
+
+  postPatch = ''
+    sed -i 's/yarl>=0.11,<0.12/yarl/g' requirements.txt
+  '';
 
   # Requires network access
   doCheck = false;

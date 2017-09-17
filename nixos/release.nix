@@ -236,6 +236,7 @@ in rec {
   tests.containers-macvlans = callTest tests/containers-macvlans.nix {};
   tests.docker = hydraJob (import tests/docker.nix { system = "x86_64-linux"; });
   tests.docker-edge = hydraJob (import tests/docker-edge.nix { system = "x86_64-linux"; });
+  tests.dovecot = callTest tests/dovecot.nix {};
   tests.dnscrypt-proxy = callTest tests/dnscrypt-proxy.nix { system = "x86_64-linux"; };
   tests.ecryptfs = callTest tests/ecryptfs.nix {};
   tests.etcd = hydraJob (import tests/etcd.nix { system = "x86_64-linux"; });
@@ -267,7 +268,6 @@ in rec {
   tests.kernel-copperhead = callTest tests/kernel-copperhead.nix {};
   tests.kernel-latest = callTest tests/kernel-latest.nix {};
   tests.kernel-lts = callTest tests/kernel-lts.nix {};
-  tests.kernel-params = callTest tests/kernel-params.nix {};
   tests.keystone = callTest tests/keystone.nix {};
   tests.kubernetes = hydraJob (import tests/kubernetes.nix { system = "x86_64-linux"; });
   tests.latestKernel.login = callTest tests/login.nix { latestKernel = true; };
@@ -313,7 +313,6 @@ in rec {
   tests.slim = callTest tests/slim.nix {};
   tests.smokeping = callTest tests/smokeping.nix {};
   tests.snapper = callTest tests/snapper.nix {};
-  tests.sysctl = callTest tests/sysctl.nix {};
   tests.taskserver = callTest tests/taskserver.nix {};
   tests.tomcat = callTest tests/tomcat.nix {};
   tests.udisks2 = callTest tests/udisks2.nix {};

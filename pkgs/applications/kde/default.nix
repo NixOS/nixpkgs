@@ -135,6 +135,7 @@ let
       libkipi = callPackage ./libkipi.nix {};
       libkleo = callPackage ./libkleo.nix {};
       libkomparediff2 = callPackage ./libkomparediff2.nix {};
+      libksane = callPackage ./libksane.nix {};
       libksieve = callPackage ./libksieve.nix {};
       mailcommon = callPackage ./mailcommon.nix {};
       mailimporter = callPackage ./mailimporter.nix {};

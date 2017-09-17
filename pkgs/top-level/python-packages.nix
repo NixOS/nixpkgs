@@ -133,6 +133,8 @@ in {
 
   # packages defined elsewhere
 
+  backports_csv = callPackage ../development/python-modules/backports_csv {};
+
   bap = callPackage ../development/python-modules/bap {
     bap = pkgs.ocamlPackages_4_02.bap;
   };
@@ -204,8 +206,6 @@ in {
   nltk = callPackage ../development/python-modules/nltk.nix { };
 
   ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
-
-  pitz = callPackage ../applications/misc/pitz { };
 
   plantuml = callPackage ../tools/misc/plantuml { };
 
@@ -323,30 +323,7 @@ in {
 
   aiohttp = callPackage ../development/python-modules/aiohttp { };
 
-  aiohttp-cors = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "aiohttp-cors";
-    # 0.5.3 is the current version but gns3-server requires 0.5.1
-    version = "0.5.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/${pname}/${name}.tar.gz";
-      sha256 = "0szma27ri25fq4nwwvs36myddggw3jz4pyzmq63yz4xpw0jjdxck";
-    };
-
-    # Requires network access
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ aiohttp ]
-      ++ optional (pythonOlder "3.5") typing;
-
-    meta = {
-      description = "CORS support for aiohttp";
-      homepage = "https://github.com/aio-libs/aiohttp-cors";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ primeos ];
-    };
-  };
+  aiohttp-cors = callPackage ../development/python-modules/aiohttp/cors.nix { };
 
   alabaster = callPackage ../development/python-modules/alabaster {};
 
@@ -2576,6 +2553,8 @@ in {
     };
   };
 
+  cccolutils = callPackage ../development/python-modules/cccolutils/default.nix {};
+
   CDDB = buildPythonPackage rec {
     name = "CDDB-1.4";
 
@@ -2675,6 +2654,8 @@ in {
       platforms   = platforms.all;
     };
   };
+
+  cld2-cffi = callPackage ../development/python-modules/cld2-cffi {};
 
   clf = buildPythonPackage rec {
     name = "clf-${version}";
@@ -2801,23 +2782,6 @@ in {
   };
 
   cligj = callPackage ../development/python-modules/cligj { };
-
-  clepy = buildPythonPackage rec {
-    name = "clepy-0.3.20";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/clepy/${name}.tar.gz";
-      sha256 = "16vibfxms5z4ld8gbkra6dkhqm2cc3jnn0fwp7mw70nlwxnmm51c";
-    };
-
-    buildInputs = with self; [ self.mock self.nose self.decorator ];
-
-    meta = {
-      homepage = http://code.google.com/p/clepy/;
-      description = "Utilities created by the Cleveland Python users group";
-    };
-  };
-
 
   clientform = buildPythonPackage (rec {
     name = "clientform-0.2.10";
@@ -3528,6 +3492,8 @@ in {
     enablePython = true;
     pythonPackages = self;
   };
+
+  openidc-client = callPackage ../development/python-modules/openidc-client/default.nix {};
 
   openstackclient = buildPythonPackage rec {
     name = "openstackclient-${version}";
@@ -5575,33 +5541,7 @@ in {
     buildInputs = with self; [ fudge_9 nose ];
   };
 
-  fedora_cert = buildPythonPackage rec {
-    name = "fedora-cert-0.5.9.2";
-    meta.maintainers = with maintainers; [ mornfall ];
-    format = "other";
-
-    src = pkgs.fetchurl {
-      url = "https://fedorahosted.org/releases/f/e/fedora-packager/fedora-packager-0.5.9.2.tar.bz2";
-      sha256 = "105swvzshgn3g6bjwk67xd8pslnhpxwa63mdsw6cl4c7cjp2blx9";
-    };
-
-    propagatedBuildInputs = with self; [ python_fedora pyopenssl ];
-    postInstall = "mv $out/bin/fedpkg $out/bin/fedora-cert-fedpkg";
-    doCheck = false;
-  };
-
-  fedpkg = buildPythonPackage (rec {
-    name = "fedpkg-1.14";
-    meta.maintainers = with maintainers; [ mornfall ];
-
-    src = pkgs.fetchurl {
-      url = "https://fedorahosted.org/releases/f/e/fedpkg/${name}.tar.bz2";
-      sha256 = "0rj60525f2sv34g5llafnkmpvbwrfbmfajxjc14ldwzymp8clc02";
-    };
-
-    patches = [ ../development/python-modules/fedpkg-buildfix.diff ];
-    propagatedBuildInputs = with self; [ rpkg offtrac urlgrabber fedora_cert ];
-  });
+  fedpkg = callPackage ../development/python-modules/fedpkg { };
 
   flit = callPackage ../development/python-modules/flit { };
 
@@ -6162,23 +6102,7 @@ in {
 
   };
 
-  hglib = buildPythonPackage rec {
-    version = "1.7";
-    name = "hglib-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-hglib/python-hglib-${version}.tar.gz";
-      sha256 = "0dc087d15b774cda82d3c8096fb0e514caeb2ddb60eed38e9056b16e279ba3c5";
-    };
-
-    meta = {
-      description = "Mercurial Python library";
-      homepage = "http://selenic.com/repo/python-hglib";
-      license = licenses.mit;
-      maintainers = with maintainers; [ dfoxfranke ];
-      platforms = platforms.all;
-    };
-  };
+  hglib = callPackage ../development/python-modules/hglib {};
 
   humanize = buildPythonPackage rec {
     version = "0.5.1";
@@ -6286,6 +6210,8 @@ in {
       maintainers = with maintainers; [ matthiasbeyer ];
     };
   };
+
+  ijson = callPackage ../development/python-modules/ijson/default.nix {};
 
   imagesize = buildPythonPackage rec {
     name = "imagesize-${version}";
@@ -6432,27 +6358,7 @@ in {
     };
   };
 
-  internetarchive = let ver = "0.8.3"; in buildPythonPackage rec {
-    name = "internetarchive-${ver}";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/jjjake/internetarchive/archive/v${ver}.tar.gz";
-      sha256 = "0j3l13zvbx50j66l6pnf8y8y8m6gk1sc3yssvfd2scvmv4gnmm8n";
-    };
-
-    # It is hardcoded to specific versions, I don't know why.
-    preConfigure = ''
-        sed 's/==/>=/' -i setup.py
-    '';
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ six clint pyyaml docopt requests jsonpatch args ];
-
-    meta = with stdenv.lib; {
-      description = "A python wrapper for the various Internet Archive APIs";
-      homepage = "https://github.com/jjjake/internetarchive";
-    };
-  };
+  internetarchive = callPackage ../development/python-modules/internetarchive {};
 
   jsbeautifier = callPackage ../development/python-modules/jsbeautifier {};
 
@@ -7209,45 +7115,6 @@ in {
 
   phpserialize = callPackage ../development/python-modules/phpserialize { };
 
-  pies = buildPythonPackage rec {
-    name = "pies-2.6.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pies/${name}.tar.gz";
-      sha256 = "d8d6ae4faa0a7da5d634ad8c6ca4bb22b70ad53bb7ecd91af23d490fcd2a88e8";
-    };
-
-    deps = if !isPy3k then [ self.pies2overrides self.enum34 ]
-           else if isPy33 then [ self.enum34 ]
-           else [];
-
-    propagatedBuildInputs = deps;
-
-    meta = {
-      description = "The simplest way to write one program that runs on both Python 2 and Python 3";
-      homepage = https://github.com/timothycrosley/pies;
-      license = licenses.mit;
-    };
-  };
-
-  pies2overrides = buildPythonPackage rec {
-    name = "pies2overrides-2.6.5";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pies2overrides/${name}.tar.gz";
-      sha256 = "2a91445afc7f692bdbabfbf00d3defb1d47ad7825eb568a6464359758ab35763";
-    };
-
-    propagatedBuildInputs = with self; [ ipaddress ];
-
-    meta = {
-      description = "Defines override classes that should be included with pies only if running on Python2";
-      homepage = https://github.com/timothycrosley/pies;
-      license = licenses.mit;
-    };
-  };
-
   plotly = callPackage ../development/python-modules/plotly { };
 
   podcastparser = callPackage ../development/python-modules/podcastparser { };
@@ -7393,6 +7260,8 @@ in {
     inherit (pkgs.stdenv) mkDerivation;
     inherit pythonOlder;
   };
+
+  pyphen = callPackage ../development/python-modules/pyphen {};
 
   pypoppler = buildPythonPackage rec {
     name = "pypoppler-${version}";
@@ -8095,6 +7964,8 @@ in {
       license = licenses.mit;
     };
   };
+
+  schema = callPackage ../development/python-modules/schema {};
 
   svg-path = buildPythonPackage rec {
     name = "svg.path-${version}";
@@ -10287,27 +10158,7 @@ in {
 
   hmmlearn = callPackage ../development/python-modules/hmmlearn { };
 
-  hcs_utils = buildPythonPackage rec {
-    name = "hcs_utils-1.5";
-
-    src = pkgs.fetchurl {
-      url    = "mirror://pypi/h/hcs_utils/${name}.tar.gz";
-      sha256 = "1d2za9crkgzildx610w3zif2i8phcqhh6n8nzg3yvy2mg0s18mkl";
-    };
-
-    LC_ALL="en_US.UTF-8";
-
-    buildInputs = with self; [ six pkgs.glibcLocales ];
-
-    meta = {
-      description = "Library collecting some useful snippets";
-      homepage    = https://pypi.python.org/pypi/hcs_utils/1.3;
-      license     = licenses.isc;
-      maintainers = with maintainers; [ lovek323 ];
-      platforms   = platforms.unix;
-    };
-  };
-
+  hcs_utils = callPackage ../development/python-modules/hcs_utils { };
 
   hetzner = buildPythonPackage rec {
     name = "hetzner-${version}";
@@ -12351,27 +12202,7 @@ in {
 
   moretools = callPackage ../development/python-modules/moretools { };
 
-  moto = buildPythonPackage rec {
-    version = "0.4.25";
-    name    = "moto-${version}";
-    src = pkgs.fetchurl {
-      url    = "http://pypi.python.org/packages/df/9e/0b22ac0abf61711c86ae75a0548825e19cc123b522ff3508cbc43924969d/moto-0.4.25.tar.gz";
-      sha256 = "1gqm7h6bm5xkspd07bnjwdr2q6cvpxkayx0hkgk8fhkawbg0fqq7";
-    };
-
-    propagatedBuildInputs = with self; [
-      # Main dependencies
-      jinja2 werkzeug flask requests six boto httpretty xmltodict
-      # For tests
-      nose sure boto3 freezegun
-    ];
-
-    checkPhase = "nosetests";
-
-    # TODO: make this true; I think lots of the tests want network access but we can probably run the others
-    doCheck = false;
-  };
-
+  moto = callPackage ../development/python-modules/moto {};
 
   mox = buildPythonPackage rec {
     name = "mox-0.5.3";
@@ -14227,7 +14058,7 @@ in {
        oslo-serialization oslo-utils iso8601 oslo-log oslo-i18n webob
      ];
      buildInputs = with self; [
-       oslo-middleware cachetools oslo-service futurist anyjson oslosphinx
+       oslo-middleware cachetools_1 oslo-service futurist anyjson oslosphinx
        testtools oslotest
      ];
 
@@ -14236,20 +14067,8 @@ in {
      };
    };
 
-   cachetools = buildPythonPackage rec {
-     name = "cachetools-${version}";
-     version = "1.1.3";
-     disabled = isPyPy;  # a test fails
-
-     src = pkgs.fetchurl {
-       url = "mirror://pypi/c/cachetools/${name}.tar.gz";
-       sha256 = "0js7qx5pa8ibr8487lcf0x3a7w0xml0wa17snd6hjs0857kqhn20";
-     };
-
-     meta = with stdenv.lib; {
-       homepage = "https://github.com/tkem/cachetools";
-     };
-   };
+   cachetools_1 = callPackage ../development/python-modules/cachetools/1.nix {};
+   cachetools = callPackage ../development/python-modules/cachetools {};
 
    futurist = buildPythonPackage rec {
      name = "futurist-${version}";
@@ -14285,7 +14104,7 @@ in {
     propagatedBuildInputs = with self; [
       pbr oslo-config oslo-context oslo-log oslo-utils oslo-serialization
       oslo-i18n stevedore six eventlet greenlet webob pyyaml kombu_3 trollius
-      aioeventlet cachetools oslo-middleware futurist redis oslo-service
+      aioeventlet cachetools_1 oslo-middleware futurist redis oslo-service
       eventlet pyzmq
     ];
 
@@ -14692,7 +14511,7 @@ in {
     };
 
     propagatedBuildInputs = with self; [
-      pbr futures enum34 debtcollector cachetools oslo-serialization oslo-utils
+      pbr futures enum34 debtcollector cachetools_1 oslo-serialization oslo-utils
       jsonschema monotonic stevedore networkx futurist pbr automaton fasteners
     ];
     buildInputs = with self; [
@@ -17681,24 +17500,7 @@ in {
     };
   };
 
-  python_fedora = buildPythonPackage (rec {
-    version = "0.5.5";
-    name = "python-fedora-${version}";
-    meta.maintainers = with maintainers; [ mornfall ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-fedora/${name}.tar.gz";
-      sha256 = "15m8lvbb5q4rg508i4ah8my872qrq5xjwgcgca4d3kzjv2x6fhim";
-    };
-    propagatedBuildInputs = with self; [ kitchen requests bunch paver six munch urllib3
-      beautifulsoup4 ];
-    doCheck = false;
-
-    # https://github.com/fedora-infra/python-fedora/issues/140
-    preBuild = ''
-      sed -i '4,15d' setup.py
-    '';
-  });
+  python_fedora = callPackage ../development/python-modules/python_fedora/default.nix {};
 
   python-simple-hipchat = callPackage ../development/python-modules/python-simple-hipchat {};
   python_simple_hipchat = self.python-simple-hipchat;
@@ -18467,44 +18269,6 @@ in {
   };
 
   pywinrm = callPackage ../development/python-modules/pywinrm { };
-
-  PyXAPI = stdenv.mkDerivation rec {
-    name = "PyXAPI-0.1";
-
-    src = pkgs.fetchurl {
-      url = "http://www.pps.univ-paris-diderot.fr/~ylg/PyXAPI/${name}.tar.gz";
-      sha256 = "19lblwfq24bgsgfy7hhqkxdf4bxl40chcxdlpma7a0wfa0ngbn26";
-    };
-
-    buildInputs = [ self.python ];
-
-    installPhase = ''
-      mkdir -p "$out/lib/${python.libPrefix}/site-packages"
-
-      export PYTHONPATH="$out/lib/${python.libPrefix}/site-packages:$PYTHONPATH"
-
-      ${python}/bin/${python.executable} setup.py install \
-        --install-lib=$out/lib/${python.libPrefix}/site-packages \
-        --prefix="$out"
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Python socket module extension & RFC3542 IPv6 Advanced Sockets API";
-      longDescription = ''
-        PyXAPI consists of two modules: `socket_ext' and `rfc3542'.
-        `socket_ext' extends the Python module `socket'. `socket' objects have
-        two new methods: `recvmsg' and `sendmsg'. It defines `ancillary data'
-        objects and some functions related to. `socket_ext' module also provides
-        functions to manage interfaces indexes defined in RFC3494 and not
-        available from standard Python module `socket'.
-        `rfc3542' is a full implementation of RFC3542 (Advanced Sockets
-        Application Program Interface (API) for IPv6).
-      '';
-      homepage = http://www.pps.univ-paris-diderot.fr/~ylg/PyXAPI/;
-      license = licenses.gpl2Plus;
-      maintainers = with maintainers; [ nckx ];
-    };
-  };
 
   pyxattr = buildPythonPackage (rec {
     name = "pyxattr-0.5.1";
@@ -19410,22 +19174,7 @@ in {
     };
   };
 
-  rpkg = buildPythonPackage (rec {
-    name = "rpkg-1.14";
-    disabled = !isPy27; # error: invalid command 'bdist_wheel'
-    meta.maintainers = with maintainers; [ mornfall ];
-
-    src = pkgs.fetchurl {
-      url = "https://fedorahosted.org/releases/r/p/rpkg/rpkg-1.14.tar.gz";
-      sha256 = "0d053hdjz87aym1sfm6c4cxmzmy5g0gkrmrczly86skj957r77a7";
-    };
-
-    patches = [ ../development/python-modules/rpkg-buildfix.diff ];
-
-    propagatedBuildInputs = with self; [ pycurl koji GitPython pkgs.git
-      rpm pyopenssl ];
-
-  });
+  rpkg = callPackage ../development/python-modules/rpkg/default.nix {};
 
   rply = buildPythonPackage rec {
     name = "rply-${version}";
@@ -19447,6 +19196,8 @@ in {
   };
 
   rpm = (pkgs.rpm.override{inherit python;});
+
+  rpmfluff = callPackage ../development/python-modules/rpmfluff {};
 
   rpy2 = buildPythonPackage rec {
     name = "rpy2-2.8.2";
@@ -22507,28 +22258,7 @@ in {
     };
   };
 
-  urlgrabber =  buildPythonPackage rec {
-    name = "urlgrabber-3.9.1";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "http://urlgrabber.baseurl.org/download/${name}.tar.gz";
-      sha256 = "4437076c8708e5754ea04540e46c7f4f233734ee3590bb8a96389264fb0650d0";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ pycurl ];
-
-    meta = {
-      homepage = "urlgrabber.baseurl.org";
-      license = licenses.lgpl2Plus;
-      description = "Python module for downloading files";
-      maintainers = with maintainers; [ qknight ];
-    };
-  };
-
+  urlgrabber = callPackage ../development/python-modules/urlgrabber {};
 
   urwid = buildPythonPackage (rec {
     name = "urwid-1.3.1";
@@ -24077,26 +23807,7 @@ EOF
   };
 
 
-  unidecode = buildPythonPackage rec {
-    name = "Unidecode-0.04.18";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/U/Unidecode/${name}.tar.gz";
-      sha256 = "12hhblqy1ajvidm38im4171x4arg83pfmziyn53nizp29p3m14gi";
-    };
-
-    LC_ALL="en_US.UTF-8";
-
-    buildInputs = [ pkgs.glibcLocales ];
-
-    meta = {
-      homepage = http://pypi.python.org/pypi/Unidecode/;
-      description = "ASCII transliterations of Unicode text";
-      license = licenses.gpl2;
-      maintainers = with maintainers; [ domenkozar ];
-    };
-  };
-
+  unidecode = callPackage ../development/python-modules/unidecode {};
 
   pyusb = buildPythonPackage rec {
     name = "pyusb-1.0.0";
@@ -27213,6 +26924,12 @@ EOF
   thinc = callPackage ../development/python-modules/thinc { };
 
   spacy = callPackage ../development/python-modules/spacy { };
+
+  spacy_models = callPackage ../development/python-modules/spacy/models.nix { };
+
+  textacy = callPackage ../development/python-modules/textacy { };
+
+  pyemd  = callPackage ../development/python-modules/pyemd { };
 
   behave = callPackage ../development/python-modules/behave { };
 
