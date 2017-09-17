@@ -205,10 +205,13 @@ in
           fi
 
           KEY=$(head -n1 ${secretKey})
-          DBPASS=$(head -n1 ${cfg.database.passwordFile})
           sed -e "s,#secretkey#,$KEY,g" \
-              -e "s,#dbpass#,$DBPASS,g" \
               -i ${runConfig}
+          ${optionalString (cfg.database.password != "") ''
+          DBPASS=$(head -n1 ${cfg.database.passwordFile})
+          sed -e "s,#dbpass#,$DBPASS,g" \
+              -i ${runConfig}
+          ''}
           chmod 440 ${runConfig} ${secretKey}
         ''}
 
