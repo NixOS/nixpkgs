@@ -16579,6 +16579,10 @@ in {
     };
   };
 
+  pyobjc = if stdenv.isDarwin
+    then callPackage ../development/python-modules/pyobjc {}
+    else throw "pyobjc can only be built on Mac OS";
+
   pyodbc = callPackage ../development/python-modules/pyodbc { };
 
   pyocr = callPackage ../development/python-modules/pyocr { };
