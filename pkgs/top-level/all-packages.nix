@@ -13621,6 +13621,8 @@ with pkgs;
 
   airwave = callPackage ../applications/audio/airwave/default.nix { };
 
+  alembic = callPackage ../development/libraries/alembic {};
+
   alchemy = callPackage ../applications/graphics/alchemy { };
 
   alock = callPackage ../misc/screensavers/alock { };
