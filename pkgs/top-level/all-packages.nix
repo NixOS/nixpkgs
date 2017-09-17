@@ -5378,6 +5378,13 @@ with pkgs;
   gcc = gcc6;
   gcc-unwrapped = gcc.cc;
 
+  gccStdenv = if (!stdenv.isDarwin) then stdenv else stdenv.override {
+    allowedRequisites = null;
+    cc = gcc;
+    # Include unwrapped binaries like AS, etc. and remove libcxx/libcxxabi
+    extraBuildInputs = [ stdenv.cc.cc ];
+  };
+
   wrapCCMulti = cc:
     if system == "x86_64-linux" then lowPrio (
       let
@@ -19421,6 +19428,7 @@ with pkgs;
   # `recurseIntoAttrs` for sake of hydra, not nix-env
   tests = recurseIntoAttrs {
     cc-wrapper = callPackage ../test/cc-wrapper { };
+    cc-wrapper-gcc = callPackage ../test/cc-wrapper { stdenv = gccStdenv; };
     cc-wrapper-clang = callPackage ../test/cc-wrapper { stdenv = llvmPackages.stdenv; };
     cc-wrapper-libcxx = callPackage ../test/cc-wrapper { stdenv = llvmPackages.libcxxStdenv; };
     cc-wrapper-clang-39 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_39.stdenv; };
