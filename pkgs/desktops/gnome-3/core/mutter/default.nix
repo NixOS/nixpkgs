@@ -28,10 +28,6 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 
-  patches = [
-    ./x86.patch # ./math.patch
-  ];
-
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
