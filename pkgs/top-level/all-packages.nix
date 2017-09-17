@@ -8211,6 +8211,8 @@ with pkgs;
   gmime3 = callPackage ../development/libraries/gmime/3.nix { };
   gmime = gmime2;
 
+  gmime3 = callPackage ../development/libraries/gmime/3.0.nix { };
+
   gmm = callPackage ../development/libraries/gmm { };
 
   gmp4 = callPackage ../development/libraries/gmp/4.3.2.nix { }; # required by older GHC versions

@@ -1,6 +1,6 @@
 { fetchurl, stdenv, fixDarwinDylibNames
 , pkgconfig, gnupg
-, xapian, gmime, talloc, zlib
+, xapian, gmime3, talloc, zlib, glib
 , doxygen, perl
 , pythonPackages
 , bash-completion
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig gnupg # undefined dependencies
-    xapian gmime talloc zlib  # dependencies described in INSTALL
+    xapian gmime3 glib talloc zlib  # dependencies described in INSTALL
     doxygen perl  # (optional) api docs
     pythonPackages.sphinx pythonPackages.python  # (optional) documentation -> doc/INSTALL
     bash-completion  # (optional) dependency to install bash completion
