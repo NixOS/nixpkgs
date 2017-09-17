@@ -3,8 +3,8 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ file intltool gmime libxml2 libsoup ];
+  nativeBuildInputs = [ pkgconfig file intltool ];
+  buildInputs = [ gmime libxml2 libsoup ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Videos;
