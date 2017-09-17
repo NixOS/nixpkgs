@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cmake, libcap, zlib, bzip2}:
+{stdenv, fetchurl, cmake, libcap, zlib, bzip2, perl}:
 
 stdenv.mkDerivation rec {
   name = "cdrkit-1.1.11";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1nj7iv3xrq600i37na9a5idd718piiiqbs4zxvpjs66cdrsk1h6i";
   };
 
-  buildInputs = [cmake libcap zlib bzip2];
+  buildInputs = [cmake libcap zlib bzip2 perl];
 
   hardeningDisable = [ "format" ];
 
