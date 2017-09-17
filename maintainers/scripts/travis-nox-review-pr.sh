@@ -51,26 +51,25 @@ while test -n "$1"; do
             ;;
 
         nox)
-            echo "=== Fetching Nox from binary cache"
-
-            # build nox (+ a basic nix-shell env) silently so it's not in the log
+            # build nox (+ a basic nix-shell env) silently so it's not in the
+            # log
             nix-shell -p nox stdenv --command true
-            ;;
 
-        pr)
+            args=""
             if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
-                echo "=== No pull request found"
+                echo "=== Build $TRAVIS_BRANCH branch"
+                args="wip --against $TRAVIS_BRANCH^"
             else
                 echo "=== Building pull request #$TRAVIS_PULL_REQUEST"
 
-                token=""
+                args="pr --no-merge --slug $TRAVIS_REPO_SLUG"
                 if [ -n "$GITHUB_TOKEN" ]; then
-                    token="--token $GITHUB_TOKEN"
+                    args="$args --token $GITHUB_TOKEN"
                 fi
-
-                nix-shell --packages nox \
-                          --run "nox-review pr --no-merge --slug $TRAVIS_REPO_SLUG $token $TRAVIS_PULL_REQUEST"
+                args="$args $TRAVIS_PULL_REQUEST"
             fi
+
+            nix-shell -p nox --run "nox-review $args"
             ;;
 
         *)
