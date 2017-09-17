@@ -9,7 +9,7 @@ let
   cfg = config.networking;
   dnsmasqResolve = config.services.dnsmasq.enable &&
                    config.services.dnsmasq.resolveLocalQueries;
-  hasLocalResolver = config.services.bind.enable || dnsmasqResolve;
+  hasLocalResolver = cfg.nameservers == [] && ( config.services.bind.enable || dnsmasqResolve );
 
   resolvconfOptions = cfg.resolvconfOptions
     ++ optional cfg.dnsSingleRequest "single-request"
