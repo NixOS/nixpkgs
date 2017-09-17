@@ -5849,17 +5849,7 @@ in {
     };
   };
 
-  google-compute-engine = buildPythonPackage rec {
-    version = "2.3.0";
-    name    = "google-compute-engine-${version}";
-
-    src = pkgs.fetchurl {
-      url    = "mirror://pypi/g/google-compute-engine/google-compute-engine-${version}.tar.gz";
-      sha256 = "1pjj95b3l61h8xz5kjfcgnql066cr8bq5wl480a6dxd2inw8mynf";
-    };
-
-    propagatedBuildInputs = with self; [ boto ];
-  };
+  google-compute-engine = callPackage ../tools/virtualization/google-compute-engine { };
 
   googlecl = buildPythonPackage rec {
     version = "0.9.14";
