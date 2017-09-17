@@ -15662,14 +15662,19 @@ let self = _self // overrides; _self = with self; {
   };
 
   XMLLibXML = buildPerlPackage rec {
-    name = "XML-LibXML-2.0122";
+    name = "XML-LibXML-2.0129";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
-      sha256 = "0llgkgifcw7zz7r7f2jiqryi5axymmd3fwzp4aa5gk6j37w66xkn";
+      sha256 = "0rmk6vysfgcn8434wyydd56midgshly37wx7c50ch038l2djd82w";
     };
     SKIP_SAX_INSTALL = 1;
     buildInputs = [ pkgs.libxml2 ];
     propagatedBuildInputs = [ XMLSAX ];
+
+    # https://rt.cpan.org/Public/Bug/Display.html?id=122958
+    preCheck = ''
+      rm t/32xpc_variables.t t/48_reader_undef_warning_on_empty_str_rt106830.t
+    '';
   };
 
   XMLLibXMLSimple = buildPerlPackage {
