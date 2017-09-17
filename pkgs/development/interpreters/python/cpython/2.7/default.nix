@@ -163,7 +163,8 @@ in stdenv.mkDerivation {
         # functionality to 2.x from 3.x
         for item in $out/lib/python${majorVersion}/test/*; do
           if [[ "$item" != */test_support.py*
-             && "$item" != */regrtest.py* ]]; then
+             && "$item" != */test/support
+             && "$item" != */test/regrtest.py* ]]; then
             rm -rf "$item"
           else
             echo $item
