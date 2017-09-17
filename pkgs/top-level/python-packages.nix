@@ -19833,24 +19833,20 @@ in {
 
   stevedore = callPackage ../development/python-modules/stevedore {};
 
-  Theano = self.TheanoWithoutCuda;
+  Theano = callPackage ../development/python-modules/Theano rec {
+    cudaSupport = pkgs.config.cudaSupport or false;
+    cudnnSupport = cudaSupport;
+  };
 
-  TheanoWithoutCuda = callPackage ../development/python-modules/Theano/theano-without-cuda { };
+  TheanoWithoutCuda = self.Theano.override {
+    cudaSupport = true;
+    cudnnSupport = true;
+  };
 
-  TheanoWithCuda = callPackage ../development/python-modules/Theano/theano-with-cuda (
-  let
-    boost = pkgs.boost159.override {
-      inherit (self) python numpy scipy;
-    };
-  in rec {
-    cudatoolkit = pkgs.cudatoolkit75;
-    cudnn = pkgs.cudnn5_cudatoolkit75;
-    inherit (self) numpy scipy;
-    pycuda = self.pycuda.override { inherit boost; };
-    libgpuarray = self.libgpuarray-cuda.override {
-      clblas = pkgs.clblas-cuda.override { inherit boost; };
-    };
-  });
+  TheanoWithCuda = self.Theano.override {
+    cudaSupport = false;
+    cudnnSupport = false;
+  };
 
   tidylib = buildPythonPackage rec {
     version = "0.2.4";
