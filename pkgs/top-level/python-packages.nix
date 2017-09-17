@@ -5512,6 +5512,8 @@ in {
     buildInputs = with self; [ fudge_9 nose ];
   };
 
+  faulthandler = callPackage ../development/python-modules/faulthandler {};
+
   fedpkg = callPackage ../development/python-modules/fedpkg { };
 
   flit = callPackage ../development/python-modules/flit { };
