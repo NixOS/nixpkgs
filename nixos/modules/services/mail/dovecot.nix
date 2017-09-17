@@ -9,6 +9,8 @@ let
   baseDir = "/run/dovecot2";
   stateDir = "/var/lib/dovecot";
 
+  canCreateMailUserGroup = cfg.mailUser != null && cfg.mailGroup != null;
+
   dovecotConf = concatStrings [
     ''
       base_dir = ${baseDir}
@@ -314,17 +316,18 @@ in
            description = "Dovecot user";
            group = cfg.group;
          }
-      ++ optional cfg.createMailUser
-         { name = cfg.mailUser;
-           description = "Virtual Mail User";
+      ++ optional (cfg.createMailUser && cfg.mailUser != null)
+         ({ name = cfg.mailUser;
+            description = "Virtual Mail User";
+         } // optionalAttrs (cfg.mailGroup != null) {
            group = cfg.mailGroup;
-         };
+         });
 
     users.extraGroups = optional (cfg.group == "dovecot2")
       { name = "dovecot2";
         gid = config.ids.gids.dovecot2;
       }
-    ++ optional cfg.createMailUser
+    ++ optional (cfg.createMailUser && cfg.mailGroup != null)
       { name = cfg.mailGroup;
       };
 
