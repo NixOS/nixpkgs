@@ -11464,25 +11464,7 @@ in {
     propagatedBuildInputs = with self; [ unittest2 six ];
   };
 
-  logilab-constraint = buildPythonPackage rec {
-    name = "logilab-constraint-${version}";
-    version = "0.6.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/logilab-constraint/${name}.tar.gz";
-      sha256 = "1n0xim4ij1n4yvyqqvyc0wllhjs22szglsd5av0j8k2qmck4njcg";
-    };
-
-    propagatedBuildInputs = with self; [
-      logilab_common six
-    ];
-
-    meta = with stdenv.lib; {
-      description = "logilab-database provides some classes to make unified access to different";
-      homepage = "http://www.logilab.org/project/logilab-database";
-    };
-  };
-
+  logilab-constraint = callPackage ../development/python-modules/logilab/constraint.nix {};
 
   lxml = buildPythonPackage ( rec {
     name = "lxml-3.8.0";
