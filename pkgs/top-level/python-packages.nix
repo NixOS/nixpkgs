@@ -5849,6 +5849,8 @@ in {
     };
   };
 
+  google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk { };
+
   google-compute-engine = callPackage ../tools/virtualization/google-compute-engine { };
 
   googlecl = buildPythonPackage rec {
