@@ -3501,6 +3501,8 @@ with pkgs;
     wxGTK = wxGTK30;
   };
 
+  niff = callPackage ../tools/package-management/niff { };
+
   nifskope = callPackage ../tools/graphics/nifskope { };
 
   nilfs-utils = callPackage ../tools/filesystems/nilfs-utils {};
