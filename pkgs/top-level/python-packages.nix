@@ -16572,7 +16572,7 @@ in {
     };
   };
 
-  pyobjc = if stdenv.isDarwin
+  pyobjc = if stdenv.isDarwin && isPy3k
     then callPackage ../development/python-modules/pyobjc {}
     else throw "pyobjc can only be built on Mac OS";
 
