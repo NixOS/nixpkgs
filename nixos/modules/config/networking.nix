@@ -192,14 +192,6 @@ in
 
   config = {
 
-    assertions = [
-      {
-        # Setting nameservers is mutually exclusive with running bind or dnsmasq as local resolver."
-        assertion =  hasLocalResolver -> cfg.nameservers == [];
-        message = "Can't specify networking.nameservers when bind.resolveLocalQueries or dnsmasq.resolveLocalQueries is set to true";
-      }
-    ];
-
     environment.etc =
       { # /etc/services: TCP/UDP port assignments.
         "services".source = pkgs.iana-etc + "/etc/services";
