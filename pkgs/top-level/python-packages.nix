@@ -11453,16 +11453,7 @@ in {
     };
   };
 
-  logilab_common = buildPythonPackage rec {
-    name = "logilab-common-0.63.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/logilab-common/${name}.tar.gz";
-      sha256 = "1rr81zlmlgdma3s75i5c1l8q2m25v4ac41i9pniik4mhkc6a0fv0";
-    };
-
-    propagatedBuildInputs = with self; [ unittest2 six ];
-  };
+  logilab_common = callPackage ../development/python-modules/logilab/common.nix {};
 
   logilab-constraint = callPackage ../development/python-modules/logilab/constraint.nix {};
 
