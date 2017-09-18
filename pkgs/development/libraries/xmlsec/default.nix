@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   doCheck = true;
 
+  # enable deprecated soap headers required by lasso
+  # https://dev.entrouvert.org/issues/18771
+  configureFlags = [ "--enable-soap" ];
+
   # otherwise libxmlsec1-gnutls.so won't find libgcrypt.so, after #909
   NIX_LDFLAGS = [ "-lgcrypt" ];
 
