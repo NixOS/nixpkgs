@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    echo "${buildMK}" > mk/build.mk
+    echo -n "${buildMK}" > mk/build.mk
   '';
 
   configureFlags = [

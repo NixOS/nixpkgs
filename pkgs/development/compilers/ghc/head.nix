@@ -46,7 +46,7 @@ stdenv.mkDerivation (rec {
   postPatch = "patchShebangs .";
 
   preConfigure = ''
-    echo "${buildMK}" > mk/build.mk
+    echo -n "${buildMK}" > mk/build.mk
     echo ${version} >VERSION
     echo ${rev} >GIT_COMMIT_ID
     ./boot

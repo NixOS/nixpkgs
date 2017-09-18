@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    echo "${buildMK}" > mk/build.mk
+    echo -n "${buildMK}" > mk/build.mk
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     find . -name '*.hs'  | xargs sed -i -e 's|ASSERT (|ASSERT(|' -e 's|ASSERT2 (|ASSERT2(|' -e 's|WARN (|WARN(|'
