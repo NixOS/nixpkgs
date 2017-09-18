@@ -11,49 +11,51 @@ while test -n "$1"; do
         nixpkgs-verify)
             echo "=== Verifying that nixpkgs evaluates..."
 
-            nix-env --file $TRAVIS_BUILD_DIR --query --available --json > /dev/null
+            nix-env -f. -qa --json > /dev/null
             ;;
 
         nixos-options)
             echo "=== Checking NixOS options"
 
-            nix-build $TRAVIS_BUILD_DIR/nixos/release.nix --attr options --show-trace
+            nix-build nixos/release.nix -A options --show-trace -Q
             ;;
 
         nixos-manual)
             echo "=== Checking NixOS manuals"
 
-            nix-build $TRAVIS_BUILD_DIR/nixos/release.nix --attr manual --show-trace
+            nix-build nixos/release.nix -A manual --show-trace -Q
             ;;
 
         nixpkgs-manual)
             echo "=== Checking nixpkgs manuals"
 
-            nix-build $TRAVIS_BUILD_DIR/pkgs/top-level/release.nix --attr manual --show-trace
+            nix-build pkgs/top-level/release.nix -A manual --show-trace -Q
             ;;
 
         nixpkgs-tarball)
             echo "=== Checking nixpkgs tarball creation"
 
-            nix-build $TRAVIS_BUILD_DIR/pkgs/top-level/release.nix --attr tarball --show-trace
+            nix-build pkgs/top-level/release.nix -A tarball --show-trace -Q
             ;;
 
         nixpkgs-unstable)
             echo "=== Checking nixpkgs unstable job"
 
-            nix-instantiate $TRAVIS_BUILD_DIR/pkgs/top-level/release.nix --attr unstable --show-trace
+            nix-instantiate pkgs/top-level/release.nix -A unstable \
+                                                       --show-trace -Q
             ;;
 
         nixpkgs-lint)
             echo "=== Checking nixpkgs lint"
 
-            nix-shell --packages nixpkgs-lint --run "nixpkgs-lint -f $TRAVIS_BUILD_DIR"
+            nix-shell -p nixpkgs-lint \
+                      --run "nixpkgs-lint -f $TRAVIS_BUILD_DIR"
             ;;
 
         nox)
             # build nox (+ a basic nix-shell env) silently so it's not in the
             # log
-            nix-build '<nixpkgs>' -A nox > /dev/null
+            nix-build '<nixpkgs>' -A nox -Q > /dev/null
 
             args=""
             if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
