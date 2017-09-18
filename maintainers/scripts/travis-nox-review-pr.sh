@@ -53,7 +53,7 @@ while test -n "$1"; do
         nox)
             # build nox (+ a basic nix-shell env) silently so it's not in the
             # log
-            nix-shell -p nox stdenv --command true
+            nix-build '<nixpkgs>' -A nox > /dev/null
 
             args=""
             if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then
