@@ -558,6 +558,23 @@ in {
 
   funcsigs = callPackage ../development/python-modules/funcsigs { };
 
+  fuzzyfinder = buildPythonPackage rec {
+    name = "fuzzyfinder-${version}";
+    version = "1.0.0";
+
+    src = fetchurl {
+      url = "mirror://pypi/f/fuzzyfinder/${name}.tar.gz";
+      sha256 = "11w0kha42a9kya4rv6amrhdhh4m26kzxrvg43mm3c7wiz3i4h7k9";
+    };
+
+    buildInputs = with pythonPackages; [ simplejson ];
+
+    meta = with lib; {
+      homepage = https://github.com/amjith/fuzzyfinder;
+      license = licenses.BSD;
+    };
+  };
+
   APScheduler = callPackage ../development/python-modules/APScheduler { };
 
   args = callPackage ../development/python-modules/args { };
