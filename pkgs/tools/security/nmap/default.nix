@@ -28,6 +28,13 @@ in stdenv.mkDerivation rec {
 
   patches = ./zenmap.patch;
 
+  prePatch = optionalString stdenv.isDarwin ''
+    substituteInPlace libz/configure \
+        --replace /usr/bin/libtool ar \
+        --replace 'AR="libtool"' 'AR="ar"' \
+        --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
+  '';
+
   configureFlags = []
     ++ optional (!pythonSupport) "--without-ndiff"
     ++ optional (!graphicalSupport) "--without-zenmap"
