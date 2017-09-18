@@ -5,11 +5,11 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "bluez-5.43";
+  name = "bluez-5.47";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${name}.tar.xz";
-    sha256 = "05cdnpz0w2lwq2x5ba87q1h2wgb4lfnpbnbh6p7499hx59fw1j8n";
+    sha256 = "1j22hfjz0fp4pgclgz9mfcwjbr4wqgah3gd2qhfg4r6msmybyxfg";
   };
 
   pythonPath = with pythonPackages;
@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--enable-library"
     "--enable-cups"
+    "--enable-pie"
     "--with-dbusconfdir=$(out)/etc"
     "--with-dbussystembusdir=$(out)/share/dbus-1/system-services"
     "--with-dbussessionbusdir=$(out)/share/dbus-1/services"
@@ -53,7 +54,6 @@ stdenv.mkDerivation rec {
   # FIXME: Move these into a separate package to prevent Bluez from
   # depending on Python etc.
   postInstall = ''
-    cp ./attrib/gatttool $out/bin/gatttool
     mkdir -p $test/test
     cp -a test $test
     pushd $test/test
