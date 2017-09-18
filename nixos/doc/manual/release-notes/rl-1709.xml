@@ -107,7 +107,7 @@ rmdir /var/lib/ipfs/.ipfs
       The <literal>mysql</literal> default <literal>dataDir</literal> has changed from <literal>/var/mysql</literal> to <literal>/var/lib/mysql</literal>.
     </para>
     <para>
-      Radicale's default package has changed from 1.x to 2.x. Instructions to migrate can be found <link xlink:href="http://radicale.org/1to2/"> here </link>. It is also possible to use the newer version by setting the <literal>package</literal> to <literal>radicale2</literal>, which is done automatically when <literal>stateVersion</literal> is 17.09 or higher.
+            Radicale's default package has changed from 1.x to 2.x. Instructions to migrate can be found <link xlink:href="http://radicale.org/1to2/"> here </link>. It is also possible to use the newer version by setting the <literal>package</literal> to <literal>radicale2</literal>, which is done automatically when <literal>stateVersion</literal> is 17.09 or higher. The <literal>extraArgs</literal> option has been added to allow passing the data migration arguments specified in the instructions; see the <filename xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/radicale.nix">radicale.nix</filename> NixOS test for an example migration.
     </para>
   </listitem>
   <listitem>
