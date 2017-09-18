@@ -1,7 +1,7 @@
 { fetchurl, stdenv, pkgconfig, gnome3, intltool, gobjectIntrospection, upower, cairo
 , pango, cogl, clutter, libstartup_notification, libcanberra_gtk2, zenity, libcanberra_gtk3
 , libtool, makeWrapper, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libudev, libinput
-, libgudev, xwayland }:
+, libgudev, libwacom, xwayland }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   buildInputs = with gnome3;
     [ pkgconfig intltool glib gobjectIntrospection gtk gsettings_desktop_schemas upower
       gnome_desktop cairo pango cogl clutter zenity libstartup_notification libcanberra_gtk2
-      gnome3.geocode_glib libudev libinput libgudev
+      gnome3.geocode_glib libudev libinput libgudev libwacom
       libcanberra_gtk3 zenity libtool makeWrapper xkeyboard_config libxkbfile
       libxkbcommon ];
 
