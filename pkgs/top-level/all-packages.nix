@@ -4535,6 +4535,8 @@ with pkgs;
 
   textadept = callPackage ../applications/editors/textadept { };
 
+  texworks = callPackage ../applications/editors/texworks { };
+
   thc-hydra = callPackage ../tools/security/thc-hydra { };
 
   thefuck = callPackage ../tools/misc/thefuck { };
