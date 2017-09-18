@@ -25146,25 +25146,41 @@ EOF
   };
 
   trollius = buildPythonPackage rec {
-    version = "1.0.4";
+    version = "2.1";
     name = "trollius-${version}";
-    disabled = isPy34;
+    disabled = !(isPy27 || isPy33 || isPy34);
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/trollius/${name}.tar.gz";
-      sha256 = "8884cae4ec6a2d593abcffd5e700626ad4618f42b11beb2b75998f2e8247de76";
+      sha256 = "146c60hgcmgjkbf2hmiag52f9i3hka6shwbfybdsmlvqjnfms5nd";
     };
 
-    buildInputs = with self; [ mock ]
-      ++ optional isPy26 unittest2;
+    buildInputs = with self; [ mock ] ;
 
-    propagatedBuildInputs = with self; []
-      ++ optional isPy26 ordereddict
-      ++ optional (isPy26 || isPy27 || isPyPy) futures;
+    propagatedBuildInputs = with self; [ ]
+      ++ optional isPy27 futures;
+
+    # The test_env_var_debug relies on explicit Python-path setting and as such does not play well
+    # with nix build environments.
+
+    # Test methods in Python 2.7 have slightly different names than in later versions.
 
     # Some of the tests fail on darwin with `error: AF_UNIX path too long'
     # because of the *long* path names for sockets
-    patchPhase = optionalString stdenv.isDarwin ''
+    patchPhase = ''
+      sed -i -e "s|test_env_var_debug|skip_test_env_var_debug|" tests/test_tasks.py
+      '' + (optionalString isPy27 ''
+      sed -i -e "s|assertRaisesRegex|assertRaisesRegexp|" tests/test_base_events.py
+      sed -i -e "s|assertRaisesRegex|assertRaisesRegexp|" tests/test_events.py
+      sed -i -e "s|assertRaisesRegex|assertRaisesRegexp|" tests/test_transports.py
+      sed -i -e "s|assertRaisesRegex|assertRaisesRegexp|" tests/test_unix_events.py
+      sed -i -e "s|assertRegex|assertRegexpMatches|" tests/test_base_events.py
+      sed -i -e "s|assertRegex|assertRegexpMatches|" tests/test_futures.py
+      sed -i -e "s|assertRegex|assertRegexpMatches|" tests/test_events.py
+      sed -i -e "s|assertRegex|assertRegexpMatches|" tests/test_tasks.py
+      sed -i -e "s|assertRegex|assertRegexpMatches|" tests/test_transports.py
+      sed -i -e "s|test_async_warning|skip_test_async_warning|" tests/test_tasks.py
+      '') + (optionalString stdenv.isDarwin ''
       sed -i -e "s|test_create_ssl_unix_connection|skip_test_create_ssl_unix_connection|" tests/test_events.py
       sed -i -e "s|test_create_unix_connection|skip_test_create_unix_connection|" tests/test_events.py
       sed -i -e "s|test_create_unix_connection|skip_test_create_unix_connection|" tests/test_events.py
@@ -25193,15 +25209,13 @@ EOF
       sed -i -e "s|test_unix_sock_client_ops|skip_test_unix_sock_client_ops|" tests/test_events.py
       sed -i -e "s|test_unix_sock_client_ops|skip_test_unix_sock_client_ops|" tests/test_events.py
       sed -i -e "s|test_write_pty|skip_test_write_pty|" tests/test_events.py
-    '' + optionalString isPy26 ''
-      sed -i -e "s|test_env_var_debug|skip_test_env_var_debug|" tests/test_tasks.py
-    '';
+    '');
 
     meta = {
-      description = "Port of the Tulip project (asyncio module, PEP 3156) on Python 2";
-      homepage = "https://bitbucket.org/enovance/trollius";
+      description = "Trollius is a portage of the asyncio project (asyncio module, PEP 3156); it is deprecated";
+      homepage = "https://trollius.readthedocs.io/";
       license = licenses.asl20;
-      maintainers = with maintainers; [ garbas ];
+      maintainers = with maintainers; [ garbas vanschelven ];
     };
   };
 
