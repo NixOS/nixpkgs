@@ -18358,6 +18358,8 @@ with pkgs;
 
   tini = callPackage ../applications/virtualization/tini {};
 
+  ifstat-legacy = callPackage ../tools/networking/ifstat-legacy { };
+
   isabelle = callPackage ../applications/science/logic/isabelle {
     polyml = polyml56;
     java = if stdenv.isLinux then jre else jdk;
