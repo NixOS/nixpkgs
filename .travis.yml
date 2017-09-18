@@ -13,22 +13,22 @@ script:
   - ./maintainers/scripts/travis-nox-review-pr.sh $TARGETS
 
 matrix:
+    fast_finish: true
+    allow_failures:
+        - env: TARGETS=nox
     include:
         - os: linux
           sudo: required
-          env:
-            - TARGETS='nixpkgs-verify nixpkgs-manual nixpkgs-tarball nixpkgs-unstable nixos-options'
+          env: TARGETS='nixpkgs-verify nixpkgs-manual nixpkgs-tarball nixpkgs-unstable nixos-options'
         - os: linux
           sudo: required
           dist: trusty
           before_script:
               - sudo mount -o remount,exec,size=2G,mode=755 /run/user
-          env:
-            - TARGETS=nox
+          env: TARGETS=nox
         - os: osx
           osx_image: xcode7.3
-          env:
-            - TARGETS=nox
+          env: TARGETS=nox
 
 git:
     depth: 2
