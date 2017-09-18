@@ -13,9 +13,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ fontforge ];
 
   buildPhase = ''
-    # <nixpkgs/pkgs/build-support/setup-hooks/set-source-date-epoch-to-latest.sh> set it to mtime of ./env-vars, i.e. the current time
-    export SOURCE_DATE_EPOCH=$(stat -c '%Y' ChangeLog.txt)
-
     for i in *.sfd; do
       fontforge -lang=ff -c \
         'Open($1);
