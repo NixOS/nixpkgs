@@ -29,6 +29,10 @@ matrix:
           osx_image: xcode7.3
           env:
             - TARGETS=nox
+
+git:
+    depth: 2
+
 env:
     global:
         - GITHUB_TOKEN=5edaaf1017f691ed34e7f80878f8f5fbd071603f
