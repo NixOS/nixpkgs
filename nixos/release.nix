@@ -259,6 +259,7 @@ in rec {
   tests.hibernate = callTest tests/hibernate.nix {};
   tests.hound = callTest tests/hound.nix {};
   tests.i3wm = callTest tests/i3wm.nix {};
+  tests.initrd-network-ssh = callTest tests/initrd-network-ssh.nix {};
   tests.installer = callSubTests tests/installer.nix {};
   tests.influxdb = callTest tests/influxdb.nix {};
   tests.ipv6 = callTest tests/ipv6.nix {};
