@@ -4,7 +4,9 @@ let
   sources = lib.sourceFilesBySuffices ./. [".xml"];
   sources-langs = ./languages-frameworks;
 
-  libDocFragments = lib.mapAttrsToList
+  attrsOnly = attrset: lib.filterAttrs (k: v: builtins.isAttrs v) attrset;
+
+  libSetDocFragments = libset: lib.mapAttrsToList
     (name: value:
       let
         pos = builtins.unsafeGetAttrPos name lib;
@@ -17,7 +19,23 @@ let
         </section>
       ''
     )
-    lib.docs;
+    (if builtins.hasAttr "docs" libset then libset.docs else {});
+
+  libDocFragments = lib.mapAttrsToList
+    (name: value:
+      let
+        docs = (lib.strings.concatStrings (libSetDocFragments value));
+      in if builtins.stringLength docs == 0
+      then ""
+      else ''
+        <section>
+          <title>${name}</title>
+
+          ${docs}
+        </section>
+      ''
+    )
+    (attrsOnly lib);
 
   libListDocs = pkgs.writeTextDir "lib-funcs.xml"
     ''

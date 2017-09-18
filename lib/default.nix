@@ -37,6 +37,7 @@ let
 
     # misc
     debug = callLibs ./debug.nix;
+    docs = callLibs ./docs.nix;
 
     generators = callLibs ./generators.nix;
     misc = callLibs ./deprecated.nix;
