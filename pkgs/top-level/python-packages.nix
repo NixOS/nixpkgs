@@ -177,6 +177,30 @@ in {
     hdf5 = pkgs.hdf5;
   };
 
+  hjson_to_gantt = buildPythonPackage rec {
+    name = "hjson_to_gantt-${version}";
+    version = "06bf91b9a1c80148da4597c35d2ef52af873dc4d";
+
+    src = fetchFromGitHub {
+      owner = "lowRISC";
+      repo = "hjson_to_gantt";
+      rev = version;
+      sha256 = "1skxnwq0379vc26h16cfp3gprcnx333a97g0v89zy6mr03a9sw0r";
+    };
+
+    phases = [ "unpackPhase" "installPhase" ];
+
+    installPhase = ''
+      mkdir -p $out/bin
+      cp hjson_to_gantt $out/bin/
+      chmod +x $out/bin/hjson_to_gantt
+    '';
+
+    doCheck = false;
+
+    buildInputs = with self; [ hjson fuzzyfinder ];
+  };
+
   h5py-mpi = self.h5py.override {
     hdf5 = pkgs.hdf5-mpi;
   };
