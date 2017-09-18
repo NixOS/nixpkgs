@@ -29,14 +29,14 @@ rec {
 
 
   docs.foldr = mkDoc {
+    type = "foldr :: (a -> b -> b) -> b -> [a] -> b";
+
     description = ''
       "Right fold" a binary function <literal>op</literal> between
       successive elements of <literal>list</literal> with
       <literal>nul</literal> as the starting value, i.e.,
       <literal>fold op nul [x_1 x_2 ... x_n] == op x_1 (op x_2 ... (op x_n nul))</literal>.
       (This is Haskell's <literal>foldr</literal>).
-
-      Type: foldr :: (a -> b -> b) -> b -> [a] -> b
     '';
 
     examples =[

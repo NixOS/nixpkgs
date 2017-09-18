@@ -6,18 +6,46 @@ let
 
   attrsOnly = attrset: lib.filterAttrs (k: v: builtins.isAttrs v) attrset;
 
+  docbookFromDoc = { name, pos }: {
+        # MUST match lib/doc.nix's mkDoc function signature
+        description,
+        examples ? [],
+        type ? false
+      }:
+    let
+      exampleDocbook = lib.strings.concatMapStrings ({title, body}: ''
+        <example>
+          <title>${title}</title>
+          <programlisting><![CDATA[${body}]]></programlisting>
+        </example>
+
+      '') examples;
+
+      typeDocbook = if type == false then ""
+        else ''
+        <para>${type}</para>
+        '';
+
+    in ''
+      <section>
+        <title>${name}</title>
+        ${typeDocbook}
+        <para>${pos.file}:${toString pos.line}</para>
+
+        <para>${description}</para>
+
+        ${exampleDocbook}
+      </section>
+
+    '';
+
+
+
   libSetDocFragments = libset: lib.mapAttrsToList
     (name: value:
       let
-        pos = builtins.unsafeGetAttrPos name lib;
-      in ''
-        <section>
-          <title>${name}</title>
-          <para>${pos.file}:${toString pos.line}</para>
-
-        ${value}
-        </section>
-      ''
+        pos = builtins.unsafeGetAttrPos name libset;
+      in docbookFromDoc { inherit pos name; } value
     )
     (if builtins.hasAttr "docs" libset then libset.docs else {});
 
