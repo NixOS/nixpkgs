@@ -23,7 +23,7 @@ let
 
       typeDocbook = if type == false then ""
         else ''
-        <para>${type}</para>
+        <subtitle><literal>${type}</literal></subtitle>
         '';
 
     in ''
@@ -31,6 +31,7 @@ let
         <title>${name}</title>
         ${typeDocbook}
         <para>${pos.file}:${toString pos.line}</para>
+
 
         <para>${description}</para>
 
