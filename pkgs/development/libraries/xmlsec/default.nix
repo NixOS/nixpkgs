@@ -1,18 +1,18 @@
 { stdenv, fetchurl, libxml2, gnutls, libxslt, pkgconfig, libgcrypt, libtool
-, openssl, nss, makeWrapper }:
+, openssl, makeWrapper }:
 
 let
-  version = "1.2.25";
+  version = "1.2.23";
 in
 stdenv.mkDerivation rec {
   name = "xmlsec-${version}";
 
   src = fetchurl {
     url = "http://www.aleksey.com/xmlsec/download/xmlsec1-${version}.tar.gz";
-    sha256 = "1lpwj8dxwhha54sby0v5axjk79h56jnhjjiwiasbbk15vwzahz4n";
+    sha256 = "17qfw5crkqn4v6xbkjxrjvcccfc00dy053892wrwv54qdk8n7m21";
   };
 
-  buildInputs = [ makeWrapper libxml2 gnutls libxslt pkgconfig libgcrypt libtool openssl nss ];
+  buildInputs = [ makeWrapper libxml2 gnutls libxslt pkgconfig libgcrypt libtool openssl ];
   enableParallelBuilding = true;
   doCheck = true;
 
@@ -25,10 +25,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.aleksey.com/xmlsec;
-    downloadPage = https://www.aleksey.com/xmlsec/download.html;
     description = "XML Security Library in C based on libxml2";
     license = stdenv.lib.licenses.mit;
     platforms = with stdenv.lib.platforms; linux ++ darwin;
-    updateWalker = true;
   };
 }
