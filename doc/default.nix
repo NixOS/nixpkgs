@@ -13,7 +13,8 @@ let
         type ? false
       }:
     let
-      exampleDocbook = lib.strings.concatMapStrings ({title, body}: ''
+      exampleDocbook = lib.strings.concatMapStrings ({title, body}:
+        ''
         <example>
           <title>${title}</title>
           <programlisting><![CDATA[${body}]]></programlisting>

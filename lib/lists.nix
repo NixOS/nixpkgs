@@ -74,6 +74,7 @@ rec {
   };
   fold = foldr;
 
+
   docs.foldl = mkDoc {
     description = ''
       Left fold, like <literal>foldr</literal>, but from the left:
@@ -108,6 +109,7 @@ rec {
         else op (foldl' (n - 1)) (elemAt list n);
     in foldl' (length list - 1);
 
+
   docs.foldl' = mkDoc {
     description = ''
       Strict version of <literal>foldl</literal>.
@@ -119,28 +121,47 @@ rec {
   };
   foldl' = builtins.foldl' or foldl;
 
-  /* Map with index starting from 0
 
-     Example:
-       imap0 (i: v: "${v}-${toString i}") ["a" "b"]
-       => [ "a-0" "b-1" ]
-  */
+  docs.imap0 = mkDoc {
+    description = "Map with index starting from 0";
+
+    examples = [
+      { title = "";
+        body = ''
+         imap0 (i: v: "''${v}-''${toString i}") ["a" "b"]
+         => [ "a-0" "b-1" ]
+      '';
+      }
+    ];
+  };
   imap0 = f: list: genList (n: f n (elemAt list n)) (length list);
 
-  /* Map with index starting from 1
+  docs.imap1 = mkDoc {
+    description = "Map with index starting from 1";
 
-     Example:
-       imap1 (i: v: "${v}-${toString i}") ["a" "b"]
-       => [ "a-1" "b-2" ]
-  */
+    examples = [
+      { title = "";
+        body = ''
+         imap1 (i: v: "''${v}-''${toString i}") ["a" "b"]
+         => [ "a-1" "b-2" ]
+      '';
+      }
+    ];
+  };
   imap1 = f: list: genList (n: f (n + 1) (elemAt list n)) (length list);
 
-  /* Map and concatenate the result.
+  docs.concatMap = mkDoc {
+    description = "Map and concatenate the result.";
 
-     Example:
-       concatMap (x: [x] ++ ["z"]) ["a" "b"]
-       => [ "a" "z" "b" "z" ]
-  */
+    examples = [
+      { title = "";
+        body = ''
+          concatMap (x: [x] ++ ["z"]) ["a" "b"]
+          => [ "a" "z" "b" "z" ]
+        '';
+      }
+    ];
+  };
   concatMap = f: list: concatLists (map f list);
 
   /* Flatten the argument into a single list; that is, nested lists are
