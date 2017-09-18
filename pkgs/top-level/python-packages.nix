@@ -181,6 +181,27 @@ in {
     hdf5 = pkgs.hdf5-mpi;
   };
 
+  hjson = buildPythonPackage rec {
+    name = "hjson-${version}";
+    version = "3.0.0";
+    disabled = pythonOlder "2.6";
+
+    src = fetchurl {
+      url = "mirror://pypi/h/hjson/${name}.tar.gz";
+      sha256 = "1mwxz70387x08risv1aq3cqdqzbyfcayp5x40ppi6z5pj9ib7y4w";
+    };
+
+    buildInputs = with pkgs.pythonPackages; [ simplejson ];
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://github.com/hjson/hjson-py;
+      description = "a user interface for JSON";
+      license = licenses.MIT;
+    };
+  };
+
   intelhex = callPackage ../development/python-modules/intelhex { };
 
   mpi4py = callPackage ../development/python-modules/mpi4py {
