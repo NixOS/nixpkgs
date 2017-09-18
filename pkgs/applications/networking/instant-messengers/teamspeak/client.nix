@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper, makeDesktopItem, zlib, glib, libpng, freetype, openssl
-, xorg, fontconfig, qtbase, qtwebengine, qtwebchannel, xkeyboard_config, alsaLib, libpulseaudio ? null
-, libredirect, quazip, less, which, unzip, llvmPackages
+, xorg, fontconfig, qtbase, qtwebengine, qtwebchannel, qtsvg, xkeyboard_config, alsaLib
+, libpulseaudio ? null, libredirect, quazip, less, which, unzip, llvmPackages
 }:
 
 let
@@ -12,8 +12,8 @@ let
   deps =
     [ zlib glib libpng freetype xorg.libSM xorg.libICE xorg.libXrender openssl
       xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama
-      xorg.libxcb fontconfig xorg.libXext xorg.libX11 alsaLib qtbase qtwebengine qtwebchannel libpulseaudio
-      quazip llvmPackages.libcxx llvmPackages.libcxxabi
+      xorg.libxcb fontconfig xorg.libXext xorg.libX11 alsaLib qtbase qtwebengine qtwebchannel qtsvg
+      libpulseaudio quazip llvmPackages.libcxx llvmPackages.libcxxabi
     ];
 
   desktopItem = makeDesktopItem {
