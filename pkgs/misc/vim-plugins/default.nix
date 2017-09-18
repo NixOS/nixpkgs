@@ -473,6 +473,17 @@ rec {
 
   };
 
+  flake8-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "flake8-vim-2017-02-17";
+    src = fetchgit {
+      url = "https://github.com/andviro/flake8-vim";
+      rev = "01c4af4c68f33b2b3785314bfbf5b3d8d1451795";
+      sha256 = "14rv0p1vx4njlplkc72gz7r8sy9vc6n8x9l00zc777x5zzrhgz3g";
+    };
+    dependencies = [];
+
+  };
+
   vim-css-color = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-css-color-2017-02-09";
     src = fetchgit {
@@ -1352,12 +1363,34 @@ rec {
 
   };
 
+  nvim-completion-manager = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "nvim-completion-manager-2017-09-05";
+    src = fetchgit {
+      url = "https://github.com/roxma/nvim-completion-manager";
+      rev = "d9db97f7e5a4ab8af905bc00a4501d770368dee4";
+      sha256 = "1aaclyz1ss2iv0lwcxkz8x5x4wivsixmlk5xakwy989q9g9ps2f1";
+    };
+    dependencies = [];
+
+  };
+
   rust-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "rust-vim-2017-07-14";
     src = fetchgit {
       url = "https://github.com/rust-lang/rust.vim";
       rev = "5a6133680ecf9e22eeba35c35e62ea6210225b02";
       sha256 = "0mxzl8lghq7bnwp8qs3haxq83ds5q8s8br0ajn40a3c3ns2hkhla";
+    };
+    dependencies = [];
+
+  };
+
+  vim-devicons = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-devicons-2017-05-29";
+    src = fetchgit {
+      url = "https://github.com/ryanoasis/vim-devicons";
+      rev = "153266275acc4f4615407a18e90f58780ebaef92";
+      sha256 = "1zjrra0q5c7lmgxzlz7ddd7vi6k2vhz69fdy2s7d873nnmmd7kgn";
     };
     dependencies = [];
 

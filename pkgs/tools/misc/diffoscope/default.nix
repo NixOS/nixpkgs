@@ -1,7 +1,8 @@
 { lib, stdenv, fetchgit, python3Packages, docutils
-, acl, binutils, bzip2, cbfstool, cdrkit, colord, colordiff, coreutils, cpio, diffutils, dtc, e2fsprogs
-, file, findutils, fpc, gettext, ghc, gnupg1, gnutar, gzip, imagemagick, jdk, libarchive, libcaca, llvm
-, mono, openssh, pdftk, poppler_utils, sng, sqlite, squashfsTools, tcpdump, unzip, xxd, xz
+, acl, apktool, binutils, bzip2, cbfstool, cdrkit, colord, colordiff, coreutils, cpio, diffutils, dtc
+, e2fsprogs, file, findutils, fontforge-fonttools, fpc, gettext, ghc, ghostscriptX, giflib, gnupg1, gnutar
+, gzip, imagemagick, jdk, libarchive, libcaca, llvm, mono, openssh, pdftk, pgpdump, poppler_utils, sng, sqlite
+, squashfsTools, tcpdump, unoconv, unzip, xxd, xz
 , enableBloat ? false
 }:
 
@@ -24,13 +25,16 @@ python3Packages.buildPythonApplication rec {
     sed -i setup.py -e "/'rpm-python',/d"
   '';
 
-  # Still missing these tools: apktool docx2txt enjarify gifbuild js-beautify odt2txt oggDump pgpdump ps2ascii Rscript showttf
+  # Still missing these tools: docx2txt enjarify js-beautify oggDump Rscript
   # Also these libraries: python3-guestfs
   pythonPath = with python3Packages; [ debian libarchive-c python_magic tlsh rpm ] ++ [
-      acl binutils bzip2 cbfstool cdrkit colordiff coreutils cpio diffutils dtc e2fsprogs file
-      findutils gettext gnutar gzip libarchive libcaca poppler_utils sng sqlite squashfsTools unzip
-      xxd xz
-    ] ++ lib.optionals enableBloat [ colord fpc ghc gnupg1 imagemagick llvm jdk mono openssh pdftk tcpdump ];
+      acl binutils bzip2 cdrkit colordiff coreutils cpio diffutils dtc e2fsprogs file findutils
+      fontforge-fonttools gettext gnutar gzip libarchive libcaca pgpdump sng sqlite
+      squashfsTools unzip xxd xz
+    ] ++ lib.optionals enableBloat [
+      apktool cbfstool colord fpc ghc ghostscriptX giflib gnupg1 imagemagick
+      llvm jdk mono openssh pdftk poppler_utils tcpdump unoconv
+    ];
 
   doCheck = false; # Calls 'mknod' in squashfs tests, which needs root
 

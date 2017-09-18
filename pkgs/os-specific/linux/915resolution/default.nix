@@ -14,6 +14,6 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://915resolution.mango-lang.org/;
     description = "A tool to modify Intel 800/900 video BIOS";
-    platforms = platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

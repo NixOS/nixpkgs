@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "go-ethereum-${version}";
-  version = "1.6.7";
+  version = "1.7.0";
   goPackagePath = "github.com/ethereum/go-ethereum";
 
   # Fixes Cgo related build failures (see https://github.com/NixOS/nixpkgs/issues/25959 )
@@ -12,7 +12,7 @@ buildGoPackage rec {
     owner = "ethereum";
     repo = "go-ethereum";
     rev = "v${version}";
-    sha256 = "19cq0pmif4y33v34jzvam4mcszl8vf2saf2gzfz01l4x1iv4hf1r";
+    sha256 = "0ybjaiyrfb320rab6a5r9iiqvkrcd8b2qvixzx0kjmc4a7l1q5zh";
   };
 
   # Fix cyclic referencing on Darwin
@@ -23,9 +23,10 @@ buildGoPackage rec {
     done
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://ethereum.github.io/go-ethereum/;
     description = "Official golang implementation of the Ethereum protocol";
-    license = with lib.licenses; [ lgpl3 gpl3 ];
+    license = with licenses; [ lgpl3 gpl3 ];
+    maintainers = [ maintainers.adisbladis ];
   };
 }
