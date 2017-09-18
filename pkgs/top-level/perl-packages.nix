@@ -13181,7 +13181,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ Curses ];
     meta = {
       description = "ASCII sprite animation framework";
-      license = with stdenv.lib.licenses; [ artistic1 gplPlus1 ];
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
