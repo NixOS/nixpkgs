@@ -1,6 +1,10 @@
 set -eu
 set -o pipefail
 
+if (( "${NIX_DEBUG:-0}" >= 6 )); then
+    set -x
+fi
+
 : ${outputs:=out}
 
 
