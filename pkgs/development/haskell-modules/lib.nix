@@ -80,7 +80,7 @@ rec {
   doStrip = drv: overrideCabal drv (drv: { dontStrip = false; });
   dontStrip = drv: overrideCabal drv (drv: { dontStrip = true; });
 
-  # Useful for debugging segfaults with gdb. 
+  # Useful for debugging segfaults with gdb.
   # -g: enables debugging symbols
   # --disable-*-stripping: tell GHC not to strip resulting binaries
   # dontStrip: see above
