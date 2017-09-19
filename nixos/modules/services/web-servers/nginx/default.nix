@@ -13,8 +13,8 @@ let
     vhostConfig // {
       inherit serverName;
     } // (optionalAttrs vhostConfig.enableACME {
-      sslCertificate = "/var/lib/acme/${serverName}/fullchain.pem";
-      sslCertificateKey = "/var/lib/acme/${serverName}/key.pem";
+      sslCertificate = "${config.security.acme.directory}/${serverName}/fullchain.pem";
+      sslCertificateKey = "${config.security.acme.directory}/${serverName}/key.pem";
     })
   ) cfg.virtualHosts;
   enableIPv6 = config.networking.enableIPv6;
