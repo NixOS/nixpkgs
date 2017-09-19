@@ -43,7 +43,7 @@ rec {
       (mkP "nul" "b" "initial value")
       (mkP "list" "[a]" "")
     ];
-    return = mkP "b" "";
+    return = mkR "b" "";
     examples =[
       { title = "constructing a concat function with foldr";
         body = ''
@@ -214,8 +214,21 @@ rec {
   docs.findSingle = mkDoc {
     description = ''
      Find the sole element in the list matching the specified
-     predicate, returns `default' if no such element exists, or
-     `multiple' if there are multiple matching elements.
+     predicate.
+   '';
+
+   type = "(a -> Bool) -> a -> a -> [a] -> a";
+   params = [
+     (mkP "pred" "a -> Bool" "")
+     (mkP "default" "a" "The default if <parameter>pred</parameter> never returns <literal>true</literal>")
+     (mkP "multiple" "a" "The value if <parameter>pred</parameter> returns <literal>true</literal> multiple times")
+     (mkP "list" "[a]" "The list of values to search with <parameter>pred</parameter>")
+   ];
+   return = mkR "a" ''
+     If <parameter>pred</parameter> matches once, it returns the
+     matching value from the list. If no matching element exists, it
+     returns <parameter>default</parameter>. If there are multiple
+     matching elements, it returns <parameter>multiple</parameter>.
    '';
 
     examples = [

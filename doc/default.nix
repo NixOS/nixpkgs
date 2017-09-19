@@ -27,42 +27,90 @@ let
         return ? null
       }:
     let
-      exampleDocbook = lib.strings.concatMapStrings ({title, body}:
+      exampleDocbook = if examples == [] then ""
+      else let
+        exampleInner = lib.strings.concatMapStrings ({title, body}:
         ''
-        <example>
-          <title>${title}</title>
-          <programlisting><![CDATA[${body}]]></programlisting>
-        </example>
+        <para>
+          <example>
+            <title>${title}</title>
+            <programlisting role="nix"><![CDATA[${body}]]></programlisting>
+          </example>
+        </para>
 
       '') examples;
+      in ''
+        <refsect1 role="examples">
+        <title>Examples</title>
+        ${exampleInner}
+        </refsect1>
+      '';
 
       typeDocbook = if type == false then ""
         else ''
-        <subtitle><literal>${type}</literal></subtitle>
+        <literal>${type}</literal>
         '';
 
       paramsDocbook = if params == [] then ""
         else let
           paramDocbook = lib.concatMapStrings
-            (param: ''
-              <listitem>
-                <para><parameter>${param.name}</parameter> <type>${param.type}</type> ${param.description}</para>
-              </listitem>
+            (param:
+              let
+                type = if param.type == ""
+                  then ""
+                  else " <type>${param.type}</type>";
+
+              in ''
+              <varlistentry>
+                <term><parameter>${param.name}</parameter>${type}</term>
+                <listitem>
+                  <para>${param.description}</para>
+                </listitem>
+              </varlistentry>
             '')
             params;
-        in "<orderedlist>${paramDocbook}</orderedlist>";
+        in ''
+          <refsect1 role="parameters">
+            <title>Parameters</title>
+            <para>
+              <variablelist>
+                ${paramDocbook}
+              </variablelist>
+            </para>
+          </refsect1>
+        '';
+
+      returnDocbook = if return == null then ""
+        else let
+
+        in ''
+          <refsect1 role="returnvalues">
+           <title>Return Values</title>
+           <para>
+             <type>${return.type}</type>
+             ${return.description}
+           </para>
+          </refsect1>
+        '';
 
     in ''
-      <section xml:id="fn-${cleanId libgroupname}-${cleanId name}">
-        <title><methodname>${name}</methodname></title>
-        ${typeDocbook}
-        <para>${mkGithubLink pos.file pos.line}</para>
+      <refentry xml:id="fn-${cleanId libgroupname}-${cleanId name}">
+        <refnamediv>
+          <refname>${name}</refname>
+          <refpurpose>${typeDocbook}</refpurpose>
+        </refnamediv>
 
-        <para>${description}</para>
+        <refsect1 role="description">
+          <title>Description</title>
+          <para>${description}</para>
+        </refsect1>
+
         ${paramsDocbook}
+        <!--<para>${mkGithubLink pos.file pos.line}</para>-->
+        ${returnDocbook}
 
         ${exampleDocbook}
-      </section>
+      </refentry>
 
     '';
 
