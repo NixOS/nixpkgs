@@ -1374,6 +1374,17 @@ rec {
 
   };
 
+  nvim-cm-racer = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "nvim-cm-racer-2017-07-27";
+    src = fetchgit {
+      url = "https://github.com/roxma/nvim-cm-racer";
+      rev = "2a8a4a49fa58c5dac9e0bed9511f6928930cacd2";
+      sha256 = "1yljxwypgn91084yyicbc2qprn31ld7s4drvnddzczyhzq5m2gpx";
+    };
+    dependencies = [];
+
+  };
+
   nvim-completion-manager = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "nvim-completion-manager-2017-09-05";
     src = fetchgit {
