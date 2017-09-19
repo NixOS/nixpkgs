@@ -14364,6 +14364,10 @@ with pkgs;
     withGtk = false;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices SystemConfiguration;
   };
+
+  # the cli binary is actually called tshark and often packaged under this name
+  tshark = wireshark-cli;
+
   # The GTK UI is deprecated by upstream. You probably want the QT version.
   wireshark-gtk = wireshark-cli.override { withGtk = true; };
   wireshark-qt = wireshark-cli.override { withQt = true; };
