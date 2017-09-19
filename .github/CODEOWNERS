@@ -1,49 +1,56 @@
 # CODEOWNERS file
 #
-# This file is used to describe who owns what in this repository. This file does not
-# replace `meta.maintainers` but is instead used for other things than derivations
-# and modules, like documentation, package sets, and other assets.
+# This file is used to track who follows what in this repository. This file does
+# not replace `meta.maintainers` but is instead used for other things than
+# derivations and modules, like documentation, package sets, and other assets or
+# infrastructure.
 #
-# For documentation on this file, see https://help.github.com/articles/about-codeowners/
-# Mentioned users will get code review requests.
+# While the name of this file implies "ownership", we use to both denote that
+# and allow others to subscribe to notifications. See the rough columns below to
+# separate owners from followers.
+#
+# For documentation on this file, see
+# https://help.github.com/articles/about-codeowners/ Mentioned users will get
+# code review requests.
 
-# This file
-.github/CODEOWNERS @edolstra
+# This file                                                 Owners                        Followers
+.github/CODEOWNERS                                          @edolstra
 
 # Boostraping and core infra
-pkgs/stdenv/    @edolstra
-pkgs/build-support/cc-wrapper/  @edolstra
+pkgs/stdenv/                                                @edolstra                     @Ericson2314
+pkgs/build-support/cc-wrapper/                              @edolstra                     @Ericson2314
+pkgs/build-support/setup-hooks                                                            @Ericson2314
 
 # Libraries
-lib/  @edolstra
+lib/                                                        @edolstra
 
 # Python-related code and docs
-pkgs/top-level/python-packages.nix      @FRidh
-pkgs/development/interpreters/python/*  @FRidh
-pkgs/development/python-modules/*       @FRidh
-doc/languages-frameworks/python.md      @FRidh
+pkgs/top-level/python-packages.nix                          @FRidh
+pkgs/development/interpreters/python/*                      @FRidh
+pkgs/development/python-modules/*                           @FRidh
+doc/languages-frameworks/python.md                          @FRidh
 
 # Haskell
-pkgs/development/compilers/ghc                       @peti
-pkgs/development/haskell-modules                     @peti
-pkgs/development/haskell-modules/default.nix         @peti
-pkgs/development/haskell-modules/generic-builder.nix @peti
-pkgs/development/haskell-modules/hoogle.nix          @peti
+pkgs/development/compilers/ghc                              @peti
+pkgs/development/haskell-modules                            @peti
+pkgs/development/haskell-modules/default.nix                @peti                         @Profpatsch
+pkgs/development/haskell-modules/generic-builder.nix        @peti                         @Profpatsch @Ericson2314
+pkgs/development/haskell-modules/hoogle.nix                 @peti                         @Profpatsch
 
 # R
-pkgs/applications/science/math/R @peti
-pkgs/development/r-modules       @peti
+pkgs/applications/science/math/R                            @peti
+pkgs/development/r-modules                                  @peti
 
 # Darwin-related
-pkgs/stdenv/darwin/*    @copumpkin @LnL7
-pkgs/os-specific/darwin/*       @LnL7
-pkgs/os-specific/darwin/apple-source-releases/* @copumpkin
+pkgs/stdenv/darwin/*                                        @copumpkin @LnL7              @Ericson2314
+pkgs/os-specific/darwin/*                                   @LnL7
+pkgs/os-specific/darwin/apple-source-releases/*             @copumpkin
 
 # Beam-related (Erlang, Elixir, LFE, etc)
-pkgs/development/beam-modules/*	@gleber
-pkgs/development/interpreters/erlang/*	@gleber
-pkgs/development/interpreters/lfe/*	@gleber
-pkgs/development/interpreters/elixir/*	@gleber
-pkgs/development/tools/build-managers/rebar/*	@gleber
-pkgs/development/tools/build-managers/rebar3/*	@gleber
-pkgs/development/tools/erlang/*	@gleber
+pkgs/development/beam-modules/*                             @gleber
+pkgs/development/interpreters/erlang/*                      @gleber
+pkgs/development/interpreters/lfe/*                         @gleber
+pkgs/development/interpreters/elixir/*                      @gleber
+pkgs/development/tools/build-managers/rebar/*               @gleber
+pkgs/development/tools/build-managers/rebar3/*              @gleber
+pkgs/development/tools/erlang/*                             @gleber
