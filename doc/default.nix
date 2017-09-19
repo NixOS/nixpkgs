@@ -9,6 +9,8 @@ let
       ghUrl = "${rootUrl}${commitHash}/${filePath}#L${toString line}";
     in "<link xlink:href=\"${ghUrl}\">${filePath}:${toString line}</link>";
 
+  cleanId = lib.strings.replaceChars [ "'" ] [ "-prime" ];
+
   pkgs = import ./.. { };
   lib = pkgs.lib;
   sources = lib.sourceFilesBySuffices ./. [".xml"];
@@ -16,7 +18,7 @@ let
 
   attrsOnly = attrset: lib.filterAttrs (k: v: builtins.isAttrs v) attrset;
 
-  docbookFromDoc = { name, pos }: {
+  docbookFromDoc = { name, pos, libgroupname }: {
         # MUST match lib/doc.nix's mkDoc function signature
         description,
         examples ? [],
@@ -38,7 +40,7 @@ let
         '';
 
     in ''
-      <section>
+      <section xml:id="fn-${cleanId libgroupname}-${cleanId name}">
         <title>${name}</title>
         ${typeDocbook}
         <para>${mkGithubLink pos.file pos.line}</para>
@@ -53,22 +55,22 @@ let
 
 
 
-  libSetDocFragments = libset: lib.mapAttrsToList
+  libSetDocFragments = libgroupname: libset: lib.mapAttrsToList
     (name: value:
       let
         pos = builtins.unsafeGetAttrPos name libset;
-      in docbookFromDoc { inherit pos name; } value
+      in docbookFromDoc { inherit pos name libgroupname; } value
     )
     (if builtins.hasAttr "docs" libset then libset.docs else {});
 
   libDocFragments = lib.mapAttrsToList
     (name: value:
       let
-        docs = (lib.strings.concatStrings (libSetDocFragments value));
+        docs = (lib.strings.concatStrings (libSetDocFragments name value));
       in if builtins.stringLength docs == 0
       then ""
       else ''
-        <section>
+        <section xml:id="fn-${cleanId name}">
           <title>${name}</title>
 
           ${docs}
