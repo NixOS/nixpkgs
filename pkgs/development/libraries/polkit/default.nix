@@ -42,10 +42,10 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" ]; # small man pages in $bin
 
   nativeBuildInputs =
-    [ gtk_doc pkgconfig autoreconfHook ]
+    [ gtk_doc pkgconfig autoreconfHook intltool gobjectIntrospection ]
     ++ [ libxslt docbook_xsl docbook_xml_dtd_412 ]; # man pages
   buildInputs =
-    [ glib expat pam intltool spidermonkey_17 gobjectIntrospection ]
+    [ glib expat pam spidermonkey_17 gobjectIntrospection ]
     ++ stdenv.lib.optional useSystemd systemd;
 
   # Ugly hack to overwrite hardcoded directories
