@@ -164,40 +164,85 @@ rec {
   };
   concatMap = f: list: concatLists (map f list);
 
-  /* Flatten the argument into a single list; that is, nested lists are
-     spliced into the top-level lists.
+  docs.flatten = mkDoc {
+    description = ''
+      Flatten the argument into a single list; that is, nested lists are
+      spliced into the top-level lists.
+    '';
 
-     Example:
-       flatten [1 [2 [3] 4] 5]
-       => [1 2 3 4 5]
-       flatten 1
-       => [1]
-  */
+    examples = [
+      { title = "Flattens lists of lists in to a single list";
+        body = ''
+          flatten [1 [2 [3] 4] 5]
+          => [1 2 3 4 5]
+        '';
+      }
+      { title = "Encapsulates single value in a list";
+        body = ''
+          flatten 1
+          => [1]
+        '';
+      }
+    ];
+  };
   flatten = x:
     if isList x
     then concatMap (y: flatten y) x
     else [x];
 
-  /* Remove elements equal to 'e' from a list.  Useful for buildInputs.
+  docs.remove = mkDoc {
+    description = ''
+      Remove elements equal to 'e' from a list.  Useful for buildInputs.
+    '';
 
-     Example:
-       remove 3 [ 1 3 4 3 ]
-       => [ 1 4 ]
-  */
+    examples = [
+      { title = "Remove multiple 3s";
+        body = ''
+          remove 3 [ 1 3 4 3 ]
+          => [ 1 4 ]
+        '';
+      }
+    ];
+  };
   remove = e: filter (x: x != e);
 
-  /* Find the sole element in the list matching the specified
+  docs.findSingle = mkDoc {
+    description = ''
+     Find the sole element in the list matching the specified
      predicate, returns `default' if no such element exists, or
      `multiple' if there are multiple matching elements.
+   '';
 
-     Example:
-       findSingle (x: x == 3) "none" "multiple" [ 1 3 3 ]
-       => "multiple"
-       findSingle (x: x == 3) "none" "multiple" [ 1 3 ]
-       => 3
-       findSingle (x: x == 3) "none" "multiple" [ 1 9 ]
-       => "none"
-  */
+    examples = [
+      { title = ''
+          If the predicate matches one element, the element is
+          returned.
+        '';
+        body = ''
+          findSingle (x: x == 3) "none" "multiple" [ 1 3 ]
+          => 3
+        '';
+      }
+      { title = ''
+          If the predicate matches multiple elements, the
+          <parameter>multiple</parameter> parameter is returned.
+        '';
+        body = ''
+          findSingle (x: x == 3) "none" "multiple" [ 1 3 3 ]
+          => "multiple"
+        '';
+      }
+      { title = ''
+          If the parameter matches no elements, the
+          <parameter>default</parameter> parameter is returned.
+        '';
+        body = ''
+          findSingle (x: x == 3) "none" "multiple" [ 1 9 ]
+          => "none"
+        '';
+      }
+    ];
+  };
   findSingle = pred: default: multiple: list:
     let found = filter pred list; len = length found;
     in if len == 0 then default
