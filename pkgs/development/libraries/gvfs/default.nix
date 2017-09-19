@@ -16,12 +16,15 @@ stdenv.mkDerivation rec {
     sha256 = "e752e7bb46e64e4025f63428d4f5247e3e5c0d0b5eeb4f81dbf1cd7b75f59d7b";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool libtool ];
+  nativeBuildInputs = [
+    pkgconfig intltool libtool
+    libxml2 libxslt docbook_xsl
+  ];
 
   buildInputs =
     [ makeWrapper glib dbus udev libgudev udisks2 libgcrypt
       libgphoto2 avahi libarchive fuse libcdio
-      libxml2 libxslt docbook_xsl samba libmtp libcap polkit
+      samba libmtp libcap polkit
       # ToDo: a ligther version of libsoup to have FTP/HTTP support?
     ] ++ stdenv.lib.optionals gnomeSupport (with gnome; [
       gtk libsoup libgnome_keyring gconf gcr
