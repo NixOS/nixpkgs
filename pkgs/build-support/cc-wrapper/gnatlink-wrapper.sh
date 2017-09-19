@@ -24,7 +24,7 @@ extraBefore=()
 #export NIX_@infixSalt@_LDFLAGS_SET=1
 
 # Optionally print debug info.
-if [ -n "${NIX_DEBUG:-}" ]; then
+if (( "${NIX_DEBUG:-0}" >= 1 )); then
     echo "extra flags before to @prog@:" >&2
     printf "  %q\n" "${extraBefore[@]}"  >&2
     echo "original flags to @prog@:" >&2

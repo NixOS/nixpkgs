@@ -156,7 +156,7 @@ fi
 
 
 # Optionally print debug info.
-if [ -n "${NIX_DEBUG:-}" ]; then
+if (( "${NIX_DEBUG:-0}" >= 1 )); then
     # Old bash workaround, see above.
     echo "extra flags before to @prog@:" >&2
     printf "  %q\n" ${extraBefore+"${extraBefore[@]}"}  >&2

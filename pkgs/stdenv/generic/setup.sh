@@ -269,7 +269,7 @@ for i in $initialPath; do
     addToSearchPath PATH "$i/bin"
 done
 
-if [ "${NIX_DEBUG:-}" = 1 ]; then
+if (( "${NIX_DEBUG:-0}" >= 1 )); then
     echo "initial path: $PATH"
 fi
 
@@ -429,7 +429,7 @@ fi
 
 
 PATH="${_PATH-}${_PATH:+${PATH:+:}}$PATH"
-if [ "${NIX_DEBUG:-}" = 1 ]; then
+if (( "${NIX_DEBUG:-0}" >= 1 )); then
     echo "final path: $PATH"
 fi
 
@@ -539,7 +539,7 @@ substituteAll() {
     local -a args=()
 
     for varName in $(awk 'BEGIN { for (v in ENVIRON) if (v ~ /^[a-z][a-zA-Z0-9_]*$/) print v }'); do
-        if [ "${NIX_DEBUG:-}" = "1" ]; then
+        if (( "${NIX_DEBUG:-0}" >= 1 )); then
             printf "@%s@ -> %q\n" "${varName}" "${!varName}"
         fi
         args+=("--subst-var" "$varName")
