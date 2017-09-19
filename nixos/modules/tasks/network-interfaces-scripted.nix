@@ -56,6 +56,9 @@ in
           then [ "${dev}-netdev.service" ]
           else optional (dev != null && dev != "lo" && !config.boot.isContainer) (subsystemDevice dev);
 
+        hasDefaultGatewaySet = (cfg.defaultGateway != null && cfg.defaultGateway.address != "")
+                            || (cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "");
+
         networkLocalCommands = {
           after = [ "network-setup.service" ];
           bindsTo = [ "network-setup.service" ];
@@ -68,7 +71,7 @@ in
             before = [ "network.target" "shutdown.target" ];
             wants = [ "network.target" ];
             conflicts = [ "shutdown.target" ];
-            wantedBy = [ "multi-user.target" ];
+            wantedBy = [ "multi-user.target" ] ++ optional hasDefaultGatewaySet "network-online.target";
 
             unitConfig.ConditionCapability = "CAP_NET_ADMIN";
 
@@ -85,7 +88,7 @@ in
               ''
                 # Set the static DNS configuration, if given.
                 ${pkgs.openresolv}/sbin/resolvconf -m 1 -a static <<EOF
-                ${optionalString (cfg.nameservers != [] && cfg.domain != null) ''
+                ${optionalString (cfg.domain != null) ''
                   domain ${cfg.domain}
                 ''}
                 ${optionalString (cfg.search != []) ("search " + concatStringsSep " " cfg.search)}

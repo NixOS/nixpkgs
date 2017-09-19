@@ -1,7 +1,7 @@
 { stdenv
 , fetchurl
 , buildPythonPackage
-, isPy35, isPy27
+, isPy36, isPy35, isPy27
 , cudaSupport ? false
 , cudatoolkit ? null
 , cudnn ? null
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   version = "1.1.0";
   name = "${pname}-${version}";
   format = "wheel";
-  disabled = ! (isPy35 || isPy27);
+  disabled = ! (isPy36 || isPy35 || isPy27);
 
   src = let
       tfurl = sys: proc: pykind:
@@ -59,33 +59,47 @@ buildPythonPackage rec {
             url = tfurl "linux" "cpu" "cp27-none-linux_x86_64";
             sha256 = "0ld3hqx3idxk0zcrvn3p9yqnmx09zsj3mw66jlfw6fkv5hznx8j2";
           };
-          py3 = {
+          py35 = {
             url = tfurl "linux" "cpu" "cp35-cp35m-linux_x86_64";
             sha256 = "0ahz9222rzqrk43lb9w4m351klkm6mlnnvw8xfqip28vbmymw90b";
           };
+          py36 = {
+            url = tfurl "linux" "cpu" "cp36-cp36m-linux_x86_64";
+            sha256 = "1a2cc8ihl94iqff76nxg6bq85vfb7sj5cvvi9sxy2f43k32fi4lv";
+          };
+
         };
         linux-x86_64.cuda = {
           py2 = {
             url = tfurl "linux" "gpu" "cp27-none-linux_x86_64";
             sha256 = "1baa9jwr6f8f62dyx6isbw8yyrd0pi1dz1srjblfqsyk1x3pnfvh";
           };
-          py3 = {
+          py35 = {
             url = tfurl "linux" "gpu" "cp35-cp35m-linux_x86_64";
             sha256 = "0606m2awy0ifhniy8lsyhd0xc388dgrwksn87989xlgy90wpxi92";
           };
+          py36 = {
+            url = tfurl "linux" "gpu" "cp36-cp36m-linux_x86_64";
+            sha256 = "0lvbmfa87qzrajadpsf13gi3l71vryzkryzqfvkykivqrdjsvj8q";
+          };
+
         };
       };
     in
     fetchurl (
       if stdenv.isDarwin then
-        if isPy35 then
-          dls.darwin.cpu.py3
-        else
+        if isPy27 then
           dls.darwin.cpu.py2
+        else
+          dls.darwin.cpu.py3
+      else if isPy36 then
+        if cudaSupport then
+          dls.linux-x86_64.cuda.py36
+        else dls.linux-x86_64.cpu.py36
       else if isPy35 then
         if cudaSupport then
-          dls.linux-x86_64.cuda.py3
-        else dls.linux-x86_64.cpu.py3
+          dls.linux-x86_64.cuda.py35
+        else dls.linux-x86_64.cpu.py35
       else
         if cudaSupport then
           dls.linux-x86_64.cuda.py2

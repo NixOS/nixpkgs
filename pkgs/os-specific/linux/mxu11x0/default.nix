@@ -34,6 +34,6 @@ stdenv.mkDerivation {
     license = licenses.gpl1;
     maintainers = with maintainers; [ uralbash ];
     platforms = platforms.linux;
-    broken = (versionOlder kernel.version "4.9");
+    broken = versionOlder kernel.version "4.9" || !versionOlder kernel.version "4.13";
   };
 }

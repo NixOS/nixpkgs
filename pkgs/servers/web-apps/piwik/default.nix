@@ -2,29 +2,20 @@
 
 stdenv.mkDerivation rec {
   name = "piwik-${version}";
-  version = "3.0.4";
+  version = "3.1.0";
 
   src = fetchurl {
     url = "https://builds.piwik.org/${name}.tar.gz";
-    sha512 = "2i0vydr073ynv7wcn078zxhvywdv85c648hympkzicdd746g995878py9006m96iwkmk4q664wn3f8jnfqsl1jd9f26alz1nssizbn9";
+    sha512 = "175300ibf0lg4xnyn5v47czi3vd6i7yqf1im3br4975f6k7w8q22m2mk2mi006795js5q52x48g4sc7wb47wac7wbla8wp98al48gfb";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  # regarding the PIWIK_USER_PATH substitutes:
-  #   looks like this is just a bug / confusion of the directories, and nobody has tested this.
-  #   PR at https://github.com/piwik/piwik/pull/11661
   # regarding the 127.0.0.1 substitute:
   #   This replaces the default value of the database server field.
   #   unix socket authentication only works with localhost,
   #   but password-based SQL authentication works with both.
   postPatch = ''
-    substituteInPlace core/AssetManager/UIAssetFetcher.php \
-      --replace "return PIWIK_USER_PATH;" "return PIWIK_DOCUMENT_ROOT;"
-    substituteInPlace core/AssetManager/UIAssetMerger/StylesheetUIAssetMerger.php \
-      --replace "setImportDir(PIWIK_USER_PATH);" "setImportDir(PIWIK_DOCUMENT_ROOT);"
-    substituteInPlace core/AssetManager/UIAssetMerger/StylesheetUIAssetMerger.php \
-      --replace "\$absolutePath = PIWIK_USER_PATH" "\$absolutePath = PIWIK_DOCUMENT_ROOT"
     substituteInPlace plugins/Installation/FormDatabaseSetup.php \
       --replace "=> '127.0.0.1'," "=> 'localhost',"
     cp ${./bootstrap.php} bootstrap.php

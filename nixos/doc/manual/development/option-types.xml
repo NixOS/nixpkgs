@@ -157,27 +157,26 @@
 
 <section xml:id='section-option-types-submodule'><title>Submodule</title>
 
-  <para>Submodule is a very powerful type that defines a set of sub-options that 
-    are handled like a separate module.
-    It is especially interesting when used with composed types like 
-    <literal>attrsOf</literal> or <literal>listOf</literal>.</para>
+  <para><literal>submodule</literal> is a very powerful type that defines a set
+    of sub-options that are handled like a separate module.</para>
 
-  <para>The submodule type take a parameter <replaceable>o</replaceable>, that 
-    should be a set, or a function returning a set with an 
-    <literal>options</literal> key defining the sub-options.
-    The option set can be defined directly (<xref linkend='ex-submodule-direct' 
-      />) or as reference (<xref linkend='ex-submodule-reference' />).</para>
+  <para>It takes a parameter <replaceable>o</replaceable>, that should be a set,
+    or a function returning a set with an <literal>options</literal> key
+    defining the sub-options.
+    Submodule option definitions are type-checked accordingly to the
+    <literal>options</literal> declarations.
+    Of course, you can nest submodule option definitons for even higher
+    modularity.</para>
 
-  <para>Submodule option definitions are type-checked accordingly to the options 
-    declarations. It is possible to declare submodule options inside a submodule 
-    sub-options for even higher modularity.</para>
+  <para>The option set can be defined directly
+    (<xref linkend='ex-submodule-direct' />) or as reference
+    (<xref linkend='ex-submodule-reference' />).</para>
 
 <example xml:id='ex-submodule-direct'><title>Directly defined submodule</title>
 <screen>
 options.mod = mkOption {
-  name = "mod";
   description = "submodule example";
-  type = with types; listOf (submodule {
+  type = with types; submodule {
     options = {
       foo = mkOption {
         type = int;
@@ -186,10 +185,10 @@ options.mod = mkOption {
         type = str;
       };
     };
-  });
+  };
 };</screen></example>
 
-<example xml:id='ex-submodule-reference'><title>Submodule defined as a 
+<example xml:id='ex-submodule-reference'><title>Submodule defined as a
     reference</title>
 <screen>
 let
@@ -206,16 +205,20 @@ let
 in
 options.mod = mkOption {
   description = "submodule example";
-  type = with types; listOf (submodule modOptions);
+  type = with types; submodule modOptions;
 };</screen></example>
 
-<section><title>Composed with <literal>listOf</literal></title>
-
-  <para>When composed with <literal>listOf</literal>, submodule allows multiple 
-    definitions of the submodule option set.</para>
+  <para>The <literal>submodule</literal> type is especially interesting when
+    used with composed types like <literal>attrsOf</literal> or
+    <literal>listOf</literal>.
+    When composed with <literal>listOf</literal>
+    (<xref linkend='ex-submodule-listof-declaration' />),
+    <literal>submodule</literal> allows multiple definitions of the submodule
+    option set (<xref linkend='ex-submodule-listof-definition' />).</para>
+    
 
 <example xml:id='ex-submodule-listof-declaration'><title>Declaration of a list 
-    of submodules</title>
+    nof submodules</title>
 <screen>
 options.mod = mkOption {
   description = "submodule example";
@@ -239,13 +242,11 @@ config.mod = [
   { foo = 2; bar = "two"; }
 ];</screen></example>
 
-</section>
-
-
-<section><title>Composed with <literal>attrsOf</literal></title>
-
-  <para>When composed with <literal>attrsOf</literal>, submodule allows multiple 
-    named definitions of the submodule option set.</para>
+  <para>When composed with <literal>attrsOf</literal>
+    (<xref linkend='ex-submodule-attrsof-declaration' />),
+    <literal>submodule</literal> allows multiple named definitions of the
+    submodule option set (<xref linkend='ex-submodule-attrsof-definition' />).
+  </para>
 
 <example xml:id='ex-submodule-attrsof-declaration'><title>Declaration of 
     attribute sets of submodules</title>
@@ -270,7 +271,6 @@ options.mod = mkOption {
 config.mod.one = { foo = 1; bar = "one"; };
 config.mod.two = { foo = 2; bar = "two"; };</screen></example>
 
-</section>
 </section>
 
 <section><title>Extending types</title>

@@ -194,7 +194,7 @@ in
   rbnacl = spec: {
     postInstall = ''
     sed -i $(cat $out/nix-support/gem-meta/install-path)/lib/rbnacl.rb -e "2a \
-    RBNACL_LIBSODIUM_GEM_LIB_PATH = '${libsodium.out}/lib/libsodium.${if stdenv.isDarwin then "dylib" else "so"}'
+    RBNACL_LIBSODIUM_GEM_LIB_PATH = '${libsodium.out}/lib/libsodium${stdenv.hostPlatform.extensions.sharedLibrary}'
     "
     '';
   };

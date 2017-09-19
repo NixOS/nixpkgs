@@ -10,6 +10,9 @@ stdenv.mkDerivation rec {
     sha256 = "15mcpql448vvgsbxs7wd0vdk1ln6rdcpnif6i2zjm5l4xng55s7r";
   };
 
+  # Fixes build with GCC 6
+  NIX_CFLAGS_COMPILE = "-std=c++03";
+
   buildInputs = [ pkgconfig libxslt freetype libpng libxml2 ];
 
   meta = {

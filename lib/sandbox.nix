@@ -1,4 +1,5 @@
-with import ./strings.nix;
+{ lib }:
+with lib.strings;
 
 /* Helpers for creating lisp S-exprs for the Apple sandbox
 

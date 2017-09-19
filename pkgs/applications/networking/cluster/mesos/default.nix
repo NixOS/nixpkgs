@@ -8,7 +8,6 @@
 
 let
   mavenRepo = import ./mesos-deps.nix { inherit stdenv curl; };
-  soext = if stdenv.system == "x86_64-darwin" then "dylib" else "so";
   # `tar -z` requires gzip on $PATH, so wrap tar.
   # At some point, we should try to patch mesos so we add gzip to the PATH when
   # tar is invoked. I think that only needs to be done here:
@@ -193,7 +192,7 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share/java
     cp src/java/target/mesos-*.jar $out/share/java
 
-    MESOS_NATIVE_JAVA_LIBRARY=$out/lib/libmesos.${soext}
+    MESOS_NATIVE_JAVA_LIBRARY=$out/lib/libmesos${stdenv.hostPlatform.extensions.sharedLibrary}
 
     mkdir -p $out/nix-support
     touch $out/nix-support/setup-hook

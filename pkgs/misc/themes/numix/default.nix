@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2017-02-15";
+  version = "2017-07-26";
   name = "numix-gtk-theme-${version}";
 
   src = fetchFromGitHub {
     repo = "numix-gtk-theme";
     owner = "numixproject";
-    rev = "f25d7e04353543e03fd155f4d9dfa80fc6b551f2";
-    sha256 = "0n57airi1kgg754099sdq40bb0mbp4my385fvslnsjv5d4h8jhvq";
+    rev = "858e6292c4336302be4d499c9b085a891b4c3b40";
+    sha256 = "1z9l13px79yk42874dlh8z6p7chlngwarfnki89win3g2xvclz8q";
   };
 
   nativeBuildInputs = [ sass glib libxml2 gdk_pixbuf ];

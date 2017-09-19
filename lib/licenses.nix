@@ -1,6 +1,5 @@
+{ lib }:
 let
-
-  lib = import ./default.nix;
 
   spdx = lic: lic // {
     url = "http://spdx.org/licenses/${lic.spdxId}";
@@ -180,6 +179,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "DOC License";
   };
 
+  eapl = {
+    fullName = "EPSON AVASYS PUBLIC LICENSE";
+    url = http://avasys.jp/hp/menu000000700/hpg000000603.htm;
+    free = false;
+  };
+
   efl10 = spdx {
     spdxId = "EFL-1.0";
     fullName = "Eiffel Forum License v1.0";
@@ -214,6 +219,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   fdl13 = spdx {
     spdxId = "GFDL-1.3";
     fullName = "GNU Free Documentation License v1.3";
+  };
+
+  ffsl = {
+    fullName = "Floodgap Free Software License";
+    url = http://www.floodgap.com/software/ffsl/license.html;
   };
 
   free = {
@@ -413,7 +423,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     url = "https://raw.githubusercontent.com/raboof/notion/master/LICENSE";
     fullName = "Notion modified LGPL";
   };
-  
+
   ofl = spdx {
     spdxId = "OFL-1.1";
     fullName = "SIL Open Font License 1.1";

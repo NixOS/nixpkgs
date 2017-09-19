@@ -30,5 +30,6 @@ stdenv.mkDerivation {
     license = with licenses; [ bsd3 gpl2 ];
     maintainers = with maintainers; [ fpletz ];
     platforms = platforms.linux;
+    broken = !stdenv.lib.versionOlder kernel.version "4.13";
   };
 }

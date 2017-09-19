@@ -14,11 +14,9 @@ stdenv.mkDerivation {
     substituteInPlace Makefile --replace "-arch i386" ""
   '';
 
-  installPhase = let
-    libSuff = if stdenv.isDarwin then "dylib" else "so";
-  in ''
+  installPhase = ''
     mkdir -p $out/{bin,lib,include/hdhomerun}
-    install -Dm444 libhdhomerun.${libSuff} $out/lib
+    install -Dm444 libhdhomerun${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib
     install -Dm555 hdhomerun_config $out/bin
     cp *.h $out/include/hdhomerun
   '';

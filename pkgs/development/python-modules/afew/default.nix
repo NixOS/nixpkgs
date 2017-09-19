@@ -32,7 +32,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/teythoon/afew;
+    homepage = https://github.com/afewmail/afew;
     description = "An initial tagging script for notmuch mail";
     maintainers = with maintainers; [ garbas ];
   };

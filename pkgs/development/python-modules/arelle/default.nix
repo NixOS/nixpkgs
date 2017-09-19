@@ -1,31 +1,32 @@
 { gui ? true,
   buildPythonPackage, fetchFromGitHub, lib,
   sphinx_1_2, lxml, isodate, numpy, pytest,
-  tkinter ? null,
+  tkinter ? null, py3to2, isPy3k,
   ... }:
 
-let
+buildPythonPackage rec {
+  name = "arelle-${version}${lib.optionalString (!gui) "-headless"}";
+  version = "2017-08-24";
+
+  disabled = !isPy3k;
+
   # Releases are published at http://arelle.org/download/ but sadly no
   # tags are published on github.
-  version = "2017-06-01";
-
   src = fetchFromGitHub {
     owner = "Arelle";
     repo = "Arelle";
-    rev = "c883f843d55bb48f03a15afceb4cc823cd4601bd";
-    sha256 = "1h48qdj0anv541rd3kna8bmcwfrl1l3yw76wsx8p6hx5prbmzg4v";
+    rev = "cb24e35d57b562a864ae3dd4542c4d9fcf3865fe";
+    sha256 = "1sbvhb3xlfnyvf1xj9dxwpcrfiaf7ikkdwvvap7aaxfxgiz85ip2";
   };
-
-in
-
-buildPythonPackage {
-  name = "arelle-${version}${lib.optionalString (!gui) "-headless"}";
-  inherit src;
   outputs = ["out" "doc"];
+  patches = [
+    ./tests.patch
+  ];
   postPatch = "rm testParser2.py";
   buildInputs = [
     sphinx_1_2
     pytest
+    py3to2
   ];
   propagatedBuildInputs = [
     lxml
@@ -44,6 +45,8 @@ buildPythonPackage {
   postBuild = ''
     (cd apidocs && make html && cp -r _build $doc)
     '';
+
+  doCheck = if gui then true else false;
 
   meta = {
     description = "An open source facility for XBRL, the eXtensible Business Reporting Language supporting various standards, exposed through a python or REST API" + lib.optionalString gui " and a graphical user interface";

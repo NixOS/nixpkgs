@@ -2,13 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "tinc-${version}";
-  version = "1.1pre14+20170528";
+  version = "1.1pre15";
 
-  src = fetchFromGitHub {
-    owner = "gsliepen";
-    repo = "tinc";
-    rev = "93584bc1cad7c7cc9c95859a8cde548bc18b6fa8";
-    sha256 = "17dpv3nv50jnzlijan4rfkz3mfgbwq65a42al0w846p70y6dgn8s";
+  src = fetchgit {
+    rev = "refs/tags/release-${version}";
+    url = "git://tinc-vpn.org/tinc";
+    sha256 = "1msym63jpipvzb5dn8yn8yycrii43ncfq6xddxh2ifrakr48l6y5";
   };
 
   outputs = [ "out" "man" "info" ];
@@ -16,8 +15,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook texinfo ];
   buildInputs = [ ncurses readline zlib lzo openssl ];
 
+  # needed so the build doesn't need to run git to find out the version.
   prePatch = ''
     substituteInPlace configure.ac --replace UNKNOWN ${version}
+    echo "${version}" > configure-version
+    echo "https://tinc-vpn.org/git/browse?p=tinc;a=log;h=refs/tags/release-${version}" > ChangeLog
+    sed -i '/AC_INIT/s/m4_esyscmd_s.*/${version})/' configure.ac
   '';
 
   postInstall = ''
@@ -40,6 +43,6 @@ stdenv.mkDerivation rec {
     homepage="http://www.tinc-vpn.org/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington fpletz ];
+    maintainers = with maintainers; [ wkennington fpletz lassulus ];
   };
 }

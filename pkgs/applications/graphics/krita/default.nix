@@ -9,11 +9,11 @@
 
 mkDerivation rec {
   name = "krita-${version}";
-  version = "3.1.4";
+  version = "3.2.1";
 
   src = fetchurl {
     url = "http://download.kde.org/stable/krita/${version}/${name}.tar.gz";
-    sha256 = "1al27v17s70hihk2mcmz3l2g6rl9qzpxaifapdfpkyias6q3f63l";
+    sha256 = "0fafy5ggplgq2rz85sqa42vmkzs2r9dq47qfrbnn2n6pfzkcw1pg";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules ];
@@ -24,13 +24,6 @@ mkDerivation rec {
     boost libraw fftw eigen exiv2 lcms2 gsl openexr
     openjpeg opencolorio vc poppler_qt5 curl ilmbase
     qtmultimedia qtx11extras
-  ];
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/KDE/krita/commit/2f59d0d1.patch";
-      sha256 = "0sdlcjn6i3faln3c0aczw3pg4pvmccgszmy8n914mgsccrqrazlr";
-    })
   ];
 
   NIX_CFLAGS_COMPILE = [ "-I${ilmbase.dev}/include/OpenEXR" ];

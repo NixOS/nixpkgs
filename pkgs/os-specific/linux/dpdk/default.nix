@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    make install-runtime install-sdk DESTDIR=$out prefix= includedir=/include datadir=/
+    make install-runtime DESTDIR=$out prefix= includedir=/include datadir=/
     make install-sdk DESTDIR=$out prefix= includedir=/include datadir=/
     make install-kmod DESTDIR=$kmod
   '';

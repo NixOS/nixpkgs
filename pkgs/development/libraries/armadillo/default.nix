@@ -12,10 +12,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ openblasCompat superlu hdf5 ];
 
-  cmakeFlags = let
-    libSuff = if stdenv.isDarwin then "dylib" else "so";
-  in [
-    "-DLAPACK_LIBRARY=${openblasCompat}/lib/libopenblas.${libSuff}"
+  cmakeFlags = [
+    "-DLAPACK_LIBRARY=${openblasCompat}/lib/libopenblas${stdenv.hostPlatform.extensions.sharedLibrary}"
     "-DDETECT_HDF5=ON"
   ];
 

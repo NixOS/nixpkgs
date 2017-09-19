@@ -1,9 +1,5 @@
 { stdenv }:
 
-let
-  shlib = if stdenv.isDarwin then "dylib" else "so";
-in
-
 stdenv.mkDerivation {
   name = "cc-wrapper-test";
 
@@ -34,7 +30,12 @@ stdenv.mkDerivation {
 
     printf "checking whether compiler uses NIX_LDFLAGS... " >&2
     mkdir -p foo/lib
-    $CC -shared ${stdenv.lib.optionalString stdenv.isDarwin "-Wl,-install_name,@rpath/libfoo.dylib"} -DVALUE=42 -o foo/lib/libfoo.${shlib} ${./foo.c}
+    $CC -shared \
+      ${stdenv.lib.optionalString stdenv.isDarwin "-Wl,-install_name,@rpath/libfoo.dylib"} \
+      -DVALUE=42 \
+      -o foo/lib/libfoo${stdenv.hostPlatform.extensions.sharedLibrary} \
+      ${./foo.c}
+
     NIX_LDFLAGS="-L$NIX_BUILD_TOP/foo/lib -rpath $NIX_BUILD_TOP/foo/lib" $CC -lfoo -o ldflags-check ${./ldflags-main.c}
     ./ldflags-check
 

@@ -60,10 +60,13 @@ sub update_nix_block {
       die "$url still has some interpolation" if $url =~ /\$/;
 
       my ($sha256) = get("$url.sha256") =~ /^([0-9a-f]{64})/;
-      die "invalid sha256 in $url.sha256" unless $sha256;
+      my ($sha256Base32) = readpipe("nix-hash --type sha256 --to-base32 $sha256");
+      chomp $sha256Base32;
+      print "Jetbrains published SHA256: $sha256\n";
+      print "Conversion into base32 yeilds: $sha256Base32\n";
 
       $block =~ s#version\s*=\s*"([^"]+)".+$#version = "$latest_versions{$channel}"; /* updated by script */#m;
-      $block =~ s#sha256\s*=\s*"([^"]+)".+$#sha256 = "$sha256"; /* updated by script */#m;
+      $block =~ s#sha256\s*=\s*"([^"]+)".+$#sha256 = "$sha256Base32"; /* updated by script */#m;
     }
   }
   return $block;
