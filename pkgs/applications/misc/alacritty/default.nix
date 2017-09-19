@@ -47,16 +47,24 @@ buildRustPackage rec {
   ] ++ rpathLibs;
 
   patchPhase = ''
+    runHook prePatch
+
     substituteInPlace copypasta/src/x11.rs \
       --replace Command::new\(\"xclip\"\) Command::new\(\"${xclip}/bin/xclip\"\)
+
+    runHook postPatch
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
     for f in $(find target/release -maxdepth 1 -type f); do
       cp $f $out/bin
     done;
     patchelf --set-rpath "${stdenv.lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
+
+    runHook postInstall
   '';
 
   dontPatchELF = true;
