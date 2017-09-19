@@ -13172,6 +13172,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  TermAnimation = buildPerlPackage rec {
+    name = "Term-Animation-2.6";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/K/KB/KBAUCOM/${name}.tar.gz";
+      sha256 = "7d5c3c2d4f9b657a8b1dce7f5e2cbbe02ada2e97c72f3a0304bf3c99d084b045";
+    };
+    propagatedBuildInputs = [ Curses ];
+    meta = {
+      description = "ASCII sprite animation framework";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   Test = buildPerlPackage {
     name = "Test-1.26";
     src = fetchurl {

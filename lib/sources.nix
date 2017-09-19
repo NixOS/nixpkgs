@@ -1,6 +1,5 @@
 # Functions for copying sources to the Nix store.
-
-let lib = import ./default.nix; in
+{ lib }:
 
 rec {
 

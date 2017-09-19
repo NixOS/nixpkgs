@@ -1,6 +1,6 @@
 /* String manipulation functions. */
-
-let lib = import ./default.nix;
+{ lib }:
+let
 
 inherit (builtins) length;
 

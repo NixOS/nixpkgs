@@ -23,6 +23,9 @@ rec {
   doCheck = drv: overrideCabal drv (drv: { doCheck = true; });
   dontCheck = drv: overrideCabal drv (drv: { doCheck = false; });
 
+  doBenchmark = drv: overrideCabal drv (drv: { doBenchmark = true; });
+  dontBenchmark = drv: overrideCabal drv (drv: { doBenchmark = false; });
+
   doDistribute = drv: overrideCabal drv (drv: { hydraPlatforms = drv.platforms or ["i686-linux" "x86_64-linux" "x86_64-darwin"]; });
   dontDistribute = drv: overrideCabal drv (drv: { hydraPlatforms = []; });
 
@@ -77,7 +80,7 @@ rec {
   doStrip = drv: overrideCabal drv (drv: { dontStrip = false; });
   dontStrip = drv: overrideCabal drv (drv: { dontStrip = true; });
 
-  # Useful for debugging segfaults with gdb. 
+  # Useful for debugging segfaults with gdb.
   # -g: enables debugging symbols
   # --disable-*-stripping: tell GHC not to strip resulting binaries
   # dontStrip: see above

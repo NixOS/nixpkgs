@@ -47,3 +47,6 @@ pkgs/development/interpreters/elixir/*	@gleber
 pkgs/development/tools/build-managers/rebar/*	@gleber
 pkgs/development/tools/build-managers/rebar3/*	@gleber
 pkgs/development/tools/erlang/*	@gleber
+
+# Jetbrains
+pkgs/applications/editors/jetbrains @edwtjo

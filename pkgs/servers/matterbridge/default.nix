@@ -8,7 +8,7 @@ buildGoPackage rec {
 
   src = fetchurl {
     url = "https://github.com/42wim/matterbridge/archive/v${version}.tar.gz";
-    sha256 = "0nn3929wyjdpkk8azp6wd6mkcg8h0jb1fjxm6jmb74xvdknrzv3k";
+    sha256 = "1br3rf500jdklzpxg1lkagglvmqshhligfkhndi8plg9hmzpd8qp";
   };
 
   meta = with stdenv.lib; {

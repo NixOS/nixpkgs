@@ -301,6 +301,7 @@
   ./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
   ./services/misc/gogs.nix
+  ./services/misc/gollum.nix
   ./services/misc/gpsd.nix
   #./services/misc/ihaskell.nix
   ./services/misc/irkerd.nix
@@ -512,6 +513,7 @@
   ./services/networking/smokeping.nix
   ./services/networking/softether.nix
   ./services/networking/spiped.nix
+  ./services/networking/squid.nix
   ./services/networking/sslh.nix
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix

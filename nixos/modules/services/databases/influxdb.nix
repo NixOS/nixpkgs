@@ -171,7 +171,7 @@ in
         if [ "$(id -u)" = 0 ]; then chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}; fi
       '';
       postStart = mkBefore ''
-        until ${pkgs.curl.bin}/bin/curl -s -o /dev/null 'http://127.0.0.1${toString configOptions.http.bind-address}'/ping; do
+        until ${pkgs.curl.bin}/bin/curl -s -o /dev/null ${if configOptions.http.https-enabled then "-k https" else "http"}://127.0.0.1${toString configOptions.http.bind-address}/ping; do
           sleep 1;
         done
       '';

@@ -1,3 +1,4 @@
+{ ...}:
 /* List of NixOS maintainers. The format is:
 
     handle = "Real Name <address@example.org>";

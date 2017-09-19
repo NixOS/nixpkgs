@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper, makeDesktopItem, zlib, glib, libpng, freetype, openssl
-, xorg, fontconfig, qtbase, qtwebengine, qtwebchannel, xkeyboard_config, alsaLib, libpulseaudio ? null
-, libredirect, quazip, less, which, unzip, llvmPackages
+, xorg, fontconfig, qtbase, qtwebengine, qtwebchannel, qtsvg, xkeyboard_config, alsaLib
+, libpulseaudio ? null, libredirect, quazip, less, which, unzip, llvmPackages
 }:
 
 let
@@ -12,8 +12,8 @@ let
   deps =
     [ zlib glib libpng freetype xorg.libSM xorg.libICE xorg.libXrender openssl
       xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama
-      xorg.libxcb fontconfig xorg.libXext xorg.libX11 alsaLib qtbase qtwebengine qtwebchannel libpulseaudio
-      quazip llvmPackages.libcxx llvmPackages.libcxxabi
+      xorg.libxcb fontconfig xorg.libXext xorg.libX11 alsaLib qtbase qtwebengine qtwebchannel qtsvg
+      libpulseaudio quazip llvmPackages.libcxx llvmPackages.libcxxabi
     ];
 
   desktopItem = makeDesktopItem {
@@ -31,7 +31,7 @@ in
 stdenv.mkDerivation rec {
   name = "teamspeak-client-${version}";
 
-  version = "3.1.4";
+  version = "3.1.6";
 
   src = fetchurl {
     urls = [
@@ -39,14 +39,14 @@ stdenv.mkDerivation rec {
       "http://teamspeak.gameserver.gamed.de/ts3/releases/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run"
     ];
     sha256 = if stdenv.is64bit
-                then "337aec99070366aa3bb82b1bedd8215372b9c74014b198d45d5d6375d1f1c3a8"
-                else "4e126e005b1180655b0847cbdbfc9c47c59c639b7f93f0d988b54a8c4c6ec80f";
+                then "0ncqs5ykk1zsn2lqarf7pr39rbp4h54vaqq1sgqi5irpj6yagzak"
+                else "222e8abb24de9e3ea00fca10be32340ad88859a4d811afa644c5096aada4996d";
   };
 
   # grab the plugin sdk for the desktop icon
   pluginsdk = fetchurl {
-    url = "http://dl.4players.de/ts/client/pluginsdk/pluginsdk_3.0.19.1.zip";
-    sha256 = "1r1ss6zq5axr7h82inlp98zaz50041rizli5bwz3lfyipfr034ya";
+    url = "http://dl.4players.de/ts/client/pluginsdk/pluginsdk_3.1.1.1.zip";
+    sha256 = "1bywmdj54glzd0kffvr27r84n4dsd0pskkbmh59mllbxvj0qwy7f";
   };
 
   buildInputs = [ makeWrapper less which unzip ];

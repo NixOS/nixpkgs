@@ -1,11 +1,10 @@
 # Nixpkgs/NixOS option handling.
+{ lib }:
 
-let lib = import ./default.nix; in
-
-with import ./trivial.nix;
-with import ./lists.nix;
-with import ./attrsets.nix;
-with import ./strings.nix;
+with lib.trivial;
+with lib.lists;
+with lib.attrsets;
+with lib.strings;
 
 rec {
 

@@ -1,8 +1,9 @@
 { stdenv, gitRepo, cacert, copyPathsToStore }:
 
 { name, manifest, rev ? "HEAD", sha256
+# Optional parameters:
 , repoRepoURL ? "", repoRepoRev ? "", referenceDir ? ""
-, localManifests ? [], createMirror ? false, useArchive ? !createMirror
+, localManifests ? [], createMirror ? false, useArchive ? false
 }:
 
 assert repoRepoRev != "" -> repoRepoURL != "";
@@ -51,6 +52,9 @@ in stdenv.mkDerivation {
     # Path must be absolute (e.g. for GnuPG: ~/.repoconfig/gnupg/pubring.kbx)
     export HOME="$(pwd)"
 
+    mkdir $out
+    cd $out
+
     mkdir .repo
     ${optionalString (local_manifests != []) ''
       mkdir .repo/local_manifests
@@ -61,6 +65,13 @@ in stdenv.mkDerivation {
 
     repo init ${concatStringsSep " " repoInitFlags}
     repo sync --jobs=$NIX_BUILD_CORES --current-branch
-    ${optionalString (!createMirror) "rm -rf $out/.repo"}
+
+    # TODO: The git-index files (and probably the files in .repo as well) have
+    # different contents each time and will therefore change the final hash
+    # (i.e. creating a mirror probably won't work).
+    ${optionalString (!createMirror) ''
+      rm -rf .repo
+      find -type d -name '.git' -prune -exec rm -rf {} +
+    ''}
   '';
 }

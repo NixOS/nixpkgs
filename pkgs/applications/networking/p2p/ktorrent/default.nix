@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "KDE integrated BtTorrent client";
     homepage    = https://www.kde.org/applications/internet/ktorrent/;
+    license = licenses.gpl2;
     maintainers = with maintainers; [ eelco ];
     platforms   = platforms.linux;
   };
