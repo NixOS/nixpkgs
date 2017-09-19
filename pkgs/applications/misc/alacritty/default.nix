@@ -64,6 +64,9 @@ buildRustPackage rec {
     done;
     patchelf --set-rpath "${stdenv.lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
 
+    mkdir -p $out/share/applications
+    cp Alacritty.desktop $out/share/applications/alacritty.desktop
+
     runHook postInstall
   '';
 
