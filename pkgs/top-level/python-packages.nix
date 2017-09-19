@@ -18182,6 +18182,8 @@ in {
     };
   };
 
+  radicale_infcloud = callPackage ../development/python-modules/radicale_infcloud {};
+
   recaptcha_client = buildPythonPackage rec {
     name = "recaptcha-client-1.0.6";
 
