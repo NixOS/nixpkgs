@@ -97,7 +97,7 @@ rec {
         {
           name = name + lib.optionalString
             (stdenv.hostPlatform != stdenv.buildPlatform)
-            stdenv.hostPlatform.config;
+            ("-" + stdenv.hostPlatform.config);
           builder = attrs.realBuilder or stdenv.shell;
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
           inherit stdenv;

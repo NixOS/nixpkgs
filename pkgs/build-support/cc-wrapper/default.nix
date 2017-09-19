@@ -21,8 +21,6 @@ assert !nativeTools ->
 assert !(nativeLibc && noLibc);
 assert (noLibc || nativeLibc) == (libc == null);
 
-assert stdenv.targetPlatform != stdenv.hostPlatform -> runCommand != null;
-
 # For ghdl (the vhdl language provider to gcc) we need zlib in the wrapper.
 assert cc.langVhdl or false -> zlib != null;
 
@@ -66,11 +64,11 @@ let
     else if targetPlatform.system == "i686-linux"     then "${libc_lib}/lib/ld-linux.so.2"
     else if targetPlatform.system == "x86_64-linux"   then "${libc_lib}/lib/ld-linux-x86-64.so.2"
     # ARM with a wildcard, which can be "" or "-armhf".
-    else if targetPlatform.isArm                      then "${libc_lib}/lib/ld-linux*.so.3"
+    else if (with targetPlatform; isArm && isLinux)   then "${libc_lib}/lib/ld-linux*.so.3"
     else if targetPlatform.system == "aarch64-linux"  then "${libc_lib}/lib/ld-linux-aarch64.so.1"
     else if targetPlatform.system == "powerpc-linux"  then "${libc_lib}/lib/ld.so.1"
     else if targetPlatform.system == "mips64el-linux" then "${libc_lib}/lib/ld.so.1"
-    else if targetPlatform.system == "x86_64-darwin"  then "/usr/lib/dyld"
+    else if targetPlatform.isDarwin                   then "/usr/lib/dyld"
     else if stdenv.lib.hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
     else null;
 
