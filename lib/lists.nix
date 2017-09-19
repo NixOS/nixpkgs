@@ -29,8 +29,6 @@ rec {
 
 
   docs.foldr = mkDoc {
-    type = "foldr :: (a -> b -> b) -> b -> [a] -> b";
-
     description = ''
       "Right fold" a binary function <literal>op</literal> between
       successive elements of <literal>list</literal> with
@@ -217,7 +215,6 @@ rec {
      predicate.
    '';
 
-   type = "(a -> Bool) -> a -> a -> [a] -> a";
    params = [
      (mkP "pred" "a -> Bool" "")
      (mkP "default" "a" "The default if <parameter>pred</parameter> never returns <literal>true</literal>")

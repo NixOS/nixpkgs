@@ -22,7 +22,6 @@ let
         # MUST match lib/doc.nix's mkDoc function signaturex
         description,
         examples ? [],
-        type ? false,
         params ? [],
         return ? null
       }:
@@ -45,6 +44,13 @@ let
         ${exampleInner}
         </refsect1>
       '';
+
+      type = if return == null then ""
+        else lib.strings.concatMapStringsSep " -> "
+          (param: if builtins.match ".*->.*" param.type == []
+                  then "(${param.type})"
+                  else param.type)
+          (params ++ [return]);
 
       typeDocbook = if type == false then ""
         else ''

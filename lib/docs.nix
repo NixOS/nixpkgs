@@ -7,7 +7,6 @@
         # MUST match doc/default.nix's docbookFromDoc function signature
         description,
         examples ? [],
-        type ? false,
         params ? [],
         return ? null
       }: x;
