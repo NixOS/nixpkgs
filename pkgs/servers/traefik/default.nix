@@ -2,38 +2,42 @@
 
 buildGoPackage rec {
   name = "traefik-${version}";
-  version = "v1.3.8";
+  version = "1.3.8";
 
   goPackagePath = "github.com/containous/traefik";
 
   src = fetchurl {
-    url = "https://github.com/containous/traefik/releases/download/${version}/traefik-${version}.src.tar.gz";
+    url = "https://github.com/containous/traefik/releases/download/v${version}/traefik-v${version}.src.tar.gz";
     sha256 = "6fce36dd30bb5ae5f91e69f2950f22fe7a74b920e80c6b441a0721122f6a6174";
   };
 
-  buildInputs = [ go-bindata ];
-  sourceRoot = ".";
-  postUnpack = ''
-  files=`ls`
-  mkdir traefik
-  mv $files traefik/
-  export sourceRoot="traefik"
+  buildInputs = [ go-bindata bash ];
+  unpackPhase = ''
+    runHook preUnpack
+    mkdir traefik
+    tar -C traefik -xvzf $src
+    export sourceRoot="traefik"
+    runHook postUnpack
   '';
 
   buildPhase = ''
-  cd go/src/github.com/containous/traefik
-  ${bash}/bin/bash ./script/make.sh generate
-  CGO_ENABLED=0 GOGC=off go build -v -ldflags "-s -w" -a -installsuffix nocgo -o dist/traefik ./cmd/traefik
-  '';
+    runHook preBuild
+    (
+      cd go/src/github.com/containous/traefik
+      bash ./script/make.sh generate
 
-  installPhase = ''
-  mkdir -p $bin/bin
-  cp ./dist/traefik $bin/bin/
+      CODENAME=$(awk -F "=" '/CODENAME=/ { print $2}' script/binary)
+      go build -ldflags "\
+        -X github.com/containous/traefik/version.Version=${version} \
+        -X github.com/containous/traefik/version.Codename=$CODENAME \
+      " -a -o $bin/bin/traefik ./cmd/traefik
+    )
+    runHook postBuild
   '';
 
   meta = with stdenv.lib; {
     homepage = https://traefik.io;
-    description = "Træfik, a modern reverse proxy";
+    description = "A modern reverse proxy";
     license = licenses.mit;
     maintainers = with maintainers; [ hamhut1066 ];
   };
