@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       throughput in both directions.
     '';
     homepage = https://libwebsockets.org/trac/libwebsockets;
-    license = stdenv.lib.licenses.lgpl;
+    license = stdenv.lib.licenses.lgpl21;
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };
