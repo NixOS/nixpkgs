@@ -38,7 +38,12 @@ rec {
       <literal>fold op nul [x_1 x_2 ... x_n] == op x_1 (op x_2 ... (op x_n nul))</literal>.
       (This is Haskell's <literal>foldr</literal>).
     '';
-
+    params = [
+      (mkP "op" "a -> b -> b" "")
+      (mkP "nul" "b" "initial value")
+      (mkP "list" "[a]" "")
+    ];
+    return = mkP "b" "";
     examples =[
       { title = "constructing a concat function with foldr";
         body = ''

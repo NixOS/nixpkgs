@@ -19,10 +19,12 @@ let
   attrsOnly = attrset: lib.filterAttrs (k: v: builtins.isAttrs v) attrset;
 
   docbookFromDoc = { name, pos, libgroupname }: {
-        # MUST match lib/doc.nix's mkDoc function signature
+        # MUST match lib/doc.nix's mkDoc function signaturex
         description,
         examples ? [],
-        type ? false
+        type ? false,
+        params ? [],
+        return ? null
       }:
     let
       exampleDocbook = lib.strings.concatMapStrings ({title, body}:
@@ -39,14 +41,25 @@ let
         <subtitle><literal>${type}</literal></subtitle>
         '';
 
+      paramsDocbook = if params == [] then ""
+        else let
+          paramDocbook = lib.concatMapStrings
+            (param: ''
+              <listitem>
+                <para><parameter>${param.name}</parameter> <type>${param.type}</type> ${param.description}</para>
+              </listitem>
+            '')
+            params;
+        in "<orderedlist>${paramDocbook}</orderedlist>";
+
     in ''
       <section xml:id="fn-${cleanId libgroupname}-${cleanId name}">
-        <title>${name}</title>
+        <title><methodname>${name}</methodname></title>
         ${typeDocbook}
         <para>${mkGithubLink pos.file pos.line}</para>
 
-
         <para>${description}</para>
+        ${paramsDocbook}
 
         ${exampleDocbook}
       </section>
