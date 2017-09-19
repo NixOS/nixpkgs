@@ -110,6 +110,7 @@
 "github:rhysd/vim-grammarous"
 "github:rodjek/vim-puppet"
 "github:roxma/nvim-completion-manager"
+"github:roxma/nvim-cm-racer"
 "github:ryanoasis/vim-devicons"
 "github:rust-lang/rust.vim"
 "github:sbdchd/neoformat"
