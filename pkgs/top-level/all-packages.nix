@@ -11581,6 +11581,8 @@ with pkgs;
     erlang = erlang_basho_R16B02;
   };
 
+  icinga2 = callPackage ../servers/monitoring/icinga2 { };
+
   influxdb = callPackage ../servers/nosql/influxdb { };
 
   mysql55 = callPackage ../servers/sql/mysql/5.5.x.nix {
