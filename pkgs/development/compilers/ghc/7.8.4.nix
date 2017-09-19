@@ -17,7 +17,7 @@ let
     libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-includes="${ncurses.dev}/include"
     libraries/terminfo_CONFIGURE_OPTS += --configure-option=--with-curses-libraries="${ncurses.out}/lib"
     DYNAMIC_BY_DEFAULT = NO
-    ${stdenv.lib.optionalString stdenv.isDarwin ''
+    ${stdenv.lib.optionalString (stdenv.hostPlatform.libc != "glibc") ''
       libraries/base_CONFIGURE_OPTS += --configure-option=--with-iconv-includes="${libiconv}/include"
       libraries/base_CONFIGURE_OPTS += --configure-option=--with-iconv-libraries="${libiconv}/lib"
     ''}
@@ -31,7 +31,7 @@ let
   # Splicer will pull out correct variations
   libDeps = [ ncurses ]
     ++ stdenv.lib.optional (!enableIntegerSimple) gmp
-    ++ stdenv.lib.optional (stdenv.hostPlatform.libc == "libSystem") libiconv;
+    ++ stdenv.lib.optional (stdenv.hostPlatform.libc != "glibc") libiconv;
 
 in
 
