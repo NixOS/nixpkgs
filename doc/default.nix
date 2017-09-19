@@ -100,16 +100,23 @@ let
           <refpurpose>${typeDocbook}</refpurpose>
         </refnamediv>
 
+        <refsect1>
+          <title></title>
+          <para>${mkGithubLink pos.file pos.line}</para>
+        </refsect1>
+
         <refsect1 role="description">
           <title>Description</title>
           <para>${description}</para>
         </refsect1>
 
         ${paramsDocbook}
-        <!--<para>${mkGithubLink pos.file pos.line}</para>-->
+
         ${returnDocbook}
 
         ${exampleDocbook}
+
+
       </refentry>
 
     '';
