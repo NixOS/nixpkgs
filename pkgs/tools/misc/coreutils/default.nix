@@ -76,8 +76,6 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
   FORCE_UNSAFE_CONFIGURE = optionalString hostPlatform.isSunOS "1";
 
-  makeFlags = optionalString hostPlatform.isDarwin "CFLAGS=-D_FORTIFY_SOURCE=0";
-
   # Works around a bug with 8.26:
   # Makefile:3440: *** Recursive variable 'INSTALL' references itself (eventually).  Stop.
   preInstall = optionalString (hostPlatform != buildPlatform) ''
