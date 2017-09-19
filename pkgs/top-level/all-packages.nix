@@ -6230,7 +6230,7 @@ with pkgs;
   };
 
   wrapCCCross =
-    {cc, libc, binutils, shell ? "", name ? "gcc-cross-wrapper"}:
+    {cc, libc, binutils, name ? "gcc-cross-wrapper"}:
 
     forcedNativePackages.ccWrapperFun {
       nativeTools = false;
@@ -6240,7 +6240,7 @@ with pkgs;
       isGNU = cc.isGNU or false;
       isClang = cc.isClang or false;
 
-      inherit cc binutils libc shell name;
+      inherit cc binutils libc name;
     };
 
   # prolog
