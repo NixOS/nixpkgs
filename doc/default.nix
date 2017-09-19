@@ -1,4 +1,14 @@
 let
+  rootDir = toString ./..;
+  commitHash = lib.sources.commitIdFromGitRepo ./../.git;
+
+  mkGithubLink = file: line:
+    let
+      filePath = lib.strings.removePrefix "${rootDir}/" file;
+      rootUrl = "https://github.com/NixOS/nixpkgs/blob/";
+      ghUrl = "${rootUrl}${commitHash}/${filePath}#L${toString line}";
+    in "<link xlink:href=\"${ghUrl}\">${filePath}:${toString line}</link>";
+
   pkgs = import ./.. { };
   lib = pkgs.lib;
   sources = lib.sourceFilesBySuffices ./. [".xml"];
@@ -31,7 +41,7 @@ let
       <section>
         <title>${name}</title>
         ${typeDocbook}
-        <para>${pos.file}:${toString pos.line}</para>
+        <para>${mkGithubLink pos.file pos.line}</para>
 
 
         <para>${description}</para>
