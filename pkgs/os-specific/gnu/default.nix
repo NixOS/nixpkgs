@@ -3,14 +3,21 @@
 args@{ fetchgit, stdenv, autoconf, automake, automake111x, libtool
 , texinfo, glibcCross, hurdPartedCross, libuuid, samba
 , gccCrossStageStatic, gccCrossStageFinal
-, forcedNativePackages, forceSystem, newScope, platform, config
+, forceSystem, newScope, platform, config
 , targetPlatform, buildPlatform
-, overrides ? {} }:
+, overrides ? {}
+, buildPackages, pkgs
+}:
 
 with args;
 
 let
   callPackage = newScope gnu;
+
+  forcedNativePackages =
+    if stdenv.hostPlatform == stdenv.buildPlatform
+    then pkgs
+    else buildPackages;
 
   gnu = {
     hurdCross = forcedNativePackages.callPackage ./hurd {
