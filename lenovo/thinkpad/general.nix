@@ -17,4 +17,6 @@ with lib;
   };
 
   environment.systemPackages = [ pkgs.acpi ];
+
+  sound.enableMediaKeys = true;
 }

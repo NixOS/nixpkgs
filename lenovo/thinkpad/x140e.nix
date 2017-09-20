@@ -16,7 +16,4 @@
 
   # video card
   services.xserver.videoDrivers = ["ati"];
-
-  # media keys
-  sound.enableMediaKeys = true;
 }
