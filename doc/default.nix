@@ -52,7 +52,7 @@ let
                   else param.type)
           (params ++ [return]);
 
-      typeDocbook = if type == false then ""
+      typeDocbook = if type == "" then ""
         else ''
         <literal>${type}</literal>
         '';
@@ -174,6 +174,8 @@ pkgs.stdenv.mkDerivation {
   xsltFlags = ''
     --param section.autolabel 1
     --param section.label.includes.component.label 1
+    --param refentry.generate.name 0
+    --param refentry.generate.title 1
     --param html.stylesheet 'style.css'
     --param xref.with.number.and.title 1
     --param toc.section.depth 3
