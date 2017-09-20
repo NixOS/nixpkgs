@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 		description = "A pure OCaml library to read and write CSV files";
 		license = stdenv.lib.licenses.lgpl21;
 		maintainers = [ stdenv.lib.maintainers.vbgl ];
-		inherit (src.meta) homepage;
+		homepage = https://github.com/Chris00/ocaml-csv;
 		inherit (ocaml.meta) platforms;
 	};
 }
