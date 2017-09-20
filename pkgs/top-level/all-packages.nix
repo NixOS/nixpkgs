@@ -5451,9 +5451,7 @@ with pkgs;
 
   gccCrossStageFinal = assert targetPlatform != buildPlatform; wrapCCWith {
     name = "gcc-cross-wrapper";
-    cc = gcc.cc.override {
-      crossStageStatic = false;
-    };
+    cc = gcc.cc;
     libc = libcCross;
   };
 
