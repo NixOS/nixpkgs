@@ -5388,17 +5388,22 @@ with pkgs;
   };
 
   wrapCCMulti = cc:
-    if system == "x86_64-linux" then lowPrio (
-      let
-        extraBuildCommands = ''
-          echo "dontMoveLib64=1" >> $out/nix-support/setup-hook
-        '';
-      in wrapCCWith glibc_multi extraBuildCommands (cc.cc.override {
-        stdenv = overrideCC stdenv (wrapCCWith glibc_multi "" cc.cc);
+    if system == "x86_64-linux" then lowPrio (wrapCCWith {
+      cc = cc.cc.override {
+        stdenv = overrideCC stdenv (wrapCCWith {
+          cc = cc.cc;
+          libc = glibc_multi;
+        });
         profiledCompiler = false;
         enableMultilib = true;
-      }))
-    else throw "Multilib ${cc.name} not supported on ‘${system}’";
+      };
+
+      libc = glibc_multi;
+
+      extraBuildCommands = ''
+        echo "dontMoveLib64=1" >> $out/nix-support/setup-hook
+      '';
+  }) else throw "Multilib ${cc.name} not supported on ‘${system}’";
 
   gcc_multi = wrapCCMulti gcc;
 
@@ -5425,7 +5430,8 @@ with pkgs;
       if targetPlatform.libc == "msvcrt" then __targetPackages.windows.mingw_w64_headers
       else if targetPlatform.libc == "libSystem" then darwin.xcode
       else null;
-    in wrapCCCross {
+    in wrapCCWith {
+      name = "gcc-cross-wrapper";
       cc = gcc.cc.override {
         crossStageStatic = true;
         langCC = false;
@@ -5437,12 +5443,14 @@ with pkgs;
   };
 
   # Only needed for mingw builds
-  gccCrossMingw2 = assert targetPlatform != buildPlatform; wrapCCCross {
+  gccCrossMingw2 = assert targetPlatform != buildPlatform; wrapCCWith {
+    name = "gcc-cross-wrapper";
     cc = gccCrossStageStatic.gcc;
     libc = windows.mingw_headers2;
   };
 
-  gccCrossStageFinal = assert targetPlatform != buildPlatform; wrapCCCross {
+  gccCrossStageFinal = assert targetPlatform != buildPlatform; wrapCCWith {
+    name = "gcc-cross-wrapper";
     cc = gcc.cc.override {
       crossStageStatic = false;
     };
@@ -6198,19 +6206,24 @@ with pkgs;
 
   wla-dx = callPackage ../development/compilers/wla-dx { };
 
-  wrapCCWith = libc: extraBuildCommands: baseCC: ccWrapperFun {
-    nativeTools = stdenv.cc.nativeTools or false;
-    nativeLibc = stdenv.cc.nativeLibc or false;
+  wrapCCWith = { name ? "", cc, libc, extraBuildCommands ? "" }: ccWrapperFun {
+    nativeTools = targetPlatform == hostPlatform && stdenv.cc.nativeTools or false;
+    nativeLibc = targetPlatform == hostPlatform && stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
-    cc = baseCC;
-    isGNU = baseCC.isGNU or false;
-    isClang = baseCC.isClang or false;
-    inherit libc extraBuildCommands;
+    noLibc = (libc == null);
+
+    isGNU = cc.isGNU or false;
+    isClang = cc.isClang or false;
+
+    inherit name cc libc extraBuildCommands;
   };
 
   ccWrapperFun = callPackage ../build-support/cc-wrapper;
 
-  wrapCC = wrapCCWith stdenv.cc.libc "";
+  wrapCC = cc: wrapCCWith {
+    inherit cc;
+    inherit (stdenv.cc) libc;
+  };
   # legacy version, used for gnat bootstrapping
   wrapGCC-old = baseGCC: callPackage ../build-support/gcc-wrapper-old {
     nativeTools = stdenv.cc.nativeTools or false;
@@ -6219,20 +6232,6 @@ with pkgs;
     gcc = baseGCC;
     libc = glibc;
   };
-
-  wrapCCCross =
-    {cc, libc, binutils, name ? "gcc-cross-wrapper"}:
-
-    ccWrapperFun {
-      nativeTools = false;
-      nativeLibc = false;
-      noLibc = (libc == null);
-
-      isGNU = cc.isGNU or false;
-      isClang = cc.isClang or false;
-
-      inherit cc binutils libc name;
-    };
 
   # prolog
   yap = callPackage ../development/compilers/yap { };
