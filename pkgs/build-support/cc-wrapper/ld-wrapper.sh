@@ -2,6 +2,10 @@
 set -eu -o pipefail
 shopt -s nullglob
 
+if (( "${NIX_DEBUG:-0}" >= 7 )); then
+    set -x
+fi
+
 path_backup="$PATH"
 
 # phase separation makes this look useless

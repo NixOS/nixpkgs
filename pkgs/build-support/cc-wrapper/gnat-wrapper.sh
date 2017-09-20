@@ -2,6 +2,10 @@
 set -eu -o pipefail
 shopt -s nullglob
 
+if (( "${NIX_DEBUG:-0}" >= 7 )); then
+    set -x
+fi
+
 # N.B. Gnat is not used during bootstrapping, so we don't need to
 # worry about the old bash empty array `set -u` workarounds.
 
