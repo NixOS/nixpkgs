@@ -1,0 +1,66 @@
+--- a/chrome/browser/devtools/devtools_file_system_indexer.cc
++++ b/chrome/browser/devtools/devtools_file_system_indexer.cc
+@@ -34,7 +34,6 @@ using base::TimeDelta;
+ using base::TimeTicks;
+ using content::BrowserThread;
+ using std::map;
+-using std::set;
+ using std::string;
+ using std::vector;
+ 
+@@ -191,7 +190,7 @@ vector<FilePath> Index::Search(const string& query) {
+     if (trigram != kUndefinedTrigram)
+       trigrams.push_back(trigram);
+   }
+-  set<FileId> file_ids;
++  std::set<FileId> file_ids;
+   bool first = true;
+   vector<Trigram>::const_iterator it = trigrams.begin();
+   for (; it != trigrams.end(); ++it) {
+@@ -203,7 +202,7 @@ vector<FilePath> Index::Search(const string& query) {
+       first = false;
+       continue;
+     }
+-    set<FileId> intersection = base::STLSetIntersection<set<FileId> >(
++    std::set<FileId> intersection = base::STLSetIntersection<std::set<FileId> >(
+         file_ids, index_[trigram]);
+     file_ids.swap(intersection);
+   }
+diff --git a/third_party/WebKit/Source/platform/wtf/typed_arrays/ArrayBufferContents.h b/third_party/WebKit/Source/platform/wtf/typed_arrays/ArrayBufferContents.h
+index 94bb9161ec85..e40c6387f72e 100644
+--- a/third_party/WebKit/Source/platform/wtf/typed_arrays/ArrayBufferContents.h
++++ b/third_party/WebKit/Source/platform/wtf/typed_arrays/ArrayBufferContents.h
+@@ -63,7 +63,7 @@ class WTF_EXPORT ArrayBufferContents {
+           allocation_length_(0),
+           data_(data),
+           data_length_(0),
+-          kind_(AllocationKind::kNormal),
++          kind_(WTF::ArrayBufferContents::AllocationKind::kNormal),
+           deleter_(deleter) {}
+     DataHandle(void* allocation_base,
+                size_t allocation_length,
+@@ -94,11 +94,11 @@ class WTF_EXPORT ArrayBufferContents {
+              reinterpret_cast<uintptr_t>(allocation_base_) +
+                  allocation_length_);
+       switch (kind_) {
+-        case AllocationKind::kNormal:
++        case WTF::ArrayBufferContents::AllocationKind::kNormal:
+           DCHECK(deleter_);
+           deleter_(data_);
+           return;
+-        case AllocationKind::kReservation:
++        case WTF::ArrayBufferContents::AllocationKind::kReservation:
+           ReleaseReservedMemory(allocation_base_, allocation_length_);
+           return;
+       }
+--- a/third_party/webrtc/modules/audio_processing/aec3/aec_state.cc.orig	2017-08-15 12:45:59.433532111 +0000
++++ b/third_party/webrtc/modules/audio_processing/aec3/aec_state.cc	2017-08-15 17:52:59.691328825 +0000
+@@ -10,7 +10,7 @@
+ 
+ #include "webrtc/modules/audio_processing/aec3/aec_state.h"
+ 
+-#include <math.h>
++#include <cmath>
+ #include <numeric>
+ #include <vector>
+ 

@@ -6,11 +6,11 @@
 stdenv.mkDerivation rec {
   name = "${product}-${version}";
   product = "vivaldi-ffmpeg-codecs";
-  version = "60.0.3112.90";
+  version = "61.0.3163.91";
 
   src = fetchurl {
     url = "https://commondatastorage.googleapis.com/chromium-browser-official/chromium-${version}.tar.xz";
-    sha512 = "2p7pjjsxpglxjmh0asyykagqh33ccrjwj4b2aski4h31wkxv9b9najy8aqk6j1bi06n9wd35vis4hz4fr6kvgckllg1pjqrb3bpwmq5";
+    sha512 = "3f07vwbxllrwy3agqxa6ndcix23vai18i178zscmk0y68flhzffyjdvrwlg7dzlwgiqypj2cyl21qb4qmcay2ilgw9vnr9fql2x0w7p";
   };
 
   buildInputs = [ ];
@@ -21,7 +21,9 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    ./chromium-gn-bootstrap-r8.patch
+    ./chromium-gn-bootstrap-r14.patch
+    ./chromium-gcc-r1.patch
+    ./chromium-gcc5-r1.patch
   ];
 
   configurePhase = ''
