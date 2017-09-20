@@ -99,7 +99,7 @@ let
     in ''
       <refentry xml:id="fn-${cleanId libgroupname}-${cleanId name}">
         <refnamediv>
-          <refname>${name}</refname>
+          <refname>${libgroupname}.${name}</refname>
           <refpurpose>${typeDocbook}</refpurpose>
         </refnamediv>
 
