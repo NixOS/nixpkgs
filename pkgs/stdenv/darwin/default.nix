@@ -77,7 +77,7 @@ in rec {
 
         cc = if isNull last then "/dev/null" else import ../../build-support/cc-wrapper {
           inherit shell;
-          inherit (last) stdenv;
+          inherit (last) stdenvNoCC;
 
           nativeTools  = false;
           nativeLibc   = false;
@@ -324,7 +324,7 @@ in rec {
     shell       = "${pkgs.bash}/bin/bash";
 
     cc = lib.callPackageWith {} ../../build-support/cc-wrapper {
-      inherit (pkgs) stdenv;
+      inherit (pkgs) stdenvNoCC;
       inherit shell;
       nativeTools = false;
       nativeLibc  = false;
