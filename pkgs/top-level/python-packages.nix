@@ -7748,7 +7748,9 @@ in {
     };
     doCheck = false;
     propagatedBuildInputs = with self; [ requests ];
+    buildInputs = with pkgs; [ file ];
     prePatch = ''
+      sed -i -e "s|'file|'${pkgs.file}/bin/file|" py3status/parse_config.py
       sed -i -e "s|\[\"acpi\"|\[\"${pkgs.acpi}/bin/acpi\"|" py3status/modules/battery_level.py
       sed -i -e "s|notify-send|${pkgs.libnotify}/bin/notify-send|" py3status/modules/battery_level.py
       sed -i -e "s|/usr/bin/whoami|${pkgs.coreutils}/bin/whoami|" py3status/modules/external_script.py
