@@ -29,8 +29,6 @@ with pkgs;
 
   callPackage_i686 = pkgsi686Linux.callPackage;
 
-  forcedNativePackages = if hostPlatform == buildPlatform then pkgs else buildPackages;
-
   # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
   # it uses GCC compiled with multilib support; on i686-linux, it's
   # just the plain stdenv.
@@ -5428,34 +5426,27 @@ with pkgs;
       else if targetPlatform.libc == "libSystem" then darwin.xcode
       else null;
     in wrapCCCross {
-      cc = forcedNativePackages.gcc.cc.override {
+      cc = gcc.cc.override {
         crossStageStatic = true;
         langCC = false;
         libcCross = libcCross1;
         enableShared = false;
         # Why is this needed?
-        inherit (forcedNativePackages) binutils;
       };
       libc = libcCross1;
-      inherit (forcedNativePackages) binutils;
   };
 
   # Only needed for mingw builds
   gccCrossMingw2 = assert targetPlatform != buildPlatform; wrapCCCross {
     cc = gccCrossStageStatic.gcc;
     libc = windows.mingw_headers2;
-    inherit (forcedNativePackages) binutils;
   };
 
   gccCrossStageFinal = assert targetPlatform != buildPlatform; wrapCCCross {
-    cc = forcedNativePackages.gcc.cc.override {
+    cc = gcc.cc.override {
       crossStageStatic = false;
-
-      # Why is this needed?
-      inherit (forcedNativePackages) binutils;
     };
     libc = libcCross;
-    inherit (forcedNativePackages) binutils;
   };
 
   gcc45 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.5 {
@@ -6232,7 +6223,7 @@ with pkgs;
   wrapCCCross =
     {cc, libc, binutils, name ? "gcc-cross-wrapper"}:
 
-    forcedNativePackages.ccWrapperFun {
+    ccWrapperFun {
       nativeTools = false;
       nativeLibc = false;
       noLibc = (libc == null);
@@ -7334,7 +7325,7 @@ with pkgs;
      cross_renaming: we should make all programs use pkgconfig as
      nativeBuildInput after the renaming.
      */
-  pkgconfig = forcedNativePackages.callPackage ../development/tools/misc/pkgconfig {
+  pkgconfig = callPackage ../development/tools/misc/pkgconfig {
     fetchurl = fetchurlBoot;
   };
   pkgconfigUpstream = lowPrio (pkgconfig.override { vanilla = true; });
