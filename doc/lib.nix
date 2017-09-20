@@ -88,11 +88,11 @@ let
 
         in ''
           <refsect1 role="returnvalues">
-           <title>Return Values</title>
-           <para>
-             <type>${return.type}</type>
-             ${return.description}
-           </para>
+            <title>Return Values</title>
+            <para>Type: <type>${return.type}</type></para>
+            <para>
+              ${return.description}
+            </para>
           </refsect1>
         '';
 
