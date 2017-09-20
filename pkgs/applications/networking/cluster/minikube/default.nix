@@ -23,7 +23,7 @@ let
 in buildGoPackage rec {
   pname   = "minikube";
   name    = "${pname}-${version}";
-  version = "0.22.1";
+  version = "0.22.2";
 
   goPackagePath = "k8s.io/minikube";
 
@@ -31,7 +31,7 @@ in buildGoPackage rec {
     owner  = "kubernetes";
     repo   = "minikube";
     rev    = "v${version}";
-    sha256 = "015ffsb7xx82y0dl38gayv2v9v33v99qmssd5djl21dhb3j79yba";
+    sha256 = "04h0hp0mkps3ilcig6xnmp41rlgaxhhpxakc86lsknvkk9kmrx89";
   };
 
   # kubernetes is here only to shut up a loud warning when generating the completions below. minikube checks very eagerly
