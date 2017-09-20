@@ -2,7 +2,7 @@
 
 args@{ fetchgit, stdenv, autoconf, automake, automake111x, libtool
 , texinfo, glibcCross, hurdPartedCross, libuuid, samba
-, gccCrossStageStatic, gccCrossStageFinal
+, gccCrossStageStatic, gcc
 , forceSystem, newScope, platform, config
 , targetPlatform, buildPlatform
 , overrides ? {}
@@ -28,7 +28,7 @@ let
       automake = automake111x;
       headersOnly = false;
       cross = assert targetPlatform != buildPlatform; targetPlatform;
-      gccCross = gccCrossStageFinal;
+      gccCross = gcc;
     };
 
     hurdCrossIntermediate = forcedNativePackages.callPackage ./hurd {

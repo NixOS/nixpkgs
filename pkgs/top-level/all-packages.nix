@@ -5426,6 +5426,8 @@ with pkgs;
     cc = buildPackages.gccCrossStageStatic;
   };
 
+  # The GCC used to build libc for the target platform. Normal gccs will be
+  # built with, and use, that cross-compiled libc.
   gccCrossStageStatic = assert targetPlatform != buildPlatform; let
     libcCross1 =
       if targetPlatform.libc == "msvcrt" then __targetPackages.windows.mingw_w64_headers
@@ -5454,12 +5456,6 @@ with pkgs;
     name = "gcc-cross-wrapper";
     cc = gccCrossStageStatic.gcc;
     libc = windows.mingw_headers2;
-  };
-
-  gccCrossStageFinal = assert targetPlatform != buildPlatform; wrapCCWith {
-    name = "gcc-cross-wrapper";
-    cc = gcc.cc;
-    libc = libcCross;
   };
 
   gcc45 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.5 {
@@ -6226,6 +6222,7 @@ with pkgs;
   ccWrapperFun = callPackage ../build-support/cc-wrapper;
 
   wrapCC = cc: wrapCCWith {
+    name = lib.optionalString (targetPlatform != hostPlatform) "gcc-cross-wrapper";
     inherit cc;
     libc = if targetPlatform != hostPlatform then libcCross else stdenv.cc.libc;
   };
