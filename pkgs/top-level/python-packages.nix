@@ -25833,27 +25833,7 @@ EOF
     };
   };
 
-  pafy = buildPythonPackage rec {
-    name = "pafy-${version}";
-    version = "0.5.3.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pafy/${name}.tar.gz";
-      sha256 = "1a7dxi95m1043rxx1r5x3ngb66nwlq6aqcasyqqjzmmmjps4zrim";
-    };
-
-    # No tests included in archive
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ youtube-dl ];
-
-    meta = with stdenv.lib; {
-      description = "A library to download YouTube content and retrieve metadata";
-      homepage = http://np1.github.io/pafy/;
-      license = licenses.lgpl3Plus;
-      maintainers = with maintainers; [ odi ];
-    };
-  };
+  pafy = callPackage ../development/python-modules/pafy { };
 
   suds = buildPythonPackage rec {
     name = "suds-0.4";
