@@ -53,6 +53,7 @@ in
             ~/.synergy/SSL/Fingerprints/TrustedServers.txt.  Please refer to
             the synergy wiki for details.
           '';
+        };
       };
 
       server = {
