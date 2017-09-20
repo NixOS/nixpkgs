@@ -5377,6 +5377,7 @@ with pkgs;
   gambit = callPackage ../development/compilers/gambit { };
   gerbil = callPackage ../development/compilers/gerbil { };
 
+  gccFun = callPackage ../development/compilers/gcc/6;
   gcc = gcc6;
   gcc-unwrapped = gcc.cc;
 
@@ -5432,12 +5433,18 @@ with pkgs;
       else null;
     in wrapCCWith {
       name = "gcc-cross-wrapper";
-      cc = gcc.cc.override {
+      cc = gccFun {
+        # copy-pasted
+        inherit noSysDirs;
+        # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
+        profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
+        isl = if !stdenv.isDarwin then isl_0_14 else null;
+
+        # just for stage static
         crossStageStatic = true;
         langCC = false;
         libcCross = libcCross1;
         enableShared = false;
-        # Why is this needed?
       };
       libc = libcCross1;
   };
@@ -6220,7 +6227,7 @@ with pkgs;
 
   wrapCC = cc: wrapCCWith {
     inherit cc;
-    inherit (stdenv.cc) libc;
+    libc = if targetPlatform != hostPlatform then libcCross else stdenv.cc.libc;
   };
   # legacy version, used for gnat bootstrapping
   wrapGCC-old = baseGCC: callPackage ../build-support/gcc-wrapper-old {
