@@ -88,6 +88,7 @@ pythonPackages.buildPythonApplication {
 
   preConfigure = ''
     export configureFlags="$configureFlags
+      --with-hpppddir=$out/share/cups/model/HP
       --with-cupsfilterdir=$out/lib/cups/filter
       --with-cupsbackenddir=$out/lib/cups/backend
       --with-icondir=$out/share/applications
