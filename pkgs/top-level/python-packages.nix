@@ -9003,6 +9003,8 @@ in {
 
   flake8-debugger = callPackage ../development/python-modules/flake8-debugger { };
 
+  flake8-future-import = callPackage ../development/python-modules/flake8-future-import { };
+
   flaky = buildPythonPackage rec {
     name = "flaky-${version}";
     version = "3.1.0";
