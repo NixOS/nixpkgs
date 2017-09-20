@@ -96,6 +96,10 @@ in
     '';
   };
 
+  do_sqlite3 = attrs: {
+    buildInputs = [ sqlite ];
+  };
+
   eventmachine = attrs: {
     buildInputs = [ openssl ];
   };
