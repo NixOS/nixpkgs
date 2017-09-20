@@ -123,13 +123,13 @@ in
         wantedBy = optional cfgS.autoStart "graphical-session.target";
         partOf = optional cfgS.autoStart "graphical-session.target";
         path = [ pkgs.synergy ];
-        serviceConfig.ExecStart =
-            optionalString (cfgS.enableCrypto)
-                           "${pkgs.synergy}/bin/synergy-generate-certs && "
-          + "${pkgs.synergy}/bin/synergys -c ${cfgS.configFile} --no-daemon"
-          + optionalString (cfgS.address != "")    " -a ${cfgS.address}"
-          + optionalString (cfgS.screenName != "") " -n ${cfgS.screenName}"
-          + optionalString (cfgS.enableCrypto)     " --enable-crypto";
+        serviceConfig = {
+          ExecStartPre = optionalString (cfgS.enableCrypto) "${pkgs.synergy}/bin/synergy-generate-certs";
+          ExecStart = "${pkgs.synergy}/bin/synergys -c ${cfgS.configFile} --no-daemon"
+            + optionalString (cfgS.address != "")    " -a ${cfgS.address}"
+            + optionalString (cfgS.screenName != "") " -n ${cfgS.screenName}"
+            + optionalString (cfgS.enableCrypto)     " --enable-crypto";
+        };
         serviceConfig.Restart = "on-failure";
       };
     })
