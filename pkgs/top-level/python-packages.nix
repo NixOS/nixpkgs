@@ -25835,11 +25835,11 @@ EOF
 
   pafy = buildPythonPackage rec {
     name = "pafy-${version}";
-    version = "0.5.2";
+    version = "0.5.3.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pafy/${name}.tar.gz";
-      sha256 = "1ckvrypyvb7jbqlgwdz0y337ajagjv7dgxyns326nqwypn1wpq0i";
+      sha256 = "1a7dxi95m1043rxx1r5x3ngb66nwlq6aqcasyqqjzmmmjps4zrim";
     };
 
     # No tests included in archive
