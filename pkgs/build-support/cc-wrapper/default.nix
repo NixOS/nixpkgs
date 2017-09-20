@@ -86,7 +86,8 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  inherit cc shell libc_bin libc_dev libc_lib binutils_bin coreutils_bin;
+  inherit cc libc_bin libc_dev libc_lib binutils_bin coreutils_bin;
+  shell = getBin shell + shell.shellPath or "";
   gnugrep_bin = if nativeTools then "" else gnugrep;
 
   binPrefix = prefix;
@@ -383,10 +384,6 @@ stdenv.mkDerivation {
 
   # for substitution in utils.sh
   expandResponseParams = "${expand-response-params}/bin/expand-response-params";
-
-  crossAttrs = {
-    shell = shell.crossDrv + shell.crossDrv.shellPath;
-  };
 
   meta =
     let cc_ = if cc != null then cc else {}; in

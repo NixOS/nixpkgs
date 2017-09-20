@@ -29,8 +29,6 @@ with pkgs;
 
   callPackage_i686 = pkgsi686Linux.callPackage;
 
-  forcedNativePackages = if hostPlatform == buildPlatform then pkgs else buildPackages;
-
   # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
   # it uses GCC compiled with multilib support; on i686-linux, it's
   # just the plain stdenv.
@@ -5390,17 +5388,22 @@ with pkgs;
   };
 
   wrapCCMulti = cc:
-    if system == "x86_64-linux" then lowPrio (
-      let
-        extraBuildCommands = ''
-          echo "dontMoveLib64=1" >> $out/nix-support/setup-hook
-        '';
-      in wrapCCWith glibc_multi extraBuildCommands (cc.cc.override {
-        stdenv = overrideCC stdenv (wrapCCWith glibc_multi "" cc.cc);
+    if system == "x86_64-linux" then lowPrio (wrapCCWith {
+      cc = cc.cc.override {
+        stdenv = overrideCC stdenv (wrapCCWith {
+          cc = cc.cc;
+          libc = glibc_multi;
+        });
         profiledCompiler = false;
         enableMultilib = true;
-      }))
-    else throw "Multilib ${cc.name} not supported on ‘${system}’";
+      };
+
+      libc = glibc_multi;
+
+      extraBuildCommands = ''
+        echo "dontMoveLib64=1" >> $out/nix-support/setup-hook
+      '';
+  }) else throw "Multilib ${cc.name} not supported on ‘${system}’";
 
   gcc_multi = wrapCCMulti gcc;
 
@@ -5427,35 +5430,31 @@ with pkgs;
       if targetPlatform.libc == "msvcrt" then __targetPackages.windows.mingw_w64_headers
       else if targetPlatform.libc == "libSystem" then darwin.xcode
       else null;
-    in wrapCCCross {
-      cc = forcedNativePackages.gcc.cc.override {
+    in wrapCCWith {
+      name = "gcc-cross-wrapper";
+      cc = gcc.cc.override {
         crossStageStatic = true;
         langCC = false;
         libcCross = libcCross1;
         enableShared = false;
         # Why is this needed?
-        inherit (forcedNativePackages) binutils;
       };
       libc = libcCross1;
-      inherit (forcedNativePackages) binutils;
   };
 
   # Only needed for mingw builds
-  gccCrossMingw2 = assert targetPlatform != buildPlatform; wrapCCCross {
+  gccCrossMingw2 = assert targetPlatform != buildPlatform; wrapCCWith {
+    name = "gcc-cross-wrapper";
     cc = gccCrossStageStatic.gcc;
     libc = windows.mingw_headers2;
-    inherit (forcedNativePackages) binutils;
   };
 
-  gccCrossStageFinal = assert targetPlatform != buildPlatform; wrapCCCross {
-    cc = forcedNativePackages.gcc.cc.override {
+  gccCrossStageFinal = assert targetPlatform != buildPlatform; wrapCCWith {
+    name = "gcc-cross-wrapper";
+    cc = gcc.cc.override {
       crossStageStatic = false;
-
-      # Why is this needed?
-      inherit (forcedNativePackages) binutils;
     };
     libc = libcCross;
-    inherit (forcedNativePackages) binutils;
   };
 
   gcc45 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.5 {
@@ -6207,19 +6206,24 @@ with pkgs;
 
   wla-dx = callPackage ../development/compilers/wla-dx { };
 
-  wrapCCWith = libc: extraBuildCommands: baseCC: ccWrapperFun {
-    nativeTools = stdenv.cc.nativeTools or false;
-    nativeLibc = stdenv.cc.nativeLibc or false;
+  wrapCCWith = { name ? "", cc, libc, extraBuildCommands ? "" }: ccWrapperFun {
+    nativeTools = targetPlatform == hostPlatform && stdenv.cc.nativeTools or false;
+    nativeLibc = targetPlatform == hostPlatform && stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
-    cc = baseCC;
-    isGNU = baseCC.isGNU or false;
-    isClang = baseCC.isClang or false;
-    inherit libc extraBuildCommands;
+    noLibc = (libc == null);
+
+    isGNU = cc.isGNU or false;
+    isClang = cc.isClang or false;
+
+    inherit name cc libc extraBuildCommands;
   };
 
   ccWrapperFun = callPackage ../build-support/cc-wrapper;
 
-  wrapCC = wrapCCWith stdenv.cc.libc "";
+  wrapCC = cc: wrapCCWith {
+    inherit cc;
+    inherit (stdenv.cc) libc;
+  };
   # legacy version, used for gnat bootstrapping
   wrapGCC-old = baseGCC: callPackage ../build-support/gcc-wrapper-old {
     nativeTools = stdenv.cc.nativeTools or false;
@@ -6228,20 +6232,6 @@ with pkgs;
     gcc = baseGCC;
     libc = glibc;
   };
-
-  wrapCCCross =
-    {cc, libc, binutils, shell ? "", name ? "gcc-cross-wrapper"}:
-
-    forcedNativePackages.ccWrapperFun {
-      nativeTools = false;
-      nativeLibc = false;
-      noLibc = (libc == null);
-
-      isGNU = cc.isGNU or false;
-      isClang = cc.isClang or false;
-
-      inherit cc binutils libc shell name;
-    };
 
   # prolog
   yap = callPackage ../development/compilers/yap { };
@@ -7334,7 +7324,7 @@ with pkgs;
      cross_renaming: we should make all programs use pkgconfig as
      nativeBuildInput after the renaming.
      */
-  pkgconfig = forcedNativePackages.callPackage ../development/tools/misc/pkgconfig {
+  pkgconfig = callPackage ../development/tools/misc/pkgconfig {
     fetchurl = fetchurlBoot;
   };
   pkgconfigUpstream = lowPrio (pkgconfig.override { vanilla = true; });
