@@ -11,7 +11,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "137p0kcscly95qpjzgx1yxm8k2wf5y9v3srvlhp2ajniirgv8ijv";
   };
 
-  buildInputs = with python3.pkgs; [ flake8 ];
+  buildInputs = with python3.pkgs; [ flake8 flake8-future-import ];
   propagatedBuildInputs = with python3.pkgs; [ pyserial pyaes ecdsa openssl ];
 
   meta = with stdenv.lib; {
