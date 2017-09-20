@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, libuuid, cmake, libwebsockets, c-ares }:
+{ stdenv, fetchurl, openssl, libuuid, cmake, libwebsockets, c-ares, libuv }:
 
 stdenv.mkDerivation rec {
   pname = "mosquitto";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1la2577h7hcyj7lq26vizj0sh2zmi9m7nbxjp3aalayi66kiysqm";
   };
 
-  buildInputs = [ openssl libuuid libwebsockets c-ares ]
+  buildInputs = [ openssl libuuid libwebsockets c-ares libuv ]
     ++ stdenv.lib.optional stdenv.isDarwin cmake;
 
   makeFlags = [
