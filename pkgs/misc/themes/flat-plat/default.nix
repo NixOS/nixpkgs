@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "flat-plat-gtk-theme-${version}";
-  version = "20170605";
+  version = "20170917";
 
   src = fetchFromGitHub {
     owner = "nana-4";
     repo = "Flat-Plat";
     rev = "v${version}";
-    sha256 = "1vcd6mkkfk9a1n5hwpdigvsdsfd8df83kc94w53rs7gw9pqfygya";
+    sha256 = "17r4wl27yx49xg0l3s5d67174r63p4cw6cbdmzl81if7iab69hv0";
   };
 
   nativeBuildInputs = [ gnome3.glib libxml2 ];
