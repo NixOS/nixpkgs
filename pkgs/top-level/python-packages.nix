@@ -14852,14 +14852,14 @@ in {
 
   oslo-i18n = buildPythonPackage rec {
     name = "oslo.i18n-${version}";
-    version = "2.7.0";
+    version = "3.18.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/o/oslo.i18n/${name}.tar.gz";
-      sha256 = "11jgcvj36g97awh7fpar4xxgwrvzfahq6rw7xxqac32ia790ylcz";
+      sha256 = "19w6wil588fgppc7d42fqkrjs0y81ap62svzbij8hlb3w2d4a91n";
     };
 
-    propagatedBuildInputs = with self; [ pbr Babel six oslo-config ];
+    propagatedBuildInputs = with self; [ pbr Babel six ];
     buildInputs = with self; [ mock coverage oslotest ];
     patchPhase = ''
       sed -i 's@python@${python.interpreter}@' .testr.conf
@@ -14870,11 +14870,11 @@ in {
 
   oslotest = buildPythonPackage rec {
     name = "oslotest-${version}";
-    version = "1.12.0";
+    version = "2.18.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/o/oslotest/${name}.tar.gz";
-      sha256 = "17i92hymw1dwmmb5yv90m2gam2x21mc960q1pr7bly93x49h8666";
+      sha256 = "0a0zhpb4yp7g6d290jk7a4pfci4ciwhsrqzhbwbl2szi50gp7km1";
     };
 
     patchPhase = ''
@@ -14882,27 +14882,26 @@ in {
     '';
 
     propagatedBuildInputs = with self; [ pbr fixtures subunit six testrepository
-      testscenarios testtools mock mox3 oslo-config os-client-config ];
+      os-client-config debtcollector testscenarios testtools mock mox3 os-client-config ];
   };
 
   os-client-config = buildPythonPackage rec {
     name = "os-client-config-${version}";
-    version = "1.8.1";
+    version = "1.28.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/o/os-client-config/${name}.tar.gz";
-      sha256 = "10hz4yp594mi1p7v1pvgsmx5w2rnb9y8d0jvb2lfv03ljnwzv8jz";
+      sha256 = "1f7q384b9drp3fqcg0w8aihv9k4idaay8vr3an187zjpgbx9rgp5";
     };
 
-    buildInputs = with self; [ pbr testtools testscenarios testrepository fixtures ];
-    propagatedBuildInputs = with self; [ appdirs pyyaml keystoneauth1 ];
+    # requires oslotest but is a dependency of that package ...
+    doCheck = false;
+
+    buildInputs = with self; [ pbr testtools testscenarios testrepository fixtures jsonschema ];
+    propagatedBuildInputs = with self; [ appdirs pyyaml keystoneauth1 requestsexceptions ];
 
     patchPhase = ''
       sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
-    # TODO: circular import on oslotest
-    preCheck = ''
-      rm os_client_config/tests/{test_config,test_cloud_config,test_environ}.py
     '';
   };
 
@@ -14927,16 +14926,20 @@ in {
 
   mox3 = buildPythonPackage rec {
     name = "mox3-${version}";
-    version = "0.11.0";
+    version = "0.23.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/mox3/${name}.tar.gz";
-      sha256 = "09dkgki21v5zqrx575h1aazxsq5akkv0a90z644bk1ry9a4zg1pn";
+      sha256 = "0q26sg0jasday52a7y0cch13l0ssjvr4yqnvswqxsinj1lv5ld88";
     };
 
     patchPhase = ''
       sed -i 's@python@${python.interpreter}@' .testr.conf
     '';
+
+    #  FAIL: mox3.tests.test_mox.RegexTest.testReprWithFlags
+    #  ValueError: cannot use LOCALE flag with a str pattern
+    doCheck = !isPy36;
 
     buildInputs = with self; [ subunit testrepository testtools six ];
     propagatedBuildInputs = with self; [ pbr fixtures ];
@@ -14944,21 +14947,21 @@ in {
 
   debtcollector = buildPythonPackage rec {
     name = "debtcollector-${version}";
-    version = "0.9.0";
+    version = "1.17.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/debtcollector/${name}.tar.gz";
-      sha256 = "1mvdxdrnwlgfqg26s5himkjq6f06r2khlrignx36kkbyaix6j9xb";
+      sha256 = "0rh47fd5kgjcdv9dxr7xf0x308cvfic3h2zk03ifvb4pdc5kbqvi";
     };
     patchPhase = ''
       sed -i 's@python@${python.interpreter}@' .testr.conf
     '';
 
     buildInputs = with self; [ pbr ];
-    propagatedBuildInputs = with self; [ wrapt Babel six doc8 ];
+    propagatedBuildInputs = with self; [ wrapt Babel six doc8 ] ++
+                              (optional (isPy26 || isPy27) funcsigs);
     checkInputs = with self; [ pbr Babel six wrapt testtools testscenarios
-       testrepository subunit coverage oslotest ];
-    doCheck = false; # oslo is broken
+                               testrepository subunit coverage ];
   };
 
   doc8 = callPackage ../development/python-modules/doc8 { };
@@ -18362,6 +18365,8 @@ in {
       maintainer = maintainers.fridh;
     };
   };
+
+  requestsexceptions = callPackage ../development/python-modules/requestsexceptions {};
 
   requests_ntlm = callPackage ../development/python-modules/requests_ntlm { };
 
