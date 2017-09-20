@@ -546,11 +546,12 @@
   <title>pullImage</title>
 
   <para>
-  This function is analogous to the <command>docker pull</command> command,
-  in that can be used to fetch a Docker image from a Docker registry.
-  Currently only registry <literal>v1</literal> is supported.
-  By default <link xlink:href="https://hub.docker.com/">Docker Hub</link>
-  is used to pull images.
+  This function is analogous to the <command>docker pull</command>
+  command, in that can be used to fetch a Docker image from a Docker
+  registry. The implementation relies on the tool
+  <link xlink:href="https://github.com/projectatomic/skopeo">
+    Skopeo
+  </link>.
   </para>
 
   <para>
@@ -560,13 +561,10 @@
   <example xml:id='ex-dockerTools-pullImage'><title>Docker pull</title>
   <programlisting>
   pullImage {
-    imageName = "debian"; <co xml:id='ex-dockerTools-pullImage-1' />
-    imageTag = "jessie"; <co xml:id='ex-dockerTools-pullImage-2' />
-    imageId = null; <co xml:id='ex-dockerTools-pullImage-3' />
-    sha256 = "1bhw5hkz6chrnrih0ymjbmn69hyfriza2lr550xyvpdrnbzr4gk2"; <co xml:id='ex-dockerTools-pullImage-4' />
-
-    indexUrl = "https://index.docker.io"; <co xml:id='ex-dockerTools-pullImage-5' />
-    registryVersion = "v1";
+    imageName = "nixos/nix"; <co xml:id='ex-dockerTools-pullImage-1' />
+    imageDigest = "sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b"; <co xml:id='ex-dockerTools-pullImage-2' />
+    sha256 = "18xvcnl0yvj9kfi5bkimrhhjaa8xhm3jhshh2xd7c0sbfrmfqzvi"; <co xml:id='ex-dockerTools-pullImage-3' />
+    imageTag = "1.11"; <co xml:id='ex-dockerTools-pullImage-4' />
   }
   </programlisting>
   </example>
@@ -582,21 +580,17 @@
 
   <callout arearefs='ex-dockerTools-pullImage-2'>
     <para>
-    <varname>imageTag</varname> specifies the tag of the image to be downloaded.
-    By default it's <literal>latest</literal>.
+    <varname>imageDigest</varname>, is an
+    <link xlink:href="https://docs.docker.com/registry/spec/api/#content-digests">
+      immutable image identifier
+    </link>. <literal>Skopeo</literal> can be used to get it, for instance
+    <programlisting>
+      skopeo inspect docker://docker.io/nixos/nix:1.11 | jq -r '.Digest'
+    </programlisting>
     </para>
   </callout>
 
   <callout arearefs='ex-dockerTools-pullImage-3'>
-    <para>
-    <varname>imageId</varname>, if specified this exact image will be fetched, instead
-    of <varname>imageName/imageTag</varname>. However, the resulting repository
-    will still be named <varname>imageName/imageTag</varname>.
-    By default it's <literal>null</literal>.
-    </para>
-  </callout>
-
-  <callout arearefs='ex-dockerTools-pullImage-4'>
     <para>
     <varname>sha256</varname> is the checksum of the whole fetched image.
     This argument is required.
@@ -608,11 +602,12 @@
 
   </callout>
 
-  <callout arearefs='ex-dockerTools-pullImage-5'>
+  <callout arearefs='ex-dockerTools-pullImage-4'>
     <para>
-    In the above example the default values are shown for the variables
-    <varname>indexUrl</varname> and <varname>registryVersion</varname>.
-    Hence by default the Docker.io registry is used to pull the images.
+    <varname>imageTag</varname> specifies the tag of the image. The
+    tag is currently only used at Docker image loading, ie. it is not
+    used to pull the image since it is not supported by Skopeo yet.
+    The default value is <literal>latest</literal>.
     </para>
   </callout>
   </calloutlist>
