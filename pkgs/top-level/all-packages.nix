@@ -17807,7 +17807,9 @@ with pkgs;
 
   vapor = callPackage ../games/vapor { love = love_0_8; };
 
-  vapoursynth = callPackage ../development/libraries/vapoursynth { };
+  vapoursynth = callPackage ../development/libraries/vapoursynth {
+    inherit (darwin.apple_sdk.frameworks) ApplicationServices;
+  };
 
   vapoursynth-mvtools = callPackage ../development/libraries/vapoursynth-mvtools { };
 
