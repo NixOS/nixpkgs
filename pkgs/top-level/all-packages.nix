@@ -18526,6 +18526,7 @@ with pkgs;
     dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
     flocq = callPackage ../development/coq-modules/flocq {};
     heq = callPackage ../development/coq-modules/heq {};
+    HoTT = callPackage ../development/coq-modules/HoTT {};
     interval = callPackage ../development/coq-modules/interval {};
     mathcomp = callPackage ../development/coq-modules/mathcomp { };
     paco = callPackage ../development/coq-modules/paco {};
