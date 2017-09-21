@@ -1235,6 +1235,8 @@ with pkgs;
 
   autossh = callPackage ../tools/networking/autossh { };
 
+  assh = callPackage ../tools/networking/assh { };
+
   asynk = callPackage ../tools/networking/asynk { };
 
   bacula = callPackage ../tools/backup/bacula { };
