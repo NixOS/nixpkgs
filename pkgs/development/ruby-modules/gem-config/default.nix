@@ -67,6 +67,10 @@ in
   charlock_holmes = attrs: {
     buildInputs = [ which icu zlib ];
   };
+  
+  curb = attrs: {
+    buildInputs = [ curl ];
+  };
 
   dep-selector-libgecode = attrs: {
     USE_SYSTEM_GECODE = true;
