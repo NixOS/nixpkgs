@@ -19158,6 +19158,8 @@ with pkgs;
 
   vault = callPackage ../tools/security/vault { };
 
+  vaultenv = haskellPackages.vaultenv;
+
   vbam = callPackage ../misc/emulators/vbam {
     ffmpeg = ffmpeg_2;
   };
