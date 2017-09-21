@@ -17208,7 +17208,9 @@ with pkgs;
 
   zed = callPackage ../applications/editors/zed { };
 
-  zeroc_ice = callPackage ../development/libraries/zeroc-ice { };
+  zeroc_ice = callPackage ../development/libraries/zeroc-ice {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   zexy = callPackage ../applications/audio/pd-plugins/zexy  { };
 
