@@ -1,6 +1,10 @@
 { stdenv
 , jshon
+, glib
+, nspr
+, nss
 , fetchzip
+, patchelfUnstable
 , enablePepperFlash ? false
 , enableWideVine ? false
 
@@ -45,6 +49,8 @@ let
 
     src = upstream-info.binary;
 
+    nativeBuildInputs = [ patchelfUnstable ];
+
     phases = [ "unpackPhase" "patchPhase" "installPhase" "checkPhase" ];
 
     unpackCmd = let
@@ -66,7 +72,7 @@ let
     patchPhase = ''
       for sofile in libwidevinecdm.so libwidevinecdmadapter.so; do
         chmod +x "$sofile"
-        patchelf --set-rpath "${mkrpath [ stdenv.cc.cc ]}" "$sofile"
+        patchelf --set-rpath "${mkrpath [ stdenv.cc.cc glib nspr nss ]}" "$sofile"
       done
 
       patchelf --set-rpath "$out/lib:${mkrpath [ stdenv.cc.cc ]}" \
@@ -102,6 +108,8 @@ let
       sha256 = "005sxx3ll18c6idy1db2gb47chd9c5mf83qac0vyvljsrlc7430c";
       stripRoot = false;
     };
+
+    nativeBuildInputs = [ patchelfUnstable ];
 
     patchPhase = ''
       chmod +x libpepflashplayer.so
