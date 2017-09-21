@@ -59,17 +59,17 @@ rec {
   makeStdenvCross = { stdenv
                     , cc
                     , buildPlatform, hostPlatform, targetPlatform
+                    , # Prior overrides are surely not valid as packages built
+                      # with this run on a different platform, so disable by
+                      # default.
+                      overrides ? _: _: {}
                     } @ overrideArgs: let
     stdenv = overrideArgs.stdenv.override {
       inherit
         buildPlatform hostPlatform targetPlatform
-        cc;
+        cc overrides;
 
       allowedRequisites = null;
-
-      # Overrides are surely not valid as packages built with this run on a
-      # different platform.
-      overrides = _: _: {};
     };
   in stdenv // {
     mkDerivation =
