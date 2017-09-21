@@ -292,9 +292,10 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Independent JPEG Group License";
   };
 
-  inria = {
-    fullName  = "INRIA Non-Commercial License Agreement";
+  inria-compcert = {
+    fullName  = "INRIA Non-Commercial License Agreement for the CompCert verified compiler";
     url       = "http://compcert.inria.fr/doc/LICENSE";
+    free      = false;
   };
 
   ipa = spdx {
