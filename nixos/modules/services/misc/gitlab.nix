@@ -555,6 +555,7 @@ in {
         openssh
         nodejs
         procps
+        gnupg
       ];
       preStart = ''
         mkdir -p ${cfg.backupPath}
