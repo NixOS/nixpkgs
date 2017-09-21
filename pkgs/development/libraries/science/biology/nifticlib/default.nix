@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
   name  = "${pname}-${pversion}";
 
   src = fetchurl {
-    url    = "https://downloads.sourceforge.net/project/niftilib/${pname}/${pname}_2_0_0/${name}.tar.gz";
-    sha256 = "a3e988e6a32ec57833056f6b09f940c69e79829028da121ff2c5c6f7f94a7f88";
+    url    = "mirror://sourceforge/project/niftilib/${pname}/${pname}_2_0_0/${name}.tar.gz";
+    sha256 = "123z9bwzgin5y8gi5ni8j217k7n683whjsvg0lrpii9flgk8isd3";
   };
 
   nativeBuildInputs = [ cmake ];
