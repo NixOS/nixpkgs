@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, pkgs, python3Packages }:
+{ stdenv, pkgs, python3Packages }:
 
 with python3Packages;
 
 buildPythonApplication rec {
+  name = "${pname}-${version}";
+  pname = "khal";
   version = "0.9.7";
-  name = "khal-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/k/khal/khal-${version}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "0x1p62ff7ggb172rjr6sbdrjh1gl3ck3bwxsqlsix8i5wycwvnmv";
   };
 
