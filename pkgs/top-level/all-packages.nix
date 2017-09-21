@@ -320,6 +320,8 @@ with pkgs;
 
   vmTools = callPackage ../build-support/vm/default.nix { };
 
+  linuxkit-builder = callPackage ../build-support/vm/linuxkit-builder { };
+
   releaseTools = callPackage ../build-support/release/default.nix { };
 
   composableDerivation = callPackage ../../lib/composable-derivation.nix { };
