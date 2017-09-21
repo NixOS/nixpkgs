@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   name = "rtorrent-${version}";
-  version = "0.9.6";
+  version = "20161023";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "rtorrent";
-    rev = "${version}";
-    sha256 = "0iyxmjr1984vs7hrnxkfwgrgckacqml0kv4bhj185w9bhjqvgfnf";
+    rev = "226e670decf92e7adaa845a6982aca4f164ea740";
+    sha256 = "0cxyakc09bn6wjfj42gh508hc62awx825skzacpizx2bqs6v7xvb";
   };
 
   buildInputs = [

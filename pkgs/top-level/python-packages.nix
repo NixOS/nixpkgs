@@ -7748,7 +7748,9 @@ in {
     };
     doCheck = false;
     propagatedBuildInputs = with self; [ requests ];
+    buildInputs = with pkgs; [ file ];
     prePatch = ''
+      sed -i -e "s|'file|'${pkgs.file}/bin/file|" py3status/parse_config.py
       sed -i -e "s|\[\"acpi\"|\[\"${pkgs.acpi}/bin/acpi\"|" py3status/modules/battery_level.py
       sed -i -e "s|notify-send|${pkgs.libnotify}/bin/notify-send|" py3status/modules/battery_level.py
       sed -i -e "s|/usr/bin/whoami|${pkgs.coreutils}/bin/whoami|" py3status/modules/external_script.py
@@ -9002,6 +9004,8 @@ in {
   flake8-blind-except = callPackage ../development/python-modules/flake8-blind-except { };
 
   flake8-debugger = callPackage ../development/python-modules/flake8-debugger { };
+
+  flake8-future-import = callPackage ../development/python-modules/flake8-future-import { };
 
   flaky = buildPythonPackage rec {
     name = "flaky-${version}";
@@ -25288,27 +25292,7 @@ EOF
     };
   };
 
-  pafy = buildPythonPackage rec {
-    name = "pafy-${version}";
-    version = "0.5.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pafy/${name}.tar.gz";
-      sha256 = "1ckvrypyvb7jbqlgwdz0y337ajagjv7dgxyns326nqwypn1wpq0i";
-    };
-
-    # No tests included in archive
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ youtube-dl ];
-
-    meta = with stdenv.lib; {
-      description = "A library to download YouTube content and retrieve metadata";
-      homepage = http://np1.github.io/pafy/;
-      license = licenses.lgpl3Plus;
-      maintainers = with maintainers; [ odi ];
-    };
-  };
+  pafy = callPackage ../development/python-modules/pafy { };
 
   suds = buildPythonPackage rec {
     name = "suds-0.4";

@@ -1,10 +1,12 @@
 /* Build configuration used to build glibc, Info files, and locale
    information.  */
 
-{ stdenv, lib, fetchurl
-, gd ? null, libpng ? null
+{ stdenv, lib
 , buildPlatform, hostPlatform
 , buildPackages
+, fetchurl
+, linuxHeaders ? null
+, gd ? null, libpng ? null
 }:
 
 { name
@@ -17,7 +19,6 @@
 } @ args:
 
 let
-  inherit (buildPackages) linuxHeaders;
   version = "2.25";
   patchSuffix = "-49";
   sha256 = "067bd9bb3390e79aa45911537d13c3721f1d9d3769931a30c2681bfee66f23a0";
