@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Formally verified C compiler";
     homepage    = "http://compcert.inria.fr";
-    license     = licenses.inria;
+    license     = licenses.inria-compcert;
     platforms   = platforms.linux ++
                   platforms.darwin;
     maintainers = with maintainers; [ thoughtpolice jwiegley vbgl ];
