@@ -70,6 +70,7 @@ rec {
         cc overrides;
 
       allowedRequisites = null;
+      extraBuildInputs = [ ]; # Old ones run on wrong platform
     };
   in stdenv // {
     mkDerivation =
