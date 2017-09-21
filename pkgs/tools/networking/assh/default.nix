@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, openssh, makeWrapper }:
 
 buildGoPackage rec {
   name = "assh-${version}";
@@ -7,8 +7,13 @@ buildGoPackage rec {
   goPackagePath = "github.com/moul/advanced-ssh-config";
   subPackages = [ "cmd/assh" ];
 
+  nativeBuildInputs = [ makeWrapper ];
+
   postInstall = stdenv.lib.optionalString (stdenv.isDarwin) ''
     install_name_tool -delete_rpath $out/lib $bin/bin/assh
+  '' + ''
+    wrapProgram "$bin/bin/assh" \
+      --prefix PATH : ${openssh}/bin
   '';
 
   src = fetchFromGitHub {
