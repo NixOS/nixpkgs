@@ -2013,6 +2013,9 @@ with pkgs;
 
   fdk_aac = callPackage ../development/libraries/fdk-aac { };
 
+  # WIP: fim
+  fimFull = callPackage ../tools/graphics/fim { };
+
   flac123 = callPackage ../applications/audio/flac123 { };
 
   flamegraph = callPackage ../development/tools/flamegraph { };
