@@ -1,7 +1,12 @@
-{ stdenv, fetchurl, autoconf, automake, pkgconfig, perl
-, flex, bison, readline
-, giflib, libtiff, libexif, libpng, libjpeg, jasper
-, aalib, inkscape#, SDL, fig2dev, jasper # TODO
+{ stdenv, fetchurl, autoconf, automake, pkgconfig
+, perl, flex, bison, readline, libexif
+, x11Support ? true, SDL
+, svgSupport ? true, inkscape
+, asciiArtSupport ? true, aalib
+, gifSupport ? true, giflib
+, tiffSupport ? true, libtiff
+, jpegSupport ? true, libjpeg
+, pngSupport ? true, libpng
 }:
 
 stdenv.mkDerivation rec {
@@ -20,10 +25,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoconf automake pkgconfig ];
 
-  buildInputs = [
-    perl flex bison readline
-    giflib libtiff libexif libpng libjpeg jasper aalib inkscape
-  ];
+  buildInputs = with stdenv.lib;
+    [ perl flex bison readline libexif ]
+    ++ optional x11Support SDL
+    ++ optional svgSupport inkscape
+    ++ optional asciiArtSupport aalib
+    ++ optional gifSupport giflib
+    ++ optional tiffSupport libtiff
+    ++ optional jpegSupport libjpeg
+    ++ optional pngSupport libpng;
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optional x11Support "-lSDL";
 
   meta = with stdenv.lib; {
     description = "A lightweight, highly customizable and scriptable image viewer";
