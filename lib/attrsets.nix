@@ -6,6 +6,7 @@ let
   inherit (lib.trivial) and or;
   inherit (lib.strings) concatStringsSep;
   inherit (lib.lists) fold concatMap concatLists all deepSeqList;
+  inherit (lib.docs) mkDoc mkP mkR;
 in
 
 rec {
@@ -150,22 +151,36 @@ rec {
     ) {} list_of_attrs;
 
 
-  /* Recursively collect sets that verify a given predicate named `pred'
-     from the set `attrs'.  The recursion is stopped when the predicate is
-     verified.
+  docs.collect = mkDoc {
+    description = ''
+      Recursively collect sets that verify a given predicate named
+      <parameter>pred</parameter> from the set
+      <parameter>attrs</parameter>. The recursion is stopped when the
+      predicate is verified.
+    '';
 
-     Type:
-       collect ::
-         (AttrSet -> Bool) -> AttrSet -> [x]
+    params = [
+      (mkP "pred" "AttrSet -> Bool" "")
+      (mkP "attrs" "AttrSet" "")
+    ];
+    return = mkR "[x]" "";
 
-     Example:
-       collect isList { a = { b = ["b"]; }; c = [1]; }
-       => [["b"] [1]]
-
-       collect (x: x ? outPath)
-          { a = { outPath = "a/"; }; b = { outPath = "b/"; }; }
-       => [{ outPath = "a/"; } { outPath = "b/"; }]
-  */
+    examples = [
+      { title = "Collect all values in the AttrSet which is a list.";
+        body = ''
+          collect isList { a = { b = ["b"]; }; c = [1]; }
+          => [["b"] [1]]
+        '';
+      }
+      { title = "Collect all AttrSets with an attribute named outPath.";
+        body = ''
+          collect (x: x ? outPath)
+             { a = { outPath = "a/"; }; b = { outPath = "b/"; }; }
+          => [{ outPath = "a/"; } { outPath = "b/"; }]
+        '';
+      }
+    ];
+  };
   collect = pred: attrs:
     if pred attrs then
       [ attrs ]

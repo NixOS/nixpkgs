@@ -3,16 +3,19 @@ let
   lib = pkgs.lib;
   sources = lib.sourceFilesBySuffices ./. [".xml"];
   sources-langs = ./languages-frameworks;
+
+  lib_docs = pkgs.callPackage ./lib.nix {};
 in
 pkgs.stdenv.mkDerivation {
   name = "nixpkgs-manual";
-
 
   buildInputs = with pkgs; [ pandoc libxml2 libxslt zip ];
 
   xsltFlags = ''
     --param section.autolabel 1
     --param section.label.includes.component.label 1
+    --param refentry.generate.name 0
+    --param refentry.generate.title 1
     --param html.stylesheet 'style.css'
     --param xref.with.number.and.title 1
     --param toc.section.depth 3
@@ -41,6 +44,7 @@ pkgs.stdenv.mkDerivation {
   ''
     ln -s '${sources}/'*.xml .
     mkdir ./languages-frameworks
+    cp -s '${lib_docs}'/* ./
     cp -s '${sources-langs}'/* ./languages-frameworks
   ''
   + toDocbook {

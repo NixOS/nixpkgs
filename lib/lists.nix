@@ -1,36 +1,64 @@
 # General list operations.
 { lib }:
 with lib.trivial;
+with lib.docs;
 
 rec {
 
   inherit (builtins) head tail length isList elemAt concatLists filter elem genList;
 
-  /*  Create a list consisting of a single element.  `singleton x' is
-      sometimes more convenient with respect to indentation than `[x]'
-      when x spans multiple lines.
 
-      Example:
-        singleton "foo"
-        => [ "foo" ]
-  */
+  docs.singleton = mkDoc {
+    description = ''
+      Create a list consisting of a single element. <literal>singleton
+      x</literal> is sometimes more convenient with respect to
+      indentation than <literal>[x]</literal> when
+      <literal>x</literal> spans multiple lines.
+    '';
+
+    examples =[
+      { title = "singleton returns a single-element list";
+        body = ''
+          singleton "foo"
+          => [ "foo" ]
+        '';
+      }
+    ];
+  };
   singleton = x: [x];
 
-  /* “right fold” a binary function `op' between successive elements of
-     `list' with `nul' as the starting value, i.e.,
-     `foldr op nul [x_1 x_2 ... x_n] == op x_1 (op x_2 ... (op x_n nul))'.
-     Type:
-       foldr :: (a -> b -> b) -> b -> [a] -> b
 
-     Example:
-       concat = foldr (a: b: a + b) "z"
-       concat [ "a" "b" "c" ]
-       => "abcz"
-       # different types
-       strange = foldr (int: str: toString (int + 1) + str) "a"
-       strange [ 1 2 3 4 ]
-       => "2345a"
-  */
+  docs.foldr = mkDoc {
+    description = ''
+      "Right fold" a binary function <literal>op</literal> between
+      successive elements of <literal>list</literal> with
+      <literal>nul</literal> as the starting value, i.e.,
+      <literal>fold op nul [x_1 x_2 ... x_n] == op x_1 (op x_2 ... (op x_n nul))</literal>.
+      (This is Haskell's <literal>foldr</literal>).
+    '';
+    params = [
+      (mkP "op" "a -> b -> b" "")
+      (mkP "nul" "b" "initial value")
+      (mkP "list" "[a]" "")
+    ];
+    return = mkR "b" "";
+    examples =[
+      { title = "constructing a concat function with foldr";
+        body = ''
+          concat = fold (a: b: a + b) "z"
+          concat [ "a" "b" "c" ]
+          => "abcz"
+        '';
+      }
+      { title = "foldr across different types";
+        body = ''
+          strange = foldr (int: str: toString (int + 1) + str) "a"
+          strange [ 1 2 3 4 ]
+          => "2345a"
+        '';
+      }
+    ];
+  };
   foldr = op: nul: list:
     let
       len = length list;
@@ -40,26 +68,41 @@ rec {
         else op (elemAt list n) (fold' (n + 1));
     in fold' 0;
 
-  /* `fold' is an alias of `foldr' for historic reasons */
-  # FIXME(Profpatsch): deprecate?
+
+  docs.fold = mkDoc {
+    description = ''
+      <literal>fold</literal> is a deprecated alias of
+      <literal>foldr</literal>.
+    '';
+  };
   fold = foldr;
 
 
-  /* “left fold”, like `foldr', but from the left:
-     `foldl op nul [x_1 x_2 ... x_n] == op (... (op (op nul x_1) x_2) ... x_n)`.
+  docs.foldl = mkDoc {
+    description = ''
+      Left fold, like <literal>foldr</literal>, but from the left:
+      <literal>foldl op nul [x_1 x_2 ... x_n] == op (... (op (op nul x_1) x_2) ... x_n)</literal>.
 
-     Type:
-       foldl :: (b -> a -> b) -> b -> [a] -> b
+      Type: foldl :: (b -> a -> b) -> b -> [a] -> b
+    '';
 
-     Example:
-       lconcat = foldl (a: b: a + b) "z"
-       lconcat [ "a" "b" "c" ]
-       => "zabc"
-       # different types
-       lstrange = foldl (str: int: str + toString (int + 1)) ""
-       strange [ 1 2 3 4 ]
-       => "a2345"
-  */
+    examples =[
+      { title = "implementing an lconcat with foldl";
+        body = ''
+          lconcat = foldl (a: b: a + b) "z"
+          lconcat [ "a" "b" "c" ]
+          => "zabc"
+        '';
+      }
+      { title = "foldr with different types";
+        body = ''
+          lstrange = foldl (str: int: str + toString (int + 1)) ""
+          strange [ 1 2 3 4 ]
+          => "a2345"
+        '';
+      }
+    ];
+  };
   foldl = op: nul: list:
     let
       len = length list;
@@ -69,72 +112,152 @@ rec {
         else op (foldl' (n - 1)) (elemAt list n);
     in foldl' (length list - 1);
 
-  /* Strict version of `foldl'.
 
-     The difference is that evaluation is forced upon access. Usually used
-     with small whole results (in contract with lazily-generated list or large
-     lists where only a part is consumed.)
-  */
+  docs.foldl' = mkDoc {
+    description = ''
+      Strict version of <literal>foldl</literal>.
+
+      The difference is that evaluation is forced upon access. Usually
+      used with small whole results (in contract with lazily-generated
+      list or large lists where only a part is consumed.)
+    '';
+  };
   foldl' = builtins.foldl' or foldl;
 
-  /* Map with index starting from 0
 
-     Example:
-       imap0 (i: v: "${v}-${toString i}") ["a" "b"]
-       => [ "a-0" "b-1" ]
-  */
+  docs.imap0 = mkDoc {
+    description = "Map with index starting from 0";
+
+    examples = [
+      { title = "";
+        body = ''
+         imap0 (i: v: "''${v}-''${toString i}") ["a" "b"]
+         => [ "a-0" "b-1" ]
+      '';
+      }
+    ];
+  };
   imap0 = f: list: genList (n: f n (elemAt list n)) (length list);
 
-  /* Map with index starting from 1
+  docs.imap1 = mkDoc {
+    description = "Map with index starting from 1";
 
-     Example:
-       imap1 (i: v: "${v}-${toString i}") ["a" "b"]
-       => [ "a-1" "b-2" ]
-  */
+    examples = [
+      { title = "";
+        body = ''
+         imap1 (i: v: "''${v}-''${toString i}") ["a" "b"]
+         => [ "a-1" "b-2" ]
+      '';
+      }
+    ];
+  };
   imap1 = f: list: genList (n: f (n + 1) (elemAt list n)) (length list);
 
-  /* Map and concatenate the result.
+  docs.concatMap = mkDoc {
+    description = "Map and concatenate the result.";
 
-     Example:
-       concatMap (x: [x] ++ ["z"]) ["a" "b"]
-       => [ "a" "z" "b" "z" ]
-  */
+    examples = [
+      { title = "";
+        body = ''
+          concatMap (x: [x] ++ ["z"]) ["a" "b"]
+          => [ "a" "z" "b" "z" ]
+        '';
+      }
+    ];
+  };
   concatMap = f: list: concatLists (map f list);
 
-  /* Flatten the argument into a single list; that is, nested lists are
-     spliced into the top-level lists.
+  docs.flatten = mkDoc {
+    description = ''
+      Flatten the argument into a single list; that is, nested lists are
+      spliced into the top-level lists.
+    '';
 
-     Example:
-       flatten [1 [2 [3] 4] 5]
-       => [1 2 3 4 5]
-       flatten 1
-       => [1]
-  */
+    examples = [
+      { title = "Flattens lists of lists in to a single list";
+        body = ''
+          flatten [1 [2 [3] 4] 5]
+          => [1 2 3 4 5]
+        '';
+      }
+      { title = "Encapsulates single value in a list";
+        body = ''
+          flatten 1
+          => [1]
+        '';
+      }
+    ];
+  };
   flatten = x:
     if isList x
     then concatMap (y: flatten y) x
     else [x];
 
-  /* Remove elements equal to 'e' from a list.  Useful for buildInputs.
+  docs.remove = mkDoc {
+    description = ''
+      Remove elements equal to 'e' from a list.  Useful for buildInputs.
+    '';
 
-     Example:
-       remove 3 [ 1 3 4 3 ]
-       => [ 1 4 ]
-  */
+    examples = [
+      { title = "Remove multiple 3s";
+        body = ''
+          remove 3 [ 1 3 4 3 ]
+          => [ 1 4 ]
+        '';
+      }
+    ];
+  };
   remove = e: filter (x: x != e);
 
-  /* Find the sole element in the list matching the specified
-     predicate, returns `default' if no such element exists, or
-     `multiple' if there are multiple matching elements.
+  docs.findSingle = mkDoc {
+    description = ''
+     Find the sole element in the list matching the specified
+     predicate.
+   '';
 
-     Example:
-       findSingle (x: x == 3) "none" "multiple" [ 1 3 3 ]
-       => "multiple"
-       findSingle (x: x == 3) "none" "multiple" [ 1 3 ]
-       => 3
-       findSingle (x: x == 3) "none" "multiple" [ 1 9 ]
-       => "none"
-  */
+   params = [
+     (mkP "pred" "a -> Bool" "")
+     (mkP "default" "a" "The default if <parameter>pred</parameter> never returns <literal>true</literal>")
+     (mkP "multiple" "a" "The value if <parameter>pred</parameter> returns <literal>true</literal> multiple times")
+     (mkP "list" "[a]" "The list of values to search with <parameter>pred</parameter>")
+   ];
+   return = mkR "a" ''
+     If <parameter>pred</parameter> matches once, it returns the
+     matching value from the list. If no matching element exists, it
+     returns <parameter>default</parameter>. If there are multiple
+     matching elements, it returns <parameter>multiple</parameter>.
+   '';
+
+    examples = [
+      { title = ''
+          If the predicate matches one element, the element is
+          returned.
+        '';
+        body = ''
+          findSingle (x: x == 3) "none" "multiple" [ 1 3 ]
+          => 3
+        '';
+      }
+      { title = ''
+          If the predicate matches multiple elements, the
+          <parameter>multiple</parameter> parameter is returned.
+        '';
+        body = ''
+          findSingle (x: x == 3) "none" "multiple" [ 1 3 3 ]
+          => "multiple"
+        '';
+      }
+      { title = ''
+          If the parameter matches no elements, the
+          <parameter>default</parameter> parameter is returned.
+        '';
+        body = ''
+          findSingle (x: x == 3) "none" "multiple" [ 1 9 ]
+          => "none"
+        '';
+      }
+    ];
+  };
   findSingle = pred: default: multiple: list:
     let found = filter pred list; len = length found;
     in if len == 0 then default
