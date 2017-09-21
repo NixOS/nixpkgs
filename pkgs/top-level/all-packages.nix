@@ -820,6 +820,7 @@ with pkgs;
   });
 
   caddy = callPackage ../servers/caddy { };
+  traefik = callPackage ../servers/traefik { };
 
   capstone = callPackage ../development/libraries/capstone { };
 
