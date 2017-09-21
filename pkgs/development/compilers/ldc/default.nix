@@ -81,7 +81,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DMD=$DMD" ];
 
-  doCheck = true;
+  # disable check phase because some tests are not working with sandboxing
+  doCheck = false;
 
   checkPhase = ''
       ctest -j $NIX_BUILD_CORES -V DMD=$DMD
