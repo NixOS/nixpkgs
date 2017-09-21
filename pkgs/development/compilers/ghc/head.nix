@@ -84,7 +84,23 @@ stdenv.mkDerivation rec {
 
   postPatch = "patchShebangs .";
 
+  # GHC is a bit confused on its cross terminology.
   preConfigure = ''
+    for env in $(env | grep '^TARGET_' | sed -E 's|\+?=.*||'); do
+      export "''${env#TARGET_}=''${!env}"
+    done
+    # GHC is a bit confused on its cross terminology, as these would normally be
+    # the *host* tools.
+    export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
+    export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
+    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld"
+    export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
+    export AR="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ar"
+    export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"
+    export RANLIB="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ranlib"
+    export READELF="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}readelf"
+    export STRIP="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}strip"
+
     echo -n "${buildMK}" > mk/build.mk
     echo ${version} >VERSION
     echo ${rev} >GIT_COMMIT_ID
