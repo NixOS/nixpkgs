@@ -21658,6 +21658,27 @@
           license = lib.licenses.free;
         };
       }) {};
+    multi-term = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
+        pname = "multi-term";
+        version = "1.2";
+        src = fetchFromGitHub {
+          owner = "emacsorphanage";
+          repo = "multi-term";
+          rev = "c9e67edb772f2d9f9da8d887dc746459cfbce244";
+          sha256 = "1bn6zx931vz2fa72ab999r33bxv8brn3cqmalvq25x7s4z3q1lyi";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/ae489be43b1aee93614e40f492ebdf0b98a3fbc1/recipes/multi-term";
+          sha256 = "16idk4nd7qpyrvyspbrdl8gdfaclng6ny0xigk6fqdv352djalal";
+          name = "multi-term";
+        };
+        packageRequires = [];
+        meta = {
+          homepage = "https://melpa.org/#/multi-term";
+          license = lib.licenses.free;
+        };
+      }) {};
     multi-web-mode = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
     melpaBuild {
         pname = "multi-web-mode";

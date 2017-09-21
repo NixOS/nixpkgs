@@ -44274,16 +44274,19 @@
           license = lib.licenses.free;
         };
       }) {};
-    multi-term = callPackage ({ fetchurl, lib, melpaBuild }: melpaBuild {
+    multi-term = callPackage ({ fetchFromGitHub, fetchurl, lib, melpaBuild }:
+    melpaBuild {
         pname = "multi-term";
         version = "20160619.233";
-        src = fetchurl {
-          url = "https://www.emacswiki.org/emacs/download/multi-term.el";
-          sha256 = "0i7gixcyqhd8ajbslfmb58rvdihzfprydwiqr730q9q0yfja36j8";
+        src = fetchFromGitHub {
+          owner = "emacsorphanage";
+          repo = "multi-term";
+          rev = "f954e4e18b0a035151d34852387e724d87a3316f";
+          sha256 = "00cz3q654vpmijbqxp8c6nkxqj9zx1hjr3552l0adk3fbg6qpmcq";
         };
         recipeFile = fetchurl {
-          url = "https://raw.githubusercontent.com/milkypostman/melpa/4327b4dd464ebb00c2acdd496274dedf912cdf92/recipes/multi-term";
-          sha256 = "1va4ihngwv5qvwps3m9jj0150gbrmq3zllnyq1hbx5ap8hjrhvdx";
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/ae489be43b1aee93614e40f492ebdf0b98a3fbc1/recipes/multi-term";
+          sha256 = "16idk4nd7qpyrvyspbrdl8gdfaclng6ny0xigk6fqdv352djalal";
           name = "multi-term";
         };
         packageRequires = [];
