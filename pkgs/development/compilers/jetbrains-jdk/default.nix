@@ -1,27 +1,23 @@
-{ stdenv, fetchurl, file, glib, libxml2, libav_0_8, ffmpeg, libxslt, mesa_noglu,
- xorg, alsaLib, fontconfig, freetype, pango, gtk2, cairo, gdk_pixbuf, atk }:
+{ stdenv, lib, fetchurl, file, glib, libxml2, libav_0_8, ffmpeg, libxslt
+, mesa_noglu , xorg, alsaLib, fontconfig, freetype, pango, gtk2, cairo
+, gdk_pixbuf, atk }:
 
-let
+# TODO: Investigate building from source instead of patching binaries.
+# TODO: Binary patching for not just x86_64-linux but also x86_64-darwin i686-linux
+
+let drv = stdenv.mkDerivation rec {
+  pname = "jetbrainsjdk";
   version = "152b970.2";
-  architecture = "amd64";
-  rSubPaths = [
-    "lib/${architecture}/jli"
-    "lib/${architecture}/server"
-    "lib/${architecture}/xawt"
-    "lib/${architecture}"
-  ];
-  libraries =
-    [stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt mesa_noglu xorg.libXxf86vm alsaLib fontconfig freetype pango gtk2 cairo gdk_pixbuf atk] ++
-    [xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXp xorg.libXt xorg.libXrender stdenv.cc.cc];
+  name = pname + "-" + version;
 
-in
+  src = if stdenv.system == "x86_64-linux" then
+    fetchurl {
+      url = "https://bintray.com/jetbrains/intellij-jdk/download_file?file_path=jbsdk8u${version}_linux_x64.tar.gz";
+      sha256 = "0i2cqjfab91kr618z88nb5g9yg60j5z08wjl0nlvcmpvg2z6va0m";
+    }
+  else
+    abort "unsupported system: ${stdenv.system}";
 
-let jbsdk = stdenv.mkDerivation {
-  name = "jbsdk-${version}";
-  src = fetchurl {
-    url = "https://bintray.com/jetbrains/intellij-jdk/download_file?file_path=jbsdk8u${version}_linux_x64.tar.gz";
-    sha256 = "0i2cqjfab91kr618z88nb5g9yg60j5z08wjl0nlvcmpvg2z6va0m";
-  };
   nativeBuildInputs = [ file ];
 
   unpackCmd = "mkdir jdk; pushd jdk; tar -xzf $src; popd";
@@ -38,7 +34,15 @@ let jbsdk = stdenv.mkDerivation {
     jrePath=$out/jre
   '';
 
-  postFixup = ''
+  postFixup = let
+    arch = "amd64";
+    rSubPaths = [
+      "lib/${arch}/jli"
+      "lib/${arch}/server"
+      "lib/${arch}/xawt"
+      "lib/${arch}"
+    ];
+    in ''
     rpath+="''${rpath:+:}${stdenv.lib.concatStringsSep ":" (map (a: "$jrePath/${a}") rSubPaths)}"
     find $out -type f -perm -0100 \
         -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
@@ -46,8 +50,31 @@ let jbsdk = stdenv.mkDerivation {
     find $out -name "*.so" -exec patchelf --set-rpath "$rpath" {} \;
   '';
 
+  rpath = lib.makeLibraryPath ([
+    stdenv.cc.cc stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt mesa_noglu
+    alsaLib fontconfig freetype pango gtk2 cairo gdk_pixbuf atk
+  ] ++ (with xorg; [
+    libX11 libXext libXtst libXi libXp libXt libXrender libXxf86vm
+  ]));
 
-  rpath = stdenv.lib.strings.makeLibraryPath libraries;
+  passthru.home = drv;
 
-  passthru.home = jbsdk;
-}; in jbsdk
+  meta = with stdenv.lib; {
+    description = "An OpenJDK fork to better support Jetbrains's products.";
+    longDescription = ''
+     JetBrains Runtime is a runtime environment for running IntelliJ Platform
+     based products on Windows, Mac OS X, and Linux. JetBrains Runtime is
+     based on OpenJDK project with some modifications. These modifications
+     include: Subpixel Anti-Aliasing, enhanced font rendering on Linux, HiDPI
+     support, ligatures, some fixes for native crashes not presented in
+     official build, and other small enhancements.
+
+     JetBrains Runtime is not a certified build of OpenJDK. Please, use at
+     your own risk.
+    '';
+    homepage = "https://bintray.com/jetbrains/intellij-jdk/";
+    licenses = licenses.gpl2;
+    maintainers = with maintainers; [ edwtjo ];
+    platforms = with platforms; [ "x86_64-linux" ];
+  };
+}; in drv
