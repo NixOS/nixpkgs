@@ -9763,6 +9763,8 @@ with pkgs;
 
   ndpi = callPackage ../development/libraries/ndpi { };
 
+  nifticlib = callPackage ../development/libraries/science/biology/nifticlib { };
+
   notify-sharp = callPackage ../development/libraries/notify-sharp { };
 
   ncurses5 = callPackage ../development/libraries/ncurses { abiVersion = "5"; };
