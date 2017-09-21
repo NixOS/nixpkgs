@@ -3677,6 +3677,7 @@ in {
     };
   };
 
+  bcolz = callPackage ../development/python-modules/bcolz { };
 
   pbkdf2 = buildPythonPackage rec {
     name = "pbkdf2-1.3";
