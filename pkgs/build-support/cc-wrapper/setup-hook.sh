@@ -139,7 +139,7 @@ export ${role}CC=@named_cc@
 export ${role}CXX=@named_cxx@
 
 for cmd in \
-    ar as nm objcopy ranlib strip strings size ld windres
+    ar as ld nm objcopy objdump readelf ranlib strip strings size windres
 do
     if
         PATH=$_PATH type -p "@targetPrefix@${cmd}" > /dev/null
