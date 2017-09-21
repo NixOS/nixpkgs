@@ -4,7 +4,7 @@
 , libxml2, libsoup, libsecret, libxslt, harfbuzz, libpthreadstubs, pcre, nettle, libtasn1, p11_kit
 , libidn, libedit, readline, mesa, libintlOrEmpty
 , enableGeoLocation ? true, geoclue2, sqlite
-, gst-plugins-base
+, gst-plugins-base, gst-plugins-bad
 }:
 
 assert enableGeoLocation -> geoclue2 != null;
@@ -12,7 +12,7 @@ assert enableGeoLocation -> geoclue2 != null;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.16.6";
+  version = "2.18.2";
 
   meta = {
     description = "Web content rendering engine, GTK+ port";
@@ -42,12 +42,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "08abxbhi2n1pfby9f2c20z8mpmbvbs2z7vf0p5ckq4jkz46na8zw";
+    sha256 = "1ry8zvv6k01g9p7agg326n0ziqpqjxd49h5w1b2is6rjnpqv6k5i";
   };
 
   # see if we can clean this up....
 
-  patches = [ ./finding-harfbuzz-icu.patch ]
+  patches = [ ./finding-harfbuzz-icu.patch ./gstreamergl-2.17.patch ]
      ++ optionals stdenv.isDarwin [
     ./PR-152650-2.patch
     ./PR-153138.patch
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
 
   # XXX: WebKit2 missing include path for gst-plugins-base.
   # Filled: https://bugs.webkit.org/show_bug.cgi?id=148894
-  NIX_CFLAGS_COMPILE = "-I${gst-plugins-base.dev}/include/gstreamer-1.0"
+  NIX_CFLAGS_COMPILE = "-I${gst-plugins-base.dev}/include/gstreamer-1.0 -I${gst-plugins-bad}/include/gstreamer-1.0"
                      + (optionalString stdenv.isDarwin " -lintl");
 
   nativeBuildInputs = [
@@ -88,9 +88,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = libintlOrEmpty ++ [
-    gtk2 libwebp enchant libnotify gnutls pcre nettle libidn
+    gtk2 libwebp enchant libnotify gnutls pcre nettle libidn sqlite
     libxml2 libsecret libxslt harfbuzz libpthreadstubs libtasn1 p11_kit
-    sqlite gst-plugins-base libxkbcommon epoxy at_spi2_core
+    gst-plugins-base gst-plugins-bad libxkbcommon epoxy at_spi2_core
   ] ++ optional enableGeoLocation geoclue2
     ++ (with xlibs; [ libXdmcp libXt libXtst ])
     ++ optionals stdenv.isDarwin [ libedit readline mesa ]
