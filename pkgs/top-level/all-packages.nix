@@ -7902,7 +7902,9 @@ with pkgs;
 
   eigen2 = callPackage ../development/libraries/eigen/2.0.nix {};
 
-  vmmlib = callPackage ../development/libraries/vmmlib {};
+  vmmlib = callPackage ../development/libraries/vmmlib {
+    inherit (darwin.apple_sdk.frameworks) Accelerate CoreGraphics CoreVideo;
+  };
 
   elastix = callPackage ../development/libraries/science/biology/elastix { };
 
