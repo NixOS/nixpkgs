@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
   patches = [ ./absolute-paths.diff ];
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "man" "doc" "info" ];
 
   # FIXME stackprotector needs gcc 4.9 in bootstrap tools
   hardeningDisable = [ "format" "stackprotector" ];
@@ -45,7 +45,9 @@ stdenv.mkDerivation rec {
     fi
   '';
 
-  nativeBuildInputs = [ xz xz.bin ] ++ stdenv.lib.optional (!stdenv.isLinux && !hostPlatform.isCygwin) libiconv; # HACK, see #10874 (and 14664)
+  nativeBuildInputs = [ xz xz.bin ];
+  # HACK, see #10874 (and 14664)
+  buildInputs = stdenv.lib.optional (!stdenv.isLinux && !hostPlatform.isCygwin) libiconv;
 
   enableParallelBuilding = true;
 

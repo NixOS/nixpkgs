@@ -750,6 +750,7 @@ rec {
     { name, fullName, size ? 4096, urlPrefix
     , packagesList ? "", packagesLists ? [packagesList]
     , packages, extraPackages ? [], postInstall ? ""
+    , extraDebs ? []
     , QEMU_OPTS ? "", memSize ? 512 }:
 
     let
@@ -760,7 +761,7 @@ rec {
     in
       (fillDiskWithDebs {
         inherit name fullName size postInstall QEMU_OPTS memSize;
-        debs = import expr {inherit fetchurl;};
+        debs = import expr {inherit fetchurl;} ++ extraDebs;
       }) // {inherit expr;};
 
 

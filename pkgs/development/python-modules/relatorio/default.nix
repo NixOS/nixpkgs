@@ -1,16 +1,17 @@
-{ lib, fetchurl, buildPythonPackage, genshi, lxml }:
+{ lib, fetchurl, buildPythonPackage, genshi, lxml, python_magic }:
 
 buildPythonPackage rec {
   pname = "relatorio";
   name = "${pname}-${version}";
-  version = "0.6.4";
+  version = "0.7.0";
   src = fetchurl {
     url = "mirror://pypi/r/relatorio/${name}.tar.gz";
-    sha256 = "0lincq79mzgazwd9gh41dybjh9c3n87r83pl8nk3j79aihyfk84z";
+    sha256 = "efd68d96573b15c59c24a8f420ed14210ce51de535a8470d14381f2bed69d845";
   };
   propagatedBuildInputs = [
     genshi
     lxml
+    python_magic
   ];
   meta = {
     homepage = http://relatorio.tryton.org/;

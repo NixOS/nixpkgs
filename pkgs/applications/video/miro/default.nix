@@ -81,7 +81,7 @@ in buildPythonApplication rec {
   ] ++ optional enableBonjour avahi;
 
   meta = {
-    homepage = "http://www.getmiro.com/";
+    homepage = http://www.getmiro.com/;
     description = "Video and audio feed aggregator";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.aszlig ];

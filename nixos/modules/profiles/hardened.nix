@@ -25,6 +25,13 @@ with lib;
     "nohibernate"
   ];
 
+  boot.blacklistedKernelModules = [
+    # Obscure network protocols
+    "ax25"
+    "netrom"
+    "rose"
+  ];
+
   # Restrict ptrace() usage to processes with a pre-defined relationship
   # (e.g., parent/child)
   boot.kernel.sysctl."kernel.yama.ptrace_scope" = mkOverride 500 1;
@@ -59,4 +66,20 @@ with lib;
   # the feature at runtime.  Attempting to create a user namespace
   # with unshare will then fail with "no space left on device".
   boot.kernel.sysctl."user.max_user_namespaces" = mkDefault 0;
+
+  # Raise ASLR entropy for 64bit & 32bit, respectively.
+  #
+  # Note: mmap_rnd_compat_bits may not exist on 64bit.
+  boot.kernel.sysctl."vm.mmap_rnd_bits" = mkDefault 32;
+  boot.kernel.sysctl."vm.mmap_rnd_compat_bits" = mkDefault 16;
+
+  # Allowing users to mmap() memory starting at virtual address 0 can turn a
+  # NULL dereference bug in the kernel into code execution with elevated
+  # privilege.  Mitigate by enforcing a minimum base addr beyond the NULL memory
+  # space.  This breaks applications that require mapping the 0 page, such as
+  # dosemu or running 16bit applications under wine.  It also breaks older
+  # versions of qemu.
+  #
+  # The value is taken from the KSPP recommendations (Debian uses 4096).
+  boot.kernel.sysctl."vm.mmap_min_addr" = mkDefault 65536;
 }

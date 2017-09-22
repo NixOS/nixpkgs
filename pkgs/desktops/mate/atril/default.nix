@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libxml2, libsecret, poppler, itstool, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libxml2, libsecret, poppler, itstool, mate, hicolor_icon_theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   name = "atril-${version}";
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     libsecret
     libxml2
     poppler
+    hicolor_icon_theme
     mate.mate-desktop
   ];
 
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
   
   meta = {
     description = "A simple multi-page document viewer for the MATE desktop";
-    homepage = "http://mate-desktop.org";
+    homepage = http://mate-desktop.org;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
   };

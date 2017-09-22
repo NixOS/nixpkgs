@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A program used to control monitor parameters by software";
-    homepage = "http://ddccontrol.sourceforge.net/";
+    homepage = http://ddccontrol.sourceforge.net/;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ stdenv.lib.maintainers.pakhfn ];

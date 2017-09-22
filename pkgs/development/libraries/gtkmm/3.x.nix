@@ -2,14 +2,14 @@
 
 let
   ver_maj = "3.22";
-  ver_min = "0";
+  ver_min = "2";
 in
 stdenv.mkDerivation rec {
   name = "gtkmm-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtkmm/${ver_maj}/${name}.tar.xz";
-    sha256 = "05da4d4b628fb20c8384630ddf478a3b5562952b2d6181fe28d58f6cbc0514f5";
+    sha256 = "91afd98a31519536f5f397c2d79696e3d53143b80b75778521ca7b48cb280090";
   };
 
   outputs = [ "out" "dev" ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       tutorial.
     '';
 
-    homepage = http://gtkmm.org/;
+    homepage = https://gtkmm.org/;
 
     license = licenses.lgpl2Plus;
 

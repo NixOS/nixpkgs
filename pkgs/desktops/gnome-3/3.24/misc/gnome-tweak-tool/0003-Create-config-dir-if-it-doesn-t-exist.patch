@@ -1,0 +1,27 @@
+From ba2eb4be6c69ee8206e0139268c896e6a2b278d8 Mon Sep 17 00:00:00 2001
+From: Jascha Geerds <jascha@jgeerds.name>
+Date: Sun, 25 Jun 2017 11:50:33 +0100
+Subject: [PATCH 3/3] Create config dir if it doesn't exist
+
+---
+ gtweak/gtksettings.py | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/gtweak/gtksettings.py b/gtweak/gtksettings.py
+index a0c163b..f5883ec 100644
+--- a/gtweak/gtksettings.py
++++ b/gtweak/gtksettings.py
+@@ -36,6 +36,10 @@ class GtkSettingsManager:
+     def _get_keyfile(self):
+         keyfile = None
+         try:
++            config_dir = os.path.dirname(self._path)
++            if not os.path.isdir(config_dir):
++                os.makedirs(config_dir)
++
+             keyfile = GLib.KeyFile()
+             keyfile.load_from_file(self._path, 0)
+         except MemoryError:
+-- 
+2.12.2
+

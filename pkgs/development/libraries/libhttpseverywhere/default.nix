@@ -15,18 +15,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gnome3.vala valadoc  gobjectIntrospection meson ninja pkgconfig ];
   buildInputs = [ glib gnome3.libgee libxml2 json_glib libsoup libarchive ];
 
-  configurePhase = ''
-    mkdir build
-    cd build
-    meson --prefix "$out" ..
-  '';
-
-  buildPhase = ''
-    ninja
-   '';
-
-  installPhase = "ninja install";
-
   doCheck = true;
 
   checkPhase = "./httpseverywhere_test";

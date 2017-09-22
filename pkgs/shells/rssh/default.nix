@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       rssh also includes support for rsync and cvs. For example, if you have a server which you only want to allow users to copy files off of via scp, without providing shell access, you can use rssh to do that.
     '';
-    homepage = "http://www.pizzashack.org/rssh/";
+    homepage = http://www.pizzashack.org/rssh/;
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ arobyn ];

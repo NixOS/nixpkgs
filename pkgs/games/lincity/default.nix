@@ -28,6 +28,6 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "City simulation game";
     license = licenses.gpl2Plus;
-    homepage = "https://sourceforge.net/projects/lincity";
+    homepage = https://sourceforge.net/projects/lincity;
   };
 }

@@ -22,8 +22,8 @@
 
   nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
   buildInputs = [ readline libtool libunistring libffi ];
-  propagatedBuildInputs = [ gmp boehmgc ]
 
+  propagatedBuildInputs = [ gmp boehmgc ]
     # XXX: These ones aren't normally needed here, but since
     # `libguile-2.0.la' reads `-lltdl -lunistring', adding them here will add
     # the needed `-L' flags.  As for why the `.la' file lacks the `-L' flags,

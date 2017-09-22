@@ -5,7 +5,7 @@
 appleDerivation rec {
   phases = [ "unpackPhase" "installPhase" ];
 
-  buildInputs = [ cpio ];
+  nativeBuildInputs = [ cpio ];
 
   installPhase = ''
     export NIX_ENFORCE_PURITY=

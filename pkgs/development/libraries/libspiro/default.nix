@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library that simplifies the drawing of beautiful curves";
-    homepage = "https://github.com/fontforge/libspiro";
+    homepage = https://github.com/fontforge/libspiro;
     license = licenses.gpl3Plus;
   };
 }

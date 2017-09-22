@@ -127,4 +127,8 @@ appleDerivation {
     mkdir $out/Library/PrivateFrameworks
     mv $out/Library/Frameworks/IOKit.framework $out/Library/PrivateFrameworks
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.darwin;
+  };
 }

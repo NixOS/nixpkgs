@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "SELinux Tools";
-    homepage = "http://oss.tresys.com/projects/setools/";
+    homepage = http://oss.tresys.com/projects/setools/;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };

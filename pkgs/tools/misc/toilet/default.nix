@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Display large colourful characters in text mode";
-    homepage = "http://caca.zoy.org/wiki/toilet";
+    homepage = http://caca.zoy.org/wiki/toilet;
     license = stdenv.lib.licenses.wtfpl;
     platforms = stdenv.lib.platforms.all;
   };

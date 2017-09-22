@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     description = "SDL networking library";
     platforms = platforms.unix;
     license = licenses.zlib;
-    homepage = "https://www.libsdl.org/projects/SDL_net/release-1.2.html";
+    homepage = https://www.libsdl.org/projects/SDL_net/release-1.2.html;
   };
 }

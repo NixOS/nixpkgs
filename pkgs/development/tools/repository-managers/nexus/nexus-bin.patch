@@ -1,0 +1,54 @@
+--- nexus-3.5.1-02/bin/nexus	2017-08-18 17:51:08.000000000 +0200
++++ nexus	2017-08-31 12:41:01.271475645 +0200
+@@ -72,7 +72,7 @@
+   fi
+   db_new_file=${db_file}_new
+   if [ -f "$db_file" ]; then
+-    awk '$1 != "'"$test_dir"'" {print $0}' $db_file > $db_new_file
++    awk '$1 != "'"$test_dir"'" {print $scriptname}' $db_file > $db_new_file
+     rm "$db_file"
+     mv "$db_new_file" "$db_file"
+   fi
+@@ -236,7 +236,7 @@
+ 
+ unpack_file() {
+   if [ -f "$1" ]; then
+-    jar_file=`echo "$1" | awk '{ print substr($0,1,length-5) }'`
++    jar_file=`echo "$1" | awk '{ print substr($scriptname,1,length-5) }'`
+     bin/unpack200 -r "$1" "$jar_file"
+ 
+     if [ $? -ne 0 ]; then
+@@ -360,8 +360,14 @@
+ 
+ old_pwd=`pwd`
+ 
+-progname=`basename "$0"`
+-linkdir=`dirname "$0"`
++scriptname=$0
++
++if [ ! -z "$ALTERNATIVE_NAME" ]; then
++  scriptname=`dirname "$0"`"/"$ALTERNATIVE_NAME
++fi
++
++progname=`basename "$scriptname"`
++linkdir=`dirname "$scriptname"`
+ 
+ cd "$linkdir"
+ prg="$progname"
+@@ -522,7 +528,6 @@
+ 
+ $INSTALL4J_JAVA_PREFIX nohup "$app_java_home/bin/java" -server -Dinstall4j.jvmDir="$app_java_home" -Dexe4j.moduleName="$prg_dir/$progname" "-XX:+UnlockDiagnosticVMOptions" "-Dinstall4j.launcherId=245" "-Dinstall4j.swt=false" "$vmov_1" "$vmov_2" "$vmov_3" "$vmov_4" "$vmov_5" $INSTALL4J_ADD_VM_PARAMS -classpath "$local_classpath" com.install4j.runtime.launcher.UnixLauncher start 9d17dc87 "" "" org.sonatype.nexus.karaf.NexusMain  > /dev/null 2>&1 &
+ 
+-
+     ;;
+     start-launchd)
+         echo "Starting nexus"
+@@ -569,7 +574,7 @@
+ 
+     ;;
+     *)
+-        echo "Usage: $0 {start|stop|run|run-redirect|status|restart|force-reload}"
++        echo "Usage: $scriptname {start|stop|run|run-redirect|status|restart|force-reload}"
+         exit 1
+     ;;
+ esac

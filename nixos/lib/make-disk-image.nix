@@ -39,19 +39,13 @@
 with lib;
 
 let
-  # Copied from https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/installer/cd-dvd/channel.nix
-  # TODO: factor out more cleanly
+  extensions = {
+    qcow2 = "qcow2";
+    vpc   = "vhd";
+    raw   = "img";
+  };
 
-  # Do not include these things:
-  #   - The '.git' directory
-  #   - Result symlinks from nix-build ('result', 'result-2', 'result-bin', ...)
-  #   - VIM/Emacs swap/backup files ('.swp', '.swo', '.foo.swp', 'foo~', ...)
-  filterFn = path: type: let basename = baseNameOf (toString path); in
-    if type == "directory" then basename != ".git"
-    else if type == "symlink" then builtins.match "^result(|-.*)$" basename == null
-    else builtins.match "^((|\..*)\.sw[a-z]|.*~)$" basename == null;
-
-  nixpkgs = builtins.filterSource filterFn pkgs.path;
+  nixpkgs = lib.cleanSource pkgs.path;
 
   channelSources = pkgs.runCommand "nixos-${config.system.nixosVersion}" {} ''
     mkdir -p $out
@@ -142,8 +136,8 @@ in pkgs.vmTools.runInLinuxVM (
           mv $diskImage $out/nixos.img
           diskImage=$out/nixos.img
         '' else ''
-          ${pkgs.qemu}/bin/qemu-img convert -f raw -O qcow2 $diskImage $out/nixos.qcow2
-          diskImage=$out/nixos.qcow2
+          ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${format} $diskImage $out/nixos.${extensions.${format}}
+          diskImage=$out/nixos.${extensions.${format}}
         ''}
         ${postVM}
       '';

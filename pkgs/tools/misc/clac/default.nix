@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd2;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.unix;
-    homepage = "https://github.com/soveran/clac";
+    homepage = https://github.com/soveran/clac;
   };
 }

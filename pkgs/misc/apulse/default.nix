@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "PulseAudio emulation for ALSA";
-    homepage = "https://github.com/i-rinat/apulse";
+    homepage = https://github.com/i-rinat/apulse;
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = [ maintainers.jagajaga ];

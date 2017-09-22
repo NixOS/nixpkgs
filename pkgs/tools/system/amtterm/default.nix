@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib;
     { description = "Intel AMT® SoL client + tools";
-      homepage = "https://www.kraxel.org/cgit/amtterm/";
+      homepage = https://www.kraxel.org/cgit/amtterm/;
       license = licenses.gpl2;
       maintainers = [ maintainers.ehmry ];
       platforms = platforms.linux;

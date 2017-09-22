@@ -49,7 +49,7 @@ mkDerivation rec {
     description = "A Traybar Application for Syncthing written in C++";
     longDescription = ''
         A cross-platform status bar for Syncthing.
-        Currently supports OS X, Windows and Linux.
+        Currently supports macOS, Windows and Linux.
         Written in C++ with Qt.
     '';
     license = licenses.lgpl3;

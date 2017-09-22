@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Ubuntu FAN network support enablement";
-    homepage = "https://launchpad.net/ubuntu/+source/ubuntu-fan";
+    homepage = https://launchpad.net/ubuntu/+source/ubuntu-fan;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

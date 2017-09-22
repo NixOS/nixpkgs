@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A tool to generate a static blog from reStructuredText or Markdown input files";
-    homepage = "http://getpelican.com/";
+    homepage = http://getpelican.com/;
     license = licenses.agpl3;
     maintainers = with maintainers; [ offline prikhi garbas ];
   };

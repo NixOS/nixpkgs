@@ -1,31 +1,23 @@
 { stdenv, fetchurl, pkgconfig, efl, xcbutilkeysyms, libXrandr, libXdmcp,
 libxcb, libffi, pam, alsaLib, luajit, bzip2, libpthreadstubs, gdbm, libcap,
-mesa_glu , xkeyboard_config }:
+mesa_glu, xkeyboard_config, pcre }:
 
 stdenv.mkDerivation rec {
   name = "enlightenment-${version}";
-  version = "0.21.8";
+  version = "0.21.9";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/enlightenment/${name}.tar.xz";
-    sha256 = "0cjjiip12hd8bfjl9ccl3vzl81pxh1wpymxk2yvrzf6ap5girhps";
+    sha256 = "0w5f3707hyfc20i6xqh4jlr5p2yhy1z794061mjsz2rp4w00qmpb";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ (pkgconfig.override { vanilla = true; }) ];
 
   buildInputs = [
     efl libXdmcp libxcb xcbutilkeysyms libXrandr libffi pam alsaLib
-    luajit bzip2 libpthreadstubs gdbm
+    luajit bzip2 libpthreadstubs gdbm pcre
   ] ++
     stdenv.lib.optionals stdenv.isLinux [ libcap ];
-
-  NIX_CFLAGS_COMPILE = [
-    "-I${efl}/include/ecore-imf-1"
-    "-I${efl}/include/emile-1"
-    "-I${efl}/include/eo-1"
-    "-I${efl}/include/ethumb-1"
-    "-I${efl}/include/ethumb-client-1"
-  ];
 
   preConfigure = ''
     export USER_SESSION_DIR=$prefix/lib/systemd/user

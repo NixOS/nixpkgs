@@ -19,7 +19,7 @@ buildGoPackage rec {
 
   meta = {
     description = "A prometheus exporter which scrapes remote JSON by JSONPath";
-    homepage = "https://github.com/kawamuray/prometheus-json-exporter";
+    homepage = https://github.com/kawamuray/prometheus-json-exporter;
     license = lib.licenses.asl20;
   };
 }

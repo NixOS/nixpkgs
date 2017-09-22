@@ -71,6 +71,32 @@ let
     };
   };
 
+  luacheck = buildLuaPackage rec {
+    pname = "luacheck";
+    version = "0.20.0";
+    name = "${pname}${version}";
+
+    src = fetchFromGitHub {
+      owner = "mpeterv";
+      repo = "luacheck";
+      rev = "${version}";
+      sha256 = "0ahfkmqcjhlb7r99bswy1sly6d7p4pyw5f4x4fxnxzjhbq0c5qcs";
+    };
+
+    propagatedBuildInputs = [ lua ];
+
+    installPhase = ''
+      ${lua}/bin/lua install.lua $out
+      '';
+
+    meta = with stdenv.lib; {
+      description = "A tool for linting and static analysis of Lua code";
+      homepage = https://github.com/mpeterv/luacheck;
+      license = licenses.mit;
+      platforms = platforms.unix;
+    };
+  };
+
   luaevent = buildLuaPackage rec {
     version = "0.4.3";
     name = "luaevent-${version}";

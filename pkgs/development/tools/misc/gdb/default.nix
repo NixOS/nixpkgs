@@ -11,11 +11,13 @@
 
 # Additional dependencies for GNU/Hurd.
 , mig ? null, hurd ? null
+
+, setupDebugInfoDirs
 }:
 
 let
   basename = "gdb-${version}";
-  version = "8.0";
+  version = "8.0.1";
 in
 
 assert targetPlatform.isHurd -> mig != null && hurd != null;
@@ -29,10 +31,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}.tar.xz";
-    sha256 = "1vplyf8v70yn0rdqjx6awl9nmfbwaj5ynwwjxwa71rhp97z4z8pn";
+    sha256 = "1qwmcbaxf0jc7yjl0fimgcfj2yqcrl6h7azgs1d838kbwf9mzg9x";
   };
 
-  nativeBuildInputs = [ pkgconfig texinfo perl ]
+  patches = [ ./debug-info-from-env.patch ];
+
+  nativeBuildInputs = [ pkgconfig texinfo perl setupDebugInfoDirs ]
     # TODO(@Ericson2314) not sure if should be host or target
     ++ stdenv.lib.optional targetPlatform.isHurd mig;
 
@@ -40,6 +44,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional pythonSupport python
     ++ stdenv.lib.optional targetPlatform.isHurd hurd
     ++ stdenv.lib.optional doCheck dejagnu;
+
+  propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
   enableParallelBuilding = true;
 

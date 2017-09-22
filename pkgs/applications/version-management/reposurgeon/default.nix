@@ -13,7 +13,7 @@ in mkDerivation rec {
     description = "A tool for editing version-control repository history";
     version = "3.28";
     license = licenses.bsd3;
-    homepage = "http://www.catb.org/esr/reposurgeon/";
+    homepage = http://www.catb.org/esr/reposurgeon/;
     maintainers = with maintainers; [ dfoxfranke ];
     platforms = platforms.all;
   };

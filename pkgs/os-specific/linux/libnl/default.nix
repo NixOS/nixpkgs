@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     inherit version;
-    homepage = "http://www.infradead.org/~tgr/libnl/";
+    homepage = http://www.infradead.org/~tgr/libnl/;
     description = "Linux Netlink interface library suite";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ fpletz ];

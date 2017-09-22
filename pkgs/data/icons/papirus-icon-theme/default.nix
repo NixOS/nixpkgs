@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Papirus icon theme for Linux";
-    homepage = "https://github.com/PapirusDevelopmentTeam/papirus-icon-theme";
+    homepage = https://github.com/PapirusDevelopmentTeam/papirus-icon-theme;
     license = licenses.lgpl3;
     platforms = platforms.all;
   };

@@ -6,7 +6,7 @@ with stdenv.lib;
 overrideDerivation xorgserver (oldAttrs: {
 
   name = "xwayland-${xorgserver.version}";
-  propagatedNativeBuildInputs = oldAttrs.propagatedNativeBuildInputs
+  propagatedBuildInputs = oldAttrs.propagatedBuildInputs
     ++ [wayland wayland-protocols epoxy libxslt makeWrapper libunwind];
   configureFlags = [
     "--disable-docs"

@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
       sed -i "s,^PATH=.*,PATH=$out/bin:${statdPath}," utils/statd/start-statd
 
       configureFlags="--with-start-statd=$out/bin/start-statd $configureFlags"
-      
+
       substituteInPlace systemd/nfs-utils.service \
         --replace "/bin/true" "${coreutils}/bin/true"
 
@@ -78,7 +78,7 @@ in stdenv.mkDerivation rec {
       daemons.
     '';
 
-    homepage = "https://sourceforge.net/projects/nfs/";
+    homepage = https://sourceforge.net/projects/nfs/;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

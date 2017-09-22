@@ -15,11 +15,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libxcb libXinerama xcbutil xcbutilkeysyms xcbutilwm ];
 
-  PREFIX = "$out";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "A tiling window manager based on binary space partitioning";
-    homepage = http://github.com/baskerville/bspwm;
+    homepage = https://github.com/baskerville/bspwm;
     maintainers = with maintainers; [ meisternu epitrochoid ];
     license = licenses.bsd2;
     platforms = platforms.linux;

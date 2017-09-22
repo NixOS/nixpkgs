@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, lxqt-common }:
+{ stdenv, fetchFromGitHub, cmake, lxqt-build-tools, qtbase, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, lxqt-common, qtx11extras }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
     liblxqt
     libqtxdg
     lxqt-common
+    qtx11extras
   ];
 
   cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];

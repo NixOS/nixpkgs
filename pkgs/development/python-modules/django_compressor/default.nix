@@ -2,12 +2,12 @@
   rcssmin, rjsmin, django_appconf }:
 buildPythonPackage rec {
     pname = "django_compressor";
-    version = "2.1.1";
+    version = "2.2";
     name = "${pname}-${version}";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "1s42dkq3qp1niaf69markd7m3ljgf2bspyz2nk0sa07f8q04004j";
+      sha256 = "9616570e5b08e92fa9eadc7a1b1b49639cce07ef392fc27c74230ab08075b30f";
     };
 
     # Need to setup django testing

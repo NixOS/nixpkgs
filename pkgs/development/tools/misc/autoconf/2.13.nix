@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "07krzl4czczdsgzrrw9fiqx35xcf32naf751khg821g5pqv12qgh";
   };
 
-  buildInputs = [m4 perl lzma];
+  nativebuildInputs = [ lzma ];
+  buildInputs = [ m4 perl ];
 
   doCheck = true;
 

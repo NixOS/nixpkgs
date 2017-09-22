@@ -1,6 +1,6 @@
 { stdenv, fetchurl, makeWrapper, glib
 , fontconfig, patchelf, libXext, libX11
-, freetype, libXrender
+, freetype, libXrender, zlib
 }:
 
 let
@@ -17,7 +17,7 @@ let
     else throw "Spideroak client for: ${stdenv.system} not supported!";
 
   ldpath = stdenv.lib.makeLibraryPath [
-    glib fontconfig libXext libX11 freetype libXrender
+    glib fontconfig libXext libX11 freetype libXrender zlib
   ];
 
   version = "6.0.1";
@@ -43,6 +43,8 @@ in stdenv.mkDerivation {
     rmdir $out/usr/bin || true
     mv $out/usr/share $out/
 
+    rm -f $out/opt/SpiderOakONE/lib/libz*
+
     patchelf --set-interpreter ${stdenv.glibc.out}/lib/${interpreter} \
       "$out/opt/SpiderOakONE/lib/SpiderOakONE"
 
@@ -57,7 +59,7 @@ in stdenv.mkDerivation {
   buildInputs = [ patchelf makeWrapper ];
 
   meta = {
-    homepage = "https://spideroak.com";
+    homepage = https://spideroak.com;
     description = "Secure online backup and sychronization";
     license = stdenv.lib.licenses.unfree;
     maintainers = with stdenv.lib.maintainers; [ amorsillo ];

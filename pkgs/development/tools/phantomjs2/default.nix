@@ -1,6 +1,7 @@
-{ stdenv, fetchgit,
-  bison2, flex, fontconfig, freetype, gperf, icu, openssl, libjpeg, libpng, perl, python, ruby, sqlite,
-  darwin, writeScriptBin, cups
+{ stdenv, fetchFromGitHub, fetchpatch
+, bison2, flex, fontconfig, freetype, gperf, icu, openssl, libjpeg
+, libpng, perl, python, ruby, sqlite, qtwebkit, qmake, qtbase
+, darwin, writeScriptBin, cups
 }:
 
 let
@@ -35,53 +36,53 @@ in stdenv.mkDerivation rec {
   name = "phantomjs-${version}";
   version = "2.1.1";
 
-  # needs git submodules, so can't use fetchFromGitHub
-  src = fetchgit {
-    rev = "refs/tags/${version}";
-    url = "https://github.com/ariya/phantomjs.git";
-    sha256 = "1gyc8qxn8v4vm4lgd9njrprz46fg1j5ziq0mm888q8ms0p7jy2pi";
+  src = fetchFromGitHub {
+    owner = "ariya";
+    repo = "phantomjs";
+    rev = version;
+    sha256 = "1zsbpk1sgh9a16f1a5nx3qvk77ibjn812wqkxqck8n6fia85m5iq";
   };
 
-  buildInputs = [ bison2 flex fontconfig freetype gperf icu openssl libjpeg libpng perl python ruby sqlite ]
-    ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-      AGL ApplicationServices AppKit Cocoa OpenGL
-      darwin.libobjc fakeClang cups
-    ]);
+  nativeBuildInputs = [ qmake ];
+  buildInputs = [
+    bison2 flex fontconfig freetype gperf icu openssl
+    libjpeg libpng perl python ruby sqlite qtwebkit qtbase
+  ] ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    AGL ApplicationServices AppKit Cocoa OpenGL
+    darwin.libobjc fakeClang cups
+  ]);
 
+  patches = [
+    (fetchpatch {
+      url = "https://anonscm.debian.org/cgit/collab-maint/phantomjs.git/plain/debian/patches/build-hardening.patch?id=42c9154d8c87c9fe434908259b0eddde4d892ca3";
+      sha256 = "1qs1r76w90qgpw742i7lf0y3b7m9zh5wxcbrhrak6mq1kqaphqb5";
+    })
+    (fetchpatch {
+      url = "https://anonscm.debian.org/cgit/collab-maint/phantomjs.git/plain/debian/patches/build-qt-components.patch?id=9b5c1ce95a7044ebffc634f773edf7d4eb9b6cd3";
+      sha256 = "1fw2q59aqcks3abvwkqg9903yif6aivdsznc0h6frhhjvpp19vsb";
+    })
+    (fetchpatch {
+      url = "https://anonscm.debian.org/cgit/collab-maint/phantomjs.git/plain/debian/patches/build-qt55-evaluateJavaScript.patch?id=9b5c1ce95a7044ebffc634f773edf7d4eb9b6cd3";
+      sha256 = "1avig9cfny8kv3s4mf3mdzvf3xlzgyh351yzwc4bkpnjvzv4fmq6";
+    })
+    (fetchpatch {
+      url = "https://anonscm.debian.org/cgit/collab-maint/phantomjs.git/plain/debian/patches/build-qt55-no-websecurity.patch?id=9b5c1ce95a7044ebffc634f773edf7d4eb9b6cd3";
+      sha256 = "1nykqpxa7lcf9iarz5lywgg3v3b1h19iwvjdg4kgq0ai6idhcab8";
+    })
+    (fetchpatch {
+      url = "https://anonscm.debian.org/cgit/collab-maint/phantomjs.git/plain/debian/patches/build-qt55-print.patch?id=9b5c1ce95a7044ebffc634f773edf7d4eb9b6cd3";
+      sha256 = "1fydmdjxnplglpbd3ypaih5l237jkxjirpdhzz92mcpy29yla6jw";
+    })
+    ./system-qtbase.patch
+  ];
 
-  patchPhase = ''
+  postPatch = ''
     patchShebangs .
-    sed -i -e 's|/bin/pwd|pwd|' src/qt/qtbase/configure
-    touch src/qt/{qtbase,qtwebkit,3rdparty}/.git
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
-    sed -i 's,-licucore,/usr/lib/libicucore.dylib,' src/qt/qtwebkit/Source/WTF/WTF.pri
-    substituteInPlace src/qt/qtwebkit/Tools/qmake/mkspecs/features/features.pri \
-      --replace "ENABLE_3D_RENDERING=1" "ENABLE_3D_RENDERING=0"
-    sed -i 88d src/qt/qtwebkit/Tools/qmake/mkspecs/features/features.prf
-    echo 'CONFIG -= create_cmake' >> src/qt/qtwebkit/Source/api.pri
-    echo 'CONFIG -= create_cmake' >> src/qt/qtwebkit/Source/widgetsapi.pri
-    pushd src/qt
-
-      substituteInPlace qtbase/configure \
-        --replace /usr/bin/xcode-select true \
-        --replace '/usr/bin/xcodebuild -sdk $sdk -version Path 2>/dev/null' 'echo /var/empty' \
-        --replace '/usr/bin/xcrun -sdk $sdk -find' 'type -P'
-      substituteInPlace qtbase/mkspecs/features/mac/default_pre.prf \
-        --replace '/usr/bin/xcode-select --print-path 2>/dev/null' "echo ${stdenv.libc}" \
-        --replace '/usr/bin/xcrun -find xcrun 2>/dev/null' 'echo success' \
-        --replace '/usr/bin/xcodebuild -version' 'echo Xcode 7.2; echo Build version 7C68' \
-        --replace 'sdk rez' ""
-      for file in $(grep -rl /usr/bin/xcrun .); do
-        substituteInPlace "$file" --replace "/usr/bin/xcrun" ${fakeXcrun}/bin/xcrun
-      done
-      substituteInPlace qtbase/src/tools/qlalr/lalr.cpp --replace _Nullable Nullable
-
-    popd
+    substituteInPlace src/phantomjs.pro \
+      --replace "QT_MINOR_VERSION, 5" "QT_MINOR_VERSION, 9"
   '';
 
   __impureHostDeps = stdenv.lib.optional stdenv.isDarwin "/usr/lib/libicucore.dylib";
-
-  buildPhase = "./build.py --confirm -j$NIX_BUILD_CORES";
 
   enableParallelBuilding = true;
 
@@ -97,6 +98,10 @@ in stdenv.mkDerivation rec {
         ${darwin.configd}/Library/Frameworks/SystemConfiguration.framework/SystemConfiguration \
         /System/Library/Frameworks/SystemConfiguration.framework/Versions/A/SystemConfiguration \
     $out/bin/phantomjs
+  '';
+
+  preFixup = ''
+    rm -r ../__nix_qt5__
   '';
 
   meta = with stdenv.lib; {

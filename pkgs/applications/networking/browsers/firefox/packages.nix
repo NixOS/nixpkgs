@@ -1,4 +1,4 @@
-{ lib, callPackage, fetchurl, fetchFromGitHub }:
+{ lib, callPackage, stdenv, overrideCC, gcc5, fetchurl, fetchFromGitHub, fetchpatch }:
 
 let common = opts: callPackage (import ./common.nix opts); in
 
@@ -6,11 +6,16 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    version = "54.0.1";
+    version = "55.0.3";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "43607c2c0af995a21dc7f0f68b24b7e5bdb3faa5ee06025901c826bfe4d169256ea1c9eb5fcc604c4d6426ced53e80787c12fc07cda014eca09199ef3df783a2";
+      sha512 = "3cacc87b97871f3a8c5e97c17ef7025079cb5c81f32377d9402cdad45815ac6c4c4762c79187f1e477910161c2377c42d41de62a50b6741d5d7c1cd70e8c6416";
     };
+
+    patches = lib.optional stdenv.isi686 (fetchpatch {
+      url = "https://hg.mozilla.org/mozilla-central/raw-rev/15517c5a5d37";
+      sha256 = "1ba487p3hk4w2w7qqfxgv1y57vp86b8g3xhav2j20qd3j3phbbn7";
+    });
 
     meta = {
       description = "A web browser built from Firefox source tree";
@@ -25,10 +30,10 @@ rec {
 
   firefox-esr = common rec {
     pname = "firefox-esr";
-    version = "52.2.1esr";
+    version = "52.3.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "1d79e6e4625cf7994f6d6bbdf227e483fc407bcdb20e0296ea604969e701f551b5df32f578d4669cf654b65927328c8eb0f717c7a12399bf1b02a6ac7a0cd1d3";
+      sha512 = "36da8f14b50334e36fca06e09f15583101cadd10e510268255587ea9b09b1fea918da034d6f1d439ab8c34612f6cebc409a0b8d812dddb3f997afebe64d09fe9";
     };
 
     meta = firefox.meta // {
@@ -40,19 +45,9 @@ rec {
     };
   } {};
 
-  tor-browser = common rec {
-    pname = "tor-browser";
-    version = "6.5.2";
-    isTorBrowserLike = true;
+} // (let
 
-    # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
-    src = fetchFromGitHub {
-      owner = "SLNOS";
-      repo  = "tor-browser";
-      rev   = "tor-browser-45.8.0esr-6.5-2";
-      sha256 = "0vbcp1qlxjlph0dqibylsyvb8iah3lnzdxc56hllpvbn51vrp39j";
-    };
-
+  commonAttrs = {
     overrides = {
       unpackPhase = ''
         # fetchFromGitHub produces ro sources, root dir gets a name that
@@ -96,8 +91,42 @@ rec {
       homepage = https://www.torproject.org/projects/torbrowser.html;
       platforms = lib.platforms.linux;
     };
-  } {
+  };
+
+in rec {
+
+  tor-browser-6-5 = common (rec {
+    pname = "tor-browser";
+    version = "6.5.2";
+    isTorBrowserLike = true;
+    extraConfigureFlags = [ "--disable-loop" ];
+
+    # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
+    src = fetchFromGitHub {
+      owner = "SLNOS";
+      repo  = "tor-browser";
+      rev   = "tor-browser-45.8.0esr-6.5-2";
+      sha256 = "0vbcp1qlxjlph0dqibylsyvb8iah3lnzdxc56hllpvbn51vrp39j";
+    };
+  } // commonAttrs) {
+    stdenv = overrideCC stdenv gcc5;
     ffmpegSupport = false;
   };
 
-}
+  tor-browser-7-0 = common (rec {
+    pname = "tor-browser";
+    version = "7.0.1";
+    isTorBrowserLike = true;
+
+    # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
+    src = fetchFromGitHub {
+      owner = "SLNOS";
+      repo  = "tor-browser";
+      rev   = "tor-browser-52.3.0esr-7.0-1-slnos";
+      sha256 = "0szbf8gjbl4dnrb4igy4mq5858i1y6ki4skhdw63iqqdd8w9v4yv";
+    };
+  } // commonAttrs) {};
+
+  tor-browser = tor-browser-7-0;
+
+})

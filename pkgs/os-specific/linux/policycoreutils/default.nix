@@ -26,6 +26,9 @@ stdenv.mkDerivation rec {
 
     # Fix sepolicy install
     sed -i "s,\(setup.py install\).*,\1 --prefix=$out,g" sepolicy/Makefile
+
+    # Fix setuid install
+    sed -i 's|-m 4755|-m 755|' sandbox/Makefile
   '';
 
   nativeBuildInputs = [ pythonPackages.python gettext ];

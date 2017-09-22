@@ -1,17 +1,17 @@
 { stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "statsd_bridge-${version}";
-  version = "0.3.0";
+  name = "statsd_exporter-${version}";
+  version = "0.4.0";
   rev = version;
 
   goPackagePath = "github.com/prometheus/statsd_bridge";
 
   src = fetchFromGitHub {
-    inherit rev;
+    rev = "v${version}";
     owner = "prometheus";
     repo = "statsd_exporter";
-    sha256 = "1gg9v224n05khcwy27637w3rwh0cymm7hx6bginfxd7730rmpp2r";
+    sha256 = "1w11n7g663g7d7mbf6jfzcqmcm9rhaxy52bg0rqnad9v0rs5qxr6";
   };
 
   goDeps = ./statsd-bridge_deps.nix;

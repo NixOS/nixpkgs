@@ -2,14 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "spdlog-${version}";
-  version = stdenv.lib.strings.substring 0 7 rev;
-  rev = "292bdc5eb4929f183c78d2c67082b715306f81c9";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "gabime";
     repo = "spdlog";
-    inherit rev;
-    sha256 = "1b6b0c81a8hisaibqlzj5mrk3snrfl8p5sqa056q2f02i62zksbn";
+    rev = "v${version}";
+    sha256 = "0pfagrkq6afpkl269vbi1fd6ckakzpr5b5cbapb8rr7hgsrilxza";
   };
 
   buildInputs = [ cmake ];

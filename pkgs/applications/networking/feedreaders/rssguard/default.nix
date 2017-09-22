@@ -2,13 +2,15 @@
 
 stdenv.mkDerivation rec {
   name = "rssguard-${version}";
-  version = "3.4.0";
+  version = "3.4.2";
 
   src = fetchgit {
     url = https://github.com/martinrotter/rssguard;
     rev = "refs/tags/${version}";
-    sha256 = "1cdpfjj2lm1q2qh0w0mh505blcmi4n78458d3z3c1zn9ls9b9zsp";
-    fetchSubmodules = true;
+    sha256 = "0iy0fd3qr2dm0pc6xr7sin6cjfxfa0pxhxiwzs55dhsdk9zir62s";
+    # Submodules are required only for Windows (and one of them is a huge binary
+    # package ~400MB). See project wiki for more details.
+    fetchSubmodules = false;
   };
 
   buildInputs =  [ qtwebengine qttools ];

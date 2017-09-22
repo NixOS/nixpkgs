@@ -32,7 +32,7 @@ mkDerivation {
     test-framework-quickcheck2 text union-find
   ];
   jailbreak = true;
-  homepage = "http://elm-lang.org";
+  homepage = http://elm-lang.org;
   description = "Values to help with elm-package, elm-make, and elm-lang.org.";
   license = stdenv.lib.licenses.bsd3;
   # added manually since tests are not passing

@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "";
-    homepage = "https://launchpad.net/ubuntu/+source/apt";
+    homepage = https://launchpad.net/ubuntu/+source/apt;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

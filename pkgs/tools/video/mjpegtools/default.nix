@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A suite of programs for processing MPEG or MJPEG video";
-    homepage = "http://mjpeg.sourceforge.net/";
+    homepage = http://mjpeg.sourceforge.net/;
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];

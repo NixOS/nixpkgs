@@ -7,13 +7,13 @@
 
 let
   pname = "async-timeout";
-  version = "1.2.1";
+  version = "1.3.0";
 in buildPythonPackage rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "380e9bfd4c009a14931ffe487499b0906b00b3378bb743542cfd9fbb6d8e4657";
+    sha256 = "f4651f122a9877049930ce31a8422bc202a47937627295fe5e411b2c2083481f";
   };
 
   buildInputs = [ pytestrunner ];

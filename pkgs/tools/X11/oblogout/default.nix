@@ -28,7 +28,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = {
     description = "Openbox logout script";
-    homepage = "https://launchpad.net/oblogout";
+    homepage = https://launchpad.net/oblogout;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.romildo ];

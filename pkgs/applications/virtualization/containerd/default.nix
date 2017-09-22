@@ -5,13 +5,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "containerd-${version}";
-  version = "0.2.5";
+  version = "0.2.9";
 
   src = fetchFromGitHub {
-    owner = "docker";
+    owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "16p8kixhzdx8afpciyf3fjx43xa3qrqpx06r5aqxdrqviw851zh8";
+    sha256 = "0rix0mv203fn3rcxmpqdpb54l1a0paqplg2xgldpd943qi1rm552";
   };
 
   buildInputs = [ removeReferencesTo go ];

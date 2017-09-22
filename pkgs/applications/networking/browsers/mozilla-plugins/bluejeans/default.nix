@@ -24,8 +24,6 @@ stdenv.mkDerivation rec {
     sha256 = "1fgjgzss0ghk734xpfidazyknfdn11pmyw77pc3wigl83dvx4nb2";
   };
 
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
-
   unpackPhase = "${dpkg}/bin/dpkg-deb -x $src .";
 
   installPhase =

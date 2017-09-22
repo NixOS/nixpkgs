@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Solver for package problems in CUDF format using ASP";
     homepage = http://potasssco.sourceforge.net/;
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = [ maintainers.hakuch ];
     license = licenses.gpl3Plus;
   };

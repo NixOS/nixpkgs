@@ -1,24 +1,20 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchzip }:
+
 let
   pname = "ttf-envy-code-r";
   version = "PR7";
-in
-stdenv.mkDerivation rec {
+in fetchzip {
   name = "${pname}-0.${version}";
 
-  src = fetchurl {
-    url = "http://download.damieng.com/fonts/original/EnvyCodeR-${version}.zip";
-    sha256 = "9f7e9703aaf21110b4e1a54d954d57d4092727546348598a5a8e8101e4597aff";
-  };
+  url = "http://download.damieng.com/fonts/original/EnvyCodeR-${version}.zip";
 
-  buildInputs = [unzip];
-
-  installPhase = ''
-    for f in *.ttf; do
-        install -Dm 644 "$f" "$out/share/fonts/truetype/$f"
-    done
-    install -Dm 644 Read\ Me.txt "$out/share/doc/${pname}/readme.txt"
+  postFetch = ''
+    mkdir -p $out/share/{doc,fonts}
+    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
+    unzip -j $downloadedFile \*.txt -d "$out/share/doc/${pname}"
   '';
+
+  sha256 = "0x0r07nax68cmz7490x2crzzgdg4j8fg63wppcmjqm0230bggq2z";
 
   meta = with stdenv.lib; {
     homepage = http://damieng.com/blog/tag/envy-code-r;

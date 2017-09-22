@@ -827,7 +827,7 @@ the work to be licensed" under the terms of the LGPL (including for free).
 
 The LGPL licensing for GMP is a problem for the overall licensing of binary
 programs compiled with GHC because most distributions (and builds) of GHC use
-static libraries. (Dynamic libraries are currently distributed only for OS X.)
+static libraries. (Dynamic libraries are currently distributed only for macOS.)
 The LGPL licensing situation may be worse: even though
 [The Glasgow Haskell Compiler License](https://www.haskell.org/ghc/license)
 is essentially a "free software" license (BSD3), according to
@@ -866,6 +866,67 @@ use the following to get the `scientific` package build with `integer-simple`:
 ```shell
 nix-build -A haskell.packages.integer-simple.ghc802.scientific
 ```
+
+### Quality assurance
+
+The `haskell.lib` library includes a number of functions for checking for
+various imperfections in Haskell packages. It's useful to apply these functions
+to your own Haskell packages and integrate that in a Continuous Integration
+server like [hydra](https://nixos.org/hydra/) to assure your packages maintain a
+minimum level of quality. This section discusses some of these functions.
+
+#### failOnAllWarnings
+
+Applying `haskell.lib.failOnAllWarnings` to a Haskell package enables the
+`-Wall` and `-Werror` GHC options to turn all warnings into build failures.
+
+#### buildStrictly
+
+Applying `haskell.lib.buildStrictly` to a Haskell package calls
+`failOnAllWarnings` on the given package to turn all warnings into build
+failures. Additionally the source of your package is gotten from first invoking
+`cabal sdist` to ensure all needed files are listed in the Cabal file.
+
+#### checkUnusedPackages
+
+Applying `haskell.lib.checkUnusedPackages` to a Haskell package invokes
+the [packunused](http://hackage.haskell.org/package/packunused) tool on the
+package. `packunused` complains when it finds packages listed as build-depends
+in the Cabal file which are redundant. For example:
+
+```
+$ nix-build -E 'let pkgs = import <nixpkgs> {}; in pkgs.haskell.lib.checkUnusedPackages {} pkgs.haskellPackages.scientific'
+these derivations will be built:
+  /nix/store/3lc51cxj2j57y3zfpq5i69qbzjpvyci1-scientific-0.3.5.1.drv
+...
+detected package components
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+ - library
+ - testsuite(s): test-scientific
+ - benchmark(s): bench-scientific*
+
+(component names suffixed with '*' are not configured to be built)
+
+library
+~~~~~~~
+
+The following package dependencies seem redundant:
+
+ - ghc-prim-0.5.0.0
+
+testsuite(test-scientific)
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+no redundant packages dependencies found
+
+builder for ‘/nix/store/3lc51cxj2j57y3zfpq5i69qbzjpvyci1-scientific-0.3.5.1.drv’ failed with exit code 1
+error: build of ‘/nix/store/3lc51cxj2j57y3zfpq5i69qbzjpvyci1-scientific-0.3.5.1.drv’ failed
+```
+
+As you can see, `packunused` finds out that although the testsuite component has
+no redundant dependencies the library component of `scientific-0.3.5.1` depends
+on `ghc-prim` which is unused in the library.
 
 ## Other resources
 

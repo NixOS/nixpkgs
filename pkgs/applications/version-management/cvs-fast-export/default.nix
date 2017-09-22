@@ -11,7 +11,7 @@ mkDerivation rec {
     description = "Export an RCS or CVS history as a fast-import stream";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dfoxfranke ];
-    homepage = "http://www.catb.org/esr/cvs-fast-export/";
+    homepage = http://www.catb.org/esr/cvs-fast-export/;
     platforms = platforms.all;
   };
 

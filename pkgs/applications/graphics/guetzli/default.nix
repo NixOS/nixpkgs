@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   meta = {
     description = "Perceptual JPEG encoder";
     longDescription = "Guetzli is a JPEG encoder that aims for excellent compression density at high visual quality.";
-    homepage = "https://github.com/google/guetzli";
+    homepage = https://github.com/google/guetzli;
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.x86_64;
     maintainers = [ stdenv.lib.maintainers.seppeljordan ];

@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Fork of NetHack";
-    homepage = "http://unnethack.wordpress.com/";
+    homepage = http://unnethack.wordpress.com/;
     license = "nethack";
     platforms = platforms.all;
     maintainers = with maintainers; [ abbradar ];

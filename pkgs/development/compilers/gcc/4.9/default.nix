@@ -26,7 +26,7 @@
 , enablePlugin ? true             # whether to support user-supplied plug-ins
 , name ? "gcc"
 , libcCross ? null
-, crossStageStatic ? true
+, crossStageStatic ? false
 , gnat ? null
 , libpthread ? null, libpthreadCross ? null  # required for GNU/Hurd
 , stripped ? true
@@ -72,8 +72,7 @@ let version = "4.9.4";
       # target libraries and tools.
       ++ optional langAda ../gnat-cflags.patch
       ++ optional langFortran ../gfortran-driving.patch
-      # The NXConstStr.patch can be removed at 4.9.4
-      ++ optional hostPlatform.isDarwin ../gfortran-darwin-NXConstStr.patch;
+      ;
 
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
@@ -137,7 +136,6 @@ let version = "4.9.4";
         withFloat = if gccFloat != null then " --with-float=${gccFloat}" else "";
         withMode = if gccMode != null then " --with-mode=${gccMode}" else "";
       in
-        "--target=${targetPlatform.config}" +
         withArch +
         withCpu +
         withAbi +
@@ -282,7 +280,9 @@ stdenv.mkDerivation ({
         ''
     else null;
 
-  inherit noSysDirs staticCompiler langJava crossStageStatic
+  # TODO(@Ericson2314): Make passthru instead. Weird to avoid mass rebuild,
+  crossStageStatic = targetPlatform == hostPlatform || crossStageStatic;
+  inherit noSysDirs staticCompiler langJava
     libcCross crossMingw;
 
   nativeBuildInputs = [ texinfo which gettext ]
@@ -317,6 +317,13 @@ stdenv.mkDerivation ({
   ;
 
   dontDisableStatic = true;
+
+  # TODO(@Ericson2314): Always pass "--target" and always prefix.
+  configurePlatforms =
+    # TODO(@Ericson2314): Figure out what's going wrong with Arm
+    if hostPlatform == targetPlatform && targetPlatform.isArm
+    then []
+    else [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
 
   configureFlags = "
     ${if hostPlatform.isSunOS then
@@ -435,7 +442,6 @@ stdenv.mkDerivation ({
         )
       }
       ${if langAda then " --enable-libada" else ""}
-      --target=${targetPlatform.config}
       ${xwithArch}
       ${xwithCpu}
       ${xwithAbi}
@@ -473,7 +479,7 @@ stdenv.mkDerivation ({
 
     # On GNU/Hurd glibc refers to Mach & Hurd
     # headers.
-    ++ optionals (libcCross != null && libcCross ? "propagatedBuildInputs" )
+    ++ optionals (libcCross != null && libcCross ? propagatedBuildInputs)
                  libcCross.propagatedBuildInputs);
 
   LIBRARY_PATH = makeLibraryPath ([]

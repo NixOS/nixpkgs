@@ -17,9 +17,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = stdenv.lib.optional stdenv.isSunOS "AWK=${gawk}/bin/awk";
 
-  # FIXME needs gcc 4.9 in bootstrap tools
-  hardeningDisable = [ "stackprotector" ];
-
   preInstall = ''
     installFlags="TEXMF=$out/texmf-dist";
     installTargets="install install-tex";
@@ -29,7 +26,7 @@ stdenv.mkDerivation rec {
     && !stdenv.isDarwin && !stdenv.isSunOS/*flaky*/;
 
   meta = with stdenv.lib; {
-    homepage = "http://www.gnu.org/software/texinfo/";
+    homepage = http://www.gnu.org/software/texinfo/;
     description = "The GNU documentation system";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

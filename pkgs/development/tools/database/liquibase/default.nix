@@ -35,6 +35,15 @@ stdenv.mkDerivation rec {
       mkdir -p $out/{bin,lib,sdk}
       mv ./* $out/
 
+      # Clean up documentation.
+      mkdir -p $out/share/doc/${name}
+      mv $out/LICENSE.txt \
+         $out/README.txt \
+         $out/share/doc/${name}
+
+      # Remove silly files.
+      rm $out/liquibase.bat $out/liquibase.spec
+
       # we provide our own script
       rm $out/liquibase
 
@@ -54,7 +63,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Version Control for your database";
-    homepage = "http://www.liquibase.org/";
+    homepage = http://www.liquibase.org/;
     license = licenses.asl20;
     maintainers = with maintainers; [ nequissimus profpatsch ];
     platforms = with platforms; unix;

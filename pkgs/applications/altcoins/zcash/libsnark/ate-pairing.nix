@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Optimal Ate Pairing over Barreto-Naehrig Curves";
-    homepage = "https://github.com/herumi/ate-pairing";
+    homepage = https://github.com/herumi/ate-pairing;
     maintainers = with maintainers; [ rht ];
     license = licenses.bsd3;
     platforms = platforms.unix;

@@ -18,7 +18,7 @@ in
     buildInputs = [ cups ];
 
     meta = with stdenv.lib; {
-      homepage = "http://download.ebz.epson.net/dsc/search/01/search/";
+      homepage = http://download.ebz.epson.net/dsc/search/01/search/;
       description = "ESC/P-R Driver (generic driver)";
       longDescription = ''
         Epson Inkjet Printer Driver (ESC/P-R) for Linux and the

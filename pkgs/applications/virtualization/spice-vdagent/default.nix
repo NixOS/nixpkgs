@@ -1,5 +1,6 @@
 {stdenv, fetchurl, pkgconfig, alsaLib, spice_protocol, glib,
- libpciaccess, libxcb, libXrandr, libXinerama, libXfixes, dbus}:
+ libpciaccess, libxcb, libXrandr, libXinerama, libXfixes, dbus,
+ systemd}:
 stdenv.mkDerivation rec {
   name = "spice-vdagent-0.17.0";
   src = fetchurl {
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
   '';
   buildInputs = [ pkgconfig alsaLib spice_protocol glib
                   libpciaccess libxcb libXrandr libXinerama libXfixes
-                  dbus ] ;
+                  dbus systemd ] ;
   meta = {
     description = "Enhanced SPICE integration for linux QEMU guest";
     longDescription = ''

@@ -14,10 +14,5 @@ import ./generic.nix (args // rec {
       sha256 = "1dr74i79p8r13522w2ppi8gnjd9bhngc9d2hsn91ji6f5a8fbxx9";
     }; in "${upstream}/build/linux";
 
-  features.iwlwifi = true;
-  features.efiBootStub = true;
-  features.needsCifsUtils = true;
-  features.netfilterRPFilter = true;
-
   extraMeta.hydraPlatforms = [];
 } // (args.argsOverride or {}))

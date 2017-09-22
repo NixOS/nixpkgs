@@ -1,6 +1,6 @@
-{ pkgs }:
+{ pkgs, haskellLib }:
 
-with import ./lib.nix { inherit pkgs; };
+with haskellLib;
 
 self: super: {
 
@@ -48,6 +48,9 @@ self: super: {
   terminfo = self.terminfo_0_4_0_2;
   transformers = self.transformers_0_4_3_0;
   xhtml = self.xhtml_3000_2_1;
+
+  # Requires ghc 8.2
+  ghc-proofs = dontDistribute super.ghc-proofs;
 
   # We have no working cabal-install at the moment.
   cabal-install = markBroken super.cabal-install;

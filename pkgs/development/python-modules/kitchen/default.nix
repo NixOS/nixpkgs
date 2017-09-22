@@ -1,12 +1,12 @@
 { stdenv, buildPythonPackage, fetchPypi }:
 buildPythonPackage rec {
   pname = "kitchen";
-  version = "1.2.4";
+  version = "1.2.5";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ggv3p4x8jvmmzhp0xm00h6pvh1g0gmycw71rjwagnrj8n23vxrq";
+    sha256 = "af9fbb60f68cbdb2ead402beb8fa7c7edadbe2aa7b5a70138b7c4b0fa88153fd";
   };
 
   meta = with stdenv.lib; {

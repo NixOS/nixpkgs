@@ -1,10 +1,9 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper
-, curl, netcat, mpv, python, bind, iproute, bc, gitMinimal }:
+, curl, netcat, python, bind, iproute, bc, gitMinimal }:
 let
-  version = "1.12.0";
+  version = "1.17.3";
   deps = lib.makeBinPath [
     curl
-    mpv
     python
     bind.dnsutils
     iproute
@@ -19,7 +18,7 @@ stdenv.mkDerivation {
     owner = "alexanderepstein";
     repo = "Bash-Snippets";
     rev = "v${version}";
-    sha256 = "0kx2a8z3jbmmardw9z8fpghbw5mrbz4knb3wdihq35iarcbrddrg";
+    sha256 = "1xdjk8bjh7l6h7gdqrra1dh4wdq89wmd0jsirsvqa3bmcsb2wz1r";
   };
 
   buildInputs = [ makeWrapper ];
@@ -32,7 +31,7 @@ stdenv.mkDerivation {
   dontBuild = true;
 
   installPhase = ''
-    mkdir -p "$out"/bin "$out"/man/man1
+    mkdir -p "$out"/bin "$out"/share/man/man1
     ./install.sh all
     for file in "$out"/bin/*; do
       wrapProgram "$file" --prefix PATH : "${deps}"

@@ -1,26 +1,32 @@
-{ stdenv, fetchFromGitHub, go, bash, writeText}:
+{ stdenv, fetchFromGitHub, buildGoPackage, bash, writeText}:
 
-stdenv.mkDerivation rec {
+buildGoPackage rec {
   name = "direnv-${version}";
-  version = "2.10.0";
+  version = "2.12.2";
+  goPackagePath = "github.com/direnv/direnv";
 
   src = fetchFromGitHub {
     owner = "direnv";
     repo = "direnv";
     rev = "v${version}";
-    sha256 = "04b098i8dlr6frks67ik0kbc281c6j8lkb6v0y33iwqv45n233q3";
+    sha256 = "0i8fnxhcl1zin714wxk93x8fi36z4fibapfn4jl3qkwbczkj8c8b";
   };
 
-  buildInputs = [ go ];
+  postConfigure = ''
+    cd $NIX_BUILD_TOP/go/src/$goPackagePath
+  '';
 
   buildPhase = ''
     make BASH_PATH=${bash}/bin/bash
   '';
 
   installPhase = ''
-    make install DESTDIR=$out
-    mkdir -p $out/share/fish/vendor_conf.d
-    echo "eval ($out/bin/direnv hook fish)" > $out/share/fish/vendor_conf.d/direnv.fish
+    mkdir -p $out
+    make install DESTDIR=$bin
+    mkdir -p $bin/share/fish/vendor_conf.d
+    echo "eval ($bin/bin/direnv hook fish)" > $bin/share/fish/vendor_conf.d/direnv.fish
+  '' + stdenv.lib.optionalString (stdenv.isDarwin) ''
+    install_name_tool -delete_rpath $out/lib $bin/bin/direnv
   '';
 
   meta = with stdenv.lib; {
@@ -39,6 +45,5 @@ stdenv.mkDerivation rec {
     homepage = http://direnv.net;
     license = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
-    inherit (go.meta) platforms;
   };
 }

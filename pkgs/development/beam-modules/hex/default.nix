@@ -1,10 +1,10 @@
-{stdenv, fetchFromGitHub, writeText, elixir }:
+{ stdenv, fetchFromGitHub, writeText, elixir }:
 
 let
   shell = drv: stdenv.mkDerivation {
-          name = "interactive-shell-${drv.name}";
-          buildInputs = [ drv ];
-    };
+    name = "interactive-shell-${drv.name}";
+    buildInputs = [ drv ];
+  };
 
   pkg = self: stdenv.mkDerivation rec {
     name = "hex";
@@ -46,13 +46,12 @@ let
     meta = {
       description = "Package manager for the Erlang VM https://hex.pm";
       license = stdenv.lib.licenses.mit;
-      homepage = "https://github.com/hexpm/hex";
+      homepage = https://github.com/hexpm/hex;
       maintainers = with stdenv.lib.maintainers; [ ericbmerritt ];
     };
 
     passthru = {
       env = shell self;
     };
-
 };
 in stdenv.lib.fix pkg

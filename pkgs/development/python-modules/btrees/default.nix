@@ -5,7 +5,8 @@ buildPythonPackage rec {
   version = "4.4.1";
   name = "${pname}-${version}";
 
-  propagatedBuildInputs = [ persistent zope_interface transaction ];
+  buildInputs = [ transaction ];
+  propagatedBuildInputs = [ persistent zope_interface ];
 
   src = fetchPypi {
     inherit pname version;
@@ -15,6 +16,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Scalable persistent components";
     homepage = http://packages.python.org/BTrees;
-    license = licenses.zpt21;
+    license = licenses.zpl21;
   };
 }

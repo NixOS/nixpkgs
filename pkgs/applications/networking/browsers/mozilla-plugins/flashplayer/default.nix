@@ -73,25 +73,25 @@ let
 in
 stdenv.mkDerivation rec {
   name = "flashplayer-${version}";
-  version = "26.0.0.137";
+  version = "27.0.0.130";
 
   src = fetchurl {
     url =
       if debug then
-        "https://fpdownload.macromedia.com/pub/flashplayer/updaters/26/flash_player_npapi_linux_debug.${arch}.tar.gz"
+        "https://fpdownload.macromedia.com/pub/flashplayer/updaters/27/flash_player_npapi_linux_debug.${arch}.tar.gz"
       else
         "https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.${arch}.tar.gz";
     sha256 =
       if debug then
         if arch == "x86_64" then
-          "1kdwprrrxbdgll05x148vhg86ph77ygr99ycfblblj8wjkcz9s0z"
+          "1sj06x4kfwxi9cnc8adjkxk6p81acl39l2idnyqb429l2s84d1d9"
         else
-          "1ldv0fca43kdda949095r3gk1bc9p8n94z61qijkmrpv91zv5qvl"
+          "0f9vzdn523m408sw76r32zqf7d86l2mhcfsszbfh2bixg8p2cxzz"
       else
         if arch == "x86_64" then
-          "0db6dcqal7p79q26kglnsbiv3ysx9r3c7rkdiynww18gzr40vwls"
+          "0qkdabcnqfpbfsbs8ssms9xk2pqvps6fbasvcyvhnywclra25ggc"
         else
-          "1fm6p91c63pyr0lra29vcq2dplb2c7a5114nm4r9rrrzjxakqw5w";
+          "0qkwkc6s4ganja4b2jsz4yff0bziirvbzxg0wyf648hqlb3bw5a6";
   };
 
   nativeBuildInputs = [ unzip ];

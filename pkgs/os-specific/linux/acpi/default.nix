@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       the "old" `apm' command on ACPI systems.  It includes
       battery and thermal information.
     '';
-    homepage = http://sourceforge.net/projects/acpiclient/;
+    homepage = https://sourceforge.net/projects/acpiclient/;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.mornfall ];

@@ -4,9 +4,11 @@ stdenv.mkDerivation rec {
   name = "nifskope-1.1.3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/niftools/${name}.tar.bz2";
+    url = "https://github.com/niftools/nifskope/releases/download/${name}/${name}.tar.bz2";
     sha256 = "0fcvrcjyvivww10sjhxamcip797b9ykbf5p3rm2k24xhkwdaqp72";
   };
+
+  patches = [ ./gcc-6.patch ];
 
   buildInputs = [ qt4 ];
 
@@ -46,7 +48,7 @@ stdenv.mkDerivation rec {
     ''; # */
 
   meta = {
-    homepage = http://niftools.sourceforge.net/;
+    homepage = https://github.com/niftools/nifskope/;
     description = "A tool for analyzing and editing NetImmerse/Gamebryo '*.nif' files";
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.linux;

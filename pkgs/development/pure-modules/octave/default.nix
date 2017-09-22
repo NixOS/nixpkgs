@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pure, octave, gcc6 }:
+{ stdenv, fetchurl, pkgconfig, pure, octave }:
 
 stdenv.mkDerivation rec {
   baseName = "octave";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0l1mvmi3rpabzjcrk6p04rdn922mvdm9x67zby3dha5iiccc47q0";
   };
 
-  buildInputs = [ pkgconfig gcc6 ];
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ pure octave ];
   makeFlags = "libdir=$(out)/lib prefix=$(out)/";
   setupHook = ../generic-setup-hook.sh;

@@ -1,17 +1,17 @@
-{ mkDerivation, lib, fetchFromGitHub, qtbase, qtsvg, qtx11extras, muparser, cmake }:
+{ mkDerivation, lib, fetchFromGitHub, makeWrapper, qtbase, qtsvg, qtx11extras, muparser, cmake }:
 
 mkDerivation rec {
   name    = "albert-${version}";
-  version = "0.11.3";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner  = "albertlauncher";
     repo   = "albert";
     rev    = "v${version}";
-    sha256 = "0ddz6h1334b9kqy1lfi7qa21znm3l0b9h0d4s62llxdasv103jh5";
+    sha256 = "120l7hli2l4qj2s126nawc4dsy4qvwvb0svc42hijry4l8imdhkq";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake makeWrapper ];
 
   buildInputs = [ qtbase qtsvg qtx11extras muparser ];
 
@@ -29,6 +29,11 @@ mkDerivation rec {
 
   postBuild = ''
     rm "$out/lib"
+  '';
+
+  postInstall = ''
+    wrapProgram $out/bin/albert \
+      --prefix XDG_DATA_DIRS : $out/share
   '';
 
   meta = with lib; {

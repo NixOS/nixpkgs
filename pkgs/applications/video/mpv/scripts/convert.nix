@@ -29,7 +29,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Convert parts of a video while you are watching it in mpv";
-    homepage = "https://gist.github.com/Zehkul/25ea7ae77b30af959be0";
+    homepage = https://gist.github.com/Zehkul/25ea7ae77b30af959be0;
     maintainers = [ lib.maintainers.profpatsch ];
     longDescription = ''
       When this script is loaded into mpv, you can hit Alt+W to mark the beginning

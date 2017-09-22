@@ -1,4 +1,5 @@
-{ mkDerivation, lib, cmake, xorg, plasma-framework, fetchFromGitHub }:
+{ mkDerivation, lib, cmake, xorg, plasma-framework, fetchFromGitHub
+, extra-cmake-modules, karchive, kwindowsystem, qtx11extras }:
 
 let version = "0.6.0"; in
 
@@ -14,7 +15,8 @@ mkDerivation {
 
   buildInputs = [ plasma-framework xorg.libpthreadstubs xorg.libXdmcp ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ extra-cmake-modules cmake karchive kwindowsystem
+    qtx11extras ];
 
   meta = with lib; {
     description = "Dock-style app launcher based on Plasma frameworks";

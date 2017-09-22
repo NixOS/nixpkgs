@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "QT GUI for Connman with system tray icon";
-    homepage = "https://github.com/andrew-bibb/cmst";
+    homepage = https://github.com/andrew-bibb/cmst;
     maintainers = [ stdenv.lib.maintainers.matejc ];
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.mit;

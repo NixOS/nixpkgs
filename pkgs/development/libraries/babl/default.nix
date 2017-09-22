@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "babl-0.1.24";
+  name = "babl-0.1.28";
 
   src = fetchurl {
     url = "http://ftp.gtk.org/pub/babl/0.1/${name}.tar.bz2";
-    sha256 = "02wxyaa9kjfypmg31avp2dxh16sfx9701ww6dmp0ggz5vnng2as7";
+    sha256 = "00w6xfcv960c98qvxv81gcbj8l1jiab9sggmdl77m19awwiyvwv3";
   };
 
   meta = with stdenv.lib; { 

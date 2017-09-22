@@ -10,10 +10,14 @@ let
     throw "Unsupported architecture";
 
   version = (builtins.parseDrvName edk2.name).version;
+
+  src = edk2.src;
 in
 
 stdenv.mkDerivation (edk2.setup "OvmfPkg/OvmfPkg${targetArch}.dsc" {
   name = "OVMF-${version}";
+
+  inherit src;
 
   outputs = [ "out" "fd" ];
 
@@ -27,22 +31,22 @@ stdenv.mkDerivation (edk2.setup "OvmfPkg/OvmfPkg${targetArch}.dsc" {
     export OUTPUT_FD=$fd
 
     for file in \
-      "${edk2.src}"/{UefiCpuPkg,MdeModulePkg,IntelFrameworkModulePkg,PcAtChipsetPkg,FatBinPkg,EdkShellBinPkg,MdePkg,ShellPkg,OptionRomPkg,IntelFrameworkPkg};
+      "${src}"/{UefiCpuPkg,MdeModulePkg,IntelFrameworkModulePkg,PcAtChipsetPkg,FatBinPkg,EdkShellBinPkg,MdePkg,ShellPkg,OptionRomPkg,IntelFrameworkPkg,FatPkg,CryptoPkg,SourceLevelDebugPkg};
     do
       ln -sv "$file" .
     done
 
     ${if (seabios == false) then ''
-        ln -sv ${edk2.src}/OvmfPkg .
+        ln -sv ${src}/OvmfPkg .
       '' else ''
-        cp -r ${edk2.src}/OvmfPkg .
+        cp -r ${src}/OvmfPkg .
         chmod +w OvmfPkg/Csm/Csm16
         cp ${seabios}/Csm16.bin OvmfPkg/Csm/Csm16/Csm16.bin
       ''}
 
     ${if (secureBoot == true) then ''
-        ln -sv ${edk2.src}/SecurityPkg .
-        ln -sv ${edk2.src}/CryptoPkg .
+        ln -sv ${src}/SecurityPkg .
+        ln -sv ${src}/CryptoPkg .
       '' else ''
       ''}
     '';

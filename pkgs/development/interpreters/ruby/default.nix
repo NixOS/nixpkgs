@@ -83,7 +83,7 @@ let
 
         enableParallelBuilding = true;
 
-        hardeningDisable = lib.optional isRuby20 [ "format" ];
+        hardeningDisable = lib.optional isRuby20 "format";
 
         patches =
           (import ./patchsets.nix {
@@ -151,12 +151,12 @@ let
           sed -i "s|'--with-baseruby=${baseruby}/bin/ruby'||" $rbConfig
         '';
 
-        meta = {
-          license = stdenv.lib.licenses.ruby;
-          homepage = http://www.ruby-lang.org/en/;
+        meta = with stdenv.lib; {
           description = "The Ruby language";
-          maintainers = with stdenv.lib.maintainers; [ vrthra manveru ];
-          platforms = stdenv.lib.platforms.all;
+          homepage    = http://www.ruby-lang.org/en/;
+          license     = licenses.ruby;
+          maintainers = with maintainers; [ vrthra manveru ];
+          platforms   = platforms.all;
         };
 
         passthru = rec {
@@ -212,11 +212,11 @@ in {
     };
   };
 
-  ruby_2_4_1 = generic {
-    version = rubyVersion "2" "4" "1" "";
+  ruby_2_4_2 = generic {
+    version = rubyVersion "2" "4" "2" "";
     sha256 = {
-      src = "0l0201fqwzwygnrgxay469gbb2w865bnqckq00x3prdmbh6y2c53";
-      git = "1gjn31ymypzzcwkrjx62hqw59fywz1x3cyvmi1f2yb9bwb3659ss";
+      src = "174cdiz3am1f76vsnm3iqi9c5vqphypbf9kbxx6vqqmj01gfgfck";
+      git = "1w83kzak3m6vv3k09ynfw9vpgc7vpmij3x3zmgrhwm4ds1sp5irl";
     };
   };
 }

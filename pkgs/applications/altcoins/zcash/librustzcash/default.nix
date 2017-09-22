@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Rust-language assets for Zcash";
-    homepage = "https://github.com/zcash/librustzcash";
+    homepage = https://github.com/zcash/librustzcash;
     maintainers = with maintainers; [ rht ];
     license = with licenses; [ mit asl20 ];
     platforms = platforms.unix;

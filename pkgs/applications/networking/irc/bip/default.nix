@@ -1,45 +1,37 @@
-{ stdenv, fetchurl, bison, flex, autoconf, automake, openssl }:
+{ stdenv, fetchurl, fetchpatch, bison, flex, autoconf, automake, openssl }:
 
-let
-
-  version = "0.8.9";
-  sha256 = "0q942g9lyd8pjvqimv547n6vik5759r9npw3ws3bdj4ixxqhz59w";
-
-  # fetches patches from a gentoo mirror
-  fetchPatch =
-    { file, sha256 }:
-    fetchurl {
-      url = "mirror://gentoo/../gentoo-portage/net-irc/bip/files/${file}";
-      inherit sha256;
-    };
-
-in stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "bip-${version}";
+  version = "0.8.9";
 
   # fetch sources from debian, because the creator's website provides
   # the files only via https but with an untrusted certificate.
   src = fetchurl {
     url = "mirror://debian/pool/main/b/bip/bip_${version}.orig.tar.gz";
-    inherit sha256;
+    sha256 = "0q942g9lyd8pjvqimv547n6vik5759r9npw3ws3bdj4ixxqhz59w";
   };
 
+  buildInputs = [ bison flex autoconf automake openssl ];
+
   # includes an important security patch
-  patches = map fetchPatch [
-    { file = "bip-freenode.patch";
-      sha256 = "a67e582f89cc6a32d5bb48c7e8ceb647b889808c2c8798ae3eb27d88869b892f";
-    }
+  patches = [
+    (fetchpatch {
+      url = "mirror://gentoo/../gentoo-portage/net-irc/bip/files/bip-freenode.patch";
+      sha256 = "05qy7a62p16f5knrsdv2lkhc07al18qq32ciq3k4r0lq1wbahj2y";
+    })
+    (fetchpatch {
+      url = "https://projects.duckcorp.org/projects/bip/repository/revisions/39414f8ff9df63c8bc2e4eee34f09f829a5bf8f5/diff/src/connection.c?format=diff";
+      sha256 = "1hvg58vci6invh0z19wf04jjvnm8w6f6v4c4nk1j5hc3ymxdp1rb";
+    })
   ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
-
-  buildInputs = [ bison flex autoconf automake openssl ];
 
   meta = {
     description = "An IRC proxy (bouncer)";
     homepage = http://bip.milkypond.org/;
     license = stdenv.lib.licenses.gpl2;
-    downloadPage= "https://projects.duckcorp.org/projects/bip/files";
-    inherit version;
+    downloadPage = "https://projects.duckcorp.org/projects/bip/files";
     platforms = stdenv.lib.platforms.linux;
   };
 }

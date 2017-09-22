@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "prefix=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = http://poppler.freedesktop.org/;
+    homepage = https://poppler.freedesktop.org/;
     description = "Encoding files for Poppler, a PDF rendering library";
     platforms = platforms.all;
     license = licenses.free; # more free licenses combined

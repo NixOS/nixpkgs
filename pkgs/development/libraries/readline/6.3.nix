@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0hzxr9jxqqx5sxsv9vmlxdnvlr9vi4ih1avjb869hbs6p5qn1fjn";
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [ "out" "dev" "man" "doc" "info" ];
 
   propagatedBuildInputs = [ncurses];
 

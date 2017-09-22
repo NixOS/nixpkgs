@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A compiled language with Ruby like syntax and type inference";
-    homepage = "https://crystal-lang.org/";
+    homepage = https://crystal-lang.org/;
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [ mingchuan ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];

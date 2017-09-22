@@ -1,5 +1,6 @@
 { stdenv, ocaml, findlib, jbuilder, git-http
-, ocaml_lwt, tls, conduit, magic-mime, cmdliner, mtime
+, cohttp-lwt-unix
+, tls, magic-mime, cmdliner, mtime
 }:
 
 stdenv.mkDerivation rec {
@@ -8,7 +9,7 @@ stdenv.mkDerivation rec {
 
 	buildInputs = [ ocaml findlib jbuilder cmdliner mtime ];
 
-	propagatedBuildInputs = [ conduit git-http magic-mime ocaml_lwt tls ];
+	propagatedBuildInputs = [ cohttp-lwt-unix git-http tls ];
 
 	buildPhase = "jbuilder build -p git-unix";
 

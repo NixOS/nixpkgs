@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://wiki.gnome.org/Apps/Tomboy";
+    homepage = https://wiki.gnome.org/Apps/Tomboy;
     description = "A simple note-taking application with synchronization";
     platforms = platforms.linux;
     license = stdenv.lib.licenses.lgpl2;

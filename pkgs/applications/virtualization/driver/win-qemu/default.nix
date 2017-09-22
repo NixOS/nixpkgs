@@ -30,7 +30,7 @@ stdenv.mkDerivation  {
 
   meta = with stdenv.lib; {
     description = "Windows QEMU Drivers";
-    homepage = "https://fedoraproject.org/wiki/Windows_Virtio_Drivers";
+    homepage = https://fedoraproject.org/wiki/Windows_Virtio_Drivers;
     maintainers = [ maintainers.tstrobel ];
     platforms = platforms.linux;
     license = licenses.gpl2;

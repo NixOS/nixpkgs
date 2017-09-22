@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Ed25519 public-key signatures";
-    homepage = "https://github.com/warner/python-ed25519";
+    homepage = https://github.com/warner/python-ed25519;
     license = licenses.mit;
     maintainers = with maintainers; [ np ];
   };

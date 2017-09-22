@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "raspberrypi-firmware-${version}";
-  version = "1.20170427";
+  version = "1.20170811";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "firmware";
     rev = version;
-    sha256 = "0n79nij0rlwjx3zqs4p3wcyrgrgg9gmsf1a526r91c689r5lpwvl";
+    sha256 = "1lrbbslpwjgvrn7hk3l104gkl07qxh7qd4cdyqccqhqzip9wqhkn";
   };
 
   dontStrip = true;    # Stripping breaks some of the binaries

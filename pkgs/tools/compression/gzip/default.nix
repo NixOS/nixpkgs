@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xz }:
+{ stdenv, hostPlatform, fetchurl, xz }:
 
 stdenv.mkDerivation rec {
   name = "gzip-${version}";
@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     url = "mirror://gnu/gzip/${name}.tar.xz";
     sha256 = "1lxv3p4iyx7833mlihkn5wfwmz4cys5nybwpz3dfawag8kn6f5zz";
   };
+
+  patches = stdenv.lib.optional hostPlatform.isDarwin stdenv.secure-format-patch;
 
   outputs = [ "out" "man" "info" ];
 

@@ -13,6 +13,10 @@ runCommand "signwriting-1.1.4" {
     sha256 = "0am5wbf7jdy9szxkbsc5f3959cxvbj7mr0hy1ziqmkz02c6xjw2m";
   };
 
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "0cn37s3lc7gbr8036l7ia2869qmxglkmgllh3r9q5j54g3sfjc7q";
+
   meta = with lib; {
     homepage = https://github.com/Slevinski/signwriting_2010_fonts;
     description = "Typeface for written sign languages";

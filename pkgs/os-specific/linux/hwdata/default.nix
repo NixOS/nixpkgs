@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   configureFlags = "--datadir=$(prefix)/data";
 
   meta = {
-    homepage = "https://github.com/vcrhonek/hwdata";
+    homepage = https://github.com/vcrhonek/hwdata;
     description = "Hardware Database, including Monitors, pci.ids, usb.ids, and video cards";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

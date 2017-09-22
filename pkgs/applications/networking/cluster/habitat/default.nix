@@ -5,22 +5,29 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "habitat-${version}";
-  version = "0.8.0";
+  version = "0.30.2";
 
   src = fetchFromGitHub {
     owner = "habitat-sh";
     repo = "habitat";
     rev = version;
-    sha256 = "1h9wv2v4hcv79jkkjf8j96lzxni9d51755zfflfr5s3ayaip7rzj";
+    sha256 = "0pqrm85pd9hqn5fwqjbyyrrfh4k7q9mi9qy9hm8yigk5l8mw44y1";
   };
 
-  sourceRoot = "habitat-${version}-src/components/hab";
-
-  depsSha256 = "1612jaw3zdrgrb56r755bb18l8szdmf1wi7p9lpv3d2gklqcb7l1";
+  depsSha256 = "1ahfm5agvabqqqgjsyjb95xxbc7mng1mdyclcakwp1m1qdkxx9py";
 
   buildInputs = [ libsodium libarchive openssl ];
 
   nativeBuildInputs = [ pkgconfig ];
+
+  cargoBuildFlags = ["--package hab"];
+
+  checkPhase = ''
+    runHook preCheck
+    echo "Running cargo test"
+    cargo test --package hab
+    runHook postCheck
+  '';
 
   meta = with lib; {
     description = "An application automation framework";

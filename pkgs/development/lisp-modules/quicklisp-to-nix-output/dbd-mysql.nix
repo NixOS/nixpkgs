@@ -1,36 +1,39 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''dbd-mysql'';
-  version = ''cl-dbi-20170124-git'';
+  version = ''cl-dbi-20170725-git'';
 
   description = ''Database driver for MySQL.'';
 
-  deps = [ args."cl-syntax-annot" args."cl-syntax" args."cl-mysql" ];
+  deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cl-annot" args."cl-mysql" args."cl-syntax" args."cl-syntax-annot" args."closer-mop" args."dbi" args."named-readtables" args."split-sequence" args."trivial-features" args."trivial-types" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-dbi/2017-01-24/cl-dbi-20170124-git.tgz'';
-    sha256 = ''0aqfcxbxmc9q3lagaarx0bqncbwjjv0wrskm6lkzy1fp94sik0qj'';
+    url = ''http://beta.quicklisp.org/archive/cl-dbi/2017-07-25/cl-dbi-20170725-git.tgz'';
+    sha256 = ''1gmd5y44nidqmxw7zk0mxl4mgl3mcjf1v05gjdslp3ginzznrqzl'';
   };
-    
+
   packageName = "dbd-mysql";
 
-  overrides = x: {
-    postInstall = ''
-      find "$out/lib/common-lisp/" -name '*.asd' | grep -iv '/dbd-mysql[.]asd${"$"}' |
-        while read f; do
-          env -i \
-          NIX_LISP="$NIX_LISP" \
-          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(progn
-            (asdf:load-system :$(basename "$f" .asd))
-            (asdf:perform (quote asdf:compile-bundle-op) :$(basename "$f" .asd))
-            (ignore-errors (asdf:perform (quote asdf:deliver-asd-op) :$(basename "$f" .asd)))
-            )'" \
-            "$out"/bin/*-lisp-launcher.sh ||
-          mv "$f"{,.sibling}; done || true
-    '';
-  };
+  asdFilesToKeep = ["dbd-mysql.asd"];
+  overrides = x: x;
 }
-/* (SYSTEM dbd-mysql DESCRIPTION Database driver for MySQL. SHA256 0aqfcxbxmc9q3lagaarx0bqncbwjjv0wrskm6lkzy1fp94sik0qj URL
-    http://beta.quicklisp.org/archive/cl-dbi/2017-01-24/cl-dbi-20170124-git.tgz MD5 c48d284eda4aac1ff9a10891884f52e5 NAME dbd-mysql TESTNAME NIL FILENAME
-    dbd-mysql DEPS ((NAME cl-syntax-annot FILENAME cl-syntax-annot) (NAME cl-syntax FILENAME cl-syntax) (NAME cl-mysql FILENAME cl-mysql)) DEPENDENCIES
-    (cl-syntax-annot cl-syntax cl-mysql) VERSION cl-dbi-20170124-git SIBLINGS (cl-dbi dbd-postgres dbd-sqlite3 dbi-test dbi)) */
+/* (SYSTEM dbd-mysql DESCRIPTION Database driver for MySQL. SHA256
+    1gmd5y44nidqmxw7zk0mxl4mgl3mcjf1v05gjdslp3ginzznrqzl URL
+    http://beta.quicklisp.org/archive/cl-dbi/2017-07-25/cl-dbi-20170725-git.tgz
+    MD5 a9fe67b7fea2640cea9708342a1347bd NAME dbd-mysql FILENAME dbd-mysql DEPS
+    ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
+     (NAME bordeaux-threads FILENAME bordeaux-threads)
+     (NAME cffi FILENAME cffi) (NAME cl-annot FILENAME cl-annot)
+     (NAME cl-mysql FILENAME cl-mysql) (NAME cl-syntax FILENAME cl-syntax)
+     (NAME cl-syntax-annot FILENAME cl-syntax-annot)
+     (NAME closer-mop FILENAME closer-mop) (NAME dbi FILENAME dbi)
+     (NAME named-readtables FILENAME named-readtables)
+     (NAME split-sequence FILENAME split-sequence)
+     (NAME trivial-features FILENAME trivial-features)
+     (NAME trivial-types FILENAME trivial-types))
+    DEPENDENCIES
+    (alexandria babel bordeaux-threads cffi cl-annot cl-mysql cl-syntax
+     cl-syntax-annot closer-mop dbi named-readtables split-sequence
+     trivial-features trivial-types)
+    VERSION cl-dbi-20170725-git SIBLINGS
+    (cl-dbi dbd-postgres dbd-sqlite3 dbi-test dbi) PARASITES NIL) */

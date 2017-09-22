@@ -2,25 +2,27 @@
 # - The csdp program used for the Micromega tactic is statically referenced.
 #   However, coq can build without csdp by setting it to null.
 #   In this case some Micromega tactics will search the user's path for the csdp program and will fail if it is not found.
-# - The patch-level version can be specified through the `version` argument to
-#   the derivation; it defaults to the greatest.
+# - The exact version can be specified through the `version` argument to
+#   the derivation; it defaults to the latest stable version.
 
-{ stdenv, fetchurl, writeText, pkgconfig
+{ stdenv, fetchFromGitHub, writeText, pkgconfig
 , ocamlPackages, ncurses
 , buildIde ? true
 , csdp ? null
-, version ? "8.6"
+, version ? "8.6.1"
 }:
 
 let
   sha256 = {
-   "8.5pl1"	= "1w2xvm6w16khfn63bp95s25hnkn2ny3w0yqg3lq63gp11aqpbyjb";
-   "8.5pl2"	= "0wyywia0darak2zmc5v0ra9rn0b9whwdfiahralm8v5za499s8w3";
-   "8.5pl3"	= "0fyk2a4fpifibq8y8jhx1891k55qnsnlygglch64sva0bph94nrh";
-   "8.6"	= "1pw1xvy1657l1k69wrb911iqqflzhhp8wwsjvihbgc72r3skqg3f";
+   "8.5pl1"    = "1976ki5xjg2r907xj9p7gs0kpdinywbwcqlgxqw75dgp0hkgi00n";
+   "8.5pl2"    = "109rrcrx7mz0fj7725kjjghfg5ydwb24hjsa5hspa27b4caah7rh";
+   "8.5pl3"    = "15c3rdk59nifzihsp97z4vjxis5xmsnrvpb86qiazj143z2fmdgw";
+   "8.6"       = "148mb48zpdax56c0blfi7v67lx014lnmrvxxasi28hsibyz2lvg4";
+   "8.6.1"     = "0llrxcxwy5j87vbbjnisw42rfw1n1pm5602ssx64xaxx3k176g6l";
+   "8.7+beta1" = "006rn5896pf39p4z9c6d4xj4zm80j4b67v5gwcixd63msrjqkmxp";
   }."${version}";
   coq-version = builtins.substring 0 3 version;
-  camlp5 = ocamlPackages.camlp5_transitional;
+  camlp5 = ocamlPackages.camlp5_strict;
   ideFlags = if buildIde then "-lablgtkdir ${ocamlPackages.lablgtk}/lib/ocaml/*/site-lib/lablgtk2 -coqide opt" else "";
   csdpPatch = if csdp != null then ''
     substituteInPlace plugins/micromega/sos.ml --replace "; csdp" "; ${csdp}/bin/csdp"
@@ -80,8 +82,10 @@ self = stdenv.mkDerivation {
     '';
   };
 
-  src = fetchurl {
-    url = "http://coq.inria.fr/distrib/V${version}/files/coq-${version}.tar.gz";
+  src = fetchFromGitHub {
+    owner = "coq";
+    repo = "coq";
+    rev = "V${version}";
     inherit sha256;
   };
 
@@ -129,10 +133,10 @@ self = stdenv.mkDerivation {
       together with an environment for semi-interactive development of
       machine-checked proofs.
     '';
-    homepage = "http://coq.inria.fr";
+    homepage = http://coq.inria.fr;
     license = licenses.lgpl21;
     branch = coq-version;
-    maintainers = with maintainers; [ roconnor thoughtpolice vbgl ];
+    maintainers = with maintainers; [ roconnor thoughtpolice vbgl Zimmi48 ];
     platforms = platforms.unix;
   };
 }; in self

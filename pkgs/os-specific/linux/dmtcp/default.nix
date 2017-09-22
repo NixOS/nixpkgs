@@ -1,39 +1,37 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, bash, perl, python }:
 
 stdenv.mkDerivation rec {
   name = "dmtcp-${version}";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "dmtcp";
     repo = "dmtcp";
     rev = version;
-    sha256 = "08l774i8yp41j6kmzhj7x13475m5kdfhn678ydpm5cbg4l3dda3c";
+    sha256 = "1z6cc7avs2sj8csf7rapf7nbw0giva6xpj0cshv7p9s643y8yxmi";
   };
 
   dontDisableStatic = true;
 
+  patches = [ ./ld-linux-so-buffer-size.patch ];
+
   postPatch = ''
+    patchShebangs .
+
     substituteInPlace configure \
       --replace '#define ELF_INTERPRETER "$interp"' \
                 "#define ELF_INTERPRETER \"$(cat $NIX_CC/nix-support/dynamic-linker)\""
-  '';
-
-  preConfigure = ''
     substituteInPlace src/dmtcp_coordinator.cpp \
       --replace /bin/bash ${stdenv.shell}
     substituteInPlace util/gdb-add-symbol-file \
       --replace /bin/bash ${stdenv.shell}
     substituteInPlace test/autotest.py \
-      --replace /usr/bin/env $(type -p env) \
-      --replace /bin/bash $(type -p bash) \
-      --replace /usr/bin/perl $(type -p perl) \
-      --replace /usr/bin/python $(type -p python) \
+      --replace /bin/bash ${bash}/bin/bash \
+      --replace /usr/bin/perl ${perl}/bin/perl \
+      --replace /usr/bin/python ${python}/bin/python \
       --replace "os.environ['USER']" "\"nixbld1\"" \
       --replace "os.getenv('USER')" "\"nixbld1\""
   '';
-
-  doCheck = false;
 
   meta = {
     description = "Distributed MultiThreaded Checkpointing";

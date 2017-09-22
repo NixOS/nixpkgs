@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Provides a Virtual (SCSI) HBA";
-    homepage = "http://cdemu.sourceforge.net/about/vhba/";
+    homepage = http://cdemu.sourceforge.net/about/vhba/;
     platforms = platforms.linux;
     licenses = licenses.gpl2Plus;
   };

@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Browser based viewer for profiling data";
-    homepage = "https://jiffyclub.github.io/snakeviz";
+    homepage = https://jiffyclub.github.io/snakeviz;
     license = licenses.bsd3;
     maintainers = with maintainers; [ nixy ];
   };

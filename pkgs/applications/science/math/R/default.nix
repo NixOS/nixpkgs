@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = with stdenv.lib; {
-    homepage = "http://www.r-project.org/";
+    homepage = http://www.r-project.org/;
     description = "Free software environment for statistical computing and graphics";
     license = licenses.gpl2Plus;
 

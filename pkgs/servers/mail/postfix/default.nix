@@ -87,7 +87,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://www.postfix.org/";
+    homepage = http://www.postfix.org/;
     description = "A fast, easy to administer, and secure mail server";
     license = lib.licenses.bsdOriginal;
     platforms = lib.platforms.linux;

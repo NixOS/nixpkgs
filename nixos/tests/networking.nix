@@ -105,7 +105,7 @@ let
           startAll;
 
           $client->waitForUnit("network.target");
-          $router->waitForUnit("network.target");
+          $router->waitForUnit("network-online.target");
 
           # Make sure dhcpcd is not started
           $client->fail("systemctl status dhcpcd.service");
@@ -157,7 +157,7 @@ let
           startAll;
 
           $client->waitForUnit("network.target");
-          $router->waitForUnit("network.target");
+          $router->waitForUnit("network-online.target");
 
           # Wait until we have an ip address on each interface
           $client->waitUntilSucceeds("ip addr show dev eth1 | grep -q '192.168.1'");

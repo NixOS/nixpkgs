@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "kgraphviewer-${version}";
-  version = "2.1.90";
+  version = "2.2.0";
 
   src = fetchurl {
-    url = "mirror://kde/unstable/kgraphviewer/${version}/src/${name}.tar.xz";
-    sha256 = "13zhjs57xavzrj4nrlqs35n35ihvzij7hgbszf5fhlp2a4d4rrqs";
+    url = "mirror://kde/stable/kgraphviewer/${version}/src/${name}.tar.xz";
+    sha256 = "1vs5x539mx26xqdljwzkh2bj7s3ydw4cb1wm9nlhgs18siw4gjl5";
   };
 
   buildInputs = [ kdelibs4 boost graphviz ];

@@ -31,18 +31,21 @@ EVAL_FILE = {
 
 
 def get_maintainers(attr_name):
-    nixname = attr_name.split('.')
-    meta_json = subprocess.check_output([
-        'nix-instantiate',
-        '--eval',
-        '--strict',
-        '-A',
-        '.'.join(nixname[1:]) + '.meta',
-        EVAL_FILE[nixname[0]],
-        '--json'])
-    meta = json.loads(meta_json)
-    if meta.get('maintainers'):
-        return [MAINTAINERS[name] for name in meta['maintainers'] if MAINTAINERS.get(name)]
+    try:
+        nixname = attr_name.split('.')
+        meta_json = subprocess.check_output([
+            'nix-instantiate',
+            '--eval',
+            '--strict',
+            '-A',
+            '.'.join(nixname[1:]) + '.meta',
+            EVAL_FILE[nixname[0]],
+            '--json'])
+        meta = json.loads(meta_json)
+        if meta.get('maintainers'):
+            return [MAINTAINERS[name] for name in meta['maintainers'] if MAINTAINERS.get(name)]
+    except:
+       return []
 
 
 @click.command()

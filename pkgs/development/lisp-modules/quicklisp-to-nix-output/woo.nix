@@ -1,35 +1,45 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''woo'';
-  version = ''20170227-git'';
+  version = ''20170725-git'';
 
   description = ''An asynchronous HTTP server written in Common Lisp'';
 
-  deps = [ ];
+  deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cl-utilities" args."clack-socket" args."fast-http" args."fast-io" args."flexi-streams" args."lev" args."proc-parse" args."quri" args."smart-buffer" args."split-sequence" args."static-vectors" args."swap-bytes" args."trivial-features" args."trivial-gray-streams" args."trivial-utf-8" args."uiop" args."vom" args."xsubseq" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/woo/2017-02-27/woo-20170227-git.tgz'';
-    sha256 = ''0myydz817mpkgs97p9y9n4z0kq00xxr2b65klsdkxasvvfyjw0d1'';
+    url = ''http://beta.quicklisp.org/archive/woo/2017-07-25/woo-20170725-git.tgz'';
+    sha256 = ''11cnqd058mjhkgxppsivbmd687429r4b62v7z5iav0wpha78qfgg'';
   };
-    
+
   packageName = "woo";
 
-  overrides = x: {
-    postInstall = ''
-      find "$out/lib/common-lisp/" -name '*.asd' | grep -iv '/woo[.]asd${"$"}' |
-        while read f; do
-          env -i \
-          NIX_LISP="$NIX_LISP" \
-          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(progn
-            (asdf:load-system :$(basename "$f" .asd))
-            (asdf:perform (quote asdf:compile-bundle-op) :$(basename "$f" .asd))
-            (ignore-errors (asdf:perform (quote asdf:deliver-asd-op) :$(basename "$f" .asd)))
-            )'" \
-            "$out"/bin/*-lisp-launcher.sh ||
-          mv "$f"{,.sibling}; done || true
-    '';
-  };
+  asdFilesToKeep = ["woo.asd"];
+  overrides = x: x;
 }
-/* (SYSTEM woo DESCRIPTION An asynchronous HTTP server written in Common Lisp SHA256 0myydz817mpkgs97p9y9n4z0kq00xxr2b65klsdkxasvvfyjw0d1 URL
-    http://beta.quicklisp.org/archive/woo/2017-02-27/woo-20170227-git.tgz MD5 cc37270ad408e093bd28c025466d8f64 NAME woo TESTNAME NIL FILENAME woo DEPS NIL
-    DEPENDENCIES NIL VERSION 20170227-git SIBLINGS (clack-handler-woo woo-test)) */
+/* (SYSTEM woo DESCRIPTION An asynchronous HTTP server written in Common Lisp
+    SHA256 11cnqd058mjhkgxppsivbmd687429r4b62v7z5iav0wpha78qfgg URL
+    http://beta.quicklisp.org/archive/woo/2017-07-25/woo-20170725-git.tgz MD5
+    bd901d8dfa7df3d19c6da73ea101f65b NAME woo FILENAME woo DEPS
+    ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
+     (NAME bordeaux-threads FILENAME bordeaux-threads)
+     (NAME cffi FILENAME cffi) (NAME cffi-grovel FILENAME cffi-grovel)
+     (NAME cl-utilities FILENAME cl-utilities)
+     (NAME clack-socket FILENAME clack-socket)
+     (NAME fast-http FILENAME fast-http) (NAME fast-io FILENAME fast-io)
+     (NAME flexi-streams FILENAME flexi-streams) (NAME lev FILENAME lev)
+     (NAME proc-parse FILENAME proc-parse) (NAME quri FILENAME quri)
+     (NAME smart-buffer FILENAME smart-buffer)
+     (NAME split-sequence FILENAME split-sequence)
+     (NAME static-vectors FILENAME static-vectors)
+     (NAME swap-bytes FILENAME swap-bytes)
+     (NAME trivial-features FILENAME trivial-features)
+     (NAME trivial-gray-streams FILENAME trivial-gray-streams)
+     (NAME trivial-utf-8 FILENAME trivial-utf-8) (NAME uiop FILENAME uiop)
+     (NAME vom FILENAME vom) (NAME xsubseq FILENAME xsubseq))
+    DEPENDENCIES
+    (alexandria babel bordeaux-threads cffi cffi-grovel cl-utilities
+     clack-socket fast-http fast-io flexi-streams lev proc-parse quri
+     smart-buffer split-sequence static-vectors swap-bytes trivial-features
+     trivial-gray-streams trivial-utf-8 uiop vom xsubseq)
+    VERSION 20170725-git SIBLINGS (clack-handler-woo woo-test) PARASITES NIL) */

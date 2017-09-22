@@ -176,7 +176,7 @@ in {
 
     services.xserver.updateDbusEnvironment = true;
 
-    environment.variables.GIO_EXTRA_MODULES = [ "${gnome3.dconf}/lib/gio/modules"
+    environment.variables.GIO_EXTRA_MODULES = [ "${lib.getLib gnome3.dconf}/lib/gio/modules"
                                                 "${gnome3.glib_networking.out}/lib/gio/modules"
                                                 "${gnome3.gvfs}/lib/gio/modules" ];
     environment.systemPackages = gnome3.corePackages ++ cfg.sessionPath
@@ -186,7 +186,8 @@ in {
     networking.networkmanager.basePackages =
       { inherit (pkgs) networkmanager modemmanager wpa_supplicant;
         inherit (gnome3) networkmanager_openvpn networkmanager_vpnc
-                         networkmanager_openconnect networkmanager_fortisslvpn networkmanager_pptp
+                         networkmanager_openconnect networkmanager_fortisslvpn
+                         networkmanager_pptp networkmanager_iodine
                          networkmanager_l2tp; };
 
     # Needed for themes and backgrounds

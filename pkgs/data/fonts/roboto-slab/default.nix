@@ -39,6 +39,10 @@ stdenv.mkDerivation rec {
     cp -a *.ttf $out/share/fonts/truetype/
   '';
 
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "0imhvisjzi0rvn32hn04kngca4szx0j39h4c4zs7ryb4wdca76q9";
+
   meta = {
     homepage = https://www.google.com/fonts/specimen/Roboto+Slab;
     description = "Google Roboto Slab fonts";

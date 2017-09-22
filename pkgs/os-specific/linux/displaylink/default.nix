@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchurl, unzip, utillinux, libusb1, evdi, systemd, makeWrapper }:
+{ stdenv, lib, fetchurl, unzip, utillinux,
+  libusb1, evdi, systemd, makeWrapper, requireFile }:
 
 let
   arch =
@@ -12,10 +13,22 @@ in stdenv.mkDerivation rec {
   name = "displaylink-${version}";
   version = "1.3.52";
 
-  src = fetchurl {
+  src = requireFile rec {
     name = "displaylink.zip";
-    url = "http://www.displaylink.com/downloads/file?id=744";
     sha256 = "0ridpsxcf761vym0nlpq702qa46ynddzci17bjmyax2pph7khr0k";
+    message = ''
+      In order to install the DisplayLink drivers, you must first
+      comply with DisplayLink's EULA and download the binaries and
+      sources from here:
+
+      http://www.displaylink.com/downloads/file?id=744
+
+      Once you have downloaded the file, please use the following
+      commands and re-run the installation:
+
+      mv \$PWD/"DisplayLink USB Graphics Software for Ubuntu ${version}.zip" \$PWD/${name}
+      nix-prefetch-url file://\$PWD/${name}
+    '';
   };
 
   nativeBuildInputs = [ unzip makeWrapper ];
@@ -48,6 +61,6 @@ in stdenv.mkDerivation rec {
     description = "DisplayLink DL-5xxx, DL-41xx and DL-3x00 Driver for Linux";
     platforms = [ "x86_64-linux" "i686-linux" ];
     license = licenses.unfree;
-    homepage = "http://www.displaylink.com/";
+    homepage = http://www.displaylink.com/;
   };
 }

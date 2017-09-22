@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = {
-    homepage = "http://ledger-cli.org/";
+    homepage = http://ledger-cli.org/;
     description = "A double-entry accounting system with a command-line reporting interface";
     license = "BSD";
 
@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     '';
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.peti ];
+    broken = true; # https://hydra.nixos.org/build/59124559/nixlog/1
   };
 }

@@ -17,6 +17,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ wld wayland xwayland fontconfig pixman libdrm libinput libevdev libxkbcommon libxcb xcbutilwm ];
 
+  prePatch = ''
+    substituteInPlace launch/local.mk --replace 4755 755
+  '';
+
   makeFlags = "PREFIX=$(out)";
   installPhase = "PREFIX=$out make install";
 

@@ -3,12 +3,9 @@
 
 ###### Things done
 
-Please check what applies. Note that these are not hard requirements but mereley serve as information for reviewers.
+<!-- Please check what applies. Note that these are not hard requirements but merely serve as information for reviewers. -->
 
-- [ ] Tested using sandboxing
-  ([nix.useSandbox](http://nixos.org/nixos/manual/options.html#opt-nix.useSandbox) on NixOS,
-    or option `build-use-sandbox` in [`nix.conf`](http://nixos.org/nix/manual/#sec-conf-file)
-    on non-NixOS)
+- [ ] Tested using sandboxing ([nix.useSandbox](http://nixos.org/nixos/manual/options.html#opt-nix.useSandbox) on NixOS, or option `build-use-sandbox` in [`nix.conf`](http://nixos.org/nix/manual/#sec-conf-file) on non-NixOS)
 - Built on platform(s)
    - [ ] NixOS
    - [ ] macOS

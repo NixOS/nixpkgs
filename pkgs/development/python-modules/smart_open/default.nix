@@ -23,6 +23,6 @@ buildPythonPackage rec {
   meta = {
     license = lib.licenses.mit;
     description = "smart_open is a Python 2 & Python 3 library for efficient streaming of very large file";
-    maintainers = with lib.maintainers; [ jpbernardy ];
+    maintainers = with lib.maintainers; [ jyp ];
   };
 }

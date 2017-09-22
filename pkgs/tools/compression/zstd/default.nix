@@ -12,10 +12,6 @@ stdenv.mkDerivation rec {
     owner = "facebook";
   };
 
-  # The Makefiles don't properly use file targets, but blindly rebuild
-  # all dependencies on every make invocation. So no nice phases. :-(
-  phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
-
   makeFlags = [
     "ZSTD_LEGACY_SUPPORT=${if legacySupport then "1" else "0"}"
   ];

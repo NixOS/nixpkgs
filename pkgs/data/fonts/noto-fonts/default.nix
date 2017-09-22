@@ -1,30 +1,23 @@
-{ stdenv, fetchurl, fetchFromGitHub, optipng, cairo, unzip, pythonPackages, pkgconfig, pngquant, which, imagemagick }:
+{ stdenv, fetchzip, fetchFromGitHub, optipng, cairo, unzip, pythonPackages, pkgconfig, pngquant, which, imagemagick }:
 
 rec {
   # 18MB
-  noto-fonts = let version = "git-2016-03-29"; in stdenv.mkDerivation {
+  noto-fonts = let version = "git-2016-03-29"; in fetchzip {
     name = "noto-fonts-${version}";
 
-    src = fetchFromGitHub {
-      owner = "googlei18n";
-      repo = "noto-fonts";
-      rev = "e8b0af48b15d64bd490edab4418b5e396cf29644";
-      sha256 = "02yv12fbb4n1gp9g9m0qxnj6adpg9hfsr9377h2d4xsf6sxcgy6f";
-    };
+    url = https://github.com/googlei18n/noto-fonts/archive/e8b0af48b15d64bd490edab4418b5e396cf29644.zip;
+    postFetch = ''
+      unzip $downloadedFile
 
-    phases = [ "unpackPhase" "installPhase" ];
-
-    installPhase = ''
       mkdir -p $out/share/fonts/noto
-      cp hinted/*.ttf $out/share/fonts/noto
+      cp noto-fonts-*/hinted/*.ttf $out/share/fonts/noto
       # Also copy unhinted & alpha fonts for better glyph coverage,
       # if they don't have a hinted version
       # (see https://groups.google.com/d/msg/noto-font/ZJSkZta4n5Y/tZBnLcPdbS0J)
-      cp -n unhinted/*.ttf $out/share/fonts/noto
-      cp -n alpha/*.ttf $out/share/fonts/noto
+      cp -n noto-fonts-*/unhinted/*.ttf $out/share/fonts/noto
+      cp -n noto-fonts-*/alpha/*.ttf $out/share/fonts/noto
     '';
-
-    preferLocalBuild = true;
+    sha256 = "0wphc8671dpbx3rxzmjisnjipg2c2vkhw2i6mmyamd6vvcwajd64";
 
     meta = with stdenv.lib; {
       inherit version;
@@ -49,27 +42,16 @@ rec {
     };
   };
   # 89MB
-  noto-fonts-cjk = let version = "1.004"; in stdenv.mkDerivation {
+  noto-fonts-cjk = let version = "1.004"; in fetchzip {
     name = "noto-fonts-cjk-${version}";
 
-    src = fetchurl {
-      # Same as https://noto-website.storage.googleapis.com/pkgs/NotoSansCJK.ttc.zip but versioned & with no extra SIL license file
-      url = "https://raw.githubusercontent.com/googlei18n/noto-cjk/40d9f5b179a59a06b98373c76bdc3e2119e4e6b2/NotoSansCJK.ttc.zip";
-      sha256 = "1vg3si6slvk8cklq6s5c76s84kqjc4wvwzr4ysljzjpgzra2rfn6";
-    };
-
-    nativeBuildInputs = [ unzip ];
-
-    phases = [ "unpackPhase" "installPhase" ];
-
-    sourceRoot = ".";
-
-    installPhase = ''
-      mkdir -p $out/share/fonts/noto
-      cp *.ttc $out/share/fonts/noto
+    # Same as https://noto-website.storage.googleapis.com/pkgs/NotoSansCJK.ttc.zip but versioned & with no extra SIL license file
+    url = "https://raw.githubusercontent.com/googlei18n/noto-cjk/40d9f5b179a59a06b98373c76bdc3e2119e4e6b2/NotoSansCJK.ttc.zip";
+    postFetch = ''
+      mkdir -p $out/share/fonts
+      unzip -j $downloadedFile \*.ttc -d $out/share/fonts/noto
     '';
-
-    preferLocalBuild = true;
+    sha256 = "0ghw2azqq3nkcxsbvf53qjmrhcfsnry79rq7jsr0wwi2pn7d3dsq";
 
     meta = with stdenv.lib; {
       inherit version;

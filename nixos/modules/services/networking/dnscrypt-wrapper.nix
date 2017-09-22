@@ -45,7 +45,7 @@ let
   rotateKeys = ''
     # check if keys are not expired
     keyValid() {
-      fingerprint=$(dnscrypt-wrapper --show-provider-publickey-fingerprint | awk '{print $(NF)}')
+      fingerprint=$(dnscrypt-wrapper --show-provider-publickey | awk '{print $(NF)}')
       dnscrypt-proxy --test=${toString (cfg.keys.checkInterval + 1)} \
         --resolver-address=127.0.0.1:${toString cfg.port} \
         --provider-name=${cfg.providerName} \
@@ -56,9 +56,10 @@ let
 
     # archive old keys and restart the service
     if ! keyValid; then
+      echo "certificate soon to become invalid; backing up old cert"
       mkdir -p oldkeys
-      mv ${cfg.providerName}.key oldkeys/${cfg.providerName}-$(date +%F-%T).key
-      mv ${cfg.providerName}.crt oldkeys/${cfg.providerName}-$(date +%F-%T).crt
+      mv -v ${cfg.providerName}.key oldkeys/${cfg.providerName}-$(date +%F-%T).key
+      mv -v ${cfg.providerName}.crt oldkeys/${cfg.providerName}-$(date +%F-%T).crt
       systemctl restart dnscrypt-wrapper
     fi
   '';
@@ -169,6 +170,7 @@ in {
 
       path   = with pkgs; [ dnscrypt-wrapper dnscrypt-proxy gawk ];
       script = rotateKeys;
+      serviceConfig.User = "dnscrypt-wrapper";
     };
 
 

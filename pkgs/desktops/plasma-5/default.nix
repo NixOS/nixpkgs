@@ -71,6 +71,8 @@ let
       propagateBin = propagate "bin";
 
       callPackage = self.newScope {
+        inherit propagate propagateBin;
+
         mkDerivation = args:
           let
             inherit (args) name;
@@ -90,7 +92,7 @@ let
               ];
               platforms = lib.platforms.linux;
               maintainers = with lib.maintainers; [ ttuegel ];
-              homepage = "http://www.kde.org";
+              homepage = http://www.kde.org;
             } // (args.meta or {});
           in
           mkDerivation (args // {

@@ -19,7 +19,8 @@ in
   # E.g., if Plasma 5 is enabled, it supersedes xterm.
   imports = [
     ./none.nix ./xterm.nix ./xfce.nix ./plasma5.nix ./lumina.nix
-    ./lxqt.nix ./enlightenment.nix ./gnome3.nix ./kodi.nix
+    ./lxqt.nix ./enlightenment.nix ./gnome3.nix ./kodi.nix ./maxx.nix
+    ./mate.nix
   ];
 
   options = {

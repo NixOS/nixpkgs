@@ -22,6 +22,7 @@
 , pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
 , libmsgpack, qt48, libsodium, snappy, libossp_uuid, lxc, libpcap, xlibs, gtk2, buildRubyGem
+, re2
 }@args:
 
 let
@@ -66,6 +67,10 @@ in
   charlock_holmes = attrs: {
     buildInputs = [ which icu zlib ];
   };
+  
+  curb = attrs: {
+    buildInputs = [ curl ];
+  };
 
   dep-selector-libgecode = attrs: {
     USE_SYSTEM_GECODE = true;
@@ -89,6 +94,8 @@ in
 
   gio2 = attrs: { buildInputs = [ gtk2 pcre pkgconfig ]; };
 
+  gitlab-markup = attrs: { meta.priority = 1; };
+
   glib2 = attrs: { buildInputs = [ gtk2 pcre pkgconfig ]; };
 
   gtk2 = attrs: {
@@ -98,6 +105,10 @@ in
   };
 
   gobject-introspection = attrs: { buildInputs = [ gtk2 pcre pkgconfig ]; };
+
+  grpc = attrs: {
+    buildInputs = [ openssl pkgconfig ];
+  };
 
   hitimes = attrs: {
     buildInputs =
@@ -187,9 +198,13 @@ in
   rbnacl = spec: {
     postInstall = ''
     sed -i $(cat $out/nix-support/gem-meta/install-path)/lib/rbnacl.rb -e "2a \
-    RBNACL_LIBSODIUM_GEM_LIB_PATH = '${libsodium.out}/lib/libsodium.${if stdenv.isDarwin then "dylib" else "so"}'
+    RBNACL_LIBSODIUM_GEM_LIB_PATH = '${libsodium.out}/lib/libsodium${stdenv.hostPlatform.extensions.sharedLibrary}'
     "
     '';
+  };
+
+  re2 = attrs: {
+    buildInputs = [ re2 ];
   };
 
   rmagick = attrs: {
@@ -242,7 +257,7 @@ in
 
       substituteInPlace lib/sup/crypto.rb \
         --replace 'which gpg2' \
-                  '${which}/bin/which gpg2'
+                  '${which}/bin/which gpg'
     '';
   };
 

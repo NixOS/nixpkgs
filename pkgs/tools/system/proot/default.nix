@@ -34,11 +34,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://proot.me;
+    homepage = http://proot-me.github.io;
     description = "User-space implementation of chroot, mount --bind and binfmt_misc";
     platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = with maintainers; [ ianwookim nckx ];
   };
 }
-

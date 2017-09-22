@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       different by pre-loading a small library which modifies the time,
       gettimeofday and clock_gettime system calls.
     '';
-    homepage = http://packages.qa.debian.org/d/datefudge.html;
+    homepage = https://packages.qa.debian.org/d/datefudge.html;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ leenaars ];

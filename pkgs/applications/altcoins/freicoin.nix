@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   # I think that openssl and zlib are required, but come through other
   # packages
 
+  preBuild = "unset AR";
+
   installPhase = ''
     mkdir -p $out/bin
     cp freicoin-qt $out/bin

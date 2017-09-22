@@ -12,11 +12,11 @@ in
 stdenv.mkDerivation rec {
 
   name = "calc-${version}";
-  version = "2.12.5.3";
+  version = "2.12.6.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/calc/${name}.tar.bz2";
-    sha256 = "14mnz6smhi3a0rgmwvddk9w3vdisi8khq67i8nqsl47vgs8n1kqg";
+    url = "https://github.com/lcn2/calc/releases/download/${version}/${name}.tar.bz2";
+    sha256 = "1vy4jmhmpl3gzgpkpv0kqwjv8hn1cza8cn1g8c69gq3inqvr4fvd";
   };
 
   buildInputs = [ makeWrapper readline ncurses utillinux ];

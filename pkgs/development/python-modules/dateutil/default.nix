@@ -1,12 +1,12 @@
-{ stdenv, buildPythonPackage, fetchurl, six }:
+{ stdenv, buildPythonPackage, fetchPypi, six }:
 buildPythonPackage rec {
-  pname = "dateutil";
   name = "${pname}-${version}";
-  version = "2.6.0";
+  pname = "python-dateutil";
+  version = "2.6.1";
 
-  src = fetchurl {
-    url = "mirror://pypi/p/python-dateutil/python-${name}.tar.gz";
-    sha256 = "1lhq0hxjc3cfha101q02ld5ijlpfyjn2w1yh7wvpiy367pgzi8k2";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1jkahssf0ir5ssxc3ydbp8cpv77limn8d4s77szb2nrgl2r3h749";
   };
 
   propagatedBuildInputs = [ six ];

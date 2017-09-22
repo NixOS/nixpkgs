@@ -28,8 +28,7 @@ stdenv.mkDerivation rec {
     install -Dm755 tomb       $out/bin/tomb
     install -Dm644 doc/tomb.1 $out/share/man/man1/tomb.1
 
-    # it works fine with gnupg v2, but it looks for an executable named gpg
-    ln -s ${gnupg}/bin/gpg2 $out/bin/gpg
+    ln -s ${gnupg}/bin/gpg $out/bin/gpg
 
     wrapProgram $out/bin/tomb \
       --prefix PATH : $out/bin:${lib.makeBinPath [ cryptsetup gettext pinentry ]}

@@ -6,6 +6,14 @@ stdenv.mkDerivation rec {
     url = "http://www.quitte.de/dsp/caps_${version}.tar.bz2";
     sha256 = "081zx0i2ysw5nmy03j60q9j11zdlg1fxws81kwanncdgayxgwipp";
   };
+
+  patches = [
+    (fetchurl {
+      url = "https://anonscm.debian.org/cgit/pkg-multimedia/caps.git/plain/debian/patches/0001-Avoid-ambiguity-in-div-invocation.patch";
+      sha256 = "1b1pb5yfskiw8zi1lkj572l2ajpirh4amq538vggwvlpv1fqfway";
+    })
+  ];
+
   configurePhase = ''
     echo "PREFIX = $out" > defines.make
   '';
