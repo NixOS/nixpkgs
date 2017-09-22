@@ -46,7 +46,7 @@ rec {
   seth = callPackage ./seth.nix { };
   dapp = callPackage ./dapp.nix { };
 
-  hsevm = (haskellPackages.callPackage ./hsevm.nix {});
+  hevm = (haskellPackages.callPackage ./hevm.nix {});
 
   primecoin  = callPackage ./primecoin.nix { withGui = true; };
   primecoind = callPackage ./primecoin.nix { withGui = false; };
