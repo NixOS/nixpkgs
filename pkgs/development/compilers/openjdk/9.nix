@@ -22,45 +22,44 @@ let
       throw "openjdk requires i686-linux or x86_64 linux";
 
   update = "";
-  build = "180";
+  build = "181";
   baseurl = "http://hg.openjdk.java.net/jdk9/jdk9";
   repover = "jdk-9${update}+${build}";
   paxflags = if stdenv.isi686 then "msp" else "m";
   jdk9 = fetchurl {
              url = "${baseurl}/archive/${repover}.tar.gz";
-             sha256 = "05f3i6p35nh4lwh17znkmwbb8ccw1hl1qs5hnqivpph27lpdpqnn";
+             sha256 = "0c7jwz4qvl93brs6c2v4dfc2v3lsv6ic0y72lkh04bnxg9343z82";
           };
   langtools = fetchurl {
              url = "${baseurl}/langtools/archive/${repover}.tar.gz";
-             sha256 = "0gpgg0mz29jvfck6p6kqqyi3b9lx3d4s3h0dnriswmjnw0dy3bc6";
+             sha256 = "1wa5rjan6lcs8nnxndbwpw6gkx3qbw013s6zisjjczkcaiq044pp";
           };
   hotspot = fetchurl {
              url = "${baseurl}/hotspot/archive/${repover}.tar.gz";
-             sha256 = "1zb0pzfgnykpllm9ibwqqrzhbsxdxq1cj5rdmd5h51qjfzd8k3js";
+             sha256 = "00jnj19rim1gxpsxrpr8ifx1glwrbma3qjiy1ya7n5f08fb263hs";
           };
   corba = fetchurl {
              url = "${baseurl}/corba/archive/${repover}.tar.gz";
-             sha256 = "1rv4gcidr0b71d7wkchx4g3gxkirpg98y0mlicqaah1vmvx3knkp";
+             sha256 = "1gvx6dblzj7rb8648iqwdiv36x97ibykgs323dd9044n3vbqihvj";
           };
   jdk = fetchurl {
              url = "${baseurl}/jdk/archive/${repover}.tar.gz";
-             sha256 = "1g3dwszz7v8812fp53vpsbmd5ingzwym8kwz4iq45bf0d1df95x9";
+             sha256 = "15pwdw6s03rfyw2gx06xg4f70bjl8j19ycssxiigj39h524xc9aw";
           };
   jaxws = fetchurl {
              url = "${baseurl}/jaxws/archive/${repover}.tar.gz";
-             sha256 = "0f7vblr4c322rvjgaim8lp91s9gkf1sf31mgzhl433h5m5hs5z26";
+             sha256 = "0jz32pjbgr77ybb2v1vwr1n9ljdrc3y0d5lrj072g3is1hmn2wbh";
           };
   jaxp = fetchurl {
              url = "${baseurl}/jaxp/archive/${repover}.tar.gz";
-             sha256 = "1c552q4360aqfr8h6720ckk8sn4fw8c5nix5gc826sj4vrk7gqz2";
+             sha256 = "1jdxr9hcqx6va56ll5s2x9bx9dnlrs7zyvhjk1zgr5hxg5yfcqzr";
           };
   nashorn = fetchurl {
              url = "${baseurl}/nashorn/archive/${repover}.tar.gz";
-             sha256 = "1hi9152w94gkwypj32nlxzp7ryzc04pp72qvr4z9m2vdc85hglhc";
+             sha256 = "12lihmw9ga6yhz0h26fvfablcjkkma0k3idjggmap97xha8zgd6n";
           };
   openjdk9 = stdenv.mkDerivation {
-    # name = "openjdk-9u${update}b${build}";
-    name = "openjdk-9ea-b${build}";
+    name = "openjdk-9${update}-b${build}";
 
     srcs = [ jdk9 langtools hotspot corba jdk jaxws jaxp nashorn ];
     sourceRoot = ".";
@@ -118,7 +117,12 @@ let
         "--with-extra-cflags=-Wno-error=deprecated-declarations -Wno-error=format-contains-nul -Wno-error=unused-result"
     ''
     + lib.optionalString minimal "\"--enable-headless-only\""
-    + ");";
+    + ");"
+    # https://bugzilla.redhat.com/show_bug.cgi?id=1306558
+    # https://github.com/JetBrains/jdk8u/commit/eaa5e0711a43d64874111254d74893fa299d5716
+    + stdenv.lib.optionalString stdenv.cc.isGNU ''
+      NIX_CFLAGS_COMPILE+=" -fno-lifetime-dse -fno-delete-null-pointer-checks -std=gnu++98 -Wno-error"
+    '';
 
     NIX_LDFLAGS= lib.optionals (!minimal) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
