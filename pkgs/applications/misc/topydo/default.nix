@@ -1,11 +1,11 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, arrow, icalendar, mock, freezegun
-, coverage, glibcLocales, isPy3k, green, pylint, prompt_toolkit, urwid, watchdog }:
+{ stdenv, python3Packages, fetchFromGitHub, glibcLocales }:
 
-buildPythonPackage rec {
+with python3Packages;
+
+buildPythonApplication rec {
   pname = "topydo";
   version = "0.13";
   name  = "${pname}-${version}";
-  disabled = (!isPy3k);
 
   src = fetchFromGitHub {
     owner = "bram85";
@@ -22,6 +22,7 @@ buildPythonPackage rec {
     urwid
     watchdog
   ];
+
   checkInputs = [ mock freezegun coverage green pylint ];
 
   LC_ALL="en_US.UTF-8";
