@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     homepage    = http://trousers.sourceforge.net/;
     license     = licenses.cpl10;
     maintainers = [ maintainers.ak ];
-    platforms   = platforms.unix;
+    platforms   = platforms.linux;
   };
 }
 
