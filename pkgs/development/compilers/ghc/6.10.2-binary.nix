@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
 
+  # Cannot patchelf beforehand due to relative RPATHs that anticipate
+  # the final install location/
+  LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [ libedit ncurses5 gmp ];
+
   postUnpack =
     # Strip is harmful, see also below. It's important that this happens
     # first. The GHC Cabal build system makes use of strip by default and
@@ -40,9 +44,9 @@ stdenv.mkDerivation rec {
     # On Linux, use patchelf to modify the executables so that they can
     # find editline/gmp.
     stdenv.lib.optionalString stdenv.hostPlatform.isLinux ''
-      find . -type f -perm -0100 \
-          -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath "${stdenv.lib.makeLibraryPath [ libedit ncurses5 gmp ]}" {} \;
+      find . -type f -perm -0100 -exec patchelf \
+          --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" {} \;
+
       for prog in ld ar gcc strip ranlib; do
         find . -name "setup-config" -exec sed -i "s@/usr/bin/$prog@$(type -p $prog)@g" {} \;
       done
@@ -65,6 +69,13 @@ stdenv.mkDerivation rec {
   postInstall = ''
     # bah, the passing gmp doesn't work, so let's add it to the final package.conf in a quick but dirty way
     sed -i "s@^\(.*pkgName = PackageName \"rts\".*\libraryDirs = \\[\)\(.*\)@\\1\"${gmp.out}/lib\",\2@" $out/lib/ghc-${version}/package.conf
+  '';
+
+  # On Linux, use patchelf to modify the executables so that they can
+  # find editline/gmp.
+  preFixup = stdenv.lib.optionalString stdenv.isLinux ''
+    find "$out" -type f -executable \
+        -exec patchelf  --set-rpath "${LD_LIBRARY_PATH}" {} \;
   '';
 
   doInstallCheck = true;

@@ -3,6 +3,16 @@
 , ncurses5, gmp, libiconv
 }:
 
+let
+  libPath = stdenv.lib.makeLibraryPath ([
+    ncurses5 gmp
+  ] ++ stdenv.lib.optional (stdenv.hostPlatform.isDarwin) libiconv);
+
+  libEnvVar = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin "DY"
+    + "LD_LIBRARY_PATH";
+
+in
+
 stdenv.mkDerivation rec {
   version = "7.0.4";
 
@@ -29,6 +39,10 @@ stdenv.mkDerivation rec {
     or (throw "cannot bootstrap GHC on this platform"));
 
   nativeBuildInputs = [ perl ];
+
+  # Cannot patchelf beforehand due to relative RPATHs that anticipate
+  # the final install location/
+  ${libEnvVar} = libPath;
 
   postUnpack =
     # GHC has dtrace probes, which causes ld to try to open /usr/lib/libdtrace.dylib
@@ -57,33 +71,17 @@ stdenv.mkDerivation rec {
       find . -name base.buildinfo \
           -exec sed -i "s@extra-lib-dirs: @extra-lib-dirs: ${libiconv}/lib@" {} \;
     '' +
-    # On Linux, use patchelf to modify the executables so that they can
-    # find editline/gmp.
+    # Rename needed libraries and binaries, fix interpreter
     stdenv.lib.optionalString stdenv.isLinux ''
-      find . -type f -perm -0100 \
-          -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-          --set-rpath "${stdenv.lib.makeLibraryPath [ ncurses5 gmp ]}" {} \;
+      find . -type f -perm -0100 -exec patchelf \
+          --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" {} \;
+
+      paxmark m ./ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
+
       sed -i "s|/usr/bin/perl|perl\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
       sed -i "s|/usr/bin/gcc|gcc\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
       for prog in ld ar gcc strip ranlib; do
         find . -name "setup-config" -exec sed -i "s@/usr/bin/$prog@$(type -p $prog)@g" {} \;
-      done
-    '' + stdenv.lib.optionalString stdenv.isDarwin ''
-      # not enough room in the object files for the full path to libiconv :(
-      fix () {
-        install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib $1
-      }
-
-      ln -s ${libiconv}/lib/libiconv.dylib ghc-${version}/utils/ghc-pwd/dist/build/tmp
-      ln -s ${libiconv}/lib/libiconv.dylib ghc-${version}/utils/hpc/dist/build/tmp
-      ln -s ${libiconv}/lib/libiconv.dylib ghc-${version}/ghc/stage2/build/tmp
-
-      for file in ghc-cabal ghc-pwd ghc-stage2 ghc-pkg haddock hsc2hs hpc; do
-        fix $(find . -type f -name $file)
-      done
-
-      for file in $(find . -name setup-config); do
-        substituteInPlace $file --replace /usr/bin/ranlib "$(type -P ranlib)"
       done
     '';
 
@@ -100,6 +98,29 @@ stdenv.mkDerivation rec {
   # No building is necessary, but calling make without flags ironically
   # calls install-strip ...
   dontBuild = true;
+
+  # On Linux, use patchelf to modify the executables so that they can
+  # find editline/gmp.
+  preFixup = stdenv.lib.optionalString stdenv.isLinux ''
+    find "$out" -type f -executable \
+        -exec patchelf --set-rpath "${libPath}" {} \;
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    # not enough room in the object files for the full path to libiconv :(
+    ln -s ${libiconv}/lib/libiconv.dylib $out/bin
+    ln -s ${libiconv}/lib/libiconv.dylib $out/lib/ghc-${version}/libiconv.dylib
+
+    fix () {
+      install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib $1
+    }
+
+    for file in ghc-cabal ghc-pwd ghc-stage2 ghc-pkg haddock hsc2hs hpc; do
+      fix $(find "$out" -type f -name $file)
+    done
+
+    for file in $(find "$out" -name setup-config); do
+      substituteInPlace $file --replace /usr/bin/ranlib "$(type -P ranlib)"
+    done
+  '';
 
   doInstallCheck = true;
   installCheckPhase = ''
