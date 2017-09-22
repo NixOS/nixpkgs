@@ -4,7 +4,7 @@
 , libjpeg, giflib
 , setJavaClassPath
 , minimal ? false
-, enableInfinality ? true # font rendering patch
+#, enableInfinality ? true # font rendering patch
 , enableGnome2 ? true, gtk2, gnome_vfs, glib, GConf
 }:
 
@@ -21,47 +21,48 @@ let
     else
       throw "openjdk requires i686-linux or x86_64 linux";
 
-  update = "144";
-  build = "01";
-  baseurl = "http://hg.openjdk.java.net/jdk8u/jdk8u";
-  repover = "jdk8u${update}-b${build}";
+  update = "";
+  build = "180";
+  baseurl = "http://hg.openjdk.java.net/jdk9/jdk9";
+  repover = "jdk-9${update}+${build}";
   paxflags = if stdenv.isi686 then "msp" else "m";
-  jdk8 = fetchurl {
+  jdk9 = fetchurl {
              url = "${baseurl}/archive/${repover}.tar.gz";
-             sha256 = "08b7ia2ifvcl8xnpflf019ak3xcbdjnxcy1mhfp3nbfsbk2sia45";
+             sha256 = "05f3i6p35nh4lwh17znkmwbb8ccw1hl1qs5hnqivpph27lpdpqnn";
           };
   langtools = fetchurl {
              url = "${baseurl}/langtools/archive/${repover}.tar.gz";
-             sha256 = "0g7q6ljvn79psrcak3l4imd27w047ngavn9jcn3xwivg5wppsfks";
+             sha256 = "0gpgg0mz29jvfck6p6kqqyi3b9lx3d4s3h0dnriswmjnw0dy3bc6";
           };
   hotspot = fetchurl {
              url = "${baseurl}/hotspot/archive/${repover}.tar.gz";
-             sha256 = "1hbbzf0m2a78dm8pyvc11jwfpj7q67pvjrp3hf0cnc38k9mzrn8q";
+             sha256 = "1zb0pzfgnykpllm9ibwqqrzhbsxdxq1cj5rdmd5h51qjfzd8k3js";
           };
   corba = fetchurl {
              url = "${baseurl}/corba/archive/${repover}.tar.gz";
-             sha256 = "1znc0prsb814ggm6qjgbsykm864mwypnxgi9w9f9riq8gs0578gh";
+             sha256 = "1rv4gcidr0b71d7wkchx4g3gxkirpg98y0mlicqaah1vmvx3knkp";
           };
   jdk = fetchurl {
              url = "${baseurl}/jdk/archive/${repover}.tar.gz";
-             sha256 = "0gx5md1v1jmqhdwcc7smpf46sgp4alvb6jz3n6yjlcyfzk92yi78";
+             sha256 = "1g3dwszz7v8812fp53vpsbmd5ingzwym8kwz4iq45bf0d1df95x9";
           };
   jaxws = fetchurl {
              url = "${baseurl}/jaxws/archive/${repover}.tar.gz";
-             sha256 = "0ad9w7gnwlpdssw2p3kfny02mmvzc6z8i2n7qq0177ml48c88iji";
+             sha256 = "0f7vblr4c322rvjgaim8lp91s9gkf1sf31mgzhl433h5m5hs5z26";
           };
   jaxp = fetchurl {
              url = "${baseurl}/jaxp/archive/${repover}.tar.gz";
-             sha256 = "14yzbbishsyrzmymws6mnndqj6hvs69ivfdbjhgwi0wl23g9siym";
+             sha256 = "1c552q4360aqfr8h6720ckk8sn4fw8c5nix5gc826sj4vrk7gqz2";
           };
   nashorn = fetchurl {
              url = "${baseurl}/nashorn/archive/${repover}.tar.gz";
-             sha256 = "175q29n4bfmm1cyyga7x58zhh6ann9rm3wibw0scrhgy23lx052x";
+             sha256 = "1hi9152w94gkwypj32nlxzp7ryzc04pp72qvr4z9m2vdc85hglhc";
           };
-  openjdk8 = stdenv.mkDerivation {
-    name = "openjdk-8u${update}b${build}";
+  openjdk9 = stdenv.mkDerivation {
+    # name = "openjdk-9u${update}b${build}";
+    name = "openjdk-9ea-b${build}";
 
-    srcs = [ jdk8 langtools hotspot corba jdk jaxws jaxp nashorn ];
+    srcs = [ jdk9 langtools hotspot corba jdk jaxws jaxp nashorn ];
     sourceRoot = ".";
 
     outputs = [ "out" "jre" ];
@@ -78,52 +79,46 @@ let
     #move the seven other source dirs under the main jdk8u directory,
     #with version suffixes removed, as the remainder of the build will expect
     prePatch = ''
-      mainDir=$(find . -maxdepth 1 -name jdk8u\*);
-      find . -maxdepth 1 -name \*jdk\* -not -name jdk8u\* | awk -F- '{print $1}' | while read p; do
+      mainDir=$(find . -maxdepth 1 -name jdk9\*);
+      find . -maxdepth 1 -name \*jdk\* -not -name jdk9\* | awk -F- '{print $1}' | while read p; do
         mv $p-* $mainDir/$p
       done
       cd $mainDir
     '';
 
     patches = [
-      ./fix-java-home-jdk8.patch
-      ./read-truststore-from-env-jdk8.patch
+      ./fix-java-home-jdk9.patch
+      ./read-truststore-from-env-jdk9.patch
       ./currency-date-range-jdk8.patch
-    ] ++ lib.optionals (!minimal && enableInfinality) [
-      ./004_add-fontconfig.patch
-      ./005_enable-infinality.patch
+    #] ++ lib.optionals (!minimal && enableInfinality) [
+    #  ./004_add-fontconfig.patch
+    #  ./005_enable-infinality.patch
     ] ++ lib.optionals (!minimal && enableGnome2) [
-      ./swing-use-gtk.patch
+      ./swing-use-gtk-jdk9.patch
     ];
 
     preConfigure = ''
       chmod +x configure
       substituteInPlace configure --replace /bin/bash "${bash}/bin/bash"
-      substituteInPlace hotspot/make/linux/adlc_updater --replace /bin/sh "$shell"
-      substituteInPlace hotspot/make/linux/makefiles/dtrace.make --replace /usr/include/sys/sdt.h "/no-such-path"
+
+      configureFlagsArray=(
+        "--with-boot-jdk=${bootjdk.home}"
+        "--with-update-version=${update}"
+        "--with-build-number=${build}"
+        "--with-milestone=fcs"
+        "--enable-unlimited-crypto"
+        "--disable-debug-symbols"
+        "--disable-freetype-bundling"
+        "--with-zlib=system"
+        "--with-giflib=system"
+        "--with-stdc++lib=dynamic"
+
+        # glibc 2.24 deprecated readdir_r so we need this
+        # See https://www.mail-archive.com/openembedded-devel@lists.openembedded.org/msg49006.html
+        "--with-extra-cflags=-Wno-error=deprecated-declarations -Wno-error=format-contains-nul -Wno-error=unused-result"
     ''
-    # https://bugzilla.redhat.com/show_bug.cgi?id=1306558
-    # https://github.com/JetBrains/jdk8u/commit/eaa5e0711a43d64874111254d74893fa299d5716
-    + stdenv.lib.optionalString stdenv.cc.isGNU ''
-      NIX_CFLAGS_COMPILE+=" -fno-lifetime-dse -fno-delete-null-pointer-checks -std=gnu++98 -Wno-error"
-    '';
-
-    configureFlags = [
-      "--with-boot-jdk=${bootjdk.home}"
-      "--with-update-version=${update}"
-      "--with-build-number=${build}"
-      "--with-milestone=fcs"
-      "--enable-unlimited-crypto"
-      "--disable-debug-symbols"
-      "--disable-freetype-bundling"
-      "--with-zlib=system"
-      "--with-giflib=system"
-      "--with-stdc++lib=dynamic"
-
-      # glibc 2.24 deprecated readdir_r so we need this
-      # See https://www.mail-archive.com/openembedded-devel@lists.openembedded.org/msg49006.html
-      "--with-extra-cflags=\"-Wno-error=deprecated-declarations\""
-    ] ++ lib.optional minimal "--disable-headful";
+    + lib.optionalString minimal "\"--enable-headless-only\""
+    + ");";
 
     NIX_LDFLAGS= lib.optionals (!minimal) [
       "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
@@ -136,7 +131,7 @@ let
     installPhase = ''
       mkdir -p $out/lib/openjdk $out/share $jre/lib/openjdk
 
-      cp -av build/*/images/j2sdk-image/* $out/lib/openjdk
+      cp -av build/*/images/jdk/* $out/lib/openjdk
 
       # Remove some broken manpages.
       rm -rf $out/lib/openjdk/man/ja*
@@ -149,30 +144,29 @@ let
       # jni.h expects jni_md.h to be in the header search path.
       ln -s $out/include/linux/*_md.h $out/include/
 
-      # Remove crap from the installation.
-      rm -rf $out/lib/openjdk/demo $out/lib/openjdk/sample
-      ${lib.optionalString minimal ''
-        rm $out/lib/openjdk/jre/lib/${architecture}/{libjsound,libjsoundalsa,libsplashscreen,libawt*,libfontmanager}.so
-        rm $out/lib/openjdk/jre/bin/policytool
-        rm $out/lib/openjdk/bin/{policytool,appletviewer}
-      ''}
-
-      # Move the JRE to a separate output and setup fallback fonts
-      mv $out/lib/openjdk/jre $jre/lib/openjdk/
+      # Copy the JRE to a separate output and setup fallback fonts
+      cp -av build/*/images/jre $jre/lib/openjdk/
       mkdir $out/lib/openjdk/jre
       ${lib.optionalString (!minimal) ''
         mkdir -p $jre/lib/openjdk/jre/lib/fonts/fallback
         lndir ${liberation_ttf}/share/fonts/truetype $jre/lib/openjdk/jre/lib/fonts/fallback
       ''}
-      lndir $jre/lib/openjdk/jre $out/lib/openjdk/jre
 
-      rm -rf $out/lib/openjdk/jre/bina
-      ln -s $out/lib/openjdk/bin $out/lib/openjdk/jre/bin
+      # Remove crap from the installation.
+      rm -rf $out/lib/openjdk/demo
+      ${lib.optionalString minimal ''
+        for d in $out/lib/openjdk/lib $jre/lib/openjdk/jre/lib; do
+          rm ''${d}/{libjsound,libjsoundalsa,libawt*,libfontmanager}.so
+        done
+      ''}
+
+      lndir $jre/lib/openjdk/jre $out/lib/openjdk/jre
 
       # Make sure cmm/*.pf are not symlinks:
       # https://youtrack.jetbrains.com/issue/IDEA-147272
-      rm -rf $out/lib/openjdk/jre/lib/cmm
-      ln -s {$jre,$out}/lib/openjdk/jre/lib/cmm
+      # in 9, it seems no *.pf files end up in $out ... ?
+      # rm -rf $out/lib/openjdk/jre/lib/cmm
+      # ln -s {$jre,$out}/lib/openjdk/jre/lib/cmm
 
       # Set PaX markings
       exes=$(file $out/lib/openjdk/bin/* $jre/lib/openjdk/jre/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
@@ -212,7 +206,8 @@ let
       # any package that depends on the JRE has $CLASSPATH set up
       # properly.
       mkdir -p $jre/nix-support
-      printWords ${setJavaClassPath} > $jre/nix-support/propagated-native-build-inputs
+      #TODO or printWords?  cf https://github.com/NixOS/nixpkgs/pull/27427#issuecomment-317293040
+      echo -n "${setJavaClassPath}" > $jre/nix-support/propagated-native-build-inputs
 
       # Set JAVA_HOME automatically.
       mkdir -p $out/nix-support
@@ -251,13 +246,13 @@ let
       homepage = http://openjdk.java.net/;
       license = licenses.gpl2;
       description = "The open-source Java Development Kit";
-      maintainers = with maintainers; [ edwtjo nequissimus ];
+      maintainers = with maintainers; [ edwtjo ];
       platforms = platforms.linux;
     };
 
     passthru = {
       inherit architecture;
-      home = "${openjdk8}/lib/openjdk";
+      home = "${openjdk9}/lib/openjdk";
     };
   };
-in openjdk8
+in openjdk9
