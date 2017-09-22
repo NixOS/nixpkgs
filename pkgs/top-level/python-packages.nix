@@ -25804,7 +25804,7 @@ EOF
     };
   };
 
-  topydo = callPackage ../development/python-modules/topydo {};
+  topydo = builtins.trace "python3Packages.topydo was moved to topydo" pkgs.topydo; # 2017-09-22
 
   w3lib = buildPythonPackage rec {
     name = "w3lib-${version}";
