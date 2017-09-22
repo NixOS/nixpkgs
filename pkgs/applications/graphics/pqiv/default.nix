@@ -21,6 +21,6 @@ stdenv.mkDerivation (rec {
     homepage = http://www.pberndt.com/Programme/Linux/pqiv;
     license = licenses.gpl3;
     maintainers = [ maintainers.ndowens ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 })
