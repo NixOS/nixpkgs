@@ -986,5 +986,5 @@ in rec
 
   ocamlPackages_latest = ocamlPackages_4_05;
 
-  ocamlPackages = ocamlPackages_4_02;
+  ocamlPackages = ocamlPackages_4_04;
 }
