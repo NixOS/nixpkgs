@@ -66,7 +66,7 @@ in stdenv.mkDerivation {
       experts. It runs on UNIX, macOS and Windows.
     '';
 
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor fpletz ];
   };
 }
