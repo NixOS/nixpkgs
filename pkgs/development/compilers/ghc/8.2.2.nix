@@ -3,7 +3,7 @@
 
 # build-tools
 , bootPkgs, alex, happy, hscolour
-, autoconf, automake, coreutils, fetchurl, perl, python3, sphinx
+, autoconf, autoreconfHook, automake, coreutils, fetchurl, fetchpatch, perl, python3, sphinx
 
 , libffi, libiconv ? null, ncurses
 
@@ -80,6 +80,13 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" ];
 
+  patches = [
+    (fetchpatch { # Fix STRIP to be substituted from configure
+      url = "https://git.haskell.org/ghc.git/commitdiff_plain/2fc8ce5f0c8c81771c26266ac0b150ca9b75c5f3";
+      sha256 = "03253ci40np1v6k0wmi4aypj3nmj3rdyvb1k6rwqipb30nfc719f";
+    })
+  ];
+
   postPatch = "patchShebangs .";
 
   # GHC is a bit confused on its cross terminology.
@@ -135,7 +142,7 @@ stdenv.mkDerivation rec {
   # masss-rebuild.
   crossConfig = true;
 
-  nativeBuildInputs = [ alex autoconf automake ghc happy hscolour perl python3 sphinx ];
+  nativeBuildInputs = [ alex autoconf autoreconfHook automake ghc happy hscolour perl python3 sphinx ];
 
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
