@@ -3,15 +3,19 @@
 stdenv.mkDerivation rec {
   version = "3.2.0";
   name = "sshfs-fuse-${version}";
-  
+
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "sshfs";
     rev = "sshfs-${version}";
     sha256 = "09pqdibhcj1p7m6vxkqiprvbcxp9iq2lm1hb6w7p8iarmvp80rlv";
   };
-  
+
   buildInputs = [ pkgconfig glib fuse3 autoreconfHook ];
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optional
+    (stdenv.system == "i686-linux")
+    "-D_FILE_OFFSET_BITS=64";
 
   postInstall = ''
     mkdir -p $out/sbin
