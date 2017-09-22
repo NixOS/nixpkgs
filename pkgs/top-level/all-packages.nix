@@ -5827,9 +5827,9 @@ with pkgs;
       };
 
   openjdk9 =
-    if stdenv.isDarwin then
-      callPackage ../development/compilers/openjdk-darwin/9.nix { }
-    else
+    # if stdenv.isDarwin then
+    #   callPackage ../development/compilers/openjdk-darwin/9.nix { }
+    # else
       callPackage ../development/compilers/openjdk/9.nix {
         bootjdk = openjdk8;
         inherit (gnome2) GConf gnome_vfs;
