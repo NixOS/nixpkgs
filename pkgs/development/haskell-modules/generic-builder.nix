@@ -111,9 +111,10 @@ let
   crossCabalFlags = [
     "--with-ghc=${ghc.targetPrefix}ghc"
     "--with-ghc-pkg=${ghc.targetPrefix}ghc-pkg"
-    "--with-gcc=${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc"
-    "--with-ld=${stdenv.cc.bintools}/bin/${stdenv.cc.bintools.targetPrefix}ld"
-    "--with-hsc2hs=${nativeGhc}/bin/hsc2hs"
+    "--with-gcc=${stdenv.cc.targetPrefix}cc"
+    "--with-ld=${stdenv.cc.bintools.targetPrefix}ld"
+    "--with-hsc2hs=${nativeGhc}/bin/hsc2hs" # not cross one
+    "--with-strip=${stdenv.cc.bintools.targetPrefix}strip"
   ] ++ (if isHaLVM then [] else ["--hsc2hs-options=--cross-compile"]);
 
   crossCabalFlagsString =
