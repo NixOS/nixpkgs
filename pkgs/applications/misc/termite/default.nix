@@ -19,6 +19,8 @@ let
 
     buildInputs = [ pkgconfig vte gtk3 ncurses ];
 
+    nativeBuildInputs = [ makeWrapper ];
+
     outputs = [ "out" "terminfo" ];
 
     postInstall = ''
@@ -27,6 +29,9 @@ let
 
       mkdir -p $out/nix-support
       echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
+
+      wrapProgram $out/bin/termite \
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
     '';
 
     meta = with stdenv.lib; {
