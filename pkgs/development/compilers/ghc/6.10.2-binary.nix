@@ -58,29 +58,7 @@ stdenv.mkDerivation rec {
   # calls install-strip ...
   dontBuild = true;
 
-  # The binaries for Darwin use frameworks, so fake those frameworks,
-  # and create some wrapper scripts that set DYLD_FRAMEWORK_PATH so
-  # that the executables work with no special setup.
   postInstall =
-    (if stdenv.isDarwin then
-      ''
-        mkdir -p $out/frameworks/GMP.framework/Versions/A
-        ln -s ${gmp.out}/lib/libgmp.dylib $out/frameworks/GMP.framework/GMP
-        ln -s ${gmp.out}/lib/libgmp.dylib $out/frameworks/GMP.framework/Versions/A/GMP
-        # !!! fix this
-        mkdir -p $out/frameworks/GNUeditline.framework/Versions/A
-        ln -s ${libedit}/lib/libeditline.dylib $out/frameworks/GNUeditline.framework/GNUeditline
-        ln -s ${libedit}/lib/libeditline.dylib $out/frameworks/GNUeditline.framework/Versions/A/GNUeditline
-
-        mv $out/bin $out/bin-orig
-        mkdir $out/bin
-        for i in $(cd $out/bin-orig && ls); do
-            echo \"#! $SHELL -e\" >> $out/bin/$i
-            echo \"DYLD_FRAMEWORK_PATH=$out/frameworks exec $out/bin-orig/$i -framework-path $out/frameworks \\\"\\$@\\\"\" >> $out/bin/$i
-            chmod +x $out/bin/$i
-        done
-      '' else "")
-    +
       ''
         # bah, the passing gmp doesn't work, so let's add it to the final package.conf in a quick but dirty way
         sed -i "s@^\(.*pkgName = PackageName \"rts\".*\libraryDirs = \\[\)\(.*\)@\\1\"${gmp.out}/lib\",\2@" $out/lib/ghc-${version}/package.conf
