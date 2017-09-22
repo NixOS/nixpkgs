@@ -957,4 +957,6 @@ self: super: {
     protolude = super.protolude_0_2;
   };
 
+  # test suite requires git and does a bunch of git operations
+  restless-git = dontCheck super.restless-git;
 }
