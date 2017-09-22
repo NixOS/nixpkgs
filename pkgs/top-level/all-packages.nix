@@ -16529,6 +16529,8 @@ with pkgs;
     quazip = quazip_qt4;
   };
 
+  topydo = callPackage ../applications/misc/topydo {};
+
   torchPackages = recurseIntoAttrs ( callPackage ../applications/science/machine-learning/torch {
     lua = luajit ;
   } );

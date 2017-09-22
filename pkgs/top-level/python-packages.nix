@@ -25788,29 +25788,7 @@ EOF
     };
   };
 
-  topydo = buildPythonPackage rec {
-    name = "topydo-${version}";
-    version = "0.9";
-    disabled = (!isPy3k);
-
-    src = pkgs.fetchFromGitHub {
-      owner = "bram85";
-      repo = "topydo";
-      rev = version;
-      sha256 = "0vmfr2cxn3r5zc0c4q3a94xy1r0cv177b9zrm9hkkjcmhgq42s3h";
-    };
-
-    propagatedBuildInputs = with self; [ arrow icalendar ];
-    buildInputs = with self; [ mock freezegun coverage pkgs.glibcLocales ];
-
-    LC_ALL="en_US.UTF-8";
-
-    meta = {
-      description = "A cli todo application compatible with the todo.txt format";
-      homepage = "https://github.com/bram85/topydo";
-      license = licenses.gpl3;
-    };
-  };
+  topydo = builtins.trace "python3Packages.topydo was moved to topydo" pkgs.topydo; # 2017-09-22
 
   w3lib = buildPythonPackage rec {
     name = "w3lib-${version}";
