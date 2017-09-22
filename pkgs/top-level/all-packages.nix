@@ -18853,10 +18853,6 @@ with pkgs;
 
   hplipWithPlugin = hplip.override { withPlugin = true; };
 
-  hplip_3_15_9 = callPackage ../misc/drivers/hplip/3.15.9.nix { };
-
-  hplipWithPlugin_3_15_9 = hplip_3_15_9.override { withPlugin = true; };
-
   epkowa = callPackage ../misc/drivers/epkowa { };
 
   illum = callPackage ../tools/system/illum { };
