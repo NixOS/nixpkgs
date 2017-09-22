@@ -85,8 +85,14 @@ in
         enable = mkDefault false;
       };
 
+    systemd.services.auth-rpcgss-module =
+      {
+        unitConfig.ConditionPathExists = [ "" "/etc/krb5.keytab" ];
+      };
+
     systemd.services.rpc-gssd =
       { restartTriggers = [ nfsConfFile ];
+        unitConfig.ConditionPathExists = [ "" "/etc/krb5.keytab" ];
       };
 
     systemd.services.rpc-statd =
