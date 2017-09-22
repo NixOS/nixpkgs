@@ -12,8 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "0pk07k65dlw37nz8z5spksivsv5nh96xmbi336rf2yfxf2ldpadd";
   };
 
+  nativeBuildInputs = [
+    pkgconfig
+  ];
+
   buildInputs = libintlOrEmpty ++
-   [ intltool pkgconfig glib json_glib libsoup geoip
+   [ intltool glib json_glib libsoup geoip
      dbus dbus_glib avahi
    ] ++ optionals (!stdenv.isDarwin) [ modemmanager ];
 
