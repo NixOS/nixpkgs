@@ -1149,9 +1149,7 @@ with pkgs;
 
   nfdump = callPackage ../tools/networking/nfdump { };
 
-  patdiff = callPackage ../tools/misc/patdiff {
-    ocamlPackages = ocamlPackages_4_03;
-  };
+  patdiff = callPackage ../tools/misc/patdiff { };
 
   playerctl = callPackage ../tools/audio/playerctl { };
 
@@ -2893,6 +2891,7 @@ with pkgs;
 
   liquidsoap = callPackage ../tools/audio/liquidsoap/full.nix {
     ffmpeg = ffmpeg_2;
+    ocamlPackages = ocamlPackages_4_02;
   };
 
   lksctp-tools = callPackage ../os-specific/linux/lksctp-tools { };
@@ -4379,7 +4378,7 @@ with pkgs;
 
   skippy-xd = callPackage ../tools/X11/skippy-xd {};
 
-  sks = callPackage ../servers/sks { inherit (ocamlPackages) ocaml camlp4; };
+  sks = callPackage ../servers/sks { inherit (ocamlPackages_4_02) ocaml camlp4; };
 
   skydns = callPackage ../servers/skydns { };
 
@@ -6145,9 +6144,7 @@ with pkgs;
 
   ocaml-top = callPackage ../development/tools/ocaml/ocaml-top { };
 
-  ocsigen-i18n = callPackage ../development/tools/ocaml/ocsigen-i18n {
-    ocamlPackages = ocamlPackages_4_03;
-  };
+  ocsigen-i18n = callPackage ../development/tools/ocaml/ocsigen-i18n { };
 
   opa = callPackage ../development/compilers/opa {
     nodejs = nodejs-4_x;
@@ -6286,6 +6283,7 @@ with pkgs;
   };
 
   teyjus = callPackage ../development/compilers/teyjus {
+    inherit (ocamlPackages_4_02) ocaml;
     omake = omake_rc1;
   };
 
@@ -7187,10 +7185,12 @@ with pkgs;
   flow = callPackage ../development/tools/analysis/flow {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     inherit (darwin) cf-private;
-    inherit (ocamlPackages_4_03) ocaml findlib camlp4 sedlex ocamlbuild;
+    inherit (ocamlPackages) ocaml findlib camlp4 sedlex ocamlbuild;
   };
 
-  framac = callPackage ../development/tools/analysis/frama-c { };
+  framac = callPackage ../development/tools/analysis/frama-c {
+    ocamlPackages = ocamlPackages_4_03;
+  };
 
   frame = callPackage ../development/libraries/frame { };
 
@@ -7412,9 +7412,7 @@ with pkgs;
   noweb = callPackage ../development/tools/literate-programming/noweb { };
   nuweb = callPackage ../development/tools/literate-programming/nuweb { tex = texlive.combined.scheme-small; };
 
-  obelisk = callPackage ../development/tools/ocaml/obelisk {
-    ocamlPackages = ocaml-ng.ocamlPackages_4_03;
-  };
+  obelisk = callPackage ../development/tools/ocaml/obelisk { };
 
   obuild = callPackage ../development/tools/ocaml/obuild { };
 
@@ -15418,7 +15416,7 @@ with pkgs;
     bison = bison2;
   };
 
-  llpp = ocaml-ng.ocamlPackages_4_04.callPackage ../applications/misc/llpp { };
+  llpp = ocaml-ng.ocamlPackages.callPackage ../applications/misc/llpp { };
 
   lmms = callPackage ../applications/audio/lmms {
     stdenv = overrideCC stdenv gcc5;
@@ -15920,7 +15918,7 @@ with pkgs;
 
   opusTools = callPackage ../applications/audio/opus-tools { };
 
-  orpie = callPackage ../applications/misc/orpie { gsl = gsl_1; };
+  orpie = callPackage ../applications/misc/orpie { gsl = gsl_1; ocamlPackages = ocamlPackages_4_02; };
 
   osmo = callPackage ../applications/office/osmo { };
 
@@ -16571,7 +16569,7 @@ with pkgs;
 
   stalonetray = callPackage ../applications/window-managers/stalonetray {};
 
-  inherit (ocamlPackages_4_03) stog;
+  inherit (ocamlPackages) stog;
 
   stp = callPackage ../applications/science/logic/stp {};
 
@@ -18497,9 +18495,7 @@ with pkgs;
 
   abella = callPackage ../applications/science/logic/abella {};
 
-  acgtk = callPackage ../applications/science/logic/acgtk {
-    ocamlPackages = ocamlPackages_4_03;
-  };
+  acgtk = callPackage ../applications/science/logic/acgtk { };
 
   alt-ergo = callPackage ../applications/science/logic/alt-ergo {
     ocamlPackages = ocamlPackages_4_02;
@@ -18600,7 +18596,9 @@ with pkgs;
   };
   cvc4 = callPackage ../applications/science/logic/cvc4 {};
 
-  ekrhyper = callPackage ../applications/science/logic/ekrhyper {};
+  ekrhyper = callPackage ../applications/science/logic/ekrhyper {
+    inherit (ocamlPackages_4_02) ocaml;
+  };
 
   eprover = callPackage ../applications/science/logic/eprover { };
 
@@ -18631,7 +18629,9 @@ with pkgs;
     java = if stdenv.isLinux then jre else jdk;
   };
 
-  iprover = callPackage ../applications/science/logic/iprover {};
+  iprover = callPackage ../applications/science/logic/iprover {
+    inherit (ocamlPackages_4_02) ocaml;
+  };
 
   jonprl = callPackage ../applications/science/logic/jonprl {
     smlnj = if stdenv.isDarwin
