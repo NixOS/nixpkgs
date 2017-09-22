@@ -13,8 +13,8 @@ in {
   };
 
   fuse_3 = mkFuse {
-    version = "3.1.1";
-    sha256Hash = "14mazl2i55fp4vjphwgcmk3mp2x3mhqwh9nci0rd0jl5lhpdmpq6";
+    version = "3.2.0";
+    sha256Hash = "0bfpwkfamg4rcbq1s7v5rblpisqq73z6d5j3dxypgqll07hfg51x";
     maintainers = [ maintainers.primeos ];
   };
 }
