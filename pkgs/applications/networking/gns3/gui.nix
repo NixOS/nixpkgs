@@ -1,19 +1,22 @@
-{ stdenv, python34Packages, fetchFromGitHub }:
+{ stable, branch, version, sha256Hash }:
 
-# TODO: Python 3.6 was failing
-python34Packages.buildPythonPackage rec {
+{ stdenv, python3Packages, fetchFromGitHub }:
+
+let
+  pythonPackages = python3Packages;
+
+in pythonPackages.buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "gns3-gui";
-  version = "2.0.3";
 
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = pname;
     rev = "v${version}";
-    sha256 = "10qp6430md8d0h2wamgfaq7pai59mqmcw6sw3i1gvb20m0avvsvb";
+    sha256 = sha256Hash;
   };
 
-  propagatedBuildInputs = with python34Packages; [
+  propagatedBuildInputs = with pythonPackages; [
     raven psutil jsonschema # tox for check
     # Runtime dependencies
     sip pyqt5
@@ -22,11 +25,13 @@ python34Packages.buildPythonPackage rec {
   doCheck = false; # Failing
 
   meta = with stdenv.lib; {
-    description = "Graphical Network Simulator";
-    #longDescription = ''
-    #  ...
-    #'';
-    homepage = "https://www.gns3.com/";
+    description = "Graphical Network Simulator 3 GUI (${branch} release)";
+    longDescription = ''
+      Graphical user interface for controlling the GNS3 network simulator. This
+      requires access to a local or remote GNS3 server (it's recommended to
+      download the official GNS3 VM).
+    '';
+    homepage = https://www.gns3.com/;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];
