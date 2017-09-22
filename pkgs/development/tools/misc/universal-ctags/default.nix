@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, perl }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, perl, pythonPackages }:
 
 stdenv.mkDerivation rec {
   name = "universal-ctags-${version}";
@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0nwcf5mh3ba0g23zw7ym73pgpfdass412k2fy67ryr9vnc709jkj";
   };
 
+  nativeBuildInputs = [ pythonPackages.docutils ];
   buildInputs = [ autoreconfHook pkgconfig ];
 
   # remove when https://github.com/universal-ctags/ctags/pull/1267 is merged
