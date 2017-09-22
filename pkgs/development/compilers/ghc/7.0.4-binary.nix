@@ -74,9 +74,9 @@ stdenv.mkDerivation rec {
          install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib $1
        }
 
-       ln -s ${libiconv}/lib/libiconv.dylib ghc-7.0.4/utils/ghc-pwd/dist/build/tmp
-       ln -s ${libiconv}/lib/libiconv.dylib ghc-7.0.4/utils/hpc/dist/build/tmp
-       ln -s ${libiconv}/lib/libiconv.dylib ghc-7.0.4/ghc/stage2/build/tmp
+       ln -s ${libiconv}/lib/libiconv.dylib ghc-${version}/utils/ghc-pwd/dist/build/tmp
+       ln -s ${libiconv}/lib/libiconv.dylib ghc-${version}/utils/hpc/dist/build/tmp
+       ln -s ${libiconv}/lib/libiconv.dylib ghc-${version}/ghc/stage2/build/tmp
 
        for file in ghc-cabal ghc-pwd ghc-stage2 ghc-pkg haddock hsc2hs hpc; do
          fix $(find . -type f -name $file)
