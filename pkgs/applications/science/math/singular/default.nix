@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gmp, bison, perl, autoconf, ncurses, readline, coreutils, pkgconfig
+{ stdenv, fetchurl, gmp, bison, perl, autoconf, ncurses, readline, coreutils, gcc5, pkgconfig
 , asLibsingular ? false
 }:
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ gmp perl ncurses readline ];
-  nativeBuildInputs = [ autoconf bison pkgconfig ];
+  nativeBuildInputs = [ autoconf bison gcc5 pkgconfig ];
 
   preConfigure = ''
     find . -exec sed -e 's@/bin/rm@${coreutils}&@g' -i '{}' ';'
