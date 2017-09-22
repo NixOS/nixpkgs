@@ -42,6 +42,11 @@ stdenv.mkDerivation rec {
     "ac_cv_path_SENDMAIL=sendmail"
   ];
 
+  # Fix missing libidn in mutt;
+  # this fix is ugly since it links all binaries in mutt against libidn
+  # like pgpring, pgpewrap, ...
+  NIX_LDFLAGS = "-lidn";
+
   configureScript = "./prepare";
 
   enableParallelBuilding = true;
