@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name= "riot-web-${version}";
-  version = "0.12.5";
+  version = "0.12.6";
 
   src = fetchurl {
     url = "https://github.com/vector-im/riot-web/releases/download/v${version}/riot-v${version}.tar.gz";
-    sha256 = "1g30gl4b5fk1h13r2v4rspcqic9jg99717lxplk5birg3wi3b2d3";
+    sha256 = "00hxjhnsm4622hv46xm7lc81kbnzi2iz77qppwma14cbh63jbilv";
   };
 
   installPhase = ''
