@@ -4058,6 +4058,8 @@ with pkgs;
 
   radeon-profile = libsForQt5.callPackage ../tools/misc/radeon-profile { };
 
+  radsecproxy = callPackage ../tools/networking/radsecproxy { };
+
   radvd = callPackage ../tools/networking/radvd { };
 
   rainbowstream = pythonPackages.rainbowstream;
