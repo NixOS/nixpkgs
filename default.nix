@@ -1,19 +1,24 @@
-let requiredVersion = import ./lib/minver.nix; in
-
-if ! builtins ? nixVersion || builtins.compareVersions requiredVersion builtins.nixVersion == 1 then
-
-  abort ''
-
-    This version of Nixpkgs requires Nix >= ${requiredVersion}, please upgrade:
-
-    - If you are running NixOS, use `nixos-rebuild' to upgrade your system.
-
-    - If you installed Nix using the install script (https://nixos.org/nix/install),
-      it is safe to upgrade by running it again:
-
-          curl https://nixos.org/nix/install | sh
-  ''
-
-else
-
-  import ./pkgs/top-level/impure.nix
+{ stdenv, fetchurl, automake, unzip }:
+stdenv.mkDerivation rec {
+  name = "teiler-${version}";
+  version = "3.1.1";
+  src = fetchurl {
+    url = "https://github.com/carnager/teiler/archive/v${version}.zip";
+    sha256 = "0l89aaziggqg3jc7yidcj1g0y0shym5r1dvlmk0mhfwr3w76vabk";
+  };
+  meta = {
+    homepage = https://github.com/carnager/teiler;
+    description = "Little script for screenshots and screencasts utilizing rofi, maim, ffmpeg";
+    license = stdenv.lib.licenses.gpl3;
+  };
+  dontBuild = true;
+  preInstall = ''
+    makeFlags="PREFIX= DESTDIR=$out"
+    substituteInPlace ./teiler \
+      --replace "cp /etc/teiler/teiler.conf " "cp --no-preserve=mode /etc/teiler/teiler.conf "  \
+      --replace " /etc" " $out/etc"
+  '';
+  buildInputs = [
+    unzip
+  ];
+}
