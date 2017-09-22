@@ -135,6 +135,7 @@ mapAliases (rec {
   spaceOrbit = space-orbit; # addewd 2016-05-23
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
+  sshfs = sshfs-fuse; # added 2017-08-14
   sshfsFuse = sshfs-fuse; # added 2016-09
   surf-webkit2 = surf; # added 2017-04-02
   system_config_printer = system-config-printer;  # added 2016-01-03

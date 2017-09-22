@@ -7660,11 +7660,11 @@ in {
   };
 
   raven = buildPythonPackage rec {
-    name = "raven-6.1.0";
+    name = "raven-6.2.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/raven/${name}.tar.gz";
-      sha256 = "1158fsjjl8byzl9nw52jhhdssjl6n7l0hjaxm5hdi69v2zxvzjh2";
+      sha256 = "1jmr9kpajfh6fvxbym6fdybmlr14216y0dkbial7ris9pi1pwhf5";
     };
 
     # way too many dependencies to run tests
@@ -7892,7 +7892,9 @@ in {
     };
     doCheck = false;
     propagatedBuildInputs = with self; [ requests ];
+    buildInputs = with pkgs; [ file ];
     prePatch = ''
+      sed -i -e "s|'file|'${pkgs.file}/bin/file|" py3status/parse_config.py
       sed -i -e "s|\[\"acpi\"|\[\"${pkgs.acpi}/bin/acpi\"|" py3status/modules/battery_level.py
       sed -i -e "s|notify-send|${pkgs.libnotify}/bin/notify-send|" py3status/modules/battery_level.py
       sed -i -e "s|/usr/bin/whoami|${pkgs.coreutils}/bin/whoami|" py3status/modules/external_script.py
@@ -9150,6 +9152,8 @@ in {
   flake8-blind-except = callPackage ../development/python-modules/flake8-blind-except { };
 
   flake8-debugger = callPackage ../development/python-modules/flake8-debugger { };
+
+  flake8-future-import = callPackage ../development/python-modules/flake8-future-import { };
 
   flaky = buildPythonPackage rec {
     name = "flaky-${version}";
@@ -25799,27 +25803,7 @@ EOF
     };
   };
 
-  pafy = buildPythonPackage rec {
-    name = "pafy-${version}";
-    version = "0.5.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pafy/${name}.tar.gz";
-      sha256 = "1ckvrypyvb7jbqlgwdz0y337ajagjv7dgxyns326nqwypn1wpq0i";
-    };
-
-    # No tests included in archive
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ youtube-dl ];
-
-    meta = with stdenv.lib; {
-      description = "A library to download YouTube content and retrieve metadata";
-      homepage = http://np1.github.io/pafy/;
-      license = licenses.lgpl3Plus;
-      maintainers = with maintainers; [ odi ];
-    };
-  };
+  pafy = callPackage ../development/python-modules/pafy { };
 
   suds = buildPythonPackage rec {
     name = "suds-0.4";
@@ -26289,29 +26273,7 @@ EOF
     };
   };
 
-  topydo = buildPythonPackage rec {
-    name = "topydo-${version}";
-    version = "0.9";
-    disabled = (!isPy3k);
-
-    src = pkgs.fetchFromGitHub {
-      owner = "bram85";
-      repo = "topydo";
-      rev = version;
-      sha256 = "0vmfr2cxn3r5zc0c4q3a94xy1r0cv177b9zrm9hkkjcmhgq42s3h";
-    };
-
-    propagatedBuildInputs = with self; [ arrow icalendar ];
-    buildInputs = with self; [ mock freezegun coverage pkgs.glibcLocales ];
-
-    LC_ALL="en_US.UTF-8";
-
-    meta = {
-      description = "A cli todo application compatible with the todo.txt format";
-      homepage = "https://github.com/bram85/topydo";
-      license = licenses.gpl3;
-    };
-  };
+  topydo = throw "python3Packages.topydo was moved to topydo"; # 2017-09-22
 
   w3lib = buildPythonPackage rec {
     name = "w3lib-${version}";

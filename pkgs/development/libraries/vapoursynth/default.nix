@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook,
-  zimg, libass, yasm, python3,
+  zimg, libass, yasm, python3, libiconv, ApplicationServices,
   ocrSupport ?  false, tesseract,
   imwriSupport? true,  imagemagick7
 }:
@@ -20,11 +20,12 @@ stdenv.mkDerivation rec {
     sha256 = "0nabl6949s7awy7rnr4ck52v50xr0hwr280fyzsqixgp8w369jn0";
   };
 
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [
-    pkgconfig autoreconfHook
     zimg libass tesseract yasm
     (python3.withPackages (ps: with ps; [ sphinx cython ]))
-  ] ++ optional ocrSupport   tesseract
+  ] ++ optionals stdenv.isDarwin [ libiconv ApplicationServices ]
+    ++ optional ocrSupport   tesseract
     ++ optional imwriSupport imagemagick7;
 
   configureFlags = [

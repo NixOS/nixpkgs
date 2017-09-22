@@ -20,6 +20,7 @@
 
     # Some networking tools.
     pkgs.fuse
+    pkgs.fuse3
     pkgs.sshfs-fuse
     pkgs.socat
     pkgs.screen

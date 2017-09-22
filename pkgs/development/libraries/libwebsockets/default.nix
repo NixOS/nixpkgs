@@ -11,8 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1hv2b5r6sg42xnqhm4ysjvyiz3cqpfmwaqm33vpbx0k7arj4ixvy";
   };
 
-  buildInputs = [ cmake openssl zlib ];
-  propagatedBuildInputs = [ libuv ];
+  buildInputs = [ cmake openssl zlib libuv ];
   cmakeFlags = [ "-DLWS_WITH_PLUGINS=ON" ];
 
   meta = {
