@@ -53,6 +53,9 @@ let
           patchelf --set-interpreter $interp \
             --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}:$lldbLibPath" \
             bin/clang/clang-tidy
+
+          wrapProgram $out/bin/clion \
+            --set CL_JDK "${jdk}"
         )
       '';
     });
