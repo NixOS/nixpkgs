@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "geoip" ];
 
+  enableParallelBuilding = true;
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libevent openssl zlib ] ++
     stdenv.lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
