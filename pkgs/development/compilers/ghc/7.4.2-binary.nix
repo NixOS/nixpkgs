@@ -107,15 +107,10 @@ stdenv.mkDerivation rec {
         -exec patchelf --set-rpath "${libPath}" {} \;
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     # not enough room in the object files for the full path to libiconv :(
-    ln -s ${libiconv}/lib/libiconv.dylib $out/bin
-    ln -s ${libiconv}/lib/libiconv.dylib $out/lib/ghc-${version}/libiconv.dylib
-
-    fix () {
-      install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib $1
-    }
-
-    for file in ghc-cabal ghc-pwd ghc-stage2 ghc-pkg haddock hsc2hs hpc; do
-      fix $(find "$out" -type f -name $file)
+    for exe in $(find "$out" -type f -executable); do
+      isScript $exe && continue
+      ln -fs ${libiconv}/lib/libiconv.dylib $(dirname $exe)/libiconv.dylib
+      install_name_tool -change /usr/lib/libiconv.2.dylib @executable_path/libiconv.dylib $exe
     done
 
     for file in $(find "$out" -name setup-config); do
