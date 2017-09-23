@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchFromSavannah, autogen, flex, bison, python, autoconf, automake
-, gettext, ncurses, libusb, freetype, qemu, devicemapper, unifont
+, gettext, ncurses, libusb, freetype, qemu, devicemapper, unifont, pkgconfig
 , zfs ? null
 , efiSupport ? false
 , zfsSupport ? true
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     sha256 = "03vvdfhdmf16121v7xs8is2krwnv15wpkhkf16a4yf8nsfc3f2w1";
   };
 
-  nativeBuildInputs = [ bison flex python ];
+  nativeBuildInputs = [ bison flex python pkgconfig ];
   buildInputs = [ ncurses libusb freetype gettext devicemapper ]
     ++ optional doCheck qemu
     ++ optional zfsSupport zfs;
