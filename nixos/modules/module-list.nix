@@ -92,6 +92,7 @@
   ./programs/mosh.nix
   ./programs/mtr.nix
   ./programs/nano.nix
+  ./programs/npm.nix
   ./programs/oblogout.nix
   ./programs/qt5ct.nix
   ./programs/screen.nix
