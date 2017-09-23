@@ -26,7 +26,7 @@ let
   # A clue for the kernel loading
   kernelParams = pkgs.writeText "kernel-params.txt" ''
     Kernel Parameters:
-      init=/boot/init systemConfig=/boot/init ${toString config.boot.kernelParams}
+      init=/boot/init systemConfig=/boot/init ${toString config.boot.kernelParamList}
   '';
 
   # System wide nixpkgs config
