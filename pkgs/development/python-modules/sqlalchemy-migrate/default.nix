@@ -33,5 +33,6 @@ buildPythonPackage rec {
     homepage = http://code.google.com/p/sqlalchemy-migrate/;
     description = "Schema migration tools for SQLAlchemy";
     license = licenses.asl20;
+    maintainers = with maintainers; [ makefu ];
   };
 }
