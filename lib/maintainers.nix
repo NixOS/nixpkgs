@@ -186,6 +186,7 @@
   ellis = "Ellis Whitehead <nixos@ellisw.net>";
   eperuffo = "Emanuele Peruffo <info@emanueleperuffo.com>";
   epitrochoid = "Mabry Cervin <mpcervin@uncg.edu>";
+  eqyiel = "Ruben Maher <r@rkm.id.au>";
   ericbmerritt = "Eric Merritt <eric@afiniate.com>";
   ericsagnes = "Eric Sagnes <eric.sagnes@gmail.com>";
   erikryb = "Erik Rybakken <erik.rybakken@math.ntnu.no>";

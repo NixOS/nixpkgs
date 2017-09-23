@@ -1470,6 +1470,8 @@ in {
     };
   };
 
+  blessed = callPackage ../development/python-modules/blessed {};
+
   # Build boost for this specific Python version
   # TODO: use separate output for libboost_python.so
   boost = pkgs.boost.override {inherit python;};
@@ -1557,6 +1559,8 @@ in {
       maintainers = with maintainers; [ bennofs ];
     };
   };
+
+  cement = callPackage ../development/python-modules/cement {};
 
   cgroup-utils = callPackage ../development/python-modules/cgroup-utils {};
     postPatch = ''
@@ -20314,9 +20318,12 @@ in {
   };
 
   semantic-version = buildPythonPackage rec {
-    name = "semantic_version-2.4.2";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/semantic_version/${name}.tar.gz";
+    pname = "semantic_version";
+    version = "2.4.2";
+    name = "${pname}${version}";
+
+    src = self.fetchPypi {
+      inherit pname version;
       sha256 = "7e8b7fa74a3bc9b6e90b15b83b9bc2377c78eaeae3447516425f475d5d6932d2";
     };
 
@@ -21103,10 +21110,11 @@ in {
 
   tabulate = buildPythonPackage rec {
     version = "0.7.7";
-    name = "tabulate-${version}";
+    pname = "tabulate";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tabulate/${name}.tar.gz";
+    src = fetchPypi {
+      inherit pname version;
       sha256 = "83a0b8e17c09f012090a50e1e97ae897300a72b35e0c86c0b53d3bd2ae86d8c6";
     };
 
