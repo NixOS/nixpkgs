@@ -13,15 +13,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ python fontforge ];
 
-  enableParallelBuilding = true;
-
   buildPhase = ''
     local _d=""
     local _l=""
     for _d in {Monoisome,Source}/*.sfdir; do
       _l="''${_d##*/}.log"
       echo "Building $_d (log at $_l)"
-      python Scripts/build.py ${if enableParallelBuilding then "$NIX_BUILD_CORES" else "1"} 0 $_d > $_l
+      python Scripts/build.py 1 0 $_d > $_l
     done
   '';
 
@@ -33,7 +31,7 @@ stdenv.mkDerivation rec {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash = "0ml61zym03n175gpx1gr7812f45lyjm0vzgbqjx91fi58rqlazvm";
+  outputHash = "0lbipgygiva3gg1pqw07phpnnf0s6ka9vqdk1pw7bkybjw3f7wzm";
 
   meta = with stdenv.lib; {
     homepage = http://larsenwork.com/monoid;
