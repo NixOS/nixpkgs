@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "openafs-${version}-${kernel.version}";
-  version = "1.6.21";
+  version = "1.6.21.1";
 
   src = fetchurl {
     url = "http://www.openafs.org/dl/openafs/${version}/openafs-${version}-src.tar.bz2";
-    sha256 = "ba9c1f615edd53b64fc271ad369c49a816acedca70cdd090975033469a84118f";
+    sha256 = "0nisxnfl8nllcfmi7mxj1gngkpxd4jp1wapbkhz07qwqynq9dn5f";
   };
 
   nativeBuildInputs = [ autoconf automake flex yacc perl which ];
@@ -46,8 +46,6 @@ stdenv.mkDerivation rec {
     license = licenses.ipl10;
     platforms = platforms.linux;
     maintainers = [ maintainers.z77z ];
-    broken =
-      (builtins.compareVersions kernel.version  "3.18" == -1) ||
-      (builtins.compareVersions kernel.version "4.13" == 0);
+    broken = versionOlder kernel.version "3.18";
   };
 }
