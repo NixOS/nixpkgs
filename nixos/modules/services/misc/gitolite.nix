@@ -41,6 +41,15 @@ in
         '';
       };
 
+      enableGitAnnex = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable git-annex support. Uses the <literal>extraGitoliteRc</literal> option
+          to apply the necessary configuration.
+        '';
+      };
+
       commonHooks = mkOption {
         type = types.listOf types.path;
         default = [];
@@ -75,6 +84,8 @@ in
           will need to take any customizations you may have in
           <literal>~/.gitolite.rc</literal>, convert them to appropriate Perl
           statements, add them to this option, and remove the file.
+
+          See also the <literal>enableGitAnnex</literal> option.
         '';
       };
 
@@ -124,6 +135,11 @@ in
         ''} >>"$out/gitolite.rc"
       '';
   in {
+    services.gitolite.extraGitoliteRc = optionalString cfg.enableGitAnnex ''
+      # Enable git-annex support:
+      push( @{$RC{ENABLE}}, 'git-annex-shell ua');
+    '';
+
     users.extraUsers.${cfg.user} = {
       description     = "Gitolite user";
       home            = cfg.dataDir;
@@ -198,6 +214,7 @@ in
         '';
     };
 
-    environment.systemPackages = [ pkgs.gitolite pkgs.git ];
+    environment.systemPackages = [ pkgs.gitolite pkgs.git ]
+        ++ optional cfg.enableGitAnnex pkgs.gitAndTools.git-annex;
   });
 }
