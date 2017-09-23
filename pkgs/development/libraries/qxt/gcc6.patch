@@ -1,0 +1,13 @@
+diff --git i/src/core/qxtslotjob.cpp w/src/core/qxtslotjob.cpp
+index eee4597..9387f19 100644
+--- i/src/core/qxtslotjob.cpp
++++ w/src/core/qxtslotjob.cpp
+@@ -174,7 +174,7 @@ This uses QxtSignalWaiter so it will _not_ block your current thread.
+ 
+ QVariant QxtFuture::delayedResult(int msec)
+ {
+-    if (!waiter->wait(msec, false))
++    if (!waiter->wait(msec, NULL))
+         return QVariant();
+     return job->result();
+ }

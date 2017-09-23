@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qt4 which ];
 
-  patchPhase = ''
+  patches = [
+    ./gcc6.patch
+  ];
+
+  preConfigure = ''
     patchShebangs configure
     substituteInPlace configure --replace "/bin/pwd" "${coreutils}/bin/pwd"
   '';
