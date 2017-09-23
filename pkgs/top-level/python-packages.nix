@@ -17797,16 +17797,24 @@ in {
 
   pyscss = buildPythonPackage rec {
     name = "pyScss-${version}";
-    version = "1.3.4";
+    version = "1.3.5";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyScss/${name}.tar.gz";
-      sha256 = "03lcp853kgr66aqrw2jd1q9jhs9h049w7zlwp7bfmly7xh832cnh";
+    src = pkgs.fetchFromGitHub {
+      sha256 = "0lfsan74vcw6dypb196gmbprvlbran8p7w6czy8hyl2b1l728mhz";
+      rev = "v1.3.5";
+      repo = "pyScss";
+      owner = "Kronuz";
     };
+
+    checkInputs = with self; [ pytest ];
 
     propagatedBuildInputs = with self; [ six ]
       ++ (optionals (pythonOlder "3.4") [ enum34 pathlib ])
       ++ (optionals (pythonOlder "2.7") [ ordereddict ]);
+
+    checkPhase = ''
+      py.test
+    '';
 
     meta = {
       description = "A Scss compiler for Python";
