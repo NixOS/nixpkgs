@@ -1,4 +1,4 @@
-{ buildPythonPackage, fetchPypi, pbr, six, netaddr, stevedore, mock,
+{ lib, buildPythonPackage, fetchPypi, pbr, six, netaddr, stevedore, mock,
 debtcollector, rfc3986, pyyaml, oslo-i18n }:
 
 buildPythonPackage rec {
@@ -20,5 +20,13 @@ buildPythonPackage rec {
   postPatch = ''
     substituteInPlace requirements.txt --replace "argparse" ""
   '';
+
+  meta = with lib; {
+    description = "Oslo Configuration API";
+    homepage = "https://docs.openstack.org/oslo.config/latest/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ makefu ];
+  };
+
 
 }
