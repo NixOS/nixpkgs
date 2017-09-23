@@ -62,7 +62,7 @@ stdenv.mkDerivation {
       AGL AppKit ApplicationServices Carbon Cocoa
       CoreAudio CoreBluetooth CoreLocation CoreServices
       DiskArbitration Foundation OpenGL
-      darwin.cf-private darwin.libobjc libiconv
+      darwin.libobjc libiconv
     ]);
 
   buildInputs = [ ]
@@ -79,7 +79,8 @@ stdenv.mkDerivation {
   outputs = [ "out" "dev" "bin" ];
 
   patches =
-    copyPathsToStore (lib.readPathsFromFile ./. ./series);
+    copyPathsToStore (lib.readPathsFromFile ./. ./series)
+    ++ stdenv.lib.optional stdenv.isDarwin ./darwin-cf.patch;
 
   postPatch =
     ''
@@ -110,7 +111,7 @@ stdenv.mkDerivation {
           -e 's#val=$(echo $sdk_val $(echo $val | cut -s -d \x27 \x27 -f 2-))##' \
           ./configure
       sed -i '3,$d' ./mkspecs/features/mac/default_pre.prf
-      sed -i '26,$d' ./mkspecs/features/mac/default_post.prf
+      sed -i '27,$d' ./mkspecs/features/mac/default_post.prf
       sed -i '1,$d' ./mkspecs/features/mac/sdk.prf
       sed -i 's/QMAKE_LFLAGS_RPATH      = -Wl,-rpath,/QMAKE_LFLAGS_RPATH      =/' ./mkspecs/common/mac.conf
      '';
