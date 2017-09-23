@@ -202,6 +202,45 @@ rmdir /var/lib/ipfs/.ipfs
       <command>gpgv</command>, etc.
     </para>
   </listitem>
+
+  <listitem>
+    <para>
+      <literal>services.mysql</literal> now has declarative
+      configuration of databases and users with the <literal>ensureDatabases</literal> and
+      <literal>ensureUsers</literal> options.
+    </para>
+
+    <para>
+      These options will never delete existing databases and users,
+      especially not when the value of the options are changed.
+    </para>
+
+    <para>
+      The MySQL users will be identified using
+      <link xlink:href="https://mariadb.com/kb/en/library/authentication-plugin-unix-socket/">
+        Unix socket authentication</link>. This authenticates the
+        Unix user with the same name only, and that without the need
+        for a password.
+    </para>
+
+    <para>
+      If you have previously created a MySQL <literal>root</literal>
+      user <emphasis>with a password</emphasis>, you will need to add
+      <literal>root</literal> user for unix socket authentication
+      before using the new options. This can be done by running the
+      following SQL script:
+
+<programlisting language="sql">
+CREATE USER 'root'@'%' IDENTIFIED BY '';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+-- Optionally, delete the password-authenticated user:
+-- DROP USER 'root'@'localhost';
+</programlisting>
+
+    </para>
+  </listitem>
 </itemizedlist>
 
 <para>Other notable improvements:</para>
