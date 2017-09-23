@@ -1,7 +1,6 @@
 { stdenv, fetchurl, openssl }:
 
 stdenv.mkDerivation rec {
-
   name = "radsecproxy-${version}";
   version = "1.6.9";
 
@@ -21,10 +20,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://software.nordu.net/radsecproxy/;
     description = "A generic RADIUS proxy that supports both UDP and TLS (RadSec) RADIUS transports.";
-    license = licenses.bsd;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ sargon ];
     platforms = with platforms; linux;
   };
-
 }
-
