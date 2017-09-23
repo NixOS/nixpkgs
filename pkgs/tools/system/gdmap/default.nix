@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     homepage = http://gdmap.sourceforge.net;
     description = "Recursive rectangle map of disk usage";
     license = licenses.gpl2;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };
 }

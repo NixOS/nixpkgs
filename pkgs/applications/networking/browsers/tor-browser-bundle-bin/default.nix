@@ -44,6 +44,10 @@
 , hicolor_icon_theme
 , shared_mime_info
 
+# Whether to disable multiprocess support to work around crashing tabs
+# TODO: fix the underlying problem instead of this terrible work-around
+, disableContentSandbox ? true
+
 # Extra preferences
 , extraPrefs ? ""
 }:
@@ -209,6 +213,10 @@ stdenv.mkDerivation rec {
     // Defaults to creating $TBB_HOME/TorBrowser/Data/Tor/{socks,control}.socket
     lockPref("extensions.torlauncher.control_port_use_ipc", true);
     lockPref("extensions.torlauncher.socks_port_use_ipc", true);
+
+    // Optionally disable multiprocess support.  We always set this to ensure that
+    // toggling the pref takes effect.
+    lockPref("browser.tabs.remote.autostart.2", ${if disableContentSandbox then "false" else "true"});
 
     ${optionalString (extraPrefs != "") ''
       ${extraPrefs}

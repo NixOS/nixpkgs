@@ -1470,6 +1470,8 @@ in {
     };
   };
 
+  blessed = callPackage ../development/python-modules/blessed {};
+
   # Build boost for this specific Python version
   # TODO: use separate output for libboost_python.so
   boost = pkgs.boost.override {inherit python;};
@@ -1557,6 +1559,8 @@ in {
       maintainers = with maintainers; [ bennofs ];
     };
   };
+
+  cement = callPackage ../development/python-modules/cement {};
 
   cgroup-utils = callPackage ../development/python-modules/cgroup-utils {};
     postPatch = ''
@@ -2152,13 +2156,15 @@ in {
       sha256 = "1fgg28halsy4g43wjpkbd6l0wqiwyzkd4zjrzbbyzw4dxbsf3xfm";
     };
 
-    propagatedBuildInputs =
-      [ self.dateutil
-        self.requests
-        self.jmespath
-      ];
+    propagatedBuildInputs = with self; [
+      dateutil
+      jmespath
+      docutils
+      ordereddict
+      simplejson
+    ];
 
-    buildInputs = with self; [ docutils mock nose ];
+    checkInputs = with self; [ mock nose ];
 
     checkPhase = ''
       nosetests -v
@@ -4663,7 +4669,10 @@ in {
     };
   };
 
-  dateutil = callPackage ../development/python-modules/dateutil { };
+  # Actual name of package
+  python-dateutil = callPackage ../development/python-modules/dateutil { };
+  # Alias that we should deprecate
+  dateutil = self.python-dateutil;
 
   # Buildbot 0.8.7p1 needs dateutil==1.5
   dateutil_1_5 = buildPythonPackage (rec {
@@ -7516,11 +7525,11 @@ in {
   };
 
   raven = buildPythonPackage rec {
-    name = "raven-6.1.0";
+    name = "raven-6.2.0";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/raven/${name}.tar.gz";
-      sha256 = "1158fsjjl8byzl9nw52jhhdssjl6n7l0hjaxm5hdi69v2zxvzjh2";
+      sha256 = "1jmr9kpajfh6fvxbym6fdybmlr14216y0dkbial7ris9pi1pwhf5";
     };
 
     # way too many dependencies to run tests
@@ -20314,9 +20323,12 @@ in {
   };
 
   semantic-version = buildPythonPackage rec {
-    name = "semantic_version-2.4.2";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/semantic_version/${name}.tar.gz";
+    pname = "semantic_version";
+    version = "2.4.2";
+    name = "${pname}${version}";
+
+    src = self.fetchPypi {
+      inherit pname version;
       sha256 = "7e8b7fa74a3bc9b6e90b15b83b9bc2377c78eaeae3447516425f475d5d6932d2";
     };
 
@@ -21077,10 +21089,11 @@ in {
 
   tabulate = buildPythonPackage rec {
     version = "0.7.7";
-    name = "tabulate-${version}";
+    pname = "tabulate";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/tabulate/${name}.tar.gz";
+    src = fetchPypi {
+      inherit pname version;
       sha256 = "83a0b8e17c09f012090a50e1e97ae897300a72b35e0c86c0b53d3bd2ae86d8c6";
     };
 
@@ -25762,29 +25775,7 @@ EOF
     };
   };
 
-  topydo = buildPythonPackage rec {
-    name = "topydo-${version}";
-    version = "0.9";
-    disabled = (!isPy3k);
-
-    src = pkgs.fetchFromGitHub {
-      owner = "bram85";
-      repo = "topydo";
-      rev = version;
-      sha256 = "0vmfr2cxn3r5zc0c4q3a94xy1r0cv177b9zrm9hkkjcmhgq42s3h";
-    };
-
-    propagatedBuildInputs = with self; [ arrow icalendar ];
-    buildInputs = with self; [ mock freezegun coverage pkgs.glibcLocales ];
-
-    LC_ALL="en_US.UTF-8";
-
-    meta = {
-      description = "A cli todo application compatible with the todo.txt format";
-      homepage = "https://github.com/bram85/topydo";
-      license = licenses.gpl3;
-    };
-  };
+  topydo = throw "python3Packages.topydo was moved to topydo"; # 2017-09-22
 
   w3lib = buildPythonPackage rec {
     name = "w3lib-${version}";

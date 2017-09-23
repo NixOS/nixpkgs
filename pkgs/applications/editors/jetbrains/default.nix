@@ -53,6 +53,9 @@ let
           patchelf --set-interpreter $interp \
             --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib zlib ]}:$lldbLibPath" \
             bin/clang/clang-tidy
+
+          wrapProgram $out/bin/clion \
+            --set CL_JDK "${jdk}"
         )
       '';
     });
@@ -229,15 +232,15 @@ in
 
   datagrip = buildDataGrip rec {
     name = "datagrip-${version}";
-    version = "2017.1.5"; /* updated by script */
+    version = "2017.2.2"; /* updated by script */
     description = "Your Swiss Army Knife for Databases and SQL";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/datagrip/${name}.tar.gz";
-      sha256 = "8847c35761fcf6fc7a1d3f2bed0fa3971fbf28721c144f41d21feb473bb212dc"; /* updated by script */
+      sha256 = "1l8y65fw9g5ckzwpcgigm2qwy8fhpw2hil576rphsnx6qvnh4swn"; /* updated by script */
     };
     wmClass = "jetbrains-datagrip";
-    update-channel = "datagrip_2017_1";
+    update-channel = "datagrip_2017_2";
   };
 
   gogland = buildGogland rec {
