@@ -8856,18 +8856,21 @@ in {
   };
 
   eventlet = buildPythonPackage rec {
-    name = "eventlet-0.17.4";
+    pname = "eventlet";
+    version = "0.20.0";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/e/eventlet/${name}.tar.gz";
-      sha256 = "0vam0qfm8p5jkpp2cv12r5bnpnv902ld7q074h7x5y5g9rqyj8c7";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "15bq5ybbigxnp5xwkps53zyhlg15lmcnq3ny2dppj0r0bylcs5rf";
     };
 
     buildInputs = with self; [ nose httplib2 pyopenssl  ];
 
     doCheck = false;  # too much transient errors to bother
 
-    propagatedBuildInputs = optionals (!isPyPy) [ self.greenlet ];
+    propagatedBuildInputs = optionals (!isPyPy) [ self.greenlet ] ++
+      (with self; [ enum-compat ]) ;
 
     meta = {
       homepage = http://pypi.python.org/pypi/eventlet/;
@@ -12623,13 +12626,15 @@ in {
   };
 
   monotonic = buildPythonPackage rec {
-    name = "monotonic-0.4";
+    pname = "monotonic";
+    version = "1.3";
+    name = "${pname}-${version}";
 
     __propagatedImpureHostDeps = stdenv.lib.optional stdenv.isDarwin "/usr/lib/libc.dylib";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/monotonic/${name}.tar.gz";
-      sha256 = "1diab6hfh3jpa1f0scpqaqrawk4g97ss4v7gkn2yw8znvdm6abw5";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "06vw7jwq96106plhlc5vz1v1xvjismdgw9wjyzvzf0ylglnrwiib";
     };
 
     patchPhase = optionalString stdenv.isLinux ''
@@ -13846,12 +13851,13 @@ in {
   };
 
   oslo-serialization = buildPythonPackage rec {
-    name = "oslo.serialization-${version}";
-    version = "1.10.0";
+    pname = "oslo.serialization";
+    version = "2.20.0";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/oslo.serialization/${name}.tar.gz";
-      sha256 = "15k8aql2rx5jzv3hfvmd48vsyw172qa64bs3fmsyx25p37zyfy8a";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "00j8hn8f0shk4anzb6zwn8w1sfxcil9a3jgxljwalq6ma2rzp9pw";
     };
 
     patchPhase = ''
@@ -13893,12 +13899,13 @@ in {
 
 
   oslo-utils = buildPythonPackage rec {
-    name = "oslo.utils-${version}";
-    version = "2.6.0";
+    pname = "oslo.utils";
+    version = "3.29.0";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/oslo.utils/${name}.tar.gz";
-      sha256 = "1prgi03nxkcykyja821qkycsqlnpyzw17mpvj8qf3pjmgb9gv1fy";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0l90ijw96czjd6z8bw88983rsnq5753iw86rhk1wi064w4rs19ig";
     };
 
     propagatedBuildInputs = with self; [ pbr Babel six iso8601 pytz netaddr netifaces
@@ -14254,12 +14261,14 @@ in {
 
 
   oslo-service = buildPythonPackage rec {
-    name = "oslo.service-${version}";
-    version = "0.10.0";
+    pname = "oslo.service";
+    version = "1.26.0";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/oslo.service/oslo.service-0.10.0.tar.gz";
-      sha256 = "1pcnimc2a50arcgq355ad9lramf6y1yv974swgfj6w90v5c6p9gz";
+    name = "${pname}-${version}";
+
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "083q7z6nrska5fq12vnd70blphxscd7ivca2d78jk84d99h0m5n5";
     };
 
     propagatedBuildInputs = with self; [
@@ -14267,16 +14276,15 @@ in {
       oslo-concurrency wrapt eventlet six oslo-serialization greenlet paste
       oslo-config monotonic iso8601 oslo-log pytz routes msgpack
       oslo-i18n argparse oslo-utils pbr enum34 netaddr stevedore netifaces
-      pyinotify webob retrying pyinotify ];
+      pyinotify webob retrying pyinotify oslo-log ];
     buildInputs = with self; [
       oslosphinx oslotest pkgs.procps mock mox3 fixtures subunit testrepository
       testtools testscenarios
     ];
 
-    # failing tests
-    preCheck = ''
-      rm oslo_service/tests/test_service.py
-    '';
+    ## cannot import eventlet due to:
+    # _proto_tcp = socket.getprotobyname('tcp')
+    doCheck = false;
 
     meta = with stdenv.lib; {
       homepage = "http://wiki.openstack.org/wiki/Oslo#oslo.service";
@@ -14721,13 +14729,14 @@ in {
 
 
   oslo-concurrency = buildPythonPackage rec {
-   name = "oslo-concurrency-${version}";
-   version = "2.7.0";
+    pname = "oslo.concurrency";
+    version = "3.22.0";
+    name = "${pname}-${version}";
 
-   src = pkgs.fetchurl {
-     url = "mirror://pypi/o/oslo.concurrency/oslo.concurrency-2.7.0.tar.gz";
-     sha256 = "1yp8c87yi6fx1qbq4y1xkx47iiifg7jqzpcghivhxqra8vna185d";
-   };
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0nh1ycc2s6w05g5w63bsmmda0gw7qsrwlax3as8a0piai99z4m51";
+    };
 
    propagatedBuildInputs = with self; [
      oslo-i18n argparse six wrapt oslo-utils pbr enum34 Babel netaddr monotonic
@@ -14735,8 +14744,8 @@ in {
      eventlet
    ];
    buildInputs = with self; [
-     oslosphinx fixtures futures coverage oslotest
-   ];
+     oslosphinx fixtures coverage oslotest
+   ] ++ (optional (!isPy3k) futures);
 
    # too much magic in tests
    doCheck = false;
@@ -14816,16 +14825,17 @@ in {
   olefile = callPackage ../development/python-modules/olefile { };
 
   oslo-log = buildPythonPackage rec {
-    name = "oslo.log-${version}";
-    version = "1.12.1";
+    name = "${pname}-${version}";
+    pname = "oslo.log";
+    version = "3.31.0";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/oslo.log/${name}.tar.gz";
-      sha256 = "10x596r19zjla5n1bf04j5vncx0c9gpc5wc2jlmgjbl3cyx3vgsv";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1w08cl98n8592pvb2gw01mqlwi8nnnpg1zy10mvj6xdpvfk2yqzz";
     };
 
     propagatedBuildInputs = with self; [
-      pbr Babel six iso8601 debtcollector
+      pbr Babel six iso8601 debtcollector dateutil
       oslo-utils oslo-i18n oslo-config oslo-serialization oslo-context
     ] ++ stdenv.lib.optional stdenv.isLinux pyinotify;
     buildInputs = with self; [ oslotest oslosphinx ];
@@ -14835,12 +14845,13 @@ in {
   };
 
   oslo-context = buildPythonPackage rec {
-    name = "oslo.context-${version}";
-    version = "0.7.0";
+    name = "${pname}-${version}";
+    pname = "oslo.context";
+    version = "2.18.1";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/oslo.context/${name}.tar.gz";
-      sha256 = "18fmg9dhgngshk63wfb3ddrgx5br8jxkk3x30z40741mslp1fdjy";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1sc7qrwffsm15m91c17k0xiglv6bxh9sbksvxvrrgja82m57mgh6";
     };
 
     propagatedBuildInputs = with self; [ pbr Babel ];
@@ -19050,14 +19061,16 @@ in {
   ropper = callPackage ../development/python-modules/ropper { };
 
   routes = buildPythonPackage rec {
-    name = "routes-1.12.3";
+    pname = "Routes";
+    version = "2.4.1";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = mirror://pypi/R/Routes/Routes-1.12.3.tar.gz;
-      sha256 = "eacc0dfb7c883374e698cebaa01a740d8c78d364b6e7f3df0312de042f77aa36";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "1zamff3m0kc4vyfniyhxpkkcqv1rrgnmh37ykxv34nna1ws47vi6";
     };
 
-    propagatedBuildInputs = with self; [ paste webtest ];
+    propagatedBuildInputs = with self; [ paste webtest repoze_lru ];
 
     meta = {
       description = "A Python re-implementation of the Rails routes system for mapping URLs to application actions";
@@ -22492,15 +22505,16 @@ EOF
   };
 
   webob = buildPythonPackage rec {
-    version = "1.4.1";
-    name = "webob-${version}";
+    pname = "WebOb";
+    version = "1.7.3";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/W/WebOb/WebOb-${version}.tar.gz";
-      sha256 = "1nz9m6ijf46wfn33zfza13c0k1n4kjnmn3icdlrlgz5yj21vky0j";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "10vjp2rvqiyvw157fk3sy7yds1gknzw97z4gk0qv1raskx5s2p76";
     };
 
-    propagatedBuildInputs = with self; [ nose ];
+    propagatedBuildInputs = with self; [ nose pytest ];
 
     meta = {
       description = "WSGI request and response object";
