@@ -2156,13 +2156,15 @@ in {
       sha256 = "1fgg28halsy4g43wjpkbd6l0wqiwyzkd4zjrzbbyzw4dxbsf3xfm";
     };
 
-    propagatedBuildInputs =
-      [ self.dateutil
-        self.requests
-        self.jmespath
-      ];
+    propagatedBuildInputs = with self; [
+      dateutil
+      jmespath
+      docutils
+      ordereddict
+      simplejson
+    ];
 
-    buildInputs = with self; [ docutils mock nose ];
+    checkInputs = with self; [ mock nose ];
 
     checkPhase = ''
       nosetests -v
