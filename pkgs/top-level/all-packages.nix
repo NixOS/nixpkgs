@@ -18079,7 +18079,9 @@ with pkgs;
 
   mrbayes = callPackage ../applications/science/biology/mrbayes { };
 
-  minc_tools = callPackage ../applications/science/biology/minc-tools { };
+  minc_tools = callPackage ../applications/science/biology/minc-tools {
+    inherit (perlPackages) TextFormat;
+  };
 
   ncbi_tools = callPackage ../applications/science/biology/ncbi-tools { };
 
