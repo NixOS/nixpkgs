@@ -19535,6 +19535,8 @@ in {
     };
   };
 
+  simanneal = callPackage ../development/python-modules/simanneal { };
+
   simplebayes = buildPythonPackage rec {
     name = "simplebayes-${version}";
     version = "1.5.8";
