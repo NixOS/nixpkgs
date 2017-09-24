@@ -19288,6 +19288,10 @@ with pkgs;
 
   xosd = callPackage ../misc/xosd { };
 
+  xpad = callPackage ../applications/misc/xpad {
+    inherit (gnome3) gtksourceview;
+  };
+
   xsane = callPackage ../applications/graphics/sane/xsane.nix {
     libpng = libpng12;
   };
