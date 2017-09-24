@@ -57,7 +57,7 @@ in
 
   config = mkIf anyEncrypted {
     assertions = map (dev: {
-      assertion = dev.label != null;
+      assertion = dev.encrypted.label != null;
       message = ''
         The filesystem for ${dev.mountPoint} has encrypted.enable set to true, but no encrypted.label set
       '';
