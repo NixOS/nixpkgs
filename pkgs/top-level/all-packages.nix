@@ -14717,8 +14717,6 @@ with pkgs;
 
   hello = callPackage ../applications/misc/hello { };
 
-  kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
-
   helmholtz = callPackage ../applications/audio/pd-plugins/helmholtz { };
 
   heme = callPackage ../applications/editors/heme { };
@@ -15045,6 +15043,10 @@ with pkgs;
   kubernetes = callPackage ../applications/networking/cluster/kubernetes {  };
 
   kube-dns = callPackage ../applications/networking/cluster/kubernetes/dns.nix { };
+
+  kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
+
+  kupfer = callPackage ../applications/misc/kupfer { };
 
   lame = callPackage ../development/libraries/lame { };
 
