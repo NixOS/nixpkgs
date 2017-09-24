@@ -497,6 +497,7 @@
   renzo = "Renzo Carbonara <renzocarbonara@gmail.com>";
   retrry = "Tadas Barzdžius <retrry@gmail.com>";
   rht = "rht <rhtbot@protonmail.com>";
+  richardipsum = "Richard Ipsum <richardipsum@fastmail.co.uk>";
   rick68 = "Wei-Ming Yang <rick68@gmail.com>";
   rickynils = "Rickard Nilsson <rickynils@gmail.com>";
   ris = "Robert Scott <code@humanleg.org.uk>";
