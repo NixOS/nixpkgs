@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, glib, intltool, gtk3, gtksourceview }:
+{ stdenv, fetchurl
+, autoreconfHook, pkgconfig, wrapGAppsHook
+, glib, intltool, gtk3, gtksourceview }:
 
 stdenv.mkDerivation rec {
   name = "xpad-${version}";
@@ -9,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "02yikxg6z9bwla09ka001ppjlpbv5kbza3za9asazm5aiz376mkb";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig wrapGAppsHook ];
 
   buildInputs = [ glib intltool gtk3 gtksourceview ];
 
