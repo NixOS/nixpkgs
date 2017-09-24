@@ -152,7 +152,11 @@ let
           in
           nameValuePair "network-addresses-${i.name}"
           { description = "Address configuration of ${i.name}";
-            wantedBy = [ "network-setup.service" ];
+            wantedBy = [
+              "network-setup.service"
+              "network-link-${i.name}.service"
+              "network.target"
+            ];
             # propagate stop and reload from network-setup
             partOf = [ "network-setup.service" ];
             # order before network-setup because the routes that are configured
