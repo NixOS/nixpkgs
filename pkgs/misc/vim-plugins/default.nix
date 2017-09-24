@@ -652,6 +652,17 @@ rec {
 
   };
 
+  xptemplate = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "xptemplate-2017-04-18";
+    src = fetchgit {
+      url = "https://github.com/drmingdrmer/xptemplate";
+      rev = "52d84e361e9da53c4309b0d96a1ab667c67b7f07";
+      sha256 = "195r5p4cyiip64zmgcih56c59gwm0irgid6cdrqc2y747gyxmf7m";
+    };
+    dependencies = [];
+
+  };
+
   neco-ghc = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "neco-ghc-2017-07-22";
     src = fetchgit {
