@@ -9,6 +9,7 @@ stdenv.mkDerivation rec {
     description = "Guile bindings for SDL";
     homepage    = "http://gnu.org/s/guile-sdl";
     license     = licenses.gpl3Plus;
+    maintainers = with maintainers; [ vyp ];
     platforms   = platforms.linux;
   };
 

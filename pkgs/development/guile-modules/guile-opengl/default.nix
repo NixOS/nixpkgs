@@ -7,6 +7,7 @@ stdenv.mkDerivation rec {
     description = "Guile binding for the OpenGL graphics API";
     homepage    = "http://gnu.org/s/guile-opengl";
     license     = licenses.gpl3Plus;
+    maintainers = with maintainers; [ vyp ];
     platforms   = platforms.linux;
   };
 
