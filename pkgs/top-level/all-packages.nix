@@ -12034,6 +12034,7 @@ with pkgs;
 
   # unstable until the first 1.x release
   fscrypt-experimental = callPackage ../os-specific/linux/fscrypt { };
+  fscryptctl-experimental = callPackage ../os-specific/linux/fscryptctl { };
 
   fwupd = callPackage ../os-specific/linux/firmware/fwupd { inherit (gnome2) gtk_doc; inherit (python3Packages) pygobject3 pillow; };
 
