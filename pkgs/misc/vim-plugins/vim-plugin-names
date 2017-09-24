@@ -45,6 +45,7 @@
 "github:digitaltoad/vim-jade"
 "github:dleonard0/pony-vim-syntax"
 "github:dracula/vim"
+"github:drmingdrmer/xptemplate"
 "github:eagletmt/neco-ghc"
 "github:editorconfig/editorconfig-vim"
 "github:eikenb/acp"
