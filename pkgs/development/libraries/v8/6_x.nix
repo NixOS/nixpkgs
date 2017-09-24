@@ -140,14 +140,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ python glib ];
 
   buildPhase = ''
-    ninja -C out.gn/x64.release/
+    ninja -C out.gn/${arch}.release/
   '';
 
   enableParallelBuilding = true;
 
   installPhase = ''
-    install -vD out.gn/x64.release/d8 "$out/bin/d8"
-    install -vD out.gn/x64.release/mksnapshot "$out/bin/mksnapshot"
+    install -vD out.gn/${arch}.release/d8 "$out/bin/d8"
+    install -vD out.gn/${arch}.release/mksnapshot "$out/bin/mksnapshot"
     mkdir -p "$out/lib"
     for f in libicui18n.so libicuuc.so libv8_libbase.so libv8_libplatform.so libv8.so; do
         install -vD out.gn/${arch}.release/$f "$out/lib/$f"
