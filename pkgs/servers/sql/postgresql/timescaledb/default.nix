@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    install -D timescaledb.so                  -t $out/lib
-    install -D timescaledb.control             -t $out/share/extension
-    install -D sql/timescaledb--${version}.sql -t $out/share/extension
+    install -D timescaledb.so      -t $out/lib
+    install -D timescaledb.control -t $out/share/extension
+    cp -dpR    sql/*                  $out/share/extension/
   '';
 
   meta = with stdenv.lib; {
