@@ -1144,6 +1144,8 @@ with pkgs;
 
   earlyoom = callPackage ../os-specific/linux/earlyoom { };
 
+  EBTKS = callPackage ../development/libraries/science/biology/EBTKS { };
+
   ecasound = callPackage ../applications/audio/ecasound { };
 
   edac-utils = callPackage ../os-specific/linux/edac-utils { };
