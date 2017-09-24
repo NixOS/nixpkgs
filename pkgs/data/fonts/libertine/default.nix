@@ -44,9 +44,10 @@ stdenv.mkDerivation rec {
   outputHashMode = "recursive";
   outputHash = "1mj0j0hkp8pn7jcs4pvcan6whba60bfd671g3vhx3s9kxwf7xjvr";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Linux Libertine Fonts";
     homepage = http://linuxlibertine.sf.net;
-    platforms = stdenv.lib.platforms.all;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.volth ];
   };
 }
