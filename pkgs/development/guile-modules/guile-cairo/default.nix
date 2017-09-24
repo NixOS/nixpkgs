@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, guile, pkgconfig, cairo, expat, guile_lib }:
+{ fetchurl, stdenv, guile, pkgconfig, cairo, expat, guile-lib }:
 
 stdenv.mkDerivation rec {
   name = "guile-cairo-1.4.1";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ guile pkgconfig cairo expat ]
-    ++ stdenv.lib.optional doCheck guile_lib;
+    ++ stdenv.lib.optional doCheck guile-lib;
 
   doCheck = true;
 
