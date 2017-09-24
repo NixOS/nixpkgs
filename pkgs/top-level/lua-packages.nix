@@ -285,6 +285,7 @@ let
       platforms = stdenv.lib.platforms.unix;
       license = stdenv.lib.licenses.mit;
       description = "Lightweight UNIX I/O and POSIX binding for Lua";
+      maintainers = [ maintainers.richardipsum ];
     };
     preBuild = ''
       makeFlagsArray=(
