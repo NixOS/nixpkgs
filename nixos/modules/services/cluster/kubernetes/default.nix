@@ -517,12 +517,6 @@ in {
         type = types.bool;
       };
 
-      registerSchedulable = mkOption {
-        description = "Register the node as schedulable. No-op if register-node is false.";
-        default = true;
-        type = types.bool;
-      };
-
       address = mkOption {
         description = "Kubernetes kubelet info server listening address.";
         default = "0.0.0.0";
@@ -798,7 +792,6 @@ in {
             --address=${cfg.kubelet.address} \
             --port=${toString cfg.kubelet.port} \
             --register-node=${boolToString cfg.kubelet.registerNode} \
-            --register-schedulable=${boolToString cfg.kubelet.registerSchedulable} \
             ${optionalString (cfg.kubelet.tlsCertFile != null)
               "--tls-cert-file=${cfg.kubelet.tlsCertFile}"} \
             ${optionalString (cfg.kubelet.tlsKeyFile != null)
@@ -822,7 +815,6 @@ in {
             ${optionalString (cfg.kubelet.networkPlugin != null)
               "--network-plugin=${cfg.kubelet.networkPlugin}"} \
             --cni-conf-dir=${cniConfig} \
-            --reconcile-cidr \
             --hairpin-mode=hairpin-veth \
             ${optionalString (cfg.kubelet.nodeIp != null)
               "--node-ip=${cfg.kubelet.nodeIp}"} \
@@ -987,6 +979,7 @@ in {
           User = "kubernetes";
           Group = "kubernetes";
         };
+        path = cfg.path;
       };
 
       services.kubernetes.controllerManager.kubeconfig = kubeConfigDefaults;

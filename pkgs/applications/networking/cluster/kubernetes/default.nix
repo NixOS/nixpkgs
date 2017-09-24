@@ -8,7 +8,6 @@
     "cmd/kube-controller-manager"
     "cmd/kube-proxy"
     "plugin/cmd/kube-scheduler"
-    "cmd/kube-dns"
     "federation/cmd/federation-apiserver"
     "federation/cmd/federation-controller-manager"
     "test/e2e/e2e.test"
