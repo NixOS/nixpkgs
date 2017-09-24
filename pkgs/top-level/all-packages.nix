@@ -17954,9 +17954,7 @@ with pkgs;
     libcanberra = self.libcanberra_gtk2;
   });
 
-  gnome3_24 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.24 { });
-
-  gnome3 = gnome3_24;
+  gnome3 = recurseIntoAttrs (callPackage ../desktops/gnome-3 { });
 
   gnomeExtensions = {
     caffeine = callPackage ../desktops/gnome-3/extensions/caffeine { };
