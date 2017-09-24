@@ -13,13 +13,14 @@ in stdenv.mkDerivation {
     sha256 = "1r47m1m112kxf23xny99f0qkqsk6626iyc5jp7vzndfiyp5yskwi";
   };
 
-  buildInputs = [ autoreconfHook pkgconfig guile texinfo ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ guile texinfo ];
 
   autoreconfPhase = "./autogen.sh";
 
   meta = with stdenv.lib; {
     description = "Concurrent ML-like concurrency for Guile";
-    homepage = "https://github.com/wingo/fibers";
+    homepage = https://github.com/wingo/fibers;
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ vyp ];
     platforms = platforms.all;
