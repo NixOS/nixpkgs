@@ -15042,8 +15042,6 @@ with pkgs;
 
   kubernetes = callPackage ../applications/networking/cluster/kubernetes {  };
 
-  kube-dns = callPackage ../applications/networking/cluster/kubernetes/dns.nix { };
-
   kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
 
   kupfer = callPackage ../applications/misc/kupfer { };
