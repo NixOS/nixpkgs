@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication rec {
     url = "mirror://pypi/s/sshuttle/${name}.tar.gz";
   };
 
-  patches = [ ./sudo.patch ];
+  patches = [ ./sudo.patch ./darwin.patch ];
 
   nativeBuildInputs = [ makeWrapper pandoc python3Packages.setuptools_scm ];
   buildInputs =
