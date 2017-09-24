@@ -300,13 +300,13 @@ let
   };
 
   v8js = assert isPhp7; buildPecl rec {
-    version = "1.3.2";
+    version = "1.4.1";
     name = "v8js-${version}";
 
-    sha256 = "1x7gxi70zgj3vaxs89nfbnwlqcxrps1inlyfzz66pbzdbfwvc8z8";
+    sha256 = "0k5dc395gzva4l6n9mzvkhkjq914460cwk1grfandcqy73j6m89q";
 
-    buildInputs = [ pkgs.v8 ];
-    configureFlags = [ "--with-v8js=${pkgs.v8}" ];
+    buildInputs = [ pkgs.v8_6_x ];
+    configureFlags = [ "--with-v8js=${pkgs.v8_6_x}" ];
   };
 
   composer = pkgs.stdenv.mkDerivation rec {
