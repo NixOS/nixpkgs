@@ -9,6 +9,12 @@ let
   interfaces = attrValues cfg.interfaces;
   hasVirtuals = any (i: i.virtual) interfaces;
 
+  slaves = concatMap (i: i.interfaces) (attrValues cfg.bonds)
+    ++ concatMap (i: i.interfaces) (attrValues cfg.bridges)
+    ++ concatMap (i: i.interfaces) (attrValues cfg.vswitches)
+    ++ concatMap (i: [i.interface]) (attrValues cfg.macvlans)
+    ++ concatMap (i: [i.interface]) (attrValues cfg.vlans);
+
   # We must escape interfaces due to the systemd interpretation
   subsystemDevice = interface:
     "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
@@ -469,5 +475,8 @@ in
   config = mkMerge [
     bondWarnings
     (mkIf (!cfg.useNetworkd) normalConfig)
+    { # Ensure slave interfaces are brought up
+      networking.interfaces = genAttrs slaves (i: {});
+    }
   ];
 }
