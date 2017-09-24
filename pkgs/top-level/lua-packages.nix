@@ -277,7 +277,10 @@ let
       url = "https://git.gitano.org.uk/luxio.git/snapshot/luxio-luxio-13.tar.bz2";
       sha256 = "1hvwslc25q7k82rxk461zr1a2041nxg7sn3sw3w0y5jxf0giz2pz";
     };
-    buildInputs = [ which pkgconfig ];
+    nativeBuildInputs = [ which pkgconfig ];
+    postPatch = ''
+      patchShebangs .
+    '';
     meta = {
       platforms = stdenv.lib.platforms.unix;
       license = stdenv.lib.licenses.mit;
@@ -288,6 +291,7 @@ let
         INST_LIBDIR="$out/lib/lua/${lua.luaversion}"
         INST_LUADIR="$out/share/lua/${lua.luaversion}"
         LUA_BINDIR="$out/bin"
+        INSTALL=install
         );
     '';
   };
