@@ -44,6 +44,10 @@ in
     '';
 
     postPatch = ''
+      # Patch shebands (for sandbox build)
+      chmod u+w -R build
+      patchShebangs build
+
       # Patch out Chromium-bundled libevent
       chmod u+w tools/gn/bootstrap tools/gn/bootstrap/bootstrap.py
       sed -i -e '/static_libraries.*libevent/,/^ *\]\?[})]$/d' \
