@@ -8609,6 +8609,10 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MNI-Perllib = import ../development/perl-modules/MNI {
+    inherit buildPerlPackage fetchFromGitHub stdenv perl;
+  };
+
   ModernPerl = buildPerlPackage {
     name = "Modern-Perl-1.20140107";
     src = fetchurl {
