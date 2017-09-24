@@ -9,6 +9,22 @@ let
   cfg = config.virtualisation.docker;
   proxy_env = config.networking.proxy.envVars;
 
+  daemonJSON = pkgs.writeText "daemon.json" (builtins.toJSON {
+    "default-runtime" = cfg.runtime.default;
+    runtimes = {} //
+      optionalAttrs cfg.runtime.runv.enable {
+      runv = {
+        path = "${pkgs.runv}/bin/runv";
+        runtimeArgs = [
+          "--debug"
+          "--kernel" "${cfg.runtime.runv.kernel}"
+          "--initrd" "${cfg.runtime.runv.initrd}"
+          "--driver" "${cfg.runtime.runv.driver}"
+        ];
+      };
+    };
+  });
+
 in
 
 {
@@ -135,6 +151,40 @@ in
         Docker package to be used in the module.
       '';
     };
+
+    runtime = {
+      default = mkOption {
+        type = types.enum ["runc" "runv"];
+        default = "runc";
+        description =
+          ''
+            This option determines which Docker runtime to use by default. By default runc is used.
+          '';
+      };
+
+      runv = {
+        enable = mkEnableOption "HyperContainer based runtime";
+
+        driver = mkOption {
+          # See: https://github.com/hyperhq/runv/blob/master/driverloader/driverloader_linux.go
+          type = types.enum [ "libvirt" "kvm" "qemu" ]; #TODO: Implement all drivers
+          default = "qemu";
+          description = ''The driver to be used by runv.'';
+        };
+
+        kernel = mkOption {
+          type = types.path;
+          default = "${pkgs.hyperstart}/kernel";
+          description = ''The kernel to use for starting HyperContainers.'';
+        };
+
+        initrd = mkOption {
+          type = types.path;
+          default = "${pkgs.hyperstart}/hyper-initrd.img";
+          description = ''The initrd to use for starting hyper HyperContainers.'';
+        };
+      };
+    };
   };
 
   ###### implementation
@@ -143,6 +193,8 @@ in
       environment.systemPackages = [ cfg.package ];
       users.extraGroups.docker.gid = config.ids.gids.docker;
       systemd.packages = [ cfg.package ];
+
+      virtualisation.libvirtd.enable = (cfg.runtime.runv.driver == "libvirt");
 
       systemd.services.docker = {
         wantedBy = optional cfg.enableOnBoot "multi-user.target";
@@ -157,6 +209,7 @@ in
                 --log-driver=${cfg.logDriver} \
                 ${optionalString (cfg.storageDriver != null) "--storage-driver=${cfg.storageDriver}"} \
                 ${optionalString cfg.liveRestore "--live-restore" } \
+                --config-file ${daemonJSON} \
                 ${cfg.extraOptions}
             ''];
           ExecReload=[
@@ -164,8 +217,9 @@ in
             "${pkgs.procps}/bin/kill -s HUP $MAINPID"
           ];
         };
-
-        path = [ pkgs.kmod ] ++ (optional (cfg.storageDriver == "zfs") pkgs.zfs);
+        path = [ pkgs.kmod ] ++
+               (optional (builtins.any (x: cfg.runtime.runv.driver == x) [ "qemu" "kvm" ]) pkgs.qemu_kvm) ++
+               (optional (cfg.storageDriver == "zfs") pkgs.zfs);
       };
 
       systemd.sockets.docker = {
