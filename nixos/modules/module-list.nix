@@ -268,6 +268,7 @@
   ./services/mail/opendkim.nix
   ./services/mail/opensmtpd.nix
   ./services/mail/postfix.nix
+  ./services/mail/nixcloud-email.nix
   ./services/mail/postsrsd.nix
   ./services/mail/postgrey.nix
   ./services/mail/spamassassin.nix
