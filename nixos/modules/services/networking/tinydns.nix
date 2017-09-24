@@ -15,6 +15,7 @@ with lib;
 
       data = mkOption {
         type = types.lines;
+        default = "";
         description = "The DNS data to serve, in the format described by tinydns-data(8)";
       };
 
