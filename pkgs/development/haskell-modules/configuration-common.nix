@@ -957,4 +957,11 @@ self: super: {
     protolude = super.protolude_0_2;
   };
 
+  # This tool needs the latest hackage-db version. Using the latest version of
+  # optparse-applicative allows us to generate completions for fish and zsh.
+  cabal2nix = super.cabal2nix.overrideScope (self: super: {
+    hackage-db = self.hackage-db_2_0;
+    optparse-applicative = self.optparse-applicative_0_14_0_0;
+  });
+
 }
