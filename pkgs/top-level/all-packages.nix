@@ -6708,6 +6708,8 @@ with pkgs;
 
   guileCairo = callPackage ../development/guile-modules/guile-cairo { };
 
+  guile-fibers = callPackage ../development/guile-modules/guile-fibers { };
+
   guileGnome = callPackage ../development/guile-modules/guile-gnome {
     gconf = gnome2.GConf;
     inherit (gnome2) gnome_vfs libglade libgnome libgnomecanvas libgnomeui;
