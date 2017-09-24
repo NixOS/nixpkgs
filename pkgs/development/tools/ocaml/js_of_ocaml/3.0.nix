@@ -11,5 +11,7 @@ stdenv.mkDerivation rec {
 
 	propagatedBuildInputs = [ js_of_ocaml-compiler uchar ];
 
+  patches = [ ./jbuild.diff ];
+
 	buildPhase = "jbuilder build -p js_of_ocaml";
 }
