@@ -7,6 +7,7 @@ stdenv.mkDerivation {
     description = "XCB bindings for Guile";
     homepage    = "http://www.markwitmer.com/guile-xcb/guile-xcb.html";
     license     = licenses.gpl3Plus;
+    maintainers = with maintainers; [ vyp ];
     platforms   = platforms.linux;
   };
 

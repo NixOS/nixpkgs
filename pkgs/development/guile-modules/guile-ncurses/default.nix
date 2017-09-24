@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.lgpl3Plus;
 
-    maintainers = [ ];
+    maintainers = [ stdenv.lib.maintainers.vyp ];
     platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
   };
 }
