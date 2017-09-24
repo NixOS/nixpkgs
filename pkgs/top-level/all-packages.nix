@@ -15044,8 +15044,6 @@ with pkgs;
 
   kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
 
-  kupfer = callPackage ../applications/misc/kupfer { };
-
   lame = callPackage ../development/libraries/lame { };
 
   larswm = callPackage ../applications/window-managers/larswm { };
