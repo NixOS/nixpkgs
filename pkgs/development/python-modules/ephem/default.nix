@@ -19,6 +19,6 @@ buildPythonPackage rec {
     description = "Compute positions of the planets and stars";
     homepage = https://pypi.python.org/pypi/ephem/;
     license = licenses.lgpl3;
-    maintainers = with stdenv.lib.maintainers; [ chrisrosset ];
+    maintainers = with maintainers; [ chrisrosset ];
   };
 }
