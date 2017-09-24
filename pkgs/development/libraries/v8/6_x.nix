@@ -122,9 +122,13 @@ stdenv.mkDerivation rec {
     # disable tests
     if [ "$doCheck" = "" ]; then sed -i -e '/"test:gn_all",/d' BUILD.gn; fi
 
+    # disable sysroot usage
     chmod u+w build/config build/config/sysroot.gni
     sed -i build/config/sysroot.gni \
         -e '/use_sysroot =/ { s#\(use_sysroot =\).*#\1 false#; :a  n; /current_cpu/ { s/^/#/; ba };  }'
+
+    # patch shebangs (/usr/bin/env)
+    patchShebangs tools/dev/v8gen.py
   '';
 
   configurePhase = ''
