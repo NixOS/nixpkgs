@@ -56,9 +56,7 @@ import ./make-test.nix ({ pkgs, ...} : rec {
     src = ./mesos_test.py;
     phases = [ "installPhase" "fixupPhase" ];
     installPhase = ''
-      mkdir $out
-      cp $src $out/mesos_test.py
-      chmod +x $out/mesos_test.py
+      install -Dvm 0755 $src $out/bin/mesos_test.py
 
       echo "done" > test.result
       tar czf $out/test.tar.gz test.result
@@ -74,18 +72,18 @@ import ./make-test.nix ({ pkgs, ...} : rec {
       $master->waitForOpenPort(5050);
       $slave->waitForOpenPort(5051);
 
-      # is slave registred? 
+      # is slave registered?
       $master->waitUntilSucceeds("curl -s --fail http://master:5050/master/slaves".
                                  " | grep -q \"\\\"hostname\\\":\\\"slave\\\"\"");
 
-      # try to run docker image 
+      # try to run docker image
       $master->succeed("${pkgs.mesos}/bin/mesos-execute --master=master:5050".
                        " --resources=\"cpus:0.1;mem:32\" --name=simple-docker".
                        " --containerizer=mesos --docker_image=echo:latest".
                        " --shell=true --command=\"echo done\" | grep -q TASK_FINISHED");
 
       # simple command with .tar.gz uri
-      $master->succeed("${testFramework}/mesos_test.py master ".
+      $master->succeed("${testFramework}/bin/mesos_test.py master ".
                        "${testFramework}/test.tar.gz");
     '';
 })
