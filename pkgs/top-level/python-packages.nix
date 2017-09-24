@@ -26694,6 +26694,7 @@ EOF
 
   parse-type = callPackage ../development/python-modules/parse-type { };
 
+  ephem = callPackage ../development/python-modules/ephem { };
 });
 
 in fix' (extends overrides packages)
