@@ -508,6 +508,7 @@
   robberer = "Longrin Wischnewski <robberer@freakmail.de>";
   robbinch = "Robbin C. <robbinch33@gmail.com>";
   roberth = "Robert Hensing <nixpkgs@roberthensing.nl>";
+  robertodr = "Roberto Di Remigio <roberto.diremigio@gmail.com>";
   robgssp = "Rob Glossop <robgssp@gmail.com>";
   roblabla = "Robin Lambertz <robinlambertz+dev@gmail.com>";
   roconnor = "Russell O'Connor <roconnor@theorem.ca>";
