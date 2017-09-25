@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://github.com/bup/bup";
+    homepage = https://github.com/bup/bup;
     description = "Efficient file backup system based on the git packfile format";
     license = licenses.gpl2Plus;
 

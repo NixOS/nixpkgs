@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   pname = "alabaster";
-  version = "0.7.7";
+  version = "0.7.10";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f416a84e0d0ddbc288f6b8f2c276d10b40ca1238562cd9ed5a751292ec647b71";
+    sha256 = "37cdcb9e9954ed60912ebc1ca12a9d12178c26637abdf124e3cde2341c257fe0";
   };
 
   propagatedBuildInputs = [ pygments ];

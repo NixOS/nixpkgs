@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.CoreServices ];
 
   meta = with stdenv.lib; {
-    homepage = http://libopenraw.freedesktop.org/wiki/Exempi/;
+    homepage = https://libopenraw.freedesktop.org/wiki/Exempi/;
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd3;
   };

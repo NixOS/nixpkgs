@@ -9,25 +9,46 @@
 #
 # See comment at the top of configuration-nix.nix for more information about this
 # distinction.
-{ pkgs }:
+{ pkgs, haskellLib }:
 
-with import ./lib.nix { inherit pkgs; };
+with haskellLib;
 
 self: super: {
+
+  attoparsec-time_1 = super.attoparsec-time_1.override {
+    doctest = super.doctest_0_13_0;
+  };
+  attoparsec-data = super.attoparsec-data.override {
+    attoparsec-time = self.attoparsec-time_1;
+  };
+
+  # This used to be a core package provided by GHC, but then the compiler
+  # dropped it. We define the name here to make sure that old packages which
+  # depend on this library still evaluate (even though they won't compile
+  # successfully with recent versions of the compiler).
+  bin-package-db = null;
 
   # Some Hackage packages reference this attribute, which exists only in the
   # GHCJS package set. We provide a dummy version here to fix potential
   # evaluation errors.
   ghcjs-base = null;
+  ghcjs-prim = null;
 
-  # Some packages need a non-core version of Cabal.
-  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_1_24_2_0; });
+  # Some packages add this (non-existent) dependency to express that they
+  # cannot compile in a given configuration. Win32 does this, for example, when
+  # compiled on Linux. We provide the name to avoid evaluation errors.
+  unbuildable = throw "package depends on meta package 'unbuildable'";
+
+  # cabal-install needs Cabal 2.x. hackage-security's test suite does not compile with
+  # Cabal 2.x, though. See https://github.com/haskell/hackage-security/issues/188.
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_0_0_2; });
+  hackage-security = dontCheck super.hackage-security;
 
   # Link statically to avoid runtime dependency on GHC.
   jailbreak-cabal = (disableSharedExecutables super.jailbreak-cabal).override { Cabal = self.Cabal_1_20_0_4; };
 
   # enable using a local hoogle with extra packagages in the database
-  # nix-shell -p "haskellPackages.hoogleLocal (with haskellPackages; [ mtl lens ])"
+  # nix-shell -p "haskellPackages.hoogleLocal { packages = with haskellPackages; [ mtl lens ]; }"
   # $ hoogle server
   hoogleLocal = { packages ? [] }: self.callPackage ./hoogle.nix { inherit packages; };
 
@@ -46,6 +67,13 @@ self: super: {
 
   # segfault due to missing return: https://github.com/haskell/c2hs/pull/184
   c2hs = dontCheck super.c2hs;
+
+  # https://github.com/gilith/hol/pull/1
+  hol = appendPatch (doJailbreak super.hol) (pkgs.fetchpatch {
+    name = "hol.patch";
+    url = "https://github.com/gilith/hol/commit/a5171bdcacdbe93c46c9f82ec5a38f2a2b69e632.patch";
+    sha256 = "0xkgbhc4in38hspxgz2wcvk56pjalw43gig7lzkjfhgavwxv3jyj";
+  });
 
   # This test keeps being aborted because it runs too quietly for too long
   Lazy-Pbkdf2 = if pkgs.stdenv.isi686 then dontCheck super.Lazy-Pbkdf2 else super.Lazy-Pbkdf2;
@@ -70,7 +98,7 @@ self: super: {
       name = "git-annex-${drv.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + drv.version;
-      sha256 = "1psyklfyjf4zqh3qxjn11sp2jiwvp8mfxqvsi1wggqpidfmk39jx";
+      sha256 = "15d29hmbl146axjgbm4qhxpz6ypcq1bjf2aj29yhwh5jmznh58i2";
     };
   })).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -78,8 +106,25 @@ self: super: {
     hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
   };
 
+  # Fix test trying to access /home directory
+  shell-conduit = (overrideCabal super.shell-conduit (drv: {
+    postPatch = "sed -i s/home/tmp/ test/Spec.hs";
+
+    # the tests for shell-conduit on Darwin illegitimatey assume non-GNU echo
+    # see: https://github.com/psibi/shell-conduit/issues/12
+    doCheck = !pkgs.stdenv.hostPlatform.isDarwin;
+  }));
+
   # https://github.com/froozen/kademlia/issues/2
   kademlia = dontCheck super.kademlia;
+
+  # https://github.com/haskell-works/hw-xml/issues/23
+  # Disable building the hw-xml-example executable:
+  hw-xml = (overrideCabal super.hw-xml (drv: {
+    postPatch = "sed -i 's/  hs-source-dirs:       app/" +
+                          "  hs-source-dirs:       app\\n" +
+                          "  buildable:            false/' hw-xml.cabal";
+  }));
 
   hzk = dontCheck super.hzk;
   haskakafka = dontCheck super.haskakafka;
@@ -109,6 +154,8 @@ self: super: {
     '';
     extraLibraries = [ pkgs.openblasCompat ];
   });
+
+  LambdaHack = super.LambdaHack.override { sdl2-ttf = super.sdl2-ttf_2_0_1; };
 
   # The Haddock phase fails for one reason or another.
   acme-one = dontHaddock super.acme-one;
@@ -163,25 +210,8 @@ self: super: {
     # https://github.com/jaspervdj/hakyll/issues/491
     else dontCheck super.hakyll;
 
-  # cabal2nix likes to generate dependencies on hinotify when hfsevents is really required
-  # on darwin: https://github.com/NixOS/cabal2nix/issues/146.
-  hinotify = if pkgs.stdenv.isDarwin then self.hfsevents else super.hinotify;
-
-  # FSEvents API is very buggy and tests are unreliable. See
-  # http://openradar.appspot.com/10207999 and similar issues.
-  # https://github.com/haskell-fswatch/hfsnotify/issues/62
-  fsnotify = if pkgs.stdenv.isDarwin
-    then addBuildDepend (dontCheck super.fsnotify) pkgs.darwin.apple_sdk.frameworks.Cocoa
-    else dontCheck super.fsnotify;
-
   double-conversion = if !pkgs.stdenv.isDarwin
-    then addExtraLibrary
-           # https://github.com/bos/double-conversion/pull/17
-           (appendPatch super.double-conversion (pkgs.fetchpatch {
-              url = "https://github.com/basvandijk/double-conversion/commit/0927e347d53dbd96d1949930e728cc2471dd4b14.patch";
-              sha256 = "042yqbq5p6nc9nymmbz9hgp51dlc5asaj9bf91kw5fph6dw2hwg9";
-           }))
-           pkgs.stdenv.cc.cc.lib
+    then super.double-conversion
     else addExtraLibrary (overrideCabal super.double-conversion (drv:
       {
         postPatch = ''
@@ -379,6 +409,12 @@ self: super: {
   th-printf = dontCheck super.th-printf;
   thumbnail-plus = dontCheck super.thumbnail-plus;
   tickle = dontCheck super.tickle;
+  tldr = super.tldr.override {
+    # shell-conduit determines what commands are available at compile-time, so
+    # that tldr will not compile unless the shell-conduit it uses is compiled
+    # with git in its environment.
+    shell-conduit = addBuildTool self.shell-conduit pkgs.git;
+  };
   tpdb = dontCheck super.tpdb;
   translatable-intset = dontCheck super.translatable-intset;
   ua-parser = dontCheck super.ua-parser;
@@ -424,6 +460,9 @@ self: super: {
 
   # https://github.com/basvandijk/threads/issues/10
   threads = dontCheck super.threads;
+
+  # https://github.com/purescript/purescript/pull/3041
+  purescript = doJailbreak super.purescript;
 
   # Missing module.
   rematch = dontCheck super.rematch;            # https://github.com/tcrayford/rematch/issues/5
@@ -587,15 +626,23 @@ self: super: {
     doCheck = false;            # https://github.com/kazu-yamamoto/ghc-mod/issues/335
     executableToolDepends = drv.executableToolDepends or [] ++ [pkgs.emacs];
     postInstall = ''
-      local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-${drv.version}/elisp" )
+      local lispdir=( "$data/share/${self.ghc.name}/*/${drv.pname}-${drv.version}/elisp" )
       make -C $lispdir
-      mkdir -p $out/share/emacs/site-lisp
-      ln -s "$lispdir/"*.el{,c} $out/share/emacs/site-lisp/
+      mkdir -p $data/share/emacs/site-lisp
+      ln -s "$lispdir/"*.el{,c} $data/share/emacs/site-lisp/
     '';
   });
 
   # Fine-tune the build.
   structured-haskell-mode = (overrideCabal super.structured-haskell-mode (drv: {
+    src = pkgs.fetchFromGitHub {
+      owner = "chrisdone";
+      repo = "structured-haskell-mode";
+      rev = "bd08a0b2297667e2ac7896e3b480033ae5721d4d";
+      sha256 = "14rl739z19ns31h9fj48sx9ppca4g4mqkc7ccpacagwwf55m259c";
+    };
+    version = "20170523-git";
+    editedCabalFile = null;
     # Statically linked Haskell libraries make the tool start-up much faster,
     # which is important for use in Emacs.
     enableSharedExecutables = false;
@@ -603,22 +650,22 @@ self: super: {
     # cannot easily byte-compile these files, unfortunately, because they
     # depend on a new version of haskell-mode that we don't have yet.
     postInstall = ''
-      local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-"*"/elisp" )
-      mkdir -p $out/share/emacs
-      ln -s $lispdir $out/share/emacs/site-lisp
+      local lispdir=( "$data/share/${self.ghc.name}/"*"/${drv.pname}-"*"/elisp" )
+      mkdir -p $data/share/emacs
+      ln -s $lispdir $data/share/emacs/site-lisp
     '';
   })).override {
     haskell-src-exts = self.haskell-src-exts_1_19_1;
   };
 
-  # # Make elisp files available at a location where people expect it.
+  # Make elisp files available at a location where people expect it.
   hindent = (overrideCabal super.hindent (drv: {
     # We cannot easily byte-compile these files, unfortunately, because they
     # depend on a new version of haskell-mode that we don't have yet.
     postInstall = ''
-      local lispdir=( "$out/share/"*"-${self.ghc.name}/${drv.pname}-${drv.version}/elisp" )
-      mkdir -p $out/share/emacs
-      ln -s $lispdir $out/share/emacs/site-lisp
+      local lispdir=( "$data/share/${self.ghc.name}/"*"/${drv.pname}-"*"/elisp" )
+      mkdir -p $data/share/emacs
+      ln -s $lispdir $data/share/emacs/site-lisp
     '';
     doCheck = false; # https://github.com/chrisdone/hindent/issues/299
   })).override {
@@ -664,11 +711,6 @@ self: super: {
   # We get lots of strange compiler errors during the test suite run.
   jsaddle = dontCheck super.jsaddle;
 
-  # Haste stuff
-  haste-Cabal         = markBroken (self.callPackage ../tools/haskell/haste/haste-Cabal.nix {});
-  haste-cabal-install = markBroken (self.callPackage ../tools/haskell/haste/haste-cabal-install.nix { Cabal = self.haste-Cabal; });
-  haste-compiler      = markBroken (self.callPackage ../tools/haskell/haste/haste-compiler.nix { inherit overrideCabal; super-haste-compiler = super.haste-compiler; });
-
   # tinc is a new build driver a la Stack that's not yet available from Hackage.
   tinc = self.callPackage ../tools/haskell/tinc { inherit (pkgs) cabal-install cabal2nix; };
 
@@ -680,16 +722,11 @@ self: super: {
     then appendConfigureFlag super.gtk "-fhave-quartz-gtk"
     else super.gtk;
 
-  # The stack people don't bother making their own code compile in an LTS-based
-  # environment: https://github.com/commercialhaskell/stack/issues/3001.
-  stack = super.stack.overrideScope (self: super: {
-    store-core = self.store-core_0_3;
-    store = self.store_0_3_1;
-    hpack = self.hpack_0_17_1;
-  });
-
   # It makes no sense to have intero-nix-shim in Hackage, so we publish it here only.
   intero-nix-shim = self.callPackage ../tools/haskell/intero-nix-shim {};
+
+  # vaultenv is not available from Hackage.
+  vaultenv = self.callPackage ../tools/haskell/vaultenv { };
 
   # https://github.com/Philonous/hs-stun/pull/1
   # Remove if a version > 0.1.0.1 ever gets released.
@@ -702,17 +739,16 @@ self: super: {
   # test suite cannot find its own "idris" binary
   idris = doJailbreak (dontCheck super.idris);
 
+  idris_1_1_1 = overrideCabal (doJailbreak (dontCheck super.idris_1_1_1)) (drv: {
+    # The standard libraries are compiled separately
+    configureFlags = (drv.configureFlags or []) ++ [ "-fexeconly" ];
+  });
+
   # https://github.com/bos/math-functions/issues/25
   math-functions = dontCheck super.math-functions;
 
   # broken test suite
   servant-server = dontCheck super.servant-server;
-
-  # Fix build for latest versions of servant and servant-client.
-  servant-client_0_11 = super.servant-client_0_11.overrideScope (self: super: {
-    servant-server = self.servant-server_0_11;
-    servant = self.servant_0_11;
-  });
 
   # build servant docs from the repository
   servant =
@@ -724,7 +760,7 @@ self: super: {
           owner = "haskell-servant";
           repo = "servant";
           rev = "v${ver}";
-          sha256 = "09kjinnarf9q9l8irs46gcrai8bprq39n8pj43bmdv47hl38csa0";
+          sha256 = "0bwd5dy3crn08dijn06dr3mdsww98kqxfp8v5mvrdws5glvcxdsg";
         }}/doc";
         buildInputs = with pkgs.pythonPackages; [ sphinx recommonmark sphinx_rtd_theme ];
         makeFlags = "html";
@@ -734,13 +770,12 @@ self: super: {
       };
     in overrideCabal super.servant (old: {
       postInstall = old.postInstall or "" + ''
-        ln -s ${docs} $out/share/doc/servant
+        ln -s ${docs} $doc/share/doc/servant
       '';
     });
 
-
-  # https://github.com/plow-technologies/servant-auth/issues/20
-  servant-auth = dontCheck super.servant-auth;
+  # Glob == 0.7.x
+  servant-auth = doJailbreak super.servant-auth;
 
   # https://github.com/pontarius/pontarius-xmpp/issues/105
   pontarius-xmpp = dontCheck super.pontarius-xmpp;
@@ -863,6 +898,7 @@ self: super: {
 
   # build liquidhaskell with the proper (old) aeson version
   liquidhaskell = super.liquidhaskell.override { aeson = self.aeson_0_11_3_0; };
+  aeson_0_11_3_0 = super.aeson_0_11_3_0.override { base-orphans = self.base-orphans_0_5_4; };
 
   # Test suite fails: https://github.com/lymar/hastache/issues/46.
   # Don't install internal mkReadme tool.
@@ -871,10 +907,66 @@ self: super: {
     postInstall = "rm $out/bin/mkReadme && rmdir $out/bin";
   });
 
-  # Needs a newer version of hsyslog than lts-8.x provides.
-  logging-facade-syslog = super.logging-facade-syslog.override { hsyslog = self.hsyslog_5_0_1; };
-
   # Has a dependency on outdated versions of directory.
   cautious-file = doJailbreak (dontCheck super.cautious-file);
+
+  # https://github.com/diagrams/diagrams-solve/issues/4
+  diagrams-solve = dontCheck super.diagrams-solve;
+
+  # version 1.3.1.2 does not compile: syb >=0.1.0.2 && <0.7
+  ChasingBottoms = doJailbreak super.ChasingBottoms;
+
+  # test suite does not compile with recent versions of QuickCheck
+  integer-logarithms = dontCheck (super.integer-logarithms);
+
+  # https://github.com/vincenthz/hs-tls/issues/247
+  tls = dontCheck super.tls;
+
+  # missing dependencies: blaze-html >=0.5 && <0.9, blaze-markup >=0.5 && <0.8
+  digestive-functors-blaze = doJailbreak super.digestive-functors-blaze;
+
+  # missing dependencies: doctest ==0.12.*
+  html-entities = doJailbreak super.html-entities;
+
+  # Needs a version that's newer than what we have in lts-9.
+  sbv = super.sbv.override { doctest = self.doctest_0_13_0; };
+
+  # https://github.com/takano-akio/filelock/issues/5
+  filelock = dontCheck super.filelock;
+
+  # https://github.com/alpmestan/taggy/issues/{19,20}
+  taggy = appendPatch super.taggy (pkgs.fetchpatch {
+    name = "blaze-markup.patch";
+    url = "https://github.com/alpmestan/taggy/commit/5456c2fa4d377f7802ec5df3d5f50c4ccab2e8ed.patch";
+    sha256 = "1vss7b99zrhw3r29krl1b60r4qk0m2mpwmrz8q8zdxrh33hb8pd7";
+  });
+
+  # happy 1.19.6+ broke the Agda build. Sticking with the previous version
+  # avoided that issue, but now the build fails with a segmentation fault
+  # during the install phase for no apparent reason:
+  # https://hydra.nixos.org/build/60678124
+  Agda = markBroken (super.Agda.override { happy = self.happy_1_19_5; });
+
+  # cryptol-2.5.0 doesn't want happy 1.19.6+.
+  cryptol = super.cryptol.override { happy = self.happy_1_19_5; };
+
+  # https://github.com/jtdaugherty/text-zipper/issues/11
+  text-zipper = dontCheck super.text-zipper;
+
+  # https://github.com/graknlabs/grakn-haskell/pull/1
+  grakn = dontCheck (doJailbreak super.grakn);
+
+  # cryptonite == 0.24.x, protolude == 0.2.x
+  wai-secure-cookies = super.wai-secure-cookies.override {
+    cryptonite = super.cryptonite_0_24;
+    protolude = super.protolude_0_2;
+  };
+
+  # This tool needs the latest hackage-db version. Using the latest version of
+  # optparse-applicative allows us to generate completions for fish and zsh.
+  cabal2nix = super.cabal2nix.overrideScope (self: super: {
+    hackage-db = self.hackage-db_2_0;
+    optparse-applicative = self.optparse-applicative_0_14_0_0;
+  });
 
 }

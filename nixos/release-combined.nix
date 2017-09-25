@@ -4,7 +4,8 @@
 
 { nixpkgs ? { outPath = ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
-, supportedSystems ? [ "x86_64-linux" "i686-linux" ]
+, supportedSystems ? [ "x86_64-linux" ]
+, limitedSupportedSystems ? [ "i686-linux" ]
 }:
 
 let
@@ -19,10 +20,16 @@ let
       else pkgs.lib.mapAttrs (n: v: removeMaintainers v) set
     else set;
 
+  allSupportedNixpkgs = builtins.removeAttrs (removeMaintainers (import ../pkgs/top-level/release.nix {
+    supportedSystems = supportedSystems ++ limitedSupportedSystems;
+    nixpkgs = nixpkgsSrc;
+  })) [ "unstable" ];
+
 in rec {
 
   nixos = removeMaintainers (import ./release.nix {
-    inherit stableBranch supportedSystems;
+    inherit stableBranch;
+    supportedSystems = supportedSystems ++ limitedSupportedSystems;
     nixpkgs = nixpkgsSrc;
   });
 
@@ -38,8 +45,11 @@ in rec {
       maintainers = [ pkgs.lib.maintainers.eelco ];
     };
     constituents =
-      let all = x: map (system: x.${system}) supportedSystems; in
-      [ nixos.channel
+      let
+        all = x: map (system: x.${system})
+          (supportedSystems ++ limitedSupportedSystems);
+      in [
+        nixos.channel
         (all nixos.dummy)
         (all nixos.manual)
 
@@ -60,6 +70,7 @@ in rec {
         (all nixos.tests.installer.simple)
         (all nixos.tests.installer.simpleLabels)
         (all nixos.tests.installer.simpleProvided)
+        (all nixos.tests.installer.simpleUefiSystemdBoot)
         (all nixos.tests.installer.swraid)
         (all nixos.tests.installer.btrfsSimple)
         (all nixos.tests.installer.btrfsSubvols)
@@ -70,7 +81,10 @@ in rec {
         (all nixos.tests.boot.uefiUsb)
         (all nixos.tests.boot-stage1)
         nixos.tests.hibernate.x86_64-linux # i686 is flaky, see #23107
+        nixos.tests.docker
+        nixos.tests.docker-edge
         (all nixos.tests.ecryptfs)
+        (all nixos.tests.env)
         (all nixos.tests.ipv6)
         (all nixos.tests.i3wm)
         (all nixos.tests.keymap.azerty)
@@ -79,7 +93,7 @@ in rec {
         (all nixos.tests.keymap.dvp)
         (all nixos.tests.keymap.neo)
         (all nixos.tests.keymap.qwertz)
-        (all nixos.tests.plasma5)
+        nixos.tests.plasma5.x86_64-linux # avoid big build on i686
         #(all nixos.tests.lightdm)
         (all nixos.tests.login)
         (all nixos.tests.misc)
@@ -106,8 +120,8 @@ in rec {
         (all nixos.tests.xfce)
 
         nixpkgs.tarball
-        (all nixpkgs.emacs)
-        (all nixpkgs.jdk)
+        (all allSupportedNixpkgs.emacs)
+        (all allSupportedNixpkgs.jdk)
       ];
   });
 

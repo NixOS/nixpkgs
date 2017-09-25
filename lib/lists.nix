@@ -1,6 +1,6 @@
 # General list operations.
-
-with import ./trivial.nix;
+{ lib }:
+with lib.trivial;
 
 rec {
 

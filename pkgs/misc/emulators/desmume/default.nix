@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, fetchpatch
 , pkgconfig, libtool, intltool
 , libXmu
 , lua
@@ -17,6 +17,14 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/project/desmume/desmume/${version}/${name}.tar.gz";
     sha256 = "15l8wdw3q61fniy3h93d84dnm6s4pyadvh95a0j6d580rjk4pcrs";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "gcc6_fixes.patch";
+      url = "https://anonscm.debian.org/viewvc/pkg-games/packages/trunk/desmume/debian/patches/gcc6_fixes.patch?revision=15925";
+      sha256 = "0j3fmxz0mfb3f4biks03pyz8f9hy958ks6qplisl60rzq9v9qpks";
+     })
+  ];
 
   buildInputs =
   [ pkgconfig libtool intltool libXmu lua agg alsaLib soundtouch

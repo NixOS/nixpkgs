@@ -27,12 +27,12 @@ let
   inherit (stdenv) isDarwin;
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.20.2";
+  version = "0.20.3";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "92173c976fcca70cb19a958eccdacf98af62ef7301bf786d0321cb8857cdfae6";
+    sha256 = "a777e07633d83d546c55706420179551c8e01075b53c497dcf8ae4036766bc66";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -76,8 +76,13 @@ in buildPythonPackage rec {
     chmod a+x pbcopy pbpaste
     export PATH=$(pwd):$PATH
   '' + ''
+    # since dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
+    # was supposed to be solved by https://github.com/dateutil/dateutil/issues/321, but is not the case
     py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network \
-      ${if isDarwin then "-k 'not test_locale and not test_clipboard'" else ""}
+      -k "not test_fallback_plural and \
+          not test_ambiguous_flags and \
+          not test_ambiguous_compat \
+          ${optionalString isDarwin "and not test_locale and not test_clipboard"}"
     runHook postCheck
   '';
 
@@ -85,7 +90,7 @@ in buildPythonPackage rec {
     # https://github.com/pandas-dev/pandas/issues/14866
     # pandas devs are no longer testing i686 so safer to assume it's broken
     broken = stdenv.isi686;
-    homepage = "http://pandas.pydata.org/";
+    homepage = http://pandas.pydata.org/;
     description = "Python Data Analysis Library";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ raskin fridh knedlsepp ];

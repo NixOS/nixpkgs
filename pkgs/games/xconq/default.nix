@@ -33,6 +33,7 @@ stdenv.mkDerivation rec {
     # Fix C files
     sed -re 's@[(]int[)]color@(long)color@' -i tcltk/tkmap.c
     sed -re '/unitp = view_unit[(]uview[)]/aelse *unitp = NULL\;' -i tcltk/tkmap.c
+    sed -re 's@BMAP_BYTE char@BMAP_BYTE unsigned char@' -i kernel/ui.h
 
     # Fix TCL files
     sed -re 's@MediumBlue@LightBlue@g' -i tcltk/tkconq.tcl

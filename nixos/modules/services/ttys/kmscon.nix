@@ -60,6 +60,7 @@ in {
       ConditionPathExists=/dev/tty0
 
       [Service]
+      ExecStart=
       ExecStart=${pkgs.kmscon}/bin/kmscon "--vt=%I" ${cfg.extraOptions} --seats=seat0 --no-switchvt --configdir ${configDir} --login -- ${pkgs.shadow}/bin/login -p
       UtmpIdentifier=%I
       TTYPath=/dev/%I

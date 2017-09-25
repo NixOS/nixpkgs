@@ -50,9 +50,13 @@ stdenv.mkDerivation rec {
     cp *.ttf $out/share/fonts/droid
   '';
 
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "1l3lqfdr9pm05b1py9yr3cf65gi1my7jrrlvikqpqg2zr066n6c3";
+
   meta = {
     description = "Droid Family fonts by Google Android";
-    homepage = "https://github.com/google/fonts";
+    homepage = https://github.com/google/fonts;
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.all;
     maintainers = [];

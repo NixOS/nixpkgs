@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-	version = "1.11.0";
+	version = "1.11.2";
 	name = "ocaml${ocaml.version}-git-${version}";
 
 	src = fetchFromGitHub {
 		owner = "mirage";
 		repo = "ocaml-git";
 		rev = version;
-		sha256 = "1gsvp783g4jb54ccvvpyjpxjmp0pjvlq0cicygk4z4rxs0crd6kw";
+		sha256 = "1z5b0g4vck1sh1w076i2p3ppxrmb9h30q3nip5snw2r9prkm6y1j";
 	};
 
 	buildInputs = [ ocaml findlib jbuilder ];

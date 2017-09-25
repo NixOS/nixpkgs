@@ -1,0 +1,16 @@
+diff --git a/mh/tests/ali.at b/mh/tests/ali.at
+index 28c0e5451..c76cf9363 100644
+--- a/mh/tests/ali.at
++++ b/mh/tests/ali.at
+@@ -85,9 +85,9 @@ ali -a ./mh_aliases korzen | tr -d ' '
+ [expout])
+ 
+ MH_CHECK([ali: group id],[ali05 ali-group-id ali-gid],[
+-cat /etc/passwd | awk -F : '/^#/ { next } $4==0 { print $1 }' > expout
++cat /etc/passwd | awk -F : '/^#/ { next } $4==0 { print $1; exit }' > expout
+ test -s expout || AT_SKIP_TEST
+-name=`awk -F : '/^#/ { next } $3==0 { print $1 }' /etc/group < /dev/null`
++name=`awk -F : '/^#/ { next } $3==0 { print $1; exit }' /etc/group < /dev/null`
+ test -z "$name" && AT_SKIP_TEST
+ 
+ echo "korzen: +$name" > mh_aliases

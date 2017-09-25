@@ -46,7 +46,9 @@ stdenv.mkDerivation rec {
     # The raymarine and gtm tests fail on i686 despite -ffloat-store.
   + lib.optionalString stdenv.isi686 "rm -v testo.d/raymarine.test testo.d/gtm.test;"
     # The gtm, kml and tomtom asc tests fail on darwin, see PR #23572.
-  + lib.optionalString stdenv.isDarwin "rm -v testo.d/gtm.test testo.d/kml.test testo.d/tomtom_asc.test";
+  + lib.optionalString stdenv.isDarwin "rm -v testo.d/gtm.test testo.d/kml.test testo.d/tomtom_asc.test testo.d/classic-2.test"
+    # The arc-project test fails on aarch64.
+  + lib.optionalString stdenv.isAarch64 "rm -v testo.d/arc-project.test";
 
   meta = with stdenv.lib; {
     description = "Convert, upload and download data from GPS and Map programs";

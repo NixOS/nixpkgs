@@ -12,9 +12,6 @@ stdenv.mkDerivation {
 
   buildInputs = [ unzip cmake python ];
 
-  # patch out examples in Darwin because they do not compile.
-  patches = stdenv.lib.optionals stdenv.isDarwin [ ./no-examples.patch ];
-
   meta = {
     homepage = http://people.cs.ubc.ca/~mariusm/flann/;
     license = stdenv.lib.licenses.bsd3;

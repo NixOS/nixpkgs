@@ -6,11 +6,11 @@ let
   # Might want to use `python2.withPackages(ps: [ps.numpy]);` here...
 in stdenv.mkDerivation rec {
   name = "vigra-${version}";
-  version = "1.10.0";
+  version = "1.11.1";
 
   src = fetchurl {
     url = "https://github.com/ukoethe/vigra/archive/Version-${stdenv.lib.replaceChars ["."] ["-"] version}.tar.gz";
-    sha256 = "1y3yii8wnyz68n0mzcmjylwd6jchqa3l913v39l2zsd2rv5nyvs0";
+    sha256 = "03i5wfscv83jb8vnwwhfmm8yfiniwkvk13myzhr1kbwbs9884wdj";
   };
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";

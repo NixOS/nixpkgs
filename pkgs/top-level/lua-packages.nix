@@ -8,7 +8,7 @@
 { fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
 , perl, gtk2, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
-, fetchFromGitHub, libmpack
+, fetchFromGitHub, libmpack, which
 }:
 
 let
@@ -68,6 +68,32 @@ let
     meta = {
       homepage = "http://bitop.luajit.org";
       maintainers = with maintainers; [ flosse ];
+    };
+  };
+
+  luacheck = buildLuaPackage rec {
+    pname = "luacheck";
+    version = "0.20.0";
+    name = "${pname}${version}";
+
+    src = fetchFromGitHub {
+      owner = "mpeterv";
+      repo = "luacheck";
+      rev = "${version}";
+      sha256 = "0ahfkmqcjhlb7r99bswy1sly6d7p4pyw5f4x4fxnxzjhbq0c5qcs";
+    };
+
+    propagatedBuildInputs = [ lua ];
+
+    installPhase = ''
+      ${lua}/bin/lua install.lua $out
+      '';
+
+    meta = with stdenv.lib; {
+      description = "A tool for linting and static analysis of Lua code";
+      homepage = https://github.com/mpeterv/luacheck;
+      license = licenses.mit;
+      platforms = platforms.unix;
     };
   };
 
@@ -242,6 +268,33 @@ let
       platforms = with platforms; darwin ++ linux ++ freebsd ++ illumos;
       maintainers = with maintainers; [ mornfall ];
     };
+  };
+
+  luxio = buildLuaPackage rec {
+    name = "luxio-${version}";
+    version = "13";
+    src = fetchurl {
+      url = "https://git.gitano.org.uk/luxio.git/snapshot/luxio-luxio-13.tar.bz2";
+      sha256 = "1hvwslc25q7k82rxk461zr1a2041nxg7sn3sw3w0y5jxf0giz2pz";
+    };
+    nativeBuildInputs = [ which pkgconfig ];
+    postPatch = ''
+      patchShebangs .
+    '';
+    meta = {
+      platforms = stdenv.lib.platforms.unix;
+      license = stdenv.lib.licenses.mit;
+      description = "Lightweight UNIX I/O and POSIX binding for Lua";
+      maintainers = [ maintainers.richardipsum ];
+    };
+    preBuild = ''
+      makeFlagsArray=(
+        INST_LIBDIR="$out/lib/lua/${lua.luaversion}"
+        INST_LUADIR="$out/share/lua/${lua.luaversion}"
+        LUA_BINDIR="$out/bin"
+        INSTALL=install
+        );
+    '';
   };
 
   luazip = buildLuaPackage rec {

@@ -20,9 +20,11 @@ stdenv.mkDerivation rec {
   #  chmod +w ~/espeak-data
 
   patches = [
+    ./gcc6.patch
     ./espeakedit-fix-makefile.patch
     ./espeakedit-configurable-sox-path.patch
     ./espeakedit-configurable-path-espeak-data.patch
+    ./espeakedit-gcc6.patch
   ];
 
   postPatch = ''

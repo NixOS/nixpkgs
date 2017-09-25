@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   name = "borgbackup-${version}";
-  version = "1.0.10";
+  version = "1.0.11";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://github.com/borgbackup/borg/releases/download/"
       + "${version}/${name}.tar.gz";
-    sha256 = "1sarmpzwr8dhbg0hsvaclcsjfax36ssb32d9klhhah4j8kqji3wp";
+    sha256 = "14fjk5dfwmjkn7nmkbhhbrk3g1wfrn8arvqd5r9jaij534nzsvpw";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -36,6 +36,9 @@ python3Packages.buildPythonApplication rec {
     mkdir -p $out/share/man
     cp -R docs/_build/man $out/share/man/man1
   '';
+
+  # tests fail due to missing test command in nix_run_setup.py
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "A deduplicating backup program (attic fork)";

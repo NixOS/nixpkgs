@@ -7,18 +7,18 @@ let
   libglnx-src = fetchFromGitHub {
     owner  = "GNOME";
     repo   = "libglnx";
-    rev    = "36396b49ad6636c9959f3dfac5e04d41584b1a92";
-    sha256 = "146flrpzybm2s12wg05rnglnfd2f2jx3xzvns2pq28kvg09bgcfn";
+    rev    = "50a0feaba03ffa5a1980d3a14487276b8f49f8a6";
+    sha256 = "1rn5jdh84y1yfpqmvidx82lkm0jr7scjzdrps57r37ksxvrk3ibs";
   };
 
   bsdiff-src = fetchFromGitHub {
     owner  = "mendsley";
     repo   = "bsdiff";
-    rev    = "1edf9f656850c0c64dae260960fabd8249ea9c60";
-    sha256 = "1h71d2h2d3anp4msvpaff445rnzdxii3id2yglqk7af9i43kdsn1";
+    rev    = "7d70d8f4ff48345bc76e314c9d98da91f78873fa";
+    sha256 = "0ai2kykj8i4bqcy3gry36r3n4ax0fldncfhksl5b293nf2fihnws";
   };
 
-  version = "2016.11";
+  version = "2017.9";
 in stdenv.mkDerivation {
   name = "ostree-${version}";
 
@@ -26,7 +26,7 @@ in stdenv.mkDerivation {
     rev    = "v${version}";
     owner  = "ostreedev";
     repo   = "ostree";
-    sha256 = "19xmg01mxdykx74r9ra11hc15qd1fjqbxdn23jrn2pcvz8dw9zgc";
+    sha256 = "1040xcw8qcs6xq8x4wg47hha3915qzb6lndb38wjyn6wzl1680q3";
   };
 
   nativeBuildInputs = [

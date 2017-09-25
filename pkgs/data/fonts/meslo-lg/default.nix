@@ -32,6 +32,10 @@ stdenv.mkDerivation rec {
     cp *.ttf $out/share/fonts/truetype
   '';
 
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "1cppf8sk6r5wjnnas9n6iyag6pj9jvaic66lvwpqg3742s5akx6x";
+
   meta = {
     description = "A customized version of Apple’s Menlo-Regular font";
     homepage = https://github.com/andreberg/Meslo-Font/;

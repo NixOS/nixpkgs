@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   pname = "aiodns";
-  version = "1.0.1";
+  version = "1.1.1";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "595b78b8d54115d937cf60d778c02dad76b6f789fd527dab308f99e5601e7f3d";
+    sha256 = "d8677adc679ce8d0ef706c14d9c3d2f27a0e0cc11d59730cdbaf218ad52dd9ea";
   };
 
   propagatedBuildInputs = with stdenv.lib; [ pycares ] 

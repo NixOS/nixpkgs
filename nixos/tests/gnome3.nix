@@ -15,7 +15,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       services.xserver.displayManager.auto.user = "alice";
       services.xserver.desktopManager.gnome3.enable = true;
 
-      virtualisation.memorySize = 512;
+      virtualisation.memorySize = 1024;
     };
 
   testScript =

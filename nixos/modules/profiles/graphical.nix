@@ -8,7 +8,7 @@
     enable = true;
     displayManager.sddm.enable = true;
     desktopManager.plasma5.enable = true;
-    synaptics.enable = true; # for touchpad support on many laptops
+    libinput.enable = true; # for touchpad support on many laptops
   };
 
   environment.systemPackages = [ pkgs.glxinfo ];

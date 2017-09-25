@@ -1,7 +1,7 @@
 {
   mkDerivation, lib,
   extra-cmake-modules, kdoctools,
-  kcmutils
+  kcmutils, ki18n, kiconthemes, kio, knotifications, kxmlgui,
 }:
 
 mkDerivation {
@@ -11,5 +11,5 @@ mkDerivation {
     maintainers = [ lib.maintainers.peterhoeg ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  propagatedBuildInputs = [ kcmutils ];
+  buildInputs = [ kcmutils ki18n kiconthemes kio knotifications kxmlgui ];
 }

@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   patches = [ ./automake.patch ];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [ "format" "bindnow" ];
 
   prePatch = ''
       newPath=$(echo "${ddccontrol-db}/share/ddccontrol-db" | sed "s/\\//\\\\\\//g")
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A program used to control monitor parameters by software";
-    homepage = "http://ddccontrol.sourceforge.net/";
+    homepage = http://ddccontrol.sourceforge.net/;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ stdenv.lib.maintainers.pakhfn ];

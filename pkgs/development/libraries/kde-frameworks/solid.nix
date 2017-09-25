@@ -8,9 +8,9 @@ mkDerivation {
   name = "solid";
   meta = {
     maintainers = [ lib.maintainers.ttuegel ];
-    broken = builtins.compareVersions qtbase.version "5.6.0" < 0;
+    broken = builtins.compareVersions qtbase.version "5.7.0" < 0;
   };
-  nativeBuildInputs = [ bison extra-cmake-modules flex ];
+  nativeBuildInputs = [ bison extra-cmake-modules flex media-player-info ];
   buildInputs = [ qtdeclarative qttools ];
   propagatedBuildInputs = [ qtbase ];
   propagatedUserEnvPkgs = [ media-player-info ];

@@ -1,17 +1,29 @@
-{ stdenv, buildPythonPackage, fetchurl, python,
-  zope_interface, incremental, automat, constantly
+{ stdenv
+, buildPythonPackage
+, fetchurl
+, python
+, zope_interface
+, incremental
+, automat
+, constantly
+, hyperlink
+, pyopenssl
+, service-identity
+, idna
 }:
 buildPythonPackage rec {
   pname = "Twisted";
   name = "${pname}-${version}";
-  version = "17.1.0";
+  version = "17.5.0";
 
   src = fetchurl {
     url = "mirror://pypi/T/Twisted/${name}.tar.bz2";
-    sha256 = "1p245mg15hkxp7hy5cyq2fgvlgjkb4cg0gwkwd148nzy1bbi3wnv";
+    sha256 = "1sh2h23nnizcdyrl2rn7zxijglikxwz7z7grqpvq496zy2aa967i";
   };
 
-  propagatedBuildInputs = [ zope_interface incremental automat constantly ];
+  propagatedBuildInputs = [ zope_interface incremental automat constantly hyperlink ];
+
+  passthru.extras.tls = [ pyopenssl service-identity idna ];
 
   # Patch t.p._inotify to point to libc. Without this,
   # twisted.python.runtime.platform.supportsINotify() == False

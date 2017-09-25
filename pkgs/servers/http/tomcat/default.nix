@@ -32,20 +32,20 @@ let
 in {
   tomcat7 = common {
     versionMajor = "7";
-    versionMinor = "0.75";
-    sha256 = "0w5adsy4792qkf3ws46f539lrdbpz7lghy79s6b04c9yqaxjz6ni";
+    versionMinor = "0.81";
+    sha256 = "0mcr3caizqk6qrc0j9p91apdsg65ksawg0l6xpqk1fq6071nd5rq";
   };
 
   tomcat8 = common {
     versionMajor = "8";
-    versionMinor = "0.41";
-    sha256 = "1mvnf6m29y3p40vvi9mgghrddlmgwcrcvfwrf9vbama78fsh8wm5";
+    versionMinor = "0.46";
+    sha256 = "14wb9mgb7z02j6wvvmcsfc2zkcqnijc40gzyg1mnxcy5fvf8nzpk";
   };
 
   tomcat85 = common {
     versionMajor = "8";
-    versionMinor = "5.14";
-    sha256 = "0dls16lw7yak3s6cwwcccfg0qb5g8s36waxlg8wgjk8vc57h316w";
+    versionMinor = "5.20";
+    sha256 = "1l5cgxzaassjnfbr4rbr3wzz45idcqa8aqhphhvlx1xl8xqv6p8a";
   };
 
   tomcatUnstable = common {

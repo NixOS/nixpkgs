@@ -120,7 +120,6 @@ let
 
       # Run systemd-nspawn without startup notification (we'll
       # wait for the container systemd to signal readiness).
-      EXIT_ON_REBOOT=1 \
       exec ${config.systemd.package}/bin/systemd-nspawn \
         --keep-unit \
         -M "$INSTANCE" -D "$root" $extraFlags \
@@ -596,7 +595,7 @@ in
               { config =
                   { config, pkgs, ... }:
                   { services.postgresql.enable = true;
-                    services.postgresql.package = pkgs.postgresql92;
+                    services.postgresql.package = pkgs.postgresql96;
                   };
               };
           }

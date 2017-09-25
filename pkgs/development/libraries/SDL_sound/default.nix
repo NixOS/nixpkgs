@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
     description = "SDL sound library";
     platforms = platforms.linux;
     license = licenses.lgpl21;
-    homepage = "https://www.icculus.org/SDL_sound/";
+    homepage = https://www.icculus.org/SDL_sound/;
   };
 }

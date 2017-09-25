@@ -1,3 +1,4 @@
+{ lib }:
 rec {
   pcBase = {
     name = "pc";
@@ -543,6 +544,10 @@ rec {
 
       # Cavium ThunderX stuff.
       PCI_HOST_THUNDER_ECAM y
+
+      # The default (=y) forces us to have the XHCI firmware available in initrd,
+      # which our initrd builder can't currently do easily.
+      USB_XHCI_TEGRA m
     '';
     uboot = null;
     kernelTarget = "Image";

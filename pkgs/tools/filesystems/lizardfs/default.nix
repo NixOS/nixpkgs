@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   name = "lizardfs-${version}";
-  version = "3.10.2";
+  version = "3.11.3";
 
   src = fetchFromGitHub {
     owner = "lizardfs";
     repo = "lizardfs";
     rev = "v${version}";
-    sha256 = "0xw6skprxw0wcbqh4yx8f8a4q00x0sfz42llqgd047bcbga1k5zg";
+    sha256 = "1njgj242vgpdqb1di321jfqk4al5lk72x2iyp0nldy7h6r98l2ww";
   };
 
   buildInputs = 

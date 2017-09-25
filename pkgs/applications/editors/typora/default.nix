@@ -3,18 +3,18 @@
 
 stdenv.mkDerivation rec {
   name = "typora-${version}";
-  version = "0.9.29";
+  version = "0.9.31";
 
   src =
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "https://www.typora.io/linux/typora_${version}_amd64.deb";
-        sha256 = "1d7a02ee603be871d6f8c25b5c11069267ec11644a4f513635c0769ce46a44a7";
+        sha256 = "786b5164d9c63ecc23eb427c5ff393285ce8fd540c5bfdd5c1464655fac87a42";
       }
     else
       fetchurl {
         url = "https://www.typora.io/linux/typora_${version}_i386.deb";
-        sha256 = "79834b0ccd2257c030aec850ebc81fe115f46891b482f1ffa41fcc19c5f29659";
+        sha256 = "a8fe53f8984d9f8c4e06c14affbb616be58a91cd2b475b9681fb18a6e21930d1";
       }
     ;
 
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A minimal Markdown reading & writing app";
-    homepage = "https://typora.io";
+    homepage = https://typora.io;
     license = licenses.free;
     maintainers = with stdenv.lib.maintainers; [ jensbin ];
     platforms = [ "x86_64-linux" "i686-linux" ];

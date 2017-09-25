@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   installPhase = "scons --propagate-environment --prefix=$out install";
 
   meta = {
-    homepage = "https://astroidmail.github.io/";
+    homepage = https://astroidmail.github.io/;
     description = "GTK+ frontend to the notmuch mail system";
     maintainers = [ stdenv.lib.maintainers.bdimcheff ];
     license = stdenv.lib.licenses.gpl3Plus;

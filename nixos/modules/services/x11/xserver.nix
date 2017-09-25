@@ -648,51 +648,11 @@ in
 
     services.xserver.xkbDir = mkDefault "${pkgs.xkeyboard_config}/etc/X11/xkb";
 
-    system.extraDependencies = singleton (pkgs.runCommand "xkb-layouts-exist" {
-      inherit (cfg) layout xkbDir;
+    system.extraDependencies = singleton (pkgs.runCommand "xkb-validated" {
+      inherit (cfg) xkbModel layout xkbVariant xkbOptions;
+      nativeBuildInputs = [ pkgs.xkbvalidate ];
     } ''
-      # We can use the default IFS here, because the layouts won't contain
-      # spaces or tabs and are ruled out by the sed expression below.
-      availableLayouts="$(
-        sed -n -e ':i /^! \(layout\|variant\) *$/ {
-          # Loop through all of the layouts/variants until we hit another ! at
-          # the start of the line or the line is empty ('t' branches only if
-          # the last substitution was successful, so if the line is empty the
-          # substition will fail).
-          :l; n; /^!/bi; s/^ *\([^ ]\+\).*/\1/p; tl
-        }' "$xkbDir/rules/base.lst" | sort -u
-      )"
-
-      layoutNotFound() {
-        echo >&2
-        echo "The following layouts and variants are available:" >&2
-        echo >&2
-
-        # While an output width of 80 is more desirable for small terminals, we
-        # really don't know the amount of columns of the terminal from within
-        # the builder. The content in $availableLayouts however is pretty
-        # large, so let's opt for a larger width here, because it will print a
-        # smaller amount of lines on modern KMS/framebuffer terminals and won't
-        # lose information even in smaller terminals (it only will look a bit
-        # ugly).
-        echo "$availableLayouts" | ${pkgs.utillinux}/bin/column -c 150 >&2
-
-        echo >&2
-        echo "However, the keyboard layout definition in" \
-             "\`services.xserver.layout' contains the layout \`$1', which" \
-             "isn't a valid layout or variant." >&2
-        echo >&2
-        exit 1
-      }
-
-      # Again, we don't need to take care of IFS, see the comment for
-      # $availableLayouts.
-      for l in ''${layout//,/ }; do
-        if ! echo "$availableLayouts" | grep -qxF "$l"; then
-          layoutNotFound "$l"
-        fi
-      done
-
+      validate "$xkbModel" "$layout" "$xkbVariant" "$xkbOptions"
       touch "$out"
     '');
 

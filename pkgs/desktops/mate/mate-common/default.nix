@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Common files for development of MATE packages";
-    homepage = "http://mate-desktop.org";
+    homepage = http://mate-desktop.org;
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.romildo ];

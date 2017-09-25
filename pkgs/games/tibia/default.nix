@@ -50,7 +50,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Top-down MMORPG set in a fantasy world";
-    homepage = "http://tibia.com";
+    homepage = http://tibia.com;
     license = stdenv.lib.licenses.unfree;
     platforms = ["i686-linux"];
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];

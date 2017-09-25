@@ -1,28 +1,28 @@
-{ stdenv, lib, bundler, fetchurl, fetchFromGitHub, bundlerEnv, libiconv, ruby
-, tzdata, git, nodejs, procps, dpkg
+{ pkgs, stdenv, lib, bundler, fetchurl, fetchFromGitHub, bundlerEnv, libiconv
+, ruby, tzdata, git, procps, dpkg, nettools
 }:
 
 /* When updating the Gemfile add `gem "activerecord-nulldb-adapter"`
    to allow building the assets without a database */
 
 let
-  env = bundlerEnv {
-    name = "gitlab";
+  rubyEnv = bundlerEnv {
+    name = "gitlab-env-${version}";
     inherit ruby;
     gemdir = ./.;
     meta = with lib; {
       homepage = http://www.gitlab.com/;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ fpletz ];
+      maintainers = with maintainers; [ fpletz globin ];
       license = licenses.mit;
     };
   };
 
-  version = "8.17.6";
+  version = "9.5.5";
 
   gitlabDeb = fetchurl {
     url = "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/jessie/gitlab-ce_${version}-ce.0_amd64.deb/download";
-    sha256 = "1pr8nfnkzmicn5nxjkq48l4nfjsp6v5j3v8p7cp8r86lgfdc6as3";
+    sha256 = "1wrwxksfqkha7qm2hbgs0z7lmgisdvdqa4wcll0qfzq1c3d286zz";
   };
 
 in
@@ -31,19 +31,20 @@ stdenv.mkDerivation rec {
   name = "gitlab-${version}";
 
   buildInputs = [
-    env ruby bundler tzdata git nodejs procps dpkg
+    rubyEnv ruby bundler tzdata git procps dpkg nettools
   ];
 
   src = fetchFromGitHub {
     owner = "gitlabhq";
     repo = "gitlabhq";
     rev = "v${version}";
-    sha256 = "1yyyn2j0a457q2xbcxz6b33r23myr8kxbm9whj2dwrrbp4p273hr";
+    sha256 = "0qi21lkq69ah977vssbkllb7q5jwb0vf2ws5s3bzpvp2mj3iab5m";
   };
 
   patches = [
     ./remove-hardcoded-locations.patch
     ./nulladapter.patch
+    ./fix-36783.patch
   ];
 
   postPatch = ''
@@ -77,18 +78,16 @@ stdenv.mkDerivation rec {
     mv -v opt/gitlab/embedded/service/gitlab-rails/public/assets public
     rm -rf opt
 
-    export GITLAB_DATABASE_ADAPTER=nulldb
-    export SKIP_STORAGE_VALIDATION=true
-    rake assets:precompile RAILS_ENV=production
-
     mv config/gitlab.yml config/gitlab.yml.example
-    rm config/secrets.yml
+    rm -f config/secrets.yml
     mv config config.dist
   '';
 
   installPhase = ''
     mkdir -p $out/share
     cp -r . $out/share/gitlab
+    rm -rf $out/share/gitlab/log
+    ln -sf /run/gitlab/log $out/share/gitlab/log
     ln -sf /run/gitlab/uploads $out/share/gitlab/public/uploads
     ln -sf /run/gitlab/config $out/share/gitlab/config
 
@@ -98,7 +97,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit env;
+    inherit rubyEnv;
     inherit ruby;
   };
 }

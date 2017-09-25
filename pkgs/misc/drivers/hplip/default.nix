@@ -61,10 +61,9 @@ pythonPackages.buildPythonApplication {
 
   nativeBuildInputs = [
     pkgconfig
-    makeWrapper
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  pythonPath = with pythonPackages; [
     dbus
     pillow
     pygobject2
@@ -73,6 +72,8 @@ pythonPackages.buildPythonApplication {
   ] ++ stdenv.lib.optionals qtSupport [
     pyqt4
   ];
+
+  makeWrapperArgs = [ ''--prefix PATH : "${nettools}/bin"'' ];
 
   prePatch = ''
     # HPLIP hardcodes absolute paths everywhere. Nuke from orbit.
@@ -88,6 +89,7 @@ pythonPackages.buildPythonApplication {
 
   preConfigure = ''
     export configureFlags="$configureFlags
+      --with-hpppddir=$out/share/cups/model/HP
       --with-cupsfilterdir=$out/lib/cups/filter
       --with-cupsbackenddir=$out/lib/cups/backend
       --with-icondir=$out/share/applications
@@ -144,10 +146,30 @@ pythonPackages.buildPythonApplication {
     rm $out/etc/udev/rules.d/56-hpmud.rules
   '';
 
-  postFixup = ''
-    wrapProgram $out/lib/cups/filter/hpps \
-      --prefix PATH : "${nettools}/bin"
+  # The installed executables are just symlinks into $out/share/hplip,
+  # but wrapPythonPrograms ignores symlinks. We cannot replace the Python
+  # modules in $out/share/hplip with wrapper scripts because they import
+  # each other as libraries. Instead, we emulate wrapPythonPrograms by
+  # 1. Calling patchPythonProgram on the original script in $out/share/hplip
+  # 2. Making our own wrapper pointing directly to the original script.
+  dontWrapPythonPrograms = true;
+  preFixup = ''
+    buildPythonPath "$out $pythonPath"
 
+    for bin in $out/bin/*; do
+      py=$(readlink -m $bin)
+      rm $bin
+      echo "patching \`$py'..."
+      patchPythonScript "$py"
+      echo "wrapping \`$bin'..."
+      makeWrapper "$py" "$bin" \
+          --prefix PATH ':' "$program_PATH" \
+          --set PYTHONNOUSERSITE "true" \
+          $makeWrapperArgs
+    done
+  '';
+
+  postFixup = ''
     substituteInPlace $out/etc/hp/hplip.conf --replace /usr $out
   '' + stdenv.lib.optionalString (!withPlugin) ''
     # A udev rule to notify users that they need the binary plugin.

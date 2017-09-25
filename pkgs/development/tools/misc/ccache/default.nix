@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, runCommand, zlib }:
+{ stdenv, fetchurl, fetchpatch, runCommand, zlib, makeWrapper }:
 
 let ccache = stdenv.mkDerivation rec {
   name = "ccache-${version}";
@@ -32,18 +32,16 @@ let ccache = stdenv.mkDerivation rec {
         isGNU = unwrappedCC.isGNU or false;
       };
       inherit (unwrappedCC) lib;
+      nativeBuildInputs = [ makeWrapper ];
       buildCommand = ''
         mkdir -p $out/bin
 
         wrap() {
           local cname="$1"
           if [ -x "${unwrappedCC}/bin/$cname" ]; then
-            cat > $out/bin/$cname << EOF
-        #!/bin/sh
-        ${extraConfig}
-        exec ${ccache}/bin/ccache ${unwrappedCC}/bin/$cname "\$@"
-        EOF
-            chmod +x $out/bin/$cname
+            makeWrapper ${ccache}/bin/ccache $out/bin/$cname \
+              --run ${stdenv.lib.escapeShellArg extraConfig} \
+              --add-flags ${unwrappedCC}/bin/$cname
           fi
         }
 

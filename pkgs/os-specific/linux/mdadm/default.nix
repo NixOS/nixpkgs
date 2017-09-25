@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "NIXOS=1" "INSTALL=install" "INSTALL_BINDIR=$(out)/sbin"
     "MANDIR=$(out)/share/man" "RUN_DIR=/dev/.mdadm"
+    "STRIP="
   ] ++ stdenv.lib.optionals (hostPlatform != buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.prefix}"
   ];

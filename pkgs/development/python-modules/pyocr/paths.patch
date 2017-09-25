@@ -1,0 +1,111 @@
+diff --git a/src/pyocr/cuneiform.py b/src/pyocr/cuneiform.py
+index a461d92..1f2b914 100644
+--- a/src/pyocr/cuneiform.py
++++ b/src/pyocr/cuneiform.py
+@@ -27,13 +27,9 @@ from . import error
+ from . import util
+ 
+ 
+-# CHANGE THIS IF CUNEIFORM IS NOT IN YOUR PATH, OR IS NAMED DIFFERENTLY
+-CUNEIFORM_CMD = 'cuneiform'
++CUNEIFORM_CMD = '@NIX_CUNEIFORM_CMD@'
+ 
+-CUNEIFORM_DATA_POSSIBLE_PATHS = [
+-    "/usr/local/share/cuneiform",
+-    "/usr/share/cuneiform",
+-]
++CUNEIFORM_DATA_POSSIBLE_PATHS = ['@NIX_CUNEIFORM_DATA@']
+ 
+ LANGUAGES_LINE_PREFIX = "Supported languages: "
+ LANGUAGES_SPLIT_RE = re.compile("[^a-z]")
+diff --git a/src/pyocr/libtesseract/tesseract_raw.py b/src/pyocr/libtesseract/tesseract_raw.py
+index b4e7bda..47505f7 100644
+--- a/src/pyocr/libtesseract/tesseract_raw.py
++++ b/src/pyocr/libtesseract/tesseract_raw.py
+@@ -1,55 +1,13 @@
+ import ctypes
+ import logging
+ import os
+-import sys
+ 
+ from ..error import TesseractError
+ 
+ 
+ logger = logging.getLogger(__name__)
+ 
+-TESSDATA_PREFIX = os.getenv('TESSDATA_PREFIX', None)
+-libnames = []
+-
+-if getattr(sys, 'frozen', False):
+-    # Pyinstaller integration
+-    libnames += [os.path.join(sys._MEIPASS, "libtesseract-4.dll")]
+-    libnames += [os.path.join(sys._MEIPASS, "libtesseract-3.dll")]
+-    tessdata = os.path.join(sys._MEIPASS, "data")
+-    if not os.path.exists(os.path.join(tessdata, "tessdata")):
+-        logger.warning(
+-            "Running from container, but no tessdata ({}) found !".format(
+-                tessdata
+-            )
+-        )
+-    else:
+-        TESSDATA_PREFIX = tessdata
+-
+-
+-if sys.platform[:3] == "win":
+-    libnames += [
+-        # Jflesch> Don't they have the equivalent of LD_LIBRARY_PATH on
+-        # Windows ?
+-        "../vs2010/DLL_Release/libtesseract302.dll",
+-        "libtesseract302.dll",
+-        "C:\\Program Files (x86)\\Tesseract-OCR\\libtesseract-4.dll",
+-        "C:\\Program Files (x86)\\Tesseract-OCR\\libtesseract-3.dll",
+-    ]
+-else:
+-    libnames += [
+-        "libtesseract.so.4",
+-        "libtesseract.so.3",
+-    ]
+-
+-
+-g_libtesseract = None
+-
+-for libname in libnames:
+-    try:
+-        g_libtesseract = ctypes.cdll.LoadLibrary(libname)
+-        break
+-    except OSError:
+-        pass
++g_libtesseract = ctypes.cdll.LoadLibrary('@NIX_LIBTESSERACT_PATH@')
+ 
+ 
+ class PageSegMode(object):
+@@ -326,12 +284,11 @@ def init(lang=None):
+     try:
+         if lang:
+             lang = lang.encode("utf-8")
+-        prefix = None
+-        if TESSDATA_PREFIX:
+-            prefix = TESSDATA_PREFIX.encode("utf-8")
++        prefix = os.getenv('TESSDATA_PREFIX', '@NIX_TESSDATA_PREFIX@')
++        os.environ['TESSDATA_PREFIX'] = prefix
+         g_libtesseract.TessBaseAPIInit3(
+             ctypes.c_void_p(handle),
+-            ctypes.c_char_p(prefix),
++            ctypes.c_char_p(prefix.encode('utf-8')),
+             ctypes.c_char_p(lang)
+         )
+         g_libtesseract.TessBaseAPISetVariable(
+diff --git a/src/pyocr/tesseract.py b/src/pyocr/tesseract.py
+index c935881..7139ffe 100755
+--- a/src/pyocr/tesseract.py
++++ b/src/pyocr/tesseract.py
+@@ -31,8 +31,7 @@ from .builders import DigitBuilder  # backward compatibility
+ from .error import TesseractError  # backward compatibility
+ from .util import digits_only
+ 
+-# CHANGE THIS IF TESSERACT IS NOT IN YOUR PATH, OR IS NAMED DIFFERENTLY
+-TESSERACT_CMD = 'tesseract.exe' if os.name == 'nt' else 'tesseract'
++TESSERACT_CMD = '@NIX_TESSERACT_CMD@'
+ 
+ TESSDATA_EXTENSION = ".traineddata"
+ 

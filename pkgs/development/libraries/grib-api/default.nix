@@ -49,7 +49,7 @@ stdenv.mkDerivation rec{
 
 
   meta = with stdenv.lib; {
-    homepage = "https://software.ecmwf.int/wiki/display/GRIB/Home";
+    homepage = https://software.ecmwf.int/wiki/display/GRIB/Home;
     license = licenses.asl20;
     platforms = with platforms; linux ++ darwin;
     description = "ECMWF Library for the GRIB file format";

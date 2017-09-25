@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   name = "wpa_supplicant-${version}";
 
   src = fetchurl {
-    url = "http://hostap.epitest.fi/releases/${name}.tar.gz";
+    url = "https://w1.fi/releases/${name}.tar.gz";
     sha256 = "0l0l5gz3d5j9bqjsbjlfcv4w4jwndllp9fmyai4x9kg6qhs6v4xl";
   };
 
@@ -47,6 +47,7 @@ stdenv.mkDerivation rec {
     CONFIG_HS20=y
     CONFIG_P2P=y
     CONFIG_TDLS=y
+    CONFIG_BGSCAN_SIMPLE=y
   '' + optionalString (pcsclite != null) ''
     CONFIG_EAP_SIM=y
     CONFIG_EAP_AKA=y

@@ -19,7 +19,7 @@ agda.mkDerivation (self: rec {
   topSourceDirectories = [ "src" ];
 
   meta = with stdenv.lib; {
-    homepage = "http://wiki.portal.chalmers.se/agda/pmwiki.php?n=Libraries.StandardLibrary";
+    homepage = http://wiki.portal.chalmers.se/agda/pmwiki.php?n=Libraries.StandardLibrary;
     description = "A standard library for use with the Agda compiler";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;

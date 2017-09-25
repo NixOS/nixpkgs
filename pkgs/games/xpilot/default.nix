@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = {
     inherit version;
     description = ''A multiplayer X11 space combat game'';
-    homepage = "http://xpilot.sf.net/";
+    homepage = http://xpilot.sf.net/;
     license = stdenv.lib.licenses.gpl2Plus ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;

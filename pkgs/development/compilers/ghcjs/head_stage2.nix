@@ -15,7 +15,7 @@
          base HUnit test-framework test-framework-hunit
        ];
        jailbreak = true;
-       homepage = "https://github.com/simonmar/async";
+       homepage = https://github.com/simonmar/async;
        description = "Run IO operations asynchronously and wait for their results";
        license = stdenv.lib.licenses.bsd3;
      }) {};
@@ -47,7 +47,7 @@
          time time-locale-compat unordered-containers uuid-types vector
        ];
        jailbreak = true;
-       homepage = "https://github.com/bos/aeson";
+       homepage = https://github.com/bos/aeson;
        description = "Fast JSON parsing and encoding";
        license = stdenv.lib.licenses.bsd3;
      }) {};
@@ -76,7 +76,7 @@
          transformers unordered-containers vector
        ];
        jailbreak = true;
-       homepage = "https://github.com/bos/attoparsec";
+       homepage = https://github.com/bos/attoparsec;
        description = "Fast combinator parsing for bytestrings and text";
        license = stdenv.lib.licenses.bsd3;
      }) {};
@@ -95,7 +95,7 @@
        ];
        benchmarkHaskellDepends = [ base bytestring criterion deepseq ];
        jailbreak = true;
-       homepage = "https://github.com/basvandijk/case-insensitive";
+       homepage = https://github.com/basvandijk/case-insensitive;
        description = "Case insensitive string comparison";
        license = stdenv.lib.licenses.bsd3;
      }) {};
@@ -109,7 +109,7 @@
        libraryHaskellDepends = [ base deepseq ];
        testHaskellDepends = [ base Cabal QuickCheck ];
        jailbreak = true;
-       homepage = "https://github.com/spl/dlist";
+       homepage = https://github.com/spl/dlist;
        description = "Difference lists";
        license = stdenv.lib.licenses.bsd3;
      }) {};
@@ -143,7 +143,7 @@
           test-framework-hunit test-framework-quickcheck2 text unix
         ];
         jailbreak = true;
-        homepage = "http://github.com/tibbe/hashable";
+        homepage = http://github.com/tibbe/hashable;
         description = "A class for types that can be converted to a hash value";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -156,7 +156,7 @@
         doCheck = false;
         libraryHaskellDepends = [ base transformers ];
         jailbreak = true;
-        homepage = "http://github.com/ekmett/mtl";
+        homepage = http://github.com/ekmett/mtl;
         description = "Monad classes, using functional dependencies";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -204,7 +204,7 @@
        ];
        benchmarkHaskellDepends = [ base criterion ];
        jailbreak = true;
-       homepage = "https://github.com/basvandijk/scientific";
+       homepage = https://github.com/basvandijk/scientific;
        description = "Numbers represented using scientific notation";
        license = stdenv.lib.licenses.bsd3;
      }) {};
@@ -230,7 +230,7 @@
         libraryHaskellDepends = [ base ];
         testHaskellDepends = [ base containers HUnit mtl ];
         jailbreak = true;
-        homepage = "http://www.cs.uu.nl/wiki/GenericProgramming/SYB";
+        homepage = http://www.cs.uu.nl/wiki/GenericProgramming/SYB;
         description = "Scrap Your Boilerplate";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -247,7 +247,7 @@
          base deepseq template-haskell transformers transformers-compat
        ];
        jailbreak = true;
-       homepage = "http://github.com/ekmett/tagged";
+       homepage = http://github.com/ekmett/tagged;
        description = "Haskell 98 phantom types to avoid unsafely passing dummy arguments";
        license = stdenv.lib.licenses.bsd3;
      }) {};
@@ -271,7 +271,7 @@
           test-framework-hunit test-framework-quickcheck2
         ];
         jailbreak = true;
-        homepage = "https://github.com/bos/text";
+        homepage = https://github.com/bos/text;
         description = "An efficient packed Unicode text type";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -295,7 +295,7 @@
          hashable hashmap mtl random
        ];
        jailbreak = true;
-       homepage = "https://github.com/tibbe/unordered-containers";
+       homepage = https://github.com/tibbe/unordered-containers;
        description = "Efficient hashing-based container types";
        license = stdenv.lib.licenses.bsd3;
      }) {};
@@ -318,7 +318,7 @@
          base bytestring containers criterion deepseq random
        ];
        jailbreak = true;
-       homepage = "https://github.com/aslatter/uuid";
+       homepage = https://github.com/aslatter/uuid;
        description = "Type definitions for Universally Unique Identifiers";
        license = stdenv.lib.licenses.bsd3;
      }) {};
@@ -338,7 +338,7 @@
           test-framework-quickcheck2 transformers
         ];
         jailbreak = true;
-        homepage = "https://github.com/haskell/vector";
+        homepage = https://github.com/haskell/vector;
         description = "Efficient Arrays";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -366,7 +366,7 @@
           test-framework-hunit test-framework-quickcheck2 text
         ];
         jailbreak = true;
-        homepage = "http://github.com/ghcjs/ghcjs-base";
+        homepage = http://github.com/ghcjs/ghcjs-base;
         description = "Base library for GHCJS";
         license = stdenv.lib.licenses.mit;
       }) {};
@@ -392,7 +392,7 @@
           test-framework-hunit test-framework-quickcheck2 unix
         ];
         jailbreak = true;
-        homepage = "http://www.haskell.org/cabal/";
+        homepage = http://www.haskell.org/cabal/;
         description = "A framework for packaging Haskell software";
         license = stdenv.lib.licenses.bsd3;
       }) {};

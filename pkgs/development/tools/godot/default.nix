@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage    = "http://godotengine.org";
+    homepage    = "https://godotengine.org";
     description = "Free and Open Source 2D and 3D game engine";
     license     = stdenv.lib.licenses.mit;
     platforms   = stdenv.lib.platforms.linux;

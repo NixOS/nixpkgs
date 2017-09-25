@@ -29,7 +29,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Offers access to the Mediathek of different tv stations (ARD, ZDF, Arte, etc.)";
-    homepage = "https://github.com/xaverW/MediathekView/";
+    homepage = https://github.com/xaverW/MediathekView/;
     license = licenses.gpl3;
     maintainers = [ maintainers.flosse ];
     platforms = platforms.all;

@@ -9,7 +9,7 @@
 assert zlibSupport -> zlib != null;
 
 let
-  majorVersion = "5.6";
+  majorVersion = "5.8";
   minorVersion = "0";
   minorVersionSuffix = "";
   pythonVersion = "2.7";
@@ -17,28 +17,27 @@ let
   libPrefix = "pypy${majorVersion}";
   sitePackages = "site-packages";
 
+  pythonForPypy = python.withPackages (ppkgs: [ ppkgs.pycparser ]);
+
 in stdenv.mkDerivation rec {
     name = "pypy-${version}";
     inherit majorVersion version pythonVersion;
 
     src = fetchurl {
       url = "https://bitbucket.org/pypy/pypy/get/release-pypy${pythonVersion}-v${version}.tar.bz2";
-      sha256 = "145a0kd5c0s1v2rpavw9ihncfb05s2x7chc70v8fssvyxq601911";
+      sha256 = "0dibf1bx4icrbi8zsqk7cfwgwsd3hfx6biz59k8j5rys3fx9z418";
     };
 
-   # http://bugs.python.org/issue27369
-    postPatch = let
-      expatch = fetchurl {
-        name = "tests-expat-2.2.0.patch";
-        url = "http://bugs.python.org/file43514/0001-Fix-Python-2.7.11-tests-for-Expat-2.2.0.patch";
-        sha256 = "1j3pa7ly9xrhp8jjwg5l77z7i3y68gx8f8jchqk6zc39d9glq3il";
-      };
-      in ''
-      patch lib-python/2.7/test/test_pyexpat.py < '${expatch}'
+    patches = [
+      # https://bitbucket.org/pypy/pypy/issues/2604/lib-python-27-test-test_ospy
+      ./2604-skip-urandom-fd-test.patch
+    ];
+
+    postPatch = ''
       substituteInPlace "lib-python/2.7/lib-tk/Tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
     '';
 
-    buildInputs = [ bzip2 openssl pkgconfig python libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 makeWrapper gdbm db ]
+    buildInputs = [ bzip2 openssl pkgconfig pythonForPypy libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 makeWrapper gdbm db ]
       ++ stdenv.lib.optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc
       ++ stdenv.lib.optional zlibSupport zlib;
 
@@ -66,7 +65,7 @@ in stdenv.mkDerivation rec {
     '';
 
     buildPhase = ''
-      ${python.interpreter} rpython/bin/rpython --make-jobs="$NIX_BUILD_CORES" -Ojit --batch pypy/goal/targetpypystandalone.py --withmod-_minimal_curses --withmod-unicodedata --withmod-thread --withmod-bz2 --withmod-_multiprocessing
+      ${pythonForPypy.interpreter} rpython/bin/rpython --make-jobs="$NIX_BUILD_CORES" -Ojit --batch pypy/goal/targetpypystandalone.py --withmod-_minimal_curses --withmod-unicodedata --withmod-thread --withmod-bz2 --withmod-_multiprocessing
     '';
 
     setupHook = python-setup-hook sitePackages;
@@ -92,8 +91,7 @@ in stdenv.mkDerivation rec {
        # disable test_urllib2net, test_urllib2_localnet, and test_urllibnet because they require networking (example.com)
        # disable test_ssl because no shared cipher' not found in '[Errno 1] error:14077410:SSL routines:SSL23_GET_SERVER_HELLO:sslv3 alert handshake failure
        # disable test_zipfile64 because it causes ENOSPACE
-       # disable test_epoll because of invalid arg, should be fixed in as of version 5.1.2
-      ./pypy-c ./pypy/test_all.py --pypy=./pypy-c -k 'not ( test_ssl or test_urllib2net or test_urllibnet or test_urllib2_localnet or test_socket or test_shutil or test_zipfile64 or test_epoll )' lib-python
+      ./pypy-c ./pypy/test_all.py --pypy=./pypy-c -k 'not ( test_ssl or test_urllib2net or test_urllibnet or test_urllib2_localnet or test_socket or test_shutil or test_zipfile64 )' lib-python
     '';
 
     installPhase = ''
@@ -140,7 +138,7 @@ in stdenv.mkDerivation rec {
 
     meta = with stdenv.lib; {
       homepage = http://pypy.org/;
-      description = "Fast, compliant alternative implementation of the Python language (2.7.8)";
+      description = "Fast, compliant alternative implementation of the Python language (2.7.13)";
       license = licenses.mit;
       platforms = platforms.linux;
       maintainers = with maintainers; [ domenkozar ];

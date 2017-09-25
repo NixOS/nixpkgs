@@ -2,7 +2,7 @@
 , go-md2man, go, containerd, runc, docker-proxy, tini, libtool
 , sqlite, iproute, bridge-utils, devicemapper, systemd
 , btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs
-, procps
+, procps, libseccomp
 }:
 
 with lib;
@@ -63,9 +63,12 @@ rec {
       ];
     });
 
+    # Optimizations break compilation of libseccomp c bindings
+    hardeningDisable = [ "fortify" ];
+
     buildInputs = [
       makeWrapper removeReferencesTo pkgconfig go-md2man go
-      sqlite devicemapper btrfs-progs systemd libtool
+      sqlite devicemapper btrfs-progs systemd libtool libseccomp
     ];
 
     dontStrip = true;
@@ -73,7 +76,8 @@ rec {
     DOCKER_BUILDTAGS = []
       ++ optional (systemd != null) [ "journald" ]
       ++ optional (btrfs-progs == null) "exclude_graphdriver_btrfs"
-      ++ optional (devicemapper == null) "exclude_graphdriver_devicemapper";
+      ++ optional (devicemapper == null) "exclude_graphdriver_devicemapper"
+      ++ optional (libseccomp != null) "seccomp";
 
     buildPhase = ''
       # build engine
@@ -161,7 +165,7 @@ rec {
     '';
 
     meta = {
-      homepage = http://www.docker.com/;
+      homepage = https://www.docker.com/;
       description = "An open source project to pack, ship and run any application as a lightweight container";
       license = licenses.asl20;
       maintainers = with maintainers; [ offline tailhook vdemeester ];
@@ -169,14 +173,29 @@ rec {
     };
   };
 
+  # Get revisions from
+  # https://github.com/docker/docker-ce/blob/v${version}/components/engine/hack/dockerfile/binaries-commits
+
   docker_17_06 = dockerGen rec {
-    version = "17.06.0-ce";
-    rev = "02c1d876176546b5f069dae758d6a7d2ead6bd48"; # git commit
-    sha256 = "0wrg4ygcq4c7f2bwa7pgc7y33idg0hijavx40588jaglz4k8sqpm";
-    runcRev = "992a5be178a62e026f4069f443c6164912adbf09";
-    runcSha256 = "0ylkbn5rprw5cgxazvrwj7balikpfm8vlybwdbfpwnsqk3gc6p8k";
-    containerdRev = "cfb82a876ecc11b5ca0977d1733adbe58599088a";
-    containerdSha256 = "0rix0mv203fn3rcxmpqdpb54l1a0paqplg2xgldpd943qi1rm552";
+    version = "17.06.2-ce";
+    rev = "cec0b72a9940e047e945a09e1febd781e88366d6"; # git commit
+    sha256 = "1scqx28vzh72ziq00lbx92vsb896mj974j8f0zg11y6qc5n5jx3l";
+    runcRev = "810190ceaa507aa2727d7ae6f4790c76ec150bd2";
+    runcSha256 = "0f1x1z262qg579qb1w21axj3mibq4fbff3gamliw49sdqqnb7vk3";
+    containerdRev = "6e23458c129b551d5c9871e5174f6b1b7f6d1170";
+    containerdSha256 = "12kzc5z1nhxdbizzr494ywilbs6rdv39v5ql7lmfzwh350gwlg93";
+    tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";
+    tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
+  };
+
+  docker_17_07 = dockerGen rec {
+    version = "17.07.0-ce";
+    rev = "87847530f7176a48348d196f7c23bbd058052af1"; # git commit
+    sha256 = "0zw9zlzbd7il33ch17ypwpa73gsb930sf2njnphg7ylvnqp8qzsp";
+    runcRev = "2d41c047c83e09a6d61d464906feb2a2f3c52aa4";
+    runcSha256 = "0v5iv29ck6lkxvxh7a56gfrlgfs0bjvjhrq3p6qqv9qjzv825byq";
+    containerdRev = "3addd840653146c90a254301d6c3a663c7fd6429";
+    containerdSha256 = "0as4s5wd57pdh1cyavkccpgs46kvlhr41v07qrv0phzffdhq3d5j";
     tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";
     tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
   };

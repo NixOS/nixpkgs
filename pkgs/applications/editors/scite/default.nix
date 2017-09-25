@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://www.scintilla.org/SciTE.html";
+    homepage = http://www.scintilla.org/SciTE.html;
     description = "SCIntilla based Text Editor";
     license = licenses.mit;
     platforms = platforms.linux;

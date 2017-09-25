@@ -3,12 +3,12 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "bcftools";
-  major = "1.4";
+  major = "1.5";
   version = "${major}.0";
 
   src = fetchurl {
     url = "https://github.com/samtools/bcftools/releases/download/${major}/bcftools-${major}.tar.bz2";
-    sha256 = "0k93mq3lf73dch81p4zxi0bdll567acxfa81qzbzkqflgsjb1ccg";
+    sha256 = "0093hkkvxmbwfaa7905s6185jymynvg42kq6sxv7fili11l5mxwz";
   };
 
   buildInputs = [ zlib bzip2 lzma perl ];

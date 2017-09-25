@@ -2,14 +2,14 @@
 , qtquickcontrols, qtwebkit, qttools, kde-cli-tools
 , kconfig, kdeclarative, kdoctools, kiconthemes, ki18n, kitemmodels, kitemviews
 , kjobwidgets, kcmutils, kio, knewstuff, knotifyconfig, kparts, ktexteditor
-, threadweaver, kxmlgui, kwindowsystem, grantlee
+, threadweaver, kxmlgui, kwindowsystem, grantlee, kcrash, karchive, kguiaddons
 , plasma-framework, krunner, kdevplatform, kdevelop-pg-qt, shared_mime_info
 , libksysguard, konsole, llvmPackages, makeWrapper
 }:
 
 let
   pname = "kdevelop";
-  version = "5.1.1";
+  version = "5.1.2";
 
 in
 mkDerivation rec {
@@ -17,7 +17,7 @@ mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-    sha256 = "0a01a4ffb2f01802cf4945521a3149a8f82c21fa8a97935991f1854b7db5d754";
+    sha256 = "af54e807847d145fe5f3eb55962ed0d22e6363c2bc6c32167e51ca4823c00ac7";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ mkDerivation rec {
     kconfig kdeclarative kdoctools kiconthemes ki18n kitemmodels kitemviews
     kjobwidgets kcmutils kio knewstuff knotifyconfig kparts ktexteditor
     threadweaver kxmlgui kwindowsystem grantlee plasma-framework krunner
-    kdevplatform shared_mime_info libksysguard konsole
+    kdevplatform shared_mime_info libksysguard konsole kcrash karchive kguiaddons
   ];
 
   postInstall = ''

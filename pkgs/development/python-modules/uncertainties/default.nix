@@ -16,7 +16,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = "http://pythonhosted.org/uncertainties/";
+    homepage = http://pythonhosted.org/uncertainties/;
     description = "Transparent calculations with uncertainties on the quantities involved (aka error propagation)";
     maintainer = with maintainers; [ rnhmjoj ];
     license = licenses.bsd3;

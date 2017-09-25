@@ -28,7 +28,7 @@ let
       pkgs.flask
       pkgs.prettytable
       pkgs.requests
-      pkgs.xattr
+      pkgs.pyxattr
     ]))
     # NOTE: `python2` has to be *AFTER* the above `python2.withPackages`,
     #       to ensure that the packages are available but the `toPythonPath`
@@ -73,6 +73,9 @@ rec {
     ./glusterfs-use-PATH-instead-of-hardcodes.patch
     ./glusterfs-fix-unsubstituted-autoconf-macros.patch
     ./glusterfs-python-remove-find_library.patch
+    # Remove when https://bugzilla.redhat.com/show_bug.cgi?id=1489610 is fixed
+    ./glusterfs-fix-bug-1489610-glusterfind-var-data-under-prefix.patch
+    ./glusterfs-glusterfind-log-remote-node_cmd-error.patch
   ];
 
    # Note that the VERSION file is something that is present in release tarballs
@@ -136,8 +139,14 @@ rec {
     # Luckily, `libexec` scripts are never supposed to be invoked straight from PATH,
     # instead they are invoked directly from `gluster` or `glusterd`, which is why it is
     # sufficient to set PYTHONPATH for those executables.
+    #
+    # Exceptions to these rules are the `glusterfind` `brickfind.py` and `changelog.py`
+    # crawlers, which are directly invoked on other gluster nodes using a remote SSH command
+    # issues by `glusterfind`.
 
     wrapProgram $out/share/glusterfs/scripts/eventsdash.py --set PATH "$GLUSTER_PATH" --set PYTHONPATH "$GLUSTER_PYTHONPATH" --set LD_LIBRARY_PATH "$GLUSTER_LD_LIBRARY_PATH"
+    wrapProgram $out/libexec/glusterfs/glusterfind/brickfind.py --set PATH "$GLUSTER_PATH" --set PYTHONPATH "$GLUSTER_PYTHONPATH" --set LD_LIBRARY_PATH "$GLUSTER_LD_LIBRARY_PATH"
+    wrapProgram $out/libexec/glusterfs/glusterfind/changelog.py --set PATH "$GLUSTER_PATH" --set PYTHONPATH "$GLUSTER_PYTHONPATH" --set LD_LIBRARY_PATH "$GLUSTER_LD_LIBRARY_PATH"
     '';
 
   doInstallCheck = true;

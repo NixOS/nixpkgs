@@ -5,8 +5,7 @@ with lib;
 let
 
   cfg = config.services.xserver.displayManager;
-  gnome3 = config.environment.gnome3.packageSet;
-  gdm = gnome3.gdm;
+  gdm = pkgs.gnome3.gdm;
 
 in
 
@@ -103,16 +102,31 @@ in
             (filter (arg: arg != "-terminate") cfg.xserverArgs);
           GDM_SESSIONS_DIR = "${cfg.session.desktops}";
           # Find the mouse
-          XCURSOR_PATH = "~/.icons:${config.system.path}/share/icons";
+          XCURSOR_PATH = "~/.icons:${pkgs.gnome3.adwaita-icon-theme}/share/icons";
         };
         execCmd = "exec ${gdm}/bin/gdm";
       };
 
     # Because sd_login_monitor_new requires /run/systemd/machines
     systemd.services.display-manager.wants = [ "systemd-machined.service" ];
-    systemd.services.display-manager.after = [ "systemd-machined.service" ];
+    systemd.services.display-manager.after = [
+      "rc-local.service"
+      "systemd-machined.service"
+      "systemd-user-sessions.service"
+      "getty@tty1.service"
+    ];
 
-    systemd.services.display-manager.path = [ gnome3.gnome_session ];
+    systemd.services.display-manager.conflicts = [ "getty@tty1.service" ];
+    systemd.services.display-manager.serviceConfig = {
+      # Restart = "always"; - already defined in xserver.nix
+      KillMode = "mixed";
+      IgnoreSIGPIPE = "no";
+      BusName = "org.gnome.DisplayManager";
+      StandardOutput = "syslog";
+      StandardError = "inherit";
+    };
+
+    systemd.services.display-manager.path = [ pkgs.gnome3.gnome_session ];
 
     services.dbus.packages = [ gdm ];
 
@@ -171,7 +185,7 @@ in
         auth     required       pam_env.so envfile=${config.system.build.pamEnvironment}
 
         auth     required       pam_succeed_if.so uid >= 1000 quiet
-        auth     optional       ${gnome3.gnome_keyring}/lib/security/pam_gnome_keyring.so
+        auth     optional       ${pkgs.gnome3.gnome_keyring}/lib/security/pam_gnome_keyring.so
         auth     ${if config.security.pam.enableEcryptfs then "required" else "sufficient"} pam_unix.so nullok likeauth
         ${optionalString config.security.pam.enableEcryptfs
           "auth required ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
@@ -191,7 +205,7 @@ in
           "session optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
         session  required       pam_loginuid.so
         session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
-        session  optional       ${gnome3.gnome_keyring}/lib/security/pam_gnome_keyring.so auto_start
+        session  optional       ${pkgs.gnome3.gnome_keyring}/lib/security/pam_gnome_keyring.so auto_start
       '';
 
       gdm-password.text = ''
@@ -199,7 +213,7 @@ in
         auth     required       pam_env.so envfile=${config.system.build.pamEnvironment}
 
         auth     required       pam_succeed_if.so uid >= 1000 quiet
-        auth     optional       ${gnome3.gnome_keyring}/lib/security/pam_gnome_keyring.so
+        auth     optional       ${pkgs.gnome3.gnome_keyring}/lib/security/pam_gnome_keyring.so
         auth     ${if config.security.pam.enableEcryptfs then "required" else "sufficient"} pam_unix.so nullok likeauth
         ${optionalString config.security.pam.enableEcryptfs
           "auth required ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
@@ -218,7 +232,7 @@ in
           "session optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so"}
         session  required       pam_loginuid.so
         session  optional       ${pkgs.systemd}/lib/security/pam_systemd.so
-        session  optional       ${gnome3.gnome_keyring}/lib/security/pam_gnome_keyring.so auto_start
+        session  optional       ${pkgs.gnome3.gnome_keyring}/lib/security/pam_gnome_keyring.so auto_start
       '';
 
       gdm-autologin.text = ''

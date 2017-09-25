@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       ExtremeTuxRacer - Tux lies on his belly and accelerates down ice slopes.
     '';
     license = stdenv.lib.licenses.gpl2Plus;
-    homepage = http://sourceforge.net/projects/extremetuxracer/;
+    homepage = https://sourceforge.net/projects/extremetuxracer/;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
     platforms = with stdenv.lib.platforms; linux;
   };

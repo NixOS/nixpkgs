@@ -176,7 +176,7 @@ following incompatible changes:</para>
   streamlined.  Desktop users should be able to simply set
   <programlisting>security.grsecurity.enable = true</programlisting> to get
   a reasonably secure system without having to sacrifice too much
-  functionality.  See <xref linkend="sec-grsecurity" /> for documentation
+  functionality.
   </para></listitem>
 
   <listitem><para>Special filesystems, like <literal>/proc</literal>,

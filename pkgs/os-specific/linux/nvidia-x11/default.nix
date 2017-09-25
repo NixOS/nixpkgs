@@ -6,11 +6,11 @@ in
 {
   # Policy: use the highest stable version as the default (on our master).
   stable = generic {
-    version = "375.66";
-    sha256_32bit = "0k7ib5ah3c2apzgzxlq75l48zm8901mbwj7slv18k3rhk8j0w8i9";
-    sha256_64bit = "1h01s8brpz42jwc24dsflm4psd3zsy26ds98h0adgwx51dbpzqsr";
-    settingsSha256 = "0bpdayyqw4cpgl7bgddfz6w5j8y3wsgr89p5vxnzgk9g0vgqxh5h";
-    persistencedSha256 = "113rllf9l26z546jjfijpxllp17qcpawblzxvsqc6rbzbkmvcdwi";
+    version = "384.69";
+    sha256_32bit = "1zgq9vji0ndadvql3bsnd0a6p7pq0vr8d0yb5c8b22i2h9smhw1v";
+    sha256_64bit = "0l3np6cx2rnb2q89zbnq4lvfcjl2g7i56hxwcb11ggijqm7ridx7";
+    settingsSha256 = "064va75p7dnkhy4hyi9b1gl4wjmrpjksg4cyiwl6n3lkmjnvmnwy";
+    persistencedSha256 = "0ijq25gnihw34qhkba62l5fy6lwkma94i0fxp8084byyilm3fwms";
   };
 
   beta = generic {

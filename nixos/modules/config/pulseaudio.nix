@@ -224,7 +224,7 @@ in {
       # Allow PulseAudio to get realtime priority using rtkit.
       security.rtkit.enable = true;
 
-      systemd.packages = [ cfg.package ];
+      systemd.packages = [ overriddenPackage ];
     })
 
     (mkIf hasZeroconf {

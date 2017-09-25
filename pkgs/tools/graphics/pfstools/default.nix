@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1fyc2c7jzr7k797c2dqyyvapzc3szxwcp48r382yxz2yq558xgd9";
   };
 
-  outputs = [ "out" "dev" "doc"];
+  outputs = [ "out" "dev" "man"];
 
   cmakeFlags = ''
     -DWITH_MATLAB=false 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   patches = [ ./threads.patch ./pfstools.patch ];
 
   meta = with stdenv.lib; {
-    homepage = "http://pfstools.sourceforge.net/";
+    homepage = http://pfstools.sourceforge.net/;
     description = "Toolkit for manipulation of HDR images";
     platforms = platforms.linux;
     license = licenses.lgpl2;

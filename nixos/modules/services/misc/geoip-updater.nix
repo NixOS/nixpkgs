@@ -238,7 +238,7 @@ in
 
     assertions = [
       { assertion = (builtins.filter
-          (x: builtins.match ".*\.(gz|xz)$" x == null) cfg.databases) == [];
+          (x: builtins.match ".*\\.(gz|xz)$" x == null) cfg.databases) == [];
         message = ''
           services.geoip-updater.databases supports only .gz and .xz databases.
 
@@ -246,7 +246,7 @@ in
           ${toString cfg.databases}
 
           Offending element(s):
-          ${toString (builtins.filter (x: builtins.match ".*\.(gz|xz)$" x == null) cfg.databases)};
+          ${toString (builtins.filter (x: builtins.match ".*\\.(gz|xz)$" x == null) cfg.databases)};
         '';
       }
     ];

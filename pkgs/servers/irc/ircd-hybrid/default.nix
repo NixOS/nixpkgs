@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "An IPv6-capable IRC server";
     platforms = stdenv.lib.platforms.unix;
-    homepage = "http://www.ircd-hybrid.org/";
+    homepage = http://www.ircd-hybrid.org/;
   };
 }

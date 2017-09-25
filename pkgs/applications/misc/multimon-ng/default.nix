@@ -35,7 +35,7 @@ stdenv.mkDerivation {
       AFSK2400 AFSK2400_2 AFSK2400_3 HAPN4800 FSK9600 DTMF ZVEI1 ZVEI2
       ZVEI3 DZVEI PZVEI EEA EIA CCIR MORSE CW
     '';
-    homepage = "https://github.com/EliasOenal/multimon-ng";
+    homepage = https://github.com/EliasOenal/multimon-ng;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ the-kenny ];

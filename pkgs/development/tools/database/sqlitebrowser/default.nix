@@ -1,14 +1,14 @@
 { mkDerivation, lib, fetchFromGitHub, qtbase, qttools, sqlite, cmake }:
 
 mkDerivation rec {
-  version = "3.9.1";
+  version = "3.10.0";
   name = "sqlitebrowser-${version}";
 
   src = fetchFromGitHub {
     repo   = "sqlitebrowser";
     owner  = "sqlitebrowser";
     rev    = "v${version}";
-    sha256 = "1s7f2d7wx2i68x60z7wdws3il6m83k5n5w5wyjvr0mz0mih0s150";
+    sha256 = "1fwr7p4b6glc3s0a06i7cg8l9p1mrcm4vyhyf2wi89cyg22rrf5c";
   };
 
   buildInputs = [ qtbase qttools sqlite ];
@@ -24,7 +24,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "DB Browser for SQLite";
-    homepage = "http://sqlitebrowser.org/";
+    homepage = http://sqlitebrowser.org/;
     license = licenses.gpl3;
     maintainers = [ maintainers.matthiasbeyer ];
     platforms = platforms.linux; # can only test on linux

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Atomic primitives for high performance, concurrent software";
-    homepage = "https://trac.mpich.org/projects/openpa";
+    homepage = https://trac.mpich.org/projects/openpa;
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ leenaars ];
     platforms = with stdenv.lib.platforms; linux;

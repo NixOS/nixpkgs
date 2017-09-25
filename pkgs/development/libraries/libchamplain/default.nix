@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, glib, gtk3, cairo, clutter, sqlite
-, clutter_gtk, libsoup /*, libmemphis */ }:
+, clutter_gtk, libsoup, gobjectIntrospection /*, libmemphis */ }:
 
 stdenv.mkDerivation rec {
   major = "0.12";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "13snnka1jqc5qrgij8bm22xy02pncf3dn5ij3jh4rrpzq7g1sqpi";
   };
 
-  buildInputs = [ pkgconfig ];
+  buildInputs = [ pkgconfig gobjectIntrospection ];
 
   propagatedBuildInputs = [ glib gtk3 cairo clutter_gtk sqlite libsoup ];
 

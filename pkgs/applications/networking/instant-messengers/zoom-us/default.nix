@@ -4,11 +4,11 @@
 
 let
 
-  version = "2.0.91373.0502";
+  version = "2.0.98253.0707";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.tar.xz";
-      sha256 = "0gcbfsvybkvnyklm82irgz19x3jl0hz9bwf2l9jga188057pfj7a";
+      sha256 = "1znw7459pzfl2jzmj9akfwq3z10sndfb1swdr1p3rrjpiwqh3p7r";
     };
   };
 
@@ -75,13 +75,12 @@ in stdenv.mkDerivation {
     #paxmark m $packagePath/QtWebEngineProcess # is this what dtzWill talked about?
 
     # RUNPATH set via patchelf is used only for half of libraries (why?), so wrap it
-    wrapProgram $packagePath/zoom \
+    makeWrapper $packagePath/zoom $out/bin/zoom-us \
         --prefix LD_LIBRARY_PATH : "$packagePath:$libPath" \
         --prefix LD_PRELOAD : "${libv4l}/lib/v4l1compat.so" \
         --set QT_PLUGIN_PATH "$packagePath/platforms" \
         --set QT_XKB_CONFIG_ROOT "${xorg.xkeyboardconfig}/share/X11/xkb" \
         --set QTCOMPOSE "${xorg.libX11.out}/share/X11/locale"
-    ln -s "$packagePath/zoom" "$out/bin/zoom-us"
 
     cat > $packagePath/qt.conf <<EOF
     [Paths]
@@ -92,10 +91,10 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://zoom.us;
+    homepage = https://zoom.us/;
     description = "zoom.us video conferencing application";
     license = stdenv.lib.licenses.unfree;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = builtins.attrNames srcs;
     maintainers = with stdenv.lib.maintainers; [ danbst ];
   };
 

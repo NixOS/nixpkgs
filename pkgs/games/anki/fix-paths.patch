@@ -1,7 +1,6 @@
-diff -Nurp anki-2.0.33.orig/anki/lang.py anki-2.0.33/anki/lang.py
---- anki-2.0.33.orig/anki/lang.py	2015-12-27 11:23:02.334908723 +0100
-+++ anki-2.0.33/anki/lang.py	2015-12-27 14:06:00.688003103 +0100
-@@ -71,13 +71,7 @@ def ngettext(single, plural, n):
+--- anki-2.0.46/anki/lang.py.orig	2017-08-06 15:30:10.781419237 +0200
++++ anki-2.0.46/anki/lang.py	2017-08-06 15:31:33.023043036 +0200
+@@ -71,15 +71,7 @@
      return localTranslation().ungettext(single, plural, n)
  
  def langDir():
@@ -11,6 +10,8 @@ diff -Nurp anki-2.0.33.orig/anki/lang.py anki-2.0.33/anki/lang.py
 -        dir = os.path.join(os.path.dirname(sys.argv[0]), "locale")
 -    if not os.path.isdir(dir):
 -        dir = "/usr/share/anki/locale"
+-    if not os.path.isdir(dir):
+-        dir = "/usr/local/share/anki/bin/locale"
 -    return dir
 +    return "@anki@/share/locale"
  

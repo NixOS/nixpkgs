@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   makeFlags = "WMII_HGVERSION=hg${rev}";
 
   meta = {
-    homepage = "https://code.google.com/archive/p/wmii/";
+    homepage = https://code.google.com/archive/p/wmii/;
     description = "A small window manager controlled by a 9P filesystem";
     maintainers = with stdenv.lib.maintainers; [ kovirobi ];
     license = stdenv.lib.licenses.mit;

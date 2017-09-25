@@ -1,5 +1,5 @@
 { pname, version, updateScript ? null
-, src, patches ? [], overrides ? {}, meta
+, src, patches ? [], extraConfigureFlags ? [], extraMakeFlags ? [], overrides ? {}, meta
 , isTorBrowserLike ? false }:
 
 { lib, stdenv, pkgconfig, pango, perl, python, zip, libIDL
@@ -29,7 +29,6 @@
 # Set to `privacySupport` or `false`.
 
 , webrtcSupport ? !privacySupport
-, loopSupport ? !privacySupport || !isTorBrowserLike
 , geolocationSupport ? !privacySupport
 , googleAPISupport ? geolocationSupport
 , crashreporterSupport ? false
@@ -44,11 +43,10 @@
 # option. However, in Firefox's case, those binaries may not be
 # distributed without permission from the Mozilla Foundation, see
 # http://www.mozilla.org/foundation/trademarks/.
-, enableOfficialBranding ? false
+, enableOfficialBranding ? isTorBrowserLike
 }:
 
 assert stdenv.cc ? libc && stdenv.cc.libc != null;
-assert !isTorBrowserLike -> loopSupport; # can't be disabled on firefox :(
 
 let
   flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
@@ -147,8 +145,6 @@ stdenv.mkDerivation (rec {
   ++ flag ffmpegSupport "ffmpeg"
   ++ lib.optional (!ffmpegSupport) "--disable-gstreamer"
   ++ flag webrtcSupport "webrtc"
-  ++ lib.optionals isTorBrowserLike
-       (flag loopSupport "loop")
   ++ flag geolocationSupport "mozril-geoloc"
   ++ lib.optional googleAPISupport "--with-google-api-keyfile=ga"
   ++ flag crashreporterSupport "crashreporter"
@@ -159,7 +155,18 @@ stdenv.mkDerivation (rec {
                     else [ "--disable-debug" "--enable-release"
                            "--enable-optimize"
                            "--enable-strip" ])
-  ++ lib.optional enableOfficialBranding "--enable-official-branding";
+  ++ lib.optional enableOfficialBranding "--enable-official-branding"
+  ++ extraConfigureFlags;
+
+  preBuild = lib.optionalString (enableOfficialBranding && isTorBrowserLike) ''
+    buildFlagsArray=("MOZ_APP_DISPLAYNAME=Tor Browser")
+  '';
+
+  makeFlags = lib.optionals enableOfficialBranding [
+    "MOZILLA_OFFICIAL=1"
+    "BUILD_OFFICIAL=1"
+  ]
+  ++ extraMakeFlags;
 
   enableParallelBuilding = true;
 

@@ -2,12 +2,15 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "wptserve";
   version = "1.4.0";
   name = "${pname}-${version}";
+
+  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
@@ -18,7 +21,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A webserver intended for web browser testing";
-    homepage = " http://wptserve.readthedocs.org/";
+    homepage =  http://wptserve.readthedocs.org/;
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ raskin ];
   };

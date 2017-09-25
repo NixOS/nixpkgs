@@ -83,6 +83,7 @@ in {
       description = "Prometheus exporter for UniFi Controller metrics";
       unitConfig.Documentation = "https://github.com/mdlayher/unifi_exporter";
       wantedBy = [ "multi-user.target" ];
+      after = optional config.services.unifi.enable "unifi.service";
       serviceConfig = {
         User = "nobody";
         Restart = "always";

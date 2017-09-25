@@ -30,6 +30,10 @@ let
       master-password = ${cfg.replication.masterPassword}
       master-port = ${toString cfg.replication.masterPort}
     ''}
+    ${optionalString (cfg.ensureUsers != [])
+    ''
+      plugin-load-add = auth_socket.so
+    ''}
     ${cfg.extraOptions}
   '';
 
@@ -108,16 +112,59 @@ in
 
       initialDatabases = mkOption {
         default = [];
-        description = "List of database names and their initial schemas that should be used to create databases on the first startup of MySQL";
+        description = ''
+          List of database names and their initial schemas that should be used to create databases on the first startup
+          of MySQL. The schema attribute is optional: If not specified, an empty database is created.
+        '';
         example = [
           { name = "foodatabase"; schema = literalExample "./foodatabase.sql"; }
-          { name = "bardatabase"; schema = literalExample "./bardatabase.sql"; }
+          { name = "bardatabase"; }
         ];
       };
 
       initialScript = mkOption {
         default = null;
         description = "A file containing SQL statements to be executed on the first startup. Can be used for granting certain permissions on the database";
+      };
+
+      ensureDatabases = mkOption {
+        default = [];
+        description = ''
+          Ensures that the specified databases exist.
+          This option will never delete existing databases, especially not when the value of this
+          option is changed. This means that databases created once through this option or
+          otherwise have to be removed manually.
+        '';
+        example = [
+          "nextcloud"
+          "piwik"
+        ];
+      };
+
+      ensureUsers = mkOption {
+        default = [];
+        description = ''
+          Ensures that the specified users exist and have at least the ensured permissions.
+          The MySQL users will be identified using Unix socket authentication. This authenticates the Unix user with the
+          same name only, and that without the need for a password.
+          This option will never delete existing users or remove permissions, especially not when the value of this
+          option is changed. This means that users created and permissions assigned once through this option or
+          otherwise have to be removed manually.
+        '';
+        example = [
+          {
+            name = "nextcloud";
+            ensurePermissions = {
+              "nextcloud.*" = "ALL PRIVILEGES";
+            };
+          }
+          {
+            name = "backup";
+            ensurePermissions = {
+              "*.*" = "SELECT, LOCK TABLES";
+            };
+          }
+        ];
       };
 
       # FIXME: remove this option; it's a really bad idea.
@@ -247,6 +294,8 @@ in
                     if ! test -e "${cfg.dataDir}/${database.name}"; then
                         echo "Creating initial database: ${database.name}"
                         ( echo "create database ${database.name};"
+
+                          ${optionalString (database ? "schema") ''
                           echo "use ${database.name};"
 
                           if [ -f "${database.schema}" ]
@@ -256,6 +305,7 @@ in
                           then
                               cat ${database.schema}/mysql-databases/*.sql
                           fi
+                          ''}
                         ) | ${mysql}/bin/mysql -u root -N
                     fi
                   '') cfg.initialDatabases}
@@ -299,6 +349,24 @@ in
 
               rm /tmp/mysql_init
             fi
+
+            ${optionalString (cfg.ensureDatabases != []) ''
+              (
+              ${concatMapStrings (database: ''
+                echo "CREATE DATABASE IF NOT EXISTS ${database};"
+              '') cfg.ensureDatabases}
+              ) | ${mysql}/bin/mysql -u root -N
+            ''}
+
+            ${concatMapStrings (user:
+              ''
+                ( echo "CREATE USER IF NOT EXISTS '${user.name}'@'localhost' IDENTIFIED WITH ${if mysql == pkgs.mariadb then "unix_socket" else "auth_socket"};"
+                  ${concatStringsSep "\n" (mapAttrsToList (database: permission: ''
+                  echo "GRANT ${permission} ON ${database} TO '${user.name}'@'localhost';"
+                  '') user.ensurePermissions)}
+                ) | ${mysql}/bin/mysql -u root -N
+              '') cfg.ensureUsers}
+
           ''; # */
       };
 

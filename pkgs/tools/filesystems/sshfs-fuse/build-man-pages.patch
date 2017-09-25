@@ -1,0 +1,11 @@
+--- a/meson.build	2017-09-23 22:02:57.770555382 +0200
++++ b/meson.build	2017-09-23 23:11:28.258095182 +0200
+@@ -25,7 +25,7 @@
+ endif
+ 
+ 
+-rst2man = find_program('rst2man', required: false)
++rst2man = find_program('rst2man.py', required: true)
+   
+ cfg = configuration_data()
+ 

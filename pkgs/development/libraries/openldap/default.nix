@@ -8,6 +8,14 @@ stdenv.mkDerivation rec {
     sha256 = "091qvwk5dkcpp17ziabcnh3rg3m7qwzw2pihfcd1d5fdxgywzmnd";
   };
 
+  patches = [
+    (fetchurl {
+      url = "https://bz-attachments.freebsd.org/attachment.cgi?id=183223";
+      sha256 = "1fiy457hrxmydybjlvn8ypzlavz22cz31q2rga07n32dh4x759r3";
+    })
+  ];
+  patchFlags = [ "-p0" ];
+
   # TODO: separate "out" and "bin"
   outputs = [ "out" "dev" "man" "devdoc" ];
 
@@ -20,11 +28,13 @@ stdenv.mkDerivation rec {
       "--disable-dependency-tracking"   # speeds up one-time build
       "--enable-modules"
       "--sysconfdir=/etc"
+      "--localstatedir=/var"
+      "--enable-crypt"
     ] ++ stdenv.lib.optional (openssl == null) "--without-tls"
       ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
       ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
 
-  installFlags = [ "sysconfdir=$(out)/etc" ];
+  installFlags = [ "sysconfdir=$(out)/etc" "localstatedir=$(out)/var" ];
 
   # 1. Fixup broken libtool
   # 2. Libraries left in the build location confuse `patchelf --shrink-rpath`

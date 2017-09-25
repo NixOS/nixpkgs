@@ -3,18 +3,18 @@
 , expat, libcap, oniguruma, libdwarf, libmcrypt, tbb, gperftools, glog, libkrb5
 , bzip2, openldap, readline, libelf, uwimap, binutils, cyrus_sasl, pam, libpng
 , libxslt, ocaml, freetype, gdb, git, perl, mariadb, gmp, libyaml, libedit
-, libvpx, imagemagick, fribidi, gperf
+, libvpx, imagemagick, fribidi, gperf, which
 }:
 
 stdenv.mkDerivation rec {
   name    = "hhvm-${version}";
-  version = "3.15.0";
+  version = "3.21";
 
   # use git version since we need submodules
   src = fetchgit {
     url    = "https://github.com/facebook/hhvm.git";
-    rev    = "92a682ebaa3c85b84857852d8621f528607fe27d";
-    sha256 = "0mn3bfvhdf6b4lflyjfjyr7nppkq505xkaaagk111fqy91rdzd3b";
+    rev    = "56483773e2edd9e61782f1901ce40e47959e71b8";
+    sha256 = "0dmdk98nv04m0fv6909gfbsxqlkckn369yi7kadhir0r7vxsj7wa";
     fetchSubmodules = true;
   };
 
@@ -23,8 +23,12 @@ stdenv.mkDerivation rec {
       libevent gd curl libxml2 icu flex bison openssl zlib php expat libcap
       oniguruma libdwarf libmcrypt tbb gperftools bzip2 openldap readline
       libelf uwimap binutils cyrus_sasl pam glog libpng libxslt ocaml libkrb5
-      gmp libyaml libedit libvpx imagemagick fribidi gperf
+      gmp libyaml libedit libvpx imagemagick fribidi gperf which
     ];
+
+  patches = [
+    ./flexible-array-members-gcc6.patch
+  ];
 
   enableParallelBuilding = false; # occasional build problems;
   dontUseCmakeBuildDir = true;
@@ -39,10 +43,10 @@ stdenv.mkDerivation rec {
   cmakeFlags = "-DCMAKE_INSTALL_INCLUDEDIR=include";
 
   prePatch = ''
-    substituteInPlace hphp/util/generate-buildinfo.sh \
-      --replace /bin/bash ${stdenv.shell}
     substituteInPlace ./configure \
       --replace "/usr/bin/env bash" ${stdenv.shell}
+    substituteInPlace ./third-party/ocaml/CMakeLists.txt \
+      --replace "/bin/bash" ${stdenv.shell}
     perl -pi -e 's/([ \t(])(isnan|isinf)\(/$1std::$2(/g' \
       hphp/runtime/base/*.cpp \
       hphp/runtime/ext/std/*.cpp \

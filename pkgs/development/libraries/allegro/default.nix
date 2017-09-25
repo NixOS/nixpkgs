@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "1p0ghkmpc4kwij1z9rzxfv7adnpy4ayi0ifahlns1bdzgmbyf88v";
   };
 
+  patches = [
+    ./nix-unstable-sandbox-fix.patch
+  ];
+
   buildInputs = [
     texinfo libXext xextproto libX11 xproto libXpm libXt libXcursor
     alsaLib cmake zlib libpng libvorbis libXxf86dga libXxf86misc

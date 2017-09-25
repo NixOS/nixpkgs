@@ -18,6 +18,7 @@
 , mmsSupport ? true, libmms
 , mpg123Support ? true, mpg123
 , aacSupport ? true, faad2
+, lameSupport ? true, lame
 , pulseaudioSupport ? true, libpulseaudio
 , jackSupport ? true, libjack2
 , gmeSupport ? true, game-music-emu
@@ -72,6 +73,7 @@ in stdenv.mkDerivation rec {
     ++ opt mmsSupport libmms
     ++ opt mpg123Support mpg123
     ++ opt aacSupport faad2
+    ++ opt lameSupport lame
     ++ opt zipSupport zziplib
     ++ opt (!stdenv.isDarwin && pulseaudioSupport) libpulseaudio
     ++ opt (!stdenv.isDarwin && jackSupport) libjack2
@@ -105,6 +107,7 @@ in stdenv.mkDerivation rec {
       (mkFlag mmsSupport "mms")
       (mkFlag mpg123Support "mpg123")
       (mkFlag aacSupport "aac")
+      (mkFlag lameSupport "lame-encoder")
       (mkFlag (!stdenv.isDarwin && pulseaudioSupport) "pulse")
       (mkFlag (!stdenv.isDarwin && jackSupport) "jack")
       (mkFlag stdenv.isDarwin "osx")

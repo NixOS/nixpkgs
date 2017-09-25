@@ -7,8 +7,8 @@
 # In that case its about 6MB which could be separated
 
 let
-  ver_maj = "1.50";
-  ver_min = "0";
+  ver_maj = "1.52";
+  ver_min = "1";
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gobject-introspection/${ver_maj}/${name}.tar.xz";
-    sha256 = "1c6597c666f543c70ef3d7c893ab052968afae620efdc080c36657f4226337c5";
+    sha256 = "1x5gkyrglv3dn9b4fsgw6asqgjw1wj7qc37g9pyac6pyaa6w7l1f";
   };
 
   outputs = [ "out" "dev" ];

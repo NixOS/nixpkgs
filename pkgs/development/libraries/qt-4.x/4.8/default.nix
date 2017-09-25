@@ -89,6 +89,10 @@ stdenv.mkDerivation rec {
         gtk = gtk2.out;
         gdk_pixbuf = gdk_pixbuf.out;
       })
+    ++ stdenv.lib.optional stdenv.isAarch64 (fetchpatch {
+        url = "https://src.fedoraproject.org/rpms/qt/raw/ecf530486e0fb7fe31bad26805cde61115562b2b/f/qt-aarch64.patch";
+        sha256 = "1fbjh78nmafqmj7yk67qwjbhl3f6ylkp6x33b1dqxfw9gld8b3gl";
+      })
     ++ [
       (fetchpatch {
         name = "fix-medium-font.patch";
@@ -114,6 +118,7 @@ stdenv.mkDerivation rec {
       -datadir $out/share/${name}
       -translationdir $out/share/${name}/translations
     "
+    unset LD # Makefile uses gcc for linking; setting LD interferes
   '' + optionalString stdenv.cc.isClang ''
     sed -i 's/QMAKE_CC = gcc/QMAKE_CC = clang/' mkspecs/common/g++-base.conf
     sed -i 's/QMAKE_CXX = g++/QMAKE_CXX = clang++/' mkspecs/common/g++-base.conf

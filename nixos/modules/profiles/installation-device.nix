@@ -28,7 +28,7 @@ with lib;
     services.nixosManual.showManual = true;
 
     # Let the user play Rogue on TTY 8 during the installation.
-    services.rogue.enable = true;
+    #services.rogue.enable = true;
 
     # Disable some other stuff we don't need.
     security.sudo.enable = false;
@@ -77,7 +77,6 @@ with lib;
     # Show all debug messages from the kernel but don't log refused packets
     # because we have the firewall enabled. This makes installs from the
     # console less cumbersome if the machine has a public IP.
-    boot.consoleLogLevel = mkDefault 7;
     networking.firewall.logRefusedConnections = mkDefault false;
 
     environment.systemPackages = [ pkgs.vim ];

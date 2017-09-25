@@ -62,11 +62,7 @@
     , cleanupCmds ? "", shell ? "${pkgs.bashInteractive}/bin/bash --norc"}:
 
 mkDerivation {
-  # The setup.sh script from stdenv will expect the native build inputs in
-  # the nativeBuildInputs environment variable.
-  nativeBuildInputs = [ ] ++ buildInputs;
-  # Trick to bypass the stdenv usual change of propagatedBuildInputs => propagatedNativeBuildInputs
-  propagatedBuildInputs2 = propagatedBuildInputs;
+  inherit buildInputs propagatedBuildInputs;
 
   name = "env-${name}";
   phases = [ "buildPhase" "fixupPhase" ];
@@ -89,8 +85,8 @@ mkDerivation {
         "$setupNew" > "$s"
     cat >> "$out/dev-envs/''${name/env-/}" << EOF
       defaultNativeBuildInputs="$defaultNativeBuildInputs"
-      nativeBuildInputs="$nativeBuildInputs"
-      propagatedBuildInputs="$propagatedBuildInputs2"
+      buildInputs="$buildInputs"
+      propagatedBuildInputs="$propagatedBuildInputs"
       # the setup-new script wants to write some data to a temp file.. so just let it do that and tidy up afterwards
       tmp="\$("${pkgs.coreutils}/bin/mktemp" -d)"
       NIX_BUILD_TOP="\$tmp"

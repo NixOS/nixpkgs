@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A two-pane file manager with advanced file manipulation features";
-    homepage = "http://www.boomerangsworld.de/cms/worker/index.html";
+    homepage = http://www.boomerangsworld.de/cms/worker/index.html;
     license =  licenses.gpl2;
     maintainers = [ maintainers.ndowens ];
   };

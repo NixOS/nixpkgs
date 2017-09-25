@@ -1,5 +1,9 @@
 { stdenv, fetchurl, coq }:
 
+if !stdenv.lib.versionAtLeast coq.coq-version "8.6"
+then throw "CoLoR is not available for Coq ${coq.coq-version}"
+else
+
 stdenv.mkDerivation {
   name = "coq${coq.coq-version}-CoLoR-1.3.0";
 

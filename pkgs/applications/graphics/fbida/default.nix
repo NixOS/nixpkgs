@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libexif libjpeg libpng libungif freetype fontconfig libtiff
    libwebp imagemagick curl sane-backends libdrm libXpm epoxy poppler lirc ];
   
-  makeFlags = [ "prefix=$(out)" "verbose=yes" ];
+  makeFlags = [ "prefix=$(out)" "verbose=yes" "STRIP=" ];
 
   patchPhase =
     ''

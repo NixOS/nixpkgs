@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   glpkWithExtras = lib.overrideDerivation glpk (attrs: {
-    propagatedNativeBuildInputs = [ gmp libtool libmysql libiodbc ];
+    propagatedBuildInputs = [ gmp libtool libmysql libiodbc ];
 
     CPPFLAGS = "-I${gmp.dev}/include";
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
                        "--with-gmp=yes" ];
   });
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ pure glpkWithExtras ];
   makeFlags = "libdir=$(out)/lib prefix=$(out)/";
   setupHook = ../generic-setup-hook.sh;

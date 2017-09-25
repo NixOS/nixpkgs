@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "ixgbevf-${version}-${kernel.version}";
-  version = "4.1.2";
+  version = "4.2.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/e1000/ixgbevf-${version}.tar.gz";
-    sha256 = "1dismhiq0asf04rv6pv2sk2m3xcy6m3bpk16gmxqybca3xa28a5b";
+    sha256 = "1666hsavaspjmf45ij396mkndzk6g0n3ibr2glfdhjfqhfy35zb8";
   };
 
   hardeningDisable = [ "pic" ];
@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     homepage = https://sourceforge.net/projects/e1000/files/ixgbevf%20stable/;
     license = stdenv.lib.licenses.gpl2;
     priority = 20;
+    broken = (stdenv.lib.versionOlder kernel.version "4.9");
   };
 }

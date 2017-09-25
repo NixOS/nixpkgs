@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       draw UML diagrams fast, produce sequence and activity diagrams from
       plain text, export diagrams to eps, pdf, jpg, svg, and clipboard,
       share diagrams using Eclipse, and create new, custom UML elements.
-      UMLet runs stand-alone or as Eclipse plug-in on Windows, OS X and
+      UMLet runs stand-alone or as Eclipse plug-in on Windows, macOS and
       Linux.
     '';
     homepage = http://www.umlet.com;

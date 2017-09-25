@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ehmry offline ];
     license = licenses.isc;
     platforms = [ "x86_64-linux" ];
+    broken = true;
   };
 }

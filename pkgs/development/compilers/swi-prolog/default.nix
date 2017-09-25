@@ -4,14 +4,14 @@
 }:
 
 let
-  version = "7.2.3";
+  version = "7.4.2";
 in
 stdenv.mkDerivation {
   name = "swi-prolog-${version}";
 
   src = fetchurl {
     url = "http://www.swi-prolog.org/download/stable/src/swipl-${version}.tar.gz";
-    sha256 = "1da6sr8pz1zffs79nfa1d25a11ibhalm1vdwsb17p265nx8psra3";
+    sha256 = "12yzy3w2l1p9fv77lv20xbqq47d0zjw5rkz96mx1xg1lldyja5vz";
   };
 
   buildInputs = [ gmp readline openssl libjpeg unixODBC libXinerama

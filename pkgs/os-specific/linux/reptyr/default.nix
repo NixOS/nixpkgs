@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = ["PREFIX=$(out)"];
   meta = {
-    platforms = stdenv.lib.platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with stdenv.lib.maintainers; [raskin];
     license = stdenv.lib.licenses.mit;
     description = ''A Linux tool to change controlling pty of a process'';

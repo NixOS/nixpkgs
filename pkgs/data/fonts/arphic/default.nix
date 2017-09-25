@@ -1,26 +1,22 @@
-{ stdenv, fetchurl, mkfontscale, mkfontdir }:
+{ stdenv, fetchzip, mkfontscale, mkfontdir }:
 
-{
-  arphic-ukai = stdenv.mkDerivation rec {
+let
+  version = "0.2.20080216.2";
+in {
+  arphic-ukai = fetchzip {
     name = "arphic-ukai-${version}";
 
-    version = "0.2.20080216.2";
+    url = "http://archive.ubuntu.com/ubuntu/pool/main/f/fonts-arphic-ukai/fonts-arphic-ukai_${version}.orig.tar.bz2";
 
-    src = fetchurl {
-      url = "http://archive.ubuntu.com/ubuntu/pool/main/f/fonts-arphic-ukai/fonts-arphic-ukai_${version}.orig.tar.bz2";
-      sha256 = "1lp3i9m6x5wrqjkh1a8vpyhmsrhvsa2znj2mx13qfkwza5rqv5ml";
-    };
-
-    buildInputs = [ mkfontscale mkfontdir ];
-
-    phases = [ "unpackPhase" "installPhase" ];
-
-    installPhase = ''
+    postFetch = ''
+      tar -xjvf $downloadedFile --strip-components=1
       install -D -v ukai.ttc $out/share/fonts/truetype/arphic-ukai.ttc
       cd $out/share/fonts
-      mkfontdir
-      mkfontscale
+      ${mkfontdir}/bin/mkfontdir
+      ${mkfontscale}/bin/mkfontscale
     '';
+
+    sha256 = "0xi5ycm7ydzpn7cqxv1kcj9vd70nr9wn8v27hmibyjc25y2qdmzl";
 
     meta = with stdenv.lib; {
       description = "CJK Unicode font Kai style";
@@ -32,26 +28,20 @@
     };
   };
 
-  arphic-uming = stdenv.mkDerivation rec {
+  arphic-uming = fetchzip {
     name = "arphic-uming-${version}";
 
-    version = "0.2.20080216.2";
+    url = "http://archive.ubuntu.com/ubuntu/pool/main/f/fonts-arphic-uming/fonts-arphic-uming_${version}.orig.tar.bz2";
 
-    src = fetchurl {
-      url = "http://archive.ubuntu.com/ubuntu/pool/main/f/fonts-arphic-uming/fonts-arphic-uming_${version}.orig.tar.bz2";
-      sha256 = "1ny11n380vn7sryvy1g3a83y3ll4h0jf9wgnrx55nmksx829xhg3";
-    };
-
-    buildInputs = [ mkfontscale mkfontdir ];
-
-    phases = [ "unpackPhase" "installPhase" ];
-
-    installPhase = ''
+    postFetch = ''
+      tar -xjvf $downloadedFile --strip-components=1
       install -D -v uming.ttc $out/share/fonts/truetype/arphic-uming.ttc
       cd $out/share/fonts
-      mkfontdir
-      mkfontscale
+      ${mkfontdir}/bin/mkfontdir
+      ${mkfontscale}/bin/mkfontscale
     '';
+
+    sha256 = "16jybvj1cxamm682caj6nsm6l5c60x9mgchp1l2izrw2rvc8x38d";
 
     meta = with stdenv.lib; {
       description = "CJK Unicode font Ming style";

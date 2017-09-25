@@ -1,0 +1,34 @@
+diff --git a/audio/paaudio.c b/audio/paaudio.c
+index fea6071..c1169d4 100644
+--- a/audio/paaudio.c
++++ b/audio/paaudio.c
+@@ -608,6 +608,7 @@ static int qpa_init_in(HWVoiceIn *hw, struct audsettings *as, void *drv_opaque)
+ {
+     int error;
+     pa_sample_spec ss;
++    pa_buffer_attr ba;
+     struct audsettings obt_as = *as;
+     PAVoiceIn *pa = (PAVoiceIn *) hw;
+     paaudio *g = pa->g = drv_opaque;
+@@ -616,6 +617,12 @@ static int qpa_init_in(HWVoiceIn *hw, struct audsettings *as, void *drv_opaque)
+     ss.channels = as->nchannels;
+     ss.rate = as->freq;
+
++    ba.fragsize = pa_frame_size (&ss) * g->conf.samples;
++    ba.maxlength = 5 * ba.fragsize;
++    ba.tlength = -1;
++    ba.prebuf = -1;
++    ba.minreq = -1;
++
+     obt_as.fmt = pa_to_audfmt (ss.format, &obt_as.endianness);
+
+     pa->stream = qpa_simple_new (
+@@ -625,7 +632,7 @@ static int qpa_init_in(HWVoiceIn *hw, struct audsettings *as, void *drv_opaque)
+         g->conf.source,
+         &ss,
+         NULL,                   /* channel map */
+-        NULL,                   /* buffering attributes */
++        &ba,                    /* buffering attributes */
+         &error
+         );
+     if (!pa->stream) {

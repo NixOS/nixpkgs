@@ -12,7 +12,7 @@ buildOcaml rec {
   propagatedBuildInputs = [ ocaml_batteries csv ocaml_lwt ocaml_sqlite3 estring ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/mfp/ocaml-sqlexpr";
+    homepage = http://github.com/mfp/ocaml-sqlexpr;
     description = "Type-safe, convenient SQLite database access";
     license = licenses.lgpl21;
   };

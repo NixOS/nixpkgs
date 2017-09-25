@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://software.ecmwf.int/wiki/display/ECC/";
+    homepage = https://software.ecmwf.int/wiki/display/ECC/;
     license = licenses.asl20;
     maintainers = with maintainers; [ knedlsepp ];
     platforms = platforms.unix;

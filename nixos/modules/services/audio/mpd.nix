@@ -10,11 +10,9 @@ let
   gid = config.ids.gids.mpd;
   cfg = config.services.mpd;
 
-  playlistDir = "${cfg.dataDir}/playlists";
-
   mpdConf = pkgs.writeText "mpd.conf" ''
     music_directory     "${cfg.musicDirectory}"
-    playlist_directory  "${playlistDir}"
+    playlist_directory  "${cfg.playlistDirectory}"
     db_file             "${cfg.dbFile}"
     state_file          "${cfg.dataDir}/state"
     sticker_file        "${cfg.dataDir}/sticker.sql"
@@ -57,8 +55,18 @@ in {
       musicDirectory = mkOption {
         type = types.path;
         default = "${cfg.dataDir}/music";
+        defaultText = ''''${dataDir}/music'';
         description = ''
           The directory where mpd reads music from.
+        '';
+      };
+
+      playlistDirectory = mkOption {
+        type = types.path;
+        default = "${cfg.dataDir}/playlists";
+        defaultText = ''''${dataDir}/playlists'';
+        description = ''
+          The directory where mpd stores playlists.
         '';
       };
 
@@ -120,6 +128,7 @@ in {
       dbFile = mkOption {
         type = types.str;
         default = "${cfg.dataDir}/tag_cache";
+        defaultText = ''''${dataDir}/tag_cache'';
         description = ''
           The path to MPD's database.
         '';
@@ -153,7 +162,7 @@ in {
 
       preStart = ''
         mkdir -p "${cfg.dataDir}" && chown -R ${cfg.user}:${cfg.group} "${cfg.dataDir}"
-        mkdir -p "${playlistDir}" && chown -R ${cfg.user}:${cfg.group} "${playlistDir}"
+        mkdir -p "${cfg.playlistDirectory}" && chown -R ${cfg.user}:${cfg.group} "${cfg.playlistDirectory}"
       '';
       serviceConfig = {
         User = "${cfg.user}";

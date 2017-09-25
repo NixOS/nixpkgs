@@ -47,7 +47,7 @@ EOF
   checkTarget = "tests";
 
   meta = with stdenv.lib; {
-    homepage = "http://bolt.x9c.fr";
+    homepage = http://bolt.x9c.fr;
     description = "A logging tool for the OCaml language";
     longDescription = ''
       Bolt is a logging tool for the OCaml language. It is inspired by and

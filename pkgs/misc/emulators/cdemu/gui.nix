@@ -1,9 +1,9 @@
 { callPackage, pythonPackages, gtk3, glib, libnotify, intltool, makeWrapper, gobjectIntrospection, gnome3, gdk_pixbuf, librsvg }:
 let
   pkg = import ./base.nix {
-    version = "3.0.2";
+    version = "3.1.0";
     pkgName = "gcdemu";
-    pkgSha256 = "1kmcr2a0inaddx8wrjh3l1v5ymgwv3r6nv2w05lia51r1yzvb44p";
+    pkgSha256 = "0rmnw302fk9vli22v54qx19lqxy23syxi154klxz2vma009q0p02";
   };
   inherit (pythonPackages) python pygobject3;
 in callPackage pkg {

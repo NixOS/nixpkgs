@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   # Fix linking against libpthread (patch from Fedora)
   # https://bugzilla.redhat.com/show_bug.cgi?id=1037707
   # https://bugs.launchpad.net/libmemcached/+bug/1281907
-  # Fix building on OS X (patch from Homebrew)
+  # Fix building on macOS (patch from Homebrew)
   # https://bugs.launchpad.net/libmemcached/+bug/1245562
   patches = stdenv.lib.optional stdenv.isLinux ./libmemcached-fix-linking-with-libpthread.patch
     ++ stdenv.lib.optional stdenv.isDarwin (fetchpatch {

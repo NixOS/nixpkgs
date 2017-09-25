@@ -26,7 +26,7 @@ install_name_tool \
   $out/lib/system/libsystem_kernel.dylib
 
 # TODO: this logic basically duplicates similar logic in the Libsystem expression. Deduplicate them!
-libs=$(otool -arch x86_64 -L /usr/lib/libSystem.dylib | tail -n +3 | awk '{ print $1 }')
+libs=$(cat $reexportedLibrariesFile | grep -v '^#')
 
 for i in $libs; do
   if [ "$i" != "/usr/lib/system/libsystem_kernel.dylib" ] && [ "$i" != "/usr/lib/system/libsystem_c.dylib" ]; then

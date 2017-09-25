@@ -1,0 +1,81 @@
+Look up .build-id files relative to the directories in the
+colon-separated environment variable NIX_DEBUG_INFO_DIRS, in addition
+to the existing debug-file-directory setting.
+
+diff -ru --exclude '*gcore' --exclude '*pdtrace' gdb-8.0-orig/gdb/build-id.c gdb-8.0/gdb/build-id.c
+--- gdb-8.0-orig/gdb/build-id.c	2017-06-04 17:51:26.000000000 +0200
++++ gdb-8.0/gdb/build-id.c	2017-07-28 13:18:10.797375927 +0200
+@@ -67,8 +67,8 @@
+ 
+ /* See build-id.h.  */
+ 
+-gdb_bfd_ref_ptr
+-build_id_to_debug_bfd (size_t build_id_len, const bfd_byte *build_id)
++static gdb_bfd_ref_ptr
++build_id_to_debug_bfd_in (const char *directories, size_t build_id_len, const bfd_byte *build_id)
+ {
+   char *link, *debugdir;
+   VEC (char_ptr) *debugdir_vec;
+@@ -78,7 +78,7 @@
+   int alloc_len;
+ 
+   /* DEBUG_FILE_DIRECTORY/.build-id/ab/cdef */
+-  alloc_len = (strlen (debug_file_directory)
++  alloc_len = (strlen (directories)
+ 	       + (sizeof "/.build-id/" - 1) + 1
+ 	       + 2 * build_id_len + (sizeof ".debug" - 1) + 1);
+   link = (char *) alloca (alloc_len);
+@@ -86,7 +86,7 @@
+   /* Keep backward compatibility so that DEBUG_FILE_DIRECTORY being "" will
+      cause "/.build-id/..." lookups.  */
+ 
+-  debugdir_vec = dirnames_to_char_ptr_vec (debug_file_directory);
++  debugdir_vec = dirnames_to_char_ptr_vec (directories);
+   back_to = make_cleanup_free_char_ptr_vec (debugdir_vec);
+ 
+   for (ix = 0; VEC_iterate (char_ptr, debugdir_vec, ix, debugdir); ++ix)
+@@ -137,6 +137,30 @@
+   return abfd;
+ }
+ 
++gdb_bfd_ref_ptr
++build_id_to_debug_bfd (size_t build_id_len, const bfd_byte *build_id)
++{
++  gdb_bfd_ref_ptr abfd = build_id_to_debug_bfd_in(debug_file_directory, build_id_len, build_id);
++
++  if (abfd != NULL)
++    return abfd;
++
++  static int init = 0;
++  static char *env_var;
++  if (!init)
++    {
++      env_var = getenv("NIX_DEBUG_INFO_DIRS");
++      init = 1;
++    }
++
++  if (env_var)
++    {
++      abfd = build_id_to_debug_bfd_in(env_var, build_id_len, build_id);
++    }
++
++  return abfd;
++}
++
+ /* See build-id.h.  */
+ 
+ char *
+diff -ru --exclude '*gcore' --exclude '*pdtrace' gdb-8.0-orig/gdb/symfile.c gdb-8.0/gdb/symfile.c
+--- gdb-8.0-orig/gdb/symfile.c	2017-06-04 17:51:27.000000000 +0200
++++ gdb-8.0/gdb/symfile.c	2017-07-28 12:54:05.401586174 +0200
+@@ -1415,8 +1415,8 @@
+ 			   struct cmd_list_element *c, const char *value)
+ {
+   fprintf_filtered (file,
+-		    _("The directory where separate debug "
+-		      "symbols are searched for is \"%s\".\n"),
++		    _("The directories where separate debug "
++		      "symbols are searched for are \"%s\".\n"),
+ 		    value);
+ }
+ 

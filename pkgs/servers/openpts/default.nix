@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "TCG Platform Trust Service (PTS)";
-    homepage = "http://sourceforge.jp/projects/openpts";
+    homepage = http://sourceforge.jp/projects/openpts;
     license = stdenv.lib.licenses.cpl10;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ tstrobel ];

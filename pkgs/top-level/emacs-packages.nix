@@ -269,8 +269,11 @@ let
 
   rtags = melpaBuild rec {
     pname = "rtags";
-    version = "2.0"; # really, it's some arbitrary git hash
+    version = "2.12";
     src = external.rtags.src;
+
+    configurePhase = ":";
+
     propagatedUserEnvPkgs = [ external.rtags ];
     fileSpecs = [ "src/*.el" ];
     inherit (external.rtags) meta;

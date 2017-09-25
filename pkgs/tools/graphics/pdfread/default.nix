@@ -44,7 +44,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "PDF/DJVU to ebook format converter";
-    homepage = http://www.mobileread.com/forums/showthread.php?t=21906;
+    homepage = https://www.mobileread.com/forums/showthread.php?t=21906;
     license = licenses.mit;
   };
 }

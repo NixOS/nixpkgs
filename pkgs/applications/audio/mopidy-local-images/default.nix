@@ -19,7 +19,7 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/mopidy/mopidy-local-images";
+    homepage = https://github.com/mopidy/mopidy-local-images;
     description = "Mopidy local library proxy extension for handling embedded album art";
     license = licenses.asl20;
     maintainers = [ maintainers.rvolosatovs ];

@@ -1,7 +1,7 @@
 { stdenv, lib, buildGoPackage, fetchFromGitLab }:
 buildGoPackage rec {
   name = "loccount-${version}";
-  version = "1.0";
+  version = "1.1";
 
   goPackagePath = "gitlab.com/esr/loccount";
   excludedPackages = "tests";
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "esr";
     repo = "loccount";
     rev = version;
-    sha256 = "081wf7fckn76m4x0jwq4h2fsbhpb6f67dha77ni3p6wg7q6sihqx";
+    sha256 = "1wx31hraxics8x8w42jy5b10wdx1368zp2p6gplcfmpjssf9pacr";
   };
 
   meta = with stdenv.lib; {

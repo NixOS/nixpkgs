@@ -1,6 +1,6 @@
-    buildInputs = [ perl ruby ];
+    buildInputs = [ perl ruby git ];
     buildPhase = ''
       pushd ruby/command-t
-      gem build command-t.gemspec
+      gem build ./command-t.gemspec
       popd
     '';

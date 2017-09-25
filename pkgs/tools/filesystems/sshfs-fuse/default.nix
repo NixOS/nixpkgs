@@ -1,27 +1,43 @@
-{ stdenv, fetchFromGitHub, pkgconfig, glib, fuse, autoreconfHook }:
+{ stdenv, fetchFromGitHub, meson, pkgconfig, ninja, glib, fuse3
+, buildManPages ? true, docutils
+}:
 
-stdenv.mkDerivation rec {
-  version = "2.9";
+let
+  inherit (stdenv.lib) optional;
+  rpath = stdenv.lib.makeLibraryPath [ fuse3 glib ];
+in stdenv.mkDerivation rec {
+  version = "3.3.0";
   name = "sshfs-fuse-${version}";
-  
+
   src = fetchFromGitHub {
-    repo = "sshfs";
     owner = "libfuse";
+    repo = "sshfs";
     rev = "sshfs-${version}";
-    sha256 = "1n0cq72ps4dzsh72fgfprqn8vcfr7ilrkvhzpy5500wjg88diapv";
+    sha256 = "1hn5c0059ppjqygdhvapxm7lrqm5bnpwaxgjylskz04c0vr8nygp";
   };
-  
-  buildInputs = [ pkgconfig glib fuse autoreconfHook ];
+
+  patches = optional buildManPages ./build-man-pages.patch;
+
+  nativeBuildInputs = [ meson pkgconfig ninja ];
+  buildInputs = [ fuse3 glib ] ++ optional buildManPages docutils;
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optional
+    (stdenv.system == "i686-linux")
+    "-D_FILE_OFFSET_BITS=64";
 
   postInstall = ''
     mkdir -p $out/sbin
     ln -sf $out/bin/sshfs $out/sbin/mount.sshfs
   '';
 
+  postFixup = ''
+       patchelf --set-rpath '${rpath}' "$out/bin/sshfs"
+  '';
+
   meta = with stdenv.lib; {
-    homepage = https://github.com/libfuse/sshfs;
+    inherit (src.meta) homepage;
     description = "FUSE-based filesystem that allows remote filesystems to be mounted over SSH";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jgeerds ];
+    maintainers = with maintainers; [ primeos ];
   };
 }

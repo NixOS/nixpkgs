@@ -16,22 +16,24 @@
     version = "1.3";
   };
   gemojione = {
+    dependencies = ["json"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0svj3hsmwyr306vg75cd7p9i4bwnajrda60n2vhiav2cvhnkawik";
+      sha256 = "0ayk8r147k1s38nj18pwk76npx1p7jhi86silk800nj913pjvrhj";
       type = "gem";
     };
-    version = "3.2.0";
+    version = "3.3.0";
   };
   github-markup = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1g538d7kcj2iw4d9ll8266d8n526hz2fbx7zlx8z7gxg1gzwiki9";
+      sha256 = "1nyb9ck2c9z5qi86n7r52w0m126qpnvc93yh35cn8bwsnkjqx0iq";
       type = "gem";
     };
-    version = "1.6.0";
+    version = "1.6.1";
   };
   gitlab-grit = {
+    dependencies = ["charlock_holmes" "diff-lcs" "mime-types" "posix-spawn"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0lf1cr6pzqrbnxiiwym6q74b1a2ihdi91dynajk8hi1p093hl66n";
@@ -40,14 +42,16 @@
     version = "2.8.1";
   };
   gollum = {
+    dependencies = ["gemojione" "gollum-lib" "kramdown" "mustache" "sinatra" "useragent"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0jrafhy8p9pgvya0gj2g6knrpg58g65s7j9bcyfj6fp4n2dz2w7s";
+      sha256 = "051pm2f50daiqcqy87aq4809x4c95iwwml6ca4wgvvmj5zkk6k5a";
       type = "gem";
     };
-    version = "4.1.1";
+    version = "4.1.2";
   };
   gollum-grit_adapter = {
+    dependencies = ["gitlab-grit"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0fcibm63v1afc0fj5rki0mm51m7nndil4cjcjjvkh3yigfn4nr4b";
@@ -56,12 +60,13 @@
     version = "1.0.1";
   };
   gollum-lib = {
+    dependencies = ["gemojione" "github-markup" "gollum-grit_adapter" "nokogiri" "rouge" "sanitize" "stringex"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0399lfqv3hbpr7v14p9snyimva440d2mb8y7xm2zlgwv7l0n9z0z";
+      sha256 = "1filwvjfj5q2m6w4q274ai36d6f0mrsv2l2khhk4bv1q6pqby2fq";
       type = "gem";
     };
-    version = "4.2.5";
+    version = "4.2.7";
   };
   json = {
     source = {
@@ -90,10 +95,10 @@
   mini_portile2 = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1y25adxb1hgg1wb2rn20g3vl07qziq6fz364jc5694611zz863hb";
+      sha256 = "0g5bpgy08q0nc0anisg3yvwc1gc3inl854fcrg48wvg7glqd6dpm";
       type = "gem";
     };
-    version = "2.1.0";
+    version = "2.2.0";
   };
   mustache = {
     source = {
@@ -104,12 +109,13 @@
     version = "0.99.8";
   };
   nokogiri = {
+    dependencies = ["mini_portile2"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "045xdg0w7nnsr2f2gb7v7bgx53xbc9dxf0jwzmh2pr3jyrzlm0cj";
+      sha256 = "1nffsyx1xjg6v5n9rrbi8y1arrcx2i5f21cp6clgh9iwiqkr7rnn";
       type = "gem";
     };
-    version = "1.6.8.1";
+    version = "1.8.0";
   };
   posix-spawn = {
     source = {
@@ -128,6 +134,7 @@
     version = "1.6.8";
   };
   rack-protection = {
+    dependencies = ["rack"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0cvb21zz7p9wy23wdav63z5qzfn4nialik22yqp6gihkgfqqrh5r";
@@ -138,12 +145,13 @@
   rouge = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0sfikq1q8xyqqx690iiz7ybhzx87am4w50w8f2nq36l3asw4x89d";
+      sha256 = "1wn6rq5qjmcwh9ixkljazv6gmg746rgbgs6av5qnk0mxim5qw11p";
       type = "gem";
     };
-    version = "2.0.7";
+    version = "2.1.1";
   };
   sanitize = {
+    dependencies = ["nokogiri"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0xsv6xqrlz91rd8wifjknadbl3z5h6qphmxy0hjb189qbdghggn3";
@@ -152,6 +160,7 @@
     version = "2.1.0";
   };
   sinatra = {
+    dependencies = ["rack" "rack-protection" "tilt"];
     source = {
       remotes = ["https://rubygems.org"];
       sha256 = "0byxzl7rx3ki0xd7aiv1x8mbah7hzd8f81l65nq8857kmgzj1jqq";
@@ -170,10 +179,10 @@
   tilt = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1is1ayw5049z8pd7slsk870bddyy5g2imp4z78lnvl8qsl8l0s7b";
+      sha256 = "0020mrgdf11q23hm1ddd6fv691l51vi10af00f137ilcdb2ycfra";
       type = "gem";
     };
-    version = "2.0.7";
+    version = "2.0.8";
   };
   useragent = {
     source = {

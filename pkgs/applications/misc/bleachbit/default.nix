@@ -25,7 +25,7 @@ pythonPackages.buildPythonApplication rec {
   propagatedBuildInputs = with pythonPackages; [ pygtk ];
 
   meta = {
-    homepage = "http://bleachbit.sourceforge.net";
+    homepage = http://bleachbit.sourceforge.net;
     description = "A program to clean your computer";
     longDescription = "BleachBit helps you easily clean your computer to free space and maintain privacy.";
     license = stdenv.lib.licenses.gpl3;

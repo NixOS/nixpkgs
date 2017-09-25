@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Doom editor";
-    homepage = "http://slade.mancubus.net/";
+    homepage = http://slade.mancubus.net/;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

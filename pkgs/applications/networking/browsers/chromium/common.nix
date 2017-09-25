@@ -60,7 +60,10 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   gnSystemLibraries = [
-    "ffmpeg" "flac" "harfbuzz-ng" "libwebp" "libxslt" "yasm" "snappy" # "libpng" "libjpeg"
+    "flac" "harfbuzz-ng" "libwebp" "libxslt" "yasm" "opus" "snappy" "libpng" "zlib"
+    # "libjpeg" # fails with multiple undefined references to chromium_jpeg_*
+    # "re2" # fails with linker errors
+    # "ffmpeg" # https://crbug.com/731766
   ];
 
   opusWithCustomModes = libopus.override {
@@ -73,7 +76,7 @@ let
     libpng libcap
     xdg_utils yasm minizip libwebp
     libusb1 re2 zlib
-    ffmpeg harfbuzz libxslt harfbuzz-icu libxml2
+    ffmpeg harfbuzz-icu libxslt libxml2
   ];
 
   # build paths and release info
@@ -104,23 +107,25 @@ let
       nspr nss systemd
       utillinux alsaLib
       bison gperf kerberos
-      glib gtk2 dbus_glib
+      glib gtk2 gtk3 dbus_glib
       libXScrnSaver libXcursor libXtst mesa
       pciutils protobuf speechd libXdamage
     ] ++ optional gnomeKeyringSupport libgnome_keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
-      ++ optional pulseSupport libpulseaudio
-      ++ optional (versionAtLeast version "56.0.0.0") gtk3;
+      ++ optional pulseSupport libpulseaudio;
 
     patches = [
       ./patches/nix_plugin_paths_52.patch
+      ./patches/chromium-gn-bootstrap-r14.patch
+      ./patches/chromium-gcc-r1.patch
+      ./patches/chromium-atk-r1.patch
+      ./patches/chromium-gcc5-r1.patch
       # To enable ChromeCast, go to chrome://flags and set "Load Media Router Component Extension" to Enabled
       # Fixes Chromecast: https://bugs.chromium.org/p/chromium/issues/detail?id=734325
       ./patches/fix_network_api_crash.patch
-      ./patches/chromium-59.0.3071.115-system_ffmpeg-1.patch
-    ] ++ optional (versionOlder version "57.0") ./patches/glibc-2.24.patch
-      ++ optional enableWideVine ./patches/widevine.patch;
+
+    ] ++ optional enableWideVine ./patches/widevine.patch;
 
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
@@ -183,9 +188,14 @@ let
       enable_hotwording = enableHotwording;
       enable_widevine = enableWideVine;
       use_cups = cupsSupport;
-    } // {
+
       treat_warnings_as_errors = false;
       is_clang = false;
+      clang_use_chrome_plugins = false;
+      remove_webcore_debug_symbols = true;
+      use_gtk3 = true;
+      enable_swiftshader = false;
+      fieldtrial_testing_like_official_build = true;
 
       # Google API keys, see:
       #   http://www.chromium.org/developers/how-tos/api-keys
@@ -221,9 +231,14 @@ let
     '';
 
     buildPhase = let
+      # Build paralelism: on Hydra the build was frequently running into memory
+      # exhaustion, and even other users might be running into similar issues.
+      # -j is halved to avoid memory problems, and -l is slightly increased
+      # so that the build gets slight preference before others
+      # (it will often be on "critical path" and at risk of timing out)
       buildCommand = target: ''
         ninja -C "${buildPath}"  \
-          -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES \
+          -j$(( ($NIX_BUILD_CORES+1) / 2 )) -l$(( $NIX_BUILD_CORES+1 )) \
           "${target}"
       '' + optionalString (target == "mksnapshot" || target == "chrome") ''
         paxmark m "${buildPath}/${target}"

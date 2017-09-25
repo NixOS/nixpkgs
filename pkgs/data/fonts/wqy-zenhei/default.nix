@@ -1,21 +1,19 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
-  name = "wqy-zenhei-${version}";
+let
   version = "0.9.45";
+in fetchzip rec {
+  name = "wqy-zenhei-${version}";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/wqy/${name}.tar.gz";
-    sha256 = "1mkmxq8g2hjcglb3zajfqj20r4r88l78ymsp2xyl5yav8w3f7dz4";
-  };
+  url = "mirror://sourceforge/wqy/${name}.tar.gz";
 
-  dontBuild = true;
+  postFetch = ''
+    tar -xzf $downloadedFile --strip-components=1
+    mkdir -p $out/share/fonts
+    install -m644 *.ttc $out/share/fonts/
+  '';
 
-  installPhase =
-    ''
-      mkdir -p $out/share/fonts
-      install -m644 *.ttc $out/share/fonts/
-    '';
+  sha256 = "0hbjq6afcd63nsyjzrjf8fmm7pn70jcly7fjzjw23v36ffi0g255";
 
   meta = {
     description = "A (mainly) Chinese Unicode font";
@@ -25,4 +23,3 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.all;
   };
 }
-

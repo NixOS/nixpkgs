@@ -1,29 +1,31 @@
-{ stdenv, lib, fetchgit, cmake, llvmPackages, openssl, writeScript, apple_sdk, bash, emacs }:
+{ stdenv, lib, fetchgit, cmake, llvmPackages, openssl, writeScript, apple_sdk, bash, emacs, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "rtags-${version}";
-  version = "2.10";
+  version = "2.12";
 
-  buildInputs = [ cmake llvmPackages.llvm openssl llvmPackages.clang emacs ]
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [ llvmPackages.llvm openssl emacs ]
+    ++ lib.optionals stdenv.cc.isGNU [ llvmPackages.clang-unwrapped ]
     ++ lib.optionals stdenv.isDarwin [ apple_sdk.libs.xpc apple_sdk.frameworks.CoreServices ];
-
-  preConfigure = ''
-    export LIBCLANG_CXXFLAGS="-isystem ${llvmPackages.clang.cc}/include $(llvm-config --cxxflags) -fexceptions" \
-           LIBCLANG_LIBDIR="${llvmPackages.clang.cc}/lib"
-  '';
 
 
   src = fetchgit {
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
     url = "https://github.com/andersbakken/rtags.git";
-    sha256 = "0rv5hz4cfc1adpxvp4j4227nfc0p0yrjdc6l9i32jj11p69a5401";
+    sha256 = "0bgjcvyvkpqcgw4571iz39sqydmcaz6ymx7kxcmq6j7rffs6qs7l";
     # unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation
     postFetch = ''
       rm $out/src/rct/tests/testfile_*.txt
     '';
   };
+
+  preConfigure = ''
+    export LIBCLANG_CXXFLAGS="-isystem ${llvmPackages.clang.cc}/include $(llvm-config --cxxflags) -fexceptions" \
+           LIBCLANG_LIBDIR="${llvmPackages.clang.cc}/lib"
+  '';
 
   enableParallelBuilding = true;
 

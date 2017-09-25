@@ -1,18 +1,16 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation {
+fetchzip {
   name = "source-sans-pro-2.010";
-  src = fetchurl {
-    url = "https://github.com/adobe-fonts/source-sans-pro/archive/2.010R-ro/1.065R-it.tar.gz";
-    sha256 = "1s3rgia6x9fxc2pvlwm203grqkb49px6q0xnh8kbqxqsgna615p2";
-  };
 
-  phases = "unpackPhase installPhase";
+  url = "https://github.com/adobe-fonts/source-sans-pro/archive/2.010R-ro/1.065R-it.zip";
 
-  installPhase = ''
+  postFetch = ''
     mkdir -p $out/share/fonts/opentype
-    find . -name "*.otf" -exec cp {} $out/share/fonts/opentype \;
+    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
   '';
+
+  sha256 = "17rgkh54arybmcdg750ynw32x2sps7p9vrvq9kpih8vdghwrh9k2";
 
   meta = with stdenv.lib; {
     homepage = http://sourceforge.net/adobe/sourcesans;

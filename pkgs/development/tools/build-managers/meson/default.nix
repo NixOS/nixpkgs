@@ -1,12 +1,12 @@
 { lib, python3Packages }:
 python3Packages.buildPythonApplication rec {
-  version = "0.40.0";
+  version = "0.42.1";
   pname = "meson";
   name = "${pname}-${version}";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1hb6y5phzd5738rlpz78w8hfzk7sbxj81551mb7bbkkqz8ql1gjw";
+    sha256 = "1phf1xpwm8m85qiiirkqhrf5aigx7ajaw0l59d6lzadf1fmgfx5v";
   };
 
   postFixup = ''
@@ -17,6 +17,8 @@ python3Packages.buildPythonApplication rec {
     done
     popd
   '';
+
+  setupHook = ./setup-hook.sh;
 
   meta = with lib; {
     homepage = http://mesonbuild.com;

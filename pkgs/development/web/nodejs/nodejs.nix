@@ -67,7 +67,7 @@ in
 
     meta = {
       description = "Event-driven I/O framework for the V8 JavaScript engine";
-      homepage = http://nodejs.org;
+      homepage = https://nodejs.org;
       license = licenses.mit;
       maintainers = with maintainers; [ goibhniu havvy gilligan cko ];
       platforms = platforms.linux ++ platforms.darwin;

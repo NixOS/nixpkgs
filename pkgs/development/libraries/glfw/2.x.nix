@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   
   meta = with stdenv.lib; { 
     description = "Multi-platform library for creating OpenGL contexts and managing input, including keyboard, mouse, joystick and time";
-    homepage = "http://glfw.sourceforge.net/";
+    homepage = http://glfw.sourceforge.net/;
     license = licenses.zlib;
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = platforms.linux;

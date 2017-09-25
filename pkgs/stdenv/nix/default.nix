@@ -13,11 +13,9 @@ bootStages ++ [
     inherit config overlays;
 
     stdenv = import ../generic rec {
-      buildPlatform = localSystem;
-      hostPlatform = localSystem;
-      targetPlatform = localSystem;
-
       inherit config;
+
+      inherit (prevStage.stdenv) buildPlatform hostPlatform targetPlatform;
 
       preHook = ''
         export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
@@ -26,8 +24,6 @@ bootStages ++ [
       '';
 
       initialPath = (import ../common-path.nix) { pkgs = prevStage; };
-
-      inherit (prevStage.stdenv) hostPlatform targetPlatform;
 
       cc = import ../../build-support/cc-wrapper {
         nativeTools = false;

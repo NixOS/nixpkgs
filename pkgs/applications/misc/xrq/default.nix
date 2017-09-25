@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     make PREFIX=$out install
   '';
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "man" ];
 
   buildInputs = [ libX11 ];
 

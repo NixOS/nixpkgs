@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gnutls, pkgconfig, readline, zlib, libidn, gmp, libiconv }:
+{ stdenv, fetchurl, gnutls, pkgconfig, readline, zlib, libidn2, gmp, libiconv, gettext }:
 
 stdenv.mkDerivation rec {
   name = "lftp-${version}";
@@ -14,7 +14,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gnutls readline zlib libidn gmp libiconv ];
+
+  buildInputs = [ gnutls readline zlib libidn2 gmp libiconv ]
+    ++ stdenv.lib.optional stdenv.isDarwin gettext;
+
+  hardeningDisable = stdenv.lib.optional stdenv.isDarwin "format";
 
   configureFlags = [
     "--with-readline=${readline.dev}"

@@ -9,14 +9,14 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  version = "233";
+  version = "234";
   name = "systemd-${version}";
 
   src = fetchFromGitHub {
     owner = "nixos";
     repo = "systemd";
-    rev = "72782e7ad96f9da9b0e5873f87a64007068cee06";
-    sha256 = "1cj20zrfr8g0vkxiv3h9bbd89xbj3mrsij3rjr1lbh4nkl5mcwpa";
+    rev = "ba777535a890c2a2b7677dfacc63e12c578b9b3f";
+    sha256 = "1vb45fbqkrgczfwkb0y07ldnwhjqk2sh446hzfkdn8hrwl1lifg5";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
          worth it. */
       autoreconfHook gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
     ];
-
 
   configureFlags =
     [ "--localstatedir=/var"
@@ -74,8 +73,19 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "stackprotector" ];
 
+  patches = [
+    # TODO: Remove this patch when we have a systemd version
+    # with https://github.com/systemd/systemd/pull/6678
+    (fetchpatch {
+        url = "https://github.com/systemd/systemd/commit/58a78ae77063eddfcd23ea272bd2e0ddc9ea3ff7.patch";
+        sha256 = "0g3pvqigs69mciw6lj3zg12dmxnhwxndwxdjg78af52xrp0djfg8";
+    })
+  ];
+
   preConfigure =
     ''
+      unset RANLIB
+
       ./autogen.sh
 
       # FIXME: patch this in systemd properly (and send upstream).
@@ -99,8 +109,6 @@ stdenv.mkDerivation rec {
         --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
 
       configureFlagsArray+=("--with-ntp-servers=0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
-
-      #export NIX_CFLAGS_LINK+=" -Wl,-rpath,$libudev/lib"
     '';
 
   PYTHON_BINARY = "${coreutils}/bin/env python"; # don't want a build time dependency on Python
@@ -166,16 +174,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  /*
-  # some libs fail to link to liblzma and/or libffi
-  postFixup = let extraLibs = stdenv.lib.makeLibraryPath [ xz.out libffi.out zlib.out ];
-    in ''
-      for f in "$out"/lib/*.so.0.*; do
-        patchelf --set-rpath `patchelf --print-rpath "$f"`':${extraLibs}' "$f"
-      done
-    '';
-  */
-
   # The interface version prevents NixOS from switching to an
   # incompatible systemd at runtime.  (Switching across reboots is
   # fine, of course.)  It should be increased whenever systemd changes
@@ -185,7 +183,7 @@ stdenv.mkDerivation rec {
   passthru.interfaceVersion = 2;
 
   meta = {
-    homepage = "http://www.freedesktop.org/wiki/Software/systemd";
+    homepage = http://www.freedesktop.org/wiki/Software/systemd;
     description = "A system and service manager for Linux";
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.eelco ];

@@ -1,9 +1,9 @@
-{ stdenv, fetchzip, kernel }:
+{ stdenv, fetchFromGitHub, kernel }:
 
-assert stdenv.lib.versionOlder kernel.version "4.11";
+assert stdenv.lib.versionOlder kernel.version "4.13";
 
 let
-  sourceAttrs = (import ./source.nix) { inherit fetchzip; };
+  sourceAttrs = (import ./source.nix) { inherit fetchFromGitHub; };
 in
 
 stdenv.mkDerivation {

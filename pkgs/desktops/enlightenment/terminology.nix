@@ -1,25 +1,23 @@
-{ stdenv, fetchurl, pkgconfig, efl, curl, makeWrapper }:
+{ stdenv, fetchurl, pkgconfig, efl, pcre, curl, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "terminology-${version}";
-  version = "1.0.0";
+  version = "1.1.1";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/terminology/${name}.tar.xz";
-    sha256 = "1x4j2q4qqj10ckbka0zaq2r2zm66ff1x791kp8slv1ff7fw45vdz";
+    sha256 = "05ncxvzb9rzkyjvd95hzn8lswqdwr8cix6rd54nqn9559jibh4ns";
   };
 
-  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  nativeBuildInputs = [
+    (pkgconfig.override { vanilla = true; })
+    makeWrapper
+  ];
 
-  buildInputs = [ efl curl ];
-
-  NIX_CFLAGS_COMPILE = [
-    "-I${efl}/include/ecore-con-1"
-    "-I${efl}/include/eldbus-1"
-    "-I${efl}/include/elocation-1"
-    "-I${efl}/include/emile-1"
-    "-I${efl}/include/eo-1"
-    "-I${efl}/include/ethumb-1"
+  buildInputs = [
+    efl
+    pcre
+    curl
   ];
 
   postInstall = ''

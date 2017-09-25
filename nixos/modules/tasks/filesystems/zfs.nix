@@ -72,7 +72,7 @@ in
           version will have already passed an extensive test suite, but it is
           more likely to hit an undiscovered bug compared to running a released
           version of ZFS on Linux.
-        '';
+          '';
       };
 
       extraPools = mkOption {

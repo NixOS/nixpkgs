@@ -26,8 +26,10 @@ stdenv.mkDerivation rec {
   ] ++ optional (gtkVersion != null) (if gtkVersion == "2" then gtk2 else gtk3);
 
   postPatch = ''
-    substituteInPlace {configure,ltmain.sh,m4/libtool.m4} \
-      --replace /usr/bin/file ${file}/bin/file
+    for f in {configure,ltmain.sh,m4/libtool.m4}; do
+      substituteInPlace $f \
+        --replace /usr/bin/file ${file}/bin/file
+    done
   '';
 
   # https://projects.archlinux.org/svntogit/community.git/tree/trunk/PKGBUILD?h=packages/libdbusmenu
@@ -51,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A library for passing menu structures across DBus";
-    homepage = "https://launchpad.net/dbusmenu";
+    homepage = https://launchpad.net/dbusmenu;
     license = with licenses; [ gpl3 lgpl21 lgpl3 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];

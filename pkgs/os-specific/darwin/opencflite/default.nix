@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    description = "Cross platform port of the OS X CoreFoundation";
-    homepage = "http://sourceforge.net/projects/opencflite/";
+    description = "Cross platform port of the macOS CoreFoundation";
+    homepage = http://sourceforge.net/projects/opencflite/;
     license = stdenv.lib.licenses.apsl20;
   };
 }

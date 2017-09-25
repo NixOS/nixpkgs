@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
     cp -v FONTLOG.txt $out/share/doc/${name}
   '';
 
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "1qwfsyp51grr56jcnkkmnrnl3r20pmhp9zh9g88kp64m026cah6n";
+
   meta = with stdenv.lib; {
     homepage = https://github.com/akryukov/oldstand;
     description = "An attempt to revive a specific type of Modern style of serif typefaces";
