@@ -349,7 +349,7 @@ stdenv.mkDerivation rec {
       PULSE_SERVER="\''${PULSE_SERVER:-}" \
       PULSE_COOKIE="\''${PULSE_COOKIE:-}" \
       \
-      APULSE_PLAYBACK_DEVICE="\''${APULSE_PLAYBACK_DEVICE:-plughw:0,0}" \
+      APULSE_PLAYBACK_DEVICE="\''${APULSE_PLAYBACK_DEVICE:-plug:dmix}" \
       \
       TOR_SKIP_LAUNCH="\''${TOR_SKIP_LAUNCH:-}" \
       TOR_CONTROL_PORT="\''${TOR_CONTROL_PORT:-}" \
