@@ -19749,6 +19749,10 @@ with pkgs;
 
   muscle = callPackage ../applications/science/biology/muscle/default.nix { };
 
+  n3 = callPackage ../applications/science/biology/N3 {
+    inherit (perlPackages) perl GetoptTabular MNI-Perllib;
+  };
+
   neuron = callPackage ../applications/science/biology/neuron {
     python = null;
   };
