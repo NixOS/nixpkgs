@@ -45,7 +45,12 @@ rec {
         outputHashAlgo="sha256";
         outputHash=sha256;
       }
-      "${pkgs.skopeo}/bin/skopeo copy docker://${imageId} docker-archive://$out:${imageId}";
+      ''
+        ${pkgs.skopeo}/bin/skopeo copy \
+            docker://${imageId} \
+            docker-archive://$out:${imageId} \
+            --src-tls-verify=false
+      '';
 
   # We need to sum layer.tar, not a directory, hence tarsum instead of nix-hash.
   # And we cannot untar it, because then we cannot preserve permissions ecc.
