@@ -13377,6 +13377,8 @@ with pkgs;
 
   terminus_font_ttf = callPackage ../data/fonts/terminus-font-ttf { };
 
+  tex-gyre-termes-math = callPackage ../data/fonts/tex-gyre-termes-math { };
+
   tipa = callPackage ../data/fonts/tipa { };
 
   ttf_bitstream_vera = callPackage ../data/fonts/ttf-bitstream-vera { };
