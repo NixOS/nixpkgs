@@ -7574,6 +7574,8 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
+  watson-ruby = callPackage ../development/tools/misc/watson-ruby {};
+
   xc3sprog = callPackage ../development/tools/misc/xc3sprog { };
 
   xcbuild  = callPackage ../development/tools/xcbuild/wrapper.nix {
