@@ -225,7 +225,7 @@ let
 
             "${ipCommand} link set up dev ${name}"
 
-            (lib.optional (values.allowedIPsAsRoutes != false) (map (peer:
+            (optionals (values.allowedIPsAsRoutes != false) (map (peer:
             (map (allowedIP:
             "${ipCommand} route replace ${allowedIP} dev ${name} table ${values.table}"
             ) peer.allowedIPs)
