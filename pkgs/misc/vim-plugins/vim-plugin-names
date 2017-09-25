@@ -92,6 +92,7 @@
 "github:martinda/Jenkinsfile-vim-syntax"
 "github:megaannum/forms"
 "github:megaannum/self"
+"github:mfukar/robotframework-vim"
 "github:mhinz/vim-startify"
 "github:michaeljsmith/vim-indent-object"
 "github:mileszs/ack.vim"
