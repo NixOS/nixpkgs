@@ -2417,6 +2417,8 @@ with pkgs;
 
   gtkgnutella = callPackage ../tools/networking/p2p/gtk-gnutella { };
 
+  gtkplatform = libsForQt5.callPackage ../misc/gtkplatform { };
+
   gtkvnc = callPackage ../tools/admin/gtk-vnc {};
 
   gtmess = callPackage ../applications/networking/instant-messengers/gtmess { };
