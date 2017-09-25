@@ -18,7 +18,11 @@ python3Packages.buildPythonApplication rec {
     popd
   '';
 
-  setupHook = ./setup-hook.sh;
+  postPatch = ''
+    sed -i -e 's|e.fix_rpath(install_rpath)||' mesonbuild/scripts/meson_install.py
+  '';
+
+  setupHook = ./setup-hook.sh;    
 
   meta = with lib; {
     homepage = http://mesonbuild.com;
