@@ -6,7 +6,7 @@
 , sslSupport ? false, openssl ? null
 , gnutlsSupport ? false, gnutls ? null
 , scpSupport ? false, libssh2 ? null
-, gssSupport ? false, gss ? null
+, gssSupport ? false, kerberos ? null
 , c-aresSupport ? false, c-ares ? null
 }:
 
@@ -19,6 +19,7 @@ assert !(gnutlsSupport && sslSupport);
 assert gnutlsSupport -> gnutls != null;
 assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
+assert gssSupport -> kerberos != null;
 
 stdenv.mkDerivation rec {
   name = "curl-7.56.0";
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
     optional idnSupport libidn ++
     optional ldapSupport openldap ++
     optional zlibSupport zlib ++
-    optional gssSupport gss ++
+    optional gssSupport kerberos ++
     optional c-aresSupport c-ares ++
     optional sslSupport openssl ++
     optional gnutlsSupport gnutls ++
@@ -66,7 +67,7 @@ stdenv.mkDerivation rec {
       ( if idnSupport then "--with-libidn=${libidn.dev}" else "--without-libidn" )
     ]
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
-    ++ stdenv.lib.optional gssSupport "--with-gssapi=${gss}";
+    ++ stdenv.lib.optional gssSupport "--with-gssapi=${kerberos}";
 
   CXX = "c++";
   CXXCPP = "c++ -E";
