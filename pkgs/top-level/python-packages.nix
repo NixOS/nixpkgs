@@ -10859,6 +10859,28 @@ in {
 
   keyring = callPackage ../development/python-modules/keyring { };
 
+  keyutils = buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "keyutils";
+    version = "0.5";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/k/${pname}/${name}.tar.gz";
+      sha256 = "0dskys71vkn59vlsfs1ljli0qnzk7b10iv4pawxawnk2hvyjrf10";
+    };
+
+    buildInputs = with self; [ pkgs.keyutils pytestrunner ];
+
+    doCheck = false;
+
+    meta = {
+      description = "A set of python bindings for keyutils";
+      homepage = https://github.com/sassoftware/python-keyutils;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ primeos ];
+    };
+  };
+
   klaus = buildPythonPackage rec {
     version = "0.9.1";
     name = "klaus-${version}";
