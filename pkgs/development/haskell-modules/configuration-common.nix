@@ -34,6 +34,11 @@ self: super: {
   ghcjs-base = null;
   ghcjs-prim = null;
 
+  # Some packages add this (non-existent) dependency to express that they
+  # cannot compile in a given configuration. Win32 does this, for example, when
+  # compiled on Linux. We provide the name to avoid evaluation errors.
+  unbuildable = throw "package depends on meta package 'unbuildable'";
+
   # cabal-install needs Cabal 2.x. hackage-security's test suite does not compile with
   # Cabal 2.x, though. See https://github.com/haskell/hackage-security/issues/188.
   cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_0_0_2; });
