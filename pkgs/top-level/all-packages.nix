@@ -19741,6 +19741,10 @@ with pkgs;
 
   igv = callPackage ../applications/science/biology/igv { };
 
+  inormalize = callPackage ../applications/science/biology/inormalize {
+    inherit (perlPackages) GetoptTabular MNI-Perllib;
+  };
+
   iv = callPackage ../applications/science/biology/iv {
     neuron-version = neuron.version;
   };
