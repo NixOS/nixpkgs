@@ -18887,9 +18887,9 @@ with pkgs;
 
   hplipWithPlugin = hplip.override { withPlugin = true; };
 
-  hplip_3_15_9 = callPackage ../misc/drivers/hplip/3.15.9.nix { };
+  hplip_3_16_11 = callPackage ../misc/drivers/hplip/3.16.11.nix { };
 
-  hplipWithPlugin_3_15_9 = hplip_3_15_9.override { withPlugin = true; };
+  hplipWithPlugin_3_16_11 = hplip.override { withPlugin = true; };
 
   epkowa = callPackage ../misc/drivers/epkowa { };
 
