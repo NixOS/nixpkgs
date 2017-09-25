@@ -14387,6 +14387,8 @@ with pkgs;
 
   gqrx = qt5.callPackage ../applications/misc/gqrx { };
 
+  gpx-viewer = callPackage ../applications/misc/gpx-viewer { };
+
   grass = callPackage ../applications/gis/grass { };
 
   grepm = callPackage ../applications/search/grepm { };
