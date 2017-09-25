@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, fetchFromGitHub, cyrus_sasl, openssl, go }:
 
 let
   tools = [
@@ -6,32 +6,33 @@ let
     "mongooplog" "mongorestore" "mongostat" "mongotop"
   ];
 in
-buildGoPackage rec {
+stdenv.mkDerivation rec {
   name = "mongo-tools-${version}";
-  version = "3.0.12";
+  version = "3.5.8";
   rev = "r${version}";
 
-  goPackagePath = "github.com/mongodb/mongo-tools";
-  subPackages = map (t: t + "/main") tools;
+  buildInputs = [ cyrus_sasl openssl go ];
 
   src = fetchFromGitHub {
     inherit rev;
     owner = "mongodb";
     repo = "mongo-tools";
-    sha256 = "142vxgniri1mfy2xmfgxhbdp6k6h8c5milv454krv1b51v43hsbm";
+    sha256 = "00klm4pyx5k39nn4pmfrpnkqxdhbzm7lprgwxszpirzrarh2g164";
   };
 
-  goDeps = ./deps.nix;
+  phases = ["buildPhase"];
 
-  # Mongodb incorrectly names all of their binaries main
-  # Let's work around this with our own installer
-  preInstall = ''
-    mkdir -p $bin/bin
-  '' + toString (map (t: ''
-      go install $goPackagePath/${t}/main
-      mv go/bin/main $bin/bin/${t}
-  ''
-  ) tools) + ''  
-    rm -r go/bin
+  buildPhase = ''
+    set -x
+    mkdir -p $out/bin $out/build
+    cp -r $src/* $out/build
+    cd $out/build
+    ls -la
+    . ./set_gopath.sh
+    ${
+      toString (map (t: ''
+        go build -o $out/bin/${t} -tags "ssl sasl" $src/${t}/main/${t}.go
+      '') tools)
+    }
   '';
 }
