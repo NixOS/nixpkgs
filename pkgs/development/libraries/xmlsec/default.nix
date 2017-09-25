@@ -12,7 +12,10 @@ stdenv.mkDerivation rec {
     sha256 = "1lpwj8dxwhha54sby0v5axjk79h56jnhjjiwiasbbk15vwzahz4n";
   };
 
+  outputs = [ "out" "dev" ];
+
   buildInputs = [ makeWrapper libxml2 gnutls libxslt pkgconfig libgcrypt libtool openssl nss ];
+
   enableParallelBuilding = true;
   doCheck = true;
 
@@ -22,6 +25,11 @@ stdenv.mkDerivation rec {
 
   # otherwise libxmlsec1-gnutls.so won't find libgcrypt.so, after #909
   NIX_LDFLAGS = [ "-lgcrypt" ];
+
+  postInstall = ''
+    moveToOutput "bin/xmlsec1-config" "$dev"
+    moveToOutput "lib/xmlsec1Conf.sh" "$dev"
+  '';
 
   postFixup = ''
     wrapProgram "$out/bin/xmlsec1" --prefix LD_LIBRARY_PATH ":" "$out/lib"
