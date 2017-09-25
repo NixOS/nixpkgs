@@ -1570,6 +1570,23 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
+  xf86inputcmt = (stdenv.mkDerivation "xf86inputcmt" {
+    name = "xf86-input-cmt-2017-02-27";
+
+    buildInputs = [ pkgconfig inputproto xorgserver ];
+
+    src = fetchFromGitHub {
+      owner = "GalliumOS";
+      repo = "xf86-input-cmt";
+      rev = "543063720fc9520f615332eaf8b10b53ff3fdb90";
+      sha256 = "17k3ah8l17p0ra93xrd7pf5a9sdhgd7ca8cg2q8qd31hjmi7x21h";
+    };
+
+    preConfigure = ''
+      substituteInPlace include/Makefile.in --replace '$(sdkdir)' $out/include/xorg/
+    '';
+  }) {inherit inputproto xorgserver ;};
+  
   xf86inputevdev = (mkDerivation "xf86inputevdev" {
     name = "xf86-input-evdev-2.10.5";
     builder = ./builder.sh;

@@ -300,6 +300,11 @@ in
     outputs = [ "out" "dev" ]; # mainly to get rid of propagating others
   };
 
+  xf86inputcmt = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [ args.libevdevc args.libgestures args.utilmacros ];
+    installFlags = "sdkdir=\${out}/include/xorg";    
+  };
+
   xf86inputevdev = attrs: attrs // {
     outputs = [ "out" "dev" ]; # to get rid of xorgserver.dev; man is tiny
     preBuild = "sed -e '/motion_history_proc/d; /history_size/d;' -i src/*.c";
