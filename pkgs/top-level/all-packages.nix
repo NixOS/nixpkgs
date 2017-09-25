@@ -179,7 +179,8 @@ with pkgs;
 
   # `fetchurl' downloads a file from the network.
   fetchurl = import ../build-support/fetchurl {
-    inherit curl stdenv;
+    inherit stdenv;
+    curl = curl.override { gssSupport = false; };
   };
 
   fetchRepoProject = callPackage ../build-support/fetchrepoproject { };
@@ -1613,6 +1614,7 @@ with pkgs;
     zlibSupport = true;
     sslSupport = zlibSupport;
     scpSupport = zlibSupport && !stdenv.isSunOS && !stdenv.isCygwin;
+    gssSupport = true;
   };
 
   curl_unix_socket = callPackage ../tools/networking/curl-unix-socket rec { };
