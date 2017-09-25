@@ -9,7 +9,7 @@ let
   confFile = pkgs.writeText "radicale.conf" cfg.config;
 
   # This enables us to default to version 2 while still not breaking configurations of people with version 1
-  defaultPackage = if versionAtLeast "17.09" config.system.stateVersion then {
+  defaultPackage = if versionAtLeast config.system.stateVersion "17.09" then {
     pkg = pkgs.radicale2;
     text = "pkgs.radicale2";
   } else {
