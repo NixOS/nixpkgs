@@ -10859,6 +10859,10 @@ in {
 
   keyring = callPackage ../development/python-modules/keyring { };
 
+  kivy = callPackage ../development/python-modules/kivy { inherit stdenv buildPythonPackage fetchPypi maintainers platforms licenses pkgs self ; };
+
+  kivygarden = callPackage ../development/python-modules/kivy/kivy-garden.nix { inherit buildPythonPackage fetchPypi maintainers platforms licenses pkgs self ; };
+
   klaus = buildPythonPackage rec {
     version = "0.9.1";
     name = "klaus-${version}";

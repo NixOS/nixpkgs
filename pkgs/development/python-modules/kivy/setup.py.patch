@@ -1,0 +1,16 @@
+--- Kivy-1.10.0/setup.py	2017-05-07 17:24:57.000000000 +0200
++++ setup.py	2017-09-04 14:27:13.222721223 +0200
+@@ -42,12 +42,7 @@
+ def get_version(filename='kivy/version.py'):
+     VERSION = kivy.__version__
+     DATE = datetime.utcnow().strftime('%Y%m%d')
+-    try:
+-        GIT_REVISION = check_output(
+-            ['git', 'rev-parse', 'HEAD']
+-        ).strip().decode('ascii')
+-    except CalledProcessError:
+-        GIT_REVISION = "Unknown"
++    GIT_REVISION = "Unknown"
+ 
+     cnt = (
+         "# THIS FILE IS GENERATED FROM KIVY SETUP.PY\n"
