@@ -3,13 +3,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "sysdig-${version}";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "draios";
     repo = "sysdig";
     rev = version;
-    sha256 = "0xw4in2yb3ynpc8jwl95j92kbyr7fzda3mab8nyxcyld7gshrlvd";
+    sha256 = "1hmkjvfg3371hp873mnkjq9cirqszw2ji4p7mb6jcn9ihwxil2z2";
   };
 
   buildInputs = [
@@ -28,12 +28,6 @@ stdenv.mkDerivation rec {
     "-DluaL_reg=luaL_Reg"
     "-DluaL_getn(L,i)=((int)lua_objlen(L,i))"
   ];
-
-  postPatch = ''
-    sed 's|curl/curlbuild\.h|curl/system.h|' -i \
-        userspace/libsinsp/marathon_http.cpp \
-        userspace/libsinsp/mesos_http.cpp
- '';
 
   preConfigure = ''
     export INSTALL_MOD_PATH="$out"
