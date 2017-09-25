@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--sysconfdir=/etc" ];
 
+  outputs = [ "out" "dev" ];
+
   buildInputs = [
     gnome3.gtk libglade networkmanager libnotify libsecret gsettings_desktop_schemas
     polkit isocodes makeWrapper udev libgudev gnome3.gconf gnome3.libgnome_keyring
