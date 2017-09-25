@@ -19765,6 +19765,10 @@ with pkgs;
     inherit (perlPackages) TextFormat;
   };
 
+  minc_widgets = callPackage ../applications/science/biology/minc-widgets {
+    inherit (perlPackages) GetoptTabular MNI-Perllib;
+  };
+
   mni_autoreg = callPackage ../applications/science/biology/mni_autoreg {
     inherit (perlPackages) GetoptTabular MNI-Perllib;
   };
