@@ -2656,6 +2656,7 @@ dont-distribute-packages:
 
   # these packages depend on software with an unfree license
   accelerate-bignum:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
+  accelerate-blas:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   accelerate-cublas:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   accelerate-cuda:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
   accelerate-cufft:                             [ i686-linux, x86_64-linux, x86_64-darwin ]
