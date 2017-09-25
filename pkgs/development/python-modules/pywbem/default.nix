@@ -15,12 +15,9 @@ buildPythonPackage rec {
   };
 
   patches = [
-    # fix timezone handling so the tests pass again. Can go when 0.11.0 is released
+    # fix timezone handling so the tests pass again. Can go when 0.10.1 is released
     # https://github.com/pywbem/pywbem/issues/755#issuecomment-327508681
-    (fetchpatch {
-      url = "https://github.com/pywbem/pywbem/commit/bb7fa19d636d999bf844d80939e155b8f212ef3e.patch";
-      sha256 = "1zd5f9qrb8rnaahmazkjnf3hqsc4f7n63z44k0wcwhz7fskpqza0";
-    })
+    ./make_cimdatetime_timezone_aware.patch
   ];
 
   propagatedBuildInputs = [ m2crypto ply pyyaml six ];
