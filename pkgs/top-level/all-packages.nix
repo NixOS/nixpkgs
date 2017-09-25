@@ -16615,6 +16615,8 @@ with pkgs;
 
   twmn = libsForQt5.callPackage ../applications/misc/twmn { };
 
+  testssl = callPackage ../applications/networking/testssl { };
+
   umurmur = callPackage ../applications/networking/umurmur { };
 
   unigine-valley = callPackage ../applications/graphics/unigine-valley { };
