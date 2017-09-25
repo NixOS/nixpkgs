@@ -6061,6 +6061,8 @@ in {
 
   };
 
+  hupper = callPackage ../development/python-modules/hupper {};
+
   hovercraft = buildPythonPackage rec {
     disabled = ! isPy3k;
     name = "hovercraft-${version}";
@@ -7049,6 +7051,10 @@ in {
 
   phpserialize = callPackage ../development/python-modules/phpserialize { };
 
+  plaster = callPackage ../development/python-modules/plaster {};
+
+  plaster-pastedeploy = callPackage ../development/python-modules/plaster-pastedeploy {};
+
   plotly = callPackage ../development/python-modules/plotly { };
 
   podcastparser = callPackage ../development/python-modules/podcastparser { };
@@ -7327,11 +7333,13 @@ in {
   };
 
   pyramid = buildPythonPackage rec {
-    name = "pyramid-1.7";
+    pname = "pyramid";
+    version = "1.9.1";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyramid/${name}.tar.gz";
-      sha256 = "161qacv7qqln3q02kcqll0q2mmaypm701hn1llwdwnkaywkb3xi6";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0dhbzc4q0vsnv3aihy728aczg56xs6h9s1rmvr096q4lb6yln3w4";
     };
 
     buildInputs = with self; [
@@ -7340,6 +7348,9 @@ in {
       webtest
       zope_component
       zope_interface
+      plaster
+      plaster-pastedeploy
+      hupper
     ] ++ optional isPy26 unittest2;
 
     propagatedBuildInputs = with self; [
