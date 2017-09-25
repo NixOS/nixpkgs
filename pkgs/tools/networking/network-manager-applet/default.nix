@@ -6,15 +6,18 @@
 stdenv.mkDerivation rec {
   name    = "${pname}-${major}.${minor}";
   pname   = "network-manager-applet";
-  major   = "1.4";
-  minor   = "6";
+  major   = "1.8";
+  minor   = "2";
 
   src = fetchurl {
     url    = "mirror://gnome/sources/${pname}/${major}/${name}.tar.xz";
-    sha256 = "0xpcdwqmnwiqqqsd5rx1gh5rvv5m2skj59bqxhccy1k2ikzgr9hh";
+    sha256 = "09f9hjpn9nkhw57mk6pi7q1bq3lhf5hvmwas0fknscssak7yjmry";
   };
 
-  configureFlags = [ "--sysconfdir=/etc" ];
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--without-selinux"
+  ];
 
   buildInputs = [
     gnome3.gtk libglade networkmanager libnotify libsecret gsettings_desktop_schemas
