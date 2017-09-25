@@ -15580,6 +15580,32 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  WWWYoutubeViewer = buildPerlPackage rec {
+    name = "WWW-YoutubeViewer-${version}";
+    version = "3.3.0";
+
+    src = fetchFromGitHub {
+      owner  = "trizen";
+      repo   = "youtube-viewer";
+      rev    = "${version}";
+      sha256 = "15xyrwv08fw8jmpydwzks26ipxnzliwddgyjcfqiaj0p7lwlhmx1";
+    };
+
+    propagatedBuildInputs = [
+      LWP
+      LWPProtocolHttps
+      DataDump
+      JSON
+    ];
+
+    meta = {
+      description = "A lightweight application for searching and streaming videos from YouTube";
+      homepage = https://github.com/trizen/youtube-viewer;
+      maintainers = with maintainers; [ woffs ];
+      license = with stdenv.lib.licenses; [ artistic2 ];
+    };
+  };
+
   Want = buildPerlPackage rec {
     name = "Want-0.29";
     src = fetchurl {
