@@ -808,8 +808,10 @@ with pkgs;
       makeWrapper $exe $out/bin/${drv.pname} \
         --prefix PATH ":" "${nix}/bin" \
         --prefix PATH ":" "${nix-prefetch-scripts}/bin"
-      mkdir -p $out/share/bash-completion/completions
+      mkdir -p $out/share/{bash-completion/completions,zsh/vendor-completions,fish/completions}
       $exe --bash-completion-script $exe >$out/share/bash-completion/completions/${drv.pname}
+      $exe --zsh-completion-script $exe >$out/share/zsh/vendor-completions/_${drv.pname}
+      $exe --fish-completion-script $exe >$out/share/fish/completions/${drv.pname}.fish
     '';
   });
 
@@ -1670,6 +1672,8 @@ with pkgs;
   dfc  = callPackage ../tools/system/dfc { };
 
   dev86 = callPackage ../development/compilers/dev86 { };
+
+  djbdns = callPackage ../tools/networking/djbdns { };
 
   dnscrypt-proxy = callPackage ../tools/networking/dnscrypt-proxy { };
 
@@ -3889,6 +3893,8 @@ with pkgs;
 
   platinum-searcher = callPackage ../tools/text/platinum-searcher { };
 
+  playbar2 = libsForQt5.callPackage ../applications/audio/playbar2 { };
+
   plex = callPackage ../servers/plex { enablePlexPass = config.plex.enablePlexPass or false; };
 
   ploticus = callPackage ../tools/graphics/ploticus {
@@ -4059,6 +4065,8 @@ with pkgs;
   radarr = callPackage ../servers/radarr { };
 
   radeon-profile = libsForQt5.callPackage ../tools/misc/radeon-profile { };
+
+  radsecproxy = callPackage ../tools/networking/radsecproxy { };
 
   radvd = callPackage ../tools/networking/radvd { };
 
@@ -6704,16 +6712,18 @@ with pkgs;
 
   jython = callPackage ../development/interpreters/jython {};
 
-  guileCairo = callPackage ../development/guile-modules/guile-cairo { };
+  guile-cairo = callPackage ../development/guile-modules/guile-cairo { };
 
-  guileGnome = callPackage ../development/guile-modules/guile-gnome {
+  guile-fibers = callPackage ../development/guile-modules/guile-fibers { };
+
+  guile-gnome = callPackage ../development/guile-modules/guile-gnome {
     gconf = gnome2.GConf;
     inherit (gnome2) gnome_vfs libglade libgnome libgnomecanvas libgnomeui;
   };
 
-  guile_lib = callPackage ../development/guile-modules/guile-lib { };
+  guile-lib = callPackage ../development/guile-modules/guile-lib { };
 
-  guile_ncurses = callPackage ../development/guile-modules/guile-ncurses { };
+  guile-ncurses = callPackage ../development/guile-modules/guile-ncurses { };
 
   guile-opengl = callPackage ../development/guile-modules/guile-opengl { };
 
@@ -7508,7 +7518,7 @@ with pkgs;
   texinfo413 = callPackage ../development/tools/misc/texinfo/4.13a.nix { };
   texinfo4 = texinfo413;
   texinfo5 = callPackage ../development/tools/misc/texinfo/5.2.nix { };
-  texinfo6 = callPackage ../development/tools/misc/texinfo/6.3.nix { };
+  texinfo6 = callPackage ../development/tools/misc/texinfo/6.5.nix { };
   texinfo = texinfo6;
   texinfoInteractive = appendToName "interactive" (
     texinfo.override { interactive = true; }
@@ -12022,6 +12032,10 @@ with pkgs;
 
   dstat = callPackage ../os-specific/linux/dstat { };
 
+  # unstable until the first 1.x release
+  fscrypt-experimental = callPackage ../os-specific/linux/fscrypt { };
+  fscryptctl-experimental = callPackage ../os-specific/linux/fscryptctl { };
+
   fwupd = callPackage ../os-specific/linux/firmware/fwupd { inherit (gnome2) gtk_doc; inherit (python3Packages) pygobject3 pillow; };
 
   fwupdate = callPackage ../os-specific/linux/firmware/fwupdate { };
@@ -12056,10 +12070,6 @@ with pkgs;
   eject = utillinux;
 
   facetimehd-firmware = callPackage ../os-specific/linux/firmware/facetimehd-firmware { };
-
-  fanctl = callPackage ../os-specific/linux/fanctl {
-    iproute = iproute.override { enableFan = true; };
-  };
 
   fatrace = callPackage ../os-specific/linux/fatrace { };
 
@@ -14789,8 +14799,6 @@ with pkgs;
 
   hello = callPackage ../applications/misc/hello { };
 
-  kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
-
   helmholtz = callPackage ../applications/audio/pd-plugins/helmholtz { };
 
   heme = callPackage ../applications/editors/heme { };
@@ -15114,9 +15122,9 @@ with pkgs;
 
   ktorrent = libsForQt5.callPackage ../applications/networking/p2p/ktorrent { };
 
-  kubernetes = callPackage ../applications/networking/cluster/kubernetes {
-    go = go_1_7;
-  };
+  kubernetes = callPackage ../applications/networking/cluster/kubernetes {  };
+
+  kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
 
   kupfer = callPackage ../applications/misc/kupfer { };
 
@@ -17951,9 +17959,7 @@ with pkgs;
     libcanberra = self.libcanberra_gtk2;
   });
 
-  gnome3_24 = recurseIntoAttrs (callPackage ../desktops/gnome-3/3.24 { });
-
-  gnome3 = gnome3_24;
+  gnome3 = recurseIntoAttrs (callPackage ../desktops/gnome-3 { });
 
   gnomeExtensions = {
     caffeine = callPackage ../desktops/gnome-3/extensions/caffeine { };
@@ -18888,6 +18894,7 @@ with pkgs;
 
   jack2Full = callPackage ../misc/jackaudio {
     libopus = libopus.override { withCustomModes = true; };
+    inherit (darwin.apple_sdk.frameworks) AudioToolbox CoreAudio CoreFoundation;
   };
   libjack2 = jack2Full.override { prefix = "lib"; };
 
@@ -19102,7 +19109,9 @@ with pkgs;
 
   seafile-shared = callPackage ../misc/seafile-shared { };
 
-  slock = callPackage ../misc/screensavers/slock { };
+  slock = callPackage ../misc/screensavers/slock {
+    conf = config.slock.conf or null;
+  };
 
   smokeping = callPackage ../tools/networking/smokeping {
     inherit fping rrdtool;
@@ -19332,6 +19341,10 @@ with pkgs;
   xmagnify = callPackage ../tools/X11/xmagnify { };
 
   xosd = callPackage ../misc/xosd { };
+
+  xpad = callPackage ../applications/misc/xpad {
+    inherit (gnome3) gtksourceview;
+  };
 
   xsane = callPackage ../applications/graphics/sane/xsane.nix {
     libpng = libpng12;

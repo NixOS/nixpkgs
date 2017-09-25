@@ -17797,16 +17797,24 @@ in {
 
   pyscss = buildPythonPackage rec {
     name = "pyScss-${version}";
-    version = "1.3.4";
+    version = "1.3.5";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyScss/${name}.tar.gz";
-      sha256 = "03lcp853kgr66aqrw2jd1q9jhs9h049w7zlwp7bfmly7xh832cnh";
+    src = pkgs.fetchFromGitHub {
+      sha256 = "0lfsan74vcw6dypb196gmbprvlbran8p7w6czy8hyl2b1l728mhz";
+      rev = "v1.3.5";
+      repo = "pyScss";
+      owner = "Kronuz";
     };
+
+    checkInputs = with self; [ pytest ];
 
     propagatedBuildInputs = with self; [ six ]
       ++ (optionals (pythonOlder "3.4") [ enum34 pathlib ])
       ++ (optionals (pythonOlder "2.7") [ ordereddict ]);
+
+    checkPhase = ''
+      py.test
+    '';
 
     meta = {
       description = "A Scss compiler for Python";
@@ -19527,6 +19535,8 @@ in {
     };
   };
 
+  simanneal = callPackage ../development/python-modules/simanneal { };
+
   simplebayes = buildPythonPackage rec {
     name = "simplebayes-${version}";
     version = "1.5.8";
@@ -20529,33 +20539,7 @@ in {
     };
   };
 
-  subprocess32 = buildPythonPackage rec {
-    name = "subprocess32-3.2.6";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/subprocess32/${name}.tar.gz";
-      sha256 = "ddf4d46ed2be2c7e7372dfd00c464cabb6b3e29ca4113d85e26f82b3d2c220f6";
-    };
-
-    buildInputs = [ pkgs.bash ];
-
-    preConfigure = ''
-      substituteInPlace test_subprocess32.py \
-        --replace '/usr/' '${pkgs.bash}/'
-    '';
-
-    doCheck = !isPyPy;
-    checkPhase = ''
-      ${python.interpreter} test_subprocess32.py
-    '';
-
-    meta = {
-      homepage = https://pypi.python.org/pypi/subprocess32;
-      description = "Backport of the subprocess module from Python 3.2.5 for use on 2.x";
-      maintainers = with maintainers; [ garbas ];
-    };
-  };
+  subprocess32 = callPackage ../development/python-modules/subprocess32 { };
 
   spark_parser = buildPythonPackage (rec {
     name = "${pname}-${version}";
@@ -26694,6 +26678,7 @@ EOF
 
   parse-type = callPackage ../development/python-modules/parse-type { };
 
+  ephem = callPackage ../development/python-modules/ephem { };
 });
 
 in fix' (extends overrides packages)

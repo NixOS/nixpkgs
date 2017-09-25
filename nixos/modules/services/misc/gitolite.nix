@@ -85,6 +85,14 @@ in
           Gitolite user account. This is the username of the gitolite endpoint.
         '';
       };
+
+      group = mkOption {
+        type = types.str;
+        default = "gitolite";
+        description = ''
+          Primary group of the Gitolite user account.
+        '';
+      };
     };
   };
 
@@ -121,8 +129,10 @@ in
       home            = cfg.dataDir;
       createHome      = true;
       uid             = config.ids.uids.gitolite;
+      group           = cfg.group;
       useDefaultShell = true;
     };
+    users.extraGroups."${cfg.group}".gid = config.ids.gids.gitolite;
 
     systemd.services."gitolite-init" = {
       description = "Gitolite initialization";

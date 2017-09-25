@@ -107,6 +107,7 @@
   choochootrain = "Hurshal Patel <hurshal@imap.cc>";
   chris-martin = "Chris Martin <ch.martin@gmail.com>";
   chrisjefferson = "Christopher Jefferson <chris@bubblescope.net>";
+  chrisrosset = "Christopher Rosset <chris@rosset.org.uk>";
   christopherpoole = "Christopher Mark Poole <mail@christopherpoole.net>";
   ciil = "Simon Lackerbauer <simon@lackerbauer.com>";
   ckampka = "Christian Kampka <christian@kampka.net>";
@@ -496,6 +497,7 @@
   renzo = "Renzo Carbonara <renzocarbonara@gmail.com>";
   retrry = "Tadas Barzdžius <retrry@gmail.com>";
   rht = "rht <rhtbot@protonmail.com>";
+  richardipsum = "Richard Ipsum <richardipsum@fastmail.co.uk>";
   rick68 = "Wei-Ming Yang <rick68@gmail.com>";
   rickynils = "Rickard Nilsson <rickynils@gmail.com>";
   ris = "Robert Scott <code@humanleg.org.uk>";
