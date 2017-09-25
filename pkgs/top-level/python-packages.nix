@@ -2606,11 +2606,13 @@ in {
     # https://github.com/celery/celery/pull/3736#issuecomment-274155454 from upstream
     patches = [ ../development/python-modules/celery/fix_endless_python3.6_loop_logger_isa.patch ];
 
-    ## importing of eventlet fails because of:
-    # _proto_tcp = socket.getprotobyname('tcp')
-    ## raises an exception in the sandbox
+    # make /etc/protocols accessible to fix socket.getprotobyname('tcp') in sandbox
     preCheck = ''
-      rm ./t/unit/concurrency/test_eventlet.py
+      export NIX_REDIRECTS=/etc/protocols=${pkgs.iana-etc}/etc/protocols \
+        LD_PRELOAD=${pkgs.libredirect}/lib/libredirect.so
+    '';
+    postCheck = ''
+      unset NIX_REDIRECTS LD_PRELOAD
     '';
 
     buildInputs = with self; [ pytest case ];
