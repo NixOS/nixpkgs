@@ -107,11 +107,13 @@ rec {
   nix = buildImageWithNixDb {
     name = "nix";
     contents = [
-      # nix-store -qR uses the 'more' program which is not included in
-      # the pkgs.nix dependencies. We then have to manually get it
-      # from the 'eject' package:/
-      pkgs.eject
+      # nix-store uses cat program to display results as specified by
+      # the image env variable NIX_PAGER.
+      pkgs.coreutils
       pkgs.nix
     ];
+    config = {
+      Env = [ "NIX_PAGER=cat" ];
+    };
   };
 }
