@@ -19,7 +19,7 @@ buildPythonPackage rec {
     # https://github.com/pywbem/pywbem/issues/755#issuecomment-327508681
     (fetchpatch {
       url = "https://github.com/pywbem/pywbem/commit/bb7fa19d636d999bf844d80939e155b8f212ef3e.patch";
-      sha256 = "1c5fsz4zdbgwwni7njdixbwhb5i9bw11mabqpzivrh7z9wna6ab9";
+      sha256 = "1zd5f9qrb8rnaahmazkjnf3hqsc4f7n63z44k0wcwhz7fskpqza0";
     })
   ];
 
