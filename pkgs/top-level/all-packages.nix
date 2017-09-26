@@ -5351,7 +5351,7 @@ with pkgs;
   clangWrapSelf = build: ccWrapperFun {
     cc = build;
     isClang = true;
-    stdenv = clangStdenv;
+    inherit stdenvNoCC;
     libc = glibc;
     extraPackages = [ libcxx libcxxabi ];
     nativeTools = false;
