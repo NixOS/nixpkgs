@@ -12,10 +12,12 @@ rec {
       sha512 = "3cacc87b97871f3a8c5e97c17ef7025079cb5c81f32377d9402cdad45815ac6c4c4762c79187f1e477910161c2377c42d41de62a50b6741d5d7c1cd70e8c6416";
     };
 
-    patches = lib.optional stdenv.isi686 (fetchpatch {
-      url = "https://hg.mozilla.org/mozilla-central/raw-rev/15517c5a5d37";
-      sha256 = "1ba487p3hk4w2w7qqfxgv1y57vp86b8g3xhav2j20qd3j3phbbn7";
-    });
+    patches =
+      [ ./no-buildconfig.patch ]
+      ++ lib.optional stdenv.isi686 (fetchpatch {
+        url = "https://hg.mozilla.org/mozilla-central/raw-rev/15517c5a5d37";
+        sha256 = "1ba487p3hk4w2w7qqfxgv1y57vp86b8g3xhav2j20qd3j3phbbn7";
+      });
 
     meta = {
       description = "A web browser built from Firefox source tree";
