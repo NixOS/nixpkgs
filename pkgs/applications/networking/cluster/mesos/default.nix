@@ -54,6 +54,10 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     pythonProtobuf
   ];
+
+  # note that we *must* statically link libprotobuf.
+  # if we dynamically link the lib, we get these errors:
+  # https://github.com/NixOS/nixpkgs/pull/19064#issuecomment-255082684
   preConfigure = ''
     # https://issues.apache.org/jira/browse/MESOS-6616
     configureFlagsArray+=(
@@ -64,10 +68,13 @@ in stdenv.mkDerivation rec {
     # <sys/types.h> instead of <sys/sysmacros.h>
     sed 1i'#include <sys/sysmacros.h>' -i src/linux/fs.cpp
     sed 1i'#include <sys/sysmacros.h>' -i src/slave/containerizer/mesos/isolators/gpu/isolator.cpp
+
     substituteInPlace 3rdparty/stout/include/stout/os/posix/chown.hpp \
       --subst-var-by chown ${coreutils}/bin/chown
 
     substituteInPlace 3rdparty/stout/Makefile.am \
+      --replace "-lprotobuf" \
+                "${pythonProtobuf.protobuf}/lib/libprotobuf.so"
 
     substituteInPlace 3rdparty/stout/include/stout/os/posix/fork.hpp \
       --subst-var-by sh ${bash}/bin/bash
@@ -94,6 +101,8 @@ in stdenv.mkDerivation rec {
       --subst-var-by mesos-resolve $out/bin/mesos-resolve
 
     substituteInPlace src/python/native_common/ext_modules.py.in \
+      --replace "-lprotobuf" \
+                "${pythonProtobuf.protobuf}/lib/libprotobuf.so"
 
     substituteInPlace src/slave/containerizer/mesos/isolators/gpu/volume.cpp \
       --subst-var-by cp    ${coreutils}/bin/cp \
@@ -117,6 +126,8 @@ in stdenv.mkDerivation rec {
 
     substituteInPlace src/Makefile.am \
       --subst-var-by mavenRepo ${mavenRepo} \
+      --replace "-lprotobuf" \
+                "${pythonProtobuf.protobuf}/lib/libprotobuf.so"
 
   '' + lib.optionalString stdenv.isLinux ''
 
