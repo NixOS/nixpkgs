@@ -45,6 +45,33 @@ has the following highlights: </para>
       even though <literal>HDMI-0</literal> is the first head in the list.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The handling of SSL in the nginx module has been cleaned up, renaming
+      the misnomed <literal>enableSSL</literal> to <literal>onlySSL</literal>
+      which reflects its original intention. This is not to be used with the
+      already existing <literal>forceSSL</literal> which creates a second
+      non-SSL virtual host redirecting to the SSL virtual host. This by
+      chance had worked earlier due to specific implementation details. In
+      case you had specified both please remove the <literal>enableSSL</literal>
+      option to keep the previous behaviour.
+    </para>
+    <para>
+      Another <literal>addSSL</literal> option has been introduced to configure
+      both a non-SSL virtual host and an SSL virtual host.
+    </para>
+    <para>
+      Options to configure <literal>resolver</literal>s and
+      <literal>upstream</literal>s have been introduced. See their information
+      for further details.
+    </para>
+    <para>
+      The <literal>port</literal> option has been replaced by a more generic
+      <literal>listen</literal> option which makes it possible to specify
+      multiple addresses, ports and SSL configs dependant on the new SSL
+      handling mentioned above.
+    </para>
+  </listitem>
 </itemizedlist>
 
 <para>The following new services were added since the last release:</para>
@@ -62,8 +89,15 @@ following incompatible changes:</para>
 <itemizedlist>
   <listitem>
     <para>
-      <literal>aiccu</literal> package was removed. This is due to SixXS
+      The <literal>aiccu</literal> package was removed. This is due to SixXS
       <link xlink:href="https://www.sixxs.net/main/"> sunsetting</link> its IPv6 tunnel.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The <literal>fanctl</literal> package and <literal>fan</literal> module
+      have been removed due to the developers not upstreaming their iproute2
+      patches and lagging with compatibility to recent iproute2 versions.
     </para>
   </listitem>
   <listitem>
@@ -202,6 +236,59 @@ rmdir /var/lib/ipfs/.ipfs
       <command>gpgv</command>, etc.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      <literal>services.mysql</literal> now has declarative
+      configuration of databases and users with the <literal>ensureDatabases</literal> and
+      <literal>ensureUsers</literal> options.
+    </para>
+
+    <para>
+      These options will never delete existing databases and users,
+      especially not when the value of the options are changed.
+    </para>
+
+    <para>
+      The MySQL users will be identified using
+      <link xlink:href="https://mariadb.com/kb/en/library/authentication-plugin-unix-socket/">
+        Unix socket authentication</link>. This authenticates the
+        Unix user with the same name only, and that without the need
+        for a password.
+    </para>
+
+    <para>
+      If you have previously created a MySQL <literal>root</literal>
+      user <emphasis>with a password</emphasis>, you will need to add
+      <literal>root</literal> user for unix socket authentication
+      before using the new options. This can be done by running the
+      following SQL script:
+
+<programlisting language="sql">
+CREATE USER 'root'@'%' IDENTIFIED BY '';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+-- Optionally, delete the password-authenticated user:
+-- DROP USER 'root'@'localhost';
+</programlisting>
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      <literal>sha256</literal> argument value of
+      <literal>dockerTools.pullImage</literal> expression must be
+      updated since the mechanism to download the image has been
+      changed. Skopeo is now used to pull the image instead of the
+      Docker daemon.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      Templated systemd services e.g <literal>container@name</literal> are
+      now handled currectly when switching to a new configuration, resulting
+      in them being reloaded.
+    </para>
+  </listitem>
 </itemizedlist>
 
 <para>Other notable improvements:</para>
@@ -257,14 +344,48 @@ rmdir /var/lib/ipfs/.ipfs
   </listitem>
   <listitem>
     <para>
-      <literal>sha256</literal> argument value of
-      <literal>dockerTools.pullImage</literal> expression must be
-      updated since the mechanism to download the image has been
-      changed. Skopeo is now used to pull the image instead of the
-      Docker daemon.
+      Definitions for <filename>/etc/hosts</filename> can now be sped
+      declaratively with <literal>networking.hosts</literal>.
     </para>
   </listitem>
-
+  <listitem>
+    <para>
+      Two new options have been added to the installer loader, in addition
+      to the default having changed. The kernel log verbosity has been lowered
+      to the upstream default for the default options, in order to not spam
+      the console when e.g. joining a network.
+    </para>
+    <para>
+      This therefore leads to adding a new <literal>debug</literal> option
+      to set the log level to the previous verbose mode, to make debugging
+      easier, but still accessible easily.
+    </para>
+    <para>
+      Additionally a <literal>copytoram</literal> option has been added,
+      which makes it possible to remove the install medium after booting.
+      This allows tethering from your phone after booting from it.
+    </para>
+    <para>
+      <literal>services.gitlab-runner.configOptions</literal> has been added
+      to specify the configuration of gitlab-runners declaratively.
+    </para>
+    <para>
+      <literal>services.jenkins.plugins</literal> has been added
+      to install plugins easily, this can be generated with jenkinsPlugins2nix.
+    </para>
+    <para>
+      <literal>services.postfix.config</literal> has been added
+      to specify the main.cf with NixOS options. Additionally other options
+      have been added to the postfix module and has been improved further.
+    </para>
+    <para>
+        The GitLab package and module have been updated to the latest 9.5 release.
+    </para>
+    <para>
+      The <literal>systemd-boot</literal> boot loader now lists the NixOS
+      version, kernel version and build date of all bootable generations.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>
