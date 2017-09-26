@@ -344,7 +344,7 @@ FLUSH PRIVILEGES;
   </listitem>
   <listitem>
     <para>
-      Definitions for <filename>/etc/hosts</filename> can now be sped
+      Definitions for <filename>/etc/hosts</filename> can now be specified
       declaratively with <literal>networking.hosts</literal>.
     </para>
   </listitem>
