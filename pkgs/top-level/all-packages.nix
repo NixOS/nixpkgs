@@ -7677,6 +7677,8 @@ with pkgs;
 
   belle-sip = callPackage ../development/libraries/belle-sip { };
 
+  bicpl = callPackage ../development/libraries/science/biology/bicpl { };
+
   bobcat = callPackage ../development/libraries/bobcat { };
 
   boehmgc = callPackage ../development/libraries/boehm-gc { };
