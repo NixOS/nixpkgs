@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "minc-tools";
-  name  = "${pname}-2.3.01";
+  name  = "${pname}-2017-09-11";
 
   src = fetchFromGitHub {
     owner  = "BIC-MNI";
@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
     description = "Command-line utilities for working with MINC files";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
+    license   = licenses.free;
   };
 }

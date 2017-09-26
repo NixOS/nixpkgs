@@ -14419,6 +14419,7 @@ let self = _self // overrides; _self = with self; {
       homepage = http://www.shlomifish.org/open-source/projects/Text-Format/;
       description = "Format text";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainer = with maintainers; [ bcdarwin ];
     };
   };
 
