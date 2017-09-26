@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     "--with-png=${libpng.dev}"      # optional
     "--with-poppler=${poppler.dev}" # optional
     "--with-libz=${zlib.dev}"       # optional
-    "--with-pg=${postgresql.dev}/bin/pg_config"
+    "--with-pg=${postgresql}/bin/pg_config"
     "--with-mysql=${mysql.lib.dev}/bin/mysql_config"
     "--with-geotiff=${libgeotiff}"
     "--with-sqlite3=${sqlite.dev}"
