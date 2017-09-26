@@ -15,6 +15,9 @@
 , python27
 , python27Packages
 , rsync
+
+# Customization
+, extraPrefs ? ""
 }:
 
 let
@@ -154,6 +157,9 @@ stdenv.mkDerivation rec {
     // Defaults to $XDG_RUNTIME_DIR/Tor/{socks,control}.socket
     lockPref("extensions.torlauncher.control_port_use_ipc", true);
     lockPref("extensions.torlauncher.socks_port_use_ipc", true);
+
+    // User customization
+    ${extraPrefs}
     EOF
 
     # Preload extensions
