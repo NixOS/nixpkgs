@@ -1,12 +1,10 @@
-{ stdenv, fetchFromGitHub, makeWrapper, bash, openssl, coreutils, gnugrep }:
+{ stdenv, fetchFromGitHub, makeWrapper, openssl, coreutils, gnugrep }:
 
 stdenv.mkDerivation rec {
   name = "bash-supergenpass-unstable-${version}";
   version = "2012-11-02";
 
-  buildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   src = fetchFromGitHub {
     owner = "lanzz";
@@ -16,23 +14,21 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp supergenpass.sh "$out/bin/supergenpass"
-    chmod +x "$out/bin/supergenpass"
+    install -m755 -D supergenpass.sh "$out/bin/supergenpass"
     wrapProgram "$out/bin/supergenpass" --prefix PATH : "${stdenv.lib.makeBinPath [ openssl coreutils gnugrep ]}"
   '';
 
   meta = with stdenv.lib; {
     description = "Bash shell-script implementation of SuperGenPass password generation";
     longDescription = ''
-    Bash shell-script implementation of SuperGenPass password generation
-    Usage: ./supergenpass.sh <domain> [ <length> ]
+      Bash shell-script implementation of SuperGenPass password generation
+      Usage: ./supergenpass.sh <domain> [ <length> ]
 
-    Default <length> is 10, which is also the original SuperGenPass default length.
+      Default <length> is 10, which is also the original SuperGenPass default length.
 
-    The <domain> parameter is also optional, but it does not make much sense to omit it.
+      The <domain> parameter is also optional, but it does not make much sense to omit it.
 
-    supergenpass will ask for your master password interactively, and it will not be displayed on your terminal.
+      supergenpass will ask for your master password interactively, and it will not be displayed on your terminal.
     '';
     license = licenses.mit;
     platforms = platforms.linux;
