@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchurl, python,
-  unittest2, scripttest, pytz, pylint, tempest-lib, mock, testtools,
+  unittest2, scripttest, pytz, pylint, mock, testtools,
   pbr, tempita, decorator, sqlalchemy, six, sqlparse 
 }:
 buildPythonPackage rec {
