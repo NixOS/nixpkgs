@@ -181,9 +181,12 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     TBBUILD=${tor-browser-build_src}/projects/tor-browser
+    TBDATA_PATH=TorBrowser-Data
 
     self=$out/lib/tor-browser
     mkdir -p $self && cd $self
+
+    TBDATA_IN_STORE=$self/$TBDATA_PATH
 
     cp -dR ${tor-browser-unwrapped}/lib"/"*"/"* .
     chmod -R +w .
@@ -207,7 +210,7 @@ stdenv.mkDerivation rec {
 
     // Where to find the Nixpkgs tor executable & config
     lockPref("extensions.torlauncher.tor_path", "${tor}/bin/tor");
-    lockPref("extensions.torlauncher.torrc-defaults_path", "$self/torrc-defaults");
+    lockPref("extensions.torlauncher.torrc-defaults_path", "$TBDATA_IN_STORE/torrc-defaults");
 
     // Captures store paths
     clearPref("extensions.xpiState");
@@ -227,14 +230,15 @@ stdenv.mkDerivation rec {
     ln -s -t browser/extensions ${extensionsEnv}"/"*
 
     # Copy bundle data
-    cat \
-      $TBBUILD/Bundle-Data/linux/Data/Tor/torrc-defaults \
-      $TBBUILD/Bundle-Data/PTConfigs/linux/torrc-defaults-appendix \
-      >> torrc-defaults
+    bundlePlatform=linux
+    bundleData=$TBBUILD/Bundle-Data
 
+    mkdir -p $TBDATA_PATH
     cat \
-      $TBBUILD/Bundle-Data/linux/Data/Browser/profile.default/preferences/extension-overrides.js \
-      $TBBUILD/Bundle-Data/PTConfigs/bridge_prefs.js >> defaults/pref/extension-overrides.js \
+      $bundleData/$bundlePlatform/Data/Tor/torrc-defaults \
+      >> $TBDATA_PATH/torrc-defaults
+    cat \
+      $bundleData/$bundlePlatform/Data/Browser/profile.default/preferences/extension-overrides.js \
       >> defaults/pref/extension-overrides.js
 
     # Generate a suitable wrapper
