@@ -1,4 +1,5 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, fetchurl, go-bindata, kubernetes, libvirt, qemu, docker-machine-kvm, makeWrapper }:
+{ stdenv, buildGoPackage, fetchFromGitHub, fetchurl, go-bindata, kubernetes, libvirt, qemu, docker-machine-kvm,
+  gpgme, makeWrapper }:
 
 let
   binPath = [ kubernetes ]
@@ -14,15 +15,15 @@ let
   # instead, we download localkube ourselves and shove it into the minikube binary. The versions URL that minikube uses is
   # currently https://storage.googleapis.com/minikube/k8s_releases.json
 
-  localkube-version = "1.7.3";
+  localkube-version = "1.7.5";
   localkube-binary = fetchurl {
     url = "https://storage.googleapis.com/minikube/k8sReleases/v${localkube-version}/localkube-linux-amd64";
-    sha256 = "1ay11321kg3waxzi9d885pr08hz97a8ajwk31kbfxlm3x5bk3jii";
+    sha256 = "1kn4lwnn961r19hqnkgr13np80zqk2fhp8xkhrvxzq6v6shk7gfz";
   };
 in buildGoPackage rec {
   pname   = "minikube";
   name    = "${pname}-${version}";
-  version = "0.21.0";
+  version = "0.22.2";
 
   goPackagePath = "k8s.io/minikube";
 
@@ -30,12 +31,12 @@ in buildGoPackage rec {
     owner  = "kubernetes";
     repo   = "minikube";
     rev    = "v${version}";
-    sha256 = "1y72kdrpbxwfzxs9jslcrb2l3xw83z4i7raf5c7sky4wf2nx8vis";
+    sha256 = "04h0hp0mkps3ilcig6xnmp41rlgaxhhpxakc86lsknvkk9kmrx89";
   };
 
   # kubernetes is here only to shut up a loud warning when generating the completions below. minikube checks very eagerly
   # that kubectl is on the $PATH, even if it doesn't use it at all to generate the completions
-  buildInputs = [ go-bindata makeWrapper kubernetes ];
+  buildInputs = [ go-bindata makeWrapper kubernetes gpgme ];
   subPackages = [ "cmd/minikube" ];
 
   preBuild = ''

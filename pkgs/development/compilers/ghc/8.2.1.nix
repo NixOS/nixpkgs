@@ -10,12 +10,12 @@
 let
   inherit (bootPkgs) ghc;
   version = "8.2.1";
-  preReleaseName = "ghc-8.2.1";
+
   commonBuildInputs = [ alex autoconf automake ghc happy hscolour perl python3 sphinx ];
   commonPreConfigure =  ''
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/${preReleaseName}"
+    export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
   '' + stdenv.lib.optionalString enableIntegerSimple ''
@@ -26,7 +26,7 @@ in stdenv.mkDerivation (rec {
   name = "ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/~ghc/${version}/${preReleaseName}-src.tar.xz";
+    url = "https://downloads.haskell.org/~ghc/${version}/${name}-src.tar.xz";
     sha256 = "1w4k0n23b9fg8kmarqhfamzpmf91p6jcdr6xlwzfmb4df2bd9hng";
   };
 
@@ -57,7 +57,7 @@ in stdenv.mkDerivation (rec {
   checkTarget = "test";
 
   postInstall = ''
-    paxmark m $out/lib/${preReleaseName}/bin/{ghc,haddock}
+    paxmark m $out/lib/${name}/bin/{ghc,haddock}
 
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/ghc

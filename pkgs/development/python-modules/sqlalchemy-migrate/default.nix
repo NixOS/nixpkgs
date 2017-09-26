@@ -12,7 +12,7 @@ buildPythonPackage rec {
     sha256 = "0ld2bihp9kmf57ykgzrfgxs4j9kxlw79sgdj9sfn47snw3izb2p6";
   };
 
-  checkInputs = [ unittest2 scripttest pytz pylint  mock testtools ];
+  checkInputs = [ unittest2 scripttest pytz pylint mock testtools tempest-lib ];
   propagatedBuildInputs = [ pbr tempita decorator sqlalchemy six sqlparse ];
 
   checkPhase = ''
@@ -27,12 +27,12 @@ buildPythonPackage rec {
     ${python.interpreter} setup.py test
   '';
 
-  # Tests require tempest-lib which requires the broken oslo-config
-  doCheck = false;
+  doCheck = true;
 
   meta = with stdenv.lib; {
     homepage = http://code.google.com/p/sqlalchemy-migrate/;
     description = "Schema migration tools for SQLAlchemy";
     license = licenses.asl20;
+    maintainers = with maintainers; [ makefu ];
   };
 }

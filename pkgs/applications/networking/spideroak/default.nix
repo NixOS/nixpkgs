@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, makeWrapper, glib
-, fontconfig, patchelf, libXext, libX11
-, freetype, libXrender
+{ stdenv, fetchurl, makeWrapper, patchelf
+, fontconfig, freetype, glib, libICE, libSM
+, libX11, libXext, libXrender, zlib
 }:
 
 let
@@ -12,15 +12,16 @@ let
     else if stdenv.system == "i686-linux" then "ld-linux.so.2"
     else throw "Spideroak client for: ${stdenv.system} not supported!";
 
-  sha256 = if stdenv.system == "x86_64-linux" then "88fd785647def79ee36621fa2a8a5bea73c513de03103f068dd10bc25f3cf356"
-    else if stdenv.system == "i686-linux" then "8c23271291f40aa144bbf38ceb3cc2a05bed00759c87a65bd798cf8bb289d07a"
+  sha256 = if stdenv.system == "x86_64-linux" then "0k87rn4aj0v79rz9jvwspnwzmh031ih0y74ra88nc8kl8j6b6gjm"
+    else if stdenv.system == "i686-linux" then "1wbxfikj8f7rx26asswqrfp9vpk8w5941s21y1pnaff2gcac8m3z"
     else throw "Spideroak client for: ${stdenv.system} not supported!";
 
   ldpath = stdenv.lib.makeLibraryPath [
-    glib fontconfig libXext libX11 freetype libXrender
+    fontconfig freetype glib libICE libSM
+    libX11 libXext libXrender zlib
   ];
 
-  version = "6.0.1";
+  version = "6.1.9";
 
 in stdenv.mkDerivation {
   name = "spideroak-${version}";
@@ -42,6 +43,8 @@ in stdenv.mkDerivation {
     rm "$out/usr/bin/SpiderOakONE"
     rmdir $out/usr/bin || true
     mv $out/usr/share $out/
+
+    rm -f $out/opt/SpiderOakONE/lib/libz*
 
     patchelf --set-interpreter ${stdenv.glibc.out}/lib/${interpreter} \
       "$out/opt/SpiderOakONE/lib/SpiderOakONE"

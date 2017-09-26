@@ -75,5 +75,7 @@ stdenv.mkDerivation rec {
       random number generators, and small vectors (useful for representing
       multicomponent or vector fields).
     '';
+
+    broken = true; # failing test, ancient version, no library user in nixpkgs => if you care to fix it, go ahead
   };
 }

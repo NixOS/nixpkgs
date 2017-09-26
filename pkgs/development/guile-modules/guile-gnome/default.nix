@@ -1,7 +1,7 @@
-{ fetchurl, stdenv, guile, guile_lib, gwrap
+{ fetchurl, stdenv, guile, guile-lib, gwrap
 , pkgconfig, gconf, glib, gnome_vfs, gtk2
 , libglade, libgnome, libgnomecanvas, libgnomeui
-, pango, guileCairo, autoconf, automake, texinfo }:
+, pango, guile-cairo, autoconf, automake, texinfo }:
 
 stdenv.mkDerivation rec {
   name = "guile-gnome-platform-2.16.4";
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
     libgnomecanvas
     libgnomeui
     pango
-    guileCairo
-  ] ++ stdenv.lib.optional doCheck guile_lib;
+    guile-cairo
+  ] ++ stdenv.lib.optional doCheck guile-lib;
 
   preConfigure = ''
       ./autogen.sh

@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "03rwbli76crkjl6gp422wrc9lqpl174k56cp9i96b7l8jlj2yddf";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ pkgconfig intltool ];
   buildInputs =
     [ xorg.xlibsWrapper libxml2 GConf pango glib libgnome_keyring libglade libtool ];

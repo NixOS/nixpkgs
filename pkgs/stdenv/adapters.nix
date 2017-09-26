@@ -59,17 +59,18 @@ rec {
   makeStdenvCross = { stdenv
                     , cc
                     , buildPlatform, hostPlatform, targetPlatform
+                    , # Prior overrides are surely not valid as packages built
+                      # with this run on a different platform, so disable by
+                      # default.
+                      overrides ? _: _: {}
                     } @ overrideArgs: let
     stdenv = overrideArgs.stdenv.override {
       inherit
         buildPlatform hostPlatform targetPlatform
-        cc;
+        cc overrides;
 
       allowedRequisites = null;
-
-      # Overrides are surely not valid as packages built with this run on a
-      # different platform.
-      overrides = _: _: {};
+      extraBuildInputs = [ ]; # Old ones run on wrong platform
     };
   in stdenv // {
     mkDerivation =
@@ -105,7 +106,7 @@ rec {
               # without proper `file` command, libtool sometimes fails
               # to recognize 64-bit DLLs
             ++ stdenv.lib.optional (hostPlatform.config == "x86_64-w64-mingw32") pkgs.file
-            ++ stdenv.lib.optional (hostPlatform.config == "aarch64-linux-gnu") pkgs.updateAutotoolsGnuConfigScriptsHook
+            ++ stdenv.lib.optional hostPlatform.isAarch64 pkgs.updateAutotoolsGnuConfigScriptsHook
             ;
 
           # Cross-linking dynamic libraries, every buildInput should

@@ -43,6 +43,9 @@ self: super: {
   transformers = self.transformers_0_4_3_0;
   xhtml = self.xhtml_3000_2_1;
 
+  # Requires ghc 8.2
+  ghc-proofs = dontDistribute super.ghc-proofs;
+
   # https://github.com/tibbe/hashable/issues/85
   hashable = dontCheck super.hashable;
 

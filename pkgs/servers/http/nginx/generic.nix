@@ -62,7 +62,7 @@ stdenv.mkDerivation {
 
   preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);
 
-  hardeningEnable = [ "pie" ];
+  hardeningEnable = optional (!stdenv.isDarwin) "pie";
 
   postInstall = ''
     mv $out/sbin $out/bin

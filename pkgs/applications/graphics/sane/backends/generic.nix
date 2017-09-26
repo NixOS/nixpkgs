@@ -20,12 +20,13 @@ stdenv.mkDerivation {
   outputs = [ "out" "doc" "man" ];
 
   configureFlags = []
-    ++ stdenv.lib.optional (avahi != null) "--enable-avahi"
+    ++ stdenv.lib.optional (avahi != null)   "--enable-avahi"
     ++ stdenv.lib.optional (libusb1 != null) "--enable-libusb_1_0"
     ;
 
   buildInputs = [ avahi libusb1 libv4l net_snmp ];
   nativeBuildInputs = [ gettext pkgconfig ];
+  enableParallelBuilding = true;
 
   postInstall = let
 

@@ -15,8 +15,6 @@ import ./generic.nix (args // rec {
     sha256 = "0vqjnkzcbbvyq24w3cryfmw7hhws1xqkkxqcv71szkbqqs6mcr14";
   };
 
-  kernelPatches = args.kernelPatches;
-
   extraConfig = ''
     IPV6 y
     MPTCP y
@@ -41,10 +39,6 @@ import ./generic.nix (args // rec {
     TCP_CONG_OLIA m
     TCP_CONG_WVEGAS m
     TCP_CONG_BALIA m
-  '';
 
-  features.iwlwifi = true;
-  features.efiBootStub = true;
-  features.needsCifsUtils = true;
-  features.netfilterRPFilter = true;
+  '' + (args.extraConfig or "");
 } // (args.argsOverride or {}))

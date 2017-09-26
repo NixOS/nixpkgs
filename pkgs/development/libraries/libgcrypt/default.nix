@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, fetchpatch, libgpgerror, enableCapabilities ? false, libcap }:
+{ stdenv, fetchurl, libgpgerror, enableCapabilities ? false, libcap }:
 
 assert enableCapabilities -> stdenv.isLinux;
 
 stdenv.mkDerivation rec {
   name = "libgcrypt-${version}";
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchurl {
     url = "mirror://gnupg/libgcrypt/${name}.tar.bz2";
-    sha256 = "06w97l88y2c29zf8p8cg0m4k2kiiyj6pqxdl0cxigi3wp2brdr13";
+    sha256 = "1cvqd9jk5qshbh48yh3ixw4zyr4n5k50r3475rrh20xfn7w7aa3s";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -21,15 +21,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libgpgerror ]
     ++ stdenv.lib.optional enableCapabilities libcap;
-
-  # Shouldn't be needed after 1.8.1
-  patches = if stdenv.isArm && stdenv.system != "armv7l-linux"
-    then fetchpatch {
-        url = "https://git.gnupg.org/cgi-bin/gitweb.cgi?p=libgcrypt.git;a=patch;h=4a7aa30ae9f3ce798dd886c2f2d4164c43027748";
-        name = "arm.patch";
-        sha256 = "1dq9s0xwpbg7s5sghvssmwh4v88x733zm6c8ab3flllq8h7c8fq5";
-      }
-    else null;
 
   # Make sure libraries are correct for .pc and .la files
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config

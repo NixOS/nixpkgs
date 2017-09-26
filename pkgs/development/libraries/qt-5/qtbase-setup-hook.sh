@@ -123,7 +123,7 @@ if [ -z "$NIX_QT5_TMP" ]; then
 
     mkdir -p "$NIX_QT5_TMP/nix-support"
     for subdir in bin include lib mkspecs share; do
-        mkdir "$NIX_QT5_TMP/$subdir"
+        mkdir -p "$NIX_QT5_TMP/$subdir"
         echo "$subdir/" >> "$NIX_QT5_TMP/nix-support/qt-inputs"
     done
 

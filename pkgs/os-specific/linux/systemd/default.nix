@@ -73,6 +73,15 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "stackprotector" ];
 
+  patches = [
+    # TODO: Remove this patch when we have a systemd version
+    # with https://github.com/systemd/systemd/pull/6678
+    (fetchpatch {
+        url = "https://github.com/systemd/systemd/commit/58a78ae77063eddfcd23ea272bd2e0ddc9ea3ff7.patch";
+        sha256 = "0g3pvqigs69mciw6lj3zg12dmxnhwxndwxdjg78af52xrp0djfg8";
+    })
+  ];
+
   preConfigure =
     ''
       unset RANLIB

@@ -5,15 +5,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.7.2";
+  version = "1.9.0";
   name = "cdo-${version}";
 
   # Dependencies
   buildInputs = [ curl netcdf hdf5 ];
 
   src = fetchurl {
-    url = "https://code.zmaw.de/attachments/download/12760/${name}.tar.gz";
-    sha256 = "4c43eba7a95f77457bfe0d30fb82382b3b5f2b0cf90aca6f0f0a008f6cc7e697";
+    url = "https://code.mpimet.mpg.de/attachments/download/15187/${name}.tar.gz";
+    sha256 = "024hsr6qfg2dicwvm0vvkg3fr998bchf0qgwpj2v0jmz7a67ydnz";
   };
 
  # Configure phase
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       Supported data formats are GRIB 1/2, netCDF 3/4, SERVICE, EXTRA and IEG.
       There are more than 600 operators available.
     '';
-    homepage = https://code.zmaw.de/projects/cdo/;
+    homepage = https://code.mpimet.mpg.de/projects/cdo/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.ltavard ];
     platforms = with stdenv.lib.platforms; linux ++ darwin;

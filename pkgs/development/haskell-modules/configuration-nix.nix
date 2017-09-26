@@ -105,6 +105,12 @@ self: super: builtins.intersectAttrs super {
     configureFlags =  "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka";
   });
 
+  # library has hard coded directories that need to be removed. Reported upstream here https://github.com/haskell-works/hw-kafka-client/issues/32
+  hw-kafka-client = dontCheck (overrideCabal super.hw-kafka-client (drv: {
+    preConfigure = "sed -i -e /extra-lib-dirs/d -e /include-dirs/d -e /librdkafka/d hw-kafka-client.cabal";
+    configureFlags =  "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka";
+  }));
+
   # Foreign dependency name clashes with another Haskell package.
   libarchive-conduit = super.libarchive-conduit.override { archive = pkgs.libarchive; };
 

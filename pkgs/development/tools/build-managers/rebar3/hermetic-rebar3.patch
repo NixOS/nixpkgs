@@ -1,22 +1,16 @@
-diff --git a/src/rebar3.erl b/src/rebar3.erl
-index 47dc25a..edda250 100644
---- a/src/rebar3.erl
-+++ b/src/rebar3.erl
-@@ -304,9 +304,11 @@ start_and_load_apps(Caller) ->
-     ensure_running(crypto, Caller),
-     ensure_running(asn1, Caller),
-     ensure_running(public_key, Caller),
--    ensure_running(ssl, Caller),
--    inets:start(),
--    inets:start(httpc, [{profile, rebar}]).
-+    ensure_running(ssl, Caller).
-+%%  Removed due to the hermicity requirements of Nix
-+%%
-+%% inets:start(),
-+%% inets:start(httpc, [{profile, rebar}]).
+diff --git a/bootstrap b/bootstrap
+index 7c56bab..16c1be5 100755
+--- a/bootstrap
++++ b/bootstrap
+@@ -101,7 +101,7 @@ extract(Binary) ->
+ request(Url) ->
+     HttpOptions = [{relaxed, true} | get_proxy_auth()],
  
- ensure_running(App, Caller) ->
-     case application:start(App) of
+-    case httpc:request(get, {Url, []},
++    case rebar_hermeticity:request(get, {Url, []},
+                        HttpOptions,
+                        [{body_format, binary}],
+                        rebar) of
 diff --git a/src/rebar_hermeticity.erl b/src/rebar_hermeticity.erl
 new file mode 100644
 index 0000000..8f6cc7d
@@ -66,23 +60,32 @@ index 0000000..8f6cc7d
 +    ?ERROR("Request: ~p ~s", [Method, Url]),
 +    erlang:halt(1).
 diff --git a/src/rebar_pkg_resource.erl b/src/rebar_pkg_resource.erl
-index 5817817..2ea1703 100644
+index d588f24..9ac8ad4 100644
 --- a/src/rebar_pkg_resource.erl
 +++ b/src/rebar_pkg_resource.erl
-@@ -107,7 +107,7 @@ make_vsn(_) ->
-     {error, "Replacing version of type pkg not supported."}.
- 
+@@ -109,7 +109,7 @@ make_vsn(_) ->
  request(Url, ETag) ->
+     HttpOptions = [{ssl, ssl_opts(Url)}, {relaxed, true} | rebar_utils:get_proxy_auth()],
+ 
 -    case httpc:request(get, {Url, [{"if-none-match", ETag} || ETag =/= false]++[{"User-Agent", rebar_utils:user_agent()}]},
 +    case rebar_hermeticity:request(get, {Url, [{"if-none-match", ETag} || ETag =/= false]++[{"User-Agent", rebar_utils:user_agent()}]},
-                        [{ssl, ssl_opts(Url)}, {relaxed, true}],
+                        HttpOptions,
                         [{body_format, binary}],
                         rebar) of
 diff --git a/src/rebar_prv_update.erl b/src/rebar_prv_update.erl
-index 75c609e..4283c23 100644
+index a019c5a..697cbab 100644
 --- a/src/rebar_prv_update.erl
 +++ b/src/rebar_prv_update.erl
-@@ -52,7 +52,7 @@ do(State) ->
+@@ -38,6 +38,8 @@ init(State) ->
+     {ok, State1}.
+ 
+ -spec do(rebar_state:t()) -> {ok, rebar_state:t()} | {error, string()}.
++do(State) -> {ok, State}.
++-ifdef(non_hermetic).
+ do(State) ->
+     try
+         case rebar_packages:registry_dir(State) of
+@@ -52,7 +54,7 @@ do(State) ->
                  case rebar_utils:url_append_path(CDN, ?REMOTE_REGISTRY_FILE) of
                      {ok, Url} ->
                          ?DEBUG("Fetching registry from ~p", [Url]),
@@ -91,3 +94,11 @@ index 75c609e..4283c23 100644
                                             [], [{stream, TmpFile}, {sync, true}],
                                             rebar) of
                              {ok, saved_to_file} ->
+@@ -76,6 +78,7 @@ do(State) ->
+             ?DEBUG("Error creating package index: ~p ~p", [C, erlang:get_stacktrace()]),
+             throw(?PRV_ERROR(package_index_write))
+     end.
++-endif.
+ 
+ -spec format_error(any()) -> iolist().
+ format_error({package_parse_cdn, Uri}) ->

@@ -2,14 +2,14 @@
 , cyrus_sasl, gss, gpgme, kerberos, libidn, notmuch, openssl, lmdb, libxslt, docbook_xsl }:
 
 stdenv.mkDerivation rec {
-  version = "20170714";
+  version = "20170912";
   name = "neomutt-${version}";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = "neomutt-${version}";
-    sha256 = "0jbh83hvq1jwb8ps7ffl2325y6i79wdnwcn6db0r5prmxax18hw1";
+    sha256 = "0qndszmaihly3pp2wqiqm31nxbv9ys3j05kzffaqhzngfilmar9g";
   };
 
   nativeBuildInputs = [ autoreconfHook docbook_xsl libxslt.bin which ];
@@ -42,15 +42,20 @@ stdenv.mkDerivation rec {
     "ac_cv_path_SENDMAIL=sendmail"
   ];
 
+  # Fix missing libidn in mutt;
+  # this fix is ugly since it links all binaries in mutt against libidn
+  # like pgpring, pgpewrap, ...
+  NIX_LDFLAGS = "-lidn";
+
   configureScript = "./prepare";
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A small but very powerful text-based mail client";
-    homepage = http://www.neomutt.org;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = platforms.unix;
+    homepage    = http://www.neomutt.org;
+    license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ cstrahan erikryb jfrankenau vrthra ];
+    platforms   = platforms.unix;
   };
 }

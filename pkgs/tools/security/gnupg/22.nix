@@ -15,11 +15,11 @@ assert guiSupport -> pinentry != null;
 stdenv.mkDerivation rec {
   name = "gnupg-${version}";
 
-  version = "2.2.0";
+  version = "2.2.1";
 
   src = fetchurl {
     url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "1rj538kp3wsdq7rhl8sy1wpwhlsbxcch0cwk64kgz8gpw05lllfl";
+    sha256 = "1yv2pwf3vhv9dpbf51fnm0wy03va1cg5r7qaz7rg75cwbgb0rmrl";
   };
 
   buildInputs = [
@@ -45,6 +45,9 @@ stdenv.mkDerivation rec {
       substitute $f $out/lib/systemd/user/$(basename $f) \
         --replace /usr/bin $out/bin
     done
+
+    # add gpg2 symlink to make sure git does not break when signing commits
+    ln -s $out/bin/gpg $out/bin/gpg2
   '';
 
   meta = with stdenv.lib; {

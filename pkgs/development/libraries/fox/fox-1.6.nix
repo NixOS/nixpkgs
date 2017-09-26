@@ -1,5 +1,6 @@
 { stdenv, fetchurl, xlibsWrapper, libpng, libjpeg, libtiff, zlib, bzip2, libXcursor
-, libXrandr, mesa, libXft, libXfixes, xinput }:
+, libXrandr, mesa, libXft, libXfixes, xinput
+, CoreServices }:
 
 let
   version = "1.6.49";
@@ -13,8 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "03m9wm8hpzh1i0fxx5mpvjr67384pfm9hn7gzdcq55b4639fqy9n";
   };
 
-  buildInputs = [ xlibsWrapper libpng libjpeg libtiff zlib bzip2 libXcursor libXrandr
-      libXft mesa libXfixes xinput ];
+  buildInputs = [
+    xlibsWrapper libpng libjpeg libtiff zlib bzip2 libXcursor libXrandr
+    libXft mesa libXfixes xinput
+  ] ++ stdenv.lib.optional stdenv.isDarwin CoreServices;
 
   doCheck = true;
 

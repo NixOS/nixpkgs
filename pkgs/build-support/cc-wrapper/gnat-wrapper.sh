@@ -17,10 +17,6 @@ if [ -z "${NIX_@infixSalt@_GNAT_WRAPPER_FLAGS_SET:-}" ]; then
     source @out@/nix-support/add-flags.sh
 fi
 
-if [ -n "$NIX_@infixSalt@_GNAT_WRAPPER_START_HOOK" ]; then
-    source "$NIX_@infixSalt@_GNAT_WRAPPER_START_HOOK"
-fi
-
 source @out@/nix-support/utils.sh
 
 
@@ -120,10 +116,6 @@ if [ -n "${NIX_DEBUG:-}" ]; then
     printf "  %q\n" "${params[@]}" >&2
     echo "extra flags after to @prog@:" >&2
     printf "  %q\n" "${extraAfter[@]}" >&2
-fi
-
-if [ -n "$NIX_@infixSalt@_GNAT_WRAPPER_EXEC_HOOK" ]; then
-    source "$NIX_@infixSalt@_GNAT_WRAPPER_EXEC_HOOK"
 fi
 
 PATH="$path_backup"

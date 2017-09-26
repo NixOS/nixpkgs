@@ -1,17 +1,18 @@
 {stdenv, fetchurl, pkgconfig, libbsd}:
 
 stdenv.mkDerivation rec {
-  name = "netcat-openbsd-1.105";
-  version = "1.105";
+  version = "1.130";
+  deb-version = "${version}-3";
+  name = "netcat-openbsd-${version}";
 
   srcs = [
     (fetchurl {
-      url = "mirror://debian/pool/main/n/netcat-openbsd/netcat-openbsd_1.105.orig.tar.gz";
-      sha256 = "07i1vcz8ycnfwsvz356rqmim8akfh8yhjzmhc5mqf5hmdkk3yra0";
+      url = "mirror://debian/pool/main/n/netcat-openbsd/netcat-openbsd_${version}.orig.tar.gz";
+      sha256 = "0nqy14yvclgzs98gv0fwp6jlfpfy2kk367zka648jiqbbl30awpx";
     })
     (fetchurl {
-      url = "mirror://debian/pool/main/n/netcat-openbsd/netcat-openbsd_1.105-7.debian.tar.gz";
-      sha256 = "0qxkhbwcifrps34s5mzzg79cmkvz3f96gphd3pl978pygwr5krzf";
+      url = "mirror://debian/pool/main/n/netcat-openbsd/netcat-openbsd_${deb-version}.debian.tar.xz";
+      sha256 = "0f9409vjm6v8a7m1zf5sr7wj6v5v8414i5vvxx1r45c11h69hh9a";
     })
   ];
 
@@ -26,10 +27,11 @@ stdenv.mkDerivation rec {
     install -Dm0644 nc.1 $out/share/man/man1/nc.1
   '';
 
-  meta = {
-    homepage = http://packages.debian.org/netcat-openbsd;
+  meta = with stdenv.lib; {
+    homepage = https://packages.debian.org/netcat-openbsd;
     description = "TCP/IP swiss army knife, OpenBSD variant";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ willibutz ];
   };
 
 }

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    ../chromium/patches/chromium-gn-bootstrap-r8.patch
+    ./chromium-gn-bootstrap-r8.patch
   ];
 
   configurePhase = ''

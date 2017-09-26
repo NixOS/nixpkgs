@@ -28,6 +28,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Backports of new features in Python’s weakref module";
     license = licenses.psfl;
-    maintainers = with maintainers; [ jpbernardy ];
+    maintainers = with maintainers; [ jyp ];
   };
 }

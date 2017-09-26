@@ -117,7 +117,7 @@ in
     before = ["sshd.service"];
     wants = ["local-fs.target" "network-online.target" "network.target"];
     wantedBy = [ "sshd.service" "multi-user.target" ];
-    path = with pkgs; [ ethtool ];
+    path = with pkgs; [ ethtool openssh ];
     serviceConfig = {
       ExecStart = "${gce}/bin/google_instance_setup --debug";
       Type = "oneshot";

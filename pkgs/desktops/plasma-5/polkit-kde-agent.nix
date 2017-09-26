@@ -11,4 +11,5 @@ mkDerivation {
     kdbusaddons kwidgetsaddons kcoreaddons kcrash kconfig ki18n kiconthemes
     knotifications kwindowsystem polkit-qt
   ];
+  outputs = [ "out" "dev" ];
 }

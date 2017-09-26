@@ -26,7 +26,7 @@ let
       demo     = bdist { };
     };
   };
-  actual = binDists.${stdenv.system}.${releaseType};
+  actual = binDists.${stdenv.system}.${releaseType} or (throw "Factorio: unsupported platform");
 
   bdistForArch = arch: { sha256 ? null
                        , version ? "0.15.34"
@@ -34,7 +34,7 @@ let
                        , nameMut ? x: x
                        }:
     if sha256 == null then
-      abort "Factorio ${releaseType}-${arch.inTar} binaries are not (and were never?) available to download"
+      throw "Factorio ${releaseType}-${arch.inTar} binaries are not (and were never?) available to download"
     else {
       inherit version arch;
       src = fetcher {

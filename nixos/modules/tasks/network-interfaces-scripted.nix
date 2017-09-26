@@ -9,6 +9,12 @@ let
   interfaces = attrValues cfg.interfaces;
   hasVirtuals = any (i: i.virtual) interfaces;
 
+  slaves = concatMap (i: i.interfaces) (attrValues cfg.bonds)
+    ++ concatMap (i: i.interfaces) (attrValues cfg.bridges)
+    ++ concatMap (i: i.interfaces) (attrValues cfg.vswitches)
+    ++ concatMap (i: [i.interface]) (attrValues cfg.macvlans)
+    ++ concatMap (i: [i.interface]) (attrValues cfg.vlans);
+
   # We must escape interfaces due to the systemd interpretation
   subsystemDevice = interface:
     "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
@@ -73,6 +79,9 @@ let
           then [ "${dev}-netdev.service" ]
           else optional (dev != null && dev != "lo" && !config.boot.isContainer) (subsystemDevice dev);
 
+        hasDefaultGatewaySet = (cfg.defaultGateway != null && cfg.defaultGateway.address != "")
+                            || (cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "");
+
         networkLocalCommands = {
           after = [ "network-setup.service" ];
           bindsTo = [ "network-setup.service" ];
@@ -85,7 +94,7 @@ let
             before = [ "network.target" "shutdown.target" ];
             wants = [ "network.target" ];
             conflicts = [ "shutdown.target" ];
-            wantedBy = [ "multi-user.target" ];
+            wantedBy = [ "multi-user.target" ] ++ optional hasDefaultGatewaySet "network-online.target";
 
             unitConfig.ConditionCapability = "CAP_NET_ADMIN";
 
@@ -149,7 +158,11 @@ let
           in
           nameValuePair "network-addresses-${i.name}"
           { description = "Address configuration of ${i.name}";
-            wantedBy = [ "network-setup.service" ];
+            wantedBy = [
+              "network-setup.service"
+              "network-link-${i.name}.service"
+              "network.target"
+            ];
             # propagate stop and reload from network-setup
             partOf = [ "network-setup.service" ];
             # order before network-setup because the routes that are configured
@@ -203,7 +216,7 @@ let
             after = [ "dev-net-tun.device" "network-pre.target" ];
             wantedBy = [ "network-setup.service" (subsystemDevice i.name) ];
             partOf = [ "network-setup.service" ];
-            before = [ "network-setup.service" (subsystemDevice i.name) ];
+            before = [ "network-setup.service" ];
             path = [ pkgs.iproute ];
             serviceConfig = {
               Type = "oneshot";
@@ -229,7 +242,7 @@ let
             partOf = [ "network-setup.service" ] ++ optional v.rstp "mstpd.service";
             after = [ "network-pre.target" ] ++ deps ++ optional v.rstp "mstpd.service"
               ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
-            before = [ "network-setup.service" (subsystemDevice n) ];
+            before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
@@ -328,7 +341,7 @@ let
             partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps
               ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
-            before = [ "network-setup.service" (subsystemDevice n) ];
+            before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute pkgs.gawk ];
@@ -366,7 +379,7 @@ let
             bindsTo = deps;
             partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps;
-            before = [ "network-setup.service" (subsystemDevice n) ];
+            before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
@@ -391,7 +404,7 @@ let
             bindsTo = deps;
             partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps;
-            before = [ "network-setup.service" (subsystemDevice n) ];
+            before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
@@ -419,7 +432,7 @@ let
             bindsTo = deps;
             partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps;
-            before = [ "network-setup.service" (subsystemDevice n) ];
+            before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
@@ -462,5 +475,8 @@ in
   config = mkMerge [
     bondWarnings
     (mkIf (!cfg.useNetworkd) normalConfig)
+    { # Ensure slave interfaces are brought up
+      networking.interfaces = genAttrs slaves (i: {});
+    }
   ];
 }

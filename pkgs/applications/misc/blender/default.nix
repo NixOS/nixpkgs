@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, boost, cmake, ffmpeg, gettext, glew
+{ stdenv, stdenv_gcc5, lib, fetchurl, boost, cmake, ffmpeg, gettext, glew
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, mesa, openal, opencolorio, openexr, openimageio, openjpeg_1, python
@@ -10,12 +10,12 @@
 
 with lib;
 
-stdenv.mkDerivation rec {
-  name = "blender-2.78c";
+(if cudaSupport then stdenv_gcc5 else stdenv).mkDerivation rec {
+  name = "blender-2.79";
 
   src = fetchurl {
     url = "http://download.blender.org/source/${name}.tar.gz";
-    sha256 = "0f6k3m9yd5yhn7fq9srgzwh2gachlxm03bdrvn2r7xq00grqzab4";
+    sha256 = "16f84mdzkmwjmqahjj64kbyk4kagdj4mcr8qjazs1952d7kh7pm9";
   };
 
   buildInputs =
@@ -64,6 +64,10 @@ stdenv.mkDerivation rec {
     ++ optional colladaSupport "-DWITH_OPENCOLLADA=ON";
 
   NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR -I${python}/include/${python.libPrefix}m";
+
+  # Since some dependencies are built with gcc 6, we need gcc 6's
+  # libstdc++ in our RPATH. Sigh.
+  NIX_LDFLAGS = optionalString cudaSupport "-rpath ${stdenv.cc.cc.lib}/lib";
 
   enableParallelBuilding = true;
 

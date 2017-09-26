@@ -254,7 +254,6 @@
       hydra-queue-runner = 235;
       hydra-www = 236;
       syncthing = 237;
-      mfi = 238;
       caddy = 239;
       taskd = 240;
       factorio = 241;
@@ -427,7 +426,7 @@
       teamspeak = 124;
       influxdb = 125;
       nsd = 126;
-      #gitolite = 127; # unused
+      gitolite = 127;
       znc = 128;
       polipo = 129;
       mopidy = 130;
@@ -522,7 +521,6 @@
       octoprint = 230;
       radicale = 234;
       syncthing = 237;
-      #mfi = 238; # unused
       caddy = 239;
       taskd = 240;
       factorio = 241;

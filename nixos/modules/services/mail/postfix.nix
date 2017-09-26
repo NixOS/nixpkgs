@@ -836,11 +836,5 @@ in
     (mkIf (cfg.dnsBlacklists != []) {
       services.postfix.mapFiles."client_access" = checkClientAccessFile;
     })
-    (mkIf (cfg.extraConfig != "") {
-      warnings = [ "The services.postfix.extraConfig option was deprecated. Please use services.postfix.config instead." ];
-    })
-    (mkIf (cfg.extraMasterConf != "") {
-      warnings = [ "The services.postfix.extraMasterConf option was deprecated. Please use services.postfix.masterConfig instead." ];
-    })
   ]);
 }

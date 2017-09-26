@@ -32,11 +32,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "claws-mail-${version}";
-  version = "3.15.0";
+  version = "3.15.1";
 
   src = fetchurl {
     url = "http://www.claws-mail.org/download.php?file=releases/claws-mail-${version}.tar.xz";
-    sha256 = "0bnwd3l04y6j1nw3h861rdy6k6lyjzsi51j04d33vbpq8c6jskaf";
+    sha256 = "0hlm2jipyr4z6izlrpvabpz4ivh49i13avnm848kr1nv68pkq2cd";
   };
 
   patches = [ ./mime.patch ];

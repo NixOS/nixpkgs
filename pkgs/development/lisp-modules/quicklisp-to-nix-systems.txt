@@ -38,6 +38,7 @@ cl-smtp
 clsql
 clsql-postgresql
 clsql-postgresql-socket
+clsql-sqlite3
 clss
 cl+ssl
 cl-syntax-annot

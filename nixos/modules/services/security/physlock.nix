@@ -99,6 +99,8 @@ in
       '';
     };
 
+    security.pam.services.physlock = {};
+
   };
 
 }

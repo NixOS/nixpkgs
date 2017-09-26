@@ -77,7 +77,6 @@ let
   excludedOptions = [
     "boot.systemd.services"
     "systemd.services"
-    "environment.gnome3.packageSet"
     "kde.extraPackages"
   ];
   excludeOptions = list:

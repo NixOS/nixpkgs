@@ -5,11 +5,6 @@
 # wrapped binary just inherit the work of the forker's wrapper script.
 
 var_templates=(
-    NIX_CC_WRAPPER+START_HOOK
-    NIX_CC_WRAPPER+EXEC_HOOK
-    NIX_LD_WRAPPER+START_HOOK
-    NIX_LD_WRAPPER+EXEC_HOOK
-
     NIX+CFLAGS_COMPILE
     NIX+CFLAGS_LINK
     NIX+CXXSTDLIB_COMPILE
@@ -19,7 +14,6 @@ var_templates=(
     NIX+LDFLAGS
     NIX+LDFLAGS_BEFORE
     NIX+LDFLAGS_AFTER
-    NIX+LDFLAGS_HARDEN
 
     NIX+SET_BUILD_ID
     NIX+DONT_SET_RPATH

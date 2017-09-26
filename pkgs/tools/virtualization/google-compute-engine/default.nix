@@ -1,26 +1,25 @@
 { lib
 , fetchFromGitHub
-, pythonPackages
+, buildPythonApplication
 , bash
 , shadow
 , systemd
 , utillinux
+, boto
+, setuptools
 }:
-let
-  version = "20170523";
-in
-pythonPackages.buildPythonApplication {
+
+buildPythonApplication rec {
   name = "google-compute-engine-${version}";
+  version = "20170914";
   namePrefix = "";
 
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "compute-image-packages";
     rev = version;
-    sha256 = "1qxyj3lj9in6m8yi6y6wcmc3662h9z4qax07v97rdnay99mxdv68";
+    sha256 = "0hlzcrf6yhzan25f4wzy1vbncak9whhqzrzza026ly3sq0smmjpg";
   };
-
-  patches = [ ./0001-allow-nologin-other-paths.patch ];
 
   postPatch = ''
     for file in $(find google_compute_engine -type f); do
@@ -44,11 +43,11 @@ pythonPackages.buildPythonApplication {
     cp -r google_config/udev/*.rules $out/lib/udev/rules.d
   '';
 
-  propagatedBuildInputs = with pythonPackages; [ boto setuptools ];
+  propagatedBuildInputs = [ boto setuptools ];
 
   meta = with lib; {
     description = "Google Compute Engine tools and services";
-    homepage = https://github.com/GoogleCloudPlatform/compute-image-packages;
+    homepage = "https://github.com/GoogleCloudPlatform/compute-image-packages";
     license = licenses.asl20;
     maintainers = with maintainers; [ zimbatm ];
   };

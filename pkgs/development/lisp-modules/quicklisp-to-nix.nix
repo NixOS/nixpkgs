@@ -1941,6 +1941,17 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "clsql-sqlite3" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."clsql-sqlite3" or (x: {}))
+       (import ./quicklisp-to-nix-output/clsql-sqlite3.nix {
+         inherit fetchurl;
+           "clsql" = quicklisp-to-nix-packages."clsql";
+           "clsql-uffi" = quicklisp-to-nix-packages."clsql-uffi";
+           "uffi" = quicklisp-to-nix-packages."uffi";
+       }));
+
+
   "clsql-postgresql-socket" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."clsql-postgresql-socket" or (x: {}))

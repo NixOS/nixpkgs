@@ -31,6 +31,7 @@ stdenv.mkDerivation {
       --set-rpath "${stdenv.lib.makeLibraryPath [ qtbase glew stdenv.cc.cc mesa ]}" \
       $out/share/openBrf/openBrf
 
+    mkdir -p "$out/bin"
     ln -s "$out/share/openBrf/openBrf" "$out/bin/openBrf"
   '';
 

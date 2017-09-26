@@ -9,7 +9,7 @@ let
   confFile = pkgs.writeText "radicale.conf" cfg.config;
 
   # This enables us to default to version 2 while still not breaking configurations of people with version 1
-  defaultPackage = if versionAtLeast "17.09" config.system.stateVersion then {
+  defaultPackage = if versionAtLeast config.system.stateVersion "17.09" then {
     pkg = pkgs.radicale2;
     text = "pkgs.radicale2";
   } else {
@@ -48,6 +48,12 @@ in
         configuration file.
       '';
     };
+
+    services.radicale.extraArgs = mkOption {
+      type = types.listOf types.string;
+      default = [];
+      description = "Extra arguments passed to the Radicale daemon.";
+    };
   };
 
   config = mkIf cfg.enable {
@@ -71,7 +77,11 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/radicale -C ${confFile} -f";
+        ExecStart = concatStringsSep " " ([
+          "${cfg.package}/bin/radicale" "-C" confFile
+        ] ++ (
+          map escapeShellArg cfg.extraArgs
+        ));
         User = "radicale";
         Group = "radicale";
       };

@@ -17,7 +17,7 @@ let version = "8"; in
       buildInputs = [ gnu-efi libsmbios popt pkgconfig gettext ];
       propagatedBuildInputs = [ efivar ];
       # TODO: Just apply the disable to the efi subdir
-      hardeningDisable = "all";
+      hardeningDisable = [ "all" ];
       patchPhase = ''
         sed -i 's|/usr/include/smbios_c/token.h|smbios_c/token.h|' \
           linux/libfwup.c
