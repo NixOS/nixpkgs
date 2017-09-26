@@ -14,14 +14,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libminc ];
 
-  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/" "-DBUILD_TESTING=FALSE" ];
+  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/" ];
 
-  checkPhase = "ctest --output-on-failure";  # but there are no tests ...
+  checkPhase = "ctest --output-on-failure";  # but cmake doesn't run the tests ...
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/BIC-MNI/${pname}";
     description = "Library for working with MINC files";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
+    licenses  = licenses.free;
   };
 }

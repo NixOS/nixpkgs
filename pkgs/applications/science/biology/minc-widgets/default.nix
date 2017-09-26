@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "minc-widgets";
-  name  = "${pname}-1.0.0";
+  name  = "${pname}-2016-04-20";
 
 
   src = fetchFromGitHub {
@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     description = "Collection of Perl and shell scripts for processing MINC files";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
+    license = licenses.free;
   };
 }

@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "N3";
-  name  = "${pname}-1.0.20";
+  name  = "${pname}-2017-09-18";
 
   src = fetchFromGitHub {
     owner  = "BIC-MNI";
@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     description = "MRI non-uniformity correction for MINC files";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
+    license   = licenses.free;
   };
 }

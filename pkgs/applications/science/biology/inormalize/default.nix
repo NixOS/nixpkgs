@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "inormalize";
-  name  = "${pname}-1.0.20";
+  name  = "${pname}-2014-10-21";
 
   src = fetchFromGitHub {
     owner  = "BIC-MNI";
@@ -34,5 +34,6 @@ stdenv.mkDerivation rec {
     description = "Program to normalize intensity of MINC files";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
+    license   = licenses.free;
   };
 }

@@ -1,13 +1,14 @@
-{ stdenv, fetchgit, cmake, makeWrapper, perl, GetoptTabular, MNI-Perllib, libminc }:
+{ stdenv, fetchFromGitHub, cmake, makeWrapper, perl, GetoptTabular, MNI-Perllib, libminc }:
 
 stdenv.mkDerivation rec {
   pname = "mni_autoreg";
-  name  = "${pname}-0.99.70";
+  name  = "${pname}-2017-09-22";
 
-  src = fetchgit {
-    url = "https://github.com/BIC-MNI/${pname}.git";
-    rev = "a4367b82012fe3b40e794fc1eb6c3c86e86148bf";
-    sha256 = "1j5vk7hf03y38fwb5klfppk3g4d2hx1fg3ikph2708pnssmim2qr";
+  src = fetchFromGitHub {
+    owner = "BIC-MNI";
+    repo = pname;
+    rev = "ab99e29987dc029737785baebf24896ec37a2d76";
+    sha256 = "0axl069nv57vmb2wvqq7s9v3bfxwspzmk37bxm4973ai1irgppjq";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
     description = "Tools for automated registration using the MINC image format";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
+    license = licenses.free;
   };
 }
 
