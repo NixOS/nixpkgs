@@ -19,9 +19,7 @@ let
 
     buildInputs = [ vte gtk3 ncurses ];
 
-    nativeBuildInputs = [ wrapGAppsHook pkgconfig ];
-
-    nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ wrapGAppsHook pkgconfig makeWrapper ];
 
     outputs = [ "out" "terminfo" ];
 
