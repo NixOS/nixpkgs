@@ -73,6 +73,7 @@ in {
         TimeoutStartSec="30m";
         RuntimeDirectory = "icinga2";
       };
+      path = [ pkgs.glibc ];
     };
   };
 }

@@ -17,9 +17,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export MYSQL_INCLUDE_DIR=${mysql}/include/mysql
+    export ICINGA2_RUNDIR=/run/icinga2
   '';
 
-  buildInputs = [ cmake boost yajl openssl flex bison mysql postgresql ];
+  buildInputs = [ boost yajl openssl mysql postgresql ];
+  nativeBuildInputs = [ cmake flex bison ];
 
   meta = with stdenv.lib; {
     description = "Open source monitoring system";
