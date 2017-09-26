@@ -11,6 +11,9 @@
 , coreutils
 , hicolor_icon_theme
 , shared_mime_info
+, noto-fonts
+, noto-fonts-emoji
+
 # Extensions, common
 , unzip
 , zip
@@ -172,6 +175,13 @@ let
     name = "tor-browser-extensions";
     paths = with firefoxExtensions; [ https-everywhere noscript torbutton tor-launcher ];
   };
+
+  fontsEnv = symlinkJoin {
+    name = "tor-browser-fonts";
+    paths = [ noto-fonts noto-fonts-emoji ];
+  };
+
+  fontsDir = "${fontsEnv}/share/fonts";
 in
 stdenv.mkDerivation rec {
   name = "tor-browser-bundle-${version}";
@@ -243,6 +253,11 @@ stdenv.mkDerivation rec {
     cat \
       $bundleData/$bundlePlatform/Data/Browser/profile.default/preferences/extension-overrides.js \
       >> defaults/pref/extension-overrides.js
+
+    # Hard-code path to TBB fonts; xref: FONTCONFIG_FILE in the wrapper below
+    sed $bundleData/$bundlePlatform/Data/fontconfig/fonts.conf \
+        -e "s,<dir>fonts</dir>,<dir>${fontsDir}</dir>," \
+        > $TBDATA_PATH/fonts.conf
 
     # Generate a suitable wrapper
     wrapper_PATH=${lib.makeBinPath [ coreutils ]}
