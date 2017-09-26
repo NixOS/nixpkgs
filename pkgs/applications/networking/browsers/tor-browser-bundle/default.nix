@@ -359,6 +359,13 @@ stdenv.mkDerivation rec {
         "\$@"
     EOF
     chmod +x $out/bin/tor-browser
+
+    echo "Syntax checking wrapper ..."
+    bash -n $out/bin/tor-browser
+
+    echo "Checking wrapper ..."
+    DISPLAY="" XAUTHORITY="" DBUS_SESSION_BUS_ADDRESS="" TBB_HOME=$TMPDIR/tbb \
+    $out/bin/tor-browser -version >/dev/null
   '';
 
   meta = with stdenv.lib; {
