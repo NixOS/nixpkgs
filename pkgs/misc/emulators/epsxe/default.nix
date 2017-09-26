@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   installPhase = ''
-    install -D epsxe${optionalString stdenv.is64bit "_x64"} $out/bin/epsxe
+    install -D ${if stdenv.is64bit then "epsxe_x64" else "ePSXe"} $out/bin/epsxe
     patchelf \
       --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
       --set-rpath ${makeLibraryPath buildInputs} \
