@@ -7256,6 +7256,8 @@ with pkgs;
 
   jenkins-job-builder = pythonPackages.jenkins-job-builder;
 
+  kafkacat = callPackage ../development/tools/kafkacat { };
+
   kati = callPackage ../development/tools/build-managers/kati { };
 
   kconfig-frontends = callPackage ../development/tools/misc/kconfig-frontends {
