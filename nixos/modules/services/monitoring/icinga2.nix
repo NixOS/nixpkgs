@@ -5,14 +5,14 @@ with lib;
 let
   cfg = config.services.icinga2;
   environment = pkgs.writeText "icinga-env" ''
-    DAEMON=${pkgs.icinga2}/sbin/icinga2
+    DAEMON=${lib.getBin pkgs.icinga2}/sbin/icinga2
     ICINGA2_CONFIG_FILE=/etc/icinga2/icinga2.conf
-    ICINGA2_RUN_DIR=/var/run
-    ICINGA2_STATE_DIR=/var/icinga2
+    ICINGA2_RUN_DIR=/run
+    ICINGA2_STATE_DIR=/var/lib/icinga2
     ICINGA2_PID_FILE=$ICINGA2_RUN_DIR/icinga2/icinga2.pid
-    ICINGA2_ERROR_LOG=
-    ICINGA2_STARTUP_LOG=
-    ICINGA2_LOG=
+    ICINGA2_ERROR_LOG=$ICINGA2_STATE_DIR/error.log
+    ICINGA2_STARTUP_LOG=$ICINGA2_STATE_DIR/startup.log
+    ICINGA2_LOG=$ICINGA2_STATE_DIR/icinga2.log
     ICINGA2_USER=${cfg.user}
     ICINGA2_GROUP=${cfg.group}
     ICINGA2_COMMAND_GROUP=${cfg.cmdgroup}
@@ -66,11 +66,12 @@ in {
       serviceConfig = {
         Type = "forking";
         EnvironmentFile = environment;
-        ExecStart = "${pkgs.icinga2}/bin/icinga2 daemon -d";
+        ExecStart = "${pkgs.icinga2}/bin/icinga2 daemon -d -D LocalStateDir=/var/lib/icinga2";
+        ExecStartPre = "${pkgs.icinga2}/lib/icinga2/prepare-dirs ${environment}";
         ExecReload = "${pkgs.icinga2}/lib/icinga2/safe-reload ${environment}";
-        PIDFile = "/var/run/icinga2/icinga2.pid";
+        PIDFile = "/run/icinga2/icinga2.pid";
         TimeoutStartSec="30m";
-        User = cfg.user;
+        RuntimeDirectory = "icinga2";
       };
     };
   };
