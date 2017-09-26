@@ -9266,6 +9266,8 @@ with pkgs;
 
   libminc = callPackage ../development/libraries/libminc { };
 
+  libmirage = callPackage ../misc/emulators/cdemu/libmirage.nix { }; 
+  
   libmkv = callPackage ../development/libraries/libmkv { };
 
   libmms = callPackage ../development/libraries/libmms { };
