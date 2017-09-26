@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--localstatedir=/var"
     "--with-botan-config=${botan}/bin/botan-config-1.10"
-    "--with-dhcp-pgsql=${postgresql}/bin/pg_config"
+    "--with-dhcp-pgsql=${postgresql.dev}/bin/pg_config"
     "--with-dhcp-mysql=${mysql.client.dev}/bin/mysql_config"
   ];
 
