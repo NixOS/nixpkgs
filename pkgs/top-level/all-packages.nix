@@ -1883,6 +1883,8 @@ with pkgs;
 
   epstool = callPackage ../tools/graphics/epstool { };
 
+  epsxe = callPackage ../misc/emulators/epsxe { };
+
   ethtool = callPackage ../tools/misc/ethtool { };
 
   ettercap = callPackage ../applications/networking/sniffers/ettercap { };
