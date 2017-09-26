@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchurl,
+{ stdenv, buildPythonPackage, fetchPypi,
   asgiref, django, daphne
 }:
 buildPythonPackage rec {
@@ -6,8 +6,8 @@ buildPythonPackage rec {
   name = "${pname}-${version}";
   version = "1.1.8";
 
-  src = fetchurl {
-    url = "mirror://pypi/c/channels/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "0gsy3hwn1vd709jkw8ay44qrm6aw7qggr312z8xwzq0x4ihjda02";
   };
 
