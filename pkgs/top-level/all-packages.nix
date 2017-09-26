@@ -8469,6 +8469,8 @@ with pkgs;
 
   libopcodes = callPackage ../development/libraries/libopcodes { };
 
+  bicpl = callPackage ../development/libraries/science/biology/bicpl { };
+
   # TODO(@Ericson2314): Build bionic libc from source
   bionic = assert hostPlatform.useAndroidPrebuilt;
     androidenv.androidndkPkgs.libraries;
