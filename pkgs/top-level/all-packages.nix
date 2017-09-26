@@ -198,7 +198,7 @@ with pkgs;
     baseUrl = "https://${githubBase}/${owner}/${repo}";
     passthruAttrs = removeAttrs args [ "owner" "repo" "rev" "fetchSubmodules" "private" "githubBase" "varPrefix" ];
     varBase = "NIX${if varPrefix == null then "" else "_${varPrefix}"}_GITHUB_PRIVATE_";
-  in if fetchSubmodules then
+  in (if fetchSubmodules then
     fetchgit ({
       inherit name rev fetchSubmodules;
       url = "${baseUrl}.git";
@@ -209,7 +209,6 @@ with pkgs;
     fetchzip ({
       inherit name;
       url = "${baseUrl}/archive/${rev}.tar.gz";
-      meta.homepage = "${baseUrl}/";
     } // lib.optionalAttrs private {
       netrcPhase = ''
         if [ -z "''$${varBase}USERNAME" -o -z "''$${varBase}PASSWORD" ]; then
@@ -223,7 +222,8 @@ with pkgs;
         EOF
       '';
       netrcImpureEnvVars = [ "${varBase}USERNAME" "${varBase}PASSWORD" ];
-    } // passthruAttrs) // { inherit rev; };
+    } // passthruAttrs) // { inherit rev; })
+  // { meta.homepage = baseUrl; };
 
   fetchFromBitbucket = {
     owner, repo, rev, name ? gitRepoToName repo rev,
