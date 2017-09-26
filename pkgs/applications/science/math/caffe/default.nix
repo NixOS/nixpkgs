@@ -46,9 +46,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = lib.optional pythonSupport python.pkgs.protobuf;
 
-  outputs = [ "out" "bin" ];
-  # Don't propagate bin.
-  outputBin = "out";
+  outputs = [ "bin" "out"];
+  propagatedBuildOutputs = []; # otherwise propagates out -> bin cycle
 
   postInstall = ''
     # Internal static library.
