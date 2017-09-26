@@ -2,6 +2,10 @@
 set -eu -o pipefail
 shopt -s nullglob
 
+if (( "${NIX_DEBUG:-0}" >= 7 )); then
+    set -x
+fi
+
 declare -a args=("$@")
 # I've also tried adding -z direct and -z lazyload, but it gave too many problems with C++ exceptions :'(
 # Also made sure libgcc would not be lazy-loaded, as suggested here: https://www.illumos.org/issues/2534#note-3
