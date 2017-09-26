@@ -214,6 +214,7 @@ stdenv.mkDerivation rec {
 
     // Captures store paths
     clearPref("extensions.xpiState");
+    clearPref("extensions.bootstrappedAddons");
 
     // Insist on using IPC for communicating with Tor
     //
