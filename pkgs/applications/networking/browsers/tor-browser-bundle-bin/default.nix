@@ -23,10 +23,11 @@
 , pango
 
 , audioSupport ? mediaSupport
-, pulseaudioSupport ? audioSupport
+, pulseaudioSupport ? false
 , libpulseaudio
+, apulse
 
-# Media support (implies pulseaudio support)
+# Media support (implies audio support)
 , mediaSupport ? false
 , gstreamer
 , gst-plugins-base
@@ -158,6 +159,11 @@ stdenv.mkDerivation rec {
     # and torLibPath for accuracy, but this is more convenient ...
     libPath=${libPath}:$TBB_IN_STORE:$TBB_IN_STORE/TorBrowser/Tor
 
+    # apulse uses a non-standard library path.  For now special-case it.
+    ${optionalString (audioSupport && !pulseaudioSupport) ''
+      libPath=${apulse}/lib/apulse:$libPath
+    ''}
+
     # Fixup paths to pluggable transports.
     sed -i TorBrowser/Data/Tor/torrc-defaults \
         -e "s,./TorBrowser,$TBB_IN_STORE/TorBrowser,g"
@@ -217,6 +223,13 @@ stdenv.mkDerivation rec {
     // Optionally disable multiprocess support.  We always set this to ensure that
     // toggling the pref takes effect.
     lockPref("browser.tabs.remote.autostart.2", ${if disableContentSandbox then "false" else "true"});
+
+    // Allow sandbox access to sound devices if using ALSA directly
+    ${if (audioSupport && !pulseaudioSupport) then ''
+      pref("security.sandbox.content.write_path_whitelist", "/dev/snd/");
+    '' else ''
+      clearPref("security.sandbox.content.write_path_whitelist");
+    ''}
 
     ${optionalString (extraPrefs != "") ''
       ${extraPrefs}
@@ -335,6 +348,8 @@ stdenv.mkDerivation rec {
       \
       PULSE_SERVER="\''${PULSE_SERVER:-}" \
       PULSE_COOKIE="\''${PULSE_COOKIE:-}" \
+      \
+      APULSE_PLAYBACK_DEVICE="\''${APULSE_PLAYBACK_DEVICE:-plug:dmix}" \
       \
       TOR_SKIP_LAUNCH="\''${TOR_SKIP_LAUNCH:-}" \
       TOR_CONTROL_PORT="\''${TOR_CONTROL_PORT:-}" \

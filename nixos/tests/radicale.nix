@@ -43,6 +43,7 @@ in
             });
           })
         ];
+        system.stateVersion = "17.03";
       };
       radicale1_export = lib.recursiveUpdate radicale1 {
         services.radicale.extraArgs = [

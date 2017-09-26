@@ -11,8 +11,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig gobjectIntrospection ];
-  propagatedBuildInputs = [ glib zlib gpgme libidn ];
+  buildInputs = [ gobjectIntrospection zlib gpgme libidn ];
+  nativeBuildInputs = [ pkgconfig ];
+  propagatedBuildInputs = [ glib ];
   configureFlags = [ "--enable-introspection=yes" ];
 
   enableParallelBuilding = true;

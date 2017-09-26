@@ -66,6 +66,10 @@ mapAliases (rec {
   gst_plugins_bad = gst-plugins-bad;  # added 2017-02
   gst_plugins_ugly = gst-plugins-ugly;  # added 2017-02
   gst_python = gst-python;  # added 2017-02
+  guileCairo = guile-cairo; # added 2017-09-24
+  guileGnome = guile-gnome; # added 2017-09-24
+  guile_lib = guile-lib; # added 2017-09-24
+  guile_ncurses = guile-ncurses; # added 2017-09-24
   gupnptools = gupnp-tools;  # added 2015-12-19
   gnustep-make = gnustep.make; # added 2016-7-6
   htmlTidy = html-tidy;  # added 2014-12-06

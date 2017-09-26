@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf bison pkgconfig ];
 
   preConfigure = ''
-    find . -exec sed -e 's@/bin/rm@${coreutils}&@g' -i '{}' ';'
-    find . -exec sed -e 's@/bin/uname@${coreutils}&@g' -i '{}' ';'
+    find . -type f -exec sed -e 's@/bin/rm@${coreutils}&@g' -i '{}' ';'
+    find . -type f -exec sed -e 's@/bin/uname@${coreutils}&@g' -i '{}' ';'
     ${stdenv.lib.optionalString asLibsingular ''NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -DLIBSINGULAR"''}
   '';
 
