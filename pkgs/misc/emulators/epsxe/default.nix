@@ -1,12 +1,14 @@
 { stdenv, fetchurl, alsaLib, curl, gdk_pixbuf, gcc, glib, gtk3,
   libX11, openssl, ncurses5, SDL, SDL_ttf, unzip, zlib, wrapGAppsHook }:
 
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
   name = "epsxe-${version}";
   version = "2.0.5";
 
   src = with stdenv.lib; let
-    version2 = concatStrings (splitString "." version);  
+    version2 = concatStrings (splitString "." version);
     platform = "linux" + (optionalString stdenv.is64bit "_x64");
   in fetchurl {
     url = "http://www.epsxe.com/files/ePSXe${version2}${platform}.zip";
@@ -34,17 +36,16 @@ stdenv.mkDerivation rec {
   ];
 
   dontStrip = true;
-  
+
   installPhase = ''
-    mv epsxe_* epsxe || true
-    install -Dt $out/bin epsxe
+    install -D epsxe${optionalString stdenv.is64bit "_x64"} $out/bin/epsxe
     patchelf \
       --set-interpreter $(cat ${stdenv.cc}/nix-support/dynamic-linker) \
-      --set-rpath ${stdenv.lib.makeLibraryPath buildInputs} \
+      --set-rpath ${makeLibraryPath buildInputs} \
       $out/bin/epsxe
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     homepage = http://epsxe.com/;
     description = "Enhanced PSX (PlayStation 1) emulator";
     license = licenses.unfree;
