@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig
-, zlib, freetype, libjpeg, jbig2dec, openjpeg
-, libX11, libXcursor, libXrandr, libXinerama, libXext, harfbuzz, mesa }:
+{ stdenv, lib, fetchurl, fetchpatch, pkgconfig
+, freetype, harfbuzz, openjpeg, jbig2dec
+, enableX11 ? true, libX11, libXext
+, enableCurl ? true, curl, openssl
+}:
 
 stdenv.mkDerivation rec {
   version = "1.11";
@@ -28,7 +30,9 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "prefix=$(out)" ];
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ zlib libX11 libXcursor libXext harfbuzz mesa libXrandr libXinerama freetype libjpeg jbig2dec openjpeg ];
+  buildInputs = [ freetype harfbuzz openjpeg jbig2dec ]
+                ++ lib.optionals enableX11 [ libX11 libXext ]
+                ++ lib.optionals enableCurl [ curl openssl ];
   outputs = [ "bin" "dev" "out" "man" "doc" ];
 
   preConfigure = ''
