@@ -27,6 +27,7 @@ in stdenv.mkDerivation {
     description = "Checks syntax and semantics in a Guile program or module";
     homepage = "https://user42.tuxfamily.org/guile-lint/index.html";
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ vyp ];
     platforms = platforms.all;
   };
 }
