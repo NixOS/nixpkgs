@@ -74,7 +74,7 @@ in
           (for example, when you want to restart them manually at a later time),
           set this to 'process'.
         '';
-        default = "process";
+        default = "control-group";
       };
 
       stopKillTimeout = mkOption {
