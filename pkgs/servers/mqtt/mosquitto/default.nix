@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     "PREFIX="
   ];
 
-  preBuild = ''
+  postPatch = ''
     substituteInPlace config.mk \
       --replace "/usr/local" ""
     substituteInPlace config.mk \
