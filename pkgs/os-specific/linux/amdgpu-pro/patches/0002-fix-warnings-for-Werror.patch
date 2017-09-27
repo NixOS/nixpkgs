@@ -1,0 +1,130 @@
+From f40ffb49ef0f8579c313ed895f9798c3e0e8b2a2 Mon Sep 17 00:00:00 2001
+From: David McFarland <corngood@gmail.com>
+Date: Mon, 6 Feb 2017 22:13:49 -0400
+Subject: [PATCH 2/2] fix warnings for Werror
+
+---
+ amd/amdgpu/amdgpu_amdkfd_gfx_v9.c  | 1 -
+ amd/amdgpu/amdgpu_sa.c             | 2 +-
+ amd/amdgpu/dce_v10_0.c             | 2 +-
+ amd/amdgpu/dce_v11_0.c             | 2 +-
+ amd/amdgpu/dce_v6_0.c              | 2 +-
+ amd/amdgpu/dce_v8_0.c              | 2 +-
+ amd/amdkfd/kfd_chardev.c           | 1 +
+ amd/display/dc/bios/bios_parser2.c | 8 ++++----
+ 8 files changed, 10 insertions(+), 10 deletions(-)
+
+diff --git a/amd/amdgpu/amdgpu_amdkfd_gfx_v9.c b/amd/amdgpu/amdgpu_amdkfd_gfx_v9.c
+index 0ff5027..c286100 100644
+--- a/amd/amdgpu/amdgpu_amdkfd_gfx_v9.c
++++ b/amd/amdgpu/amdgpu_amdkfd_gfx_v9.c
+@@ -966,7 +966,6 @@ static int invalidate_tlbs_with_kiq(struct amdgpu_device *adev, uint16_t pasid)
+ 	signed long r;
+ 	struct fence *f;
+ 	struct amdgpu_ring *ring = &adev->gfx.kiq.ring;
+-	struct amdgpu_kiq *kiq = &adev->gfx.kiq;
+ 
+ 	mutex_lock(&adev->gfx.kiq.ring_mutex);
+ 	amdgpu_ring_alloc(ring, 12); /* fence + invalidate_tlbs package*/
+diff --git a/amd/amdgpu/amdgpu_sa.c b/amd/amdgpu/amdgpu_sa.c
+index 401a20f..facadf3 100644
+--- a/amd/amdgpu/amdgpu_sa.c
++++ b/amd/amdgpu/amdgpu_sa.c
+@@ -430,7 +430,7 @@ void amdgpu_sa_bo_dump_debug_info(struct amdgpu_sa_manager *sa_manager,
+ 		if (i->fence)
+ #if defined(BUILD_AS_DKMS)
+ 			seq_printf(m, " protected by 0x%08x on context %d",
+-					i->fence->seqno, i->fence->context);
++					i->fence->seqno, (int)i->fence->context);
+ #else
+ 			seq_printf(m, " protected by 0x%08x on context %llu",
+ 				   i->fence->seqno, i->fence->context);
+diff --git a/amd/amdgpu/dce_v10_0.c b/amd/amdgpu/dce_v10_0.c
+index b41811d..89268d0 100644
+--- a/amd/amdgpu/dce_v10_0.c
++++ b/amd/amdgpu/dce_v10_0.c
+@@ -2131,7 +2131,7 @@ static int dce_v10_0_crtc_do_set_base(struct drm_crtc *crtc,
+ 		bypass_lut = true;
+ 		break;
+ 	default:
+-		format_name = kcl_drm_get_format_name(target_fb->pixel_format);
++		format_name = (char*)kcl_drm_get_format_name(target_fb->pixel_format);
+ 		DRM_ERROR("Unsupported screen format %s\n", format_name);
+ 		kfree(format_name);
+ 		return -EINVAL;
+diff --git a/amd/amdgpu/dce_v11_0.c b/amd/amdgpu/dce_v11_0.c
+index 82c8eba..24daa85 100644
+--- a/amd/amdgpu/dce_v11_0.c
++++ b/amd/amdgpu/dce_v11_0.c
+@@ -2115,7 +2115,7 @@ static int dce_v11_0_crtc_do_set_base(struct drm_crtc *crtc,
+ 		bypass_lut = true;
+ 		break;
+ 	default:
+-		format_name = kcl_drm_get_format_name(target_fb->pixel_format);
++		format_name = (char*)kcl_drm_get_format_name(target_fb->pixel_format);
+ 		DRM_ERROR("Unsupported screen format %s\n", format_name);
+ 		kfree(format_name);
+ 		return -EINVAL;
+diff --git a/amd/amdgpu/dce_v6_0.c b/amd/amdgpu/dce_v6_0.c
+index 2d06b39..b0da814 100644
+--- a/amd/amdgpu/dce_v6_0.c
++++ b/amd/amdgpu/dce_v6_0.c
+@@ -2064,7 +2064,7 @@ static int dce_v6_0_crtc_do_set_base(struct drm_crtc *crtc,
+ 		bypass_lut = true;
+ 		break;
+ 	default:
+-		format_name = kcl_drm_get_format_name(target_fb->pixel_format);
++		format_name = (char*)kcl_drm_get_format_name(target_fb->pixel_format);
+ 		DRM_ERROR("Unsupported screen format %s\n", format_name);
+ 		kfree(format_name);
+ 		return -EINVAL;
+diff --git a/amd/amdgpu/dce_v8_0.c b/amd/amdgpu/dce_v8_0.c
+index e32222c..f984040 100644
+--- a/amd/amdgpu/dce_v8_0.c
++++ b/amd/amdgpu/dce_v8_0.c
+@@ -2002,7 +2002,7 @@ static int dce_v8_0_crtc_do_set_base(struct drm_crtc *crtc,
+ 		bypass_lut = true;
+ 		break;
+ 	default:
+-		format_name = kcl_drm_get_format_name(target_fb->pixel_format);
++		format_name = (char*)kcl_drm_get_format_name(target_fb->pixel_format);
+ 		DRM_ERROR("Unsupported screen format %s\n", format_name);
+ 		kfree(format_name);
+ 		return -EINVAL;
+diff --git a/amd/amdkfd/kfd_chardev.c b/amd/amdkfd/kfd_chardev.c
+index b01875e..a15cebc 100644
+--- a/amd/amdkfd/kfd_chardev.c
++++ b/amd/amdkfd/kfd_chardev.c
+@@ -1755,6 +1755,7 @@ static int kfd_ioctl_get_tile_config(struct file *filep,
+ static int kfd_ioctl_cross_memory_copy(struct file *filep,
+ 				       struct kfd_process *local_p, void *data)
+ {
++  return 0;
+ }
+ #else
+ static int kfd_ioctl_cross_memory_copy(struct file *filep,
+diff --git a/amd/display/dc/bios/bios_parser2.c b/amd/display/dc/bios/bios_parser2.c
+index 682fc9b..6257220 100644
+--- a/amd/display/dc/bios/bios_parser2.c
++++ b/amd/display/dc/bios/bios_parser2.c
+@@ -1317,13 +1317,13 @@ static enum bp_result get_embedded_panel_info_v2_1(
+ 	info->lcd_timing.misc_info.VERTICAL_CUT_OFF = 0;
+ 
+ 	info->lcd_timing.misc_info.H_REPLICATION_BY2 =
+-		lvds->lcd_timing.miscinfo & ATOM_H_REPLICATIONBY2;
++		(lvds->lcd_timing.miscinfo & ATOM_H_REPLICATIONBY2) != 0;
+ 	info->lcd_timing.misc_info.V_REPLICATION_BY2 =
+-		lvds->lcd_timing.miscinfo & ATOM_V_REPLICATIONBY2;
++		(lvds->lcd_timing.miscinfo & ATOM_V_REPLICATIONBY2) != 0;
+ 	info->lcd_timing.misc_info.COMPOSITE_SYNC =
+-		lvds->lcd_timing.miscinfo & ATOM_COMPOSITESYNC;
++		(lvds->lcd_timing.miscinfo & ATOM_COMPOSITESYNC) != 0;
+ 	info->lcd_timing.misc_info.INTERLACE =
+-		lvds->lcd_timing.miscinfo & ATOM_INTERLACE;
++		(lvds->lcd_timing.miscinfo & ATOM_INTERLACE) != 0;
+ 
+ 	/* not provided by VBIOS*/
+ 	info->lcd_timing.misc_info.DOUBLE_CLOCK = 0;
+-- 
+2.14.1
+

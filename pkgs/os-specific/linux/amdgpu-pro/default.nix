@@ -30,9 +30,9 @@ let
 
 in stdenv.mkDerivation rec {
 
-  version = "17.10";
+  version = "17.30";
   pname = "amdgpu-pro";
-  build = "${version}-401251";
+  build = "${version}-465504";
 
   libCompatDir = "/run/lib/${libArch}";
 
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     url =
     "https://www2.ati.com/drivers/linux/ubuntu/amdgpu-pro-${build}.tar.xz";
-    sha256 = "004n0df8acjpjz72z3bjxb2a0b7qwln13jlknfn7xxqvhhwwy40a";
+    sha256 = "1xga5fc5yv1abznw3c4y7nm8ixqmaf2fv2rfb2sn88al8b8r8i5p";
     curlOpts = "--referer http://support.amd.com/en-us/kb-articles/Pages/AMD-Radeon-GPU-PRO-Linux-Beta-Driver%e2%80%93Release-Notes.aspx";
   };
 
@@ -57,12 +57,10 @@ in stdenv.mkDerivation rec {
     sourceRoot=.
   '';
 
-  modulePatches = [
+  modulePatches = optionals (!libsOnly) ([
     ./patches/0001-disable-firmware-copy.patch
-    ./patches/0002-linux-4.9-fixes.patch
-    ./patches/0003-Change-seq_printf-format-for-64-bit-context.patch
-    ./patches/0004-fix-warnings-for-Werror.patch
-  ];
+    ./patches/0002-fix-warnings-for-Werror.patch
+  ]);
 
   patchPhase = optionalString (!libsOnly) ''
     pushd usr/src/amdgpu-pro-${build}
@@ -116,10 +114,11 @@ in stdenv.mkDerivation rec {
     popd
 
     pushd opt/amdgpu-pro
-  '' + optionalString (!stdenv.is64bit) ''
+  '' + optionalString (!libsOnly && stdenv.is64bit) ''
     cp -r bin $out/bin
   '' + ''
     cp -r include $out/include
+    cp -r share/* $out/share
     cp -r lib/${libArch}/* $out/lib
   '' + optionalString (!libsOnly) ''
     mv lib/xorg $out/lib/xorg
@@ -133,7 +132,7 @@ in stdenv.mkDerivation rec {
     mv $out/etc/vulkan $out/share
     interpreter="$(cat $NIX_CC/nix-support/dynamic-linker)"
     libPath="$out/lib:$out/lib/gbm:$depLibPath"
-  '' + optionalString (!stdenv.is64bit) ''
+  '' + optionalString (!libsOnly && stdenv.is64bit) ''
     for prog in clinfo modetest vbltest kms-universal-planes kms-steal-crtc modeprint amdgpu_test kmstest proptest; do
       patchelf --interpreter "$interpreter" --set-rpath "$libPath" "$out/bin/$prog"
     done
@@ -147,8 +146,11 @@ in stdenv.mkDerivation rec {
     for lib in `find "$out/lib/" -name '*.so*' -type f`; do
       patchelf --set-rpath "$libPath" "$lib"
     done
-    for lib in libEGL.so.1 libGL.so.1.2 ${optionalString (!libsOnly) "xorg/modules/extensions/libglx.so"} dri/amdgpu_dri.so; do
+    for lib in libEGL.so.1 libGL.so.1.2 ${optionalString (!libsOnly) "xorg/modules/extensions/libglx.so"} dri/amdgpu_dri.so libamdocl${bitness}.so; do
       perl -pi -e 's:${libReplaceDir}:${libCompatDir}:g' "$out/lib/$lib"
+    done
+    for lib in dri/amdgpu_dri.so libdrm_amdgpu.so.1.0.0 libgbm_amdgpu.so.1.0.0 libkms_amdgpu.so.1.0.0 libamdocl${bitness}.so; do
+      perl -pi -e 's:/opt/amdgpu-pro/:/run/amdgpu-pro/:g' "$out/lib/$lib"
     done
     substituteInPlace "$out/share/vulkan/icd.d/amd_icd${bitness}.json" --replace "/opt/amdgpu-pro/lib/${libArch}" "$out/lib"
   '';
