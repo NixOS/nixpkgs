@@ -70,6 +70,6 @@ in
     splUnstable = common {
       version = "2017-09-26";
       rev = "e8474f9ad3b3d23c3277535c4f53f8fd1e6cbd74";
-      sha256 = "1hydfhmngpq31gxkxipqxnin74l760d1ia202h12vsgix9sp32h7";
+      sha256 = "0251cnffgx98nckgz6imwa8dnvba44wc02aacmr1n430gmq72xra";
     };
 }
