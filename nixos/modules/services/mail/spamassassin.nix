@@ -42,7 +42,7 @@ in
 
           Then you can Use this sieve filter:
             require ["fileinto", "reject", "envelope"];
-            
+
             if header :contains "X-Spam-Flag" "YES" {
               fileinto "spam";
             }
@@ -67,11 +67,11 @@ in
       initPreConf = mkOption {
         type = types.str;
         description = "The SpamAssassin init.pre config.";
-        default = 
-        ''          
+        default =
+        ''
           #
           # to update this list, run this command in the rules directory:
-          # grep 'loadplugin.*Mail::SpamAssassin::Plugin::.*' -o -h * | sort | uniq     
+          # grep 'loadplugin.*Mail::SpamAssassin::Plugin::.*' -o -h * | sort | uniq
           #
 
           #loadplugin Mail::SpamAssassin::Plugin::AccessDB
@@ -142,7 +142,7 @@ in
 
     systemd.services.sa-update = {
       script = ''
-        set +e 
+        set +e
         ${pkgs.su}/bin/su -s "${pkgs.bash}/bin/bash" -c "${pkgs.spamassassin}/bin/sa-update --gpghomedir=/var/lib/spamassassin/sa-update-keys/ --siteconfigpath=${spamdEnv}/" spamd
 
         v=$?
@@ -157,7 +157,7 @@ in
       '';
     };
 
-    systemd.timers.sa-update = { 
+    systemd.timers.sa-update = {
       description = "sa-update-service";
       partOf      = [ "sa-update.service" ];
       wantedBy    = [ "timers.target" ];
@@ -184,7 +184,7 @@ in
         echo "Recreating '/var/lib/spamasassin' with creating '3.004001' (or similar) and 'sa-update-keys'"
         mkdir -p /var/lib/spamassassin
         chown spamd:spamd /var/lib/spamassassin -R
-        set +e 
+        set +e
         ${pkgs.su}/bin/su -s "${pkgs.bash}/bin/bash" -c "${pkgs.spamassassin}/bin/sa-update --gpghomedir=/var/lib/spamassassin/sa-update-keys/ --siteconfigpath=${spamdEnv}/" spamd
         v=$?
         set -e
