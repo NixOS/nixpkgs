@@ -7,8 +7,8 @@ in stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
-    url = "http://download.tuxfamily.org/user42/${name}.tar.bz2";
-    sha256 = "5bfcf7a623338b2ef81ac097e3e136eaf32856dd0730b7eeaff3161067b5d0be";
+    url = "https://download.tuxfamily.org/user42/${name}.tar.bz2";
+    sha256 = "1gnhnmki05pkmzpbfc07vmb2iwza6vhy75y03bw2x2rk4fkggz2v";
   };
 
   buildInputs = [ guile ];
