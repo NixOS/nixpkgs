@@ -281,6 +281,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     url = https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception;
   };
 
+  hpnd = spdx {
+    spdxId = "HPND";
+    fullName = "Historic Permission Notice and Disclaimer";
+  };
+
   # Intel's license, seems free
   iasl = {
     fullName = "iASL";
