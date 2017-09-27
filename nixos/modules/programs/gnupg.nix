@@ -52,6 +52,27 @@ in
         Enables GnuPG network certificate management daemon with socket-activation for every user session.
       '';
     };
+
+    trezor-agent.enable = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Enable the Trezor GnuPG agent service, which allows you to use your
+        Trezor as a GnuPG agent for signing and decrypting.
+      '';
+    };
+
+    trezor-agent.configPath = mkOption {
+      type = types.string;
+      default = "/var/empty";
+      example = "/home/alice/.gnupg/trezor";
+      description = ''
+        The GNUPGHOME path for your Trezor GnuPG config. See
+        https://github.com/romanz/trezor-agent/blob/master/README-GPG.md on how
+        to set this up.
+      '';
+    };
+
   };
 
   config = mkIf cfg.agent.enable {
@@ -96,6 +117,19 @@ in
         message = "You can't use ssh-agent and GnuPG agent with SSH support enabled at the same time!";
       }
     ];
-  };
+  } // (mkIf cfg.trezor-agent.enable  {
+    systemd.user.services.trezor-agent = {
+      description = "Trezor GnuPG Agent";
+
+      wantedBy = [ "multi-user.target" ];
+      path = [ pkgs.gnupg ];
+
+      environment = {
+        GNUPGHOME=cfg.trezor-agent.configPath;
+      };
+
+      serviceConfig.ExecStart = "${pkgs.python27Packages.trezor_agent}/bin/trezor-gpg-agent";
+    };
+  });
 
 }
