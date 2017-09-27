@@ -15,10 +15,8 @@ stdenv.mkDerivation rec {
      "-DICINGA2_PLUGINDIR=plugins"
   ];
 
-  preConfigure = ''
-    export MYSQL_INCLUDE_DIR=${mysql}/include/mysql
-    export ICINGA2_RUNDIR=/run/icinga2
-  '';
+  MYSQL_INCLUDE_DIR="${mysql}/include/mysql";
+  ICINGA2_RUNDIR="/run/icinga2";
 
   buildInputs = [ boost yajl openssl mysql postgresql ];
   nativeBuildInputs = [ cmake flex bison ];
