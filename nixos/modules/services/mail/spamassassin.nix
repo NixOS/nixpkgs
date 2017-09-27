@@ -122,7 +122,11 @@ in
   config = mkIf cfg.enable {
 
     # Allow users to run 'spamc'.
-    environment.systemPackages = [ pkgs.spamassassin ];
+
+    environment = {
+      etc = singleton { source = spamdEnv; target = "spamassassin"; };
+      systemPackages = [ pkgs.spamassassin ];
+    };
 
     users.extraUsers = singleton {
       name = "spamd";
@@ -177,11 +181,6 @@ in
       # 0 and 1 no error, exitcode > 1 means error:
       # https://spamassassin.apache.org/full/3.1.x/doc/sa-update.html#exit_codes
       preStart = ''
-        # this abstraction requires no centralized config at all
-        if [ -d /etc/spamassassin ]; then
-          echo "This spamassassin does not support global '/etc/spamassassin' folder for configuration as this would be impure. Merge your configs into 'services.spamassassin' and remove the '/etc/spamassassin' folder to make this service work. Also see 'https://github.com/NixOS/nixpkgs/pull/26470'."; 
-          exit 1
-        fi
         echo "Recreating '/var/lib/spamasassin' with creating '3.004001' (or similar) and 'sa-update-keys'"
         mkdir -p /var/lib/spamassassin
         chown spamd:spamd /var/lib/spamassassin -R
