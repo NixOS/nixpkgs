@@ -9281,8 +9281,8 @@ with pkgs;
 
   libminc = callPackage ../development/libraries/libminc { };
 
-  libmirage = callPackage ../misc/emulators/cdemu/libmirage.nix { }; 
-  
+  libmirage = callPackage ../misc/emulators/cdemu/libmirage.nix { };
+
   libmkv = callPackage ../development/libraries/libmkv { };
 
   libmms = callPackage ../development/libraries/libmms { };
@@ -13981,10 +13981,10 @@ with pkgs;
 
   inherit (callPackage ../applications/virtualization/docker { })
     docker_17_06
-    docker_17_07;
+    docker_17_09;
 
-  docker = docker_17_06;
-  docker-edge = docker_17_07;
+  docker = docker_17_09;
+  docker-edge = docker_17_09;
 
   docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
 
