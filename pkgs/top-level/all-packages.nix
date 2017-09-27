@@ -7187,7 +7187,7 @@ with pkgs;
 
   gtkdialog = callPackage ../development/tools/misc/gtkdialog { };
 
-  guileLint = callPackage ../development/tools/guile/guile-lint { };
+  guile-lint = callPackage ../development/tools/guile/guile-lint { };
 
   gwrap = callPackage ../development/tools/guile/g-wrap { };
 
