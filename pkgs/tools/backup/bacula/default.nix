@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
     # acl relies on attr, which I can't get to build on darwin
     ++ stdenv.lib.optional (!stdenv.isDarwin) acl;
 
-  configureFlags = [ 
+  configureFlags = [
     "--with-sqlite3=${sqlite.dev}"
-    "--with-postgresql=${postgresql}"
+    "--with-postgresql=${postgresql.dev}"
   ];
 
   postInstall = ''
