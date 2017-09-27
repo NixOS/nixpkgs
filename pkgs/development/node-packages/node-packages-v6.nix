@@ -23701,10 +23701,10 @@ in
   bower2nix = nodeEnv.buildNodePackage {
     name = "bower2nix";
     packageName = "bower2nix";
-    version = "3.1.1";
+    version = "3.2.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/bower2nix/-/bower2nix-3.1.1.tgz";
-      sha1 = "77cc8f966a3595686f5d6fae30ad9bd2cc20bfe3";
+      url = "https://registry.npmjs.org/bower2nix/-/bower2nix-3.2.0.tgz";
+      sha1 = "nlzr17lidjf72s60vcsnqpjxgnnsn32s";
     };
     dependencies = [
       sources."argparse-1.0.4"
