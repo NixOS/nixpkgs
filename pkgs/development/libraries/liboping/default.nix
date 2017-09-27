@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses ? null, perl ? null }:
 
 stdenv.mkDerivation rec {
-  name = "liboping-1.9.0";
+  name = "liboping-1.10.0";
 
   src = fetchurl {
     url = "http://verplant.org/liboping/files/${name}.tar.bz2";
-    sha256 = "0c1mdx9ixqypayhm617jjv9kr6y60nh3mnryafjzv23bnn41vfs4";
+    sha256 = "1n2wkmvw6n80ybdwkjq8ka43z2x8mvxq49byv61b52iyz69slf7b";
   };
 
   buildInputs = [ ncurses perl ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://noping.cc/;
     license = licenses.lgpl21;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
 }
