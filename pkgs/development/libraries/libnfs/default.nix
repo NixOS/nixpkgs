@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "NFS client library";
     homepage    = https://github.com/sahlberg/libnfs;
-    license     = with licenses; [ lgpl2 bsd gpl3];
+    license     = with licenses; [ lgpl2 gpl3];
     maintainers = with maintainers; [ peterhoeg ];
     platforms   = platforms.unix;
   };
