@@ -335,6 +335,13 @@ FLUSH PRIVILEGES;
     was removed and should not be needed anymore.</para>
   </listitem>
 
+  <listitem>
+    <para>
+      Redis has been updated to version 4 which mandates a cluster
+      mass-restart, due to changes in the network handling, in order
+      to ensure compatibility with networks NATing traffic.
+    </para>
+  </listitem>
 </itemizedlist>
 
 <para>Other notable improvements:</para>
