@@ -26,6 +26,7 @@
 
 # Customization
 , extraPrefs ? ""
+, extraExtensions ? [ ]
 }:
 
 let
@@ -42,7 +43,12 @@ let
 
   extensionsEnv = symlinkJoin {
     name = "tor-browser-extensions";
-    paths = with firefoxExtensions; [ https-everywhere noscript torbutton tor-launcher ];
+    paths = with firefoxExtensions; [
+      https-everywhere
+      noscript
+      torbutton
+      tor-launcher
+    ] ++ extraExtensions;
   };
 
   fontsEnv = symlinkJoin {
