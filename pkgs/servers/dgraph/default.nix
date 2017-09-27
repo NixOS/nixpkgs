@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "dgraph-${version}";
-  version = "0.8.1";
+  version = "0.8.2";
 
   goPackagePath = "github.com/dgraph-io/dgraph";
 
@@ -10,13 +10,13 @@ buildGoPackage rec {
     owner = "dgraph-io";
     repo = "dgraph";
     rev = "v${version}";
-    sha256 = "1gls2pvgcmd364x84gz5fafs7pwkll4k352rg1lmv70wvzyydsdr";
+    sha256 = "0zc5bda8m2srjbk0gy1nnm0bya8if0kmk1szqr1qv3xifdzmi4nf";
   };
 
   extraOutputsToInstall = [ "dashboard" ];
 
   goDeps = ./deps.nix;
-  subPackages = [ "cmd/dgraph" "cmd/dgraphloader" ];
+  subPackages = [ "cmd/dgraph" "cmd/dgraphloader" "cmd/bulkloader"];
 
   # let's move the dashboard to a different output, to prevent $bin from
   # depending on $out
@@ -36,6 +36,7 @@ buildGoPackage rec {
     # Removing it fixes cycle between $out and $bin
     install_name_tool -delete_rpath $out/lib $bin/bin/dgraph
     install_name_tool -delete_rpath $out/lib $bin/bin/dgraphloader
+    install_name_tool -delete_rpath $out/lib $bin/bin/bulkloader
   '';
  
   meta = {
