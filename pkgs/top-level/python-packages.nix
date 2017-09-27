@@ -3244,6 +3244,8 @@ in {
       sha256 = "d04bb2425086c3fe86f7bc48915290b13e798497839fbb18ab7f6dffcf98cc3a";
     };
 
+    outputs = [ "out" "dev" ];
+
     buildInputs = [ pkgs.openssl self.cryptography_vectors ]
                ++ optional stdenv.isDarwin pkgs.darwin.apple_sdk.frameworks.Security;
     propagatedBuildInputs = with self; [
@@ -17970,6 +17972,8 @@ in {
       url = "mirror://pypi/p/pyOpenSSL/pyOpenSSL-${version}.tar.gz";
       sha256 = "0d283g4zi0hr9papd24mjl70mi15gyzq6fx618rizi87dgipqqax";
     };
+
+    outputs = [ "out" "dev" ];
 
     preCheck = ''
       sed -i 's/test_set_default_verify_paths/noop/' tests/test_ssl.py
