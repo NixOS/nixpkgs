@@ -6,20 +6,8 @@
 }:
 
 let
+  # TODO: Sway 0.14.0 with wlc 0.0.10 segfaults
   version = "0.13.0";
-  # Temporary workaround (0.14.0 segfaults)
-  wlc_009 = stdenv.lib.overrideDerivation wlc (oldAttrs: rec {
-    name = "wlc-${version}";
-    version = "0.0.9";
-
-    src = fetchFromGitHub {
-      owner = "Cloudef";
-      repo = "wlc";
-      rev = "v${version}";
-      fetchSubmodules = true;
-      sha256 = "1r6jf64gs7n9a8129wsc0mdwhcv44p8k87kg0714rhx3g2w22asg";
-    };
-  });
 in stdenv.mkDerivation rec {
   name = "sway-${version}";
 
@@ -35,7 +23,7 @@ in stdenv.mkDerivation rec {
     asciidoc libxslt docbook_xsl
   ];
   buildInputs = [
-    wayland wlc_009 libxkbcommon pixman fontconfig pcre json_c dbus_libs
+    wayland wlc libxkbcommon pixman fontconfig pcre json_c dbus_libs
     pango cairo libinput libcap xwayland pam gdk_pixbuf libpthreadstubs
     libXdmcp
   ];
@@ -48,7 +36,7 @@ in stdenv.mkDerivation rec {
   cmakeFlags = "-DVERSION=${version}";
   installPhase = "PREFIX=$out make install";
 
-  LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [ wlc_009 dbus_libs ];
+  LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [ wlc dbus_libs ];
   preFixup = ''
     wrapProgram $out/bin/sway \
       --prefix LD_LIBRARY_PATH : "${LD_LIBRARY_PATH}";

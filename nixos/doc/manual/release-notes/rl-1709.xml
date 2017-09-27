@@ -289,6 +289,52 @@ FLUSH PRIVILEGES;
       in them being reloaded.
     </para>
   </listitem>
+
+  <listitem>
+    <para>
+      <literal>services.mysqlBackup</literal> now works by default
+      without any user setup, including for users other than
+      <literal>mysql</literal>.
+    </para>
+
+    <para>
+      By default, the <literal>mysql</literal> user is no longer the
+      user which performs the backup. Instead a system account
+      <literal>mysqlbackup</literal> is used.
+    </para>
+
+    <para>
+      The <literal>mysqlBackup</literal> service is also now using
+      systemd timers instead of <literal>cron</literal>.
+    </para>
+
+    <para>
+      Therefore, the <literal>services.mysqlBackup.period</literal>
+      option no longer exists, and has been replaced with
+      <literal>services.mysqlBackup.calendar</literal>, which is in
+      the format of <link
+      xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.time.html#Calendar%20Events">systemd.time(7)</link>.
+    </para>
+
+    <para>
+      If you expect to be sent an e-mail when the backup fails,
+      consider using a script which monitors the systemd journal for
+      errors. Regretfully, at present there is no built-in
+      functionality for this.
+    </para>
+
+    <para>
+      You can check that backups still work by running
+      <command>systemctl start mysql-backup</command> then
+      <command>systemctl status mysql-backup</command>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>Steam: the <literal>newStdcpp</literal> parameter
+    was removed and should not be needed anymore.</para>
+  </listitem>
+
 </itemizedlist>
 
 <para>Other notable improvements:</para>
@@ -344,7 +390,7 @@ FLUSH PRIVILEGES;
   </listitem>
   <listitem>
     <para>
-      Definitions for <filename>/etc/hosts</filename> can now be sped
+      Definitions for <filename>/etc/hosts</filename> can now be specified
       declaratively with <literal>networking.hosts</literal>.
     </para>
   </listitem>

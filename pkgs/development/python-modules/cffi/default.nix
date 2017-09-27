@@ -10,6 +10,8 @@ if isPyPy then null else buildPythonPackage rec {
     sha256 = "1mffyilq4qycm8gs4wkgb18rnqil8a9blqq77chdlshzxc8jkc5k";
   };
 
+  outputs = [ "out" "dev" ];
+
   propagatedBuildInputs = [ libffi pycparser ];
   buildInputs = [ pytest ];
 

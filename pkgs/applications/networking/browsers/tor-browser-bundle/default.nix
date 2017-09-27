@@ -2,11 +2,20 @@
 , lib
 , fetchurl
 , fetchgit
+, symlinkJoin
 
 , tor
 , tor-browser-unwrapped
 
+# Wrapper runtime
+, coreutils
+, hicolor_icon_theme
+, shared_mime_info
+, noto-fonts
+, noto-fonts-emoji
+
 # Extensions, common
+, unzip
 , zip
 
 # HTTPS Everywhere
@@ -15,6 +24,9 @@
 , python27
 , python27Packages
 , rsync
+
+# Customization
+, extraPrefs ? ""
 }:
 
 let
@@ -24,10 +36,15 @@ let
     sha256 = "0j37mqldj33fnzghxifvy6v8vdwkcz0i4z81prww64md5s8qcsa9";
   };
 
+  # Each extension drv produces an output comprising an unpacked .xpi
+  # named after the extension uuid, as it would appear under
+  # `firefox/extensions'.
   firefoxExtensions = {
     https-everywhere = stdenv.mkDerivation rec {
       name = "https-everywhere-${version}";
       version = "5.2.21";
+
+      extid = "https-everywhere-eff@eff.org";
 
       src = fetchgit {
         url = "https://git.torproject.org/https-everywhere.git";
@@ -41,16 +58,24 @@ let
         python27
         python27Packages.lxml
         rsync
+        unzip
         zip
       ];
 
-      buildCommand = ''
+      unpackPhase = ''
         cp -dR --no-preserve=mode "$src" src
         cd src
+      '';
 
-        sed -i makexpi.sh -e '104d' # cp -a translations/* fails because the dir is empty ...
+      # Beware: the build expects translations/ to be non-empty (which it
+      # will be with submodules initialized).
+      buildPhase = ''
         $shell ./makexpi.sh ${version} --no-recurse
-        install -m 444 -Dt $out pkg"/"*.xpi
+      '';
+
+      installPhase = ''
+        mkdir $out
+        unzip -d "$out/$extid" "pkg/https-everywhere-$version-eff.xpi"
       '';
 
       meta = {
@@ -58,14 +83,32 @@ let
       };
     };
 
-    noscript = fetchurl {
-      url = https://secure.informaction.com/download/releases/noscript-5.0.10.xpi;
-      sha256 = "18k5karbaj5mhd9cyjbqgik6044bw88rjalkh6anjanxbn503j6g";
+    noscript = stdenv.mkDerivation rec {
+      name = "noscript-${version}";
+      version = "5.0.10";
+
+      extid = "{73a6fe31-595d-460b-a920-fcc0f8843232}";
+
+      src = fetchurl {
+        url = "https://secure.informaction.com/download/releases/noscript-${version}.xpi";
+        sha256 = "18k5karbaj5mhd9cyjbqgik6044bw88rjalkh6anjanxbn503j6g";
+      };
+
+      nativeBuildInputs = [ unzip ];
+
+      unpackPhase = ":";
+
+      installPhase = ''
+        mkdir $out
+        unzip -d "$out/$extid" "$src"
+      '';
     };
 
     torbutton = stdenv.mkDerivation rec {
       name = "torbutton-${version}";
       version = "1.9.8.1";
+
+      extid = "torbutton@torproject.org";
 
       src = fetchgit {
         url = "https://git.torproject.org/torbutton.git";
@@ -73,20 +116,32 @@ let
         sha256 = "1amp0c9ky0a7fsa0bcbi6n6ginw7s2g3an4rj7kvc1lxmrcsm65l";
       };
 
-      nativeBuildInputs = [ zip ];
+      nativeBuildInputs = [ unzip zip ];
 
-      buildCommand = ''
+      unpackPhase = ''
         cp -dR --no-preserve=mode "$src" src
         cd src
-
-        $shell ./makexpi.sh
-        install -m 444 -Dt $out pkg"/"*.xpi
       '';
+
+      buildPhase = ''
+        $shell ./makexpi.sh
+      '';
+
+      installPhase = ''
+        mkdir $out
+        unzip -d "$out/$extid" "pkg/torbutton-$version.xpi"
+      '';
+
+      meta = {
+        homepage = https://gitweb.torproject.org/torbutton.git/;
+      };
     };
 
     tor-launcher = stdenv.mkDerivation rec {
       name = "tor-launcher-${version}";
       version = "0.2.12.3";
+
+      extid = "tor-launcher@torproject.org";
 
       src = fetchgit {
         url = "https://git.torproject.org/tor-launcher.git";
@@ -94,17 +149,39 @@ let
         sha256 = "0126x48pjiy2zm4l8jzhk70w24hviaz560ffp4lb9x0ar615bc9q";
       };
 
-      nativeBuildInputs = [ zip ];
+      nativeBuildInputs = [ unzip zip ];
 
-      buildCommand = ''
+      unpackPhase = ''
         cp -dR --no-preserve=mode "$src" src
         cd src
-
-        make package
-        install -m 444 -Dt $out pkg"/"*.xpi
       '';
+
+      buildPhase = ''
+        make package
+      '';
+
+      installPhase = ''
+        mkdir $out
+        unzip -d "$out/$extid" "pkg/tor-launcher-$version.xpi"
+      '';
+
+      meta = {
+        homepage = https://gitweb.torproject.org/tor-launcher.git/;
+      };
     };
   };
+
+  extensionsEnv = symlinkJoin {
+    name = "tor-browser-extensions";
+    paths = with firefoxExtensions; [ https-everywhere noscript torbutton tor-launcher ];
+  };
+
+  fontsEnv = symlinkJoin {
+    name = "tor-browser-fonts";
+    paths = [ noto-fonts noto-fonts-emoji ];
+  };
+
+  fontsDir = "${fontsEnv}/share/fonts";
 in
 stdenv.mkDerivation rec {
   name = "tor-browser-bundle-${version}";
@@ -118,9 +195,12 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     TBBUILD=${tor-browser-build_src}/projects/tor-browser
+    TBDATA_PATH=TorBrowser-Data
 
     self=$out/lib/tor-browser
     mkdir -p $self && cd $self
+
+    TBDATA_IN_STORE=$self/$TBDATA_PATH
 
     cp -dR ${tor-browser-unwrapped}/lib"/"*"/"* .
     chmod -R +w .
@@ -144,58 +224,148 @@ stdenv.mkDerivation rec {
 
     // Where to find the Nixpkgs tor executable & config
     lockPref("extensions.torlauncher.tor_path", "${tor}/bin/tor");
-    lockPref("extensions.torlauncher.torrc-defaults_path", "$self/torrc-defaults");
+    lockPref("extensions.torlauncher.torrc-defaults_path", "$TBDATA_IN_STORE/torrc-defaults");
 
     // Captures store paths
     clearPref("extensions.xpiState");
+    clearPref("extensions.bootstrappedAddons");
 
     // Insist on using IPC for communicating with Tor
-    //
-    // Defaults to $XDG_RUNTIME_DIR/Tor/{socks,control}.socket
     lockPref("extensions.torlauncher.control_port_use_ipc", true);
     lockPref("extensions.torlauncher.socks_port_use_ipc", true);
+
+    // User customization
+    ${extraPrefs}
     EOF
 
     # Preload extensions
-    install -m 444 -D \
-      ${firefoxExtensions.tor-launcher}/tor-launcher-*.xpi \
-      browser/extensions/tor-launcher@torproject.org.xpi
-    install -m 444 -D \
-      ${firefoxExtensions.torbutton}/torbutton-*.xpi \
-      browser/extensions/torbutton@torproject.org.xpi
-    install -m 444 -D \
-      ${firefoxExtensions.https-everywhere}/https-everywhere-*-eff.xpi \
-      browser/extensions/https-everywhere-eff@eff.org.xpi
-    install -m 444 -D \
-      ${firefoxExtensions.noscript} \
-      browser/extensions/{73a6fe31-595d-460b-a920-fcc0f8843232}.xpi
+    # XXX: the fact that ln -s env browser/extensions fails, symlinkJoin seems a little redundant ...
+    ln -s -t browser/extensions ${extensionsEnv}"/"*
 
     # Copy bundle data
-    cat \
-      $TBBUILD/Bundle-Data/linux/Data/Tor/torrc-defaults \
-      $TBBUILD/Bundle-Data/PTConfigs/linux/torrc-defaults-appendix \
-      >> torrc-defaults
+    bundlePlatform=linux
+    bundleData=$TBBUILD/Bundle-Data
 
+    mkdir -p $TBDATA_PATH
     cat \
-      $TBBUILD/Bundle-Data/linux/Data/Browser/profile.default/preferences/extension-overrides.js \
-      $TBBUILD/Bundle-Data/PTConfigs/bridge_prefs.js >> defaults/pref/extension-overrides.js \
+      $bundleData/$bundlePlatform/Data/Tor/torrc-defaults \
+      >> $TBDATA_PATH/torrc-defaults
+    cat \
+      $bundleData/$bundlePlatform/Data/Browser/profile.default/preferences/extension-overrides.js \
       >> defaults/pref/extension-overrides.js
 
+    # Hard-code path to TBB fonts; xref: FONTCONFIG_FILE in the wrapper below
+    sed $bundleData/$bundlePlatform/Data/fontconfig/fonts.conf \
+        -e "s,<dir>fonts</dir>,<dir>${fontsDir}</dir>," \
+        > $TBDATA_PATH/fonts.conf
+
     # Generate a suitable wrapper
+    wrapper_PATH=${lib.makeBinPath [ coreutils ]}
+    wrapper_XDG_DATA_DIRS=${lib.concatMapStringsSep ":" (x: "${x}/share") [
+      hicolor_icon_theme
+      shared_mime_info
+    ]}
+
     mkdir -p $out/bin
     cat >$out/bin/tor-browser <<EOF
-    #! ${stdenv.shell} -e
+    #! ${stdenv.shell} -eu
 
-    THE_HOME=\$HOME
+    PATH=$wrapper_PATH
+
+    readonly THE_HOME=\$HOME
     TBB_HOME=\''${TBB_HOME:-\''${XDG_DATA_HOME:-$HOME/.local/share}/tor-browser}
+    if [[ \''${TBB_HOME:0:1} != / ]] ; then
+      TBB_HOME=\$PWD/\$TBB_HOME
+    fi
+    readonly TBB_HOME
+
+    # Basic sanity check: never want to vomit directly onto user's homedir
+    if [[ "\$TBB_HOME" = "\$THE_HOME" ]] ; then
+      echo 'TBB_HOME=\$HOME; refusing to run' >&2
+      exit 1
+    fi
+
     mkdir -p "\$TBB_HOME"
 
     HOME=\$TBB_HOME
     cd "\$HOME"
 
-    exec $self/firefox -no-remote about:tor
+    # Re-init XDG basedir envvars
+    XDG_CACHE_HOME=\$HOME/.cache
+    XDG_CONFIG_HOME=\$HOME/.config
+    XDG_DATA_HOME=\$HOME/.local/share
+
+    # Initialize empty TBB runtime state directory hierarchy.  Mirror the
+    # layout used by the official TBB, to avoid the hassle of working
+    # against the assumptions made by tor-launcher & co.
+    mkdir -p "\$HOME/TorBrowser" "\$HOME/TorBrowser/Data"
+
+    # Initialize the Tor data directory.
+    mkdir -p "\$HOME/TorBrowser/Data/Tor"
+
+    # TBB fails if ownership is too permissive
+    chmod 0700 "\$HOME/TorBrowser/Data/Tor"
+
+    # Initialize the browser profile state.  Expect TBB to generate all data.
+    mkdir -p "\$HOME/TorBrowser/Data/Browser/profile.default"
+
+    # Files that capture store paths; re-generated by firefox at startup
+    rm -rf "\$HOME/TorBrowser/Data/Browser/profile.default"/{compatibility.ini,extensions.ini,extensions.json,startupCache}
+
+    # Clear out fontconfig caches
+    rm -f "\$HOME/.cache/fontconfig/"*.cache-*
+
+    # Lift-off!
+    #
+    # TZ is set to avoid stat()ing /etc/localtime over and over ...
+    #
+    # DBUS_SESSION_BUS_ADDRESS is inherited to avoid auto-launching a new
+    # dbus instance; to prevent using the session bus, set the envvar to
+    # an empty/invalid value prior to running tor-browser.
+    #
+    # FONTCONFIG_FILE is required to make fontconfig read the TBB
+    # fonts.conf; upstream uses FONTCONFIG_PATH, but FC_DEBUG=1024
+    # indicates the system fonts.conf being used instead.
+    #
+    # HOME, TMPDIR, XDG_*_HOME are set as a form of soft confinement;
+    # ideally, tor-browser should not write to any path outside TBB_HOME
+    # and should run even under strict confinement to TBB_HOME.
+    #
+    # XDG_DATA_DIRS is set to prevent searching system directories for
+    # mime and icon data.
+    #
+    # Parameters lacking a default value below are *required* (enforced by
+    # -o nounset).
+    exec env -i \
+      TZ=":" \
+      \
+      DISPLAY="\$DISPLAY" \
+      XAUTHORITY="\$XAUTHORITY" \
+      DBUS_SESSION_BUS_ADDRESS="\$DBUS_SESSION_BUS_ADDRESS" \
+      \
+      HOME="\$HOME" \
+      TMPDIR="\$XDG_CACHE_HOME/tmp" \
+      XDG_CONFIG_HOME="\$XDG_CONFIG_HOME" \
+      XDG_DATA_HOME="\$XDG_DATA_HOME" \
+      XDG_CACHE_HOME="\$XDG_CACHE_HOME" \
+      \
+      XDG_DATA_DIRS="$wrapper_XDG_DATA_DIRS" \
+      \
+      FONTCONFIG_FILE="$TBDATA_IN_STORE/fonts.conf" \
+      \
+      $self/firefox \
+        -no-remote \
+        -profile "\$HOME/TorBrowser/Data/Browser/profile.default" \
+        "\$@"
     EOF
     chmod +x $out/bin/tor-browser
+
+    echo "Syntax checking wrapper ..."
+    bash -n $out/bin/tor-browser
+
+    echo "Checking wrapper ..."
+    DISPLAY="" XAUTHORITY="" DBUS_SESSION_BUS_ADDRESS="" TBB_HOME=$TMPDIR/tbb \
+    $out/bin/tor-browser -version >/dev/null
   '';
 
   meta = with stdenv.lib; {

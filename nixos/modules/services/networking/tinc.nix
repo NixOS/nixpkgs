@@ -141,7 +141,6 @@ in
               ${optionalString (data.ed25519PrivateKeyFile != null) "Ed25519PrivateKeyFile = ${data.ed25519PrivateKeyFile}"}
               ${optionalString (data.listenAddress != null) "ListenAddress = ${data.listenAddress}"}
               ${optionalString (data.bindToAddress != null) "BindToAddress = ${data.bindToAddress}"}
-              Device = /dev/net/tun
               Interface = tinc.${network}
               ${data.extraConfig}
             '';
@@ -168,6 +167,7 @@ in
           Type = "simple";
           Restart = "always";
           RestartSec = "3";
+          ExecStart = "${data.package}/bin/tincd -D -U tinc.${network} -n ${network} ${optionalString (data.chroot) "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}";
         };
         preStart = ''
           mkdir -p /etc/tinc/${network}/hosts
@@ -186,9 +186,6 @@ in
             # Tinc 1.0 uses the tincd application
             [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tincd -n ${network} -K 4096
           fi
-        '';
-        script = ''
-          tincd -D -U tinc.${network} -n ${network} ${optionalString (data.chroot) "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}
         '';
       })
     );

@@ -46,7 +46,7 @@ let
       let path = if atLeast "9.6" then "src/common/config_info.c" else "src/bin/pg_config/pg_config.c"; in
         ''
           # Hardcode the path to pgxs so pg_config returns the path in $out
-          substituteInPlace "${path}" --replace HARDCODED_PGXS_PATH $out/lib
+          substituteInPlace "${path}" --replace HARDCODED_PGXS_PATH $dev/lib
         '';
 
     postInstall =
