@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "INSTALL_ROOT=$(out)" ] ++ optional withDocumentation "install_docs";
 
   preBuild = optional withDocumentation ''
-    ln -s ${qtbase}/$qtDocPrefix $NIX_QT5_TMP/share
+    ln -s ${getLib qtbase}/$qtDocPrefix $NIX_QT5_TMP/share
   '';
 
   postInstall = ''
