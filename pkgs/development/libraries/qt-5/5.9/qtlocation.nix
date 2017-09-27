@@ -3,7 +3,7 @@
 qtSubmodule {
   name = "qtlocation";
   qtInputs = [ qtbase qtmultimedia ];
-  outputs = [ "out" "dev" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
   postInstall = ''
     moveToOutput "$qtPluginPrefix" "$bin"
     moveToOutput "$qtQmlPrefix" "$bin"

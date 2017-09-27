@@ -28,7 +28,7 @@ mkDerivation {
     kidletime kinit kio knewstuff knotifications kpackage kscreenlocker kservice
     kwayland kwidgetsaddons kwindowsystem kxmlgui plasma-framework
   ];
-  outputs = [ "out" "dev" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
   NIX_CFLAGS_COMPILE = [
     ''-DNIXPKGS_XWAYLAND="${lib.getBin xwayland}/bin/Xwayland"''
