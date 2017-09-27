@@ -110,10 +110,6 @@ in stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckPhase = "$out/bin/ibus version";
 
-  postInstall = ''
-    moveToOutput "bin/ibus-setup" "$dev"
-  '';
-
   meta = with stdenv.lib; {
     homepage = https://github.com/ibus/ibus;
     description = "Intelligent Input Bus for Linux / Unix OS";
