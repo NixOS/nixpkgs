@@ -24,7 +24,7 @@ in stdenv.mkDerivation {
   doCheck = true;
 
   meta = {
-    description = "Guile-Lint checks syntax and semantics in a Guile program or module";
+    description = "Checks syntax and semantics in a Guile program or module";
     homepage = "http://user42.tuxfamily.org/guile-lint/index.html";
     license = "GPL";
   };
