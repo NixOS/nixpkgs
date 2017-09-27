@@ -183,7 +183,7 @@ in
 
   pg = attrs: {
     buildFlags = [
-      "--with-pg-config=${postgresql.dev}/bin/pg_config"
+      "--with-pg-config=${postgresql}/bin/pg_config"
     ];
   };
 

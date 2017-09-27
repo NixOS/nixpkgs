@@ -11,7 +11,7 @@ let
       inherit sha256;
     };
 
-    outputs = [ "out" "dev" "lib" "doc" "man" ];
+    outputs = [ "out" "lib" "doc" "man" ];
     setOutputFlags = false; # $out retains configureFlags :-/
 
     buildInputs =
@@ -46,15 +46,17 @@ let
       let path = if atLeast "9.6" then "src/common/config_info.c" else "src/bin/pg_config/pg_config.c"; in
         ''
           # Hardcode the path to pgxs so pg_config returns the path in $out
-          substituteInPlace "${path}" --replace HARDCODED_PGXS_PATH $dev/lib
+          substituteInPlace "${path}" --replace HARDCODED_PGXS_PATH $out/lib
         '';
 
     postInstall =
       ''
-        moveToOutput "bin/pg_config" "$dev"
-        moveToOutput "lib/pgxs" "$dev" # looks strange, but not deleting it
+        moveToOutput "lib/pgxs" "$out" # looks strange, but not deleting it
         moveToOutput "lib/*.a" "$out"
         moveToOutput "lib/libecpg*" "$out"
+
+        # Prevent a retained dependency on gcc-wrapper.
+        substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv.cc}/bin/ld ld
 
         # Remove static libraries in case dynamic are available.
         for i in $out/lib/*.a; do
