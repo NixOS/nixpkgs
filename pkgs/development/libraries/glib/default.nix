@@ -42,8 +42,8 @@ let
     ln -sr -t "''${!outputInclude}/include/" "''${!outputInclude}"/lib/*/include/* 2>/dev/null || true
   '';
 
-  ver_maj = "2.52";
-  ver_min = "3";
+  ver_maj = "2.54";
+  ver_min = "0";
 in
 
 stdenv.mkDerivation rec {
@@ -51,10 +51,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${ver_maj}/${name}.tar.xz";
-    sha256 = "0a71wkkhkvad84gm30w13micxxgqqw3sxhybj7nd9z60lwspdvi5";
+    sha256 = "fe22998ff0394ec31e6e5511c379b74011bee61a4421bca7fcab223dfbe0fc6a";
   };
 
-  patches = optional stdenv.isDarwin ./darwin-compilation.patch ++ optional doCheck ./skip-timer-test.patch;
+  patches = optional stdenv.isDarwin ./darwin-compilation.patch
+    ++ optional doCheck ./skip-timer-test.patch;
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
@@ -76,21 +77,23 @@ stdenv.mkDerivation rec {
     ++ optional (stdenv.isFreeBSD || stdenv.isSunOS) "--with-libiconv=gnu"
     ++ optional stdenv.isSunOS "--disable-dtrace";
 
-  NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin " -lintl"
-    + optionalString stdenv.isSunOS " -DBSD_COMP";
+  NIX_CFLAGS_COMPILE = optional stdenv.isDarwin "-lintl"
+    ++ optional stdenv.isSunOS "-DBSD_COMP";
 
-  preConfigure = if !stdenv.isSunOS then null else
-    ''
-      sed -i -e 's|inotify.h|foobar-inotify.h|g' configure
-    '';
+  preConfigure = optionalString stdenv.isSunOS ''
+    sed -i -e 's|inotify.h|foobar-inotify.h|g' configure
+  '';
+
+  postConfigure = ''
+    patchShebangs ./gobject/
+  '';
 
   LIBELF_CFLAGS = optional stdenv.isFreeBSD "-I${libelf}";
   LIBELF_LIBS = optional stdenv.isFreeBSD "-L${libelf} -lelf";
 
-  preBuild = optionalString stdenv.isDarwin
-    ''
-      export MACOSX_DEPLOYMENT_TARGET=
-    '';
+  preBuild = optionalString stdenv.isDarwin ''
+    export MACOSX_DEPLOYMENT_TARGET=
+  '';
 
   enableParallelBuilding = true;
   DETERMINISTIC_BUILD = 1;
@@ -100,33 +103,36 @@ stdenv.mkDerivation rec {
     substituteInPlace "$dev/bin/gdbus-codegen" --replace "$out" "$dev"
     sed -i "$dev/bin/glib-gettextize" -e "s|^gettext_dir=.*|gettext_dir=$dev/share/glib-2.0/gettext|"
   ''
-    # This file is *included* in gtk3 and would introduce runtime reference via __FILE__.
-    + ''
-      sed '1i#line 1 "${name}/include/glib-2.0/gobject/gobjectnotifyqueue.c"' \
-        -i "$dev"/include/glib-2.0/gobject/gobjectnotifyqueue.c
-    '';
+  # This file is *included* in gtk3 and would introduce runtime reference via __FILE__.
+  + ''
+    sed '1i#line 1 "${name}/include/glib-2.0/gobject/gobjectnotifyqueue.c"' \
+      -i "$dev"/include/glib-2.0/gobject/gobjectnotifyqueue.c
+  '';
 
   inherit doCheck;
-  preCheck = optionalString doCheck
-    '' export LD_LIBRARY_PATH="$NIX_BUILD_TOP/${name}/glib/.libs:$LD_LIBRARY_PATH"
-       export TZDIR="${tzdata}/share/zoneinfo"
-       export XDG_CACHE_HOME="$TMP"
-       export XDG_RUNTIME_HOME="$TMP"
-       export HOME="$TMP"
-       export XDG_DATA_DIRS="${desktop_file_utils}/share:${shared_mime_info}/share"
-       export G_TEST_DBUS_DAEMON="${dbus_daemon.out}/bin/dbus-daemon"
+  preCheck = optionalString doCheck ''
+    export LD_LIBRARY_PATH="$NIX_BUILD_TOP/${name}/glib/.libs:$LD_LIBRARY_PATH"
+    export TZDIR="${tzdata}/share/zoneinfo"
+    export XDG_CACHE_HOME="$TMP"
+    export XDG_RUNTIME_HOME="$TMP"
+    export HOME="$TMP"
+    export XDG_DATA_DIRS="${desktop_file_utils}/share:${shared_mime_info}/share"
+    export G_TEST_DBUS_DAEMON="${dbus_daemon.out}/bin/dbus-daemon"
+    export PATH="$PATH:$(pwd)/gobject"
+    echo "PATH=$PATH"
 
-       substituteInPlace gio/tests/desktop-files/home/applications/epiphany-weather-for-toronto-island-9c6a4e022b17686306243dada811d550d25eb1fb.desktop --replace "Exec=/bin/true" "Exec=${coreutils}/bin/true"
-       # Needs machine-id, comment the test
-       sed -e '/\/gdbus\/codegen-peer-to-peer/ s/^\/*/\/\//' -i gio/tests/gdbus-peer.c
-       sed -e '/g_test_add_func/ s/^\/*/\/\//' -i gio/tests/gdbus-unix-addresses.c
-       # All gschemas fail to pass the test, upstream bug?
-       sed -e '/g_test_add_data_func/ s/^\/*/\/\//' -i gio/tests/gschema-compile.c
-       # Cannot reproduce the failing test_associations on hydra
-       sed -e '/\/appinfo\/associations/d' -i gio/tests/appinfo.c
-       # Needed because of libtool wrappers
-       sed -e '/g_subprocess_launcher_set_environ (launcher, envp);/a g_subprocess_launcher_setenv (launcher, "PATH", g_getenv("PATH"), TRUE);' -i gio/tests/gsubprocess.c
-    '';
+    substituteInPlace gio/tests/desktop-files/home/applications/epiphany-weather-for-toronto-island-9c6a4e022b17686306243dada811d550d25eb1fb.desktop \
+      --replace "Exec=/bin/true" "Exec=${coreutils}/bin/true"
+    # Needs machine-id, comment the test
+    sed -e '/\/gdbus\/codegen-peer-to-peer/ s/^\/*/\/\//' -i gio/tests/gdbus-peer.c
+    sed -e '/g_test_add_func/ s/^\/*/\/\//' -i gio/tests/gdbus-unix-addresses.c
+    # All gschemas fail to pass the test, upstream bug?
+    sed -e '/g_test_add_data_func/ s/^\/*/\/\//' -i gio/tests/gschema-compile.c
+    # Cannot reproduce the failing test_associations on hydra
+    sed -e '/\/appinfo\/associations/d' -i gio/tests/appinfo.c
+    # Needed because of libtool wrappers
+    sed -e '/g_subprocess_launcher_set_environ (launcher, envp);/a g_subprocess_launcher_setenv (launcher, "PATH", g_getenv("PATH"), TRUE);' -i gio/tests/gsubprocess.c
+  '';
 
   passthru = {
      gioModuleDir = "lib/gio/modules";
@@ -136,7 +142,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "C library of programming buildings blocks";
     homepage    = https://www.gtk.org/;
-    license     = licenses.lgpl2Plus;
+    license     = licenses.lgpl21Plus;
     maintainers = with maintainers; [ lovek323 raskin ];
     platforms   = platforms.unix;
 
