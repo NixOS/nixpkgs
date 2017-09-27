@@ -163,6 +163,12 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         path = [ data.package ];
+        restartTriggers =
+          let
+            drvlist = [ config.environment.etc."tinc/${network}/tinc.conf".source ]
+                        ++ mapAttrsToList (host: _: config.environment.etc."tinc/${network}/hosts/${host}".source) data.hosts;
+          in # drvlist might be too long to be used directly
+            [ (builtins.hashString "sha256" (concatMapStrings (d: d.outPath) drvlist)) ];
         serviceConfig = {
           Type = "simple";
           Restart = "always";
