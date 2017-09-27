@@ -45,11 +45,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pkgconfig curl libdbi libgcrypt libmemcached
-    cyrus_sasl libnotify gdk_pixbuf libpcap libvirt
+    cyrus_sasl libnotify gdk_pixbuf liboping libpcap libvirt
     libxml2 libmysql postgresql protobufc rrdtool
     varnish yajl jdk libtool python hiredis
   ] ++ stdenv.lib.optionals stdenv.isLinux [
-    iptables libatasmart libcredis libmodbus liboping libsigrok
+    iptables libatasmart libcredis libmodbus libsigrok
     lm_sensors lvm2 rabbitmq-c udev net_snmp libmnl libmicrohttpd
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.IOKit
