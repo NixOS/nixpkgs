@@ -99,12 +99,12 @@ let
         };
 
         postgresql = {
-          configureFlags = ["--with-pgsql=${postgresql.dev}"];
+          configureFlags = ["--with-pgsql=${postgresql}"];
           buildInputs = [ postgresql ];
         };
 
         pdo_pgsql = {
-          configureFlags = ["--with-pdo-pgsql=${postgresql.dev}"];
+          configureFlags = ["--with-pdo-pgsql=${postgresql}"];
           buildInputs = [ postgresql ];
         };
 
