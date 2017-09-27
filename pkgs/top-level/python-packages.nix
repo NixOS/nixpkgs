@@ -25813,8 +25813,14 @@ EOF
 
     propagatedBuildInputs = with self; [
       trezor libagent ecdsa ed25519
-      mnemonic semver unidecode
+      mnemonic semver unidecode pyqt5
     ];
+
+    postFixup = ''
+      # fix for qt pinentry in non-tty environments such as systemd services
+      wrapProgram $out/bin/trezor-gpg-agent \
+        --set QT_QPA_PLATFORM_PLUGIN_PATH "${pkgs.qt59.qtbase.bin}/lib/qt-5.9/plugins/platforms/"
+    '';
 
     meta = {
       description = "Using Trezor as hardware SSH agent";
