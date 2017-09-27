@@ -15,7 +15,7 @@ in stdenv.mkDerivation {
 
   unpackPhase = ''tar xjvf "$src" && sourceRoot="$PWD/${name}"'';
 
-  patchPhase = ''
+  prePatch = ''
     cat guile-lint.in |						\
     sed 's|^exec guile|exec $\{GUILE:-${guile}/bin/guile}|g' > ,,tmp &&	\
     mv ,,tmp guile-lint.in
