@@ -22403,6 +22403,12 @@ EOF
       mnemonic semver unidecode pyqt5 pkgs.which
     ];
 
+    postFixup = ''
+      # fix for qt pinentry in non-tty environments such as systemd services
+      wrapProgram $out/bin/trezor-gpg-agent \
+        --set QT_QPA_PLATFORM_PLUGIN_PATH "${pkgs.qt59.qtbase.bin}/lib/qt-5.9/plugins/platforms/"
+    '';
+
     meta = {
       description = "Using Trezor as hardware SSH agent";
       homepage = https://github.com/romanz/trezor-agent;
