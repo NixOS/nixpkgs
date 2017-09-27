@@ -373,8 +373,10 @@ rec {
   }
   '';
 
-  addRtp = path: derivation:
-    derivation // { rtp = "${derivation}/${path}"; };
+  addRtp = path: attrs: derivation:
+    derivation // { rtp = "${derivation}/${path}"; } // {
+      overrideAttrs = f: buildVimPlugin (attrs // f attrs);
+    };
 
   buildVimPlugin = a@{
     name,
@@ -389,7 +391,7 @@ rec {
     addonInfo ? null,
     ...
   }:
-    addRtp "${rtpPath}/${path}" (stdenv.mkDerivation (a // {
+    addRtp "${rtpPath}/${path}" a (stdenv.mkDerivation (a // {
       name = namePrefix + name;
 
       inherit unpackPhase configurePhase buildPhase addonInfo preInstall postInstall;
