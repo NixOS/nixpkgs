@@ -1,12 +1,13 @@
 { stdenv, makeWrapper, requireFile, unzip, openjdk }:
 
 stdenv.mkDerivation rec {
-  name = "sqldeveloper-4.1.1.19.59";
+  name = "sqldeveloper-17.2.0.188.1159";
 
   src = requireFile {
     name = "${name}-no-jre.zip";
     url = "http://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/";
-    sha256 = "1dbbqlz11zps9w5qvzlcv5rdv43s25c3mbzf8il1px4m2j33y3rv";
+	/* Actual direct link (would it be allowed to give that link?): http://download.oracle.com/otn/java/sqldeveloper/sqldeveloper-17.2.0.188.1159-no-jre.zip */
+    sha256 = "03960705fabc7b3fa98d55a31ee6a17f783b8c8b01462613c6b6a699e8cae4d5";
   };
 
   buildInputs = [ makeWrapper unzip ];
