@@ -13,9 +13,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [ cmake gcc zlib bzip2 lzma ];
+  buildInputs = [ zlib bzip2 lzma ];
 
-  builder = ./builder.sh;
+  installPhase = ''
+    install -vD bin/freebayes bin/bamleftalign scripts/* -t $out/bin
+  '';
 
   meta = with stdenv.lib; {
     description = "Bayesian haplotype-based polymorphism discovery and genotyping";
