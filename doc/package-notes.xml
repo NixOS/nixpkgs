@@ -479,7 +479,7 @@ it. Place the resulting <filename>package.nix</filename> file into
   <term>Using the FOSS Radeon or nouveau (nvidia) drivers</term>
   <listitem><itemizedlist>
     <listitem><para>The <literal>newStdcpp</literal> parameter
-    was removed after 17.09 release and should not be needed anymore.
+    was removed since NixOS 17.09 and should not be needed anymore.
     </para></listitem>
 
     <listitem><para>

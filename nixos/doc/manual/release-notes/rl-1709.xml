@@ -329,6 +329,12 @@ FLUSH PRIVILEGES;
       <command>systemctl status mysql-backup</command>.
     </para>
   </listitem>
+
+  <listitem>
+    <para>Steam: the <literal>newStdcpp</literal> parameter
+    was removed and should not be needed anymore.</para>
+  </listitem>
+
 </itemizedlist>
 
 <para>Other notable improvements:</para>
