@@ -29,8 +29,8 @@ following incompatible changes:</para>
 
 <itemizedlist>
   <listitem>
-    <para>
-    </para>
+    <para>Steam: the <literal>newStdcpp</literal> parameter
+    was removed and should not be needed anymore.</para>
   </listitem>
 </itemizedlist>
 
