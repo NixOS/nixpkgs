@@ -5,7 +5,7 @@ qtSubmodule {
   qtInputs = [ qtbase qtquickcontrols ];
   buildInputs = [ wayland ];
   nativeBuildInputs = [ pkgconfig ];
-  outputs = [ "out" "dev" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
   postInstall = ''
     moveToOutput "$qtPluginPrefix" "$bin"
     moveToOutput "$qtQmlPrefix" "$bin"

@@ -13,5 +13,5 @@ mkDerivation {
     kwindowsystem kxmlgui qtquickcontrols qtquickcontrols2
     kactivities kactivities-stats kirigami2
   ];
-  outputs = [ "out" "dev" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
 }
