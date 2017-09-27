@@ -142,16 +142,21 @@ in
 
       preStart = ''
         if ! test -e ${cfg.privateConfig}; then
-          mkdir -m 700 -p $(dirname ${cfg.privateConfig})
+          mkdir -p $(dirname ${cfg.privateConfig})
           echo  > ${cfg.privateConfig} '[syncserver]'
+          chmod 600 ${cfg.privateConfig}
           echo >> ${cfg.privateConfig} "secret = $(head -c 20 /dev/urandom | sha1sum | tr -d ' -')"
         fi
+        chmod 600 ${cfg.privateConfig}
+        chmod 755 $(dirname ${cfg.privateConfig})
         chown ${user}:${group} ${cfg.privateConfig}
+
       '' + optionalString (cfg.sqlUri == defaultSqlUri) ''
         if ! test -e $(dirname ${defaultDbLocation}); then
           mkdir -m 700 -p $(dirname ${defaultDbLocation})
           chown ${user}:${group} $(dirname ${defaultDbLocation})
         fi
+
         # Move previous database file if it exists
         oldDb="/var/db/firefox-sync-server.db"
         if test -f $oldDb; then
