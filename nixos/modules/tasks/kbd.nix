@@ -99,8 +99,7 @@ in
         '';
 
         systemd.services."systemd-vconsole-setup" =
-          { wantedBy = [ "sysinit.target" ];
-            before = [ "display-manager.service" ];
+          { before = [ "display-manager.service" ];
             after = [ "systemd-udev-settle.service" ];
             restartTriggers = [ vconsoleConf kbdEnv ];
           };
