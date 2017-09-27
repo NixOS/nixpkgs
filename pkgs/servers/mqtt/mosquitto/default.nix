@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl libuuid libwebsockets c-ares libuv ]
     ++ stdenv.lib.optional stdenv.isDarwin cmake;
 
-  makeFlags = [
+  makeFlags = stdenv.lib.optionals stdenv.isLinux [
     "DESTDIR=$(out)"
     "PREFIX="
   ];
