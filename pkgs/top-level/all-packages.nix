@@ -11115,6 +11115,10 @@ with pkgs;
     go = go_1_8;
   };
 
+  buildGo19Package = callPackage ../development/go-modules/generic {
+    go = go_1_9;
+  };
+
   buildGoPackage = buildGo18Package;
 
   go2nix = callPackage ../development/tools/go2nix { };
