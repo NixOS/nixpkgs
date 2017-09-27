@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, pkgconfig, cmake
-, dbus, networkmanager, webkitgtk216x, pcre, python2, python3 }:
+, dbus, networkmanager, spidermonkey_38, pcre, python2, python3 }:
 
 stdenv.mkDerivation rec {
   name = "libproxy-${version}";
@@ -16,16 +16,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig cmake ];
 
-  buildInputs = [ dbus networkmanager webkitgtk216x pcre ];
+  buildInputs = [ dbus networkmanager spidermonkey_38 pcre python2 python3 ];
 
   preConfigure = ''
-    cmakeFlagsArray=($cmakeFlagsArray "-DPYTHON2_SITEPKG_DIR=$out/${python2.sitePackages}" "-DPYTHON3_SITEPKG_DIR=$out/${python3.sitePackages}")
+    cmakeFlagsArray+=(
+      "-DWITH_MOZJS=ON"
+      "-DPYTHON2_SITEPKG_DIR=$out/${python2.sitePackages}"
+      "-DPYTHON3_SITEPKG_DIR=$out/${python3.sitePackages}"
+    )
   '';
-
-  cmakeFlags = [
-    "-DWITH_WEBKIT3=ON"
-    "-DWITH_MOZJS=OFF"
-  ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

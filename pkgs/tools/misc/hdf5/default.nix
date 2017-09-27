@@ -57,6 +57,6 @@ stdenv.mkDerivation rec {
     '';
     license = stdenv.lib.licenses.free; # BSD-like
     homepage = https://www.hdfgroup.org/HDF5/;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

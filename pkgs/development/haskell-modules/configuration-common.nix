@@ -908,4 +908,9 @@ self: super: {
   # https://github.com/jtdaugherty/text-zipper/issues/11
   text-zipper = dontCheck super.text-zipper;
 
+  # Some yi-* libraries are in Stackage LTS 9.x (and are therefore restricted
+  # to version 0.14.x), but others aren't (and therefore use version 0.15.x).
+  # This needs cleanup before those builds can succeed.
+  yi = markBroken super.yi;
+
 }

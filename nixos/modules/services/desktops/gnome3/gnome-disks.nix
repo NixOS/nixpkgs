@@ -4,9 +4,6 @@
 
 with lib;
 
-let
-  gnome3 = config.environment.gnome3.packageSet;
-in
 {
 
   ###### interface
@@ -33,9 +30,9 @@ in
 
   config = mkIf config.services.gnome3.gnome-disks.enable {
 
-    environment.systemPackages = [ gnome3.gnome-disk-utility ];
+    environment.systemPackages = [ pkgs.gnome3.gnome-disk-utility ];
 
-    services.dbus.packages = [ gnome3.gnome-disk-utility ];
+    services.dbus.packages = [ pkgs.gnome3.gnome-disk-utility ];
 
   };
 

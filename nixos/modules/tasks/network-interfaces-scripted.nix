@@ -9,6 +9,16 @@ let
   interfaces = attrValues cfg.interfaces;
   hasVirtuals = any (i: i.virtual) interfaces;
 
+  slaves = concatMap (i: i.interfaces) (attrValues cfg.bonds)
+    ++ concatMap (i: i.interfaces) (attrValues cfg.bridges)
+    ++ concatMap (i: i.interfaces) (attrValues cfg.vswitches)
+    ++ concatMap (i: [i.interface]) (attrValues cfg.macvlans)
+    ++ concatMap (i: [i.interface]) (attrValues cfg.vlans);
+
+  # We must escape interfaces due to the systemd interpretation
+  subsystemDevice = interface:
+    "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
+
   interfaceIps = i:
     i.ip4 ++ optionals cfg.enableIPv6 i.ip6
     ++ optional (i.ipAddress != null) {
@@ -88,7 +98,7 @@ in
               ''
                 # Set the static DNS configuration, if given.
                 ${pkgs.openresolv}/sbin/resolvconf -m 1 -a static <<EOF
-                ${optionalString (cfg.domain != null) ''
+                ${optionalString (cfg.nameservers != [] && cfg.domain != null) ''
                   domain ${cfg.domain}
                 ''}
                 ${optionalString (cfg.search != []) ("search " + concatStringsSep " " cfg.search)}
@@ -143,7 +153,11 @@ in
           in
           nameValuePair "network-addresses-${i.name}"
           { description = "Address configuration of ${i.name}";
-            wantedBy = [ "network-setup.service" ];
+            wantedBy = [
+              "network-setup.service"
+              "network-link-${i.name}.service"
+              "network.target"
+            ];
             # propagate stop and reload from network-setup
             partOf = [ "network-setup.service" ];
             # order before network-setup because the routes that are configured
@@ -195,8 +209,9 @@ in
           { description = "Virtual Network Interface ${i.name}";
             requires = optionals (!config.boot.isContainer) [ "dev-net-tun.device" ];
             after = [ "network-pre.target" ] ++ (optionals (!config.boot.isContainer) [ "dev-net-tun.device" ]);
-            wantedBy = [ "network.target" (subsystemDevice i.name) ];
-            before = [ "network-interfaces.target" (subsystemDevice i.name) ];
+            wantedBy = [ "network-setup.service" (subsystemDevice i.name) ];
+            partOf = [ "network-setup.service" ];
+            before = [ "network-setup.service" ];
             path = [ pkgs.iproute ];
             serviceConfig = {
               Type = "oneshot";
@@ -222,7 +237,7 @@ in
             partOf = [ "network-setup.service" ] ++ optional v.rstp "mstpd.service";
             after = [ "network-pre.target" ] ++ deps ++ optional v.rstp "mstpd.service"
               ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
-            before = [ "network-setup.service" (subsystemDevice n) ];
+            before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = with pkgs; [ iproute gawk ];
@@ -330,7 +345,7 @@ in
             partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps
               ++ concatMap (i: [ "network-addresses-${i}.service" "network-link-${i}.service" ]) v.interfaces;
-            before = [ "network-setup.service" (subsystemDevice n) ];
+            before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute pkgs.gawk ];
@@ -367,7 +382,7 @@ in
             bindsTo = deps;
             partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps;
-            before = [ "network-setup.service" (subsystemDevice n) ];
+            before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
@@ -392,7 +407,7 @@ in
             bindsTo = deps;
             partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps;
-            before = [ "network-setup.service" (subsystemDevice n) ];
+            before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
@@ -420,7 +435,7 @@ in
             bindsTo = deps;
             partOf = [ "network-setup.service" ];
             after = [ "network-pre.target" ] ++ deps;
-            before = [ "network-setup.service" (subsystemDevice n) ];
+            before = [ "network-setup.service" ];
             serviceConfig.Type = "oneshot";
             serviceConfig.RemainAfterExit = true;
             path = [ pkgs.iproute ];
@@ -460,4 +475,14 @@ in
 
   };
 
+in
+
+{
+  config = mkMerge [
+    bondWarnings
+    (mkIf (!cfg.useNetworkd) normalConfig)
+    { # Ensure slave interfaces are brought up
+      networking.interfaces = genAttrs slaves (i: {});
+    }
+  ];
 }

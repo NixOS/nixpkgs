@@ -1,0 +1,22 @@
+diff --git a/tests/test.cpp b/tests/test.cpp
+index 8a8a811..31e8459 100644
+--- a/tests/test.cpp
++++ b/tests/test.cpp
+@@ -479,7 +479,7 @@ int process4(jack_nframes_t nframes, void *arg)
+ 	jack_nframes_t delta_time = cur_time - last_time;
+ 
+ 	Log("calling process4 callback : jack_frame_time = %ld delta_time = %ld\n", cur_time, delta_time);
+-	if (delta_time > 0  && (jack_nframes_t)abs(delta_time - cur_buffer_size) > tolerance) {
++	if (delta_time > 0  && (jack_nframes_t)fabs(delta_time - cur_buffer_size) > tolerance) {
+ 		printf("!!! ERROR !!! jack_frame_time seems to return incorrect values cur_buffer_size = %d, delta_time = %d tolerance %d\n", cur_buffer_size, delta_time, tolerance);
+ 	}
+ 
+@@ -1064,7 +1064,7 @@ int main (int argc, char *argv[])
+     }
+     jack_sleep(1 * 1000);
+     cur_buffer_size = jack_get_buffer_size(client1);
+-    if (abs((old_buffer_size * factor) - cur_buffer_size) > 5) {  // Tolerance needed for dummy driver...
++    if (fabs((old_buffer_size * factor) - cur_buffer_size) > 5) {  // Tolerance needed for dummy driver...
+         printf("!!! ERROR !!! Buffer size has not been changed !\n");
+         printf("!!! Maybe jack was compiled without the '--enable-resize' flag...\n");
+     } else {

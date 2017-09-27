@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, dbus, glib, alsaLib,
-  pythonPackages, readline, libsndfile, udev, libical,
+  pythonPackages, readline, udev, libical,
   systemd, enableWiimote ? false }:
 
 assert stdenv.isLinux;
@@ -15,13 +15,10 @@ stdenv.mkDerivation rec {
   pythonPath = with pythonPackages;
     [ dbus pygobject2 pygobject3 recursivePthLoader ];
 
-  buildInputs =
-    [ pkgconfig dbus glib alsaLib pythonPackages.python pythonPackages.wrapPython
-      readline libsndfile udev libical
-      # Disables GStreamer; not clear what it gains us other than a
-      # zillion extra dependencies.
-      # gstreamer gst-plugins-base
-    ];
+  buildInputs = [
+    pkgconfig dbus glib alsaLib pythonPackages.python pythonPackages.wrapPython
+    readline udev libical
+  ];
 
   outputs = [ "out" "dev" "test" ];
 
@@ -51,10 +48,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = "rulesdir=$(out)/lib/udev/rules.d";
 
-  # FIXME: Move these into a separate package to prevent Bluez from
-  # depending on Python etc.
   postInstall = ''
-    mkdir -p $test/test
+    mkdir -p $test/{bin,test}
     cp -a test $test
     pushd $test/test
     for a in \
@@ -65,7 +60,7 @@ stdenv.mkDerivation rec {
             list-devices \
             monitor-bluetooth \
             ; do
-      ln -s ../test/$a $out/bin/bluez-$a
+      ln -s ../test/$a $test/bin/bluez-$a
     done
     popd
     wrapPythonProgramsIn $test/test "$test/test $pythonPath"

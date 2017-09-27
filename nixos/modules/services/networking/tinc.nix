@@ -141,7 +141,6 @@ in
               ${optionalString (data.ed25519PrivateKeyFile != null) "Ed25519PrivateKeyFile = ${data.ed25519PrivateKeyFile}"}
               ${optionalString (data.listenAddress != null) "ListenAddress = ${data.listenAddress}"}
               ${optionalString (data.bindToAddress != null) "BindToAddress = ${data.bindToAddress}"}
-              Device = /dev/net/tun
               Interface = tinc.${network}
               ${data.extraConfig}
             '';
@@ -168,6 +167,7 @@ in
           Type = "simple";
           Restart = "always";
           RestartSec = "3";
+          ExecStart = "${data.package}/bin/tincd -D -U tinc.${network} -n ${network} ${optionalString (data.chroot) "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}";
         };
 
         preStart = ''
@@ -195,10 +195,6 @@ in
           mount -o defaults,bind,ro /etc/hosts /etc/tinc/${network}/etc/hosts
           mount -o defaults,bind,ro /etc/resolv.conf /etc/tinc/${network}/etc/resolv.conf
           mount -o defaults,bind,ro /nix/store /etc/tinc/${network}/nix/store
-        '';
-
-        script = ''
-          tincd -D -U tinc.${network} -n ${network} ${optionalString data.chroot "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}
         '';
 
         postStop = optionalString data.chroot ''

@@ -4,7 +4,7 @@
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
-, curl, libiconv, gmp, zfs, parted, fuse
+, curl, libiconv, gmp, zfs, parted, fuse, qemu
 , xen ? null, enableXen ? false
 }:
 
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/lib/systemd/system/libvirtd.service --replace /bin/kill ${coreutils}/bin/kill
     rm $out/lib/systemd/system/{virtlockd,virtlogd}.*
     wrapProgram $out/sbin/libvirtd \
-      --prefix PATH : ${makeBinPath [ iptables iproute pmutils numad numactl ]}
+      --prefix PATH : ${makeBinPath [ iptables iproute pmutils numad numactl qemu ]}
   '';
 
   enableParallelBuilding = true;

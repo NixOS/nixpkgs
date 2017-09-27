@@ -431,7 +431,7 @@ in
         fi
       '';
 
-    nix.nrBuildUsers = mkDefault (lib.max 10 cfg.maxJobs);
+    nix.nrBuildUsers = mkDefault (lib.max 32 cfg.maxJobs);
 
     users.extraUsers = nixbldUsers;
 

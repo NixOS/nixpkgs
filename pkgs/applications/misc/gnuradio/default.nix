@@ -41,8 +41,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postPatch = ''
+    substituteInPlace \
+        gr-fec/include/gnuradio/fec/polar_decoder_common.h \
+        --replace BOOST_CONSTEXPR_OR_CONST const
+  '';
+
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-unused-variable"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-unused-variable -std=c++11"
   '';
 
   # - Ensure we get an interactive backend for matplotlib. If not the gr_plot_*
