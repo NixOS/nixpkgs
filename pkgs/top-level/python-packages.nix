@@ -7346,19 +7346,18 @@ in {
       sha256 = "0dhbzc4q0vsnv3aihy728aczg56xs6h9s1rmvr096q4lb6yln3w4";
     };
 
-    buildInputs = with self; [
+    checkInputs = with self; [
       docutils
       virtualenv
       webtest
       zope_component
-      zope_interface
-      plaster
-      plaster-pastedeploy
-      hupper
     ] ++ optional isPy26 unittest2;
 
     propagatedBuildInputs = with self; [
+      hupper
       PasteDeploy
+      plaster
+      plaster-pastedeploy
       repoze_lru
       repoze_sphinx_autointerface
       translationstring
