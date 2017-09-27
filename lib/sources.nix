@@ -23,7 +23,11 @@ rec {
     lib.hasSuffix ".o" baseName ||
     lib.hasSuffix ".so" baseName ||
     # Filter out nix-build result symlinks
-    (type == "symlink" && lib.hasPrefix "result" baseName)
+    (type == "symlink" && lib.hasPrefix "result" baseName) ||
+
+    # Filter out cmakefile
+    (type == "regular" && baseName == "CMakeCache.txt") ||
+    (type == "directory" && baseName == "CMakeFiles")
   );
 
   cleanSource = builtins.filterSource cleanSourceFilter;
