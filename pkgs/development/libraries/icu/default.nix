@@ -2,15 +2,7 @@
 
 let
   pname = "icu4c";
-  version = "58.2";
-
-  # this patch should no longer be needed in 58.3
-  # https://bugs.gentoo.org/show_bug.cgi?id=599142#c14
-  keywordFix = fetchurl {
-    url = "http://bugs.icu-project.org/trac/changeset/39484?format=diff";
-    name = "icu-changeset-39484.diff";
-    sha256 = "0hxhpgydalyxacaaxlmaddc1sjwh65rsnpmg0j414mnblq74vmm8";
-  };
+  version = "59.1";
 in
 stdenv.mkDerivation {
   name = pname + "-" + version;
@@ -18,7 +10,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "http://download.icu-project.org/files/${pname}/${version}/${pname}-"
       + (stdenv.lib.replaceChars ["."] ["_"] version) + "-src.tgz";
-    sha256 = "036shcb3f8bm1lynhlsb4kpjm9s9c2vdiir01vg216rs2l8482ib";
+    sha256 = "1zkmbg2932ggvpgjp8pys0cj6z8bw087y8858009shkrjfpzscki";
   };
 
   outputs = [ "out" "dev" ];
@@ -32,10 +24,6 @@ stdenv.mkDerivation {
     sourceRoot=''${sourceRoot}/source
     echo Source root reset to ''${sourceRoot}
   '';
-
-  patchFlags = "-p4";
-
-  patches = [ keywordFix ];
 
   preConfigure = ''
     sed -i -e "s|/bin/sh|${stdenv.shell}|" configure
