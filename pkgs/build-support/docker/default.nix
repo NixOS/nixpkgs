@@ -32,20 +32,7 @@ rec {
     inherit pkgs buildImage pullImage shadowSetup buildImageWithNixDb;
   };
 
-  pullImage =
-    let
-      nameReplace = name: builtins.replaceStrings ["/" ":"] ["-" "-"] name;
-    in
-      # For simplicity we only support sha256.
-      { imageName, imageTag ? "latest", imageId ? "${imageName}:${imageTag}"
-      , sha256, name ? (nameReplace "docker-image-${imageName}-${imageTag}.tar") }:
-      runCommand name {
-        impureEnvVars=pkgs.stdenv.lib.fetchers.proxyImpureEnvVars;
-        outputHashMode="flat";
-        outputHashAlgo="sha256";
-        outputHash=sha256;
-      }
-      "${pkgs.skopeo}/bin/skopeo copy docker://${imageId} docker-archive://$out:${imageId}";
+  pullImage = callPackage ./pull.nix {};
 
   # We need to sum layer.tar, not a directory, hence tarsum instead of nix-hash.
   # And we cannot untar it, because then we cannot preserve permissions ecc.
