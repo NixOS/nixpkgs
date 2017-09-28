@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, openssl_1_0_2, pkgconfig, libpcap }:
+{ stdenv, buildGoPackage, fetchFromGitHub, openssl_1_0_2, pkgconfig, libpcap }:
 
 let
   tools = [
@@ -6,6 +6,9 @@ let
     "mongooplog" "mongorestore" "mongostat" "mongotop"
   ];
 in
+
+with stdenv.lib;
+
 buildGoPackage rec {
   name = "mongo-tools-${version}";
   version = "3.5.13";
@@ -22,28 +25,23 @@ buildGoPackage rec {
   };
 
   goDeps = ./deps.nix;
-  
-  buildInputs = [ pkgconfig openssl_1_0_2 libpcap ];
-  
- 
-  buildPhase = ''
-    ./go/src/github.com/mongodb/mongo-tools/build.sh ssl
-  '';
-  
-  buildFlags = [ "-tags ssl" ];
-  
-  allowGoReference = true;
-  
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl_1_0_2 libpcap ];
 
   # Mongodb incorrectly names all of their binaries main
   # Let's work around this with our own installer
-  preInstall = ''
-    mkdir -p $bin/bin
-  '' + toString (map (t: ''
-      go install $goPackagePath/${t}/main
-      mv go/bin/main $bin/bin/${t}
-  ''
-  ) tools) + ''  
-    rm -r go/bin
+  buildPhase = ''
+    runHook preBuild
+    ${stdenv.lib.concatMapStrings (t: ''
+      go build -o "$bin/bin/${t}" -tags ssl -ldflags "-s -w" $goPackagePath/${t}/main
+    '') tools}
+    runHook postBuild
   '';
+
+  meta = {
+    homepage = https://github.com/mongodb/mongo-tools;
+    description = "Tools for the MongoDB";
+    license = licenses.asl20;
+  };
 }
