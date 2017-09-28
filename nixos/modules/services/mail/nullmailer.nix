@@ -192,7 +192,7 @@ with lib;
 
       preStart = ''
         mkdir -p /var/spool/nullmailer/{queue,tmp}
-        rm -f var/spool/nullmailer/trigger && mkfifo -m 660 /var/spool/nullmailer/trigger
+        rm -f /var/spool/nullmailer/trigger && mkfifo -m 660 /var/spool/nullmailer/trigger
         chown ${cfg.user} /var/spool/nullmailer/*
       '';
 
