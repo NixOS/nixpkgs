@@ -24,6 +24,7 @@
       url = "https://git.torproject.org/https-everywhere.git";
       rev = "refs/tags/${version}";
       sha256 = "0z9madihh4b4z4blvfmh6w1hsv8afyi0x7b243nciq9r4w55xgfa";
+      fetchSubmodules = true;
     };
 
     nativeBuildInputs = [
@@ -34,10 +35,6 @@
       rsync
       zip
     ];
-
-    unpackPhase = ''
-      cp -dR --no-preserve=mode "$src" src && cd src
-    '';
 
     buildPhase = ''
       $shell ./makexpi.sh ${version} --no-recurse
@@ -80,10 +77,6 @@
 
     nativeBuildInputs = [ zip ];
 
-    unpackPhase = ''
-      cp -dR --no-preserve=mode "$src" src && cd src
-    '';
-
     buildPhase = ''
       $shell ./makexpi.sh
     '';
@@ -106,10 +99,6 @@
     };
 
     nativeBuildInputs = [ zip ];
-
-    unpackPhase = ''
-      cp -dR --no-preserve=mode "$src" src && cd src
-    '';
 
     buildPhase = ''
       make package
