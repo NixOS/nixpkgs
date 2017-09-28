@@ -913,6 +913,4 @@ self: super: {
   # This needs cleanup before those builds can succeed.
   yi = markBroken super.yi;
 
-  # test suite requires git and does a bunch of git operations
-  restless-git = dontCheck super.restless-git;
 }
