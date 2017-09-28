@@ -1,28 +1,29 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gtk2, mednafen }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, gtk2, mednafen }:
 
 stdenv.mkDerivation rec {
-
-  version = "0.8";
   name = "mednaffe-${version}";
+  version = "0.8.6";
 
   src = fetchFromGitHub {
-	repo = "mednaffe";
-	owner = "AmatCoder";
-	rev = "v${version}";
-	sha256 = "1j4py4ih14fa6dv0hka03rs4mq19ir83qkbxsz3695a4phmip0jr";
+    owner = "AmatCoder";
+    repo = "mednaffe";
+    rev = "v${version}";
+    sha256 = "13l7gls430dcslpan39k0ymdnib2v6crdsmn6bs9k9g30nfnqi6m";
   };
 
-  prePatch = ''
-    substituteInPlace src/mednaffe.c --replace "binpath = NULL" "binpath = g_strdup( \"${mednafen}/bin/mednafen\" )"
+  patchPhase = ''
+    substituteInPlace src/mednaffe.c \
+      --replace 'binpath = NULL' 'binpath = "${mednafen}/bin/mednafen"'
   '';
 
-  buildInputs = [ pkgconfig gtk2 mednafen ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ gtk2 mednafen ];
 
   meta = with stdenv.lib; {
     description = "A GTK based frontend for mednafen";
     homepage = https://github.com/AmatCoder/mednaffe;
     license = licenses.gpl3;
-    maintainers = [ maintainers.sheenobu ];
+    maintainers = with maintainers; [ sheenobu ];
     platforms = platforms.linux;
   };
 }
