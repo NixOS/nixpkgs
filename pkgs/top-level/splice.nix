@@ -86,5 +86,5 @@ in
 
   newScope = extra: lib.callPackageWith (splicedPackages // extra);
 
-  newScopeWithOutput = extra: lib.callPackageWithOutputWith (splicedPackages // extra);
+  newScopeWithOutput = extra: lib.customisation.callPackageWithOutputWith (splicedPackages // extra);
 }

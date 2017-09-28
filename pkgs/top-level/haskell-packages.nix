@@ -24,7 +24,7 @@ let
   };
 
   callPackage = lib.callPackageWith (pkgs // { inherit haskellLib; });
-  callPackageWithOutput = lib.callPackageWithOutputWith (pkgs // { inherit haskellLib; });
+  callPackageWithOutput = lib.customisation.callPackageWithOutputWith (pkgs // { inherit haskellLib; });
 
 in rec {
   lib = haskellLib;
