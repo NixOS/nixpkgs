@@ -42,6 +42,8 @@ let
       ETL boost cairo gettext glibmm mlt-qt5 libsigcxx libxmlxx pango
       pkgconfig autoreconfHook
     ];
+
+    meta.broken = true;
   };
 in
 stdenv.mkDerivation rec {
