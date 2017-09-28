@@ -87,54 +87,50 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.sshguard pkgs.iptables pkgs.ipset ];
-
-    environment.etc."sshguard.conf".text = let 
+    environment.etc."sshguard.conf".text = let
         list_services = ( name:  "-t ${name} ");
       in ''
-        BACKEND="${pkgs.sshguard}/libexec/sshg-fw-ipset"
-        LOGREADER="LANG=C ${pkgs.systemd}/bin/journalctl -afb -p info -n1 ${toString (map list_services cfg.services)} -o cat"
+        BACKEND="${lib.getBin pkgs.sshguard}/libexec/sshg-fw-ipset"
+        LOGREADER="LANG=C ${lib.getBin pkgs.systemd}/bin/journalctl -afb -p info -n1 ${toString (map list_services cfg.services)} -o cat"
       '';
 
-    systemd.services.sshguard =
-      { description = "SSHGuard brute-force attacks protection system";
+    systemd.services.sshguard = {
+      description = "SSHGuard brute-force attacks protection system";
 
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
-        partOf = optional config.networking.firewall.enable "firewall.service";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+      partOf = optional config.networking.firewall.enable "firewall.service";
 
-        path = [ pkgs.iptables pkgs.ipset pkgs.iproute pkgs.systemd ];
+      path = with pkgs; [ iptables ipset iproute systemd ];
 
-        postStart = ''
-          mkdir -p /var/lib/sshguard
-          ${pkgs.ipset}/bin/ipset -quiet create -exist sshguard4 hash:ip family inet
-          ${pkgs.ipset}/bin/ipset -quiet create -exist sshguard6 hash:ip family inet6
-          ${pkgs.iptables}/bin/iptables -I INPUT -m set --match-set sshguard4 src -j DROP
-          ${pkgs.iptables}/bin/ip6tables -I INPUT -m set --match-set sshguard6 src -j DROP
-        '';
+      postStart = ''
+        mkdir -p /var/lib/sshguard
+        ${pkgs.ipset}/bin/ipset -quiet create -exist sshguard4 hash:ip family inet
+        ${pkgs.ipset}/bin/ipset -quiet create -exist sshguard6 hash:ip family inet6
+        ${pkgs.iptables}/bin/iptables  -I INPUT -m set --match-set sshguard4 src -j DROP
+        ${pkgs.iptables}/bin/ip6tables -I INPUT -m set --match-set sshguard6 src -j DROP
+      '';
 
-        preStop = ''
-          ${pkgs.iptables}/bin/iptables -D INPUT -m set --match-set sshguard4 src -j DROP
-          ${pkgs.iptables}/bin/ip6tables -D INPUT -m set --match-set sshguard6 src -j DROP
-        '';
+      preStop = ''
+        ${pkgs.iptables}/bin/iptables  -D INPUT -m set --match-set sshguard4 src -j DROP
+        ${pkgs.iptables}/bin/ip6tables -D INPUT -m set --match-set sshguard6 src -j DROP
+      '';
 
-        unitConfig.Documentation = "man:sshguard(8)";
+      unitConfig.Documentation = "man:sshguard(8)";
 
-        serviceConfig = {
-            Type = "simple";
-            ExecStart = let
-                list_whitelist = ( name:  "-w ${name} ");
-              in ''
-                 ${pkgs.sshguard}/bin/sshguard -a ${toString cfg.attack_threshold} ${optionalString (cfg.blacklist_threshold != null) "-b ${toString cfg.blacklist_threshold}:${cfg.blacklist_file} "}-i /run/sshguard/sshguard.pid -p ${toString cfg.blocktime} -s ${toString cfg.detection_time} ${toString (map list_whitelist cfg.whitelist)}
+      serviceConfig = {
+        Type = "simple";
+        ExecStart = let
+          list_whitelist = ( name:  "-w ${name} ");
+        in ''
+          ${pkgs.sshguard}/bin/sshguard -a ${toString cfg.attack_threshold} ${optionalString (cfg.blacklist_threshold != null) "-b ${toString cfg.blacklist_threshold}:${cfg.blacklist_file} "}-i /run/sshguard/sshguard.pid -p ${toString cfg.blocktime} -s ${toString cfg.detection_time} ${toString (map list_whitelist cfg.whitelist)}
               '';
-            PIDFile = "/run/sshguard/sshguard.pid";
-            Restart = "always";
-
-            ReadOnlyDirectories = "/";
-            ReadWriteDirectories = "/run/sshguard /var/lib/sshguard";
-            RuntimeDirectory = "sshguard";
-            CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_RAW";
-         };
+        Restart = "always";
+        ProtectSystem = true;
+        PrivateTmp = true;
+        RuntimeDirectory = "sshguard";
+        # CapabilityBoundingSet = "CAP_NET_ADMIN CAP_NET_RAW";
       };
+    };
   };
 }
