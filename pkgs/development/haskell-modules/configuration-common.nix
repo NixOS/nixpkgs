@@ -971,4 +971,8 @@ self: super: {
     hackage-db = self.hackage-db_2_0;
     optparse-applicative = self.optparse-applicative_0_14_0_0;
   });
+
+  # Break "hpack >=0.17.0 && <0.19".
+  stack = doJailbreak super.stack;
+
 }
