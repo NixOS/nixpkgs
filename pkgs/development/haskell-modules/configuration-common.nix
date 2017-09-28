@@ -34,6 +34,11 @@ self: super: {
   ghcjs-base = null;
   ghcjs-prim = null;
 
+  # Some packages add this (non-existent) dependency to express that they
+  # cannot compile in a given configuration. Win32 does this, for example, when
+  # compiled on Linux. We provide the name to avoid evaluation errors.
+  unbuildable = throw "package depends on meta package 'unbuildable'";
+
   # cabal-install needs Cabal 2.x. hackage-security's test suite does not compile with
   # Cabal 2.x, though. See https://github.com/haskell/hackage-security/issues/188.
   cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_0_0_2; });
@@ -959,4 +964,11 @@ self: super: {
 
   # test suite requires git and does a bunch of git operations
   restless-git = dontCheck super.restless-git;
+
+  # This tool needs the latest hackage-db version. Using the latest version of
+  # optparse-applicative allows us to generate completions for fish and zsh.
+  cabal2nix = super.cabal2nix.overrideScope (self: super: {
+    hackage-db = self.hackage-db_2_0;
+    optparse-applicative = self.optparse-applicative_0_14_0_0;
+  });
 }

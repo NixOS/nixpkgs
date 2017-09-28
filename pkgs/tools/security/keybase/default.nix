@@ -16,12 +16,16 @@ buildGoPackage rec {
     sha256 = "0vivc71xfi4y3ydd29b17qxzi10r3a1ppmjjws6vrs0gz58bz1j8";
   };
 
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    install_name_tool -delete_rpath $out/lib $bin/bin/keybase
+  '';
+
   buildFlags = [ "-tags production" ];
 
   meta = with stdenv.lib; {
     homepage = https://www.keybase.io/;
     description = "The Keybase official command-line utility and service.";
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ carlsverre np rvolosatovs ];
   };
 }

@@ -31,6 +31,6 @@ stdenv.mkDerivation {
     description = "Encrypted networking for regular people";
     license = licenses.gpl3;
     maintainers = with maintainers; [ ehmry ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }

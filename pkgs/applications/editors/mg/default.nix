@@ -1,33 +1,30 @@
-{ fetchurl, stdenv, ncurses, pkgconfig, libbsd }:
+{ stdenv, fetchurl, pkgconfig, libbsd, ncurses }:
+
 stdenv.mkDerivation rec {
   name = "mg-${version}";
-  version = "20161005";
+  version = "20170828";
 
   src = fetchurl {
     url = "http://homepage.boetes.org/software/mg/${name}.tar.gz";
-    sha256 = "0qaydk2cy765n9clghmi5gdnpwn15y2v0fj6r0jcm0v7d89vbz5p";
+    sha256 = "139nc58l5ifj3d3478nhqls0lic52skmxfxggznzxaz9camqd20z";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error";
-  
-  preConfigure = ''
-    substituteInPlace GNUmakefile \
-      --replace /usr/bin/pkg-config ${pkgconfig}/bin/pkg-config
-      '';
+  enableParallelBuilding = true;
+
+  makeFlags = [ "PKG_CONFIG=${pkgconfig}/bin/pkg-config" ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp mg $out/bin
-    mkdir -p $out/share/man/man1
-    cp mg.1 $out/share/man/man1
+    install -m 555 -Dt $out/bin mg
+    install -m 444 -Dt $out/share/man/man1 mg.1
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ncurses libbsd ];
+
+  buildInputs = [ libbsd ncurses ];
 
   meta = with stdenv.lib; {
-    homepage = http://homepage.boetes.org/software/mg/;
     description = "Micro GNU/emacs, a portable version of the mg maintained by the OpenBSD team";
+    homepage = "https://homepage.boetes.org/software/mg";
     license = licenses.publicDomain;
     platforms = platforms.all;
   };

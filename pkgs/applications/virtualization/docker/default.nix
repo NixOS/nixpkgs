@@ -44,6 +44,12 @@ rec {
         rev = containerdRev;
         sha256 = containerdSha256;
       };
+
+      # This should go into the containerd derivation once 1.0.0 is out
+      preBuild = (optionalString (version == "17.09.0-ce") ''
+        mkdir $(pwd)/vendor/src
+        mv $(pwd)/vendor/{github.com,golang.org,google.golang.org} $(pwd)/vendor/src/
+      '') + oldAttrs.preBuild;
     });
     docker-tini = tini.overrideAttrs  (oldAttrs: rec {
       name = "docker-init";
@@ -188,14 +194,14 @@ rec {
     tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
   };
 
-  docker_17_07 = dockerGen rec {
-    version = "17.07.0-ce";
-    rev = "87847530f7176a48348d196f7c23bbd058052af1"; # git commit
-    sha256 = "0zw9zlzbd7il33ch17ypwpa73gsb930sf2njnphg7ylvnqp8qzsp";
-    runcRev = "2d41c047c83e09a6d61d464906feb2a2f3c52aa4";
-    runcSha256 = "0v5iv29ck6lkxvxh7a56gfrlgfs0bjvjhrq3p6qqv9qjzv825byq";
-    containerdRev = "3addd840653146c90a254301d6c3a663c7fd6429";
-    containerdSha256 = "0as4s5wd57pdh1cyavkccpgs46kvlhr41v07qrv0phzffdhq3d5j";
+  docker_17_09 = dockerGen rec {
+    version = "17.09.0-ce";
+    rev = "afdb6d44a80f777069885a9ee0e0f86cf841b1bb"; # git commit
+    sha256 = "03g0imdcxqx9y4hhyymxqzvm8bqg4cqrmb7sjbxfdgrhzh9kcn1p";
+    runcRev = "3f2f8b84a77f73d38244dd690525642a72156c64";
+    runcSha256 = "0vaagmav8443kmyxac2y1y5l2ipcs1c7gdmsnvj48y9bafqx72rq";
+    containerdRev = "06b9cb35161009dcb7123345749fef02f7cea8e0";
+    containerdSha256 = "10hms8a2nn69nfnwly6923jzx40c3slpsdhjhff4bxh36flpf9gd";
     tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";
     tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
   };

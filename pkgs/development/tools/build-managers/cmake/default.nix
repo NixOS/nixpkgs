@@ -17,7 +17,7 @@ with stdenv.lib;
 let
   os = stdenv.lib.optionalString;
   majorVersion = "3.9";
-  minorVersion = "1";
+  minorVersion = "2";
   version = "${majorVersion}.${minorVersion}";
 in
 
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}files/v${majorVersion}/cmake-${version}.tar.gz";
-    # from https://cmake.org/files/v3.9/cmake-3.9.1-SHA-256.txt
-    sha256 = "d768ee83d217f91bb597b3ca2ac663da7a8603c97e1f1a5184bc01e0ad2b12bb";
+    # from https://cmake.org/files/v3.9/cmake-3.9.2-SHA-256.txt
+    sha256 = "954a5801a456ee48e76f01107c9a4961677dd0f3e115275bbd18410dc22ba3c1";
   };
 
   prePatch = optionalString (!useSharedLibraries) ''

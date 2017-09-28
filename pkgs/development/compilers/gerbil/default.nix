@@ -2,23 +2,27 @@
   coreutils, rsync, bash,
   openssl, zlib, sqlite, libxml2, libyaml, libmysql, lmdb, leveldb }:
 
+# TODO: distinct packages for gerbil-release and gerbil-devel
+
 stdenv.mkDerivation rec {
   name    = "gerbil-${version}";
 
-  version = "0.12-DEV";
+  version = "0.12-DEV-777-gd855915";
   src = fetchgit {
     url = "https://github.com/vyzo/gerbil.git";
-    rev = "3657b6e940ea248e0b312f276590e38ff68997e7";
-    sha256 = "11ys7082ghkm4yikz4qxmv3jpxcr42jfi0jhjw1mpzbqdg6004w2";
+    rev = "9db6187dc996eec4087f83b86339e7b17bb69bad";
+    sha256 = "1hqmsy77d62dvil3az4vdr0rmwvxhinjl1dbcxzamz2c2kcjv1jg";
   };
 
   buildInputs = [
-    gambit openssl
+    gambit
     coreutils rsync bash
-    zlib openssl zlib sqlite libxml2 libyaml libmysql lmdb leveldb
+    openssl zlib sqlite libxml2 libyaml libmysql lmdb leveldb
   ];
 
   postPatch = ''
+    echo '(define (gerbil-version-string) "v${version}")' > src/gerbil/runtime/gx-version.scm
+
     patchShebangs .
 
     find . -type f -executable -print0 | while IFS= read -r -d ''$'\0' f; do

@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.cs.princeton.edu/~bwk/btl.mirror/;
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.konimex ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

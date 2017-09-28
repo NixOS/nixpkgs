@@ -151,15 +151,6 @@ in
         ";
       };
 
-      resolveLocalQueries = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether bind should resolve local queries (i.e. add 127.0.0.1 to
-          /etc/resolv.conf, overriding networking.nameserver).
-        '';
-      };
-
     };
 
   };

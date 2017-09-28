@@ -426,7 +426,7 @@
       teamspeak = 124;
       influxdb = 125;
       nsd = 126;
-      #gitolite = 127; # unused
+      gitolite = 127;
       znc = 128;
       polipo = 129;
       mopidy = 130;

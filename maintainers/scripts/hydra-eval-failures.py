@@ -13,10 +13,8 @@ from pyquery import PyQuery as pq
 
 
 maintainers_json = subprocess.check_output([
-    'nix-instantiate',
-    'lib/maintainers.nix',
-    '--eval',
-    '--json'])
+    'nix-instantiate', '-E', 'import ./lib/maintainers.nix {}', '--eval', '--json'
+])
 maintainers = json.loads(maintainers_json)
 MAINTAINERS = {v: k for k, v in maintainers.iteritems()}
 

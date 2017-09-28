@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     homepage = http://puredocs.bitbucket.org/pure-gen.html;
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = [];
     maintainers = with stdenv.lib.maintainers; [ asppsa ];
   };
 }

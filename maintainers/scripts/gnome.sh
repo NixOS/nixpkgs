@@ -9,17 +9,15 @@ GNOME_FTP=ftp.gnome.org/pub/GNOME/sources
 NO_GNOME_MAJOR="ghex gtkhtml gdm"
 
 usage() {
-  echo "Usage: $0 gnome_dir <show project>|<update project>|<update-all> [major.minor]" >&2
-  echo "gnome_dir is for example pkgs/desktops/gnome-3/3.18" >&2
+  echo "Usage: $0 <show project>|<update project>|<update-all> [major.minor]" >&2
   exit 0
 }
 
-if [ "$#" -lt 2 ]; then
+if [ "$#" -lt 1 ]; then
   usage
 fi
 
-GNOME_TOP=$1
-shift
+GNOME_TOP=pkgs/desktops/gnome-3
 
 action=$1
 

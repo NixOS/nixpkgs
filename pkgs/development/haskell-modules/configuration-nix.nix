@@ -227,6 +227,12 @@ self: super: builtins.intersectAttrs super {
   # /homeless-shelter. Disabled.
   purescript = dontCheck super.purescript;
 
+  # https://github.com/haskell-foundation/foundation/pull/412
+  foundation =
+    if pkgs.stdenv.isDarwin
+    then dontCheck super.foundation
+    else super.foundation;
+
   # Hardcoded include path
   poppler = overrideCabal super.poppler (drv: {
     postPatch = ''
