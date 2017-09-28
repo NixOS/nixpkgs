@@ -10,6 +10,8 @@
   lib,
   pkgs,
   pigz,
+  nixUnstable,
+  perl,
   runCommand,
   rsync,
   shadow,
@@ -27,7 +29,7 @@
 rec {
 
   examples = import ./examples.nix {
-    inherit pkgs buildImage pullImage shadowSetup;
+    inherit pkgs buildImage pullImage shadowSetup buildImageWithNixDb;
   };
 
   pullImage =
@@ -135,7 +137,7 @@ rec {
         };
         inherit fromImage fromImageName fromImageTag;
 
-        buildInputs = [ utillinux e2fsprogs jshon rsync ];
+        buildInputs = [ utillinux e2fsprogs jshon rsync jq ];
       } ''
       rm -rf $out
 
@@ -144,44 +146,29 @@ rec {
       mount /dev/${vmTools.hd} disk
       cd disk
 
+      layers=""
       if [[ -n "$fromImage" ]]; then
         echo "Unpacking base image..."
         mkdir image
         tar -C image -xpf "$fromImage"
-
-        # If the image name isn't set, read it from the image repository json.
-        if [[ -z "$fromImageName" ]]; then
-          fromImageName=$(jshon -k < image/repositories | head -n 1)
-          echo "From-image name wasn't set. Read $fromImageName."
-        fi
-
-        # If the tag isn't set, use the name as an index into the json
-        # and read the first key found.
-        if [[ -z "$fromImageTag" ]]; then
-          fromImageTag=$(jshon -e $fromImageName -k < image/repositories \
-                         | head -n1)
-          echo "From-image tag wasn't set. Read $fromImageTag."
-        fi
-
-        # Use the name and tag to get the parent ID field.
-        parentID=$(jshon -e $fromImageName -e $fromImageTag -u \
-                   < image/repositories)
+        layers=$(jq -r '.[0].Layers | join(" ")' image/manifest.json)
       fi
 
-      # Unpack all of the parent layers into the image.
+      # Unpack all of the layers into the image.
+      # Layer list is ordered starting from the base image
       lowerdir=""
-      while [[ -n "$parentID" ]]; do
-        echo "Unpacking layer $parentID"
-        mkdir -p image/$parentID/layer
-        tar -C image/$parentID/layer -xpf image/$parentID/layer.tar
-        rm image/$parentID/layer.tar
+      for layer in $layers; do
+        echo "Unpacking layer $layer"
+        layerDir=image/$(echo $layer | cut -d':' -f2)"_unpacked"
+        mkdir -p $layerDir
+        tar -C $layerDir -xpf image/$layer
+        chmod a+w image/$layer
+        rm image/$layer
 
-        find image/$parentID/layer -name ".wh.*" -exec bash -c 'name="$(basename {}|sed "s/^.wh.//")"; mknod "$(dirname {})/$name" c 0 0; rm {}' \;
+        find $layerDir -name ".wh.*" -exec bash -c 'name="$(basename {}|sed "s/^.wh.//")"; mknod "$(dirname {})/$name" c 0 0; rm {}' \;
 
         # Get the next lower directory and continue the loop.
-        lowerdir=$lowerdir''${lowerdir:+:}image/$parentID/layer
-        parentID=$(cat image/$parentID/json \
-                  | (jshon -e parent -u 2>/dev/null || true))
+        lowerdir=$lowerdir''${lowerdir:+:}$layerDir
       done
 
       mkdir work
@@ -237,6 +224,19 @@ rec {
       set -e
       export PATH=${coreutils}/bin:/bin
       ${text}
+    '';
+
+  nixRegistration = contents: runCommand "nix-registration" {
+    buildInputs = [ nixUnstable perl ];
+    # For obtaining the closure of `contents'.
+    exportReferencesGraph =
+      let contentsList = if builtins.isList contents then contents else [ contents ];
+      in map (x: [("closure-" + baseNameOf x) x]) contentsList;
+    }
+    ''
+      mkdir $out
+      printRegistration=1 perl ${pkgs.pathsFromGraph} closure-* > $out/db.dump
+      perl ${pkgs.pathsFromGraph} closure-* > $out/storePaths
     '';
 
   # Create a "layer" (set of files).
@@ -446,26 +446,17 @@ rec {
 
         mkdir image
         touch baseFiles
+        layers=""
         if [[ -n "$fromImage" ]]; then
           echo "Unpacking base image..."
           tar -C image -xpf "$fromImage"
-          # Do not import the base image configuration and manifest
-          chmod a+w image image/*.json
-          rm -f image/*.json
-
-          if [[ -z "$fromImageName" ]]; then
-            fromImageName=$(jshon -k < image/repositories|head -n1)
-          fi
-          if [[ -z "$fromImageTag" ]]; then
-            fromImageTag=$(jshon -e $fromImageName -k \
-                           < image/repositories|head -n1)
-          fi
-          parentID=$(jshon -e $fromImageName -e $fromImageTag -u \
-                     < image/repositories)
-
-          for l in image/*/layer.tar; do
-            ls_tar $l >> baseFiles
+          config=$(jq -r '.[0].Config' image/manifest.json)
+          layers=$(jq -r '.[0].Layers | join(" ")' image/manifest.json)
+          for l in $layers; do
+            ls_tar image/$l >> baseFiles
           done
+          chmod u+w image image/$config
+          rm image/$config
         fi
 
         chmod -R ug+rw image
@@ -492,46 +483,27 @@ rec {
         tar -rpf temp/layer.tar --mtime="@$SOURCE_DATE_EPOCH" \
           --owner=0 --group=0 --no-recursion --files-from newFiles
 
-        echo "Adding meta..."
+        gzip temp/layer.tar
+        layerID="sha256:$(sha256sum temp/layer.tar.gz | cut -d ' ' -f 1)"
+        mv temp/layer.tar.gz image/$layerID
 
-        # If we have a parentID, add it to the json metadata.
-        if [[ -n "$parentID" ]]; then
-          cat temp/json | jshon -s "$parentID" -i parent > tmpjson
-          mv tmpjson temp/json
-        fi
-
-        # Take the sha256 sum of the generated json and use it as the layer ID.
-        # Compute the size and add it to the json under the 'Size' field.
-        layerID=$(sha256sum temp/json|cut -d ' ' -f 1)
-        size=$(stat --printf="%s" temp/layer.tar)
-        cat temp/json | jshon -s "$layerID" -i id -n $size -i Size > tmpjson
-        mv tmpjson temp/json
-
-        # Use the temp folder we've been working on to create a new image.
-        mv temp image/$layerID
-
-        # Create image json and image manifest
+        echo "Generating image configuration and manifest..."
         imageJson=$(cat ${baseJson} | jq ". + {\"rootfs\": {\"diff_ids\": [], \"type\": \"layers\"}}")
         manifestJson=$(jq -n "[{\"RepoTags\":[\"$imageName:$imageTag\"]}]")
-        currentID=$layerID
-        while [[ -n "$currentID" ]]; do
-          layerChecksum=$(sha256sum image/$currentID/layer.tar | cut -d ' ' -f1)
-          imageJson=$(echo "$imageJson" | jq ".history |= [{\"created\": \"${created}\"}] + .")
-          imageJson=$(echo "$imageJson" | jq ".rootfs.diff_ids |= [\"sha256:$layerChecksum\"] + .")
-          manifestJson=$(echo "$manifestJson" | jq ".[0].Layers |= [\"$currentID/layer.tar\"] + .")
 
-          currentID=$(cat image/$currentID/json | (jshon -e parent -u 2>/dev/null || true))
+        # The layer list is ordered starting from the base image
+        layers=$(echo $layers $layerID)
+        for i in $(echo $layers); do
+          imageJson=$(echo "$imageJson" | jq ".history |= [{\"created\": \"${created}\"}] + .")
+          diffId=$(gzip -dc image/$i | sha256sum | cut -d" " -f1)
+          imageJson=$(echo "$imageJson" | jq ".rootfs.diff_ids |= [\"sha256:$diffId\"] + .")
+          manifestJson=$(echo "$manifestJson" | jq ".[0].Layers |= [\"$i\"] + .")
         done
 
         imageJsonChecksum=$(echo "$imageJson" | sha256sum | cut -d ' ' -f1)
-        echo "$imageJson" > "image/$imageJsonChecksum.json"
-        manifestJson=$(echo "$manifestJson" | jq ".[0].Config = \"$imageJsonChecksum.json\"")
+        echo "$imageJson" > "image/sha256:$imageJsonChecksum"
+        manifestJson=$(echo "$manifestJson" | jq ".[0].Config = \"sha256:$imageJsonChecksum\"")
         echo "$manifestJson" > image/manifest.json
-
-        # Store the json under the name image/repositories.
-        jshon -n object \
-          -n object -s "$layerID" -i "$imageTag" \
-          -i "$imageName" > image/repositories
 
         # Make the image read-only.
         chmod -R a-w image
@@ -544,4 +516,37 @@ rec {
 
     in
     result;
+
+  # Build an image and populate its nix database with the provided
+  # contents. The main purpose is to be able to use nix commands in
+  # the container.
+  # Be careful since this doesn't work well with multilayer.
+  buildImageWithNixDb = args@{ contents ? null, extraCommands ? "", ... }:
+    buildImage (args // {
+      extraCommands = ''
+        echo "Generating the nix database..."
+        echo "Warning: only the database of the deepest Nix layer is loaded."
+        echo "         If you want to use nix commands in the container, it would"
+        echo "         be better to only have one layer that contains a nix store."
+        # This requires Nix 1.12 or higher
+        export NIX_REMOTE=local?root=$PWD
+        ${nixUnstable}/bin/nix-store --load-db < ${nixRegistration contents}/db.dump
+
+        # We fill the store in order to run the 'verify' command that
+        # generates hash and size of output paths.
+        # Note when Nix 1.12 is be the stable one, the database dump
+        # generated by the exportReferencesGraph function will
+        # contains sha and size. See
+        # https://github.com/NixOS/nix/commit/c2b0d8749f7e77afc1c4b3e8dd36b7ee9720af4a
+        storePaths=$(cat ${nixRegistration contents}/storePaths)
+        echo "Copying everything to /nix/store (will take a while)..."
+        cp -prd $storePaths nix/store/
+        ${nixUnstable}/bin/nix-store --verify --check-contents
+
+        mkdir -p nix/var/nix/gcroots/docker/
+        for i in ${lib.concatStringsSep " " contents}; do
+          ln -s $i nix/var/nix/gcroots/docker/$(basename $i)
+        done;
+      '' + extraCommands;
+    });
 }

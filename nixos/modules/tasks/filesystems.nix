@@ -217,7 +217,7 @@ in
     # Add the mount helpers to the system path so that `mount' can find them.
     system.fsPackages = [ pkgs.dosfstools ];
 
-    environment.systemPackages = [ pkgs.fuse ] ++ config.system.fsPackages;
+    environment.systemPackages = with pkgs; [ fuse3 fuse ] ++ config.system.fsPackages;
 
     environment.etc.fstab.text =
       let

@@ -1,11 +1,8 @@
 # GPaste daemon.
-{ config, lib, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
-let
-  gnome3 = config.environment.gnome3.packageSet;
-in
 {
   ###### interface
   options = {
@@ -22,9 +19,9 @@ in
 
   ###### implementation
   config = mkIf config.services.gnome3.gpaste.enable {
-    environment.systemPackages = [ gnome3.gpaste ];
-    services.dbus.packages = [ gnome3.gpaste ];
-    services.xserver.desktopManager.gnome3.sessionPath = [ gnome3.gpaste ];
-    systemd.packages = [ gnome3.gpaste ];
+    environment.systemPackages = [ pkgs.gnome3.gpaste ];
+    services.dbus.packages = [ pkgs.gnome3.gpaste ];
+    services.xserver.desktopManager.gnome3.sessionPath = [ pkgs.gnome3.gpaste ];
+    systemd.packages = [ pkgs.gnome3.gpaste ];
   };
 }

@@ -27,6 +27,6 @@ in stdenv.mkDerivation {
 
     license = stdenv.lib.licenses.mit;
     homepage = https://github.com/katmagic/Shallot;
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.linux;
   };
 }

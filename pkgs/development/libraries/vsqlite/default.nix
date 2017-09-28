@@ -11,10 +11,17 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost sqlite ];
 
-  meta = {
+  prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace Makefile.in \
+        --replace '-Wl,--as-needed' "" \
+        --replace '-Wl,-soname -Wl,libvsqlitepp.so.3' \
+                  "-Wl,-install_name,$out/lib/libvsqlitepp.3.dylib"
+  '';
+
+  meta = with stdenv.lib; {
     homepage = http://vsqlite.virtuosic-bytes.com/;
     description = "C++ wrapper library for sqlite.";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.bsd3;
+    platforms = platforms.unix;
   };
 }

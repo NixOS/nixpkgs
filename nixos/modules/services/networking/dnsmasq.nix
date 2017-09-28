@@ -42,7 +42,7 @@ in
         default = true;
         description = ''
           Whether dnsmasq should resolve local queries (i.e. add 127.0.0.1 to
-          /etc/resolv.conf overriding networking.nameservers).
+          /etc/resolv.conf).
         '';
       };
 

@@ -2,6 +2,10 @@
 set -eu -o pipefail
 shopt -s nullglob
 
+if (( "${NIX_DEBUG:-0}" >= 7 )); then
+    set -x
+fi
+
 path_backup="$PATH"
 
 # phase separation makes this look useless
@@ -156,7 +160,7 @@ fi
 
 
 # Optionally print debug info.
-if [ -n "${NIX_DEBUG:-}" ]; then
+if (( "${NIX_DEBUG:-0}" >= 1 )); then
     # Old bash workaround, see above.
     echo "extra flags before to @prog@:" >&2
     printf "  %q\n" ${extraBefore+"${extraBefore[@]}"}  >&2

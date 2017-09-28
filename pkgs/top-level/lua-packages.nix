@@ -8,7 +8,7 @@
 { fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
 , perl, gtk2, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
-, fetchFromGitHub, libmpack
+, fetchFromGitHub, libmpack, which
 }:
 
 let
@@ -268,6 +268,33 @@ let
       platforms = with platforms; darwin ++ linux ++ freebsd ++ illumos;
       maintainers = with maintainers; [ mornfall ];
     };
+  };
+
+  luxio = buildLuaPackage rec {
+    name = "luxio-${version}";
+    version = "13";
+    src = fetchurl {
+      url = "https://git.gitano.org.uk/luxio.git/snapshot/luxio-luxio-13.tar.bz2";
+      sha256 = "1hvwslc25q7k82rxk461zr1a2041nxg7sn3sw3w0y5jxf0giz2pz";
+    };
+    nativeBuildInputs = [ which pkgconfig ];
+    postPatch = ''
+      patchShebangs .
+    '';
+    meta = {
+      platforms = stdenv.lib.platforms.unix;
+      license = stdenv.lib.licenses.mit;
+      description = "Lightweight UNIX I/O and POSIX binding for Lua";
+      maintainers = [ maintainers.richardipsum ];
+    };
+    preBuild = ''
+      makeFlagsArray=(
+        INST_LIBDIR="$out/lib/lua/${lua.luaversion}"
+        INST_LUADIR="$out/share/lua/${lua.luaversion}"
+        LUA_BINDIR="$out/bin"
+        INSTALL=install
+        );
+    '';
   };
 
   luazip = buildLuaPackage rec {

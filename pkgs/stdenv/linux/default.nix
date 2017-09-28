@@ -84,7 +84,7 @@ let
           libc = prevStage.glibc;
           inherit (prevStage) binutils coreutils gnugrep;
           name = name;
-          stdenv = prevStage.ccWrapperStdenv;
+          stdenvNoCC = prevStage.ccWrapperStdenv;
         };
 
         extraAttrs = {
@@ -244,7 +244,7 @@ in
         };
         cc = prevStage.gcc-unwrapped;
         libc = self.glibc;
-        inherit (self) stdenv binutils coreutils gnugrep;
+        inherit (self) stdenvNoCC binutils coreutils gnugrep;
         name = "";
         shell = self.bash + "/bin/bash";
       };

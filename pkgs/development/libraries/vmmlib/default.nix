@@ -1,10 +1,10 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, boost, blas }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, boost, blas
+, Accelerate, CoreGraphics, CoreVideo
+}:
 
 stdenv.mkDerivation rec {
   version = "1.6.2";
   name = "vmmlib-${version}";
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ stdenv cmake boost blas ];
 
   src = fetchFromGitHub {
     owner = "VMML";
@@ -13,13 +13,17 @@ stdenv.mkDerivation rec {
     sha256 = "0sn6jl1r5k6ka0vkjsdnn14hb95dqq8158dapby6jk72wqj9kdml";
   };
 
-  patches = [ 
-		./disable-cpack.patch   #disable the need of cpack/rpm
-	    ];
-  
+  patches = [
+    ./disable-cpack.patch   #disable the need of cpack/rpm
+  ];
+
+  nativeBuildInputs = [ pkgconfig cmake ];
+  buildInputs = [ boost blas ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Accelerate CoreGraphics CoreVideo ];
+
   enableParallelBuilding = true;
 
-  doCheck = true;
+  doCheck = !stdenv.isDarwin;
 
   checkTarget = "test";
 
@@ -37,6 +41,6 @@ stdenv.mkDerivation rec {
     homepage    = http://github.com/VMML/vmmlib/;
     maintainers = [ maintainers.adev ];
     platforms   = platforms.all;
-  };  
+  };
 }
 

@@ -14,4 +14,5 @@ mkDerivation {
   propagatedBuildInputs = [
     kio kparts kxmlgui qtscript solid
   ];
+  outputs = [ "out" "dev" ];
 }

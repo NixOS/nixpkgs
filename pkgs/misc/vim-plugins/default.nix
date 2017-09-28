@@ -16,7 +16,7 @@ in
 
 # TL;DR
 # Add your plugin to ./vim-plugin-names
-# Regenerate via `nix-shell -p vimPlugins.pluginnames2nix --command "vim-plugin-names-to-nix"`
+# Regenerate via `nix-shell -I nixpkgs=/path/to/your/local/fork -p vimPlugins.pluginnames2nix --command "vim-plugin-names-to-nix"`
 # Copy the generated expression(s) into this file.
 # If plugin is complicated then make changes to ./vim2nix/additional-nix-code
 
@@ -495,6 +495,17 @@ rec {
 
   };
 
+  LanguageClient-neovim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "LanguageClient-neovim-2017-09-05";
+    src = fetchgit {
+      url = "https://github.com/autozimu/LanguageClient-neovim";
+      rev = "5bfc3492d50c3c48c6e0b0d1899ed2bbca2cf48f";
+      sha256 = "1zi3v4yx4hgzfr23377z84yngiqvdwjpdpkn12lpi6irb04q6641";
+    };
+    dependencies = [];
+
+  };
+
   clighter8 = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "clighter8-2017-07-23";
     src = fetchgit {
@@ -636,6 +647,17 @@ rec {
       url = "https://github.com/dracula/vim";
       rev = "6a5bf34193927c70b6c21dcbe1c130d2ab0951d6";
       sha256 = "1mmqrc52k133ddpxcs0mxjph4n4b856r5wbs17bgcpk95cfbspb1";
+    };
+    dependencies = [];
+
+  };
+
+  xptemplate = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "xptemplate-2017-04-18";
+    src = fetchgit {
+      url = "https://github.com/drmingdrmer/xptemplate";
+      rev = "52d84e361e9da53c4309b0d96a1ab667c67b7f07";
+      sha256 = "195r5p4cyiip64zmgcih56c59gwm0irgid6cdrqc2y747gyxmf7m";
     };
     dependencies = [];
 
@@ -1151,6 +1173,17 @@ rec {
 
   };
 
+  robotframework-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "robotframework-vim-2017-04-14";
+    src = fetchgit {
+      url = "https://github.com/mfukar/robotframework-vim";
+      rev = "75d5b371a4da2a090a2872d55bd0dead013f334e";
+      sha256 = "091ac5rq6f1a7j2q3dy9rc00vckv21m4wd29ijj63jannr02v5ad";
+    };
+    dependencies = [];
+
+  };
+
   vim-startify = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-startify-2017-06-15";
     src = fetchgit {
@@ -1358,6 +1391,17 @@ rec {
       url = "https://github.com/rodjek/vim-puppet";
       rev = "cb1863af2ba4de9fb1c1d952d82692502348fb92";
       sha256 = "0a3q6f8jplxbvpjaz9vnh589al64vg567nc00xabp46vcm83nk4x";
+    };
+    dependencies = [];
+
+  };
+
+  nvim-cm-racer = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "nvim-cm-racer-2017-07-27";
+    src = fetchgit {
+      url = "https://github.com/roxma/nvim-cm-racer";
+      rev = "2a8a4a49fa58c5dac9e0bed9511f6928930cacd2";
+      sha256 = "1yljxwypgn91084yyicbc2qprn31ld7s4drvnddzczyhzq5m2gpx";
     };
     dependencies = [];
 

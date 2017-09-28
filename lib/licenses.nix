@@ -281,6 +281,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     url = https://fedoraproject.org/wiki/Licensing/GPL_Classpath_Exception;
   };
 
+  hpnd = spdx {
+    spdxId = "HPND";
+    fullName = "Historic Permission Notice and Disclaimer";
+  };
+
   # Intel's license, seems free
   iasl = {
     fullName = "iASL";
@@ -292,9 +297,10 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Independent JPEG Group License";
   };
 
-  inria = {
-    fullName  = "INRIA Non-Commercial License Agreement";
+  inria-compcert = {
+    fullName  = "INRIA Non-Commercial License Agreement for the CompCert verified compiler";
     url       = "http://compcert.inria.fr/doc/LICENSE";
+    free      = false;
   };
 
   ipa = spdx {

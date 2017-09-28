@@ -3,19 +3,17 @@
 , libgcrypt, dnsmasq, bluez5, readline
 , gobjectIntrospection, modemmanager, openresolv, libndp, newt, libsoup
 , ethtool, iputils, gnused, coreutils, file, inetutils, kmod, jansson, libxslt
-, python3Packages, docbook_xsl, fetchpatch, openconnect }:
+, python3Packages, docbook_xsl, fetchpatch, openconnect, curl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   name    = "network-manager-${version}";
   pname   = "NetworkManager";
-  major   = "1.6";
+  major   = "1.8";
   version = "${major}.2";
-  # FIXME: this problem is fixed upstream (commit 6a77258f4ec2), remove when upgrading ^^^
-  hardeningDisable = [ "format" ];
 
   src = fetchurl {
     url    = "mirror://gnome/sources/${pname}/${major}/${pname}-${version}.tar.xz";
-    sha256 = "1y96k82rav8if334jl500zc024d210c4pgprh94yqyz3rmanyaxj";
+    sha256 = "1x0vzxvrck0snga2n3pc7g74m20zz74cr4r8gfspl8sckv6yz9bi";
   };
 
   outputs = [ "out" "dev" ];
@@ -46,13 +44,15 @@ stdenv.mkDerivation rec {
       --subst-var-by modprobeBinPath ${kmod}/bin/modprobe
     # to enable link-local connections
     configureFlags="$configureFlags --with-udev-dir=$out/lib/udev"
+
+    # Fixes: error: po/Makefile.in.in was not created by intltoolize.
+    intltoolize --automake --copy --force
   '';
 
   # Right now we hardcode quite a few paths at build time. Probably we should
   # patch networkmanager to allow passing these path in config file. This will
   # remove unneeded build-time dependencies.
   configureFlags = [
-    "--with-distro=exherbo"
     "--with-dhclient=${dhcp}/bin/dhclient"
     "--with-dnsmasq=${dnsmasq}/bin/dnsmasq"
     # Upstream prefers dhclient, so don't add dhcpcd to the closure
@@ -69,26 +69,21 @@ stdenv.mkDerivation rec {
     "--with-session-tracking=systemd"
     "--with-modem-manager-1"
     "--with-nmtui"
-    "--with-libsoup=yes"
+    "--disable-gtk-doc"
   ];
 
   patches = [
     ./PppdPath.patch
-    (fetchpatch {
-      sha256 = "1n90j5rwg97xkrhlldyr92filc2dmycl9pr0svky9hlcn9csk2z6";
-      name = "null-dereference.patch";
-      url = "https://github.com/NetworkManager/NetworkManager/commit/4e8eddd100bbc8429806a70620c90b72cfd29cb1.patch";
-    })
     ./openconnect_helper_path.patch
     ./modprobe.patch
   ];
 
-  buildInputs = [ systemd libgudev libnl libuuid polkit ppp libndp
+  buildInputs = [ systemd libgudev libnl libuuid polkit ppp libndp curl
                   bluez5 dnsmasq gobjectIntrospection modemmanager readline newt libsoup jansson ];
 
   propagatedBuildInputs = [ dbus_glib gnutls libgcrypt python3Packages.pygobject3 ];
 
-  nativeBuildInputs = [ intltool pkgconfig libxslt docbook_xsl ];
+  nativeBuildInputs = [ autoreconfHook intltool pkgconfig libxslt docbook_xsl ];
 
   preInstall = ''
     installFlagsArray=( "sysconfdir=$out/etc" "localstatedir=$out/var" "runstatedir=$out/var/run" )
