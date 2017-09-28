@@ -448,6 +448,13 @@ FLUSH PRIVILEGES;
       or setting it to <literal>"random"</literal>.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      <literal>imageDigest</literal> required argument has been
+      added to the <literal>dockerTools.pullImage</literal>
+      function. It provides an immutable image identifier.
+    </para>
+  </listitem>
 
 </itemizedlist>
 

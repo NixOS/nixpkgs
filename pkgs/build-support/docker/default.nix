@@ -32,20 +32,26 @@ rec {
     inherit pkgs buildImage pullImage shadowSetup buildImageWithNixDb;
   };
 
+  # To find the digest of an image, you can use skopeo:
+  # skopeo inspect docker://docker.io/nixos/nix:1.11 | jq -r '.Digest'
   pullImage =
     let
       nameReplace = name: builtins.replaceStrings ["/" ":"] ["-" "-"] name;
     in
-      # For simplicity we only support sha256.
-      { imageName, imageTag ? "latest", imageId ? "${imageName}:${imageTag}"
-      , sha256, name ? (nameReplace "docker-image-${imageName}-${imageTag}.tar") }:
+      { imageName, imageDigest, sha256
+      # The tag is only used at Docker image loading (to set a tag),
+      # ie. it is not used to pull the image since it is not supported
+      # by Skopeo yet.
+      , imageTag ? "latest"
+      , name ? (nameReplace "docker-image-${imageName}-${imageDigest}.tar") }:
       runCommand name {
         impureEnvVars=pkgs.stdenv.lib.fetchers.proxyImpureEnvVars;
         outputHashMode="flat";
         outputHashAlgo="sha256";
         outputHash=sha256;
       }
-      "${pkgs.skopeo}/bin/skopeo copy docker://${imageId} docker-archive://$out:${imageId}";
+      # fixme: use docker://${imageName}:${imageTag}@${imageDigest} when supported by Skopeo
+      "${pkgs.skopeo}/bin/skopeo copy docker://${imageName}@${imageDigest} docker-archive://$out:${imageName}:${imageTag}";
 
   # We need to sum layer.tar, not a directory, hence tarsum instead of nix-hash.
   # And we cannot untar it, because then we cannot preserve permissions ecc.

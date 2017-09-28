@@ -86,7 +86,7 @@ rec {
   nixFromDockerHub = pullImage {
     imageName = "nixos/nix";
     imageTag = "1.11";
-    # this hash will need change if the tag is updated at docker hub
+    imageDigest = "sha256:20d9485b25ecfd89204e843a962c1bd70e9cc6858d65d7f5fadc340246e2116b";
     sha256 = "18xvcnl0yvj9kfi5bkimrhhjaa8xhm3jhshh2xd7c0sbfrmfqzvi";
   };
 
