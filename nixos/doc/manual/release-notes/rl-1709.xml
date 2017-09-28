@@ -183,6 +183,53 @@ following incompatible changes:</para>
 <itemizedlist>
   <listitem>
     <para>
+        <emphasis role="strong">
+            In an Qemu-based virtualization environment, the network interface
+            names changed from i.e. <literal>enp0s3</literal> to
+            <literal>ens3</literal>.
+        </emphasis>
+    </para>
+    <para>
+        This is due to a kernel configuration change. The new naming
+        is consistent with those of other Linux distributions with
+        systemd. See
+        <!--!link href="https://github.com/NixOS/nixpkgs/issues/29197">#29197</link-->
+        for more information.
+    </para>
+    <para>
+        A machine is affected if the <literal>virt-what</literal> tool
+        either returns <literal>qemu</literal> or
+        <literal>kvm</literal> <emphasis>and</emphasis> has
+        interface names used in any part of its NixOS configuration,
+        in particular if a static network configuration with
+        <literal>networking.interfaces</literal> is used.
+    </para>
+    <para>
+        Before rebooting affected machines, please ensure:
+        <itemizedlist>
+          <listitem>
+            <para>
+              Change the interface names in your NixOS configuration.
+              The first interface will be called <literal>ens3</literal>,
+              the second one <literal>ens8</literal> and starting from there
+              incremented by 1.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              After changing the interface names, rebuild your system with
+              <literal>nixos-rebuild boot</literal> to activate the new
+              configuration after a reboot. If you switch to the new
+              configuration right away you might lose network connectivity!
+              If using <literal>nixops</literal>, deploy with
+              <literal>nixops deploy --force-reboot</literal>.
+            </para>
+          </listitem>
+        </itemizedlist>
+    </para>
+  </listitem>
+  <listitem>
+    <para>
       The <literal>aiccu</literal> package was removed. This is due to SixXS
       <link xlink:href="https://www.sixxs.net/main/"> sunsetting</link> its IPv6 tunnel.
     </para>
