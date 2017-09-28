@@ -1,13 +1,14 @@
-{lib, fetchurl, python, buildPythonPackage, isPy27, isPyPy, gfortran, nose, blas}:
+{lib, fetchPypi, python, buildPythonPackage, isPy27, isPyPy, gfortran, nose, blas}:
 
 buildPythonPackage rec {
   pname = "numpy";
-  version = "1.13.1";
+  version = "1.13.2";
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/n/numpy/numpy-${version}.zip";
-    sha256 = "c9b0283776085cb2804efff73e9955ca279ba4edafd58d3ead70b61d209c4fbb";
+  src = fetchPypi {
+    inherit pname version;
+    extension = "zip";
+    sha256 = "1fmq8923q91xyjf6fngl0n6jlysryyzx06288b5qdvv97mlfpklh";
   };
 
   disabled = isPyPy;
