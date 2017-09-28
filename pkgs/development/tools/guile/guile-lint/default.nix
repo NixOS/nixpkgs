@@ -1,10 +1,8 @@
 { stdenv, fetchurl, guile }:
 
-let
+stdenv.mkDerivation rec {
   name = "guile-lint-${version}";
   version = "14";
-in stdenv.mkDerivation {
-  inherit name;
 
   src = fetchurl {
     url = "https://download.tuxfamily.org/user42/${name}.tar.bz2";
