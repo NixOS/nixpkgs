@@ -35,6 +35,18 @@ with lib;
         description = "Whether to set the system sendmail to nullmailer's.";
       };
 
+      remotesFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Path to the <code>remotes</code> control file. This file contains a
+          list of remote servers to which to send each message.
+
+          See <code>man 8 nullmailer-send</code> for syntax and available
+          options.
+        '';
+      };
+
       config = {
         adminaddr = mkOption {
           type = types.nullOr types.str;
@@ -173,13 +185,27 @@ with lib;
     cfg = config.services.nullmailer;
   in mkIf cfg.enable {
 
+    assertions = [
+      { assertion = cfg.config.remotes == null || cfg.remotesFile == null;
+        message = "Only one of `remotesFile` or `config.remotes` may be used at a time.";
+      }
+    ];
+
     environment = {
       systemPackages = [ pkgs.nullmailer ];
       etc = let
         getval  = attr: builtins.getAttr attr cfg.config;
         attrs   = builtins.attrNames cfg.config;
-        attrs'  = builtins.filter (attr: ! isNull (getval attr)) attrs;
-      in foldl' (as: attr: as // { "nullmailer/${attr}".text = getval attr; }) {} attrs';
+        remotesFilter = if cfg.remotesFile != null
+                        then (attr: attr != "remotes")
+                        else (_: true);
+        optionalRemotesFileLink = if cfg.remotesFile != null
+                                  then { "nullmailer/remotes".source = cfg.remotesFile; }
+                                  else {};
+        attrs'  = builtins.filter (attr: (! isNull (getval attr)) && (remotesFilter attr)) attrs;
+      in
+        (foldl' (as: attr: as // { "nullmailer/${attr}".text = getval attr; }) {} attrs')
+        // optionalRemotesFileLink;
     };
 
     users = {
