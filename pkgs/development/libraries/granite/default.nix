@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   majorVersion = "0.4";
-  minorVersion = "0.1";
+  minorVersion = "1";
   name = "granite-${majorVersion}.${minorVersion}";
   src = fetchurl {
     url = "https://launchpad.net/granite/${majorVersion}/${majorVersion}.${minorVersion}/+download/${name}.tar.xz";
-    sha256 = "1pf4jkz3xyn1sqv70063im80ayb5kdsqwqwx11dc7vgypsl458cm";
+    sha256 = "177h5h1q4qd7g99mzbczvz78j8c9jf4f1gwdj9f6imbc7r913d4b";
   };
   cmakeFlags = "-DINTROSPECTION_GIRDIR=share/gir-1.0/ -DINTROSPECTION_TYPELIBDIR=lib/girepository-1.0";
   nativeBuildInputs = [ pkgconfig ];
