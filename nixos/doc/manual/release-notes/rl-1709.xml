@@ -6,6 +6,14 @@
 
 <title>Release 17.09 (“Hummingbird”, 2017/09/??)</title>
 
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-17.09-highlights">
+
+<title>Highlights</title>
+
 <para>In addition to numerous new and upgraded packages, this release
 has the following highlights: </para>
 
@@ -74,14 +82,100 @@ has the following highlights: </para>
   </listitem>
 </itemizedlist>
 
+</section>
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-17.09-new-services">
+
+<title>New Services</title>
+
 <para>The following new services were added since the last release:</para>
 
 <itemizedlist>
-  <listitem>
-    <para></para>
-  </listitem>
+  <listitem><para><literal>config/fonts/fontconfig-penultimate.nix</literal></para></listitem>
+  <listitem><para><literal>config/fonts/fontconfig-ultimate.nix</literal></para></listitem>
+  <listitem><para><literal>config/terminfo.nix</literal></para></listitem>
+  <listitem><para><literal>hardware/sensor/iio.nix</literal></para></listitem>
+  <listitem><para><literal>hardware/nitrokey.nix</literal></para></listitem>
+  <listitem><para><literal>hardware/raid/hpsa.nix</literal></para></listitem>
+  <listitem><para><literal>programs/browserpass.nix</literal></para></listitem>
+  <listitem><para><literal>programs/gnupg.nix</literal></para></listitem>
+  <listitem><para><literal>programs/qt5ct.nix</literal></para></listitem>
+  <listitem><para><literal>programs/slock.nix</literal></para></listitem>
+  <listitem><para><literal>programs/thefuck.nix</literal></para></listitem>
+  <listitem><para><literal>security/auditd.nix</literal></para></listitem>
+  <listitem><para><literal>security/lock-kernel-modules.nix</literal></para></listitem>
+  <listitem><para><literal>service-managers/docker.nix</literal></para></listitem>
+  <listitem><para><literal>service-managers/trivial.nix</literal></para></listitem>
+  <listitem><para><literal>services/admin/salt/master.nix</literal></para></listitem>
+  <listitem><para><literal>services/admin/salt/minion.nix</literal></para></listitem>
+  <listitem><para><literal>services/audio/slimserver.nix</literal></para></listitem>
+  <listitem><para><literal>services/cluster/kubernetes/default.nix</literal></para></listitem>
+  <listitem><para><literal>services/cluster/kubernetes/dns.nix</literal></para></listitem>
+  <listitem><para><literal>services/cluster/kubernetes/dashboard.nix</literal></para></listitem>
+  <listitem><para><literal>services/continuous-integration/hail.nix</literal></para></listitem>
+  <listitem><para><literal>services/databases/clickhouse.nix</literal></para></listitem>
+  <listitem><para><literal>services/databases/postage.nix</literal></para></listitem>
+  <listitem><para><literal>services/desktops/gnome3/gnome-disks.nix</literal></para></listitem>
+  <listitem><para><literal>services/desktops/gnome3/gpaste.nix</literal></para></listitem>
+  <listitem><para><literal>services/logging/SystemdJournal2Gelf.nix</literal></para></listitem>
+  <listitem><para><literal>services/logging/heartbeat.nix</literal></para></listitem>
+  <listitem><para><literal>services/logging/journalwatch.nix</literal></para></listitem>
+  <listitem><para><literal>services/logging/syslogd.nix</literal></para></listitem>
+  <listitem><para><literal>services/mail/mailhog.nix</literal></para></listitem>
+  <listitem><para><literal>services/mail/nullmailer.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/airsonic.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/autorandr.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/exhibitor.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/fstrim.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/gollum.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/irkerd.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/jackett.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/radarr.nix</literal></para></listitem>
+  <listitem><para><literal>services/misc/snapper.nix</literal></para></listitem>
+  <listitem><para><literal>services/monitoring/osquery.nix</literal></para></listitem>
+  <listitem><para><literal>services/monitoring/prometheus/collectd-exporter.nix</literal></para></listitem>
+  <listitem><para><literal>services/monitoring/prometheus/fritzbox-exporter.nix</literal></para></listitem>
+  <listitem><para><literal>services/network-filesystems/kbfs.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/dnscache.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/fireqos.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/iwd.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/keepalived/default.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/keybase.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/lldpd.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/matterbridge.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/squid.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/tinydns.nix</literal></para></listitem>
+  <listitem><para><literal>services/networking/xrdp.nix</literal></para></listitem>
+  <listitem><para><literal>services/security/shibboleth-sp.nix</literal></para></listitem>
+  <listitem><para><literal>services/security/sks.nix</literal></para></listitem>
+  <listitem><para><literal>services/security/sshguard.nix</literal></para></listitem>
+  <listitem><para><literal>services/security/torify.nix</literal></para></listitem>
+  <listitem><para><literal>services/security/usbguard.nix</literal></para></listitem>
+  <listitem><para><literal>services/security/vault.nix</literal></para></listitem>
+  <listitem><para><literal>services/system/earlyoom.nix</literal></para></listitem>
+  <listitem><para><literal>services/system/saslauthd.nix</literal></para></listitem>
+  <listitem><para><literal>services/web-apps/nexus.nix</literal></para></listitem>
+  <listitem><para><literal>services/web-apps/pgpkeyserver-lite.nix</literal></para></listitem>
+  <listitem><para><literal>services/web-apps/piwik.nix</literal></para></listitem>
+  <listitem><para><literal>services/web-servers/lighttpd/collectd.nix</literal></para></listitem>
+  <listitem><para><literal>services/web-servers/minio.nix</literal></para></listitem>
+  <listitem><para><literal>services/x11/display-managers/xpra.nix</literal></para></listitem>
+  <listitem><para><literal>services/x11/xautolock.nix</literal></para></listitem>
+  <listitem><para><literal>tasks/filesystems/bcachefs.nix</literal></para></listitem>
+  <listitem><para><literal>tasks/powertop.nix</literal></para></listitem>
 </itemizedlist>
 
+</section>
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-17.09-incompatibilities">
+
+<title>Backward Incompatibilities</title>
 
 <para>When upgrading from a previous release, please be aware of the
 following incompatible changes:</para>
@@ -336,7 +430,14 @@ FLUSH PRIVILEGES;
   </listitem>
 </itemizedlist>
 
-<para>Other notable improvements:</para>
+</section>
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-17.09-notable-changes">
+
+<title>Other Notable Changes</title>
 
 <itemizedlist>
 
@@ -443,4 +544,5 @@ FLUSH PRIVILEGES;
 
 </itemizedlist>
 
+</section>
 </section>
