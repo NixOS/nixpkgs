@@ -47,10 +47,10 @@ stdenv.mkDerivation rec {
     pkgconfig curl libdbi libgcrypt libmemcached
     cyrus_sasl libnotify gdk_pixbuf liboping libpcap libvirt
     libxml2 libmysql postgresql protobufc rrdtool
-    varnish yajl jdk libtool python hiredis
+    varnish yajl jdk libtool python hiredis libmicrohttpd
   ] ++ stdenv.lib.optionals stdenv.isLinux [
     iptables libatasmart libcredis libmodbus libsigrok
-    lm_sensors lvm2 rabbitmq-c udev net_snmp libmnl libmicrohttpd
+    lm_sensors lvm2 rabbitmq-c udev net_snmp libmnl
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.IOKit
     darwin.apple_sdk.frameworks.ApplicationServices
