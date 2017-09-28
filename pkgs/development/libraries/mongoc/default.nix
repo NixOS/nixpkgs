@@ -1,5 +1,5 @@
 { stdenv, fetchzip, perl, pkgconfig, libbson
-, openssl, which
+, openssl, which, zlib, snappy
 }:
 
 stdenv.mkDerivation rec {
@@ -11,8 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1vnnk3pwbcmwva1010bl111kdcdx3yb2w7j7a78hhvrm1k9r1wp8";
   };
 
+  nativeBuildInputs = [ pkgconfig which perl ];
+  buildInputs = [ openssl zlib snappy ];
   propagatedBuildInputs = [ libbson ];
-  buildInputs = [ openssl perl pkgconfig which ];
 
   meta = with stdenv.lib; {
     description = "The official C client library for MongoDB";
