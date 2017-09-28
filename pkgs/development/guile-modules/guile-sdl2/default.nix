@@ -37,7 +37,7 @@ in stdenv.mkDerivation {
     description = "Bindings to SDL2 for GNU Guile";
     homepage = "https://git.dthompson.us/guile-sdl2.git";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ seppeljordan ];
+    maintainers = with maintainers; [ seppeljordan vyp ];
     platforms = platforms.all;
   };
 }
