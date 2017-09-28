@@ -17,5 +17,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ MP2E ];
+    broken = true;
   };
 }
