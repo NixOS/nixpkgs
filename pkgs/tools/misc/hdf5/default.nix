@@ -1,5 +1,7 @@
 { stdenv
 , fetchurl
+, gcc
+, removeReferencesTo
 , cpp ? false
 , gfortran ? null
 , zlib ? null
@@ -30,7 +32,7 @@ stdenv.mkDerivation rec {
     inherit mpi;
   };
 
-  buildInputs = []
+  buildInputs = [ removeReferencesTo ]
     ++ optional (gfortran != null) gfortran
     ++ optional (szip != null) szip;
 
@@ -46,6 +48,9 @@ stdenv.mkDerivation rec {
     ++ optional enableShared "--enable-shared";
 
   patches = [./bin-mv.patch];
+
+  postInstall =
+    '' find "$out" -type f -exec remove-references-to -t ${gcc} '{}' + '';
 
   meta = {
     description = "Data model, library, and file format for storing and managing data";
