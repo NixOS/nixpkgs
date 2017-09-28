@@ -13954,6 +13954,7 @@ in {
 
     meta = with stdenv.lib; {
       homepage = "http://wiki.openstack.org/wiki/Oslo#oslo.middleware";
+      broken = true;
     };
   };
 

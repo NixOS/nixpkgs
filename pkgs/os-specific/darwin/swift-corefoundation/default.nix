@@ -29,4 +29,6 @@ stdenv.mkDerivation {
     mkdir -p $out/lib
     cp ../Build/CoreFoundation/libCoreFoundation.a $out/lib
   '';
+
+  meta.platforms = [ stdenv.lib.platforms.darwin ];
 }

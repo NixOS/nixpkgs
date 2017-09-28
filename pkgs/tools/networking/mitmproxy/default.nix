@@ -71,5 +71,6 @@ in p.pkgs.buildPythonPackage rec {
     homepage = http://mitmproxy.org/;
     license = licenses.mit;
     maintainers = with maintainers; [ fpletz ];
+    broken = true;
   };
 }

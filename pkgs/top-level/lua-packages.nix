@@ -154,6 +154,7 @@ let
       homepage = "http://matthewwild.co.uk/projects/luaexpat";
       platforms = stdenv.lib.platforms.unix;
       maintainers = [ stdenv.lib.maintainers.flosse ];
+      broken = (builtins.parseDrvName lua.name).name != "lua";
     };
   };
 
@@ -312,6 +313,7 @@ let
       homepage = "https://github.com/luaforge/luazip";
       platforms = stdenv.lib.platforms.linux;
       license = stdenv.lib.licenses.mit;
+      broken = (builtins.parseDrvName lua.name).name != "lua";
     };
   };
 
@@ -461,6 +463,7 @@ let
     meta = {
       description = "Lua C extension module for JSON support";
       license = stdenv.lib.licenses.mit;
+      broken = (builtins.parseDrvName lua.name).name != "lua";
     };
   };
 
