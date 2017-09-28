@@ -194,18 +194,10 @@ with lib;
     environment = {
       systemPackages = [ pkgs.nullmailer ];
       etc = let
-        getval  = attr: builtins.getAttr attr cfg.config;
-        attrs   = builtins.attrNames cfg.config;
-        remotesFilter = if cfg.remotesFile != null
-                        then (attr: attr != "remotes")
-                        else (_: true);
-        optionalRemotesFileLink = if cfg.remotesFile != null
-                                  then { "nullmailer/remotes".source = cfg.remotesFile; }
-                                  else {};
-        attrs'  = builtins.filter (attr: (! isNull (getval attr)) && (remotesFilter attr)) attrs;
+        validAttrs = filterAttrs (name: value: value != null) cfg.config;
       in
-        (foldl' (as: attr: as // { "nullmailer/${attr}".text = getval attr; }) {} attrs')
-        // optionalRemotesFileLink;
+        (foldl' (as: name: as // { "nullmailer/${name}".text = validAttrs.${name}; }) {} (attrNames validAttrs))
+          // optionalAttrs (cfg.remotesFile != null) { "nullmailer/remotes".source = cfg.remotesFile; };
     };
 
     users = {
