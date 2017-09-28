@@ -7,6 +7,8 @@
 , configurationNix ? import ./configuration-nix.nix
 }:
 
+self: # Provided by `callPackageWithOutput`
+
 let
 
   inherit (lib) extends makeExtensible;
@@ -14,19 +16,15 @@ let
 
   haskellPackages = pkgs.callPackage makePackageSet {
     package-set = initialPackages;
-    inherit stdenv haskellLib ghc extensible-self;
+    extensible-self = self;
+    inherit stdenv haskellLib ghc;
   };
 
   commonConfiguration = configurationCommon { inherit pkgs haskellLib; };
   nixConfiguration = configurationNix { inherit pkgs haskellLib; };
 
-  extensible-self = makeExtensible
-    (extends overrides
-      (extends packageSetConfig
-        (extends compilerConfig
-          (extends commonConfiguration
-            (extends nixConfiguration haskellPackages)))));
-
-in
-
-  extensible-self
+in (extends overrides
+     (extends packageSetConfig
+       (extends compilerConfig
+         (extends commonConfiguration
+           (extends nixConfiguration haskellPackages))))) self

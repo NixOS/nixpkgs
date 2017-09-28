@@ -50,10 +50,50 @@ rec {
        }
        else { }));
 
+  # A more powerful version of `makeOverridable` with features similar
+  # to `makeExtensibleWithInterface`.
+  makeOverridableWithInterface = interface: f: origArgs: let
 
-  /* `makeOverridable` takes a function from attribute set to attribute set and
-     injects `override` attibute which can be used to override arguments of
-     the function.
+    addOverrideFuncs = {val, args, ...}: overridePackage:
+      (lib.optionalAttrs (builtins.isAttrs val) (val // {
+        extend = f: overridePackage (_: self: super: {
+          val = super.val // f self.val super.val;
+        });
+
+        overrideDerivation = newArgs: overridePackage (_: self: super: {
+          val = lib.overrideDerivation super.val newArgs;
+        });
+
+        ${if val ? overrideAttrs then "overrideAttrs" else null} = fdrv:
+          overridePackage (_: self: super: {
+            val = super.val.overrideAttrs fdrv;
+          });
+      })) // (lib.optionalAttrs (builtins.isFunction val) {
+        __functor = _: val;
+        extend = throw "extend not yet supported for functors";
+        overrideDerivation = throw "overrideDerivation not yet supported for functors";
+      }) // {
+        inherit overridePackage;
+
+        override = newArgs: overridePackage (_: self: super: {
+          args = super.args //
+            (if builtins.isFunction newArgs then newArgs super.args else newArgs);
+        });
+      };
+
+  in lib.makeExtensibleWithInterface (x: o: interface (addOverrideFuncs x o) o) (output: self: {
+    args = origArgs;
+    val = f output self.args self.val;
+  });
+
+
+  /* `makeOverridable` takes a function from attribute set to
+     attribute set and injects 4 attributes which can be used to
+     override arguments and return values of the function.
+
+
+     1. `override` allows you to change what arguments were passed to
+     the function and acquire the new result.
 
        nix-repl> x = {a, b}: { result = a + b; }
 
@@ -65,28 +105,75 @@ rec {
        nix-repl> y.override { a = 10; }
        { override = «lambda»; overrideDerivation = «lambda»; result = 12; }
 
-     Please refer to "Nixpkgs Contributors Guide" section
-     "<pkg>.overrideDerivation" to learn about `overrideDerivation` and caveats
-     related to its use.
+
+     2. `extend` changes the results of the function, giving you a
+     view of the original result and a view of the eventual final
+     result. It is meant to do the same thing as
+     `makeExtensible`. That is, it lets you add to or change the
+     return value, such that previous extensions are consistent with
+     the final view, rather than being based on outdated
+     values. "Outdated" values come from the `super` argument, which
+     must be used when you are attempting to modify and old value. And
+     the final values come from the `self` argument, which recursively
+     refers to what all extensions combined return.
+
+       nix-repl> obj = makeOverridable (args: { }) { }
+
+       nix-repl> obj = obj.extend (self: super: { foo = "foo"; })
+
+       nix-repl> obj.foo
+       "foo"
+
+       nix-repl> obj = obj.extend (self: super: { foo = super.foo + " + "; bar = "bar"; foobar = self.foo + self.bar; })
+
+       nix-repl> obj
+       { bar = "bar"; foo = "foo + "; foobar = "foo + bar"; ... } # Excess omitted
+
+
+     3. `overrideDerivation`: Please refer to "Nixpkgs Contributors
+     Guide" section "<pkg>.overrideDerivation" to learn about
+     `overrideDerivation` and caveats related to its use.
+
+
+     4. `overridePackage` is by far the most powerful of the four, as
+     it exposes a deeper structure. It provides `self` and `super`
+     views of both the arguments and return value of the function,
+     allowing you to change both in one override; you can even have
+     overrides for one based on overrides for the other. It also
+     provides the `output` view, which is the view of `self` after
+     passing it through the `makeOverridable` interface and adding all
+     the `overrideX` functions. `output` is necessary when your
+     overrides depend on the overridable structure of `output`.
+
+       nix-repl> obj = makeOverridable ({a, b}: {inherit a b;}) {a = 1; b = 3;}
+
+       nix-repl> obj = obj.overridePackage (output: self: super: { args = super.args // {b = self.val.a;}; })
+
+       nix-repl> obj.b
+       1
+
+       nix-repl> obj = obj.overridePackage (output: self: super: { val = super.val // {a = self.args.a + 10;}; })
+
+       nix-repl> obj.b
+       11
+
   */
-  makeOverridable = f: origArgs:
+  makeOverridable = fn: makeOverridableWithInterface (x: _: x) (_: args: _: fn args);
+
+  callPackageCommon = functionArgs: scope: f: args:
     let
-      ff = f origArgs;
-      overrideWith = newArgs: origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs);
-    in
-      if builtins.isAttrs ff then (ff // {
-        override = newArgs: makeOverridable f (overrideWith newArgs);
-        overrideDerivation = fdrv:
-          makeOverridable (args: overrideDerivation (f args) fdrv) origArgs;
-        ${if ff ? overrideAttrs then "overrideAttrs" else null} = fdrv:
-          makeOverridable (args: (f args).overrideAttrs fdrv) origArgs;
-      })
-      else if builtins.isFunction ff then {
-        override = newArgs: makeOverridable f (overrideWith newArgs);
-        __functor = self: ff;
-        overrideDerivation = throw "overrideDerivation not yet supported for functors";
-      }
-      else ff;
+      intersect = builtins.intersectAttrs functionArgs;
+      interface = val: overridePackage: val // {
+        overrideScope = newScope: overridePackage (_: self: super: {
+          scope = super.scope.extend newScope;
+        });
+      };
+    in (makeOverridableWithInterface interface f (intersect scope // args))
+      .overridePackage (output: self: super: {
+        inherit scope;
+        # Don't use super.args because that contains the original scope.
+        args = intersect self.scope  // args;
+      });
 
 
   /* Call the package function in the file `fn' with the required
@@ -109,12 +196,35 @@ rec {
         libfoo = null;
         enableX11 = true;
       };
+
+    On top of the additions from `makeOverridable`, an `overrideScope`
+    function is also added to the result. It is similar to `override`,
+    except that it provides `self` and `super` views to the
+    scope. This can't be done in `makeOverridable` because the scope
+    is filtered to just the arguments needed by the function before
+    entering `makeOverridable`. It is useful to have a view of the
+    scope before restriction; for example, to change versions for a
+    particular dependency.
+
+      foo.overrideScope (self: super: {
+        llvm = self.llvm_37;
+      })
+
+    `llvm_37` would not exist in the scope after restriction.
+
   */
   callPackageWith = autoArgs: fn: args:
-    let
-      f = if builtins.isFunction fn then fn else import fn;
-      auto = builtins.intersectAttrs (builtins.functionArgs f) autoArgs;
-    in makeOverridable f (auto // args);
+    let f = if builtins.isFunction fn then fn else import fn;
+    in callPackageCommon (builtins.functionArgs f) autoArgs (output: x: _: f x) args;
+
+
+  # Like `callPackageWith`, but provides the function with a `self`
+  # view of the output, which has the override functions
+  # injected. `fn` is called with the new output whenever an override
+  # or extension is added.
+  callPackageWithOutputWith = autoArgs: fn: args:
+    let f = if builtins.isFunction fn then fn else import fn;
+    in callPackageCommon (builtins.functionArgs f) autoArgs (output: args: _: f args output ) args;
 
 
   /* Like callPackage, but for a function that returns an attribute

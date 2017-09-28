@@ -5,14 +5,9 @@ let
 
   lib = pkgs.callPackage ./lib.nix {};
 
-  # FIXME: add support for overrideScope
-  callPackageWithScope = scope: drv: args: stdenv.lib.callPackageWith scope drv args;
-  mkScope = scope: pkgs // scope;
-
   packages = self:
     let
-      defaultScope = mkScope self;
-      callPackage = drv: args: callPackageWithScope defaultScope drv args;
+      callPackage = stdenv.lib.callPackageWith (pkgs // self);
     in
       import ./hex-packages.nix {
         inherit pkgs stdenv callPackage;
