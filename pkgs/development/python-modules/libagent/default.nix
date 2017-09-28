@@ -22,5 +22,6 @@ buildPythonPackage rec {
     homepage = https://github.com/romanz/trezor-agent;
     license = licenses.gpl3;
     maintainers = with maintainers; [ np ];
+    broken = true;
   };
 }

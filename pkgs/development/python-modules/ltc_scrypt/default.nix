@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 }:
 
 buildPythonPackage rec {
@@ -12,6 +13,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "1h90hh3iw4i7zs7jgskdjlk8gi97b3v2zqsxdfwdvhrrnhpvv856";
   };
+
+  disabled = isPy3k;
 
   meta = with stdenv.lib; {
     description = "Bindings for scrypt proof of work used by Litecoin";

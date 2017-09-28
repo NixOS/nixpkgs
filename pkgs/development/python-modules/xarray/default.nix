@@ -29,5 +29,6 @@ buildPythonPackage rec {
     homepage = https://github.com/pydata/xarray;
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ fridh ];
+    broken = true;
   };
 }
