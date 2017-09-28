@@ -1,11 +1,9 @@
 { fetchurl, stdenv, guile, guile-lib, libffi, pkgconfig, glib }:
 
-let
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "g-wrap";
   version = "1.9.15";
-in stdenv.mkDerivation {
-  inherit name;
 
   src = fetchurl {
     url = "mirror://savannah/${pname}/${name}.tar.gz";
