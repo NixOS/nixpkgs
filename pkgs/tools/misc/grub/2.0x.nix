@@ -2,7 +2,7 @@
 , gettext, ncurses, libusb, freetype, qemu, devicemapper, unifont
 , zfs ? null
 , efiSupport ? false
-, zfsSupport ? true
+, zfsSupport ? false
 , xenSupport ? false
 }:
 
