@@ -55,22 +55,23 @@ has the following highlights: </para>
   </listitem>
   <listitem>
     <para>
-      The handling of SSL in the nginx module has been cleaned up, renaming
-      the misnomed <literal>enableSSL</literal> to <literal>onlySSL</literal>
-      which reflects its original intention. This is not to be used with the
-      already existing <literal>forceSSL</literal> which creates a second
-      non-SSL virtual host redirecting to the SSL virtual host. This by
-      chance had worked earlier due to specific implementation details. In
-      case you had specified both please remove the <literal>enableSSL</literal>
-      option to keep the previous behaviour.
+      The handling of SSL in the <literal>services.nginx</literal> module has
+      been cleaned up, renaming the misnamed <literal>enableSSL</literal> to
+      <literal>onlySSL</literal> which reflects its original intention. This
+      is not to be used with the already existing <literal>forceSSL</literal>
+      which creates a second non-SSL virtual host redirecting to the SSL
+      virtual host. This by chance had worked earlier due to specific
+      implementation details. In case you had specified both please remove
+      the <literal>enableSSL</literal> option to keep the previous behaviour.
     </para>
     <para>
       Another <literal>addSSL</literal> option has been introduced to configure
-      both a non-SSL virtual host and an SSL virtual host.
+      both a non-SSL virtual host and an SSL virtual host with the same
+      configuration.
     </para>
     <para>
-      Options to configure <literal>resolver</literal>s and
-      <literal>upstream</literal>s have been introduced. See their information
+      Options to configure <literal>resolver</literal> options and
+      <literal>upstream</literal> blocks have been introduced. See their information
       for further details.
     </para>
     <para>
@@ -193,7 +194,7 @@ following incompatible changes:</para>
         This is due to a kernel configuration change. The new naming
         is consistent with those of other Linux distributions with
         systemd. See
-        <!--!link href="https://github.com/NixOS/nixpkgs/issues/29197">#29197</link-->
+        <link xlink:href="https://github.com/NixOS/nixpkgs/issues/29197">#29197</link>
         for more information.
     </para>
     <para>
@@ -230,6 +231,39 @@ following incompatible changes:</para>
   </listitem>
   <listitem>
     <para>
+      The following changes apply if the <literal>stateVersion</literal> is changed to 17.09 or higher.
+      For <literal>stateVersion = "17.03"</literal> or lower the old behavior is preserved.
+    </para>
+    <itemizedlist>
+      <listitem>
+        <para>
+          The <literal>postgres</literal> default version was changed from 9.5 to 9.6.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>postgres</literal> superuser name has changed from <literal>root</literal> to <literal>postgres</literal> to more closely follow what other Linux distributions are doing.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>postgres</literal> default <literal>dataDir</literal> has changed from <literal>/var/db/postgres</literal> to <literal>/var/lib/postgresql/$psqlSchema</literal> where $psqlSchema is 9.6 for example.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          The <literal>mysql</literal> default <literal>dataDir</literal> has changed from <literal>/var/mysql</literal> to <literal>/var/lib/mysql</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Radicale's default package has changed from 1.x to 2.x. Instructions to migrate can be found <link xlink:href="http://radicale.org/1to2/"> here </link>. It is also possible to use the newer version by setting the <literal>package</literal> to <literal>radicale2</literal>, which is done automatically when <literal>stateVersion</literal> is 17.09 or higher. The <literal>extraArgs</literal> option has been added to allow passing the data migration arguments specified in the instructions; see the <filename xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/radicale.nix">radicale.nix</filename> NixOS test for an example migration.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </listitem>
+  <listitem>
+    <para>
       The <literal>aiccu</literal> package was removed. This is due to SixXS
       <link xlink:href="https://www.sixxs.net/main/"> sunsetting</link> its IPv6 tunnel.
     </para>
@@ -256,7 +290,7 @@ following incompatible changes:</para>
   </listitem>
   <listitem>
     <para>
-      The ipfs package now doesn't ignore the <literal>dataDir</literal> option anymore. If you've ever set this option to anything other than the default you'll have to either unset it (so the default gets used) or migrate the old data manually with
+      The <literal>ipfs</literal> service now doesn't ignore the <literal>dataDir</literal> option anymore. If you've ever set this option to anything other than the default you'll have to either unset it (so the default gets used) or migrate the old data manually with
 <programlisting>
 dataDir=&lt;valueOfDataDir&gt;
 mv /var/lib/ipfs/.ipfs/* $dataDir
@@ -266,30 +300,9 @@ rmdir /var/lib/ipfs/.ipfs
   </listitem>
   <listitem>
     <para>
-      The following changes apply if the <literal>stateVersion</literal> is changed to 17.09 or higher.
-      For <literal>stateVersion = "17.03</literal> or lower the old behavior is preserved.
-    </para>
-    <para>
-      The <literal>postgres</literal> default version was changed from 9.5 to 9.6.
-    </para>
-    <para>
-      The <literal>postgres</literal> superuser name has changed from <literal>root</literal> to <literal>postgres</literal> to more closely follow what other Linux distributions are doing.
-    </para>
-    <para>
-      The <literal>postgres</literal> default <literal>dataDir</literal> has changed from <literal>/var/db/postgres</literal> to <literal>/var/lib/postgresql/$psqlSchema</literal> where $psqlSchema is 9.6 for example.
-    </para>
-    <para>
-      The <literal>mysql</literal> default <literal>dataDir</literal> has changed from <literal>/var/mysql</literal> to <literal>/var/lib/mysql</literal>.
-    </para>
-    <para>
-            Radicale's default package has changed from 1.x to 2.x. Instructions to migrate can be found <link xlink:href="http://radicale.org/1to2/"> here </link>. It is also possible to use the newer version by setting the <literal>package</literal> to <literal>radicale2</literal>, which is done automatically when <literal>stateVersion</literal> is 17.09 or higher. The <literal>extraArgs</literal> option has been added to allow passing the data migration arguments specified in the instructions; see the <filename xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/tests/radicale.nix">radicale.nix</filename> NixOS test for an example migration.
-    </para>
-  </listitem>
-  <listitem>
-    <para>
       The <literal>caddy</literal> service was previously using an extra
-      <literal>.caddy</literal> in the data directory specified with the
-      <literal>dataDir</literal> option. The contents of the
+      <literal>.caddy</literal> directory in the data directory specified
+      with the <literal>dataDir</literal> option. The contents of the
       <literal>.caddy</literal> directory are now expected to be in the
       <literal>dataDir</literal>.
     </para>
@@ -368,15 +381,6 @@ rmdir /var/lib/ipfs/.ipfs
       No complete replacement for grsecurity/PaX is available presently.
     </para>
   </listitem>
-    <listitem>
-    <para>
-      The <literal>gnupg</literal> package used to suffix its programs
-      with <literal>2</literal>, like <command>gpg2</command> and
-      <command>gpgv2</command>. This suffix has since been dropped,
-      and the programs are now simply <command>gpg</command>,
-      <command>gpgv</command>, etc.
-    </para>
-  </listitem>
   <listitem>
     <para>
       <literal>services.mysql</literal> now has declarative
@@ -417,14 +421,6 @@ FLUSH PRIVILEGES;
 
   <listitem>
     <para>
-      Templated systemd services e.g <literal>container@name</literal> are
-      now handled currectly when switching to a new configuration, resulting
-      in them being reloaded.
-    </para>
-  </listitem>
-
-  <listitem>
-    <para>
       <literal>services.mysqlBackup</literal> now works by default
       without any user setup, including for users other than
       <literal>mysql</literal>.
@@ -460,6 +456,14 @@ FLUSH PRIVILEGES;
       You can check that backups still work by running
       <command>systemctl start mysql-backup</command> then
       <command>systemctl status mysql-backup</command>.
+    </para>
+  </listitem>
+
+  <listitem>
+    <para>
+      Templated systemd services e.g <literal>container@name</literal> are
+      now handled currectly when switching to a new configuration, resulting
+      in them being reloaded.
     </para>
   </listitem>
 
@@ -558,23 +562,33 @@ FLUSH PRIVILEGES;
       which makes it possible to remove the install medium after booting.
       This allows tethering from your phone after booting from it.
     </para>
+  </listitem>
+  <listitem>
     <para>
       <literal>services.gitlab-runner.configOptions</literal> has been added
       to specify the configuration of gitlab-runners declaratively.
     </para>
+  </listitem>
+  <listitem>
     <para>
       <literal>services.jenkins.plugins</literal> has been added
       to install plugins easily, this can be generated with jenkinsPlugins2nix.
     </para>
+  </listitem>
+  <listitem>
     <para>
       <literal>services.postfix.config</literal> has been added
       to specify the main.cf with NixOS options. Additionally other options
       have been added to the postfix module and has been improved further.
     </para>
+  </listitem>
+  <listitem>
     <para>
       The GitLab package and module have been updated to the latest 10.0
       release.
     </para>
+  </listitem>
+  <listitem>
     <para>
       The <literal>systemd-boot</literal> boot loader now lists the NixOS
       version, kernel version and build date of all bootable generations.
