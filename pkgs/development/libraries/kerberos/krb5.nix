@@ -12,11 +12,11 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "${type}krb5-${version}";
   majorVersion = "1.15";
-  version = "${majorVersion}";
+  version = "${majorVersion}.2";
 
   src = fetchurl {
     url = "${meta.homepage}dist/krb5/${majorVersion}/krb5-${version}.tar.gz";
-    sha256 = "0z0jxm6ppbxi9anv2h12nrb5lpwl95f96kw6dx7sn268fhkpad7x";
+    sha256 = "0zn8s7anb10hw3nzwjz7vg10fgmmgvwnibn2zrn3nppjxn9f6f8n";
   };
 
   configureFlags = [ "--with-tcl=no" "--localstatedir=/var/lib"]
