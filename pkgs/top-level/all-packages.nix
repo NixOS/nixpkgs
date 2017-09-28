@@ -16751,6 +16751,8 @@ with pkgs;
     ocamlPackages = ocamlPackages_4_01_0;
   };
 
+  virt-what = callPackage ../applications/virtualization/virt-what { };
+
   virtmanager = callPackage ../applications/virtualization/virt-manager {
     vte = gnome3.vte;
     dconf = gnome3.dconf;
