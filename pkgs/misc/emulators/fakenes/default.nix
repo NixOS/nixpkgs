@@ -1,7 +1,7 @@
 {stdenv, fetchurl, allegro, openal, mesa, zlib, hawknl, freeglut, libX11,
   libXxf86vm, libXcursor, libXpm }:
 
-stdenv.mkDerivation { 
+stdenv.mkDerivation {
   name = "fakenes-0.5.9b3";
   src = fetchurl {
     url = mirror://sourceforge/fakenes/fakenes-0.5.9-beta3.tar.gz;
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     cp fakenes $out/bin
   '';
 
-  NIX_LDFLAGS = "-lX11 -lXxf86vm -lXcursor -lXpm"; 
+  NIX_LDFLAGS = "-lX11 -lXxf86vm -lXcursor -lXpm";
 
   patches = [ ./build.patch ];
 
@@ -27,5 +27,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl2Plus;
     description = "Portable Open Source NES Emulator";
     platforms = stdenv.lib.platforms.linux;
+    broken = true;
   };
 }
