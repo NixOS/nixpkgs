@@ -14033,6 +14033,8 @@ in {
        testtools testscenarios testrepository oslotest subunit
      ];
 
+     # breaks in sandboxing
+     doCheck = false;
    };
 
   oslo-messaging = buildPythonPackage rec {
