@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, openssl_1_0_2, pkgconfig, libpcap }:
 
 let
   tools = [
@@ -8,7 +8,7 @@ let
 in
 buildGoPackage rec {
   name = "mongo-tools-${version}";
-  version = "3.0.12";
+  version = "3.5.13";
   rev = "r${version}";
 
   goPackagePath = "github.com/mongodb/mongo-tools";
@@ -18,10 +18,22 @@ buildGoPackage rec {
     inherit rev;
     owner = "mongodb";
     repo = "mongo-tools";
-    sha256 = "142vxgniri1mfy2xmfgxhbdp6k6h8c5milv454krv1b51v43hsbm";
+    sha256 = "00klm4pyx5k39nn4pmfrpnkqxdhbzm7lprgwxszpirzrarh2g164";
   };
 
   goDeps = ./deps.nix;
+  
+  buildInputs = [ pkgconfig openssl_1_0_2 libpcap ];
+  
+ 
+  buildPhase = ''
+    ./go/src/github.com/mongodb/mongo-tools/build.sh ssl
+  '';
+  
+  buildFlags = [ "-tags ssl" ];
+  
+  allowGoReference = true;
+  
 
   # Mongodb incorrectly names all of their binaries main
   # Let's work around this with our own installer
