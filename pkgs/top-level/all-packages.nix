@@ -14031,6 +14031,8 @@ with pkgs;
 
   ekho = callPackage ../applications/audio/ekho { };
 
+  electron-cash = callPackage ../applications/misc/electron-cash { };
+
   electrum = callPackage ../applications/misc/electrum { };
 
   electrum-dash = callPackage ../applications/misc/electrum-dash { };
