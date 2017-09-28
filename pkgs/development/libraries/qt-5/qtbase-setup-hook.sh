@@ -127,7 +127,7 @@ if [ -z "$NIX_QT5_TMP" ]; then
         echo "$subdir/" >> "$NIX_QT5_TMP/nix-support/qt-inputs"
     done
 
-    cp "@dev@/bin/qmake" "$NIX_QT5_TMP/bin"
+    cp -f "@dev@/bin/qmake" "$NIX_QT5_TMP/bin"
     echo "bin/qmake" >> "$NIX_QT5_TMP/nix-support/qt-inputs"
 
     cat >"$NIX_QT5_TMP/bin/qt.conf" <<EOF
