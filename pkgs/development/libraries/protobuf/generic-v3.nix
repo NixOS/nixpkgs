@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  dontDisableStatic = true;
+
   NIX_CFLAGS_COMPILE = with stdenv.lib;
     # gcc before 6 doesn't know this option
     optionalString (hasPrefix "gcc-6" stdenv.cc.cc.name) "-Wno-error=misleading-indentation";
