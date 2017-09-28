@@ -273,15 +273,7 @@ FLUSH PRIVILEGES;
 </programlisting>
     </para>
   </listitem>
-  <listitem>
-    <para>
-      <literal>sha256</literal> argument value of
-      <literal>dockerTools.pullImage</literal> expression must be
-      updated since the mechanism to download the image has been
-      changed. Skopeo is now used to pull the image instead of the
-      Docker daemon.
-    </para>
-  </listitem>
+
   <listitem>
     <para>
       Templated systemd services e.g <literal>container@name</literal> are
