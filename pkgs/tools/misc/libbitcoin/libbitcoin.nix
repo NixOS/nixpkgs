@@ -13,7 +13,8 @@ in stdenv.mkDerivation {
     sha256 = "1lpdjm13kgs4fbp579bwfvws8yf9mnr5dw3ph8zxg2gf110h85sy";
   };
 
-  buildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ ];
 
   propagatedBuildInputs = [ secp256k1 ];
 

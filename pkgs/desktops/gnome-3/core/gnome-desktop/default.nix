@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ pkgconfig python libxml2Python libxslt which libX11
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ python libxml2Python libxslt which libX11
                   xkeyboard_config isocodes itstool wayland
                   gtk3 glib intltool gnome_doc_utils libxkbfile
                   gobjectIntrospection ];

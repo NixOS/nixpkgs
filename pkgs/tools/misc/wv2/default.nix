@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fix-include.patch ];
 
-  buildInputs = [ pkgconfig cmake libgsf glib libxml2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake libgsf glib libxml2 ];
 
   NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 

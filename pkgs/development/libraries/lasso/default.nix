@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   };
 
-  buildInputs = [ autoconf automake autoreconfHook glib gobjectIntrospection gtk_doc libtool libxml2 libxslt openssl pkgconfig python27Packages.six xmlsec zlib ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ autoconf automake glib gobjectIntrospection gtk_doc libtool libxml2 libxslt openssl python27Packages.six xmlsec zlib ];
 
   configurePhase = ''
     ./configure --with-pkg-config=$PKG_CONFIG_PATH \

@@ -14,8 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "14wck0r64z5haacp7g7qb2qrbhff3x6jfjmn4268dyb9dl5663f2";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    expat curl jansson libpng libjpeg mesa pcre pkgconfig SDL2 vimNox
+    expat curl jansson libpng libjpeg mesa pcre SDL2 vimNox
   ];
 
   installPhase = with stdenv.lib; let

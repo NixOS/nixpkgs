@@ -43,8 +43,9 @@ stdenv.mkDerivation rec {
     sha256 = "14p5cc3ys3qfg71xzxfvmxdmz5l4brpbhlmw1fwdda392lia084x";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig curl iptables libatasmart libcredis libdbi libgcrypt libmemcached
+    curl iptables libatasmart libcredis libdbi libgcrypt libmemcached
     cyrus_sasl libmodbus libnotify gdk_pixbuf liboping libpcap libsigrok libvirt
     lm_sensors libxml2 lvm2 libmysql postgresql protobufc rabbitmq-c rrdtool
     varnish yajl jdk libtool python udev net_snmp hiredis libmnl libmicrohttpd

@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1bij6nm06ghkg98n2pdyacam2fyg5y8f7ajw0d5653m0r4ldw5p7";
   };
 
-  buildInputs = [ openssl pkgconfig db cyrus_sasl ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl db cyrus_sasl ];
 
   meta = with stdenv.lib; {
     homepage = http://isync.sourceforge.net/;

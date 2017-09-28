@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ sphinxbase ];
 
-  buildInputs = [ pkgconfig python27 swig2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ python27 swig2 ];
 
   meta = {
     description = "Voice recognition library written in C";

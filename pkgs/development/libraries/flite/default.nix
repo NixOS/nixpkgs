@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "197cc2a1f045b1666a29a9b5f035b3d676db6db94a4439d99a03b65e551ae2e0";
   };
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   configureFlags = ''
     --enable-shared

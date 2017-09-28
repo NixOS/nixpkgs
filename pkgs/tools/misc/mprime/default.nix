@@ -23,7 +23,8 @@ stdenv.mkDerivation {
 
   unpackCmd = "unzip -d src -q $curSrc";
 
-  buildInputs = [ unzip pkgconfig curl ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ unzip curl ];
 
   patches = [ ./makefile.patch ];
 

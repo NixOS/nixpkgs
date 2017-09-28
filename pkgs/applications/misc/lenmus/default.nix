@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig
     cmake boost
     portmidi sqlite
     freetype libpng pngpp zlib

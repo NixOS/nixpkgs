@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "15iz0qp57qy5pjrblsn36l0chlncqggqsg8h8i8c71499afzj7iv";
   };
 
-  buildInputs = [ pkgconfig udev glib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ udev glib ];
 
   # There's a dependency cycle with umockdev and the tests fail to LD_PRELOAD anyway.
   configureFlags = [ "--disable-umockdev" ];

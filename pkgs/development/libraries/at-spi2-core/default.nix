@@ -14,8 +14,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    python pkgconfig popt  intltool dbus_glib
+    python popt  intltool dbus_glib
     libX11 xextproto libSM libICE libXtst libXi
     gobjectIntrospection
   ];

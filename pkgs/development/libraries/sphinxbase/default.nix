@@ -15,7 +15,8 @@ stdenv.mkDerivation (rec {
     sha256 = "0vr4k8pv5a8nvq9yja7kl13b5lh0f9vha8fc8znqnm8bwmcxnazp";
   };
 
-  buildInputs = [ swig2 python27 pkgconfig bison ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ swig2 python27 bison ];
 
   meta = {
     description = "Support Library for Pocketsphinx";

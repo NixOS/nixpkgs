@@ -24,7 +24,7 @@ buildPythonApplication rec {
     PATH="${parted}/sbin:$PATH"
   '';
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = [ parted ];
 

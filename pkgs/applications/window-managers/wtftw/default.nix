@@ -11,7 +11,8 @@ rustPlatform.buildRustPackage rec {
 
   depsSha256 = "0z7h8ybh2db3xl8qxbzby5lncdaijixzmbn1j8a45lbky1xiix71";
 
-  buildInputs = [ libXinerama libX11 pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libXinerama libX11 ];
   libPath = stdenv.lib.makeLibraryPath [ libXinerama libX11 ];
 
   preInstall = ''

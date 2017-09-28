@@ -18,7 +18,7 @@ let
 
     postUnpack = "sourceRoot=\${sourceRoot}/ETL/";
 
-    buildInputs = [ autoreconfHook ];
+    nativeBuildInputs = [ autoreconfHook ];
   };
 
   synfig = stdenv.mkDerivation rec {
@@ -38,9 +38,9 @@ let
       "--with-boost-libdir=${boost.out}/lib"
     ];
 
+    nativeBuildInputs = [ pkgconfig autoreconfHook gettext ];
     buildInputs = [
-      ETL boost cairo gettext glibmm mlt-qt5 libsigcxx libxmlxx pango
-      pkgconfig autoreconfHook
+      ETL boost cairo glibmm mlt-qt5 libsigcxx libxmlxx pango
     ];
   };
 in
@@ -99,10 +99,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./bootstrap.sh";
 
+  nativeBuildInputs = [ pkgconfig autoreconfHook gettext ];
   buildInputs = [
-    ETL boost cairo gettext glibmm gtk3 gtkmm3 imagemagick intltool
-    libjack2 libsigcxx libxmlxx makeWrapper mlt-qt5 pkgconfig
-    synfig autoreconfHook which defaultIconTheme
+    ETL boost cairo glibmm gtk3 gtkmm3 imagemagick intltool
+    libjack2 libsigcxx libxmlxx makeWrapper mlt-qt5
+    synfig which defaultIconTheme
   ];
 
   postInstall = ''

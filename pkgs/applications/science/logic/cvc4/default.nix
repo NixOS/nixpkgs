@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "085bjrrm33rl5pwqx13af9sgni9cfbg70wag6lm08jj41ws411xs";
   };
 
-  buildInputs = [ gmp cln pkgconfig readline swig libantlr3c antlr3_4 boost jdk autoreconfHook python2 ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ gmp cln readline swig libantlr3c antlr3_4 boost jdk python2 ];
   configureFlags = [
     "--enable-language-bindings=c,c++,java"
     "--enable-gpl"

@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = "patchShebangs src/bin-to-c-source.py";
-  buildInputs = [ cmake pkgconfig zlib curl elfutils python libiberty binutils ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake zlib curl elfutils python libiberty binutils ];
 
   meta = with stdenv.lib; {
     description = "Code coverage tester for compiled programs, Python scripts and shell scripts";

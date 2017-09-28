@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = "INTROSPECTION_GIRDIR=$(out)/share/gir-1.0/ INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0";
 
-  buildInputs = [ intltool pkgconfig glib gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool glib gobjectIntrospection ];
 
   meta = {
     homepage = http://www.gnome.org;

@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   enableParallelBuilding = true;
-  buildInputs = [ protobuf protobufc asciidoc xmlto libpaper libnl libcap pkgconfig python ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ protobuf protobufc asciidoc xmlto libpaper libnl libcap python ];
 
   patchPhase = ''
     chmod +w ./scripts/gen-offsets.sh

@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0l9lkzwi2227y5y02i5g1d701bmlyaj8lffv72jks1w4mkh7q7qh";
   };
 
-  buildInputs = [ pkgconfig openssl pcsclite ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl pcsclite ];
 
   configureFlags = [ "--with-backend=pcsc" ];
 

@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0i8ad1yrz9nrrgpi8db4z0aii5s0sy35mmzdfw5nq183mvbx8qqd";
   };
 
-  buildInputs = [ pkgconfig ocaml camlp5 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ocaml camlp5 ];
 
   installPhase = ''
     mkdir -p $out/bin

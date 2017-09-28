@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
                             gnome_online_accounts shared_mime_info ];
   propagatedBuildInputs = [ folks telepathy_logger evolution_data_server
                             telepathy_mission_control ];
-  buildInputs = [ pkgconfig gtk3 glib webkitgtk intltool itstool
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk3 glib webkitgtk intltool itstool
                   libxml2 libxslt icu file makeWrapper
                   telepathy_glib clutter_gtk clutter-gst cogl
                   gst_all_1.gstreamer gst_all_1.gst-plugins-base

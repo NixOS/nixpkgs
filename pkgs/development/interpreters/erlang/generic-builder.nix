@@ -47,9 +47,9 @@ in stdenv.mkDerivation ({
 
   inherit src version;
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper perl ];
+  nativeBuildInputs = [ autoreconfHook makeWrapper perl gnum4 libxslt libxml2 ];
 
-  buildInputs = [ gnum4 ncurses openssl autoreconfHook libxslt libxml2 ]
+  buildInputs = [ ncurses openssl ]
     ++ optionals wxSupport wxPackages2
     ++ optionals odbcSupport odbcPackages
     ++ optionals javacSupport javacPackages

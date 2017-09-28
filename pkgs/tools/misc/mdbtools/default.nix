@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "1lz33lmqifjszad7rl1r7rpxbziprrm5rkb27wmswyl5v98dqsbi";
   };
 
-  buildInputs = [glib readline bison flex pkgconfig];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [glib readline bison flex];
 
   preConfigure = ''
     sed -e 's@static \(GHashTable [*]mdb_backends;\)@\1@' -i src/libmdb/backend.c

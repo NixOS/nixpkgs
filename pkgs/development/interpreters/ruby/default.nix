@@ -66,8 +66,9 @@ let
         # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
         NROFF = "${groff}/bin/nroff";
 
-        buildInputs = ops useRailsExpress [ autoreconfHook bison ]
-          ++ (op fiddleSupport libffi)
+        nativeBuildInputs = ops useRailsExpress [ autoreconfHook bison ];
+        buildInputs =
+             (op fiddleSupport libffi)
           ++ (ops cursesSupport [ ncurses readline ])
           ++ (op docSupport groff)
           ++ (op zlibSupport zlib)

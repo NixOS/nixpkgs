@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   # configure script looks for d-bus but it is only needed for tests
-  buildInputs = [ glib bison flex pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib bison flex ];
 
   meta = {
     description = "Preprocessor for making GObjects with inline C code";

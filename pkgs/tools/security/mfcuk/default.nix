@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0m9sy61rsbw63xk05jrrmnyc3xda0c3m1s8pg3sf8ijbbdv9axcp";
   };
 
-  buildInputs = [ pkgconfig libnfc ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libnfc ];
 
   meta = with stdenv.lib; {
     description = "MiFare Classic Universal toolKit";

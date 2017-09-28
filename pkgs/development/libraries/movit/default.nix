@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ eigen epoxy ];
 
-  buildInputs = [ SDL fftw gtest pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ SDL fftw gtest ];
 
   meta = with stdenv.lib; {
     description = "High-performance, high-quality video filters for the GPU";

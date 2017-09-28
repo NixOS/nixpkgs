@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 		sha256 = "949f8eff7e74ff2666cccf8a1efbfcce8d54bc41bec6ad6db8c029de7ca832a3";
 	};
 
-  buildInputs = [ ocaml fuse postgresql pcre libuuid gnome_vfs pkgconfig GConf ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ocaml fuse postgresql pcre libuuid gnome_vfs GConf ];
 
   buildPhase = ''
     cd deps

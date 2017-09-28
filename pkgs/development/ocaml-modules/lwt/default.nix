@@ -26,7 +26,8 @@ buildOcaml rec {
     inherit sha256;
   };
 
-  buildInputs = [ ocaml_oasis pkgconfig which cryptopp ocaml findlib ocamlbuild glib ncurses camlp4 cppo ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ocaml_oasis which cryptopp ocaml findlib ocamlbuild glib ncurses camlp4 cppo ]
   ++ stdenv.lib.optional ppxSupport ppx_tools;
 
   propagatedBuildInputs = [ result ]

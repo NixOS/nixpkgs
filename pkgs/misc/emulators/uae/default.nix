@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-sdl" "--with-sdl-sound" "--with-sdl-gfx" "--with-alsa" ];
 
-  buildInputs = [ pkgconfig gtk2 alsaLib SDL ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 alsaLib SDL ];
 
   hardeningDisable = [ "format" ];
 

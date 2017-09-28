@@ -10,6 +10,7 @@ stdenv.mkDerivation {
   };
 
   configureFlags = "--disable-scrollkeeper";
-  buildInputs = [ pkgconfig python libxml2Python libxslt which libX11 gtk
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ python libxml2Python libxslt which libX11 gtk
                   intltool GConf gnome_doc_utils ];
 }

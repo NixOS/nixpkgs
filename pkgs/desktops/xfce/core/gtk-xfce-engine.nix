@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
-  buildInputs = [ pkgconfig intltool gtk ] ++ stdenv.lib.optional withGtk3 gtk3;
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool gtk ] ++ stdenv.lib.optional withGtk3 gtk3;
   
   configureFlags = stdenv.lib.optional withGtk3 "--enable-gtk3";
 

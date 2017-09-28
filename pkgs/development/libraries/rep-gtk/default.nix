@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0hgkkywm8zczir3lqr727bn7ybgg71x9cwj1av8fykkr8pdpard9";
   };
 
-  buildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ ];
   propagatedBuildInputs = [ librep gtk2 ];
 
   patchPhase = ''

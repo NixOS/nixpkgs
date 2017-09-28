@@ -12,8 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "08mcpy9ljwb1i3l4cmlwn024q2psk5gg9f0ylgh99hy1ffx0n7am";
   };
 
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [
-    autoreconfHook pcsclite pkgconfig
+    pcsclite
   ];
 
   preConfigure = ''

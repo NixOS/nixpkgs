@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   '';
 
 
-  buildInputs = [ocaml findlib pkgconfig gdome2 libxslt];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ocaml findlib gdome2 libxslt];
   propagatedBuildInputs = [gdome2];
 
   meta = {

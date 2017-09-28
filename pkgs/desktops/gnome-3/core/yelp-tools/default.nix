@@ -3,7 +3,8 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  buildInputs = [ libxml2 libxslt itstool gnome3.yelp_xsl pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libxml2 libxslt itstool gnome3.yelp_xsl ];
 
   doCheck = true;
 

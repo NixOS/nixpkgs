@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./bug653388.patch ];
 
-  buildInputs = [ pkgconfig gtk gettext intltool libart_lgpl libgnomecups bison flex ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk gettext intltool libart_lgpl libgnomecups bison flex ];
 
   propagatedBuildInputs = [ libxml2 ];
 

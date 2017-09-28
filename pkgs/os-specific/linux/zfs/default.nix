@@ -38,8 +38,9 @@ let
 
       patches = extraPatches;
 
-      buildInputs = [ autoreconfHook nukeReferences ]
-        ++ optionals buildKernel [ spl ]
+      nativeBuildInputs = [ autoreconfHook nukeReferences ];
+      buildInputs =
+           optionals buildKernel [ spl ]
         ++ optionals buildUser [ zlib libuuid python attr ];
 
       # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work

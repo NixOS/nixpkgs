@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" "devdoc" "info" ];
-  buildInputs = [ libgcrypt curl gnutls pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libgcrypt curl gnutls ];
 
   preCheck = ''
     # Since `localhost' can't be resolved in a chroot, work around it.

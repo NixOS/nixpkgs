@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     "--enable-id64"
   ];
 
-  buildInputs = [
+  nativeBuildInputs = [
     pkgconfig
   ];
 

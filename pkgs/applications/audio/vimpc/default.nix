@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1z9yx2pz84lyng1ig9y4z6pdalwxb80ig7nnzhqfy3pl36hq6shi";
   };
 
-  buildInputs = [ autoreconfHook mpd_clientlib ncurses pcre pkgconfig taglib ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ mpd_clientlib ncurses pcre taglib ];
 
   postInstall = ''
     mkdir -p $out/etc

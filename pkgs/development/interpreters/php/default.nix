@@ -20,7 +20,8 @@ let
 
       enableParallelBuilding = true;
 
-      buildInputs = [ flex bison pkgconfig ]
+  nativeBuildInputs = [ pkgconfig ];
+      buildInputs = [ flex bison ]
         ++ lib.optional stdenv.isLinux systemd;
 
       flags = {

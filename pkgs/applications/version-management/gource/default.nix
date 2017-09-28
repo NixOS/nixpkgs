@@ -11,8 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1llqwdnfa1pff8bxk27qsqff1fcg0a9kfdib0rn7p28vl21n1cgj";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    glew SDL2 ftgl pkgconfig libpng libjpeg pcre SDL2_image mesa
+    glew SDL2 ftgl libpng libjpeg pcre SDL2_image mesa
     boost glm freetype
   ];
 

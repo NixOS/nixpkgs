@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0wiagx7i8p9zal53smf5abrnh9lr31mv0p36wg017401jrmf5577";
   };
 
-  buildInputs = [ autoconf automake pkgconfig libtool SDL2 libpng ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake libtool SDL2 libpng ];
 
   propagatedBuildInputs = [ SDL2 libpng ];
 

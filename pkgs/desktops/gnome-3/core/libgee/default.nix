@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fix_introspection_paths.patch ];
 
-  buildInputs = [ autoconf vala_0_32 pkgconfig glib gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf vala_0_32 glib gobjectIntrospection ];
 
   meta = with stdenv.lib; {
     description = "Utility library providing GObject-based interfaces and classes for commonly used data structures";

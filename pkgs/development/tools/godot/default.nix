@@ -13,8 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "04qbab0icpv3ascr4dqgj18sqvw04a1jypcngb0ji8npa8q9wxb2";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gcc scons pkgconfig libX11 libXcursor libXinerama libXrandr libXrender
+    gcc scons libX11 libXcursor libXinerama libXrandr libXrender
     freetype openssl alsaLib libpulseaudio mesa_glu zlib
   ];
 

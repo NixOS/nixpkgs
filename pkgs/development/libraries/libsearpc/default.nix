@@ -14,7 +14,8 @@ stdenv.mkDerivation rec
 
   patches = [ ./libsearpc.pc.patch ];
 
-  buildInputs = [ automake autoconf pkgconfig libtool python2Packages.python python2Packages.simplejson ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ automake autoconf libtool python2Packages.python python2Packages.simplejson ];
   propagatedBuildInputs = [ glib jansson ];
 
   preConfigure = "./autogen.sh";

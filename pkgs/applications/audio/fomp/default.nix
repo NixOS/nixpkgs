@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1hh2xhknanqn3iwp12ihl6bf8p7bqxryms9qk7mh21lixl42b8k5";
   };
 
-  buildInputs = [ lv2  pkgconfig python2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ lv2 python2 ];
 
   installPhase = ''
     python waf configure --prefix=$out

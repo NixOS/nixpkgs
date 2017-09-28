@@ -7,7 +7,8 @@ stdenv.mkDerivation {
     sha256 = "0cfvs7hw67fp0wimskqd0gdfx323gv6hi0c5pf59krnmhdrl6z8p";
   };
 
-  buildInputs = [ pkgconfig gtk2 mono gtk-sharp-2_0 ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 mono gtk-sharp-2_0 ]
   ++ (with gnome2; [ libart_lgpl gnome_vfs libgnome libgnomecanvas libgnomeui]);
 
   patches = [ ./Makefile.in.patch ];

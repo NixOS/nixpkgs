@@ -11,7 +11,8 @@ stdenv.mkDerivation {
 
   sourceRoot = "Jool-v${sourceAttrs.version}-src/usr";
 
-  buildInputs = [ autoreconfHook pkgconfig libnl ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ libnl ];
 
   postPatch = ''
     chmod u+w -R ../common

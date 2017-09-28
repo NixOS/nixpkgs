@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "0l8715x23qmk0jkywiza3qx0xxmafxi4grp7p82kkc5df5ccs8kx";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig
     xfce4_dev_tools
     thunarx-2-dev
     exo gtk libxfce4util libxfce4ui

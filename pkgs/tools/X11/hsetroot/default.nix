@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
     sha256 = "1px1p3wz7ji725z9nlwb0x0h6lnnvnpz15sblzzq7zrijl3wz65x";
   };
 
-  buildInputs = [ autoconf automake imlib2 libtool libX11 pkgconfig xproto ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake imlib2 libtool libX11 xproto ];
 
   patches = [ underlinkingPatch ];
 

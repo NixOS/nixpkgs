@@ -11,8 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1kbw9ycl2ddzpfs1v4rbqa4gdhw4inrisf4awyaxb7zxfxmbzk1g";
   };
 
-  nativeBuildInputs = [ pythonPackages.docutils ];
-  buildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig pythonPackages.docutils ];
 
   autoreconfPhase = ''
     ./autogen.sh --tmpdir

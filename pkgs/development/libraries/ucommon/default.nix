@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "6ac9f76c2af010f97e916e4bae1cece341dc64ca28e3881ff4ddc3bc334060d7";
   };
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   # disable flaky networking test
   postPatch = ''

@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1hfigfj1976qk11kfsgj75l20qvyq8c9p2h4mjw23d59rsg5ga2a";
   };
 
-  buildInputs = [ pkgconfig glib python3 libsigrok check ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib python3 libsigrok check ];
 
   meta = with stdenv.lib; {
     description = "Protocol decoding library for the sigrok signal analysis software suite";

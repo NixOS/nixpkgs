@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
 
-  buildInputs = [ pkgconfig gtk3 glib intltool itstool gegl babl gnome3.libgdata
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk3 glib intltool itstool gegl babl gnome3.libgdata
                   gnome3.gsettings_desktop_schemas makeWrapper gmp libmediaart
                   gdk_pixbuf gnome3.defaultIconTheme librsvg exempi
                   gnome3.gfbgraph gnome3.grilo-plugins gnome3.grilo

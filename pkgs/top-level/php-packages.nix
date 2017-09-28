@@ -91,7 +91,8 @@ let
       "--with-libmemcached-dir=${pkgs.libmemcached}"
     ];
 
-    buildInputs = with pkgs; [ pkgconfig cyrus_sasl zlib ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with pkgs; [ cyrus_sasl zlib ];
   };
 
   # Not released yet
@@ -109,7 +110,8 @@ let
       "--with-libmemcached-dir=${pkgs.libmemcached}"
     ];
 
-    buildInputs = with pkgs; [ pkgconfig cyrus_sasl zlib ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with pkgs; [ cyrus_sasl zlib ];
   };
 
   pcs = buildPecl rec {
@@ -162,9 +164,7 @@ let
       "--with-yaml=${pkgs.libyaml}"
     ];
 
-    buildInputs = [
-      pkgs.pkgconfig
-    ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
   };
 
   yaml20 = assert isPhp7; buildPecl {
@@ -176,9 +176,7 @@ let
       "--with-yaml=${pkgs.libyaml}"
     ];
 
-    buildInputs = [
-      pkgs.pkgconfig
-    ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
   };
 
   # Since PHP 5.5 OPcache is integrated in the core and has to be enabled via --enable-opcache during compilation.
@@ -197,7 +195,7 @@ let
       "--with-zmq=${pkgs.zeromq}"
     ];
 
-    buildInputs = [ pkgs.pkgconfig ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
   };
 
   # No support for PHP 7 and probably never will be

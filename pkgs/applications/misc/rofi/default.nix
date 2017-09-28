@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
     sed -i 's/~root/~nobody/g' test/helper-expand.c
   '';
 
-  buildInputs = [ autoreconfHook pkgconfig libxkbcommon pango cairo git
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ libxkbcommon pango cairo git
     libstartup_notification libxcb xcbutil xcbutilwm xcbutilxrm which
   ];
   doCheck = true;

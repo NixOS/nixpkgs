@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "06fp6b4li50mzw83j3pkzqspm6dpgxgxw03b60xkxlkgg5qa6jbp";
   };
 
-  buildInputs = 
-  [ pkgconfig ncurses ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ncurses ];
 
   meta = {
     description = "Yet another zen simulation; A simple find-the-kitten game";

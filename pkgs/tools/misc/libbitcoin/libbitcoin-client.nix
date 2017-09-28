@@ -13,7 +13,8 @@ in stdenv.mkDerivation {
     sha256 = "1g79hl6jmf5dam7vq19h4dgdj7gcn19fa7q78vn573mg2rdyal53";
   };
 
-  buildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ ];
 
   propagatedBuildInputs = [ libsodium czmqpp libbitcoin ];
 

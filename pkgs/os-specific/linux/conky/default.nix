@@ -89,7 +89,8 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lgcc_s";
 
-  buildInputs = [ pkgconfig glib cmake libXinerama ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib cmake libXinerama ]
     ++ optionals docsSupport        [ docbook2x libxslt man less ]
     ++ optional  ncursesSupport     ncurses
     ++ optional  x11Support         xlibsWrapper

@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = ["fortify"];
 
-  buildInputs = [ removeReferencesTo go-md2man go pkgconfig libseccomp libapparmor apparmor-parser ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ removeReferencesTo go-md2man go libseccomp libapparmor apparmor-parser ];
 
   makeFlags = ''BUILDTAGS+=seccomp BUILDTAGS+=apparmor'';
 

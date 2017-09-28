@@ -9,7 +9,8 @@ stdenv.mkDerivation {
     rev = "4c32e748863d5165cc0e3d6b54a8383f4836cdf1";
     sha256 = "18szs3j3ig8wlcqngran0daxaj7j2qsmch0212ids6fymj1hgax4";
   };
-  buildInputs = [ openssl doxygen boost sqlite cryptopp pkgconfig python pythonPackages.sphinx];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl doxygen boost sqlite cryptopp python pythonPackages.sphinx];
   preConfigure = ''
     patchShebangs waf
     ./waf configure \

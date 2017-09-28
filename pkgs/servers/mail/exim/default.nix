@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ coreutils db openssl pcre perl pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ coreutils db openssl pcre perl ];
 
   preBuild = ''
     sed '

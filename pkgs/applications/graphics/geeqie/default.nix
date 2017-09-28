@@ -15,8 +15,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-gps" ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig autoconf automake gtk2 libpng exiv2 lcms intltool gettext
+    autoconf automake gtk2 libpng exiv2 lcms intltool gettext
   ];
 
   postInstall = ''

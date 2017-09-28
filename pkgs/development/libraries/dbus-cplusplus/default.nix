@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "0rwcz9pvc13b3yfr0lkifnfz0vb5q6dg240bzgf37ni4s8rpc72g";
   })];
 
-  buildInputs = [ dbus glib pkgconfig expat ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ dbus glib expat ];
 
   configureFlags = "--disable-ecore";
 

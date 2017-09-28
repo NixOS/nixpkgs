@@ -20,8 +20,9 @@ stdenv.mkDerivation rec {
     "--enable-imlib2"
   ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig autoreconfHook libX11
+    autoreconfHook libX11
     pam libgcrypt libXrender imlib2
   ];
 

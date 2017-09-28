@@ -13,7 +13,8 @@ stdenv.mkDerivation rec{
     sha256 = "0274l1p71ps222i62whqfkg80fcc8m4w2hmpbrbbd5gh8kfpman3";
   };
 
-  buildInputs = [ pkgconfig cmake perl gmp libtap gperf
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake perl gmp libtap gperf
     perlPackages.TemplateToolkit perlPackages.StringShellQuote
     perlPackages.GamesSolitaireVerify perlPackages.TaskFreecellSolverTesting
     python3Packages.python python3Packages.random2 ];

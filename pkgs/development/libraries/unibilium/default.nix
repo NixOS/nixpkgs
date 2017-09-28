@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ]
     ++ stdenv.lib.optional stdenv.isDarwin "LIBTOOL=${libtool}/bin/libtool";
 
-  buildInputs = [ libtool pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libtool ];
 
   meta = with lib; {
     description = "A very basic terminfo library";

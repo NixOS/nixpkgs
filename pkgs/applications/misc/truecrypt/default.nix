@@ -85,7 +85,8 @@ stdenv.mkDerivation {
     sha256 = "5ae6a4f32ca737e02def3bf314c9842fb89be82bf00b6f4022a97d8d565522b8";
   };
 
-  buildInputs = [ pkgconfig fuse devicemapper wxGTK nasm ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ fuse devicemapper wxGTK nasm ];
 
   meta = {
     description = "Free Open-Source filesystem on-the-fly encryption";

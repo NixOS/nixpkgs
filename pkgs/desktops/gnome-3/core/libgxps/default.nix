@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1gi0b0x0354jyqc48vspk2hg2q1403cf2p9ibj847nzhkdrh9l9r";
   };
 
-  buildInputs = [ pkgconfig glib cairo freetype libjpeg libtiff acl openssl bzip2 attr libxml2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib cairo freetype libjpeg libtiff acl openssl bzip2 attr libxml2 ];
   propagatedBuildInputs = [ libarchive ];
 
   configureFlags = "--without-liblcms2";

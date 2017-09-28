@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake boost pkgconfig doxygen qt48Full libharu 
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake boost doxygen qt48Full libharu 
     pango fcgi firebird libmysql postgresql graphicsmagick glew 
     openssl pcre ];
 

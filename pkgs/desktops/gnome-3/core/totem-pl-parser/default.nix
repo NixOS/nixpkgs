@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "38be09bddc46ddecd2b5ed7c82144ef52aafe879a5ec3d8b192b4b64ba995469";
   };
 
-  buildInputs = [ pkgconfig file intltool gmime libxml2 libsoup ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ file intltool gmime libxml2 libsoup ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Videos;

@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1vbr4iqi7nl7kq982agd3liw10gx67s95idd0pjy5h1jsnwyqgda";
   };
 
-  buildInputs = [gupnp libuuid gssdp pkgconfig gtk3 intltool gupnp_av
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [gupnp libuuid gssdp gtk3 intltool gupnp_av
                  gnome2.gnome_icon_theme makeWrapper];
 
   postInstall = ''

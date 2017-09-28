@@ -18,7 +18,8 @@ rustPlatform.buildRustPackage rec {
 
   passthru.rustc = rustc;
 
-  buildInputs = [ file curl pkgconfig python openssl cmake zlib makeWrapper libgit2 ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ file curl python openssl cmake zlib makeWrapper libgit2 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
 
   LIBGIT2_SYS_USE_PKG_CONFIG=1;

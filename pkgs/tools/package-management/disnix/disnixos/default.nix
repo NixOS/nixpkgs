@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "0pqv8n9942vjwmb32m1af29fi0vjlsbwkj2c7h1xs28z6wahr7wa";
   };
   
-  buildInputs = [ socat pkgconfig dysnomia disnix getopt ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ socat dysnomia disnix getopt ];
   
   meta = {
     description = "Provides complementary NixOS infrastructure deployment to Disnix";

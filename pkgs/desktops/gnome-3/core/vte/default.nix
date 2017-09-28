@@ -6,7 +6,8 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  buildInputs = [ gobjectIntrospection intltool pkgconfig gnome3.glib
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gobjectIntrospection intltool gnome3.glib
                   gnome3.gtk3 ncurses vala_0_32 libxml2 gperf ];
 
   propagatedBuildInputs = [ gnutls pcre2 ];

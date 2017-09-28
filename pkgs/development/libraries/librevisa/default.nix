@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0bjzq23s3xzw0l9qx4l8achrx5id8xdd6r52lvdl4a28dxzbcfhq";
   };
 
-  buildInputs = [ pkgconfig libusb1 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libusb1 ];
 
   meta = with stdenv.lib; {
     description = "Implementation of the VISA standard (for instrument control)";

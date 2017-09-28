@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./gcc5.patch ];
 
-  buildInputs = [ boost libxml2 pkgconfig curl autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ boost libxml2 curl ];
   configureFlags = "--without-man --with-boost=${boost.dev} --disable-werror --disable-tests";
 
   # Cppcheck cannot find all the include files (use --check-config for details)

@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0gpjvzcfyilb96x5ywajxgkw42ipwp4my36z9cq686bd9vpp3q0g";
   };
 
-  buildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake ];
 
   propagatedBuildInputs = [ libxml2 pcre ];
 
