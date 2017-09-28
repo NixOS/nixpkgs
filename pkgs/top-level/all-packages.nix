@@ -5157,6 +5157,8 @@ with pkgs;
 
   xwinmosaic = callPackage ../tools/X11/xwinmosaic {};
 
+  xwinwrap = callPackage ../tools/X11/xwinwrap {};
+
   yaft = callPackage ../applications/misc/yaft { };
 
   yarn = callPackage ../development/tools/yarn  { };
@@ -9906,17 +9908,9 @@ with pkgs;
 
   openbabel = callPackage ../development/libraries/openbabel { };
 
-  opencascade = callPackage ../development/libraries/opencascade {
-    tcl = tcl-8_5;
-    tk = tk-8_5;
-  };
+  opencascade = callPackage ../development/libraries/opencascade { };
 
-  opencascade_6_5 = callPackage ../development/libraries/opencascade/6.5.nix {
-    automake = automake111x;
-    ftgl = ftgl212;
-  };
-
-  opencascade_oce = callPackage ../development/libraries/opencascade/oce.nix { };
+  opencascade_oce = opencascade;
 
   opencl-headers = callPackage ../development/libraries/opencl-headers { };
 
@@ -11123,6 +11117,10 @@ with pkgs;
     go = go_1_8;
   };
 
+  buildGo19Package = callPackage ../development/go-modules/generic {
+    go = go_1_9;
+  };
+
   buildGoPackage = buildGo18Package;
 
   go2nix = callPackage ../development/tools/go2nix { };
@@ -11684,7 +11682,7 @@ with pkgs;
     libmemcached = null; # Detection is broken upstream
   };
 
-  postgresql = postgresql95;
+  postgresql = postgresql96;
 
   inherit (callPackages ../servers/sql/postgresql { })
     postgresql93
@@ -14546,7 +14544,6 @@ with pkgs;
 
   freecad = callPackage ../applications/graphics/freecad {
     boost = boost155;
-    opencascade = opencascade_oce;
   };
 
   freemind = callPackage ../applications/misc/freemind { };

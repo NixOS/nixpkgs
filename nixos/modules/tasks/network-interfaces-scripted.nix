@@ -122,24 +122,32 @@ let
 
                 # Set the default gateway.
                 ${optionalString (cfg.defaultGateway != null && cfg.defaultGateway.address != "") ''
-                  # FIXME: get rid of "|| true" (necessary to make it idempotent).
-                  ip route add default ${optionalString (cfg.defaultGateway.metric != null)
+                  ${optionalString (cfg.defaultGateway.interface != null) ''
+                    ip route replace ${cfg.defaultGateway.address} dev ${cfg.defaultGateway.interface} ${optionalString (cfg.defaultGateway.metric != null)
+                      "metric ${toString cfg.defaultGateway.metric}"
+                    } proto static
+                  ''}
+                  ip route replace default ${optionalString (cfg.defaultGateway.metric != null)
                       "metric ${toString cfg.defaultGateway.metric}"
                     } via "${cfg.defaultGateway.address}" ${
                     optionalString (cfg.defaultGatewayWindowSize != null)
                       "window ${toString cfg.defaultGatewayWindowSize}"} ${
                     optionalString (cfg.defaultGateway.interface != null)
-                      "dev ${cfg.defaultGateway.interface}"} proto static || true
+                      "dev ${cfg.defaultGateway.interface}"} proto static
                 ''}
                 ${optionalString (cfg.defaultGateway6 != null && cfg.defaultGateway6.address != "") ''
-                  # FIXME: get rid of "|| true" (necessary to make it idempotent).
-                  ip -6 route add ::/0 ${optionalString (cfg.defaultGateway6.metric != null)
+                  ${optionalString (cfg.defaultGateway6.interface != null) ''
+                    ip -6 route replace ${cfg.defaultGateway6.address} dev ${cfg.defaultGateway6.interface} ${optionalString (cfg.defaultGateway6.metric != null)
+                      "metric ${toString cfg.defaultGateway6.metric}"
+                    } proto static
+                  ''}
+                  ip -6 route replace default ${optionalString (cfg.defaultGateway6.metric != null)
                       "metric ${toString cfg.defaultGateway6.metric}"
                     } via "${cfg.defaultGateway6.address}" ${
                     optionalString (cfg.defaultGatewayWindowSize != null)
                       "window ${toString cfg.defaultGatewayWindowSize}"} ${
                     optionalString (cfg.defaultGateway6.interface != null)
-                      "dev ${cfg.defaultGateway6.interface}"} proto static || true
+                      "dev ${cfg.defaultGateway6.interface}"} proto static
                 ''}
               '';
           };

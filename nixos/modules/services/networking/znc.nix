@@ -212,6 +212,14 @@ in
         '';
       };
 
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to open ports in the firewall for ZNC.
+        '';
+      };
+
       zncConf = mkOption {
         default = "";
         example = "See: http://wiki.znc.in/Configuration";
@@ -273,14 +281,6 @@ in
           type = types.string;
           description = ''
             The IRC nick.
-          '';
-        };
-
-        openFirewall = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Whether to open ports in the firewall for ZNC.
           '';
         };
 
@@ -359,7 +359,7 @@ in
   config = mkIf cfg.enable {
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.port ];
+      allowedTCPPorts = [ cfg.confOptions.port ];
     };
 
     systemd.services.znc = {

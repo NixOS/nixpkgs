@@ -7156,6 +7156,8 @@ in {
 
   pycassa = callPackage ../development/python-modules/pycassa { };
 
+  pyblake2 = callPackage ../development/python-modules/pyblake2 { };
+
   pybluez = buildPythonPackage rec {
     version = "unstable-20160819";
     pname = "pybluez";
@@ -18428,26 +18430,8 @@ in {
 
   requests_oauthlib = callPackage ../development/python-modules/requests-oauthlib.nix { };
 
-  requests_toolbelt = buildPythonPackage rec {
-    version = "0.7.1";
-    name = "requests-toolbelt-${version}";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/sigmavirus24/requests-toolbelt/archive/${version}.tar.gz";
-      sha256 = "16grklnbgcfwqj3f39gw7fc9afi7xlp9gm7x8w6mi81dzhdxf50y";
-    };
-
-    propagatedBuildInputs = with self; [ requests ];
-
-    buildInputs = with self; [ betamax mock pytest ];
-
-    meta = {
-      description = "A toolbelt of useful classes and functions to be used with python-requests";
-      homepage = http://toolbelt.rtfd.org;
-      maintainers = with maintainers; [ matthiasbeyer jgeerds ];
-    };
-
-  };
+  requests-toolbelt = callPackage ../development/python-modules/requests-toolbelt { };
+  requests_toolbelt = self.requests-toolbelt; # Old attr, 2017-09-26
 
   retry_decorator = buildPythonPackage rec {
     name = "retry_decorator-1.0.0";
@@ -21944,27 +21928,7 @@ in {
     };
   };
 
-  twine = buildPythonPackage rec {
-    name = "twine-${version}";
-    version = "1.8.1";
-
-    src = pkgs.fetchurl {
-      url    = "mirror://pypi/t/twine/${name}.tar.gz";
-      sha256 = "68b663691a947b844f92853c992d42bb68b6333bffc9ab7f661346b001c1da82";
-    };
-
-    propagatedBuildInputs = with self; [ clint pkginfo requests requests_toolbelt ];
-
-    # Requires network
-    doCheck = false;
-
-    meta = {
-      description = "Collection of utilities for interacting with PyPI";
-      homepage = https://github.com/pypa/twine;
-      license = licenses.asl20;
-      maintainer = with maintainers; [ fridh ];
-    };
-  };
+  twine = callPackage ../development/python-modules/twine { };
 
   twisted = callPackage ../development/python-modules/twisted { };
 

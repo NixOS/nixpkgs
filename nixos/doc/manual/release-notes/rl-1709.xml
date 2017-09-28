@@ -335,6 +335,13 @@ FLUSH PRIVILEGES;
     was removed and should not be needed anymore.</para>
   </listitem>
 
+  <listitem>
+    <para>
+      Redis has been updated to version 4 which mandates a cluster
+      mass-restart, due to changes in the network handling, in order
+      to ensure compatibility with networks NATing traffic.
+    </para>
+  </listitem>
 </itemizedlist>
 
 <para>Other notable improvements:</para>
@@ -432,6 +439,16 @@ FLUSH PRIVILEGES;
       version, kernel version and build date of all bootable generations.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The dnscrypt-proxy service now defaults to using a random upstream resolver,
+      selected from the list of public non-logging resolvers with DNSSEC support.
+      Existing configurations can be migrated to this mode of operation by
+      omitting the <option>services.dnscrypt-proxy.resolverName</option> option
+      or setting it to <literal>"random"</literal>.
+    </para>
+  </listitem>
+
 </itemizedlist>
 
 </section>
