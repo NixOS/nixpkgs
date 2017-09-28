@@ -1,5 +1,5 @@
 skip () {
-    if [ -n "${NIX_DEBUG:-}" ]; then
+    if (( "${NIX_DEBUG:-0}" >= 1 )); then
         echo "skipping impure path $1" >&2
     fi
 }
