@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   configureFlags = "--with-openssl=${openssl.dev}";
 
   preConfigure = ''
-    export PGHEADER="${postgresql.dev}/include/libpq-fe.h";
+    export PGHEADER="${postgresql}/include/libpq-fe.h";
     export MSHEADER="${lib.getDev mysql.client}/include/mysql/mysql.h";
     export SQHEADER="${sqlite.dev}/include/sqlite3.h";
 
