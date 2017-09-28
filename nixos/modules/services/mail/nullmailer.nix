@@ -142,7 +142,16 @@ with lib;
           type = types.nullOr types.str;
           default = null;
           description = ''
-            If set, content will override the envelope sender on all messages.
+            A list of remote servers to which to send each message. Each line
+            contains a remote host name or address followed by an optional
+            protocol string, separated by white space.
+
+            See <code>man 8 nullmailer-send</code> for syntax and available
+            options.
+
+            WARNING: This is stored world-readable in the nix store. If you need
+            to specify any secret credentials here, consider using the
+            <code>remotesFile</code> option instead.
           '';
         };
 
