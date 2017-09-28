@@ -525,7 +525,8 @@ FLUSH PRIVILEGES;
       have been added to the postfix module and has been improved further.
     </para>
     <para>
-        The GitLab package and module have been updated to the latest 9.5 release.
+      The GitLab package and module have been updated to the latest 10.0
+      release.
     </para>
     <para>
       The <literal>systemd-boot</literal> boot loader now lists the NixOS
