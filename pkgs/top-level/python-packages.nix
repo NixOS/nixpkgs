@@ -16879,6 +16879,8 @@ in {
 
   pyshp = callPackage ../development/python-modules/pyshp { };
 
+  pysmbc = callPackage ../development/python-modules/pysmbc { };
+
   pyspread = callPackage ../development/python-modules/pyspread { };
 
   pyx = buildPythonPackage rec {
