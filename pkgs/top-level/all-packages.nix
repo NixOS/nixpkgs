@@ -517,6 +517,8 @@ with pkgs;
 
   apitrace = libsForQt5.callPackage ../applications/graphics/apitrace {};
 
+  arguments = callPackage ../development/libraries/arguments { };
+
   argus = callPackage ../tools/networking/argus {};
 
   argus-clients = callPackage ../tools/networking/argus-clients {};
