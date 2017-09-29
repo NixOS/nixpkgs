@@ -16133,7 +16133,7 @@ in {
 
 
   pyalgotrade = buildPythonPackage {
-    name = "pyalogotrade-0.16";
+    name = "pyalgotrade-0.16";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
