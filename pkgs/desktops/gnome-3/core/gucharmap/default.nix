@@ -1,6 +1,7 @@
 { stdenv, intltool, fetchurl, pkgconfig, gtk3
 , glib, desktop_file_utils, bash, appdata-tools
-, makeWrapper, gnome3, file, itstool, libxml2 }:
+, wrapGAppsHook, gnome3, itstool, libxml2
+, callPackage, unzip }:
 
 # TODO: icons and theme still does not work
 # use packaged gnome3.adwaita-icon-theme
@@ -12,16 +13,17 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
-  preConfigure = "substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file";
+  preConfigure = "patchShebangs gucharmap/gen-guch-unicode-tables.pl";
 
-  buildInputs = [ pkgconfig gtk3 intltool itstool glib appdata-tools
-                  gnome3.yelp_tools libxml2 file desktop_file_utils
-                  gnome3.gsettings_desktop_schemas makeWrapper ];
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook unzip ];
 
-  preFixup = ''
-    wrapProgram "$out/bin/gucharmap" \
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
-  '';
+  buildInputs = [ gtk3 intltool itstool glib appdata-tools
+                  gnome3.yelp_tools libxml2 desktop_file_utils
+                  gnome3.gsettings_desktop_schemas ];
+
+  unicode-data = callPackage ./unicode-data.nix {};
+
+  configureFlags = "--with-unicode-data=${unicode-data}";
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Gucharmap;
