@@ -60,7 +60,7 @@ let
       nixpkgsVersion mod;
 
     inherit (fixedPoints) fix fix' extends composeExtensions
-      makeExtensible makeExtensibleWithCustomName;
+      makeExtensible makeExtensibleWithCustomName makeExtensibleWithInterface;
     inherit (attrsets) attrByPath hasAttrByPath setAttrByPath
       getAttrFromPath attrVals attrValues catAttrs filterAttrs
       filterAttrsRecursive foldAttrs collect nameValuePair mapAttrs
@@ -88,7 +88,8 @@ let
     inherit (stringsWithDeps) textClosureList textClosureMap
       noDepEntry fullDepEntry packEntry stringAfter;
     inherit (customisation) overrideDerivation makeOverridable
-      callPackageWith callPackagesWith addPassthru hydraJob makeScope;
+      callPackageWith callPackagesWith addPassthru hydraJob makeScope
+      callPackageWithOutputWith;
     inherit (meta) addMetaAttrs dontDistribute setName updateName
       appendToName mapDerivationAttrset lowPrio lowPrioSet hiPrio
       hiPrioSet;

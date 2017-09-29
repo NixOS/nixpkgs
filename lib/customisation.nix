@@ -81,7 +81,7 @@ rec {
         });
       };
 
-  in lib.fixedPoints.makeExtensibleWithInterface (x: o: interface (addOverrideFuncs x o) o) (output: self: {
+  in lib.makeExtensibleWithInterface (x: o: interface (addOverrideFuncs x o) o) (output: self: {
     args = origArgs;
     val = f output self.args self.val;
   });
