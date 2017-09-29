@@ -521,6 +521,7 @@ in
         ftp = {};
         i3lock = {};
         i3lock-color = {};
+        swaylock = {};
         screen = {};
         vlock = {};
         xlock = {};
