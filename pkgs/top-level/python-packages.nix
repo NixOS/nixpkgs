@@ -17876,22 +17876,7 @@ in {
     };
   };
 
-  pyserial = buildPythonPackage rec {
-    name = "pyserial-2.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyserial/${name}.tar.gz";
-      sha256 = "3542ec0838793e61d6224e27ff05e8ce4ba5a5c5cc4ec5c6a3e8d49247985477";
-    };
-
-    doCheck = false;
-
-    meta = {
-      homepage = "http://pyserial.sourceforge.net/";
-      license = licenses.psfl;
-      description = "Python serial port extension";
-    };
-  };
+  pyserial = callPackage ../development/python-modules/pyserial {};
 
   pymongo = callPackage ../development/python-modules/pymongo {};
 
