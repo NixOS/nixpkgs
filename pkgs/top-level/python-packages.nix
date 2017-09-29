@@ -14634,7 +14634,7 @@ in {
       sed -i 's/from oslo import i18n/import oslo_i18n as i18n/' hyperv/common/i18n.py
     '';
 
-    broken = true;
+    meta.broken = true;
   };
 
   kazoo = buildPythonPackage rec {
