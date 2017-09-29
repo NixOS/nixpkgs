@@ -674,7 +674,7 @@ with pkgs;
 
   backup = callPackage ../tools/backup/backup { };
 
-  base16 = callPackage ../misc/base16 { };
+  base16-builder = callPackage ../misc/base16-builder { };
 
   basex = callPackage ../tools/text/xml/basex { };
 
