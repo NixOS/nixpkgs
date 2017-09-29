@@ -60,7 +60,7 @@ let
       nixpkgsVersion mod;
 
     inherit (fixedPoints) fix fix' extends composeExtensions
-      makeExtensible makeExtensibleWithCustomName makeExtensibleWithInterface;
+      makeExtensible makeExtensibleWithCustomName;
     inherit (attrsets) attrByPath hasAttrByPath setAttrByPath
       getAttrFromPath attrVals attrValues catAttrs filterAttrs
       filterAttrsRecursive foldAttrs collect nameValuePair mapAttrs
