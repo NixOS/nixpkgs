@@ -16134,6 +16134,7 @@ in {
 
   pyalgotrade = buildPythonPackage {
     name = "pyalgotrade-0.16";
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PyAlgoTrade/PyAlgoTrade-0.16.tar.gz";
