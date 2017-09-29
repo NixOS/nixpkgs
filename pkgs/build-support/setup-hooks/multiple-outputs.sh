@@ -40,9 +40,9 @@ _overrideFirst outputLib "lib" "out"
 _overrideFirst outputDoc "doc" "out"
 _overrideFirst outputDevdoc "devdoc" REMOVE # documentation for developers
 # man and info pages are small and often useful to distribute with binaries
-_overrideFirst outputMan "man" "doc" "$outputBin"
+_overrideFirst outputMan "man" "$outputBin"
 _overrideFirst outputDevman "devman" "devdoc" "$outputMan"
-_overrideFirst outputInfo "info" "doc" "$outputMan"
+_overrideFirst outputInfo "info" "$outputBin"
 
 
 # Add standard flags to put files into the desired outputs.
@@ -61,7 +61,7 @@ _multioutConfig() {
             local shareDocName="$(sed -n "s/^PACKAGE_TARNAME='\(.*\)'$/\1/p" < "$confScript")"
         fi
                                     # PACKAGE_TARNAME sometimes contains garbage.
-        if [ -n "$shareDocName" ] || echo "$shareDocName" | grep -q '[^a-zA-Z-_0-9]'; then
+        if [ -n "$shareDocName" ] || echo "$shareDocName" | grep -q '[^a-zA-Z0-9_-]'; then
             shareDocName="$(echo "$name" | sed 's/-[^a-zA-Z].*//')"
         fi
     fi

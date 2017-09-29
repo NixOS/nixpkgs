@@ -19,14 +19,14 @@ stdenv.mkDerivation {
   priority = 5;
 
   buildCommand = ''
-    mkdir -p $out/share/autostart
+    mkdir -p $out/etc/xdg/autostart
     target=${name}.desktop
     cp ${package}/share/applications/${srcPrefix}${name}.desktop $target
     chmod +rw $target
     echo "X-KDE-autostart-phase=${phase}" >> $target
     ${lib.optionalString (after != null) ''echo "${after}" >> $target''}
     ${lib.optionalString (condition != null) ''echo "${condition}" >> $target''}
-    cp $target $out/share/autostart
+    cp $target $out/etc/xdg/autostart
   '';
 
   # this will automatically put 'package' in the environment when you

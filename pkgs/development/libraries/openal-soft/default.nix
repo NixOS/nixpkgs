@@ -18,7 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "051k5fy8pk4fd9ha3qaqcv08xwbks09xl5qs4ijqq2qz5xaghhd3";
   };
 
-  buildInputs = [ cmake ]
+  nativeBuildInputs = [ cmake ];
+
+  buildInputs = []
     ++ optional alsaSupport alsaLib
     ++ optional pulseSupport libpulseaudio
     ++ optionals stdenv.isDarwin [ CoreServices AudioUnit AudioToolbox ];

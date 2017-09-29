@@ -1,0 +1,22 @@
+Index: qtserialport-opensource-src-5.8.0/src/serialport/qtudev_p.h
+===================================================================
+--- qtserialport-opensource-src-5.8.0.orig/src/serialport/qtudev_p.h
++++ qtserialport-opensource-src-5.8.0/src/serialport/qtudev_p.h
+@@ -111,9 +111,17 @@ inline QFunctionPointer resolveSymbol(QL
+ inline bool resolveSymbols(QLibrary *udevLibrary)
+ {
+     if (!udevLibrary->isLoaded()) {
++#ifdef NIXPKGS_LIBUDEV
++        udevLibrary->setFileNameAndVersion(QLatin1String(NIXPKGS_LIBUDEV), 1);
++#else
+         udevLibrary->setFileNameAndVersion(QStringLiteral("udev"), 1);
++#endif
+         if (!udevLibrary->load()) {
++#ifdef NIXPKGS_LIBUDEV
++            udevLibrary->setFileNameAndVersion(QLatin1String(NIXPKGS_LIBUDEV), 0);
++#else
+             udevLibrary->setFileNameAndVersion(QStringLiteral("udev"), 0);
++#endif
+             if (!udevLibrary->load()) {
+                 qWarning("Failed to load the library: %s, supported version(s): %i and %i", qPrintable(udevLibrary->fileName()), 1, 0);
+                 return false;

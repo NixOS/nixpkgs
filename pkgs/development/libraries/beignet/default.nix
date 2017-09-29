@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   name = "beignet-${version}";
-  version = "1.2.1";
+  version = "1.3.1";
 
   src = fetchurl {
     url = "https://01.org/sites/default/files/${name}-source.tar.gz"; 
-    sha256 = "07y8ga545654jdbijmplga7a7j3jn04q5gfdjsl8cax16hsv0kmp";
+    sha256 = "07snrgjlhwl5fxz82dyqp632cnf5hp0gfqrjd2930jv79p37p6rr";
   };  
 
   patches = [ ./clang_llvm.patch ]; 
@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = "https://cgit.freedesktop.org/beignet/";
+    homepage = https://cgit.freedesktop.org/beignet/;
     description = "OpenCL Library for Intel Ivy Bridge and newer GPUs";
     longDescription = ''
       The package provides an open source implementation of the OpenCL specification for Intel GPUs. 

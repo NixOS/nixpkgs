@@ -53,6 +53,11 @@ in stdenv.mkDerivation rec {
     ln -sv $PWD/lib $out
   '';
 
+  patches = stdenv.lib.optionals (!stdenv.isDarwin) [
+    # llvm-config --libfiles returns (non-existing) static libs
+    ../fix-llvm-config.patch
+  ];
+
   cmakeFlags = with stdenv; [
     "-DCMAKE_BUILD_TYPE=${if debugVersion then "Debug" else "Release"}"
     "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
@@ -62,7 +67,7 @@ in stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional enableSharedLibraries
     "-DBUILD_SHARED_LIBS=ON"
     ++ stdenv.lib.optional (!isDarwin)
-    "-DLLVM_BINUTILS_INCDIR=${binutils.dev}/include"
+    "-DLLVM_BINUTILS_INCDIR=${stdenv.lib.getDev binutils}/include"
     ++ stdenv.lib.optionals ( isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"

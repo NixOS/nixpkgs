@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "phwmon-${version}";
-  version = "2016-03-13";
+  version = "2017-04-10";
 
   src = fetchFromGitLab {
     owner = "o9000";
     repo = "phwmon";
-    rev = "90247ceaff915ad1040352c5cc9195e4153472d4";
-    sha256 = "1gkjfmd8rai7bl1j7jz9drmzlw72n7mczl0akv39ya4l6k8plzvv";
+    rev = "b162e53dccc4adf8f11f49408d05fd85d9c6c909";
+    sha256 = "1hqmsq66y8bqkpvszw84jyk8haxq3cjnz105hlkmp7786vfmkisq";
   };
 
   nativeBuildInputs = [ pythonPackages.wrapPython ];

@@ -8,6 +8,17 @@ let
 
   version = "4.0.4";
 
+  runtimeDeps = [
+    udev libnotify
+  ];
+  deps = (with xorg; [
+    libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes
+    libXrender libX11 libXtst libXScrnSaver
+  ]) ++ [
+    gtk2 atk glib pango gdk_pixbuf cairo freetype fontconfig dbus
+    gnome2.GConf nss nspr alsaLib cups expat stdenv.cc.cc
+  ] ++ runtimeDeps;
+
   desktopItem = makeDesktopItem rec {
     name = "Franz";
     exec = name;
@@ -25,16 +36,8 @@ in stdenv.mkDerivation rec {
       "16l9jma2hiwzl9l41yhrwribcgmxca271rq0cfbbm9701mmmciyy";
   };
 
-  phases = [ "unpackPhase" "installPhase" "postFixup" ];
-
-  deps = with xorg; [
-   gtk2 atk glib pango gdk_pixbuf cairo freetype fontconfig dbus
-   libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes
-   libXrender libX11 libXtst libXScrnSaver gnome2.GConf nss nspr alsaLib
-   cups expat stdenv.cc.cc
-
-   udev libnotify
-  ];
+  # don't remove runtime deps
+  dontPatchELF = true;
 
   unpackPhase = ''
     tar xzf $src
@@ -42,26 +45,27 @@ in stdenv.mkDerivation rec {
 
   installPhase = ''
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" Franz
-    patchelf --set-rpath "$out/share/franz:${stdenv.lib.makeLibraryPath deps}" Franz
+    patchelf --set-rpath "$out/opt/franz:${stdenv.lib.makeLibraryPath deps}" Franz
 
-    mkdir -p $out/bin $out/share/franz
-    cp -r * $out/share/franz
-    ln -s $out/share/franz/Franz $out/bin
+    mkdir -p $out/bin $out/opt/franz
+    cp -r * $out/opt/franz
+    ln -s $out/opt/franz/Franz $out/bin
 
+    # provide desktop item and icon
     mkdir -p $out/share/applications $out/share/pixmaps
     ln -s ${desktopItem}/share/applications/* $out/share/applications
-    ln -s $out/share/franz/resources/app.asar.unpacked/assets/franz.png $out/share/pixmaps
+    ln -s $out/opt/franz/resources/app.asar.unpacked/assets/franz.png $out/share/pixmaps
   '';
 
   postFixup = ''
-    paxmark m $out/share/franz/Franz
+    paxmark m $out/opt/franz/Franz
   '';
 
   meta = with stdenv.lib; {
     description = "A free messaging app that combines chat & messaging services into one application";
     homepage = http://meetfranz.com;
     license = licenses.free;
-    maintainers = [ stdenv.lib.maintainers.gnidorah ];
+    maintainers = [ maintainers.gnidorah ];
     platforms = ["i686-linux" "x86_64-linux"];
     hydraPlatforms = [];
   };

@@ -1,12 +1,6 @@
 #!@shell@
 
-PATH="$PATH${PATH:+:}@suffixPATH@"
-
-export QT_PLUGIN_PATH="$QT_PLUGIN_PATH${QT_PLUGIN_PATH:+:}@QT_PLUGIN_PATH@"
-export QML_IMPORT_PATH="$QML_IMPORT_PATH${QML_IMPORT_PATH:+:}@QML_IMPORT_PATH@"
-export QML2_IMPORT_PATH="$QML2_IMPORT_PATH${QML2_IMPORT_PATH:+:}@QML2_IMPORT_PATH@"
-
-kbuildsycoca5
+@kbuildsycoca5@
 
 # Set the default GTK 2 theme
 if ! [ -e $HOME/.gtkrc-2.0 ] \
@@ -32,6 +26,7 @@ fi
 
 if ! [ -e $HOME/.config/gtk-3.0/settings.ini ] \
        && [ -e /run/current-system/sw/share/themes/Breeze/gtk-3.0 ]; then
+    mkdir -p $HOME/.config/gtk-3.0
     cat >$HOME/.config/gtk-3.0/settings.ini <<EOF
 [Settings]
 gtk-font-name=Sans Serif Regular 10
@@ -63,7 +58,7 @@ rm -fv $HOME/.cache/icon-cache.kcache
 # in Trolltech.conf.  A better solution would be to stop
 # Qt from doing this wackiness in the first place.
 if [ -e $HOME/.config/Trolltech.conf ]; then
-    sed -e '/nix\\store\|nix\/store/ d' -i $HOME/.config/Trolltech.conf
+    @sed@ -e '/nix\\store\|nix\/store/ d' -i $HOME/.config/Trolltech.conf
 fi
 
 if test "x$1" = x--failsafe; then
@@ -81,11 +76,11 @@ trap 'echo GOT SIGHUP' HUP
 unset DYLD_FORCE_FLAT_NAMESPACE
 
 # Check if a KDE session already is running and whether it's possible to connect to X
-kcheckrunning
+@kcheckrunning@
 kcheckrunning_result=$?
 if test $kcheckrunning_result -eq 0 ; then
     echo "KDE seems to be already running on this display."
-    xmessage -geometry 500x100 "KDE seems to be already running on this display."
+    @xmessage@ -geometry 500x100 "KDE seems to be already running on this display."
     exit 1
 elif test $kcheckrunning_result -eq 2 ; then
     echo "\$DISPLAY is not set or cannot connect to the X server."
@@ -107,7 +102,7 @@ fi
 # * Then ksmserver is started which takes control of the rest of the startup sequence
 
 # We need to create config folder so we can write startupconfigkeys
-configDir=$(qtpaths --writable-path GenericConfigLocation)
+configDir=$(@qtpaths@ --writable-path GenericConfigLocation)
 mkdir -p "$configDir"
 
 if ! [ -e $configDir/kcminputrc ]; then
@@ -164,10 +159,10 @@ activeFont=Noto Sans,12,-1,5,50,0,0,0,0,0,Bold
 EOF
 }
 
-kstartupconfig5
+@kstartupconfig5@
 returncode=$?
 if test $returncode -ne 0; then
-    xmessage -geometry 500x100 "kstartupconfig5 does not exist or fails. The error code is $returncode. Check your installation."
+    @xmessage@ -geometry 500x100 "kstartupconfig5 does not exist or fails. The error code is $returncode. Check your installation."
     exit 1
 fi
 [ -r $configDir/startupconfig ] && . $configDir/startupconfig
@@ -189,7 +184,7 @@ export XCURSOR_PATH
 # XCursor mouse theme needs to be applied here to work even for kded or ksmserver
 if test -n "$kcminputrc_mouse_cursortheme" -o -n "$kcminputrc_mouse_cursorsize" ; then
 
-    kapplymousetheme "$kcminputrc_mouse_cursortheme" "$kcminputrc_mouse_cursorsize"
+    @kapplymousetheme@ "$kcminputrc_mouse_cursortheme" "$kcminputrc_mouse_cursorsize"
     if test $? -eq 10; then
         XCURSOR_THEME=breeze_cursors
         export XCURSOR_THEME
@@ -213,10 +208,10 @@ unset THEME
 # If the user has overwritten fonts, the cursor font may be different now
 # so don't move this up.
 #
-xsetroot -cursor_name left_ptr
+@xsetroot@ -cursor_name left_ptr
 
 if test "$kcmfonts_general_forcefontdpi" -ne 0; then
-    xrdb -quiet -merge -nocpp <<EOF
+    @xrdb@ -quiet -merge -nocpp <<EOF
 Xft.dpi: $kcmfonts_general_forcefontdpi
 EOF
 fi
@@ -229,7 +224,7 @@ if test -z "$dl"; then
   # the splashscreen and progress indicator
   case "$ksplashrc_ksplash_engine" in
     KSplashQML)
-      ksplash_pid=$(ksplashqml "${ksplashrc_ksplash_theme}" --pid)
+      ksplash_pid=$(@ksplashqml@ "${ksplashrc_ksplash_theme}" --pid)
       ;;
     None)
       ;;
@@ -241,12 +236,12 @@ fi
 echo 'startkde: Starting up...'  1>&2
 
 # Make sure that D-Bus is running
-if qdbus >/dev/null 2>/dev/null; then
+if @qdbus@ >/dev/null 2>/dev/null; then
     : # ok
 else
     echo 'startkde: Could not start D-Bus. Can you call qdbus?'  1>&2
     test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
-    xmessage -geometry 500x100 "Could not start D-Bus. Can you call qdbus?"
+    @xmessage@ -geometry 500x100 "Could not start D-Bus. Can you call qdbus?"
     exit 1
 fi
 
@@ -274,11 +269,11 @@ fi
 #
 KDE_FULL_SESSION=true
 export KDE_FULL_SESSION
-xprop -root -f KDE_FULL_SESSION 8t -set KDE_FULL_SESSION true
+@xprop@ -root -f KDE_FULL_SESSION 8t -set KDE_FULL_SESSION true
 
 KDE_SESSION_VERSION=5
 export KDE_SESSION_VERSION
-xprop -root -f KDE_SESSION_VERSION 32c -set KDE_SESSION_VERSION 5
+@xprop@ -root -f KDE_SESSION_VERSION 32c -set KDE_SESSION_VERSION 5
 
 KDE_SESSION_UID=$(id -ru)
 export KDE_SESSION_UID
@@ -300,7 +295,7 @@ export XDG_CURRENT_DESKTOP
 # For anything else (that doesn't set env vars, or that needs a window manager),
 # better use the Autostart folder.
 
-IFS=":" read -r -a scriptpath <<< $(qtpaths --paths GenericConfigLocation)
+IFS=":" read -r -a scriptpath <<< $(@qtpaths@ --paths GenericConfigLocation)
 # Add /env/ to the directory to locate the scripts to be sourced
 for prefix in "${scriptpath[@]}"; do
   for file in "$prefix"/plasma-workspace/env/*.sh; do
@@ -308,37 +303,28 @@ for prefix in "${scriptpath[@]}"; do
   done
 done
 
-# At this point all the environment is ready, let's send it to kwalletd if running
-if test -n "$PAM_KWALLET_LOGIN" ; then
-    env | socat STDIN UNIX-CONNECT:$PAM_KWALLET_LOGIN
-fi
-# ...and also to kwalletd5
-if test -n "$PAM_KWALLET5_LOGIN" ; then
-    env | socat STDIN UNIX-CONNECT:$PAM_KWALLET5_LOGIN
-fi
-
 # At this point all environment variables are set, let's send it to the DBus session server to update the activation environment
-dbus-update-activation-environment --systemd --all
+@dbus_update_activation_environment@ --systemd --all
 if test $? -ne 0; then
   # Startup error
   echo 'startkde: Could not sync environment to dbus.'  1>&2
   test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
-  xmessage -geometry 500x100 "Could not sync environment to dbus."
+  @xmessage@ -geometry 500x100 "Could not sync environment to dbus."
   exit 1
 fi
 
 # We set LD_BIND_NOW to increase the efficiency of kdeinit.
 # kdeinit unsets this variable before loading applications.
-LD_BIND_NOW=true start_kdeinit_wrapper --kded +kcminit_startup
+LD_BIND_NOW=true @start_kdeinit_wrapper@ --kded +kcminit_startup
 if test $? -ne 0; then
   # Startup error
   echo 'startkde: Could not start kdeinit5. Check your installation.'  1>&2
   test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
-  xmessage -geometry 500x100 "Could not start kdeinit5. Check your installation."
+  @xmessage@ -geometry 500x100 "Could not start kdeinit5. Check your installation."
   exit 1
 fi
 
-qdbus org.kde.KSplash /KSplash org.kde.KSplash.setStage kinit
+@qdbus@ org.kde.KSplash /KSplash org.kde.KSplash.setStage kinit
 
 # finally, give the session control to the session manager
 # see kdebase/ksmserver for the description of the rest of the startup sequence
@@ -355,15 +341,15 @@ test -n "$KDEWM" && KDEWM="--windowmanager $KDEWM"
 # lock now and do the rest of the KDE startup underneath the locker.
 KSMSERVEROPTIONS=""
 test -n "$dl" && KSMSERVEROPTIONS=" --lockscreen"
-kwrapper5 ksmserver $KDEWM $KSMSERVEROPTIONS
+@kwrapper5@ @ksmserver@ $KDEWM $KSMSERVEROPTIONS
 if test $? -eq 255; then
   # Startup error
   echo 'startkde: Could not start ksmserver. Check your installation.'  1>&2
   test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
-  xmessage -geometry 500x100 "Could not start ksmserver. Check your installation."
+  @xmessage@ -geometry 500x100 "Could not start ksmserver. Check your installation."
 fi
 
-wait_drkonqi=$(kreadconfig5 --file startkderc --group WaitForDrKonqi --key Enabled --default true)
+wait_drkonqi=$(@kreadconfig5@ --file startkderc --group WaitForDrKonqi --key Enabled --default true)
 
 if test x"$wait_drkonqi"x = x"true"x ; then
     # wait for remaining drkonqi instances with timeout (in seconds)
@@ -374,8 +360,8 @@ if test x"$wait_drkonqi"x = x"true"x ; then
         wait_drkonqi_counter=$((wait_drkonqi_counter+5))
         if test "$wait_drkonqi_counter" -ge "$wait_drkonqi_timeout" ; then
             # ask remaining drkonqis to die in a graceful way
-            qdbus | grep 'org.kde.drkonqi-' | while read address ; do
-                qdbus "$address" "/MainApplication" "quit"
+            @qdbus@ | grep 'org.kde.drkonqi-' | while read address ; do
+                @qdbus@ "$address" "/MainApplication" "quit"
             done
             break
         fi
@@ -387,12 +373,12 @@ echo 'startkde: Shutting down...'  1>&2
 test -n "$ksplash_pid" && kill "$ksplash_pid" 2>/dev/null
 
 # Clean up
-kdeinit5_shutdown
+@kdeinit5_shutdown@
 
 unset KDE_FULL_SESSION
-xprop -root -remove KDE_FULL_SESSION
+@xprop@ -root -remove KDE_FULL_SESSION
 unset KDE_SESSION_VERSION
-xprop -root -remove KDE_SESSION_VERSION
+@xprop@ -root -remove KDE_SESSION_VERSION
 unset KDE_SESSION_UID
 
 echo 'startkde: Done.'  1>&2

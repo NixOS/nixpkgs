@@ -1,14 +1,16 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, pam, systemd }:
 
 stdenv.mkDerivation rec {
-  version = "0.5";
+  version = "11-dev";
   name = "physlock-v${version}";
   src = fetchFromGitHub {
     owner = "muennich";
     repo = "physlock";
-    rev = "v${version}";
-    sha256 = "102kdixrf7xxsxr69lbz73i1ss7959716cmdf8d5kbnhmk6argv7";
+    rev = "31cc383afc661d44b6adb13a7a5470169753608f";
+    sha256 = "0j6v8li3vw9y7vwh9q9mk1n1cnwlcy3bgr1jgw5gcv2am2yi4vx3";
   };
+
+  buildInputs = [ pam systemd ];
 
   preConfigure = ''
     substituteInPlace Makefile \
@@ -16,8 +18,10 @@ stdenv.mkDerivation rec {
       --replace "-m 4755 -o root -g root" ""
   '';
 
+  makeFlags = "SESSION=systemd";
+
   meta = with stdenv.lib; {
-    description = "A secure suspend/hibernate-friendly alternative to `vlock -an` without PAM support";
+    description = "A secure suspend/hibernate-friendly alternative to `vlock -an`";
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

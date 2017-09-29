@@ -40,12 +40,12 @@ in {
 
     uefiCdrom = makeBootTest "uefi-cdrom" ''
         cdrom => glob("${iso}/iso/*.iso"),
-        bios => '${pkgs.OVMF}/FV/OVMF.fd'
+        bios => '${pkgs.OVMF.fd}/FV/OVMF.fd'
       '';
 
     uefiUsb = makeBootTest "uefi-usb" ''
         usb => glob("${iso}/iso/*.iso"),
-        bios => '${pkgs.OVMF}/FV/OVMF.fd'
+        bios => '${pkgs.OVMF.fd}/FV/OVMF.fd'
       '';
 
     netboot = let

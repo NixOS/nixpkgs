@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   buildInputs = [];
   propagatedBuildInputs = [audiofile libtiff];
   meta = {
-    homepage = "http://www.creytiv.com/baresip.html";
+    homepage = http://www.creytiv.com/baresip.html;
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [raskin];
     license = stdenv.lib.licenses.gpl2;

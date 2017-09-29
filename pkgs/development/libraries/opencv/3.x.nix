@@ -4,18 +4,21 @@
 , enablePNG       ? true, libpng
 , enableTIFF      ? true, libtiff
 , enableWebP      ? true, libwebp
-, enableEXR       ? true, openexr, ilmbase
+, enableEXR ? (!stdenv.isDarwin), openexr, ilmbase
 , enableJPEG2K    ? true, jasper
 
 , enableIpp       ? false
-, enableContrib   ? false, protobuf3_1
+, enableContrib   ? false, protobuf
 , enablePython    ? false, pythonPackages
 , enableGtk2      ? false, gtk2
 , enableGtk3      ? false, gtk3
 , enableFfmpeg    ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
 , enableEigen     ? false, eigen
+, enableOpenblas  ? false, openblas
 , enableCuda      ? false, cudatoolkit, gcc5
+, enableTesseract ? false, tesseract, leptonica
+, AVFoundation, Cocoa, QTKit
 }:
 
 let
@@ -34,6 +37,16 @@ let
     rev    = version;
     sha256 = "1lynpbxz1jay3ya5y45zac5v8c6ifgk4ssn8d1chfdk3spi691jj";
   };
+
+  # This fixes the build on macOS.
+  # See: https://github.com/opencv/opencv_contrib/pull/926
+  contribOSXFix = fetchpatch {
+    url = "https://github.com/opencv/opencv_contrib/commit/abf44fcccfe2f281b7442dac243e37b7f436d961.patch";
+    sha256 = "11dsq8dwh1k6f7zglbc26xwsjw184ggf2531mhf7v77kd72k19fm";
+  };
+
+  # Contrib must be built in order to enable Tesseract support:
+  buildContrib = enableContrib || enableTesseract;
 
   vggFiles = fetchFromGitHub {
     owner  = "opencv";
@@ -57,8 +70,11 @@ stdenv.mkDerivation rec {
   inherit version src;
 
   postUnpack =
-    (lib.optionalString enableContrib ''
+    (lib.optionalString buildContrib ''
       cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/opencv_contrib"
+
+      # This fixes the build on macOS.
+      patch -d "$NIX_BUILD_TOP/opencv_contrib" -p2 < "${contribOSXFix}"
 
       for name in vgg_generated_48.i \
                   vgg_generated_64.i \
@@ -77,6 +93,17 @@ stdenv.mkDerivation rec {
         ln -s "${bootdescFiles}/$name" "$NIX_BUILD_TOP/opencv_contrib/xfeatures2d/src/$name"
       done
     '');
+
+  # This prevents cmake from using libraries in impure paths (which
+  # causes build failure on non NixOS)
+  # Also, work around https://github.com/NixOS/nixpkgs/issues/26304 with
+  # what appears to be some stray headers in dnn/misc/tensorflow
+  # in contrib when generating the Python bindings:
+  postPatch = ''
+    sed -i '/Add these standard paths to the search paths for FIND_LIBRARY/,/^\s*$/{d}' CMakeLists.txt
+    sed -i -e 's|if len(decls) == 0:|if len(decls) == 0 or "opencv2/" not in hdr:|' ./modules/python/src2/gen2.py
+  '';
+
   preConfigure =
     (let version  = "20151201";
          md5      = "808b791a6eac9ed78d32a7666804320e";
@@ -95,7 +122,7 @@ stdenv.mkDerivation rec {
           ln -s "${ippicv}" "${dir}/${name}"
         ''
     ) +
-    (lib.optionalString enableContrib ''
+    (lib.optionalString buildContrib ''
       cmakeFlagsArray+=("-DOPENCV_EXTRA_MODULES_PATH=$NIX_BUILD_TOP/opencv_contrib")
     '');
 
@@ -113,9 +140,14 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
+    ++ lib.optional enableOpenblas openblas
+    # There is seemingly no compile-time flag for Tesseract.  It's
+    # simply enabled automatically if contrib is built, and it detects
+    # tesseract & leptonica.
+    ++ lib.optionals enableTesseract [ tesseract leptonica ]
     ++ lib.optionals enableCuda [ cudatoolkit gcc5 ]
-    ++ lib.optional enableContrib protobuf3_1
-    ;
+    ++ lib.optional buildContrib protobuf
+    ++ lib.optionals stdenv.isDarwin [ AVFoundation Cocoa QTKit ];
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
 
@@ -124,7 +156,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = lib.optional enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   cmakeFlags = [
-    "-DWITH_IPP=${if enableIpp then "ON" else "OFF"}"
+    "-DWITH_IPP=${if enableIpp then "ON" else "OFF"} -DWITH_OPENMP=ON"
     (opencvFlag "TIFF" enableTIFF)
     (opencvFlag "JASPER" enableJPEG2K)
     (opencvFlag "WEBP" enableWebP)
@@ -134,7 +166,8 @@ stdenv.mkDerivation rec {
     (opencvFlag "CUDA" enableCuda)
     (opencvFlag "CUBLAS" enableCuda)
   ] ++ lib.optionals enableCuda [ "-DCUDA_FAST_MATH=ON" ]
-    ++ lib.optional enableContrib "-DBUILD_PROTOBUF=off";
+    ++ lib.optional buildContrib "-DBUILD_PROTOBUF=off"
+    ++ lib.optionals stdenv.isDarwin ["-DWITH_OPENCL=OFF" "-DWITH_LAPACK=OFF"];
 
   enableParallelBuilding = true;
 
@@ -146,7 +179,7 @@ stdenv.mkDerivation rec {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = http://opencv.org/;
     license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [viric flosse mdaiter];
-    platforms = with stdenv.lib.platforms; linux;
+    maintainers = with stdenv.lib.maintainers; [viric mdaiter];
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

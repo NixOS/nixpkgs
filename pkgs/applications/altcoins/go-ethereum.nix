@@ -1,34 +1,32 @@
-{ stdenv, lib, go, fetchgit }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+buildGoPackage rec {
   name = "go-ethereum-${version}";
-  version = "1.4.7";
-  rev = "refs/tags/v${version}";
+  version = "1.7.0";
   goPackagePath = "github.com/ethereum/go-ethereum";
 
-  buildInputs = [ go ];
+  # Fixes Cgo related build failures (see https://github.com/NixOS/nixpkgs/issues/25959 )
+  hardeningDisable = [ "fortify" ];
 
-  src = fetchgit {
-    inherit rev;
-    url = "https://${goPackagePath}";
-    sha256 = "19q518kxkvrr44cvsph4wv3lr6ivqsckz1f22r62932s3sq6gyd8";
+  src = fetchFromGitHub {
+    owner = "ethereum";
+    repo = "go-ethereum";
+    rev = "v${version}";
+    sha256 = "0ybjaiyrfb320rab6a5r9iiqvkrcd8b2qvixzx0kjmc4a7l1q5zh";
   };
 
-  buildPhase = ''
-    export GOROOT=$(mktemp -d --suffix=-goroot)
-    ln -sv ${go}/share/go/* $GOROOT
-    ln -svf ${go}/bin $GOROOT
-    make all
+  # Fix cyclic referencing on Darwin
+  postInstall = stdenv.lib.optionalString (stdenv.isDarwin) ''
+    for file in $bin/bin/*; do
+      # Not all files are referencing $out/lib so consider this step non-critical
+      install_name_tool -delete_rpath $out/lib $file || true
+    done
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -v build/bin/* $out/bin
-  '';
-
-  meta = {
-    homepage = "https://ethereum.github.io/go-ethereum/";
+  meta = with stdenv.lib; {
+    homepage = https://ethereum.github.io/go-ethereum/;
     description = "Official golang implementation of the Ethereum protocol";
-    license = with lib.licenses; [ lgpl3 gpl3 ];
+    license = with licenses; [ lgpl3 gpl3 ];
+    maintainers = [ maintainers.adisbladis ];
   };
 }

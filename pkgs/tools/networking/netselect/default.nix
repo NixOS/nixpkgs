@@ -8,10 +8,13 @@ stdenv.mkDerivation {
     sha256 = "0y69z59vylj9x9nk5jqn6ihx7dkzg09gpv2w1q1rs8fmi4jr90gy";
   };
 
-  preBuild = "
+  preBuild = ''
     makeFlagsArray=(PREFIX=$out)
-    substituteInPlace Makefile --replace '-o root' '' --replace '-g root' ''
-  ";
+    substituteInPlace Makefile \
+      --replace "-o root" "" \
+      --replace "-g root" "" \
+      --replace "4755"    "0755"
+  '';
   
   meta = {
     homepage = http://alumnit.ca/~apenwarr/netselect/;

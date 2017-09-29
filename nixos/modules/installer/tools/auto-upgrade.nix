@@ -76,7 +76,7 @@ let cfg = config.system.autoUpgrade; in
       environment = config.nix.envVars //
         { inherit (config.environment.sessionVariables) NIX_PATH;
           HOME = "/root";
-        };
+        } // config.networking.proxy.envVars;
 
       path = [ pkgs.gnutar pkgs.xz.bin config.nix.package.out ];
 

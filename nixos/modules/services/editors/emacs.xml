@@ -24,7 +24,7 @@
   <para>
     Emacs runs within a graphical desktop environment using the X
     Window System, but works equally well on a text terminal. Under
-    <productname>OS X</productname>, a "Mac port" edition is
+    <productname>macOS</productname>, a "Mac port" edition is
     available, which uses Apple's native GUI frameworks.
   </para>
 
@@ -84,7 +84,7 @@
             <listitem>
               <para>
                 Emacs 25 with the "Mac port" patches, providing a more
-                native look and feel under OS X.
+                native look and feel under macOS.
               </para>
             </listitem>
           </varlistentry>

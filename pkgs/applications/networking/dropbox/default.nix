@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, makeDesktopItem, patchelf, makeWrapper, makeQtWrapper
+{ mkDerivation, stdenv, lib, fetchurl, makeDesktopItem
+, makeWrapper, patchelf
 , dbus_libs, fontconfig, freetype, gcc, glib
 , libdrm, libffi, libICE, libSM
 , libX11, libXcomposite, libXext, libXmu, libXrender, libxcb
@@ -23,30 +24,28 @@
 let
   # NOTE: When updating, please also update in current stable,
   # as older versions stop working
-  version = "23.4.19";
-  sha256 =
-    {
-      "x86_64-linux" = "09vjic4yi6g6rbliz4b56swqdpjgw0m7gs2n40xhvbqfd35prafs";
-      "i686-linux"   = "0i2x2s7p1lq315z8198wjlfqr5lqj3mxdcqxz44skrbkmqfd9hab";
-    }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
+  version = "35.4.20";
+  sha256 = {
+    "x86_64-linux" = "09qxr94bcyjn5ky20yapljxi2n2nbk6ldcpx2h0ysy8jp6zbrn78";
+    "i686-linux"   = "1rd4b26dbjf779g085si65lac74bk6lcx8k7i3nqk3vrvbva9n40";
+  }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
-  arch =
-    {
-      "x86_64-linux" = "x86_64";
-      "i686-linux"   = "x86";
-    }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
+  arch = {
+    "x86_64-linux" = "x86_64";
+    "i686-linux"   = "x86";
+  }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
   # relative location where the dropbox libraries are stored
   appdir = "opt/dropbox";
 
-  ldpath = stdenv.lib.makeLibraryPath
-    [
-      dbus_libs fontconfig freetype gcc.cc glib libdrm libffi libICE libSM
-      libX11 libXcomposite libXext libXmu libXrender libxcb libxml2 libxslt
-      ncurses zlib
+  libs = [
+    dbus_libs fontconfig freetype gcc.cc glib libdrm libffi libICE libSM
+    libX11 libXcomposite libXext libXmu libXrender libxcb libxml2 libxslt
+    ncurses zlib
 
-      qtbase qtdeclarative qtwebkit
-    ];
+    qtbase qtdeclarative qtwebkit
+  ];
+  ldpath = stdenv.lib.makeLibraryPath libs;
 
   desktopItem = makeDesktopItem {
     name = "dropbox";
@@ -58,20 +57,23 @@ let
     startupNotify = "false";
   };
 
-in stdenv.mkDerivation {
+in mkDerivation {
   name = "dropbox-${version}";
   src = fetchurl {
     name = "dropbox-${version}.tar.gz";
-    url = "https://dl-web.dropbox.com/u/17/dropbox-lnx.${arch}-${version}.tar.gz";
+    url = "https://clientupdates.dropboxstatic.com/dbx-releng/client/dropbox-lnx.${arch}-${version}.tar.gz";
     inherit sha256;
   };
 
   sourceRoot = ".dropbox-dist";
 
-  nativeBuildInputs = [ makeQtWrapper patchelf ];
+  nativeBuildInputs = [ makeWrapper patchelf ];
+  buildInputs = libs;
   dontStrip = true; # already done
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p "$out/${appdir}"
     cp -r --no-preserve=mode "dropbox-lnx.${arch}-${version}"/* "$out/${appdir}/"
 
@@ -94,16 +96,18 @@ in stdenv.mkDerivation {
 
     mkdir -p "$out/bin"
     RPATH="${ldpath}:$out/${appdir}"
-    makeQtWrapper "$out/${appdir}/dropbox" "$out/bin/dropbox" \
+    chmod 755 $out/${appdir}/dropbox
+    makeWrapper "$out/${appdir}/dropbox" "$out/bin/dropbox" \
       --prefix LD_LIBRARY_PATH : "$RPATH"
 
-    chmod 755 $out/${appdir}/dropbox
 
     rm $out/${appdir}/wmctrl
     ln -s ${wmctrl}/bin/wmctrl $out/${appdir}/wmctrl
+
+    runHook postInstall
   '';
 
-  fixupPhase = ''
+  preFixup = ''
     INTERP=$(cat $NIX_CC/nix-support/dynamic-linker)
     RPATH="${ldpath}:$out/${appdir}"
     getType='s/ *Type: *\([A-Z]*\) (.*/\1/'
@@ -134,11 +138,11 @@ in stdenv.mkDerivation {
     paxmark m $out/${appdir}/dropbox
   '';
 
-  meta = {
-    homepage = "http://www.dropbox.com";
+  meta = with lib; {
     description = "Online stored folders (daemon version)";
-    maintainers = with stdenv.lib.maintainers; [ ttuegel ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
-    license = stdenv.lib.licenses.unfree;
+    homepage    = http://www.dropbox.com;
+    maintainers = with maintainers; [ ttuegel ];
+    license     = licenses.unfree;
+    platforms   = [ "i686-linux" "x86_64-linux" ];
   };
 }

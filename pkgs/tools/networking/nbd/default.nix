@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lrt -lpthread";
 
   meta = {
-    homepage = "http://nbd.sourceforge.net";
+    homepage = http://nbd.sourceforge.net;
     description = "Map arbitrary files as block devices over the network";
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.peti ];

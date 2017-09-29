@@ -1,8 +1,9 @@
 { stdenv , fetchurl , buildPythonPackage , sphinx }:
 
 buildPythonPackage rec {
+  pname = "hieroglyph";
   version = "0.7.1";
-  name = "hieroglyph-${version}";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/h/hieroglyph/${name}.tar.gz";

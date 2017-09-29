@@ -1,46 +1,52 @@
-{ stdenv, fetchurl, buildPythonPackage, service-identity, requests2,
-  six, mock, twisted, incremental, coreutils, gnumake, pep8, sphinx,
-  openssl, pyopenssl }:
+{ stdenv, fetchPypi, buildPythonPackage, service-identity, requests, six
+, mock, twisted, incremental, pep8, httpbin
+}:
 
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "treq";
-  version = "16.12.0";
+  version = "17.8.0";
 
-  src = fetchurl {
-    url = "mirror://pypi/t/${pname}/${name}.tar.gz";
-    sha256 = "1aci3f3rmb5mdf4s6s4k4kghmnyy784cxgi3pz99m5jp274fs25h";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "ef72d2d5e0b24bdf29267b608fa33df0ac401743af8524438b073e1fb2b66f16";
   };
 
-  buildInputs = [
+  propagatedBuildInputs = [
+    requests
+    six
+    incremental
+    service-identity
+    twisted
+    # twisted [tls] requirements (we should find a way to list "extras")
+    twisted.extras.tls
+  ];
+
+  checkInputs = [
     pep8
     mock
+    httpbin
   ];
 
-  propagatedBuildInputs = [
-    service-identity
-    requests2
-    twisted
-    incremental
-    sphinx
-    six
-    openssl
-    pyopenssl
-  ];
+  postPatch = ''
+    rm -fv src/treq/test/test_treq_integration.py
+  '';
+
+  # XXX tox tries to install coverage despite it is installed
+  #postBuild = ''
+  #  # build documentation and install in $out
+  #  tox -e docs
+  #  mkdir -pv $out/docs
+  #  cp -rv docs/* $out/docs/
+  #'';
 
   checkPhase = ''
-    ${pep8}/bin/pep8 --ignore=E902 treq
+    pep8 --ignore=E902 treq
     trial treq
   '';
 
+  # Failing tests https://github.com/twisted/treq/issues/208
   doCheck = false;
-  # Failure: twisted.web._newclient.RequestTransmissionFailed: [<twisted.python.failure.Failure OpenSSL.SSL.Error: [('SSL routines', 'ssl3_get_server_certificate', 'certificate verify failed')]>]
-
-  postBuild = ''
-    ${coreutils}/bin/mkdir -pv treq
-    ${coreutils}/bin/echo "${version}" | ${coreutils}/bin/tee treq/_version
-    cd docs && ${gnumake}/bin/make html && cd ..
-  '';
 
   meta = with stdenv.lib; {
     homepage = http://github.com/twisted/treq;

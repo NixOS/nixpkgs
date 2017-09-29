@@ -44,7 +44,7 @@ in
       ''
         # This function is called whenever a command is not found.
         command_not_found_handle() {
-          local p=${commandNotFound}
+          local p=${commandNotFound}/bin/command-not-found
           if [ -x $p -a -f ${cfg.dbPath} ]; then
             # Run the helper program.
             $p "$@"
@@ -65,7 +65,7 @@ in
       ''
         # This function is called whenever a command is not found.
         command_not_found_handler() {
-          local p=${commandNotFound}
+          local p=${commandNotFound}/bin/command-not-found
           if [ -x $p -a -f ${cfg.dbPath} ]; then
             # Run the helper program.
             $p "$@"

@@ -13,19 +13,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libsodium ];
 
-  phases = [ "unpackPhase" "buildPhase" "installPhase" ];
-
   buildPhase = "bash build.sh";
 
   installPhase = ''
-    mkdir -p $out/bin
     rm out/quicktun*tgz
-    cp -v out/quicktun* $out/bin/
+    install -vD out/quicktun* -t $out/bin
   '';
 
   meta = with stdenv.lib; {
     description = "Very simple, yet secure VPN software";
-    homepage = "http://wiki.ucis.nl/QuickTun";
+    homepage = http://wiki.ucis.nl/QuickTun;
     maintainers = [ maintainers.fpletz ];
     platforms = platforms.unix;
   };

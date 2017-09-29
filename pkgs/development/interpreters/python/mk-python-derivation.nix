@@ -37,6 +37,9 @@
 # generated binaries.
 , makeWrapperArgs ? []
 
+# Skip wrapping of python programs altogether
+, dontWrapPythonPrograms ? false
+
 , meta ? {}
 
 , passthru ? {}
@@ -51,18 +54,11 @@ if disabled
 then throw "${name} not supported for interpreter ${python.executable}"
 else
 
-python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
+python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "checkInputs"] // {
 
   name = namePrefix + name;
 
   inherit pythonPath;
-
-
-  # Determinism: The interpreter is patched to write null timestamps when compiling python files.
-  # This way python doesn't try to update them when we freeze timestamps in nix store.
-  DETERMINISTIC_BUILD=1;
-  # Determinism: We fix the hashes of str, bytes and datetime objects.
-  PYTHONHASHSEED = 0;
 
   buildInputs = [ wrapPython ] ++ buildInputs ++ pythonPath
     ++ [ (ensureNewerSourcesHook { year = "1980"; }) ]
@@ -76,7 +72,7 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled"] // {
   doCheck = false;
   doInstallCheck = doCheck;
 
-  postFixup = ''
+  postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
     wrapPythonPrograms
   '' + lib.optionalString catchConflicts ''
     # Check if we have two packages with the same name in the closure and fail.

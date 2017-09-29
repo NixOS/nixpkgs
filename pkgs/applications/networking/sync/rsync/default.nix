@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl
+{ stdenv, fetchurl, perl, libiconv, zlib, popt
 , enableACLs ? true, acl ? null
 , enableCopyDevicesPatch ? false
 }:
@@ -18,10 +18,10 @@ stdenv.mkDerivation rec {
   srcs = [mainSrc] ++ stdenv.lib.optional enableCopyDevicesPatch patchesSrc;
   patches = stdenv.lib.optional enableCopyDevicesPatch "./patches/copy-devices.diff";
 
-  buildInputs = stdenv.lib.optional enableACLs acl;
+  buildInputs = [libiconv zlib popt] ++ stdenv.lib.optional enableACLs acl;
   nativeBuildInputs = [perl];
 
-  configureFlags = "--with-nobody-group=nogroup";
+  configureFlags = ["--with-nobody-group=nogroup"];
 
   meta = base.meta // {
     description = "A fast incremental file transfer utility";

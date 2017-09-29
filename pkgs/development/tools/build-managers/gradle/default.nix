@@ -52,6 +52,16 @@ rec {
   };
 
   gradle_latest = gradleGen rec {
+    name = "gradle-4.2";
+    nativeVersion = "0.14";
+
+    src = fetchurl {
+      url = "http://services.gradle.org/distributions/${name}-bin.zip";
+      sha256 = "1bifb3smmdxkfk94li2l63g2jxcl1bjca2bqcq2rqnp568yxcpai";
+    };
+  };
+
+  gradle_3_5 = gradleGen rec {
     name = "gradle-3.5";
     nativeVersion = "0.14";
 

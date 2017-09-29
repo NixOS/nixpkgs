@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   configurePhase = ''makeFlags="PREFIX=$out MANDIR=$out/share/man"'';
 
   meta = {
-    homepage = "http://www.openwall.com/popa3d/";
+    homepage = http://www.openwall.com/popa3d/;
     description = "Tiny POP3 daemon with security as the primary goal";
     platforms = stdenv.lib.platforms.linux;
   };

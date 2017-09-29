@@ -4,13 +4,13 @@
 stdenv.mkDerivation rec {
   name = "${product}-${version}";
   product = "pdfpc";
-  version = "4.0.6";
+  version = "4.0.7";
 
   src = fetchFromGitHub {
     repo = "pdfpc";
     owner = "pdfpc";
     rev = "v${version}";
-    sha256 = "05cfx45i0xnwvclrbwlmqsjj2sk1galk62dc0mrkhr6293mbp1mx";
+    sha256 = "00qfmmk8h762p53z46g976z7j4fbxyi16w5axzsv1ymvdq95ds8c";
   };
 
   nativeBuildInputs = [ cmake pkgconfig vala ];

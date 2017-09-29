@@ -22,6 +22,7 @@ let
     ${optionalString (interfaces!=null) "allow-interfaces=${concatStringsSep "," interfaces}"}
     ${optionalString (domainName!=null) "domain-name=${domainName}"}
     allow-point-to-point=${yesNo allowPointToPoint}
+    ${optionalString (cacheEntriesMax!=null) "cache-entries-max=${toString cacheEntriesMax}"}
 
     [wide-area]
     enable-wide-area=${yesNo wideArea}
@@ -33,6 +34,9 @@ let
     publish-hinfo=${yesNo publish.hinfo}
     publish-workstation=${yesNo publish.workstation}
     publish-domain=${yesNo publish.domain}
+
+    [reflector]
+    enable-reflector=${yesNo reflector}
   '';
 
 in
@@ -113,6 +117,11 @@ in
         description = ''Whether to enable wide-area service discovery.'';
       };
 
+      reflector = mkOption {
+        default = false;
+        description = ''Reflect incoming mDNS requests to all allowed network interfaces.'';
+      };
+
       publish = {
         enable = mkOption {
           default = false;
@@ -155,6 +164,15 @@ in
           Whether to enable the mDNS NSS (Name Service Switch) plug-in.
           Enabling it allows applications to resolve names in the `.local'
           domain by transparently querying the Avahi daemon.
+        '';
+      };
+
+      cacheEntriesMax = mkOption {
+        default = null;
+        type = types.nullOr types.int;
+        description = ''
+          Number of resource records to be cached per interface. Use 0 to
+          disable caching. Avahi daemon defaults to 4096 if not set.
         '';
       };
 

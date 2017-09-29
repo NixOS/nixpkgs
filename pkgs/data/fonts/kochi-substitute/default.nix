@@ -28,6 +28,10 @@ stdenv.mkDerivation {
     cp ./share/fonts/truetype/kochi/kochi-mincho-subst.ttf $out/share/fonts/truetype/
   '';
 
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "10hcrf51npc1w2jsz5aiw07dgw96vs4wmsz4ai9zyaswipvf8ddy";
+
   meta = {
     description = "Japanese font, a free replacement for MS Gothic and MS Mincho";
     longDescription = ''

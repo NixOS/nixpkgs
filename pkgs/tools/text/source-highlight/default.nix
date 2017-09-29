@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     description = "Source code renderer with syntax highlighting";
     homepage = http://www.gnu.org/software/src-highlite/;
     license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
     longDescription =
       ''
         GNU Source-highlight, given a source file, produces a document

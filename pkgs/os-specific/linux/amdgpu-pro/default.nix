@@ -30,9 +30,9 @@ let
 
 in stdenv.mkDerivation rec {
 
-  version = "16.60";
+  version = "17.10";
   pname = "amdgpu-pro";
-  build = "${version}-379184";
+  build = "${version}-401251";
 
   libCompatDir = "/run/lib/${libArch}";
 
@@ -41,7 +41,7 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     url =
     "https://www2.ati.com/drivers/linux/ubuntu/amdgpu-pro-${build}.tar.xz";
-    sha256 = "1g90sryxw8y4abjgviibq34v3hr82ijgbaiqnxgafrf7g9s5m2yq";
+    sha256 = "004n0df8acjpjz72z3bjxb2a0b7qwln13jlknfn7xxqvhhwwy40a";
     curlOpts = "--referer http://support.amd.com/en-us/kb-articles/Pages/AMD-Radeon-GPU-PRO-Linux-Beta-Driver%e2%80%93Release-Notes.aspx";
   };
 

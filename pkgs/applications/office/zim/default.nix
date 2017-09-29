@@ -9,11 +9,11 @@
 
 python2Packages.buildPythonApplication rec {
   name = "zim-${version}";
-  version = "0.65";
+  version = "0.67-rc2";
 
   src = fetchurl {
     url = "http://zim-wiki.org/downloads/${name}.tar.gz";
-    sha256 = "15pdq4fxag85qjsrdmmssiq85qsk5vnbp8mrqnpvx8lm8crz6hjl";
+    sha256 = "0l4q2dfnvyn0jr1lggf8g7515q4z7qr1lnmy0lsyhjf477ldszqf";
   };
 
   propagatedBuildInputs = with python2Packages; [ pyGtkGlade pyxdg pygobject2 ];
@@ -37,9 +37,10 @@ python2Packages.buildPythonApplication rec {
   '';
 
 
-  meta = {
-      description = "A desktop wiki";
-      homepage = http://zim-wiki.org;
-      license = stdenv.lib.licenses.gpl2Plus;
+  meta = with stdenv.lib; {
+    description = "A desktop wiki";
+    homepage = http://zim-wiki.org;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ pSub ];
   };
 }

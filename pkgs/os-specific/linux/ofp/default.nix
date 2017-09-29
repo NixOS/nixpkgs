@@ -36,5 +36,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms =  [ "x86_64-linux" ];
     maintainers = [ maintainers.abuibrahim ];
+    broken = true;
   };
 }

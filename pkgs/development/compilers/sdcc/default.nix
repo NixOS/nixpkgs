@@ -1,22 +1,20 @@
-{ stdenv, fetchurl, bison, flex, boost, gputils ? null }:
+{ stdenv, fetchurl, bison, flex, boost, texinfo, gputils ? null }:
 
 stdenv.mkDerivation rec {
-  version = "3.5.0";
+  version = "3.6.0";
   name = "sdcc-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/sdcc/sdcc-src-${version}.tar.bz2";
-    sha256 = "1aazz0yynr694q0rich7r03qls0zvsjc00il14pb4i22c78phagq";
+    sha256 = "0x53gh5yrrfjvlnkk29mjn8hq4v52alrsf7c8nsyzzq13sqwwpg8";
   };
 
   # TODO: remove this comment when gputils != null is tested
-  buildInputs = [ bison flex boost gputils ];
+  buildInputs = [ bison flex boost texinfo gputils ];
 
   configureFlags = ''
     ${if gputils == null then "--disable-pic14-port --disable-pic16-port" else ""}
   '';
-
-  NIX_CFLAGS_COMPILE = "--std=c99"; # http://sourceforge.net/p/sdcc/code/9106/
 
   meta = with stdenv.lib; {
     description = "Small Device C Compiler";

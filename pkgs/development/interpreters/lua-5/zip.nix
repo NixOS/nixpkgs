@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   patches = [ ./zip.patch ];
 
   meta = {
-    homepage = "https://github.com/luaforge/luazip";
+    homepage = https://github.com/luaforge/luazip;
     hydraPlatforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.mit;
   };

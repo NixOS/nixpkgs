@@ -22,8 +22,13 @@ with lib;
     boot.loader.timeout = 0;
 
     # Allow root logins
-    services.openssh.enable = true;
-    services.openssh.permitRootLogin = "prohibit-password";
+    services.openssh = {
+      enable = true;
+      permitRootLogin = "prohibit-password";
+      passwordAuthentication = mkDefault false;
+    };
+
+    services.cloud-init.enable = true;
 
     # Put /tmp and /var on /ephemeral0, which has a lot more space.
     # Unfortunately we can't do this with the `fileSystems' option

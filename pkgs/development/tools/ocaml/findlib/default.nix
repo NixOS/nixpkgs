@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "ocaml-findlib-${version}";
-  version = "1.7.1";
+  version = "1.7.3";
 
   src = fetchurl {
     url = "http://download.camlcity.org/download/findlib-${version}.tar.gz";
-    sha256 = "1vsys5gpahi36nxv5yx29zhwn8b2d7sqqswza05vxy5bx5wrljsx";
+    sha256 = "12xx8si1qv3xz90qsrpazjjk4lc1989fzm97rsmc4diwla7n15ni";
   };
 
   buildInputs = [m4 ncurses ocaml];

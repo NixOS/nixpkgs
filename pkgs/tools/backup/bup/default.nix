@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://github.com/bup/bup";
+    homepage = https://github.com/bup/bup;
     description = "Efficient file backup system based on the git packfile format";
     license = licenses.gpl2Plus;
 
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
       Capable of doing *fast* incremental backups of virtual machine images.
     '';
 
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ muflax ];
   };
 }

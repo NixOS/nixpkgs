@@ -1,4 +1,8 @@
-{ fetchurl, stdenv, gmp, mpfr }:
+{ stdenv, fetchurl
+, gmp, mpfr
+, buildPlatform, hostPlatform
+}:
+
 let
   version = "1.0.3";
 in
@@ -14,10 +18,7 @@ stdenv.mkDerivation rec {
 
   CFLAGS = "-I${gmp.dev}/include";
 
-  doCheck = true;
-
-  # FIXME needs gcc 4.9 in bootstrap tools
-  hardeningDisable = [ "stackprotector" ];
+  doCheck = hostPlatform == buildPlatform;
 
   meta = {
     description = "Library for multiprecision complex arithmetic with exact rounding";

@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1cc4xxv72a82p1w9r76090xba7g069r41bi4zx32k4gz3vyl1am6";
   };
 
-  buildInputs = [ cmake extra-cmake-modules qtquickcontrols kconfigwidgets kdeclarative kdecoration ];
+  nativeBuildInputs = [ cmake extra-cmake-modules ];
+  buildInputs = [ qtquickcontrols kconfigwidgets kdeclarative kdecoration ];
 
   meta = with stdenv.lib; {
     description = "Allows to preview a KDecoration plugin";

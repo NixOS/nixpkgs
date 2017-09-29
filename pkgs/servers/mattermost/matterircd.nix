@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   name = "matterircd-${version}";
-  version = "0.11.2";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "42wim";
     repo = "matterircd";
     rev = "v${version}";
-    sha256 = "0yxqlckir50kdlbi36kak5ncfzl6sh811hzicdar5yzanzcip8ja";
+    sha256 = "1fgpfyb78l1kl0kja2fjqc4ik1q869cmhx6xdmp9ff2qcqk22cj0";
   };
 
   goPackagePath = "github.com/42vim/matterircd";

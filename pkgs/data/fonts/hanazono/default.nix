@@ -1,24 +1,19 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
-  name = "hanazono-${version}";
+let
   version = "20141012";
+in fetchzip {
+  name = "hanazono-${version}";
 
-  src = fetchurl {
-    url = "mirror://sourceforgejp/hanazono-font/62072/hanazono-20141012.zip";
-    sha256 = "020jhqnzm9jvkmfvvyk1my26ncwxbnb9yc8v7am252jwrifji9q6";
-  };
+  url = "mirror://sourceforgejp/hanazono-font/62072/hanazono-${version}.zip";
 
-  buildInputs = [ unzip ];
-
-  sourceRoot = ".";
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/hanazono
-    cp *.ttf $out/share/fonts/hanazono
-    mkdir -p $out/share/doc/hanazono
-    cp *.txt $out/share/doc/hanazono
+  postFetch = ''
+    mkdir -p $out/share/fonts/hanazono $out/share/doc/hanazono
+    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/hanazono
+    unzip -j $downloadedFile \*.txt -d $out/share/doc/hanazono
   '';
+
+  sha256 = "0z0fgrjzp0hqqnhfisivciqpxd2br2w2q9mvxkglj44np2q889w2";
 
   meta = with stdenv.lib; {
     description = "Free kanji font containing 96,327 characters";

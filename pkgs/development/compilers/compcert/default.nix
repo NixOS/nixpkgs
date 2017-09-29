@@ -7,11 +7,11 @@ assert lib.versionAtLeast ocamlPackages.ocaml.version "4.02";
 
 stdenv.mkDerivation rec {
   name    = "compcert-${version}";
-  version = "3.0.1";
+  version = "3.1";
 
   src = fetchurl {
     url    = "http://compcert.inria.fr/release/${name}.tgz";
-    sha256 = "0dgrj26dzdy4n3s9b5hwc6lm54vans1v4qx9hdp1q8w1qqcdriq9";
+    sha256 = "0irfwlw2chalp0g2gw0makc699hn3z37sha1a239p9d90mzx03cx";
   };
 
   buildInputs = [ coq ]
@@ -20,9 +20,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configurePhase = ''
+    substituteInPlace VERSION --replace '3.0.1' '3.1'
     substituteInPlace ./configure --replace '{toolprefix}gcc' '{toolprefix}cc'
     ./configure -clightgen -prefix $out -toolprefix ${tools}/bin/ '' +
-    (if stdenv.isDarwin then "ia32-macosx" else "ia32-linux");
+    (if stdenv.isDarwin then "x86_64-macosx" else "x86_64-linux");
 
   installTargets = "documentation install";
 
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     mkdir -p $lib/share/doc/compcert
     mv doc/html $lib/share/doc/compcert/
     mkdir -p $lib/lib/coq/${coq.coq-version}/user-contrib/compcert/
-    mv backend cfrontend common cparser driver flocq x86 x86_32 lib \
+    mv backend cfrontend common cparser driver flocq x86 x86_64 lib \
       $lib/lib/coq/${coq.coq-version}/user-contrib/compcert/
   '';
 
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Formally verified C compiler";
     homepage    = "http://compcert.inria.fr";
-    license     = licenses.inria;
+    license     = licenses.inria-compcert;
     platforms   = platforms.linux ++
                   platforms.darwin;
     maintainers = with maintainers; [ thoughtpolice jwiegley vbgl ];

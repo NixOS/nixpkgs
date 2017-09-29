@@ -8,7 +8,7 @@
 { fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
 , perl, gtk2, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
-, fetchFromGitHub, libmpack
+, fetchFromGitHub, libmpack, which
 }:
 
 let
@@ -68,6 +68,32 @@ let
     meta = {
       homepage = "http://bitop.luajit.org";
       maintainers = with maintainers; [ flosse ];
+    };
+  };
+
+  luacheck = buildLuaPackage rec {
+    pname = "luacheck";
+    version = "0.20.0";
+    name = "${pname}${version}";
+
+    src = fetchFromGitHub {
+      owner = "mpeterv";
+      repo = "luacheck";
+      rev = "${version}";
+      sha256 = "0ahfkmqcjhlb7r99bswy1sly6d7p4pyw5f4x4fxnxzjhbq0c5qcs";
+    };
+
+    propagatedBuildInputs = [ lua ];
+
+    installPhase = ''
+      ${lua}/bin/lua install.lua $out
+      '';
+
+    meta = with stdenv.lib; {
+      description = "A tool for linting and static analysis of Lua code";
+      homepage = https://github.com/mpeterv/luacheck;
+      license = licenses.mit;
+      platforms = platforms.unix;
     };
   };
 
@@ -244,6 +270,33 @@ let
     };
   };
 
+  luxio = buildLuaPackage rec {
+    name = "luxio-${version}";
+    version = "13";
+    src = fetchurl {
+      url = "https://git.gitano.org.uk/luxio.git/snapshot/luxio-luxio-13.tar.bz2";
+      sha256 = "1hvwslc25q7k82rxk461zr1a2041nxg7sn3sw3w0y5jxf0giz2pz";
+    };
+    nativeBuildInputs = [ which pkgconfig ];
+    postPatch = ''
+      patchShebangs .
+    '';
+    meta = {
+      platforms = stdenv.lib.platforms.unix;
+      license = stdenv.lib.licenses.mit;
+      description = "Lightweight UNIX I/O and POSIX binding for Lua";
+      maintainers = [ maintainers.richardipsum ];
+    };
+    preBuild = ''
+      makeFlagsArray=(
+        INST_LIBDIR="$out/lib/lua/${lua.luaversion}"
+        INST_LUADIR="$out/share/lua/${lua.luaversion}"
+        LUA_BINDIR="$out/bin"
+        INSTALL=install
+        );
+    '';
+  };
+
   luazip = buildLuaPackage rec {
     name = "zip-${version}";
     version = "1.2.3";
@@ -311,24 +364,23 @@ let
 
   lrexlib = buildLuaPackage rec {
     name = "lrexlib-${version}";
-    version = "2.7.2";
+    version = "2.8.0";
     src = fetchzip {
-      url = "https://github.com/rrthomas/lrexlib/archive/150c251be57c4e569da0f48bf6b01fbca97179fe.zip";
-      sha256 = "0acb3258681bjq61piz331r99bdff6cnkjaigq5phg3699iz5h75";
+      url = "https://github.com/rrthomas/lrexlib/archive/rel-2-8-0.zip";
+      sha256 = "1c62ny41b1ih6iddw5qn81gr6dqwfffzdp7q6m8x09zzcdz78zhr";
     };
     buildInputs = [ unzip luastdlib pcre luarocks oniguruma gnulib tre glibc ];
 
     buildPhase = let
-      luaVariable = "LUA_PATH=${luastdlib}/share/lua/${lua.luaversion}/?.lua";
+      luaVariable = ''LUA_PATH="${luastdlib}/share/lua/${lua.luaversion}/?/init.lua;${luastdlib}/share/lua/${lua.luaversion}/?.lua"'';
 
-      pcreVariable = "PCRE_DIR=${pcre.dev}";
+      pcreVariable = "PCRE_DIR=${pcre.out} PCRE_INCDIR=${pcre.dev}/include";
       onigVariable = "ONIG_DIR=${oniguruma}";
       gnuVariable = "GNU_INCDIR=${gnulib}/lib";
       treVariable = "TRE_DIR=${tre}";
       posixVariable = "POSIX_DIR=${glibc.dev}";
     in ''
-      sed -e 's@$(LUAROCKS) $(LUAROCKS_COMMAND) $$i;@$(LUAROCKS) $(LUAROCKS_COMMAND) $$i ${pcreVariable} ${onigVariable} ${gnuVariable} ${treVariable} ${posixVariable};@' \
-          -i Makefile
+      sed -e 's@$(LUAROCKS) $(LUAROCKS_COMMAND) $$i;@$(LUAROCKS) $(LUAROCKS_COMMAND) $$i ${pcreVariable} ${onigVariable} ${gnuVariable} ${treVariable} ${posixVariable};@' -i Makefile
       ${luaVariable} make
     '';
 
@@ -341,7 +393,6 @@ let
       homepage = "https://github.com/lua-stdlib/lua-stdlib/";
       platforms = stdenv.lib.platforms.linux;
       license = stdenv.lib.licenses.mit;
-      broken = true;
     };
   };
 

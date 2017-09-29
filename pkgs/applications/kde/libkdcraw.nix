@@ -1,6 +1,6 @@
-{ kdeApp, lib, extra-cmake-modules, libraw, qtbase }:
+{ mkDerivation, lib, extra-cmake-modules, libraw, qtbase }:
 
-kdeApp {
+mkDerivation {
   name = "libkdcraw";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 bsd3 ];
@@ -9,4 +9,5 @@ kdeApp {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ qtbase ];
   propagatedBuildInputs = [ libraw ];
+  outputs = [ "out" "dev" ];
 }

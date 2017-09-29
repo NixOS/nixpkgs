@@ -41,6 +41,9 @@
 
       # Virtio (QEMU, KVM etc.) support.
       "virtio_net" "virtio_pci" "virtio_blk" "virtio_scsi" "virtio_balloon" "virtio_console"
+      
+      # VMware support.
+      "mptspi" "vmw_balloon" "vmwgfx" "vmw_vmci" "vmw_vsock_vmci_transport" "vmxnet3" "vsock"
 
       # Hyper-V support.
       "hv_storvsc"
@@ -50,7 +53,7 @@
     ];
 
   # Include lots of firmware.
-  hardware.enableAllFirmware = true;
+  hardware.enableRedistributableFirmware = true;
 
   imports =
     [ ../hardware/network/zydas-zd1211.nix ];

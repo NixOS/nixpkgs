@@ -4,7 +4,7 @@
 
 # Optional Dependencies
 , snappy ? null, leveldb ? null, yasm ? null, fcgi ? null, expat ? null
-, curl ? null, fuse ? null, accelio ? null, libibverbs ? null, librdmacm ? null
+, curl ? null, fuse ? null, libibverbs ? null, librdmacm ? null
 , libedit ? null, libatomic_ops ? null, kinetic-cpp-client ? null
 , rocksdb ? null, libs3 ? null
 
@@ -50,7 +50,6 @@ let
   optExpat = shouldUsePkg expat;
   optCurl = shouldUsePkg curl;
   optFuse = shouldUsePkg fuse;
-  optAccelio = shouldUsePkg accelio;
   optLibibverbs = shouldUsePkg libibverbs;
   optLibrdmacm = shouldUsePkg librdmacm;
   optLibedit = shouldUsePkg libedit;
@@ -75,10 +74,6 @@ let
   hasMds = hasServer;
   hasOsd = hasServer;
   hasRadosgw = optFcgi != null && optExpat != null && optCurl != null && optLibedit != null;
-
-  hasXio = (stdenv.isLinux || stdenv.isFreeBSD) &&
-    versionAtLeast version "9.0.3" &&
-    optAccelio != null && optLibibverbs != null && optLibrdmacm != null;
 
   hasRocksdb = versionAtLeast version "9.0.0" && optRocksdb != null;
 
@@ -128,8 +123,6 @@ stdenv.mkDerivation {
     optSnappy optLeveldb
   ] ++ optionals hasRadosgw [
     optFcgi optExpat optCurl optFuse optLibedit
-  ] ++ optionals hasXio [
-    optAccelio optLibibverbs optLibrdmacm
   ] ++ optionals hasRocksdb [
     optRocksdb
   ] ++ optionals hasKinetic [
@@ -192,7 +185,6 @@ stdenv.mkDerivation {
     (mkWith   (malloc == optGperftools)    "tcmalloc"             null)
     (mkEnable false                        "pgrefdebugging"       null)
     (mkEnable false                        "cephfs-java"          null)
-    (mkEnable hasXio                       "xio"                  null)
     (mkWith   (optLibatomic_ops != null)   "libatomic-ops"        null)
     (mkWith   true                         "ocf"                  null)
     (mkWith   hasKinetic                   "kinetic"              null)

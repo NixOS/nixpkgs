@@ -1,7 +1,12 @@
+{ lib }:
+  let inherit (lib.attrsets) mapAttrs; in
+
 rec {
-  doubles = import ./doubles.nix;
-  parse = import ./parse.nix;
-  platforms = import ./platforms.nix;
+  doubles = import ./doubles.nix { inherit lib; };
+  parse = import ./parse.nix { inherit lib; };
+  inspect = import ./inspect.nix { inherit lib; };
+  platforms = import ./platforms.nix { inherit lib; };
+  examples = import ./examples.nix { inherit lib; };
 
   # Elaborate a `localSystem` or `crossSystem` so that it contains everything
   # necessary.
@@ -18,6 +23,22 @@ rec {
       config = parse.tripleFromSystem final.parsed;
       # Just a guess, based on `system`
       platform = platforms.selectBySystem final.system;
-    } // args;
+      libc =
+        /**/ if final.isDarwin then "libSystem"
+        else if final.isMinGW  then "msvcrt"
+        else if final.isLinux  then "glibc"
+        # TODO(@Ericson2314) think more about other operating systems
+        else                        "native/impure";
+      extensions = {
+        sharedLibrary =
+          /**/ if final.isDarwin  then ".dylib"
+          else if final.isWindows then ".dll"
+          else                         ".so";
+        executable =
+          /**/ if final.isWindows then ".exe"
+          else                         "";
+      };
+    } // mapAttrs (n: v: v final.parsed) inspect.predicates
+      // args;
   in final;
 }

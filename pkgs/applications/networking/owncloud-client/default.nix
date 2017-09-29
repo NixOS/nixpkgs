@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, cmake, qt5, pkgconfig, qtkeychain, sqlite }:
+{ stdenv, fetchurl, cmake, pkgconfig, qtbase, qtwebkit, qtkeychain, sqlite }:
 
 stdenv.mkDerivation rec {
   name = "owncloud-client-${version}";
-  version = "2.3.0";
+  version = "2.3.3";
 
   src = fetchurl {
     url = "https://download.owncloud.com/desktop/stable/owncloudclient-${version}.tar.xz";
-    sha256 = "10ah4zmnv4hfi50k59qwk990h1a4g95d3yvxqqrv4x1dv8p2sscf";
+    sha256 = "1r5ddln1wc9iyjizgqb104i0r6qhzsmm2wdnxfaif119cv0vphda";
   };
 
   nativeBuildInputs = [ pkgconfig cmake ];
-  buildInputs = [ qt5.qtbase qt5.qtwebkit qtkeychain sqlite ];
+  buildInputs = [ qtbase qtwebkit qtkeychain sqlite ];
 
   cmakeFlags = [
     "-UCMAKE_INSTALL_LIBDIR"

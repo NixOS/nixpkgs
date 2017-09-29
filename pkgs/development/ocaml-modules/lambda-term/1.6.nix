@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libev, ocaml, findlib, ocamlbuild, ocaml_lwt, ocaml_react, zed, camlp4 }:
+{ stdenv, fetchurl, libev, ocaml, findlib, ocamlbuild, lwt, ocaml_react, zed, camlp4 }:
 
 stdenv.mkDerivation rec {
   version = "1.6";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rhfixdgpylxznf6sa9wr31wb4pjzpfn5mxhxqpbchmpl2afwa09";
   };
 
-  buildInputs = [ libev ocaml findlib ocamlbuild ocaml_lwt ocaml_react ];
+  buildInputs = [ libev ocaml findlib ocamlbuild lwt ocaml_react ];
 
   propagatedBuildInputs = [ camlp4 zed ];
 

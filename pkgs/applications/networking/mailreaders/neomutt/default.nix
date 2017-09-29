@@ -1,42 +1,40 @@
-{ stdenv, fetchFromGitHub, which, autoconf, automake, ncurses, perl
-, cyrus_sasl, gdbm, gpgme, kerberos, libidn, notmuch, openssl, lmdb }:
+{ stdenv, fetchFromGitHub, which, autoreconfHook, ncurses, perl
+, cyrus_sasl, gss, gpgme, kerberos, libidn, notmuch, openssl, lmdb, libxslt, docbook_xsl }:
 
 stdenv.mkDerivation rec {
-  version = "20170306";
+  version = "20170912";
   name = "neomutt-${version}";
 
   src = fetchFromGitHub {
-    owner = "neomutt";
-    repo = "neomutt";
-    rev = "neomutt-${version}";
-    sha256 = "0nlazabwj4czi30m84ppga275hkr51glyndizqzg540q9wp1acz4";
+    owner  = "neomutt";
+    repo   = "neomutt";
+    rev    = "neomutt-${version}";
+    sha256 = "0qndszmaihly3pp2wqiqm31nxbv9ys3j05kzffaqhzngfilmar9g";
   };
 
-  nativeBuildInputs = [ which autoconf automake ];
-  buildInputs =
-    [ cyrus_sasl gdbm gpgme kerberos libidn ncurses
-      notmuch openssl perl lmdb ];
+  nativeBuildInputs = [ autoreconfHook docbook_xsl libxslt.bin which ];
+  buildInputs = [
+    cyrus_sasl gss gpgme kerberos libidn ncurses
+    notmuch openssl perl lmdb
+  ];
+
+  postPatch = ''
+    for f in doc/*.xsl ; do
+      substituteInPlace $f \
+        --replace http://docbook.sourceforge.net/release/xsl/current ${docbook_xsl}/share/xml/docbook-xsl
+    done
+  '';
 
   configureFlags = [
     "--enable-debug"
     "--enable-gpgme"
-    "--enable-hcache"
-    "--enable-imap"
     "--enable-notmuch"
-    "--enable-pgp"
-    "--enable-pop"
-    "--enable-sidebar"
-    "--enable-keywords"
-    "--enable-smtp"
-    "--enable-nntp"
-    "--enable-compressed"
     "--with-homespool=mailbox"
     "--with-gss"
     "--with-mailpath="
     "--with-ssl"
     "--with-sasl"
     "--with-curses"
-    "--with-regex"
     "--with-idn"
     "--with-lmdb"
 
@@ -44,13 +42,20 @@ stdenv.mkDerivation rec {
     "ac_cv_path_SENDMAIL=sendmail"
   ];
 
+  # Fix missing libidn in mutt;
+  # this fix is ugly since it links all binaries in mutt against libidn
+  # like pgpring, pgpewrap, ...
+  NIX_LDFLAGS = "-lidn";
+
   configureScript = "./prepare";
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A small but very powerful text-based mail client";
-    homepage = http://www.neomutt.org;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ cstrahan vrthra erikryb ];
+    homepage    = http://www.neomutt.org;
+    license     = licenses.gpl2Plus;
+    maintainers = with maintainers; [ cstrahan erikryb jfrankenau vrthra ];
+    platforms   = platforms.unix;
   };
 }

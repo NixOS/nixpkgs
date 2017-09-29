@@ -1,12 +1,12 @@
 {
-  kdeApp, lib,
+  mkDerivation, lib,
   automoc4, bison, cmake, flex, libxslt, perl, pkgconfig, shared_mime_info,
   attica, attr, avahi, docbook_xml_dtd_42, docbook_xsl, giflib, ilmbase,
   libdbusmenu_qt, libjpeg, libxml2, phonon, polkit_qt4, qca2, qt4,
   shared_desktop_ontologies, soprano, strigi, udev, xz, pcre, fetchpatch
 }:
 
-kdeApp {
+mkDerivation {
   name = "kdelibs";
 
   outputs = [ "out" "dev" ];
@@ -42,8 +42,8 @@ kdeApp {
 
   meta = {
     platforms = lib.platforms.linux;
-    homepage = "http://www.kde.org";
-    licenses = with lib.licenses; [ gpl2 fdl12 lgpl21 ];
+    homepage = http://www.kde.org;
+    license = with lib.licenses; [ gpl2 fdl12 lgpl21 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
 }

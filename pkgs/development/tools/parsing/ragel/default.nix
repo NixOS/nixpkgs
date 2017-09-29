@@ -3,7 +3,7 @@
 }:
 
 let
-  generic = { version, sha256 }:
+  generic = { version, sha256, license }:
     stdenv.mkDerivation rec {
       name = "ragel-${version}";
 
@@ -27,7 +27,7 @@ let
       meta = with stdenv.lib; {
         homepage = http://www.complang.org/ragel;
         description = "State machine compiler";
-        license = licenses.gpl2;
+        inherit license;
         platforms = platforms.unix;
         maintainers = with maintainers; [ pSub ];
       };
@@ -37,12 +37,14 @@ in
 
 {
   ragelStable = generic {
-    version = "6.9";
-    sha256 = "02k6rwh8cr95f1p5sjjr3wa6dilg06572xz1v71dk8awmc7vw1vf";
+    version = "6.10";
+    sha256 = "0gvcsl62gh6sg73nwaxav4a5ja23zcnyxncdcdnqa2yjcpdnw5az";
+    license = stdenv.lib.licenses.gpl2;
   };
 
   ragelDev = generic {
-    version = "7.0.0.9";
-    sha256 = "1w2jhfg3fxl15gcmm7z3jbi6splgc83mmwcfbp08lfc8sg2wmrmr";
+    version = "7.0.0.10";
+    sha256 = "1v4ddzxal4gf8l8nkn32qabba6nbpd2mg8sphgmdn8kaqv52nmj0";
+    license = stdenv.lib.licenses.mit;
   };
 }

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, scons, pkgconfig, which, makeWrapper, python
-, expat, libraw1394, libconfig, libavc1394, libiec61883
+, expat, libraw1394, libconfig, libavc1394, libiec61883, libxmlxx, glibmm
 
 # Optional dependencies
 , libjack2 ? null, dbus ? null, dbus_cplusplus ? null, alsaLib ? null
@@ -25,11 +25,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "${prefix}ffado-${version}";
-  version = "2.2.1";
+  version = "2.3.0";
 
   src = fetchurl {
     url = "http://www.ffado.org/files/libffado-${version}.tgz";
-    sha256 = "1ximic90l0av91njb123ra2zp6mg23yg5iz8xa5371cqrn79nacz";
+    sha256 = "122z8gya60nyg47i738z2yr4qcjyk2xix4kwhf5ybkmp23kcgqqq";
   };
 
   nativeBuildInputs = [ scons pkgconfig which makeWrapper python ];
@@ -38,10 +38,10 @@ stdenv.mkDerivation rec {
     expat libraw1394 libconfig libavc1394 libiec61883
   ] ++ stdenv.lib.optionals (!libOnly) [
     optLibjack2 optDbus optDbus_cplusplus optAlsaLib optPyqt4
-    optXdg_utils
+    optXdg_utils libxmlxx glibmm
   ];
 
-  patches = [ ./build-fix.patch ];
+  patches = [ ./gcc6.patch ];
 
   postPatch = ''
     # SConstruct checks cpuinfo and an objdump of /bin/mount to determine the appropriate arch
@@ -55,6 +55,10 @@ stdenv.mkDerivation rec {
     sed -i -e '1i #include <stdlib.h>' \
       -e '1i #include "version.h"' \
       src/libutil/serialize_expat.cpp
+  '';
+
+  preConfigure = ''
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(pkg-config --cflags libxml++-2.6)"
   '';
 
   # TODO fix ffado-diag, it doesn't seem to use PYPKGDIR

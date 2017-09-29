@@ -1,9 +1,9 @@
-{ stdenv, fetchgit, curl, cmake, boost, gcc5, protobuf, pkgconfig, jsoncpp
+{ stdenv, fetchgit, fetchFromGitHub, curl, cmake, boost, gcc, protobuf, pkgconfig, jsoncpp
 , libusb1, libmicrohttpd
 }:
 
 let
-  version = "1.2.0";
+  version = "1.2.1";
 in
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,14 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url    = "https://github.com/trezor/trezord";
     rev    = "refs/tags/v${version}";
-    sha256 = "1606j5cfngryk4q21yiga1zvc3zpx4q8vqn6ljrvr679hpvlwni4";
+    sha256 = "1iaxmwyidjdcrc6jg0859v6v5x3qnz5b0p78pq0bypvmgyijhpm4";
+  };
+
+  common = fetchFromGitHub {
+    owner = "trezor";
+    repo = "trezor-common";
+    rev = "b55fb61218431e9c99c9d6c1673801902fc9e92e";
+    sha256 = "1zanbgz1qjs8wfwp0z91sqcvj77a9iis694k415jyd2dn4riqhdg";
   };
 
   meta = with stdenv.lib; {
@@ -27,7 +34,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    gcc5
+    gcc
     pkgconfig
   ];
 
@@ -40,8 +47,15 @@ stdenv.mkDerivation rec {
     jsoncpp
   ];
 
+  preConfigure = ''
+    ( cd src/config
+      ln -s $common/protob/config.proto
+      protoc -I . --cpp_out=. config.proto
+    )
+  '';
+
   LD_LIBRARY_PATH = "${stdenv.lib.makeLibraryPath [ curl ]}";
-  cmakeFlags="-DJSONCPP_LIBRARY='${jsoncpp}/lib/libjsoncpp.so'";
+  cmakeFlags = [ "-DJSONCPP_LIBRARY='${jsoncpp}/lib/libjsoncpp.so'" ];
 
   installPhase = ''
     mkdir -p $out/bin

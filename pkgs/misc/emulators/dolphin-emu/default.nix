@@ -1,6 +1,7 @@
-{ stdenv, pkgconfig, cmake, bluez, ffmpeg, libao, mesa, gtk2, glib
+{ stdenv, pkgconfig, cmake, bluez, ffmpeg, libao, gtk2, glib, mesa
 , gettext, libpthreadstubs, libXrandr, libXext, readline, openal
 , libXdmcp, portaudio, fetchFromGitHub, libusb, libevdev
+, wxGTK30, soundtouch, miniupnpc, mbedtls, curl, lzo, sfml
 , libpulseaudio ? null }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +31,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig cmake bluez ffmpeg libao mesa gtk2 glib
                   gettext libpthreadstubs libXrandr libXext readline openal
-                  libevdev libXdmcp portaudio libusb libpulseaudio ];
+                  libevdev libXdmcp portaudio libusb libpulseaudio
+                  libevdev libXdmcp portaudio libusb libpulseaudio
+                  wxGTK30 soundtouch miniupnpc mbedtls curl lzo sfml ];
 
   meta = {
     homepage = http://dolphin-emu.org/;

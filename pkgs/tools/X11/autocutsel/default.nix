@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     inherit version;
-    homepage = "http://www.nongnu.org/autocutsel/";
+    homepage = http://www.nongnu.org/autocutsel/;
     description = "Tracks changes in the server's cutbuffer and CLIPBOARD selection";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = with stdenv.lib.platforms; all;

@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   buildInputs = [ python ];
 
   patchPhase = ''
-    sed -i "pius" -e's|/usr/bin/gpg|${gnupg}/bin/gpg2|g'
+    sed -i "pius" -e's|/usr/bin/gpg|${gnupg}/bin/gpg|g'
   '';
 
   dontBuild = true;
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.phildev.net/pius/;
+    homepage = https://www.phildev.net/pius/;
 
     description = "PGP Individual UID Signer (PIUS), quickly and easily sign UIDs on a set of PGP keys";
 

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, buildPythonApplication
-, zip, ffmpeg, rtmpdump, atomicparsley, pandoc
+, zip, ffmpeg, rtmpdump, atomicparsley, pycryptodome, pandoc
 # Pandoc is required to build the package's man page. Release tarballs contain a
 # formatted man page already, though, it will still be installed. We keep the
 # manpage argument in place in case someone wants to use this derivation to
@@ -8,21 +8,23 @@
 , generateManPage ? false
 , ffmpegSupport ? true
 , rtmpSupport ? true
+, hlsEncryptedSupport ? true
 , makeWrapper }:
 
 with stdenv.lib;
 buildPythonApplication rec {
 
   name = "youtube-dl-${version}";
-  version = "2017.04.02";
+  version = "2017.09.24";
 
   src = fetchurl {
     url = "https://yt-dl.org/downloads/${version}/${name}.tar.gz";
-    sha256 = "131z42aq2qnh394y4ykzm3mvsf62lia86y90as6acyg4v201lgk2";
+    sha256 = "0j2m75j0d1n83i7jzpkcj7ir0bkskj024j9b0yi88zipcg740wbx";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ zip ] ++ optional generateManPage pandoc;
+  propagatedBuildInputs = optional hlsEncryptedSupport pycryptodome;
 
   # Ensure ffmpeg is available in $PATH for post-processing & transcoding support.
   # rtmpdump is required to download files over RTMP

@@ -2,16 +2,19 @@
 
 stdenv.mkDerivation rec {
   name = "sherpa-${version}";
-  version = "2.2.1";
+  version = "2.2.4";
 
   src = fetchurl {
     url = "http://www.hepforge.org/archive/sherpa/SHERPA-MC-${version}.tar.gz";
-    sha256 = "13vkz6w8kqyv8sgy3mxnlps5ykml5rnlj50vjj0pp9rgbl5y8ali";
+    sha256 = "1rw0ivx78zkbkl7nwil9i4fn8rvkifc3i20zrq3asbi4kb6brj2x";
   };
 
   buildInputs = [ gfortran sqlite lhapdf rivet ];
 
   enableParallelBuilding = true;
+
+  # LLVM 4 doesn't allow ambigous type in std::abs argument
+  patches = stdenv.lib.optional stdenv.cc.isClang [ ./explicit_overloads.patch ];
 
   configureFlags = [
     "--with-sqlite3=${sqlite.dev}"

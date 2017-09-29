@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, openssl, cmake, perl, pkgconfig, zlib }:
+{ stdenv, fetchFromGitHub, rustPlatform, cmake, perl, pkgconfig, zlib }:
 
 with rustPlatform;
 
@@ -12,31 +12,28 @@ let
   };
   cargoPatch = ''
     # use non-git dependencies
-    patch -p1 <<EOF
-   --- exa-v0.4.1-src.org/Cargo.toml       1970-01-01 01:00:01.000000000 +0100
-   +++ exa-v0.4.1-src/Cargo.toml   2017-04-04 10:33:31.554377034 +0200
-   @@ -42,4 +42,4 @@
-    optional = true
-
-    [dependencies.zoneinfo_compiled]
-   -git = "https://github.com/rust-datetime/zoneinfo-compiled.git"
-   +path = "${zoneinfo_compiled}"
-EOF
+    patch Cargo.toml <<EOF
+    46c46
+    < git = "https://github.com/rust-datetime/zoneinfo-compiled.git"
+    ---
+    > path = "${zoneinfo_compiled}"
+    EOF
   '';
 in buildRustPackage rec {
-  name = "exa-unstable-2017-04-02";
+  name = "exa-${version}";
+  version = "0.7.0";
 
-  depsSha256 = "0szjba03q4iwzjzb2dp39hhz554ys4z11qdhcdq1mgxqk94scjf4";
+  depsSha256 = "0j320hhf2vqaha137pjj4pyiw6d3p5h3nhy3pl9vna1g5mnl1sn7";
 
   src = fetchFromGitHub {
     owner = "ogham";
     repo = "exa";
-    rev = "1a6066327d2643881996946942aba530e8a1c67c";
-    sha256 = "1xrsg3zw5d3sw2bwx8g0lrs6zpk8rdrvvnknf7c9drp7rplmd8zq";
+    rev = "v${version}";
+    sha256 = "0i9psgna2wwv9qyw9cif4qznqiyi16vl763hpm2yr195aj700339";
   };
 
   nativeBuildInputs = [ cmake pkgconfig perl ];
-  buildInputs = [ openssl zlib ];
+  buildInputs = [ zlib ];
 
   # Some tests fail, but Travis ensures a proper build
   doCheck = false;
@@ -60,7 +57,7 @@ in buildRustPackage rec {
       for a directory, or recursing into directories with a tree view. exa is
       written in Rust, so it’s small, fast, and portable.
     '';
-    homepage = http://bsago.me/exa;
+    homepage = http://the.exa.website;
     license = licenses.mit;
     maintainer = [ maintainers.ehegnes ];
   };

@@ -1,4 +1,9 @@
-{ stdenv, fetchurl, lzip }:
+{ stdenv
+, fetchurl, lzip
+, hostPlatform, buildPlatform
+}:
+
+let inherit (stdenv.lib) optionals; in
 
 stdenv.mkDerivation rec {
   name = "ddrescue-1.22";
@@ -10,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ lzip ];
 
-  doCheck = true;
+  doCheck = hostPlatform == buildPlatform;
 
   meta = with stdenv.lib; {
     description = "GNU ddrescue, a data recovery tool";

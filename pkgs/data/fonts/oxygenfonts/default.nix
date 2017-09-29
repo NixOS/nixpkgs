@@ -1,22 +1,16 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
+fetchzip rec {
   name = "oxygenfonts-20160824";
 
-  src = fetchFromGitHub {
-    owner = "vernnobile";
-    repo = "oxygenFont";
-    rev = "62db0ebe3488c936406685485071a54e3d18473b";
-    sha256 = "134kx3d0g3zdkw8kl8p6j37fzw3bl163jv2dx4dk1451f3ramcnh";
-  };
+  url = https://github.com/vernnobile/oxygenFont/archive/62db0ebe3488c936406685485071a54e3d18473b.zip;
 
-  phases = [ "unpackPhase" "installPhase" ];
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/truetype/
-    cp OxygenSans-version-0.4/*/*.ttf $out/share/fonts/truetype/
-    cp Oxygen-Monospace/*.ttf $out/share/fonts/truetype/
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile '*/Oxygen-Sans.ttf' '*/Oxygen-Sans-Bold.ttf' '*/OxygenMono-Regular.ttf' -d $out/share/fonts/truetype
   '';
+
+  sha256 = "17m86p1s7a7d90zqjsr46h5bpmas4vxsgj7kd0j5c8cb7lw92jyf";
 
   meta = with stdenv.lib; {
     description = "Desktop/gui font for integrated use with the KDE desktop";

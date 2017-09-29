@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       but up to 100 times faster. It is based on the optimizing native code
       compiler, the native runtime and an earlier prototype by Alain
       Frisch. It is build upon Just-In-Time techniques and currently
-      supports Unix-like systems (i.e. Linux, BSD or Mac OS X) running on
+      supports Unix-like systems (i.e. Linux, BSD or macOS) running on
       x86 or x86-64 processors. Support for additional architectures and
       operating systems is planned, but not yet available.
     '';

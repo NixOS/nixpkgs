@@ -3,7 +3,8 @@
 , documentation ? false # build documentation
 , avahiSupport ? false # build support for Avahi in libinfinity
 , stdenv, fetchurl, pkgconfig, glib, libxml2, gnutls, gsasl
-, gtk2 ? null, gtkdoc ? null, avahi ? null, libdaemon ? null, libidn, gss }:
+, gtk2 ? null, gtkdoc ? null, avahi ? null, libdaemon ? null, libidn, gss
+, libintlOrEmpty }:
 
 let
   edf = flag: feature: (if flag then "--with-" else "--without-") + feature;
@@ -17,7 +18,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1idsxb6rz4i55g3vi2sv7hmm57psbccpb57yc4jgphaq6ydgqsr6";
   };
 
-  buildInputs = [ pkgconfig glib libxml2 gsasl libidn gss ]
+  buildInputs = [ pkgconfig glib libxml2 gsasl libidn gss libintlOrEmpty ]
     ++ optional gtkWidgets gtk2
     ++ optional documentation gtkdoc
     ++ optional avahiSupport avahi
@@ -34,12 +35,14 @@ in stdenv.mkDerivation rec {
     ${edf avahiSupport "avahi"}
   '';
 
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
+
   meta = {
     homepage = http://gobby.0x539.de/;
     description = "An implementation of the Infinote protocol written in GObject-based C";
     license = stdenv.lib.licenses.lgpl2Plus;
     maintainers = [ stdenv.lib.maintainers.phreedom ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 
 }

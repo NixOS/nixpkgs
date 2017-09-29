@@ -5,13 +5,13 @@
 # calculating the lists anyway?". The answer is one can mindlessly update these
 # tests as new platforms become supported, and then just give the diff a quick
 # sanity check before committing :).
-{ lib, assertTrue }:
-
-with lib.systems.doubles;
-
-let mseteq = x: y: lib.sort lib.lessThan x == lib.sort lib.lessThan y; in
-
-{
+let
+  lib = import ../default.nix;
+  mseteq = x: y: {
+    expr     = lib.sort lib.lessThan x;
+    expected = lib.sort lib.lessThan y;
+  };
+in with lib.systems.doubles; lib.runTests {
   all = assertTrue (mseteq all (linux ++ darwin ++ cygwin ++ freebsd ++ openbsd ++ netbsd ++ illumos));
 
   arm = assertTrue (mseteq arm [ "armv5tel-linux" "armv6l-linux" "armv7l-linux" ]);

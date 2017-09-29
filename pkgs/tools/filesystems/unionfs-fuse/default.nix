@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "unionfs-fuse-${version}";
-  version = "1.0";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "rpodgorny";
     repo = "unionfs-fuse";
     rev = "v${version}";
-    sha256 = "0g2hd6yi6v8iqzmgncg1zi9a7ixy9hsh51rzf6jnmzi79543dihf";
+    sha256 = "0lb8zgdxnjy2fjr2284hvdfn7inc1in44ynzgcr66x54bxzvynj6";
   };
 
   patches =
@@ -34,10 +34,11 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/sbin/mount.unionfs-fuse --replace unionfs $out/bin/unionfs
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "FUSE UnionFS implementation";
-    homepage = http://podgorny.cz/moin/UnionFsFuse;
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = https://github.com/rpodgorny/unionfs-fuse;
+    license = licenses.bsd3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ orivej ];
   };
 }

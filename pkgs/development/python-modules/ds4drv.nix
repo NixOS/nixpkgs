@@ -4,7 +4,8 @@
 }:
 
 buildPythonPackage rec {
-  name = "ds4drv-${version}";
+  pname = "ds4drv";
+  name = "${pname}-${version}";
   version = "0.5.1";
 
   # PyPi only carries py3 wheel
@@ -21,7 +22,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Userspace driver for the DualShock 4 controller";
-    homepage = "https://github.com/chrippa/ds4drv";
+    homepage = https://github.com/chrippa/ds4drv;
     license = lib.licenses.mit;
   };
 }

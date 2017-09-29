@@ -1,13 +1,14 @@
 { stdenv, fetchgit, cmake, perl, go }:
 
+# reference: https://boringssl.googlesource.com/boringssl/+/2661/BUILDING.md
 stdenv.mkDerivation rec {
   name = "boringssl-${version}";
-  version = "2016-03-08";
+  version = "2017-02-23";
 
   src = fetchgit {
     url    = "https://boringssl.googlesource.com/boringssl";
-    rev    = "bfb38b1a3c5e37d43188bbd02365a87bebc8d122";
-    sha256 = "0bm7vqg3bk716xmw2af99p44zizfhknq9z3cphf7klfdrr7ibqm5";
+    rev    = "be2ee342d3781ddb954f91f8a7e660c6f59e87e5";
+    sha256 = "022zq7wlkhrg6al7drr3555lam3zw5bb10ylf9mznp83s854f975";
   };
 
   buildInputs = [ cmake perl go ];
@@ -17,8 +18,12 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin $out/include $out/lib
 
-    mv tool/bssl    $out/bin
-    mv ssl/libssl.a $out/lib
+    mv tool/bssl $out/bin
+
+    mv ssl/libssl.a           $out/lib
+    mv crypto/libcrypto.a     $out/lib
+    mv decrepit/libdecrepit.a $out/lib
+
     mv ../include/openssl $out/include
   '';
 

@@ -1,4 +1,5 @@
 { name
+, channel
 , writeScript
 , xidel
 , coreutils
@@ -8,19 +9,20 @@
 , gnupg
 , baseName ? "firefox"
 , basePath ? "pkgs/applications/networking/browsers/firefox-bin"
-, baseUrl ? "http://archive.mozilla.org/pub/firefox/releases/"
+, baseUrl
 }:
 
 let
-  version = (builtins.parseDrvName name).version;
-  isBeta = builtins.stringLength version + 1 == builtins.stringLength (builtins.replaceStrings ["b"] ["bb"] version);
-in writeScript "update-${baseName}-bin" ''
+  isBeta =
+    channel != "release";
+
+in writeScript "update-${name}" ''
   PATH=${coreutils}/bin:${gnused}/bin:${gnugrep}/bin:${xidel}/bin:${curl}/bin:${gnupg}/bin
   set -eux
   pushd ${basePath}
 
   HOME=`mktemp -d`
-  cat ${./firefox.key} | gpg2 --import
+  cat ${./firefox.key} | gpg --import
 
   tmpfile=`mktemp`
   url=${baseUrl}
@@ -45,7 +47,7 @@ in writeScript "update-${baseName}-bin" ''
 
   curl --silent -o $HOME/shasums "$url$version/SHA512SUMS"
   curl --silent -o $HOME/shasums.asc "$url$version/SHA512SUMS.asc"
-  gpgv2 --keyring=$HOME/.gnupg/pubring.kbx $HOME/shasums.asc $HOME/shasums
+  gpgv --keyring=$HOME/.gnupg/pubring.kbx $HOME/shasums.asc $HOME/shasums
 
   # this is a list of sha512 and tarballs for both arches
   shasums=`cat $HOME/shasums`
@@ -80,7 +82,7 @@ in writeScript "update-${baseName}-bin" ''
   }
   EOF
 
-  mv $tmpfile ${if isBeta then "beta_" else ""}sources.nix
+  mv $tmpfile ${channel}_sources.nix
 
   popd
 ''

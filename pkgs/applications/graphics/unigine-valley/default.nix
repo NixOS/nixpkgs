@@ -51,20 +51,30 @@ in
     ];
 
     unpackPhase = ''
+      runHook preUnpack
+
       cp $src extractor.run
       chmod +x extractor.run
       ./extractor.run --target $sourceRoot
+
+      runHook postUnpack
     '';
 
     patchPhase = ''
+      runHook prePatch
+
       # Patch ELF files.
       elfs=$(find bin -type f | xargs file | grep ELF | cut -d ':' -f 1)
       for elf in $elfs; do
         patchelf --set-interpreter ${stdenv.cc.libc}/lib/ld-linux-x86-64.so.2 $elf || true
       done
+
+      runHook postPatch
     '';
 
     installPhase = ''
+      runHook preInstall
+
       instdir=$out/${instPath}
 
       # Install executables and libraries
@@ -86,13 +96,15 @@ in
       wrapProgram $out/bin/valley \
         --run "cd $instdir" \
         --prefix LD_LIBRARY_PATH : /run/opengl-driver/lib:$instdir/bin:$libPath
+
+      runHook postInstall
     '';
 
     stripDebugList = ["${instPath}/bin"];
 
     meta = {
       description = "The Unigine Valley GPU benchmarking tool";
-      homepage = "http://unigine.com/products/benchmarks/valley/";
+      homepage = http://unigine.com/products/benchmarks/valley/;
       license = stdenv.lib.licenses.unfree; # see also: $out/$instPath/documentation/License.pdf
       maintainers = [ stdenv.lib.maintainers.kierdavis ];
       platforms = ["x86_64-linux" "i686-linux"];

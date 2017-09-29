@@ -1,16 +1,24 @@
-{ stdenv, fetchurl, python, buildPythonPackage, mpi, openssh, isPy3k, isPyPy }:
+{ stdenv, fetchPypi, python, buildPythonPackage, mpi, openssh, isPy3k, isPyPy }:
 
 buildPythonPackage rec {
-  name = "mpi4py-1.3.1";
+  pname = "mpi4py";
+  version = "2.0.0";
+  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "https://bitbucket.org/mpi4py/mpi4py/downloads/${name}.tar.gz";
-    sha256 = "e7bd2044aaac5a6ea87a87b2ecc73b310bb6efe5026031e33067ea3c2efc3507";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "10fb01595rg17ycz08a23v24akm25d13srsy2rnixam7a5ca0hv5";
   };
 
   passthru = {
     inherit mpi;
   };
+
+  # Rename libm.so -> libm.so.6 in test
+  # See: https://bitbucket.org/mpi4py/mpi4py/issues/28/test_dltestdl-test-failure
+  patches = [
+    ./tests.patch
+  ];
 
   # The tests in the `test_spawn` module fail in the chroot build environment.
   # However, they do pass in a pure, or non-pure nix-shell. Hence, we
@@ -18,7 +26,7 @@ buildPythonPackage rec {
   # Unfortunately, the command-line arguments to `./setup.py test` are not
   # correctly passed to the test-runner. Hence, these arguments are patched
   # directly into `setup.py`.
-  patchPhase = ''
+  prePatch = ''
     sed 's/err = main(cmd.args or \[\])/err = main(cmd.args or ["-v", "-e", "test_spawn"])/' -i setup.py
   '';
 
@@ -47,10 +55,13 @@ buildPythonPackage rec {
 
   disabled = isPy3k || isPyPy;
 
+  # Timing out communicating between processes when sandboxing enabled.
+  doCheck = false;
+
   meta = {
     description =
       "Python bindings for the Message Passing Interface standard";
-    homepage = "http://code.google.com/p/mpi4py/";
+    homepage = http://code.google.com/p/mpi4py/;
     license = stdenv.lib.licenses.bsd3;
   };
 }

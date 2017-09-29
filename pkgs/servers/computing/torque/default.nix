@@ -29,8 +29,9 @@ stdenv.mkDerivation rec {
 
    for f in $(find ./ -name Makefile.in); do
      echo patching $f...
-     sed -i $f -e '/PBS_MKDIRS/d'
+     sed -i $f -e '/PBS_MKDIRS/d' -e '/chmod u+s/d'
    done
+
   '';
 
   postInstall = ''

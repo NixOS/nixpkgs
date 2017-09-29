@@ -8,10 +8,6 @@ stdenv.mkDerivation {
     sha256 = "05yxrp44ky2kg6qknk1ih0kvwkgbn9fbz77r3vci7agslh5wjm8g";
   };
 
-  crossAttrs = {
-    makeFlags = "CC=${stdenv.cross.config}-gcc";
-  };
-
   preInstall = ''
     mkdir -p $out/sbin $out/share/man/man8
     makeFlagsArray=(SBINDIR=$out/sbin MANDIR=$out/share/man/man8)

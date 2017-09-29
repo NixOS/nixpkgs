@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libav_0_8, libkeyfinder, qtbase, qtxmlpatterns, qmakeHook, taglib }:
+{ stdenv, fetchFromGitHub, libav_0_8, libkeyfinder, qtbase, qtxmlpatterns, qmake, taglib }:
 
 stdenv.mkDerivation rec {
   name = "keyfinder-${version}";
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     owner = "ibsh";
   };
 
-  buildInputs = [ libav_0_8 libkeyfinder qtbase qtxmlpatterns qmakeHook taglib ];
+  nativeBuildInputs = [ qmake ];
+  buildInputs = [ libav_0_8 libkeyfinder qtbase qtxmlpatterns taglib ];
 
   postPatch = ''
     substituteInPlace is_KeyFinder.pro \

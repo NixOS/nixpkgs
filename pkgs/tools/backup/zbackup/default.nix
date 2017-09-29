@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake protobufc ];
   meta = {
     description = "A versatile deduplicating backup tool";
-    homepage = "http://zbackup.org/";
+    homepage = http://zbackup.org/;
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2Plus;
   };

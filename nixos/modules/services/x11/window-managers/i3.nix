@@ -36,6 +36,21 @@ in
         i3 package to use.
       '';
     };
+
+    extraPackages = mkOption {
+      type = with types; listOf package;
+      default = with pkgs; [ dmenu i3status i3lock ];
+      example = literalExample ''
+        with pkgs; [
+          dmenu
+          i3status
+          i3lock
+        ]
+      '';
+      description = ''
+        Extra packages to be installed system wide.
+      '';
+    };
   };
 
   config = mkIf cfg.enable {
@@ -50,7 +65,7 @@ in
         waitPID=$!
       '';
     }];
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [ cfg.package ] ++ cfg.extraPackages;
   };
 
   imports = [

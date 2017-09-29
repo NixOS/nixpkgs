@@ -1,14 +1,14 @@
 {
-  kdeApp, lib,
+  mkDerivation, lib,
   extra-cmake-modules, kio, libkexiv2, libkdcraw
 }:
 
-kdeApp {
+mkDerivation {
   name = "kdegraphics-thumbnailers";
   meta = {
     license = [ lib.licenses.lgpl21 ];
     maintainers = [ lib.maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules ];
-  propagatedBuildInputs = [ kio libkexiv2 libkdcraw ];
+  buildInputs = [ kio libkexiv2 libkdcraw ];
 }

@@ -1,5 +1,7 @@
 { buildPythonPackage
 , fetchFromGitHub
+, pythonOlder
+, future
 , numpy
 , six
 , scipy
@@ -56,7 +58,8 @@ buildPythonPackage rec {
     pycuda
     cudatoolkit
     libgpuarray
-  ] ++ (stdenv.lib.optional (cudnn != null) [ cudnn ]);
+    cudnn
+  ] ++ (stdenv.lib.optional (pythonOlder "3.0") future);
 
   passthru.cudaSupport = true;
 }

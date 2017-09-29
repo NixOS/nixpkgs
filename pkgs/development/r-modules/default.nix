@@ -262,6 +262,7 @@ let
     h5 = [ pkgs.hdf5-cpp pkgs.which ];
     h5vc = [ pkgs.zlib.dev ];
     HiCseg = [ pkgs.gsl_1 ];
+    imager = [ pkgs.x11 ];
     iBMQ = [ pkgs.gsl_1 ];
     igraph = [ pkgs.gmp ];
     JavaGD = [ pkgs.jdk ];
@@ -280,6 +281,7 @@ let
     pbdMPI = [ pkgs.openmpi ];
     pbdNCDF4 = [ pkgs.netcdf ];
     pbdPROF = [ pkgs.openmpi ];
+    pbdZMQ = [ pkgs.which ];
     PKI = [ pkgs.openssl.dev ];
     png = [ pkgs.libpng.dev ];
     PopGenome = [ pkgs.zlib.dev ];
@@ -408,7 +410,6 @@ let
     Cairo = [ pkgs.pkgconfig ];
     Rsymphony = [ pkgs.pkgconfig pkgs.doxygen pkgs.graphviz pkgs.subversion ];
     qtutils = [ pkgs.qt4 ];
-    ecoretriever = [ pkgs.which ];
     tcltk2 = [ pkgs.tcl pkgs.tk ];
     tikzDevice = [ pkgs.which pkgs.texlive.combined.scheme-medium ];
     rPython = [ pkgs.which ];
@@ -495,7 +496,6 @@ let
     "fscaret"
     "fSRM"
     "gcmr"
-    "Geneland"
     "GeoGenetix"
     "geomorph"
     "geoR"
@@ -566,7 +566,6 @@ let
     "plotSEMM"
     "plsRbeta"
     "plsRglm"
-    "pmg"
     "PopGenReport"
     "poppr"
     "powerpkg"
@@ -629,7 +628,6 @@ let
     "rioja"
     "ripa"
     "rite"
-    "rnbn"
     "RNCEP"
     "RQDA"
     "RSDA"
@@ -661,7 +659,6 @@ let
     "SYNCSA"
     "SyNet"
     "tcltk2"
-    "TDMR"
     "TED"
     "TestScorer"
     "TIMP"
@@ -684,517 +681,17 @@ let
   ];
 
   packagesToSkipCheck = [
-    "Rmpi" # tries to run MPI processes
-    "gmatrix" # requires CUDA runtime
+    "Rmpi"     # tries to run MPI processes
+    "gmatrix"  # requires CUDA runtime
     "gputools" # requires CUDA runtime
-    "sprint" # tries to run MPI processes
-    "pbdMPI" # tries to run MPI processes
+    "sprint"   # tries to run MPI processes
+    "pbdMPI"   # tries to run MPI processes
   ];
 
   # Packages which cannot be installed due to lack of dependencies or other reasons.
   brokenPackages = [
-    "acs"                             # build is broken
-    "AffyTiling"                      # build is broken
-    "agRee"                           # depends on broken package BRugs-0.8-6
-    "aLFQ"                            # depends on broken package bio3d-2.3-1
-    "animation"                       # build is broken
-    "anim_plots"                      # depends on broken package animation-2.4
-    "annmap"                          # depends on broken package RMySQL-0.10.9
-    "apaStyle"                        # depends on broken package gdtools-0.1.3
-    "apaTables"                       # depends on broken package OpenMx-2.7.4
-    "ArrayExpressHTS"                 # build is broken
-    "arrayQualityMetrics"             # build is broken
-    "auRoc"                           # depends on broken package OpenMx-2.7.4
-    "BatchQC"                         # build is broken
-    "bayou"                           # depends on broken package animation-2.4
-    "bedr"                            # build is broken
-    "BETS"                            # build is broken
-    "BiGGR"                           # depends on broken package rsbml-2.30.0
-    "bio3d"                           # build is broken
-    "bioassayR"                       # depends on broken package ChemmineR-2.24.2
-    "biomformat"                      # depends on broken package r-rhdf5-2.16.0
-    "biotools"                        # depends on broken package rpanel-1.1-3
-    "birte"                           # build is broken
-    "BiSEp"                           # build is broken
-    "BLCOP"                           # depends on broken package Rsymphony-0.1-26
-    "BMhyd"                           # depends on broken package animation-2.4
-    "BNSP"                            # build is broken
-    "BPEC"                            # depends on broken package animation-2.4
-    "BrailleR"                        # depends on broken package gridGraphics-0.1-5
-    "brainGraph"                      # build is broken
-    "brranching"                      # depends on broken package animation-2.4
-    "brr"                             # build is broken
-    "BRugs"                           # build is broken
-    "CADStat"                         # build is broken
-    "CampaR1"                         # depends on broken package r-bio3d-2.3-1
-    "canceR"                          # build is broken
-    "CardinalWorkflows"               # build is broken
-    "CARrampsOcl"                     # depends on broken package OpenCL-0.1-3
-    "categoryCompare"                 # depends on broken package RCytoscape-1.21.1
-    "Causata"                         # depends on broken package RMySQL-0.10.9
-    "cdcfluview"                      # depends on broken package V8-1.2
-    "ChemmineDrugs"                   # depends on broken package ChemmineR-2.24.2
-    "ChemmineR"                       # build is broken
-    "chinese_misc"                    # build is broken
-    "ChIPQC"                          # depends on broken package r-DiffBind-2.0.9
-    "ChIPXpress"                      # build is broken
-    "ChIPXpressData"                  # build is broken
-    "choroplethr"                     # depends on broken package acs-2.0
-    "CHRONOS"                         # build is broken
-    "cleanEHR"                        # build is broken
-    "clickR"                          # depends on broken package gdtools-0.1.3
-    "clpAPI"                          # build is broken
-    "CNEr"                            # build is broken
-    "colormap"                        # depends on broken package V8-1.2
-    "colorscience"                    # build is broken
-    "compendiumdb"                    # depends on broken package RMySQL-0.10.9
-    "CONFESS"                         # depends on broken package r-flowCore-1.38.2
-    "CONS"                            # build is broken
-    "convevol"                        # depends on broken package animation-2.4
-    "CountClust"                      # build is broken
-    "CountsEPPM"                      # build is broken
-    "COUSCOus"                        # depends on broken package r-bio3d-2.3-1
-    "covr"                            # build is broken
-    "cplexAPI"                        # build is broken
-    "Crossover"                       # build is broken
-    "CrypticIBDcheck"                 # build is broken
-    "csaw"                            # build is broken
-    "ctsem"                           # depends on broken package OpenMx-2.7.4
-    "cudaBayesreg"                    # build is broken
-    "curlconverter"                   # depends on broken package V8-1.2
-    "cytofkit"                        # depends on broken package flowCore-1.38.2
-    "daff"                            # depends on broken package V8-1.2
-    "dagbag"                          # build is broken
-    "dagitty"                         # depends on broken package V8-1.2
-    "dagLogo"                         # depends on broken package MotIV-1.28.0
-    "DAISIE"                          # depends on broken package animation-2.4
-    "dataMaid"                        # build is broken
-    "dataone"                         # build is broken
-    "datapack"                        # build is broken
-    "dbConnect"                       # depends on broken package RMySQL-0.10.9
-    "DBKGrad"                         # depends on broken package rpanel-1.1-3
-    "DCM"                             # build is broken
-    "DDD"                             # depends on broken package animation-2.4
-    "deBInfer"                        # depends on broken package PBSddesolve-1.12.2
-    "DecisionCurve"                   # build is broken
-    "deepSNV"                         # build is broken
-    "DEGraph"                         # depends on broken package RCytoscape-1.21.1
-    "DEploid"                         # build is broken
-    "DiagrammeRsvg"                   # depends on broken package V8-1.2
-    "DiffBind"                        # build is broken
-    "diffHic"                         # depends on broken package r-csaw-1.6.1
-    "DirichletMultinomial"            # build is broken
-    "diveRsity"                       # build is broken
-    "DmelSGI"                         # depends on broken package r-rhdf5-2.16.0
-    "DNAprofiles"                     # build is broken
-    "docxtools"                       # build is broken
-    "DOQTL"                           # depends on broken package r-rhdf5-2.16.0
-    "DOT"                             # depends on broken package V8-1.2
-    "dynr"                            # build is broken
-    "ecospat"                         # depends on broken package MigClim-1.6
-    "EGAD"                            # depends on broken package arrayQualityMetrics-3.28.2
-    "eiR"                             # depends on broken package ChemmineR-2.24.2
-    "emg"                             # build is broken
-    "envlpaster"                      # build is broken
-    "erpR"                            # depends on broken package rpanel-1.1-3
-    "euroMix"                         # build is broken
-    "evobiR"                          # depends on broken package animation-2.4
-    "exifr"                           # build is broken
-    "exprso"                          # build is broken
-    "fastR"                           # build is broken
-    "fdq"                             # depends on broken package gdtools-0.1.3
-    "Fgmutils"                        # depends on broken package gdtools-0.1.3
-    "flan"                            # build is broken
-    "flowAI"                          # depends on broken package r-flowCore-1.38.2
-    "flowBeads"                       # depends on broken package r-flowCore-1.38.2
-    "flowBin"                         # depends on broken package r-flowCore-1.38.2
-    "flowCHIC"                        # depends on broken package r-flowCore-1.38.2
-    "flowClean"                       # depends on broken package r-flowCore-1.38.2
-    "flowClust"                       # depends on broken package r-flowCore-1.38.2
-    "flowCore"                        # build is broken
-    "flowDensity"                     # depends on broken package flowCore-1.38.2
-    "flowDiv"                         # depends on broken package r-flowCore-1.38.2
-    "flowFit"                         # depends on broken package r-flowCore-1.38.2
-    "flowFitExampleData"              # depends on broken package r-flowCore-1.38.2
-    "flowFP"                          # depends on broken package r-flowCore-1.38.2
-    "flowMatch"                       # depends on broken package r-flowCore-1.38.2
-    "flowMeans"                       # depends on broken package r-flowCore-1.38.2
-    "flowMerge"                       # depends on broken package r-flowCore-1.38.2
-    "flowPeaks"                       # build is broken
-    "flowQB"                          # depends on broken package r-flowCore-1.38.2
-    "flowQ"                           # depends on broken package flowCore-1.38.2
-    "FlowSOM"                         # depends on broken package r-flowCore-1.38.2
-    "flowStats"                       # depends on broken package r-flowCore-1.38.2
-    "flowTrans"                       # depends on broken package r-flowCore-1.38.2
-    "flowType"                        # depends on broken package r-flowCore-1.38.2
-    "flowUtils"                       # depends on broken package r-flowCore-1.38.2
-    "flowViz"                         # depends on broken package r-flowCore-1.38.2
-    "flowVS"                          # depends on broken package r-flowCore-1.38.2
-    "flowWorkspace"                   # depends on broken package r-flowCore-1.38.2
-    "fmcsR"                           # depends on broken package ChemmineR-2.24.2
-    "ForestTools"                     # depends on broken package imager-0.31
-    "fPortfolio"                      # depends on broken package Rsymphony-0.1-26
-    "fracprolif"                      # build is broken
-    "funModeling"                     # build is broken
-    "gahgu133acdf"                    # build is broken
-    "gahgu133bcdf"                    # build is broken
-    "gahgu133plus2cdf"                # build is broken
-    "gahgu95av2cdf"                   # build is broken
-    "gahgu95bcdf"                     # build is broken
-    "gahgu95ccdf"                     # build is broken
-    "gahgu95dcdf"                     # build is broken
-    "gahgu95ecdf"                     # build is broken
-    "gamlss_demo"                     # depends on broken package rpanel-1.1-3
-    "gazepath"                        # build is broken
-    "gdtools"                         # build is broken
-    "GENE_E"                          # depends on broken package r-rhdf5-2.16.0
-    "geojson"                         # depends on broken package r-protolite-1.5
-    "geojsonio"                       # depends on broken package V8-1.2
-    "geojsonlint"                     # depends on broken package V8-1.2
-    "gfcanalysis"                     # depends on broken package animation-2.4
-    "gfer"                            # depends on broken package V8-1.2
-    "ggcyto"                          # depends on broken package r-flowCore-1.38.2
-    "ggghost"                         # depends on broken package animation-2.4
-    "ggiraph"                         # depends on broken package gdtools-0.1.3
-    "ggiraphExtra"                    # depends on broken package gdtools-0.1.3
-    "ggseas"                          # build is broken
-    "gmatrix"                         # depends on broken package cudatoolkit-8.0.61
-    "gMCP"                            # build is broken
-    "gmDatabase"                      # depends on broken package RMySQL-0.10.9
-    "gmum_r"                          # build is broken
-    "goldi"                           # build is broken
-    "googleformr"                     # build is broken
-    "gpg"                             # build is broken
-    "gpuR"                            # build is broken
-    "gputools"                        # depends on broken package cudatoolkit-8.0.61
-    "GraphPAC"                        # build is broken
-    "gridGraphics"                    # build is broken
-    "GSCA"                            # depends on broken package r-rhdf5-2.16.0
-    "GUIDE"                           # depends on broken package rpanel-1.1-3
-    "gunsales"                        # build is broken
-    "h2o"                             # build is broken
-    "h5vc"                            # depends on broken package r-rhdf5-2.16.0
-    "harrietr"                        # build is broken
-    "HDF5Array"                       # depends on broken package r-rhdf5-2.16.0
-    "healthyFlowData"                 # depends on broken package r-flowCore-1.38.2
-    "HierO"                           # build is broken
-    "HilbertVisGUI"                   # build is broken
-    "HiPLARM"                         # build is broken
-    "hisse"                           # depends on broken package animation-2.4
-    "homomorpheR"                     # depends on broken package sodium-0.4
-    "HTSSIP"                          # depends on broken package r-rhdf5-2.16.0
-    "idm"                             # depends on broken package animation-2.4
-    "ifaTools"                        # depends on broken package OpenMx-2.7.4
-    "IHW"                             # depends on broken package r-lpsymphony-1.0.2
-    "IHWpaper"                        # depends on broken package r-lpsymphony-1.0.2
-    "IlluminaHumanMethylation450k_db" # build is broken
-    "imager"                          # build is broken
-    "immunoClust"                     # depends on broken package r-flowCore-1.38.2
-    "inSilicoMerging"                 # build is broken
-    "intansv"                         # build is broken
-    "interactiveDisplay"              # build is broken
-    "ionicons"                        # depends on broken package rsvg-1.0
-    "IONiseR"                         # depends on broken package r-rhdf5-2.16.0
-    "ITGM"                            # depends on broken package gdtools-0.1.3
-    "jpmesh"                          # depends on broken package V8-1.2
-    "js"                              # depends on broken package V8-1.2
-    "jsonld"                          # depends on broken package V8-1.2
-    "jsonvalidate"                    # depends on broken package V8-1.2
-    "KoNLP"                           # build is broken
-    "largeList"                       # build is broken
-    "largeVis"                        # build is broken
-    "lawn"                            # depends on broken package V8-1.2
-    "LCMCR"                           # build is broken
-    "lefse"                           # build is broken
-    "lfe"                             # build is broken
-    "lgcp"                            # depends on broken package rpanel-1.1-3
-    "Libra"                           # build is broken
-    "libsoc"                          # build is broken
-    "link2GI"                         # depends on broken package r-sf-0.3-4
-    "LinRegInteractive"               # depends on broken package rpanel-1.1-3
-    "liquidSVM"                       # build is broken
-    "littler"                         # build is broken
-    "LowMACA"                         # depends on broken package MotIV-1.28.0
-    "lpsymphony"                      # build is broken
-    "lvnet"                           # depends on broken package OpenMx-2.7.4
-    "MafDb_1Kgenomes_phase3_hs37d5"   # build is broken
-    "mafs"                            # build is broken
-    "magick"                          # build is broken
-    "maGUI"                           # build is broken
-    "mapr"                            # depends on broken package V8-1.2
-    "mar1s"                           # build is broken
-    "MatrixRider"                     # depends on broken package CNEr-1.8.3
-    "MBESS"                           # depends on broken package OpenMx-2.7.4
-    "mBvs"                            # build is broken
-    "mcaGUI"                          # build is broken
-    "mdsr"                            # depends on broken package RMySQL-0.10.9
-    "Mediana"                         # depends on broken package gdtools-0.1.3
-    "melviewr"                        # build is broken
-    "MeSH_Hsa_eg_db"                  # build is broken
-    "MeSH_Mmu_eg_db"                  # build is broken
-    "meshr"                           # depends on broken package r-MeSH.Hsa.eg.db-1.6.0
-    "Metab"                           # build is broken
-    "metagear"                        # build is broken
-    "MetaIntegrator"                  # depends on broken package RMySQL-0.10.9
-    "metaSEM"                         # depends on broken package OpenMx-2.7.4
-    "MigClim"                         # build is broken
-    "minimist"                        # depends on broken package V8-1.2
-    "miscF"                           # depends on broken package BRugs-0.8-6
-    "mixlink"                         # build is broken
-    "MLSeq"                           # build is broken
-    "MMDiff"                          # depends on broken package r-DiffBind-2.0.9
-    "mmnet"                           # build is broken
-    "MonetDBLite"                     # build is broken
-    "mongolite"                       # build is broken
-    "monogeneaGM"                     # depends on broken package animation-2.4
-    "MonoPhy"                         # depends on broken package animation-2.4
-    "motifbreakR"                     # depends on broken package MotIV-1.28.0
-    "motifStack"                      # depends on broken package MotIV-1.28.0
-    "MotIV"                           # build is broken
-    "mptools"                         # depends on broken package animation-2.4
-    "mrMLM"                           # build is broken
-    "mRMRe"                           # build is broken
-    "mscstexta4r"                     # build is broken
-    "mscsweblm4r"                     # build is broken
-    "MSeasyTkGUI"                     # build is broken
-    "MSGFgui"                         # depends on broken package MSGFplus-1.6.2
-    "MSGFplus"                        # build is broken
-    "multiDimBio"                     # depends on broken package gridGraphics-0.1-5
-    "multipanelfigure"                # depends on broken package gridGraphics-0.1-5
-    "munsellinterpol"                 # build is broken
-    "mutossGUI"                       # build is broken
-    "mvMORPH"                         # depends on broken package animation-2.4
-    "mvst"                            # build is broken
-    "ncdfFlow"                        # depends on broken package r-flowCore-1.38.2
-    "NCIgraph"                        # depends on broken package RCytoscape-1.21.1
-    "ndjson"                          # build is broken
-    "ndtv"                            # depends on broken package animation-2.4
-    "NetRep"                          # depends on broken package r-RhpcBLASctl-0.15-148
-    "nlts"                            # build is broken
-    "NORRRM"                          # build is broken
-    "odbc"                            # build is broken
-    "officer"                         # depends on broken package gdtools-0.1.3
-    "OpenCL"                          # build is broken
-    "opencpu"                         # depends on broken package r-protolite-1.5
-    "openCyto"                        # depends on broken package r-flowCore-1.38.2
-    "OpenMx"                          # build is broken
-    "optbdmaeAT"                      # build is broken
-    "optBiomarker"                    # depends on broken package rpanel-1.1-3
-    "ora"                             # depends on broken package ROracle-1.3-1
-    "OUwie"                           # depends on broken package animation-2.4
-    "PAA"                             # build is broken
-    "paleotree"                       # depends on broken package animation-2.4
-    "PathSelectMP"                    # build is broken
-    "PatternClass"                    # build is broken
-    "PBD"                             # depends on broken package animation-2.4
-    "PBSddesolve"                     # build is broken
-    "PBSmapping"                      # build is broken
-    "pcadapt"                         # depends on broken package vcfR-1.4.0
-    "pcaL1"                           # build is broken
-    "pcaPA"                           # build is broken
-    "pcrsim"                          # build is broken
-    "pdfsearch"                       # build is broken
-    "pdftools"                        # build is broken
-    "pd_genomewidesnp_6"              # build is broken
-    "permGPU"                         # build is broken
-    "PGA"                             # build is broken
-    "PGPC"                            # depends on broken package ChemmineR-2.24.2
-    "ph2bye"                          # depends on broken package animation-2.4
-    "PhyInformR"                      # depends on broken package animation-2.4
-    "phylocurve"                      # depends on broken package animation-2.4
-    "phyloseq"                        # depends on broken package r-rhdf5-2.16.0
-    "PhySortR"                        # depends on broken package animation-2.4
-    "phytools"                        # depends on broken package animation-2.4
-    "PICS"                            # build is broken
-    "PING"                            # depends on broken package PICS-2.16.0
-    "plateCore"                       # depends on broken package r-flowCore-1.38.2
-    "plfMA"                           # build is broken
-    "podkat"                          # build is broken
-    "PottsUtils"                      # depends on broken package BRugs-0.8-6
-    "powell"                          # build is broken
-    "pqsfinder"                       # depends on broken package r-flowCore-1.38.2
-    "prebs"                           # depends on broken package r-rhdf5-2.16.0
-    "PREDAsampledata"                 # depends on broken package gahgu133plus2cdf-2.2.1
-    "predictionInterval"              # depends on broken package OpenMx-2.7.4
-    "pRoloc"                          # build is broken
-    "pRolocGUI"                       # build is broken
-    "proteoQC"                        # build is broken
-    "protolite"                       # build is broken
-    "prototest"                       # build is broken
-    "PSAboot"                         # build is broken
-    "psbcGroup"                       # build is broken
-    "PythonInR"                       # build is broken
-    "qcmetrics"                       # build is broken
-    "QFRM"                            # build is broken
-    "qrqc"                            # build is broken
-    "qtbase"                          # build is broken
-    "qtpaint"                         # build is broken
-    "qtutils"                         # build is broken
-    "QUALIFIER"                       # depends on broken package r-flowCore-1.38.2
-    "QuartPAC"                        # build is broken
-    "QuasR"                           # build is broken
-    "QUBIC"                           # build is broken
-    "QVM"                             # build is broken
-    "raincpc"                         # build is broken
-    "rainfreq"                        # build is broken
-    "RAM"                             # depends on broken package animation-2.4
-    "RamiGO"                          # depends on broken package RCytoscape-1.21.1
-    "randomcoloR"                     # depends on broken package V8-1.2
-    "randstr"                         # build is broken
-    "RapidPolygonLookup"              # depends on broken package PBSmapping-2.69.76
-    "RAppArmor"                       # build is broken
-    "raptr"                           # depends on broken package PBSmapping-2.69.76
-    "RBerkeley"                       # build is broken
-    "RbioRXN"                         # depends on broken package ChemmineR-2.24.2
-    "Rblpapi"                         # build is broken
-    "Rchemcpp"                        # depends on broken package ChemmineR-2.24.2
-    "rchess"                          # depends on broken package V8-1.2
-    "RchyOptimyx"                     # depends on broken package r-flowCore-1.38.2
-    "RcmdrPlugin_FuzzyClust"          # build is broken
-    "RcmdrPlugin_PcaRobust"           # build is broken
-    "Rcpi"                            # depends on broken package ChemmineR-2.24.2
-    "Rcplex"                          # build is broken
-    "RcppAPT"                         # build is broken
-    "RcppGetconf"                     # build is broken
-    "RcppOctave"                      # build is broken
-    "RcppRedis"                       # build is broken
-    "rcqp"                            # build is broken
-    "rcrypt"                          # build is broken
-    "RCytoscape"                      # build is broken
-    "rDEA"                            # build is broken
-    "RDieHarder"                      # build is broken
-    "REBayes"                         # depends on broken package Rmosek-1.2.5.1
-    "recluster"                       # depends on broken package animation-2.4
-    "redland"                         # build is broken
-    "remoter"                         # build is broken
-    "repijson"                        # depends on broken package V8-1.2
-    "replicationInterval"             # depends on broken package OpenMx-2.7.4
-    "ReporteRs"                       # depends on broken package gdtools-0.1.3
-    "ReQON"                           # depends on broken package seqbias-1.20.0
-    "RforProteomics"                  # depends on broken package interactiveDisplay-1.10.2
-    "rgbif"                           # depends on broken package V8-1.2
-    "Rgnuplot"                        # build is broken
-    "rgp"                             # build is broken
-    "rgpui"                           # depends on broken package rgp-0.4-1
-    "rhdf5"                           # build is broken
-    "RhpcBLASctl"                     # build is broken
-    "ridge"                           # build is broken
-    "rjade"                           # depends on broken package V8-1.2
-    "rJPSGCS"                         # build is broken
-    "RKEEL"                           # depends on broken package RKEELjars-1.0.15
-    "RKEELjars"                       # build is broken
-    "Rknots"                          # depends on broken package r-bio3d-2.3-1
-    "rLindo"                          # build is broken
-    "rlo"                             # depends on broken package PythonInR-0.1-3
-    "RMallow"                         # build is broken
-    "rmapshaper"                      # depends on broken package V8-1.2
-    "rMAT"                            # build is broken
-    "Rmosek"                          # build is broken
-    "RMySQL"                          # build is broken
-    "RnavGraph"                       # build is broken
-    "rnetcarto"                       # build is broken
-    "ROI_plugin_cplex"                # depends on broken package Rcplex-0.3-3
-    "ROI_plugin_symphony"             # depends on broken package Rsymphony-0.1-26
-    "Rolexa"                          # build is broken
-    "ROracle"                         # build is broken
-    "RPA"                             # depends on broken package r-rhdf5-2.16.0
-    "RPANDA"                          # depends on broken package animation-2.4
-    "rpanel"                          # build is broken
-    "rpg"                             # build is broken
-    "Rphylopars"                      # depends on broken package animation-2.4
-    "Rpoppler"                        # build is broken
-    "RQuantLib"                       # build is broken
-    "RSAP"                            # build is broken
-    "rsbml"                           # build is broken
-    "RSCABS"                          # build is broken
-    "rscala"                          # build is broken
-    "Rsomoclu"                        # build is broken
-    "rsparkling"                      # depends on broken package h2o-3.10.3.6
-    "rsvg"                            # build is broken
-    "Rsymphony"                       # build is broken
-    "rtable"                          # depends on broken package gdtools-0.1.3
-    "rTANDEM"                         # build is broken
-    "Rtextrankr"                      # build is broken
-    "rUnemploymentData"               # depends on broken package acs-2.0
-    "rvg"                             # depends on broken package gdtools-0.1.3
-    "RVideoPoker"                     # depends on broken package rpanel-1.1-3
-    "rzmq"                            # build is broken
-    "s2"                              # build is broken
-    "Sabermetrics"                    # build is broken
-    "sapFinder"                       # build is broken
-    "sbrl"                            # build is broken
-    "scater"                          # depends on broken package r-rhdf5-2.16.0
-    "scran"                           # depends on broken package r-rhdf5-2.16.0
-    "SDD"                             # depends on broken package rpanel-1.1-3
-    "seasonal"                        # build is broken
-    "seasonalview"                    # build is broken
-    "Sejong"                          # build is broken
-    "SemiCompRisks"                   # build is broken
-    "semtree"                         # depends on broken package OpenMx-2.7.4
-    "seqbias"                         # build is broken
-    "SeqGrapheR"                      # build is broken
-    "seqTools"                        # build is broken
-    "sf"                              # build is broken
-    "shazam"                          # build is broken
-    "shinyTANDEM"                     # build is broken
-    "SICtools"                        # build is broken
-    "SigTree"                         # depends on broken package r-rhdf5-2.16.0
-    "SimInf"                          # build is broken
-    "simsalapar"                      # build is broken
-    "smapr"                           # depends on broken package r-rhdf5-2.16.0
-    "SnakeCharmR"                     # build is broken
-    "sodium"                          # build is broken
-    "soilphysics"                     # depends on broken package rpanel-1.1-3
-    "sortinghat"                      # build is broken
-    "spade"                           # depends on broken package r-flowCore-1.38.2
-    "spdynmod"                        # depends on broken package animation-2.4
-    "spocc"                           # depends on broken package V8-1.2
-    "spongecake"                      # build is broken
-    "srd"                             # depends on broken package animation-2.4
-    "SSDM"                            # build is broken
-    "stagePop"                        # depends on broken package PBSddesolve-1.12.2
-    "Starr"                           # build is broken
-    "stream"                          # depends on broken package animation-2.4
-    "streamMOA"                       # depends on broken package animation-2.4
-    "stremr"                          # build is broken
-    "subspaceMOA"                     # depends on broken package animation-2.4
-    "svglite"                         # depends on broken package gdtools-0.1.3
-    "sybilSBML"                       # build is broken
-    "synthACS"                        # depends on broken package acs-2.0
-    "tcpl"                            # depends on broken package RMySQL-0.10.9
-    "TDA"                             # build is broken
-    "TED"                             # depends on broken package animation-2.4
-    "tesseract"                       # build is broken
-    "textreadr"                       # build is broken
-    "textTinyR"                       # build is broken
-    "TFBSTools"                       # depends on broken package CNEr-1.8.3
-    "TKF"                             # depends on broken package animation-2.4
-    "tmap"                            # depends on broken package V8-1.2
-    "tmaptools"                       # depends on broken package V8-1.2
-    "tofsims"                         # build is broken
-    "toxboot"                         # depends on broken package RMySQL-0.10.9
-    "TransView"                       # build is broken
-    "treeplyr"                        # depends on broken package animation-2.4
-    "TSMySQL"                         # depends on broken package RMySQL-0.10.9
-    "uaparserjs"                      # depends on broken package V8-1.2
-    "UBCRM"                           # build is broken
-    "uHMM"                            # build is broken
-    "umx"                             # depends on broken package OpenMx-2.7.4
-    "userfriendlyscience"             # depends on broken package OpenMx-2.7.4
-    "V8"                              # build is broken
-    "VBmix"                           # build is broken
-    "vcfR"                            # build is broken
-    "vdiffr"                          # depends on broken package gdtools-0.1.3
-    "vmsbase"                         # depends on broken package PBSmapping-2.69.76
-    "wallace"                         # depends on broken package V8-1.2
-    "wand"                            # build is broken
-    "webp"                            # build is broken
-    "wordbankr"                       # depends on broken package RMySQL-0.10.9
-    "x13binary"                       # build is broken
-    "x_ent"                           # depends on broken package r-protolite-1.5
-    "xps"                             # build is broken
-    "xslt"                            # build is broken
-    "zoon"                            # build is broken
+    "gputools"                        # depends on non-free cudatoolkit-8.0.61
+    "gmatrix"                         # depends on non-free cudatoolkit-8.0.61
   ];
 
   otherOverrides = old: new: {

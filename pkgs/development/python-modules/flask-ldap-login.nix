@@ -3,7 +3,9 @@
 , mock, nose }:
 
 buildPythonPackage rec {
-  name = "flask-ldap-login-0.3.0";
+  pname = "flask-ldap-login";
+  version = "0.3.0";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/f/flask-ldap-login/${name}.tar.gz";

@@ -2,7 +2,9 @@
 , zope_testrunner, six, chardet}:
 
 buildPythonPackage rec {
-  name = "ghdiff-0.4";
+  pname = "ghdiff";
+  version = "0.4";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/g/ghdiff/${name}.tar.gz";

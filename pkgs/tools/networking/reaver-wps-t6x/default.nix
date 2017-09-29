@@ -1,8 +1,9 @@
-{ stdenv, fetchFromGitHub, libpcap, sqlite, pixiewps }:
+{ stdenv, fetchFromGitHub, libpcap, sqlite, pixiewps, makeWrapper }:
 
 stdenv.mkDerivation rec {
   version = "1.5.2";
   name = "reaver-wps-t6x-${version}";
+  confdir = "/var/db/${name}"; # the sqlite database is at "${confdir}/reaver/reaver.db"
 
   src = fetchFromGitHub {
     owner = "t6x";
@@ -11,17 +12,27 @@ stdenv.mkDerivation rec {
     sha256 = "0zhlms89ncqz1f1hc22yw9x1s837yv76f1zcjizhgn5h7vp17j4b";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ libpcap sqlite pixiewps ];
 
-  prePatch = "cd src";
+  sourceRoot = "reaver-wps-fork-t6x-v${version}-src/src";
 
-  preInstall = "mkdir -p $out/bin";
+  configureFlags = "--sysconfdir=${confdir}";
 
-  meta = {
+  installPhase = ''
+    mkdir -p $out/{bin,etc}
+    cp reaver.db $out/etc/
+    cp reaver wash $out/bin/
+
+    wrapProgram $out/bin/reaver --run "[ -s ${confdir}/reaver/reaver.db ] || install -D $out/etc/reaver.db ${confdir}/reaver/reaver.db"
+    wrapProgram $out/bin/wash   --run "[ -s ${confdir}/reaver/reaver.db ] || install -D $out/etc/reaver.db ${confdir}/reaver/reaver.db"
+  '';
+
+  meta = with stdenv.lib; {
     description = "Online and offline brute force attack against WPS";
     homepage = https://github.com/t6x/reaver-wps-fork-t6x;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
-    maintainer = stdenv.lib.maintainers.nico202;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ nico202 volth ];
   };
 }

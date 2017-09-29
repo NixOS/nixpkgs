@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fftw, freeglut, mesa_glu, qtbase, qtmultimedia, qmakeHook
+{ stdenv, fetchFromGitHub, fftw, freeglut, mesa_glu, qtbase, qtmultimedia, qmake
 , alsaSupport ? true, alsaLib ? null
 , jackSupport ? false, libjack2 ? null
 , portaudioSupport ? false, portaudio ? null }:
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "gillesdegottex";
   };
 
-  nativeBuildInputs = [ qmakeHook ];
+  nativeBuildInputs = [ qmake ];
   buildInputs = [ fftw qtbase qtmultimedia ]
     ++ optionals alsaSupport [ alsaLib ]
     ++ optionals jackSupport [ libjack2 ]

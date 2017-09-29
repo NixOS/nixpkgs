@@ -1,20 +1,20 @@
-{ stdenv, lib, fetchFromGitHub, extra-cmake-modules, makeQtWrapper
+{ mkDerivation, lib, fetchFromGitHub, extra-cmake-modules
 , qtbase, qtmultimedia, qtquick1, qttools
 , mesa, libX11
 , libass, openal, ffmpeg, libuchardet
 , alsaLib, libpulseaudio, libva
 }:
 
-with stdenv.lib;
+with lib;
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "libqtav-${version}";
 
   # Awaiting upcoming `v1.12.0` release. `v1.11.0` is not supporting cmake which is the
   # the reason behind taking an unstable git rev. 
   version = "unstable-2017-03-30";
 
-  nativeBuildInputs = [ extra-cmake-modules makeQtWrapper qttools ];
+  nativeBuildInputs = [ extra-cmake-modules qttools ];
   buildInputs = [ 
     qtbase qtmultimedia qtquick1
     mesa libX11
@@ -43,12 +43,6 @@ stdenv.mkDerivation rec {
   preFixup = ''
     mkdir -p "$out/bin"
     cp -a "./bin/"* "$out/bin"
-  '';
-
-  postFixup = ''
-    for i in `find $out/bin -maxdepth 1 -xtype f -executable`; do
-      wrapQtProgram "$i"
-    done
   '';
 
   meta = {

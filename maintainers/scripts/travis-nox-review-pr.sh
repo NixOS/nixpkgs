@@ -53,8 +53,8 @@ while test -n "$1"; do
         nox)
             echo "=== Fetching Nox from binary cache"
 
-            # build nox silently so it's not in the log
-            nix-build "<nixpkgs>" -A nox -A stdenv
+            # build nox (+ a basic nix-shell env) silently so it's not in the log
+            nix-shell -p nox stdenv --command true
             ;;
 
         pr)

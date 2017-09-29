@@ -120,7 +120,7 @@ in
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [ kmod iproute iptables utillinux ]; # XXX Linux
       wants = [ "keys.target" ];
-      after = [ "network.target" "keys.target" ];
+      after = [ "network-online.target" "keys.target" ];
       environment = {
         STRONGSWAN_CONF = strongswanConf { inherit setup connections ca secrets; };
       };

@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "0dp06rwihks50c57bbv04d6bj2qc88isl91971r4lii2xp0qn7sg";
   };
 
+  patches = [
+    ./gcc6.patch
+  ];
+
   cmakeFlags = [
     "-DQT5_BUILD=ON"
     "-DCMAKE_MINIMUM_REQUIRED_VERSION=3.0"
@@ -48,7 +52,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "DVD backup and DVD authoring program";
-    homepage = "http://k9copy-reloaded.sourceforge.net/";
+    homepage = http://k9copy-reloaded.sourceforge.net/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ flosse ];
     platforms = stdenv.lib.platforms.unix;

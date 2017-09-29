@@ -51,6 +51,5 @@ buildPythonApplication rec {
     homepage = https://github.com/spyder-ide/spyder/;
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor fridh ];
   };
 }

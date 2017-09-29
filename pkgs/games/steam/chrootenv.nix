@@ -2,18 +2,14 @@
 , steam-runtime, steam-runtime-i686 ? null
 , withJava ? false
 , withPrimus ? false
+, extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , nativeOnly ? false
 , runtimeOnly ? false
-, newStdcpp ? false
 }:
 
 let
   commonTargetPkgs = pkgs: with pkgs;
     let
-      primus2 = if newStdcpp then primus else primus.override {
-        stdenv = overrideInStdenv stdenv [ useOldCXXAbi ];
-        stdenv_i686 = overrideInStdenv pkgsi686Linux.stdenv [ useOldCXXAbi ];
-      };
       tzdir = "${pkgs.tzdata}/share/zoneinfo";
       # I'm not sure if this is the best way to add things like this
       # to an FHSUserEnv
@@ -37,7 +33,8 @@ let
       # Zoneinfo
       etc-zoneinfo
     ] ++ lib.optional withJava jdk
-      ++ lib.optional withPrimus primus2;
+      ++ lib.optional withPrimus primus
+      ++ extraPkgs pkgs;
 
 in buildFHSUserEnv rec {
   name = "steam";
@@ -66,7 +63,7 @@ in buildFHSUserEnv rec {
     xlibs.libpciaccess
 
     (steamPackages.steam-runtime-wrapped.override {
-      inherit nativeOnly runtimeOnly newStdcpp;
+      inherit nativeOnly runtimeOnly;
     })
   ];
 

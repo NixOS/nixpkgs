@@ -1,0 +1,119 @@
+diff --git a/ATOOLS/Phys/Flavour.C b/ATOOLS/Phys/Flavour.C
+index 1986348..740eea3 100644
+--- a/ATOOLS/Phys/Flavour.C
++++ b/ATOOLS/Phys/Flavour.C
+@@ -298,8 +298,8 @@ std::string Flavour::IDName() const
+ 
+ bool Flavour::IsDiQuark() const 
+ {
+-  if(abs(Kfcode())>=1103&&abs(Kfcode())<=5505) {
+-    double help=abs(Kfcode())/100.0-int(abs(Kfcode())/100.0); 
++  if(abs((long)Kfcode())>=1103&&abs((long)Kfcode())<=5505) {
++    double help=abs((long)Kfcode())/100.0-int(abs((long)Kfcode())/100.0); 
+     if(help<0.031) return true;
+   }
+   return false;
+@@ -307,27 +307,27 @@ bool Flavour::IsDiQuark() const
+ 
+ bool Flavour::IsBaryon() const 
+ {
+-  if (abs(Kfcode())%10000<1000) return false;
++  if (abs((long)Kfcode())%10000<1000) return false;
+   return !IsDiQuark();
+ }
+ 
+ bool Flavour::IsB_Hadron() const 
+ {
+-  if (abs(Kfcode())<100)                            return 0;
++  if (abs((long)Kfcode())<100)                            return 0;
+   if (Kfcode()-100*int(Kfcode()/100)<10)                 return 0;
+-  if (abs((Kfcode()-100*int(Kfcode()/100))/10)==5)       return 1;
+-  if (abs((Kfcode()-1000*int(Kfcode()/1000))/100)==5)    return 1;
+-  if (abs((Kfcode()-10000*int(Kfcode()/10000))/1000)==5) return 1;
++  if (abs((long)(Kfcode()-100*int(Kfcode()/100))/10)==5)       return 1;
++  if (abs((long)(Kfcode()-1000*int(Kfcode()/1000))/100)==5)    return 1;
++  if (abs((long)(Kfcode()-10000*int(Kfcode()/10000))/1000)==5) return 1;
+   return 0;
+ }
+ 
+ bool Flavour::IsC_Hadron() const 
+ {
+-  if (abs(Kfcode())<100)                            return 0;
++  if (abs((long)Kfcode())<100)                            return 0;
+   if (Kfcode()-100*int(Kfcode()/100)<10)                 return 0;
+-  if (abs((Kfcode()-100*int(Kfcode()/100))/10)==4)       return 1;
+-  if (abs((Kfcode()-1000*int(Kfcode()/1000))/100)==4)    return 1;
+-  if (abs((Kfcode()-10000*int(Kfcode()/10000))/1000)==4) return 1;
++  if (abs((long)(Kfcode()-100*int(Kfcode()/100))/10)==4)       return 1;
++  if (abs((long)(Kfcode()-1000*int(Kfcode()/1000))/100)==4)    return 1;
++  if (abs((long)(Kfcode()-10000*int(Kfcode()/10000))/1000)==4) return 1;
+   return 0;
+ }
+ 
+diff --git a/AddOns/Pythia/Pythia_Jet_Criterion.C b/AddOns/Pythia/Pythia_Jet_Criterion.C
+index bbe9597..c1201e1 100644
+--- a/AddOns/Pythia/Pythia_Jet_Criterion.C
++++ b/AddOns/Pythia/Pythia_Jet_Criterion.C
+@@ -117,8 +117,8 @@ namespace PYTHIA {
+       double Qsq = sign * Q.Abs2();
+       // Mass term of radiator
+       DEBUG_VAR(ampl->MS());
+-      double m2Rad = ( abs(RadAfterBranch.Flav().Kfcode()) >= 4
+-                   && abs(RadAfterBranch.Flav().Kfcode()) < 7)
++      double m2Rad = ( abs((long)RadAfterBranch.Flav().Kfcode()) >= 4
++                   && abs((long)RadAfterBranch.Flav().Kfcode()) < 7)
+                    ? ampl->MS()->Mass2(RadAfterBranch.Flav())
+                    : 0.;
+       // Construct 2->3 variables for FSR
+diff --git a/BEAM/Main/EPA.C b/BEAM/Main/EPA.C
+index 861a1b2..340ac33 100644
+--- a/BEAM/Main/EPA.C
++++ b/BEAM/Main/EPA.C
+@@ -54,7 +54,7 @@ double EPA::CosInt::GetCosInt(double X)
+ 
+ double EPA::phi(double x, double qq)
+ {
+-  if (abs(m_beam.Kfcode()) == kf_p_plus) {
++  if (abs((long)m_beam.Kfcode()) == kf_p_plus) {
+     const double a = 7.16;
+     const double b = -3.96;
+     const double c = .028;
+@@ -179,7 +179,7 @@ bool EPA::CalculateWeight(double x,double q2)
+     m_weight=0.0;
+     return 1;
+   }
+-  if (abs(m_beam.Kfcode()) == kf_e) {
++  if (abs((long)m_beam.Kfcode()) == kf_e) {
+     double f = alpha/M_PI*(1+sqr(1-m_x))/m_x*log(2.*m_energy/m_mass);
+     if (f < 0) f = 0.;
+     m_weight = f;
+@@ -187,7 +187,7 @@ bool EPA::CalculateWeight(double x,double q2)
+ 	     <<"energy = "<<m_energy<<", "<<"mass = "<<m_mass<<".\n";
+     return 1;    
+   }
+-  else if (abs(m_beam.Kfcode()) == kf_p_plus) {
++  else if (abs((long)m_beam.Kfcode()) == kf_p_plus) {
+     const double qz = 0.71;
+     double f, qmi, qma;
+     qma=m_q2Max/qz;
+diff --git a/PDF/Remnant/Hadron_Remnant.C b/PDF/Remnant/Hadron_Remnant.C
+index 243717c..58c2278 100644
+--- a/PDF/Remnant/Hadron_Remnant.C
++++ b/PDF/Remnant/Hadron_Remnant.C
+@@ -188,13 +188,13 @@ ATOOLS::Flavour Hadron_Remnant::Opposite(ATOOLS::Flavour flav) const
+     if (m_constit[i]==flav && !found) found=true;
+     else rem[j++]=m_constit[i].Kfcode();
+   }
+-  Flavour anti=Flavour((kf_code)(abs(rem[0])*1000+abs(rem[1])*100+3));
++  Flavour anti=Flavour((kf_code)(abs((long)rem[0])*1000+abs((long)rem[1])*100+3));
+   if (rem[0]!=rem[1]) {
+     if (ran->Get()<0.25) 
+-      anti=Flavour((kf_code)(abs(rem[0])*1000+abs(rem[1])*100+1));
++      anti=Flavour((kf_code)(abs((long)rem[0])*1000+abs((long)rem[1])*100+1));
+   }
+   else {
+-    anti=Flavour((kf_code)(abs(rem[0])*1100+3));
++    anti=Flavour((kf_code)(abs((long)rem[0])*1100+3));
+   }
+   if (flav.IsAnti()) anti=anti.Bar();
+   return anti;

@@ -1,0 +1,25 @@
+From c2105ecdf6a6cc1fbb4c1ae01475db6a65fee32f Mon Sep 17 00:00:00 2001
+From: Orivej Desh <orivej@gmx.fr>
+Date: Mon, 27 Mar 2017 01:39:11 +0000
+Subject: [PATCH] Search for termcap in ncurses
+
+---
+ cmake/find_readline_edit.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/cmake/find_readline_edit.cmake b/cmake/find_readline_edit.cmake
+index 26f2768..f520ece 100644
+--- a/cmake/find_readline_edit.cmake
++++ b/cmake/find_readline_edit.cmake
+@@ -7,7 +7,7 @@ endif ()
+ 
+ list(APPEND CMAKE_FIND_LIBRARY_SUFFIXES .so.2)
+ 
+-find_library (TERMCAP_LIB NAMES termcap)
++find_library (TERMCAP_LIB NAMES ncurses)
+ find_library (EDIT_LIB NAMES edit)
+ 
+ set(READLINE_INCLUDE_PATHS "/var/empty/local/var/empty/readline/include")
+-- 
+2.12.0
+

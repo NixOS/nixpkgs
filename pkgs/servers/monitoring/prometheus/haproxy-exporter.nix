@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "haproxy_exporter-${version}";
-  version = "0.7.1";
+  version = "0.8.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/prometheus/haproxy_exporter";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "prometheus";
     repo = "haproxy_exporter";
-    sha256 = "1svwa1cw4yc5k8acj2r2hkall9csxjw51hgmwkmx5dq55gr9lzai";
+    sha256 = "0gx8pq67w71ch3g3c77xaz39msrd9graizc6d3shwabdjx35yc6q";
   };
 
   meta = with stdenv.lib; {

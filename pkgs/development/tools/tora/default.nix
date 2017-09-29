@@ -1,10 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, cmake, extra-cmake-modules, makeQtWrapper
+{ mkDerivation, lib, fetchFromGitHub, cmake, extra-cmake-modules, makeWrapper
 , boost, doxygen, openssl, mysql, postgresql, graphviz, loki, qscintilla, qtbase }:
 
 let
   qscintillaLib = (qscintilla.override { withQt5 = true; });
 
-in stdenv.mkDerivation rec {
+in mkDerivation rec {
   name = "tora-${version}";
   version = "3.1";
 
@@ -15,10 +15,8 @@ in stdenv.mkDerivation rec {
     sha256 = "0wninl10bcgiljf6wnhn2rv8kmzryw78x5qvbw8s2zfjlnxjsbn7";
   };
 
-  enableParallelBuilding = true;
-
+  nativeBuildInputs = [ cmake extra-cmake-modules makeWrapper ];
   buildInputs = [
-    cmake extra-cmake-modules makeQtWrapper
     boost doxygen graphviz loki mysql openssl postgresql qscintillaLib qtbase
   ];
 
@@ -54,11 +52,11 @@ in stdenv.mkDerivation rec {
   ];
 
   postFixup = ''
-    wrapQtProgram $out/bin/tora \
+    wrapProgram $out/bin/tora \
       --prefix PATH : ${lib.getBin graphviz}/bin
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tora SQL tool";
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.linux;

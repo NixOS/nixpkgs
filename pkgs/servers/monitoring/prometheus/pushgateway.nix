@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "pushgateway-${version}";
-  version = "0.3.1";
+  version = "0.4.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/prometheus/pushgateway";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "prometheus";
     repo = "pushgateway";
-    sha256 = "0ax83yy5hbfppcr66l9al7wxibcqfnyps05jdscvpwvgrg4q7ldk";
+    sha256 = "19hsv42addcx4dsjdbh64y7ggjvaaay9gag0342gz7gyl9sr719f";
   };
 
   buildInputs = [ go-bindata ];

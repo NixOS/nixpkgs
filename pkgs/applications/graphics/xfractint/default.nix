@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.unfree;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = "https://www.fractint.net/";
+    homepage = https://www.fractint.net/;
   };
 }

@@ -42,10 +42,9 @@ qtSubmodule {
     sed -i -e 's,/cert.pem,/certs/ca-bundle.crt,' src/3rdparty/chromium/third_party/boringssl/src/crypto/x509/x509_def.c
 
     configureFlags+="\
-        -plugindir $out/lib/qt5/plugins \
-        -importdir $out/lib/qt5/imports \
-        -qmldir $out/lib/qt5/qml \
-        -docdir $out/share/doc/qt5"
+        -plugindir $out/$qtPluginPrefix \
+        -qmldir $out/$qtQmlPrefix \
+        -docdir $out/$qtDocPrefix"
   '';
   propagatedBuildInputs = [
     # Image formats

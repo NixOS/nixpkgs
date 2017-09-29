@@ -9,10 +9,17 @@ let
   else
     throw "Unsupported architecture";
 
+  version = (builtins.parseDrvName edk2.name).version;
+
+  src = edk2.src;
 in
 
 stdenv.mkDerivation (edk2.setup "OvmfPkg/OvmfPkg${targetArch}.dsc" {
-  name = "OVMF-2014-12-10";
+  name = "OVMF-${version}";
+
+  inherit src;
+
+  outputs = [ "out" "fd" ];
 
   # TODO: properly include openssl for secureBoot
   buildInputs = [nasm iasl] ++ stdenv.lib.optionals (secureBoot == true) [ openssl ];
@@ -20,23 +27,26 @@ stdenv.mkDerivation (edk2.setup "OvmfPkg/OvmfPkg${targetArch}.dsc" {
   hardeningDisable = [ "stackprotector" "pic" "fortify" ];
 
   unpackPhase = ''
+    # $fd is overwritten during the build
+    export OUTPUT_FD=$fd
+
     for file in \
-      "${edk2.src}"/{UefiCpuPkg,MdeModulePkg,IntelFrameworkModulePkg,PcAtChipsetPkg,FatBinPkg,EdkShellBinPkg,MdePkg,ShellPkg,OptionRomPkg,IntelFrameworkPkg};
+      "${src}"/{UefiCpuPkg,MdeModulePkg,IntelFrameworkModulePkg,PcAtChipsetPkg,FatBinPkg,EdkShellBinPkg,MdePkg,ShellPkg,OptionRomPkg,IntelFrameworkPkg,FatPkg,CryptoPkg,SourceLevelDebugPkg};
     do
       ln -sv "$file" .
     done
 
     ${if (seabios == false) then ''
-        ln -sv ${edk2.src}/OvmfPkg .
+        ln -sv ${src}/OvmfPkg .
       '' else ''
-        cp -r ${edk2.src}/OvmfPkg .
+        cp -r ${src}/OvmfPkg .
         chmod +w OvmfPkg/Csm/Csm16
         cp ${seabios}/Csm16.bin OvmfPkg/Csm/Csm16/Csm16.bin
       ''}
 
     ${if (secureBoot == true) then ''
-        ln -sv ${edk2.src}/SecurityPkg .
-        ln -sv ${edk2.src}/CryptoPkg .
+        ln -sv ${src}/SecurityPkg .
+        ln -sv ${src}/CryptoPkg .
       '' else ''
       ''}
     '';
@@ -46,6 +56,13 @@ stdenv.mkDerivation (edk2.setup "OvmfPkg/OvmfPkg${targetArch}.dsc" {
     '' else ''
       build -D CSM_ENABLE -D FD_SIZE_2MB ${if secureBoot then "-DSECURE_BOOT_ENABLE=TRUE" else ""}
     '';
+
+  postFixup = ''
+    mkdir -vp $OUTPUT_FD/FV
+    mv -v $out/FV/OVMF{,_CODE,_VARS}.fd $OUTPUT_FD/FV
+  '';
+
+  dontPatchELF = true;
 
   meta = {
     description = "Sample UEFI firmware for QEMU and KVM";

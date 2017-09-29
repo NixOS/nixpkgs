@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A high performance HTTP 1.1 server in Erlang";
-    homepage = http://http://yaws.hyber.org;
+    homepage = http://yaws.hyber.org;
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ goibhniu the-kenny ];

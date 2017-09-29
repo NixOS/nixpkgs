@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "git-open-${version}";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "paulirish";
     repo = "git-open";
     rev = "v${version}";
-    sha256 = "005am4phf7j4ybc9k1hqsxjb7gv2i56a3axrza866pwwx1ayrhpq";
+    sha256 = "1klj41vqgyyigqzi6s1ykz9vd8wvaq3skin63pi989dlsjf7igyr";
   };
 
   buildInputs = [ makeWrapper ];

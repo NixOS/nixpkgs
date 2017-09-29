@@ -1,4 +1,4 @@
-{ go, govers, parallel, lib, fetchgit, fetchhg, rsync, removeReferencesTo }:
+{ go, govers, parallel, lib, fetchgit, fetchhg, fetchbzr, rsync, removeReferencesTo }:
 
 { name, buildInputs ? [], nativeBuildInputs ? [], passthru ? {}, preFixup ? ""
 
@@ -54,7 +54,11 @@ let
         fetchhg {
           inherit (goDep.fetch) url rev sha256;
         }
-      else abort "Unrecognized package fetch type";
+      else if goDep.fetch.type == "bzr" then
+        fetchbzr {
+          inherit (goDep.fetch) url rev sha256;
+        }
+      else abort "Unrecognized package fetch type: ${goDep.fetch.type}";
     };
 
   importGodeps = { depsFile }:
@@ -119,7 +123,7 @@ go.stdenv.mkDerivation (
       [ -n "$excludedPackages" ] && echo "$d" | grep -q "$excludedPackages" && return 0
       local OUT
       if ! OUT="$(go $cmd $buildFlags "''${buildFlagsArray[@]}" -v $d 2>&1)"; then
-        if ! echo "$OUT" | grep -q 'no buildable Go source files'; then
+        if ! echo "$OUT" | grep -qE '(no( buildable| non-test)?|build constraints exclude all) Go (source )?files'; then
           echo "$OUT" >&2
           return 1
         fi
@@ -184,7 +188,7 @@ go.stdenv.mkDerivation (
   '';
 
   preFixup = preFixup + ''
-    find $bin/bin -type f -exec ${removeExpr removeReferences} '{}' +
+    find $bin/bin -type f -exec ${removeExpr removeReferences} '{}' + || true
   '';
 
   shellHook = ''
@@ -194,7 +198,7 @@ go.stdenv.mkDerivation (
      ln -s "${dep.src}" "$d/src/${dep.goPackagePath}"
   ''
   ) goPath) + ''
-    export GOPATH="$d:$GOPATH"
+    export GOPATH=${lib.concatStringsSep ":" ( ["$d"] ++ ["$GOPATH"] ++ ["$PWD"] ++ extraSrcPaths)}
   '';
 
   disallowedReferences = lib.optional (!allowGoReference) go

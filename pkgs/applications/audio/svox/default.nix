@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "svox-${version}";
-  version = "2016-10-20";
+  version = "2017-07-18";
 
   src = fetchgit {
     url = "https://android.googlesource.com/platform/external/svox";
-    rev = "2dd8f16e4436520b93e93aa72b92acad92c0127d";
-    sha256 = "064h3zb9bn1z6xbv15iy6l4rlxx8fqzy54s898qvafjhz6kawj9g";
+    rev = "7e68d0e9aac1b5d2ad15e92ddaa3bceb27973fcb";
+    sha256 = "1bqj12w23nn27x64ianm2flrqvkskpvgrnly7ah8gv6k8s8chh3r";
   };
 
   postPatch = ''
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Text-to-speech engine";
-    homepage = "https://android.googlesource.com/platform/external/svox";
+    homepage = https://android.googlesource.com/platform/external/svox;
     platforms = platforms.linux;
     license = licenses.asl20;
     maintainers = with maintainers; [ abbradar ];

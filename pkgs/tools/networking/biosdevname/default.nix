@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Udev helper for naming devices per BIOS names";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = ["x86_64-linux" "i686-linux"];
     maintainers = with maintainers; [ cstrahan ];
   };
 }

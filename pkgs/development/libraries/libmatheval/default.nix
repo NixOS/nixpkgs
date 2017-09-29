@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       mathematical functions. In addition to parsing and evaluation, libmatheval can also compute 
       symbolic derivatives and output expressions to strings.
     '';
-    homepage = "https://www.gnu.org/software/libmatheval/";
+    homepage = https://www.gnu.org/software/libmatheval/;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.bzizou ];
     platforms = stdenv.lib.platforms.linux;

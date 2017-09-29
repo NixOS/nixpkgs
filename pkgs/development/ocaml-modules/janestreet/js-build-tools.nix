@@ -1,4 +1,4 @@
-{stdenv, buildOcaml, fetchurl, ocaml_oasis_46, opam}:
+{ stdenv, buildOcaml, fetchurl, ocaml_oasis, opam }:
 
 buildOcaml rec {
   name = "js-build-tools";
@@ -13,7 +13,7 @@ buildOcaml rec {
 
   hasSharedObjects = true;
 
-  buildInputs = [ ocaml_oasis_46 opam ];
+  buildInputs = [ ocaml_oasis opam ];
 
   dontAddPrefix = true;
   configurePhase = "./configure --prefix $prefix";

@@ -1,7 +1,8 @@
-{ plasmaPackage, extra-cmake-modules, qtbase }:
+{ mkDerivation, extra-cmake-modules, qtbase }:
 
-plasmaPackage {
+mkDerivation {
   name = "kdecoration";
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ qtbase ];
+  outputs = [ "out" "dev" ];
 }

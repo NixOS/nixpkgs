@@ -114,7 +114,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Canon InkJet printer drivers for the MG7500, MG6700, MG6600, MG5600, MG2900, MB2000, MB2300, iB4000, MB5000, MB5300, iP110, E450, MX490, E480, MG7700, MG6900, MG6800, MG5700, MG3600, and G3000 series.";
-    homepage = "http://support-th.canon-asia.com/contents/TH/EN/0100712901.html";
+    homepage = http://support-th.canon-asia.com/contents/TH/EN/0100712901.html;
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

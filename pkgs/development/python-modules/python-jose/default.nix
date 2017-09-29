@@ -3,7 +3,8 @@
 }:
 
 buildPythonPackage rec {
-  name = "python-jose-${version}";
+  pname = "python-jose";
+  name = "${pname}-${version}";
   version = "1.3.2";
   src = fetchFromGitHub {
     owner = "mpdavis";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
   ];
   propagatedBuildInputs = [ future six ecdsa pycryptodome ];
   meta = with stdenv.lib; {
-    homepage = "https://github.com/mpdavis/python-jose";
+    homepage = https://github.com/mpdavis/python-jose;
     description = "A JOSE implementation in Python";
     platforms = platforms.all;
     license = licenses.mit;

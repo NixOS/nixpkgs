@@ -7,7 +7,8 @@ stdenv.mkDerivation rec {
     sha256 = "0yn7f3g5wva8nqxh76adpq9rihggc405jkqysfghzwnf3yymyqrr";
   };
 
-  buildInputs = [ocaml findlib curl ncurses];
+  buildInputs = [ ocaml findlib ncurses ];
+  propagatedBuildInputs = [ curl ];
   createFindlibDestdir = true;
   meta = {
     description = "OCaml bindings to libcurl";

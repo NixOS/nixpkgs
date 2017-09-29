@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchurl, cgal, boost, gmp, mpfr, flex, bison, dxflib, readline
-, qtbase, qmakeHook, mesa_glu
+, qtbase, qmake, mesa_glu
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ qmakeHook ];
+  nativeBuildInputs = [ qmake ];
   buildInputs = [ qtbase cgal boost gmp mpfr flex bison dxflib readline mesa_glu ];
 
   meta = with stdenv.lib; {

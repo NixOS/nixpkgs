@@ -1,7 +1,9 @@
 { lib, fetchurl, buildPythonPackage, python, isPyPy }:
 
 if isPyPy then throw "sip not supported for interpreter ${python.executable}" else buildPythonPackage rec {
-  name = "sip-4.19.1";
+  pname = "sip";
+  version = "4.19.1";
+  name = "${pname}-${version}";
   format = "other";
 
   src = fetchurl {

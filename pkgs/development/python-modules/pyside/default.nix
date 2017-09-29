@@ -1,7 +1,9 @@
 { lib, fetchurl, cmake, python, buildPythonPackage, pysideGeneratorrunner, pysideShiboken, qt4 }:
 
+# This derivation provides a Python module and should therefore be called via `python-packages.nix`.
 buildPythonPackage rec {
-  name = "pyside-${version}";
+  pname = "pyside";
+  name = "${pname}-${version}";
   version = "1.2.4";
   format = "other";
 
@@ -19,7 +21,7 @@ buildPythonPackage rec {
   meta = {
     description = "LGPL-licensed Python bindings for the Qt cross-platform application and UI framework";
     license = lib.licenses.lgpl21;
-    homepage = "http://www.pyside.org";
+    homepage = http://www.pyside.org;
     maintainers = [ lib.maintainers.chaoflow ];
     platforms = lib.platforms.all;
   };

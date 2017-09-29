@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libusb1, tcl, usb-modeswitch }:
+{ stdenv, fetchurl, tcl, usb-modeswitch }:
 
 stdenv.mkDerivation rec {
   name = "usb-modeswitch-data-${version}";
@@ -15,10 +15,9 @@ stdenv.mkDerivation rec {
     sed -i 's@usb_modeswitch@${usb-modeswitch}/bin/usb_modeswitch@g' 40-usb_modeswitch.rules
   '';
 
-  buildInputs = [ libusb1 usb-modeswitch ];
   # we add tcl here so we can patch in support for new devices by dropping config into
   # the usb_modeswitch.d directory
-  nativeBuildInputs = [ pkgconfig tcl ];
+  nativeBuildInputs = [ tcl ];
 
   meta = with stdenv.lib; {
     description = "Device database and the rules file for 'multi-mode' USB devices";

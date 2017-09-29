@@ -1,16 +1,20 @@
 { stdenv, fetchurl, libclthreads, zita-alsa-pcmi, alsaLib, libjack2
-, libclxclient, libX11, libXft, readline}:
+, libclxclient, libX11, libXft, readline
+}:
 
 stdenv.mkDerivation rec {
   name = "aeolus-${version}";
-  version = "0.9.0";
+  version = "0.9.5";
+
   src = fetchurl {
     url = "http://kokkinizita.linuxaudio.org/linuxaudio/downloads/${name}.tar.bz2";
-    sha256 = "0dkkibza25a6z9446njqlaynx8gfk5wb828pl9v1snmi5390iggp";
+    sha256 = "0wfp8ihldyq2dhdyy7ld7z0zzfvnwam1dvbxnpd9d6xgc4k3j4nv";
   };
 
-  buildInputs = [ libclthreads zita-alsa-pcmi alsaLib libjack2 libclxclient
-    libX11 libXft readline ];
+  buildInputs = [
+    libclthreads zita-alsa-pcmi alsaLib libjack2 libclxclient
+    libX11 libXft readline
+  ];
 
   patchPhase = ''sed "s@ldconfig.*@@" -i source/Makefile'';
 

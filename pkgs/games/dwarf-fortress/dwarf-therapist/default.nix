@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, coreutils, qtbase, qtdeclarative, qmakeHook, texlive }:
+{ stdenv, fetchFromGitHub, coreutils, qtbase, qtdeclarative, qmake, texlive }:
 
 stdenv.mkDerivation rec {
   name = "dwarf-therapist-original-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "layouts" ];
   buildInputs = [ qtbase qtdeclarative ];
-  nativeBuildInputs = [ texlive qmakeHook ];
+  nativeBuildInputs = [ texlive qmake ];
 
   enableParallelBuilding = false;
 
@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ the-kenny abbradar ];
     license = licenses.mit;
     platforms = platforms.linux;
-    homepage = "https://github.com/splintermind/Dwarf-Therapist";
+    homepage = https://github.com/splintermind/Dwarf-Therapist;
   };
 }

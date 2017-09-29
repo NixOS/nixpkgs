@@ -10,13 +10,15 @@ stdenv.mkDerivation rec {
     sha256 = "0nii6p4m2x8rkaf8r6smgfwb1q4hpf117kkg64yr6gyqgdchnljv";
   };
 
+  patches = stdenv.lib.optional stdenv.isDarwin ./darwin.patch;
+
   installFlags = [ "DESTDIR=$(out)" "PREFIX=/" ];
 
   # we build the static library because of two makefile bugs
   # * .h files installed for static library target only
   # * .so.0 -> .so link only created in the static library install target
   buildPhase = ''
-    make lib-shared lib-static build-shared
+    make lib-shared lib-static build-shared CC=cc PREFIX=$out
   '';
 
   # we don't actually want the static library, so we remove it after it
@@ -29,7 +31,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://rhash.anz.ru;
     description = "Console utility and library for computing and verifying hash sums of files";
-    platforms = platforms.linux;
+    platforms = platforms.all;
     maintainers = [ maintainers.andrewrk ];
   };
 }

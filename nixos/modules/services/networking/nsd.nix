@@ -30,6 +30,7 @@ let
       cd $out/zones
 
       for zoneFile in *; do
+        echo "|- checking zone '$out/zones/$zoneFile'"
         ${nsdPkg}/sbin/nsd-checkzone "$zoneFile" "$zoneFile" || {
           if grep -q \\\\\\$ "$zoneFile"; then
             echo zone "$zoneFile" contains escaped dollar signes \\\$
@@ -810,6 +811,7 @@ in
 
       serviceConfig = {
         ExecStart = "${nsdPkg}/sbin/nsd -d -c ${nsdEnv}/nsd.conf";
+        StandardError = "null";
         PIDFile = pidFile;
         Restart = "always";
         RestartSec = "4s";

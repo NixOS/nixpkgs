@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     wrapProgram $out/bin/easytag \
       --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:$out/share" \
-      --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules"
+      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules"
   '';
 
   NIX_LDFLAGS = "-lid3tag -lz";
@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper pkgconfig intltool ];
   buildInputs = [
     gtk3 glib libid3tag id3lib taglib libvorbis libogg flac
-    itstool libxml2 gsettings_desktop_schemas gnome3.defaultIconTheme gnome3.dconf
+    itstool libxml2 gsettings_desktop_schemas gnome3.defaultIconTheme (stdenv.lib.getLib gnome3.dconf)
   ];
 
   meta = with stdenv.lib; {
     description = "View and edit tags for various audio files";
-    homepage = "http://projects.gnome.org/easytag/";
+    homepage = http://projects.gnome.org/easytag/;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fuuzetsu ];
     platforms = platforms.linux;

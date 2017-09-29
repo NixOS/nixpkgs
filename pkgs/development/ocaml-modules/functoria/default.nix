@@ -2,6 +2,9 @@
 , bos, cmdliner, ocamlgraph
 }:
 
+if !stdenv.lib.versionAtLeast ocaml.version "4.03"
+then throw "functoria is not available for OCaml ${ocaml.version}" else
+
 stdenv.mkDerivation rec {
 	name = "ocaml${ocaml.version}-functoria-${version}";
 	version = "2.0.2";

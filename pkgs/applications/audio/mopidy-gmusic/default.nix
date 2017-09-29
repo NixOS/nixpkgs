@@ -11,9 +11,9 @@ pythonPackages.buildPythonApplication rec {
 
   propagatedBuildInputs = [
     mopidy
-    pythonPackages.requests2
+    pythonPackages.requests
     pythonPackages.gmusicapi
-    pythonPackages.cachetools
+    pythonPackages.cachetools_1
   ];
 
   doCheck = false;

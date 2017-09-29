@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   
   meta = with stdenv.lib; {
     description = "JACK audio connection kit";
-    homepage = "http://jackaudio.org";
+    homepage = http://jackaudio.org;
     license = "GPL";
     platforms = platforms.unix;
     maintainers = with maintainers; [ wkennington ];

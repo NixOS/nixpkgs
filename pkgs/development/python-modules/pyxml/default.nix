@@ -1,7 +1,9 @@
 {lib, fetchurl, python, buildPythonPackage, makeWrapper}:
 
 buildPythonPackage rec {
-  name = "PyXML-0.8.4";
+  pname = "PyXML";
+  version = "0.8.4";
+  name = "${pname}-${pname}";
   format = "other";
   src = fetchurl {
     url = "mirror://sourceforge/pyxml/${name}.tar.gz";

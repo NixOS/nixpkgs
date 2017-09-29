@@ -24,13 +24,13 @@
 
 let
   pname = "zeep";
-  version = "1.1.0";
+  version = "2.3.0";
 in buildPythonPackage {
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "83e82b6cb59e84bf4725add3771ed442bb099fad5959c887efe7c49a8a940ea5";
+    sha256 = "b01d81c61d7b7858b7be001615d3c995a371815f5e6902c914fea9beba30b716";
   };
 
   propagatedBuildInputs = [
@@ -83,7 +83,7 @@ in buildPythonPackage {
   '';
 
   meta = with lib; {
-    homepage = "http://docs.python-zeep.org";
+    homepage = http://docs.python-zeep.org;
     license = licenses.mit;
     description = "A modern/fast Python SOAP client based on lxml / requests";
     maintainers = with maintainers; [ rvl ];

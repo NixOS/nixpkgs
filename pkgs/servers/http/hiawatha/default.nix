@@ -21,6 +21,10 @@ stdenv.mkDerivation rec {
 
   buildInputs =  [ cmake libxslt zlib libxml2 ] ++ stdenv.lib.optional enableSSL openssl ;
 
+  prePatch = ''
+    substituteInPlace CMakeLists.txt --replace SETUID ""
+  '';
+
   cmakeFlags = [
     ( if enableSSL then "-DENABLE_TLS=on" else "-DENABLE_TLS=off" )
     ( if enableMonitor then "-DENABLE_MONITOR=on" else "-DENABLE_MONITOR=off" )
@@ -44,7 +48,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "An advanced and secure webserver";
     license = licenses.gpl2;
-    homepage = "https://www.hiawatha-webserver.org";
+    homepage = https://www.hiawatha-webserver.org;
     maintainer = [ maintainers.ndowens ];
   };
 

@@ -362,7 +362,7 @@ services.syncthing = {
   <listitem>
     <para>
       <literal>networking.firewall.allowPing</literal> is now enabled by
-      default. Users are encourarged to configure an approiate rate limit for
+      default. Users are encouraged to configure an appropriate rate limit for
       their machines using the Kernel interface at
       <filename>/proc/sys/net/ipv4/icmp_ratelimit</filename> and
       <filename>/proc/sys/net/ipv6/icmp/ratelimit</filename> or using the

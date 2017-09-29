@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "tt-rss-${version}";
-  version = "16.3";
+  version = "17.4";
 
   src = fetchgit {
-    url = "https://tt-rss.org/gitlab/fox/tt-rss.git";
+    url = "https://git.tt-rss.org/git/tt-rss.git";
     rev = "refs/tags/${version}";
-    sha256 = "1584lcq6kcy9f8ik5djb9apck9hxvfpl54sn6yhl3pdfrfdj3nw5";
+    sha256 = "07ng21n4pva56cxnxkzd6vzs381zn67psqpm51ym5wnl644jqh08";
   };
 
   buildPhases = ["unpackPhase" "installPhase"];

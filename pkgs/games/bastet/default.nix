@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "bastet-${version}";
-  version = "0.43.1";
+  version = "0.43.2";
   buildInputs = [ ncurses boost ];
 
   src = fetchFromGitHub {
     owner = "fph";
     repo = "bastet";
     rev = version;
-    sha256 = "14ymdarx30zqxyixvb17h4hs57y6zfx0lrdvc200crllz8zzdx5z";
+    sha256 = "09kamxapm9jw9przpsgjfg33n9k94bccv65w95dakj0br33a75wn";
   };
 
   installPhase = ''

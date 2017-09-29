@@ -57,6 +57,8 @@ in
     powerManagement.scsiLinkPolicy = null;
     powerManagement.cpuFreqGovernor = null;
 
+    systemd.sockets."systemd-rfkill".enable = false;
+
     systemd.services = {
       "systemd-rfkill@".enable = false;
       "systemd-rfkill".enable = false;

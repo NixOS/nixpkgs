@@ -1,10 +1,10 @@
 {
-  kdeApp, lib,
+  mkDerivation, lib,
   extra-cmake-modules, kdoctools,
   baloo, kconfig, kdelibs4support, kfilemetadata, ki18n, kio, kservice
 }:
 
-kdeApp {
+mkDerivation {
   name = "baloo-widgets";
   meta = {
     license = [ lib.licenses.lgpl21 ];
@@ -14,4 +14,5 @@ kdeApp {
   propagatedBuildInputs = [
     baloo kconfig kdelibs4support kfilemetadata ki18n kio kservice
   ];
+  outputs = [ "out" "dev" ];
 }

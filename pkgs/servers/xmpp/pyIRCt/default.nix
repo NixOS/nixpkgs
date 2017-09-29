@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     sed -e '/configFiles/iimport os' -i config.py
     cp * $out/share/${name}
     cat > $out/bin/pyIRCt <<EOF
-      #! /bin/sh
+      #!${stdenv.shell}
       cd $out/share/${name}
       ./irc.py \"$@\"
     EOF

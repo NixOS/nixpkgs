@@ -1,22 +1,28 @@
-{ stdenv, fetchFromGitHub, boost, cmake, cpp-hocon, curl, leatherman, libyamlcpp, openssl, ruby, utillinux }:
+{ stdenv, fetchFromGitHub, boost, cmake, cpp-hocon, curl, leatherman, libwhereami, libyamlcpp, openssl, ruby, utillinux }:
 
 stdenv.mkDerivation rec {
   name = "facter-${version}";
-  version = "3.6.0";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
-    sha256 = "1fwvjd84nw39lgclkz4kn90z84fs9lsama3ikq0qs1in3y3jfmvi";
+    sha256 = "1picxrmvka57ph4zqgwqdsqvz3mqppg41wkj8dx37hscwwlbdw0s";
     rev = version;
     repo = "facter";
     owner = "puppetlabs";
   };
+
+  CXXFLAGS = "-fpermissive";
+  NIX_CFLAGS_COMPILE = "-Wno-error";
+  NIX_LDFLAGS = "-lblkid";
 
   cmakeFlags = [ "-DFACTER_RUBY=${ruby}/lib/libruby.so" ];
 
   # since we cant expand $out in cmakeFlags
   preConfigure = "cmakeFlags+=\" -DRUBY_LIB_INSTALL=$out/lib/ruby\"";
 
-  buildInputs = [ boost cmake cpp-hocon curl leatherman libyamlcpp openssl ruby utillinux ];
+  buildInputs = [ boost cmake cpp-hocon curl leatherman libwhereami libyamlcpp openssl ruby utillinux ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/puppetlabs/facter;

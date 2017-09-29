@@ -19,14 +19,21 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nmap${optionalString graphicalSupport "-graphical"}-${version}";
-  version = "7.40";
+  version = "7.60";
 
   src = fetchurl {
     url = "https://nmap.org/dist/nmap-${version}.tar.bz2";
-    sha256 = "121i9mgyc28ra2825akd0ix5qyssv4xc2qlx296mam6hzxgnc54y";
+    sha256 = "08bga42ipymmbxd7wy4x5sl26c0ir1fm3n9rc6nqmhx69z66wyd8";
   };
 
   patches = ./zenmap.patch;
+
+  prePatch = optionalString stdenv.isDarwin ''
+    substituteInPlace libz/configure \
+        --replace /usr/bin/libtool ar \
+        --replace 'AR="libtool"' 'AR="ar"' \
+        --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
+  '';
 
   configureFlags = []
     ++ optional (!pythonSupport) "--without-ndiff"

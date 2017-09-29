@@ -1,19 +1,25 @@
-{ stdenv, cmake, mesa, SDL, SDL_mixer, SDL_net, fetchurl }:
+{ stdenv, cmake, mesa_noglu, SDL, SDL_mixer, SDL_net, fetchFromGitHub, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "eternity-engine-3.40.46";
-  src = fetchurl {
-    url = https://github.com/team-eternity/eternity/archive/3.40.46.tar.gz;
-    sha256 = "0jq8q0agw7lgab9q2h8wcaakvg913l9j3a6ss0hn9661plkw2yb4";
+  name = "eternity-engine-${version}";
+  version = "3.42.02";
+  src = fetchFromGitHub {
+    owner = "team-eternity";
+    repo = "eternity";
+    rev = "${version}";
+    sha256 = "00kpq4k23hjmzjaymw3sdda7mqk8fjq6dzf7fmdal9fm7lfmj41k";
   };
 
-  buildInputs = [ stdenv cmake mesa SDL SDL_mixer SDL_net ];
+  nativeBuildInputs = [ cmake makeWrapper ];
+  buildInputs = [ mesa_noglu SDL SDL_mixer SDL_net ];
 
   enableParallelBuilding = true;
 
   installPhase = ''
-  mkdir -p $out/bin
-  cp source/eternity $out/bin
+    install -Dm755 source/eternity $out/lib/eternity/eternity
+    cp -r $src/base $out/lib/eternity/base
+    mkdir $out/bin
+    makeWrapper $out/lib/eternity/eternity $out/bin/eternity
   '';
 
   meta = {

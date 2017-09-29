@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Chess database with play and training functionality";
-    homepage = "http://scid.sourceforge.net/";
+    homepage = http://scid.sourceforge.net/;
     license = stdenv.lib.licenses.gpl2;
   };
 }

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     glib
     cairo
     pango
-    (poppler.override { withData = true; })
+    poppler
     fontforge
     openjdk8
   ];

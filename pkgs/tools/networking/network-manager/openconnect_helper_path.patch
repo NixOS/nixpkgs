@@ -1,0 +1,29 @@
+diff --git a/clients/common/nm-vpn-helpers.c b/clients/common/nm-vpn-helpers.c
+index 15611c45c..4a7444d3a 100644
+--- a/clients/common/nm-vpn-helpers.c
++++ b/clients/common/nm-vpn-helpers.c
+@@ -203,23 +203,8 @@ nm_vpn_openconnect_authenticate_helper (const char *host,
+ 	gboolean ret;
+ 	char **strv = NULL, **iter;
+ 	char *argv[4];
+-	const char *path;
+-	const char *const DEFAULT_PATHS[] = {
+-		"/sbin/",
+-		"/usr/sbin/",
+-		"/usr/local/sbin/",
+-		"/bin/",
+-		"/usr/bin/",
+-		"/usr/local/bin/",
+-		NULL,
+-	};
+-
+-	path = nm_utils_file_search_in_paths ("openconnect", "/usr/sbin/openconnect", DEFAULT_PATHS,
+-	                                      G_FILE_TEST_IS_EXECUTABLE, NULL, NULL, error);
+-	if (!path)
+-		return FALSE;
+ 
+-	argv[0] = (char *) path;
++	argv[0] = "@openconnect@/bin/openconnect";
+ 	argv[1] = "--authenticate";
+ 	argv[2] = (char *) host;
+ 	argv[3] = NULL;

@@ -1,11 +1,11 @@
-{ stdenv, ghc, pkgconfig, glibcLocales, cacert }:
+{ stdenv, ghc, pkgconfig, glibcLocales, cacert }@depArgs:
 
 with stdenv.lib;
 
 { buildInputs ? []
 , extraArgs ? []
 , LD_LIBRARY_PATH ? []
-, ghc ? ghc
+, ghc ? depArgs.ghc
 , ...
 }@args:
 
@@ -37,7 +37,6 @@ stdenv.mkDerivation (args // {
 
   configurePhase = args.configurePhase or ''
     export STACK_ROOT=$NIX_BUILD_TOP/.stack
-    stack setup
   '';
 
   buildPhase = args.buildPhase or "stack build";

@@ -3,14 +3,15 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "samtools";
-  version = "1.3.1";
+  major = "1.5";
+  version = "${major}.0";
 
   src = fetchurl {
-    url = "https://github.com/samtools/${pname}/releases/download/${version}/${name}.tar.bz2";
-    sha256 = "0znnnxc467jbf1as2dpskrjhfh8mbll760j6w6rdkwlwbqsp8gbc";
+    url = "https://github.com/samtools/samtools/releases/download/${major}/samtools-${major}.tar.bz2";
+    sha256 = "1xidmv0jmfy7l0kb32hdnlshcxgzi1hmygvig0cqrq1fhckdlhl5";
   };
 
-  buildInputs = [ zlib ncurses htslib ];
+  buildInputs = [ zlib ncurses ];
 
   configureFlags = [ "--with-htslib=${htslib}" ]
     ++ stdenv.lib.optional (ncurses == null) "--without-curses";

@@ -1,7 +1,9 @@
-{ stdenv, fetchFromGitHub, emscriptenfastcomp, python, nodejs, closurecompiler, jre }:
+{ stdenv, fetchFromGitHub, emscriptenfastcomp, python, nodejs, closurecompiler
+, jre, binaryen, enableWasm ? true
+}:
 
 let
-  rev = "1.37.9";
+  rev = "1.37.16";
   appdir = "share/emscripten";
 in
 
@@ -11,7 +13,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "kripken";
     repo = "emscripten";
-    sha256 = "0dmvhw4j9bdqbdknz7ibg2fwzynw4w8ksnj8rkswdmp660889krp";
+    sha256 = "1qyhjx5zza01vnwmj6qzxbkagxknn4kzb6gw12fqw5q8pa8fy4zy";
     inherit rev;
   };
 
@@ -34,8 +36,11 @@ stdenv.mkDerivation {
     echo "NODE_JS = '${nodejs}/bin/node'" >> $out/${appdir}/config
     echo "JS_ENGINES = [NODE_JS]" >> $out/${appdir}/config
     echo "COMPILER_ENGINE = NODE_JS" >> $out/${appdir}/config
-    echo "CLOSURE_COMPILER = '${closurecompiler}/share/java/compiler.jar'" >> $out/${appdir}/config
+    echo "CLOSURE_COMPILER = '${closurecompiler}/share/java/closure-compiler-v${closurecompiler.version}.jar'" >> $out/${appdir}/config
     echo "JAVA = '${jre}/bin/java'" >> $out/${appdir}/config
+  ''
+  + stdenv.lib.optionalString enableWasm ''
+    echo "BINARYEN_ROOT = '${binaryen}'" >> $out/share/emscripten/config
   '';
 
   meta = with stdenv.lib; {

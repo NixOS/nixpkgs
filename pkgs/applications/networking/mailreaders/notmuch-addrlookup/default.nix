@@ -13,6 +13,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig glib notmuch ];
 
+  # Required until notmuch-addrlookup can be compiled against notmuch >= 0.25
+  patches = [ ./0001-notmuch-0.25-compatibility-fix.patch ];
+
   installPhase = ''
     mkdir -p "$out/bin"
     cp notmuch-addrlookup "$out/bin"

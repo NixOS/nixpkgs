@@ -1,9 +1,12 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, python2Packages, makeWrapper
-, bash, libsamplerate, libsndfile, readline
+{ stdenv, fetchFromGitHub, pkgconfig, python2Packages, makeWrapper
+, bash, libsamplerate, libsndfile, readline, eigen, celt
+# Darwin Dependencies
+, aften, AudioToolbox, CoreAudio, CoreFoundation
 
 # Optional Dependencies
 , dbus ? null, libffado ? null, alsaLib ? null
 , libopus ? null
+, darwin
 
 # Extra options
 , prefix ? ""
@@ -16,7 +19,7 @@ let
 
   libOnly = prefix == "lib";
 
-  optDbus = shouldUsePkg dbus;
+  optDbus = if stdenv.isDarwin then null else shouldUsePkg dbus;
   optPythonDBus = if libOnly then null else shouldUsePkg dbus-python;
   optLibffado = if libOnly then null else shouldUsePkg libffado;
   optAlsaLib = if libOnly then null else shouldUsePkg alsaLib;
@@ -24,39 +27,46 @@ let
 in
 stdenv.mkDerivation rec {
   name = "${prefix}jack2-${version}";
-  version = "1.9.10";
+  version = "1.9.11-RC1";
 
   src = fetchFromGitHub {
     owner = "jackaudio";
     repo = "jack2";
     rev = "v${version}";
-    sha256 = "1a2213l7x6sgqg2hq3yhnpvvvqyskhsmx8j3z0jgjsqwz9xa3wbr";
+    sha256 = "0i708ar3ll5p8yj0h7ffg84nrn49ap47l2yy75rxyw30cyywhxp4";
   };
 
   nativeBuildInputs = [ pkgconfig python makeWrapper ];
-  buildInputs = [ python libsamplerate libsndfile readline
+  buildInputs = [ libsamplerate libsndfile readline eigen celt
     optDbus optPythonDBus optLibffado optAlsaLib optLibopus
-  ];
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ aften AudioToolbox CoreAudio CoreFoundation ];
+
+  # CoreFoundation 10.10 doesn't include CFNotificationCenter.h yet.
+  patches = stdenv.lib.optionals stdenv.isDarwin [ ./clang.patch ./darwin-cf.patch ];
 
   prePatch = ''
-    substituteInPlace svnversion_regenerate.sh --replace /bin/bash ${bash}/bin/bash
+    substituteInPlace svnversion_regenerate.sh \
+        --replace /bin/bash ${bash}/bin/bash
   '';
 
-  patches = [
-    ./jack-gcc5.patch
-    (fetchpatch {
-      url = "https://github.com/jackaudio/jack2/commit/ff1ed2c4524095055140370c1008a2d9cccc5645.patch";
-      sha256 = "0vywakbmlskvs9ginij9ilk39wjyzg7w6cf1qxp11hb0hj69fir5";
-    })
-  ];
+  # It looks like one of the frameworks depends on <CoreFoundation/CFAttributedString.h>
+  # since frameworks are impure we also have to use the impure CoreFoundation here.
+  # FIXME: remove when CoreFoundation is updated to 10.11
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    export NIX_CFLAGS_COMPILE="-F${CoreFoundation}/Library/Frameworks $NIX_CFLAGS_COMPILE"
+  '';
 
   configurePhase = ''
+    runHook preConfigure
+
     python waf configure --prefix=$out \
       ${optionalString (optDbus != null) "--dbus"} \
       --classic \
       ${optionalString (optLibffado != null) "--firewire"} \
       ${optionalString (optAlsaLib != null) "--alsa"} \
       --autostart=${if (optDbus != null) then "dbus" else "classic"} \
+
+    runHook postConfigure
   '';
 
   buildPhase = ''
@@ -74,7 +84,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "JACK audio connection kit, version 2 with jackdbus";
-    homepage = "http://jackaudio.org";
+    homepage = http://jackaudio.org;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ goibhniu wkennington ];

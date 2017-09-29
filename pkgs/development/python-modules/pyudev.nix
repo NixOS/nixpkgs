@@ -3,7 +3,8 @@
 }:
 
 buildPythonPackage rec {
-  name = "pyudev-${version}";
+  pname = "pyudev";
+  name = "${pname}-${version}";
   version = "0.21.0";
 
   src = fetchurl {
@@ -28,7 +29,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = "http://pyudev.readthedocs.org/";
+    homepage = http://pyudev.readthedocs.org/;
     description = "Pure Python libudev binding";
     license = lib.licenses.lgpl21Plus;
   };

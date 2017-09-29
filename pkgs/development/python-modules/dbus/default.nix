@@ -2,7 +2,9 @@
 , ncurses, pygobject3 }:
 
 if isPyPy then throw "dbus-python not supported for interpreter ${python.executable}" else buildPythonPackage rec {
-  name = "dbus-python-1.2.4";
+  pname = "dbus-python";
+  version = "1.2.4";
+  name = "${pname}-${version}";
   format = "other";
 
   src = fetchurl {

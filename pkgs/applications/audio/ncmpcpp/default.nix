@@ -1,39 +1,33 @@
 { stdenv, fetchurl, boost, mpd_clientlib, ncurses, pkgconfig, readline
-, libiconv, icu
+, libiconv, icu, curl
 , outputsSupport ? false # outputs screen
 , visualizerSupport ? false, fftw ? null # visualizer screen
 , clockSupport ? false # clock screen
-, unicodeSupport ? true # utf8 support
-, curlSupport ? true, curl ? null # allow fetching lyrics from the internet
 , taglibSupport ? true, taglib ? null # tag editor
 }:
 
 assert visualizerSupport -> (fftw != null);
-assert curlSupport -> (curl != null);
 assert taglibSupport -> (taglib != null);
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "ncmpcpp-${version}";
-  version = "0.7.5";
+  version = "0.8";
 
   src = fetchurl {
     url = "http://ncmpcpp.rybczak.net/stable/${name}.tar.bz2";
-    sha256 = "0zg084m06y7dd8ccy6aq9hx8q7qi2s5kl0br5139hrmk40q68kvy";
+    sha256 = "0nj6ky805a55acj0w57sbn3vfmmkbqp97rhbi0q9848n10f2l3rg";
   };
 
   configureFlags = [ "BOOST_LIB_SUFFIX=" ]
     ++ optional outputsSupport "--enable-outputs"
     ++ optional visualizerSupport "--enable-visualizer --with-fftw"
     ++ optional clockSupport "--enable-clock"
-    ++ optional unicodeSupport "--enable-unicode"
-    ++ optional curlSupport "--with-curl"
     ++ optional taglibSupport "--with-taglib";
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ boost mpd_clientlib ncurses readline libiconv icu ]
-    ++ optional curlSupport curl
+  buildInputs = [ boost mpd_clientlib ncurses readline libiconv icu curl ]
     ++ optional visualizerSupport fftw
     ++ optional taglibSupport taglib;
 
@@ -41,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "A featureful ncurses based MPD client inspired by ncmpc";
     homepage    = http://ncmpcpp.rybczak.net/;
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ lovek323 mornfall koral ];
-    platforms   = platforms.linux;
+    maintainers = with maintainers; [ jfrankenau koral lovek323 mornfall ];
+    platforms   = platforms.all;
   };
 }

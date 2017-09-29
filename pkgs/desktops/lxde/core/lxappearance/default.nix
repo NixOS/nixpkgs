@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, pkgconfig, libX11, gtk2 }:
+{ stdenv, fetchurl, intltool, pkgconfig, libX11, gtk2, withGtk3 ? false, gtk3 }:
 
 stdenv.mkDerivation rec {
   name = "lxappearance-0.6.3";
@@ -10,13 +10,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool ];
 
-  buildInputs = [ libX11 gtk2 ];
+  buildInputs = [ libX11 (if withGtk3 then gtk3 else gtk2) ];
+
+  patches = [ ./lxappearance-0.6.3-xdg.system.data.dirs.patch ];
+
+  configureFlags = stdenv.lib.optional withGtk3 "--enable-gtk3";
 
   meta = {
     description = "A lightweight program for configuring the theme and fonts of gtk applications";
-    homepage = "http://lxde.org/";
+    homepage = http://lxde.org/;
     maintainers = [ stdenv.lib.maintainers.hinton ];
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2;
   };
 }

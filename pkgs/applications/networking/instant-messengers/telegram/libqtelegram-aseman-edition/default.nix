@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, qtbase, qtmultimedia, qtquick1, qmakeHook }:
+, qtbase, qtmultimedia, qtquick1, qmake }:
 
 stdenv.mkDerivation rec {
   name = "libqtelegram-aseman-edition-${meta.version}";
@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ qtbase qtmultimedia qtquick1 ];
-  nativeBuildInputs = [ qmakeHook ];
   enableParallelBuilding = true;
+  nativeBuildInputs = [ qmake ];
 
   patchPhase = ''
     substituteInPlace libqtelegram-ae.pro --replace "/libqtelegram-ae" ""

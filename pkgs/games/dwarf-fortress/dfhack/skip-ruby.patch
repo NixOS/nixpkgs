@@ -1,16 +1,10 @@
-diff -ru3 dfhack-ae59b4f/plugins/ruby/CMakeLists.txt dfhack-ae59b4f-new/plugins/ruby/CMakeLists.txt
---- dfhack-ae59b4f/plugins/ruby/CMakeLists.txt	1970-01-01 03:00:01.000000000 +0300
-+++ dfhack-ae59b4f-new/plugins/ruby/CMakeLists.txt	2016-11-23 15:29:09.907286546 +0300
-@@ -1,3 +1,4 @@
-+IF(FALSE)
- IF (APPLE)
-     SET(RUBYLIB ${CMAKE_CURRENT_SOURCE_DIR}/osx${DFHACK_BUILD_ARCH}/libruby.dylib)
-     SET(RUBYLIB_INSTALL_NAME "libruby.dylib")
-@@ -48,6 +49,7 @@
-             "482c1c418f4ee1a5f04203eee1cda0ef")
-     ENDIF()
- ENDIF()
-+ENDIF()
+diff --git a/plugins/ruby/CMakeLists.txt b/plugins/ruby/CMakeLists.txt
+index f1ef12ac..0976e18a 100644
+--- a/plugins/ruby/CMakeLists.txt
++++ b/plugins/ruby/CMakeLists.txt
+@@ -1,5 +1,5 @@
+ # Allow build system to turn off downloading of libruby.so.
+-OPTION(DOWNLOAD_RUBY "Download prebuilt libruby.so for ruby plugin." ON)
++OPTION(DOWNLOAD_RUBY "Download prebuilt libruby.so for ruby plugin." OFF)
  
- IF (APPLE OR UNIX)
-     SET(RUBYAUTOGEN ruby-autogen-gcc.rb)
+ IF (DOWNLOAD_RUBY)

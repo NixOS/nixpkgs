@@ -13,6 +13,7 @@
 , SDL # only for avplay in $bin, adds nontrivial closure to it
 , enableGPL ? true # ToDo: some additional default stuff may need GPL
 , enableUnfree ? faacSupport
+, hostPlatform
 }:
 
 assert faacSupport -> enableUnfree;
@@ -27,8 +28,8 @@ let inherit (stdenv.lib) optional optionals hasPrefix; in
 let
   result = {
     libav_0_8 = libavFun "0.8.20" "0c7a2417c3a01eb74072691bb93ce802ae1be08f";
-    libav_11  = libavFun  "11.8"  "d0e93f6b229ae46c49d13ec183b13cfee70a51f0";
-    libav_12  = libavFun "12"     "4ecde7274621c82a6882b7614d907b28de25cc4e";
+    libav_11  = libavFun "11.10"  "38db6721ca8423682e4d614c170eccc33ba32e00";
+    libav_12  = libavFun "12.1"   "df048240318b888e3938f649422b967f62e43e3c";
   };
 
   libavFun = version : sha1 : stdenv.mkDerivation rec {
@@ -41,7 +42,7 @@ let
 
     patches = []
       ++ optional (vpxSupport && hasPrefix "0.8." version) ./vpxenc-0.8.17-libvpx-1.5.patch
-      ++ optional (vpxSupport && hasPrefix "11."  version) ./vpxenc-11.6-libvpx-1.5.patch;
+      ;
 
     preConfigure = "patchShebangs doc/texi2pod.pl";
 
@@ -105,19 +106,19 @@ let
     installCheckTarget = "check"; # tests need to be run *after* installation
 
     crossAttrs = {
-      dontSetConfigureCross = true;
+      configurePlatforms = [];
       configureFlags = configureFlags ++ [
-        "--cross-prefix=${stdenv.cross.config}-"
+        "--cross-prefix=${stdenv.cc.prefix}"
         "--enable-cross-compile"
         "--target_os=linux"
-        "--arch=${stdenv.cross.arch}"
+        "--arch=${hostPlatform.arch}"
         ];
     };
 
     passthru = { inherit vdpauSupport; };
 
     meta = with stdenv.lib; {
-      homepage = http://libav.org/;
+      homepage = https://libav.org/;
       description = "A complete, cross-platform solution to record, convert and stream audio and video (fork of ffmpeg)";
       license = with licenses; if enableUnfree then unfree #ToDo: redistributable or not?
         else if enableGPL then gpl2Plus else lgpl21Plus;

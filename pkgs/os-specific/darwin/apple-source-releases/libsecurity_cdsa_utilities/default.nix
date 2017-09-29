@@ -1,4 +1,4 @@
-{ CommonCrypto, appleDerivation, libsecurity_codesigning, libsecurity_utilities, m4, osx_private_sdk }:
+{ CommonCrypto, appleDerivation, libsecurity_codesigning, libsecurity_utilities, m4 }:
 appleDerivation {
   buildInputs = [
     libsecurity_utilities

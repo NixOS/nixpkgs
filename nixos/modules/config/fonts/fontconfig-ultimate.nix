@@ -53,7 +53,7 @@ in
           };
 
           substitutions = mkOption {
-            type = types.nullOr (types.enum ["free" "combi" "ms"]);
+            type = types.enum ["free" "combi" "ms" "none"];
             default = "free";
             description = ''
               Font substitutions to replace common Type 1 fonts with nicer

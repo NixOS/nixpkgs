@@ -1,0 +1,21 @@
+# HG changeset patch
+# User Armin Rigo <arigo@tunes.org>
+# Date 1500108588 -7200
+# Node ID 20f7723ff895430c2f45647e7d0c0ca56d93e40a
+# Parent  d135217574a6bd2e87a883e1d495f82c5e89bc8b
+(ronan, arigo)
+
+Issue #2604: skip this test (fails on some Linux because pypy uses the
+new getrandom() syscall)
+
+diff --git a/lib-python/2.7/test/test_os.py b/lib-python/2.7/test/test_os.py
+--- a/lib-python/2.7/test/test_os.py
++++ b/lib-python/2.7/test/test_os.py
+@@ -580,6 +580,7 @@
+                  "getentropy() does not use a file descriptor")
+ class URandomFDTests(unittest.TestCase):
+     @unittest.skipUnless(resource, "test requires the resource module")
++    @test_support.impl_detail(pypy=False)    # on Linux, may use getrandom()
+     def test_urandom_failure(self):
+         # Check urandom() failing when it is not able to open /dev/random.
+         # We spawn a new process to make the test more robust (if getrlimit()

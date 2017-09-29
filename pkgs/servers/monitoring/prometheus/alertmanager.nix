@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "alertmanager-${version}";
-  version = "0.5.1";
+  version = "0.8.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/prometheus/alertmanager";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "prometheus";
     repo = "alertmanager";
-    sha256 = "1z0f8jqbd4v00634qcs41h1zb70ahl63svlzn33gavripk84hwzq";
+    sha256 = "0bqc58j0nrq7y8nbd927z7x74m8mcd2782cxkqwscpq6d9983qql";
   };
 
   # Tests exist, but seem to clash with the firewall.
@@ -25,6 +25,17 @@ buildGoPackage rec {
        -X ${t}.BuildUser=nix@nixpkgs
        -X ${t}.BuildDate=unknown
        -X ${t}.GoVersion=${stdenv.lib.getVersion go}
+  '';
+
+  postBuild = ''
+    $NIX_BUILD_TOP/go/bin/artifacts
+  '';
+
+  postInstall = ''
+    rm $bin/bin/artifacts
+    mkdir -p $bin/share/man/man1 $bin/etc/bash_completion.d
+    cp -v amtool*.1 $bin/share/man/man1
+    cp -v amtool_completion.sh $bin/etc/bash_completion.d
   '';
 
   meta = with stdenv.lib; {

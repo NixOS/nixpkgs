@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, qmakeHook, qtbase, qttools, makeQtWrapper }:
+{ stdenv, fetchFromGitHub, qmake, qtbase, qttools }:
 
 stdenv.mkDerivation rec {
   name = "gpxsee-${version}";
-  version = "4.3";
+  version = "4.14";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    sha256 = "15f686frxlrmdvh5cc837kx62g0ihqj4vb87i8433g7l5vqkv3lf";
+    sha256 = "0yv3hcs5b8a88mp24h8r2sn69phwrahdff5pp74lz24270il3jgb";
   };
 
-  nativeBuildInputs = [ qmakeHook qttools makeQtWrapper ];
+  nativeBuildInputs = [ qmake qttools ];
 
   preConfigure = ''
     substituteInPlace src/config.h --replace /usr/share/gpxsee $out/share/gpxsee
@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     install -Dm755 GPXSee $out/bin/GPXSee
-    wrapQtProgram $out/bin/GPXSee
 
     mkdir -p $out/share/gpxsee
     cp pkg/maps.txt $out/share/gpxsee

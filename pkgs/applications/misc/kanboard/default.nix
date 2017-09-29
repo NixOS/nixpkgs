@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "kanboard-${version}";
-  version = "1.0.40";
+  version = "1.0.46";
 
   src = fetchzip {
-    url = "https://kanboard.net/kanboard-1.0.40.zip";
-    sha256 = "1phn3rvngch636g00rhicl0225qk6gdmxqjflkrdchv299zysswd";
+    url = "https://kanboard.net/${name}.zip";
+    sha256 = "00fzzijibj7x8pz8xwc601fcrzvdwz5fv45f2zzmbygl86khp82a";
   };
 
   dontBuild = true;
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Kanban project management software";
-    homepage = "https://kanboard.net";
+    homepage = https://kanboard.net;
     license = licenses.mit;
     maintainers = with maintainers; [ fpletz ];
   };

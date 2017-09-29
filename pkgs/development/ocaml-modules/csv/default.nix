@@ -1,32 +1,26 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild }:
+{ stdenv, fetchurl, ocaml, findlib, jbuilder }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
+	version = "2.0";
+	name = "ocaml${ocaml.version}-csv-${version}";
+	src = fetchurl {
+		url = "https://github.com/Chris00/ocaml-csv/releases/download/2.0/csv-2.0.tbz";
+		sha256 = "1g6xsybwc5ifr7n4hkqlh3294njzca12xg86ghh6pqy350wpq1zp";
+	};
 
-  name = "ocaml-csv-1.4.2";
+	unpackCmd = "tar -xjf $src";
 
-  src = fetchzip {
-    url = https://github.com/Chris00/ocaml-csv/releases/download/1.4.2/csv-1.4.2.tar.gz;
-    sha256 = "05s8py2qr3889c72g1q07r15pzch3j66xdphxi2sd93h5lvnpi4j";
-  };
+	buildInputs = [ ocaml findlib jbuilder ];
 
-  buildInputs = [ ocaml findlib ocamlbuild ];
+	buildPhase = "jbuilder build -p csv";
 
-  createFindlibDestdir = true;
+	inherit (jbuilder) installPhase;
 
-  configurePhase = "ocaml setup.ml -configure --prefix $out --enable-tests";
-
-  buildPhase = "ocaml setup.ml -build";
-
-  doCheck = true;
-  checkPhase = "ocaml setup.ml -test";
-
-  installPhase = "ocaml setup.ml -install";
-
-  meta = with stdenv.lib; {
-    description = "A pure OCaml library to read and write CSV files";
-    homepage = https://github.com/Chris00/ocaml-csv;
-    license = licenses.lgpl21;
-    maintainers = [ maintainers.vbgl ];
-    platforms = ocaml.meta.platforms or [];
-  };
+	meta = {
+		description = "A pure OCaml library to read and write CSV files";
+		license = stdenv.lib.licenses.lgpl21;
+		maintainers = [ stdenv.lib.maintainers.vbgl ];
+		homepage = https://github.com/Chris00/ocaml-csv;
+		inherit (ocaml.meta) platforms;
+	};
 }

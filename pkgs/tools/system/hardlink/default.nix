@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   buildInputs = [ unzip ];
 
   meta = {
-    homepage = "http://pkgs.fedoraproject.org/cgit/hardlink.git/";
+    homepage = http://pkgs.fedoraproject.org/cgit/hardlink.git/;
     description = "Consolidate duplicate files via hardlinks";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;

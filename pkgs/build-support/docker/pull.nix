@@ -1,41 +1,32 @@
-{ stdenv, lib, curl, jshon, python, runCommand }:
-
-# Inspired and simplified version of fetchurl.
+{ stdenv, lib, docker, vmTools, utillinux, curl, kmod, dhcp, cacert, e2fsprogs }:
+let
+  nameReplace = name: builtins.replaceStrings ["/" ":"] ["-" "-"] name;
+in
 # For simplicity we only support sha256.
+{ imageName, imageTag ? "latest", imageId ? "${imageName}:${imageTag}"
+, sha256, name ? (nameReplace "docker-image-${imageName}-${imageTag}.tar") }:
+let
+  pullImage = vmTools.runInLinuxVM (
+    stdenv.mkDerivation {
+      inherit name imageId;
 
-# Currently only registry v1 is supported, compatible with Docker Hub.
+      certs = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
-{ imageName, imageTag ? "latest", imageId ? null
-, sha256, name ? "${imageName}-${imageTag}"
-, indexUrl ? "https://index.docker.io"
-, registryVersion ? "v1"
-, curlOpts ? "" }:
+      builder = ./pull.sh;
 
-assert registryVersion == "v1";
+      buildInputs = [ curl utillinux docker kmod dhcp cacert e2fsprogs ];
 
-let layer = stdenv.mkDerivation {
-  inherit name imageName imageTag imageId
-          indexUrl registryVersion curlOpts;
+      outputHashAlgo = "sha256";
+      outputHash = sha256;
 
-  builder = ./pull.sh;
-  detjson = ./detjson.py;
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
-  buildInputs = [ curl jshon python ];
+      preVM = vmTools.createEmptyImage {
+        size = 2048;
+        fullName = "${name}-disk";
+      };
 
-  outputHashAlgo = "sha256";
-  outputHash = sha256;
-  outputHashMode = "recursive";
-
-  impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
-    # This variable allows the user to pass additional options to curl
-    "NIX_CURL_FLAGS"
-  ];
-
-  # Doing the download on a remote machine just duplicates network
-  # traffic, so don't do that.
-  preferLocalBuild = true;
-};
-
-in runCommand "${name}.tar.gz" {} ''
-  tar -C ${layer} -czf $out .
-''
+      QEMU_OPTS = "-netdev user,id=net0 -device virtio-net-pci,netdev=net0";
+    });
+in
+  pullImage

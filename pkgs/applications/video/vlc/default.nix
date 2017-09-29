@@ -20,18 +20,12 @@ assert (!withQt5 -> qt4 != null);
 
 stdenv.mkDerivation rec {
   name = "vlc-${version}";
-  version = "2.2.4";
+  version = "2.2.6";
 
   src = fetchurl {
     url = "http://get.videolan.org/vlc/${version}/${name}.tar.xz";
-    sha256 = "1gjkrwlg8ab3skzl67cxb9qzg4187ifckd1z9kpy11q058fyjchn";
+    sha256 = "1a22b913p2227ljz89c4fgjlyln5gcz8z58w32r0wh4srnnd60y4";
   };
-
-  patches = optional withQt5 (fetchurl {
-    name = "Fix-build-using-old-GCC-intrinsics.patch";
-    url = "https://patches.videolan.org/patch/14061/raw/";
-    sha256 = "16v4k7378a590diz11bdvdaqi9cpf6333hp5wr6v5sfrsma8qvpx";
-  });
 
   # Comment-out the Qt 5.5 version check, as we do apply the relevant patch.
   # https://trac.videolan.org/vlc/ticket/16497

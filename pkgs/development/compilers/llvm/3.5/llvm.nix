@@ -47,13 +47,14 @@ in stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional enableSharedLibraries
     "-DBUILD_SHARED_LIBS=ON"
     ++ stdenv.lib.optional (!isDarwin)
-    "-DLLVM_BINUTILS_INCDIR=${binutils.dev}/include"
+    "-DLLVM_BINUTILS_INCDIR=${stdenv.lib.getDev binutils}/include"
     ++ stdenv.lib.optionals ( isDarwin) [
     "-DCMAKE_CXX_FLAGS=-stdlib=libc++"
     "-DCAN_TARGET_i386=false"
   ];
 
-  patches = [ ./fix-15974.patch ];
+  patches = [ ./fix-15974.patch ] ++
+    stdenv.lib.optionals (!stdenv.isDarwin) [../fix-llvm-config.patch ];
 
   postBuild = ''
     rm -fR $out

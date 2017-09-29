@@ -2,7 +2,7 @@
 , thin-provisioning-tools, enable_dmeventd ? false }:
 
 let
-  version = "2.02.140";
+  version = "2.02.173";
 in
 
 stdenv.mkDerivation {
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "ftp://sources.redhat.com/pub/lvm2/releases/LVM2.${version}.tgz";
-    sha256 = "1jd46diyv7074fw8kxwq7imn4pl76g01d8y7z4scq0lkxf8jmpai";
+    sha256 = "0r4dx87z7ggxmxligdzz43chgfrwn9lyj7vaz63z97h0gs61dfff";
   };
 
   configureFlags = [
@@ -27,10 +27,7 @@ stdenv.mkDerivation {
 
   preConfigure =
     ''
-      substituteInPlace scripts/lvmdump.sh \
-        --replace /usr/bin/tr ${coreutils}/bin/tr
       substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
-        --replace /usr/sbin/lvm $out/sbin/lvm \
         --replace /usr/bin/udevadm ${systemd.udev.bin}/bin/udevadm
 
       sed -i /DEFAULT_SYS_DIR/d Makefile.in
@@ -60,7 +57,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://sourceware.org/lvm2/;
-    descriptions = "Tools to support Logical Volume Management (LVM) on Linux";
+    description = "Tools to support Logical Volume Management (LVM) on Linux";
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [raskin];
     inherit version;

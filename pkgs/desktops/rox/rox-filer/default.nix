@@ -69,7 +69,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Fast, lightweight, gtk2 file manager";
-    homepage = "http://rox.sourceforge.net/desktop";
+    homepage = http://rox.sourceforge.net/desktop;
     license = with licenses; [ gpl2 lgpl2 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.eleanor ];

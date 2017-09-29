@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Offline conference schedule viewer";
-    homepage = "http://www.toastfreeware.priv.at/confclerk";
+    homepage = http://www.toastfreeware.priv.at/confclerk;
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ ehmry ];
     inherit (qt4.meta) platforms;

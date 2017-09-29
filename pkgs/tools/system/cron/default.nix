@@ -12,8 +12,9 @@ stdenv.mkDerivation {
   hardeningEnable = [ "pie" ];
 
   preBuild = ''
-    substituteInPlace Makefile --replace ' -o root' ' ' --replace 111 755
-    makeFlags="DESTROOT=$out"
+    # do not set sticky bit in /nix/store 
+    substituteInPlace Makefile --replace ' -o root' ' ' --replace 111 755 --replace 4755 0755
+    makeFlags="DESTROOT=$out CC=cc"
 
     # We want to ignore the $glibc/include/paths.h definition of
     # sendmail path.
@@ -23,7 +24,7 @@ stdenv.mkDerivation {
     #define _PATH_SENDMAIL "${sendmailPath}"
 
     #undef _PATH_DEFPATH
-    #define _PATH_DEFPATH "/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/nix/var/nix/profiles/default/sbin:/run/current-system/sw/bin:/run/current-system/sw/sbin:/usr/bin:/bin"
+    #define _PATH_DEFPATH "/run/wrappers/bin:/nix/var/nix/profiles/default/bin:/run/current-system/sw/bin:/usr/bin:/bin"
     __EOT__
 
     # Implicit saved uids do not work here due to way NixOS uses setuid wrappers
@@ -35,6 +36,6 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Daemon for running commands at specific times (Vixie Cron)";
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

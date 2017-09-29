@@ -68,7 +68,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Free space simulation";
-    homepage = "http://www.shatters.net/celestia/";
+    homepage = http://www.shatters.net/celestia/;
     license = stdenv.lib.licenses.gpl2;
 
     platforms = stdenv.lib.platforms.linux;

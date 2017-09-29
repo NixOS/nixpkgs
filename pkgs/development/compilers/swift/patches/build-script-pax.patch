@@ -1,12 +1,13 @@
 --- swift/utils/build-script-impl	2017-01-23 12:47:20.401326309 -0600
 +++ swift-pax/utils/build-script-impl	2017-01-23 13:24:10.339366996 -0600
-@@ -1823,6 +1823,16 @@ function set_lldb_xcodebuild_options() {
+@@ -1823,6 +1823,17 @@ function set_lldb_xcodebuild_options() {
      fi
  }
  
 +## XXX: Taken from nixpkgs /pkgs/stdenv/generic/setup.sh
 +isELF() {
 +    local fn="$1"
++    local fd
 +    local magic
 +    exec {fd}< "$fn"
 +    read -n 4 -u $fd magic

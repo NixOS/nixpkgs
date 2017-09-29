@@ -82,14 +82,13 @@ in
       };
 
       resolverName = mkOption {
-        default = "dnscrypt.eu-nl";
+        default = "random";
+        example = "dnscrypt.eu-nl";
         type = types.nullOr types.str;
         description = ''
           The name of the DNSCrypt resolver to use, taken from
-          <filename>${resolverList}</filename>.  The default
-          resolver is located in Holland, supports DNS security
-          extensions, and <emphasis>claims</emphasis> to not
-          keep logs.
+          <filename>${resolverList}</filename>.  The default is to
+          pick a random non-logging resolver that supports DNSSEC.
         '';
       };
 

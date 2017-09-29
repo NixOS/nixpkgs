@@ -2,7 +2,8 @@
 , libasyncns, pkgconfig }:
 
 buildPythonPackage rec {
-  name = "libasyncns-python-${version}";
+  pname = "libasyncns-python";
+  name = "${pname}-${version}";
   version = "0.7.1";
 
   src = fetchurl {

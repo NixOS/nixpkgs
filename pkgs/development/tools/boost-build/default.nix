@@ -1,11 +1,14 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "boost-build-2.0-m12";
+  name = "boost-build-${version}";
+  version = "2016.03";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/boost/${name}.tar.bz2";
-    sha256 = "10sbbkx2752r4i1yshyp47nw29lyi1p34sy6hj7ivvnddiliayca";
+  src = fetchFromGitHub {
+    owner = "boostorg";
+    repo = "build";
+    rev = version;
+    sha256 = "1qw5marmp7z09nwcjlqrmqdg9b6myfqj3zvfz888x9mbidrmhn6p";
   };
 
   hardeningDisable = [ "format" ];
@@ -17,30 +20,17 @@ stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
-    cd jam_src
-    ./build.sh
+    ./bootstrap.sh
   '';
 
   installPhase = ''
-    # Install Bjam
-    mkdir -p $out/bin
-    cd "$(ls | grep bin)"
-    cp -a bjam $out/bin
-
-    # Bjam is B2
-    ln -s bjam $out/bin/b2
-
-    # Install the shared files (don't include jam_src)
-    cd ../..
-    rm -rf jam_src
-    mkdir -p $out/share
-    cp -a . $out/share/boost-build
+    ./b2 install --prefix=$out
   '';
 
   meta = with stdenv.lib; {
     homepage = http://www.boost.org/boost-build2/;
     license = stdenv.lib.licenses.boost;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ wkennington ];
+    maintainers = with maintainers; [ ivan-tkatchev ];
   };
 }

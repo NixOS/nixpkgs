@@ -11,6 +11,8 @@ stdenv.mkDerivation {
 
   postUnpack = "sourceRoot=\${sourceRoot}/wmsm";
 
+  NIX_CFLAGS_COMPILE = "-std=gnu89";
+
   installPhase = ''
     substituteInPlace Makefile --replace "PREFIX	= /usr/X11R6/bin" "" --replace "/usr/bin/install" "install"
     mkdir -pv $out/bin;
@@ -19,7 +21,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "System monitor for Windowmaker";
-    homepage = "http://linux-bsd-unix.strefa.pl";
+    homepage = http://linux-bsd-unix.strefa.pl;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.bstrik ];
   };

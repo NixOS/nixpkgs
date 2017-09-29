@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "silver-searcher-${version}";
-  version = "1.0.2";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "ggreer";
     repo = "the_silver_searcher";
     rev = "${version}";
-    sha256 = "1c504x62yxf4b5k8ixvr97g97nd4kff32flxdjnvxvcrrnany8zx";
+    sha256 = "0wcw4kyivb10m9b173183jrj46a0gisd35yqxi1mr9hw5l5dhkpa";
   };
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";

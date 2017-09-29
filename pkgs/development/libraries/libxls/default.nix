@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Extract Cell Data From Excel xls files";
-    homepage = "http://sourceforge.net/projects/libxls/";
+    homepage = http://sourceforge.net/projects/libxls/;
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];

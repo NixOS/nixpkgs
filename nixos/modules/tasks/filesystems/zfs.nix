@@ -72,7 +72,7 @@ in
           version will have already passed an extensive test suite, but it is
           more likely to hit an undiscovered bug compared to running a released
           version of ZFS on Linux.
-        '';
+          '';
       };
 
       extraPools = mkOption {
@@ -140,6 +140,17 @@ in
           this once.
         '';
       };
+
+      requestEncryptionCredentials = mkOption {
+        type = types.bool;
+        default = config.boot.zfs.enableUnstable;
+        description = ''
+          Request encryption keys or passwords for all encrypted datasets on import.
+
+          Dataset encryption is only supported in zfsUnstable at the moment.
+        '';
+      };
+
     };
 
     services.zfs.autoSnapshot = {
@@ -263,6 +274,10 @@ in
           assertion = !cfgZfs.forceImportAll || cfgZfs.forceImportRoot;
           message = "If you enable boot.zfs.forceImportAll, you must also enable boot.zfs.forceImportRoot";
         }
+        {
+          assertion = cfgZfs.requestEncryptionCredentials -> cfgZfs.enableUnstable;
+          message = "This feature is only available for zfs unstable. Set the NixOS option boot.zfs.enableUnstable.";
+        }
       ];
 
       boot = {
@@ -306,6 +321,9 @@ in
             done
             echo
             if [[ -n "$msg" ]]; then echo "$msg"; fi
+            ${lib.optionalString cfgZfs.requestEncryptionCredentials ''
+              zfs load-key -a
+            ''}
         '') rootPools));
       };
 
@@ -370,7 +388,7 @@ in
       in listToAttrs (map createImportService dataPools ++ map createSyncService allPools) // {
         "zfs-mount" = { after = [ "systemd-modules-load.service" ]; };
         "zfs-share" = { after = [ "systemd-modules-load.service" ]; };
-        "zed" = { after = [ "systemd-modules-load.service" ]; };
+        "zfs-zed" = { after = [ "systemd-modules-load.service" ]; };
       };
 
       systemd.targets."zfs-import" =

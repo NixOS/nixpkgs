@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://sourceforge.net/p/ghdl-updates/wiki/Home/";
+    homepage = http://sourceforge.net/p/ghdl-updates/wiki/Home/;
     description = "Free VHDL simulator";
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; (if flavour == "llvm" then [ "i686-linux" "x86_64-linux" ]

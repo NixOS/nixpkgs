@@ -1,7 +1,8 @@
 { lib, fetchurl, buildPythonPackage, flake8, nose }:
 
 buildPythonPackage rec {
-  name = "flake8-debugger-${version}";
+  pname = "flake8-debugger";
+  name = "${pname}-${version}";
   version = "1.4.0";
   src = fetchurl {
     url = "mirror://pypi/f/flake8-debugger/${name}.tar.gz";

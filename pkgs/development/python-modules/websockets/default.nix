@@ -6,13 +6,13 @@
 
 let
   pname = "websockets";
-  version = "3.2";
+  version = "3.4";
 in buildPythonPackage rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "1dah1faywsnrlqyzagb1qc1cxrq9145srkdy118yhy9s8dyq4dmm";
+    sha256 = "43e5b9f51dd0000a4c6f646e2ade0c886bd14a784ffac08b9e079bd17a63bcc5";
   };
 
   disabled = pythonOlder "3.3";

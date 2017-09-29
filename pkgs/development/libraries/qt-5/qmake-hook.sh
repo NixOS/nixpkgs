@@ -22,11 +22,16 @@ _qtModuleMultioutDevsPre() {
 }
 
 _qtModuleMultioutDevsPost() {
+    local -a findopts=(-name '*.a' -o -name '*.la')
+    if [ -z "@isDarwin@" ]; then
+        findopts+=(-o -name '*.prl')
+    fi
+
     # Move libtool archives and qmake project files to $dev/lib
     if [ "z${!outputLib}" != "z${!outputDev}" ]; then
         pushd "${!outputLib}"
         if [ -d "lib" ]; then
-            find lib \( -name '*.a' -o -name '*.la' -o -name '*.prl' \) -print0 | \
+            find lib \( "${findopts[@]}" \) -print0 | \
                 while read -r -d $'\0' file; do
                     mkdir -p "${!outputDev}/$(dirname "$file")"
                     mv "${!outputLib}/$file" "${!outputDev}/$file"

@@ -1,0 +1,20 @@
+diff --git a/setup.cfg b/setup.cfg
+index 604994d..e38c3ec 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -6,6 +6,7 @@ formats = gztar
+ 
+ [tool:pytest]
+ flakes-ignore = 
++	nix_run_setup.py ALL
+ 	natsort/compat/py23.py UndefinedName
+ 	natsort/__init__.py UnusedImport
+ 	natsort/compat/* UnusedImport
+@@ -14,6 +15,7 @@ flakes-ignore =
+ 	test_natsort/test_locale_help.py UnusedImport RedefinedWhileUnused
+ 	test_natsort/compat/* UnusedImport
+ pep8ignore = 
++	nix_run_setup.py ALL
+ 	natsort/ns_enum.py E126 E241 E123 E221
+ 	test_natsort/test_*.py E501 E241 E221
+ 	test_natsort/test_natsort_keygen.py E501 E241 E221 E701

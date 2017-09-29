@@ -2,14 +2,14 @@
   flex, bison, elfutils, python, pythonPackages, luajit, netperf, iperf }:
 
 stdenv.mkDerivation rec {
-  version = "0.2.0";
+  version = "0.3.0";
   name = "bcc-${version}";
 
   src = fetchFromGitHub {
     owner = "iovisor";
     repo = "bcc";
     rev = "v${version}";
-    sha256 = "1xifh8lcqmn4mk6w4srjf4zk6mlwgck4fpcyhhliy39963ch5k08";
+    sha256 = "19lkqmilfjmj7bnhxlacd0waa5db8gf4lng12fy2zgji0d77vm1d";
   };
 
   buildInputs = [ makeWrapper cmake llvmPackages.llvm llvmPackages.clang-unwrapped kernel
@@ -25,17 +25,19 @@ stdenv.mkDerivation rec {
     mv $out/share/bcc/man $out/share/
 
     for f in $out/share/bcc/tools\/*; do
-      ln -s $f $out/bin/$(basename $f)
-      wrapProgram $f \
-        --prefix LD_LIBRARY_PATH : $out/lib \
-        --prefix PYTHONPATH : $out/lib/python2.7/site-packages \
-        --prefix PYTHONPATH : :${pythonPackages.netaddr}/lib/${python.libPrefix}/site-packages
+      if [ -x $f ]; then
+        ln -s $f $out/bin/$(basename $f)
+        wrapProgram $f \
+          --prefix LD_LIBRARY_PATH : $out/lib \
+          --prefix PYTHONPATH : $out/lib/python2.7/site-packages \
+          --prefix PYTHONPATH : ${pythonPackages.netaddr}/lib/${python.libPrefix}/site-packages
+      fi
     done
   '';
 
   meta = with stdenv.lib; {
     description = "Dynamic Tracing Tools for Linux";
-    homepage = "https://iovisor.github.io/bcc/";
+    homepage = https://iovisor.github.io/bcc/;
     license = licenses.asl20;
     maintainers = with maintainers; [ ragge ];
   };

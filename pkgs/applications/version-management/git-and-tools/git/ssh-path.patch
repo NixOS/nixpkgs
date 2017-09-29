@@ -2,20 +2,20 @@ diff --git a/connect.c b/connect.c
 index fd7ffe1..20cd992 100644
 --- a/connect.c
 +++ b/connect.c
-@@ -768,7 +768,7 @@ struct child_process *git_connect(int fd[2], const char *url,
- 
+@@ -768,7 +768,7 @@
+
  				ssh = getenv("GIT_SSH");
  				if (!ssh)
 -					ssh = "ssh";
 +					ssh = "@ssh@";
- 
- 				ssh_dup = xstrdup(ssh);
- 				base = basename(ssh_dup);
+				else
+					handle_ssh_variant(ssh, 0,
+								&port_option,
 diff --git a/git-gui/lib/remote_add.tcl b/git-gui/lib/remote_add.tcl
 index 50029d0..17b9594 100644
 --- a/git-gui/lib/remote_add.tcl
 +++ b/git-gui/lib/remote_add.tcl
-@@ -139,7 +139,7 @@ method _add {} {
+@@ -139,7 +139,7 @@
  		# Parse the location
  		if { [regexp {(?:git\+)?ssh://([^/]+)(/.+)} $location xx host path]
  		     || [regexp {([^:][^:]+):(.+)} $location xx host path]} {

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     homepage = http://libre.tibirna.org/projects/qgit/wiki/QGit;
     description = "Graphical front-end to Git";
-    maintainer = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg ];
     inherit (qtbase.meta) platforms;
   };
 }

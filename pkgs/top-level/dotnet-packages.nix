@@ -443,7 +443,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "Excel-DNA is an independent project to integrate .NET into Excel";
-      homepage = "http://excel-dna.net/";
+      homepage = "https://excel-dna.net/";
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;

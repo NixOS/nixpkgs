@@ -16,8 +16,8 @@ that we're trying to help2man).
 
  install_preload: install_dirs preload
 -	$(INSTALL_PROGRAM) $(preload).so $(DESTDIR)$(pkglibdir)
-+	$(INSTALL_PROGRAM) lib/cygintl-8.dll $(DESTDIR)$(pkglibdir)
-+	ln -sf cygintl-8.dll $(DESTDIR)$(pkglibdir)/$(preload).so
++	$(INSTALL_PROGRAM) lib/cygintl-9.dll $(DESTDIR)$(pkglibdir)
++	ln -sf cygintl-9.dll $(DESTDIR)$(pkglibdir)/$(preload).so
 
  install_l10n: install_dirs msg_l10n man_l10n info_l10n
         set -e; \
@@ -27,8 +27,8 @@ that we're trying to help2man).
  $(preload).so: $(srcdir)/$(preload).c
 -	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o $@ -fPIC -shared $? $(LIBS)
 +	mkdir -p lib
-+	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o lib/cygintl-8.dll -shared $? $(LIBS)
-+	ln -sf lib/cygintl-8.dll $@
++	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) -o lib/cygintl-9.dll -shared $? $(LIBS)
++	ln -sf lib/cygintl-9.dll $@
 
  man: $(target).1
  $(target).1: $(srcdir)/$(target).PL $(srcdir)/$(target).h2m.PL
@@ -62,7 +62,7 @@ that we're trying to help2man).
          return;
  
 +#ifdef __CYGWIN__
-+    if (!(RTLD_NEXT = dlopen("/usr/bin/cygintl-8.dll", RTLD_LAZY)))
++    if (!(RTLD_NEXT = dlopen("/usr/bin/cygintl-9.dll", RTLD_LAZY)))
 +        die("libintl8 not found");
 +#endif
 +

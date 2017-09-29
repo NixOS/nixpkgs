@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Modern icon theme designed around bold colours and simple geometric shapes";
-    homepage = http://snwh.org/paper;
+    homepage = https://snwh.org/paper;
     license = with licenses; [ cc-by-sa-40 lgpl3 ];
     platforms = platforms.all;
     maintainers = with maintainers; [ romildo ];

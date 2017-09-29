@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Support to authenticate against PostgreSQL for PAM-enabled appliations";
-    homepage = "https://github.com/pam-pgsql/pam-pgsql";
+    homepage = https://github.com/pam-pgsql/pam-pgsql;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

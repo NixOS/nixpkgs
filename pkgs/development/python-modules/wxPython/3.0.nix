@@ -12,6 +12,8 @@
 , isPy3k
 , isPyPy
 , python
+, cairo
+, pango
 }:
 
 assert wxGTK.unicode;
@@ -43,6 +45,15 @@ buildPythonPackage rec {
     # this check is supposed to only return false on older systems running non-framework python
     substituteInPlace src/osx_cocoa/_core_wrap.cpp \
       --replace "return wxPyTestDisplayAvailable();" "return true;"
+  '' + lib.optionalString (!stdenv.isDarwin) ''
+    substituteInPlace wx/lib/wxcairo.py \
+      --replace 'cairoLib = None' 'cairoLib = ctypes.CDLL("${cairo}/lib/libcairo.so")'
+    substituteInPlace wx/lib/wxcairo.py \
+      --replace '_dlls = dict()' '_dlls = {k: ctypes.CDLL(v) for k, v in [
+        ("gdk",        "${wxGTK.gtk}/lib/libgtk-x11-2.0.so"),
+        ("pangocairo", "${pango.out}/lib/libpangocairo-1.0.so"),
+        ("appsvc",     None)
+      ]}'
   '';
 
   NIX_LDFLAGS = lib.optionalString (!stdenv.isDarwin) "-lX11 -lgdk-x11-2.0";

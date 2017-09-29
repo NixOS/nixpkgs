@@ -18,6 +18,10 @@ stdenv.mkDerivation {
       mkfontdir 
       mkfontscale
     '';
+  
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "127zrg65s90ksj99kr9hxny40rbxvpai62mf5nqk853hcd1bzpr6";
 
   meta = {
     description = "A Unicode font";

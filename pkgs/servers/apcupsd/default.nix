@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig utillinux man ] ++ stdenv.lib.optional enableCgiScripts gd;
 
+  prePatch = ''
+    sed -e "s,\$(INSTALL_PROGRAM) \$(STRIP),\$(INSTALL_PROGRAM)," \
+        -i ./src/apcagent/Makefile ./autoconf/targets.mak
+  '';
+
   # ./configure ignores --prefix, so we must specify some paths manually
   # There is no real reason for a bin/sbin split, so just use bin.
   preConfigure = ''

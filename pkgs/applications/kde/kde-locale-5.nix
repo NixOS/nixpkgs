@@ -1,8 +1,8 @@
 name: args:
 
-{ kdeApp, cmake, extra-cmake-modules, gettext, kdoctools }:
+{ mkDerivation, cmake, extra-cmake-modules, gettext, kdoctools }:
 
-kdeApp (args // {
+mkDerivation (args // {
   sname = "kde-l10n-${name}";
   name = "kde-l10n-${name}-qt5";
 

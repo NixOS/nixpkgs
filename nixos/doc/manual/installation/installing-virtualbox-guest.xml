@@ -37,15 +37,7 @@
 </orderedlist>
 
 <para>
-  There are a few modifications you should make in configuration.nix. Enable
-  the virtualbox guest service in the main block:
-</para>
-
-<programlisting>
-virtualisation.virtualbox.guest.enable = true;
-</programlisting>
-
-<para>
+  There are a few modifications you should make in configuration.nix.
   Enable booting:
 </para>
 

@@ -9,6 +9,7 @@
 , pulseSupport ? false, libpulseaudio ? null
 , enableHardening ? false
 , headless ? false
+, enable32bitGuests ? true
 , patchelfUnstable # needed until 0.10 is released
 }:
 
@@ -17,11 +18,11 @@ with stdenv.lib;
 let
   python = python2;
   buildType = "release";
-
-  extpack = "996f783996a597d3936fc5f1ccf56edd31ae1f8fb4d527009647d9a2c8c853cd";
-  extpackRev = "114002";
-  main = "7ed0959bbbd02826b86b3d5dc8348931ddfab267c31f8ed36ee53c12f5522cd9";
-  version = "5.1.18";
+  # Manually sha256sum the extensionPack file, must be hex!
+  extpack = "14f152228495a715f526eb74134d43c960919cc534d2bc67cfe34a63e6cf7721";
+  extpackRev = "117224";
+  main = "1af8h3d3sdpcxcp5g75qfq10z81l7m8gk0sz8zqix8c1wqsm0wdm";
+  version = "5.1.26";
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
   extensionPack = requireFile rec {
@@ -58,7 +59,7 @@ in stdenv.mkDerivation {
     ++ optional pythonBindings python # Python is needed even when not building bindings
     ++ optional pulseSupport libpulseaudio
     ++ optionals (headless) [ libXrandr ]
-    ++ optionals (!headless) [ qt5.qtbase qt5.qtx11extras qt5.makeQtWrapper libXinerama SDL ];
+    ++ optionals (!headless) [ qt5.qtbase qt5.qtx11extras libXinerama SDL ];
 
   hardeningDisable = [ "fortify" "pic" "stackprotector" ];
 
@@ -129,6 +130,7 @@ in stdenv.mkDerivation {
       ${optionalString (!pythonBindings) "--disable-python"} \
       ${optionalString (!pulseSupport) "--disable-pulse"} \
       ${optionalString (!enableHardening) "--disable-hardening"} \
+      ${optionalString (!enable32bitGuests) "--disable-vmmraw"} \
       --disable-kmods --with-mkisofs=${xorriso}/bin/xorrisofs
     sed -e 's@PKG_CONFIG_PATH=.*@PKG_CONFIG_PATH=${libIDL}/lib/pkgconfig:${glib.dev}/lib/pkgconfig ${libIDL}/bin/libIDL-config-2@' \
         -i AutoConfig.kmk
@@ -153,12 +155,8 @@ in stdenv.mkDerivation {
     find out/linux.*/${buildType}/bin -mindepth 1 -maxdepth 1 \
       -name src -o -exec cp -avt "$libexec" {} +
 
-    # Create wrapper script
     mkdir -p $out/bin
-    ${optionalString (!headless) ''
-      makeQtWrapper "$libexec/VirtualBox" $out/bin/VirtualBox
-    ''}
-    for file in ${optionalString (!headless) "VBoxSDL rdesktop-vrdp"} VBoxManage VBoxBalloonCtrl VBoxHeadless; do
+    for file in ${optionalString (!headless) "VirtualBox VBoxSDL rdesktop-vrdp"} VBoxManage VBoxBalloonCtrl VBoxHeadless; do
         echo "Linking $file to /bin"
         test -x "$libexec/$file"
         ln -s "$libexec/$file" $out/bin/$file

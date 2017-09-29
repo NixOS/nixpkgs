@@ -15,11 +15,7 @@ stdenv.mkDerivation {
     sed -i -e "s,/sbin/,$out/sbin/," src/halt.c src/init.c src/paths.h
   '';
 
-  makeFlags = "SULOGINLIBS=-lcrypt ROOT=$(out) MANDIR=/share/man";
-
-  crossAttrs = {
-    makeFlags = "SULOGINLIBS=-lcrypt ROOT=$(out) MANDIR=/share/man CC=${stdenv.cross.config}-gcc";
-  };
+  makeFlags = [ "SULOGINLIBS=-lcrypt" "ROOT=$(out)" "MANDIR=/share/man" ];
 
   preInstall =
     ''

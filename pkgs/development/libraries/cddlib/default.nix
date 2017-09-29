@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = "https://www.inf.ethz.ch/personal/fukudak/cdd_home/index.html";
+    homepage = https://www.inf.ethz.ch/personal/fukudak/cdd_home/index.html;
   };
 }

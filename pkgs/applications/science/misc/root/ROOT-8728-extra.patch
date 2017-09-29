@@ -1,0 +1,175 @@
+diff --git a/core/metacling/src/TCling.cxx b/core/metacling/src/TCling.cxx
+index d71cb74..076facb 100644
+--- a/core/metacling/src/TCling.cxx
++++ b/core/metacling/src/TCling.cxx
+@@ -756,7 +756,7 @@ int TCling_GenerateDictionary(const std::vector<std::string> &classes,
+                gSystem->PrependPathName(dirbase, header);
+                dir = gSystem->DirName(dir);
+             }
+-            fileContent += TString("#include \"") + header + "\"\n";
++            fileContent += (TString("#include \"") + header + "\"\n").Data();
+          }
+       }
+       for (it = fwdDecls.begin(); it != fwdDecls.end(); ++it) {
+@@ -1061,7 +1061,7 @@ TCling::TCling(const char *name, const char *title)
+       ROOT::TMetaUtils::SetPathsForRelocatability(clingArgsStorage);
+ 
+       // Add -I early so ASTReader can find the headers.
+-      std::string interpInclude(TROOT::GetEtcDir());
++      std::string interpInclude(TROOT::GetEtcDir().Data());
+       clingArgsStorage.push_back("-I" + interpInclude);
+ 
+       // Add include path to etc/cling. FIXME: This is a short term solution. The
+@@ -1070,7 +1070,7 @@ TCling::TCling(const char *name, const char *title)
+       clingArgsStorage.push_back("-I" + interpInclude + "/cling");
+ 
+       // Add the root include directory and etc/ to list searched by default.
+-      clingArgsStorage.push_back(std::string("-I" + TROOT::GetIncludeDir()));
++      clingArgsStorage.push_back(std::string(("-I" + TROOT::GetIncludeDir()).Data()));
+ 
+       // Add the current path to the include path
+       // TCling::AddIncludePath(".");
+diff --git a/hist/hist/src/TFormula.cxx b/hist/hist/src/TFormula.cxx
+index abf3929..e7dad98 100644
+--- a/hist/hist/src/TFormula.cxx
++++ b/hist/hist/src/TFormula.cxx
+@@ -1677,7 +1677,7 @@ void TFormula::ProcessFormula(TString &formula)
+          if(fun.fName.Contains("::")) // add support for nested namespaces
+          {
+             // look for last occurence of "::"
+-            std::string name(fun.fName);
++            std::string name(fun.fName.Data());
+             size_t index = name.rfind("::");
+             assert(index != std::string::npos);
+             TString className = fun.fName(0,fun.fName(0,index).Length());
+@@ -1869,7 +1869,7 @@ void TFormula::ProcessFormula(TString &formula)
+ 
+          // save copy of inputFormula in a std::strig for the unordered map
+          // and also formula is same as FClingInput typically and it will be modified
+-         std::string inputFormula = std::string(formula);
++         std::string inputFormula = std::string(formula.Data());
+ 
+ 
+          // valid input formula - try to put into Cling
+diff --git a/main/src/nbmain.cxx b/main/src/nbmain.cxx
+index 55d4f2f..8490149 100644
+--- a/main/src/nbmain.cxx
++++ b/main/src/nbmain.cxx
+@@ -173,9 +173,9 @@ static bool CreateStamp(string dest)
+ 
+ int main()
+ {
+-   string rootbin(TROOT::GetBinDir());
+-   string rootlib(TROOT::GetLibDir());
+-   string rootetc(TROOT::GetEtcDir());
++   string rootbin(TROOT::GetBinDir().Data());
++   string rootlib(TROOT::GetLibDir().Data());
++   string rootetc(TROOT::GetEtcDir().Data());
+ 
+    // If needed, install ROOT notebook files in the user's home directory
+ #ifdef WIN32
+diff --git a/math/minuit/src/TMinuitMinimizer.cxx b/math/minuit/src/TMinuitMinimizer.cxx
+index 4e2082a..18215c0 100644
+--- a/math/minuit/src/TMinuitMinimizer.cxx
++++ b/math/minuit/src/TMinuitMinimizer.cxx
+@@ -454,7 +454,7 @@ std::string TMinuitMinimizer::VariableName(unsigned int ivar) const {
+    // return the variable name
+    if (!CheckMinuitInstance()) return std::string();
+    if (!CheckVarIndex(ivar)) return std::string();
+-   return std::string(fMinuit->fCpnam[ivar]);
++   return std::string(fMinuit->fCpnam[ivar].Data());
+ }
+ 
+ int TMinuitMinimizer::VariableIndex(const std::string & ) const {
+diff --git a/tmva/tmva/src/Factory.cxx b/tmva/tmva/src/Factory.cxx
+index 36060ef..a1bbe34 100644
+--- a/tmva/tmva/src/Factory.cxx
++++ b/tmva/tmva/src/Factory.cxx
+@@ -390,7 +390,7 @@ TMVA::MethodBase* TMVA::Factory::BookMethod( TMVA::DataLoader *loader, TString t
+    // initialize methods
+    IMethod* im;
+    if (!boostNum) {
+-      im = ClassifierFactory::Instance().Create( std::string(theMethodName),
++      im = ClassifierFactory::Instance().Create( std::string(theMethodName.Data()),
+                                                  fJobName,
+                                                  methodTitle,
+                                                  loader->DefaultDataSetInfo(),
+@@ -933,7 +933,7 @@ void TMVA::Factory::TrainAllMethods()
+ 
+        // recreate
+        m = dynamic_cast<MethodBase*>( ClassifierFactory::Instance()
+-                   .Create( std::string(Types::Instance().GetMethodName(methodType)),
++                   .Create( std::string(Types::Instance().GetMethodName(methodType).Data()),
+                       dataSetInfo, weightfile ) );
+        if( m->GetMethodType() == Types::kCategory ){
+       MethodCategory *methCat = (dynamic_cast<MethodCategory*>(m));
+diff --git a/tmva/tmva/src/MethodBoost.cxx b/tmva/tmva/src/MethodBoost.cxx
+index 1349e5d..2125ab3 100644
+--- a/tmva/tmva/src/MethodBoost.cxx
++++ b/tmva/tmva/src/MethodBoost.cxx
+@@ -389,7 +389,7 @@ void TMVA::MethodBoost::Train()
+       // the first classifier shows the option string output, the rest not
+       if (fCurrentMethodIdx>0) TMVA::MsgLogger::InhibitOutput();
+ 
+-      IMethod* method = ClassifierFactory::Instance().Create(std::string(fBoostedMethodName),
++      IMethod* method = ClassifierFactory::Instance().Create(std::string(fBoostedMethodName.Data()),
+                                                              GetJobName(),
+                                                              Form("%s_B%04i", fBoostedMethodTitle.Data(),fCurrentMethodIdx),
+                                                              DataInfo(),
+diff --git a/tmva/tmva/src/MethodCategory.cxx b/tmva/tmva/src/MethodCategory.cxx
+index c2cbe80..d278cca 100644
+--- a/tmva/tmva/src/MethodCategory.cxx
++++ b/tmva/tmva/src/MethodCategory.cxx
+@@ -147,7 +147,7 @@ TMVA::IMethod* TMVA::MethodCategory::AddMethod( const TCut& theCut,
+                                                 const TString& theTitle,
+                                                 const TString& theOptions )
+ {
+-   std::string addedMethodName = std::string(Types::Instance().GetMethodName(theMethod));
++   std::string addedMethodName = std::string(Types::Instance().GetMethodName(theMethod).Data());
+ 
+    Log() << kINFO << "Adding sub-classifier: " << addedMethodName << "::" << theTitle << Endl;
+ 
+diff --git a/tmva/tmva/src/MethodCompositeBase.cxx b/tmva/tmva/src/MethodCompositeBase.cxx
+index 98fa5da..96bd9a3 100644
+--- a/tmva/tmva/src/MethodCompositeBase.cxx
++++ b/tmva/tmva/src/MethodCompositeBase.cxx
+@@ -194,7 +194,7 @@ void TMVA::MethodCompositeBase::ReadWeightsFromXML( void* wghtnode )
+          ((TMVA::MethodBoost*)this)->BookMethod( Types::Instance().GetMethodType( methodTypeName), methodName,  optionString );
+       }
+       fMethods.push_back(ClassifierFactory::Instance().Create(
+-                                                              std::string(methodTypeName),jobName, methodName,DataInfo(),optionString));
++                                                              std::string(methodTypeName.Data()),jobName, methodName,DataInfo(),optionString));
+ 
+       fMethodWeight.push_back(methodWeight);
+       MethodBase* meth = dynamic_cast<MethodBase*>(fMethods.back());
+@@ -259,7 +259,7 @@ void  TMVA::MethodCompositeBase::ReadWeightsFromStream( std::istream& istr )
+             ((TMVA::MethodBoost*)this)->BookMethod( Types::Instance().GetMethodType( methodName), methodTitle,  optionString );
+       }
+       else methodTitle=Form("%s (%04i)",GetMethodName().Data(),fCurrentMethodIdx);
+-      fMethods.push_back(ClassifierFactory::Instance().Create( std::string(methodName), jobName,
++      fMethods.push_back(ClassifierFactory::Instance().Create( std::string(methodName.Data()), jobName,
+                                                                methodTitle,DataInfo(), optionString) );
+       fMethodWeight.push_back( methodWeight );
+       if(MethodBase* m = dynamic_cast<MethodBase*>(fMethods.back()) )
+diff --git a/tmva/tmva/src/Reader.cxx b/tmva/tmva/src/Reader.cxx
+index 94a8b28..0b67867 100644
+--- a/tmva/tmva/src/Reader.cxx
++++ b/tmva/tmva/src/Reader.cxx
+@@ -401,7 +401,7 @@ TMVA::IMethod* TMVA::Reader::BookMVA( const TString& methodTag, const TString& w
+ 
+ TMVA::IMethod* TMVA::Reader::BookMVA( TMVA::Types::EMVA methodType, const TString& weightfile )
+ {
+-   IMethod* im = ClassifierFactory::Instance().Create(std::string(Types::Instance().GetMethodName( methodType )),
++   IMethod* im = ClassifierFactory::Instance().Create(std::string(Types::Instance().GetMethodName( methodType ).Data()),
+                                                       DataInfo(), weightfile );
+ 
+    MethodBase *method = (dynamic_cast<MethodBase*>(im));
+@@ -440,7 +440,7 @@ TMVA::IMethod* TMVA::Reader::BookMVA( TMVA::Types::EMVA methodType, const char*
+ #if ROOT_VERSION_CODE >= ROOT_VERSION(5,26,00)
+ 
+    // books MVA method from weightfile
+-   IMethod* im = ClassifierFactory::Instance().Create(std::string(Types::Instance().GetMethodName( methodType )),
++   IMethod* im = ClassifierFactory::Instance().Create(std::string(Types::Instance().GetMethodName( methodType ).Data()),
+                                                       DataInfo(), "" );
+ 
+    MethodBase *method = (dynamic_cast<MethodBase*>(im));

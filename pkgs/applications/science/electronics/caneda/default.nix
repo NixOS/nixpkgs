@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ cmake qt4 libxml2 libxslt ];
 
+  patches = [
+    ./gcc6.patch
+  ];
+
   postInstall = ''
     mkdir $out/share/caneda/components
     cp -R ${srcComponents}/* $out/share/caneda/components
@@ -31,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Open source EDA software focused on easy of use and portability";
-    homepage = http://caneda.tuxfamily.org;
+    homepage = http://caneda.org;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;

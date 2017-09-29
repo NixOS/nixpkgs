@@ -47,6 +47,7 @@ static void init()
 
 static const char * rewrite(const char * path, char * buf)
 {
+    if (path == NULL) return path;
     for (int n = 0; n < nrRedirects; ++n) {
         int len = strlen(from[n]);
         if (strncmp(path, from[n], len) != 0) continue;

@@ -5,12 +5,19 @@
 
 stdenv.mkDerivation rec {
   name = "rethinkdb-${version}";
-  version = "2.3.5";
+  version = "2.3.6";
 
   src = fetchurl {
     url = "https://download.rethinkdb.com/dist/${name}.tgz";
-    sha256 = "047fz3r0rn95mqr5p1xfdprf0hq4avq2a1q8zsdifxxid7hyx2nx";
+    sha256 = "0a6wlgqa2flf87jrp4fq4y9aihwyhgwclmss56z03b8hd5k5j8f4";
   };
+
+  patches = [
+    (fetchurl {
+        url = "https://github.com/rethinkdb/rethinkdb/commit/871bd3705a1f29c4ab07a096d562a4b06231a97c.patch";
+        sha256 = "05nagixlwnq3x7441fhll5vs70pxppbsciw8qjqp660bdb5m4jm1";
+    })
+  ];
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' external/v8_3.30.33.16/build/gyp/pylib/gyp/xcode_emulation.py

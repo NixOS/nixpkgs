@@ -233,6 +233,7 @@ in
           hydra_logo ${cfg.logo}
         ''}
         gc_roots_dir ${cfg.gcRootsDir}
+        use-substitutes = ${if cfg.useSubstitutes then "1" else "0"}
       '';
 
     environment.systemPackages = [ cfg.package ];
@@ -269,8 +270,8 @@ in
 
           ${optionalString haveLocalDB ''
             if ! [ -e ${baseDir}/.db-created ]; then
-              ${config.services.postgresql.package}/bin/createuser hydra
-              ${config.services.postgresql.package}/bin/createdb -O hydra hydra
+              ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createuser hydra
+              ${pkgs.sudo}/bin/sudo -u ${config.services.postgresql.superUser} ${config.services.postgresql.package}/bin/createdb -O hydra hydra
               touch ${baseDir}/.db-created
             fi
           ''}
@@ -307,6 +308,7 @@ in
         requires = [ "hydra-init.service" ];
         after = [ "hydra-init.service" ];
         environment = serverEnv;
+        restartTriggers = [ hydraConf ];
         serviceConfig =
           { ExecStart =
               "@${cfg.package}/bin/hydra-server hydra-server -f -h '${cfg.listenHost}' "
@@ -323,6 +325,7 @@ in
         requires = [ "hydra-init.service" ];
         after = [ "hydra-init.service" "network.target" ];
         path = [ cfg.package pkgs.nettools pkgs.openssh pkgs.bzip2 config.nix.package ];
+        restartTriggers = [ hydraConf ];
         environment = env // {
           PGPASSFILE = "${baseDir}/pgpass-queue-runner"; # grrr
           IN_SYSTEMD = "1"; # to get log severity levels
@@ -343,7 +346,8 @@ in
       { wantedBy = [ "multi-user.target" ];
         requires = [ "hydra-init.service" ];
         after = [ "hydra-init.service" "network.target" ];
-        path = [ cfg.package pkgs.nettools ];
+        path = with pkgs; [ cfg.package nettools jq ];
+        restartTriggers = [ hydraConf ];
         environment = env;
         serviceConfig =
           { ExecStart = "@${cfg.package}/bin/hydra-evaluator hydra-evaluator";

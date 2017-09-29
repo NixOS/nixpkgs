@@ -36,7 +36,7 @@ stdenv.mkDerivation (rec {
     description = "Bidirectional file synchronizer";
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; unix;
   };
 
 })

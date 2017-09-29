@@ -1,12 +1,24 @@
-{ lib, python3Packages, fetchurl }:
-python3Packages.buildPythonPackage rec {
-  version = "0.35.0";
-  name = "meson-${version}";
+{ lib, python3Packages }:
+python3Packages.buildPythonApplication rec {
+  version = "0.42.1";
+  pname = "meson";
+  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/m/meson/${name}.tar.gz";
-    sha256 = "0w4vian55cwcv2m5qzn73aznf9a0y24cszqb7dkpahrb9yrg25l3";
+  src = python3Packages.fetchPypi {
+    inherit pname version;
+    sha256 = "1phf1xpwm8m85qiiirkqhrf5aigx7ajaw0l59d6lzadf1fmgfx5v";
   };
+
+  postFixup = ''
+    pushd $out/bin
+    # undo shell wrapper as meson tools are called with python
+    for i in *; do
+      mv ".$i-wrapped" "$i"
+    done
+    popd
+  '';
+
+  setupHook = ./setup-hook.sh;
 
   meta = with lib; {
     homepage = http://mesonbuild.com;

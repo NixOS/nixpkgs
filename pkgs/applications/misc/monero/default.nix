@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, boost, miniupnpc, openssl, pkgconfig, unbound }:
 
 let
-  version = "0.10.2.1";
+  version = "0.11.0.0";
 in
 stdenv.mkDerivation {
   name = "monero-${version}";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     owner = "monero-project";
     repo = "monero";
     rev = "v${version}";
-    sha256 = "0jr57lih3smdg4abglfyfhxp69akiyqy889gcpdplwl05vfnhand";
+    sha256 = "041xxk9gznfpgn8f07m7sddr74cwm1sdyf9i85k10ndja87xc6y4";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -30,7 +30,6 @@ stdenv.mkDerivation {
         bin/monerod \
         bin/monero-blockchain-export \
         bin/monero-blockchain-import \
-        bin/monero-utils-deserialize \
         bin/monero-wallet-cli \
         bin/monero-wallet-rpc
   '';

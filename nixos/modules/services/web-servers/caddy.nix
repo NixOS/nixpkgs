@@ -5,12 +5,22 @@ with lib;
 let
   cfg = config.services.caddy;
   configFile = pkgs.writeText "Caddyfile" cfg.config;
-in
-{
+in {
   options.services.caddy = {
     enable = mkEnableOption "Caddy web server";
 
     config = mkOption {
+      default = "";
+      example = ''
+        example.com {
+        gzip
+        minify
+        log syslog
+
+        root /srv/http
+        }
+      '';
+      type = types.lines;
       description = "Verbatim Caddyfile to use";
     };
 
@@ -36,7 +46,11 @@ in
     dataDir = mkOption {
       default = "/var/lib/caddy";
       type = types.path;
-      description = "The data directory, for storing certificates.";
+      description = ''
+        The data directory, for storing certificates. Before 17.09, this
+        would create a .caddy directory. With 17.09 the contents of the
+        .caddy directory are in the specified data directory instead.
+      '';
     };
 
     package = mkOption {
@@ -50,17 +64,32 @@ in
   config = mkIf cfg.enable {
     systemd.services.caddy = {
       description = "Caddy web server";
-      after = [ "network.target" ];
+      after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
+      environment = mkIf (versionAtLeast config.system.stateVersion "17.09")
+        { CADDYPATH = cfg.dataDir; };
       serviceConfig = {
-        ExecStart = ''${cfg.package.bin}/bin/caddy -conf=${configFile} \
-          -ca=${cfg.ca} -email=${cfg.email} ${optionalString cfg.agree "-agree"}
+        ExecStart = ''
+          ${cfg.package.bin}/bin/caddy -root=/var/tmp -conf=${configFile} \
+            -ca=${cfg.ca} -email=${cfg.email} ${optionalString cfg.agree "-agree"}
         '';
+        ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Type = "simple";
         User = "caddy";
         Group = "caddy";
+        Restart = "on-failure";
+        StartLimitInterval = 86400;
+        StartLimitBurst = 5;
         AmbientCapabilities = "cap_net_bind_service";
-        LimitNOFILE = 8192;
+        CapabilityBoundingSet = "cap_net_bind_service";
+        NoNewPrivileges = true;
+        LimitNPROC = 64;
+        LimitNOFILE = 1048576;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectHome = true;
+        ProtectSystem = "full";
+        ReadWriteDirectories = cfg.dataDir;
       };
     };
 

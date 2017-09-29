@@ -2,7 +2,7 @@
 
 let
   inherit (stdenv) system;
-  version = "21a";
+  version = "21b";
   downloadUrl = arch:
     "http://common-lisp.net/project/cmucl/downloads/release/" +
     "${version}/cmucl-${version}-${arch}.tar.bz2";
@@ -13,7 +13,7 @@ let
   dist =
     if system == "i686-linux" then fetchDist {
         arch = "x86-linux";
-        sha256 = "0w8dcaiasfd4fbj340zaf6wcjfgc4wzkvr24gbxa5rr3aw10rl02";
+        sha256 = "13k3b5ygnbsq6n2i3r5i4ljw3r1qlskn2p5f4x9hrx6vfvbb3k7a";
       }
     else throw "Unsupported platform for cmucl.";
 in

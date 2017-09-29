@@ -1,4 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ stdenv, fetchFromGitHub, cmake
+, hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   name = "nlohmann_json-${version}";
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
   crossAttrs = {
     cmakeFlags = "-DBuildTests=OFF";
     doCheck = false;
-  } // stdenv.lib.optionalAttrs (stdenv.cross.libc == "msvcrt") {
+  } // stdenv.lib.optionalAttrs (hostPlatform.libc == "msvcrt") {
     cmakeFlags = "-DBuildTests=OFF -DCMAKE_SYSTEM_NAME=Windows";
   };
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, texinfo, libXext, xextproto, libX11, xproto
+{ stdenv, fetchFromGitHub, texinfo, libXext, xextproto, libX11, xproto
 , libXpm, libXt, libXcursor, alsaLib, cmake, zlib, libpng, libvorbis
 , libXxf86dga, libXxf86misc, xf86dgaproto, xf86miscproto
 , xf86vidmodeproto, libXxf86vm, openal, mesa, kbproto, libjpeg, flac
@@ -9,11 +9,13 @@
 
 stdenv.mkDerivation rec {
   name = "allegro-${version}";
-  version = "5.2.1.1";
+  version = "5.2.2.0";
 
-  src = fetchurl {
-    url = "http://download.gna.org/allegro/allegro/${version}/${name}.tar.gz";
-    sha256 = "0waalic7lyaf6i33nikmkc29bndci5c5090c4ra2vmy67cqdzndm";
+  src = fetchFromGitHub {
+    owner = "liballeg";
+    repo = "allegro5";
+    rev = version;
+    sha256 = "1sf0dr0ahrzsy6gzzpvys9d7d9w0grayhak4cyymjv7w857hf51m";
   };
 
   buildInputs = [

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "emby-${version}";
-  version = "3.2.12";
+  version = "3.2.32.0";
 
   src = fetchurl {
     url = "https://github.com/MediaBrowser/Emby/releases/download/${version}/Emby.Mono.zip";
-    sha256 = "0vbb7ax3100djz6zl8vji04a1x3r9vrrgkar605sc2w9n1j1msp2";
+    sha256 = "0bwcqwh9g8yrkh1schfr30jf5m2w3r2raczq5x94vjfs8i6dmqh0";
   };
 
   buildInputs = with pkgs; [
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "MediaBrowser - Bring together your videos, music, photos, and live television";
-    homepage = http://emby.media/;
+    homepage = https://emby.media/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.fadenb ];
     platforms = stdenv.lib.platforms.all;

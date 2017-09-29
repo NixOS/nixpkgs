@@ -149,7 +149,7 @@ in
           --group fcron \
           --directory /var/spool/fcron
         # load system crontab file
-        #${pkgs.fcron}/bin/fcrontab -u systab ${pkgs.writeText "systab" cfg.systab}
+        /run/wrappers/bin/fcrontab -u systab ${pkgs.writeText "systab" cfg.systab}
       '';
 
       serviceConfig = {

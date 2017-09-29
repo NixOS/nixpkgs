@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
 
   meta = {
-    homepage = "http://ocaml-text.forge.ocamlcore.org/";
+    homepage = http://ocaml-text.forge.ocamlcore.org/;
     description = "A library for convenient text manipulation";
     license = stdenv.lib.licenses.bsd3;
     platforms = ocaml.meta.platforms or [];

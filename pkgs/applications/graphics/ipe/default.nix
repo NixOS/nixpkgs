@@ -1,6 +1,5 @@
-{ stdenv, fetchurl, pkgconfig, zlib, freetype, cairo, lua5, texlive, ghostscript
+{ stdenv, fetchurl, makeWrapper, pkgconfig, zlib, freetype, cairo, lua5, texlive, ghostscript
 , libjpeg, qtbase
-, makeQtWrapper
 }:
 
 stdenv.mkDerivation rec {
@@ -28,14 +27,14 @@ stdenv.mkDerivation rec {
   LUA_PACKAGE = "lua";
 
   buildInputs = [
-    libjpeg pkgconfig zlib qtbase freetype cairo lua5 texlive ghostscript
+    libjpeg zlib qtbase freetype cairo lua5 texlive ghostscript
   ];
 
-  nativeBuildInputs = [ makeQtWrapper ];
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
 
   postFixup = ''
     for prog in $out/bin/*; do
-      wrapQtProgram "$prog" --prefix PATH : "${texlive}/bin"
+      wrapProgram "$prog" --prefix PATH : "${texlive}/bin"
     done
   '';
 

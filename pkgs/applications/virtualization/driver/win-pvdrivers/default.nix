@@ -22,7 +22,7 @@ stdenv.mkDerivation  {
 
   meta = with stdenv.lib; {
     description = "Xen Subproject: Windows PV Driver";
-    homepage = "http://xenproject.org/downloads/windows-pv-drivers.html";
+    homepage = http://xenproject.org/downloads/windows-pv-drivers.html;
     maintainers = [ maintainers.tstrobel ];
     platforms = platforms.linux;
     license = licenses.bsd3;

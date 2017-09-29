@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "apitrace-${version}";
-  version = "7.1";
+  version = "7.1-363-ge3509be1";
 
   src = fetchFromGitHub {
-    sha256 = "1n2gmsjnpyam7isg7n1ksggyh6y1l8drvx0a93bnvbcskr7jiz9a";
-    rev = version;
+    sha256 = "1xbz6gwl7kqjm7jjy5gxkdxzrg93vj1a3l19ara7rni6dii0q136";
+    rev = "e3509be175eda77749abffe051ed0d3eb5d14e72";
     repo = "apitrace";
     owner = "apitrace";
   };

@@ -8,10 +8,10 @@ bootPkgs.callPackage ./base.nix {
   ghcjsSrc = fetchFromGitHub {
     # TODO: switch back to the regular ghcjs repo
     # when https://github.com/ghcjs/ghcjs/pull/573 is merged.
-    owner = "basvandijk";
+    owner = "k0001";
     repo = "ghcjs";
-    rev = "e6cdc71964a1c2e4184416a493e9d384c408914c";
-    sha256 = "00fk9qwyx4vpvr0h9jbqxwlrvl6w63l5sq8r357prsp6xyv5zniz";
+    rev = "600015e085a28da601b65a41c513d4a458fcd184";
+    sha256 = "01kirrg0fnfwhllvwgfqjiwzwj4yv4lyig87x61n9jp6y5shzjdx";
   };
   ghcjsBootSrc = fetchgit {
     # TODO: switch back to git://github.com/ghcjs/ghcjs-boot.git

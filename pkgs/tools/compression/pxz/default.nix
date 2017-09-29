@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "https://jnovy.fedorapeople.org/pxz/";
+    homepage = https://jnovy.fedorapeople.org/pxz/;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [pashev];
     description = ''Parallel XZ is a compression utility that takes advantage of

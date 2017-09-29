@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     sed -i -e "s|/usr/bin/lynx|${lynx}/bin/lynx|g" $out/etc/jwhois.conf
   '';
 
-  patches = [ ./connect.patch ];
+  patches = [ ./connect.patch ./service-name.patch ];
 
   meta = {
     description = "A client for the WHOIS protocol allowing you to query the owner of a domain name";

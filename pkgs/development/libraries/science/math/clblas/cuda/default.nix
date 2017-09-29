@@ -5,6 +5,7 @@
 , blas
 , boost
 , python
+, ocl-icd
 , cudatoolkit
 , nvidia_x11
 , gtest
@@ -51,6 +52,7 @@ stdenv.mkDerivation rec {
     gfortran
     blas
     python
+    ocl-icd
     cudatoolkit
     nvidia_x11
     gtest

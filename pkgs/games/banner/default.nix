@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "banner-1.3.3";
+  name = "banner-1.3.4";
 
   src = fetchurl {
     url = "http://software.cedar-solutions.com/ftp/software/${name}.tar.gz";
-    sha256 = "1njbgba0gzvrmdkvfjgrnvj0i80yi8k7mpkgyxaj07bmv9kc3h5v";
+    sha256 = "04q5ribr0r9s8waky3nk356l0qdhfxw15ipz7lsfgv1fxq3qk6bz";
   };
 
   meta = with stdenv.lib; {

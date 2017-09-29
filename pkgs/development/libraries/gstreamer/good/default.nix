@@ -4,6 +4,7 @@
 , libvpx, speex, flac, taglib, libshout
 , cairo, gdk_pixbuf, aalib, libcaca
 , libsoup, libpulseaudio, libintlOrEmpty
+, darwin
 }:
 
 let
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
       code, LGPL or LGPL-compatible for the supporting library).
     '';
     license     = licenses.lgpl2Plus;
-    platforms   = platforms.linux;
+    platforms   = platforms.linux ++ platforms.darwin;
   };
 
   src = fetchurl {
@@ -40,6 +41,7 @@ stdenv.mkDerivation rec {
     libsoup libshout
   ]
   ++ libintlOrEmpty
+  ++ optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Cocoa ]
   ++ optionals stdenv.isLinux [ libv4l libpulseaudio libavc1394 libiec61883 ];
 
   preFixup = ''

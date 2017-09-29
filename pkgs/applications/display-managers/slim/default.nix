@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
       # Ensure that sessions appear in sort order, rather than in
       # directory order.
       ./sort-sessions.patch
+
+      # Allow to set logfile to a special "/dev/stderr" in order to continue
+      # logging to stderr and thus to the journal.
+      ./no-logfile.patch
     ];
 
   preConfigure = "substituteInPlace CMakeLists.txt --replace /lib $out/lib";

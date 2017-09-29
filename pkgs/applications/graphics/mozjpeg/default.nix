@@ -1,12 +1,12 @@
 { stdenv, fetchurl, file, pkgconfig, libpng, nasm }:
 
 stdenv.mkDerivation rec {
-  version = "3.1";
+  version = "3.2";
   name = "mozjpeg-${version}";
 
   src = fetchurl {
     url = "https://github.com/mozilla/mozjpeg/releases/download/v${version}/mozjpeg-${version}-release-source.tar.gz";
-    sha256 = "07vs0xq9di7bv3y68daig8dvxvjqrn8a5na702gj3nn58a1xivfy";
+    sha256 = "0wvv5qh1jasz8apq93c3j9d5wd22j7lld9dr06p76yj4mpnc3v4a";
   };
 
   postPatch = ''

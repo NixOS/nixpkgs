@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = http://www.darlinghq.org/;
-    description = "Darling lets you open OS X dmgs on Linux";
+    description = "Darling lets you open macOS dmgs on Linux";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl3;
   };

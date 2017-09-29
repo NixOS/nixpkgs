@@ -13,8 +13,10 @@ let
     INSERT INTO sth (id) VALUES (1);
     INSERT INTO sth (id) VALUES (1);
     INSERT INTO sth (id) VALUES (1);
+    CREATE TABLE xmltest ( doc xml );
+    INSERT INTO xmltest (doc) VALUES ('<test>ok</test>'); -- check if libxml2 enabled
   '';
-  make-postgresql-test = postgresql-name: postgresql-package: {
+  make-postgresql-test = postgresql-name: postgresql-package: makeTest {
     name = postgresql-name;
     meta = with pkgs.stdenv.lib.maintainers; {
       maintainers = [ zagy ];
@@ -27,17 +29,23 @@ let
       };
 
     testScript = ''
+      sub check_count {
+        my ($select, $nlines) = @_;
+        return 'test $(sudo -u postgres psql postgres -tAc "' . $select . '"|wc -l) -eq ' . $nlines;
+      }
+
       $machine->start;
       $machine->waitForUnit("postgresql");
       # postgresql should be available just after unit start
-      $machine->succeed("cat ${test-sql} | psql postgres");
+      $machine->succeed("cat ${test-sql} | sudo -u postgres psql");
       $machine->shutdown; # make sure that postgresql survive restart (bug #1735)
       sleep(2);
       $machine->start;
       $machine->waitForUnit("postgresql");
-      $machine->fail('test $(psql postgres -tAc "SELECT * FROM sth;"|wc -l) -eq 3');
-      $machine->succeed('test $(psql postgres -tAc "SELECT * FROM sth;"|wc -l) -eq 5');
-      $machine->fail('test $(psql postgres -tAc "SELECT * FROM sth;"|wc -l) -eq 4');
+      $machine->fail(check_count("SELECT * FROM sth;", 3));
+      $machine->succeed(check_count("SELECT * FROM sth;", 5));
+      $machine->fail(check_count("SELECT * FROM sth;", 4));
+      $machine->succeed(check_count("SELECT xpath(\'/test/text()\', doc) FROM xmltest;", 1));
       $machine->shutdown;
     '';
 

@@ -10,17 +10,6 @@ index 6abbc72..804f0f2 100644
  #include "gettext.h"
  #define _(String) dgettext (PACKAGE, String)
  #include "progname.h"
-@@ -161,9 +160,7 @@ process_input (char *readbuf, int flags)
-       free (output);
-     }
-   else
--    error (EXIT_FAILURE, 0, "%s: %s",
--	   args_info.register_given ? "register" : "lookup",
--	   idn2_strerror (rc));
-+    perror (idn2_strerror (rc));
- }
- 
- int
 @@ -222,7 +219,7 @@ main (int argc, char *argv[])
      }
  

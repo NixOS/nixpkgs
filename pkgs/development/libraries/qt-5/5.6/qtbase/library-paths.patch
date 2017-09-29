@@ -1,0 +1,20 @@
+Index: qtbase-opensource-src-5.6.2/src/corelib/kernel/qcoreapplication.cpp
+===================================================================
+--- qtbase-opensource-src-5.6.2.orig/src/corelib/kernel/qcoreapplication.cpp
++++ qtbase-opensource-src-5.6.2/src/corelib/kernel/qcoreapplication.cpp
+@@ -2533,6 +2533,15 @@ QStringList QCoreApplication::libraryPat
+         QStringList *app_libpaths = new QStringList;
+         coreappdata()->app_libpaths.reset(app_libpaths);
+ 
++        // Add library paths derived from PATH
++        const QStringList paths = QFile::decodeName(qgetenv("PATH")).split(':');
++        const QString plugindir = QStringLiteral("../" NIXPKGS_QT_PLUGIN_PREFIX);
++        for (const QString &path: paths) {
++            if (!path.isEmpty()) {
++                app_libpaths->append(QDir::cleanPath(path + QDir::separator() + plugindir));
++            }
++        }
++
+         const QByteArray libPathEnv = qgetenv("QT_PLUGIN_PATH");
+         if (!libPathEnv.isEmpty()) {
+             QStringList paths = QFile::decodeName(libPathEnv).split(QDir::listSeparator(), QString::SkipEmptyParts);

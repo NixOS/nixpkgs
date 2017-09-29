@@ -1,28 +1,27 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, zlib, libjpeg, xz }:
 
 let
-  version = "4.0.7";
+  version = "4.0.8";
 in
 stdenv.mkDerivation rec {
   name = "libtiff-${version}";
 
   src = fetchurl {
     url = "http://download.osgeo.org/libtiff/tiff-${version}.tar.gz";
-    sha256 = "06ghqhr4db1ssq0acyyz49gr8k41gzw6pqb6mbn5r7jqp77s4hwz";
+    sha256 = "0419mh6kkhz5fkyl77gv0in8x4d2jpdpfs147y8mj86rrjlabmsr";
   };
 
   prePatch =let
-      # https://lwn.net/Vulnerabilities/711777/
       debian = fetchurl {
-        url = http://http.debian.net/debian/pool/main/t/tiff/tiff_4.0.7-5.debian.tar.xz;
-        sha256 = "1ribxdn89wx3nllcyh7ql3dx6wpr1h7z3waglz1w7dklxm43q67l";
+        url = http://snapshot.debian.org/archive/debian-debug/20170928T093547Z/pool/main/t/tiff/tiff_4.0.8-5.debian.tar.xz;
+        sha256 = "11qkiliw04dmdvdd5z2lv5hh2fiwa29qbhkxvlvmb4yslnmyywha";
       };
     in ''
       tar xf '${debian}'
       patches="$patches $(cat debian/patches/series | sed 's|^|debian/patches/|')"
     '';
 
-  outputs = [ "bin" "dev" "out" "doc" ];
+  outputs = [ "bin" "dev" "out" "man" "doc" ];
 
   nativeBuildInputs = [ pkgconfig ];
 

@@ -2,7 +2,8 @@
   six, pytest, pytestrunner, pytestcov, coverage
 }:
 buildPythonPackage rec {
-  name = "libais-${version}";
+  pname = "libais";
+  name = "${pname}-${version}";
   version = "0.16";
 
   src = fetchurl {

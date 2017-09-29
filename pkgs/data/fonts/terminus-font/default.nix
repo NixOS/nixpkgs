@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, perl, bdftopcf, mkfontdir, mkfontscale }:
+{ stdenv, fetchurl, python3, bdftopcf, mkfontdir, mkfontscale }:
 
 stdenv.mkDerivation rec {
-  name = "terminus-font-4.40";
+  name = "terminus-font-4.46";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/terminus-font/${name}/${name}.tar.gz";
-    sha256 = "0487cyx5h1f0crbny5sg73a22gmym5vk1i7646gy7hgiscj2rxb4";
+    sha256 = "1kavqw38aarz0vpwz4b7l6l8xkyc5096zaf9ypqnvdwraqz46aaf";
   };
 
-  buildInputs = [ perl bdftopcf mkfontdir mkfontscale ];
+  buildInputs = [ python3 bdftopcf mkfontdir mkfontscale ];
 
   patchPhase = ''
     substituteInPlace Makefile --replace 'fc-cache' '#fc-cache'

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pidgin unzip glib json_glib nss nspr libgnome_keyring ];
 
   meta = with stdenv.lib; {
-    homepage = https://code.google.com/p/pidgin-opensteamworks;
+    homepage = https://github.com/EionRobb/pidgin-opensteamworks;
     description = "Plugin for Pidgin 2.x which implements Steam Friends/Steam IM compatibility";
     license = licenses.gpl3;
     platforms = platforms.linux;

@@ -268,6 +268,18 @@ in
       };
     };
 
+  google_apis_25 = buildGoogleApis {
+    name = "google_apis-25";
+      src = fetchurl {
+        url = https://dl.google.com/android/repository/google_apis-25_r1.zip;
+        sha1 = "550e83eea9513ab11c44919ac6da54b36084a9f3";
+      };
+      meta = {
+        description = "Android + Google APIs";
+
+      };
+    };
+
   android_support_extra = buildGoogleApis {
     name = "android_support_extra";
     src = fetchurl {
@@ -280,15 +292,28 @@ in
     };
   };
 
+
   google_play_services = buildGoogleApis {
     name = "google_play_services";
     src = fetchurl {
-      url = https://dl.google.com/android/repository/google_play_services_v8_rc41.zip;
-      sha1 = "7a50dec81ba9c9b51d7778c19ca05002498209e8";
+      url = https://dl.google.com/android/repository/google_play_services_v12_1_rc11.zip;
+      sha1 = "d2bb583a3f62b068d448df10544c1852d910526f";
     };
     meta = {
       description = "Google Play services client library and sample code";
       url = http://developer.android.com/;
+    };
+  };
+
+  instant_apps = buildGoogleApis {
+    name = "instant_apps_sdk";
+    src = fetchurl {
+      url = https://dl.google.com/android/repository/aiasdk-1.0.0.zip;
+      sha1 = "50074a0f0312ee1d0d81d2cddc3d84a8a9e97a53";
+    };
+    meta = {
+      description = "Android Instant Apps Development SDK";
+      url = "https://developer.android.com/";
     };
   };
 

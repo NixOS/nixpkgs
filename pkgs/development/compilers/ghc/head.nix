@@ -5,6 +5,7 @@
   # If enabled GHC will be build with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
 , enableIntegerSimple ? false, gmp
+, version ? "8.3.20170808"
 }:
 
 let
@@ -12,8 +13,7 @@ let
 
   commonBuildInputs = [ ghc perl autoconf automake happy alex python3 ];
 
-  version = "8.1.20170106";
-  rev = "b4f2afe70ddbd0576b4eba3f82ba1ddc52e9b3bd";
+  rev = "14457cf6a50f708eecece8f286f08687791d51f7";
 
   commonPreConfigure =  ''
     echo ${version} >VERSION
@@ -34,7 +34,7 @@ in stdenv.mkDerivation (rec {
   src = fetchgit {
     url = "git://git.haskell.org/ghc.git";
     inherit rev;
-    sha256 = "1h064nikx5srsd7qvz19f6dxvnpfjp0b3b94xs1f4nar18hzf4j0";
+    sha256 = "08vj9ca7rq7rv8pjfl14fg2lg9d6zisrwlq6bi5vzr006816dy8y";
   };
 
   postPatch = "patchShebangs .";
@@ -48,6 +48,7 @@ in stdenv.mkDerivation (rec {
   configureFlags = [
     "CC=${stdenv.cc}/bin/cc"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
+    "--datadir=$doc/share/doc/ghc"
   ] ++ stdenv.lib.optional (! enableIntegerSimple) [
     "--with-gmp-includes=${gmp.dev}/include" "--with-gmp-libraries=${gmp.out}/lib"
   ] ++ stdenv.lib.optional stdenv.isDarwin [
@@ -74,6 +75,8 @@ in stdenv.mkDerivation (rec {
     done
   '';
 
+  outputs = [ "out" "doc" ];
+
   passthru = {
     inherit bootPkgs;
   } // stdenv.lib.optionalAttrs (targetPlatform != buildPlatform) {
@@ -84,7 +87,7 @@ in stdenv.mkDerivation (rec {
   };
 
   meta = {
-    homepage = "http://haskell.org/ghc";
+    homepage = http://haskell.org/ghc;
     description = "The Glasgow Haskell Compiler";
     maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
     inherit (ghc.meta) license platforms;
@@ -98,26 +101,26 @@ in stdenv.mkDerivation (rec {
   '';
 
   configureFlags = [
-    "CC=${stdenv.ccCross}/bin/${cross.config}-cc"
-    "LD=${stdenv.binutilsCross}/bin/${cross.config}-ld"
-    "AR=${stdenv.binutilsCross}/bin/${cross.config}-ar"
-    "NM=${stdenv.binutilsCross}/bin/${cross.config}-nm"
-    "RANLIB=${stdenv.binutilsCross}/bin/${cross.config}-ranlib"
+    "CC=${stdenv.cc}/bin/${cross.config}-cc"
+    "LD=${stdenv.cc}/bin/${cross.config}-ld"
+    "AR=${stdenv.cc}/bin/${cross.config}-ar"
+    "NM=${stdenv.cc}/bin/${cross.config}-nm"
+    "RANLIB=${stdenv.cc}/bin/${cross.config}-ranlib"
     "--target=${cross.config}"
     "--enable-bootstrap-with-devel-snapshot"
   ] ++
     # fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
     lib.optional (cross.config or null == "aarch64-apple-darwin14") "--disable-large-address-space";
 
-  buildInputs = commonBuildInputs ++ [ stdenv.ccCross stdenv.binutilsCross ];
+  buildInputs = commonBuildInputs;
 
-  dontSetConfigureCross = true;
+  configurePlatforms = [];
 
   passthru = {
     inherit bootPkgs cross;
 
-    cc = "${stdenv.ccCross}/bin/${cross.config}-cc";
+    cc = "${stdenv.cc}/bin/${cross.config}-cc";
 
-    ld = "${stdenv.binutilsCross}/bin/${cross.config}-ld";
+    ld = "${stdenv.cc}/bin/${cross.config}-ld";
   };
 })

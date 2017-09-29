@@ -1,0 +1,13 @@
+diff --git a/src/common/gajim.py b/src/common/gajim.py
+index 4a5d884b6..95d401b67 100644
+--- a/src/common/gajim.py
++++ b/src/common/gajim.py
+@@ -415,7 +415,7 @@ def get_jid_from_account(account_name, full=False):
+     jid = name + '@' + hostname
+     if full:
+         resource = connections[account_name].server_resource
+-        jid += '/' + resource
++        jid += '/' + str(resource)
+     return jid
+ 
+ def get_our_jids():

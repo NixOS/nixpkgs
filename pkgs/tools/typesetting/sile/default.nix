@@ -45,6 +45,9 @@ stdenv.mkDerivation rec {
       --set LUA_CPATH "${luaCPath};" \
   '';
 
+  # Hack to avoid TMPDIR in RPATHs.
+  preFixup = ''rm -rf "$(pwd)" && mkdir "$(pwd)" '';
+
   meta = {
     description = "A typesetting system";
     longDescription = ''
