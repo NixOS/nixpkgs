@@ -16133,7 +16133,7 @@ in {
 
 
   pyalgotrade = buildPythonPackage {
-    name = "pyalgotrade-0.16";
+    name = "pyalogotrade-0.16";
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -16142,8 +16142,6 @@ in {
     };
 
     propagatedBuildInputs = with self; [ numpy scipy pytz ];
-
-    disable = isPy3k;
 
     meta = {
       description = "Python Algorithmic Trading";
