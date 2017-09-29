@@ -2479,6 +2479,8 @@ with pkgs;
 
   pgjwt = callPackage ../servers/sql/postgresql/pgjwt {};
 
+  pgtap = callPackage ../servers/sql/postgresql/pgtap {};
+
   pigz = callPackage ../tools/compression/pigz { };
 
   pixz = callPackage ../tools/compression/pixz { };
