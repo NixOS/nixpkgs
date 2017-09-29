@@ -8399,31 +8399,7 @@ in {
 
   django-raster = callPackage ../development/python-modules/django-raster { };
 
-  django_redis = buildPythonPackage rec {
-    name = "django-redis-${version}";
-    version = "4.2.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-redis/${name}.tar.gz";
-      sha256 = "9ad6b299458f7e6bfaefa8905f52560017369d82fb8fb0ed4b41adc048dbf11c";
-    };
-
-    doCheck = false;
-
-    buildInputs = [ self.mock ];
-
-    propagatedBuildInputs = with self; [
-      django
-      redis
-      msgpack
-    ];
-
-    meta = {
-      description = "Full featured redis cache backend for Django";
-      homepage = https://github.com/niwibe/django-redis;
-      license = licenses.bsd3;
-    };
-  };
+  django_redis = callPackage ../development/python-modules/django_redis { };
 
   django_reversion = buildPythonPackage rec {
     name = "django-reversion-${version}";
@@ -18573,22 +18549,7 @@ in {
 
   };
 
-  redis = buildPythonPackage rec {
-    name = "redis-2.10.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/redis/${name}.tar.gz";
-      sha256 = "0csmrkxb29x7xs9b51zplwkkq2hwnbh9jns1g85dykn5rxmaxysx";
-    };
-
-    # tests require a running redis
-    doCheck = false;
-
-    meta = {
-      description = "Python client for Redis key-value store";
-      homepage = "https://pypi.python.org/pypi/redis/";
-    };
-  };
+  redis = callPackage ../development/python-modules/redis { };
 
   rednose = buildPythonPackage rec {
     name = "rednose-${version}";
