@@ -1,5 +1,11 @@
 { stdenv, fetchFromGitHub, postgresql }:
 
+# # To enable on NixOS:
+# config.services.postgresql = {
+#   extraPlugins = [ pkgs.timescaledb ];
+#   extraConfig = "shared_preload_libraries = 'timescaledb'";
+# }
+
 stdenv.mkDerivation rec {
   name = "timescaledb-${version}";
   version = "0.5.0";
@@ -21,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "TimescaleDB scales PostgreSQL for time-series data via automatic partitioning across time and space";
+    description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";
     homepage = https://www.timescale.com/;
     maintainers = with maintainers; [ volth ];
     platforms = platforms.linux;
