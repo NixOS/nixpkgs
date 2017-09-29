@@ -463,6 +463,8 @@ with pkgs;
     withGui = false;
   };
 
+  arguments = callPackage ../development/libraries/arguments { };
+
   apitrace = libsForQt56.callPackage ../applications/graphics/apitrace {};
 
   argus = callPackage ../tools/networking/argus {};
