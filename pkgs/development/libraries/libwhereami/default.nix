@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, cmake, boost, curl, leatherman }:
 
 stdenv.mkDerivation rec {
-  name = "cpp-hocon-${version}";
-  version = "0.1.6";
+  name = "libwhereami-${version}";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
-    sha256 = "0qf2nqp28ahypnzjrr37f54i06ylni40y18q9kwp5s7i5cwbjqgc";
+    sha256 = "0nhbmxm626cgawprszw6c03a3hasxjn1i9ldhhj5xyvxp8r5l9q4";
     rev = version;
-    repo = "cpp-hocon";
+    repo = "libwhereami";
     owner = "puppetlabs";
   };
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
-    description = " A C++ port of the Typesafe Config library";
+    description = "Library to report hypervisor information from inside a VM";
     license = licenses.asl20;
     maintainers = [ maintainers.womfoo ];
     platforms = platforms.linux;
