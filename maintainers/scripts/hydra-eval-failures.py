@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p python3Full python3Packages.requests python3Packages.pyquery python3Packages.click
+#!nix-shell -i python3 -p 'python3.withPackages(ps: with ps; [ requests pyquery click ])'
 
 # To use, just execute this script with --help to display help.
 
