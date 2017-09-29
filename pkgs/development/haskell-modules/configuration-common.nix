@@ -58,12 +58,14 @@ self: super: {
   hasql-postgres = dontCheck super.hasql-postgres;
   hspec-expectations = dontCheck super.hspec-expectations;
   hspec = super.hspec.override { stringbuilder = dontCheck super.stringbuilder; };
-  hspec-core = super.hspec-core.override { silently = dontCheck super.silently; temporary = dontCheck super.temporary; };
   HTTP = dontCheck super.HTTP;
   nanospec = dontCheck super.nanospec;
   options = dontCheck super.options;
   statistics = dontCheck super.statistics;
   http-streams = dontCheck super.http-streams;
+
+  # https://github.com/hspec/hspec/issues/330
+  hspec-core = dontCheck (super.hspec-core.override { silently = dontCheck super.silently; temporary = dontCheck super.temporary; });
 
   # segfault due to missing return: https://github.com/haskell/c2hs/pull/184
   c2hs = dontCheck super.c2hs;
