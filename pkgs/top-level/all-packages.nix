@@ -9844,6 +9844,8 @@ with pkgs;
 
   oniguruma = callPackage ../development/libraries/oniguruma { };
 
+  oobicpl = callPackage ../development/libraries/science/biology/oobicpl { };
+
   openal = self.openalSoft;
 
   openalSoft = callPackage ../development/libraries/openal-soft {
