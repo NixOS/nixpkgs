@@ -73,6 +73,7 @@
   ./programs/adb.nix
   ./programs/atop.nix
   ./programs/bash/bash.nix
+  ./programs/bcc.nix
   ./programs/blcr.nix
   ./programs/browserpass.nix
   ./programs/cdemu.nix
