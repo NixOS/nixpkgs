@@ -4757,7 +4757,7 @@ with pkgs;
   usbmuxd = callPackage ../tools/misc/usbmuxd {};
 
   uwsgi = callPackage ../servers/uwsgi {
-    plugins = [];
+    plugins = [ "cgi" "php" "python2" "python3" "rack" ];
     withPAM = stdenv.isLinux;
     withSystemd = stdenv.isLinux;
   };
