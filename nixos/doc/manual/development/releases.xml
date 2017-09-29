@@ -163,6 +163,11 @@
       </listitem>
       <listitem>
         <para>
+          Set a release date in the release notes.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           Change <literal>stableBranch</literal> to true and wait for channel to update.
         </para>
       </listitem>
@@ -195,7 +200,7 @@
       </listitem>
       <listitem>
         <para>
-          Send an email to nix-dev to announce the release with above information. Best to check how previous email was formulated
+          Send an email to nix-devel to announce the release with above information. Best to check how previous email was formulated
           to see what needs to be included.
         </para>
       </listitem>
@@ -223,27 +228,27 @@
       <tbody>
         <row>
           <entry>
-            2016-07-25
+            2018-01-31
           </entry>
           <entry>
-            Send email to nix-dev about upcoming branch-off
+            Send email to nix-devel about upcoming branch-off
           </entry>
         </row>
         <row>
           <entry>
-            2016-09-01
+            2018-02-28
           </entry>
           <entry>
-            <literal>release-16.09</literal> branch and corresponding jobsets are created,
+            <literal>release-18.03</literal> branch and corresponding jobsets are created,
             change freeze
           </entry>
         </row>
         <row>
           <entry>
-            2016-09-30
+            2018-03-29
           </entry>
           <entry>
-            NixOS 16.09 released
+            NixOS 18.03 released
           </entry>
         </row>
       </tbody>
