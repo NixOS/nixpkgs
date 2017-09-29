@@ -24,5 +24,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.gplates.org;
     license = licenses.gpl2;
     platforms = platforms.all;
+    broken = true;
   };
 }
