@@ -72,34 +72,8 @@ rec {
 
   # Same as `makeExtensible` but the name of the extending attribute is
   # customized.
-  makeExtensibleWithCustomName = extenderName: f: makeExtensibleWithInterface
-    (fixedPoint: extend: fixedPoint // { ${extenderName} = ext: extend (_: ext); })
-    (_: f);
-
-  # A version of `makeExtensible` that allows the function being fixed
-  # to return a different interface than the interface returned to the
-  # user. Along with `self` and `super` views of the internal
-  # interface, a `self` view of the output interface is also
-  # provided. `extend` is not added to the output by default. This is
-  # the job of the interface.
-  #
-  #     nix-repl> foo = {a, b}: {c = a + b;}
-  #
-  #     nix-repl> interface = {args, val, ...}: extend: val // {inherit extend;}
-  #
-  #     nix-repl> obj = makeExtensibleWithInterface interface (output: self: { args = {a = 1; b = 2;}; val = foo self.args; })
-  #
-  #     nix-repl> obj.c
-  #     3
-  #
-  #     nix-repl> obj = obj.extend (output: self: super: { args = super.args // { b = output.d; }; })
-  #
-  #     nix-repl> obj = obj.extend (output: self: super: { val = super.val // { d = 10; }; })
-  #
-  #     nix-repl> { inherit (obj) c d; }
-  #     { c = 11; d = 10; }
-  makeExtensibleWithInterface = interface: f: let i = interface
-    (fix' (f i))
-    (fext: makeExtensibleWithInterface interface (i': (extends (fext i') (f i'))));
-  in i;
+  makeExtensibleWithCustomName = extenderName: rattrs:
+    fix' rattrs // {
+      ${extenderName} = f: makeExtensibleWithCustomName extenderName (extends f rattrs);
+   };
 }

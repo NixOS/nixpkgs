@@ -1,4 +1,4 @@
-{ pkgs, lib, stdenv, buildPlatform, targetPlatform }:
+{ pkgs, lib, newScope, stdenv, buildPlatform, targetPlatform }:
 
 let
   # These are attributes in compiler and packages that don't support integer-simple.
@@ -23,8 +23,7 @@ let
     inherit pkgs;
   };
 
-  callPackage = lib.callPackageWith (pkgs // { inherit haskellLib; });
-  callPackageWithOutput = lib.callPackageWithOutputWith (pkgs // { inherit haskellLib; });
+  callPackage = newScope { inherit haskellLib; };
 
 in rec {
   lib = haskellLib;
@@ -122,75 +121,75 @@ in rec {
   packages = {
 
     # Support for this compiler is broken, because it can't deal with directory-based package databases.
-    # ghc6104 = callPackageWithOutput ../development/haskell-modules { ghc = compiler.ghc6104; };
-    ghc6123 = callPackageWithOutput ../development/haskell-modules {
+    # ghc6104 = callPackage ../development/haskell-modules { ghc = compiler.ghc6104; };
+    ghc6123 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc6123;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-6.12.x.nix { };
     };
-    ghc704 = callPackageWithOutput ../development/haskell-modules {
+    ghc704 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc704;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.0.x.nix { };
     };
-    ghc722 = callPackageWithOutput ../development/haskell-modules {
+    ghc722 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc722;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.2.x.nix { };
     };
-    ghc742 = callPackageWithOutput ../development/haskell-modules {
+    ghc742 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc742;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.4.x.nix { };
     };
-    ghc763 = callPackageWithOutput ../development/haskell-modules {
+    ghc763 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc763;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.6.x.nix { };
     };
-    ghc783 = callPackageWithOutput ../development/haskell-modules {
+    ghc783 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc783;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.8.x.nix { };
     };
-    ghc784 = callPackageWithOutput ../development/haskell-modules {
+    ghc784 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc784;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.8.x.nix { };
     };
-    ghc7102 = callPackageWithOutput ../development/haskell-modules {
+    ghc7102 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc7102;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
     };
-    ghc7103 = callPackageWithOutput ../development/haskell-modules {
+    ghc7103 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc7103;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
     };
-    ghc802 = callPackageWithOutput ../development/haskell-modules {
+    ghc802 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc802;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.0.x.nix { };
     };
-    ghc821 = callPackageWithOutput ../development/haskell-modules {
+    ghc821 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc821;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
     };
-    ghcHEAD = callPackageWithOutput ../development/haskell-modules {
+    ghcHEAD = callPackage ../development/haskell-modules {
       ghc = compiler.ghcHEAD;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
     };
     # TODO Support for multiple variants here
-    ghcCross = callPackageWithOutput ../development/haskell-modules {
+    ghcCross = callPackage ../development/haskell-modules {
       ghc = compiler.ghcHEAD.crossCompiler;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-head.nix { };
     };
-    ghcCross821 = callPackageWithOutput ../development/haskell-modules {
+    ghcCross821 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc821.crossCompiler;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
     };
-    ghcjs = callPackageWithOutput ../development/haskell-modules {
+    ghcjs = callPackage ../development/haskell-modules {
       ghc = compiler.ghcjs;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
       packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
-    ghcjsHEAD = callPackageWithOutput ../development/haskell-modules {
+    ghcjsHEAD = callPackage ../development/haskell-modules {
       ghc = compiler.ghcjsHEAD;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.0.x.nix { };
       packageSetConfig = callPackage ../development/haskell-modules/configuration-ghcjs.nix { };
     };
-    ghcHaLVM240 = callPackageWithOutput ../development/haskell-modules {
+    ghcHaLVM240 = callPackage ../development/haskell-modules {
       ghc = compiler.ghcHaLVM240;
       compilerConfig = callPackage ../development/haskell-modules/configuration-halvm-2.4.0.nix { };
     };
