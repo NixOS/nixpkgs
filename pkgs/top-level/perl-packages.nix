@@ -12857,11 +12857,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  TAPParserSourceHandlerpgTAP = buildPerlModule {
-    name = "TAP-Parser-SourceHandler-pgTAP-3.30";
+  TAPParserSourceHandlerpgTAP = buildPerlModule rec {
+    name = "TAP-Parser-SourceHandler-pgTAP-3.33";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DW/DWHEELER/TAP-Parser-SourceHandler-pgTAP-3.30.tar.gz;
-      sha256 = "08gadqf898r23sx07sn13555cp9zkwp8igjlh1fza2ycfivpfl9f";
+      url = "mirror://cpan/authors/id/D/DW/DWHEELER/${name}.tar.gz";
+      sha256 = "35q46y2hbp2ij5n9ir76lmspqj3n8gb0z9l5ipb5g7q90l160m4k";
     };
     meta = {
       homepage = http://search.cpan.org/dist/Tap-Parser-Sourcehandler-pgTAP/;
