@@ -171,6 +171,19 @@ stdenv.mkDerivation rec {
       $bundleData/PTConfigs/bridge_prefs.js \
       >> defaults/pref/extension-overrides.js
 
+    # Configure geoip
+    #
+    # tor-launcher insists on resolving geoip data relative to torrc-defaults
+    # (and passes them directly on the tor command-line).
+    #
+    # Write the paths into torrc-defaults anyway, otherwise they'll be
+    # captured in the runtime torrc.
+    ln -s -t $TBDATA_PATH ${tor.geoip}/share/tor/geoip{,6}
+    cat >>$TBDATA_PATH/torrc-defaults <<EOF
+    GeoIPFile $TBDATA_IN_STORE/geoip
+    GeoIPv6File $TBDATA_IN_STORE/geoip6
+    EOF
+
     # Configure pluggable transports
     cat >>$TBDATA_PATH/torrc-defaults <<EOF
     ClientTransportPlugin obfs2,obfs3 exec ${obfsproxy}/bin/obfsproxy managed
