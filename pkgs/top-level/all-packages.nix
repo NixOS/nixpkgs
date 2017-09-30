@@ -3265,7 +3265,9 @@ with pkgs;
 
   mednafen-server = callPackage ../misc/emulators/mednafen/server.nix { };
 
-  mednaffe = callPackage ../misc/emulators/mednaffe/default.nix { };
+  mednaffe = callPackage ../misc/emulators/mednaffe/default.nix {
+    gtk2 = null;
+  };
 
   megacli = callPackage ../tools/misc/megacli { };
 
