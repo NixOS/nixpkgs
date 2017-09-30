@@ -136,6 +136,7 @@
   dancek = "Hannu Hartikainen <hannu.hartikainen@gmail.com>";
   danielfullmer = "Daniel Fullmer <danielrf12@gmail.com>";
   dasuxullebt = "Christoph-Simon Senjak <christoph.senjak@googlemail.com>";
+  david50407 = "David Kuo <me@davy.tw>";
   davidak = "David Kleuker <post@davidak.de>";
   davidrusu = "David Rusu <davidrusu.me@gmail.com>";
   davorb = "Davor Babic <davor@davor.se>";
