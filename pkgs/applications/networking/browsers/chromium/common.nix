@@ -133,8 +133,10 @@ let
       # https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/
       # https://git.archlinux.org/svntogit/packages.git/tree/trunk?h=packages/chromium
       # for updated patches and hints about build flags
-      ++ optionals (versionRange "61" "62") [
+      ++ optionals (versionOlder version "62") [
       ./patches/chromium-gn-bootstrap-r14.patch
+    ]
+      ++ optionals (versionRange "61" "62") [
       ./patches/chromium-gcc-r1.patch
       ./patches/chromium-atk-r1.patch
       ./patches/chromium-gcc5-r1.patch
