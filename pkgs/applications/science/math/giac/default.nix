@@ -59,5 +59,6 @@ stdenv.mkDerivation rec {
     ## xcas is buildable on darwin but there are specific instructions I could
     ## not test
     platforms = platforms.linux;
+    maintainers = [ maintainers.symphorien ];
   };
 }
