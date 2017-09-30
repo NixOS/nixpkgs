@@ -5,14 +5,13 @@ lua:
 if disabled then
   throw "${attrs.name} not supported by interpreter lua-${lua.luaversion}"
 else
-  lua.stdenv.mkDerivation ({
-
-      preBuild = ''
-        makeFlagsArray=(
-          PREFIX=$out
-          LUA_LIBDIR="$out/lib/lua/${lua.luaversion}"
-          LUA_INC="-I${lua}/include");
-      '';
+  lua.stdenv.mkDerivation (
+    {
+      makeFlags = [
+        "PREFIX=$(out)"
+        "LUA_LIBDIR=$(out)/lib/lua/${lua.luaversion}"
+        "LUA_INC=-I${lua}/include"
+      ];
     }
     //
     attrs
