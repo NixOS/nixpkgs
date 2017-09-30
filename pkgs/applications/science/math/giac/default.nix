@@ -1,47 +1,51 @@
-{stdenv, fetchurl, gmp, mpfr, pari, ntl, gsl, blas,
-readline, gettext, liblapackWithAtlas, bison, yacc, flex,
-mpfi,  libpng, libao, gfortran, texlive, hevea, perl,
-enableGui ? true, mesa ? null, xorg ? null, fltk ? null,
+{ stdenv, fetchurl, texlive, bison, flex
+, gmp, mpfr, pari, ntl, gsl, blas, mpfi, liblapackWithAtlas
+, readline, gettext, libpng, libao, gfortran, perl
+, enableGUI ? false, mesa ? null, xorg ? null, fltk ? null
 }:
 
-assert enableGui -> mesa != null && xorg != null && fltk != null;
+assert enableGUI -> mesa != null && xorg != null && fltk != null;
 
 stdenv.mkDerivation rec {
-  name = "giac-${version}";
+  name = "${attr}-${version}";
+  attr = if enableGUI then "giac-with-xcas" else "giac";
   version = "1.4.9";
 
   src = fetchurl {
-    url = "https://www-fourier.ujf-grenoble.fr/~parisse/giac/${name}.tar.bz2";
+    url = "https://www-fourier.ujf-grenoble.fr/~parisse/giac/giac-${version}.tar.bz2";
     sha256 = "1n7xxgpqrsq7cv5wgcmgag6jvxw5wijkf1yv1r5aizlf1rc7dhai";
   };
 
-
-  patchPhase = ''
-    for i in doc/*/Makefile* ; do
+  postPatch = ''
+    for i in doc/*/Makefile*; do
       substituteInPlace "$i" --replace "/bin/cp" "cp";
     done;
-    '';
+  '';
 
   nativeBuildInputs = [
-    texlive.combined.scheme-small hevea
+    texlive.combined.scheme-small bison flex
   ];
 
+  # perl is only needed for patchShebangs fixup.
   buildInputs = [
-    gmp mpfr pari ntl gsl mpfi liblapackWithAtlas bison yacc flex readline
-    gettext blas libpng gfortran perl
-  ] ++ stdenv.lib.optionals enableGui [
+    gmp mpfr pari ntl gsl blas mpfi liblapackWithAtlas
+    readline gettext libpng libao gfortran perl
+  ] ++ stdenv.lib.optionals enableGUI [
     mesa fltk xorg.libX11
   ];
+
+  outputs = [ "out" ];
 
   enableParallelBuilding = true;
   hardeningDisable = [ "format" "bindnow" "relro" ];
 
   configureFlags = [
-      "--enable-gc" "--enable-png" "--enable-gsl" "--enable-lapack"
-      "--enable-pari" "--enable-ntl" "--enable-gmpxx" # "--enable-cocoa"
-      "--enable-ao" ] ++ stdenv.lib.optionals enableGui [
-      "--enable-gui" "--with-x"
-    ];
+    "--enable-gc" "--enable-png" "--enable-gsl" "--enable-lapack"
+    "--enable-pari" "--enable-ntl" "--enable-gmpxx" # "--enable-cocoa"
+    "--enable-ao"
+  ] ++ stdenv.lib.optionals enableGUI [
+    "--enable-gui" "--with-x"
+  ];
 
   postInstall = ''
     # example Makefiles contain the full path to some commands

@@ -9279,8 +9279,8 @@ with pkgs;
 
   libminc = callPackage ../development/libraries/libminc { };
 
-  libmirage = callPackage ../misc/emulators/cdemu/libmirage.nix { }; 
-  
+  libmirage = callPackage ../misc/emulators/cdemu/libmirage.nix { };
+
   libmkv = callPackage ../development/libraries/libmkv { };
 
   libmms = callPackage ../development/libraries/libmms { };
@@ -18435,8 +18435,8 @@ with pkgs;
 
   gfan = callPackage ../applications/science/math/gfan {};
 
-  xcas = callPackage ../applications/science/math/giac { };
-  giac = xcas.override { enableGui = false;};
+  giac = callPackage ../applications/science/math/giac { };
+  giac-with-xcas = giac.override { enableGUI = true; };
 
   ginac = callPackage ../applications/science/math/ginac { };
 
