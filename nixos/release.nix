@@ -251,6 +251,8 @@ in rec {
   tests.gocd-server = callTest tests/gocd-server.nix {};
   tests.gnome3 = callTest tests/gnome3.nix {};
   tests.gnome3-gdm = callTest tests/gnome3-gdm.nix {};
+  tests.grafama = callTest tests/grafana.nix {};
+  tests.graphite = callTest tests/graphite.nix {};
   tests.hardened = callTest tests/hardened.nix { };
   tests.hibernate = callTest tests/hibernate.nix { system = "x86_64-linux"; };
   tests.hound = callTest tests/hound.nix {};
