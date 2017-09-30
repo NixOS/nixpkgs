@@ -204,11 +204,11 @@ in {
     };
   };
 
-  ruby_2_3_4 = generic {
-    version = rubyVersion "2" "3" "4" "";
+  ruby_2_3_5 = generic {
+    version = rubyVersion "2" "3" "5" "";
     sha256 = {
-      src = "1hy0zr4vwkqcjbykh2hp0d6ifkrhgskaxlzy6878sc9kr4bqzqcq";
-      git = "0jjhgdjv3aayxb0flxjiny7xfzh3ggrqcpvgjv2ydm25padfbqmp";
+      src = "1k6x4g68lq30i0myip5bn56rcbwjxmqq95j1fkdgbvwbnaxzfqjl";
+      git = "0spwqz4b5xxqzs13azsd4xz4jkc3is7d9q4s6s2qilb8ib4863jl";
     };
   };
 
