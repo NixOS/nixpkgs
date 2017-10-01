@@ -200,7 +200,7 @@ let
                 in
                 ''
                   echo "${address}" >> $state
-                  if out=$(ip addr add "${address}" dev "${i.name}" 2>&1); then
+                  if out=$(ip addr add "${address}" dev "${i.name}" ${concatStringsSep " " ip.flags} 2>&1); then
                     echo "added ip ${address}"
                   elif ! echo "$out" | grep "File exists" >/dev/null 2>&1; then
                     echo "failed to add ${address}"
