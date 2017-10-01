@@ -1,4 +1,4 @@
-{ lib, python }:
+{ lib, python, fetchFromGitHub }:
 
 with python.pkgs;
 
@@ -7,10 +7,20 @@ buildPythonApplication rec {
   version = "0.16.3";
   name = "${pname}-${version}";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0z9n0dnidnvm511pdzf73grmr4xn59znkfalq8x9gw5v7lqwa2mc";
+  src = fetchFromGitHub {
+    owner = "mkdocs";
+    repo = "mkdocs";
+    rev = version;
+    sha256 = "0gssa5gbd1y2v3azdhf2zh7ayx4ncfag4r2a6fi96jbic64r3qrs";
   };
+
+  checkInputs = [
+    nose nose-exclude mock
+  ];
+
+  NOSE_EXCLUDE_TESTS="mkdocs.tests.gh_deploy_tests.TestGitHubDeploy;mkdocs.tests.config.config_tests.ConfigTests";
+
+  checkPhase = "nosetests mkdocs";
 
   propagatedBuildInputs = [
     tornado
