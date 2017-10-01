@@ -21,11 +21,11 @@ let
   withX = libX11 != null && !aquaterm && !stdenv.isDarwin;
 in
 stdenv.mkDerivation rec {
-  name = "gnuplot-5.0.6";
+  name = "gnuplot-5.2.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnuplot/${name}.tar.gz";
-    sha256 = "0q5lr6nala3ln6f3yp6g17ziymb9r9gx9zylnw1y3hjmwl9lggjv";
+    sha256 = "0hqyajcnlk822fk7hyl07sqk6a75n93awbdl3ydk9fd6l4jn9zkx";
   };
 
   buildInputs =
