@@ -19,6 +19,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "libsmbclient binding for Python";
     homepage = https://github.com/hamano/pysmbc;
-    license = licenses.gplv2;
+    license = licenses.gpl2;
   };
 }
