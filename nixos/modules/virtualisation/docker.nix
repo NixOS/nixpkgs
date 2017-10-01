@@ -167,7 +167,7 @@ in
 
         driver = mkOption {
           # See: https://github.com/hyperhq/runv/blob/master/driverloader/driverloader_linux.go
-          type = types.enum [ "libvirt" "kvm" "qemu" ]; #TODO: Implement all drivers
+          type = types.enum [ "kvm" "qemu" ]; #TODO: Implement all drivers: libvirt, xenpv, xen, kvmtool
           default = "qemu";
           description = ''The driver to be used by runv.'';
         };
@@ -218,7 +218,8 @@ in
           ];
         };
         path = [ pkgs.kmod ] ++
-               (optional (builtins.any (x: cfg.runtime.runv.driver == x) [ "qemu" "kvm" ]) pkgs.qemu_kvm) ++
+               (optional (cfg.runtime.runv.driver == "kvm") pkgs.qemu_kvm) ++
+               (optional (cfg.runtime.runv.driver == "qemu") pkgs.qemu) ++
                (optional (cfg.storageDriver == "zfs") pkgs.zfs);
       };
 
