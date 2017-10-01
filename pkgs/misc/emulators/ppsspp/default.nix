@@ -5,7 +5,7 @@ assert withGamepads -> (SDL2 != null);
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "PPSSPP-${version}";
+  name = "ppsspp-${version}";
   version = "1.4.2";
 
   src = fetchFromGitHub {
@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
     mv PPSSPPQt $out/bin/ppsspp
     mv assets $out/share/ppsspp
   '';
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = https://www.ppsspp.org/;

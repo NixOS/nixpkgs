@@ -25,7 +25,7 @@ in
 
 mapAliases (rec {
   accounts-qt = libsForQt5.accounts-qt;  # added 2015-12-19
-  adobeReader = adobe-reader;
+  adobeReader = adobe-reader; # added 2013-11-04
   aircrackng = aircrack-ng; # added 2016-01-14
   ammonite-repl = ammonite; # added 2017-05-02
   arduino_core = arduino-core;  # added 2015-02-04
@@ -117,6 +117,7 @@ mapAliases (rec {
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatexSF = pidginlatex; # added 2014-11-02
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
+  PPSSPP = ppsspp; # added 2017-10-01
   prometheus-statsd-bridge = prometheus-statsd-exporter;  # added 2017-08-27
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
   QmidiNet = qmidinet;  # added 2016-05-22
