@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "${major}.0";
   pname = "htslib";
-  major = "1.6";
+  version = "1.6";
 
   src = fetchurl {
-    url = "https://github.com/samtools/htslib/releases/download/${major}/htslib-${major}.tar.bz2";
+    url = "https://github.com/samtools/htslib/releases/download/${version}/${name}.tar.bz2";
     sha256 = "1jsca3hg4rbr6iqq6imkj4lsvgl8g9768bcmny3hlff2w25vx24m";
   };
 
-  propagatedNativeBuildInputs = [ perl ];
+  # perl is only used during the check phase.
+  nativeBuildInputs = [ perl ];
 
   buildInputs = [ zlib bzip2 lzma curl ];
 
@@ -19,13 +19,13 @@ stdenv.mkDerivation rec {
 
   installFlags = "prefix=$(out)";
 
+  preCheck = ''
+    patchShebangs test/
+  '';
+
   enableParallelBuilding = true;
 
   doCheck = true;
-
-  preCheck = ''
-    find test -name "*.pl" -exec sed -ie 's|/usr/bin/\(env[[:space:]]\)\{0,1\}perl|${perl}/bin/perl|' {} +
-  '';
 
   meta = with stdenv.lib; {
     description = "A C library for reading/writing high-throughput sequencing data";
@@ -35,4 +35,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.mimadrid ];
   };
 }
-
