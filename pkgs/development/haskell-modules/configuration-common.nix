@@ -975,4 +975,7 @@ self: super: {
   # Break "hpack >=0.17.0 && <0.19".
   stack = doJailbreak super.stack;
 
+  # https://github.com/mgajda/json-autotype/issues/15
+  json-autotype = doJailbreak super.json-autotype;
+
 }
