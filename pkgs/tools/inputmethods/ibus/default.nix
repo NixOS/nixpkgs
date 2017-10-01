@@ -50,6 +50,12 @@ let
   };
   pyEnv = python3.buildEnv.override {
     extraLibs = [ python3.pkgs.pygobject3 ];
+
+    # ImportError: No module named site
+    postBuild = ''
+      makeWrapper '${glib.dev}/bin/glib-genmarshal' "$out"/bin/glib-genmarshal \
+        --unset PYTHONPATH
+    '';
   };
 in stdenv.mkDerivation rec {
   name = "ibus-${version}";
