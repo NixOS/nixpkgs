@@ -156,7 +156,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       requires = lib.optional cfg.useRpcbind "rpcbind.service";
-      after = [ "network.target" "local-fs.target" ] ++ lib.optional cfg.useRpcbind [ "rpcbind.service" ];
+      after = [ "network.target" "local-fs.target" ] ++ lib.optional cfg.useRpcbind "rpcbind.service";
 
       preStart = ''
         install -m 0755 -d /var/log/glusterfs
