@@ -11225,27 +11225,7 @@ in {
 
   linode-api = callPackage ../development/python-modules/linode-api { };
 
-  livereload = buildPythonPackage rec {
-    name = "livereload-${version}";
-    version = "2.5.0";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "lepture";
-      repo = "python-livereload";
-      rev = "v${version}";
-      sha256 = "0ixsc7wibmkfk9fnyq0d1b5d9snxfpzzzgsxvq28rn54v6q8b7m2";
-    };
-
-    buildInputs = with self; [ nose django ];
-
-    propagatedBuildInputs = with self; [ tornado six ];
-
-    meta = {
-      description = "Runs a local server that reloads as you develop";
-      homepage = "https://github.com/lepture/python-livereload";
-      license = licenses.bsd3;
-    };
-  };
+  livereload = callPackage ../development/python-modules/livereload { };
 
   llfuse = buildPythonPackage rec {
     name = "llfuse-1.0";
