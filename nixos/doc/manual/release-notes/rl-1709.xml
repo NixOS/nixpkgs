@@ -534,7 +534,7 @@ FLUSH PRIVILEGES;
       Nixpkgs overlays may now be specified with a file as well as a directory. The
       value of <literal>&lt;nixpkgs-overlays></literal> may be a file, and
       <filename>~/.config/nixpkgs/overlays.nix</filename> can be used instead of the
-      <filename>~/.config/nixpkgs/overalys</filename> directory.
+      <filename>~/.config/nixpkgs/overlays</filename> directory.
     </para>
     <para>
       See the overlays chapter of the Nixpkgs manual for more details.
