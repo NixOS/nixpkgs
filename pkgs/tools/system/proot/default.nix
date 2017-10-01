@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, talloc, docutils
+{ stdenv, fetchFromGitHub, fetchpatch
+, talloc, docutils
 , enableStatic ? false }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +17,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ docutils ];
 
   enableParallelBuilding = true;
+
+  patches = [
+    (fetchpatch { # debian patch for aarch64 build
+      sha256 = "18milpzjkbfy5ab789ia3m4pyjyr9mfzbw6kbjhkj4vx9jc39svv";
+      url = "https://sources.debian.net/data/main/p/proot/5.1.0-1.2/debian/patches/arm64.patch";
+    })
+  ];
 
   preBuild = stdenv.lib.optionalString enableStatic ''
     export LDFLAGS="-static"
