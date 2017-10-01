@@ -1,11 +1,16 @@
 { stdenv, lib, buildEnv, dwarf-fortress-original, substituteAll
 , enableDFHack ? false, dfhack
 , enableSoundSense ? false, soundSense, jdk
+, enableStoneSense ? false
 , themes ? {}
 , theme ? null
 }:
 
 let
+  dfhack_ = dfhack.override {
+    inherit enableStoneSense;
+  };
+
   ptheme =
     if builtins.isString theme
     then builtins.getAttr theme themes
@@ -13,7 +18,7 @@ let
 
   # These are in inverse order for first packages to override the next ones.
   pkgs = lib.optional (theme != null) ptheme
-         ++ lib.optional enableDFHack dfhack
+         ++ lib.optional enableDFHack dfhack_
          ++ lib.optional enableSoundSense soundSense
          ++ [ dwarf-fortress-original ];
 
@@ -26,7 +31,7 @@ let
 
     postBuild = lib.optionalString enableDFHack ''
       rm $out/hack/symbols.xml
-      substitute ${dfhack}/hack/symbols.xml $out/hack/symbols.xml \
+      substitute ${dfhack_}/hack/symbols.xml $out/hack/symbols.xml \
         --replace $(cat ${dwarf-fortress-original}/hash.md5.orig) \
                   $(cat ${dwarf-fortress-original}/hash.md5)
     '';

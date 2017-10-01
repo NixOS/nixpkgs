@@ -12,6 +12,7 @@ let
     };
 
     soundSense = callPackage ./soundsense.nix { };
+    stoneSense = callPackage ./stonesense.nix { };
 
     dwarf-fortress-unfuck = callPackage ./unfuck.nix { };
 
