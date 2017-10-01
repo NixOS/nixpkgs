@@ -776,12 +776,12 @@ in {
   in buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "awscli";
-    version = "1.11.108";
+    version = "1.11.162";
     namePrefix = "";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "1wz76hkljc25zzfa2l5jv0mbr5vx6d9ixq4sq0p3zf3l45ql6mdf";
+      sha256 = "0ff17fdzzncrzl7ps1cyrs0c5f82ncbvflnjz8sd1vkcmn9yij8r";
     };
 
     # No tests included
