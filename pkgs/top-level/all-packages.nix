@@ -12614,6 +12614,8 @@ with pkgs;
 
   delve = callPackage ../development/tools/delve { };
 
+  dep = callPackage ../development/tools/dep { };
+
   go-bindata = callPackage ../development/tools/go-bindata { };
 
   go-bindata-assetfs = callPackage ../development/tools/go-bindata-assetfs { };
