@@ -13,9 +13,13 @@ stdenv.mkDerivation rec {
 
   # this is the bare minimum configuration, as I'm only interested in MP4Box
   # For most other functionality, this should probably be extended
-  nativeBuildInputs = [ pkgconfig zlib ];
+  nativeBuildInputs = [ pkgconfig ];
 
-  meta = {
+  buildInputs = [ zlib ];
+
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
     description = "Open Source multimedia framework for research and academic purposes";
     longDescription = ''
       GPAC is an Open Source multimedia framework for research and academic purposes.
@@ -30,12 +34,8 @@ stdenv.mkDerivation rec {
       And some server tools included in MP4Box and MP42TS applications.
     '';
     homepage = https://gpac.wp.imt.fr;
-    license = stdenv.lib.licenses.lgpl21;
-
-    maintainers = [
-      stdenv.lib.maintainers.bluescreen303
-      stdenv.lib.maintainers.mgdelacroix
-    ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [ bluescreen303 mgdelacroix ];
+    platforms = platforms.linux;
   };
 }
