@@ -776,12 +776,12 @@ in {
   in buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "awscli";
-    version = "1.11.108";
+    version = "1.11.162";
     namePrefix = "";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "1wz76hkljc25zzfa2l5jv0mbr5vx6d9ixq4sq0p3zf3l45ql6mdf";
+      sha256 = "0ff17fdzzncrzl7ps1cyrs0c5f82ncbvflnjz8sd1vkcmn9yij8r";
     };
 
     # No tests included
@@ -2145,13 +2145,13 @@ in {
 
   boto3 = buildPythonPackage rec {
     name = "boto3-${version}";
-    version = "1.4.4";
+    version = "1.4.7";
 
     src = pkgs.fetchFromGitHub {
       owner = "boto";
       repo  = "boto3";
       rev   = version;
-      sha256 = "1zngj38a2dmc02p3ha9crzv9k682f0zgyyfx1bgg8hwwrnggikwl";
+      sha256 = "0ca08xkkx6py08gqgn1aci9pklidwivxbvpwjv7623jr21avakdi";
     };
 
     propagatedBuildInputs = [ self.botocore self.jmespath self.s3transfer ] ++
@@ -2184,11 +2184,11 @@ in {
   botocore = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "botocore";
-    version = "1.5.71";
+    version = "1.7.20";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "1fgg28halsy4g43wjpkbd6l0wqiwyzkd4zjrzbbyzw4dxbsf3xfm";
+      sha256 = "16sy35bp9i2g9785l8jzcd4ddc2nydqs3wnkqwi36xx6l3bdbn13";
     };
 
     propagatedBuildInputs = with self; [
