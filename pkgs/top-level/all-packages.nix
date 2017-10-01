@@ -4781,6 +4781,8 @@ with pkgs;
     inherit (perlPackages) ShellCommand TestMost;
   };
 
+  vcstool = callPackage ../development/tools/vcstool { };
+
   verilator = callPackage ../applications/science/electronics/verilator {};
 
   verilog = callPackage ../applications/science/electronics/verilog {};
