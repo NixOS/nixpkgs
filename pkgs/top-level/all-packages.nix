@@ -2828,6 +2828,8 @@ with pkgs;
 
   knockknock = callPackage ../tools/security/knockknock { };
 
+  kore = callPackage ../development/web/kore { };
+
   partition-manager = libsForQt5.callPackage ../tools/misc/partition-manager { };
 
   kpcli = callPackage ../tools/security/kpcli { };
