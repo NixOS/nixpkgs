@@ -1,0 +1,440 @@
+diff --git a/Makefile.am b/Makefile.am
+index b677b74da720d59a12cfb8b1d3a8835bb3bc0e09..0c36ce81d2b8fc8e0fefbe623b902f8d59715d20 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -67,9 +67,8 @@ endif
+ # Skip Linux-specific steps on OSX.
+ if ! BUILD_DARWIN
+ if HAVE_GUI
+-	rsync -rupE --exclude="img/.DS_Store" img $(DESTDIR)$(prefix)/share/armory/
+-	sed "s: /usr: $(prefix):g" < dpkgfiles/armory > $(DESTDIR)$(prefix)/bin/armory
+-	chmod +x $(DESTDIR)$(prefix)/bin/armory
++	mkdir -p $(DESTDIR)$(prefix)/share/armory
++	cp -r img $(DESTDIR)$(prefix)/share/armory/
+ endif
+ endif
+ 
+diff --git a/configure.ac b/configure.ac
+index 220ed80d2662b084a4ae8b693fefbf220923bcdc..d1aa3764edf0e2a99251183d0b7aa666b63c1663 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -3,8 +3,6 @@ AC_INIT([BitcoinArmory], [0.96.3], [moothecowlord@gmail.com])
+ 
+ AM_INIT_AUTOMAKE([1.10 subdir-objects foreign -Wall -Werror])
+ 
+-AC_CONFIG_SUBDIRS([cppForSwig/fcgi cppForSwig/cryptopp])
+-
+ AM_PROG_AR
+ LT_INIT
+ 
+@@ -164,7 +162,7 @@ AM_CONDITIONAL([BUILD_DARWIN], [test x$BUILD_OS = xdarwin])
+ 
+ AC_CONFIG_FILES(Makefile
+ 		cppForSwig/Makefile
+-		cppForSwig/lmdb/Makefile)
++		)
+ 
+ AM_CONDITIONAL([BUILD_TESTS], [test "x$want_tests" = "xyes"])
+ if test "x$want_tests" = "xyes"; then
+diff --git a/cppForSwig/BDM_Server.h b/cppForSwig/BDM_Server.h
+index 0e9557192096d8169dd90b8b33453f699d68ff79..84d70e33c6a4f9dcb24958d11fa34f87b1d1a0cd 100644
+--- a/cppForSwig/BDM_Server.h
++++ b/cppForSwig/BDM_Server.h
+@@ -16,8 +16,8 @@
+ #include <future>
+ 
+ #include "BitcoinP2p.h"
+-#include "./fcgi/include/fcgiapp.h"
+-#include "./fcgi/include/fcgios.h"
++#include <fastcgi/fcgiapp.h>
++#include <fastcgi/fcgios.h>
+ 
+ #include "BlockDataViewer.h"
+ #include "DataObject.h"
+diff --git a/cppForSwig/BlockObj.cpp b/cppForSwig/BlockObj.cpp
+index b13b6826aebf6bdf2715eca3cd1e6499dccd13b9..bf14db052c8fcd4de0a033379b7d1dfe31aa4740 100644
+--- a/cppForSwig/BlockObj.cpp
++++ b/cppForSwig/BlockObj.cpp
+@@ -13,7 +13,7 @@
+ #include <algorithm>
+ #include <thread>
+ 
+-#include "integer.h"
++#include <cryptopp/integer.h>
+ #include "BinaryData.h"
+ #include "BtcUtils.h"
+ #include "BlockObj.h"
+diff --git a/cppForSwig/BlockUtils.h b/cppForSwig/BlockUtils.h
+index b60ded1a7c5b5d6d2ecbc9be5374d61fbf6ba655..1ea77fa95ff0254c2642e7f22899eded49f0ca93 100644
+--- a/cppForSwig/BlockUtils.h
++++ b/cppForSwig/BlockUtils.h
+@@ -31,8 +31,8 @@
+ #include "ScrAddrObj.h"
+ #include "bdmenums.h"
+ 
+-#include "cryptlib.h"
+-#include "sha.h"
++#include <cryptopp/cryptlib.h>
++#include <cryptopp/sha.h>
+ #include "UniversalTimer.h"
+ 
+ #include <functional>
+diff --git a/cppForSwig/BtcUtils.cpp b/cppForSwig/BtcUtils.cpp
+index 59630c835eb24e743ee6555ce844352dc41fabc4..1a11634901120508ec82abfb1c08a68c0c25fe5b 100644
+--- a/cppForSwig/BtcUtils.cpp
++++ b/cppForSwig/BtcUtils.cpp
+@@ -7,9 +7,9 @@
+ ////////////////////////////////////////////////////////////////////////////////
+ 
+ #include "BtcUtils.h"
+-#include "hmac.h"
+-#include "sha.h"
+-#include "base64.h"
++#include <cryptopp/hmac.h>
++#include <cryptopp/sha.h>
++#include <cryptopp/base64.h>
+ #include "EncryptionUtils.h"
+ #include "BlockDataManagerConfig.h"
+ 
+diff --git a/cppForSwig/BtcUtils.h b/cppForSwig/BtcUtils.h
+index 51b2feb901c5422c739355c12d10c4148c272572..8b0eae6d57524fe2070359689693dbfa51e7e074 100644
+--- a/cppForSwig/BtcUtils.h
++++ b/cppForSwig/BtcUtils.h
+@@ -29,10 +29,10 @@
+ #include <stdexcept>
+ 
+ #include "BinaryData.h"
+-#include "cryptlib.h"
+-#include "sha.h"
+-#include "integer.h"
+-#include "ripemd.h"
++#include <cryptopp/cryptlib.h>
++#include <cryptopp/sha.h>
++#include <cryptopp/integer.h>
++#include <cryptopp/ripemd.h>
+ #include "UniversalTimer.h"
+ #include "log.h"
+ 
+diff --git a/cppForSwig/EncryptionUtils.cpp b/cppForSwig/EncryptionUtils.cpp
+index 9907578dfa10bad94649ea7a916b0b6f41582cb9..3763629c9acbbef68d2728342ab8dbc9b8776d9b 100644
+--- a/cppForSwig/EncryptionUtils.cpp
++++ b/cppForSwig/EncryptionUtils.cpp
+@@ -7,8 +7,8 @@
+ ////////////////////////////////////////////////////////////////////////////////
+ #include "EncryptionUtils.h"
+ #include "log.h"
+-#include "integer.h"
+-#include "oids.h"
++#include <cryptopp/integer.h>
++#include <cryptopp/oids.h>
+ 
+ //#include <openssl/ec.h>
+ //#include <openssl/ecdsa.h>
+diff --git a/cppForSwig/EncryptionUtils.h b/cppForSwig/EncryptionUtils.h
+index 02074f3d226b6c8a118951050b0ecefae3bb4d7e..7a3e3ebfce8d76078ba3abeb5a0a527c7171de7a 100644
+--- a/cppForSwig/EncryptionUtils.h
++++ b/cppForSwig/EncryptionUtils.h
+@@ -59,13 +59,13 @@
+ #include <cmath>
+ #include <algorithm>
+ 
+-#include "cryptlib.h"
+-#include "osrng.h"
+-#include "sha.h"
+-#include "aes.h"
+-#include "modes.h"
+-#include "eccrypto.h"
+-#include "filters.h"
++#include <cryptopp/cryptlib.h>
++#include <cryptopp/osrng.h>
++#include <cryptopp/sha.h>
++#include <cryptopp/aes.h>
++#include <cryptopp/modes.h>
++#include <cryptopp/eccrypto.h>
++#include <cryptopp/filters.h>
+ #include "DetSign.h"
+ 
+ #include "BinaryData.h"
+diff --git a/cppForSwig/FcgiMessage.h b/cppForSwig/FcgiMessage.h
+index 4f09e1358edafe022d9a689f73350cbd55cb45dc..b9d9dd5666ee968bd48672e187f277ac3b3b74b4 100644
+--- a/cppForSwig/FcgiMessage.h
++++ b/cppForSwig/FcgiMessage.h
+@@ -13,7 +13,7 @@
+ #include <vector>
+ #include <string>
+ #include <sstream>
+-#include "./fcgi/include/fastcgi.h"
++#include <fastcgi/fastcgi.h>
+ 
+ using namespace std;
+ 
+diff --git a/cppForSwig/Makefile.am b/cppForSwig/Makefile.am
+index b663c7a9da40c60efac60d8ee91ac2f9875945c9..3074118eb2f5e62e2947af26ef57d2a982a1a863 100644
+--- a/cppForSwig/Makefile.am
++++ b/cppForSwig/Makefile.am
+@@ -3,8 +3,8 @@ if BUILD_TESTS
+ MAYBE_BUILD += gtest
+ endif
+ 
+-DIST_SUBDIRS = lmdb fcgi cryptopp
+-SUBDIRS = lmdb fcgi cryptopp $(MAYBE_BUILD)
++DIST_SUBDIRS =
++SUBDIRS = $(MAYBE_BUILD)
+ 
+ SWIG_FLAGS = -c++ -python -threads
+ AM_CXXFLAGS = $(CXXFLAGS) -std=c++11
+@@ -21,6 +21,7 @@ SWIG_FLAGS += -D__CLANG__
+ endif
+ 
+ INCLUDE_FILES = UniversalTimer.h BinaryData.h lmdb_wrapper.h \
++	DetSign.h lmdbpp.h \
+ 	BtcUtils.h DBUtils.h BlockObj.h BlockUtils.h EncryptionUtils.h \
+ 	BtcWallet.h LedgerEntry.h ScrAddrObj.h Blockchain.h \
+ 	BDM_mainthread.h BDM_supportClasses.h \
+@@ -34,6 +35,7 @@ INCLUDE_FILES = UniversalTimer.h BinaryData.h lmdb_wrapper.h \
+ 	TransactionBatch.h BlockchainScanner_Super.h SigHashEnum.h
+ 
+ DB_SOURCE_FILES = UniversalTimer.cpp BinaryData.cpp lmdb_wrapper.cpp \
++	DetSign.cpp lmdbpp.cpp \
+ 	BtcUtils.cpp DBUtils.cpp BlockObj.cpp BlockUtils.cpp EncryptionUtils.cpp \
+ 	BtcWallet.cpp LedgerEntry.cpp ScrAddrObj.cpp Blockchain.cpp \
+ 	BDM_mainthread.cpp BDM_supportClasses.cpp \
+@@ -46,6 +48,7 @@ DB_SOURCE_FILES = UniversalTimer.cpp BinaryData.cpp lmdb_wrapper.cpp \
+ 	StringSockets.cpp main.cpp ReentrantLock.cpp log.cpp
+ 
+ CPPBLOCKUTILS_SOURCE_FILES = UniversalTimer.cpp BinaryData.cpp \
++	DetSign.cpp lmdbpp.cpp \
+ 	BtcUtils.cpp DBUtils.cpp EncryptionUtils.cpp \
+ 	BDM_seder.cpp DataObject.cpp FcgiMessage.cpp \
+ 	SocketObject.cpp SwigClient.cpp StringSockets.cpp \
+@@ -62,14 +65,12 @@ noinst_PROGRAMS = ArmoryDB
+ ArmoryDB_SOURCES = $(INCLUDE_FILES) \
+ 		   $(DB_SOURCE_FILES)
+ 
+-ArmoryDB_CXXFLAGS = $(AM_CXXFLAGS) -Ilmdb \
+-		    -Icryptopp \
+-		    -Ifcgi -Ifcgi/include \
++ArmoryDB_CXXFLAGS = $(AM_CXXFLAGS) \
+ 		    -D__STDC_LIMIT_MACROS
+ 
+-ArmoryDB_LDADD = -Llmdb -llmdb \
+-		 -Lcryptopp -lcryptopp \
+-		 -Lfcgi/libfcgi/ -lfcgi \
++ArmoryDB_LDADD = -llmdb \
++		 -lcryptopp \
++		 -lfcgi \
+ 		 -lpthread
+ 
+ ArmoryDB_LDFLAGS = -static $(LDFLAGS)
+@@ -81,14 +82,13 @@ lib_LTLIBRARIES = libCppBlockUtils.la
+ libCppBlockUtils_la_SOURCES = $(INCLUDE_FILES) \
+ 				$(CPPBLOCKUTILS_SOURCE_FILES) \
+ 				CppBlockUtils_wrap.cxx
+-libCppBlockUtils_la_CXXFLAGS = $(AM_CXXFLAGS) -Ilmdb \
+-		    		-Icryptopp \
++libCppBlockUtils_la_CXXFLAGS = $(AM_CXXFLAGS) \
+ 				$(AX_SWIG_PYTHON_CPPFLAGS) \
+ 				$(EXTRA_PYTHON_INCLUDES) \
+ 				-D__STDC_LIMIT_MACROS
+ 
+-libCppBlockUtils_la_LIBADD = 	-Llmdb -llmdb \
+-		 	 	./cryptopp/libcryptopp.la \
++libCppBlockUtils_la_LIBADD = 	-llmdb \
++				-lcryptopp \
+ 		 	 	-lpthread
+ 
+ libCppBlockUtils_la_LDFLAGS = $(LDFLAGS)
+diff --git a/cppForSwig/Script.cpp b/cppForSwig/Script.cpp
+index d97bc7d86baaa7ef98bf222cf56784e61b0a159f..763befeb67e82c34acb8cc1ccc5b03f6ba6547f7 100644
+--- a/cppForSwig/Script.cpp
++++ b/cppForSwig/Script.cpp
+@@ -9,7 +9,7 @@
+ #include "Script.h"
+ #include "Transactions.h"
+ #include "Signer.h"
+-#include "oids.h"
++#include <cryptopp/oids.h>
+ 
+ //dtors
+ StackValue::~StackValue()
+diff --git a/cppForSwig/Transactions.cpp b/cppForSwig/Transactions.cpp
+index c358ec26ddbe075802b87a14f73410e45bced15b..2591af8bde6b22a1c2ebdcd6bd102bb86c092d54 100644
+--- a/cppForSwig/Transactions.cpp
++++ b/cppForSwig/Transactions.cpp
+@@ -7,7 +7,7 @@
+ ////////////////////////////////////////////////////////////////////////////////
+ 
+ #include "Transactions.h"
+-#include "oids.h"
++#include <cryptopp/oids.h>
+ 
+ ////////////////////////////////////////////////////////////////////////////////
+ TransactionStub::~TransactionStub(void)
+diff --git a/cppForSwig/Wallets.h b/cppForSwig/Wallets.h
+index a5598478afe433a670d89139ed8acce0289a8247..ff767942fcacd922c416d9398c9861ac869b16ef 100644
+--- a/cppForSwig/Wallets.h
++++ b/cppForSwig/Wallets.h
+@@ -19,7 +19,7 @@
+ 
+ #include "BinaryData.h"
+ #include "EncryptionUtils.h"
+-#include "lmdb/lmdbpp.h"
++#include "lmdbpp.h"
+ #include "Script.h"
+ #include "Signer.h"
+ #include "ReentrantLock.h"
+diff --git a/cppForSwig/cryptopp/DetSign.cpp b/cppForSwig/cryptopp/DetSign.cpp
+index a12d7ddceece0229957d149d95347c6ddbaefcb0..86b145532609d151b2f7cc0d53b272815ca45cca 100644
+--- a/cppForSwig/cryptopp/DetSign.cpp
++++ b/cppForSwig/cryptopp/DetSign.cpp
+@@ -9,15 +9,15 @@
+ // Implementation of RFC 6979 for Crypto++. ECDSA_DetSign<ECP, SHA256>::Signer
+ // is an example of a signer that uses RFC 6979 to determine the k-value.
+ 
+-#include "pch.h"
++#include <cryptopp/pch.h>
+ 
+ #ifndef CRYPTOPP_IMPORTS
+ 
+ #include "DetSign.h"
+-#include "integer.h"
+-#include "hmac.h"
+-#include "pubkey.h"
+-#include "sha.h"
++#include <cryptopp/integer.h>
++#include <cryptopp/hmac.h>
++#include <cryptopp/pubkey.h>
++#include <cryptopp/sha.h>
+ 
+ NAMESPACE_BEGIN(CryptoPP)
+ 
+diff --git a/cppForSwig/cryptopp/DetSign.h b/cppForSwig/cryptopp/DetSign.h
+index 921b9293efb642b33f02f156f98efdf89f23b437..11dba4503d25145fed4a3553d20f4bfa9c2b22e8 100644
+--- a/cppForSwig/cryptopp/DetSign.h
++++ b/cppForSwig/cryptopp/DetSign.h
+@@ -12,8 +12,8 @@
+ #ifndef CRYPTOPP_DETSIGNRNG_H
+ #define CRYPTOPP_DETSIGNRNG_H
+ 
+-#include "pubkey.h"
+-#include "eccrypto.h"
++#include <cryptopp/pubkey.h>
++#include <cryptopp/eccrypto.h>
+ 
+ NAMESPACE_BEGIN(CryptoPP)
+ 
+diff --git a/cppForSwig/gtest/Makefile.am b/cppForSwig/gtest/Makefile.am
+index 4087b6c966e6c7c2d0c36c331ca2cd001052e2cd..11047b7214bddbdd9a48c41e1c3656664602ca5b 100644
+--- a/cppForSwig/gtest/Makefile.am
++++ b/cppForSwig/gtest/Makefile.am
+@@ -1,4 +1,4 @@
+-SUBDIRS = ../lmdb ../fcgi ../cryptopp
++SUBDIRS =
+ 
+ AM_CXXFLAGS =
+ 
+@@ -37,9 +37,7 @@ SOURCE_FILES = ../UniversalTimer.cpp ../BinaryData.cpp ../lmdb_wrapper.cpp \
+ 	../CoinSelection.cpp ../log.cpp \
+ 	gtest-all.cc
+ 
+-AM_CXXFLAGS += -I../lmdb \
+-	-I../cryptopp \
+-	-I../fcgi -I../fcgi/include \
++AM_CXXFLAGS += \
+ 	-D__STDC_LIMIT_MACROS
+ 
+ AM_LDFLAGS = -static $(LDFLAGS)
+@@ -55,19 +53,19 @@ CppBlockUtilsTests_CXXFLAGS = $(AM_CXXFLAGS) $(CXXFLAGS) -std=c++11
+ DB1kIterTest_CXXFLAGS = $(AM_CXXFLAGS) $(CXXFLAGS) -std=c++11
+ ContainerTests_CXXFLAGS = $(AM_CXXFLAGS) $(CXXFLAGS) -std=c++11
+ 
+-CppBlockUtilsTests_LDADD = -L../lmdb -llmdb \
+-	-L../cryptopp -lcryptopp \
+-	-L../fcgi/libfcgi/ -lfcgi \
++CppBlockUtilsTests_LDADD = -llmdb \
++	-lcryptopp \
++	-lfcgi \
+ 	-lpthread $(LDFLAGS)
+ 
+ ContainerTests_LDADD = -lpthread $(LDFLAGS)
+ 
+-DB1kIterTest_LDADD = -L../lmdb -llmdb \
+-	-L../cryptopp -lcryptopp \
+-	-L../fcgi/libfcgi/ -lfcgi \
++DB1kIterTest_LDADD = -llmdb \
++	-lcryptopp \
++	-lfcgi \
+ 	-lpthread $(LDFLAGS)
+ 
+-SupernodeTests_LDADD = -L../lmdb -llmdb \
+-	-L../cryptopp -lcryptopp \
+-	-L../fcgi/libfcgi/ -lfcgi \
++SupernodeTests_LDADD = -llmdb \
++	-lcryptopp \
++	-lfcgi \
+ 	-lpthread $(LDFLAGS)
+diff --git a/cppForSwig/lmdb/lmdbpp.h b/cppForSwig/lmdb/lmdbpp.h
+index 94f774633a0a45bd775c97a3820adfc0a30751ed..eab720d1ce4c47ec49954c1b2db4c1f17eb69519 100644
+--- a/cppForSwig/lmdb/lmdbpp.h
++++ b/cppForSwig/lmdb/lmdbpp.h
+@@ -14,7 +14,7 @@
+ #include <unordered_map>
+ #include <thread>
+ #include <mutex>
+-#include "lmdb.h"
++#include <lmdb.h>
+ 
+ struct MDB_env;
+ struct MDB_txn;
+diff --git a/cppForSwig/lmdb_wrapper.h b/cppForSwig/lmdb_wrapper.h
+index e6d7054444fbac532c391136be67855480834e2c..9711c7f012d88b157ba6581d615b8e7967d9e9f1 100644
+--- a/cppForSwig/lmdb_wrapper.h
++++ b/cppForSwig/lmdb_wrapper.h
+@@ -23,7 +23,7 @@
+ #include "BlockObj.h"
+ #include "StoredBlockObj.h"
+ 
+-#include "lmdb/lmdbpp.h"
++#include "lmdbpp.h"
+ 
+ class Blockchain;
+ 
+diff --git a/dpkgfiles/armory.desktop b/dpkgfiles/armory.desktop
+index ef18daef782de3989d6d52983eef379f28574756..b8770568131ec0b9222c901376abc7a379111248 100755
+--- a/dpkgfiles/armory.desktop
++++ b/dpkgfiles/armory.desktop
+@@ -4,7 +4,7 @@ Name=Armory
+ GenericName=Bitcoin Client
+ Comment=Full-featured Bitcoin wallet management application
+ Categories=Qt;Network;
+-Exec=/usr/local/bin/armory
++Exec=armory
+ Icon=armoryicon
+ StartupNotify=false
+ Terminal=false
+diff --git a/dpkgfiles/armoryoffline.desktop b/dpkgfiles/armoryoffline.desktop
+index c8e832caa24599d356f7bbca4aad9509bad5efd8..b31f01e30257ff5cf93050e07b2154d573eaffa2 100755
+--- a/dpkgfiles/armoryoffline.desktop
++++ b/dpkgfiles/armoryoffline.desktop
+@@ -4,7 +4,7 @@ Name=Armory (Offline-mode)
+ GenericName=Bitcoin Client
+ Comment=Full-featured Bitcoin wallet management application
+ Categories=Qt;Network;
+-Exec=/usr/local/bin/armory --offline
++Exec=armory --offline
+ Icon=armoryicon
+ StartupNotify=false
+ Terminal=false
+diff --git a/dpkgfiles/armorytestnet.desktop b/dpkgfiles/armorytestnet.desktop
+index 387df15b81aa450682cd38a2136dd78a3ae40888..e99bf3fbf32279846aebd73bb4c3eefc0495efbc 100755
+--- a/dpkgfiles/armorytestnet.desktop
++++ b/dpkgfiles/armorytestnet.desktop
+@@ -4,7 +4,7 @@ Name=Armory (Testnet)
+ GenericName=Bitcoin Client
+ Comment=Full-featured Bitcoin wallet management application
+ Categories=Qt;Network;
+-Exec=/usr/local/bin/armory --testnet
++Exec=armory --testnet
+ Icon=armorytestneticon
+ StartupNotify=false
+ Terminal=false

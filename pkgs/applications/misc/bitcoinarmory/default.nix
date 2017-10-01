@@ -1,45 +1,56 @@
-{ stdenv, fetchFromGitHub, pythonPackages
-, pkgconfig, autoreconfHook, rsync
-, swig, qt4, fcgi
-, bitcoin, procps, utillinux
+{ stdenv, autoreconfHook, bitcoin, cryptopp, fcgi, fetchFromGitHub
+, lmdb, pkgconfig, procps, pythonPackages, qt4, rsync, swig, utillinux
 }:
+
 let
 
-  version = "0.96.1";
-  sitePackages = pythonPackages.python.sitePackages;
   inherit (pythonPackages) mkPythonDerivation pyqt4 psutil twisted;
 
-in mkPythonDerivation {
+in mkPythonDerivation rec {
 
   name = "bitcoinarmory-${version}";
+  version = "0.96.3";
 
   src = fetchFromGitHub {
     owner = "goatpig";
     repo = "BitcoinArmory";
     rev = "v${version}";
-    #sha256 = "023c7q1glhrkn4djz3pf28ckd1na52lsagv4iyfgchqvw7qm7yx2";
-    sha256 = "0pjk5qx16n3kvs9py62666qkwp2awkgd87by4karbj7vk6p1l14h"; fetchSubmodules = true;
+    sha256 = "1nbdhmyk9nm771fvmn5bd5id14xr4ijsnbxbs7c8my6l8drr06q3";
   };
 
-  # FIXME bitcoind doesn't die on shutdown. Need some sort of patch to fix that.
-  #patches = [ ./shutdown-fix.patch ];
+  patches = [ ./automake.patch ];
 
-  buildInputs = [
-    pkgconfig
-    autoreconfHook
-    swig
-    qt4
-    fcgi
-    rsync # used by silly install script (TODO patch upstream)
-  ];
+  postPatch = ''
+    # Remove a bunch of unused stuff & the ones we’re taking from
+    # Nixpkgs, so that we get real compilation errors (hopefully).
+    rm -r dpkgfiles/{armory,control*,copyright,make_*,post*,rules}
+    rm -r PublicKeys extras guitest linuxbuild osxbuild r-pi release_scripts
+    rm -r samplemodules urllib3 webshop windowsbuild README_OSX.md
+    rm -r edit_icons.bat edit_icons.rts nginx_example.conf subprocess_win.py
+    rm -r update_version.py writeNSISCompilerArgs.py ArmorySetup.nsi
 
-  propagatedBuildInputs = [
-    pyqt4
-    psutil
-    twisted
-  ];
+    mv cppForSwig/cryptopp/DetSign.* cppForSwig/
+    mv cppForSwig/lmdb/lmdbpp.* cppForSwig/
 
-  makeFlags = [ "PREFIX=$(out)" ];
+    rm -r cppForSwig/{BitcoinArmory_CppTests,BDM_Client,BlockDataManager}
+    rm -r cppForSwig/{ContainerTests,DB1kIterTest,LMDB_Win}
+    rm -r cppForSwig/{cryptopp,fcgi}
+    rm -r cppForSwig/guardian/{*.sln,*.vc*proj*}
+    rm -r cppForSwig/{leveldb_windows_port,leveldbwin,lmdb}
+    rm -r cppForSwig/BitcoinArmory.sln
+  '';
+
+  # TODO: are pytest/* run at all?
+
+  # TODO: are cppForSwig/gtest/* run at all?
+
+  # TODO: maybe use `jasvet.py` from its upstream? But where is it?
+
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+
+  buildInputs = [ swig qt4 fcgi cryptopp lmdb ];
+
+  propagatedBuildInputs = [ pyqt4 psutil twisted ];
 
   makeWrapperArgs = [
     "--prefix            PATH : ${bitcoin}/bin"   # for `bitcoind`
@@ -49,16 +60,15 @@ in mkPythonDerivation {
     "--run    cd\\ $out/lib/armory"               # so that GUI resources can be loaded
   ];
 
-  # auditTmpdir runs during fixupPhase, so patchelf before that
-  preFixup = ''
-    newRpath=$(patchelf --print-rpath $out/bin/ArmoryDB | sed -r 's|(.*)(/tmp/nix-build-.*libfcgi/.libs:?)(.*)|\1\3|')
-    patchelf --set-rpath $out/lib:$newRpath $out/bin/ArmoryDB
+  postInstall = ''
+    ln -sf $out/lib/armory/ArmoryQt.py $out/bin/armory
+    mkdir -p $out/share/applications
+    cp dpkgfiles/*.desktop $out/share/applications/
   '';
 
   # fixupPhase of mkPythonDerivation wraps $out/bin/*, so this needs to come after
   postFixup = ''
     wrapPythonProgramsIn $out/lib/armory "$out $pythonPath"
-    ln -sf $out/lib/armory/ArmoryQt.py $out/bin/armory
   '';
 
   meta = {
@@ -80,8 +90,8 @@ in mkPythonDerivation {
     '';
     homepage = https://github.com/goatpig/BitcoinArmory;
     license = stdenv.lib.licenses.agpl3Plus;
-    maintainers = with stdenv.lib.maintainers; [ elitak ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    maintainers = with stdenv.lib.maintainers; [ elitak michalrus ];
+    platforms = stdenv.lib.platforms.linux;
   };
 
 }
