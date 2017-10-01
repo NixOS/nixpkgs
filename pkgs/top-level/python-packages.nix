@@ -2145,13 +2145,13 @@ in {
 
   boto3 = buildPythonPackage rec {
     name = "boto3-${version}";
-    version = "1.4.4";
+    version = "1.4.7";
 
     src = pkgs.fetchFromGitHub {
       owner = "boto";
       repo  = "boto3";
       rev   = version;
-      sha256 = "1zngj38a2dmc02p3ha9crzv9k682f0zgyyfx1bgg8hwwrnggikwl";
+      sha256 = "0ca08xkkx6py08gqgn1aci9pklidwivxbvpwjv7623jr21avakdi";
     };
 
     propagatedBuildInputs = [ self.botocore self.jmespath self.s3transfer ] ++
