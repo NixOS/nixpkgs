@@ -14368,7 +14368,7 @@ with pkgs;
 
   fmsynth = callPackage ../applications/audio/fmsynth { };
 
-  focuswriter = callPackage ../applications/editors/focuswriter { };
+  focuswriter = libsForQt5.callPackage ../applications/editors/focuswriter { };
 
   font-manager = callPackage ../applications/misc/font-manager { };
 
