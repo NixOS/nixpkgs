@@ -16095,6 +16095,8 @@ with pkgs;
     gst-plugins-bad = null;
   };
 
+  falkon = libsForQt5.callPackage ../applications/networking/browsers/falkon { };
+
   qutebrowser = libsForQt5.callPackage ../applications/networking/browsers/qutebrowser {
     inherit (python3Packages) buildPythonApplication pyqt5 jinja2 pygments pyyaml pypeg2 cssutils pyopengl;
     inherit (gst_all_1) gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav;
