@@ -2,7 +2,7 @@
 , libxml2, libxslt, libffi, makeWrapper, p7zip, xar, gzip, cpio }:
 
 let
-  version = "1.9.5";
+  version = "2.0.0";
   rake = buildRubyGem {
     inherit ruby;
     gemName = "rake";
@@ -17,9 +17,9 @@ let
       else "system ${stdenv.system} not supported";
 
   sha256 = {
-    "x86_64-linux"  = "16ijzaacfbqrgh561bf51747d2rv8kydgs14dfdr572qi0f88baw";
-    "i686-linux"    = "0lvkb4k0a34a8hzlsi0apf056rhyprh5w0gn16d0n2ijnaf9j2yk";
-    "x86_64-darwin" = "070mrczsx1j0jl9sx6963l3hrk9anqa13r008wk1d22d25xj25mc";
+    "x86_64-linux"  = "184amybyxqlxqr8fk6lyx2znmci1fazsiby90q7d1xx2ihz3hm5x";
+    "i686-linux"    = "19r1m5jila40x69m1qz2hslz7v1hdg8wwdhcq8d5qjnzwfmlw2qz";
+    "x86_64-darwin" = "154400iqs01235bclr8ic7g9jv01lfs766bmv7p8784r3xsblvsr";
   }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
   arch = builtins.replaceStrings ["-linux" "-darwin"] ["" ""] stdenv.system;
