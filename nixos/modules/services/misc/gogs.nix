@@ -240,7 +240,7 @@ in
       };
     };
 
-    users = {
+    users = mkIf (cfg.user == "gogs") {
       extraUsers.gogs = {
         description = "Go Git Service";
         uid = config.ids.uids.gogs;
