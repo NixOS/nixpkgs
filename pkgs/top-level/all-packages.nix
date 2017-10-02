@@ -55,10 +55,10 @@ with pkgs;
 
   stringsWithDeps = lib.stringsWithDeps;
 
-  ### Evaluating the entire NixPkgs naively will fail, make failure fast
+  ### Evaluating the entire Nixpkgs naively will fail, make failure fast
   AAAAAASomeThingsFailToEvaluate = throw ''
     Please be informed that this pseudo-package is not the only part of
-    NixPkgs that fails to evaulate. You should not evaluate entire NixPkgs
+    Nixpkgs that fails to evaluate. You should not evaluate entire Nixpkgs
     without some special measures to handle failing packages, like those taken
     by Hydra.
   '';
