@@ -2,7 +2,7 @@
 , libxml2, libxslt, libffi, makeWrapper, p7zip, xar, gzip, cpio }:
 
 let
-  version = "1.9.5";
+  version = "1.9.7";
   rake = buildRubyGem {
     inherit ruby;
     gemName = "rake";
@@ -17,9 +17,9 @@ let
       else "system ${stdenv.system} not supported";
 
   sha256 = {
-    "x86_64-linux"  = "16ijzaacfbqrgh561bf51747d2rv8kydgs14dfdr572qi0f88baw";
-    "i686-linux"    = "0lvkb4k0a34a8hzlsi0apf056rhyprh5w0gn16d0n2ijnaf9j2yk";
-    "x86_64-darwin" = "070mrczsx1j0jl9sx6963l3hrk9anqa13r008wk1d22d25xj25mc";
+    "x86_64-linux"  = "1pfbmsvi9mkwgs32k4nn52ncz8xn033xbz50ma8ck5adq8v9hmym";
+    "i686-linux"    = "0z0n97wzx3cs95z7b6b3dgfbjg1wjw4lqdnk3wmfc4d7bifdhvsa";
+    "x86_64-darwin" = "00x55va1g4xv0xy6khd1kd56y5ah0xacncrclmyr9fypyzqrpfry";
   }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
   arch = builtins.replaceStrings ["-linux" "-darwin"] ["" ""] stdenv.system;
@@ -132,6 +132,11 @@ in stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
+    for lib in $out/opt/vagrant/embedded/gems/gems/ffi-1.9.18/ext/ffi_c/*.so*; do
+      if [[ ! -L "$lib" ]]; then
+        patchelf --set-rpath "$(patchelf --print-rpath $lib):$out/opt/vagrant/embedded/lib" "$lib"
+      fi
+    done
     chmod +x "$out/opt/vagrant/embedded/gems/gems/vagrant-$version/plugins/provisioners/salt/bootstrap-salt.sh"
   '' +
   (stdenv.lib.optionalString stdenv.isDarwin ''
