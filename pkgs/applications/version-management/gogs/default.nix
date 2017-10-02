@@ -16,9 +16,12 @@ buildGoPackage rec {
     sha256 = "1xn1b4dxf7r8kagps3yvp31zskfxn50k1gfic9abl4kjwpwk78c0";
   };
 
-  patchPhase = ''
+  patches = [ ./static-root-path.patch ];
+
+  postPatch = ''
     patchShebangs .
-    '';
+    substituteInPlace pkg/setting/setting.go --subst-var data
+  '';
 
   nativeBuildInputs = [ makeWrapper ];
 
