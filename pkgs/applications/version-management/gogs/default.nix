@@ -33,10 +33,7 @@ buildGoPackage rec {
     cp -R $src/{public,templates} $data
 
     wrapProgram $bin/bin/gogs \
-      --prefix PATH : ${makeBinPath [ bash git gzip openssh ]} \
-      --run 'export GOGS_WORK_DIR=''${GOGS_WORK_DIR:-$PWD}' \
-      --run 'mkdir -p "$GOGS_WORK_DIR" && cd "$GOGS_WORK_DIR"' \
-      --run "ln -fs $data/{public,templates} ."
+      --prefix PATH : ${makeBinPath [ bash git gzip openssh ]}
   '';
 
   goPackagePath = "github.com/gogits/gogs";
