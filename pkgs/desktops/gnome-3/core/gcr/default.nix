@@ -7,12 +7,14 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [
-    pkgconfig intltool gnupg glib gobjectIntrospection libxslt
-    libgcrypt libtasn1 dbus_glib gtk pango gdk_pixbuf atk makeWrapper vala_0_32
+  buildInputs = let
+    gpg = gnupg.override { guiSupport = false; }; # prevent build cycle with pinentry_gnome
+  in [
+    pkgconfig intltool gpg gobjectIntrospection libxslt
+    libgcrypt libtasn1 dbus_glib pango gdk_pixbuf atk makeWrapper vala_0_32
   ];
 
-  propagatedBuildInputs = [ p11_kit ];
+  propagatedBuildInputs = [ glib gtk p11_kit ];
 
   #doCheck = true;
 
