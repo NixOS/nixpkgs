@@ -625,6 +625,8 @@ let
 
     sawja = callPackage ../development/ocaml-modules/sawja { };
 
+    stdint = callPackage ../development/ocaml-modules/stdint { };
+
     uucd = callPackage ../development/ocaml-modules/uucd { };
     uucp = callPackage ../development/ocaml-modules/uucp { };
     uunf = callPackage ../development/ocaml-modules/uunf { };
