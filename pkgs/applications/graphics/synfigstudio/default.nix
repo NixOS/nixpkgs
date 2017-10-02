@@ -42,6 +42,8 @@ let
     buildInputs = [
       ETL boost cairo glibmm mlt-qt5 libsigcxx libxmlxx pango
     ];
+
+    meta.broken = true;
   };
 in
 stdenv.mkDerivation rec {

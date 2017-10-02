@@ -635,6 +635,13 @@ in {
         chown -R ${cfg.user}:${cfg.group} ${cfg.statePath}
         chmod -R ug+rwX,o-rwx+X ${cfg.statePath}
         chmod -R u+rwX,go-rwx+X ${gitlabEnv.HOME}
+        chmod -R ug+rwX,o-rwx ${cfg.statePath}/repositories
+        chmod -R ug-s ${cfg.statePath}/repositories
+        find ${cfg.statePath}/repositories -type d -print0 | xargs -0 chmod g+s
+        chmod 700 ${cfg.statePath}/uploads
+        chown -R git ${cfg.statePath}/uploads
+        find ${cfg.statePath}/uploads -type f -exec chmod 0644 {} \;
+        find ${cfg.statePath}/uploads -type d -not -path ${cfg.statePath}/uploads -exec chmod 0700 {} \;
       '';
 
       serviceConfig = {

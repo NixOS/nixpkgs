@@ -4,13 +4,13 @@
 }:
 pythonPackages.buildPythonApplication rec {
   name = "xflux-gui-${version}";
-  version = "2016-09-21";
+  version = "1.1.10";
 
   src = fetchFromGitHub {
     repo = "xflux-gui";
     owner = "xflux-gui";
-    rev = "0b56204477494b473a390e8b0db043437ec14f32";
-    sha256 = "15pr8f31jnhqjlpvasnj6cmm6hw5gljphh2pxzav3zd9bp4yl56r";
+    rev = "v${version}";
+    sha256 = "1k67qg9y4c0n9ih0syx81ixbdl2x89gd4arwh71316cshskn0rc8";
   };
 
   propagatedBuildInputs = with pythonPackages; [
@@ -32,7 +32,6 @@ pythonPackages.buildPythonApplication rec {
 
   postFixup = ''
     wrapGAppsHook
-    makeWrapperArgs="''${gappsWrapperArgs[@]}"
     wrapPythonPrograms
     patchPythonScript $out/${pythonPackages.python.sitePackages}/fluxgui/fluxapp.py
   '';

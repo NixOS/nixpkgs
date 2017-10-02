@@ -215,6 +215,31 @@ let
     '';
   };
 
+  lua-iconv = buildLuaPackage rec {
+    name = "lua-iconv-${version}";
+    version = "7";
+    src = fetchFromGitHub {
+      owner = "ittner";
+      repo = "lua-iconv";
+      rev = "e8d34024a6b185a759733915f116cc5588550261";
+      sha256 = "0rd76966qlxfp8ypkyrbif76nxnm1acclqwfs45wz3972jsk654i";
+    };
+
+    preBuild = ''
+      makeFlagsArray=(
+        INSTALL_PATH="$out/lib/lua/${lua.luaversion}"
+      );
+    '';
+
+    meta = {
+      platforms = stdenv.lib.platforms.unix;
+      license = stdenv.lib.licenses.mit;
+      description = "Lua bindings for POSIX iconv";
+      maintainers = [ maintainers.richardipsum ];
+      homepage = "https://ittner.github.io/lua-iconv/";
+    };
+  };
+
   luasec = buildLuaPackage rec {
     name = "sec-0.6";
     src = fetchFromGitHub {

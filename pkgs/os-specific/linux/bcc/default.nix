@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, cmake, llvmPackages, kernel,
+{ stdenv, fetchFromGitHub, makeWrapper, cmake, llvmPackages_39, kernel,
   flex, bison, elfutils, python, pythonPackages, luajit, netperf, iperf }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "19lkqmilfjmj7bnhxlacd0waa5db8gf4lng12fy2zgji0d77vm1d";
   };
 
-  buildInputs = [ makeWrapper cmake llvmPackages.llvm llvmPackages.clang-unwrapped kernel
+  # llvm 4.0 leads to segmentation faults, this will be fixed in llvm 5.0
+  # https://github.com/iovisor/bcc/issues/1276#issuecomment-319888478
+  buildInputs = [ makeWrapper cmake llvmPackages_39.llvm llvmPackages_39.clang-unwrapped kernel
     flex bison elfutils python pythonPackages.netaddr luajit netperf iperf
   ];
 

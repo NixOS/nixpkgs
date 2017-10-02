@@ -29,5 +29,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ forkk ];
+    broken = true;
   };
 }

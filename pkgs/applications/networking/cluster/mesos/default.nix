@@ -68,6 +68,8 @@ in stdenv.mkDerivation rec {
       --subst-var-by chown ${coreutils}/bin/chown
 
     substituteInPlace 3rdparty/stout/Makefile.am \
+      --replace "-lprotobuf" \
+                "${pythonProtobuf.protobuf}/lib/libprotobuf.a"
 
     substituteInPlace 3rdparty/stout/include/stout/os/posix/fork.hpp \
       --subst-var-by sh ${bash}/bin/bash
@@ -94,6 +96,8 @@ in stdenv.mkDerivation rec {
       --subst-var-by mesos-resolve $out/bin/mesos-resolve
 
     substituteInPlace src/python/native_common/ext_modules.py.in \
+      --replace "-lprotobuf" \
+                "${pythonProtobuf.protobuf}/lib/libprotobuf.a"
 
     substituteInPlace src/slave/containerizer/mesos/isolators/gpu/volume.cpp \
       --subst-var-by cp    ${coreutils}/bin/cp \
@@ -117,6 +121,8 @@ in stdenv.mkDerivation rec {
 
     substituteInPlace src/Makefile.am \
       --subst-var-by mavenRepo ${mavenRepo} \
+      --replace "-lprotobuf" \
+                "${pythonProtobuf.protobuf}/lib/libprotobuf.a"
 
   '' + lib.optionalString stdenv.isLinux ''
 

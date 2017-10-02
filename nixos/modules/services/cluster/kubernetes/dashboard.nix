@@ -11,7 +11,7 @@ let
   image = pkgs.dockerTools.pullImage {
     imageName = name;
     imageTag = version;
-    sha256 = "0b5v7xa3s91yi9yfsw2b8wijiprnicbb02f5kqa579h4yndb3gfz";
+    sha256 = "1sf54d96nkgic9hir9c6p14gw24ns1k5d5a0r1sg414kjrvic0b4";
   };
 in {
   options.services.kubernetes.addons.dashboard = {

@@ -46,11 +46,10 @@ rec {
       };
 
       # This should go into the containerd derivation once 1.0.0 is out
-      preBuild = ''
+      preBuild = (optionalString (version == "17.09.0-ce") ''
         mkdir $(pwd)/vendor/src
         mv $(pwd)/vendor/{github.com,golang.org,google.golang.org} $(pwd)/vendor/src/
-        ln -s $(pwd) vendor/src/github.com/containerd/containerd
-      '';
+      '') + oldAttrs.preBuild;
     });
     docker-tini = tini.overrideAttrs  (oldAttrs: rec {
       name = "docker-init";

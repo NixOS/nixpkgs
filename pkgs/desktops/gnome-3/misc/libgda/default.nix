@@ -3,6 +3,14 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
+  patches = [
+    (fetchurl {
+      name = "libgda-fix-encoding-of-copyright-headers.patch";
+      url = https://bug787685.bugzilla-attachments.gnome.org/attachment.cgi?id=359901;
+      sha256 = "11qj7f7zsiw8jy18vlwz2prlxpg4iq350sws3qwfwsv0lnmncmfq";
+    })
+  ];
+
   configureFlags = [
     "--enable-gi-system-install=no"
   ];

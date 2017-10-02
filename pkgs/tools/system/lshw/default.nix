@@ -20,7 +20,14 @@ stdenv.mkDerivation rec {
   })];
 
   nativeBuildInputs = [ pkgconfig ];
+
   buildInputs = lib.optionals withGUI [ gtk2 sqlite ];
+
+  # Fix version info.
+  preConfigure = ''
+    sed -e "s/return \"unknown\"/return \"${version}\"/" \
+        -i src/core/version.cc
+  '';
 
   makeFlags = [ "PREFIX=$(out)" ];
 

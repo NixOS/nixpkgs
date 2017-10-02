@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, libxml2, dbus_glib, shared_mime_info, libexif
 , gtk, gnome3, libunique, intltool, gobjectIntrospection, gnome-autoar, glib
-, libnotify, wrapGAppsHook, exempi, librsvg, tracker, libselinux }:
+, libnotify, wrapGAppsHook, exempi, librsvg, tracker, libselinux, gdk_pixbuf }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -15,6 +15,14 @@ stdenv.mkDerivation rec {
 
   # fatal error: gio/gunixinputstream.h: No such file or directory
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Thumbnailers
+      --prefix XDG_DATA_DIRS : "${gdk_pixbuf}/share"
+      --prefix XDG_DATA_DIRS : "${librsvg}/share"
+    )
+  '';
 
 #  hardeningDisable = [ "format" ];
   enableParallelBuilding = true;

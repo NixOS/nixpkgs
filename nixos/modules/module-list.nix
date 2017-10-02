@@ -73,6 +73,7 @@
   ./programs/adb.nix
   ./programs/atop.nix
   ./programs/bash/bash.nix
+  ./programs/bcc.nix
   ./programs/blcr.nix
   ./programs/browserpass.nix
   ./programs/cdemu.nix
@@ -102,6 +103,7 @@
   ./programs/spacefm.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix
+  ./programs/sysdig.nix
   ./programs/thefuck.nix
   ./programs/tmux.nix
   ./programs/venus.nix
