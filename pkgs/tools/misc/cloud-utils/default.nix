@@ -12,10 +12,7 @@ stdenv.mkDerivation {
   buildPhase = ''
     mkdir -p $out/bin
     cp bin/growpart $out/bin/growpart
-    sed -i 's|awk|gawk|' $out/bin/growpart
-    sed -i 's|sed|gnused|' $out/bin/growpart
-    ln -s sed $out/bin/gnused
-    wrapProgram $out/bin/growpart --prefix PATH : "${stdenv.lib.makeBinPath [ gnused gawk utillinux ]}:$out/bin"
+    wrapProgram $out/bin/growpart --prefix PATH : "${stdenv.lib.makeBinPath [ gnused gawk utillinux ]}"
   '';
   dontInstall = true;
   dontPatchShebangs = true;
