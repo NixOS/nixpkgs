@@ -2297,6 +2297,8 @@ with pkgs;
 
   flashbench = callPackage ../os-specific/linux/flashbench { };
 
+  flatpak = callPackage ../development/libraries/flatpak { };
+
   figlet = callPackage ../tools/misc/figlet { };
 
   file = callPackage ../tools/misc/file { };

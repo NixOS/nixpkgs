@@ -1,0 +1,46 @@
+--- a/tests/libtest.sh
++++ b/tests/libtest.sh
+@@ -322,7 +322,7 @@
+         # running installed-tests: assume we know what we're doing
+         :
+     elif ! "$FLATPAK_BWRAP" --unshare-ipc --unshare-net --unshare-pid \
+-            --ro-bind / / /bin/true > bwrap-result 2>&1; then
++            --ro-bind / / @coreutils@/bin/true > bwrap-result 2>&1; then
+         sed -e 's/^/# /' < bwrap-result
+         echo "1..0 # SKIP Cannot run bwrap"
+         exit 0
+@@ -330,7 +330,7 @@
+ }
+ 
+ skip_without_python2 () {
+-    if ! test -f /usr/bin/python2 || ! /usr/bin/python2 -c "import sys; sys.exit(0 if sys.version_info >= (2, 7) else 1)" ; then
++    if ! test -f @python2@/bin/python2 || ! @python2@/bin/python2 -c "import sys; sys.exit(0 if sys.version_info >= (2, 7) else 1)" ; then
+         echo "1..0 # SKIP this test requires /usr/bin/python2 (2.7) support"
+         exit 0
+     fi
+@@ -350,12 +350,12 @@
+ export DBUS_SESSION_BUS_ADDRESS="$(cat dbus-session-bus-address)"
+ DBUS_SESSION_BUS_PID="$(cat dbus-session-bus-pid)"
+ 
+-if ! /bin/kill -0 "$DBUS_SESSION_BUS_PID"; then
++if ! @coreutils@/bin/kill -0 "$DBUS_SESSION_BUS_PID"; then
+     assert_not_reached "Failed to start dbus-daemon"
+ fi
+ 
+ cleanup () {
+-    /bin/kill $DBUS_SESSION_BUS_PID ${FLATPAK_HTTP_PID:-}
++    @coreutils@/bin/kill $DBUS_SESSION_BUS_PID ${FLATPAK_HTTP_PID:-}
+     gpg-connect-agent --homedir "${FL_GPG_HOMEDIR}" killagent /bye || true
+     fusermount -u $XDG_RUNTIME_DIR/doc || :
+     if test -n "${TEST_SKIP_CLEANUP:-}"; then
+--- a/tests/testlibrary.c
++++ b/tests/testlibrary.c
+@@ -378,7 +378,7 @@
+     {
+       gint exit_code = 0;
+       char *argv[] = { (char *)bwrap, "--unshare-ipc", "--unshare-net",
+-          "--unshare-pid", "--ro-bind", "/", "/", "/bin/true", NULL };
++          "--unshare-pid", "--ro-bind", "/", "/", "@coreutils@/bin/true", NULL };
+       g_autofree char *argv_str = g_strjoinv (" ", argv);
+       g_test_message ("Spawning %s", argv_str);
+       g_spawn_sync (NULL, argv, NULL, G_SPAWN_SEARCH_PATH, NULL, NULL, NULL, NULL, &exit_code, &error);
