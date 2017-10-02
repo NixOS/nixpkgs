@@ -17,7 +17,6 @@ stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [ cmake makedepend perl pkgconfig qttools ];
 
-  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     dssi
     fftwSinglePrec
