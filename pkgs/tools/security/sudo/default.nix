@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, coreutils, pam, groff
+{ stdenv, fetchurl, coreutils, pam, groff, sssd
 , sendmailPath ? "/run/wrappers/bin/sendmail"
 , withInsults ? false
 , withSssd ? false
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     installFlags="sudoers_uid=$(id -u) sudoers_gid=$(id -g) sysconfdir=$out/etc rundir=$TMPDIR/dummy vardir=$TMPDIR/dummy"
     '';
 
-  buildInputs = [ coreutils pam groff ] ++ stdenv.lib.optionals withSssd [ sssd ];
+  buildInputs = [ coreutils pam groff ];
 
   enableParallelBuilding = true;
 
