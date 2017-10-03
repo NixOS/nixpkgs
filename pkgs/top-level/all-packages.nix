@@ -6264,6 +6264,7 @@ with pkgs;
     vala_0_28
     vala_0_32
     vala_0_34
+    vala_0_38
     vala;
 
   valadoc = callPackage ../development/tools/valadoc { };
