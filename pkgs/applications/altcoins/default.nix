@@ -1,17 +1,17 @@
-{ callPackage, boost155, boost162, boost163, openssl_1_1_0, haskellPackages, darwin }:
+{ callPackage, boost155, boost162, boost163, openssl_1_1_0, haskellPackages, darwin, libsForQt5 }:
 
 rec {
 
   bitcoin  = callPackage ./bitcoin.nix { withGui = true; };
   bitcoind = callPackage ./bitcoin.nix { withGui = false; };
 
-  bitcoin-abc  = callPackage ./bitcoin-abc.nix { withGui = true; };
+  bitcoin-abc  = libsForQt5.callPackage ./bitcoin-abc.nix { withGui = true; };
   bitcoind-abc = callPackage ./bitcoin-abc.nix { withGui = false; };
 
   bitcoin-unlimited  = callPackage ./bitcoin-unlimited.nix { withGui = true; };
   bitcoind-unlimited = callPackage ./bitcoin-unlimited.nix { withGui = false; };
 
-  bitcoin-classic  = callPackage ./bitcoin-classic.nix { withGui = true; };
+  bitcoin-classic  = libsForQt5.callPackage ./bitcoin-classic.nix { withGui = true; };
   bitcoind-classic = callPackage ./bitcoin-classic.nix { withGui = false; };
 
   bitcoin-xt  = callPackage ./bitcoin-xt.nix { withGui = true; };
