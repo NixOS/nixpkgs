@@ -7,7 +7,7 @@ let
   cfg = config.krb5;
 
   # This is to provide support for old configuration options (as much as is
-  # reasonable).  This can probably be removed after some time.
+  # reasonable). This can be removed after 18.03 was released.
   defaultConfig = {
     libdefaults = optionalAttrs (cfg.defaultRealm != null)
       { default_realm = cfg.defaultRealm; };
