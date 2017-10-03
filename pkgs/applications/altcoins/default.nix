@@ -1,4 +1,4 @@
-{ callPackage, boost155, boost162, boost163, openssl_1_1_0, haskellPackages }:
+{ callPackage, boost155, boost162, boost163, openssl_1_1_0, haskellPackages, darwin }:
 
 rec {
 
@@ -26,7 +26,10 @@ rec {
   dogecoind = callPackage ./dogecoin.nix { withGui = false; };
 
   freicoin = callPackage ./freicoin.nix { boost = boost155; };
-  go-ethereum = callPackage ./go-ethereum.nix { };
+  go-ethereum = callPackage ./go-ethereum.nix {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
   go-ethereum-classic = callPackage ./go-ethereum-classic { };
 
   hivemind = callPackage ./hivemind.nix { withGui = true; };
