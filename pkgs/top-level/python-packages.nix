@@ -7046,6 +7046,8 @@ in {
 
   plotly = callPackage ../development/python-modules/plotly { };
 
+  plyfile = callPackage ../development/python-modules/plyfile { };
+
   podcastparser = callPackage ../development/python-modules/podcastparser { };
 
   pomegranate = callPackage ../development/python-modules/pomegranate { };
