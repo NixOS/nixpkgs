@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   major = "0.12";
-  version = "${major}.14";
+  version = "${major}.16";
   name = "libchamplain-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libchamplain/${major}/${name}.tar.xz";
-    sha256 = "13snnka1jqc5qrgij8bm22xy02pncf3dn5ij3jh4rrpzq7g1sqpi";
+    sha256 = "13chvc2n074i0jw5jlb8i7cysda4yqx58ca6y3mrlrl9g37k2zja";
   };
 
   nativeBuildInputs = [ pkgconfig ];
