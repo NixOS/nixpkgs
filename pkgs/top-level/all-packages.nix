@@ -9880,6 +9880,8 @@ with pkgs;
 
   libqalculate = callPackage ../development/libraries/libqalculate { };
 
+  libroxml = callPackage ../development/libraries/libroxml { };
+
   librsvg = callPackage ../development/libraries/librsvg { };
 
   librsync = callPackage ../development/libraries/librsync { };
