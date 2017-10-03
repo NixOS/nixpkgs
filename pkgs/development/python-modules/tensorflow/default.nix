@@ -1,4 +1,5 @@
 { stdenv
+, symlinkJoin
 , lib
 , fetchurl
 , buildPythonPackage
@@ -34,6 +35,13 @@ buildPythonPackage rec {
   name = "${pname}-${version}";
   format = "wheel";
   disabled = ! (isPy35 || isPy36 || isPy27);
+
+  # cudatoolkit is split (see https://github.com/NixOS/nixpkgs/commit/bb1c9b027d343f2ce263496582d6b56af8af92e6)
+  # However this means that libcusolver is not loadable by tensor flow. So we undo the split here.
+  cudatoolkit_joined = symlinkJoin {
+    name = "unsplit_cudatoolkit";
+    paths = [ cudatoolkit.out
+              cudatoolkit.lib ];};
 
   src = let
       tfurl = sys: proc: pykind:
@@ -112,7 +120,7 @@ buildPythonPackage rec {
   propagatedBuildInputs =
     [ numpy six protobuf mock backports_weakref ]
     ++ lib.optional (!isPy36) tensorflow-tensorboard
-    ++ lib.optionals cudaSupport [ cudatoolkit cudnn stdenv.cc ];
+    ++ lib.optionals cudaSupport [ cudatoolkit_joined cudnn stdenv.cc ];
 
   # tensorflow-gpu depends on tensorflow_tensorboard, which cannot be
   # built at the moment (some of its dependencies do not build
@@ -126,7 +134,7 @@ buildPythonPackage rec {
   postFixup = let
     rpath = stdenv.lib.makeLibraryPath
       (if cudaSupport then
-        [ stdenv.cc.cc.lib zlib cudatoolkit cudnn
+        [ stdenv.cc.cc.lib zlib cudatoolkit_joined cudnn
           linuxPackages.nvidia_x11 ]
       else
         [ stdenv.cc.cc.lib zlib ]
