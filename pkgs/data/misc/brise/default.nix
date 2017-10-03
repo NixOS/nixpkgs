@@ -36,6 +36,6 @@ stdenv.mkDerivation rec {
     # may be released under different licenses
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = [ maintainers.mingchuan ];
+    maintainers = [ maintainers.sifmelcara ];
   };
 }

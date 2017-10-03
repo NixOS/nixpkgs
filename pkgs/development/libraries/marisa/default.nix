@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     homepage    = https://code.google.com/p/marisa-trie/;
     description = "Static and space-efficient trie data structure library";
     license     = licenses.bsd3;
-    maintainers = with maintainers; [ mingchuan ];
+    maintainers = with maintainers; [ sifmelcara ];
     platforms   = platforms.all;
   };
 }

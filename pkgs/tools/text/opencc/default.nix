@@ -27,7 +27,7 @@ stdenv.mkDerivation {
       phrase-level conversion, variant conversion and regional idioms among Mainland China,
       Taiwan and Hong kong.
     '';
-    maintainers = [ maintainers.mingchuan ];
+    maintainers = [ maintainers.sifmelcara ];
     platforms = platforms.linux;
   };
 }

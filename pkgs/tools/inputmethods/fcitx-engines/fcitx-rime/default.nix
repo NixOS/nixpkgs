@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     description   = "Rime support for Fcitx";
     license       = licenses.gpl2;
     platforms     = platforms.linux;
-    maintainers   = with maintainers; [ mingchuan ];
+    maintainers   = with maintainers; [ sifmelcara ];
   };
 }

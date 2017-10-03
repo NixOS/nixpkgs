@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     homepage    = http://rime.im/;
     description = "Rime Input Method Engine, the core library";
     license     = licenses.bsd3;
-    maintainers = with maintainers; [ mingchuan ];
+    maintainers = with maintainers; [ sifmelcara ];
     platforms   = platforms.all;
   };
 }
