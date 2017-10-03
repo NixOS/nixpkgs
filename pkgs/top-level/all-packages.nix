@@ -18632,7 +18632,7 @@ with pkgs;
 
   eagle = callPackage ../applications/science/electronics/eagle { };
 
-  caneda = callPackage ../applications/science/electronics/caneda { };
+  caneda = libsForQt5.callPackage ../applications/science/electronics/caneda { };
 
   geda = callPackage ../applications/science/electronics/geda {
     guile = guile_2_0;
