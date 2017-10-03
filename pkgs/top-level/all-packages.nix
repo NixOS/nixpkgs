@@ -2199,6 +2199,8 @@ with pkgs;
 
   gitlab-workhorse = callPackage ../applications/version-management/gitlab-workhorse { };
 
+  gitaly = callPackage ../applications/version-management/gitaly { };
+
   gitstats = callPackage ../applications/version-management/gitstats { };
 
   gogs = callPackage ../applications/version-management/gogs { };
