@@ -9,7 +9,7 @@
   ./config/fonts/ghostscript.nix
   ./config/gnu.nix
   ./config/i18n.nix
-  ./config/krb5.nix
+  ./config/krb5/default.nix
   ./config/ldap.nix
   ./config/networking.nix
   ./config/no-x-libs.nix
