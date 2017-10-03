@@ -2297,6 +2297,8 @@ with pkgs;
 
   godot = callPackage ../development/tools/godot {};
 
+  goklp = callPackage ../tools/networking/goklp {};
+
   go-mtpfs = callPackage ../tools/filesystems/go-mtpfs { };
 
   go-pup = callPackage ../development/tools/pup { };
