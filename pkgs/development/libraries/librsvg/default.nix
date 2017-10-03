@@ -6,11 +6,11 @@
 # no introspection by default, it's too big
 
 stdenv.mkDerivation rec {
-  name = "librsvg-2.40.17";
+  name = "librsvg-2.40.18";
 
   src = fetchurl {
-    url    = "mirror://gnome/sources/librsvg/2.40/${name}.tar.xz";
-    sha256 = "1k39gyf7f5m9x0jvpcxvfcqswdb04xhm1lbwbjabn1f4xk5wbxp6";
+    url    = "mirror://gnome/sources/librsvg/2.40/librsvg-2.40.18.tar.xz";
+    sha256 = "0k2nbd4g31qinkdfd8r5c5ih2ixl85fbkgkqqh9747lwr24c9j5z";
   };
 
   NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
