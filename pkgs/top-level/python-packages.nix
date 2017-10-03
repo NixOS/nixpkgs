@@ -14151,17 +14151,19 @@ in {
 
   cmd2 = buildPythonPackage rec {
     name = "cmd2-${version}";
-    version = "0.6.8";
+    version = "0.7.7";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cmd2/${name}.tar.gz";
-      sha256 = "1a346zcd46c8gwbbp2cxsmvgfkyy26kwxjzdnkv7n47w6660sy5c";
+      sha256 = "0widbir8ay1fd4zm8l0rjq78j1cvbammbz8xs32crbanqsgzpqml";
     };
 
     # No tests included
     doCheck = false;
 
     propagatedBuildInputs = with self; [
+      pyperclip
+      six
       pyparsing
     ];
 
@@ -15613,27 +15615,7 @@ in {
   };
 
   pika-pool = callPackage ../development/python-modules/pika-pool { };
-
-  platformio =  buildPythonPackage rec {
-    name = "platformio-${version}";
-    version="2.10.3";
-
-    disabled = isPy3k || isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/b7/a3/1d3a9d7bae91df1b607e0f31549ec3e0006f29484cc6a1431b3fe3c5b02e/platformio-2.10.3.tar.gz";
-      sha256 = "f3a646871f9baed05f336a32576edaab90abf0737d8adb54f2acb7bcad42a65f";
-     };
-
-     propagatedBuildInputs = with self; [ click_5 requests bottle pyserial lockfile colorama];
-
-     meta = with stdenv.lib; {
-     description = "An open source ecosystem for IoT development";
-     homepage = http://platformio.org;
-     maintainers = with maintainers; [ mog ];
-     license = licenses.asl20;
-     };
-  };
+  platformio = callPackage ../development/python-modules/platformio { };
 
   pylibconfig2 = buildPythonPackage rec {
     name = "pylibconfig2-${version}";
@@ -16860,7 +16842,7 @@ in {
     };
 
     disabled = !isPy3k;
-    
+
     # No tests in archive
     doCheck = false;
 
@@ -17879,22 +17861,7 @@ in {
     };
   };
 
-  pyserial = buildPythonPackage rec {
-    name = "pyserial-2.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyserial/${name}.tar.gz";
-      sha256 = "3542ec0838793e61d6224e27ff05e8ce4ba5a5c5cc4ec5c6a3e8d49247985477";
-    };
-
-    doCheck = false;
-
-    meta = {
-      homepage = "http://pyserial.sourceforge.net/";
-      license = licenses.psfl;
-      description = "Python serial port extension";
-    };
-  };
+  pyserial = callPackage ../development/python-modules/pyserial {};
 
   pymongo = callPackage ../development/python-modules/pymongo {};
 
@@ -20361,22 +20328,7 @@ in {
     };
   };
 
-  semantic-version = buildPythonPackage rec {
-    pname = "semantic_version";
-    version = "2.4.2";
-    name = "${pname}${version}";
-
-    src = self.fetchPypi {
-      inherit pname version;
-      sha256 = "7e8b7fa74a3bc9b6e90b15b83b9bc2377c78eaeae3447516425f475d5d6932d2";
-    };
-
-    meta = {
-      description = "A library implementing the 'SemVer' scheme";
-      license = licenses.bsdOriginal;
-      maintainers = with maintainers; [ layus ];
-    };
-  };
+  semantic-version = callPackage ../development/python-modules/semantic-version { };
 
   sexpdata = buildPythonPackage rec {
     name = "sexpdata-0.0.2";

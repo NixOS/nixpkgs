@@ -13,11 +13,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ mpd_clientlib curl glib ];
 
-  preConfigure = ''
-    export LIBMPDCLIENT_LIBS=${mpd_clientlib}/lib/libmpdclient.so.${mpd_clientlib.majorVersion}.0.${mpd_clientlib.minorVersion}
-    export LIBMPDCLIENT_CFLAGS=${mpd_clientlib}
-  '';
-
   meta = with stdenv.lib; {
     description = "A Music Player Daemon (MPD) client which submits information about tracks beeing played to a scrobbler (e.g. last.fm)";
     homepage = http://mpd.wikia.com/wiki/Client:mpdscribble;

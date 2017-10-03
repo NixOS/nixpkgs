@@ -55,10 +55,10 @@ with pkgs;
 
   stringsWithDeps = lib.stringsWithDeps;
 
-  ### Evaluating the entire NixPkgs naively will fail, make failure fast
+  ### Evaluating the entire Nixpkgs naively will fail, make failure fast
   AAAAAASomeThingsFailToEvaluate = throw ''
     Please be informed that this pseudo-package is not the only part of
-    NixPkgs that fails to evaulate. You should not evaluate entire NixPkgs
+    Nixpkgs that fails to evaluate. You should not evaluate entire Nixpkgs
     without some special measures to handle failing packages, like those taken
     by Hydra.
   '';
@@ -1952,6 +1952,8 @@ with pkgs;
     hangul = callPackage ../tools/inputmethods/fcitx-engines/fcitx-hangul { };
 
     unikey = callPackage ../tools/inputmethods/fcitx-engines/fcitx-unikey { };
+
+    rime = callPackage ../tools/inputmethods/fcitx-engines/fcitx-rime { };
 
     m17n = callPackage ../tools/inputmethods/fcitx-engines/fcitx-m17n { };
 
@@ -3869,10 +3871,16 @@ with pkgs;
   pinentry = callPackage ../tools/security/pinentry {
     libcap = if stdenv.isDarwin then null else libcap;
     qt4 = null;
+    gtk2 = null;
+    gcr = gnome3.gcr;
   };
 
   pinentry_ncurses = pinentry.override {
-    gtk2 = null;
+    gcr = null;
+  };
+
+  pinentry_gtk2 = pinentry_ncurses.override {
+    inherit gtk2;
   };
 
   pinentry_qt4 = pinentry_ncurses.override {
@@ -4652,6 +4660,7 @@ with pkgs;
   tor-browser-bundle = callPackage ../applications/networking/browsers/tor-browser-bundle {
     stdenv = stdenvNoCC;
     tor-browser-unwrapped = firefoxPackages.tor-browser;
+    inherit (python27Packages) obfsproxy;
   };
 
   touchegg = callPackage ../tools/inputmethods/touchegg { };
@@ -4754,6 +4763,8 @@ with pkgs;
   untex = callPackage ../tools/text/untex { };
 
   upx = callPackage ../tools/compression/upx { };
+
+  uqmi = callPackage ../tools/networking/uqmi { };
 
   uriparser = callPackage ../development/libraries/uriparser {};
 
@@ -7596,7 +7607,7 @@ with pkgs;
   universal-ctags = callPackage ../development/tools/misc/universal-ctags { };
 
   vagrant = callPackage ../development/tools/vagrant {
-    ruby = ruby_2_2;
+    ruby = ruby_2_3;
   };
 
   bashdb = callPackage ../development/tools/misc/bashdb { };
@@ -9203,6 +9214,8 @@ with pkgs;
 
   librevisa = callPackage ../development/libraries/librevisa { };
 
+  librime = callPackage ../development/libraries/librime {};
+
   libsamplerate = callPackage ../development/libraries/libsamplerate {
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon CoreServices;
   };
@@ -9529,6 +9542,8 @@ with pkgs;
 
   libu2f-server = callPackage ../development/libraries/libu2f-server { };
 
+  libubox = callPackage ../development/libraries/libubox { };
+
   libuecc = callPackage ../development/libraries/libuecc { };
 
   libui = callPackage ../development/libraries/libui { };
@@ -9730,6 +9745,8 @@ with pkgs;
   lzo = callPackage ../development/libraries/lzo { };
 
   mapnik = callPackage ../development/libraries/mapnik { };
+
+  marisa = callPackage ../development/libraries/marisa {};
 
   matio = callPackage ../development/libraries/matio { };
 
@@ -13060,6 +13077,8 @@ with pkgs;
   bakoma_ttf = callPackage ../data/fonts/bakoma-ttf { };
 
   bgnet = callPackage ../data/documentation/bgnet { };
+
+  brise = callPackage ../data/misc/brise { };
 
   inherit (kdeFrameworks) breeze-icons;
 

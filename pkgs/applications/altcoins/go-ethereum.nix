@@ -1,9 +1,13 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, buildGoPackage, fetchFromGitHub, libobjc, IOKit }:
 
 buildGoPackage rec {
   name = "go-ethereum-${version}";
   version = "1.7.0";
   goPackagePath = "github.com/ethereum/go-ethereum";
+
+  # Fix for usb-related segmentation faults on darwin
+  propagatedBuildInputs =
+    stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];
 
   # Fixes Cgo related build failures (see https://github.com/NixOS/nixpkgs/issues/25959 )
   hardeningDisable = [ "fortify" ];

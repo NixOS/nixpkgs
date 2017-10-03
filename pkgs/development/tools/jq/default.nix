@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, oniguruma }:
+{ stdenv, fetchurl, fetchpatch, oniguruma }:
 
 stdenv.mkDerivation rec {
   name = "jq-${version}";
@@ -26,15 +26,13 @@ stdenv.mkDerivation rec {
   patchFlags = [ "-p2" ]; # `src` subdir was introduced after v1.5 was released
 
   # jq is linked to libjq:
-  configureFlags = [
-    "LDFLAGS=-Wl,-rpath,\\\${libdir}"
-  ];
+  configureFlags = stdenv.lib.optional (!stdenv.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = ''A lightweight and flexible command-line JSON processor'';
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ raskin ];
-    platforms = with lib.platforms; linux ++ darwin;
+    license = licenses.mit;
+    maintainers = with maintainers; [ raskin ];
+    platforms = with platforms; linux ++ darwin;
     downloadPage = "http://stedolan.github.io/jq/download/";
     updateWalker = true;
     inherit version;

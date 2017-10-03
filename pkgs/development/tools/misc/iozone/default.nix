@@ -7,6 +7,8 @@ let
     "linux-AMD64"
   else if stdenv.system == "x86_64-darwin" then
     "macosx"
+  else if stdenv.system == "aarch64-linux" then
+    "linux-arm"
   else abort "Platform ${stdenv.system} not yet supported.";
 in
 
@@ -53,7 +55,7 @@ stdenv.mkDerivation rec {
     description = "IOzone Filesystem Benchmark";
     homepage    = http://www.iozone.org/;
     license     = stdenv.lib.licenses.unfreeRedistributable;
-    platforms   = ["i686-linux" "x86_64-linux" "x86_64-darwin"];
-    maintainers = [ stdenv.lib.maintainers.Baughn ];
+    platforms   = ["i686-linux" "x86_64-linux" "x86_64-darwin" "aarch64-linux" ];
+    maintainers = with stdenv.lib.maintainers; [ Baughn makefu ];
   };
 }
