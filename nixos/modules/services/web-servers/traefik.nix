@@ -4,17 +4,16 @@ with lib;
 
 let
   cfg = config.services.traefik;
-configFile =
-  if (cfg.configFile == null) then
-  (pkgs.runCommand "config.toml" {
-    buildInputs = [ pkgs.remarshal ];
-  } ''
-    remarshal -if json -of toml \
-    < ${pkgs.writeText "config.json" (builtins.toJSON cfg.configOptions)} \
-    > $out
-    '')
-    else
-    cfg.configFile;
+  configFile =
+    if cfg.configFile == null then
+      pkgs.runCommand "config.toml" {
+        buildInputs = [ pkgs.remarshal ];
+      } ''
+        remarshal -if json -of toml \
+          < ${pkgs.writeText "config.json" (builtins.toJSON cfg.configOptions)} \
+          > $out
+      ''
+    else cfg.configFile;
 
 in {
   options.services.traefik = {
@@ -24,38 +23,35 @@ in {
       default = null;
       example = /path/to/config.toml;
       type = types.nullOr types.path;
-      description = "Verbatim traefik.toml to use";
+      description = ''
+        Path to verbatim traefik.toml to use.
+        (Using that option has precedence over <literal>configOptions</literal>)
+      '';
     };
+
     configOptions = mkOption {
       description = ''
         Config for Traefik.
       '';
       type = types.attrs;
+      default = {
+        defaultEntryPoints = ["http"];
+        entryPoints.http.address = ":80";
+      };
       example = {
         defaultEntrypoints = [ "http" ];
-        web = {
-          address = ":8080";
-        };
-        entryPoints = {
-          http = {
-            address = ":80";
-          };
-        };
+        web.address = ":8080";
+        entryPoints.http.address = ":80";
+
         file = {};
         frontends = {
           frontend1 = {
             backend = "backend1";
-            routes.test_1 = {
-              rule = "Host:localhost";
-            };
+            routes.test_1.rule = "Host:localhost";
           };
         };
-        backends = {
-          backend1 = {
-            servers.server1 = {
-              url = "http://localhost:8000";
-            };
-          };
+        backends.backend1 = {
+          servers.server1.url = "http://localhost:8000";
         };
       };
     };
@@ -82,7 +78,12 @@ in {
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
+        PermissionsStartOnly = true;
         ExecStart = ''${cfg.package.bin}/bin/traefik --configfile=${configFile}'';
+        ExecStartPre = [
+          ''${pkgs.coreutils}/bin/mkdir -p "${cfg.dataDir}"''
+          ''${pkgs.coreutils}/bin/install -d -m700 --owner traefik --group traefik "${cfg.dataDir}"''
+        ];
         Type = "simple";
         User = "traefik";
         Group = "traefik";
