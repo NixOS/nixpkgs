@@ -21,7 +21,7 @@ in {
 
     configFile = mkOption {
       default = null;
-      example = /path/to/config.toml;
+      example = literalExample "/path/to/config.toml";
       type = types.nullOr types.path;
       description = ''
         Path to verbatim traefik.toml to use.
