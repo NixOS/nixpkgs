@@ -277,6 +277,7 @@ in rec {
   #tests.lightdm = callTest tests/lightdm.nix {};
   tests.login = callTest tests/login.nix {};
   #tests.logstash = callTest tests/logstash.nix {};
+  tests.mariadb = callTest tests/mariadb.nix {};
   tests.mathics = callTest tests/mathics.nix {};
   tests.mesos = callTest tests/mesos.nix {};
   tests.misc = callTest tests/misc.nix {};
