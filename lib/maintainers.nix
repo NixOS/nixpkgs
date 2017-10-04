@@ -458,6 +458,7 @@
   periklis = "theopompos@gmail.com";
   pesterhazy = "Paulus Esterhazy <pesterhazy@gmail.com>";
   peterhoeg = "Peter Hoeg <peter@hoeg.com>";
+  peterromfeldhk = "Peter Romfeld <peter.romfeld.hk@gmail.com>";
   peti = "Peter Simons <simons@cryp.to>";
   philandstuff = "Philip Potter <philip.g.potter@gmail.com>";
   phile314 = "Philipp Hausmann <nix@314.ch>";

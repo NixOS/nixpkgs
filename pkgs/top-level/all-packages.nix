@@ -2033,6 +2033,8 @@ with pkgs;
 
   lprof = callPackage ../tools/graphics/lprof { };
 
+  fastlane = callPackage ../tools/admin/fastlane { };
+
   fatresize = callPackage ../tools/filesystems/fatresize {};
 
   fdk_aac = callPackage ../development/libraries/fdk-aac { };
