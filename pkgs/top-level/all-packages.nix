@@ -16187,6 +16187,8 @@ with pkgs;
 
   renoise = callPackage ../applications/audio/renoise {};
 
+  radiotray-ng = callPackage ../applications/audio/radiotray-ng { };
+
   rapcad = libsForQt56.callPackage ../applications/graphics/rapcad { boost = boost159; };
 
   rapidsvn = callPackage ../applications/version-management/rapidsvn { };
