@@ -6,13 +6,13 @@ assert qtbase != null -> qt4 == null;
 
 stdenv.mkDerivation rec {
   name = "snowman-${version}";
-  version = "2017-07-22";
+  version = "2017-08-13";
 
   src = fetchFromGitHub {
     owner = "yegord";
     repo = "snowman";
-    rev = "6c4d9cceb56bf2fd0f650313131a2240579d1bea";
-    sha256 = "1d0abh0fg637jksk7nl4yl54b4cadinj93qqvsm138zyx7h57xqf";
+    rev = "cd9edcddf873fc40d7bcb1bb1eae815faedd3a03";
+    sha256 = "10f3kd5m5xw7hqh92ba7dcczwbznxvk1qxg0yycqz7y9mfr2282n";
   };
 
   nativeBuildInputs = [ cmake ];
