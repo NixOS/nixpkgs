@@ -82,7 +82,8 @@ in {
         ExecStart = ''${cfg.package.bin}/bin/traefik --configfile=${configFile}'';
         ExecStartPre = [
           ''${pkgs.coreutils}/bin/mkdir -p "${cfg.dataDir}"''
-          ''${pkgs.coreutils}/bin/install -d -m700 --owner traefik --group traefik "${cfg.dataDir}"''
+          ''${pkgs.coreutils}/bin/chmod 700 "${cfg.dataDir}"''
+          ''${pkgs.coreutils}/bin/chown -R traefik:traefik "${cfg.dataDir}"''
         ];
         Type = "simple";
         User = "traefik";
