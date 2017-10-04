@@ -15,102 +15,48 @@ let
     collector_log_file: /var/log/datadog/collector.log
     forwarder_log_file: /var/log/datadog/forwarder.log
     dogstatsd_log_file: /var/log/datadog/dogstatsd.log
-    pup_log_file:       /var/log/datadog/pup.log
+    jmxfetch_log_file:  /var/log/datadog/jmxfetch.log
+    go-metro_log_file:  /var/log/datadog/go-metro.log
+    trace-agent_log_file: /var/log/datadog/trace-agent.log
 
-    # proxy_host: my-proxy.com
-    # proxy_port: 3128
-    # proxy_user: user
-    # proxy_password: password
-
-    # tags: mytag0, mytag1
     ${optionalString (cfg.tags != null ) "tags: ${concatStringsSep "," cfg.tags }"}
-
-    # collect_ec2_tags: no
-    # recent_point_threshold: 30
-    # use_mount: no
-    # listen_port: 17123
-    # graphite_listen_port: 17124
-    # non_local_traffic: no
-    # use_curl_http_client: False
-    # bind_host: localhost
-
-    # use_pup: no
-    # pup_port: 17125
-    # pup_interface: localhost
-    # pup_url: http://localhost:17125
-
-    # dogstatsd_port : 8125
-    # dogstatsd_interval : 10
-    # dogstatsd_normalize : yes
-    # statsd_forward_host: address_of_own_statsd_server
-    # statsd_forward_port: 8125
-
-    # device_blacklist_re: .*\/dev\/mapper\/lxc-box.*
-
-    # ganglia_host: localhost
-    # ganglia_port: 8651
+    ${cfg.extraDdConfig}
   '';
 
-  diskConfig = pkgs.writeText "disk.yaml" ''
-    init_config:
+  # Integrations requested by the user, always-on disk and network
+  # integrations and any integrations we have explicit support for.
+  allWantedIntegrations =
+    let fromConfig =  n: c: optional (c != null) { name = n; config = c; };
+    in cfg.integrations ++ [ { name = "disk"; } { name = "network"; } ] ++
+       (fromConfig "postgres" cfg.postgresqlConfig) ++
+       (fromConfig "nginx" cfg.nginxConfig) ++
+       (fromConfig "mongo" cfg.mongoConfig) ++
+       (fromConfig "process" cfg.processConfig) ++
+       (fromConfig "jmx" cfg.jmxConfig);
 
-    instances:
-      - use_mount: no
-  '';
-  
-  networkConfig = pkgs.writeText "network.yaml" ''
-    init_config:
-
-    instances:
-      # Network check only supports one configured instance
-      - collect_connection_state: false
-        excluded_interfaces:
-          - lo
-          - lo0
-  '';
-  
-  postgresqlConfig = pkgs.writeText "postgres.yaml" cfg.postgresqlConfig;
-  nginxConfig = pkgs.writeText "nginx.yaml" cfg.nginxConfig;
-  mongoConfig = pkgs.writeText "mongo.yaml" cfg.mongoConfig;
-  jmxConfig = pkgs.writeText "jmx.yaml" cfg.jmxConfig;
-  processConfig = pkgs.writeText "process.yaml" cfg.processConfig;
-  
   etcfiles =
-    let
-      defaultConfd = import ./dd-agent-defaults.nix;
-    in (map (f: { source = "${pkgs.dd-agent}/agent/conf.d-system/${f}";
-                  target = "dd-agent/conf.d/${f}";
-                }) defaultConfd) ++ [
-      { source = ddConf;
-        target = "dd-agent/datadog.conf";
-      }
-      { source = diskConfig;
-        target = "dd-agent/conf.d/disk.yaml";
-      }
-      { source = networkConfig;
-        target = "dd-agent/conf.d/network.yaml";
-      } ] ++
-    (optional (cfg.postgresqlConfig != null)
-      { source = postgresqlConfig;
-        target = "dd-agent/conf.d/postgres.yaml";
-      }) ++
-    (optional (cfg.nginxConfig != null)
-      { source = nginxConfig;
-        target = "dd-agent/conf.d/nginx.yaml";
-      }) ++
-    (optional (cfg.mongoConfig != null)
-      { source = mongoConfig;
-        target = "dd-agent/conf.d/mongo.yaml";
-      }) ++
-    (optional (cfg.processConfig != null)
-      { source = processConfig;
-        target = "dd-agent/conf.d/process.yaml";
-      }) ++
-    (optional (cfg.jmxConfig != null)
-      { source = jmxConfig;
-        target = "dd-agent/conf.d/jmx.yaml";
-      });
+    map (i: { source = if builtins.hasAttr "config" i
+                       then pkgs.writeText "${i.name}.yaml" i.config
+                       else "${cfg.agent}/agent/conf.d-system/${i.name}.yaml";
+              target = "dd-agent/conf.d/${i.name}.yaml";
+            }
+        ) allWantedIntegrations ++
+        [ { source = ddConf;
+            target = "dd-agent/datadog.conf";
+          }
+        ];
 
+  # restart triggers
+  etcSources = map (i: i.source) etcfiles;
+
+  # Only pull in dependencies for default supported integrations if
+  # they are actually used.
+  defaultIntegrationDeps = with pkgs.pythonPackages;
+    let mDep = n: ds: if builtins.any (i: i.name == n) allWantedIntegrations then ds else [];
+    in mDep "disk" [ psutil ] ++
+       mDep "network" [ psutil ] ++
+       mDep "postgres" [ pg8000 psycopg2 ] ++
+       mDep "mongo" [ pymongo ];
 in {
   options.services.dd-agent = {
     enable = mkOption {
@@ -150,7 +96,7 @@ in {
       default = null;
       type = types.uniq (types.nullOr types.string);
     };
-    
+
     mongoConfig = mkOption {
       description = "MongoDB integration configuration";
       default = null;
@@ -166,17 +112,60 @@ in {
     processConfig = mkOption {
       description = ''
         Process integration configuration
- 
+
         See http://docs.datadoghq.com/integrations/process/
       '';
       default = null;
       type = types.uniq (types.nullOr types.string);
     };
 
+    agent = mkOption {
+      description = "The dd-agent package to use. Useful when overriding the package.";
+      default = pkgs.dd-agent.override {
+        # Make sure we have dependencies that default supported
+        # integrations need.
+        extraBuildInputs = defaultIntegrationDeps;
+      };
+      type = types.package;
+    };
+
+    integrations = mkOption {
+      description = ''
+        Any integrations to use. Default config used if none
+        specified. It is currently up to the user to make sure that
+        the dd-agent package used has all the dependencies chosen
+        integrations require in scope. <literal>disk</literal> and
+        <literal>network</literal> integrations are always included.
+        An integration configured through explicit service support
+        such as <literal>processConfig</literal> takes precedence over
+        any configuration specified here.
+      '';
+      type = types.listOf (types.attrsOf types.string);
+      default = [];
+      example = ''
+        [ { name = "elastic";
+            config = '''
+              init_config:
+
+              instances:
+                - url: http://localhost:9200
+            ''';
+          }
+          { name = "nginx"; }
+          { name = "ntp"; }
+        ]
+      '';
+    };
+
+    extraDdConfig = mkOption {
+      description = "Extra settings to append to datadog agent config.";
+      default = "";
+      type = types.string;
+    };
   };
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [ pkgs."dd-agent" pkgs.sysstat pkgs.procps ];
+    environment.systemPackages = [ cfg.agent pkgs.sysstat pkgs.procps ];
 
     users.extraUsers.datadog = {
       description = "Datadog Agent User";
@@ -190,46 +179,17 @@ in {
 
     systemd.services.dd-agent = {
       description = "Datadog agent monitor";
-      path = [ pkgs."dd-agent" pkgs.python pkgs.sysstat pkgs.procps ];
+      path = [ pkgs.sysstat pkgs.procps ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        ExecStart = "${pkgs.dd-agent}/bin/dd-agent foreground";
+        ExecStart = "${pkgs.pythonPackages.supervisor}/bin/supervisord -c ${cfg.agent}/agent/supervisor.conf";
         User = "datadog";
         Group = "datadog";
         Restart = "always";
+        WorkingDirectory = "${cfg.agent}";
         RestartSec = 2;
       };
-      restartTriggers = [ pkgs.dd-agent ddConf diskConfig networkConfig postgresqlConfig nginxConfig mongoConfig jmxConfig processConfig ];
-    };
-
-    systemd.services.dogstatsd = {
-      description = "Datadog statsd";
-      path = [ pkgs."dd-agent" pkgs.python pkgs.procps ];
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        ExecStart = "${pkgs.dd-agent}/bin/dogstatsd start";
-        User = "datadog";
-        Group = "datadog";
-        Type = "forking";
-        PIDFile = "/tmp/dogstatsd.pid";
-        Restart = "always";
-        RestartSec = 2;
-      };
-      restartTriggers = [ pkgs.dd-agent ddConf diskConfig networkConfig postgresqlConfig nginxConfig mongoConfig jmxConfig processConfig ];
-    };
-
-    systemd.services.dd-jmxfetch = lib.mkIf (cfg.jmxConfig != null) {
-      description = "Datadog JMX Fetcher";
-      path = [ pkgs."dd-agent" pkgs.python pkgs.sysstat pkgs.procps pkgs.jdk ];
-      wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        ExecStart = "${pkgs.dd-agent}/bin/dd-jmxfetch";
-        User = "datadog";
-        Group = "datadog";
-        Restart = "always";
-        RestartSec = 2;
-      };
-      restartTriggers = [ pkgs.dd-agent ddConf diskConfig networkConfig postgresqlConfig nginxConfig mongoConfig jmxConfig ];
+      restartTriggers = [ cfg.agent ddConf ] ++ etcSources;
     };
 
     environment.etc = etcfiles;
