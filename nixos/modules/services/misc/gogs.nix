@@ -25,6 +25,7 @@ let
     HTTP_ADDR = ${cfg.httpAddress}
     HTTP_PORT = ${toString cfg.httpPort}
     ROOT_URL = ${cfg.rootUrl}
+    STATIC_ROOT_PATH = ${cfg.staticRootPath}
 
     [session]
     COOKIE_NAME = session
@@ -175,6 +176,13 @@ in
         '';
       };
 
+      staticRootPath = mkOption {
+        type = types.str;
+        default = "${pkgs.gogs.data}";
+        example = "/var/lib/gogs/data";
+        description = "Upper level of template and static files path.";
+      };
+
       extraConfig = mkOption {
         type = types.str;
         default = "";
@@ -195,6 +203,8 @@ in
         runConfig = "${cfg.stateDir}/custom/conf/app.ini";
         secretKey = "${cfg.stateDir}/custom/conf/secret_key";
       in ''
+        mkdir -p ${cfg.stateDir}
+
         # copy custom configuration and generate a random secret key if needed
         ${optionalString (cfg.useWizard == false) ''
           mkdir -p ${cfg.stateDir}/custom/conf
@@ -240,7 +250,7 @@ in
       };
     };
 
-    users = {
+    users = mkIf (cfg.user == "gogs") {
       extraUsers.gogs = {
         description = "Go Git Service";
         uid = config.ids.uids.gogs;
