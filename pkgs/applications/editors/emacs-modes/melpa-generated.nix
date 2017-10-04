@@ -10171,6 +10171,27 @@
           license = lib.licenses.free;
         };
       }) {};
+    company-lean = callPackage ({ company, dash, dash-functional, emacs, f, fetchFromGitHub, fetchurl, lean-mode, lib, melpaBuild, s }:
+    melpaBuild {
+        pname = "company-lean";
+        version = "20170920.708";
+        src = fetchFromGitHub {
+          owner = "leanprover";
+          repo = "lean-mode";
+          rev = "fa75bf97442a42e76e77fcf1b3c64e58f4f4169a";
+          sha256 = "1qyg0yjfmpnj8y3bbip3mvlhmh0ccm0j0p3crmb3az84fycvrsnr";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/42f4d6438c8aeb94ebc1782f2f5e2abd17f0ffde/recipes/company-lean";
+          sha256 = "1hqkn7w5dyznf7i3r3132q8x31r74q188jsm5kdrjqgbwak2p91a";
+          name = "company-lean";
+        };
+        packageRequires = [ company dash dash-functional emacs f lean-mode s ];
+        meta = {
+          homepage = "https://melpa.org/#/company-lean";
+          license = lib.licenses.free;
+        };
+      }) {};
     company-lua = callPackage ({ company, f, fetchFromGitHub, fetchurl, lib, lua-mode, melpaBuild, s }:
     melpaBuild {
         pname = "company-lua";
@@ -32722,6 +32743,27 @@
           license = lib.licenses.free;
         };
       }) {};
+    helm-lean = callPackage ({ dash, emacs, fetchFromGitHub, fetchurl, helm, lean-mode, lib, melpaBuild }:
+    melpaBuild {
+        pname = "helm-lean";
+        version = "20170919.934";
+        src = fetchFromGitHub {
+          owner = "leanprover";
+          repo = "lean-mode";
+          rev = "fa75bf97442a42e76e77fcf1b3c64e58f4f4169a";
+          sha256 = "1qyg0yjfmpnj8y3bbip3mvlhmh0ccm0j0p3crmb3az84fycvrsnr";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/42f4d6438c8aeb94ebc1782f2f5e2abd17f0ffde/recipes/helm-lean";
+          sha256 = "0j5ax14lhlyd9mpqk1jwh7nfp090kj71r045v2qjfaw2fa23b7si";
+          name = "helm-lean";
+        };
+        packageRequires = [ dash emacs helm lean-mode ];
+        meta = {
+          homepage = "https://melpa.org/#/helm-lean";
+          license = lib.licenses.free;
+        };
+      }) {};
     helm-lobsters = callPackage ({ cl-lib ? null, fetchFromGitHub, fetchurl, helm, lib, melpaBuild }:
     melpaBuild {
         pname = "helm-lobsters";
@@ -41628,6 +41670,27 @@
         packageRequires = [];
         meta = {
           homepage = "https://melpa.org/#/ldap-mode";
+          license = lib.licenses.free;
+        };
+      }) {};
+    lean-mode = callPackage ({ dash, dash-functional, emacs, f, fetchFromGitHub, fetchurl, flycheck, lib, melpaBuild, s }:
+    melpaBuild {
+        pname = "lean-mode";
+        version = "20170920.755";
+        src = fetchFromGitHub {
+          owner = "leanprover";
+          repo = "lean-mode";
+          rev = "fa75bf97442a42e76e77fcf1b3c64e58f4f4169a";
+          sha256 = "1qyg0yjfmpnj8y3bbip3mvlhmh0ccm0j0p3crmb3az84fycvrsnr";
+        };
+        recipeFile = fetchurl {
+          url = "https://raw.githubusercontent.com/milkypostman/melpa/42f4d6438c8aeb94ebc1782f2f5e2abd17f0ffde/recipes/lean-mode";
+          sha256 = "0rdraxsirkrzbinjwg4qam15iy3qiixqgwsckngzw8d9a4s9l6sj";
+          name = "lean-mode";
+        };
+        packageRequires = [ dash dash-functional emacs f flycheck s ];
+        meta = {
+          homepage = "https://melpa.org/#/lean-mode";
           license = lib.licenses.free;
         };
       }) {};
