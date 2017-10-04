@@ -7095,6 +7095,8 @@ with pkgs;
 
   dejagnu = callPackage ../development/tools/misc/dejagnu { };
 
+  devtodo = callPackage ../development/tools/devtodo { };
+
   dfeet = callPackage ../development/tools/misc/d-feet { };
 
   dfu-programmer = callPackage ../development/tools/misc/dfu-programmer { };
