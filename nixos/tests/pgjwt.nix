@@ -17,13 +17,8 @@ with pkgs; {
     master = { pkgs, config, ... }:
     {
       services.postgresql = {
-      enable = true;
-      package = postgresql96;
-      extraPlugins = [ pgjwt pgtap ];
-      initialScript =  writeText "postgresql-init.sql"
-      ''
-        CREATE ROLE postgres WITH superuser login createdb;
-      '';
+        enable = true;
+        extraPlugins = [ pgjwt pgtap ];
       };
     };
   };
