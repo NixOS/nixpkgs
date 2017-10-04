@@ -27,6 +27,5 @@ stdenv.mkDerivation {
     homepage = http://gmsh.info/;
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.gpl2Plus;
-    broken = true;
   };
 }
