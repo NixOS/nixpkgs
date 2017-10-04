@@ -1,4 +1,4 @@
-{ fetchurl, fetchpatch, stdenv, pkgconfig, gnome3, intltool, gobjectIntrospection, upower, cairo
+{ fetchurl, stdenv, pkgconfig, gnome3, intltool, gobjectIntrospection, upower, cairo
 , pango, cogl, clutter, libstartup_notification, libcanberra_gtk2, zenity, libcanberra_gtk3
 , libtool, makeWrapper, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libudev, libinput
 , libgudev, libwacom, xwayland, autoreconfHook }:

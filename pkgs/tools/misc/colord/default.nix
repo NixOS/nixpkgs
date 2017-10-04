@@ -1,7 +1,7 @@
 { stdenv, fetchurl, bash-completion
 , glib, polkit, pkgconfig, gettext, gusb, lcms2, sqlite, systemd, dbus
 , gobjectIntrospection, argyllcms, meson, ninja, libxml2, vala_0_38
-, libgudev, sane-backends }:
+, libgudev, sane-backends, udev }:
 
 stdenv.mkDerivation rec {
   name = "colord-1.4.1";

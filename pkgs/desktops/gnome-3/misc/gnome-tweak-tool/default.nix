@@ -1,6 +1,6 @@
-{ stdenv, intltool, fetchurl, atk
+{ stdenv, meson, ninja, gettext, fetchurl, atk
 , pkgconfig, gtk3, glib, libsoup
-, bash, itstool, libxml2, python2Packages
+, bash, itstool, libxml2, python3Packages
 , gnome3, librsvg, gdk_pixbuf, file, libnotify, gobjectIntrospection, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -8,22 +8,25 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  checkPhase = "meson test";
+
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
-  makeFlags = [ "DESTDIR=/" ];
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 glib intltool itstool libxml2
-                  gnome3.gsettings_desktop_schemas file
+  nativeBuildInputs = [ meson ninja pkgconfig gettext itstool libxml2 file wrapGAppsHook ];
+  buildInputs = [ gtk3 glib gnome3.gsettings_desktop_schemas
                   gdk_pixbuf gnome3.defaultIconTheme librsvg
-                  libnotify gnome3.gnome_shell python2Packages.pygobject3
+                  libnotify gnome3.gnome_shell python3Packages.pygobject3
                   libsoup gnome3.gnome_settings_daemon gnome3.nautilus
-                  gnome3.gnome_desktop wrapGAppsHook gobjectIntrospection
+                  gnome3.gnome_desktop gobjectIntrospection
                 ];
+
+  postPatch = ''
+    patchShebangs meson-postinstall.py
+  '';
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PYTHONPATH : "$out/${python2Packages.python.sitePackages}:$PYTHONPATH")
+      --prefix PYTHONPATH : "$out/${python3Packages.python.sitePackages}:$PYTHONPATH")
   '';
 
   patches = [

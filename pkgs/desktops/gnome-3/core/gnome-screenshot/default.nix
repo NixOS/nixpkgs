@@ -1,26 +1,30 @@
-{ stdenv, intltool, fetchurl, pkgconfig, libcanberra_gtk3
-, bash, gtk3, glib, wrapGAppsHook
-, itstool, gnome3, librsvg, gdk_pixbuf }:
+{ stdenv, gettext, libxml2, fetchurl, pkgconfig, libcanberra_gtk3
+, bash, gtk3, glib, meson, ninja, wrapGAppsHook, appstream-glib
+, gnome3, librsvg, gdk_pixbuf }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
   doCheck = true;
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
+  checkPhase = "meson test";
+
+
+  postPatch = ''
+    chmod +x build-aux/postinstall.py # patchShebangs requires executable file
+    patchShebangs build-aux/postinstall.py
+  '';
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
   propagatedBuildInputs = [ gdk_pixbuf gnome3.defaultIconTheme librsvg ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ bash gtk3 glib intltool itstool libcanberra_gtk3
-                  gnome3.gsettings_desktop_schemas wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext appstream-glib libxml2 wrapGAppsHook ];
+  buildInputs = [ bash gtk3 glib libcanberra_gtk3
+                  gnome3.gsettings_desktop_schemas ];
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gtk3.out}/share:${gnome3.gnome_themes_standard}/share"
-    )
-  '';
+  patches = [
+    ./prevent-cache-updates.patch
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://en.wikipedia.org/wiki/GNOME_Screenshot;
