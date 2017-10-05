@@ -47,22 +47,8 @@ stdenv.mkDerivation rec {
   ];
 
   configurePhase = ''
-    # Prevent clang-3.5 (rather than just clang) from being selected as the compiler as that's
-    # not wrapped
-    # substituteInPlace src/pal/tools/gen-buildsys-clang.sh --replace "which \"clang-\$" "which \"clang-DoNotFindThisOne\$"
-
     patchShebangs build.sh
     patchShebangs src/pal/tools/gen-buildsys-clang.sh
-
-    # See https://github.com/dotnet/coreclr/issues/7573#issuecomment-253081323
-    ed -v ./src/pal/src/include/pal/palinternal.h << EOF
-    /^#undef memcpy
-    -1
-    d
-    +1
-    d
-    w
-    EOF
   '';
 
   BuildArch = if stdenv.is64bit then "x64" else "x86";
