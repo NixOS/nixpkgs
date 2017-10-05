@@ -560,6 +560,8 @@ with pkgs;
 
   bonnie = callPackage ../tools/filesystems/bonnie { };
 
+  bonfire = callPackage ../tools/misc/bonfire { };
+
   container-linux-config-transpiler = callPackage ../development/tools/container-linux-config-transpiler { };
 
   djmount = callPackage ../tools/filesystems/djmount { };
@@ -673,6 +675,13 @@ with pkgs;
 
   axel = callPackage ../tools/networking/axel {
     libssl = openssl;
+  };
+
+  axoloti = callPackage ../applications/audio/axoloti { };
+  dfu-util-axoloti = callPackage ../applications/audio/axoloti/dfu-util.nix { };
+  libusb1-axoloti = callPackage ../applications/audio/axoloti/libusb1.nix {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
   azureus = callPackage ../tools/networking/p2p/azureus { };
@@ -2031,6 +2040,8 @@ with pkgs;
 
   lprof = callPackage ../tools/graphics/lprof { };
 
+  fastlane = callPackage ../tools/admin/fastlane { };
+
   fatresize = callPackage ../tools/filesystems/fatresize {};
 
   fdk_aac = callPackage ../development/libraries/fdk-aac { };
@@ -2477,6 +2488,8 @@ with pkgs;
 
   pgjwt = callPackage ../servers/sql/postgresql/pgjwt {};
 
+  pgtap = callPackage ../servers/sql/postgresql/pgtap {};
+
   pigz = callPackage ../tools/compression/pigz { };
 
   pixz = callPackage ../tools/compression/pixz { };
@@ -2699,6 +2712,7 @@ with pkgs;
   iperf = iperf3;
 
   ipfs = callPackage ../applications/networking/ipfs { };
+  ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
 
   ipmitool = callPackage ../tools/system/ipmitool {
     static = false;
@@ -3871,16 +3885,14 @@ with pkgs;
   pinentry = callPackage ../tools/security/pinentry {
     libcap = if stdenv.isDarwin then null else libcap;
     qt4 = null;
-    gtk2 = null;
-    gcr = gnome3.gcr;
   };
 
   pinentry_ncurses = pinentry.override {
-    gcr = null;
+    gtk2 = null;
   };
 
-  pinentry_gtk2 = pinentry_ncurses.override {
-    inherit gtk2;
+  pinentry_gnome = pinentry_ncurses.override {
+    gcr = gnome3.gcr;
   };
 
   pinentry_qt4 = pinentry_ncurses.override {
@@ -5411,7 +5423,9 @@ with pkgs;
     '';
   });
 
-  crystal = callPackage ../development/compilers/crystal { };
+  crystal = callPackage ../development/compilers/crystal {
+    llvm = llvm_4;
+  };
 
   devpi-client = callPackage ../development/tools/devpi-client {};
 
@@ -7080,6 +7094,8 @@ with pkgs;
   dcadec = callPackage ../development/tools/dcadec { };
 
   dejagnu = callPackage ../development/tools/misc/dejagnu { };
+
+  devtodo = callPackage ../development/tools/devtodo { };
 
   dfeet = callPackage ../development/tools/misc/d-feet { };
 
@@ -14651,6 +14667,8 @@ with pkgs;
 
   gcolor2 = callPackage ../applications/graphics/gcolor2 { };
 
+  gcolor3 = callPackage ../applications/graphics/gcolor3 { };
+
   get_iplayer = callPackage ../applications/misc/get_iplayer {};
 
   getxbook = callPackage ../applications/misc/getxbook {};
@@ -18612,7 +18630,7 @@ with pkgs;
 
   eagle = callPackage ../applications/science/electronics/eagle { };
 
-  caneda = callPackage ../applications/science/electronics/caneda { };
+  caneda = libsForQt5.callPackage ../applications/science/electronics/caneda { };
 
   geda = callPackage ../applications/science/electronics/geda {
     guile = guile_2_0;

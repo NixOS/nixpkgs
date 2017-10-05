@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libcdio, zlib, bzip2, readline, acl, attr }:
+{ fetchurl, stdenv, libcdio, zlib, bzip2, readline, acl, attr, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "xorriso-1.4.8";
@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  buildInputs = [ libcdio zlib bzip2 readline attr ]
-    ++ stdenv.lib.optional stdenv.isLinux acl;
+  buildInputs = [ libcdio zlib bzip2 readline libiconv ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ acl attr ];
 
   meta = with stdenv.lib; {
     description = "ISO 9660 Rock Ridge file system manipulator";

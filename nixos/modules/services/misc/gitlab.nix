@@ -414,7 +414,7 @@ in {
           Make sure the secret is an RSA private key in PEM format. You can
           generate one with
 
-          openssl genrsa 2048openssl genpkey -algorithm RSA -out - -pkeyopt rsa_keygen_bits:2048
+          openssl genrsa 2048
         '';
       };
 
@@ -567,6 +567,7 @@ in {
         mkdir -p ${cfg.statePath}/log
         mkdir -p ${cfg.statePath}/tmp/pids
         mkdir -p ${cfg.statePath}/tmp/sockets
+        mkdir -p ${cfg.statePath}/shell
 
         rm -rf ${cfg.statePath}/config ${cfg.statePath}/shell/hooks
         mkdir -p ${cfg.statePath}/config

@@ -28,6 +28,9 @@ stdenv.mkDerivation rec {
   # jq is linked to libjq:
   configureFlags = stdenv.lib.optional (!stdenv.isDarwin) "LDFLAGS=-Wl,-rpath,\\\${libdir}";
 
+  installCheckPhase = "$out/bin/jq --help";
+  doInstallCheck = true;
+
   meta = with stdenv.lib; {
     description = ''A lightweight and flexible command-line JSON processor'';
     license = licenses.mit;

@@ -136,6 +136,7 @@
   dancek = "Hannu Hartikainen <hannu.hartikainen@gmail.com>";
   danielfullmer = "Daniel Fullmer <danielrf12@gmail.com>";
   dasuxullebt = "Christoph-Simon Senjak <christoph.senjak@googlemail.com>";
+  david50407 = "David Kuo <me@davy.tw>";
   davidak = "David Kleuker <post@davidak.de>";
   davidrusu = "David Rusu <davidrusu.me@gmail.com>";
   davorb = "Davor Babic <davor@davor.se>";
@@ -457,6 +458,7 @@
   periklis = "theopompos@gmail.com";
   pesterhazy = "Paulus Esterhazy <pesterhazy@gmail.com>";
   peterhoeg = "Peter Hoeg <peter@hoeg.com>";
+  peterromfeldhk = "Peter Romfeld <peter.romfeld.hk@gmail.com>";
   peti = "Peter Simons <simons@cryp.to>";
   philandstuff = "Philip Potter <philip.g.potter@gmail.com>";
   phile314 = "Philipp Hausmann <nix@314.ch>";
@@ -589,6 +591,7 @@
   taku0 = "Takuo Yonezawa <mxxouy6x3m_github@tatapa.org>";
   tari = "Peter Marheine <peter@taricorp.net>";
   tavyc = "Octavian Cerna <octavian.cerna@gmail.com>";
+  TealG = "Teal Gaure <~@Teal.Gr>";
   teh = "Tom Hunger <tehunger@gmail.com>";
   telotortium = "Robert Irelan <rirelan@gmail.com>";
   teto = "Matthieu Coudron <mcoudron@hotmail.com>";
