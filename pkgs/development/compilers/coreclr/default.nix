@@ -12,19 +12,20 @@
 , lttng-ust
 , liburcu
 , libuuid
+, libkrb5
 , ed
 , debug ? false
 }:
 
 stdenv.mkDerivation rec {
   name = "coreclr-${version}";
-  version = "1.0.4";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner  = "dotnet";
     repo   = "coreclr";
     rev    = "v${version}";
-    sha256 = "1wpig71q0kh2yrq162d32x00zlwrrs1wymkgijh49cqkn4cwkh91";
+    sha256 = "16z58ix8kmk8csfy5qsqz8z30czhrap2vb8s8vdflmbcfnq31jcw";
   };
 
   buildInputs = [
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
     lttng-ust
     liburcu
     libuuid
+    libkrb5
     ed
   ];
 
@@ -73,7 +75,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
+    # set -x
     ./build.sh $BuildArch $BuildType
+    # set +x
 
     # Try to make some sensible hierarchy out of the output
     pushd bin/Product/Linux.$BuildArch.$BuildType
