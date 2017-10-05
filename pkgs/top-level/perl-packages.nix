@@ -12013,11 +12013,15 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  SetObject = buildPerlPackage {
-    name = "Set-Object-1.34";
+  SetObject = buildPerlPackage rec {
+    name = "Set-Object-1.35";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RU/RURBAN/Set-Object-1.34.tar.gz;
-      sha256 = "1dipd6k572pzqjzbj9vagb2k347qcg29lsxzx9y214bhnw7fgvjp";
+      url = "mirror://cpan/authors/id/R/RU/RURBAN/${name}.tar.gz";
+      sha256 = "189a4d7cc3e583faa8518a63a95cf4aa3a320f79b5c6f5e40970687244080ee7";
+    };
+    meta = {
+      description = "Unordered collections (sets) of Perl Objects";
+      license = stdenv.lib.licenses.artistic2;
     };
   };
 
