@@ -34,7 +34,7 @@ assert withOnlineServices -> withTaglib;
 assert withReplaygain -> withTaglib;
 
 let
-  version = "2.1.0";
+  version = "2.2.0";
   pname = "cantata";
   fstat = x: fn: "-DENABLE_" + fn + "=" + (if x then "ON" else "OFF");
   fstats = x: map (fstat x);
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     owner  = "CDrummond";
     repo   = "cantata";
     rev    = "v${version}";
-    sha256 = "1mwc3cyrvg8qxjn70h4i6kdkvz85xspb3wi8wrb56jrhil409fkh";
+    sha256 = "1b633chgfs8rya78bzzck5zijna15d1y4nmrz4dcjp862ks5y5q6";
   };
 
   buildInputs = [ vlc ]
@@ -86,17 +86,16 @@ stdenv.mkDerivation rec {
 
   # This is already fixed upstream but not released yet. Maybe in version 2.
   preConfigure = ''
-    sed -i -e 's/STRLESS/VERSION_LESS/g' cmake/FindTaglib.cmake
+    # sed -i -e 's/STRLESS/VERSION_LESS/g' cmake/FindTaglib.cmake
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/cdrummond/cantata;
+    homepage    = https://github.com/cdrummond/cantata;
     description = "A graphical client for MPD";
-    license = licenses.gpl3;
-
+    license     = licenses.gpl3;
+    maintainers = with maintainers; [ fuuzetsu peterhoeg ];
     # Technically Cantata can run on Windows so if someone wants to
     # bother figuring that one out, be my guest.
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ fuuzetsu ];
+    platforms   = platforms.linux;
   };
 }
