@@ -43,18 +43,32 @@ in
       ];
       preStart = ''
         test -d /var/lib/nzbget || {
-          echo "Creating nzbget state directoy in /var/lib/"
+          echo "Creating nzbget state directory in /var/lib/"
           mkdir -p /var/lib/nzbget
         }
-        test -f /var/lib/nzbget/nzbget.conf || {
+
+        conf=/var/lib/nzbget/nzbget.conf
+        test -f $conf && {
+          webdir=`grep -Po '(?<=^WebDir=).*+' $conf`
+          test -d $webdir || {
+            echo Updating broken WebDir=$webdir to ${cfg.package}/share/nzbget/webui
+            sed -i 's|"$webdir"|"${cfg.package}"/share/nzbget/webui|g' $conf
+          }
+          cfgtemplate=`grep -Po '(?<=^ConfigTemplate=).*+' $conf`
+          test -f $cfgtemplate || {
+            echo Updating broken ConfigTemplate=$cfgtemplate to ${cfg.package}/share/nzbget/nzbget.conf
+            sed -i 's|"$cfgtemplate"|"${cfg.package}"/share/nzbget/nzbget.conf|g' $conf
+          }
+        } || {
           echo "nzbget.conf not found. Copying default config to /var/lib/nzbget/nzbget.conf"
-          cp ${cfg.package}/share/nzbget/nzbget.conf /var/lib/nzbget/nzbget.conf
-          echo "Setting file mode of nzbget.conf to 0700 (needs to be written and contains plaintext credentials)"
-          chmod 0700 /var/lib/nzbget/nzbget.conf
+          cp ${cfg.package}/share/nzbget/nzbget.conf $conf
+          echo "Setting file mode of nzbget.conf to 0677 (needs to be written and contains plaintext credentials)"
+          chmod 0700 $conf
           echo "Setting temporary \$MAINDIR variable in default config required in order to allow nzbget to complete initial start"
           echo "Remember to change this to a proper value once NZBGet startup has been completed"
-          sed -i -e 's/MainDir=.*/MainDir=\/tmp/g' /var/lib/nzbget/nzbget.conf
+          sed -i -e 's/MainDir=.*/MainDir=\/tmp/g' $conf
         }
+
         echo "Ensuring proper ownership of /var/lib/nzbget (${cfg.user}:${cfg.group})."
         chown -R ${cfg.user}:${cfg.group} /var/lib/nzbget
       '';
