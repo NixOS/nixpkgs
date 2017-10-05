@@ -3,7 +3,6 @@
 let
 
   kdeLocale4 = import ./kde-locale-4.nix;
-  kdeLocale5 = import ./kde-locale-5.nix;
 
 in
 
