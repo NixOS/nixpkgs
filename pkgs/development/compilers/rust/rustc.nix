@@ -55,6 +55,8 @@ stdenv.mkDerivation {
                 ++ optional (targets != []) "--target=${target}"
                 ++ optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
 
+  dontFixLibtool = true;
+
   patches = patches ++ targetPatches;
 
   passthru.target = target;
