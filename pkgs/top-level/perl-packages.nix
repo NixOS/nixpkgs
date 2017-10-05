@@ -11976,13 +11976,13 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ServerStarter = buildPerlModule {
-    name = "Server-Starter-0.32";
+  ServerStarter = buildPerlModule rec {
+    name = "Server-Starter-0.33";
     src = fetchurl {
-      url = mirror://cpan/authors/id/K/KA/KAZUHO/Server-Starter-0.32.tar.gz;
-      sha256 = "a8ecc19f05f3c3b079e1c7f2c007a6df2b9a2912b9848a8fb51bd78c7b13ac1a";
+      url = "mirror://cpan/authors/id/K/KA/KAZUHO/${name}.tar.gz";
+      sha256 = "109cc1ede244f2edb7e020c507d4a1ff7a8074f22a8f7c30253fb00af1aba6f6";
     };
-    buildInputs = [ TestRequires TestSharedFork TestTCP ];
+    buildInputs = [ ModuleBuild TestRequires TestSharedFork TestTCP ];
     meta = {
       homepage = https://github.com/kazuho/p5-Server-Starter;
       description = "A superdaemon for hot-deploying server programs";
