@@ -10320,7 +10320,13 @@ with pkgs;
       kirigami_1
       kirigami_2;
 
+    kdb = callPackage ../development/libraries/kdb { };
+
     kdiagram = callPackage ../development/libraries/kdiagram { };
+
+    kproperty = callPackage ../development/libraries/kproperty { };
+
+    kreport = callPackage ../development/libraries/kreport { };
 
     kirigami = kirigami_1;
 
@@ -13829,8 +13835,13 @@ with pkgs;
 
   calibre = libsForQt5.callPackage ../applications/misc/calibre { };
 
-  calligra = kde4.callPackage ../applications/office/calligra {
+  calligra2 = kde4.callPackage ../applications/office/calligra/2.nix {
     vc = vc_0_7;
+  };
+
+  calligra = libsForQt5.callPackage ../applications/office/calligra {
+    inherit (kdeApplications) akonadi-calendar akonadi-contacts;
+    openjpeg = openjpeg_1;
   };
 
   camlistore = callPackage ../applications/misc/camlistore { };
@@ -15195,6 +15206,8 @@ with pkgs;
   keepnote = callPackage ../applications/office/keepnote { };
 
   kermit = callPackage ../tools/misc/kermit { };
+
+  kexi = libsForQt5.callPackage ../applications/office/kexi { };
 
   keyfinder = libsForQt5.callPackage ../applications/audio/keyfinder { };
 
