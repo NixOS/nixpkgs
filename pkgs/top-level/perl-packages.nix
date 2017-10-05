@@ -15460,10 +15460,15 @@ let self = _self // overrides; _self = with self; {
   };
 
   VariableMagic = buildPerlPackage rec {
-    name = "Variable-Magic-0.58";
+    name = "Variable-Magic-0.61";
     src = fetchurl {
-      url = "mirror://cpan/modules/by-module/Variable/${name}.tar.gz";
-      sha256 = "1yhh3zbawx68sw93xrnvfnqq5pb2pmbk20rckqxbwkq1n8c6lv83";
+      url = "mirror://cpan/authors/id/V/VP/VPIT/${name}.tar.gz";
+      sha256 = "b8afe92e54c72a2ed2ca1b08ce90518b855734f7d33c454d0f66f2c1ccf8a6d7";
+    };
+    meta = {
+      homepage = http://search.cpan.org/dist/Variable-Magic/;
+      description = "Associate user-defined magic to variables from Perl";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
