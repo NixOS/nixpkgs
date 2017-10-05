@@ -1,4 +1,4 @@
-{ pythonPackages }:
+{ stdenv, pythonPackages }:
 
 with pythonPackages;buildPythonPackage rec {
   pname = "devpi-common";
@@ -17,7 +17,7 @@ with pythonPackages;buildPythonPackage rec {
     py.test
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/devpi/devpi;
     description = "Utilities jointly used by devpi-server and devpi-client";
     license = licenses.mit;
