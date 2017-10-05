@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
         (fetchpatch {
           name = "mupdf-1.10a-shared_libs-1.patch";
-          url = "http://www.linuxfromscratch.org/patches/downloads/mupdf/mupdf-1.10a-shared_libs-1.patch";
+          url = "https://ftp.osuosl.org/pub/blfs/conglomeration/mupdf/mupdf-1.10a-shared_libs-1.patch";
           sha256 = "0kg4vahp7hlyyj5hl18brk8s8xcbqrx19pqjzkfq6ha8mqa3k4ab";
         })
       ];
