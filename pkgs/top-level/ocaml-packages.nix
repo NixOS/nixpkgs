@@ -439,8 +439,6 @@ let
 
     ocaml_sqlite3 = callPackage ../development/ocaml-modules/sqlite3 { };
 
-    ocaml_ssl = callPackage ../development/ocaml-modules/ssl { };
-
     ocaml_text = callPackage ../development/ocaml-modules/ocaml-text { };
 
     ocf = callPackage ../development/ocaml-modules/ocf { };
@@ -605,6 +603,8 @@ let
     sedlex = callPackage ../development/ocaml-modules/sedlex { };
 
     sqlite3EZ = callPackage ../development/ocaml-modules/sqlite3EZ { };
+
+    ssl = callPackage ../development/ocaml-modules/ssl { };
 
     stog = callPackage ../applications/misc/stog { };
 
