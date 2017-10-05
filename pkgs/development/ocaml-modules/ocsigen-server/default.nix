@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, which, ocaml_react, ocaml_ssl,
+{stdenv, fetchurl, ocaml, findlib, which, react, ocaml_ssl,
 lwt, ocamlnet, ocaml_pcre, cryptokit, tyxml, ipaddr, zlib,
 libev, openssl, ocaml_sqlite3, tree, uutf, makeWrapper, camlp4
 , camlzip, pgocaml
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     sha256 = "1v44qv2ixd7i1qinyhlzzqiffawsdl7xhhh6ysd7lf93kh46d5sy";
   };
 
-  buildInputs = [ocaml which findlib ocaml_react ocaml_ssl lwt
+  buildInputs = [ocaml which findlib react ocaml_ssl lwt
   ocamlnet ocaml_pcre cryptokit tyxml ipaddr zlib libev openssl
   ocaml_sqlite3 tree uutf makeWrapper camlp4 pgocaml camlzip ];
 
