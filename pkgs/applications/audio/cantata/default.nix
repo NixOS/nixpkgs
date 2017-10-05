@@ -38,9 +38,10 @@ let
   pname = "cantata";
   fstat = x: fn: "-DENABLE_" + fn + "=" + (if x then "ON" else "OFF");
   fstats = x: map (fstat x);
-in
 
-stdenv.mkDerivation rec {
+  withUdisks = (withTaglib && withDevices);
+
+in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
@@ -60,34 +61,29 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional  withLame lame
     ++ stdenv.lib.optional  withMtp libmtp
     ++ stdenv.lib.optional  withMusicbrainz libmusicbrainz5
-    ++ stdenv.lib.optional  (withTaglib && withDevices) udisks2;
+    ++ stdenv.lib.optional  withUdisks udisks2;
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
   enableParallelBuilding = true;
 
   cmakeFlags = stdenv.lib.flatten [
-    (fstat withQt5 "QT5")
-    (fstats withTaglib [ "TAGLIB" "TAGLIB_EXTRAS" ])
-    (fstats withReplaygain [ "FFMPEG" "MPG123" "SPEEXDSP" ])
-    (fstat withCdda "CDPARANOIA")
-    (fstat withCddb "CDDB")
-    (fstat withLame "LAME")
-    (fstat withMtp "MTP")
-    (fstat withMusicbrainz "MUSICBRAINZ")
+    (fstat withQt5            "QT5")
+    (fstats withTaglib        [ "TAGLIB" "TAGLIB_EXTRAS" ])
+    (fstats withReplaygain    [ "FFMPEG" "MPG123" "SPEEXDSP" ])
+    (fstat withCdda           "CDPARANOIA")
+    (fstat withCddb           "CDDB")
+    (fstat withLame           "LAME")
+    (fstat withMtp            "MTP")
+    (fstat withMusicbrainz    "MUSICBRAINZ")
     (fstat withOnlineServices "ONLINE_SERVICES")
-    (fstat withDynamic "DYNAMIC")
-    (fstat withDevices "DEVICES_SUPPORT")
-    (fstat withHttpServer "HTTP_SERVER")
-    (fstat withStreams "STREAMS")
+    (fstat withDynamic        "DYNAMIC")
+    (fstat withDevices        "DEVICES_SUPPORT")
+    (fstat withHttpServer     "HTTP_SERVER")
+    (fstat withStreams        "STREAMS")
+    (fstat withUdisks         "UDISKS2")
     "-DENABLE_HTTPS_SUPPORT=ON"
-    "-DENABLE_UDISKS2=ON"
   ];
-
-  # This is already fixed upstream but not released yet. Maybe in version 2.
-  preConfigure = ''
-    # sed -i -e 's/STRLESS/VERSION_LESS/g' cmake/FindTaglib.cmake
-  '';
 
   meta = with stdenv.lib; {
     homepage    = https://github.com/cdrummond/cantata;
