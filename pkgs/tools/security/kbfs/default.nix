@@ -2,18 +2,18 @@
 
 buildGoPackage rec {
   name = "kbfs-${version}";
-  version = "20170922.f76290";
+  version = "20171004.40555d";
 
   goPackagePath = "github.com/keybase/kbfs";
-  subPackages = [ "kbfsfuse" ];
+  subPackages = [ "kbfsfuse" "kbfsgit/git-remote-keybase" ];
 
   dontRenameImports = true;
 
   src = fetchFromGitHub {
     owner = "keybase";
     repo = "kbfs";
-    rev = "f76290f6e1a8cbaa6046980c67c548fbff9e123a";
-    sha256 = "1v086wmc0hly4b91y6xndfdhj981n2yr6nnb3rl6f4kwx291ih54";
+    rev = "40555dbc9c93a05f3a82053860df30e45c7bd779";
+    sha256 = "08wj8fh1ja8kfzvbza5csy9mpfy39lifnzvfrnbj7vyyv88qc3h0";
   };
 
   buildFlags = [ "-tags production" ];
