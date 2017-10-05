@@ -11,6 +11,8 @@ stdenv.mkDerivation {
 
   postUnpack = "sourceRoot=\${sourceRoot}/wmsm";
 
+  NIX_CFLAGS_COMPILE = "-std=gnu89";
+
   installPhase = ''
     substituteInPlace Makefile --replace "PREFIX	= /usr/X11R6/bin" "" --replace "/usr/bin/install" "install"
     mkdir -pv $out/bin;

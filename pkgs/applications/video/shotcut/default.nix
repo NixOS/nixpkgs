@@ -52,9 +52,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;
-
-    # after qt5 bump it probably needs to be updated,
-    # but newer versions seem to need newer than the latest stable mlt
-    # broken = true;
   };
 }

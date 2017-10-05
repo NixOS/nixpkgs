@@ -37,7 +37,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 9.5
+  # LTS Haskell 9.6
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -54,7 +54,7 @@ default-package-overrides:
   - aeson-better-errors ==0.9.1.0
   - aeson-casing ==0.1.0.5
   - aeson-compat ==0.3.6
-  - aeson-diff ==1.1.0.3
+  - aeson-diff ==1.1.0.4
   - aeson-extra ==0.4.0.0
   - aeson-generic-compat ==0.0.1.0
   - aeson-injector ==1.0.10.0
@@ -215,7 +215,7 @@ default-package-overrides:
   - avwx ==0.3.0.2
   - aws ==0.16
   - axiom ==0.4.6
-  - b9 ==0.5.32
+  - b9 ==0.5.35
   - backprop ==0.0.3.0
   - bake ==0.5
   - bank-holidays-england ==0.1.0.6
@@ -252,7 +252,7 @@ default-package-overrides:
   - binary-tagged ==0.1.4.2
   - binary-typed ==1.0
   - bindings-DSL ==1.0.23
-  - bindings-GLFW ==3.1.2.2
+  - bindings-GLFW ==3.1.2.3
   - bindings-libzip ==1.0.1
   - bioace ==0.0.1
   - bioalign ==0.0.5
@@ -399,7 +399,7 @@ default-package-overrides:
   - cmark ==0.5.6
   - cmark-highlight ==0.2.0.0
   - cmark-lucid ==0.1.0.0
-  - cmdargs ==0.10.17
+  - cmdargs ==0.10.18
   - code-builder ==0.1.3
   - code-page ==0.1.3
   - codo-notation ==0.5.2
@@ -763,13 +763,13 @@ default-package-overrides:
   - ghc-events ==0.6.0
   - ghc-exactprint ==0.5.5.0
   - ghc-heap-view ==0.5.10
-  - ghcid ==0.6.6
+  - ghcid ==0.6.7
   - ghcjs-base-stub ==0.1.0.4
   - ghcjs-codemirror ==0.0.0.1
   - ghcjs-perch ==0.3.3.2
   - ghc-paths ==0.1.0.9
   - ghc-prof ==1.4.0.2
-  - ghc-syb-utils ==0.2.3.2
+  - ghc-syb-utils ==0.2.3.3
   - ghc-tcplugins-extra ==0.2.1
   - ghc-typelits-extra ==0.2.3
   - ghc-typelits-knownnat ==0.3.1
@@ -916,7 +916,7 @@ default-package-overrides:
   - gogol-youtube-reporting ==0.3.0
   - google-cloud ==0.0.4
   - google-oauth2-jwt ==0.2.2
-  - GPipe ==2.2.1
+  - GPipe ==2.2.3
   - GPipe-GLFW ==1.4.1.1
   - gpolyline ==0.1.0.1
   - graph-core ==0.3.0.0
@@ -997,7 +997,7 @@ default-package-overrides:
   - haskell-tools-rewrite ==0.8.1.0
   - haskintex ==0.7.0.1
   - hasmin ==0.3.2.4
-  - hasql ==0.19.18.1
+  - hasql ==0.19.18.2
   - hasql-migration ==0.1.3
   - hasql-pool ==0.4.1
   - hasql-transaction ==0.5
@@ -1033,7 +1033,7 @@ default-package-overrides:
   - hexml ==0.3.2
   - hexpat ==0.20.13
   - hexstring ==0.11.1
-  - hformat ==0.3.0.0
+  - hformat ==0.3.1.0
   - hfsevents ==0.1.6
   - hid ==0.2.2
   - hidapi ==0.1.4
@@ -1057,7 +1057,7 @@ default-package-overrides:
   - hlint ==2.0.9
   - hmatrix ==0.18.0.0
   - hmatrix-gsl ==0.18.0.1
-  - hmatrix-gsl-stats ==0.4.1.6
+  - hmatrix-gsl-stats ==0.4.1.7
   - hmatrix-special ==0.4.0.1
   - hmpfr ==0.4.3
   - hoauth2 ==1.3.0
@@ -1272,7 +1272,7 @@ default-package-overrides:
   - jwt ==0.7.2
   - kan-extensions ==5.0.2
   - kansas-comet ==0.4
-  - katip ==0.5.0.1
+  - katip ==0.5.0.2
   - kawhi ==0.3.0
   - kdt ==0.2.4
   - keter ==1.4.3.2
@@ -1339,7 +1339,7 @@ default-package-overrides:
   - linked-list-with-iterator ==0.1.1.0
   - linux-file-extents ==0.2.0.0
   - linux-namespaces ==0.1.2.0
-  - List ==0.6.0
+  - List ==0.6.1
   - list-fusion-probe ==0.1.0.6
   - ListLike ==4.5.1
   - list-prompt ==0.1.1.0
@@ -1381,7 +1381,7 @@ default-package-overrides:
   - markdown-unlit ==0.4.0
   - markov-chain ==0.0.3.4
   - markup ==3.1.0
-  - marvin ==0.2.3
+  - marvin ==0.2.5
   - marvin-interpolate ==1.1.2
   - mathexpr ==0.3.0.0
   - math-functions ==0.2.1.0
@@ -1491,7 +1491,7 @@ default-package-overrides:
   - mysql ==0.1.4
   - mysql-haskell ==0.8.0.0
   - mysql-haskell-openssl ==0.8.0.0
-  - mysql-simple ==0.4.2.0
+  - mysql-simple ==0.4.3
   - nagios-check ==0.3.2
   - names-th ==0.2.0.3
   - nano-erl ==0.1.0.1
@@ -1650,7 +1650,7 @@ default-package-overrides:
   - pinboard ==0.9.12.5
   - pinch ==0.3.2.0
   - pinchot ==0.24.0.0
-  - pipes ==4.3.4
+  - pipes ==4.3.5
   - pipes-attoparsec ==0.5.1.5
   - pipes-bytestring ==2.1.6
   - pipes-cacophony ==0.5.0
@@ -1736,8 +1736,8 @@ default-package-overrides:
   - prompt ==0.1.1.2
   - protobuf ==0.2.1.1
   - protobuf-simple ==0.1.0.4
-  - protocol-buffers ==2.4.3
-  - protocol-buffers-descriptor ==2.4.3
+  - protocol-buffers ==2.4.4
+  - protocol-buffers-descriptor ==2.4.4
   - proto-lens ==0.2.1.0
   - proto-lens-arbitrary ==0.1.1.1
   - proto-lens-combinators ==0.1.0.7
@@ -1911,7 +1911,7 @@ default-package-overrides:
   - servant-auth-cookie ==0.5.0.5
   - servant-blaze ==0.7.1
   - servant-cassava ==0.9
-  - servant-checked-exceptions ==0.4.0.0
+  - servant-checked-exceptions ==0.4.1.0
   - servant-client ==0.11
   - servant-docs ==0.11
   - servant-elm ==0.4.0.1
@@ -1972,7 +1972,7 @@ default-package-overrides:
   - smtp-mail ==0.1.4.6
   - snap-blaze ==0.2.1.5
   - snap-core ==1.0.3.1
-  - snap-server ==1.0.3.1
+  - snap-server ==1.0.3.3
   - snowflake ==0.1.1.1
   - snowtify ==0.1.0.3
   - soap ==0.2.3.5
@@ -2074,7 +2074,7 @@ default-package-overrides:
   - SVGFonts ==1.6.0.2
   - svg-tree ==0.6.2
   - swagger ==0.3.0
-  - swagger2 ==2.1.5
+  - swagger2 ==2.1.6
   - syb ==0.7
   - symbol ==0.2.4
   - symengine ==0.1.2.0
@@ -2178,7 +2178,7 @@ default-package-overrides:
   - thread-local-storage ==0.1.1
   - threads ==0.5.1.5
   - threepenny-editors ==0.4.1
-  - threepenny-gui ==0.8.1.0
+  - threepenny-gui ==0.8.2.0
   - threepenny-gui-flexbox ==0.4.2
   - th-reify-compat ==0.0.1.2
   - th-reify-many ==0.1.8
@@ -2207,7 +2207,7 @@ default-package-overrides:
   - tls ==1.3.11
   - tls-debug ==0.4.4
   - tls-session-manager ==0.0.0.1
-  - tmp-postgres ==0.1.0.8
+  - tmp-postgres ==0.1.1.0
   - token-bucket ==0.1.0.1
   - torrent ==10000.1.1
   - tostring ==0.2.1.1

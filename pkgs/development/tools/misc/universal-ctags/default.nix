@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, perl, pythonPackages }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, perl, pythonPackages, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "universal-ctags-${version}";
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1kbw9ycl2ddzpfs1v4rbqa4gdhw4inrisf4awyaxb7zxfxmbzk1g";
   };
 
-  nativeBuildInputs = [ pythonPackages.docutils ];
-  buildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig pythonPackages.docutils ];
+  buildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;
 
   autoreconfPhase = ''
     ./autogen.sh --tmpdir

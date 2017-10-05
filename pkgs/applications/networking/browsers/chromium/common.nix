@@ -90,6 +90,15 @@ let
     sha256 = "1vhslc4xg0d6wzlsi99zpah2xzjziglccrxn55k7qna634wyxg77";
   };
 
+  versionRange = min-version: upto-version:
+    let inherit (upstream-info) version;
+        result = versionAtLeast version min-version && versionOlder version upto-version;
+        stable-version = (import ./upstream-info.nix).stable.version;
+    in if versionAtLeast stable-version upto-version
+       then warn "chromium: stable version ${stable-version} is newer than a patchset bounded at ${upto-version}. You can safely delete it."
+            result
+       else result;
+
   base = rec {
     name = "${packageName}-${version}";
     inherit (upstream-info) version;
@@ -117,15 +126,31 @@ let
 
     patches = [
       ./patches/nix_plugin_paths_52.patch
+      # To enable ChromeCast, go to chrome://flags and set "Load Media Router Component Extension" to Enabled
+      # Fixes Chromecast: https://bugs.chromium.org/p/chromium/issues/detail?id=734325
+      ./patches/fix_network_api_crash.patch
+    ] # As major versions are added, you can trawl the gentoo and arch repos at
+      # https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/
+      # https://git.archlinux.org/svntogit/packages.git/tree/trunk?h=packages/chromium
+      # for updated patches and hints about build flags
+      ++ optionals (versionRange "61" "62") [
       ./patches/chromium-gn-bootstrap-r14.patch
       ./patches/chromium-gcc-r1.patch
       ./patches/chromium-atk-r1.patch
       ./patches/chromium-gcc5-r1.patch
-      # To enable ChromeCast, go to chrome://flags and set "Load Media Router Component Extension" to Enabled
-      # Fixes Chromecast: https://bugs.chromium.org/p/chromium/issues/detail?id=734325
-      ./patches/fix_network_api_crash.patch
-
-    ] ++ optional enableWideVine ./patches/widevine.patch;
+    ]
+      ++ optionals (versionRange "62" "63") [
+      ./patches/chromium-gn-bootstrap-r17.patch
+      ./patches/chromium-gcc5-r2.patch
+      ./patches/chromium-glibc2.26-r1.patch
+    ]
+      ++ optionals (versionAtLeast version "63") [
+      ./patches/chromium-gn-bootstrap-r19.patch
+      ./patches/chromium-gcc5-r2.patch
+      ./patches/chromium-glibc2.26-r1.patch
+      ./patches/chromium-sysroot-r1.patch
+    ]
+      ++ optional enableWideVine ./patches/widevine.patch;
 
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX

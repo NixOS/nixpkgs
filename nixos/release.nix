@@ -278,6 +278,7 @@ in rec {
   tests.login = callTest tests/login.nix {};
   #tests.logstash = callTest tests/logstash.nix {};
   tests.mathics = callTest tests/mathics.nix {};
+  tests.mesos = callTest tests/mesos.nix {};
   tests.misc = callTest tests/misc.nix {};
   tests.mongodb = callTest tests/mongodb.nix {};
   tests.mumble = callTest tests/mumble.nix {};
@@ -302,7 +303,7 @@ in rec {
   #tests.panamax = hydraJob (import tests/panamax.nix { system = "x86_64-linux"; });
   tests.peerflix = callTest tests/peerflix.nix {};
   tests.postgresql = callSubTests tests/postgresql.nix {};
-  tests.pgjwt = callTest tests/pgjwt.nix {};
+  #tests.pgjwt = callTest tests/pgjwt.nix {};
   tests.printing = callTest tests/printing.nix {};
   tests.proxy = callTest tests/proxy.nix {};
   tests.pumpio = callTest tests/pump.io.nix {};

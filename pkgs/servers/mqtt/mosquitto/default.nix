@@ -14,12 +14,12 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl libuuid libwebsockets c-ares libuv ]
     ++ stdenv.lib.optional stdenv.isDarwin cmake;
 
-  makeFlags = [
+  makeFlags = stdenv.lib.optionals stdenv.isLinux [
     "DESTDIR=$(out)"
     "PREFIX="
   ];
 
-  preBuild = ''
+  postPatch = ''
     substituteInPlace config.mk \
       --replace "/usr/local" ""
     substituteInPlace config.mk \

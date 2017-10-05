@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     homepage = http://streamripper.sourceforge.net/;
     description = "Application that lets you record streaming mp3 to your hard drive";
     license = licenses.gpl2;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ the-kenny ];
   };
 }

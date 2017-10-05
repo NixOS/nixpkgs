@@ -56,14 +56,14 @@ self: super: {
   clock = dontCheck super.clock;
   Dust-crypto = dontCheck super.Dust-crypto;
   hasql-postgres = dontCheck super.hasql-postgres;
-  hspec-expectations = dontCheck super.hspec-expectations;
   hspec = super.hspec.override { stringbuilder = dontCheck super.stringbuilder; };
   hspec-core = super.hspec-core.override { silently = dontCheck super.silently; temporary = dontCheck super.temporary; };
+  hspec-expectations = dontCheck super.hspec-expectations;
   HTTP = dontCheck super.HTTP;
+  http-streams = dontCheck super.http-streams;
   nanospec = dontCheck super.nanospec;
   options = dontCheck super.options;
   statistics = dontCheck super.statistics;
-  http-streams = dontCheck super.http-streams;
 
   # segfault due to missing return: https://github.com/haskell/c2hs/pull/184
   c2hs = dontCheck super.c2hs;
@@ -98,7 +98,7 @@ self: super: {
       name = "git-annex-${drv.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + drv.version;
-      sha256 = "15d29hmbl146axjgbm4qhxpz6ypcq1bjf2aj29yhwh5jmznh58i2";
+      sha256 = "03fa03n4zkpj5z3ma1ahvnxd85dni2aikqayqf838jvfl7bd5b9n";
     };
   })).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -962,11 +962,20 @@ self: super: {
     protolude = super.protolude_0_2;
   };
 
+  # test suite requires git and does a bunch of git operations
+  restless-git = dontCheck super.restless-git;
+
   # This tool needs the latest hackage-db version. Using the latest version of
   # optparse-applicative allows us to generate completions for fish and zsh.
   cabal2nix = super.cabal2nix.overrideScope (self: super: {
     hackage-db = self.hackage-db_2_0;
     optparse-applicative = self.optparse-applicative_0_14_0_0;
   });
+
+  # Break "hpack >=0.17.0 && <0.19".
+  stack = doJailbreak super.stack;
+
+  # https://github.com/mgajda/json-autotype/issues/15
+  json-autotype = doJailbreak super.json-autotype;
 
 }

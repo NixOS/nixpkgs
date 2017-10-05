@@ -414,7 +414,7 @@ in {
           Make sure the secret is an RSA private key in PEM format. You can
           generate one with
 
-          openssl genrsa 2048openssl genpkey -algorithm RSA -out - -pkeyopt rsa_keygen_bits:2048
+          openssl genrsa 2048
         '';
       };
 
@@ -567,6 +567,7 @@ in {
         mkdir -p ${cfg.statePath}/log
         mkdir -p ${cfg.statePath}/tmp/pids
         mkdir -p ${cfg.statePath}/tmp/sockets
+        mkdir -p ${cfg.statePath}/shell
 
         rm -rf ${cfg.statePath}/config ${cfg.statePath}/shell/hooks
         mkdir -p ${cfg.statePath}/config
@@ -635,6 +636,13 @@ in {
         chown -R ${cfg.user}:${cfg.group} ${cfg.statePath}
         chmod -R ug+rwX,o-rwx+X ${cfg.statePath}
         chmod -R u+rwX,go-rwx+X ${gitlabEnv.HOME}
+        chmod -R ug+rwX,o-rwx ${cfg.statePath}/repositories
+        chmod -R ug-s ${cfg.statePath}/repositories
+        find ${cfg.statePath}/repositories -type d -print0 | xargs -0 chmod g+s
+        chmod 700 ${cfg.statePath}/uploads
+        chown -R git ${cfg.statePath}/uploads
+        find ${cfg.statePath}/uploads -type f -exec chmod 0644 {} \;
+        find ${cfg.statePath}/uploads -type d -not -path ${cfg.statePath}/uploads -exec chmod 0700 {} \;
       '';
 
       serviceConfig = {

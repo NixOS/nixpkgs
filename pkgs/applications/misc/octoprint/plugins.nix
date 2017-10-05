@@ -12,13 +12,13 @@ let
 
     m33-fio = buildPlugin rec {
       name = "M33-Fio-${version}";
-      version = "1.20";
+      version = "1.21";
 
       src = fetchFromGitHub {
         owner = "donovan6000";
         repo = "M33-Fio";
         rev = "V${version}";
-        sha256 = "1ng7lzlkqsjcr1w7wgzwsqkkvcvpajcj2cwqlffh95916sw8n767";
+        sha256 = "1la3611kkqn8yiwjn6cizc45ri8pnk6ckld1na4nk6mqk88jvjq7";
       };
 
       patches = [
