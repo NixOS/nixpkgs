@@ -34,7 +34,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   ++ lib.optional cairoSupport           pkgs.cairo
   ++ lib.optional tiffSupport            pkgs.libtiff
   ++ lib.optional odbcSupport            pkgs.unixODBC
-  ++ lib.optional netapiSupport          pkgs.samba3_light
+  ++ lib.optional netapiSupport          pkgs.samba4
   ++ lib.optional cursesSupport          pkgs.ncurses
   ++ lib.optional vaSupport              pkgs.libva-full
   ++ lib.optional pcapSupport            pkgs.libpcap
