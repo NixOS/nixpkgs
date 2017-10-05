@@ -433,9 +433,6 @@ let
 
     pgocaml = callPackage ../development/ocaml-modules/pgocaml {};
 
-    ocaml_react = callPackage ../development/ocaml-modules/react { };
-    reactivedata = callPackage ../development/ocaml-modules/reactivedata {};
-
     ocamlscript = callPackage ../development/tools/ocaml/ocamlscript { };
 
     ocamlsdl= callPackage ../development/ocaml-modules/ocamlsdl { };
@@ -592,6 +589,10 @@ let
     qtest = callPackage ../development/ocaml-modules/qtest { };
 
     re = callPackage ../development/ocaml-modules/re { };
+
+    react = callPackage ../development/ocaml-modules/react { };
+
+    reactivedata = callPackage ../development/ocaml-modules/reactivedata {};
 
     reason = callPackage ../development/compilers/reason { };
 

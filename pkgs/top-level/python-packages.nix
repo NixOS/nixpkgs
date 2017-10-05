@@ -2355,25 +2355,7 @@ in {
     };
   };
 
-  devpi-common = buildPythonPackage rec {
-    name = "devpi-common";
-    version = "3.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/devpi-common/devpi-common-${version}.tar.gz";
-      sha256 = "0l3a7iyk596x6pvzg7604lzzi012qszr804fqn6f517zcy1xz23j";
-    };
-
-    propagatedBuildInputs = [ self.requests self.py ];
-
-    meta = {
-      homepage = https://bitbucket.org/hpk42/devpi;
-      description = "Utilities jointly used by devpi-server and devpi-client";
-      license = licenses.mit;
-      maintainers = with maintainers; [ lewo makefu ];
-    };
-  };
-
+  devpi-common = callPackage ../development/python-modules/devpi-common { };
   # A patched version of buildout, useful for buildout based development on Nix
   zc_buildout_nix = callPackage ../development/python-modules/buildout-nix { };
 
