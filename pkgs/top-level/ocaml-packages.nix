@@ -433,16 +433,11 @@ let
 
     pgocaml = callPackage ../development/ocaml-modules/pgocaml {};
 
-    ocaml_react = callPackage ../development/ocaml-modules/react { };
-    reactivedata = callPackage ../development/ocaml-modules/reactivedata {};
-
     ocamlscript = callPackage ../development/tools/ocaml/ocamlscript { };
 
     ocamlsdl= callPackage ../development/ocaml-modules/ocamlsdl { };
 
     ocaml_sqlite3 = callPackage ../development/ocaml-modules/sqlite3 { };
-
-    ocaml_ssl = callPackage ../development/ocaml-modules/ssl { };
 
     ocaml_text = callPackage ../development/ocaml-modules/ocaml-text { };
 
@@ -593,6 +588,10 @@ let
 
     re = callPackage ../development/ocaml-modules/re { };
 
+    react = callPackage ../development/ocaml-modules/react { };
+
+    reactivedata = callPackage ../development/ocaml-modules/reactivedata {};
+
     reason = callPackage ../development/compilers/reason { };
 
     rope = callPackage ../development/ocaml-modules/rope { };
@@ -604,6 +603,8 @@ let
     sedlex = callPackage ../development/ocaml-modules/sedlex { };
 
     sqlite3EZ = callPackage ../development/ocaml-modules/sqlite3EZ { };
+
+    ssl = callPackage ../development/ocaml-modules/ssl { };
 
     stog = callPackage ../applications/misc/stog { };
 

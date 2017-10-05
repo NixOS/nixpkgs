@@ -951,6 +951,8 @@ with pkgs;
 
   deisctl = callPackage ../development/tools/deisctl {};
 
+  deja-dup = callPackage ../applications/backup/deja-dup { };
+
   devmem2 = callPackage ../os-specific/linux/devmem2 { };
 
   dbus-broker = callPackage ../os-specific/linux/dbus-broker {};
@@ -2309,6 +2311,8 @@ with pkgs;
   gocryptfs = callPackage ../tools/filesystems/gocrypfs { };
 
   godot = callPackage ../development/tools/godot {};
+
+  goklp = callPackage ../tools/networking/goklp {};
 
   go-mtpfs = callPackage ../tools/filesystems/go-mtpfs { };
 
@@ -6304,6 +6308,7 @@ with pkgs;
     vala_0_28
     vala_0_32
     vala_0_34
+    vala_0_38
     vala;
 
   valadoc = callPackage ../development/tools/valadoc { };
@@ -7094,6 +7099,8 @@ with pkgs;
   dcadec = callPackage ../development/tools/dcadec { };
 
   dejagnu = callPackage ../development/tools/misc/dejagnu { };
+
+  devtodo = callPackage ../development/tools/devtodo { };
 
   dfeet = callPackage ../development/tools/misc/d-feet { };
 
@@ -10313,7 +10320,13 @@ with pkgs;
       kirigami_1
       kirigami_2;
 
+    kdb = callPackage ../development/libraries/kdb { };
+
     kdiagram = callPackage ../development/libraries/kdiagram { };
+
+    kproperty = callPackage ../development/libraries/kproperty { };
+
+    kreport = callPackage ../development/libraries/kreport { };
 
     kirigami = kirigami_1;
 
@@ -11734,7 +11747,8 @@ with pkgs;
   oracleXE = callPackage ../servers/sql/oracle-xe { };
 
   softether_4_18 = callPackage ../servers/softether/4.18.nix { };
-  softether = softether_4_18;
+  softether_4_20 = callPackage ../servers/softether/4.20.nix { };
+  softether = softether_4_20;
 
   qboot = callPackage ../applications/virtualization/qboot { stdenv = stdenv_32bit; };
 
@@ -13821,8 +13835,13 @@ with pkgs;
 
   calibre = libsForQt5.callPackage ../applications/misc/calibre { };
 
-  calligra = kde4.callPackage ../applications/office/calligra {
+  calligra2 = kde4.callPackage ../applications/office/calligra/2.nix {
     vc = vc_0_7;
+  };
+
+  calligra = libsForQt5.callPackage ../applications/office/calligra {
+    inherit (kdeApplications) akonadi-calendar akonadi-contacts;
+    openjpeg = openjpeg_1;
   };
 
   camlistore = callPackage ../applications/misc/camlistore { };
@@ -15187,6 +15206,8 @@ with pkgs;
   keepnote = callPackage ../applications/office/keepnote { };
 
   kermit = callPackage ../tools/misc/kermit { };
+
+  kexi = libsForQt5.callPackage ../applications/office/kexi { };
 
   keyfinder = libsForQt5.callPackage ../applications/audio/keyfinder { };
 
