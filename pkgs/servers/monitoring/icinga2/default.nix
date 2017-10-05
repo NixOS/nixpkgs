@@ -11,12 +11,16 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "1ilgwld1qg9nam0l3rx2ja1rnyamv90q76n4ndw9b51vsnff8qz9";
   };
+  patches = [
+    ./rundir.patch
+  ];
   cmakeFlags = [
      "-DICINGA2_PLUGINDIR=plugins"
+     "-DICINGA2_RUNDIR=/run"
+     "-DCMAKE_INSTALL_LOCALSTATEDIR=/var/lib/icinga2"
   ];
 
   MYSQL_INCLUDE_DIR="${mysql}/include/mysql";
-  ICINGA2_RUNDIR="/run/icinga2";
 
   buildInputs = [ boost yajl openssl mysql postgresql ];
   nativeBuildInputs = [ cmake flex bison ];

@@ -1,0 +1,33 @@
+diff --git i/icinga-app/CMakeLists.txt w/icinga-app/CMakeLists.txt
+index 44fb877..d1ba786 100644
+--- i/icinga-app/CMakeLists.txt
++++ w/icinga-app/CMakeLists.txt
+@@ -54,4 +54,3 @@ install(
+ 
+ install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/log/icinga2\")")
+ install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/lib/icinga2\")")
+-install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${ICINGA2_RUNDIR}/icinga2\")")
+diff --git i/lib/compat/CMakeLists.txt w/lib/compat/CMakeLists.txt
+index b8b4852..2300d3f 100644
+--- i/lib/compat/CMakeLists.txt
++++ w/lib/compat/CMakeLists.txt
+@@ -61,6 +61,5 @@ install(TARGETS compat RUNTIME DESTINATION ${CMAKE_INSTALL_SBINDIR} LIBRARY DEST
+ 
+ install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/log/icinga2/compat/archives\")")
+ install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/spool/icinga2\")")
+-install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${ICINGA2_RUNDIR}/icinga2/cmd\")")
+ 
+ set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}" PARENT_SCOPE)
+diff --git i/lib/livestatus/CMakeLists.txt w/lib/livestatus/CMakeLists.txt
+index ac20b44..0d1d824 100644
+--- i/lib/livestatus/CMakeLists.txt
++++ w/lib/livestatus/CMakeLists.txt
+@@ -52,8 +52,6 @@ install_if_not_exists(
+   ${CMAKE_INSTALL_SYSCONFDIR}/icinga2/features-available
+ )
+ 
+-install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${ICINGA2_RUNDIR}/icinga2/cmd\")")
+-
+ install(TARGETS livestatus RUNTIME DESTINATION ${CMAKE_INSTALL_SBINDIR} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/icinga2)
+ 
+ set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}" PARENT_SCOPE)
