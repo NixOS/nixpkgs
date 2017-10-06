@@ -13177,7 +13177,9 @@ with pkgs;
 
   comic-relief = callPackage ../data/fonts/comic-relief {};
 
-  coreclr = callPackage ../development/compilers/coreclr { };
+  coreclr = callPackage ../development/compilers/coreclr {
+    debug = config.coreclr.debug or false;
+  };
 
   corefonts = callPackage ../data/fonts/corefonts { };
 

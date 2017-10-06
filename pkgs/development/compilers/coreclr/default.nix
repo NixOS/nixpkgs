@@ -13,7 +13,6 @@
 , liburcu
 , libuuid
 , libkrb5
-, ed
 , debug ? false
 }:
 
@@ -43,52 +42,42 @@ stdenv.mkDerivation rec {
     liburcu
     libuuid
     libkrb5
-    ed
   ];
 
   configurePhase = ''
-    patchShebangs build.sh
-    patchShebangs src/pal/tools/gen-buildsys-clang.sh
+    # override to avoid cmake running
+    patchShebangs .
   '';
 
   BuildArch = if stdenv.is64bit then "x64" else "x86";
   BuildType = if debug then "Debug" else "Release";
 
-  hardeningDisable = [ "strictoverflow" "format" ];
-  NIX_CFLAGS_COMPILE = [
-    "-Wno-error=unused-result" "-Wno-error=delete-non-virtual-dtor"
-    "-Wno-error=null-dereference"
+  hardeningDisable = [
+    "strictoverflow"
+    "format"
   ];
 
   buildPhase = ''
-    ./build.sh $BuildArch $BuildType
-
-    # Try to make some sensible hierarchy out of the output
-    pushd bin/Product/Linux.$BuildArch.$BuildType
-    mkdir lib2
-    mv *.so *.so.dbg lib2
-    mv bin lib3
-    mkdir lib4
-    mv Loader lib4
-    mv inc include
-    mv gcinfo include
-    mkdir bin
-    mkdir -p share/doc
-    mv sosdocsunix.txt share/doc
-    for f in * ; do test -f $f && mv -v $f bin; done
-    popd
+    runHook preBuild
+    ./build.sh $BuildArch Release
+    runHook postBuild
   '';
 
   installPhase = ''
-    mkdir -p $out
-    cp -rv bin/Product/Linux.$BuildArch.$BuildType/* $out
+    runHook preInstall
+    mkdir -p $out/share/dotnet $out/bin
+    cp -r bin/Product/Linux.$BuildArch.$BuildType/* $out/share/dotnet
+    for cmd in coreconsole corerun createdump crossgen ilasm ildasm mcs superpmi; do
+      ln -s $out/share/dotnet/$cmd $out/bin/$cmd
+    done
+    runHook postInstall
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://dotnet.github.io/core/;
     description = ".NET is a general purpose development platform";
     platforms = [ "x86_64-linux" ];
-    maintainers = with stdenv.lib.maintainers; [ obadz ];
-    license = stdenv.lib.licenses.mit;
+    maintainers = with maintainers; [ obadz ];
+    license = licenses.mit;
   };
 }
