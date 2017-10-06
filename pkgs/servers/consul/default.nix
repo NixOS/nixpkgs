@@ -21,10 +21,6 @@ buildGoPackage rec {
     buildFlagsArray+=("-ldflags" "-X github.com/hashicorp/consul/version.GitDescribe=v${version} -X github.com/hashicorp/consul/version.Version=${version} -X github.com/hashicorp/consul/version.VersionPrerelease=")
   '';
 
-  preFixup = stdenv.lib.optionalString stdenv.isDarwin ''
-    install_name_tool -delete_rpath $out/lib $bin/bin/consul
-  '';
-
   meta = with stdenv.lib; {
     description = "Tool for service discovery, monitoring and configuration";
     homepage = https://www.consul.io/;
