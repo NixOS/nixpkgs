@@ -17,6 +17,16 @@ let
     ICINGA2_GROUP=${cfg.group}
     ICINGA2_COMMAND_GROUP=${cfg.cmdgroup}
   '';
+  prestartscript = pkgs.writeScript "icinga-prestart" ''
+          #!${pkgs.bash}/bin/bash
+          ${pkgs.icinga2}/lib/icinga2/prepare-dirs ${environmentfile}
+          if [ ! -d /etc/icinga2 ]
+          then
+            cp -r ${pkgs.icinga2}/etc/icinga2 /etc/icinga2
+            sudo chown -R icinga:icinga /etc/icinga2
+            sudo chmod -R go-w /etc/icinga2
+          fi
+          '';
 in {
   ###### interface
 
@@ -68,7 +78,7 @@ in {
         Type = "forking";
         Environmentfile = environmentfile;
         ExecStart = "${pkgs.icinga2}/bin/icinga2 daemon -d -D LocalStateDir=/var/lib/icinga2";
-        ExecStartPre = "${pkgs.icinga2}/lib/icinga2/prepare-dirs ${environmentfile}";
+        ExecStartPre = prestartscript;
         ExecReload = "${pkgs.icinga2}/lib/icinga2/safe-reload ${environmentfile}";
         PIDFile = "/run/icinga2/icinga2.pid";
         TimeoutStartSec="30m";

@@ -12,11 +12,12 @@ stdenv.mkDerivation rec {
     sha256 = "1ilgwld1qg9nam0l3rx2ja1rnyamv90q76n4ndw9b51vsnff8qz9";
   };
   patches = [
-    ./rundir.patch
+    ./removemkdir.patch
   ];
   cmakeFlags = [
      "-DICINGA2_PLUGINDIR=plugins"
      "-DICINGA2_RUNDIR=/run"
+     "-DICINGA2_SYSCONFDIR=/etc"
      "-DCMAKE_INSTALL_LOCALSTATEDIR=/var/lib/icinga2"
   ];
 

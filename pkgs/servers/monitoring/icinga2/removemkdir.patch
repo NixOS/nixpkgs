@@ -1,3 +1,28 @@
+diff --git i/CMakeLists.txt w/CMakeLists.txt
+index 0ee7695..86cba7f 100644
+--- i/CMakeLists.txt
++++ w/CMakeLists.txt
+@@ -46,6 +46,7 @@ string(REPLACE "Version: " "" ICINGA2_VERSION ${VERSION_LINE})
+ include(GNUInstallDirs)
+ include(InstallConfig)
+ 
++set(ICINGA2_SYSCONFDIR "/etc/icinga2" CACHE STRING "Icinga 2 config dir")
+ set(ICINGA2_USER "icinga" CACHE STRING "Icinga 2 user")
+ set(ICINGA2_GROUP "icinga" CACHE STRING "Icinga 2 group")
+ set(ICINGA2_COMMAND_GROUP "icingacmd" CACHE STRING "Icinga 2 command group")
+diff --git i/config.h.cmake w/config.h.cmake
+index 1903b28..de12cc5 100644
+--- i/config.h.cmake
++++ w/config.h.cmake
+@@ -13,7 +13,7 @@
+ #cmakedefine ICINGA2_UNITY_BUILD
+ 
+ #define ICINGA_PREFIX "${CMAKE_INSTALL_PREFIX}"
+-#define ICINGA_SYSCONFDIR "${CMAKE_INSTALL_FULL_SYSCONFDIR}"
++#define ICINGA_SYSCONFDIR "${ICINGA2_SYSCONFDIR}"
+ #define ICINGA_RUNDIR "${ICINGA2_RUNDIR}"
+ #define ICINGA_LOCALSTATEDIR "${CMAKE_INSTALL_FULL_LOCALSTATEDIR}"
+ #define ICINGA_PKGDATADIR "${CMAKE_INSTALL_FULL_DATADIR}/icinga2"
 diff --git i/icinga-app/CMakeLists.txt w/icinga-app/CMakeLists.txt
 index 44fb877..6ea339d 100644
 --- i/icinga-app/CMakeLists.txt
