@@ -1,8 +1,8 @@
+{ version, sha256, patches ? [], patchFlags ? "" }:
 { stdenv, fetchurl, fetchpatch, fixDarwinDylibNames }:
 
 let
   pname = "icu4c";
-  version = "59.1";
 in
 stdenv.mkDerivation {
   name = pname + "-" + version;
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   src = fetchurl {
     url = "http://download.icu-project.org/files/${pname}/${version}/${pname}-"
       + (stdenv.lib.replaceChars ["."] ["_"] version) + "-src.tgz";
-    sha256 = "1zkmbg2932ggvpgjp8pys0cj6z8bw087y8858009shkrjfpzscki";
+    inherit sha256;
   };
 
   outputs = [ "out" "dev" ];
@@ -24,6 +24,8 @@ stdenv.mkDerivation {
     sourceRoot=''${sourceRoot}/source
     echo Source root reset to ''${sourceRoot}
   '';
+
+  inherit patchFlags patches;
 
   preConfigure = ''
     sed -i -e "s|/bin/sh|${stdenv.shell}|" configure
