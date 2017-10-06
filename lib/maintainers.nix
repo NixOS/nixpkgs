@@ -170,7 +170,7 @@
   dtzWill = "Will Dietz <nix@wdtz.org>";
   dywedir = "Vladyslav M. <dywedir@protonmail.ch>";
   e-user = "Alexander Kahl <nixos@sodosopa.io>";
-  ebzzry = "Rommel Martinez <ebzzry@gmail.com>";
+  ebzzry = "Rommel Martinez <ebzzry@ebzzry.io>";
   edanaher = "Evan Danaher <nixos@edanaher.net>";
   edef = "edef <edef@edef.eu>";
   ederoyd46 = "Matthew Brown <matt@ederoyd.co.uk>";
