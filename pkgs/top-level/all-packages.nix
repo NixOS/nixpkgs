@@ -12310,6 +12310,8 @@ with pkgs;
 
   kmscube = callPackage ../os-specific/linux/kmscube { };
 
+  kmsxx = callPackage ../development/libraries/kmsxx { };
+
   latencytop = callPackage ../os-specific/linux/latencytop { };
 
   ldm = callPackage ../os-specific/linux/ldm { };
