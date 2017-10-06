@@ -11,6 +11,7 @@ assertExecutable() {
 # makeWrapper EXECUTABLE ARGS
 
 # ARGS:
+# --no-assert       : skip assertion that the file is readable/exists/is executable
 # --argv0 NAME      : set name of executed process to NAME
 #                     (otherwise it’s called …-wrapped)
 # --set   VAR VAL   : add VAR with value VAL to the executable’s environment
@@ -33,7 +34,9 @@ makeWrapper() {
     local params varName value command separator n fileNames
     local argv0 flagsBefore flags
 
-    assertExecutable "$original"
+    if ! [[ "${@}" == *"--no-assert"* ]]; then
+      assertExecutable "$original"
+    fi
 
     mkdir -p "$(dirname "$wrapper")"
 
@@ -95,6 +98,8 @@ makeWrapper() {
         elif [[ "$p" == "--argv0" ]]; then
             argv0="${params[$((n + 1))]}"
             n=$((n + 1))
+        elif [[ "$p" == "--no-assert" ]]; then
+            : # processed previously
         else
             die "makeWrapper doesn't understand the arg $p"
         fi
@@ -131,7 +136,9 @@ wrapProgram() {
     local prog="$1"
     local hidden
 
-    assertExecutable "$prog"
+    if ! [[ "${@}" == *"--no-assert"* ]]; then
+      assertExecutable "$prog"
+    fi
 
     hidden="$(dirname "$prog")/.$(basename "$prog")"-wrapped
     while [ -e "$hidden" ]; do
