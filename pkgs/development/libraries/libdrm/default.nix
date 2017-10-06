@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1minzvsyz5hgm6ixpj8ysa6jsv7vm8qc8nx390jxdsk0v9ljd983";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "bin" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libpthreadstubs libpciaccess valgrind-light ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin
     "echo : \\\${ac_cv_func_clock_gettime=\'yes\'} > config.cache";
 
-  configureFlags = [ ]
+  configureFlags = [ "--enable-install-test-programs" ]
     ++ stdenv.lib.optionals (stdenv.isArm || stdenv.isAarch64) [ "--enable-tegra-experimental-api" "--enable-etnaviv-experimental-api" ]
     ++ stdenv.lib.optional stdenv.isDarwin "-C";
 
