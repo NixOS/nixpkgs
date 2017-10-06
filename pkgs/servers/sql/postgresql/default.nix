@@ -85,7 +85,6 @@ let
       license = licenses.postgresql;
       maintainers = [ maintainers.ocharles ];
       platforms = platforms.unix;
-      hydraPlatforms = platforms.linux;
     };
   });
 
