@@ -1,22 +1,40 @@
 diff --git i/icinga-app/CMakeLists.txt w/icinga-app/CMakeLists.txt
-index 44fb877..d1ba786 100644
+index 44fb877..6ea339d 100644
 --- i/icinga-app/CMakeLists.txt
 +++ w/icinga-app/CMakeLists.txt
-@@ -54,4 +54,3 @@ install(
+@@ -52,6 +52,3 @@ install(
+   RUNTIME DESTINATION ${InstallPath}
+ )
  
- install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/log/icinga2\")")
- install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/lib/icinga2\")")
+-install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/log/icinga2\")")
+-install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/lib/icinga2\")")
 -install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${ICINGA2_RUNDIR}/icinga2\")")
+diff --git i/lib/base/CMakeLists.txt w/lib/base/CMakeLists.txt
+index 858943f..9b41ebc 100644
+--- i/lib/base/CMakeLists.txt
++++ w/lib/base/CMakeLists.txt
+@@ -82,9 +82,6 @@ set_target_properties (
+   VERSION ${SPEC_VERSION}
+ )
+ 
+-install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/cache/icinga2\")")
+-install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/log/icinga2/crash\")")
+-
+ install(
+   TARGETS base
+   RUNTIME DESTINATION ${CMAKE_INSTALL_SBINDIR}
 diff --git i/lib/compat/CMakeLists.txt w/lib/compat/CMakeLists.txt
-index b8b4852..2300d3f 100644
+index b8b4852..8f47199 100644
 --- i/lib/compat/CMakeLists.txt
 +++ w/lib/compat/CMakeLists.txt
-@@ -61,6 +61,5 @@ install(TARGETS compat RUNTIME DESTINATION ${CMAKE_INSTALL_SBINDIR} LIBRARY DEST
+@@ -59,8 +59,4 @@ install_if_not_exists(
  
- install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/log/icinga2/compat/archives\")")
- install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/spool/icinga2\")")
+ install(TARGETS compat RUNTIME DESTINATION ${CMAKE_INSTALL_SBINDIR} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/icinga2)
+ 
+-install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/log/icinga2/compat/archives\")")
+-install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/spool/icinga2\")")
 -install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${ICINGA2_RUNDIR}/icinga2/cmd\")")
- 
+-
  set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}" PARENT_SCOPE)
 diff --git i/lib/livestatus/CMakeLists.txt w/lib/livestatus/CMakeLists.txt
 index ac20b44..0d1d824 100644
@@ -31,3 +49,30 @@ index ac20b44..0d1d824 100644
  install(TARGETS livestatus RUNTIME DESTINATION ${CMAKE_INSTALL_SBINDIR} LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/icinga2)
  
  set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}" PARENT_SCOPE)
+diff --git i/lib/perfdata/CMakeLists.txt w/lib/perfdata/CMakeLists.txt
+index 08920dd..8bbe53c 100644
+--- i/lib/perfdata/CMakeLists.txt
++++ w/lib/perfdata/CMakeLists.txt
+@@ -72,7 +72,4 @@ install(
+   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}/icinga2
+ )
+ 
+-install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/spool/icinga2/perfdata\")")
+-install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/spool/icinga2/tmp\")")
+-
+ set(CPACK_NSIS_EXTRA_INSTALL_COMMANDS "${CPACK_NSIS_EXTRA_INSTALL_COMMANDS}" PARENT_SCOPE)
+diff --git i/lib/remote/CMakeLists.txt w/lib/remote/CMakeLists.txt
+index eb98673..72614b8 100644
+--- i/lib/remote/CMakeLists.txt
++++ w/lib/remote/CMakeLists.txt
+@@ -62,10 +62,3 @@ if(APPLE)
+     LIBRARY DESTINATION ${CMAKE_INSTALL_BINDIR}/icinga-studio.app/Contents
+   )
+ endif()
+-
+-#install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/lib/icinga2/api\")")
+-install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/lib/icinga2/api/log\")")
+-install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/lib/icinga2/api/repository\")")
+-install(CODE "file(MAKE_DIRECTORY \"\$ENV{DESTDIR}${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/lib/icinga2/api/zones\")")
+-
+-

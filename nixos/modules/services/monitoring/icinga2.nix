@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.icinga2;
-  environment = pkgs.writeText "icinga-env" ''
+  environmentfile = pkgs.writeText "icinga-env" ''
     DAEMON=${lib.getBin pkgs.icinga2}/sbin/icinga2
     ICINGA2_CONFIG_FILE=/etc/icinga2/icinga2.conf
     ICINGA2_RUN_DIR=/run
@@ -47,6 +47,7 @@ in {
 
   config = mkIf cfg.enable {
 
+    environment.systemPackages = with pkgs; [ icinga2 ];
 
     users.extraUsers.icinga2 = {
       name = cfg.user;
@@ -65,10 +66,10 @@ in {
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "forking";
-        EnvironmentFile = environment;
+        Environmentfile = environmentfile;
         ExecStart = "${pkgs.icinga2}/bin/icinga2 daemon -d -D LocalStateDir=/var/lib/icinga2";
-        ExecStartPre = "${pkgs.icinga2}/lib/icinga2/prepare-dirs ${environment}";
-        ExecReload = "${pkgs.icinga2}/lib/icinga2/safe-reload ${environment}";
+        ExecStartPre = "${pkgs.icinga2}/lib/icinga2/prepare-dirs ${environmentfile}";
+        ExecReload = "${pkgs.icinga2}/lib/icinga2/safe-reload ${environmentfile}";
         PIDFile = "/run/icinga2/icinga2.pid";
         TimeoutStartSec="30m";
         RuntimeDirectory = "icinga2";
