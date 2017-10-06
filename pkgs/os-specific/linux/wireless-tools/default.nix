@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   preBuild = "
-    makeFlagsArray=(PREFIX=$out)
+    makeFlagsArray=(PREFIX=$out CC=$CC LDCONFIG=: AR=$AR RANLIB=$RANLIB)
   ";
 
   meta = {
