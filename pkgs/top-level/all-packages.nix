@@ -1435,6 +1435,8 @@ with pkgs;
 
   cuetools = callPackage ../tools/cd-dvd/cuetools { };
 
+  u3-tool = callPackage ../tools/filesystems/u3-tool { };
+
   unifdef = callPackage ../development/tools/misc/unifdef { };
 
   unionfs-fuse = callPackage ../tools/filesystems/unionfs-fuse { };
