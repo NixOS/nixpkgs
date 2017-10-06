@@ -329,7 +329,7 @@ in
       };
 
       mutable = mkOption {
-        default = false;
+        default = true;
         type = types.bool;
         description = ''
           Indicates whether to allow the contents of the `dataDir` directory to be changed
@@ -379,7 +379,8 @@ in
         # If mutable, regenerate conf file every time.
         ${optionalString (!cfg.mutable) ''
           ${pkgs.coreutils}/bin/echo "znc is set to be system-managed. Now deleting old znc.conf file to be regenerated."
-          ${pkgs.coreutils}/bin/rm -f ${cfg.dataDir}/configs/znc.conf
+          ${pkgs.coreutils}/bin/echo "You can still recover you old config from '${cfg.dataDir}/configs/znc.conf.bak'."
+          ${pkgs.coreutils}/bin/mv ${cfg.dataDir}/configs/znc.conf{,.bak}
         ''}
 
         # Ensure essential files exist.
