@@ -42,35 +42,44 @@ in
         p7zip
       ];
       preStart = ''
-        test -d /var/lib/nzbget || {
-          echo "Creating nzbget state directory in /var/lib/"
-          mkdir -p /var/lib/nzbget
+        datadir=/var/lib/nzbget
+        configfile=$datadir/nzbget.conf
+        cfgtemplate_pkg=${cfg.package}/share/nzbget/nzbget.conf
+        webdir_pkg=${cfg.package}/share/nzbget/webui
+
+        test -d $datadir || {
+          echo "Creating nzbget data directory in $datadir"
+          mkdir -p $datadir
         }
 
-        conf=/var/lib/nzbget/nzbget.conf
-        test -f $conf && {
-          webdir=`grep -Po '(?<=^WebDir=).*+' $conf`
+        test -f $configfile && {
+          # nzbget expects config to have a stable reference to resources in
+          # /usr or /etc.  Instead our config references /nix/store (a moving
+          # target), which breaks after an upgrade/ garbage collection cycle.
+          # To fix this, at runtime we have the server rewrite broken links
+          # to point at the current installation under /nix/store.
+          webdir=`grep -Po '(?<=^WebDir=).*+' $configfile`
           test -d $webdir || {
-            echo Updating broken WebDir=$webdir to ${cfg.package}/share/nzbget/webui
-            sed -i 's|"$webdir"|"${cfg.package}"/share/nzbget/webui|g' $conf
+            echo "In $configfile, updating broken WebDir=$webdir to $webdir_pkg"
+            sed -i "s|$webdir|$webdir_pkg|g" $configfile
           }
-          cfgtemplate=`grep -Po '(?<=^ConfigTemplate=).*+' $conf`
+          cfgtemplate=`grep -Po '(?<=^ConfigTemplate=).*+' $configfile`
           test -f $cfgtemplate || {
-            echo Updating broken ConfigTemplate=$cfgtemplate to ${cfg.package}/share/nzbget/nzbget.conf
-            sed -i 's|"$cfgtemplate"|"${cfg.package}"/share/nzbget/nzbget.conf|g' $conf
+            echo "In $configfile, updating broken ConfigTemplate=$cfgtemplate to $cfgtemplate_pkg"
+            sed -i "s|$cfgtemplate|$cfgtemplate_pkg|g" $configfile
           }
         } || {
-          echo "nzbget.conf not found. Copying default config to /var/lib/nzbget/nzbget.conf"
-          cp ${cfg.package}/share/nzbget/nzbget.conf $conf
-          echo "Setting file mode of nzbget.conf to 0677 (needs to be written and contains plaintext credentials)"
-          chmod 0700 $conf
+          echo "nzbget.conf not found. Copying default config $cfgtemplate_pkg to $configfile"
+          cp $cfgtemplate_pkg $configfile
+          echo "Setting $configfile permissions to 0700 (needs to be written and contains plaintext credentials)"
+          chmod 0700 $configfile
           echo "Setting temporary \$MAINDIR variable in default config required in order to allow nzbget to complete initial start"
           echo "Remember to change this to a proper value once NZBGet startup has been completed"
-          sed -i -e 's/MainDir=.*/MainDir=\/tmp/g' $conf
+          sed -i -e 's/MainDir=.*/MainDir=\/tmp/g' $configfile
         }
 
-        echo "Ensuring proper ownership of /var/lib/nzbget (${cfg.user}:${cfg.group})."
-        chown -R ${cfg.user}:${cfg.group} /var/lib/nzbget
+        echo "Ensuring proper ownership of $datadir (${cfg.user}:${cfg.group})."
+        chown -R ${cfg.user}:${cfg.group} $datadir
       '';
 
       serviceConfig = {
