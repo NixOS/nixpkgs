@@ -113,6 +113,7 @@ let
         flags = mkOption {
           default = [];
           example = [ "nodad" "noprefixroute" ];
+          type = types.listOf types.str;
           description = ''
             Additional configuration flags for the address.
           '';
