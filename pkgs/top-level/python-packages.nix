@@ -25651,16 +25651,18 @@ EOF
   trezor_agent = buildPythonPackage rec{
     name = "${pname}-${version}";
     pname = "trezor_agent";
-    version = "0.9.0";
+    version = "0.9.2";
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "1i5cdamlf3c0ym600pjklij74p8ifj9cv7xrpnrfl1b8nkadswbz";
-    };
+    src = "${pkgs.fetchFromGitHub {
+      repo = "trezor-agent";
+      owner = "romanz";
+      rev = "v${version}";
+      sha256 = "1wrmf76016ksx394l1xknnqn08sc5pid5ihri619cd83zsxpkfvk";
+    }}/agents/trezor";
 
     propagatedBuildInputs = with self; [
       trezor libagent ecdsa ed25519
-      mnemonic keepkey semver
+      mnemonic semver unidecode
     ];
 
     meta = {
