@@ -61,9 +61,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildPhase = ''
-    # set -x
     ./build.sh $BuildArch $BuildType
-    # set +x
 
     # Try to make some sensible hierarchy out of the output
     pushd bin/Product/Linux.$BuildArch.$BuildType
@@ -92,6 +90,5 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" ];
     maintainers = with stdenv.lib.maintainers; [ obadz ];
     license = stdenv.lib.licenses.mit;
-    broken = true; # CoreCLR has proven to be very difficult to package. PRs welcome if someone wants to shave that yak.
   };
 }
