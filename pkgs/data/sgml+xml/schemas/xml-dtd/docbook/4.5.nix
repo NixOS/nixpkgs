@@ -1,7 +1,7 @@
-{stdenv, fetchurl, unzip}:
+{stdenv, fetchurl, unzip, findXMLCatalogs}:
 
 import ./generic.nix {
-  inherit stdenv fetchurl unzip;
+  inherit stdenv fetchurl unzip findXMLCatalogs;
   name = "docbook-xml-4.5";
   src = fetchurl {
     url = http://www.docbook.org/xml/4.5/docbook-xml-4.5.zip;
