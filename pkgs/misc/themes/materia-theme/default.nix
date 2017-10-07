@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, gnome3, libxml2, gtk-engine-murrine, gdk_pixbuf, librsvg }:
 
 stdenv.mkDerivation rec {
-  name = "flat-plat-gtk-theme-${version}";
-  version = "20170917";
+  name = "materia-theme-${version}";
+  version = "20171005";
 
   src = fetchFromGitHub {
     owner = "nana-4";
-    repo = "Flat-Plat";
+    repo = "materia-theme";
     rev = "v${version}";
-    sha256 = "17r4wl27yx49xg0l3s5d67174r63p4cw6cbdmzl81if7iab69hv0";
+    sha256 = "0znm7mx2nv2sgvy8fyams1ckp1ly3nbbs0k09d24w1zzd90xhzqp";
   };
 
   nativeBuildInputs = [ gnome3.glib libxml2 ];
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A Material Design-like theme for GTK+ based desktop environments";
-    homepage = https://github.com/nana-4/Flat-Plat;
+    description = "A Material Design-like theme for GNOME/GTK+ based desktop environments (formerly Flat-Plat)";
+    homepage = https://github.com/nana-4/materia-theme;
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = [ maintainers.mounium ];
