@@ -17977,11 +17977,12 @@ in {
   };
 
   pyopenssl = buildPythonPackage rec {
-    name = "pyopenssl-${version}";
+    pname = "pyOpenSSL";
+    name = "${pname}-${version}";
     version = "17.2.0";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyOpenSSL/pyOpenSSL-${version}.tar.gz";
+    src = self.fetchPypi {
+      inherit pname version;
       sha256 = "0d283g4zi0hr9papd24mjl70mi15gyzq6fx618rizi87dgipqqax";
     };
 
