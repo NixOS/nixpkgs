@@ -13,10 +13,10 @@ stdenv.mkDerivation rec {
 
   makeFlags = ''PREFIX=$(out)'';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Simple X hotkey daemon";
-    homepage = https://github.com/baskerville/sxhkd/;
-    license = stdenv.lib.licenses.bsd2;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = "https://github.com/baskerville/sxhkd";
+    license = licenses.bsd2;
+    platforms = platforms.linux;
   };
 }
