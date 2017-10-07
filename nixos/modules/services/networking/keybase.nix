@@ -28,11 +28,12 @@ in {
       description = "Keybase service";
       serviceConfig = {
         ExecStart = ''
-          ${pkgs.keybase}/bin/keybase service
+          ${pkgs.keybase}/bin/keybase -d service --auto-forked
         '';
         Restart = "on-failure";
         PrivateTmp = true;
       };
+      wantedBy = [ "default.target" ];
     };
 
     environment.systemPackages = [ pkgs.keybase ];
