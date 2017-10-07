@@ -379,7 +379,7 @@ in
         # If mutable, regenerate conf file every time.
         ${optionalString (!cfg.mutable) ''
           ${pkgs.coreutils}/bin/echo "znc is set to be system-managed. Now deleting old znc.conf file to be regenerated."
-          ${pkgs.coreutils}/bin/rm ${cfg.dataDir}/configs/znc.conf
+          ${pkgs.coreutils}/bin/rm -f ${cfg.dataDir}/configs/znc.conf
         ''}
 
         # Ensure essential files exist.
