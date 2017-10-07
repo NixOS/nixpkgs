@@ -19829,21 +19829,7 @@ in {
     };
   };
 
-  spambayes = buildPythonPackage rec {
-    name = "spambayes-1.1b1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://sourceforge/spambayes/${name}.tar.gz";
-      sha256 = "0kqvjb89b02wp41p650ydfspi1s8d7akx1igcrw62diidqbxp04n";
-    };
-
-    propagatedBuildInputs = with self; [ bsddb3 pydns lockfile ];
-
-    meta = {
-      description = "Statistical anti-spam filter, initially based on the work of Paul Graham";
-      homepage = http://spambayes.sourceforge.net/;
-    };
-  };
+  spambayes = callPackage ../development/python-modules/spambayes { };
 
   shapely = callPackage ../development/python-modules/shapely { };
 
