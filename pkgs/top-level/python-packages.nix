@@ -179,8 +179,53 @@ in {
     hdf5 = pkgs.hdf5;
   };
 
+  hjson_to_gantt = buildPythonPackage rec {
+    name = "hjson_to_gantt-${version}";
+    version = "06bf91b9a1c80148da4597c35d2ef52af873dc4d";
+
+    src = fetchFromGitHub {
+      owner = "lowRISC";
+      repo = "hjson_to_gantt";
+      rev = version;
+      sha256 = "1skxnwq0379vc26h16cfp3gprcnx333a97g0v89zy6mr03a9sw0r";
+    };
+
+    phases = [ "unpackPhase" "installPhase" ];
+
+    installPhase = ''
+      mkdir -p $out/bin
+      cp hjson_to_gantt $out/bin/
+      chmod +x $out/bin/hjson_to_gantt
+    '';
+
+    doCheck = false;
+
+    buildInputs = with self; [ hjson fuzzyfinder ];
+  };
+
   h5py-mpi = self.h5py.override {
     hdf5 = pkgs.hdf5-mpi;
+  };
+
+  hjson = buildPythonPackage rec {
+    name = "hjson-${version}";
+    version = "3.0.0";
+    disabled = pythonOlder "2.6";
+
+    src = fetchurl {
+      url = "mirror://pypi/h/hjson/${name}.tar.gz";
+      sha256 = "1mwxz70387x08risv1aq3cqdqzbyfcayp5x40ppi6z5pj9ib7y4w";
+    };
+
+    buildInputs = with pkgs.pythonPackages; [ simplejson ];
+
+    doCheck = false;
+
+    meta = {
+      homepage = http://github.com/hjson/hjson-py;
+      description = "a user interface for JSON";
+      license = licenses.MIT;
+    };
   };
 
   intelhex = callPackage ../development/python-modules/intelhex { };
@@ -534,6 +579,23 @@ in {
   } else null;
 
   funcsigs = callPackage ../development/python-modules/funcsigs { };
+
+  fuzzyfinder = buildPythonPackage rec {
+    name = "fuzzyfinder-${version}";
+    version = "1.0.0";
+
+    src = fetchurl {
+      url = "mirror://pypi/f/fuzzyfinder/${name}.tar.gz";
+      sha256 = "11w0kha42a9kya4rv6amrhdhh4m26kzxrvg43mm3c7wiz3i4h7k9";
+    };
+
+    buildInputs = with pythonPackages; [ simplejson ];
+
+    meta = with lib; {
+      homepage = https://github.com/amjith/fuzzyfinder;
+      license = licenses.BSD;
+    };
+  };
 
   APScheduler = callPackage ../development/python-modules/APScheduler { };
 
