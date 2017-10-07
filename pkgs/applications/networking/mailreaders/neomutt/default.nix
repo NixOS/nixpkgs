@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, which, autoreconfHook, ncurses, perl
-, cyrus_sasl, gss, gpgme, kerberos, libidn, notmuch, openssl, lmdb, libxslt, docbook_xsl }:
+, cyrus_sasl, gss, gpgme, kerberos, libidn, notmuch, openssl, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42 }:
 
 stdenv.mkDerivation rec {
   version = "20170912";
@@ -12,18 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "0qndszmaihly3pp2wqiqm31nxbv9ys3j05kzffaqhzngfilmar9g";
   };
 
-  nativeBuildInputs = [ autoreconfHook docbook_xsl libxslt.bin which ];
+  nativeBuildInputs = [ autoreconfHook docbook_xsl docbook_xml_dtd_42 libxslt.bin which ];
   buildInputs = [
     cyrus_sasl gss gpgme kerberos libidn ncurses
     notmuch openssl perl lmdb
   ];
-
-  postPatch = ''
-    for f in doc/*.xsl ; do
-      substituteInPlace $f \
-        --replace http://docbook.sourceforge.net/release/xsl/current ${docbook_xsl}/share/xml/docbook-xsl
-    done
-  '';
 
   configureFlags = [
     "--enable-debug"
