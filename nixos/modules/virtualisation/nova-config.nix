@@ -24,7 +24,7 @@ with lib;
     # Allow root logins
     services.openssh = {
       enable = true;
-      permitRootLogin = "prohibit-password";
+      permitRootLogin = "without-password";
       passwordAuthentication = mkDefault false;
     };
 
