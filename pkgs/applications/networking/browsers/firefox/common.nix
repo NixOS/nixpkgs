@@ -8,8 +8,7 @@
 , yasm, mesa, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, gstreamer, gst-plugins-base, icu, libpng, jemalloc, libpulseaudio
-, autoconf213, which, cargo, rustc, llvm
-, writeScript, xidel, common-updater-scripts, coreutils, gnused, gnugrep, curl
+, autoconf213, which, gnused, cargo, rustc, llvmPackages
 , enableGTK3 ? false, gtk3, wrapGAppsHook
 , debugBuild ? false
 , # If you want the resulting program to call itself "Firefox" instead
@@ -23,6 +22,7 @@
 assert stdenv.cc ? libc && stdenv.cc.libc != null;
 
 stdenv.mkDerivation rec {
+  gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
   name = "${pname}-unwrapped-${version}";
 
   inherit src meta;
@@ -39,11 +39,13 @@ stdenv.mkDerivation rec {
       xorg.libXScrnSaver xorg.scrnsaverproto
       xorg.libXext xorg.xextproto sqlite unzip
       hunspell libevent libstartup_notification libvpx /* cairo */
-      icu libpng jemalloc llvm
+      icu libpng jemalloc llvmPackages.llvm
       libpulseaudio # only headers are needed
     ]
     ++ lib.optional enableGTK3 gtk3
     ++ lib.optionals (!passthru.ffmpegSupport) [ gstreamer gst-plugins-base ];
+
+  NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss";
 
   nativeBuildInputs =
     [ autoconf213 which gnused pkgconfig perl python cargo rustc ]
@@ -51,6 +53,8 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--enable-application=browser"
+
+
       "--with-system-jpeg"
       "--with-system-zlib"
       "--with-system-bz2"
@@ -75,7 +79,10 @@ stdenv.mkDerivation rec {
       "--enable-jemalloc"
       "--disable-gconf"
       "--enable-default-toolkit=cairo-gtk${if enableGTK3 then "3" else "2"}"
-      "--with-google-api-keyfile=ga"
+  ]
+  ++ lib.optionals (stdenv.lib.versionAtLeast version "56") [
+    "--with-libclang-path=${llvmPackages.clang-unwrapped}/lib"
+    "--with-clang-path=${llvmPackages.clang}/bin/clang"
     ]
     ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
                       else [ "--disable-debug" "--enable-release"
@@ -87,6 +94,11 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
+      cxxLib=$( echo -n ${gcc}/include/c++/* )
+      archLib=$cxxLib/$( ${gcc}/bin/gcc -dumpmachine )
+
+      test -f layout/style/ServoBindings.toml && sed -i -e '/"-DMOZ_STYLO"/ a , "-cxx-isystem", "'$cxxLib'", "-isystem", "'$archLib'"' layout/style/ServoBindings.toml
+
       configureScript="$(realpath ./configure)"
       mkdir ../objdir
       cd ../objdir
