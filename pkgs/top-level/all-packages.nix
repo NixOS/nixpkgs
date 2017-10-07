@@ -8560,7 +8560,7 @@ with pkgs;
   icu58 = callPackage ../development/libraries/icu/58.nix { };
   icu59 = callPackage ../development/libraries/icu/59.nix { };
 
-  icu = icu59;
+  icu = icu58;
 
   id3lib = callPackage ../development/libraries/id3lib { };
 
