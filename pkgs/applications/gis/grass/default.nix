@@ -1,6 +1,6 @@
 { stdenv, fetchurl, flex, bison, pkgconfig, zlib, libtiff, libpng, fftw
 , cairo, readline, ffmpeg, makeWrapper, wxGTK30, netcdf, blas
-, proj, gdal, geos, sqlite, postgresql, mysql, python2Packages
+, proj, gdal, geos, sqlite, postgresql, mysql, python2Packages, libLAS
 }:
 
 stdenv.mkDerivation {
@@ -11,10 +11,11 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite pkgconfig cairo
-  readline ffmpeg makeWrapper wxGTK30 netcdf geos postgresql mysql.client blas ]
+  readline ffmpeg makeWrapper wxGTK30 netcdf geos postgresql mysql.client blas libLAS ]
     ++ (with python2Packages; [ python dateutil wxPython30 numpy ]);
 
   configureFlags = [
+    "--with-liblas=${libLAS}/bin/liblas-config"
     "--with-proj-share=${proj}/share/proj"
     "--without-opengl"
     "--with-readline"
