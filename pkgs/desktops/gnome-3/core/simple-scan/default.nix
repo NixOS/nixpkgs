@@ -3,14 +3,7 @@
 , gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "simple-scan-${version}";
-  version = "${major_version}.0.1";
-  major_version = "3.22";
-
-  src = fetchurl {
-    url = "https://launchpad.net/simple-scan/${major_version}/${version}/+download/${name}.tar.xz";
-    sha256 = "0l1b3llkdlqq0bcjx1cadba67l2zb4zfykdaprpjbjbr6gkbc1f5";
-  };
+  inherit (import ./src.nix fetchurl) name src;
 
   buildInputs = [ cairo colord glib gnome3.defaultIconTheme gusb gtk3 libusb1 libxml2 sane-backends vala_0_32 ];
   nativeBuildInputs = [ intltool itstool pkgconfig wrapGAppsHook ];

@@ -781,7 +781,6 @@ with pkgs;
   bsod = callPackage ../misc/emulators/bsod { };
 
   btrfs-progs = callPackage ../tools/filesystems/btrfs-progs { };
-  btrfs-progs_4_4_1 = callPackage ../tools/filesystems/btrfs-progs/4.4.1.nix { };
 
   btrfs-dedupe = callPackage ../tools/filesystems/btrfs-dedupe/default.nix {};
 
@@ -950,6 +949,8 @@ with pkgs;
   deis = callPackage ../development/tools/deis {};
 
   deisctl = callPackage ../development/tools/deisctl {};
+
+  deja-dup = callPackage ../applications/backup/deja-dup { };
 
   devmem2 = callPackage ../os-specific/linux/devmem2 { };
 
@@ -1443,6 +1444,8 @@ with pkgs;
   cpuminer-multi = callPackage ../tools/misc/cpuminer-multi { };
 
   cuetools = callPackage ../tools/cd-dvd/cuetools { };
+
+  u3-tool = callPackage ../tools/filesystems/u3-tool { };
 
   unifdef = callPackage ../development/tools/misc/unifdef { };
 
@@ -6306,6 +6309,7 @@ with pkgs;
     vala_0_28
     vala_0_32
     vala_0_34
+    vala_0_38
     vala;
 
   valadoc = callPackage ../development/tools/valadoc { };
@@ -10311,7 +10315,13 @@ with pkgs;
       kirigami_1
       kirigami_2;
 
+    kdb = callPackage ../development/libraries/kdb { };
+
     kdiagram = callPackage ../development/libraries/kdiagram { };
+
+    kproperty = callPackage ../development/libraries/kproperty { };
+
+    kreport = callPackage ../development/libraries/kreport { };
 
     kirigami = kirigami_1;
 
@@ -11761,7 +11771,8 @@ with pkgs;
     postgresql93
     postgresql94
     postgresql95
-    postgresql96;
+    postgresql96
+    postgresql100;
 
   postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
 
@@ -12705,6 +12716,8 @@ with pkgs;
   open-vm-tools-headless = open-vm-tools.override { withX = false; };
 
   delve = callPackage ../development/tools/delve { };
+
+  dep = callPackage ../development/tools/dep { };
 
   go-bindata = callPackage ../development/tools/go-bindata { };
 
@@ -13820,8 +13833,13 @@ with pkgs;
 
   calibre = libsForQt5.callPackage ../applications/misc/calibre { };
 
-  calligra = kde4.callPackage ../applications/office/calligra {
+  calligra2 = kde4.callPackage ../applications/office/calligra/2.nix {
     vc = vc_0_7;
+  };
+
+  calligra = libsForQt5.callPackage ../applications/office/calligra {
+    inherit (kdeApplications) akonadi-calendar akonadi-contacts;
+    openjpeg = openjpeg_1;
   };
 
   camlistore = callPackage ../applications/misc/camlistore { };
@@ -15187,6 +15205,8 @@ with pkgs;
 
   kermit = callPackage ../tools/misc/kermit { };
 
+  kexi = libsForQt5.callPackage ../applications/office/kexi { };
+
   keyfinder = libsForQt5.callPackage ../applications/audio/keyfinder { };
 
   keyfinder-cli = libsForQt5.callPackage ../applications/audio/keyfinder-cli { };
@@ -16306,7 +16326,7 @@ with pkgs;
 
   shutter = callPackage ../applications/graphics/shutter { };
 
-  simple-scan = callPackage ../applications/graphics/simple-scan { };
+  simple-scan = gnome3.simple-scan;
 
   siproxd = callPackage ../applications/networking/siproxd { };
 
@@ -16445,10 +16465,7 @@ with pkgs;
 
   smartdeblur = callPackage ../applications/graphics/smartdeblur { };
 
-  snapper = callPackage ../tools/misc/snapper {
-    btrfs-progs = btrfs-progs_4_4_1;
-    stdenv = overrideCC stdenv gcc5;
-  };
+  snapper = callPackage ../tools/misc/snapper { };
 
   snd = callPackage ../applications/audio/snd { };
 
@@ -16699,6 +16716,8 @@ with pkgs;
   toot = callPackage ../applications/misc/toot { };
 
   toxic = callPackage ../applications/networking/instant-messengers/toxic { };
+
+  tqsl = callPackage ../applications/misc/tqsl { };
 
   transcode = callPackage ../applications/audio/transcode { };
 

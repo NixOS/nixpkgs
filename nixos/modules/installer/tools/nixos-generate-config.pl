@@ -398,19 +398,15 @@ EOF
 
     # Is this a btrfs filesystem?
     if ($fsType eq "btrfs") {
-        my ($status, @id_info) = runCommand("btrfs subvol show $rootDir$mountPoint");
-        if ($status != 0 || join("", @id_info) =~ /ERROR:/) {
+        my ($status, @info) = runCommand("btrfs subvol show $rootDir$mountPoint");
+        if ($status != 0 || join("", @info) =~ /ERROR:/) {
             die "Failed to retrieve subvolume info for $mountPoint\n";
         }
-        my @ids = join("", @id_info) =~ m/Subvolume ID:[ \t\n]*([^ \t\n]*)/;
+        my @ids = join("", @info) =~ m/Subvolume ID:[ \t\n]*([0-9]*)/;
         if ($#ids > 0) {
             die "Btrfs subvol name for $mountPoint listed multiple times in mount\n"
         } elsif ($#ids == 0) {
-            my ($status, @path_info) = runCommand("btrfs subvol list $rootDir$mountPoint");
-            if ($status != 0) {
-                die "Failed to find $mountPoint subvolume id from btrfs\n";
-            }
-            my @paths = join("", @path_info) =~ m/ID $ids[0] [^\n]* path ([^\n]*)/;
+            my @paths = join("", @info) =~ m/^([^\n]*)/;
             if ($#paths > 0) {
                 die "Btrfs returned multiple paths for a single subvolume id, mountpoint $mountPoint\n";
             } elsif ($#paths != 0) {

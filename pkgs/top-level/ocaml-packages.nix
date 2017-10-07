@@ -114,7 +114,10 @@ let
 
     benchmark = callPackage ../development/ocaml-modules/benchmark { };
 
-    biniou = callPackage ../development/ocaml-modules/biniou { };
+    biniou =
+      if lib.versionOlder "4.02" ocaml.version
+      then callPackage ../development/ocaml-modules/biniou { }
+      else callPackage ../development/ocaml-modules/biniou/1.0.nix { };
 
     bin_prot_p4 = callPackage ../development/ocaml-modules/bin_prot { };
 
@@ -439,8 +442,6 @@ let
 
     ocaml_sqlite3 = callPackage ../development/ocaml-modules/sqlite3 { };
 
-    ocaml_ssl = callPackage ../development/ocaml-modules/ssl { };
-
     ocaml_text = callPackage ../development/ocaml-modules/ocaml-text { };
 
     ocf = callPackage ../development/ocaml-modules/ocf { };
@@ -605,6 +606,8 @@ let
     sedlex = callPackage ../development/ocaml-modules/sedlex { };
 
     sqlite3EZ = callPackage ../development/ocaml-modules/sqlite3EZ { };
+
+    ssl = callPackage ../development/ocaml-modules/ssl { };
 
     stog = callPackage ../applications/misc/stog { };
 

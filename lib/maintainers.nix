@@ -164,13 +164,14 @@
   dotlambda = "Robert Schütz <rschuetz17@gmail.com>";
   doublec = "Chris Double <chris.double@double.co.nz>";
   dpaetzel = "David Pätzel <david.a.paetzel@gmail.com>";
+  dpflug = "David Pflug <david@pflug.email>";
   drets = "Dmytro Rets <dmitryrets@gmail.com>";
   drewkett = "Andrew Burkett <burkett.andrew@gmail.com>";
   dsferruzza = "David Sferruzza <david.sferruzza@gmail.com>";
   dtzWill = "Will Dietz <nix@wdtz.org>";
   dywedir = "Vladyslav M. <dywedir@protonmail.ch>";
   e-user = "Alexander Kahl <nixos@sodosopa.io>";
-  ebzzry = "Rommel Martinez <ebzzry@gmail.com>";
+  ebzzry = "Rommel Martinez <ebzzry@ebzzry.io>";
   edanaher = "Evan Danaher <nixos@edanaher.net>";
   edef = "edef <edef@edef.eu>";
   ederoyd46 = "Matthew Brown <matt@ederoyd.co.uk>";
