@@ -45,6 +45,7 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     version = "0.8.2";
     maintainers = [ maintainers.dochang ];
+    platforms = platforms.unix;
   };
 
 }
