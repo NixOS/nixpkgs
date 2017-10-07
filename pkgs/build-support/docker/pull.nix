@@ -1,4 +1,4 @@
-{ stdenv, lib, docker, vmTools, utillinux, curl, kmod, dhcp, cacert, e2fsprogs }:
+{ stdenv, lib, docker, vmTools, utillinux, curl, kmod, dhcp, cacert, e2fsprogs, jq }:
 let
   nameReplace = name: builtins.replaceStrings ["/" ":"] ["-" "-"] name;
 in
@@ -14,7 +14,7 @@ let
 
       builder = ./pull.sh;
 
-      buildInputs = [ curl utillinux docker kmod dhcp cacert e2fsprogs ];
+      buildInputs = [ curl utillinux docker kmod dhcp cacert e2fsprogs jq ];
 
       outputHashAlgo = "sha256";
       outputHash = sha256;
