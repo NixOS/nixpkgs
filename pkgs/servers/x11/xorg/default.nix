@@ -1820,11 +1820,11 @@ let
   }) // {inherit ;};
 
   xf86videoamdgpu = (mkDerivation "xf86videoamdgpu" {
-    name = "xf86-video-amdgpu-1.3.0";
+    name = "xf86-video-amdgpu-1.4.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/driver/xf86-video-amdgpu-1.3.0.tar.bz2;
-      sha256 = "0w2f7xz44pym2k5kr76p983dwbc2f2p2jazpff999giqi4i0yqy1";
+      url = mirror://xorg/individual/driver/xf86-video-amdgpu-1.4.0.tar.bz2;
+      sha256 = "0z56ifw3xiq9dychv8chg1cny0hq4v3c1r9pqcybk5fp7nzw9jpq";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ fontsproto mesa libdrm udev randrproto renderproto videoproto xextproto xf86driproto xorgserver xproto ];
