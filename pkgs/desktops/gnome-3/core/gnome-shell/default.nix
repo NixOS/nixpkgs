@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   LANG = "en_US.UTF-8";
 
-  nativeBuildInputs = [ meson ninja gettext docbook_xsl docbook_xsl_ns perl wrapGAppsHook glibcLocales ];
+  nativeBuildInputs = [ meson ninja gettext docbook_xsl docbook_xsl_ns docbook_xml_dtd_42 perl wrapGAppsHook glibcLocales ];
   buildInputs = with gnome3;
     [ gsettings_desktop_schemas gnome_keyring gnome-menus glib gcr json_glib accountsservice
       libcroco libsecret pkgconfig libsoup polkit gdk_pixbuf
@@ -43,16 +43,6 @@ in stdenv.mkDerivation rec {
     })
     ./fix-paths.patch
   ];
-
-  postPatch = ''
-    substituteInPlace man/meson.build --replace \
-      "http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" \
-      "${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
-
-    substituteInPlace man/gnome-shell.xml --replace \
-      http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd \
-      ${docbook_xml_dtd_42}/xml/dtd/docbook/docbookx.dtd
-  '';
 
   preBuild = ''
     # meson setup-hook changes the directory so the files are located one level up
