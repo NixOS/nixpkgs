@@ -5,7 +5,7 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  nativeBuildInputs = [ pkgconfig meson ninja gettext wrapGAppsHook libxslt
+  nativeBuildInputs = [ pkgconfig meson ninja gettext wrapGAppsHook libxslt docbook_xml_dtd_42
                         valgrind-light docbook_xsl gtk_doc desktop_file_utils ];
   buildInputs = [ gnome3.gtk glib packagekit appstream-glib libsoup
                   gnome3.gsettings_desktop_schemas gnome3.gnome_desktop
@@ -17,16 +17,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs meson_post_install.sh
-
-    substituteInPlace src/meson.build --replace \
-      "http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl" \
-      "${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl"
-
-    for xml in src/gnome-software.xml src/gnome-software-editor.xml; do
-      substituteInPlace $xml --replace \
-        http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd \
-        ${docbook_xml_dtd_42}/xml/dtd/docbook/docbookx.dtd
-    done
   '';
 
   mesonFlags = [
