@@ -15252,6 +15252,8 @@ with pkgs;
 
   ktorrent = libsForQt5.callPackage ../applications/networking/p2p/ktorrent { };
 
+  kubecfg = callPackage ../applications/networking/cluster/kubecfg { };
+
   kubernetes = callPackage ../applications/networking/cluster/kubernetes {  };
 
   kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
