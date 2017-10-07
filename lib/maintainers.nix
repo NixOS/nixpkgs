@@ -98,6 +98,7 @@
   canndrew = "Andrew Cann <shum@canndrew.org>";
   carlsverre = "Carl Sverre <accounts@carlsverre.com>";
   casey = "Casey Rodarmor <casey@rodarmor.net>";
+  catern = "Spencer Baugh <sbaugh@catern.com>";
   caugner = "Claas Augner <nixos@caugner.de>";
   cdepillabout = "Dennis Gosnell <cdep.illabout@gmail.com>";
   cfouche = "Chaddaï Fouché <chaddai.fouche@gmail.com>";

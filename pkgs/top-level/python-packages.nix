@@ -291,6 +291,8 @@ in {
 
   sip = callPackage ../development/python-modules/sip { };
 
+  supervise_api = callPackage ../development/python-modules/supervise_api { };
+
   tables = callPackage ../development/python-modules/tables {
     hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
   };
@@ -14994,59 +14996,6 @@ in {
 
   pandas = callPackage ../development/python-modules/pandas { };
 
-  pandas_17 = let
-    inherit (pkgs.stdenv.lib) optional optionalString;
-    inherit (pkgs.stdenv) isDarwin;
-  in buildPythonPackage rec {
-    name = "pandas-${version}";
-    version = "0.17.1";
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/source/p/pandas/${name}.tar.gz";
-      sha256 = "cfd7214a7223703fe6999fbe34837749540efee1c985e6aee9933f30e3f72837";
-    };
-
-    buildInputs = with self; [ nose ] ++ optional isDarwin pkgs.libcxx;
-    propagatedBuildInputs = with self; [
-      dateutil
-      scipy_0_17
-      numexpr
-      pytz
-      xlrd
-      bottleneck
-      sqlalchemy
-      lxml
-      html5lib
-#      modules.sqlite3
-      beautifulsoup4
-    ] ++ optional isDarwin pkgs.darwin.locale; # provides the locale command
-
-    # For OSX, we need to add a dependency on libcxx, which provides
-    # `complex.h` and other libraries that pandas depends on to build.
-    patchPhase = optionalString isDarwin ''
-      cpp_sdk="${pkgs.libcxx}/include/c++/v1";
-      echo "Adding $cpp_sdk to the setup.py common_include variable"
-      substituteInPlace setup.py \
-        --replace "['pandas/src/klib', 'pandas/src']" \
-                  "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
-
-      # disable clipboard tests since pbcopy/pbpaste are not open source
-      substituteInPlace pandas/io/tests/test_clipboard.py \
-        --replace pandas.util.clipboard no_such_module \
-        --replace OSError ImportError
-    '';
-
-    doCheck = false;
-
-    meta = {
-      homepage = "http://pandas.pydata.org/";
-      description = "Python Data Analysis Library";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ raskin fridh ];
-      platforms = platforms.unix;
-    };
-  };
-
   xlrd = buildPythonPackage rec {
     name = "xlrd-${version}";
 
@@ -17797,11 +17746,12 @@ in {
   };
 
   pyopenssl = buildPythonPackage rec {
-    name = "pyopenssl-${version}";
+    pname = "pyOpenSSL";
+    name = "${pname}-${version}";
     version = "17.2.0";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyOpenSSL/pyOpenSSL-${version}.tar.gz";
+    src = self.fetchPypi {
+      inherit pname version;
       sha256 = "0d283g4zi0hr9papd24mjl70mi15gyzq6fx618rizi87dgipqqax";
     };
 
@@ -19406,8 +19356,6 @@ in {
   };
 
   scipy = callPackage ../development/python-modules/scipy { };
-
-  scipy_0_17 = callPackage ../development/python-modules/scipy/0.17.1.nix { };
 
   scikitimage = buildPythonPackage rec {
     name = "scikit-image-${version}";

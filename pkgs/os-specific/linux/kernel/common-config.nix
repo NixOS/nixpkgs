@@ -245,6 +245,9 @@ with stdenv.lib;
   USB_SERIAL_KEYSPAN_USA49W y
   USB_SERIAL_KEYSPAN_USA49WLC y
 
+  # Device mapper (RAID, LVM, etc.)
+  MD y
+
   # Filesystem options - in particular, enable extended attributes and
   # ACLs for all filesystems that support them.
   FANOTIFY y
