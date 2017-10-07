@@ -27,7 +27,6 @@ in
   };
 
   config = mkIf config.hardware.parallels.enable {
-
     services.xserver = {
       drivers = singleton
         { name = "prlvideo"; modules = [ prl-tools ]; libPath = [ prl-tools ]; };
@@ -89,14 +88,6 @@ in
       };
     };
 
-    systemd.services.prlcc = {
-      description = "Parallels Control Center";
-      wantedBy = [ "graphical.target" ];
-      serviceConfig = {
-        ExecStart = "${prl-tools}/bin/prlcc";
-      };
-    };
-  
     systemd.user.services = {
       prlcc = {
         description = "Parallels Control Center";
