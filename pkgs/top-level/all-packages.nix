@@ -6626,7 +6626,7 @@ with pkgs;
   inherit (callPackage ../development/interpreters/ruby {})
     ruby_2_0_0
     ruby_2_1_10
-    ruby_2_2_7
+    ruby_2_2_8
     ruby_2_3_4
     ruby_2_4_2;
 
@@ -6634,7 +6634,7 @@ with pkgs;
   ruby = ruby_2_3;
   ruby_2_0 = ruby_2_0_0;
   ruby_2_1 = ruby_2_1_10;
-  ruby_2_2 = ruby_2_2_7;
+  ruby_2_2 = ruby_2_2_8;
   ruby_2_3 = ruby_2_3_4;
   ruby_2_4 = ruby_2_4_2;
 
