@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ asciidoc libxcb xcbutil xcbutilkeysyms xcbutilwm ];
 
-  makeFlags = ''PREFIX=$(out)'';
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "Simple X hotkey daemon";
