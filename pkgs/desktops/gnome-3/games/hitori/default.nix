@@ -9,8 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "07pm3xl05jgb8x151k1j2ap57dmfvk2nkz9dmqnn5iywfigsysd1";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig gtk3 wrapGAppsHook intltool itstool libxml2
+    gtk3 wrapGAppsHook intltool itstool libxml2
     gnome3.defaultIconTheme
   ];
 

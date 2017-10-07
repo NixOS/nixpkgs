@@ -72,8 +72,9 @@ rec {
     # Optimizations break compilation of libseccomp c bindings
     hardeningDisable = [ "fortify" ];
 
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [
-      makeWrapper removeReferencesTo pkgconfig go-md2man go
+      makeWrapper removeReferencesTo go-md2man go
       sqlite devicemapper btrfs-progs systemd libtool libseccomp
     ];
 

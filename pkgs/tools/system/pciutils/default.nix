@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1d62f8fa192f90e61c35a6fc15ff3cb9a7a792f782407acc42ef67817c5939f5";
   };
 
-  buildInputs = [ pkgconfig zlib kmod which ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ zlib kmod which ];
 
   makeFlags = "SHARED=yes PREFIX=\${out}";
 

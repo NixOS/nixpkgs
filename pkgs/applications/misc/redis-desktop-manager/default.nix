@@ -24,10 +24,9 @@ stdenv.mkDerivation rec {
     sha256 = "0a7xa39qp1q32zkypw32mm3wi8wbhxhvrm6l3xsa3k1jzih7hzxr";
   };
 
-  nativeBuildInputs = [ qmake ];
-
+  nativeBuildInputs = [ pkgconfig qmake ];
   buildInputs = [
-    pkgconfig libssh2 qtbase qtdeclarative qtgraphicaleffects qtimageformats
+    libssh2 qtbase qtdeclarative qtgraphicaleffects qtimageformats
     qtquick1 qtquickcontrols qtsvg qttools
   ];
 

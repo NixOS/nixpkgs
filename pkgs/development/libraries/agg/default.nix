@@ -7,7 +7,8 @@ stdenv.mkDerivation rec {
     url = "http://www.antigrain.com/${name}.tar.gz";
     sha256 = "07wii4i824vy9qsvjsgqxppgqmfdxq0xa87i5yk53fijriadq7mb";
   };
-  buildInputs = [ autoconf automake libtool pkgconfig freetype SDL libX11 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake libtool freetype SDL libX11 ];
 
   # fix build with new automake, from Gentoo ebuild
   preConfigure = ''

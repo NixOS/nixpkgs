@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
                      "--with-static-gmp-include-dir=${gmp-static.dev}/include"
                      "--enable-mcsat"
                    ];
-  buildInputs = [ gmp-static gperf autoreconfHook libpoly ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ gmp-static gperf libpoly ];
 
   enableParallelBuilding = true;
   doCheck = true;

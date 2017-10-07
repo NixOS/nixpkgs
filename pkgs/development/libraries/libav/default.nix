@@ -70,7 +70,8 @@ let
       ++ optional freetypeSupport "--enable-libfreetype"
       ;
 
-    buildInputs = [ pkgconfig lame yasm zlib bzip2 SDL ]
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ lame yasm zlib bzip2 SDL ]
       ++ [ perl ] # for install-man target
       ++ optional mp3Support lame
       ++ optional speexSupport speex

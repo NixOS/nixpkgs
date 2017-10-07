@@ -11,8 +11,10 @@ stdenv.mkDerivation {
   };
 
   patches = [ ./xlib.patch ];
+
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    perl perlXMLParser pkgconfig gtk2 scrollkeeper
+    perl perlXMLParser gtk2 scrollkeeper
     libglade libXmu gettext lame libXdamage libXfixes libXext libX11
   ];
 

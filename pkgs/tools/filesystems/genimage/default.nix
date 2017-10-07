@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0y4h8x8lqxam8m90rdfq8cg5137kvilxr3d1qzddpx7nxpvmmwv9";
   };
 
-  buildInputs = [ pkgconfig libconfuse ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libconfuse ];
 
   postInstall = ''
     # As there is no manpage or built-in --help, add the README file for

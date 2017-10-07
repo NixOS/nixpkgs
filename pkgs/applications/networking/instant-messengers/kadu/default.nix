@@ -10,7 +10,8 @@ stdenv.mkDerivation {
     sha256 = "1a5q5b8pm253cwg6ahahjdm8jxj0pv41apyi1nvvy08bs38bn1yn";
   };
 
-  buildInputs = [ cmake qt4 libgadu libXScrnSaver libsndfile libX11 alsaLib aspell libidn qca2 phonon pkgconfig
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake qt4 libgadu libXScrnSaver libsndfile libX11 alsaLib aspell libidn qca2 phonon
   ];
 
   configureFlags = "CPPFLAGS=-DQT_NO_DEBUG";

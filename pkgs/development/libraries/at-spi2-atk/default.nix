@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "d25e528e1406a10c7d9b675aa15e638bcbf0a122ca3681f655a30cce83272fb9";
   };
 
-  buildInputs = [ python pkgconfig popt atk libX11 libICE xorg.libXtst libXi
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ python popt atk libX11 libICE xorg.libXtst libXi
                   intltool dbus_glib at_spi2_core libSM ];
 
   meta = with stdenv.lib; {

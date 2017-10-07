@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0hc1fjfbfvggl72zqx27v4wy84f5m7bp4dnwd8g41aw8lgynbgaq";
   };
 
-  buildInputs = [ gmp pkgconfig redland zlib librdf_raptor2 librdf_rasqal ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gmp redland zlib librdf_raptor2 librdf_rasqal ];
 
   preConfigure = ''
     # Define _XOPEN_SOURCE to enable, e.g., getaddrinfo.

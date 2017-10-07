@@ -5395,7 +5395,7 @@ with pkgs;
   clangWrapSelf = build: ccWrapperFun {
     cc = build;
     isClang = true;
-    stdenv = clangStdenv;
+    inherit stdenvNoCC;
     libc = glibc;
     extraPackages = [ libcxx libcxxabi ];
     nativeTools = false;
@@ -6318,11 +6318,11 @@ with pkgs;
 
   wla-dx = callPackage ../development/compilers/wla-dx { };
 
-  wrapCCWith = { name ? "", cc, libc, extraBuildCommands ? "" }: ccWrapperFun {
+  wrapCCWith = { name ? "", cc, libc, extraBuildCommands ? "" }: ccWrapperFun rec {
     nativeTools = targetPlatform == hostPlatform && stdenv.cc.nativeTools or false;
     nativeLibc = targetPlatform == hostPlatform && stdenv.cc.nativeLibc or false;
     nativePrefix = stdenv.cc.nativePrefix or "";
-    noLibc = (libc == null);
+    noLibc = !nativeLibc && (libc == null);
 
     isGNU = cc.isGNU or false;
     isClang = cc.isClang or false;
@@ -7448,12 +7448,6 @@ with pkgs;
 
   pmccabe = callPackage ../development/tools/misc/pmccabe { };
 
-  /* Make pkgconfig always return a nativeDrv, never a proper crossDrv,
-     because most usage of pkgconfig as buildInput (inheritance of
-     pre-cross nixpkgs) means using it using as nativeBuildInput
-     cross_renaming: we should make all programs use pkgconfig as
-     nativeBuildInput after the renaming.
-     */
   pkgconfig = callPackage ../development/tools/misc/pkgconfig {
     fetchurl = fetchurlBoot;
   };

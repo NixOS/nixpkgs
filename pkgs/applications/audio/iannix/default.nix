@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "184ydb9f1303v332k5k3f1ki7cb6nkxhh6ij0yn72v7dp7figrgj";
   };
 
-  nativeBuildInputs = [ qmake ];
-  buildInputs = [ alsaLib pkgconfig qtbase qtscript ];
+  nativeBuildInputs = [ pkgconfig qmake ];
+  buildInputs = [ alsaLib qtbase qtscript ];
 
   qmakeFlags = [ "PREFIX=/" ];
 

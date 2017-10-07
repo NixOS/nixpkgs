@@ -21,8 +21,9 @@ stdenv.mkDerivation rec {
     sha256 = "1f7ylw3mhhnii52mmk40hyc4kqhpvjdr3hmsplzkdhsfww9kflg3";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig readline libuuid libmesode
+    readline libuuid libmesode
     glib openssl expat ncurses libotr curl
   ] ++ optionals autoAwaySupport [ libXScrnSaver libX11 ]
     ++ optionals notifySupport   [ libnotify gdk_pixbuf ]

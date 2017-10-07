@@ -12,8 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "39b8e1f2ba4cc1f5bdc8e39c7be35e5f831253008e4ee2c176984f080416676c";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig xlibsWrapper libpng libjpeg expat libXaw yacc
+    xlibsWrapper libpng libjpeg expat libXaw yacc
     libtool fontconfig pango gd libwebp
   ];
 

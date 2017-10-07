@@ -20,14 +20,14 @@ let
     nativeBuildInputs = [ cmake ];
     buildInputs = [ libpng flex bison ];
   };
-  buildPlugin = { pluginName, sha256, buildInputs, preConfigure ? "" }:
+  buildPlugin = { pluginName, sha256, nativeBuildInputs ? [], buildInputs ? [], preConfigure ? "" }:
     stdenv.mkDerivation {
       name = "openfx-${pluginName}-${version}";
       src = fetchurl {
         url = "https://github.com/MrKepzie/Natron/releases/download/${version}/openfx-${pluginName}-${version}.tar.xz";
         inherit sha256;
       };
-      inherit buildInputs;
+      inherit nativeBuildInputs buildInputs;
       preConfigure = ''
         makeFlagsArray+=("CONFIG=release")
         makeFlagsArray+=("PLUGINPATH=$out/Plugins/OFX/Natron")
@@ -50,8 +50,9 @@ let
     ({
       pluginName = "arena";
       sha256 = "0qba13vn9qdfax7nqlz1ps27zspr5kh795jp1xvbmwjzjzjpkqkf";
+      nativeBuildInputs = [ pkgconfig ];
       buildInputs = [
-        pkgconfig pango librsvg librevenge libcdr opencolorio libxml2 libzip
+        pango librsvg librevenge libcdr opencolorio libxml2 libzip
         poppler imagemagick
       ];
       preConfigure = ''
@@ -65,8 +66,9 @@ let
     ({
       pluginName = "io";
       sha256 = "0s196i9fkgr9iw92c94mxgs1lkxbhynkf83vmsgrldflmf0xjky7";
+      nativeBuildInputs = [ pkgconfig ];
       buildInputs = [
-        pkgconfig libpng ffmpeg openexr opencolorio openimageio boost mesa_noglu
+        libpng ffmpeg openexr opencolorio openimageio boost mesa_noglu
         seexpr
       ];
     })
@@ -91,11 +93,11 @@ stdenv.mkDerivation {
     sha256 = "1wdc0zqriw2jhlrhzs6af3kagrv22cm086ffnbr1x43mgc9hfhjp";
   };
 
-  buildInputs = [
-    pkgconfig qt4 boost expat cairo python2Packages.pyside python2Packages.pysideShiboken
-  ];
+  nativeBuildInputs = [ qmake4Hook pkgconfig python2Packages.wrapPython ];
 
-  nativeBuildInputs = [ qmake4Hook python2Packages.wrapPython ];
+  buildInputs = [
+    qt4 boost expat cairo python2Packages.pyside python2Packages.pysideShiboken
+  ];
 
   preConfigure = ''
     export MAKEFLAGS=-j$NIX_BUILD_CORES

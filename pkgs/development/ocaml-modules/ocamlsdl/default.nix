@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "abfb295b263dc11e97fffdd88ea1a28b46df8cc2b196777093e4fe7f509e4f8f";
   };
 
-  buildInputs = [ocaml pkgconfig findlib SDL SDL_image SDL_mixer SDL_ttf SDL_gfx lablgl];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ocaml findlib SDL SDL_image SDL_mixer SDL_ttf SDL_gfx lablgl];
 
   propagatedBuildInputs = [ SDL SDL_image SDL_mixer SDL_ttf SDL_gfx pkgconfig ];
   createFindlibDestdir = true;

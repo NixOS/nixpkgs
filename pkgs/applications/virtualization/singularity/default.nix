@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "19g43gfdy5s8y4252474cp39d6ypn5dd37wp0s21fgd13vqy26px";
   };
 
-  buildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ ];
 
   meta = with stdenv.lib; {
     homepage = http://singularity.lbl.gov/;

@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
-  buildInputs = [ pkgconfig intltool libxfce4util libxfce4ui xfce4panel libxfcegui4 xfconf gtk libunique ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool libxfce4util libxfce4ui xfce4panel libxfcegui4 xfconf gtk libunique ];
 
   meta = {
     homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";

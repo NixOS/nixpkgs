@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "19vy3ldbf931hjvn9jf9dvw1di3yx9ljxyk2yp5cnac1wqiza3jm";
   };
 
-  buildInputs = [ cmake speexdsp pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake speexdsp ];
 
   meta = with stdenv.lib; {
     description = "Implementation of the EBU R128 loudness standard";

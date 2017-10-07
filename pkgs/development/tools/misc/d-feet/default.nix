@@ -13,7 +13,8 @@ in pythonPackages.buildPythonApplication rec {
     sha256 = "a3dc940c66f84b996c328531e3034d475ec690d7ff639445ff7ca746aa8cb9c2";
   };
 
-  buildInputs = [ pkgconfig libxml2 itstool intltool glib gtk3
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libxml2 itstool intltool glib gtk3
     gnome3.defaultIconTheme makeWrapper libwnck3
   ];
 

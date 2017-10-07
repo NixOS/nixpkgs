@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0nwg4bw02v6vahm2rwfaj7fzp3ffhjg5jk7h20il4246swhxw6s6";
   };
 
-  buildInputs = [ cmake pcre pkgconfig python2 zlib libxml2 lzma gsl ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake pcre python2 zlib libxml2 lzma gsl ]
     ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext mesa ]
     ++ stdenv.lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
     ;

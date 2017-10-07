@@ -10,7 +10,8 @@ stdenv.mkDerivation {
 
   makeFlags = "RM=rm LN=ln MV=mv";
 
-  buildInputs = [ lame libvorbis libmad pkgconfig libao ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ lame libvorbis libmad libao ];
 
   hardeningDisable = [ "format" ];
 

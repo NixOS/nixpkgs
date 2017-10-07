@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" "devdoc" "info" ];
-  buildInputs = [ libgcrypt curl gnutls pkgconfig ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libgcrypt curl gnutls ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv libintlOrEmpty ];
 
   preCheck = ''

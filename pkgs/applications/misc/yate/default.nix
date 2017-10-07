@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   # TODO zaptel ? postgres ?
-  buildInputs = [ qt4 openssl autoconf automake pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ qt4 openssl autoconf automake ];
 
   # /dev/null is used when linking which is a impure path for the wrapper
   preConfigure =

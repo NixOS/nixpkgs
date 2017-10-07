@@ -7,7 +7,8 @@ stdenv.mkDerivation {
      sha256 = "369a8f2e5673c6b7ab0cf85166f38fbf553dd966c3c1cfeec0e32837defd32c7";
   };
 
-  buildInputs = [ pkgconfig libX11 libXpm libXext ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libX11 libXpm libXext ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/wmsm";
 

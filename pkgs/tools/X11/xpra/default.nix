@@ -18,8 +18,9 @@ in buildPythonApplication rec {
     sha256 = "09hzgbsj9v5qyh41rbz968ipi7016jk66b60vm6piryna9kbnha3";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cython pkgconfig
+    cython
 
     xorg.libX11 xorg.renderproto xorg.libXrender xorg.libXi xorg.inputproto xorg.kbproto
     xorg.randrproto xorg.damageproto xorg.compositeproto xorg.xextproto xorg.recordproto

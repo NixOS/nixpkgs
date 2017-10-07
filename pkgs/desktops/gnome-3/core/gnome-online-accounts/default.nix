@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ pkgconfig glib libxslt gtk webkitgtk json_glib rest gnome_common wrapGAppsHook
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib libxslt gtk webkitgtk json_glib rest gnome_common wrapGAppsHook
                   libsecret dbus_glib telepathy_glib glib_networking intltool icu libsoup vala
                   docbook_xsl_ns docbook_xsl gnome3.defaultIconTheme ];
 

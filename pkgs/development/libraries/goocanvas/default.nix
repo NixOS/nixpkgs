@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "07kicpcacbqm3inp7zq32ldp95mxx4kfxpaazd0x5jk7hpw2w1qw";
   };
 
-  buildInputs = [ gtk2 cairo glib pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 cairo glib ];
 
   meta = { 
     description = "Canvas widget for GTK+ based on the the Cairo 2D library";

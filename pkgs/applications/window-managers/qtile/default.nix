@@ -29,7 +29,8 @@ python27Packages.buildPythonApplication rec {
     substituteInPlace libqtile/xcursors.py --subst-var-by xcb-cursor ${xcbutilcursor.out}
   '';
 
-  buildInputs = [ pkgconfig glib libxcb cairo pango python27Packages.xcffib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib libxcb cairo pango python27Packages.xcffib ];
 
   pythonPath = with python27Packages; [ xcffib cairocffi-xcffib trollius ];
 

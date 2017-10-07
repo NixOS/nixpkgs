@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1lby508fb0n8ks6iz959sh18fc37br39d6pbapwvbcw5nckdrxwj";
   };
 
-  buildInputs = [ boost gtk2 pkgconfig python ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ boost gtk2 python ];
 
   configurePhase = "${python.interpreter} waf configure --prefix=$out";
 

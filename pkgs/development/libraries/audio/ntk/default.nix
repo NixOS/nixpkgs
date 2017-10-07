@@ -9,8 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "0pph7hf07xaa011zr40cs62f3f7hclfbv5kcrl757gcp2s5pi2iq";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cairo libjpeg libXft pkgconfig python2
+    cairo libjpeg libXft python2
   ];
 
   buildPhase = ''

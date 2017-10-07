@@ -30,10 +30,12 @@ buildPythonPackage rec {
       tests/run/cpdef_enums.pyx
   '';
 
-  buildInputs = [ glibcLocales pkgconfig gdb ];
-  # For testing
-  nativeBuildInputs = [ numpy ncurses ];
-
+  nativeBuildInputs = [
+    pkgconfig
+    # For testing
+    numpy ncurses
+  ];
+  buildInputs = [ glibcLocales gdb ];
   LC_ALL = "en_US.UTF-8";
 
   # cython's testsuite is not working very well with libc++

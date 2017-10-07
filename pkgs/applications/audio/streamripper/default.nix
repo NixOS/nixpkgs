@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0hnyv3206r0rfprn3k7k6a0j959kagsfyrmyjm3gsf3vkhp5zmy1";
   };
 
-  buildInputs = [ pkgconfig glib libogg libvorbis ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib libogg libvorbis ];
 
   meta = with stdenv.lib; {
     homepage = http://streamripper.sourceforge.net/;

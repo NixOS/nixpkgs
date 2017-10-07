@@ -15,8 +15,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    perl gperf bison groff libXft pkgconfig
+    perl gperf bison groff libXft
     pcre libtomcrypt libtommath lz4
   ];
 

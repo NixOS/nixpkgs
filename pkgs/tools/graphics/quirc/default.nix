@@ -10,8 +10,9 @@ let
     rev = "5b262480091d5f84a67a4a56c728fc8b39844339";
     sha256 = "1w5qvjafn14s6jjs7kiwsqirlsqbgv0p152hrsq463pm34hp0lzy";
   };
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    SDL SDL_gfx libjpeg pkgconfig libpng
+    SDL SDL_gfx libjpeg libpng
   ];
 in
 stdenv.mkDerivation {

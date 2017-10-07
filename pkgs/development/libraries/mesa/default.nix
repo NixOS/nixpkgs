@@ -140,14 +140,14 @@ stdenv.mkDerivation {
     "--disable-opencl"
   ];
 
-  nativeBuildInputs = [ pkgconfig file ];
+  nativeBuildInputs = [ autoreconfHook intltool pkgconfig file ];
 
   propagatedBuildInputs = with xorg;
     [ libXdamage libXxf86vm ]
     ++ optional stdenv.isLinux libdrm;
 
   buildInputs = with xorg; [
-    autoreconfHook intltool expat llvmPackages.llvm
+    expat llvmPackages.llvm
     glproto dri2proto dri3proto presentproto
     libX11 libXext libxcb libXt libXfixes libxshmfence
     libffi wayland libvdpau libelf libXvMC

@@ -7,7 +7,8 @@ stdenv.mkDerivation {
     sha256 = "09xhgzmsq0g3jsyj24vy67bhzk2fv971w5ixdkhfwgar70cw1nn0";
   };
 
-  buildInputs = [pkgconfig libestr];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libestr];
 
   meta = {
     homepage = http://www.libee.org/;

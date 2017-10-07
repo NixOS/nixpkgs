@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "101781iw32p47386fxqr01nrkywi12w17ajh02k2vlga4z8zyv86";
   };
 
-  buildInputs = [ pkgconfig perl
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ perl
     buildsystem
     libparserutils
   ];

@@ -21,15 +21,18 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "man" "dev" ];
 
-  buildInputs =
-    [ linuxHeaders pkgconfig intltool gperf libcap kmod xz pam acl
-      /* cryptsetup */ libuuid m4 glib libxslt libgcrypt libgpgerror
-      libmicrohttpd kexectools libseccomp libffi audit lz4 libapparmor
-      iptables gnu-efi
+  nativeBuildInputs =
+    [ pkgconfig intltool gperf libxslt
       /* FIXME: we may be able to prevent the following dependencies
          by generating an autoconf'd tarball, but that's probably not
          worth it. */
       autoreconfHook gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
+    ];
+  buildInputs =
+    [ linuxHeaders libcap kmod xz pam acl
+      /* cryptsetup */ libuuid m4 glib libgcrypt libgpgerror
+      libmicrohttpd kexectools libseccomp libffi audit lz4 libapparmor
+      iptables gnu-efi
     ];
 
   configureFlags =

@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1x7pi77nal10717l02qpnhrx6d7w5nqrljkn9zx5w7gpb8fpb3vp";
   };
 
-  buildInputs = [ boost cairomm cmake libsndfile lv2 ntk pkgconfig python ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ boost cairomm cmake libsndfile lv2 ntk python ];
 
   installPhase = ''
     make install

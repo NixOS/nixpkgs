@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "14d3a93ha5k4al4ib43nyn1ppx7kgb12xw6mkflhx8nxmx8827nc";
   };
 
-  buildInputs = [ pkgconfig openssl stdenv.cc.libc.static ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl stdenv.cc.libc.static ]
     ++ stdenv.lib.optional (libuuid != null)
          (libuuid.overrideAttrs (attrs:
            { configureFlags = attrs.configureFlags ++ [ "--enable-static" ]; }));

@@ -8,7 +8,8 @@ stdenv.mkDerivation {
       ];
     sha256 = "099kx6ni5vkgr3kf40glif8m6r1m1hq6hxqlqrblaj1w5cphh8hi";
   };
-  buildInputs = [imake gccmakedep libXpm libXp bison flex pkgconfig];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [imake gccmakedep libXpm libXp bison flex];
   propagatedBuildInputs = [xlibsWrapper libXmu];
 
   meta = {

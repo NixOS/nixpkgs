@@ -32,8 +32,9 @@ stdenv.mkDerivation {
     done
   '';
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig mono glib pango gtk2 GConf libglade libgnomecanvas
+    mono glib pango gtk2 GConf libglade libgnomecanvas
     libgtkhtml libgnomeui libgnomeprint libgnomeprintui gtkhtml libxml2
   ];
 

@@ -14,12 +14,12 @@ stdenv.mkDerivation rec {
     sha256 = "1r6sx9zl1wkykgfx6k26268xadair6hzl15v5hmiri9sdhrn33q7";
   };
 
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+
   buildInputs = [
-    pkgconfig cmake pixman libpthreadstubs gtkmm3 libXau libXdmcp
+    cmake pixman libpthreadstubs gtkmm3 libXau libXdmcp
     lcms2 libiptcdata libcanberra_gtk3 fftw expat pcre libsigcxx lensfun
   ];
-
-  nativeBuildInputs = [ wrapGAppsHook ];
 
   cmakeFlags = [
     "-DPROC_TARGET_NUMBER=2"

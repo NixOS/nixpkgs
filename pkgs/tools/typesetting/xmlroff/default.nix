@@ -10,8 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1sczn6xjczsfdxlbjqv4xqlki2a95y2s8ih2nl9v1vhqfk17fiww";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig
     autoconf
     automake
     libxml2

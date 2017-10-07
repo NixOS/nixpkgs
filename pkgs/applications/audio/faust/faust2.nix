@@ -187,7 +187,8 @@ let
 
     stdenv.mkDerivation ((faust2ApplBase args) // {
 
-      buildInputs = [ makeWrapper pkgconfig ];
+      nativeBuildInputs = [ pkgconfig ];
+      buildInputs = [ makeWrapper ];
 
       propagatedBuildInputs = [ faust ] ++ propagatedBuildInputs;
 

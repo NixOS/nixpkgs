@@ -7,7 +7,8 @@ stdenv.mkDerivation rec {
     sha256 = "0cb6p58yv55kdyfj7s9n9xcwpvxrj8nyc6brw9jvwlc5n4y3cd5a";
   };
 
-  buildInputs = [ cmake pkgconfig SDL SDL_mixer SDL_net ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake SDL SDL_mixer SDL_net ];
 
   enableParallelBuilding = true;
 

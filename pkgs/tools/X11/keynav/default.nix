@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0v1m8w877fcrk918p6b6q3753dsz8i1f4mb9bi064cp11kh85nq5";
   };
 
-  buildInputs = [ pkgconfig libX11 xextproto libXtst libXi libXext libXinerama
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libX11 xextproto libXtst libXi libXext libXinerama
                   glib cairo xdotool ];
 
   patchPhase = ''

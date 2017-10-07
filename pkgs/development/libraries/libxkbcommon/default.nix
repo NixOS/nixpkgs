@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [ pkgconfig yacc flex xkeyboard_config libxcb ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ yacc flex xkeyboard_config libxcb ];
 
   configureFlags = [
     "--with-xkb-config-root=${xkeyboard_config}/etc/X11/xkb"

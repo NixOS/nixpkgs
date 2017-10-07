@@ -2,7 +2,8 @@
 
 stdenv.mkDerivation rec {
   name = "gnaural-1.0.20110606";
-  buildInputs = [ pkgconfig gtk2 libsndfile portaudio ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 libsndfile portaudio ];
   src = fetchurl {
     url = "mirror://sourceforge/gnaural/Gnaural/${name}.tar.gz";
     sha256 = "0p9rasz1jmxf16vnpj17g3vzdjygcyz3l6nmbq6wr402l61f1vy5";

@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
   # Remove patch once the kernel headers are updated
   patches = [ ./add-ip6-header.patch ];
 
-  buildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ ];
 
   postInstall = ''
     # The bridge utils build does not fail even if the brctl binary

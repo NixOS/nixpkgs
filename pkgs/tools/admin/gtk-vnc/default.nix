@@ -15,11 +15,13 @@ in stdenv.mkDerivation rec {
     sha256 = "0gj8dpy3sj4dp810gy67spzh5f0jd8aqg69clcwqjcskj1yawbiw";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    python gnutls cairo libtool pkgconfig glib libffi libgcrypt
+    python gnutls cairo libtool glib libffi libgcrypt
     intltool cyrus_sasl libpulseaudio perl perlPackages.TextCSV
     gobjectIntrospection libogg libgpgerror
-    gtk3 vala_0_32 pygobject3 ];
+    gtk3 vala_0_32 pygobject3
+  ];
 
   NIX_CFLAGS_COMPILE = "-fstack-protector-all";
   configureFlags = [

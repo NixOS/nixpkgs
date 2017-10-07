@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ nspr ];
 
-  buildInputs = [ pkgconfig perl python2 zip libffi readline ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ perl python2 zip libffi readline ];
 
   postUnpack = "sourceRoot=\${sourceRoot}/js/src";
 

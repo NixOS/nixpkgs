@@ -24,7 +24,8 @@ stdenv.mkDerivation rec {
     export configureFlags="$configureFlags --target-cpu=$(uname -m)"
   '';
 
-  buildInputs = [which pkgconfig file glib gtk2 gtk3 curl libXt];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [which file glib gtk2 gtk3 curl libXt];
 
   preferLocalBuild = true;
 

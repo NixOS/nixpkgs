@@ -7,7 +7,8 @@ stdenv.mkDerivation rec {
     sha256 = "1g9cbhblll47l300zr999xr51x2g98y49l222f77fhswd12kjzhd";
   };
 
-  buildInputs = [ udev ncurses pkgconfig bluez ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ udev ncurses bluez ];
 
   configureFlags = "--with-doxygen=no";
 

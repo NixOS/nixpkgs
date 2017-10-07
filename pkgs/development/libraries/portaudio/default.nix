@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "04qmin6nj144b8qb9kkd9a52xfvm0qdgm8bg8jbl7s3frmyiv8pm";
   };
 
-  buildInputs = [ pkgconfig libjack2 ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libjack2 ]
     ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
 
   configureFlags = [ "--disable-mac-universal" ];

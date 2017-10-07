@@ -9,8 +9,10 @@ let
     url="https://github.com/ambrop72/badvpn/archive/1.999.130.tar.gz";
     sha256="02b1fra43l75mljkhrq45vcrrqv0znicjn15g7nbqx3jppzbpm5z";
   };
+
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cmake openssl nss pkgconfig nspr
+    cmake openssl nss nspr
   ];
   compileFlags = "-O3 ${stdenv.lib.optionalString (!debug) "-DNDEBUG"}";
 in

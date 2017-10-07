@@ -9,7 +9,8 @@ stdenv.mkDerivation (rec {
     sha256 = "1rlf5h67vhj7n1y7jqkm9k115nfnzpwngj3kzqsi2lg676srclv7";
   };
 
-  buildInputs = [ pkgconfig gtk2 imlib2 file lcms2 libexif ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 imlib2 file lcms2 libexif ];
 
   preBuild=''
     substituteInPlace Makefile --replace /usr/local "$out"

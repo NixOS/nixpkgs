@@ -16,7 +16,8 @@ in stdenv.mkDerivation {
     leaveDotGit = true;
   };
 
-  buildInputs = [ autoconf automake libtool pkgconfig git ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake libtool git ];
 
   propagatedBuildInputs = [ bison flex postgresql ];
 

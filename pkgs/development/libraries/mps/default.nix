@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1k7vnanpgawnj84x2xs6md57pfib9p7c3acngqzkl3c2aqw8qay0";
   };
 
-  buildInputs = [ autoreconfHook sqlite ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ sqlite ];
 
   meta = {
     description = "A flexible memory management and garbage collection library";

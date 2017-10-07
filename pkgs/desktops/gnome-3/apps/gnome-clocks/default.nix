@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  buildInputs = [ pkgconfig gtk3 glib intltool itstool libcanberra_gtk3
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk3 glib intltool itstool libcanberra_gtk3
                   gnome3.gsettings_desktop_schemas makeWrapper
                   gdk_pixbuf gnome3.defaultIconTheme librsvg
                   gnome3.gnome_desktop gnome3.geocode_glib geoclue2

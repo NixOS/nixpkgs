@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1rpf683lxa78fmxxb0hnq7vdh3yn7qid2gqq67q9mk65sp9vdhdj";
   };
 
-  buildInputs = [ autoconf automake intltool libtool pkgconfig vala glib encfs
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake intltool libtool vala glib encfs
     gtk3 libgnome_keyring gnome3.libgee xorg.libSM xorg.libICE
     wrapGAppsHook ];
 

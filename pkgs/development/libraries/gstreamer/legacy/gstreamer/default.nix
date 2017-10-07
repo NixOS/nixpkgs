@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [ perl bison flex pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ perl bison flex ];
   propagatedBuildInputs = [ glib libxml2 ] ++ libintlOrEmpty;
 
   patchPhase = ''

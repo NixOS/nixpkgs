@@ -18,7 +18,8 @@ let
       url = "https://github.com/pitivi/gst-transcoder/archive/1.8.0.tar.gz";
       sha256 = "0iggr6idmp7cmfsf6pkhfl3jq1bkga37jl5prbcl1zapkzi26fg6";
     };
-    buildInputs = [ which meson ninja pkgconfig gobjectIntrospection ]
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ which meson ninja gobjectIntrospection ]
       ++ (with gst; [ gstreamer gst-plugins-base ]);
   };
 

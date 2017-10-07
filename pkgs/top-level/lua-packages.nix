@@ -379,7 +379,7 @@ let
       url = "https://github.com/lua-stdlib/lua-stdlib/archive/release.zip";
       sha256 = "0636absdfjx8ybglwydmqxwfwmqz1c4b9s5mhxlgm4ci18lw3hms";
     };
-    buildInputs = [ autoreconfHook unzip ];
+    nativeBuildInputs = [ autoreconfHook unzip ];
     meta = {
       homepage = "https://github.com/lua-stdlib/lua-stdlib/";
       platforms = stdenv.lib.platforms.linux;
@@ -508,7 +508,8 @@ let
       platforms   = platforms.unix;
     };
 
-    buildInputs = [ glib gobjectIntrospection lua pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ glib gobjectIntrospection lua ];
 
     makeFlags = [ "LUA_VERSION=${lua.luaversion}" ];
 
@@ -521,7 +522,8 @@ let
     name = "lua-mpack-${libmpack.version}";
     src = libmpack.src;
     sourceRoot = "libmpack-${libmpack.rev}-src/binding/lua";
-    buildInputs = [ libmpack ]; #libtool lua pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libmpack ]; #libtool lua ];
     dontBuild = true;
     preInstall = ''
       mkdir -p $out/lib/lua/${lua.luaversion}

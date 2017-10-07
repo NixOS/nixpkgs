@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0g71szjklkiczxwzbjjfm59y6v9w4hp8mg7cy99z1g7qcjm0gfbj";
   };
 
-  buildInputs = [ libX11 libXext libXaw pkgconfig imlib2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libX11 libXext libXaw imlib2 ];
   propagatedBuildInputs = [ libast ];
 
   meta = with stdenv.lib; {

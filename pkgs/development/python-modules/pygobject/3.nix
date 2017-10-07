@@ -13,7 +13,8 @@ buildPythonPackage rec {
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [ pkgconfig glib gobjectIntrospection ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib gobjectIntrospection ]
                  ++ stdenv.lib.optionals stdenv.isDarwin [ which ncurses ];
   propagatedBuildInputs = [ pycairo cairo ];
 

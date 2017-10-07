@@ -6,7 +6,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ pkgconfig flex bison gtk3 libxml2 gnome3.gjs gnome3.gdl
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ flex bison gtk3 libxml2 gnome3.gjs gnome3.gdl
     gnome3.libgda gnome3.gtksourceview intltool itstool python2 makeWrapper
     gnome3.gsettings_desktop_schemas
   ];

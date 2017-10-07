@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0svsy6rqmdj11b400c242i2ixihyz0hds0dgicqz6g6dcgmcl62q";
   };
 
-  buildInputs = [ SDL SDL_image SDL_ttf libpng zlib lua5 pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ SDL SDL_image SDL_ttf libpng zlib lua5 ];
 
   preBuild = "cd src";
 

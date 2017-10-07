@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = [ cmake unzip pkgconfig libXpm fltk13 freeimage ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake unzip libXpm fltk13 freeimage ];
 
   unpackPhase = ''
     unzip $src -d posterazor

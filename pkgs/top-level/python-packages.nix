@@ -6163,13 +6163,13 @@ in {
       sha256 = "0i14bc67200zhzxc41g5dfp2m0pr1zaa2gv59p2va1xw0ji2dc0f";
     };
 
+    nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = with self; [
       nose
       pkgs.libjpeg
       pkgs.libpng
       pkgs.libtiff
       pkgs.libwebp
-      pkgs.pkgconfig
     ];
     propagatedBuildInputs = with self; [ numpy ];
 
@@ -7205,7 +7205,8 @@ in {
     };
 
     NIX_CFLAGS_COMPILE="-I${pkgs.poppler.dev}/include/poppler/";
-    buildInputs = [ pkgs.pkgconfig pkgs.poppler.dev ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = [ pkgs.poppler.dev ];
     propagatedBuildInputs = with self; [ pycairo pygobject2 ];
 
     patches = [
@@ -9473,7 +9474,8 @@ in {
       sha256 = "06rmp1ap6flh64m81j0n3a357ij2vj9zwcvvw0p31y6hz1id9shi";
     };
 
-    buildInputs = with self; [ pkgs.pkgconfig pkgs.fuse ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with self; [ pkgs.fuse ];
 
     meta = {
       description = "Python bindings for FUSE";
@@ -11219,7 +11221,8 @@ in {
       sha256 = "1li7q04ljrvwharw4fblcbfhvk6s0l3lnv8yqb4c22lcgbkiqlps";
     };
 
-    buildInputs = with self; [ pytest pkgs.pkgconfig pkgs.fuse pkgs.attr pkgs.which ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with self; [ pytest pkgs.fuse pkgs.attr pkgs.which ];
 
     propagatedBuildInputs = with self; [ contextlib2 ];
 
@@ -13165,7 +13168,8 @@ in {
         configure
     '';
 
-    buildInputs = with self; [ python pkgs.pkgconfig pkgs.libnotify pygobject2 pygtk pkgs.glib pkgs.gtk2 pkgs.dbus_glib ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with self; [ python pkgs.libnotify pygobject2 pygtk pkgs.glib pkgs.gtk2 pkgs.dbus_glib ];
 
     postInstall = "cd $out/lib/python*/site-packages && ln -s gtk-*/pynotify .";
 
@@ -16444,7 +16448,8 @@ in {
       patchShebangs .
     '';
 
-    buildInputs = [ self.setuptools self.nose pkgs.pkgconfig pkgs.swig pkgs.libcdio ]
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = [ self.setuptools self.nose pkgs.swig pkgs.libcdio ]
       ++ stdenv.lib.optional stdenv.isDarwin pkgs.libiconv;
 
     patches = [ ../development/python-modules/pycdio/add-cdtext-toc.patch ];
@@ -17148,7 +17153,7 @@ in {
       PATH="${pkgs.parted}/sbin:$PATH"
     '';
 
-    buildInputs = with self; [ pkgs.pkgconfig ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
 
     propagatedBuildInputs = with self; [ pkgs.parted ];
 
@@ -18116,8 +18121,9 @@ in {
       sha256 = "1svlwyl61rvbqbcbalkg6pbf38yjyv7qkq9sx4x35yk69lscaac2";
     };
 
+    nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = [
-      pkgs.pkgconfig pkgs.gtk2 self.pygtk pkgs.libxml2
+      pkgs.gtk2 self.pygtk pkgs.libxml2
       pkgs.libxslt pkgs.libsoup pkgs.webkitgtk24x-gtk2 pkgs.icu
     ];
 
@@ -20281,7 +20287,8 @@ in {
       sha256 = "0zrjxvzxqm4bz2jcy8sras8jircgbs6dkrw8j3nc6jhvzlikwwxl";
     };
 
-    buildInputs = [ pkgs.pkgconfig self.pytest_28 self.pytestrunner ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = [ self.pytest_28 self.pytestrunner ];
     propagatedBuildInputs = [ self.cffi pkgs.secp256k1 ];
 
     # Tests are not included in archive
@@ -20351,8 +20358,9 @@ in {
       sha256 = "1q35kgz151rr99240jq55rs39y741m8shh9yihl3x95rkjxchji4";
     };
 
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with pkgs; [ alsaLib ffmpeg libv4l sqlite libvpx ];
     propagatedBuildInputs = with self; [ cython pkgs.openssl dns dateutil xcaplib msrplib lxml python-otr ];
-    buildInputs = with pkgs; [ alsaLib ffmpeg libv4l pkgconfig sqlite libvpx ];
   };
 
 
@@ -20915,7 +20923,8 @@ in {
     src = pkgs.subunit.src;
 
     propagatedBuildInputs = with self; [ testtools testscenarios ];
-    buildInputs = [ pkgs.pkgconfig pkgs.check pkgs.cppunit ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = [ pkgs.check pkgs.cppunit ];
 
     patchPhase = ''
       sed -i 's/version=VERSION/version="${pkgs.subunit.version}"/' setup.py
@@ -24041,7 +24050,8 @@ EOF
       sha256 = "1l0s9cx38qb6x5xj32r531xap11m93c3gag30idj8fzkn74cpfgc";
     };
 
-    buildInputs = with self; [ python pkgs.pkgconfig pkgs.libvirt lxml ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with self; [ python pkgs.libvirt lxml ];
 
     buildPhase = "${python.interpreter} setup.py build";
 
@@ -24180,7 +24190,8 @@ EOF
     preBuild = "${python}/bin/${python.executable} setup.py build_ext";
     installPhase= "${python}/bin/${python.executable} setup.py install --prefix=$out";
 
-    buildInputs = with self; [ pkgs.pkgconfig pkgs.enlightenment.efl ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with self; [ pkgs.enlightenment.efl ];
     doCheck = false;
 
     meta = {

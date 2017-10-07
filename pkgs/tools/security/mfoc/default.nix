@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   patches = [./mf_mini.patch];
 
-  buildInputs = [ pkgconfig libnfc ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libnfc ];
 
   meta = with stdenv.lib; {
     description = "Mifare Classic Offline Cracker";

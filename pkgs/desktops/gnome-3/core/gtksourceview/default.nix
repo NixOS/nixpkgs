@@ -6,7 +6,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ gtk3 ];
 
-  buildInputs = [ pkgconfig atk cairo glib pango
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ atk cairo glib pango
                   libxml2Python perl intltool gettext ];
 
   preBuild = ''

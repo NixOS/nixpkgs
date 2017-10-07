@@ -15,7 +15,8 @@ in stdenv.mkDerivation rec {
     sha256 = "0mx6n901vb97hsv0cwaafjffj75s1kcp8jsqay90dy3099849dyz";
   };
 
-  buildInputs = [ pkgconfig gtk3 intltool itstool libxml2 brasero libcanberra_gtk3
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk3 intltool itstool libxml2 brasero libcanberra_gtk3
                   gnome3.gsettings_desktop_schemas libmusicbrainz5 libdiscid isocodes
                   makeWrapper (stdenv.lib.getLib gnome3.dconf)
                   gst_all_1.gstreamer gst_all_1.gst-plugins-base

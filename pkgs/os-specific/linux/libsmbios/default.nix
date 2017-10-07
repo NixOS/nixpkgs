@@ -11,7 +11,8 @@ stdenv.mkDerivation {
     sha256 = "0kvi36jrvhspyyq0pjfdyvzvimdn27fvbdpf429qm3xdmfi78y2j";
   };
 
-  buildInputs = [ pkgconfig libxml2 perl autoreconfHook doxygen ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ libxml2 perl doxygen ];
 
   # It tries to install some Python stuff even when Python is disabled.
   installFlags = "pkgpythondir=$(TMPDIR)/python";

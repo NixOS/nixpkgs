@@ -2,6 +2,10 @@
 set -eu -o pipefail
 shopt -s nullglob
 
+if (( "${NIX_DEBUG:-0}" >= 7 )); then
+    set -x
+fi
+
 path_backup="$PATH"
 
 # phase separation makes this look useless
@@ -63,12 +67,22 @@ fi
 
 extraAfter+=($NIX_@infixSalt@_LDFLAGS_AFTER)
 
+# Three tasks:
+#
+#   1. Find all -L... switches for rpath
+#
+#   2. Find relocatable flag for build id.
+#
+#   3. Choose 32-bit dynamic linker if needed
 declare -a libDirs
 declare -A libs
-relocatable=
+declare -i relocatable=0 link32=0
 
-# Find all -L... switches for rpath, and relocatable flags for build id.
-if [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ] || [ "$NIX_@infixSalt@_SET_BUILD_ID" = 1 ]; then
+if
+    [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ] \
+        || [ "$NIX_@infixSalt@_SET_BUILD_ID" = 1 ] \
+        || [ -e @out@/nix-support/dynamic-linker-m32 ]
+then
     prev=
     # Old bash thinks empty arrays are undefined, ugh.
     for p in \
@@ -82,6 +96,13 @@ if [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ] || [ "$NIX_@infixSalt@_SET_BUILD_I
                 ;;
             -l)
                 libs["lib${p}.so"]=1
+                ;;
+            -m)
+                # Presumably only the last `-m` flag has any effect.
+                case "$p" in
+                    elf_i386) link32=1;;
+                    *)        link32=0;;
+                esac
                 ;;
             -dynamic-linker | -plugin)
                 # Ignore this argument, or it will match *.so and be added to rpath.
@@ -108,6 +129,14 @@ if [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ] || [ "$NIX_@infixSalt@_SET_BUILD_I
     done
 fi
 
+if [ -e "@out@/nix-support/dynamic-linker-m32" ] && (( "$link32" )); then
+    # We have an alternate 32-bit linker and we're producing a 32-bit ELF, let's
+    # use it.
+    extraAfter+=(
+        '-dynamic-linker'
+        "$(< @out@/nix-support/dynamic-linker-m32)"
+    )
+fi
 
 # Add all used dynamic libraries to the rpath.
 if [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ]; then
@@ -150,13 +179,13 @@ fi
 
 # Only add --build-id if this is a final link. FIXME: should build gcc
 # with --enable-linker-build-id instead?
-if [ "$NIX_@infixSalt@_SET_BUILD_ID" = 1 ] && [ ! "$relocatable" ]; then
+if [ "$NIX_@infixSalt@_SET_BUILD_ID" = 1 ] && ! (( "$relocatable" )); then
     extraAfter+=(--build-id)
 fi
 
 
 # Optionally print debug info.
-if [ -n "${NIX_DEBUG:-}" ]; then
+if (( "${NIX_DEBUG:-0}" >= 1 )); then
     # Old bash workaround, see above.
     echo "extra flags before to @prog@:" >&2
     printf "  %q\n" ${extraBefore+"${extraBefore[@]}"}  >&2

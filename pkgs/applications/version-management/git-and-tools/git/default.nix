@@ -145,6 +145,22 @@ stdenv.mkDerivation {
       # Also put git-http-backend into $PATH, so that we can use smart
       # HTTP(s) transports for pushing
       ln -s $out/libexec/git-core/git-http-backend $out/bin/git-http-backend
+
+      # wrap perl commands
+      gitperllib=$out/lib/perl5/site_perl
+      for i in ${builtins.toString perlLibs}; do
+        gitperllib=$gitperllib:$i/lib/perl5/site_perl
+      done
+      wrapProgram $out/libexec/git-core/git-cvsimport \
+                  --set GITPERLLIB "$gitperllib"
+      wrapProgram $out/libexec/git-core/git-add--interactive \
+                  --set GITPERLLIB "$gitperllib"
+      wrapProgram $out/libexec/git-core/git-archimport \
+                  --set GITPERLLIB "$gitperllib"
+      wrapProgram $out/libexec/git-core/git-instaweb \
+                  --set GITPERLLIB "$gitperllib"
+      wrapProgram $out/libexec/git-core/git-cvsexportcommit \
+                  --set GITPERLLIB "$gitperllib"
     ''
 
    + (if svnSupport then

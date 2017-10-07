@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1fll0xjg1p3pabgjiddild4ragk9spbdmdzrkq0hv5pxb1qrv7lp";
   };
 
-  buildInputs = [ libgcrypt pkgconfig glib linuxHeaders sqlite ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libgcrypt glib linuxHeaders sqlite ];
 
   makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
 

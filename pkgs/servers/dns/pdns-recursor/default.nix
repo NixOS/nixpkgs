@@ -18,8 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "0k8y9zxj2lz4rq782vgzr28yd43q0hwlnvszwq0k9l6c967pff13";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    boost openssl pkgconfig systemd
+    boost openssl systemd
   ] ++ optional enableLua [ lua luajit ]
     ++ optional enableProtoBuf protobuf;
 

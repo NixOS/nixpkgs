@@ -10,7 +10,8 @@ in stdenv.mkDerivation rec {
     sha256 = "ea0dd94429c0645f2f98824274ef04543fe459dd83a5449a68910acc3ba67f29";
   };
 
-  buildInputs = [ pkgconfig glib libcanberra_gtk2 gobjectIntrospection libtool ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib libcanberra_gtk2 gobjectIntrospection libtool ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/GSound;

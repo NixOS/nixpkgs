@@ -9,7 +9,8 @@ stdenv.mkDerivation {
     sha256 = "1hv1y9i66p473hfy36nqj220sfrxdmbd75c1gpjvpk8073vx55ac";
   };
 
-  buildInputs = [ lua pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ lua ];
 
   patches = [
     ./makefile-errors.patch
