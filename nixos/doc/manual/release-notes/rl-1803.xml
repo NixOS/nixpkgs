@@ -71,6 +71,7 @@ following incompatible changes:</para>
 <itemizedlist>
   <listitem>
     <para>
+      ZNC option <option>services.znc.mutable</option> now defaults to <literal>true</literal>.
     </para>
   </listitem>
 </itemizedlist>
