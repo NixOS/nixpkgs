@@ -1902,6 +1902,10 @@ with pkgs;
 
   epsxe = callPackage ../misc/emulators/epsxe { };
 
+  escrotum = callPackage ../tools/graphics/escrotum {
+    inherit (pythonPackages) buildPythonApplication pygtk numpy;
+  };
+
   ethtool = callPackage ../tools/misc/ethtool { };
 
   ettercap = callPackage ../applications/networking/sniffers/ettercap { };
