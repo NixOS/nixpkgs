@@ -1,35 +1,33 @@
-{ stdenv, fetchurl, config
-, cmake, pkgconfig
-, doxygen
-, qt
-, libXmu, mesa, openal, SDL2, freeglut
-}:
+{ stdenv, fetchurl, cmake, pkgconfig, qtbase, mesa
+, freeglut ? null, openal ? null, SDL2 ? null }:
 
 stdenv.mkDerivation rec {
-  name = "yabause-${meta.version}";
+  name = "yabause-${version}";
+  # 0.9.15 only works with OpenGL 3.2 or later:
+  # https://github.com/Yabause/yabause/issues/349
+  version = "0.9.14";
 
   src = fetchurl {
-    url = "http://download.tuxfamily.org/yabause/releases/${meta.version}/${name}.tar.gz";
+    url = "https://download.tuxfamily.org/yabause/releases/${version}/${name}.tar.gz";
     sha256 = "0nkpvnr599g0i2mf19sjvw5m0rrvixdgz2snav4qwvzgfc435rkm";
   };
 
-  patches = [ ./linkage-rwx-linux-elf.diff ];
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [ qtbase mesa freeglut openal SDL2 ];
 
-  buildInputs =
-  [ cmake pkgconfig doxygen qt libXmu mesa openal SDL2 freeglut ];
+  patches = [ ./emu-compatibility.com.patch ./linkage-rwx-linux-elf.patch ];
 
-  cmakeConfigureFlags = [    
-    "-DYAB_PORTS='qt'"
-    "-DYAB_OPTIMIZED_DMA='ON'"
-    "-DYAB_NETWORK='ON'" ] ;
+  cmakeFlags = [
+    "-DYAB_NETWORK=ON"
+    "-DYAB_OPTIMIZED_DMA=ON"
+    "-DYAB_PORTS=qt"
+  ] ;
 
   meta = with stdenv.lib; {
-    version = "0.9.14";
     description = "An open-source Sega Saturn emulator";
-    homepage = http://yabause.org/;
+    homepage = https://yabause.org/;
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.AndersonTorres ];
+    maintainers = with maintaines; [ AndersonTorres ];
     platforms = platforms.linux;
   };
 }
-# TODO: Qt5

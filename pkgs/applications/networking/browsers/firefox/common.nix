@@ -8,8 +8,7 @@
 , yasm, mesa, sqlite, unzip, makeWrapper
 , hunspell, libevent, libstartup_notification, libvpx
 , cairo, icu, libpng, jemalloc
-, autoconf213, which, gnused, cargo, rustc
-
+, autoconf213, which, gnused, cargo, rustc, llvmPackages
 , debugBuild ? false
 
 ### optionals
@@ -50,6 +49,7 @@ assert stdenv.cc ? libc && stdenv.cc.libc != null;
 
 let
   flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
+  gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
 in
 
 stdenv.mkDerivation (rec {
@@ -74,6 +74,8 @@ stdenv.mkDerivation (rec {
   ++ lib.optionals ffmpegSupport [ gstreamer gst-plugins-base ]
   ++ lib.optional  gtk3Support gtk3;
 
+  NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss";
+
   nativeBuildInputs =
     [ autoconf213 which gnused pkgconfig perl python cargo rustc ]
     ++ lib.optional gtk3Support wrapGAppsHook;
@@ -88,6 +90,12 @@ stdenv.mkDerivation (rec {
     make -f client.mk configure-files
 
     configureScript="$(realpath ./configure)"
+
+    cxxLib=$( echo -n ${gcc}/include/c++/* )
+    archLib=$cxxLib/$( ${gcc}/bin/gcc -dumpmachine )
+
+    test -f layout/style/ServoBindings.toml && sed -i -e '/"-DMOZ_STYLO"/ a , "-cxx-isystem", "'$cxxLib'", "-isystem", "'$archLib'"' layout/style/ServoBindings.toml
+
     cd obj-*
   '' + lib.optionalString googleAPISupport ''
     # Google API key used by Chromium and Firefox.
@@ -119,6 +127,10 @@ stdenv.mkDerivation (rec {
     "--disable-maintenance-service"
     "--disable-gconf"
     "--enable-default-toolkit=cairo-gtk${if gtk3Support then "3" else "2"}"
+  ]
+  ++ lib.optionals (stdenv.lib.versionAtLeast version "56") [
+    "--with-libclang-path=${llvmPackages.clang-unwrapped}/lib"
+    "--with-clang-path=${llvmPackages.clang}/bin/clang"
   ]
 
   # TorBrowser patches these

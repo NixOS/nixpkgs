@@ -2093,7 +2093,8 @@ in {
     buildInputs = [ pkgs.db ];
 
     # Judging from SyntaxError in test
-    disabled = isPy3k;
+#    disabled = isPy3k;
+    doCheck = false; # test suite breaks python3 compatibility
 
     # Path to database need to be set.
     # Somehow the setup.py flag is not propagated.
@@ -19829,21 +19830,7 @@ in {
     };
   };
 
-  spambayes = buildPythonPackage rec {
-    name = "spambayes-1.1b1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://sourceforge/spambayes/${name}.tar.gz";
-      sha256 = "0kqvjb89b02wp41p650ydfspi1s8d7akx1igcrw62diidqbxp04n";
-    };
-
-    propagatedBuildInputs = with self; [ bsddb3 pydns lockfile ];
-
-    meta = {
-      description = "Statistical anti-spam filter, initially based on the work of Paul Graham";
-      homepage = http://spambayes.sourceforge.net/;
-    };
-  };
+  spambayes = callPackage ../development/python-modules/spambayes { };
 
   shapely = callPackage ../development/python-modules/shapely { };
 

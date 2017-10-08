@@ -6701,7 +6701,7 @@ with pkgs;
   inherit (callPackage ../development/interpreters/ruby {})
     ruby_2_0_0
     ruby_2_1_10
-    ruby_2_2_7
+    ruby_2_2_8
     ruby_2_3_5
     ruby_2_4_2;
 
@@ -6709,7 +6709,7 @@ with pkgs;
   ruby = ruby_2_3;
   ruby_2_0 = ruby_2_0_0;
   ruby_2_1 = ruby_2_1_10;
-  ruby_2_2 = ruby_2_2_7;
+  ruby_2_2 = ruby_2_2_8;
   ruby_2_3 = ruby_2_3_5;
   ruby_2_4 = ruby_2_4_2;
 
@@ -8645,7 +8645,10 @@ with pkgs;
 
   hyena = callPackage ../development/libraries/hyena { };
 
-  icu = callPackage ../development/libraries/icu { };
+  icu58 = callPackage ../development/libraries/icu/58.nix { };
+  icu59 = callPackage ../development/libraries/icu/59.nix { };
+
+  icu = icu58;
 
   id3lib = callPackage ../development/libraries/id3lib { };
 
@@ -14572,6 +14575,7 @@ with pkgs;
       libpng = libpng_apng;
       python = python2;
       gnused = gnused_422;
+      icu = icu59;
     };
   });
 
@@ -14833,7 +14837,9 @@ with pkgs;
 
   gphoto2fs = callPackage ../applications/misc/gphoto2/gphotofs.nix { };
 
-  gramps = callPackage ../applications/misc/gramps { };
+  gramps = callPackage ../applications/misc/gramps { 
+        pythonPackages = python3Packages;
+  };
 
   graphicsmagick = callPackage ../applications/graphics/graphicsmagick { };
   graphicsmagick_q16 = callPackage ../applications/graphics/graphicsmagick { quantumdepth = 16; };
@@ -15236,7 +15242,7 @@ with pkgs;
 
   kiwix = callPackage ../applications/misc/kiwix { };
 
-  kmplayer = kde4.callPackage ../applications/video/kmplayer { };
+  kmplayer = libsForQt5.callPackage ../applications/video/kmplayer { };
 
   kodestudio = callPackage ../applications/editors/kodestudio { };
 
@@ -15251,6 +15257,8 @@ with pkgs;
   ksuperkey = callPackage ../tools/X11/ksuperkey { };
 
   ktorrent = libsForQt5.callPackage ../applications/networking/p2p/ktorrent { };
+
+  kubecfg = callPackage ../applications/networking/cluster/kubecfg { };
 
   kubernetes = callPackage ../applications/networking/cluster/kubernetes {  };
 
@@ -16185,6 +16193,8 @@ with pkgs;
 
   renoise = callPackage ../applications/audio/renoise {};
 
+  radiotray-ng = callPackage ../applications/audio/radiotray-ng { };
+
   rapcad = libsForQt56.callPackage ../applications/graphics/rapcad { boost = boost159; };
 
   rapidsvn = callPackage ../applications/version-management/rapidsvn { };
@@ -16376,7 +16386,7 @@ with pkgs;
   viber = callPackage ../applications/networking/instant-messengers/viber { };
 
   sonic-pi = callPackage ../applications/audio/sonic-pi {
-    ruby = ruby_2_2;
+    ruby = ruby_2_3;
   };
 
   st = callPackage ../applications/misc/st {
@@ -18986,8 +18996,6 @@ with pkgs;
 
   fceux = callPackage ../misc/emulators/fceux { };
 
-  flat-plat = callPackage ../misc/themes/flat-plat { };
-
   flockit = callPackage ../tools/backup/flockit { };
 
   foldingathome = callPackage ../misc/foldingathome { };
@@ -19069,6 +19077,9 @@ with pkgs;
   mailcore2 = callPackage ../development/libraries/mailcore2 { };
 
   martyr = callPackage ../development/libraries/martyr { };
+
+  # previously known as flat-plat
+  materia-theme = callPackage ../misc/themes/materia-theme { };
 
   mess = callPackage ../misc/emulators/mess {
     inherit (pkgs.gnome2) GConf;
@@ -19528,8 +19539,9 @@ with pkgs;
 
   xzoom = callPackage ../tools/X11/xzoom {};
 
-  yabause = callPackage ../misc/emulators/yabause {
-    qt = qt4;
+  yabause = libsForQt5.callPackage ../misc/emulators/yabause {
+    freeglut = null;
+    openal = null;
   };
 
   yadm = callPackage ../applications/version-management/yadm { };
@@ -19667,4 +19679,6 @@ with pkgs;
   };
 
   duti = callPackage ../os-specific/darwin/duti {};
+
+  dnstracer = callPackage ../tools/networking/dnstracer {};
 }

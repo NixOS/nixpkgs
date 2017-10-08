@@ -41,6 +41,7 @@
   amorsillo = "Andrew Morsillo <andrew.morsillo@gmail.com>";
   AndersonTorres = "Anderson Torres <torres.anderson.85@gmail.com>";
   anderspapitto = "Anders Papitto <anderspapitto@gmail.com>";
+  andir = "Andreas Rammhold <andreas@rammhold.de>";
   andres = "Andres Loeh <ksnixos@andres-loeh.de>";
   andrewrk = "Andrew Kelley <superjoe30@gmail.com>";
   andsild = "Anders Sildnes <andsild@gmail.com>";
