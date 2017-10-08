@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, pkgconfig, libdrm, pythonBindings ? null }:
+{ stdenv, fetchgit, cmake, pkgconfig, libdrm, python }:
 
 stdenv.mkDerivation rec {
   name = "kmsxx-2017-10-03";
@@ -12,10 +12,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  cmakeFlags = stdenv.lib.optionalString (pythonBindings == null) [ "-DKMSXX_ENABLE_PYTHON=OFF" ];
-
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ libdrm ] ++ stdenv.lib.optional (pythonBindings != null) pythonBindings;
+  buildInputs = [ libdrm python ];
+
+  pythonPath = [ ];
+  passthru.python = python;
 
   meta = with stdenv.lib; {
     description = "C++11 library, utilities and python bindings for Linux kernel mode setting";
