@@ -59,5 +59,7 @@ in {
     };
 
     services.keybase.enable = true;
+
+    environment.systemPackages = [ pkgs.kbfs ];
   };
 }
