@@ -29,26 +29,32 @@ in {
       minioAddress = mkOption {
         type = types.str;
         example = "https://10.0.0.1:9000";
+        default = if config.services.minio.enable then "http://localhost:9000" else null;
         description = ''
           The URL of the minio server.
           Use HTTPS if Minio accepts secure connections only.
+          By default this connects to the local minio server if enabled.
         '';
       };
 
       minioAccessKey = mkOption {
         type = types.str;
         example = "BKIKJAA5BMMU2RHO6IBB";
+        default = if config.services.minio.enable then config.services.minio.accessKey else null;
         description = ''
           The value of the Minio access key.
           It is required in order to connect to the server.
+          By default this uses the one from the local minio server if enabled.
         '';
       };
 
       minioAccessSecret = mkOption {
         type = types.str;
+        default = if config.services.minio.enable then config.services.minio.secretKey else null;
         description = ''
           The calue of the Minio access secret.
           It is required in order to connect to the server.
+          By default this uses the one from the local minio server if enabled.
         '';
       };
 
