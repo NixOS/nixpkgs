@@ -25,8 +25,6 @@ buildGoPackage rec {
     make install DESTDIR=$bin
     mkdir -p $bin/share/fish/vendor_conf.d
     echo "eval ($bin/bin/direnv hook fish)" > $bin/share/fish/vendor_conf.d/direnv.fish
-  '' + stdenv.lib.optionalString (stdenv.isDarwin) ''
-    install_name_tool -delete_rpath $out/lib $bin/bin/direnv
   '';
 
   meta = with stdenv.lib; {

@@ -16,10 +16,6 @@ buildGoPackage rec {
     sha256 = "1zgvriyir2ga0p4ah9ia1sbl9ydnrnw5ggq4c1ya8gcfgn8vzdsf";
   };
 
-  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
-    install_name_tool -delete_rpath $out/lib $bin/bin/keybase
-  '';
-
   buildFlags = [ "-tags production" ];
 
   meta = with stdenv.lib; {

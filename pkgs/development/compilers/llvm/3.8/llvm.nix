@@ -44,7 +44,11 @@ in stdenv.mkDerivation rec {
   # 10.9. This is a temporary measure until nixpkgs darwin support is
   # updated.
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
-        sed -i 's/os_trace(\(.*\)");$/printf(\1\\n");/g' ./projects/compiler-rt/lib/sanitizer_common/sanitizer_mac.cc
+    sed -i 's/os_trace(\(.*\)");$/printf(\1\\n");/g' ./projects/compiler-rt/lib/sanitizer_common/sanitizer_mac.cc
+
+    substituteInPlace CMakeLists.txt \
+      --replace 'set(CMAKE_INSTALL_NAME_DIR "@rpath")' "set(CMAKE_INSTALL_NAME_DIR "$out/lib")" \
+      --replace 'set(CMAKE_INSTALL_RPATH "@executable_path/../lib")' ""
   '';
 
   # hacky fix: created binaries need to be run before installation
@@ -75,7 +79,6 @@ in stdenv.mkDerivation rec {
   '';
 
   postInstall = stdenv.lib.optionalString (stdenv.isDarwin && enableSharedLibraries) ''
-    install_name_tool -id $out/lib/libLLVM.dylib $out/lib/libLLVM.dylib
     ln -s $out/lib/libLLVM.dylib $out/lib/libLLVM-${version}.dylib
   '';
 
