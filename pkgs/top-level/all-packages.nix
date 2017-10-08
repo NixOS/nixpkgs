@@ -16465,6 +16465,8 @@ with pkgs;
 
   sddm = libsForQt5.callPackage ../applications/display-managers/sddm { };
 
+  skim = callPackage ../applications/misc/skim { };
+
   skrooge = libsForQt5.callPackage ../applications/office/skrooge {};
 
   slim = callPackage ../applications/display-managers/slim {
