@@ -2593,6 +2593,8 @@ with pkgs;
 
   host = bind.host;
 
+  hotpatch = callPackage ../development/libraries/hotpatch { };
+
   hotspot = libsForQt56.callPackage ../development/tools/analysis/hotspot { };
 
   hping = callPackage ../tools/networking/hping { };
