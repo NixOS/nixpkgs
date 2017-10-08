@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     description = "A hierarchical command-line task manager";
     license = licenses.gpl2;
     maintainers = [ maintainers.woffs ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }
