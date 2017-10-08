@@ -1,11 +1,11 @@
 { fetchurl, stdenv, pkgconfig, ncurses, boehmgc, perl, help2man }:
 
 stdenv.mkDerivation rec {
-  name = "zile-2.4.13";
+  name = "zile-2.4.14";
 
   src = fetchurl {
     url = "mirror://gnu/zile/${name}.tar.gz";
-    sha256 = "03mcg0bxkzprlsx8y6h22w924pzx4a9zr7zm3g11j8j3x9lz75f7";
+    sha256 = "0x3byaddms8l3g7igx6njycqsq98wgapysdb5c7lhcnajlkp8y3s";
   };
 
   nativeBuildInputs = [ pkgconfig perl ]
