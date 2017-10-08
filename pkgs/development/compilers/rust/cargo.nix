@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, file, curl, pkgconfig, python, openssl, cmake, zlib
+{ stdenv, fetchFromGitHub, file, curl, pkgconfig, python, openssl, cmake, zlib
 , makeWrapper, libiconv, cacert, rustPlatform, rustc, libgit2
 , version, srcSha, depsSha256
 , patches ? []}:
@@ -7,9 +7,10 @@ rustPlatform.buildRustPackage rec {
   name = "cargo-${version}";
   inherit version;
 
-  src = fetchgit {
-    url = "https://github.com/rust-lang/cargo";
-    rev = version;
+  src = fetchFromGitHub {
+    owner  = "rust-lang";
+    repo   = "cargo";
+    rev    = version;
     sha256 = srcSha;
   };
 
