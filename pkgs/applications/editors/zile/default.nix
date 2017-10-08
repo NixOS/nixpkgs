@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0x3byaddms8l3g7igx6njycqsq98wgapysdb5c7lhcnajlkp8y3s";
   };
 
-  buildInputs = [ pkgconfig ncurses boehmgc ];
-  nativeBuildInputs = [ perl ]
+  buildInputs = [ ncurses boehmgc ];
+  nativeBuildInputs = [ perl pkgconfig ]
     # `help2man' wants to run Zile, which won't work when the
     # newly-produced binary can't be run at build-time.
     ++ stdenv.lib.optional
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   # XXX: Work around cross-compilation-unfriendly `gl_FUNC_FSTATAT' macro.
-  preConfigure = "export gl_cv_func_fstatat_zero_flag=yes";
+  gl_cv_func_fstatat_zero_flag="yes";
 
   meta = with stdenv.lib; {
     description = "Lightweight Emacs clone";
