@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoreconfHook, perl, zlib, gnutls, gss, openssl
-, libssh2, libidn, libpsl, openldap }:
+, libidn }:
 
 stdenv.mkDerivation rec {
   version = "7.54.1";
@@ -12,20 +12,20 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ perl gnutls gss openssl zlib libidn libssh2 libpsl openldap ];
+  buildInputs = [ perl gnutls gss openssl zlib libidn ];
 
   preConfigure = ''
     sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
   '';
 
   configureFlags = [
-    "--with-zlib"
-    "--with-gssapi"
-    "--with-libssh2"
-    "--with-libidn"
-    "--with-libpsl"
-    "--enable-ldap"
-    "--enable-ldaps"
+    "--enable-ipv6" "--with-gnutls" "--without-libmetalink" "--without-winidn"
+    "--without-librtmp" "--without-nghttp2" "--without-nss" "--without-cyassl"
+    "--without-polarssl" "--without-ssl" "--without-winssl"
+    "--without-darwinssl" "--disable-sspi" "--disable-ntlm-wb" "--disable-ldap"
+    "--disable-rtsp" "--disable-dict" "--disable-telnet" "--disable-tftp"
+    "--disable-pop3" "--disable-imap" "--disable-smtp" "--disable-gopher"
+    "--disable-file" "--disable-ftp" "--disable-smb"
   ];
 
   meta = with stdenv.lib; {
