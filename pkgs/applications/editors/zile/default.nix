@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
          (stdenv.hostPlatform == stdenv.buildPlatform)
          help2man;
 
-  buildInputs = [ ncurses boehmgc ];
-
   # Tests can't be run because most of them rely on the ability to
   # fiddle with the terminal.
   doCheck = false;
