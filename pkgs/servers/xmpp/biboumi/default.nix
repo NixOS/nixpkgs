@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, cmake, libuuid, expat, sqlite, libidn,
-  libiconv, botan2, systemd, pkgconfig, udns, pandoc } :
+  libiconv, botan2, systemd, pkgconfig, udns, pandoc, procps } :
 
 stdenv.mkDerivation rec {
   name = "biboumi-${version}";
@@ -20,14 +20,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig pandoc ];
   buildInputs = [ libuuid expat sqlite libiconv libidn botan2 systemd
-    udns ];
+    udns procps ];
 
+  inherit procps;
   preConfigure = ''
-    grep -lr /etc/biboumi . | while read f
-    do
-      substituteInPlace $f --replace /etc/biboumi $out/etc/biboumi
-    done
+    substituteInPlace CMakeLists.txt --replace /etc/biboumi $out/etc/biboumi
+    substituteInPlace unit/biboumi.service.cmake --replace /bin/kill $procps/bin/kill
     cp $louiz_catch/single_include/catch.hpp tests/
+    # echo "policy_directory=$out/etc/biboumi" >> conf/biboumi.cfg
+    # TODO include conf/biboumi.cfg as example somewhere
   '';
 
   enableParallelBuilding = true;
