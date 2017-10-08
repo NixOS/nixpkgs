@@ -37,26 +37,30 @@ in {
         '';
       };
 
-      minioAccessKey = mkOption {
+      minioAccessKey = mkOption ({
         type = types.str;
         example = "BKIKJAA5BMMU2RHO6IBB";
-        default = if config.services.minio.enable then config.services.minio.accessKey else null;
         description = ''
           The value of the Minio access key.
           It is required in order to connect to the server.
-          By default this uses the one from the local minio server if enabled.
+          By default this uses the one from the local minio server if enabled
+          and <literal>config.services.minio.accessKey</literal>.
         '';
-      };
+      } // optionalAttrs (config.services.minio.enable && config.services.minio.accessKey != "") {
+        default = config.services.minio.accessKey;
+      });
 
-      minioAccessSecret = mkOption {
+      minioAccessSecret = mkOption ({
         type = types.str;
-        default = if config.services.minio.enable then config.services.minio.secretKey else null;
         description = ''
           The calue of the Minio access secret.
           It is required in order to connect to the server.
-          By default this uses the one from the local minio server if enabled.
+          By default this uses the one from the local minio server if enabled
+          and <literal>config.services.minio.secretKey</literal>.
         '';
-      };
+      } // optionalAttrs (config.services.minio.enable && config.services.minio.secretKey != "") {
+        default = config.services.minio.secretKey;
+      });
 
       minioBucketStats = mkOption {
         type = types.bool;
