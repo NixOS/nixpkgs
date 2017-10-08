@@ -2228,6 +2228,8 @@ with pkgs;
 
   git-up = callPackage ../applications/version-management/git-up { };
 
+  gitea = callPackage ../applications/version-management/gitea { };
+
   gitfs = callPackage ../tools/filesystems/gitfs { };
 
   gitinspector = callPackage ../applications/version-management/gitinspector { };
