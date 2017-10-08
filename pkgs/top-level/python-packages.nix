@@ -17594,6 +17594,8 @@ in {
     };
   };
 
+  pypcap = callPackage ../development/python-modules/pypcap {};
+
   pyplatec = buildPythonPackage rec {
     name = "PyPlatec-${version}";
     version = "1.4.0";
