@@ -31,14 +31,6 @@ buildGoPackage rec {
       -X github.com/dgraph-io/dgraph/cmd/dgraph/main.uiDir=$dashboard/src/assets/"
   '';
 
-  preFixup = stdenv.lib.optionalString stdenv.isDarwin ''
-    # Somehow on Darwin, $out/lib (which doesn't exist) ends up in RPATH.
-    # Removing it fixes cycle between $out and $bin
-    install_name_tool -delete_rpath $out/lib $bin/bin/dgraph
-    install_name_tool -delete_rpath $out/lib $bin/bin/dgraphloader
-    install_name_tool -delete_rpath $out/lib $bin/bin/bulkloader
-  '';
- 
   meta = {
     homepage = "https://dgraph.io/";
     description = "Fast, Distributed Graph DB";

@@ -9,9 +9,7 @@ buildGoPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  postInstall = stdenv.lib.optionalString (stdenv.isDarwin) ''
-    install_name_tool -delete_rpath $out/lib $bin/bin/assh
-  '' + ''
+  postInstall = ''
     wrapProgram "$bin/bin/assh" \
       --prefix PATH : ${openssh}/bin
   '';

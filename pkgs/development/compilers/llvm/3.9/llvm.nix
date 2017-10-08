@@ -82,6 +82,10 @@ in stdenv.mkDerivation rec {
   + stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace ./projects/compiler-rt/cmake/config-ix.cmake \
       --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
+
+    substituteInPlace CMakeLists.txt \
+      --replace 'set(CMAKE_INSTALL_NAME_DIR "@rpath")' "set(CMAKE_INSTALL_NAME_DIR "$lib/lib")" \
+      --replace 'set(CMAKE_INSTALL_RPATH "@executable_path/../lib")' ""
   ''
   # Patch llvm-config to return correct library path based on --link-{shared,static}.
   + stdenv.lib.optionalString (enableSharedLibraries) ''
@@ -130,8 +134,6 @@ in stdenv.mkDerivation rec {
   + stdenv.lib.optionalString (stdenv.isDarwin && enableSharedLibraries) ''
     substituteInPlace "$out/lib/cmake/llvm/LLVMExports-release.cmake" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLLVM.dylib" "$lib/lib/libLLVM.dylib"
-    install_name_tool -id $lib/lib/libLLVM.dylib $lib/lib/libLLVM.dylib
-    install_name_tool -change @rpath/libLLVM.dylib $lib/lib/libLLVM.dylib $out/bin/llvm-config
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${version}.dylib
   '';
