@@ -137,10 +137,7 @@ in
       after = [ "local-fs.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      # FIXME use specific path
-      environment = {
-        PATH = "/run/current-system/sw/bin";
-      };
+      path = [ pkgs.fcron ];
 
       preStart = ''
         install \
