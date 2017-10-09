@@ -124,9 +124,6 @@ let
       ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional pulseSupport libpulseaudio;
 
-    # NSS header layout change
-    NIX_CFLAGS_COMPILE = ["-I${nss.dev}/include/nss"];
-
     patches = [
       ./patches/nix_plugin_paths_52.patch
       # To enable ChromeCast, go to chrome://flags and set "Load Media Router Component Extension" to Enabled
