@@ -11339,7 +11339,8 @@ with pkgs;
   elasticmq = callPackage ../servers/elasticmq { };
 
   eventstore = callPackage ../servers/nosql/eventstore {
-    v8 = v8_3_24_10;
+    mono = mono46;
+    v8 = v8_6_x;
   };
 
   etcdctl = etcd;
