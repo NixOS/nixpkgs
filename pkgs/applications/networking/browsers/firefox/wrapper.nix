@@ -116,13 +116,13 @@ let
             --prefix-contents PATH ':' "$(filterExisting $(addSuffix /extra-bin-path $plugins))" \
             --suffix PATH ':' "$out/bin" \
             --set MOZ_APP_LAUNCHER "${browserName}${nameSuffix}" \
-            --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
-            ${lib.optionalString (!ffmpegSupport)
-                ''--prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"''
-            + lib.optionalString (browser ? gtk3)
-                ''--prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-                  --suffix XDG_DATA_DIRS : '${gnome3.defaultIconTheme}/share'
-                ''
+            --set MOZ_SYSTEM_DIR "$out/lib/mozilla"${
+              lib.optionalString (!ffmpegSupport) '' \
+              --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"''
+            }${
+              lib.optionalString (browser ? gtk3) '' \
+                --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
+                --suffix XDG_DATA_DIRS : "${gnome3.defaultIconTheme}/share"''
             }
 
         if [ -e "${browser}/share/icons" ]; then
