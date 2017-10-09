@@ -47,6 +47,8 @@ let
 
     buildInputs = [ libmnl ];
 
+    enableParallelBuilding = true;
+
     makeFlags = [
       "WITH_BASHCOMPLETION=yes"
       "WITH_WGQUICK=yes"
@@ -57,6 +59,11 @@ let
     ];
 
     buildPhase = "make tools";
+
+    postInstall = ''
+      substituteInPlace $out/lib/systemd/system/wg-quick@.service \
+        --replace /usr/bin $out/bin
+    '';
   };
 
 in if kernel == null

@@ -27,6 +27,7 @@ stdenv.mkDerivation rec {
 
   # otherwise libxmlsec1-gnutls.so won't find libgcrypt.so, after #909
   NIX_LDFLAGS = [ "-lgcrypt" ];
+  NIX_CFLAGS_COMPILE = [ "-I${nss.dev}/include/nss" ];
 
   postInstall = ''
     moveToOutput "bin/xmlsec1-config" "$dev"

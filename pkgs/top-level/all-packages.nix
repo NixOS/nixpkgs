@@ -1902,6 +1902,10 @@ with pkgs;
 
   epsxe = callPackage ../misc/emulators/epsxe { };
 
+  escrotum = callPackage ../tools/graphics/escrotum {
+    inherit (pythonPackages) buildPythonApplication pygtk numpy;
+  };
+
   ethtool = callPackage ../tools/misc/ethtool { };
 
   ettercap = callPackage ../applications/networking/sniffers/ettercap { };
@@ -2593,6 +2597,8 @@ with pkgs;
   horst = callPackage ../tools/networking/horst { };
 
   host = bind.host;
+
+  hotpatch = callPackage ../development/libraries/hotpatch { };
 
   hotspot = libsForQt56.callPackage ../development/tools/analysis/hotspot { };
 
@@ -11790,6 +11796,7 @@ with pkgs;
   prometheus-haproxy-exporter = callPackage ../servers/monitoring/prometheus/haproxy-exporter.nix { };
   prometheus-json-exporter = callPackage ../servers/monitoring/prometheus/json-exporter.nix { };
   prometheus-mesos-exporter = callPackage ../servers/monitoring/prometheus/mesos-exporter.nix { };
+  prometheus-minio-exporter = callPackage ../servers/monitoring/prometheus/minio-exporter { };
   prometheus-mysqld-exporter = callPackage ../servers/monitoring/prometheus/mysqld-exporter.nix { };
   prometheus-nginx-exporter = callPackage ../servers/monitoring/prometheus/nginx-exporter.nix { };
   prometheus-node-exporter = callPackage ../servers/monitoring/prometheus/node-exporter.nix { };

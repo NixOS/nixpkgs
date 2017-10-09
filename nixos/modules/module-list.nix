@@ -375,6 +375,7 @@
   ./services/monitoring/prometheus/collectd-exporter.nix
   ./services/monitoring/prometheus/fritzbox-exporter.nix
   ./services/monitoring/prometheus/json-exporter.nix
+  ./services/monitoring/prometheus/minio-exporter.nix
   ./services/monitoring/prometheus/nginx-exporter.nix
   ./services/monitoring/prometheus/node-exporter.nix
   ./services/monitoring/prometheus/snmp-exporter.nix

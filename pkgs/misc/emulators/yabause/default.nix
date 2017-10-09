@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "An open-source Sega Saturn emulator";
     homepage = https://yabause.org/;
     license = licenses.gpl2Plus;
-    maintainers = with maintaines; [ AndersonTorres ];
+    maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux;
   };
 }

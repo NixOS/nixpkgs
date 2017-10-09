@@ -26,5 +26,6 @@ python3Packages.buildPythonApplication rec {
     homepage = https://github.com/garabik/unicode;
     license = licenses.gpl3;
     maintainers = [ maintainers.woffs ];
+    platforms = platforms.all;
   };
 }
