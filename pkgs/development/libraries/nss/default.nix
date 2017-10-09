@@ -68,7 +68,7 @@ in stdenv.mkDerivation rec {
     sed -e "s,%prefix%,$PREFIX," \
         -e "s,%exec_prefix%,$PREFIX," \
         -e "s,%libdir%,$PREFIX/lib64," \
-        -e "s,%includedir%,$PREFIX/include/nss," \
+        -e "s,%includedir%,$dev/include/nss," \
         -e "s,%NSS_VERSION%,$NSS_MAJOR_VERSION.$NSS_MINOR_VERSION.$NSS_PATCH_VERSION,g" \
         -e "s,%NSPR_VERSION%,4.16,g" \
         pkg/pkg-config/nss.pc.in > $out/lib/pkgconfig/nss.pc
