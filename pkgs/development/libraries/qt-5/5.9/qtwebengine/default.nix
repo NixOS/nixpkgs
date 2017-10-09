@@ -101,9 +101,6 @@ qtSubmodule {
   ];
   patches = optional stdenv.needsPax ./qtwebengine-paxmark-mksnapshot.patch;
 
-  # NSS header layout change
-  NIX_CFLAGS_COMPILE = [ "-I${nss.dev}/include/nss" ];
-
   dontUseNinjaBuild = true;
   dontUseNinjaInstall = true;
 
