@@ -151,6 +151,8 @@ let
         EXPAT_INC="-I${expat.dev}/include");
     '';
 
+    disabled = isLuaJIT;
+
     meta = {
       homepage = "http://matthewwild.co.uk/projects/luaexpat";
       platforms = stdenv.lib.platforms.unix;
@@ -333,7 +335,7 @@ let
     buildInputs = [ unzip zziplib ];
     patches = [ ../development/lua-modules/zip.patch ];
     # does not currently work under lua 5.2
-    disabled = isLua52;
+    disabled = isLua52 || isLuaJIT;
     meta = {
       homepage = "https://github.com/luaforge/luazip";
       platforms = stdenv.lib.platforms.linux;
@@ -484,6 +486,7 @@ let
       rm -rf $out/share/lua/${lua.luaversion}/cjson/tests
     '';
     installTargets = "install install-extra";
+    disabled = isLuaJIT;
     meta = {
       description = "Lua C extension module for JSON support";
       license = stdenv.lib.licenses.mit;
