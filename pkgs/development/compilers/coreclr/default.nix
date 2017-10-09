@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     runHook preBuild
-    ./build.sh $BuildArch Release
+    ./build.sh $BuildArch $BuildType
     runHook postBuild
   '';
 
