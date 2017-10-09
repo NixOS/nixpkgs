@@ -14,6 +14,7 @@
 let
   isLua51 = lua.luaversion == "5.1";
   isLua52 = lua.luaversion == "5.2";
+  isLuaJIT = (builtins.parseDrvName lua.name).name == "luajit";
 
   platformString =
     if stdenv.isDarwin then "macosx"
@@ -534,13 +535,13 @@ let
       "LUA_VERSION_MAJ_MIN="
       "LUA_CMOD_INSTALLDIR=$$out/lib/lua/${lua.luaversion}"
     ];
+    # gcc -llua fails with luajit.
+    disabled = isLuaJIT;
     meta = {
       description = "Simple implementation of msgpack in C Lua 5.1";
       homepage = "https://github.com/tarruda/libmpack";
       platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
       license = stdenv.lib.licenses.mit;
-      # gcc -llua fails with luajit
-      broken = (builtins.parseDrvName lua.name).name != "lua";
     };
   };
 
