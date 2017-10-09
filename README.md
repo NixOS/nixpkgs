@@ -30,7 +30,7 @@ For pull-requests, please rebase onto nixpkgs `master`.
 * [Documentation (Nix Expression Language chapter)](https://nixos.org/nix/manual/#ch-expression-language)
 * [Manual (How to write packages for Nix)](https://nixos.org/nixpkgs/manual/)
 * [Manual (NixOS)](https://nixos.org/nixos/manual/)
-* [NixOS User Wiki](https://nixos.wiki/)
+* [Community maintained wiki](https://nixos.wiki/)
 * [Continuous package builds for unstable/master](https://hydra.nixos.org/jobset/nixos/trunk-combined)
 * [Continuous package builds for 17.09 release](https://hydra.nixos.org/jobset/nixos/release-17.09)
 * [Tests for unstable/master](https://hydra.nixos.org/job/nixos/trunk-combined/tested#tabs-constituents)
