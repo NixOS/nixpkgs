@@ -10,11 +10,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
+
   propagatedBuildInputs = [ nss nspr ];
 
   configureFlags = [ "--enable-nss" ];
-
-  NIX_CFLAGS_COMPILE = [ "-I${nss.dev}/include/nss" ];
 
   postInstall = ''
     substituteInPlace $out/lib/liboauth.la \
@@ -27,4 +26,5 @@ stdenv.mkDerivation rec {
     homepage = http://liboauth.sourceforge.net/;
     repositories.git = https://github.com/x42/liboauth.git;
   };
+
 }
