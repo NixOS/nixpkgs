@@ -10721,11 +10721,6 @@ with pkgs;
     stdenv = overrideCC stdenv gcc5;
   };
 
-  v8_3_24_10 = callPackage ../development/libraries/v8/3.24.10.nix {
-    inherit (python2Packages) python gyp;
-    stdenv = overrideCC stdenv gcc5;
-  };
-
   v8_6_x = callPackage ../development/libraries/v8/6_x.nix {
     inherit (python2Packages) python;
   };
