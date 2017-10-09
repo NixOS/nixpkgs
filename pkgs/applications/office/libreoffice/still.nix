@@ -65,7 +65,9 @@ in stdenv.mkDerivation rec {
 
   # For some reason librdf_redland sometimes refers to rasqal.h instead 
   # of rasqal/rasqal.h
-  NIX_CFLAGS_COMPILE="-I${librdf_rasqal}/include/rasqal";
+  # NSS update changed header layout
+  NIX_CFLAGS_COMPILE = [ "-I${librdf_rasqal}/include/rasqal"
+    "-I${nss.dev}/include/nss"];
 
   # If we call 'configure', 'make' will then call configure again without parameters.
   # It's their system.
