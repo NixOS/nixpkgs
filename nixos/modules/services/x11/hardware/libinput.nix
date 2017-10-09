@@ -75,12 +75,13 @@ in {
         default = null;
         description =
           ''
-            Enables a click method. Permitted values are none, buttonareas, clickfinger.
+            Enables a click method. Permitted values are <literal>none</literal>,
+            <literal>buttonareas</literal>, <literal>clickfinger</literal>.
             Not all devices support all methods, if an option is unsupported,
-            the default click method for this device is used. 
+            the default click method for this device is used.
           '';
       };
-      
+
       leftHanded = mkOption {
         type = types.bool;
         default = false;
@@ -96,7 +97,7 @@ in {
             simultaneously produces a middle mouse button click.
           '';
       };
-      
+
       naturalScrolling = mkOption {
         type = types.bool;
         default = false;
@@ -120,7 +121,8 @@ in {
         example = "edge";
         description =
           ''
-            Specify the scrolling method.
+            Specify the scrolling method: <literal>twofinger</literal>, <literal>edge</literal>,
+            or <literal>none</literal>
           '';
       };
 
@@ -141,7 +143,8 @@ in {
         example = "disabled";
         description =
           ''
-            Sets the send events mode to disabled, enabled, or "disable when an external mouse is connected".
+            Sets the send events mode to <literal>disabled</literal>, <literal>enabled</literal>,
+            or <literal>disabled-on-external-mouse</literal>
           '';
       };
 
