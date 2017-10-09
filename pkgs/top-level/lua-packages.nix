@@ -86,6 +86,9 @@ let
 
     propagatedBuildInputs = [ lua ];
 
+    # No Makefile.
+    dontBuild = true;
+
     installPhase = ''
       ${lua}/bin/lua install.lua $out
       '';
