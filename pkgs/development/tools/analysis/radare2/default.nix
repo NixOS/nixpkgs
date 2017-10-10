@@ -34,10 +34,6 @@ stdenv.mkDerivation rec {
     substituteInPlace shlr/Makefile --replace CS_RELEASE=0 CS_RELEASE=1
     cp ${capstone} shlr/capstone-${cs_ver}.tar.gz
 
-    # make compiler happy (fixed in upstream 2017-08-11)
-    substituteInPlace libr/asm/arch/hexagon/gnu/hexagon-dis.c --replace \
-      '(*info->fprintf_func) (info->stream, errmsg);' \
-      '(*info->fprintf_func) (info->stream, "%s", errmsg);'
   '';
 
   buildInputs = [pkgconfig readline libusb libewf perl zlib openssl]
