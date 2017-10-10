@@ -7,7 +7,7 @@
 , glib, gtk3, pango, gdk_pixbuf, cairo, atk, gnome3
 , nss, nspr
 , patchelf, makeWrapper
-, proprietaryCodecs ? true, vivaldi-ffmpeg-codecs ? null
+, proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
 }:
 
 stdenv.mkDerivation rec {
