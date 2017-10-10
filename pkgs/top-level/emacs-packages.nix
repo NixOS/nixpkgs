@@ -94,7 +94,7 @@ let
       rev = "v${version}";
       sha256 = "19sy49r3ijh36m7hl4vspw5c4i8pnfqdn4ldm2sqchxigkw56ayl";
     };
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ external.pkgconfig ];
     buildInputs = with external; [ autoconf automake libpng zlib poppler ];
     preBuild = "make server/epdfinfo";
     fileSpecs = [ "lisp/pdf-*.el" "server/epdfinfo" ];
