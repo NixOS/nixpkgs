@@ -13,8 +13,8 @@ stdenv.mkDerivation {
     sha256 = "1zvadgsskmpm82id9mbj24a2lyq38qv768ixv7nmfjl3d4wr2biv";
   };
 
-  nativeBuildInputs = [ bison binutils gettext pkgconfig ];
-  buildInputs = [ glib gnutls gtk2 libxml2 zlib ];
+  nativeBuildInputs = [ bison gettext pkgconfig ];
+  buildInputs = [ binutils glib gnutls gtk2 libxml2 zlib ];
 
   hardeningDisable = [ "bindnow" "fortify" "pic" "relro" ];
 
