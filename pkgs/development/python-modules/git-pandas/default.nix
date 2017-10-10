@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "git-pandas";
-  version = "1.2.0+git20170723";
+  version = "1.2.0+git20171010";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
-    owner = "wdm0006";
+    owner = "mayflower";
     repo = "git-pandas";
-    rev = "4ba60a3878520afa86184dce825f5ed3fe07b5f7";
+    rev = "5cb0a49f83e013b780703273a770f36019f7edb9";
     sha256 = "1ggp4zlrbmi13wi6mdx5cs15mlgjiv53qpp34h8vngzzbvsylxp0";
   };
 
