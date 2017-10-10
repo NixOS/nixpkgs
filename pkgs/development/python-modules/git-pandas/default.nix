@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "mayflower";
     repo = "git-pandas";
     rev = "5cb0a49f83e013b780703273a770f36019f7edb9";
-    sha256 = "1ggp4zlrbmi13wi6mdx5cs15mlgjiv53qpp34h8vngzzbvsylxp0";
+    sha256 = "071pgy79ikfwqzvazp8zv4ikaap7phrasfn13wi6lz6rcbp2c0z8";
   };
 
   propagatedBuildInputs = [ pandas GitPython requests redis ];
