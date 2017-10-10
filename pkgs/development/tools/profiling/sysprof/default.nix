@@ -1,5 +1,7 @@
-{ fetchurl, stdenv, binutils
-, pkgconfig, gtk2, glib, pango, libglade }:
+{ stdenv
+, fetchurl, pkgconfig
+, gtk2, glib, pango, libglade
+}:
 
 stdenv.mkDerivation rec {
   name = "sysprof-1.2.0";
@@ -10,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ binutils gtk2 glib pango libglade ];
+  buildInputs = [ gtk2 glib pango libglade ];
 
   meta = {
     homepage = http://sysprof.com/;
