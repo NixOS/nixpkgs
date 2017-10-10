@@ -102,28 +102,16 @@ in
     environment.etc."fish/foreign-env/shellInit".text = cfge.shellInit;
     environment.etc."fish/foreign-env/loginShellInit".text = cfge.loginShellInit;
     environment.etc."fish/foreign-env/interactiveShellInit".text = cfge.interactiveShellInit;
-
-    environment.etc."fish/nixos-env-preinit.fish".text = ''
-      # This happens before $__fish_datadir/config.fish sets fish_function_path, so it is currently
-      # unset. We set it and then completely erase it, leaving its configuration to $__fish_datadir/config.fish
-      set fish_function_path ${pkgs.fish-foreign-env}/share/fish-foreign-env/functions $__fish_datadir/functions
-
-      # source the NixOS environment config
-      if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]
-          fenv source ${config.system.build.setEnvironment}
-      end
-
-      # clear fish_function_path so that it will be correctly set when we return to $__fish_datadir/config.fish
-      set -e fish_function_path
-    '';
-
     environment.etc."fish/config.fish".text = ''
       # /etc/fish/config.fish: DO NOT EDIT -- this file has been generated automatically.
 
       # if we haven't sourced the general config, do it
       if not set -q __fish_nixos_general_config_sourced
         set fish_function_path ${pkgs.fish-foreign-env}/share/fish-foreign-env/functions $fish_function_path
-        fenv source /etc/fish/foreign-env/shellInit > /dev/null
+        # source the NixOS environment config
+        if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]
+            fenv source ${config.system.build.setEnvironment}
+        end
         set -e fish_function_path[1]
 
         ${cfg.shellInit}

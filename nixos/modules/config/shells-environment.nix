@@ -165,6 +165,12 @@ in
 
     # For resetting environment with `. /etc/set-environment` when needed
     # and discoverability (see motivation of #30418).
+    #
+    # The set-environment.sh script is also exposed here for use by shells in
+    # loading the essential Nix environment variables. It is loaded automatically
+    # by Nixpkgs' fish package, but it can by used by other shells in and
+    # outside of Nixpkgs. This is meant to be a path which can be used in common
+
     environment.etc."set-environment".source = config.system.build.setEnvironment;
 
     system.build.setEnvironment = pkgs.writeText "set-environment"
@@ -181,6 +187,9 @@ in
         # ~/bin if it exists overrides other bin directories.
         export PATH="$HOME/bin:$PATH"
       '';
+
+   # among different Nix module systems, for example NixOS and nix-darwin.
+    environment.etc."nix/support/set-environment.sh".source = "${system.build.setEnvironment}";
 
     system.activationScripts.binsh = stringAfter [ "stdio" ]
       ''
