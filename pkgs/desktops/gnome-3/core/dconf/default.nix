@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, vala_0_32, libxslt, pkgconfig, glib, dbus_glib, gnome3
+{ stdenv, fetchurl, vala, libxslt, pkgconfig, glib, dbus_glib, gnome3
 , libxml2, intltool, docbook_xsl_ns, docbook_xsl, makeWrapper }:
 
 let
@@ -15,9 +15,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ vala_0_32 libxslt glib dbus_glib gnome3.gtk libxml2
-                  intltool docbook_xsl docbook_xsl_ns makeWrapper ];
+  nativeBuildInputs = [ vala pkgconfig intltool libxslt libxml2 docbook_xsl docbook_xsl_ns makeWrapper ];
+  buildInputs = [ glib dbus_glib ];
 
   postConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace client/Makefile \
