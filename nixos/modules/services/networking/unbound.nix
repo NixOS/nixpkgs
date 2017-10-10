@@ -105,7 +105,7 @@ in
       description = "Unbound recursive Domain Name Server";
       after = [ "network.target" ];
       before = [ "nss-lookup.target" ];
-      wants = [" nss-lookup.target" ];
+      wants = [ "nss-lookup.target" ];
       wantedBy = [ "multi-user.target" ];
 
       preStart = ''
