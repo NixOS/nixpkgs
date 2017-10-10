@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
    at_spi2_core dbus gnome3.gnome_online_accounts libgpgerror
   ];
 
-  propagatedUserEnvPkgs = [ duplicity ];
+  propagatedUserEnvPkgs = [ duplicity gnome3.dconf ];
 
   postInstall = ''
     glib-compile-schemas $out/share/glib-2.0/schemas
