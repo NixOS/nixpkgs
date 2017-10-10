@@ -5897,6 +5897,8 @@ in {
 
   };
 
+  git-pandas = callPackage ../development/python-modules/git-pandas { };
+
   GitPython = buildPythonPackage rec {
     version = "2.0.8";
     name = "GitPython-${version}";
