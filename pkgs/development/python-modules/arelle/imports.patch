@@ -1,0 +1,14 @@
+diff --git c/arelle/CntlrProfiler.py i/arelle/CntlrProfiler.py
+index a64bb1b..dc0299d 100644
+--- c/arelle/CntlrProfiler.py
++++ i/arelle/CntlrProfiler.py
+@@ -1,5 +1,6 @@
+ 
+-import Cntlr, ModelManager, FileSource, time
++from arelle import Cntlr, ModelManager, FileSource
++import time
+ from optparse import OptionParser
+ import cProfile
+ import gettext
+diff --git a/arelle/UITkTable.py b/arelle/UITkTable.py
+index 6d4597b..c2cf325 100644

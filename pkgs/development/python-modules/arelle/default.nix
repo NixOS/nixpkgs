@@ -1,32 +1,32 @@
 { gui ? true,
   buildPythonPackage, fetchFromGitHub, lib,
   sphinx_1_2, lxml, isodate, numpy, pytest,
-  tkinter ? null, py3to2, isPy3k,
+  tkinter ? null, isPy34,
   ... }:
 
 buildPythonPackage rec {
   name = "arelle-${version}${lib.optionalString (!gui) "-headless"}";
-  version = "2017-08-24";
+  version = "2017-10-07";
 
-  disabled = !isPy3k;
+  # Import semantics have changed in python 3.5. Upstream uses python 3.4.
+  disabled = !isPy34;
 
   # Releases are published at http://arelle.org/download/ but sadly no
   # tags are published on github.
   src = fetchFromGitHub {
     owner = "Arelle";
     repo = "Arelle";
-    rev = "cb24e35d57b562a864ae3dd4542c4d9fcf3865fe";
-    sha256 = "1sbvhb3xlfnyvf1xj9dxwpcrfiaf7ikkdwvvap7aaxfxgiz85ip2";
+    rev = "55d9a570aae3fd2f332eeb0741f66abeca8bc489";
+    sha256 = "0ld5h4s1dj96fy09hns6f9mw5gwq9pjfsy7jc1f5prif5g3smmnw";
   };
   outputs = ["out" "doc"];
   patches = [
-    ./tests.patch
+    ./imports.patch
   ];
   postPatch = "rm testParser2.py";
   buildInputs = [
     sphinx_1_2
     pytest
-    py3to2
   ];
   propagatedBuildInputs = [
     lxml
