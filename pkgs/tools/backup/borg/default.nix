@@ -2,7 +2,7 @@
 
 python3Packages.buildPythonApplication rec {
   name = "borgbackup-${version}";
-  version = "1.0.11";
+  version = "1.1.0";
   namePrefix = "";
 
   src = fetchurl {
