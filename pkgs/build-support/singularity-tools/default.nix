@@ -74,7 +74,10 @@ rec {
             mkdir -p bin nix/store
             for f in $(cat $layerClosure) ; do
               cp -ar $f ./$f
-              for f in $f/bin/* ; do
+            done
+
+            for c in ${toString contents} ; do
+              for f in $c/bin/* ; do
                 if [ ! -e bin/$(basename $f) ] ; then
                   ln -s $f bin/
                 fi
