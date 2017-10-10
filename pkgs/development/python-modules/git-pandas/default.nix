@@ -1,23 +1,26 @@
 { buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , python
 , stdenv
 , pandas
 , GitPython
 , requests
+, redis
 }:
 
 buildPythonPackage rec {
   pname = "git-pandas";
-  version = "1.2.0";
+  version = "1.2.0+git20170723";
   name = "${pname}-${version}";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0bgyspzf9yb6s9s5p68qr0pi7vg91xj4rll9axm1wahafqfvf729";
+  src = fetchFromGitHub {
+    owner = "wdm0006";
+    repo = "git-pandas";
+    rev = "4ba60a3878520afa86184dce825f5ed3fe07b5f7";
+    sha256 = "1ggp4zlrbmi13wi6mdx5cs15mlgjiv53qpp34h8vngzzbvsylxp0";
   };
 
-  propagatedBuildInputs = [ pandas GitPython requests ];
+  propagatedBuildInputs = [ pandas GitPython requests redis ];
 
   doCheck = false;
 
