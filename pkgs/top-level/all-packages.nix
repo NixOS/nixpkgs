@@ -8026,6 +8026,8 @@ with pkgs;
 
   dxflib = callPackage ../development/libraries/dxflib {};
 
+  easyloggingpp = callPackage ../development/libraries/easyloggingpp {};
+
   eccodes = callPackage ../development/libraries/eccodes { };
 
   eclib = callPackage ../development/libraries/eclib {};
