@@ -36,7 +36,7 @@ let
     then ["nouveau" "freedreno" "vc4" "etnaviv" "imx"]
     else if stdenv.isAarch64
     then ["nouveau" "vc4" ]
-    else ["i915" "r300" "r600" "radeonsi" "nouveau"];
+    else ["svga" "i915" "r300" "r600" "radeonsi" "nouveau"];
   defaultDriDrivers =
     if (stdenv.isArm || stdenv.isAarch64)
     then ["nouveau"]
@@ -51,8 +51,7 @@ let gallium_ = galliumDrivers; dri_ = driDrivers; vulkan_ = vulkanDrivers; in
 
 let
   galliumDrivers =
-    ["svga"]
-    ++ (if gallium_ == null
+    (if gallium_ == null
           then defaultGalliumDrivers
           else gallium_)
     ++ ["swrast"];
