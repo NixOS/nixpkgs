@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   name = "libqalculate-${version}";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchurl {
     url = "https://github.com/Qalculate/libqalculate/archive/v${version}.tar.gz";
-    sha256 = "1ziw48djccsgfcjd1h3834sihr89pyb3mna096cpm47bc71saqvh";
+    sha256 = "036f284bssvavyz6pgpcdafvxa59h2wdrh8xl7nmxxnw9v7n2n7l";
   };
 
   outputs = [ "out" "dev" "doc" ];
