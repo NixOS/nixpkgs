@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, darwin }:
+{ stdenv, fetchpatch, fetchurl, unzip, darwin }:
 
 stdenv.mkDerivation {
   name = "freeimage-3.17.0";
@@ -7,6 +7,17 @@ stdenv.mkDerivation {
     url = mirror://sourceforge/freeimage/FreeImage3170.zip;
     sha256 = "12bz57asdcfsz3zr9i9nska0fb6h3z2aizy412qjqkixkginbz7v";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://anonscm.debian.org/cgit/debian-science/packages/freeimage.git/plain/debian/patches/Fix-CVE-2015-0852.patch";
+      sha256 = "0qkb96mvvhji75gz7dma3vj2b71smp96z3kl2ydj6skvnw6slnmc";
+    })
+    (fetchpatch {
+      url = "https://anonscm.debian.org/cgit/debian-science/packages/freeimage.git/plain/debian/patches/Fix-CVE-2016-5684.patch";
+      sha256 = "18g5ckrvqfjcldis7zf7hmfl8b3mgnc6akd6x3cdq8c5j7l1y98f";
+    })
+  ];
 
   buildInputs = [ unzip ] ++ stdenv.lib.optional stdenv.isDarwin darwin.cctools;
 
