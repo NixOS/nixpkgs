@@ -2,21 +2,21 @@
 # nettools needed for hostname
 
 let
-  dirname = "Isabelle2016-1";
+  dirname = "Isabelle2017";
 in
 
 stdenv.mkDerivation {
-  name = "isabelle-2016-1";
+  name = "isabelle-2017";
   inherit dirname;
 
   src = if stdenv.isDarwin
     then fetchurl {
       url = "http://isabelle.in.tum.de/website-${dirname}/dist/${dirname}.dmg";
-      sha256 = "0553l7m2z32ajmiv6sgg11rh16n490w8i4q9hr7vx4zzggr9nrlr";
+      sha256 = "1awgg39i72pivwfijdwffvil3glnpimjz2x04qbl5la2j6la48nb";
     }
     else fetchurl {
       url = "http://isabelle.in.tum.de/website-${dirname}/dist/${dirname}_linux.tar.gz";
-      sha256 = "1w1cgfmmi1sr43z6hczyc29lxlnlz7dd8fa88ai44wkc13y05b5r";
+      sha256 = "01v1zrajyfamjq5b8v18qr3ffivjckifsvvx2vs13di6wsnmm9gw";
     };
 
   buildInputs = [ perl polyml z3 ]
@@ -43,6 +43,10 @@ stdenv.mkDerivation {
       --replace '$ML_HOME/poly' ${polyml}/bin/poly
     substituteInPlace contrib/z3*/etc/settings \
       --replace '$Z3_HOME/z3' '${z3}/bin/z3'
+
+    for comp in contrib/jdk contrib/polyml*; do
+      rm -rf $comp/x86*
+    done
     '' + (if ! stdenv.isLinux then "" else ''
     arch=${if stdenv.system == "x86_64-linux" then "x86_64-linux" else "x86-linux"}
     for f in contrib/*/$arch/{bash_process,epclextract,eprover,nunchaku,SPASS}; do

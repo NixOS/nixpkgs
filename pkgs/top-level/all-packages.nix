@@ -14844,7 +14844,7 @@ with pkgs;
 
   gphoto2fs = callPackage ../applications/misc/gphoto2/gphotofs.nix { };
 
-  gramps = callPackage ../applications/misc/gramps { 
+  gramps = callPackage ../applications/misc/gramps {
         pythonPackages = python3Packages;
   };
 
