@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru = {
-    inherit prefix;
+    inherit prefix version;
   };
 
   meta = with stdenv.lib; {
