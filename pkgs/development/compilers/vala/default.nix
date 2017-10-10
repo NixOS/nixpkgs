@@ -65,5 +65,5 @@ in rec {
     extraBuildInputs = [ graphviz ];
   };
 
-  vala = vala_0_34;
+  vala = vala_0_38;
 }

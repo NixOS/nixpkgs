@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, vala_0_32, intltool, libgit2, pkgconfig, gtk3, glib
+{ stdenv, fetchurl, fetchgit, vala, intltool, libgit2, pkgconfig, gtk3, glib
 , json_glib, webkitgtk, wrapGAppsHook, libpeas, bash, gobjectIntrospection
 , gnome3, gtkspell3, shared_mime_info, libgee, libgit2-glib, librsvg, libsecret
 , dconf}:
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ shared_mime_info
                             gnome3.gnome_themes_standard ];
 
-  buildInputs = [ vala_0_32 libgit2 gtk3 glib json_glib webkitgtk libgee libpeas
+  buildInputs = [ vala libgit2 gtk3 glib json_glib webkitgtk libgee libpeas
                   libgit2-glib gtkspell3 gnome3.gtksourceview gnome3.gsettings_desktop_schemas
                   librsvg libsecret gobjectIntrospection gnome3.adwaita-icon-theme ];
 

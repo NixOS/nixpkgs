@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, libxml2, gnome3
-, gnome_doc_utils, intltool, which, libuuid, vala_0_32
+, gnome_doc_utils, intltool, which, libuuid, vala
 , desktop_file_utils, itstool, wrapGAppsHook, appdata-tools }:
 
 stdenv.mkDerivation rec {
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
                   gnome3.dconf itstool gnome3.nautilus ];
 
   nativeBuildInputs = [ pkgconfig intltool gnome_doc_utils which libuuid libxml2
-                        vala_0_32 desktop_file_utils wrapGAppsHook ];
+                        vala desktop_file_utils wrapGAppsHook ];
 
   # Silly ./configure, it looks for dbus file from gnome-shell in the
   # installation tree of the package it is configuring.

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, autoconf-archive, appstream-glib, intltool, pkgconfig, libtool, wrapGAppsHook,
-  dbus_glib, libcanberra_gtk2, gst_all_1, vala_0_34, gnome3, gtk3,
+  dbus_glib, libcanberra_gtk2, gst_all_1, vala, gnome3, gtk3,
   glib, gobjectIntrospection, libpeas
 }:
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib gobjectIntrospection libpeas
-    dbus_glib libcanberra_gtk2 vala_0_34 gst_all_1.gstreamer
+    dbus_glib libcanberra_gtk2 vala gst_all_1.gstreamer
     gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
     gnome3.gsettings_desktop_schemas
     gnome3.gnome_common gnome3.gnome_shell gtk3
