@@ -189,6 +189,7 @@ in
               sshKey = "/root/.ssh/id_buildfarm";
               system = "x86_64-linux";
               maxJobs = 2;
+              speedFactor = 2;
               supportedFeatures = [ "kvm" ];
               mandatoryFeatures = [ "perf" ];
             }
