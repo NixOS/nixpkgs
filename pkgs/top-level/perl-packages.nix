@@ -11658,6 +11658,22 @@ let
     };
   };
 
+  NetWhoisIP = buildPerlPackage rec {
+    name = "Net-Whois-IP-1.19";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BS/BSCHMITZ/${name}.tar.gz";
+      sha256 = "08kj2h9qiyfvv3jfz619xl796j93cslg7d96919mnrnjy6hdz6zh";
+    };
+
+    propagatedBuildInputs = [ RegexpIPv6 LWPProtocolhttps ];
+    doCheck = false;
+
+    # https://rt.cpan.org/Public/Bug/Display.html?id=99377
+    postPatch = ''
+      substituteInPlace IP.pm --replace " AutoLoader" ""
+    '';
+  };
+
   NetWorks = buildPerlPackage {
     name = "Net-Works-0.22";
     src = fetchurl {
