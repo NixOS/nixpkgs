@@ -1735,6 +1735,8 @@ with pkgs;
     openssl = openssl_1_0_2;
   };
 
+  dnsenum = callPackage ../tools/security/dnsenum { };
+
   dnsmap = callPackage ../tools/security/dnsmap { };
 
   dnsrecon = callPackage ../tools/security/dnsrecon { };
