@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DENABLE_UPDATER=OFF"
-  ];
+  ] ++ stdenv.lib.optional (!doCheck) "-DENABLE_TESTS=OFF";
 
-  doCheck = false;
+  doCheck = true;
 
   checkTarget = "test";
 
