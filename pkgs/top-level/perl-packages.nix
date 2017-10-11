@@ -12475,6 +12475,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  StringRandom = buildPerlModule rec {
+    name = "String-Random-0.29";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "0p2sa5ah10hjf9jyqgfp9p4nkkwpnmaq60faxlzv47dbcrgad90x";
+    };
+  };
+
   StringRewritePrefix = buildPerlPackage {
     name = "String-RewritePrefix-0.007";
     src = fetchurl {
