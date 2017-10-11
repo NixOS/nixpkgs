@@ -24,7 +24,9 @@ releaseTools.sourceTarball rec {
     eval "$preConfigure"
     releaseName=nixpkgs-$VERSION$VERSION_SUFFIX
     echo -n $VERSION_SUFFIX > .version-suffix
+    echo -n ${nixpkgs.rev or nixpkgs.shortRev} > .git-revision
     echo "release name is $releaseName"
+    echo "git-revision is $(cat .git-revision)"
   '';
 
   dontBuild = false;
