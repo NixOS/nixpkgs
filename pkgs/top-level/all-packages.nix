@@ -1735,6 +1735,8 @@ with pkgs;
     openssl = openssl_1_0_2;
   };
 
+  dnsmap = callPackage ../tools/security/dnsmap { };
+
   docbook2odf = callPackage ../tools/typesetting/docbook2odf {
     inherit (perlPackages) PerlMagick;
   };
