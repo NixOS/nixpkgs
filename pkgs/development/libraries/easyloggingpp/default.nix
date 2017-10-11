@@ -1,3 +1,6 @@
+# To use this package with a CMake and pkg-config build:
+# pkg_check_modules(EASYLOGGINGPP REQUIRED easyloggingpp)
+# add_executable(main src/main.cpp ${EASYLOGGINGPP_PREFIX}/include/easylogging++.cc)
 { stdenv, fetchFromGitHub, cmake, gtest }:
 stdenv.mkDerivation rec {
   name = "easyloggingpp-${version}";
@@ -10,9 +13,22 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [cmake];
   buildInputs = [gtest];
-  cmakeFlags = [ "-Dtest=ON" "-Dbuild_static_lib=ON"];
+  cmakeFlags = [ "-Dtest=ON" ];
   NIX_CFLAGS_COMPILE = "-std=c++11" +
     stdenv.lib.optionalString stdenv.isLinux " -pthread";
+  postInstall = ''
+    mkdir -p $out/include
+    cp ../src/easylogging++.cc $out/include
+    mkdir -p $out/lib/pkgconfig
+    cat << EOF > $out/lib/pkgconfig/easyloggingpp.pc
+    Name: easyloggingpp
+    Description: A C++ Logging Library
+    Version: ${version}
+    prefix=$out
+    includedir=\''${prefix}/include
+    Cflags: -I\''${includedir}
+    EOF
+  '';
   meta = {
     description = "C++ logging library";
     homepage = https://muflihun.github.io/easyloggingpp/;
