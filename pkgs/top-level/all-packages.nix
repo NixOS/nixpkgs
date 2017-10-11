@@ -1995,6 +1995,8 @@ with pkgs;
 
   flashbench = callPackage ../os-specific/linux/flashbench { };
 
+  fierce = callPackage ../tools/security/fierce { };
+
   figlet = callPackage ../tools/misc/figlet { };
 
   file = callPackage ../tools/misc/file { };
