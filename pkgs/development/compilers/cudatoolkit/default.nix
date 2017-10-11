@@ -51,7 +51,7 @@ let
             patchelf \
               --set-interpreter "''$(cat $NIX_CC/nix-support/dynamic-linker)" $i
           fi
-          if [[ $i =~ libcudart ]]; then
+          if [[ $i =~ libcublas ]] || [[ $i =~ libcudart ]] || [[ $i =~ libcufft.* ]] || [[ $i =~ libcurand ]] || [[ $i =~ libcusolver ]] ; then
             rpath2=
           else
             rpath2=$rpath:$lib/lib:$out/jre/lib/amd64/jli:$out/lib:$out/lib64:$out/nvvm/lib:$out/nvvm/lib64
@@ -87,7 +87,7 @@ let
         # Move some libraries to the lib output so that programs that
         # depend on them don't pull in this entire monstrosity.
         mkdir -p $lib/lib
-        mv -v $out/lib64/libcudart* $lib/lib/
+        mv -v $out/lib64/libcublas* $out/lib64/libcudart* $out/lib64/libcufft* $out/lib64/libcurand* $out/lib64/libcusolver* $lib/lib/
 
         # Remove OpenCL libraries as they are provided by ocl-icd and driver.
         rm -f $out/lib64/libOpenCL*
