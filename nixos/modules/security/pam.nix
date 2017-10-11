@@ -330,6 +330,7 @@ let
           ${optionalString cfg.setEnvironment ''
             session required pam_env.so envfile=${config.system.build.pamEnvironment}
           ''}
+          session required pam_keyinit.so force revoke
           session required pam_unix.so
           ${optionalString cfg.setLoginUid
               "session ${
