@@ -132,6 +132,7 @@ let
       sonnet = callPackage ./sonnet.nix {};
       syntax-highlighting = callPackage ./syntax-highlighting.nix {};
       threadweaver = callPackage ./threadweaver.nix {};
+      kirigami2 = callPackage ./kirigami2.nix {};
 
     # TIER 2
       kactivities = callPackage ./kactivities.nix {};
