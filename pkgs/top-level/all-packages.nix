@@ -1748,6 +1748,8 @@ with pkgs;
 
   dmg2img = callPackage ../tools/misc/dmg2img { };
 
+  dnsenum = callPackage ../tools/security/dnsenum { };
+
   dnsrecon = callPackage ../tools/security/dnsrecon { };
 
   docbook2odf = callPackage ../tools/typesetting/docbook2odf {
