@@ -20710,6 +20710,36 @@ in {
 
   transaction = callPackage ../development/python-modules/transaction { };
 
+  translate-toolkit = buildPythonPackage rec {
+    name = "translate-toolkit-${version}";
+    version = "2.2.5";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "translate";
+      repo = "translate";
+      rev = version;
+      sha256 = "05mh5h92w4h4899javn6grf5plbc9s6s968l7b77s912v8rsjy1r";
+    };
+
+    propagatedBuildInputs = with self; [
+      six diff-match-patch lxml python-Levenshtein chardet pycountry
+    ];
+    checkInputs = with self; [ pytest ];
+
+    # test_xliff_conformance requires network
+    checkPhase = ''
+      py.test -k 'not test_xliff_conformance' tests
+    '';
+
+    meta = {
+      description = "Useful localization tools for building localization & translation systems";
+      homepage = http://toolkit.translatehouse.org/;
+      license = stdenv.lib.licenses.gpl2;
+      maintainers = with stdenv.lib.maintainers; [ phile314 ];
+      platforms = with stdenv.lib.platforms; unix;
+    };
+  };
+
 
   transmissionrpc = buildPythonPackage rec {
     name = "transmissionrpc-${version}";
