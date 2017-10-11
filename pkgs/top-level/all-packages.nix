@@ -1737,6 +1737,8 @@ with pkgs;
 
   dnsmap = callPackage ../tools/security/dnsmap { };
 
+  dnsrecon = callPackage ../tools/security/dnsrecon { };
+
   docbook2odf = callPackage ../tools/typesetting/docbook2odf {
     inherit (perlPackages) PerlMagick;
   };
