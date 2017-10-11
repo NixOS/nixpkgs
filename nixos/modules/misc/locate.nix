@@ -147,8 +147,8 @@ in {
         serviceConfig.PrivateTmp = "yes";
         serviceConfig.PrivateNetwork = "yes";
         serviceConfig.NoNewPrivileges = "yes";
-        serviceConfig.ReadOnlyDirectories = "/";
-        serviceConfig.ReadWriteDirectories = dirOf cfg.output;
+        serviceConfig.ReadOnlyPaths = "/";
+        serviceConfig.ReadWritePaths = dirOf cfg.output;
       };
 
     systemd.timers.update-locatedb =
