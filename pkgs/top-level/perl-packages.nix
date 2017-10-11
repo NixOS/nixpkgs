@@ -10211,6 +10211,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  NetNetmask = buildPerlPackage rec {
+    name = "Net-Netmask-1.9022";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/M/MU/MUIR/modules/${name}.tar.gz";
+      sha256 = "0cqmlcxifh5phb3m6bi5pddv0f235vhjvcr0aipjwxfyyhgrq287";
+    };
+  };
+
   NetOAuth = buildPerlPackage {
     name = "Net-OAuth-0.28";
     src = fetchurl {
