@@ -24,6 +24,7 @@ pkgs.stdenv.mkDerivation rec{
     rev="7e6f3364bcf0a0ec838aa4853f550a9a7b5ed027";
     sha256="04wl0jpha19fsnyc5a8y4pkss9by468k0i5w5bjswnaz792yji6v";
   };
+  buildInputs=[pkgs.makeWrapper];
   phases = [ "installPhase" ];
 
   installPhase = let
@@ -38,6 +39,8 @@ pkgs.stdenv.mkDerivation rec{
       --subst-var-by less "${pkgs.less}" \
       --subst-var-by MODULES_PATH '${modulesPathStr}' \
       --subst-var-by HOME_MANAGER_EXPR_PATH "${dot}.nix"
+
+    wrapProgram $out/bin/home-manager --prefix NIX_PATH : home-manager=${src}/modules
   '';
 
   meta = with pkgs.stdenv.lib; {
