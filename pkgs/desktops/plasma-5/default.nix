@@ -137,6 +137,7 @@ let
       plasma-workspace-wallpapers = callPackage ./plasma-workspace-wallpapers.nix {};
       polkit-kde-agent = callPackage ./polkit-kde-agent.nix {};
       powerdevil = callPackage ./powerdevil.nix {};
+      sddm-kcm = callPackage ./sddm-kcm.nix {};
       startkde = callPackage ./startkde {};
       systemsettings = callPackage ./systemsettings.nix {};
     };
