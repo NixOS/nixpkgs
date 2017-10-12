@@ -35,11 +35,6 @@
   ./hardware/ksm.nix
   ./hardware/mcelog.nix
   ./hardware/network/b43.nix
-  ./hardware/network/intel-2100bg.nix
-  ./hardware/network/intel-2200bg.nix
-  ./hardware/network/intel-3945abg.nix
-  ./hardware/network/ralink.nix
-  ./hardware/network/rtl8192c.nix
   ./hardware/nitrokey.nix
   ./hardware/opengl.nix
   ./hardware/pcmcia.nix
