@@ -18949,7 +18949,14 @@ with pkgs;
 
   darling-dmg = callPackage ../tools/filesystems/darling-dmg { };
 
-  desmume = callPackage ../misc/emulators/desmume { inherit (pkgs.gnome2) gtkglext libglade; };
+  desmume = callPackage ../misc/emulators/desmume {
+    inherit (pkgs.gnome2) gtkglext libglade;
+  };
+
+  desmume-git = callPackage ../misc/emulators/desmume/git.nix {
+    inherit (pkgs.gnome2) gtkglext libglade;
+  };
+  
 
   dbacl = callPackage ../tools/misc/dbacl { };
 
