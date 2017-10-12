@@ -1,13 +1,14 @@
-{ stdenv, fetchgit, cmake, pkgconfig, libdrm, python }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, libdrm, python }:
 
 stdenv.mkDerivation rec {
-  name = "kmsxx-2017-10-03";
+  name = "kmsxx-2017-10-10";
 
-  src = fetchgit {
-    url = "https://github.com/tomba/kmsxx";
+  src = fetchFromGitHub {
+    owner = "tomba";
+    repo = "kmsxx";
     fetchSubmodules = true;
-    rev = "35d54fdddd6d7add49efbb0d9dec30816de96c90";
-    sha256 = "144gjqz6bxsn4j7k8q8309ph9czmr8rd4vzwfayw3airplnz5zka";
+    rev = "f32b82c17cd357ae1c8ed2636266113955293feb";
+    sha256 = "14panqdqq83wh6wym5afdiyrr78mb12ga63pgrppj27kgv398yjj";
   };
 
   enableParallelBuilding = true;
@@ -22,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "C++11 library, utilities and python bindings for Linux kernel mode setting";
     homepage = https://github.com/tomba/kmsxx;
     license = licenses.mpl20;
-    maintainers = [ maintainers.gnidorah ];
+    maintainers = with maintainers; [ gnidorah ];
     platforms = platforms.linux;
   };
 }
