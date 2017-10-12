@@ -19216,6 +19216,8 @@ with pkgs;
 
   pt = callPackage ../applications/misc/pt { };
 
+  pykms = callPackage ../tools/networking/pykms { };
+
   pyload = callPackage ../applications/networking/pyload {};
 
   uae = callPackage ../misc/emulators/uae { };
