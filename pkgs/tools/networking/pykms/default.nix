@@ -75,7 +75,7 @@ in python2Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Windows KMS (Key Management Service) server written in Python";
-    homepage    = "https://forums.mydigitallife.info/threads/50234-Emulated-KMS-Servers-on-non-Windows-platforms/page2?p=840410&viewfull=1#post840410";
+    homepage    = https://github.com/ThunderEX/py-kms;
     license     = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
   };
