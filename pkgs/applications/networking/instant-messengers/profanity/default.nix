@@ -21,7 +21,10 @@ stdenv.mkDerivation rec {
     sha256 = "1f7ylw3mhhnii52mmk40hyc4kqhpvjdr3hmsplzkdhsfww9kflg3";
   };
 
+  enableParallelBuilding = true;
+
   nativeBuildInputs = [ pkgconfig ];
+
   buildInputs = [
     readline libuuid libmesode
     glib openssl expat ncurses libotr curl
