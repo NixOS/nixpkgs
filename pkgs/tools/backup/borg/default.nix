@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = with python3Packages; [
     # For building documentation:
-    sphinx sphinx_rtd_theme
+    sphinx guzzle_sphinx_theme
   ];
   buildInputs = [
     acl lz4 openssl python3Packages.setuptools_scm
