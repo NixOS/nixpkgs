@@ -20765,6 +20765,8 @@ in {
     };
   });
 
+  guzzle_sphinx_theme = callPackage ../development/python-modules/guzzle_sphinx_theme { };
+
   sphinx-testing = callPackage ../development/python-modules/sphinx-testing { };
 
   sphinxcontrib-blockdiag = buildPythonPackage (rec {
