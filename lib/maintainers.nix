@@ -206,6 +206,7 @@
   falsifian = "James Cook <james.cook@utoronto.ca>";
   fare = "Francois-Rene Rideau <fahree@gmail.com>";
   fgaz = "Francesco Gazzetta <francygazz@gmail.com>";
+  flokli = "Florian Klink <flokli@flokli.de>";
   florianjacob = "Florian Jacob <projects+nixos@florianjacob.de>";
   flosse = "Markus Kohlhase <mail@markus-kohlhase.de>";
   fluffynukeit = "Daniel Austin <dan@fluffynukeit.com>";
