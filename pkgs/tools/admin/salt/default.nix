@@ -8,12 +8,12 @@
 
 python2Packages.buildPythonApplication rec {
   pname = "salt";
-  version = "2017.7.1";
+  version = "2017.7.2";
   name = "${pname}-${version}";
 
   src = python2Packages.fetchPypi {
     inherit pname version;
-    sha256 = "079kymgxyzhf47dd42l7f42jp45gx5im4k3g31bj25p1s0aq91py";
+    sha256 = "0h18zwp1w90rgxpmqgrmn9wp31h03f0vak8lpnnbh0dzbbgcffzz";
   };
 
   propagatedBuildInputs = with python2Packages; [
