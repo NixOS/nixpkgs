@@ -1,16 +1,18 @@
 { stdenv, fetchurl, pkgconfig, glib, openssl, expat, libmesode
 , ncurses, libotr, curl, readline, libuuid
 
-, autoAwaySupport ? false, libXScrnSaver ? null, libX11 ? null
-, notifySupport ? false,   libnotify ? null, gdk_pixbuf ? null
-, traySupport ? false,     gnome2 ? null
-, pgpSupport ? true,       gpgme ? null
+, autoAwaySupport ? false,       libXScrnSaver ? null, libX11 ? null
+, notifySupport ? false,         libnotify ? null, gdk_pixbuf ? null
+, traySupport ? false,           gnome2 ? null
+, pgpSupport ? true,            gpgme ? null
+, pythonPluginSupport ? true,   python ? null
 }:
 
-assert autoAwaySupport -> libXScrnSaver != null && libX11 != null;
-assert notifySupport   -> libnotify != null && gdk_pixbuf != null;
-assert traySupport     -> gnome2 != null;
-assert pgpSupport      -> gpgme != null;
+assert autoAwaySupport     -> libXScrnSaver != null && libX11 != null;
+assert notifySupport       -> libnotify != null && gdk_pixbuf != null;
+assert traySupport         -> gnome2 != null;
+assert pgpSupport          -> gpgme != null;
+assert pythonPluginSupport -> python != null;
 
 with stdenv.lib;
 
@@ -30,10 +32,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     readline libuuid libmesode
     glib openssl expat ncurses libotr curl
-  ] ++ optionals autoAwaySupport [ libXScrnSaver libX11 ]
-    ++ optionals notifySupport   [ libnotify gdk_pixbuf ]
-    ++ optionals traySupport     [ gnome2.gtk ]
-    ++ optionals pgpSupport      [ gpgme ];
+  ] ++ optionals autoAwaySupport     [ libXScrnSaver libX11 ]
+    ++ optionals notifySupport       [ libnotify gdk_pixbuf ]
+    ++ optionals traySupport         [ gnome2.gtk ]
+    ++ optionals pgpSupport          [ gpgme ]
+    ++ optionals pythonPluginSupport [ python ];
 
   meta = {
     description = "A console based XMPP client";
