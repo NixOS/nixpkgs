@@ -20554,25 +20554,7 @@ in {
     };
   });
 
-  sphinx_guzzle_theme = buildPythonPackage (rec {
-    version = "0.7.11";
-    name = "sphinx_guzzle_theme-${version}";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/guzzle/guzzle_sphinx_theme/archive/${version}.tar.gz";
-      sha256 = "f5f0e3d541c09ace912e0fa75dafd46f5a54314a929913c7de9709e677d5aa09";
-    };
-
-    buildInputs = with self; [ sphinx ];
-
-    meta = with stdenv.lib; {
-      description = "Sphinx theme used by Guzzle: http://guzzlephp.org";
-      homepage = https://github.com/guzzle/guzzle_sphinx_theme/;
-      license = licenses.mit;
-      maintainers = with maintainers; [ flokli ];
-      platforms = platforms.unix;
-    };
-  });
+  guzzle_sphinx_theme = callPackage ../development/python-modules/guzzle_sphinx_theme { };
 
   sphinx-testing = callPackage ../development/python-modules/sphinx-testing { };
 
