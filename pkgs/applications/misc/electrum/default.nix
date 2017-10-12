@@ -29,7 +29,7 @@ python2Packages.buildPythonApplication rec {
 
     # TODO plugins
     # amodem
-    # btchip
+    btchip
     # matplotlib
   ];
 
