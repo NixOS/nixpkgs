@@ -828,10 +828,10 @@ with pkgs;
     enableSharedExecutables = false;
     executableToolDepends = [ makeWrapper ];
     postInstall = ''
-      exe=$out/libexec/${drv.pname}-${drv.version}/${drv.pname}
-      install -D $out/bin/${drv.pname} $exe
-      rm -rf $out/{bin,lib,share}
-      makeWrapper $exe $out/bin/${drv.pname} \
+      exe=$libexec/bin/${drv.pname}-${drv.version}/${drv.pname}
+      install -D $bin/bin/${drv.pname} $exe
+      rm -rf $bin/bin $out/lib $out/share
+      makeWrapper $exe $bin/bin/${drv.pname} \
         --prefix PATH ":" "${nix}/bin" \
         --prefix PATH ":" "${nix-prefetch-scripts}/bin"
       mkdir -p $out/share/{bash-completion/completions,zsh/vendor-completions,fish/completions}
@@ -845,7 +845,7 @@ with pkgs;
     executableToolDepends = [ makeWrapper ];
     postInstall = ''
       wrapProgram $out/bin/stack2nix \
-        --prefix PATH ":" "${git}/bin:${cabal2nix}/bin:${cabal-install}/bin:${stack}/bin"
+        ${lib.makeBinPath [ git cabal2nix cabal-install stack ]}
     '';
   });
 
