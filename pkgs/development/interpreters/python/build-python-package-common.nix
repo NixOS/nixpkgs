@@ -29,4 +29,8 @@ attrs // {
 
     runHook postInstall
   '';
+
+  fixupPhase = attrs.fixupPhase or ''
+    rm -rf $out/bin/__pycache__
+  '';
 }
