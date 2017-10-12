@@ -1107,6 +1107,10 @@ with pkgs;
 
   gosu = callPackage ../tools/misc/gosu { };
 
+  greg = callPackage ../applications/audio/greg {
+    pythonPackages = python3Packages;
+  };
+
   gringo = callPackage ../tools/misc/gringo { scons = scons_2_5_1; };
 
   gti = callPackage ../tools/misc/gti { };
