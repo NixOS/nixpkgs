@@ -188,6 +188,22 @@ let
       Type = "ProductType";
       Name = "Dynamic Library";
       PackageTypes = [ "com.apple.package-type.mach-o-dylib" ];
+      DefaultBuildProperties = {
+        FULL_PRODUCT_NAME = "$(EXECUTABLE_NAME)";
+        MACH_O_TYPE = "mh_dylib";
+        REZ_EXECUTABLE = "YES";
+        EXECUTABLE_SUFFIX = ".$(EXECUTABLE_EXTENSION)";
+        EXECUTABLE_EXTENSION = "dylib";
+        DYLIB_COMPATIBILITY_VERSION = "1";
+        DYLIB_CURRENT_VERSION = "1";
+        FRAMEWORK_FLAG_PREFIX = "-framework";
+        LIBRARY_FLAG_PREFIX = "-l";
+        LIBRARY_FLAG_NOSPACE = "YES";
+        STRIP_STYLE = "debugging";
+        GCC_INLINES_ARE_PRIVATE_EXTERN = "YES";
+        CODE_SIGNING_ALLOWED = "YES";
+        CODE_SIGNING_REQUIRED = "NO";
+      };
     }
     {
       Identifier = "com.apple.product-type.library.static";
@@ -247,7 +263,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "nixpkgs.platform";
+  name = "MacOSX.platform";
   buildInputs = [ xcbuild ];
   buildCommand = ''
     mkdir -p $out/
@@ -264,6 +280,6 @@ stdenv.mkDerivation {
 
     mkdir -p $out/Developer/SDKs/
     cd $out/Developer/SDKs/
-    cp -r ${sdk} nix.nixpkgs.sdk
+    cp -r ${sdk} ${sdk.name}
   '';
 }
