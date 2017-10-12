@@ -38,6 +38,13 @@ stdenv.mkDerivation rec {
     ++ optionals pgpSupport          [ gpgme ]
     ++ optionals pythonPluginSupport [ python ];
 
+  # Enable feature flags, so that build fail if libs are missing
+  configureFlags = [ "--enable-c-plugins" "--enable-otr" ]
+    ++ optionals notifySupport       [ "--enable-notifications" ]
+    ++ optionals traySupport         [ "--enable-icons" ]
+    ++ optionals pgpSupport          [ "--enable-pgp" ]
+    ++ optionals pythonPluginSupport [ "--enable-python-plugins" ];
+
   meta = {
     description = "A console based XMPP client";
     longDescription = ''
