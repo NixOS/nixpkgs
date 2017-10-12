@@ -5,7 +5,7 @@
 
 let
 
-  version = "0.15.0";
+  version = "0.16.0";
 
 in mkDerivation rec {
   name = "sddm-${version}";
@@ -14,7 +14,7 @@ in mkDerivation rec {
     owner = "sddm";
     repo = "sddm";
     rev = "v${version}";
-    sha256 = "1wissgl7wd7fblq8ghz8n2fr6wqip7h88p9fiarfpvi1918fgng8";
+    sha256 = "1j0rc8nk8bz7sxa0bc6lx9v7r3zlcfyicngfjqb894ni9k71kzsb";
   };
 
   patches =
