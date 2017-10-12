@@ -103,7 +103,7 @@ if (-e "/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors") {
 
     foreach $e (@desired_governors) {
         if (index($governors, $e) != -1) {
-            last if (push @attrs, "powerManagement.cpuFreqGovernor = \"$e\";");
+            last if (push @attrs, "powerManagement.cpuFreqGovernor = lib.mkDefault \"$e\";");
         }
     }
 }
