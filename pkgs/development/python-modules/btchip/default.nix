@@ -15,6 +15,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Python communication library for Ledger Hardware Wallet products";
     homepage = "https://github.com/LedgerHQ/btchip-python";
-    license = licenses.apache2;
+    license = licenses.asl20;
   };
 }
