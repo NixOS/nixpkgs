@@ -4631,6 +4631,8 @@ with pkgs;
 
   thefuck = callPackage ../tools/misc/thefuck { };
 
+  theharvester = callPackage ../tools/security/theharvester { };
+
   thin-provisioning-tools = callPackage ../tools/misc/thin-provisioning-tools {  };
 
   tiled = libsForQt5.callPackage ../applications/editors/tiled { };
