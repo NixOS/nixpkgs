@@ -28,8 +28,5 @@ stdenv.mkDerivation rec {
     license        = licenses.mit;
     maintainers    = with maintainers; [ obadz ];
     platforms      = platforms.all;
-
-    # This is a header-only library, no point in hydra building it:
-    hydraPlatforms = [];
   };
 }
