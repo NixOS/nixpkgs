@@ -913,4 +913,7 @@ self: super: {
   # This needs cleanup before those builds can succeed.
   yi = markBroken super.yi;
 
+  # https://github.com/jwiegley/hnix/issues/65
+  hnix = super.hnix.override { data-fix = self.data-fix_0_0_7; };
+
 }
