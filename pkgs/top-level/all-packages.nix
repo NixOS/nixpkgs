@@ -4621,6 +4621,8 @@ with pkgs;
 
   thefuck = callPackage ../tools/misc/thefuck { };
 
+  theharvester = callPackage ../tools/security/theharvester { };
+
   thin-provisioning-tools = callPackage ../tools/misc/thin-provisioning-tools {  };
 
   tie = callPackage ../development/tools/misc/tie { };
