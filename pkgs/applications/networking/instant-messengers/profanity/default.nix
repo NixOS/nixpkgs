@@ -4,11 +4,13 @@
 , autoAwaySupport ? false, libXScrnSaver ? null, libX11 ? null
 , notifySupport ? false,   libnotify ? null, gdk_pixbuf ? null
 , traySupport ? false,     gnome2 ? null
+, pgpSupport ? true,       gpgme ? null
 }:
 
 assert autoAwaySupport -> libXScrnSaver != null && libX11 != null;
 assert notifySupport   -> libnotify != null && gdk_pixbuf != null;
 assert traySupport     -> gnome2 != null;
+assert pgpSupport      -> gpgme != null;
 
 with stdenv.lib;
 
@@ -30,7 +32,8 @@ stdenv.mkDerivation rec {
     glib openssl expat ncurses libotr curl
   ] ++ optionals autoAwaySupport [ libXScrnSaver libX11 ]
     ++ optionals notifySupport   [ libnotify gdk_pixbuf ]
-    ++ optionals traySupport     [ gnome2.gtk ];
+    ++ optionals traySupport     [ gnome2.gtk ]
+    ++ optionals pgpSupport      [ gpgme ];
 
   meta = {
     description = "A console based XMPP client";
