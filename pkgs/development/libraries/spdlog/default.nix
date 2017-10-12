@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "spdlog-${version}";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
-    owner = "gabime";
-    repo = "spdlog";
-    rev = "v${version}";
-    sha256 = "0pfagrkq6afpkl269vbi1fd6ckakzpr5b5cbapb8rr7hgsrilxza";
+    owner  = "gabime";
+    repo   = "spdlog";
+    rev    = "v${version}";
+    sha256 = "13730429gwlabi432ilpnja3sfvy0nn2719vnhhmii34xcdyc57q";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   # cmakeFlags = [ "-DSPDLOG_BUILD_EXAMPLES=ON" ];
 
