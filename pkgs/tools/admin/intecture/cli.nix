@@ -5,16 +5,16 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "intecture-cli-${version}";
-  version = "0.3.2";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "intecture";
     repo = "cli";
     rev = version;
-    sha256 = "0f5pyrlkxzz4kdfzwambxzqr48g3n06f1pv163h06ggssqa51wbc";
+    sha256 = "16a5fkpyqkf8w20k3ircc1d0qmif7nygkzxj6mzk9609dlb0dmxq";
   };
 
-  depsSha256 = "0f3rhjs5addppva4cjx3ngpa5gz2i2n46hyc3zd4l7lhh8gaggix";
+  depsSha256 = "0nax7h7f5qgalgxsfidrxrv1ybl5xvrpc1k7xc1kmaf955gqmc46";
 
   buildInputs = [ openssl zeromq czmq zlib ];
 
