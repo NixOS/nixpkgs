@@ -35,6 +35,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boost cryptopp curl fuse openssl python spdlog ];
 
+  patches = [
+    ./test-no-network.patch  # Disable tests using external networking
+    ./skip-failing-test-large-malloc.patch
+  ];
+
   # coreutils is needed for the vendored scrypt
   nativeBuildInputs = [ cmake coreutils pkgconfig ];
 
@@ -43,8 +48,26 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DCRYFS_UPDATE_CHECKS=OFF"
     "-DBoost_USE_STATIC_LIBS=OFF" # this option is case sensitive
-    "-DBUILD_TESTING=OFF"
+    "-DBUILD_TESTING=ON"
   ];
+
+  doCheck = true;
+
+  # Cryfs tests are broken on darwin
+  checkPhase = stdenv.lib.optionalString (!stdenv.isDarwin) ''
+    # Skip CMakeFiles directory and tests depending on fuse (does not work well with sandboxing)
+    SKIP_IMPURE_TESTS="CMakeFiles|fspp|cryfs-cli"
+
+    for test in `ls -d test/*/ | egrep -v "$SKIP_IMPURE_TESTS"`; do
+      "./$test`basename $test`-test"
+    done
+  '';
+
+  installPhase = ''
+    # Building with BUILD_TESTING=ON is missing the install target
+    mkdir -p $out/bin
+    install -m 755 ./src/cryfs-cli/cryfs $out/bin/cryfs
+  '';
 
   meta = with stdenv.lib; {
     description = "Cryptographic filesystem for the cloud";
