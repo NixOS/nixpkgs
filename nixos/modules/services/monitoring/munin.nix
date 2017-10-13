@@ -193,6 +193,9 @@ in
       };
     };
 
+    # munin_stats plugin breaks as of 2.0.33 when this doesn't exist
+    systemd.tmpfiles.rules = [ "d /var/run/munin 0755 munin munin -" ];
+
   }) (mkIf cronCfg.enable {
 
     systemd.timers.munin-cron = {
