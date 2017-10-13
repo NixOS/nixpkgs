@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     sha256 = "0j3baf92vkczr5fxww7rp1b7gmczxmmgrqc8w2dy7kgk09m85k9w";
   };
 
-  patches = [ ./hier.patch ];
+  patches = [ ./hier.patch ./fix-nix-usernamespace-build.patch ];
 
   postPatch = ''
     echo gcc -O2 -include ${glibc.dev}/include/errno.h > conf-cc
