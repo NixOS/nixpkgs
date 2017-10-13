@@ -131,8 +131,6 @@
   ./security/rtkit.nix
   ./security/wrappers/default.nix
   ./security/sudo.nix
-  ./service-managers/docker.nix
-  ./service-managers/trivial.nix
   ./services/admin/salt/master.nix
   ./services/admin/salt/minion.nix
   ./services/amqp/activemq/default.nix
