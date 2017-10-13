@@ -4434,6 +4434,10 @@ with pkgs;
 
   sqliteman = callPackage ../applications/misc/sqliteman { };
 
+  stapler = callPackage ../tools/typesetting/stapler {
+    inherit (python2Packages) buildPythonApplication pypdf2 more-itertools;
+  };
+
   stdman = callPackage ../data/documentation/stdman { };
 
   storebrowse = callPackage ../tools/system/storebrowse { };
