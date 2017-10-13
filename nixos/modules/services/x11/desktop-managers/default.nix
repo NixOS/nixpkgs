@@ -109,5 +109,5 @@ in
 
   };
 
-  xcfg.displayManager.session = cfg.session.list;
+  config.services.xserver.displayManager.session = cfg.session.list;
 }
