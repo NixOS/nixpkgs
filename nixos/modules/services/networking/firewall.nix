@@ -95,18 +95,18 @@ let
     ip46tables -N nixos-fw-log-refuse
 
     ${optionalString cfg.logRefusedConnections ''
-      ip46tables -A nixos-fw-log-refuse -p tcp --syn -j LOG --log-level info --log-prefix "rejected connection: "
+      ip46tables -A nixos-fw-log-refuse -p tcp --syn -j LOG --log-level info --log-prefix "refused connection: "
     ''}
     ${optionalString (cfg.logRefusedPackets && !cfg.logRefusedUnicastsOnly) ''
       ip46tables -A nixos-fw-log-refuse -m pkttype --pkt-type broadcast \
-        -j LOG --log-level info --log-prefix "rejected broadcast: "
+        -j LOG --log-level info --log-prefix "refused broadcast: "
       ip46tables -A nixos-fw-log-refuse -m pkttype --pkt-type multicast \
-        -j LOG --log-level info --log-prefix "rejected multicast: "
+        -j LOG --log-level info --log-prefix "refused multicast: "
     ''}
     ip46tables -A nixos-fw-log-refuse -m pkttype ! --pkt-type unicast -j nixos-fw-refuse
     ${optionalString cfg.logRefusedPackets ''
       ip46tables -A nixos-fw-log-refuse \
-        -j LOG --log-level info --log-prefix "rejected packet: "
+        -j LOG --log-level info --log-prefix "refused packet: "
     ''}
     ip46tables -A nixos-fw-log-refuse -j nixos-fw-refuse
 
