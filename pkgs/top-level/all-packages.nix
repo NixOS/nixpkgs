@@ -19033,6 +19033,8 @@ with pkgs;
 
   guetzli = callPackage ../applications/graphics/guetzli { };
 
+  gummi = callPackage ../applications/misc/gummi { };
+
   gxemul = callPackage ../misc/emulators/gxemul { };
 
   hatari = callPackage ../misc/emulators/hatari { };
