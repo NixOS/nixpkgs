@@ -1,4 +1,7 @@
-{ stdenv, fetchFromGitHub, pkgs, makeWrapper }:
+{ stdenv, fetchFromGitHub, pkgs, makeWrapper
+, glib, gnome2, gnome3, gtk2-x11, gtkspell2, poppler
+, pkgconfig, intltool, autoreconfHook, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   version = "0.6.6";
@@ -11,17 +14,21 @@ stdenv.mkDerivation rec {
     sha256 = "1vw8rhv8qj82l6l22kpysgm9mxilnki2kjmvxsnajbqcagr6s7cn";
   };
 
-  nativeBuildInputs = with pkgs; [ pkgconfig intltool autoreconfHook makeWrapper ];
-  buildInputs = with pkgs; [ glib gnome2.gtksourceview gnome2.pango gtk2-x11 gtkspell2 poppler ];
+  nativeBuildInputs = [
+    pkgconfig intltool autoreconfHook makeWrapper wrapGAppsHook
+  ];
+  buildInputs = [
+    glib gnome2.gtksourceview gnome2.pango gtk2-x11 gtkspell2 poppler
+    gnome3.defaultIconTheme
+  ];
 
-  preFixup = ''
-    wrapProgram "$out/bin/gummi" \
-      --prefix XDG_DATA_DIRS : "${pkgs.gnome2.gtksourceview}/share"
+  preConfigure = ''
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${pkgs.gnome2.gtksourceview}/share")
   '';
 
   postInstall = ''
     install -Dpm644 COPYING $out/share/licenses/$name/COPYING
-    '';
+  '';
 
   meta = {
     homepage = http://gummi.midnightcoding.org/;
