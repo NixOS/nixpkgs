@@ -1886,6 +1886,8 @@ with pkgs;
 
   enblend-enfuse = callPackage ../tools/graphics/enblend-enfuse { };
 
+  cryfs = callPackage ../tools/filesystems/cryfs { };
+
   encfs = callPackage ../tools/filesystems/encfs {
     tinyxml2 = tinyxml-2;
   };
@@ -18235,7 +18237,7 @@ with pkgs;
     kinfocenter kmenuedit kscreen kscreenlocker ksshaskpass ksysguard
     kwallet-pam kwayland-integration kwin kwrited milou oxygen plasma-desktop
     plasma-integration plasma-nm plasma-pa plasma-workspace
-    plasma-workspace-wallpapers polkit-kde-agent powerdevil startkde
+    plasma-workspace-wallpapers polkit-kde-agent powerdevil sddm-kcm startkde
     systemsettings;
 
   ### SCIENCE
@@ -19217,6 +19219,8 @@ with pkgs;
   ppsspp = libsForQt5.callPackage ../misc/emulators/ppsspp { };
 
   pt = callPackage ../applications/misc/pt { };
+
+  pykms = callPackage ../tools/networking/pykms { };
 
   pyload = callPackage ../applications/networking/pyload {};
 

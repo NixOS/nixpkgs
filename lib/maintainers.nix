@@ -107,6 +107,7 @@
   chaoflow = "Florian Friesdorf <flo@chaoflow.net>";
   chattered = "Phil Scott <me@philscotted.com>";
   choochootrain = "Hurshal Patel <hurshal@imap.cc>";
+  chpatrick = "Patrick Chilton <chpatrick@gmail.com>";
   chris-martin = "Chris Martin <ch.martin@gmail.com>";
   chrisjefferson = "Christopher Jefferson <chris@bubblescope.net>";
   chrisrosset = "Christopher Rosset <chris@rosset.org.uk>";
@@ -171,6 +172,7 @@
   drewkett = "Andrew Burkett <burkett.andrew@gmail.com>";
   dsferruzza = "David Sferruzza <david.sferruzza@gmail.com>";
   dtzWill = "Will Dietz <nix@wdtz.org>";
+  dupgit = "Olivier Delhomme <olivier.delhomme@free.fr>";
   dywedir = "Vladyslav M. <dywedir@protonmail.ch>";
   e-user = "Alexander Kahl <nixos@sodosopa.io>";
   ebzzry = "Rommel Martinez <ebzzry@ebzzry.io>";
@@ -205,6 +207,7 @@
   falsifian = "James Cook <james.cook@utoronto.ca>";
   fare = "Francois-Rene Rideau <fahree@gmail.com>";
   fgaz = "Francesco Gazzetta <francygazz@gmail.com>";
+  flokli = "Florian Klink <flokli@flokli.de>";
   florianjacob = "Florian Jacob <projects+nixos@florianjacob.de>";
   flosse = "Markus Kohlhase <mail@markus-kohlhase.de>";
   fluffynukeit = "Daniel Austin <dan@fluffynukeit.com>";

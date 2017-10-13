@@ -142,7 +142,8 @@ in
 
           kde-gtk-config breeze-gtk
 
-          phonon-backend-gstreamer
+          libsForQt56.phonon-backend-gstreamer
+          libsForQt5.phonon-backend-gstreamer
         ]
 
         ++ lib.optionals cfg.enableQt4Support [ breeze-qt4 pkgs.phonon-backend-gstreamer ]

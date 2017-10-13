@@ -17596,6 +17596,8 @@ in {
     };
   };
 
+  pypcap = callPackage ../development/python-modules/pypcap {};
+
   pyplatec = buildPythonPackage rec {
     name = "PyPlatec-${version}";
     version = "1.4.0";
@@ -20553,6 +20555,8 @@ in {
       platforms = platforms.unix;
     };
   });
+
+  guzzle_sphinx_theme = callPackage ../development/python-modules/guzzle_sphinx_theme { };
 
   sphinx-testing = callPackage ../development/python-modules/sphinx-testing { };
 

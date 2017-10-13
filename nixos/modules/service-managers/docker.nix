@@ -6,7 +6,7 @@ let
   cfg = config.docker-containers;
 
   containerModule = {
-    script = mkOption {
+    options.script = mkOption {
       type = types.lines;
       description = "Shell commands executed as the service's main process.";
     };

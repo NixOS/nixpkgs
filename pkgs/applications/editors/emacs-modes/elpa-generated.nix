@@ -28,10 +28,10 @@
     ada-mode = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib, wisi }:
     elpaBuild {
         pname = "ada-mode";
-        version = "5.2.2";
+        version = "5.3.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ada-mode-5.2.2.tar";
-          sha256 = "0c0lrj4vgsbawyshqbfb7gvndf0yb97wybqb0b34z7kan7q0xgvd";
+          url = "https://elpa.gnu.org/packages/ada-mode-5.3.1.tar";
+          sha256 = "0srna7w3y2nq0y80a01bcx8mg6gvind7nzvsbk9bd7rrr05njrd9";
         };
         packageRequires = [ cl-lib emacs wisi ];
         meta = {
@@ -95,10 +95,10 @@
     ahungry-theme = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "ahungry-theme";
-        version = "1.4.0";
+        version = "1.5.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ahungry-theme-1.4.0.tar";
-          sha256 = "1n8k12mfn01f20j0pyd7ycj77x0y3a008xc94frklaaqjc0v26s4";
+          url = "https://elpa.gnu.org/packages/ahungry-theme-1.5.0.tar";
+          sha256 = "0xxzmqawd7cwafzb9z6c7hjlh6adc5sj7hfcqxf30b7b7ragqn19";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -149,10 +149,10 @@
     ascii-art-to-unicode = callPackage ({ elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "ascii-art-to-unicode";
-        version = "1.9";
+        version = "1.11";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ascii-art-to-unicode-1.9.el";
-          sha256 = "0lfgfkx81s4dd318xcxsl7hdgpi0dc1fv3d00m3xg8smyxcf3adv";
+          url = "https://elpa.gnu.org/packages/ascii-art-to-unicode-1.11.el";
+          sha256 = "1z1vjpskvhynja41cv5z6xrz3rmpdzz51avv2gzrpxxa4k6iaz8s";
         };
         packageRequires = [];
         meta = {
@@ -281,10 +281,10 @@
       }) {};
     captain = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "captain";
-        version = "1.0.1";
+        version = "1.0.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/captain-1.0.1.el";
-          sha256 = "1jqbgzcgq4kxpcsma9ia6w6rjy9sdn51lz2f4rfjjy3qgy4fqjx5";
+          url = "https://elpa.gnu.org/packages/captain-1.0.2.el";
+          sha256 = "0rslksfwzf5bngmbfgv2mwmls5dpwmz7rs9av9p60y7k848haqf1";
         };
         packageRequires = [];
         meta = {
@@ -700,10 +700,10 @@
     ebdb = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib, seq }:
     elpaBuild {
         pname = "ebdb";
-        version = "0.3.1";
+        version = "0.3.4";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ebdb-0.3.1.tar";
-          sha256 = "1g8chkw302nhjj8n6v7j3xfcw24wpn43pcp8f3bh4s4haw1l75q3";
+          url = "https://elpa.gnu.org/packages/ebdb-0.3.4.tar";
+          sha256 = "1jj7s0646wqg9ykmpi52cc6m6m0gk2inqc2h6h7cr7gr4v7n2l00";
         };
         packageRequires = [ cl-lib emacs seq ];
         meta = {
@@ -728,10 +728,10 @@
     ebdb-i18n-chn = callPackage ({ ebdb, elpaBuild, fetchurl, lib, pyim }:
     elpaBuild {
         pname = "ebdb-i18n-chn";
-        version = "1.1";
+        version = "1.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ebdb-i18n-chn-1.1.el";
-          sha256 = "0pf7qp15z9wp41dazvi4bhdz7y13h9k5nnghhsb0nvknn6if0k4m";
+          url = "https://elpa.gnu.org/packages/ebdb-i18n-chn-1.2.el";
+          sha256 = "1qgrlk625mhfd6n1mc0kqfzbisnb61kx3vrrl3bzlz4viq3kcc10";
         };
         packageRequires = [ ebdb pyim ];
         meta = {
@@ -1556,10 +1556,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20170911";
+        version = "20171009";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20170911.tar";
-          sha256 = "0w91f5lx64klwbpym0b73z919dagzakykkmx6g13iscsh7fflx06";
+          url = "https://elpa.gnu.org/packages/org-20171009.tar";
+          sha256 = "03j7vcj5rihhdh1mmy667s1jy39wfs0kf4gc0gmqxldml062gcpm";
         };
         packageRequires = [];
         meta = {
@@ -2068,10 +2068,10 @@
       }) {};
     tramp-theme = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "tramp-theme";
-        version = "0.1.1";
+        version = "0.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/tramp-theme-0.1.1.el";
-          sha256 = "0l8i625h9sc6h59qfj847blmfwfhf9bvfsbmwfb56qzs535fby3y";
+          url = "https://elpa.gnu.org/packages/tramp-theme-0.2.el";
+          sha256 = "1q1j0vcdyv5gnfbnfl08rnwd5j4ayc1gi1vpinr99ny70wsv7gbf";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -2293,10 +2293,10 @@
     wisi = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "wisi";
-        version = "1.1.5";
+        version = "1.1.6";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/wisi-1.1.5.tar";
-          sha256 = "1q0dbykh9gvh0355vc1lwpriwlqq07jaydqx8zdrs6s0zyffx3a4";
+          url = "https://elpa.gnu.org/packages/wisi-1.1.6.tar";
+          sha256 = "0p7hm9l4gbp50rmpqna6jnc1pss2axdd6m6hk9ik4afbz0knzwnk";
         };
         packageRequires = [ cl-lib emacs ];
         meta = {
