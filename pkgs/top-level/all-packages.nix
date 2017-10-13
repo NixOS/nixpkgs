@@ -14155,7 +14155,9 @@ with pkgs;
 
   electron-cash = callPackage ../applications/misc/electron-cash { };
 
-  electrum = callPackage ../applications/misc/electrum { };
+  electrum = callPackage ../applications/misc/electrum {
+    plugins = with python2Packages; [ keepkey trezor ];
+  };
 
   electrum-dash = callPackage ../applications/misc/electrum-dash { };
 
