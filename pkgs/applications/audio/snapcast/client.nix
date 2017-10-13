@@ -14,14 +14,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ alsaLib alsaUtils libvorbis tremor flac avahi ];
 
-  buildPhase = ''
-    cd client
-    make DESTDIR=$out
-  '';
+  sourceRoot = "client";
+  makeFlags = [ "DESTDIR=$(out)" ];
 
   installPhase = ''
+    runHook preInstall
     install -vD snapclient $out/bin/snapclient
     install -vD snapclient.1 $out/share/man/man1/snapclient.1
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {

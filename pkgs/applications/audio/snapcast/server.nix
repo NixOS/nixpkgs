@@ -14,14 +14,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ alsaLib alsaUtils libvorbis flac avahi ];
 
-  buildPhase = ''
-    cd server
-    make DESTDIR=$out
-  '';
+  sourceRoot = "server";
+  makeFlags = [ "DESTDIR=$(out)" ];
 
   installPhase = ''
+    runHook preInstall
     install -vD snapserver $out/bin/snapserver
     install -vD snapserver.1 $out/share/man/man1/snapserver.1
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
