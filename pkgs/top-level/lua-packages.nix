@@ -169,7 +169,10 @@ let
       url = "https://github.com/keplerproject/luafilesystem/archive/v1_6_2.tar.gz";
       sha256 = "134azkxw84xp9g5qmzjsmcva629jm7plwcmjxkdzdg05vyd7kig1";
     };
-    preConfigure = "substituteInPlace config --replace 'CC= gcc' '';"
+
+    preConfigure = ''
+      substituteInPlace config --replace "CC= gcc" "";
+    ''
     + stdenv.lib.optionalString stdenv.isDarwin ''
       substituteInPlace config \
       --replace 'LIB_OPTION= -shared' '###' \
@@ -357,7 +360,9 @@ let
 
     buildInputs = [ zlib ];
 
-    preConfigure = "substituteInPlace Makefile --replace gcc cc --replace '-llua' ''";
+    preConfigure = ''
+      substituteInPlace Makefile --replace gcc cc --replace "-llua" ""
+    '';
 
     preBuild = ''
       makeFlagsArray=(
