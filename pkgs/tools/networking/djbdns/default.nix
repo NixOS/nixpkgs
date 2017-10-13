@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glibc } :
+{ stdenv, fetchurl, glibc, dns-root-data } :
 
 let
   version = "1.05";
@@ -23,6 +23,8 @@ stdenv.mkDerivation {
   postPatch = ''
     echo gcc -O2 -include ${glibc.dev}/include/errno.h > conf-cc
     echo $out > conf-home
+    # djbdns ships with an outdated list of root servers
+    awk '/^.?.ROOT-SERVERS.NET/ { print $4 }' ${dns-root-data}/root.hints > dnsroots.global
     sed -i "s|/etc/dnsroots.global|$out/etc/dnsroots.global|" dnscache-conf.c
   '';
 

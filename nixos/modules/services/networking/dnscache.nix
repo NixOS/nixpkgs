@@ -18,10 +18,13 @@ let
       '') ips}
     '') cfg.domainServers)}
 
-    # djbdns contains an outdated list of root servers;
-    # if one was not provided in config, provide a current list
-    if [ ! -e servers/@ ]; then
-      awk '/^.?.ROOT-SERVERS.NET/ { print $4 }' ${pkgs.dns-root-data}/root.hints > $out/servers/@
+    # if a list of root servers was not provided in config, copy it
+    # over. (this is also done by dnscache-conf, but we 'rm -rf
+    # /var/lib/dnscache/root' below & replace it wholesale with this,
+    # so we have to ensure servers/@ exists ourselves.)
+    if [ ! -e $out/servers/@ ]; then
+      #note: symlink does not work, not sure why
+      cp ${pkgs.djbdns}/etc/dnsroots.global $out/servers/@;
     fi
   '';
 
