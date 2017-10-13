@@ -20,9 +20,11 @@
 , fontconfig
 , gtk_engines
 , alsaLib
+, libidn
+, zlib
 }:
 
-let versionRec = { major = "13"; minor = "4"; patch = "0"; };
+let versionRec = { major = "13"; minor = "7"; patch = "0"; };
 in stdenv.mkDerivation rec {
   name = "citrix-receiver-${version}";
   version = with versionRec; "${major}.${minor}.${patch}";
@@ -31,11 +33,14 @@ in stdenv.mkDerivation rec {
   prefixWithBitness = if stdenv.is64bit then "linuxx64" else "linuxx86";
 
   src = with versionRec; requireFile rec {
-    name = "${prefixWithBitness}-${version}.10109380.tar.gz";
+    name =
+      if stdenv.is64bit
+      then "${prefixWithBitness}-${version}.10276927.tar.gz"
+      else "${prefixWithBitness}-${version}.10276925.tar.gz";
     sha256 =
       if stdenv.is64bit
-      then "133brs0sq6d0mgr19rc6ig1n9ahm3ryi23v5nrgqfh0hgxqcrrjb"
-      else "0r7jfl5yqv1s2npy8l9gsn0gbb82f6raa092ppkc8xy5pni5sh7l";
+      then "18fb374b9fb8e249b79178500dddca7a1f275411c6537e7695da5dcf19c5ba91"
+      else "4c68723b0327cf6f12da824056fce2b7853c38e6163a48c9d222b93dd8da75b6";
     message = ''
       In order to use Citrix Receiver, you need to comply with the Citrix EULA and download
       the ${if stdenv.is64bit then "64-bit" else "32-bit"} binaries, .tar.gz from:
@@ -79,6 +84,8 @@ in stdenv.mkDerivation rec {
     xlibs.libXinerama
     xlibs.libXfixes
     libpng12
+    libidn
+    zlib
     gtk_engines
     freetype
     fontconfig
