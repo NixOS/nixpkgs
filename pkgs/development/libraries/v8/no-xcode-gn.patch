@@ -1,0 +1,119 @@
+diff -ur nix-build-v8-6.2.414.27.drv-0/build/config/compiler/BUILD.gn nix-build-v8-6.2.414.27.drv-1/v8-6.2.414.27-src/build/config/compiler/BUILD.gn
+--- nix-build-v8-6.2.414.27.drv-0/build/config/compiler/BUILD.gn	2017-10-13 22:30:19.000000000 +0200
++++ nix-build-v8-6.2.414.27.drv-1/build/config/compiler/BUILD.gn	2017-10-14 13:21:38.000000000 +0200
+@@ -1233,6 +1233,8 @@
+       ]
+     }
+   }
++
++  cflags += [ "-Wno-unknown-warning-option" ]
+ }
+ 
+ # chromium_code ---------------------------------------------------------------
+diff -ur nix-build-v8-6.2.414.27.drv-0/build/config/mac/BUILD.gn nix-build-v8-6.2.414.27.drv-1/v8-6.2.414.27-src/build/config/mac/BUILD.gn
+--- nix-build-v8-6.2.414.27.drv-0/build/config/mac/BUILD.gn	2017-10-13 22:30:19.000000000 +0200
++++ nix-build-v8-6.2.414.27.drv-1/build/config/mac/BUILD.gn	2017-10-14 12:31:04.000000000 +0200
+@@ -3,7 +3,6 @@
+ # found in the LICENSE file.
+ 
+ import("//build/config/sysroot.gni")
+-import("//build/config/mac/mac_sdk.gni")
+ import("//build/config/mac/symbols.gni")
+ 
+ # This is included by reference in the //build/config/compiler config that
+@@ -25,11 +24,6 @@
+     ]
+   }
+ 
+-  # This is here so that all files get recompiled after an Xcode update.
+-  # (defines are passed via the command line, and build system rebuild things
+-  # when their commandline changes). Nothing should ever read this define.
+-  defines = [ "CR_XCODE_VERSION=$xcode_version" ]
+-
+   asmflags = common_mac_flags
+   cflags = common_mac_flags
+ 
+@@ -52,16 +46,6 @@
+ # that is Mac-only. Please see that target for advice on what should go in
+ # :runtime_library vs. :compiler.
+ config("runtime_library") {
+-  common_flags = [
+-    "-isysroot",
+-    rebase_path(sysroot, root_build_dir),
+-    "-mmacosx-version-min=$mac_deployment_target",
+-  ]
+-
+-  asmflags = common_flags
+-  cflags = common_flags
+-  ldflags = common_flags
+-
+   # Prevent Mac OS X AssertMacros.h (included by system header) from defining
+   # macros that collide with common names, like 'check', 'require', and
+   # 'verify'.
+diff -ur nix-build-v8-6.2.414.27.drv-0/build/config/sysroot.gni nix-build-v8-6.2.414.27.drv-1/v8-6.2.414.27-src/build/config/sysroot.gni
+--- nix-build-v8-6.2.414.27.drv-0/build/config/sysroot.gni	2017-10-13 22:30:24.000000000 +0200
++++ nix-build-v8-6.2.414.27.drv-1/build/config/sysroot.gni	2017-10-14 12:30:00.000000000 +0200
+@@ -71,8 +71,7 @@
+         "Missing sysroot ($sysroot). To fix, run: build/linux/sysroot_scripts/install-sysroot.py --arch=$_script_arch")
+   }
+ } else if (is_mac) {
+-  import("//build/config/mac/mac_sdk.gni")
+-  sysroot = mac_sdk_path
++  sysroot = ""
+ } else if (is_ios) {
+   import("//build/config/ios/ios_sdk.gni")
+   sysroot = ios_sdk_path
+diff -ur nix-build-v8-6.2.414.27.drv-0/build/toolchain/mac/BUILD.gn nix-build-v8-6.2.414.27.drv-1/v8-6.2.414.27-src/build/toolchain/mac/BUILD.gn
+--- nix-build-v8-6.2.414.27.drv-0/build/toolchain/mac/BUILD.gn	2017-10-13 22:30:19.000000000 +0200
++++ nix-build-v8-6.2.414.27.drv-1/build/toolchain/mac/BUILD.gn	2017-10-14 12:29:51.000000000 +0200
+@@ -11,7 +11,6 @@
+ if (is_ios) {
+   import("//build/config/ios/ios_sdk.gni")
+ }
+-import("//build/config/mac/mac_sdk.gni")
+ import("//build/config/mac/symbols.gni")
+ 
+ assert(host_os == "mac")
+@@ -84,13 +83,7 @@
+       host_toolchain = host_toolchain
+     }
+ 
+-    # Supports building with the version of clang shipped with Xcode when
+-    # targeting iOS by not respecting clang_base_path.
+-    if (toolchain_args.current_os == "ios" && use_xcode_clang) {
+-      prefix = ""
+-    } else {
+-      prefix = rebase_path("$clang_base_path/bin/", root_build_dir)
+-    }
++    prefix = ""
+ 
+     _cc = "${prefix}clang"
+     _cxx = "${prefix}clang++"
+@@ -425,27 +418,6 @@
+       description = "COPY_BUNDLE_DATA {{source}} {{output}}"
+       pool = ":bundle_pool($default_toolchain)"
+     }
+-    tool("compile_xcassets") {
+-      _tool = rebase_path("//build/toolchain/mac/compile_xcassets.py",
+-                          root_build_dir)
+-      if (is_ios) {
+-        _sdk_name = ios_sdk_name
+-        _min_deployment_target = ios_deployment_target
+-        _compress_pngs = ""
+-      } else {
+-        _sdk_name = mac_sdk_name
+-        _min_deployment_target = mac_deployment_target
+-        _compress_pngs = " -c "
+-      }
+-      command = "$env_wrapper rm -f {{output}} && " +
+-                "TOOL_VERSION=${tool_versions.compile_xcassets} " +
+-                "python $_tool -p $_sdk_name -t $_min_deployment_target " +
+-                "$_compress_pngs -T {{bundle_product_type}} -o {{output}} " +
+-                "{{inputs}}"
+-
+-      description = "COMPILE_XCASSETS {{output}}"
+-      pool = ":bundle_pool($default_toolchain)"
+-    }
+   }
+ }
+ 

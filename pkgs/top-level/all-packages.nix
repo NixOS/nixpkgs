@@ -10849,6 +10849,7 @@ with pkgs;
   };
 
   v8_6_x = callPackage ../development/libraries/v8/6_x.nix {
+    libtool = darwin.cctools;
     inherit (python2Packages) python;
   };
 
