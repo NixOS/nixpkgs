@@ -19,7 +19,8 @@ let partition-all-cabal-hashes = stdenv.mkDerivation
       { name = "partition-all-cabal-hashes";
         src = ./partition-all-cabal-hashes.c;
         unpackPhase = "true";
-        buildInputs = [ pkgconfig libarchive glib ];
+        buildInputs = [ libarchive glib ];
+        nativeBuildInputs = [ pkgconfig ];
         buildPhase =
           "cc -O3 $(pkg-config --cflags --libs libarchive glib-2.0) $src -o partition-all-cabal-hashes";
         installPhase =
