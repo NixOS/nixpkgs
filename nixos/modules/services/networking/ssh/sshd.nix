@@ -363,9 +363,12 @@ in
           HostKey ${k.path}
         '')}
 
+        # Allow DSA client keys for now. (These were deprecated
+        # in OpenSSH 7.0.)
+        PubkeyAcceptedKeyTypes +ssh-dss
+
+        # Re-enable DSA host keys for now.
         ${optionalString supportOldHostKeys ''
-          # Allow DSA keys for now. (deprecated in OpenSSH 7.0)
-          PubkeyAcceptedKeyTypes +ssh-dss
           HostKeyAlgorithms +ssh-dss
         ''}
       '';
