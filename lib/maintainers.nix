@@ -72,6 +72,7 @@
   bcarrell = "Brandon Carrell <brandoncarrell@gmail.com>";
   bcdarwin = "Ben Darwin <bcdarwin@gmail.com>";
   bdimcheff = "Brandon Dimcheff <brandon@dimcheff.com>";
+  bendlas = "Herwig Hochleitner <herwig@bendlas.net>";
   benley = "Benjamin Staffin <benley@gmail.com>";
   bennofs = "Benno Fünfstück <benno.fuenfstueck@gmail.com>";
   benwbooth = "Ben Booth <benwbooth@gmail.com>";
