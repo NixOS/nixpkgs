@@ -13,14 +13,14 @@ let
   inherit (stdenv.lib) optional;
 in
 stdenv.mkDerivation rec {
-  version = "1.6.0";
+  version = "2.0.0";
   name = "radare2-${version}";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = version;
-    sha256 = "0kb7y0b5kw2p1kxpzjgc8pnwdkqyzkijzp5d2a9zs2ira96668zd";
+    sha256 = "1ahai9x6jc15wjzdbdkri3rc88ark2i5s8nv2pxcp0wwldvawlzi";
   };
 
   postPatch = let
@@ -34,10 +34,6 @@ stdenv.mkDerivation rec {
     substituteInPlace shlr/Makefile --replace CS_RELEASE=0 CS_RELEASE=1
     cp ${capstone} shlr/capstone-${cs_ver}.tar.gz
 
-    # make compiler happy (fixed in upstream 2017-08-11)
-    substituteInPlace libr/asm/arch/hexagon/gnu/hexagon-dis.c --replace \
-      '(*info->fprintf_func) (info->stream, errmsg);' \
-      '(*info->fprintf_func) (info->stream, "%s", errmsg);'
   '';
 
   nativeBuildInputs = [ pkgconfig ];

@@ -4,11 +4,11 @@
 
 let
 
-  version = "2.0.98253.0707";
+  version = "2.0.106600.0904";
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://zoom.us/client/${version}/zoom_x86_64.tar.xz";
-      sha256 = "1znw7459pzfl2jzmj9akfwq3z10sndfb1swdr1p3rrjpiwqh3p7r";
+      sha256 = "1dcr0rqgjingjqbqv37hqjhhwy8axnjyirrnmjk44b5xnh239w9s";
     };
   };
 
@@ -53,6 +53,7 @@ in stdenv.mkDerivation {
     xorg.libXrender
     xorg.libXcomposite
     xorg.libXScrnSaver
+    xorg.libXrandr
 
     stdenv.cc.cc
   ];

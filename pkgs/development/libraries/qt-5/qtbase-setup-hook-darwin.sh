@@ -2,6 +2,12 @@ qtPluginPrefix=@qtPluginPrefix@
 qtQmlPrefix=@qtQmlPrefix@
 qtDocPrefix=@qtDocPrefix@
 
+_qtRmCMakeLink() {
+    find "${!outputLib}" -name "*.cmake" -type l | xargs rm
+}
+
+postInstallHooks+=(_qtRmCMakeLink)
+
 addToSearchPathOnceWithCustomDelimiter() {
     local delim="$1"
     local search="$2"

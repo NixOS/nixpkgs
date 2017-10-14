@@ -125,13 +125,16 @@ in {
     warnings = optional (isMLocate && cfg.localuser != null) "mlocate does not support searching as user other than root"
             ++ optional (isFindutils && cfg.pruneNames != []) "findutils locate does not support pruning by directory component"
             ++ optional (isFindutils && cfg.pruneBindMounts) "findutils locate does not support skipping bind mounts";
-  
+
+    # directory creation needs to be separated from main service
+    # because ReadWritePaths fails when the directory doesn't already exist
+    systemd.tmpfiles.rules = [ "d ${dirOf cfg.output} 0755 root root -" ];
+
     systemd.services.update-locatedb =
       { description = "Update Locate Database";
         path = mkIf (!isMLocate) [ pkgs.su ];
         script =
           ''
-            mkdir -m 0755 -p ${dirOf cfg.output}
             exec ${cfg.locate}/bin/updatedb \
               ${optionalString (cfg.localuser != null && ! isMLocate) ''--localuser=${cfg.localuser}''} \
               --output=${toString cfg.output} ${concatStringsSep " " cfg.extraFlags}
@@ -147,8 +150,13 @@ in {
         serviceConfig.PrivateTmp = "yes";
         serviceConfig.PrivateNetwork = "yes";
         serviceConfig.NoNewPrivileges = "yes";
-        serviceConfig.ReadOnlyDirectories = "/";
-        serviceConfig.ReadWriteDirectories = dirOf cfg.output;
+        serviceConfig.ReadOnlyPaths = "/";
+        # Use dirOf cfg.output because mlocate creates temporary files next to
+        # the actual database. We could specify and create them as well,
+        # but that would make this quite brittle when they change something.
+        # NOTE: If /var/cache does not exist, this leads to the misleading error message:
+        # update-locatedb.service: Failed at step NAMESPACE spawning …/update-locatedb-start: No such file or directory
+        serviceConfig.ReadWritePaths = dirOf cfg.output;
       };
 
     systemd.timers.update-locatedb =

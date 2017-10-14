@@ -10,7 +10,6 @@ let
     sha256="02b1fra43l75mljkhrq45vcrrqv0znicjn15g7nbqx3jppzbpm5z";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     cmake openssl nss nspr
   ];
@@ -18,6 +17,7 @@ let
 in
 stdenv.mkDerivation {
   inherit (s) name version;
+  nativeBuildInputs = [ pkgconfig ];
   inherit buildInputs;
   src = fetchurl {
     inherit (s) url sha256;

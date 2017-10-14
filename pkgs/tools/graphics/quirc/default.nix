@@ -10,14 +10,13 @@ let
     rev = "5b262480091d5f84a67a4a56c728fc8b39844339";
     sha256 = "1w5qvjafn14s6jjs7kiwsqirlsqbgv0p152hrsq463pm34hp0lzy";
   };
+in
+stdenv.mkDerivation {
+  inherit (s) name version;
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     SDL SDL_gfx libjpeg libpng
   ];
-in
-stdenv.mkDerivation {
-  inherit (s) name version;
-  inherit buildInputs;
   src = fetchgit {
     inherit (s) url sha256 rev;
   };

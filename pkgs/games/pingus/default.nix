@@ -1,8 +1,6 @@
 {stdenv, fetchurl, scons, SDL, SDL_image, boost, libpng, SDL_mixer, pkgconfig
 , mesa}:
 let
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [scons SDL SDL_image boost libpng SDL_mixer mesa];
   s = # Generated upstream information
   rec {
     baseName="pingus";
@@ -15,7 +13,8 @@ let
 in
 stdenv.mkDerivation rec {
   inherit (s) name version;
-  inherit buildInputs;
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [scons SDL SDL_image boost libpng SDL_mixer mesa];
   src = fetchurl {
     inherit (s) url sha256;
   };

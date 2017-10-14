@@ -2,8 +2,8 @@
 , libevent, gd, curl, libxml2, icu, flex, bison, openssl, zlib, php
 , expat, libcap, oniguruma, libdwarf, libmcrypt, tbb, gperftools, glog, libkrb5
 , bzip2, openldap, readline, libelf, uwimap, binutils, cyrus_sasl, pam, libpng
-, libxslt, ocaml, freetype, gdb, git, perl, mariadb, gmp, libyaml, libedit
-, libvpx, imagemagick, fribidi, gperf, which
+, libxslt, freetype, gdb, git, perl, mariadb, gmp, libyaml, libedit
+, libvpx, imagemagick, fribidi, gperf, which, ocamlPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -22,8 +22,9 @@ stdenv.mkDerivation rec {
     [ cmake pkgconfig boost libunwind mariadb.client libmemcached pcre gdb git perl
       libevent gd curl libxml2 icu flex bison openssl zlib php expat libcap
       oniguruma libdwarf libmcrypt tbb gperftools bzip2 openldap readline
-      libelf uwimap binutils cyrus_sasl pam glog libpng libxslt ocaml libkrb5
+      libelf uwimap binutils cyrus_sasl pam glog libpng libxslt libkrb5
       gmp libyaml libedit libvpx imagemagick fribidi gperf which
+      ocamlPackages.ocaml ocamlPackages.ocamlbuild
     ];
 
   patches = [

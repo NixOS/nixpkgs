@@ -7,7 +7,12 @@ let
 
   cfg = config.services.compton;
 
-  configFile = pkgs.writeText "compton.conf"
+  configFile = let
+    opacityRules = optionalString (length cfg.opacityRules != 0)
+      (concatStringsSep "\n"
+        (map (a: "opacity-rule = [ \"${a}\" ];") cfg.opacityRules)
+      );
+  in pkgs.writeText "compton.conf"
     (optionalString cfg.fade ''
       # fading
       fading = true;
@@ -30,7 +35,9 @@ let
       active-opacity   = ${cfg.activeOpacity};
       inactive-opacity = ${cfg.inactiveOpacity};
       menu-opacity     = ${cfg.menuOpacity};
-      
+
+      ${opacityRules}
+
       # other options
       backend = ${toJSON cfg.backend};
       vsync = ${toJSON cfg.vSync};
@@ -152,6 +159,14 @@ in {
       example = "0.8";
       description = ''
         Opacity of dropdown and popup menu.
+      '';
+    };
+
+    opacityRules = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      description = ''
+        Opacity rules to be handled by compton.
       '';
     };
 

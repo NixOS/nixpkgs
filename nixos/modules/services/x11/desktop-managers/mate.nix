@@ -72,6 +72,7 @@ in
     ];
 
     services.gnome3.gnome-keyring.enable = true;
+    services.upower.enable = config.powerManagement.enable;
 
     environment.pathsToLink = [ "/share" ];
   };

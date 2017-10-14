@@ -267,44 +267,23 @@ let
   };
 
   v8 = assert isPhp7; buildPecl rec {
-    version = "0.1.0";
+    version = "0.1.9";
     name = "v8-${version}";
 
-    src = pkgs.fetchurl {
-      url = "https://github.com/pinepain/php-v8/archive/v${version}.tar.gz";
-      sha256 = "18smnxd34b486f5n8j0wk9z7r5x1w84v89mgf76z0bn7gxdxl0xj";
-    };
+    sha256 = "0bj77dfmld5wfwl4wgqnpa0i4f3mc1mpsp9dmrwqv050gs84m7h1";
 
-    buildInputs = [ pkgs.v8 ];
-    configureFlags = [ "--with-v8=${pkgs.v8}" ];
-
-    patches = [
-      (builtins.toFile "link-libv8_libbase.patch" ''
-        Index: php-v8/config.m4
-        ===================================================================
-        --- php-v8.orig/config.m4
-        +++ php-v8/config.m4
-        @@ -69,7 +69,7 @@ if test "$PHP_V8" != "no"; then
-               #static_link_extra="libv8_base.a libv8_libbase.a libv8_libplatform.a libv8_snapshot.a"
-               ;;
-             * )
-        -      static_link_extra="libv8_libplatform.a"
-        +      static_link_extra="libv8_libplatform.a libv8_libbase.a"
-               #static_link_extra="libv8_base.a libv8_libbase.a libv8_libplatform.a libv8_snapshot.a"
-               ;;
-           esac
-	''
-      )];
+    buildInputs = [ pkgs.v8_6_x ];
+    configureFlags = [ "--with-v8=${pkgs.v8_6_x}" ];
   };
 
   v8js = assert isPhp7; buildPecl rec {
-    version = "1.3.2";
+    version = "1.4.1";
     name = "v8js-${version}";
 
-    sha256 = "1x7gxi70zgj3vaxs89nfbnwlqcxrps1inlyfzz66pbzdbfwvc8z8";
+    sha256 = "0k5dc395gzva4l6n9mzvkhkjq914460cwk1grfandcqy73j6m89q";
 
-    buildInputs = [ pkgs.v8 ];
-    configureFlags = [ "--with-v8js=${pkgs.v8}" ];
+    buildInputs = [ pkgs.v8_6_x ];
+    configureFlags = [ "--with-v8js=${pkgs.v8_6_x}" ];
   };
 
   composer = pkgs.stdenv.mkDerivation rec {

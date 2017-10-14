@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     makeWrapper ${jdk}/bin/java $out/bin/selendroid-selenium \
       --add-flags "-Dfile.encoding=UTF-8" \
       --add-flags "-cp \"$out/share/lib/selendroid/${name}.jar:${selenium-server-standalone}/share/lib/${selenium-server-standalone.name}/${selenium-server-standalone.name}.jar\"" \
-      --add-flags "org.openqa.grid.selenium.GridLauncher"
+      --add-flags "org.openqa.grid.selenium.GridLauncherV3"
   '';
 
   meta = {

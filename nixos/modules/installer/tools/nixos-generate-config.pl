@@ -402,7 +402,7 @@ EOF
         if ($status != 0 || join("", @info) =~ /ERROR:/) {
             die "Failed to retrieve subvolume info for $mountPoint\n";
         }
-        my @ids = join("", @info) =~ m/Subvolume ID:[ \t\n]*([0-9]*)/;
+        my @ids = join("\n", @info) =~ m/^(?!\/\n).*Subvolume ID:[ \t\n]*([0-9]+)/s;
         if ($#ids > 0) {
             die "Btrfs subvol name for $mountPoint listed multiple times in mount\n"
         } elsif ($#ids == 0) {

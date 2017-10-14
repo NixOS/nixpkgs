@@ -14997,6 +14997,8 @@ in {
 
   pandas = callPackage ../development/python-modules/pandas { };
 
+  pandas_0_17_1 = callPackage ../development/python-modules/pandas/0.17.1.nix { };
+
   xlrd = buildPythonPackage rec {
     name = "xlrd-${version}";
 
@@ -15601,6 +15603,8 @@ in {
 
   pika-pool = callPackage ../development/python-modules/pika-pool { };
   platformio = callPackage ../development/python-modules/platformio { };
+
+  kmsxx = callPackage ../development/libraries/kmsxx { };
 
   pylibconfig2 = buildPythonPackage rec {
     name = "pylibconfig2-${version}";
@@ -17593,6 +17597,8 @@ in {
       maintainers = with maintainers; [ goibhniu ];
     };
   };
+
+  pypcap = callPackage ../development/python-modules/pypcap {};
 
   pyplatec = buildPythonPackage rec {
     name = "PyPlatec-${version}";
@@ -20551,6 +20557,8 @@ in {
       platforms = platforms.unix;
     };
   });
+
+  guzzle_sphinx_theme = callPackage ../development/python-modules/guzzle_sphinx_theme { };
 
   sphinx-testing = callPackage ../development/python-modules/sphinx-testing { };
 

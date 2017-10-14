@@ -212,12 +212,7 @@ self: super: {
 
   double-conversion = if !pkgs.stdenv.isDarwin
     then super.double-conversion
-    else addExtraLibrary (overrideCabal super.double-conversion (drv:
-      {
-        postPatch = ''
-          substituteInPlace double-conversion.cabal --replace stdc++ c++
-        '';
-      })) pkgs.libcxx;
+    else addExtraLibrary super.double-conversion pkgs.libcxx;
 
   inline-c-cpp = if !pkgs.stdenv.isDarwin
     then super.inline-c-cpp
@@ -940,12 +935,6 @@ self: super: {
     url = "https://github.com/alpmestan/taggy/commit/5456c2fa4d377f7802ec5df3d5f50c4ccab2e8ed.patch";
     sha256 = "1vss7b99zrhw3r29krl1b60r4qk0m2mpwmrz8q8zdxrh33hb8pd7";
   });
-
-  # happy 1.19.6+ broke the Agda build. Sticking with the previous version
-  # avoided that issue, but now the build fails with a segmentation fault
-  # during the install phase for no apparent reason:
-  # https://hydra.nixos.org/build/60678124
-  Agda = markBroken (super.Agda.override { happy = self.happy_1_19_5; });
 
   # cryptol-2.5.0 doesn't want happy 1.19.6+.
   cryptol = super.cryptol.override { happy = self.happy_1_19_5; };

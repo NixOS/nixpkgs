@@ -23,6 +23,11 @@ stdenv.mkDerivation rec {
     cp *.svg "$out/share/fonts/svg"
     cp *.woff "$out/share/fonts/web"
   '';
+
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "03zvczdka665zcyf9fjrnx434mwpr5q8396j34kjmc67w7nhc49r";
+
   meta = {
     inherit version;
     description = ''Bitmapped character-art-friendly Unicode fonts'';

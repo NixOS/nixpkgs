@@ -58,11 +58,14 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/xcodebuild \
       --add-flags "-xcconfig ${xcconfig}" \
       --add-flags "DERIVED_DATA_DIR=." \
-      --set DEVELOPER_DIR "$out"
+      --set DEVELOPER_DIR "$out" \
+      --set SDKROOT ${sdkName}
     wrapProgram $out/bin/xcrun \
-      --set DEVELOPER_DIR "$out"
+      --set DEVELOPER_DIR "$out" \
+      --set SDKROOT ${sdkName}
     wrapProgram $out/bin/xcode-select \
-      --set DEVELOPER_DIR "$out"
+      --set DEVELOPER_DIR "$out" \
+      --set SDKROOT ${sdkName}
   '';
 
   inherit (xcbuild) meta;

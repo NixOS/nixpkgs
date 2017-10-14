@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
+  dontStrip = true;
+
   meta = with stdenv.lib; {
     description = "OCaml Bindings to gettext";
     homepage = https://forge.ocamlcore.org/projects/ocaml-gettext;

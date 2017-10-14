@@ -3,7 +3,7 @@
   src, version, qtCompatVersion,
 
   coreutils, bison, flex, gdb, gperf, lndir, patchelf, perl, pkgconfig, python2,
-  ruby,
+  ruby, which,
   # darwin support
   darwin, libiconv, libcxx,
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
       libjpeg libpng libtiff
     ]
 
-    ++ lib.optional mesaSupported mesa
+    ++ lib.optional (mesaSupported && !stdenv.isDarwin) mesa
 
     ++ lib.optionals (!stdenv.isDarwin) [
       dbus glib udev
@@ -73,14 +73,14 @@ stdenv.mkDerivation {
     ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs =
-    [ bison flex gperf lndir perl pkgconfig python2 ]
+    [ bison flex gperf lndir perl pkgconfig python2 which ]
     ++ lib.optional (!stdenv.isDarwin) patchelf;
 
   outputs = [ "out" "dev" "bin" ];
 
   patches =
     copyPathsToStore (lib.readPathsFromFile ./. ./series)
-    ++ stdenv.lib.optional stdenv.isDarwin ./darwin-cf.patch;
+    ++ stdenv.lib.optional stdenv.isDarwin (copyPathsToStore (lib.readPathsFromFile ./. ./darwin-series));
 
   postPatch =
     ''
@@ -94,7 +94,7 @@ stdenv.mkDerivation {
       sed -i '/PATHS.*NO_DEFAULT_PATH/ d' mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
     ''
 
-    + lib.optionalString mesaSupported ''
+    + lib.optionalString (mesaSupported && !stdenv.isDarwin) ''
       sed -i mkspecs/common/linux.conf \
           -e "/^QMAKE_INCDIR_OPENGL/ s|$|${mesa.dev or mesa}/include|" \
           -e "/^QMAKE_LIBDIR_OPENGL/ s|$|${mesa.out}/lib|"
@@ -110,10 +110,10 @@ stdenv.mkDerivation {
           -e 's#sdk_val=$(/usr/bin/xcrun -sdk $sdk -find $(echo $val | cut -d \x27 \x27 -f 1))##' \
           -e 's#val=$(echo $sdk_val $(echo $val | cut -s -d \x27 \x27 -f 2-))##' \
           ./configure
-      sed -i '3,$d' ./mkspecs/features/mac/default_pre.prf
-      sed -i '27,$d' ./mkspecs/features/mac/default_post.prf
-      sed -i '1,$d' ./mkspecs/features/mac/sdk.prf
-      sed -i 's/QMAKE_LFLAGS_RPATH      = -Wl,-rpath,/QMAKE_LFLAGS_RPATH      =/' ./mkspecs/common/mac.conf
+          substituteInPlace ./mkspecs/common/mac.conf \
+              --replace "/System/Library/Frameworks/OpenGL.framework/" "${darwin.apple_sdk.frameworks.OpenGL}/Library/Frameworks/OpenGL.framework/"
+          substituteInPlace ./mkspecs/common/mac.conf \
+              --replace "/System/Library/Frameworks/AGL.framework/" "${darwin.apple_sdk.frameworks.AGL}/Library/Frameworks/AGL.framework/"
      '';
      # Note on the above: \x27 is a way if including a single-quote
      # character in the sed string arguments.
@@ -144,7 +144,7 @@ stdenv.mkDerivation {
       ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
     ]
 
-    ++ lib.optional mesaSupported
+    ++ lib.optional (mesaSupported && !stdenv.isDarwin)
        ''-DNIXPKGS_MESA_GL="${mesa.out}/lib/libGL"''
 
     ++ lib.optionals (!stdenv.isDarwin)
