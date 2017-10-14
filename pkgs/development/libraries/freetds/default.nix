@@ -1,35 +1,34 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig
-, openssl
+{ stdenv, fetchurl
 , odbcSupport ? false, unixODBC ? null }:
 
 assert odbcSupport -> unixODBC != null;
 
 stdenv.mkDerivation rec {
-  name = "freetds-${version}";
-  version = "1.00.62";
+  name = "freetds-0.91";
 
   src = fetchurl {
-    url    = "http://www.freetds.org/files/stable/${name}.tar.bz2";
-    sha256 = "10d1rjflp3gkmgk5zlv2ck23p0fgpxrgf1jhfv9pvy3q02h9ldis";
+    url = "http://mirrors.ibiblio.org/freetds/stable/${name}.tar.gz";
+    sha256 = "0r946axzxs0czsmr7283w7vmk5jx3jnxxc32d2ncxsrsh2yli0ba";
   };
 
-  configureFlags = [
-    "--with-tdsver=7.0"
-  ];
+  hardeningDisable = [ "format" ];
 
-  buildInputs = [
-    openssl
-  ] ++ stdenv.lib.optional odbcSupport unixODBC;
+  buildInputs = stdenv.lib.optional odbcSupport [ unixODBC ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  configureFlags = stdenv.lib.optionalString odbcSupport "--with-odbc=${unixODBC}";
 
-  enableParallelBuilding = true;
+  doDist = true;
 
-  meta = with stdenv.lib; {
-    description = "Libraries to natively talk to Microsoft SQL Server and Sybase databases";
-    homepage    = http://www.freetds.org;
-    license     = licenses.lgpl2;
-    maintainers = with maintainers; [ peterhoeg ];
-    platforms   = platforms.all;
+  distPhase = ''
+    touch $out/include/tds.h
+    touch $out/lib/libtds.a
+  '';
+
+  meta = {
+    description =
+      "Libraries to natively talk to Microsoft SQL Server and Sybase databases";
+    homepage = http://www.freetds.org;
+    license = "lgpl";
+    platforms = stdenv.lib.platforms.all;
   };
 }
