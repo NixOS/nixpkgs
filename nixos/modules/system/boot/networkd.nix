@@ -8,8 +8,6 @@ let
 
   cfg = config.systemd.network;
 
-  waitOnline = config.networking.waitForOnline;
-
   checkLink = checkUnitConfig "Link" [
     (assertOnlyFields [
       "Description" "Alias" "MACAddressPolicy" "MACAddress" "NamePolicy" "Name"
@@ -701,9 +699,9 @@ in
   config = mkIf config.systemd.network.enable {
 
     systemd.additionalUpstreamSystemUnits = [
+      "systemd-networkd.service" "systemd-networkd-wait-online.service"
       "org.freedesktop.network1.busname"
-      "systemd-networkd.service"
-    ] ++ optional waitOnline "systemd-networkd-wait-online.service";
+    ];
 
     systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links
       // mapAttrs' (n: v: nameValuePair "${n}.netdev" (netdevToUnit n v)) cfg.netdevs
@@ -716,11 +714,11 @@ in
       restartTriggers = map (f: f.source) (unitFiles);
     };
 
-    systemd.services.systemd-networkd-wait-online = lib.mkIf waitOnline {
+    systemd.services.systemd-networkd-wait-online = {
       wantedBy = [ "network-online.target" ];
     };
 
-    systemd.services."systemd-network-wait-online@" = lib.mkIf waitOnline {
+    systemd.services."systemd-network-wait-online@" = {
       description = "Wait for Network Interface %I to be Configured";
       conflicts = [ "shutdown.target" ];
       requisite = [ "systemd-networkd.service" ];
