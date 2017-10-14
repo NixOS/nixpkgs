@@ -581,6 +581,7 @@ in {
         mkdir -p ${cfg.statePath}/{log,uploads}
         ln -sf ${cfg.statePath}/log /run/gitlab/log
         ln -sf ${cfg.statePath}/uploads /run/gitlab/uploads
+        ln -sf ${cfg.statePath}/tmp /run/gitlab/tmp
         chown -R ${cfg.user}:${cfg.group} /run/gitlab
 
         # Prepare home directory
