@@ -5,11 +5,11 @@ with python3Packages;
 buildPythonApplication rec {
   name = "${pname}-${version}";
   pname = "khal";
-  version = "0.9.7";
+  version = "0.9.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0x1p62ff7ggb172rjr6sbdrjh1gl3ck3bwxsqlsix8i5wycwvnmv";
+    sha256 = "1blx3gxnv7sj302biqphfw7i6ilzl2xlmvzp130n3113scg9w17y";
   };
 
   LC_ALL = "en_US.UTF-8";
