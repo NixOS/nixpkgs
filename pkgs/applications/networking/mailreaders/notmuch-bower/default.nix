@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, gawk, mercury, pandoc, ncurses, gpgme }:
 
 stdenv.mkDerivation rec {
-  name = "bower-${version}";
+  name = "notmuch-bower-${version}";
   version = "2017-09-27";
 
   src = fetchFromGitHub {

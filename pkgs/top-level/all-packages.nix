@@ -13695,7 +13695,7 @@ with pkgs;
 
   brackets = callPackage ../applications/editors/brackets { gconf = gnome3.gconf; };
 
-  bower = callPackage ../applications/networking/mailreaders/bower { };
+  notmuch-bower = callPackage ../applications/networking/mailreaders/notmuch-bower { };
 
   bristol = callPackage ../applications/audio/bristol { };
 
