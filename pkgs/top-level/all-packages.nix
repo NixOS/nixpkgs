@@ -10090,6 +10090,8 @@ with pkgs;
 
   ortp = callPackage ../development/libraries/ortp { };
 
+  openrct2 = callPackage ../games/openrct2/default.nix { };
+
   osm-gps-map = callPackage ../development/libraries/osm-gps-map { };
 
   p11_kit = callPackage ../development/libraries/p11-kit { };
