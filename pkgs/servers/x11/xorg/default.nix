@@ -860,11 +860,11 @@ let
   }) // {inherit libfontenc fontsproto freetype xproto xtrans zlib ;};
 
   libXfont2 = (mkDerivation "libXfont2" {
-    name = "libXfont2-2.0.1";
+    name = "libXfont2-2.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXfont2-2.0.1.tar.bz2;
-      sha256 = "0znvwk36nhmyqpmhbm9mzisgixp1mp5qkfald8x1n5yxbm3vpyz9";
+      url = mirror://xorg/individual/lib/libXfont2-2.0.2.tar.bz2;
+      sha256 = "04f1lswh1ridkycgaivf1hrr77l5ap8smbfr2rqjrm7phwxqs24l";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libfontenc fontsproto freetype xproto xtrans zlib ];
@@ -980,11 +980,11 @@ let
   }) // {inherit renderproto libX11 xproto ;};
 
   libXres = (mkDerivation "libXres" {
-    name = "libXres-1.0.7";
+    name = "libXres-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXres-1.0.7.tar.bz2;
-      sha256 = "1rd0bzn67cpb2qkc946gch2183r4bdjfhs6cpqbipy47m9a91296";
+      url = mirror://xorg/individual/lib/libXres-1.2.0.tar.bz2;
+      sha256 = "1m0jr0lbz9ixpp9ihk68349q0i7ry2379lnfzdy4mrl86ijc2xgz";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ resourceproto libX11 libXext xextproto xproto ];
