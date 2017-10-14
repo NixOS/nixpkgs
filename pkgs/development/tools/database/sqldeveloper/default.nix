@@ -1,17 +1,25 @@
 { stdenv, makeWrapper, requireFile, unzip, openjdk }:
 
 stdenv.mkDerivation rec {
-  version = "17.2.0.188.1159";
+  version = "17.3.0.271.2323";
   name = "sqldeveloper-${version}";
 
   src = requireFile rec {
     name = "sqldeveloper-${version}-no-jre.zip";
-    url = "http://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/sqldev-downloads-172-3939055.html";
+    url = "http://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/";
     message = ''
       This Nix expression requires that ${name} already be part of the store. To
       obtain it you need to
 
       - navigate to ${url}
+      - make sure that it says "Version ${version}" above the list of downloads 
+        - if it does not, click on the "Previous Version" link below the downloads
+          and repeat until the version is correct. This is necessarry because as the
+          time of this writing there exists no permanent link for the current version
+          yet.
+          Also consider updating this package yourself (you probably just need to
+          change the `version` variable and update the sha256 to the one of the
+          new file) or opening an issue at the nixpkgs repo.
       - accept the license agreement
       - download the file listed under "Other Platforms"
       - sign in or create an oracle account if neccessary
@@ -24,7 +32,8 @@ stdenv.mkDerivation rec {
 
         nix-prefetch-url --type sha256 file:///path/to/${name}
     '';
-    sha256 = "03960705fabc7b3fa98d55a31ee6a17f783b8c8b01462613c6b6a699e8cae4d5";
+    # obtained by `sha256sum sqldeveloper-${version}-no-jre.zip`
+    sha256 = "06ba5920544bacbea83425548b1b8f69ab3e9bb279076321aece2c0c6d415dad";
   };
 
   buildInputs = [ makeWrapper unzip ];
