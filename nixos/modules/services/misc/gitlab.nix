@@ -639,10 +639,10 @@ in {
         chmod -R ug+rwX,o-rwx ${cfg.statePath}/repositories
         chmod -R ug-s ${cfg.statePath}/repositories
         find ${cfg.statePath}/repositories -type d -print0 | xargs -0 chmod g+s
-        chmod 700 ${cfg.statePath}/uploads
+        chmod 770 ${cfg.statePath}/uploads
         chown -R git ${cfg.statePath}/uploads
         find ${cfg.statePath}/uploads -type f -exec chmod 0644 {} \;
-        find ${cfg.statePath}/uploads -type d -not -path ${cfg.statePath}/uploads -exec chmod 0700 {} \;
+        find ${cfg.statePath}/uploads -type d -not -path ${cfg.statePath}/uploads -exec chmod 0770 {} \;
       '';
 
       serviceConfig = {
