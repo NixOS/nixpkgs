@@ -4,13 +4,13 @@ let
   depsGit = {
     "tools/gn" = fetchgit {
       url = "https://chromium.googlesource.com/chromium/src/tools/gn";
-      rev = "d0c518db129975ce88ff1de26c857873b0619c4b";
-      sha256 = "0l15vzmjyx6bwlz1qhn3fy7yx3qzzxr3drnkj3l0p0fmyxza52vx";
+      rev = "858366e6b3803ff067862a9b994776fc11124ba2";
+      sha256 = "0nylfi9jnp8f8i1vr7jxdskvjr7hi1g9hg7qxxqcy4bdrfr2npra";
     };
     "base" = fetchgit {
       url = "https://chromium.googlesource.com/chromium/src/base";
-      rev = "bc6e3ce8ca01b894751e1f7b22b561e3ae2e7f17";
-      sha256 = "1yl49v6nxbrfms52xf7fiwh7d4301m2aj744pa3hzzh989c5j6g5";
+      rev = "d56f52a20c2ca2ab28579677d2ea5483401bd47e";
+      sha256 = "0b29bmi3qfnvxwcljzbzi6im49nd7j6pf9zb5c53zb9pilwpsrqq";
     };
     "build" = fetchgit {
       url = "https://chromium.googlesource.com/chromium/src/build";
@@ -32,7 +32,7 @@ let
 in
   stdenv.mkDerivation rec {
     name = "gn";
-    version = "0.0.0.20170629";
+    version = "0.0.0.20171013";
     sourceRoot = ".";
 
     unpackPhase = ''
