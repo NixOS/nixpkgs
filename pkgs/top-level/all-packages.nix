@@ -7395,7 +7395,10 @@ with pkgs;
 
   ninja = callPackage ../development/tools/build-managers/ninja { };
 
-  gn = callPackage ../development/tools/build-managers/gn { };
+  gn = callPackage ../development/tools/build-managers/gn {
+    inherit (darwin.apple_sdk.frameworks) AppKit ApplicationServices Cocoa CoreBluetooth Foundation ImageCaptureCore;
+    libtool = darwin.cctools;
+  };
 
   nixbang = callPackage ../development/tools/misc/nixbang {
       pythonPackages = python3Packages;

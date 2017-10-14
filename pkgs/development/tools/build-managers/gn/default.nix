@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchgit, fetchurl, libevent, ninja, python }:
+{ stdenv, lib, fetchgit, fetchurl, libevent, libtool, ninja, python
+, AppKit, ApplicationServices, Cocoa, CoreBluetooth, Foundation, ImageCaptureCore }:
 
 let
   depsGit = {
@@ -29,6 +30,11 @@ let
     };
   };
 
+  appleApsl = fetchurl {
+    url = "https://chromium.googlesource.com/chromium/src/third_party/+archive/7b93eb6514e15b92eb8d8b1767b92612c12c3364/apple_apsl.tar.gz";
+    sha256 = "00s9nfgz30877h48jd1831l1fp05i33cpya7264scm9firw3r0id";
+  };
+
 in
   stdenv.mkDerivation rec {
     name = "gn";
@@ -41,22 +47,42 @@ in
           mkdir -p $sourceRoot/${n}
           cp -r ${v}/* $sourceRoot/${n}
         '') depsGit)}
+    '' + stdenv.lib.strings.optionalString stdenv.isDarwin ''
+      mkdir -p third_party/apple_apsl
+      tar -C third_party/apple_apsl -xf ${appleApsl}
     '';
+
+    prePatch = ''
+      chmod u+w -R .
+    '';
+
+    patches = stdenv.lib.optionals stdenv.isDarwin [
+      # Remove NSPressureConfiguration stuff, which is only available on MacOS 10.11+ and not part
+      # of the platform libraries in nixpkgs
+      ./NSPressureConfiguration.patch
+
+      # also just remove GetModelIdentifier stuff from base library, which isn't used by GN itself
+      # yet cannot be linked because of old IOKit
+      ./RemoveGetModelIdentifier.patch
+
+      # fix bootstrap, compile in some files listed in BUILD.gn, yet missing from bootstrap script
+      ./bootstrap.patch
+    ];
 
     postPatch = ''
       # Patch shebands (for sandbox build)
-      chmod u+w -R build
       patchShebangs build
 
       # Patch out Chromium-bundled libevent
-      chmod u+w tools/gn/bootstrap tools/gn/bootstrap/bootstrap.py
       sed -i -e '/static_libraries.*libevent/,/^ *\]\?[})]$/d' \
           tools/gn/bootstrap/bootstrap.py
     '';
 
     NIX_LDFLAGS = "-levent";
 
-    nativeBuildInputs = [ ninja python ];
+    nativeBuildInputs = [ ninja python ] ++ stdenv.lib.optional stdenv.isDarwin [
+      libtool AppKit ApplicationServices Cocoa CoreBluetooth Foundation ImageCaptureCore
+    ];
     buildInputs = [ libevent ];
 
     buildPhase = ''
@@ -71,7 +97,7 @@ in
       description = "A meta-build system that generates NinjaBuild files";
       homepage = https://chromium.googlesource.com/chromium/src/tools/gn;
       license = licenses.bsd3;
-      platforms = platforms.linux;
+      platforms = platforms.linux ++ platforms.darwin;
       maintainers = [ maintainers.stesie ];
     };
   }

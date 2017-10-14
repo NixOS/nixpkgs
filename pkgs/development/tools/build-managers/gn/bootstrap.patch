@@ -1,0 +1,20 @@
+diff --git a/bootstrap/bootstrap.py b/bootstrap/bootstrap.py
+index f154ed2..690f614 100755
+--- a/tools/gn/bootstrap/bootstrap.py
++++ b/tools/gn/bootstrap/bootstrap.py
+@@ -691,11 +691,15 @@ def write_gn_ninja(path, root_gen_dir, options):
+         'base/mac/bundle_locations.mm',
+         'base/mac/call_with_eh_frame.cc',
+         'base/mac/call_with_eh_frame_asm.S',
++        'base/mac/dispatch_source_mach.cc',
+         'base/mac/foundation_util.mm',
++        'base/mac/mac_logging.mm',
+         'base/mac/mach_logging.cc',
++        'base/mac/mac_util.mm',
+         'base/mac/scoped_mach_port.cc',
+         'base/mac/scoped_mach_vm.cc',
+         'base/mac/scoped_nsautorelease_pool.mm',
++        'base/mac/scoped_nsobject.mm',
+         'base/memory/shared_memory_handle_mac.cc',
+         'base/memory/shared_memory_mac.cc',
+         'base/message_loop/message_pump_mac.mm',

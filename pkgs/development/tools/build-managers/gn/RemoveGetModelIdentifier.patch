@@ -1,0 +1,76 @@
+diff --git a/base/mac/mac_util.h b/base/mac/mac_util.h
+index 67d188084..8c0a78e8f 100644
+--- a/base/mac/mac_util.h
++++ b/base/mac/mac_util.h
+@@ -158,18 +158,6 @@ inline bool IsOSLaterThan10_12_DontCallThis() {
+   return !IsAtMostOS10_12();
+ }
+ 
+-// Retrieve the system's model identifier string from the IOKit registry:
+-// for example, "MacPro4,1", "MacBookPro6,1". Returns empty string upon
+-// failure.
+-BASE_EXPORT std::string GetModelIdentifier();
+-
+-// Parse a model identifier string; for example, into ("MacBookPro", 6, 1).
+-// If any error occurs, none of the input pointers are touched.
+-BASE_EXPORT bool ParseModelIdentifier(const std::string& ident,
+-                                      std::string* type,
+-                                      int32_t* major,
+-                                      int32_t* minor);
+-
+ }  // namespace mac
+ }  // namespace base
+ 
+diff --git a/base/mac/mac_util.mm b/base/mac/mac_util.mm
+index 9615f9d2e..7f825e5b4 100644
+--- a/base/mac/mac_util.mm
++++ b/base/mac/mac_util.mm
+@@ -434,48 +434,5 @@ int MacOSXMinorVersion() {
+ }
+ }  // namespace internal
+ 
+-std::string GetModelIdentifier() {
+-  std::string return_string;
+-  ScopedIOObject<io_service_t> platform_expert(
+-      IOServiceGetMatchingService(kIOMasterPortDefault,
+-                                  IOServiceMatching("IOPlatformExpertDevice")));
+-  if (platform_expert) {
+-    ScopedCFTypeRef<CFDataRef> model_data(
+-        static_cast<CFDataRef>(IORegistryEntryCreateCFProperty(
+-            platform_expert,
+-            CFSTR("model"),
+-            kCFAllocatorDefault,
+-            0)));
+-    if (model_data) {
+-      return_string =
+-          reinterpret_cast<const char*>(CFDataGetBytePtr(model_data));
+-    }
+-  }
+-  return return_string;
+-}
+-
+-bool ParseModelIdentifier(const std::string& ident,
+-                          std::string* type,
+-                          int32_t* major,
+-                          int32_t* minor) {
+-  size_t number_loc = ident.find_first_of("0123456789");
+-  if (number_loc == std::string::npos)
+-    return false;
+-  size_t comma_loc = ident.find(',', number_loc);
+-  if (comma_loc == std::string::npos)
+-    return false;
+-  int32_t major_tmp, minor_tmp;
+-  std::string::const_iterator begin = ident.begin();
+-  if (!StringToInt(
+-          StringPiece(begin + number_loc, begin + comma_loc), &major_tmp) ||
+-      !StringToInt(
+-          StringPiece(begin + comma_loc + 1, ident.end()), &minor_tmp))
+-    return false;
+-  *type = ident.substr(0, number_loc);
+-  *major = major_tmp;
+-  *minor = minor_tmp;
+-  return true;
+-}
+-
+ }  // namespace mac
+ }  // namespace base
