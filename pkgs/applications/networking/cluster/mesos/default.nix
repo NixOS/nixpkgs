@@ -1,9 +1,9 @@
-{ stdenv, lib, makeWrapper, fetchurl, curl, sasl, openssh, autoconf
-, automake, libtool, unzip, gnutar, jdk, maven, python, wrapPython
+{ stdenv, lib, makeWrapper, fetchurl, curl, sasl, openssh
+, unzip, gnutar, jdk, python, wrapPython
 , setuptools, boto, pythonProtobuf, apr, subversion, gzip, systemd
 , leveldb, glog, perf, utillinux, libnl, iproute, openssl, libevent
-, ethtool, coreutils, which, iptables
-, bash
+, ethtool, coreutils, which, iptables, maven
+, bash, autoreconfHook
 }:
 
 let
@@ -21,7 +21,7 @@ let
   });
 
 in stdenv.mkDerivation rec {
-  version = "1.1.1";
+  version = "1.4.0";
   name = "mesos-${version}";
 
   enableParallelBuilding = true;
@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://apache/mesos/${version}/${name}.tar.gz";
-    sha256 = "0f46ebb130d2d4a9732f95d0a71d80c8c5967f3c172b110f2ece316e05922115";
+    sha256 = "0c08kd226nrjwm2z2drpq4vi97h9r8b1xkdvkgh1114fxg7cyvys";
   };
 
   patches = [
@@ -40,11 +40,13 @@ in stdenv.mkDerivation rec {
     # see https://github.com/cstrahan/mesos/tree/nixos-${version}
     ./nixos.patch
   ];
-
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
   buildInputs = [
-    makeWrapper autoconf automake libtool curl sasl jdk maven
+    makeWrapper curl sasl jdk
     python wrapPython boto setuptools leveldb
-    subversion apr glog openssl libevent
+    subversion apr glog openssl libevent maven
   ] ++ lib.optionals stdenv.isLinux [
     libnl
   ];
@@ -52,10 +54,6 @@ in stdenv.mkDerivation rec {
   propagatedBuildInputs = [
     pythonProtobuf
   ];
-
-  # note that we *must* statically link libprotobuf.
-  # if we dynamically link the lib, we get these errors:
-  # https://github.com/NixOS/nixpkgs/pull/19064#issuecomment-255082684
   preConfigure = ''
     # https://issues.apache.org/jira/browse/MESOS-6616
     configureFlagsArray+=(
@@ -66,7 +64,6 @@ in stdenv.mkDerivation rec {
     # <sys/types.h> instead of <sys/sysmacros.h>
     sed 1i'#include <sys/sysmacros.h>' -i src/linux/fs.cpp
     sed 1i'#include <sys/sysmacros.h>' -i src/slave/containerizer/mesos/isolators/gpu/isolator.cpp
-
     substituteInPlace 3rdparty/stout/include/stout/os/posix/chown.hpp \
       --subst-var-by chown ${coreutils}/bin/chown
 
@@ -179,7 +176,7 @@ in stdenv.mkDerivation rec {
     "--enable-libevent"
     "--with-libevent=${libevent.dev}"
     "--with-protobuf=${pythonProtobuf.protobuf}"
-    "PROTOBUF_JAR=${mavenRepo}/com/google/protobuf/protobuf-java/2.6.1/protobuf-java-2.6.1.jar"
+    "PROTOBUF_JAR=${mavenRepo}/com/google/protobuf/protobuf-java/3.3.0/protobuf-java-3.3.0.jar"
   ] ++ lib.optionals stdenv.isLinux [
     "--with-network-isolator"
     "--with-nl=${libnl.dev}"

@@ -2,8 +2,8 @@
 
 buildGoPackage rec {
   name = "git-lfs-${version}";
-  version = "2.2.1";
-  rev = "621d1f821f73efcedc829dda43fd9c1fcf07c6ab";
+  version = "2.3.3";
+  rev = "c9d3beb098254f067680a5ccbb8742387f81d82e";
 
   goPackagePath = "github.com/git-lfs/git-lfs";
 
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "git-lfs";
     repo = "git-lfs";
-    sha256 = "00wc4gjs4yy2qld1m4yar37jkw9fdi2h8xp25hy2y80cnyiafn7s";
+    sha256 = "1hzpzbm46f45vh5liijpyppfcmr7wycnsa09vmilq0wm341ivnsf";
   };
 
   preBuild = ''

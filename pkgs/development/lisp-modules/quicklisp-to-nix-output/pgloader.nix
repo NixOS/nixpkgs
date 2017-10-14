@@ -29,6 +29,8 @@ rec {
           mv "$f"{,.sibling}; done || true
     '';
   };
+
+  meta.broken = true;
 }
 /* (SYSTEM pgloader DESCRIPTION Load data into PostgreSQL SHA256 1z6p7dz1ir9cg4gl1vkvbc1f7pv1yfv1jgwjkw29v57fdg4faz9v URL
     http://beta.quicklisp.org/archive/pgloader/2017-07-25/pgloader-v3.4.1.tgz MD5 6741f8e7d2d416942d5c4a1971576d33 NAME pgloader TESTNAME NIL FILENAME pgloader

@@ -31,5 +31,6 @@ buildPythonPackage rec {
     homepage = https://developer.mozilla.org/en-US/docs/Mozilla/QA/Marionette;
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ raskin ];
+    broken = true;
   };
 }

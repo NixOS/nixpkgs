@@ -2,6 +2,7 @@
   pythonOlder,
   geos, gdal, pytz
 }:
+
 buildPythonPackage rec {
   pname = "Django";
   name = "${pname}-${version}";
@@ -19,6 +20,7 @@ buildPythonPackage rec {
       src = ./1.10-gis-libs.template.patch;
       geos = geos;
       gdal = gdal;
+      extension = stdenv.hostPlatform.extensions.sharedLibrary;
     })
   ];
 

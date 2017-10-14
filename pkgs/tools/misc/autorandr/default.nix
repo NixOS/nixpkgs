@@ -1,7 +1,9 @@
 { stdenv
 , python3Packages
 , fetchFromGitHub
-, systemd }:
+, systemd
+, xrandr
+, makeWrapper }:
 
 let
   python = python3Packages.python;
@@ -12,6 +14,7 @@ in
     name = "autorandr-${version}";
 
     buildInputs = [ python ];
+    nativeBuildInputs = [ makeWrapper ];
 
     installPhase = ''
       runHook preInstall
@@ -33,7 +36,13 @@ in
         make install TARGETS='udev' PREFIX=$out DESTDIR=$out \
           UDEV_RULES_DIR=/etc/udev/rules.d
       ''}
+
       runHook postInstall
+    '';
+
+    postFixup = ''
+      wrapProgram $out/bin/autorandr \
+        --prefix PATH : ${xrandr}/bin
     '';
 
     src = fetchFromGitHub {

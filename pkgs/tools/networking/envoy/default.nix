@@ -299,5 +299,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];
+    broken = true;
   };
 }

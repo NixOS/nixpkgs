@@ -44,5 +44,6 @@ stdenv.mkDerivation {
     homepage = https://cr.yp.to/djbdns.html;
     license = licenses.publicDomain;
     maintainers = with maintainers; [ jerith666 ];
+    hydraPlatforms = []; # fails on hydra but builds locally
   };
 }

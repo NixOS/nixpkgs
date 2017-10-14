@@ -790,11 +790,11 @@ let
   }) // {inherit libfontenc fontsproto freetype xproto xtrans zlib ;};
 
   libXfont2 = (mkDerivation "libXfont2" {
-    name = "libXfont2-2.0.1";
+    name = "libXfont2-2.0.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXfont2-2.0.1.tar.bz2;
-      sha256 = "0znvwk36nhmyqpmhbm9mzisgixp1mp5qkfald8x1n5yxbm3vpyz9";
+      url = mirror://xorg/individual/lib/libXfont2-2.0.2.tar.bz2;
+      sha256 = "04f1lswh1ridkycgaivf1hrr77l5ap8smbfr2rqjrm7phwxqs24l";
     };
     buildInputs = [pkgconfig libfontenc fontsproto freetype xproto xtrans zlib ];
     meta.platforms = stdenv.lib.platforms.unix;
@@ -900,11 +900,11 @@ let
   }) // {inherit renderproto libX11 xproto ;};
 
   libXres = (mkDerivation "libXres" {
-    name = "libXres-1.0.7";
+    name = "libXres-1.2.0";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXres-1.0.7.tar.bz2;
-      sha256 = "1rd0bzn67cpb2qkc946gch2183r4bdjfhs6cpqbipy47m9a91296";
+      url = mirror://xorg/individual/lib/libXres-1.2.0.tar.bz2;
+      sha256 = "1m0jr0lbz9ixpp9ihk68349q0i7ry2379lnfzdy4mrl86ijc2xgz";
     };
     buildInputs = [pkgconfig resourceproto libX11 libXext xextproto xproto ];
     meta.platforms = stdenv.lib.platforms.unix;
@@ -2363,11 +2363,11 @@ let
   }) // {inherit ;};
 
   xorgserver = (mkDerivation "xorgserver" {
-    name = "xorg-server-1.19.3";
+    name = "xorg-server-1.19.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/xserver/xorg-server-1.19.3.tar.bz2;
-      sha256 = "162s1v901djr57gxmmk4airk8hiwcz79dqyz72972x1lw1k82yk7";
+      url = mirror://xorg/individual/xserver/xorg-server-1.19.5.tar.bz2;
+      sha256 = "0iql4pgsgpyqcrd3256pv227cdadvz01ych61n0d41ixp67gmzqq";
     };
     buildInputs = [pkgconfig dri2proto dri3proto renderproto openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
     meta.platforms = stdenv.lib.platforms.unix;

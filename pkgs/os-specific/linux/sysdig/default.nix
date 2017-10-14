@@ -35,23 +35,7 @@ stdenv.mkDerivation rec {
     export KERNELDIR="${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   '';
 
-  libPath = makeLibraryPath [
-    zlib
-    luajit
-    ncurses
-    jsoncpp
-    curl
-    jq
-    openssl
-    libb64
-    gcc
-    stdenv.cc.cc
-  ];
-
-  postInstall = optionalString (!stdenv.isDarwin) ''
-    patchelf --set-rpath "$libPath" "$out/bin/sysdig"
-    patchelf --set-rpath "$libPath" "$out/bin/csysdig"
-  '' + optionalString (kernel != null) ''
+  postInstall = optionalString (kernel != null) ''
     make install_driver
     kernel_dev=${kernel.dev}
     kernel_dev=''${kernel_dev#/nix/store/}

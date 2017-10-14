@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
     license     = licenses.gpl3;
     platforms   = platforms.all;
     maintainer  = [ stdenv.lib.maintainers.joelmo ];
+    broken = true;
   };
 
   src = fetchurl {

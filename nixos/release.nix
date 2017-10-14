@@ -221,7 +221,7 @@ in rec {
   tests.boot-stage1 = callTest tests/boot-stage1.nix {};
   tests.cadvisor = hydraJob (import tests/cadvisor.nix { system = "x86_64-linux"; });
   tests.chromium = (callSubTests tests/chromium.nix { system = "x86_64-linux"; }).stable;
-  tests.cjdns = callTest tests/cjdns.nix {};
+  tests.cjdns = callTest tests/cjdns.nix { system = "x86_64-linux"; };
   tests.cloud-init = callTest tests/cloud-init.nix {};
   tests.containers-ipv4 = callTest tests/containers-ipv4.nix {};
   tests.containers-ipv6 = callTest tests/containers-ipv6.nix {};
@@ -252,7 +252,7 @@ in rec {
   tests.gnome3 = callTest tests/gnome3.nix {};
   tests.gnome3-gdm = callTest tests/gnome3-gdm.nix {};
   tests.hardened = callTest tests/hardened.nix { };
-  tests.hibernate = callTest tests/hibernate.nix {};
+  tests.hibernate = callTest tests/hibernate.nix { system = "x86_64-linux"; };
   tests.hound = callTest tests/hound.nix {};
   tests.i3wm = callTest tests/i3wm.nix {};
   tests.installer = callSubTests tests/installer.nix {};
@@ -294,7 +294,7 @@ in rec {
   #tests.panamax = hydraJob (import tests/panamax.nix { system = "x86_64-linux"; });
   tests.peerflix = callTest tests/peerflix.nix {};
   tests.postgresql = callSubTests tests/postgresql.nix {};
-  tests.pgjwt = callTest tests/pgjwt.nix {};
+  #tests.pgjwt = callTest tests/pgjwt.nix {};
   tests.printing = callTest tests/printing.nix {};
   tests.proxy = callTest tests/proxy.nix {};
   tests.pumpio = callTest tests/pump.io.nix {};

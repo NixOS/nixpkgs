@@ -1,29 +1,34 @@
 { stdenv, fetchFromGitHub, makeWrapper, cmake, pkgconfig, wxGTK30, glib, pcre, m4, bash,
-  xdg_utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick }:
+  xdg_utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick, darwin }:
 
+with stdenv.lib;
 stdenv.mkDerivation rec {
-  rev = "de5554dbc0ec69329b75777d4a3b2f01851fc5ed";
-  build = "unstable-2017-07-13.git${builtins.substring 0 7 rev}";
+  rev = "73e52ccbc7626631b6898c7324413ee1fc09bc0e";
+  build = "unstable-2017-09-25.git${builtins.substring 0 7 rev}";
   name = "far2l-2.1.${build}";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
     rev = rev;
-    sha256 = "07l8w9p6zxm9qgh9wlci584lgv8gd4aw742jaqh9acgkxy9caih8";
+    sha256 = "0pg1l2k5ycm6whr39gshpbgw62v51rfz3ddi6qhcx0nyzxcrczy5";
   };
 
   nativeBuildInputs = [ cmake pkgconfig m4 makeWrapper imagemagick ];
 
-  buildInputs = [ wxGTK30 glib pcre ];
+  buildInputs = [ wxGTK30 glib pcre ]
+    ++ optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
 
   patches = [ ./add-nix-syntax-highlighting.patch ];
 
-  postPatch = ''
-    echo 'echo ${build}' > far2l/bootstrap/scripts/vbuild.sh
-
-    substituteInPlace far2l/bootstrap/open.sh              \
+  postPatch = optionalString stdenv.isLinux ''
+    substituteInPlace far2l/bootstrap/open.sh \
       --replace 'gvfs-trash'  '${gvfs}/bin/gvfs-trash'
+  '' + optionalString stdenv.isDarwin ''
+    substituteInPlace far2l/CMakeLists.txt \
+      --replace "-framework System" -lSystem
+  '' + ''
+    echo 'echo ${build}' > far2l/bootstrap/scripts/vbuild.sh
     substituteInPlace far2l/bootstrap/open.sh              \
       --replace 'xdg-open'    '${xdg_utils}/bin/xdg-open'
     substituteInPlace far2l/vtcompletor.cpp                \
@@ -62,7 +67,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "An orthodox file manager";
     homepage = https://github.com/elfmz/far2l;
     license = licenses.gpl2;

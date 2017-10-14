@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
     license     = licenses.lgpl21;
     maintainers = with maintainers; [ lluchs ];
     platforms   = [ "x86_64-linux" ];
+    broken = true;
   };
 }

@@ -122,5 +122,6 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ maintainers.puffnfresh ];
     platforms = platforms.linux;
+    broken = true;
   };
 }

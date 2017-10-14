@@ -24,5 +24,6 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.all;
+    broken = true;
   };
 }

@@ -47,6 +47,10 @@ stdenv.mkDerivation rec {
         -i gdk-pixbuf-loader/Makefile
     sed -e "s#\$(GDK_PIXBUF_QUERYLOADERS)#GDK_PIXBUF_MODULEDIR=$GDK_PIXBUF/loaders \$(GDK_PIXBUF_QUERYLOADERS)#" \
          -i gdk-pixbuf-loader/Makefile
+
+    # Fix thumbnailer path
+    sed -e "s#@bindir@\(/gdk-pixbuf-thumbnailer\)#${gdk_pixbuf}/bin\1#g" \
+        -i gdk-pixbuf-loader/librsvg.thumbnailer.in
   '';
 
   # Merge gdkpixbuf and librsvg loaders

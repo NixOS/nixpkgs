@@ -8264,7 +8264,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ ModuleBuild NetDNSResolverProgrammable ];
     propagatedBuildInputs = [ Error NetAddrIP NetDNS URI ];
 
-    buildPhase = "perl Build.PL --install_base=$out --install_path=\"sbin=$out/bin\"; ./Build build ";
+    buildPhase = "perl Build.PL --install_base=$out --install_path=\"sbin=$out/bin\" --install_path=\"lib=$out/lib/perl5/site_perl\"; ./Build build ";
 
     doCheck = false; # The main test performs network access
     meta = {

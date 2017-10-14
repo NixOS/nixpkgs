@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
     sha256 = "09nygz1x9fvqf33gqpc6jnr1j7ny0yny3w2ngwqqfkf3f8n83qhr";
   };
 
-
   enableParallelBuilding = true;
   nativeBuildInputs = [ makeWrapper pkgconfig qmake ];
   buildInputs = [
@@ -49,9 +48,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;
-
-    # after qt5 bump it probably needs to be updated,
-    # but newer versions seem to need newer than the latest stable mlt
-    # broken = true;
+    broken = true;
   };
 }

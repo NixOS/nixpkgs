@@ -35,5 +35,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ canndrew ];
     license = licenses.mit;
     platforms = platforms.unix;
+    broken = true;
   };
 }

@@ -1870,6 +1870,8 @@ in {
       sha256 = "496265f4b7d33483ec153b9e1b8333fe959b115f7e781510089c8313b7d86560";
     };
 
+    disabled = isPy3k;
+
     meta = {
       description = "Tap into The Echo Nest's Musical Brain for the best music search, information, recommendations and remix tools on the web";
       homepage = https://github.com/echonest/pyechonest;
@@ -3355,6 +3357,8 @@ in {
       bandit oslosphinx coverage testtools testscenarios testrepository mock
 
     ];
+
+    meta.broken = true;
   };
 
   barbicanclient = buildPythonPackage rec {
@@ -3434,6 +3438,7 @@ in {
       description = "Client library and command line tool for the OpenStack Nova API";
       license = stdenv.lib.licenses.asl20;
       platforms = stdenv.lib.platforms.linux;
+      broken = true;
     };
   };
 
@@ -3447,6 +3452,8 @@ in {
     };
 
     buildInputs = with self; [ pytest ];
+
+    disabled = isPy3k;
 
     meta = with stdenv.lib; {
       description = "Tablib: format-agnostic tabular dataset library";
@@ -5473,6 +5480,7 @@ in {
     propagatedBuildInputs = with self; [ python_fedora pyopenssl ];
     postInstall = "mv $out/bin/fedpkg $out/bin/fedora-cert-fedpkg";
     doCheck = false;
+    disabled = isPy3k;
   };
 
   fedpkg = buildPythonPackage (rec {
@@ -6384,6 +6392,8 @@ in {
     buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ six clint pyyaml docopt requests jsonpatch args ];
 
+    disabled = isPy3k;
+
     meta = with stdenv.lib; {
       description = "A python wrapper for the various Internet Archive APIs";
       homepage = "https://github.com/jjjake/internetarchive";
@@ -6553,6 +6563,7 @@ in {
 
     buildInputs = [ pkgs.bluez pkgs.openobex ];
 
+    disabled = isPy3k;
 
     meta = {
       homepage = http://lightblue.sourceforge.net;
@@ -6904,7 +6915,9 @@ in {
       url = git://github.com/etsy/logster;
       rev = "7475c53822";
       sha256 = "0565wxxiwksnly8rakb2r77k7lwzniq16kv861qd2ns9hgsjgy31";
-    };
+     };
+
+     disabled = isPy3k;
   };
 
   logfury = callPackage ../development/python-modules/logfury { };
@@ -7860,6 +7873,8 @@ in {
 
     buildInputs = with self; [ zope_interface zope_location zope_schema ];
 
+    disabled = isPy3k;
+
     meta = {
       maintainers = with maintainers; [ domenkozar ];
     };
@@ -8516,31 +8531,7 @@ in {
 
   django-raster = callPackage ../development/python-modules/django-raster { };
 
-  django_redis = buildPythonPackage rec {
-    name = "django-redis-${version}";
-    version = "4.2.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/django-redis/${name}.tar.gz";
-      sha256 = "9ad6b299458f7e6bfaefa8905f52560017369d82fb8fb0ed4b41adc048dbf11c";
-    };
-
-    doCheck = false;
-
-    buildInputs = [ self.mock ];
-
-    propagatedBuildInputs = with self; [
-      django
-      redis
-      msgpack
-    ];
-
-    meta = {
-      description = "Full featured redis cache backend for Django";
-      homepage = https://github.com/niwibe/django-redis;
-      license = licenses.bsd3;
-    };
-  };
+  django_redis = callPackage ../development/python-modules/django_redis { };
 
   django_reversion = buildPythonPackage rec {
     name = "django-reversion-${version}";
@@ -10348,6 +10339,8 @@ in {
     };
 
     propagatedBuildInputs = with self; [ requests ];
+
+    disabled = isPy3k;
   };
 
   hypothesis = callPackage ../development/python-modules/hypothesis.nix { };
@@ -11476,6 +11469,7 @@ in {
     meta = {
       homepage = http://locust.io/;
       description = "A load testing tool";
+      broken = true;
     };
   };
 
@@ -13260,6 +13254,8 @@ in {
 
     propagatedBuildInputs = with self; [ nose ];
 
+    disabled = isPy3k;
+
     meta = {
       description = "Simple nose plugin that enables developers to run subset of collected tests to spare some waiting time for better things";
     };
@@ -14131,6 +14127,7 @@ in {
 
     meta = with stdenv.lib; {
       homepage = "http://wiki.openstack.org/wiki/Oslo#oslo.middleware";
+      broken = true;
     };
   };
 
@@ -14192,6 +14189,8 @@ in {
        testtools testscenarios testrepository oslotest subunit
      ];
 
+     # breaks in sandboxing
+     doCheck = false;
    };
 
   oslo-messaging = buildPythonPackage rec {
@@ -14266,6 +14265,8 @@ in {
     patchPhase = ''
       sed -i 's@python@${python.interpreter}@' .testr.conf
     '';
+
+    meta.broken = true;
   };
 
   cinderclient = buildPythonPackage rec {
@@ -14385,6 +14386,7 @@ in {
     buildInputs = with self; [
       tempest-lib testresources mock oslotest
     ];
+    meta.broken = true;
   };
 
   oslo-rootwrap = buildPythonPackage rec {
@@ -14631,6 +14633,8 @@ in {
       sed -i '/doc8/d' test-requirements.txt
       ${python.interpreter} setup.py test
     '';
+
+    meta.broken = true;
   };
 
   glance_store = buildPythonPackage rec {
@@ -14782,6 +14786,8 @@ in {
       # https://github.com/openstack/networking-hyperv/commit/56d66fc012846620a60cb8f18df5a1c889fe0e26
       sed -i 's/from oslo import i18n/import oslo_i18n as i18n/' hyperv/common/i18n.py
     '';
+
+    meta.broken = true;
   };
 
   kazoo = buildPythonPackage rec {
@@ -15544,6 +15550,8 @@ in {
 
     propagatedBuildInputs = with self; [ httplib2 ];
 
+    disabled = isPy3k;
+
     meta = {
       homepage = https://developer.paypal.com/;
       description = "Python APIs to create, process and manage payment";
@@ -16297,7 +16305,8 @@ in {
 
 
   pyalgotrade = buildPythonPackage {
-    name = "pyalogotrade-0.16";
+    name = "pyalgotrade-0.16";
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PyAlgoTrade/PyAlgoTrade-0.16.tar.gz";
@@ -16629,6 +16638,7 @@ in {
     meta = {
       description = "Interface for working with block devices";
       license = licenses.gpl2Plus;
+      broken = isPy3k;
     };
   };
 
@@ -16691,6 +16701,7 @@ in {
       license = licenses.bsd2;
       platforms = platforms.all;
       homepage = "http://jparyani.github.io/pycapnp/index.html";
+      broken = true;
     };
   };
 
@@ -17445,12 +17456,14 @@ in {
   };
 
   pyjwt = buildPythonPackage rec {
-    version = "1.4.2";
+    version = "1.5.3";
     name = "pyjwt-${version}";
 
-    src = pkgs.fetchurl {
-      url = "http://github.com/progrium/pyjwt/archive/${version}.tar.gz";
-      sha256 = "06vg84aicwkv0kli8i4jhg0kc6298cmh38ib058q01yxzk6q17gn";
+    src = pkgs.fetchFromGitHub {
+      owner = "progrium";
+      repo = "pyjwt";
+      rev = version;
+      sha256 = "109zb3ka2lvp00r9nawa0lmljfikvhcj5yny19kcipz8mqia1gs8";
     };
 
     buildInputs = with self; [ pytestrunner pytestcov pytest coverage ];
@@ -18199,11 +18212,12 @@ in {
   };
 
   pyopenssl = buildPythonPackage rec {
-    name = "pyopenssl-${version}";
+    pname = "pyOpenSSL";
+    name = "${pname}-${version}";
     version = "17.2.0";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyOpenSSL/pyOpenSSL-${version}.tar.gz";
+    src = self.fetchPypi {
+      inherit pname version;
       sha256 = "0d283g4zi0hr9papd24mjl70mi15gyzq6fx618rizi87dgipqqax";
     };
 
@@ -18973,22 +18987,7 @@ in {
 
   };
 
-  redis = buildPythonPackage rec {
-    name = "redis-2.10.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/redis/${name}.tar.gz";
-      sha256 = "0csmrkxb29x7xs9b51zplwkkq2hwnbh9jns1g85dykn5rxmaxysx";
-    };
-
-    # tests require a running redis
-    doCheck = false;
-
-    meta = {
-      description = "Python client for Redis key-value store";
-      homepage = "https://pypi.python.org/pypi/redis/";
-    };
-  };
+  redis = callPackage ../development/python-modules/redis { };
 
   rednose = buildPythonPackage rec {
     name = "rednose-${version}";
@@ -19727,6 +19726,8 @@ in {
       sha256 = "1b59vyy12g6rix9l2fxx0hjiq33shkb79v57gwffs57vh74wc53v";
     };
 
+    disabled = isPy3k;
+
     meta = {
       description = "A Python object API for managing the Linux LIO kernel target";
       homepage = "https://github.com/agrover/rtslib-fb";
@@ -20374,8 +20375,11 @@ in {
       export LANG="en_US.UTF-8";
     '';
 
-    patchPhase = ''
-      sed -i "s|_lgeos = load_dll('geos_c', fallbacks=.*)|_lgeos = load_dll('geos_c', fallbacks=['${pkgs.geos}/lib/libgeos_c.so'])|" shapely/geos.py
+    patchPhase = let
+      libc = if stdenv.isDarwin then "libc.dylib" else "libc.so.6";
+    in ''
+      sed -i "s|_lgeos = load_dll('geos_c', fallbacks=.*)|_lgeos = load_dll('geos_c', fallbacks=['${pkgs.geos}/lib/libgeos_c${stdenv.hostPlatform.extensions.sharedLibrary}'])|" shapely/geos.py
+      sed -i "s|free = load_dll('c').free|free = load_dll('c', fallbacks=['${stdenv.cc.libc}/lib/${libc}']).free|" shapely/geos.py
     '';
 
     # tests/test_voctorized fails because the vectorized extension is not
@@ -20386,6 +20390,7 @@ in {
 
     meta = {
       description = "Geometric objects, predicates, and operations";
+      maintainers = with maintainers; [ knedlsepp ];
       homepage = "https://pypi.python.org/pypi/Shapely/";
     };
   };
@@ -22041,6 +22046,8 @@ in {
       sha256 = "64a6c3f1a60a9d8bf18f96a5403f3735b334040345ac3646064931c209720972";
     };
 
+    disabled = isPy3k;
+
     meta = {
       description = "Python implementation of the v3 API for TheMovieDB.org, allowing access to movie and cast information";
       homepage = http://pypi.python.org/pypi/tmdb3;
@@ -22737,6 +22744,8 @@ in {
       url = "mirror://pypi/P/PyVirtualDisplay/${name}.tar.gz";
       sha256 = "aa6aef08995e14c20cc670d933bfa6e70d736d0b555af309b2e989e2faa9ee53";
     };
+
+    disabled = isPy3k;
 
     meta = {
       description = "Python wrapper for Xvfb, Xephyr and Xvnc";
@@ -23746,6 +23755,8 @@ EOF
 
     buildInputs = with self; [ mock nose ];
 
+    disabled = isPy3k;
+
     meta = {
       description = "Python API for the browse feature of Spotify";
       homepage = https://github.com/trygveaa/python-tunigo;
@@ -24745,6 +24756,8 @@ EOF
     };
 
     propagatedBuildInputs = with self; [requests websocket_client python_magic ];
+
+    meta.broken = true;
   };
 
   power = buildPythonPackage rec {
@@ -25060,6 +25073,8 @@ EOF
     };
 
     propagatedBuildInputs = with self; [ pynacl six ];
+
+    disabled = isPy3k;
   };
 
   pynacl = buildPythonPackage rec {
@@ -27083,6 +27098,8 @@ EOF
     };
     propagatedBuildInputs = with self; [ requests ];
 
+    disabled = isPy3k;
+
     meta = {
       description = "A Python client for the Packet API.";
       homepage    = "https://github.com/packethost/packet-python";
@@ -27187,6 +27204,8 @@ EOF
       rev = "479211f6c5a7d034fd77762dfed381c3315cd773";
       sha256 = "1ad0mkixc0s86djwsvhp1qlvcfs25086nh0qw7bys49gz8shczzi";
     };
+
+    disabled = isPy3k;
   };
 
   wptserve = callPackage ../development/python-modules/wptserve { };

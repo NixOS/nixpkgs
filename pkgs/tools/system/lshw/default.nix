@@ -19,6 +19,12 @@ stdenv.mkDerivation rec {
     sha256 = "147wyr5m185f8swsmb4q1ahs9r1rycapbpa2548aqbv298bbish3";
   })];
 
+  # Fix version info.
+  preConfigure = ''
+    sed -e "s/return \"unknown\"/return \"${version}\"/" \
+        -i src/core/version.cc
+  '';
+
   buildInputs = lib.optionals withGUI [ gtk2 pkgconfig sqlite ];
 
   makeFlags = [ "PREFIX=$(out)" ];
