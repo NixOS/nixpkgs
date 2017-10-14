@@ -26537,6 +26537,8 @@ EOF
     };
   };
 
+  yowsup = callPackage ../development/python-modules/yowsup { };
+
   wptserve = callPackage ../development/python-modules/wptserve { };
 
   yenc = callPackage ../development/python-modules/yenc { };
