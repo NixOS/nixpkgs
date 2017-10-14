@@ -1,4 +1,5 @@
 { stdenv
+, pkgs
 , fetchFromGitHub
 , rustPlatform
 }:
@@ -7,16 +8,25 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "git-dit-${version}";
-  version = "0.3.0";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "neithernut";
     repo = "git-dit";
     rev = "v${version}";
-    sha256 = "1xl698ngl0b7hd21917zavxcyba267xcsmri2q5a8mgavyssjazp";
+    sha256 = "1sx6sc2dj3l61gbiqz8vfyhw5w4xjdyfzn1ixz0y8ipm579yc7a2";
   };
 
-  depsSha256 = "19lrj4i6vzmf22r6xg99zcwvzjpiar8pqin1m2nvv78xzxx5yvgb";
+  depsSha256 = "1z2n3z5wkh5z5vc976yscq77fgjszwzwlrp7g17hmsbhzx6x170h";
+
+  buildInputs = with pkgs; [
+    openssl
+    gcc
+    cmake
+    pkgconfig
+    libssh
+    zlib
+  ];
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
