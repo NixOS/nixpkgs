@@ -1,0 +1,128 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="chap-bootstrap">
+
+<title>Bootstrapping Nixpkgs</title>
+
+<para>This chapter describes how to bootstrap a pinned Nixpkgs revision without
+the use of the <varname>NIX_PATH</varname>.  This improves the reproducibility
+of your builds by removing the <varname>NIX_PATH</varname> as a source of
+variability.</para>
+
+<para>To do so, follow the instructions in the following file, which is
+self-documenting:</para>
+
+<programlisting><![CDATA[
+# This file provides a way to bootstrap and pin `nixpkgs` without the use of
+# `<nixpkgs>`.  Instead, this depends only on `<nix>` (a builtin path to the
+# current Nix installation).  This comes in handy if you do not want to depend
+# on the `NIX_PATH` at all
+#
+# Save this file as `default.nix` within a directory named `./nixpkgs/`
+#
+# Then for each revision of `nixpkgs` that you want to pin, run:
+#
+# ```bash
+# $ nix-prefetch-git https://github.com/NixOS/nixpkgs.git "${REVISION}" > "./nixpkgs/{REVISION_NAME}.json"
+# ```
+#
+# For example, you might do:
+#
+# ```bash
+# $ nix-prefetch-git https://github.com/NixOS/nixpkgs.git c6356ce381cd04c676eb0f6028e1f8395bdba323 > nixpkgs/17_09.json
+# ```
+#
+# Then you can use the pinned `nixpkgs` by importing the `./nixpkgs/` directory
+# and accessing the store path as an attribute named after the
+# `${REVISION_NAME}`, like this:
+#
+# ```nix
+# let
+#   nixpkgs = (import ./nixpkgs)."17_09";
+# 
+#   pkgs = import nixpkgs { };
+#
+# in
+#   ...
+# ```
+
+
+with rec {
+  system = builtins.currentSystem;
+
+  builtin-paths = import <nix/config.nix>;
+
+  hashes = {
+    commit = "76d649b59484607901f0c1b8f737d8376a904019";
+    sha256 = "01c2f4mj4ahir0sxk9kxbymg2pki1pc9a3y6r9x6ridry75fzb8h";
+  };
+
+  stage1-tarball = import <nix/fetchurl.nix> {
+    url = "https://github.com/NixOS/nixpkgs/archive/${hashes.commit}.tar.gz";
+    inherit (hashes) sha256;
+  };
+
+  stage1-path = builtins.derivation {
+    name = "nixpkgs-bootstrap-stage1";
+    builder = builtin-paths.shell;
+    args = [
+      (builtins.toFile "nixpkgs-unpacker" ''
+        "$coreutils/mkdir" -p "$out"
+        cd "$out"
+        "$gzip" -c -d "$tarball" > temporary.tar
+        "$tar" -xf temporary.tar --strip-components=1
+        "$coreutils/rm" temporary.tar
+      '')
+    ];
+
+    inherit system;
+
+    inherit (builtin-paths) tar gzip coreutils;
+    tarball = stage1-tarball;
+  };
+
+  stage1 = import stage1-path { inherit system; };
+};
+
+let
+  pinnedNixpkgs =
+    let
+      paths = 
+        builtins.filter (f: "default.nix" != f)
+          (builtins.attrNames
+            (builtins.readDir ./.));
+
+      toKeyVal = file: {
+        name = builtins.replaceStrings [ ".json" ] [ "" ] file;
+
+        value = 
+          let
+            json = builtins.fromJSON (builtins.readFile (./. + "/${file}"));
+          in
+            stage1.fetchFromGitHub {
+              owner = "NixOS";
+              repo  = "nixpkgs";
+              inherit (json) rev sha256;
+            };
+      };
+    in
+      builtins.listToAttrs(map toKeyVal paths);
+in
+  # The resulting attribute set given by `pinnedNixpkgs` provides the
+  # `fetchFromGitHub` derivation for each `*.json` file within this
+  # directory keyed by its filename without the `.json` extension.
+  #
+  # e.g: If this directory were to contain these `.json` files:
+  #
+  # .
+  # ├── 16_09.json
+  # ├── 17_03.json
+  # └── 17_09.json
+  #
+  # ... then this file would produce this attribute set:
+  #
+  # $ nix-instantiate --eval --expr 'import ./default.nix'
+  # { 16_09 = <CODE>; 17_03 = <CODE>; 17_09 = <CODE>; }
+  pinnedNixpkgs
+]]></programlisting>
+</chapter>
