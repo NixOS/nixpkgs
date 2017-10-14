@@ -1,16 +1,21 @@
-{ buildPythonPackage, stdenv, fetchFromGitHub, six, python-axolotl }:
+{ buildPythonPackage, stdenv, fetchFromGitHub, six, python-axolotl, pytest }:
 
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "yowsup";
-  version = "v2.5.2";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "tgalal";
     repo = "yowsup";
-    rev = version;
+    rev = "v${version}";
     sha256 = "16l8jmr32wwvl11m0a4r4id3dkfqj2n7dn6gky1077xwmj2da4fl";
   };
+
+  checkInputs = [ pytest ];
+  checkPhase = ''
+    HOME=$(mktemp -d) py.test yowsup
+  '';
 
   patches = [ ./argparse-dependency.patch ];
 
