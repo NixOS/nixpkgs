@@ -43,8 +43,15 @@ let
     open_normally() {
         echo luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} \
           ${optionalString (header != null) "--header=${header}"} \
-          ${optionalString (keyFile != null) "--key-file=${keyFile} ${optionalString (keyFileSize != null) "--keyfile-size=${toString keyFileSize}"}"} \
           > /.luksopen_args
+        ${optionalString (keyFile != null) ''
+        if [ -e ${keyFile} ]; then
+            echo " --key-file=${keyFile} ${optionalString (keyFileSize != null) "--keyfile-size=${toString keyFileSize}"}" \
+              >> /.luksopen_args
+        else
+            echo "keyfile ${keyFile} not found -- fallback to interactive unlocking"
+        fi
+        ''}
         cryptsetup-askpass
         rm /.luksopen_args
     }
