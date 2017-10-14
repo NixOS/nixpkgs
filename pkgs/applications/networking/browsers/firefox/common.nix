@@ -130,7 +130,8 @@ stdenv.mkDerivation (rec {
     "--disable-gconf"
     "--enable-default-toolkit=cairo-gtk${if gtk3Support then "3" else "2"}"
   ]
-  ++ lib.optionals (stdenv.lib.versionAtLeast version "56") [
+  ++ lib.optionals (stdenv.lib.versionAtLeast version "56" && !stdenv.hostPlatform.isi686) [
+    # on i686-linux: --with-libclang-path is not available in this configuration
     "--with-libclang-path=${llvmPackages.clang-unwrapped}/lib"
     "--with-clang-path=${llvmPackages.clang}/bin/clang"
   ]
