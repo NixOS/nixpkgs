@@ -55,11 +55,6 @@ let
     DisplayCommand=${Xsetup}
     DisplayStopCommand=${Xstop}
 
-    # This doesn't mean we have wayland support yet but is only to shut up an
-    # error about a missing default directory
-    [Wayland]
-    SessionDir=${dmcfg.session.desktops}
-
     ${optionalString cfg.autoLogin.enable ''
     [Autologin]
     User=${cfg.autoLogin.user}
