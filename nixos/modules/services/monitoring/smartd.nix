@@ -81,32 +81,13 @@ let
         description = "Options that determine how smartd monitors the device.";
       };
 
-      timeout = mkOption {
-        default = -1;
-        example = "70";
-        type = types.int;
-        description = ''
-          Set SCT Error Recovery Control timeout in deciseconds for use in raid configurations.
-
-          Values are as follows:
-            -1 = do not touch, leave at default
-             0 = disable SCT ERT
-            70 = default in consumer drives (7 seconds)
-
-          Maximum is disk dependant but probably 60 seconds.
-        '';
-      };
-
     };
 
   };
 
-  deviceTimeout = d:
-    lib.optionalString (d.timeout > -1) ''
-      ${pkgs.smartmontools}/bin/smartctl -l scterc,${d.timeout},${d.timeout} --silent errorsonly ${d.device}
-    '';
+in
 
-in {
+{
   ###### interface
 
   options = {
@@ -241,13 +222,7 @@ in {
 
       path = [ pkgs.nettools ]; # for hostname and dnsdomanname calls in smartd
 
-      serviceConfig = {
-        ExecStartPre = ''
-          ${concatMapStringsSep "\n" deviceTimeout cfg.devices}
-        '';
-        ExecStart = "${pkgs.smartmontools}/sbin/smartd --no-fork --configfile=${smartdConf}";
-      };
-
+      serviceConfig.ExecStart = "${pkgs.smartmontools}/sbin/smartd --no-fork --configfile=${smartdConf}";
     };
 
   };
