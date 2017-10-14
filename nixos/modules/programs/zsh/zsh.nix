@@ -107,7 +107,7 @@ in
         if [ -n "$__ETC_ZSHENV_SOURCED" ]; then return; fi
         export __ETC_ZSHENV_SOURCED=1
 
-        . ${config.system.build.setEnvironment}
+        ${config.system.build.setEnvironment.text}
 
         ${cfge.shellInit}
 

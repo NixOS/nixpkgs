@@ -123,7 +123,7 @@ in
     programs.bash = {
 
       shellInit = ''
-        . ${config.system.build.setEnvironment}
+        ${config.system.build.setEnvironment.text}
 
         ${cfge.shellInit}
       '';
