@@ -19,6 +19,7 @@
 , pulseaudioSupport ? true, libpulseaudio
 , ffmpegSupport ? true, gstreamer, gst-plugins-base
 , gtk3Support ? !isTorBrowserLike, gtk2, gtk3, wrapGAppsHook
+, gssSupport ? true, kerberos
 
 ## privacy-related options
 
@@ -72,7 +73,8 @@ stdenv.mkDerivation (rec {
   ++ lib.optional  alsaSupport alsaLib
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optionals ffmpegSupport [ gstreamer gst-plugins-base ]
-  ++ lib.optional  gtk3Support gtk3;
+  ++ lib.optional  gtk3Support gtk3
+  ++ lib.optional  gssSupport kerberos;
 
   NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss";
 
@@ -155,6 +157,7 @@ stdenv.mkDerivation (rec {
   ++ flag alsaSupport "alsa"
   ++ flag pulseaudioSupport "pulseaudio"
   ++ flag ffmpegSupport "ffmpeg"
+  ++ flag gssSupport "negotiateauth"
   ++ lib.optional (!ffmpegSupport) "--disable-gstreamer"
   ++ flag webrtcSupport "webrtc"
   ++ flag geolocationSupport "mozril-geoloc"
@@ -219,6 +222,7 @@ stdenv.mkDerivation (rec {
     gtk = gtk2;
     inherit nspr;
     inherit ffmpegSupport;
+    inherit gssSupport;
   } // lib.optionalAttrs gtk3Support { inherit gtk3; };
 
 } // overrides)
