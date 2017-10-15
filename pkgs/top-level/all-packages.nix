@@ -19092,7 +19092,9 @@ with pkgs;
   };
   openlilylib-fonts = callPackage ../misc/lilypond/fonts.nix { };
 
-  mailcore2 = callPackage ../development/libraries/mailcore2 { };
+  mailcore2 = callPackage ../development/libraries/mailcore2 {
+    icu = icu58;
+  };
 
   martyr = callPackage ../development/libraries/martyr { };
 
