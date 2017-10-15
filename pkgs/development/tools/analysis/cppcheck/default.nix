@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   postInstall = ''
-    make DB2MAN=${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl man
+    make DB2MAN=${docbook_xsl}/share/xml/docbook-xsl/manpages/docbook.xsl man
     mkdir -p $man/share/man/man1
     cp cppcheck.1 $man/share/man/man1/cppcheck.1
   '';
