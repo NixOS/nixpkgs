@@ -88,14 +88,14 @@
 
   tor-launcher = stdenv.mkDerivation rec {
     name = "tor-launcher-${version}";
-    version = "0.2.12.3";
+    version = "0.2.13";
 
     extid = "tor-launcher@torproject.org";
 
     src = fetchgit {
       url = "https://git.torproject.org/tor-launcher.git";
       rev = "refs/tags/${version}";
-      sha256 = "0126x48pjiy2zm4l8jzhk70w24hviaz560ffp4lb9x0ar615bc9q";
+      sha256 = "1f98v88y2clwvjiw77kxqc9cacp5h0489a540nc2wmsx7vnskrq0";
     };
 
     nativeBuildInputs = [ zip ];
