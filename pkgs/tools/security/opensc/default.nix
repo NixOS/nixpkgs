@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     "--enable-doc"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
-    "--with-xsl-stylesheetsdir=${docbook_xsl}/xml/xsl/docbook"
+    "--with-xsl-stylesheetsdir=${docbook_xsl}/share/xml/docbook-xsl"
     "--with-pcsc-provider=${pcsclite}/lib/libpcsclite.so"
   ];
 
