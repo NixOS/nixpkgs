@@ -14,6 +14,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ ncurses ];
 
+  makeFlags = [ "execgamesdir=$(out)/bin" ];
+
+  postInstall = ''
+    install -Dm644 {nki,$out/share/games/robotfindskitten}/vanilla.nki
+  '';
+
   meta = {
     description = "Yet another zen simulation; A simple find-the-kitten game";
     homepage = http://robotfindskitten.org/;
