@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   patchPhase = ''
-    sed -i s,/usr/share/sgml/docbook/xml-dtd-4.1.2/,${docbook_xml_dtd_412}/xml/dtd/docbook/, \
+    sed -i s,/usr/share/sgml/docbook/xml-dtd-4.1.2/,${docbook_xml_dtd_412}/share/xml/dtd/docbook/, \
       docsrc/*.xml
   '';
 
