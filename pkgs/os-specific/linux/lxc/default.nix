@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoreconfHook pkgconfig perl docbook2x python3Packages.wrapPython
+    docbook_xml_dtd_45
   ];
   buildInputs = [
     libapparmor gnutls libselinux libseccomp cgmanager libnih dbus libcap
@@ -34,8 +35,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i '/chmod u+s/d' src/lxc/Makefile.am
   '';
-
-  XML_CATALOG_FILES = "${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml";
 
   # FIXME
   # glibc 2.25 moved major()/minor() to <sys/sysmacros.h>.
