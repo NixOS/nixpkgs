@@ -5,9 +5,6 @@
   docbook_xml_xslt, ldap, systemd, nspr, check, cmocka, uid_wrapper,
   nss_wrapper, docbook_xml_dtd_44, ncurses, Po4a, http-parser, jansson }:
 
-let
-  docbookFiles = "${pkgs.docbook_xml_xslt}/share/xml/docbook-xsl/catalog.xml:${pkgs.docbook_xml_dtd_44}/xml/dtd/docbook/catalog.xml";
-in
 stdenv.mkDerivation rec {
   name = "sssd-${version}";
   version = "1.14.2";
@@ -21,7 +18,6 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
   preConfigure = ''
-    export SGML_CATALOG_FILES="${docbookFiles}"
     export PYTHONPATH=${ldap}/lib/python2.7/site-packages
     export PATH=$PATH:${pkgs.openldap}/libexec
 
@@ -37,23 +33,19 @@ stdenv.mkDerivation rec {
       --with-syslog=journald
       --without-selinux
       --without-semanage
-      --with-xml-catalog-path=''${SGML_CATALOG_FILES%%:*}
       --with-ldb-lib-dir=$out/modules/ldb
       --with-nscd=${glibc.bin}/sbin/nscd
     )
   '';
 
   enableParallelBuilding = true;
+  nativeBuildInputs = [ docbook_xml_xslt docbook_xml_dtd_44 ];
   buildInputs = [ augeas dnsutils c-ares cyrus_sasl ding-libs libnl libunistring nss
                   samba libnfsidmap doxygen python python3 popt
                   talloc tdb tevent pkgconfig ldb pam openldap pcre kerberos
                   cifs_utils glib keyutils dbus fakeroot libxslt libxml2
                   ldap systemd nspr check cmocka uid_wrapper
                   nss_wrapper ncurses Po4a http-parser jansson ];
-
-  makeFlags = [
-    "SGML_CATALOG_FILES=${docbookFiles}"
-  ];
 
   installFlags = [
      "sysconfdir=$(out)/etc"
