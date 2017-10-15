@@ -762,6 +762,8 @@ with pkgs;
   };
   bro = callPackage ../applications/networking/ids/bro { };
 
+  browsermob-proxy = callPackage ../development/tools/browsermob-proxy {};
+
   bruteforce-luks = callPackage ../tools/security/bruteforce-luks { };
 
   bsod = callPackage ../misc/emulators/bsod { };
