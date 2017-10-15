@@ -47,13 +47,13 @@
 
   noscript = stdenv.mkDerivation rec {
     name = "noscript-${version}";
-    version = "5.0.10";
+    version = "5.1.2";
 
     extid = "{73a6fe31-595d-460b-a920-fcc0f8843232}";
 
     src = fetchurl {
       url = "https://secure.informaction.com/download/releases/noscript-${version}.xpi";
-      sha256 = "18k5karbaj5mhd9cyjbqgik6044bw88rjalkh6anjanxbn503j6g";
+      sha256 = "1fzspdiwhjabwz1yxb3gzj7giz9jbc1xxm65i93rvhzcp537cs42";
     };
 
     unpackPhase = ":";
