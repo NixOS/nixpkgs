@@ -63,6 +63,12 @@ let
     GRAPHITE_STORAGE_DIR = dataDir;
   };
 
+  pythonPackages = pkgs.python27Packages.override {
+    overrides = self: super: {
+      django = super.django_1_8;
+    };
+  };
+
 in {
 
   ###### interface
@@ -417,7 +423,8 @@ in {
           ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
-          PIDFile="/run/${name}/${name}.pid";
+          PIDFile = "/run/${name}/${name}.pid";
+          RuntimeDirectory = name;
         };
         preStart = mkPidFileDir name;
       };
@@ -433,7 +440,8 @@ in {
           ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
           Group = "graphite";
-          PIDFile="/run/${name}/${name}.pid";
+          PIDFile = "/run/${name}/${name}.pid";
+          RuntimeDirectory = name;
         };
         preStart = mkPidFileDir name;
       };
@@ -455,14 +463,14 @@ in {
           PYTHONPATH = let
               penv = pkgs.python.buildEnv.override {
                 extraLibs = [
-                  pkgs.python27Packages.graphite_web
-                  pkgs.python27Packages.pysqlite
+                  pythonPackages.graphite_web
+                  pythonPackages.pysqlite
                 ];
               };
               penvPack = "${penv}/${pkgs.python.sitePackages}";
               # opt/graphite/webapp contains graphite/settings.py
               # explicitly adding pycairo in path because it cannot be imported via buildEnv
-            in "${penvPack}/opt/graphite/webapp:${penvPack}:${pkgs.pythonPackages.pycairo}/${pkgs.python.sitePackages}";
+            in "${penvPack}/opt/graphite/webapp:${penvPack}:${pythonPackages.pycairo}/${pkgs.python.sitePackages}";
           DJANGO_SETTINGS_MODULE = "graphite.settings";
           GRAPHITE_CONF_DIR = configDir;
           GRAPHITE_STORAGE_DIR = dataDir;
@@ -470,9 +478,9 @@ in {
         };
         serviceConfig = {
           ExecStart = ''
-            ${pkgs.python27Packages.waitress}/bin/waitress-serve \
+            ${pythonPackages.waitress}/bin/waitress-serve \
             --host=${cfg.web.listenAddress} --port=${toString cfg.web.port} \
-            --call django.core.handlers.wsgi:WSGIHandler'';
+            --call django.core.wsgi:get_wsgi_application'';
           User = "graphite";
           Group = "graphite";
           PermissionsStartOnly = true;
@@ -483,10 +491,10 @@ in {
             chmod 0700 ${dataDir}/{whisper/,log/webapp/}
 
             # populate database
-            ${pkgs.python27Packages.graphite_web}/bin/manage-graphite.py syncdb --noinput
+            ${pythonPackages.django}/bin/django-admin.py syncdb --noinput
 
             # create index
-            ${pkgs.python27Packages.graphite_web}/bin/build-index.sh
+            ${pythonPackages.graphite_web}/bin/build-index.sh
 
             chown -R graphite:graphite ${cfg.dataDir}
 
@@ -495,7 +503,7 @@ in {
         '';
       };
 
-      environment.systemPackages = [ pkgs.python27Packages.graphite_web ];
+      environment.systemPackages = [ pythonPackages.graphite_web ];
     })
 
     (mkIf cfg.api.enable {
