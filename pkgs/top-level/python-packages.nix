@@ -6990,20 +6990,31 @@ in {
   };
 
   pew = buildPythonPackage rec {
-    name = "pew-0.1.14";
-    namePrefix = "";
+    name = "pew-1.1.0";
 
     disabled = pythonOlder "3.4"; # old versions require backported libraries
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pew/${name}.tar.gz";
-      sha256 = "0p188ah80l0rzbib2srahj2sswz8rcpqwbrbajyv2r5c1m5k6r4b";
+      sha256 = "0b8z1vjsll1kgnh3mmdjps5rr9gayy091rapp2dra71jrwkx3yfh";
     };
 
-    propagatedBuildInputs = with self; [ virtualenv virtualenv-clone ];
+    propagatedBuildInputs = with self; [ virtualenv virtualenv-clone setuptools ];
+
+    postFixup = ''
+      set -euo pipefail
+      PEW_SITE="$out/lib/${self.python.libPrefix}/site-packages"
+      SETUPTOOLS="${self.setuptools}/lib/${self.python.libPrefix}/site-packages"
+      SETUPTOOLS_SITE=$SETUPTOOLS/$(cat $SETUPTOOLS/setuptools.pth)
+      CLONEVENV_SITE="${self.virtualenv-clone}/lib/${python.libPrefix}/site-packages"
+      SITE_PACKAGES="[\'$PEW_SITE\',\'$SETUPTOOLS_SITE\',\'$CLONEVENV_SITE\']"
+      substituteInPlace $PEW_SITE/pew/pew.py \
+        --replace "from pew.pew" "import sys; sys.path.extend($SITE_PACKAGES); from pew.pew" \
+        --replace 'sys.executable, "-m", "virtualenv"' "'${self.virtualenv}/bin/virtualenv'"
+    '';
 
     meta = {
-      description = "Tools to manage multiple virtualenvs written in pure python, a virtualenvwrapper rewrite";
+      description = "Tools to manage multiple virtualenvs written in pure python";
       license = licenses.mit;
       platforms = platforms.all;
       maintainers = with maintainers; [ berdario ];
