@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     owner  = "sheepdog";
     repo   = "sheepdog";
     rev    = "${version}";
-    sha256 = "0c4f454d6185617f67e6ebe60c6735f481ea46460c84e2132a1c47090cf8b857";
+    sha256 = "0f4l44w2a8zl92agwsmrxssdw3z4lvcxi0hac4kcj8yr4rqwlm0z";
   };
 
   buildInputs = [ 
