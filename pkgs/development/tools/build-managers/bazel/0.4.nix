@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, jdk, zip, unzip, bash, makeWrapper, which }:
+{ stdenv, lib, fetchurl, jdk, zip, unzip, bash, makeWrapper, which
+# Always assume all markers valid (don't redownload dependencies).
+# Also, don't clean up environment variables.
+, enableNixHacks ? false
+}:
 
 stdenv.mkDerivation rec {
 
@@ -20,6 +24,8 @@ stdenv.mkDerivation rec {
   };
 
   sourceRoot = ".";
+
+  patches = lib.optional enableNixHacks ./nix-hacks.patch;
 
   postPatch = ''
     for f in $(grep -l -r '#!/bin/bash'); do
