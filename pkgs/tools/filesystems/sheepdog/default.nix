@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, liburcu, corosync, fuse, zookeeper, curl, fcgi
- , automake, autoconf, libtool, pkgconfig, groff, yasm
+ , automake, autoconf, libtool, pkgconfig, groff, yasm, systemd
  , withSheepFs ? false
  , withHttp ? false
 }:
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     pkgconfig
     groff
     yasm
+    systemd
     liburcu
     corosync
     zookeeper
