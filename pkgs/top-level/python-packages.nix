@@ -15578,6 +15578,27 @@ in {
     };
   };
 
+  pipenv = buildPythonPackage rec {
+    name = "pipenv-8.2.7";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/p/pipenv/${name}.tar.gz";
+      sha256 = "08wkxs6qqgzxamym523bjv7zahg8p9v18x0yi9vwclij5k91iyzm";
+    };
+
+    LC_ALL = "en_US.UTF-8";
+
+    propagatedBuildInputs = with self; [ pew pip requests flake8 ];
+
+    doCheck = false;
+
+    meta = {
+      description = "Python Development Workflow for Humans";
+      license = licenses.mit;
+      platforms = platforms.all;
+    };
+  };
+
   pip-tools = callPackage ../development/python-modules/pip-tools {
     glibcLocales = pkgs.glibcLocales;
   };
