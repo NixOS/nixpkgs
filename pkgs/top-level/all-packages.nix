@@ -7330,6 +7330,8 @@ with pkgs;
 
   kcov = callPackage ../development/tools/analysis/kcov { };
 
+  kubectl = callPackage ../tools/admin/kubectl { };
+
   kube-aws = callPackage ../development/tools/kube-aws { };
 
   lcov = callPackage ../development/tools/analysis/lcov { };
