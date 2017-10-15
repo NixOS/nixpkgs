@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
     sha256 = "1w71nk527lq504njmaf0vzr93pgahkgzzxzglrq6bay8cw2rvnvq";
   };
 
-  buildInputs = [ python2 unzip ];
+  buildInputs = [ python2 unzip docbook_xml_dtd_45 docbook5_xsl docbook_xsl ];
 
   # install filters early, so their shebangs are patched too
   patchPhase = with stdenv.lib; ''
@@ -235,7 +235,7 @@ stdenv.mkDerivation rec {
     # use it to work around an impurity in the tetex package; tetex tools
     # cannot find their neighbours (e.g. pdflatex doesn't find mktextfm).
     # We can remove PATH= when those impurities are fixed.
-    sed -e "s|^ENV =.*|ENV = dict(XML_CATALOG_FILES='${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook5_xsl}/xml/xsl/docbook/catalog.xml ${docbook_xsl}/xml/xsl/docbook/catalog.xml', PATH='${stdenv.lib.makeBinPath [ tetex coreutils gnused ]}')|" \
+    sed -e "s|^ENV =.*|ENV = dict(XML_CATALOG_FILES='$XML_CATALOG_FILES', PATH='${stdenv.lib.makeBinPath [ tetex coreutils gnused ]}')|" \
         -e "s|^ASCIIDOC =.*|ASCIIDOC = '$out/bin/asciidoc'|" \
         -e "s|^XSLTPROC =.*|XSLTPROC = '${libxslt.bin}/bin/xsltproc'|" \
         -e "s|^DBLATEX =.*|DBLATEX = '${dblatexFull}/bin/dblatex'|" \
