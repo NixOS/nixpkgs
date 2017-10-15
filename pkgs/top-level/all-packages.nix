@@ -18744,6 +18744,14 @@ with pkgs;
     cudnnSupport = cudaSupport;
   };
 
+  cntk = callPackage ../applications/science/math/cntk rec {
+    cudaSupport = pkgs.config.cudaSupport or false;
+    cudnnSupport = cudaSupport;
+    inherit (linuxPackages) nvidia_x11;
+    cudatoolkit = cudatoolkit8;
+    cudnn = cudnn6_cudatoolkit8;
+  };
+
   ecm = callPackage ../applications/science/math/ecm { };
 
   eukleides = callPackage ../applications/science/math/eukleides {
