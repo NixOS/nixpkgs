@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, flex, cracklib }:
+{ stdenv, buildPackages, fetchurl, flex, cracklib }:
 
 stdenv.mkDerivation rec {
   name = "linux-pam-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "doc" "man" /* "modules" */ ];
 
-  nativeBuildInputs = [ flex ];
+  nativeBuildInputs = [ buildPackages.stdenv.cc flex ];
 
   buildInputs = [ cracklib ];
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   crossAttrs = {
     propagatedBuildInputs = [ flex.crossDrv cracklib.crossDrv ];
     preConfigure = preConfigure + ''
-      ar x ${flex.crossDrv}/lib/libfl.a
+      $crossConfig-ar x ${flex.crossDrv}/lib/libfl.a
       mv libyywrap.o libyywrap-target.o
       ar x ${flex}/lib/libfl.a
       mv libyywrap.o libyywrap-host.o
