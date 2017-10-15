@@ -6313,6 +6313,8 @@ in {
     };
   };
 
+  jsmin = callPackage ../development/python-modules/jsmin { };
+
   jsonpatch = callPackage ../development/python-modules/jsonpatch { };
 
   jsonpointer = buildPythonPackage rec {
