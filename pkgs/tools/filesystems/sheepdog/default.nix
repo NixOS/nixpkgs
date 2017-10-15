@@ -50,8 +50,8 @@ stdenv.mkDerivation rec {
       cloning, and thin provisioning.
       '';
 
-    homepage = https://sheepdog.github.io/sheepdog/
-    license = https://raw.githubusercontent.com/sheepdog/sheepdog/master/COPYING
+    homepage = https://sheepdog.github.io/sheepdog/;
+    license = https://raw.githubusercontent.com/sheepdog/sheepdog/master/COPYING;
     platforms = stdenv.lib.platforms.linux;
   };
 }
