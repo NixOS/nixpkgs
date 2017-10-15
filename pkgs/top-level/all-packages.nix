@@ -4455,6 +4455,8 @@ with pkgs;
 
   sl = callPackage ../tools/misc/sl { };
 
+  sheepdog = callPackage ../tools/filesystems/sheepdog { };
+
   socat = callPackage ../tools/networking/socat { };
 
   socat2pre = lowPrio (callPackage ../tools/networking/socat/2.x.nix { });
