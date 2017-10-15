@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
 
   patches =
     [ ./keep-path.patch
+      ./respect-xml-catalog-files-var.patch
       dots_in_usernames
     ];
 
@@ -53,11 +54,6 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     export ac_cv_func_setpgrp_void=yes
     export shadow_cv_logdir=/var/log
-    (
-    head -n -1 "${docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml"
-    tail -n +3 "${docbook_xsl}/share/xml/docbook-xsl/catalog.xml"
-    ) > xmlcatalog
-    configureFlags="$configureFlags --with-xml-catalog=$PWD/xmlcatalog ";
   '';
 
   configureFlags = " --enable-man ";
