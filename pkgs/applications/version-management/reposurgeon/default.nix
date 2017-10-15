@@ -33,7 +33,6 @@ in mkDerivation rec {
 
   preBuild = ''
     makeFlagsArray=(
-      XML_CATALOG_FILES="${docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml ${docbook_xml_xslt}/xml/xsl/docbook/catalog.xml"
       prefix="$out"
       pyinclude="-I${python}/include/python2.7"
       pylib="-L${python}/lib -lpython2.7"
