@@ -14,9 +14,7 @@ stdenv.mkDerivation rec {
     "DB2MAN=docbook2man"
   ];
 
-  XML_CATALOG_FILES = "${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml";
-
-  nativeBuildInputs = [ pkgconfig docbook2x flex bison ];
+  nativeBuildInputs = [ pkgconfig docbook2x docbook_xml_dtd_45 flex bison ];
   buildInputs = [ libmnl libnftnl gmp readline ];
 
   meta = with stdenv.lib; {
