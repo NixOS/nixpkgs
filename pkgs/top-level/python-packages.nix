@@ -6994,27 +6994,6 @@ in {
     };
   };
 
-  pew = buildPythonPackage rec {
-    name = "pew-0.1.14";
-    namePrefix = "";
-
-    disabled = pythonOlder "3.4"; # old versions require backported libraries
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pew/${name}.tar.gz";
-      sha256 = "0p188ah80l0rzbib2srahj2sswz8rcpqwbrbajyv2r5c1m5k6r4b";
-    };
-
-    propagatedBuildInputs = with self; [ virtualenv virtualenv-clone ];
-
-    meta = {
-      description = "Tools to manage multiple virtualenvs written in pure python, a virtualenvwrapper rewrite";
-      license = licenses.mit;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ berdario ];
-    };
-  };
-
   pex = buildPythonPackage rec {
     name = "pex-${version}";
     version = "1.2.7";
