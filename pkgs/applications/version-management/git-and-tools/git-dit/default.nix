@@ -1,39 +1,41 @@
-{ stdenv, fetchFromGitHub, pandoc }:
+{ stdenv
+, fetchFromGitHub
+, openssl
+, gcc
+, zlib
+, libssh
+, cmake
+, perl
+, pkgconfig
+, rustPlatform
+}:
 
-stdenv.mkDerivation rec {
+with rustPlatform;
+
+buildRustPackage rec {
   name = "git-dit-${version}";
-  version = "0.1.0";
-
-  buildInputs = [ pandoc ];
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "neithernut";
     repo = "git-dit";
     rev = "v${version}";
-    sha256 = "1rvp2dhnb8yqrracvfpvf8z1vz4fs0rii18hhrskr6n1sfd7x9kd";
+    sha256 = "1sx6sc2dj3l61gbiqz8vfyhw5w4xjdyfzn1ixz0y8ipm579yc7a2";
   };
 
-  # the Makefile doesn’t work, we emulate it below
-  dontBuild = true;
+  depsSha256 = "1z2n3z5wkh5z5vc976yscq77fgjszwzwlrp7g17hmsbhzx6x170h";
 
-  postPatch = ''
-    # resolve binaries to the right path
-    sed -e "s|exec git-dit-|exec $out/bin/git-dit-|" -i git-dit
+  nativeBuildInputs = [
+    cmake
+    pkgconfig
+    perl
+  ];
 
-    # we change every git dit command to the local subcommand path
-    # (git dit foo -> /nix/store/…-git-dit/bin/git-dit-foo)
-    for script in git-dit-*; do
-      sed -e "s|git dit |$out/bin/git-dit-|g" -i "$script"
-    done
-  '';
-
-  installPhase = ''
-    mkdir -p $out/{bin,share/man/man1}
-    # from the Makefile
-    ${stdenv.lib.getBin pandoc}/bin/pandoc -s -t man git-dit.1.md \
-                                           -o $out/share/man/man1/git-dit.1
-    cp git-dit* $out/bin
-  '';
+  buildInputs = [
+    openssl
+    libssh
+    zlib
+  ];
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
@@ -41,6 +43,4 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ profpatsch matthiasbeyer ];
   };
-
-
 }
