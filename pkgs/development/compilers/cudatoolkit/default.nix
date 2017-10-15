@@ -1,11 +1,12 @@
-{ lib, stdenv, fetchurl, requireFile, patchelf, perl, ncurses, expat, python27, zlib
+{ lib, stdenv, makeWrapper, fetchurl, requireFile, patchelf, perl, ncurses, expat, python27, zlib
+, gcc48, gcc49, gcc5, gcc6
 , xorg, gtk2, glib, fontconfig, freetype, unixODBC, alsaLib, glibc
 }:
 
 let
 
   common =
-    args@{ version, sha256
+    args@{ gcc, version, sha256
     , url ? ""
     , name ? ""
     , developerProgram ? false
@@ -37,7 +38,7 @@ let
 
       outputs = [ "out" "lib" "doc" ];
 
-      buildInputs = [ perl ];
+      nativeBuildInputs = [ perl makeWrapper ];
 
       runtimeDependencies = [
         ncurses expat python zlib glibc
@@ -105,10 +106,20 @@ let
         # Remove OpenCL libraries as they are provided by ocl-icd and driver.
         rm -f $out/lib64/libOpenCL*
 
+        # Set compiler for NVCC.
+        wrapProgram $out/bin/nvcc \
+          --prefix PATH : ${gcc}/bin
       '' + lib.optionalString (lib.versionOlder version "8.0") ''
         # Hack to fix building against recent Glibc/GCC.
         echo "NIX_CFLAGS_COMPILE+=' -D_FORCE_INLINES'" >> $out/nix-support/setup-hook
       '';
+
+      passthru = {
+        cc = gcc;
+        majorVersion =
+          let versionParts = lib.splitString "." version;
+          in "${lib.elemAt versionParts 0}.${lib.elemAt versionParts 1}";
+      };
 
       meta = with stdenv.lib; {
         description = "A compiler for NVIDIA GPUs, math libraries, and tools";
@@ -124,36 +135,42 @@ in {
     version = "6.0.37";
     url = "http://developer.download.nvidia.com/compute/cuda/6_0/rel/installers/cuda_6.0.37_linux_64.run";
     sha256 = "991e436c7a6c94ec67cf44204d136adfef87baa3ded270544fa211179779bc40";
+    gcc = gcc48;
   };
 
   cudatoolkit65 = common {
     version = "6.5.19";
     url = "http://developer.download.nvidia.com/compute/cuda/6_5/rel/installers/cuda_6.5.19_linux_64.run";
     sha256 = "1x9zdmk8z784d3d35vr2ak1l4h5v4jfjhpxfi9fl9dvjkcavqyaj";
+    gcc = gcc48;
   };
 
   cudatoolkit7 = common {
     version = "7.0.28";
     url = "http://developer.download.nvidia.com/compute/cuda/7_0/Prod/local_installers/cuda_7.0.28_linux.run";
     sha256 = "1km5hpiimx11jcazg0h3mjzk220klwahs2vfqhjavpds5ff2wafi";
+    gcc = gcc49;
   };
 
   cudatoolkit75 = common {
     version = "7.5.18";
     url = "http://developer.download.nvidia.com/compute/cuda/7.5/Prod/local_installers/cuda_7.5.18_linux.run";
     sha256 = "1v2ylzp34ijyhcxyh5p6i0cwawwbbdhni2l5l4qm21s1cx9ish88";
+    gcc = gcc49;
   };
 
   cudatoolkit8 = common {
     version = "8.0.61";
     url = "https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda_8.0.61_375.26_linux-run";
     sha256 = "1i4xrsqbad283qffvysn88w2pmxzxbbby41lw0j1113z771akv4w";
+    gcc = gcc5;
   };
 
   cudatoolkit9 = common {
     version = "9.0.176";
     url = "https://developer.nvidia.com/compute/cuda/9.0/Prod/local_installers/cuda_9.0.176_384.81_linux-run";
     sha256 = "0308rmmychxfa4inb1ird9bpgfppgr9yrfg1qp0val5azqik91ln";
+    gcc = gcc6;
   };
 
 }
