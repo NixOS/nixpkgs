@@ -30,7 +30,7 @@ python2Packages.buildPythonApplication {
   doCheck = false;
 
   postInstall = ''
-    make -C doc/manual install nixops.1 docbookxsl=${docbook5_xsl}/xml/xsl/docbook \
+    make -C doc/manual install nixops.1 docbookxsl=${docbook5_xsl}/share/xml/docbook-xsl-ns \
       docdir=$out/share/doc/nixops mandir=$out/share/man
 
     mkdir -p $out/share/nix/nixops
