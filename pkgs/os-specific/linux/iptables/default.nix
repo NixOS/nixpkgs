@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libnetfilter_conntrack libnftnl libmnl ];
 
   preConfigure = ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -lmnl -lnftnl"
+    export NIX_LDFLAGS="$NIX_LDFLAGS -lmnl -lnftnl -ldl"
   '';
 
   configureFlags = ''
