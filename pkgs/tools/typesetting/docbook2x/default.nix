@@ -1,12 +1,12 @@
-{ fetchurl, stdenv, texinfo, perl
+{ fetchurl, stdenv, lib, texinfo, perl
 , XMLSAX, XMLParser, XMLNamespaceSupport
 , groff, libxml2, libxslt, gnused, libiconv, opensp
-, docbook_xml_dtd_43
+, docbook_xml_dtd_43, findXMLCatalogs
 , makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "docbook2X-0.8.8";
-  
+
   src = fetchurl {
     url = "mirror://sourceforge/docbook2x/${name}.tar.gz";
     sha256 = "0ifwzk99rzjws0ixzimbvs83x6cxqk1xzmg84wa1p7bs6rypaxs0";
@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
   # writes its output to stdout instead of creating a file.
   patches = [ ./db2x_texixml-to-stdout.patch ];
 
-  buildInputs = [ perl texinfo groff libxml2 libxslt makeWrapper
+  nativeBuildInputs = [ findXMLCatalogs makeWrapper ];
+  buildInputs = [ perl texinfo groff libxml2 libxslt docbook_xml_dtd_43
                   XMLSAX XMLParser XMLNamespaceSupport opensp libiconv
                 ];
 
@@ -32,14 +33,10 @@ stdenv.mkDerivation rec {
                   docbook2man docbook2texi";
     for i in $perlPrograms
     do
-      # XXX: We work around the fact that `wrapProgram' doesn't support
-      # spaces below by inserting escaped backslashes.
-      wrapProgram $out/bin/$i --prefix PERL5LIB :			\
-        "${XMLSAX}/lib/perl5/site_perl:${XMLParser}/lib/perl5/site_perl" \
-	--prefix PERL5LIB :						\
-	"${XMLNamespaceSupport}/lib/perl5/site_perl"			\
-	--prefix XML_CATALOG_FILES "\ "					\
-	"$out/share/docbook2X/dtd/catalog.xml\ $out/share/docbook2X/xslt/catalog.xml\ ${docbook_xml_dtd_43}/xml/dtd/docbook/catalog.xml"
+      wrapProgram $out/bin/$i \
+        --set PERL5LIB \
+          "${lib.makePerlPath [ XMLSAX XMLParser XMLNamespaceSupport ]}" \
+        --set XML_CATALOG_FILES "$XML_CATALOG_FILES"
     done
 
     wrapProgram $out/bin/sgml2xml-isoent --prefix PATH : \
