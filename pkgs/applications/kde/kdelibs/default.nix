@@ -34,8 +34,8 @@ mkDerivation {
   NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
 
   cmakeFlags = [
-    "-DDOCBOOKXML_CURRENTDTD_DIR=${docbook_xml_dtd_42}/xml/dtd/docbook"
-    "-DDOCBOOKXSL_DIR=${docbook_xsl}/xml/xsl/docbook"
+    "-DDOCBOOKXML_CURRENTDTD_DIR=${docbook_xml_dtd_42}/share/xml/dtd/docbook"
+    "-DDOCBOOKXSL_DIR=${docbook_xsl}/share/xml/docbook-xsl"
     "-DWITH_SOLID_UDISKS2=ON"
     "-DKDE_DEFAULT_HOME=.kde"
   ];
