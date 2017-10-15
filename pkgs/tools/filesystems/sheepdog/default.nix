@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    description = "Distributed storage system for KVM"
+    description = "Distributed storage system for KVM";
 
     longDescription =
       ''
