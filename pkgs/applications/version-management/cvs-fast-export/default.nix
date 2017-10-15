@@ -29,7 +29,6 @@ mkDerivation rec {
 
   preBuild = ''
     makeFlagsArray=(
-      XML_CATALOG_FILES="${docbook_xml_dtd_45}/xml/dtd/docbook/catalog.xml ${docbook_xml_xslt}/xml/xsl/docbook/catalog.xml"
       LIBS=""
       prefix="$out"
     )
