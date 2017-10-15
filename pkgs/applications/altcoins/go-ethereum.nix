@@ -19,14 +19,6 @@ buildGoPackage rec {
     sha256 = "11n77zlf8qixhx26sqf33v911716msi6h0z4ng8gxhzhznrn2nrd";
   };
 
-  # Fix cyclic referencing on Darwin
-  postInstall = stdenv.lib.optionalString (stdenv.isDarwin) ''
-    for file in $bin/bin/*; do
-      # Not all files are referencing $out/lib so consider this step non-critical
-      install_name_tool -delete_rpath $out/lib $file || true
-    done
-  '';
-
   meta = with stdenv.lib; {
     homepage = https://ethereum.github.io/go-ethereum/;
     description = "Official golang implementation of the Ethereum protocol";

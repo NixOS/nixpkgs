@@ -4,10 +4,6 @@ buildGoPackage rec {
   name = "elvish-${version}";
   version = "0.10";
 
-  postInstall = stdenv.lib.optionalString (stdenv.isDarwin) ''
-    install_name_tool -delete_rpath $out/lib $bin/bin/elvish
-  '';
-
   goPackagePath = "github.com/elves/elvish";
 
   src = fetchFromGitHub {

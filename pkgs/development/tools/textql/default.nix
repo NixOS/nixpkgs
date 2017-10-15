@@ -16,10 +16,6 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  preFixup = stdenv.lib.optionalString stdenv.isDarwin ''
-    install_name_tool -delete_rpath $out/lib $bin/bin/textql
-  '';
-
   meta = with stdenv.lib; {
     description = "Execute SQL against structured text like CSV or TSV";
     homepage = https://github.com/dinedal/textql;
