@@ -1,0 +1,54 @@
+diff --git a/doc/configure.ac b/doc/configure.ac
+index c4279dc..49ffe06 100644
+--- a/doc/configure.ac
++++ b/doc/configure.ac
+@@ -27,7 +27,7 @@ AC_PROG_MAKE_SET
+ dnl
+ dnl           checks for programs
+ dnl
+-CL_PROG_INSTALL
++AC_PROG_INSTALL
+                       dnl sets variables INSTALL, INSTALL_DATA, INSTALL_PROGRAM
+ dnl
+ dnl           That's it.
+diff --git a/lib/Makefile.in b/lib/Makefile.in
+index b7b96ee..fd819ef 100644
+--- a/lib/Makefile.in
++++ b/lib/Makefile.in
+@@ -41,7 +41,7 @@ CXXCPP = @CXXCPP@
+ # Both C and C++ compiler
+ OBJEXT = @OBJEXT@
+ # Other
+-AR = ar
++AR = @AR@
+ AR_FLAGS = rc
+ RANLIB = @RANLIB@
+ MV = mv
+diff --git a/lib/configure.ac b/lib/configure.ac
+index b3df1cd..abc469a 100644
+--- a/lib/configure.ac
++++ b/lib/configure.ac
+@@ -35,7 +35,9 @@ AC_PROG_CXXCPP
+                       dnl sets variable CXXCPP
+ AC_PROG_RANLIB
+                       dnl sets variable RANLIB
+-CL_PROG_INSTALL
++AC_CHECK_TOOL([AR],[ar])
++                      dnl sets variable AR
++AC_PROG_INSTALL
+                       dnl sets variables INSTALL, INSTALL_DATA, INSTALL_PROGRAM
+ dnl
+ dnl           That's it.
+diff --git a/src/configure.ac b/src/configure.ac
+index 33f4983..7594015 100644
+--- a/src/configure.ac
++++ b/src/configure.ac
+@@ -34,7 +34,7 @@ AC_PROG_CXX
+                       dnl sets variable CXX
+ AC_PROG_CXXCPP
+                       dnl sets variable CXXCPP
+-CL_PROG_INSTALL
++AC_PROG_INSTALL
+                       dnl sets variables INSTALL, INSTALL_DATA, INSTALL_PROGRAM
+ dnl
+ dnl           checks for compiler characteristics
