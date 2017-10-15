@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, liburcu, corosync, fuse, zookeeper, curl, fcgi
+{ stdenv, fetchFromGitHub, liburcu, corosync, fuse, zookeeper_mt, curl, fcgi
  , automake, autoconf, libtool, pkgconfig, groff, yasm, systemd, libqb
  , withSheepFs ? false
  , withHttp ? false
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     libqb
     liburcu
     corosync
-    zookeeper
+    zookeeper_mt
   ] ++ stdenv.lib.optional withSheepFs [
     fuse
   ] ++ stdenv.lib.optional withHttp [
