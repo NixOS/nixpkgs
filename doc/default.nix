@@ -81,26 +81,26 @@ pkgs.stdenv.mkDerivation {
 
     # validate against relaxng schema
     xmllint --nonet --xinclude --noxincludenode manual.xml --output manual-full.xml
-    ${pkgs.jing}/bin/jing ${pkgs.docbook5}/xml/rng/docbook/docbook.rng manual-full.xml
+    ${pkgs.jing}/bin/jing ${pkgs.docbook5}/share/xml/docbook-5.0/rng/docbook.rng manual-full.xml
 
     dst=$out/share/doc/nixpkgs
     mkdir -p $dst
     xsltproc $xsltFlags --nonet --xinclude \
       --output $dst/manual.html \
-      ${pkgs.docbook5_xsl}/xml/xsl/docbook/xhtml/docbook.xsl \
+      ${pkgs.docbook5_xsl}/share/xml/docbook-xsl-ns/xhtml/docbook.xsl \
       ./manual.xml
 
     cp ${./style.css} $dst/style.css
 
     mkdir -p $dst/images/callouts
-    cp "${pkgs.docbook5_xsl}/xml/xsl/docbook/images/callouts/"*.gif $dst/images/callouts/
+    cp "${pkgs.docbook5_xsl}/share/xml/docbook-xsl-ns/images/callouts/"*.gif $dst/images/callouts/
 
     mkdir -p $out/nix-support
     echo "doc manual $dst manual.html" >> $out/nix-support/hydra-build-products
 
     xsltproc $xsltFlags --nonet --xinclude \
       --output $dst/epub/ \
-      ${pkgs.docbook5_xsl}/xml/xsl/docbook/epub/docbook.xsl \
+      ${pkgs.docbook5_xsl}/share/xml/docbook-xsl-ns/epub/docbook.xsl \
       ./manual.xml
 
     cp -r $dst/images $dst/epub/OEBPS
