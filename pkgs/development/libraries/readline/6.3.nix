@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-    [ # This test requires running host code
+    [ # This test requires running target code
       "bash_cv_wcwidth_broken=no"
     ];
 
