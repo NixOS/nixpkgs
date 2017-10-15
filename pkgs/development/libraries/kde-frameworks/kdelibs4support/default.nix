@@ -25,7 +25,7 @@ mkDerivation {
     ktextwidgets kunitconversion kwindowsystem qtbase
   ];
   cmakeFlags = [
-    "-DDocBookXML4_DTD_DIR=${docbook_xml_dtd_45}/xml/dtd/docbook"
+    "-DDocBookXML4_DTD_DIR=${docbook_xml_dtd_45}/share/xml/dtd/docbook"
     "-DDocBookXML4_DTD_VERSION=4.5"
   ];
   outputs = [ "out" "dev" ];
