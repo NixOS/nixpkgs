@@ -1582,21 +1582,12 @@ with pkgs;
 
   cudatoolkit = cudatoolkit9;
 
-  cudnn_cudatoolkit7 = callPackage ../development/libraries/science/math/cudnn/7.0-4.0 {
-    cudatoolkit = cudatoolkit7;
-  };
-
-  cudnn_cudatoolkit75 = callPackage ../development/libraries/science/math/cudnn/7.5-6.0 {
-    cudatoolkit = cudatoolkit75;
-  };
-
-  cudnn_cudatoolkit8 = callPackage ../development/libraries/science/math/cudnn/8.0-7.0 {
-    cudatoolkit = cudatoolkit8;
-  };
-
-  cudnn_cudatoolkit9 = callPackage ../development/libraries/science/math/cudnn/9.0-7.0 {
-    cudatoolkit = cudatoolkit9;
-  };
+  inherit (callPackages ../development/libraries/science/math/cudnn { })
+    cudnn_cudatoolkit7
+    cudnn_cudatoolkit75
+    cudnn6_cudatoolkit8
+    cudnn_cudatoolkit8
+    cudnn_cudatoolkit9;
 
   cudnn = cudnn_cudatoolkit9;
 
