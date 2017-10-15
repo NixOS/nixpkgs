@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, perl, perlXMLParser, libxml2, libxslt, docbook_xml_dtd_42}:
+{stdenv, fetchurl, pkgconfig, perl, perlXMLParser, libxml2, libxslt}:
 
 stdenv.mkDerivation rec {
   name = "rarian-0.8.1";
@@ -8,8 +8,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ perl perlXMLParser libxml2 libxslt];
-  configureFlags = "--with-xml-catalog=${docbook_xml_dtd_42}/xml/dtd/docbook/docbook.cat";
+  buildInputs = [ perl perlXMLParser libxml2 libxslt ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
