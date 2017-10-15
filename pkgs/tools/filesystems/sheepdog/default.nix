@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     fcgi
   ];
 
+  preConfigure = "./autogen.sh";
+
   configureFlags = [
     "--enable-systemd"
     "--enable-corosync"
