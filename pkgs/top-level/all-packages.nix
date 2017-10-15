@@ -3354,7 +3354,7 @@ with pkgs;
 
   mmake = callPackage ../tools/misc/mmake { };
 
-  modemmanager = callPackage ../tools/networking/modemmanager {};
+  modemmanager = callPackage ../tools/networking/modem-manager {};
 
   modsecurity_standalone = callPackage ../tools/security/modsecurity { };
 
