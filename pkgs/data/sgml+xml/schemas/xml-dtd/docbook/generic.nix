@@ -5,8 +5,8 @@ assert unzip != null;
 stdenv.mkDerivation {
   inherit src name postInstall;
   builder = ./builder.sh;
-  buildInputs = [unzip];
-  propagatedBuildInputs = [ findXMLCatalogs ];
+  nativeBuildInputs = [unzip];
+  propagatedNativeBuildInputs = [ findXMLCatalogs ];
 
   meta = meta // {
     platforms = stdenv.lib.platforms.unix;
