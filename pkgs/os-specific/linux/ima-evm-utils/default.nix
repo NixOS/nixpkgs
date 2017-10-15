@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ openssl attr keyutils asciidoc libxslt ];
 
-  buildPhase = "make prefix=$out MANPAGE_DOCBOOK_XSL=${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl";
+  buildPhase = "make prefix=$out MANPAGE_DOCBOOK_XSL=${docbook_xsl}/share/xml/docbook-xsl/manpages/docbook.xsl";
 
   meta = {
     description = "evmctl utility to manage digital signatures of the Linux kernel integrity subsystem (IMA/EVM)";
