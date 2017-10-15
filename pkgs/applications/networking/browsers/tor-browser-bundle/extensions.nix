@@ -16,14 +16,14 @@
 {
   https-everywhere = stdenv.mkDerivation rec {
     name = "https-everywhere-${version}";
-    version = "2017.9.12";
+    version = "2017.10.4";
 
     extid = "https-everywhere-eff@eff.org";
 
     src = fetchgit {
       url = "https://git.torproject.org/https-everywhere.git";
       rev = "refs/tags/${version}";
-      sha256 = "179429pngyksp9xkr86nf2m5q6zmg19c7ng1dhqjfb1vsncwgw66";
+      sha256 = "1g7971xygnhagnb25xjdf6mli6091ai9igx42d0ww88g8i0cqfzj";
       fetchSubmodules = true; # for translations, TODO: remove
     };
 
