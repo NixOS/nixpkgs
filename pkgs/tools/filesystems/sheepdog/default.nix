@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, liburcu, corosync, fuse, zookeeper, curl, fcgi, automake, autoconf, libtool
+{ stdenv, fetchFromGitHub, liburcu, corosync, fuse, zookeeper, curl, fcgi, automake, autoconf, libtool, pkgconfig
  , withSheepFs ? false
  , withHttp ? false
 }:
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
     automake
     autoconf
     libtool
+    pkgconfig
     liburcu
     corosync
     zookeeper
