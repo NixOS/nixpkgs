@@ -1,6 +1,12 @@
 { stdenv
-, pkgs
 , fetchFromGitHub
+, openssl
+, gcc
+, zlib
+, libssh
+, cmake
+, perl
+, pkgconfig
 , rustPlatform
 }:
 
@@ -19,11 +25,14 @@ buildRustPackage rec {
 
   depsSha256 = "1z2n3z5wkh5z5vc976yscq77fgjszwzwlrp7g17hmsbhzx6x170h";
 
-  buildInputs = with pkgs; [
-    openssl
-    gcc
+  nativeBuildInputs = [
     cmake
     pkgconfig
+    perl
+  ];
+
+  buildInputs = [
+    openssl
     libssh
     zlib
   ];
@@ -34,6 +43,4 @@ buildRustPackage rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ profpatsch matthiasbeyer ];
   };
-
-
 }
