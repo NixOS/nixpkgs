@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, liburcu, corosync, fuse, zookeeper, curl, fcgi
+{ stdenv, fetchFromGitHub, liburcu, corosync, fuse, zookeeper, curl, fcgi, automake, autoconf
  , withSheepFs ? false
  , withHttp ? false
 }:
@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "0f4l44w2a8zl92agwsmrxssdw3z4lvcxi0hac4kcj8yr4rqwlm0z";
   };
 
-  buildInputs = [ 
+  buildInputs = [
+    automake
+    autoconf
     liburcu
     corosync
     zookeeper
