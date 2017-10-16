@@ -11,10 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1wszcx6hgw4q4r778zswrlwdwvwxq834bkajck8w9yfqwxs9lmq8";
   };
 
-  preBuild = ''
-    makeFlags="DESTDIR=$out $makeFlags"
-  '';
-  makeFlags = "ICEBOX=${icestorm}/share/icebox";
+  makeFlags =
+    [ "DESTDIR=$(out)" "ICEBOX=${icestorm}/share/icebox"
+    ];
 
   meta = {
     description = "Place and route tool for FPGAs";
@@ -30,7 +29,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/cseed/arachne-pnr;
     license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.shell ];
+    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice ];
     platforms = stdenv.lib.platforms.linux;
   };
 }
