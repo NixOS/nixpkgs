@@ -18684,6 +18684,8 @@ with pkgs;
 
   boolector = callPackage ../applications/science/logic/boolector {};
 
+  symbiyosys = callPackage ../applications/science/logic/symbiyosys {};
+
   ### SCIENCE / ELECTRONICS
 
   adms = callPackage ../applications/science/electronics/adms { };
