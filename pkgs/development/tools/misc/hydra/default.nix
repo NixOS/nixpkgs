@@ -102,7 +102,7 @@ in releaseTools.nixBuild rec {
     (cd $sourceRoot && (git ls-files -o --directory | xargs -r rm -rfv)) || true
   '';
 
-  configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
+  configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/share/xml/docbook-xsl" ];
 
   shellHook = ''
     PATH=$(pwd)/src/script:$(pwd)/src/hydra-eval-jobs:$(pwd)/src/hydra-queue-runner:$(pwd)/src/hydra-evaluator:$PATH
