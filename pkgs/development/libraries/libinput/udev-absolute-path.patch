@@ -1,11 +1,12 @@
---- a/meson.build	2017-09-25 11:37:07.787726521 +0000
-+++ b/meson.build	2017-09-25 11:38:48.958233247 +0000
-@@ -100,7 +100,7 @@
-      args : model_quirks)
+--- configure.ac	2016-05-27 14:00:25.248388226 +0200
++++ configure.ac	2016-05-27 14:01:28.228943416 +0200
+@@ -214,7 +214,8 @@ AM_CONDITIONAL(BUILD_DOCS, [test "x$buil
+ # Used by the udev rules so we can use callouts during testing without
+ # installing everything first. Default is the empty string so the installed
+ # rule will use udev's default path. Override is in udev/Makefile.am
+-AC_SUBST(UDEV_TEST_PATH, "")
++UDEV_TEST_PATH="${UDEV_DIR}/"
++AC_SUBST(UDEV_TEST_PATH)
+ AC_PATH_PROG(SED, [sed])
  
- udev_rules_config = configuration_data()
--udev_rules_config.set('UDEV_TEST_PATH', '')
-+udev_rules_config.set('UDEV_TEST_PATH', udev_dir + '/')
- configure_file(input : 'udev/80-libinput-device-groups.rules.in',
- 	       output : '80-libinput-device-groups.rules',
- 	       install : true,
+ AC_CONFIG_FILES([Makefile
