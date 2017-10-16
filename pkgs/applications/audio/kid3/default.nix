@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = "-lm -lpthread";
 
   preConfigure = ''
-    export DOCBOOKDIR="${docbook_xsl}/xml/xsl/docbook/"
+    export DOCBOOKDIR="${docbook_xsl}/share/xml/docbook-xsl/"
   '';
 
   postInstall = ''
