@@ -973,4 +973,7 @@ self: super: {
   amqp-utils = super.amqp-utils.override {
     amqp = dontCheck super.amqp_0_18_1;
   };
+
+  # depends on haskell-gi-overloading-0.0
+  ltk = doJailbreak super.ltk;
 }
