@@ -391,6 +391,21 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestNoWarnings Moo TypeTiny ];
   };
 
+  ArrayFIFO = buildPerlPackage rec {
+    name = "Array-FIFO-0.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DB/DBURKE/${name}.tar.gz";
+      sha256 = "8082b7ca456d02c7c862ba409cbd62a9cafdb8c5832f5d7fb1d37ba8698ee5b1";
+    };
+    buildInputs = [ TestSpec ];
+    propagatedBuildInputs = [ Moose namespaceautoclean ];
+    meta = {
+      homepage = https://github.com/dwburke/perl-Array-FIFO;
+      description = "A Simple limitable FIFO array, with sum and average methods";
+      license = stdenv.lib.licenses.artistic2;
+    };
+  };
+
   ListCompare = buildPerlPackage rec {
     name = "List-Compare-0.53";
     src = fetchurl {
