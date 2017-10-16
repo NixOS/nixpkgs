@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurlBoot, enableThreading ? stdenv ? glibc }:
+{ lib, stdenv, fetchurlBoot, buildPackages, enableThreading ? stdenv ? glibc }:
 
 with lib;
 
@@ -19,7 +19,8 @@ let
   libc = if stdenv.cc.libc or null != null then stdenv.cc.libc else "/usr";
   libcInc = lib.getDev libc;
   libcLib = lib.getLib libc;
-  common = { version, sha256 }: stdenv.mkDerivation rec {
+  crossCompiling = stdenv.buildPlatform != stdenv.hostPlatform;
+  common = { version, sha256 }: stdenv.mkDerivation (rec {
     name = "perl-${version}";
 
     src = fetchurlBoot {
@@ -50,6 +51,8 @@ let
       pwd="$(type -P pwd)"
       substituteInPlace dist/PathTools/Cwd.pm \
         --replace "/bin/pwd" "$pwd"
+    '' + stdenv.lib.optionalString crossCompiling ''
+      substituteInPlace cnf/configure_tool.sh --replace "cc -E -P" "cc -E"
     '';
 
     # Build a thread-safe Perl with a dynamic libperls.o.  We need the
@@ -58,8 +61,10 @@ let
     # contains the string "perl", Configure would select $out/lib.
     # Miniperl needs -lm. perl needs -lrt.
     configureFlags =
-      [ "-de"
-        "-Dcc=cc"
+      (if crossCompiling
+       then [ "-Dlibpth=\"\"" "-Dglibpth=\"\"" ]
+       else [ "-de" "-Dcc=cc" ])
+      ++ [
         "-Uinstallusrbinperl"
         "-Dinstallstyle=lib/perl5"
         "-Duseshrplib"
@@ -69,14 +74,13 @@ let
       ++ optional stdenv.isSunOS "-Dcc=gcc"
       ++ optional enableThreading "-Dusethreads";
 
-    configureScript = "${stdenv.shell} ./Configure";
+    configureScript = stdenv.lib.optionalString (!crossCompiling) "${stdenv.shell} ./Configure";
 
-    dontAddPrefix = true;
+    dontAddPrefix = !crossCompiling;
 
-    enableParallelBuilding = true;
+    enableParallelBuilding = !crossCompiling;
 
-    preConfigure =
-      ''
+    preConfigure = optionalString (!crossCompiling) ''
         configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3"
       '' + optionalString (stdenv.isArm || stdenv.isMips) ''
         configureFlagsArray=(-Dldflags="-lm -lrt")
@@ -121,7 +125,23 @@ let
       maintainers = [ maintainers.eelco ];
       platforms = platforms.all;
     };
-  };
+  } // stdenv.lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
+    crossVersion = "1.1.8";
+
+    perl-cross-src = fetchurlBoot {
+      url = "https://github.com/arsv/perl-cross/releases/download/${crossVersion}/perl-cross-${crossVersion}.tar.gz";
+      sha256 = "072j491rpz2qx2sngbg4flqh4lx5865zyql7b9lqm6s1kknjdrh8";
+    };
+
+    nativeBuildInputs = [ buildPackages.stdenv.cc ];
+
+    postUnpack = ''
+      unpackFile ${perl-cross-src}
+      cp -R perl-cross-${crossVersion}/* perl-${version}/
+    '';
+
+    configurePlatforms = [ "build" "host" "target" ];
+  });
 in rec {
   perl = perl524;
 
