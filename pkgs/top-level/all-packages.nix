@@ -12920,7 +12920,6 @@ with pkgs;
 
   systemd = callPackage ../os-specific/linux/systemd {
     utillinux = utillinuxMinimal; # break the cyclic dependency
-    gperf = gperf_3_0; # fix build until v233
   }
     // {
       udev.bin = systemd;     # ${systemd.udev.bin}/bin/udevadm
