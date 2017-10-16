@@ -18327,6 +18327,12 @@ with pkgs;
 
   bwa = callPackage ../applications/science/biology/bwa/default.nix { };
 
+  ### SCIENCE/MACHINE LEARNING
+
+  sc2-headless = callPackage ../applications/science/machine-learning/sc2-headless {
+    licenseAccepted = (config.sc2-headless.accept_license or false);
+  };
+
   ### SCIENCE/MATH
 
   arpack = callPackage ../development/libraries/science/math/arpack { };
