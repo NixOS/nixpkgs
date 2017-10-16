@@ -298,6 +298,7 @@ in rec {
   tests.postgresql = callSubTests tests/postgresql.nix {};
   #tests.pgjwt = callTest tests/pgjwt.nix {};
   tests.printing = callTest tests/printing.nix {};
+  tests.prometheus = callTest tests/prometheus.nix {};
   tests.proxy = callTest tests/proxy.nix {};
   tests.pumpio = callTest tests/pump.io.nix {};
   # tests.quagga = callTest tests/quagga.nix {};
