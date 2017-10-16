@@ -6989,38 +6989,6 @@ in {
     };
   };
 
-  pew = buildPythonPackage rec {
-    name = "pew-1.1.0";
-
-    disabled = pythonOlder "3.4"; # old versions require backported libraries
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pew/${name}.tar.gz";
-      sha256 = "0b8z1vjsll1kgnh3mmdjps5rr9gayy091rapp2dra71jrwkx3yfh";
-    };
-
-    propagatedBuildInputs = with self; [ virtualenv virtualenv-clone setuptools ];
-
-    postFixup = ''
-      set -euo pipefail
-      PEW_SITE="$out/lib/${self.python.libPrefix}/site-packages"
-      SETUPTOOLS="${self.setuptools}/lib/${self.python.libPrefix}/site-packages"
-      SETUPTOOLS_SITE=$SETUPTOOLS/$(cat $SETUPTOOLS/setuptools.pth)
-      CLONEVENV_SITE="${self.virtualenv-clone}/lib/${python.libPrefix}/site-packages"
-      SITE_PACKAGES="[\'$PEW_SITE\',\'$SETUPTOOLS_SITE\',\'$CLONEVENV_SITE\']"
-      substituteInPlace $PEW_SITE/pew/pew.py \
-        --replace "from pew.pew" "import sys; sys.path.extend($SITE_PACKAGES); from pew.pew" \
-        --replace 'sys.executable, "-m", "virtualenv"' "'${self.virtualenv}/bin/virtualenv'"
-    '';
-
-    meta = {
-      description = "Tools to manage multiple virtualenvs written in pure python";
-      license = licenses.mit;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ berdario ];
-    };
-  };
-
   pex = buildPythonPackage rec {
     name = "pex-${version}";
     version = "1.2.7";
@@ -15575,27 +15543,6 @@ in {
       license = licenses.mit;
       homepage = https://pip.pypa.io/;
       priority = 10;
-    };
-  };
-
-  pipenv = buildPythonPackage rec {
-    name = "pipenv-8.2.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pipenv/${name}.tar.gz";
-      sha256 = "08wkxs6qqgzxamym523bjv7zahg8p9v18x0yi9vwclij5k91iyzm";
-    };
-
-    LC_ALL = "en_US.UTF-8";
-
-    propagatedBuildInputs = with self; [ pew pip requests flake8 ];
-
-    doCheck = false;
-
-    meta = {
-      description = "Python Development Workflow for Humans";
-      license = licenses.mit;
-      platforms = platforms.all;
     };
   };
 

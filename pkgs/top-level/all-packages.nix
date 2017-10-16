@@ -6660,6 +6660,9 @@ with pkgs;
 
   svg2tikz = python27Packages.svg2tikz;
 
+  pew = callPackage ../development/tools/pew {};
+  pipenv = callPackage ../development/tools/pipenv {};
+
   pyrex = pyrex095;
 
   pyrex095 = callPackage ../development/interpreters/pyrex/0.9.5.nix { };
