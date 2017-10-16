@@ -67,7 +67,6 @@ in
       luks = {
         devices =
           map (dev: { name = dev.encrypted.label; device = dev.encrypted.blkDev; } ) keylessEncDevs;
-        cryptoModules = [ "aes" "sha256" "sha1" "xts" ];
         forceLuksSupportInInitrd = true;
       };
       postMountCommands =
