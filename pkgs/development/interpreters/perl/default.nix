@@ -14,6 +14,9 @@ with lib;
 # use enableThreading = false there.
 assert enableThreading -> (stdenv ? glibc);
 
+# Perl really doesn't support cross-compilation.
+assert stdenv.buildPlatform == stdenv.hostPlatform;
+
 let
 
   libc = if stdenv.cc.libc or null != null then stdenv.cc.libc else "/usr";
