@@ -165,8 +165,10 @@ stdenv.mkDerivation rec {
     (opencvFlag "OPENEXR" enableEXR)
     (opencvFlag "CUDA" enableCuda)
     (opencvFlag "CUBLAS" enableCuda)
-  ] ++ lib.optionals enableCuda [ "-DCUDA_FAST_MATH=ON" ]
-    ++ lib.optional buildContrib "-DBUILD_PROTOBUF=off"
+  ] ++ lib.optionals enableCuda [
+    "-DCUDA_FAST_MATH=ON"
+    "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/gcc"
+  ] ++ lib.optional buildContrib "-DBUILD_PROTOBUF=off"
     ++ lib.optionals stdenv.isDarwin ["-DWITH_OPENCL=OFF" "-DWITH_LAPACK=OFF"];
 
   enableParallelBuilding = true;
