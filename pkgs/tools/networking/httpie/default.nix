@@ -2,7 +2,6 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "httpie-0.9.9";
-  namePrefix = "";
 
   src = fetchurl {
     url = "mirror://pypi/h/httpie/${name}.tar.gz";

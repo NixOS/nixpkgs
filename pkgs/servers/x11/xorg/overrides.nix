@@ -315,11 +315,11 @@ in
     installFlags = "sdkdir=\${out}/include/xorg";
   };
 
-  xf86inputlibinput = attrs: attrs // {
-    name = "xf86-input-libinput-0.25.1";
+  xf86inputlibinput = attrs: attrs // rec {
+    name = "xf86-input-libinput-0.26.0";
     src = args.fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-libinput-0.25.1.tar.bz2;
-      sha256 = "1q67hjd67ni1nq7kgxdrrdgkyhzaqvvn2vlnsiiq9w4y3icpv7s8";
+      url = "mirror://xorg/individual/driver/${name}.tar.bz2";
+      sha256 = "0yrqs88b7yn9nljwlxzn76jfmvf0sh939kzij5b2jvr2qa7mbjmb";
     };
     buildInputs = attrs.buildInputs ++ [ args.libinput ];
     installFlags = "sdkdir=\${out}/include/xorg";

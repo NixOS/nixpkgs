@@ -14,8 +14,8 @@
 , enableGtk3      ? false, gtk3
 , enableFfmpeg    ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
-, enableEigen     ? false, eigen
-, enableOpenblas  ? false, openblas
+, enableEigen     ? true, eigen
+, enableOpenblas  ? true, openblas
 , enableCuda      ? false, cudatoolkit, gcc5
 , enableTesseract ? false, tesseract, leptonica
 , AVFoundation, Cocoa, QTKit

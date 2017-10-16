@@ -72,6 +72,7 @@
   bcarrell = "Brandon Carrell <brandoncarrell@gmail.com>";
   bcdarwin = "Ben Darwin <bcdarwin@gmail.com>";
   bdimcheff = "Brandon Dimcheff <brandon@dimcheff.com>";
+  bendlas = "Herwig Hochleitner <herwig@bendlas.net>";
   benley = "Benjamin Staffin <benley@gmail.com>";
   bennofs = "Benno Fünfstück <benno.fuenfstueck@gmail.com>";
   benwbooth = "Ben Booth <benwbooth@gmail.com>";
@@ -196,6 +197,7 @@
   eqyiel = "Ruben Maher <r@rkm.id.au>";
   ericbmerritt = "Eric Merritt <eric@afiniate.com>";
   ericsagnes = "Eric Sagnes <eric.sagnes@gmail.com>";
+  erictapen = "Justin Humm <justin.humm@posteo.de>";
   erikryb = "Erik Rybakken <erik.rybakken@math.ntnu.no>";
   ertes = "Ertugrul Söylemez <esz@posteo.de>";
   ethercrow = "Dmitry Ivanov <ethercrow@gmail.com>";

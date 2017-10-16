@@ -50,12 +50,16 @@ in mkDerivation rec {
   postInstall = ''
     # remove empty scripts
     rm "$out/share/sddm/scripts/Xsetup" "$out/share/sddm/scripts/Xstop"
+    for f in $out/share/sddm/themes/**/theme.conf ; do
+      substituteInPlace $f \
+        --replace 'background=' "background=$(dirname $f)/"
+    done
   '';
 
   meta = with lib; {
     description = "QML based X11 display manager";
-    homepage = https://github.com/sddm/sddm;
-    platforms = platforms.linux;
+    homepage    = https://github.com/sddm/sddm;
     maintainers = with maintainers; [ abbradar ttuegel ];
+    platforms   = platforms.linux;
   };
 }

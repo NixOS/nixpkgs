@@ -214,6 +214,7 @@ in rec {
   # Run the tests for each platform.  You can run a test by doing
   # e.g. ‘nix-build -A tests.login.x86_64-linux’, or equivalently,
   # ‘nix-build tests/login.nix -A result’.
+  tests.atd = callTest tests/atd.nix {};
   tests.acme = callTest tests/acme.nix {};
   tests.avahi = callTest tests/avahi.nix {};
   tests.bittorrent = callTest tests/bittorrent.nix {};
@@ -249,6 +250,7 @@ in rec {
   tests.firewall = callTest tests/firewall.nix {};
   tests.fleet = hydraJob (import tests/fleet.nix { system = "x86_64-linux"; });
   #tests.gitlab = callTest tests/gitlab.nix {};
+  tests.gitolite = callTest tests/gitolite.nix {};
   tests.glance = callTest tests/glance.nix {};
   tests.gocd-agent = callTest tests/gocd-agent.nix {};
   tests.gocd-server = callTest tests/gocd-server.nix {};
@@ -303,6 +305,7 @@ in rec {
   #tests.panamax = hydraJob (import tests/panamax.nix { system = "x86_64-linux"; });
   tests.peerflix = callTest tests/peerflix.nix {};
   tests.postgresql = callSubTests tests/postgresql.nix {};
+  tests.postgis = callTest tests/postgis.nix {};
   #tests.pgjwt = callTest tests/pgjwt.nix {};
   tests.printing = callTest tests/printing.nix {};
   tests.proxy = callTest tests/proxy.nix {};

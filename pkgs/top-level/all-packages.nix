@@ -3218,7 +3218,9 @@ with pkgs;
 
   mailhog = callPackage ../servers/mail/mailhog {};
 
-  mailnag = callPackage ../applications/networking/mailreaders/mailnag { };
+  mailnag = callPackage ../applications/networking/mailreaders/mailnag {
+    pythonPackages = python2Packages;
+  };
 
   mailsend = callPackage ../tools/networking/mailsend { };
 
@@ -6672,6 +6674,9 @@ with pkgs;
 
   svg2tikz = python27Packages.svg2tikz;
 
+  pew = callPackage ../development/tools/pew {};
+  pipenv = callPackage ../development/tools/pipenv {};
+
   pyrex = pyrex095;
 
   pyrex095 = callPackage ../development/interpreters/pyrex/0.9.5.nix { };
@@ -10124,7 +10129,9 @@ with pkgs;
 
   pgroonga = callPackage ../servers/sql/postgresql/pgroonga {};
 
-  plv8 = callPackage ../servers/sql/postgresql/plv8 {};
+  plv8 = callPackage ../servers/sql/postgresql/plv8 {
+    v8 = v8_6_x;
+  };
 
   phonon = callPackage ../development/libraries/phonon {};
 
@@ -13829,6 +13836,8 @@ with pkgs;
 
   brackets = callPackage ../applications/editors/brackets { gconf = gnome3.gconf; };
 
+  notmuch-bower = callPackage ../applications/networking/mailreaders/notmuch-bower { };
+
   bristol = callPackage ../applications/audio/bristol { };
 
   bs1770gain = callPackage ../applications/audio/bs1770gain {
@@ -15300,7 +15309,7 @@ with pkgs;
 
   lastfmsubmitd = callPackage ../applications/audio/lastfmsubmitd { };
 
-  lbdb = callPackage ../tools/misc/lbdb { };
+  lbdb = callPackage ../tools/misc/lbdb { abook = null; gnupg = null; goobook = null; khard = null; };
 
   lbzip2 = callPackage ../tools/compression/lbzip2 { };
 
@@ -18672,7 +18681,13 @@ with pkgs;
 
   z3 = callPackage ../applications/science/logic/z3 {};
 
+  aiger = callPackage ../applications/science/logic/aiger {};
+
+  avy = callPackage ../applications/science/logic/avy {};
+
   boolector = callPackage ../applications/science/logic/boolector {};
+
+  symbiyosys = callPackage ../applications/science/logic/symbiyosys {};
 
   ### SCIENCE / ELECTRONICS
 

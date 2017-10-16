@@ -6313,6 +6313,8 @@ in {
     };
   };
 
+  jsmin = callPackage ../development/python-modules/jsmin { };
+
   jsonpatch = callPackage ../development/python-modules/jsonpatch { };
 
   jsonpointer = buildPythonPackage rec {
@@ -6992,27 +6994,6 @@ in {
     };
   };
 
-  pew = buildPythonPackage rec {
-    name = "pew-0.1.14";
-    namePrefix = "";
-
-    disabled = pythonOlder "3.4"; # old versions require backported libraries
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pew/${name}.tar.gz";
-      sha256 = "0p188ah80l0rzbib2srahj2sswz8rcpqwbrbajyv2r5c1m5k6r4b";
-    };
-
-    propagatedBuildInputs = with self; [ virtualenv virtualenv-clone ];
-
-    meta = {
-      description = "Tools to manage multiple virtualenvs written in pure python, a virtualenvwrapper rewrite";
-      license = licenses.mit;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ berdario ];
-    };
-  };
-
   pex = buildPythonPackage rec {
     name = "pex-${version}";
     version = "1.2.7";
@@ -7045,6 +7026,8 @@ in {
   plaster-pastedeploy = callPackage ../development/python-modules/plaster-pastedeploy {};
 
   plotly = callPackage ../development/python-modules/plotly { };
+
+  plyfile = callPackage ../development/python-modules/plyfile { };
 
   podcastparser = callPackage ../development/python-modules/podcastparser { };
 
@@ -11613,25 +11596,7 @@ in {
     };
   });
 
-  MechanicalSoup = buildPythonPackage rec {
-    name = "MechanicalSoup-${version}";
-    version = "0.4.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/M/MechanicalSoup/${name}.zip";
-      sha256 = "02jkwly4gw1jqm55l4wwn0j0ggnysx55inw9j96bif5l49z5cacd";
-    };
-
-    propagatedBuildInputs = with self; [ requests beautifulsoup4 six ];
-
-    meta = {
-      description = "A Python library for automating interaction with websites";
-      homepage = https://github.com/hickford/MechanicalSoup;
-      license = licenses.mit;
-      maintainers = with maintainers; [ jgillich ];
-    };
-  };
-
+  MechanicalSoup = callPackage ../development/python-modules/MechanicalSoup/default.nix { };
 
   meld3 = buildPythonPackage rec {
     name = "meld3-1.0.0";
@@ -26536,6 +26501,8 @@ EOF
       sha256 = "1ad0mkixc0s86djwsvhp1qlvcfs25086nh0qw7bys49gz8shczzi";
     };
   };
+
+  yowsup = callPackage ../development/python-modules/yowsup { };
 
   wptserve = callPackage ../development/python-modules/wptserve { };
 
