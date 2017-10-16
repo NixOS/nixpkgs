@@ -182,7 +182,7 @@ in {
 
     backend = mkOption {
       type = types.enum [ "glx" "xrender" ];
-      default = "glx";
+      default = "xrender";
       description = ''
         Backend to use: <literal>glx</literal> or <literal>xrender</literal>.
       '';
