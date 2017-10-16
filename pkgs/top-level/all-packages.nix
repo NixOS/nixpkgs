@@ -13809,6 +13809,8 @@ with pkgs;
     inherit (gnome2) zenity;
   };
 
+  bgpdump = callPackage ../tools/networking/bgpdump { };
+
   blackbox = callPackage ../applications/version-management/blackbox { };
 
   bleachbit = callPackage ../applications/misc/bleachbit { };
