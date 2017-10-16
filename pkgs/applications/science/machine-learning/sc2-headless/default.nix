@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     license = {
       fullName = "BLIZZARD® STARCRAFT® II AI AND MACHINE LEARNING LICENSE";
       url = "https://blzdistsc2-a.akamaihd.net/AI_AND_MACHINE_LEARNING_LICENSE.html";
+      free = false;
     };
   };
 }
