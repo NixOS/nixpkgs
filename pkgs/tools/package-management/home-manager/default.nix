@@ -39,8 +39,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A user environment configurator";
-    maintainers = with mantainers; [ rycee ];
+    maintainers = with maintainers; [ rycee ];
     platforms = platforms.linux;
-    license = license.mit;
+    license = licenses.mit;
   };
 }
