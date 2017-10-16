@@ -2,7 +2,12 @@
 , fetchurl, zlib
 , buildPlatform, hostPlatform, targetPlatform
 , noSysDirs, gold ? true, bison ? null
+  # Which ld implementation to use by default?
+, defaultLd ? null
 }:
+
+assert (builtins.elem defaultLd ["bfd" "gold" null]);
+assert defaultLd == "gold" -> gold;
 
 let
   # Note to whoever is upgrading this: 2.29 is broken.
@@ -102,7 +107,8 @@ stdenv.mkDerivation rec {
     "--enable-deterministic-archives"
     "--disable-werror"
     "--enable-fix-loongson2f-nop"
-  ] ++ optionals gold [ "--enable-gold" "--enable-plugins" ];
+  ] ++ optionals gold [ "--enable-gold" "--enable-plugins" ]
+  ++ optional (defaultLd == "gold") "--enable-gold=default";
 
   enableParallelBuilding = true;
 
