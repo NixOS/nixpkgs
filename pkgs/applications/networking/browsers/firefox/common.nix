@@ -15,7 +15,7 @@
 
 ## optional libraries
 
-, alsaSupport ? true, alsaLib
+, alsaSupport ? stdenv.isLinux, alsaLib
 , pulseaudioSupport ? true, libpulseaudio
 , ffmpegSupport ? true, gstreamer, gst-plugins-base
 , gtk3Support ? !isTorBrowserLike, gtk2, gtk3, wrapGAppsHook
@@ -44,13 +44,16 @@
 # distributed without permission from the Mozilla Foundation, see
 # http://www.mozilla.org/foundation/trademarks/.
 , enableOfficialBranding ? isTorBrowserLike
+
+, gcc
 }:
 
 assert stdenv.cc ? libc && stdenv.cc.libc != null;
 
 let
   flag = tf: x: [(if tf then "--enable-${x}" else "--disable-${x}")];
-  gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
+  toolkit = if stdenv.isDarwin then "cairo-cocoa"
+            else "cairo-gtk${if gtk3Support then "3" else "2"}";
 in
 
 stdenv.mkDerivation (rec {
@@ -128,12 +131,12 @@ stdenv.mkDerivation (rec {
     "--enable-jemalloc"
     "--disable-maintenance-service"
     "--disable-gconf"
-    "--enable-default-toolkit=cairo-gtk${if gtk3Support then "3" else "2"}"
+    "--enable-default-toolkit=${toolkit}"
   ]
   ++ lib.optionals (stdenv.lib.versionAtLeast version "56" && !stdenv.hostPlatform.isi686) [
     # on i686-linux: --with-libclang-path is not available in this configuration
     "--with-libclang-path=${llvmPackages.clang-unwrapped}/lib"
-    "--with-clang-path=${llvmPackages.clang}/bin/clang"
+    "--with-clang-path=${llvmPackages.clang}/binxbe/clang"
   ]
 
   # TorBrowser patches these
