@@ -57,9 +57,8 @@ stdenv.mkDerivation rec {
     ++ optional jackaudioSupport "-DWITH_JACK=ON"
     ++ optionals cudaSupport
       [ "-DWITH_CYCLES_CUDA_BINARIES=ON"
-        # Disable the sm_20 architecture to work around a segfault in
-        # ptxas, as suggested on #blendercoders.
-        "-DCYCLES_CUDA_BINARIES_ARCH=sm_21;sm_30;sm_35;sm_37;sm_50;sm_52;sm_60;sm_61"
+        # Disable architectures before sm_30 to support new CUDA toolkits.
+        "-DCYCLES_CUDA_BINARIES_ARCH=sm_30;sm_35;sm_37;sm_50;sm_52;sm_60;sm_61"
       ]
     ++ optional colladaSupport "-DWITH_OPENCOLLADA=ON";
 
