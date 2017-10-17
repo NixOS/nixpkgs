@@ -34,4 +34,8 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     cp ./nix-info $out/bin/nix-info
   '';
+
+  meta = {
+    platforms = lib.platforms.all;
+  };
 }
