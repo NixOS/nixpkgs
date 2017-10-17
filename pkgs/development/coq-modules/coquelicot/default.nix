@@ -7,15 +7,15 @@ let param =
     url = https://gforge.inria.fr/frs/download.php/file/35429/coquelicot-2.1.1.tar.gz;
     sha256 = "1wxds73h26q03r2xiw8shplh97rsbim2i2s0r7af0fa490bp44km";
   };
-  v2_1_2 = {
-    version = "2.1.2";
-    url = https://gforge.inria.fr/frs/download.php/file/36320/coquelicot-2.1.2.tar.gz;
-    sha256 = "09q9xbzyndx8i68hn3ir4pmzgqd1q33qpk3xghf2l849g8w3q5an";
+  v3_0_1 = {
+    version = "3.0.1";
+    url = "https://gforge.inria.fr/frs/download.php/file/37045/coquelicot-3.0.1.tar.gz";
+    sha256 = "0hsyhsy2lwqxxx2r8xgi5csmirss42lp9bkb9yy35mnya0w78c8r";
   };
   in {
   "8.4" = v2_1_1;
-  "8.5" = v2_1_2;
-  "8.6" = v2_1_2;
+  "8.5" = v3_0_1;
+  "8.6" = v3_0_1;
 }."${coq.coq-version}"; in
 
 stdenv.mkDerivation {

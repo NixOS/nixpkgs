@@ -6,11 +6,11 @@ assert kernel != null -> stdenv.lib.versionAtLeast kernel.version "3.10";
 let
   name = "wireguard-${version}";
 
-  version = "0.0.20170810";
+  version = "0.0.20171011";
 
   src = fetchurl {
     url    = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-${version}.tar.xz";
-    sha256 = "ab96230390625aad6f4816fa23aef6e9f7fee130f083d838919129ff12089bf7";
+    sha256 = "15hby5fi85r7h7adr8kva26w9b2sz3147d7nl2y0fdblb3v4zr72";
   };
 
   meta = with stdenv.lib; {
@@ -47,6 +47,8 @@ let
 
     buildInputs = [ libmnl ];
 
+    enableParallelBuilding = true;
+
     makeFlags = [
       "WITH_BASHCOMPLETION=yes"
       "WITH_WGQUICK=yes"
@@ -57,6 +59,11 @@ let
     ];
 
     buildPhase = "make tools";
+
+    postInstall = ''
+      substituteInPlace $out/lib/systemd/system/wg-quick@.service \
+        --replace /usr/bin $out/bin
+    '';
   };
 
 in if kernel == null

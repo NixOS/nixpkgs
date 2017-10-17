@@ -81,7 +81,20 @@ let
 
       setup = setupScript;
 
-      inherit preHook initialPath shell
+      # We pretty much never need rpaths on Darwin, since all library path references
+      # are absolute unless we go out of our way to make them relative (like with CF)
+      # TODO: This really wants to be in stdenv/darwin but we don't have hostPlatform
+      # there (yet?) so it goes here until then.
+      preHook = preHook+ lib.optionalString buildPlatform.isDarwin ''
+        export NIX_BUILD_DONT_SET_RPATH=1
+      '' + lib.optionalString hostPlatform.isDarwin ''
+        export NIX_DONT_SET_RPATH=1
+        export NIX_NO_SELF_RPATH=1
+      '' + lib.optionalString targetPlatform.isDarwin ''
+        export NIX_TARGET_DONT_SET_RPATH=1
+      '';
+
+      inherit initialPath shell
         defaultNativeBuildInputs defaultBuildInputs;
     }
     // lib.optionalAttrs buildPlatform.isDarwin {

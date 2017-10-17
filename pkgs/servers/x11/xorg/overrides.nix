@@ -315,11 +315,11 @@ in
     installFlags = "sdkdir=\${out}/include/xorg";
   };
 
-  xf86inputlibinput = attrs: attrs // {
-    name = "xf86-input-libinput-0.25.1";
+  xf86inputlibinput = attrs: attrs // rec {
+    name = "xf86-input-libinput-0.26.0";
     src = args.fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-libinput-0.25.1.tar.bz2;
-      sha256 = "1q67hjd67ni1nq7kgxdrrdgkyhzaqvvn2vlnsiiq9w4y3icpv7s8";
+      url = "mirror://xorg/individual/driver/${name}.tar.bz2";
+      sha256 = "0yrqs88b7yn9nljwlxzn76jfmvf0sh939kzij5b2jvr2qa7mbjmb";
     };
     buildInputs = attrs.buildInputs ++ [ args.libinput ];
     installFlags = "sdkdir=\${out}/include/xorg";
@@ -398,11 +398,6 @@ in
     let
       attrs = with args;
         if (args.abiCompat == null) then attrs_passed
-            # All this just for 1.19.2, as the tarball is incorrectly autotoolized.
-            // {
-              nativeBuildInputs = [ utilmacros fontutil ];
-              preConfigure = "libtoolize --force; aclocal; autoheader; automake -afi";
-            }
         else if (args.abiCompat == "1.17") then {
           name = "xorg-server-1.17.4";
           builder = ./builder.sh;
@@ -567,6 +562,13 @@ in
   };
 
   xf86videointel = attrs: attrs // {
+    # the update script only works with released tarballs :-/
+    name = "xf86-video-intel-2017-04-18";
+    src = args.fetchurl {
+      url = "http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/snapshot/"
+          + "c72bb27a3a68ecc616ce2dc8e9a1d20354504562.tar.gz";
+      sha256 = "1awxbig135nmq7qa8jzggqr4q32k6ngnal2lckrdkg7zqi40zdv8";
+    };
     buildInputs = attrs.buildInputs ++ [xorg.libXfixes xorg.libXScrnSaver xorg.pixman];
     nativeBuildInputs = attrs.nativeBuildInputs ++ [args.autoreconfHook xorg.utilmacros];
     configureFlags = "--with-default-dri=3 --enable-tools";

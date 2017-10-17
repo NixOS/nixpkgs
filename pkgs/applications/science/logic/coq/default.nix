@@ -19,7 +19,7 @@ let
    "8.5pl3"    = "15c3rdk59nifzihsp97z4vjxis5xmsnrvpb86qiazj143z2fmdgw";
    "8.6"       = "148mb48zpdax56c0blfi7v67lx014lnmrvxxasi28hsibyz2lvg4";
    "8.6.1"     = "0llrxcxwy5j87vbbjnisw42rfw1n1pm5602ssx64xaxx3k176g6l";
-   "8.7+beta1" = "006rn5896pf39p4z9c6d4xj4zm80j4b67v5gwcixd63msrjqkmxp";
+   "8.7+beta2" = "1r274m44z774xigvj43g211ms9z9bwgyp1g43rvq4fswb3gzxc4b";
   }."${version}";
   coq-version = builtins.substring 0 3 version;
   camlp5 = ocamlPackages.camlp5_strict;

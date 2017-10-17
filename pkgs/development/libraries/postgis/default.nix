@@ -109,4 +109,30 @@ in rec {
     '';
   });
 
+  v_2_4_0 = pgDerivationBaseNewer.merge ( fix : {
+    version = "2.4.0";
+    sha256 = "02baa90f04da41e04b6c18eedfda53110c45ae943d4e65050f6d202f7de07d29";
+    sql_srcs = ["postgis.sql" "spatial_ref_sys.sql"];
+    builtInputs = [gdal json_c pkgconfig];
+
+    # postgis config directory assumes /include /lib from the same root for json-c library
+    NIX_LDFLAGS = "-L${stdenv.lib.getLib json_c}/lib";
+
+    dontDisableStatic = true;
+    preConfigure = ''
+      sed -i 's@/usr/bin/file@${file}/bin/file@' configure
+      configureFlags="$configureFlags --with-gdalconfig=${gdal}/bin/gdal-config --with-jsondir=${json_c.dev}"
+    '';
+    postConfigure = ''
+      sed -i "s|@mkdir -p \$(DESTDIR)\$(PGSQL_BINDIR)||g ;
+              s|\$(DESTDIR)\$(PGSQL_BINDIR)|$prefix/bin|g
+              " \
+          "raster/loader/Makefile";
+      sed -i "s|\$(DESTDIR)\$(PGSQL_BINDIR)|$prefix/bin|g
+              " \
+          "raster/scripts/python/Makefile";
+    '';
+  });
+
+
 }

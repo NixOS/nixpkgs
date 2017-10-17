@@ -1,4 +1,4 @@
-{ stdenv, fetchpatch, fetchFromGitHub, python3, glibcLocales }:
+{ stdenv, fetchpatch, fetchFromGitHub, fetchurl, python3, glibcLocales }:
 
 let
   p = python3.override {
@@ -17,6 +17,19 @@ let
         src = oldAttrs.src.override {
           inherit version;
           sha256 = "00daa04c9870345f56605d91d7d4897bc1b16f6fff7c74cb602b08ef16c0fb43";
+        };
+      });
+      pyopenssl = super.pyopenssl.overridePythonAttrs (oldAttrs: rec {
+        version = "17.0.0";
+        name = "${oldAttrs.pname}-${version}";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "1pdg1gpmkzj8yasg6cmkhcivxcdp4c12nif88y4qvsxq5ffzxas8";
+        };
+        patches = fetchpatch {
+          url = "https://github.com/pyca/pyopenssl/commit/"
+              + "a40898b5f1d472f9449a344f703fa7f90cddc21d.patch";
+          sha256 = "0bdfrhfvdfxhfknn46s4db23i3hww6ami2r1l5rfrri0pn8b8mh7";
         };
       });
     };
@@ -70,6 +83,6 @@ in p.pkgs.buildPythonPackage rec {
     description = "Man-in-the-middle proxy";
     homepage = http://mitmproxy.org/;
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz kamilchm ];
   };
 }

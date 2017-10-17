@@ -9,7 +9,7 @@
   ./config/fonts/ghostscript.nix
   ./config/gnu.nix
   ./config/i18n.nix
-  ./config/krb5.nix
+  ./config/krb5/default.nix
   ./config/ldap.nix
   ./config/networking.nix
   ./config/no-x-libs.nix
@@ -35,11 +35,6 @@
   ./hardware/ksm.nix
   ./hardware/mcelog.nix
   ./hardware/network/b43.nix
-  ./hardware/network/intel-2100bg.nix
-  ./hardware/network/intel-2200bg.nix
-  ./hardware/network/intel-3945abg.nix
-  ./hardware/network/ralink.nix
-  ./hardware/network/rtl8192c.nix
   ./hardware/nitrokey.nix
   ./hardware/opengl.nix
   ./hardware/pcmcia.nix
@@ -136,8 +131,6 @@
   ./security/rtkit.nix
   ./security/wrappers/default.nix
   ./security/sudo.nix
-  ./service-managers/docker.nix
-  ./service-managers/trivial.nix
   ./services/admin/salt/master.nix
   ./services/admin/salt/minion.nix
   ./services/amqp/activemq/default.nix
@@ -269,6 +262,7 @@
   ./services/mail/offlineimap.nix
   ./services/mail/opendkim.nix
   ./services/mail/opensmtpd.nix
+  ./services/mail/pfix-srsd.nix
   ./services/mail/postfix.nix
   ./services/mail/postsrsd.nix
   ./services/mail/postgrey.nix
@@ -332,6 +326,7 @@
   ./services/misc/parsoid.nix
   ./services/misc/phd.nix
   ./services/misc/plex.nix
+  ./services/misc/pykms.nix
   ./services/misc/radarr.nix
   ./services/misc/redmine.nix
   ./services/misc/rippled.nix
@@ -374,6 +369,7 @@
   ./services/monitoring/prometheus/collectd-exporter.nix
   ./services/monitoring/prometheus/fritzbox-exporter.nix
   ./services/monitoring/prometheus/json-exporter.nix
+  ./services/monitoring/prometheus/minio-exporter.nix
   ./services/monitoring/prometheus/nginx-exporter.nix
   ./services/monitoring/prometheus/node-exporter.nix
   ./services/monitoring/prometheus/snmp-exporter.nix
@@ -621,6 +617,7 @@
   ./services/web-servers/phpfpm/default.nix
   ./services/web-servers/shellinabox.nix
   ./services/web-servers/tomcat.nix
+  ./services/web-servers/traefik.nix
   ./services/web-servers/uwsgi.nix
   ./services/web-servers/varnish/default.nix
   ./services/web-servers/winstone.nix

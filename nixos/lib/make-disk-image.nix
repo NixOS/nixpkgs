@@ -80,7 +80,7 @@ let
     truncate -s ${toString diskSize}M $diskImage
 
     ${if partitioned then ''
-      parted $diskImage -- mklabel msdos mkpart primary ext4 1M -1s
+      parted --script $diskImage -- mklabel msdos mkpart primary ext4 1M -1s
       offset=$((2048*512))
     '' else ''
       offset=0

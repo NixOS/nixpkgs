@@ -10,17 +10,17 @@ let
   udevRules = callPackage ./udev_rules_type1.nix {};
 
 in stdenv.mkDerivation rec {
-  name = "brscan4-0.4.4-2";
+  name = "brscan4-0.4.4-4";
   src = 
     if stdenv.system == "i686-linux" then
       fetchurl {
         url = "http://download.brother.com/welcome/dlf006646/${name}.i386.deb";
-        sha256 = "1rd6qmg49lvack8rg9kkqs3vxfvvqf2x45h93pkrhk8a4aj5c8ll";
+        sha256 = "13mhjbzf9nvpdzrc2s98684r7likg76zxs1wlz2h8w59fsqgx4k2";
       }
     else if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "http://download.brother.com/welcome/dlf006645/${name}.amd64.deb";
-        sha256 = "1r3cq1k2a2bghibkckmk00x7y59ic31gv7jcsw7380szf1j3la59";
+        sha256 = "0xy5px96y1saq9l80vwvfn6anr2q42qlxdhm6ci2a0diwib5q9fd";
       }
     else throw "${name} is not supported on ${stdenv.system} (only i686-linux and x86_64 linux are supported)";
 

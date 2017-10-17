@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/share/applications/solvespace.desktop \
-      --replace /usr/bin/ $out/bin/ \
+      --replace /usr/bin/ $out/bin/
   '';
 
   meta = {

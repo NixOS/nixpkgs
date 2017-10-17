@@ -16,15 +16,15 @@
 {
   https-everywhere = stdenv.mkDerivation rec {
     name = "https-everywhere-${version}";
-    version = "5.2.21";
+    version = "2017.9.12";
 
     extid = "https-everywhere-eff@eff.org";
 
     src = fetchgit {
       url = "https://git.torproject.org/https-everywhere.git";
       rev = "refs/tags/${version}";
-      sha256 = "0z9madihh4b4z4blvfmh6w1hsv8afyi0x7b243nciq9r4w55xgfa";
-      fetchSubmodules = true;
+      sha256 = "179429pngyksp9xkr86nf2m5q6zmg19c7ng1dhqjfb1vsncwgw66";
+      fetchSubmodules = true; # for translations, TODO: remove
     };
 
     nativeBuildInputs = [

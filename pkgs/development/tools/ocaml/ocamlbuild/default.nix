@@ -1,5 +1,4 @@
-{stdenv, fetchFromGitHub, ocaml, findlib, buildOcaml, type_conv, camlp4,
- ocamlmod, ocamlify, ounit, expect}:
+{ stdenv, fetchFromGitHub, ocaml, findlib }:
 let
   version = "0.11.0";
 in

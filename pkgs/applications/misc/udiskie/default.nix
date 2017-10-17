@@ -4,13 +4,13 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "udiskie-${version}";
-  version = "1.7.0";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "coldfix";
     repo = "udiskie";
     rev = version;
-    sha256 = "1dvfhf0d79al0vnrwdknfiy2297m3f7fgn7syr85p29hd6260jnv";
+    sha256 = "12d0fc88wlbh5vvsijvy3cwk37wagmg8193n9zcipr1ivmcmhx15";
   };
 
   buildInputs = [

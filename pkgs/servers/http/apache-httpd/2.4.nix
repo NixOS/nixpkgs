@@ -5,7 +5,6 @@
 , ldapSupport ? true, openldap
 , libxml2Support ? true, libxml2
 , luaSupport ? false, lua5
-, fetchpatch
 }:
 
 let optional       = stdenv.lib.optional;
@@ -17,12 +16,12 @@ assert ldapSupport -> aprutil.ldapSupport && openldap != null;
 assert http2Support -> nghttp2 != null;
 
 stdenv.mkDerivation rec {
-  version = "2.4.27";
+  version = "2.4.28";
   name = "apache-httpd-${version}";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha1 = "699e4e917e8fb5fd7d0ce7e009f8256ed02ec6fc";
+    sha256 = "c1197a3a62a4ab5c584ab89b249af38cf28b4adee9c0106b62999fd29f920666";
   };
 
   # FIXME: -dev depends on -doc
@@ -39,15 +38,6 @@ stdenv.mkDerivation rec {
   prePatch = ''
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
   '';
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2017-9798.patch";
-      url = "https://svn.apache.org/viewvc/httpd/httpd/branches/2.4.x/server/core.c?r1=1805223&r2=1807754&pathrev=1807754&view=patch";
-      sha256 = "00hbq5szgav91kwsc30jdjvgd3vbgm8n198yna8bcs33p434v25k";
-      stripLen = 3;
-     })
-  ];
 
   # Required for ‘pthread_cancel’.
   NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";

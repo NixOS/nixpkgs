@@ -1,20 +1,22 @@
-{ stdenv, fetchurl, pythonPackages, glibcLocales} :
+{ stdenv, pythonPackages, glibcLocales} :
 
 pythonPackages.buildPythonApplication rec {
-  name = "devpi-client-${version}";
-  version = "2.7.0";
+  name = "${pname}-${version}";
+  pname = "devpi-client";
+  version = "3.1.0rc1";
 
-  src = fetchurl {
-    url = "mirror://pypi/d/devpi-client/${name}.tar.gz";
-    sha256 = "0z7vaf0a66n82mz0vx122pbynjvkhp2mjf9lskgyv09y3bxzzpj3";
+  src = pythonPackages.fetchPypi {
+    inherit pname version;
+    sha256 = "0kfyva886k9zxmilqb2yviwqzyvs3n36if3s56y4clbvw9hr2lc3";
   };
-
-  doCheck = false;
+  # requires devpi-server which is currently not packaged
+  doCheck = true;
+  checkInputs = with pythonPackages; [ pytest webtest mock ];
+  checkPhase = "py.test";
 
   LC_ALL = "en_US.UTF-8";
-  buildInputs = with pythonPackages; [ glibcLocales tox check-manifest pkginfo ];
-
-  propagatedBuildInputs = with pythonPackages; [ py devpi-common ];
+  buildInputs = with pythonPackages; [ glibcLocales pkginfo tox check-manifest ];
+  propagatedBuildInputs = with pythonPackages; [ py devpi-common pluggy ];
 
   meta = {
     homepage = http://doc.devpi.net;

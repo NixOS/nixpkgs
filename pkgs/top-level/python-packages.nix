@@ -291,6 +291,8 @@ in {
 
   sip = callPackage ../development/python-modules/sip { };
 
+  supervise_api = callPackage ../development/python-modules/supervise_api { };
+
   tables = callPackage ../development/python-modules/tables {
     hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
   };
@@ -2091,7 +2093,8 @@ in {
     buildInputs = [ pkgs.db ];
 
     # Judging from SyntaxError in test
-    disabled = isPy3k;
+#    disabled = isPy3k;
+    doCheck = false; # test suite breaks python3 compatibility
 
     # Path to database need to be set.
     # Somehow the setup.py flag is not propagated.
@@ -2355,25 +2358,7 @@ in {
     };
   };
 
-  devpi-common = buildPythonPackage rec {
-    name = "devpi-common";
-    version = "3.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/devpi-common/devpi-common-${version}.tar.gz";
-      sha256 = "0l3a7iyk596x6pvzg7604lzzi012qszr804fqn6f517zcy1xz23j";
-    };
-
-    propagatedBuildInputs = [ self.requests self.py ];
-
-    meta = {
-      homepage = https://bitbucket.org/hpk42/devpi;
-      description = "Utilities jointly used by devpi-server and devpi-client";
-      license = licenses.mit;
-      maintainers = with maintainers; [ lewo makefu ];
-    };
-  };
-
+  devpi-common = callPackage ../development/python-modules/devpi-common { };
   # A patched version of buildout, useful for buildout based development on Nix
   zc_buildout_nix = callPackage ../development/python-modules/buildout-nix { };
 
@@ -6328,6 +6313,8 @@ in {
     };
   };
 
+  jsmin = callPackage ../development/python-modules/jsmin { };
+
   jsonpatch = callPackage ../development/python-modules/jsonpatch { };
 
   jsonpointer = buildPythonPackage rec {
@@ -7007,27 +6994,6 @@ in {
     };
   };
 
-  pew = buildPythonPackage rec {
-    name = "pew-0.1.14";
-    namePrefix = "";
-
-    disabled = pythonOlder "3.4"; # old versions require backported libraries
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pew/${name}.tar.gz";
-      sha256 = "0p188ah80l0rzbib2srahj2sswz8rcpqwbrbajyv2r5c1m5k6r4b";
-    };
-
-    propagatedBuildInputs = with self; [ virtualenv virtualenv-clone ];
-
-    meta = {
-      description = "Tools to manage multiple virtualenvs written in pure python, a virtualenvwrapper rewrite";
-      license = licenses.mit;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ berdario ];
-    };
-  };
-
   pex = buildPythonPackage rec {
     name = "pex-${version}";
     version = "1.2.7";
@@ -7060,6 +7026,8 @@ in {
   plaster-pastedeploy = callPackage ../development/python-modules/plaster-pastedeploy {};
 
   plotly = callPackage ../development/python-modules/plotly { };
+
+  plyfile = callPackage ../development/python-modules/plyfile { };
 
   podcastparser = callPackage ../development/python-modules/podcastparser { };
 
@@ -11628,25 +11596,7 @@ in {
     };
   });
 
-  MechanicalSoup = buildPythonPackage rec {
-    name = "MechanicalSoup-${version}";
-    version = "0.4.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/M/MechanicalSoup/${name}.zip";
-      sha256 = "02jkwly4gw1jqm55l4wwn0j0ggnysx55inw9j96bif5l49z5cacd";
-    };
-
-    propagatedBuildInputs = with self; [ requests beautifulsoup4 six ];
-
-    meta = {
-      description = "A Python library for automating interaction with websites";
-      homepage = https://github.com/hickford/MechanicalSoup;
-      license = licenses.mit;
-      maintainers = with maintainers; [ jgillich ];
-    };
-  };
-
+  MechanicalSoup = callPackage ../development/python-modules/MechanicalSoup/default.nix { };
 
   meld3 = buildPythonPackage rec {
     name = "meld3-1.0.0";
@@ -14151,17 +14101,19 @@ in {
 
   cmd2 = buildPythonPackage rec {
     name = "cmd2-${version}";
-    version = "0.6.8";
+    version = "0.7.7";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cmd2/${name}.tar.gz";
-      sha256 = "1a346zcd46c8gwbbp2cxsmvgfkyy26kwxjzdnkv7n47w6660sy5c";
+      sha256 = "0widbir8ay1fd4zm8l0rjq78j1cvbammbz8xs32crbanqsgzpqml";
     };
 
     # No tests included
     doCheck = false;
 
     propagatedBuildInputs = with self; [
+      pyperclip
+      six
       pyparsing
     ];
 
@@ -15010,6 +14962,8 @@ in {
 
   pandas = callPackage ../development/python-modules/pandas { };
 
+  pandas_0_17_1 = callPackage ../development/python-modules/pandas/0.17.1.nix { };
+
   xlrd = buildPythonPackage rec {
     name = "xlrd-${version}";
 
@@ -15613,27 +15567,9 @@ in {
   };
 
   pika-pool = callPackage ../development/python-modules/pika-pool { };
+  platformio = callPackage ../development/python-modules/platformio { };
 
-  platformio =  buildPythonPackage rec {
-    name = "platformio-${version}";
-    version="2.10.3";
-
-    disabled = isPy3k || isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/b7/a3/1d3a9d7bae91df1b607e0f31549ec3e0006f29484cc6a1431b3fe3c5b02e/platformio-2.10.3.tar.gz";
-      sha256 = "f3a646871f9baed05f336a32576edaab90abf0737d8adb54f2acb7bcad42a65f";
-     };
-
-     propagatedBuildInputs = with self; [ click_5 requests bottle pyserial lockfile colorama];
-
-     meta = with stdenv.lib; {
-     description = "An open source ecosystem for IoT development";
-     homepage = http://platformio.org;
-     maintainers = with maintainers; [ mog ];
-     license = licenses.asl20;
-     };
-  };
+  kmsxx = callPackage ../development/libraries/kmsxx { };
 
   pylibconfig2 = buildPythonPackage rec {
     name = "pylibconfig2-${version}";
@@ -16860,7 +16796,7 @@ in {
     };
 
     disabled = !isPy3k;
-    
+
     # No tests in archive
     doCheck = false;
 
@@ -17627,6 +17563,8 @@ in {
     };
   };
 
+  pypcap = callPackage ../development/python-modules/pypcap {};
+
   pyplatec = buildPythonPackage rec {
     name = "PyPlatec-${version}";
     version = "1.4.0";
@@ -17780,11 +17718,12 @@ in {
   };
 
   pyopenssl = buildPythonPackage rec {
-    name = "pyopenssl-${version}";
+    pname = "pyOpenSSL";
+    name = "${pname}-${version}";
     version = "17.2.0";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyOpenSSL/pyOpenSSL-${version}.tar.gz";
+    src = self.fetchPypi {
+      inherit pname version;
       sha256 = "0d283g4zi0hr9papd24mjl70mi15gyzq6fx618rizi87dgipqqax";
     };
 
@@ -17879,22 +17818,7 @@ in {
     };
   };
 
-  pyserial = buildPythonPackage rec {
-    name = "pyserial-2.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyserial/${name}.tar.gz";
-      sha256 = "3542ec0838793e61d6224e27ff05e8ce4ba5a5c5cc4ec5c6a3e8d49247985477";
-    };
-
-    doCheck = false;
-
-    meta = {
-      homepage = "http://pyserial.sourceforge.net/";
-      license = licenses.psfl;
-      description = "Python serial port extension";
-    };
-  };
+  pyserial = callPackage ../development/python-modules/pyserial {};
 
   pymongo = callPackage ../development/python-modules/pymongo {};
 
@@ -19877,21 +19801,7 @@ in {
     };
   };
 
-  spambayes = buildPythonPackage rec {
-    name = "spambayes-1.1b1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://sourceforge/spambayes/${name}.tar.gz";
-      sha256 = "0kqvjb89b02wp41p650ydfspi1s8d7akx1igcrw62diidqbxp04n";
-    };
-
-    propagatedBuildInputs = with self; [ bsddb3 pydns lockfile ];
-
-    meta = {
-      description = "Statistical anti-spam filter, initially based on the work of Paul Graham";
-      homepage = http://spambayes.sourceforge.net/;
-    };
-  };
+  spambayes = callPackage ../development/python-modules/spambayes { };
 
   shapely = callPackage ../development/python-modules/shapely { };
 
@@ -20361,22 +20271,7 @@ in {
     };
   };
 
-  semantic-version = buildPythonPackage rec {
-    pname = "semantic_version";
-    version = "2.4.2";
-    name = "${pname}${version}";
-
-    src = self.fetchPypi {
-      inherit pname version;
-      sha256 = "7e8b7fa74a3bc9b6e90b15b83b9bc2377c78eaeae3447516425f475d5d6932d2";
-    };
-
-    meta = {
-      description = "A library implementing the 'SemVer' scheme";
-      license = licenses.bsdOriginal;
-      maintainers = with maintainers; [ layus ];
-    };
-  };
+  semantic-version = callPackage ../development/python-modules/semantic-version { };
 
   sexpdata = buildPythonPackage rec {
     name = "sexpdata-0.0.2";
@@ -20627,6 +20522,8 @@ in {
       platforms = platforms.unix;
     };
   });
+
+  guzzle_sphinx_theme = callPackage ../development/python-modules/guzzle_sphinx_theme { };
 
   sphinx-testing = callPackage ../development/python-modules/sphinx-testing { };
 
@@ -26604,6 +26501,8 @@ EOF
       sha256 = "1ad0mkixc0s86djwsvhp1qlvcfs25086nh0qw7bys49gz8shczzi";
     };
   };
+
+  yowsup = callPackage ../development/python-modules/yowsup { };
 
   wptserve = callPackage ../development/python-modules/wptserve { };
 

@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   name = "check-${version}";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/check/${version}/check-${version}.tar.gz";
-    sha256 = "0lhhywf5nxl3dd0hdakra3aasl590756c9kmvyifb3vgm9k0gxgm";
+    url = "https://github.com/libcheck/check/releases/download/${version}/check-${version}.tar.gz";
+    sha256 = "05jn1pgb7hqb937xky2147nnq3r4qy5wwr79rddpax3bms5a9xr4";
   };
 
   # Test can randomly fail: http://hydra.nixos.org/build/7243912
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
          can be used within source code editors and IDEs.
       '';
 
-    homepage = http://check.sourceforge.net/;
+    homepage = https://libcheck.github.io/check/;
 
     license = licenses.lgpl2Plus;
     platforms = platforms.all;

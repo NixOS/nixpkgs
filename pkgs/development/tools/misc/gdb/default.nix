@@ -60,10 +60,7 @@ stdenv.mkDerivation rec {
   configureFlags = with stdenv.lib; [
     "--with-gmp=${gmp.dev}" "--with-mpfr=${mpfr.dev}" "--with-system-readline"
     "--with-system-zlib" "--with-expat" "--with-libexpat-prefix=${expat.dev}"
-  ] ++ stdenv.lib.optional hostPlatform.isLinux
-      # TODO(@Ericson2314): make this conditional on whether host platform is NixOS
-      "--with-separate-debug-dir=/run/current-system/sw/lib/debug"
-    ++ stdenv.lib.optional (!pythonSupport) "--without-python"
+  ] ++ stdenv.lib.optional (!pythonSupport) "--without-python"
     ++ stdenv.lib.optional multitarget "--enable-targets=all";
 
   postInstall =

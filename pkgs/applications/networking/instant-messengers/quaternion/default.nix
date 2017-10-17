@@ -2,7 +2,7 @@
 
 mkDerivation rec {
   name = "quaternion-git-${version}";
-  version = "2017-06-29";
+  version = "2017-10-07";
 
   # quaternion and tensor share the same libqmatrixclient library as a git submodule
   #
@@ -13,8 +13,8 @@ mkDerivation rec {
 
   src = fetchgit {
     url             = "https://github.com/QMatrixClient/Quaternion.git";
-    rev             = "1febc0178fd3d02b7426f58981b54924ad60c84d";
-    sha256          = "1whjhlphdhk7kgw2zqc0wj3k2i9gkp79qq2bnrh4mbcp3qmcqngr";
+    rev             = "1007f2ca4ad5e8cc5dba437d6a0cdea07d1f1332";
+    sha256          = "0hvc81ld7fcwyrxsr2q3yvzh0rzhgmflby4nmyzcbjds7b7pv0xq";
     fetchSubmodules = true;
   };
 

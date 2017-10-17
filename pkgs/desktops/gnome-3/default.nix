@@ -30,7 +30,7 @@ let
   optionalPackages = with gnome3; [ baobab eog epiphany evince
     gucharmap nautilus totem vino yelp gnome-bluetooth
     gnome-calculator gnome-contacts gnome-font-viewer gnome-screenshot
-    gnome-system-log gnome-system-monitor
+    gnome-system-log gnome-system-monitor simple-scan
     gnome_terminal gnome-user-docs evolution file-roller gedit
     gnome-clocks gnome-music gnome-tweak-tool gnome-photos
     nautilus-sendto dconf-editor vinagre gnome-weather gnome-logs
@@ -230,6 +230,8 @@ let
 
   rest = callPackage ./core/rest { };
 
+  simple-scan = callPackage ./core/simple-scan { };
+
   sushi = callPackage ./core/sushi { };
 
   totem = callPackage ./core/totem { };
@@ -364,10 +366,7 @@ let
 
   california = callPackage ./misc/california { };
 
-  geary = callPackage ./misc/geary {
-    # https://bugzilla.gnome.org/show_bug.cgi?id=728002
-    webkitgtk = pkgs.webkitgtk24x-gtk3;
-  };
+  geary = callPackage ./misc/geary { };
 
   gfbgraph = callPackage ./misc/gfbgraph { };
 

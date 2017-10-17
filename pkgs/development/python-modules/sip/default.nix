@@ -2,13 +2,13 @@
 
 if isPyPy then throw "sip not supported for interpreter ${python.executable}" else buildPythonPackage rec {
   pname = "sip";
-  version = "4.19.1";
+  version = "4.19.3";
   name = "${pname}-${version}";
   format = "other";
 
   src = fetchurl {
     url = "mirror://sourceforge/pyqt/sip/${name}/${name}.tar.gz";
-    sha256 = "501852b8325349031b769d1c03d6eab04f7b9b97f790ec79f3d3d04bf065d83e";
+    sha256 = "0x2bghbprwl3az1ni3p87i0bq8r99694la93kg65vi0cz12gh3bl";
   };
 
   configurePhase = ''

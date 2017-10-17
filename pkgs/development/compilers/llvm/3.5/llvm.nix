@@ -33,6 +33,12 @@ in stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ ncurses zlib ];
 
+  prePatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace 'set(CMAKE_INSTALL_NAME_DIR "@rpath")' "set(CMAKE_INSTALL_NAME_DIR "$out/lib")" \
+      --replace 'set(CMAKE_INSTALL_RPATH "@executable_path/../lib")' ""
+  '';
+
   # hacky fix: created binaries need to be run before installation
   preBuild = ''
     mkdir -p $out/

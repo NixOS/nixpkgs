@@ -2,7 +2,7 @@
 , libxml2, libxslt, libffi, makeWrapper, p7zip, xar, gzip, cpio }:
 
 let
-  version = "1.9.5";
+  version = "2.0.0";
   rake = buildRubyGem {
     inherit ruby;
     gemName = "rake";
@@ -17,9 +17,9 @@ let
       else "system ${stdenv.system} not supported";
 
   sha256 = {
-    "x86_64-linux"  = "16ijzaacfbqrgh561bf51747d2rv8kydgs14dfdr572qi0f88baw";
-    "i686-linux"    = "0lvkb4k0a34a8hzlsi0apf056rhyprh5w0gn16d0n2ijnaf9j2yk";
-    "x86_64-darwin" = "070mrczsx1j0jl9sx6963l3hrk9anqa13r008wk1d22d25xj25mc";
+    "x86_64-linux"  = "184amybyxqlxqr8fk6lyx2znmci1fazsiby90q7d1xx2ihz3hm5x";
+    "i686-linux"    = "19r1m5jila40x69m1qz2hslz7v1hdg8wwdhcq8d5qjnzwfmlw2qz";
+    "x86_64-darwin" = "154400iqs01235bclr8ic7g9jv01lfs766bmv7p8784r3xsblvsr";
   }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
 
   arch = builtins.replaceStrings ["-linux" "-darwin"] ["" ""] stdenv.system;
@@ -85,6 +85,22 @@ in stdenv.mkDerivation rec {
     ln -s ${openssl.bin}/bin/c_rehash opt/vagrant/embedded/bin
     ln -s ${openssl.bin}/bin/openssl opt/vagrant/embedded/bin
 
+    # libiconv: iconv
+    rm opt/vagrant/embedded/bin/iconv
+    ln -s ${libiconv}/bin/iconv opt/vagrant/embedded/bin
+
+    # libxml: xml2-config, xmlcatalog, xmllint
+    rm opt/vagrant/embedded/bin/{xml2-config,xmlcatalog,xmllint}
+    ln -s ${libxml2.dev}/bin/xml2-config opt/vagrant/embedded/bin
+    ln -s ${libxml2.bin}/bin/xmlcatalog opt/vagrant/embedded/bin
+    ln -s ${libxml2.bin}/bin/xmllint opt/vagrant/embedded/bin
+
+    # libxslt: xslt-config, xsltproc
+    rm opt/vagrant/embedded/bin/{xslt-config,xsltproc}
+    ln -s ${libxslt.dev}/bin/xslt-config opt/vagrant/embedded/bin
+    ln -s ${libxslt.bin}/bin/xsltproc opt/vagrant/embedded/bin
+
+  '' + (stdenv.lib.optionalString (! stdenv.isDarwin) ''
     # ruby: erb, gem, irb, rake, rdoc, ri, ruby
     rm opt/vagrant/embedded/bin/{erb,gem,irb,rake,rdoc,ri,ruby}
     ln -s ${ruby}/bin/erb opt/vagrant/embedded/bin
@@ -101,24 +117,10 @@ in stdenv.mkDerivation rec {
       ln -s $lib opt/vagrant/embedded/lib/''${lib##*/}
     done
 
-    # libiconv: iconv
-    rm opt/vagrant/embedded/bin/iconv
-    ln -s ${libiconv}/bin/iconv opt/vagrant/embedded/bin
-
-    # libxml: xml2-config, xmlcatalog, xmllint
-    rm opt/vagrant/embedded/bin/{xml2-config,xmlcatalog,xmllint}
-    ln -s ${libxml2.dev}/bin/xml2-config opt/vagrant/embedded/bin
-    ln -s ${libxml2.bin}/bin/xmlcatalog opt/vagrant/embedded/bin
-    ln -s ${libxml2.bin}/bin/xmllint opt/vagrant/embedded/bin
-
-    # libxslt: xslt-config, xsltproc
-    rm opt/vagrant/embedded/bin/{xslt-config,xsltproc}
-    ln -s ${libxslt.dev}/bin/xslt-config opt/vagrant/embedded/bin
-    ln -s ${libxslt.bin}/bin/xsltproc opt/vagrant/embedded/bin
-
     # libffi
     ln -s ${libffi}/lib/libffi.so.6 opt/vagrant/embedded/lib/libffi.so.6
 
+  '') + ''
     mkdir -p "$out"
     cp -r opt "$out"
     cp -r usr/bin "$out"

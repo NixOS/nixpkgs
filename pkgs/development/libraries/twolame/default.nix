@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.twolame.org/;
     license = with licenses; [ lgpl2Plus ];
-    platforms = with platforms; [ unix ];
+    platforms = with platforms; unix;
     maintainers = with maintainers; [ AndersonTorres ];
   };
 }

@@ -219,12 +219,12 @@ in
 
   clion = buildClion rec {
     name = "clion-${version}";
-    version = "2017.2.2"; /* updated by script */
+    version = "2017.2.3"; /* updated by script */
     description  = "C/C++ IDE. New. Intelligent. Cross-platform";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/cpp/CLion-${version}.tar.gz";
-      sha256 = "1rnncii7z44186jv9xl3ax179ws9wfwd6yndyf9pvnpcd4jcs6d0"; /* updated by script */
+      sha256 = "02hyndyfcrvfbi4q8vmmj0xh2bggwc2azggm24g3m03iffa7j6fx"; /* updated by script */
     };
     wmClass = "jetbrains-clion";
     update-channel = "CLion_Release"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
@@ -245,12 +245,12 @@ in
 
   gogland = buildGogland rec {
     name = "gogland-${version}";
-    version = "172.3968.45"; /* updated by script */
+    version = "173.2696.28"; /* updated by script */
     description = "Up and Coming Go IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "0nk9g28l414yp5ldyx1yl38qpp9s1pxkfxfwmw9yvlff3bi0kkyw"; /* updated by script */
+      sha256 = "07nz2pf7fnjxsvc82vihk2i880cji349czxzshr1dk50ixlydq7n"; /* updated by script */
     };
     wmClass = "jetbrains-gogland";
     update-channel = "gogland_1.0_EAP";
@@ -258,12 +258,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2017.2.4"; /* updated by script */
+    version = "2017.2.5"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "179nqzgbb76pyr48faca6k69v32m5kvx66i2apih95g54sd1xgva"; /* updated by script */
+      sha256 = "01p63wsy60icy4673ci435rmzpjfkyz7a8w413vw45i2bm76skhr"; /* updated by script */
     };
     wmClass = "jetbrains-idea-ce";
     update-channel = "IDEA_Release";
@@ -271,12 +271,12 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2017.2.4"; /* updated by script */
+    version = "2017.2.5"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}-no-jdk.tar.gz";
-      sha256 = "1qwqk1r42llh8py0w2iq4w1ks3ipzsxkbdz0zkrd1572zngpk90m"; /* updated by script */
+      sha256 = "0pp49nck1cad6pz81bd95v4v55vmnvj7cbdzybmldglka1afqjb6"; /* updated by script */
     };
     wmClass = "jetbrains-idea";
     update-channel = "IDEA_Release";
@@ -323,12 +323,12 @@ in
 
   rider = buildRider rec {
     name = "rider-${version}";
-    version = "2017.1.1"; /* updated by script */
+    version = "2017.1.2"; /* updated by script */
     description = "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/resharper/JetBrains.Rider-${version}.tar.gz";
-      sha256 = "1h6p847izddard3227ifg3q5klwvdfixir63i6adkd2fvsqn5935"; /* updated by script */
+      sha256 = "0kphjxibrs4ss6hpxbssvs3n35xh9zzw7a1q09x79ibvvk73gwqh"; /* updated by script */
     };
     wmClass = "jetbrains-rider";
     update-channel = "rider_2017_1";
