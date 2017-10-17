@@ -47,6 +47,7 @@ let
               jobs.nix-repl.x86_64-darwin
               jobs.nix.x86_64-darwin
               jobs.nox.x86_64-darwin
+              jobs.nix-info.x86_64-darwin
               jobs.openssh.x86_64-darwin
               jobs.openssl.x86_64-darwin
               jobs.postgresql.x86_64-darwin
@@ -88,6 +89,9 @@ let
               # Needed by travis-ci to test PRs
               jobs.nox.x86_64-linux
               jobs.nox.x86_64-darwin
+              # Needed for support
+              jobs.nix-info.x86_64-linux
+              jobs.nix-info.x86_64-darwin
               # Ensure that X11/GTK+ are in order.
               jobs.thunderbird.x86_64-linux
               # Ensure that basic stuff works on darwin
