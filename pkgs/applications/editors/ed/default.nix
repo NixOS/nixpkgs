@@ -11,9 +11,18 @@ stdenv.mkDerivation (rec {
     sha256 = "1nqhk3n1s1p77g2bjnj55acicsrlyb2yasqxqwpx0w0djfx64ygm";
   };
 
+  unpackCmd = "tar --lzip -xf";
+
   nativeBuildInputs = [ lzip ];
 
   doCheck = true; # not cross;
+
+  installFlags = [ "DESTDIR=$(out)" ];
+
+  configureFlags = [
+    "--exec-prefix=${stdenv.cc.targetPrefix}"
+    "CC=${stdenv.cc.targetPrefix}cc"
+  ];
 
   meta = {
     description = "An implementation of the standard Unix editor";
