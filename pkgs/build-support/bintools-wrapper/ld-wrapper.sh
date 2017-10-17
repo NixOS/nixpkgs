@@ -120,7 +120,11 @@ then
                     -l?*)
                         libs["lib${p:2}.so"]=1
                         ;;
-                    "${NIX_STORE:-}"/*.so | "${NIX_STORE:-}"/*.so.*)
+                    # Note that we used to only look at shared libraries in /nix/store.
+                    # However, some packages (libssh2) build non-installed executables
+                    # in their build trees which link against shared libraries
+                    # in their tree. Linking these breaks if we are so restrictive.
+                    */*.so | */*.so.*)
                         # This is a direct reference to a shared library.
                         libDirs+=("${p%/*}")
                         libs["${p##*/}"]=1
