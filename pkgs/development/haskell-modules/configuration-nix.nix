@@ -503,4 +503,8 @@ self: super: builtins.intersectAttrs super {
 
   # Written against the 6.X series of megaparsec
   htoml-megaparsec = super.htoml-megaparsec.override { megaparsec = self.megaparsec_6_2_0; };
+
+  # Break cyclic reference that results in an infinite recursion.
+  partial-semigroup = dontCheck super.partial-semigroup;
+
 }
