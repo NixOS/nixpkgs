@@ -19159,6 +19159,7 @@ with pkgs;
   nix-bundle = callPackage ../tools/package-management/nix-bundle { nix = nixUnstable; };
 
   nix-info = callPackage ../tools/nix/info { };
+  nix-info-tested = callPackage ../tools/nix/info { doCheck = true; };
 
   nix-index = callPackage ../tools/package-management/nix-index { };
 
