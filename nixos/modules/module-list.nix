@@ -343,6 +343,7 @@
   ./services/misc/svnserve.nix
   ./services/misc/synergy.nix
   ./services/misc/taskserver
+  ./services/misc/tzupdate.nix
   ./services/misc/uhub.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/apcupsd.nix
