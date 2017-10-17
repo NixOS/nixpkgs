@@ -1,9 +1,12 @@
-{ stdenv, lib, coreutils, findutils, gnugrep, darwin, shellcheck }:
+{ stdenv, lib, coreutils, findutils, gnugrep, darwin, shellcheck
+, doCheck ? false # Avoid having GHC in the build-time closure of all NixOS configuratinos
+}:
+
 stdenv.mkDerivation {
   name = "nix-info";
   src = ./info.sh;
 
-  buildInputs = [
+  nativeBuildInputs = lib.optionals doCheck [
     shellcheck
   ];
 
@@ -25,7 +28,7 @@ stdenv.mkDerivation {
     substituteAllInPlace ./nix-info
   '';
 
-  doCheck = true;
+  inherit doCheck;
   checkPhase = ''
     shellcheck ./nix-info
   '';
