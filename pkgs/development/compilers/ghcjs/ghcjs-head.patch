@@ -46,24 +46,6 @@ index db8b12e..7b815c5 100644
        mapM_ patchPackage =<< allPackages
        preparePrimops
        buildGenPrim
-@@ -1141,7 +1132,7 @@ cabalStage1 pkgs = sub $ do
-   globalFlags <- cabalGlobalFlags
-   flags <- cabalInstallFlags (length pkgs == 1)
-   let args = globalFlags ++ ("install" : pkgs) ++
--             [ "--solver=topdown" -- the modular solver refuses to install stage1 packages
-+             [ "--allow-boot-library-installs"
-              ] ++ map ("--configure-option="<>) configureOpts ++ flags
-   checkInstallPlan pkgs args
-   cabal_ args
-@@ -1162,7 +1153,7 @@ cabalInstall pkgs = do
- -- uses somewhat fragile parsing of --dry-run output, find a better way
- checkInstallPlan :: [Package] -> [Text] -> B ()
- checkInstallPlan pkgs opts = do
--  plan <- cabal (opts ++ ["-v2", "--dry-run"])
-+  plan <- cabal (opts ++ ["-vverbose+nowrap", "--dry-run"])
-   when (hasReinstalls plan || hasUnexpectedInstalls plan || hasNewVersion plan) (err plan)
-   where
-     hasReinstalls = T.isInfixOf "(reinstall)"   -- reject reinstalls
 @@ -1201,14 +1192,14 @@ cabalInstallFlags parmakeGhcjs = do
             , "--avoid-reinstalls"
             , "--builddir",      "dist"
