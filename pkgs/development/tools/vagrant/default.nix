@@ -127,8 +127,7 @@ in stdenv.mkDerivation rec {
     wrapProgram "$out/bin/vagrant" --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ libxml2 libxslt ]}" \
                                    --prefix LD_LIBRARY_PATH : "$out/opt/vagrant/embedded/lib"
 
-    mkdir -p "$out/share/bash-completion/completions/"
-    cp "opt/vagrant/embedded/gems/gems/vagrant-$version/contrib/bash/completion.sh" \
+    install -D "opt/vagrant/embedded/gems/gems/vagrant-$version/contrib/bash/completion.sh" \
       "$out/share/bash-completion/completions/vagrant"
   '';
 
