@@ -6,7 +6,9 @@
 , withNetworkManager ? true
 }:
 
-pythonPackages.buildPythonApplication rec {
+let
+  inherit (pythonPackages) python;
+in pythonPackages.buildPythonApplication rec {
   name = "mailnag-${version}";
   version = "1.2.1";
 
@@ -30,6 +32,10 @@ pythonPackages.buildPythonApplication rec {
   propagatedBuildInputs = with pythonPackages; [
     pygobject3 dbus-python pyxdg
   ];
+
+  buildPhase = "";
+
+  installPhase = "${python}/bin/python setup.py install --prefix=$out";
 
   doCheck = false;
 
