@@ -170,7 +170,7 @@ if [ "$NIX_@infixSalt@_DONT_SET_RPATH" != 1 ]; then
                 # should be found in a later directory, so we add all
                 # directories that contain any of the libraries to rpath.
                 rpaths["$dir"]=1
-                extraAfter+=(-rpath "$dir")
+                extraAfter+=(-rpath "$dir" -rpath-link "$dir")
                 break
             fi
         done
