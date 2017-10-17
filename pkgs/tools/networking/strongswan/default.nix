@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
   configureFlags =
     [ "--enable-swanctl" "--enable-cmd" "--enable-systemd"
       "--enable-farp" "--enable-dhcp"
+      "--enable-openssl"
       "--enable-eap-sim" "--enable-eap-sim-file" "--enable-eap-simaka-pseudonym"
       "--enable-eap-simaka-reauth" "--enable-eap-identity" "--enable-eap-md5"
       "--enable-eap-gtc" "--enable-eap-aka" "--enable-eap-aka-3gpp2"
@@ -55,7 +56,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional (stdenv.system == "i686-linux") "--enable-padlock"
     ++ stdenv.lib.optionals enableTNC [
          "--disable-gmp" "--disable-aes" "--disable-md5" "--disable-sha1" "--disable-sha2" "--disable-fips-prf"
-         "--enable-curl" "--enable-openssl"
+         "--enable-curl"
          "--enable-eap-tnc" "--enable-eap-ttls" "--enable-eap-dynamic" "--enable-tnccs-20"
          "--enable-tnc-imc" "--enable-imc-os" "--enable-imc-attestation"
          "--enable-tnc-imv" "--enable-imv-attestation"
