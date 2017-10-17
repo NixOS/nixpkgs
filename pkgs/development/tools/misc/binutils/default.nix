@@ -50,13 +50,9 @@ stdenv.mkDerivation rec {
     ./no-plugins.patch
   ];
 
-  outputs = [ "out" ]
-    ++ optional (targetPlatform == hostPlatform && !hostPlatform.isDarwin) "lib" # problems in Darwin stdenv
-    ++ [ "info" ]
-    ++ optional (targetPlatform == hostPlatform) "dev";
+  outputs = [ "out" "info" ];
 
-  nativeBuildInputs = [ bison ]
-    ++ optional (hostPlatform != buildPlatform) buildPackages.stdenv.cc;
+  nativeBuildInputs = [ bison buildPackages.stdenv.cc ];
   buildInputs = [ zlib ];
 
   inherit noSysDirs;
@@ -87,11 +83,16 @@ stdenv.mkDerivation rec {
     then []
     else [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
 
-  configureFlags =
-    [ "--enable-shared" "--enable-deterministic-archives" "--disable-werror" ]
-    ++ optional (stdenv.system == "mips64el-linux") "--enable-fix-loongson2f-nop"
-    ++ optionals gold [ "--enable-gold" "--enable-plugins" ]
-    ++ optional (stdenv.system == "i686-linux") "--enable-targets=x86_64-linux-gnu";
+  configureFlags = [
+    "--enable-targets=all" "--enable-64-bit-bfd"
+    "--disable-install-libbfd"
+    "--disable-shared" "--enable-static"
+    "--with-system-zlib"
+
+    "--enable-deterministic-archives"
+    "--disable-werror"
+    "--enable-fix-loongson2f-nop"
+  ] ++ optionals gold [ "--enable-gold" "--enable-plugins" ];
 
   enableParallelBuilding = true;
 
