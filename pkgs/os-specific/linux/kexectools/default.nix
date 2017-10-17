@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib }:
+{ stdenv, buildPackages, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
   name = "kexec-tools-${version}";
@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" "pic" "relro" ];
 
+  nativeBuildInputs = [ buildPackages.stdenv.cc ];
   buildInputs = [ zlib ];
 
   meta = with stdenv.lib; {
