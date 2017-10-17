@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, autoconf, zlib, bzip2 }:
+{ stdenv, fetchzip, autoreconfHook, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
   name = "bgpdump-2017-09-29";
@@ -8,12 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "09g9vz2zc4nyzl669w1j7fxw21ifja6dxbp0xbqh6n7w3gpx2g88";
   };
 
-  buildInputs = [ autoconf zlib bzip2 ];
-  configurePhase = ''
-    autoheader
-    autoconf
-    ./configure --prefix=$out
-  '';
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ zlib bzip2 ];
 
   meta = {
     homepage = https://bitbucket.org/ripencc/bgpdump/wiki/Home;
