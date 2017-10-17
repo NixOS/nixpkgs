@@ -13712,6 +13712,7 @@ with pkgs;
   ethabi = self.altcoins.ethabi;
   ethrun = self.altcoins.ethrun;
   seth = self.altcoins.seth;
+  xmr-stak-cpu = self.altcoins.xmr-stak-cpu;
   dapp = self.altcoins.dapp;
   hevm = self.altcoins.hevm;
 
