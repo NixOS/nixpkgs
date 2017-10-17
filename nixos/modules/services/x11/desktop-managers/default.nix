@@ -87,8 +87,8 @@ in
 
       default = mkOption {
         type = types.str;
-        default = "";
-        example = "none";
+        default = "none";
+        example = "plasma5";
         description = "Default desktop manager loaded if none have been chosen.";
         apply = defaultDM:
           if defaultDM == "" && cfg.session.list != [] then
