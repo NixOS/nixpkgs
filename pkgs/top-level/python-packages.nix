@@ -11650,6 +11650,8 @@ in {
     };
   };
 
+  meliae = callPackage ../development/python-modules/meliae {};
+
   memcached = buildPythonPackage rec {
     name = "memcached-1.51";
 
