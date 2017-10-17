@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, fetchpatch
 , talloc, docutils
-, enableStatic ? false }:
+, enableStatic ? true }:
 
 stdenv.mkDerivation rec {
   name = "proot-${version}";
