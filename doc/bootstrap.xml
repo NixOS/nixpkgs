@@ -109,15 +109,22 @@ with rec {
 #
 # e.g: If this directory were to contain these `.json` files:
 #
+# ```
 # .
 # ├── 16_09.json
 # ├── 17_03.json
 # └── 17_09.json
+# ```
 #
 # ... then this file would produce this attribute set:
 #
-# $ nix-instantiate --eval --expr 'import ./default.nix'
+# ```
+# $ nix-instantiate --eval ./default.nix
 # { 16_09 = <CODE>; 17_03 = <CODE>; 17_09 = <CODE>; }
+# ```
+#
+# ... where each field is a derivation that fetches the corresponding `nixpkgs`
+# source tree
 pinnedNixpkgs
 ]]></programlisting>
 </chapter>
