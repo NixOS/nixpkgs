@@ -67,11 +67,9 @@ with rec {
     builder = builtin-paths.shell;
     args = [
       (builtins.toFile "nixpkgs-unpacker" ''
-        "$coreutils/mkdir" -p "$out"
+        "$coreutils/mkdir" --parents "$out"
         cd "$out"
-        "$gzip" -c -d "$tarball" > temporary.tar
-        "$tar" -xf temporary.tar --strip-components=1
-        "$coreutils/rm" temporary.tar
+        "$gzip" --decompress < "$tarball" | "$tar" --extract --strip-components=1
       '')
     ];
 
