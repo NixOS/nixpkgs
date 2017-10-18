@@ -11,11 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "1abbch762gv8rjr579q3qyyk6c80plklbv2mw4x0vg71dgsw9bgz";
   };
 
-  configureFlags = "CPPFLAGS=-DNDEBUG CFLAGS=-O3 CXXFLAGS=-O3";
+  # This isn't an autoconf-based configure.
+  configureFlags = "CXX=${stdenv.cc.targetPrefix}g++ CPPFLAGS=-DNDEBUG CFLAGS=-O3 CXXFLAGS=-O3";
+  configurePlatforms = [];
 
   setupHook = ./lzip-setup-hook.sh;
 
-  doCheck = true;
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   enableParallelBuilding = true;
 
   meta = {
