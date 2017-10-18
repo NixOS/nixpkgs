@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libtool, readline, gmp, pkgconfig, boehmgc, libunistring
+{ fetchurl, stdenv, lib, buildPackages, libtool, readline, gmp, pkgconfig, boehmgc, libunistring
 , libffi, gawk, makeWrapper, fetchpatch, coverageAnalysis ? null, gnu ? null
 , hostPlatform
 }:
@@ -20,7 +20,9 @@
   outputs = [ "out" "dev" "info" ];
   setOutputFlags = false; # $dev gets into the library otherwise
 
-  nativeBuildInputs = [ makeWrapper gawk pkgconfig ];
+  nativeBuildInputs = [ makeWrapper gawk pkgconfig ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
+       [ buildPackages.guile buildPackages.stdenv.cc ];
   buildInputs = [ readline libtool libunistring libffi ];
 
   propagatedBuildInputs = [ gmp boehmgc ]
@@ -29,9 +31,6 @@
     # the needed `-L' flags.  As for why the `.la' file lacks the `-L' flags,
     # see below.
     ++ [ libtool libunistring ];
-
-  # A native Guile 2.0 is needed to cross-build Guile.
-  selfNativeBuildInput = true;
 
   enableParallelBuilding = true;
 
@@ -46,8 +45,15 @@
   # don't have "libgcc_s.so.1" on darwin
   LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
 
-  configureFlags = [ "--with-libreadline-prefix=${readline.dev}" ]
-    ++ stdenv.lib.optionals stdenv.isSunOS [
+  configureFlags = [
+    "--with-libreadline-prefix=${readline.dev}"
+  ] ++ stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "CC_FOR_BUILD=${buildPackages.stdenv.cc.targetPrefix}gcc"
+    "GUILE_FOR_BUILD=${lib.getBin buildPackages.guile}/bin/guile"
+    "--with-libgmp-prefix=${gmp.dev}"
+    "--with-libltdl-prefix=${libtool}"
+    "--with-libunistring-prefix=${libunistring}"
+  ] ++ stdenv.lib.optionals stdenv.isSunOS [
       # Make sure the right <gmp.h> is found, and not the incompatible
       # /usr/include/mp.h from OpenSolaris.  See
       # <https://lists.gnu.org/archive/html/hydra-users/2012-08/msg00000.html>
@@ -60,6 +66,7 @@
       # See below.
       "--without-threads"
     ];
+  configurePlatforms = [ "build" "host" "target" ];
 
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
@@ -108,4 +115,3 @@
     '';
   };
 })
-
