@@ -968,6 +968,7 @@ self: super: {
 
   # Depends on broken fluid.
   fluid-idl-http-client = markBroken super.fluid-idl-http-client;
+  fluid-idl-scotty = markBroken super.fluid-idl-scotty;
 
   # depends on amqp >= 0.17
   amqp-utils = super.amqp-utils.override {
