@@ -214,6 +214,7 @@ in rec {
   # Run the tests for each platform.  You can run a test by doing
   # e.g. ‘nix-build -A tests.login.x86_64-linux’, or equivalently,
   # ‘nix-build tests/login.nix -A result’.
+  tests.atd = callTest tests/atd.nix {};
   tests.avahi = callTest tests/avahi.nix {};
   tests.bittorrent = callTest tests/bittorrent.nix {};
   tests.blivet = callTest tests/blivet.nix {};
@@ -246,11 +247,14 @@ in rec {
   tests.firewall = callTest tests/firewall.nix {};
   tests.fleet = hydraJob (import tests/fleet.nix { system = "x86_64-linux"; });
   #tests.gitlab = callTest tests/gitlab.nix {};
+  tests.gitolite = callTest tests/gitolite.nix {};
   tests.glance = callTest tests/glance.nix {};
   tests.gocd-agent = callTest tests/gocd-agent.nix {};
   tests.gocd-server = callTest tests/gocd-server.nix {};
   tests.gnome3 = callTest tests/gnome3.nix {};
   tests.gnome3-gdm = callTest tests/gnome3-gdm.nix {};
+  tests.grafama = callTest tests/grafana.nix {};
+  tests.graphite = callTest tests/graphite.nix {};
   tests.hardened = callTest tests/hardened.nix { };
   tests.hibernate = callTest tests/hibernate.nix { system = "x86_64-linux"; };
   tests.hound = callTest tests/hound.nix {};
@@ -296,6 +300,7 @@ in rec {
   tests.postgresql = callSubTests tests/postgresql.nix {};
   #tests.pgjwt = callTest tests/pgjwt.nix {};
   tests.printing = callTest tests/printing.nix {};
+  tests.prometheus = callTest tests/prometheus.nix {};
   tests.proxy = callTest tests/proxy.nix {};
   tests.pumpio = callTest tests/pump.io.nix {};
   # tests.quagga = callTest tests/quagga.nix {};

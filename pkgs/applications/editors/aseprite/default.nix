@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   name = "aseprite-${version}";
-  version = if unfree then "1.2-beta12" else "1.1.7";
+  version = if unfree then "1.2.2" else "1.1.7";
 
   src = fetchFromGitHub {
     owner = "aseprite";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     fetchSubmodules = true;
     sha256 = if unfree
-      then "1zgsr03d4vwdj2qyiwfwfqsbqngp85n13i3xwbkfkbja036c5yhc"
+      then "1ldi7zikl1g6rq3g9lkypx5wqzza5j0054j1r8bh7lyvb0szicig"
       else "0gd49lns2bpzbkwax5jf9x1xmg1j8ij997kcxr2596cwiswnw4di";
   };
 
@@ -29,6 +29,10 @@ stdenv.mkDerivation rec {
     curl freetype giflib libjpeg libpng libwebp pixman tinyxml zlib
     libX11 libXext libXcursor libXxf86vm
   ] ++ lib.optionals unfree [ cmark ];
+
+  postPatch = ''
+    sed -i src/config.h -e "s-\\(#define VERSION\\) .*-\\1 \"$version\"-"
+  '';
 
   cmakeFlags = [
     "-DENABLE_UPDATER=OFF"

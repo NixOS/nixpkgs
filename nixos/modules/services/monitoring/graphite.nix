@@ -7,6 +7,19 @@ let
   writeTextOrNull = f: t: mapNullable (pkgs.writeTextDir f) t;
 
   dataDir = cfg.dataDir;
+  staticDir = cfg.dataDir + "/static";
+
+  graphiteLocalSettingsDir = pkgs.runCommand "graphite_local_settings"
+    {inherit graphiteLocalSettings;} ''
+    mkdir -p $out
+    ln -s $graphiteLocalSettings $out/graphite_local_settings.py
+  '';
+
+  graphiteLocalSettings = pkgs.writeText "graphite_local_settings.py" (
+    "STATIC_ROOT = '${staticDir}'\n" +
+    optionalString (! isNull config.time.timeZone) "TIME_ZONE = '${config.time.timeZone}'\n"
+    + cfg.web.extraConfig
+  );
 
   graphiteApiConfig = pkgs.writeText "graphite-api.yaml" ''
     time_zone: ${config.time.timeZone}
@@ -50,7 +63,7 @@ let
     chown -R graphite:graphite /run/${name}
   '';
 
-  carbonEnvironment = {
+  carbonEnv = {
     PYTHONPATH = let
       cenv = pkgs.python.buildEnv.override {
         extraLibs = [ pkgs.python27Packages.carbon ];
@@ -61,14 +74,6 @@ let
     GRAPHITE_ROOT = dataDir;
     GRAPHITE_CONF_DIR = configDir;
     GRAPHITE_STORAGE_DIR = dataDir;
-  };
-
-  carbonEnv = with pkgs; python.buildEnv.override {
-    extraLibs = with pythonPackages; [ twisted carbon whisper ];
-  };
-
-  graphiteWebEnv = with pkgs; python.buildEnv.override {
-    extraLibs = with pythonPackages; [ waitress graphite_web django_1_5 ];
   };
 
 in {
@@ -101,6 +106,15 @@ in {
         description = "Graphite web frontend port.";
         default = 8080;
         type = types.int;
+      };
+
+      extraConfig = mkOption {
+        type = types.str;
+        default = "";
+        description = ''
+          Graphite webapp settings. See:
+          <link xlink:href="http://graphite.readthedocs.io/en/latest/config-local-settings.html"/>
+        '';
       };
     };
 
@@ -395,9 +409,8 @@ in {
       systemd.services.carbonCache = let name = "carbon-cache"; in {
         description = "Graphite Data Storage Backend";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" ];
-        environment = carbonEnvironment;
-        path = [ carbonEnv ];
+        after = [ "network.target" ];
+        environment = carbonEnv;
         serviceConfig = {
           ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
@@ -406,6 +419,7 @@ in {
           PIDFile="/run/${name}/${name}.pid";
         };
         preStart = mkPidFileDir name + ''
+
           mkdir -p ${cfg.dataDir}/whisper
           chmod 0700 ${cfg.dataDir}/whisper
           chown graphite:graphite ${cfg.dataDir}
@@ -419,8 +433,8 @@ in {
         enable = cfg.carbon.enableAggregator;
         description = "Carbon Data Aggregator";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" ];
-        environment = carbonEnvironment;
+        after = [ "network.target" ];
+        environment = carbonEnv;
         serviceConfig = {
           ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
@@ -435,8 +449,8 @@ in {
       systemd.services.carbonRelay = let name = "carbon-relay"; in {
         description = "Carbon Data Relay";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" ];
-        environment = carbonEnvironment;
+        after = [ "network.target" ];
+        environment = carbonEnv;
         serviceConfig = {
           ExecStart = "${pkgs.pythonPackages.twisted}/bin/twistd ${carbonOpts name}";
           User = "graphite";
@@ -450,7 +464,6 @@ in {
     (mkIf (cfg.carbon.enableCache || cfg.carbon.enableAggregator || cfg.carbon.enableRelay) {
       environment.systemPackages = [
         pkgs.pythonPackages.carbon
-        pkgs.pythonPackages.whisper
       ];
     })
 
@@ -458,8 +471,8 @@ in {
       systemd.services.graphiteWeb = {
         description = "Graphite Web Interface";
         wantedBy = [ "multi-user.target" ];
-        after = [ "network-interfaces.target" ];
-        path = [ graphiteWebEnv pkgs.perl ];
+        after = [ "network.target" ];
+        path = [ pkgs.perl ];
         environment = {
           PYTHONPATH = let
               penv = pkgs.python.buildEnv.override {
@@ -469,9 +482,13 @@ in {
                 ];
               };
               penvPack = "${penv}/${pkgs.python.sitePackages}";
-              # opt/graphite/webapp contains graphite/settings.py
-              # explicitly adding pycairo in path because it cannot be imported via buildEnv
-            in "${penvPack}/opt/graphite/webapp:${penvPack}:${pkgs.pythonPackages.pycairo}/${pkgs.python.sitePackages}";
+            in concatStringsSep ":" [
+                 "${graphiteLocalSettingsDir}"
+                 "${penvPack}/opt/graphite/webapp"
+                 "${penvPack}"
+                 # explicitly adding pycairo in path because it cannot be imported via buildEnv
+                 "${pkgs.pythonPackages.pycairo}/${pkgs.python.sitePackages}"
+               ];
           DJANGO_SETTINGS_MODULE = "graphite.settings";
           GRAPHITE_CONF_DIR = configDir;
           GRAPHITE_STORAGE_DIR = dataDir;
@@ -479,9 +496,9 @@ in {
         };
         serviceConfig = {
           ExecStart = ''
-            ${graphiteWebEnv}/bin/waitress-serve \
-            --host=${cfg.web.listenAddress} --port=${toString cfg.web.port} \
-            --call django.core.handlers.wsgi:WSGIHandler'';
+            ${pkgs.python27Packages.waitress-django}/bin/waitress-serve-django \
+              --host=${cfg.web.listenAddress} --port=${toString cfg.web.port}
+          '';
           User = "graphite";
           Group = "graphite";
           PermissionsStartOnly = true;
@@ -491,15 +508,19 @@ in {
             mkdir -p ${dataDir}/{whisper/,log/webapp/}
             chmod 0700 ${dataDir}/{whisper/,log/webapp/}
 
-            # populate database
-            ${graphiteWebEnv}/bin/manage-graphite.py syncdb --noinput
+            ${pkgs.pythonPackages.django_1_8}/bin/django-admin.py migrate --noinput
 
-            # create index
-            ${graphiteWebEnv}/bin/build-index.sh
-
-            chown -R graphite:graphite ${cfg.dataDir}
+            chown -R graphite:graphite ${dataDir}
 
             touch ${dataDir}/db-created
+          fi
+
+          # Only collect static files when graphite_web changes.
+          if ! [ "${dataDir}/current_graphite_web" -ef "${pkgs.python27Packages.graphite_web}" ]; then
+            mkdir -p ${staticDir}
+            ${pkgs.pythonPackages.django_1_8}/bin/django-admin.py collectstatic  --noinput --clear
+            chown -R graphite:graphite ${staticDir}
+            ln -sfT "${pkgs.python27Packages.graphite_web}" "${dataDir}/current_graphite_web"
           fi
         '';
       };
