@@ -38,10 +38,12 @@ buildPythonPackage rec {
 
   # cudatoolkit is split (see https://github.com/NixOS/nixpkgs/commit/bb1c9b027d343f2ce263496582d6b56af8af92e6)
   # However this means that libcusolver is not loadable by tensor flow. So we undo the split here.
-  cudatoolkit_joined = symlinkJoin {
-    name = "unsplit_cudatoolkit";
-    paths = [ cudatoolkit.out
-              cudatoolkit.lib ];};
+  cudatoolkit_joined = if cudaSupport then
+    symlinkJoin {
+      name = "unsplit_cudatoolkit";
+      paths = [ cudatoolkit.out
+                cudatoolkit.lib ];
+    } else null;
 
   src = let
       tfurl = sys: proc: pykind:
