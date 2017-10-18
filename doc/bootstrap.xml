@@ -80,47 +80,44 @@ with rec {
   };
 
   stage1 = import stage1-path { inherit system; config = {}; };
+
+  paths = 
+    builtins.filter (f: "default.nix" != f)
+      (builtins.attrNames
+        (builtins.readDir ./.));
+
+  toKeyVal = file: {
+    name = builtins.replaceStrings [ ".json" ] [ "" ] file;
+
+    value = 
+      let
+        json = builtins.fromJSON (builtins.readFile (./. + "/${file}"));
+      in
+        stage1.fetchFromGitHub {
+          owner = "NixOS";
+          repo  = "nixpkgs";
+          inherit (json) rev sha256;
+        };
+  };
+
+  pinnedNixpkgs = builtins.listToAttrs(map toKeyVal paths);
 };
 
-let
-  pinnedNixpkgs =
-    let
-      paths = 
-        builtins.filter (f: "default.nix" != f)
-          (builtins.attrNames
-            (builtins.readDir ./.));
-
-      toKeyVal = file: {
-        name = builtins.replaceStrings [ ".json" ] [ "" ] file;
-
-        value = 
-          let
-            json = builtins.fromJSON (builtins.readFile (./. + "/${file}"));
-          in
-            stage1.fetchFromGitHub {
-              owner = "NixOS";
-              repo  = "nixpkgs";
-              inherit (json) rev sha256;
-            };
-      };
-    in
-      builtins.listToAttrs(map toKeyVal paths);
-in
-  # The resulting attribute set given by `pinnedNixpkgs` provides the
-  # `fetchFromGitHub` derivation for each `*.json` file within this
-  # directory keyed by its filename without the `.json` extension.
-  #
-  # e.g: If this directory were to contain these `.json` files:
-  #
-  # .
-  # ├── 16_09.json
-  # ├── 17_03.json
-  # └── 17_09.json
-  #
-  # ... then this file would produce this attribute set:
-  #
-  # $ nix-instantiate --eval --expr 'import ./default.nix'
-  # { 16_09 = <CODE>; 17_03 = <CODE>; 17_09 = <CODE>; }
-  pinnedNixpkgs
+# The resulting attribute set given by `pinnedNixpkgs` provides the
+# `fetchFromGitHub` derivation for each `*.json` file within this
+# directory keyed by its filename without the `.json` extension.
+#
+# e.g: If this directory were to contain these `.json` files:
+#
+# .
+# ├── 16_09.json
+# ├── 17_03.json
+# └── 17_09.json
+#
+# ... then this file would produce this attribute set:
+#
+# $ nix-instantiate --eval --expr 'import ./default.nix'
+# { 16_09 = <CODE>; 17_03 = <CODE>; 17_09 = <CODE>; }
+pinnedNixpkgs
 ]]></programlisting>
 </chapter>
