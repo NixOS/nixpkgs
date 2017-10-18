@@ -1,0 +1,12 @@
+diff --git build/top.mk build/top.mk
+--- build/top.mk
++++ build/top.mk
+@@ -59,7 +59,7 @@ INSTALL_PROGRAM = $(INSTALL)
+ INSTALL_DATA = $(INSTALL) -m 644
+ INSTALL_SCRIPT = $(INSTALL)
+ 
+-STRIP = -s
++STRIP =
+ 
+ LINT = lint
+ 5LINT = 5lint

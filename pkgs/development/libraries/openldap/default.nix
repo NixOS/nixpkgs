@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
       url = "https://bz-attachments.freebsd.org/attachment.cgi?id=183223";
       sha256 = "1fiy457hrxmydybjlvn8ypzlavz22cz31q2rga07n32dh4x759r3";
     })
+
+    ./no-strip.patch
   ];
   patchFlags = [ "-p0" ];
 
@@ -21,7 +23,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ openssl cyrus_sasl db groff libtool ];
+  nativeBuildInputs = [ groff ];
+  buildInputs = [ openssl cyrus_sasl db libtool ];
 
   configureFlags =
     [ "--enable-overlays"
@@ -32,7 +35,13 @@ stdenv.mkDerivation rec {
       "--enable-crypt"
     ] ++ stdenv.lib.optional (openssl == null) "--without-tls"
       ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
-      ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
+      ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic"
+      ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform)
+         [ "--with-yielding-select=no"
+           # the autoconf check will otherwise conclude that memcmp is broken, leading to
+           # "undefined lutil_memcmp" errors at link time. See
+           # http://markmail.org/message/kksqgqafvilfu3at.
+           "ac_cv_func_memcmp_working=yes" ];
 
   installFlags = [ "sysconfdir=$(out)/etc" "localstatedir=$(out)/var" ];
 

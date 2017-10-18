@@ -1,0 +1,29 @@
+diff build/top.mk build/top.mk
+--- build/top.mk
++++ build/top.mk
+@@ -170,10 +170,9 @@ LDAP_LIBREWRITE_A = $(LDAP_LIBDIR)/librewrite/librewrite.a
+ LDAP_LIBLUNICODE_A = $(LDAP_LIBDIR)/liblunicode/liblunicode.a
+ LDAP_LIBLUTIL_A = $(LDAP_LIBDIR)/liblutil/liblutil.a
+ 
+-LDAP_L = $(LDAP_LIBLUTIL_A) \
+-	$(LDAP_LIBLDAP_LA) $(LDAP_LIBLBER_LA)
++LDAP_L = $(LDAP_LIBLDAP_LA) $(LDAP_LIBLBER_LA) $(LDAP_LIBLUTIL_A)
+ SLAPD_L = $(LDAP_LIBLUNICODE_A) $(LDAP_LIBREWRITE_A) \
+-	$(LDAP_LIBLUTIL_A) $(LDAP_LIBLDAP_R_LA) $(LDAP_LIBLBER_LA)
++  $(LDAP_LIBLDAP_R_LA) $(LDAP_LIBLBER_LA) $(LDAP_LIBLUTIL_A)
+ 
+ WRAP_LIBS = @WRAP_LIBS@
+ # AutoConfig generated 
+diff --git a/libraries/librewrite/Makefile.in b/libraries/librewrite/Makefile.in
+--- libraries/librewrite/Makefile.in
++++ libraries/librewrite/Makefile.in
+@@ -28,8 +28,7 @@ LDAP_LIBDIR= ../../libraries
+ 
+ LIBRARY = librewrite.a
+ PROGRAMS	= rewrite
+-XLIBS = $(LIBRARY) $(LDAP_LIBLUTIL_A) \
+-	$(LDAP_LIBLDAP_R_LA) $(LDAP_LIBLBER_LA)
++XLIBS = $(LIBRARY) $(LDAP_LIBLDAP_R_LA) $(LDAP_LIBLUTIL_A) $(LDAP_LIBLBER_LA)
+ XXLIBS  = $(SECURITY_LIBS) $(LUTIL_LIBS)
+ XXXLIBS = $(LTHREAD_LIBS)
+ 
