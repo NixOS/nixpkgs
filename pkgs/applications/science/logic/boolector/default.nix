@@ -8,6 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "0mdf7hwix237pvknvrpazcx6s3ininj5k7vhysqjqgxa7lxgq045";
   };
 
+  prePatch = ''
+    sed -i -e 's@mv lingeling\* lingeling@\0 \&\& sed -i -e "1i#include <stdint.h>" lingeling/lglib.h@' makefile
+  '';
+
   installPhase = ''
     mkdir $out
     mv boolector/bin $out
