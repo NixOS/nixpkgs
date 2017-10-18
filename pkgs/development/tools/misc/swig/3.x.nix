@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook bison ];
-  buildInputs = [ pcre ];
+  buildInputs = [ pcre pcre.dev ];
 
-  configureFlags = "--without-tcl";
+  configureFlags = "--without-tcl --with-pcre=${lib.getLib pcre}";
 
   postPatch = ''
     # Disable ccache documentation as it need yodl

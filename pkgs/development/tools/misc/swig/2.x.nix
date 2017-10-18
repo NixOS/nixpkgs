@@ -11,10 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "0khm9gh5pczfcihr0pbicaicc4v9kjm5ip2alvkhmbb3ga6njkcm";
   };
 
-  nativeBuildInputs = [ autoreconfHook bison ];
-  buildInputs = [ pcre ];
+  # Configure needs to the pcre-config script
+  nativeBuildInputs = [ autoreconfHook bison pcre.crossDrv.dev ];
+  buildInputs = [ pcre.crossDrv ];
 
-  configureFlags = "--without-tcl";
+  configureFlags = "--without-tcl --with-pcre=${lib.getLib pcre}";
 
   postPatch = ''
     # Disable ccache documentation as it need yodl
