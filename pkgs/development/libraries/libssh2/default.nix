@@ -1,4 +1,4 @@
-{ stdenv, fetchurlBoot, openssl, zlib, windows
+{ stdenv, lib, fetchurlBoot, openssl, zlib, windows
 , hostPlatform
 }:
 
@@ -28,6 +28,14 @@ stdenv.mkDerivation rec {
       export LDFLAGS="-L${windows.mingw_w64}/lib $LDFLAGS"
     '';
   };
+
+  # Hack: when cross-compiling we need to manually add rpaths to ensure that
+  # the linker can find find zlib and openssl when linking the testsuite.
+  NIX_LDFLAGS =
+    if stdenv.hostPlatform != stdenv.buildPlatform
+    then '' -rpath-link ${lib.getLib zlib}/lib
+            -rpath-link ${lib.getLib openssl}/lib ''
+    else null;
 
   meta = {
     description = "A client-side C library implementing the SSH2 protocol";
