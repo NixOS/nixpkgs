@@ -372,6 +372,17 @@ sub getUnitInfo {
     return $info;
 }
 
+# Fail if the given systemd unit is not in the "active" state.
+sub requireActiveUnit {
+    my ($self, $unit) = @_;
+    $self->nest("checking if unit ‘$unit’ has reached state 'active'", sub {
+        my $info = $self->getUnitInfo($unit);
+        my $state = $info->{ActiveState};
+        if ($state ne "active") {
+            die "Expected unit ‘$unit’ to to be in state 'active' but it is in state ‘$state’\n";
+        };
+    });
+}
 
 # Wait for a systemd unit to reach the "active" state.
 sub waitForUnit {

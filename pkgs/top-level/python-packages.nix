@@ -60,7 +60,7 @@ let
 
   buildPythonApplication = args: buildPythonPackage ({namePrefix="";} // args );
 
-  graphiteVersion = "0.9.15";
+  graphiteVersion = "1.0.2";
 
   fetchPypi = makeOverridable( {format ? "setuptools", ... } @attrs:
     let
@@ -8306,14 +8306,14 @@ in {
 
   django_tagging = callPackage ../development/python-modules/django_tagging { };
 
-  django_tagging_0_3 = self.django_tagging.overrideAttrs (attrs: rec {
-    name = "django-tagging-0.3.6";
+  django_tagging_0_4_3 = self.django_tagging.overrideAttrs (attrs: rec {
+    name = "django-tagging-0.4.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/django-tagging/${name}.tar.gz";
-      sha256 = "03zlbq13rydfh28wh0jk3x3cjk9x6jjmqnx1i3ngjmfwbxf8x6j1";
+      sha256 = "0617azpmp6jpg3d88v2ir97qrc9aqcs2s9gyvv9bgf2cp55khxhs";
     };
-    propagatedBuildInputs = with self; [ django ];
+    propagatedBuildInputs = with self; [ django_1_8 ];
   });
 
   django_classytags = buildPythonPackage rec {
@@ -22658,11 +22658,11 @@ EOF
   };
 
   waitress = buildPythonPackage rec {
-    name = "waitress-0.8.9";
+    name = "waitress-1.0.2";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/w/waitress/${name}.tar.gz";
-      sha256 = "826527dc9d334ed4ed76cdae672fdcbbccf614186657db71679ab58df869458a";
+      sha256 = "0pw6yyxi348r2xpq3ykqnf7gwi881azv2422d2ixb0xi5jws2ky7";
     };
 
     doCheck = false;
@@ -22672,6 +22672,8 @@ EOF
        platforms = platforms.all;
     };
   };
+
+  waitress-django = callPackage ../development/python-modules/waitress-django { };
 
   webassets = buildPythonPackage rec {
     name = "webassets-${version}";
@@ -23869,7 +23871,7 @@ EOF
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/w/whisper/${name}.tar.gz";
-      sha256 = "1chkphxwnwvy2cs7jc2h2i0lqqvi9jx6vqj3ly88lwk7m35r4ss2";
+      sha256 = "1v1bi3fl1i6p4z4ki692bykrkw6907dn3mfq0151f70lvi3zpns3";
     };
 
     # error: invalid command 'test'
@@ -23936,7 +23938,7 @@ EOF
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/carbon/${name}.tar.gz";
-      sha256 = "f01db6d37726c6fc0a8aaa66a7bf14436b0dd0d62ef3c20ecb31605a4d365d2e";
+      sha256 = "142smpmgbnjinvfb6s4ijazish4vfgzyd8zcmdkh55y051fkixkn";
     };
 
     propagatedBuildInputs = with self; [ whisper txamqp zope_interface twisted ];
@@ -24151,10 +24153,13 @@ EOF
 
     src = pkgs.fetchurl rec {
       url = "mirror://pypi/g/graphite-web/${name}.tar.gz";
-      sha256 = "1c0kclbv8shv9nvjx19wqm4asia58s3qmd9fapchc6y9fjpjax6q";
+      sha256 = "0q8bwlj75jqyzmazfsi5sa26xl58ssa8wdxm2l4j0jqyn8xpfnmc";
     };
 
-    propagatedBuildInputs = with self; [ django django_tagging_0_3 whisper pycairo ldap memcached pytz ];
+    propagatedBuildInputs = with self; [
+      django_1_8 django_tagging_0_4_3 whisper pycairo cairocffi
+      ldap memcached pytz urllib3 scandir
+    ];
 
     postInstall = ''
       wrapProgram $out/bin/run-graphite-devel-server.py \
@@ -24162,10 +24167,20 @@ EOF
     '';
 
     preConfigure = ''
-      substituteInPlace webapp/graphite/thirdparty/pytz/__init__.py --replace '/usr/share/zoneinfo' '/etc/zoneinfo'
-      substituteInPlace webapp/graphite/settings.py --replace "join(WEBAPP_DIR, 'content')" "join('$out', 'webapp', 'content')"
-      cp webapp/graphite/manage.py bin/manage-graphite.py
-      substituteInPlace bin/manage-graphite.py --replace 'settings' 'graphite.settings'
+      # graphite is configured by storing a local_settings.py file inside the
+      # graphite python package. Since that package is stored in the immutable
+      # Nix store we can't modify it. So how do we configure graphite?
+      #
+      # First of all we rename "graphite.local_settings" to
+      # "graphite_local_settings" so that the settings are not looked up in the
+      # graphite package anymore. Secondly we place a directory containing a
+      # graphite_local_settings.py on the PYTHONPATH in the graphite module
+      # <nixpkgs/nixos/modules/services/monitoring/graphite.nix>.
+      substituteInPlace webapp/graphite/settings.py \
+        --replace "graphite.local_settings" " graphite_local_settings"
+
+      substituteInPlace webapp/graphite/settings.py \
+        --replace "join(WEBAPP_DIR, 'content')" "join('$out', 'webapp', 'content')"
     '';
 
     # error: invalid command 'test'
