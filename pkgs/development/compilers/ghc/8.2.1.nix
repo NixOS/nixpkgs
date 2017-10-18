@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, bootPkgs, perl, ncurses, libiconv, binutils, coreutils
+{ stdenv, lib, fetchurl, bootPkgs, perl, ncurses, libiconv, targetPackages, coreutils
 , autoconf, automake, happy, alex, python3, sphinx, hscolour
 , buildPlatform, targetPlatform , selfPkgs, cross ? null
 
@@ -66,7 +66,7 @@ in stdenv.mkDerivation (rec {
     for i in "$out/bin/"*; do
       test ! -h $i || continue
       egrep --quiet '^#!' <(head -n 1 $i) || continue
-      sed -i -e '2i export PATH="$PATH:${stdenv.lib.makeBinPath [ binutils coreutils ]}"' $i
+      sed -i -e '2i export PATH="$PATH:${stdenv.lib.makeBinPath [ targetPackages.stdenv.cc.bintools coreutils ]}"' $i
     done
   '';
 
@@ -97,23 +97,23 @@ in stdenv.mkDerivation (rec {
 
   configureFlags = [
     "CC=${stdenv.ccCross}/bin/${cross.config}-cc"
-    "LD=${stdenv.binutils}/bin/${cross.config}-ld"
-    "AR=${stdenv.binutils}/bin/${cross.config}-ar"
-    "NM=${stdenv.binutils}/bin/${cross.config}-nm"
-    "RANLIB=${stdenv.binutils}/bin/${cross.config}-ranlib"
+    "LD=${targetPackages.stdenv.cc.bintools}/bin/${cross.config}-ld"
+    "AR=${targetPackages.stdenv.cc.bintools}/bin/${cross.config}-ar"
+    "NM=${targetPackages.stdenv.cc.bintools}/bin/${cross.config}-nm"
+    "RANLIB=${targetPackages.stdenv.cc.bintools}/bin/${cross.config}-ranlib"
     "--target=${cross.config}"
     "--enable-bootstrap-with-devel-snapshot"
   ] ++
     # fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
     lib.optional (cross.config or null == "aarch64-apple-darwin14") "--disable-large-address-space";
 
-  buildInputs = commonBuildInputs ++ [ stdenv.ccCross stdenv.binutils ];
+  buildInputs = commonBuildInputs ++ [ stdenv.ccCross stdenv.targetPackages.stdenv.cc.bintools ];
 
   dontSetConfigureCross = true;
 
   passthru = {
     inherit bootPkgs cross;
     cc = "${stdenv.ccCross}/bin/${cross.config}-cc";
-    ld = "${stdenv.binutils}/bin/${cross.config}-ld";
+    ld = "${stdenv.targetPackages.stdenv.cc.bintools}/bin/${cross.config}-ld";
   };
 })
