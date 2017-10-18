@@ -161,12 +161,12 @@ in rec {
 
   nixUnstable = (lib.lowPrio (common rec {
     name = "nix-1.12${suffix}";
-    suffix = "pre5650_1dd29d7a";
+    suffix = "pre5655_cbc21691";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "1dd29d7aebae706f3e90a18bbfae727f2ed03c70";
-      sha256 = "182v2rczm8al1ggbaca8qapvrjyp21li1fd3fiwr5nqgazgr5308";
+      rev = "cbc216911dbda23c3bc050c969bc725fe60760ef";
+      sha256 = "0ynnk2m2n5pjmhy5gry90dy5k2wwy29v2wnq6zz32ak9zwz36x8r";
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings { nix = nixUnstable; }; };

@@ -1,10 +1,12 @@
 {stdenv, fetchurl, gtk2, gperf, pkgconfig, bzip2, tcl, tk, judy, xz}:
+
 stdenv.mkDerivation rec {
-  name = "gtkwave-3.3.70";
+  name = "gtkwave-${version}";
+  version = "3.3.86";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gtkwave/${name}.tar.gz";
-    sha256 = "1akzf1sq8mwarrbrbz5chrvgwlsp444h5za8rg1dfyqk733s7piz";
+    url    = "mirror://sourceforge/gtkwave/${name}.tar.gz";
+    sha256 = "1l1hikhhk7drkbpdmj9qg7c3lj1b86z7f5rnwagrql8bss2j80fx";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -13,10 +15,10 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-tcl=${tcl}/lib" "--with-tk=${tk}/lib" "--enable-judy" ];
 
   meta = {
-    description = "Wave viewer for Unix and Win32";
-    homepage = http://gtkwave.sourceforge.net;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
-    platforms = with stdenv.lib.platforms; linux;
+    description = "VCD/Waveform viewer for Unix and Win32";
+    homepage    = http://gtkwave.sourceforge.net;
+    license     = stdenv.lib.licenses.gpl2Plus;
+    maintainers = with stdenv.lib.maintainers; [ thoughtpolice viric ];
+    platforms   = stdenv.lib.platforms.linux;
   };
 }

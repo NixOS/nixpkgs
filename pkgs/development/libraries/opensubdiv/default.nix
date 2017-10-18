@@ -28,8 +28,8 @@
     [ "-DNO_TUTORIALS=1"
       "-DNO_REGRESSION=1"
       "-DNO_EXAMPLES=1"
-      "-DGLEW_INCLUDE_DIR=${glew}/include"
-      "-DGLEW_LIBRARY=${glew}/lib"
+      "-DGLEW_INCLUDE_DIR=${glew.dev}/include"
+      "-DGLEW_LIBRARY=${glew.dev}/lib"
     ];
 
   enableParallelBuilding = true;

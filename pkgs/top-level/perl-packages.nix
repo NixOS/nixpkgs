@@ -309,11 +309,11 @@ let self = _self // overrides; _self = with self; {
   };
 
   AppSqitch = buildPerlModule rec {
-    version = "0.9994";
+    version = "0.9996";
     name = "App-Sqitch-${version}";
     src = fetchurl {
       url = "mirror://cpan/authors/id/D/DW/DWHEELER/${name}.tar.gz";
-      sha256 = "0in602z40s50fdlmws4g0a1pb8p7yn0wx8jgsacz26a4i1q7gpi4";
+      sha256 = "864edde554e7cd6578e8fe2a4c17ea8eda82da878cdfd00fd9fb3c53f696fc1e";
     };
     buildInputs = [
       CaptureTiny PathClass TestDeep TestDir TestException
@@ -389,6 +389,21 @@ let self = _self // overrides; _self = with self; {
     };
 
     buildInputs = [ TestNoWarnings Moo TypeTiny ];
+  };
+
+  ArrayFIFO = buildPerlPackage rec {
+    name = "Array-FIFO-0.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DB/DBURKE/${name}.tar.gz";
+      sha256 = "8082b7ca456d02c7c862ba409cbd62a9cafdb8c5832f5d7fb1d37ba8698ee5b1";
+    };
+    buildInputs = [ TestSpec ];
+    propagatedBuildInputs = [ Moose namespaceautoclean ];
+    meta = {
+      homepage = https://github.com/dwburke/perl-Array-FIFO;
+      description = "A Simple limitable FIFO array, with sum and average methods";
+      license = stdenv.lib.licenses.artistic2;
+    };
   };
 
   ListCompare = buildPerlPackage rec {

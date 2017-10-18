@@ -11,8 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1wszcx6hgw4q4r778zswrlwdwvwxq834bkajck8w9yfqwxs9lmq8";
   };
 
+  enableParallelBuilding = true;
   makeFlags =
-    [ "DESTDIR=$(out)" "ICEBOX=${icestorm}/share/icebox"
+    [ "PREFIX=$(out)" "ICEBOX=${icestorm}/share/icebox"
     ];
 
   meta = {

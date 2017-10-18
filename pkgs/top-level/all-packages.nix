@@ -6855,8 +6855,9 @@ with pkgs;
   ansible_2_1 = callPackage ../tools/admin/ansible/2.1.nix {};
   ansible_2_2 = callPackage ../tools/admin/ansible/2.2.nix {};
   ansible_2_3 = callPackage ../tools/admin/ansible/2.3.nix {};
-  ansible  = ansible_2_3;
-  ansible2 = ansible_2_3;
+  ansible_2_4 = callPackage ../tools/admin/ansible/2.4.nix {};
+  ansible  = ansible_2_4;
+  ansible2 = ansible_2_4;
 
   antlr = callPackage ../development/tools/parsing/antlr/2.7.7.nix { };
 
@@ -13780,6 +13781,8 @@ with pkgs;
 
   bazaarTools = callPackage ../applications/version-management/bazaar/tools.nix { };
 
+  bb =  callPackage ../applications/misc/bb { };
+
   beast = callPackage ../applications/audio/beast {
     inherit (gnome2) libgnomecanvas libart_lgpl;
     guile = guile_1_8;
@@ -13807,6 +13810,8 @@ with pkgs;
   bitwig-studio =  callPackage ../applications/audio/bitwig-studio {
     inherit (gnome2) zenity;
   };
+
+  bgpdump = callPackage ../tools/networking/bgpdump { };
 
   blackbox = callPackage ../applications/version-management/blackbox { };
 
@@ -19149,6 +19154,9 @@ with pkgs;
   nixui = callPackage ../tools/package-management/nixui { node_webkit = nwjs_0_12; };
 
   nix-bundle = callPackage ../tools/package-management/nix-bundle { nix = nixUnstable; };
+
+  nix-info = callPackage ../tools/nix/info { };
+  nix-info-tested = callPackage ../tools/nix/info { doCheck = true; };
 
   nix-index = callPackage ../tools/package-management/nix-index { };
 
