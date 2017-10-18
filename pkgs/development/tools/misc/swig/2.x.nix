@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, pcre }:
+{ lib, stdenv, fetchFromGitHub, autoreconfHook, bison, pcre }:
 
 stdenv.mkDerivation rec {
   name = "swig-${version}";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0khm9gh5pczfcihr0pbicaicc4v9kjm5ip2alvkhmbb3ga6njkcm";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool bison ];
+  nativeBuildInputs = [ autoreconfHook bison ];
   buildInputs = [ pcre ];
 
   configureFlags = "--without-tcl";
@@ -21,9 +21,7 @@ stdenv.mkDerivation rec {
     sed -i '/man1/d' CCache/Makefile.in
   '';
 
-  preConfigure = ''
-    ./autogen.sh
-  '';
+  autoreconfPhase = '' ./autogen.sh '';
 
   meta = {
     description = "SWIG, an interface compiler that connects C/C++ code to higher-level languages";
