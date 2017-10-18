@@ -315,7 +315,7 @@ let
 
           # Session management.
           ${optionalString cfg.setEnvironment ''
-            session required pam_env.so envfile=${config.system.build.pamEnvironment}
+            session required pam_env.so readenv=0 conffile=${config.system.build.pamEnvironment}
           ''}
           session required pam_unix.so
           ${optionalString cfg.setLoginUid
