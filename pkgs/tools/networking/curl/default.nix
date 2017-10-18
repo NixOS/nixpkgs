@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl
+{ stdenv, lib, fetchurl, pkgconfig, perl
 , http2Support ? true, nghttp2
 , idnSupport ? false, libidn ? null
 , ldapSupport ? false, openldap ? null
@@ -93,6 +93,16 @@ stdenv.mkDerivation rec {
         ( if gnutlsSupport then "--with-gnutls=${gnutls.crossDrv}" else "--without-gnutls" )
         "--with-random /dev/urandom"
       ];
+
+    # Hack: when cross-compiling we need to manually add rpaths to ensure that
+    # the linker can find find zlib and openssl when linking the libcurl shared
+    # object.
+    NIX_LDFLAGS = ''
+      -rpath-link ${lib.getLib openssl}/lib
+      -rpath-link ${lib.getLib libssh2}/lib
+      -rpath-link ${lib.getLib nghttp2}/lib
+    '';
+    makeFlags = "V=1";
   };
 
   passthru = {
