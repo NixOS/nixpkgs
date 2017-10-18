@@ -1,0 +1,13 @@
+diff --git i/modules/setting/setting.go w/modules/setting/setting.go
+index aafe2d1b..1e4a8064 100644
+--- i/modules/setting/setting.go
++++ w/modules/setting/setting.go
+@@ -683,7 +683,7 @@ func NewContext() {
+ 	LocalURL = sec.Key("LOCAL_ROOT_URL").MustString(defaultLocalURL)
+ 	OfflineMode = sec.Key("OFFLINE_MODE").MustBool()
+ 	DisableRouterLog = sec.Key("DISABLE_ROUTER_LOG").MustBool()
+-	StaticRootPath = sec.Key("STATIC_ROOT_PATH").MustString(workDir)
++	StaticRootPath = sec.Key("STATIC_ROOT_PATH").MustString("@data@")
+ 	AppDataPath = sec.Key("APP_DATA_PATH").MustString("data")
+ 	EnableGzip = sec.Key("ENABLE_GZIP").MustBool()
+ 	EnablePprof = sec.Key("ENABLE_PPROF").MustBool(false)
