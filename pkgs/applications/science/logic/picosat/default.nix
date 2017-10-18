@@ -9,6 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "0m578rpa5rdn08d10kr4lbsdwp4402hpavrz6n7n53xs517rn5hm";
   };
 
+  prePatch = ''
+    substituteInPlace picosat.c --replace "sys/unistd.h" "unistd.h"
+  '';
+
   configurePhase = "./configure.sh --shared --trace";
 
   installPhase = ''
