@@ -6263,6 +6263,8 @@ with pkgs;
 
   serpent = callPackage ../development/compilers/serpent { };
 
+  shmig = callPackage ../development/tools/database/shmig { };
+
   smlnjBootstrap = callPackage ../development/compilers/smlnj/bootstrap.nix { };
   smlnj = if stdenv.isDarwin
             then callPackage ../development/compilers/smlnj { }
