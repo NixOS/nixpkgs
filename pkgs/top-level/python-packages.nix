@@ -2921,6 +2921,8 @@ in {
 
   colorama = callPackage ../development/python-modules/colorama { };
 
+  colorlover = callPackage ../development/python-modules/colorlover { };
+
   CommonMark = buildPythonPackage rec {
     name = "CommonMark-${version}";
     version = "0.6.3";
