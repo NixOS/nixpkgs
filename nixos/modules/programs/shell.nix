@@ -4,12 +4,6 @@
 
 with lib;
 
-let
-
-  cfg = config.environment;
-
-in
-
 {
 
   config = {
