@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch
+{ stdenv, fetchurl, fetchpatch, buildPackages
 , glibc
 , bzip2
 , expat
@@ -39,12 +39,15 @@ let
     ++ optionals x11Support [ tcl tk libX11 xproto ]
     ++ optionals stdenv.isDarwin [ CF configd ];
 
+  nativeBuildInputs =
+    optional (stdenv.hostPlatform != stdenv.buildPlatform) buildPackages.python3;
+
 in stdenv.mkDerivation {
   name = "python3-${version}";
   pythonVersion = majorVersion;
   inherit majorVersion version;
 
-  inherit buildInputs;
+  inherit buildInputs nativeBuildInputs;
 
   src = fetchurl {
     url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
@@ -87,6 +90,27 @@ in stdenv.mkDerivation {
     "--without-ensurepip"
     "--with-system-expat"
     "--with-system-ffi"
+  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "ac_cv_buggy_getaddrinfo=no"
+    # Assume little-endian IEEE 754 floating point when cross compiling
+    "ac_cv_little_endian_double=yes"
+    "ac_cv_big_endian_double=no"
+    "ac_cv_mixed_endian_double=no"
+    "ac_cv_x87_double_rounding=yes"
+    "ac_cv_tanh_preserves_zero_sign=yes"
+    # Generally assume that things are present and work
+    "ac_cv_posix_semaphores_enabled=yes"
+    "ac_cv_broken_sem_getvalue=no"
+    "ac_cv_wchar_t_signed=yes"
+    "ac_cv_rshift_extends_sign=yes"
+    "ac_cv_broken_nice=no"
+    "ac_cv_broken_poll=no"
+    "ac_cv_working_tzset=yes"
+    "ac_cv_have_long_long_format=yes"
+    "ac_cv_have_size_t_format=yes"
+    "ac_cv_computed_gotos=yes"
+    "ac_cv_file__dev_ptmx=yes"
+    "ac_cv_file__dev_ptc=yes"
   ];
 
   preConfigure = ''
@@ -139,7 +163,7 @@ in stdenv.mkDerivation {
     for i in $out/lib/python${majorVersion}/_sysconfigdata*.py $out/lib/python${majorVersion}/config-${majorVersion}m*/Makefile; do
       sed -i $i -e "s|-I/nix/store/[^ ']*||g" -e "s|-L/nix/store/[^ ']*||g" -e "s|$TMPDIR|/no-such-path|g"
     done
-
+  '' + optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
     # Determinism: rebuild all bytecode
     # We exclude lib2to3 because that's Python 2 code which fails
     # We rebuild three times, once for each optimization level

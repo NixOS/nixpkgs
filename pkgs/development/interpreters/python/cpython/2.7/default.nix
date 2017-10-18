@@ -1,4 +1,4 @@
-{ stdenv, hostPlatform, fetchurl
+{ stdenv, hostPlatform, buildPlatform, buildPackages, fetchurl
 , bzip2
 , gdbm
 , fetchpatch
@@ -89,6 +89,10 @@ let
       # compiler when needed.
       ./python-2.7-distutils-C++.patch
 
+    ] ++ [
+
+      # Don't use pass host PYTHONPATH to build python
+      #./cross-compile.patch
     ];
 
   preConfigure = ''
@@ -117,6 +121,28 @@ let
     "ac_cv_func_bind_textdomain_codeset=yes"
   ] ++ optionals stdenv.isDarwin [
     "--disable-toolbox-glue"
+  ] ++ optionals (hostPlatform != buildPlatform) [
+    "PYTHON_FOR_BUILD=${getBin buildPackages.python}/bin/python"
+    "ac_cv_buggy_getaddrinfo=no"
+    # Assume little-endian IEEE 754 floating point when cross compiling
+    "ac_cv_little_endian_double=yes"
+    "ac_cv_big_endian_double=no"
+    "ac_cv_mixed_endian_double=no"
+    "ac_cv_x87_double_rounding=yes"
+    "ac_cv_tanh_preserves_zero_sign=yes"
+    # Generally assume that things are present and work
+    "ac_cv_posix_semaphores_enabled=yes"
+    "ac_cv_broken_sem_getvalue=no"
+    "ac_cv_wchar_t_signed=yes"
+    "ac_cv_rshift_extends_sign=yes"
+    "ac_cv_broken_nice=no"
+    "ac_cv_broken_poll=no"
+    "ac_cv_working_tzset=yes"
+    "ac_cv_have_long_long_format=yes"
+    "ac_cv_have_size_t_format=yes"
+    "ac_cv_computed_gotos=yes"
+    "ac_cv_file__dev_ptmx=yes"
+    "ac_cv_file__dev_ptc=yes"
   ];
 
   postConfigure = if hostPlatform.isCygwin then ''
@@ -131,6 +157,9 @@ let
     ++ [ db gdbm ncurses sqlite readline ]
     ++ optionals x11Support [ tcl tk xlibsWrapper libX11 ]
     ++ optionals stdenv.isDarwin ([ CF ] ++ optional (configd != null) configd);
+  nativeBuildInputs =
+    optionals (hostPlatform != buildPlatform)
+    [ buildPackages.stdenv.cc buildPackages.python ];
 
   mkPaths = paths: {
     C_INCLUDE_PATH = makeSearchPathOutput "dev" "include" paths;
@@ -144,7 +173,7 @@ in stdenv.mkDerivation {
     name = "python-${version}";
     pythonVersion = majorVersion;
 
-    inherit majorVersion version src patches buildInputs
+    inherit majorVersion version src patches buildInputs nativeBuildInputs
             preConfigure configureFlags;
 
     LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
@@ -187,7 +216,8 @@ in stdenv.mkDerivation {
         # Determinism: Windows installers were not deterministic.
         # We're also not interested in building Windows installers.
         find "$out" -name 'wininst*.exe' | xargs -r rm -f
-
+      '' + optionalString (stdenv.hostPlatform == stdenv.buildPlatform)
+      ''
         # Determinism: rebuild all bytecode
         # We exclude lib2to3 because that's Python 2 code which fails
         # We rebuild three times, once for each optimization level
