@@ -6314,17 +6314,18 @@ with pkgs;
 
   wla-dx = callPackage ../development/compilers/wla-dx { };
 
-  wrapCCWith = { name ? "", cc, libc, extraBuildCommands ? "" }: ccWrapperFun rec {
-    nativeTools = targetPlatform == hostPlatform && stdenv.cc.nativeTools or false;
-    nativeLibc = targetPlatform == hostPlatform && stdenv.cc.nativeLibc or false;
-    nativePrefix = stdenv.cc.nativePrefix or "";
-    noLibc = !nativeLibc && (libc == null);
+  wrapCCWith = { name ? "", cc, libc, extraBuildCommands ? "", overridePrefix ? "" }:
+    ccWrapperFun rec {
+      nativeTools = targetPlatform == hostPlatform && stdenv.cc.nativeTools or false;
+      nativeLibc = targetPlatform == hostPlatform && stdenv.cc.nativeLibc or false;
+      nativePrefix = stdenv.cc.nativePrefix or "";
+      noLibc = !nativeLibc && (libc == null);
 
-    isGNU = cc.isGNU or false;
-    isClang = cc.isClang or false;
+      isGNU = cc.isGNU or false;
+      isClang = cc.isClang or false;
 
-    inherit name cc libc extraBuildCommands;
-  };
+      inherit name cc libc extraBuildCommands overridePrefix;
+    };
 
   ccWrapperFun = callPackage ../build-support/cc-wrapper;
 

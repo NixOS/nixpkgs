@@ -11,6 +11,7 @@
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
 , useMacosReexportHack ? false
+, overridePrefix ? ""
 }:
 
 with stdenvNoCC.lib;
@@ -32,8 +33,10 @@ let
   #
   # TODO(@Ericson2314) Make unconditional, or optional but always true by
   # default.
-  prefix = stdenv.lib.optionalString (targetPlatform != hostPlatform)
-                                     (targetPlatform.config + "-");
+  prefix = if overridePrefix != ""
+           then overridePrefix
+           else stdenv.lib.optionalString (targetPlatform != hostPlatform)
+                                          (targetPlatform.config + "-");
 
   ccVersion = (builtins.parseDrvName cc.name).version;
   ccName = (builtins.parseDrvName cc.name).name;
