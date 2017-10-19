@@ -323,6 +323,7 @@
   konimex = "Muhammad Herdiansyah <herdiansyah@netc.eu>";
   koral = "Koral <koral@mailoo.org>";
   kovirobi = "Kovacsics Robert <kovirobi@gmail.com>";
+  kquick = "Kevin Quick <quick@sparq.org>";
   kragniz = "Louis Taylor <louis@kragniz.eu>";
   kristoff3r = "Kristoffer Søholm <k.soeholm@gmail.com>";
   ktosiek = "Tomasz Kontusz <tomasz.kontusz@gmail.com>";
