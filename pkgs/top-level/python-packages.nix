@@ -5538,6 +5538,24 @@ in {
     };
   };
 
+  fontconfig = buildPythonPackage rec {
+    name = "Python-fontconfig-0.5.1";
+
+    src = pkgs.fetchurl {
+      url = "mirror://pypi/P/Python-fontconfig/${name}.tar.gz";
+      sha256 = "154rfd0ygcbj9y8m32n537b457yijpfx9dvmf76vi0rg4ikf7kxp";
+    };
+
+    propagatedBuildInputs = with self; [ pkgs.fontconfig ];
+
+    meta = {
+      homepage = https://github.com/Vayn/python-fontconfig;
+      description = "Python binding for Fontconfig";
+      license = stdenv.lib.licenses.gpl3;
+      maintainers = with maintainers; [ gnidorah ];
+    };
+  };
+
   frozendict = buildPythonPackage rec {
     name = "frozendict-0.5";
 
