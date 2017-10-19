@@ -8811,7 +8811,7 @@ in {
   keyutils = callPackage ../development/python-modules/keyutils { };
 
   klein = callPackage ../development/python-modules/klein { };
- 
+
   koji = callPackage ../development/python-modules/koji { };
 
   kombu = buildPythonPackage rec {
@@ -18709,6 +18709,10 @@ EOF
 
     propagatedBuildInputs = with self; [];
   };
+
+  pybindgen = callPackage ../development/python-modules/pybindgen {};
+
+  pygccxml = callPackage ../development/python-modules/pygccxml {};
 
   pymacaroons-pynacl = callPackage ../development/python-modules/pymacaroons-pynacl { };
 
