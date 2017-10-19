@@ -142,7 +142,7 @@ in
           ${pkg}/apache-tomcat/conf/server.xml.dist > ${cfg.home}/server.xml
       '';
 
-      script = "${pkg}/start_crowd.sh";
+      script = "${pkg}/start_crowd.sh -fg";
 
       serviceConfig = {
         User = cfg.user;
