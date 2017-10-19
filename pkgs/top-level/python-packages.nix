@@ -6671,14 +6671,15 @@ in {
     };
   };
 
-  python-mapnik = buildPythonPackage {
-    name = "python-mapnik-git-2016-08-30";
+  python-mapnik = buildPythonPackage rec {
+    name = "python-mapnik-${version}";
+    version = "3.0.13";
 
     src = pkgs.fetchFromGitHub {
       owner = "mapnik";
       repo = "python-mapnik";
-      rev = "541fd962d4fc99d50ec472af6ddccfdbf98cff37";
-      sha256 = "1d93qjnzggdpbhnmxlmk5jh0zd2jnpfl4n4aip5ypd39ilqibhf3";
+      rev = "v${version}";
+      sha256 = "0biw9bfkbsgfyjihyvkj4abx9s9r3h81rk6dc1y32022rypsqhkp";
     };
 
     disabled = isPyPy;
