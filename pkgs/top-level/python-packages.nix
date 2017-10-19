@@ -19184,17 +19184,18 @@ EOF
 
   tokenserver = buildPythonPackage rec {
     name = "tokenserver-${version}";
-    version = "1.2.11";
+    version = "1.2.27";
 
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/tokenserver.git;
       rev = "refs/tags/${version}";
-      sha256 = "1cvkvxcday1qc3zyarasj3l7322w8afhrcxcsvb5wac1ryh1w6y2";
+      sha256 = "0il3bgjld495g9gxvvrm56kpan5swaizzg216qz3zxmb6w9ly3fm";
     };
 
     doCheck = false;
     buildInputs = [ self.testfixtures ];
-    propagatedBuildInputs = with self; [ cornice mozsvc pybrowserid tokenlib ];
+    propagatedBuildInputs = with self; [ cornice mozsvc pybrowserid tokenlib
+      pymysql umemcache hawkauthlib alembic pymysqlsa paste boto ];
 
     meta = {
       platforms = platforms.all;
