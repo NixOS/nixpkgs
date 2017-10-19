@@ -20133,13 +20133,13 @@ EOF
 
   syncserver = buildPythonPackage rec {
     name = "syncserver-${version}";
-    version = "1.5.2";
+    version = "1.6.0";
     disabled = ! isPy27;
 
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/syncserver.git;
       rev = "refs/tags/${version}";
-      sha256 = "1pk4rvwvsd1vxbpzg39hxqi8pi9v6b4s6m0mqbpg88s6s7i6ks3m";
+      sha256 = "1fsiwihgq3z5b5kmssxxil5g2abfvsf6wfikzyvi4sy8hnym77mb";
     };
 
     buildInputs = with self; [ unittest2 ];
