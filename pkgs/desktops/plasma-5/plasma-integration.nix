@@ -2,7 +2,7 @@
   mkDerivation,
   extra-cmake-modules,
   breeze-qt5, kconfig, kconfigwidgets, kiconthemes, kio, knotifications,
-  kwayland, libXcursor
+  kwayland, libXcursor, qtquickcontrols2
 }:
 
 # TODO: install Noto Sans and Oxygen Mono fonts with plasma-integration
@@ -12,6 +12,6 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
     breeze-qt5 kconfig kconfigwidgets kiconthemes kio knotifications kwayland
-    libXcursor
+    libXcursor qtquickcontrols2
   ];
 }
