@@ -18481,6 +18481,7 @@ with pkgs;
 
   ### SCIENCE/LOGIC
 
+  abc = callPackage ../applications/science/logic/abc/libabc.nix {};
   abc-verifier = callPackage ../applications/science/logic/abc {};
 
   abella = callPackage ../applications/science/logic/abella {};
