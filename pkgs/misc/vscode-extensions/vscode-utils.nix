@@ -70,12 +70,14 @@ let
       mktplcRef = ext; 
     }); 
 
+  extensionFromVscodeMarketplace = mktplcExtRefToExtDrv;
   extensionsFromVscodeMarketplace = mktplcExtRefList:
-    builtins.map mktplcExtRefToExtDrv mktplcExtRefList;
+    builtins.map extensionFromVscodeMarketplace mktplcExtRefList;
 
 in
 
 {
   inherit fetchVsixFromVscodeMarketplace buildVscodeExtension 
-          buildVscodeMarketplaceExtension extensionsFromVscodeMarketplace;
+          buildVscodeMarketplaceExtension extensionFromVscodeMarketplace
+          extensionsFromVscodeMarketplace;
 }
