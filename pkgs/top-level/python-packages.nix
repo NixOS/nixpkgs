@@ -1669,6 +1669,8 @@ in {
 
   csvkit =  callPackage ../development/python-modules/csvkit { };
 
+  cufflinks = callPackage ../development/python-modules/cufflinks { };
+
   cx_Freeze = callPackage ../development/python-modules/cx_freeze {};
 
   cvxopt = buildPythonPackage rec {
@@ -2931,6 +2933,8 @@ in {
   };
 
   colorama = callPackage ../development/python-modules/colorama { };
+
+  colorlover = callPackage ../development/python-modules/colorlover { };
 
   CommonMark = buildPythonPackage rec {
     name = "CommonMark-${version}";
