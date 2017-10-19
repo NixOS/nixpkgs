@@ -26524,6 +26524,8 @@ EOF
 
   stripe = callPackage ../development/python-modules/stripe { };
 
+  twilio = callPackage ../development/python-modules/twilio { };
+
   uranium = callPackage ../development/python-modules/uranium { };
 
   vine = callPackage ../development/python-modules/vine { };
