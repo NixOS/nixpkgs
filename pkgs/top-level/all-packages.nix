@@ -151,7 +151,7 @@ with pkgs;
 
   fetchgitPrivate = callPackage ../build-support/fetchgit/private.nix { };
 
-  fetchgitrevision = import ../build-support/fetchgitrevision runCommand git;
+  fetchgitrevision = import ../build-support/fetchgitrevision runCommand git cacert;
 
   fetchgitLocal = callPackage ../build-support/fetchgitlocal { };
 
