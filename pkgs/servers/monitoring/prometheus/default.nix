@@ -1,42 +1,60 @@
-{ stdenv, go, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, go, buildGoPackage, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "prometheus-${version}";
-  version = "1.7.2";
-  rev = "v${version}";
+with lib;
 
-  goPackagePath = "github.com/prometheus/prometheus";
+let
+  genericBuild = _: { version, sha256, doCheck ? true }: buildGoPackage rec {
+    name = "prometheus-${version}";
+    inherit version;
+    rev = "v${version}";
 
-  src = fetchFromGitHub {
-    inherit rev;
-    owner = "prometheus";
-    repo = "prometheus";
-    sha256 = "0a2qlcx4p6mwgff9hc2h3sm1glh6syb38jfxabsx2clmj0gq2dq1";
+    goPackagePath = "github.com/prometheus/prometheus";
+
+    src = fetchFromGitHub {
+      inherit rev sha256;
+      owner = "prometheus";
+      repo = "prometheus";
+    };
+
+    inherit doCheck;
+
+    buildFlagsArray = let t = "${goPackagePath}/version"; in ''
+      -ldflags=
+         -X ${t}.Version=${version}
+         -X ${t}.Revision=unknown
+         -X ${t}.Branch=unknown
+         -X ${t}.BuildUser=nix@nixpkgs
+         -X ${t}.BuildDate=unknown
+         -X ${t}.GoVersion=${stdenv.lib.getVersion go}
+    '';
+
+    preInstall = ''
+      mkdir -p "$bin/share/doc/prometheus" "$bin/etc/prometheus"
+      cp -a $src/documentation/* $bin/share/doc/prometheus
+      cp -a $src/console_libraries $src/consoles $bin/etc/prometheus
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Service monitoring system and time series database";
+      homepage = https://prometheus.io;
+      license = licenses.asl20;
+      maintainers = with maintainers; [ benley fpletz ];
+      platforms = platforms.unix;
+    };
   };
 
-  docheck = true;
+in mapAttrs genericBuild {
 
-  buildFlagsArray = let t = "${goPackagePath}/version"; in ''
-    -ldflags=
-       -X ${t}.Version=${version}
-       -X ${t}.Revision=unknown
-       -X ${t}.Branch=unknown
-       -X ${t}.BuildUser=nix@nixpkgs
-       -X ${t}.BuildDate=unknown
-       -X ${t}.GoVersion=${stdenv.lib.getVersion go}
-  '';
-
-  preInstall = ''
-    mkdir -p "$bin/share/doc/prometheus" "$bin/etc/prometheus"
-    cp -a $src/documentation/* $bin/share/doc/prometheus
-    cp -a $src/console_libraries $src/consoles $bin/etc/prometheus
-  '';
-
-  meta = with stdenv.lib; {
-    description = "Service monitoring system and time series database";
-    homepage = https://prometheus.io;
-    license = licenses.asl20;
-    maintainers = with maintainers; [ benley fpletz ];
-    platforms = platforms.unix;
+  prometheus1 = {
+    version = "1.8.0";
+    sha256 = "0hiiql5jp3sh72iyqrm4npk44ncwcwil649l38c76k615w6w1vs9";
   };
+
+  prometheus2 = {
+    version = "2.0.0-rc.1";
+    sha256 = "0i44gsb6lhxkgjb3i489h1939c44szj3dslmmf910dm21497fapz";
+    # Tests need lots of diskspace
+    doCheck = false;
+  };
+
 }
