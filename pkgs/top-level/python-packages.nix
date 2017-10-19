@@ -535,6 +535,10 @@ in {
     };
   } else null;
 
+  fontconfig = callPackage ../development/python-modules/fontconfig {
+    fontconfig = pkgs.fontconfig;
+  };
+
   funcsigs = callPackage ../development/python-modules/funcsigs { };
 
   APScheduler = callPackage ../development/python-modules/APScheduler { };
@@ -5535,24 +5539,6 @@ in {
       homepage = "https://github.com/obsrvbl/flowlogs-reader";
       maintainers = with maintainers; [ cransom ];
       license = licenses.asl20;
-    };
-  };
-
-  fontconfig = buildPythonPackage rec {
-    name = "Python-fontconfig-0.5.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/P/Python-fontconfig/${name}.tar.gz";
-      sha256 = "154rfd0ygcbj9y8m32n537b457yijpfx9dvmf76vi0rg4ikf7kxp";
-    };
-
-    propagatedBuildInputs = with self; [ pkgs.fontconfig ];
-
-    meta = {
-      homepage = https://github.com/Vayn/python-fontconfig;
-      description = "Python binding for Fontconfig";
-      license = stdenv.lib.licenses.gpl3;
-      maintainers = with maintainers; [ gnidorah ];
     };
   };
 
