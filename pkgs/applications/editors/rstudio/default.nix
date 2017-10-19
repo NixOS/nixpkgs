@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, makeDesktopItem, cmake, boost163, zlib, openssl,
+{ stdenv, fetchurl, fetchpatch, makeDesktopItem, cmake, boost, zlib, openssl,
 R, qt5, libuuid, hunspellDicts, unzip, ant, jdk, gnumake, makeWrapper, pandoc
 }:
 
@@ -10,7 +10,9 @@ in
 stdenv.mkDerivation rec {
   name = "RStudio-${version}";
 
-  buildInputs = [ cmake boost163 zlib openssl R qt5.full qt5.qtwebkit qt5.qtwebchannel libuuid unzip ant jdk makeWrapper pandoc ];
+  nativeBuildInputs = [ cmake unzip ant jdk makeWrapper pandoc ];
+
+  buildInputs = [ boost zlib openssl R qt5.full qt5.qtwebkit qt5.qtwebchannel libuuid ];
 
   src = fetchurl {
     url = "https://github.com/rstudio/rstudio/archive/v${version}.tar.gz";
@@ -95,6 +97,8 @@ stdenv.mkDerivation rec {
       mkdir -p dependencies/common/pandoc
       cp ${pandoc}/bin/pandoc dependencies/common/pandoc/
     '';
+
+  enableParallelBuilding = true;
 
   cmakeFlags = [ "-DRSTUDIO_TARGET=Desktop" "-DQT_QMAKE_EXECUTABLE=$NIX_QT5_TMP/bin/qmake" ];
 

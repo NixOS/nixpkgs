@@ -645,9 +645,7 @@ with pkgs;
   };
   aria = aria2;
 
-  aspcud = callPackage ../tools/misc/aspcud {
-    boost = boost163;
-  };
+  aspcud = callPackage ../tools/misc/aspcud { };
 
   at = callPackage ../tools/system/at { };
 
@@ -1402,9 +1400,7 @@ with pkgs;
 
   citrix_receiver = callPackage ../applications/networking/remote/citrix-receiver { };
 
-  citra = libsForQt5.callPackage ../misc/emulators/citra {
-    boost = boost163;
-  };
+  citra = libsForQt5.callPackage ../misc/emulators/citra { };
 
   cmst = libsForQt5.callPackage ../tools/networking/cmst { };
 
@@ -7825,8 +7821,9 @@ with pkgs;
   boost162 = callPackage ../development/libraries/boost/1.62.nix { };
   boost163 = callPackage ../development/libraries/boost/1.63.nix { };
   boost164 = callPackage ../development/libraries/boost/1.64.nix { };
-  boost16x = boost164;
-  boost = boost162;
+  boost165 = callPackage ../development/libraries/boost/1.65.nix { };
+  boost16x = boost165;
+  boost = boost16x;
 
   boost_process = callPackage ../development/libraries/boost-process { };
 
@@ -12930,7 +12927,6 @@ with pkgs;
 
   systemd = callPackage ../os-specific/linux/systemd {
     utillinux = utillinuxMinimal; # break the cyclic dependency
-    gperf = gperf_3_0; # fix build until v233
   }
     // {
       udev.bin = systemd;     # ${systemd.udev.bin}/bin/udevadm

@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, automake, autoconf, boost, openssl, lib, libtool, pkgconfig, zlib, python, libiconv, geoip
 # Version specific options
-, version, sha256
-, ... }:
+{ version, sha256, patches ? [] }:
+
+{ stdenv, fetchurl, automake, autoconf, boost, openssl, lib, libtool, pkgconfig, zlib, python, libiconv, geoip, ... }:
 
 let formattedVersion = lib.replaceChars ["."] ["_"] version;
 
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     url = "https://github.com/arvidn/libtorrent/archive/libtorrent-${formattedVersion}.tar.gz";
     inherit sha256;
   };
+
+  inherit patches;
 
   nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
   buildInputs = [ boost openssl zlib python libiconv geoip ];

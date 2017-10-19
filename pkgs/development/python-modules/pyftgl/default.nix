@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ stdenv, buildPythonPackage, fetchFromGitHub, isPy3k
 , boost, freetype, ftgl, mesa }:
 
 buildPythonPackage rec {
@@ -10,6 +10,10 @@ buildPythonPackage rec {
     rev = "0.4b";
     sha256 = "12zcjv4cwwjihiaf74kslrdmmk4bs47h7006gyqfwdfchfjdgg4r";
   };
+
+  postPatch = stdenv.lib.optional isPy3k ''
+    sed -i "s,'boost_python','boost_python3',g" setup.py
+  '';
 
   buildInputs = [ boost freetype ftgl mesa ];
 
