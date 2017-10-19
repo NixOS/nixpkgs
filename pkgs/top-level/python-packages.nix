@@ -11129,14 +11129,12 @@ in {
     };
   });
 
-  libgpuarray-cuda = callPackage ../development/python-modules/libgpuarray/cuda/default.nix rec {
-    inherit (self) numpy scipy;
-    inherit (pkgs.linuxPackages) nvidia_x11;
-    cudatoolkit = pkgs.cudatoolkit75;
-    clblas = pkgs.clblas-cuda;
+  libgpuarray = callPackage ../development/python-modules/libgpuarray {
+    clblas = pkgs.clblas.override { boost = self.boost; };
+    cudaSupport = pkgs.config.cudaSupport or false;
   };
 
-  libnacl = callPackage ../development/python-modules/libnacl/default.nix {
+  libnacl = callPackage ../development/python-modules/libnacl {
     inherit (pkgs) libsodium;
   };
 
@@ -19835,24 +19833,20 @@ in {
 
   stevedore = callPackage ../development/python-modules/stevedore {};
 
-  Theano = self.TheanoWithoutCuda;
+  Theano = callPackage ../development/python-modules/Theano rec {
+    cudaSupport = pkgs.config.cudaSupport or false;
+    cudnnSupport = cudaSupport;
+  };
 
-  TheanoWithoutCuda = callPackage ../development/python-modules/Theano/theano-without-cuda { };
+  TheanoWithoutCuda = self.Theano.override {
+    cudaSupport = true;
+    cudnnSupport = true;
+  };
 
-  TheanoWithCuda = callPackage ../development/python-modules/Theano/theano-with-cuda (
-  let
-    boost = pkgs.boost159.override {
-      inherit (self) python numpy scipy;
-    };
-  in rec {
-    cudatoolkit = pkgs.cudatoolkit75;
-    cudnn = pkgs.cudnn5_cudatoolkit75;
-    inherit (self) numpy scipy;
-    pycuda = self.pycuda.override { inherit boost; };
-    libgpuarray = self.libgpuarray-cuda.override {
-      clblas = pkgs.clblas-cuda.override { inherit boost; };
-    };
-  });
+  TheanoWithCuda = self.Theano.override {
+    cudaSupport = false;
+    cudnnSupport = false;
+  };
 
   tidylib = buildPythonPackage rec {
     version = "0.2.4";
@@ -25980,14 +25974,16 @@ EOF
 
   tensorflow-tensorboard = callPackage ../development/python-modules/tensorflow-tensorboard { };
 
-  tensorflow = self.tensorflowWithoutCuda;
+  tensorflow = callPackage ../development/python-modules/tensorflow {
+    cudaSupport = pkgs.config.cudaSupport or false;
+  };
 
-  tensorflowWithoutCuda = callPackage ../development/python-modules/tensorflow { };
+  tensorflowWithoutCuda = self.tensorflow.override {
+    cudaSupport = false;
+  };
 
-  tensorflowWithCuda = callPackage ../development/python-modules/tensorflow {
+  tensorflowWithCuda = self.tensorflow.override {
     cudaSupport = true;
-    cudatoolkit = pkgs.cudatoolkit8;
-    cudnn = pkgs.cudnn60_cudatoolkit80;
   };
 
   tflearn = buildPythonPackage rec {
