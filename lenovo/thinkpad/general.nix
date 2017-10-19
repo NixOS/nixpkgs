@@ -11,12 +11,12 @@ with lib;
   hardware.enableRedistributableFirmware = mkDefault true;
   services.tlp.enable = true;
 
-  services.xserver = {
+  services.xserver = mkDefault {
     synaptics.enable = false;
     libinput.enable = true;
   };
 
   environment.systemPackages = [ pkgs.acpi ];
 
-  sound.enableMediaKeys = true;
+  sound.enableMediaKeys = mkDefault true;
 }
