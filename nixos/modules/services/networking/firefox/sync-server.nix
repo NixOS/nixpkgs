@@ -127,7 +127,7 @@ in
   config = mkIf cfg.enable {
 
     systemd.services.syncserver = let
-      syncServerEnv = pkgs.python.withPackages(ps: with ps; [ syncserver pasteScript ]);
+      syncServerEnv = pkgs.python.withPackages(ps: with ps; [ syncserver pasteScript requests ]);
       user = "syncserver";
       group = "syncserver";
     in {
