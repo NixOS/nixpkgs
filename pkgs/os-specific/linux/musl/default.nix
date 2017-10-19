@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   name    = "musl-${version}";
-  version = "1.1.16";
+  version = "1.1.17";
 
   src = fetchurl {
     url    = "http://www.musl-libc.org/releases/${name}.tar.gz";
-    sha256 = "048h0w4yjyza4h05bkc6dpwg3hq6l03na46g0q1ha8fpwnjqawck";
+    sha256 = "0r0lyp2w6v2bvm8h1si7w3p2qx037szl14qnxm5p00568z3m3an8";
   };
 
   enableParallelBuilding = true;
 
-  # required to avoid busybox segfaulting on startup when invoking
-  # nix-build "<nixpkgs/pkgs/stdenv/linux/make-bootstrap-tools.nix>"
+  # Disable auto-adding stack protector flags,
+  # so musl can selectively disable as needed
   hardeningDisable = [ "stackprotector" ];
 
   preConfigure = ''
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-shared"
     "--enable-static"
+    "CFLAGS=-fstack-protector-strong"
   ];
 
   patches = [];
