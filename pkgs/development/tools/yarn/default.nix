@@ -1,4 +1,4 @@
-{ stdenv, nodejs, fetchzip, makeWrapper }:
+{ stdenv, nodejs-8_x, fetchzip, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "yarn-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0jsaszykgmli503jgwdk79qks44krjgjr0qmizh3y7z4lplqdjip";
   };
 
-  buildInputs = [makeWrapper nodejs];
+  buildInputs = [makeWrapper nodejs-8_x];
 
   installPhase = ''
     mkdir -p $out/{bin,libexec/yarn/}
