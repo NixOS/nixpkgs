@@ -1,4 +1,4 @@
-{ mkDerivation, lib, copyPathsToStore, fetchFromGitHub, fetchpatch
+{ mkDerivation, lib, fetchFromGitHub, fetchpatch
 , cmake, extra-cmake-modules, pkgconfig, libxcb, libpthreadstubs, lndir
 , libXdmcp, libXau, qtbase, qtdeclarative, qttools, pam, systemd
 }:
@@ -17,8 +17,7 @@ in mkDerivation rec {
     sha256 = "1j0rc8nk8bz7sxa0bc6lx9v7r3zlcfyicngfjqb894ni9k71kzsb";
   };
 
-  patches =
-    copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [ ./sddm-ignore-config-mtime.patch ];
 
   postPatch =
     # Module Qt5::Test must be included in `find_package` before it is used.
