@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, fontconfig }:
+{ lib, buildPythonPackage, fetchPypi, fontconfig, python, freefont_ttf }:
 
 buildPythonPackage rec {
   pname = "Python-fontconfig";
@@ -11,6 +11,10 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ fontconfig ];
+
+  buildInputs = [ freefont_ttf ];
+
+  checkPhase = "echo y | ${python.interpreter} test/test.py";
 
   meta = {
     homepage = https://github.com/Vayn/python-fontconfig;
