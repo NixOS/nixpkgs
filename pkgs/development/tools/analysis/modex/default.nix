@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ bison flex ];
 
   meta = {
-    description = "Mechanical extraction of verification models from implementation level C code for spin.";
+    description = "Mechanical extraction of verification models from implementation level C code for spin";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.free;
     homepage = "http://spinroot.com/modex";
