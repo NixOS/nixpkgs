@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
     sha256 = "09yvhj53af91nc54gmy7cbp7yljfcyj68a87494r5xvdfnsj11gy";
   };
 
-  buildInputs = [ ];
   preBuild = ''
     export buildFlags="CC=$CC CXX=$CXX LD=$CXX ABC_USE_NO_READLINE=1 libabc.a"
   '';
