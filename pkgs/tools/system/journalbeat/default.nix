@@ -15,6 +15,7 @@ in buildGoPackage rec {
 
   postInstall = ''
     wrapProgram $bin/bin/journalbeat \
+      --argv0 journalbeat \
       --prefix LD_LIBRARY_PATH : ${libPath}
   '';
 
