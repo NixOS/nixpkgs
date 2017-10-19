@@ -2,8 +2,8 @@
 , gdk_pixbuf, libnotify, gst_all_1
 , libgnome_keyring3, networkmanager
 , wrapGAppsHook, gnome3
-, withGnomeKeyring ? false
-, withNetworkManager ? true
+# otherwise passwords are stored unencrypted
+, withGnomeKeyring ? true
 }:
 
 let
@@ -22,8 +22,7 @@ in pythonPackages.buildPythonApplication rec {
     gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
     gnome3.defaultIconTheme
-  ] ++ stdenv.lib.optional withGnomeKeyring libgnome_keyring3
-    ++ stdenv.lib.optional withNetworkManager networkmanager;
+  ] ++ stdenv.lib.optional withGnomeKeyring libgnome_keyring3;
 
   nativeBuildInputs = [
     wrapGAppsHook
