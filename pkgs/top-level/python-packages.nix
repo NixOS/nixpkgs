@@ -535,6 +535,8 @@ in {
     };
   } else null;
 
+  python-fontconfig = callPackage ../development/python-modules/python-fontconfig { };
+
   funcsigs = callPackage ../development/python-modules/funcsigs { };
 
   APScheduler = callPackage ../development/python-modules/APScheduler { };
