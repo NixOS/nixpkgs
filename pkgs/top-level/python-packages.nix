@@ -535,9 +535,7 @@ in {
     };
   } else null;
 
-  fontconfig = callPackage ../development/python-modules/fontconfig {
-    fontconfig = pkgs.fontconfig;
-  };
+  python-fontconfig = callPackage ../development/python-modules/python-fontconfig { };
 
   funcsigs = callPackage ../development/python-modules/funcsigs { };
 
