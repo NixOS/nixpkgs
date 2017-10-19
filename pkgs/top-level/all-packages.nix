@@ -7378,6 +7378,8 @@ with pkgs;
 
   moby = callPackage ../development/tools/misc/moby { };
 
+  modex = callPackage ../development/tools/analysis/modex { };
+
   msgpack-tools = callPackage ../development/tools/msgpack-tools { };
 
   msitools = callPackage ../development/tools/misc/msitools { };
