@@ -252,6 +252,9 @@ stdenv.mkDerivation {
       "-inotify"
       "-system-libjpeg"
       "-system-libpng"
+      # gold linker of binutils 2.28 generates duplicate symbols
+      # TODO: remove for newer version of binutils 
+      "-no-use-gold-linker"
     ]
 
     ++ lib.optionals stdenv.isDarwin [
