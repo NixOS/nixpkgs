@@ -12,12 +12,10 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = "patchShebangs ./scripts/mk_bits_lut";
-  # doCheck = true;
+
+  doCheck = true;
+  checkTarget = "test";
   
-  propagatedBuildInputs = [ ];
-
-  buildInputs = [ ];
-
   installFlags = [ "PREFIX=$(out)" ];
   postInstall = ''
       install -m644 vendor/greatest.h $out/include/
