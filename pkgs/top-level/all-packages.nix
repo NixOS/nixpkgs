@@ -16995,6 +16995,8 @@ with pkgs;
 
   vue = callPackage ../applications/misc/vue { };
 
+  vuze = callPackage ../applications/networking/p2p/vuze { };
+
   vwm = callPackage ../applications/window-managers/vwm { };
 
   vym = callPackage ../applications/misc/vym { };
