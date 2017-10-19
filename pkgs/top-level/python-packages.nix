@@ -20156,13 +20156,13 @@ EOF
 
   serversyncstorage = buildPythonPackage rec {
     name = "serversyncstorage-${version}";
-    version = "1.5.13";
+    version = "1.6.11";
     disabled = !isPy27;
 
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/server-syncstorage.git;
       rev = "refs/tags/${version}";
-      sha256 = "0m14v7n105y06w3mdp35pyxyzjj5vqwbznzdbixhkms3df6md2lq";
+      sha256 = "197gj2jfs2c6nzs20j37kqxwi91wabavxnfm4rqmrjwhgqjwhnm0";
     };
 
     propagatedBuildInputs = with self; [
