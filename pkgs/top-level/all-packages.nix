@@ -122,6 +122,8 @@ with pkgs;
 
   dispad = callPackage ../tools/X11/dispad { };
 
+  dump1090 = callPackage ../applications/misc/dump1090 { };
+
   vsenv = callPackage ../build-support/vsenv {
     vs = vs90wrapper;
   };
