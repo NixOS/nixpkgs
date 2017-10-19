@@ -248,6 +248,7 @@
   grburst = "Julius Elias <grburst@openmailbox.org>";
   gridaphobe = "Eric Seidel <eric@seidel.io>";
   guibert = "David Guibert <david.guibert@gmail.com>";
+  guibou = "Guillaume Bouchard <guillaum.bouchard@gmail.com>";
   guillaumekoenig = "Guillaume Koenig <guillaume.edward.koenig@gmail.com>";
   guyonvarch = "Joris Guyonvarch <joris@guyonvarch.me>";
   hakuch = "Jesse Haber-Kucharsky <hakuch@gmail.com>";
