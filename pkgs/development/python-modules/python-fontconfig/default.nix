@@ -1,6 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, fontconfig, python, freefont_ttf }:
+{ lib, buildPythonPackage, fetchPypi, fontconfig, python, freefont_ttf, makeFontsConf }:
 
-buildPythonPackage rec {
+let
+  fontsConf = makeFontsConf {
+    fontDirectories = [ freefont_ttf ];
+  };
+in buildPythonPackage rec {
   pname = "Python-fontconfig";
   version = "0.5.1";
   name = "${pname}-${version}";
@@ -10,11 +14,13 @@ buildPythonPackage rec {
     sha256 = "154rfd0ygcbj9y8m32n537b457yijpfx9dvmf76vi0rg4ikf7kxp";
   };
 
+  FONTCONFIG_FILE = fontsConf;
+
   propagatedBuildInputs = [ fontconfig ];
 
-  buildInputs = [ freefont_ttf ];
-
-  checkPhase = "echo y | ${python.interpreter} test/test.py";
+  checkPhase = ''
+    echo y | ${python.interpreter} test/test.py
+  '';
 
   meta = {
     homepage = https://github.com/Vayn/python-fontconfig;
