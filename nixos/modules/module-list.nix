@@ -99,6 +99,7 @@
   ./programs/ssh.nix
   ./programs/ssmtp.nix
   ./programs/sysdig.nix
+  ./programs/sway.nix
   ./programs/thefuck.nix
   ./programs/tmux.nix
   ./programs/venus.nix
