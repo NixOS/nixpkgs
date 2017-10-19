@@ -1,5 +1,6 @@
 { stdenv, lib, fetchurl, autoreconfHook, pkgconfig
 , openssl, netcat-gnu, gnutls, gsasl, libidn, Security
+, libsecret, withKeyring ? true
 , systemd ? null }:
 
 let
@@ -20,11 +21,13 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openssl gnutls gsasl libidn ]
-    ++ stdenv.lib.optional stdenv.isDarwin Security;
+    ++ stdenv.lib.optional stdenv.isDarwin Security
+    ++ stdenv.lib.optional withKeyring libsecret;
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   configureFlags =
-    stdenv.lib.optional stdenv.isDarwin [ "--with-macosx-keyring" ];
+    stdenv.lib.optional stdenv.isDarwin [ "--with-macosx-keyring" ]
+    ++ stdenv.lib.optional withKeyring [ "--with-libsecret" ];
 
   postInstall = ''
     substitute scripts/msmtpq/msmtpq $out/bin/msmtpq \
