@@ -29,8 +29,6 @@ stdenv.mkDerivation rec {
     install -m644 ../Manual/* $out/share/modex/Manual/
     '';
   
-  propagatedBuildInputs = [ ];
-
   buildInputs = [ bison flex ];
 
   meta = {
