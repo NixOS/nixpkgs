@@ -1,34 +1,45 @@
-{ stdenv, requireFile, cudatoolkit }:
+{ callPackage, cudatoolkit7, cudatoolkit75, cudatoolkit8, cudatoolkit9 }:
 
-stdenv.mkDerivation rec {
-  version = "4.0";
-
-  name = "cudnn-${version}";
-
-  src = requireFile rec {
-    name = "cudnn-7.0-linux-x64-v${version}-prod.tgz";
-    message = '' 
-      This nix expression requires that ${name} is
-      already part of the store. Register yourself to NVIDIA Accelerated Computing Developer Program
-      and download cuDNN library at https://developer.nvidia.com/cudnn, and store it to the nix store with nix-store --add-fixed sha256 <FILE>.
-    '';
-    sha256 = "0zgr6qdbc29qw6sikhrh6diwwz7150rqc8a49f2qf37j2rvyyr2f";
-
+let
+  generic = args: callPackage (import ./generic.nix (removeAttrs args ["cudatoolkit"])) {
+    inherit (args) cudatoolkit;
   };
 
-  phases = "unpackPhase installPhase fixupPhase";
+in
 
-  propagatedBuildInputs = [ cudatoolkit ];
+{
+  cudnn_cudatoolkit7 = generic rec {
+    version = "4.0";
+    cudatoolkit = cudatoolkit7;
+    srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v${version}-prod.tgz";
+    sha256 = "0zgr6qdbc29qw6sikhrh6diwwz7150rqc8a49f2qf37j2rvyyr2f";
+  };
 
-  installPhase = ''
-    mkdir -p $out
-    cp -a include $out/include
-    cp -a lib64 $out/lib64
-  '';
+  cudnn_cudatoolkit75 = generic rec {
+    version = "6.0";
+    cudatoolkit = cudatoolkit75;
+    srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v${version}.tgz";
+    sha256 = "0b68hv8pqcvh7z8xlgm4cxr9rfbjs0yvg1xj2n5ap4az1h3lp3an";
+  };
 
-  meta = {
-    description = "NVIDIA CUDA Deep Neural Network library (cuDNN)";
-    homepage = https://developer.nvidia.com/cudnn;
-    license = stdenv.lib.licenses.unfree;
+  cudnn6_cudatoolkit8 = generic rec {
+    version = "6.0";
+    cudatoolkit = cudatoolkit8;
+    srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v${version}.tgz";
+    sha256 = "173zpgrk55ri8if7s5yngsc89ajd6hz4pss4cdxlv6lcyh5122cv";
+  };
+
+  cudnn_cudatoolkit8 = generic rec {
+    version = "7.0";
+    cudatoolkit = cudatoolkit8;
+    srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v7.tgz";
+    sha256 = "19yjdslrslwv5ic4vgpzb0fa0mqbgi6a66b7gc66vdc9n9589398";
+  };
+
+  cudnn_cudatoolkit9 = generic rec {
+    version = "7.0";
+    cudatoolkit = cudatoolkit9;
+    srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v7.tgz";
+    sha256 = "1ld5x819vya6p2ppmr7i3lz9ac2y81kssgbzgd0lsign7r2qjapc";
   };
 }

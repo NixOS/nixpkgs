@@ -16,7 +16,7 @@
 , enableGStreamer ? false, gst_all_1
 , enableEigen     ? true, eigen
 , enableOpenblas  ? true, openblas
-, enableCuda      ? false, cudatoolkit, gcc5
+, enableCuda      ? false, cudatoolkit
 , enableTesseract ? false, tesseract, leptonica
 , AVFoundation, Cocoa, QTKit
 }:
@@ -145,7 +145,7 @@ stdenv.mkDerivation rec {
     # simply enabled automatically if contrib is built, and it detects
     # tesseract & leptonica.
     ++ lib.optionals enableTesseract [ tesseract leptonica ]
-    ++ lib.optionals enableCuda [ cudatoolkit gcc5 ]
+    ++ lib.optional enableCuda cudatoolkit
     ++ lib.optional buildContrib protobuf
     ++ lib.optionals stdenv.isDarwin [ AVFoundation Cocoa QTKit ];
 
@@ -165,8 +165,10 @@ stdenv.mkDerivation rec {
     (opencvFlag "OPENEXR" enableEXR)
     (opencvFlag "CUDA" enableCuda)
     (opencvFlag "CUBLAS" enableCuda)
-  ] ++ lib.optionals enableCuda [ "-DCUDA_FAST_MATH=ON" ]
-    ++ lib.optional buildContrib "-DBUILD_PROTOBUF=off"
+  ] ++ lib.optionals enableCuda [
+    "-DCUDA_FAST_MATH=ON"
+    "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/gcc"
+  ] ++ lib.optional buildContrib "-DBUILD_PROTOBUF=off"
     ++ lib.optionals stdenv.isDarwin ["-DWITH_OPENCL=OFF" "-DWITH_LAPACK=OFF"];
 
   enableParallelBuilding = true;

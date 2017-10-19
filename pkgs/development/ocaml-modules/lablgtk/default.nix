@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib, pkgconfig, gtk2, libgnomecanvas, libglade, gtksourceview, camlp4}:
+{ stdenv, fetchurl, ocaml, findlib, pkgconfig, gtk2, libgnomecanvas, libglade, gtksourceview }:
 
 let
   pname = "lablgtk";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ocaml findlib gtk2 libgnomecanvas libglade gtksourceview camlp4];
+  buildInputs = [ ocaml findlib gtk2 libgnomecanvas libglade gtksourceview ];
 
   configureFlags = "--with-libdir=$(out)/lib/ocaml/${ocaml.version}/site-lib";
   buildFlags = "world";
