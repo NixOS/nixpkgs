@@ -1,14 +1,15 @@
-{stdenv, fetchFromGitHub, cmake, boost, pkgconfig, doxygen, qt48Full, libharu, 
-  pango, fcgi, firebird, libmysql, postgresql, graphicsmagick, glew, openssl,
-  pcre }:
+{ stdenv, fetchFromGitHub, cmake, boost, pkgconfig, doxygen, qt48Full, libharu
+, pango, fcgi, firebird, libmysql, postgresql, graphicsmagick, glew, openssl
+, pcre
+}:
 
 stdenv.mkDerivation rec {
-  name = "wt";
+  name = "wt-${version}";
   version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "kdeforche";
-    repo = name;
+    repo = "wt";
     rev = version;
     sha256 = "1451xxvnx6mlvxg0jxlr1mfv5v18h2214kijk5kacilqashfc43i";
   };
@@ -16,9 +17,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake boost doxygen qt48Full libharu 
-    pango fcgi firebird libmysql postgresql graphicsmagick glew 
-    openssl pcre ];
+  buildInputs = [
+    cmake boost doxygen qt48Full libharu
+    pango fcgi firebird libmysql postgresql graphicsmagick glew
+    openssl pcre
+  ];
 
   cmakeFlags = [
     "-DWT_WRASTERIMAGE_IMPLEMENTATION=GraphicsMagick"
@@ -31,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://www.webtoolkit.eu/wt;
     description = "C++ library for developing web applications";
-    platforms = platforms.linux ;
+    platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = [ maintainers.juliendehos ];
   };
