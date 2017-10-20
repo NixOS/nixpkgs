@@ -11425,7 +11425,9 @@ with pkgs;
 
   charybdis = callPackage ../servers/irc/charybdis {};
 
-  clickhouse = callPackage ../servers/clickhouse { };
+  clickhouse = callPackage ../servers/clickhouse {
+    boost = boost160;
+  };
 
   couchdb = callPackage ../servers/http/couchdb {
     spidermonkey = spidermonkey_1_8_5;
@@ -17451,6 +17453,7 @@ with pkgs;
   zanshin = libsForQt5.callPackage ../applications/office/zanshin {
     inherit (kdeApplications) akonadi-calendar akonadi-notes akonadi-search kidentitymanagement kontactinterface kldap;
     inherit (kdeFrameworks) krunner kwallet;
+    boost = boost160;
   };
 
   zathura = callPackage ../applications/misc/zathura {
