@@ -35,9 +35,8 @@ pkgs/applications/science/math/R @peti
 pkgs/development/r-modules       @peti
 
 # Darwin-related
-pkgs/stdenv/darwin/*    @copumpkin @LnL7
-pkgs/os-specific/darwin/*       @LnL7
-pkgs/os-specific/darwin/apple-source-releases/* @copumpkin
+/pkgs/stdenv/darwin/             @org/darwin-maintainers
+/pkgs/os-specific/darwin/        @org/darwin-maintainers
 
 # Beam-related (Erlang, Elixir, LFE, etc)
 pkgs/development/beam-modules/*	@gleber

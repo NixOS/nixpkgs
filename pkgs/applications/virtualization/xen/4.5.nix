@@ -1,4 +1,5 @@
 { stdenv, callPackage, fetchurl, fetchpatch, fetchgit
+, ocamlPackages_4_02
 , withInternalQemu ? true
 , withInternalTraditionalQemu ? true
 , withInternalSeabios ? true
@@ -414,4 +415,4 @@ callPackage (import ./generic.nix (rec {
       -i tools/libxl/libxl_device.c
   '';
 
-})) args
+})) ({ ocamlPackages = ocamlPackages_4_02; } // args)

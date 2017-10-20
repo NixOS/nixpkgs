@@ -98,7 +98,10 @@ let
     camlzip = callPackage ../development/ocaml-modules/camlzip { };
 
     camomile_0_8_2 = callPackage ../development/ocaml-modules/camomile/0.8.2.nix { };
-    camomile = callPackage ../development/ocaml-modules/camomile { };
+    camomile =
+      if lib.versionOlder "4.03" ocaml.version
+      then callPackage ../development/ocaml-modules/camomile { }
+      else callPackage ../development/ocaml-modules/camomile/0.8.5.nix { };
 
     camlimages_4_0 =
       if lib.versionOlder "4.02" ocaml.version
@@ -986,5 +989,5 @@ in rec
 
   ocamlPackages_latest = ocamlPackages_4_05;
 
-  ocamlPackages = ocamlPackages_4_02;
+  ocamlPackages = ocamlPackages_4_04;
 }
