@@ -4622,6 +4622,8 @@ with pkgs;
 
   timetrap = callPackage ../applications/office/timetrap { };
 
+  tzupdate = callPackage ../applications/misc/tzupdate { };
+
   tinc = callPackage ../tools/networking/tinc { };
 
   tie = callPackage ../development/tools/misc/tie { };
