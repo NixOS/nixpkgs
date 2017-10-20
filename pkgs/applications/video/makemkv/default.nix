@@ -4,17 +4,17 @@
 
 stdenv.mkDerivation rec {
   name = "makemkv-${ver}";
-  ver = "1.10.6";
+  ver = "1.10.7";
   builder = ./builder.sh;
 
   src_bin = fetchurl {
     url = "http://www.makemkv.com/download/makemkv-bin-${ver}.tar.gz";
-    sha256 = "99d68e4e0166c9a4e2dce6638e19cbe312b5981f6e1811ed0987578ceefac3e3";
+    sha256 = "2b9a9e6fb779bc876371b2f88b23fddad3e92d6449fe5d1541dcd9ad04e01eac";
   };
 
   src_oss = fetchurl {
     url = "http://www.makemkv.com/download/makemkv-oss-${ver}.tar.gz";
-    sha256 = "ab028ba05364f2d899b76e6a7392c9ef555379de2ef4732e1de27c23fd78d235";
+    sha256 = "be61fcee31dc52944ec7ef440ff8fffbc140d24877e6afb19149c541564eb654";
   };
 
   nativeBuildInputs = [ pkgconfig ];
