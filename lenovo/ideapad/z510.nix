@@ -1,3 +1,6 @@
+# NOTE: this doesn't inherit from the `general.nix`
+# as z510 is not a ThinkPad
+
 { config, pkgs, ... }:
 {
   hardware.cpu.intel.updateMicrocode = true;

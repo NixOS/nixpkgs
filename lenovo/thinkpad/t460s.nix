@@ -3,6 +3,7 @@
 {
   imports =
     [ ../lib/kernel-version.nix
+      ./general-intel.nix
     ];
 
   ## BEGIN from generated hardware-configuration
@@ -26,9 +27,6 @@
     { version = "4.6";   msg = "Suspending the T460s by closing the lid when running on battery causes the machine to freeze up entirely."; }
   ];
 
-  # For the wifi (intel iwlwifi)
-  hardware.enableAllFirmware = true;
-
   # For the screen. I don't know what to do with this information, but
   # the hiDPI support is far from perfect (as of July 2016):
 
@@ -39,21 +37,4 @@
   # Aspect Ratio: 16 × 9 (1.78:1)
   # Pixel Count: 3,686,400
   # Megapixels: 3.69MP
-
-  # Use libinput to let the physical middle button be used to scroll
-  # with the trackpoint
-  services.xserver = {
-    libinput.enable = true;
-    synaptics.enable = false;
-
-    config = ''
-      Section "InputClass"
-        Identifier     "Enable libinput for TrackPoint"
-        MatchIsPointer "on"
-        Driver         "libinput"
-        Option         "ScrollMethod" "button"
-        Option         "ScrollButton" "8"
-      EndSection
-    '';
-  };
 }

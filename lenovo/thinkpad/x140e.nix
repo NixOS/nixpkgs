@@ -1,6 +1,8 @@
 { config, lib, pkgs, ... }:
 
 {
+  imports = [ ./general.nix ];
+
   boot = {
     # wireless
     kernelModules = [ "kvm-amd" "wl" ];
@@ -14,13 +16,4 @@
 
   # video card
   services.xserver.videoDrivers = ["ati"];
-
-  # trackpad (touchpad disabled)
-  hardware.trackpoint = {
-    enable = true;
-    emulateWheel = true;
-  };
-
-  # media keys
-  sound.enableMediaKeys = true;
 }

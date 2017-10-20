@@ -1,6 +1,8 @@
 { config, pkgs, ... }:
 
 {
+  imports = [ ./general-intel.nix ];
+
   boot = {
     kernelParams = [
       # Kernel GPU Savings Options (NOTE i915 chipset only)
