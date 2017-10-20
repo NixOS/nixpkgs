@@ -1,6 +1,7 @@
 { stdenv, buildPythonPackage, fetchurl, substituteAll,
   pythonOlder,
-  geos, gdal, pytz
+  geos, gdal, pytz,
+  withGdal ? false
 }:
 
 buildPythonPackage rec {
@@ -15,7 +16,7 @@ buildPythonPackage rec {
     sha256 = "0a9bk1a0n0264lcr67fmwzqyhkhy6bqdzkxsj9a8dpyzca0qfdhq";
   };
 
-  patches = [
+  patches = stdenv.lib.optionals withGdal [
     (substituteAll {
       src = ./1.10-gis-libs.template.patch;
       geos = geos;
