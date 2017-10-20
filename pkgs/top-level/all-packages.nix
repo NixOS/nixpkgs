@@ -11059,6 +11059,8 @@ with pkgs;
 
   xvidcore = callPackage ../development/libraries/xvidcore { };
 
+  xxHash = callPackage ../development/libraries/xxHash {};
+
   xylib = callPackage ../development/libraries/xylib { };
 
   yajl = callPackage ../development/libraries/yajl { };

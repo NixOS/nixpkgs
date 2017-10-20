@@ -1,30 +1,24 @@
 { stdenv, fetchurl, fetchpatch, cmake, pcre, pkgconfig, python2
-, libX11, libXpm, libXft, libXext, mesa, zlib, libxml2, lzma, gsl
+, libX11, libXpm, libXft, libXext, mesa, zlib, libxml2, lz4, lzma, gsl, xxHash
 , Cocoa, OpenGL, noSplash ? false }:
 
 stdenv.mkDerivation rec {
   name = "root-${version}";
-  version = "6.10.04";
+  version = "6.10.08";
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    sha256 = "0nwg4bw02v6vahm2rwfaj7fzp3ffhjg5jk7h20il4246swhxw6s6";
+    sha256 = "12mddl6pqwwc9nr4jqzp6h1jm4zycazd3v88dz306m1nmk97dlic";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake pcre python2 zlib libxml2 lzma gsl ]
+  buildInputs = [ cmake pcre python2 zlib libxml2 lz4 lzma gsl xxHash ]
     ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext mesa ]
     ++ stdenv.lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
     ;
 
   patches = [
     ./sw_vers.patch
-
-    # this prevents thisroot.sh from setting $p, which interferes with stdenv setup
-    ./thisroot.patch
-
-    # https://sft.its.cern.ch/jira/browse/ROOT-8728
-    ./ROOT-8728-extra.patch
   ];
 
   preConfigure = ''
