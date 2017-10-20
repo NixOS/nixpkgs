@@ -11481,6 +11481,8 @@ with pkgs;
     inherit (lua51Packages) luasocket luasec luaexpat luafilesystem luabitop luaevent luazlib;
   };
 
+  biboumi = callPackage ../servers/xmpp/biboumi { };
+
   elasticmq = callPackage ../servers/elasticmq { };
 
   eventstore = callPackage ../servers/nosql/eventstore {
