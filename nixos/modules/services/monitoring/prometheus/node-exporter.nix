@@ -33,7 +33,7 @@ in {
         default = [];
         example = ''[ "systemd" ]'';
         description = ''
-          Collectors to enable. Only collectors explicitly listed here will be enabled.
+          Collectors to enable. The collectors listed here are enabled in addition to the default ones.
         '';
       };
 
@@ -64,13 +64,12 @@ in {
       wantedBy = [ "multi-user.target" ];
       script = ''
         exec ${pkgs.prometheus-node-exporter}/bin/node_exporter \
-          ${optionalString (cfg.enabledCollectors != [])
-            ''-collectors.enabled ${concatStringsSep "," cfg.enabledCollectors}''} \
-          -web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
+          ${concatMapStrings (x: "--collector." + x + " ") cfg.enabledCollectors} \
+          --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
       serviceConfig = {
-        User = "nobody";
+        DynamicUser = true;
         Restart  = "always";
         PrivateTmp = true;
         WorkingDirectory = /tmp;
