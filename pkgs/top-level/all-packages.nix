@@ -17450,6 +17450,7 @@ with pkgs;
   zanshin = libsForQt5.callPackage ../applications/office/zanshin {
     inherit (kdeApplications) akonadi-calendar akonadi-notes akonadi-search kidentitymanagement kontactinterface kldap;
     inherit (kdeFrameworks) krunner kwallet;
+    boost = boost160;
   };
 
   zathura = callPackage ../applications/misc/zathura {
