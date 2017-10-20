@@ -2550,4 +2550,14 @@ rec {
 
   };
 
+  zig-vim = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "zig-vim-2017-10-17";
+    src = fetchgit {
+      url = "https://github.com/zig-lang/zig.vim";
+      rev = "6059db59f61b517f5d65303b61f03324e01fdc2f";
+      sha256 = "0w3pa63s0r6h6w1iqmc444qrsc99xcccwapd6nyh3gb72z228d7z";
+    };
+    dependencies = [];
+
+  };
 }
