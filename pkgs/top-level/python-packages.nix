@@ -1372,10 +1372,10 @@ in {
 
   # Build boost for this specific Python version
   # TODO: use separate output for libboost_python.so
-  boost = pkgs.boost.override {
+  boost = toPythonModule (pkgs.boost.override {
     inherit (self) python numpy;
     enablePython = true;
-  };
+  });
 
   buttersink = buildPythonPackage rec {
     name = "buttersink-0.6.8";
@@ -3236,15 +3236,15 @@ in {
     propagatedBuildInputs = with self; [ pyusb ];
   };
 
-  opencv = pkgs.opencv.override {
+  opencv = toPythonModule (pkgs.opencv.override {
     enablePython = true;
     pythonPackages = self;
-  };
+  });
 
-  opencv3 = pkgs.opencv3.override {
+  opencv3 = toPythonModule (pkgs.opencv3.override {
     enablePython = true;
     pythonPackages = self;
-  };
+  });
 
   openidc-client = callPackage ../development/python-modules/openidc-client/default.nix {};
 
@@ -4772,12 +4772,10 @@ in {
   easy-thumbnails = callPackage ../development/python-modules/easy-thumbnails { };
 
   eccodes = if (isPy27) then
-      (pkgs.eccodes.overrideAttrs (oldattrs: {
-    name = "${python.libPrefix}-" + oldattrs.name;
-  })).override {
-    enablePython = true;
-    pythonPackages = self;
-  } else throw "eccodes not supported for interpreter ${python.executable}";
+    toPythonModule (pkgs.eccodes.override {
+      enablePython = true;
+      pythonPackages = self;
+    }) else throw "eccodes not supported for interpreter ${python.executable}";
 
   EditorConfig = buildPythonPackage rec {
     name = "EditorConfig-${version}";
@@ -8747,10 +8745,10 @@ in {
 
   folium = callPackage ../development/python-modules/folium { };
 
-  fontforge = pkgs.fontforge.override {
+  fontforge = toPythonModule (pkgs.fontforge.override {
     withPython = true;
     inherit python;
-  };
+  });
 
   fonttools = callPackage ../development/python-modules/fonttools { };
 
@@ -8924,11 +8922,9 @@ in {
     };
   };
 
-  gdal = (pkgs.gdal.overrideDerivation (oldattrs: {
-    name = "${python.libPrefix}-" + oldattrs.name;
-  })).override {
+  gdal = toPythonModule (pkgs.gdal.override {
     pythonPackages = self;
-  };
+  });
 
   gdrivefs = buildPythonPackage rec {
     version = "0.14.8";
@@ -9300,13 +9296,11 @@ in {
     };
   };
 
-  grib-api = if (isPy27) then
-      (pkgs.grib-api.overrideAttrs (oldattrs: {
-    name = "${python.libPrefix}-" + oldattrs.name;
-  })).override {
-    enablePython = true;
-    pythonPackages = self;
-  } else throw "grib-api not supported for interpreter ${python.executable}";
+  grib-api = if (isPy27) then toPythonModule
+    (pkgs.grib-api.override {
+      enablePython = true;
+      pythonPackages = self;
+    }) else throw "grib-api not supported for interpreter ${python.executable}";
 
   gspread = buildPythonPackage rec {
     version = "0.2.3";
@@ -10409,13 +10403,13 @@ in {
   };
 
   libplist = if isPy3k then throw "libplist not supported for interpreter ${python.executable}" else
-    (pkgs.libplist.override{python2Packages=self; }).py;
+    (toPythonModule (pkgs.libplist.override{python2Packages=self; })).py;
 
   libxml2 = if isPy3k then throw "libxml2 not supported for interpreter ${python.executable}" else
-    (pkgs.libxml2.override{pythonSupport=true; python2=python;}).py;
+    (toPythonModule (pkgs.libxml2.override{pythonSupport=true; python2=python;})).py;
 
   libxslt = if isPy3k then throw "libxslt not supported for interpreter ${python.executable}" else
-    (pkgs.libxslt.override{pythonSupport=true; python2=python; inherit (self) libxml2;}).py;
+    (toPythonModule (pkgs.libxslt.override{pythonSupport=true; python2=python; inherit (self) libxml2;})).py;
 
   limnoria = buildPythonPackage rec {
     name = "limnoria-${version}";
@@ -17477,7 +17471,7 @@ in {
 
   rply = callPackage ../development/python-modules/rply/default.nix {};
 
-  rpm = (pkgs.rpm.override{inherit python;});
+  rpm = toPythonModule (pkgs.rpm.override{inherit python;});
 
   rpmfluff = callPackage ../development/python-modules/rpmfluff {};
 
@@ -22124,7 +22118,7 @@ EOF
   };
 
   # For backwards compatibility. Please use nixpkgs.udiskie instead.
-  udiskie = pkgs.udiskie.override { pythonPackages = self; };
+  udiskie = toPythonModule (pkgs.udiskie.override { pythonPackages = self; });
 
   # Should be bumped along with EFL!
   pythonefl = buildPythonPackage rec {
@@ -24461,7 +24455,7 @@ EOF
   zeep = callPackage ../development/python-modules/zeep { };
 
   zeitgeist = if isPy3k then throw "zeitgeist not supported for interpreter ${python.executable}" else
-    (pkgs.zeitgeist.override{python2Packages=self;}).py;
+    (toPythonModule (pkgs.zeitgeist.override{python2Packages=self;})).py;
 
   zeroconf = callPackage ../development/python-modules/zeroconf { };
 
