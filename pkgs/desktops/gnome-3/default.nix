@@ -366,10 +366,7 @@ let
 
   california = callPackage ./misc/california { };
 
-  geary = callPackage ./misc/geary {
-    # https://bugzilla.gnome.org/show_bug.cgi?id=728002
-    webkitgtk = pkgs.webkitgtk24x-gtk3;
-  };
+  geary = callPackage ./misc/geary { };
 
   gfbgraph = callPackage ./misc/gfbgraph { };
 

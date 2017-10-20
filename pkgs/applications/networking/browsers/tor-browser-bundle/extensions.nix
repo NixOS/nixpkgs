@@ -16,14 +16,14 @@
 {
   https-everywhere = stdenv.mkDerivation rec {
     name = "https-everywhere-${version}";
-    version = "2017.9.12";
+    version = "2017.10.4";
 
     extid = "https-everywhere-eff@eff.org";
 
     src = fetchgit {
       url = "https://git.torproject.org/https-everywhere.git";
       rev = "refs/tags/${version}";
-      sha256 = "179429pngyksp9xkr86nf2m5q6zmg19c7ng1dhqjfb1vsncwgw66";
+      sha256 = "1g7971xygnhagnb25xjdf6mli6091ai9igx42d0ww88g8i0cqfzj";
       fetchSubmodules = true; # for translations, TODO: remove
     };
 
@@ -47,13 +47,13 @@
 
   noscript = stdenv.mkDerivation rec {
     name = "noscript-${version}";
-    version = "5.0.10";
+    version = "5.1.2";
 
     extid = "{73a6fe31-595d-460b-a920-fcc0f8843232}";
 
     src = fetchurl {
       url = "https://secure.informaction.com/download/releases/noscript-${version}.xpi";
-      sha256 = "18k5karbaj5mhd9cyjbqgik6044bw88rjalkh6anjanxbn503j6g";
+      sha256 = "1fzspdiwhjabwz1yxb3gzj7giz9jbc1xxm65i93rvhzcp537cs42";
     };
 
     unpackPhase = ":";
@@ -88,14 +88,14 @@
 
   tor-launcher = stdenv.mkDerivation rec {
     name = "tor-launcher-${version}";
-    version = "0.2.12.3";
+    version = "0.2.13";
 
     extid = "tor-launcher@torproject.org";
 
     src = fetchgit {
       url = "https://git.torproject.org/tor-launcher.git";
       rev = "refs/tags/${version}";
-      sha256 = "0126x48pjiy2zm4l8jzhk70w24hviaz560ffp4lb9x0ar615bc9q";
+      sha256 = "1f98v88y2clwvjiw77kxqc9cacp5h0489a540nc2wmsx7vnskrq0";
     };
 
     nativeBuildInputs = [ zip ];

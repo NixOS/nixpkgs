@@ -1,41 +1,34 @@
-{ stdenv, fetchurl, intltool, pkgconfig, gtk3, vala_0_32
-, makeWrapper, gdk_pixbuf, cmake, desktop_file_utils
+{ stdenv, fetchurl, intltool, pkgconfig, gtk3, vala_0_38, enchant
+, wrapGAppsHook, gdk_pixbuf, cmake, desktop_file_utils
 , libnotify, libcanberra_gtk3, libsecret, gmime
 , libpthreadstubs, sqlite
 , gnome3, librsvg, gnome_doc_utils, webkitgtk }:
 
 let
-  majorVersion = "0.11";
+  majorVersion = "0.12";
 in
 stdenv.mkDerivation rec {
-  name = "geary-${majorVersion}.3";
+  name = "geary-${majorVersion}.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/geary/${majorVersion}/${name}.tar.xz";
-    sha256 = "1r42ijxafach5lv8ibs6y0l5k4nacjg427dnma8fj00xr1sri7j1";
+    sha256 = "0ii4qaqfqx90kvqwg0g9jahygkir4mb03ja55fa55yyx6cq0kwff";
   };
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool gtk3 makeWrapper cmake desktop_file_utils gnome_doc_utils
-                  vala_0_32 webkitgtk libnotify libcanberra_gtk3 gnome3.libgee libsecret gmime sqlite
+  nativeBuildInputs = [ vala_0_38 intltool pkgconfig wrapGAppsHook cmake desktop_file_utils gnome_doc_utils ];
+  buildInputs = [ gtk3 enchant webkitgtk libnotify libcanberra_gtk3 gnome3.libgee libsecret gmime sqlite
                   libpthreadstubs gnome3.gsettings_desktop_schemas gnome3.gcr
                   gdk_pixbuf librsvg gnome3.defaultIconTheme ];
 
   preConfigure = ''
-    substituteInPlace src/CMakeLists.txt --replace '`pkg-config --variable=girdir gobject-introspection-1.0`' '${webkitgtk}/share/gir-1.0'
-  '';
-
-  postInstall = ''
-    mkdir -p $out/share/gsettings-schemas/${name}/
-    mv $out/share/glib-2.0 $out/share/gsettings-schemas/${name}
+    substituteInPlace src/CMakeLists.txt --replace '`''${PKG_CONFIG_EXECUTABLE} --variable=girdir gobject-introspection-1.0`' '${webkitgtk.dev}/share/gir-1.0'
   '';
 
   preFixup = ''
-    wrapProgram "$out/bin/geary" \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:${gnome3.gnome_themes_standard}/share:$out/share:$GSETTINGS_SCHEMAS_PATH"
+    # Add geary to path for geary-attach
+    gappsWrapperArgs+=(--prefix PATH : "$out/bin")
   '';
 
   enableParallelBuilding = true;

@@ -891,9 +891,8 @@ self: super: {
   # https://github.com/danidiaz/tailfile-hinotify/issues/2
   tailfile-hinotify = dontCheck super.tailfile-hinotify;
 
-  # build liquidhaskell with the proper (old) aeson version
-  liquidhaskell = super.liquidhaskell.override { aeson = self.aeson_0_11_3_0; };
-  aeson_0_11_3_0 = super.aeson_0_11_3_0.override { base-orphans = self.base-orphans_0_5_4; };
+  # build liquidhaskell with the proper (new) aeson version
+  liquidhaskell = super.liquidhaskell.override { aeson = dontCheck self.aeson_1_2_2_0; };
 
   # Test suite fails: https://github.com/lymar/hastache/issues/46.
   # Don't install internal mkReadme tool.
@@ -936,12 +935,6 @@ self: super: {
     sha256 = "1vss7b99zrhw3r29krl1b60r4qk0m2mpwmrz8q8zdxrh33hb8pd7";
   });
 
-  # happy 1.19.6+ broke the Agda build. Sticking with the previous version
-  # avoided that issue, but now the build fails with a segmentation fault
-  # during the install phase for no apparent reason:
-  # https://hydra.nixos.org/build/60678124
-  Agda = markBroken (super.Agda.override { happy = self.happy_1_19_5; });
-
   # cryptol-2.5.0 doesn't want happy 1.19.6+.
   cryptol = super.cryptol.override { happy = self.happy_1_19_5; };
 
@@ -972,5 +965,8 @@ self: super: {
 
   # https://github.com/mgajda/json-autotype/issues/15
   json-autotype = doJailbreak super.json-autotype;
+
+  # Depends on broken fluid.
+  fluid-idl-http-client = markBroken super.fluid-idl-http-client;
 
 }

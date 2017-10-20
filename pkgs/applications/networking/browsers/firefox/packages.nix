@@ -113,6 +113,7 @@ in rec {
   } // commonAttrs) {
     stdenv = overrideCC stdenv gcc5;
     ffmpegSupport = false;
+    gssSupport = false;
   };
 
   tor-browser-7-0 = common (rec {

@@ -9,6 +9,7 @@
 , esteidfirefoxplugin
 , vlc_npapi
 , libudev
+, kerberos
 }:
 
 ## configurability of the wrapper itself
@@ -25,6 +26,7 @@ let
   cfg = stdenv.lib.attrByPath [ browserName ] {} config;
   enableAdobeFlash = cfg.enableAdobeFlash or false;
   ffmpegSupport = browser.ffmpegSupport or false;
+  gssSupport = browser.gssSupport or false;
   jre = cfg.jre or false;
   icedtea = cfg.icedtea or false;
 
@@ -46,6 +48,7 @@ let
       ++ lib.optional (cfg.enableVLC or false) vlc_npapi
      );
   libs = (if ffmpegSupport then [ ffmpeg ] else with gst_all; [ gstreamer gst-plugins-base ])
+         ++ lib.optional gssSupport kerberos
          ++ lib.optionals (cfg.enableQuakeLive or false)
          (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib libudev ])
          ++ lib.optional (enableAdobeFlash && (cfg.enableAdobeFlashDRM or false)) hal-flash

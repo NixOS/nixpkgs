@@ -7,9 +7,9 @@ let
 
   version = "0.96.1";
   sitePackages = pythonPackages.python.sitePackages;
-  inherit (pythonPackages) mkPythonDerivation pyqt4 psutil twisted;
+  inherit (pythonPackages) buildPythonApplication pyqt4 psutil twisted;
 
-in mkPythonDerivation {
+in buildPythonApplication {
 
   name = "bitcoinarmory-${version}";
 
@@ -20,6 +20,8 @@ in mkPythonDerivation {
     #sha256 = "023c7q1glhrkn4djz3pf28ckd1na52lsagv4iyfgchqvw7qm7yx2";
     sha256 = "0pjk5qx16n3kvs9py62666qkwp2awkgd87by4karbj7vk6p1l14h"; fetchSubmodules = true;
   };
+
+  format = "other";
 
   # FIXME bitcoind doesn't die on shutdown. Need some sort of patch to fix that.
   #patches = [ ./shutdown-fix.patch ];

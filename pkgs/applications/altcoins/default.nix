@@ -1,4 +1,4 @@
-{ callPackage, boost155, boost162, boost163, openssl_1_1_0, haskellPackages, darwin, libsForQt5 }:
+{ callPackage, boost155, boost162, openssl_1_1_0, haskellPackages, darwin, libsForQt5 }:
 
 rec {
 
@@ -59,6 +59,5 @@ rec {
   zcash = callPackage ./zcash {
     withGui = false;
     openssl = openssl_1_1_0;
-    boost = boost163;
   };
 }

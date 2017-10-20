@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, jdk, zip, unzip, bash, makeWrapper, which }:
+{ stdenv, lib, fetchurl, jdk, zip, unzip, bash, makeWrapper, which, coreutils
+# Always assume all markers valid (don't redownload dependencies).
+# Also, don't clean up environment variables.
+, enableNixHacks ? false
+}:
 
 stdenv.mkDerivation rec {
 
@@ -9,7 +13,7 @@ stdenv.mkDerivation rec {
     description = "Build tool that builds code quickly and reliably";
     license = licenses.asl20;
     maintainers = with maintainers; [ cstrahan philandstuff ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 
   name = "bazel-${version}";
@@ -19,25 +23,24 @@ stdenv.mkDerivation rec {
     sha256 = "0asmq3kxnl4326zhgh13mvcrc8jvmiswjj4ymrq0943q4vj7nwrb";
   };
 
+  preUnpack = ''
+    mkdir bazel
+    cd bazel
+  '';
   sourceRoot = ".";
 
+  patches = lib.optional enableNixHacks ./nix-hacks.patch;
+
   postPatch = ''
-    for f in $(grep -l -r '#!/bin/bash'); do
-      substituteInPlace "$f" --replace '#!/bin/bash' '#!${bash}/bin/bash'
+    for f in $(grep -l -r '/bin/bash'); do
+      substituteInPlace "$f" --replace '/bin/bash' '${bash}/bin/bash'
     done
-    for f in \
-      src/main/java/com/google/devtools/build/lib/analysis/CommandHelper.java \
-      src/main/java/com/google/devtools/build/lib/bazel/rules/BazelConfiguration.java \
-      src/main/java/com/google/devtools/build/lib/bazel/rules/sh/BazelShRuleClasses.java \
-      src/main/java/com/google/devtools/build/lib/rules/cpp/LinkCommandLine.java \
-      ; do
-      substituteInPlace "$f" --replace /bin/bash ${bash}/bin/bash
+    for f in $(grep -l -r '/usr/bin/env'); do
+      substituteInPlace "$f" --replace '/usr/bin/env' '${coreutils}/bin/env'
     done
   '';
 
   buildInputs = [
-    stdenv.cc
-    stdenv.cc.cc.lib
     jdk
     zip
     unzip
@@ -52,12 +55,7 @@ stdenv.mkDerivation rec {
     bash
   ];
 
-  # If TMPDIR is in the unpack dir we run afoul of blaze's infinite symlink
-  # detector (see com.google.devtools.build.lib.skyframe.FileFunction).
-  # Change this to $(mktemp -d) as soon as we figure out why.
-
   buildPhase = ''
-    export TMPDIR=/tmp
     ./compile.sh
     ./output/bazel --output_user_root=/tmp/.bazel build //scripts:bash_completion \
       --spawn_strategy=standalone \

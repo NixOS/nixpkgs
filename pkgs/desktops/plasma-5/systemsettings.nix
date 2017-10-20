@@ -1,7 +1,8 @@
 {
   mkDerivation, extra-cmake-modules, kdoctools,
   kcmutils, kconfig, kdbusaddons, khtml, ki18n, kiconthemes, kio, kitemviews,
-  kservice, kwindowsystem, kxmlgui, qtquickcontrols, qtquickcontrols2
+  kservice, kwindowsystem, kxmlgui, qtquickcontrols, qtquickcontrols2,
+  kactivities, kactivities-stats, kirigami2
 }:
 
 mkDerivation {
@@ -10,6 +11,7 @@ mkDerivation {
   buildInputs = [
     kcmutils kconfig kdbusaddons khtml ki18n kiconthemes kio kitemviews kservice
     kwindowsystem kxmlgui qtquickcontrols qtquickcontrols2
+    kactivities kactivities-stats kirigami2
   ];
   outputs = [ "out" "dev" "bin" ];
 }

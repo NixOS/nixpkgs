@@ -95,10 +95,10 @@
     ahungry-theme = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "ahungry-theme";
-        version = "1.5.0";
+        version = "1.6.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ahungry-theme-1.5.0.tar";
-          sha256 = "0xxzmqawd7cwafzb9z6c7hjlh6adc5sj7hfcqxf30b7b7ragqn19";
+          url = "https://elpa.gnu.org/packages/ahungry-theme-1.6.0.tar";
+          sha256 = "1b0x7g753gn7mym8286b937zmxv50jgdish2h6wc05w1g1lygwsz";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -201,10 +201,10 @@
       }) {};
     auto-correct = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "auto-correct";
-        version = "1.1";
+        version = "1.1.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/auto-correct-1.1.el";
-          sha256 = "19i84dqqnxc5v36lsmj9zj8wbmg267c50jvq2i9bb66i9pzd0s53";
+          url = "https://elpa.gnu.org/packages/auto-correct-1.1.1.el";
+          sha256 = "141dp4r6v6qs1a58z2qmsyr3pfgp3xji0sqg3fn91q2x4dkvqfzl";
         };
         packageRequires = [];
         meta = {
@@ -281,10 +281,10 @@
       }) {};
     captain = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "captain";
-        version = "1.0.2";
+        version = "1.0.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/captain-1.0.2.el";
-          sha256 = "0rslksfwzf5bngmbfgv2mwmls5dpwmz7rs9av9p60y7k848haqf1";
+          url = "https://elpa.gnu.org/packages/captain-1.0.3.el";
+          sha256 = "02b4s4pfnwfwc3xgh4g96wrqll37m35dc2x09pjwkdjxglki7045";
         };
         packageRequires = [];
         meta = {
@@ -1464,10 +1464,10 @@
       }) {};
     nlinum = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "nlinum";
-        version = "1.7";
+        version = "1.8";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/nlinum-1.7.el";
-          sha256 = "0ql1dbad29sdv3wmv65985g8ibl2176m2hqhjfrppgg34h3w51lz";
+          url = "https://elpa.gnu.org/packages/nlinum-1.8.el";
+          sha256 = "0bb1c8a68fzv59q2ri7ppbx8cm7sa8n4hxxvxv73db2dcgwrgwga";
         };
         packageRequires = [];
         meta = {
@@ -1556,10 +1556,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20171009";
+        version = "20171016";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20171009.tar";
-          sha256 = "03j7vcj5rihhdh1mmy667s1jy39wfs0kf4gc0gmqxldml062gcpm";
+          url = "https://elpa.gnu.org/packages/org-20171016.tar";
+          sha256 = "1196kv83p953nd9c5gxkn8ndw2kmm2kfw34dldap6m89khqflz5a";
         };
         packageRequires = [];
         meta = {

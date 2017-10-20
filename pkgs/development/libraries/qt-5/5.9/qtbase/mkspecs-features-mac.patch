@@ -1,7 +1,7 @@
-diff -u qtbase-opensource-src-5.9.1.orig/mkspecs/features/mac/default_post.prf qtbase-opensource-src-5.9.1/mkspecs/features/mac/default_post.prf
---- qtbase-opensource-src-5.9.1.orig/mkspecs/features/mac/default_post.prf	2017-09-16 16:40:30.000000000 +0800
-+++ qtbase-opensource-src-5.9.1/mkspecs/features/mac/default_post.prf	2017-09-16 16:41:03.000000000 +0800
-@@ -24,165 +24,3 @@
+diff -u -r qtbase-opensource-src-5.9.2.orig/mkspecs/features/mac/default_post.prf qtbase-opensource-src-5.9.2/mkspecs/features/mac/default_post.prf
+--- qtbase-opensource-src-5.9.2.orig/mkspecs/features/mac/default_post.prf	2017-10-14 12:31:04.000000000 +0800
++++ qtbase-opensource-src-5.9.2/mkspecs/features/mac/default_post.prf	2017-10-14 12:42:02.000000000 +0800
+@@ -24,166 +24,3 @@
          }
      }
  }
@@ -164,13 +164,14 @@ diff -u qtbase-opensource-src-5.9.1.orig/mkspecs/features/mac/default_post.prf q
 -}
 -
 -cache(QMAKE_XCODE_DEVELOPER_PATH, stash)
--cache(QMAKE_XCODE_VERSION, stash)
+-!isEmpty(QMAKE_XCODE_VERSION): \
+-    cache(QMAKE_XCODE_VERSION, stash)
 -
 -QMAKE_XCODE_LIBRARY_SUFFIX = $$qtPlatformTargetSuffix()
-diff -u qtbase-opensource-src-5.9.1.orig/mkspecs/features/mac/default_pre.prf qtbase-opensource-src-5.9.1/mkspecs/features/mac/default_pre.prf
---- qtbase-opensource-src-5.9.1.orig/mkspecs/features/mac/default_pre.prf	2017-09-16 16:40:30.000000000 +0800
-+++ qtbase-opensource-src-5.9.1/mkspecs/features/mac/default_pre.prf	2017-09-16 16:40:45.000000000 +0800
-@@ -1,51 +1,2 @@
+diff -u -r qtbase-opensource-src-5.9.2.orig/mkspecs/features/mac/default_pre.prf qtbase-opensource-src-5.9.2/mkspecs/features/mac/default_pre.prf
+--- qtbase-opensource-src-5.9.2.orig/mkspecs/features/mac/default_pre.prf	2017-10-14 12:31:04.000000000 +0800
++++ qtbase-opensource-src-5.9.2/mkspecs/features/mac/default_pre.prf	2017-10-14 12:42:02.000000000 +0800
+@@ -1,56 +1,2 @@
  CONFIG = asset_catalogs rez $$CONFIG
  load(default_pre)
 -
@@ -183,18 +184,23 @@ diff -u qtbase-opensource-src-5.9.1.orig/mkspecs/features/mac/default_pre.prf qt
 -    # Make sure Xcode path is valid
 -    !exists($$QMAKE_XCODE_DEVELOPER_PATH): \
 -        error("Xcode is not installed in $${QMAKE_XCODE_DEVELOPER_PATH}. Please use xcode-select to choose Xcode installation path.")
--
--    # Make sure Xcode is set up properly
--    isEmpty($$list($$system("/usr/bin/xcrun -find xcodebuild 2>/dev/null"))): \
--        error("Xcode not set up properly. You may need to confirm the license agreement by running /usr/bin/xcodebuild.")
 -}
 -
--isEmpty(QMAKE_XCODE_VERSION) {
--    # Extract Xcode version using xcodebuild
--    xcode_version = $$system("/usr/bin/xcodebuild -version")
--    QMAKE_XCODE_VERSION = $$member(xcode_version, 1)
--    isEmpty(QMAKE_XCODE_VERSION): error("Could not resolve Xcode version.")
--    unset(xcode_version)
+-isEmpty(QMAKE_XCODEBUILD_PATH): \
+-    QMAKE_XCODEBUILD_PATH = $$system("/usr/bin/xcrun -find xcodebuild 2>/dev/null")
+-
+-!isEmpty(QMAKE_XCODEBUILD_PATH) {
+-    # Make sure Xcode is set up properly
+-    !system("/usr/bin/xcrun xcodebuild -license check 2>/dev/null"): \
+-        error("Xcode not set up properly. You need to confirm the license agreement by running 'sudo xcrun xcodebuild -license accept'.")
+-
+-    isEmpty(QMAKE_XCODE_VERSION) {
+-        # Extract Xcode version using xcodebuild
+-        xcode_version = $$system("/usr/bin/xcrun xcodebuild -version")
+-        QMAKE_XCODE_VERSION = $$member(xcode_version, 1)
+-        isEmpty(QMAKE_XCODE_VERSION): error("Could not resolve Xcode version.")
+-        unset(xcode_version)
+-    }
 -}
 -
 -isEmpty(QMAKE_TARGET_BUNDLE_PREFIX) {
@@ -222,10 +228,10 @@ diff -u qtbase-opensource-src-5.9.1.orig/mkspecs/features/mac/default_pre.prf qt
 -# feature, which allows Xcode to choose the Qt libraries to link to
 -# at build time, depending on the current Xcode SDK and configuration.
 -QMAKE_XCODE_LIBRARY_SUFFIX_SETTING = QT_LIBRARY_SUFFIX
-diff -u qtbase-opensource-src-5.9.1.orig/mkspecs/features/mac/sdk.prf qtbase-opensource-src-5.9.1/mkspecs/features/mac/sdk.prf
---- qtbase-opensource-src-5.9.1.orig/mkspecs/features/mac/sdk.prf	2017-09-16 16:40:30.000000000 +0800
-+++ qtbase-opensource-src-5.9.1/mkspecs/features/mac/sdk.prf	2017-09-16 16:41:16.000000000 +0800
-@@ -1,49 +0,0 @@
+diff -u -r qtbase-opensource-src-5.9.2.orig/mkspecs/features/mac/sdk.prf qtbase-opensource-src-5.9.2/mkspecs/features/mac/sdk.prf
+--- qtbase-opensource-src-5.9.2.orig/mkspecs/features/mac/sdk.prf	2017-10-14 12:31:04.000000000 +0800
++++ qtbase-opensource-src-5.9.2/mkspecs/features/mac/sdk.prf	2017-10-14 12:42:10.000000000 +0800
+@@ -1,58 +0,0 @@
 -
 -isEmpty(QMAKE_MAC_SDK): \
 -    error("QMAKE_MAC_SDK must be set when using CONFIG += sdk.")
@@ -235,13 +241,22 @@ diff -u qtbase-opensource-src-5.9.1.orig/mkspecs/features/mac/sdk.prf qtbase-ope
 -
 -defineReplace(xcodeSDKInfo) {
 -    info = $$1
+-    equals(info, "Path"): \
+-        info = --show-sdk-path
+-    equals(info, "PlatformPath"): \
+-        info = --show-sdk-platform-path
+-    equals(info, "SDKVersion"): \
+-        info = --show-sdk-version
 -    sdk = $$2
 -    isEmpty(sdk): \
 -        sdk = $$QMAKE_MAC_SDK
 -
 -    isEmpty(QMAKE_MAC_SDK.$${sdk}.$${info}) {
--        QMAKE_MAC_SDK.$${sdk}.$${info} = $$system("/usr/bin/xcodebuild -sdk $$sdk -version $$info 2>/dev/null")
--        isEmpty(QMAKE_MAC_SDK.$${sdk}.$${info}): error("Could not resolve SDK $$info for \'$$sdk\'")
+-        QMAKE_MAC_SDK.$${sdk}.$${info} = $$system("/usr/bin/xcrun --sdk $$sdk $$info 2>/dev/null")
+-        # --show-sdk-platform-path won't work for Command Line Tools; this is fine
+-        # only used by the XCTest backend to testlib
+-        isEmpty(QMAKE_MAC_SDK.$${sdk}.$${info}):if(!isEmpty(QMAKE_XCODEBUILD_PATH)|!equals(info, "--show-sdk-platform-path")): \
+-            error("Could not resolve SDK $$info for \'$$sdk\'")
 -        cache(QMAKE_MAC_SDK.$${sdk}.$${info}, set stash, QMAKE_MAC_SDK.$${sdk}.$${info})
 -    }
 -
@@ -275,4 +290,3 @@ diff -u qtbase-opensource-src-5.9.1.orig/mkspecs/features/mac/sdk.prf qtbase-ope
 -    $$tool = $$sysrooted $$member(value, 1, -1)
 -    cache($$tool_variable, set stash, $$tool)
 -}
-Common subdirectories: qtbase-opensource-src-5.9.1.orig/mkspecs/features/mac/unsupported and qtbase-opensource-src-5.9.1/mkspecs/features/mac/unsupported
