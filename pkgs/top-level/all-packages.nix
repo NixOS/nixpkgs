@@ -10967,7 +10967,9 @@ with pkgs;
 
   wiredtiger = callPackage ../development/libraries/wiredtiger { };
 
-  wt = callPackage ../development/libraries/wt { };
+  wt = callPackage ../development/libraries/wt {
+    boost = boost160; # 165: error: invalid conversion from 'const char*'...
+  };
 
   wxGTK = wxGTK28;
 
