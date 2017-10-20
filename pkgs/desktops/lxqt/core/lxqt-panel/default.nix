@@ -1,5 +1,5 @@
 {
-  stdenv, fetchFromGitHub, fetchurl, standardPatch,
+  stdenv, fetchFromGitHub, fetchpatch, standardPatch,
   cmake, pkgconfig, lxqt-build-tools,
   qtbase, qttools, qtx11extras, qtsvg, libdbusmenu, kwindowsystem, solid,
   kguiaddons, liblxqt, libqtxdg, lxqt-common, lxqt-globalkeys, libsysstat,
@@ -50,9 +50,10 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    (fetchurl {
+    (fetchpatch {
        url = https://github.com/lxde/lxqt-panel/commit/ec62109e0fa678875a9b10fc6f1975267432712d.patch;
-       sha256 = "1ywwk8gb6gbvs8z9gwgsnb13z1jvyvjij349nq7ij6iyhyld0jlr";
+       name = "fix-compile-explicit-keyword.patch";
+       sha256 = "1grda0dw175kbsfq90lr5qaf79akwikzxw85jhd5f339nnramp81";
     })
   ];
 
