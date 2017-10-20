@@ -95,7 +95,10 @@ in {
 
   setuptools = callPackage ../development/python-modules/setuptools { };
 
-  vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit { pythonPackages = self; };
+  vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit {
+    pythonPackages = self;
+    boost = pkgs.boost160;
+  };
 
   acoustics = callPackage ../development/python-modules/acoustics { };
 
