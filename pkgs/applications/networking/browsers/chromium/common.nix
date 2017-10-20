@@ -133,22 +133,14 @@ let
       # https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/
       # https://git.archlinux.org/svntogit/packages.git/tree/trunk?h=packages/chromium
       # for updated patches and hints about build flags
-      ++ optionals (versionRange "61" "62") [
-      ./patches/chromium-gn-bootstrap-r14.patch
-      ./patches/chromium-gcc-r1.patch
-      ./patches/chromium-atk-r1.patch
-      ./patches/chromium-gcc5-r1.patch
-    ]
       ++ optionals (versionRange "62" "63") [
       ./patches/chromium-gn-bootstrap-r17.patch
-      ./patches/chromium-gcc5-r2.patch
+      ./patches/chromium-gcc5-r3.patch
       ./patches/chromium-glibc2.26-r1.patch
     ]
       ++ optionals (versionAtLeast version "63") [
-      ./patches/chromium-gn-bootstrap-r19.patch
-      ./patches/chromium-gcc5-r2.patch
-      ./patches/chromium-glibc2.26-r1.patch
-      ./patches/chromium-sysroot-r1.patch
+      ./patches/chromium-gcc5-r4.patch
+      ./patches/constexpr-fix.patch
     ]
       ++ optional enableWideVine ./patches/widevine.patch;
 
