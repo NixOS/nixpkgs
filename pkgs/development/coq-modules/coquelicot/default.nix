@@ -16,6 +16,7 @@ let param =
   "8.4" = v2_1_1;
   "8.5" = v3_0_1;
   "8.6" = v3_0_1;
+  "8.7" = v3_0_1;
 }."${coq.coq-version}"; in
 
 stdenv.mkDerivation {

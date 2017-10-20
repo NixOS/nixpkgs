@@ -18544,7 +18544,7 @@ with pkgs;
   };
   coq_8_6 = callPackage ../applications/science/logic/coq {};
   coq_8_7 = callPackage ../applications/science/logic/coq {
-    version = "8.7+beta2";
+    version = "8.7.0";
   };
   coq_HEAD = callPackage ../applications/science/logic/coq/HEAD.nix {};
 
@@ -18604,6 +18604,7 @@ with pkgs;
   coqPackages_8_4 = mkCoqPackages_8_4 coqPackages_8_4;
   coqPackages_8_5 = mkCoqPackages coqPackages_8_5 coq_8_5;
   coqPackages_8_6 = mkCoqPackages coqPackages_8_6 coq_8_6;
+  coqPackages_8_7 = mkCoqPackages coqPackages_8_7 coq_8_7;
   coqPackages = coqPackages_8_6;
   coq = coqPackages.coq;
 
