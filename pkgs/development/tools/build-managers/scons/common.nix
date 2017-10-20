@@ -27,6 +27,6 @@ in python2Packages.buildPythonApplication {
       software.
     '';
     platforms = platforms.all;
-    maintainers = [ primeos ];
+    maintainers = [ maintainers.primeos ];
   };
 }
