@@ -6119,6 +6119,8 @@ with pkgs;
   mozart-binary = callPackage ../development/compilers/mozart/binary.nix { };
   mozart = mozart-binary;
 
+  multicompiler = callPackage ../development/compilers/multicompiler { };
+
   nim = callPackage ../development/compilers/nim { };
   nrpl = callPackage ../development/tools/nrpl { };
 
