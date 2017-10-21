@@ -282,6 +282,8 @@ in {
 
   python-stdnum = callPackage ../development/python-modules/python-stdnum { };
 
+  python-utils = callPackage ../development/python-modules/python-utils { };
+
   pytimeparse =  callPackage ../development/python-modules/pytimeparse { };
 
   PyWebDAV = callPackage ../development/python-modules/pywebdav { };
