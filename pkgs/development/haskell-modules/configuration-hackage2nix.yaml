@@ -2850,7 +2850,6 @@ dont-distribute-packages:
   AMI:                                          [ i686-linux, x86_64-linux, x86_64-darwin ]
   ampersand:                                    [ i686-linux, x86_64-linux, x86_64-darwin ]
   amqp-conduit:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
-  amqp-utils:                                   [ i686-linux, x86_64-linux, x86_64-darwin ]
   analyze-client:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   anansi-pandoc:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   anatomy:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
