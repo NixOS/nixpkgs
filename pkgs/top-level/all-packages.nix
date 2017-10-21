@@ -11483,6 +11483,8 @@ with pkgs;
     inherit (lua51Packages) luasocket luasec luaexpat luafilesystem luabitop luaevent luazlib;
   };
 
+  biboumi = callPackage ../servers/xmpp/biboumi { };
+
   elasticmq = callPackage ../servers/elasticmq { };
 
   eventstore = callPackage ../servers/nosql/eventstore {
@@ -15027,6 +15029,7 @@ with pkgs;
   wlc = callPackage ../development/libraries/wlc { };
   orbment = callPackage ../applications/window-managers/orbment { };
   sway = callPackage ../applications/window-managers/sway { };
+  swaylock = callPackage ../applications/window-managers/sway { };
 
   swc = callPackage ../development/libraries/swc { };
   wld = callPackage ../development/libraries/wld { };
@@ -18281,7 +18284,7 @@ with pkgs;
     kinfocenter kmenuedit kscreen kscreenlocker ksshaskpass ksysguard
     kwallet-pam kwayland-integration kwin kwrited milou oxygen plasma-desktop
     plasma-integration plasma-nm plasma-pa plasma-vault plasma-workspace
-    plasma-workspace-wallpapers polkit-kde-agent powerdevil sddm-kcm startkde
+    plasma-workspace-wallpapers polkit-kde-agent powerdevil sddm-kcm
     systemsettings;
 
   ### SCIENCE

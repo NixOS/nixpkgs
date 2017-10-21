@@ -1,25 +1,51 @@
-{ stdenv, fetchFromGitHub, curl, dmd, gcc }:
+{ stdenv, fetchFromGitHub, curl, dmd, libevent, rsync }:
 
 stdenv.mkDerivation rec {
   name = "dub-${version}";
-  version = "1.1.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
-    sha256 = "1smzlfs5gjmrlghccdgn04qzy5b8l0xm8y2virayb2adrwqviscm";
-    rev = "v${version}";
+    owner = "dlang";
     repo = "dub";
-    owner = "D-Programming-Language";
+    rev = "v${version}";
+    sha256 = "0kmirx4ijhzirjwdqmnwqhngg38zdaydpvny2p0yj3afqgkj6vq5";
   };
 
-  buildInputs = [ curl ];
-  propagatedBuildInputs = [ gcc dmd ];
-
-  buildPhase = ''
+  postPatch = ''
     # Avoid that the version file is overwritten
     substituteInPlace build.sh \
       --replace source/dub/version_.d /dev/null
-    patchShebangs ./build.sh
+
+    substituteInPlace build.sh \
+      --replace MACOSX_DEPLOYMENT_TARGET MACOSX_DEPLOYMENT_TARGET_
+
+    patchShebangs build.sh
+    patchShebangs test
+
+    # Remove unittest which is not working for now (upstream already fixed: https://github.com/dlang/dub/issues/1224)
+    rm test/interactive-remove.sh
+
+    # Fix test as long as there is no upstream solution. (see https://github.com/dlang/dub/pull/1227)
+    substituteInPlace test/issue884-init-defer-file-creation.sh \
+      --replace "< /dev/stdin" "<(while :; do sleep 1; done)" \
+      --replace "sleep 1" ""
+  '';
+
+  nativeBuildInputs = [ dmd libevent rsync ];
+  buildInputs = [ curl ];
+
+  buildPhase = ''
+    export DMD=${dmd.out}/bin/dmd
     ./build.sh
+  '';
+
+  doCheck = false;
+
+  checkPhase = ''
+      export DUB=$PWD/bin/dub
+      export DC=${dmd.out}/bin/dmd
+      export HOME=$TMP
+      ./test/run-unittest.sh
   '';
 
   installPhase = ''
@@ -29,9 +55,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Build tool for D projects";
+    description = "Package and build manager for D applications and libraries";
     homepage = http://code.dlang.org/;
     license = licenses.mit;
+    maintainers = with maintainers; [ ThomasMader ];
     platforms = platforms.unix;
   };
 }

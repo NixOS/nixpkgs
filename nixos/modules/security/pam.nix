@@ -486,8 +486,9 @@ in
       ++ optionals config.krb5.enable [pam_krb5 pam_ccreds]
       ++ optionals config.security.pam.enableOTPW [ pkgs.otpw ]
       ++ optionals config.security.pam.oath.enable [ pkgs.oathToolkit ]
-      ++ optionals config.security.pam.enableU2F [ pkgs.pam_u2f ]
-      ++ optionals config.security.pam.enableEcryptfs [ pkgs.ecryptfs ];
+      ++ optionals config.security.pam.enableU2F [ pkgs.pam_u2f ];
+
+    boot.supportedFilesystems = optionals config.security.pam.enableEcryptfs [ "ecryptfs" ];
 
     security.wrappers = {
       unix_chkpwd = {
@@ -495,10 +496,7 @@ in
         owner = "root";
         setuid = true;
       };
-    } // (if config.security.pam.enableEcryptfs then {
-      "mount.ecryptfs_private".source = "${pkgs.ecryptfs.out}/bin/mount.ecryptfs_private";
-       "umount.ecryptfs_private".source = "${pkgs.ecryptfs.out}/bin/umount.ecryptfs_private";
-    } else {});
+    };
 
     environment.etc =
       mapAttrsToList (n: v: makePAMService v) config.security.pam.services;
@@ -521,6 +519,7 @@ in
         ftp = {};
         i3lock = {};
         i3lock-color = {};
+        swaylock = {};
         screen = {};
         vlock = {};
         xlock = {};
