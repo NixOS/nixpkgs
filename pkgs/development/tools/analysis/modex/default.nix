@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Mechanical extraction of verification models from implementation level C code for spin";
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
     license = {
       fullName = "Educational, notice must be maintained, non-monetizable";
       location = "tarball extracted $sourceRoot/modex.c";
