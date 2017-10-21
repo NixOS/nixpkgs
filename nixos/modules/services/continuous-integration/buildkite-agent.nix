@@ -9,9 +9,8 @@ let
       token="${cfg.token}"
       name="${cfg.name}"
       meta-data="${cfg.meta-data}"
-      hooks-path="${pkgs.buildkite-agent}/share/hooks"
-      build-path="/var/lib/buildkite-agent/builds"
-      bootstrap-script="${pkgs.buildkite-agent}/share/bootstrap.sh"
+      hooks-path="${cfg.package}/share/hooks"
+      build-path="${cfg.dataDir}"
     '';
 in
 
@@ -19,6 +18,26 @@ in
   options = {
     services.buildkite-agent = {
       enable = mkEnableOption "buildkite-agent";
+
+      package = mkOption {
+        default = pkgs.buildkite-agent;
+        defaultText = "pkgs.buildkite-agent";
+        description = "Which buildkite-agent derivation to use";
+        type = types.package;
+      };
+
+      dataDir = mkOption {
+        default = "/var/lib/buildkite-agent";
+        description = "The workdir for the agent";
+        type = types.str;
+      };
+
+      runtimePackages = mkOption {
+        default = [ pkgs.nix ];
+        defaultText = "[ pkgs.nix ]";
+        description = "Add programs to the buildkite-agent environment";
+        type = types.listOf types.package;
+      };
 
       token = mkOption {
         type = types.str;
@@ -62,27 +81,31 @@ in
   config = mkIf config.services.buildkite-agent.enable {
     users.extraUsers.buildkite-agent =
       { name = "buildkite-agent";
-        home = "/var/lib/buildkite-agent";
+        home = cfg.dataDir;
         createHome = true;
         description = "Buildkite agent user";
       };
 
-    environment.systemPackages = [ pkgs.buildkite-agent ];
+    environment.systemPackages = [ cfg.package ];
 
     systemd.services.buildkite-agent =
       { description = "Buildkite Agent";
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
-        environment.HOME = "/var/lib/buildkite-agent";
+        path = cfg.runtimePackages;
+        environment = config.networking.proxy.envVars // {
+          HOME = cfg.dataDir;
+          NIX_REMOTE = "daemon";
+        };
         preStart = ''
-            ${pkgs.coreutils}/bin/mkdir -m 0700 -p /var/lib/buildkite-agent/.ssh
+          ${pkgs.coreutils}/bin/mkdir -m 0700 -p ${cfg.dataDir}/.ssh
 
-            echo "${cfg.openssh.privateKey}" > /var/lib/buildkite-agent/.ssh/id_rsa
-            ${pkgs.coreutils}/bin/chmod 600 /var/lib/buildkite-agent/.ssh/id_rsa
+          echo "${cfg.openssh.privateKey}" > ${cfg.dataDir}/.ssh/id_rsa
+          ${pkgs.coreutils}/bin/chmod 600 ${cfg.dataDir}/.ssh/id_rsa
 
-            echo "${cfg.openssh.publicKey}" > /var/lib/buildkite-agent/.ssh/id_rsa.pub
-            ${pkgs.coreutils}/bin/chmod 600 /var/lib/buildkite-agent/.ssh/id_rsa.pub
-          '';
+          echo "${cfg.openssh.publicKey}" > ${cfg.dataDir}/.ssh/id_rsa.pub
+          ${pkgs.coreutils}/bin/chmod 600 ${cfg.dataDir}/.ssh/id_rsa.pub
+        '';
 
         serviceConfig =
           { ExecStart = "${pkgs.buildkite-agent}/bin/buildkite-agent start --config ${configFile}";

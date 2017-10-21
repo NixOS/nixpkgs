@@ -9,13 +9,13 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "vault-${version}";
-  version = "0.8.1";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "19y688nvi0vr7cdnaa5sy2m65xicjwi5qgkgzyjvb7r3zb0dnli1";
+    sha256 = "1dcmqbcdkj42614am2invb6wf8v29z4sp4d354a4d83rwhyb0qly";
   };
 
   nativeBuildInputs = [ go gox removeReferencesTo ];
@@ -26,6 +26,8 @@ in stdenv.mkDerivation rec {
 
     mkdir -p src/github.com/hashicorp
     ln -s $(pwd) src/github.com/hashicorp/vault
+
+    mkdir -p .git/hooks
 
     GOPATH=$(pwd) make
   '';

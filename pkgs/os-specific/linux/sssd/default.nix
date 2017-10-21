@@ -3,7 +3,8 @@
   python, python3, pam, popt, talloc, tdb, tevent, pkgconfig, ldb, openldap,
   pcre, kerberos, cifs_utils, glib, keyutils, dbus, fakeroot, libxslt, libxml2,
   docbook_xml_xslt, ldap, systemd, nspr, check, cmocka, uid_wrapper,
-  nss_wrapper, docbook_xml_dtd_44, ncurses, Po4a, http-parser, jansson }:
+  nss_wrapper, docbook_xml_dtd_44, ncurses, Po4a, http-parser, jansson
+  , withSudo ? false }:
 
 let
   docbookFiles = "${pkgs.docbook_xml_xslt}/share/xml/docbook-xsl/catalog.xml:${pkgs.docbook_xml_dtd_44}/xml/dtd/docbook/catalog.xml";
@@ -41,6 +42,8 @@ stdenv.mkDerivation rec {
       --with-ldb-lib-dir=$out/modules/ldb
       --with-nscd=${glibc.bin}/sbin/nscd
     )
+  '' + stdenv.lib.optionalString withSudo ''
+    configureFlagsArray+=("--with-sudo")
   '';
 
   enableParallelBuilding = true;

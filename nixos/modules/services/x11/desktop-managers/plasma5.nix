@@ -175,7 +175,7 @@ in
         serif = [ "Noto Serif" ];
       };
 
-      programs.ssh.askPassword = "${plasma5.ksshaskpass.out}/bin/ksshaskpass";
+      programs.ssh.askPassword = mkDefault "${plasma5.ksshaskpass.out}/bin/ksshaskpass";
 
       # Enable helpful DBus services.
       services.udisks2.enable = true;
@@ -190,7 +190,7 @@ in
       ];
 
       services.xserver.displayManager.sddm = {
-        theme = "breeze";
+        theme = mkDefault "breeze";
       };
 
       security.pam.services.kde = { allowNullPassword = true; };

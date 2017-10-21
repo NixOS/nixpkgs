@@ -193,6 +193,9 @@ in
       };
     };
 
+    # munin_stats plugin breaks as of 2.0.33 when this doesn't exist
+    systemd.tmpfiles.rules = [ "d /var/run/munin 0755 munin munin -" ];
+
   }) (mkIf cronCfg.enable {
 
     systemd.timers.munin-cron = {
@@ -212,9 +215,11 @@ in
       };
     };
 
-    system.activationScripts.munin-cron = stringAfter [ "users" "groups" ] ''
-      mkdir -p /var/{run,log,www,lib}/munin
-      chown -R munin:munin /var/{run,log,www,lib}/munin
-    '';
+    systemd.tmpfiles.rules = [
+      "d /var/run/munin 0755 munin munin -"
+      "d /var/log/munin 0755 munin munin -"
+      "d /var/www/munin 0755 munin munin -"
+      "d /var/lib/munin 0755 munin munin -"
+    ];
   })];
 }
