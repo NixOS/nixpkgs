@@ -84,6 +84,9 @@ makeCmakeFindLibs(){
         -L*)
           export CMAKE_LIBRARY_PATH="$CMAKE_LIBRARY_PATH${CMAKE_LIBRARY_PATH:+:}${flag:2}"
           ;;
+        -F*)
+          export CMAKE_FRAMEWORK_PATH="$CMAKE_FRAMEWORK_PATH${CMAKE_FRAMEWORK_PATH:+:}${flag:2}"
+          ;;
         -isystem)
           isystem_seen=1
           ;;
