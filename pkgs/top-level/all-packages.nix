@@ -10858,6 +10858,13 @@ with pkgs;
     gnutls = gnutls;
   });
 
+  # 3.14 is needed for R V8 module in ../development/r-modules/default.nix
+  v8_3_14 = callPackage ../development/libraries/v8/3.14.nix {
+    inherit (python2Packages) python gyp;
+    cctools = darwin.cctools;
+    stdenv = overrideCC stdenv gcc5;
+  };
+
   v8_3_16_14 = callPackage ../development/libraries/v8/3.16.14.nix {
     inherit (python2Packages) python gyp;
     cctools = darwin.cctools;
