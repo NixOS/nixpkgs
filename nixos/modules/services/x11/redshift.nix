@@ -19,18 +19,31 @@ in {
     };
 
     latitude = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
+      default = null;
       description = ''
         Your current latitude, between
-        <literal>-90.0</literal> and <literal>90.0</literal>.
+        <literal>-90.0</literal> and <literal>90.0</literal>. Must be provided
+        along with longitude.
       '';
     };
 
     longitude = mkOption {
-      type = types.str;
+      type = types.nullOr types.str;
+      default = null;
       description = ''
         Your current longitude, between
-        between <literal>-180.0</literal> and <literal>180.0</literal>.
+        between <literal>-180.0</literal> and <literal>180.0</literal>. Must be
+        provided along with latitude.
+      '';
+    };
+
+    provider = mkOption {
+      type = types.enum [ "manual" "geoclue2" ];
+      default = "manual";
+      description = ''
+        The location provider to use for determining your location. If set to
+        <literal>manual</literal> you must also provide latitude/longitude.
       '';
     };
 
@@ -93,14 +106,33 @@ in {
   };
 
   config = mkIf cfg.enable {
-    systemd.user.services.redshift = {
+    assertions = [ 
+      {
+        assertion = 
+          if cfg.provider == "manual"
+          then (cfg.latitude != null && cfg.longitude != null) 
+          else (cfg.latitude == null && cfg.longitude == null);
+        message = "Latitude and longitude must be provided together, and with provider set to null.";
+      }
+    ];
+
+    services.geoclue2.enable = mkIf (cfg.provider == "geoclue2") true;
+
+    systemd.user.services.redshift = 
+    let
+      providerString = 
+        if cfg.provider == "manual"
+        then "${cfg.latitude}:${cfg.longitude}"
+        else cfg.provider;
+    in
+    {
       description = "Redshift colour temperature adjuster";
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
       serviceConfig = {
         ExecStart = ''
           ${cfg.package}/bin/redshift \
-            -l ${cfg.latitude}:${cfg.longitude} \
+            -l ${providerString} \
             -t ${toString cfg.temperature.day}:${toString cfg.temperature.night} \
             -b ${toString cfg.brightness.day}:${toString cfg.brightness.night} \
             ${lib.strings.concatStringsSep " " cfg.extraOptions}
