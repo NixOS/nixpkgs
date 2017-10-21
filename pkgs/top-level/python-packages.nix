@@ -13348,6 +13348,8 @@ in {
     };
   };
 
+  numpy-stl = callPackage ../development/python-modules/numpy-stl { };
+
   numtraits = buildPythonPackage rec {
     pname = "numtraits";
     version = "0.2";
