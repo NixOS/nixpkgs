@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
       src/tools/xcode/realpath/BUILD \
       src/tools/xcode/stdredirect/BUILD \
       src/tools/xcode/xcrunwrapper/xcrunwrapper.sh
+    sed -i 's,/usr/bin/xcrun "''${TOOLNAME}","''${TOOLNAME}",g' \
+      src/tools/xcode/xcrunwrapper/xcrunwrapper.sh
     sed -i 's/"xcrun", "clang"/"clang"/g' tools/osx/xcode_configure.bzl
   '';
 
