@@ -3,8 +3,6 @@
 , platformTools
 }:
 
-assert stdenv.isLinux;
-
 stdenv.mkDerivation rec {
   name = "android-ndk-r10e";
 
@@ -16,6 +14,14 @@ stdenv.mkDerivation rec {
     else if stdenv.system == "x86_64-linux" then fetchurl {
       url = "http://dl.google.com/android/ndk/${name}-linux-x86_64.bin";
       sha256 = "0nhxixd0mq4ib176ya0hclnlbmhm8f2lab6i611kiwbzyqinfb8h";
+    }
+    else if stdenv.system == "i686-darwin" then fetchurl {
+      url = "http://dl.google.com/android/ndk/${name}-darwin-x86.bin";
+      sha256 = "0kh8bmfcwq7lf6xiwlacwx7wf2mqg7ax7jaq28gi0qvgc2g3133j";
+    }
+    else if stdenv.system == "x86_64-darwin" then fetchurl {
+      url = "http://dl.google.com/android/ndk/${name}-darwin-x86_64.bin";
+      sha256 = "0kh8bmfcwq7lf6xiwlacwx7wf2mqg7ax7jaq28gi0qvgc2g3133j";
     }
     else throw "platform ${stdenv.system} not supported!";
 
@@ -78,8 +84,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
-    meta = {
-        platforms = stdenv.lib.platforms.linux;
+    meta = with stdenv.lib; {
+        platforms = with platforms; linux ++ darwin;
         hydraPlatforms = [];
     };
 }
