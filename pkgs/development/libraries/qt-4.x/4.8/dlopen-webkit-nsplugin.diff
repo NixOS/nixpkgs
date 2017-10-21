@@ -1,0 +1,52 @@
+diff --git a/src/3rdparty/webkit/Source/WebCore/plugins/qt/PluginPackageQt.cpp b/src/3rdparty/webkit/Source/WebCore/plugins/qt/PluginPackageQt.cpp
+index 19941d6..0ec15e2 100644
+--- a/src/3rdparty/webkit/Source/WebCore/plugins/qt/PluginPackageQt.cpp
++++ b/src/3rdparty/webkit/Source/WebCore/plugins/qt/PluginPackageQt.cpp
+@@ -121,7 +121,7 @@ static void initializeGtk(QLibrary* module = 0)
+         }
+     }
+ 
+-    QLibrary library(QLatin1String("libgtk-x11-2.0.so.0"));
++    QLibrary library(QLatin1String("@gtk@/lib/libgtk-x11-2.0"), 0);
+     if (library.load()) {
+         typedef void *(*gtk_init_check_ptr)(int*, char***);
+         gtk_init_check_ptr gtkInitCheck = (gtk_init_check_ptr)library.resolve("gtk_init_check");
+diff --git a/src/3rdparty/webkit/Source/WebCore/plugins/qt/PluginViewQt.cpp b/src/3rdparty/webkit/Source/WebCore/plugins/qt/PluginViewQt.cpp
+index 2fe69d1..b658e4a 100644
+--- a/src/3rdparty/webkit/Source/WebCore/plugins/qt/PluginViewQt.cpp
++++ b/src/3rdparty/webkit/Source/WebCore/plugins/qt/PluginViewQt.cpp
+@@ -857,7 +857,7 @@ static Display *getPluginDisplay()
+     // support gdk based plugins (like flash) that use a different X connection.
+     // The code below has the same effect as this one:
+     // Display *gdkDisplay = gdk_x11_display_get_xdisplay(gdk_display_get_default());
+-    QLibrary library(QLatin1String("libgdk-x11-2.0"), 0);
++    QLibrary library(QLatin1String("@gdk_pixbuf@/lib/libgdk-x11-2.0"), 0);
+     if (!library.load())
+         return 0;
+ 
+diff --git a/src/3rdparty/webkit/Source/WebKit2/Shared/Plugins/Netscape/x11/NetscapePluginModuleX11.cpp b/src/3rdparty/webkit/Source/WebKit2/Shared/Plugins/Netscape/x11/NetscapePluginModuleX11.cpp
+index 2c9b465..56b3074 100644
+--- a/src/3rdparty/webkit/Source/WebKit2/Shared/Plugins/Netscape/x11/NetscapePluginModuleX11.cpp
++++ b/src/3rdparty/webkit/Source/WebKit2/Shared/Plugins/Netscape/x11/NetscapePluginModuleX11.cpp
+@@ -42,7 +42,7 @@ namespace WebKit {
+ #if PLATFORM(QT)
+ static void initializeGTK()
+ {
+-    QLibrary library(QLatin1String("libgtk-x11-2.0.so.0"));
++    QLibrary library(QLatin1String("@gtk@/lib/libgtk-x11-2.0"), 0);
+     if (library.load()) {
+         typedef void *(*gtk_init_check_ptr)(int*, char***);
+         gtk_init_check_ptr gtkInitCheck = reinterpret_cast<gtk_init_check_ptr>(library.resolve("gtk_init_check"));
+diff --git a/src/3rdparty/webkit/Source/WebKit2/WebProcess/Plugins/Netscape/x11/NetscapePluginX11.cpp b/src/3rdparty/webkit/Source/WebKit2/WebProcess/Plugins/Netscape/x11/NetscapePluginX11.cpp
+index b8c8f2a..e7f4dc5 100644
+--- a/src/3rdparty/webkit/Source/WebKit2/WebProcess/Plugins/Netscape/x11/NetscapePluginX11.cpp
++++ b/src/3rdparty/webkit/Source/WebKit2/WebProcess/Plugins/Netscape/x11/NetscapePluginX11.cpp
+@@ -54,7 +54,7 @@ static Display *getPluginDisplay()
+     // The code below has the same effect as this one:
+     // Display *gdkDisplay = gdk_x11_display_get_xdisplay(gdk_display_get_default());
+ 
+-    QLibrary library(QLatin1String("libgdk-x11-2.0"), 0);
++    QLibrary library(QLatin1String("@gdk_pixbuf@/lib/libgdk-x11-2.0"), 0);
+     if (!library.load())
+         return 0;
+ 

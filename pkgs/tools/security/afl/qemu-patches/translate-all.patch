@@ -1,0 +1,18 @@
+--- qemu-2.3.0/translate-all.c.orig     2014-12-09 14:45:46.000000000 +0000
++++ qemu-2.3.0/translate-all.c  2015-01-28 22:37:42.383000000 +0000
+@@ -393,8 +393,13 @@
+     /* We can't use g_malloc because it may recurse into a locked mutex. */
+ # define ALLOC(P, SIZE)                                 \
+     do {                                                \
+-        P = mmap(NULL, SIZE, PROT_READ | PROT_WRITE,    \
+-                 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);   \
++      void* _tmp = mmap(NULL, SIZE, PROT_READ | PROT_WRITE, \
++                        MAP_PRIVATE | MAP_ANONYMOUS, -1, 0); \
++      if (_tmp == (void*)-1) { \
++        qemu_log(">>> Out of memory for stack, bailing out. <<<\n"); \
++        exit(1); \
++      } \
++      (P) = _tmp; \
+     } while (0)
+ #else
+ # define ALLOC(P, SIZE) \

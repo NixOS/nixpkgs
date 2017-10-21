@@ -1,0 +1,38 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-firewall">
+
+<title>Firewall</title>
+
+<para>NixOS has a simple stateful firewall that blocks incoming
+connections and other unexpected packets.  The firewall applies to
+both IPv4 and IPv6 traffic. It is enabled by default. It can be
+disabled as follows:
+
+<programlisting>
+networking.firewall.enable = false;
+</programlisting>
+
+If the firewall is enabled, you can open specific TCP ports to the
+outside world:
+
+<programlisting>
+networking.firewall.allowedTCPPorts = [ 80 443 ];
+</programlisting>
+
+Note that TCP port 22 (ssh) is opened automatically if the SSH daemon
+is enabled (<option>services.openssh.enable = true</option>).  UDP
+ports can be opened through
+<option>networking.firewall.allowedUDPPorts</option>.  Also of
+interest is
+
+<programlisting>
+networking.firewall.allowPing = true;
+</programlisting>
+
+to allow the machine to respond to ping requests.  (ICMPv6 pings are
+always allowed.)</para>
+
+</section>

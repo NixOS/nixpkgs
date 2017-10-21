@@ -1,0 +1,12 @@
+diff -Naur a52dec.orig/configure.in a52dec/configure.in
+--- a52dec.orig/configure.in	2002-07-27 23:50:20.000000000 -0400
++++ a52dec/configure.in	2013-01-28 21:06:27.000000000 -0500
+@@ -6,7 +6,7 @@
+ AC_CONFIG_FILES([Makefile autotools/Makefile include/Makefile test/Makefile
+     doc/Makefile src/Makefile liba52/Makefile libao/Makefile vc++/Makefile])
+ AM_INIT_AUTOMAKE([a52dec],[0.7.4])
+-AM_CONFIG_HEADER(include/config.h)
++AC_CONFIG_HEADER(include/config.h)
+ AM_MAINTAINER_MODE
+ AC_CANONICAL_HOST
+ 

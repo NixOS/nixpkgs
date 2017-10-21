@@ -1,0 +1,54 @@
+diff --git a/Makefile b/Makefile
+index d1b0d0c..f8d6a2d 100644
+--- a/Makefile
++++ b/Makefile
+@@ -80,8 +80,6 @@ clean:
+ 
+ 
+ #------------------------------------------------------------------------
+-#make install is validated only for Linux, OSX, kFreeBSD and Hurd targets
+-ifneq (,$(filter $(shell uname),Linux Darwin GNU/kFreeBSD GNU))
+ 
+ install:
+ 	@cd $(LZ4DIR); $(MAKE) -e install
+@@ -129,4 +127,3 @@ examples:
+ prg-travis:
+ 	@cd $(PRGDIR); $(MAKE) -e test-travis
+ 
+-endif
+diff --git a/lib/Makefile b/lib/Makefile
+index 02ddd3b..26ed18f 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -80,8 +80,6 @@ clean:
+ 
+ 
+ #------------------------------------------------------------------------
+-#make install is validated only for Linux, OSX, kFreeBSD and Hurd targets
+-ifneq (,$(filter $(shell uname),Linux Darwin GNU/kFreeBSD GNU))
+ 
+ liblz4.pc: liblz4.pc.in Makefile
+ 	@echo creating pkgconfig
+@@ -114,4 +112,3 @@ uninstall:
+ 	@[ -f $(DESTDIR)$(INCLUDEDIR)/lz4frame.h ] && rm -f $(DESTDIR)$(INCLUDEDIR)/lz4frame.h
+ 	@echo lz4 libraries successfully uninstalled
+ 
+-endif
+diff --git a/programs/Makefile b/programs/Makefile
+index f422902..6943363 100644
+--- a/programs/Makefile
++++ b/programs/Makefile
+@@ -113,8 +113,6 @@ clean:
+ 
+ 
+ #------------------------------------------------------------------------
+-#make install is validated only for Linux, OSX, kFreeBSD and Hurd targets
+-ifneq (,$(filter $(shell uname),Linux Darwin GNU/kFreeBSD GNU))
+ 
+ install: lz4 lz4c
+ 	@echo Installing binaries
+@@ -307,4 +305,3 @@ test-mem: lz4 datagen fuzzer frametest fullbench
+ test-mem32: lz4c32 datagen
+ # unfortunately, valgrind doesn't seem to work with non-native binary. If someone knows how to do a valgrind-test on a 32-bits exe with a 64-bits system...
+ 
+-endif

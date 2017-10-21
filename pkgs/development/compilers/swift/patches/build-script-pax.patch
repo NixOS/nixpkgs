@@ -1,0 +1,33 @@
+--- swift/utils/build-script-impl	2017-01-23 12:47:20.401326309 -0600
++++ swift-pax/utils/build-script-impl	2017-01-23 13:24:10.339366996 -0600
+@@ -1823,6 +1823,17 @@ function set_lldb_xcodebuild_options() {
+     fi
+ }
+ 
++## XXX: Taken from nixpkgs /pkgs/stdenv/generic/setup.sh
++isELF() {
++    local fn="$1"
++    local fd
++    local magic
++    exec {fd}< "$fn"
++    read -n 4 -u $fd magic
++    exec {fd}<&-
++    if [[ "$magic" =~ ELF ]]; then return 0; else return 1; fi
++}
++
+ #
+ # Configure and build each product
+ #
+@@ -2624,6 +2634,12 @@ for host in "${ALL_HOSTS[@]}"; do
+             fi
+ 
+             call "${CMAKE_BUILD[@]}" "${build_dir}" $(cmake_config_opt ${product}) -- "${BUILD_ARGS[@]}" ${build_targets[@]}
++            
++						while IFS= read -r -d $'\0' i; do
++								if ! isELF "$i"; then continue; fi
++								echo "setting pax flags on $i"
++								paxctl -czexm "$i" || true
++						done < <(find "${build_dir}" -executable -type f -wholename "*/bin/*" -print0)
+         fi
+     done
+ done

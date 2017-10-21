@@ -1,0 +1,14 @@
+diff -Naur mp4v2-trunk-r355/src/mp4atom.cpp mp4v2-trunk-r355/src/mp4atom.cpp
+--- mp4v2-trunk-r355/src/mp4atom.cpp	2012-02-21 19:40:03.000000000 +0100
++++ mp4v2-trunk-r355/src/mp4atom.cpp	2012-02-21 19:36:38.000000000 +0100
+@@ -543,6 +543,10 @@
+         m_pFile->SetPosition(m_start + 8);
+         m_pFile->WriteUInt64(m_size);
+     } else {
++        if (!(m_size <= (uint64_t)0xFFFFFFFF)) {
++            // Let the user know what the following assert is all about
++            fprintf(stderr, "MP4ERROR: File size exceeded 4 GB; output unplayable. Enable \"Large file size\" to fix it.\n");
++        }
+         ASSERT(m_size <= (uint64_t)0xFFFFFFFF);
+         m_pFile->SetPosition(m_start);
+         m_pFile->WriteUInt32(m_size);

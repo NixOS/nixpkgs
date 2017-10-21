@@ -1,0 +1,26 @@
+diff -ru3 SDL2-2.0.4/sdl2-config.cmake.in SDL2-2.0.4-new/sdl2-config.cmake.in
+--- SDL2-2.0.4/sdl2-config.cmake.in	2016-01-02 22:56:31.000000000 +0300
++++ SDL2-2.0.4-new/sdl2-config.cmake.in	2016-08-22 05:26:42.420397323 +0300
+@@ -6,5 +6,5 @@
+ set(SDL2_PREFIX "@prefix@")
+ set(SDL2_EXEC_PREFIX "@prefix@")
+ set(SDL2_LIBDIR "@libdir@")
+-set(SDL2_INCLUDE_DIRS "@includedir@/SDL2")
++set(SDL2_INCLUDE_DIRS "@includedir@/SDL2" $ENV{SDL2_PATH})
+ set(SDL2_LIBRARIES "-L${SDL2_LIBDIR} @SDL_RLD_FLAGS@ @SDL_LIBS@")
+diff -ru3 SDL2-2.0.4/sdl2-config.in SDL2-2.0.4-new/sdl2-config.in
+--- SDL2-2.0.4/sdl2-config.in	2016-01-02 22:56:31.000000000 +0300
++++ SDL2-2.0.4-new/sdl2-config.in	2016-08-22 05:32:02.256397839 +0300
+@@ -42,7 +42,11 @@
+       echo @SDL_VERSION@
+       ;;
+     --cflags)
+-      echo -I@includedir@/SDL2 @SDL_CFLAGS@
++      SDL_CFLAGS=""
++      for i in @includedir@/SDL2 $SDL2_PATH; do
++        SDL_CFLAGS="$SDL_CFLAGS -I$i"
++      done
++      echo $SDL_CFLAGS @SDL_CFLAGS@
+       ;;
+ @ENABLE_SHARED_TRUE@    --libs)
+ @ENABLE_SHARED_TRUE@      echo -L@libdir@ @SDL_RLD_FLAGS@ @SDL_LIBS@

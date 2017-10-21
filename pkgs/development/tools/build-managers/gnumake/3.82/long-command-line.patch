@@ -1,0 +1,54 @@
+https://savannah.gnu.org/bugs/?36451
+
+From a95796de3a491d8acfc8ea94c217b90531161786 Mon Sep 17 00:00:00 2001
+From: psmith <psmith>
+Date: Sun, 9 Sep 2012 23:25:07 +0000
+Subject: [PATCH] Keep the command line on the heap to avoid stack overflow.
+ Fixes Savannah bug #36451.
+
+---
+ ChangeLog |  3 +++
+ job.c     | 13 +++++++++----
+ 2 files changed, 12 insertions(+), 4 deletions(-)
+
+diff --git job.c job.c
+index 754576b..f7b7d51 100644
+--- job.c
++++ job.c
+@@ -2984,8 +2984,8 @@ construct_command_argv_internal (char *line, char **restp, char *shell,
+ 	return new_argv;
+       }
+ 
+-    new_line = alloca ((shell_len*2) + 1 + sflags_len + 1
+-                             + (line_len*2) + 1);
++    new_line = xmalloc ((shell_len*2) + 1 + sflags_len + 1
++                        + (line_len*2) + 1);
+     ap = new_line;
+     /* Copy SHELL, escaping any characters special to the shell.  If
+        we don't escape them, construct_command_argv_internal will
+@@ -3052,8 +3052,11 @@ construct_command_argv_internal (char *line, char **restp, char *shell,
+ 	*ap++ = *p;
+       }
+     if (ap == new_line + shell_len + sflags_len + 2)
+-      /* Line was empty.  */
+-      return 0;
++      {
++        /* Line was empty.  */
++        free (new_line);
++        return 0;
++      }
+     *ap = '\0';
+ 
+ #ifdef WINDOWS32
+@@ -3194,6 +3197,8 @@ construct_command_argv_internal (char *line, char **restp, char *shell,
+       fatal (NILF, _("%s (line %d) Bad shell context (!unixy && !batch_mode_shell)\n"),
+             __FILE__, __LINE__);
+ #endif
++
++    free (new_line);
+   }
+ #endif	/* ! AMIGA */
+ 
+-- 
+1.7.12
+

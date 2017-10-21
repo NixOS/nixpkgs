@@ -1,0 +1,130 @@
+diff --git a/Makefile b/Makefile
+index d82e30f..d231cf9 100644
+--- a/Makefile
++++ b/Makefile
+@@ -51,6 +51,9 @@ endif
+ ifdef DEBIAN
+ CPPFLAGS += -DDEBIAN
+ endif
++ifdef NIXOS
++CPPFLAGS += -DNIXOS
++endif
+ ifdef DEFAULT_OLD_METADATA
+  CPPFLAGS += -DDEFAULT_OLD_METADATA
+  DEFAULT_METADATA=0.90
+@@ -105,6 +108,7 @@ endif
+ INSTALL = /usr/bin/install
+ DESTDIR =
+ BINDIR  = /sbin
++INSTALL_BINDIR = ${BINDIR}
+ MANDIR  = /usr/share/man
+ MAN4DIR = $(MANDIR)/man4
+ MAN5DIR = $(MANDIR)/man5
+@@ -259,20 +263,20 @@ sha1.o : sha1.c sha1.h md5.h
+ 	$(CC) $(CFLAGS) -DHAVE_STDINT_H -o sha1.o -c sha1.c
+ 
+ install : mdadm mdmon install-man install-udev
+-	$(INSTALL) -D $(STRIP) -m 755 mdadm $(DESTDIR)$(BINDIR)/mdadm
+-	$(INSTALL) -D $(STRIP) -m 755 mdmon $(DESTDIR)$(BINDIR)/mdmon
++	$(INSTALL) -D $(STRIP) -m 755 mdadm $(DESTDIR)$(INSTALL_BINDIR)/mdadm
++	$(INSTALL) -D $(STRIP) -m 755 mdmon $(DESTDIR)$(INSTALL_BINDIR)/mdmon
+ 
+ install-static : mdadm.static install-man
+-	$(INSTALL) -D $(STRIP) -m 755 mdadm.static $(DESTDIR)$(BINDIR)/mdadm
++	$(INSTALL) -D $(STRIP) -m 755 mdadm.static $(DESTDIR)$(INSTALL_BINDIR)/mdadm
+ 
+ install-tcc : mdadm.tcc install-man
+-	$(INSTALL) -D $(STRIP) -m 755 mdadm.tcc $(DESTDIR)$(BINDIR)/mdadm
++	$(INSTALL) -D $(STRIP) -m 755 mdadm.tcc $(DESTDIR)$(INSTALL_BINDIR)/mdadm
+ 
+ install-uclibc : mdadm.uclibc install-man
+-	$(INSTALL) -D $(STRIP) -m 755 mdadm.uclibc $(DESTDIR)$(BINDIR)/mdadm
++	$(INSTALL) -D $(STRIP) -m 755 mdadm.uclibc $(DESTDIR)$(INSTALL_BINDIR)/mdadm
+ 
+ install-klibc : mdadm.klibc install-man
+-	$(INSTALL) -D $(STRIP) -m 755 mdadm.klibc $(DESTDIR)$(BINDIR)/mdadm
++	$(INSTALL) -D $(STRIP) -m 755 mdadm.klibc $(DESTDIR)$(INSTALL_BINDIR)/mdadm
+ 
+ install-man: mdadm.8 md.4 mdadm.conf.5 mdmon.8
+ 	$(INSTALL) -D -m 644 mdadm.8 $(DESTDIR)$(MAN8DIR)/mdadm.8
+@@ -305,7 +309,7 @@ install-systemd: systemd/mdmon@.service
+ 	if [ -f /etc/SuSE-release -o -n "$(SUSE)" ] ;then $(INSTALL) -D -m 755 systemd/SUSE-mdadm_env.sh $(DESTDIR)$(SYSTEMD_DIR)/../scripts/mdadm_env.sh ;fi
+ 
+ uninstall:
+-	rm -f $(DESTDIR)$(MAN8DIR)/mdadm.8 $(DESTDIR)$(MAN8DIR)/mdmon.8 $(DESTDIR)$(MAN4DIR)/md.4 $(DESTDIR)$(MAN5DIR)/mdadm.conf.5 $(DESTDIR)$(BINDIR)/mdadm
++	rm -f $(DESTDIR)$(MAN8DIR)/mdadm.8 $(DESTDIR)$(MAN8DIR)/mdmon.8 $(DESTDIR)$(MAN4DIR)/md.4 $(DESTDIR)$(MAN5DIR)/mdadm.conf.5 $(DESTDIR)$(INSTALL_BINDIR)/mdadm
+ 
+ test: mdadm mdmon test_stripe swap_super raid6check
+ 	@echo "Please run './test' as root"
+diff --git a/policy.c b/policy.c
+index 064d349..6b2f2b1 100644
+--- a/policy.c
++++ b/policy.c
+@@ -796,12 +796,39 @@ char *find_rule(struct rule *rule, char *rule_type)
+ #define UDEV_RULE_FORMAT \
+ "ACTION==\"add\", SUBSYSTEM==\"block\", " \
+ "ENV{DEVTYPE}==\"%s\", ENV{ID_PATH}==\"%s\", " \
+-"RUN+=\"" BINDIR "/mdadm --incremental $env{DEVNAME}\"\n"
++"RUN+=\"%s/mdadm --incremental $env{DEVNAME}\"\n"
+ 
+ #define UDEV_RULE_FORMAT_NOTYPE \
+ "ACTION==\"add\", SUBSYSTEM==\"block\", " \
+ "ENV{ID_PATH}==\"%s\", " \
+-"RUN+=\"" BINDIR "/mdadm --incremental $env{DEVNAME}\"\n"
++"RUN+=\"%s/mdadm --incremental $env{DEVNAME}\"\n"
++
++#ifdef NIXOS
++const char *get_mdadm_bindir(void)
++{
++	static char *bindir = NULL;
++	if (bindir != NULL) {
++		return bindir;
++	} else {
++		int len;
++		bindir = xmalloc(1025);
++		len = readlink("/proc/self/exe", bindir, 1024);
++		if (len > 0) {
++			char *basename;
++			if ((basename = strrchr(bindir, '/')) != NULL)
++				*basename = '\0';
++			else
++				*(bindir + len) = '\0';
++		} else {
++			*bindir = '\0';
++		}
++		return bindir;
++	}
++}
++#define SELF get_mdadm_bindir()
++#else
++#define SELF BINDIR
++#endif
+ 
+ /* Write rule in the rule file. Use format from UDEV_RULE_FORMAT */
+ int write_rule(struct rule *rule, int fd, int force_part)
+@@ -815,9 +842,9 @@ int write_rule(struct rule *rule, int fd, int force_part)
+ 	if (force_part)
+ 		typ = type_part;
+ 	if (typ)
+-		snprintf(line, sizeof(line) - 1, UDEV_RULE_FORMAT, typ, pth);
++		snprintf(line, sizeof(line) - 1, UDEV_RULE_FORMAT, typ, pth, SELF);
+ 	else
+-		snprintf(line, sizeof(line) - 1, UDEV_RULE_FORMAT_NOTYPE, pth);
++		snprintf(line, sizeof(line) - 1, UDEV_RULE_FORMAT_NOTYPE, pth, SELF);
+ 	return write(fd, line, strlen(line)) == (int)strlen(line);
+ }
+ 
+diff --git a/util.c b/util.c
+index cc98d3b..1ada2f4 100644
+--- a/util.c
++++ b/util.c
+@@ -1700,7 +1700,9 @@ int start_mdmon(char *devnm)
+ 	char pathbuf[1024];
+ 	char *paths[4] = {
+ 		pathbuf,
++#ifndef NIXOS
+ 		BINDIR "/mdmon",
++#endif
+ 		"./mdmon",
+ 		NULL
+ 	};

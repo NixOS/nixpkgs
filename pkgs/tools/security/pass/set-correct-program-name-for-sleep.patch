@@ -1,0 +1,69 @@
+From 25b44e00ed5df8ffe2782d38ad5cd9f514379599 Mon Sep 17 00:00:00 2001
+From: "Andrew R. M" <andrewmiller237@gmail.com>
+Date: Sat, 8 Apr 2017 13:50:01 -0400
+Subject: [PATCH] Patch the clip() function to work even when using
+ single-binary coreutils
+
+---
+ src/password-store.sh  | 4 ++--
+ src/platform/cygwin.sh | 4 ++--
+ src/platform/darwin.sh | 4 ++--
+ 3 files changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/src/password-store.sh b/src/password-store.sh
+index 6a4172d..4dbd6b8 100755
+--- a/src/password-store.sh
++++ b/src/password-store.sh
+@@ -155,11 +155,11 @@ clip() {
+ 	# variable. Specifically, it cannot store nulls nor (non-trivally) store
+ 	# trailing new lines.
+ 	local sleep_argv0="password store sleep on display $DISPLAY"
+-	pkill -f "^$sleep_argv0" 2>/dev/null && sleep 0.5
++	pkill -P $(pgrep -f "^$sleep_argv0") 2>/dev/null && sleep 0.5
+ 	local before="$(xclip -o -selection "$X_SELECTION" 2>/dev/null | base64)"
+ 	echo -n "$1" | xclip -selection "$X_SELECTION" || die "Error: Could not copy data to the clipboard"
+ 	(
+-		( exec -a "$sleep_argv0" bash <<<"trap 'kill %1' TERM; sleep '$CLIP_TIME' & wait" )
++		( exec -a "$sleep_argv0" bash <(echo trap 'kill %1' TERM\; sleep "$CLIP_TIME & wait") )
+ 		local now="$(xclip -o -selection "$X_SELECTION" | base64)"
+ 		[[ $now != $(echo -n "$1" | base64) ]] && before="$now"
+ 
+diff --git a/src/platform/cygwin.sh b/src/platform/cygwin.sh
+index 6e5dd86..f3574c4 100644
+--- a/src/platform/cygwin.sh
++++ b/src/platform/cygwin.sh
+@@ -3,11 +3,11 @@
+ 
+ clip() {
+ 	local sleep_argv0="password store sleep on display $DISPLAY"
+-	pkill -f "^$sleep_argv0" 2>/dev/null && sleep 0.5
++	pkill -P $(pgrep -f "^$sleep_argv0") 2>/dev/null && sleep 0.5
+ 	local before="$(base64 < /dev/clipboard)"
+ 	echo -n "$1" > /dev/clipboard
+ 	(
+-		( exec -a "$sleep_argv0" sleep "$CLIP_TIME" )
++		( exec -a "$sleep_argv0" bash <(echo sleep "$CLIP_TIME") )
+ 		local now="$(base64 < /dev/clipboard)"
+ 		[[ $now != $(echo -n "$1" | base64) ]] && before="$now"
+ 		echo "$before" | base64 -d > /dev/clipboard
+diff --git a/src/platform/darwin.sh b/src/platform/darwin.sh
+index 86eb325..deb04c4 100644
+--- a/src/platform/darwin.sh
++++ b/src/platform/darwin.sh
+@@ -3,11 +3,11 @@
+ 
+ clip() {
+ 	local sleep_argv0="password store sleep for user $(id -u)"
+-	pkill -f "^$sleep_argv0" 2>/dev/null && sleep 0.5
++	pkill -P $(pgrep -f "^$sleep_argv0") 2>/dev/null && sleep 0.5
+ 	local before="$(pbpaste | openssl base64)"
+ 	echo -n "$1" | pbcopy
+ 	(
+-		( exec -a "$sleep_argv0" sleep "$CLIP_TIME" )
++		( exec -a "$sleep_argv0" bash <(echo sleep "$CLIP_TIME") )
+ 		local now="$(pbpaste | openssl base64)"
+ 		[[ $now != $(echo -n "$1" | openssl base64) ]] && before="$now"
+ 		echo "$before" | openssl base64 -d | pbcopy
+-- 
+2.12.2
+

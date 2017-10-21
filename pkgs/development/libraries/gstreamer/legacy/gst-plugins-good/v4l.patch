@@ -1,0 +1,11 @@
+diff -ru -x '*~' gst-plugins-good-0.10.31-orig/sys/v4l2/gstv4l2bufferpool.c gst-plugins-good-0.10.31/sys/v4l2/gstv4l2bufferpool.c
+--- gst-plugins-good-0.10.31-orig/sys/v4l2/gstv4l2bufferpool.c	2011-12-30 14:59:13.000000000 +0100
++++ gst-plugins-good-0.10.31/sys/v4l2/gstv4l2bufferpool.c	2013-01-28 17:41:25.549523708 +0100
+@@ -181,7 +181,6 @@
+     GST_LOG_OBJECT (pool->v4l2elem, "  MMAP offset:  %u",
+         ret->vbuffer.m.offset);
+   GST_LOG_OBJECT (pool->v4l2elem, "  length:    %u", ret->vbuffer.length);
+-  GST_LOG_OBJECT (pool->v4l2elem, "  input:     %u", ret->vbuffer.input);
+ 
+   data = (guint8 *) v4l2_mmap (0, ret->vbuffer.length,
+       PROT_READ | PROT_WRITE, MAP_SHARED, pool->video_fd,

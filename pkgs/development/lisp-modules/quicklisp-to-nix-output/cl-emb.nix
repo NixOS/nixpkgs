@@ -1,0 +1,25 @@
+args @ { fetchurl, ... }:
+rec {
+  baseName = ''cl-emb'';
+  version = ''20170227-git'';
+
+  description = ''A templating system for Common Lisp'';
+
+  deps = [ args."cl-ppcre" ];
+
+  src = fetchurl {
+    url = ''http://beta.quicklisp.org/archive/cl-emb/2017-02-27/cl-emb-20170227-git.tgz'';
+    sha256 = ''03n97xvh3v8bz1p75v1vhryfkjm74v0cr5jwg4rakq9zkchhfk80'';
+  };
+
+  packageName = "cl-emb";
+
+  asdFilesToKeep = ["cl-emb.asd"];
+  overrides = x: x;
+}
+/* (SYSTEM cl-emb DESCRIPTION A templating system for Common Lisp SHA256
+    03n97xvh3v8bz1p75v1vhryfkjm74v0cr5jwg4rakq9zkchhfk80 URL
+    http://beta.quicklisp.org/archive/cl-emb/2017-02-27/cl-emb-20170227-git.tgz
+    MD5 01d850432cc2f8e920e50b4b36e42d42 NAME cl-emb FILENAME cl-emb DEPS
+    ((NAME cl-ppcre FILENAME cl-ppcre)) DEPENDENCIES (cl-ppcre) VERSION
+    20170227-git SIBLINGS NIL PARASITES NIL) */

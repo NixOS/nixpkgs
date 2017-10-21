@@ -1,0 +1,16 @@
+--- ./scripts/xflock4.orig	2017-08-06 23:05:53.807688995 +0100
++++ ./scripts/xflock4	2017-08-06 23:09:06.171789989 +0100
+@@ -24,10 +24,11 @@
+ PATH=/bin:/usr/bin
+ export PATH
+
+-# Lock by xscreensaver or gnome-screensaver, if a respective daemon is running
++# Lock by xscreensaver, gnome-screensaver or light-locker, if a respective daemon is running
+ for lock_cmd in \
+     "xscreensaver-command -lock" \
+-    "gnome-screensaver-command --lock"
++    "gnome-screensaver-command --lock" \
++    "light-locker-command -l"
+ do
+     $lock_cmd >/dev/null 2>&1 && exit
+ done

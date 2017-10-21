@@ -1,0 +1,46 @@
+This is a slightly modified version of https://svnweb.freebsd.org/ports/head/lang/gcc5/files/patch-libc%2B%2B?revision=432958&view=co&pathrev=432958,
+which doesn't apply cleanly due to them using a slightly different format of patch from us. I just replaced the .orig file references with a/b paths.
+
+--- a/gcc/auto-profile.c 2015-01-18 02:25:42 UTC
++++ b/gcc/auto-profile.c
+@@ -19,11 +19,9 @@ along with GCC; see the file COPYING3.  
+ <http://www.gnu.org/licenses/>.  */
+ 
+ #include "config.h"
+-#include "system.h"
+-
+-#include <string.h>
+ #include <map>
+ #include <set>
++#include "system.h"
+ 
+ #include "coretypes.h"
+ #include "hash-set.h"
+--- a/gcc/graphite-isl-ast-to-gimple.c 2017-01-19 21:02:12 UTC
++++ b/gcc/graphite-isl-ast-to-gimple.c
+@@ -38,6 +38,7 @@ extern "C" {
+ #endif
+ #endif
+ 
++#include <map>
+ #include "system.h"
+ #include "coretypes.h"
+ #include "hash-set.h"
+@@ -75,7 +76,6 @@ extern "C" {
+ #include "tree-scalar-evolution.h"
+ #include "gimple-ssa.h"
+ #include "tree-into-ssa.h"
+-#include <map>
+ 
+ #ifdef HAVE_isl
+ #include "graphite-poly.h"
+--- a/gcc/system.h 2015-01-05 12:33:28 UTC
++++ b/gcc/system.h
+@@ -217,6 +217,7 @@ extern int errno;
+ #ifdef __cplusplus
+ # include <algorithm>
+ # include <cstring>
++# include <new>
+ # include <utility>
+ #endif
+ 

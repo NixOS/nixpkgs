@@ -1,0 +1,11 @@
+--- old/build/pkgs/git/spkg-install	2015-07-26 15:34:43.000000000 +0200
++++ new/build/pkgs/git/spkg-install	2015-09-17 08:28:03.586657451 +0200
+@@ -45,6 +45,8 @@
+     fi
+ done
+ 
++find . -exec sed -e 's@/usr/bin/perl@perl@g' -i '{}' ';'
++
+ # We don't want to think about Fink or Macports
+ export NO_FINK=1
+ export NO_DARWIN_PORTS=1

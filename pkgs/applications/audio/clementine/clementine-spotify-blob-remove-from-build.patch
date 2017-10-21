@@ -1,0 +1,21 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 23070d9..83b6772 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -275,8 +275,6 @@ optional_component(LIBPULSE ON "Pulse audio integration"
+ optional_component(VISUALISATIONS ON "Visualisations")
+ 
+ if(NOT HAVE_SPOTIFY_BLOB AND NOT CRYPTOPP_FOUND)
+-  message(FATAL_ERROR "Either crypto++ must be available or the non-GPL Spotify "
+-          "code must be compiled in")
+ elseif(CRYPTOPP_FOUND)
+   set(HAVE_CRYPTOPP ON)
+   set(HAVE_SPOTIFY_DOWNLOADER ON)
+@@ -434,7 +432,6 @@ if(HAVE_BREAKPAD)
+ endif(HAVE_BREAKPAD)
+ 
+ if(HAVE_SPOTIFY_BLOB)
+-  add_subdirectory(ext/clementine-spotifyblob)
+ endif(HAVE_SPOTIFY_BLOB)
+ 
+ if(HAVE_MOODBAR)

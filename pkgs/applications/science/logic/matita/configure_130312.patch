@@ -1,0 +1,35 @@
+--- matita/configure     2011-11-22 06:04:17.000000000 -0500
++++ matita/configure     2011-11-24 11:43:11.584847938 -0500
+@@ -1905,6 +1905,7 @@
+ # look for METAS dir
+ 
+ LIBSPATH="`pwd`/components"
++OLDCAMLPATH="$OCAMLPATH"
+ OCAMLPATH="$LIBSPATH/METAS"
+ 
+ # creating META.*
+@@ -1927,7 +1928,7 @@
+ gdome2 \
+ http \
+ lablgtk2 \
+-lablgtksourceview2.gtksourceview2 \
++lablgtk2.gtksourceview \
+ mysql \
+ netstring \
+ ulex08 \
+@@ -1953,13 +1954,13 @@
+ FINDLIB_REQUIRES="\
+ $FINDLIB_CREQUIRES \
+ lablgtk2.glade \
+-lablgtksourceview2.gtksourceview2 \
++lablgtk2.gtksourceview \
+ "
+ for r in $FINDLIB_LIBSREQUIRES $FINDLIB_REQUIRES
+ do
+   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $r ocaml library" >&5
+ $as_echo_n "checking for $r ocaml library... " >&6; }
+-  if OCAMLPATH=$OCAMLPATH $OCAMLFIND query $r &> /dev/null; then
++  if OCAMLPATH=$OCAMLPATH:$OLDCAMLPATH $OCAMLFIND query $r &> /dev/null; then
+     { $as_echo "$as_me:${as_lineno-$LINENO}: result: yes" >&5
+ $as_echo "yes" >&6; }
+   else

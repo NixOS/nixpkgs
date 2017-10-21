@@ -1,0 +1,22 @@
+diff --git a/tools/get_platform.py b/tools/get_platform.py
+index 3dd34516..f53ca83a 100644
+--- a/tools/get_platform.py
++++ b/tools/get_platform.py
+@@ -26,6 +26,8 @@ DEBIAN_VERSION = "/etc/debian_version"
+ GENTOO_RELEASE = "/etc/gentoo-release"
+ 
+ def _platform():
++    return ("nixos", "nixos")
++
+     osType, _, _, _, _, _ = platform.uname()
+ 
+     if osType == "Windows":
+@@ -75,6 +77,8 @@ def _platform():
+         return (None, osType.lower())
+ 
+ def _distro(osType):
++    return "unknown_version"
++
+     def getRedhatDistroVersion(pattern):
+         with open(SYSTEM_RELEASE, "r") as fd:
+             contents = fd.read()

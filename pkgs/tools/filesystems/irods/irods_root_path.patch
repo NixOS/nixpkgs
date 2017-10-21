@@ -1,0 +1,11 @@
+--- a/lib/core/src/irods_default_paths.cpp	2016-10-24 17:09:02.955889536 +0200
++++ b/lib/core/src/irods_default_paths.cpp	2016-10-24 17:09:43.178722157 +0200
+@@ -18,7 +18,7 @@
+         try {
+             boost::filesystem::path path{dl_info.dli_fname};
+             path = boost::filesystem::canonical(path);
+-            path.remove_filename().remove_filename().remove_filename(); // Removes filename and the two directories (usr and lib) between libirods_common.so and base of irods install
++            path.remove_filename().remove_filename(); // Removes filename and the two directories (usr and lib) between libirods_common.so and base of irods install
+             return path;
+         } catch(const boost::filesystem::filesystem_error& e) {
+             THROW(-1, e.what());

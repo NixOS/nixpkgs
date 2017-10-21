@@ -1,0 +1,11 @@
+--- llvm.org/utils/llvm-build/llvmbuild/main.py	2015-10-07 00:24:35.000000000 +0100
++++ llvm/utils/llvm-build/llvmbuild/main.py	2017-06-16 17:08:39.866586578 +0100
+@@ -413,7 +413,7 @@
+             if library_name is None:
+                 library_name_as_cstr = 'nullptr'
+             else:
+-                library_name_as_cstr = '"lib%s.a"' % library_name
++                library_name_as_cstr = '"lib%s.so"' % library_name
+             if is_installed:
+                 is_installed_as_cstr = 'true'
+             else:

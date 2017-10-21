@@ -1,0 +1,4 @@
+url http://sourceforge.net/projects/libwpd/files/librevenge/
+SF_version_dir librevenge-
+version_link '[.]tar.xz/download$'
+SF_redirect

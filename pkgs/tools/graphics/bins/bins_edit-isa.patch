@@ -1,0 +1,20 @@
+--- a/bins_edit	2005-08-25 14:34:39.000000000 -0400
++++ b/bins_edit	2016-05-18 20:25:40.913460314 -0400
+@@ -26,7 +26,7 @@
+ 
+ use Getopt::Long;
+ use IO::File;
+-use UNIVERSAL qw(isa);
++use Scalar::Util 'reftype';
+ 
+ # XML parsing & writing
+ use XML::Grove;
+@@ -198,7 +198,7 @@
+   my $fieldValue;
+   foreach my $element
+     (@{$document->at_path('/'.$fileType.'/description')->{Contents}}) {
+-      if (isa($element, 'XML::Grove::Element') && $element->{Name} eq "field") {
++      if (reftype($element) eq 'XML::Grove::Element' && $element->{Name} eq "field") {
+ 	$fieldName = $element->{Attributes}{'name'};
+ 	$fieldValue = "";
+ 	if ($fieldName eq $field) {

@@ -1,0 +1,104 @@
+change from upstream to speed up by skipping unused globs
+https://bugs.gentoo.org/382845
+
+http://cvs.savannah.gnu.org/viewvc/make/read.c?root=make&r1=1.198&r2=1.200
+
+Revision 1.200
+Sat May 7 14:36:12 2011 UTC (4 months, 1 week ago) by psmith 
+Branch: MAIN 
+Changes since 1.199: +1 -1 lines 
+Inverted the boolean test from what I wanted it to be.  Added a
+regression test to make sure this continues to work.
+
+Revision 1.199
+Mon May 2 00:18:06 2011 UTC (4 months, 2 weeks ago) by psmith 
+Branch: MAIN 
+Changes since 1.198: +35 -25 lines 
+Avoid invoking glob() unless the filename has potential globbing
+characters in it, for performance improvements.
+
+--- read.c	2011/04/29 15:27:39	1.198
++++ read.c	2011/05/07 14:36:12	1.200
+@@ -2901,6 +2901,7 @@
+       const char *name;
+       const char **nlist = 0;
+       char *tildep = 0;
++      int globme = 1;
+ #ifndef NO_ARCHIVES
+       char *arname = 0;
+       char *memname = 0;
+@@ -3109,32 +3110,40 @@
+ 	}
+ #endif /* !NO_ARCHIVES */
+ 
+-      switch (glob (name, GLOB_NOSORT|GLOB_ALTDIRFUNC, NULL, &gl))
+-	{
+-	case GLOB_NOSPACE:
+-	  fatal (NILF, _("virtual memory exhausted"));
+-
+-	case 0:
+-          /* Success.  */
+-          i = gl.gl_pathc;
+-          nlist = (const char **)gl.gl_pathv;
+-          break;
+-
+-        case GLOB_NOMATCH:
+-          /* If we want only existing items, skip this one.  */
+-          if (flags & PARSEFS_EXISTS)
+-            {
+-              i = 0;
+-              break;
+-            }
+-          /* FALLTHROUGH */
+-
+-	default:
+-          /* By default keep this name.  */
++      /* glob() is expensive: don't call it unless we need to.  */
++      if (!(flags & PARSEFS_EXISTS) && strpbrk (name, "?*[") == NULL)
++        {
++          globme = 0;
+           i = 1;
+           nlist = &name;
+-          break;
+-	}
++        }
++      else
++        switch (glob (name, GLOB_NOSORT|GLOB_ALTDIRFUNC, NULL, &gl))
++          {
++          case GLOB_NOSPACE:
++            fatal (NILF, _("virtual memory exhausted"));
++
++          case 0:
++            /* Success.  */
++            i = gl.gl_pathc;
++            nlist = (const char **)gl.gl_pathv;
++            break;
++
++          case GLOB_NOMATCH:
++            /* If we want only existing items, skip this one.  */
++            if (flags & PARSEFS_EXISTS)
++              {
++                i = 0;
++                break;
++              }
++            /* FALLTHROUGH */
++
++          default:
++            /* By default keep this name.  */
++            i = 1;
++            nlist = &name;
++            break;
++          }
+ 
+       /* For each matched element, add it to the list.  */
+       while (i-- > 0)
+@@ -3174,7 +3183,8 @@
+ #endif /* !NO_ARCHIVES */
+           NEWELT (concat (2, prefix, nlist[i]));
+ 
+-      globfree (&gl);
++      if (globme)
++        globfree (&gl);
+ 
+ #ifndef NO_ARCHIVES
+       if (arname)

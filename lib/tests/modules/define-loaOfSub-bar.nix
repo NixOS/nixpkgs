@@ -1,0 +1,3 @@
+{
+  loaOfSub.bar = {};
+}

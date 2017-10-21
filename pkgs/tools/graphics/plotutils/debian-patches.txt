@@ -1,0 +1,3 @@
+plotutils/2.6-2
+10_repair_postscript
+25_libpng15

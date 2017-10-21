@@ -1,0 +1,14 @@
+--- gnustep-gui-0.24.0/Tools/GNUmakefile.preamble	2006-02-22 12:43:48.000000000 +0600
++++ gnustep-gui-0.24.0.patched/Tools/GNUmakefile.preamble	2014-12-01 12:52:41.000000000 +0600
+@@ -32,9 +32,11 @@
+ ADDITIONAL_LIB_DIRS += -L../Source/$(GNUSTEP_OBJ_DIR) -L../Model/$(GNUSTEP_OBJ_DIR)
+ 
+ # Additional libraries when linking tools
++make_services_TOOL_LIBS += -lgnustep-base
+ gpbs_TOOL_LIBS += -lgnustep-gui $(SYSTEM_LIBS)
+ set_show_service_TOOL_LIBS += -lgnustep-gui $(SYSTEM_LIBS)
+ gopen_TOOL_LIBS += -lgnustep-gui $(SYSTEM_LIBS)
++gclose_TOOL_LIBS += -lgnustep-base
+ gcloseall_TOOL_LIBS += -lgnustep-gui $(SYSTEM_LIBS)
+ GSspell_TOOL_LIBS += $(ADDITIONAL_DEPENDS)
+ 

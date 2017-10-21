@@ -1,0 +1,10 @@
+Fix for https://gitlab.com/git-latexdiff/git-latexdiff/issues/8
+---
+--- src/git-latexdiff	2016-01-26 14:04:54.338568955 +0100
++++ src/git-latexdiff	2016-01-26 14:40:23.700381943 +0100
+@@ -1,4 +1,4 @@
+-#! /bin/bash
++#!/usr/bin/env bash
+ 
+ # Main author: Matthieu Moy <Matthieu.Moy@imag.fr> (2012 - 2015)
+ # (See the Git history for other contributors)

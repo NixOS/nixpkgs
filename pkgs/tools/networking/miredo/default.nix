@@ -1,0 +1,34 @@
+{ stdenv, fetchurl, nettools, iproute, judy }:
+
+stdenv.mkDerivation rec {
+  version = "1.2.6";
+  name = "miredo-${version}";
+
+  buildInputs = [ judy ];
+
+  src = fetchurl {
+    url = "http://www.remlab.net/files/miredo/miredo-${version}.tar.xz";
+    sha256 = "0j9ilig570snbmj48230hf7ms8kvcwi2wblycqrmhh85lksd49ps";
+  };
+
+  postPatch = ''
+    substituteInPlace misc/client-hook.bsd \
+      --replace '/sbin/route' '${nettools}/bin/route' \
+      --replace '/sbin/ifconfig' '${nettools}/bin/ifconfig'
+    substituteInPlace misc/client-hook.iproute --replace '/sbin/ip' '${iproute}/bin/ip'
+  '';
+
+  configureFlags = [ "--with-Judy" ];
+
+  postInstall = ''
+    rm -rf $out/lib/systemd $out/var $out/etc/miredo/miredo.conf
+  '';
+
+  meta = with stdenv.lib; {
+    description = "Teredo IPv6 Tunneling Daemon";
+    homepage = http://www.remlab.net/miredo/;
+    license = licenses.gpl2;
+    maintainers = [ maintainers.volth ];
+    platforms = platforms.unix;
+  };
+}

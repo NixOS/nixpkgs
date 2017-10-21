@@ -1,0 +1,22 @@
+diff --git a/pppd/Makefile.linux b/pppd/Makefile.linux
+index 060db6a..c151c62 100644
+--- a/pppd/Makefile.linux
++++ b/pppd/Makefile.linux
+@@ -117,7 +117,7 @@ CFLAGS   += -DHAS_SHADOW
+ #LIBS     += -lshadow $(LIBS)
+ endif
+ 
+-ifneq ($(wildcard /usr/include/crypt.h),)
++ifneq ($(wildcard @glibc@/include/crypt.h),)
+ CFLAGS  += -DHAVE_CRYPT_H=1
+ LIBS	+= -lcrypt
+ endif
+@@ -169,7 +169,7 @@ LIBS	+= -ldl
+ endif
+ 
+ ifdef FILTER
+-ifneq ($(wildcard /usr/include/pcap-bpf.h),)
++ifneq ($(wildcard @libpcap@/include/pcap-bpf.h),)
+ LIBS    += -lpcap
+ CFLAGS  += -DPPP_FILTER
+ endif

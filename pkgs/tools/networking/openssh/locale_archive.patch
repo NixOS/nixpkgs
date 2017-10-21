@@ -1,0 +1,15 @@
+diff --git a/session.c b/session.c
+index e032de6..44db2bb 100644
+--- a/session.c
++++ b/session.c
+@@ -1196,6 +1196,10 @@ do_setup_env(Session *s, const char *shell)
+ 	if (getenv("TZ"))
+ 		child_set_env(&env, &envsize, "TZ", getenv("TZ"));
+ 
++  /* NixOS path to the glibc locale archive, to be set in the upstart job */
++	if (getenv("LOCALE_ARCHIVE"))
++		child_set_env(&env, &envsize, "LOCALE_ARCHIVE", getenv("LOCALE_ARCHIVE"));
++
+ 	/* Set custom environment options from RSA authentication. */
+ 	if (!options.use_login) {
+ 		while (custom_environment) {

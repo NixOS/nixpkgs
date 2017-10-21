@@ -1,0 +1,98 @@
+--- eflite-0.4.1.orig/fs.c
++++ eflite-0.4.1/fs.c
+@@ -9,7 +9,7 @@
+  * GNU General Public License, as published by the Free Software
+  * Foundation.  Please see the file COPYING for details.
+  *
+- * $Id: fs.c,v 1.19 2007/01/18 23:58:42 mgorse Exp $
++ * $Id: fs.c,v 1.22 2008/03/05 15:21:43 mgorse Exp $
+  *
+  * Notes:
+  *
+@@ -505,19 +505,6 @@
+   }
+ }
+ 
+-
+-
+-static void play_audio_close(void *cancel)
+-{
+-  if (audiodev)
+-  {
+-	audio_drain(audiodev);
+-	close_audiodev();
+-	//	usleep(5000);
+-  }
+-}
+-
+-
+ static inline void determine_playlen(int speed, cst_wave *wptr, int type, int *pl, int *s)
+ {
+   int playlen, skip;
+@@ -573,12 +560,12 @@
+ 	type = ac[ac_head].type;
+ 	WAVE_UNLOCK;
+ 	pthread_testcancel();
+-	pthread_cleanup_push(play_audio_close, NULL);
+-
++	
+ 	es_log(2, "Opening audio device.");
+ 	/* We abuse the wave mutex here to avoid being canceled
+ 	 * while the audio device is being openned */
+ 	WAVE_LOCK;
++	assert(audiodev == NULL);
+ 	audiodev = audio_open(wptr->sample_rate, wptr->num_channels, CST_AUDIO_LINEAR16);
+ 	WAVE_UNLOCK;
+ 	if (audiodev == NULL)
+@@ -606,8 +593,8 @@
+ #ifdef DEBUG
+ 	  start_time = get_ticks_count();
+ #endif
+-	  pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
+       audio_write(audiodev, wptr->samples + skip, playlen * 2);
++      pthread_testcancel();
+ 	  es_log(2, "Write took %.2f seconds.", get_ticks_count() - start_time);
+ 	}
+     es_log(2, "play: syncing.");
+@@ -617,16 +604,16 @@
+     audio_flush(audiodev);
+ 	pthread_setcanceltype(PTHREAD_CANCEL_DEFERRED, NULL);
+ 	es_log(2, "Flush took %.2f seconds.", get_ticks_count() - start_time);
+-    es_log(2, "play: Closing audio device");
+-	close_audiodev();
+-	pthread_cleanup_pop(0);
+-	  pthread_testcancel();
+-	  TEXT_LOCK;
++    	pthread_testcancel();
++
++	TEXT_LOCK;
+     time_left -= ((float)playlen) / wptr->sample_rate;
+ 	pthread_cond_signal(&text_condition);
+ 	TEXT_UNLOCK;
+ 
+ 	WAVE_LOCK;
++	es_log(2, "play: Closing audio device");
++	close_audiodev();
+     ac_destroy(&ac[ac_head]);
+ 	ac_head++;
+ 	if (ac_head == ac_tail)
+@@ -894,6 +881,7 @@
+ 	WAVE_LOCK_NI;
+ 	pthread_cond_signal(&wave_condition); // necessary because we inhibit cancellation while waiting
+ 	pthread_cancel(wave_thread);
++	if (audiodev != NULL) audio_drain(audiodev);
+ 	WAVE_UNLOCK_NI;
+   }
+ 
+@@ -917,7 +905,10 @@
+   }
+ 	
+   /* At this point, no thread is running */
+-  
++
++  // Make sure audio device is closed
++  close_audiodev();
++
+   /* Free any wave data */
+   es_log(2, "s_clear: freeing wave data: %d", ac_tail);
+   for (i = 0; i < ac_tail; i++)

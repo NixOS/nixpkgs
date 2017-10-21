@@ -1,0 +1,55 @@
+diff -Nru sendmail-8.14.3.orig/devtools/M4/UNIX/milterlibrary.m4 sendmail-8.14.3/devtools/M4/UNIX/milterlibrary.m4
+--- sendmail-8.14.3.orig/devtools/M4/UNIX/milterlibrary.m4	1970-01-01 01:00:00.000000000 +0100
++++ sendmail-8.14.3/devtools/M4/UNIX/milterlibrary.m4	2009-08-22 21:51:10.000000000 +0200
+@@ -0,0 +1,39 @@
++divert(-1)
++#
++# Copyright (c) 1999-2001 Sendmail, Inc. and its suppliers.
++#	All rights reserved.
++#
++# By using this file, you agree to the terms and conditions set
++# forth in the LICENSE file which can be found at the top level of
++# the sendmail distribution.
++#
++#
++#  Definitions for Makefile construction for sendmail
++#
++divert(0)dnl
++include(confBUILDTOOLSDIR`/M4/'bldM4_TYPE_DIR`/links.m4')dnl
++bldLIST_PUSH_ITEM(`bldC_PRODUCTS', bldCURRENT_PRODUCT)dnl
++bldPUSH_TARGET(bldCURRENT_PRODUCT`.so' bldCURRENT_PRODUCT`.a')dnl
++bldPUSH_INSTALL_TARGET(`install-'bldCURRENT_PRODUCT)dnl
++bldPUSH_CLEAN_TARGET(bldCURRENT_PRODUCT`-clean')dnl
++
++include(confBUILDTOOLSDIR`/M4/'bldM4_TYPE_DIR`/defines.m4')
++divert(bldTARGETS_SECTION)
++bldCURRENT_PRODUCT.so: ${BEFORE} ${bldCURRENT_PRODUCT`OBJS'}
++	${CCLINK} ${LDOPTS_SO} -o bldCURRENT_PRODUCT.so -Wl,confSONAME,bldCURRENT_PRODUCT.so.${MILTER_SOVER} ${bldCURRENT_PRODUCT`OBJS'} -lc ${LIBS}
++bldCURRENT_PRODUCT.a: ${BEFORE} ${bldCURRENT_PRODUCT`OBJS'}
++	${AR} ${AROPTS} bldCURRENT_PRODUCT.a ${bldCURRENT_PRODUCT`OBJS'}
++	${RANLIB} ${RANLIBOPTS} bldCURRENT_PRODUCT.a
++ifdef(`bldLINK_SOURCES', `bldMAKE_SOURCE_LINKS(bldLINK_SOURCES)')
++
++install-`'bldCURRENT_PRODUCT: bldCURRENT_PRODUCT.so bldCURRENT_PRODUCT.a
++ifdef(`bldINSTALLABLE', `	ifdef(`confMKDIR', `if [ ! -d "${DESTDIR}${bldINSTALL_DIR`'LIBDIR}" ]; then confMKDIR -p "${DESTDIR}${bldINSTALL_DIR`'LIBDIR}"; else :; fi ')
++	${INSTALL} -c bldCURRENT_PRODUCT.so "${DESTDIR}${LIBDIR}/bldCURRENT_PRODUCT.so.${MILTER_SOVER}"
++	${LN} ${LNOPTS} bldCURRENT_PRODUCT.so.${MILTER_SOVER} "${DESTDIR}${LIBDIR}/bldCURRENT_PRODUCT.so"
++	${INSTALL} -c bldCURRENT_PRODUCT.a "${DESTDIR}${LIBDIR}"')
++
++bldCURRENT_PRODUCT-clean:
++	rm -f ${OBJS} bldCURRENT_PRODUCT.so bldCURRENT_PRODUCT.a ${MANPAGES}
++
++divert(0)
++COPTS+= confCCOPTS_SO
+diff -Nru sendmail-8.14.3.orig/libmilter/Makefile.m4 sendmail-8.14.3/libmilter/Makefile.m4
+--- sendmail-8.14.3.orig/libmilter/Makefile.m4	2008-04-08 07:23:44.000000000 +0200
++++ sendmail-8.14.3/libmilter/Makefile.m4	2009-08-22 21:53:35.000000000 +0200
+@@ -9,7 +9,7 @@
+ SMSRCDIR=ifdef(`confSMSRCDIR', `confSMSRCDIR', `${SRCDIR}/sendmail')
+ PREPENDDEF(`confINCDIRS', `-I${SMSRCDIR} ')
+ 
+-bldPRODUCT_START(`library', `libmilter')
++bldPRODUCT_START(`milterlibrary', `libmilter')
+ define(`bldINSTALLABLE', `true')
+ define(`LIBMILTER_EXTRAS', `errstring.c strl.c')
+ APPENDDEF(`confENVDEF', `-DNOT_SENDMAIL -Dsm_snprintf=snprintf')

@@ -1,0 +1,25 @@
+diff --git a/src/mongo/util/SConscript b/src/mongo/util/SConscript
+index 6add602..6e232d8 100644
+--- a/src/mongo/util/SConscript
++++ b/src/mongo/util/SConscript
+@@ -241,9 +241,6 @@ if get_option('allocator') == 'tcmalloc':
+         # Add in the include path for our vendored tcmalloc.
+         tcmspEnv.InjectThirdPartyIncludePaths('gperftools')
+ 
+-        # Include valgrind since tcmalloc disables itself while running under valgrind
+-        tcmspEnv.InjectThirdPartyIncludePaths('valgrind')
+-
+         # If our changes to tcmalloc are ever upstreamed, this should become set based on a top
+         # level configure check, though its effects should still be scoped just to these files.
+         tcmspEnv.Append(
+@@ -252,6 +249,10 @@ if get_option('allocator') == 'tcmalloc':
+             ]
+         )
+ 
++    # Include valgrind since tcmalloc disables itself while running under valgrind
++    if not use_system_version_of_library('valgrind'):
++        tcmspEnv.InjectThirdPartyIncludePaths('valgrind')
++
+     tcmspEnv.Library(
+         target='tcmalloc_set_parameter',
+         source=[

@@ -1,0 +1,35 @@
+diff -ur netatalk-3.1.7-old/config/Makefile.in netatalk-3.1.7-new/config/Makefile.in 
+--- netatalk-3.1.7-old/config/Makefile.in	2014-08-29 03:33:35.000000000 -0700
++++ netatalk-3.1.7-new/config/Makefile.in	2015-08-13 20:52:35.000000000 -0700
+@@ -699,7 +699,7 @@
+ 
+ info-am:
+ 
+-install-data-am: install-data-local install-dbusserviceDATA
++install-data-am: install-dbusserviceDATA
+ 
+ install-dvi: install-dvi-recursive
+ 
+@@ -754,7 +754,7 @@
+ 	cscopelist cscopelist-recursive ctags ctags-recursive \
+ 	distclean distclean-generic distclean-libtool distclean-tags \
+ 	distdir dvi dvi-am html html-am info info-am install \
+-	install-am install-data install-data-am install-data-local \
++	install-am install-data install-data-am \
+ 	install-dbusserviceDATA install-dvi install-dvi-am \
+ 	install-exec install-exec-am install-html install-html-am \
+ 	install-info install-info-am install-man install-pdf \
+@@ -782,12 +782,6 @@
+ # install configuration files
+ #
+ 
+-install-data-local: install-config-files
+-	mkdir -pm 0755 $(DESTDIR)$(localstatedir)/netatalk/
+-	mkdir -pm 0755 $(DESTDIR)$(localstatedir)/netatalk/CNID/
+-	$(INSTALL_DATA) $(srcdir)/README $(DESTDIR)$(localstatedir)/netatalk/
+-	$(INSTALL_DATA) $(srcdir)/README $(DESTDIR)$(localstatedir)/netatalk/CNID/
+-
+ uninstall-local:
+ 	@for f in $(CONFFILES) $(GENFILES); do \
+ 		echo rm -f $(DESTDIR)$(pkgconfdir)/$$f; \
+

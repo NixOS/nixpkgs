@@ -1,0 +1,14 @@
+=== modified file 'kazam/frontend/indicator.py'
+--- a/kazam/frontend/indicator.py	2013-01-26 01:53:53 +0000
++++ b/kazam/frontend/indicator.py	2013-06-13 18:18:37 +0000
+@@ -291,3 +291,9 @@
+         def start_recording(self):
+             logger.debug("Recording started.")
+             self.indicator.set_from_icon_name("kazam-recording")
++
++        def hide_it(self):
++            self.indicator.set_visible(False)
++
++        def show_it(self):
++            self.indicator.set_visible(True)
+

@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+set -e
+
+die() {
+    echo "$0: error: $1" >&2
+    exit 1
+}
+
+# Usage: update-source-hash <attr> <version> [<new-source-hash>]
+attr=$1
+newVersion=$2
+newHash=$3
+
+nixFile=$(nix-instantiate --eval --strict -A "$attr.meta.position" | sed -re 's/^"(.*):[0-9]+"$/\1/')
+if [ ! -f "$nixFile" ]; then
+    die "Couldn't evaluate '$attr.meta.position' to locate the .nix file!"
+fi
+
+oldHashAlgo=$(nix-instantiate --eval --strict -A "$attr.src.drvAttrs.outputHashAlgo" | tr -d '"')
+oldHash=$(nix-instantiate --eval --strict -A "$attr.src.drvAttrs.outputHash" | tr -d '"')
+
+if [ -z "$oldHashAlgo" -o -z "$oldHash" ]; then
+    die "Couldn't evaluate old source hash from '$attr.src'!"
+fi
+
+if [ $(grep -c "$oldHash" "$nixFile") != 1 ]; then
+    die "Couldn't locate old source hash '$oldHash' (or it appeared more than once) in '$nixFile'!"
+fi
+
+drvName=$(nix-instantiate --eval -E "with import ./. {}; (builtins.parseDrvName $attr.name).name" | tr -d '"')
+oldVersion=$(nix-instantiate --eval -E "with import ./. {}; $attr.version or (builtins.parseDrvName $attr.name).version" | tr -d '"')
+
+if [ -z "$drvName" -o -z "$oldVersion" ]; then
+    die "Couldn't evaluate name and version from '$attr.name'!"
+fi
+
+if [ "$oldVersion" = "$newVersion" ]; then
+    echo "$0: New version same as old version, nothing to do." >&2
+    exit 0
+fi
+
+# Escape dots, there should not be any other regex characters allowed in store path names
+oldVersion=$(echo "$oldVersion" | sed -re 's|\.|\\.|g')
+
+if [ $(grep -c -E "^\s*(let\b)?\s*version\s+=\s+\"$oldVersion\"" "$nixFile") = 1 ]; then
+    pattern="/\bversion\b\s*=/ s|\"$oldVersion\"|\"$newVersion\"|"
+elif [ $(grep -c -E "^\s*(let\b)?\s*name\s+=\s+\"$drvName-$oldVersion\"" "$nixFile") = 1 ]; then
+    pattern="/\bname\b\s*=/ s|\"$drvName-$oldVersion\"|\"$drvName-$newVersion\"|"
+else
+    die "Couldn't figure out where out where to patch in new version in '$attr'!"
+fi
+
+# Replace new version
+sed -i.bak "$nixFile" -re "$pattern"
+if cmp -s "$nixFile" "$nixFile.bak"; then
+    die "Failed to replace version '$oldVersion' to '$newVersion' in '$attr'!"
+fi
+
+case "$oldHashAlgo" in
+    sha256) hashLength=64 ;;
+    sha512) hashLength=128 ;;
+    *) die "Unhandled hash algorithm '$oldHashAlgo' in '$attr'!" ;;
+esac
+
+# Make a temporary all-zeroes hash of $hashLength characters
+tempHash=$(printf '%0*d' "$hashLength" 0)
+
+sed -i "$nixFile" -re "s|\"$oldHash\"|\"$tempHash\"|"
+if cmp -s "$nixFile" "$nixFile.bak"; then
+    die "Failed to replace source hash of '$attr' to a temporary hash!"
+fi
+
+# If new hash not given on the command line, recalculate it ourselves.
+if [ -z "$newHash" ]; then
+    nix-build --no-out-link -A "$attr.src" 2>"$attr.fetchlog" >/dev/null || true
+    # FIXME: use nix-build --hash here once https://github.com/NixOS/nix/issues/1172 is fixed
+    newHash=$(tail -n2 "$attr.fetchlog" | grep "output path .* has .* hash .* when .* was expected" | head -n1 | tr -dc '\040-\177' | awk '{ print $(NF-4) }')
+fi
+
+if [ -z "$newHash" ]; then
+    cat "$attr.fetchlog" >&2
+    die "Couldn't figure out new hash of '$attr.src'!"
+fi
+
+sed -i "$nixFile" -re "s|\"$tempHash\"|\"$newHash\"|"
+if cmp -s "$nixFile" "$nixFile.bak"; then
+    die "Failed to replace temporary source hash of '$attr' to the final source hash!"
+fi
+
+rm -f "$nixFile.bak"
+rm -f "$attr.fetchlog"

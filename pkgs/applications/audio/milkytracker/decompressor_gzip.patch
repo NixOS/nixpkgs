@@ -1,0 +1,20 @@
+https://bugs.archlinux.org/task/31324
+https://410333.bugs.gentoo.org/attachment.cgi?id=322456
+
+diff -ur src.old/compression/DecompressorGZIP.cpp src/compression/DecompressorGZIP.cpp
+--- src.old/compression/DecompressorGZIP.cpp	2012-08-28 17:54:46.000000000 +0200
++++ src/compression/DecompressorGZIP.cpp	2012-08-28 17:55:21.000000000 +0200
+@@ -57,11 +57,11 @@
+ 	
+ bool DecompressorGZIP::decompress(const PPSystemString& outFileName, Hints hint)
+ {
+-    gzFile *gz_input_file = NULL;
++    gzFile gz_input_file = NULL;
+ 	int len = 0;
+ 	pp_uint8 *buf;
+ 	
+-	if ((gz_input_file = (void **)gzopen (fileName.getStrBuffer(), "r")) == NULL)
++	if ((gz_input_file = gzopen (fileName.getStrBuffer(), "r")) == NULL)
+ 		return false;
+ 	
+ 	if ((buf = new pp_uint8[0x10000]) == NULL)

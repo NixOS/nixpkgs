@@ -1,0 +1,12 @@
+diff --git a/internal/git/command.go b/internal/git/command.go
+index 0e5496c..5778294 100644
+--- a/internal/git/command.go
++++ b/internal/git/command.go
+@@ -16,6 +16,7 @@ func gitCommand(gl_id string, name string, args ...string) *exec.Cmd {
+ 	cmd.Env = []string{
+ 		fmt.Sprintf("HOME=%s", os.Getenv("HOME")),
+ 		fmt.Sprintf("PATH=%s", os.Getenv("PATH")),
++		fmt.Sprintf("GITLAB_SHELL_CONFIG_PATH=%s", os.Getenv("GITLAB_SHELL_CONFIG_PATH")),
+ 		fmt.Sprintf("LD_LIBRARY_PATH=%s", os.Getenv("LD_LIBRARY_PATH")),
+ 		fmt.Sprintf("GL_ID=%s", gl_id),
+ 	}

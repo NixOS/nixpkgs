@@ -1,0 +1,23 @@
+diff --git a/source/OMakefile b/source/OMakefile
+index 6b19d84..095b8b6 100644
+--- a/source/OMakefile
++++ b/source/OMakefile
+@@ -164,12 +164,17 @@ LNK_MAIN = $(FNT)/linkerfront
+ DEP_MAIN = $(FNT)/dependfront
+ 
+ ############################################################
++# Nixpkgs specific changes
++#
++
++LEX = flex
++
++############################################################
+ # Platform specific changes
+ #
+ 
+ if $(mem $(OSTYPE), Cygwin Win32)
+     YACC = bison -by
+-    LEX = flex
+     CFLAGS += -mno-cygwin
+     INC_C[] += $(INC)/byteswap $(INC)/search
+     export

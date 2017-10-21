@@ -1,0 +1,31 @@
+--- Bear-2.2.1-src/bear/main.py.in	1970-01-01 01:00:01.000000000 +0100
++++ Bear-2.2.1-src-patch/bear/main.py.in	2016-11-02 20:23:38.050134984 +0100
+@@ -48,6 +48,7 @@
+ import shutil
+ import contextlib
+ import logging
++from distutils.spawn import find_executable
+ 
+ # Ignored compiler options map for compilation database creation.
+ # The map is used in `split_command` method. (Which does ignore and classify
+@@ -447,7 +448,6 @@
+     # do extra check on number of source files
+     return result if result.files else None
+ 
+-
+ def split_compiler(command):
+     """ A predicate to decide the command is a compiler call or not.
+ 
+@@ -467,7 +467,11 @@
+                    for pattern in COMPILER_CPP_PATTERNS)
+ 
+     if command:  # not empty list will allow to index '0' and '1:'
+-        executable = os.path.basename(command[0])
++        absolute_executable = os.path.realpath(find_executable(command[0]))
++        if 'wrapper' in absolute_executable:
++            return None
++
++        executable = os.path.basename(absolute_executable)
+         parameters = command[1:]
+         # 'wrapper' 'parameters' and
+         # 'wrapper' 'compiler' 'parameters' are valid.

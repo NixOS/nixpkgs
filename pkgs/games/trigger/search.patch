@@ -1,0 +1,14 @@
+diff --git a/src/Trigger/main.cpp b/src/Trigger/main.cpp
+index 39539e1..680c12c 100644
+--- a/src/Trigger/main.cpp
++++ b/src/Trigger/main.cpp
+@@ -890,7 +890,8 @@ bool MainApp::loadAll()
+                 std::smatch mr; // Match Results
+                 std::regex pat(R"(^(\w+)(\..+)$)"); // Pattern
+ 
+-                if (!std::regex_search(std::string(*fname), mr, pat))
++                std::string search(*fname);
++                if (!std::regex_search(search, mr, pat))
+                     continue;
+ 
+                 std::string basefname = mr[1];

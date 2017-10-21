@@ -1,0 +1,54 @@
+From 46fe80ab7c0013a929d0934e61429820042a70a9 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Niklas=20Hamb=C3=BCchen?= <mail@nh2.me>
+Date: Fri, 21 Jul 2017 20:09:11 +0200
+Subject: [PATCH 1/2] base: Add `extra-libraries: m` because base uses libm
+ functions.
+
+Linking with gold needs this because in contrast to ld, gold
+doesn't implicitly link libm.
+
+Found by Michael Bishop <cleverca22@gmail.com>.
+---
+ libraries/base/base.cabal | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/libraries/base/base.cabal b/libraries/base/base.cabal
+index f00fb8768e5..fd91f268ffe 100644
+--- a/libraries/base/base.cabal
++++ b/libraries/base/base.cabal
+@@ -342,6 +342,10 @@ Library
+         WCsubst.h
+         consUtils.h
+ 
++    -- Base uses libm functions. ld.bfd links libm implicitly when necessary.
++    -- Other linkers, like gold, don't, so we have to declare it explicitly.
++    extra-libraries: m
++
+     -- OS Specific
+     if os(windows)
+         -- Windows requires some extra libraries for linking because the RTS
+
+From 900a8f4931e9bc6d3219d9263cfecfc6af8fc766 Mon Sep 17 00:00:00 2001
+From: michael bishop <cleverca22@gmail.com>
+Date: Sat, 22 Jul 2017 13:12:39 -0300
+Subject: [PATCH 2/2] also add -lm to ghc-prim
+
+---
+ libraries/ghc-prim/ghc-prim.cabal | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/libraries/ghc-prim/ghc-prim.cabal b/libraries/ghc-prim/ghc-prim.cabal
+index 00a029efedf..6db85dd69fc 100644
+--- a/libraries/ghc-prim/ghc-prim.cabal
++++ b/libraries/ghc-prim/ghc-prim.cabal
+@@ -42,6 +42,10 @@ Library
+         UnliftedFFITypes
+ 
+     build-depends: rts == 1.0.*
++    
++    -- Base uses libm functions. ld.bfd links libm implicitly when necessary.
++    -- Other linkers, like gold, don't, so we have to declare it explicitly.
++    extra-libraries: m
+ 
+     exposed-modules:
+         GHC.CString

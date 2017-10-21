@@ -1,0 +1,2 @@
+source $stdenv/setup
+genericBuild

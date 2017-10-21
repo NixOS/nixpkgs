@@ -1,0 +1,18 @@
+diff --git a/rts/posix/OSMem.c b/rts/posix/OSMem.c
+index 99620ee..e052a84 100644
+--- a/rts/posix/OSMem.c
++++ b/rts/posix/OSMem.c
+@@ -523,13 +523,7 @@ void osDecommitMemory(void *at, W_ size)
+         sysErrorBelch("unable to make released memory unaccessible");
+ #endif
+ 
+-#ifdef MADV_FREE
+-    // Try MADV_FREE first, FreeBSD has both and MADV_DONTNEED
+-    // just swaps memory out
+-    r = madvise(at, size, MADV_FREE);
+-#else
+     r = madvise(at, size, MADV_DONTNEED);
+-#endif
+     if(r < 0)
+         sysErrorBelch("unable to decommit memory");
+ }
