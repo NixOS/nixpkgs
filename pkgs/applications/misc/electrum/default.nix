@@ -16,6 +16,7 @@ python2Packages.buildPythonApplication rec {
     dns
     ecdsa
     jsonrpclib
+    matplotlib
     pbkdf2
     protobuf
     pyaes

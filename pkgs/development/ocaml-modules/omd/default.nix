@@ -1,10 +1,10 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild }:
 
 stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-omd-1.3.0";
+  name = "ocaml${ocaml.version}-omd-1.3.1";
   src = fetchurl {
-    url = http://pw374.github.io/distrib/omd/omd-1.3.0.tar.gz;
-    sha256 = "0d0r6c4s3hq11d0qjc0bc1s84hz7k8nfg5q6g239as8myam4a80w";
+    url = "https://github.com/Chris00/omd/releases/download/1.3.1/omd-1.3.1.tar.gz";
+    sha256 = "1sgdgzpx96br7npj8mh91cli5mqmzsjpngwm7x4212n3k1d0ivwa";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild ];

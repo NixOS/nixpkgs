@@ -86,7 +86,7 @@ stdenv.mkDerivation {
     ''
       substituteInPlace configure --replace /bin/pwd pwd
       substituteInPlace src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
-      sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i config.tests/*/*.test -i mkspecs/*/*.conf
+      sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i mkspecs/*/*.conf
 
       sed -i '/PATHS.*NO_DEFAULT_PATH/ d' src/corelib/Qt5Config.cmake.in
       sed -i '/PATHS.*NO_DEFAULT_PATH/ d' src/corelib/Qt5CoreMacros.cmake
@@ -105,6 +105,7 @@ stdenv.mkDerivation {
           -e 's|! /usr/bin/xcode-select --print-path >/dev/null 2>&1;|false;|' \
           -e 's|! /usr/bin/xcrun -find xcodebuild >/dev/null 2>&1;|false;|' \
           -e 's|sysroot=$(/usr/bin/xcodebuild -sdk $sdk -version Path 2>/dev/null)|sysroot=/nonsense|' \
+          -e 's|sysroot=$(/usr/bin/xcrun --sdk $sdk --show-sdk-path 2>/dev/null)|sysroot=/nonsense|' \
           -e 's|QMAKE_CONF_COMPILER=`getXQMakeConf QMAKE_CXX`|QMAKE_CXX="clang++"\nQMAKE_CONF_COMPILER="clang++"|' \
           -e 's|XCRUN=`/usr/bin/xcrun -sdk macosx clang -v 2>&1`|XCRUN="clang -v 2>&1"|' \
           -e 's#sdk_val=$(/usr/bin/xcrun -sdk $sdk -find $(echo $val | cut -d \x27 \x27 -f 1))##' \
@@ -155,6 +156,7 @@ stdenv.mkDerivation {
 
     ++ lib.optionals stdenv.isDarwin
     [
+      "-Wno-missing-sysroot"
       "-D__MAC_OS_X_VERSION_MAX_ALLOWED=1090"
       "-D__AVAILABILITY_INTERNAL__MAC_10_10=__attribute__((availability(macosx,introduced=10.10)))"
       # Note that nixpkgs's objc4 is from macOS 10.11 while the SDK is
@@ -252,6 +254,9 @@ stdenv.mkDerivation {
       "-inotify"
       "-system-libjpeg"
       "-system-libpng"
+      # gold linker of binutils 2.28 generates duplicate symbols
+      # TODO: remove for newer version of binutils 
+      "-no-use-gold-linker"
     ]
 
     ++ lib.optionals stdenv.isDarwin [

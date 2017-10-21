@@ -22,22 +22,23 @@ assert pythonSupport -> (python != null && numpy != null);
 
 stdenv.mkDerivation rec {
   name = "caffe-${version}";
-  version = "1.0-rc5";
+  version = "1.0";
 
   src = fetchFromGitHub {
     owner = "BVLC";
     repo = "caffe";
-    rev = "rc5";
-    sha256 = "0lfmmc0n6xvkpygvxclzrvd0zigb4yfc5612anv2ahlxpfi9031c";
+    rev = version;
+    sha256 = "104jp3cm823i3cdph7hgsnj6l77ygbwsy35mdmzhmsi4jxprd9j3";
   };
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ cmake doxygen ];
 
-  cmakeFlags = [ "-DCUDA_ARCH_NAME=All" ]
-               ++ lib.optional (!cudaSupport) "-DCPU_ONLY=ON"
-               ++ lib.optional (!pythonSupport) "-DBUILD_python=OFF";
+  cmakeFlags = [
+    "-DCUDA_ARCH_NAME=All"
+    (if pythonSupport then "-Dpython_version=${python.version}" else "-DBUILD_python=OFF")
+  ] ++ lib.optional (!cudaSupport) "-DCPU_ONLY=ON";
 
   buildInputs = [ boost google-gflags glog protobuf hdf5-cpp lmdb leveldb snappy opencv atlas ]
                 ++ lib.optional cudaSupport cudatoolkit
@@ -48,6 +49,16 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "out"];
   propagatedBuildOutputs = []; # otherwise propagates out -> bin cycle
+
+  preConfigure = lib.optionalString (cudaSupport && lib.versionAtLeast cudatoolkit.version "9.0") ''
+    # CUDA 9.0 doesn't support sm_20
+    sed -i 's,20 21(20) ,,' cmake/Cuda.cmake
+  '' + lib.optionalString (python.isPy3 or false) ''
+    sed -i \
+      -e 's,"python-py''${boost_py_version}",python3,g' \
+      -e 's,''${Boost_PYTHON-PY''${boost_py_version}_FOUND},''${Boost_PYTHON3_FOUND},g' \
+      cmake/Dependencies.cmake
+  '';
 
   postInstall = ''
     # Internal static library.

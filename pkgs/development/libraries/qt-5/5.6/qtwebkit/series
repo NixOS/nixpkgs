@@ -1,3 +1,4 @@
 qtwebkit-dlopen-gtk.patch
 qtwebkit-dlopen-udev.patch
 qtwebkit-icucore-darwin.patch
+qtwebkit-icu-59.patch

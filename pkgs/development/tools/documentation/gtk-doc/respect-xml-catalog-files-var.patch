@@ -1,0 +1,28 @@
+diff --git a/m4/gtkdoc_jh_check_xml_catalog.m4 b/m4/gtkdoc_jh_check_xml_catalog.m4
+index 618c1c9..1842a0d 100644
+--- a/m4/gtkdoc_jh_check_xml_catalog.m4
++++ b/m4/gtkdoc_jh_check_xml_catalog.m4
+@@ -10,7 +10,21 @@ AC_DEFUN([JH_CHECK_XML_CATALOG],
+ 		AC_MSG_RESULT([found])
+ 		ifelse([$3],,,[$3])
+ 	else
+-		AC_MSG_RESULT([not found])
+-		ifelse([$4],,[AC_MSG_ERROR([could not find ifelse([$2],,[$1],[$2]) in XML catalog])],[$4])
++		jh_check_xml_catalog_saved_ifs="$IFS"
++		IFS=' '
++		for f in $XML_CATALOG_FILES; do
++			if [[ -f "$f" ]] && \
++				AC_RUN_LOG([$XMLCATALOG --noout "$f" "$1" >&2]); then
++				jh_found_xmlcatalog=true
++				AC_MSG_RESULT([found])
++				ifelse([$3],,,[$3])
++				break
++			fi
++		done
++		IFS="$jh_check_xml_catalog_saved_ifs"
++		if ! $jh_found_xmlcatalog; then
++			AC_MSG_RESULT([not found])
++			ifelse([$4],,[AC_MSG_ERROR([could not find ifelse([$2],,[$1],[$2]) in XML catalog])],[$4])
++		fi
+ 	fi
+ ])

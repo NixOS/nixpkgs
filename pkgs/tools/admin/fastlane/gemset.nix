@@ -137,10 +137,10 @@
     dependencies = ["CFPropertyList" "addressable" "babosa" "colored" "commander-fastlane" "dotenv" "excon" "faraday" "faraday-cookie_jar" "faraday_middleware" "fastimage" "gh_inspector" "google-api-client" "highline" "json" "mini_magick" "multi_json" "multi_xml" "multipart-post" "plist" "public_suffix" "rubyzip" "security" "slack-notifier" "terminal-notifier" "terminal-table" "tty-screen" "word_wrap" "xcodeproj" "xcpretty" "xcpretty-travis-formatter"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1sg8xh1rjigiq438knkpdq685kyw34ki3h7baj65qh9mkkc8drxy";
+      sha256 = "0n73748vw7y29ycx0rjdg9zvn8xhncq07zq1l4a16n5s82rb14iy";
       type = "gem";
     };
-    version = "2.60.1";
+    version = "2.61.0";
   };
   gh_inspector = {
     source = {
@@ -360,10 +360,10 @@
     dependencies = ["addressable" "faraday" "jwt" "multi_json"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "149668991xqibvm8kvl10kzy891yd6f994b4gwlx6c3vl24v5jq6";
+      sha256 = "0js81lxqirdza8gf2f6avh11fny49ygmxfi1qx7jp8l9wrhznbkv";
       type = "gem";
     };
-    version = "0.7.3";
+    version = "0.8.1";
   };
   slack-notifier = {
     source = {

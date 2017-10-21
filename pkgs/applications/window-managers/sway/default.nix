@@ -5,17 +5,15 @@
 , libXdmcp
 }:
 
-let
-  # TODO: Sway 0.14.0 with wlc 0.0.10 segfaults
-  version = "0.13.0";
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "sway-${version}";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "Sircmpwn";
     repo = "sway";
     rev = "${version}";
-    sha256 = "1vgk4rl51nx66yzpwg4yhnbj7wc30k5q0hh5lf8y0i1nvpal0p3q";
+    sha256 = "1l8v9cdzd44bm4q71d47vqg6933b8j42q1a61r362vz2la1rcpq2";
   };
 
   nativeBuildInputs = [

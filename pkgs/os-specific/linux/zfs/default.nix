@@ -2,7 +2,7 @@
 , configFile ? "all"
 
 # Userspace dependencies
-, zlib, libuuid, python, attr
+, zlib, libuuid, python, attr, openssl
 
 # Kernel dependencies
 , kernel ? null, spl ? null, splUnstable ? null
@@ -41,7 +41,8 @@ let
       nativeBuildInputs = [ autoreconfHook nukeReferences ];
       buildInputs =
            optionals buildKernel [ spl ]
-        ++ optionals buildUser [ zlib libuuid python attr ];
+        ++ optionals buildUser [ zlib libuuid python attr ]
+        ++ optionals (buildUser && isUnstable) [ openssl ];
 
       # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
       NIX_CFLAGS_LINK = "-lgcc_s";
@@ -158,10 +159,10 @@ in {
     incompatibleKernelVersion = null;
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2017-09-26";
+    version = "2017-10-16";
 
-    rev = "7e98073379353a05498ac5a2f1a5df2a2257d6b0";
-    sha256 = "1hydfhmngpq31gxkxipqxnin74l760d1ia202h12vsgix9sp32h7";
+    rev = "7670f721fc82e6cdcdd31f83760a79b6f2f2b998";
+    sha256 = "0ask9d9936s7mhs9q5wzvn6c8fd322i76hs2n7fajfk17b1a1lkj";
     isUnstable = true;
 
     extraPatches = [

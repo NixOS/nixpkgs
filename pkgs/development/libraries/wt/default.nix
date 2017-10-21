@@ -1,24 +1,27 @@
-{stdenv, fetchFromGitHub, cmake, boost, pkgconfig, doxygen, qt48Full, libharu, 
-  pango, fcgi, firebird, libmysql, postgresql, graphicsmagick, glew, openssl,
-  pcre }:
+{ stdenv, fetchFromGitHub, cmake, boost, pkgconfig, doxygen, qt48Full, libharu
+, pango, fcgi, firebird, libmysql, postgresql, graphicsmagick, glew, openssl
+, pcre
+}:
 
 stdenv.mkDerivation rec {
-  name = "wt";
-  version = "3.3.6";
+  name = "wt-${version}";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "kdeforche";
-    repo = name;
+    repo = "wt";
     rev = version;
-    sha256 = "1pvykc969l9cpd0da8bgpi4gr8f6qczrbpprrxamyj1pn0ydzvq3";
+    sha256 = "1451xxvnx6mlvxg0jxlr1mfv5v18h2214kijk5kacilqashfc43i";
   };
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake boost doxygen qt48Full libharu 
-    pango fcgi firebird libmysql postgresql graphicsmagick glew 
-    openssl pcre ];
+  buildInputs = [
+    cmake boost doxygen qt48Full libharu
+    pango fcgi firebird libmysql postgresql graphicsmagick glew
+    openssl pcre
+  ];
 
   cmakeFlags = [
     "-DWT_WRASTERIMAGE_IMPLEMENTATION=GraphicsMagick"
@@ -28,12 +31,10 @@ stdenv.mkDerivation rec {
     "--no-warn-unused-cli"
   ];
 
-  patches = [ ./cmake.patch ];  # fix a cmake warning; PR sent to upstream 
-
   meta = with stdenv.lib; {
     homepage = https://www.webtoolkit.eu/wt;
     description = "C++ library for developing web applications";
-    platforms = platforms.linux ;
+    platforms = platforms.linux;
     license = licenses.gpl2;
     maintainers = [ maintainers.juliendehos ];
   };

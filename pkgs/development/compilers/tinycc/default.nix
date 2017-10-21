@@ -2,9 +2,9 @@
 with stdenv.lib;
 
 let
-  date = "20170924";
-  rev = "1443039416dd02750765efde1af35e31c8d41be3";
-  sha256 = "060l0f77hirq3i5bg294gxcszlvyn89ds2q21jwgy3ryrapfbl8i";
+  date = "20171016";
+  rev = "da8c62f75d893449e232944fc62566c020b4d010";
+  sha256 = "0pdvyhrx7g9imxpc7gr75116imi6ifn0ihsl4fbffsji2dpi61y2";
   version = "0.9.27pre-${date}";
 in
 

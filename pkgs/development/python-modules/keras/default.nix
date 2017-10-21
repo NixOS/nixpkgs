@@ -1,13 +1,6 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
-, pytest
-, pytestcov
-, pytestpep8
-, pytest_xdist
-, six
-, Theano
-, pyyaml
+{ stdenv, lib, buildPythonPackage, fetchPypi
+, pytest, pytestcov, pytestpep8, pytest_xdist
+, six, numpy, scipy, pyyaml
 }:
 
 buildPythonPackage rec {
@@ -28,7 +21,7 @@ buildPythonPackage rec {
   ];
 
   propagatedBuildInputs = [
-    six Theano pyyaml
+    six pyyaml numpy scipy
   ];
 
   # Couldn't get tests working

@@ -46,10 +46,10 @@ rec {
       };
 
       # This should go into the containerd derivation once 1.0.0 is out
-      preBuild = (optionalString (version == "17.09.0-ce") ''
+      preBuild = ''
         mkdir $(pwd)/vendor/src
         mv $(pwd)/vendor/{github.com,golang.org,google.golang.org} $(pwd)/vendor/src/
-      '') + oldAttrs.preBuild;
+      '' + oldAttrs.preBuild;
     });
     docker-tini = tini.overrideAttrs  (oldAttrs: rec {
       name = "docker-init";
@@ -122,7 +122,13 @@ rec {
 
     installPhase = ''
       install -Dm755 ./components/cli/docker $out/libexec/docker/docker
-      install -Dm755 ./components/engine/bundles/${version}/dynbinary-daemon/dockerd-${version} $out/libexec/docker/dockerd
+
+      if [ -d "./components/engine/bundles/${version}" ]; then
+        install -Dm755 ./components/engine/bundles/${version}/dynbinary-daemon/dockerd-${version} $out/libexec/docker/dockerd
+      else
+        install -Dm755 ./components/engine/bundles/dynbinary-daemon/dockerd-${version} $out/libexec/docker/dockerd
+      fi
+
       makeWrapper $out/libexec/docker/docker $out/bin/docker \
         --prefix PATH : "$out/libexec/docker:$extraPath"
       makeWrapper $out/libexec/docker/dockerd $out/bin/dockerd \
@@ -175,7 +181,7 @@ rec {
       homepage = https://www.docker.com/;
       description = "An open source project to pack, ship and run any application as a lightweight container";
       license = licenses.asl20;
-      maintainers = with maintainers; [ offline tailhook vdemeester ];
+      maintainers = with maintainers; [ nequissimus offline tailhook vdemeester ];
       platforms = platforms.linux;
     };
   };
@@ -183,24 +189,24 @@ rec {
   # Get revisions from
   # https://github.com/docker/docker-ce/blob/v${version}/components/engine/hack/dockerfile/binaries-commits
 
-  docker_17_06 = dockerGen rec {
-    version = "17.06.2-ce";
-    rev = "cec0b72a9940e047e945a09e1febd781e88366d6"; # git commit
-    sha256 = "1scqx28vzh72ziq00lbx92vsb896mj974j8f0zg11y6qc5n5jx3l";
-    runcRev = "810190ceaa507aa2727d7ae6f4790c76ec150bd2";
-    runcSha256 = "0f1x1z262qg579qb1w21axj3mibq4fbff3gamliw49sdqqnb7vk3";
-    containerdRev = "6e23458c129b551d5c9871e5174f6b1b7f6d1170";
-    containerdSha256 = "12kzc5z1nhxdbizzr494ywilbs6rdv39v5ql7lmfzwh350gwlg93";
-    tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";
-    tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
-  };
-
   docker_17_09 = dockerGen rec {
     version = "17.09.0-ce";
     rev = "afdb6d44a80f777069885a9ee0e0f86cf841b1bb"; # git commit
     sha256 = "03g0imdcxqx9y4hhyymxqzvm8bqg4cqrmb7sjbxfdgrhzh9kcn1p";
     runcRev = "3f2f8b84a77f73d38244dd690525642a72156c64";
     runcSha256 = "0vaagmav8443kmyxac2y1y5l2ipcs1c7gdmsnvj48y9bafqx72rq";
+    containerdRev = "06b9cb35161009dcb7123345749fef02f7cea8e0";
+    containerdSha256 = "10hms8a2nn69nfnwly6923jzx40c3slpsdhjhff4bxh36flpf9gd";
+    tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";
+    tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
+  };
+
+  docker_17_10 = dockerGen rec {
+    version = "17.10.0-ce";
+    rev = "f4ffd2511ce93aa9e5eefdf0e912f77543080b0b"; # git commit
+    sha256 = "07x47cfdaz4lhlga1pchcbqqy0nd2q6zch0ycag18vzi99w4gmh2";
+    runcRev = "0351df1c5a66838d0c392b4ac4cf9450de844e2d";
+    runcSha256 = "1cmkdv6rli7v0y0fddqxvrvzd486fg9ssp3kgkya3szkljzz4xj0";
     containerdRev = "06b9cb35161009dcb7123345749fef02f7cea8e0";
     containerdSha256 = "10hms8a2nn69nfnwly6923jzx40c3slpsdhjhff4bxh36flpf9gd";
     tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";

@@ -9,6 +9,8 @@
 , enableStatic ? !enableShared
 , enablePIC ? false
 , enableExceptions ? false
+, enablePython ? hostPlatform == buildPlatform
+, enableNumpy ? false, numpy ? null
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
 , patches ? null
 , mpi ? null
@@ -20,6 +22,9 @@
 
 # We must build at least one type of libraries
 assert !enableShared -> enableStatic;
+
+assert enablePython -> hostPlatform == buildPlatform;
+assert enableNumpy -> enablePython;
 
 with stdenv.lib;
 let
@@ -62,7 +67,8 @@ let
   ] ++ optional (link != "static") "runtime-link=${runtime-link}" ++ [
     "link=${link}"
     "${cflags}"
-  ] ++ optional (variant == "release") "debug-symbols=off";
+  ] ++ optional (variant == "release") "debug-symbols=off"
+    ++ optional (!enablePython) "--without-python";
 
   nativeB2Flags = [
     "-sEXPAT_INCLUDE=${expat.dev}/include"
@@ -76,7 +82,6 @@ let
     "-sEXPAT_LIBPATH=${expat.crossDrv}/lib"
     "--user-config=user-config.jam"
     "toolset=gcc-cross"
-    "--without-python"
   ] ++ optionals (hostPlatform.libc == "msvcrt") [
     "target-os=windows"
     "threadapi=win32"
@@ -148,8 +153,10 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   buildInputs = [ expat zlib bzip2 libiconv ]
-    ++ stdenv.lib.optionals (hostPlatform == buildPlatform) [ python icu ]
-    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+    ++ optional (hostPlatform == buildPlatform) icu
+    ++ optional stdenv.isDarwin fixDarwinDylibNames
+    ++ optional enablePython python
+    ++ optional enableNumpy numpy;
 
   configureScript = "./bootstrap.sh";
   configureFlags = commonConfigureFlags
