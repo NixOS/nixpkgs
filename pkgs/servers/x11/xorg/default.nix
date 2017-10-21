@@ -848,11 +848,11 @@ let
   }) // {inherit fixesproto libX11 xextproto xproto ;};
 
   libXfont = (mkDerivation "libXfont" {
-    name = "libXfont-1.5.2";
+    name = "libXfont-1.5.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXfont-1.5.2.tar.bz2;
-      sha256 = "0w8d07bkmjiarkx09579bl8zsq903mn8javc7qpi0ix4ink5x502";
+      url = mirror://xorg/individual/lib/libXfont-1.5.3.tar.bz2;
+      sha256 = "1l4k3i3xzqdmaszykh6bb2ah78p6c3z7fak7xzgq2d38s87w31db";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libfontenc fontsproto freetype xproto xtrans zlib ];
