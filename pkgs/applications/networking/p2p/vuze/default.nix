@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Torrent client";
     homepage = http://www.vuze.com;
-    license = licenses.free;
+    license = licenses.unfree;
     platforms = platforms.all;
     maintainers = with maintainers; [ volth ];
   };
