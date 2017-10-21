@@ -5,7 +5,7 @@ then throw "Uranium not supported for interpreter ${python.executable}"
 else
 
 stdenv.mkDerivation rec {
-  version = "2.6.1";
+  version = "3.0.3";
   pname = "uranium";
   name = "${pname}-${version}";
   
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "Ultimaker";
     repo = "Uranium";
     rev = version;
-    sha256 = "1682xwxf6xs1d1cfv1s7xnabqv58jjdb6szz8624b3k9rsj5l2yq";
+    sha256 = "1pyzpcdb6kb0basvhgpjdiws8x0bwl71k7nkf3j3s9wk1dvyw824";
   };
   
   buildInputs = [ python gettext ];
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A Python framework for building Desktop applications";
-    homepage = https://github.com/Ultimaker/Uranium;
+    homepage = "https://github.com/Ultimaker/Uranium";
     license = licenses.agpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
