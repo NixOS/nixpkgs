@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "pell";
-  version = "0.0.1";
+  version = "0.0.2";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "ebzzry";
     repo = pname;
-    rev = "3f95341eb9439c7a6be1f3c6366c0552ab8208f0";
-    sha256 = "183aj3ys080g2kahl8x8rkhzlsb6h5ls9xm1v2kasfbn1pi5i6nn";
+    rev = "ec14de0a9b666433954184167bf3b82cf21193f8";
+    sha256 = "0r2gbb4l9rr5x99m62zicknsp1gf9fr124xpyd8ak9izr5hvskn9";
   };
 
   installPhase = ''
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = https://github.com/ebzzry/pell;
-    description = "A simple periodic host monitor using ping";
+    description = "A simple host availability monitor";
     license = licenses.mit;
     maintainers = [ maintainers.ebzzry ];
     platforms = platforms.unix;
