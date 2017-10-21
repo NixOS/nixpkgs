@@ -97,12 +97,26 @@ in
       moduleName="$(sed -n 's,ModuleName *= *,,p' ${themesEnv}/share/plymouth/themes/${cfg.theme}/${cfg.theme}.plymouth)"
 
       mkdir -p $out/lib/plymouth/renderers
-      cp ${plymouth}/lib/plymouth/{text,details,$moduleName}.so $out/lib/plymouth
+      # module might come from a theme
+      cp ${themesEnv}/lib/plymouth/{text,details,$moduleName}.so $out/lib/plymouth
       cp ${plymouth}/lib/plymouth/renderers/{drm,frame-buffer}.so $out/lib/plymouth/renderers
 
       mkdir -p $out/share/plymouth/themes
       cp ${plymouth}/share/plymouth/plymouthd.defaults $out/share/plymouth
-      cp -r ${themesEnv}/share/plymouth/themes/{text,details,${cfg.theme}} $out/share/plymouth/themes
+
+      # copy themes into working directory for patching
+      mkdir themes
+      # use -L to copy the directories proper, not the symlinks to them
+      cp -r -L ${themesEnv}/share/plymouth/themes/{text,details,${cfg.theme}} themes
+
+      # patch out any attempted references to the theme or plymouth's themes directory
+      chmod -R +w themes
+      find themes -type f | while read file
+      do
+        sed -i "s,/nix/.*/share/plymouth/themes,$out/share/plymouth/themes,g" $file
+      done
+
+      cp -r themes/* $out/share/plymouth/themes
       cp ${cfg.logo} $out/share/plymouth/logo.png
     '';
 
