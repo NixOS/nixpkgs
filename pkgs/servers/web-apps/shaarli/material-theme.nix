@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "shaarli-material-${version}";
-  version = "0.8.3";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "kalvn";
     repo = "Shaarli-Material";
     rev = "v${version}";
-    sha256 = "0ivq35183r5vyzvf47sgxwdxllmvhd5w9w75xgyp3kbw2na4yrmr";
+    sha256 = "0x8d9425n3jrwzsyxclbxfspvi91v1klq8r3m6wcj81kys7vmzgh";
   };
 
   patchPhase = ''
