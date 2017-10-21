@@ -1,6 +1,5 @@
 { stdenv, fetchurl, python2Packages,
-  withPlugins ? true,
-  plugins
+  plugins ? []
 }:
 
 python2Packages.buildPythonApplication rec {
@@ -26,7 +25,7 @@ python2Packages.buildPythonApplication rec {
     qrcode
     requests
     tlslite
-  ] ++ stdenv.lib.optional withPlugins plugins;
+  ] ++ plugins;
 
   preBuild = ''
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
