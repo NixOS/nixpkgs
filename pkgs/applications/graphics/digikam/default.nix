@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl, cmake, extra-cmake-modules, wrapGAppsHook
+{ mkDerivation, lib, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
 
 # For `digitaglinktree`
 , perl, sqlite
@@ -33,8 +33,8 @@
 , liblqr1
 , libqtav
 , libusb1
-, mesa
 , marble
+, mesa
 , mysql
 , opencv3
 , pcre
@@ -53,11 +53,11 @@ mkDerivation rec {
   version = "5.7.0";
 
   src = fetchurl {
-    url = "http://download.kde.org/stable/digikam/${name}.tar.xz";
+    url = "mirror://kde/stable/digikam/${name}.tar.xz";
     sha256 = "1xah079g47fih8l9qy1ifppfvmq5yms5y1z54nvxdyz8nsszy19n";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules kdoctools wrapGAppsHook ];
+  nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];
 
   buildInputs = [
     bison
