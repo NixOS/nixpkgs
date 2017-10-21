@@ -38,6 +38,13 @@ stdenv.mkDerivation rec {
     for f in $(grep -l -r '/usr/bin/env'); do
       substituteInPlace "$f" --replace '/usr/bin/env' '${coreutils}/bin/env'
     done
+  '' + lib.optionalString stdenv.isDarwin ''
+    sed -i 's,/usr/bin/xcrun clang,clang,g' \
+      scripts/bootstrap/compile.sh \
+      src/tools/xcode/realpath/BUILD \
+      src/tools/xcode/stdredirect/BUILD \
+      src/tools/xcode/xcrunwrapper/xcrunwrapper.sh
+    sed -i 's/"xcrun", "clang"/"clang"/g' tools/osx/xcode_configure.bzl
   '';
 
   buildInputs = [
