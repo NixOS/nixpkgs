@@ -762,6 +762,8 @@ with pkgs;
 
   bootchart = callPackage ../tools/system/bootchart { };
 
+  bowtie2 = callPackage ../applications/science/biology/bowtie2 { };
+
   boxfs = callPackage ../tools/filesystems/boxfs { };
 
   brasero-original = lowPrio (callPackage ../tools/cd-dvd/brasero { });
