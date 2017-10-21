@@ -7709,7 +7709,6 @@ with pkgs;
     inherit (python3Packages) fetchPypi buildPythonApplication lxml typed-ast;
   };
 
-
   ### DEVELOPMENT / LIBRARIES
 
   a52dec = callPackage ../development/libraries/a52dec { };
@@ -11119,6 +11118,8 @@ with pkgs;
   czmqpp = callPackage ../development/libraries/czmqpp {
     czmq = czmq3;
   };
+
+  zig = callPackage ../development/compilers/zig {};
 
   zimlib = callPackage ../development/libraries/zimlib { };
 
