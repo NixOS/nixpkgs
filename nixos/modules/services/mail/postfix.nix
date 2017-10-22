@@ -28,7 +28,7 @@ let
 
   mainCf = let
     escape = replaceStrings ["$"] ["$$"];
-    mkList = items: "\n  " + concatMapStringsSep "\n  " escape items;
+    mkList = items: "\n  " + concatStringsSep "\n  " items;
     mkVal = value:
       if isList value then mkList value
         else " " + (if value == true then "yes"
