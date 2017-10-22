@@ -14,13 +14,14 @@ buildRustPackage rec {
     sha256 = "10s01x54kwjm2c85v57i6g3pvj5w3wpkjblj036mmd865fla1brb";
   };
 
-  depsSha256 = "1k5xbw2zhm5z650mxdbxixr90im53wlpjdvq2pbnx2snqm84idlc";
+  cargoSha256 = "06qivlybmmc49ksv4232sm1r4hp923xsq4c2ksa4i2azdzc1csdc";
 
   buildInputs = [ wlc dbus_libs dbus_glib cairo libxkbcommon ];
 
   nativeBuildInputs = [ pkgconfig ];
 
   meta = with stdenv.lib; {
+    broken = true;
     description = "Customizable Wayland compositor (window manager)";
     longDescription = ''
       Way Cooler is a customizable tiling window manager written in Rust

@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "12l3ff0s0pzhcf5jbs8wqawjk4jghhhz8j6dq1n5201yvny12jlr";
   };
 
-  depsSha256 = "1nnb2lpzjf6hv1a7cw3cbkc22fb54rsp6h87wzmqi4hsy1csff7a";
+  cargoSha256 = "0gppki9mgx99xipapg36ydwk1bplygnz6sbyzbg46vhn10iggfwm";
 
   meta = with stdenv.lib; {
     description = "A tool for formatting Rust code according to style guidelines";

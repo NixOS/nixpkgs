@@ -1,17 +1,18 @@
-From 1d8a91d5b09cb762fe890d04bfb61b9eefd0624a Mon Sep 17 00:00:00 2001
-From: Moritz Ulrich <moritz@tarn-vedra.de>
-Date: Sun, 8 Jan 2017 10:28:17 +0100
-Subject: [PATCH] Disable libstd::net::tcp::{ttl, timeouts} on Darwin
+From 26d3b70abec1adf773522643b31ce9c03439916a Mon Sep 17 00:00:00 2001
+From: Joerg Thalheim <joerg@thalheim.io>
+Date: Tue, 10 Oct 2017 00:40:20 +0100
+Subject: [PATCH] Disable fragile tests libstd::net::tcp on Darwin/Linux
 
+Signed-off-by: Joerg Thalheim <joerg@thalheim.io>
 ---
- src/libstd/net/tcp.rs | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ src/libstd/net/tcp.rs | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
 diff --git a/src/libstd/net/tcp.rs b/src/libstd/net/tcp.rs
-index 0e7c5b0671..d42fd26267 100644
+index 8d1e7882e5..2c223fb315 100644
 --- a/src/libstd/net/tcp.rs
 +++ b/src/libstd/net/tcp.rs
-@@ -551,6 +551,7 @@ mod tests {
+@@ -949,6 +949,7 @@ mod tests {
          })
      }
  
@@ -19,7 +20,7 @@ index 0e7c5b0671..d42fd26267 100644
      #[test]
      fn write_close() {
          each_ip(&mut |addr| {
-@@ -1022,7 +1023,10 @@ mod tests {
+@@ -1421,7 +1422,10 @@ mod tests {
  
      // FIXME: re-enabled bitrig/openbsd tests once their socket timeout code
      //        no longer has rounding errors.
@@ -31,7 +32,7 @@ index 0e7c5b0671..d42fd26267 100644
      #[test]
      fn timeouts() {
          let addr = next_test_ip4();
-@@ -1101,6 +1105,7 @@ mod tests {
+@@ -1500,6 +1504,7 @@ mod tests {
          assert_eq!(false, t!(stream.nodelay()));
      }
  
@@ -39,6 +40,14 @@ index 0e7c5b0671..d42fd26267 100644
      #[test]
      fn ttl() {
          let ttl = 100;
+@@ -1568,6 +1573,7 @@ mod tests {
+         })
+     }
+ 
++    #[cfg_attr(target_os = "linux", ignore)]
+     #[test]
+     fn connect_timeout_unroutable() {
+         // this IP is unroutable, so connections should always time out,
 -- 
-2.11.0
+2.14.2
 

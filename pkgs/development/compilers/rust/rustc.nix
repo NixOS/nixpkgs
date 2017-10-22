@@ -48,14 +48,17 @@ stdenv.mkDerivation {
   configureFlags = configureFlags
                 ++ [ "--enable-local-rust" "--local-rust-root=${rustPlatform.rust.rustc}" "--enable-rpath" ]
                 ++ [ "--enable-vendor" "--disable-locked-deps" ]
-                ++ [ "--enable-llvm-link-shared" ]
                 # ++ [ "--jemalloc-root=${jemalloc}/lib"
                 ++ [ "--default-linker=${stdenv.cc}/bin/cc" "--default-ar=${binutils.out}/bin/ar" ]
+                ++ optional (!forceBundledLLVM) [ "--enable-llvm-link-shared" ]
                 ++ optional (stdenv.cc.cc ? isClang) "--enable-clang"
                 ++ optional (targets != []) "--target=${target}"
                 ++ optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
 
   patches = patches ++ targetPatches;
+
+  # the rust build system complains that nix alters the checksums
+  dontFixLibtool = true;
 
   passthru.target = target;
 
