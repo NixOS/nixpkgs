@@ -15,6 +15,10 @@ stdenv.mkDerivation rec {
       url = "https://anonscm.debian.org/git/pkg-games/torcs.git/plain/debian/patches/gcc6-isnan.patch";
       sha256 = "16scmq30vwb8429ah9d4ws0v1w6ai59lvn7hcgnvfzyap42ry876";
     })
+    (fetchpatch {
+      url = "https://anonscm.debian.org/git/pkg-games/torcs.git/plain/debian/patches/format-argument.patch";
+      sha256 = "04advcx88yh23ww767iysydzhp370x7cqp2wf9hk2y1qvw7mxsja";
+    })
   ];
 
   postPatch = ''
@@ -27,8 +31,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bash ];
 
   installTargets = "install datainstall";
-
-  hardeningDisable = [ "format" ];
 
   postInstall = ''
     wrapProgram $out/bin/torcs \
