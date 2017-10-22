@@ -176,6 +176,7 @@
   dupgit = "Olivier Delhomme <olivier.delhomme@free.fr>";
   dywedir = "Vladyslav M. <dywedir@protonmail.ch>";
   e-user = "Alexander Kahl <nixos@sodosopa.io>";
+  earldouglas = "James Earl Douglas <james@earldouglas.com>";
   ebzzry = "Rommel Martinez <ebzzry@ebzzry.io>";
   edanaher = "Evan Danaher <nixos@edanaher.net>";
   edef = "edef <edef@edef.eu>";
