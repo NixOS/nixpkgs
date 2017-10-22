@@ -1,14 +1,13 @@
 { stdenv, fetchFromGitHub, fetchpatch
 , talloc, docutils
-, enableStatic ? false }:
+, enableStatic ? true }:
 
-stdenv.mkDerivation rec {
+({ version, rev, sha256, patches }: stdenv.mkDerivation {
   name = "proot-${version}";
-  version = "5.1.0";
+  inherit version;
 
   src = fetchFromGitHub {
-    sha256 = "0azsqis99gxldmbcg43girch85ysg4hwzf0h1b44bmapnsm89fbz";
-    rev = "v${version}";
+    inherit rev sha256;
     repo = "proot";
     owner = "cedric-vincent";
   };
@@ -18,12 +17,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patches = [
-    (fetchpatch { # debian patch for aarch64 build
-      sha256 = "18milpzjkbfy5ab789ia3m4pyjyr9mfzbw6kbjhkj4vx9jc39svv";
-      url = "https://sources.debian.net/data/main/p/proot/5.1.0-1.2/debian/patches/arm64.patch";
-    })
-  ];
+  inherit patches;
 
   preBuild = stdenv.lib.optionalString enableStatic ''
     export LDFLAGS="-static"
@@ -48,4 +42,20 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ ianwookim nckx makefu ];
   };
-}
+})
+(if stdenv.isAarch64 then rec {
+  version = "5.1.0";
+  sha256 = "0azsqis99gxldmbcg43girch85ysg4hwzf0h1b44bmapnsm89fbz";
+  rev = "v${version}";
+  patches = [
+    (fetchpatch { # debian patch for aarch64 build
+      sha256 = "18milpzjkbfy5ab789ia3m4pyjyr9mfzbw6kbjhkj4vx9jc39svv";
+      url = "https://sources.debian.net/data/main/p/proot/5.1.0-1.2/debian/patches/arm64.patch";
+    })
+  ];
+} else {
+  version = "5.1.0.20171015";
+  sha256 = "0jam87msh5jx8vpb19n6xwxw1xlig5amdcqif7gn2rc8nhswpxif";
+  rev = "0bf2ee17daafeeadfed079cec97fe1ac781e696a";
+  patches = [];
+})
