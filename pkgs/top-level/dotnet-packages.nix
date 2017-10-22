@@ -543,7 +543,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       homepage = https://github.com/fsharp/FSharp.AutoComplete;
       license = stdenv.lib.licenses.asl20;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 
@@ -570,7 +570,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       homepage = "http://fsharp.github.io/FSharp.Compiler.Service/";
       license = stdenv.lib.licenses.asl20;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 
@@ -839,7 +839,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       homepage = http://www.ndesk.org/Options;
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 
@@ -875,7 +875,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       homepage = "http://www.newtonsoft.com/json";
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
-      platforms = with stdenv.lib.platforms; linux;
+      platforms = with stdenv.lib.platforms; linux ++ darwin;
     };
   };
 
