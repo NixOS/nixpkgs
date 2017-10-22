@@ -50,7 +50,18 @@ EOF
     export CARGO_HOME=$out
     cd $src
 
-    if [[ ! -f Cargo.lock ]]; then
+    find_upwards() {
+        [[ "$(realpath "$1")" == "/" ]] && return 1
+        if [ -f "$1/$2" ]; then
+            echo "$1/$2"
+        else
+            find_upwards "../$1" "$2"
+        fi
+    }
+
+    cargo_lock=$(find_upwards . "Cargo.lock")
+
+    if [[ -z "$cargo_lock" ]]; then
         echo
         echo "ERROR: The Cargo.lock file doesn't exist"
         echo
