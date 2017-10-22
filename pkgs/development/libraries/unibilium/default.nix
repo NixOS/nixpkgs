@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "unibilium-${version}";
 
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "mauke";
     repo = "unibilium";
     rev = "v${version}";
-    sha256 = "1qsw19irg70l29j7qv403f32l4rrzn53w7881a6h874j9gisl51s";
+    sha256 = "11mbfijdrvbmdlmxs8j4vij78ki0vna89yg3r9n9g1i6j45hiq2r";
   };
 
   makeFlags = [ "PREFIX=$(out)" ]
