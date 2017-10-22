@@ -201,10 +201,10 @@
       }) {};
     auto-correct = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "auto-correct";
-        version = "1.1.1";
+        version = "1.1.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/auto-correct-1.1.1.el";
-          sha256 = "141dp4r6v6qs1a58z2qmsyr3pfgp3xji0sqg3fn91q2x4dkvqfzl";
+          url = "https://elpa.gnu.org/packages/auto-correct-1.1.3.el";
+          sha256 = "09r58p8na1ai2v9zllb92lvsjlq2jfzwvj0ipck1py0i4xfsm7aq";
         };
         packageRequires = [];
         meta = {
@@ -241,10 +241,10 @@
       }) {};
     beacon = callPackage ({ elpaBuild, fetchurl, lib, seq }: elpaBuild {
         pname = "beacon";
-        version = "1.3.2";
+        version = "1.3.3";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/beacon-1.3.2.el";
-          sha256 = "0ldja8xrrninm588f27bhxvp0b12cngazyz688lkxvwx28cpqb7n";
+          url = "https://elpa.gnu.org/packages/beacon-1.3.3.el";
+          sha256 = "10r4fpf8pcf1qn5ncpm5g7skzba749mrc1ggykq92jlha3q98s02";
         };
         packageRequires = [ seq ];
         meta = {
@@ -945,10 +945,10 @@
     gnorb = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "gnorb";
-        version = "1.2.4";
+        version = "1.3.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/gnorb-1.2.4.tar";
-          sha256 = "013sdzpix9mc7d99mmpqv0r80zr50l1c7jld09p6767f86j6vahi";
+          url = "https://elpa.gnu.org/packages/gnorb-1.3.0.tar";
+          sha256 = "0c256473llp7ahl1wbm6m236cj2lhp9ms1clmxpsfv51ds27ljqv";
         };
         packageRequires = [ cl-lib ];
         meta = {
