@@ -87,7 +87,8 @@ in stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  enableParallelBuilding = true;
+  # on 2.2: fatal error: tensorboard/tensorboard.pb.h: No such file or directory
+  enableParallelBuilding = false;
 
   meta = with lib; {
     homepage = "https://github.com/Microsoft/CNTK";
