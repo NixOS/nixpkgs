@@ -37,7 +37,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 9.9
+  # LTS Haskell 9.10
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -801,7 +801,7 @@ default-package-overrides:
   - gitson ==0.5.2
   - gi-webkit ==3.0.14
   - gl ==0.8.0
-  - glabrous ==0.3.2
+  - glabrous ==0.3.3
   - glaze ==0.3.0.1
   - glazier ==0.11.0.1
   - glazier-pipes ==0.1.5.1
@@ -998,7 +998,7 @@ default-package-overrides:
   - hasmin ==0.3.3
   - hasql ==0.19.18.2
   - hasql-migration ==0.1.3
-  - hasql-pool ==0.4.1
+  - hasql-pool ==0.4.2.1
   - hasql-transaction ==0.5.1
   - hastache ==0.6.1
   - hasty-hamiltonian ==1.3.0
@@ -1024,7 +1024,7 @@ default-package-overrides:
   - hebrew-time ==0.1.1
   - hedgehog ==0.5
   - hedgehog-quickcheck ==0.1
-  - hedis ==0.9.9
+  - hedis ==0.9.10
   - here ==1.2.11
   - heredoc ==0.2.0.0
   - heterocephalus ==1.0.5.0
@@ -1248,7 +1248,7 @@ default-package-overrides:
   - ix-shapable ==0.1.0
   - jack ==0.7.1.1
   - jailbreak-cabal ==1.3.2
-  - javascript-extras ==0.3.1.0
+  - javascript-extras ==0.3.2.0
   - jmacro ==0.6.14
   - jmacro-rpc ==0.3.2
   - jmacro-rpc-happstack ==0.3.2
@@ -1271,7 +1271,7 @@ default-package-overrides:
   - jwt ==0.7.2
   - kan-extensions ==5.0.2
   - kansas-comet ==0.4
-  - katip ==0.5.0.3
+  - katip ==0.5.1.0
   - kawhi ==0.3.0
   - kdt ==0.2.4
   - keter ==1.4.3.2
@@ -1490,7 +1490,7 @@ default-package-overrides:
   - mysql ==0.1.4
   - mysql-haskell ==0.8.0.0
   - mysql-haskell-openssl ==0.8.0.0
-  - mysql-simple ==0.4.3
+  - mysql-simple ==0.4.4
   - nagios-check ==0.3.2
   - names-th ==0.2.0.3
   - nano-erl ==0.1.0.1
@@ -1638,7 +1638,7 @@ default-package-overrides:
   - persistent-redis ==2.5.2
   - persistent-refs ==0.4
   - persistent-sqlite ==2.6.2
-  - persistent-template ==2.5.2
+  - persistent-template ==2.5.3
   - pgp-wordlist ==0.1.0.2
   - pg-transact ==0.1.0.1
   - phantom-state ==0.2.1.2
@@ -1649,13 +1649,13 @@ default-package-overrides:
   - pinboard ==0.9.12.5
   - pinch ==0.3.2.0
   - pinchot ==0.24.0.0
-  - pipes ==4.3.5
+  - pipes ==4.3.6
   - pipes-attoparsec ==0.5.1.5
   - pipes-bytestring ==2.1.6
   - pipes-cacophony ==0.5.0
   - pipes-category ==0.2.0.1
   - pipes-concurrency ==2.0.8
-  - pipes-extras ==1.0.11
+  - pipes-extras ==1.0.12
   - pipes-fluid ==0.5.0.3
   - pipes-group ==1.0.8
   - pipes-misc ==0.3.0.0
@@ -1716,7 +1716,7 @@ default-package-overrides:
   - prettyprinter-compat-ansi-wl-pprint ==1.0.1
   - prettyprinter-compat-wl-pprint ==1.0.0.1
   - pretty-show ==1.6.13
-  - pretty-simple ==2.0.0.0
+  - pretty-simple ==2.0.1.0
   - pretty-types ==0.2.3.1
   - primes ==0.2.1.0
   - primitive ==0.6.2.0
@@ -1752,7 +1752,7 @@ default-package-overrides:
   - publicsuffix ==0.20170508
   - pure-io ==0.2.1
   - pureMD5 ==2.1.3
-  - purescript-bridge ==0.11.0.0
+  - purescript-bridge ==0.11.1.0
   - pusher-http-haskell ==1.2.0.1
   - pwstore-fast ==2.4.4
   - QuasiText ==0.1.2.6
@@ -2096,7 +2096,7 @@ default-package-overrides:
   - tar ==0.5.0.3
   - tar-conduit ==0.1.1
   - tardis ==0.4.1.0
-  - tasty ==0.11.2.5
+  - tasty ==0.11.3
   - tasty-ant-xml ==1.1.0
   - tasty-auto ==0.2.0.0
   - tasty-dejafu ==0.6.0.0
@@ -2283,7 +2283,7 @@ default-package-overrides:
   - unix-bytestring ==0.3.7.3
   - unix-compat ==0.4.3.1
   - unix-time ==0.3.7
-  - unliftio ==0.1.0.0
+  - unliftio ==0.1.1.0
   - unliftio-core ==0.1.0.0
   - unlit ==0.4.0.0
   - unordered-containers ==0.2.8.0
@@ -2325,7 +2325,7 @@ default-package-overrides:
   - verbosity ==0.2.3.0
   - versions ==3.1.1
   - vhd ==0.2.2
-  - ViennaRNAParser ==1.3.2
+  - ViennaRNAParser ==1.3.3
   - viewprof ==0.0.0.10
   - vinyl ==0.5.3
   - vinyl-utils ==0.3.0.0
