@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, mesa, freeglut, libX11, plib, openal, freealut, libXrandr, xproto,
+{ fetchpatch, fetchurl, stdenv, mesa, freeglut, libX11, plib, openal, freealut, libXrandr, xproto,
 libXext, libSM, libICE, libXi, libXt, libXrender, libXxf86vm, libvorbis,
 libpng, zlib, bash, makeWrapper }:
 
@@ -10,7 +10,14 @@ stdenv.mkDerivation rec {
     sha256 = "0kdq0sc7dsfzlr0ggbxggcbkivc6yp30nqwjwcaxg9295s3b06wa";
   };
 
-  patchPhase = ''
+  patches = [
+    (fetchpatch {
+      url = "https://anonscm.debian.org/git/pkg-games/torcs.git/plain/debian/patches/gcc6-isnan.patch";
+      sha256 = "16scmq30vwb8429ah9d4ws0v1w6ai59lvn7hcgnvfzyap42ry876";
+    })
+  ];
+
+  postPatch = ''
     sed -i -e s,/bin/bash,`type -P bash`, src/linux/torcs.in
   '';
 
