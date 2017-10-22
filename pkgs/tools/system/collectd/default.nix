@@ -43,6 +43,9 @@ stdenv.mkDerivation rec {
     sha256 = "14p5cc3ys3qfg71xzxfvmxdmz5l4brpbhlmw1fwdda392lia084x";
   };
 
+  # on 5.7.2: lvm2app.h:21:2: error: #warning "liblvm2app is deprecated, use D-Bus API instead." [-Werror=cpp]
+  NIX_CFLAGS_COMPILE = "-Wno-error=cpp";
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     curl libdbi libgcrypt libmemcached
