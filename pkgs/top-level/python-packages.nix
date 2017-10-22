@@ -18547,22 +18547,6 @@ in {
     };
   };
 
-  # Remove before release of 17.09
-  requests_1 = buildPythonPackage rec {
-    name = "requests-1.2.3";
-    disabled = !pythonOlder "3.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/requests/${name}.tar.gz";
-      sha256 = "156bf3ec27ba9ec7e0cf8fbe02808718099d218de403eb64a714d73ba1a29ab1";
-    };
-
-    meta = {
-      description = "An Apache2 licensed HTTP library, written in Python, for human beings";
-      homepage = http://docs.python-requests.org/en/latest/;
-    };
-  };
-
   requests2 = throw "requests2 has been deprecated. Use requests instead.";
 
   # use requests, not requests_2
