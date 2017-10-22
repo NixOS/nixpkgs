@@ -438,6 +438,8 @@ with pkgs;
 
   ansifilter = callPackage ../tools/text/ansifilter {};
 
+  anura = callPackage ../games/anura { };
+
   apktool = callPackage ../development/tools/apktool {
     buildTools = androidenv.buildTools;
   };
