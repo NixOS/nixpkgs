@@ -19,6 +19,10 @@ stdenv.mkDerivation rec {
       url = "https://anonscm.debian.org/git/pkg-games/torcs.git/plain/debian/patches/format-argument.patch";
       sha256 = "04advcx88yh23ww767iysydzhp370x7cqp2wf9hk2y1qvw7mxsja";
     })
+    (fetchpatch {
+      url = "https://anonscm.debian.org/git/pkg-games/torcs.git/plain/debian/patches/glibc-default-source.patch";
+      sha256 = "0k4hgpddnhv68mdc9ics7ah8q54j60g394d7zmcmzg6l3bjd9pyp";
+    })
   ];
 
   postPatch = ''
