@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.threadingbuildingblocks.org/";
     description = "High level abstract threading library";
     platforms = platforms.unix;
-    license = licenses.apache2;
+    license = licenses.asl20;
     maintainers = with maintainers; [ dizfer ];
   };
 }
