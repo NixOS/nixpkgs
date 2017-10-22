@@ -7,6 +7,12 @@ with lib;
     services.xl2tpd = {
       enable = mkEnableOption "Whether xl2tpd should be run on startup.";
 
+      xl2tpOptions = mkOption {
+        type        = types.lines;
+        description = "The xl2tpd configuration file. Note that this will disable serverIp, clientRange, extraXl2tpOptions and extraPppdOptions";
+        default     = "";
+      };
+
       serverIp = mkOption {
         type        = types.string;
         description = "The server-side IP address.";
@@ -42,21 +48,22 @@ with lib;
       cfg = config.services.xl2tpd;
 
       # Config files from https://help.ubuntu.com/community/L2TPServer
-      xl2tpd-conf = pkgs.writeText "xl2tpd.conf" ''
-        [global]
-        ipsec saref = no
+      xl2tpd-conf = pkgs.writeText "xl2tpd.conf" (if (cfg.xl2tpOptions == "")
+        then ''
+          [global]
+          ipsec saref = no
 
-        [lns default]
-        local ip = ${cfg.serverIp}
-        ip range = ${cfg.clientIpRange}
-        pppoptfile = ${pppd-options}
-        length bit = yes
+          [lns default]
+          local ip = ${cfg.serverIp}
+          ip range = ${cfg.clientIpRange}
+          pppoptfile = ${pppd-options}
+          length bit = yes
 
-        ; Extra
-        ${cfg.extraXl2tpOptions}
-      '';
+          ; Extra
+          ${cfg.extraXl2tpOptions}
+        '' else cfg.xl2tpOptions);
 
-      pppd-options = pkgs.writeText "ppp-options-xl2tpd.conf" ''
+      pppd-options = mkIf (cfg.xl2tpOptions != "") pkgs.writeText "ppp-options-xl2tpd.conf" ''
         refuse-pap
         refuse-chap
         refuse-mschap
