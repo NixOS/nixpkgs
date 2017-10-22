@@ -54,6 +54,8 @@ in buildPythonPackage rec {
     xlwt
   ];
 
+  doCheck = false;
+
   # For OSX, we need to add a dependency on libcxx, which provides
   # `complex.h` and other libraries that pandas depends on to build.
   postPatch = optionalString isDarwin ''
