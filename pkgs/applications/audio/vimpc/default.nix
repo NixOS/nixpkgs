@@ -2,14 +2,16 @@
 , taglib }:
 
 stdenv.mkDerivation rec {
-  version = "0.09.0";
+  version = "0.09.1";
   name = "vimpc-${version}";
 
   src = fetchFromGitHub {
     owner = "boysetsfrog";
     repo = "vimpc";
-    rev = "v${version}";
-    sha256 = "1z9yx2pz84lyng1ig9y4z6pdalwxb80ig7nnzhqfy3pl36hq6shi";
+    # Using commit-hash as there is not tag available
+    # https://github.com/boysetsfrog/vimpc/issues/70
+    rev = "63556da6b94ab27d7e3f542399f5e0975a5812ba";
+    sha256 = "1495a702df4nja8mlxq98mkbic2zv88sjiinimf9qddrfb38jxk6";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
