@@ -1103,7 +1103,7 @@ with pkgs;
 
   gosu = callPackage ../tools/misc/gosu { };
 
-  gringo = callPackage ../tools/misc/gringo { };
+  gringo = callPackage ../tools/misc/gringo { scons = scons_2_5_1; };
 
   gti = callPackage ../tools/misc/gti { };
 
