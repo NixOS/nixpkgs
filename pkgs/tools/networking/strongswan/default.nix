@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       "--enable-eap-sim" "--enable-eap-sim-file" "--enable-eap-simaka-pseudonym"
       "--enable-eap-simaka-reauth" "--enable-eap-identity" "--enable-eap-md5"
       "--enable-eap-gtc" "--enable-eap-aka" "--enable-eap-aka-3gpp2"
-      "--enable-eap-mschapv2" "--enable-xauth-eap" "--enable-ext-auth"
+      "--enable-eap-mschapv2" "--enable-eap-radius" "--enable-xauth-eap" "--enable-ext-auth"
       "--enable-forecast" "--enable-connmark" "--enable-acert"
       "--enable-pkcs11" "--enable-eap-sim-pcsc" "--enable-dnscert" "--enable-unbound"
       "--enable-af-alg" "--enable-xauth-pam" "--enable-chapoly" ]
