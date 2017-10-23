@@ -13327,6 +13327,8 @@ in {
     buildInputs = with self; [ nose ];
   };
 
+  nose_warnings_filters = callPackage ../development/python-modules/nose_warnings_filters { };
+
   notebook = callPackage ../development/python-modules/notebook { };
 
   notify = pkgs.stdenv.mkDerivation (rec {
