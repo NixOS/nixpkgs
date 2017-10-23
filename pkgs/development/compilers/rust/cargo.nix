@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, file, curl, pkgconfig, python, openssl, cmake, zlib
-, makeWrapper, libiconv, cacert, rustPlatform, rustc, libgit2
+, makeWrapper, libiconv, cacert, rustPlatform, rustc, libgit2, darwin
 , version, srcSha, cargoSha256
 , patches ? []}:
 
@@ -21,7 +21,10 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ file curl python openssl cmake zlib makeWrapper libgit2 ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
+    # FIXME: Use impure version of CoreFoundation because of missing symbols.
+    # CFURLSetResourcePropertyForKey is defined in the headers but there's no
+    # corresponding implementation in the sources from opensource.apple.com.
+    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreFoundation libiconv ];
 
   LIBGIT2_SYS_USE_PKG_CONFIG=1;
 
