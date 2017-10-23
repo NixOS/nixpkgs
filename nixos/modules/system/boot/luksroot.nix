@@ -5,7 +5,7 @@ with lib;
 let
   luks = config.boot.initrd.luks;
 
-  openCommand = name': { name, device, header, keyFile, keyFileSize, allowDiscards, yubikey, ... }: assert name' == name; ''
+  openCommand = name': { name, device, header, keyFile, keyFileSize, allowDiscards, yubikey, fallback, ... }: assert name' == name; ''
 
     # Wait for a target (e.g. device, keyFile, header, ...) to appear.
     wait_target() {
@@ -45,12 +45,14 @@ let
           ${optionalString (header != null) "--header=${header}"} \
           > /.luksopen_args
         ${optionalString (keyFile != null) ''
-        if [ -e ${keyFile} ]; then
+        ${optionalString fallback "if [ -e ${keyFile} ]; then"}
             echo " --key-file=${keyFile} ${optionalString (keyFileSize != null) "--keyfile-size=${toString keyFileSize}"}" \
               >> /.luksopen_args
+        ${optionalString fallback ''
         else
             echo "keyfile ${keyFile} not found -- fallback to interactive unlocking"
         fi
+        ''}
         ''}
         cryptsetup-askpass
         rm /.luksopen_args
@@ -327,6 +329,16 @@ in
               Whether to allow TRIM requests to the underlying device. This option
               has security implications; please read the LUKS documentation before
               activating it.
+            '';
+          };
+
+          fallback = mkOption {
+            default = false;
+            type = types.bool;
+            description = ''
+              Whether to fallback to interactive passphrase prompt if the keyfile
+              cannot be found. This will prevent unattended boot should the keyfile
+              go missing.
             '';
           };
 
