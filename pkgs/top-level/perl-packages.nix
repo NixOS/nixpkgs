@@ -119,14 +119,14 @@ let self = _self // overrides; _self = with self; {
   };
 
   AnyEvent = buildPerlPackage rec {
-    name = "AnyEvent-7.08";
+    name = "AnyEvent-7.14";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${name}.tar.gz";
-      sha256 = "16nnqzxy5baiar6gxnq5w296mmjgijcn1jq8rp867nksph03mxz8";
+      sha256 = "539358d225bad34b4a64f5217f8c2a707b15e3a28c74120c9dd2270c7cca7d2a";
     };
+    buildInputs = [ CanaryStability ];
     meta = {
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
