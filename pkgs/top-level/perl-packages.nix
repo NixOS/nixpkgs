@@ -168,19 +168,17 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  AnyEventRabbitMQ = buildPerlPackage {
-    name = "AnyEvent-RabbitMQ-1.15";
+  AnyEventRabbitMQ = buildPerlPackage rec {
+    name = "AnyEvent-RabbitMQ-1.19";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BO/BOBTFISH/AnyEvent-RabbitMQ-1.15.tar.gz;
-      sha256 = "fda292dfaae10f6d99aafc46831ce507153b58368e3eb2617bbb3f749605805a";
+      url = "mirror://cpan/authors/id/D/DL/DLAMBLEY/${name}.tar.gz";
+      sha256 = "a440ec2fa5a4018ad44739baaa9601cc460ad497282e89110ba8e3cf23312f0a";
     };
     buildInputs = [ TestException ];
     propagatedBuildInputs = [ AnyEvent DevelGlobalDestruction FileShareDir ListMoreUtils NetAMQP Readonly namespaceclean ];
     meta = {
       description = "An asynchronous and multi channel Perl AMQP client";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      maintainers = with maintainers; [ ];
-      platforms   = stdenv.lib.platforms.unix;
     };
   };
 
