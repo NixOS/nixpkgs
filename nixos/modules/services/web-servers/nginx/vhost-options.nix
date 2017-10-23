@@ -48,7 +48,21 @@ with lib;
     enableACME = mkOption {
       type = types.bool;
       default = false;
-      description = "Whether to ask Let's Encrypt to sign a certificate for this vhost.";
+      description = ''
+        Whether to ask Let's Encrypt to sign a certificate for this vhost.
+        Alternately, you can use an existing certificate through <option>useACMEHost</option>.
+      '';
+    };
+
+    useACMEHost = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = ''
+        A host of an existing Let's Encrypt certificate to use.
+        This is useful if you have many subdomains and want to avoid hitting the
+        <link xlink:href="https://letsencrypt.org/docs/rate-limits/">rate limit</link>.
+        Alternately, you can generate a certificate through <option>enableACME</option>.
+      '';
     };
 
     acmeRoot = mkOption {
