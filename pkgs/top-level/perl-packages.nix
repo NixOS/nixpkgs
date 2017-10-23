@@ -156,10 +156,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   AnyEventI3 = buildPerlPackage rec {
-    name = "AnyEvent-I3-0.16";
+    name = "AnyEvent-I3-0.17";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MS/MSTPLBG/${name}.tar.gz";
-      sha256 = "1qwva5vmmn929l6k9wzhp4h80ad4qm4m1g2dyv4nlas624003hig";
+      sha256 = "5382c984c9f138395f29f0c00af81aa0c8f4b765582055c73ede4b13f04a6d63";
     };
     propagatedBuildInputs = [ AnyEvent JSONXS ];
     meta = {
