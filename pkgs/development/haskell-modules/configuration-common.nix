@@ -916,4 +916,7 @@ self: super: {
   # https://github.com/jwiegley/hnix/issues/65
   hnix = super.hnix.override { data-fix = self.data-fix_0_0_7; };
 
+  # Build with gi overloading feature disabled.
+  ltk = super.ltk.overrideScope (self: super: { haskell-gi-overloading = self.haskell-gi-overloading_0_0; });
+
 }
