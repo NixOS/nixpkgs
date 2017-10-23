@@ -3,6 +3,7 @@
 , fetchPypi
 , pytest
 , nose
+, glibcLocales
 , entrypoints
 , bleach
 , mistune
@@ -21,15 +22,15 @@
 
 buildPythonPackage rec {
   pname = "nbconvert";
-  version = "5.2.1";
+  version = "5.3.1";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9ed68ec7fe90a8672b43795b29ea91cc75ea355c83debc83ebd12171521ec274";
+    sha256 = "1f9dkvpx186xjm4xab0qbph588mncp4vqk3fmxrsnqs43mks9c8j";
   };
 
-  checkInputs = [ nose pytest ];
+  checkInputs = [ nose pytest glibcLocales ];
 
   propagatedBuildInputs = [
     entrypoints bleach mistune jinja2 pygments traitlets testpath
@@ -37,16 +38,14 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    nosetests -v
+    mkdir tmp
+    LC_ALL=en_US.utf8 HOME=`realpath tmp` py.test -v
   '';
-
-  # PermissionError. Likely due to being in a chroot
-  doCheck = false;
 
   meta = {
     description = "Converting Jupyter Notebooks";
     homepage = http://jupyter.org/;
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh ];
+    maintainers = with lib.maintainers; [ fridh globin ];
   };
 }
