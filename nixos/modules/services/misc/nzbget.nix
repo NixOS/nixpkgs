@@ -43,34 +43,16 @@ in
       ];
       preStart = ''
         datadir=/var/lib/nzbget
-        configfile=$datadir/nzbget.conf
-        cfgtemplate_pkg=${cfg.package}/share/nzbget/nzbget.conf
-        webdir_pkg=${cfg.package}/share/nzbget/webui
+        cfgtemplate=${cfg.package}/share/nzbget/nzbget.conf
 
         test -d $datadir || {
           echo "Creating nzbget data directory in $datadir"
           mkdir -p $datadir
         }
 
-        test -f $configfile && {
-          # nzbget expects config to have a stable reference to resources in
-          # /usr or /etc.  Instead our config references /nix/store (a moving
-          # target), which breaks after an upgrade/ garbage collection cycle.
-          # To fix this, at runtime we have the server rewrite broken links
-          # to point at the current installation under /nix/store.
-          webdir=`grep -Po '(?<=^WebDir=).*+' $configfile`
-          test -d $webdir || {
-            echo "In $configfile, updating broken WebDir=$webdir to $webdir_pkg"
-            sed -i "s|$webdir|$webdir_pkg|g" $configfile
-          }
-          cfgtemplate=`grep -Po '(?<=^ConfigTemplate=).*+' $configfile`
-          test -f $cfgtemplate || {
-            echo "In $configfile, updating broken ConfigTemplate=$cfgtemplate to $cfgtemplate_pkg"
-            sed -i "s|$cfgtemplate|$cfgtemplate_pkg|g" $configfile
-          }
-        } || {
-          echo "nzbget.conf not found. Copying default config $cfgtemplate_pkg to $configfile"
-          cp $cfgtemplate_pkg $configfile
+        test -f $configfile || {
+          echo "nzbget.conf not found. Copying default config $cfgtemplate to $configfile"
+          cp $cfgtemplate $configfile
           echo "Setting $configfile permissions to 0700 (needs to be written and contains plaintext credentials)"
           chmod 0700 $configfile
           echo "Setting temporary \$MAINDIR variable in default config required in order to allow nzbget to complete initial start"
@@ -82,12 +64,34 @@ in
         chown -R ${cfg.user}:${cfg.group} $datadir
       '';
 
+      script = ''
+        configfile=/var/lib/nzbget/nzbget.conf
+        args="--daemon --configfile $configfile"
+
+        # The script in preStart (above) copies nzbget's config template to datadir on first run,
+        # containing paths that point to the nzbget derivation installed at the time.
+        # These paths break when nzbget is upgraded & the original derivation is garbage collected.
+        # If such broken paths are found in the config file, override them to point to the
+        # currently installed nzbget derivation.
+        cfgfallback () {
+          local hit=`grep -Po "(?<=^$1=).*+" "$configfile" | sed 's/[ \t]*$//'`  # Strip trailing whitespace
+          ( test $hit && test -e $hit ) || {
+            echo "In $configfile, valid $1 not found; falling back to $1=$2"
+            args+=" -o $1=$2"
+          }
+        }
+
+        cfgfallback ConfigTemplate ${cfg.package}/share/nzbget/nzbget.conf
+        cfgfallback WebDir ${cfg.package}/share/nzbget/webui
+
+        ${cfg.package}/bin/nzbget $args
+      '';
+
       serviceConfig = {
         Type = "forking";
         User = cfg.user;
         Group = cfg.group;
         PermissionsStartOnly = "true";
-        ExecStart = "${cfg.package}/bin/nzbget --daemon --configfile /var/lib/nzbget/nzbget.conf";
         Restart = "on-failure";
       };
     };
