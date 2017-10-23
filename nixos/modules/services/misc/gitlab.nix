@@ -634,7 +634,7 @@ in {
 
         # The gitlab:shell:create_hooks task seems broken for fixing links
         # so we instead delete all the hooks and create them anew
-        rm ${cfg.statePath}/repositories/**/*.git/hooks
+        rm -f ${cfg.statePath}/repositories/**/*.git/hooks
         ${gitlab-rake}/bin/gitlab-rake gitlab:shell:create_hooks RAILS_ENV=production
 
         # Change permissions in the last step because some of the
