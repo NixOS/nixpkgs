@@ -572,7 +572,7 @@ in {
         rm -rf ${cfg.statePath}/config ${cfg.statePath}/shell/hooks
         mkdir -p ${cfg.statePath}/config
 
-        tr -dc A-Za-z0-9 < /dev/urandom | head -c 32 > ${cfg.statePath}/config/gitlab_shell_secret
+        ${pkgs.openssl}/bin/openssl rand -hex 32 > ${cfg.statePath}/config/gitlab_shell_secret
 
         # The uploads directory is hardcoded somewhere deep in rails. It is
         # symlinked in the gitlab package to /run/gitlab/uploads to make it
