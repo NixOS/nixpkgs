@@ -2717,6 +2717,8 @@ with pkgs;
   ipfs = callPackage ../applications/networking/ipfs { };
   ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
 
+  ipget = callPackage ../applications/networking/ipget { };
+
   ipmitool = callPackage ../tools/system/ipmitool {
     static = false;
   };
