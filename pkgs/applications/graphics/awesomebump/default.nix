@@ -1,26 +1,37 @@
-{ lib, stdenv, fetchurl, qtbase, qmake, makeWrapper }:
+{ lib, stdenv, fetchurl, qtbase, qmake, makeWrapper, qtscript, gcc, flex, bison, qtdeclarative, gnutar }:
 
 stdenv.mkDerivation {
-  name = "awesomebump-4.0";
+  name = "awesomebump-5.1";
 
   src = fetchurl {
-    url = https://github.com/kmkolasinski/AwesomeBump/archive/Linuxv4.0.tar.gz;
-    sha256 = "1rp4m4y2ld49hibzwqwy214cbiin80i882d9l0y1znknkdcclxf2";
+    url = https://github.com/kmkolasinski/AwesomeBump/archive/Winx32v5.1.tar.gz;
+    sha256 = "04s0jj9gfw1rfr82ga2vw6x1jy00ca9p9s3hh31q3k5h6vg5ailn";
   };
 
-  setSourceRoot = "sourceRoot=$(echo */Sources)";
+  buildInputs = [ qtbase qtscript qtdeclarative flex bison gnutar ];
 
-  nativeBuildInputs = [ makeWrapper qmake ];
-  buildInputs = [ qtbase ];
+  nativeBuildInputs = [ qmake makeWrapper ];
 
-  enableParallelBuilding = true;
+  buildPhase = ''
+    cd Sources/utils/QtnProperty
+    tar xf "${fetchurl { url = "https://github.com/kmkolasinski/QtnProperty/archive/00e1a9a7cdf6fa84d1b0a35efe752bc2e4a6be1f.tar.gz"; sha256 = "0fdny0khm6jb5816d5xsijp26xrkz2ksz8w9pv1x4hf32l48s9yn"; } }"
+    mv QtnProperty-*/* .
+    rm -r QtnProperty-*
+    alias
+    $QMAKE Property.pro -r TOP_SRC_DIR=$(pwd)
+    make
+    cd ../../../
+    $QMAKE
+    make
+    cp -vr workdir/`cat workdir/current`/bin/AwesomeBump Bin
+  '';
 
   installPhase =
     ''
       d=$out/libexec/AwesomeBump
       mkdir -p $d $out/bin
-      cp AwesomeBump $d/
-      cp -prd ../Bin/Configs ../Bin/Core $d/
+      cp Bin/AwesomeBump $d/
+      cp -prd Bin/Configs Bin/Core $d/
 
       # AwesomeBump expects to find Core and Configs in its current
       # directory.
