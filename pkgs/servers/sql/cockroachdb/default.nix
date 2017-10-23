@@ -34,11 +34,15 @@ buildGoPackage rec {
       mv cockroach.bash $out/share/bash-completion/completions
     '';
 
+  preFixup = stdenv.lib.optionalString stdenv.isDarwin ''
+    install_name_tool -delete_rpath $out/lib $bin/bin/cockroach
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://www.cockroachlabs.com;
     description = "A scalable, survivable, strongly-consistent SQL database";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = [ maintainers.rushmorem ];
   };
 }
