@@ -68,6 +68,9 @@ self: super:
 
 ## OTHER PACKAGES
 
+  # haddock throws the error: No input file(s).
+  fail = dontHaddock super.fail;
+
   cereal = addBuildDepend super.cereal [ self.fail ];
 
   entropy = overrideCabal super.entropy (old: {
