@@ -671,6 +671,7 @@
   xnwdd = "Guillermo NWDD <nwdd+nixos@no.team>";
   xvapx = "Marti Serra <marti.serra.coscollano@gmail.com>";
   xwvvvvwx = "David Terry <davidterry@posteo.de>";
+  xzfc = "Albert Safin <xzfcpw@gmail.com>";
   yarr = "Dmitry V. <savraz@gmail.com>";
   yegortimoshenko = "Yegor Timoshenko <yegortimoshenko@gmail.com>";
   yochai = "Yochai <yochai@titat.info>";
