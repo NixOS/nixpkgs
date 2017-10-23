@@ -10918,32 +10918,7 @@ in {
 
   jupyter_client = callPackage ../development/python-modules/jupyter_client { };
 
-  jupyter_core = buildPythonPackage rec {
-    version = "4.3.0";
-    name = "jupyter_core-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jupyter_core/${name}.tar.gz";
-      sha256 = "a96b129e1641425bf057c3d46f4f44adce747a7d60107e8ad771045c36514d40";
-    };
-
-    buildInputs = with self; [ pytest mock ];
-    propagatedBuildInputs = with self; [ ipython traitlets];
-
-    checkPhase = ''
-      py.test
-    '';
-
-    # Several tests fail due to being in a chroot
-    doCheck = false;
-
-    meta = {
-      description = "Jupyter core package. A base package on which Jupyter projects rely";
-      homepage = http://jupyter.org/;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  jupyter_core = callPackage ../development/python-modules/jupyter_core { };
 
   jsonpath_rw = buildPythonPackage rec {
     name = "jsonpath-rw-${version}";
