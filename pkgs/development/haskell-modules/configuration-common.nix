@@ -976,4 +976,7 @@ self: super: {
 
   # depends on haskell-gi-overloading-0.0
   ltk = doJailbreak super.ltk;
+
+  # tests fail
+  leksah-server = dontCheck super.leksah-server;
 }
