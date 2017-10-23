@@ -158,6 +158,13 @@ let
         cp $buildRoot/{.config,Module.symvers} $dev/lib/modules/${modDirVersion}/build
         make modules_prepare $makeFlags "''${makeFlagsArray[@]}" O=$dev/lib/modules/${modDirVersion}/build
 
+        # Keep some extra files on some arches (powerpc, aarch64)
+        for f in arch/powerpc/lib/crtsavres.o arch/arm64/kernel/ftrace-mod.o; do
+          if [ -f "$buildRoot/$f" ]; then
+            cp $buildRoot/$f $dev/lib/modules/${modDirVersion}/build/$f
+          fi
+        done
+
         # !!! No documentation on how much of the source tree must be kept
         # If/when kernel builds fail due to missing files, you can add
         # them here. Note that we may see packages requiring headers
@@ -165,19 +172,23 @@ let
         # headers on 3.10 though.
 
         chmod u+w -R ../source
-        arch=`cd $dev/lib/modules/${modDirVersion}/build/arch; ls`
+        arch=$(cd $dev/lib/modules/${modDirVersion}/build/arch; ls)
 
-        # Remove unusued arches
-        mv arch/$arch .
-        rm -fR arch
-        mkdir arch
-        mv $arch arch
+        # Remove unused arches
+        for d in $(cd arch/; ls); do
+          if [ "$d" = "$arch" ]; then continue; fi
+          if [ "$arch" = arm64 ] && [ "$d" = arm ]; then continue; fi
+          rm -rf arch/$d
+        done
 
         # Remove all driver-specific code (50M of which is headers)
         rm -fR drivers
 
         # Keep all headers
         find .  -type f -name '*.h' -print0 | xargs -0 chmod u-w
+
+        # Keep linker scripts (they are required for out-of-tree modules on aarch64)
+        find .  -type f -name '*.lds' -print0 | xargs -0 chmod u-w
 
         # Keep root and arch-specific Makefiles
         chmod u-w Makefile
