@@ -4,7 +4,7 @@
 , libxml2, libsoup, libsecret, libxslt, harfbuzz, libpthreadstubs, pcre, nettle, libtasn1, p11_kit
 , libidn, libedit, readline, mesa, libintlOrEmpty
 , enableGeoLocation ? true, geoclue2, sqlite
-, gst-plugins-base
+, gst-plugins-base, gst-plugins-bad
 }:
 
 assert enableGeoLocation -> geoclue2 != null;
@@ -12,7 +12,7 @@ assert enableGeoLocation -> geoclue2 != null;
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "webkitgtk-${version}";
-  version = "2.16.6";
+  version = "2.18.1";
 
   meta = {
     description = "Web content rendering engine, GTK+ port";
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://webkitgtk.org/releases/${name}.tar.xz";
-    sha256 = "08abxbhi2n1pfby9f2c20z8mpmbvbs2z7vf0p5ckq4jkz46na8zw";
+    sha256 = "15fp7szmkpannx7avsynf0nv3y343qwq0fvq3rz2m2mw5wq7pnww";
   };
 
   # see if we can clean this up....
@@ -77,10 +77,7 @@ stdenv.mkDerivation rec {
   "-DENABLE_GTKDOC=OFF"
   ];
 
-  # XXX: WebKit2 missing include path for gst-plugins-base.
-  # Filled: https://bugs.webkit.org/show_bug.cgi?id=148894
-  NIX_CFLAGS_COMPILE = "-I${gst-plugins-base.dev}/include/gstreamer-1.0"
-                     + (optionalString stdenv.isDarwin " -lintl");
+  NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin " -lintl";
 
   nativeBuildInputs = [
     cmake perl python2 ruby bison gperf sqlite
@@ -90,7 +87,7 @@ stdenv.mkDerivation rec {
   buildInputs = libintlOrEmpty ++ [
     gtk2 libwebp enchant libnotify gnutls pcre nettle libidn
     libxml2 libsecret libxslt harfbuzz libpthreadstubs libtasn1 p11_kit
-    gst-plugins-base libxkbcommon epoxy at_spi2_core
+    sqlite gst-plugins-base gst-plugins-bad libxkbcommon epoxy at_spi2_core
   ] ++ optional enableGeoLocation geoclue2
     ++ (with xlibs; [ libXdmcp libXt libXtst ])
     ++ optionals stdenv.isDarwin [ libedit readline mesa ]
