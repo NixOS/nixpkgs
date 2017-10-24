@@ -3,6 +3,8 @@
 , fftw, vid-stab, opencv3, ladspa-sdk
 }:
 
+let inherit (stdenv.lib) getDev; in
+
 stdenv.mkDerivation rec {
   name = "mlt-${version}";
   version = "6.4.1";
@@ -26,6 +28,10 @@ stdenv.mkDerivation rec {
     "--avformat-swscale" "--enable-gpl" "--enable-gpl" "--enable-gpl3"
     "--enable-opengl"
   ];
+
+  # mlt is unable to cope with our multi-prefix Qt build
+  # because it does not use CMake or qmake.
+  NIX_CFLAGS_COMPILE = [ "-I${getDev qtsvg}/include/QtSvg" ];
 
   CXXFLAGS = "-std=c++11";
 
