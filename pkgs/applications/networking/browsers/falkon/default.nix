@@ -31,7 +31,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig qmake qttools ];
 
-  enableParallelBuilding = true;
+  # on 2.1.2: RCC: Error in 'autoscroll.qrc': Cannot find file 'locale/ar_SA.qm'
+  enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
     description = "QtWebEngine based cross-platform web browser";

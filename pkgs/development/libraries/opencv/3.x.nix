@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl, fetchpatch, fetchFromGitHub, cmake, pkgconfig, unzip, zlib
+{ lib, stdenv
+, fetchurl, fetchFromGitHub
+, cmake, pkgconfig, unzip, zlib, pcre, hdf5, protobuf
+, config
 
 , enableJPEG      ? true, libjpeg
 , enablePNG       ? true, libpng
@@ -6,93 +9,129 @@
 , enableWebP      ? true, libwebp
 , enableEXR ? (!stdenv.isDarwin), openexr, ilmbase
 , enableJPEG2K    ? true, jasper
+, enableEigen     ? true, eigen
+, enableOpenblas  ? true, openblas
+
+, enableCuda      ? (config.cudaSupport or false), cudatoolkit
 
 , enableIpp       ? false
-, enableContrib   ? false, protobuf
+, enableContrib   ? false  #, caffe, glog, boost, google-gflags
 , enablePython    ? false, pythonPackages
 , enableGtk2      ? false, gtk2
 , enableGtk3      ? false, gtk3
 , enableFfmpeg    ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
-, enableEigen     ? true, eigen
-, enableOpenblas  ? true, openblas
-, enableCuda      ? false, cudatoolkit
 , enableTesseract ? false, tesseract, leptonica
+, enableDocs      ? false, doxygen, graphviz-nox
+
 , AVFoundation, Cocoa, QTKit
 }:
 
 let
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv";
     rev    = version;
-    sha256 = "0f59g0dvhp5xg1xa3r4lp351a7x0k03i77ylgcf69ns3y47qd16p";
+    sha256 = "0266kg337wij9rz602z5088jn2fq56aqpxxflf0fbh28kygchvk4";
   };
 
   contribSrc = fetchFromGitHub {
     owner  = "opencv";
     repo   = "opencv_contrib";
     rev    = version;
-    sha256 = "1lynpbxz1jay3ya5y45zac5v8c6ifgk4ssn8d1chfdk3spi691jj";
-  };
-
-  # This fixes the build on macOS.
-  # See: https://github.com/opencv/opencv_contrib/pull/926
-  contribOSXFix = fetchpatch {
-    url = "https://github.com/opencv/opencv_contrib/commit/abf44fcccfe2f281b7442dac243e37b7f436d961.patch";
-    sha256 = "11dsq8dwh1k6f7zglbc26xwsjw184ggf2531mhf7v77kd72k19fm";
+    sha256 = "0qxdvzdszzlpsya1pn4d2r9z4j98isxrgk15a2wwa3dqjmgv880d";
   };
 
   # Contrib must be built in order to enable Tesseract support:
   buildContrib = enableContrib || enableTesseract;
 
-  vggFiles = fetchFromGitHub {
-    owner  = "opencv";
-    repo   = "opencv_3rdparty";
-    rev    = "fccf7cd6a4b12079f73bbfb21745f9babcd4eb1d";
-    sha256 = "0r9fam8dplyqqsd3qgpnnfgf9l7lj44di19rxwbm8mxiw0rlcdvy";
+  # See opencv/3rdparty/ippicv/ippicv.cmake
+  ippicv = {
+    src = fetchFromGitHub {
+      owner  = "opencv";
+      repo   = "opencv_3rdparty";
+      rev    = "a62e20676a60ee0ad6581e217fe7e4bada3b95db";
+      sha256 = "04idycc479l7fidj6r107sv65iszndswm287ms3nh896jbpbaxbv";
+    } + "/ippicv";
+    files = let name = platform : "ippicv_2017u2_${platform}_20170418.tgz"; in
+      if stdenv.system == "x86_64-linux" then
+      { ${name "lnx_intel64"} = "87cbdeb627415d8e4bc811156289fa3a"; }
+      else if stdenv.system == "i686-linux" then
+      { ${name "lnx_ia32"}    = "f2cece00d802d4dea86df52ed095257e"; }
+      else if stdenv.system == "x86_64-darwin" then
+      { ${name "mac_intel64"} = "0c25953c99dbb499ff502485a9356d8d"; }
+      else
+      throw "ICV is not available for this platform (or not yet supported by this package)";
+    dst = ".cache/ippicv";
   };
 
-  bootdescFiles = fetchFromGitHub {
-    owner  = "opencv";
-    repo   = "opencv_3rdparty";
-    rev    = "34e4206aef44d50e6bbcd0ab06354b52e7466d26";
-    sha256 = "13yig1xhvgghvxspxmdidss5lqiikpjr0ddm83jsi0k85j92sn62";
+  # See opencv_contrib/modules/xfeatures2d/cmake/download_vgg.cmake
+  vgg = {
+    src = fetchFromGitHub {
+      owner  = "opencv";
+      repo   = "opencv_3rdparty";
+      rev    = "fccf7cd6a4b12079f73bbfb21745f9babcd4eb1d";
+      sha256 = "0r9fam8dplyqqsd3qgpnnfgf9l7lj44di19rxwbm8mxiw0rlcdvy";
+    };
+    files = {
+      "vgg_generated_48.i"  = "e8d0dcd54d1bcfdc29203d011a797179";
+      "vgg_generated_64.i"  = "7126a5d9a8884ebca5aea5d63d677225";
+      "vgg_generated_80.i"  = "7cd47228edec52b6d82f46511af325c5";
+      "vgg_generated_120.i" = "151805e03568c9f490a5e3a872777b75";
+    };
+    dst = ".cache/xfeatures2d/vgg";
+  };
+
+  # See opencv_contrib/modules/xfeatures2d/cmake/download_boostdesc.cmake
+  boostdesc = {
+    src = fetchFromGitHub {
+      owner  = "opencv";
+      repo   = "opencv_3rdparty";
+      rev    = "34e4206aef44d50e6bbcd0ab06354b52e7466d26";
+      sha256 = "13yig1xhvgghvxspxmdidss5lqiikpjr0ddm83jsi0k85j92sn62";
+    };
+    files = {
+      "boostdesc_bgm.i"          = "0ea90e7a8f3f7876d450e4149c97c74f";
+      "boostdesc_bgm_bi.i"       = "232c966b13651bd0e46a1497b0852191";
+      "boostdesc_bgm_hd.i"       = "324426a24fa56ad9c5b8e3e0b3e5303e";
+      "boostdesc_binboost_064.i" = "202e1b3e9fec871b04da31f7f016679f";
+      "boostdesc_binboost_128.i" = "98ea99d399965c03d555cef3ea502a0b";
+      "boostdesc_binboost_256.i" = "e6dcfa9f647779eb1ce446a8d759b6ea";
+      "boostdesc_lbgm.i"         = "0ae0675534aa318d9668f2a179c2a052";
+    };
+    dst = ".cache/xfeatures2d/boostdesc";
+  };
+
+  installExtraFiles = extra : with lib; ''
+    mkdir -p "${extra.dst}"
+  '' + concatStrings (mapAttrsToList (name : md5 : ''
+    ln -s "${extra.src}/${name}" "${extra.dst}/${md5}-${name}"
+  '') extra.files);
+
+  # See opencv_contrib/modules/dnn_modern/CMakeLists.txt
+  tinyDnn = rec {
+    src = fetchurl {
+      url    = "https://github.com/tiny-dnn/tiny-dnn/archive/${name}";
+      sha256 = "12x1b984cn0psn6kz1fy75zljgzqvkdyjy8i292adfnyqpl1rip2";
+    };
+    name = "v1.0.0a3.tar.gz";
+    md5  = "adb1c512e09ca2c7a6faef36f9c53e59";
+    dst  = ".cache/tiny_dnn";
   };
 
   opencvFlag = name: enabled: "-DWITH_${name}=${if enabled then "ON" else "OFF"}";
+
 in
 
 stdenv.mkDerivation rec {
   name = "opencv-${version}";
   inherit version src;
 
-  postUnpack =
-    (lib.optionalString buildContrib ''
-      cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/opencv_contrib"
-
-      # This fixes the build on macOS.
-      patch -d "$NIX_BUILD_TOP/opencv_contrib" -p2 < "${contribOSXFix}"
-
-      for name in vgg_generated_48.i \
-                  vgg_generated_64.i \
-                  vgg_generated_80.i \
-                  vgg_generated_120.i; do
-        ln -s "${vggFiles}/$name" "$NIX_BUILD_TOP/opencv_contrib/xfeatures2d/src/$name"
-      done
-
-      for name in boostdesc_bgm.i          \
-                  boostdesc_bgm_bi.i       \
-                  boostdesc_bgm_hd.i       \
-                  boostdesc_binboost_064.i \
-                  boostdesc_binboost_128.i \
-                  boostdesc_binboost_256.i \
-                  boostdesc_lbgm.i; do
-        ln -s "${bootdescFiles}/$name" "$NIX_BUILD_TOP/opencv_contrib/xfeatures2d/src/$name"
-      done
-    '');
+  postUnpack = lib.optionalString buildContrib ''
+    cp --no-preserve=mode -r "${contribSrc}/modules" "$NIX_BUILD_TOP/opencv_contrib"
+  '';
 
   # This prevents cmake from using libraries in impure paths (which
   # causes build failure on non NixOS)
@@ -105,29 +144,19 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure =
-    (let version  = "20151201";
-         md5      = "808b791a6eac9ed78d32a7666804320e";
-         sha256   = "1nph0w0pdcxwhdb5lxkb8whpwd9ylvwl97hn0k425amg80z86cs3";
-         rev      = "81a676001ca8075ada498583e4166079e5744668";
-         platform = if stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux" then "linux"
-                    else throw "ICV is not available for this platform (or not yet supported by this package)";
-         name = "ippicv_${platform}_${version}.tgz";
-         ippicv = fetchurl {
-           url = "https://raw.githubusercontent.com/opencv/opencv_3rdparty/${rev}/ippicv/${name}";
-           inherit sha256;
-         };
-         dir = "3rdparty/ippicv/downloads/${platform}-${md5}";
-     in lib.optionalString enableIpp ''
-          mkdir -p "${dir}"
-          ln -s "${ippicv}" "${dir}/${name}"
-        ''
-    ) +
-    (lib.optionalString buildContrib ''
+    installExtraFiles ippicv + (
+    lib.optionalString buildContrib ''
       cmakeFlagsArray+=("-DOPENCV_EXTRA_MODULES_PATH=$NIX_BUILD_TOP/opencv_contrib")
+
+      ${installExtraFiles vgg}
+      ${installExtraFiles boostdesc}
+
+      mkdir -p "${tinyDnn.dst}"
+      ln -s "${tinyDnn.src}" "${tinyDnn.dst}/${tinyDnn.md5}-${tinyDnn.name}"
     '');
 
   buildInputs =
-       [ zlib ]
+       [ zlib pcre hdf5 protobuf ]
     ++ lib.optional enablePython pythonPackages.python
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableGtk3 gtk3
@@ -146,8 +175,13 @@ stdenv.mkDerivation rec {
     # tesseract & leptonica.
     ++ lib.optionals enableTesseract [ tesseract leptonica ]
     ++ lib.optional enableCuda cudatoolkit
-    ++ lib.optional buildContrib protobuf
-    ++ lib.optionals stdenv.isDarwin [ AVFoundation Cocoa QTKit ];
+
+    # These are only needed for the currently disabled
+    # cnn_3dobj and dnn_modern modules
+    # ++ lib.optionals buildContrib [ caffe glog boost google-gflags ]
+
+    ++ lib.optionals stdenv.isDarwin [ AVFoundation Cocoa QTKit ]
+    ++ lib.optionals enableDocs [ doxygen graphviz-nox ];
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
 
@@ -156,7 +190,10 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = lib.optional enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   cmakeFlags = [
-    "-DWITH_IPP=${if enableIpp then "ON" else "OFF"} -DWITH_OPENMP=ON"
+    "-DBUILD_PROTOBUF=OFF"
+    "-DPROTOBUF_UPDATE_FILES=ON"
+    "-DWITH_OPENMP=ON"
+    (opencvFlag "IPP" enableIpp)
     (opencvFlag "TIFF" enableTIFF)
     (opencvFlag "JASPER" enableJPEG2K)
     (opencvFlag "WEBP" enableWebP)
@@ -168,10 +205,23 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableCuda [
     "-DCUDA_FAST_MATH=ON"
     "-DCUDA_HOST_COMPILER=${cudatoolkit.cc}/bin/gcc"
-  ] ++ lib.optional buildContrib "-DBUILD_PROTOBUF=off"
+  ] ++ lib.optionals buildContrib [
+         # the cnn_3dobj module fails to build
+         "-DBUILD_opencv_cnn_3dobj=OFF"
+
+         # the dnn_modern module causes:
+         # https://github.com/opencv/opencv_contrib/issues/823
+         #
+         # On OS X its dependency tiny-dnn-1.0.0a3 also fails to build.
+         "-DBUILD_opencv_dnn_modern=OFF"
+       ]
     ++ lib.optionals stdenv.isDarwin ["-DWITH_OPENCL=OFF" "-DWITH_LAPACK=OFF"];
 
   enableParallelBuilding = true;
+
+  postBuild = lib.optionalString enableDocs ''
+    make doxygen
+  '';
 
   hardeningDisable = [ "bindnow" "relro" ];
 
@@ -181,7 +231,7 @@ stdenv.mkDerivation rec {
     description = "Open Computer Vision Library with more than 500 algorithms";
     homepage = http://opencv.org/;
     license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [viric mdaiter];
+    maintainers = with stdenv.lib.maintainers; [viric mdaiter basvandijk];
     platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

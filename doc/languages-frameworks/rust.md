@@ -9,16 +9,15 @@ date: 2017-03-05
 To install the rust compiler and cargo put
 
 ```
-rustStable.rustc
-rustStable.cargo
+rust
 ```
 
-into the `environment.systemPackages` or bring them into scope with
-`nix-shell -p rustStable.rustc -p rustStable.cargo`.
+into the `environment.systemPackages` or bring them into
+scope with `nix-shell -p rust`.
 
-There are also `rustBeta` and `rustNightly` package sets available.
-These are not updated very regularly. For daily builds use either rustup from
-nixpkgs or use the [Rust nightlies overlay](#using-the-rust-nightlies-overlay).
+For daily builds (beta and nightly) use either rustup from
+nixpkgs or use the [Rust nightlies
+overlay](#using-the-rust-nightlies-overlay).
 
 ## Packaging Rust applications
 
@@ -38,7 +37,7 @@ buildRustPackage rec {
     sha256 = "0y5d1n6hkw85jb3rblcxqas2fp82h3nghssa4xqrhqnz25l799pj";
   };
 
-  depsSha256 = "0q68qyl2h6i0qsz82z840myxlnjay8p1w5z7hfyr8fqp7wgwa9cx";
+  cargoSha256 = "0q68qyl2h6i0qsz82z840myxlnjay8p1w5z7hfyr8fqp7wgwa9cx";
 
   meta = with stdenv.lib; {
     description = "A utility that combines the usability of The Silver Searcher with the raw speed of grep";
@@ -50,7 +49,7 @@ buildRustPackage rec {
 }
 ```
 
-`buildRustPackage` requires a `depsSha256` attribute which is computed over
+`buildRustPackage` requires a `cargoSha256` attribute which is computed over
 all crate sources of this package. Currently it is obtained by inserting a
 fake checksum into the expression and building the package once. The correct
 checksum can be then take from the failed build.
@@ -76,11 +75,11 @@ in the `~/.config/nixpkgs/overlays` directory.
 
 The latest version can be installed with the following command:
 
-    $ nix-env -Ai nixos.rustChannels.stable.rust
+    $ nix-env -Ai nixos.latest.rustChannels.stable.rust
 
 Or using the attribute with nix-shell:
 
-    $ nix-shell -p nixos.rustChannels.stable.rust
+    $ nix-shell -p nixos.latest.rustChannels.stable.rust
 
 To install the beta or nightly channel, "stable" should be substituted by
 "nightly" or "beta", or

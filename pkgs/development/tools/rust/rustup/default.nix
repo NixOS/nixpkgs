@@ -6,7 +6,7 @@ rustPlatform.buildRustPackage rec {
   name = "rustup-${version}";
   version = "1.3.0";
 
-  depsSha256 = "078hssgffgpakv735p1xg60kic151r2dvpdr9sipb63lwqr4dxfb";
+  cargoSha256 = "1yd7k0jpx78p5bp6iyzgbyj7pjz8vyjg9g7fmf1bl60jsbdpgv3g";
 
   src = fetchFromGitHub {
     owner = "rust-lang-nursery";

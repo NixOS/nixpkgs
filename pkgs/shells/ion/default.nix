@@ -4,16 +4,16 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "ion-${version}";
-  version = "1.0.3";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "redox-os";
     repo = "ion";
     rev = version;
-    sha256 = "0c2haw9qiwysyp1xj6qla8d6zpsdlygagzh86sk04c2b4ssyaca3";
+    sha256 = "0i0acl5nw254mw8dbfmb4792rr71is98a5wg32yylfnlrk7zlf8z";
   };
 
-  depsSha256 = "0w2jgbrcx57js8ihzs5acp6b1niw1c7khdxrv14y3z9mmm9j55hs";
+  cargoSha256 = "0ffp6r5jqyf9j8jd77vbvc6l3xm09ipbraj6av6iciw1sxskib33";
 
   meta = with stdenv.lib; {
     description = "Modern system shell with simple (and powerful) syntax";

@@ -1,26 +1,30 @@
-{ stdenv, fetchgit, file, curl, pkgconfig, python, openssl, cmake, zlib
-, makeWrapper, libiconv, cacert, rustPlatform, rustc, libgit2
-, version, srcRev, srcSha, depsSha256
+{ stdenv, fetchFromGitHub, file, curl, pkgconfig, python, openssl, cmake, zlib
+, makeWrapper, libiconv, cacert, rustPlatform, rustc, libgit2, darwin
+, version, srcSha, cargoSha256
 , patches ? []}:
 
 rustPlatform.buildRustPackage rec {
   name = "cargo-${version}";
   inherit version;
 
-  src = fetchgit {
-    url = "https://github.com/rust-lang/cargo";
-    rev = srcRev;
+  src = fetchFromGitHub {
+    owner  = "rust-lang";
+    repo   = "cargo";
+    rev    = version;
     sha256 = srcSha;
   };
 
-  inherit depsSha256;
+  inherit cargoSha256;
   inherit patches;
 
   passthru.rustc = rustc;
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ file curl python openssl cmake zlib makeWrapper libgit2 ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
+    # FIXME: Use impure version of CoreFoundation because of missing symbols.
+    # CFURLSetResourcePropertyForKey is defined in the headers but there's no
+    # corresponding implementation in the sources from opensource.apple.com.
+    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.CoreFoundation libiconv ];
 
   LIBGIT2_SYS_USE_PKG_CONFIG=1;
 
@@ -52,6 +56,6 @@ rustPlatform.buildRustPackage rec {
     description = "Downloads your Rust project's dependencies and builds your project";
     maintainers = with maintainers; [ wizeman retrry ];
     license = [ licenses.mit licenses.asl20 ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

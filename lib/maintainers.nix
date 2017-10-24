@@ -31,6 +31,7 @@
   ak = "Alexander Kjeldaas <ak@formalprivacy.com>";
   akaWolf = "Artjom Vejsel <akawolf0@gmail.com>";
   akc = "Anders Claesson <akc@akc.is>";
+  alexvorobiev = "Alex Vorobiev <alexander.vorobiev@gmail.com";
   algorith = "Dries Van Daele <dries_van_daele@telenet.be>";
   alibabzo = "Alistair Bill <alistair.bill@gmail.com>";
   all = "Nix Committers <nix-commits@lists.science.uu.nl>";
