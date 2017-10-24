@@ -3570,6 +3570,8 @@ with pkgs;
 
   nixbot = callPackage ../tools/misc/nixbot {};
 
+  notify-desktop = callPackage ../tools/misc/notify-desktop {};
+
   nkf = callPackage ../tools/text/nkf {};
 
   nlopt = callPackage ../development/libraries/nlopt { octave = null; };
