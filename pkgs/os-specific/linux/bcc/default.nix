@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     find $out/share/bcc/tools -type f -executable -print0 | \
     while IFS= read -r -d $'\0' f; do
       pythonLibs="$out/lib/python2.7/site-packages:${pythonPackages.netaddr}/lib/${python.libPrefix}/site-packages"
-      rm $out/bin/$(basename $f)
+      rm -f $out/bin/$(basename $f)
       makeWrapper $f $out/bin/$(basename $f) \
         --prefix LD_LIBRARY_PATH : $out/lib \
         --prefix PYTHONPATH : "$pythonLibs"
