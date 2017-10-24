@@ -8098,14 +8098,14 @@ with pkgs;
   ffmpeg_2_8 = callPackage ../development/libraries/ffmpeg/2.8.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
-  ffmpeg_3_3 = callPackage ../development/libraries/ffmpeg/3.3.nix {
+  ffmpeg_3_4 = callPackage ../development/libraries/ffmpeg/3.4.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreMedia;
   };
   # Aliases
   ffmpeg_0 = ffmpeg_0_10;
   ffmpeg_1 = ffmpeg_1_2;
   ffmpeg_2 = ffmpeg_2_8;
-  ffmpeg_3 = ffmpeg_3_3;
+  ffmpeg_3 = ffmpeg_3_4;
   ffmpeg = ffmpeg_3;
 
   ffmpeg-full = callPackage ../development/libraries/ffmpeg-full {
