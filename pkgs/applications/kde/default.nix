@@ -124,6 +124,7 @@ let
       korganizer = callPackage ./korganizer.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
       kqtquickcharts = callPackage ./kqtquickcharts.nix {};
+      krdc = callPackage ./krdc.nix {};
       krfb = callPackage ./krfb.nix {};
       ktnef = callPackage ./ktnef.nix {};
       kwalletmanager = callPackage ./kwalletmanager.nix {};
