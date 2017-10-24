@@ -122,7 +122,7 @@ let
     ''
       set +o pipefail
       for component in ${all-cabal-hashes}/*; do
-        if ls $component | grep -q ${name}; then
+        if ls $component | grep -q "^${name}$"; then
           echo "builtins.storePath $component" > $out
           exit 0
         fi
