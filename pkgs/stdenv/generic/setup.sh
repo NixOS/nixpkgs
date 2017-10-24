@@ -7,6 +7,7 @@ fi
 
 : ${outputs:=out}
 
+# This will rebuild EVERYTHING
 
 ######################################################################
 # Hook handling.
