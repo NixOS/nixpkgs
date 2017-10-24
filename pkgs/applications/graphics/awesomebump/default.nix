@@ -1,47 +1,49 @@
-{ lib, stdenv, fetchurl, qtbase, qmake, makeWrapper, qtscript, gcc, flex, bison, qtdeclarative, gnutar }:
+{ lib, stdenv, fetchgit, qtbase, qmake, makeWrapper, qtscript, gcc, flex, bison, qtdeclarative, gnutar }:
 
-stdenv.mkDerivation {
-  name = "awesomebump-5.1";
 
-  src = fetchurl {
-    url = https://github.com/kmkolasinski/AwesomeBump/archive/Winx32v5.1.tar.gz;
-    sha256 = "04s0jj9gfw1rfr82ga2vw6x1jy00ca9p9s3hh31q3k5h6vg5ailn";
+let
+  version = "5.1";
+
+  src = fetchgit {
+    url = "https://github.com/kmkolasinski/AwesomeBump.git";
+    rev = "Winx32v${version}";
+    sha256 = "1c8b9jki0v8kzkvsvyv7q1w3s7j40br6ph15hh2xi0a1mpwckq56";
+    fetchSubmodules = true;
   };
 
-  buildInputs = [ qtbase qtscript qtdeclarative flex bison gnutar ];
+  qtnproperty = stdenv.mkDerivation {
+    name = "qtnproperty";
+    inherit src;
+    sourceRoot = "AwesomeBump/Sources/utils/QtnProperty";
+    buildInputs = [ qtscript qtbase qtdeclarative ];
+    nativeBuildInputs = [ qmake flex bison ];
+    postInstall = ''
+      install -D bin-linux/QtnPEG $out/bin/QtnPEG
+    '';
+  };
+in stdenv.mkDerivation rec {
+  name = "awesomebump-${version}";
+
+  inherit src;
+
+  buildInputs = [ qtbase qtscript qtdeclarative ];
 
   nativeBuildInputs = [ qmake makeWrapper ];
 
-  buildPhase = ''
-    cd Sources/utils/QtnProperty
-    tar xf "${fetchurl { url = "https://github.com/kmkolasinski/QtnProperty/archive/00e1a9a7cdf6fa84d1b0a35efe752bc2e4a6be1f.tar.gz"; sha256 = "0fdny0khm6jb5816d5xsijp26xrkz2ksz8w9pv1x4hf32l48s9yn"; } }"
-    mv QtnProperty-*/* .
-    rm -r QtnProperty-*
-    alias
-    $QMAKE Property.pro -r TOP_SRC_DIR=$(pwd)
-    make
-    cd ../../../
-    $QMAKE
-    make
-    cp -vr workdir/`cat workdir/current`/bin/AwesomeBump Bin
+  preBuild = ''
+    ln -sf ${qtnproperty}/bin/QtnPEG Sources/utils/QtnProperty/bin-linux/QtnPEG
   '';
 
-  installPhase =
-    ''
-      d=$out/libexec/AwesomeBump
-      mkdir -p $d $out/bin
-      cp Bin/AwesomeBump $d/
-      cp -prd Bin/Configs Bin/Core $d/
+  postInstall = ''
+    d=$out/libexec/AwesomeBump
 
-      # AwesomeBump expects to find Core and Configs in its current
-      # directory.
-      makeWrapper $d/AwesomeBump $out/bin/AwesomeBump \
+    mkdir -p $d
+    cp -vr workdir/`cat workdir/current`/bin/AwesomeBump $d/
+    cp -prd Bin/Configs Bin/Core $d/
+
+    # AwesomeBump expects to find Core and Configs in its current directory.
+    makeWrapper $d/AwesomeBump $out/bin/AwesomeBump \
         --run "cd $d"
-    '';
-
-  # RPATH in /tmp hack
-  preFixup = ''
-    rm -r $NIX_BUILD_TOP/__nix_qt5__
   '';
 
   meta = {
