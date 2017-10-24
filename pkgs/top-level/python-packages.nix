@@ -18919,6 +18919,8 @@ in {
     };
   };
 
+  root_numpy = callPackage ../development/python-modules/root_numpy { };
+
   rootpy = buildPythonPackage rec {
     version = "0.9.0";
     name = "rootpy-${version}";
