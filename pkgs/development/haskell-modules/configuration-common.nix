@@ -971,7 +971,9 @@ self: super: {
   fluid-idl-scotty = markBroken super.fluid-idl-scotty;
 
   # depends on amqp >= 0.17
-  amqp-utils = super.amqp-utils.override {
-    amqp = dontCheck super.amqp_0_18_1;
-  };
+  amqp-utils = super.amqp-utils.override { amqp = dontCheck super.amqp_0_18_1; };
+
+  # Build with gi overloading feature disabled.
+  ltk = super.ltk.overrideScope (self: super: { haskell-gi-overloading = self.haskell-gi-overloading_0_0; });
+
 }

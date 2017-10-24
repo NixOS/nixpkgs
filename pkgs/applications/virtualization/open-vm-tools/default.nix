@@ -36,6 +36,9 @@ stdenv.mkDerivation rec {
 
      # Avoid a glibc >= 2.25 deprecation warning that gets fatal via -Werror.
      sed 1i'#include <sys/sysmacros.h>' -i lib/wiper/wiperPosix.c
+
+     # Make reboot work, shutdown is not in /sbin on NixOS
+     sed -i 's,/sbin/shutdown,shutdown,' lib/system/systemLinux.c
   '';
 
   configureFlags = [ "--without-kernel-modules" "--without-xmlsecurity" ]
