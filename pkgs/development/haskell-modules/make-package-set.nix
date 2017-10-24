@@ -144,7 +144,22 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     callHackage = name: version: self.callPackage (self.hackage2nix name version);
 
     # Creates a Haskell package from a source package by calling cabal2nix on the source.
-    callCabal2nix = name: src: self.callPackage (self.haskellSrc2nix { inherit src name; });
+    callCabal2nix = name: src: args: if builtins.typeOf src != "path"
+      then self.callPackage (haskellSrc2nix { inherit name src; }) args
+      else
+        # When `src` is a Nix path literal, only use `cabal2nix` on
+        # the cabal file, so that the "import-from-derivation" is only
+        # recomputed when the cabal file changes, and so your source
+        # code isn't duplicated into the nix store on every change.
+        # This can only be done when `src` is a Nix path literal
+        # because that is the only kind of source that
+        # `builtins.filterSource` works on. But this filtering isn't
+        # usually important on other kinds of sources, like
+        # `fetchFromGitHub`.
+        overrideCabal (self.callPackage (haskellSrc2nix {
+          inherit name;
+          src = builtins.filterSource (path: type: pkgs.lib.hasSuffix ".cabal" path) src;
+        }) args) (_: { inherit src; });
 
     # : Map Name (Either Path VersionNumber) -> HaskellPackageOverrideSet
     # Given a set whose values are either paths or version strings, produces
