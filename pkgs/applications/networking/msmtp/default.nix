@@ -1,5 +1,6 @@
 { stdenv, lib, fetchurl, autoreconfHook, pkgconfig
 , openssl, netcat-gnu, gnutls, gsasl, libidn, Security
+, withKeyring ? true, libsecret ? null
 , systemd ? null }:
 
 let
@@ -20,7 +21,9 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openssl gnutls gsasl libidn ]
-    ++ stdenv.lib.optional stdenv.isDarwin Security;
+    ++ stdenv.lib.optional stdenv.isDarwin Security
+    ++ stdenv.lib.optional withKeyring libsecret;
+
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   configureFlags =
