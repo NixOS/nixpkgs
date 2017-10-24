@@ -118,6 +118,8 @@ with pkgs;
 
   dotnetbuildhelpers = callPackage ../build-support/dotnetbuildhelpers { };
 
+  dotnet-sdk = callPackage ../development/compilers/dotnet/sdk/default.nix { };
+
   dispad = callPackage ../tools/X11/dispad { };
 
   vsenv = callPackage ../build-support/vsenv {
