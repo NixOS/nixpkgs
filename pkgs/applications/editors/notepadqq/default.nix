@@ -1,13 +1,13 @@
-{ stdenv, fetchgit, pkgconfig, which, qtbase, qtsvg, qttools, qtwebkit }:
+{ stdenv, fetchgit, pkgconfig, which, qtbase, qtsvg, qttools, qtwebkit}:
 
 let
-  version = "0.53.0";
+  version = "1.2.0";
 in stdenv.mkDerivation {
   name = "notepadqq-${version}";
   src = fetchgit {
     url = "https://github.com/notepadqq/notepadqq.git";
-    rev = "3b0751277fb268ec72b466b37d0f0977c536bc1b";
-    sha256 = "0hw94mn2xg2r58afvz1xg990jinv9aa33942zgwq54qwj61r93hi";
+    rev = "ab074d30e02d49e0fe6957c1523e7fed239aff7d";
+    sha256 = "0j8vqsdw314qpk5lrgccm9n7gbyr14ac3s65sl1qn87pxhrz1hpg";
     fetchSubmodules = true;
   };
 
