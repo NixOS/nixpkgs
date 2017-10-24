@@ -646,7 +646,7 @@ in {
         chmod -R ug-s ${cfg.statePath}/repositories
         find ${cfg.statePath}/repositories -type d -print0 | xargs -0 chmod g+s
         chmod 770 ${cfg.statePath}/uploads
-        chown -R git ${cfg.statePath}/uploads
+        chown -R ${cfg.user} ${cfg.statePath}/uploads
         find ${cfg.statePath}/uploads -type f -exec chmod 0644 {} \;
         find ${cfg.statePath}/uploads -type d -not -path ${cfg.statePath}/uploads -exec chmod 0770 {} \;
       '';

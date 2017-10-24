@@ -46,8 +46,8 @@ let
 in mapAttrs genericBuild {
 
   prometheus1 = {
-    version = "1.8.0";
-    sha256 = "0hiiql5jp3sh72iyqrm4npk44ncwcwil649l38c76k615w6w1vs9";
+    version = "1.8.1";
+    sha256 = "07xvpjhhxc0r73qfmkvf94zhv19zv76privw6blg35k5nxcnj7j4";
   };
 
   prometheus2 = {

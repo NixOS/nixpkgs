@@ -78,7 +78,7 @@ let
     });
 
   buildGogland = { name, version, src, license, description, wmClass, update-channel }:
-    (mkJetBrainsProduct {
+    lib.overrideDerivation (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
       product = "Gogland";
       meta = with stdenv.lib; {
@@ -93,6 +93,13 @@ let
         maintainers = [ maintainers.miltador ];
         platforms = platforms.linux;
       };
+    }) (attrs: {
+      postFixup = (attrs.postFixup or "") + ''
+        interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
+        patchelf --set-interpreter $interp $out/gogland*/plugins/intellij-go-plugin/lib/dlv/linux/dlv
+
+        chmod +x $out/gogland*/plugins/intellij-go-plugin/lib/dlv/linux/dlv
+      '';
     });
 
   buildIdea = { name, version, src, license, description, wmClass, update-channel }:

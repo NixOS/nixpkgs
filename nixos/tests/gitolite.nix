@@ -11,7 +11,7 @@ let
     -----END OPENSSH PRIVATE KEY-----
   '';
 
-  adminPublicKey = pkgs.writeText "id_ed25519.pub" ''
+  adminPublicKey = ''
     ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO7urFhAA90BTpGuEHeWWTY3W/g9PBxXNxfWhfbrm4Le root@client
   '';
 
@@ -62,7 +62,7 @@ in
       {
         services.gitolite = {
           enable = true;
-          adminPubkey = builtins.readFile adminPublicKey;
+          adminPubkey = adminPublicKey;
         };
         services.openssh.enable = true;
       };

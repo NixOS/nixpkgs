@@ -7833,7 +7833,6 @@ with pkgs;
     openssl = openssl_1_0_2;
   };
   botan2 = callPackage ../development/libraries/botan/2.0.nix { };
-  botanUnstable = callPackage ../development/libraries/botan/unstable.nix { };
 
   box2d = callPackage ../development/libraries/box2d { };
 
@@ -10921,7 +10920,7 @@ with pkgs;
 
   wcslib = callPackage ../development/libraries/wcslib { };
 
-  webkitgtk = webkitgtk216x;
+  webkitgtk = webkitgtk218x;
 
   webkitgtk24x-gtk3 = callPackage ../development/libraries/webkitgtk/2.4.nix {
     harfbuzz = harfbuzz-icu;
@@ -10929,14 +10928,9 @@ with pkgs;
     inherit (darwin) libobjc;
   };
 
-  webkitgtk216x = callPackage ../development/libraries/webkitgtk/2.16.nix {
+  webkitgtk218x = callPackage ../development/libraries/webkitgtk/2.16.nix {
     harfbuzz = harfbuzz-icu;
-    gst-plugins-base = gst_all_1.gst-plugins-base;
-  };
-
-  webkitgtk217x = callPackage ../development/libraries/webkitgtk/2.17.nix {
-    harfbuzz = harfbuzz-icu;
-    gst-plugins-base = gst_all_1.gst-plugins-base;
+    inherit (gst_all_1) gst-plugins-base gst-plugins-bad;
   };
 
   webkitgtk24x-gtk2 = webkitgtk24x-gtk3.override {
@@ -14101,11 +14095,11 @@ with pkgs;
   };
 
   inherit (callPackage ../applications/virtualization/docker { })
-    docker_17_06
-    docker_17_09;
+    docker_17_09
+    docker_17_10;
 
   docker = docker_17_09;
-  docker-edge = docker_17_09;
+  docker-edge = docker_17_10;
 
   docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
 

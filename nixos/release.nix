@@ -240,7 +240,7 @@ in rec {
   tests.ecryptfs = callTest tests/ecryptfs.nix {};
   tests.etcd = hydraJob (import tests/etcd.nix { system = "x86_64-linux"; });
   tests.ec2-nixops = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-nixops;
-  tests.ec2-config = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-config;
+  #tests.ec2-config = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-config; # broken since 2017-04-03
   tests.elk = hydraJob (import tests/elk.nix { system = "x86_64-linux"; });
   tests.ferm = callTest tests/ferm.nix {};
   tests.firefox = callTest tests/firefox.nix {};
@@ -252,8 +252,7 @@ in rec {
   tests.gocd-agent = callTest tests/gocd-agent.nix {};
   tests.gocd-server = callTest tests/gocd-server.nix {};
   tests.gnome3 = callTest tests/gnome3.nix {};
-  tests.gnome3-gdm = callTest tests/gnome3-gdm.nix {};
-  tests.grafama = callTest tests/grafana.nix {};
+  #tests.gnome3-gdm = callTest tests/gnome3-gdm.nix {}; # broken since 2016-10-25
   tests.graphite = callTest tests/graphite.nix {};
   tests.hardened = callTest tests/hardened.nix { };
   tests.hibernate = callTest tests/hibernate.nix { system = "x86_64-linux"; };
@@ -294,7 +293,7 @@ in rec {
   tests.leaps = callTest tests/leaps.nix { };
   tests.nsd = callTest tests/nsd.nix {};
   tests.openssh = callTest tests/openssh.nix {};
-  tests.pam-oath-login = callTest tests/pam-oath-login.nix {};
+  #tests.pam-oath-login = callTest tests/pam-oath-login.nix {}; # broken since 2017-05-31
   #tests.panamax = hydraJob (import tests/panamax.nix { system = "x86_64-linux"; });
   tests.peerflix = callTest tests/peerflix.nix {};
   tests.postgresql = callSubTests tests/postgresql.nix {};
