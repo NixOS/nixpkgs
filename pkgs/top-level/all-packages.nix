@@ -10228,6 +10228,8 @@ with pkgs;
 
   re2 = callPackage ../development/libraries/re2 { };
 
+  statusnotifier = callPackage ../development/libraries/statusnotifier { };
+
   qbs = callPackage ../development/tools/build-managers/qbs { };
 
   qca2 = callPackage ../development/libraries/qca2 { qt = qt4; };
