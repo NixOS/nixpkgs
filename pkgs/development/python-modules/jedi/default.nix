@@ -1,16 +1,18 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, glibcLocales, tox, pytestcov }:
+{ stdenv, buildPythonPackage, fetchPypi, pytest, glibcLocales, tox, pytestcov, parso }:
 
 buildPythonPackage rec {
   pname = "jedi";
-  version = "0.10.2";
+  version = "0.11.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7abb618cac6470ebbd142e59c23daec5e6e063bfcecc8a43a037d2ab57276f4e";
+    sha256 = "f6d5973573e76b1fd2ea75f6dcd6445d02d41ff3af5fc61b275b4e323d1dd396";
   };
 
   checkInputs = [ pytest glibcLocales tox pytestcov ];
+
+  propagatedBuildInputs = [ parso ];
 
   checkPhase = ''
     LC_ALL="en_US.UTF-8" py.test test

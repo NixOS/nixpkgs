@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "pomegranate";
-  version = "0.7.7";
+  version = "0.8.0";
   name  = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b5b7a6256778fc4097ee77caec28ec845ec1fee3d701f3f26f83860b2d45c453";
+    sha256 = "6b03d05bffbe46c674800652cf273a8d338a2e40001b763cd6925aac0b578a43";
   };
 
   propagatedBuildInputs = [ numpy scipy cython networkx joblib ];

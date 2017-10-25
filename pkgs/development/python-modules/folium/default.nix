@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "folium";
-  version = "0.3.0";
+  version = "0.5.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7729ddd6766b9c5dab17b3709e2387935fd5c655872f1cbab7b7036474415217";
+    sha256 = "748944521146d85c6cd6230acf234e885864cd0f42fea3758d655488517e5e6e";
   };
 
   postPatch = ''

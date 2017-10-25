@@ -2,17 +2,18 @@
 
 buildPythonPackage rec {
   pname = "feedgen";
-  version = "0.5.1";
+  version = "0.6.1";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3a344b5e3662e9012d095a081a7f216f188dccf3a8f44ad7882960fef05e6787";
+    sha256 = "e5a1f2a8aaed06dae325e6024aa7083e90655c6cbddeb3671249b3895c135762";
   };
 
   propagatedBuildInputs = [ dateutil lxml ];
 
-  doCheck = true;
+  # No tests in archive
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Python module to generate ATOM feeds, RSS feeds and Podcasts.";

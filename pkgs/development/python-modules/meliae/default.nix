@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "meliae";
-  version = "0.4.0";
+  version = "0.4.0.final.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16gcgjzcjlbfarwlj18fn089bz34kzfw8varbzxsi9ma0amijrcp";
+    sha256 = "976519ab02aaa6a8fb5f596dc4dd9f64fc9510b00e054979566e51c9be7cec99";
   };
 
   disabled = isPy3k;

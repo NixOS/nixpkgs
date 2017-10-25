@@ -5,14 +5,14 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "portend";
-  version = "2.1.2";
+  version = "2.2";
 
   buildInputs = [ pytest pytest-sugar pytest-warnings setuptools_scm ];
   propagatedBuildInputs = [ tempora ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dx8b1rn64ymx5s4mdzlw5hz59qi167z7nny36dl75ghlldn41w4";
+    sha256 = "bc48d3d99e1eaf2e9406c729f8848bfdaf87876cd3560dc3ec6c16714f529586";
   };
 
   meta = with stdenv.lib; {

@@ -14,11 +14,11 @@
 buildPythonPackage rec {
   pname = "Cython";
   name = "${pname}-${version}";
-  version = "0.26.1";
+  version = "0.27.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c2e63c4794161135adafa8aa4a855d6068073f421c83ffacc39369497a189dd5";
+    sha256 = "265dacf64ed8c0819f4be9355c39beaa13dc2ad2f85237a2c4e478f5ce644b48";
   };
 
   # With Python 2.x on i686-linux or 32-bit ARM this test fails because the
