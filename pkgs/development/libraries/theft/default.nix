@@ -17,9 +17,7 @@ stdenv.mkDerivation rec {
   checkTarget = "test";
   
   installFlags = [ "PREFIX=$(out)" ];
-  postInstall = ''
-      install -m644 vendor/greatest.h $out/include/
-    '';
+  postInstall = "install -m644 vendor/greatest.h $out/include/";
   
   meta = {
     description = "A C library for property-based testing";
