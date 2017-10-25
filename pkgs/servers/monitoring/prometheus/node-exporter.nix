@@ -2,16 +2,16 @@
 
 buildGoPackage rec {
   name = "node_exporter-${version}";
-  version = "0.15.0";
-  rev = "v${version}";
+  version = "0.15.0+zfs-fix";
+  rev = "fix/zfs-uint64-stats";
 
   goPackagePath = "github.com/prometheus/node_exporter";
 
   src = fetchFromGitHub {
     inherit rev;
-    owner = "prometheus";
+    owner = "mayflower";
     repo = "node_exporter";
-    sha256 = "0v1m6m9fmlw66s9v50y2rfr5kbpb9mxbwpcab4cmgcjs1y7wcn49";
+    sha256 = "00gwr3zlbzj2gbpz59b1748p7xkzpv0rrc5afv2gqncc9pl2xgbl";
   };
 
   preFixup = stdenv.lib.optionalString stdenv.isDarwin ''
