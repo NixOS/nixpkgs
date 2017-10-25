@@ -4,11 +4,11 @@
 
 let
 
-  version = "1.8.0";
+  version = "1.8.1";
 
   src = fetchurl {
     url = "https://github.com/garbas/pypi2nix/archive/v${version}.tar.gz";
-    sha256 = "133sjx8r1jdb5gi3caawa9m7v496jv4id2c3zqnx8hria22425za";
+    sha256 = "1ynqfm77a2icbqx2y7srgx8agzxqc7y171h9f36mabjh2ph0p02a";
   };
 
   click = fetchurl {
