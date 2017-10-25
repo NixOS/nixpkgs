@@ -13,22 +13,20 @@ buildPythonApplication rec {
     sha256 = "1gvr9l3bgbf87b2ih36zfi5qcga925vjjr8snbak7sgxqzifimij";
   };
 
-  buildInputs = [ pkgconfig glew fontconfig glfw ncurses libunistring ];
+  buildInputs = [ glew fontconfig glfw ncurses libunistring ];
+
+  nativeBuildInputs = [ pkgconfig ];
 
   buildPhase = ''
     python3 setup.py linux-package
   '';
 
   installPhase = ''
-    cd linux-package
-    mkdir -p $out/bin/
-    mkdir -p $out/lib/
-    mkdir -p $out/share
-    cp -r bin/* $out/bin
-    cp -r share/* $out/share/
-    cp -r lib/* $out/lib/
-
-    wrapProgram "$out/bin/kitty" --set PATH "$out/bin:/run/wrappers/bin:/run/current-system/sw/bin:${stdenv.lib.makeBinPath [ imagemagick ]}"
+    runHook preInstall
+    mkdir -p $out
+    cp -r linux-package/{bin,share,lib} $out
+    wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${stdenv.lib.makeBinPath [ imagemagick ]}"
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
