@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "powerdns-${version}";
-  version = "4.0.3";
+  version = "4.0.4";
 
   src = fetchurl {
     url = "http://downloads.powerdns.com/releases/pdns-${version}.tar.bz2";
-    sha256 = "10p2m2zbydbd5xjdgf8z4zgvl8diyb4k3bq1hzsl32r71daj3yk0";
+    sha256 = "0qypns1iqlrc5d3iwabrsi1vpb0yffy36chsb1zpqiv9vs4snx6r";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     # cannot find postgresql libs on macos x
     license = licenses.gpl2;
-    maintainers = [ maintainers.mic92 maintainers.nhooyr ];
+    maintainers = [ maintainers.mic92 ];
   };
 }
