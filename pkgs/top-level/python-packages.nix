@@ -18874,25 +18874,9 @@ in {
     };
   };
 
-  rootpy = buildPythonPackage rec {
-    version = "0.9.0";
-    name = "rootpy-${version}";
+  root_numpy = callPackage ../development/python-modules/root_numpy { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/rootpy/${name}.tar.gz";
-      sha256 = "04alx6afiyahhv816f6zpwnm0sx2jxgqpgqcn6kdw0wnpc9625cr";
-    };
-
-    disabled = isPy3k;
-
-    propagatedBuildInputs = with self; [ pkgs.root numpy matplotlib ];
-
-    meta = {
-      homepage = "http://www.rootpy.org";
-      license = licenses.gpl3;
-      description = "Pythonic interface to the ROOT framework";
-    };
-  };
+  rootpy = callPackage ../development/python-modules/rootpy { };
 
   rope = buildPythonPackage rec {
     version = "0.10.2";
