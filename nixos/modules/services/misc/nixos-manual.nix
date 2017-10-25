@@ -135,8 +135,9 @@ in
         };
       };
 
-    services.mingetty.helpLine = mkIf cfg.showManual
-      "\nPress <Alt-F${toString cfg.ttyNumber}> for the NixOS manual.";
+      services.mingetty.helpLine = "\nRun `nixos-help` "
+        + lib.optionalString cfg.showManual "or press <Alt-F${toString cfg.ttyNumber}> "
+        + "for the NixOS manual.";
 
   };
 
