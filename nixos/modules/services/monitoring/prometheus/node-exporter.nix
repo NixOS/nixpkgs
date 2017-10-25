@@ -69,8 +69,8 @@ in {
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
       serviceConfig = {
-        DynamicUser = true;
-        Restart  = "always";
+        User = "nobody";
+        Restart = "always";
         PrivateTmp = true;
         WorkingDirectory = /tmp;
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
