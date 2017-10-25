@@ -387,6 +387,7 @@
   mcmtroffaes = "Matthias C. M. Troffaes <matthias.troffaes@gmail.com>";
   mdaiter = "Matthew S. Daiter <mdaiter8121@gmail.com>";
   meditans = "Carlo Nucera <meditans@gmail.com>";
+  mehandes = "Matt Deming <niewskici@gmail.com>";
   meisternu = "Matt Miemiec <meister@krutt.org>";
   metabar = "Celine Mercier <softs@metabarcoding.org>";
   mgdelacroix = "Miguel de la Cruz <mgdelacroix@gmail.com>";
