@@ -64,11 +64,11 @@ in
         KillMode = "none";
         User = cfg.user;
         Group = cfg.group;
-        PermissionsStartOnly = "true";
-        ExecStart = "${pkgs.tmux}/bin/tmux new-session -s rtorrent -n rtorrent -d -c ${cfg.dataDir} ${cfg.package}/bin/rtorrent -n -o import=${cfg.configFile}";
+        ExecStart = "${pkgs.tmux}/bin/tmux new-session -c ${cfg.dataDir} -s rtorrent -n rtorrent -d ${cfg.package}/bin/rtorrent -n -o import=${cfg.configFile}";
         ExecStop = "${pkgs.bash}/bin/bash -c \"${pkgs.tmux}/bin/tmux send-keys -t rtorrent C-q && while pidof rtorrent > /dev/null; do sleep 0.5; done\"";
         WorkingDirectory = "${cfg.dataDir}";
         Restart = "on-failure";
+        PermissionsStartOnly = "true";
       };
 
       preStart = ''
