@@ -32,6 +32,30 @@ stdenv.mkDerivation rec {
       url = "https://ftp.osuosl.org/pub/blfs/conglomeration/mupdf/mupdf-1.11-shared_libs-1.patch";
       sha256 = "127x8jhyj3i9cn3mxw9mm5barw2yk43rvmghg54bhn4rjalx857j";
     })
+
+    (fetchurl {
+      name = "mupdf-1.11-CVE-2017-14685.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=ab1a420613dec93c686acbee2c165274e922f82a";
+      sha256 = "120xapwj0af333n3a32ypxk0jmjv2ia476jg8pzsfqk9a5qqkx46";
+    })
+
+    (fetchurl {
+      name = "mupdf-1.11-CVE-2017-14686.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=0f0fbc07d9be31f5e83ec5328d7311fdfd8328b1";
+      sha256 = "0pkn7mfqhmnsyia4rh4mw4q435bzvlc22crqa1bxpaa0gcyky51c";
+    })
+
+    (fetchurl {
+      name = "mupdf-1.11-CVE-2017-14687.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=2b16dbd8f73269cb15ca61ece75cf8d2d196ed28";
+      sha256 = "01v41cwrdnz3k32fcadk2gk4knqrm3mavzp6pxhn19nwgmqkshjd";
+    })
+
+    (fetchurl {
+      name = "mupdf-1.11-CVE-2017-15587.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=82df2631d7d0446b206ea6b434ea609b6c28b0e8";
+      sha256 = "04kfww7y0wazg6372g44fa2k5kiiigq4616ihkvmp18rz86903n9";
+    })
   ];
 
   makeFlags = [ "prefix=$(out)" ];
