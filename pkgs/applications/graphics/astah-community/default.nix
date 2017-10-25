@@ -37,20 +37,22 @@ stdenv.mkDerivation {
     sha256 = "1lkl30jdjiarvh2ap9rjabvrq9qhrlmfrasv3vvkag22y9w4l499";
   };
 
-  buildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [ unzip makeWrapper ];
 
   installPhase = ''
-    mkdir -p $out/share
-    mkdir -p $out/share/pixmaps
-    mkdir -p $out/share/mime/packages
-    mkdir -p $out/bin
+    runHook preInstall
+
+    mkdir -p $out/{bin,share}
     cp -r . $out/share/astah
     cp -r ${desktopItem}/share/applications $out/share/applications
-    cp ${desktopIcon} $out/share/pixmaps/${name}.png
-    cp ${mimeXml} $out/share/mime/packages/${name}.xml
+
+    install -D ${desktopIcon} $out/share/pixmaps/${name}.png
+    install -D ${mimeXml} $out/share/mime/packages/${name}.xml
 
     makeWrapper ${jre}/bin/java $out/bin/astah \
       --add-flags "-jar $out/share/astah/astah-community.jar"
+
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
