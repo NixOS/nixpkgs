@@ -71,7 +71,7 @@ in {
       '';
       serviceConfig = {
         User = "nobody";
-        Restart  = "always";
+        Restart = "always";
         PrivateTmp = true;
         WorkingDirectory = /tmp;
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
