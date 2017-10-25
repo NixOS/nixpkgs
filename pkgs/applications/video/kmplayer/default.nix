@@ -21,6 +21,11 @@ mkDerivation rec {
     ./no-docs.patch # Don't build docs due to errors (kdelibs4support propagates kdoctools)
   ];
 
+  postPatch = ''
+    sed -i src/kmplayer.desktop \
+      -e "s,^Exec.*,Exec=$out/bin/kmplayer -qwindowtitle %c %i %U,"
+  '';
+
   nativeBuildInputs = [ extra-cmake-modules makeWrapper ];
 
   buildInputs = [
