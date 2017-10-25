@@ -9,7 +9,7 @@
 # - We for the moment do not package them to keep the dependencies slim.
 #   Probably, shall package the newer tools as skktools-extra in the future.
 stdenv.mkDerivation rec {
-  name = "skktools";
+  name = "skktools-${version}";
   version = "1.3.3";
   src = fetchFromGitHub {
     owner = "skk-dev";
