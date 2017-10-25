@@ -115,11 +115,18 @@ let
 
     };
 
-    config = {
+    config = let
+      defaultFormatOptions =
+        # -F needed to allow bare block device without partitions
+        if (builtins.substring 0 3 config.fsType) == "ext" then "-F"
+        # -q needed for non-interactive operations
+        else if config.fsType == "jfs" then "-q"
+        # (same here)
+        else if config.fsType == "reiserfs" then "-q"
+        else null;
+    in {
       options = mkIf config.autoResize [ "x-nixos.autoresize" ];
-
-      # -F needed to allow bare block device without partitions
-      formatOptions = mkIf ((builtins.substring 0 3 config.fsType) == "ext") (mkDefault "-F");
+      formatOptions = mkIf (defaultFormatOptions != null) (mkDefault defaultFormatOptions);
     };
 
   };
