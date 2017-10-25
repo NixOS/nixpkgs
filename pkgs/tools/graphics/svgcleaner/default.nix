@@ -18,8 +18,8 @@ buildRustPackage rec {
   meta = with stdenv.lib; {
     description = "A tool for tidying and optimizing SVGs";
     homepage = "https://github.com/RazrFalcon/svgcleaner";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl2;
+    platforms = platforms.all;
     maintainer = [ maintainers.mehandes ];
   };
 }
