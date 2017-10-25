@@ -17340,6 +17340,8 @@ with pkgs;
 
   xpdf = libsForQt5.callPackage ../applications/misc/xpdf { };
 
+  xpointerbarrier = callPackage ../tools/X11/xpointerbarrier {};
+
   xkb_switch = callPackage ../tools/X11/xkb-switch { };
 
   xkblayout-state = callPackage ../applications/misc/xkblayout-state { };
