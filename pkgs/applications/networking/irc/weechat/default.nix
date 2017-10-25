@@ -8,6 +8,7 @@
 , pythonPackages
 , rubySupport ? true, ruby
 , tclSupport ? true, tcl
+, homeDir ? null, lib
 , extraBuildInputs ? [] }:
 
 assert guileSupport -> guile != null;
@@ -62,13 +63,15 @@ stdenv.mkDerivation rec {
     # Fix '_res_9_init: undefined symbol' error
     + (stdenv.lib.optionalString stdenv.isDarwin "-DBIND_8_COMPAT=1 -lresolv");
 
-  postInstall = with stdenv.lib; ''
+  postInstall = let
+    homeDirOption = lib.optionalString (homeDir != null) "--add-flags '-d ${homeDir}'";
+  in with stdenv.lib; ''
     NIX_PYTHONPATH="$out/lib/${python.libPrefix}/site-packages"
     wrapProgram "$out/bin/weechat" \
       ${optionalString perlSupport "--prefix PATH : ${perl}/bin"} \
       --prefix PATH : ${pythonPackages.python}/bin \
       --prefix PYTHONPATH : "$PYTHONPATH" \
-      --prefix PYTHONPATH : "$NIX_PYTHONPATH"
+      --prefix PYTHONPATH : "$NIX_PYTHONPATH" ${homeDirOption}
   '';
 
   meta = {

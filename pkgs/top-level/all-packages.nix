@@ -17071,6 +17071,8 @@ with pkgs;
     inherit (luaPackages) cjson;
   };
 
+  weechat-wrapper = callPackage ../applications/networking/irc/weechat/wrapper.nix { };
+
   westonLite = callPackage ../applications/window-managers/weston {
     pango = null;
     freerdp = null;
