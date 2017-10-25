@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pythonPackages, zip, makeWrapper, nix, nix-prefetch-git
+{ stdenv, fetchFromGitHub, fetchurl, pythonPackages, zip, makeWrapper, nix, nix-prefetch-git
 , nix-prefetch-hg
 }:
 
@@ -6,9 +6,11 @@ let
 
   version = "1.8.1";
 
-  src = fetchurl {
-    url = "https://github.com/garbas/pypi2nix/archive/v${version}.tar.gz";
-    sha256 = "1ynqfm77a2icbqx2y7srgx8agzxqc7y171h9f36mabjh2ph0p02a";
+  src = fetchFromGitHub {
+    owner = "garbas";
+    repo = "pypi2nix";
+    rev = "v${version}";
+    sha256 = "039a2ys7ijzi2sa2haa6a8lbhncvd1wfsi6gcy9vm02gi31ghzyb";
   };
 
   click = fetchurl {
