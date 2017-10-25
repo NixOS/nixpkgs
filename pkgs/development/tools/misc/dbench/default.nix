@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = "Filesystem benchmark tool based on load patterns";
     homepage = https://dbench.samba.org/;
     license = licenses.gpl3;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };
 }

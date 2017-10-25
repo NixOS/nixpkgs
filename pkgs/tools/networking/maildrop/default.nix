@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1a94p2b41iy334cwfwmzi19557dn5j61abh0cp2rfc9dkc8ibhdg";
   };
 
-  buildInputs = [ pkgconfig pcre perl ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ pcre perl ];
 
   patches = [ ./maildrop.configure.hack.patch ]; # for building in chroot
 

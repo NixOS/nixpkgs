@@ -40,7 +40,8 @@ stdenv.mkDerivation rec {
       '(*info->fprintf_func) (info->stream, "%s", errmsg);'
   '';
 
-  buildInputs = [pkgconfig readline libusb libewf perl zlib openssl]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ readline libusb libewf perl zlib openssl]
     ++ optional useX11 [gtkdialog vte gtk2]
     ++ optional rubyBindings [ruby]
     ++ optional pythonBindings [python]

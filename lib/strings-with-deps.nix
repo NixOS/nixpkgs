@@ -1,3 +1,4 @@
+{ lib }:
 /*
 Usage:
 
@@ -40,9 +41,9 @@ Usage:
   [1] maybe this behaviour should be removed to keep things simple (?)
 */
 
-with import ./lists.nix;
-with import ./attrsets.nix;
-with import ./strings.nix;
+with lib.lists;
+with lib.attrsets;
+with lib.strings;
 
 rec {
 

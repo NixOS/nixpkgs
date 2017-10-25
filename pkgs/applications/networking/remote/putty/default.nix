@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
     cd unix
   '';
 
-  buildInputs = [ gtk2 ncurses pkgconfig autoconf automake perl halibut libtool ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 ncurses autoconf automake perl halibut libtool ];
 
   meta = with stdenv.lib; {
     description = "A Free Telnet/SSH Client";

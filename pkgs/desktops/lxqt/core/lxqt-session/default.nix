@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qtbase, qttools, qtsvg, kwindowsystem, liblxqt, libqtxdg, lxqt-common, xorg, xdg-user-dirs }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt-build-tools, qtbase, qttools, qtsvg, qtx11extras, kwindowsystem, liblxqt, libqtxdg, lxqt-common, xorg, xdg-user-dirs }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     qtbase
     qttools
     qtsvg
+    qtx11extras
     kwindowsystem
     liblxqt
     libqtxdg

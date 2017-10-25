@@ -26,7 +26,7 @@
 , enablePlugin ? true             # whether to support user-supplied plug-ins
 , name ? "gcc"
 , libcCross ? null
-, crossStageStatic ? true
+, crossStageStatic ? false
 , gnat ? null
 , libpthread ? null, libpthreadCross ? null  # required for GNU/Hurd
 , stripped ? true
@@ -217,7 +217,8 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
-  outputs = [ "out" "lib" "man" "info" ];
+  outputs = if langJava || langGo then ["out" "man" "info"]
+    else [ "out" "lib" "man" "info" ];
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
 
@@ -292,7 +293,9 @@ stdenv.mkDerivation ({
         ''
     else null;
 
-  inherit noSysDirs staticCompiler langJava crossStageStatic
+  # TODO(@Ericson2314): Make passthru instead. Weird to avoid mass rebuild,
+  crossStageStatic = targetPlatform == hostPlatform || crossStageStatic;
+  inherit noSysDirs staticCompiler langJava
     libcCross crossMingw;
 
   nativeBuildInputs = [ texinfo which gettext ]
@@ -321,7 +324,11 @@ stdenv.mkDerivation ({
     export LDFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $LDFLAGS_FOR_TARGET"
     export CXXFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CXXFLAGS_FOR_TARGET"
     export CFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CFLAGS_FOR_TARGET"
-  '';
+  ''
+  + stdenv.lib.optionalString (langJava || langGo) ''
+    export lib=$out;
+  ''
+  ;
 
   dontDisableStatic = true;
 
@@ -563,4 +570,10 @@ stdenv.mkDerivation ({
 // optionalAttrs (!stripped || targetPlatform != hostPlatform) { dontStrip = true; }
 
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
+
+// optionalAttrs (langJava) {
+     postFixup = ''
+       target="$(echo "$out/libexec/gcc"/*/*/ecj*)"
+       patchelf --set-rpath "$(patchelf --print-rpath "$target"):$out/lib" "$target"
+     '';}
 )

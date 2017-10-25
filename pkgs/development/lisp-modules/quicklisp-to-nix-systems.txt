@@ -33,6 +33,7 @@ closer-mop
 cl-ppcre
 cl-ppcre-template
 cl-ppcre-unicode
+cl-protobufs
 cl-reexport
 cl-smtp
 clsql

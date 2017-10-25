@@ -24,8 +24,10 @@ stdenv.mkDerivation rec {
     sha256 = "0ahwhmscrmnpvl1r732wg93dzkhv8c1sph2yrqgsrhr73c1616ix";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
+
   buildInputs = [
-    pkgconfig cmake perl curl gtest lzma bzip2 lz4 db dpkg libxslt.bin
+    cmake perl curl gtest lzma bzip2 lz4 db dpkg libxslt.bin
   ] ++ lib.optionals withDocs [
     doxygen Po4a w3m
   ] ++ lib.optionals withNLS [

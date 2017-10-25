@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   ];
   sourceRoot = "yosys";
 
-  buildInputs = [ pkgconfig tcl readline libffi python3 bison flex ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ tcl readline libffi python3 bison flex ];
   preBuild = ''
     chmod -R u+w ../yosys-abc
     ln -s ../yosys-abc abc

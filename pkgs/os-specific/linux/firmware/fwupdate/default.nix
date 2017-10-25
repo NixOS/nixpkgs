@@ -14,10 +14,11 @@ let version = "8"; in
           "TARGETDIR=$(out)/boot/efi/nixos/"
           "prefix=$(out)/"
         ];
-      buildInputs = [ gnu-efi libsmbios popt pkgconfig gettext ];
+  nativeBuildInputs = [ pkgconfig ];
+      buildInputs = [ gnu-efi libsmbios popt gettext ];
       propagatedBuildInputs = [ efivar ];
       # TODO: Just apply the disable to the efi subdir
-      hardeningDisable = "all";
+      hardeningDisable = [ "all" ];
       patchPhase = ''
         sed -i 's|/usr/include/smbios_c/token.h|smbios_c/token.h|' \
           linux/libfwup.c

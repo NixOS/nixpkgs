@@ -103,4 +103,6 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+
+  outputs = [ "out" "dev" ];
 }

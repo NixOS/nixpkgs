@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
 
   dontUseCmakeConfigure = true;
 
-  buildInputs = [ avahi dbus cmake gettext git gnutar gzip bzip2 ffmpeg libiconv openssl pkgconfig python
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ avahi dbus cmake gettext git gnutar gzip bzip2 ffmpeg libiconv openssl python
     which zlib ];
 
   preConfigure = ''

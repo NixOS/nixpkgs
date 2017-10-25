@@ -8,7 +8,8 @@ with stdenv.lib;
 qtSubmodule {
   name = "qtmultimedia";
   qtInputs = [ qtbase qtdeclarative ];
-  buildInputs = [ pkgconfig gstreamer gst-plugins-base libpulseaudio]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gstreamer gst-plugins-base libpulseaudio]
     ++ optional (stdenv.isLinux) alsaLib;
   outputs = [ "out" "dev" "bin" ];
   qmakeFlags = [ "GST_VERSION=1.0" ];

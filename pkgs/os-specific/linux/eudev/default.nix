@@ -8,13 +8,15 @@ let
     url="http://dev.gentoo.org/~blueness/eudev/eudev-${version}.tar.gz";
     sha256 = "06gyyl90n85x8i7lfhns514y1kg1ians13l467admyzy3kjxkqsp";
   };
+
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    glib pkgconfig gperf utillinux
+    glib gperf utillinux
   ];
 in
 stdenv.mkDerivation {
   inherit (s) name version;
-  inherit buildInputs;
+  inherit nativeBuildInputs buildInputs;
   src = fetchurl {
     inherit (s) url sha256;
   };

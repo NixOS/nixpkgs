@@ -1,3 +1,4 @@
+{ lib }:
 rec {
 
   /* The identity function
@@ -55,7 +56,7 @@ rec {
     isInt add sub lessThan
     seq deepSeq genericClosure;
 
-  inherit (import ./strings.nix) fileContents;
+  inherit (lib.strings) fileContents;
 
   # Return the Nixpkgs version number.
   nixpkgsVersion =

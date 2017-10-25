@@ -19,6 +19,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     $machine->waitForX;
     $machine->waitForFile("/home/alice/.Xauthority");
     $machine->succeed("xauth merge ~alice/.Xauthority");
+    $machine->waitUntilSucceeds("xmonad --restart");
     $machine->sleep(3);
     $machine->sendKeys("alt-shift-ret");
     $machine->waitForWindow(qr/machine.*alice/);

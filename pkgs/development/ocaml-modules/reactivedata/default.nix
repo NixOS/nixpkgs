@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, ocaml_react, opam }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, react, opam }:
 
 assert stdenv.lib.versionAtLeast ocaml.version "3.11";
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ ocaml findlib ocamlbuild opam ];
-  propagatedBuildInputs = [ocaml_react];
+  propagatedBuildInputs = [ react ];
 
   buildPhase = "ocaml pkg/build.ml native=true native-dynlink=true";
 

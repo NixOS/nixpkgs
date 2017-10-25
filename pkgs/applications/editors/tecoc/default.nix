@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
  '';
     homepage = https://github.com/blakemcbride/TECOC;
     maintainers = [ maintainers.AndersonTorres ];
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }
 # TODO: test in other platforms - especially Darwin

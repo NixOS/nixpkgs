@@ -11,7 +11,8 @@ buildOcaml rec {
     sha256 = "164gyrs6zxr5pyljwpjgd4knwlrkcmamsq3gvkkkvgf9rmhrl3zf";
   };
 
-  buildInputs = [ ncurses pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ncurses ];
   propagatedBuildInputs = [ libffi ];
 
   hasSharedObjects = true;

@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
-  buildInputs = [ unzip pkgconfig libixp_hg txt2tags dash python which
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ unzip libixp_hg txt2tags dash python which
                   libX11 libXrender libXext libXinerama libXrandr libXft ];
 
   # For some reason including mercurial in buildInputs did not help

@@ -1,30 +1,29 @@
-{ stdenv, fetchurl, openssl, libuuid, cmake, libwebsockets }:
+{ stdenv, fetchurl, openssl, libuuid, cmake, libwebsockets, c-ares, libuv }:
 
 stdenv.mkDerivation rec {
   pname = "mosquitto";
-  version = "1.4";
+  version = "1.4.14";
 
   name = "${pname}-${version}";
 
   src = fetchurl {
-    url = http://mosquitto.org/files/source/mosquitto-1.4.tar.gz;
-    sha256 = "1imw5ps0cqda41b574k8hgz9gdr8yy58f76fg8gw14pdnvf3l7sr";
+    url = "http://mosquitto.org/files/source/mosquitto-${version}.tar.gz";
+    sha256 = "1la2577h7hcyj7lq26vizj0sh2zmi9m7nbxjp3aalayi66kiysqm";
   };
 
-  buildInputs = [ openssl libuuid libwebsockets ]
+  buildInputs = [ openssl libuuid libwebsockets c-ares libuv ]
     ++ stdenv.lib.optional stdenv.isDarwin cmake;
 
-  makeFlags = [
+  makeFlags = stdenv.lib.optionals stdenv.isLinux [
     "DESTDIR=$(out)"
     "PREFIX="
   ];
 
-  preBuild = ''
+  postPatch = ''
     substituteInPlace config.mk \
       --replace "/usr/local" ""
     substituteInPlace config.mk \
       --replace "WITH_WEBSOCKETS:=no" "WITH_WEBSOCKETS:=yes"
-
   '';
 
   meta = {

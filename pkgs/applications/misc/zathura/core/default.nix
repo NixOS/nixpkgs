@@ -19,8 +19,9 @@ stdenv.mkDerivation rec {
 
   icon = ./icon.xpm;
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig file gtk girara
+    file gtk girara
     gettext makeWrapper sqlite glib
   ] ++ optional synctexSupport texlive.bin.core;
 

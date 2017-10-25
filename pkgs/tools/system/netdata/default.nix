@@ -1,17 +1,18 @@
 { stdenv, fetchFromGitHub, autoreconfHook, zlib, pkgconfig, libuuid }:
 
 stdenv.mkDerivation rec{
-  version = "1.5.0";
+  version = "1.7.0";
   name = "netdata-${version}";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "firehol";
     repo = "netdata";
-    sha256 = "1nsv0s11ai1kvig9xr4cz2f2lalvilpbfjpd8fdfqk9fak690zhz";
+    sha256 = "1fv01jnbgwbafsxavlji90zdqizn8m4nfg9ivc4sbi05j036bg6n";
   };
 
-  buildInputs = [ autoreconfHook zlib pkgconfig libuuid ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ zlib libuuid ];
 
   # Allow UI to load when running as non-root
   patches = [ ./web_access.patch ];

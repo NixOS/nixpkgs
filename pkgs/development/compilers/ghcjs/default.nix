@@ -2,5 +2,5 @@
 
 bootPkgs.callPackage ./base.nix {
   inherit bootPkgs;
-  broken = false;
+  broken = true;  # https://hydra.nixos.org/build/62184741
 }

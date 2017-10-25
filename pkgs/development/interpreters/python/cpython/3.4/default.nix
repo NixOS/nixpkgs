@@ -66,6 +66,7 @@ in stdenv.mkDerivation {
 
   patches = [
     ./no-ldconfig.patch
+    ./ld_library_path.patch
   ];
 
   postPatch = ''

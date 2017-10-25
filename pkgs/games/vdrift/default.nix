@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ka6zir9hg0md5p03dl461jkvbk05ywyw233hnc3ka6shz3vazi1";
   };
 
-  buildInputs = [ pkgconfig scons mesa SDL2 SDL2_image libvorbis bullet curl gettext ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ scons mesa SDL2 SDL2_image libvorbis bullet curl gettext ];
 
   buildPhase = ''
     cp -r --reflink=auto $data data

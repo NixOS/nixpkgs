@@ -12,8 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "076l75rfl6pnp1wgiwlaihy1vg2advg1z8bi0x84kk259kldgvwn";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig libjpeg libpng xorg.libxcb libX11 mesa libdrm python27 wayland libudev
+    libjpeg libpng xorg.libxcb libX11 mesa libdrm python27 wayland libudev
   ];
 
   buildPhase = ''

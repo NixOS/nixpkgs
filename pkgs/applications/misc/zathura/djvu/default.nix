@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "03cw54d2fipvbrnbqy0xccqkx6s77dyhyymx479aj5ryy4513dq8";
   };
 
-  buildInputs = [ pkgconfig djvulibre gettext zathura_core gtk girara ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ djvulibre gettext zathura_core gtk girara ];
 
   patches = [ ./gtkflags.patch ];
 

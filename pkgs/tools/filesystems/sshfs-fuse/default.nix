@@ -1,21 +1,37 @@
-{ stdenv, fetchFromGitHub, pkgconfig, glib, fuse, autoreconfHook }:
+{ stdenv, fetchFromGitHub, meson, pkgconfig, ninja, glib, fuse3
+, buildManPages ? true, docutils
+}:
 
-stdenv.mkDerivation rec {
-  version = "2.10"; # Temporary (need to add libfuse 3.x first)
+let
+  inherit (stdenv.lib) optional;
+  rpath = stdenv.lib.makeLibraryPath [ fuse3 glib ];
+in stdenv.mkDerivation rec {
+  version = "3.3.0";
   name = "sshfs-fuse-${version}";
-  
+
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "sshfs";
     rev = "sshfs-${version}";
-    sha256 = "1dmw4kx6vyawcywiv8drrajnam0m29mxfswcp4209qafzx3mjlp1";
+    sha256 = "1hn5c0059ppjqygdhvapxm7lrqm5bnpwaxgjylskz04c0vr8nygp";
   };
-  
-  buildInputs = [ pkgconfig glib fuse autoreconfHook ];
+
+  patches = optional buildManPages ./build-man-pages.patch;
+
+  nativeBuildInputs = [ meson pkgconfig ninja ];
+  buildInputs = [ fuse3 glib ] ++ optional buildManPages docutils;
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optional
+    (stdenv.system == "i686-linux")
+    "-D_FILE_OFFSET_BITS=64";
 
   postInstall = ''
     mkdir -p $out/sbin
     ln -sf $out/bin/sshfs $out/sbin/mount.sshfs
+  '';
+
+  postFixup = ''
+       patchelf --set-rpath '${rpath}' "$out/bin/sshfs"
   '';
 
   meta = with stdenv.lib; {

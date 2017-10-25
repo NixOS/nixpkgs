@@ -1,24 +1,24 @@
 { stdenv, fetchurl, fetchbzr, cmake, mesa, wxGTK, zlib, libX11, gettext, glew, cairo, curl, openssl, boost, pkgconfig, doxygen }:
 
 stdenv.mkDerivation rec {
-  name = "kicad-${series}";
+  name = "kicad-${version}";
   series = "4.0";
-  version = "4.0.6";
+  version = "4.0.7";
 
   srcs = [
     (fetchurl {
       url = "https://code.launchpad.net/kicad/${series}/${version}/+download/kicad-${version}.tar.xz";
-      sha256 = "1612lkr1p5sii2c4q8zdm6m4kmdylcq8hkd1mzr6b7l3g70sqz79";
+      sha256 = "1hgxan9321szgyqnkflb0q60yjf4yvbcc4cpwhm0yz89qrvlq1q9";
     })
 
     (fetchurl {
       url = "http://downloads.kicad-pcb.org/libraries/kicad-library-${version}.tar.gz";
-      sha256 = "16f47pd6f0ddsdxdrp327nr9v05gl8c24d0qypq2aqx5hdjmkp7f";
+      sha256 = "1azb7v1y3l6j329r9gg7f4zlg0wz8nh4s4i5i0l9s4yh9r6i9zmv";
     })
 
     (fetchurl {
       url = "http://downloads.kicad-pcb.org/libraries/kicad-footprints-${version}.tar.gz";
-      sha256 = "0vmgqhdw05k5fdnqv42grnvlz7v75g9md82jp2d3dvw2zw050lfb";
+      sha256 = "08qrz5zzsb5127jlnv24j0sgiryd5nqwg3lfnwi8j9a25agqk13j";
     })
   ];
 
@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true; # often fails on Hydra: fatal error: pcb_plot_params_lexer.h: No such file or directory
 
-  buildInputs = [ cmake mesa wxGTK zlib libX11 gettext glew cairo curl openssl boost pkgconfig doxygen ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake mesa wxGTK zlib libX11 gettext glew cairo curl openssl boost doxygen ];
 
   # They say they only support installs to /usr or /usr/local,
   # so we have to handle this.
@@ -66,5 +67,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = with stdenv.lib.platforms; linux;
+    hydraPlatforms = []; # 'output limit exceeded' error on hydra
   };
 }

@@ -875,12 +875,17 @@ to your own Haskell packages and integrate that in a Continuous Integration
 server like [hydra](https://nixos.org/hydra/) to assure your packages maintain a
 minimum level of quality. This section discusses some of these functions.
 
+#### failOnAllWarnings
+
+Applying `haskell.lib.failOnAllWarnings` to a Haskell package enables the
+`-Wall` and `-Werror` GHC options to turn all warnings into build failures.
+
 #### buildStrictly
 
-Applying `haskell.lib.buildStrictly` to a Haskell package enables the `-Wall`
-and `-Werror` GHC options to turn all warnings into build failures. Additionally
-the source of your package is gotten from first invoking `cabal sdist` to ensure
-all needed files are listed in the Cabal file.
+Applying `haskell.lib.buildStrictly` to a Haskell package calls
+`failOnAllWarnings` on the given package to turn all warnings into build
+failures. Additionally the source of your package is gotten from first invoking
+`cabal sdist` to ensure all needed files are listed in the Cabal file.
 
 #### checkUnusedPackages
 

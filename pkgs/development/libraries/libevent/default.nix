@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, openssl, findutils }:
+{ stdenv, fetchurl, findutils
+, sslSupport? true, openssl
+}:
+
+assert sslSupport -> openssl != null;
 
 stdenv.mkDerivation rec {
   name = "libevent-${version}";
@@ -11,13 +15,20 @@ stdenv.mkDerivation rec {
 
   # libevent_openssl is moved into its own output, so that openssl isn't present
   # in the default closure.
-  outputs = [ "out" "dev" "openssl" ];
+  outputs = [ "out" "dev" ]
+    ++ stdenv.lib.optional sslSupport "openssl"
+    ;
   outputBin = "dev";
-  propagatedBuildOutputs = [ "out" "openssl" ];
+  propagatedBuildOutputs = [ "out" ]
+    ++ stdenv.lib.optional sslSupport "openssl"
+    ;
 
-  buildInputs = [ openssl ] ++ stdenv.lib.optional stdenv.isCygwin findutils;
+  buildInputs = []
+    ++ stdenv.lib.optional sslSupport openssl
+    ++ stdenv.lib.optional stdenv.isCygwin findutils
+    ;
 
-  postInstall = ''
+  postInstall = stdenv.lib.optionalString sslSupport ''
     moveToOutput "lib/libevent_openssl*" "$openssl"
     substituteInPlace "$dev/lib/pkgconfig/libevent_openssl.pc" \
       --replace "$out" "$openssl"

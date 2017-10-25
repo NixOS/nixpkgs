@@ -114,7 +114,10 @@ let
 
     benchmark = callPackage ../development/ocaml-modules/benchmark { };
 
-    biniou = callPackage ../development/ocaml-modules/biniou { };
+    biniou =
+      if lib.versionOlder "4.02" ocaml.version
+      then callPackage ../development/ocaml-modules/biniou { }
+      else callPackage ../development/ocaml-modules/biniou/1.0.nix { };
 
     bin_prot_p4 = callPackage ../development/ocaml-modules/bin_prot { };
 
@@ -172,7 +175,10 @@ let
       lwt = ocaml_lwt;
     };
 
-    csv = callPackage ../development/ocaml-modules/csv { };
+    csv =
+      if lib.versionAtLeast ocaml.version "4.2"
+      then callPackage ../development/ocaml-modules/csv { }
+      else callPackage ../development/ocaml-modules/csv/1.5.nix { };
 
     curses = callPackage ../development/ocaml-modules/curses { };
 
@@ -430,16 +436,11 @@ let
 
     pgocaml = callPackage ../development/ocaml-modules/pgocaml {};
 
-    ocaml_react = callPackage ../development/ocaml-modules/react { };
-    reactivedata = callPackage ../development/ocaml-modules/reactivedata {};
-
     ocamlscript = callPackage ../development/tools/ocaml/ocamlscript { };
 
     ocamlsdl= callPackage ../development/ocaml-modules/ocamlsdl { };
 
     ocaml_sqlite3 = callPackage ../development/ocaml-modules/sqlite3 { };
-
-    ocaml_ssl = callPackage ../development/ocaml-modules/ssl { };
 
     ocaml_text = callPackage ../development/ocaml-modules/ocaml-text { };
 
@@ -590,6 +591,10 @@ let
 
     re = callPackage ../development/ocaml-modules/re { };
 
+    react = callPackage ../development/ocaml-modules/react { };
+
+    reactivedata = callPackage ../development/ocaml-modules/reactivedata {};
+
     reason = callPackage ../development/compilers/reason { };
 
     rope = callPackage ../development/ocaml-modules/rope { };
@@ -601,6 +606,8 @@ let
     sedlex = callPackage ../development/ocaml-modules/sedlex { };
 
     sqlite3EZ = callPackage ../development/ocaml-modules/sqlite3EZ { };
+
+    ssl = callPackage ../development/ocaml-modules/ssl { };
 
     stog = callPackage ../applications/misc/stog { };
 
@@ -621,6 +628,8 @@ let
     uuidm = callPackage ../development/ocaml-modules/uuidm { };
 
     sawja = callPackage ../development/ocaml-modules/sawja { };
+
+    stdint = callPackage ../development/ocaml-modules/stdint { };
 
     uucd = callPackage ../development/ocaml-modules/uucd { };
     uucp = callPackage ../development/ocaml-modules/uucp { };

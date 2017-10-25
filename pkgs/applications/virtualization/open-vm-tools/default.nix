@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   name = "open-vm-tools-${version}";
-  version = "10.1.0";
+  version = "10.1.10";
 
   src = fetchFromGitHub {
-    owner = "vmware";
-    repo = "open-vm-tools";
-    rev = "stable-${version}";
-    sha256 = "1qzk4mvw618ca4j9agsfpqch9jgwghvdc4rpkvlyz8kirvh9iniz";
+    owner  = "vmware";
+    repo   = "open-vm-tools";
+    rev    = "stable-${version}";
+    sha256 = "13ifpi53rc2463ka8xw9zx407d1fz119x8sb9k48g5mwxm6c85fm";
   };
 
   sourceRoot = "${src.name}/open-vm-tools";
@@ -52,8 +52,8 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/vmware/open-vm-tools;
     description = "Set of tools for VMWare guests to improve host-guest interaction";
     longDescription = ''
-      A set of services and modules that enable several features in VMware products for 
-      better management of, and seamless user interactions with, guests. 
+      A set of services and modules that enable several features in VMware products for
+      better management of, and seamless user interactions with, guests.
     '';
     license = licenses.gpl2;
     platforms = platforms.linux;

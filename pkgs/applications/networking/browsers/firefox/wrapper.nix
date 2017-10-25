@@ -129,6 +129,8 @@ in stdenv.mkDerivation {
 
   passthru = { unwrapped = browser; };
 
+  disallowedRequisites = [ stdenv.cc ];
+
   meta = browser.meta // {
     description =
       browser.meta.description

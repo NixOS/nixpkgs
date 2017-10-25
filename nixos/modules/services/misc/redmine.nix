@@ -191,7 +191,7 @@ in {
 
         if [ "${cfg.databaseHost}" = "127.0.0.1" ]; then
           if ! test -e "${cfg.stateDir}/db-created"; then
-            psql postgres -c "CREATE ROLE redmine WITH LOGIN NOCREATEDB NOCREATEROLE NOCREATEUSER ENCRYPTED PASSWORD '${cfg.databasePassword}'"
+            psql postgres -c "CREATE ROLE redmine WITH LOGIN NOCREATEDB NOCREATEROLE ENCRYPTED PASSWORD '${cfg.databasePassword}'"
             ${config.services.postgresql.package}/bin/createdb --owner redmine redmine || true
             touch "${cfg.stateDir}/db-created"
           fi

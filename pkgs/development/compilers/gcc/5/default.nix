@@ -26,7 +26,7 @@
 , enablePlugin ? true             # whether to support user-supplied plug-ins
 , name ? "gcc"
 , libcCross ? null
-, crossStageStatic ? true
+, crossStageStatic ? false
 , gnat ? null
 , libpthread ? null, libpthreadCross ? null  # required for GNU/Hurd
 , stripped ? true
@@ -221,8 +221,7 @@ stdenv.mkDerivation ({
     inherit sha256;
   };
 
-  # FIXME stackprotector needs gcc 4.9 in bootstrap tools
-  hardeningDisable = [ "stackprotector" "format" ];
+  hardeningDisable = [ "format" ];
 
   inherit patches;
 
@@ -299,7 +298,9 @@ stdenv.mkDerivation ({
         ''
     else null;
 
-  inherit noSysDirs staticCompiler langJava crossStageStatic
+  # TODO(@Ericson2314): Make passthru instead. Weird to avoid mass rebuild,
+  crossStageStatic = targetPlatform == hostPlatform || crossStageStatic;
+  inherit noSysDirs staticCompiler langJava
     libcCross crossMingw;
 
   nativeBuildInputs = [ texinfo which gettext ]

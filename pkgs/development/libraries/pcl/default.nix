@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake qhull flann boost eigen pkgconfig libusb1 libpcap
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake qhull flann boost eigen libusb1 libpcap
                   libpng vtk qt4 libXt ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa AGL cf-private ];
   cmakeFlags = stdenv.lib.optionals stdenv.isDarwin [

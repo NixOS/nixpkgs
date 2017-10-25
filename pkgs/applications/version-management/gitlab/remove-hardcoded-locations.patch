@@ -62,22 +62,16 @@ diff --git a/lib/gitlab/logger.rb b/lib/gitlab/logger.rb
 index 59b21149a9..4f4a39a06c 100644
 --- a/lib/gitlab/logger.rb
 +++ b/lib/gitlab/logger.rb
-@@ -13,20 +13,20 @@ module Gitlab
+@@ -13,7 +13,7 @@
      end
  
      def self.read_latest
 -      path = Rails.root.join("log", file_name)
 +      path = File.join(ENV["GITLAB_LOG_PATH"], file_name)
-       self.build unless File.exist?(path)
-       tail_output, _ = Gitlab::Popen.popen(%W(tail -n 2000 #{path}))
-       tail_output.split("\n")
-     end
  
-     def self.read_latest_for(filename)
--      path = Rails.root.join("log", filename)
-+      path = File.join(ENV["GITLAB_LOG_PATH"], filename)
-       tail_output, _ = Gitlab::Popen.popen(%W(tail -n 2000 #{path}))
-       tail_output.split("\n")
+       return [] unless File.readable?(path)
+ 
+@@ -22,7 +22,7 @@
      end
  
      def self.build
@@ -158,3 +152,14 @@ index b276a81eac..070e3ebd81 100644
        end
      end
    end
+--- a/lib/api/api.rb	1970-01-01 01:00:01.000000000 +0100
++++ b/lib/api/api.rb	2017-09-28 19:37:24.953605705 +0200
+@@ -2,7 +2,7 @@
+   class API < Grape::API
+     include APIGuard
+ 
+-    LOG_FILENAME = Rails.root.join("log", "api_json.log")
++    LOG_FILENAME = File.join(ENV["GITLAB_LOG_PATH"], "api_json.log")
+ 
+     use GrapeLogging::Middleware::RequestLogger,
+         logger: Logger.new(LOG_FILENAME),

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   name = "fd-${version}";
-  version = "2.0.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${version}";
-    sha256 = "1xs4y9zf5m0ykl95787jv98xg0a60gkcyyh7kg7qg4xrcgf4qz4j";
+    sha256 = "1aw4pgsmvzzqlvbxzv5jnw42nf316qfhvr50b58iqi2dxy8z8cmv";
   };
 
-  depsSha256 = "1hxf3j4584jgpwrwykx6yil6q6ka9l81qvx6zrbprdxk3pslp049";
+  depsSha256 = "17fjlmdwp8582dvv68b5h3zzvmd71yd9sw9xalyrrww46h7fd84g";
 
   meta = {
     description = "A simple, fast and user-friendly alternative to find";

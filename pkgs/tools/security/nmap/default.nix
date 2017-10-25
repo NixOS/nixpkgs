@@ -28,6 +28,13 @@ in stdenv.mkDerivation rec {
 
   patches = ./zenmap.patch;
 
+  prePatch = optionalString stdenv.isDarwin ''
+    substituteInPlace libz/configure \
+        --replace /usr/bin/libtool ar \
+        --replace 'AR="libtool"' 'AR="ar"' \
+        --replace 'ARFLAGS="-o"' 'ARFLAGS="-r"'
+  '';
+
   configureFlags = []
     ++ optional (!pythonSupport) "--without-ndiff"
     ++ optional (!graphicalSupport) "--without-zenmap"
@@ -39,7 +46,8 @@ in stdenv.mkDerivation rec {
       wrapProgram $out/bin/zenmap --prefix PYTHONPATH : "$(toPythonPath $out)" --prefix PYTHONPATH : "$PYTHONPATH" --prefix PYTHONPATH : $(toPythonPath $pygtk)/gtk-2.0 --prefix PYTHONPATH : $(toPythonPath $pygobject)/gtk-2.0 --prefix PYTHONPATH : $(toPythonPath $pycairo)/gtk-2.0
   '';
 
-  buildInputs = with python2Packages; [ libpcap pkgconfig openssl ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = with python2Packages; [ libpcap openssl ]
     ++ optionals pythonSupport [ makeWrapper python ]
     ++ optionals graphicalSupport [
       libX11 gtk2 pygtk pysqlite pygobject2 pycairo

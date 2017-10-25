@@ -1,14 +1,17 @@
-{ callPackage, pkgs }:
+{ callPackage, boost155, boost162, boost163, openssl_1_1_0, haskellPackages, darwin, libsForQt5 }:
 
 rec {
 
   bitcoin  = callPackage ./bitcoin.nix { withGui = true; };
   bitcoind = callPackage ./bitcoin.nix { withGui = false; };
 
+  bitcoin-abc  = libsForQt5.callPackage ./bitcoin-abc.nix { withGui = true; };
+  bitcoind-abc = callPackage ./bitcoin-abc.nix { withGui = false; };
+
   bitcoin-unlimited  = callPackage ./bitcoin-unlimited.nix { withGui = true; };
   bitcoind-unlimited = callPackage ./bitcoin-unlimited.nix { withGui = false; };
 
-  bitcoin-classic  = callPackage ./bitcoin-classic.nix { withGui = true; };
+  bitcoin-classic  = libsForQt5.callPackage ./bitcoin-classic.nix { withGui = true; };
   bitcoind-classic = callPackage ./bitcoin-classic.nix { withGui = false; };
 
   bitcoin-xt  = callPackage ./bitcoin-xt.nix { withGui = true; };
@@ -22,12 +25,15 @@ rec {
   dogecoin  = callPackage ./dogecoin.nix { withGui = true; };
   dogecoind = callPackage ./dogecoin.nix { withGui = false; };
 
-  freicoin = callPackage ./freicoin.nix { boost = pkgs.boost155; };
-  go-ethereum = callPackage ./go-ethereum.nix { };
+  freicoin = callPackage ./freicoin.nix { boost = boost155; };
+  go-ethereum = callPackage ./go-ethereum.nix {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
   go-ethereum-classic = callPackage ./go-ethereum-classic { };
 
-  hivemind = callPackage ./hivemind.nix { withGui = true; boost = pkgs.boost162; };
-  hivemindd = callPackage ./hivemind.nix { withGui = false; boost = pkgs.boost162; };
+  hivemind = callPackage ./hivemind.nix { withGui = true; };
+  hivemindd = callPackage ./hivemind.nix { withGui = false; };
 
   litecoin  = callPackage ./litecoin.nix { withGui = true; };
   litecoind = callPackage ./litecoin.nix { withGui = false; };
@@ -35,15 +41,15 @@ rec {
   memorycoin  = callPackage ./memorycoin.nix { withGui = true; };
   memorycoind = callPackage ./memorycoin.nix { withGui = false; };
 
-  namecoin  = callPackage ./namecoin.nix  { inherit namecoind; };
-  namecoind = callPackage ./namecoind.nix { };
+  namecoin  = callPackage ./namecoin.nix  { withGui = true; };
+  namecoind = callPackage ./namecoin.nix { withGui = false; };
 
   ethabi = callPackage ./ethabi.nix { };
   ethrun = callPackage ./ethrun.nix { };
   seth = callPackage ./seth.nix { };
   dapp = callPackage ./dapp.nix { };
 
-  hsevm = (pkgs.haskellPackages.callPackage ./hsevm.nix {});
+  hevm = (haskellPackages.callPackage ./hevm.nix {});
 
   primecoin  = callPackage ./primecoin.nix { withGui = true; };
   primecoind = callPackage ./primecoin.nix { withGui = false; };
@@ -52,7 +58,7 @@ rec {
 
   zcash = callPackage ./zcash {
     withGui = false;
-    openssl = pkgs.openssl_1_1_0;
-    boost = pkgs.boost163;
+    openssl = openssl_1_1_0;
+    boost = boost163;
   };
 }

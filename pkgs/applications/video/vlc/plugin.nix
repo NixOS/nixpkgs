@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = "sh autogen.sh";
 
-  buildInputs = [ vlc autoconf automake libtool pkgconfig npapi_sdk libxcb
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ vlc autoconf automake libtool npapi_sdk libxcb
       xlibsWrapper gtk ];
 
   enableParallelBuilding = true;

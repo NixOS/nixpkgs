@@ -7,7 +7,7 @@
 #  $ nix-build '<nixpkgs>' -A dockerTools.examples.redis
 #  $ docker load < result
 
-{ pkgs, buildImage, pullImage, shadowSetup }:
+{ pkgs, buildImage, pullImage, shadowSetup, buildImageWithNixDb }:
 
 rec {
   # 1. basic example
@@ -83,11 +83,11 @@ rec {
   };
 
   # 4. example of pulling an image. could be used as a base for other images
-  nix = pullImage {
+  nixFromDockerHub = pullImage {
     imageName = "nixos/nix";
     imageTag = "1.11";
     # this hash will need change if the tag is updated at docker hub
-    sha256 = "1gk4bq05vl3rj3mh4mlbl4iicgndmimlv8jvkhdk4hrv0r44bwr3";
+    sha256 = "0nncn9pn5miygan51w34c2p9qssi96jgsaqv44dxxdprc8pg0g83";
   };
 
   # 5. example of multiple contents, emacs and vi happily coexisting
@@ -100,5 +100,20 @@ rec {
       pkgs.vim
       pkgs.nano
     ];
+  };
+
+  # 5. nix example to play with the container nix store
+  # docker run -it --rm nix nix-store -qR $(nix-build '<nixpkgs>' -A nix)
+  nix = buildImageWithNixDb {
+    name = "nix";
+    contents = [
+      # nix-store uses cat program to display results as specified by
+      # the image env variable NIX_PAGER.
+      pkgs.coreutils
+      pkgs.nix
+    ];
+    config = {
+      Env = [ "NIX_PAGER=cat" ];
+    };
   };
 }

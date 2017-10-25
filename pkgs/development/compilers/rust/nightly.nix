@@ -22,6 +22,7 @@ rec {
     ] ++ stdenv.lib.optional stdenv.needsPax ./patches/grsec.patch;
 
     doCheck = false;
+    broken = true;
   };
 
   cargo = callPackage ./cargo.nix rec {

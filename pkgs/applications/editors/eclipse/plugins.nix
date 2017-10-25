@@ -447,6 +447,28 @@ rec {
     };
   };
 
+  vrapper = buildEclipseUpdateSite rec {
+    name = "vrapper-${version}";
+    version = "0.72.0";
+    owner = "vrapper";
+    repo = "vrapper";
+    date = "20170311";
+
+    src = fetchzip {
+      stripRoot = false;
+      url = "https://github.com/${owner}/${repo}/releases/download/${version}/vrapper_${version}_${date}.zip";
+      sha256 = "0nyirf6km97q211cxfy01kidxac20m8ba3kk9xj73ykrhsk3cxjp";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/vrapper/vrapper";
+      description = "A wrapper to provide a Vim-like input scheme for moving around and editing text";
+      license = licenses.gpl3;
+      platforms = platforms.all;
+      maintainers = [ maintainers.stumoss ];
+    };
+  };
+
   yedit = buildEclipsePlugin rec {
     name = "yedit-${version}";
     version = "1.0.20.201509041456";

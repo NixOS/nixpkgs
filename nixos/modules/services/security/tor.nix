@@ -17,7 +17,7 @@ let
       GeoIPv6File ${pkgs.tor.geoip}/share/tor/geoip6
     ''}
 
-    ${optint "ControlPort" (toString cfg.controlPort)}
+    ${optint "ControlPort" cfg.controlPort}
   ''
   # Client connection config
   + optionalString cfg.client.enable  ''

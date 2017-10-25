@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     url = "http://www.creytiv.com/pub/baresip-${version}.tar.gz";
     sha256 = "0yi80gi2vb600n7wi6mk81zfdi1n5pg1dsz7458sb3z5cv5gj8yg";
   };
-  buildInputs = [zlib openssl libre librem pkgconfig
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [zlib openssl libre librem
     cairo mpg123 gstreamer gst-ffmpeg gst-plugins-base gst-plugins-bad gst-plugins-good
     alsaLib SDL libv4l celt libsndfile srtp ffmpeg gsm speex portaudio spandsp libuuid
     ccache libvpx

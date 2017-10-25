@@ -67,7 +67,7 @@ let
 in
 
 let
-  version = "17.1.7";
+  version = "17.1.10";
   branch  = head (splitString "." version);
   driverLink = "/run/opengl-driver" + optionalString stdenv.isi686 "-32";
 in
@@ -82,7 +82,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
       "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
     ];
-    sha256 = "1xg5v61nvabjk3rx48cwmnwv6zpqdcnkxl8bz82284mifjl75x39";
+    sha256 = "cbc0d681cc4df47d8deb5a36f45b420978128522fd665b2cd4c7096316f11bdb";
   };
 
   prePatch = "patchShebangs .";
@@ -140,14 +140,14 @@ stdenv.mkDerivation {
     "--disable-opencl"
   ];
 
-  nativeBuildInputs = [ pkgconfig file ];
+  nativeBuildInputs = [ autoreconfHook intltool pkgconfig file ];
 
   propagatedBuildInputs = with xorg;
     [ libXdamage libXxf86vm ]
     ++ optional stdenv.isLinux libdrm;
 
   buildInputs = with xorg; [
-    autoreconfHook intltool expat llvmPackages.llvm
+    expat llvmPackages.llvm
     glproto dri2proto dri3proto presentproto
     libX11 libXext libxcb libXt libXfixes libxshmfence
     libffi wayland libvdpau libelf libXvMC

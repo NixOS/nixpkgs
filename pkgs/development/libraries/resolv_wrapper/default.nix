@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
     homepage = "https://git.samba.org/?p=uid_wrapper.git;a=summary;";
     license = licenses.bsd3;
     maintainers = with maintainers; [ wkennington ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }

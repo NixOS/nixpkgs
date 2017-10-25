@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  postPatch = ''
+    sed -e 's/set -o posix/set +o posix/' -i configure
+  '';
+
   meta = {
     description = "Command-line option parser generator";
 

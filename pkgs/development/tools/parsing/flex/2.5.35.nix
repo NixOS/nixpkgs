@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ flex bison texinfo help2man autoreconfHook ];
 
-  propagatedNativeBuildInputs = [ m4 ];
+  propagatedBuildInputs = [ m4 ];
 
   crossAttrs = {
     preConfigure = ''

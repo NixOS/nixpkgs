@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ bison ];
 
-  propagatedNativeBuildInputs = [ m4 ];
+  propagatedBuildInputs = [ m4 ];
 
   postConfigure = stdenv.lib.optionalString (stdenv.isDarwin || stdenv.isCygwin) ''
     sed -i Makefile -e 's/-no-undefined//;'

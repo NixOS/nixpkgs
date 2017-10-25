@@ -1,8 +1,8 @@
-{ stdenv, fetchgit, pkgconfig, vte, gtk3, ncurses, makeWrapper, symlinkJoin
+{ stdenv, fetchgit, pkgconfig, vte, gtk3, ncurses, makeWrapper, wrapGAppsHook, symlinkJoin
 , configFile ? null
 }:
 
-let 
+let
   version = "12";
   termite = stdenv.mkDerivation {
     name = "termite-${version}";
@@ -17,7 +17,9 @@ let
 
     makeFlags = [ "VERSION=v${version}" "PREFIX=" "DESTDIR=$(out)" ];
 
-    buildInputs = [ pkgconfig vte gtk3 ncurses ];
+    buildInputs = [ vte gtk3 ncurses ];
+
+    nativeBuildInputs = [ wrapGAppsHook pkgconfig ];
 
     outputs = [ "out" "terminfo" ];
 

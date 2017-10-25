@@ -1,23 +1,23 @@
-{ lib, stdenv, fetchgit, fetchpatch, python3Packages, docutils
-, acl, binutils, bzip2, cbfstool, cdrkit, colord, cpio, diffutils, e2fsprogs, file, fpc, gettext, ghc
-, gnupg1, gzip, jdk, libcaca, mono, pdftk, poppler_utils, sng, sqlite, squashfsTools, unzip, xxd, xz
-, colordiff
+{ lib, stdenv, fetchgit, python3Packages, docutils
+, acl, apktool, binutils, bzip2, cbfstool, cdrkit, colord, colordiff, coreutils, cpio, diffutils, dtc
+, e2fsprogs, file, findutils, fontforge-fonttools, fpc, gettext, ghc, ghostscriptX, giflib, gnupg1, gnutar
+, gzip, imagemagick, jdk, libarchive, libcaca, llvm, mono, openssh, pdftk, pgpdump, poppler_utils, sng, sqlite
+, squashfsTools, tcpdump, unoconv, unzip, xxd, xz
 , enableBloat ? false
 }:
 
 python3Packages.buildPythonApplication rec {
   name = "diffoscope-${version}";
-  version = "85";
+  version = "86";
 
   src = fetchgit {
     url    = "git://anonscm.debian.org/reproducible/diffoscope.git";
     rev    = "refs/tags/${version}";
-    sha256 = "0kmcfhgva1fl6x5b07sc7k6ba9mqs3ma0lvspxm31w7nrrrqcvlr";
+    sha256 = "0jj3gn7pw7him12bxf0wbs6wkz32ydv909v5gi681p0dyzajd0zr";
   };
 
   patches = [
-    # Ignore different link counts - doesn't work with 85
-    # ./ignore_links.patch
+    ./ignore_links.patch
   ];
 
   postPatch = ''
@@ -25,12 +25,16 @@ python3Packages.buildPythonApplication rec {
     sed -i setup.py -e "/'rpm-python',/d"
   '';
 
-  # Still missing these tools: enjarify, otool & lipo (maybe macOS only), showttf
+  # Still missing these tools: docx2txt enjarify js-beautify oggDump Rscript
   # Also these libraries: python3-guestfs
-  pythonPath = with python3Packages;
-    [ debian libarchive-c python_magic tlsh rpm cdrkit acl binutils bzip2 cbfstool cpio diffutils e2fsprogs file gettext
-      gzip libcaca poppler_utils sng sqlite squashfsTools unzip xxd xz colordiff
-    ] ++ lib.optionals enableBloat [ colord fpc ghc gnupg1 jdk mono pdftk ];
+  pythonPath = with python3Packages; [ debian libarchive-c python_magic tlsh rpm ] ++ [
+      acl binutils bzip2 cdrkit colordiff coreutils cpio diffutils dtc e2fsprogs file findutils
+      fontforge-fonttools gettext gnutar gzip libarchive libcaca pgpdump sng sqlite
+      squashfsTools unzip xxd xz
+    ] ++ lib.optionals enableBloat [
+      apktool cbfstool colord fpc ghc ghostscriptX giflib gnupg1 imagemagick
+      llvm jdk mono openssh pdftk poppler_utils tcpdump unoconv
+    ];
 
   doCheck = false; # Calls 'mknod' in squashfs tests, which needs root
 

@@ -13,7 +13,8 @@ buildRustPackage rec {
     sha256 = "1lmg65yqkwf2a5qxm3dmv8158kqhnriir062vlgar5wimf409rm5";
   };
   depsSha256 = "0v145fi9bfiwvsdy7hz9lw4m2f2j8sxvixfzmjwfnq4klm51c8yl";
-  buildInputs = [pkgconfig openssl curl];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl curl];
 
   postInstall = ''
     mkdir -p $out/etc/profile.d

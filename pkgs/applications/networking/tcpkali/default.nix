@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "03cbmnc60wkd7f4bapn5cbm3c4zas2l0znsbpci2mn8ms8agif82";
   };
-  buildInputs = [autoreconfHook bison];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ bison];
   meta = {
     description = "High performance TCP and WebSocket load generator and sink";
     license = stdenv.lib.licenses.bsd2;

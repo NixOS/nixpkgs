@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [ pkgconfig intltool glib libxfce4util gtk libxfce4ui ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool glib libxfce4util gtk libxfce4ui ];
 
   meta = with stdenv.lib; {
     homepage = http://www.xfce.org/;

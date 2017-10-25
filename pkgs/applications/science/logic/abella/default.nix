@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, rsync, ocaml }:
+{ stdenv, fetchurl, rsync, ocamlPackages }:
 
 stdenv.mkDerivation rec {
   name = "abella-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "b56d865ebdb198111f1dcd5b6fbcc0d7fc6dd1294f7601903ba4e3c3322c099c";
   };
 
-  buildInputs = [ rsync ocaml ];
+  buildInputs = [ rsync ] ++ (with ocamlPackages; [ ocaml ocamlbuild ]);
 
   installPhase = ''
     mkdir -p $out/bin

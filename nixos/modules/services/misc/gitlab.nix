@@ -142,9 +142,9 @@ let
     GITLAB_UPLOADS_PATH = "${cfg.statePath}/uploads";
     GITLAB_LOG_PATH = "${cfg.statePath}/log";
     GITLAB_SHELL_PATH = "${cfg.packages.gitlab-shell}";
-    GITLAB_SHELL_CONFIG_PATH = "${cfg.statePath}/home/config.yml";
+    GITLAB_SHELL_CONFIG_PATH = "${cfg.statePath}/shell/config.yml";
     GITLAB_SHELL_SECRET_PATH = "${cfg.statePath}/config/gitlab_shell_secret";
-    GITLAB_SHELL_HOOKS_PATH = "${cfg.statePath}/home/hooks";
+    GITLAB_SHELL_HOOKS_PATH = "${cfg.statePath}/shell/hooks";
     GITLAB_REDIS_CONFIG_FILE = pkgs.writeText "gitlab-redis.yml" redisYml;
     prometheus_multiproc_dir = "/run/gitlab";
     RAILS_ENV = "production";
@@ -414,7 +414,7 @@ in {
           Make sure the secret is an RSA private key in PEM format. You can
           generate one with
 
-          openssl genrsa 2048openssl genpkey -algorithm RSA -out - -pkeyopt rsa_keygen_bits:2048
+          openssl genrsa 2048
         '';
       };
 
@@ -555,6 +555,7 @@ in {
         openssh
         nodejs
         procps
+        gnupg
       ];
       preStart = ''
         mkdir -p ${cfg.backupPath}
@@ -566,8 +567,9 @@ in {
         mkdir -p ${cfg.statePath}/log
         mkdir -p ${cfg.statePath}/tmp/pids
         mkdir -p ${cfg.statePath}/tmp/sockets
+        mkdir -p ${cfg.statePath}/shell
 
-        rm -rf ${cfg.statePath}/config ${cfg.statePath}/home/hooks
+        rm -rf ${cfg.statePath}/config ${cfg.statePath}/shell/hooks
         mkdir -p ${cfg.statePath}/config
 
         tr -dc A-Za-z0-9 < /dev/urandom | head -c 32 > ${cfg.statePath}/config/gitlab_shell_secret
@@ -634,6 +636,13 @@ in {
         chown -R ${cfg.user}:${cfg.group} ${cfg.statePath}
         chmod -R ug+rwX,o-rwx+X ${cfg.statePath}
         chmod -R u+rwX,go-rwx+X ${gitlabEnv.HOME}
+        chmod -R ug+rwX,o-rwx ${cfg.statePath}/repositories
+        chmod -R ug-s ${cfg.statePath}/repositories
+        find ${cfg.statePath}/repositories -type d -print0 | xargs -0 chmod g+s
+        chmod 700 ${cfg.statePath}/uploads
+        chown -R git ${cfg.statePath}/uploads
+        find ${cfg.statePath}/uploads -type f -exec chmod 0644 {} \;
+        find ${cfg.statePath}/uploads -type d -not -path ${cfg.statePath}/uploads -exec chmod 0700 {} \;
       '';
 
       serviceConfig = {

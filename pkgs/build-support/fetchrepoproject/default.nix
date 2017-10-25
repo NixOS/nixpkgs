@@ -1,31 +1,13 @@
-{ stdenv, git, gitRepo, gnupg ? null, cacert, copyPathsToStore }:
+{ stdenv, gitRepo, cacert, copyPathsToStore }:
 
-{ name, manifest, rev ? "HEAD", sha256, repoRepoURL ? "", repoRepoRev ? "", referenceDir ? ""
-, localManifests ? [], createMirror ? false, useArchive ? !createMirror
+{ name, manifest, rev ? "HEAD", sha256
+# Optional parameters:
+, repoRepoURL ? "", repoRepoRev ? "", referenceDir ? ""
+, localManifests ? [], createMirror ? false, useArchive ? false
 }:
 
 assert repoRepoRev != "" -> repoRepoURL != "";
 assert createMirror -> !useArchive;
-
-with stdenv.lib;
-
-let
-  repoInitFlags = [
-    "--manifest-url=${manifest}"
-    "--manifest-branch=${rev}"
-    "--depth=1"
-    #TODO: fetching clone.bundle seems to fail spectacularly inside a sandbox.
-    "--no-clone-bundle"
-    (optionalString createMirror "--mirror")
-    (optionalString useArchive "--archive")
-    (optionalString (repoRepoURL != "") "--repo-url=${repoRepoURL}")
-    (optionalString (repoRepoRev != "") "--repo-branch=${repoRepoRev}")
-    (optionalString (referenceDir != "") "--reference=${referenceDir}")
-  ];
-
-  local_manifests = copyPathsToStore localManifests;
-
-in
 
 with stdenv.lib;
 
@@ -35,39 +17,61 @@ let
     (optionalString (repoRepoRev != "") "--repo-branch=${repoRepoRev}")
     (optionalString (referenceDir != "") "--reference=${referenceDir}")
   ];
-in
 
-stdenv.mkDerivation {
-  buildCommand = ''
-    mkdir .repo
-    ${optionalString (local_manifests != []) ''
-    mkdir ./.repo/local_manifests
-    for local_manifest in ${concatMapStringsSep " " toString local_manifests}
+  repoInitFlags = [
+    "--manifest-url=${manifest}"
+    "--manifest-branch=${rev}"
+    "--depth=1"
+    (optionalString createMirror "--mirror")
+    (optionalString useArchive "--archive")
+  ] ++ extraRepoInitFlags;
 
-    do
-      cp $local_manifest ./.repo/local_manifests/$(stripHash $local_manifest; echo $strippedName)
-    done
-    ''}
+  local_manifests = copyPathsToStore localManifests;
 
-    export HOME=.repo
-    repo init ${concatStringsSep " " repoInitFlags}
+in stdenv.mkDerivation {
+  inherit name;
 
-    repo sync --jobs=$NIX_BUILD_CORES --current-branch
-    ${optionalString (!createMirror) "rm -rf $out/.repo"}
-  '';
+  inherit cacert manifest rev repoRepoURL repoRepoRev referenceDir; # TODO
 
-  GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
-
-  impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars ++ [
-    "GIT_PROXY_COMMAND" "SOCKS_SERVER"
-  ];
-
-  buildInputs = [git gitRepo cacert] ++ optional (gnupg != null) [gnupg] ;
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
   outputHash = sha256;
 
   preferLocalBuild = true;
   enableParallelBuilding = true;
-  inherit name cacert manifest rev repoRepoURL repoRepoRev referenceDir;
+
+  impureEnvVars = fetchers.proxyImpureEnvVars ++ [
+    "GIT_PROXY_COMMAND" "SOCKS_SERVER"
+  ];
+
+  buildInputs = [ gitRepo cacert ];
+
+  GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+  buildCommand = ''
+    # Path must be absolute (e.g. for GnuPG: ~/.repoconfig/gnupg/pubring.kbx)
+    export HOME="$(pwd)"
+
+    mkdir $out
+    cd $out
+
+    mkdir .repo
+    ${optionalString (local_manifests != []) ''
+      mkdir .repo/local_manifests
+      for local_manifest in ${concatMapStringsSep " " toString local_manifests}; do
+        cp $local_manifest .repo/local_manifests/$(stripHash $local_manifest; echo $strippedName)
+      done
+    ''}
+
+    repo init ${concatStringsSep " " repoInitFlags}
+    repo sync --jobs=$NIX_BUILD_CORES --current-branch
+
+    # TODO: The git-index files (and probably the files in .repo as well) have
+    # different contents each time and will therefore change the final hash
+    # (i.e. creating a mirror probably won't work).
+    ${optionalString (!createMirror) ''
+      rm -rf .repo
+      find -type d -name '.git' -prune -exec rm -rf {} +
+    ''}
+  '';
 }

@@ -10,9 +10,6 @@ stdenv.mkDerivation rec {
 
   setupHook = [ ./setup-hook.sh ];
 
-  # FIXME needs gcc 4.9 in bootstrap tools
-  hardeningDisable = [ "stackprotector" ];
-
   #doCheck = true; # problems when loading libc.so.6
 
   meta = {

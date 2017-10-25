@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   name = "cpp-hocon-${version}";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
-    sha256 = "0fc5468458mz572nbp45x5sblp6dsb4d1b6jqv77zf3mx5xyziz7";
+    sha256 = "0qf2nqp28ahypnzjrr37f54i06ylni40y18q9kwp5s7i5cwbjqgc";
     rev = version;
     repo = "cpp-hocon";
     owner = "puppetlabs";
@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ boost curl leatherman ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

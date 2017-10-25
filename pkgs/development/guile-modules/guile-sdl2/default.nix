@@ -1,46 +1,38 @@
-{ stdenv,
-  SDL2,
-  SDL2_image,
-  SDL2_ttf,
-  SDL2_mixer,
-  autoconf,
-  automake,
-  fetchgit,
-  guile,
-  libtool,
-  pkgconfig
-  }:
-stdenv.mkDerivation rec {
-  name = "guile-sdl2-${version}";
-  version = "0.1.0";
-  buildInputs = [ autoconf
-                  automake
-                  SDL2
-                  SDL2_image
-                  SDL2_ttf
-                  SDL2_mixer
-                  libtool
-                  guile
-                  pkgconfig ];
-  src = fetchgit {
-    url = "git://dthompson.us/guile-sdl2.git";
-    rev = "048f80ddb5c6b03b87bba199a99a6f22d911bfff";
-    sha256 = "1v7bc2bsddb46qdzq7cyzlw5i2y175kh66mbzbjky85sjfypb084";
+{ stdenv, fetchurl, guile, libtool, pkgconfig
+, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer
+}:
+
+let
+  name = "${pname}-${version}";
+  pname = "guile-sdl2";
+  version = "0.2.0";
+in stdenv.mkDerivation {
+  inherit name;
+
+  src = fetchurl {
+    url = "https://files.dthompson.us/${pname}/${name}.tar.gz";
+    sha256 = "0yq9lsl17cdvj77padvpk3jcw2g6g0pck9jrchc7n2767rrc012b";
   };
-  preConfigurePhases = [ "bootstrapPhase" ];
-  bootstrapPhase = ''
-    ./bootstrap
-  '';
-  configureFlags = [ "--with-libsdl2-prefix=${SDL2}"
-                     "--with-libsdl2-image-prefix=${SDL2_image}"
-                     "--with-libsdl2-ttf-prefix=${SDL2_ttf}"
-                     "--with-libsdl2-mixer-prefix=${SDL2_mixer}"];
-  makeFlags = ["GUILE_AUTO_COMPILE=0"];
-  meta = {
+
+  buildInputs = [
+    guile libtool pkgconfig
+    SDL2 SDL2_image SDL2_ttf SDL2_mixer
+  ];
+
+  configureFlags = [
+    "--with-libsdl2-prefix=${SDL2}"
+    "--with-libsdl2-image-prefix=${SDL2_image}"
+    "--with-libsdl2-ttf-prefix=${SDL2_ttf}"
+    "--with-libsdl2-mixer-prefix=${SDL2_mixer}"
+  ];
+
+  makeFlags = [ "GUILE_AUTO_COMPILE=0" ];
+
+  meta = with stdenv.lib; {
     description = "Bindings to SDL2 for GNU Guile";
-    homepage = https://git.dthompson.us/guile-sdl2.git;
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.seppeljordan ];
-    platforms = stdenv.lib.platforms.all;
+    homepage = "https://dthompson.us/projects/guile-sdl2.html";
+    license = licenses.lgpl3Plus;
+    maintainers = with maintainers; [ seppeljordan vyp ];
+    platforms = platforms.all;
   };
 }

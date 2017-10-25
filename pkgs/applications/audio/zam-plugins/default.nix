@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1hyly5inis59cvh0r7lyi203h8v5jh84ca9jpaljm53cvw6d93px";
   };
 
-  buildInputs = [ boost libX11 mesa liblo libjack2 ladspaH lv2 pkgconfig rubberband libsndfile ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ boost libX11 mesa liblo libjack2 ladspaH lv2 rubberband libsndfile ];
 
   patchPhase = ''
     patchShebangs ./dpf/utils/generate-ttl.sh

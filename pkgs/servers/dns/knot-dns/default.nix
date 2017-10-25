@@ -7,11 +7,11 @@ let inherit (stdenv.lib) optional optionals; in
 # Note: ATM only the libraries have been tested in nixpkgs.
 stdenv.mkDerivation rec {
   name = "knot-dns-${version}";
-  version = "2.5.3";
+  version = "2.6.0";
 
   src = fetchurl {
     url = "http://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "d78ae231a68ace264f5738c8e57481923bcad7413f3f440c06fa6cc0aded9d8e";
+    sha256 = "68e04961d0bf6ba193cb7ec658b295c4ff6e60b3754d64bcd77ebdcee0f283fd";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -20,16 +20,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gnutls jansson liburcu libidn
     nettle libedit
-    libiconv
+    libiconv lmdb
     # without sphinx &al. for developer documentation
   ]
-    # Use embedded lmdb there for now, as detection is broken on Darwin somehow.
-    ++ optionals stdenv.isLinux [ libcap_ng systemd lmdb ]
+    ++ optionals stdenv.isLinux [ libcap_ng systemd ]
     ++ libintlOrEmpty
     ++ optional stdenv.isDarwin zlib; # perhaps due to gnutls
-
-  # Not ideal but seems to work on Linux.
-  configureFlags = optional stdenv.isLinux "--with-lmdb=${stdenv.lib.getLib lmdb}";
 
   enableParallelBuilding = true;
 

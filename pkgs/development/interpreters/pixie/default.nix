@@ -32,8 +32,8 @@ let
   build = {flags, target}: stdenv.mkDerivation rec {
     name = "pixie-${version}";
     version = "0-r${commit-count}-${variant}";
-    nativeBuildInputs = libs;
-    buildInputs = [ pkgconfig makeWrapper ];
+    nativeBuildInputs = [ makeWrapper pkgconfig ];
+    buildInputs = libs;
     PYTHON = if buildWithPypy
       then "${pypy}/pypy-c/.pypy-c-wrapped"
       else "${python2.interpreter}";

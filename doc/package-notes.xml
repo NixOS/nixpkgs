@@ -101,7 +101,7 @@ modulesTree = [kernel]
 $ nix-env -i ncurses
 $ export NIX_CFLAGS_LINK=-lncurses
 $ make menuconfig ARCH=<replaceable>arch</replaceable></screen>
-          
+
           </para>
         </listitem>
 
@@ -111,9 +111,9 @@ $ make menuconfig ARCH=<replaceable>arch</replaceable></screen>
         </listitem>
 
       </orderedlist>
-    
+
     </para>
-    
+
   </listitem>
 
   <listitem>
@@ -409,24 +409,24 @@ it. Place the resulting <filename>package.nix</filename> file into
 <title>Steam in Nix</title>
 
 <para>
-  Steam is distributed as a <filename>.deb</filename> file, for now only 
-  as an i686 package (the amd64 package only has documentation). 
-  When unpacked, it has a script called <filename>steam</filename> that 
+  Steam is distributed as a <filename>.deb</filename> file, for now only
+  as an i686 package (the amd64 package only has documentation).
+  When unpacked, it has a script called <filename>steam</filename> that
   in ubuntu (their target distro) would go to <filename>/usr/bin
-  </filename>. When run for the first time, this script copies some 
-  files to the user's home, which include another script that is the 
-  ultimate responsible for launching the steam binary, which is also 
+  </filename>. When run for the first time, this script copies some
+  files to the user's home, which include another script that is the
+  ultimate responsible for launching the steam binary, which is also
   in $HOME.
 </para>
 <para>
   Nix problems and constraints:
 <itemizedlist>
-  <listitem><para>We don't have <filename>/bin/bash</filename> and many 
+  <listitem><para>We don't have <filename>/bin/bash</filename> and many
   scripts point there. Similarly for <filename>/usr/bin/python</filename>
   .</para></listitem>
   <listitem><para>We don't have the dynamic loader in <filename>/lib
   </filename>.</para></listitem>
-  <listitem><para>The <filename>steam.sh</filename> script in $HOME can 
+  <listitem><para>The <filename>steam.sh</filename> script in $HOME can
   not be patched, as it is checked and rewritten by steam.</para></listitem>
   <listitem><para>The steam binary cannot be patched, it's also checked.</para></listitem>
 </itemizedlist>
@@ -446,10 +446,10 @@ it. Place the resulting <filename>package.nix</filename> file into
 <title>How to play</title>
 
 <para>
-  For 64-bit systems it's important to have 
-  <programlisting>hardware.opengl.driSupport32Bit = true;</programlisting> 
-  in your <filename>/etc/nixos/configuration.nix</filename>. You'll also need 
-  <programlisting>hardware.pulseaudio.support32Bit = true;</programlisting> 
+  For 64-bit systems it's important to have
+  <programlisting>hardware.opengl.driSupport32Bit = true;</programlisting>
+  in your <filename>/etc/nixos/configuration.nix</filename>. You'll also need
+  <programlisting>hardware.pulseaudio.support32Bit = true;</programlisting>
   if you are using PulseAudio - this will enable 32bit ALSA apps integration.
   To use the Steam controller, you need to add
   <programlisting>services.udev.extraRules = ''
@@ -470,31 +470,25 @@ it. Place the resulting <filename>package.nix</filename> file into
 
   <varlistentry>
     <term>Steam fails to start. What do I do?</term>
-    <listitem><para>Try to run 
+    <listitem><para>Try to run
     <programlisting>strace steam</programlisting>
     to see what is causing steam to fail.</para></listitem>
   </varlistentry>
 
   <varlistentry>
-  <term>Using the FOSS Radeon drivers</term>
-  <listitem><itemizedlist><listitem><para>
-  The open source radeon drivers need a newer libc++ than is provided 
-  by the default runtime, which leads to a crash on launch. Use
-  <programlisting>environment.systemPackages = [(pkgs.steam.override { newStdcpp = true; })];</programlisting>
-  in your config if you get an error like
-  <programlisting>
-libGL error: unable to load driver: radeonsi_dri.so
-libGL error: driver pointer missing
-libGL error: failed to load driver: radeonsi
-libGL error: unable to load driver: swrast_dri.so
-libGL error: failed to load driver: swrast</programlisting></para></listitem>
-  <listitem><para>
-  Steam ships statically linked with a version of libcrypto that
-  conflics with the one dynamically loaded by radeonsi_dri.so.
-  If you get the error
-  <programlisting>steam.sh: line 713: 7842 Segmentation fault (core dumped)</programlisting>
-  have a look at <link xlink:href="https://github.com/NixOS/nixpkgs/pull/20269">this pull request</link>.
-  </para></listitem>
+  <term>Using the FOSS Radeon or nouveau (nvidia) drivers</term>
+  <listitem><itemizedlist>
+    <listitem><para>The <literal>newStdcpp</literal> parameter
+    was removed since NixOS 17.09 and should not be needed anymore.
+    </para></listitem>
+
+    <listitem><para>
+    Steam ships statically linked with a version of libcrypto that
+    conflics with the one dynamically loaded by radeonsi_dri.so.
+    If you get the error
+    <programlisting>steam.sh: line 713: 7842 Segmentation fault (core dumped)</programlisting>
+    have a look at <link xlink:href="https://github.com/NixOS/nixpkgs/pull/20269">this pull request</link>.
+    </para></listitem>
 
   </itemizedlist></listitem></varlistentry>
 
@@ -504,7 +498,7 @@ libGL error: failed to load driver: swrast</programlisting></para></listitem>
   <listitem><para>
   There is no java in steam chrootenv by default. If you get a message like
   <programlisting>/home/foo/.local/share/Steam/SteamApps/common/towns/towns.sh: line 1: java: command not found</programlisting>
-  You need to add  
+  You need to add
   <programlisting> steam.override { withJava = true; };</programlisting>
   to your configuration.
   </para></listitem>
@@ -519,14 +513,14 @@ libGL error: failed to load driver: swrast</programlisting></para></listitem>
 
 <title>steam-run</title>
 <para>
-The FHS-compatible chroot used for steam can also be used to run 
+The FHS-compatible chroot used for steam can also be used to run
 other linux games that expect a FHS environment.
-To do it, add 
+To do it, add
 <programlisting>pkgs.(steam.override {
           nativeOnly = true;
           newStdcpp = true;
         }).run</programlisting>
-to your configuration, rebuild, and run the game with 
+to your configuration, rebuild, and run the game with
 <programlisting>steam-run ./foo</programlisting>
 </para>
 

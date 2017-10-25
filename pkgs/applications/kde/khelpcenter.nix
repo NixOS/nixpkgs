@@ -12,5 +12,4 @@ mkDerivation {
     grantlee kcmutils kconfig kcoreaddons kdbusaddons kdelibs4support khtml
     ki18n kinit kservice xapian
   ];
-  patches = [ ./khelpcenter_kcoreaddons.patch ];
 }

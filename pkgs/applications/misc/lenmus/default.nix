@@ -16,10 +16,6 @@ stdenv.mkDerivation rec {
     sha256 = "1n639xr1qxx6rhqs0c6sjxp3bv8cwkmw1vfk1cji7514gj2a9v3p";
   };
 
-  cmakeFlags = [
-    "-DCMAKE_INSALL_PREFIX=$out"
-  ];
-
   enableParallelBuilding = true;
 
   patches = [
@@ -33,8 +29,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig
     cmake boost
     portmidi sqlite
     freetype libpng pngpp zlib

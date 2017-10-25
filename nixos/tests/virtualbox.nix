@@ -461,11 +461,11 @@ in mapAttrs mkVBoxTest {
     my $test1IP = waitForIP_test1 1;
     my $test2IP = waitForIP_test2 1;
 
-    $machine->succeed("echo '$test2IP' | nc '$test1IP' 1234");
-    $machine->succeed("echo '$test1IP' | nc '$test2IP' 1234");
+    $machine->succeed("echo '$test2IP' | nc -N '$test1IP' 1234");
+    $machine->succeed("echo '$test1IP' | nc -N '$test2IP' 1234");
 
-    $machine->waitUntilSucceeds("nc '$test1IP' 5678 >&2");
-    $machine->waitUntilSucceeds("nc '$test2IP' 5678 >&2");
+    $machine->waitUntilSucceeds("nc -N '$test1IP' 5678 < /dev/null >&2");
+    $machine->waitUntilSucceeds("nc -N '$test2IP' 5678 < /dev/null >&2");
 
     shutdownVM_test1;
     shutdownVM_test2;

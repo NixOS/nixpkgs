@@ -17,7 +17,7 @@
 
 let
   basename = "gdb-${version}";
-  version = "8.0";
+  version = "8.0.1";
 in
 
 assert targetPlatform.isHurd -> mig != null && hurd != null;
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}.tar.xz";
-    sha256 = "1vplyf8v70yn0rdqjx6awl9nmfbwaj5ynwwjxwa71rhp97z4z8pn";
+    sha256 = "1qwmcbaxf0jc7yjl0fimgcfj2yqcrl6h7azgs1d838kbwf9mzg9x";
   };
 
   patches = [ ./debug-info-from-env.patch ];
@@ -60,10 +60,7 @@ stdenv.mkDerivation rec {
   configureFlags = with stdenv.lib; [
     "--with-gmp=${gmp.dev}" "--with-mpfr=${mpfr.dev}" "--with-system-readline"
     "--with-system-zlib" "--with-expat" "--with-libexpat-prefix=${expat.dev}"
-  ] ++ stdenv.lib.optional hostPlatform.isLinux
-      # TODO(@Ericson2314): make this conditional on whether host platform is NixOS
-      "--with-separate-debug-dir=/run/current-system/sw/lib/debug"
-    ++ stdenv.lib.optional (!pythonSupport) "--without-python"
+  ] ++ stdenv.lib.optional (!pythonSupport) "--without-python"
     ++ stdenv.lib.optional multitarget "--enable-targets=all";
 
   postInstall =

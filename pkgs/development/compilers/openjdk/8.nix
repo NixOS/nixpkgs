@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cpio, pkgconfig, file, which, unzip, zip, cups, freetype
+{ stdenv, lib, fetchurl, bash, cpio, pkgconfig, file, which, unzip, zip, cups, freetype
 , alsaLib, bootjdk, cacert, perl, liberation_ttf, fontconfig, zlib, lndir
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama, libXcursor
 , libjpeg, giflib
@@ -75,11 +75,14 @@ let
       gtk2 gnome_vfs GConf glib
     ];
 
+    #move the seven other source dirs under the main jdk8u directory,
+    #with version suffixes removed, as the remainder of the build will expect
     prePatch = ''
-      ls | grep jdk | grep -v '^jdk8u' | awk -F- '{print $1}' | while read p; do
-        mv $p-* $(ls | grep '^jdk8u')/$p
+      mainDir=$(find . -maxdepth 1 -name jdk8u\*);
+      find . -maxdepth 1 -name \*jdk\* -not -name jdk8u\* | awk -F- '{print $1}' | while read p; do
+        mv $p-* $mainDir/$p
       done
-      cd $(ls | grep '^jdk8u')
+      cd $mainDir
     '';
 
     patches = [
@@ -95,7 +98,7 @@ let
 
     preConfigure = ''
       chmod +x configure
-      substituteInPlace configure --replace /bin/bash "$shell"
+      substituteInPlace configure --replace /bin/bash "${bash}/bin/bash"
       substituteInPlace hotspot/make/linux/adlc_updater --replace /bin/sh "$shell"
       substituteInPlace hotspot/make/linux/makefiles/dtrace.make --replace /usr/include/sys/sdt.h "/no-such-path"
     ''
@@ -188,10 +191,11 @@ let
       done
 
       # Generate certificates.
-      pushd $jre/lib/openjdk/jre/lib/security
-      rm cacerts
-      perl ${./generate-cacerts.pl} $jre/lib/openjdk/jre/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
-      popd
+      (
+        cd $jre/lib/openjdk/jre/lib/security
+        rm cacerts
+        perl ${./generate-cacerts.pl} $jre/lib/openjdk/jre/bin/keytool ${cacert}/etc/ssl/certs/ca-bundle.crt
+      )
 
       ln -s $out/lib/openjdk/bin $out/bin
       ln -s $jre/lib/openjdk/jre/bin $jre/bin
@@ -221,13 +225,13 @@ let
       # Build the set of output library directories to rpath against
       LIBDIRS=""
       for output in $outputs; do
-        LIBDIRS="$(find $(eval echo \$$output) -name \*.so\* -exec dirname {} \; | sort | uniq | tr '\n' ':'):$LIBDIRS"
+        LIBDIRS="$(find $(eval echo \$$output) -name \*.so\* -exec dirname {} \+ | sort | uniq | tr '\n' ':'):$LIBDIRS"
       done
 
       # Add the local library paths to remove dependencies on the bootstrap
       for output in $outputs; do
-        OUTPUTDIR="$(eval echo \$$output)"
-        BINLIBS="$(find $OUTPUTDIR/bin/ -type f; find $OUTPUTDIR -name \*.so\*)"
+        OUTPUTDIR=$(eval echo \$$output)
+        BINLIBS=$(find $OUTPUTDIR/bin/ -type f; find $OUTPUTDIR -name \*.so\*)
         echo "$BINLIBS" | while read i; do
           patchelf --set-rpath "$LIBDIRS:$(patchelf --print-rpath "$i")" "$i" || true
           patchelf --shrink-rpath "$i" || true

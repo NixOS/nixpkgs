@@ -21,6 +21,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ secretstorage ];
 
+  doCheck = !stdenv.isDarwin;
+
   checkPhase = ''
     py.test $out
   '';

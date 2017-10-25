@@ -25,6 +25,17 @@ stdenv.mkDerivation rec {
   '';
   configureFlags = [ "--enable-libgdbm-compat" ];
 
+  postInstall = ''
+    # create symlinks for compatibility
+    install -dm755 $out/include/gdbm
+    (
+      cd $out/include/gdbm
+      ln -s ../gdbm.h gdbm.h
+      ln -s ../ndbm.h ndbm.h
+      ln -s ../dbm.h  dbm.h
+    )
+  '';
+
   meta = with lib; {
     description = "GNU dbm key/value database library";
 

@@ -20,8 +20,9 @@ stdenv.mkDerivation rec {
     sha256 = "0wc64dzcxrzgi6kwcljz6y3cwm3ajdgf6aws7g58azbhvl1jk04l";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    openssl zlib asciidoc libxml2 libxslt docbook_xml_xslt pkgconfig luajit
+    openssl zlib asciidoc libxml2 libxslt docbook_xml_xslt luajit
   ];
 
   postPatch = ''

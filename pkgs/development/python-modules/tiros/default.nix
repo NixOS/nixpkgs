@@ -1,20 +1,15 @@
-{ stdenv
-, fetchPypi
-, buildPythonPackage
-, semantic-version
-, boto3
-, flask
-, docutils
+{ stdenv, fetchPypi, buildPythonPackage
+, semantic-version, boto3, flask, docutils, requests
 }:
 
 buildPythonPackage rec {
   pname = "tiros";
   name = "${pname}-${version}";
-  version = "1.0.38";
+  version = "1.0.39";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0k668z9gb5vh304gysynj4rxgi24wy2vl4a33dnwkri2g6db3s4n";
+    sha256 = "10wh84lpl7k8i69hlxwrzp2lln63w2afv9l7ij7r3lqjwd0z0skr";
   };
 
   patchPhase = ''
@@ -22,5 +17,5 @@ buildPythonPackage rec {
     sed -i "s/'datetime',//" setup.py
   '';
 
-  propagatedBuildInputs = [ semantic-version boto3 flask docutils ];
+  propagatedBuildInputs = [ semantic-version boto3 flask docutils requests ];
 }

@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1knmgxrg2kxdlin8qyf6351943ldg8myllwf860af58x1wncxc74";
   };
 
-  buildInputs = [ pkgconfig libmowgli ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libmowgli ];
   
   meta = {
     description = "A library and set of userland tools which abstract the storage of configuration settings away from userland applications";

@@ -16,12 +16,12 @@ assert ldapSupport -> aprutil.ldapSupport && openldap != null;
 assert http2Support -> nghttp2 != null;
 
 stdenv.mkDerivation rec {
-  version = "2.4.27";
+  version = "2.4.28";
   name = "apache-httpd-${version}";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha1 = "699e4e917e8fb5fd7d0ce7e009f8256ed02ec6fc";
+    sha256 = "c1197a3a62a4ab5c584ab89b249af38cf28b4adee9c0106b62999fd29f920666";
   };
 
   # FIXME: -dev depends on -doc
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     optional http2Support nghttp2 ++
     optional stdenv.isDarwin libiconv;
 
-  patchPhase = ''
+  prePatch = ''
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
   '';
 

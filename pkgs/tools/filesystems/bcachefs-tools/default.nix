@@ -9,10 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "05ba1h09rrqj6vjr3q37ybca3nbrmnifmffdyk83622l28fpv350";
   };
 
-  buildInputs = [ pkgconfig attr libuuid libscrypt libsodium keyutils liburcu zlib libaio ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ attr libuuid libscrypt libsodium keyutils liburcu zlib libaio ];
 
   preConfigure = ''
-    substituteInPlace cmd_migrate.c --replace /usr/include/dirent.h ${stdenv.glibc.dev}/include/dirent.h
+    substituteInPlace cmd_migrate.c --replace /usr/include/dirent.h ${stdenv.lib.getDev stdenv.cc.libc}/include/dirent.h
   '';
 
   installFlags = [ "PREFIX=$(out)" ];

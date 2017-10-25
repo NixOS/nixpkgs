@@ -1,9 +1,9 @@
 { stdenv, fetchzip, fetchgit, boost, cmake, z3 }:
 
 let
-  version = "0.4.16";
-  rev = "d7661dd97460250b4e1127b9e7ea91e116143780";
-  sha256 = "1fd69pdhkkkvbkrxipkck1icpqkpdskjzar48a1yzdsx3l8s4lil";
+  version = "0.4.17";
+  rev = "bdeb9e52a2211510644fb53df93fb98258b40a65";
+  sha256 = "1x6q2rlq6gxggidgsy6li7m4phwr1hcfi65pq9yimz64ddqfiira";
   jsoncppURL = https://github.com/open-source-parsers/jsoncpp/archive/1.7.7.tar.gz;
   jsoncpp = fetchzip {
     url = jsoncppURL;
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   patchPhase = ''
     echo >commit_hash.txt '${rev}'
     echo >prerelease.txt
-    substituteInPlace deps/jsoncpp.cmake \
+    substituteInPlace cmake/jsoncpp.cmake \
       --replace '${jsoncppURL}' ${jsoncpp}
     substituteInPlace cmake/EthCompilerSettings.cmake \
       --replace 'add_compile_options(-Werror)' ""

@@ -116,14 +116,18 @@ fi
 
 if [ -z "$NIX_QT5_TMP" ]; then
     if [ -z "$NIX_QT_SUBMODULE" ]; then
-        NIX_QT5_TMP=$(pwd)/__nix_qt5__
+        if [ -z "$IN_NIX_SHELL" ]; then
+            NIX_QT5_TMP=$(pwd)/__nix_qt5__
+        else
+            NIX_QT5_TMP=$(mktemp -d)
+        fi
     else
         NIX_QT5_TMP=$out
     fi
 
     mkdir -p "$NIX_QT5_TMP/nix-support"
     for subdir in bin include lib mkspecs share; do
-        mkdir "$NIX_QT5_TMP/$subdir"
+        mkdir -p "$NIX_QT5_TMP/$subdir"
         echo "$subdir/" >> "$NIX_QT5_TMP/nix-support/qt-inputs"
     done
 
@@ -142,3 +146,10 @@ EOF
     export QMAKE="$NIX_QT5_TMP/bin/qmake"
 fi
 
+_qtShellCleanupHook () {
+    rm -fr $NIX_QT5_TMP
+}
+
+if [ -n "$IN_NIX_SHELL" ]; then
+    trap _qtShellCleanupHook EXIT
+fi

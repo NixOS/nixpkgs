@@ -19,4 +19,5 @@ mkDerivation {
     kconfig kconfigwidgets kdbusaddons kiconthemes kcmutils knotifications
     kwidgetsaddons kitemviews kio kwindowsystem plasma-framework qtdeclarative
   ];
+  outputs = [ "out" "dev" ];
 }

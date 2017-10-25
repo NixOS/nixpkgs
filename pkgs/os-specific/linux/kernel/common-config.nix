@@ -38,6 +38,7 @@ with stdenv.lib;
   DEBUG_STACKOVERFLOW n
   SCHEDSTATS n
   DETECT_HUNG_TASK y
+  DEBUG_INFO n # Not until we implement a separate debug output
 
   ${optionalString (versionOlder version "4.4") ''
     CPU_NOTIFIER_ERROR_INJECT? n
@@ -243,6 +244,9 @@ with stdenv.lib;
   USB_SERIAL_KEYSPAN_USA19QI y
   USB_SERIAL_KEYSPAN_USA49W y
   USB_SERIAL_KEYSPAN_USA49WLC y
+
+  # Device mapper (RAID, LVM, etc.)
+  MD y
 
   # Filesystem options - in particular, enable extended attributes and
   # ACLs for all filesystems that support them.
@@ -564,7 +568,9 @@ with stdenv.lib;
   # Media support.
   MEDIA_DIGITAL_TV_SUPPORT y
   MEDIA_CAMERA_SUPPORT y
-  MEDIA_RC_SUPPORT y
+  ${optionalString (versionOlder version "4.14") ''
+    MEDIA_RC_SUPPORT y
+  ''}
   MEDIA_USB_SUPPORT y
   MEDIA_PCI_SUPPORT y
 

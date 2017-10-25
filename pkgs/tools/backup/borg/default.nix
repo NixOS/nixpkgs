@@ -37,6 +37,9 @@ python3Packages.buildPythonApplication rec {
     cp -R docs/_build/man $out/share/man/man1
   '';
 
+  # tests fail due to missing test command in nix_run_setup.py
+  doCheck = false;
+
   meta = with stdenv.lib; {
     description = "A deduplicating backup program (attic fork)";
     homepage = https://borgbackup.github.io/;

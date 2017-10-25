@@ -1,11 +1,12 @@
-let lib = import ./default.nix;
+{ lib }:
+let
     inherit (builtins) isFunction head tail isList isAttrs isInt attrNames;
 
 in
 
-with import ./lists.nix;
-with import ./attrsets.nix;
-with import ./strings.nix;
+with lib.lists;
+with lib.attrsets;
+with lib.strings;
 
 rec {
 

@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "0piwkmg7jn64h57cjf5cybyvyqxj2k752g9vrf4ycds7nhvvbnb6";
   };
 
-  buildInputs = [ zlib curl expat fuse openssl autoreconfHook python ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ zlib curl expat fuse openssl python ];
 
   meta = {
     homepage = http://afflib.sourceforge.net/;

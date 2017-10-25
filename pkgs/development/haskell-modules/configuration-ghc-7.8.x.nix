@@ -37,6 +37,9 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # Requires ghc 8.2
+  ghc-proofs = dontDistribute super.ghc-proofs;
+
   # https://github.com/peti/jailbreak-cabal/issues/9
   jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_20_0_4; };
 

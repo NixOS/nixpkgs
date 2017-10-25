@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1pzjq4nfxl2aakxipdjs5hq9n14374ly1l00s40kd2djnnxmd7pb";
   };
 
-  buildInputs = [ pkgconfig perl glib slang zip unzip file gettext libX11 libICE
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ perl glib slang zip unzip file gettext libX11 libICE
     libssh2 openssl ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
 
   configureFlags = [ "--enable-vfs-smb" ];

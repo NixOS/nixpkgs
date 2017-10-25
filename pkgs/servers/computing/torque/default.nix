@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1qpsk3bla6b6m7m0i1xpr183yj79liy3p34xhnz1grgq0776wg5l";
   };
 
-  buildInputs = [ openssl flex bison pkgconfig groff libxml2 utillinux libtool
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl flex bison groff libxml2 utillinux libtool
                   which ];
 
   enableParallelBuilding = true;

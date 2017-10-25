@@ -66,11 +66,6 @@ in rec {
       bootPkgs = packages.ghc784;
       inherit (bootPkgs) hscolour;
     };
-    ghc801 = callPackage ../development/compilers/ghc/8.0.1.nix rec {
-      bootPkgs = packages.ghc7103;
-      inherit (bootPkgs) hscolour;
-      sphinx = pkgs.python27Packages.sphinx;
-    };
     ghc802 = callPackage ../development/compilers/ghc/8.0.2.nix rec {
       bootPkgs = packages.ghc7103;
       inherit (bootPkgs) hscolour;
@@ -162,10 +157,6 @@ in rec {
     ghc7103 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc7103;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
-    };
-    ghc801 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc801;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.0.x.nix { };
     };
     ghc802 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc802;

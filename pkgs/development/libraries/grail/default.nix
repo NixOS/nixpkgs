@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1wwx5ibjdz5pyd0f5cd1n91y67r68dymxpm2lgd829041xjizvay";
   };
 
-  buildInputs = [ pkgconfig python3 frame ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ python3 frame ]
   ++ stdenv.lib.optionals enableX11 [xorg.libX11 xorg.libXtst xorg.libXext xorg.libXi xorg.libXfixes];
 
   configureFlags = stdenv.lib.optional enableX11 "--with-x11";

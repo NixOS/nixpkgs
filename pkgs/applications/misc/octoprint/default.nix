@@ -91,6 +91,8 @@ in pythonPackages.buildPythonApplication rec {
       -e 's,psutil>=[^"]*,psutil,g' \
       -e 's,requests>=[^"]*,requests,g' \
       -e 's,future>=[^"]*,future,g' \
+      -e 's,pyserial>=[^"]*,pyserial,g' \
+      -e 's,semantic_version>=[^"]*,semantic_version,g' \
       setup.py
   '';
 

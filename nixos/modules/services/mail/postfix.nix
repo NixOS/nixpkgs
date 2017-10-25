@@ -79,6 +79,12 @@ let
   // optionalAttrs haveTransport { transport_maps = "hash:/etc/postfix/transport"; }
   // optionalAttrs haveVirtual { virtual_alias_maps = "${cfg.virtualMapType}:/etc/postfix/virtual"; }
   // optionalAttrs (cfg.dnsBlacklists != []) { smtpd_client_restrictions = clientRestrictions; }
+  // optionalAttrs cfg.useSrs {
+    sender_canonical_maps = "tcp:127.0.0.1:10001";
+    sender_canonical_classes = "envelope_sender";
+    recipient_canonical_maps = "tcp:127.0.0.1:10002";
+    recipient_canonical_classes= "envelope_recipient";
+  }
   // optionalAttrs cfg.enableHeaderChecks { header_checks = "regexp:/etc/postfix/header_checks"; }
   // optionalAttrs (cfg.sslCert != "") {
     smtp_tls_CAfile = cfg.sslCACert;
@@ -626,6 +632,12 @@ in
         description = "Maps to be compiled and placed into /var/lib/postfix/conf.";
       };
 
+      useSrs = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to enable sender rewriting scheme";
+      };
+
     };
 
   };
@@ -645,6 +657,8 @@ in
         # This makes comfortable for root to run 'postqueue' for example.
         systemPackages = [ pkgs.postfix ];
       };
+
+      services.pfix-srsd.enable = config.services.postfix.useSrs;
 
       services.mail.sendmailSetuidWrapper = mkIf config.services.postfix.setSendmail {
         program = "sendmail";

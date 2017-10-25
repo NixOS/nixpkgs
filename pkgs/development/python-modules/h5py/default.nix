@@ -28,7 +28,8 @@ in buildPythonPackage rec {
 
   preBuild = if mpiSupport then "export CC=${mpi}/bin/mpicc" else "";
 
-  buildInputs = [ hdf5 cython pkgconfig ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ hdf5 cython ]
     ++ optional mpiSupport mpi
     ;
   propagatedBuildInputs = [ numpy six]

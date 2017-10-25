@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
     substituteInPlace libtool --replace stdc++ c++
   '';
 
+  NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.isDarwin "-D_XOPEN_SOURCE";
+
   # some packages want to link to the static tcmalloc_minimal
   # to drop the runtime dependency on gperftools
   dontDisableStatic = true;

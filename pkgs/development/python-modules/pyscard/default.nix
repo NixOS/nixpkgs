@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildPythonPackage, swig, pcsclite }:
+{ stdenv, fetchurl, buildPythonPackage, swig, pcsclite, PCSC }:
 
 buildPythonPackage rec {
   version = "1.9.6";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   NIX_CFLAGS_COMPILE = "-isystem ${pcsclite}/include/PCSC/";
 
   propagatedBuildInputs = [ pcsclite ];
-  buildInputs = [ swig ];
+  buildInputs = [ swig ] ++ stdenv.lib.optional stdenv.isDarwin PCSC;
 
   meta = {
     homepage = https://pyscard.sourceforge.io/;

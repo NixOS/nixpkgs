@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1m4ncws1h03zq7zyqbaymvjzzbh1d3lc4wb1aksrdf0ync76yv9i";
   };
 
-  buildInputs = [ pkgconfig libsigcxx ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libsigcxx ];
 
   patches = [ ./libpar2-0.4-external-verification.patch ];
 

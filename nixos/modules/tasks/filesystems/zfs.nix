@@ -24,7 +24,11 @@ let
 
   kernel = config.boot.kernelPackages;
 
-  packages = {
+  packages = if config.boot.zfs.enableUnstable then {
+    spl = kernel.splUnstable;
+    zfs = kernel.zfsUnstable;
+    zfsUser = pkgs.zfsUnstable;
+  } else {
     spl = kernel.spl;
     zfs = kernel.zfs;
     zfsUser = pkgs.zfs;
@@ -58,6 +62,19 @@ in
 
   options = {
     boot.zfs = {
+      enableUnstable = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Use the unstable zfs package. This might be an option, if the latest
+          kernel is not yet supported by a published release of ZFS. Enabling
+          this option will install a development version of ZFS on Linux. The
+          version will have already passed an extensive test suite, but it is
+          more likely to hit an undiscovered bug compared to running a released
+          version of ZFS on Linux.
+          '';
+      };
+
       extraPools = mkOption {
         type = types.listOf types.str;
         default = [];
@@ -123,6 +140,17 @@ in
           this once.
         '';
       };
+
+      requestEncryptionCredentials = mkOption {
+        type = types.bool;
+        default = config.boot.zfs.enableUnstable;
+        description = ''
+          Request encryption keys or passwords for all encrypted datasets on import.
+
+          Dataset encryption is only supported in zfsUnstable at the moment.
+        '';
+      };
+
     };
 
     services.zfs.autoSnapshot = {
@@ -246,6 +274,10 @@ in
           assertion = !cfgZfs.forceImportAll || cfgZfs.forceImportRoot;
           message = "If you enable boot.zfs.forceImportAll, you must also enable boot.zfs.forceImportRoot";
         }
+        {
+          assertion = cfgZfs.requestEncryptionCredentials -> cfgZfs.enableUnstable;
+          message = "This feature is only available for zfs unstable. Set the NixOS option boot.zfs.enableUnstable.";
+        }
       ];
 
       boot = {
@@ -289,6 +321,9 @@ in
             done
             echo
             if [[ -n "$msg" ]]; then echo "$msg"; fi
+            ${lib.optionalString cfgZfs.requestEncryptionCredentials ''
+              zfs load-key -a
+            ''}
         '') rootPools));
       };
 

@@ -1,11 +1,12 @@
-let inherit (import ../attrsets.nix) mapAttrs; in
+{ lib }:
+  let inherit (lib.attrsets) mapAttrs; in
 
 rec {
-  doubles = import ./doubles.nix;
-  parse = import ./parse.nix;
-  inspect = import ./inspect.nix;
-  platforms = import ./platforms.nix;
-  examples = import ./examples.nix;
+  doubles = import ./doubles.nix { inherit lib; };
+  parse = import ./parse.nix { inherit lib; };
+  inspect = import ./inspect.nix { inherit lib; };
+  platforms = import ./platforms.nix { inherit lib; };
+  examples = import ./examples.nix { inherit lib; };
 
   # Elaborate a `localSystem` or `crossSystem` so that it contains everything
   # necessary.
@@ -28,6 +29,15 @@ rec {
         else if final.isLinux  then "glibc"
         # TODO(@Ericson2314) think more about other operating systems
         else                        "native/impure";
+      extensions = {
+        sharedLibrary =
+          /**/ if final.isDarwin  then ".dylib"
+          else if final.isWindows then ".dll"
+          else                         ".so";
+        executable =
+          /**/ if final.isWindows then ".exe"
+          else                         "";
+      };
     } // mapAttrs (n: v: v final.parsed) inspect.predicates
       // args;
   in final;

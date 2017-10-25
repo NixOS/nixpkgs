@@ -4,11 +4,11 @@ let
   buildbot-pkg = pythonPackages.buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "buildbot-pkg";
-    version = "0.9.9.post2";
+    version = "0.9.11";
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "1h24fzyr4kfm1nb2627hgg9nl5mwv1gihc3f2wb5000gxmjdasg8";
+      sha256 = "1gh7wj9z7n7yfs219jbv9pdd2w8dwj6qpa090ffjkfpgd3xana33";
     };
 
     propagatedBuildInputs = with pythonPackages; [ setuptools ];
@@ -25,14 +25,14 @@ in {
   www = pythonPackages.buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "buildbot_www";
-    version = "0.9.9.post2";
+    version = buildbot-pkg.version;
 
     # NOTE: wheel is used due to buildbot circular dependency
     format = "wheel";
 
     src = pythonPackages.fetchPypi {
       inherit pname version format;
-      sha256 = "1yzk3sy9i8g8wz9vvghhxnafs5dzsd3sybmm8lg043129rh116b9";
+      sha256 = "0fk1swdncg4nha744mzkf6jqh1zv1cfhnqvd19669kjcyjx9i68d";
     };
 
     meta = with stdenv.lib; {
@@ -46,11 +46,11 @@ in {
   console-view = pythonPackages.buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "buildbot-console-view";
-    version = "0.9.9.post2";
+    version = buildbot-pkg.version;
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "0mmlxzlzl0r97jf0g98m7k1b13mzzy80445i0biazkj0vzkpwxza";
+      sha256 = "16wxgnh35916c2gw34971ynx319lnm9addhqvii885vid44pqim0";
     };
 
     propagatedBuildInputs = with pythonPackages; [ buildbot-pkg ];
@@ -66,11 +66,11 @@ in {
   waterfall-view = pythonPackages.buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "buildbot-waterfall-view";
-    version = "0.9.9.post2";
+    version = buildbot-pkg.version;
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "0pq45gddwjd61nxmr48cl8s533i4gy3wg9wzbj3g1yb30yrz8qf4";
+      sha256 = "1hcr8xsc0ajfg2vz2h8g5s8ypsp32kdplgqp21jh8z5y0a6nzqsl";
     };
 
     propagatedBuildInputs = with pythonPackages; [ buildbot-pkg ];
@@ -86,11 +86,11 @@ in {
   grid-view = pythonPackages.buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "buildbot-grid-view";
-    version = "0.9.9.post2";
+    version = buildbot-pkg.version;
 
     src = pythonPackages.fetchPypi {
       inherit pname version;
-      sha256 = "16y7br1yniby8yp932ildn14cxvbw5ywx36d703c4d98dmnlrpaw";
+      sha256 = "0aw1073xq549q5jkjk31zhqpasp8jiy4gch0fjyw8qy0dax8hc7r";
     };
 
     propagatedBuildInputs = with pythonPackages; [ buildbot-pkg ];
@@ -99,6 +99,26 @@ in {
       homepage = http://buildbot.net/;
       description = "Buildbot Grid View Plugin";
       maintainers = with maintainers; [ nand0p ];
+      license = licenses.gpl2;
+    };
+  };
+
+  wsgi-dashboards = pythonPackages.buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "buildbot-wsgi-dashboards";
+    version = buildbot-pkg.version;
+
+    src = pythonPackages.fetchPypi {
+      inherit pname version;
+      sha256 = "0x99mdmn1ngcnmkxr40hwqafsq48jybdz45y5kpc0yw68n0bfwmv";
+    };
+
+    propagatedBuildInputs = with pythonPackages; [ buildbot-pkg ];
+
+    meta = with stdenv.lib; {
+      homepage = http://buildbot.net/;
+      description = "Buildbot WSGI dashboards Plugin";
+      maintainers = with maintainers; [ akazakov ];
       license = licenses.gpl2;
     };
   };

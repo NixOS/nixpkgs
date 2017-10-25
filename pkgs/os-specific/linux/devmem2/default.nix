@@ -8,8 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "14f1k7v6i1yaxg4xcaaf5i4aqn0yabba857zjnbg9wiymy82qf7c";
   };
 
+  hardeningDisable = [ "format" ];  # fix compile error
+
   buildCommand = ''
-    export hardeningDisable=format  # fix compile error
     cc "$src" -o devmem2
     install -D devmem2 "$out/bin/devmem2"
   '';

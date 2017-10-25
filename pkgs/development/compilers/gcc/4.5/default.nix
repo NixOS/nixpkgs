@@ -20,7 +20,7 @@
 , enableMultilib ? false
 , name ? "gcc"
 , libcCross ? null
-, crossStageStatic ? true
+, crossStageStatic ? false
 , gnat ? null
 , libpthread ? null, libpthreadCross ? null  # required for GNU/Hurd
 , stripped ? true
@@ -65,7 +65,7 @@ let version = "4.5.4";
 
     /* Cross-gcc settings */
     gccArch = stdenv.lib.attrByPath [ "gcc" "arch" ] null targetPlatform;
-    gccCpu = stdenv.lib.attrByPath [ "gcc" "cpu" ] null targetPlatformt;
+    gccCpu = stdenv.lib.attrByPath [ "gcc" "cpu" ] null targetPlatform;
     gccAbi = stdenv.lib.attrByPath [ "gcc" "abi" ] null targetPlatform;
     withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
     withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
@@ -213,7 +213,9 @@ stdenv.mkDerivation ({
         ''
     else null;
 
-  inherit noSysDirs profiledCompiler staticCompiler langJava crossStageStatic
+  # TODO(@Ericson2314): Make passthru instead. Weird to avoid mass rebuild,
+  crossStageStatic = targetPlatform == hostPlatform || crossStageStatic;
+  inherit noSysDirs profiledCompiler staticCompiler langJava
     libcCross crossMingw;
 
   nativeBuildInputs = [ texinfo which gettext ]

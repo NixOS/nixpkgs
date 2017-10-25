@@ -1,10 +1,10 @@
-{stdenv, fetchFromGitHub, writeText, elixir }:
+{ stdenv, fetchFromGitHub, writeText, elixir }:
 
 let
   shell = drv: stdenv.mkDerivation {
-          name = "interactive-shell-${drv.name}";
-          buildInputs = [ drv ];
-    };
+    name = "interactive-shell-${drv.name}";
+    buildInputs = [ drv ];
+  };
 
   pkg = self: stdenv.mkDerivation rec {
     name = "hex";
@@ -53,6 +53,5 @@ let
     passthru = {
       env = shell self;
     };
-
 };
 in stdenv.lib.fix pkg

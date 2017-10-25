@@ -11,8 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1k4fcsa8zzi04ja179bmj24hvqcbm3icfvrvrzyz2gw9qwfclrwi";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig SDL mesa openal lua
+    SDL mesa openal lua
     libdevil freetype physfs libmodplug mpg123 libvorbis libogg
   ];
 

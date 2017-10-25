@@ -8,7 +8,7 @@
 { fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
 , perl, gtk2, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
-, fetchFromGitHub, libmpack
+, fetchFromGitHub, libmpack, which
 }:
 
 let
@@ -215,6 +215,31 @@ let
     '';
   };
 
+  lua-iconv = buildLuaPackage rec {
+    name = "lua-iconv-${version}";
+    version = "7";
+    src = fetchFromGitHub {
+      owner = "ittner";
+      repo = "lua-iconv";
+      rev = "e8d34024a6b185a759733915f116cc5588550261";
+      sha256 = "0rd76966qlxfp8ypkyrbif76nxnm1acclqwfs45wz3972jsk654i";
+    };
+
+    preBuild = ''
+      makeFlagsArray=(
+        INSTALL_PATH="$out/lib/lua/${lua.luaversion}"
+      );
+    '';
+
+    meta = {
+      platforms = stdenv.lib.platforms.unix;
+      license = stdenv.lib.licenses.mit;
+      description = "Lua bindings for POSIX iconv";
+      maintainers = [ maintainers.richardipsum ];
+      homepage = "https://ittner.github.io/lua-iconv/";
+    };
+  };
+
   luasec = buildLuaPackage rec {
     name = "sec-0.6";
     src = fetchFromGitHub {
@@ -268,6 +293,33 @@ let
       platforms = with platforms; darwin ++ linux ++ freebsd ++ illumos;
       maintainers = with maintainers; [ mornfall ];
     };
+  };
+
+  luxio = buildLuaPackage rec {
+    name = "luxio-${version}";
+    version = "13";
+    src = fetchurl {
+      url = "https://git.gitano.org.uk/luxio.git/snapshot/luxio-luxio-13.tar.bz2";
+      sha256 = "1hvwslc25q7k82rxk461zr1a2041nxg7sn3sw3w0y5jxf0giz2pz";
+    };
+    nativeBuildInputs = [ which pkgconfig ];
+    postPatch = ''
+      patchShebangs .
+    '';
+    meta = {
+      platforms = stdenv.lib.platforms.unix;
+      license = stdenv.lib.licenses.mit;
+      description = "Lightweight UNIX I/O and POSIX binding for Lua";
+      maintainers = [ maintainers.richardipsum ];
+    };
+    preBuild = ''
+      makeFlagsArray=(
+        INST_LIBDIR="$out/lib/lua/${lua.luaversion}"
+        INST_LUADIR="$out/share/lua/${lua.luaversion}"
+        LUA_BINDIR="$out/bin"
+        INSTALL=install
+        );
+    '';
   };
 
   luazip = buildLuaPackage rec {
@@ -327,7 +379,7 @@ let
       url = "https://github.com/lua-stdlib/lua-stdlib/archive/release.zip";
       sha256 = "0636absdfjx8ybglwydmqxwfwmqz1c4b9s5mhxlgm4ci18lw3hms";
     };
-    buildInputs = [ autoreconfHook unzip ];
+    nativeBuildInputs = [ autoreconfHook unzip ];
     meta = {
       homepage = "https://github.com/lua-stdlib/lua-stdlib/";
       platforms = stdenv.lib.platforms.linux;
@@ -456,7 +508,8 @@ let
       platforms   = platforms.unix;
     };
 
-    buildInputs = [ glib gobjectIntrospection lua pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ glib gobjectIntrospection lua ];
 
     makeFlags = [ "LUA_VERSION=${lua.luaversion}" ];
 
@@ -469,7 +522,8 @@ let
     name = "lua-mpack-${libmpack.version}";
     src = libmpack.src;
     sourceRoot = "libmpack-${libmpack.rev}-src/binding/lua";
-    buildInputs = [ libmpack ]; #libtool lua pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libmpack ]; #libtool lua ];
     dontBuild = true;
     preInstall = ''
       mkdir -p $out/lib/lua/${lua.luaversion}

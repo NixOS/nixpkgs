@@ -256,6 +256,14 @@ in
         '';
       };
 
+      nat = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Assume router is NATed. Enabled by default.
+        '';
+      };
+
       upnp = {
         enable = mkOption {
           type = types.bool;

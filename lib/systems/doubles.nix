@@ -1,8 +1,9 @@
+{ lib }:
 let
-  lists = import ../lists.nix;
-  parse = import ./parse.nix;
-  inherit (import ./inspect.nix) predicates;
-  inherit (import ../attrsets.nix) matchAttrs;
+  inherit (lib) lists;
+  parse = import ./parse.nix { inherit lib; };
+  inherit (import ./inspect.nix { inherit lib; }) predicates;
+  inherit (lib.attrsets) matchAttrs;
 
   all = [
     "aarch64-linux"

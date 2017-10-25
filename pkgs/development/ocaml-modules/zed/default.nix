@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, camomile, ocaml_react }:
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, camomile, react }:
 
 stdenv.mkDerivation rec {
   version = "1.4";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0d8qfy0qiydrrqi8qc9rcwgjigql6vx9gl4zp62jfz1lmjgb2a3w";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ocaml_react ];
+  buildInputs = [ ocaml findlib ocamlbuild react ];
 
   propagatedBuildInputs = [ camomile ];
 

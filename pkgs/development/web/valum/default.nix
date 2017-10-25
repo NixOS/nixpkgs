@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ca067gg5z1798bazwzgg2yd2mbysvk8i2q2v3i8d0d188y2hj84";
   };
 
-  buildInputs = [ python pkgconfig glib vala_0_28 ctpl libgee libsoup fcgi ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ python glib vala_0_28 ctpl libgee libsoup fcgi ];
 
   configurePhase = ''python waf configure --prefix=$out'';
 

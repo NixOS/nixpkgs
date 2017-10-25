@@ -93,10 +93,7 @@ in rec {
         (all nixos.tests.keymap.dvp)
         (all nixos.tests.keymap.neo)
         (all nixos.tests.keymap.qwertz)
-        (all nixos.tests.plasma5)
-        (all nixos.tests.kernel-latest)
-        (all nixos.tests.kernel-lts)
-        (all nixos.tests.kernel-params)
+        nixos.tests.plasma5.x86_64-linux # avoid big build on i686
         #(all nixos.tests.lightdm)
         (all nixos.tests.login)
         (all nixos.tests.misc)
@@ -119,10 +116,8 @@ in rec {
         (all nixos.tests.sddm.default)
         (all nixos.tests.simple)
         (all nixos.tests.slim)
-        (all nixos.tests.sysctl)
         (all nixos.tests.udisks2)
         (all nixos.tests.xfce)
-        (all nixos.tests.xmonad)
 
         nixpkgs.tarball
         (all allSupportedNixpkgs.emacs)

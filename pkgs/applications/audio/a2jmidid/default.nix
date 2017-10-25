@@ -12,7 +12,8 @@ in stdenv.mkDerivation rec {
     sha256 = "06dgf5655znbvrd7fhrv8msv6zw8vk0hjqglcqkh90960mnnmwz7";
   };
 
-  buildInputs = [ makeWrapper pkgconfig alsaLib dbus libjack2 python dbus-python ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ makeWrapper alsaLib dbus libjack2 python dbus-python ];
 
   configurePhase = "${python.interpreter} waf configure --prefix=$out";
 

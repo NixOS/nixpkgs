@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
 
 	buildInputs = [ ocaml findlib jbuilder ocaml-migrate-parsetree ppx_tools_versioned ];
 
+  postPatch = "patchShebangs lib/generate_stubs.sh";
+
 	propagatedBuildInputs = [ js_of_ocaml-compiler uchar ];
 
 	buildPhase = "jbuilder build -p js_of_ocaml";

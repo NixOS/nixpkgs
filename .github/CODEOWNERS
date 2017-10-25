@@ -26,9 +26,9 @@ doc/languages-frameworks/python.md      @FRidh
 # Haskell
 pkgs/development/compilers/ghc                       @peti
 pkgs/development/haskell-modules                     @peti
-pkgs/development/haskell-modules/default.nix         @Profpatsch @peti
-pkgs/development/haskell-modules/generic-builder.nix @Profpatsch @peti
-pkgs/development/haskell-modules/hoogle.nix          @Profpatsch @peti
+pkgs/development/haskell-modules/default.nix         @peti
+pkgs/development/haskell-modules/generic-builder.nix @peti
+pkgs/development/haskell-modules/hoogle.nix          @peti
 
 # R
 pkgs/applications/science/math/R @peti
@@ -38,3 +38,18 @@ pkgs/development/r-modules       @peti
 pkgs/stdenv/darwin/*    @copumpkin @LnL7
 pkgs/os-specific/darwin/*       @LnL7
 pkgs/os-specific/darwin/apple-source-releases/* @copumpkin
+
+# Beam-related (Erlang, Elixir, LFE, etc)
+pkgs/development/beam-modules/*	@gleber
+pkgs/development/interpreters/erlang/*	@gleber
+pkgs/development/interpreters/lfe/*	@gleber
+pkgs/development/interpreters/elixir/*	@gleber
+pkgs/development/tools/build-managers/rebar/*	@gleber
+pkgs/development/tools/build-managers/rebar3/*	@gleber
+pkgs/development/tools/erlang/*	@gleber
+
+# Jetbrains
+pkgs/applications/editors/jetbrains @edwtjo
+
+# Eclipse
+pkgs/applications/editors/eclipse @rycee

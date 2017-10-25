@@ -33,7 +33,7 @@ in {
         default = [];
         example = ''[ "systemd" ]'';
         description = ''
-          Collectors to enable, additionally to the defaults.
+          Collectors to enable. Only collectors explicitly listed here will be enabled.
         '';
       };
 

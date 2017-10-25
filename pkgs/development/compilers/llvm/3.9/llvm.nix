@@ -26,7 +26,6 @@ assert (hostPlatform != buildPlatform) -> !enableSharedLibraries;
 
 let
   src = fetch "llvm" "1vi9sf7rx1q04wj479rsvxayb6z740iaz3qniwp266fgp5a07n8z";
-  shlib = if stdenv.isDarwin then "dylib" else "so";
 
   # Used when creating a version-suffixed symlink of libLLVM.dylib
   shortVersion = with stdenv.lib;
@@ -106,7 +105,7 @@ in stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional enableSharedLibraries [
     "-DLLVM_LINK_LLVM_DYLIB=ON"
   ] ++ stdenv.lib.optional (!isDarwin)
-    "-DLLVM_BINUTILS_INCDIR=${binutils.dev}/include"
+    "-DLLVM_BINUTILS_INCDIR=${stdenv.lib.getDev binutils}/include"
     ++ stdenv.lib.optionals (isDarwin) [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
@@ -124,7 +123,7 @@ in stdenv.mkDerivation rec {
   postInstall = ""
   + stdenv.lib.optionalString (enableSharedLibraries) ''
     moveToOutput "lib/libLLVM-*" "$lib"
-    moveToOutput "lib/libLLVM.${shlib}" "$lib"
+    moveToOutput "lib/libLLVM${stdenv.hostPlatform.extensions.sharedLibrary}" "$lib"
     substituteInPlace "$out/lib/cmake/llvm/LLVMExports-release.cmake" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLLVM-" "$lib/lib/libLLVM-"
   ''

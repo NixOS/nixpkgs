@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1w7bs46r4lykfd83kc3bg9i1rxzzlb4ydk23ikf8mx8avz05q1aj";
   };
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   meta = with stdenv.lib; {
     description = "Library of Assorted Spiffy Things";

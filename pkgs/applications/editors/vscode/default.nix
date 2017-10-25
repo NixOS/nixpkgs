@@ -1,8 +1,8 @@
 { stdenv, lib, callPackage, fetchurl, unzip, atomEnv, makeDesktopItem,
-  makeWrapper, libXScrnSaver, libxkbfile }:
+  makeWrapper, libXScrnSaver, libxkbfile, libsecret }:
 
 let
-  version = "1.15.1";
+  version = "1.17.0";
   channel = "stable";
 
   plat = {
@@ -12,15 +12,16 @@ let
   }.${stdenv.system};
 
   sha256 = {
-    "i686-linux" = "09vvq02bsq6fdb0ibshn97kll43dpfmyq2dahl9gj02jlwardq27";
-    "x86_64-linux" = "1kg25i4kavmgivnk4w3dsbsnn9vncl5d2m0ds93f8qvmxpizwg21";
-    "x86_64-darwin" = "1fgjg7c9appp8v0ir7m2r3a3x4z0gx4na0p3d8j1x4pcs0kqy0qp";
+    "i686-linux" = "1s6nkzdsgfn5x7y91bwb6d7sw4b8s335myc0yhbsfpfks5pgi331";
+    "x86_64-linux" = "1av7xcb2sig5p344y2v1zjspg5nl9bds03r1yvgssm7mcy9l1gqk";
+    "x86_64-darwin" = "1fn9i5vs4b6xir51zavx7i8m68bwqa1hfr03aagy8byg9v8w5dx8";
   }.${stdenv.system};
 
   archive_fmt = if stdenv.system == "x86_64-darwin" then "zip" else "tar.gz";
 
   rpath = lib.concatStringsSep ":" [
     atomEnv.libPath
+    "${lib.makeLibraryPath [libsecret]}/libsecret-1.so.0"
     "${lib.makeLibraryPath [libXScrnSaver]}/libXss.so.1"
     "${lib.makeLibraryPath [libxkbfile]}/libxkbfile.so.1"
     "$out/lib/vscode"
@@ -47,8 +48,8 @@ in
     };
 
     buildInputs = if stdenv.system == "x86_64-darwin"
-      then [ unzip makeWrapper libXScrnSaver ]
-      else [ makeWrapper libXScrnSaver libxkbfile ];
+      then [ unzip makeWrapper libXScrnSaver libsecret ]
+      else [ makeWrapper libXScrnSaver libxkbfile libsecret ];
 
     installPhase =
       if stdenv.system == "x86_64-darwin" then ''
@@ -75,6 +76,12 @@ in
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --set-rpath "${rpath}" \
         $out/lib/vscode/code
+
+      patchelf \
+        --set-rpath "${rpath}" \
+        $out/lib/vscode/resources/app/node_modules/keytar/build/Release/keytar.node
+
+      ln -s ${lib.makeLibraryPath [libsecret]}/libsecret-1.so.0 $out/lib/vscode/libsecret-1.so.0
     '';
 
     meta = with stdenv.lib; {

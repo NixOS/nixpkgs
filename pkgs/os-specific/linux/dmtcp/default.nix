@@ -13,15 +13,14 @@ stdenv.mkDerivation rec {
 
   dontDisableStatic = true;
 
+  patches = [ ./ld-linux-so-buffer-size.patch ];
+
   postPatch = ''
     patchShebangs .
 
     substituteInPlace configure \
       --replace '#define ELF_INTERPRETER "$interp"' \
                 "#define ELF_INTERPRETER \"$(cat $NIX_CC/nix-support/dynamic-linker)\""
-  '';
-
-  preConfigure = ''
     substituteInPlace src/dmtcp_coordinator.cpp \
       --replace /bin/bash ${stdenv.shell}
     substituteInPlace util/gdb-add-symbol-file \

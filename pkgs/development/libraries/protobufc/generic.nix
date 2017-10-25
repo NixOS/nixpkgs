@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
 
   inherit src;
 
-  buildInputs = [ autoreconfHook pkgconfig protobuf zlib ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ protobuf zlib ];
 
   meta = with stdenv.lib; {
     homepage = http://github.com/protobuf-c/protobuf-c/;

@@ -17,8 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "14i1wvqbqib9h9092z10g4g0y14r5sp2fdaksvnw687l3ybwi6dn";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    SDL_ttf SDL_net cmake pkgconfig lua5_1 SDL SDL_mixer SDL_image fpc
+    SDL_ttf SDL_net cmake lua5_1 SDL SDL_mixer SDL_image fpc
     qt4 ghc ffmpeg freeglut makeWrapper physfs
   ];
 

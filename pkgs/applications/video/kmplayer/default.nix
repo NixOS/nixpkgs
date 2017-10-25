@@ -1,30 +1,41 @@
-{ stdenv, fetchurl
-, automoc4, cmake, gettext, makeWrapper, perl, pkgconfig
-, kdelibs4, cairo, dbus_glib, mplayer
+{
+  mkDerivation, lib, fetchurl,
+  extra-cmake-modules, makeWrapper,
+  qtsvg, qtx11extras, ki18n, kdelibs4support, kio, kmediaplayer, kwidgetsaddons,
+  phonon, cairo, mplayer
 }:
 
-stdenv.mkDerivation {
-  name = "kmplayer-0.11.3d";
+mkDerivation rec {
+  majorMinorVersion = "0.12";
+  patchVersion = "0b";
+  version = "${majorMinorVersion}.${patchVersion}";
+  name = "kmplayer-${version}";
 
   src = fetchurl {
-    #url = http://kmplayer.kde.org/pkgs/kmplayer-0.11.3d.tar.bz2;
-    url = "mirror://gentoo/distfiles/kmplayer-0.11.3d.tar.bz2";
-    sha256 = "1yvbkb1hh5y7fqfvixjf2rryzm0fm0fpkx4lmvhi7k7d0v4wpgky";
+    url = "mirror://kde/stable/kmplayer/${majorMinorVersion}/kmplayer-${version}.tar.bz2";
+    sha256 = "0wzdxym4fc83wvqyhcwid65yv59a2wvp1lq303cn124mpnlwx62y";
   };
 
-  buildInputs = [ kdelibs4 cairo dbus_glib ];
+  patches = [
+    ./kmplayer_part-plugin_metadata.patch # Qt 5.9 doesn't like an empty string for the optional "FILE" argument of "Q_PLUGIN_METADATA"
+    ./no-docs.patch # Don't build docs due to errors (kdelibs4support propagates kdoctools)
+  ];
 
-  nativeBuildInputs = [ automoc4 cmake gettext makeWrapper perl pkgconfig ];
+  nativeBuildInputs = [ extra-cmake-modules makeWrapper ];
+
+  buildInputs = [
+    qtsvg qtx11extras ki18n kdelibs4support kio kmediaplayer kwidgetsaddons
+    phonon cairo
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/kmplayer --suffix PATH : ${mplayer}/bin
   '';
 
-  meta = {
+  meta = with lib; {
     description = "MPlayer front-end for KDE";
-    license = "GPL";
-    homepage = http://kmplayer.kde.org;
-    broken = true; # Also unavailable on this mirror
-    maintainers = [ stdenv.lib.maintainers.sander ];
+    license = with licenses; [ gpl2 lgpl2 fdl12 ];
+    homepage = https://kmplayer.kde.org/;
+    maintainers = with maintainers; [ sander zraexy ];
   };
 }

@@ -13,10 +13,8 @@ from pyquery import PyQuery as pq
 
 
 maintainers_json = subprocess.check_output([
-    'nix-instantiate',
-    'lib/maintainers.nix',
-    '--eval',
-    '--json'])
+    'nix-instantiate', '-E', 'import ./lib/maintainers.nix {}', '--eval', '--json'
+])
 maintainers = json.loads(maintainers_json)
 MAINTAINERS = {v: k for k, v in maintainers.iteritems()}
 
@@ -51,8 +49,8 @@ def get_maintainers(attr_name):
 @click.command()
 @click.option(
     '--jobset',
-    default="nixos/release-17.03",
-    help='Hydra project like nixos/release-17.03')
+    default="nixos/release-17.09",
+    help='Hydra project like nixos/release-17.09')
 def cli(jobset):
     """
     Given a Hydra project, inspect latest evaluation

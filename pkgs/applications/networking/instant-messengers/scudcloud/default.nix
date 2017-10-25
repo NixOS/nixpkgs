@@ -1,12 +1,12 @@
 { stdenv, fetchurl, python3Packages }:
 
-let version = "1.58";
+let version = "1.63";
 in python3Packages.buildPythonPackage {
   name = "scudcloud-${version}";
 
   src = fetchurl {
     url = "https://github.com/raelgc/scudcloud/archive/v${version}.tar.gz";
-    sha256 = "1j84qdc2j3dvl1nhrjqm0blc8ww723p9a6hqprkkp8alw77myq1l";
+    sha256 = "e0d1cb72115d0fda17db92d28be51558ad8fe250972683fac3086dbe8d350d22";
   };
 
   propagatedBuildInputs = with python3Packages; [ pyqt5 dbus-python ];

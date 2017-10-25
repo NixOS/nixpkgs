@@ -23,10 +23,11 @@
 , pango
 
 , audioSupport ? mediaSupport
-, pulseaudioSupport ? audioSupport
+, pulseaudioSupport ? false
 , libpulseaudio
+, apulse
 
-# Media support (implies pulseaudio support)
+# Media support (implies audio support)
 , mediaSupport ? false
 , gstreamer
 , gst-plugins-base
@@ -38,6 +39,16 @@
 # Pluggable transport dependencies
 , python27
 
+# Wrapper runtime
+, coreutils
+, glibcLocales
+, hicolor_icon_theme
+, shared_mime_info
+
+# Whether to disable multiprocess support to work around crashing tabs
+# TODO: fix the underlying problem instead of this terrible work-around
+, disableContentSandbox ? true
+
 # Extra preferences
 , extraPrefs ? ""
 }:
@@ -45,7 +56,9 @@
 with stdenv.lib;
 
 let
-  libPath = makeLibraryPath ([
+  libPath = makeLibraryPath libPkgs;
+
+  libPkgs = [
     atk
     cairo
     dbus
@@ -62,6 +75,7 @@ let
     libXt
     pango
     stdenv.cc.cc
+    stdenv.cc.libc
     zlib
   ]
   ++ optionals pulseaudioSupport [ libpulseaudio ]
@@ -70,7 +84,7 @@ let
     gst-plugins-base
     gmp
     ffmpeg
-  ]);
+  ];
 
   gstPluginsPath = concatMapStringsSep ":" (x:
     "${x}/lib/gstreamer-0.10") [
@@ -84,7 +98,7 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "7.0.5";
+  version = "7.0.6";
 
   lang = "en-US";
 
@@ -94,7 +108,7 @@ let
         "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz"
       ];
-      sha256 = "1ixa1pmh3fm82gwzkm7r3gbly1lrihpvk1irmpc8b8zsi2s49ghd";
+      sha256 = "11z3r0577p78ifi9lk4lrh9wb46k77wy77g5p9l8il02760bgq6m";
     };
 
     "i686-linux" = fetchurl {
@@ -102,7 +116,7 @@ let
         "https://github.com/TheTorProject/gettorbrowser/releases/download/v${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
         "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz"
       ];
-      sha256 = "1kb0m4xikxcgj03h6l0ch5d53i8hxdacwm7q745a377g44q84nzb";
+      sha256 = "1r8v5w66clmm76kzpkf0f5jcxs76whb5xrl20rkirp79fybqn4hx";
     };
   };
 in
@@ -144,6 +158,11 @@ stdenv.mkDerivation rec {
     # The final libPath.  Note, we could split this into firefoxLibPath
     # and torLibPath for accuracy, but this is more convenient ...
     libPath=${libPath}:$TBB_IN_STORE:$TBB_IN_STORE/TorBrowser/Tor
+
+    # apulse uses a non-standard library path.  For now special-case it.
+    ${optionalString (audioSupport && !pulseaudioSupport) ''
+      libPath=${apulse}/lib/apulse:$libPath
+    ''}
 
     # Fixup paths to pluggable transports.
     sed -i TorBrowser/Data/Tor/torrc-defaults \
@@ -201,6 +220,17 @@ stdenv.mkDerivation rec {
     lockPref("extensions.torlauncher.control_port_use_ipc", true);
     lockPref("extensions.torlauncher.socks_port_use_ipc", true);
 
+    // Optionally disable multiprocess support.  We always set this to ensure that
+    // toggling the pref takes effect.
+    lockPref("browser.tabs.remote.autostart.2", ${if disableContentSandbox then "false" else "true"});
+
+    // Allow sandbox access to sound devices if using ALSA directly
+    ${if (audioSupport && !pulseaudioSupport) then ''
+      pref("security.sandbox.content.write_path_whitelist", "/dev/snd/");
+    '' else ''
+      clearPref("security.sandbox.content.write_path_whitelist");
+    ''}
+
     ${optionalString (extraPrefs != "") ''
       ${extraPrefs}
     ''}
@@ -225,11 +255,20 @@ stdenv.mkDerivation rec {
     GeoIPv6File $TBB_IN_STORE/TorBrowser/Data/Tor/geoip6
     EOF
 
+    WRAPPER_XDG_DATA_DIRS=${concatMapStringsSep ":" (x: "${x}/share") [
+      hicolor_icon_theme
+      shared_mime_info
+    ]}
+
     # Generate wrapper
     mkdir -p $out/bin
     cat > "$out/bin/tor-browser" << EOF
     #! ${stdenv.shell}
     set -o errexit -o nounset
+
+    PATH=${makeBinPath [ coreutils ]}
+    export LC_ALL=C
+    export LOCALE_ARCHIVE=${glibcLocales}/lib/locale/locale-archive
 
     # Enter local state directory.
     REAL_HOME=\$HOME
@@ -291,14 +330,26 @@ stdenv.mkDerivation rec {
     # Setting FONTCONFIG_FILE is required to make fontconfig read the TBB
     # fonts.conf; upstream uses FONTCONFIG_PATH, but FC_DEBUG=1024
     # indicates the system fonts.conf being used instead.
+    #
+    # XDG_DATA_DIRS is set to prevent searching system dirs (looking for .desktop & icons)
     exec env -i \
+      TZ=":" \
+      TZDIR="\''${TZDIR:-}" \
+      LOCALE_ARCHIVE="\$LOCALE_ARCHIVE" \
+      \
+      TMPDIR="\''${TMPDIR:-/tmp}" \
       HOME="\$HOME" \
       XAUTHORITY="\$XAUTHORITY" \
       DISPLAY="\$DISPLAY" \
       DBUS_SESSION_BUS_ADDRESS="\$DBUS_SESSION_BUS_ADDRESS" \
       \
+      XDG_DATA_HOME="\$HOME/.local/share" \
+      XDG_DATA_DIRS="$WRAPPER_XDG_DATA_DIRS" \
+      \
       PULSE_SERVER="\''${PULSE_SERVER:-}" \
       PULSE_COOKIE="\''${PULSE_COOKIE:-}" \
+      \
+      APULSE_PLAYBACK_DEVICE="\''${APULSE_PLAYBACK_DEVICE:-plug:dmix}" \
       \
       TOR_SKIP_LAUNCH="\''${TOR_SKIP_LAUNCH:-}" \
       TOR_CONTROL_PORT="\''${TOR_CONTROL_PORT:-}" \
@@ -328,7 +379,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/applications
     cp $desktopItem/share/applications"/"* $out/share/applications
     sed -i $out/share/applications/torbrowser.desktop \
-        -e "s,Exec=.*,Exec=$out/bin/tor-browser,"
+        -e "s,Exec=.*,Exec=$out/bin/tor-browser," \
+        -e "s,Icon=.*,Icon=$out/share/pixmaps/torbrowser.png,"
 
     # Install icons
     mkdir -p $out/share/pixmaps

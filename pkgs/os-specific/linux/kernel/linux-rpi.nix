@@ -15,9 +15,9 @@ stdenv.lib.overrideDerivation (import ./generic.nix (args // rec {
     sha256 = "1ly0x7a43zvig0fv7lc6rpq49pcdb7i9sdb78p4gi5485zap40kb";
   };
 
-  features.iwlwifi = true;
-  features.needsCifsUtils = true;
-  features.netfilterRPFilter = true;
+  features = {
+    efiBootStub = false;
+  } // (args.features or {});
 
   extraMeta.hydraPlatforms = [];
 })) (oldAttrs: {

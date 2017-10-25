@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0yi82rak2277x4nzzr5zwbsnha5pi61w975c8src2iwar2b6m0xg";
   };
 
-  buildInputs = [ mesa_glu ftgl freefont_ttf libjack2 libltc libsndfile libsamplerate lv2 gtk2 cairo pango fftwFloat pkgconfig  zita-convolver];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ mesa_glu ftgl freefont_ttf libjack2 libltc libsndfile libsamplerate lv2 gtk2 cairo pango fftwFloat  zita-convolver];
 
   makeFlags = [ "PREFIX=$(out)" "FONTFILE=${freefont_ttf}/share/fonts/truetype/FreeSansBold.ttf" ];
 

@@ -94,7 +94,7 @@ bootstrap_plugins(#data{plugins = Plugins}) ->
 
 -spec bootstrap_libs(#data{}) -> ok.
 bootstrap_libs(#data{erl_libs = ErlLibs}) ->
-    io:format("Bootstrapping dependent librariesXXXX~n"),
+    io:format("Bootstrapping dependent libraries~n"),
     Target = "_build/default/lib/",
     Paths = string:tokens(ErlLibs, ":"),
     CopiableFiles =

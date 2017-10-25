@@ -24,8 +24,8 @@ in mkPythonDerivation {
   # FIXME bitcoind doesn't die on shutdown. Need some sort of patch to fix that.
   #patches = [ ./shutdown-fix.patch ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig
     autoreconfHook
     swig
     qt4

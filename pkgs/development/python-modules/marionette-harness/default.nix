@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy3k
 , mozprofile
 , mozversion
 , moztest
@@ -15,6 +16,7 @@ buildPythonPackage rec {
   pname = "marionette-harness";
   version = "4.1.0";
   name = "${pname}-${version}";
+  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;

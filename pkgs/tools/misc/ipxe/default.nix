@@ -1,8 +1,8 @@
 { stdenv, fetchgit, perl, cdrkit, syslinux, xz, openssl }:
 
 let
-  date = "20160831";
-  rev = "827dd1bfee67daa683935ce65316f7e0f057fe1c";
+  date = "20170922";
+  rev = "74d90b33f8490adcee2026ece18d8411d93b6a39";
 in
 
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   src = fetchgit {
     url = git://git.ipxe.org/ipxe.git;
-    sha256 = "11w8b0vln3skfn8r1cvzngslz12njdkwmnacyq3qffb96k2dn2ww";
+    sha256 = "12ijrq451fj2x3i7c7xjlxig5mwbhmgzqjvmfl2sza953vfbk4vw";
     inherit rev;
   };
 
@@ -40,6 +40,10 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out
     cp bin/ipxe.dsk bin/ipxe.usb bin/ipxe.iso bin/ipxe.lkrn bin/undionly.kpxe $out
+
+    # Some PXE constellations especially with dnsmasq are looking for the file with .0 ending
+    # let's provide it as a symlink to be compatible in this case.
+    ln -s undionly.kpxe $out/undionly.kpxe.0
   '';
 
   meta = with stdenv.lib;

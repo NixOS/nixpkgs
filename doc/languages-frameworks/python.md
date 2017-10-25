@@ -785,7 +785,20 @@ example of such a situation is when `py.test` is used.
 
 #### Common issues
 
-- Non-working tests can often be deselected. In the case of `py.test`: `py.test -k 'not function_name and not other_function'`.
+- Non-working tests can often be deselected. By default `buildPythonPackage` runs `python setup.py test`.
+  Most python modules follows the standard test protocol where the pytest runner can be used instead.
+  `py.test` supports a `-k` parameter to ignore test methods or classes: 
+  
+  ```nix
+  buildPythonPackage {
+    # ...
+    # assumes the tests are located in tests
+    checkInputs = [ pytest ];
+    checkPhase = ''
+      py.test -k 'not function_name and not other_function' tests
+    '';
+  }
+  ```
 - Unicode issues can typically be fixed by including `glibcLocales` in `buildInputs` and exporting `LC_ALL=en_US.utf-8`.
 - Tests that attempt to access `$HOME` can be fixed by using the following work-around before running tests (e.g. `preCheck`): `export HOME=$(mktemp -d)`
 

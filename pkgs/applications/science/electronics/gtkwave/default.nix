@@ -7,7 +7,8 @@ stdenv.mkDerivation rec {
     sha256 = "1akzf1sq8mwarrbrbz5chrvgwlsp444h5za8rg1dfyqk733s7piz";
   };
 
-  buildInputs = [ gtk2 gperf pkgconfig bzip2 tcl tk judy xz ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 gperf bzip2 tcl tk judy xz ];
 
   configureFlags = [ "--with-tcl=${tcl}/lib" "--with-tk=${tk}/lib" "--enable-judy" ];
 

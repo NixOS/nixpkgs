@@ -50,14 +50,14 @@
     };
     version = "0.12.2";
   };
-  gitaly = {
+  gitaly-proto = {
     dependencies = ["google-protobuf" "grpc"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "16ya0vqmrr3nsrsrcph1rqnb43gpvszhvs8v6viki5lvg9rdxb67";
+      sha256 = "1nqp9ib00q55ig8zf1r6ldf3xkqw0874ra1mbcsm8sl46l84lx11";
       type = "gem";
     };
-    version = "0.30.0";
+    version = "0.37.0";
   };
   github-linguist = {
     dependencies = ["charlock_holmes" "escape_utils" "mime-types" "rugged"];
@@ -71,10 +71,10 @@
   google-protobuf = {
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1q0ka7x53b9vx4wdb2jdvwxxpb5i5ns7fhqb9zgbrp8yy1bg9m9p";
+      sha256 = "1jh8axm5m75rvdf2i3s24pmi7p613armh9vk3p1d0ryfx159mqkl";
       type = "gem";
     };
-    version = "3.3.0";
+    version = "3.4.0.2";
   };
   googleauth = {
     dependencies = ["faraday" "jwt" "logging" "memoist" "multi_json" "os" "signet"];
@@ -89,10 +89,10 @@
     dependencies = ["google-protobuf" "googleauth"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0hp8sfvl99imzp3c5sp96qpi49550v7ri7ljfvb3nllcmd3jw7sk";
+      sha256 = "056ipqai887x5jpbgcc215kdi0lfqjzcjbx3hx11cjrfww01zc52";
       type = "gem";
     };
-    version = "1.4.1";
+    version = "1.6.0";
   };
   i18n = {
     source = {

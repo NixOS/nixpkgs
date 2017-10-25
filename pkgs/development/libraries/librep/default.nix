@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "1k6c0hmyzxh8459r790slh9vv9vwy9d7w3nlmrqypbx9mk855hgy";
   };
 
-  buildInputs = [ pkgconfig autoreconfHook readline texinfo ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ readline texinfo ];
   propagatedBuildInputs = [ gdbm gmp libffi ];
 
   configureFlags = [

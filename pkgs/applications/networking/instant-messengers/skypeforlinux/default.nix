@@ -3,7 +3,6 @@
 , libnotify, nspr, nss, systemd, xorg, libv4l, libstdcxx5 }:
 
 let
-
   skype = {version, sha256, ...}:
     let
       rpath = stdenv.lib.makeLibraryPath [

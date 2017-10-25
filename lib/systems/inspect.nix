@@ -1,6 +1,7 @@
-with import ./parse.nix;
-with import ../attrsets.nix;
-with import ../lists.nix;
+{ lib }:
+with import ./parse.nix { inherit lib; };
+with lib.attrsets;
+with lib.lists;
 
 rec {
   patterns = rec {

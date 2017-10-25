@@ -1,6 +1,10 @@
 set -eu
 set -o pipefail
 
+if (( "${NIX_DEBUG:-0}" >= 6 )); then
+    set -x
+fi
+
 : ${outputs:=out}
 
 
@@ -269,7 +273,7 @@ for i in $initialPath; do
     addToSearchPath PATH "$i/bin"
 done
 
-if [ "${NIX_DEBUG:-}" = 1 ]; then
+if (( "${NIX_DEBUG:-0}" >= 1 )); then
     echo "initial path: $PATH"
 fi
 
@@ -429,7 +433,7 @@ fi
 
 
 PATH="${_PATH-}${_PATH:+${PATH:+:}}$PATH"
-if [ "${NIX_DEBUG:-}" = 1 ]; then
+if (( "${NIX_DEBUG:-0}" >= 1 )); then
     echo "final path: $PATH"
 fi
 
@@ -473,14 +477,14 @@ substitute() {
     shift 2
 
     if [ ! -f "$input" ]; then
-      echo "${FUNCNAME[0]}(): ERROR: file '$input' does not exist" >&2
+      echo "substitute(): ERROR: file '$input' does not exist" >&2
       return 1
     fi
 
     local content
     # read returns non-0 on EOF, so we want read to fail
     if IFS='' read -r -N 0 content < "$input"; then
-        echo "${FUNCNAME[0]}(): ERROR: File \"$input\" has null bytes, won't process" >&2
+        echo "substitute(): ERROR: File \"$input\" has null bytes, won't process" >&2
         return 1
     fi
 
@@ -497,10 +501,8 @@ substitute() {
                 shift 2
                 # check if the used nix attribute name is a valid bash name
                 if ! [[ "$varName" =~ ^[a-zA-Z_][a-zA-Z0-9_]*$ ]]; then
-                    echo "${FUNCNAME[0]}(): WARNING: substitution variables should be valid bash names," >&2
-                    echo "  \"$varName\" isn't and therefore was skipped; it might be caused" >&2
-                    echo "  by multi-line phases in variables - see #14907 for details." >&2
-                    continue
+                    echo "substitute(): ERROR: substitution variables must be valid Bash names, \"$varName\" isn't." >&2
+                    return 1
                 fi
                 pattern="@$varName@"
                 replacement="${!varName}"
@@ -513,7 +515,7 @@ substitute() {
                 ;;
 
             *)
-                echo "${FUNCNAME[0]}(): ERROR: Invalid command line argument: $1" >&2
+                echo "substitute(): ERROR: Invalid command line argument: $1" >&2
                 return 1
                 ;;
         esac
@@ -533,18 +535,16 @@ substituteInPlace() {
 }
 
 
-# Substitute all environment variables that do not start with an upper-case
-# character or underscore. Note: other names that aren't bash-valid
-# will cause an error during `substitute --subst-var`.
+# Substitute all environment variables that start with a lowercase character and
+# are valid Bash names.
 substituteAll() {
     local input="$1"
     local output="$2"
     local -a args=()
 
-    # Select all environment variables that start with a lowercase character.
-    for varName in $(env | sed -e $'s/^\([a-z][^= \t]*\)=.*/\\1/; t \n d'); do
-        if [ "${NIX_DEBUG:-}" = "1" ]; then
-            echo "@${varName}@ -> '${!varName}'"
+    for varName in $(awk 'BEGIN { for (v in ENVIRON) if (v ~ /^[a-z][a-zA-Z0-9_]*$/) print v }'); do
+        if (( "${NIX_DEBUG:-0}" >= 1 )); then
+            printf "@%s@ -> %q\n" "${varName}" "${!varName}"
         fi
         args+=("--subst-var" "$varName")
     done
@@ -1020,9 +1020,8 @@ genericBuild() {
         if [[ "$curPhase" = installCheckPhase && -z "${doInstallCheck:-}" ]]; then continue; fi
         if [[ "$curPhase" = distPhase && -z "${doDist:-}" ]]; then continue; fi
 
-        if [[ -n "${tracePhases:-}" ]]; then
-            echo
-            echo "@ phase-started $out $curPhase"
+        if [[ -n $NIX_LOG_FD ]]; then
+            echo "@nix { \"action\": \"setPhase\", \"phase\": \"$curPhase\" }" >&$NIX_LOG_FD
         fi
 
         showPhaseHeader "$curPhase"
@@ -1037,11 +1036,6 @@ genericBuild() {
 
         if [ "$curPhase" = unpackPhase ]; then
             cd "${sourceRoot:-.}"
-        fi
-
-        if [ -n "${tracePhases:-}" ]; then
-            echo
-            echo "@ phase-succeeded $out $curPhase"
         fi
     done
 }

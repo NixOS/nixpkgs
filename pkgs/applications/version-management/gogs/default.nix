@@ -7,18 +7,21 @@ with stdenv.lib;
 
 buildGoPackage rec {
   name = "gogs-${version}";
-  version = "0.11.19";
+  version = "0.11.29";
 
   src = fetchFromGitHub {
     owner = "gogits";
     repo = "gogs";
     rev = "v${version}";
-    sha256 = "0smzklhpfv3smqgzd0cnjdif3zi5q7b02grrnb5zssmdi1b2dlsd";
+    sha256 = "1xn1b4dxf7r8kagps3yvp31zskfxn50k1gfic9abl4kjwpwk78c0";
   };
 
-  patchPhase = ''
+  patches = [ ./static-root-path.patch ];
+
+  postPatch = ''
     patchShebangs .
-    '';
+    substituteInPlace pkg/setting/setting.go --subst-var data
+  '';
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -33,10 +36,7 @@ buildGoPackage rec {
     cp -R $src/{public,templates} $data
 
     wrapProgram $bin/bin/gogs \
-      --prefix PATH : ${makeBinPath [ bash git gzip openssh ]} \
-      --run 'export GOGS_WORK_DIR=''${GOGS_WORK_DIR:-$PWD}' \
-      --run 'mkdir -p "$GOGS_WORK_DIR" && cd "$GOGS_WORK_DIR"' \
-      --run "ln -fs $data/{public,templates} ."
+      --prefix PATH : ${makeBinPath [ bash git gzip openssh ]}
   '';
 
   goPackagePath = "github.com/gogits/gogs";

@@ -1,5 +1,5 @@
 { stdenv, buildOcaml, fetchzip, which, cryptopp, ocaml, findlib, ocamlbuild, camlp4
-, ocaml_react, ocaml_ssl, libev, pkgconfig, ncurses, ocaml_oasis, glib
+, react, ssl, libev, pkgconfig, ncurses, ocaml_oasis, glib
 , ppx_tools, result, cppo
 , ppxSupport ? stdenv.lib.versionAtLeast ocaml.version "4.02"
 , version ? if stdenv.lib.versionAtLeast ocaml.version "4.02" then "2.7.1" else "2.6.0"
@@ -26,11 +26,12 @@ buildOcaml rec {
     inherit sha256;
   };
 
-  buildInputs = [ ocaml_oasis pkgconfig which cryptopp ocaml findlib ocamlbuild glib ncurses camlp4 cppo ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ocaml_oasis which cryptopp ocaml findlib ocamlbuild glib ncurses camlp4 cppo ]
   ++ stdenv.lib.optional ppxSupport ppx_tools;
 
   propagatedBuildInputs = [ result ]
-  ++ optionals [ ocaml_react ocaml_ssl ]
+  ++ optionals [ react ssl ]
   ++ [ libev ];
 
   configureScript = "ocaml setup.ml -configure";

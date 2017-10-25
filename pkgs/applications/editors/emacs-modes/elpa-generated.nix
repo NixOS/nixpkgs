@@ -199,6 +199,19 @@
           license = lib.licenses.free;
         };
       }) {};
+    auto-correct = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
+        pname = "auto-correct";
+        version = "1.1";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/auto-correct-1.1.el";
+          sha256 = "19i84dqqnxc5v36lsmj9zj8wbmg267c50jvq2i9bb66i9pzd0s53";
+        };
+        packageRequires = [];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/auto-correct.html";
+          license = lib.licenses.free;
+        };
+      }) {};
     auto-overlays = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "auto-overlays";
         version = "0.10.9";
@@ -263,6 +276,19 @@
         packageRequires = [];
         meta = {
           homepage = "https://elpa.gnu.org/packages/caps-lock.html";
+          license = lib.licenses.free;
+        };
+      }) {};
+    captain = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
+        pname = "captain";
+        version = "1.0.1";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/captain-1.0.1.el";
+          sha256 = "1jqbgzcgq4kxpcsma9ia6w6rjy9sdn51lz2f4rfjjy3qgy4fqjx5";
+        };
+        packageRequires = [];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/captain.html";
           license = lib.licenses.free;
         };
       }) {};
@@ -919,10 +945,10 @@
     gnorb = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "gnorb";
-        version = "1.2.3";
+        version = "1.2.4";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/gnorb-1.2.3.tar";
-          sha256 = "1bqm08i2aam4v4gfzyxfmic0rg0ka7cns38khwj42vhwgv045xc7";
+          url = "https://elpa.gnu.org/packages/gnorb-1.2.4.tar";
+          sha256 = "013sdzpix9mc7d99mmpqv0r80zr50l1c7jld09p6767f86j6vahi";
         };
         packageRequires = [ cl-lib ];
         meta = {
@@ -1530,10 +1556,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20170904";
+        version = "20170911";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20170904.tar";
-          sha256 = "1nbdphd102lwkj0sg1lywydkc547fzc8p1n8y507xwvxdjazdnyb";
+          url = "https://elpa.gnu.org/packages/org-20170911.tar";
+          sha256 = "0w91f5lx64klwbpym0b73z919dagzakykkmx6g13iscsh7fflx06";
         };
         packageRequires = [];
         meta = {
@@ -1893,14 +1919,14 @@
           license = lib.licenses.free;
         };
       }) {};
-    sokoban = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
+    sokoban = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "sokoban";
-        version = "1.4.5";
+        version = "1.4.6";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/sokoban-1.4.5.tar";
-          sha256 = "1hh35g1p2f5al88jsbgiz35bvhn7iw5sf9zhsjimiig5isv7khip";
+          url = "https://elpa.gnu.org/packages/sokoban-1.4.6.tar";
+          sha256 = "112cl1l36zn5q9cw81rxi96zflf7ddp3by1h7fsz48yjfidpfbzn";
         };
-        packageRequires = [];
+        packageRequires = [ emacs ];
         meta = {
           homepage = "https://elpa.gnu.org/packages/sokoban.html";
           license = lib.licenses.free;

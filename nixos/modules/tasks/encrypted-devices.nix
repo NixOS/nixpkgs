@@ -56,11 +56,19 @@ in
   };
 
   config = mkIf anyEncrypted {
+    assertions = map (dev: {
+      assertion = dev.encrypted.label != null;
+      message = ''
+        The filesystem for ${dev.mountPoint} has encrypted.enable set to true, but no encrypted.label set
+      '';
+    }) encDevs;
+
     boot.initrd = {
       luks = {
         devices =
           map (dev: { name = dev.encrypted.label; device = dev.encrypted.blkDev; } ) keylessEncDevs;
         cryptoModules = [ "aes" "sha256" "sha1" "xts" ];
+        forceLuksSupportInInitrd = true;
       };
       postMountCommands =
         concatMapStrings (dev: "cryptsetup luksOpen --key-file ${dev.encrypted.keyFile} ${dev.encrypted.blkDev} ${dev.encrypted.label};\n") keyedEncDevs;

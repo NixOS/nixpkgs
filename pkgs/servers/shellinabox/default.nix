@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./shellinabox-minus.patch ];
 
-  buildInputs = [ autoreconfHook pam openssl openssh makeWrapper ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ pam openssl openssh makeWrapper ];
 
   # Disable GSSAPIAuthentication errors. Also, paths in certain source files are
   # hardcoded. Replace the hardcoded paths with correct paths.

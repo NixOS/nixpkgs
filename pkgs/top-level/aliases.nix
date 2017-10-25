@@ -25,7 +25,7 @@ in
 
 mapAliases (rec {
   accounts-qt = libsForQt5.accounts-qt;  # added 2015-12-19
-  adobeReader = adobe-reader;
+  adobeReader = adobe-reader; # added 2013-11-04
   aircrackng = aircrack-ng; # added 2016-01-14
   ammonite-repl = ammonite; # added 2017-05-02
   arduino_core = arduino-core;  # added 2015-02-04
@@ -66,6 +66,11 @@ mapAliases (rec {
   gst_plugins_bad = gst-plugins-bad;  # added 2017-02
   gst_plugins_ugly = gst-plugins-ugly;  # added 2017-02
   gst_python = gst-python;  # added 2017-02
+  guileCairo = guile-cairo; # added 2017-09-24
+  guileGnome = guile-gnome; # added 2017-09-24
+  guile_lib = guile-lib; # added 2017-09-24
+  guileLint = guile-lint; # added 2017-09-27
+  guile_ncurses = guile-ncurses; # added 2017-09-24
   gupnptools = gupnp-tools;  # added 2015-12-19
   gnustep-make = gnustep.make; # added 2016-7-6
   htmlTidy = html-tidy;  # added 2014-12-06
@@ -112,6 +117,7 @@ mapAliases (rec {
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatexSF = pidginlatex; # added 2014-11-02
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
+  PPSSPP = ppsspp; # added 2017-10-01
   prometheus-statsd-bridge = prometheus-statsd-exporter;  # added 2017-08-27
   qca-qt5 = libsForQt5.qca-qt5;  # added 2015-12-19
   QmidiNet = qmidinet;  # added 2016-05-22
@@ -121,6 +127,7 @@ mapAliases (rec {
   qwt6 = libsForQt5.qwt;  # added 2015-12-19
   rdiff_backup = rdiff-backup;  # added 2014-11-23
   rdmd = dtools;  # added 2017-08-19
+  robomongo = robo3t; #added 2017-09-28
   rssglx = rss-glx; #added 2015-03-25
   rubygems = throw "deprecated 2016-03-02: rubygems is now bundled with ruby";
   rustUnstable = rustNightly; # added 2016-11-29
@@ -135,6 +142,7 @@ mapAliases (rec {
   spaceOrbit = space-orbit; # addewd 2016-05-23
   speedtest_cli = speedtest-cli;  # added 2015-02-17
   sqliteInteractive = sqlite-interactive;  # added 2014-12-06
+  sshfs = sshfs-fuse; # added 2017-08-14
   sshfsFuse = sshfs-fuse; # added 2016-09
   surf-webkit2 = surf; # added 2017-04-02
   system_config_printer = system-config-printer;  # added 2016-01-03

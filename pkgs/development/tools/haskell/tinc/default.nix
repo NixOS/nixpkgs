@@ -38,4 +38,5 @@ mkDerivation {
   license = stdenv.lib.licenses.mit;
   hydraPlatforms = [ "x86_64-linux" ];
   maintainers = [ stdenv.lib.maintainers.robbinch ];
+  broken = true;
 }
