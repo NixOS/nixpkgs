@@ -25,10 +25,9 @@ in
       default     = "";
       type        = types.lines;
       example = ''
-        export XKB_DEFAULT_LAYOUT=us,ru
+        export XKB_DEFAULT_LAYOUT=us,de
+        export XKB_DEFAULT_VARIANT=,nodeadkeys
         export XKB_DEFAULT_OPTIONS=grp:alt_shift_toggle,
-        export QT_QPA_PLATFORM=wayland
-        export QT_WAYLAND_DISABLE_WINDOWDECORATION="1"
       '';
       description = ''
         Shell commands executed just before sway is started.
@@ -37,13 +36,12 @@ in
 
     extraPackages = mkOption {
       type = with types; listOf package;
-      default = with pkgs; [ ];
+      default = with pkgs; [
+        i3status xwayland rxvt_unicode dmenu
+      ];
       example = literalExample ''
         with pkgs; [
-          i3status
-          xwayland j4-dmenu-desktop dunst
-          qt5.qtwayland
-          imagemagick
+          i3status xwayland rxvt_unicode dmenu
         ]
       '';
       description = ''
