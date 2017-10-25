@@ -16114,6 +16114,7 @@ with pkgs;
     notifySupport   = config.profanity.notifySupport   or true;
     traySupport     = config.profanity.traySupport     or true;
     autoAwaySupport = config.profanity.autoAwaySupport or true;
+    python = python3;
   };
 
   psi = kde4.callPackage ../applications/networking/instant-messengers/psi { };
