@@ -48,7 +48,12 @@ in
       rtorrent = { gid = 276; };
     };
     users.extraUsers = mkIf (cfg.user == "rtorrent") {
-      rtorrent = { uid = 276; group = cfg.group; shell = pkgs.bashInteractive; };
+      rtorrent = {
+        uid = 276; group = cfg.group;
+        shell = pkgs.bashInteractive;
+        home = cfg.dataDir;
+        createHome = true;
+      };
     };
 
     systemd.services.rtorrent = {
@@ -59,25 +64,20 @@ in
       ];
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
+      # N.B. our default rtorrent.rc uses bash, which needs to be on the $PATH
+      path = [ cfg.package pkgs.tmux pkgs.bash pkgs.procps ];
       serviceConfig = {
         Type = "forking";
         KillMode = "none";
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${pkgs.tmux}/bin/tmux new-session -c ${cfg.dataDir} -s rtorrent -n rtorrent -d ${cfg.package}/bin/rtorrent -n -o import=${cfg.configFile}";
-        ExecStop = "${pkgs.bash}/bin/bash -c \"${pkgs.tmux}/bin/tmux send-keys -t rtorrent C-q && while pidof rtorrent > /dev/null; do sleep 0.5; done\"";
+        ExecStart = "${pkgs.tmux}/bin/tmux new-session -c ${cfg.dataDir} -s rtorrent -n rtorrent -d rtorrent -n -o import=${cfg.configFile}";
+        ExecStop = "${pkgs.bash}/bin/bash -c \"tmux send-keys -t rtorrent C-q && while pidof rtorrent > /dev/null; do sleep 0.5; done\"";
         WorkingDirectory = "${cfg.dataDir}";
         Restart = "on-failure";
-        PermissionsStartOnly = "true";
       };
 
       preStart = ''
-test -d "${cfg.dataDir}" || {
-  echo "Creating initial rtorrent data directory in \"${cfg.dataDir}\"."
-  mkdir -p "${cfg.dataDir}"
-  chown ${cfg.user}:${cfg.group} "${cfg.dataDir}"
-}
-
 test -f "${cfg.configFile}" || {
   echo "creating default rtorrent config file at \"${cfg.configFile}\"."
   cat > "${cfg.configFile}" << EOF
