@@ -4,9 +4,6 @@ with lib;
 
 let
   cfg = config.services.prometheus.nodeExporter;
-  cmdlineArgs = cfg.extraFlags ++ [
-    "-web.listen-address=${cfg.listenAddress}"
-  ];
 in {
   options = {
     services.prometheus.nodeExporter = {
