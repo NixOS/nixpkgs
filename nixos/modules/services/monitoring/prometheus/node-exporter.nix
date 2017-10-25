@@ -37,6 +37,15 @@ in {
         '';
       };
 
+      disabledCollectors = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        example = ''[ "timex" ]'';
+        description = ''
+          Collectors to disable which are enabled by default.
+        '';
+      };
+
       extraFlags = mkOption {
         type = types.listOf types.str;
         default = [];
@@ -64,7 +73,8 @@ in {
       wantedBy = [ "multi-user.target" ];
       script = ''
         exec ${pkgs.prometheus-node-exporter}/bin/node_exporter \
-          ${concatMapStrings (x: "--collector." + x + " ") cfg.enabledCollectors} \
+          ${concatMapStringsSep " " (x: "--collector." + x) cfg.enabledCollectors} \
+          ${concatMapStringsSep " " (x: "--no-collector." + x) cfg.disabledCollectors} \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
