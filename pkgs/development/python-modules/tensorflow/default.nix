@@ -7,6 +7,9 @@
 , cudaSupport ? false, nvidia_x11 ? null, cudatoolkit ? null, cudnn ? null
 # Default from ./configure script
 , cudaCapabilities ? [ "3.5" "5.2" ]
+, sse42Support ? false
+, avx2Support ? false
+, fmaSupport ? false
 }:
 
 assert cudaSupport -> cudatoolkit != null
@@ -77,6 +80,9 @@ let
     hardeningDisable = [ "all" ];
 
     bazelFlags = [ "--config=opt" ]
+                 ++ lib.optional sse42Support "--copt=-msse4.2"
+                 ++ lib.optional avx2Support "--copt=-mavx2"
+                 ++ lib.optional fmaSupport "--copt=-mfma"
                  ++ lib.optional cudaSupport "--config=cuda";
 
     bazelTarget = "//tensorflow/tools/pip_package:build_pip_package";
