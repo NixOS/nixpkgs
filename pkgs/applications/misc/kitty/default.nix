@@ -2,7 +2,7 @@
 
 with python3Packages;
 buildPythonApplication rec {
-  version = "0.4.0";
+  version = "0.4.2";
   name = "kitty-${version}";
   format = "other";
 
@@ -10,7 +10,7 @@ buildPythonApplication rec {
     owner = "kovidgoyal";
     repo = "kitty";
     rev = "v${version}";
-    sha256 = "1gvr9l3bgbf87b2ih36zfi5qcga925vjjr8snbak7sgxqzifimij";
+    sha256 = "058676r2b83mjggbfc701v3vlviaslf7qciz8sm8lcda82k01wfp";
   };
 
   buildInputs = [ glew fontconfig glfw ncurses libunistring ];
@@ -33,5 +33,6 @@ buildPythonApplication rec {
     homepage = https://github.com/kovidgoyal/kitty;
     description = "A modern, hackable, featureful, OpenGL based terminal emulator";
     license = licenses.gpl3;
+    maintainers = with maintainers; [ tex ];
   };
 }
