@@ -72,7 +72,7 @@ in
     environment.systemPackages = [ plymouth ];
 
     environment.etc."plymouth/plymouthd.conf".source = configFile;
-    environment.etc."plymouth/plymouthd.defaults".source = "${plymouth}/share/plymouth/plymouth.defaults";
+    environment.etc."plymouth/plymouthd.defaults".source = "${plymouth}/share/plymouth/plymouthd.defaults";
     environment.etc."plymouth/logo.png".source = cfg.logo;
     environment.etc."plymouth/themes".source = "${themesEnv}/share/plymouth/themes";
     # XXX: Needed because we supply a different set of plugins in initrd.

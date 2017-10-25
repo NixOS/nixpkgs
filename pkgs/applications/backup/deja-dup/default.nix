@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   name = "deja-dup-${version}";
-  version = "36.1";
+  version = "36.3";
 
   src = fetchurl {
     url = "https://launchpad.net/deja-dup/36/${version}/+download/deja-dup-${version}.tar.xz";
-    sha256 = "1s48k2sxrpwkzp37s4x7934lyg5194c47nv9ks15rksd5s0alnld";
+    sha256 = "08pwybzp7ynfcf0vqxfc3p8ir4gnzcv4v4cq5bwidbff9crklhrc";
   };
 
   patches = [
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://launchpad.net/deja-dup;
     license = with licenses; gpl3;
-    maintainers = with maintainers; [ jtojnar ];
+    maintainers = with maintainers; [ jtojnar joncojonathan ];
     platforms = with platforms; linux;
   };
 }
