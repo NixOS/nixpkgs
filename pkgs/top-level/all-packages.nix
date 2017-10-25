@@ -305,6 +305,8 @@ with pkgs;
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
 
+  closureInfo = callPackage ../build-support/closure-info.nix { };
+
   setupSystemdUnits = callPackage ../build-support/setup-systemd-units.nix { };
 
   singularity-tools = callPackage ../build-support/singularity-tools { };
