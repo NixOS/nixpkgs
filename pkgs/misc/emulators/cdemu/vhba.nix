@@ -18,5 +18,6 @@ stdenv.mkDerivation rec {
     homepage = http://cdemu.sourceforge.net/about/vhba/;
     platforms = platforms.linux;
     licenses = licenses.gpl2Plus;
+    maintainers = with stdenv.lib.maintainers; [ bendlas ];
   };
 }

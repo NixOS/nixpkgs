@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.volth ];
     platforms = ocaml.meta.platforms or [];
+    broken = true;
   };
 }

@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "163pqy39cca8cnf8rm8zr63ndsnr7rki9pf9j7dl9gyxmi7sx88s";
   };
 
-  buildInputs = [ autoconf automake dbus glib libtool pkgconfig udisks2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake dbus glib libtool udisks2 ];
 
   preConfigure = "libtoolize && aclocal && autoconf && automake --add-missing";
 

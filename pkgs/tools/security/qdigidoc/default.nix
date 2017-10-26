@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/
   '';
 
-  buildInputs = [ cmake ccid qttools pkgconfig pcsclite qttranslations
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake ccid qttools pcsclite qttranslations
                   hicolor_icon_theme libdigidocpp opensc shared_mime_info
                   openldap gettext desktop_file_utils makeWrapper
                 ];

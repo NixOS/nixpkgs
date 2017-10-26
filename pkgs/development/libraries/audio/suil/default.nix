@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "1kji3lhha26qr6xm9j8ic5c40zbrrb5qnwm2qxzmsfxgmrz29wkf";
   };
 
-  buildInputs = [ gtk2 lv2 pkgconfig python serd sord sratom ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 lv2 python serd sord sratom ]
     ++ (lib.optionals withQt4 [ qt4 ])
     ++ (lib.optionals withQt5 (with qt5; [ qtbase qttools ]));
 

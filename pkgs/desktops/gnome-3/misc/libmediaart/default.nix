@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0jg9gwxmhdxcbwb5svgkxkd3yl1d14wqzckcgg2swkn81i7al52v";
   };
 
-  buildInputs = [ pkgconfig glib gdk_pixbuf gobjectIntrospection ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib gdk_pixbuf gobjectIntrospection ];
 
   meta = with stdenv.lib; {
     description = "Library tasked with managing, extracting and handling media art caches";

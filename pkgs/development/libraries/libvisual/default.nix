@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1my1ipd5k1ixag96kwgf07bgxkjlicy9w22jfxb2kq95f6wgsk8b";
   };
 
-  buildInputs = [ pkgconfig glib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib ];
 
   hardeningDisable = [ "format" ];
 

@@ -9,7 +9,8 @@ stdenv.mkDerivation {
     url = "http://sourceforge.net/projects/gwyddion/files/gwyddion/2.48/gwyddion-2.48.tar.xz";
     sha256 = "119iw58ac2wn4cas6js8m7r1n4gmmkga6b1y711xzcyjp9hshgwx";
   };
-  buildInputs = [ gtk2 pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 ];
   meta = {
     homepage = http://gwyddion.net/;
 

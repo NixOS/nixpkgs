@@ -6,8 +6,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-tests" ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig gtk3 wrapGAppsHook intltool itstool libxml2
+    gtk3 wrapGAppsHook intltool itstool libxml2
     systemd gnome3.gsettings_desktop_schemas gnome3.defaultIconTheme
   ];
 

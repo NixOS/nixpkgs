@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "11bfjz14z37v6hk2xyg4vrw423b5h3qgcbviv07g00ws1fgjygm2";
   };
 
-  buildInputs = [ pkgconfig qt4 alsaLib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ qt4 alsaLib ];
 
   meta = with stdenv.lib; {
     description = "MIDI event processor and router";

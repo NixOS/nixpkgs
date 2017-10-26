@@ -2,6 +2,12 @@ qtPluginPrefix=@qtPluginPrefix@
 qtQmlPrefix=@qtQmlPrefix@
 qtDocPrefix=@qtDocPrefix@
 
+_qtRmCMakeLink() {
+    find "${!outputLib}" -name "*.cmake" -type l | xargs rm
+}
+
+postInstallHooks+=(_qtRmCMakeLink)
+
 addToSearchPathOnceWithCustomDelimiter() {
     local delim="$1"
     local search="$2"
@@ -176,7 +182,8 @@ _qtFixCMakePaths() {
     find "${!outputLib}" -name "*.cmake" | while read file; do
         substituteInPlace "$file" \
             --subst-var-by NIX_OUT "${!outputLib}" \
-            --subst-var-by NIX_DEV "${!outputDev}"
+            --subst-var-by NIX_DEV "${!outputDev}" \
+            --subst-var-by NIX_BIN "${!outputBin}"
     done
 }
 

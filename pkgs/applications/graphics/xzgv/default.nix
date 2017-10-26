@@ -1,21 +1,22 @@
-{ stdenv, fetchurl, gtk2, pkgconfig, texinfo }:
+{ stdenv, fetchurl, gtk2, libexif, pkgconfig, texinfo }:
 
 stdenv.mkDerivation rec {
   name = "xzgv-${version}";
-  version = "0.9.1";
+  version = "0.9.2";
   src = fetchurl {
     url = "mirror://sourceforge/xzgv/xzgv-${version}.tar.gz";
-    sha256 = "1rh432wnvzs434knzbda0fslhfx0gngryrrnqkfm6gwd2g5mxcph";
+    sha256 = "17l1xr9v07ggwga3vn0z1i4lnwjrr20rr8z1kjbw71aaijxl18i5";
   };
-  buildInputs = [ gtk2 pkgconfig texinfo ];
-  patches = [ ./fix-linker-paths.patch ];
+  nativeBuildInputs = [ pkgconfig texinfo ];
+  buildInputs = [ gtk2 libexif ];
   postPatch = ''
     substituteInPlace config.mk \
       --replace /usr/local $out
-    substituteInPlace config.mk \
-      --replace "CFLAGS=-O2 -Wall" "CFLAGS=-Wall"
     substituteInPlace Makefile \
       --replace "all: src man" "all: src man info"
+  '';
+  preInstall = ''
+    mkdir -p $out/share/{app-install/desktop,applications,info,pixmaps}
   '';
   meta = with stdenv.lib; {
     homepage = http://sourceforge.net/projects/xzgv/;

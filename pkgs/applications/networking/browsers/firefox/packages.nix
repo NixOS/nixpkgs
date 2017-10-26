@@ -6,16 +6,18 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    version = "55.0.3";
+    version = "56.0.2";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "3cacc87b97871f3a8c5e97c17ef7025079cb5c81f32377d9402cdad45815ac6c4c4762c79187f1e477910161c2377c42d41de62a50b6741d5d7c1cd70e8c6416";
+      sha512 = "35f81e8163a254b7e134fc073acbcff63aa1025b9c6392377650a8f2d0a5f0c77211adb0ae3d8ac85f036bb387246934b8847f14a03fceb7fcbc5b3cf94c9392";
     };
 
-    patches = lib.optional stdenv.isi686 (fetchpatch {
-      url = "https://hg.mozilla.org/mozilla-central/raw-rev/15517c5a5d37";
-      sha256 = "1ba487p3hk4w2w7qqfxgv1y57vp86b8g3xhav2j20qd3j3phbbn7";
-    });
+    patches =
+      [ ./no-buildconfig.patch ]
+      ++ lib.optional stdenv.isi686 (fetchpatch {
+        url = "https://hg.mozilla.org/mozilla-central/raw-rev/15517c5a5d37";
+        sha256 = "1ba487p3hk4w2w7qqfxgv1y57vp86b8g3xhav2j20qd3j3phbbn7";
+      });
 
     meta = {
       description = "A web browser built from Firefox source tree";
@@ -30,10 +32,10 @@ rec {
 
   firefox-esr = common rec {
     pname = "firefox-esr";
-    version = "52.3.0esr";
+    version = "52.4.1esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "36da8f14b50334e36fca06e09f15583101cadd10e510268255587ea9b09b1fea918da034d6f1d439ab8c34612f6cebc409a0b8d812dddb3f997afebe64d09fe9";
+      sha512 = "d80c7219548391d8a47b6e404662ea41e6acfa264a67d69365e76dd8943077e388ab24b030850919f8fc6681c11486bdbaaf170d441c861f4a12cedbe08955ab";
     };
 
     meta = firefox.meta // {
@@ -111,6 +113,7 @@ in rec {
   } // commonAttrs) {
     stdenv = overrideCC stdenv gcc5;
     ffmpegSupport = false;
+    gssSupport = false;
   };
 
   tor-browser-7-0 = common (rec {

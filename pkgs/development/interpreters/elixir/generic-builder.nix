@@ -22,6 +22,8 @@ in
 
     buildInputs = [ erlang rebar makeWrapper ];
 
+    LOCALE_ARCHIVE = stdenv.lib.optionalString stdenv.isLinux
+      "${pkgs.glibcLocales}/lib/locale/locale-archive";
     LANG = "en_US.UTF-8";
     LC_TYPE = "en_US.UTF-8";
 
@@ -30,8 +32,8 @@ in
     inherit debugInfo;
 
     buildFlags = if debugInfo
-     then "ERL_COMPILER_OPTIONS=debug_info"
-     else "";
+      then "ERL_COMPILER_OPTIONS=debug_info"
+      else "";
 
     preBuild = ''
       # The build process uses ./rebar. Link it to the nixpkgs rebar

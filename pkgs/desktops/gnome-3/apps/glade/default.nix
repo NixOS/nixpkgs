@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
-  buildInputs = [ pkgconfig gtk3 glib intltool itstool libxml2 python
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk3 glib intltool itstool libxml2 python
                   gnome3.gsettings_desktop_schemas makeWrapper docbook_xsl
                   gdk_pixbuf gnome3.defaultIconTheme librsvg libxslt ];
 

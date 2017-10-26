@@ -3,7 +3,7 @@
   src, version, qtCompatVersion,
 
   coreutils, bison, flex, gdb, gperf, lndir, patchelf, perl, pkgconfig, python2,
-  ruby,
+  ruby, which,
   # darwin support
   darwin, libiconv, libcxx,
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation {
       libjpeg libpng libtiff
     ]
 
-    ++ lib.optional mesaSupported mesa
+    ++ lib.optional (mesaSupported && !stdenv.isDarwin) mesa
 
     ++ lib.optionals (!stdenv.isDarwin) [
       dbus glib udev
@@ -73,20 +73,20 @@ stdenv.mkDerivation {
     ++ lib.optional (postgresql != null) postgresql;
 
   nativeBuildInputs =
-    [ bison flex gperf lndir perl pkgconfig python2 ]
+    [ bison flex gperf lndir perl pkgconfig python2 which ]
     ++ lib.optional (!stdenv.isDarwin) patchelf;
 
-  outputs = [ "out" "dev" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
 
   patches =
     copyPathsToStore (lib.readPathsFromFile ./. ./series)
-    ++ stdenv.lib.optional stdenv.isDarwin ./darwin-cf.patch;
+    ++ stdenv.lib.optional stdenv.isDarwin (copyPathsToStore (lib.readPathsFromFile ./. ./darwin-series));
 
   postPatch =
     ''
       substituteInPlace configure --replace /bin/pwd pwd
       substituteInPlace src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
-      sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i config.tests/*/*.test -i mkspecs/*/*.conf
+      sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i mkspecs/*/*.conf
 
       sed -i '/PATHS.*NO_DEFAULT_PATH/ d' src/corelib/Qt5Config.cmake.in
       sed -i '/PATHS.*NO_DEFAULT_PATH/ d' src/corelib/Qt5CoreMacros.cmake
@@ -94,7 +94,7 @@ stdenv.mkDerivation {
       sed -i '/PATHS.*NO_DEFAULT_PATH/ d' mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
     ''
 
-    + lib.optionalString mesaSupported ''
+    + lib.optionalString (mesaSupported && !stdenv.isDarwin) ''
       sed -i mkspecs/common/linux.conf \
           -e "/^QMAKE_INCDIR_OPENGL/ s|$|${mesa.dev or mesa}/include|" \
           -e "/^QMAKE_LIBDIR_OPENGL/ s|$|${mesa.out}/lib|"
@@ -105,15 +105,16 @@ stdenv.mkDerivation {
           -e 's|! /usr/bin/xcode-select --print-path >/dev/null 2>&1;|false;|' \
           -e 's|! /usr/bin/xcrun -find xcodebuild >/dev/null 2>&1;|false;|' \
           -e 's|sysroot=$(/usr/bin/xcodebuild -sdk $sdk -version Path 2>/dev/null)|sysroot=/nonsense|' \
+          -e 's|sysroot=$(/usr/bin/xcrun --sdk $sdk --show-sdk-path 2>/dev/null)|sysroot=/nonsense|' \
           -e 's|QMAKE_CONF_COMPILER=`getXQMakeConf QMAKE_CXX`|QMAKE_CXX="clang++"\nQMAKE_CONF_COMPILER="clang++"|' \
           -e 's|XCRUN=`/usr/bin/xcrun -sdk macosx clang -v 2>&1`|XCRUN="clang -v 2>&1"|' \
           -e 's#sdk_val=$(/usr/bin/xcrun -sdk $sdk -find $(echo $val | cut -d \x27 \x27 -f 1))##' \
           -e 's#val=$(echo $sdk_val $(echo $val | cut -s -d \x27 \x27 -f 2-))##' \
           ./configure
-      sed -i '3,$d' ./mkspecs/features/mac/default_pre.prf
-      sed -i '27,$d' ./mkspecs/features/mac/default_post.prf
-      sed -i '1,$d' ./mkspecs/features/mac/sdk.prf
-      sed -i 's/QMAKE_LFLAGS_RPATH      = -Wl,-rpath,/QMAKE_LFLAGS_RPATH      =/' ./mkspecs/common/mac.conf
+          substituteInPlace ./mkspecs/common/mac.conf \
+              --replace "/System/Library/Frameworks/OpenGL.framework/" "${darwin.apple_sdk.frameworks.OpenGL}/Library/Frameworks/OpenGL.framework/"
+          substituteInPlace ./mkspecs/common/mac.conf \
+              --replace "/System/Library/Frameworks/AGL.framework/" "${darwin.apple_sdk.frameworks.AGL}/Library/Frameworks/AGL.framework/"
      '';
      # Note on the above: \x27 is a way if including a single-quote
      # character in the sed string arguments.
@@ -144,7 +145,7 @@ stdenv.mkDerivation {
       ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
     ]
 
-    ++ lib.optional mesaSupported
+    ++ lib.optional (mesaSupported && !stdenv.isDarwin)
        ''-DNIXPKGS_MESA_GL="${mesa.out}/lib/libGL"''
 
     ++ lib.optionals (!stdenv.isDarwin)
@@ -155,6 +156,7 @@ stdenv.mkDerivation {
 
     ++ lib.optionals stdenv.isDarwin
     [
+      "-Wno-missing-sysroot"
       "-D__MAC_OS_X_VERSION_MAX_ALLOWED=1090"
       "-D__AVAILABILITY_INTERNAL__MAC_10_10=__attribute__((availability(macosx,introduced=10.10)))"
       # Note that nixpkgs's objc4 is from macOS 10.11 while the SDK is
@@ -252,6 +254,9 @@ stdenv.mkDerivation {
       "-inotify"
       "-system-libjpeg"
       "-system-libpng"
+      # gold linker of binutils 2.28 generates duplicate symbols
+      # TODO: remove for newer version of binutils 
+      "-no-use-gold-linker"
     ]
 
     ++ lib.optionals stdenv.isDarwin [

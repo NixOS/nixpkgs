@@ -9,7 +9,7 @@
   ./config/fonts/ghostscript.nix
   ./config/gnu.nix
   ./config/i18n.nix
-  ./config/krb5.nix
+  ./config/krb5/default.nix
   ./config/ldap.nix
   ./config/networking.nix
   ./config/no-x-libs.nix
@@ -35,11 +35,6 @@
   ./hardware/ksm.nix
   ./hardware/mcelog.nix
   ./hardware/network/b43.nix
-  ./hardware/network/intel-2100bg.nix
-  ./hardware/network/intel-2200bg.nix
-  ./hardware/network/intel-3945abg.nix
-  ./hardware/network/ralink.nix
-  ./hardware/network/rtl8192c.nix
   ./hardware/nitrokey.nix
   ./hardware/opengl.nix
   ./hardware/pcmcia.nix
@@ -73,6 +68,7 @@
   ./programs/adb.nix
   ./programs/atop.nix
   ./programs/bash/bash.nix
+  ./programs/bcc.nix
   ./programs/blcr.nix
   ./programs/browserpass.nix
   ./programs/cdemu.nix
@@ -102,6 +98,8 @@
   ./programs/spacefm.nix
   ./programs/ssh.nix
   ./programs/ssmtp.nix
+  ./programs/sysdig.nix
+  ./programs/sway.nix
   ./programs/thefuck.nix
   ./programs/tmux.nix
   ./programs/venus.nix
@@ -134,8 +132,6 @@
   ./security/rtkit.nix
   ./security/wrappers/default.nix
   ./security/sudo.nix
-  ./service-managers/docker.nix
-  ./service-managers/trivial.nix
   ./services/admin/salt/master.nix
   ./services/admin/salt/minion.nix
   ./services/amqp/activemq/default.nix
@@ -267,6 +263,7 @@
   ./services/mail/offlineimap.nix
   ./services/mail/opendkim.nix
   ./services/mail/opensmtpd.nix
+  ./services/mail/pfix-srsd.nix
   ./services/mail/postfix.nix
   ./services/mail/postsrsd.nix
   ./services/mail/postgrey.nix
@@ -300,6 +297,7 @@
   ./services/misc/fstrim.nix
   ./services/misc/gammu-smsd.nix
   ./services/misc/geoip-updater.nix
+  ./services/misc/gitea.nix
   #./services/misc/gitit.nix
   ./services/misc/gitlab.nix
   ./services/misc/gitolite.nix
@@ -330,6 +328,7 @@
   ./services/misc/parsoid.nix
   ./services/misc/phd.nix
   ./services/misc/plex.nix
+  ./services/misc/pykms.nix
   ./services/misc/radarr.nix
   ./services/misc/redmine.nix
   ./services/misc/rippled.nix
@@ -346,6 +345,7 @@
   ./services/misc/svnserve.nix
   ./services/misc/synergy.nix
   ./services/misc/taskserver
+  ./services/misc/tzupdate.nix
   ./services/misc/uhub.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/apcupsd.nix
@@ -372,6 +372,7 @@
   ./services/monitoring/prometheus/collectd-exporter.nix
   ./services/monitoring/prometheus/fritzbox-exporter.nix
   ./services/monitoring/prometheus/json-exporter.nix
+  ./services/monitoring/prometheus/minio-exporter.nix
   ./services/monitoring/prometheus/nginx-exporter.nix
   ./services/monitoring/prometheus/node-exporter.nix
   ./services/monitoring/prometheus/snmp-exporter.nix
@@ -619,6 +620,7 @@
   ./services/web-servers/phpfpm/default.nix
   ./services/web-servers/shellinabox.nix
   ./services/web-servers/tomcat.nix
+  ./services/web-servers/traefik.nix
   ./services/web-servers/uwsgi.nix
   ./services/web-servers/varnish/default.nix
   ./services/web-servers/winstone.nix
@@ -694,6 +696,7 @@
   ./tasks/filesystems/bcachefs.nix
   ./tasks/filesystems/btrfs.nix
   ./tasks/filesystems/cifs.nix
+  ./tasks/filesystems/ecryptfs.nix
   ./tasks/filesystems/exfat.nix
   ./tasks/filesystems/ext.nix
   ./tasks/filesystems/f2fs.nix

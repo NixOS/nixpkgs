@@ -2,22 +2,17 @@
 
 stdenv.mkDerivation rec {
   name = "et-${version}";
-  version = "2017-03-04";
+  version = "0.1";
 
   src = fetchFromGitHub {
     owner = "geistesk";
     repo = "et";
-    rev = "151e9b6bc0d2d4f45bda8ced740ee99d0f2012f6";
-    sha256 = "1a1jdnzmal05k506bbvzlwsj2f3kql6l5xc1gdabm79y6vaf4r7s";
+    rev = "${version}";
+    sha256 = "1d2hq6p1y2ynk0a3l35lwbm1fcl9kg7rpjcin8bx4xcdpbw42y94";
   };
 
   buildInputs = [ libnotify gdk_pixbuf ];
   nativeBuildInputs = [ pkgconfig ];
-
-  prePatch = ''
-    substituteInPlace Makefile \
-        --replace ' = gcc' ' ?= gcc'
-  '';
 
   installPhase = ''
     mkdir -p $out/bin
@@ -26,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Minimal libnotify-based (egg) timer for GNU/Linux";
+    description = "Minimal libnotify-based (egg) timer";
     homepage = https://github.com/geistesk/et;
     license = licenses.gpl3;
     platforms = platforms.unix;

@@ -14,8 +14,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig autoconf automake libtool which gtkdoc gettext gobjectIntrospection libxslt
+    autoconf automake libtool which gtkdoc gettext gobjectIntrospection libxslt
     systemd vala_0_23 glib
   ];
 

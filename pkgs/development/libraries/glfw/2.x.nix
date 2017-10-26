@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mesa, libX11 }:
+{ stdenv, fetchurl, mesa_glu, mesa_noglu, libX11, libXext }:
 
 stdenv.mkDerivation rec {
   name = "glfw-2.7.9";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "17c2msdcb7pn3p8f83805h1c216bmdqnbn9hgzr1j8wnwjcpxx6i";
   };
 
-  buildInputs = [ mesa libX11 ];
+  buildInputs = [ mesa_glu mesa_noglu libX11 libXext ];
 
   buildPhase = ''
     make x11

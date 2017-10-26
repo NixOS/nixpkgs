@@ -25,7 +25,7 @@ qtSubmodule {
     bison coreutils flex git gperf ninja pkgconfig python2 which
   ];
   doCheck = true;
-  outputs = [ "out" "dev" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
 
   enableParallelBuilding = true;
 

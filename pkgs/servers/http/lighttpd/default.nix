@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "0grsqh7pdqnjx6xicd96adsx84vryb7c4n21dnxfygm3xrfj55qw";
   };
 
-  buildInputs = [ pkgconfig pcre libxml2 zlib attr bzip2 which file openssl ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ pcre libxml2 zlib attr bzip2 which file openssl ]
              ++ stdenv.lib.optional enableMagnet lua5_1
              ++ stdenv.lib.optional enableMysql mysql.lib;
 

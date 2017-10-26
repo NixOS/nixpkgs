@@ -88,20 +88,9 @@ rec {
         # buildInputs should be built with the usual gcc-wrapper
         # And the same for propagatedBuildInputs.
         nativeDrv = stdenv.mkDerivation args;
-
-        # Temporary expression until the cross_renaming, to handle the
-        # case of pkgconfig given as buildInput, but to be used as
-        # nativeBuildInput.
-        hostAsNativeDrv = drv:
-            builtins.unsafeDiscardStringContext drv.nativeDrv.drvPath
-            == builtins.unsafeDiscardStringContext drv.crossDrv.drvPath;
-        buildInputsNotNull = stdenv.lib.filter
-            (drv: builtins.isAttrs drv && drv ? nativeDrv) buildInputs;
-        nativeInputsFromBuildInputs = stdenv.lib.filter hostAsNativeDrv buildInputsNotNull;
       in
         stdenv.mkDerivation (args // {
           nativeBuildInputs = nativeBuildInputs
-            ++ nativeInputsFromBuildInputs
             ++ stdenv.lib.optional selfNativeBuildInput nativeDrv
               # without proper `file` command, libtool sometimes fails
               # to recognize 64-bit DLLs

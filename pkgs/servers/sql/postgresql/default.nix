@@ -11,7 +11,7 @@ let
       inherit sha256;
     };
 
-    outputs = [ "out" "dev" "lib" "doc" "man" ];
+    outputs = [ "out" "lib" "doc" "man" ];
     setOutputFlags = false; # $out retains configureFlags :-/
 
     buildInputs =
@@ -51,10 +51,12 @@ let
 
     postInstall =
       ''
-        moveToOutput "bin/pg_config" "$dev"
-        moveToOutput "lib/pgxs" "$dev" # looks strange, but not deleting it
+        moveToOutput "lib/pgxs" "$out" # looks strange, but not deleting it
         moveToOutput "lib/*.a" "$out"
         moveToOutput "lib/libecpg*" "$out"
+
+        # Prevent a retained dependency on gcc-wrapper.
+        substituteInPlace "$out/lib/pgxs/src/Makefile.global" --replace ${stdenv.cc}/bin/ld ld
 
         # Remove static libraries in case dynamic are available.
         for i in $out/lib/*.a; do
@@ -83,7 +85,6 @@ let
       license = licenses.postgresql;
       maintainers = [ maintainers.ocharles ];
       platforms = platforms.unix;
-      hydraPlatforms = platforms.linux;
     };
   });
 
@@ -111,6 +112,12 @@ in {
     version = "9.6.5";
     psqlSchema = "9.6";
     sha256 = "0k3ls2x182jz6djjiqj9kycddabdl2gk1y1ajq1vipnxwfki5nh6";
+  };
+
+  postgresql100 = common {
+    version = "10.0";
+    psqlSchema = "10.0";
+    sha256 = "1lbzwpmdxmk5bh0ix0rn72qbd52dq5cb55nzajscb0bvwa95abvi";
   };
 
 }

@@ -21,11 +21,11 @@ assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
 
 stdenv.mkDerivation rec {
-  name = "curl-7.55.1";
+  name = "curl-7.56.0";
 
   src = fetchurl {
     url = "http://curl.haxx.se/download/${name}.tar.bz2";
-    sha256 = "1yvcn7jbh99gsqhc040nky0h15a1cfh8yic6k0a1zhdhscpakcg5";
+    sha256 = "1pvr2bqfhk46bzq2x2hskmnq3wc8qxlps7apm9q1qiixb9ra8q6y";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -68,8 +68,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
     ++ stdenv.lib.optional gssSupport "--with-gssapi=${gss}";
 
-  CXX = "g++";
-  CXXCPP = "g++ -E";
+  CXX = "c++";
+  CXXCPP = "c++ -E";
 
   postInstall = ''
     moveToOutput bin/curl-config "$dev"

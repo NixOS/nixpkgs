@@ -51,8 +51,9 @@ stdenv.mkDerivation rec {
     "-lswscale"
   ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig file gettext wxGTK30 expat alsaLib
+    file gettext wxGTK30 expat alsaLib
     libsndfile soxr libid3tag libjack2 lv2 lilv serd sord sratom suil gtk2
     ffmpeg libmad lame libvorbis flac soundtouch
     autoconf automake libtool # for the preConfigure phase

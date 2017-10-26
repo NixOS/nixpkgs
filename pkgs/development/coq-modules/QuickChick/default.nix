@@ -19,6 +19,7 @@ let param =
       rev = "366ee3f8e599b5cab438a63a09713f44ac544c5a";
       sha256 = "06kwnrfndnr6w8bmaa2s0i0rkqyv081zj55z3vcyn0wr6x6mlsz9";
     };
+
   }."${coq.coq-version}"
 ; in
 

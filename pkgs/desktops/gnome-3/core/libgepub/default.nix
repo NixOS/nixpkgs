@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  buildInputs = [ autoconf pkgconfig glib gobjectIntrospection webkitgtk libsoup
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf glib gobjectIntrospection webkitgtk libsoup
     libxml2 libarchive ];
 
   meta = with stdenv.lib; {

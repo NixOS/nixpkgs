@@ -6,9 +6,9 @@
 let
   plexPass = throw "Plex pass has been removed at upstream's request; please unset nixpkgs.config.plex.pass";
   plexpkg = if enablePlexPass then plexPass else {
-    version = "1.9.1.4272";
-    vsnHash = "b207937f1";
-    sha256 = "e7e313700d994e9c406706cf5dbaab6974a998b5e7f556a014e66eaa4f9cf9c8";
+    version = "1.9.5.4339";
+    vsnHash = "46276db8d";
+    sha256 = "09zc2wfpvan2j9h88x1f57lpfiqvml2m5m2azhphi4hb31sd3hch";
   };
 
 in stdenv.mkDerivation rec {

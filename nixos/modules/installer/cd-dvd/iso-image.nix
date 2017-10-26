@@ -361,6 +361,9 @@ in
         { source = config.isoImage.splashImage;
           target = "/isolinux/background.png";
         }
+        { source = pkgs.writeText "version" config.system.nixosVersion;
+          target = "/version.txt";
+        }
       ] ++ optionals config.isoImage.makeEfiBootable [
         { source = efiImg;
           target = "/boot/efi.img";

@@ -9,8 +9,9 @@ stdenv.mkDerivation {
     sha256 = "1sdq3vvwkq4bkyrvh0p884d66gaddz8hlab3m798ji9ixbak2z1x";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig bzip2 curl expat fribidi libunibreak
+    bzip2 curl expat fribidi libunibreak
     qt4 sqlite zlib
   ];
 

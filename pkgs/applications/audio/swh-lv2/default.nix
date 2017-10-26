@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
     sed -e "s#PREFIX = /usr/local#PREFIX = $out#" -i Makefile
   '';
 
-  buildInputs = [ fftwSinglePrec lv2 pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ fftwSinglePrec lv2 ];
 
   installPhase = "make install-system";
 

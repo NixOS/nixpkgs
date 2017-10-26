@@ -5,15 +5,15 @@
 # script that sets up the right environment variables so that the
 # compiler and the linker just "work".
 
-{ name ? "", stdenv, nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
-, cc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? stdenv.shell
+{ name ? "", stdenvNoCC, nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
+, cc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? stdenvNoCC.shell
 , zlib ? null, extraPackages ? [], extraBuildCommands ? ""
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
 , useMacosReexportHack ? false
 }:
 
-with stdenv.lib;
+with stdenvNoCC.lib;
 
 assert nativeTools -> nativePrefix != "";
 assert !nativeTools ->
@@ -25,6 +25,7 @@ assert (noLibc || nativeLibc) == (libc == null);
 assert cc.langVhdl or false -> zlib != null;
 
 let
+  stdenv = stdenvNoCC;
   inherit (stdenv) hostPlatform targetPlatform;
 
   # Prefix for binaries. Customarily ends with a dash separator.

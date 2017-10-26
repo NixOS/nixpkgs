@@ -5,6 +5,8 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
+  outputs = [ "out" "dev" ];
+
   buildInputs = with gnome3; [
     dbus libgcrypt pam python gtk3 gconf libgnome_keyring
     pango gcr gdk_pixbuf atk p11_kit

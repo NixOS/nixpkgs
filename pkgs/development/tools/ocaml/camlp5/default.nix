@@ -6,11 +6,11 @@ in
 
 stdenv.mkDerivation {
 
-  name = "camlp5${if transitional then "_transitional" else ""}-7.01";
+  name = "camlp5${if transitional then "_transitional" else ""}-7.02";
 
   src = fetchzip {
-    url = https://github.com/camlp5/camlp5/archive/rel701.tar.gz;
-    sha256 = "1gxhj7y30f1hbcqnqgg80wz0ymbslsfh09kl2kiackp49fywl606";
+    url = https://github.com/camlp5/camlp5/archive/rel702.tar.gz;
+    sha256 = "1m2d55zrgllidhgslvzgmr27f56qzdahz2sv56bvjs3bg7grmhnc";
   };
 
   buildInputs = [ ocaml ];

@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "17ajlwgvyyrap8z7f16zcs59pksvncwbmd3mzf98wj7zqgczjaja";
   };
 
-  buildInputs = [ pkgconfig udev ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ udev ];
 
   meta = with stdenv.lib; {
     description = "Cross-platform shared library for serial port access";

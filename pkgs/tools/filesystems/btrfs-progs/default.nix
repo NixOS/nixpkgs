@@ -2,18 +2,19 @@
 , asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, libxslt
 }:
 
-let version = "4.8.2"; in
+let version = "4.13.1"; in
 
 stdenv.mkDerivation rec {
   name = "btrfs-progs-${version}";
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/people/kdave/btrfs-progs/btrfs-progs-v${version}.tar.xz";
-    sha256 = "0pswcfmdnfc586770h74abp67gn2xv8fd46vxlimnmn837sj7h41";
+    sha256 = "1clavvrlkswgicqsm2yfsxqw04lsn8dra0db84jqm6j2apz80kz0";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig attr acl zlib libuuid e2fsprogs lzo
+    attr acl zlib libuuid e2fsprogs lzo
     asciidoc xmlto docbook_xml_dtd_45 docbook_xsl libxslt
   ];
 

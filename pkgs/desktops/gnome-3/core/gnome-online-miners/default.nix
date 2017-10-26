@@ -4,7 +4,8 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  buildInputs = [ pkgconfig glib gnome3.libgdata libxml2 libsoup gmp openssl
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib gnome3.libgdata libxml2 libsoup gmp openssl
                   gnome3.grilo gnome3.libzapojit gnome3.grilo-plugins
                   gnome3.gnome_online_accounts makeWrapper gnome3.libmediaart
                   gnome3.tracker gnome3.gfbgraph json_glib gnome3.rest ];

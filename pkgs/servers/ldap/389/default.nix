@@ -12,8 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "1r1n44xfvy51r4r1180dfmjziyj3pqxwmnv6rjvvvjjm87fslmdd";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig perl pam nspr nss openldap db cyrus_sasl svrcore icu
+    perl pam nspr nss openldap db cyrus_sasl svrcore icu
     net_snmp kerberos pcre
   ] ++ (with perlPackages; [ MozillaLdap NetAddrIP DBFile ]);
 

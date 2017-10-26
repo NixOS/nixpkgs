@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
       sha256 = "10vspwsgr8pwf3qp2bviw6b2l8prgdiswgv7qiqiyr0h1mmk487y";
     };
     patches = [ ./libmpd-11.8.17-remove-strndup.patch ];
-    buildInputs = [ pkgconfig glib ];
+
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ glib ];
   };
 
   src = fetchurl {
@@ -22,8 +24,9 @@ stdenv.mkDerivation rec {
     sha256 = "0b3bnxf98i5lhjyljvgxgx9xmb6p46cn3a9cccrng14nagri9556";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    libtool intltool pkgconfig glib gtk2 curl mpd_clientlib libsoup
+    libtool intltool glib gtk2 curl mpd_clientlib libsoup
     libunique libmpd gob2 vala_0_23 libSM libICE sqlite hicolor_icon_theme
     wrapGAppsHook
   ];

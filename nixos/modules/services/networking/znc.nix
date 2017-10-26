@@ -212,6 +212,14 @@ in
         '';
       };
 
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to open ports in the firewall for ZNC.
+        '';
+      };
+
       zncConf = mkOption {
         default = "";
         example = "See: http://wiki.znc.in/Configuration";
@@ -276,14 +284,6 @@ in
           '';
         };
 
-        openFirewall = mkOption {
-          type = types.bool;
-          default = false;
-          description = ''
-            Whether to open ports in the firewall for ZNC.
-          '';
-        };
-
         passBlock = mkOption {
           example = defaultPassBlock;
           type = types.string;
@@ -329,7 +329,7 @@ in
       };
 
       mutable = mkOption {
-        default = false;
+        default = true;
         type = types.bool;
         description = ''
           Indicates whether to allow the contents of the `dataDir` directory to be changed
@@ -359,7 +359,7 @@ in
   config = mkIf cfg.enable {
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ cfg.port ];
+      allowedTCPPorts = [ cfg.confOptions.port ];
     };
 
     systemd.services.znc = {

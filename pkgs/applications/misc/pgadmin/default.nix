@@ -1,23 +1,32 @@
-{ stdenv, fetchurl, postgresql, wxGTK, libxml2, libxslt, openssl, zlib, makeDesktopItem }:
+{ stdenv, fetchurl, fetchpatch, postgresql, wxGTK, libxml2, libxslt, openssl, zlib, makeDesktopItem }:
 
 stdenv.mkDerivation rec {
   name = "pgadmin3-${version}";
-  version = "1.22.1";
+  version = "1.22.2";
 
   src = fetchurl {
-    url = "http://ftp.postgresql.org/pub/pgadmin3/release/v${version}/src/pgadmin3-${version}.tar.gz";
-    sha256 = "0gkqpj8cg6jd6yhssrij1cbh960rg9fkjbdzcpryi6axwv0ag7ki";
+    url = "http://ftp.postgresql.org/pub/pgadmin/pgadmin3/v${version}/src/pgadmin3-${version}.tar.gz";
+    sha256 = "1b24b356h8z188nci30xrb57l7kxjqjnh6dq9ws638phsgiv0s4v";
   };
 
   enableParallelBuilding = true;
 
   buildInputs = [ postgresql wxGTK openssl zlib ];
 
+  patches = [
+    (fetchpatch {
+      sha256 = "09hp7s3zjz80rpx2j3xyznwswwfxzi70z7c05dzrdk74mqjjpkfk";
+      name = "843344.patch";
+      url = "https://sources.debian.net/data/main/p/pgadmin3/1.22.2-1/debian/patches/843344";
+    })
+  ];
+
   preConfigure = ''
     substituteInPlace pgadmin/ver_svn.sh --replace "bin/bash" "$shell"
   '';
 
   configureFlags = [
+    "--with-pgsql=${postgresql}"
     "--with-libxml2=${libxml2.dev}"
     "--with-libxslt=${libxslt.dev}"
   ];

@@ -20,7 +20,8 @@ stdenv.mkDerivation {
         [ ./gcolor2-amd64.patch ] else
         [ ];
 
-buildInputs = [ gtk2 perl perlXMLParser pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+buildInputs = [ gtk2 perl perlXMLParser ];
 
   meta = {
     description = "Simple GTK+2 color selector";

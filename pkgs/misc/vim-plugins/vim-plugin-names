@@ -161,6 +161,7 @@
 "github:zah/nim.vim"
 "github:zchee/deoplete-go"
 "github:zchee/deoplete-jedi"
+"github:zig-lang/zig.vim"
 "goyo"
 "gruvbox"
 "matchit.zip"

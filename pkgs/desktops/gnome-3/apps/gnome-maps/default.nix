@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  buildInputs = [ pkgconfig intltool gobjectIntrospection wrapGAppsHook
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool gobjectIntrospection wrapGAppsHook
                   gtk3 geoclue2 gnome3.gjs gnome3.libgee folks gfbgraph
                   gnome3.geocode_glib libchamplain file libsoup
                   gdk_pixbuf librsvg libgweather autoreconfHook

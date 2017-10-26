@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0jl4iny2dqpcgi3sgxzpgnbw0752i8ay3rscp2cgdjlp79ql5gil";
   };
 
-  buildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/GnomeVideoEffects;

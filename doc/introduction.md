@@ -48,6 +48,4 @@ The binaries are made available via a [binary cache](https://cache.nixos.org).
 
 The current Nix expressions of the channels are available in the
 [`nixpkgs-channels`](https://github.com/NixOS/nixpkgs-channels) repository,
-which has branches corresponding to the available channels. There is also the
-[Nixpkgs Monitor](http://monitor.nixos.org) which keeps track of updates
-and security vulnerabilities.
+which has branches corresponding to the available channels.

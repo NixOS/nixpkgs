@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-systemd" "--with-systemdsystemunitdir=$(out)/etc/systemd/system" ];
 
-  buildInputs = [ autoreconfHook systemd fcgi pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ systemd fcgi ];
 
   # systemd 230 no longer has libsystemd-daemon as a separate entity from libsystemd
   postPatch = ''

@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "18969v870737jg1q0l3d05pb9mxsrcpdi0mnyz94rwkspszvxxqi";
   };
 
-  buildInputs = [ cmake gtk3 vala pkgconfig gnome3.libgee ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake gtk3 vala gnome3.libgee ];
 
   meta = with stdenv.lib; {
       description = "A fast dmenu-like gtk3 application launcher";

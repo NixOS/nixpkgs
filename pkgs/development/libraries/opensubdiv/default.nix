@@ -1,17 +1,17 @@
-{ lib, stdenv, stdenv_gcc5, fetchurl, fetchFromGitHub, cmake, pkgconfig, xorg, mesa_glu
+{ lib, stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig, xorg, mesa_glu
 , mesa_noglu, glew, ocl-icd, python3
 , cudaSupport ? false, cudatoolkit
 }:
 
-(if cudaSupport then stdenv_gcc5 else stdenv).mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "opensubdiv-${version}";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitHub {
     owner = "PixarAnimationStudios";
     repo = "OpenSubdiv";
     rev = "v${lib.replaceChars ["."] ["_"] version}";
-    sha256 = "0wk12n1s8za3sz8d6bmfm3rfjyx20j48gy1xp57dvbnjvlvzqy3w";
+    sha256 = "0wpjwfik4q9s4r30hndhzmfyzv968mmg5lgng0123l07mn47d2yl";
   };
 
   outputs = [ "out" "dev" ];
@@ -28,9 +28,9 @@
     [ "-DNO_TUTORIALS=1"
       "-DNO_REGRESSION=1"
       "-DNO_EXAMPLES=1"
-      "-DGLEW_INCLUDE_DIR=${glew}/include"
-      "-DGLEW_LIBRARY=${glew}/lib"
-    ];
+      "-DGLEW_INCLUDE_DIR=${glew.dev}/include"
+      "-DGLEW_LIBRARY=${glew.dev}/lib"
+    ] ++ lib.optional cudaSupport "-DOSD_CUDA_NVCC_FLAGS=--gpu-architecture=compute_30";
 
   enableParallelBuilding = true;
 

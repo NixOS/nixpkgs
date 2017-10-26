@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0d9rankzgmnx5423pyfkbxy0qxw3ck2vrdjdnlhddy15wkk87i9f";
   };
 
-  buildInputs = [ makeWrapper gtk2 libsoup pkgconfig webkit gsettings_desktop_schemas ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ makeWrapper gtk2 libsoup webkit gsettings_desktop_schemas ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 

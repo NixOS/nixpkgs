@@ -108,6 +108,7 @@ in stdenv.mkDerivation rec {
     (enableFeature dvdnavSupport "dvdnav")
     (enableFeature vaapiSupport "vaapi")
     (enableFeature waylandSupport "wayland")
+    (enableFeature stdenv.isLinux "dvbin")
   ];
 
   configurePhase = ''

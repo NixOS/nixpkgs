@@ -1,5 +1,6 @@
 { stdenv, fetchurl, pkgconfig, gnutls, jansson, liburcu, lmdb, libcap_ng, libidn
 , systemd, nettle, libedit, zlib, libiconv, libintlOrEmpty
+, fetchpatch
 }:
 
 let inherit (stdenv.lib) optional optionals; in
@@ -7,12 +8,26 @@ let inherit (stdenv.lib) optional optionals; in
 # Note: ATM only the libraries have been tested in nixpkgs.
 stdenv.mkDerivation rec {
   name = "knot-dns-${version}";
-  version = "2.5.3";
+  version = "2.6.0";
 
   src = fetchurl {
     url = "http://secure.nic.cz/files/knot-dns/knot-${version}.tar.xz";
-    sha256 = "d78ae231a68ace264f5738c8e57481923bcad7413f3f440c06fa6cc0aded9d8e";
+    sha256 = "68e04961d0bf6ba193cb7ec658b295c4ff6e60b3754d64bcd77ebdcee0f283fd";
   };
+
+  patches = [
+    # remove both for >= 2.6.1
+    (fetchpatch {
+      name = "kdig-tls.patch";
+      url = "https://gitlab.labs.nic.cz/knot/knot-dns/commit/b72d5cd032795.diff";
+      sha256 = "0ig31rp82j49jh8n3s0dcf5abhh35mcp2k2wii7bh0c60ngb29k6";
+    })
+    (fetchpatch {
+      name = "kdig-tls-sni.patch";
+      url = "https://gitlab.labs.nic.cz/knot/knot-dns/commit/2e94ccee671ec70e.diff";
+      sha256 = "0psl6650v7g240i8w196v7zxy6j11d0aa6hm11b7vnaimjshgibv";
+    })
+  ];
 
   outputs = [ "bin" "out" "dev" ];
 

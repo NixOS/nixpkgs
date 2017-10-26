@@ -31,6 +31,7 @@ let
       pkgs.nano
       pkgs.ncurses
       pkgs.netcat
+      pkgs.nix-info
       config.programs.ssh.package
       pkgs.perl
       pkgs.procps

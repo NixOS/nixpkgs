@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ pkgconfig automake autoconf gtk3 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ automake autoconf gtk3 ];
 
   preConfigure = "./autogen.sh";
 

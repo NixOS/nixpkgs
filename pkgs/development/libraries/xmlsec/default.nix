@@ -14,7 +14,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [ makeWrapper libxml2 gnutls libxslt pkgconfig libgcrypt libtool openssl nss ];
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
+
+  buildInputs = [ libxml2 gnutls libxslt libgcrypt libtool openssl nss ];
 
   enableParallelBuilding = true;
   doCheck = true;

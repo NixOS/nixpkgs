@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1vxdsiky3492zlyrym02sdwf09y19rl2z5h5iin7qm0wizw5wvm1";
   };
 
-  buildInputs = [ intltool gobjectIntrospection pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool gobjectIntrospection ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

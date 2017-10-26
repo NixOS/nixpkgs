@@ -92,7 +92,7 @@ let
             -drive index=0,id=drive1,file=$NIX_DISK_IMAGE,if=${cfg.qemu.diskInterface},cache=writeback,werror=report \
             -kernel ${config.system.build.toplevel}/kernel \
             -initrd ${config.system.build.toplevel}/initrd \
-            -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo} ${kernelConsole} $QEMU_KERNEL_PARAMS" \
+            -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${kernelConsole} $QEMU_KERNEL_PARAMS" \
           ''} \
           $extraDisks \
           ${qemuGraphics} \
@@ -102,15 +102,7 @@ let
     '';
 
 
-  regInfo = pkgs.runCommand "reginfo"
-    { exportReferencesGraph =
-        map (x: [("closure-" + baseNameOf x) x]) config.virtualisation.pathsInNixDB;
-      buildInputs = [ pkgs.perl ];
-      preferLocalBuild = true;
-    }
-    ''
-      printRegistration=1 perl ${pkgs.pathsFromGraph} closure-* > $out
-    '';
+  regInfo = pkgs.closureInfo { rootPaths = config.virtualisation.pathsInNixDB; };
 
 
   # Generate a hard disk image containing a /boot partition and GRUB

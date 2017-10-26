@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   hsEnv = haskellPackages.ghcWithPackages (hsPkgs : [hsPkgs.language-c]);
-  buildInputs = [ pkgconfig hsEnv pure ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ hsEnv pure ];
   makeFlags = "libdir=$(out)/lib prefix=$(out)/";
 
   meta = {

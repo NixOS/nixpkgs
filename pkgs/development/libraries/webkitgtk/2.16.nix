@@ -83,14 +83,14 @@ stdenv.mkDerivation rec {
                      + (optionalString stdenv.isDarwin " -lintl");
 
   nativeBuildInputs = [
-    cmake perl python2 ruby bison gperf sqlite
+    cmake perl python2 ruby bison gperf
     pkgconfig gettext gobjectIntrospection
   ];
 
   buildInputs = libintlOrEmpty ++ [
     gtk2 libwebp enchant libnotify gnutls pcre nettle libidn
     libxml2 libsecret libxslt harfbuzz libpthreadstubs libtasn1 p11_kit
-    gst-plugins-base libxkbcommon epoxy at_spi2_core
+    sqlite gst-plugins-base libxkbcommon epoxy at_spi2_core
   ] ++ optional enableGeoLocation geoclue2
     ++ (with xlibs; [ libXdmcp libXt libXtst ])
     ++ optionals stdenv.isDarwin [ libedit readline mesa ]

@@ -8,7 +8,8 @@ in stdenv.mkDerivation {
     sha256 = "0slpsnzzzdkf5d9za7j4kr15jr4mn1k9klfsxibzy47b2bx1vkar";
   };
 
-  buildInputs = [ pkgconfig nix git ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ nix git ];
 
   NIX_CFLAGS_COMPILE = "-std=c++1y";
 

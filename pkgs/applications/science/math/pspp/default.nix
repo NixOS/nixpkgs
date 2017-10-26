@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1r8smr5057993h90nx0mdnff8nxw9x546zzh6qpy4h3xblp1la5s";
   };
 
-  buildInputs = [ libxml2 readline zlib perl cairo gtk3 gsl pkgconfig
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libxml2 readline zlib perl cairo gtk3 gsl
     gtksourceview pango gettext ];
 
   doCheck = false;

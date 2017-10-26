@@ -2,7 +2,7 @@
 , zlib, libpng
 , enableGSL ? true, gsl
 , enableGhostScript ? true, ghostscript
-, enableMuPDF ? true, jbig2dec, openjpeg, freetype, harfbuzz, mupdf
+, enableMuPDF ? true, mupdf
 , enableJPEG2K ? true, jasper
 , enableDJVU ? true, djvulibre
 , enableGOCR ? false, gocr # Disabled by default due to crashes
@@ -51,7 +51,19 @@ stdenv.mkDerivation rec {
          url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=2c4e5867ee699b1081527bc6c6ea0e99a35a5c27";
          sha256 = "14k7x47ifx82sds1c06ibzbmcparfg80719jhgwjk6w1vkh4r693";
         })
+
+        (fetchpatch {
+          name = "mupdf-1.10a-shared_libs-1.patch";
+          url = "https://ftp.osuosl.org/pub/blfs/conglomeration/mupdf/mupdf-1.10a-shared_libs-1.patch";
+          sha256 = "0kg4vahp7hlyyj5hl18brk8s8xcbqrx19pqjzkfq6ha8mqa3k4ab";
+        })
       ];
+
+      # Override this since the jpeg directory was renamed libjpeg in mupdf 1.11
+      preConfigure = ''
+        # Don't remove mujs because upstream version is incompatible
+        rm -rf thirdparty/{curl,freetype,glfw,harfbuzz,jbig2dec,jpeg,openjpeg,zlib}
+      '';
     });
     leptonica_modded = leptonica.overrideAttrs (attrs: {
       prePatch = ''
@@ -75,8 +87,8 @@ stdenv.mkDerivation rec {
     [ zlib libpng ] ++
     optional enableGSL gsl ++
     optional enableGhostScript ghostscript ++
-    optionals enableMuPDF [ jbig2dec openjpeg freetype harfbuzz mupdf_modded ] ++
-    optionals enableJPEG2K [ jasper ] ++
+    optional enableMuPDF mupdf_modded ++
+    optional enableJPEG2K jasper ++
     optional enableDJVU djvulibre ++
     optional enableGOCR gocr ++
     optionals enableTesseract [ leptonica_modded tesseract_modded ];

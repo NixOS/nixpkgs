@@ -1,6 +1,6 @@
 { stdenv, fetchurl, which, ocsigen_server, ocsigen_deriving, ocaml,
-  js_of_ocaml, ocaml_react, lwt, calendar, cryptokit, tyxml,
-  ipaddr, ocamlnet, ocaml_ssl, ocaml_pcre, ocaml_optcomp,
+  js_of_ocaml, react, lwt, calendar, cryptokit, tyxml,
+  ipaddr, ocamlnet, ssl, ocaml_pcre, ocaml_optcomp,
   reactivedata, opam, ppx_tools, ppx_deriving, findlib
 , ocamlbuild
 }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec
 
   propagatedBuildInputs = [ lwt reactivedata tyxml ipaddr ocsigen_server ppx_deriving
                             ocsigen_deriving js_of_ocaml
-                            calendar cryptokit ocamlnet ocaml_react ocaml_ssl ocaml_pcre ];
+                            calendar cryptokit ocamlnet react ssl ocaml_pcre ];
 
   installPhase = "opam-installer -i --prefix=$out --libdir=$OCAMLFIND_DESTDIR";
 

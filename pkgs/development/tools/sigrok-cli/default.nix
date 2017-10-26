@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "072ylscp0ppgii1k5j07hhv7dfmni4vyhxnsvxmgqgfyq9ldjsan";
   };
 
-  buildInputs = [ pkgconfig glib libsigrok libsigrokdecode ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib libsigrok libsigrokdecode ];
 
   meta = with stdenv.lib; {
     description = "Command-line frontend for the sigrok signal analysis software suite";

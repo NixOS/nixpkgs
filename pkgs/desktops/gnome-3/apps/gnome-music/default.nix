@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
-  buildInputs = [ pkgconfig gtk3 glib intltool itstool gnome3.libmediaart
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk3 glib intltool itstool gnome3.libmediaart
                   gdk_pixbuf gnome3.defaultIconTheme librsvg python3Packages.python
                   gnome3.grilo gnome3.grilo-plugins gnome3.totem-pl-parser libxml2 libnotify
                   python3Packages.pycairo python3Packages.dbus-python python3Packages.requests

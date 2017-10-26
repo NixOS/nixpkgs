@@ -42,12 +42,11 @@ in rec {
     name = "nixos-${nixos.channel.version}";
     meta = {
       description = "Release-critical builds for the NixOS channel";
-      maintainers = [ pkgs.lib.maintainers.eelco ];
+      maintainers = with pkgs.lib.maintainers; [ eelco fpletz ];
     };
     constituents =
       let
-        all = x: map (system: x.${system})
-          (supportedSystems ++ limitedSupportedSystems);
+        all = x: map (system: x.${system}) supportedSystems;
       in [
         nixos.channel
         (all nixos.dummy)
@@ -61,7 +60,7 @@ in rec {
         nixos.tests.chromium
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
-        nixos.tests.gnome3.x86_64-linux # FIXME: i686-linux
+        (all nixos.tests.gnome3)
         nixos.tests.installer.zfsroot.x86_64-linux # ZFS is 64bit only
         (all nixos.tests.installer.lvm)
         (all nixos.tests.installer.luksroot)
@@ -80,9 +79,8 @@ in rec {
         (all nixos.tests.boot.uefiCdrom)
         (all nixos.tests.boot.uefiUsb)
         (all nixos.tests.boot-stage1)
-        nixos.tests.hibernate.x86_64-linux # i686 is flaky, see #23107
+        (all nixos.tests.hibernate)
         nixos.tests.docker
-        nixos.tests.docker-edge
         (all nixos.tests.ecryptfs)
         (all nixos.tests.env)
         (all nixos.tests.ipv6)
@@ -93,7 +91,7 @@ in rec {
         (all nixos.tests.keymap.dvp)
         (all nixos.tests.keymap.neo)
         (all nixos.tests.keymap.qwertz)
-        nixos.tests.plasma5.x86_64-linux # avoid big build on i686
+        (all nixos.tests.plasma5)
         #(all nixos.tests.lightdm)
         (all nixos.tests.login)
         (all nixos.tests.misc)

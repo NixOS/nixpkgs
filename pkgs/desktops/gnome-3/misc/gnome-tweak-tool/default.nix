@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=/" ];
 
-  buildInputs = [ pkgconfig gtk3 glib intltool itstool libxml2
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk3 glib intltool itstool libxml2
                   gnome3.gsettings_desktop_schemas file
                   gdk_pixbuf gnome3.defaultIconTheme librsvg
                   libnotify gnome3.gnome_shell python2Packages.pygobject3

@@ -18,11 +18,11 @@ let
     };
   };
 
-  version = "9.5.5";
+  version = "10.0.2";
 
   gitlabDeb = fetchurl {
     url = "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/jessie/gitlab-ce_${version}-ce.0_amd64.deb/download";
-    sha256 = "1wrwxksfqkha7qm2hbgs0z7lmgisdvdqa4wcll0qfzq1c3d286zz";
+    sha256 = "0jsqjarvjzbxv1yiddzp5xwsqqrq5cvam0xn749p1vzqhcp8pahc";
   };
 
 in
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     owner = "gitlabhq";
     repo = "gitlabhq";
     rev = "v${version}";
-    sha256 = "0qi21lkq69ah977vssbkllb7q5jwb0vf2ws5s3bzpvp2mj3iab5m";
+    sha256 = "1602d6nkb41gg80n6p0wqxrjsn79s0z3817461d8dw2ha2dmbl34";
   };
 
   patches = [
@@ -84,12 +84,14 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    rm -r tmp
     mkdir -p $out/share
     cp -r . $out/share/gitlab
     rm -rf $out/share/gitlab/log
     ln -sf /run/gitlab/log $out/share/gitlab/log
     ln -sf /run/gitlab/uploads $out/share/gitlab/public/uploads
     ln -sf /run/gitlab/config $out/share/gitlab/config
+    ln -sf /run/gitlab/tmp $out/share/gitlab/tmp
 
     # rake tasks to mitigate CVE-2017-0882
     # see https://about.gitlab.com/2017/03/20/gitlab-8-dot-17-dot-4-security-release/

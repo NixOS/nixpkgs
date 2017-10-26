@@ -18,7 +18,7 @@ buildRustPackage rec {
 
   doCheck = false;
 
-  depsSha256 = "1qzzpnkyw1bn5fnj06c80f7985v1q0rqcphrrrkpbi33lg5mzgbv";
+  cargoSha256 = "0r69vghjd6b30v0qjsipyv56n92iwvyxmllrnwjzjf5pzhhjl7sy";
 
   meta = with stdenv.lib; {
     description = "A distributed version control system";

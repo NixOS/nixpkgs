@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "0craa24pw7b70sh253arv9bg9sy4q3mhsjwfss3bnv5nf0xwnncw";
   };
 
-  buildInputs = [ gtk2 libhangul pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 libhangul ];
 
   meta = with stdenv.lib; {
     description = "The Easy Hangul XIM";

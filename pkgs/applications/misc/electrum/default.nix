@@ -13,6 +13,7 @@ python2Packages.buildPythonApplication rec {
     dns
     ecdsa
     jsonrpclib
+    matplotlib
     pbkdf2
     protobuf
     pyaes
@@ -30,7 +31,6 @@ python2Packages.buildPythonApplication rec {
     # TODO plugins
     # amodem
     # btchip
-    # matplotlib
   ];
 
   preBuild = ''

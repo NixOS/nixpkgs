@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "06zqn8z6a0hfsx3s1kzqvqzb73afgcl6z5r062sxv7kv570fvffr";
   };
 
-  buildInputs = [ pkgconfig zathura_core gtk girara openssl mupdf libjpeg jbig2dec openjpeg ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ zathura_core gtk girara openssl mupdf libjpeg jbig2dec openjpeg ];
 
   makeFlags = [ "PREFIX=$(out)" "PLUGINDIR=$(out)/lib" ];
 

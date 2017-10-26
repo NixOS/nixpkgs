@@ -91,8 +91,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ryy946h7ddmxh866hfszqfyff1qy4svpsk7w3739v75f4awr9li";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig
     gtk2
     libxml2
     libtool

@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "GRL_PLUGINS_DIR=$(out)/lib/grilo-${major}" ];
 
-  buildInputs = [ pkgconfig gnome3.grilo libxml2 gupnp gssdp gnome3.libgdata
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gnome3.grilo libxml2 gupnp gssdp gnome3.libgdata
                   lua5 liboauth gupnp_av sqlite gnome3.gnome_online_accounts
                   gnome3.totem-pl-parser gnome3.rest gmime json_glib
                   avahi gnome3.libmediaart tracker intltool itstool ];

@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0x8s7vpb7rw5x37yjzy1f98m4f2csdg89libb74fm36gn8ly0hli";
   };
 
-  buildInputs = [ pkgconfig unzip portaudio wxGTK ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ unzip portaudio wxGTK ];
 
   # TODO:
   # Uhm, seems like espeakedit still wants espeak-data/ in $HOME, even thought

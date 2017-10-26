@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   prePatch =let
       debian = fetchurl {
-        url = http://snapshot.debian.org/archive/debian-debug/20170602T031313Z/pool/main/t/tiff/tiff_4.0.8-2.debian.tar.xz;
-        sha256 = "1ssjh6vn9rvl2jwm34i3p89g8lj0c7fj3cziva9rj4vasfps58ng";
+        url = http://snapshot.debian.org/archive/debian-debug/20170928T093547Z/pool/main/t/tiff/tiff_4.0.8-5.debian.tar.xz;
+        sha256 = "11qkiliw04dmdvdd5z2lv5hh2fiwa29qbhkxvlvmb4yslnmyywha";
       };
     in ''
       tar xf '${debian}'

@@ -2,18 +2,18 @@
 , freeglut, freealut, mesa, libICE, libjpeg, openal, openscenegraph, plib
 , libSM, libunwind, libX11, xproto, libXext, xextproto, libXi, inputproto
 , libXmu, libXt, simgear, zlib, boost, cmake, libpng, udev, fltk13, apr
-, makeDesktopItem, qtbase
+, makeDesktopItem, qtbase, qtdeclarative, glew
 }:
 
 let
-  version = "2016.4.4";
-  shortVersion = "2016.4";
+  version = "2017.3.1";
+  shortVersion = "2017.3";
   data = stdenv.mkDerivation rec {
     name = "flightgear-base-${version}";
 
     src = fetchurl {
       url = "mirror://sourceforge/flightgear/release-${shortVersion}/FlightGear-${version}-data.tar.bz2";
-      sha256 = "0s4nlkwi9jfc408agsl0w5xl3vajrvplc66k3nwg92wsr614pz9x";
+      sha256 = "166q0fsbp17lx1l1n6i8cfk3d1i79pasz1liya09z6m2i1pb026z";
     };
 
     phases = [ "installPhase" ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/flightgear/release-${shortVersion}/${name}.tar.bz2";
-    sha256 = "1z7s9m2g85g8q9zxawhpal84rq2jin1ppchshbwi460gwk5r46fm";
+    sha256 = "1kccf91vmxnzyki6grx09s10dvr4j6qrz34ikj7jn81g5scisbkg";
   };
 
   # Of all the files in the source and data archives, there doesn't seem to be
@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
     freeglut freealut mesa libICE libjpeg openal openscenegraph plib
     libSM libunwind libX11 xproto libXext xextproto libXi inputproto
     libXmu libXt simgear zlib boost cmake libpng udev fltk13 apr qtbase
+    glew qtdeclarative
   ];
 
   postInstall = ''
@@ -66,9 +67,9 @@ stdenv.mkDerivation rec {
     do
       wrapProgram $f --set FG_ROOT "${data}/share/FlightGear"
     done
-
-
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Flight simulator";

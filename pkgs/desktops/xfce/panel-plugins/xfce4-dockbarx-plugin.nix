@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
 
   pythonPath = [ dockbarx ];
 
-  buildInputs = [ pkgconfig python2 vala gtk2 pythonPackages.wrapPython ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ python2 vala gtk2 pythonPackages.wrapPython ]
     ++ (with xfce; [ libxfce4util xfce4panel xfconf xfce4_dev_tools ])
     ++ pythonPath;
 

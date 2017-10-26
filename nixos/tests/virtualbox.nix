@@ -107,8 +107,8 @@ let
 
     buildInputs = [ pkgs.utillinux pkgs.perl ];
   } ''
-    ${pkgs.parted}/sbin/parted /dev/vda mklabel msdos
-    ${pkgs.parted}/sbin/parted /dev/vda -- mkpart primary ext2 1M -1s
+    ${pkgs.parted}/sbin/parted --script /dev/vda mklabel msdos
+    ${pkgs.parted}/sbin/parted --script /dev/vda -- mkpart primary ext2 1M -1s
     . /sys/class/block/vda1/uevent
     mknod /dev/vda1 b $MAJOR $MINOR
 

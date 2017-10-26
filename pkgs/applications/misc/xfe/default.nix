@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1g9a0bpny2m7ixgxpqjh0wvh2x6d0lpj6682zn5dfqwan4j2xfsd";
   };
 
-  buildInputs = [ fox pkgconfig gettext xlibsWrapper gcc intltool file libpng ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ fox gettext xlibsWrapper gcc intltool file libpng ];
 
   preConfigure = ''
     sed -i s,/usr/share/xfe,$out/share/xfe, src/xfedefs.h

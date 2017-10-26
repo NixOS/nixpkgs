@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "063vc29v7ycaai98v3z4q319sv9sm91my17pmhblw1vifxnw02wf";
   };
 
-  buildInputs = [ cmake fcitx gettext pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake fcitx gettext ];
 
   NIX_CFLAGS_COMPILE = "-Wno-narrowing";
 

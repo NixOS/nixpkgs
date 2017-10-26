@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" "man" ];
 
-  buildInputs = [ pkgconfig zlib libjpeg libpng libtiff libusb gnutls libpaper ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ zlib libjpeg libpng libtiff libusb gnutls libpaper ]
     ++ optionals stdenv.isLinux [ avahi pam dbus systemd acl ]
     ++ optionals stdenv.isDarwin (with darwin; [
       configd apple_sdk.frameworks.ApplicationServices

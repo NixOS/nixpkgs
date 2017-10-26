@@ -9,14 +9,17 @@ let
     url="http://fbterm.googlecode.com/files/fbterm-1.7.0.tar.gz";
     sha256="0pciv5by989vzvjxsv1jsv4bdp4m8j0nfbl29jm5fwi12w4603vj";
   };
-  buildInputs = [gpm freetype fontconfig pkgconfig ncurses libx86];
+  buildInputs = [gpm freetype fontconfig ncurses libx86];
 in
 stdenv.mkDerivation {
   inherit (s) name version;
   src = fetchurl {
     inherit (s) url sha256;
   };
+
+  nativeBuildInputs = [ pkgconfig ];
   inherit buildInputs;
+
   preConfigure = ''
     sed -e '/ifdef SYS_signalfd/atypedef long long loff_t;' -i src/fbterm.cpp
     sed -e '/install-exec-hook:/,/^[^\t]/{d}; /.NOEXPORT/iinstall-exec-hook:\

@@ -1,9 +1,12 @@
-{ stdenv, fetchurl, gettext, gtk3, python2Packages
+{ stdenv, fetchurl, gettext, gtk3, pythonPackages
 , gdk_pixbuf, libnotify, gst_all_1
-, libgnome_keyring3 ? null, networkmanager ? null
+, libgnome_keyring3, networkmanager
+, wrapGAppsHook, gnome3
+, withGnomeKeyring ? false
+, withNetworkManager ? true
 }:
 
-python2Packages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication rec {
   name = "mailnag-${version}";
   version = "1.2.1";
 
@@ -13,26 +16,20 @@ python2Packages.buildPythonApplication rec {
   };
 
   buildInputs = [
-    gettext gtk3 python2Packages.pygobject3 python2Packages.dbus-python
-    python2Packages.pyxdg gdk_pixbuf libnotify gst_all_1.gstreamer
+    gettext gtk3 gdk_pixbuf libnotify gst_all_1.gstreamer
     gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
-    gst_all_1.gst-plugins-bad libgnome_keyring3 networkmanager
+    gst_all_1.gst-plugins-bad
+    gnome3.defaultIconTheme
+  ] ++ stdenv.lib.optional withGnomeKeyring libgnome_keyring3
+    ++ stdenv.lib.optional withNetworkManager networkmanager;
+
+  nativeBuildInputs = [
+    wrapGAppsHook
   ];
 
-  preFixup = ''
-    for script in mailnag mailnag-config; do
-      wrapProgram $out/bin/$script \
-        --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-        --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH" \
-        --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "$GST_PLUGIN_SYSTEM_PATH_1_0" \
-        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share" \
-        --prefix PYTHONPATH : "$PYTHONPATH"
-    done
-  '';
-
-  buildPhase = "";
-
-  installPhase = "python2 setup.py install --prefix=$out";
+  propagatedBuildInputs = with pythonPackages; [
+    pygobject3 dbus-python pyxdg
+  ];
 
   doCheck = false;
 

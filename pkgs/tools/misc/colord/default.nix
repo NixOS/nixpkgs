@@ -10,7 +10,6 @@ stdenv.mkDerivation rec {
     url = "http://www.freedesktop.org/software/colord/releases/${name}.tar.xz";
     sha256 = "0flcsr148xshjbff030pgyk9ar25an901m9q1pjgjdvaq5j1h96m";
   };
-   nativeBuildInputs = [ autoreconfHook intltool ];
 
   enableParallelBuilding = true;
 
@@ -34,7 +33,9 @@ stdenv.mkDerivation rec {
     sed -e "s|if test -w .*;|if false;|" -i src/Makefile.{am,in}
   '';
 
-  buildInputs = [ glib polkit pkgconfig gusb libusb1 lcms2 sqlite systemd dbus gobjectIntrospection
+  nativeBuildInputs = [ autoreconfHook intltool pkgconfig ];
+
+  buildInputs = [ glib polkit gusb libusb1 lcms2 sqlite systemd dbus gobjectIntrospection
                   bash-completion argyllcms libgudev sane-backends ];
 
   postInstall = ''

@@ -20,7 +20,8 @@ in stdenv.mkDerivation rec {
     sha256 = "1bxd828nrawmym6d8awh1vrni8dsbwh1k5am1lrq5ihp5c3kw9ka";
   };
 
-  buildInputs = [ cmake pkgconfig gnome_keyring gtk gtk.dev gtkmm pcre swig python sudo
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake gnome_keyring gtk gtk.dev gtkmm pcre swig python sudo
     paramiko mysql libxml2 libctemplate libmysqlconnectorcpp vsqlite tinyxml gdal libiodbc file
     libpthreadstubs libXdmcp libuuid libzip libgnome_keyring libgnome_keyring.dev jre autoconf
     automake libtool boost glibmm glibmm.dev libsigcxx pangomm libX11 pexpect pycrypto openssl

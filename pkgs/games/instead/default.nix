@@ -38,7 +38,8 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-llua -lgcc_s";
 
-  buildInputs = [ SDL SDL_ttf SDL_image SDL_mixer pkgconfig lua zlib unzip ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ SDL SDL_ttf SDL_image SDL_mixer lua zlib unzip ];
 
   configurePhase = ''
     { echo 2; echo $out; } | ./configure.sh

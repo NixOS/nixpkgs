@@ -1,32 +1,46 @@
-{ stdenv, fetchurl, ncurses }:
+{ stdenv, fetchurl, autoreconfHook, pkgconfig
+, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "minicom-2.7";
+  name = "minicom-2.7.1";
 
   src = fetchurl {
-    url = "http://alioth.debian.org/frs/download.php/file/3977/${name}.tar.gz";
-    sha256 = "1x04m4k7c71j5cnhzpjrbz43dd96k4mpkd0l87v5skrgp1isdhws";
+    url    = "https://alioth.debian.org/frs/download.php/latestfile/3/${name}.tar.gz";
+    sha256 = "1wa1l36fa4npd21xa9nz60yrqwkk5cq713fa3p5v0zk7g9mq6bsk";
   };
 
-  buildInputs = [ncurses];
+  buildInputs = [ ncurses ];
 
-  configureFlags = [ "--sysconfdir=/etc" "--enable-lock-dir=/var/lock" ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  preConfigure =
+  enableParallelBuilding = true;
+
+  configureFlags = [
+    "--sysconfdir=/etc"
+    "--enable-lock-dir=/var/lock"
+  ];
+
+  patches = [ ./xminicom_terminal_paths.patch ];
+
+  preConfigure = ''
     # Have `configure' assume that the lock directory exists.
-    '' sed -i "configure" -e's/test -d \$UUCPLOCK/true/g'
-    '';
+    substituteInPlace configure \
+      --replace 'test -d $UUCPLOCK' true
 
-  meta = {
+    substituteInPlace src/rwconf.c \
+      --replace /usr/bin/ascii-xfr $out/bin/ascii-xfr
+  '';
+
+  meta = with stdenv.lib; {
     description = "Modem control and terminal emulation program";
-    homepage = http://alioth.debian.org/projects/minicom/;
-
-    longDescription =
-      '' Minicom is a menu driven communications program.  It emulates ANSI
-         and VT102 terminals.  It has a dialing directory and auto zmodem
-         download.
-      '';
-
-    platforms = stdenv.lib.platforms.gnu;  # arbitrary choice
+    homepage = https://alioth.debian.org/projects/minicom/;
+    license = licenses.gpl2;
+    longDescription = ''
+      Minicom is a menu driven communications program.  It emulates ANSI
+      and VT102 terminals.  It has a dialing directory and auto zmodem
+      download.
+    '';
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.linux;
   };
 }

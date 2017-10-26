@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" ];
 
   propagatedBuildInputs = [ libusb1 ];
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   # tried to install files to /lib/udev, hopefully OK
   configureFlags = [ "--with-udev=$$bin/lib/udev" ];

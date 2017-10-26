@@ -65,6 +65,9 @@ in with stdenv; mkDerivation rec {
     ++ edf withKDE "WITH_KDE";
 
   preFixup =
+    lib.optionalString daemon ''
+        wrapProgram "$out/bin/quasselcore" --suffix PATH : "${qtbase.bin}/bin"
+    '' +
     lib.optionalString buildClient ''
         wrapProgram "$out/bin/quassel${lib.optionalString client "client"}" \
           --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
