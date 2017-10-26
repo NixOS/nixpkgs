@@ -4056,7 +4056,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ FileWhich JSONMaybeXS TestDifferences ];
     meta = {
-      homepage = https://code.google.com/p/perl-devel-nytprof/;
+      homepage = https://github.com/timbunce/devel-nytprof;
       description = "Powerful fast feature-rich Perl source code profiler";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };

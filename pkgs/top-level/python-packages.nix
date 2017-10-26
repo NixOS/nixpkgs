@@ -15441,7 +15441,7 @@ in {
 
     meta = {
       description = "Process and system utilization information interface for python";
-      homepage = http://code.google.com/p/psutil/;
+      homepage = https://github.com/giampaolo/psutil;
     };
   };
 

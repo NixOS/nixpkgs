@@ -19,8 +19,9 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = {
-    homepage = http://code.google.com/p/mp4v2;
+    homepage = https://code.google.com/archive/p/mp4v2/;
     maintainers = [ ];
     platforms = stdenv.lib.platforms.linux;
+    license = stdenv.lib.licenses.mpl11;
   };
 }
