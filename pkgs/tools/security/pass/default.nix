@@ -21,6 +21,12 @@ let
     { name = "import"; rev = "491935bd275f29ceac2b876b3a288011d1ce31e7"; sha256 = "02mbh05ab8h7kc30hz718d1d1vkjz43b96c7p0xnd92610d2q66q"; }
     { name = "update"; rev = "cf576c9036fd18efb9ed29e0e9f811207b556fde"; sha256 = "1hhbrg6a2walrvla6q4cd3pgrqbcrf9brzjkb748735shxfn52hd"; }
   ];
+  passmenu-plus = fetchFromGitHub {
+    owner = "ciil";
+    repo = "passmenu-plus";
+    rev = "40e5b0b02e57292c6cf1921da226430ec95b9ef4";
+    sha256 = "0cv4xz5c7672yaxl6yk89dnqim1lr5xzfai8fmr0ghsa24ijcrwy";
+  };
 
 in stdenv.mkDerivation rec {
   version = "1.7.1";
@@ -52,7 +58,7 @@ in stdenv.mkDerivation rec {
     mkdir -p "$out/share/emacs/site-lisp"
     cp "contrib/emacs/password-store.el" "$out/share/emacs/site-lisp/"
   '' + optionalString x11Support ''
-    cp "contrib/dmenu/passmenu" "$out/bin/"
+    cp "contrib/dmenu/passmenu" "${passmenu-plus}/passmenu-plus" "$out/bin/"
   '';
 
   wrapperPath = with stdenv.lib; makeBinPath ([
@@ -78,8 +84,10 @@ in stdenv.mkDerivation rec {
   '' + stdenv.lib.optionalString x11Support ''
     # We just wrap passmenu with the same PATH as pass. It doesn't
     # need all the tools in there but it doesn't hurt either.
-    wrapProgram $out/bin/passmenu \
-      --prefix PATH : "$out/bin:${wrapperPath}"
+    for f in $out/bin/passmenu*; do
+      wrapProgram $f \
+        --prefix PATH : "$out/bin:${wrapperPath}"
+    done
   '';
 
   meta = with stdenv.lib; {
