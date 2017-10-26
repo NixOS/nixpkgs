@@ -2814,6 +2814,8 @@ with pkgs;
 
   jrnl = callPackage ../applications/misc/jrnl { };
 
+  jsawk = callPackage ../tools/text/jsawk { };
+
   jscoverage = callPackage ../development/tools/misc/jscoverage { };
 
   jsduck = callPackage ../development/tools/jsduck { };
