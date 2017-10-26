@@ -74,11 +74,12 @@ in
 
   config = mkIf (cfg.enable || cfg.install) {
     users.groups = mkIf (cfg.enable && cfg.group == "rtorrent") {
-      rtorrent = { gid = 276; };
+      rtorrent.gid = config.ids.gids.rtorrent; 
     };
     users.extraUsers = mkIf (cfg.enable && cfg.user == "rtorrent") {
       rtorrent = {
-        uid = 276; group = cfg.group;
+        uid = config.ids.uids.rtorrent;
+        group = cfg.group;
         shell = pkgs.bashInteractive;
         home = cfg.dataDir;
         createHome = true;
