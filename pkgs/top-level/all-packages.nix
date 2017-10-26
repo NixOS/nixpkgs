@@ -19017,6 +19017,8 @@ with pkgs;
 
   colort = callPackage ../applications/misc/colort { };
 
+  cope = callPackage ../applications/misc/cope { };
+
   terminal-parrot = callPackage ../applications/misc/terminal-parrot { };
 
   e17gtk = callPackage ../misc/themes/e17gtk { };

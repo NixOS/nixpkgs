@@ -7308,6 +7308,24 @@ let self = _self // overrides; _self = with self; {
   };
 
 
+  IOStty = buildPerlPackage rec {
+    name = "IO-Stty-0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TODDR/${name}.tar.gz";
+      sha256 = "0llih2ywi693k5jqn855xflxanjmnssh1x31jwxd52ayp26m4ab9";
+    };
+    preConfigure = ''
+      touch Makefile.PL
+    '';
+    propagatedBuildInputs = [ ModuleBuild ];
+
+    buildPhase = "perl Build.PL --install_base=$out; ./Build build";
+    installPhase = "./Build install";
+
+    doCheck = false; /* there are no tests */
+    # installTargets = "install";
+  };
+
   IPCRun = buildPerlPackage {
     name = "IPC-Run-0.92";
     src = fetchurl {
