@@ -74,8 +74,15 @@ rec {
     };
   in stdenv // {
     mkDerivation =
-      { nativeBuildInputs ? []
+      { buildInputs ? [], nativeBuildInputs ? []
+      , propagatedBuildInputs ? [], propagatedNativeBuildInputs ? []
       , selfNativeBuildInput ? args.crossAttrs.selfNativeBuildInput or false
+      , depsBuildBuild ? [], depsBuildTarget ? [], __depsHostHost ? []
+      , __depsBuildBuildPropagated ? []
+      , __depsBuildTargetPropagated ? []
+      , __depsHostHostPropagated ? []
+      , __depsTargetTarget ? []
+      , __depsTargetTargetPropagated ? []
       , ...
       } @ args:
 
@@ -96,6 +103,16 @@ rec {
             ++ stdenv.lib.optional (hostPlatform.config == "x86_64-w64-mingw32") pkgs.file
             ++ stdenv.lib.optional (hostPlatform.isAarch64 || hostPlatform.libc == "musl") pkgs.updateAutotoolsGnuConfigScriptsHook
             ;
+
+          # Cross-linking dynamic libraries, every buildInput should
+          # be propagated because ld needs the -rpath-link to find
+          # any library needed to link the program dynamically at
+          # loader time. ld(1) explains it.
+          buildInputs = [];
+          propagatedBuildInputs =
+            propagatedBuildInputs ++ buildInputs ++ __depsBuildTargetPropagated ++ __depsHostHostPropagated ++ __depsTargetTarget ++
+            depsBuildBuild ++ depsBuildTarget ++ __depsHostHost ++ __depsBuildBuildPropagated ++ __depsTargetTargetPropagated;
+          propagatedNativeBuildInputs = propagatedNativeBuildInputs;
 
           crossConfig = hostPlatform.config;
         } // args.crossAttrs or {});
