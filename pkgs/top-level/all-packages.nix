@@ -17003,6 +17003,8 @@ with pkgs;
       else null;
   };
 
+  uvcdynctrl = callPackage ../os-specific/linux/uvcdynctrl { };
+
   vkeybd = callPackage ../applications/audio/vkeybd {};
 
   vlc = callPackage ../applications/video/vlc {
