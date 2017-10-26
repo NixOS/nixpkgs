@@ -22626,7 +22626,7 @@ EOF
     propagateBuildInputs= [pkgs.ffmpeg];
     doCheck=false;#checks require working sites
   };
-  
+
   zbase32 = buildPythonPackage (rec {
     name = "zbase32-1.1.2";
 
@@ -22752,28 +22752,6 @@ EOF
     };
   };
 
-  you-get = buildPythonApplication rec {
-    version = "0.4.390";
-    name = "you-get-${version}";
-    disabled = !isPy3k;
-
-    # Tests aren't packaged, but they all hit the real network so
-    # probably aren't suitable for a build environment anyway.
-    doCheck = false;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/y/you-get/${name}.tar.gz";
-      sha256 = "17hs0g9yvgvkmr7p1cz39mbbvb40q65qkc31j3ixc2f873gahagw";
-    };
-
-    meta = {
-      description = "A tiny command line utility to download media contents from the web";
-      homepage = https://you-get.org;
-      license = licenses.mit;
-      maintainers = with maintainers; [ ryneeverett ];
-      platforms = platforms.all;
-    };
-  };
 
   zetup = callPackage ../development/python-modules/zetup { };
 
