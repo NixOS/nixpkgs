@@ -12,9 +12,9 @@ buildPythonPackage rec {
     sha256 = "6bdb69fc125ba705854e21163be6c7da3aa17c2a3a84f40b6d8a3f6e4a8cb314";
   };
 
-  propagatedBuildInputs = [ protobuf3_2 hidapi requests ];
+  propagatedBuildInputs = [ protobuf3_2 hidapi requests mnemonic ];
 
-  buildInputs = [ ecdsa mnemonic ];
+  buildInputs = [ ecdsa ];
 
   # There are no actual tests: "ImportError: No module named tests"
   doCheck = false;
