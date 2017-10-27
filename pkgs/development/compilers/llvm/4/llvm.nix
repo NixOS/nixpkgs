@@ -1,4 +1,5 @@
 { stdenv
+, buildPackages
 , fetch
 , fetchpatch
 , cmake
@@ -114,6 +115,13 @@ in stdenv.mkDerivation (rec {
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
   ]
+  ++ stdenv.lib.optionals crossCompiling [
+    "-DCMAKE_CROSSCOMPILING=True"
+    "-DLLVM_TABLEGEN=${buildPackages.llvm.dev}/tablegen"
+    "-DCLANG_TABLEGEN=${buildPackages.llvm.dev}/tablegen"
+    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.triple}"
+    "-DLLVM_TARGET_ARCH=${stdenv.targetPlatform.arch}"
+    "-DLLVM_TARGETS_TO_BUILD=${stdenv.targetPlatform.arch}"
   ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
