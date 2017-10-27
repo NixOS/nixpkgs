@@ -160,7 +160,7 @@ in rec {
   }) // { perl-bindings = nixStable; };
 
   nixUnstable = (lib.lowPrio (common rec {
-    name = "nix-1.12${suffix}";
+    name = "nix-unstable-1.12${suffix}";
     suffix = "pre5663_c7af84ce";
     src = fetchFromGitHub {
       owner = "NixOS";
