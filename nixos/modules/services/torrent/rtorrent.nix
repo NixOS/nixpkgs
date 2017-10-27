@@ -37,13 +37,37 @@ in
     dataDir = mkOption {
       type = types.str;
       default = "/var/lib/rtorrent";
-      description = "The directory where rtorrent stores its data files.";
+      description = ''
+        If enabled as a system service, the directory where rtorrent stores its data files.
+        If installed as a user service, this value is ignored.
+      '';
     };
 
     configFile = mkOption {
       type = types.str;
       default = "/var/lib/rtorrent/rtorrent.rc";
-      description = "The location of rtorrent's config file.";
+      description = ''
+        If enabled as a system service, the location of rtorrent's config file.
+        If installed as a user service, this value is ignored.
+      '';
+    };
+
+    userDataDir = mkOption {
+      type = types.str;
+      default = "rtorrent";
+      description = ''
+        If installed as a user service, the directory where rtorrent stores its data files relative to $HOME.
+        If enabled as a system service, this value is ignored.
+      '';
+    };
+
+    userConfigFile = mkOption {
+      type = types.str;
+      default = ".rtorrent.rc";
+      description = ''
+        If installed as a user service, the location of rtorrent's config file relative to $HOME.
+        If enabled as a system service, this value is ignored.
+      '';
     };
 
     user = mkOption {
@@ -74,7 +98,7 @@ in
 
   config = mkIf (cfg.enable || cfg.install) {
     users.groups = mkIf (cfg.enable && cfg.group == "rtorrent") {
-      rtorrent.gid = config.ids.gids.rtorrent; 
+      rtorrent.gid = config.ids.gids.rtorrent;
     };
     users.extraUsers = mkIf (cfg.enable && cfg.user == "rtorrent") {
       rtorrent = {
@@ -113,18 +137,22 @@ in
       # Default rtorrent.rc (in preStart) uses bash, which needs to be on the $PATH
       path = [ cfg.package pkgs.tmux pkgs.bash pkgs.procps ];
       preStart = ''
-      if test -e $HOME/rtorrent/.session/rtorrent.lock && test -z `pidof rtorrent`; then
-        rm -f $HOME/rtorrent/.session/rtorrent.lock
+      test -d $HOME/${cfg.userDataDir} || {
+        echo "Creating rtorrent data directory at $HOME/${cfg.userDataDir}."
+        mkdir $HOME/${cfg.userDataDir}
+      }
+      if test -e $HOME/${cfg.userDataDir}/.session/rtorrent.lock && test -z `pidof rtorrent`; then
+        rm -f $HOME/${cfg.userDataDir}/.session/rtorrent.lock
       fi
       
-      test -f $HOME/.rtorrent.rc || {
-        echo "creating default rtorrent config file at $HOME/.rtorrent.rc."
-        cat > $HOME/.rtorrent.rc << EOF
-      '' + replaceStrings [ "/home/USERNAME" ] [ "$HOME" ] (readFile ./rtorrent.rc) + "\nEOF\n}";
+      test -f $HOME/${cfg.userConfigFile} || {
+        echo "creating default rtorrent config file at $HOME/${cfg.userConfigFile}."
+        cat > $HOME/${cfg.userConfigFile} << EOF
+      '' + replaceStrings [ "/home/USERNAME/rtorrent" ] [ "$HOME/${cfg.userDataDir}" ] (readFile ./rtorrent.rc) + "\nEOF\n}";
       environment = { HOME = "%h"; };
       serviceConfig = {
         Type = "forking";
-        ExecStart = "${pkgs.tmux}/bin/tmux -L rtorrent new-session -s rt -n rtorrent -d rtorrent";
+        ExecStart = "${pkgs.tmux}/bin/tmux -L rtorrent new-session -s rt -n rtorrent -d rtorrent -n -o import=%h/${cfg.userConfigFile}";
         ExecStop = "${pkgs.bash}/bin/bash -c \"tmux -L rtorrent send-keys -t rt:rtorrent.0 C-q; while pidof rtorrent > /dev/null; do echo stopping rtorrent...; sleep 1; done\"";
         Restart = "on-failure";
       };
