@@ -12,7 +12,8 @@ stdenv.mkDerivation rec
     sha256 = "0q4a102xlcsxlr53h4jr4w8qzkbzvm2f3nk9fsha48h6l2hw34bb";
   };
 
-  buildInputs = [ which automake autoconf pkgconfig libtool vala_0_23 python ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ which automake autoconf libtool vala_0_23 python ];
   propagatedBuildInputs = [ libsearpc libzdb libuuid libevent sqlite openssl ];
 
   preConfigure = ''

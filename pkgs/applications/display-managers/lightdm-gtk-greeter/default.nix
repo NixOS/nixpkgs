@@ -26,7 +26,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ pkgconfig lightdm intltool makeWrapper ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ lightdm intltool makeWrapper ]
     ++ (if useGTK2 then [ gtk2 ] else [ gtk3 ]);
 
   configureFlags = [

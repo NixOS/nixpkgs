@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-std=gnu++98";
 
-  buildInputs = [ pkgconfig bison flex unixODBC openssl openldap
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ bison flex unixODBC openssl openldap
                   cyrus_sasl kerberos expat SDL libdv libv4l alsaLib ];
 
   enableParallelBuilding = true;

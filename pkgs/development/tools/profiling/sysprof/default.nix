@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1wb4d844rsy8qjg3z5m6rnfm72da4xwzrrkkb1q5r10sq1pkrw5s";
   };
 
-  buildInputs = [ binutils pkgconfig gtk2 glib pango libglade ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ binutils gtk2 glib pango libglade ];
 
   meta = {
     homepage = http://sysprof.com/;

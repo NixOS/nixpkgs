@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "003xyqjq59wcjafrdv1b8w34xsn4nvzz51wwd7mqddajh0g4dz4g";
   };
 
-  buildInputs = [ pkgconfig fftw fftwSinglePrec alsaLib libsndfile libpulseaudio ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ fftw fftwSinglePrec alsaLib libsndfile libpulseaudio ];
 
   meta = {
     description = "General-purpose software audio FSK modem";

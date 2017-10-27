@@ -6,15 +6,15 @@
 }:
 
 assert guiSupport -> (dbus_libs != null);
-
 with stdenv.lib;
+
 stdenv.mkDerivation rec {
   name = "qbittorrent-${version}";
-  version = "3.3.15";
+  version = "3.3.16";
 
   src = fetchurl {
     url = "mirror://sourceforge/qbittorrent/${name}.tar.xz";
-    sha256 = "1bnfnbkdg0088h25zzhlpcdh30y0k1m76bkhjsj1aali765c1fx7";
+    sha256 = "0mxyn2pajvb55bhcaz55v64p2xzy15p0yy174s62b5y3f8cac27a";
   };
 
   nativeBuildInputs = [ pkgconfig which ];
@@ -33,11 +33,7 @@ stdenv.mkDerivation rec {
     (if webuiSupport then "" else "--disable-webui")
   ] ++ optional debugSupport "--enable-debug";
 
-  # The lrelease binary is named lrelease instead of lrelease-qt4
-  patches = [ ./fix-lrelease.patch ];
-
-  # https://github.com/qbittorrent/qBittorrent/issues/1992
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   meta = {
     description = "Free Software alternative to µtorrent";

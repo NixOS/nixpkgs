@@ -11,7 +11,8 @@ stdenv.mkDerivation rec{
     sha256 = "1fv01jnbgwbafsxavlji90zdqizn8m4nfg9ivc4sbi05j036bg6n";
   };
 
-  buildInputs = [ autoreconfHook zlib pkgconfig libuuid ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ zlib libuuid ];
 
   # Allow UI to load when running as non-root
   patches = [ ./web_access.patch ];

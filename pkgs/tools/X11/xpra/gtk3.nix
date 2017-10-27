@@ -19,9 +19,8 @@ buildPythonApplication rec {
     substituteInPlace xpra/client/gtk3/cairo_workaround.pyx --replace 'pycairo/pycairo.h' 'py3cairo.h'
   '';
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig
-
     xorg.libX11 xorg.renderproto xorg.libXrender xorg.libXi xorg.inputproto xorg.kbproto
     xorg.randrproto xorg.damageproto xorg.compositeproto xorg.xextproto xorg.recordproto
     xorg.xproto xorg.fixesproto xorg.libXtst xorg.libXfixes xorg.libXcomposite xorg.libXdamage

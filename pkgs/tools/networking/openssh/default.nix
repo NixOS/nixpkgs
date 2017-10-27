@@ -56,7 +56,8 @@ stdenv.mkDerivation rec {
       substituteInPlace Makefile.in --replace '$(INSTALL) -m 4711' '$(INSTALL) -m 0711'
     '';
 
-  buildInputs = [ zlib openssl libedit pkgconfig pam ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ zlib openssl libedit pam ]
     ++ optional withKerberos kerberos
     ++ optional hpnSupport autoreconfHook;
 

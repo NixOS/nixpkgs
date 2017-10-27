@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1rsyf5hbjim7zpk1yar3gv65g1nmw6zbbc0smrmxsfk0f9n3j9m6";
   };
 
-  buildInputs = [ pkgconfig glib gtk3 libgee intltool ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib gtk3 libgee intltool ];
 
   meta = with stdenv.lib; {
     description = "Small library intended for internal use by GNOME Games, but it may be used by others";

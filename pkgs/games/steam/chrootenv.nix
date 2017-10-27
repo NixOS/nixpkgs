@@ -1,5 +1,5 @@
 { stdenv, lib, writeScript, buildFHSUserEnv, steam
-, steam-runtime, steam-runtime-i686 ? null
+, steam-runtime-wrapped, steam-runtime-wrapped-i686 ? null
 , withJava ? false
 , withPrimus ? false
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
@@ -69,9 +69,9 @@ in buildFHSUserEnv rec {
 
   extraBuildCommands = ''
     mkdir -p steamrt
-    ln -s ../lib/steam-runtime steamrt/${steam-runtime.arch}
-    ${lib.optionalString (steam-runtime-i686 != null) ''
-      ln -s ../lib32/steam-runtime steamrt/${steam-runtime-i686.arch}
+    ln -s ../lib/steam-runtime steamrt/${steam-runtime-wrapped.arch}
+    ${lib.optionalString (steam-runtime-wrapped-i686 != null) ''
+      ln -s ../lib32/steam-runtime steamrt/${steam-runtime-wrapped-i686.arch}
     ''}
   '';
 
@@ -96,8 +96,8 @@ in buildFHSUserEnv rec {
     inherit multiPkgs extraBuildCommands;
 
     runScript =
-      let ldPath = map (x: "/steamrt/${steam-runtime.arch}/" + x) steam-runtime.libs
-                 ++ lib.optionals (steam-runtime-i686 != null) (map (x: "/steamrt/${steam-runtime-i686.arch}/" + x) steam-runtime-i686.libs);
+      let ldPath = map (x: "/steamrt/${steam-runtime-wrapped.arch}/" + x) steam-runtime-wrapped.libs
+                 ++ lib.optionals (steam-runtime-wrapped-i686 != null) (map (x: "/steamrt/${steam-runtime-wrapped-i686.arch}/" + x) steam-runtime-wrapped-i686.libs);
       in writeScript "steam-run" ''
         #!${stdenv.shell}
         run="$1"

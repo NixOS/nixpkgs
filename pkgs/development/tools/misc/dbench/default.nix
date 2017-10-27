@@ -13,10 +13,18 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     ./autogen.sh
+    configureFlagsArray+=("--datadir=$out/share/dbench")
   '';
 
   postInstall = ''
-    cp -R loadfiles/ $out/share/
+    cp -R loadfiles/* $out/share/dbench/doc/dbench/loadfiles
+
+    # dbench looks here for the file
+    ln -s doc/dbench/loadfiles/client.txt $out/share/dbench/client.txt
+
+    # backwards compatible to older nixpkgs packaging introduced by
+    # 3f27be8e5d5861cd4b9487d6c5212d88bf24316d
+    ln -s dbench/doc/dbench/loadfiles $out/share/loadfiles
   '';
 
   meta = with stdenv.lib; {

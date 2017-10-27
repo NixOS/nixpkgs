@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, openssl, db48, boost
-, zlib, miniupnpc, qt4, utillinux, protobuf, qrencode, libevent
+, zlib, miniupnpc, qtbase ? null, qttools ? null, utillinux, protobuf, qrencode, libevent
 , withGui }:
 
 with stdenv.lib;
@@ -16,13 +16,15 @@ stdenv.mkDerivation rec {
     sha256 = "129gkg035gv7zmc463jl2spvdh0fl4q8v4jdaslfnp34hbwi1p07";
   };
 
+  patches = [ ./fix-bitcoin-qt-build.patch ];
+
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [ openssl db48 boost zlib
                   miniupnpc utillinux protobuf libevent ]
-                  ++ optionals withGui [ qt4 qrencode ];
+                  ++ optionals withGui [ qtbase qttools qrencode ];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
-                     ++ optionals withGui [ "--with-gui=qt4" ];
+                     ++ optionals withGui [ "--with-gui=qt5" ];
 
   meta = {
     description = "Peer-to-peer electronic cash system (Classic client)";

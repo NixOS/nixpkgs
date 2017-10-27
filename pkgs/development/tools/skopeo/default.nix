@@ -10,7 +10,8 @@ buildGoPackage rec {
   goPackagePath = "github.com/projectatomic/skopeo";
   excludedPackages = "integration";
 
-  buildInputs = [ gpgme libgpgerror devicemapper btrfs-progs pkgconfig ostree ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gpgme libgpgerror devicemapper btrfs-progs ostree ];
 
   src = fetchFromGitHub {
     inherit rev;

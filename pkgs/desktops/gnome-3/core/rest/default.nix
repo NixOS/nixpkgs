@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "e7b89b200c1417073aef739e8a27ff2ab578056c27796ec74f5886a5e0dff647";
   };
 
-  buildInputs = [ pkgconfig glib libsoup gobjectIntrospection];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib libsoup gobjectIntrospection];
 
   configureFlags = "--with-ca-certificates=/etc/ssl/certs/ca-certificates.crt";
 

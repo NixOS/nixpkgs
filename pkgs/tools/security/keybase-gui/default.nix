@@ -37,10 +37,10 @@ let
 in
 stdenv.mkDerivation rec {
   name = "keybase-gui-${version}";
-  version = "1.0.25-20170714172717.73f9070";
+  version = "1.0.33-20171003193427.d9ceb86ac";
   src = fetchurl {
     url = "https://s3.amazonaws.com/prerelease.keybase.io/linux_binaries/deb/keybase_${version}_amd64.deb";
-    sha256 = "0yrq18rrc30f7ymajvd71r29z1by7h6abyaxx2gmrg648qgc6zv4";
+    sha256 = "0sqani2fy5jzqmz35md1bdw2vwpx91l87b6s3x9z53halzq7vfy6";
   };
   phases = ["unpackPhase" "installPhase" "fixupPhase"];
   unpackPhase = ''

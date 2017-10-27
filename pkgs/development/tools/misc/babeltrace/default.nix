@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0z0k4qvz4ypxs4dmgrzv9da7ylf6jr94ra6nylqpfrdspvjzwj92";
   };
 
-  buildInputs = [ pkgconfig glib libuuid popt elfutils ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib libuuid popt elfutils ];
 
   meta = with stdenv.lib; {
     description = "Command-line tool and library to read and convert LTTng tracefiles";

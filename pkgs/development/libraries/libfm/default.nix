@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "0nlvfwh09gbq8bkbvwnw6iqr918rrs9gc9ljb9pjspyg408bn1n7";
   };
 
-  buildInputs = [ glib gtk intltool pango pkgconfig vala_0_34 ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib gtk intltool pango vala_0_34 ]
                 ++ optional (!extraOnly) menu-cache;
 
   configureFlags = [ (optional extraOnly "--with-extra-only")

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     echo 'Cflags: -I''${includedir}' >> glu.pc.in
   '';
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ mesa_noglu ];
 
   outputs = [ "out" "dev" ];

@@ -11,7 +11,8 @@ stdenv.mkDerivation  rec {
     sha256 = "1n1dnqnj24xhiy9323lj52nswr5120cj56fpckg802miss05sr6x";
   };
 
-  buildInputs = [ cairo fftw gtkmm2 lv2 lvtk pkgconfig python ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cairo fftw gtkmm2 lv2 lvtk python ];
 
   configurePhase = "python waf configure --prefix=$out";
 

@@ -1,6 +1,11 @@
 { stdenv, fetchFromGitHub, autoreconfHook, coq, ocamlPackages }:
 
 let param = {
+  "8.7" = {
+    version = "0.6.1";
+    rev = "c3b87af6bfa338e18b83f014ebd0e56e1f611663";
+    sha256 = "1jaafkwsb5450378nprjsds1illgdaq60gryi8kspw0i25ykz2c9";
+  };
   "8.6" = {
     version = "0.6.1";
     rev = "c3b87af6bfa338e18b83f014ebd0e56e1f611663";
@@ -21,7 +26,8 @@ stdenv.mkDerivation {
     inherit (param) rev sha256;
   };
 
-  buildInputs = [ autoreconfHook coq ]
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ coq ]
   ++ (with ocamlPackages; [ ocaml findlib ocamlgraph ]);
 
   preInstall = ''

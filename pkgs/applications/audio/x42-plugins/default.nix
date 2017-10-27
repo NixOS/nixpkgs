@@ -11,7 +11,16 @@ stdenv.mkDerivation rec {
     sha256 = "0yi82rak2277x4nzzr5zwbsnha5pi61w975c8src2iwar2b6m0xg";
   };
 
-  buildInputs = [ mesa_glu ftgl freefont_ttf libjack2 libltc libsndfile libsamplerate lv2 gtk2 cairo pango fftwFloat pkgconfig  zita-convolver];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ mesa_glu ftgl freefont_ttf libjack2 libltc libsndfile libsamplerate lv2 gtk2 cairo pango fftwFloat zita-convolver ];
+
+  # Don't remove this. The default fails with 'do not know how to unpack source archive'
+  # every now and then on Hydra. No idea why.
+  unpackPhase = ''
+    tar xf $src
+    sourceRoot=$(echo x42-plugins-*)
+    chmod -R u+w $sourceRoot
+  '';
 
   makeFlags = [ "PREFIX=$(out)" "FONTFILE=${freefont_ttf}/share/fonts/truetype/FreeSansBold.ttf" ];
 

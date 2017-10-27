@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "1lmcj8rf83w13q8q68hh7sa1abc2m6j2zmfska92xdp7hslhdgc5";
   };
 
-  buildInputs = [ emacs w3m texinfo autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ emacs w3m texinfo ];
 
   # XXX: Should we do the same for xpdf/evince, gv, gs, etc.?
   patchPhase = ''

@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
                      "--with-plymouth=yes"
                      "--with-systemdsystemunitdir=$(out)/etc/systemd/system" ];
 
-  buildInputs = [ pkgconfig glib itstool libxml2 intltool autoreconfHook
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ glib itstool libxml2 intltool
                   accountsservice gnome3.dconf systemd
                   gobjectIntrospection libX11 gtk
                   libcanberra_gtk3 pam libtool plymouth librsvg ];

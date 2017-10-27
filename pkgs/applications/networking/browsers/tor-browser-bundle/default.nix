@@ -1,10 +1,30 @@
 { stdenv
-, lib
-, fetchurl
 , fetchgit
+, fetchurl
+, symlinkJoin
 
 , tor
 , tor-browser-unwrapped
+
+# Wrapper runtime
+, coreutils
+, hicolor_icon_theme
+, shared_mime_info
+, noto-fonts
+, noto-fonts-emoji
+
+# Audio support
+, audioSupport ? mediaSupport
+, apulse
+
+# Media support (implies audio support)
+, mediaSupport ? false
+, gstreamer
+, gst-plugins-base
+, gst-plugins-good
+, gst-ffmpeg
+, gmp
+, ffmpeg
 
 # Extensions, common
 , zip
@@ -15,7 +35,16 @@
 , python27
 , python27Packages
 , rsync
+
+# Pluggable transports
+, obfsproxy
+
+# Customization
+, extraPrefs ? ""
+, extraExtensions ? [ ]
 }:
+
+with stdenv.lib;
 
 let
   tor-browser-build_src = fetchgit {
@@ -24,87 +53,39 @@ let
     sha256 = "0j37mqldj33fnzghxifvy6v8vdwkcz0i4z81prww64md5s8qcsa9";
   };
 
-  firefoxExtensions = {
-    https-everywhere = stdenv.mkDerivation rec {
-      name = "https-everywhere-${version}";
-      version = "5.2.21";
-
-      src = fetchgit {
-        url = "https://git.torproject.org/https-everywhere.git";
-        rev = "refs/tags/${version}";
-        sha256 = "0z9madihh4b4z4blvfmh6w1hsv8afyi0x7b243nciq9r4w55xgfa";
-      };
-
-      nativeBuildInputs = [
-        git
-        libxml2 # xmllint
-        python27
-        python27Packages.lxml
-        rsync
-        zip
-      ];
-
-      buildCommand = ''
-        cp -dR --no-preserve=mode "$src" src
-        cd src
-
-        sed -i makexpi.sh -e '104d' # cp -a translations/* fails because the dir is empty ...
-        $shell ./makexpi.sh ${version} --no-recurse
-        install -m 444 -Dt $out pkg"/"*.xpi
-      '';
-
-      meta = {
-        homepage = https://gitweb.torproject.org/https-everywhere.git/;
-      };
-    };
-
-    noscript = fetchurl {
-      url = https://secure.informaction.com/download/releases/noscript-5.0.10.xpi;
-      sha256 = "18k5karbaj5mhd9cyjbqgik6044bw88rjalkh6anjanxbn503j6g";
-    };
-
-    torbutton = stdenv.mkDerivation rec {
-      name = "torbutton-${version}";
-      version = "1.9.8.1";
-
-      src = fetchgit {
-        url = "https://git.torproject.org/torbutton.git";
-        rev = "refs/tags/${version}";
-        sha256 = "1amp0c9ky0a7fsa0bcbi6n6ginw7s2g3an4rj7kvc1lxmrcsm65l";
-      };
-
-      nativeBuildInputs = [ zip ];
-
-      buildCommand = ''
-        cp -dR --no-preserve=mode "$src" src
-        cd src
-
-        $shell ./makexpi.sh
-        install -m 444 -Dt $out pkg"/"*.xpi
-      '';
-    };
-
-    tor-launcher = stdenv.mkDerivation rec {
-      name = "tor-launcher-${version}";
-      version = "0.2.12.3";
-
-      src = fetchgit {
-        url = "https://git.torproject.org/tor-launcher.git";
-        rev = "refs/tags/${version}";
-        sha256 = "0126x48pjiy2zm4l8jzhk70w24hviaz560ffp4lb9x0ar615bc9q";
-      };
-
-      nativeBuildInputs = [ zip ];
-
-      buildCommand = ''
-        cp -dR --no-preserve=mode "$src" src
-        cd src
-
-        make package
-        install -m 444 -Dt $out pkg"/"*.xpi
-      '';
-    };
+  firefoxExtensions = import ./extensions.nix {
+    inherit stdenv fetchurl fetchgit zip
+      git libxml2 python27 python27Packages rsync;
   };
+
+  bundledExtensions = with firefoxExtensions; [
+    https-everywhere
+    noscript
+    torbutton
+    tor-launcher
+  ] ++ extraExtensions;
+
+  fontsEnv = symlinkJoin {
+    name = "tor-browser-fonts";
+    paths = [ noto-fonts noto-fonts-emoji ];
+  };
+
+  fontsDir = "${fontsEnv}/share/fonts";
+
+  gstPluginsPath = concatMapStringsSep ":" (x:
+    "${x}/lib/gstreamer-0.10") [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-ffmpeg
+    ];
+
+  gstLibPath = makeLibraryPath [
+    gstreamer
+    gst-plugins-base
+    gmp
+    ffmpeg
+  ];
 in
 stdenv.mkDerivation rec {
   name = "tor-browser-bundle-${version}";
@@ -116,11 +97,19 @@ stdenv.mkDerivation rec {
 
   buildPhase = ":";
 
+  # The following creates a customized firefox distribution.  For
+  # simplicity, we copy the entire base firefox runtime, to work around
+  # firefox's annoying insistence on resolving the installation directory
+  # relative to the real firefox executable.  A little tacky and
+  # inefficient but it works.
   installPhase = ''
     TBBUILD=${tor-browser-build_src}/projects/tor-browser
+    TBDATA_PATH=TorBrowser-Data
 
     self=$out/lib/tor-browser
     mkdir -p $self && cd $self
+
+    TBDATA_IN_STORE=$self/$TBDATA_PATH
 
     cp -dR ${tor-browser-unwrapped}/lib"/"*"/"* .
     chmod -R +w .
@@ -140,62 +129,212 @@ stdenv.mkDerivation rec {
     lockPref("app.update.enabled", false);
     lockPref("extensions.update.autoUpdateDefault", false);
     lockPref("extensions.update.enabled", false);
+    lockPref("extensions.torbutton.updateNeeded", false);
     lockPref("extensions.torbutton.versioncheck_enabled", false);
 
     // Where to find the Nixpkgs tor executable & config
     lockPref("extensions.torlauncher.tor_path", "${tor}/bin/tor");
-    lockPref("extensions.torlauncher.torrc-defaults_path", "$self/torrc-defaults");
+    lockPref("extensions.torlauncher.torrc-defaults_path", "$TBDATA_IN_STORE/torrc-defaults");
 
     // Captures store paths
     clearPref("extensions.xpiState");
+    clearPref("extensions.bootstrappedAddons");
 
     // Insist on using IPC for communicating with Tor
-    //
-    // Defaults to $XDG_RUNTIME_DIR/Tor/{socks,control}.socket
     lockPref("extensions.torlauncher.control_port_use_ipc", true);
     lockPref("extensions.torlauncher.socks_port_use_ipc", true);
+
+    // Allow sandbox access to sound devices if using ALSA directly
+    ${if audioSupport then ''
+      pref("security.sandbox.content.write_path_whitelist", "/dev/snd/");
+    '' else ''
+      clearPref("security.sandbox.content.write_path_whitelist");
+    ''}
+
+    // User customization
+    ${extraPrefs}
     EOF
 
     # Preload extensions
-    install -m 444 -D \
-      ${firefoxExtensions.tor-launcher}/tor-launcher-*.xpi \
-      browser/extensions/tor-launcher@torproject.org.xpi
-    install -m 444 -D \
-      ${firefoxExtensions.torbutton}/torbutton-*.xpi \
-      browser/extensions/torbutton@torproject.org.xpi
-    install -m 444 -D \
-      ${firefoxExtensions.https-everywhere}/https-everywhere-*-eff.xpi \
-      browser/extensions/https-everywhere-eff@eff.org.xpi
-    install -m 444 -D \
-      ${firefoxExtensions.noscript} \
-      browser/extensions/{73a6fe31-595d-460b-a920-fcc0f8843232}.xpi
+    find ${toString bundledExtensions} -name '*.xpi' -exec ln -s -t browser/extensions '{}' '+'
 
     # Copy bundle data
-    cat \
-      $TBBUILD/Bundle-Data/linux/Data/Tor/torrc-defaults \
-      $TBBUILD/Bundle-Data/PTConfigs/linux/torrc-defaults-appendix \
-      >> torrc-defaults
+    bundlePlatform=linux
+    bundleData=$TBBUILD/Bundle-Data
 
+    mkdir -p $TBDATA_PATH
     cat \
-      $TBBUILD/Bundle-Data/linux/Data/Browser/profile.default/preferences/extension-overrides.js \
-      $TBBUILD/Bundle-Data/PTConfigs/bridge_prefs.js >> defaults/pref/extension-overrides.js \
+      $bundleData/$bundlePlatform/Data/Tor/torrc-defaults \
+      >> $TBDATA_PATH/torrc-defaults
+    cat \
+      $bundleData/$bundlePlatform/Data/Browser/profile.default/preferences/extension-overrides.js \
+      $bundleData/PTConfigs/bridge_prefs.js \
       >> defaults/pref/extension-overrides.js
 
+    # Configure geoip
+    #
+    # tor-launcher insists on resolving geoip data relative to torrc-defaults
+    # (and passes them directly on the tor command-line).
+    #
+    # Write the paths into torrc-defaults anyway, otherwise they'll be
+    # captured in the runtime torrc.
+    ln -s -t $TBDATA_PATH ${tor.geoip}/share/tor/geoip{,6}
+    cat >>$TBDATA_PATH/torrc-defaults <<EOF
+    GeoIPFile $TBDATA_IN_STORE/geoip
+    GeoIPv6File $TBDATA_IN_STORE/geoip6
+    EOF
+
+    # Configure pluggable transports
+    cat >>$TBDATA_PATH/torrc-defaults <<EOF
+    ClientTransportPlugin obfs2,obfs3 exec ${obfsproxy}/bin/obfsproxy managed
+    EOF
+
+    # Hard-code path to TBB fonts; xref: FONTCONFIG_FILE in the wrapper below
+    sed $bundleData/$bundlePlatform/Data/fontconfig/fonts.conf \
+        -e "s,<dir>fonts</dir>,<dir>${fontsDir}</dir>," \
+        > $TBDATA_PATH/fonts.conf
+
     # Generate a suitable wrapper
+    wrapper_PATH=${makeBinPath [ coreutils ]}
+    wrapper_XDG_DATA_DIRS=${concatMapStringsSep ":" (x: "${x}/share") [
+      hicolor_icon_theme
+      shared_mime_info
+    ]}
+
+    ${optionalString audioSupport ''
+      # apulse uses a non-standard library path ...
+      wrapper_LD_LIBRARY_PATH=${apulse}/lib/apulse''${wrapper_LD_LIBRARY_PATH:+:$wrapper_LD_LIBRARY_PATH}
+    ''}
+
+    ${optionalString mediaSupport ''
+      wrapper_LD_LIBRARY_PATH=${gstLibPath}''${wrapper_LD_LIBRARY_PATH:+:$wrapper_LD_LIBRARY_PATH}
+    ''}
+
     mkdir -p $out/bin
     cat >$out/bin/tor-browser <<EOF
-    #! ${stdenv.shell} -e
+    #! ${stdenv.shell} -eu
 
-    THE_HOME=\$HOME
-    TBB_HOME=\''${TBB_HOME:-\''${XDG_DATA_HOME:-$HOME/.local/share}/tor-browser}
+    umask 077
+
+    PATH=$wrapper_PATH
+
+    readonly THE_HOME=\$HOME
+    TBB_HOME=\''${TBB_HOME:-\''${XDG_DATA_HOME:-\$HOME/.local/share}/tor-browser}
+    if [[ \''${TBB_HOME:0:1} != / ]] ; then
+      TBB_HOME=\$PWD/\$TBB_HOME
+    fi
+    readonly TBB_HOME
+
+    # Basic sanity check: never want to vomit directly onto user's homedir
+    if [[ "\$TBB_HOME" = "\$THE_HOME" ]] ; then
+      echo 'TBB_HOME=\$HOME; refusing to run' >&2
+      exit 1
+    fi
+
     mkdir -p "\$TBB_HOME"
 
     HOME=\$TBB_HOME
     cd "\$HOME"
 
-    exec $self/firefox -no-remote about:tor
+    # Re-init XDG basedir envvars
+    XDG_CACHE_HOME=\$HOME/.cache
+    XDG_CONFIG_HOME=\$HOME/.config
+    XDG_DATA_HOME=\$HOME/.local/share
+
+    # Initialize empty TBB runtime state directory hierarchy.  Mirror the
+    # layout used by the official TBB, to avoid the hassle of working
+    # against the assumptions made by tor-launcher & co.
+    mkdir -p "\$HOME/TorBrowser" "\$HOME/TorBrowser/Data"
+
+    # Initialize the Tor data directory.
+    mkdir -p "\$HOME/TorBrowser/Data/Tor"
+
+    # TBB fails if ownership is too permissive
+    chmod 0700 "\$HOME/TorBrowser/Data/Tor"
+
+    # Initialize the browser profile state.  Expect TBB to generate all data.
+    mkdir -p "\$HOME/TorBrowser/Data/Browser/profile.default"
+
+    # Files that capture store paths; re-generated by firefox at startup
+    rm -rf "\$HOME/TorBrowser/Data/Browser/profile.default"/{compatibility.ini,extensions.ini,extensions.json,startupCache}
+
+    # Clear out fontconfig caches
+    rm -f "\$HOME/.cache/fontconfig/"*.cache-*
+
+    # Lift-off!
+    #
+    # TZ is set to avoid stat()ing /etc/localtime over and over ...
+    #
+    # DBUS_SESSION_BUS_ADDRESS is inherited to avoid auto-launching a new
+    # dbus instance; to prevent using the session bus, set the envvar to
+    # an empty/invalid value prior to running tor-browser.
+    #
+    # FONTCONFIG_FILE is required to make fontconfig read the TBB
+    # fonts.conf; upstream uses FONTCONFIG_PATH, but FC_DEBUG=1024
+    # indicates the system fonts.conf being used instead.
+    #
+    # HOME, TMPDIR, XDG_*_HOME are set as a form of soft confinement;
+    # ideally, tor-browser should not write to any path outside TBB_HOME
+    # and should run even under strict confinement to TBB_HOME.
+    #
+    # XDG_DATA_DIRS is set to prevent searching system directories for
+    # mime and icon data.
+    #
+    # PULSE_{SERVER,COOKIE} is necessary for audio playback w/pulseaudio
+    #
+    # APULSE_PLAYBACK_DEVICE is for audio playback w/o pulseaudio (no capture yet)
+    #
+    # GST_PLUGIN_SYSTEM_PATH is for HD video playback
+    #
+    # GST_REGISTRY is set to devnull to minimize disk writes
+    #
+    # TOR_* is for using an external tor instance
+    #
+    # Parameters lacking a default value below are *required* (enforced by
+    # -o nounset).
+    exec env -i \
+      LD_LIBRARY_PATH=$wrapper_LD_LIBRARY_PATH \
+      \
+      TZ=":" \
+      \
+      DISPLAY="\$DISPLAY" \
+      XAUTHORITY="\$XAUTHORITY" \
+      DBUS_SESSION_BUS_ADDRESS="\$DBUS_SESSION_BUS_ADDRESS" \
+      \
+      HOME="\$HOME" \
+      TMPDIR="\$XDG_CACHE_HOME/tmp" \
+      XDG_CONFIG_HOME="\$XDG_CONFIG_HOME" \
+      XDG_DATA_HOME="\$XDG_DATA_HOME" \
+      XDG_CACHE_HOME="\$XDG_CACHE_HOME" \
+      XDG_RUNTIME_DIR="\$HOME/run" \
+      \
+      XDG_DATA_DIRS="$wrapper_XDG_DATA_DIRS" \
+      \
+      FONTCONFIG_FILE="$TBDATA_IN_STORE/fonts.conf" \
+      \
+      APULSE_PLAYBACK_DEVICE="\''${APULSE_PLAYBACK_DEVICE:-plug:dmix}" \
+      \
+      GST_PLUGIN_SYSTEM_PATH="${optionalString mediaSupport gstPluginsPath}" \
+      GST_REGISTRY="/dev/null" \
+      GST_REGISTRY_UPDATE="no" \
+      \
+      TOR_SKIP_LAUNCH="\''${TOR_SKIP_LAUNCH:-}" \
+      TOR_CONTROL_PORT="\''${TOR_CONTROL_PORT:-}" \
+      TOR_SOCKS_PORT="\''${TOR_SOCKS_PORT:-}" \
+      \
+      $self/firefox \
+        -no-remote \
+        -profile "\$HOME/TorBrowser/Data/Browser/profile.default" \
+        "\$@"
     EOF
     chmod +x $out/bin/tor-browser
+
+    echo "Syntax checking wrapper ..."
+    bash -n $out/bin/tor-browser
+
+    echo "Checking wrapper ..."
+    DISPLAY="" XAUTHORITY="" DBUS_SESSION_BUS_ADDRESS="" TBB_HOME=$(mktemp -d) \
+    $out/bin/tor-browser -version >/dev/null
   '';
 
   meta = with stdenv.lib; {

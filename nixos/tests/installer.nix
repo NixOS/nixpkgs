@@ -260,9 +260,9 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted /dev/vda mklabel msdos",
-              "parted /dev/vda -- mkpart primary linux-swap 1M 1024M",
-              "parted /dev/vda -- mkpart primary ext2 1024M -1s",
+              "parted --script /dev/vda mklabel msdos",
+              "parted --script /dev/vda -- mkpart primary linux-swap 1M 1024M",
+              "parted --script /dev/vda -- mkpart primary ext2 1024M -1s",
               "udevadm settle",
               "mkswap /dev/vda1 -L swap",
               "swapon -L swap",
@@ -277,11 +277,11 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted /dev/vda mklabel gpt",
-              "parted -s /dev/vda -- mkpart ESP fat32 1M 50MiB", # /boot
-              "parted -s /dev/vda -- set 1 boot on",
-              "parted -s /dev/vda -- mkpart primary linux-swap 50MiB 1024MiB",
-              "parted -s /dev/vda -- mkpart primary ext2 1024MiB -1MiB", # /
+              "parted --script /dev/vda mklabel gpt",
+              "parted --script /dev/vda -- mkpart ESP fat32 1M 50MiB", # /boot
+              "parted --script /dev/vda -- set 1 boot on",
+              "parted --script /dev/vda -- mkpart primary linux-swap 50MiB 1024MiB",
+              "parted --script /dev/vda -- mkpart primary ext2 1024MiB -1MiB", # /
               "udevadm settle",
               "mkswap /dev/vda2 -L swap",
               "swapon -L swap",
@@ -300,10 +300,10 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted /dev/vda mklabel msdos",
-              "parted /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
-              "parted /dev/vda -- mkpart primary linux-swap 50MB 1024M",
-              "parted /dev/vda -- mkpart primary ext2 1024M -1s", # /
+              "parted --script /dev/vda mklabel msdos",
+              "parted --script /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
+              "parted --script /dev/vda -- mkpart primary linux-swap 50MB 1024M",
+              "parted --script /dev/vda -- mkpart primary ext2 1024M -1s", # /
               "udevadm settle",
               "mkswap /dev/vda2 -L swap",
               "swapon -L swap",
@@ -321,10 +321,10 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted /dev/vda mklabel msdos",
-              "parted /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
-              "parted /dev/vda -- mkpart primary linux-swap 50MB 1024M",
-              "parted /dev/vda -- mkpart primary ext2 1024M -1s", # /
+              "parted --script /dev/vda mklabel msdos",
+              "parted --script /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
+              "parted --script /dev/vda -- mkpart primary linux-swap 50MB 1024M",
+              "parted --script /dev/vda -- mkpart primary ext2 1024M -1s", # /
               "udevadm settle",
               "mkswap /dev/vda2 -L swap",
               "swapon -L swap",
@@ -357,9 +357,9 @@ in {
       createPartitions =
         ''
           $machine->succeed(
-              "parted /dev/vda mklabel msdos",
-              "parted /dev/vda -- mkpart primary linux-swap 1M 1024M",
-              "parted /dev/vda -- mkpart primary 1024M -1s",
+              "parted --script /dev/vda mklabel msdos",
+              "parted --script /dev/vda -- mkpart primary linux-swap 1M 1024M",
+              "parted --script /dev/vda -- mkpart primary 1024M -1s",
               "udevadm settle",
 
               "mkswap /dev/vda1 -L swap",
@@ -380,11 +380,11 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted /dev/vda mklabel msdos",
-              "parted /dev/vda -- mkpart primary 1M 2048M", # PV1
-              "parted /dev/vda -- set 1 lvm on",
-              "parted /dev/vda -- mkpart primary 2048M -1s", # PV2
-              "parted /dev/vda -- set 2 lvm on",
+              "parted --script /dev/vda mklabel msdos",
+              "parted --script /dev/vda -- mkpart primary 1M 2048M", # PV1
+              "parted --script /dev/vda -- set 1 lvm on",
+              "parted --script /dev/vda -- mkpart primary 2048M -1s", # PV2
+              "parted --script /dev/vda -- set 2 lvm on",
               "udevadm settle",
               "pvcreate /dev/vda1 /dev/vda2",
               "vgcreate MyVolGroup /dev/vda1 /dev/vda2",
@@ -402,10 +402,10 @@ in {
   luksroot = makeInstallerTest "luksroot"
     { createPartitions = ''
         $machine->succeed(
-          "parted /dev/vda mklabel msdos",
-          "parted /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
-          "parted /dev/vda -- mkpart primary linux-swap 50M 1024M",
-          "parted /dev/vda -- mkpart primary 1024M -1s", # LUKS
+          "parted --script /dev/vda mklabel msdos",
+          "parted --script /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
+          "parted --script /dev/vda -- mkpart primary linux-swap 50M 1024M",
+          "parted --script /dev/vda -- mkpart primary 1024M -1s", # LUKS
           "udevadm settle",
           "mkswap /dev/vda2 -L swap",
           "swapon -L swap",
@@ -434,7 +434,7 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted /dev/vda --"
+              "parted --script /dev/vda --"
               . " mklabel msdos"
               . " mkpart primary ext2 1M 100MB" # /boot
               . " mkpart extended 100M -1s"
@@ -469,9 +469,9 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted /dev/sda mklabel msdos",
-              "parted /dev/sda -- mkpart primary linux-swap 1M 1024M",
-              "parted /dev/sda -- mkpart primary ext2 1024M -1s",
+              "parted --script /dev/sda mklabel msdos",
+              "parted --script /dev/sda -- mkpart primary linux-swap 1M 1024M",
+              "parted --script /dev/sda -- mkpart primary ext2 1024M -1s",
               "udevadm settle",
               "mkswap /dev/sda1 -L swap",
               "swapon -L swap",

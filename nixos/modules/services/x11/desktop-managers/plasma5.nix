@@ -47,7 +47,7 @@ in
             ${getBin config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
           ''}
 
-          exec "${plasma5.startkde}"
+          exec "${getBin plasma5.plasma-workspace}/bin/startkde"
         '';
       };
 
@@ -142,7 +142,8 @@ in
 
           kde-gtk-config breeze-gtk
 
-          phonon-backend-gstreamer
+          libsForQt56.phonon-backend-gstreamer
+          libsForQt5.phonon-backend-gstreamer
         ]
 
         ++ lib.optionals cfg.enableQt4Support [ breeze-qt4 pkgs.phonon-backend-gstreamer ]
@@ -174,7 +175,7 @@ in
         serif = [ "Noto Serif" ];
       };
 
-      programs.ssh.askPassword = "${plasma5.ksshaskpass.out}/bin/ksshaskpass";
+      programs.ssh.askPassword = mkDefault "${plasma5.ksshaskpass.out}/bin/ksshaskpass";
 
       # Enable helpful DBus services.
       services.udisks2.enable = true;
@@ -189,7 +190,7 @@ in
       ];
 
       services.xserver.displayManager.sddm = {
-        theme = "breeze";
+        theme = mkDefault "breeze";
       };
 
       security.pam.services.kde = { allowNullPassword = true; };

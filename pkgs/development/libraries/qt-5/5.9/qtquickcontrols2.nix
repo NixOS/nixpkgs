@@ -3,7 +3,7 @@
 qtSubmodule {
   name = "qtquickcontrols2";
   qtInputs = [ qtdeclarative ];
-  outputs = [ "out" "dev" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
   postInstall = ''
     moveToOutput "$qtQmlPrefix" "$bin"
   '';

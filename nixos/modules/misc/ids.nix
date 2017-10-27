@@ -296,7 +296,10 @@
       clickhouse = 278;
       rslsync = 279;
       minio = 280;
-      rtorrent = 281;
+      kanboard = 281;
+      pykms = 282;
+      kodi = 283;
+      rtorrent = 284;
 
       # When adding a uid, make sure it doesn't match an existing gid. And don't use uids above 399!
 
@@ -562,7 +565,10 @@
       clickhouse = 278;
       rslsync = 279;
       minio = 280;
-      rtorrent = 281;
+      kanboard = 281;
+      pykms = 282;
+      kodi = 283;
+      rtorrent = 284;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal

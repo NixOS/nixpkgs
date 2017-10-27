@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1abn4amsyys6vwn7csxsxny94n24ycca3xhqxqcmdc4j0dzn3kmb";
   };
 
-  buildInputs = [ pkgconfig glib gtk2 python2Packages.python python2Packages.wrapPython python2Packages.pygtk ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib gtk2 python2Packages.python python2Packages.wrapPython python2Packages.pygtk ];
   pythonPath = with python2Packages; [ pygtk pycairo ];
 
   installPhase = ''

@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0hml2v228wi2r61m1pgka7h96rl92b6apk0iigm62miyp4mp9ys4";
   };
 
-  buildInputs = [ pkgconfig freetype pango libpng libtiff giflib libjpeg netpbm ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ freetype pango libpng libtiff giflib libjpeg netpbm ];
 
   patches = [
     ./giflib.patch

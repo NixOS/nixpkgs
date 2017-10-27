@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0l6944hq79qsyp60i5ai02xwyp8l47q7xdm3js0jfkpf72ag7i42";
   };
 
-  buildInputs = [ pkgconfig gtk2 bison intltool flex netpbm imagemagick dbus xlibsWrapper mesa tcl shared_mime_info tk gnome2.gtkglext pangox_compat gd xorg.libXmu ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 bison intltool flex netpbm imagemagick dbus xlibsWrapper mesa tcl shared_mime_info tk gnome2.gtkglext pangox_compat gd xorg.libXmu ];
 
   configureFlags = ["--disable-update-desktop-database"];
 

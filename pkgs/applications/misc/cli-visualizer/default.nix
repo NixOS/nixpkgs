@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fftw, ncurses, libpulseaudio }:
+{ stdenv, fetchFromGitHub, fftw, ncurses5, libpulseaudio, makeWrapper }:
 
 stdenv.mkDerivation rec {
   version = "1.5";
@@ -15,13 +15,15 @@ stdenv.mkDerivation rec {
     sed '1i#include <cmath>' -i src/Transformer/SpectrumCircleTransformer.cpp
   '';
 
-  buildInputs = [ fftw ncurses libpulseaudio ];
+  buildInputs = [ fftw ncurses5 libpulseaudio makeWrapper ];
 
   buildFlags = [ "ENABLE_PULSE=1" ];
 
   installPhase = ''
     mkdir -p $out/bin
     cp build/vis $out/bin/vis
+    # See https://github.com/dpayne/cli-visualizer/issues/62#issuecomment-330738075
+    wrapProgram $out/bin/vis --set TERM rxvt-256color
   '';
 
   meta = {

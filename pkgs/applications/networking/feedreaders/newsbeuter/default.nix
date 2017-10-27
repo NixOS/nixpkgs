@@ -36,6 +36,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/akrennmair/newsbeuter/commit/26f5a4350f3ab5507bb8727051c87bb04660f333.patch";
       sha256 = "1jjxj4z3s4f1n8rfpwyd42a40gjnziykqas6a26s1lsdkklnbp6q";
     })
+    # https://github.com/akrennmair/newsbeuter/issues/591 / CVE-2017-12904
+    (fetchpatch {
+      url = "https://github.com/akrennmair/newsbeuter/commit/d1460189f6f810ca9a3687af7bc43feb7f2af2d9.patch";
+      sha256 = "1a8k73ckziszsbdwdhcmkfvlmgy955gssg9v4sqvg20v91l5rmai";
+    })
    ];
 
   installFlags = [ "DESTDIR=$(out)" "prefix=" ];

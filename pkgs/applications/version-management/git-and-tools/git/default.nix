@@ -13,7 +13,7 @@
 }:
 
 let
-  version = "2.14.2";
+  version = "2.14.3";
   svn = subversionClient.override { perlBindings = true; };
 in
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "18f70gfzwqd210806hmf94blcd7yv5h9ka6xqkpd2jhijqwp5sah";
+    sha256 = "078m0za5gyzcah5iaxdwx663yvdp8byvjc8rpzjzcrr4sl6rcc2k";
   };
 
   hardeningDisable = [ "format" ];
@@ -145,6 +145,22 @@ stdenv.mkDerivation {
       # Also put git-http-backend into $PATH, so that we can use smart
       # HTTP(s) transports for pushing
       ln -s $out/libexec/git-core/git-http-backend $out/bin/git-http-backend
+
+      # wrap perl commands
+      gitperllib=$out/lib/perl5/site_perl
+      for i in ${builtins.toString perlLibs}; do
+        gitperllib=$gitperllib:$i/lib/perl5/site_perl
+      done
+      wrapProgram $out/libexec/git-core/git-cvsimport \
+                  --set GITPERLLIB "$gitperllib"
+      wrapProgram $out/libexec/git-core/git-add--interactive \
+                  --set GITPERLLIB "$gitperllib"
+      wrapProgram $out/libexec/git-core/git-archimport \
+                  --set GITPERLLIB "$gitperllib"
+      wrapProgram $out/libexec/git-core/git-instaweb \
+                  --set GITPERLLIB "$gitperllib"
+      wrapProgram $out/libexec/git-core/git-cvsexportcommit \
+                  --set GITPERLLIB "$gitperllib"
     ''
 
    + (if svnSupport then

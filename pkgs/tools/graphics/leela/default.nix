@@ -10,7 +10,8 @@ stdenv.mkDerivation {
     sha256 = "1k6n758r9dhjmc1pnpk6qzpg0q7pkq2hf18z3b0s2z198jpkg9s3";
   };
 
-  buildInputs = [ pkgconfig poppler ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ poppler ];
 
   installFlags = [ "PREFIX=$(out)" "MANDIR=$(out)/share/man" ];
 

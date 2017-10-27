@@ -13,7 +13,7 @@ GEM
     escape_utils (1.1.1)
     faraday (0.12.2)
       multipart-post (>= 1.2, < 3)
-    gitaly-proto (0.31.0)
+    gitaly-proto (0.37.0)
       google-protobuf (~> 3.1)
       grpc (~> 1.0)
     github-linguist (4.7.6)
@@ -21,7 +21,7 @@ GEM
       escape_utils (~> 1.1.0)
       mime-types (>= 1.19)
       rugged (>= 0.23.0b)
-    google-protobuf (3.3.0)
+    google-protobuf (3.4.0.2)
     googleauth (0.5.3)
       faraday (~> 0.12)
       jwt (~> 1.4)
@@ -30,7 +30,7 @@ GEM
       multi_json (~> 1.11)
       os (~> 0.9)
       signet (~> 0.7)
-    grpc (1.4.5)
+    grpc (1.6.0)
       google-protobuf (~> 3.1)
       googleauth (~> 0.5.1)
     i18n (0.8.1)
@@ -63,8 +63,8 @@ PLATFORMS
 
 DEPENDENCIES
   activesupport
-  gitaly-proto (~> 0.31.0)
+  gitaly-proto (~> 0.37.0)
   github-linguist (~> 4.7.0)
 
 BUNDLED WITH
-   1.15.3
+   1.15.4

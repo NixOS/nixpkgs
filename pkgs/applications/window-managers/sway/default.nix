@@ -1,58 +1,34 @@
 { stdenv, fetchFromGitHub
-, makeWrapper, cmake, pkgconfig, asciidoc, libxslt, docbook_xsl
-, wayland, wlc, libxkbcommon, pixman, fontconfig, pcre, json_c, dbus_libs
-, pango, cairo, libinput, libcap, xwayland, pam, gdk_pixbuf, libpthreadstubs
+, cmake, pkgconfig, asciidoc, libxslt, docbook_xsl
+, wayland, wlc, libxkbcommon, pcre, json_c, dbus_libs
+, pango, cairo, libinput, libcap, pam, gdk_pixbuf, libpthreadstubs
 , libXdmcp
+, buildDocs ? true
 }:
 
-let
-  version = "0.13.0";
-  # Temporary workaround (0.14.0 segfaults)
-  wlc_009 = stdenv.lib.overrideDerivation wlc (oldAttrs: rec {
-    name = "wlc-${version}";
-    version = "0.0.9";
-
-    src = fetchFromGitHub {
-      owner = "Cloudef";
-      repo = "wlc";
-      rev = "v${version}";
-      fetchSubmodules = true;
-      sha256 = "1r6jf64gs7n9a8129wsc0mdwhcv44p8k87kg0714rhx3g2w22asg";
-    };
-  });
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "sway-${version}";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "Sircmpwn";
     repo = "sway";
     rev = "${version}";
-    sha256 = "1vgk4rl51nx66yzpwg4yhnbj7wc30k5q0hh5lf8y0i1nvpal0p3q";
+    sha256 = "1l8v9cdzd44bm4q71d47vqg6933b8j42q1a61r362vz2la1rcpq2";
   };
 
   nativeBuildInputs = [
-    makeWrapper cmake pkgconfig
-    asciidoc libxslt docbook_xsl
-  ];
+    cmake pkgconfig
+  ] ++ stdenv.lib.optional buildDocs [ asciidoc libxslt docbook_xsl ];
   buildInputs = [
-    wayland wlc_009 libxkbcommon pixman fontconfig pcre json_c dbus_libs
-    pango cairo libinput libcap xwayland pam gdk_pixbuf libpthreadstubs
+    wayland wlc libxkbcommon pcre json_c dbus_libs
+    pango cairo libinput libcap pam gdk_pixbuf libpthreadstubs
     libXdmcp
   ];
 
-  patchPhase = ''
-    sed -i s@/etc/sway@$out/etc/sway@g CMakeLists.txt;
-  '';
+  enableParallelBuilding = true;
 
-  makeFlags = "PREFIX=$(out)";
   cmakeFlags = "-DVERSION=${version}";
-  installPhase = "PREFIX=$out make install";
-
-  LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath [ wlc_009 dbus_libs ];
-  preFixup = ''
-    wrapProgram $out/bin/sway \
-      --prefix LD_LIBRARY_PATH : "${LD_LIBRARY_PATH}";
-  '';
 
   meta = with stdenv.lib; {
     description = "i3-compatible window manager for Wayland";

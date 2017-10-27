@@ -113,7 +113,6 @@ appleDerivation rec {
     install_name_tool \
       -id $out/lib/libresolv.9.dylib \
       -change "$resolv_libSystem" $out/lib/libSystem.dylib \
-      -delete_rpath ${libresolv}/lib \
       $out/lib/libresolv.9.dylib
     ln -s libresolv.9.dylib $out/lib/libresolv.dylib
   '';

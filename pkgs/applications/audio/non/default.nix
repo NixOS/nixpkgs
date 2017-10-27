@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "080rha4ffp7qycyg1mqcf4vj0s7z8qfvz6bxm0w29xgg2kkmb3fx";
   };
 
-  buildInputs = [ pkgconfig python2 cairo libjpeg ntk libjack2 libsndfile
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ python2 cairo libjpeg ntk libjack2 libsndfile
     ladspaH liblrdf liblo libsigcxx
   ];
   configurePhase = "python waf configure --prefix=$out";

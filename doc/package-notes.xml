@@ -477,32 +477,18 @@ it. Place the resulting <filename>package.nix</filename> file into
 
   <varlistentry>
   <term>Using the FOSS Radeon or nouveau (nvidia) drivers</term>
-  <listitem><itemizedlist><listitem><para>
-  Both the open source radeon drivers as well as the nouveau drivers (nvidia)
-  need a newer libc++ than is provided by the default runtime, which leads to a
-  crash on launch. Use <programlisting>environment.systemPackages =
-  [(pkgs.steam.override { newStdcpp = true; })];</programlisting> in your config
-  if you get an error like
-  <programlisting>
-libGL error: unable to load driver: radeonsi_dri.so
-libGL error: driver pointer missing
-libGL error: failed to load driver: radeonsi
-libGL error: unable to load driver: swrast_dri.so
-libGL error: failed to load driver: swrast</programlisting>
-  or
-  <programlisting>
-libGL error: unable to load driver: nouveau_dri.so
-libGL error: driver pointer missing
-libGL error: failed to load driver: nouveau
-libGL error: unable to load driver: swrast_dri.so
-libGL error: failed to load driver: swrast</programlisting></para></listitem>
-  <listitem><para>
-  Steam ships statically linked with a version of libcrypto that
-  conflics with the one dynamically loaded by radeonsi_dri.so.
-  If you get the error
-  <programlisting>steam.sh: line 713: 7842 Segmentation fault (core dumped)</programlisting>
-  have a look at <link xlink:href="https://github.com/NixOS/nixpkgs/pull/20269">this pull request</link>.
-  </para></listitem>
+  <listitem><itemizedlist>
+    <listitem><para>The <literal>newStdcpp</literal> parameter
+    was removed since NixOS 17.09 and should not be needed anymore.
+    </para></listitem>
+
+    <listitem><para>
+    Steam ships statically linked with a version of libcrypto that
+    conflics with the one dynamically loaded by radeonsi_dri.so.
+    If you get the error
+    <programlisting>steam.sh: line 713: 7842 Segmentation fault (core dumped)</programlisting>
+    have a look at <link xlink:href="https://github.com/NixOS/nixpkgs/pull/20269">this pull request</link>.
+    </para></listitem>
 
   </itemizedlist></listitem></varlistentry>
 

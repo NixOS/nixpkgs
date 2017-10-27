@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1cnvgx3jv0yvxlqy0l9k285zgvazmh5k8m4l7lxckjfm5bn6hm1r";
   };
 
-  buildInputs = [ libjack2 pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libjack2 ];
 
   meta = { 
     description = "Console jack loudness meter";

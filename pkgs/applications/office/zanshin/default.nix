@@ -1,5 +1,5 @@
 {
-  stdenv,
+  mkDerivation, lib,
   fetchurl, fetchpatch,
   extra-cmake-modules,
   qtbase, boost,
@@ -7,7 +7,7 @@
   krunner, kwallet
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "zanshin";
   version = "0.4.1";
   name = "${pname}-${version}";
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     krunner kwallet
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A powerful yet simple application to manage your day to day actions, getting your mind like water";
     homepage = https://zanshin.kde.org/;
     maintainers = with maintainers; [ zraexy ];

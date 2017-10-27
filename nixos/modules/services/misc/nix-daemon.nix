@@ -189,6 +189,7 @@ in
               sshKey = "/root/.ssh/id_buildfarm";
               system = "x86_64-linux";
               maxJobs = 2;
+              speedFactor = 2;
               supportedFeatures = [ "kvm" ];
               mandatoryFeatures = [ "perf" ];
             }
@@ -428,7 +429,7 @@ in
         fi
       '';
 
-    nix.nrBuildUsers = mkDefault (lib.max 10 cfg.maxJobs);
+    nix.nrBuildUsers = mkDefault (lib.max 32 cfg.maxJobs);
 
     users.extraUsers = nixbldUsers;
 

@@ -217,7 +217,8 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
-  outputs = [ "out" "lib" "man" "info" ];
+  outputs = if langJava || langGo then ["out" "man" "info"]
+    else [ "out" "lib" "man" "info" ];
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
 
@@ -323,7 +324,11 @@ stdenv.mkDerivation ({
     export LDFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $LDFLAGS_FOR_TARGET"
     export CXXFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CXXFLAGS_FOR_TARGET"
     export CFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CFLAGS_FOR_TARGET"
-  '';
+  ''
+  + stdenv.lib.optionalString (langJava || langGo) ''
+    export lib=$out;
+  ''
+  ;
 
   dontDisableStatic = true;
 
@@ -565,4 +570,10 @@ stdenv.mkDerivation ({
 // optionalAttrs (!stripped || targetPlatform != hostPlatform) { dontStrip = true; }
 
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
+
+// optionalAttrs (langJava) {
+     postFixup = ''
+       target="$(echo "$out/libexec/gcc"/*/*/ecj*)"
+       patchelf --set-rpath "$(patchelf --print-rpath "$target"):$out/lib" "$target"
+     '';}
 )

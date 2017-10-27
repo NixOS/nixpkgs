@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ vala_0_32 pkgconfig gtk3 glib intltool itstool libxml2
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ vala_0_32 gtk3 glib intltool itstool libxml2
                   bzip2 gnome3.totem-pl-parser libxslt
                   gnome3.gsettings_desktop_schemas wrapGAppsHook
                   file gdk_pixbuf gnome3.defaultIconTheme librsvg sqlite

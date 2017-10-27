@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "rofi-pass-${version}";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner = "carnager";
     repo = "rofi-pass";
     rev = version;
-    sha256 = "1qv1yphfy2zmiibc92kq1m0k8plal5wcb6jymc3ks2wrl4v98iy4";
+    sha256 = "1sc4b1g2z7402akk96rqbnwjd66n6qn046ihpwxdb03bv2qahiap";
   };
 
   buildInputs = [ makeWrapper ];

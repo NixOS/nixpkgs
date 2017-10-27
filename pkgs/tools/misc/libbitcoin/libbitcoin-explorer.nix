@@ -13,7 +13,8 @@ in stdenv.mkDerivation {
     sha256 = "00123vw7rxk0ypdfzk0xwk8q55ll31000mkjqdzl915krsbkbfvp";
   };
 
-  buildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ ];
 
   propagatedBuildInputs = [ libbitcoin-client ];
 

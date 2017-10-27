@@ -13,7 +13,8 @@ stdenv.mkDerivation {
     sha256 = "0hwcamf5fi35frg7q6kgisc9v0prqbhsplb2gl55cg3av9sh3hqx";
   };
 
-  buildInputs = [pkgconfig t1lib glib gmetadom libxml2 popt];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ t1lib glib gmetadom libxml2 popt];
   propagatedBuildInputs = [gtk2 t1lib];
 
   patches = [ ./gcc-4.3-build-fixes.patch ./gcc-4.4-build-fixes.patch ];

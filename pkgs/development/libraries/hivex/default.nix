@@ -12,8 +12,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./hivex-syms.patch ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig autoreconfHook makeWrapper
+    autoreconfHook makeWrapper
     perl libxml2 IOStringy
   ];
 

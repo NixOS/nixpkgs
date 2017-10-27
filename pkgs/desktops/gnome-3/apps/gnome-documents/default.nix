@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-getting-started" ];
 
-  buildInputs = [ pkgconfig gtk3 glib intltool itstool libxslt
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk3 glib intltool itstool libxslt
                   docbook_xsl desktop_file_utils inkscape poppler_utils
                   gnome3.gsettings_desktop_schemas makeWrapper gmp
                   gdk_pixbuf gnome3.defaultIconTheme librsvg evince

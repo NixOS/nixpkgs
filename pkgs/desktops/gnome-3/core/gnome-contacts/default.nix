@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
    touch src/*.vala
   '';
 
-  buildInputs = [ pkgconfig gtk3 glib intltool itstool evolution_data_server
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk3 glib intltool itstool evolution_data_server
                   gnome3.gsettings_desktop_schemas wrapGAppsHook file libnotify
                   folks gnome3.gnome_desktop telepathy_glib libsecret dbus_glib
                   libxml2 libsoup gnome3.gnome_online_accounts nspr nss

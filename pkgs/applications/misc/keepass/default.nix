@@ -8,11 +8,11 @@
 # plugin derivations in the Nix store and nowhere else.
 with builtins; buildDotnetPackage rec {
   baseName = "keepass";
-  version = "2.36";
+  version = "2.37";
 
   src = fetchurl {
     url = "mirror://sourceforge/keepass/KeePass-${version}-Source.zip";
-    sha256 = "1j6qhy8h3z6higbpq3q9v04amvgbn90yj3kbsvj17azdkffkwzny";
+    sha256 = "1wfbpfjng1blzkbjnxsdnny544297bm9869ianbr6l0hrvcgv3qx";
   };
 
   sourceRoot = ".";
@@ -98,7 +98,7 @@ with builtins; buildDotnetPackage rec {
   meta = {
     description = "GUI password manager with strong cryptography";
     homepage = http://www.keepass.info/;
-    maintainers = with stdenv.lib.maintainers; [ amorsillo obadz jraygauthier ];
+    maintainers = with stdenv.lib.maintainers; [ amorsillo obadz joncojonathan jraygauthier ];
     platforms = with stdenv.lib.platforms; all;
     license = stdenv.lib.licenses.gpl2;
   };

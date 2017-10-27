@@ -12,7 +12,8 @@ stdenv.mkDerivation {
   version = release.version;
   src = fetchurl { inherit (release) url sha256;
                    name = "libfolia-${release.version}.tar.gz"; };
-  buildInputs = [ automake autoconf libtool pkgconfig autoconf-archive libxml2 icu languageMachines.ticcutils ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ automake autoconf libtool autoconf-archive libxml2 icu languageMachines.ticcutils ];
   preConfigure = "sh bootstrap.sh";
 
   meta = with stdenv.lib; {

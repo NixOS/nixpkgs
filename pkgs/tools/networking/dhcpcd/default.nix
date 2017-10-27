@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "17nnhxmbdcc7k2mh6sgvxisqcqbic5540xbig363ds97gvf795kg";
   };
 
-  buildInputs = [ pkgconfig udev ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ udev ];
 
   configureFlags = [
     "--sysconfdir=/etc"

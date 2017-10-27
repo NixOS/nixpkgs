@@ -215,6 +215,31 @@ let
     '';
   };
 
+  lua-iconv = buildLuaPackage rec {
+    name = "lua-iconv-${version}";
+    version = "7";
+    src = fetchFromGitHub {
+      owner = "ittner";
+      repo = "lua-iconv";
+      rev = "e8d34024a6b185a759733915f116cc5588550261";
+      sha256 = "0rd76966qlxfp8ypkyrbif76nxnm1acclqwfs45wz3972jsk654i";
+    };
+
+    preBuild = ''
+      makeFlagsArray=(
+        INSTALL_PATH="$out/lib/lua/${lua.luaversion}"
+      );
+    '';
+
+    meta = {
+      platforms = stdenv.lib.platforms.unix;
+      license = stdenv.lib.licenses.mit;
+      description = "Lua bindings for POSIX iconv";
+      maintainers = [ maintainers.richardipsum ];
+      homepage = "https://ittner.github.io/lua-iconv/";
+    };
+  };
+
   luasec = buildLuaPackage rec {
     name = "sec-0.6";
     src = fetchFromGitHub {
@@ -354,7 +379,7 @@ let
       url = "https://github.com/lua-stdlib/lua-stdlib/archive/release.zip";
       sha256 = "0636absdfjx8ybglwydmqxwfwmqz1c4b9s5mhxlgm4ci18lw3hms";
     };
-    buildInputs = [ autoreconfHook unzip ];
+    nativeBuildInputs = [ autoreconfHook unzip ];
     meta = {
       homepage = "https://github.com/lua-stdlib/lua-stdlib/";
       platforms = stdenv.lib.platforms.linux;
@@ -483,7 +508,8 @@ let
       platforms   = platforms.unix;
     };
 
-    buildInputs = [ glib gobjectIntrospection lua pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ glib gobjectIntrospection lua ];
 
     makeFlags = [ "LUA_VERSION=${lua.luaversion}" ];
 
@@ -496,7 +522,8 @@ let
     name = "lua-mpack-${libmpack.version}";
     src = libmpack.src;
     sourceRoot = "libmpack-${libmpack.rev}-src/binding/lua";
-    buildInputs = [ libmpack ]; #libtool lua pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libmpack ]; #libtool lua ];
     dontBuild = true;
     preInstall = ''
       mkdir -p $out/lib/lua/${lua.luaversion}

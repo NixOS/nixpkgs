@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
                      "--with-systemduserunitdir=$(out)/etc/systemd/user"
                      "--with-nautilusdir=$(out)/lib/nautilus/extensions-3.0" ];
 
-  buildInputs = [ pkgconfig gtk3 glib intltool itstool libxml2 libtool
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk3 glib intltool itstool libxml2 libtool
                   wrapGAppsHook file gdk_pixbuf gnome3.defaultIconTheme librsvg
                   nautilus libnotify libcanberra_gtk3 systemd ];
 

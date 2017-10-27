@@ -12,7 +12,8 @@ stdenv.mkDerivation {
     sha256 = "1rpanrv8bgdh95v2320qbd44xskncvq6y84cbbfc86gw0qxpd9cb";
   };
 
-  buildInputs = [ cmake libtiff pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake libtiff ];
   propagatedBuildInputs = [ tesseract ];
 
   meta = {

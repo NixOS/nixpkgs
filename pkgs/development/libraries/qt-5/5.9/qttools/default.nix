@@ -5,7 +5,7 @@ with stdenv.lib;
 qtSubmodule {
   name = "qttools";
   qtInputs = [ qtbase ];
-  outputs = [ "out" "dev" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
   patches = copyPathsToStore (readPathsFromFile ./. ./series);
   # qmake moves all binaries to $dev in preFixup
   postFixup = ''

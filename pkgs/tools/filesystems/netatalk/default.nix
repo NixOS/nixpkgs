@@ -8,7 +8,8 @@ stdenv.mkDerivation rec{
     sha256 = "0wf09fyqzza024qr1s26z5x7rsvh9zb4pv598gw7gm77wjcr6174";
   };
 
-  buildInputs = [ pkgconfig db libgcrypt avahi libiconv pam openssl acl ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ db libgcrypt avahi libiconv pam openssl acl ];
 
   patches = ./omitLocalstatedirCreation.patch;
 

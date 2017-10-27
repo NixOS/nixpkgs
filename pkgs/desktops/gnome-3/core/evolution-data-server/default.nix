@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ libsecret nss nspr libical db ];
 
   # uoa irrelevant for now
-  cmakeFlags = [ "-DENABLE_UOA=OFF" "-DENABLE_GOA=OFF" ]
+  cmakeFlags = [ "-DENABLE_UOA=OFF" ]
                    ++ stdenv.lib.optionals valaSupport [
                      "-DENABLE_VALA_BINDINGS=ON" "-DENABLE_INTROSPECTION=ON"
                      "-DCMAKE_SKIP_BUILD_RPATH=OFF" ];

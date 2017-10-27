@@ -17,7 +17,8 @@ stdenv.mkDerivation rec {
      ''
      else "");
 
-  buildInputs = [ pkgconfig browser (browser.gtk) libXpm gettext ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ browser (browser.gtk) libXpm gettext ];
   
   installPhase = ''
     mkdir -p $out/lib/mozilla/plugins

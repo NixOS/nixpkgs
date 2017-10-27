@@ -9,13 +9,14 @@ let
     url="http://foicica.com/gtdialog/download/gtdialog_1.3.zip";
     sha256="0y7sln877940bpj0s38cs5s97xg8csnaihh18lmnchf7c2kkbxpq";
   };
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cdk unzip gtk2 glib ncurses pkgconfig
+    cdk unzip gtk2 glib ncurses
   ];
 in
 stdenv.mkDerivation {
   inherit (s) name version;
-  inherit buildInputs;
+  inherit nativeBuildInputs buildInputs;
   src = fetchurl {
     inherit (s) url sha256;
   };

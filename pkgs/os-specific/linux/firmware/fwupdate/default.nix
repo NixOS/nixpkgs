@@ -14,7 +14,8 @@ let version = "8"; in
           "TARGETDIR=$(out)/boot/efi/nixos/"
           "prefix=$(out)/"
         ];
-      buildInputs = [ gnu-efi libsmbios popt pkgconfig gettext ];
+  nativeBuildInputs = [ pkgconfig ];
+      buildInputs = [ gnu-efi libsmbios popt gettext ];
       propagatedBuildInputs = [ efivar ];
       # TODO: Just apply the disable to the efi subdir
       hardeningDisable = [ "all" ];

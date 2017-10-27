@@ -26,9 +26,8 @@ in stdenv.mkDerivation rec {
     sha256 = "0f3radhlji7rxl760yl2vm49fvfslympxrpm8497acbmbd7wlhxz";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig
-
     python3
     perl
     perlPackages.XMLParser

@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "02ak3b0vv72mv38cwvy7qp0y6hgrzcgahkv1apgks3drpnz5w1sj";
   };
 
-  buildInputs = [ yacc ncurses libxml2 libzip libxls pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ yacc ncurses libxml2 libzip libxls ];
 
   buildPhase = ''
     cd src

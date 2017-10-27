@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   outputBin = "dev";
   outputMan = "dev"; # tiny pages
 
-  buildInputs = [ flex bison pkgconfig python setupHook/*move .gir*/ ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ flex bison python setupHook/*move .gir*/ ]
     ++ libintlOrEmpty
     ++ stdenv.lib.optional stdenv.isDarwin cctools;
   propagatedBuildInputs = [ libffi glib ];

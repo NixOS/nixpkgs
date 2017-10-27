@@ -3,7 +3,8 @@
 stdenv.mkDerivation {
   name = "p2pvc";
 
-  buildInputs = [ pkgconfig opencv ncurses portaudio ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ opencv ncurses portaudio ];
 
   enableParallelBuilding = true;
 

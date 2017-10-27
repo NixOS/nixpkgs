@@ -16,6 +16,7 @@
 , gstreamer
 , gtk2
 , gtk3
+, kerberos
 , libX11
 , libXScrnSaver
 , libxcb
@@ -100,6 +101,7 @@ stdenv.mkDerivation {
       gstreamer
       gtk2
       gtk3
+      kerberos
       libX11
       libXScrnSaver
       libXcomposite
@@ -168,6 +170,7 @@ stdenv.mkDerivation {
     '';
 
   passthru.ffmpegSupport = true;
+  passthru.gssSupport = true;
   passthru.updateScript = import ./update.nix {
     inherit name channel writeScript xidel coreutils gnused gnugrep gnupg curl;
     baseUrl =

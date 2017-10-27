@@ -9,18 +9,19 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "zcash" + (toString (optional (!withGui) "d")) + "-" + version;
-  version = "1.0.11";
+  version = "1.0.12";
 
   src = fetchFromGitHub {
     owner = "zcash";
     repo  = "zcash";
     rev = "v${version}";
-    sha256 = "09474jdhsg30maqrwfxigbw3llqi8axhh82lz3a23ii2gj68ni55";
+    sha256 = "19bxhdnkvgncgl9x6nbaf5nwgrdfw99icvdbi9adfh646pd5z64s";
   };
 
   enableParallelBuilding = true;
 
-  buildInputs = [ pkgconfig gtest gmock gmp libsnark autoreconfHook openssl wget db62 boost zlib
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ gtest gmock gmp libsnark openssl wget db62 boost zlib
                   protobuf libevent libsodium librustzcash ]
                   ++ optionals stdenv.isLinux [ utillinux ]
                   ++ optionals withGui [ qt4 qrencode ];

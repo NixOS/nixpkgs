@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
 
   installPhase = "scons install";
 
-  buildInputs = [ gdk_pixbuf pkgconfig gtk2 glib scons pcre cfitsio perl gob2 vala_0_23 libtiff
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gdk_pixbuf gtk2 glib scons pcre cfitsio perl gob2 vala_0_23 libtiff
     json_glib ];
 
   meta = {

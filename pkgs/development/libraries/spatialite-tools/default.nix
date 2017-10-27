@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "14aqmhvab63ydbb82fglsbig7jw1wmci8jjvci07aavdhvh1pyrv";
   };
 
-  buildInputs = [ pkgconfig sqlite expat zlib proj geos libspatialite readosm ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ sqlite expat zlib proj geos libspatialite readosm ];
 
   configureFlags = "--disable-freexl";
 
