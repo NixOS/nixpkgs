@@ -8,7 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "0d5qlq5ab95wh1xc87rqrh1vx6i8lddka1w3f1zcqvcqdxgyn8zx";
   };
 
-  configureFlags = [ "--disable-lynx" ];
+  configureFlags = [ "--disable-lynx" ]
+    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    [ # Can't run this test while cross-compiling
+      "ac_cv_func_setpgrp_void=yes"
+    ];
 
   meta = {
     description = "Lightweight C library that eases the writing of UNIX daemons";
