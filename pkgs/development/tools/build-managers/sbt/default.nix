@@ -20,8 +20,6 @@ stdenv.mkDerivation rec {
       --replace "| bc)" "| ${bc}/bin/bc)"
   '';
 
-  buildInputs = [ bc ];
-
   installPhase = ''
     mkdir -p $out/share/sbt $out/bin
     cp -ra . $out/share/sbt
