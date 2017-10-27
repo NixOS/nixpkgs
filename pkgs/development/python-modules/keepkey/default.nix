@@ -4,11 +4,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "keepkey";
-  version = "0.7.3";
+  version = "4.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14d2r8dlx997ypgma2k8by90acw7i3l7hfq4gar9lcka0lqfj714";
+    sha256 = "95c8d5127919f9fc4bb0120b05f92efc8f526d4a68122ac18e63509571ac45a2";
   };
 
   propagatedBuildInputs = [ protobuf hidapi ];

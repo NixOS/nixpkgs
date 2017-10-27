@@ -1,4 +1,4 @@
-{ stdenv, buildPythonApplication, fetchurl, pythonOlder
+{ stdenv, buildPythonApplication, fetchPypi, pythonOlder
 , mock, pytest, nose
 , pyyaml, backports_ssl_match_hostname, colorama, docopt
 , dockerpty, docker, ipaddress, jsonschema, requests
@@ -10,8 +10,8 @@ buildPythonApplication rec {
   pname = "docker-compose";
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/d/docker-compose/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "0yg58m5kk22kihbra0h40miqnbdmkirjr9y47wns613sdikrymmg";
   };
 

@@ -118,6 +118,8 @@ with pkgs;
 
   dotnetbuildhelpers = callPackage ../build-support/dotnetbuildhelpers { };
 
+  dotnet-sdk = callPackage ../development/compilers/dotnet/sdk/default.nix { };
+
   dispad = callPackage ../tools/X11/dispad { };
 
   vsenv = callPackage ../build-support/vsenv {
@@ -302,6 +304,8 @@ with pkgs;
   nixBufferBuilders = import ../build-support/emacs/buffer.nix { inherit (pkgs) lib writeText; inherit (emacsPackagesNg) inherit-local; };
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
+
+  closureInfo = callPackage ../build-support/closure-info.nix { };
 
   setupSystemdUnits = callPackage ../build-support/setup-systemd-units.nix { };
 
@@ -1102,6 +1106,10 @@ with pkgs;
   gorilla-bin = callPackage ../tools/security/gorilla-bin { };
 
   gosu = callPackage ../tools/misc/gosu { };
+
+  greg = callPackage ../applications/audio/greg {
+    pythonPackages = python3Packages;
+  };
 
   gringo = callPackage ../tools/misc/gringo { scons = scons_2_5_1; };
 
@@ -2810,6 +2818,8 @@ with pkgs;
 
   jrnl = callPackage ../applications/misc/jrnl { };
 
+  jsawk = callPackage ../tools/text/jsawk { };
+
   jscoverage = callPackage ../development/tools/misc/jscoverage { };
 
   jsduck = callPackage ../development/tools/jsduck { };
@@ -3556,6 +3566,8 @@ with pkgs;
   pasystray = callPackage ../tools/audio/pasystray { };
 
   pnmixer = callPackage ../tools/audio/pnmixer { };
+
+  pulsemixer = callPackage ../tools/audio/pulsemixer { };
 
   pwsafe = callPackage ../applications/misc/pwsafe {
     wxGTK = wxGTK30;
@@ -4497,6 +4509,8 @@ with pkgs;
   supertux-editor = callPackage ../applications/editors/supertux-editor { };
 
   super-user-spark = haskellPackages.callPackage ../applications/misc/super_user_spark { };
+
+  svgcleaner = callPackage ../tools/graphics/svgcleaner { };
 
   ssdeep = callPackage ../tools/security/ssdeep { };
 
@@ -6246,6 +6260,8 @@ with pkgs;
 
   serpent = callPackage ../development/compilers/serpent { };
 
+  shmig = callPackage ../development/tools/database/shmig { };
+
   smlnjBootstrap = callPackage ../development/compilers/smlnj/bootstrap.nix { };
   smlnj = if stdenv.isDarwin
             then callPackage ../development/compilers/smlnj { }
@@ -7537,6 +7553,8 @@ with pkgs;
   sbt = callPackage ../development/tools/build-managers/sbt { };
   sbt-with-scala-native = callPackage ../development/tools/build-managers/sbt/scala-native.nix { };
   simpleBuildTool = sbt;
+
+  sbt-extras = callPackage ../development/tools/build-managers/sbt-extras { };
 
   shallot = callPackage ../tools/misc/shallot { };
 
@@ -13175,7 +13193,9 @@ with pkgs;
 
   comic-relief = callPackage ../data/fonts/comic-relief {};
 
-  coreclr = callPackage ../development/compilers/coreclr { };
+  coreclr = callPackage ../development/compilers/coreclr {
+    debug = config.coreclr.debug or false;
+  };
 
   corefonts = callPackage ../data/fonts/corefonts { };
 
@@ -13700,6 +13720,8 @@ with pkgs;
   atom-beta = callPackage ../applications/editors/atom/beta.nix { };
 
   aseprite = callPackage ../applications/editors/aseprite { };
+
+  astah-community = callPackage ../applications/graphics/astah-community { };
 
   astroid = callPackage ../applications/networking/mailreaders/astroid { };
 
@@ -15242,7 +15264,7 @@ with pkgs;
 
   inherit (kdeApplications)
     akonadi akregator ark dolphin ffmpegthumbs filelight gwenview k3b
-    kaddressbook kate kcachegrind kcalc kcolorchooser kcontacts kdenlive kdf
+    kaddressbook kate kcachegrind kcalc kcolorchooser kcontacts kdenlive kdf keditbookmarks
     kgpg khelpcenter kig kleopatra kmail kmix kolourpaint kompare konsole
     kontact korganizer krdc krfb kwalletmanager marble minuet okteta okular spectacle;
 
@@ -15290,6 +15312,8 @@ with pkgs;
   };
 
   kipi-plugins = libsForQt5.callPackage ../applications/graphics/kipi-plugins { };
+
+  kitty = callPackage ../applications/misc/kitty { };
 
   kiwix = callPackage ../applications/misc/kiwix { };
 
@@ -16110,6 +16134,7 @@ with pkgs;
     notifySupport   = config.profanity.notifySupport   or true;
     traySupport     = config.profanity.traySupport     or true;
     autoAwaySupport = config.profanity.autoAwaySupport or true;
+    python = python3;
   };
 
   psi = kde4.callPackage ../applications/networking/instant-messengers/psi { };
@@ -16988,6 +17013,8 @@ with pkgs;
       else null;
   };
 
+  uvcdynctrl = callPackage ../os-specific/linux/uvcdynctrl { };
+
   vkeybd = callPackage ../applications/audio/vkeybd {};
 
   vlc = callPackage ../applications/video/vlc {
@@ -17020,6 +17047,8 @@ with pkgs;
   vscode-extensions = recurseIntoAttrs (callPackage ../misc/vscode-extensions {});
 
   vue = callPackage ../applications/misc/vue { };
+
+  vuze = callPackage ../applications/networking/p2p/vuze { };
 
   vwm = callPackage ../applications/window-managers/vwm { };
 
@@ -17063,6 +17092,8 @@ with pkgs;
   weechat-matrix-bridge = callPackage ../applications/networking/instant-messengers/weechat-matrix-bridge {
     inherit (luaPackages) cjson;
   };
+
+  weechat-xmpp = callPackage ../applications/networking/instant-messengers/weechat-xmpp {};
 
   westonLite = callPackage ../applications/window-managers/weston {
     pango = null;
@@ -17337,6 +17368,8 @@ with pkgs;
   apvlv = callPackage ../applications/misc/apvlv { };
 
   xpdf = libsForQt5.callPackage ../applications/misc/xpdf { };
+
+  xpointerbarrier = callPackage ../tools/X11/xpointerbarrier {};
 
   xkb_switch = callPackage ../tools/X11/xkb-switch { };
 
@@ -19773,5 +19806,7 @@ with pkgs;
 
   duti = callPackage ../os-specific/darwin/duti {};
 
-  dnstracer = callPackage ../tools/networking/dnstracer {};
+  dnstracer = callPackage ../tools/networking/dnstracer {
+    inherit (darwin) libresolv;
+  };
 }

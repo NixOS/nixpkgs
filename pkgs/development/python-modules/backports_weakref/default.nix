@@ -9,10 +9,10 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "backports.weakref";
-  version = "1.0rc1";
+  version = "1.0.post1";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14i8m3lspykdfpzf50grij3z286j9q8f32f2bnwdicv659qvy4w8";
+    sha256 = "bc4170a29915f8b22c9e7c4939701859650f2eb84184aee80da329ac0b9825c2";
   };
 
   buildInputs = [ setuptools_scm ];

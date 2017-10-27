@@ -15,11 +15,19 @@ stdenv.mkDerivation rec {
     sha256 = "68e04961d0bf6ba193cb7ec658b295c4ff6e60b3754d64bcd77ebdcee0f283fd";
   };
 
-  patches = [(fetchpatch { # remove for >= 2.6.1
-    name = "kdig-tls.patch";
-    url = "https://gitlab.labs.nic.cz/knot/knot-dns/commit/b72d5cd032795.diff";
-    sha256 = "0ig31rp82j49jh8n3s0dcf5abhh35mcp2k2wii7bh0c60ngb29k6";
-  })];
+  patches = [
+    # remove both for >= 2.6.1
+    (fetchpatch {
+      name = "kdig-tls.patch";
+      url = "https://gitlab.labs.nic.cz/knot/knot-dns/commit/b72d5cd032795.diff";
+      sha256 = "0ig31rp82j49jh8n3s0dcf5abhh35mcp2k2wii7bh0c60ngb29k6";
+    })
+    (fetchpatch {
+      name = "kdig-tls-sni.patch";
+      url = "https://gitlab.labs.nic.cz/knot/knot-dns/commit/2e94ccee671ec70e.diff";
+      sha256 = "0psl6650v7g240i8w196v7zxy6j11d0aa6hm11b7vnaimjshgibv";
+    })
+  ];
 
   outputs = [ "bin" "out" "dev" ];
 

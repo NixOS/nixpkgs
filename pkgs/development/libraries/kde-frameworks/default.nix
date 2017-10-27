@@ -78,7 +78,7 @@ let
             inherit (args) name;
             inherit (srcs."${name}") src version;
 
-            outputs = args.outputs or [ "out" "dev" "bin" ];
+            outputs = args.outputs or [ "bin" "dev" "out" ];
             hasBin = lib.elem "bin" outputs;
             hasDev = lib.elem "dev" outputs;
 

@@ -1,39 +1,37 @@
-{ stdenv, fetchFromGitHub, makeWrapper, cmake, llvmPackages_39, kernel,
-  flex, bison, elfutils, python, pythonPackages, luajit, netperf, iperf }:
+{ stdenv, fetchFromGitHub, makeWrapper, cmake, llvmPackages_5, kernel
+, flex, bison, elfutils, python, pythonPackages, luajit, netperf, iperf }:
 
 stdenv.mkDerivation rec {
-  version = "0.3.0";
+  version = "0.4.0";
   name = "bcc-${version}";
 
   src = fetchFromGitHub {
     owner = "iovisor";
     repo = "bcc";
     rev = "v${version}";
-    sha256 = "19lkqmilfjmj7bnhxlacd0waa5db8gf4lng12fy2zgji0d77vm1d";
+    sha256 = "106ri3yhjhp3dgsjb05y4j6va153d5nqln3zjdz6qfz87svak0rw";
   };
 
-  # llvm 4.0 leads to segmentation faults, this will be fixed in llvm 5.0
-  # https://github.com/iovisor/bcc/issues/1276#issuecomment-319888478
-  buildInputs = [ makeWrapper cmake llvmPackages_39.llvm llvmPackages_39.clang-unwrapped kernel
-    flex bison elfutils python pythonPackages.netaddr luajit netperf iperf
+  buildInputs = [
+    llvmPackages_5.llvm llvmPackages_5.clang-unwrapped kernel
+    elfutils python pythonPackages.netaddr luajit netperf iperf
   ];
 
-  cmakeFlags="-DBCC_KERNEL_MODULES_DIR=${kernel.dev}/lib/modules -DBCC_KERNEL_HAS_SOURCE_DIR=1";
+  nativeBuildInputs = [ makeWrapper cmake flex bison ];
 
   postInstall = ''
     mkdir -p $out/bin $out/share
-    rm -r $out/share/bcc/tools/{old,doc/CMakeLists.txt}
+    rm -r $out/share/bcc/tools/old
     mv $out/share/bcc/tools/doc $out/share
     mv $out/share/bcc/man $out/share/
 
-    for f in $out/share/bcc/tools\/*; do
-      if [ -x $f ]; then
-        ln -s $f $out/bin/$(basename $f)
-        wrapProgram $f \
-          --prefix LD_LIBRARY_PATH : $out/lib \
-          --prefix PYTHONPATH : $out/lib/python2.7/site-packages \
-          --prefix PYTHONPATH : ${pythonPackages.netaddr}/lib/${python.libPrefix}/site-packages
-      fi
+    find $out/share/bcc/tools -type f -executable -print0 | \
+    while IFS= read -r -d $'\0' f; do
+      pythonLibs="$out/lib/python2.7/site-packages:${pythonPackages.netaddr}/lib/${python.libPrefix}/site-packages"
+      rm -f $out/bin/$(basename $f)
+      makeWrapper $f $out/bin/$(basename $f) \
+        --prefix LD_LIBRARY_PATH : $out/lib \
+        --prefix PYTHONPATH : "$pythonLibs"
     done
   '';
 

@@ -33,7 +33,7 @@ mkDerivation {
 
     qtgraphicaleffects qtquickcontrols qtquickcontrols2 qtscript qtwayland qtx11extras
   ];
-  outputs = [ "out" "dev" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
 
   cmakeFlags = [
     "-DNIXPKGS_XMESSAGE=${getBin xmessage}/bin/xmessage"

@@ -33,7 +33,7 @@ let
     name = "couchbase-${version}";
     version = "2.3.4";
 
-    buildInputs = [ pkgs.libcouchbase pcs ];
+    buildInputs = [ pkgs.libcouchbase pkgs.zlib igbinary pcs ];
 
     src = pkgs.fetchFromGitHub {
       owner = "couchbase";
@@ -57,8 +57,29 @@ let
                if test -r $i/include/libcouchbase/couchbase.h; then
                  LIBCOUCHBASE_DIR=$i
                  AC_MSG_RESULT(found in $i)
+        @@ -154,6 +154,8 @@ COUCHBASE_FILES=" \
+             igbinary_inc_path="$phpincludedir"
+           elif test -f "$phpincludedir/ext/igbinary/igbinary.h"; then
+             igbinary_inc_path="$phpincludedir"
+        +  elif test -f "${igbinary.dev}/include/ext/igbinary/igbinary.h"; then
+        +    igbinary_inc_path="${igbinary.dev}/include"
+           fi
+           if test "$igbinary_inc_path" = ""; then
+             AC_MSG_WARN([Cannot find igbinary.h])
       '')
     ];
+  };
+
+  igbinary = buildPecl {
+    name = "igbinary-2.0.4";
+
+    configureFlags = [ "--enable-igbinary" ];
+
+    makeFlags = [ "phpincludedir=$(dev)/include" ];
+
+    outputs = [ "out" "dev" ];
+
+    sha256 = "0a55l4f0bgbf3f6sh34njd14niwagg829gfkvb8n5fs69xqab67d";
   };
 
   imagick = buildPecl {

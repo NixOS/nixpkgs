@@ -1191,6 +1191,8 @@ in {
     };
   };
 
+  backports_tempfile = callPackage ../development/python-modules/backports_tempfile { };
+
   backports_unittest-mock = callPackage ../development/python-modules/backports_unittest-mock {};
 
   babelfish = buildPythonPackage rec {
@@ -7583,11 +7585,11 @@ in {
   };
 
   raven = buildPythonPackage rec {
-    name = "raven-6.2.0";
+    name = "raven-6.2.1";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/raven/${name}.tar.gz";
-      sha256 = "1jmr9kpajfh6fvxbym6fdybmlr14216y0dkbial7ris9pi1pwhf5";
+      sha256 = "1zkh8llsfng5viz8cpf9j74v30705hv80vb5g6gha1ij7v60p8y0";
     };
 
     # way too many dependencies to run tests
@@ -10798,32 +10800,7 @@ in {
 
   jupyter_client = callPackage ../development/python-modules/jupyter_client { };
 
-  jupyter_core = buildPythonPackage rec {
-    version = "4.3.0";
-    name = "jupyter_core-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/j/jupyter_core/${name}.tar.gz";
-      sha256 = "a96b129e1641425bf057c3d46f4f44adce747a7d60107e8ad771045c36514d40";
-    };
-
-    buildInputs = with self; [ pytest mock ];
-    propagatedBuildInputs = with self; [ ipython traitlets];
-
-    checkPhase = ''
-      py.test
-    '';
-
-    # Several tests fail due to being in a chroot
-    doCheck = false;
-
-    meta = {
-      description = "Jupyter core package. A base package on which Jupyter projects rely";
-      homepage = http://jupyter.org/;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  jupyter_core = callPackage ../development/python-modules/jupyter_core { };
 
   jsonpath_rw = buildPythonPackage rec {
     name = "jsonpath-rw-${version}";
@@ -11652,6 +11629,8 @@ in {
     };
   };
 
+  meliae = callPackage ../development/python-modules/meliae {};
+
   memcached = buildPythonPackage rec {
     name = "memcached-1.51";
 
@@ -11900,23 +11879,7 @@ in {
     };
   };
 
-  mistune = buildPythonPackage rec {
-    version = "0.7.1";
-    name = "mistune-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/m/mistune/${name}.tar.gz";
-      sha256 = "6076dedf768348927d991f4371e5a799c6a0158b16091df08ee85ee231d929a7";
-    };
-
-    buildInputs = with self; [nose];
-
-    meta = {
-      description = "The fastest markdown parser in pure Python";
-      homepage = https://github.com/lepture/mistune;
-      license = licenses.bsd3;
-    };
-  };
+  mistune = callPackage ../development/python-modules/mistune { };
 
   brotlipy = buildPythonPackage rec {
     name = "brotlipy-${version}";
@@ -13148,6 +13111,8 @@ in {
 
     buildInputs = with self; [ nose ];
   };
+
+  nose_warnings_filters = callPackage ../development/python-modules/nose_warnings_filters { };
 
   notebook = callPackage ../development/python-modules/notebook { };
 
@@ -15137,6 +15102,8 @@ in {
       license = licenses.bsd3;
     };
   };
+
+  parso = callPackage ../development/python-modules/parso { };
 
   partd = buildPythonPackage rec {
     name = "partd-${version}";
@@ -18911,25 +18878,9 @@ in {
     };
   };
 
-  rootpy = buildPythonPackage rec {
-    version = "0.9.0";
-    name = "rootpy-${version}";
+  root_numpy = callPackage ../development/python-modules/root_numpy { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/rootpy/${name}.tar.gz";
-      sha256 = "04alx6afiyahhv816f6zpwnm0sx2jxgqpgqcn6kdw0wnpc9625cr";
-    };
-
-    disabled = isPy3k;
-
-    propagatedBuildInputs = with self; [ pkgs.root numpy matplotlib ];
-
-    meta = {
-      homepage = "http://www.rootpy.org";
-      license = licenses.gpl3;
-      description = "Pythonic interface to the ROOT framework";
-    };
-  };
+  rootpy = callPackage ../development/python-modules/rootpy { };
 
   rope = buildPythonPackage rec {
     version = "0.10.2";
@@ -24035,13 +23986,13 @@ EOF
   };
 
   libvirt = let
-    version = "3.6.0";
+    version = "3.8.0";
   in assert version == pkgs.libvirt.version; pkgs.stdenv.mkDerivation rec {
     name = "libvirt-python-${version}";
 
     src = pkgs.fetchurl {
       url = "http://libvirt.org/sources/python/${name}.tar.gz";
-      sha256 = "1l0s9cx38qb6x5xj32r531xap11m93c3gag30idj8fzkn74cpfgc";
+      sha256 = "02spx8kfcsnqwsshd7bk2plyic2lbpwzg16sf3csh0avck5akjsz";
     };
 
     nativeBuildInputs = [ pkgs.pkgconfig ];

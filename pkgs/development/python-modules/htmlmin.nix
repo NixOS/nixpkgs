@@ -1,11 +1,11 @@
 { stdenv, buildPythonPackage, fetchPypi }:
 buildPythonPackage rec {
   pname = "htmlmin";
-  version = "0.1.10";
+  version = "0.1.11";
   name = "${pname}-${version}";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ca5c5dfbb0fa58562e5cbc8dc026047f6cb431d4333504b11853853be448aa63";
+    sha256 = "f27fb96fdddeb1725ee077be532c7bea23288c69d0e996e7798f24fae7a14e5e";
   };
 
   # Tests run fine in a normal source checkout, but not when being built by nix.

@@ -12,11 +12,11 @@ assert taglibSupport -> (taglib != null);
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "ncmpcpp-${version}";
-  version = "0.8";
+  version = "0.8.1";
 
   src = fetchurl {
-    url = "http://ncmpcpp.rybczak.net/stable/${name}.tar.bz2";
-    sha256 = "0nj6ky805a55acj0w57sbn3vfmmkbqp97rhbi0q9848n10f2l3rg";
+    url = "https://ncmpcpp.rybczak.net/stable/${name}.tar.bz2";
+    sha256 = "1zw8d07b2bkssbsybg6jnmpq001w525viajrnz4jvfml3l55gyad";
   };
 
   configureFlags = [ "BOOST_LIB_SUFFIX=" ]
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A featureful ncurses based MPD client inspired by ncmpc";
-    homepage    = http://ncmpcpp.rybczak.net/;
+    homepage    = https://ncmpcpp.rybczak.net/;
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ jfrankenau koral lovek323 mornfall ];
     platforms   = platforms.all;

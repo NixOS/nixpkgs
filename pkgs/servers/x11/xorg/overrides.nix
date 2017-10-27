@@ -563,11 +563,11 @@ in
 
   xf86videointel = attrs: attrs // {
     # the update script only works with released tarballs :-/
-    name = "xf86-video-intel-2017-04-18";
+    name = "xf86-video-intel-2017-10-19";
     src = args.fetchurl {
       url = "http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/snapshot/"
-          + "c72bb27a3a68ecc616ce2dc8e9a1d20354504562.tar.gz";
-      sha256 = "1awxbig135nmq7qa8jzggqr4q32k6ngnal2lckrdkg7zqi40zdv8";
+          + "4798e18b2b2c8b0a05dc967e6140fd9962bc1a73.tar.gz";
+      sha256 = "1zpgbibfpdassswfj68zwhhfpvd2p80rpxw92bis6lv81ssknwby";
     };
     buildInputs = attrs.buildInputs ++ [xorg.libXfixes xorg.libXScrnSaver xorg.pixman];
     nativeBuildInputs = attrs.nativeBuildInputs ++ [args.autoreconfHook xorg.utilmacros];

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, makeDesktopItem, ant, jdk, jre }:
+{ stdenv, fetchurl, makeWrapper, makeDesktopItem, jdk, jre, wrapGAppsHook, gtk3, gsettings_desktop_schemas }:
 
 stdenv.mkDerivation rec {
   version = "3.8.1";
@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
     exec = "jabref";
   };
 
-  buildInputs = [ makeWrapper jdk ];
+  buildInputs = [ makeWrapper jdk wrapGAppsHook gtk3 gsettings_desktop_schemas ];
 
-  phases = [ "installPhase" ];
+  unpackPhase = "#";
 
   installPhase = ''
     mkdir -p $out/bin $out/share/java $out/share/icons

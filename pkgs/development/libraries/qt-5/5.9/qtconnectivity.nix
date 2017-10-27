@@ -3,7 +3,7 @@
 qtSubmodule {
   name = "qtconnectivity";
   qtInputs = [ qtbase qtdeclarative ];
-  outputs = [ "out" "dev" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
   postInstall = ''
     moveToOutput "$qtQmlPrefix" "$bin"
   '';

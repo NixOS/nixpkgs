@@ -76,7 +76,7 @@ stdenv.mkDerivation {
     [ bison flex gperf lndir perl pkgconfig python2 which ]
     ++ lib.optional (!stdenv.isDarwin) patchelf;
 
-  outputs = [ "out" "dev" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
 
   patches =
     copyPathsToStore (lib.readPathsFromFile ./. ./series)

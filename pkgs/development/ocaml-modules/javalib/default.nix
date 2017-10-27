@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   version = "2.3.4";
 
   src = fetchurl {
-    url = "https://gforge.inria.fr/frs/download.php/file/37153/javalib-2.3.4.tar.bz2";
-    sha256 = "081ga3qzx0lkz0wy92qyj6k75k3s79518bvqii2q778hh5wif36f";
+    url = "https://gforge.inria.fr/frs/download.php/file/37154/javalib-2.3.4.tar.bz2";
+    sha256 = "1ajzbyli5a3y9s8f46913drpxdzlby3i4g3c2fqacmnbyvhpaqb6";
   };
 
   buildInputs = [ which ocaml findlib camlp4 ];
