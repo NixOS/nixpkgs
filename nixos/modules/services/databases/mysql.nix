@@ -30,7 +30,7 @@ let
       master-password = ${cfg.replication.masterPassword}
       master-port = ${toString cfg.replication.masterPort}
     ''}
-    ${optionalString (cfg.ensureUsers != [])
+    ${optionalString (cfg.ensureUsers != [] || cfg.enableSocketAuth)
     ''
       plugin-load-add = auth_socket.so
     ''}
@@ -92,6 +92,13 @@ in
         default = "/run/mysqld";
         description = "Location of the file which stores the PID of the MySQL server";
       };
+
+      enableSocketAuth = mkEnableOption ''to let root login as the mysql root
+        user via unix sockets. To enable, the mysql root user needs to have an empty
+        password set. Warning: This will disable password auth for
+        the mysql root entirely! Even with disabling this option, password auth will
+        have to be reset manually to work again.
+      '';
 
       extraOptions = mkOption {
         type = types.lines;
@@ -356,6 +363,10 @@ in
                 echo "CREATE DATABASE IF NOT EXISTS ${database};"
               '') cfg.ensureDatabases}
               ) | ${mysql}/bin/mysql -u root -N
+            ''}
+
+            ${optionalString (cfg.enableSocketAuth) ''
+              echo "ALTER USER 'root'@'localhost' IDENTIFIED WITH ${if mysql == pkgs.mariadb then "unix_socket" else "auth_socket"};" | ${mysql}/bin/mysql -u root -N
             ''}
 
             ${concatMapStrings (user:
