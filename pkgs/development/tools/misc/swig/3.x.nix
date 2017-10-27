@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1wyffskbkzj5zyhjnnpip80xzsjcr3p0q5486z3wdwabnysnhn8n";
   };
 
-  nativeBuildInputs = [ autoreconfHook bison ];
-  buildInputs = [ pcre pcre.dev ];
+  nativeBuildInputs = [ autoreconfHook bison pcre.dev ];
+  buildInputs = [ pcre ];
 
   configureFlags = "--without-tcl --with-pcre=${lib.getLib pcre}";
 
