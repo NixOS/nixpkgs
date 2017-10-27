@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "51c158a6c8b899898d1c91c6b51a34110196815cc905f9be0fa5878e19355608";
+    sha256 = "022n6lcqx1x51yzgj1f9bj0rc08i6hdbbili3j6qk6dqr2k5ihai";
   };
 
   prePatch = lib.optionalString stdenv.isDarwin ''
