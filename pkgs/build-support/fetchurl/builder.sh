@@ -7,7 +7,7 @@ source $mirrorsFile
 # servers to need them during redirects, and work on SSL without a
 # certificate (this isn't a security problem because we check the
 # cryptographic hash of the output anyway).
-curl="curl \
+curl="$CURL \
  --location --max-redirs 20 \
  --retry 3 \
  --disable-epsv \
