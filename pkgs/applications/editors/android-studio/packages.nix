@@ -1,4 +1,4 @@
-{  stdenv, callPackage, fetchurl, makeFontsConf }:
+{ stdenv, callPackage, fetchurl, makeFontsConf }:
 let
   mkStudio = opts: callPackage (import ./common.nix opts) {
     fontsConf = makeFontsConf {
@@ -6,11 +6,11 @@ let
     };
   };
 in rec {
-  stable = mkStudio rec {
+  stable = mkStudio {
     pname = "android-studio";
-    version = "2.3.3.0";
-    build = "162.4069837";
-    sha256Hash = "0zzis9m2xp44xwkj0zvcqw5rh3iyd3finyi5nqhgira1fkacz0qk";
+    version = "3.0.0.18"; # "Android Studio 3.0"
+    build = "171.4408382";
+    sha256Hash = "18npm7ckdybj6vc2vndr0wd50da19m9z2j7wld2mdidnl5ggk4br";
 
     meta = with stdenv.lib; {
       description = "The Official IDE for Android (stable version)";
