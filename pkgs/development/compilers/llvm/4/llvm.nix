@@ -26,6 +26,17 @@ let
   # Used when creating a version-suffixed symlink of libLLVM.dylib
   shortVersion = with stdenv.lib;
     concatStringsSep "." (take 2 (splitString "." release_version));
+
+  crossCompiling = stdenv.buildPlatform != stdenv.hostPlatform;
+  llvmArch =
+    let target = stdenv.targetPlatform;
+    in if target.isArm
+       then "ARM"
+       else
+       if target.isx86_64
+       then "X86"
+       else throw "unknown platform";
+
 in stdenv.mkDerivation (rec {
   name = "llvm-${version}";
 
@@ -41,7 +52,9 @@ in stdenv.mkDerivation (rec {
     ++ stdenv.lib.optional enableSharedLibraries "lib";
 
   nativeBuildInputs = [ cmake python ]
-    ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
+    ++ stdenv.lib.optional enableManpages python.pkgs.sphinx
+       # for build tablegen
+    ++ stdenv.lib.optional crossCompiling buildPackages.llvm;
 
   buildInputs = [ libxml2 libffi ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi ];
@@ -81,9 +94,6 @@ in stdenv.mkDerivation (rec {
     )
   '' + stdenv.lib.optionalString stdenv.isAarch64 ''
     patch -p0 < ${../aarch64.patch}
-  '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
-    patch -p1 -i ${../TLI-musl.patch}
-    patch -p1 -i ${./dynamiclibrary-musl.patch}
   '';
 
   # hacky fix: created binaries need to be run before installation
@@ -117,11 +127,14 @@ in stdenv.mkDerivation (rec {
   ]
   ++ stdenv.lib.optionals crossCompiling [
     "-DCMAKE_CROSSCOMPILING=True"
-    "-DLLVM_TABLEGEN=${buildPackages.llvm.dev}/tablegen"
-    "-DCLANG_TABLEGEN=${buildPackages.llvm.dev}/tablegen"
-    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.triple}"
-    "-DLLVM_TARGET_ARCH=${stdenv.targetPlatform.arch}"
-    "-DLLVM_TARGETS_TO_BUILD=${stdenv.targetPlatform.arch}"
+    "-DLLVM_TABLEGEN=${buildPackages.llvm}/tablegen"
+    "-DCLANG_TABLEGEN=${buildPackages.llvm}/tablegen"
+    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
+    "-DTARGET_TRIPLE=${stdenv.targetPlatform.config}"
+
+    "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
+    "-DCOMPILER_RT_BUILD_XRAY=OFF"
+  ]
   ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
