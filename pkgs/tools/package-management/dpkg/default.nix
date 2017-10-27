@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, perl, zlib, bzip2, xz, makeWrapper }:
+{ stdenv, fetchurl, perl, zlib, bzip2, xz, makeWrapper, coreutils }:
 
 stdenv.mkDerivation rec {
   name = "dpkg-${version}";
-  version = "1.18.24";
+  version = "1.19.0.4";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/dpkg/dpkg_${version}.tar.xz";
-    sha256 = "1d6p22vk1b9v16q96mwaz9w2xr4ly28yamkh49md9gq67qfhhlyq";
+    sha256 = "02lrwrkl2g1jwj71088rwswx07a1zq1jkq7193lbvy8jj2qnp9lq";
   };
 
   configureFlags = [
@@ -29,6 +29,24 @@ stdenv.mkDerivation rec {
     for i in $(find . -name Makefile.in); do
       substituteInPlace $i --replace "install-data-local:" "disabled:" ;
     done
+  '';
+
+  patchPhase = ''
+    patchShebangs .
+
+    # Dpkg commands sometimes calls out to shell commands
+    substituteInPlace lib/dpkg/dpkg.h --replace '"dpkg-deb"' \"$out/bin/dpkg-deb\"
+    substituteInPlace lib/dpkg/dpkg.h --replace '"dpkg-split"' \"$out/bin/dpkg-split\"
+    substituteInPlace lib/dpkg/dpkg.h --replace '"dpkg-query"' \"$out/bin/dpkg-query\"
+    substituteInPlace lib/dpkg/dpkg.h --replace '"dpkg-divert"' \"$out/bin/dpkg-divert\"
+    substituteInPlace lib/dpkg/dpkg.h --replace '"dpkg-statoverride"' \"$out/bin/dpkg-statoverride\"
+    substituteInPlace lib/dpkg/dpkg.h --replace '"dpkg-trigger"' \"$out/bin/dpkg-trigger\"
+    substituteInPlace lib/dpkg/dpkg.h --replace '"dpkg"' \"$out/bin/dpkg\"
+    substituteInPlace lib/dpkg/dpkg.h --replace '"debsig-verify"' \"$out/bin/debsig-verify\"
+
+    substituteInPlace lib/dpkg/dpkg.h --replace '"rm"' \"${coreutils}/bin/rm\"
+    substituteInPlace lib/dpkg/dpkg.h --replace '"cat"' \"${coreutils}/bin/cat\"
+    substituteInPlace lib/dpkg/dpkg.h --replace '"diff"' \"${coreutils}/bin/diff\"
   '';
 
   buildInputs = [ perl zlib bzip2 xz ];
