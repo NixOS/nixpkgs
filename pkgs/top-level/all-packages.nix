@@ -1476,6 +1476,8 @@ with pkgs;
 
   m17n_lib = callPackage ../tools/inputmethods/m17n-lib { };
 
+  skktools = callPackage ../tools/inputmethods/skk/skktools { };
+
   ibus = callPackage ../tools/inputmethods/ibus {
     inherit (gnome3) dconf glib;
   };
