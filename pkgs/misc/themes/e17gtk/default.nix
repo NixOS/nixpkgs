@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "e17gtk-${version}";
-  version = "3.22.1";
+  version = "3.22.2";
 
   src = fetchFromGitHub {
     owner = "tsujan";
     repo = "E17gtk";
     rev = "V${version}";
-    sha256 = "0y1v5hamssgzgcmwbr60iz7wipb9yzzj3ypzkc6i65mp4pyazrv8";
+    sha256 = "1qwj1hmdlk8sdqhkrh60p2xg4av1rl0lmipdg5j0i40318pmiml1";
   };
 
   installPhase = ''
