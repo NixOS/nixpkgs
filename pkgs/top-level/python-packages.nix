@@ -12467,23 +12467,6 @@ in {
 
   nose-exclude = callPackage ../development/python-modules/nose-exclude { };
 
-  nose-selecttests = buildPythonPackage rec {
-    version = "0.4";
-    name = "nose-selecttests-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nose-selecttests/${name}.zip";
-      sha256 = "0lgrfgp3sq8xi8d9grrg0z8jsyk0wl8a3rxw31hb7vdncin5b7n5";
-    };
-
-    propagatedBuildInputs = with self; [ nose ];
-
-    meta = {
-      description = "Simple nose plugin that enables developers to run subset of collected tests to spare some waiting time for better things";
-    };
-  };
-
-
   nose2 = if isPy26 then null else (buildPythonPackage rec {
     name = "nose2-0.5.0";
     src = pkgs.fetchurl {
