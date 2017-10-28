@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "datefudge";
-  version = "1.2.1";
+  version = "1.22";
   name = "${pname}-${version}";
 
   src = fetchgit {
-    sha256 = "0l83kn6c3jr3wzs880zfa64rw81cqjjk55gjxz71rjf2balp64ps";
+    sha256 = "1fmd05r00wx4zc90lbi804jl7xwdl11jq2a1kp5lqimk3yyvfw4c";
     url = "git://anonscm.debian.org/users/robert/datefudge.git";
-    rev = "cd141c63bebe9b579109b2232b5e83db18f222c2";
+    rev = "fe27db47a0f250fb56164114fff8ae8d5af47ab6";
   };
 
   patchPhase = ''
