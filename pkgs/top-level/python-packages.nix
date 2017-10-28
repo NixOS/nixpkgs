@@ -19613,39 +19613,6 @@ in {
     };
   };
 
-
-  skype4py = buildPythonPackage (rec {
-    name = "Skype4Py-1.0.32.0";
-    disabled = isPy3k || isPyPy;
-
-    src = pkgs.fetchurl {
-      url = mirror://sourceforge/skype4py/Skype4Py-1.0.32.0.tar.gz;
-      sha256 = "0cmkrv450wa8v50bng5dflpwkl5c1p9pzysjkb2956w5kvwh6f5b";
-    };
-
-    unpackPhase = ''
-      tar xf $src
-      find . -type d -exec chmod +rx {} \;
-      sourceRoot=`pwd`/`ls -d S*`
-    '';
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ pkgs.xorg.libX11 dbus-python pygobject2 ];
-
-    meta = {
-      description = "High-level, platform independent Skype API wrapper for Python";
-
-      # The advertisement says https://developer.skype.com/wiki/Skype4Py
-      # but that url does not work. This following web page points to the
-      # download link and has some information about the package.
-      homepage = http://pypi.python.org/pypi/Skype4Py/1.0.32.0;
-      broken = true;
-      license = "BSD";
-    };
-  });
-
   smartdc = buildPythonPackage rec {
     name = "smartdc-0.1.12";
 
