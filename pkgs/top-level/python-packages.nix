@@ -16986,25 +16986,7 @@ in {
     };
   };
 
-  pylibacl = buildPythonPackage (rec {
-    name = "pylibacl-0.5.1";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/downloads/iustin/pylibacl/${name}.tar.gz";
-      sha256 = "1idks7j9bn62xzsaxkvhl7bdq6ws8kv8aa0wahfh7724qlbbcf1k";
-    };
-
-    # ERROR: testExtended (tests.test_acls.AclExtensions)
-    # IOError: [Errno 0] Error
-    doCheck = false;
-
-    buildInputs = with self; [ pkgs.acl ];
-
-    meta = {
-      description = "A Python extension module for POSIX ACLs, it can be used to query, list, add, and remove ACLs from files and directories under operating systems that support them";
-      license = licenses.lgpl21Plus;
-    };
-  });
+  pylibacl = callPackage ../development/python-modules/pylibacl { };
 
   pyliblo = buildPythonPackage rec {
     name = "pyliblo-${version}";
