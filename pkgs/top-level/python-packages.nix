@@ -18187,25 +18187,6 @@ in {
     };
   };
 
-  ropemacs = buildPythonPackage rec {
-    version = "0.7";
-    name = "ropemacs-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/ropemacs/${name}.tar.gz";
-      sha256 = "1x5qf1drcdz9jfiiakc60kzqkb3ahsg9j902c5byf3gjfacdrmqj";
-    };
-
-    propagatedBuildInputs = with self; [ ropemode ];
-
-     meta = {
-       description = "A plugin for performing python refactorings in emacs";
-       homepage = http://rope.sf.net/ropemacs.html;
-       maintainers = with maintainers; [ goibhniu ];
-       license = licenses.gpl2;
-     };
-  };
-
   ropper = callPackage ../development/python-modules/ropper { };
 
   routes = buildPythonPackage rec {
