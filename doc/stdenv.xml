@@ -1217,7 +1217,7 @@ substitute ./foo.in ./foo.out \
 
       <para><function>substitute</function> is implemented using the
       <command
-      xlink:href="http://replace.richardlloyd.org.uk/">replace</command>
+      xlink:href="https://replace.richardlloyd.org.uk/">replace</command>
       command.  Unlike with the <command>sed</command> command, you
       don’t have to worry about escaping special characters.  It
       supports performing substitutions on binary files (such as

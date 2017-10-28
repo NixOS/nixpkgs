@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Interactive Parallel Computing with IPython";
-    homepage = http://ipython.org/;
+    homepage = https://ipython.org/;
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

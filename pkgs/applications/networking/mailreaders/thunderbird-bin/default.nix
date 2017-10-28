@@ -165,14 +165,14 @@ stdenv.mkDerivation {
     baseName = "thunderbird";
     channel = "release";
     basePath = "pkgs/applications/networking/mailreaders/thunderbird-bin";
-    baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
+    baseUrl = "https://archive.mozilla.org/pub/thunderbird/releases/";
   };
   meta = with stdenv.lib; {
     description = "Mozilla Thunderbird, a full-featured email client (binary package)";
-    homepage = http://www.mozilla.org/thunderbird/;
+    homepage = https://www.mozilla.org/thunderbird/;
     license = {
       free = false;
-      url = http://www.mozilla.org/en-US/foundation/trademarks/policy/;
+      url = https://www.mozilla.org/en-US/foundation/trademarks/policy/;
     };
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
     platforms = platforms.linux;

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "HTTP server for purely static content";
-    homepage    = http://linux.bytesex.org/misc/webfs.html;
+    homepage    = https://linux.bytesex.org/misc/webfs.html;
     license     = licenses.gpl2;
     platforms   = platforms.all;
     maintainers = with maintainers; [ zimbatm ];

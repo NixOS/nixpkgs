@@ -7485,7 +7485,7 @@ let
 
             meta = {
               longDescription = ''A pure-erlang, open-source, implementation of
-                                Cucumber (http://cukes.info). This provides a
+                                Cucumber (https://cukes.info). This provides a
                                 subset of the Cucumber feature definition
                                 language.'';
               license = stdenv.lib.licenses.mit;
@@ -20236,7 +20236,7 @@ let
 
             meta = {
               description = '' HTTP Request & Response Server. An incomplete
-                            clone of http://httpbin.org '';
+                            clone of https://httpbin.org '';
               license = stdenv.lib.licenses.mit;
               homepage = "https://github.com/edgurgel/httparrot";
             };
@@ -26618,7 +26618,7 @@ let
             meta = {
               description = ''MessagePack serializer/deserializer'';
               license = stdenv.lib.licenses.apsl20;
-              homepage = "http://msgpack.org";
+              homepage = "https://msgpack.org";
             };
           } // packageOverrides)
       ) {};
@@ -28640,7 +28640,7 @@ let
 
             meta = {
               longDescription = ''Pandex is a lightweight Elixir wrapper for
-                                [Pandoc](http://pandoc.org). Pandex enables you
+                                [Pandoc](https://pandoc.org). Pandex enables you
                                 to convert Markdown, CommonMark, HTML, Latex,
                                 json, html to HTML, HTML5, opendocument, rtf,
                                 texttile, asciidoc, markdown, json and others.

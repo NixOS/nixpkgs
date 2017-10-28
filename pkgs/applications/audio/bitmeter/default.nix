@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libjack2 gtk2 ];
 
   meta = with stdenv.lib; {
-    homepage = http://devel.tlrmx.org/audio/bitmeter/;
+    homepage = https://devel.tlrmx.org/audio/bitmeter/;
     description = "Also known as jack bitscope. Useful to detect denormals";
     license = licenses.gpl2;
     maintainers = [ maintainers.magnetophon ];

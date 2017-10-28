@@ -11,7 +11,7 @@ This is the Android Software Development Kit License Agreement
 
 1.2 &quot;Android&quot; means the Android software stack for devices, as made available under the Android Open Source Project, which is located at the following URL: http://source.android.com/, as updated from time to time.
 
-1.3 A &quot;compatible implementation&quot; means any Android device that (i) complies with the Android Compatibility Definition document, which can be found at the Android compatibility website (http://source.android.com/compatibility) and which may be updated from time to time; and (ii) successfully passes the Android Compatibility Test Suite (CTS).
+1.3 A &quot;compatible implementation&quot; means any Android device that (i) complies with the Android Compatibility Definition document, which can be found at the Android compatibility website (https://source.android.com/compatibility) and which may be updated from time to time; and (ii) successfully passes the Android Compatibility Test Suite (CTS).
 
 1.4 &quot;Google&quot; means Google Inc., a Delaware corporation with principal place of business at 1600 Amphitheatre Parkway, Mountain View, CA 94043, United States.
 
@@ -211,7 +211,7 @@ This is the Android SDK Preview License Agreement (the &quot;License Agreement&q
 
 6.1 In order to continually innovate and improve the Preview, Google may collect certain usage statistics from the software including but not limited to a unique identifier, associated IP address, version number of the software, and information on which tools and/or services in the Preview are being used and how they are being used. Before any of this information is collected, the Preview will notify you and seek your consent. If you withhold consent, the information will not be collected.
 
-6.2 The data collected is examined in the aggregate to improve the Preview and is maintained in accordance with Google's Privacy Policy located at http://www.google.com/policies/privacy/.
+6.2 The data collected is examined in the aggregate to improve the Preview and is maintained in accordance with Google's Privacy Policy located at https://www.google.com/policies/privacy/.
 
 7. Third Party Applications
 
@@ -600,7 +600,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:name-display>Google APIs</sdk:name-display>
 		<sdk:api-level>3</sdk:api-level>
 		<sdk:description>Android + Google APIs</sdk:description>
-		<sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/</sdk:desc-url>
 		<sdk:libs>
 			<sdk:lib>
 				<sdk:name>com.google.android.maps</sdk:name>
@@ -627,7 +627,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:name-display>Google APIs</sdk:name-display>
 		<sdk:api-level>4</sdk:api-level>
 		<sdk:description>Android + Google APIs</sdk:description>
-		<sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/</sdk:desc-url>
 		<sdk:libs>
 			<sdk:lib>
 				<sdk:name>com.google.android.maps</sdk:name>
@@ -654,7 +654,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:name-display>Google APIs</sdk:name-display>
 		<sdk:api-level>5</sdk:api-level>
 		<sdk:description>Android + Google APIs</sdk:description>
-		<sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/</sdk:desc-url>
 		<sdk:libs>
 			<sdk:lib>
 				<sdk:name>com.google.android.maps</sdk:name>
@@ -681,7 +681,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:name-display>Google APIs</sdk:name-display>
 		<sdk:api-level>6</sdk:api-level>
 		<sdk:description>Android + Google APIs</sdk:description>
-		<sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/</sdk:desc-url>
 		<sdk:libs>
 			<sdk:lib>
 				<sdk:name>com.google.android.maps</sdk:name>
@@ -708,7 +708,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:name-display>Google APIs</sdk:name-display>
 		<sdk:api-level>7</sdk:api-level>
 		<sdk:description>Android + Google APIs</sdk:description>
-		<sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/</sdk:desc-url>
 		<sdk:libs>
 			<sdk:lib>
 				<sdk:name>com.google.android.maps</sdk:name>
@@ -735,7 +735,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:name-display>Google APIs</sdk:name-display>
 		<sdk:api-level>8</sdk:api-level>
 		<sdk:description>Android + Google APIs</sdk:description>
-		<sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/</sdk:desc-url>
 		<sdk:libs>
 			<sdk:lib>
 				<sdk:name>com.google.android.maps</sdk:name>
@@ -762,7 +762,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:name-display>Google APIs</sdk:name-display>
 		<sdk:api-level>9</sdk:api-level>
 		<sdk:description>Android + Google APIs</sdk:description>
-		<sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/</sdk:desc-url>
 		<sdk:libs>
 			<sdk:lib>
 				<sdk:name>com.google.android.maps</sdk:name>
@@ -789,7 +789,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:name-display>Google APIs</sdk:name-display>
 		<sdk:api-level>10</sdk:api-level>
 		<sdk:description>Android + Google APIs</sdk:description>
-		<sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/</sdk:desc-url>
 		<sdk:libs>
 			<sdk:lib>
 				<sdk:name>com.google.android.maps</sdk:name>
@@ -820,7 +820,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:name-display>Google APIs</sdk:name-display>
 		<sdk:api-level>11</sdk:api-level>
 		<sdk:description>Android + Google APIs</sdk:description>
-		<sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/</sdk:desc-url>
 		<sdk:libs>
 			<sdk:lib>
 				<sdk:name>com.google.android.maps</sdk:name>
@@ -847,7 +847,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:name-display>Google APIs</sdk:name-display>
 		<sdk:api-level>12</sdk:api-level>
 		<sdk:description>Android + Google APIs</sdk:description>
-		<sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/</sdk:desc-url>
 		<sdk:libs>
 			<sdk:lib>
 				<sdk:name>com.google.android.maps</sdk:name>
@@ -878,7 +878,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:name-display>Google APIs</sdk:name-display>
 		<sdk:api-level>13</sdk:api-level>
 		<sdk:description>Android + Google APIs</sdk:description>
-		<sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/</sdk:desc-url>
 		<sdk:libs>
 			<sdk:lib>
 				<sdk:name>com.google.android.maps</sdk:name>
@@ -1269,7 +1269,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:name-display>Google TV Addon</sdk:name-display>
 		<sdk:api-level>12</sdk:api-level>
 		<sdk:description></sdk:description>
-		<sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/</sdk:desc-url>
 		<sdk:libs/>
 	</sdk:add-on>
 	<sdk:add-on>
@@ -1291,7 +1291,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:name-display>Google TV Addon</sdk:name-display>
 		<sdk:api-level>13</sdk:api-level>
 		<sdk:description></sdk:description>
-		<sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/</sdk:desc-url>
 		<sdk:libs/>
 	</sdk:add-on>
 	<sdk:extra>
@@ -1353,7 +1353,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:vendor-id>google</sdk:vendor-id>
 		<sdk:vendor-display></sdk:vendor-display>
 		<sdk:description>Android Market Licensing client library</sdk:description>
-		<sdk:desc-url>http://developer.android.com/guide/publishing/licensing.html</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/guide/publishing/licensing.html</sdk:desc-url>
 		<sdk:name-display>Google Play Licensing Library</sdk:name-display>
 		<sdk:path>market_licensing</sdk:path>
 	</sdk:extra>
@@ -1374,7 +1374,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:vendor-id>google</sdk:vendor-id>
 		<sdk:vendor-display>Google Inc.</sdk:vendor-display>
 		<sdk:description>Android Market APK Expansion library</sdk:description>
-		<sdk:desc-url>http://developer.android.com/guide/market/expansion-files.html</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/guide/market/expansion-files.html</sdk:desc-url>
 		<sdk:name-display>Google Play APK Expansion library</sdk:name-display>
 		<sdk:path>market_apk_expansion</sdk:path>
 	</sdk:extra>
@@ -1439,7 +1439,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:vendor-id>google</sdk:vendor-id>
 		<sdk:vendor-display>Google Inc.</sdk:vendor-display>
 		<sdk:description>USB Driver for Windows, revision 11</sdk:description>
-		<sdk:desc-url>http://developer.android.com/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/</sdk:desc-url>
 		<sdk:name-display>Google USB Driver</sdk:name-display>
 		<sdk:path>usb_driver</sdk:path>
 	</sdk:extra>
@@ -1460,7 +1460,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:vendor-id>google</sdk:vendor-id>
 		<sdk:vendor-display>Google Inc.</sdk:vendor-display>
 		<sdk:description>Google Play Billing files and sample code</sdk:description>
-		<sdk:desc-url>http://developer.android.com/google/play/billing/index.html</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/google/play/billing/index.html</sdk:desc-url>
 		<sdk:name-display>Google Play Billing Library</sdk:name-display>
 		<sdk:path>play_billing</sdk:path>
 		<sdk:old-paths>market_billing</sdk:old-paths>
@@ -1505,7 +1505,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:vendor-id>google</sdk:vendor-id>
 		<sdk:vendor-display>Google Inc.</sdk:vendor-display>
 		<sdk:description>Analytics App Tracking SDK</sdk:description>
-		<sdk:desc-url>http://developers.google.com/analytics/devguides/collection/</sdk:desc-url>
+		<sdk:desc-url>https://developers.google.com/analytics/devguides/collection/</sdk:desc-url>
 		<sdk:name-display>Google Analytics App Tracking SDK</sdk:name-display>
 		<sdk:path>analytics_sdk_v2</sdk:path>
 	</sdk:extra>
@@ -1569,7 +1569,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:vendor-id>google</sdk:vendor-id>
 		<sdk:vendor-display>Google Inc.</sdk:vendor-display>
 		<sdk:description>Android Auto API testing simulators</sdk:description>
-		<sdk:desc-url>http://developer.android.com/auto</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/auto</sdk:desc-url>
 		<sdk:name-display>Android Auto API Simulators</sdk:name-display>
 		<sdk:path>simulators</sdk:path>
 	</sdk:extra>
@@ -1606,7 +1606,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS &quot;AS IS&
 		<sdk:vendor-id>google</sdk:vendor-id>
 		<sdk:vendor-display>Google Inc.</sdk:vendor-display>
 		<sdk:description>Head unit emulator for developers targeting the Android Auto platform.</sdk:description>
-		<sdk:desc-url>http://developer.android.com/tools/help/desktop-head-unit.html</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/tools/help/desktop-head-unit.html</sdk:desc-url>
 		<sdk:name-display>Android Auto Desktop Head Unit emulator</sdk:name-display>
 		<sdk:path>auto</sdk:path>
 	</sdk:extra>

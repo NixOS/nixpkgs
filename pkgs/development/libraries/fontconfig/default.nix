@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library for font customization and configuration";
-    homepage = http://fontconfig.org/;
+    homepage = https://fontconfig.org/;
     license = licenses.bsd2; # custom but very bsd-like
     platforms = platforms.all;
     maintainers = [ maintainers.vcunat ];

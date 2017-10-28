@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
       difficult) migrating the Perl program ip6_int into.
       Now only one utiltity is needed to do a lot.
     '';
-    homepage = http://www.deepspace6.net/projects/ipv6calc.html;
+    homepage = https://www.deepspace6.net/projects/ipv6calc.html;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];

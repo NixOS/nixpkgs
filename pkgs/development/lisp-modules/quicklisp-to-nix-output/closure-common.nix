@@ -8,7 +8,7 @@ rec {
   deps = [ args."alexandria" args."babel" args."trivial-features" args."trivial-gray-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/closure-common/2010-11-07/closure-common-20101107-git.tgz'';
+    url = ''https://beta.quicklisp.org/archive/closure-common/2010-11-07/closure-common-20101107-git.tgz'';
     sha256 = ''1982dpn2z7rlznn74gxy9biqybh2d4r1n688h9pn1s2bssgv3hk4'';
   };
 
@@ -19,7 +19,7 @@ rec {
 }
 /* (SYSTEM closure-common DESCRIPTION NIL SHA256
     1982dpn2z7rlznn74gxy9biqybh2d4r1n688h9pn1s2bssgv3hk4 URL
-    http://beta.quicklisp.org/archive/closure-common/2010-11-07/closure-common-20101107-git.tgz
+    https://beta.quicklisp.org/archive/closure-common/2010-11-07/closure-common-20101107-git.tgz
     MD5 12c45a2f0420b2e86fa06cb6575b150a NAME closure-common FILENAME
     closure-common DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)

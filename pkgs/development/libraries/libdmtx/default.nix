@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An open source software for reading and writing Data Matrix barcodes";
-    homepage = http://libdmtx.org;
+    homepage = https://libdmtx.org;
     platforms = stdenv.lib.platforms.all;
     maintainers = [ ];
   };

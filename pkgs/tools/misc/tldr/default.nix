@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       tldr pages gives common use cases for commands, so you don't need to hunt
       through a man page for the correct flags.
     '';
-    homepage = http://tldr-pages.github.io;
+    homepage = https://tldr-pages.github.io;
     license = licenses.mit;
     maintainers = with maintainers; [ taeer nckx ];
     platforms = platforms.linux;

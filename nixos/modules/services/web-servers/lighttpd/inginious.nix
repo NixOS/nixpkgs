@@ -171,7 +171,7 @@ in
       description = ''
         Select how INGINious accesses to grading containers.
         The default "local" option ensures that Docker is started and provisioned.
-        Fore more information, see http://inginious.readthedocs.io/en/latest/install_doc/config_reference.html
+        Fore more information, see https://inginious.readthedocs.io/en/latest/install_doc/config_reference.html
         Not all backends are supported. Use services.inginious.configFile for full flexibility.
       '';
     };

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   name = "mprime-28.7";
 
   src = fetchurl {
-    url = http://www.mersenne.org/ftp_root/gimps/p95v287.source.zip;
+    url = https://www.mersenne.org/ftp_root/gimps/p95v287.source.zip;
     sha256 = "1k3gxhs3g8hfghzpmidhcwpwyayj8r83v8zjai1z4xgsql4jwby1";
   };
 
@@ -47,9 +47,9 @@ stdenv.mkDerivation {
       client. It is identical to Prime95 in functionality, except it lacks a
       graphical user interface.
     '';
-    homepage = http://www.mersenne.org/;
+    homepage = https://www.mersenne.org/;
     # Unfree, because of a license requirement to share prize money if you find
-    # a suitable prime. http://www.mersenne.org/legal/#EULA
+    # a suitable prime. https://www.mersenne.org/legal/#EULA
     license = stdenv.lib.licenses.unfree;
     # Untested on linux-32 and osx. Works in theory.
     platforms = ["i686-linux" "x86_64-linux" "x86_64-darwin"];

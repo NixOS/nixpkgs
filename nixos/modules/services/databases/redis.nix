@@ -72,7 +72,7 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Set vm.overcommit_memory to 1 (Suggested for Background Saving: http://redis.io/topics/faq)
+          Set vm.overcommit_memory to 1 (Suggested for Background Saving: https://redis.io/topics/faq)
         '';
       };
 

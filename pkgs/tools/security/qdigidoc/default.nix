@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   
   meta = with stdenv.lib; {
     description = "Qt based UI application for verifying and signing digital signatures";
-    homepage = http://www.id.ee/;
+    homepage = https://www.id.ee/;
     license = licenses.lgpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.jagajaga ];

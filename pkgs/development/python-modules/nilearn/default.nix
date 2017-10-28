@@ -24,7 +24,7 @@ buildPythonPackage rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://nilearn.github.io;
+    homepage = https://nilearn.github.io;
     description = "A module for statistical learning on neuroimaging data";
     license = licenses.bsd3;
   };

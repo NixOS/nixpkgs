@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   name = "folding-at-home-6.02";
 
   src = fetchurl {
-    url = http://www.stanford.edu/group/pandegroup/folding/release/FAH6.02-Linux.tgz;
+    url = https://www.stanford.edu/group/pandegroup/folding/release/FAH6.02-Linux.tgz;
     sha256 = "01nwi0lb4vv0xg4k04i2fbf5v5qgabl70jm5cgvw1ibgqjz03910";
   };
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://folding.stanford.edu/;
+    homepage = https://folding.stanford.edu/;
     description = "Folding@home distributed computing client";
     license = stdenv.lib.licenses.unfree;
   };

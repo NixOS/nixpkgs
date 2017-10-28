@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Gstreamer Ugly Plugins";
-    homepage    = "http://gstreamer.freedesktop.org";
+    homepage    = "https://gstreamer.freedesktop.org";
     longDescription = ''
       a set of plug-ins that have good quality and correct functionality,
       but distributing them might pose problems.  The license on either

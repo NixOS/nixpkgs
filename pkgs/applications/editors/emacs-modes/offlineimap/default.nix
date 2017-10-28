@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "OfflineIMAP support for Emacs";
-    homepage = "http://julien.danjou.info/projects/emacs-packages#offlineimap";
+    homepage = "https://julien.danjou.info/projects/emacs-packages#offlineimap";
     platforms = stdenv.lib.platforms.all;
     maintainers = [ stdenv.lib.maintainers.garbas ];
     broken = true;

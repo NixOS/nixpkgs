@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   '';
 
   # Incompatibility with Linux 2.6.23 headers, see
-  # http://www.mail-archive.com/cdwrite@other.debian.org/msg11464.html
+  # https://www.mail-archive.com/cdwrite@other.debian.org/msg11464.html
   NIX_CFLAGS_COMPILE = "-DINT_MAX=__INT_MAX__";
 
   meta = {

@@ -22,7 +22,7 @@ stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
 
   meta = {
-    homepage = http://www.bergo.eng.br/eboard/;
+    homepage = https://www.bergo.eng.br/eboard/;
     description = "Chess interface for Unix-like systems";
     platforms = stdenv.lib.platforms.linux;
   };

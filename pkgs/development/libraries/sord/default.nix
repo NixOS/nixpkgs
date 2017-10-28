@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   installPhase = "${python.interpreter} waf install";
 
   meta = with stdenv.lib; {
-    homepage = http://drobilla.net/software/sord;
+    homepage = https://drobilla.net/software/sord;
     description = "A lightweight C library for storing RDF data in memory";
     license = licenses.mit;
     maintainers = [ maintainers.goibhniu ];

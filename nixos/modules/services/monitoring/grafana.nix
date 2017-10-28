@@ -221,7 +221,7 @@ in {
     extraOptions = mkOption {
       description = ''
         Extra configuration options passed as env variables as specified in
-        <link xlink:href="http://docs.grafana.org/installation/configuration/">documentation</link>,
+        <link xlink:href="https://docs.grafana.org/installation/configuration/">documentation</link>,
         but without GF_ prefix
       '';
       default = {};

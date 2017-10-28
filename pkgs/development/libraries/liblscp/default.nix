@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   preConfigure = "make -f Makefile.svn";
 
   meta = with stdenv.lib; {
-    homepage = http://www.linuxsampler.org;
+    homepage = https://www.linuxsampler.org;
     description = "LinuxSampler Control Protocol (LSCP) wrapper library";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];

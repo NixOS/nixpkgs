@@ -1,5 +1,5 @@
 Taken from gentoo:
-http://sources.gentoo.org/viewcvs.py/gentoo-x86/sci-mathematics/yacas/files/yacas-1.2.2-gcc43.patch?rev=1.1&view=markup
+https://sources.gentoo.org/viewcvs.py/gentoo-x86/sci-mathematics/yacas/files/yacas-1.2.2-gcc43.patch?rev=1.1&view=markup
 Index: yacas-1.2.2-gcc43.patch
 ===================================================================
 --- a/manmake/manripper.cpp

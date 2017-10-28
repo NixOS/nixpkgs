@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   name = "pdfread-1.8.2";
 
   src = fetchurl {
-    # I got it from http://www.mobileread.com/forums/showthread.php?t=21906
+    # I got it from https://www.mobileread.com/forums/showthread.php?t=21906
     # But that needs user registration to allow downloading.
     # This is an evolution from pdfread 1.7 in http://pdfread.sourceforge.net/
     # Temporary place:

@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
   ++ (stdenv.lib.optional stdenv.isDarwin "--build=${stdenv.system}");
 
   meta = {
-    homepage = http://www.skarnet.org/software/s6-dns/;
+    homepage = https://www.skarnet.org/software/s6-dns/;
     description = "A suite of DNS client programs and libraries for Unix systems";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.isc;

@@ -1,5 +1,5 @@
 Work around GCJ bug #35410:
-http://gcc.gnu.org/bugzilla/show_bug.cgi?id=35410 .
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=35410 .
 
 diff --git a/src/org/mozilla/javascript/Arguments.java b/src/org/mozilla/javascript/Arguments.java
 index d914294..d658f12 100644

@@ -5,9 +5,9 @@
 
 let
   inherit (pythonPackages) python pygobject3;
-  isopub = fetchurl { url = http://www.oasis-open.org/docbook/xml/4.5/ent/isopub.ent; sha256 = "073l492jz70chcadr2p7ssx7gz5hd731s2cazhxx4r845kilyr77"; };
-  isonum = fetchurl { url = http://www.oasis-open.org/docbook/xml/4.5/ent/isonum.ent; sha256 = "04b62dw2g3cj9i4vn9xyrsrlz8fpmmijq98dm0nrkky31bwbbrs3"; };
-  isogrk1 = fetchurl { url = http://www.oasis-open.org/docbook/xml/4.5/ent/isogrk1.ent; sha256 = "04b23anhs5wr62n4rgsjirzvw7rpjcsf8smz4ffzaqh3b0vw90vm"; };
+  isopub = fetchurl { url = https://www.oasis-open.org/docbook/xml/4.5/ent/isopub.ent; sha256 = "073l492jz70chcadr2p7ssx7gz5hd731s2cazhxx4r845kilyr77"; };
+  isonum = fetchurl { url = https://www.oasis-open.org/docbook/xml/4.5/ent/isonum.ent; sha256 = "04b62dw2g3cj9i4vn9xyrsrlz8fpmmijq98dm0nrkky31bwbbrs3"; };
+  isogrk1 = fetchurl { url = https://www.oasis-open.org/docbook/xml/4.5/ent/isogrk1.ent; sha256 = "04b23anhs5wr62n4rgsjirzvw7rpjcsf8smz4ffzaqh3b0vw90vm"; };
 in stdenv.mkDerivation rec {
   name = "gnumeric-1.12.35";
 
@@ -20,9 +20,9 @@ in stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace doc/C/gnumeric.xml \
-	--replace http://www.oasis-open.org/docbook/xml/4.5/ent/isopub.ent ${isopub} \
-	--replace http://www.oasis-open.org/docbook/xml/4.5/ent/isonum.ent ${isonum} \
-	--replace http://www.oasis-open.org/docbook/xml/4.5/ent/isogrk1.ent ${isogrk1}
+	--replace https://www.oasis-open.org/docbook/xml/4.5/ent/isopub.ent ${isopub} \
+	--replace https://www.oasis-open.org/docbook/xml/4.5/ent/isonum.ent ${isonum} \
+	--replace https://www.oasis-open.org/docbook/xml/4.5/ent/isogrk1.ent ${isogrk1}
   '';
 
   nativeBuildInputs = [ pkgconfig ];
@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "The GNOME Office Spreadsheet";
     license = stdenv.lib.licenses.gpl2Plus;
-    homepage = http://projects.gnome.org/gnumeric/;
+    homepage = https://projects.gnome.org/gnumeric/;
     platforms = platforms.unix;
     maintainers = [ maintainers.vcunat ];
   };

@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.bluez.org/;
+    homepage = https://www.bluez.org/;
     repositories.git = https://git.kernel.org/pub/scm/bluetooth/bluez.git;
     description = "Bluetooth support for Linux";
     platforms = platforms.linux;

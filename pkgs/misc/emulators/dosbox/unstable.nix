@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.dosbox.com/;
+    homepage = https://www.dosbox.com/;
     description = "A DOS emulator";
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ binarin ];

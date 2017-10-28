@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     isFcitxEngine = true;
     homepage      = "https://github.com/fcitx/fcitx-unikey";
-    downloadPage  = "http://download.fcitx-im.org/fcitx-table-other/";
+    downloadPage  = "https://download.fcitx-im.org/fcitx-table-other/";
     description   = "Fcitx wrapper for unikey";
     license       = licenses.gpl3Plus;
     platforms     = platforms.linux;

@@ -1,6 +1,6 @@
 Add missing casts.  The GCC folks applied a similar patch in
 GCC's own copy of Classpath:
-http://gcc.gnu.org/ml/java/2007-05/msg00039.html .
+https://gcc.gnu.org/ml/java/2007-05/msg00039.html .
 
 --- classpath-0.98/javax/management/NotificationBroadcasterSupport.java	2009-07-30 16:52:08.000000000 +0200
 +++ classpath-0.98/javax/management/NotificationBroadcasterSupport.java	2009-07-30 16:51:58.000000000 +0200

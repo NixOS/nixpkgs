@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "KDE simple image scanning application";
-    homepage    = http://www.kde.org/applications/graphics/skanlite/;
+    homepage    = https://www.kde.org/applications/graphics/skanlite/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ pshendry ];
     platforms   = platforms.linux;

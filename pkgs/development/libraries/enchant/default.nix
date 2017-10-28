@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [aspell glib hunspell hspell];
   
   meta = {
-    homepage = http://www.abisource.com/enchant;
+    homepage = https://www.abisource.com/enchant;
     platforms = stdenv.lib.platforms.unix;
   };
 }

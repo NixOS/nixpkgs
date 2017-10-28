@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Union file system translator for GNU/Hurd";
 
-    homepage = http://www.gnu.org/software/hurd/hurd/translator/unionfs.html;
+    homepage = https://www.gnu.org/software/hurd/hurd/translator/unionfs.html;
 
     license = stdenv.lib.licenses.gpl2Plus;
 

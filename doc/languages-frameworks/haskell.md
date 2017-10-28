@@ -9,7 +9,7 @@ date: 2015-06-01
 ## How to install Haskell packages
 
 Nixpkgs distributes build instructions for all Haskell packages registered on
-[Hackage](http://hackage.haskell.org/), but strangely enough normal Nix package
+[Hackage](https://hackage.haskell.org/), but strangely enough normal Nix package
 lookups don't seem to discover any of them, except for the default version of ghc, cabal-install, and stack:
 ```
 $ nix-env -i alex
@@ -249,7 +249,7 @@ of the wrapper script then executes the real `ghc`, but passes the path to the
 new `lib` directory using GHC's `-B` flag.
 
 The purpose of those environment variables is to work around an impurity in the
-popular [ghc-paths](http://hackage.haskell.org/package/ghc-paths) library. That
+popular [ghc-paths](https://hackage.haskell.org/package/ghc-paths) library. That
 library promises to give its users access to GHC's installation paths. Only,
 the library can't possible know that path when it's compiled, because the path
 GHC considers its own is determined only much later, when the user configures
@@ -345,13 +345,13 @@ workarounds.
 
 ### How to build a Haskell project using Stack
 
-[Stack](http://haskellstack.org) is a popular build tool for Haskell projects.
+[Stack](https://haskellstack.org) is a popular build tool for Haskell projects.
 It has first-class support for Nix. Stack can optionally use Nix to
 automatically select the right version of GHC and other build tools to build,
 test and execute apps in an existing project downloaded from somewhere on the
 Internet. Pass the `--nix` flag to any `stack` command to do so, e.g.
 ```shell
-git clone --recursive http://github.com/yesodweb/wai
+git clone --recursive https://github.com/yesodweb/wai
 cd wai
 stack --nix build
 ```
@@ -416,7 +416,7 @@ haskell.lib.buildStackProject {
 }
 ```
 
-[stack-nix-doc]: http://docs.haskellstack.org/en/stable/nix_integration.html
+[stack-nix-doc]: https://docs.haskellstack.org/en/stable/nix_integration.html
 
 ### How to create ad hoc environments for `nix-shell`
 
@@ -603,7 +603,7 @@ Then, replace instances of `haskellPackages` in the `cabal2nix`-generated
 ### How to override package versions in a compiler-specific package set
 
 Nixpkgs provides the latest version of
-[`ghc-events`](http://hackage.haskell.org/package/ghc-events), which is 0.4.4.0
+[`ghc-events`](https://hackage.haskell.org/package/ghc-events), which is 0.4.4.0
 at the time of this writing. This is fine for users of GHC 7.10.x, but GHC
 7.8.4 cannot compile that binary. Now, one way to solve that problem is to
 register an older version of `ghc-events` in the 7.8.x-specific package set.
@@ -813,10 +813,10 @@ available that Cabal could link!
 By default GHC implements the Integer type using the
 [GNU Multiple Precision Arithmetic (GMP) library](https://gmplib.org/).
 The implementation can be found in the
-[integer-gmp](http://hackage.haskell.org/package/integer-gmp) package.
+[integer-gmp](https://hackage.haskell.org/package/integer-gmp) package.
 
 A potential problem with this is that GMP is licensed under the
-[GNU Lesser General Public License (LGPL)](http://www.gnu.org/copyleft/lesser.html),
+[GNU Lesser General Public License (LGPL)](https://www.gnu.org/copyleft/lesser.html),
 a kind of "copyleft" license. According to the terms of the LGPL, paragraph 5,
 you may distribute a program that is designed to be compiled and dynamically
 linked with the library under the terms of your choice (i.e., commercially) but
@@ -835,7 +835,7 @@ paragraph 2 of the LGPL, GHC must be distributed under the terms of the LGPL!
 
 To work around these problems GHC can be build with a slower but LGPL-free
 alternative implemention for Integer called
-[integer-simple](http://hackage.haskell.org/package/integer-simple).
+[integer-simple](https://hackage.haskell.org/package/integer-simple).
 
 To get a GHC compiler build with `integer-simple` instead of `integer-gmp` use
 the attribute: `haskell.compiler.integer-simple."${ghcVersion}"`.
@@ -890,7 +890,7 @@ failures. Additionally the source of your package is gotten from first invoking
 #### checkUnusedPackages
 
 Applying `haskell.lib.checkUnusedPackages` to a Haskell package invokes
-the [packunused](http://hackage.haskell.org/package/packunused) tool on the
+the [packunused](https://hackage.haskell.org/package/packunused) tool on the
 package. `packunused` complains when it finds packages listed as build-depends
 in the Cabal file which are redundant. For example:
 

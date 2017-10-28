@@ -12,7 +12,7 @@ with lib;
     proxyPass = mkOption {
       type = types.nullOr types.str;
       default = null;
-      example = "http://www.example.org/";
+      example = "https://www.example.org/";
       description = ''
         Adds proxy_pass directive and sets recommended proxy headers if
         recommendedProxySettings is enabled.

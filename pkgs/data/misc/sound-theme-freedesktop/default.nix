@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Freedesktop reference sound theme";
-    homepage = http://freedesktop.org/wiki/Specifications/sound-theme-spec;
-    # See http://cgit.freedesktop.org/sound-theme-freedesktop/tree/CREDITS:
+    homepage = https://freedesktop.org/wiki/Specifications/sound-theme-spec;
+    # See https://cgit.freedesktop.org/sound-theme-freedesktop/tree/CREDITS:
     license = with licenses; [ cc-by-30 cc-by-sa-25 gpl2 gpl2Plus ];
     maintainers = with maintainers; [ nckx ];
     platforms = with platforms; unix;

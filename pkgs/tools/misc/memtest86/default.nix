@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "memtest86-4.3.6";
   
   src = fetchurl {
-    url = http://www.memtest86.com/downloads/memtest86-4.3.6-src.tar.gz;
+    url = https://www.memtest86.com/downloads/memtest86-4.3.6-src.tar.gz;
     sha256 = "0qbksyl2hmkm12n7zbmf2m2n3q811skhykxx6a9a7y6r7k8y5qmv";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://memtest86.com/;
+    homepage = https://memtest86.com/;
     description = "A tool to detect memory errors, to be run from a bootloader";
     broken = true;
   };

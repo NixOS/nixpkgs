@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
        #  chardev: opening backend "stdio" failed
        #  qemu: could not open serial device 'stdio': Invalid argument
        #
-       # See <http://www.mail-archive.com/qemu-devel@nongnu.org/msg22775.html>.
+       # See <https://www.mail-archive.com/qemu-devel@nongnu.org/msg22775.html>.
        sed -i "tests/util/grub-shell.in" \
            -e's/qemu-system-i386/qemu-system-x86_64 -nodefaults/g'
 
@@ -119,7 +119,7 @@ stdenv.mkDerivation rec {
          operating system (e.g., GNU).
       '';
 
-    homepage = http://www.gnu.org/software/grub/;
+    homepage = https://www.gnu.org/software/grub/;
 
     license = licenses.gpl3Plus;
 

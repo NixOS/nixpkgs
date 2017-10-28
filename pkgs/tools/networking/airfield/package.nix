@@ -8,7 +8,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/asn1/-/asn1-0.1.11.tgz";
+        url = "https://registry.npmjs.org/asn1/-/asn1-0.1.11.tgz";
         name = "asn1-0.1.11.tgz";
         sha1 = "559be18376d08a4ec4dbe80877d27818639b2df7";
       })
@@ -28,7 +28,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/assert-plus/-/assert-plus-0.1.2.tgz";
+        url = "https://registry.npmjs.org/assert-plus/-/assert-plus-0.1.2.tgz";
         name = "assert-plus-0.1.2.tgz";
         sha1 = "d93ffdbb67ac5507779be316a7d65146417beef8";
       })
@@ -48,7 +48,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/async/-/async-0.9.0.tgz";
+        url = "https://registry.npmjs.org/async/-/async-0.9.0.tgz";
         name = "async-0.9.0.tgz";
         sha1 = "ac3613b1da9bed1b47510bb4651b8931e47146c7";
       })
@@ -71,7 +71,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/aws-sign2/-/aws-sign2-0.5.0.tgz";
+        url = "https://registry.npmjs.org/aws-sign2/-/aws-sign2-0.5.0.tgz";
         name = "aws-sign2-0.5.0.tgz";
         sha1 = "c57103f7a17fc037f02d7c2e64b602ea223f7d63";
       })
@@ -91,7 +91,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/base64-url/-/base64-url-1.0.0.tgz";
+        url = "https://registry.npmjs.org/base64-url/-/base64-url-1.0.0.tgz";
         name = "base64-url-1.0.0.tgz";
         sha1 = "ab694376f2801af6c9260899ffef02f86b40ee2c";
       })
@@ -111,7 +111,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/bl/-/bl-0.9.3.tgz";
+        url = "https://registry.npmjs.org/bl/-/bl-0.9.3.tgz";
         name = "bl-0.9.3.tgz";
         sha1 = "c41eff3e7cb31bde107c8f10076d274eff7f7d44";
       })
@@ -132,7 +132,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/boom/-/boom-0.4.2.tgz";
+        url = "https://registry.npmjs.org/boom/-/boom-0.4.2.tgz";
         name = "boom-0.4.2.tgz";
         sha1 = "7a636e9ded4efcefb19cef4947a3c67dfaee911b";
       })
@@ -153,7 +153,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/buffer-crc32/-/buffer-crc32-0.1.1.tgz";
+        url = "https://registry.npmjs.org/buffer-crc32/-/buffer-crc32-0.1.1.tgz";
         name = "buffer-crc32-0.1.1.tgz";
         sha1 = "7e110dc9953908ab7c32acdc70c9f945b1cbc526";
       })
@@ -173,7 +173,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/bytes/-/bytes-0.1.0.tgz";
+        url = "https://registry.npmjs.org/bytes/-/bytes-0.1.0.tgz";
         name = "bytes-0.1.0.tgz";
         sha1 = "c574812228126d6369d1576925a8579db3f8e5a2";
       })
@@ -193,7 +193,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/caseless/-/caseless-0.6.0.tgz";
+        url = "https://registry.npmjs.org/caseless/-/caseless-0.6.0.tgz";
         name = "caseless-0.6.0.tgz";
         sha1 = "8167c1ab8397fb5bb95f96d28e5a81c50f247ac4";
       })
@@ -213,7 +213,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/combined-stream/-/combined-stream-0.0.5.tgz";
+        url = "https://registry.npmjs.org/combined-stream/-/combined-stream-0.0.5.tgz";
         name = "combined-stream-0.0.5.tgz";
         sha1 = "29ed76e5c9aad07c4acf9ca3d32601cce28697a2";
       })
@@ -234,7 +234,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/commander/-/commander-0.6.1.tgz";
+        url = "https://registry.npmjs.org/commander/-/commander-0.6.1.tgz";
         name = "commander-0.6.1.tgz";
         sha1 = "fa68a14f6a945d54dbbe50d8cdb3320e9e3b1a06";
       })
@@ -254,7 +254,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/connect/-/connect-2.7.1.tgz";
+        url = "https://registry.npmjs.org/connect/-/connect-2.7.1.tgz";
         name = "connect-2.7.1.tgz";
         sha1 = "b869df9acf3dd8a0af7523c7c6f1aa8b4b761daa";
       })
@@ -284,7 +284,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/connect-redis/-/connect-redis-2.1.0.tgz";
+        url = "https://registry.npmjs.org/connect-redis/-/connect-redis-2.1.0.tgz";
         name = "connect-redis-2.1.0.tgz";
         sha1 = "bc20aab9791288c605f39f572f8cbb1fa8ab7cc4";
       })
@@ -308,7 +308,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/consolidate/-/consolidate-0.10.0.tgz";
+        url = "https://registry.npmjs.org/consolidate/-/consolidate-0.10.0.tgz";
         name = "consolidate-0.10.0.tgz";
         sha1 = "81f1a6ceba1247df9cef7a261ce527c2ce538f7a";
       })
@@ -329,7 +329,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/cookie/-/cookie-0.0.5.tgz";
+        url = "https://registry.npmjs.org/cookie/-/cookie-0.0.5.tgz";
         name = "cookie-0.0.5.tgz";
         sha1 = "f9acf9db57eb7568c9fcc596256b7bb22e307c81";
       })
@@ -349,7 +349,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/cookie/-/cookie-0.1.2.tgz";
+        url = "https://registry.npmjs.org/cookie/-/cookie-0.1.2.tgz";
         name = "cookie-0.1.2.tgz";
         sha1 = "72fec3d24e48a3432073d90c12642005061004b1";
       })
@@ -369,7 +369,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/cookie-signature/-/cookie-signature-0.0.1.tgz";
+        url = "https://registry.npmjs.org/cookie-signature/-/cookie-signature-0.0.1.tgz";
         name = "cookie-signature-0.0.1.tgz";
         sha1 = "13d3603b5cf63befbf85a8801e37aa900db46985";
       })
@@ -389,7 +389,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/cookie-signature/-/cookie-signature-1.0.5.tgz";
+        url = "https://registry.npmjs.org/cookie-signature/-/cookie-signature-1.0.5.tgz";
         name = "cookie-signature-1.0.5.tgz";
         sha1 = "a122e3f1503eca0f5355795b0711bb2368d450f9";
       })
@@ -409,7 +409,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/core-util-is/-/core-util-is-1.0.1.tgz";
+        url = "https://registry.npmjs.org/core-util-is/-/core-util-is-1.0.1.tgz";
         name = "core-util-is-1.0.1.tgz";
         sha1 = "6b07085aef9a3ccac6ee53bf9d3df0c1521a5538";
       })
@@ -429,7 +429,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/crc/-/crc-0.2.0.tgz";
+        url = "https://registry.npmjs.org/crc/-/crc-0.2.0.tgz";
         name = "crc-0.2.0.tgz";
         sha1 = "f4486b9bf0a12df83c3fca14e31e030fdabd9454";
       })
@@ -449,7 +449,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/crc/-/crc-3.0.0.tgz";
+        url = "https://registry.npmjs.org/crc/-/crc-3.0.0.tgz";
         name = "crc-3.0.0.tgz";
         sha1 = "d11e97ec44a844e5eb15a74fa2c7875d0aac4b22";
       })
@@ -469,7 +469,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/cryptiles/-/cryptiles-0.2.2.tgz";
+        url = "https://registry.npmjs.org/cryptiles/-/cryptiles-0.2.2.tgz";
         name = "cryptiles-0.2.2.tgz";
         sha1 = "ed91ff1f17ad13d3748288594f8a48a0d26f325c";
       })
@@ -490,7 +490,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/ctype/-/ctype-0.5.2.tgz";
+        url = "https://registry.npmjs.org/ctype/-/ctype-0.5.2.tgz";
         name = "ctype-0.5.2.tgz";
         sha1 = "fe8091d468a373a0b0c9ff8bbfb3425c00973a1d";
       })
@@ -510,7 +510,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/debug/-/debug-2.0.0.tgz";
+        url = "https://registry.npmjs.org/debug/-/debug-2.0.0.tgz";
         name = "debug-2.0.0.tgz";
         sha1 = "89bd9df6732b51256bc6705342bba02ed12131ef";
       })
@@ -531,7 +531,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/debug/-/debug-1.0.4.tgz";
+        url = "https://registry.npmjs.org/debug/-/debug-1.0.4.tgz";
         name = "debug-1.0.4.tgz";
         sha1 = "5b9c256bd54b6ec02283176fa8a0ede6d154cbf8";
       })
@@ -554,7 +554,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/delayed-stream/-/delayed-stream-0.0.5.tgz";
+        url = "https://registry.npmjs.org/delayed-stream/-/delayed-stream-0.0.5.tgz";
         name = "delayed-stream-0.0.5.tgz";
         sha1 = "d4b1f43a93e8296dfe02694f4680bc37a313c73f";
       })
@@ -574,7 +574,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/depd/-/depd-0.4.5.tgz";
+        url = "https://registry.npmjs.org/depd/-/depd-0.4.5.tgz";
         name = "depd-0.4.5.tgz";
         sha1 = "1a664b53388b4a6573e8ae67b5f767c693ca97f1";
       })
@@ -594,7 +594,7 @@
     bin = true;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/express/-/express-3.0.5.tgz";
+        url = "https://registry.npmjs.org/express/-/express-3.0.5.tgz";
         name = "express-3.0.5.tgz";
         sha1 = "4c6e5850e6b5e8ca2af57f21ed7097de50948b73";
       })
@@ -626,7 +626,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/express-session/-/express-session-1.8.2.tgz";
+        url = "https://registry.npmjs.org/express-session/-/express-session-1.8.2.tgz";
         name = "express-session-1.8.2.tgz";
         sha1 = "c4011e728a2349b3c18f117a5409908985e83483";
       })
@@ -655,7 +655,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/forever-agent/-/forever-agent-0.5.2.tgz";
+        url = "https://registry.npmjs.org/forever-agent/-/forever-agent-0.5.2.tgz";
         name = "forever-agent-0.5.2.tgz";
         sha1 = "6d0e09c4921f94a27f63d3b49c5feff1ea4c5130";
       })
@@ -675,7 +675,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/form-data/-/form-data-0.1.4.tgz";
+        url = "https://registry.npmjs.org/form-data/-/form-data-0.1.4.tgz";
         name = "form-data-0.1.4.tgz";
         sha1 = "91abd788aba9702b1aabfa8bc01031a2ac9e3b12";
       })
@@ -698,7 +698,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/formidable/-/formidable-1.0.11.tgz";
+        url = "https://registry.npmjs.org/formidable/-/formidable-1.0.11.tgz";
         name = "formidable-1.0.11.tgz";
         sha1 = "68f63325a035e644b6f7bb3d11243b9761de1b30";
       })
@@ -718,7 +718,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/fresh/-/fresh-0.1.0.tgz";
+        url = "https://registry.npmjs.org/fresh/-/fresh-0.1.0.tgz";
         name = "fresh-0.1.0.tgz";
         sha1 = "03e4b0178424e4c2d5d19a54d8814cdc97934850";
       })
@@ -738,7 +738,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/hawk/-/hawk-1.1.1.tgz";
+        url = "https://registry.npmjs.org/hawk/-/hawk-1.1.1.tgz";
         name = "hawk-1.1.1.tgz";
         sha1 = "87cd491f9b46e4e2aeaca335416766885d2d1ed9";
       })
@@ -762,7 +762,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/hoek/-/hoek-0.9.1.tgz";
+        url = "https://registry.npmjs.org/hoek/-/hoek-0.9.1.tgz";
         name = "hoek-0.9.1.tgz";
         sha1 = "3d322462badf07716ea7eb85baf88079cddce505";
       })
@@ -782,7 +782,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/http-signature/-/http-signature-0.10.0.tgz";
+        url = "https://registry.npmjs.org/http-signature/-/http-signature-0.10.0.tgz";
         name = "http-signature-0.10.0.tgz";
         sha1 = "1494e4f5000a83c0f11bcc12d6007c530cb99582";
       })
@@ -805,7 +805,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz";
+        url = "https://registry.npmjs.org/inherits/-/inherits-2.0.1.tgz";
         name = "inherits-2.0.1.tgz";
         sha1 = "b17d08d326b4423e568eff719f91b0b1cbdf69f1";
       })
@@ -825,7 +825,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz";
+        url = "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz";
         name = "isarray-0.0.1.tgz";
         sha1 = "8a18acfca9a8f4177e09abfc6038939b05d1eedf";
       })
@@ -845,7 +845,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/json-stringify-safe/-/json-stringify-safe-5.0.0.tgz";
+        url = "https://registry.npmjs.org/json-stringify-safe/-/json-stringify-safe-5.0.0.tgz";
         name = "json-stringify-safe-5.0.0.tgz";
         sha1 = "4c1f228b5050837eba9d21f50c2e6e320624566e";
       })
@@ -865,7 +865,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/methods/-/methods-0.0.1.tgz";
+        url = "https://registry.npmjs.org/methods/-/methods-0.0.1.tgz";
         name = "methods-0.0.1.tgz";
         sha1 = "277c90f8bef39709645a8371c51c3b6c648e068c";
       })
@@ -885,7 +885,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/mime/-/mime-1.2.6.tgz";
+        url = "https://registry.npmjs.org/mime/-/mime-1.2.6.tgz";
         name = "mime-1.2.6.tgz";
         sha1 = "b1f86c768c025fa87b48075f1709f28aeaf20365";
       })
@@ -905,7 +905,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/mime/-/mime-1.2.11.tgz";
+        url = "https://registry.npmjs.org/mime/-/mime-1.2.11.tgz";
         name = "mime-1.2.11.tgz";
         sha1 = "58203eed86e3a5ef17aed2b7d9ebd47f0a60dd10";
       })
@@ -925,7 +925,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/mime-types/-/mime-types-1.0.2.tgz";
+        url = "https://registry.npmjs.org/mime-types/-/mime-types-1.0.2.tgz";
         name = "mime-types-1.0.2.tgz";
         sha1 = "995ae1392ab8affcbfcb2641dd054e943c0d5dce";
       })
@@ -945,7 +945,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/mkdirp/-/mkdirp-0.3.3.tgz";
+        url = "https://registry.npmjs.org/mkdirp/-/mkdirp-0.3.3.tgz";
         name = "mkdirp-0.3.3.tgz";
         sha1 = "595e251c1370c3a68bab2136d0e348b8105adf13";
       })
@@ -965,7 +965,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/ms/-/ms-0.6.2.tgz";
+        url = "https://registry.npmjs.org/ms/-/ms-0.6.2.tgz";
         name = "ms-0.6.2.tgz";
         sha1 = "d89c2124c6fdc1353d65a8b77bf1aac4b193708c";
       })
@@ -985,7 +985,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/mz/-/mz-1.0.1.tgz";
+        url = "https://registry.npmjs.org/mz/-/mz-1.0.1.tgz";
         name = "mz-1.0.1.tgz";
         sha1 = "5ce1d3fe5cb3267c9c3141fb6a070f8d17f215d8";
       })
@@ -1006,7 +1006,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/native-or-bluebird/-/native-or-bluebird-1.1.1.tgz";
+        url = "https://registry.npmjs.org/native-or-bluebird/-/native-or-bluebird-1.1.1.tgz";
         name = "native-or-bluebird-1.1.1.tgz";
         sha1 = "9131a6d6532afdfb5635f9703734cc6652c905ee";
       })
@@ -1026,7 +1026,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/node-uuid/-/node-uuid-1.4.1.tgz";
+        url = "https://registry.npmjs.org/node-uuid/-/node-uuid-1.4.1.tgz";
         name = "node-uuid-1.4.1.tgz";
         sha1 = "39aef510e5889a3dca9c895b506c73aae1bac048";
       })
@@ -1046,7 +1046,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/oauth-sign/-/oauth-sign-0.4.0.tgz";
+        url = "https://registry.npmjs.org/oauth-sign/-/oauth-sign-0.4.0.tgz";
         name = "oauth-sign-0.4.0.tgz";
         sha1 = "f22956f31ea7151a821e5f2fb32c113cad8b9f69";
       })
@@ -1066,7 +1066,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/on-headers/-/on-headers-1.0.0.tgz";
+        url = "https://registry.npmjs.org/on-headers/-/on-headers-1.0.0.tgz";
         name = "on-headers-1.0.0.tgz";
         sha1 = "2c75b5da4375513d0161c6052e7fcbe4953fca5d";
       })
@@ -1086,7 +1086,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/parseurl/-/parseurl-1.3.0.tgz";
+        url = "https://registry.npmjs.org/parseurl/-/parseurl-1.3.0.tgz";
         name = "parseurl-1.3.0.tgz";
         sha1 = "b58046db4223e145afa76009e61bac87cc2281b3";
       })
@@ -1106,7 +1106,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/pause/-/pause-0.0.1.tgz";
+        url = "https://registry.npmjs.org/pause/-/pause-0.0.1.tgz";
         name = "pause-0.0.1.tgz";
         sha1 = "1d408b3fdb76923b9543d96fb4c9dfd535d9cb5d";
       })
@@ -1126,7 +1126,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/punycode/-/punycode-1.3.1.tgz";
+        url = "https://registry.npmjs.org/punycode/-/punycode-1.3.1.tgz";
         name = "punycode-1.3.1.tgz";
         sha1 = "710afe5123c20a1530b712e3e682b9118fe8058e";
       })
@@ -1146,7 +1146,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/qs/-/qs-0.5.1.tgz";
+        url = "https://registry.npmjs.org/qs/-/qs-0.5.1.tgz";
         name = "qs-0.5.1.tgz";
         sha1 = "9f6bf5d9ac6c76384e95d36d15b48980e5e4add0";
       })
@@ -1166,7 +1166,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/qs/-/qs-1.2.2.tgz";
+        url = "https://registry.npmjs.org/qs/-/qs-1.2.2.tgz";
         name = "qs-1.2.2.tgz";
         sha1 = "19b57ff24dc2a99ce1f8bdf6afcda59f8ef61f88";
       })
@@ -1186,7 +1186,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/range-parser/-/range-parser-0.0.4.tgz";
+        url = "https://registry.npmjs.org/range-parser/-/range-parser-0.0.4.tgz";
         name = "range-parser-0.0.4.tgz";
         sha1 = "c0427ffef51c10acba0782a46c9602e744ff620b";
       })
@@ -1206,7 +1206,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/readable-stream/-/readable-stream-1.0.31.tgz";
+        url = "https://registry.npmjs.org/readable-stream/-/readable-stream-1.0.31.tgz";
         name = "readable-stream-1.0.31.tgz";
         sha1 = "8f2502e0bc9e3b0da1b94520aabb4e2603ecafae";
       })
@@ -1230,7 +1230,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/redis/-/redis-0.12.1.tgz";
+        url = "https://registry.npmjs.org/redis/-/redis-0.12.1.tgz";
         name = "redis-0.12.1.tgz";
         sha1 = "64df76ad0fc8acebaebd2a0645e8a48fac49185e";
       })
@@ -1253,7 +1253,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/request/-/request-2.44.0.tgz";
+        url = "https://registry.npmjs.org/request/-/request-2.44.0.tgz";
         name = "request-2.44.0.tgz";
         sha1 = "78d62454d68853cadfb07ad31f58b9ec98072ea8";
       })
@@ -1289,7 +1289,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/send/-/send-0.1.0.tgz";
+        url = "https://registry.npmjs.org/send/-/send-0.1.0.tgz";
         name = "send-0.1.0.tgz";
         sha1 = "cfb08ebd3cec9b7fc1a37d9ff9e875a971cf4640";
       })
@@ -1313,7 +1313,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/sntp/-/sntp-0.2.4.tgz";
+        url = "https://registry.npmjs.org/sntp/-/sntp-0.2.4.tgz";
         name = "sntp-0.2.4.tgz";
         sha1 = "fb885f18b0f3aad189f824862536bceeec750900";
       })
@@ -1334,7 +1334,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/string_decoder/-/string_decoder-0.10.31.tgz";
+        url = "https://registry.npmjs.org/string_decoder/-/string_decoder-0.10.31.tgz";
         name = "string_decoder-0.10.31.tgz";
         sha1 = "62e203bc41766c6c28c9fc84301dab1c5310fa94";
       })
@@ -1354,7 +1354,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/stringstream/-/stringstream-0.0.4.tgz";
+        url = "https://registry.npmjs.org/stringstream/-/stringstream-0.0.4.tgz";
         name = "stringstream-0.0.4.tgz";
         sha1 = "0f0e3423f942960b5692ac324a57dd093bc41a92";
       })
@@ -1374,7 +1374,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/swig/-/swig-0.14.0.tgz";
+        url = "https://registry.npmjs.org/swig/-/swig-0.14.0.tgz";
         name = "swig-0.14.0.tgz";
         sha1 = "544bfb3bd837608873eed6a72c672a28cb1f1b3f";
       })
@@ -1396,7 +1396,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/tough-cookie/-/tough-cookie-0.12.1.tgz";
+        url = "https://registry.npmjs.org/tough-cookie/-/tough-cookie-0.12.1.tgz";
         name = "tough-cookie-0.12.1.tgz";
         sha1 = "8220c7e21abd5b13d96804254bd5a81ebf2c7d62";
       })
@@ -1417,7 +1417,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/tunnel-agent/-/tunnel-agent-0.4.0.tgz";
+        url = "https://registry.npmjs.org/tunnel-agent/-/tunnel-agent-0.4.0.tgz";
         name = "tunnel-agent-0.4.0.tgz";
         sha1 = "b1184e312ffbcf70b3b4c78e8c219de7ebb1c550";
       })
@@ -1437,7 +1437,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/uid-safe/-/uid-safe-1.0.1.tgz";
+        url = "https://registry.npmjs.org/uid-safe/-/uid-safe-1.0.1.tgz";
         name = "uid-safe-1.0.1.tgz";
         sha1 = "5bd148460a2e84f54f193fd20352c8c3d7de6ac8";
       })
@@ -1459,7 +1459,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/underscore/-/underscore-1.7.0.tgz";
+        url = "https://registry.npmjs.org/underscore/-/underscore-1.7.0.tgz";
         name = "underscore-1.7.0.tgz";
         sha1 = "6bbaf0877500d36be34ecaa584e0db9fef035209";
       })
@@ -1479,7 +1479,7 @@
     bin = false;
     src = [
       (fetchurl {
-        url = "http://registry.npmjs.org/utils-merge/-/utils-merge-1.0.0.tgz";
+        url = "https://registry.npmjs.org/utils-merge/-/utils-merge-1.0.0.tgz";
         name = "utils-merge-1.0.0.tgz";
         sha1 = "0294fb922bb9375153541c4f7096231f287c8af8";
       })

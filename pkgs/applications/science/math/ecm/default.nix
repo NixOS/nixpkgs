@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
-    url = http://gforge.inria.fr/frs/download.php/file/32159/ecm-6.4.4.tar.gz;
+    url = https://gforge.inria.fr/frs/download.php/file/32159/ecm-6.4.4.tar.gz;
     sha256 = "0v5h2nicz9yx78c2d72plbhi30iq4nxbvphja1s9501db4aah4y8";
   };
 

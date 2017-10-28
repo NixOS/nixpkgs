@@ -2,7 +2,7 @@
 
 let
   scrypt_src = fetchzip {
-    url = "http://www.tarsnap.com/scrypt/scrypt-1.2.0.tgz";
+    url = "https://www.tarsnap.com/scrypt/scrypt-1.2.0.tgz";
     sha256 = "0ahylib2pimlhjcm566kpim6n16jci5v749xwdkr9ivgfjrv3xn4";
   };
 

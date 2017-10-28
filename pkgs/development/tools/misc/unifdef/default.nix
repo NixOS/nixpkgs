@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://dotat.at/prog/unifdef/;
+    homepage = https://dotat.at/prog/unifdef/;
     description = "Selectively remove C preprocessor conditionals";
     license = licenses.bsd2;
     platforms = platforms.unix;

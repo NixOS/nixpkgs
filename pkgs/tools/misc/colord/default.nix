@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "System service to manage, install and generate color profiles to accurately color manage input and output devices";
-    homepage = http://www.freedesktop.org/software/colord/intro.html;
+    homepage = https://www.freedesktop.org/software/colord/intro.html;
     license = stdenv.lib.licenses.lgpl2Plus;
     maintainers = [stdenv.lib.maintainers.marcweber];
     platforms = stdenv.lib.platforms.linux;

@@ -71,7 +71,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://plex.tv/;
+    homepage = https://plex.tv/;
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ colemickens forkk thoughtpolice pjones lnl7 ];

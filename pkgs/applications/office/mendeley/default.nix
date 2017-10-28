@@ -126,7 +126,7 @@ stdenv.mkDerivation {
   dontPatchElf = true;
 
   meta = {
-    homepage = http://www.mendeley.com;
+    homepage = https://www.mendeley.com;
     description = "A reference manager and academic social network";
     license = stdenv.lib.licenses.unfree;
     platforms = stdenv.lib.platforms.linux;

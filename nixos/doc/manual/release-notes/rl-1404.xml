@@ -17,7 +17,7 @@ the following highlights:
   details.</para></listitem>
 
   <listitem><para>Systemd has been updated to version 212, which has
-  <link xlink:href="http://cgit.freedesktop.org/systemd/systemd/plain/NEWS?id=v212">numerous
+  <link xlink:href="https://cgit.freedesktop.org/systemd/systemd/plain/NEWS?id=v212">numerous
   improvements</link>. NixOS now automatically starts systemd user
   instances when you log in. You can define global user units through
   the <option>systemd.unit.*</option> options.</para></listitem>
@@ -33,7 +33,7 @@ the following highlights:
   <listitem><para>GNOME 3.10 experimental support has been added.</para></listitem>
 
   <listitem><para>Nix has been updated to 1.7 (<link
-  xlink:href="http://nixos.org/nix/manual/#ssec-relnotes-1.7">details</link>).</para></listitem>
+  xlink:href="https://nixos.org/nix/manual/#ssec-relnotes-1.7">details</link>).</para></listitem>
 
   <listitem><para>NixOS now supports fully declarative management of
   users and groups. If you set <option>users.mutableUsers</option> to

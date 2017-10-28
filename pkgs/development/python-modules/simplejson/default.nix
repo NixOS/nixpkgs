@@ -24,7 +24,7 @@ buildPythonPackage rec {
       default, encoding is done in an encoding neutral fashion (plain
       ASCII with \uXXXX escapes for unicode characters).
     '';
-    homepage = http://code.google.com/p/simplejson/;
+    homepage = https://code.google.com/p/simplejson/;
     license = lib.licenses.mit;
   };
 }

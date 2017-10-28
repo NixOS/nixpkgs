@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ xercesc getopt ];
 
   meta = {
-    homepage = http://xalan.apache.org/;
+    homepage = https://xalan.apache.org/;
     description = "A XSLT processor for transforming XML documents";
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;

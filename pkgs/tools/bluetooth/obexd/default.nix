@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
 
   meta = {
-    homepage = http://www.bluez.org/;
+    homepage = https://www.bluez.org/;
     platforms = stdenv.lib.platforms.linux;
   };
 }

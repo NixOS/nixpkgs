@@ -37,7 +37,7 @@ in
           { demo = '''
               #!ipxe
               dhcp
-              chain http://boot.ipxe.org/demo/boot.php
+              chain https://boot.ipxe.org/demo/boot.php
             ''';
           }
         '';

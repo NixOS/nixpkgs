@@ -53,7 +53,7 @@ in
       VertRefresh 1.0 - 200.0
       #To add your own modes here, use a modeline calculator, like:
       # cvt:
-      # http://www.x.org/archive/X11R7.5/doc/man/man1/cvt.1.html
+      # https://www.x.org/archive/X11R7.5/doc/man/man1/cvt.1.html
       # xtiming:
       # http://xtiming.sourceforge.net/cgi-bin/xtiming.pl
       # gtf:

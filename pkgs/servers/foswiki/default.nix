@@ -36,7 +36,7 @@ perlPackages.buildPerlPackage rec {
 
   meta = with stdenv.lib; {
     description = "An open, programmable collaboration platform";
-    homepage = http://foswiki.org;
+    homepage = https://foswiki.org;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

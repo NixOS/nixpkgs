@@ -37,6 +37,6 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.unix;
     license = licenses.bsd2;
-    downloadPage = "http://www.spass-prover.org/download/index.html";
+    downloadPage = "https://www.spass-prover.org/download/index.html";
   };
 }

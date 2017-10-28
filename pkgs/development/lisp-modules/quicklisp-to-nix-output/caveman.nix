@@ -8,7 +8,7 @@ rec {
   deps = [ args."anaphora" args."cl-emb" args."cl-ppcre" args."cl-project" args."cl-syntax" args."cl-syntax-annot" args."clack-v1-compat" args."do-urlencode" args."local-time" args."myway" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/caveman/2017-06-30/caveman-20170630-git.tgz'';
+    url = ''https://beta.quicklisp.org/archive/caveman/2017-06-30/caveman-20170630-git.tgz'';
     sha256 = ''0wpjnskcvrgvqn9gbr43yqnpcxfmdggbiyaxz9rrhgcis2rwjkj2'';
   };
 
@@ -19,7 +19,7 @@ rec {
 }
 /* (SYSTEM caveman DESCRIPTION Web Application Framework for Common Lisp SHA256
     0wpjnskcvrgvqn9gbr43yqnpcxfmdggbiyaxz9rrhgcis2rwjkj2 URL
-    http://beta.quicklisp.org/archive/caveman/2017-06-30/caveman-20170630-git.tgz
+    https://beta.quicklisp.org/archive/caveman/2017-06-30/caveman-20170630-git.tgz
     MD5 774f85fa78792bde012bad78efff4b53 NAME caveman FILENAME caveman DEPS
     ((NAME anaphora FILENAME anaphora) (NAME cl-emb FILENAME cl-emb)
      (NAME cl-ppcre FILENAME cl-ppcre) (NAME cl-project FILENAME cl-project)

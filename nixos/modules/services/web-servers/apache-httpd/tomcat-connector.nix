@@ -56,7 +56,7 @@ JkLogStampFormat "[%a %b %d %H:%M:%S %Y]"
 
 # JkOptions indicates to send SSK KEY SIZE
 # Note: Changed from +ForwardURICompat.
-# See http://tomcat.apache.org/security-jk.html
+# See https://tomcat.apache.org/security-jk.html
 JkOptions +ForwardKeySize +ForwardURICompatUnparsed -ForwardDirectories
 
 # JkRequestLogFormat

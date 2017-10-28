@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   CFLAGS = "-DSFTPSERVER_PATH=\\\"${sftpPath}\\\"";
 
-  # http://www.gnu.org/software/make/manual/html_node/Libraries_002fSearch.html
+  # https://www.gnu.org/software/make/manual/html_node/Libraries_002fSearch.html
   preConfigure = ''
     makeFlags=VPATH=`cat $NIX_CC/nix-support/orig-libc`/lib
   '';
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib ] ++ lib.optionals enableStatic [ glibc.static zlib.static ];
 
   meta = with stdenv.lib; {
-    homepage = http://matt.ucc.asn.au/dropbear/dropbear.html;
+    homepage = https://matt.ucc.asn.au/dropbear/dropbear.html;
     description = "A small footprint implementation of the SSH 2 protocol";
     license = licenses.mit;
     maintainers = with maintainers; [ abbradar ];

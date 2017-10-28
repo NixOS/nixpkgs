@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   data = fetchzip {
-    url = http://sites.google.com/a/camanis.net/opentyrian/tyrian/tyrian21.zip;
+    url = https://sites.google.com/a/camanis.net/opentyrian/tyrian/tyrian21.zip;
     sha256 = "1biz6hf6s7qrwn8ky0g6p8w7yg715w7yklpn6258bkks1s15hpdb";
   };
 

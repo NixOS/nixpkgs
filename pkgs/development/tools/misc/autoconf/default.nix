@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ m4 perl ];
 
   # Work around a known issue in Cygwin.  See
-  # http://thread.gmane.org/gmane.comp.sysutils.autoconf.bugs/6822 for
+  # https://thread.gmane.org/gmane.comp.sysutils.autoconf.bugs/6822 for
   # details.
   # There are many test failures on `i386-pc-solaris2.11'.
   #doCheck = ((!stdenv.isCygwin) && (!stdenv.isSunOS));
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     '';
 
   meta = {
-    homepage = http://www.gnu.org/software/autoconf/;
+    homepage = https://www.gnu.org/software/autoconf/;
     description = "Part of the GNU Build System";
 
     longDescription = ''

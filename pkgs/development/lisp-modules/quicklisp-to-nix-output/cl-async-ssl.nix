@@ -8,7 +8,7 @@ rec {
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cl-async" args."cl-async-base" args."cl-async-util" args."cl-libuv" args."cl-ppcre" args."fast-io" args."static-vectors" args."trivial-features" args."trivial-gray-streams" args."vom" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-async/2016-08-25/cl-async-20160825-git.tgz'';
+    url = ''https://beta.quicklisp.org/archive/cl-async/2016-08-25/cl-async-20160825-git.tgz'';
     sha256 = ''104x6vw9zrmzz3sipmzn0ygil6ccyy8gpvvjxak2bfxbmxcl09pa'';
   };
 
@@ -20,7 +20,7 @@ rec {
 /* (SYSTEM cl-async-ssl DESCRIPTION
     SSL Wrapper around cl-async socket implementation. SHA256
     104x6vw9zrmzz3sipmzn0ygil6ccyy8gpvvjxak2bfxbmxcl09pa URL
-    http://beta.quicklisp.org/archive/cl-async/2016-08-25/cl-async-20160825-git.tgz
+    https://beta.quicklisp.org/archive/cl-async/2016-08-25/cl-async-20160825-git.tgz
     MD5 18e1d6c54a27c8ba721ebaa3d8c6e112 NAME cl-async-ssl FILENAME
     cl-async-ssl DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)

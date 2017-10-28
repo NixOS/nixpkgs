@@ -58,7 +58,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "IPython: Productive Interactive Computing";
-    homepage = http://ipython.org/;
+    homepage = https://ipython.org/;
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ bjornfor jgeerds orivej lnl7 ];
   };

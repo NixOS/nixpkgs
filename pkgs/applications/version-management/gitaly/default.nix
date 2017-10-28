@@ -31,7 +31,7 @@ in buildGoPackage rec {
   outputs = [ "bin" "out" "ruby" ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.gitlab.com/;
+    homepage = https://www.gitlab.com/;
     platforms = platforms.unix;
     maintainers = with maintainers; [ roblabla ];
     license = licenses.mit;

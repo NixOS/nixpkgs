@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl curl ];
 
   # Add support for CURL_CA_BUNDLE variable.
-  # Fix <http://sourceforge.net/p/esniper/bugs/648/>.
+  # Fix <https://sourceforge.net/p/esniper/bugs/648/>.
   patches = [ ./find-ca-bundle.patch ];
 
   postInstall = ''

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ intltool glib gobjectIntrospection ];
 
   meta = {
-    homepage = http://www.gnome.org;
+    homepage = https://www.gnome.org;
     description = "Gnome menu specification";
 
     platforms = stdenv.lib.platforms.linux;

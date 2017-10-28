@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
       with close compatibility, under multiple platforms.
     '';
 
-    homepage = http://www.freedink.org/;
+    homepage = https://www.freedink.org/;
     license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ stdenv.lib.maintainers.bjg ];

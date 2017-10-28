@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS = optionalString stdenv.isDarwin "-lintl";
 
   meta = {
-    homepage = http://www.freedesktop.org/wiki/Software/desktop-file-utils;
+    homepage = https://www.freedesktop.org/wiki/Software/desktop-file-utils;
     description = "Command line utilities for working with .desktop files";
     platforms = platforms.linux ++ platforms.darwin;
   };

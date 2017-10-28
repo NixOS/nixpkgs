@@ -19,7 +19,7 @@ let
     name = "vstsdk366_27_06_2016_build_61";
     src = requireFile {
       name = "${name}.zip";
-      url = "http://www.steinberg.net/en/company/developers.html";
+      url = "https://www.steinberg.net/en/company/developers.html";
       sha256 = "05gsr13bpi2hhp34rvhllsvmn44rqvmjdpg9fsgfzgylfkz0kiki";
     };
     nativeBuildInputs = [ unzip ];

@@ -436,7 +436,7 @@ self: super: builtins.intersectAttrs super {
   hinotify = if pkgs.stdenv.isDarwin then self.hfsevents else super.hinotify;
 
   # FSEvents API is very buggy and tests are unreliable. See
-  # http://openradar.appspot.com/10207999 and similar issues.
+  # https://openradar.appspot.com/10207999 and similar issues.
   # https://github.com/haskell-fswatch/hfsnotify/issues/62
   fsnotify = if pkgs.stdenv.isDarwin
     then addBuildDepend (dontCheck super.fsnotify) pkgs.darwin.apple_sdk.frameworks.Cocoa

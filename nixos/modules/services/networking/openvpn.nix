@@ -80,7 +80,7 @@ in
         {
           server = {
             config = '''
-              # Simplest server configuration: http://openvpn.net/index.php/documentation/miscellaneous/static-key-mini-howto.html.
+              # Simplest server configuration: https://openvpn.net/index.php/documentation/miscellaneous/static-key-mini-howto.html.
               # server :
               dev tun
               ifconfig 10.8.0.1 10.8.0.2

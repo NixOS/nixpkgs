@@ -231,7 +231,7 @@ preConfigure = "configureFlagsArray=(\"CFLAGS=-O0 -g\")";</programlisting>
 
 <programlisting>
 fetchurl {
-  url = http://releases.mozilla.org/<replaceable>...</replaceable>/firefox-2.0.0.6-source.tar.bz2;
+  url = https://releases.mozilla.org/<replaceable>...</replaceable>/firefox-2.0.0.6-source.tar.bz2;
   sha1 = "eb72f55e4a8bf08e8c6ef227c0ade3d068ba1082";
 }</programlisting>
 
@@ -337,7 +337,7 @@ export NIX_MIRRORS_sourceforge=http://osdn.dl.sourceforge.net/sourceforge/</prog
 <section><title>Release 0.10 (October 12, 2006)</title>
 
 <note><para>This release of Nixpkgs requires <link
-xlink:href='http://nixos.org/releases/nix/nix-0.10/'>Nix
+xlink:href='https://nixos.org/releases/nix/nix-0.10/'>Nix
 0.10</link> or higher.</para></note>
 
 <para>This release has the following improvements:</para>
@@ -389,7 +389,7 @@ xlink:href='http://nixos.org/releases/nix/nix-0.10/'>Nix
     <itemizedlist>
 
       <listitem><para><literal>i686-cygwin</literal>, i.e., Windows
-      (using <link xlink:href="http://www.cygwin.com/">Cygwin</link>).
+      (using <link xlink:href="https://www.cygwin.com/">Cygwin</link>).
       The standard environment on <literal>i686-cygwin</literal> by
       default builds binaries for the Cygwin environment (i.e., it
       uses Cygwin tools and produces executables that use the Cygwin
@@ -543,7 +543,7 @@ some of the more notable changes:</para>
 <itemizedlist>
 
   <listitem><para>Distribution files have been moved to <link
-  xlink:href="http://nixos.org/" />.</para></listitem>
+  xlink:href="https://nixos.org/" />.</para></listitem>
 
   <listitem><para>The C library on Linux, Glibc, has been updated to
   version 2.3.6.</para></listitem>

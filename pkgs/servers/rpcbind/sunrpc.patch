@@ -1,4 +1,4 @@
-http://projects.archlinux.org/svntogit/packages.git/tree/trunk/rpcbind-sunrpc.patch?h=packages/rpcbind
+https://projects.archlinux.org/svntogit/packages.git/tree/trunk/rpcbind-sunrpc.patch?h=packages/rpcbind
 
 Lookup "sunrpc" instead of "rpcbind" in /etc/services, since the former is the
 official IANA name.

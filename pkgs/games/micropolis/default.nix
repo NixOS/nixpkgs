@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   patches =
     [ (fetchurl {
-        url = http://rmdir.de/~michael/micropolis_git.patch;
+        url = https://rmdir.de/~michael/micropolis_git.patch;
         sha256 = "10j0svcs576ip7v5mn99gvqx9ki8jfd5w5yvsxj57xh56dd0by2p";
       })
     ];

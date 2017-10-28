@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "IPython HTML widgets for Jupyter";
-    homepage = http://ipython.org/;
+    homepage = https://ipython.org/;
     license = ipywidgets.meta.license; # Build from same repo
     maintainers = with lib.maintainers; [ fridh ];
   };

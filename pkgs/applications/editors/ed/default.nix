@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
     license = stdenv.lib.licenses.gpl3Plus;
 
-    homepage = http://www.gnu.org/software/ed/;
+    homepage = https://www.gnu.org/software/ed/;
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.unix;

@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    homepage = http://cernlib.web.cern.ch;
+    homepage = https://cernlib.web.cern.ch;
     description = "Legacy collection of libraries and modules for data analysis in high energy physics";
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ veprbl ];

@@ -69,7 +69,7 @@ stdenv.mkDerivation ({
 
   postPatch =
     # Needed for glibc to build with the gnumake 3.82
-    # http://comments.gmane.org/gmane.linux.lfs.support/31227
+    # https://comments.gmane.org/gmane.linux.lfs.support/31227
     ''
       sed -i 's/ot \$/ot:\n\ttouch $@\n$/' manual/Makefile
     ''
@@ -182,7 +182,7 @@ stdenv.mkDerivation ({
   preBuild = lib.optionalString withGd "unset NIX_DONT_SET_RPATH";
 
   meta = {
-    homepage = http://www.gnu.org/software/libc/;
+    homepage = https://www.gnu.org/software/libc/;
     description = "The GNU C Library";
 
     longDescription =

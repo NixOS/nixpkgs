@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Prints certain LSB (Linux Standard Base) and Distribution information";
-    homepage = http://www.linuxfoundation.org/collaborate/workgroups/lsb;
+    homepage = https://www.linuxfoundation.org/collaborate/workgroups/lsb;
     license = [ stdenv.lib.licenses.gpl2Plus stdenv.lib.licenses.gpl3Plus ];
     platforms = stdenv.lib.platforms.linux;
   };

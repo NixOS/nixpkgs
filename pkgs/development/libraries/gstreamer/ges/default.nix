@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library for creation of audio/video non-linear editors";
-    homepage    = "http://gstreamer.freedesktop.org";
+    homepage    = "https://gstreamer.freedesktop.org";
     license     = licenses.lgpl2Plus;
     platforms   = platforms.unix;
   };

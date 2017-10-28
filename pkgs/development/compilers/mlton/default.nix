@@ -123,7 +123,7 @@ stdenv.mkDerivation rec {
       by eliminating performance penalties often associated with the use of high-level language features.
       MLton development began in 1997, and continues to this day with a growing worldwide community of
       developers and users, who have helped to port MLton to a number of platforms.
-      Description taken from http://en.wikipedia.org/wiki/Mlton .
+      Description taken from https://en.wikipedia.org/wiki/Mlton .
     '';
 
     homepage = http://mlton.org/;

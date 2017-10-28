@@ -456,7 +456,7 @@
 +    print 'Android NDK not found at ' + ANDROID_NDK_DIR
 +    print 'The Android NDK is needed to build a Clang whose -fsanitize=address'
 +    print 'works on Android. See '
-+    print 'http://code.google.com/p/chromium/wiki/AndroidBuildInstructions'
++    print 'https://code.google.com/p/chromium/wiki/AndroidBuildInstructions'
 +    print 'for how to install the NDK, or pass --without-android.'
 +    return 1
  

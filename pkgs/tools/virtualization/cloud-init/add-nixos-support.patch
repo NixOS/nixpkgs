@@ -33,7 +33,7 @@ diff -ruN cloud-init-0.7.6.orig/cloudinit/distros/nixos.py cloud-init-0.7.6/clou
 +#    GNU General Public License for more details.
 +#
 +#    You should have received a copy of the GNU General Public License
-+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
++#    along with this program.  If not, see <https://www.gnu.org/licenses/>.
 +
 +from cloudinit import distros
 +from cloudinit import helpers

@@ -51,6 +51,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = licenses.gpl3;
   };
-  passthru.updateInfo.downloadPage = "http://globulation2.org/wiki/Download_and_Install";
+  passthru.updateInfo.downloadPage = "https://globulation2.org/wiki/Download_and_Install";
 }
 

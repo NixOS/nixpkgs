@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  # efi-boot-patch extracted from http://arm.koji.fedoraproject.org/koji/rpminfo?rpmID=174244
+  # efi-boot-patch extracted from https://arm.koji.fedoraproject.org/koji/rpminfo?rpmID=174244
   patches = [ ./include-path.patch ./cdrkit-1.1.9-efi-boot.patch ];
 
   postInstall = ''

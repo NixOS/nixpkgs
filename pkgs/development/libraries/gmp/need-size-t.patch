@@ -2,7 +2,7 @@ diff --git a/gmp-h.in b/gmp-h.in
 index 7deb67a..240d663 100644
 --- a/gmp-h.in
 +++ b/gmp-h.in
-@@ -46,13 +46,11 @@ along with the GNU MP Library.  If not, see http://www.gnu.org/licenses/.  */
+@@ -46,13 +46,11 @@ along with the GNU MP Library.  If not, see https://www.gnu.org/licenses/.  */
  #ifndef __GNU_MP__
  #define __GNU_MP__ 5
  

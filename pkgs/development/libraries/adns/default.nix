@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   preConfigure =
     stdenv.lib.optionalString stdenv.isDarwin "sed -i -e 's|-Wl,-soname=$(SHLIBSONAME)||' configure";
 
-  # http://thread.gmane.org/gmane.linux.distributions.nixos/1328 for details.
+  # https://thread.gmane.org/gmane.linux.distributions.nixos/1328 for details.
   doCheck = false;
 
   postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.chiark.greenend.org.uk/~ian/adns/;
+    homepage = https://www.chiark.greenend.org.uk/~ian/adns/;
     description = "Asynchronous DNS Resolver Library";
     license = stdenv.lib.licenses.lgpl2;
 

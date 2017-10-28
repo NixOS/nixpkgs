@@ -8,7 +8,7 @@ rec {
   deps = [ args."named-readtables" args."trivial-types" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-syntax/2015-04-07/cl-syntax-20150407-git.tgz'';
+    url = ''https://beta.quicklisp.org/archive/cl-syntax/2015-04-07/cl-syntax-20150407-git.tgz'';
     sha256 = ''1pz9a7hiql493ax5qgs9zb3bmvf0nnmmgdx14s4j2apdy2m34v8n'';
   };
 
@@ -20,7 +20,7 @@ rec {
 /* (SYSTEM cl-syntax DESCRIPTION
     Reader Syntax Coventions for Common Lisp and SLIME SHA256
     1pz9a7hiql493ax5qgs9zb3bmvf0nnmmgdx14s4j2apdy2m34v8n URL
-    http://beta.quicklisp.org/archive/cl-syntax/2015-04-07/cl-syntax-20150407-git.tgz
+    https://beta.quicklisp.org/archive/cl-syntax/2015-04-07/cl-syntax-20150407-git.tgz
     MD5 602b84143aafe59d65f4e08ac20a124a NAME cl-syntax FILENAME cl-syntax DEPS
     ((NAME named-readtables FILENAME named-readtables)
      (NAME trivial-types FILENAME trivial-types))

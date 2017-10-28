@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     description = "A JavaScript and CSS minifier";
     maintainers = [ stdenv.lib.maintainers.jwiegley ];
     platforms = stdenv.lib.platforms.all;
-    homepage = http://yui.github.io/yuicompressor/;
+    homepage = https://yui.github.io/yuicompressor/;
     license = stdenv.lib.licenses.bsd3;
   };
 

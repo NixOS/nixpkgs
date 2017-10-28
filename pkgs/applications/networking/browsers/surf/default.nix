@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
       possible to embed it in another application. Furthermore, one can point
       surf to another URI by setting its XProperties.
     '';
-    homepage = http://surf.suckless.org;
+    homepage = https://surf.suckless.org;
     license = licenses.mit;
     platforms = webkitgtk.meta.platforms;
     maintainers = with maintainers; [ joachifm ];

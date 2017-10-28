@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   patches = [ ./maildrop.configure.hack.patch ]; # for building in chroot
 
   meta = with stdenv.lib; {
-    homepage = http://www.courier-mta.org/maildrop/;
+    homepage = https://www.courier-mta.org/maildrop/;
     description = "Mail filter/mail delivery agent that is used by the Courier Mail Server";
     license = licenses.gpl3;
     platforms = platforms.linux;

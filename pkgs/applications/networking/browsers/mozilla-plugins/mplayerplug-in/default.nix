@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     (if browser ? isFirefox3Like then ''
        # Cause a rebuild of these file from the IDL file, needed for GNU IceCat 3
        # and Mozilla Firefox 3.
-       # See, e.g., http://article.gmane.org/gmane.comp.mozilla.mplayerplug-in/2104 .
+       # See, e.g., https://article.gmane.org/gmane.comp.mozilla.mplayerplug-in/2104 .
        rm -f Source/nsIScriptableMplayerPlugin.h
      ''
      else "");

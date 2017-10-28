@@ -56,7 +56,7 @@ stdenv.mkDerivation {
     '';
 
   meta = {
-    homepage = http://sourceware.org/lvm2/;
+    homepage = https://sourceware.org/lvm2/;
     description = "Tools to support Logical Volume Management (LVM) on Linux";
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [raskin];

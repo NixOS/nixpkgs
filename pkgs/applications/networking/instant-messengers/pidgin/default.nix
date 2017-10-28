@@ -66,7 +66,7 @@ let unwrapped = stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Multi-protocol instant messaging client";
-    homepage = http://pidgin.im;
+    homepage = https://pidgin.im;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.vcunat ];

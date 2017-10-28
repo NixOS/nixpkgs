@@ -10,7 +10,7 @@ rec {
   deps = [ args."asdf-system-connections" args."metatilities-base" args."moptilities" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-containers/2017-04-03/cl-containers-20170403-git.tgz'';
+    url = ''https://beta.quicklisp.org/archive/cl-containers/2017-04-03/cl-containers-20170403-git.tgz'';
     sha256 = ''0wlwbz5xv3468iszvmfxnj924mdwx0lyzmhsggiq7iq7ip8wbbxg'';
   };
 
@@ -22,7 +22,7 @@ rec {
 /* (SYSTEM cl-containers DESCRIPTION
     A generic container library for Common Lisp SHA256
     0wlwbz5xv3468iszvmfxnj924mdwx0lyzmhsggiq7iq7ip8wbbxg URL
-    http://beta.quicklisp.org/archive/cl-containers/2017-04-03/cl-containers-20170403-git.tgz
+    https://beta.quicklisp.org/archive/cl-containers/2017-04-03/cl-containers-20170403-git.tgz
     MD5 17123cd2b018cd3eb048eceef78be3f8 NAME cl-containers FILENAME
     cl-containers DEPS
     ((NAME asdf-system-connections FILENAME asdf-system-connections)

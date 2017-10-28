@@ -183,7 +183,7 @@ pythonPackages.buildPythonApplication {
 
   meta = with stdenv.lib; {
     description = "Print, scan and fax HP drivers for Linux";
-    homepage = http://hplipopensource.com/;
+    homepage = https://hplipopensource.com/;
     license = if withPlugin
       then licenses.unfree
       else with licenses; [ mit bsd2 gpl2Plus ];

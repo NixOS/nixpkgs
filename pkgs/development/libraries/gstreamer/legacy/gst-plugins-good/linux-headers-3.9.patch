@@ -1,4 +1,4 @@
-http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/media-plugins/gst-plugins-v4l2/files/gst-plugins-v4l2-0.10.31-linux-headers-3.9.patch
+https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/media-plugins/gst-plugins-v4l2/files/gst-plugins-v4l2-0.10.31-linux-headers-3.9.patch
 
 From 8e633d2059cb835448021cf79becb487aff10975 Mon Sep 17 00:00:00 2001
 From: Bastien Nocera <hadess@hadess.net>

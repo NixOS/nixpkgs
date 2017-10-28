@@ -1,5 +1,5 @@
 # Fetches a chicken egg from henrietta using `chicken-install -r'
-# See: http://wiki.call-cc.org/chicken-projects/egg-index-4.html
+# See: https://wiki.call-cc.org/chicken-projects/egg-index-4.html
 
 { stdenv, chicken }:
 { name, version, md5 ? "", sha256 ? "" }:

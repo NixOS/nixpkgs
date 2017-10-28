@@ -16,7 +16,7 @@ python2Packages.buildPythonApplication rec {
   patchPhase = ''
     echo "graft nova" >> MANIFEST.in
 
-    # remove transient error test, see http://hydra.nixos.org/build/40203534
+    # remove transient error test, see https://hydra.nixos.org/build/40203534
     rm nova/tests/unit/compute/test_{shelve,compute_utils}.py
   '';
 

@@ -1,4 +1,4 @@
-url http://www.monotone.ca/downloads.php
+url https://www.monotone.ca/downloads.php
 
 do_overwrite(){
   ensure_version

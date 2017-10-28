@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage    = "http://code.google.com/p/uim/";
+    homepage    = "https://code.google.com/p/uim/";
     description = "A multilingual input method framework";
     license     = stdenv.lib.licenses.bsd3;
     platforms   = stdenv.lib.platforms.linux;

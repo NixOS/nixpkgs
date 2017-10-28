@@ -23,7 +23,7 @@ python2Packages.buildPythonApplication rec {
 
     meta = {
       description = "Qt based graphical tool for working with Mercurial";
-      homepage = http://tortoisehg.bitbucket.org/;
+      homepage = https://tortoisehg.bitbucket.org/;
       license = lib.licenses.gpl2;
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [ danbst ];

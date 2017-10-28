@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://mosquitto.org/;
+    homepage = https://mosquitto.org/;
     description = "An open source MQTT v3.1/3.1.1 broker";
     platforms = stdenv.lib.platforms.unix;
-    # http://www.eclipse.org/legal/epl-v10.html (free software, copyleft)
+    # https://www.eclipse.org/legal/epl-v10.html (free software, copyleft)
     license = stdenv.lib.licenses.epl10;
   };
 }

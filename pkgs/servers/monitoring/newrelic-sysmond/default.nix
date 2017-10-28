@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "System-wide monitoring for newrelic";
-    homepage = http://newrelic.com/;
+    homepage = https://newrelic.com/;
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lnl7 ];

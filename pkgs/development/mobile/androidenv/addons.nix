@@ -24,7 +24,7 @@ in
       };
       meta = {
         description = "Android + Google APIs";
-        url = http://developer.android.com/;
+        url = https://developer.android.com/;
       };
     };
 
@@ -36,7 +36,7 @@ in
       };
       meta = {
         description = "Android + Google APIs";
-        url = http://developer.android.com/;
+        url = https://developer.android.com/;
       };
     };
 
@@ -48,7 +48,7 @@ in
       };
       meta = {
         description = "Android + Google APIs";
-        url = http://developer.android.com/;
+        url = https://developer.android.com/;
       };
     };
 
@@ -60,7 +60,7 @@ in
       };
       meta = {
         description = "Android + Google APIs";
-        url = http://developer.android.com/;
+        url = https://developer.android.com/;
       };
     };
 
@@ -72,7 +72,7 @@ in
       };
       meta = {
         description = "Android + Google APIs";
-        url = http://developer.android.com/;
+        url = https://developer.android.com/;
       };
     };
 
@@ -84,7 +84,7 @@ in
       };
       meta = {
         description = "Android + Google APIs";
-        url = http://developer.android.com/;
+        url = https://developer.android.com/;
       };
     };
 
@@ -96,7 +96,7 @@ in
       };
       meta = {
         description = "Android + Google APIs";
-        url = http://developer.android.com/;
+        url = https://developer.android.com/;
       };
     };
 
@@ -108,7 +108,7 @@ in
       };
       meta = {
         description = "Android + Google APIs";
-        url = http://developer.android.com/;
+        url = https://developer.android.com/;
       };
     };
 
@@ -120,7 +120,7 @@ in
       };
       meta = {
         description = "Android + Google APIs";
-        url = http://developer.android.com/;
+        url = https://developer.android.com/;
       };
     };
 
@@ -132,7 +132,7 @@ in
       };
       meta = {
         description = "Android + Google APIs";
-        url = http://developer.android.com/;
+        url = https://developer.android.com/;
       };
     };
 
@@ -144,7 +144,7 @@ in
       };
       meta = {
         description = "Android + Google APIs";
-        url = http://developer.android.com/;
+        url = https://developer.android.com/;
       };
     };
 
@@ -288,7 +288,7 @@ in
     };
     meta = {
       description = "Android Support Library";
-      url = http://developer.android.com/;
+      url = https://developer.android.com/;
     };
   };
 
@@ -301,7 +301,7 @@ in
     };
     meta = {
       description = "Google Play services client library and sample code";
-      url = http://developer.android.com/;
+      url = https://developer.android.com/;
     };
   };
 

@@ -11,7 +11,7 @@
 assert guileBindings -> guile != null;
 let
   # XXX: Gnulib's `test-select' fails on FreeBSD:
-  # http://hydra.nixos.org/build/2962084/nixlog/1/raw .
+  # https://hydra.nixos.org/build/2962084/nixlog/1/raw .
   doCheck = !stdenv.isFreeBSD && !stdenv.isDarwin && lib.versionAtLeast version "3.4";
 in
 stdenv.mkDerivation {
@@ -83,7 +83,7 @@ stdenv.mkDerivation {
        tampering, or message forgery."
     '';
 
-    homepage = http://www.gnu.org/software/gnutls/;
+    homepage = https://www.gnu.org/software/gnutls/;
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ eelco wkennington fpletz ];
     platforms = platforms.all;

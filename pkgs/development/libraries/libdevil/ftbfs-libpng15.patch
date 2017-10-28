@@ -1,4 +1,4 @@
-Source: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=649554
+Source: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=649554
 --- devil-1.7.8.orig/src-IL/src/il_icon.c
 +++ devil-1.7.8/src-IL/src/il_icon.c
 @@ -525,7 +525,11 @@

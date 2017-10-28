@@ -89,7 +89,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Desktop client for HipChat services";
-    homepage = http://www.hipchat.com;
+    homepage = https://www.hipchat.com;
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ jgeerds puffnfresh ];

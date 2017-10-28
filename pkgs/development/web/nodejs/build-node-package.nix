@@ -238,7 +238,7 @@ let
       fi
 
       # Install package
-      (cd $HOME && npm --registry http://www.example.com --nodedir=${sources} install $src --fetch-retries 0 ${flags})
+      (cd $HOME && npm --registry https://www.example.com --nodedir=${sources} install $src --fetch-retries 0 ${flags})
 
       runHook postBuild
     '';

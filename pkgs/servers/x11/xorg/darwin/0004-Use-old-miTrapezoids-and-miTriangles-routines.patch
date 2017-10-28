@@ -7,7 +7,7 @@ Reverts commits:
     788ccb9a8bcf6a4fb4054c507111eec3338fb969
     566f1931ee2916269e164e114bffaf2da1d039d1
 
-http://xquartz.macosforge.org/trac/ticket/525
+https://xquartz.macosforge.org/trac/ticket/525
 
 Signed-off-by: Jeremy Huddleston Sequoia <jeremyhu@apple.com>
 ---

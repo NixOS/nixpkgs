@@ -21,7 +21,7 @@ fetchzip rec {
 
       This is the successor to the IPA fonts.
     '';
-    homepage = http://ipafont.ipa.go.jp/;
+    homepage = https://ipafont.ipa.go.jp/;
     license = licenses.ipa;
     maintainers = with maintainers; [ gebner ];
     platforms = with platforms; unix;

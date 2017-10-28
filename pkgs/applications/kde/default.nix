@@ -50,7 +50,7 @@ let
 
         meta = {
           platforms = lib.platforms.linux;
-          homepage = "http://www.kde.org";
+          homepage = "https://www.kde.org";
         } // (args.meta or {});
       });
 

@@ -400,7 +400,7 @@ self: super: {
   static-resources = dontCheck super.static-resources;
   strive = dontCheck super.strive;                      # fails its own hlint test with tons of warnings
   svndump = dontCheck super.svndump;
-  tar = dontCheck super.tar; #http://hydra.nixos.org/build/25088435/nixlog/2 (fails only on 32-bit)
+  tar = dontCheck super.tar; #https://hydra.nixos.org/build/25088435/nixlog/2 (fails only on 32-bit)
   th-printf = dontCheck super.th-printf;
   thumbnail-plus = dontCheck super.thumbnail-plus;
   tickle = dontCheck super.tickle;
@@ -691,7 +691,7 @@ self: super: {
   # https://github.com/fpco/stackage/issues/838
   cryptonite = dontCheck super.cryptonite;
 
-  # We cannot build this package w/o the C library from <http://www.phash.org/>.
+  # We cannot build this package w/o the C library from <https://www.phash.org/>.
   phash = markBroken super.phash;
 
   # https://github.com/sol/hpack/issues/53

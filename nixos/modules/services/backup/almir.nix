@@ -116,7 +116,7 @@ in {
           sqlite:////var/lib/bacula/bacula.db'
         '';
 	description = ''
-         Define SQL database connection to bacula catalog as specified in http://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls
+         Define SQL database connection to bacula catalog as specified in https://docs.sqlalchemy.org/en/latest/core/engines.html#database-urls
         '';
       };
 

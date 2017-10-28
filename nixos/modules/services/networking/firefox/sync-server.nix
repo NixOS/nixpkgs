@@ -112,7 +112,7 @@ in
           etc., and <option>driver</option> the name of a DBAPI, such as
           <option>psycopg2</option>, <option>pyodbc</option>, <option>cx_oracle</option>,
           etc. The <link
-          xlink:href="http://docs.sqlalchemy.org/en/rel_0_9/core/engines.html#database-urls">
+          xlink:href="https://docs.sqlalchemy.org/en/rel_0_9/core/engines.html#database-urls">
           SQLAlchemy documentation</link> provides more examples and describe the syntax of
           the expected URL.
         '';

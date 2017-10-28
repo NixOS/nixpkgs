@@ -8,7 +8,7 @@ rec {
   deps = [ args."alexandria" args."babel" args."babel-streams" args."trivial-features" args."trivial-gray-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/do-urlencode/2013-07-20/do-urlencode-20130720-git.tgz'';
+    url = ''https://beta.quicklisp.org/archive/do-urlencode/2013-07-20/do-urlencode-20130720-git.tgz'';
     sha256 = ''19l4rwqc52w7nrpy994b3n2dcv8pjgc530yn2xmgqlqabpxpz3xa'';
   };
 
@@ -19,7 +19,7 @@ rec {
 }
 /* (SYSTEM do-urlencode DESCRIPTION Percent Encoding (aka URL Encoding) library
     SHA256 19l4rwqc52w7nrpy994b3n2dcv8pjgc530yn2xmgqlqabpxpz3xa URL
-    http://beta.quicklisp.org/archive/do-urlencode/2013-07-20/do-urlencode-20130720-git.tgz
+    https://beta.quicklisp.org/archive/do-urlencode/2013-07-20/do-urlencode-20130720-git.tgz
     MD5 c8085e138711c225042acf83b4bf0507 NAME do-urlencode FILENAME
     do-urlencode DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)

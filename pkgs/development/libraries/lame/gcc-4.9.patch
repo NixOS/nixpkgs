@@ -1,5 +1,5 @@
 fix sse optimizations build on 32-bit with gcc 4.9
-http://git.videolan.org/gitweb.cgi/vlc.git/?a=commit;h=351af417bae0d09bd5a3753d1237f03adf591933
+https://git.videolan.org/gitweb.cgi/vlc.git/?a=commit;h=351af417bae0d09bd5a3753d1237f03adf591933
 
 xmm_quantize_sub.c: In function 'init_xrpow_core_sse':
 xmm_quantize_sub.c:65:18: warning: SSE vector return without SSE enabled changes the ABI [-W

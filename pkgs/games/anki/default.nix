@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
     '';
 
     meta = {
-      homepage = http://ankisrs.net/;
+      homepage = https://ankisrs.net/;
       description = "Spaced repetition flashcard program";
       license = stdenv.lib.licenses.gpl3;
 

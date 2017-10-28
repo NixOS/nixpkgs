@@ -158,7 +158,7 @@ in {
           # Find the mouse
           export XCURSOR_PATH=~/.icons:${config.system.path}/share/icons
 
-          # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
+          # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
           ${pkgs.xdg-user-dirs}/bin/xdg-user-dirs-update
 
           ${pkgs.gnome3.gnome_session}/bin/gnome-session ${optionalString cfg.debug "--debug"} &

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     platforms = platforms.linux;
     license = licenses.lgpl21;
-    homepage = http://libproxy.github.io/libproxy/;
+    homepage = https://libproxy.github.io/libproxy/;
     description = "A library that provides automatic proxy configuration management";
   };
 }

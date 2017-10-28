@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     # It will hardcode this for /var/lib/dovecot.
-    # http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=626211
+    # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=626211
     "--localstatedir=/var"
     # We need this so utilities default to reading /etc/dovecot/dovecot.conf file.
     "--sysconfdir=/etc"
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional withSQLite "--with-sqlite";
 
   meta = {
-    homepage = http://dovecot.org/;
+    homepage = https://dovecot.org/;
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
     maintainers = with stdenv.lib.maintainers; [viric peti rickynils];
     platforms = stdenv.lib.platforms.unix;

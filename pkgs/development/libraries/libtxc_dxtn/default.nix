@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ mesa ];
 
   meta = {
-    homepage = http://dri.freedesktop.org/wiki/S3TC;
+    homepage = https://dri.freedesktop.org/wiki/S3TC;
     repositories.git = git://people.freedesktop.org/~mareko/libtxc_dxtn;
     platforms = stdenv.lib.platforms.unix;
   };

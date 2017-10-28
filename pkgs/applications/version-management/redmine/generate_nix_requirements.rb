@@ -12,7 +12,7 @@ TMP_DIR = "/tmp/gems"
 FileUtils.rm_rf(TMP_DIR) if File.exists?(TMP_DIR)
 FileUtils.mkdir TMP_DIR
 
-GEMSERVER = "http://rubygems.org"
+GEMSERVER = "https://rubygems.org"
 
 # inspect Gemfile.lock
 lockfile = Bundler::LockfileParser.new(Bundler.read_file("Gemfile.lock"))

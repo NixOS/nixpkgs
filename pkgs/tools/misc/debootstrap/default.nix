@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Tool to create a Debian system in a chroot";
-    homepage = http://packages.debian.org/de/lenny/debootstrap; # http://code.erisian.com.au/Wiki/debootstrap
+    homepage = https://packages.debian.org/de/lenny/debootstrap; # http://code.erisian.com.au/Wiki/debootstrap
     license = stdenv.lib.licenses.gpl2; # gentoo says so.. ?
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;

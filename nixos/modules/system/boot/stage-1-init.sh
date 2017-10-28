@@ -533,7 +533,7 @@ eval "exec $logOutFd>&- $logErrFd>&-"
 # https://www.freedesktop.org/wiki/Software/systemd/RootStorageDaemons/
 for pid in $(pgrep -v -f '^@'); do
     # Make sure we don't kill kernel processes, see #15226 and:
-    # http://stackoverflow.com/questions/12213445/identifying-kernel-threads
+    # https://stackoverflow.com/questions/12213445/identifying-kernel-threads
     readlink "/proc/$pid/exe" &> /dev/null || continue
     # Try to avoid killing ourselves.
     [ $pid -eq $$ ] && continue

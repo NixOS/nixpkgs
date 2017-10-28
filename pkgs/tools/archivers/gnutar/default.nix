@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   # gnutar tries to call into gettext between `fork` and `exec`,
   # which is not safe on darwin.
-  # see http://article.gmane.org/gmane.os.macosx.fink.devel/21882
+  # see https://article.gmane.org/gmane.os.macosx.fink.devel/21882
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/system.c --replace '_(' 'N_('
   '';
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '' else null;
 
   meta = {
-    homepage = http://www.gnu.org/software/tar/;
+    homepage = https://www.gnu.org/software/tar/;
     description = "GNU implementation of the `tar' archiver";
 
     longDescription = ''

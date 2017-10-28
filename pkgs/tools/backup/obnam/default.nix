@@ -15,7 +15,7 @@ pythonPackages.buildPythonApplication rec {
   doCheck = false;
 
   meta = {
-    homepage = http://obnam.org;
+    homepage = https://obnam.org;
     description = "Backup program supporting deduplication, compression and encryption";
     maintainers = [ stdenv.lib.maintainers.rickynils ];
     platforms = stdenv.lib.platforms.linux;

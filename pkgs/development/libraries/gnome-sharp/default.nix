@@ -3,7 +3,7 @@
 stdenv.mkDerivation {
   name = "gnome-sharp-2.24.1";
   src = fetchurl {
-    url = http://ftp.gnome.org/pub/gnome/sources/gnome-sharp/2.24/gnome-sharp-2.24.1.tar.gz;
+    url = https://ftp.gnome.org/pub/gnome/sources/gnome-sharp/2.24/gnome-sharp-2.24.1.tar.gz;
     sha256 = "0cfvs7hw67fp0wimskqd0gdfx323gv6hi0c5pf59krnmhdrl6z8p";
   };
 

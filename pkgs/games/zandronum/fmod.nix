@@ -11,12 +11,12 @@ let
   src =
     (if (bits == "64") then
       fetchurl {
-        url = "http://zandronum.com/essentials/fmod/fmodapi42416linux64.tar.gz";
+        url = "https://zandronum.com/essentials/fmod/fmodapi42416linux64.tar.gz";
         sha256 = "0hkwlzchzzgd7fanqznbv5bs53z2qy8iiv9l2y77l4sg1jwmlm6y";
       }
     else
       fetchurl {
-        url = "http://zandronum.com/essentials/fmod/fmodapi42416linux.tar.gz";
+        url = "https://zandronum.com/essentials/fmod/fmodapi42416linux.tar.gz";
         sha256 = "13diw3ax2slkr99mwyjyc62b8awc30k0z08cvkpk2p3i1j6f85m5";
       }
     );
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Programming library and toolkit for the creation and playback of interactive audio";
-    homepage    = "http://www.fmod.org/";
+    homepage    = "https://www.fmod.org/";
     license     = licenses.unfreeRedistributable;
     platforms   = platforms.linux;
     maintainers = [ stdenv.lib.maintainers.lassulus ];

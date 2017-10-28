@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     # This program does not cross-build fine. So I only cross-build some parts
     # I need for the linux perf tool.
     # On the awful cross-building:
-    # http://comments.gmane.org/gmane.comp.sysutils.elfutils.devel/2005
+    # https://comments.gmane.org/gmane.comp.sysutils.elfutils.devel/2005
     #
     # I wrote this testing for the nanonote.
     buildPhase = ''

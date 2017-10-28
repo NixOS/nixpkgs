@@ -21,7 +21,7 @@ let
 
     meta = with stdenv.lib; {
       license     = licenses.lgpl2;
-      homepage    = http://www.kde.org;
+      homepage    = https://www.kde.org;
       maintainers = with maintainers; [ ttuegel peterhoeg ];
       platforms   = platforms.unix;
       inherit broken;

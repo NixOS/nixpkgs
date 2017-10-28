@@ -13,7 +13,7 @@
    you may not use this file except in compliance with the License.
    You may obtain a copy of the License at:
 
-     http://www.apache.org/licenses/LICENSE-2.0
+     https://www.apache.org/licenses/LICENSE-2.0
 
    This code is a shim patched into the separately-distributed source
    code of QEMU 2.2.0. It leverages the built-in QEMU tracing functionality

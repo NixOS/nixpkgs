@@ -13,7 +13,7 @@ findTarball() {
 
 canonicalizeJarManifest() {
     local input=$1
-    # http://docs.oracle.com/javase/7/docs/technotes/guides/jar/jar.html#Notes_on_Manifest_and_Signature_Files
+    # https://docs.oracle.com/javase/7/docs/technotes/guides/jar/jar.html#Notes_on_Manifest_and_Signature_Files
     (head -n 1 $input && tail -n +2 $input | sort | grep -v '^\s*$') > $input-tmp
     mv $input-tmp $input
 }

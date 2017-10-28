@@ -54,7 +54,7 @@ stdenv.mkDerivation {
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
     homepage = ''https://www.gentoo.org/proj/en/eudev/'';
-    downloadPage = ''http://dev.gentoo.org/~blueness/eudev/'';
+    downloadPage = ''https://dev.gentoo.org/~blueness/eudev/'';
     updateWalker = true;
   };
 }

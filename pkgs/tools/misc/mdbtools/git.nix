@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   name = "mdbtools-git-2014-07-25";
 
   src = fetchgit {
-    url = "http://github.com/brianb/mdbtools.git";
+    url = "https://github.com/brianb/mdbtools.git";
     rev = "9ab40e83e6789015c965c92bdb62f92f8cdd0dbd";
     sha256 = "0hlf5lk86xm0bpdlpk4a1zyfvbim76dhvmybxga2p7mbb1jc825l";
   };

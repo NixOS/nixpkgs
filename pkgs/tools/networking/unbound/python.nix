@@ -58,7 +58,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Python library for Unbound, the validating, recursive, and caching DNS resolver";
     license = licenses.bsd3;
-    homepage = http://www.unbound.net;
+    homepage = https://www.unbound.net;
     maintainers = with maintainers; [ leenaars ];
     platforms = stdenv.lib.platforms.unix;
   };

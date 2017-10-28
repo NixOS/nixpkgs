@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   meta = {
-    homepage = http://developer.kde.org/~wheeler/taglib.html;
+    homepage = https://developer.kde.org/~wheeler/taglib.html;
     repositories.git = git://github.com/taglib/taglib.git;
 
     description = "A library for reading and editing the meta-data of several popular audio formats";

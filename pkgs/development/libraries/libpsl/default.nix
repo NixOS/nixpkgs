@@ -61,7 +61,7 @@ in stdenv.mkDerivation rec {
       "supercookies" and "super domain" certificates, for highlighting parts of
       the domain in a user interface or sorting domain lists by site.
     '';
-    homepage = http://rockdaboot.github.io/libpsl/;
+    homepage = https://rockdaboot.github.io/libpsl/;
     license = licenses.mit;
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ nckx ];

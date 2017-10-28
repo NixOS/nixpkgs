@@ -15,11 +15,11 @@ runCommand "dbus-1"
       <?xml version="1.0"?>
       <!DOCTYPE catalog PUBLIC
         "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN"
-        "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
+        "https://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
 
       <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog">
         <rewriteSystem
-          systemIdStartString="http://www.freedesktop.org/standards/dbus/1.0/"
+          systemIdStartString="https://www.freedesktop.org/standards/dbus/1.0/"
           rewritePrefix="file://${dbus}/share/xml/dbus/"/>
       </catalog>
     '';

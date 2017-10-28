@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   #From Debian, fixes build issue described here:
-  #http://www.mail-archive.com/debian-bugs-rc@lists.debian.org/msg250091.html
+  #https://www.mail-archive.com/debian-bugs-rc@lists.debian.org/msg250091.html
   patches = [ ./01_remove-disable-deprecated.patch ];
 
   nativeBuildInputs = [ pkgconfig ];

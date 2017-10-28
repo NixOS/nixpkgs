@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     stdenv.lib.optional (coreutils != null) "PR_PROGRAM=${coreutils}/bin/pr";
 
   meta = {
-    homepage = http://www.gnu.org/software/diffutils/diffutils.html;
+    homepage = https://www.gnu.org/software/diffutils/diffutils.html;
     description = "Commands for showing the differences between files (diff, cmp, etc.)";
     platforms = stdenv.lib.platforms.unix;
   };

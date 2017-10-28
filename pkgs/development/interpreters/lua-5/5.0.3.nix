@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "lua-5.0.3";
 
   src = fetchurl {
-    url = http://www.lua.org/ftp/lua-5.0.3.tar.gz;
+    url = https://www.lua.org/ftp/lua-5.0.3.tar.gz;
     sha256 = "1193a61b0e08acaa6eee0eecf29709179ee49c71baebc59b682a25c3b5a45671";
   };
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   installTargets = "install soinstall";
 
   meta = {
-    homepage = http://www.lua.org;
+    homepage = https://www.lua.org;
     description = "Powerful, fast, lightweight, embeddable scripting language";
     longDescription = ''
       Lua combines simple procedural syntax with powerful data

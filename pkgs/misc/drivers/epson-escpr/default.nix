@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       Epson Inkjet Printer Driver (ESC/P-R) for Linux and the
       corresponding PPD files. The list of supported printers
-      can be found at http://www.openprinting.org/driver/epson-escpr/ .
+      can be found at https://www.openprinting.org/driver/epson-escpr/ .
 
       To use the driver adjust your configuration.nix file:
         services.printing = {

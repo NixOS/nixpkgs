@@ -3,7 +3,7 @@
 fetchzip {
   name = "opensans-ttf-20140617";
 
-  url = "http://web.archive.org/web/20150801161609/https://hexchain.org/pub/archlinux/ttf-opensans/opensans.tar.gz";
+  url = "https://web.archive.org/web/20150801161609/https://hexchain.org/pub/archlinux/ttf-opensans/opensans.tar.gz";
 
   postFetch = ''
     tar -xzf $downloadedFile

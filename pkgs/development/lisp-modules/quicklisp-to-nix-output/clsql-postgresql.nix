@@ -8,7 +8,7 @@ rec {
   deps = [ args."clsql" args."clsql-uffi" args."uffi" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clsql/2016-02-08/clsql-20160208-git.tgz'';
+    url = ''https://beta.quicklisp.org/archive/clsql/2016-02-08/clsql-20160208-git.tgz'';
     sha256 = ''0hc97rlfpanp6c1ziis47mrq2fgxbk0h51bhczn8k9xin2qbhhgn'';
   };
 
@@ -19,7 +19,7 @@ rec {
 }
 /* (SYSTEM clsql-postgresql DESCRIPTION Common Lisp PostgreSQL API Driver
     SHA256 0hc97rlfpanp6c1ziis47mrq2fgxbk0h51bhczn8k9xin2qbhhgn URL
-    http://beta.quicklisp.org/archive/clsql/2016-02-08/clsql-20160208-git.tgz
+    https://beta.quicklisp.org/archive/clsql/2016-02-08/clsql-20160208-git.tgz
     MD5 d1da7688361337a7de4fe7452c225a06 NAME clsql-postgresql FILENAME
     clsql-postgresql DEPS
     ((NAME clsql FILENAME clsql) (NAME clsql-uffi FILENAME clsql-uffi)

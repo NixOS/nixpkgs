@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "DICT version of English Wiktionary";
-    homepage = http://en.wiktionary.org/;
+    homepage = https://en.wiktionary.org/;
     maintainers = [ stdenv.lib.maintainers.mornfall ];
     platforms = stdenv.lib.platforms.all;
   };

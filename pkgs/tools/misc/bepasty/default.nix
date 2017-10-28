@@ -26,7 +26,7 @@ buildPythonApplication rec {
   };
 
   meta = {
-    homepage = http://github.com/bepasty/bepasty-server;
+    homepage = https://github.com/bepasty/bepasty-server;
     description = "Binary pastebin server";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.makefu ];

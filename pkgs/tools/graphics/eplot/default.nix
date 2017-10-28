@@ -6,12 +6,12 @@ stdenv.mkDerivation rec {
   # Upstream has been contacted (2015-03) regarding providing versioned
   # download URLs. Initial response was positive, but no action yet.
   src = fetchurl {
-    url = "http://liris.cnrs.fr/christian.wolf/software/eplot/download/eplot";
+    url = "https://liris.cnrs.fr/christian.wolf/software/eplot/download/eplot";
     sha256 = "0y9x82i3sfpgxsqz2w42r6iad6ph7vxb7np1xbwapx5iipciclw5";
   };
 
   ecSrc = fetchurl {
-    url = "http://liris.cnrs.fr/christian.wolf/software/eplot/download/ec";
+    url = "https://liris.cnrs.fr/christian.wolf/software/eplot/download/ec";
     sha256 = "0fg31g8mrcx14h2rjcf091cbd924n19z55iscaiflspifya30yhd";
   };
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       This package also includes the complementary 'ec' tool (say "extract
       column").
     '';
-    homepage = http://liris.cnrs.fr/christian.wolf/software/eplot/;
+    homepage = https://liris.cnrs.fr/christian.wolf/software/eplot/;
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];

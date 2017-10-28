@@ -1,5 +1,5 @@
 Glibc 2.10 has a `getline' symbol that clashes with teTeX's.
-Taken from http://lists.ibiblio.org/pipermail/sm-commit/2009-July/024831.html
+Taken from https://lists.ibiblio.org/pipermail/sm-commit/2009-July/024831.html
 
 diff -rc -x '*~' tetex-src-3.0-orig/texk/dvipsk/afm2tfm.c tetex-src-3.0/texk/dvipsk/afm2tfm.c
 *** tetex-src-3.0-orig/texk/dvipsk/afm2tfm.c	2005-01-30 14:17:09.000000000 +0100

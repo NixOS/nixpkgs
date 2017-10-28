@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ nmap inetutils ];
 
   meta = with stdenv.lib; {
-    homepage = http://projects.gnome.org/gnome-network;
+    homepage = https://projects.gnome.org/gnome-network;
     description = "A collection of networking tools";
     maintainers = gnome3.maintainers;
     license = licenses.gpl2;

@@ -2,7 +2,7 @@ Description: Backport changes for the libav 9 API
  Also replace loading of libavcodec and libavutil via dlopen by linking against
  it.
 Author: Sebastian Ramacher <sramacher@debian.org>
-Bug-Debian: http://bugs.debian.org/720824
+Bug-Debian: https://bugs.debian.org/720824
 Last-Update: 2013-09-12
 
 --- a/plugins/video/H.263-1998/h263-1998.cxx

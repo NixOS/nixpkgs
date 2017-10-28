@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = http://terraria.org;
+    homepage = https://terraria.org;
     description = "Dedicated server for Terraria, a 2D action-adventure sandbox";
     platforms = platforms.linux;
     license = licenses.unfree;

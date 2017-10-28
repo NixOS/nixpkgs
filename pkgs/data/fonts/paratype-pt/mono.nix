@@ -3,7 +3,7 @@
 fetchzip rec {
   name = "paratype-pt-mono";
 
-  url = "http://www.paratype.ru/uni/public/PTMono.zip";
+  url = "https://www.paratype.ru/uni/public/PTMono.zip";
 
   postFetch = ''
     mkdir -p $out/share/{doc,fonts}
@@ -14,13 +14,13 @@ fetchzip rec {
   sha256 = "07kl82ngby55khvzsvn831ddpc0q8djgz2y6gsjixkyjfdk2xjjm";
 
   meta = with stdenv.lib; {
-    homepage = http://www.paratype.ru/public/; 
+    homepage = https://www.paratype.ru/public/; 
     description = "An open Paratype font";
 
     license = "Open Paratype license";
     # no commercial distribution of the font on its own
     # must rename on modification
-    # http://www.paratype.ru/public/pt_openlicense.asp
+    # https://www.paratype.ru/public/pt_openlicense.asp
 
     platforms = platforms.all;
     maintainers = with maintainers; [ raskin ];

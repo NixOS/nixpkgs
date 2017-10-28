@@ -6,17 +6,17 @@
 
 let
   opengfx = fetchzip {
-    url = "http://binaries.openttd.org/extra/opengfx/0.5.2/opengfx-0.5.2-all.zip";
+    url = "https://binaries.openttd.org/extra/opengfx/0.5.2/opengfx-0.5.2-all.zip";
     sha256 = "1sjzwl8wfdj0izlx2qdq15bqiy1vzq7gq7drydfwwryk173ig5sa";
   };
 
   opensfx = fetchzip {
-    url = "http://binaries.openttd.org/extra/opensfx/0.2.3/opensfx-0.2.3-all.zip";
+    url = "https://binaries.openttd.org/extra/opensfx/0.2.3/opensfx-0.2.3-all.zip";
     sha256 = "1bb167kszdd6dqbcdjrxxwab6b7y7jilhzi3qijdhprpm5gf1lp3";
   };
 
   openmsx = fetchzip {
-    url = "http://binaries.openttd.org/extra/openmsx/0.3.1/openmsx-0.3.1-all.zip";
+    url = "https://binaries.openttd.org/extra/openmsx/0.3.1/openmsx-0.3.1-all.zip";
     sha256 = "0qnmfzz0v8vxrrvxnm7szphrlrlvhkwn3y92b4iy0b4b6yam0yd4";
   };
 
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
         - play cooperatively controlling the same business
         - observe as spectators
     '';
-    homepage = http://www.openttd.org/;
+    homepage = https://www.openttd.org/;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ jcumming the-kenny fpletz ];

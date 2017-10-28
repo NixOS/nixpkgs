@@ -96,7 +96,7 @@ stdenv.mkDerivation rec {
       when available (e.g., through the X Render Extension).
     '';
 
-    homepage = http://cairographics.org/;
+    homepage = https://cairographics.org/;
 
     license = with licenses; [ lgpl2Plus mpl10 ];
 

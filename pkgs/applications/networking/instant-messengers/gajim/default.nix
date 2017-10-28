@@ -122,11 +122,11 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://gajim.org/;
+    homepage = https://gajim.org/;
     description = "Jabber client written in PyGTK";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.raskin maintainers.aszlig ];
-    downloadPage = "http://gajim.org/downloads.php";
+    downloadPage = "https://gajim.org/downloads.php";
     updateWalker = true;
     platforms = stdenv.lib.platforms.linux;
   };

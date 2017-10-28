@@ -161,7 +161,7 @@ in mkDerivation (rec {
   '';
   # We build with --quick so we can build stage 2 packages separately.
   # This is necessary due to: https://github.com/haskell/cabal/commit/af19fb2c2d231d8deff1cb24164a2bf7efb8905a
-  # Cabal otherwise fails to build: http://hydra.nixos.org/build/31824079/nixlog/1/raw
+  # Cabal otherwise fails to build: https://hydra.nixos.org/build/31824079/nixlog/1/raw
   postInstall = ''
     PATH=$out/bin:$PATH LD_LIBRARY_PATH=${gmp.out}/lib:${stdenv.cc}/lib64:$LD_LIBRARY_PATH \
       env -u GHC_PACKAGE_PATH $out/bin/ghcjs-boot \

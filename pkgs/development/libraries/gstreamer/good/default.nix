@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Gstreamer Good Plugins";
-    homepage    = "http://gstreamer.freedesktop.org";
+    homepage    = "https://gstreamer.freedesktop.org";
     longDescription = ''
       a set of plug-ins that we consider to have good quality code,
       correct functionality, our preferred license (LGPL for the plug-in

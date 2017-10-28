@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = http://mdocml.bsd.lv/;
+    homepage = https://mdocml.bsd.lv/;
     description = "converter from Texinfo into mdoc";
     license = licenses.isc;
     platforms = platforms.all;

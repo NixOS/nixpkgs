@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   passthru.pythonPath = [];
 
   meta = {
-    homepage = http://gstreamer.freedesktop.org;
+    homepage = https://gstreamer.freedesktop.org;
 
     description = "Python bindings for GStreamer";
 

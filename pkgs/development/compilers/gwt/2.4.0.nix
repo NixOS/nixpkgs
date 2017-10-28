@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://code.google.com/webtoolkit/;
+    homepage = https://code.google.com/webtoolkit/;
     description = "A development toolkit for building and optimizing complex browser-based applications";
     platforms = stdenv.lib.platforms.unix;
   };

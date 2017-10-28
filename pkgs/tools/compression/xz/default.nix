@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   postInstall = "rm -rf $out/share/doc";
 
   meta = with stdenv.lib; {
-    homepage = http://tukaani.org/xz/;
+    homepage = https://tukaani.org/xz/;
     description = "XZ, general-purpose data compression software, successor of LZMA";
 
     longDescription =

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     isFcitxEngine = true;
     homepage      = "https://github.com/fcitx/fcitx-m17n";
-    downloadPage  = "http://download.fcitx-im.org/fcitx-table-other/";
+    downloadPage  = "https://download.fcitx-im.org/fcitx-table-other/";
     description   = "Fcitx wrapper for m17n";
     license       = licenses.gpl3Plus;
     platforms     = platforms.linux;

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.isDarwin;
 
   meta = with stdenv.lib; {
-    homepage = http://code.google.com/p/snappy/;
+    homepage = https://code.google.com/p/snappy/;
     license = licenses.bsd3;
     description = "Compression/decompression library for very high speeds";
     platforms = platforms.unix;

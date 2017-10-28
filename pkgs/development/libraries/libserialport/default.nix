@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Cross-platform shared library for serial port access";
-    homepage = http://sigrok.org/;
+    homepage = https://sigrok.org/;
     license = licenses.gpl3Plus;
     # macOS, Windows and Android is also supported (according to upstream).
     platforms = platforms.linux;

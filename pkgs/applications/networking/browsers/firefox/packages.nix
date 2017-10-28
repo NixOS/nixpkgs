@@ -21,7 +21,7 @@ rec {
 
     meta = {
       description = "A web browser built from Firefox source tree";
-      homepage = http://www.mozilla.com/en-US/firefox/;
+      homepage = https://www.mozilla.com/en-US/firefox/;
       maintainers = with lib.maintainers; [ eelco ];
       platforms = lib.platforms.linux;
     };

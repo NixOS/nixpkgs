@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       An official binary for Shotcut, which includes all the
       dependencies pinned to specific versions, is provided on
-      http://shotcut.org.
+      https://shotcut.org.
 
       If you encounter problems with this version, please contact the
       nixpkgs maintainer(s). If you wish to report any bugs upstream,

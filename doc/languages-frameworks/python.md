@@ -201,7 +201,7 @@ building Python libraries is `buildPythonPackage`. Let's see how we can build th
     doCheck = false;
 
     meta = {
-      homepage = "http://github.com/pytoolz/toolz/";
+      homepage = "https://github.com/pytoolz/toolz/";
       description = "List processing tools and functional utilities";
       license = licenses.bsd3;
       maintainers = with maintainers; [ fridh ];
@@ -247,7 +247,7 @@ with import <nixpkgs> {};
       doCheck = false;
 
       meta = {
-        homepage = "http://github.com/pytoolz/toolz/";
+        homepage = "https://github.com/pytoolz/toolz/";
         description = "List processing tools and functional utilities";
       };
     };
@@ -373,7 +373,7 @@ and `CFLAGS`.
 
     meta = {
       description = "A pythonic wrapper around FFTW, the FFT library, presenting a unified interface for all the supported transforms";
-      homepage = http://hgomersall.github.com/pyFFTW/;
+      homepage = https://hgomersall.github.com/pyFFTW/;
       license = with licenses; [ bsd2 bsd3 ];
       maintainer = with maintainers; [ fridh ];
     };
@@ -385,7 +385,7 @@ Note also the line `doCheck = false;`, we explicitly disabled running the test-s
 
 #### Develop local package
 
-As a Python developer you're likely aware of [development mode](http://setuptools.readthedocs.io/en/latest/setuptools.html#development-mode) (`python setup.py develop`);
+As a Python developer you're likely aware of [development mode](https://setuptools.readthedocs.io/en/latest/setuptools.html#development-mode) (`python setup.py develop`);
 instead of installing the package this command creates a special link to the project code.
 That way, you can run updated code without having to reinstall after each and every change you make.
 Development mode is also available. Let's see how you can use it.
@@ -449,7 +449,7 @@ buildPythonPackage rec {
   };
 
   meta = {
-    homepage = "http://github.com/pytoolz/toolz/";
+    homepage = "https://github.com/pytoolz/toolz/";
     description = "List processing tools and functional utilities";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fridh ];
@@ -563,7 +563,7 @@ The following is an example:
     propagatedBuildInputs = [ self.ZopeInterface ];
 
     meta = {
-      homepage = http://twistedmatrix.com/;
+      homepage = https://twistedmatrix.com/;
       description = "Twisted, an event-driven networking engine written in Python";
       license = stdenv.lib.licenses.mit;
     };

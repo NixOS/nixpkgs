@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A tool for building complete development environments";
-    homepage    = http://vagrantup.com;
+    homepage    = https://vagrantup.com;
     license     = licenses.mit;
     maintainers = with maintainers; [ lovek323 globin jgeerds kamilchm ];
     platforms   = with platforms; linux ++ darwin;

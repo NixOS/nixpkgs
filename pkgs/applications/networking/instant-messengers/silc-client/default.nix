@@ -2,7 +2,7 @@
 , enablePlugin ? false }:
 
 # Enabling the plugin and using it with a recent irssi, segafults on join:
-# http://marc.info/?l=silc-devel&m=125610477802211
+# https://marc.info/?l=silc-devel&m=125610477802211
 
 let
   basename = "silc-client-1.1.11";

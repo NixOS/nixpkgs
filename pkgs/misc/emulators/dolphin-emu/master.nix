@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
                   libevdev libXdmcp portaudio libusb libpulseaudio ];
 
   meta = {
-    homepage = http://dolphin-emu.org/;
+    homepage = https://dolphin-emu.org/;
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARM";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ MP2E ];

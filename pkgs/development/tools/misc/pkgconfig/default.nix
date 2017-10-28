@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "14fmwzki1rlz8bs2p810lk6jqdxsk966d8drgsjmi54cd00rrikg";
   };
     # Process Requires.private properly, see
-    # http://bugs.freedesktop.org/show_bug.cgi?id=4738.
+    # https://bugs.freedesktop.org/show_bug.cgi?id=4738.
   patches = optional (!vanilla) ./requires-private.patch
     ++ optional stdenv.isCygwin ./2.36.3-not-win32.patch;
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A tool that allows packages to find out information about other packages";
-    homepage = http://pkg-config.freedesktop.org/wiki/;
+    homepage = https://pkg-config.freedesktop.org/wiki/;
     platforms = platforms.all;
   };
 

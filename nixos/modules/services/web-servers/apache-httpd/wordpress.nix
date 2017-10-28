@@ -1,5 +1,5 @@
 { config, lib, pkgs, serverInfo, php, ... }:
-# http://codex.wordpress.org/Hardening_WordPress
+# https://codex.wordpress.org/Hardening_WordPress
 
 with lib;
 
@@ -168,7 +168,7 @@ in
     tablePrefix = mkOption {
       default = "wp_";
       description = ''
-        The $table_prefix is the value placed in the front of your database tables. Change the value if you want to use something other than wp_ for your database prefix. Typically this is changed if you are installing multiple WordPress blogs in the same database. See <link xlink:href='http://codex.wordpress.org/Editing_wp-config.php#table_prefix'/>.
+        The $table_prefix is the value placed in the front of your database tables. Change the value if you want to use something other than wp_ for your database prefix. Typically this is changed if you are installing multiple WordPress blogs in the same database. See <link xlink:href='https://codex.wordpress.org/Editing_wp-config.php#table_prefix'/>.
       '';
     };
     wordpressUploads = mkOption {
@@ -216,7 +216,7 @@ in
           name = "responsive-theme";
           # Download the theme from the wordpress site
           src = pkgs.fetchurl {
-            url = http://wordpress.org/themes/download/responsive.1.9.7.6.zip;
+            url = https://wordpress.org/themes/download/responsive.1.9.7.6.zip;
             sha256 = "06i26xlc5kdnx903b1gfvnysx49fb4kh4pixn89qii3a30fgd8r8";
           };
           # We need unzip to build this package

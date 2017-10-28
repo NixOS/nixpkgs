@@ -9,7 +9,7 @@ let
 in fetchzip {
   name = "montserrat-${version}";
 
-  url = "http://marvid.fr/~eeva/mirror/Montserrat.tar.gz";
+  url = "https://marvid.fr/~eeva/mirror/Montserrat.tar.gz";
 
   postFetch = ''
     tar -xzf $downloadedFile --strip-components=1

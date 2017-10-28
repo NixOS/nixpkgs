@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig which makeWrapper hexdump ];
 
-  # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
+  # https://knot-resolver.readthedocs.io/en/latest/build.html#requirements
   buildInputs = [ knot-dns luajit libuv gnutls nettle lmdb ]
     ++ optional doInstallCheck cmocka
     ++ optional stdenv.isLinux systemd # sd_notify

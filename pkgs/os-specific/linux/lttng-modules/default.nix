@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Linux kernel modules for LTTng tracing";
-    homepage = http://lttng.org/;
+    homepage = https://lttng.org/;
     license = with licenses; [ lgpl21 gpl2 mit ];
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

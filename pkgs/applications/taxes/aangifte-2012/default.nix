@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "aangifte2012-1";
 
   src = fetchurl {
-    url = http://download.belastingdienst.nl/belastingdienst/apps/linux/ib2012_linux.tar.gz;
+    url = https://download.belastingdienst.nl/belastingdienst/apps/linux/ib2012_linux.tar.gz;
     sha256 = "05bahvk514lncgfr9kybcafahyz1rgfpwp5cykchxbbc033zm0xy";
   };
 

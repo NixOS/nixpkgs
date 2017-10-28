@@ -9,23 +9,23 @@ let
   emojiData = let
     srcs = {
       data = fetchurl {
-        url = "http://unicode.org/Public/emoji/5.0/emoji-data.txt";
+        url = "https://unicode.org/Public/emoji/5.0/emoji-data.txt";
         sha256 = "0zfn3z61xy76yah3d24dd745qjssrib009m4nvqpnx4sf1r13i2x";
       };
       sequences = fetchurl {
-        url = "http://unicode.org/Public/emoji/5.0/emoji-sequences.txt";
+        url = "https://unicode.org/Public/emoji/5.0/emoji-sequences.txt";
         sha256 = "0xzk7hi2a8macx9s5gj2pb36d38y8fa9001sj71g6kw25c2h94cn";
       };
       variation-sequences = fetchurl {
-        url = "http://unicode.org/Public/emoji/5.0/emoji-variation-sequences.txt";
+        url = "https://unicode.org/Public/emoji/5.0/emoji-variation-sequences.txt";
         sha256 = "1wlg4gbq7spmpppjfy5zdl82sj0hc836p8gljgfrjmwsjgybq286";
       };
       zwj-sequences = fetchurl {
-        url = "http://unicode.org/Public/emoji/5.0/emoji-zwj-sequences.txt";
+        url = "https://unicode.org/Public/emoji/5.0/emoji-zwj-sequences.txt";
         sha256 = "0rrnk94mhm3k9vs74pvyvs4ir7f31f1libx7c196fmdqvp1qfafw";
       };
       test = fetchurl {
-        url = "http://unicode.org/Public/emoji/5.0/emoji-test.txt";
+        url = "https://unicode.org/Public/emoji/5.0/emoji-test.txt";
         sha256 = "1dvxw5xp1xiy13c1p1c7l2xc9q8f8znk47kb7q8g7bbgbi21cq5m";
       };
     };

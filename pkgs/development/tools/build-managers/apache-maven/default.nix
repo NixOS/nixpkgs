@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Build automation tool (used primarily for Java projects)";
-    homepage = http://maven.apache.org/;
+    homepage = https://maven.apache.org/;
     license = licenses.asl20;
     platforms = platforms.unix;
   };

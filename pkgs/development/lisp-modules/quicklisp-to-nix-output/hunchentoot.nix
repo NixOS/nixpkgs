@@ -13,7 +13,7 @@ rec {
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."chunga" args."cl+ssl" args."cl-base64" args."cl-fad" args."cl-ppcre" args."cl-who" args."cxml-stp" args."drakma" args."flexi-streams" args."md5" args."rfc2388" args."split-sequence" args."swank" args."trivial-backtrace" args."trivial-features" args."trivial-garbage" args."trivial-gray-streams" args."usocket" args."xpath" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/hunchentoot/2017-07-25/hunchentoot-v1.2.37.tgz'';
+    url = ''https://beta.quicklisp.org/archive/hunchentoot/2017-07-25/hunchentoot-v1.2.37.tgz'';
     sha256 = ''1r0p8qasd2zy9a8l58jysz5bb1gj79cz2ikr93in0my8q44pg9lc'';
   };
 
@@ -28,7 +28,7 @@ rec {
   simple framework for user-defined handlers and can be extended
   through subclassing.
     SHA256 1r0p8qasd2zy9a8l58jysz5bb1gj79cz2ikr93in0my8q44pg9lc URL
-    http://beta.quicklisp.org/archive/hunchentoot/2017-07-25/hunchentoot-v1.2.37.tgz
+    https://beta.quicklisp.org/archive/hunchentoot/2017-07-25/hunchentoot-v1.2.37.tgz
     MD5 3fd6a6c4dd0d32db7b71828b52494325 NAME hunchentoot FILENAME hunchentoot
     DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)

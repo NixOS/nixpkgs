@@ -32,7 +32,7 @@ assert swingSupport -> xorg != null;
 let
   version = "9.0.1";
 
-  downloadUrlBase = http://www.oracle.com/technetwork/java/javase/downloads;
+  downloadUrlBase = https://www.oracle.com/technetwork/java/javase/downloads;
 
   jce =
     if installjce then

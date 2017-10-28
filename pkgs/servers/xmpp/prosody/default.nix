@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Open-source XMPP application server written in Lua";
     license = licenses.mit;
-    homepage = http://www.prosody.im;
+    homepage = https://www.prosody.im;
     platforms = platforms.linux;
     maintainers = [ maintainers.flosse ];
   };

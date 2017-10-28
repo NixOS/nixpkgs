@@ -24,8 +24,8 @@ in {
           deleted.
 
           Please see the Jenkins Job Builder documentation for more info:
-          <link xlink:href="http://docs.openstack.org/infra/jenkins-job-builder/">
-          http://docs.openstack.org/infra/jenkins-job-builder/</link>
+          <link xlink:href="https://docs.openstack.org/infra/jenkins-job-builder/">
+          https://docs.openstack.org/infra/jenkins-job-builder/</link>
         '';
       };
 

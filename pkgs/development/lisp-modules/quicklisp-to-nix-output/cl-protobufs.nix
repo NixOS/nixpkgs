@@ -8,7 +8,7 @@ rec {
   deps = [ args."alexandria" args."babel" args."closer-mop" args."trivial-features" args."trivial-garbage" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-protobufs/2017-04-03/cl-protobufs-20170403-git.tgz'';
+    url = ''https://beta.quicklisp.org/archive/cl-protobufs/2017-04-03/cl-protobufs-20170403-git.tgz'';
     sha256 = ''0ibpl076k8gq79sacg96mzjf5hqkrxzi5wlx3bjap52pla53w4g5'';
   };
 
@@ -19,7 +19,7 @@ rec {
 }
 /* (SYSTEM cl-protobufs DESCRIPTION Protobufs for Common Lisp SHA256
     0ibpl076k8gq79sacg96mzjf5hqkrxzi5wlx3bjap52pla53w4g5 URL
-    http://beta.quicklisp.org/archive/cl-protobufs/2017-04-03/cl-protobufs-20170403-git.tgz
+    https://beta.quicklisp.org/archive/cl-protobufs/2017-04-03/cl-protobufs-20170403-git.tgz
     MD5 86c8da92b246b4b77d6107bc5dfaff08 NAME cl-protobufs FILENAME
     cl-protobufs DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)

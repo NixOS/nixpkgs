@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = requireFile {
     message = ''
       Nix can't download kdb+ for you automatically. Go to
-      http://kx.com and download the free, 32-bit version for
+      https://kx.com and download the free, 32-bit version for
       Linux. Then run "nix-prefetch-url file:///linux.zip" in the
       directory where you saved it. Note you need version 3.3.
     '';
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Analytics and time-series database";
-    homepage    = "http://www.kx.com/";
+    homepage    = "https://www.kx.com/";
     license     = stdenv.lib.licenses.unfree;
     platforms   = [ "i686-linux" ];
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];

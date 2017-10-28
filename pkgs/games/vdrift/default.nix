@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Car racing game";
-    homepage = http://vdrift.net/;
+    homepage = https://vdrift.net/;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [viric];
     platforms = stdenv.lib.platforms.linux;

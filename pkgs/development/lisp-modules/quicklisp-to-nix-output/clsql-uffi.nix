@@ -8,7 +8,7 @@ rec {
   deps = [ args."clsql" args."uffi" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clsql/2016-02-08/clsql-20160208-git.tgz'';
+    url = ''https://beta.quicklisp.org/archive/clsql/2016-02-08/clsql-20160208-git.tgz'';
     sha256 = ''0hc97rlfpanp6c1ziis47mrq2fgxbk0h51bhczn8k9xin2qbhhgn'';
   };
 
@@ -20,7 +20,7 @@ rec {
 /* (SYSTEM clsql-uffi DESCRIPTION
     Common UFFI Helper functions for Common Lisp SQL Interface Library SHA256
     0hc97rlfpanp6c1ziis47mrq2fgxbk0h51bhczn8k9xin2qbhhgn URL
-    http://beta.quicklisp.org/archive/clsql/2016-02-08/clsql-20160208-git.tgz
+    https://beta.quicklisp.org/archive/clsql/2016-02-08/clsql-20160208-git.tgz
     MD5 d1da7688361337a7de4fe7452c225a06 NAME clsql-uffi FILENAME clsql-uffi
     DEPS ((NAME clsql FILENAME clsql) (NAME uffi FILENAME uffi)) DEPENDENCIES
     (clsql uffi) VERSION clsql-20160208-git SIBLINGS

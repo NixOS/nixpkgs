@@ -7,7 +7,7 @@ in
     name = "jdee-svn${revision}";
 
     # Last release is too old, so use SVN.
-    # See http://www.emacswiki.org/emacs/JavaDevelopmentEnvironment .
+    # See https://www.emacswiki.org/emacs/JavaDevelopmentEnvironment .
     src = fetchsvn {
       url = "https://jdee.svn.sourceforge.net/svnroot/jdee/trunk/jdee";
       rev = revision;

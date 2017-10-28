@@ -12,21 +12,21 @@ has the following highlights:</para>
 <itemizedlist>
 
   <listitem>
-    <para>The <link xlink:href="http://haskell.org/">Haskell</link>
+    <para>The <link xlink:href="https://haskell.org/">Haskell</link>
     packages infrastructure has been re-designed from the ground up
     (&quot;Haskell NG&quot;). NixOS now distributes the latest version
     of every single package registered on <link
-    xlink:href="http://hackage.haskell.org/">Hackage</link> -- well in
+    xlink:href="https://hackage.haskell.org/">Hackage</link> -- well in
     excess of 8,000 Haskell packages. Detailed instructions on how to
     use that infrastructure can be found in the <link
-    xlink:href="http://nixos.org/nixpkgs/manual/#users-guide-to-the-haskell-infrastructure">User's
+    xlink:href="https://nixos.org/nixpkgs/manual/#users-guide-to-the-haskell-infrastructure">User's
     Guide to the Haskell Infrastructure</link>. Users migrating from an
     earlier release may find helpful information below, in the list of
     backwards-incompatible changes. Furthermore, we distribute 51(!)
     additional Haskell package sets that provide every single <link
-    xlink:href="http://www.stackage.org/">LTS Haskell</link> release
+    xlink:href="https://www.stackage.org/">LTS Haskell</link> release
     since version 0.0 as well as the most recent <link
-    xlink:href="http://www.stackage.org/">Stackage Nightly</link>
+    xlink:href="https://www.stackage.org/">Stackage Nightly</link>
     snapshot. The announcement <link
     xlink:href="https://nixos.org/nix-dev/2015-September/018138.html">&quot;Full
     Stackage Support in Nixpkgs&quot;</link> gives additional
@@ -275,7 +275,7 @@ nix-env -f &quot;&lt;nixpkgs&gt;&quot; -iA haskellPackages.pandoc
     from the distribution. The proper way to register Haskell libraries with
     the compiler now is the <literal>haskellPackages.ghcWithPackages</literal>
     function. The <link
-    xlink:href="http://nixos.org/nixpkgs/manual/#users-guide-to-the-haskell-infrastructure">User's
+    xlink:href="https://nixos.org/nixpkgs/manual/#users-guide-to-the-haskell-infrastructure">User's
     Guide to the Haskell Infrastructure</link> provides more information about
     this subject.
   </para>

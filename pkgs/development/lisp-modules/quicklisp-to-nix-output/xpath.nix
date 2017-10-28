@@ -8,7 +8,7 @@ rec {
   deps = [ args."alexandria" args."babel" args."cl-ppcre" args."closure-common" args."cxml" args."cxml-dom" args."cxml-klacks" args."cxml-test" args."cxml-xml" args."parse-number" args."puri" args."trivial-features" args."trivial-gray-streams" args."yacc" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/plexippus-xpath/2012-09-09/plexippus-xpath-20120909-darcs.tgz'';
+    url = ''https://beta.quicklisp.org/archive/plexippus-xpath/2012-09-09/plexippus-xpath-20120909-darcs.tgz'';
     sha256 = ''1zlkr7ck60gr5rxfiq22prnbblih14ywr0s5g2kss2a842zvkxn6'';
   };
 
@@ -19,7 +19,7 @@ rec {
 }
 /* (SYSTEM xpath DESCRIPTION NIL SHA256
     1zlkr7ck60gr5rxfiq22prnbblih14ywr0s5g2kss2a842zvkxn6 URL
-    http://beta.quicklisp.org/archive/plexippus-xpath/2012-09-09/plexippus-xpath-20120909-darcs.tgz
+    https://beta.quicklisp.org/archive/plexippus-xpath/2012-09-09/plexippus-xpath-20120909-darcs.tgz
     MD5 1d7457bffe7c4f6e1631c59bc00723d4 NAME xpath FILENAME xpath DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME cl-ppcre FILENAME cl-ppcre)

@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       using existing libraries, e.g. e2fslibs is used to read and write the
       ext2 partition.
     '';
-    homepage = http://partclone.org;
+    homepage = https://partclone.org;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [stdenv.lib.maintainers.marcweber];
     platforms = stdenv.lib.platforms.linux;

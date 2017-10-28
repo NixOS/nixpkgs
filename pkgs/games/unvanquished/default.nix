@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
         allows for extensive customization of the game and its
         setting.
     '';
-    homepage = http://unvanquished.net;
+    homepage = https://unvanquished.net;
     #license = "unknown";
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
     platforms = stdenv.lib.platforms.linux;

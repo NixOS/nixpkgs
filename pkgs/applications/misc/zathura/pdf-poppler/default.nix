@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" "PLUGINDIR=$(out)/lib" ];
 
   meta = with lib; {
-    homepage = http://pwmt.org/projects/zathura/;
+    homepage = https://pwmt.org/projects/zathura/;
     description = "A zathura PDF plugin (poppler)";
     longDescription = ''
       The zathura-pdf-poppler plugin adds PDF support to zathura by 

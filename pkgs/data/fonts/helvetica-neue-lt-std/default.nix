@@ -5,7 +5,7 @@ let
 in fetchzip rec {
   name = "helvetica-neue-lt-std-${version}";
 
-  url = "http://www.ephifonts.com/downloads/helvetica-neue-lt-std.zip";
+  url = "https://www.ephifonts.com/downloads/helvetica-neue-lt-std.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts
@@ -15,7 +15,7 @@ in fetchzip rec {
   sha256 = "0ampp9vf9xw0sdppl4lb9i9h75ywljhdcqmzh45mx2x9m7h6xgg9";
 
   meta = {
-    homepage = http://www.ephifonts.com/free-helvetica-font-helvetica-neue-lt-std.html;
+    homepage = https://www.ephifonts.com/free-helvetica-font-helvetica-neue-lt-std.html;
     description = "Helvetica Neue LT Std font";
     longDescription = ''
       Helvetica Neue Lt Std is one of the most highly rated and complete

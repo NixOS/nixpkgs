@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
     ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.qemu.org/;
+    homepage = https://www.qemu.org/;
     description = "Fork of QEMU with AFL instrumentation support";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ thoughtpolice ];

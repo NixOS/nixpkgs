@@ -10,7 +10,7 @@ rec {
   deps = [ args."fiveam" args."trivial-features" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/external-program/2016-08-25/external-program-20160825-git.tgz'';
+    url = ''https://beta.quicklisp.org/archive/external-program/2016-08-25/external-program-20160825-git.tgz'';
     sha256 = ''0avnnhxxa1wfri9i3m1339nszyp1w2cilycc948nf5awz4mckq13'';
   };
 
@@ -21,7 +21,7 @@ rec {
 }
 /* (SYSTEM external-program DESCRIPTION NIL SHA256
     0avnnhxxa1wfri9i3m1339nszyp1w2cilycc948nf5awz4mckq13 URL
-    http://beta.quicklisp.org/archive/external-program/2016-08-25/external-program-20160825-git.tgz
+    https://beta.quicklisp.org/archive/external-program/2016-08-25/external-program-20160825-git.tgz
     MD5 6902724c4f762a17645c46b0a1d8efde NAME external-program FILENAME
     external-program DEPS
     ((NAME fiveam FILENAME fiveam)

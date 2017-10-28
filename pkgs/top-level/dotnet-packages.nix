@@ -413,7 +413,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "Deedle is an easy to use library for data and time series manipulation and for scientific programming";
-      homepage = "http://bluemountaincapital.github.io/Deedle/";
+      homepage = "https://bluemountaincapital.github.io/Deedle/";
       license = stdenv.lib.licenses.free;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -567,7 +567,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "The F# compiler services package is a component derived from the F# compiler source code that exposes additional functionality for implementing F# language bindings";
-      homepage = "http://fsharp.github.io/FSharp.Compiler.Service/";
+      homepage = "https://fsharp.github.io/FSharp.Compiler.Service/";
       license = stdenv.lib.licenses.asl20;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -611,7 +611,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "F# Data: Library for Data Access";
-      homepage = "http://fsharp.github.io/FSharp.Data/";
+      homepage = "https://fsharp.github.io/FSharp.Data/";
       license = stdenv.lib.licenses.asl20;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -643,7 +643,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   #
   #   meta = {
   #     description = "FSharpx.Extras is a collection of libraries and tools for use with F#";
-  #     homepage = "http://fsprojects.github.io/FSharpx.Extras/";
+  #     homepage = "https://fsprojects.github.io/FSharpx.Extras/";
   #     license = stdenv.lib.licenses.asl20;
   #     maintainers = with stdenv.lib.maintainers; [ obadz ];
   #     platforms = with stdenv.lib.platforms; linux;
@@ -715,7 +715,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "Math.NET Numerics is an opensource numerical library for .Net, Silverlight and Mono";
-      homepage = http://numerics.mathdotnet.com/;
+      homepage = https://numerics.mathdotnet.com/;
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -872,7 +872,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "Popular high-performance JSON framework for .NET";
-      homepage = "http://www.newtonsoft.com/json";
+      homepage = "https://www.newtonsoft.com/json";
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
@@ -954,7 +954,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
     meta = {
       description = "A dependency manager for .NET and Mono projects";
-      homepage = "http://fsprojects.github.io/Paket/";
+      homepage = "https://fsprojects.github.io/Paket/";
       license = stdenv.lib.licenses.mit;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;

@@ -2,7 +2,7 @@ diff -Nur poezio-0.10.orig/plugins/gpg/__init__.py poezio-0.10/plugins/gpg/__ini
 --- poezio-0.10.orig/plugins/gpg/__init__.py	2016-07-27 19:02:41.000000000 +0200
 +++ poezio-0.10/plugins/gpg/__init__.py	2016-11-16 14:17:06.011128631 +0100
 @@ -105,7 +105,7 @@
- .. _XEP-0027: http://xmpp.org/extensions/xep-0027.html
+ .. _XEP-0027: https://xmpp.org/extensions/xep-0027.html
  
  """
 -from gpg import gnupg

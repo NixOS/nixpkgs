@@ -15,6 +15,6 @@ stdenv.mkDerivation rec {
   buildInputs = [python boost imagemagick];
 
   meta = {
-    homepage = http://www.imagemagick.org/script/api.php;
+    homepage = https://www.imagemagick.org/script/api.php;
   };
 }

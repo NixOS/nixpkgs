@@ -61,7 +61,7 @@ buildPythonPackage rec {
   meta = {
     description =
       "Python bindings for the Message Passing Interface standard";
-    homepage = http://code.google.com/p/mpi4py/;
+    homepage = https://code.google.com/p/mpi4py/;
     license = stdenv.lib.licenses.bsd3;
   };
 }

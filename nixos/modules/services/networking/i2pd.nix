@@ -174,7 +174,7 @@ in
         default = false;
         description = ''
           Enables I2Pd as a running service upon activation.
-          Please read http://i2pd.readthedocs.io/en/latest/ for further
+          Please read https://i2pd.readthedocs.io/en/latest/ for further
           configuration help.
         '';
       };

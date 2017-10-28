@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     # dict order breaking tests
-    sed -i 's@<a href="http://www.example.com" rel="nofollow">@...@' src/restview/tests.py
+    sed -i 's@<a href="https://www.example.com" rel="nofollow">@...@' src/restview/tests.py
   '';
 
   meta = {

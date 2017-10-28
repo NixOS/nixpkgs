@@ -44,7 +44,7 @@ in
     };
     meta = {
       description = "Android Support Library";
-      url = http://developer.android.com/;
+      url = https://developer.android.com/;
     };
   };
 </xsl:for-each><xsl:for-each select="sdk:extra[sdk:path='google_play_services']">
@@ -56,7 +56,7 @@ in
     };
     meta = {
       description = "Google Play services client library and sample code";
-      url = http://developer.android.com/;
+      url = https://developer.android.com/;
     };
   };
 </xsl:for-each>

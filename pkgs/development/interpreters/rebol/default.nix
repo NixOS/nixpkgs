@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   r3 = fetchurl {
-    url = "http://rebolsource.net/downloads/experimental/r3-linux-x64-gbf237fc";
+    url = "https://rebolsource.net/downloads/experimental/r3-linux-x64-gbf237fc";
     sha256 = "0cm86kn4lcbvyy6pqg67x53y0wz353y0vg7pfqv65agxj1ynxnrx";
     name = "r3";
   };

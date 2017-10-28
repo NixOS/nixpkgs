@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   name = "fbreader-0.99.4";
 
   src = fetchurl {
-    url = http://fbreader.org/files/desktop/fbreader-sources-0.99.4.tgz;
+    url = https://fbreader.org/files/desktop/fbreader-sources-0.99.4.tgz;
     sha256 = "1sdq3vvwkq4bkyrvh0p884d66gaddz8hlab3m798ji9ixbak2z1x";
   };
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "An e-book reader for Linux";
-    homepage = http://www.fbreader.org/;
+    homepage = https://www.fbreader.org/;
     license = licenses.gpl3;
     platforms = platforms.linux; # possibly also on unix general
     maintainers = [ maintainers.coroa ];

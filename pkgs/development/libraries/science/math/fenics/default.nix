@@ -42,7 +42,7 @@ let
     '';
     meta = {
       description = "Distributed just-in-time shared library building";
-      homepage = http://fenicsproject.org/;
+      homepage = https://fenicsproject.org/;
       platforms = stdenv.lib.platforms.all;
       license = stdenv.lib.licenses.lgpl3;
     };
@@ -60,7 +60,7 @@ let
     '';
     meta = {
       description = "Automatic generation of finite element basis functions";
-      homepage = http://fenicsproject.org/;
+      homepage = https://fenicsproject.org/;
       platforms = stdenv.lib.platforms.all;
       license = stdenv.lib.licenses.lgpl3;
     };
@@ -78,7 +78,7 @@ let
     '';
     meta = {
       description = "A domain-specific language for finite element variational forms";
-      homepage = http://fenicsproject.org/;
+      homepage = https://fenicsproject.org/;
       platforms = stdenv.lib.platforms.all;
       license = stdenv.lib.licenses.lgpl3;
     };
@@ -97,7 +97,7 @@ let
     '';
     meta = {
       description = "A compiler for finite element variational forms";
-      homepage = http://fenicsproject.org/;
+      homepage = https://fenicsproject.org/;
       platforms = stdenv.lib.platforms.all;
       license = stdenv.lib.licenses.lgpl3;
     };
@@ -112,7 +112,7 @@ let
     buildInputs = [ numpy six ];
     meta = {
       description = "Instant inlining of C and C++ code in Python";
-      homepage = http://fenicsproject.org/;
+      homepage = https://fenicsproject.org/;
       platforms = stdenv.lib.platforms.all;
       license = stdenv.lib.licenses.lgpl3;
     };
@@ -157,7 +157,7 @@ stdenv.mkDerivation {
   postInstall = "source $out/share/dolfin/dolfin.conf";
   meta = {
     description = "The FEniCS Problem Solving Environment in Python and C++";
-    homepage = http://fenicsproject.org/;
+    homepage = https://fenicsproject.org/;
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.lgpl3;
   };

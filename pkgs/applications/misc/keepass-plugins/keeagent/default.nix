@@ -6,14 +6,14 @@ let
     name = "keeagent-${version}";
 
     src = fetchzip {
-      url = http://lechnology.com/wp-content/uploads/2016/07/KeeAgent_v0.8.1.zip;
+      url = https://lechnology.com/wp-content/uploads/2016/07/KeeAgent_v0.8.1.zip;
       sha256 = "16x1qrnzg0xkvi7w29wj3z0ldmql2vcbwxksbsmnidzmygwg98hk";
       stripRoot = false;
     };
 
     meta = {
       description = "KeePass plugin to allow other programs to access SSH keys stored in a KeePass database for authentication";
-      homepage    = http://lechnology.com/software/keeagent;
+      homepage    = https://lechnology.com/software/keeagent;
       platforms   = with stdenv.lib.platforms; linux;
       license     = stdenv.lib.licenses.gpl2;
       maintainers = [ ];

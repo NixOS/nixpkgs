@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
       Recoll is an Xapian frontend that can search through files, archive
       members, email attachments. 
     '';
-    homepage = http://www.lesbonscomptes.com/recoll/;
+    homepage = https://www.lesbonscomptes.com/recoll/;
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = [ maintainers.jcumming ];

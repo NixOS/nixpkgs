@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "The best terminal emulator written with the EFL";
-    homepage = http://enlightenment.org/;
+    homepage = https://enlightenment.org/;
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.bsd2;
     maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx ];

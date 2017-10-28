@@ -10,7 +10,7 @@ rec {
   deps = [ args."alexandria" args."bordeaux-threads" args."cl-aa" args."cl-fad" args."cl-paths-ttf" args."cl-store" args."cl-vectors" args."clx" args."trivial-features" args."zpb-ttf" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clx-truetype/2016-08-25/clx-truetype-20160825-git.tgz'';
+    url = ''https://beta.quicklisp.org/archive/clx-truetype/2016-08-25/clx-truetype-20160825-git.tgz'';
     sha256 = ''0ndy067rg9w6636gxwlpnw7f3ck9nrnjb03444pprik9r3c9in67'';
   };
 
@@ -22,7 +22,7 @@ rec {
 /* (SYSTEM clx-truetype DESCRIPTION
     clx-truetype is pure common lisp solution for antialiased TrueType font rendering using CLX and XRender extension.
     SHA256 0ndy067rg9w6636gxwlpnw7f3ck9nrnjb03444pprik9r3c9in67 URL
-    http://beta.quicklisp.org/archive/clx-truetype/2016-08-25/clx-truetype-20160825-git.tgz
+    https://beta.quicklisp.org/archive/clx-truetype/2016-08-25/clx-truetype-20160825-git.tgz
     MD5 7c9dedb21d52dedf727de741ac6d9c60 NAME clx-truetype FILENAME
     clx-truetype DEPS
     ((NAME alexandria FILENAME alexandria)

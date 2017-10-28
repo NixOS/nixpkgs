@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tracing tools (kernel + user space) for Linux";
-    homepage = http://lttng.org/;
+    homepage = https://lttng.org/;
     license = licenses.lgpl21;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

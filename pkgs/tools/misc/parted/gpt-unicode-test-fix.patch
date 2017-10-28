@@ -1,6 +1,6 @@
 From Ludo's suggestion at:
 
-  http://debbugs.gnu.org/cgi/bugreport.cgi?msg=8;bug=18258
+  https://debbugs.gnu.org/cgi/bugreport.cgi?msg=8;bug=18258
 
 diff --git a/tests/t0251-gpt-unicode.sh b/tests/t0251-gpt-unicode.sh
 index c845950..fa63a72 100755

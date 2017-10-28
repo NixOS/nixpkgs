@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" "PLUGINDIR=$(out)/lib" ];
 
   meta = with lib; {
-    homepage = http://pwmt.org/projects/zathura/;
+    homepage = https://pwmt.org/projects/zathura/;
     description = "A zathura PS plugin";
     longDescription = ''
       The zathura-ps plugin adds PS support to zathura by using the

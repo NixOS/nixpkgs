@@ -5,7 +5,7 @@
 <title>Bower</title>
 
 <para>
-  <link xlink:href="http://bower.io">Bower</link> is a package manager
+  <link xlink:href="https://bower.io">Bower</link> is a package manager
   for web site front-end components. Bower packages (comprising of
   build artefacts and sometimes sources) are stored in
   <command>git</command> repositories, typically on Github. The

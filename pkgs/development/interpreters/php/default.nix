@@ -305,7 +305,7 @@ let
 
       meta = with stdenv.lib; {
         description = "An HTML-embedded scripting language";
-        homepage = http://www.php.net/;
+        homepage = https://www.php.net/;
         license = licenses.php301;
         maintainers = with maintainers; [ globin ];
         platforms = platforms.all;

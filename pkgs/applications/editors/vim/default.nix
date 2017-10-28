@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   # To fix the trouble in vim73, that it cannot cross-build with this patch
   # to bypass a configure script check that cannot be done cross-building.
-  # http://groups.google.com/group/vim_dev/browse_thread/thread/66c02efd1523554b?pli=1
+  # https://groups.google.com/group/vim_dev/browse_thread/thread/66c02efd1523554b?pli=1
   # patchPhase = ''
   #   sed -i -e 's/as_fn_error.*int32.*/:/' src/auto/configure
   # '';

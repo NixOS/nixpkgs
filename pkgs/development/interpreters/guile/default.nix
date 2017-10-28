@@ -64,7 +64,7 @@
   postInstall = ''
     wrapProgram $out/bin/guile-snarf --prefix PATH : "${gawk}/bin"
 
-    # XXX: See http://thread.gmane.org/gmane.comp.lib.gnulib.bugs/18903 for
+    # XXX: See https://thread.gmane.org/gmane.comp.lib.gnulib.bugs/18903 for
     # why `--with-libunistring-prefix' and similar options coming from
     # `AC_LIB_LINKFLAGS_BODY' don't work on NixOS/x86_64.
     sed -i "$out/lib/pkgconfig/guile-2.2.pc"    \
@@ -92,7 +92,7 @@
 
   meta = {
     description = "Embeddable Scheme implementation";
-    homepage    = http://www.gnu.org/software/guile/;
+    homepage    = https://www.gnu.org/software/guile/;
     license     = stdenv.lib.licenses.lgpl3Plus;
     maintainers = with stdenv.lib.maintainers; [ ludo lovek323 vrthra ];
     platforms   = stdenv.lib.platforms.all;

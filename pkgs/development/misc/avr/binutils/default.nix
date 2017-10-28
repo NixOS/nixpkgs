@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "the GNU Binutils for AVR microcontrollers";
-    homepage = http://www.gnu.org/software/binutils/;
+    homepage = https://www.gnu.org/software/binutils/;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
     maintainers = with maintainers; [ mguentner ];

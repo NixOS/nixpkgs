@@ -6,7 +6,7 @@
 stdenv.mkDerivation {
   name = "grass-7.0.2";
   src = fetchurl {
-    url = http://grass.osgeo.org/grass70/source/grass-7.0.2.tar.gz;
+    url = https://grass.osgeo.org/grass70/source/grass-7.0.2.tar.gz;
     sha256 = "02qrdgn46gxr60amxwax4b8fkkmhmjxi6qh4yfvpbii6ai6diarf";
   };
 
@@ -68,7 +68,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://grass.osgeo.org/;
+    homepage = https://grass.osgeo.org/;
     description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.all;

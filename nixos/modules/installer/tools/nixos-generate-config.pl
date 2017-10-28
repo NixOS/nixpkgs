@@ -155,7 +155,7 @@ sub pciCheck {
     }
 
     # broadcom STA driver (wl.ko)
-    # list taken from http://www.broadcom.com/docs/linux_sta/README.txt
+    # list taken from https://www.broadcom.com/docs/linux_sta/README.txt
     if ($vendor eq "0x14e4" &&
         ($device eq "0x4311" || $device eq "0x4312" || $device eq "0x4313" ||
          $device eq "0x4315" || $device eq "0x4327" || $device eq "0x4328" ||

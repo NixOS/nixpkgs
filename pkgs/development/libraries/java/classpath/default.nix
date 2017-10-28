@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     # GCJ tries to compile all of Classpath during the `configure' run when
     # trying to build in the source tree (see
-    # http://www.mail-archive.com/classpath@gnu.org/msg15079.html), thus we
+    # https://www.mail-archive.com/classpath@gnu.org/msg15079.html), thus we
     # build out-of-tree.
     mkdir ../build
     cd ../build
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
       for the Java programming language.
     '';
 
-    homepage = http://www.gnu.org/software/classpath/;
+    homepage = https://www.gnu.org/software/classpath/;
 
     # The exception makes it similar to LGPLv2+ AFAICS.
     license = stdenv.lib.licenses.gpl2ClasspathPlus;

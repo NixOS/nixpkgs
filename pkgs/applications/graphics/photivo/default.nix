@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   name = "photivo-2014-01-25";
 
   src = fetchhg {
-    url = "http://code.google.com/p/photivo/";
+    url = "https://code.google.com/p/photivo/";
     rev = "d687864489da";
     sha256 = "0f6y18k7db2ci6xn664zcwm1g1k04sdv7gg1yd5jk41bndjb7z8h";
   };

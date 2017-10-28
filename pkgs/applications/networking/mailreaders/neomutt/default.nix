@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
     for f in doc/*.{xml,xsl}*  ; do
       substituteInPlace $f \
         --replace http://docbook.sourceforge.net/release/xsl/current     ${docbook_xsl}/share/xml/docbook-xsl \
-        --replace http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd ${docbook_xml_dtd_42}/xml/dtd/docbook/docbookx.dtd
+        --replace https://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd ${docbook_xml_dtd_42}/xml/dtd/docbook/docbookx.dtd
     done
   '';
 
@@ -69,7 +69,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A small but very powerful text-based mail client";
-    homepage    = http://www.neomutt.org;
+    homepage    = https://www.neomutt.org;
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ cstrahan erikryb jfrankenau vrthra ];
     platforms   = platforms.unix;

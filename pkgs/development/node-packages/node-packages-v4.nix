@@ -6543,7 +6543,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "The streaming build system";
-      homepage = http://gulpjs.com/;
+      homepage = https://gulpjs.com/;
       license = "MIT";
     };
     production = true;

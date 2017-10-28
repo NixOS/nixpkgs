@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage    = "http://commons.apache.org/proper/commons-io";
+    homepage    = "https://commons.apache.org/proper/commons-io";
     description = "A library of utilities to assist with developing IO functionality";
     maintainers = with stdenv.lib.maintainers; [ copumpkin ];
     license     = stdenv.lib.licenses.asl20;

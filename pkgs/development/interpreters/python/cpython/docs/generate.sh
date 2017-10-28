@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 TYPES="html pdf-a4 pdf-letter text"
-URL=http://docs.python.org/ftp/python/doc/VERSION/python-VERSION-docs-TYPE.tar.bz2
-VERSIONS=$(curl http://www.python.org/download/releases/ 2>/dev/null | grep "releases/[123456789]"| cut -d/ -f4 |grep -v "^[12].[012345]" |grep -v "^1.6.1")
+URL=https://docs.python.org/ftp/python/doc/VERSION/python-VERSION-docs-TYPE.tar.bz2
+VERSIONS=$(curl https://www.python.org/download/releases/ 2>/dev/null | grep "releases/[123456789]"| cut -d/ -f4 |grep -v "^[12].[012345]" |grep -v "^1.6.1")
 echo "Generating expressions for:
 ${VERSIONS}
 "

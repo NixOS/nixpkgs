@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.linuxsampler.org;
+    homepage = https://www.linuxsampler.org;
     description = "Sampler backend";
     longDescription = ''
       Includes sampler engine, audio and MIDI drivers, network layer

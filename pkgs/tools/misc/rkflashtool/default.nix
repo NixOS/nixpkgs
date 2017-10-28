@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://sourceforge.net/projects/rkflashtool/;
+    homepage = https://sourceforge.net/projects/rkflashtool/;
     description = "Tools for flashing Rockchip devices";
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.viric ];

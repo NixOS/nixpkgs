@@ -40,7 +40,7 @@
     goPackagePath = "launchpad.net/go-xdg/v0";
     fetch = {
       type = "bzr";
-      url = "http://bazaar.launchpad.net/~chipaca/go-xdg/v0/";
+      url = "https://bazaar.launchpad.net/~chipaca/go-xdg/v0/";
       rev = "10";
       sha256 = "0fd68kkxzxjanpgannpys962bxzqdf8c1qvzk687hv504a3dp76f";
     };

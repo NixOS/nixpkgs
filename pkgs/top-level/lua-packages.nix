@@ -165,7 +165,7 @@ let
 
     meta = with stdenv.lib; {
       description = "SAX XML parser based on the Expat library";
-      homepage = "http://matthewwild.co.uk/projects/luaexpat";
+      homepage = "https://matthewwild.co.uk/projects/luaexpat";
       license = licenses.mit;
       maintainers = with maintainers; [ flosse ];
       platforms = platforms.unix;

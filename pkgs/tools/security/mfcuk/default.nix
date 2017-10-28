@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "MiFare Classic Universal toolKit";
     license = licenses.gpl2;
-    homepage = http://code.google.com/p/mfcuk/;
+    homepage = https://code.google.com/p/mfcuk/;
     maintainers = with maintainers; [ offline ];
     platforms = platforms.unix;
   };

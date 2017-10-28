@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://odamex.net/;
+    homepage = https://odamex.net/;
     description = "A client/server port for playing old-school Doom online";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;

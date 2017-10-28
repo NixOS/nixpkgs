@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://apr.apache.org/;
+    homepage = https://apr.apache.org/;
     description = "The Apache Portable Runtime library";
     platforms = platforms.all;
     maintainers = [ maintainers.eelco ];

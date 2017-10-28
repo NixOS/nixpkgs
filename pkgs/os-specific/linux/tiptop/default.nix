@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   patches = [(fetchpatch {
     name = "reproducibility.patch";
-    url = "http://anonscm.debian.org/cgit/collab-maint/tiptop.git/plain/debian/"
+    url = "https://anonscm.debian.org/cgit/collab-maint/tiptop.git/plain/debian/"
       + "patches/0001-fix-reproducibility-of-build-process.patch?id=c777d0d5803";
     sha256 = "116l7n3nl9lj691i7j8x0d0za1i6zpqgghw5d70qfpb17c04cblp";
   })];

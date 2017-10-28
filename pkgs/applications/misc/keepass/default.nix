@@ -97,7 +97,7 @@ with builtins; buildDotnetPackage rec {
 
   meta = {
     description = "GUI password manager with strong cryptography";
-    homepage = http://www.keepass.info/;
+    homepage = https://www.keepass.info/;
     maintainers = with stdenv.lib.maintainers; [ amorsillo obadz joncojonathan jraygauthier ];
     platforms = with stdenv.lib.platforms; all;
     license = stdenv.lib.licenses.gpl2;

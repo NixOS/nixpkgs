@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       - Small. Portable. Single-threaded. Efficient.
       - Supports IPv6.
     '';
-    homepage = http://unix4lyfe.org/darkstat;
+    homepage = https://unix4lyfe.org/darkstat;
     license = licenses.gpl2;
     maintainers = with maintainers; [ nckx ];
     platforms = with platforms; unix;

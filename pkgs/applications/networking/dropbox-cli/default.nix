@@ -32,7 +32,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://dropbox.com;
+    homepage = https://dropbox.com;
     description = "Command line client for the dropbox daemon";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];

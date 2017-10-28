@@ -52,7 +52,7 @@ in stdenv.mkDerivation {
 
   meta = {
       description = "A sandbox-building game";
-      homepage = http://www.minecraft.net;
+      homepage = https://www.minecraft.net;
       maintainers = with stdenv.lib.maintainers; [ cpages ryantm ];
       license = stdenv.lib.licenses.unfreeRedistributable;
   };

@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Gnome Diagram drawing software";
-    homepage = http://live.gnome.org/Dia;
+    homepage = https://live.gnome.org/Dia;
     maintainers = with stdenv.lib.maintainers; [raskin];
     platforms = stdenv.lib.platforms.unix;
   };

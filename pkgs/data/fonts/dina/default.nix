@@ -5,7 +5,7 @@ let
 in fetchzip rec {
   name = "dina-font-${version}";
 
-  url = "http://www.donationcoder.com/Software/Jibz/Dina/downloads/Dina.zip";
+  url = "https://www.donationcoder.com/Software/Jibz/Dina/downloads/Dina.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts

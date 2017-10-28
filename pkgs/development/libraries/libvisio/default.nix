@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A library providing ability to interpret and import visio diagrams into various applications";
-    homepage = http://www.freedesktop.org/wiki/Software/libvisio;
+    homepage = https://www.freedesktop.org/wiki/Software/libvisio;
     platforms = stdenv.lib.platforms.unix;
   };
 }

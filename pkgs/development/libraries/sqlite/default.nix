@@ -6,7 +6,7 @@ stdenv.mkDerivation {
   name = "sqlite-3.20.0";
 
   src = fetchurl {
-    url = "http://sqlite.org/2017/sqlite-autoconf-3200000.tar.gz";
+    url = "https://sqlite.org/2017/sqlite-autoconf-3200000.tar.gz";
     sha256 = "1876dapm1xx5aqd2d8l7ymmkd2z9rybh99rp5f5rd4zz57vcc51q";
   };
 
@@ -57,7 +57,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.sqlite.org/;
+    homepage = https://www.sqlite.org/;
     description = "A self-contained, serverless, zero-configuration, transactional SQL database engine";
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ eelco np ];

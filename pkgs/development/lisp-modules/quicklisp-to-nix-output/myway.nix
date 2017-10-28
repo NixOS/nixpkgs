@@ -8,7 +8,7 @@ rec {
   deps = [ args."alexandria" args."babel" args."cl-ppcre" args."cl-utilities" args."map-set" args."quri" args."split-sequence" args."trivial-features" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/myway/2015-03-02/myway-20150302-git.tgz'';
+    url = ''https://beta.quicklisp.org/archive/myway/2015-03-02/myway-20150302-git.tgz'';
     sha256 = ''1spab9zzhwjg3r5xncr5ncha7phw72wp49cxxncgphh1lfaiyblh'';
   };
 
@@ -19,7 +19,7 @@ rec {
 }
 /* (SYSTEM myway DESCRIPTION Sinatra-compatible routing library. SHA256
     1spab9zzhwjg3r5xncr5ncha7phw72wp49cxxncgphh1lfaiyblh URL
-    http://beta.quicklisp.org/archive/myway/2015-03-02/myway-20150302-git.tgz
+    https://beta.quicklisp.org/archive/myway/2015-03-02/myway-20150302-git.tgz
     MD5 6a16b41eb3216c469bfc8783cce08b01 NAME myway FILENAME myway DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME cl-ppcre FILENAME cl-ppcre)

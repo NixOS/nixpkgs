@@ -121,7 +121,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.opera.com;
+    homepage = https://www.opera.com;
     description = "Web browser";
     license = stdenv.lib.licenses.unfree;
   };

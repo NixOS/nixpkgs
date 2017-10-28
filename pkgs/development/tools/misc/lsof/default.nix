@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       ) [ false true ]
       ++ map (
         # the tarball is moved after new version is released
-        isOld: "http://www.mirrorservice.org/sites/lsof.itap.purdue.edu/pub/tools/unix/lsof/"
+        isOld: "https://www.mirrorservice.org/sites/lsof.itap.purdue.edu/pub/tools/unix/lsof/"
         + "${stdenv.lib.optionalString isOld "OLD/"}lsof_${version}.tar.bz2"
       ) [ false true ]
       ;

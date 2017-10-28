@@ -14,7 +14,7 @@ declare -a argsBefore=(-z ignore) argsAfter=()
 
 # This loop makes sure all -L arguments are before -l arguments, or ld may complain it cannot find a library.
 # GNU binutils does not have this problem:
-#   http://stackoverflow.com/questions/5817269/does-the-order-of-l-and-l-options-in-the-gnu-linker-matter
+#   https://stackoverflow.com/questions/5817269/does-the-order-of-l-and-l-options-in-the-gnu-linker-matter
 while (( $# )); do
     case "${args[$i]}" in
         -L)   argsBefore+=("$1" "$2"); shift ;;

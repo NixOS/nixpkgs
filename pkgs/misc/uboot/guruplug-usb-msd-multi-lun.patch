@@ -2,7 +2,7 @@ The GuruPlug's microSD card reader is a USB mass storage device that
 has two logical units (LUNs), i.e., two "SCSI disks".  This patch
 adds multi-LUN support to the USB MSD driver.
 
-See the thread at <http://thread.gmane.org/gmane.comp.boot-loaders.u-boot/85425>.
+See the thread at <https://thread.gmane.org/gmane.comp.boot-loaders.u-boot/85425>.
 
 --- u-boot/common/usb_storage.c	1970-01-01 01:00:01.000000000 +0100
 +++ u-boot/common/usb_storage.c	2010-10-02 00:38:15.000000000 +0200

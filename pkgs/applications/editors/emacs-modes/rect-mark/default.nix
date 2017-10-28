@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "rect-mark-1.4";
 
   src = fetchurl {
-    url = "http://emacswiki.org/emacs/download/rect-mark.el";
+    url = "https://emacswiki.org/emacs/download/rect-mark.el";
     sha256 = "0pyyg53z9irh5jdfvh2qp4pm8qrml9r7lh42wfmdw6c7f56qryh8";
   };
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Mark a rectangle of text with highlighting";
-    homepage = http://emacswiki.org/emacs/RectangleMark;
+    homepage = https://emacswiki.org/emacs/RectangleMark;
     license = stdenv.lib.licenses.gpl2Plus;
 
     platforms = stdenv.lib.platforms.all;

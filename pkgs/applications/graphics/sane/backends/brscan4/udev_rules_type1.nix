@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
 
     See:
 
-     -  <http://ubuntuforums.org/showthread.php?t=1496878>
-     -  <http://www.planet-libre.org/index.php?post_id=10937>
+     -  <https://ubuntuforums.org/showthread.php?t=1496878>
+     -  <https://www.planet-libre.org/index.php?post_id=10937>
   */
   patchPhase = ''
     sed -i -e s/SYSFS/ATTR/g opt/brother/scanner/udev-rules/type1/*.rules

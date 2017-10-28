@@ -140,7 +140,7 @@ in {
     name         = "config-userdata";
     sshPublicKey = snakeOilPublicKey;
 
-    # ### http://nixos.org/channels/nixos-unstable nixos
+    # ### https://nixos.org/channels/nixos-unstable nixos
     userData = ''
       { pkgs, ... }:
 

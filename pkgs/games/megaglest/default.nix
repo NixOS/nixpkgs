@@ -43,7 +43,7 @@ stdenv.mkDerivation {
   meta = {
     description = "MegaGlest is an entertaining free (freeware and free software) and open source cross-platform 3D real-time strategy (RTS) game";
     license = stdenv.lib.licenses.gpl3;
-    homepage = http://megaglest.org/;
+    homepage = https://megaglest.org/;
     maintainers = [ stdenv.lib.maintainers.matejc ];
     platforms = stdenv.lib.platforms.linux;
   };

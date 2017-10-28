@@ -4,9 +4,9 @@
 let
   defaultRepos = [
     http://central.maven.org/maven2
-    http://oss.sonatype.org/content/repositories/releases
-    http://oss.sonatype.org/content/repositories/public
-    http://repo.typesafe.com/typesafe/releases
+    https://oss.sonatype.org/content/repositories/releases
+    https://oss.sonatype.org/content/repositories/public
+    https://repo.typesafe.com/typesafe/releases
   ];
 in
 
@@ -18,7 +18,7 @@ args@
 , # Example: "4.3.6"
   version
 , # List of maven repositories from where to fetch the artifact.
-  # Example: [ http://oss.sonatype.org/content/repositories/public ].
+  # Example: [ https://oss.sonatype.org/content/repositories/public ].
   repos ? defaultRepos
   # The `url` and `urls` parameters, if specified should point to the JAR
   # file and will take precedence over the `repos` parameter. Only one of `url`

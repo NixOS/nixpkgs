@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Comprehensive suite for man in the middle attacks";
-    homepage = http://ettercap.github.io/ettercap/;
+    homepage = https://ettercap.github.io/ettercap/;
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ pSub ];

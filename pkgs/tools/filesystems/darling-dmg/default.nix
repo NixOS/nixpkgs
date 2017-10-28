@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake fuse openssl zlib bzip2 libxml2 icu ];
 
   meta = {
-    homepage = http://www.darlinghq.org/;
+    homepage = https://www.darlinghq.org/;
     description = "Darling lets you open macOS dmgs on Linux";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl3;

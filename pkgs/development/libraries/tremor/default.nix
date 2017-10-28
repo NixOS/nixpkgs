@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "tremor-svn-${src.rev}";
 
   src = fetchsvn {
-    url = http://svn.xiph.org/trunk/Tremor;
+    url = https://svn.xiph.org/trunk/Tremor;
     rev = "17866";
     sha256 = "161411cbefa1527da7a8fc087e78d8e21d19143d3a6eb42fb281e5026aad7568";
   };

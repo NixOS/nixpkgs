@@ -1,6 +1,6 @@
 Description: Add check for buffer overflow with malformed input files
 Author: <eriks@debian.org>
-Bug-Debian: http://bugs.debian.org/407015
+Bug-Debian: https://bugs.debian.org/407015
 Last-Update: 2009-06-03
 
 --- antiword-0.37~/wordole.c	2005-08-26 21:49:57.000000000 +0200

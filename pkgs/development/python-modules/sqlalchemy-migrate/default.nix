@@ -30,7 +30,7 @@ buildPythonPackage rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = http://code.google.com/p/sqlalchemy-migrate/;
+    homepage = https://code.google.com/p/sqlalchemy-migrate/;
     description = "Schema migration tools for SQLAlchemy";
     license = licenses.asl20;
     maintainers = with maintainers; [ makefu ];

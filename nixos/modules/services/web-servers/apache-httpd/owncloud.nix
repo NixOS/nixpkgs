@@ -146,8 +146,8 @@ let
       /* memcached servers (Only used when xCache, APC and APCu are absent.) */
       "memcached_servers" => array(
           // hostname, port and optional weight. Also see:
-          // http://www.php.net/manual/en/memcached.addservers.php
-          // http://www.php.net/manual/en/memcached.addserver.php
+          // https://www.php.net/manual/en/memcached.addservers.php
+          // https://www.php.net/manual/en/memcached.addserver.php
           //array('localhost', 11211),
           //array('other.host.local', 11211),
       ),
@@ -266,7 +266,7 @@ let
           */
       ),
       //links to custom clients
-      'customclient_desktop' => ''', //http://owncloud.org/sync-clients/
+      'customclient_desktop' => ''', //https://owncloud.org/sync-clients/
       'customclient_android' => ''', //https://play.google.com/store/apps/details?id=com.owncloud.android
       'customclient_ios' => ''', //https://itunes.apple.com/us/app/owncloud/id543672169?mt=8
 

@@ -73,7 +73,7 @@ in buildPythonApplication rec {
 
 
   meta = {
-    homepage = http://xpra.org/;
+    homepage = https://xpra.org/;
     description = "Persistent remote applications for X";
     platforms = platforms.linux;
     maintainers = with maintainers; [ tstrobel offline ];

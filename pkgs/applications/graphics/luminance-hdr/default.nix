@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   patches = [(fetchpatch {
     name = "fix-qt53-build.diff";
-    url = "http://anonscm.debian.org/cgit/pkg-phototools/luminance-hdr.git/"
+    url = "https://anonscm.debian.org/cgit/pkg-phototools/luminance-hdr.git/"
       + "plain/debian/patches/51_qt5_printsupport.diff?id=00c869a860062dac181303f2c03a3513c0e210bc";
     sha256 = "0nzvfxd3ybxx61rj6vxcaaxfrsxrl9af3h8jj7pr3rncisnl9gkl";
   })];

@@ -413,7 +413,7 @@ Additional information.
       <para>
         It's only for non-breaking mass-rebuild commits. That means it's not to
         be used for testing, and changes must have been well tested already.
-        <link xlink:href="http://comments.gmane.org/gmane.linux.distributions.nixos/13447">Read policy here</link>.
+        <link xlink:href="https://comments.gmane.org/gmane.linux.distributions.nixos/13447">Read policy here</link>.
       </para>
     </listitem>
     <listitem>
@@ -421,7 +421,7 @@ Additional information.
         If the branch is already in a broken state, please refrain from adding
         extra new breakages. Stabilize it for a few days, merge into master,
         then resume development on staging.
-        <link xlink:href="http://hydra.nixos.org/jobset/nixpkgs/staging#tabs-evaluations">Keep an eye on the staging evaluations here</link>.
+        <link xlink:href="https://hydra.nixos.org/jobset/nixpkgs/staging#tabs-evaluations">Keep an eye on the staging evaluations here</link>.
         If any fixes for staging happen to be already in master, then master can
         be merged into staging.
       </para>

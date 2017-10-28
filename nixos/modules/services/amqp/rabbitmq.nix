@@ -65,7 +65,7 @@ in {
         type = types.str;
         description = ''
           Verbatim configuration file contents.
-          See http://www.rabbitmq.com/configure.html
+          See https://www.rabbitmq.com/configure.html
         '';
       };
 

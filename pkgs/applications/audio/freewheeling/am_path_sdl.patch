@@ -17,13 +17,13 @@
 -#AM_PATH_SDL($SDL_VERSION,
 -#            :,
 -#	    AC_MSG_ERROR([VIDEO: *** SDL version $SDL_VERSION not found!
--#		          http://www.libsdl.org/])
+-#		          https://www.libsdl.org/])
 -#)
 +SDL_VERSION=1.2.4
 +AM_PATH_SDL($SDL_VERSION,
 +            :,
 +	    AC_MSG_ERROR([VIDEO: *** SDL version $SDL_VERSION not found!
-+		          http://www.libsdl.org/])
++		          https://www.libsdl.org/])
 +)
  
  AC_CHECK_LIB([vorbis], [main], , 
@@ -34,7 +34,7 @@
  		http://www.xiph.org/ogg/vorbis/)])
 +AC_CHECK_LIB([ogg], [main], , 
 +  [AC_MSG_ERROR(AUDIO: You need libogg-dev installed.
-+		http://www.xiph.org/ogg/)])
++		https://www.xiph.org/ogg/)])
  
  AC_CHECK_LIB([sndfile], [main], , 
    [AC_MSG_ERROR(AUDIO: you need libsndfile installed.

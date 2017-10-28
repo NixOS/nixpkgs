@@ -167,7 +167,7 @@ in {
       description = ''
         Process integration configuration
  
-        See http://docs.datadoghq.com/integrations/process/
+        See https://docs.datadoghq.com/integrations/process/
       '';
       default = null;
       type = types.uniq (types.nullOr types.string);

@@ -1,6 +1,6 @@
 Description: Correct 64 Architecture implementation of 32 bit data
 Author: Chris Donoghue <cdonoghu@gmail.com>
-Bug-Debian: http://bugs.debian.org/362068
+Bug-Debian: https://bugs.debian.org/362068
 
 --- wmctrl-1.07.orig/main.c
 +++ wmctrl-1.07/main.c
@@ -10,7 +10,7 @@ Bug-Debian: http://bugs.debian.org/362068
       *               data to be retrieved.
 +     *
 +     * NOTE:  see 
-+     * http://mail.gnome.org/archives/wm-spec-list/2003-March/msg00067.html
++     * https://mail.gnome.org/archives/wm-spec-list/2003-March/msg00067.html
 +     * In particular:
 +     *
 +     * 	When the X window system was ported to 64-bit architectures, a

@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   patches = [
     ./xbase-fixes.patch
     (fetchurl {
-      url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/dev-db/xbase/files/xbase-3.1.2-gcc47.patch?revision=1.1";
+      url = "https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/dev-db/xbase/files/xbase-3.1.2-gcc47.patch?revision=1.1";
       sha256 = "1kpcrkkcqdwl609yd0qxlvp743icz3vni13993sz6fkgn5lah8yl";
     })
     (fetchurl {

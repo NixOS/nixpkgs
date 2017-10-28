@@ -114,7 +114,7 @@ let
           exit 1
         fi
 
-        # Note: we can get rid of this once http://permalink.gmane.org/gmane.linux.kbuild.devel/13800 is merged.
+        # Note: we can get rid of this once https://permalink.gmane.org/gmane.linux.kbuild.devel/13800 is merged.
         buildFlagsArray+=("KBUILD_BUILD_TIMESTAMP=$(date -u -d @$SOURCE_DATE_EPOCH)")
       '';
 

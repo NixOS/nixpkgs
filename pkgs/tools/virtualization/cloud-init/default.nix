@@ -32,7 +32,7 @@ in pythonPackages.buildPythonApplication rec {
     oauthlib pyserial configobj pyyaml requests jsonpatch ];
 
   meta = {
-    homepage = http://cloudinit.readthedocs.org;
+    homepage = https://cloudinit.readthedocs.org;
     description = "Provides configuration and customization of cloud instance";
     maintainers = [ lib.maintainers.madjar lib.maintainers.phile314 ];
     platforms = lib.platforms.all;

@@ -39,7 +39,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://preyproject.com;
+    homepage = https://preyproject.com;
     description = "Proven tracking software that helps you find, lock and recover your devices when stolen or missing";
     maintainers = with maintainers; [ domenkozar ];
     license = licenses.gpl3;

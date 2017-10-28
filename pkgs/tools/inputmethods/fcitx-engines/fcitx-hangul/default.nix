@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     isFcitxEngine = true;
     homepage      = "https://github.com/fcitx/fcitx-hangul";
-    downloadPage  = "http://download.fcitx-im.org/fcitx-hangul/";
+    downloadPage  = "https://download.fcitx-im.org/fcitx-hangul/";
     description   = "Fcitx Wrapper for hangul";
     license       = licenses.gpl2;
     platforms     = platforms.linux;

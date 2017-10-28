@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://doomseeker.drdteam.org/;
+    homepage = https://doomseeker.drdteam.org/;
     description = "Multiplayer server browser for many Doom source ports";
     license = licenses.gpl2;
     platforms = platforms.unix;

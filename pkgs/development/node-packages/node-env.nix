@@ -242,14 +242,14 @@ let
         export HOME=$TMPDIR
         cd "${packageName}"
         runHook preRebuild
-        npm --registry http://www.example.com --nodedir=${nodeSources} ${npmFlags} ${stdenv.lib.optionalString production "--production"} rebuild
+        npm --registry https://www.example.com --nodedir=${nodeSources} ${npmFlags} ${stdenv.lib.optionalString production "--production"} rebuild
 
         if [ "$dontNpmInstall" != "1" ]
         then
             # NPM tries to download packages even when they already exist if npm-shrinkwrap is used.
             rm -f npm-shrinkwrap.json
 
-            npm --registry http://www.example.com --nodedir=${nodeSources} ${npmFlags} ${stdenv.lib.optionalString production "--production"} install
+            npm --registry https://www.example.com --nodedir=${nodeSources} ${npmFlags} ${stdenv.lib.optionalString production "--production"} install
         fi
 
         # Create symlink to the deployed executable folder, if applicable
@@ -312,13 +312,13 @@ let
           patchShebangs .
 
           export HOME=$PWD
-          npm --registry http://www.example.com --nodedir=${nodeSources} ${npmFlags} ${stdenv.lib.optionalString production "--production"} rebuild
+          npm --registry https://www.example.com --nodedir=${nodeSources} ${npmFlags} ${stdenv.lib.optionalString production "--production"} rebuild
 
           ${stdenv.lib.optionalString (!dontNpmInstall) ''
             # NPM tries to download packages even when they already exist if npm-shrinkwrap is used.
             rm -f npm-shrinkwrap.json
 
-            npm --registry http://www.example.com --nodedir=${nodeSources} ${npmFlags} ${stdenv.lib.optionalString production "--production"} install
+            npm --registry https://www.example.com --nodedir=${nodeSources} ${npmFlags} ${stdenv.lib.optionalString production "--production"} install
           ''}
 
           ln -s $out/lib/node_modules/.bin $out/bin

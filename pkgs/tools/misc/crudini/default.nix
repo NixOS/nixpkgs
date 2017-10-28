@@ -41,7 +41,7 @@ python2Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A utility for manipulating ini files ";
-    homepage = http://www.pixelbeat.org/programs/crudini/;
+    homepage = https://www.pixelbeat.org/programs/crudini/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
   };

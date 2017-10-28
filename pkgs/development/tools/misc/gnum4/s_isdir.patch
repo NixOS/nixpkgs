@@ -1,6 +1,6 @@
 Fails to build with glibc 2.12.1 without this patch.
 
-http://lists.gnu.org/archive/html/bug-m4/2010-05/msg00002.html
+https://lists.gnu.org/archive/html/bug-m4/2010-05/msg00002.html
 
 --- a/src/path.c
 +++ b/src/path.c

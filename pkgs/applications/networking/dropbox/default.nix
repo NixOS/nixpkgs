@@ -145,7 +145,7 @@ in mkDerivation {
 
   meta = with lib; {
     description = "Online stored folders (daemon version)";
-    homepage    = http://www.dropbox.com;
+    homepage    = https://www.dropbox.com;
     maintainers = with maintainers; [ ttuegel ];
     license     = licenses.unfree;
     platforms   = [ "i686-linux" "x86_64-linux" ];

@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://www.eclipse.org/jdt/core/index.php;
 
-    # http://www.eclipse.org/legal/epl-v10.html (free software, copyleft)
+    # https://www.eclipse.org/legal/epl-v10.html (free software, copyleft)
     license = stdenv.lib.licenses.epl10;
 
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;

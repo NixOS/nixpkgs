@@ -8,7 +8,7 @@ rec {
   deps = [ args."anaphora" args."asdf-system-connections" args."cl-containers" args."cl-ppcre" args."dynamic-classes" args."metabang-bind" args."metatilities-base" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-markdown/2010-10-06/cl-markdown-20101006-darcs.tgz'';
+    url = ''https://beta.quicklisp.org/archive/cl-markdown/2010-10-06/cl-markdown-20101006-darcs.tgz'';
     sha256 = ''1hrv7szhmhxgbadwrmf6wx4kwkbg3dnabbsz4hfffzjgprwac79w'';
   };
 
@@ -19,7 +19,7 @@ rec {
 }
 /* (SYSTEM cl-markdown DESCRIPTION NIL SHA256
     1hrv7szhmhxgbadwrmf6wx4kwkbg3dnabbsz4hfffzjgprwac79w URL
-    http://beta.quicklisp.org/archive/cl-markdown/2010-10-06/cl-markdown-20101006-darcs.tgz
+    https://beta.quicklisp.org/archive/cl-markdown/2010-10-06/cl-markdown-20101006-darcs.tgz
     MD5 3e748529531ad1dcbee5443fe24b6300 NAME cl-markdown FILENAME cl-markdown
     DEPS
     ((NAME anaphora FILENAME anaphora)

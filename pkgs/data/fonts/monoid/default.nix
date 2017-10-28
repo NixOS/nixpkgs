@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   outputHash = "0lbipgygiva3gg1pqw07phpnnf0s6ka9vqdk1pw7bkybjw3f7wzm";
 
   meta = with stdenv.lib; {
-    homepage = http://larsenwork.com/monoid;
+    homepage = https://larsenwork.com/monoid;
     description = "Customisable coding font with alternates, ligatures and contextual positioning";
     license = [ licenses.ofl licenses.mit ];
     platforms = platforms.all;

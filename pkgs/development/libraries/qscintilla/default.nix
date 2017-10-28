@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
       proportional fonts, bold and italics, multiple foreground and
       background colours and multiple fonts.
     '';
-    homepage = http://www.riverbankcomputing.com/software/qscintilla/intro;
+    homepage = https://www.riverbankcomputing.com/software/qscintilla/intro;
     license = with licenses; [ gpl2 gpl3 ]; # and commercial
     platforms = platforms.unix;
     maintainers = with maintainers; [ peterhoeg ];

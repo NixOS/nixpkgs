@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ tstrobel ];
     platforms = platforms.linux;
     license = licenses.unfree;
-    downloadPage = http://matrica.de/download/download.html;
+    downloadPage = https://matrica.de/download/download.html;
   };
 
 }

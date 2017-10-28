@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ curl tzdata ];
 
-  # Buid and install are based on http://wiki.dlang.org/Building_DMD
+  # Buid and install are based on https://wiki.dlang.org/Building_DMD
   buildPhase = ''
       cd dmd
       make -j$NIX_BUILD_CORES -f posix.mak INSTALL_DIR=$out
@@ -160,7 +160,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Official reference compiler for the D language";
-    homepage = http://dlang.org/;
+    homepage = https://dlang.org/;
     # Everything is now Boost licensed, even the backend.
     # https://github.com/dlang/dmd/pull/6680
     license = licenses.boost;

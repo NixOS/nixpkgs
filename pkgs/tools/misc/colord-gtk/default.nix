@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ intltool colord glib gtk3 lcms2 ];
 
   meta = {
-    homepage = http://www.freedesktop.org/software/colord/intro.html;
+    homepage = https://www.freedesktop.org/software/colord/intro.html;
     license = stdenv.lib.licenses.lgpl2Plus;
     platforms = stdenv.lib.platforms.linux;
   };

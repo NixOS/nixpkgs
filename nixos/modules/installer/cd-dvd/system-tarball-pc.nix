@@ -146,7 +146,7 @@ in
           R8169 y
 
           # Enable nfs root boot
-          UNIX y # http://www.linux-mips.org/archives/linux-mips/2006-11/msg00113.html
+          UNIX y # https://www.linux-mips.org/archives/linux-mips/2006-11/msg00113.html
           IP_PNP y
           IP_PNP_DHCP y
           FSCACHE y

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Gstreamer Bad Plugins";
-    homepage    = "http://gstreamer.freedesktop.org";
+    homepage    = "https://gstreamer.freedesktop.org";
     longDescription = ''
       a set of plug-ins that aren't up to par compared to the
       rest.  They might be close to being good quality, but they're missing

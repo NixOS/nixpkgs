@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Obstacled race game";
-    homepage = http://xmoto.tuxfamily.org;
+    homepage = https://xmoto.tuxfamily.org;
     maintainers = with maintainers; [ raskin viric pSub ];
     platforms = platforms.linux;
   };

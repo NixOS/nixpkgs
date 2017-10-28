@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.areca-backup.org/;
+    homepage = https://www.areca-backup.org/;
     description = "An Open Source personal backup solution";
     license = licenses.gpl2;
     maintainers = with maintainers; [ pSub ];

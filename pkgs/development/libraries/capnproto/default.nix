@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage    = "http://kentonv.github.io/capnproto";
+    homepage    = "https://kentonv.github.io/capnproto";
     description = "Cap'n Proto cerealization protocol";
     longDescription = ''
       Cap’n Proto is an insanely fast data interchange format and

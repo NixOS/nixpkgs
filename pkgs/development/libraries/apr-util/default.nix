@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = http://apr.apache.org/;
+    homepage = https://apr.apache.org/;
     description = "A companion library to APR, the Apache Portable Runtime";
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.unix;

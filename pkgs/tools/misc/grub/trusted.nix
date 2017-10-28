@@ -21,7 +21,7 @@ let
 
   po_src = fetchurl {
     name = "grub-2.02-beta2.tar.gz";
-    url = "http://alpha.gnu.org/gnu/grub/grub-2.02~beta2.tar.gz";
+    url = "https://alpha.gnu.org/gnu/grub/grub-2.02~beta2.tar.gz";
     sha256 = "1lr9h3xcx0wwrnkxdnkfjwy08j7g7mdlmmbdip2db4zfgi69h0rm";
 
   };
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
        #  chardev: opening backend "stdio" failed
        #  qemu: could not open serial device 'stdio': Invalid argument
        #
-       # See <http://www.mail-archive.com/qemu-devel@nongnu.org/msg22775.html>.
+       # See <https://www.mail-archive.com/qemu-devel@nongnu.org/msg22775.html>.
        sed -i "tests/util/grub-shell.in" \
            -e's/qemu-system-i386/qemu-system-x86_64 -nodefaults/g'
     '';

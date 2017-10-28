@@ -13951,14 +13951,14 @@
     os = [ ];
     cpu = [ ];
   };
-  by-spec."emitter"."http://github.com/component/emitter/archive/1.0.1.tar.gz" =
+  by-spec."emitter"."https://github.com/component/emitter/archive/1.0.1.tar.gz" =
     self.by-version."emitter"."1.0.1";
   by-version."emitter"."1.0.1" = self.buildNodePackage {
     name = "emitter-1.0.1";
     version = "1.0.1";
     bin = false;
     src = fetchurl {
-      url = "http://github.com/component/emitter/archive/1.0.1.tar.gz";
+      url = "https://github.com/component/emitter/archive/1.0.1.tar.gz";
       name = "emitter-1.0.1.tgz";
       sha256 = "0eae744826723877457f7a7ac7f31d68a5a060673b3a883f6a8e325bf48f313d";
     };

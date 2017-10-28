@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     name = "${name}-1.0.x86_64.rpm";
     sha256 = "0s2jj2xn56v5ys6hxb7l7045hw9c1mm1lhj4p2fvqbs02kqchab6";
 
-    url = "http://www.oracle.com/technetwork/"
+    url = "https://www.oracle.com/technetwork/"
         + "products/express-edition/downloads/";
   };
 
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Oracle Database Express Edition";
-    homepage = http://www.oracle.com/technetwork/products/express-edition/;
+    homepage = https://www.oracle.com/technetwork/products/express-edition/;
     license = licenses.unfree;
   };
 }

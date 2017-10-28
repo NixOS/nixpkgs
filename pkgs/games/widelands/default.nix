@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "RTS with multiple-goods economy";
-    homepage    = "http://widelands.org/";
+    homepage    = "https://widelands.org/";
     longDescription = ''
       Widelands is a real time strategy game based on "The Settlers" and "The
       Settlers II". It has a single player campaign mode, as well as a networked

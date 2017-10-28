@@ -1,6 +1,6 @@
 Description: Fix compilation against libav10 
 Author: Reinhard Tartler <siretart@tauware.de>
-Bug-Debian: http://bugs.debian.org/739439
+Bug-Debian: https://bugs.debian.org/739439
 
 --- a/plugins/video/H.263-1998/h263-1998.cxx
 +++ b/plugins/video/H.263-1998/h263-1998.cxx

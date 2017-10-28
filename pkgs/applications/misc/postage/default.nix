@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
       the style of NGINX and Node.js. This heart makes Postage as fast as any
       PostgreSQL interface can hope to be.
     '';
-    homepage = http://www.workflowproducts.com/postage.html;
+    homepage = https://www.workflowproducts.com/postage.html;
     license = licenses.asl20;
     maintainers = [ maintainers.basvandijk ];
   };
