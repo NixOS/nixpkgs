@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     install -Dm755 build/EmojiOneColor-SVGinOT.ttf $out/share/fonts/truetype/EmojiOneColor-SVGinOT.ttf
+    install -Dm755 linux/fontconfig/56-emojione-color.conf $out/etc/fonts/conf.d/56-emojione-color.conf
   '';
 
   meta = with stdenv.lib; {

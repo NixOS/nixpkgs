@@ -2,6 +2,7 @@
   ./config/debug-info.nix
   ./config/fonts/corefonts.nix
   ./config/fonts/fontconfig.nix
+  ./config/fonts/fontconfig-emojione.nix
   ./config/fonts/fontconfig-penultimate.nix
   ./config/fonts/fontconfig-ultimate.nix
   ./config/fonts/fontdir.nix
