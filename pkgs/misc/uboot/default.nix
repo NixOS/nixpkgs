@@ -4,13 +4,14 @@
 
 let
   buildUBoot = { targetPlatforms
-            , filesToInstall
-            , installDir ? "$out"
-            , defconfig
+               , filesToInstall
+               , installDir ? "$out"
+               , defconfig
             , extraMakeFlags ? []
-            , extraMeta ? {}
-            , ... } @ args:
-           stdenv.mkDerivation (rec {
+               , extraMeta ? {}
+               , otherConfig ? ""
+               , ... } @ args:
+            stdenv.mkDerivation (rec {
 
     name = "uboot-${defconfig}-${version}";
     version = "2017.09";
@@ -50,7 +51,10 @@ let
     makeFlags = [ "DTC=dtc" ] ++ extraMakeFlags;
 
     configurePhase = ''
-      make ${defconfig}
+      make $makeFlags ${defconfig}
+      # Apply otherConfig
+      echo "${otherConfig}" >> .config
+      make $makeFlags oldconfig
     '';
 
     installPhase = ''
@@ -88,6 +92,16 @@ in rec {
 
   ubootTools = buildUBoot rec {
     defconfig = "allnoconfig";
+    # This is necessary otherwise the build fails with undefined symbols at link-time.
+    # This is likely a bug in u-boot.
+    otherConfig = ''
+      CONFIG_FIT=y
+      CONFIG_FIT_SIGNATURE=y
+      CONFIG_FIT_ENABLE_SHA256_SUPPORT=y
+      CONFIG_FIT_VERBOSE=y
+      CONFIG_FIT_BEST_MATCH=y
+      CONFIG_SPL_RSA=y
+    '';
     installDir = "$out/bin";
     buildFlags = "tools NO_SDL=1";
     dontStrip = false;
