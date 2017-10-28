@@ -12702,6 +12702,8 @@ in {
 
   nbformat = callPackage ../development/python-modules/nbformat { };
 
+  nbmerge = callPackage ../development/python-modules/nbmerge { };
+
   nbxmpp = buildPythonPackage rec {
     name = "nbxmpp-${version}";
     version = "0.5.5";
