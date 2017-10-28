@@ -20169,36 +20169,6 @@ in {
     };
   };
 
-  taskcoach = buildPythonPackage rec {
-    name = "TaskCoach-1.3.22";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://sourceforge/taskcoach/${name}.tar.gz";
-      sha256 = "1ddx56bqmh347synhgjq625ijv5hqflr0apxg0nl4jqdsqk1zmxh";
-    };
-
-    propagatedBuildInputs = with self; [ wxPython ];
-
-    # I don't know why I need to add these libraries. Shouldn't they
-    # be part of wxPython?
-    postInstall = ''
-      libspaths=${with pkgs.xorg; pkgs.lib.makeLibraryPath [ libSM libXScrnSaver ]}
-      wrapProgram $out/bin/taskcoach.py \
-        --prefix LD_LIBRARY_PATH : $libspaths
-    '';
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    meta = {
-      homepage = http://taskcoach.org/;
-      description = "Todo manager to keep track of personal tasks and todo lists";
-      license = licenses.gpl3Plus;
-      broken = stdenv.isDarwin;
-    };
-  };
-
   taskw = buildPythonPackage rec {
     version = "1.0.3";
     name = "taskw-${version}";
