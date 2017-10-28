@@ -17006,29 +17006,6 @@ in {
     };
   };
 
-  pymacs = buildPythonPackage rec {
-    version = "0.25";
-    name = "pymacs-${version}";
-    disabled = isPy3k || isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/pinard/Pymacs/tarball/v${version}";
-      name = "${name}.tar.gz";
-      sha256 = "1hmy76c5igm95rqbld7gvk0az24smvc8hplfwx2f5rhn6frj3p2i";
-    };
-
-    configurePhase = "make";
-
-    doCheck = false;
-
-    meta = {
-      description = "Emacs Lisp to Python interface";
-      homepage = http://pymacs.progiciels-bpi.ca;
-      license = licenses.gpl2;
-      maintainers = with maintainers; [ goibhniu ];
-    };
-  };
-
   pypcap = callPackage ../development/python-modules/pypcap {};
 
   pyplatec = buildPythonPackage rec {
