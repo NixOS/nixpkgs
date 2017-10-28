@@ -5635,27 +5635,6 @@ in {
 
   google-compute-engine = callPackage ../tools/virtualization/google-compute-engine { };
 
-  googlecl = buildPythonPackage rec {
-    version = "0.9.14";
-    name    = "googlecl-${version}";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url    = "https://googlecl.googlecode.com/files/${name}.tar.gz";
-      sha256 = "0nnf7xkr780wivr5xnchfcrahlzy9bi2dxcs1w1bh1014jql0iha";
-    };
-
-    meta = {
-      description = "Brings Google services to the command line";
-      homepage    = https://code.google.com/p/googlecl/;
-      license     = licenses.asl20;
-      maintainers = with maintainers; [ lovek323 ];
-      platforms   = platforms.unix;
-    };
-
-    propagatedBuildInputs = with self; [ gdata ];
-  };
-
   gplaycli = buildPythonPackage rec {
     version = "0.1.2";
     name = "gplaycli-${version}";
