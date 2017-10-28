@@ -140,6 +140,11 @@
     the GRUB boot loader is to be installed.  Without it, NixOS cannot
     boot.</para>
 
+    <para>If there are other operating systems running on the machine before
+    installing NixOS, the
+    <option>boot.loader.grub.useOSProber</option> option can be set to
+    <literal>true</literal> to automatically add them to the grub menu.</para>
+
     <para>Another critical option is <option>fileSystems</option>,
     specifying the file systems that need to be mounted by NixOS.
     However, you typically don’t need to set it yourself, because
