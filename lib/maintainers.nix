@@ -268,6 +268,7 @@
   htr = "Hugo Tavares Reis <hugo@linux.com>";
   iand675 = "Ian Duncan <ian@iankduncan.com>";
   ianwookim = "Ian-Woo Kim <ianwookim@gmail.com>";
+  iblech = "Ingo Blechschmidt <iblech@speicherleck.de>";
   igsha = "Igor Sharonov <igor.sharonov@gmail.com>";
   ikervagyok = "Balázs Lengyel <ikervagyok@gmail.com>";
   infinisil = "Silvan Mosberger <infinisil@icloud.com>";

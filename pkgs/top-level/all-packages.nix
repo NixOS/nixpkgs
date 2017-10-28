@@ -4486,6 +4486,8 @@ with pkgs;
 
   sshfs-fuse = callPackage ../tools/filesystems/sshfs-fuse { };
 
+  sshlatex = callPackage ../tools/typesetting/sshlatex { };
+
   sshuttle = callPackage ../tools/security/sshuttle { };
 
   ssldump = callPackage ../tools/networking/ssldump { };
