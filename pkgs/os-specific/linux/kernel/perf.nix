@@ -49,6 +49,10 @@ stdenv.mkDerivation {
       "-Wno-error=unused-const-variable" "-Wno-error=misleading-indentation"
     ];
 
+  makeFlags = if hostPlatform == buildPlatform
+    then null
+    else "CROSS_COMPILE=${stdenv.cc.prefix}";
+
   separateDebugInfo = true;
   installFlags = "install install-man ASCIIDOC8=1";
 
