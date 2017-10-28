@@ -18225,22 +18225,6 @@ in {
     };
   };
 
-  rtslib_fb = buildPythonPackage rec {
-    version = "2.1.fb43";
-    name = "rtslib-fb-${version}";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/agrover/rtslib-fb/archive/v${version}.tar.gz";
-      sha256 = "1b59vyy12g6rix9l2fxx0hjiq33shkb79v57gwffs57vh74wc53v";
-    };
-
-    meta = {
-      description = "A Python object API for managing the Linux LIO kernel target";
-      homepage = "https://github.com/agrover/rtslib-fb";
-      platforms = platforms.linux;
-    };
-  };
-
   s3transfer = buildPythonPackage rec {
     version = "0.1.10";
     name = "s3transfer-${version}";
