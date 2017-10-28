@@ -57,6 +57,7 @@ let
     glew110
     openssl
     libidn
+    libtbb
 
     # Other things from runtime
     xlibs.libXinerama
