@@ -3458,6 +3458,8 @@ with pkgs;
 
   nasty = callPackage ../tools/security/nasty { };
 
+  nat-traverse = callPackage ../tools/networking/nat-traverse { };
+
   nawk = callPackage ../tools/text/nawk { };
 
   nbd = callPackage ../tools/networking/nbd { };
