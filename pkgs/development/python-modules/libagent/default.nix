@@ -1,5 +1,5 @@
 { stdenv, fetchPypi, buildPythonPackage, ed25519, ecdsa
-, semver, keepkey, trezor, mnemonic, ledgerblue
+, semver, keepkey, trezor, mnemonic, ledgerblue, unidecode
 }:
 
 buildPythonPackage rec {
@@ -15,6 +15,10 @@ buildPythonPackage rec {
   buildInputs = [
     ed25519 ecdsa semver keepkey
     trezor mnemonic ledgerblue
+  ];
+
+  propagatedBuildInputs = [
+    unidecode
   ];
 
   meta = with stdenv.lib; {
