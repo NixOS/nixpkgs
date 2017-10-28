@@ -30,6 +30,10 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = optional stdenv.isDarwin AGL;
 
+  patches = [
+   ./patches/fix_assertion_using_hide_in_destroy.diff
+  ];
+
   configureFlags =
     [ "--enable-gtk2" "--disable-precomp-headers" "--enable-mediactrl"
       (if compat24 then "--enable-compat24" else "--disable-compat24")
@@ -65,7 +69,7 @@ stdenv.mkDerivation {
   };
 
   enableParallelBuilding = true;
-  
+
   meta = {
     platforms = with platforms; darwin ++ linux;
     license = licenses.wxWindows;

@@ -22,6 +22,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
+  patches = [
+   ./patches/fix_assertion_using_hide_in_destroy.diff
+  ];
+
   hardeningDisable = [ "format" ];
 
   configureFlags = [

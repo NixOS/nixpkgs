@@ -37,9 +37,11 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = optional stdenv.isDarwin AGL;
 
-  patches =
+  patches = [
+    ./patches/fix_assertion_using_hide_in_destroy.diff
+  ]
     # "Add support for WebKit2GTK+ in wxWebView". Will be in 3.0.4
-    optional (!withGtk2) (fetchpatch {
+    ++ optional (!withGtk2) (fetchpatch {
       url = "https://github.com/wxWidgets/wxWidgets/commit/ec6e54bc893fb7516731ca9c71e0d0bbc5ae9ff7.patch";
       sha256 = "0gxd83xajm7gdv9rdzyvqwa2p5nz29nr23i0zx2dgfpsvz2qjp3q";
     });
@@ -81,7 +83,7 @@ stdenv.mkDerivation {
   };
 
   enableParallelBuilding = true;
-  
+
   meta = {
     platforms = with platforms; darwin ++ linux;
     license = licenses.wxWindows;
