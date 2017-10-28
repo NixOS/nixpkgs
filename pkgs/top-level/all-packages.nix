@@ -17638,7 +17638,6 @@ with pkgs;
   digikam = libsForQt5.callPackage ../applications/graphics/digikam {
     inherit (plasma5) oxygen;
     inherit (kdeApplications) kcalcore;
-    boost = boost160;
   };
 
   displaycal = (newScope pythonPackages) ../applications/graphics/displaycal {};
