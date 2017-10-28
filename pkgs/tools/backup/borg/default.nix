@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3Packages, acl, lz4, openssl }:
+{ stdenv, fetchurl, python3Packages, acl, lz4, openssl, openssh }:
 
 python3Packages.buildPythonApplication rec {
   name = "borgbackup-${version}";
@@ -26,6 +26,10 @@ python3Packages.buildPythonApplication rec {
     export BORG_OPENSSL_PREFIX="${openssl.dev}"
     export BORG_LZ4_PREFIX="${lz4.dev}"
   '';
+
+  makeWrapperArgs = [
+    ''--prefix PATH ':' "${openssh}/bin"''
+  ];
 
   postInstall = ''
     make -C docs singlehtml
