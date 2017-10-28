@@ -16385,7 +16385,9 @@ with pkgs;
 
   udevil = callPackage ../applications/misc/udevil {};
 
-  udiskie = callPackage ../applications/misc/udiskie { };
+  udiskie = callPackage ../applications/misc/udiskie {
+    pythonPackages = python3Packages;
+  };
 
   sakura = callPackage ../applications/misc/sakura {
     vte = gnome3.vte;
