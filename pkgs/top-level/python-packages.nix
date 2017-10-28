@@ -20355,29 +20355,6 @@ in {
     };
   };
 
-  trac = buildPythonPackage {
-    name = "trac-1.0.1";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = http://ftp.edgewall.com/pub/trac/Trac-1.0.1.tar.gz;
-      sha256 = "1nqa95fcnkpyq4jk6az7l7sqgm3b3pjq3bx1n7y4v3bad5jr1m4x";
-    };
-
-    # couple of failing tests
-    doCheck = false;
-
-    PYTHON_EGG_CACHE = "`pwd`/.egg-cache";
-
-    propagatedBuildInputs = with self; [ genshi ];
-
-    meta = {
-      description = "Enhanced wiki and issue tracking system for software development projects";
-
-      license = "BSD";
-    };
-  };
-
   traits = buildPythonPackage rec {
     name = "traits-${version}";
     version = "4.5.0";
