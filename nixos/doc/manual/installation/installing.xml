@@ -16,7 +16,8 @@
   hardware.</para></listitem>
 
   <listitem><para>The NixOS manual is available on virtual console 8
-  (press Alt+F8 to access).</para></listitem>
+  (press Alt+F8 to access) or by running <command>nixos-help</command>.
+  </para></listitem>
 
   <listitem><para>You get logged in as <literal>root</literal>
   (with empty password).</para></listitem>
