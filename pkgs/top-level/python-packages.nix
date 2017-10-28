@@ -2981,30 +2981,6 @@ in {
   });
 
 
-  configshell_fb = buildPythonPackage rec {
-    version = "1.1.fb10";
-    name = "configshell-fb-${version}";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/agrover/configshell-fb/archive/v${version}.tar.gz";
-      sha256 = "1dd87xvm98nk3jzybb041gjdahi2z9b53pwqhyxcfj4a91y82ndy";
-    };
-
-    propagatedBuildInputs = with self; [
-      pyparsing
-      urwid
-    ];
-
-    # Fails on python 3 due to a None value where a string is expected
-    doCheck = !isPy3k;
-
-    meta = {
-      description = "A Python library for building configuration shells";
-      homepage = "https://github.com/agrover/configshell-fb";
-      platforms = platforms.linux;
-    };
-  };
-
   confluent-kafka = callPackage ../development/python-modules/confluent-kafka {};
 
   construct = callPackage ../development/python-modules/construct {};
