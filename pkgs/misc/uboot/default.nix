@@ -13,11 +13,11 @@ let
            stdenv.mkDerivation (rec {
 
     name = "uboot-${defconfig}-${version}";
-    version = "2017.03";
+    version = "2017.09";
 
     src = fetchurl {
       url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${version}.tar.bz2";
-      sha256 = "0gqihplap05dlpwdb971wsqyv01nz2vabwq5g5649gr5jczsyjzm";
+      sha256 = "0i4p12ar0zgyxs8hiqgp6p6shvbw4ikkvryd4mh70bppyln5zldj";
     };
 
     patches = [
