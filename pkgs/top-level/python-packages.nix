@@ -4617,30 +4617,6 @@ in {
     };
   };
 
-  deform_bootstrap = buildPythonPackage rec {
-    name = "deform_bootstrap-0.2.9";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/deform_bootstrap/${name}.tar.gz";
-      sha256 = "1hgq3vqsfqdmlyahnlc40w13viawhpzqf4jzigsggdb41x545fda";
-    };
-
-    buildInputs = [ self.mock ];
-    propagatedBuildInputs = with self; [ deform pyramid ];
-
-    # demo is removed as it depends on deformdemo
-    patchPhase = ''
-      rm -rf deform_bootstrap/demo
-    '';
-
-    meta = {
-      maintainers = with maintainers; [ domenkozar ];
-      platforms = platforms.all;
-    };
-  };
-
-  demjson = callPackage ../development/python-modules/demjson { };
-
   derpconf = self.buildPythonPackage rec {
     name = "derpconf-0.4.9";
 
