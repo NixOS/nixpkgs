@@ -40,6 +40,6 @@ in
     version = "7.0";
     cudatoolkit = cudatoolkit9;
     srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v7.tgz";
-    sha256 = "1ld5x819vya6p2ppmr7i3lz9ac2y81kssgbzgd0lsign7r2qjapc";
+    sha256 = "1ycy413cq9y9yxj20djqv05aarn3qzcy2md3dvvjpvhc269kwn09";
   };
 }
