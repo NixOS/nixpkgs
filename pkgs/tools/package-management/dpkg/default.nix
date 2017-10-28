@@ -35,18 +35,18 @@ stdenv.mkDerivation rec {
     patchShebangs .
 
     # Dpkg commands sometimes calls out to shell commands
-    substituteInPlace lib/dpkg/dpkg.h --replace '"dpkg-deb"' \"$out/bin/dpkg-deb\"
-    substituteInPlace lib/dpkg/dpkg.h --replace '"dpkg-split"' \"$out/bin/dpkg-split\"
-    substituteInPlace lib/dpkg/dpkg.h --replace '"dpkg-query"' \"$out/bin/dpkg-query\"
-    substituteInPlace lib/dpkg/dpkg.h --replace '"dpkg-divert"' \"$out/bin/dpkg-divert\"
-    substituteInPlace lib/dpkg/dpkg.h --replace '"dpkg-statoverride"' \"$out/bin/dpkg-statoverride\"
-    substituteInPlace lib/dpkg/dpkg.h --replace '"dpkg-trigger"' \"$out/bin/dpkg-trigger\"
-    substituteInPlace lib/dpkg/dpkg.h --replace '"dpkg"' \"$out/bin/dpkg\"
-    substituteInPlace lib/dpkg/dpkg.h --replace '"debsig-verify"' \"$out/bin/debsig-verify\"
-
-    substituteInPlace lib/dpkg/dpkg.h --replace '"rm"' \"${coreutils}/bin/rm\"
-    substituteInPlace lib/dpkg/dpkg.h --replace '"cat"' \"${coreutils}/bin/cat\"
-    substituteInPlace lib/dpkg/dpkg.h --replace '"diff"' \"${coreutils}/bin/diff\"
+    substituteInPlace lib/dpkg/dpkg.h \
+       --replace '"dpkg-deb"' \"$out/bin/dpkg-deb\" \
+       --replace '"dpkg-split"' \"$out/bin/dpkg-split\" \
+       --replace '"dpkg-query"' \"$out/bin/dpkg-query\" \
+       --replace '"dpkg-divert"' \"$out/bin/dpkg-divert\" \
+       --replace '"dpkg-statoverride"' \"$out/bin/dpkg-statoverride\" \
+       --replace '"dpkg-trigger"' \"$out/bin/dpkg-trigger\" \
+       --replace '"dpkg"' \"$out/bin/dpkg\" \
+       --replace '"debsig-verify"' \"$out/bin/debsig-verify\" \
+       --replace '"rm"' \"${coreutils}/bin/rm\" \
+       --replace '"cat"' \"${coreutils}/bin/cat\" \
+       --replace '"diff"' \"${coreutils}/bin/diff\"
   '';
 
   buildInputs = [ perl zlib bzip2 xz ];
