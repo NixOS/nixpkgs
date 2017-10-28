@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ viric ];
     platforms = platforms.linux;
-    hydraPlatforms = [];
+    broken = true;
   };
 }
