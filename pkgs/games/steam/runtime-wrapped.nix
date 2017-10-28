@@ -26,7 +26,7 @@ let
     xlibs.libICE
     gnome2.GConf
     freetype
-    curl
+    (curl.override { gnutlsSupport = true; sslSupport = false; })
     nspr
     nss
     fontconfig
