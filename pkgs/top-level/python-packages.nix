@@ -26190,31 +26190,7 @@ EOF
 
   zeroconf = callPackage ../development/python-modules/zeroconf { };
 
-  zipfile36 = buildPythonPackage rec {
-    pname = "zipfile36";
-    version = "0.1.3";
-    name = "${pname}-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-      sha256 = "a78a8dddf4fa114f7fe73df76ffcce7538e23433b7a6a96c1c904023f122aead";
-    };
-
-    checkPhase = ''
-      ${python.interpreter} -m unittest test_zipfile.py
-    '';
-
-    # Only works with Python 3.x.
-    # Not supposed to be used with 3.6 and up.
-    disabled = !(isPy3k && (pythonOlder "3.6"));
-
-    meta = {
-      description = "Read and write ZIP files - backport of the zipfile module from Python 3.6";
-      homepage = https://gitlab.com/takluyver/zipfile36;
-      license = licenses.psfl;
-      maintainer = maintainers.fridh;
-    };
-  };
+  zipfile36 = callPackage ../development/python-modules/zipfile36 { };
 
   todoist = callPackage ../development/python-modules/todoist { };
 
