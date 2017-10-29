@@ -4523,29 +4523,7 @@ in {
     };
   };
 
-  datashape = buildPythonPackage rec {
-    name = "datashape-${version}";
-    version = "0.5.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/D/DataShape/${name}.tar.gz";
-      sha256 = "2356ea690c3cf003c1468a243a9063144235de45b080b3652de4f3d44e57d783";
-    };
-
-    buildInputs = with self; [ pytest mock ];
-    propagatedBuildInputs = with self; [ numpy multipledispatch dateutil ];
-
-    checkPhase = ''
-      py.test datashape/tests
-    '';
-
-    meta = {
-      homepage = https://github.com/ContinuumIO/datashape;
-      description = "A data description language";
-      license = licenses.bsd2;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  datashape = callPackage ../development/python-modules/datashape { };
 
   requests-cache = buildPythonPackage (rec {
     name = "requests-cache-${version}";
