@@ -892,6 +892,8 @@ with pkgs;
 
   colord-kde = libsForQt5.callPackage ../tools/misc/colord-kde {};
 
+  colpack = callPackage ../applications/science/math/colpack { };
+
   consul = callPackage ../servers/consul { };
 
   consul-ui = callPackage ../servers/consul/ui.nix { };
