@@ -28,15 +28,6 @@ in stdenv.mkDerivation rec {
       --replace "/bin/umount" "$out/bin/umount"
   '';
 
-  crossAttrs = {
-    # Work around use of `AC_RUN_IFELSE'.
-    preConfigure = "export scanf_cv_type_modifier=ms";
-  };
-
-  preConfigure = lib.optionalString (systemd != null) ''
-    configureFlags+=" --with-systemd --with-systemdsystemunitdir=$bin/lib/systemd/system/"
-  '';
-
   # !!! It would be better to obtain the path to the mount helpers
   # (/sbin/mount.*) through an environment variable, but that's
   # somewhat risky because we have to consider that mount can setuid
@@ -49,7 +40,12 @@ in stdenv.mkDerivation rec {
     "--enable-fs-paths-default=/run/wrappers/bin:/var/run/current-system/sw/bin:/sbin"
     "--disable-makeinstall-setuid" "--disable-makeinstall-chown"
   ]
-    ++ lib.optional (ncurses == null) "--without-ncurses";
+    ++ lib.optional (ncurses == null) "--without-ncurses"
+    ++ lib.optional (systemd != null) "--with-systemd --with-systemdsystemunitdir=$bin/lib/systemd/system/"
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      # Work around use of `AC_RUN_IFELSE'.
+      "scanf_cv_type_modifier=ms"
+    ];
 
   makeFlags = "usrbin_execdir=$(bin)/bin usrsbin_execdir=$(bin)/sbin";
 
