@@ -80,6 +80,7 @@ let
       homepage = https://github.com/pixie-lang/pixie;
       license = stdenv.lib.licenses.lgpl3;
       platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin"];
+      maintainers = with stdenv.lib.maintainers; [ bendlas ];
     };
   };
 in build (builtins.getAttr variant variants)
