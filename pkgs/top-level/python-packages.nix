@@ -18049,27 +18049,7 @@ in {
   # use requests, not requests_2
   requests = callPackage ../development/python-modules/requests { };
 
-  requests_download = buildPythonPackage rec {
-    pname = "requests_download";
-    version = "0.1.1";
-    name = "${pname}-${version}";
-
-    format = "wheel";
-
-    src = pkgs.fetchurl {
-      url = https://files.pythonhosted.org/packages/60/af/10f899f0574a81cbc511124c08d7c7dc46c20d4f956a6a3c793ad4330bb4/requests_download-0.1.1-py2.py3-none-any.whl;
-      sha256 = "07832a93314bcd619aaeb08611ae245728e66672efb930bc2a300a115a47dab7";
-    };
-
-    propagatedBuildInputs = with self; [ requests ];
-
-    meta = {
-      description = "Download files using requests and save them to a target path";
-      homepage = https://www.github.com/takluyver/requests_download;
-      license = licenses.mit;
-      maintainer = maintainers.fridh;
-    };
-  };
+  requests_download = callPackage ../development/python-modules/requests_download { };
 
   requestsexceptions = callPackage ../development/python-modules/requestsexceptions {};
 
@@ -18194,26 +18174,7 @@ in {
 
   rcssmin = callPackage ../development/python-modules/rcssmin { };
 
-  recommonmark = buildPythonPackage rec {
-    name = "recommonmark-${version}";
-    version = "0.4.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/recommonmark/${name}.tar.gz";
-      sha256 = "6e29c723abcf5533842376d87c4589e62923ecb6002a8e059eb608345ddaff9d";
-    };
-
-    buildInputs = with self; [ pytest sphinx ];
-    propagatedBuildInputs = with self; [ CommonMark_54 docutils ];
-
-    meta = {
-      description = "A docutils-compatibility bridge to CommonMark";
-      homepage = https://github.com/rtfd/recommonmark;
-      license = licenses.mit;
-      maintainers = with maintainers; [ fridh ];
-    };
-
-  };
+  recommonmark = callPackage ../development/python-modules/recommonmark { };
 
   redis = callPackage ../development/python-modules/redis { };
 
