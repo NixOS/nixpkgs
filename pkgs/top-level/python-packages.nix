@@ -13453,29 +13453,7 @@ in {
     };
   };
 
-  odo = buildPythonPackage rec {
-    name = "odo-${version}";
-    version= "0.5.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/odo/${name}.tar.gz";
-      sha256 = "1mh5k69d9ph9jd07jl9yqh78rbnh5cjspi1q530v3ml7ivjzz4p8";
-    };
-
-    buildInputs = with self; [ pytest ];
-    propagatedBuildInputs = with self; [ datashape numpy pandas toolz multipledispatch networkx ];
-
-    checkPhase = ''
-      py.test odo/tests
-    '';
-
-    meta = {
-      homepage = https://github.com/ContinuumIO/odo;
-      description = "Data migration utilities";
-      license = licenses.bsdOriginal;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  odo = callPackage ../development/python-modules/odo { };
 
   offtrac = buildPythonPackage rec {
     name = "offtrac-0.1.0";
