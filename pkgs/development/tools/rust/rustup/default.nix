@@ -1,4 +1,4 @@
-{ stdenv, lib, runCommand
+{ stdenv, lib, runCommand, patchelf
 , fetchFromGitHub, rustPlatform
 , pkgconfig, curl, Security }:
 
@@ -24,9 +24,11 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [ "--features no-self-update" ];
 
   patches = lib.optionals stdenv.isLinux [
-    (runCommand "0001-use-hardcoded-dynamic-linker.patch" { CC=stdenv.cc; } ''
+    (runCommand "0001-dynamically-patchelf-binaries.patch" { CC=stdenv.cc; patchelf = patchelf; } ''
        export dynamicLinker=$(cat $CC/nix-support/dynamic-linker)
-       substituteAll ${./0001-use-hardcoded-dynamic-linker.patch} $out
+       substitute ${./0001-dynamically-patchelf-binaries.patch} $out \
+         --subst-var patchelf \
+         --subst-var dynamicLinker
     '')
   ];
 
