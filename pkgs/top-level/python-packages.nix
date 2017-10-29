@@ -17079,19 +17079,21 @@ in {
 
 
   pyodbc = buildPythonPackage rec {
-    name = "pyodbc-3.0.7";
+    pname = "pyodbc";
+    version = "4.0.19";
+    name = "${pname}-${version}";
     disabled = isPyPy;  # use pypypdbc instead
 
-    src = pkgs.fetchurl {
-      url = "https://pyodbc.googlecode.com/files/${name}.zip";
-      sha256 = "0ldkm8xws91j7zbvpqb413hvdz8r66bslr451q3qc0xi8cnmydfq";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "05mkaxbi9n02bpr3l0qnyfb3458f35hk71bq8jmadikp3h8al7dg";
     };
 
     buildInputs = with self; [ pkgs.libiodbc ];
 
     meta = {
       description = "Python ODBC module to connect to almost any database";
-      homepage = https://code.google.com/p/pyodbc/;
+      homepage = "https://github.com/mkleehammer/pyodbc";
       license = licenses.mit;
       platforms = platforms.linux;
       maintainers = with maintainers; [ bjornfor ];
