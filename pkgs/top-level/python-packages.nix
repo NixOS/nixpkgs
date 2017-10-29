@@ -2061,23 +2061,7 @@ in {
     };
   };
 
-
-  bpython = buildPythonPackage rec {
-     name = "bpython-0.12";
-     src = pkgs.fetchurl {
-       url = "http://www.bpython-interpreter.org/releases/bpython-0.12.tar.gz";
-       sha256 = "1ilf58qq7sazmcgg4f1wswbhcn2gb8qbbrpgm6gf0j2lbm60gabl";
-     };
-
-     propagatedBuildInputs = with self; [ pygments ];
-     doCheck = false;
-
-     meta = {
-       description = "UNKNOWN";
-       homepage = "UNKNOWN";
-       maintainers = with maintainers; [ domenkozar ];
-     };
-   };
+  bpython = callPackage ../development/python-modules/bpython {};
 
   bsddb3 = buildPythonPackage rec {
     name = "bsddb3-${version}";
@@ -3323,6 +3307,8 @@ in {
     # No tests included
     doCheck = false;
   };
+
+  curtsies = callPackage ../development/python-modules/curtsies { };
 
   oslo-vmware = buildPythonPackage rec {
     name = "oslo.vmware-${version}";
@@ -12363,6 +12349,8 @@ in {
       maintainers = with maintainers; [ sjourdois ];
     };
   };
+
+  pyte = callPackage ../development/python-modules/pyte { };
 
   graphviz = buildPythonPackage rec {
     name = "graphviz-${version}";
@@ -21587,25 +21575,7 @@ in {
 
   urlgrabber = callPackage ../development/python-modules/urlgrabber {};
 
-  urwid = buildPythonPackage (rec {
-    name = "urwid-1.3.1";
-
-    # multiple:  NameError: name 'evl' is not defined
-    doCheck = false;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/u/urwid/${name}.tar.gz";
-      sha256 = "18cnd1wdjcas08x5qwa5ayw6jsfcn33w4d9f7q3s29fy6qzc1kng";
-    };
-
-    meta = {
-      description = "A full-featured console (xterm et al.) user interface library";
-      homepage = http://excess.org/urwid;
-      repositories.git = git://github.com/wardi/urwid.git;
-      license = licenses.lgpl21;
-      maintainers = with maintainers; [ garbas ];
-    };
-  });
+  urwid = callPackage ../development/python-modules/urwid {};
 
   urwidtrees = buildPythonPackage rec {
     name = "urwidtrees-${rev}";
