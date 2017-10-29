@@ -18693,24 +18693,7 @@ in {
 
   sampledata = callPackage ../development/python-modules/sampledata { };
 
-  scapy = buildPythonPackage rec {
-    name = "scapy-2.2.0";
-
-    disabled = isPy3k || isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "http://www.secdev.org/projects/scapy/files/${name}.tar.gz";
-      sha256 = "1bqmp0xglkndrqgmybpwmzkv462mir8qlkfwsxwbvvzh9li3ndn5";
-    };
-
-    meta = {
-      description = "Powerful interactive network packet manipulation program";
-      homepage = http://www.secdev.org/projects/scapy/;
-      license = licenses.gpl2;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ bjornfor ];
-    };
-  };
+  scapy = callPackage ../development/python-modules/scapy { };
 
   scipy = callPackage ../development/python-modules/scipy { };
 
