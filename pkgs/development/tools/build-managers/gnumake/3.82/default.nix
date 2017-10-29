@@ -50,7 +50,7 @@ stdenv.mkDerivation {
          to build and install the program.
       '';
 
-    homepage = http://www.gnu.org/software/make/;
+    homepage = https://www.gnu.org/software/make/;
 
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ ];

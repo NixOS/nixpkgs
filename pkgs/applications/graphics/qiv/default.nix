@@ -19,7 +19,7 @@ stdenv.mkDerivation (rec {
 
   meta = {
     description = "Quick image viewer";
-    homepage = http://spiegl.de/qiv/;
+    homepage = https://spiegl.de/qiv/;
     inherit version;
     platforms = stdenv.lib.platforms.linux;
   };

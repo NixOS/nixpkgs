@@ -1,5 +1,5 @@
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     lolcat (42.1.0)
       paint (~> 0.8.3)

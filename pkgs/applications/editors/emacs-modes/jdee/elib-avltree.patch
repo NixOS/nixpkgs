@@ -1,5 +1,5 @@
 JDEE refers to the `avltree' module from GNU Elib, but GNU Elib
-no longer exists (see http://www.gnu.org/software/elib/).  This
+no longer exists (see https://www.gnu.org/software/elib/).  This
 patch updates the module names to what's current in Emacs.
 
 --- jde/config/build.el

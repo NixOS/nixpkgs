@@ -494,7 +494,7 @@ in
           libAppleWM applewmproto
         ];
         # Patches can be pulled from the server-*-apple branches of:
-        # http://cgit.freedesktop.org/~jeremyhu/xserver/
+        # https://cgit.freedesktop.org/~jeremyhu/xserver/
         patches = commonPatches ++ [
           ./darwin/0002-sdksyms.sh-Use-CPPFLAGS-not-CFLAGS.patch
           ./darwin/0004-Use-old-miTrapezoids-and-miTriangles-routines.patch
@@ -566,7 +566,7 @@ in
     # the update script only works with released tarballs :-/
     name = "xf86-video-intel-2017-10-19";
     src = args.fetchurl {
-      url = "http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/snapshot/"
+      url = "https://cgit.freedesktop.org/xorg/driver/xf86-video-intel/snapshot/"
           + "4798e18b2b2c8b0a05dc967e6140fd9962bc1a73.tar.gz";
       sha256 = "1zpgbibfpdassswfj68zwhhfpvd2p80rpxw92bis6lv81ssknwby";
     };

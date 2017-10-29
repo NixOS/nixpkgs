@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A Web server and javax.servlet container";
-    homepage = http://www.eclipse.org/jetty/;
+    homepage = https://www.eclipse.org/jetty/;
     platforms = stdenv.lib.platforms.all;
     license = [ stdenv.lib.licenses.asl20 stdenv.lib.licenses.epl10 ];
   };

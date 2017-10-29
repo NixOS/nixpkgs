@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://icculus.org/blackshades/;
+    homepage = https://icculus.org/blackshades/;
     description = "Protect the VIP";
     license = stdenv.lib.licenses.free;
     maintainers = with stdenv.lib.maintainers; [viric];

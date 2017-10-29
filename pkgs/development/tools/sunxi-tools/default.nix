@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Tools for Allwinner A10 devices";
-    homepage = http://linux-sunxi.org/;
+    homepage = https://linux-sunxi.org/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ elitak ];

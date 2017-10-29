@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "prefix=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.routino.org/;
+    homepage = https://www.routino.org/;
     description = "OpenStreetMap Routing Software";
     license = licenses.agpl3;
     maintainter = with maintainers; [ dotlambda ];

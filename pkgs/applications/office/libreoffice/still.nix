@@ -265,7 +265,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Comprehensive, professional-quality productivity suite (Still/stable release)";
-    homepage = http://libreoffice.org/;
+    homepage = https://libreoffice.org/;
     license = licenses.lgpl3;
     maintainers = with maintainers; [ viric raskin ];
     platforms = platforms.linux;

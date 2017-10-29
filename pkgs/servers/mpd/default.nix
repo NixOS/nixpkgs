@@ -128,7 +128,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A flexible, powerful daemon for playing music";
-    homepage    = http://mpd.wikia.com/wiki/Music_Player_Daemon_Wiki;
+    homepage    = https://mpd.wikia.com/wiki/Music_Player_Daemon_Wiki;
     license     = licenses.gpl2;
     maintainers = with maintainers; [ astsmtl fuuzetsu ehmry fpletz ];
     platforms   = platforms.unix;

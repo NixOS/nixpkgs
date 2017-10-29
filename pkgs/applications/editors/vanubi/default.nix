@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://vanubi.github.io/vanubi;
+    homepage = https://vanubi.github.io/vanubi;
     description = "Programming editor for GTK+ inspired by Emacs";
     license = licenses.gpl3;
     platforms = platforms.linux;

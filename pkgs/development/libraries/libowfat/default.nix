@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   makeFlags = "prefix=$(out)";
   
   meta = with stdenv.lib; {
-    homepage = http://www.fefe.de/libowfat/;
+    homepage = https://www.fefe.de/libowfat/;
     license = licenses.gpl2;
     platforms = platforms.linux;
   };

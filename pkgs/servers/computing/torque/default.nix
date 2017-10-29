@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     name = "${name}.tar.gz";
-    url = "http://www.adaptivecomputing.com/index.php?wpfb_dl=2880";
+    url = "https://www.adaptivecomputing.com/index.php?wpfb_dl=2880";
     sha256 = "1qpsk3bla6b6m7m0i1xpr183yj79liy3p34xhnz1grgq0776wg5l";
   };
 
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.adaptivecomputing.com/products/open-source/torque;
+    homepage = https://www.adaptivecomputing.com/products/open-source/torque;
     description = "Resource management system for submitting and controlling jobs on supercomputers, clusters, and grids";
     platforms = platforms.linux;
   };

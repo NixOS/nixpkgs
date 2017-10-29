@@ -1,4 +1,4 @@
-# global distutils configuration, see http://docs.python.org/2/install/index.html#distutils-configuration-files
+# global distutils configuration, see https://docs.python.org/2/install/index.html#distutils-configuration-files
 
 { stdenv, python, writeText, extraCfg ? "", overrideCfg ? "" }:
 

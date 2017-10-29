@@ -24,7 +24,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://caml.inria.fr;
+    homepage = https://caml.inria.fr;
     description = "OCaml mode package for Emacs";
     platforms = stdenv.lib.platforms.unix;
   };

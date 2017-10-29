@@ -44,7 +44,7 @@ stdenv.mkDerivation rec{
       Memorycoin is based on the Bitcoin code, but with some key
       differences.
     '';
-    homepage = http://www.bitcoin.org/;
+    homepage = https://www.bitcoin.org/;
     maintainers = with maintainers; [ AndersonTorres ];
     license = licenses.mit;
     platforms = platforms.unix;

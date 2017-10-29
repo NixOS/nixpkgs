@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Isolated test runner with Docker";
-    homepage    = http://zimbatm.github.io/cide/;
+    homepage    = https://zimbatm.github.io/cide/;
     license     = licenses.mit;
     maintainers = with maintainers; [ zimbatm ];
     platforms   = docker.meta.platforms;

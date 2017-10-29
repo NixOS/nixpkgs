@@ -100,10 +100,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "The TeamSpeak voice communication tool";
-    homepage = http://teamspeak.com/;
+    homepage = https://teamspeak.com/;
     license = {
       fullName = "Teamspeak client license";
-      url = http://sales.teamspeakusa.com/licensing.php;
+      url = https://sales.teamspeakusa.com/licensing.php;
       free = false;
     };
     maintainers = [ stdenv.lib.maintainers.lhvwb ];
@@ -126,7 +126,7 @@ Thank you,
 TeamSpeak Sales Team
 ________________________________
 e-Mail: sales@tritoncia.com
-TeamSpeak: http://www.TeamSpeak.com
+TeamSpeak: https://www.TeamSpeak.com
 Account Login: https://sales.TritonCIA.com/users
 
 

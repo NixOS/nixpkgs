@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
          the wordnet data available to dictd and by extension for lookup with
          the dict command. '';
 
-    homepage = http://wordnet.princeton.edu/;
+    homepage = https://wordnet.princeton.edu/;
 
     maintainers = [ stdenv.lib.maintainers.mornfall ];
     platforms = stdenv.lib.platforms.all;

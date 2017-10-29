@@ -3,7 +3,7 @@
 fetchzip rec {
   name = "kawkab-mono-20151015";
 
-  url = "http://makkuk.com/kawkab-mono/downloads/kawkab-mono-0.1.zip";
+  url = "https://makkuk.com/kawkab-mono/downloads/kawkab-mono-0.1.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts

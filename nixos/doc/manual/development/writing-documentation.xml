@@ -49,7 +49,7 @@
 </para>
 
 <para>
-  <link xlink:href="http://pandoc.org">Pandoc</link> can generate
+  <link xlink:href="https://pandoc.org">Pandoc</link> can generate
   DocBook XML from a multitude of formats, which makes a good starting
   point.
 

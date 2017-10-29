@@ -35,8 +35,8 @@ declare -a packages
 declare -a top_level
 
 if [[ ! -f ${dir}/kde_projects.xml ]]; then
-  if ! curl -o "${dir}/kde_projects.xml" -J http://projects.kde.org/kde_projects.xml; then
-    echo "Could not download http://projects.kde.org/kde_projects.xml to ${dir}/kde_projects.xml" >&2
+  if ! curl -o "${dir}/kde_projects.xml" -J https://projects.kde.org/kde_projects.xml; then
+    echo "Could not download https://projects.kde.org/kde_projects.xml to ${dir}/kde_projects.xml" >&2
     exit 1
   fi
 fi

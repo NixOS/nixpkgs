@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Firefox ID card signing plugin";
-    homepage = http://www.id.ee/;
+    homepage = https://www.id.ee/;
     license = licenses.lgpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.jagajaga ];

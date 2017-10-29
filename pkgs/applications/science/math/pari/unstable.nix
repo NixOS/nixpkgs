@@ -19,13 +19,13 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Computer algebra system for high-performance number theory computations";
-    homepage    = "http://pari.math.u-bordeaux.fr/";
+    homepage    = "https://pari.math.u-bordeaux.fr/";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ ertes raskin ];
     platforms   = platforms.linux;
 
     inherit version;
-    downloadPage = "http://pari.math.u-bordeaux.fr/download.html";
+    downloadPage = "https://pari.math.u-bordeaux.fr/download.html";
     updateWalker = true;
   };
 }

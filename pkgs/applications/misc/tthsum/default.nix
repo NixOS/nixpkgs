@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       both the internal and the leaf nodes.
 
       The specification of the Tiger hash algorithm is at:
-      http://www.cs.technion.ac.il/~biham/Reports/Tiger/
+      https://www.cs.technion.ac.il/~biham/Reports/Tiger/
 
       The specification of the THEX algorithm is at:
       http://adc.sourceforge.net/draft-jchapweske-thex-02.html

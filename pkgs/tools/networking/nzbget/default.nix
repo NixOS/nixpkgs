@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://nzbget.net;
+    homepage = https://nzbget.net;
     license = licenses.gpl2Plus;
     description = "A command line tool for downloading files from news servers";
     maintainers = with maintainers; [ pSub ];

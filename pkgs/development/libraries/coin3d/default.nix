@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     (fetchurl {
-      url = http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/media-libs/coin/files/coin-3.1.3-gcc-4.7.patch;
+      url = https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/media-libs/coin/files/coin-3.1.3-gcc-4.7.patch;
       name = "gcc-4.7.patch";
       sha256 = "076dyc52swk8qc7ylps53fg6iqmd52x8s7m18i80x49dd109yw20";
     })

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   doCheck = hostPlatform == buildPlatform;
 
   meta = {
-    homepage = http://www.gnu.org/software/libsigsegv/;
+    homepage = https://www.gnu.org/software/libsigsegv/;
     description = "Library to handle page faults in user mode";
 
     longDescription = ''

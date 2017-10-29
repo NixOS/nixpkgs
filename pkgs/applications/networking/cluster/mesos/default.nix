@@ -240,7 +240,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage    = "http://mesos.apache.org";
+    homepage    = "https://mesos.apache.org";
     license     = licenses.asl20;
     description = "A cluster manager that provides efficient resource isolation and sharing across distributed applications, or frameworks";
     maintainers = with maintainers; [ cstrahan kevincox offline ];

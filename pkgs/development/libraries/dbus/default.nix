@@ -84,7 +84,7 @@ self = stdenv.mkDerivation {
 
     meta = with stdenv.lib; {
       description = "Simple interprocess messaging system";
-      homepage = http://www.freedesktop.org/wiki/Software/dbus/;
+      homepage = https://www.freedesktop.org/wiki/Software/dbus/;
       license = licenses.gpl2Plus; # most is also under AFL-2.1
       platforms = platforms.unix;
     };

@@ -18,7 +18,7 @@ stdenv.mkDerivation (rec {
 
   meta = with stdenv.lib; {
     description = "Rewrite of qiv (quick image viewer)";
-    homepage = http://www.pberndt.com/Programme/Linux/pqiv;
+    homepage = https://www.pberndt.com/Programme/Linux/pqiv;
     license = licenses.gpl3;
     maintainers = [ maintainers.ndowens ];
     platforms = platforms.linux;

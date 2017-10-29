@@ -34,7 +34,7 @@ stdenv.mkDerivation rec{
 
   meta = with stdenv.lib; {
     description = "Real-time performance monitoring tool";
-    homepage = http://netdata.firehol.org;
+    homepage = https://netdata.firehol.org;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.lethalman ];

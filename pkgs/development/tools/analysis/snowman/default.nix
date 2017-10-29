@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Native code to C/C++ decompiler";
-    homepage = "http://derevenets.com/";
+    homepage = "https://derevenets.com/";
 
     # https://github.com/yegord/snowman/blob/master/doc/licenses.asciidoc
     license = licenses.gpl3Plus;

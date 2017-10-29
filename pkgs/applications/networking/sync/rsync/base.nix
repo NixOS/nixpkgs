@@ -14,7 +14,7 @@ rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://rsync.samba.org/;
+    homepage = https://rsync.samba.org/;
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
   };

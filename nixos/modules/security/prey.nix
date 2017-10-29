@@ -16,7 +16,7 @@ in {
         default = false;
         type = types.bool;
         description = ''
-          Enables the <link xlink:href="http://preyproject.com/" />
+          Enables the <link xlink:href="https://preyproject.com/" />
           shell client. Be sure to specify both API and device keys.
           Once enabled, a <command>cron</command> job will run every 15
           minutes to report status information.

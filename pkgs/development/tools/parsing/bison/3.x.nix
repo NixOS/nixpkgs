@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ m4 ];
 
   meta = {
-    homepage = http://www.gnu.org/software/bison/;
+    homepage = https://www.gnu.org/software/bison/;
     description = "Yacc-compatible parser generator";
     license = stdenv.lib.licenses.gpl3Plus;
 

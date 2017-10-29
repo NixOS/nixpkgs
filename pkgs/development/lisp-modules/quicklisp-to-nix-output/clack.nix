@@ -8,7 +8,7 @@ rec {
   deps = [ args."alexandria" args."bordeaux-threads" args."lack" args."lack-middleware-backtrace" args."lack-util" args."uiop" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clack/2017-06-30/clack-20170630-git.tgz'';
+    url = ''https://beta.quicklisp.org/archive/clack/2017-06-30/clack-20170630-git.tgz'';
     sha256 = ''1z3xrwldfzd4nagk2d0gw5hspnr35r6kh19ksqr3kyf6wpn2lybg'';
   };
 
@@ -19,7 +19,7 @@ rec {
 }
 /* (SYSTEM clack DESCRIPTION Web application environment for Common Lisp SHA256
     1z3xrwldfzd4nagk2d0gw5hspnr35r6kh19ksqr3kyf6wpn2lybg URL
-    http://beta.quicklisp.org/archive/clack/2017-06-30/clack-20170630-git.tgz
+    https://beta.quicklisp.org/archive/clack/2017-06-30/clack-20170630-git.tgz
     MD5 845b25a3cc6f3a1ee1dbd6de73dfb815 NAME clack FILENAME clack DEPS
     ((NAME alexandria FILENAME alexandria)
      (NAME bordeaux-threads FILENAME bordeaux-threads)

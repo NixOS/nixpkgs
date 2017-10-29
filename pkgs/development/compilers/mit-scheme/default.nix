@@ -76,14 +76,14 @@ stdenv.mkDerivation {
          development cycle.
       '';
 
-    homepage = http://www.gnu.org/software/mit-scheme/;
+    homepage = https://www.gnu.org/software/mit-scheme/;
 
     license = licenses.gpl2Plus;
 
     maintainers = [ ];
 
     # Build fails on Cygwin and Darwin:
-    # <http://article.gmane.org/gmane.lisp.scheme.mit-scheme.devel/489>.
+    # <https://article.gmane.org/gmane.lisp.scheme.mit-scheme.devel/489>.
     platforms = platforms.gnu ++ platforms.freebsd;
   };
 }

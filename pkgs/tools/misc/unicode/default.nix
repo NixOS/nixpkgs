@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   ucdtxt = fetchurl {
-    url = http://www.unicode.org/Public/10.0.0/ucd/UnicodeData.txt;
+    url = https://www.unicode.org/Public/10.0.0/ucd/UnicodeData.txt;
     sha256 = "1cfak1j753zcrbgixwgppyxhm4w8vda8vxhqymi7n5ljfi6kwhjj";
   };
 

@@ -1,6 +1,6 @@
 /* This function provides a generic Python package builder.  It is
    intended to work with packages that use `distutils/setuptools'
-   (http://pypi.python.org/pypi/setuptools/), which represents a large
+   (https://pypi.python.org/pypi/setuptools/), which represents a large
    number of Python packages nowadays.  */
 
 { lib

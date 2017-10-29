@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.gitlab.com/;
+    homepage = https://www.gitlab.com/;
     platforms = platforms.unix;
     maintainers = with maintainers; [ fpletz ];
     license = licenses.mit;

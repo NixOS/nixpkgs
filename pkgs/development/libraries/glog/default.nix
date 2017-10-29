@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   meta = with stdenv.lib; {
-    homepage = http://code.google.com/p/google-glog/;
+    homepage = https://code.google.com/p/google-glog/;
     license = licenses.bsd3;
     description = "Library for application-level logging";
     platforms = platforms.unix;

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Online hand recognition system with machine learning";
-    homepage = http://taku910.github.io/zinnia/;
+    homepage = https://taku910.github.io/zinnia/;
     license = licenses.bsd2;
     platforms = platforms.unix;
     maintainers = [ maintainers.gebner ];

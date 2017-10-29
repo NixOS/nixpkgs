@@ -1,11 +1,11 @@
 Fix Gnulib's getcwd in chroots.
-From Debian bug #456164, http://bugs.debian.org/456164 .
+From Debian bug #456164, https://bugs.debian.org/456164 .
 
 --- cvs-1.12.13.orig/debian/patches/20_readdir_errno
 +++ cvs-1.12.13/debian/patches/20_readdir_errno
 @@ -0,0 +1,121 @@
 +# From Gnulib:
-+#   http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff;h=0b78641d85af3b72e3b9d94cb7b94e45f3c08ee5
++#   https://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff;h=0b78641d85af3b72e3b9d94cb7b94e45f3c08ee5
 +# We don't need this directly, but it's required so that 21_getcwd_chroot
 +# applies cleanly.
 +#
@@ -129,7 +129,7 @@ From Debian bug #456164, http://bugs.debian.org/456164 .
 +++ cvs-1.12.13/debian/patches/21_getcwd_chroot
 @@ -0,0 +1,172 @@
 +# From Gnulib:
-+#  http://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff;h=79c0a43808d9ca85acd04600149fc1a9b75bd1b9
++#  https://git.savannah.gnu.org/gitweb/?p=gnulib.git;a=commitdiff;h=79c0a43808d9ca85acd04600149fc1a9b75bd1b9
 +#
 +# 2006-07-03  Paul Eggert  <eggert@cs.ucla.edu>
 +#
@@ -141,7 +141,7 @@ From Debian bug #456164, http://bugs.debian.org/456164 .
 +# 	don't match the stat.st_ino values for the same names.
 +# 	* getcwd.c (__getcwd): When no d_ino value matches the target inode
 +# 	number, iterate through all entries again, using lstat instead.
-+# 	Reported by Kenshi Muto in http://bugs.debian.org/355810, and by
++# 	Reported by Kenshi Muto in https://bugs.debian.org/355810, and by
 +# 	Zouhir Hafidi in https://bugzilla.redhat.com/bugzilla/190656.
 +#
 +# 	* getcwd.c (__getcwd): Clarify a comment.

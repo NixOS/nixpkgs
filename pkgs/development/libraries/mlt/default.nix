@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Mostly taken from:
-  # http://www.kdenlive.org/user-manual/downloading-and-installing-kdenlive/installing-source/installing-mlt-rendering-engine
+  # https://www.kdenlive.org/user-manual/downloading-and-installing-kdenlive/installing-source/installing-mlt-rendering-engine
   configureFlags = [
     "--avformat-swscale" "--enable-gpl" "--enable-gpl" "--enable-gpl3"
     "--enable-opengl"

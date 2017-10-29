@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Python wrapper to libcangjie";
-    homepage = http://cangjians.github.io/projects/pycangjie/;
+    homepage = https://cangjians.github.io/projects/pycangjie/;
     license = licenses.lgpl3Plus;
     maintainers = [ maintainers.linquize ];
     platforms = platforms.all;

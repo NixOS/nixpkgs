@@ -1,7 +1,7 @@
 # Define the list of system with their properties.
 #
 # See https://clang.llvm.org/docs/CrossCompilation.html and
-# http://llvm.org/docs/doxygen/html/Triple_8cpp_source.html especially
+# https://llvm.org/docs/doxygen/html/Triple_8cpp_source.html especially
 # Triple::normalize. Parsing should essentially act as a more conservative
 # version of that last function.
 { lib }:

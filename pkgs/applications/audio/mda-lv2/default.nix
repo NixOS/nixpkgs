@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   installPhase = "python waf install";
 
   meta = with stdenv.lib; {
-    homepage = http://drobilla.net/software/mda-lv2/;
+    homepage = https://drobilla.net/software/mda-lv2/;
     description = "An LV2 port of the MDA plugins by Paul Kellett";
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.goibhniu ];

@@ -670,7 +670,7 @@ src = fetchFromGitHub {
 patches = [
   (fetchpatch {
     name = "fix-check-for-using-shared-freetype-lib.patch";
-    url = "http://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=8f5d285";
+    url = "https://git.ghostscript.com/?p=ghostpdl.git;a=patch;h=8f5d285";
     sha256 = "1f0k043rng7f0rfl9hhb89qzvvksqmkrikmm38p61yfx51l325xr";
   })
 ];

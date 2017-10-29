@@ -3,7 +3,7 @@ From: =?UTF-8?q?Bj=C3=B8rn=20Forsman?= <bjorn.forsman@gmail.com>
 Date: Tue, 6 Jan 2015 20:39:41 +0100
 Subject: [PATCH] vimdot: lookup 'vim' in $PATH
 
-Instead of hardcoding /usr/bin/vim. Needed for NixOS (http://nixos.org), and is
+Instead of hardcoding /usr/bin/vim. Needed for NixOS (https://nixos.org), and is
 probably useful for others too.
 ---
  plugin/xlib/vimdot.sh | 4 ++--

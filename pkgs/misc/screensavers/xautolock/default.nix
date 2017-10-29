@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [xlibsWrapper imake libXScrnSaver scrnsaverproto];
   meta = with stdenv.lib; {
     description = "A program that launches a given program when your X session has been idle for a given time.";
-    homepage = http://www.ibiblio.org/pub/linux/X11/screensavers;
+    homepage = https://www.ibiblio.org/pub/linux/X11/screensavers;
     maintainers = with maintainers; [ garbas ];
     platforms = platforms.linux;
     license = licenses.gpl2;

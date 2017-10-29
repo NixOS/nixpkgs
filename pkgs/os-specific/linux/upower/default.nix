@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   installFlags = "historydir=$(TMPDIR)/foo";
 
   meta = {
-    homepage = http://upower.freedesktop.org/;
+    homepage = https://upower.freedesktop.org/;
     description = "A D-Bus service for power management";
     platforms = stdenv.lib.platforms.linux;
   };

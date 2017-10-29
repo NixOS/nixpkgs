@@ -180,7 +180,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "WebM VP8/VP9 codec SDK";
-    homepage    = http://www.webmproject.org/;
+    homepage    = https://www.webmproject.org/;
     license     = licenses.bsd3;
     maintainers = with maintainers; [ codyopel ];
     platforms   = platforms.all;

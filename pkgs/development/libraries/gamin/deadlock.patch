@@ -17,7 +17,7 @@ is an internal server header).
 
 This should fix the intermittent deadlocks I've been experiencing
 causing KDE applications to no longer start, and probably also
-http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=542361
+https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=542361
 ---
  server/inotify-helper.c |    7 ++-----
  server/inotify-helper.h |    1 -

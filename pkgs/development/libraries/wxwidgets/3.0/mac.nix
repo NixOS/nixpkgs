@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       })
 
       # Various fixes related to Yosemite. Revisit in next stable release.
-      # Please keep an eye on http://trac.wxwidgets.org/ticket/16329 as well
+      # Please keep an eye on https://trac.wxwidgets.org/ticket/16329 as well
       # Theoretically the above linked patch should still be needed, but it isn't.
       # Try to find out why.
       (fetchpatch {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       })
 
       # Remove uncenessary <QuickTime/QuickTime.h> includes
-      # http://trac.wxwidgets.org/changeset/f6a2d1caef5c6d412c84aa900cb0d3990b350938/git-wxWidgets
+      # https://trac.wxwidgets.org/changeset/f6a2d1caef5c6d412c84aa900cb0d3990b350938/git-wxWidgets
       (fetchpatch {
         name = "patch-quicktime-removal.diff";
         url = https://raw.githubusercontent.com/Homebrew/formula-patches/bbf4995/wxmac/patch-quicktime-removal.diff;
@@ -43,10 +43,10 @@ stdenv.mkDerivation rec {
       })
 
       # Patch for wxOSXPrintData, custom paper not applied
-      # http://trac.wxwidgets.org/ticket/16959
+      # https://trac.wxwidgets.org/ticket/16959
       (fetchpatch {
         name = "wxPaperCustomPatch.patch";
-        url = http://trac.wxwidgets.org/raw-attachment/ticket/16959/wxPaperCustomPatch.patch;
+        url = https://trac.wxwidgets.org/raw-attachment/ticket/16959/wxPaperCustomPatch.patch;
         sha256 = "0xgscv86f8dhggn9n8bhlq9wlj3ydsicgy9v35sraxyma18cbjvl";
       })
     ];

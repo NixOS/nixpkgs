@@ -50,7 +50,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Git for operating system binaries";
-    homepage    = "http://live.gnome.org/OSTree/";
+    homepage    = "https://live.gnome.org/OSTree/";
     license     = licenses.lgpl2Plus;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ copumpkin ];

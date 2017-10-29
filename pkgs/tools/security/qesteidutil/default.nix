@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   
   meta = with stdenv.lib; {
     description = "UI application for managing smart card PIN/PUK codes and certificates";
-    homepage = http://www.id.ee/;
+    homepage = https://www.id.ee/;
     license = licenses.lgpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.jagajaga ];

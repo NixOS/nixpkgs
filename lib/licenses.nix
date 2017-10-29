@@ -30,13 +30,13 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
 
   amazonsl = {
     fullName = "Amazon Software License";
-    url = http://aws.amazon.com/asl/;
+    url = https://aws.amazon.com/asl/;
     free = false;
   };
 
   amd = {
     fullName = "AMD License Agreement";
-    url = http://developer.amd.com/amd-license-agreement/;
+    url = https://developer.amd.com/amd-license-agreement/;
   };
 
   apsl20 = spdx {
@@ -176,7 +176,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
 
   eapl = {
     fullName = "EPSON AVASYS PUBLIC LICENSE";
-    url = http://avasys.jp/hp/menu000000700/hpg000000603.htm;
+    url = https://avasys.jp/hp/menu000000700/hpg000000603.htm;
     free = false;
   };
 
@@ -258,7 +258,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
 
   gpl2Oss = {
     fullName = "GNU General Public License version 2 only (with OSI approved licenses linking exception)";
-    url = http://www.mysql.com/about/legal/licensing/foss-exception;
+    url = https://www.mysql.com/about/legal/licensing/foss-exception;
   };
 
   gpl2Plus = spdx {
@@ -384,7 +384,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   };
 
   # spdx.org does not (yet) differentiate between the X11 and Expat versions
-  # for details see http://en.wikipedia.org/wiki/MIT_License#Various_versions
+  # for details see https://en.wikipedia.org/wiki/MIT_License#Various_versions
   mit = spdx {
     spdxId = "MIT";
     fullName = "MIT License";
@@ -453,7 +453,7 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   psfl = spdx {
     spdxId = "Python-2.0";
     fullName = "Python Software Foundation License version 2";
-    #url = http://docs.python.org/license.html;
+    #url = https://docs.python.org/license.html;
   };
 
   publicDomain = {

@@ -41,7 +41,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Qt library for a slippy map with patches from the Subsurface project";
-      homepage = http://subsurface-divelog.org;
+      homepage = https://subsurface-divelog.org;
       license = licenses.lgpl21;
       maintainers = with maintainers; [ mguentner ];
       platforms = platforms.all;

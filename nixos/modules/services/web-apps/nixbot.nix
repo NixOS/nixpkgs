@@ -7,7 +7,7 @@ let
   pyramidIni = ''
     ###
     # app configuration
-    # http://docs.pylonsproject.org/projects/pyramid/en/1.7-branch/narr/environment.html
+    # https://docs.pylonsproject.org/projects/pyramid/en/1.7-branch/narr/environment.html
     ###
 
     [app:main]
@@ -43,7 +43,7 @@ let
 
     ###
     # logging configuration
-    # http://docs.pylonsproject.org/projects/pyramid/en/1.7-branch/narr/logging.html
+    # https://docs.pylonsproject.org/projects/pyramid/en/1.7-branch/narr/logging.html
     ###
 
     [loggers]

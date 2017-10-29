@@ -3,7 +3,7 @@
 fetchzip {
   name = "ipafont-003.03";
 
-  url = "http://ipafont.ipa.go.jp/old/ipafont/IPAfont00303.php";
+  url = "https://ipafont.ipa.go.jp/old/ipafont/IPAfont00303.php";
 
   postFetch = ''
     mkdir -p $out/share/fonts

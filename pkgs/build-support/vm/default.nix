@@ -734,7 +734,7 @@ rec {
         esac
       done
 
-      # Work around this bug: http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=452279
+      # Work around this bug: https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=452279
       sed -i ./Packages -e s/x86_64-linux-gnu/x86-64-linux-gnu/g
 
       perl -w ${deb/deb-closure.pl} \
@@ -823,7 +823,7 @@ rec {
         url = mirror://fedora/linux/releases/8/Everything/i386/os/repodata/primary.xml.gz;
         sha256 = "0kwf0jcp63pygpvgvwl4w58pph24xbcy6db6fnq2f3ly5myhz53n";
       };
-      urlPrefix = http://archives.fedoraproject.org/pub/archive/fedora/linux/releases/8/Everything/i386/os;
+      urlPrefix = https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/8/Everything/i386/os;
       packages = commonFedoraPackages;
     };
 
@@ -834,7 +834,7 @@ rec {
         url = mirror://fedora/linux/releases/8/Everything/x86_64/os/repodata/primary.xml.gz;
         sha256 = "11bfmpy3nz82zzmj5lfravvzlw514v4718adi4b06ps9zv3zpy8r";
       };
-      urlPrefix = http://archives.fedoraproject.org/pub/archive/fedora/linux/releases/8/Everything/x86_64/os;
+      urlPrefix = https://archives.fedoraproject.org/pub/archive/fedora/linux/releases/8/Everything/x86_64/os;
       packages = commonFedoraPackages;
       archs = ["noarch" "x86_64"];
     };

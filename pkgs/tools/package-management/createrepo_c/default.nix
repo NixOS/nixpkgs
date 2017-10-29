@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C implementation of createrepo";
-    homepage    = "http://rpm-software-management.github.io/createrepo_c/";
+    homepage    = "https://rpm-software-management.github.io/createrepo_c/";
     license     = licenses.gpl2;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ copumpkin ];

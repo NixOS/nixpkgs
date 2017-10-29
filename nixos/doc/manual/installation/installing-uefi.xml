@@ -15,7 +15,7 @@ changes:
     <para>You should boot the live CD in UEFI mode (consult your
     specific hardware's documentation for instructions). You may find
     the <link
-    xlink:href="http://www.rodsbooks.com/refind">rEFInd
+    xlink:href="https://www.rodsbooks.com/refind">rEFInd
     boot manager</link> useful.</para>
   </listitem>
   <listitem>

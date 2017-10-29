@@ -31,7 +31,7 @@ let
 
   twisted_13 = pythonPackages.buildPythonPackage rec {
     # NOTE: When updating please check if new versions still cause issues
-    # to packages like carbon (http://stackoverflow.com/questions/19894708/cant-start-carbon-12-04-python-error-importerror-cannot-import-name-daem)
+    # to packages like carbon (https://stackoverflow.com/questions/19894708/cant-start-carbon-12-04-python-error-importerror-cannot-import-name-daem)
     disabled = pythonPackages.isPy3k;
 
     name = "Twisted-13.2.0";
@@ -43,13 +43,13 @@ let
     propagatedBuildInputs = with pythonPackages; [ zope_interface ];
 
     # Generate Twisted's plug-in cache.  Twited users must do it as well.  See
-    # http://twistedmatrix.com/documents/current/core/howto/plugin.html#auto3
-    # and http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=477103 for
+    # https://twistedmatrix.com/documents/current/core/howto/plugin.html#auto3
+    # and https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=477103 for
     # details.
     postInstall = "$out/bin/twistd --help > /dev/null";
 
     meta = with stdenv.lib; {
-      homepage = http://twistedmatrix.com/;
+      homepage = https://twistedmatrix.com/;
       description = "Twisted, an event-driven networking engine written in Python";
       longDescription = ''
         Twisted is an event-driven networking engine written in Python

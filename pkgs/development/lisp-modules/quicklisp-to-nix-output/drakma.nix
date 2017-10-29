@@ -8,7 +8,7 @@ rec {
   deps = [ args."chipz" args."chunga" args."cl+ssl" args."cl-base64" args."cl-ppcre" args."flexi-streams" args."puri" args."usocket" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/drakma/2017-06-30/drakma-v2.0.3.tgz'';
+    url = ''https://beta.quicklisp.org/archive/drakma/2017-06-30/drakma-v2.0.3.tgz'';
     sha256 = ''1xbbwd2gg17pq03bblj6imh7lq39z2w3yix6fm25509gyhs76ymd'';
   };
 
@@ -19,7 +19,7 @@ rec {
 }
 /* (SYSTEM drakma DESCRIPTION Full-featured http/https client based on usocket
     SHA256 1xbbwd2gg17pq03bblj6imh7lq39z2w3yix6fm25509gyhs76ymd URL
-    http://beta.quicklisp.org/archive/drakma/2017-06-30/drakma-v2.0.3.tgz MD5
+    https://beta.quicklisp.org/archive/drakma/2017-06-30/drakma-v2.0.3.tgz MD5
     3578c67b445cf982414ff78b2fb8d295 NAME drakma FILENAME drakma DEPS
     ((NAME chipz FILENAME chipz) (NAME chunga FILENAME chunga)
      (NAME cl+ssl FILENAME cl+ssl) (NAME cl-base64 FILENAME cl-base64)

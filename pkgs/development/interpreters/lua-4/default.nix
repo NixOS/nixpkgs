@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "lua-4.0.1";
 
   src = fetchurl {
-    url = http://www.lua.org/ftp/lua-4.0.1.tar.gz;
+    url = https://www.lua.org/ftp/lua-4.0.1.tar.gz;
     sha256 = "0ajd906hasii365xdihv9mdmi3cixq758blx0289x4znkha6wx6z";
   };
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation {
   hardeningDisable = stdenv.lib.optional stdenv.isi686 "stackprotector";
 
   meta = {
-    homepage = http://www.lua.org;
+    homepage = https://www.lua.org;
     description = "Powerful, fast, lightweight, embeddable scripting language";
     longDescription = ''
       Lua combines simple procedural syntax with powerful data

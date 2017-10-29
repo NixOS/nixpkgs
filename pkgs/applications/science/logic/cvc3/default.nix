@@ -24,11 +24,11 @@ stdenv.mkDerivation rec {
       [ raskin ];
     platforms = platforms.linux;
     license = licenses.free;
-    homepage = http://www.cs.nyu.edu/acsys/cvc3/index.html;
+    homepage = https://www.cs.nyu.edu/acsys/cvc3/index.html;
   };
   passthru = {
     updateInfo = {
-      downloadPage = "http://www.cs.nyu.edu/acsys/cvc3/download.html";
+      downloadPage = "https://www.cs.nyu.edu/acsys/cvc3/download.html";
     };
   };
 }

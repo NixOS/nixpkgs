@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   preFixup = "rm $out/share/icons/hicolor/icon-theme.cache ";
 
   meta = {
-    homepage = http://www.xfce.org/projects/;
+    homepage = https://www.xfce.org/projects/;
     description = "A simple calendar application with reminders";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;

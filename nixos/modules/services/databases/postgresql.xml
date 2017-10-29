@@ -11,7 +11,7 @@
 <!-- FIXME: source can be added automatically -->
 <para><emphasis>Source:</emphasis> <filename>modules/services/databases/postgresql.nix</filename></para>
 
-<para><emphasis>Upstream documentation:</emphasis> <link xlink:href="http://www.postgresql.org/docs/"/></para>
+<para><emphasis>Upstream documentation:</emphasis> <link xlink:href="https://www.postgresql.org/docs/"/></para>
 
 <!-- FIXME: more stuff, like maintainer? -->
 

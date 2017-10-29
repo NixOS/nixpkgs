@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       graphics software based on the OpenGL Shading Language (GLSL)
       specification and released under the MIT license.
     '';
-    homepage = http://glm.g-truc.net/;
+    homepage = https://glm.g-truc.net/;
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];

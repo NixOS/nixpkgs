@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A Linux System call fuzz tester";
-    homepage = http://codemonkey.org.uk/projects/trinity/;
+    homepage = https://codemonkey.org.uk/projects/trinity/;
     license = licenses.gpl2;
     maintainers = [ maintainers.dezgeg ];
     platforms = platforms.linux;

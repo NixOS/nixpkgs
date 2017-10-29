@@ -20,6 +20,6 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A Python wrapper for the SQLite embedded relational database engine";
-    homepage = http://code.google.com/p/apsw/;
+    homepage = https://code.google.com/p/apsw/;
   };
 }

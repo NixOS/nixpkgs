@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     (fetchpatch { url = http://sources.debian.net/data/main/p/ptlib/2.10.11~dfsg-2.1/debian/patches/bison-fix;
       sha256 = "0vzv9kyn9s628z8wy2gva380gi1rmhxilwlg5pikl5a0wn8p46nw";
     })
-    (fetchpatch { url = http://sources.debian.net/data/main/p/ptlib/2.10.11~dfsg-2.1/debian/patches/no-sslv3;
+    (fetchpatch { url = https://sources.debian.net/data/main/p/ptlib/2.10.11~dfsg-2.1/debian/patches/no-sslv3;
       sha256 = "172s1dnnrl54p9sf1nl7s475sm78rpw3p8jxi0pdx6izzl8hcdr0";
     })
     (fetchpatch { url = http://sources.debian.net/data/main/p/ptlib/2.10.11~dfsg-2.1/debian/patches/gcc-5_support;

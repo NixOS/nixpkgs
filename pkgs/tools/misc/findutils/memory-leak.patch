@@ -1,4 +1,4 @@
-http://git.savannah.gnu.org/cgit/findutils.git/patch/?id=c1556892a
+https://git.savannah.gnu.org/cgit/findutils.git/patch/?id=c1556892a
 diff --git a/find/fstype.c b/find/fstype.c
 index 535f920..a0ac8bc 100644
 --- a/find/fstype.c

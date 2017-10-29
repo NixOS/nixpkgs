@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple TeX front-end program inspired by TeXShop";
-    homepage = http://www.tug.org/texworks/;
+    homepage = https://www.tug.org/texworks/;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ dotlambda ];
     platforms = with platforms; linux;

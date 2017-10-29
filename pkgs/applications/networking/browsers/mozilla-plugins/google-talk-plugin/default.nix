@@ -49,8 +49,8 @@ stdenv.mkDerivation rec {
   name = "google-talk-plugin-${version}";
 
   # You can get the upstream version and SHA-1 hash from the following URLs:
-  # curl -s http://dl.google.com/linux/talkplugin/deb/dists/stable/main/binary-amd64/Packages | grep -E 'Version|SHA1'
-  # curl -s http://dl.google.com/linux/talkplugin/deb/dists/stable/main/binary-i386/Packages | grep -E 'Version|SHA1'
+  # curl -s https://dl.google.com/linux/talkplugin/deb/dists/stable/main/binary-amd64/Packages | grep -E 'Version|SHA1'
+  # curl -s https://dl.google.com/linux/talkplugin/deb/dists/stable/main/binary-i386/Packages | grep -E 'Version|SHA1'
   version = "5.41.3.0";
 
   src =
@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
   passthru.mozillaPlugin = "/lib/mozilla/plugins";
 
   meta = {
-    homepage = http://www.google.com/chat/video/;
+    homepage = https://www.google.com/chat/video/;
     license = stdenv.lib.licenses.unfree;
     maintainers = [ stdenv.lib.maintainers.eelco ];
   };

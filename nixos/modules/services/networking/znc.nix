@@ -222,7 +222,7 @@ in
 
       zncConf = mkOption {
         default = "";
-        example = "See: http://wiki.znc.in/Configuration";
+        example = "See: https://wiki.znc.in/Configuration";
         type = types.lines;
         description = ''
           Config file as generated with `znc --makeconf` to use for the whole ZNC configuration.

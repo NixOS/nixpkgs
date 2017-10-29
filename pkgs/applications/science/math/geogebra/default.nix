@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   };
 
   srcIcon = fetchurl {
-    url = "http://static.geogebra.org/images/geogebra-logo.svg";
+    url = "https://static.geogebra.org/images/geogebra-logo.svg";
     sha256 = "01sy7ggfvck350hwv0cla9ynrvghvssqm3c59x4q5lwsxjsxdpjm";
   };
 

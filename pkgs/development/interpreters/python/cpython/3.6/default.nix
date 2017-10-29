@@ -165,7 +165,7 @@ in stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://python.org;
+    homepage = https://python.org;
     description = "A high-level dynamically-typed programming language";
     longDescription = ''
       Python is a remarkably powerful dynamic programming language that

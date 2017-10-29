@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   name = "flashtool-0.9.14.0";
 
   src = requireFile {
-    url = "http://dfiles.eu/files/n8c1c3pgc";
+    url = "https://dfiles.eu/files/n8c1c3pgc";
     name = "flashtool-0.9.14.0-linux.tar.7z";
     sha256 = "0mfjdjj7clz2dhkg7lzy1m8hk8ngla7zgcryf51aki1gnpbb2zc1";
   };

@@ -78,7 +78,7 @@ in stdenv.mkDerivation {
     substituteInPlace "Lib/tkinter/tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
   ''
     # Avoid picking up getentropy() from glibc >= 2.25, as that would break
-    # on older kernels.  http://bugs.python.org/issue29157
+    # on older kernels.  https://bugs.python.org/issue29157
     + optionalString stdenv.isLinux ''
         substituteInPlace Python/random.c --replace 'defined(HAVE_GETENTROPY)' '0'
         cat Python/random.c
@@ -172,7 +172,7 @@ in stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://python.org;
+    homepage = https://python.org;
     description = "A high-level dynamically-typed programming language";
     longDescription = ''
       Python is a remarkably powerful dynamic programming language that

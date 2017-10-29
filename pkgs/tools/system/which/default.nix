@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://ftp.gnu.org/gnu/which/;
+    homepage = https://ftp.gnu.org/gnu/which/;
     platforms = platforms.all;
     license = licenses.gpl3;
   };

@@ -5,7 +5,7 @@
 , libpulseaudio, libical, libtool, nss, gobjectIntrospection, gstreamer, makeWrapper
 , accountsservice, gdk_pixbuf, gdm, upower, ibus, networkmanagerapplet }:
 
-# http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/gnome-base/gnome-shell/gnome-shell-3.10.2.1.ebuild?revision=1.3&view=markup
+# https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/gnome-base/gnome-shell/gnome-shell-3.10.2.1.ebuild?revision=1.3&view=markup
 
 let
   pythonEnv = python3Packages.python.withPackages ( ps: with ps; [ pygobject3 ] );

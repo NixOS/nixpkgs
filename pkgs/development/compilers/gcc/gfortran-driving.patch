@@ -1,5 +1,5 @@
 This patch fixes interaction with Libtool.
-See <http://thread.gmane.org/gmane.comp.gcc.patches/258777>, for details.
+See <https://thread.gmane.org/gmane.comp.gcc.patches/258777>, for details.
 
 --- a/gcc/fortran/gfortranspec.c
 +++ b/gcc/fortran/gfortranspec.c

@@ -58,21 +58,21 @@ let
   termkey_tgz    = "libtermkey-0.17.tar.gz";
   bombay_zip     = "bombay.zip";
 
-  scinterm_url   = "http://foicica.com/scinterm/download/" + scinterm_zip;
+  scinterm_url   = "https://foicica.com/scinterm/download/" + scinterm_zip;
   tre_url        = "https://github.com/laurikari/tre/archive/" + tre_zip;
-  #scintillua_url = "http://foicica.com/scintillua/download/" + scintillua_zip;
-  scintillua_url = "http://foicica.com/hg/scintillua/archive/" + scintillua_zip;
-  gtdialog_url   = "http://foicica.com/gtdialog/download/" + gtdialog_zip;
+  #scintillua_url = "https://foicica.com/scintillua/download/" + scintillua_zip;
+  scintillua_url = "https://foicica.com/hg/scintillua/archive/" + scintillua_zip;
+  gtdialog_url   = "https://foicica.com/gtdialog/download/" + gtdialog_zip;
   lspawn_url     = "http://foicica.com/lspawn/download/" + lspawn_zip;
 
   scintilla_url  = "http://prdownloads.sourceforge.net/scintilla/" + scintilla_tgz;
-  lua_url        = "http://www.lua.org/ftp/" + lua_tgz;
+  lua_url        = "https://www.lua.org/ftp/" + lua_tgz;
   lpeg_url       = "http://www.inf.puc-rio.br/~roberto/lpeg/" + lpeg_tgz;
   lfs_url        = "https://github.com/keplerproject/luafilesystem/archive/" + lfs_zip;
   luajit_url     = "http://luajit.org/download/" + luajit_tgz;
-  libluajit_url  = "http://foicica.com/textadept/download/" + libluajit_tgz;
-  cdk_url        = "http://invisible-mirror.net/archives/cdk/" + cdk_tgz;
-  bombay_url     = "http://foicica.com/hg/bombay/archive/tip.zip";
+  libluajit_url  = "https://foicica.com/textadept/download/" + libluajit_tgz;
+  cdk_url        = "https://invisible-mirror.net/archives/cdk/" + cdk_tgz;
+  bombay_url     = "https://foicica.com/hg/bombay/archive/tip.zip";
   termkey_url    = "http://www.leonerd.org.uk/code/libtermkey/" + termkey_tgz;
 
 
@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchhg {
-    url = http://foicica.com/hg/textadept;
+    url = https://foicica.com/hg/textadept;
     rev = "textadept_${version}";
     sha256 = "18x79pazm86agn1khdxfnf87la6kli3xasi7dcjx7l6yyz19y14d";
   };
@@ -152,7 +152,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An extensible text editor based on Scintilla with Lua scripting";
-    homepage = http://foicica.com/textadept;
+    homepage = https://foicica.com/textadept;
     license = licenses.mit;
     maintainers = with maintainers; [ raskin mirrexagon ];
     platforms = platforms.linux;

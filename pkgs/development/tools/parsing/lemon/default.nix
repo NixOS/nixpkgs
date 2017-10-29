@@ -5,7 +5,7 @@ let
   srcs = {
     lemon = fetchurl {
       sha256 = "1c5pk2hz7j9hix5mpc38rwnm8dnlr2jqswf4lan6v78ccbyqzkjx";
-      url = "http://www.sqlite.org/src/raw/tool/lemon.c?name=680980c7935bfa1edec20c804c9e5ba4b1dd96f5";
+      url = "https://www.sqlite.org/src/raw/tool/lemon.c?name=680980c7935bfa1edec20c804c9e5ba4b1dd96f5";
       name = "lemon.c";
     };
     lempar = fetchurl {
@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
       file using that grammar. Lemon is similar to the much more famous
       programs "yacc" and "bison", but is not compatible with either.
     '';
-    homepage = http://www.hwaci.com/sw/lemon/;
+    homepage = https://www.hwaci.com/sw/lemon/;
     license = licenses.publicDomain;
     platforms = platforms.unix;
     maintainers = with maintainers; [ nckx ];

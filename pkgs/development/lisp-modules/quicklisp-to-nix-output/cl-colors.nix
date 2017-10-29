@@ -10,7 +10,7 @@ rec {
   deps = [ args."alexandria" args."anaphora" args."let-plus" args."lift" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-colors/2015-12-18/cl-colors-20151218-git.tgz'';
+    url = ''https://beta.quicklisp.org/archive/cl-colors/2015-12-18/cl-colors-20151218-git.tgz'';
     sha256 = ''032kswn6h2ib7v8v1dg0lmgfks7zk52wrv31q6p2zj2a156ccqp4'';
   };
 
@@ -21,7 +21,7 @@ rec {
 }
 /* (SYSTEM cl-colors DESCRIPTION Simple color library for Common Lisp SHA256
     032kswn6h2ib7v8v1dg0lmgfks7zk52wrv31q6p2zj2a156ccqp4 URL
-    http://beta.quicklisp.org/archive/cl-colors/2015-12-18/cl-colors-20151218-git.tgz
+    https://beta.quicklisp.org/archive/cl-colors/2015-12-18/cl-colors-20151218-git.tgz
     MD5 2963c3e7aca2c5db2132394f83716515 NAME cl-colors FILENAME cl-colors DEPS
     ((NAME alexandria FILENAME alexandria) (NAME anaphora FILENAME anaphora)
      (NAME let-plus FILENAME let-plus) (NAME lift FILENAME lift))

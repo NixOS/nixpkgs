@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
   ++ (stdenv.lib.optional stdenv.isDarwin "--build=${stdenv.system}");
 
   meta = {
-    homepage = http://skarnet.org/software/execline/;
+    homepage = https://skarnet.org/software/execline/;
     description = "A small scripting language, to be used in place of a shell in non-interactive scripts";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.isc;

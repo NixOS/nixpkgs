@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = requireFile rec {
     name = "sqldeveloper-${version}-no-jre.zip";
-    url = "http://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/";
+    url = "https://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/";
     message = ''
       This Nix expression requires that ${name} already be part of the store. To
       obtain it you need to
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
       a reports interface, a complete data modeling solution, and a migration
       platform for moving your 3rd party databases to Oracle.
     '';
-    homepage = http://www.oracle.com/technetwork/developer-tools/sql-developer/overview/;
+    homepage = https://www.oracle.com/technetwork/developer-tools/sql-developer/overview/;
     license = licenses.unfree;
     maintainers = [ maintainers.ardumont ];
     platforms = platforms.linux;

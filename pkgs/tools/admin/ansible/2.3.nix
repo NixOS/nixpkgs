@@ -28,7 +28,7 @@ pythonPackages.buildPythonPackage rec {
   ] ++ stdenv.lib.optional windowsSupport pywinrm;
 
   meta = with stdenv.lib; {
-    homepage = http://www.ansible.com;
+    homepage = https://www.ansible.com;
     description = "A simple automation tool";
     license = with licenses; [ gpl3 ] ;
     maintainers = with maintainers; [

@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "4.5";
 
   src = fetchgit {
-    url = "http://review.coreboot.org/p/coreboot";
+    url = "https://review.coreboot.org/p/coreboot";
     rev = "refs/tags/${version}";
     sha256 = "0sc2h440x4sfp1lqnmh3xfgymf7j0rqfx00v6jqf0svfbp8a6cq5";
   };

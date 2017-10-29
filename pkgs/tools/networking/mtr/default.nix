@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A network diagnostics tool";
-    homepage    = http://www.bitwizard.nl/mtr/;
+    homepage    = https://www.bitwizard.nl/mtr/;
     license     = licenses.gpl2;
     maintainers = with maintainers; [ koral orivej raskin ];
     platforms   = platforms.unix;

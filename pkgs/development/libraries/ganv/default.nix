@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   rev = "2016-10-15";
 
   src = fetchgit {
-    url = "http://git.drobilla.net/cgit.cgi/ganv.git";
+    url = "https://git.drobilla.net/cgit.cgi/ganv.git";
     rev = "31685d283e9b811b61014f820c42807f4effa071";
     sha256 = "0xmbykdl42jn9cgzrqrys5lng67d26nk5xq10wkkvjqldiwdck56";
   };
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An interactive Gtk canvas widget for graph-based interfaces";
-    homepage = http://drobilla.net;
+    homepage = https://drobilla.net;
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

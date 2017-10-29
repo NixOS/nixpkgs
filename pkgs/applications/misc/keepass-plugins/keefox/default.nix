@@ -11,7 +11,7 @@ let
 
     meta = {
       description = "Keepass plugin for keefox Firefox add-on";
-      homepage    = http://keefox.org;
+      homepage    = https://keefox.org;
       platforms   = with stdenv.lib.platforms; linux;
       license     = stdenv.lib.licenses.gpl2;
       maintainers = [ stdenv.lib.maintainers.mjanczyk ];

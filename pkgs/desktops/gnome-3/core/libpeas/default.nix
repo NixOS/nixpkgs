@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A GObject-based plugins engine";
-    homepage = http://ftp.acc.umu.se/pub/GNOME/sources/libpeas/;
+    homepage = https://ftp.acc.umu.se/pub/GNOME/sources/libpeas/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = gnome3.maintainers;

@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   name = "xpdf-4.00";
 
    src = fetchurl {
-    url = http://www.xpdfreader.com/dl/xpdf-4.00.tar.gz;
+    url = https://www.xpdfreader.com/dl/xpdf-4.00.tar.gz;
     sha256 = "1mhn89738vjva14xr5gblc2zrdgzmpqbbjdflqdmpqv647294ggz";
   };
 

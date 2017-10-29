@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- xslt file for http://projects.kde.org/kde_projects.xml -->
+<!-- xslt file for https://projects.kde.org/kde_projects.xml -->
 
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 

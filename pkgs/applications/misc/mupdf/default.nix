@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
     (fetchurl {
       name = "mupdf-1.11-CVE-2017-6060.patch";
-      url = "http://git.ghostscript.com/?p=mupdf.git;a=blobdiff_plain;f=platform/x11/jstest_main.c;h=f158d9628ed0c0a84e37fe128277679e8334422a;hp=13c3a0a3ba3ff4aae29f6882d23740833c1d842f;hb=06a012a42c9884e3cd653e7826cff1ddec04eb6e;hpb=34e18d127a02146e3415b33c4b67389ce1ddb614";
+      url = "https://git.ghostscript.com/?p=mupdf.git;a=blobdiff_plain;f=platform/x11/jstest_main.c;h=f158d9628ed0c0a84e37fe128277679e8334422a;hp=13c3a0a3ba3ff4aae29f6882d23740833c1d842f;hb=06a012a42c9884e3cd653e7826cff1ddec04eb6e;hpb=34e18d127a02146e3415b33c4b67389ce1ddb614";
       sha256 = "163bllvjrbm0gvjb25lv7b6sih4zr4g4lap3h0cbq8dvpjxx0jfc";
     })
 
@@ -35,25 +35,25 @@ stdenv.mkDerivation rec {
 
     (fetchurl {
       name = "mupdf-1.11-CVE-2017-14685.patch";
-      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=ab1a420613dec93c686acbee2c165274e922f82a";
+      url = "https://git.ghostscript.com/?p=mupdf.git;a=patch;h=ab1a420613dec93c686acbee2c165274e922f82a";
       sha256 = "120xapwj0af333n3a32ypxk0jmjv2ia476jg8pzsfqk9a5qqkx46";
     })
 
     (fetchurl {
       name = "mupdf-1.11-CVE-2017-14686.patch";
-      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=0f0fbc07d9be31f5e83ec5328d7311fdfd8328b1";
+      url = "https://git.ghostscript.com/?p=mupdf.git;a=patch;h=0f0fbc07d9be31f5e83ec5328d7311fdfd8328b1";
       sha256 = "0pkn7mfqhmnsyia4rh4mw4q435bzvlc22crqa1bxpaa0gcyky51c";
     })
 
     (fetchurl {
       name = "mupdf-1.11-CVE-2017-14687.patch";
-      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=2b16dbd8f73269cb15ca61ece75cf8d2d196ed28";
+      url = "https://git.ghostscript.com/?p=mupdf.git;a=patch;h=2b16dbd8f73269cb15ca61ece75cf8d2d196ed28";
       sha256 = "01v41cwrdnz3k32fcadk2gk4knqrm3mavzp6pxhn19nwgmqkshjd";
     })
 
     (fetchurl {
       name = "mupdf-1.11-CVE-2017-15587.patch";
-      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=82df2631d7d0446b206ea6b434ea609b6c28b0e8";
+      url = "https://git.ghostscript.com/?p=mupdf.git;a=patch;h=82df2631d7d0446b206ea6b434ea609b6c28b0e8";
       sha256 = "04kfww7y0wazg6372g44fa2k5kiiigq4616ihkvmp18rz86903n9";
     })
   ];
@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://mupdf.com;
+    homepage = https://mupdf.com;
     repositories.git = git://git.ghostscript.com/mupdf.git;
     description = "Lightweight PDF, XPS, and E-book viewer and toolkit written in portable C";
     license = licenses.gpl3Plus;

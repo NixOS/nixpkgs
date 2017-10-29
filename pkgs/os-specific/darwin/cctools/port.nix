@@ -109,7 +109,7 @@ let
     };
 
     meta = {
-      homepage = http://www.opensource.apple.com/source/cctools/;
+      homepage = https://www.opensource.apple.com/source/cctools/;
       description = "MacOS Compiler Tools (cross-platform port)";
       license = stdenv.lib.licenses.apsl20;
     };

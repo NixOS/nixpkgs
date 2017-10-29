@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
   ++ (stdenv.lib.optional stdenv.isDarwin "--build=${stdenv.system}");
 
   meta = {
-    homepage = http://skarnet.org/software/s6-rc/;
+    homepage = https://skarnet.org/software/s6-rc/;
     description = "A service manager for s6-based systems";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.isc;

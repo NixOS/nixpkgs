@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.schedmd.com/;
+    homepage = https://www.schedmd.com/;
     description = "Simple Linux Utility for Resource Management";
     platforms = platforms.linux;
     license = licenses.gpl2;

@@ -13,7 +13,7 @@
   # of "Earlybird" or whatever, enable this option.  However, those
   # binaries may not be distributed without permission from the
   # Mozilla Foundation, see
-  # http://www.mozilla.org/foundation/trademarks/.
+  # https://www.mozilla.org/foundation/trademarks/.
   enableOfficialBranding ? false
 , makeDesktopItem
 }:
@@ -177,10 +177,10 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A full-featured e-mail client";
-    homepage = http://www.mozilla.org/thunderbird/;
+    homepage = https://www.mozilla.org/thunderbird/;
     license =
       # Official branding implies thunderbird name and logo cannot be reuse,
-      # see http://www.mozilla.org/foundation/licensing.html
+      # see https://www.mozilla.org/foundation/licensing.html
       if enableOfficialBranding then licenses.proprietary else licenses.mpl11;
     maintainers = [ maintainers.pierron maintainers.eelco ];
     platforms = platforms.linux;
@@ -188,7 +188,7 @@ in stdenv.mkDerivation rec {
 
   passthru.updateScript = import ./../../browsers/firefox/update.nix {
     attrPath = "thunderbird";
-    baseUrl = "http://archive.mozilla.org/pub/thunderbird/releases/";
+    baseUrl = "https://archive.mozilla.org/pub/thunderbird/releases/";
     inherit writeScript lib common-updater-scripts xidel coreutils gnused gnugrep curl;
   };
 }

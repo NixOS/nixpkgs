@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://pigeonhole.dovecot.org/;
+    homepage = https://pigeonhole.dovecot.org/;
     description = "A sieve plugin for the Dovecot IMAP server";
     license = licenses.lgpl21;
     maintainers = [ maintainers.rickynils ];

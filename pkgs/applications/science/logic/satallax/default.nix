@@ -59,8 +59,8 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    downloadPage = "http://www.ps.uni-saarland.de/~cebrown/satallax/downloads.php";
-    homepage = http://www.ps.uni-saarland.de/~cebrown/satallax/index.php;
+    downloadPage = "https://www.ps.uni-saarland.de/~cebrown/satallax/downloads.php";
+    homepage = https://www.ps.uni-saarland.de/~cebrown/satallax/index.php;
     updateWalker = true;
   };
 }

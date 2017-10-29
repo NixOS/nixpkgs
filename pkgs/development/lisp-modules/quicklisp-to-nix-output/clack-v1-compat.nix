@@ -8,7 +8,7 @@ rec {
   deps = [ args."alexandria" args."bordeaux-threads" args."circular-streams" args."cl-base64" args."cl-ppcre" args."cl-syntax-annot" args."clack" args."clack-test" args."dexador" args."flexi-streams" args."http-body" args."ironclad" args."lack" args."lack-util" args."local-time" args."marshal" args."prove" args."quri" args."split-sequence" args."trivial-backtrace" args."trivial-mimes" args."trivial-types" args."uiop" args."usocket" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/clack/2017-06-30/clack-20170630-git.tgz'';
+    url = ''https://beta.quicklisp.org/archive/clack/2017-06-30/clack-20170630-git.tgz'';
     sha256 = ''1z3xrwldfzd4nagk2d0gw5hspnr35r6kh19ksqr3kyf6wpn2lybg'';
   };
 
@@ -19,7 +19,7 @@ rec {
 }
 /* (SYSTEM clack-v1-compat DESCRIPTION NIL SHA256
     1z3xrwldfzd4nagk2d0gw5hspnr35r6kh19ksqr3kyf6wpn2lybg URL
-    http://beta.quicklisp.org/archive/clack/2017-06-30/clack-20170630-git.tgz
+    https://beta.quicklisp.org/archive/clack/2017-06-30/clack-20170630-git.tgz
     MD5 845b25a3cc6f3a1ee1dbd6de73dfb815 NAME clack-v1-compat FILENAME
     clack-v1-compat DEPS
     ((NAME alexandria FILENAME alexandria)

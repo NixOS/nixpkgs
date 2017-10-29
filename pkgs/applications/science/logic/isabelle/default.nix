@@ -69,7 +69,7 @@ stdenv.mkDerivation {
       to be expressed in a formal language and provides tools for proving those
       formulas in a logical calculus.
     '';
-    homepage = http://isabelle.in.tum.de/;
+    homepage = https://isabelle.in.tum.de/;
     license = "LGPL";
     maintainers = [ stdenv.lib.maintainers.jwiegley ];
     platforms = stdenv.lib.platforms.linux;

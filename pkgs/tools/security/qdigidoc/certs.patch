@@ -959,11 +959,11 @@ diff -ruN a/client/EE.xml b/client/EE.xml
 +               </PostalAddresses>
 +               <ElectronicAddress>
 +                  <URI xml:lang="en">mailto:info@guardtime.com </URI>
-+                  <URI xml:lang="en">http://www.guardtime.com</URI>
++                  <URI xml:lang="en">https://www.guardtime.com</URI>
 +               </ElectronicAddress>
 +            </TSPAddress>
 +            <TSPInformationURI>
-+               <URI xml:lang="en">http://www.guardtime.com/policies/</URI>
++               <URI xml:lang="en">https://www.guardtime.com/policies/</URI>
 +               <URI xml:lang="en">http://sr.riik.ee/en/registry/legal-framework.html</URI>
 +               <URI xml:lang="et">http://sr.riik.ee/et/register/oigusaktid.html</URI>
 +            </TSPInformationURI>
@@ -3079,7 +3079,7 @@ diff -ruN a/client/tl-mp.xml b/client/tl-mp.xml
 +                  </DigitalId>
 +               </ServiceDigitalIdentity>
 +            </ServiceDigitalIdentities>
-+            <TSLLocation>http://www.pts.se/upload/Ovrigt/Internet/Branschinformation/Trusted-List-SE-MR.xml</TSLLocation>
++            <TSLLocation>https://www.pts.se/upload/Ovrigt/Internet/Branschinformation/Trusted-List-SE-MR.xml</TSLLocation>
 +            <AdditionalInformation>
 +               <OtherInformation>
 +                  <TSLType>http://uri.etsi.org/TrstSvc/TrustedList/TSLType/EUgeneric</TSLType>

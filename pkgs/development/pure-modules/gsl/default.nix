@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "GNU Scientific Library interface for Pure";
-    homepage = http://puredocs.bitbucket.org/pure-gsl.html;
+    homepage = https://puredocs.bitbucket.org/pure-gsl.html;
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ asppsa ];

@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Automatic and interactive theorem prover (version with HoTT support)";
-    homepage    = "http://leanprover.github.io";
+    homepage    = "https://leanprover.github.io";
     license     = licenses.asl20;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice gebner ];

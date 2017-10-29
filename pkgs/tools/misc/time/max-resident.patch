@@ -1,6 +1,6 @@
 Fix the "max resident" size reported by ‘time’ being off by a factor of 4. 
 
-From http://lists.gnu.org/archive/html/help-gnu-utils/2010-10/msg00002.html
+From https://lists.gnu.org/archive/html/help-gnu-utils/2010-10/msg00002.html
 
 diff -ru -x '*~' time-1.7-orig/time.c time-1.7/time.c
 --- time-1.7-orig/time.c	1996-06-13 15:38:21.000000000 -0400

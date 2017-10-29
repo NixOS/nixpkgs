@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tiny externally controllable webkit browser";
-    homepage    = "http://uzbl.org/";
+    homepage    = "https://uzbl.org/";
     license     = licenses.gpl3;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ raskin dgonyeo ];

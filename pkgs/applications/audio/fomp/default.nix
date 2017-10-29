@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://drobilla.net/software/fomp/;
+    homepage = https://drobilla.net/software/fomp/;
     description = "An LV2 port of the MCP, VCO, FIL, and WAH plugins by Fons Adriaensen";
     license = licenses.gpl2;
     maintainers = [ maintainers.magnetophon ];

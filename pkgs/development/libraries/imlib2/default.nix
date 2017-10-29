@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       easily, without sacrificing speed.
     '';
 
-    homepage = http://docs.enlightenment.org/api/imlib2/html;
+    homepage = https://docs.enlightenment.org/api/imlib2/html;
     license = licenses.free;
     platforms = platforms.unix;
     maintainers = with maintainers; [ spwhitt ];

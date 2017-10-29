@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An efficient, small, quality libc implementation";
-    homepage    = "http://www.musl-libc.org";
+    homepage    = "https://www.musl-libc.org";
     license     = stdenv.lib.licenses.mit;
     platforms   = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];

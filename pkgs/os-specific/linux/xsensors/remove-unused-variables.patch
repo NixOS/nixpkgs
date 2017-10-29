@@ -1,7 +1,7 @@
 Author: Nanley Chery <nanleychery@gmail.com>
 From: Jean Delvare <khali@linux-fr.org>
 Subject: Remove declared, but unused variables
-Bug-Debian: http://bugs.debian.org/625435
+Bug-Debian: https://bugs.debian.org/625435
 ---
 --- a/src/gui.c
 +++ b/src/gui.c

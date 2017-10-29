@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An account manager and channel dispatcher for the Telepathy framework";
-    homepage = http://telepathy.freedesktop.org/wiki/;
+    homepage = https://telepathy.freedesktop.org/wiki/;
     license = licenses.lgpl21;
     platforms = platforms.unix;
   };

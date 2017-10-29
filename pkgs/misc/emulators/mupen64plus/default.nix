@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A Nintendo 64 Emulator";
     license = stdenv.lib.licenses.gpl2Plus;
-    homepage = http://www.mupen64plus.org/;
+    homepage = https://www.mupen64plus.org/;
     maintainers = [ stdenv.lib.maintainers.sander ];
     platforms = stdenv.lib.platforms.linux;
   };

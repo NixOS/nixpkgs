@@ -32,7 +32,7 @@ stdenv.mkDerivation  rec {
   meta = with stdenv.lib; {
     description = ''A real-time graphical programming environment for
                     audio, video, and graphical processing'';
-    homepage = http://puredata.info;
+    homepage = https://puredata.info;
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];

@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Jupyter Qt console";
-    homepage = http://jupyter.org/;
+    homepage = https://jupyter.org/;
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

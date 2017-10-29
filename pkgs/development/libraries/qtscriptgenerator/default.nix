@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     cd generator
     qmake
     make
-    # Set QTDIR, see http://code.google.com/p/qtscriptgenerator/issues/detail?id=38
+    # Set QTDIR, see https://code.google.com/p/qtscriptgenerator/issues/detail?id=38
     QTDIR=${qt4} ./generator
     cd ../qtbindings
     qmake
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "QtScript bindings generator";
-    homepage = http://code.google.com/p/qtscriptgenerator/;
+    homepage = https://code.google.com/p/qtscriptgenerator/;
     inherit (qt4.meta) platforms;
     maintainers = [ ];
   };

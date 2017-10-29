@@ -1,6 +1,6 @@
 { stdenv, fetchurl, libvdpau, mesa, libva, pkgconfig }:
 let
-  libvdpau08patch = (fetchurl { url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/x11-libs/libva-vdpau-driver/files/libva-vdpau-driver-0.7.4-libvdpau-0.8.patch?revision=1.1";
+  libvdpau08patch = (fetchurl { url = "https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/x11-libs/libva-vdpau-driver/files/libva-vdpau-driver-0.7.4-libvdpau-0.8.patch?revision=1.1";
                                 name = "libva-vdpau-driver-0.7.4-libvdpau-0.8.patch";
                                 sha256 = "1n2cys59wyv8ylx9i5m3s6856mgx24hzcp45w1ahdfbzdv9wrfbl";
                               });
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./glext85.patch
-              (fetchurl { url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/x11-libs/libva-vdpau-driver/files/libva-vdpau-driver-0.7.4-VAEncH264VUIBufferType.patch?revision=1.1";
+              (fetchurl { url = "https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/x11-libs/libva-vdpau-driver/files/libva-vdpau-driver-0.7.4-VAEncH264VUIBufferType.patch?revision=1.1";
                           name = "libva-vdpau-driver-0.7.4-VAEncH264VUIBufferType.patch";
                           sha256 = "166svcav6axkrlb3i4rbf6dkwjnqdf69xw339az1f5yabj72pqqs";
                         }) ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
 
   meta = {
-    homepage = http://cgit.freedesktop.org/vaapi/vdpau-driver/;
+    homepage = https://cgit.freedesktop.org/vaapi/vdpau-driver/;
     license = stdenv.lib.licenses.gpl2Plus;
     description = "VDPAU driver for the VAAPI library";
     platforms = stdenv.lib.platforms.linux;

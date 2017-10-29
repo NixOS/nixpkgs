@@ -42,7 +42,7 @@ buildPythonApplication rec {
   doCheck = false;
 
   meta = {
-    homepage = http://rg3.github.io/youtube-dl/;
+    homepage = https://rg3.github.io/youtube-dl/;
     repositories.git = https://github.com/rg3/youtube-dl.git;
     description = "Command-line tool to download videos from YouTube.com and other sites";
     longDescription = ''

@@ -2,17 +2,17 @@
 
 let
   src_usbdk_x86 = fetchurl {
-    url = "http://www.spice-space.org/download/windows/usbdk/UsbDk_1.0.4_x86.msi";
+    url = "https://www.spice-space.org/download/windows/usbdk/UsbDk_1.0.4_x86.msi";
     sha256 = "17hv8034wk1xqnanm5jxs4741nl7asps1fdz6lhnrpp6gvj6yg9y";
   };
 
   src_usbdk_amd64 = fetchurl {
-    url = "http://www.spice-space.org/download/windows/usbdk/UsbDk_1.0.4_x64.msi";
+    url = "https://www.spice-space.org/download/windows/usbdk/UsbDk_1.0.4_x64.msi";
     sha256 = "0alcqsivp33pm8sy0lmkvq7m5yh6mmcmxdl39zjxjra67kw8r2sd";
   };
 
   src_qxlwddm = fetchurl {
-    url = "http://people.redhat.com/~vrozenfe/qxlwddm/qxlwddm-0.11.zip";
+    url = "https://people.redhat.com/~vrozenfe/qxlwddm/qxlwddm-0.11.zip";
     sha256 = "082zdpbh9i3bq2ds8g33rcbcw390jsm7cqf46rrlx02x8r03dm98";
   };
 
@@ -22,7 +22,7 @@ let
   };
 
   src_vdagent_amd64 = fetchurl {
-    url = "http://www.spice-space.org/download/windows/vdagent/vdagent-win-0.7.3/vdagent_0_7_3_x64.zip";
+    url = "https://www.spice-space.org/download/windows/vdagent/vdagent-win-0.7.3/vdagent_0_7_3_x64.zip";
     sha256 = "0djmvm66jcmcyhhbjppccbai45nqpva7vyvry6w8nyc0fwi1vm9l";
   };
 in
@@ -62,7 +62,7 @@ stdenv.mkDerivation  {
 
   meta = with stdenv.lib; {
     description = ''Windows SPICE Drivers'';
-    homepage = http://www.spice-space.org;
+    homepage = https://www.spice-space.org;
     maintainers = [ maintainers.tstrobel ];
     platforms = platforms.linux;
   };

@@ -9,7 +9,7 @@ let
     sha256 = "0pyrpz9c8nxccwpgyr36w314mi8h132cis8ijvlqmmhqxwsi30hm";
   };
   icons = fetchurl {
-    url    = "http://download.fcitx-im.org/fcitx-mozc/fcitx-mozc-icon.tar.gz";
+    url    = "https://download.fcitx-im.org/fcitx-mozc/fcitx-mozc-icon.tar.gz";
     sha256 = "10bdjn481jsh32vll7r756l392anz44h6207vjqwby3rplk31np1";
   };
 in clangStdenv.mkDerivation rec {
@@ -91,8 +91,8 @@ in clangStdenv.mkDerivation rec {
   meta = with clangStdenv.lib; {
     isFcitxEngine = true;
     description   = "Fcitx engine for Google japanese input method";
-    homepage      = http://code.google.com/p/mozc/;
-    downloadPage  = "http://download.fcitx-im.org/fcitx-mozc/";
+    homepage      = https://code.google.com/p/mozc/;
+    downloadPage  = "https://download.fcitx-im.org/fcitx-mozc/";
     license       = licenses.free;
     platforms     = platforms.linux;
     maintainers   = [ maintainers.ericsagnes ];

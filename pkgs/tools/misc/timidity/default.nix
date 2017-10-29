@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   NIX_LDFLAGS = ["-ljack -L${libjack2}/lib"];
 
   instruments = fetchurl {
-    url = http://www.csee.umbc.edu/pub/midia/instruments.tar.gz;
+    url = https://www.csee.umbc.edu/pub/midia/instruments.tar.gz;
     sha256 = "0lsh9l8l5h46z0y8ybsjd4pf6c22n33jsjvapfv3rjlfnasnqw67";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://sourceforge.net/projects/timidity/;
+    homepage = https://sourceforge.net/projects/timidity/;
     license = licenses.gpl2;
     description = "A software MIDI renderer";
     maintainers = [ maintainers.marcweber ];

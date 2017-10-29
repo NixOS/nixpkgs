@@ -3,7 +3,7 @@ From: Jeremy Huddleston Sequoia <jeremyhu@apple.com>
 Date: Sat, 31 May 2014 13:14:20 -0700
 Subject: [PATCH 6/6] fb: Revert fb changes that broke XQuartz
 
-    http://bugs.freedesktop.org/show_bug.cgi?id=26124
+    https://bugs.freedesktop.org/show_bug.cgi?id=26124
 
 Revert "Use new pixman_glyph_cache_t API that will be in pixman 0.28.0"
 Revert "fb: Fix origin of source picture in fbGlyphs"

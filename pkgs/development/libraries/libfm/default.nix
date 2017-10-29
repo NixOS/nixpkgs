@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://blog.lxde.org/?cat=28/;
+    homepage = https://blog.lxde.org/?cat=28/;
     license = licenses.lgpl21Plus;
     description = "A glib-based library for file management";
     maintainers = [ maintainers.ttuegel ];

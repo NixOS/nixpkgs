@@ -8,7 +8,7 @@ rec {
   deps = [ args."abnf" args."alexandria" args."anaphora" args."asdf-system-connections" args."babel" args."bordeaux-threads" args."cffi" args."chipz" args."chunga" args."cl+ssl" args."cl-base64" args."cl-containers" args."cl-csv" args."cl-fad" args."cl-interpol" args."cl-log" args."cl-markdown" args."cl-postgres" args."cl-ppcre" args."cl-unicode" args."cl-utilities" args."closer-mop" args."command-line-arguments" args."db3" args."drakma" args."dynamic-classes" args."esrap" args."flexi-streams" args."garbage-pools" args."ieee-floats" args."ironclad" args."iterate" args."ixf" args."list-of" args."local-time" args."lparallel" args."md5" args."metabang-bind" args."metatilities-base" args."mssql" args."nibbles" args."parse-number" args."postmodern" args."puri" args."py-configparser" args."qmynd" args."quri" args."s-sql" args."simple-date" args."split-sequence" args."sqlite" args."trivial-backtrace" args."trivial-features" args."trivial-gray-streams" args."trivial-utf-8" args."uiop" args."usocket" args."uuid" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/pgloader/2017-07-25/pgloader-v3.4.1.tgz'';
+    url = ''https://beta.quicklisp.org/archive/pgloader/2017-07-25/pgloader-v3.4.1.tgz'';
     sha256 = ''1z6p7dz1ir9cg4gl1vkvbc1f7pv1yfv1jgwjkw29v57fdg4faz9v'';
   };
 
@@ -19,7 +19,7 @@ rec {
 }
 /* (SYSTEM pgloader DESCRIPTION Load data into PostgreSQL SHA256
     1z6p7dz1ir9cg4gl1vkvbc1f7pv1yfv1jgwjkw29v57fdg4faz9v URL
-    http://beta.quicklisp.org/archive/pgloader/2017-07-25/pgloader-v3.4.1.tgz
+    https://beta.quicklisp.org/archive/pgloader/2017-07-25/pgloader-v3.4.1.tgz
     MD5 6741f8e7d2d416942d5c4a1971576d33 NAME pgloader FILENAME pgloader DEPS
     ((NAME abnf FILENAME abnf) (NAME alexandria FILENAME alexandria)
      (NAME anaphora FILENAME anaphora)

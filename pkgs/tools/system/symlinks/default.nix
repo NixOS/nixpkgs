@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   # No license is mentioned in the code but
-  # http://www.ibiblio.org/pub/Linux/utils/file/symlinks.lsm
+  # https://www.ibiblio.org/pub/Linux/utils/file/symlinks.lsm
   # and other package managers list it as
   # "(c) Mark Lord, freely distributable"
   meta = with stdenv.lib; {

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "3.4.0";
 
   src = fetchurl {
-    url = "http://ftp.gnome.org/pub/GNOME/sources/glabels/3.4/glabels-3.4.0.tar.xz";
+    url = "https://ftp.gnome.org/pub/GNOME/sources/glabels/3.4/glabels-3.4.0.tar.xz";
     sha256 = "04345crf5yrhq6rlrymz630rxnm8yw41vx04hb6xn2nkjn9hf3nl";
   };
 

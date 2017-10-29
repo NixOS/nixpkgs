@@ -63,7 +63,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.redmine.org/;
+    homepage = https://www.redmine.org/;
     platforms = platforms.linux;
     maintainers = [ maintainers.garbas ];
     license = licenses.gpl2;

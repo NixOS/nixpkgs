@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://softwarebakery.com/maato/thunar-dropbox.html;
+    homepage = https://softwarebakery.com/maato/thunar-dropbox.html;
     description = "A plugin for thunar that adds context-menu items from dropbox";
     license = licenses.gpl3;
     platforms = platforms.linux;

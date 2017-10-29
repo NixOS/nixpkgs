@@ -3,7 +3,7 @@
 }:
 
 { packages ? []
-, mirror ? "http://ftp.gwdg.de/pub/linux/sources.redhat.com/cygwin"
+, mirror ? "https://ftp.gwdg.de/pub/linux/sources.redhat.com/cygwin"
 , extraContents ? []
 }:
 

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
          traceroute, uucpd, and whois.
       '';
 
-    homepage = http://www.gnu.org/software/inetutils/;
+    homepage = https://www.gnu.org/software/inetutils/;
     license = stdenv.lib.licenses.gpl3Plus;
 
     maintainers = [ ];

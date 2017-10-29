@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       expiration date.
     '';
     license = licenses.unfree;
-    homepage = http://makemkv.com;
+    homepage = https://makemkv.com;
     maintainers = [ maintainers.titanous ];
   };
 }

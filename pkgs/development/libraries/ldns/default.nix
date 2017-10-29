@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Library with the aim of simplifying DNS programming in C";
     license = licenses.bsd3;
-    homepage = http://www.nlnetlabs.nl/projects/ldns/;
+    homepage = https://www.nlnetlabs.nl/projects/ldns/;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jgeerds ];
   };

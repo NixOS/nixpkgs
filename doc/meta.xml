@@ -16,7 +16,7 @@ meta = {
     GNU Hello is a program that prints "Hello, world!" when you run it.
     It is fully customizable.
   '';
-  homepage = http://www.gnu.org/software/hello/manual/;
+  homepage = https://www.gnu.org/software/hello/manual/;
   license = stdenv.lib.licenses.gpl3Plus;
   maintainers = [ stdenv.lib.maintainers.eelco ];
   platforms = stdenv.lib.platforms.all;
@@ -38,11 +38,11 @@ $ nix-env -qa hello --json
     "hello": {
         "meta": {
             "description": "A program that produces a familiar, friendly greeting",
-            "homepage": "http://www.gnu.org/software/hello/manual/",
+            "homepage": "https://www.gnu.org/software/hello/manual/",
             "license": {
                 "fullName": "GNU General Public License version 3 or later",
                 "shortName": "GPLv3+",
-                "url": "http://www.fsf.org/licensing/licenses/gpl.html"
+                "url": "https://www.fsf.org/licensing/licenses/gpl.html"
             },
             "longDescription": "GNU Hello is a program that prints \"Hello, world!\" when you run it.\nIt is fully customizable.\n",
             "maintainers": [
@@ -122,13 +122,13 @@ meta-attributes</title>
   <varlistentry>
     <term><varname>homepage</varname></term>
     <listitem><para>The package’s homepage.  Example:
-    <literal>http://www.gnu.org/software/hello/manual/</literal></para></listitem>
+    <literal>https://www.gnu.org/software/hello/manual/</literal></para></listitem>
   </varlistentry>
 
   <varlistentry>
     <term><varname>downloadPage</varname></term>
     <listitem><para>The page where a link to the current version can be found.  Example:
-    <literal>http://ftp.gnu.org/gnu/hello/</literal></para></listitem>
+    <literal>https://ftp.gnu.org/gnu/hello/</literal></para></listitem>
   </varlistentry>
 
   <varlistentry>

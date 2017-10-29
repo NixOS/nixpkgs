@@ -11,7 +11,7 @@ stdenv.mkDerivation {
   patches = [
     # Will be needed after linux-headers is updated to >= 2.6.21.
     (fetchurl {
-      url = "http://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/sys-apps/fxload/files/fxload-20020411-linux-headers-2.6.21.patch?rev=1.1";
+      url = "https://sources.gentoo.org/viewcvs.py/*checkout*/gentoo-x86/sys-apps/fxload/files/fxload-20020411-linux-headers-2.6.21.patch?rev=1.1";
       sha256 = "0ij0c8nr1rbyl5wmyv1cklhkxglvsqz32h21cjw4bjm151kgmk7p";
     })
   ];

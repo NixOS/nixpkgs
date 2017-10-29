@@ -8,7 +8,7 @@ stdenv.mkDerivation  rec {
   rev = "2017-01-18";
 
   src = fetchgit {
-    url = "http://git.drobilla.net/cgit.cgi/ingen.git";
+    url = "https://git.drobilla.net/cgit.cgi/ingen.git";
     rev = "02ae3e9d8bf3f6a5e844706721aad8c0ac9f4340";
     sha256 = "15s8nrzn68hc2s6iw0zshbz3lfnsq0mr6gflq05xm911b7xbp74k";
   };
@@ -39,7 +39,7 @@ stdenv.mkDerivation  rec {
 
   meta = with stdenv.lib; {
     description = "A modular audio processing system using JACK and LV2 or LADSPA plugins";
-    homepage = http://drobilla.net/software/ingen;
+    homepage = https://drobilla.net/software/ingen;
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

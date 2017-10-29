@@ -18,6 +18,6 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = http://pypi.python.org/pypi/zodbpickle;
+    homepage = https://pypi.python.org/pypi/zodbpickle;
   };
 }

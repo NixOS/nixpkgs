@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage    = http://www.openldap.org/;
+    homepage    = https://www.openldap.org/;
     description = "An open source implementation of the Lightweight Directory Access Protocol";
     maintainers = with maintainers; [ lovek323 mornfall ];
     platforms   = platforms.unix;

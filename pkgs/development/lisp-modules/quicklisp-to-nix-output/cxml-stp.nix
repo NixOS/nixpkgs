@@ -10,7 +10,7 @@ rec {
   deps = [ args."alexandria" args."babel" args."cl-ppcre" args."closure-common" args."cxml" args."cxml-dom" args."cxml-klacks" args."cxml-test" args."cxml-xml" args."parse-number" args."puri" args."rt" args."trivial-features" args."trivial-gray-streams" args."xpath" args."yacc" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cxml-stp/2012-05-20/cxml-stp-20120520-git.tgz'';
+    url = ''https://beta.quicklisp.org/archive/cxml-stp/2012-05-20/cxml-stp-20120520-git.tgz'';
     sha256 = ''1pmh7wvkncbwwp30d445mhj21j210swq03f6hm44x1231s8r8azv'';
   };
 
@@ -21,7 +21,7 @@ rec {
 }
 /* (SYSTEM cxml-stp DESCRIPTION NIL SHA256
     1pmh7wvkncbwwp30d445mhj21j210swq03f6hm44x1231s8r8azv URL
-    http://beta.quicklisp.org/archive/cxml-stp/2012-05-20/cxml-stp-20120520-git.tgz
+    https://beta.quicklisp.org/archive/cxml-stp/2012-05-20/cxml-stp-20120520-git.tgz
     MD5 7bc57586a91cd4d4864b8cbad3689d85 NAME cxml-stp FILENAME cxml-stp DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME cl-ppcre FILENAME cl-ppcre)

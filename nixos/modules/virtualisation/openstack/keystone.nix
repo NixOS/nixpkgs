@@ -75,7 +75,7 @@ in {
         default = "http://localhost:5000/v2.0";
         description = ''
           The public identity endpoint. The link <link
-          xlink:href="http://docs.openstack.org/liberty/install-guide-rdo/keystone-services.html">
+          xlink:href="https://docs.openstack.org/liberty/install-guide-rdo/keystone-services.html">
           create keystone endpoint</link> provides more informations
           about that.
         '';

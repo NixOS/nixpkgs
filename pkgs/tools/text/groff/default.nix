@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   crossAttrs = {
     # Trick to get the build system find the proper 'native' groff
-    # http://www.mail-archive.com/bug-groff@gnu.org/msg01335.html
+    # https://www.mail-archive.com/bug-groff@gnu.org/msg01335.html
     preBuild = ''
       makeFlags="GROFF_BIN_PATH=${buildPackages.groff}/bin GROFFBIN=${buildPackages.groff}/bin/groff"
     '';
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.gnu.org/software/groff/;
+    homepage = https://www.gnu.org/software/groff/;
     description = "GNU Troff, a typesetting package that reads plain text and produces formatted output";
     license = licenses.gpl3Plus;
     platforms = platforms.all;

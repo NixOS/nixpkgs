@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage    = http://www.tmsu.org;
+    homepage    = https://www.tmsu.org;
     description = "A tool for tagging your files using a virtual filesystem";
     maintainers = with maintainers; [ pSub ];
     license     = licenses.gpl3;

@@ -12,7 +12,7 @@ stdenv.mkDerivation  rec {
     sha256 = "05kc4brcx8mncai0rj2gz4s4bsrsy9q8xlnaddf75i0m8jl7snhh";
   };
 
-  # http://permalink.gmane.org/gmane.linux.redhat.fedora.extras.cvs/822346
+  # https://permalink.gmane.org/gmane.linux.redhat.fedora.extras.cvs/822346
   patches = [ ./socket.patch ./gcc-47.patch ];
 
   buildInputs = [ alsaLib gtk2 libjack2 libxml2 makeWrapper

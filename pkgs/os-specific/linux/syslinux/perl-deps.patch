@@ -1,4 +1,4 @@
-http://git.ipxe.org/ipxe.git/commitdiff/719b498
+https://git.ipxe.org/ipxe.git/commitdiff/719b498
 
 diff -ru -x '*~' -x '*.orig' -x '*.rej' syslinux-4.02-orig/gpxe/src/arch/i386/Makefile.pcbios syslinux-4.02/gpxe/src/arch/i386/Makefile.pcbios
 --- syslinux-4.02-orig/gpxe/src/arch/i386/Makefile.pcbios	2010-07-21 21:33:13.000000000 +0200

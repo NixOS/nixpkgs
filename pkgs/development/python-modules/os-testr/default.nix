@@ -27,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A testr wrapper to provide functionality for OpenStack projects";
-    homepage  = http://docs.openstack.org/developer/os-testr/;
+    homepage  = https://docs.openstack.org/developer/os-testr/;
     license = licenses.asl20;
   };
 }

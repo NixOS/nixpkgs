@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ unzip ];
 
   # The -Xmx1000M comes suggested from their download page:
-  # http://www.cs.waikato.ac.nz/ml/weka/downloading.html
+  # https://www.cs.waikato.ac.nz/ml/weka/downloading.html
   installPhase = ''
     mkdir -pv $out/share/weka $out/bin
     cp -Rv * $out/share/weka
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.cs.waikato.ac.nz/ml/weka/;
+    homepage = https://www.cs.waikato.ac.nz/ml/weka/;
     description = "Collection of machine learning algorithms for data mining tasks";
     license = stdenv.lib.licenses.gpl2Plus;
     maintainer = [stdenv.lib.maintainers.mimadrid];

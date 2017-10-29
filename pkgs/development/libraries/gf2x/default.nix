@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   # or fetchFromGitHub(owner,repo,rev) or fetchgit(rev)
   src = fetchurl {
-    url = "http://gforge.inria.fr/frs/download.php/file/30873/gf2x-1.1.tar.gz";
+    url = "https://gforge.inria.fr/frs/download.php/file/30873/gf2x-1.1.tar.gz";
     sha256 = "17w4b39j9dvri5s278pxi8ha7mf47j87kq1lr802l4408rh02gqd";
   };
 

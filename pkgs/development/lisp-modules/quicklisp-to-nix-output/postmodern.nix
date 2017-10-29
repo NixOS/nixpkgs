@@ -10,7 +10,7 @@ rec {
   deps = [ args."alexandria" args."bordeaux-threads" args."cl-postgres" args."cl-postgres-tests" args."closer-mop" args."fiveam" args."md5" args."s-sql" args."simple-date" args."simple-date-postgres-glue" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/postmodern/2017-04-03/postmodern-20170403-git.tgz'';
+    url = ''https://beta.quicklisp.org/archive/postmodern/2017-04-03/postmodern-20170403-git.tgz'';
     sha256 = ''1pklmp0y0falrmbxll79drrcrlgslasavdym5r45m8kkzi1zpv9p'';
   };
 
@@ -21,7 +21,7 @@ rec {
 }
 /* (SYSTEM postmodern DESCRIPTION PostgreSQL programming API SHA256
     1pklmp0y0falrmbxll79drrcrlgslasavdym5r45m8kkzi1zpv9p URL
-    http://beta.quicklisp.org/archive/postmodern/2017-04-03/postmodern-20170403-git.tgz
+    https://beta.quicklisp.org/archive/postmodern/2017-04-03/postmodern-20170403-git.tgz
     MD5 7a4145a0a5ff5bcb7a4bf29b5c2915d2 NAME postmodern FILENAME postmodern
     DEPS
     ((NAME alexandria FILENAME alexandria)

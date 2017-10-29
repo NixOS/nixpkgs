@@ -9,7 +9,7 @@ let
     version="4.9.1";
     name="${baseName}-${version}";
     hash="1mkh36xnnacnz9r00b5f9ld9309k32jv6mcavklbdnca8bl56bib";
-    url="http://ftp.gnu.org/gnu/xboard/xboard-4.9.1.tar.gz";
+    url="https://ftp.gnu.org/gnu/xboard/xboard-4.9.1.tar.gz";
     sha256="1mkh36xnnacnz9r00b5f9ld9309k32jv6mcavklbdnca8bl56bib";
   };
   buildInputs = [

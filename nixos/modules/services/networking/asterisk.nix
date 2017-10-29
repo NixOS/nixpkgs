@@ -173,7 +173,7 @@ in
           path.
 
           See
-          <link xlink:href="http://www.asterisk.org/community/documentation"/>
+          <link xlink:href="https://www.asterisk.org/community/documentation"/>
           for more examples of what is possible here.
         '';
       };

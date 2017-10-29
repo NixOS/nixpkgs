@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.bareos.org/;
+    homepage = https://www.bareos.org/;
     description = "A fork of the bacula project";
     license = licenses.agpl3;
     platforms = platforms.unix;

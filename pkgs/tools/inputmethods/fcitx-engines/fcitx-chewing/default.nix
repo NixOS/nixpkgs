@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     isFcitxEngine = true;
     homepage      = "https://github.com/fcitx/fcitx-chewing";
-    downloadPage  = "http://download.fcitx-im.org/fcitx-chewing/";
+    downloadPage  = "https://download.fcitx-im.org/fcitx-chewing/";
     description   = "Fcitx engine for chewing";
     license       = licenses.gpl2;
     platforms     = platforms.linux;

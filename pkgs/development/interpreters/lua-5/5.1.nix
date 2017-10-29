@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   patches = (if stdenv.isDarwin then [ ./5.1.darwin.patch ] else [ dsoPatch ])
     ++ [(fetchpatch {
       name = "CVE-2014-5461.patch";
-      url = "http://anonscm.debian.org/cgit/pkg-lua/lua5.1.git/plain/debian/patches/"
+      url = "https://anonscm.debian.org/cgit/pkg-lua/lua5.1.git/plain/debian/patches/"
         + "0004-Fix-stack-overflow-in-vararg-functions.patch?id=b75a2014db2ad65683521f7bb295bfa37b48b389";
       sha256 = "05i5vh53d9i6dy11ibg9i9qpwz5hdm0s8bkx1d9cfcvy80cm4c7f";
     })];
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.lua.org;
+    homepage = https://www.lua.org;
     description = "Powerful, fast, lightweight, embeddable scripting language";
     longDescription = ''
       Lua combines simple procedural syntax with powerful data

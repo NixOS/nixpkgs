@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
   stripDebugFlags=["-S" "--keep-file-symbols"];
 
   meta = {
-    homepage = http://haskell.org/ghc;
+    homepage = https://haskell.org/ghc;
     description = "The Glasgow Haskell Compiler";
     maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
     platforms = ["x86_64-linux" "i686-linux"];  # Darwin is unsupported.
     inherit (ghc.meta) license;
-    broken = true; # broken by gcc 5.x: http://hydra.nixos.org/build/33627548
+    broken = true; # broken by gcc 5.x: https://hydra.nixos.org/build/33627548
   };
 }

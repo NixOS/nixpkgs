@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" "PLUGINDIR=$(out)/lib" ];
 
   meta = with lib; {
-    homepage = http://pwmt.org/projects/zathura/;
+    homepage = https://pwmt.org/projects/zathura/;
     description = "A zathura PDF plugin (mupdf)";
     longDescription = ''
       The zathura-pdf-mupdf plugin adds PDF support to zathura by

@@ -386,7 +386,7 @@ diff -Nuar coq-8.3pl3-orig/configure~ coq-8.3pl3/configure~
 +fi
 +
 +if [ "$wwwcoq_spec" = "no" ]; then
-+    WWWCOQ="http://coq.inria.fr/"
++    WWWCOQ="https://coq.inria.fr/"
 +fi
 +
 +#########################################

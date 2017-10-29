@@ -8,7 +8,7 @@ rec {
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cl-fuse" args."cl-utilities" args."iterate" args."pcall" args."pcall-queue" args."trivial-backtrace" args."trivial-features" args."trivial-utf-8" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-fuse-meta-fs/2015-06-08/cl-fuse-meta-fs-20150608-git.tgz'';
+    url = ''https://beta.quicklisp.org/archive/cl-fuse-meta-fs/2015-06-08/cl-fuse-meta-fs-20150608-git.tgz'';
     sha256 = ''1i3yw237ygwlkhbcbm9q54ad9g4fi63fw4mg508hr7bz9gzg36q2'';
   };
 
@@ -20,7 +20,7 @@ rec {
 /* (SYSTEM cl-fuse-meta-fs DESCRIPTION
     CFFI bindings to FUSE (Filesystem in user space) SHA256
     1i3yw237ygwlkhbcbm9q54ad9g4fi63fw4mg508hr7bz9gzg36q2 URL
-    http://beta.quicklisp.org/archive/cl-fuse-meta-fs/2015-06-08/cl-fuse-meta-fs-20150608-git.tgz
+    https://beta.quicklisp.org/archive/cl-fuse-meta-fs/2015-06-08/cl-fuse-meta-fs-20150608-git.tgz
     MD5 eb80b959dd6494cd787cff4f8c2f214b NAME cl-fuse-meta-fs FILENAME
     cl-fuse-meta-fs DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)

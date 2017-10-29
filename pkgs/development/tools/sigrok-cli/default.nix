@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Command-line frontend for the sigrok signal analysis software suite";
-    homepage = http://sigrok.org/;
+    homepage = https://sigrok.org/;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

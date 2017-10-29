@@ -8,7 +8,7 @@ rec {
   deps = [ args."alexandria" args."cffi" args."iolib_dot_asdf" args."iolib_dot_base" args."iolib_dot_conf" args."split-sequence" args."uiop" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/iolib/2017-06-30/iolib-v0.8.3.tgz'';
+    url = ''https://beta.quicklisp.org/archive/iolib/2017-06-30/iolib-v0.8.3.tgz'';
     sha256 = ''12gsvsjyxmclwidcjvyrfvd0773ib54a3qzmf33hmgc9knxlli7c'';
   };
 
@@ -19,7 +19,7 @@ rec {
 }
 /* (SYSTEM iolib.grovel DESCRIPTION The CFFI Groveller SHA256
     12gsvsjyxmclwidcjvyrfvd0773ib54a3qzmf33hmgc9knxlli7c URL
-    http://beta.quicklisp.org/archive/iolib/2017-06-30/iolib-v0.8.3.tgz MD5
+    https://beta.quicklisp.org/archive/iolib/2017-06-30/iolib-v0.8.3.tgz MD5
     fc28d4cad6f8e43972df3baa6a8ac45c NAME iolib.grovel FILENAME
     iolib_dot_grovel DEPS
     ((NAME alexandria FILENAME alexandria) (NAME cffi FILENAME cffi)

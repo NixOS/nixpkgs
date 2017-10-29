@@ -448,7 +448,7 @@ Parts = {
     'Saying': "saying",
     'See also': None,
     'Shorthand': None,
-    '[http://en.wikipedia.org/wiki/Shorthand Shorthand]': None,
+    '[https://en.wikipedia.org/wiki/Shorthand Shorthand]': None,
     'Sister projects': None,
     'Spelling note': None,
     'Synonyms': None,
@@ -753,7 +753,7 @@ info = """   This file was converted from the original database on:
              %s
 
    The original data is available from:
-             http://en.wiktionary.org
+             https://en.wiktionary.org
    The version from which this file was generated was:
              %s
 
@@ -770,7 +770,7 @@ f.close()
 
 f = os.popen("bunzip2 -c %s" % fn, "r")
 out = codecs.getwriter("utf_8")(
-        os.popen("dictfmt -p wiktionary-en --locale en_US.UTF-8 --columns 0 -u http://en.wiktionary.org", "w"))
+        os.popen("dictfmt -p wiktionary-en --locale en_US.UTF-8 --columns 0 -u https://en.wiktionary.org", "w"))
 
 out.write(("%%h English Wiktionary\n%s" % info).encode('utf-8'))
 xml.sax.parse(f, WordHandler())

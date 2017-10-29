@@ -37,6 +37,6 @@ stdenv.mkDerivation {
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
     homepage = http://re-alpine.sf.net/;
-    downloadPage = "http://sourceforge.net/projects/re-alpine/files/";
+    downloadPage = "https://sourceforge.net/projects/re-alpine/files/";
   };
 }

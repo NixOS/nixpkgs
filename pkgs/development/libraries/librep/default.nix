@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       machine. It can serve as an application extension language
       but is also suitable for standalone scripts.
      '';
-    homepage = http://sawfish.wikia.com;
+    homepage = https://sawfish.wikia.com;
     license = licenses.gpl2;
     maintainers = [ maintainers.AndersonTorres ];
   };

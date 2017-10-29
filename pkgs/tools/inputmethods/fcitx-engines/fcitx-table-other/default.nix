@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     isFcitxEngine = true;
     homepage      = "https://github.com/fcitx/fcitx-table-other";
-    downloadPage  = "http://download.fcitx-im.org/fcitx-table-other/";
+    downloadPage  = "https://download.fcitx-im.org/fcitx-table-other/";
     description   = "Provides some other tables for Fcitx";
     license       = licenses.gpl3Plus;
     platforms     = platforms.linux;

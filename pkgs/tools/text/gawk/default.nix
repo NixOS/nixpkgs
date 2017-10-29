@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://www.gnu.org/software/gawk/;
+    homepage = https://www.gnu.org/software/gawk/;
     description = "GNU implementation of the Awk programming language";
 
     longDescription = ''

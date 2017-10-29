@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       Internet.  It features full mesh routing, as well as encryption,
       authentication, compression and ethernet bridging.
     '';
-    homepage="http://www.tinc-vpn.org/";
+    homepage="https://www.tinc-vpn.org/";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;
   };

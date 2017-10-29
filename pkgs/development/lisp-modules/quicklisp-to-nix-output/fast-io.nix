@@ -8,7 +8,7 @@ rec {
   deps = [ args."alexandria" args."static-vectors" args."trivial-gray-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/fast-io/2017-06-30/fast-io-20170630-git.tgz'';
+    url = ''https://beta.quicklisp.org/archive/fast-io/2017-06-30/fast-io-20170630-git.tgz'';
     sha256 = ''0wg40jv6hn4ijks026d2aaz5pr3zfxxzaakyzzjka6981g9rgkrg'';
   };
 
@@ -19,7 +19,7 @@ rec {
 }
 /* (SYSTEM fast-io DESCRIPTION Alternative I/O mechanism to a stream or vector
     SHA256 0wg40jv6hn4ijks026d2aaz5pr3zfxxzaakyzzjka6981g9rgkrg URL
-    http://beta.quicklisp.org/archive/fast-io/2017-06-30/fast-io-20170630-git.tgz
+    https://beta.quicklisp.org/archive/fast-io/2017-06-30/fast-io-20170630-git.tgz
     MD5 34bfe5f306f2e0f6da128fe024ee242d NAME fast-io FILENAME fast-io DEPS
     ((NAME alexandria FILENAME alexandria)
      (NAME static-vectors FILENAME static-vectors)

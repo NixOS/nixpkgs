@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     ./dont-hardcode-cc.patch
   ] ++ stdenv.lib.optional enableNLS
     (fetchurl {
-      url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/app-arch/unzip/files/unzip-6.0-natspec.patch?revision=1.1";
+      url = "https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/app-arch/unzip/files/unzip-6.0-natspec.patch?revision=1.1";
       name = "unzip-6.0-natspec.patch";
       sha256 = "67ab260ae6adf8e7c5eda2d1d7846929b43562943ec4aff629bd7018954058b1";
     });

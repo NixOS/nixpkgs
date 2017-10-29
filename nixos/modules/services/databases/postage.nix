@@ -65,7 +65,7 @@ in {
         Postage requires at least one PostgreSQL server be defined.
         </para><para>
         Detailed information about PostgreSQL connection strings is available at:
-        <link xlink:href="http://www.postgresql.org/docs/current/static/libpq-connect.html"/>
+        <link xlink:href="https://www.postgresql.org/docs/current/static/libpq-connect.html"/>
         </para><para>
         Note that you should not specify your user name or password. That
         information will be entered on the login screen. If you specify a

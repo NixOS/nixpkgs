@@ -37,7 +37,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Interactive theorem prover based on Higher-Order Logic";
-    homepage    = http://www.cl.cam.ac.uk/~jrh13/hol-light/;
+    homepage    = https://www.cl.cam.ac.uk/~jrh13/hol-light/;
     license     = licenses.bsd2;
     platforms   = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice z77z vbgl ];

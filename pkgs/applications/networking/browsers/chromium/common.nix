@@ -181,7 +181,7 @@ let
 
       # use patched freetype
       # FIXME https://bugs.chromium.org/p/pdfium/issues/detail?id=733
-      # FIXME http://savannah.nongnu.org/bugs/?51156
+      # FIXME https://savannah.nongnu.org/bugs/?51156
       tar -xJf ${freetype_source}
 
       # remove unused third-party
@@ -221,7 +221,7 @@ let
       fieldtrial_testing_like_official_build = true;
 
       # Google API keys, see:
-      #   http://www.chromium.org/developers/how-tos/api-keys
+      #   https://www.chromium.org/developers/how-tos/api-keys
       # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
       # please get your own set of keys.
       google_api_key = "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI";

@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Cartographic Projections Library";
-    homepage = http://trac.osgeo.org/proj/;
+    homepage = https://trac.osgeo.org/proj/;
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ vbgl ];

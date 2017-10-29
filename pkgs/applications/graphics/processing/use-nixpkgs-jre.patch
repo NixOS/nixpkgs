@@ -26,7 +26,7 @@ index 4d0f0b2..c3f5c09 100755
      <untar compression="gzip" 
 @@ -655,39 +656,38 @@
  <!--
-     http://www.gnu.org/software/tar/manual/html_section/transform.html
+     https://www.gnu.org/software/tar/manual/html_section/transform.html
  -->
 -    <exec executable="tar" dir="linux">
 +    <!-- <exec executable="tar" dir="linux"> -->

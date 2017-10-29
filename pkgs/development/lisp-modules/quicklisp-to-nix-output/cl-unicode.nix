@@ -10,7 +10,7 @@ rec {
   deps = [ args."cl-ppcre" args."flexi-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-unicode/2014-12-17/cl-unicode-0.1.5.tgz'';
+    url = ''https://beta.quicklisp.org/archive/cl-unicode/2014-12-17/cl-unicode-0.1.5.tgz'';
     sha256 = ''1jd5qq5ji6l749c4x415z22y9r0k9z18pdi9p9fqvamzh854i46n'';
   };
 
@@ -21,7 +21,7 @@ rec {
 }
 /* (SYSTEM cl-unicode DESCRIPTION Portable Unicode Library SHA256
     1jd5qq5ji6l749c4x415z22y9r0k9z18pdi9p9fqvamzh854i46n URL
-    http://beta.quicklisp.org/archive/cl-unicode/2014-12-17/cl-unicode-0.1.5.tgz
+    https://beta.quicklisp.org/archive/cl-unicode/2014-12-17/cl-unicode-0.1.5.tgz
     MD5 2fd456537bd670126da84466226bc5c5 NAME cl-unicode FILENAME cl-unicode
     DEPS
     ((NAME cl-ppcre FILENAME cl-ppcre)

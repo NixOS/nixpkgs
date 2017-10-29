@@ -1,6 +1,6 @@
 From: Michael Biebl <biebl@debian.org>
 Origin: vendor
-Bug-Debian: http://bugs.debian.org/665506
+Bug-Debian: https://bugs.debian.org/665506
 Subject: Including individual glib headers no longer supported
 
 --- a/src/ario-profiles.h

@@ -67,7 +67,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Software implementation of a telephone private branch exchange (PBX)";
-      homepage = http://www.asterisk.org/;
+      homepage = https://www.asterisk.org/;
       license = licenses.gpl2;
       maintainers = with maintainers; [ auntie DerTim1 yorickvp ];
     };
@@ -114,7 +114,7 @@ in
       # provided here verbatim for the convenience of anyone wanting to build
       # Asterisk from other sources. Include in externals.
       # "sounds/asterisk-core-sounds-en-gsm-1.5.tar.gz" = fetchurl {
-      #   url = http://downloads.asterisk.org/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.5.tar.gz;
+      #   url = https://downloads.asterisk.org/pub/telephony/sounds/releases/asterisk-core-sounds-en-gsm-1.5.tar.gz;
       #   sha256 = "01xzbg7xy0c5zg7sixjw5025pvr4z64kfzi9zvx19im0w331h4cd";
       # };
       # "sounds/asterisk-moh-opsound-wav-2.03.tar.gz" = fetchurl {

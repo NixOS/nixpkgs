@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "C++ template library for linear algebra: vectors, matrices, and related algorithms";
     license = licenses.lgpl3Plus;
-    homepage = http://eigen.tuxfamily.org ;
+    homepage = https://eigen.tuxfamily.org ;
     maintainers = with stdenv.lib.maintainers; [ sander raskin ];
     branch = "2";
     platforms = with stdenv.lib.platforms; unix;

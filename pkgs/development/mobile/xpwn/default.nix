@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   ];
 
   meta = with stdenv.lib; {
-    homepage    = "http://planetbeing.lighthouseapp.com/projects/15246-xpwn";
+    homepage    = "https://planetbeing.lighthouseapp.com/projects/15246-xpwn";
     description = "Custom NOR firmware loader/IPSW generator for the iPhone";
     license     = licenses.gpl3Plus;
     platforms   = with platforms; linux ++ darwin;

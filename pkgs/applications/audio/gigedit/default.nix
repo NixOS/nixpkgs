@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.linuxsampler.org;
+    homepage = https://www.linuxsampler.org;
     description = "Gigasampler file access library";
     license = licenses.gpl2;
     maintainers = [ maintainers.goibhniu ];

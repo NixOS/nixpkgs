@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
     homepage = https://wiki.documentfoundation.org/DLP/Libraries/libzmf;
-    downloadPage = "http://dev-www.libreoffice.org/src/libzmf/";
+    downloadPage = "https://dev-www.libreoffice.org/src/libzmf/";
     updateWalker = true;
   };
 }

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = {
-    homepage = http://libspectre.freedesktop.org/;
+    homepage = https://libspectre.freedesktop.org/;
     description = "PostScript rendering library";
 
     longDescription = ''

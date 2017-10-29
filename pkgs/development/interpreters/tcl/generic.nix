@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The Tcl scription language";
-    homepage = http://www.tcl.tk/;
+    homepage = https://www.tcl.tk/;
     license = licenses.tcltk;
     platforms = platforms.all;
     maintainers = with maintainers; [ wkennington vrthra ];

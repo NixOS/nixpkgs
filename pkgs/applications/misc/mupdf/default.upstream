@@ -1,4 +1,4 @@
-url http://mupdf.com/downloads/archive/
+url https://mupdf.com/downloads/archive/
 do_overwrite(){
   ensure_hash
   ensure_version

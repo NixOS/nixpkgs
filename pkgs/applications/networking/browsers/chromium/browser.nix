@@ -46,7 +46,7 @@ mkChromiumDerivation (base: rec {
 
   meta = {
     description = "An open source web browser from Google";
-    homepage = http://www.chromium.org/;
+    homepage = https://www.chromium.org/;
     maintainers = with maintainers; [ chaoflow bendlas ];
     license = licenses.bsd3;
     platforms = platforms.linux;

@@ -4,7 +4,7 @@ which doesn't apply cleanly due to them using a slightly different format of pat
 --- a/gcc/auto-profile.c 2015-01-18 02:25:42 UTC
 +++ b/gcc/auto-profile.c
 @@ -19,11 +19,9 @@ along with GCC; see the file COPYING3.  
- <http://www.gnu.org/licenses/>.  */
+ <https://www.gnu.org/licenses/>.  */
  
  #include "config.h"
 -#include "system.h"

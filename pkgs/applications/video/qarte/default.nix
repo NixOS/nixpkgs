@@ -5,7 +5,7 @@ let
 in stdenv.mkDerivation {
   name = "qarte-3.10.0+188";
   src = fetchbzr {
-    url = http://bazaar.launchpad.net/~vincent-vandevyvre/qarte/qarte-3;
+    url = https://bazaar.launchpad.net/~vincent-vandevyvre/qarte/qarte-3;
     rev = "188";
     sha256 = "06xpkjgm5ci5gfkza9f44m8l4jj32gfmr65cqs4x0j2ihrc6b4r9";
   };

@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
       support, with no effort from your side.
     '';
 
-    homepage = http://www.gnu.org/software/emms/;
+    homepage = https://www.gnu.org/software/emms/;
 
     license = stdenv.lib.licenses.gpl3Plus;
 

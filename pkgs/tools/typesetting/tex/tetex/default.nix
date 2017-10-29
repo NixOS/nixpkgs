@@ -47,7 +47,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description  = "A full-featured (La)TeX distribution";
-    homepage     = http://www.tug.org/tetex/;
+    homepage     = https://www.tug.org/tetex/;
     maintainers  = with maintainers; [ lovek323 ];
     platforms    = platforms.unix;
     hydraPlatforms = [];

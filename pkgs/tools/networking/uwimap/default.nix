@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://www.washington.edu/imap/;
+    homepage = https://www.washington.edu/imap/;
     description = "UW IMAP toolkit - IMAP-supporting software developed by the UW";
     license = stdenv.lib.licenses.asl20;
     platforms = with stdenv.lib.platforms; linux;

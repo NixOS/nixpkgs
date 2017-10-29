@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.unix;
     license = licenses.asl20;
-    homepage = http://alviano.net/software/maxino/;
+    homepage = https://alviano.net/software/maxino/;
   };
 }

@@ -58,8 +58,8 @@ stdenv.mkDerivation rec {
     ++ optional (hostPlatform != buildPlatform && hostPlatform.libc != "glibc") libiconv;
 
   # The tests are known broken on Cygwin
-  # (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
-  # Darwin (http://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
+  # (https://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19025),
+  # Darwin (https://thread.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
   # and {Open,Free}BSD.
   # With non-standard storeDir: https://github.com/NixOS/nix/issues/512
   doCheck = hostPlatform == buildPlatform
@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.gnu.org/software/coreutils/;
+    homepage = https://www.gnu.org/software/coreutils/;
     description = "The basic file, shell and text manipulation utilities of the GNU operating system";
 
     longDescription = ''

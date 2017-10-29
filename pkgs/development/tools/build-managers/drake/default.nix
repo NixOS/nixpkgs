@@ -10,7 +10,7 @@ bundlerEnv {
   
   meta = with lib; {
     description = "A branch of Rake supporting automatic parallelizing of tasks";
-    homepage = http://quix.github.io/rake/;
+    homepage = https://quix.github.io/rake/;
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ romildo ];

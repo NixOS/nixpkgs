@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libkate pango cairo ];
 
   meta = {
-    homepage = http://code.google.com/p/libtiger/;
+    homepage = https://code.google.com/p/libtiger/;
     description = "A rendering library for Kate streams using Pango and Cairo";
     platforms = stdenv.lib.platforms.unix;
   };

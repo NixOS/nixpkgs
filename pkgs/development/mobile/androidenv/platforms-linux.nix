@@ -24,7 +24,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 2";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 
@@ -36,7 +36,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 3";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 
@@ -48,7 +48,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 4";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 
@@ -60,7 +60,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 5";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 
@@ -72,7 +72,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 6";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 
@@ -84,7 +84,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 7";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 
@@ -96,7 +96,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 8";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 
@@ -108,7 +108,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 9";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 
@@ -120,7 +120,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 10";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 
@@ -132,7 +132,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 11";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 
@@ -144,7 +144,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 12";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 
@@ -156,7 +156,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 13";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 
@@ -168,7 +168,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 14";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 
@@ -180,7 +180,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 15";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 
@@ -192,7 +192,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 16";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 
@@ -204,7 +204,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 17";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 
@@ -216,7 +216,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 18";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 
@@ -228,7 +228,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 19";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 
@@ -240,7 +240,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 20";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 
@@ -252,7 +252,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 21";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 
@@ -264,7 +264,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 22";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 
@@ -276,7 +276,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 23";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 
@@ -288,7 +288,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 24";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 
@@ -300,7 +300,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 25";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 
@@ -312,7 +312,7 @@ in
     };
     meta = {
       description = "Android SDK Platform 26";
-      homepage = http://developer.android.com/sdk/;
+      homepage = https://developer.android.com/sdk/;
     };
   };
 

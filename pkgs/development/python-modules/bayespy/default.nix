@@ -24,7 +24,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.bayespy.org;
+    homepage = https://www.bayespy.org;
     description = "Variational Bayesian inference tools for Python";
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];

@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://gmpclient.org;
+    homepage = https://gmpclient.org;
     description = "A GTK2 frontend for Music Player Daemon";
     license = licenses.gpl2;
     maintainers = [ maintainers.rickynils ];

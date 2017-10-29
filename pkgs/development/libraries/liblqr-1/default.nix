@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ glib ];
 
   meta = with stdenv.lib; {
-    homepage = http://liblqr.wikidot.com;
+    homepage = https://liblqr.wikidot.com;
     description = "Seam-carving C/C++ library called Liquid Rescaling";
     platforms = platforms.all;
     maintainers = [ ];

@@ -10,7 +10,7 @@ in rec {
     url = "https://dl.winehq.org/wine/source/2.0/wine-${version}.tar.xz";
     sha256 = "16iwf48cfi39aqyy8131jz4x7lr551c9yc0mnks7g24j77sq867p";
 
-    ## see http://wiki.winehq.org/Gecko
+    ## see https://wiki.winehq.org/Gecko
     gecko32 = fetchurl rec {
       version = "2.47";
       url = "http://dl.winehq.org/wine/wine-gecko/${version}/wine_gecko-${version}-x86.msi";
@@ -22,7 +22,7 @@ in rec {
       sha256 = "0zaagqsji6zaag92fqwlasjs8v9hwjci5c2agn9m7a8fwljylrf5";
     };
 
-    ## see http://wiki.winehq.org/Mono
+    ## see https://wiki.winehq.org/Mono
     mono = fetchurl rec {
       version = "4.7.1";
       url = "http://dl.winehq.org/wine/wine-mono/${version}/wine-mono-${version}.msi";

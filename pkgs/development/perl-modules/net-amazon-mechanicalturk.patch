@@ -1,4 +1,4 @@
-From http://daveviner.blogspot.com/2009/12/amazon-mechanical-turk-perl-library.html
+From https://daveviner.blogspot.com/2009/12/amazon-mechanical-turk-perl-library.html
 http://www.vinertech.com/patches/net-amazon-mechanicalturk.patch
 
 diff -rubB Net-Amazon-MechanicalTurk-1.01/lib/Net/Amazon/MechanicalTurk/ModuleUtil.pm Net-Amazon-MechanicalTurk-1.01/lib/Net/Amazon/MechanicalTurk/ModuleUtil.pm

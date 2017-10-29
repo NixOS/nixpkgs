@@ -7,7 +7,7 @@
 , gnugrep
 , curl
 , attrPath
-, baseUrl ? "http://archive.mozilla.org/pub/firefox/releases/"
+, baseUrl ? "https://archive.mozilla.org/pub/firefox/releases/"
 , versionSuffix ? ""
 }:
 

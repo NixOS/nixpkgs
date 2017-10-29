@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A multi-source music player";
-    homepage = http://tomahawk-player.org/;
+    homepage = https://tomahawk-player.org/;
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.aszlig ];

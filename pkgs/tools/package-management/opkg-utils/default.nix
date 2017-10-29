@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Helper scripts for use with the opkg package manager";
-    homepage = http://git.yoctoproject.org/cgit/cgit.cgi/opkg-utils/;
+    homepage = https://git.yoctoproject.org/cgit/cgit.cgi/opkg-utils/;
     license = licenses.gpl2;
     platforms = platforms.all;
     maintainers = [ maintainers.bjornfor ];

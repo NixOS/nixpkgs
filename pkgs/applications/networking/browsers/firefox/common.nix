@@ -42,7 +42,7 @@
 # "Firefox"/"Torbrowser" instead of "Nightly" or whatever, enable this
 # option. However, in Firefox's case, those binaries may not be
 # distributed without permission from the Mozilla Foundation, see
-# http://www.mozilla.org/foundation/trademarks/.
+# https://www.mozilla.org/foundation/trademarks/.
 , enableOfficialBranding ? isTorBrowserLike
 }:
 

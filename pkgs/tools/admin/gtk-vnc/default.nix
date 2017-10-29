@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     updateInfo = {
-      downloadPage = "http://ftp.gnome.org/pub/GNOME/sources/gtk-vnc";
+      downloadPage = "https://ftp.gnome.org/pub/GNOME/sources/gtk-vnc";
     };
   };
 }

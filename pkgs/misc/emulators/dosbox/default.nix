@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   patches =
     [ # Fix building with GCC 4.6.
       (fetchurl {
-        url = "http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/games-emulation/dosbox/files/dosbox-0.74-gcc46.patch?revision=1.1";
+        url = "https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/games-emulation/dosbox/files/dosbox-0.74-gcc46.patch?revision=1.1";
         sha256 = "03iv1ph7fccfw327ngnhvzwyiix7fsbdb5mmpxivzkidhlrssxq9";
       })
     ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.dosbox.com/;
+    homepage = https://www.dosbox.com/;
     description = "A DOS emulator";
     platforms = stdenv.lib.platforms.unix;
   };

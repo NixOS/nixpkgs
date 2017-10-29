@@ -64,7 +64,7 @@ let
 # ISO installer
 # installerIso = callPackage ./installer.nix {};
 
-#### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
+#### Core (https://ftp.acc.umu.se/pub/GNOME/core/)
 
   adwaita-icon-theme = callPackage ./core/adwaita-icon-theme { };
 
@@ -257,7 +257,7 @@ let
   zenity = callPackage ./core/zenity { };
 
 
-#### Apps (http://ftp.acc.umu.se/pub/GNOME/apps/)
+#### Apps (https://ftp.acc.umu.se/pub/GNOME/apps/)
 
   accerciser = callPackage ./apps/accerciser { };
 
@@ -312,7 +312,7 @@ let
 
   vinagre = callPackage ./apps/vinagre { };
 
-#### Dev http://ftp.gnome.org/pub/GNOME/devtools/
+#### Dev https://ftp.gnome.org/pub/GNOME/devtools/
 
   anjuta = callPackage ./devtools/anjuta { };
 
@@ -362,7 +362,7 @@ let
 
   quadrapassel = callPackage ./games/quadrapassel { };
 
-#### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
+#### Misc -- other packages on https://ftp.gnome.org/pub/GNOME/sources/
 
   california = callPackage ./misc/california { };
 

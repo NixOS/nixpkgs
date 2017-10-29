@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = http://telepathy.freedesktop.org;
+    homepage = https://telepathy.freedesktop.org;
     description = "Jabber/XMPP connection manager for the Telepathy framework";
     platforms = stdenv.lib.platforms.gnu;
   };

@@ -175,7 +175,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A media player that supports many video formats (MPlayer and mplayer2 fork)";
-    homepage = http://mpv.io;
+    homepage = https://mpv.io;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres fuuzetsu fpletz ];
     platforms = platforms.darwin ++ platforms.linux;

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   dontUseCmakeBuildDir=true;
 
   meta = {
-    homepage = http://musicbrainz.org/doc/libmusicbrainz;
+    homepage = https://musicbrainz.org/doc/libmusicbrainz;
     description = "MusicBrainz Client Library (5.x version)";
     longDescription = ''
       The libmusicbrainz (also known as mb_client or MusicBrainz Client

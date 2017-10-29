@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   meta = {
       description = "A program and library for changing the tempo, pitch and playback rate of audio";
-      homepage = http://www.surina.net/soundtouch/;
-      downloadPage = http://www.surina.net/soundtouch/sourcecode.html;
+      homepage = https://www.surina.net/soundtouch/;
+      downloadPage = https://www.surina.net/soundtouch/sourcecode.html;
       license = stdenv.lib.licenses.lgpl21;
       platforms = stdenv.lib.platforms.all;
   };

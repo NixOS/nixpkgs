@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ which ];
   buildInputs = [ readline python icu ];
 
-  # http://code.google.com/p/v8/issues/detail?id=2149
+  # https://code.google.com/p/v8/issues/detail?id=2149
   NIX_CFLAGS_COMPILE = concatStringsSep " " [
     "-Wno-error=strict-overflow"
     "-Wno-unused-local-typedefs"

@@ -4,7 +4,7 @@ stdenv.mkDerivation {
   name = "aangifte2014-1";
 
   src = fetchurl {
-    url = http://download.belastingdienst.nl/belastingdienst/apps/linux/ib2014_linux.tar.gz;
+    url = https://download.belastingdienst.nl/belastingdienst/apps/linux/ib2014_linux.tar.gz;
     sha256 = "1lkpfn9ban122hw27vvscdlg3933i2lqcdhp7lk26f894jbwzq3j";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Elektronische aangifte IB 2014 (Dutch Tax Return Program)";
-    url = http://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/themaoverstijgend/programmas_en_formulieren/aangifteprogramma_2014_linux;
+    url = https://www.belastingdienst.nl/wps/wcm/connect/bldcontentnl/themaoverstijgend/programmas_en_formulieren/aangifteprogramma_2014_linux;
     license = stdenv.lib.licenses.unfree;
     platforms = stdenv.lib.platforms.linux;
     hydraPlatforms = [];

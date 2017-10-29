@@ -21,7 +21,7 @@ in buildPythonApplication rec {
   propagatedBuildInputs = [ xrandr pygtk ];
 
   meta = {
-    homepage = http://christian.amsuess.com/tools/arandr/;
+    homepage = https://christian.amsuess.com/tools/arandr/;
     description = "A simple visual front end for XRandR";
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.domenkozar ];

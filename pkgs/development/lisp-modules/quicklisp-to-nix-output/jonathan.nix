@@ -8,7 +8,7 @@ rec {
   deps = [ args."babel" args."cl-annot" args."cl-ppcre" args."cl-syntax" args."cl-syntax-annot" args."fast-io" args."proc-parse" args."trivial-types" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/jonathan/2017-06-30/jonathan-20170630-git.tgz'';
+    url = ''https://beta.quicklisp.org/archive/jonathan/2017-06-30/jonathan-20170630-git.tgz'';
     sha256 = ''0vxnxs38f6gxw51b69n09p2qmph17jkhwdvwq02sayiq3p4w10bm'';
   };
 
@@ -20,7 +20,7 @@ rec {
 /* (SYSTEM jonathan DESCRIPTION
     High performance JSON encoder and decoder. Currently support: SBCL, CCL.
     SHA256 0vxnxs38f6gxw51b69n09p2qmph17jkhwdvwq02sayiq3p4w10bm URL
-    http://beta.quicklisp.org/archive/jonathan/2017-06-30/jonathan-20170630-git.tgz
+    https://beta.quicklisp.org/archive/jonathan/2017-06-30/jonathan-20170630-git.tgz
     MD5 5d82723835164f4e3d9c4d031322eb98 NAME jonathan FILENAME jonathan DEPS
     ((NAME babel FILENAME babel) (NAME cl-annot FILENAME cl-annot)
      (NAME cl-ppcre FILENAME cl-ppcre) (NAME cl-syntax FILENAME cl-syntax)

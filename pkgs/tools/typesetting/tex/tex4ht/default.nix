@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "tex4ht-1.0.2009_06_11_1038";
 
   src = fetchurl {
-    url = "http://tug.org/applications/tex4ht/tex4ht.zip";
+    url = "https://tug.org/applications/tex4ht/tex4ht.zip";
     sha256 = "15gj18ihds6530af42clpa4zskak5kah9wzs2hd19a9ymwjsccd6";
   };
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://tug.org/tex4ht/;
+    homepage = https://tug.org/tex4ht/;
     description = "A system to convert (La)TeX documents to HTML and various other formats";
     license = stdenv.lib.licenses.lppl12;
     platforms = stdenv.lib.platforms.unix;

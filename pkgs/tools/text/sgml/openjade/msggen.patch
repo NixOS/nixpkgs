@@ -1,4 +1,4 @@
-http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/app-text/openjade/files/openjade-1.3.2-msggen.pl.patch?revision=1.2
+https://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/app-text/openjade/files/openjade-1.3.2-msggen.pl.patch?revision=1.2
 
 Use Getopt::Std in place of getopts.pl.
 https://bugs.gentoo.org/show_bug.cgi?id=420083

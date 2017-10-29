@@ -32,7 +32,7 @@ let
   debMirrors = [
     "http://95.31.35.30/chrome/pool/main/g"
     "http://mirror.pcbeta.com/google/chrome/deb/pool/main/g"
-    "http://repo.fdzh.org/chrome/deb/pool/main/g"
+    "https://repo.fdzh.org/chrome/deb/pool/main/g"
   ];
 
 in rec {
@@ -81,7 +81,7 @@ in rec {
       ${attrs.os}.${attrs.channel} = attrs // {
         history = let
           drvName = "omahaproxy-${attrs.os}.${attrs.channel}-info";
-          history = csv2nix drvName "http://omahaproxy.appspot.com/history";
+          history = csv2nix drvName "https://omahaproxy.appspot.com/history";
           cond = h: attrs.os == h.os && attrs.channel == h.channel
                  && lib.versionOlder h.version attrs.current_version;
           # Note that this is a *reverse* sort!
@@ -90,7 +90,7 @@ in rec {
         in map (lib.flip removeAttrs ["os" "channel"]) sorted;
         version = attrs.current_version;
       };
-    }) (csv2nix "omahaproxy-info" "http://omahaproxy.appspot.com/all?csv=1"));
+    }) (csv2nix "omahaproxy-info" "https://omahaproxy.appspot.com/all?csv=1"));
 
     /*
       XXX: This is essentially the same as:

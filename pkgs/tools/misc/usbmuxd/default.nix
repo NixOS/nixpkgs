@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://marcansoft.com/blog/iphonelinux/usbmuxd/;
+    homepage = https://marcansoft.com/blog/iphonelinux/usbmuxd/;
     description = "USB Multiplex Daemon (for talking to iPhone or iPod)";
     longDescription = ''
       usbmuxd: USB Multiplex Daemon. This bit of software is in charge of

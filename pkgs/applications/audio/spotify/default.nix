@@ -7,7 +7,7 @@ assert stdenv.system == "x86_64-linux";
 let
   # Please update the stable branch!
   # Latest version number can be found at:
-  # http://repository-origin.spotify.com/pool/non-free/s/spotify-client/
+  # https://repository-origin.spotify.com/pool/non-free/s/spotify-client/
   # Be careful not to pick the testing version.
   version = "1.0.64.407.g9bd02c2d-26";
 

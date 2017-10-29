@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 #NIX_LDFLAGS = "-lXext -lgcc_s";
 
   meta = { 
-    homepage = http://www.xine-project.org/;
+    homepage = https://www.xine-project.org/;
     description = "Xlib-based interface to Xine, a video player";
     platforms = stdenv.lib.platforms.linux;
   };

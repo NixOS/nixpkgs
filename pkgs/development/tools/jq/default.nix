@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ raskin ];
     platforms = with platforms; linux ++ darwin;
-    downloadPage = "http://stedolan.github.io/jq/download/";
+    downloadPage = "https://stedolan.github.io/jq/download/";
     updateWalker = true;
     inherit version;
   };

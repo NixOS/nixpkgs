@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The ultimate desktop calculator";
-    homepage = http://qalculate.github.io;
+    homepage = https://qalculate.github.io;
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.all;
   };

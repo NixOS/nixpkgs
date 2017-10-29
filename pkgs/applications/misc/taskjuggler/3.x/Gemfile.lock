@@ -1,5 +1,5 @@
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     mail (2.6.3)
       mime-types (>= 1.16, < 3)

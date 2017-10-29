@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   configureFlags = ["--enable-mbim-qmux" ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.freedesktop.org/wiki/Software/libqmi/;
+    homepage = https://www.freedesktop.org/wiki/Software/libqmi/;
     description = "Modem protocol helper library";
     platforms = platforms.linux;
     license = licenses.gpl2;

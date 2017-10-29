@@ -80,7 +80,7 @@ let
       ./2.7.3-no-libm.patch
     ] ++ optionals hasDistutilsCxxPatch [
 
-      # Patch from http://bugs.python.org/issue1222585 adapted to work with
+      # Patch from https://bugs.python.org/issue1222585 adapted to work with
       # `patch -p1' and with a last hunk removed
       # Upstream distutils is calling C compiler to compile C++ code, which
       # only works for GCC and Apple Clang. This makes distutils to call C++
@@ -212,7 +212,7 @@ in stdenv.mkDerivation {
     enableParallelBuilding = true;
 
     meta = {
-      homepage = http://python.org;
+      homepage = https://python.org;
       description = "A high-level dynamically-typed programming language";
       longDescription = ''
         Python is a remarkably powerful dynamic programming language that

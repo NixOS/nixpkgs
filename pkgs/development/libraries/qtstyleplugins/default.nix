@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Additional style plugins for Qt5, including BB10, GTK+, Cleanlooks, Motif, Plastique";
-    homepage = http://blog.qt.io/blog/2012/10/30/cleaning-up-styles-in-qt5-and-adding-fusion/;
+    homepage = https://blog.qt.io/blog/2012/10/30/cleaning-up-styles-in-qt5-and-adding-fusion/;
     license = licenses.lgpl21;
     maintainers = [ maintainers.gnidorah ];
     platforms = platforms.linux;

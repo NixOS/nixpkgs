@@ -25,7 +25,7 @@ let self = stdenv.mkDerivation rec {
   configureFlags =
     # Build a "fat binary", with routines for several sub-architectures
     # (x86), except on Solaris where some tests crash with "Memory fault".
-    # See <http://hydra.nixos.org/build/2760931>, for instance.
+    # See <https://hydra.nixos.org/build/2760931>, for instance.
     #
     # no darwin because gmp uses ASM that clang doesn't like
     optional (!stdenv.isSunOS) "--enable-fat"

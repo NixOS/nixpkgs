@@ -10,7 +10,7 @@ rec {
   deps = [ args."trivial-gray-streams" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/flexi-streams/2015-07-09/flexi-streams-1.0.15.tgz'';
+    url = ''https://beta.quicklisp.org/archive/flexi-streams/2015-07-09/flexi-streams-1.0.15.tgz'';
     sha256 = ''0zkx335winqs7xigbmxhhkhcsfa9hjhf1q6r4q710y29fbhpc37p'';
   };
 
@@ -21,7 +21,7 @@ rec {
 }
 /* (SYSTEM flexi-streams DESCRIPTION Flexible bivalent streams for Common Lisp
     SHA256 0zkx335winqs7xigbmxhhkhcsfa9hjhf1q6r4q710y29fbhpc37p URL
-    http://beta.quicklisp.org/archive/flexi-streams/2015-07-09/flexi-streams-1.0.15.tgz
+    https://beta.quicklisp.org/archive/flexi-streams/2015-07-09/flexi-streams-1.0.15.tgz
     MD5 02dbb5a0c5f982e0c7a88aad9a25004e NAME flexi-streams FILENAME
     flexi-streams DEPS
     ((NAME trivial-gray-streams FILENAME trivial-gray-streams)) DEPENDENCIES

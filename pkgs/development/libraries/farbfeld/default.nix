@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "3";
 
   src = fetchgit {
-    url = "http://git.suckless.org/farbfeld";
+    url = "https://git.suckless.org/farbfeld";
     rev = "refs/tags/${version}";
     sha256 = "1k9cnw2zk9ywcn4hibf7wgi4czwyxhgjdmia6ghpw3wcz8vi71xl";
   };

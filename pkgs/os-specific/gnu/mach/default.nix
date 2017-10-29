@@ -20,7 +20,7 @@ stdenv.mkDerivation ({
        stdenv.lib.optional headersOnly "--build=i586-pc-gnu"  # cheat
 
     # Always enable dependency tracking.  See
-    # <http://lists.gnu.org/archive/html/bug-hurd/2010-05/msg00137.html>.
+    # <https://lists.gnu.org/archive/html/bug-hurd/2010-05/msg00137.html>.
     ++ [ "--enable-dependency-tracking" ];
 
   nativeBuildInputs = [ autoconf automake texinfo ]
@@ -43,7 +43,7 @@ stdenv.mkDerivation ({
 
     license = stdenv.lib.licenses.gpl2Plus;
 
-    homepage = http://www.gnu.org/software/hurd/microkernel/mach/gnumach.html;
+    homepage = https://www.gnu.org/software/hurd/microkernel/mach/gnumach.html;
 
     maintainers = [ stdenv.lib.maintainers.ludo ];
     platforms = [ "i586-gnu" ];

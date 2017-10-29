@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
                 ++ optional gpgSupport "--enable-gpgme";
 
   meta = {
-    homepage = http://sylpheed.sraoss.jp/en/;
+    homepage = https://sylpheed.sraoss.jp/en/;
     description = "A lightweight and user-friendly e-mail client";
     maintainers = [ maintainers.eelco ];
     platforms = platforms.linux ++ platforms.darwin;

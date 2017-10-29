@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://invisible-island.net/xterm;
+    homepage = https://invisible-island.net/xterm;
     license = "BSD";
     maintainers = with stdenv.lib.maintainers; [viric vrthra];
     platforms = with stdenv.lib.platforms; linux ++ darwin;

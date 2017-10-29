@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     description = ''
       Readable bitmap font inspired by Envy Code R
     '';
-    homepage = "http://ywstd.fr/p/pj/#envypn";
+    homepage = "https://ywstd.fr/p/pj/#envypn";
     license = licenses.miros;
     platforms = platforms.linux;
   };

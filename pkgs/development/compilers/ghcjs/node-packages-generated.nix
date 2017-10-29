@@ -29,7 +29,7 @@
     version = "0.8.1";
     bin = false;
     src = fetchurl {
-      url = "http://registry.npmjs.org/after/-/after-0.8.1.tgz";
+      url = "https://registry.npmjs.org/after/-/after-0.8.1.tgz";
       name = "after-0.8.1.tgz";
       sha1 = "ab5d4fb883f596816d3515f8f791c0af486dd627";
     };
@@ -48,7 +48,7 @@
     version = "0.0.6";
     bin = false;
     src = fetchurl {
-      url = "http://registry.npmjs.org/arraybuffer.slice/-/arraybuffer.slice-0.0.6.tgz";
+      url = "https://registry.npmjs.org/arraybuffer.slice/-/arraybuffer.slice-0.0.6.tgz";
       name = "arraybuffer.slice-0.0.6.tgz";
       sha1 = "f33b2159f0532a3f3107a272c0ccfbd1ad2979ca";
     };
@@ -86,7 +86,7 @@
     version = "0.1.2";
     bin = false;
     src = fetchurl {
-      url = "http://registry.npmjs.org/base64-arraybuffer/-/base64-arraybuffer-0.1.2.tgz";
+      url = "https://registry.npmjs.org/base64-arraybuffer/-/base64-arraybuffer-0.1.2.tgz";
       name = "base64-arraybuffer-0.1.2.tgz";
       sha1 = "474df4a9f2da24e05df3158c3b1db3c3cd46a154";
     };
@@ -105,7 +105,7 @@
     version = "0.1.0";
     bin = false;
     src = fetchurl {
-      url = "http://registry.npmjs.org/base64id/-/base64id-0.1.0.tgz";
+      url = "https://registry.npmjs.org/base64id/-/base64id-0.1.0.tgz";
       name = "base64id-0.1.0.tgz";
       sha1 = "02ce0fdeee0cef4f40080e1e73e834f0b1bfce3f";
     };
@@ -143,7 +143,7 @@
     version = "1.0.2";
     bin = false;
     src = fetchurl {
-      url = "http://registry.npmjs.org/better-assert/-/better-assert-1.0.2.tgz";
+      url = "https://registry.npmjs.org/better-assert/-/better-assert-1.0.2.tgz";
       name = "better-assert-1.0.2.tgz";
       sha1 = "40866b9e1b9e0b55b481894311e68faffaebc522";
     };
@@ -182,7 +182,7 @@
     version = "1.0.0";
     bin = false;
     src = fetchurl {
-      url = "http://registry.npmjs.org/callsite/-/callsite-1.0.0.tgz";
+      url = "https://registry.npmjs.org/callsite/-/callsite-1.0.0.tgz";
       name = "callsite-1.0.0.tgz";
       sha1 = "280398e5d664bd74038b6f0905153e6e8af1bc20";
     };
@@ -201,7 +201,7 @@
     version = "1.0.0";
     bin = false;
     src = fetchurl {
-      url = "http://registry.npmjs.org/component-bind/-/component-bind-1.0.0.tgz";
+      url = "https://registry.npmjs.org/component-bind/-/component-bind-1.0.0.tgz";
       name = "component-bind-1.0.0.tgz";
       sha1 = "00c608ab7dcd93897c0009651b1d3a8e1e73bbd1";
     };
@@ -220,7 +220,7 @@
     version = "1.1.2";
     bin = false;
     src = fetchurl {
-      url = "http://registry.npmjs.org/component-emitter/-/component-emitter-1.1.2.tgz";
+      url = "https://registry.npmjs.org/component-emitter/-/component-emitter-1.1.2.tgz";
       name = "component-emitter-1.1.2.tgz";
       sha1 = "296594f2753daa63996d2af08d15a95116c9aec3";
     };
@@ -258,7 +258,7 @@
     version = "0.0.3";
     bin = false;
     src = fetchurl {
-      url = "http://registry.npmjs.org/component-inherit/-/component-inherit-0.0.3.tgz";
+      url = "https://registry.npmjs.org/component-inherit/-/component-inherit-0.0.3.tgz";
       name = "component-inherit-0.0.3.tgz";
       sha1 = "645fc4adf58b72b649d5cae65135619db26ff143";
     };
@@ -277,7 +277,7 @@
     version = "0.7.4";
     bin = false;
     src = fetchurl {
-      url = "http://registry.npmjs.org/debug/-/debug-0.7.4.tgz";
+      url = "https://registry.npmjs.org/debug/-/debug-0.7.4.tgz";
       name = "debug-0.7.4.tgz";
       sha1 = "06e1ea8082c2cb14e39806e22e2f6f757f92af39";
     };
@@ -296,7 +296,7 @@
     version = "2.2.0";
     bin = false;
     src = fetchurl {
-      url = "http://registry.npmjs.org/debug/-/debug-2.2.0.tgz";
+      url = "https://registry.npmjs.org/debug/-/debug-2.2.0.tgz";
       name = "debug-2.2.0.tgz";
       sha1 = "f87057e995b1a1f6ae6a4960664137bc56f039da";
     };
@@ -455,7 +455,7 @@
     version = "0.0.1";
     bin = false;
     src = fetchurl {
-      url = "http://registry.npmjs.org/indexof/-/indexof-0.0.1.tgz";
+      url = "https://registry.npmjs.org/indexof/-/indexof-0.0.1.tgz";
       name = "indexof-0.0.1.tgz";
       sha1 = "82dc336d232b9062179d05ab3293a66059fd435d";
     };
@@ -474,7 +474,7 @@
     version = "0.0.1";
     bin = false;
     src = fetchurl {
-      url = "http://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz";
+      url = "https://registry.npmjs.org/isarray/-/isarray-0.0.1.tgz";
       name = "isarray-0.0.1.tgz";
       sha1 = "8a18acfca9a8f4177e09abfc6038939b05d1eedf";
     };
@@ -493,7 +493,7 @@
     version = "3.2.6";
     bin = false;
     src = fetchurl {
-      url = "http://registry.npmjs.org/json3/-/json3-3.2.6.tgz";
+      url = "https://registry.npmjs.org/json3/-/json3-3.2.6.tgz";
       name = "json3-3.2.6.tgz";
       sha1 = "f6efc93c06a04de9aec53053df2559bb19e2038b";
     };
@@ -531,7 +531,7 @@
     version = "1.12.0";
     bin = false;
     src = fetchurl {
-      url = "http://registry.npmjs.org/mime-db/-/mime-db-1.12.0.tgz";
+      url = "https://registry.npmjs.org/mime-db/-/mime-db-1.12.0.tgz";
       name = "mime-db-1.12.0.tgz";
       sha1 = "3d0c63180f458eb10d325aaa37d7c58ae312e9d7";
     };
@@ -550,7 +550,7 @@
     version = "2.0.14";
     bin = false;
     src = fetchurl {
-      url = "http://registry.npmjs.org/mime-types/-/mime-types-2.0.14.tgz";
+      url = "https://registry.npmjs.org/mime-types/-/mime-types-2.0.14.tgz";
       name = "mime-types-2.0.14.tgz";
       sha1 = "310e159db23e077f8bb22b748dabfa4957140aa6";
     };
@@ -570,7 +570,7 @@
     version = "0.7.1";
     bin = false;
     src = fetchurl {
-      url = "http://registry.npmjs.org/ms/-/ms-0.7.1.tgz";
+      url = "https://registry.npmjs.org/ms/-/ms-0.7.1.tgz";
       name = "ms-0.7.1.tgz";
       sha1 = "9cd13c03adbff25b65effde7ce864ee952017098";
     };
@@ -608,7 +608,7 @@
     version = "0.0.3";
     bin = false;
     src = fetchurl {
-      url = "http://registry.npmjs.org/object-component/-/object-component-0.0.3.tgz";
+      url = "https://registry.npmjs.org/object-component/-/object-component-0.0.3.tgz";
       name = "object-component-0.0.3.tgz";
       sha1 = "f0c69aa50efc95b866c186f400a33769cb2f1291";
     };
@@ -627,7 +627,7 @@
     version = "0.0.6";
     bin = false;
     src = fetchurl {
-      url = "http://registry.npmjs.org/options/-/options-0.0.6.tgz";
+      url = "https://registry.npmjs.org/options/-/options-0.0.6.tgz";
       name = "options-0.0.6.tgz";
       sha1 = "ec22d312806bb53e731773e7cdaefcf1c643128f";
     };
@@ -646,7 +646,7 @@
     version = "0.0.1";
     bin = false;
     src = fetchurl {
-      url = "http://registry.npmjs.org/parsejson/-/parsejson-0.0.1.tgz";
+      url = "https://registry.npmjs.org/parsejson/-/parsejson-0.0.1.tgz";
       name = "parsejson-0.0.1.tgz";
       sha1 = "9b10c6c0d825ab589e685153826de0a3ba278bcc";
     };
@@ -666,7 +666,7 @@
     version = "0.0.2";
     bin = false;
     src = fetchurl {
-      url = "http://registry.npmjs.org/parseqs/-/parseqs-0.0.2.tgz";
+      url = "https://registry.npmjs.org/parseqs/-/parseqs-0.0.2.tgz";
       name = "parseqs-0.0.2.tgz";
       sha1 = "9dfe70b2cddac388bde4f35b1f240fa58adbe6c7";
     };

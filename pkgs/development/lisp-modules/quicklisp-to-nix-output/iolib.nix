@@ -10,7 +10,7 @@ rec {
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."idna" args."iolib_dot_asdf" args."iolib_dot_base" args."iolib_dot_conf" args."iolib_dot_grovel" args."split-sequence" args."swap-bytes" args."trivial-features" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/iolib/2017-06-30/iolib-v0.8.3.tgz'';
+    url = ''https://beta.quicklisp.org/archive/iolib/2017-06-30/iolib-v0.8.3.tgz'';
     sha256 = ''12gsvsjyxmclwidcjvyrfvd0773ib54a3qzmf33hmgc9knxlli7c'';
   };
 
@@ -21,7 +21,7 @@ rec {
 }
 /* (SYSTEM iolib DESCRIPTION I/O library. SHA256
     12gsvsjyxmclwidcjvyrfvd0773ib54a3qzmf33hmgc9knxlli7c URL
-    http://beta.quicklisp.org/archive/iolib/2017-06-30/iolib-v0.8.3.tgz MD5
+    https://beta.quicklisp.org/archive/iolib/2017-06-30/iolib-v0.8.3.tgz MD5
     fc28d4cad6f8e43972df3baa6a8ac45c NAME iolib FILENAME iolib DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME bordeaux-threads FILENAME bordeaux-threads)

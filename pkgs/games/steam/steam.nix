@@ -29,7 +29,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A digital distribution platform";
-    homepage = http://store.steampowered.com/;
+    homepage = https://store.steampowered.com/;
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ jagajaga ];
   };

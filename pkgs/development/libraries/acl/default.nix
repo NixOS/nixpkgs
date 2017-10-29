@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   installTargets = "install install-lib install-dev";
 
   meta = {
-    homepage = http://savannah.nongnu.org/projects/acl;
+    homepage = https://savannah.nongnu.org/projects/acl;
     description = "Library and tools for manipulating access control lists";
     platforms = stdenv.lib.platforms.linux;
   };

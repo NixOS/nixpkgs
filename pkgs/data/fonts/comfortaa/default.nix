@@ -15,7 +15,7 @@ in fetchzip rec {
   sha256 = "1gnscf3kw9p5gbc5594a22cc6nmiir9mhp1nl3mkbzd4v1jfbh2h";
 
   meta = with stdenv.lib; {
-    homepage = http://aajohan.deviantart.com/art/Comfortaa-font-105395949;
+    homepage = https://aajohan.deviantart.com/art/Comfortaa-font-105395949;
     description = "A clean and modern font suitable for headings and logos";
     license = licenses.ofl;
     platforms = platforms.all;

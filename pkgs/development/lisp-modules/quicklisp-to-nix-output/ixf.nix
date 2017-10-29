@@ -8,7 +8,7 @@ rec {
   deps = [ args."alexandria" args."babel" args."cl-ppcre" args."ieee-floats" args."local-time" args."md5" args."split-sequence" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-ixf/2017-06-30/cl-ixf-20170630-git.tgz'';
+    url = ''https://beta.quicklisp.org/archive/cl-ixf/2017-06-30/cl-ixf-20170630-git.tgz'';
     sha256 = ''1qfmsz3lbydas7iv0bxdl4gl5ah4ydjxxqfpyini7qy0cb4wplf2'';
   };
 
@@ -19,7 +19,7 @@ rec {
 }
 /* (SYSTEM ixf DESCRIPTION Tools to handle IBM PC version of IXF file format
     SHA256 1qfmsz3lbydas7iv0bxdl4gl5ah4ydjxxqfpyini7qy0cb4wplf2 URL
-    http://beta.quicklisp.org/archive/cl-ixf/2017-06-30/cl-ixf-20170630-git.tgz
+    https://beta.quicklisp.org/archive/cl-ixf/2017-06-30/cl-ixf-20170630-git.tgz
     MD5 51db2caba094cac90982396cf552c847 NAME ixf FILENAME ixf DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME cl-ppcre FILENAME cl-ppcre) (NAME ieee-floats FILENAME ieee-floats)

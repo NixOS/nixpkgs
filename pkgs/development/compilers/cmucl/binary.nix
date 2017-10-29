@@ -4,7 +4,7 @@ let
   inherit (stdenv) system;
   version = "21b";
   downloadUrl = arch:
-    "http://common-lisp.net/project/cmucl/downloads/release/" +
+    "https://common-lisp.net/project/cmucl/downloads/release/" +
     "${version}/cmucl-${version}-${arch}.tar.bz2";
   fetchDist = {arch, sha256}: fetchurl {
     url = downloadUrl arch;
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
       ANSI Common Lisp standard.
     '';
     license = stdenv.lib.licenses.free;		# public domain
-    homepage = http://www.cons.org/cmucl/;
+    homepage = https://www.cons.org/cmucl/;
     maintainers = [stdenv.lib.maintainers.tohl];
     platforms = stdenv.lib.platforms.linux;
   };

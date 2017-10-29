@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
       emphasizes separating logic from presentation: it is impossible to
       embed application logic in this template language.
     '';
-    homepage = http://code.google.com/p/google-ctemplate/;
+    homepage = https://code.google.com/p/google-ctemplate/;
     license = "bsd";
   };
 }

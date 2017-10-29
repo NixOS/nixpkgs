@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ nettle ];
 
   meta = {
-    homepage = http://rdfind.pauldreik.se/;
+    homepage = https://rdfind.pauldreik.se/;
     description = "Removes or hardlinks duplicate files very swiftly";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ wmertens ];

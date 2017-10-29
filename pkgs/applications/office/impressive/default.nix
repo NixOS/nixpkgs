@@ -6,7 +6,7 @@ let
   pythonEnv = python2.withPackages (ps: with ps; [pyopengl pygame pillow]);
 in stdenv.mkDerivation {
     # This project was formerly known as KeyJNote.
-    # See http://keyj.emphy.de/apple-lawsuit/ for details.
+    # See https://keyj.emphy.de/apple-lawsuit/ for details.
 
     name = "impressive-${version}";
 

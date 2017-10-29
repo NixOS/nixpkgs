@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
       provided.
     '';
 
-    homepage = http://gnupg.org;
+    homepage = https://gnupg.org;
     license = stdenv.lib.licenses.lgpl2Plus;
     platforms = stdenv.lib.platforms.all;
   };

@@ -242,7 +242,7 @@ in
             PermissionsStartOnly = true;
 
             # Shut down Postgres using SIGINT ("Fast Shutdown mode").  See
-            # http://www.postgresql.org/docs/current/static/server-shutdown.html
+            # https://www.postgresql.org/docs/current/static/server-shutdown.html
             KillSignal = "SIGINT";
             KillMode = "mixed";
 

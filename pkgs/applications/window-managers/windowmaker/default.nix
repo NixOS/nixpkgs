@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://windowmaker.org/;
+    homepage = https://windowmaker.org/;
     description = "NeXTSTEP-like window manager";
     longDescription = ''
       Window Maker is an X11 window manager originally designed to

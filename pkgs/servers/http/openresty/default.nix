@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A fast web application server built on Nginx";
-    homepage    = http://openresty.org;
+    homepage    = https://openresty.org;
     license     = licenses.bsd2;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice ];

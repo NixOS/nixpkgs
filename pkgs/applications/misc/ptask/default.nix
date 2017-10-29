@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://wpitchoune.net/ptask/;
+    homepage = https://wpitchoune.net/ptask/;
     description = "GTK-based GUI for taskwarrior";
     license = licenses.gpl2;
     maintainer = [ maintainers.spacefrogg ];

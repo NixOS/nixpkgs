@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Cross-platform media player and streaming server";
-    homepage = http://www.videolan.org/vlc/;
+    homepage = https://www.videolan.org/vlc/;
     platforms = platforms.linux;
     license = licenses.lgpl21Plus;
   };

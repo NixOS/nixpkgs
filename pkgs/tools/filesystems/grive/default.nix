@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [cmake libgcrypt json_c curl expat stdenv binutils boost];
 
   # work around new binutils headers, see
-  # http://stackoverflow.com/questions/11748035/binutils-bfd-h-wants-config-h-now
+  # https://stackoverflow.com/questions/11748035/binutils-bfd-h-wants-config-h-now
   prePatch = ''
     sed -i '1i#define PACKAGE "grive"\n#define PACKAGE_VERSION "${version}"' \
       libgrive/src/bfd/SymbolInfo.cc

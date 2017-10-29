@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "devdoc" ];
 
   meta = with stdenv.lib; {
-    homepage = http://fribidi.org/;
+    homepage = https://fribidi.org/;
     description = "GNU implementation of the Unicode Bidirectional Algorithm (bidi)";
     license = licenses.gpl2;
     platforms = platforms.unix;

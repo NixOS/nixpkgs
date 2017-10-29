@@ -1,7 +1,7 @@
 Author: Nanley Chery <nanleychery@gmail.com>
 Subject: Update deprecated gtk casts and replace deprecated function calls with their analogous cairo counterparts.
-Bug-Debian: http://bugs.debian.org/622005
-Bug-Debian: http://bugs.debian.org/610321
+Bug-Debian: https://bugs.debian.org/622005
+Bug-Debian: https://bugs.debian.org/610321
 ---
 --- a/src/gui.c
 +++ b/src/gui.c

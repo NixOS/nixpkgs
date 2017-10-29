@@ -10,7 +10,7 @@ rec {
   deps = [ args."fiveam" args."trivial-features" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/swap-bytes/2016-09-29/swap-bytes-v1.1.tgz'';
+    url = ''https://beta.quicklisp.org/archive/swap-bytes/2016-09-29/swap-bytes-v1.1.tgz'';
     sha256 = ''0snwbfplqhg1y4y4m7lgvksg1hs0sygfikz3rlbkfl4gwg8pq8ky'';
   };
 
@@ -21,7 +21,7 @@ rec {
 }
 /* (SYSTEM swap-bytes DESCRIPTION Optimized byte-swapping primitives. SHA256
     0snwbfplqhg1y4y4m7lgvksg1hs0sygfikz3rlbkfl4gwg8pq8ky URL
-    http://beta.quicklisp.org/archive/swap-bytes/2016-09-29/swap-bytes-v1.1.tgz
+    https://beta.quicklisp.org/archive/swap-bytes/2016-09-29/swap-bytes-v1.1.tgz
     MD5 dda8b3b0a4e345879e80a3cc398667bb NAME swap-bytes FILENAME swap-bytes
     DEPS
     ((NAME fiveam FILENAME fiveam)

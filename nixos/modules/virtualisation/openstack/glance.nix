@@ -111,7 +111,7 @@ in {
         default = "http://localhost:9292";
         description = ''
           The public image endpoint. The link <link
-          xlink:href="http://docs.openstack.org/liberty/install-guide-rdo/keystone-services.html">
+          xlink:href="https://docs.openstack.org/liberty/install-guide-rdo/keystone-services.html">
           create endpoint</link> provides more informations
           about that.
         '';

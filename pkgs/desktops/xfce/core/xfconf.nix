@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ dbus_glib ];
 
   meta = with stdenv.lib; {
-    homepage = http://docs.xfce.org/xfce/xfconf/start;
+    homepage = https://docs.xfce.org/xfce/xfconf/start;
     description = "Simple client-server configuration storage and query system for Xfce";
     license = licenses.gpl2;
     platforms = platforms.linux;

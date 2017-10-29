@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   ++ (stdenv.lib.optional stdenv.isDarwin "--build=${stdenv.system}");
 
   meta = {
-    homepage = http://www.skarnet.org/software/s6/;
+    homepage = https://www.skarnet.org/software/s6/;
     description = "skarnet.org's small & secure supervision software suite";
     platforms = stdenv.lib.platforms.all;
     license = stdenv.lib.licenses.isc;

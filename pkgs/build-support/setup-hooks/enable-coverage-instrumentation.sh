@@ -9,7 +9,7 @@ postUnpack() {
     # This is an uberhack to prevent libtool from remoaving gcno
     # files.  This has been fixed in libtool, but there are packages
     # out there with old ltmain.sh scripts.  See
-    # http://www.mail-archive.com/libtool@gnu.org/msg10725.html
+    # https://www.mail-archive.com/libtool@gnu.org/msg10725.html
     for i in $(find -name ltmain.sh); do
         substituteInPlace $i --replace '*.$objext)' '*.$objext | *.gcno)'
     done

@@ -8,7 +8,7 @@
 -
 +/*
 + * bukind: don't use g.width as a width of a character!
-+ * instead use g.xOff, see e.g.: http://keithp.com/~keithp/render/Xft.tutorial
++ * instead use g.xOff, see e.g.: https://keithp.com/~keithp/render/Xft.tutorial
 + */
            int wcw = WCWIDTH (ch);
 -          if (wcw > 0) g.width = (g.width + wcw - 1) / wcw;

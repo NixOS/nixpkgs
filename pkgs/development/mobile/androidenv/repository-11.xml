@@ -6,7 +6,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -26,7 +26,7 @@ This is the Android Software Development Kit License Agreement
 
 1.2 &quot;Android&quot; means the Android software stack for devices, as made available under the Android Open Source Project, which is located at the following URL: http://source.android.com/, as updated from time to time.
 
-1.3 A &quot;compatible implementation&quot; means any Android device that (i) complies with the Android Compatibility Definition document, which can be found at the Android compatibility website (http://source.android.com/compatibility) and which may be updated from time to time; and (ii) successfully passes the Android Compatibility Test Suite (CTS).
+1.3 A &quot;compatible implementation&quot; means any Android device that (i) complies with the Android Compatibility Definition document, which can be found at the Android compatibility website (https://source.android.com/compatibility) and which may be updated from time to time; and (ii) successfully passes the Android Compatibility Test Suite (CTS).
 
 1.4 &quot;Google&quot; means Google Inc., a Delaware corporation with principal place of business at 1600 Amphitheatre Parkway, Mountain View, CA 94043, United States.
 
@@ -226,7 +226,7 @@ This is the Android SDK Preview License Agreement (the &quot;License Agreement&q
 
 6.1 In order to continually innovate and improve the Preview, Google may collect certain usage statistics from the software including but not limited to a unique identifier, associated IP address, version number of the software, and information on which tools and/or services in the Preview are being used and how they are being used. Before any of this information is collected, the Preview will notify you and seek your consent. If you withhold consent, the information will not be collected.
 
-6.2 The data collected is examined in the aggregate to improve the Preview and is maintained in accordance with Google's Privacy Policy located at http://www.google.com/policies/privacy/.
+6.2 The data collected is examined in the aggregate to improve the Preview and is maintained in accordance with Google's Privacy Policy located at https://www.google.com/policies/privacy/.
 
 7. Third Party Applications
 
@@ -353,7 +353,7 @@ June 2014.</sdk:license>
 		<sdk:min-tools-rev>
 			<sdk:major>22</sdk:major>
 		</sdk:min-tools-rev>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>15</sdk:api>
 			<sdk:revision>1</sdk:revision>
@@ -377,7 +377,7 @@ June 2014.</sdk:license>
 		<sdk:min-tools-rev>
 			<sdk:major>22</sdk:major>
 		</sdk:min-tools-rev>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>16</sdk:api>
 			<sdk:revision>2</sdk:revision>
@@ -401,7 +401,7 @@ June 2014.</sdk:license>
 		<sdk:min-tools-rev>
 			<sdk:major>22</sdk:major>
 		</sdk:min-tools-rev>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>16</sdk:api>
 			<sdk:revision>2</sdk:revision>
@@ -425,7 +425,7 @@ June 2014.</sdk:license>
 		<sdk:min-tools-rev>
 			<sdk:major>22</sdk:major>
 		</sdk:min-tools-rev>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>16</sdk:api>
 			<sdk:revision>3</sdk:revision>
@@ -449,7 +449,7 @@ June 2014.</sdk:license>
 		<sdk:min-tools-rev>
 			<sdk:major>22</sdk:major>
 		</sdk:min-tools-rev>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>14</sdk:api>
 			<sdk:revision>2</sdk:revision>
@@ -473,7 +473,7 @@ June 2014.</sdk:license>
 		<sdk:min-tools-rev>
 			<sdk:major>22</sdk:major>
 		</sdk:min-tools-rev>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>12</sdk:api>
 			<sdk:revision>2</sdk:revision>
@@ -497,7 +497,7 @@ June 2014.</sdk:license>
 		<sdk:min-tools-rev>
 			<sdk:major>22</sdk:major>
 		</sdk:min-tools-rev>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>12</sdk:api>
 			<sdk:revision>1</sdk:revision>
@@ -521,7 +521,7 @@ June 2014.</sdk:license>
 		<sdk:min-tools-rev>
 			<sdk:major>22</sdk:major>
 		</sdk:min-tools-rev>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>12</sdk:api>
 			<sdk:revision>1</sdk:revision>
@@ -545,7 +545,7 @@ June 2014.</sdk:license>
 		<sdk:min-tools-rev>
 			<sdk:major>21</sdk:major>
 		</sdk:min-tools-rev>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>12</sdk:api>
 			<sdk:revision>1</sdk:revision>
@@ -569,7 +569,7 @@ June 2014.</sdk:license>
 		<sdk:min-tools-rev>
 			<sdk:major>21</sdk:major>
 		</sdk:min-tools-rev>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>12</sdk:api>
 			<sdk:revision>1</sdk:revision>
@@ -593,7 +593,7 @@ June 2014.</sdk:license>
 		<sdk:min-tools-rev>
 			<sdk:major>21</sdk:major>
 		</sdk:min-tools-rev>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>12</sdk:api>
 			<sdk:revision>1</sdk:revision>
@@ -617,7 +617,7 @@ June 2014.</sdk:license>
 		<sdk:min-tools-rev>
 			<sdk:major>21</sdk:major>
 		</sdk:min-tools-rev>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>12</sdk:api>
 			<sdk:revision>1</sdk:revision>
@@ -638,7 +638,7 @@ June 2014.</sdk:license>
 			</sdk:archive>
 		</sdk:archives>
 		<sdk:uses-license ref="android-sdk-license"/>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>12</sdk:api>
 			<sdk:revision>1</sdk:revision>
@@ -662,7 +662,7 @@ June 2014.</sdk:license>
 		<sdk:min-tools-rev>
 			<sdk:major>12</sdk:major>
 		</sdk:min-tools-rev>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>4</sdk:api>
 		</sdk:layoutlib>
@@ -685,7 +685,7 @@ June 2014.</sdk:license>
 		<sdk:min-tools-rev>
 			<sdk:major>11</sdk:major>
 		</sdk:min-tools-rev>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>4</sdk:api>
 		</sdk:layoutlib>
@@ -708,7 +708,7 @@ June 2014.</sdk:license>
 		<sdk:min-tools-rev>
 			<sdk:major>10</sdk:major>
 		</sdk:min-tools-rev>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>4</sdk:api>
 		</sdk:layoutlib>
@@ -731,7 +731,7 @@ June 2014.</sdk:license>
 		<sdk:min-tools-rev>
 			<sdk:major>4</sdk:major>
 		</sdk:min-tools-rev>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>4</sdk:api>
 		</sdk:layoutlib>
@@ -754,7 +754,7 @@ June 2014.</sdk:license>
 		<sdk:min-tools-rev>
 			<sdk:major>4</sdk:major>
 		</sdk:min-tools-rev>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>4</sdk:api>
 		</sdk:layoutlib>
@@ -777,7 +777,7 @@ June 2014.</sdk:license>
 		<sdk:min-tools-rev>
 			<sdk:major>4</sdk:major>
 		</sdk:min-tools-rev>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>4</sdk:api>
 		</sdk:layoutlib>
@@ -800,7 +800,7 @@ June 2014.</sdk:license>
 		<sdk:min-tools-rev>
 			<sdk:major>8</sdk:major>
 		</sdk:min-tools-rev>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>4</sdk:api>
 		</sdk:layoutlib>
@@ -839,7 +839,7 @@ June 2014.</sdk:license>
 		<sdk:min-tools-rev>
 			<sdk:major>4</sdk:major>
 		</sdk:min-tools-rev>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>4</sdk:api>
 		</sdk:layoutlib>
@@ -878,7 +878,7 @@ June 2014.</sdk:license>
 		<sdk:min-tools-rev>
 			<sdk:major>3</sdk:major>
 		</sdk:min-tools-rev>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>4</sdk:api>
 		</sdk:layoutlib>
@@ -917,7 +917,7 @@ June 2014.</sdk:license>
 		<sdk:min-tools-rev>
 			<sdk:major>6</sdk:major>
 		</sdk:min-tools-rev>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>4</sdk:api>
 		</sdk:layoutlib>
@@ -956,7 +956,7 @@ June 2014.</sdk:license>
 		<sdk:min-tools-rev>
 			<sdk:major>6</sdk:major>
 		</sdk:min-tools-rev>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>4</sdk:api>
 		</sdk:layoutlib>
@@ -995,7 +995,7 @@ June 2014.</sdk:license>
 		<sdk:min-tools-rev>
 			<sdk:major>6</sdk:major>
 		</sdk:min-tools-rev>
-		<sdk:desc-url>http://developer.android.com/sdk/</sdk:desc-url>
+		<sdk:desc-url>https://developer.android.com/sdk/</sdk:desc-url>
 		<sdk:layoutlib>
 			<sdk:api>4</sdk:api>
 		</sdk:layoutlib>

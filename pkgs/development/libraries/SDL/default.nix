@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Fix window resizing issues, e.g. for xmonad
-    # Ticket: http://bugzilla.libsdl.org/show_bug.cgi?id=1430
+    # Ticket: https://bugzilla.libsdl.org/show_bug.cgi?id=1430
     (fetchpatch {
       name = "fix_window_resizing.diff";
       url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?msg=10;filename=fix_window_resizing.diff;att=2;bug=665779";
@@ -66,12 +66,12 @@ stdenv.mkDerivation rec {
     })
     # Fix drops of keyboard events for SDL_EnableUNICODE
     (fetchpatch {
-      url = "http://hg.libsdl.org/SDL/raw-rev/0aade9c0203f";
+      url = "https://hg.libsdl.org/SDL/raw-rev/0aade9c0203f";
       sha256 = "1y9izncjlqvk1mkz1pkl9lrk9s452cmg2izjjlqqrhbn8279xy50";
     })
     # Ignore insane joystick axis events
     (fetchpatch {
-      url = "http://hg.libsdl.org/SDL/raw-rev/95abff7adcc2";
+      url = "https://hg.libsdl.org/SDL/raw-rev/95abff7adcc2";
       sha256 = "0i8x0kx0pw12ld5bfxhyzs466y3c0n9dscw1ijhq1b96r72xyhqq";
     })
     # Workaround X11 bug to allow changing gamma
@@ -84,11 +84,11 @@ stdenv.mkDerivation rec {
     # Fix a build failure on OS X Mavericks
     # Ticket: https://bugzilla.libsdl.org/show_bug.cgi?id=2085
     (fetchpatch {
-      url = "http://hg.libsdl.org/SDL/raw-rev/e9466ead70e5";
+      url = "https://hg.libsdl.org/SDL/raw-rev/e9466ead70e5";
       sha256 = "0mpwdi09h89df2wxqw87m1rdz7pr46k0w6alk691k8kwv970z6pl";
     })
     (fetchpatch {
-      url = "http://hg.libsdl.org/SDL/raw-rev/bbfb41c13a87";
+      url = "https://hg.libsdl.org/SDL/raw-rev/bbfb41c13a87";
       sha256 = "1336g7waaf1c8yhkz11xbs500h8bmvabh4h437ax8l1xdwcppfxv";
     })
     ./find-headers.patch
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A cross-platform multimedia library";
-    homepage    = "http://www.libsdl.org/";
+    homepage    = "https://www.libsdl.org/";
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;
     license     = licenses.lgpl21;

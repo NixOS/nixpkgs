@@ -1,4 +1,4 @@
-Via http://bugs.gentoo.org/show_bug.cgi?id=229603
+Via https://bugs.gentoo.org/show_bug.cgi?id=229603
 
 --- lash-0.5.4/liblash/socket.c	2008-06-26 15:20:44.227064193 +0200
 +++ lash-0.5.4/liblash/socket.c	2008-06-26 15:21:18.245063129 +0200

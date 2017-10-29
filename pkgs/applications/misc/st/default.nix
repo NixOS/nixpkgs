@@ -25,7 +25,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://st.suckless.org/;
+    homepage = https://st.suckless.org/;
     license = licenses.mit;
     maintainers = with maintainers; [viric andsild];
     platforms = platforms.linux;

@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Native Gtk+ Twitter client for the Linux desktop";
     longDescription = "Corebird is a modern, easy and fun Twitter client.";
-    homepage = http://corebird.baedert.org;
+    homepage = https://corebird.baedert.org;
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.jonafato ];

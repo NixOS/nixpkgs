@@ -7,7 +7,7 @@
 , docbook_xsl, docbook_xsl_ns, modemmanager, clutter, clutter_gtk
 , fontconfig, sound-theme-freedesktop, grilo }:
 
-# http://ftp.gnome.org/pub/GNOME/teams/releng/3.10.2/gnome-suites-core-3.10.2.modules
+# https://ftp.gnome.org/pub/GNOME/teams/releng/3.10.2/gnome-suites-core-3.10.2.modules
 # TODO: bluetooth, wacom, printers
 
 stdenv.mkDerivation rec {

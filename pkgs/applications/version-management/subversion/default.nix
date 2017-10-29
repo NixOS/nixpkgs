@@ -90,7 +90,7 @@ let
 
     meta = {
       description = "A version control system intended to be a compelling replacement for CVS in the open source community";
-      homepage = http://subversion.apache.org/;
+      homepage = https://subversion.apache.org/;
       maintainers = with stdenv.lib.maintainers; [ eelco lovek323 ];
       platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
     };

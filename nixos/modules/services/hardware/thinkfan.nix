@@ -30,7 +30,7 @@ let
     # For example:
     # sensor /proc/acpi/ibm/thermal (0, 0, 10)
     # will add a fixed value of 10 °C the 3rd value read from that file. Check out
-    # http://www.thinkwiki.org/wiki/Thermal_Sensors to find out how much you may
+    # https://www.thinkwiki.org/wiki/Thermal_Sensors to find out how much you may
     # want to add to certain temperatures.
     
     #  Syntax:

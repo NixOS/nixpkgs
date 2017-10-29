@@ -11,9 +11,9 @@
 <itemizedlist>
 
 <listitem><para>Systemd has been updated to version 217, which has numerous
-<link xlink:href="http://lists.freedesktop.org/archives/systemd-devel/2014-October/024662.html">improvements.</link></para></listitem>
+<link xlink:href="https://lists.freedesktop.org/archives/systemd-devel/2014-October/024662.html">improvements.</link></para></listitem>
 
-<listitem><para><link xlink:href="http://thread.gmane.org/gmane.linux.distributions.nixos/15165">
+<listitem><para><link xlink:href="https://thread.gmane.org/gmane.linux.distributions.nixos/15165">
 Nix has been updated to 1.8.</link></para></listitem>
 
 <listitem><para>NixOS is now based on Glibc 2.20.</para></listitem>
@@ -108,7 +108,7 @@ following incompatible changes:
 <listitem><para>The default version of Apache httpd is now 2.4. If
 you use the <option>extraConfig</option> option to pass literal
 Apache configuration text, you may need to update it — see <link
-xlink:href="http://httpd.apache.org/docs/2.4/upgrading.html">Apache’s
+xlink:href="https://httpd.apache.org/docs/2.4/upgrading.html">Apache’s
 documentation</link> for details. If you wish to continue to use
 httpd 2.2, add the following line to your NixOS configuration:
 
@@ -120,7 +120,7 @@ services.httpd.package = pkgs.apacheHttpd_2_2;
 
 <listitem><para>PHP 5.3 has been removed because it is no longer
 supported by the PHP project. A <link
-xlink:href="http://php.net/migration54">migration guide</link> is
+xlink:href="https://php.net/migration54">migration guide</link> is
 available.</para></listitem>
 
 <listitem><para>The host side of a container virtual Ethernet pair

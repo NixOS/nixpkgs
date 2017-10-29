@@ -38,7 +38,7 @@ pythonPackages.buildPythonApplication {
   '';
 
   meta = with stdenv.lib; {
-    homepage    = http://www.fail2ban.org/;
+    homepage    = https://www.fail2ban.org/;
     description = "A program that scans log files for repeated failing login attempts and bans IP addresses";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ eelco lovek323 fpletz ];

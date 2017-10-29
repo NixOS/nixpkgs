@@ -13,14 +13,14 @@ let optional = stdenv.lib.optional;
         be part of the store. Download the file
         manually at
 
-        http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html
+        https://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html
 
         and add it to the Nix store using either:
           nix-store --add-fixed sha256 ${name}
         or
           nix-prefetch-url --type sha256 file:///path/to/${name}
       '';
-      url = "http://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html";
+      url = "https://www.oracle.com/technetwork/topics/linuxx86-64soft-092277.html";
       sha256 = hash;
     });
 in stdenv.mkDerivation rec {

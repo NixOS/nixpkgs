@@ -6,7 +6,7 @@ let
     version="4.1.4.1";
     name="${baseName}-${version}";
     hash="09450yknzb0m3375lg4k8gdypmk3xwl8m1krv1kvhylmrm3995mz";
-    url="http://common-lisp.net/project/xcvb/cl-launch/cl-launch-4.1.4.1.tar.gz";
+    url="https://common-lisp.net/project/xcvb/cl-launch/cl-launch-4.1.4.1.tar.gz";
     sha256="09450yknzb0m3375lg4k8gdypmk3xwl8m1krv1kvhylmrm3995mz";
   };
   buildInputs = [

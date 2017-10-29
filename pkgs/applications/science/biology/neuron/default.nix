@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
                 involving many ion-specific channels, ion accumulation, and second messengers";
 
     license     = licenses.bsd3;
-    homepage    = http://www.neuron.yale.edu/neuron;
+    homepage    = https://www.neuron.yale.edu/neuron;
     maintainers = [ maintainers.adev ];
     platforms   = platforms.all;
   };

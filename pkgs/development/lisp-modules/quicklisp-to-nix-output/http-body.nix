@@ -8,7 +8,7 @@ rec {
   deps = [ args."alexandria" args."babel" args."cl-annot" args."cl-ppcre" args."cl-syntax" args."cl-utilities" args."fast-http" args."fast-io" args."flexi-streams" args."jonathan" args."proc-parse" args."quri" args."smart-buffer" args."split-sequence" args."trivial-gray-streams" args."xsubseq" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/http-body/2016-12-04/http-body-20161204-git.tgz'';
+    url = ''https://beta.quicklisp.org/archive/http-body/2016-12-04/http-body-20161204-git.tgz'';
     sha256 = ''1y50yipsbl4j99igmfi83pr7p56hb31dcplpy05fp5alkb5rv0gi'';
   };
 
@@ -19,7 +19,7 @@ rec {
 }
 /* (SYSTEM http-body DESCRIPTION HTTP POST data parser for Common Lisp SHA256
     1y50yipsbl4j99igmfi83pr7p56hb31dcplpy05fp5alkb5rv0gi URL
-    http://beta.quicklisp.org/archive/http-body/2016-12-04/http-body-20161204-git.tgz
+    https://beta.quicklisp.org/archive/http-body/2016-12-04/http-body-20161204-git.tgz
     MD5 6eda50cf89aa3b6a8e9ccaf324734a0e NAME http-body FILENAME http-body DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME cl-annot FILENAME cl-annot) (NAME cl-ppcre FILENAME cl-ppcre)

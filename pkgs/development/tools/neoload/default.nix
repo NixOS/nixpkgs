@@ -3,7 +3,7 @@
 # If you happen to use this software on the XMonad window manager, you will have issues with
 # grey windows, no resizing, menus not showing and other glitches.
 # This can be fixed by setting a different WM name:
-# http://www.haskell.org/haskellwiki/Xmonad/Frequently_asked_questions#Using_SetWMName
+# https://www.haskell.org/haskellwiki/Xmonad/Frequently_asked_questions#Using_SetWMName
 
 if !licenseAccepted then throw ''
     You have to accept the neoload EULA at

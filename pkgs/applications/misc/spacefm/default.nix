@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
       with built-in VFS, udev- or HAL-based device manager,
       customizable menu system, and bash integration
     '';
-    homepage = http://ignorantguru.github.io/spacefm/;
+    homepage = https://ignorantguru.github.io/spacefm/;
     platforms = platforms.linux;
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ jagajaga obadz ];

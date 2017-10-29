@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
          other attributes in a pre-defined or user-specifiable output format.
       '';
 
-    homepage = http://www.ibiblio.org/mp3info/;
+    homepage = https://www.ibiblio.org/mp3info/;
 
     license = stdenv.lib.licenses.gpl2Plus;
 

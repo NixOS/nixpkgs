@@ -113,7 +113,7 @@ in {
         default = "";
         description = ''
           Graphite webapp settings. See:
-          <link xlink:href="http://graphite.readthedocs.io/en/latest/config-local-settings.html"/>
+          <link xlink:href="https://graphite.readthedocs.io/en/latest/config-local-settings.html"/>
         '';
       };
     };
@@ -127,7 +127,7 @@ in {
           graphite carbon.
 
           For more information visit
-          <link xlink:href="http://graphite-api.readthedocs.org/en/latest/"/>
+          <link xlink:href="https://graphite-api.readthedocs.org/en/latest/"/>
         '';
         default = false;
         type = types.bool;

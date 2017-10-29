@@ -9,7 +9,7 @@
 }:
 
 # Useful resource covering build options:
-# http://tug.org/texlive/doc/tlbuild.html
+# https://tug.org/texlive/doc/tlbuild.html
 
 let
   withSystemLibs = map (libname: "--with-system-${libname}");
@@ -140,7 +140,7 @@ core = stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Basic binaries for TeX Live";
-    homepage    = http://www.tug.org/texlive;
+    homepage    = https://www.tug.org/texlive;
     license     = stdenv.lib.licenses.gpl2;
     maintainers = with maintainers; [ vcunat lovek323 raskin jwiegley ];
     platforms   = platforms.all;
@@ -164,7 +164,7 @@ core-big = stdenv.mkDerivation { #TODO: upmendex
     ++ map (prog: "--disable-${prog}") # don't build things we already have
       [ "tex" "ptex" "eptex" "uptex" "euptex" "aleph" "pdftex"
         "web-progs" "synctex" "luajittex" "mfluajit" # luajittex is mostly not needed, see:
-        # http://tex.stackexchange.com/questions/97999/when-to-use-luajittex-in-favour-of-luatex
+        # https://tex.stackexchange.com/questions/97999/when-to-use-luajittex-in-favour-of-luatex
       ];
 
   configureScript = ":";

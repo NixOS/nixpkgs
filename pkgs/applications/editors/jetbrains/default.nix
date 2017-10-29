@@ -234,7 +234,7 @@ in
       sha256 = "02hyndyfcrvfbi4q8vmmj0xh2bggwc2azggm24g3m03iffa7j6fx"; /* updated by script */
     };
     wmClass = "jetbrains-clion";
-    update-channel = "CLion_Release"; # channel's id as in http://www.jetbrains.com/updates/updates.xml
+    update-channel = "CLion_Release"; # channel's id as in https://www.jetbrains.com/updates/updates.xml
   };
 
   datagrip = buildDataGrip rec {

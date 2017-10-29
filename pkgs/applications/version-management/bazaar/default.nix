@@ -25,7 +25,7 @@ python2Packages.buildPythonApplication rec {
   '';
 
   meta = {
-    homepage = http://bazaar-vcs.org/;
+    homepage = https://bazaar-vcs.org/;
     description = "A distributed version control system that Just Works";
     platforms = stdenv.lib.platforms.unix;
   };

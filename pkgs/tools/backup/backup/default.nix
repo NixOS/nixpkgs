@@ -10,7 +10,7 @@ bundlerEnv {
 
   meta = with lib; {
     description = "Easy full stack backup operations on UNIX-like systems";
-    homepage    = http://backup.github.io/backup/v4/;
+    homepage    = https://backup.github.io/backup/v4/;
     license     = licenses.mit;
     maintainers = [ maintainers.palo ];
     platforms   = platforms.unix;

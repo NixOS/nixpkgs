@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
     ];
 
   meta = {
-    homepage = http://www.freedesktop.org/wiki/Software/Farstream;
+    homepage = https://www.freedesktop.org/wiki/Software/Farstream;
     description = "Audio/Video Communications Framework formely known as farsight";
     maintainers = [ ];
     platforms = stdenv.lib.platforms.linux;

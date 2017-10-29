@@ -229,7 +229,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Open Computer Vision Library with more than 500 algorithms";
-    homepage = http://opencv.org/;
+    homepage = https://opencv.org/;
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [viric mdaiter basvandijk];
     platforms = with stdenv.lib.platforms; linux ++ darwin;

@@ -53,7 +53,7 @@ in buildGoPackage rec {
   meta = with stdenv.lib; {
     description = "Build, deploy, and manage your applications with Docker and Kubernetes";
     license = licenses.asl20;
-    homepage = http://www.openshift.org;
+    homepage = https://www.openshift.org;
     maintainers = with maintainers; [offline bachp moretea];
     platforms = platforms.linux;
   };

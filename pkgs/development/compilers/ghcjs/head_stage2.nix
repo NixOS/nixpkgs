@@ -538,7 +538,7 @@
           tasty-quickcheck transformers unix
         ];
         jailbreak = true;
-        homepage = "http://www.haskell.org/cabal/";
+        homepage = "https://www.haskell.org/cabal/";
         description = "A framework for packaging Haskell software";
         license = stdenv.lib.licenses.bsd3;
       }) {};

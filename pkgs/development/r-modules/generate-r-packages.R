@@ -6,9 +6,9 @@ cl <- makeCluster(10)
 rVersion <- paste(R.Version()$major, strsplit(R.Version()$minor, ".", fixed=TRUE)[[1]][1], sep=".")
 snapshotDate <- Sys.Date()-1
 
-mirrorUrls <- list( bioc=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", rVersion, "/bioc/src/contrib/")
-                  , "bioc-annotation"=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", rVersion, "/data/annotation/src/contrib/")
-                  , "bioc-experiment"=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", rVersion, "/data/experiment/src/contrib/")
+mirrorUrls <- list( bioc=paste0("https://bioconductor.statistik.tu-dortmund.de/packages/", rVersion, "/bioc/src/contrib/")
+                  , "bioc-annotation"=paste0("https://bioconductor.statistik.tu-dortmund.de/packages/", rVersion, "/data/annotation/src/contrib/")
+                  , "bioc-experiment"=paste0("https://bioconductor.statistik.tu-dortmund.de/packages/", rVersion, "/data/experiment/src/contrib/")
                   , cran=paste0("http://mran.revolutionanalytics.com/snapshot/", snapshotDate, "/src/contrib/")
                   )
 

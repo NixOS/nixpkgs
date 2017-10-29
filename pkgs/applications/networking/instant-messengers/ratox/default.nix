@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta =
     { description = "FIFO based tox client";
-      homepage = http://ratox.2f30.org/;
+      homepage = https://ratox.2f30.org/;
       license = licenses.isc;
       maintainers = with maintainers; [ ehmry ];
       platforms = platforms.linux;

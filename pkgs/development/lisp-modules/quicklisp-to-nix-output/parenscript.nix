@@ -8,7 +8,7 @@ rec {
   deps = [ args."anaphora" args."cl-ppcre" args."named-readtables" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/parenscript/2016-03-18/Parenscript-2.6.tgz'';
+    url = ''https://beta.quicklisp.org/archive/parenscript/2016-03-18/Parenscript-2.6.tgz'';
     sha256 = ''1hvr407fz7gzaxqbnki4k3l44qvl7vk6p5pn7811nrv6lk3kp5li'';
   };
 
@@ -19,7 +19,7 @@ rec {
 }
 /* (SYSTEM parenscript DESCRIPTION Lisp to JavaScript transpiler SHA256
     1hvr407fz7gzaxqbnki4k3l44qvl7vk6p5pn7811nrv6lk3kp5li URL
-    http://beta.quicklisp.org/archive/parenscript/2016-03-18/Parenscript-2.6.tgz
+    https://beta.quicklisp.org/archive/parenscript/2016-03-18/Parenscript-2.6.tgz
     MD5 dadecc13f2918bc618fb143e893deb99 NAME parenscript FILENAME parenscript
     DEPS
     ((NAME anaphora FILENAME anaphora) (NAME cl-ppcre FILENAME cl-ppcre)

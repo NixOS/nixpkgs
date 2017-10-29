@@ -8,7 +8,7 @@ rec {
   deps = [ args."ironclad" args."lack-component" args."lack-util" args."nibbles" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/lack/2017-07-25/lack-20170725-git.tgz'';
+    url = ''https://beta.quicklisp.org/archive/lack/2017-07-25/lack-20170725-git.tgz'';
     sha256 = ''1c5xlya1zm232zsala03a6m10m11hgqvbgx04kxl29yz0ldp7jbp'';
   };
 
@@ -19,7 +19,7 @@ rec {
 }
 /* (SYSTEM lack DESCRIPTION A minimal Clack SHA256
     1c5xlya1zm232zsala03a6m10m11hgqvbgx04kxl29yz0ldp7jbp URL
-    http://beta.quicklisp.org/archive/lack/2017-07-25/lack-20170725-git.tgz MD5
+    https://beta.quicklisp.org/archive/lack/2017-07-25/lack-20170725-git.tgz MD5
     ab71d36ac49e4759806e9a2ace50ae53 NAME lack FILENAME lack DEPS
     ((NAME ironclad FILENAME ironclad)
      (NAME lack-component FILENAME lack-component)

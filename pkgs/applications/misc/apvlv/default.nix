@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://naihe2010.github.io/apvlv/;
+    homepage = https://naihe2010.github.io/apvlv/;
     description = "PDF viewer with Vim-like behaviour";
     longDescription = ''
       apvlv is a PDF/DJVU/UMD/TXT Viewer Under Linux/WIN32

@@ -167,7 +167,7 @@ in
     # A special service to tell the UPS to power down/hibernate just before the
     # computer shuts down. (The UPS has a built in delay before it actually
     # shuts off power.) Copied from here:
-    # http://forums.opensuse.org/english/get-technical-help-here/applications/479499-apcupsd-systemd-killpower-issues.html
+    # https://forums.opensuse.org/english/get-technical-help-here/applications/479499-apcupsd-systemd-killpower-issues.html
     systemd.services.apcupsd-killpower = {
       description = "APC UPS Kill Power";
       after = [ "shutdown.target" ]; # append umount.target?

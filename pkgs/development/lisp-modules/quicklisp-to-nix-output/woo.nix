@@ -8,7 +8,7 @@ rec {
   deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."cffi-grovel" args."cl-utilities" args."clack-socket" args."fast-http" args."fast-io" args."flexi-streams" args."lev" args."proc-parse" args."quri" args."smart-buffer" args."split-sequence" args."static-vectors" args."swap-bytes" args."trivial-features" args."trivial-gray-streams" args."trivial-utf-8" args."uiop" args."vom" args."xsubseq" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/woo/2017-07-25/woo-20170725-git.tgz'';
+    url = ''https://beta.quicklisp.org/archive/woo/2017-07-25/woo-20170725-git.tgz'';
     sha256 = ''11cnqd058mjhkgxppsivbmd687429r4b62v7z5iav0wpha78qfgg'';
   };
 
@@ -19,7 +19,7 @@ rec {
 }
 /* (SYSTEM woo DESCRIPTION An asynchronous HTTP server written in Common Lisp
     SHA256 11cnqd058mjhkgxppsivbmd687429r4b62v7z5iav0wpha78qfgg URL
-    http://beta.quicklisp.org/archive/woo/2017-07-25/woo-20170725-git.tgz MD5
+    https://beta.quicklisp.org/archive/woo/2017-07-25/woo-20170725-git.tgz MD5
     bd901d8dfa7df3d19c6da73ea101f65b NAME woo FILENAME woo DEPS
     ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
      (NAME bordeaux-threads FILENAME bordeaux-threads)

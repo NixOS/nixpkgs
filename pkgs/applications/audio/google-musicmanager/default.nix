@@ -11,9 +11,9 @@ stdenv.mkDerivation rec {
   name    = "${product}-${version}";
 
   # When looking for newer versions, since google doesn't let you list their repo dirs,
-  # curl http://dl.google.com/linux/musicmanager/deb/dists/stable/Release
+  # curl https://dl.google.com/linux/musicmanager/deb/dists/stable/Release
   # fetch an appropriate packages file such as main/binary-amd64/Packages:
-  # curl http://dl.google.com/linux/musicmanager/deb/dists/stable/main/binary-amd64/Packages
+  # curl https://dl.google.com/linux/musicmanager/deb/dists/stable/main/binary-amd64/Packages
   # which will contain the links to all available *.debs for the arch.
 
   src = if stdenv.system == "x86_64-linux"

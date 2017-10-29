@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = http://www.vanheusden.com/httping;
+    homepage = https://www.vanheusden.com/httping;
     description = "ping with HTTP requests";
     longDescription = ''
       Give httping an url, and it'll show you how long it takes to connect,

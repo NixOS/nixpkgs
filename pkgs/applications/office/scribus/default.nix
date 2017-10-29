@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
     description = "Desktop Publishing (DTP) and Layout program for Linux";
-    homepage = http://www.scribus.net;
+    homepage = https://www.scribus.net;
     license = stdenv.lib.licenses.gpl2;
   };
 }

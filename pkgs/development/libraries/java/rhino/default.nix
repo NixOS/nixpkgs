@@ -4,7 +4,7 @@ let
   version = "1.7R2";
 
   xbeans  = fetchurl {
-    url = "http://archive.apache.org/dist/xmlbeans/binaries/xmlbeans-2.2.0.zip";
+    url = "https://archive.apache.org/dist/xmlbeans/binaries/xmlbeans-2.2.0.zip";
     sha256 = "1pb08d9j81d0wz5wj31idz198iwhqb7mch872n08jh1354rjlqwk";
   };
 in
@@ -51,7 +51,7 @@ stdenv.mkDerivation {
          to provide scripting to end users.
       '';
 
-    homepage = http://www.mozilla.org/rhino/;
+    homepage = https://www.mozilla.org/rhino/;
 
     license = with licenses; [ mpl11 /* or */ gpl2Plus ];
     platforms = platforms.linux ++ platforms.darwin;

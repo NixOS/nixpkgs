@@ -10,7 +10,7 @@ Description: [CVE-2012-4527] Stack-based buffer overflow with long file names
 Author: Attila Bogar, Jean-Michel Vourgère <jmv_deb@nirgal.com>
 Origin: https://bugzilla.redhat.com/show_bug.cgi?id=CVE-2012-4527
 Bug: CVE-2012-4527
-Bug-Debian: http://bugs.debian.org/690924
+Bug-Debian: https://bugs.debian.org/690924
 Forwarded: no
 Last-Update: 2012-11-01
 Index: mcrypt-2.6.8/src/mcrypt.c

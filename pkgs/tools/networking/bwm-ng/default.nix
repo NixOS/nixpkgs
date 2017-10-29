@@ -13,12 +13,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  # This code uses inline in the gnu89 sense: see http://clang.llvm.org/compatibility.html#inline
+  # This code uses inline in the gnu89 sense: see https://clang.llvm.org/compatibility.html#inline
   NIX_CFLAGS_COMPILE = if stdenv.cc.isClang then "-std=gnu89" else null;
 
   meta = with stdenv.lib; {
     description = "A small and simple console-based live network and disk io bandwidth monitor";
-    homepage = http://www.gropp.org/?id=projects&sub=bwm-ng;
+    homepage = https://www.gropp.org/?id=projects&sub=bwm-ng;
     license = licenses.gpl2;
     platforms = platforms.unix;
 

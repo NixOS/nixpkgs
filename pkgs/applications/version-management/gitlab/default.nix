@@ -11,7 +11,7 @@ let
     inherit ruby;
     gemdir = ./.;
     meta = with lib; {
-      homepage = http://www.gitlab.com/;
+      homepage = https://www.gitlab.com/;
       platforms = platforms.linux;
       maintainers = with maintainers; [ fpletz globin ];
       license = licenses.mit;

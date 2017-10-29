@@ -75,7 +75,7 @@ in
       };
 
       link = mkOption {
-        default = "http://planet.nixos.org";
+        default = "https://planet.nixos.org";
         type = types.str;
         description = ''
           Link to the main page.
@@ -137,7 +137,7 @@ in
           {
             name = "Rok Garbas";
             feedUrl= "http://url/to/rss/feed.xml";
-            homepageUrl = "http://garbas.si";
+            homepageUrl = "https://garbas.si";
           }
         ];
         description = ''

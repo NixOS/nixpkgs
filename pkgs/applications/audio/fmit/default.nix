@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       FMIT is a graphical utility for tuning musical instruments, with error
       and volume history, and advanced features.
     '';
-    homepage = http://gillesdegottex.github.io/fmit/;
+    homepage = https://gillesdegottex.github.io/fmit/;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];

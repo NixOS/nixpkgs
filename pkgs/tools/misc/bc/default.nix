@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "GNU software calculator";
-    homepage = http://www.gnu.org/software/bc/;
+    homepage = https://www.gnu.org/software/bc/;
     platforms = stdenv.lib.platforms.all;
   };
 }

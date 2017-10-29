@@ -9,7 +9,7 @@ let
   date = "20111020";
 
   # Use the `tschwinge/Peter_Herbolzheimer' branch as prescribed in
-  # <http://www.gnu.org/software/hurd/hurd/building/cross-compiling.html>.
+  # <https://www.gnu.org/software/hurd/hurd/building/cross-compiling.html>.
   rev = "a7b82c3302bf9c47176648eb802a61ae2d9a16f5";
 in
 stdenv.mkDerivation ({
@@ -61,7 +61,7 @@ stdenv.mkDerivation ({
    # different ways: one for gcc as run from `configure', and one for linking
    # libpthread.so (by default `libtool --mode=link' swallows `-B', hence
    # this workaround; see
-   # <http://lists.gnu.org/archive/html/bug-libtool/2010-05/msg00012.html>.)
+   # <https://lists.gnu.org/archive/html/bug-libtool/2010-05/msg00012.html>.)
    LDFLAGS = "-B${glibcCross}/lib";
    makeFlags = [ "LDFLAGS=-Wc,-B${glibcCross}/lib" ];
 

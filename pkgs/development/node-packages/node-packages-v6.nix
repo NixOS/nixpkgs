@@ -24850,7 +24850,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "The browser package manager";
-      homepage = http://bower.io/;
+      homepage = https://bower.io/;
       license = "MIT";
     };
     production = true;
@@ -28095,7 +28095,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "The streaming build system";
-      homepage = http://gulpjs.com/;
+      homepage = https://gulpjs.com/;
       license = "MIT";
     };
     production = true;
@@ -28579,7 +28579,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "A tool for creating and developing Ionic Framework mobile apps.";
-      homepage = http://ionicframework.com/;
+      homepage = https://ionicframework.com/;
       license = "MIT";
     };
     production = true;
@@ -28912,7 +28912,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "Validate JSON";
-      homepage = http://zaach.github.com/jsonlint/;
+      homepage = https://zaach.github.com/jsonlint/;
     };
     production = true;
   };
@@ -28979,7 +28979,7 @@ in
     ];
     buildInputs = globalBuildInputs;
     meta = {
-      description = "Various utilities for JSON References (http://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03).";
+      description = "Various utilities for JSON References (https://tools.ietf.org/html/draft-pbryan-zyp-json-ref-03).";
       homepage = https://github.com/whitlockjc/json-refs;
       license = "MIT";
     };
@@ -29622,7 +29622,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "Spectacular Test Runner for JavaScript.";
-      homepage = http://karma-runner.github.io/;
+      homepage = https://karma-runner.github.io/;
       license = "MIT";
     };
     production = true;
@@ -32047,7 +32047,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "Simple monitor script for use during development of a node.js app.";
-      homepage = http://nodemon.io/;
+      homepage = https://nodemon.io/;
       license = "MIT";
     };
     production = true;
@@ -32530,7 +32530,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "A visual tool for wiring the Internet of Things";
-      homepage = http://nodered.org/;
+      homepage = https://nodered.org/;
       license = "Apache-2.0";
     };
     production = true;

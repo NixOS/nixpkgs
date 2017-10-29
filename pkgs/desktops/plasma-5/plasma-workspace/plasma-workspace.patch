@@ -150,7 +150,7 @@ index e9fa0bee..79e50a96 100644
 -if [  ${XDG_CONFIG_HOME} ]; then
 -  configDir=$XDG_CONFIG_HOME;
 -else
--  configDir=${HOME}/.config; #this is the default, http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
+-  configDir=${HOME}/.config; #this is the default, https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
 +export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 +@NIXPKGS_MKDIR@ -p "$XDG_CONFIG_HOME"
 +
@@ -636,7 +636,7 @@ index fd232bdf..e1c8fff6 100644
 -if [  ${XDG_CONFIG_HOME} ]; then
 -  configDir=$XDG_CONFIG_HOME;
 -else
--  configDir=${HOME}/.config; #this is the default, http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
+-  configDir=${HOME}/.config; #this is the default, https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
 +export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:-$HOME/.config}"
 +if [ -r "$XDG_CONFIG_HOME/startupconfig" ]; then
 +    . "$XDG_CONFIG_HOME/startupconfig"
@@ -866,7 +866,7 @@ index 417a87d4..3f62745a 100644
 -if [  ${XDG_CONFIG_HOME} ]; then
 -  configDir=$XDG_CONFIG_HOME;
 -else
--  configDir=${HOME}/.config; #this is the default, http://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
+-  configDir=${HOME}/.config; #this is the default, https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html
 +@NIXPKGS_KBUILDSYCOCA5@
 +
 +# Set the default GTK 2 theme

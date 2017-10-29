@@ -32,7 +32,7 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
     </head>
     <body onload="javascript:document.title='startup done'">
       <img src="file://${pkgs.fetchurl {
-        url = "http://nixos.org/logo/nixos-hex.svg";
+        url = "https://nixos.org/logo/nixos-hex.svg";
         sha256 = "0wxpp65npdw2cg8m0cxc9qff1sb3b478cxpg1741d8951g948rg8";
       }}" />
     </body>

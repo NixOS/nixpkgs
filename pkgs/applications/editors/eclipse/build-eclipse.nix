@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
   ''; # */
 
   meta = {
-    homepage = http://www.eclipse.org/;
+    homepage = https://www.eclipse.org/;
     inherit description;
   };
 

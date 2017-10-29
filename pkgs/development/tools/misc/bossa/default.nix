@@ -3,7 +3,7 @@
 let
   # BOSSA needs a "bin2c" program to embed images.
   # Source taken from:
-  # http://wiki.wxwidgets.org/Embedding_PNG_Images-Bin2c_In_C
+  # https://wiki.wxwidgets.org/Embedding_PNG_Images-Bin2c_In_C
   bin2c = stdenv.mkDerivation {
     name = "bossa-bin2c";
     src = ./bin2c.c;

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   getTheDemo = ''
     We cannot download the demo version automatically, please go to
-    http://worldofgoo.com/dl2.php?lk=demo, then add it to your nix store.
+    https://worldofgoo.com/dl2.php?lk=demo, then add it to your nix store.
     You can do this by using "nix-prefetch-url file://WorldOfGooDemo.1.41.tar.gz" in the
     directory where you saved it.
   '';
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
       Balls who live in the beautiful World of Goo don't know that they are in a
       game, or that they are extremely delicious.
     '';
-    homepage = http://worldofgoo.com;
+    homepage = https://worldofgoo.com;
     license = licenses.unfree;
     maintainers = with maintainers; [ jcumming ];
   };

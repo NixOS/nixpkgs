@@ -1,4 +1,4 @@
-http://bugs.gentoo.org/405323
+https://bugs.gentoo.org/405323
 
 --- a/src/client/imagefile.cpp
 +++ b/src/client/imagefile.cpp

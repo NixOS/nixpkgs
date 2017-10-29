@@ -1,4 +1,4 @@
-url http://sourceforge.net/projects/golly/files/golly/
+url https://sourceforge.net/projects/golly/files/golly/
 version_link '[-][0-9.]+/$'
 SF_version_tarball 'src'
 SF_redirect

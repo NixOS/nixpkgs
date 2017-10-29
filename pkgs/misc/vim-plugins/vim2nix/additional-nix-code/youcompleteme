@@ -9,7 +9,7 @@
 
     meta = {
       description = "Fastest non utf-8 aware word and C completion engine for Vim";
-      homepage = http://github.com/Valloric/YouCompleteMe;
+      homepage = https://github.com/Valloric/YouCompleteMe;
       license = stdenv.lib.licenses.gpl3;
       maintainers = with stdenv.lib.maintainers; [marcweber jagajaga];
       platforms = stdenv.lib.platforms.unix;

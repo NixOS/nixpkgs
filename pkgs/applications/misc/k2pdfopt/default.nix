@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
         (fetchurl {
          name = "CVE-2017-5896.patch";
-         url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=2c4e5867ee699b1081527bc6c6ea0e99a35a5c27";
+         url = "https://git.ghostscript.com/?p=mupdf.git;a=patch;h=2c4e5867ee699b1081527bc6c6ea0e99a35a5c27";
          sha256 = "14k7x47ifx82sds1c06ibzbmcparfg80719jhgwjk6w1vkh4r693";
         })
 
