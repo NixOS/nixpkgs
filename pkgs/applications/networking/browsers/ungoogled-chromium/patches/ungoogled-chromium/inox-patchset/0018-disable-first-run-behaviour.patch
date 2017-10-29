@@ -1,0 +1,62 @@
+--- a/chrome/browser/ui/startup/startup_browser_creator_impl.cc
++++ b/chrome/browser/ui/startup/startup_browser_creator_impl.cc
+@@ -1105,8 +1105,6 @@ void StartupBrowserCreatorImpl::AddStart
+         // Replace magic names for the actual urls.
+         if (it->host() == "new_tab_page") {
+           startup_urls->push_back(GURL(chrome::kChromeUINewTabURL));
+-        } else if (it->host() == "welcome_page") {
+-          startup_urls->push_back(internals::GetWelcomePageURL());
+         } else {
+           startup_urls->push_back(*it);
+         }
+@@ -1121,10 +1119,6 @@ void StartupBrowserCreatorImpl::AddStart
+   if (startup_urls->empty()) {
+     AddSpecialURLs(startup_urls);
+     startup_urls->push_back(GURL(chrome::kChromeUINewTabURL));
+-
+-    // Special case the FIRST_RUN_LAST_TAB case of the welcome page.
+-    if (welcome_run_type_ == WelcomeRunType::FIRST_RUN_LAST_TAB)
+-      startup_urls->push_back(internals::GetWelcomePageURL());
+   }
+ 
+   if (signin::ShouldShowPromoAtStartup(profile_, is_first_run_)) {
+@@ -1160,10 +1154,6 @@ void StartupBrowserCreatorImpl::AddStart
+ 
+ void StartupBrowserCreatorImpl::AddSpecialURLs(
+     std::vector<GURL>* url_list) const {
+-  // Optionally include the welcome page.
+-  if (welcome_run_type_ == WelcomeRunType::FIRST_TAB)
+-    url_list->insert(url_list->begin(), internals::GetWelcomePageURL());
+-
+   // If this Profile is marked for a reset prompt, ensure the reset
+   // settings dialog appears.
+   if (ProfileHasResetTrigger()) {
+--- a/chrome/browser/ui/startup/startup_tab_provider.cc
++++ b/chrome/browser/ui/startup/startup_tab_provider.cc
+@@ -146,9 +146,6 @@ StartupTabs StartupTabProviderImpl::GetS
+     bool is_signed_in,
+     bool is_supervised_user) {
+   StartupTabs tabs;
+-  if (!has_seen_welcome_page && is_signin_allowed && !is_signed_in &&
+-      !is_supervised_user)
+-    tabs.emplace_back(GetWelcomePageUrl(!is_first_run), false);
+   return tabs;
+ }
+ 
+@@ -164,16 +161,6 @@ StartupTabs StartupTabProviderImpl::GetW
+     bool is_default_browser,
+     bool is_supervised_user) {
+   StartupTabs tabs;
+-
+-  if (is_supervised_user)
+-    return tabs;
+-
+-  if (set_default_browser_allowed && !has_seen_win10_promo &&
+-      !is_default_browser) {
+-    tabs.emplace_back(GetWin10WelcomePageUrl(!is_first_run), false);
+-  } else if (!has_seen_welcome_page && is_signin_allowed && !is_signed_in) {
+-    tabs.emplace_back(GetWelcomePageUrl(!is_first_run), false);
+-  }
+   return tabs;
+ }
+ #endif

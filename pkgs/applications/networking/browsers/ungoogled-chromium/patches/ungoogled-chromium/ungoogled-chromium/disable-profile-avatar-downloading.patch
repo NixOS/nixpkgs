@@ -1,0 +1,14 @@
+# Stop downloading of profile avatar (trk:271:...)
+
+--- a/chrome/browser/profiles/profile_avatar_downloader.cc
++++ b/chrome/browser/profiles/profile_avatar_downloader.cc
+@@ -26,8 +26,7 @@ ProfileAvatarDownloader::ProfileAvatarDo
+     : icon_index_(icon_index),
+       callback_(callback) {
+   DCHECK(!callback_.is_null());
+-  GURL url(std::string(kHighResAvatarDownloadUrlPrefix) +
+-           profiles::GetDefaultAvatarIconFileNameAtIndex(icon_index));
++  GURL url(std::string("about:blank"));
+   net::NetworkTrafficAnnotationTag traffic_annotation =
+       net::DefineNetworkTrafficAnnotation("profile_avatar", R"(
+         semantics {

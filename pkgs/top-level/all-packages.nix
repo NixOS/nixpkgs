@@ -16869,6 +16869,8 @@ with pkgs;
 
   unpaper = callPackage ../tools/graphics/unpaper { };
 
+  ungoogled-chromium = callPackage ../applications/networking/browsers/ungoogled-chromium { };
+
   urh = callPackage ../applications/misc/urh { };
 
   uucp = callPackage ../tools/misc/uucp { };
