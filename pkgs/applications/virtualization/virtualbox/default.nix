@@ -190,13 +190,15 @@ in stdenv.mkDerivation {
     cp -rv out/linux.*/${buildType}/bin/src "$modsrc"
   '';
 
-  passthru = { inherit version; /* for guest additions */ };
+  passthru = {
+    inherit version;       # for guest additions
+    inherit extensionPack; # for inclusion in profile to prevent gc
+  };
 
   meta = {
     description = "PC emulator";
     homepage = http://www.virtualbox.org/;
     maintainers = [ lib.maintainers.sander ];
     platforms = lib.platforms.linux;
-    inherit extensionPack;
   };
 }
