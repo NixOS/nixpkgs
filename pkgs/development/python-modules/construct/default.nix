@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   name = "construct-${version}";
-  version = "2.8.10";
+  version = "2.8.16";
 
   src = fetchFromGitHub {
     owner = "construct";
     repo = "construct";
     rev = "v${version}";
-    sha256 = "1xfmmc5pihn3ql9f7blrciy06y2bwczqvkbcpvh96dmgqwc3wys3";
+    sha256 = "0lzz1dy419n254qccch7yx4nkpwd0fsyjhnsnaf6ysgwzqxxv63j";
   };
 
   propagatedBuildInputs = [ six ];
