@@ -1,17 +1,17 @@
-{ stdenv, python3Packages, fetchFromGitHub }:
+{ stdenv, python3, fetchFromGitHub }:
 
-python3Packages.buildPythonApplication rec {
-  name = "nixbot-unstable-2016-10-09";
+python3.pkgs.buildPythonApplication rec {
+  name = "nixbot-unstable-2017-10-29";
 
   src = fetchFromGitHub {
-    owner = "domenkozar";
+    owner = "mayflower";
     repo = "nixbot";
-    rev = "dc490e4954cb08f0eff97f74ad39dedb54670aa9";
-    sha256 = "1l8rlhd2b7x5m79vb2vgszachygasv0pk8drnwgxyvsn0k88xcan";
+    rev = "1996d718ff692a5840efa691418526a4faafc89f";
+    sha256 = "1jajkpl86nd9d7y1qzx8w8c3ak5hfb365kqlmvq6snvx4j1q4aw0";
   };
 
-  propagatedBuildInputs = with python3Packages; [
-    pygit2 pyramid waitress github3_py
+  propagatedBuildInputs = with python3.pkgs; [
+    PyGithub flask flask_migrate flask_sqlalchemy celery redis
   ];
 
   doCheck = false;
@@ -20,6 +20,6 @@ python3Packages.buildPythonApplication rec {
     description = "Github bot for reviewing/testing pull requests with the help of Hydra";
     maintainers = with maintainers; [ domenkozar fpletz globin ];
     license = licenses.asl20;
-    homepage = https://github.com/domenkozar/nixbot;
+    homepage = https://github.com/mayflower/nixbot;
   };
 }
