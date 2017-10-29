@@ -25,6 +25,10 @@ buildPythonPackage rec {
       sha256 = "633c2f89481d8ebc55639b59216f7d16d07b44a94758850c0b887006967214f3";
     };
 
+    patches = [
+      ./ZODB-5.3.0-fix-tests.patch
+    ];
+
     propagatedBuildInputs = [
       manuel
       transaction
