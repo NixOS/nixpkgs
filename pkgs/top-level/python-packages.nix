@@ -3243,33 +3243,7 @@ in {
 
   cython = callPackage ../development/python-modules/Cython { };
 
-  cytoolz = buildPythonPackage rec {
-    name = "cytoolz-${version}";
-    version = "0.8.2";
-
-    src = pkgs.fetchurl{
-      url = "mirror://pypi/c/cytoolz/cytoolz-${version}.tar.gz";
-      sha256 = "476a2ad176de5eaef80499b7b43d4f72ba6d23df33d349088dae315e9b31c552";
-    };
-
-    # Extension types
-    disabled = isPyPy;
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ toolz ];
-
-    # Disable failing test https://github.com/pytoolz/cytoolz/issues/97
-    checkPhase = ''
-      NOSE_EXCLUDE=test_curried_exceptions nosetests -v $out/${python.sitePackages}
-    '';
-
-    meta = {
-      homepage = "http://github.com/pytoolz/cytoolz/";
-      description = "Cython implementation of Toolz: High performance functional utilities";
-      license = "licenses.bsd3";
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  cytoolz = callPackage ../development/python-modules/cytoolz { };
 
   cryptacular = buildPythonPackage rec {
     name = "cryptacular-1.4.1";
