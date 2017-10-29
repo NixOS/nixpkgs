@@ -10938,33 +10938,8 @@ in {
 
   livereload = callPackage ../development/python-modules/livereload { };
 
-  llfuse = buildPythonPackage rec {
-    name = "llfuse-1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/llfuse/${name}.tar.bz2";
-      sha256 = "1li7q04ljrvwharw4fblcbfhvk6s0l3lnv8yqb4c22lcgbkiqlps";
-    };
-
-    nativeBuildInputs = [ pkgs.pkgconfig ];
-    buildInputs = with self; [ pytest pkgs.fuse pkgs.attr pkgs.which ];
-
-    propagatedBuildInputs = with self; [ contextlib2 ];
-
-    checkPhase = ''
-      py.test
-    '';
-
-    # FileNotFoundError: [Errno 2] No such file or directory: '/usr/bin'
-    doCheck = false;
-
-    meta = {
-      description = "Python bindings for the low-level FUSE API";
-      homepage = https://code.google.com/p/python-llfuse/;
-      license = licenses.lgpl2Plus;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ bjornfor ];
-    };
+  llfuse = callPackage ../development/python-modules/llfuse {
+    fuse = pkgs.fuse;  # use "real" fuse, not the python module
   };
 
   locustio = buildPythonPackage rec {
