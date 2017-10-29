@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
+{ stdenv, buildPackages, lib
+, fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
 , zlib, openssl, gdbm, ncurses, readline, groff, libyaml, libffi, autoreconfHook, bison
 , autoconf, darwin ? null
 , buildEnv, bundler, bundix, Foundation
@@ -22,6 +23,12 @@ let
   # Contains the ruby version heuristics
   rubyVersion = import ./ruby-version.nix { inherit lib; };
 
+  # Needed during postInstall
+  buildRuby =
+    if stdenv.hostPlatform == stdenv.buildPlatform
+    then "$out/bin/ruby"
+    else "${buildPackages.ruby}/bin/ruby";
+
   generic = { version, sha256 }: let
     ver = version;
     tag = ver.gitTag;
@@ -30,7 +37,8 @@ let
     isRuby25 = ver.majMin == "2.5";
     baseruby = self.override { useRailsExpress = false; };
     self = lib.makeOverridable (
-      { stdenv, lib, fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
+  { stdenv, buildPackages, lib
+      , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
       , useRailsExpress ? true
       , zlib, zlibSupport ? true
       , openssl, opensslSupport ? true
@@ -67,7 +75,11 @@ let
         # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
         NROFF = "${groff}/bin/nroff";
 
-        nativeBuildInputs = ops useRailsExpress [ autoreconfHook bison ];
+        nativeBuildInputs =
+             ops useRailsExpress [ autoreconfHook bison ]
+          ++ ops (stdenv.buildPlatform != stdenv.hostPlatform) [
+               buildPackages.ruby
+             ];
         buildInputs =
              (op fiddleSupport libffi)
           ++ (ops cursesSupport [ ncurses readline ])
@@ -129,14 +141,16 @@ let
             "--with-out-ext=tk"
             # on yosemite, "generating encdb.h" will hang for a very long time without this flag
             "--with-setjmp-type=setjmp"
-          ];
+          ]
+          ++ op (stdenv.hostPlatform != stdenv.buildPlatform)
+             "--with-baseruby=${buildRuby}";
 
         installFlags = stdenv.lib.optionalString docSupport "install-doc";
         # Bundler tries to create this directory
         postInstall = ''
           # Update rubygems
           pushd rubygems
-          $out/bin/ruby setup.rb
+          ${buildRuby} setup.rb
           popd
 
           # Remove unnecessary groff reference from runtime closure, since it's big
