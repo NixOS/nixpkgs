@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, compiler ? if stdenv.cc.isClang then "clang" else null, stdver ? null }:
 
-stdenv.mkDerivation rec {
+with stdenv.lib; stdenv.mkDerivation rec {
   name = "tbb-${version}";
   version = "2018_U1";
 
@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "1lygz07va6hsv2vlx9zwz5d2n81rxsdhmh0pqxgj8n1bvb1rp0qw";
   };
+
+  makeFlags = concatStringsSep " " (
+    optional (compiler != null) "compiler=${compiler}" ++
+    optional (stdver != null) "stdver=${stdver}"
+  );
 
   installPhase = ''
     mkdir -p $out/{lib,share/doc}
@@ -21,7 +26,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Intel Thread Building Blocks C++ Library";
     homepage = "http://threadingbuildingblocks.org/";
     license = licenses.asl20;
