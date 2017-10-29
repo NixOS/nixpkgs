@@ -37,6 +37,7 @@ stdenv.mkDerivation rec {
     "ac_cv_sizeof_int=4"
     "vim_cv_memmove_handles_overlap=yes"
     "vim_cv_memmove_handles_overlap=yes"
+    "vim_cv_tgent=zero"
   ];
 
   postInstall = ''
