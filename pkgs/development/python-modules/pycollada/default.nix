@@ -1,11 +1,13 @@
-{ stdenv, fetchurl, buildPythonPackage, numpy, isPy3k, dateutil, dateutil_1_5 }:
+{ stdenv, fetchPypi, buildPythonPackage, numpy, isPy3k, dateutil, dateutil_1_5 }:
 
 buildPythonPackage rec {
-  name = "pycollada-0.4.1";
+  pname = "pycollada";
+  version = "0.5";
+  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/p/pycollada/${name}.tar.gz";
-    sha256 = "0i50lh98550pwr95zgzrgiqzsspm09wl52xlv83y5nrsz4mblylv";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1g96maw2c25l4i3ks51784h33zf7s18vrn6iyz4ca34iy4sl7yq9";
   };
 
   buildInputs = [ numpy ] ++ (if isPy3k then [dateutil] else [dateutil_1_5]);
