@@ -3367,6 +3367,8 @@ in {
     doCheck = false;
   };
 
+  curtsies = callPackage ../development/python-modules/curtsies { };
+
   oslo-vmware = buildPythonPackage rec {
     name = "oslo.vmware-${version}";
     version = "1.22.0";
