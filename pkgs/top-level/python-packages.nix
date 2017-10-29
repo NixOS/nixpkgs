@@ -21026,32 +21026,7 @@ in {
 
   testtools = callPackage ../development/python-modules/testtools { };
 
-  traitlets = buildPythonPackage rec {
-    pname = "traitlets";
-    version = "4.3.2";
-    name = "${pname}-${version}";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "9c4bd2d267b7153df9152698efb1050a5d84982d3384a37b2c1f7723ba3e7835";
-    };
-
-    LC_ALL = "en_US.UTF-8";
-
-    buildInputs = with self; [ pkgs.glibcLocales pytest mock ];
-    propagatedBuildInputs = with self; [ipython_genutils decorator enum34];
-
-    checkPhase = ''
-      py.test $out
-    '';
-
-    meta = {
-      description = "Traitlets Python config system";
-      homepage = http://ipython.org/;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  traitlets = callPackage ../development/python-modules/traitlets { };
 
   python_mimeparse = buildPythonPackage rec {
     name = "python-mimeparse-${version}";
