@@ -2078,23 +2078,7 @@ in {
     };
   };
 
-
-  bpython = buildPythonPackage rec {
-     name = "bpython-0.12";
-     src = pkgs.fetchurl {
-       url = "http://www.bpython-interpreter.org/releases/bpython-0.12.tar.gz";
-       sha256 = "1ilf58qq7sazmcgg4f1wswbhcn2gb8qbbrpgm6gf0j2lbm60gabl";
-     };
-
-     propagatedBuildInputs = with self; [ pygments ];
-     doCheck = false;
-
-     meta = {
-       description = "UNKNOWN";
-       homepage = "UNKNOWN";
-       maintainers = with maintainers; [ domenkozar ];
-     };
-   };
+  bpython = callPackage ../development/python-modules/bpython {};
 
   bsddb3 = buildPythonPackage rec {
     name = "bsddb3-${version}";
