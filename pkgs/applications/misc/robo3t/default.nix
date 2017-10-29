@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   desktopItem = makeDesktopItem {
-    name = "Robo3T";
+    name = "robo3t";
     exec = "robo3t";
     icon = icon;
     comment = "Query GUI for mongodb";

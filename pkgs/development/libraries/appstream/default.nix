@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
   cmakeFlags = ''
     -DSTEMMING=off
     '';
-      
+
   meta = with stdenv.lib; {
     description = "Software metadata handling library";
-    homepage    = "http://www.freedesktop.org/wiki/Distributions/AppStream/Software/";
+    homepage    = https://www.freedesktop.org/wiki/Distributions/AppStream/;
     longDescription =
     ''
       AppStream is a cross-distro effort for building Software-Center applications

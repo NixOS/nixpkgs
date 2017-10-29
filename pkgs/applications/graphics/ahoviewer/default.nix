@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "ahoviewer-${version}";
-  version = "1.4.8";
+  version = "1.4.9";
 
   src = fetchFromGitHub {
     owner = "ahodesuka";
     repo = "ahoviewer";
     rev = version;
-    sha256 = "0fsak22hpi2r8zqysswdyngaf3n635qvclqh1p0g0wrkfza4dbc4";
+    sha256 = "194h3k5zvd8gjrbs91qba7d9h7i30yh4rjk4w3aa1vwvv0qm2amx";
   };
 
   enableParallelBuilding = true; 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://github.com/ahodesuka/ahoviewer;
     description = "A GTK2 image viewer, manga reader, and booru browser";
-    maintainers = [ maintainers.skrzyp ];
+    maintainers = with maintainers; [ skrzyp xzfc ];
     license = licenses.mit;
     platforms = platforms.allBut [ "darwin" "cygwin" ];
   };
