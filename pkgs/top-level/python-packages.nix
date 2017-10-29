@@ -4832,26 +4832,7 @@ in {
     };
   };
 
-
-  demjson = buildPythonPackage rec {
-    pname = "demjson";
-    version = "2.2.4";
-    name = "${pname}-${version}";
-    disabled = isPy36;
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0ygbddpnvp5lby6mr5kz60la3hkvwwzv3wwb3z0w9ngxl0w21pii";
-    };
-
-    meta = {
-      description = "Encoder/decoder and lint/validator for JSON (JavaScript Object Notation)";
-      homepage = http://deron.meranda.us/python/demjson/;
-      license = licenses.lgpl3Plus;
-      maintainers = with maintainers; [ bjornfor ];
-      platforms = platforms.all;
-    };
-  };
+  demjson = callPackage ../development/python-modules/demjson { };
 
   derpconf = self.buildPythonPackage rec {
     name = "derpconf-0.4.9";
