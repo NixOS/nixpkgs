@@ -1,21 +1,22 @@
-{ stdenv, fetchurl, coq }:
+{ stdenv, fetchFromGitHub, coq, coqPackages }:
 
-stdenv.mkDerivation {
-  name = "coq${coq.coq-version}-math-classes-1.0.6";
+if ! stdenv.lib.versionAtLeast coq.coq-version "8.6" then
+  throw "Math-Classes requires Coq 8.6 or later."
+else
 
-  src = fetchurl {
-    url = https://github.com/math-classes/math-classes/archive/1.0.6.tar.gz;
-    sha256 = "071hgjk4bz2ybci7dp2mw7xqmxmm2zph7kj28xcdg28iy796lf02";
+stdenv.mkDerivation rec {
+
+  name = "coq${coq.coq-version}-math-classes-${version}";
+  version = "1.0.7";
+
+  src = fetchFromGitHub {
+    owner = "math-classes";
+    repo = "math-classes";
+    rev = version;
+    sha256 = "0wgnczacvkb2pc3vjbni9bwjijfyd5jcdnyyjg8185hkf9zzabgi";
   };
 
-  # src = fetchFromGitHub {
-  #   owner  = "math-classes";
-  #   repo   = "math-classes";
-  #   rev    = "1d426a08c2fbfd68bd1b3622fe8f31dd03712e6c";
-  #   sha256 = "3kjc2wzb6n9hcqb2ijx2pckn8jk5g09crrb87yb4s9m0mrw79smr";
-  # };
-
-  buildInputs = [ coq ];
+  buildInputs = [ coq coqPackages.bignums ];
   enableParallelBuilding = true;
   installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
 
