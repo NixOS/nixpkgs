@@ -18807,16 +18807,14 @@ in {
 
 
   robotsuite = buildPythonPackage rec {
-    version = "1.4.2";
-    name = "robotsuite-${version}";
+    pname = "robotsuite";
+    version = "2.0.0";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/robotsuite/${name}.zip";
-      sha256 = "0sw09vrvwv3gzqb6jvhbrz09l6nzzj3i9av34qjddqfwq7cr1bla";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "15iw7g6gspf1ill0mzjrj71dirqfc86f1j14wphdvs2lazv8d50z";
     };
-
-    # error: invalid command 'test'
-    #doCheck = false;
 
     buildInputs = with self; [ unittest2 ];
     propagatedBuildInputs = with self; [ robotframework lxml ];
