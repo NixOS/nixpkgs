@@ -26396,25 +26396,7 @@ EOF
     };
   };
 
-  pwntools = buildPythonPackage rec {
-    name = "pwntools-${version}";
-    version = "3.7.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pwntools/${name}.tar.gz";
-      sha256 = "1c0n97cf3nql3n6sxpbp43x1byhkgfbpbl2b22h8nllgb8n0z9l0";
-    };
-    propagatedBuildInputs = with self; [ Mako packaging pysocks pygments ROPGadget capstone paramiko pip psutil pyelftools pypandoc pyserial dateutil requests tox pkgs.pandoc unicorn intervaltree ];
-
-    disabled = isPy3k;
-
-    meta = {
-      homepage = "http://pwntools.com";
-      description = "CTF framework and exploit development library";
-      license = licenses.mit;
-      maintainers = with maintainers; [ bennofs ];
-    };
-  };
+  pwntools = callPackage ../development/python-modules/pwntools { };
 
   ROPGadget = callPackage ../development/python-modules/ROPGadget { };
 
