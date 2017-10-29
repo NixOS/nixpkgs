@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   name = "usbtmc-${version}";
-  version = "0.6";
+  version = "0.8";
 
   src = fetchurl {
     url = "https://github.com/python-ivi/python-usbtmc/archive/v${version}.tar.gz";
-    sha256 = "1wnw6ndc3s1i8zpbikz5zc40ijvpraqdb0xn8zmqlyn95xxfizw2";
+    sha256 = "14f4j77ljr45crnjwlp1dqbxwa45s20y2fpq5rg59r60w15al4yw";
   };
 
   propagatedBuildInputs = [ pyusb ];
