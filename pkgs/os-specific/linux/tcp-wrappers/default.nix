@@ -20,6 +20,7 @@ in stdenv.mkDerivation rec {
   prePatch = ''
     tar -xaf $debian
     patches="$(cat debian/patches/series | sed 's,^,debian/patches/,') $patches"
+    substituteInPlace Makefile --replace "AR	= ar" "AR = ${stdenv.cc.targetPrefix}ar"
   '';
 
   buildInputs = [ libnsl ];
