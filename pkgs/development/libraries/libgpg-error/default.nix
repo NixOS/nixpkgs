@@ -28,6 +28,7 @@ in stdenv.mkDerivation (rec {
 
   postPatch = ''
     sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure
+    cp src/syscfg/lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-gnueabihf.h
   '' + stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
     ln -s lock-obj-pub.x86_64-pc-linux-musl.h src/syscfg/lock-obj-pub.linux-musl.h
   '';
@@ -49,7 +50,7 @@ in stdenv.mkDerivation (rec {
     # Thus, re-run it with Bash.
       "${stdenv.shell} config.status";
 
-  doCheck = true; # not cross
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
   meta = with stdenv.lib; {
     homepage = https://www.gnupg.org/related_software/libgpg-error/index.html;
