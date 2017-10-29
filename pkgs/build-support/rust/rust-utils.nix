@@ -18,7 +18,7 @@ let buildCrate = { crateName, crateVersion, dependencies, complete, crateFeature
                  " --extern ${extern}=${dep.out}/lib${extern}-${dep.metadata}.so")
             ) "" dependencies;
           optLevel = if release then 3 else 0;
-          rustcOpts = (if release then "-C opt-level=3" else "-g");
+          rustcOpts = (if release then "-C opt-level=3" else "-C debuginfo=2");
           rustcMeta = "-C metadata=" + metadata + " -C extra-filename=-" + metadata;
       in ''
 
@@ -30,7 +30,6 @@ let buildCrate = { crateName, crateVersion, dependencies, complete, crateFeature
       mkdir -p target/deps
       mkdir -p target/build
       chmod uga+w target -R
-
       for i in ${completeDepsDir}; do
          ln -s -f $i/*.rlib target/deps #*/
          ln -s -f $i/*.so target/deps #*/
@@ -38,8 +37,17 @@ let buildCrate = { crateName, crateVersion, dependencies, complete, crateFeature
             cat $i/link >> target/link
             cat $i/link >> target/link.final
          fi
+         if [ -e $i/env ]; then
+            source $i/env
+         fi
       done
-
+      if [ -e target/link ]; then
+        tr '\n' ' ' < target/link > target/link_
+        tr '\n' ' ' < target/link.final > target/link.final_
+        sort -u target/link_ > target/link
+        sort -u target/link.final_ > target/link.final
+        rm target/link_ target/link.final_
+      fi
       EXTRA_BUILD=""
       BUILD_OUT_DIR=""
       export CARGO_PKG_NAME=${crateName}
@@ -59,7 +67,11 @@ let buildCrate = { crateName, crateVersion, dependencies, complete, crateFeature
       if [[ ! -z "${build}" ]] ; then
          echo "$boldgreen" "Building ${build} (${libName})" "$norm"
          mkdir -p target/build/${crateName}
-         rustc --crate-name build_script_build ${build} --crate-type bin ${rustcOpts} ${crateFeatures} --out-dir target/build/${crateName} --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow $(cat target/link)
+         if [ -e target/link ]; then
+           rustc --crate-name build_script_build ${build} --crate-type bin ${rustcOpts} ${crateFeatures} --out-dir target/build/${crateName} --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow $(cat target/link)
+         else
+           rustc --crate-name build_script_build ${build} --crate-type bin ${rustcOpts} ${crateFeatures} --out-dir target/build/${crateName} --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow
+         fi
          mkdir -p target/build/${crateName}.out
          export RUST_BACKTRACE=1
          BUILD_OUT_DIR="-L $OUT_DIR"
@@ -71,6 +83,9 @@ let buildCrate = { crateName, crateVersion, dependencies, complete, crateFeature
 
          EXTRA_LINK=$(grep "^cargo:rustc-link-lib=" target/build/${crateName}.opt | sed -e "s/cargo:rustc-link-lib=\(.*\)/\1/")
          EXTRA_LINK_SEARCH=$(grep "^cargo:rustc-link-search=" target/build/${crateName}.opt | sed -e "s/cargo:rustc-link-search=\(.*\)/\1/")
+         CRATENAME=$(echo ${crateName} | sed -e "s/\(.*\)-sys$/\1/" | tr '[:lower:]' '[:upper:]')
+         grep "^cargo:" target/build/${crateName}.opt | grep -v "^cargo:rustc-" | grep -v "^cargo:warning=" | grep -v "^cargo:rerun-if-changed=" | grep -v "^cargo:rerun-if-env-changed" | sed -e "s/cargo:\([^=]*\)=\(.*\)/export DEP_$(echo $CRATENAME)_\U\1\E=\2/" > target/env
+
          set -e
          if [ -n "$(ls target/build/${crateName}.out)" ]; then
 
@@ -139,15 +154,16 @@ let buildCrate = { crateName, crateVersion, dependencies, complete, crateFeature
       echo "$EXTRA_LINK" | while read i; do
          if [ ! -z "$i" ]; then
            echo "-l $i" >> target/link
-           echo "EXTRA_LINK, i = $i"
            echo "-l $i" >> target/link.final
          fi
       done
 
       if [ -e target/link ]; then
-         LINK=$(cat target/link)
-         sort target/link.final | uniq > target/link.final.sorted
+         sort -u target/link.final > target/link.final.sorted
          mv target/link.final.sorted target/link.final
+         sort -u target/link > target/link.sorted
+         mv target/link.sorted target/link
+         LINK=$(cat target/link)
       fi
 
       mkdir -p target/bin
@@ -175,7 +191,10 @@ let buildCrate = { crateName, crateVersion, dependencies, complete, crateFeature
 
     installCrate = crateName: ''
       mkdir -p $out
-      if [ -e target/link.final ]; then
+      if [ -s target/env ]; then
+        cp target/env $out/env
+      fi
+      if [ -s target/link.final ]; then
         cp target/link.final $out/link
       fi
       cp -PR target/deps/* $out # */
