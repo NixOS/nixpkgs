@@ -16256,12 +16256,35 @@ with pkgs;
 
   quiterss = libsForQt5.callPackage ../applications/networking/newsreaders/quiterss {};
 
-  quodlibet-without-gst-plugins = callPackage ../applications/audio/quodlibet { };
-
   quodlibet = callPackage ../applications/audio/quodlibet {
-    withGstPlugins = true;
-    gst-plugins-bad = null;
+    keybinder3 = null;
+    libmodplug = null;
+    kakasi = null;
+    libappindicator-gtk3 = null;
   };
+
+  quodlibet-without-gst-plugins = quodlibet.override {
+    withGstPlugins = false;
+    tag = "-without-gst-plugins";
+  };
+
+  quodlibet-xine = quodlibet.override { xineBackend = true; tag = "-xine"; };
+
+  quodlibet-full = callPackage ../applications/audio/quodlibet {
+    inherit (gnome2) gtksourceview;
+    withDbusPython = true;
+    withPyInotify = true;
+    withMusicBrainzNgs = true;
+    withPahoMqtt = true;
+    keybinder3 = keybinder3;
+    libmodplug = libmodplug;
+    kakasi = kakasi;
+    webkitgtk = webkitgtk24x-gtk3;
+    libappindicator-gtk3 = libappindicator-gtk3;
+    tag = "-full";
+  };
+
+  quodlibet-xine-full = quodlibet-full.override { xineBackend = true; tag = "-xine-full"; };
 
   falkon = libsForQt5.callPackage ../applications/networking/browsers/falkon { };
 

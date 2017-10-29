@@ -5512,6 +5512,8 @@ in {
     buildInputs = with self; [ fudge_9 nose ];
   };
 
+  faulthandler = callPackage ../development/python-modules/faulthandler {};
+
   fedpkg = callPackage ../development/python-modules/fedpkg { };
 
   flit = callPackage ../development/python-modules/flit { };
@@ -17081,6 +17083,7 @@ in {
     };
   };
 
+  pyobjc = callPackage ../development/python-modules/pyobjc {};
 
   pyodbc = buildPythonPackage rec {
     name = "pyodbc-3.0.7";
