@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, buildPythonPackage, pep8 }:
+{ stdenv, fetchPypi, buildPythonPackage, pycodestyle }:
 
 buildPythonPackage rec {
-  name = "autopep8-1.0.4";
+  pname = "autopep8";
+  version = "1.3.3";
+  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/a/autopep8/${name}.tar.gz";
-    sha256 = "17lydqm8y9a5qadp6iifxrb5mb0g9fr1vxn5qy1fjpyhazxaw8n1";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0c1gl648g2xnz3j0rsp71ld4i32zlglmqjvqf4q8r08jp3zpny7z";
   };
 
-  propagatedBuildInputs = [ pep8 ];
+  propagatedBuildInputs = [ pycodestyle ];
 
   # One test fails:
   # FAIL: test_recursive_should_not_crash_on_unicode_filename (test.test_autopep8.CommandLineTests)
