@@ -15808,6 +15808,8 @@ with pkgs;
     libmlt = mlt;
   };
 
+  shogun = callPackage ../applications/science/machine-learning/shogun { };
+
   smplayer = libsForQt5.callPackage ../applications/video/smplayer { };
 
   smtube = libsForQt56.callPackage ../applications/video/smtube {};
