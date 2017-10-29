@@ -1,16 +1,14 @@
-{ stdenv, fetchurl, buildPythonPackage, isPy3k }:
+{ stdenv, fetchPypi, buildPythonPackage }:
 
 buildPythonPackage rec {
-  name = "dpkt-1.8";
-  disabled = isPy3k;
+  pname = "dpkt";
+  version = "1.9.1";
+  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "https://dpkt.googlecode.com/files/${name}.tar.gz";
-    sha256 = "01q5prynymaqyfsfi2296xncicdpid2hs3yyasim8iigvkwy4vf5";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0rr9ygczhxkfb61778jx0cxs0sq46zwlcj5l3wn6xmd3iy3yx9y6";
   };
-
-  # error: invalid command 'test'
-  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "Fast, simple packet creation / parsing, with definitions for the basic TCP/IP protocols";
