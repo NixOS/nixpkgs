@@ -1,11 +1,13 @@
-{ stdenv, fetchurl, buildPythonPackage, libusb, libusb1 }:
+{ stdenv, fetchPypi, buildPythonPackage, libusb, libusb1 }:
 
 buildPythonPackage rec {
-  name = "pyusb-1.0.0";
+  pname = "pyusb";
+  version = "1.0.2";
+  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "https://pypi.python.org/packages/8a/19/66fb48a4905e472f5dfeda3a1bafac369fbf6d6fc5cf55b780864962652d/PyUSB-1.0.0.tar.gz";
-    sha256 = "0s2k4z06fapd5vp1gnrlf8a9sjpc03p9974lzw5k6ky39akzyd2v";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0qkk2jn270jwwl1x26hmdhb14m9kkbrzzwzizdjcl1a29b6756sf";
   };
 
   # Fix the USB backend library lookup
