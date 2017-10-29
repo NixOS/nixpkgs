@@ -21303,30 +21303,7 @@ in {
     };
   };
 
-  toolz = buildPythonPackage rec{
-    name = "toolz-${version}";
-    version = "0.8.2";
-
-    src = pkgs.fetchurl{
-      url = "mirror://pypi/t/toolz/toolz-${version}.tar.gz";
-      sha256 = "0l3czks4xy37i8099waxk2fdz5g0k1dwys2mkhlxc0b0886cj4sa";
-    };
-
-    buildInputs = with self; [ nose ];
-
-    checkPhase = ''
-      # https://github.com/pytoolz/toolz/issues/357
-      rm toolz/tests/test_serialization.py
-      nosetests toolz/tests
-    '';
-
-    meta = {
-      homepage = "http://github.com/pytoolz/toolz/";
-      description = "List processing tools and functional utilities";
-      license = "licenses.bsd3";
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  toolz = callPackage ../development/python-modules/toolz { };
 
   tox = buildPythonPackage rec {
     name = "tox-${version}";
