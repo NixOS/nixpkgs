@@ -4853,19 +4853,15 @@ in {
 
 
   demjson = buildPythonPackage rec {
-    name = "demjson-1.6";
+    pname = "demjson";
+    version = "2.2.4";
+    name = "${pname}-${version}";
+    disabled = isPy36;
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/demjson/${name}.tar.gz";
-      sha256 = "0abf7wqqq7rk1sycy47ayn5p93yy7gjq50cb2z69wmik1qqrr60x";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "0ygbddpnvp5lby6mr5kz60la3hkvwwzv3wwb3z0w9ngxl0w21pii";
     };
-
-    doCheck = false; # there are no tests
-
-    preFixup = ''
-      mkdir -p "$out/bin"
-      cp jsonlint "$out/bin/"
-    '';
 
     meta = {
       description = "Encoder/decoder and lint/validator for JSON (JavaScript Object Notation)";
