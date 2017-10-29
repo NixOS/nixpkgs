@@ -1940,26 +1940,7 @@ in {
     };
   };
 
-
-  bitstring = buildPythonPackage rec {
-    pname = "bitstring";
-    version = "3.1.5";
-    name = "${pname}-${version}";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "1algq30j6rz12b1902bpw7iijx5lhrfqhl80d4ac6xzkrrpshqy1";
-      extension = "zip";
-    };
-
-    meta = {
-      description = "Module for binary data manipulation";
-      homepage = "https://github.com/scott-griffiths/bitstring";
-      license = licenses.mit;
-      platforms = platforms.linux;
-      maintainers = with maintainers; [ bjornfor ];
-    };
-  };
+  bitstring = callPackage ../development/python-modules/bitstring { };
 
   blaze = callPackage ../development/python-modules/blaze { };
 
