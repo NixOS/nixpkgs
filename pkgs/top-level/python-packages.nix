@@ -12493,6 +12493,8 @@ in {
     };
   };
 
+  pyte = callPackage ../development/python-modules/pyte { };
+
   graphviz = buildPythonPackage rec {
     name = "graphviz-${version}";
     version = "0.5.2";
