@@ -19133,30 +19133,7 @@ in {
     };
   };
 
-  seaborn = buildPythonPackage rec {
-    name = "seaborn-0.7.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/seaborn/${name}.tar.gz";
-      sha256 = "0pawrqc3mxpwd5g9pvi9gba02637bh5c8ldpp8izfwpfn52469zs";
-    };
-
-    buildInputs = with self; [ nose ];
-    propagatedBuildInputs = with self; [ pandas matplotlib ];
-
-    checkPhase = ''
-      nosetests -v
-    '';
-
-    # Computationally very demanding tests
-    doCheck = false;
-
-    meta = {
-      description = "Statisitical data visualization";
-      homepage = "http://stanford.edu/~mwaskom/software/seaborn/";
-      license     = "BSD";
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
+  seaborn = callPackage ../development/python-modules/seaborn { };
 
   selenium = buildPythonPackage rec {
     name = "selenium-2.52.0";
