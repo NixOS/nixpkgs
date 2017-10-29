@@ -35,7 +35,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ libnsl ];
 
-  makeFlags = [ "REAL_DAEMON_DIR=$(out)/bin" "linux" ];
+  makeFlags = [ "REAL_DAEMON_DIR=$(out)/bin" "linux" "AR:=$(AR)" ];
 
   installPhase = ''
     mkdir -p "$out/bin"
