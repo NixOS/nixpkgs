@@ -1,23 +1,25 @@
 { stdenv, fetchFromGitHub
 , cacert
-, buildPythonPackage, python-jose }:
+, buildPythonPackage, pyjwt }:
 
 buildPythonPackage rec {
   name = "PyGithub-${version}";
-  version = "1.32";
+  version = "1.35";
 
   src = fetchFromGitHub {
     owner = "PyGithub";
     repo = "PyGithub";
-    rev = "v${version}";
-    sha256 = "15dr9ja63zdxax9lg6q2kcakqa82dpffyhgpjr13wq3sfkcy5pdw";
+    rev = version;
+    sha256 = "0qp4jiizpnhzbp1dv5a2ap3wqmqbvbh0p9i3j4ld8xz80nyml5d7";
   };
 
   postPatch = ''
     # requires network
     echo "" > github/tests/Issue142.py
   '';
-  propagatedBuildInputs = [ python-jose ];
+
+  propagatedBuildInputs = [ pyjwt ];
+
   meta = with stdenv.lib; {
     homepage = https://github.com/PyGithub/PyGithub;
     description = "A Python (2 and 3) library to access the GitHub API v3";
