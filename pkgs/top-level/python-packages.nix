@@ -10503,30 +10503,7 @@ in {
 
   ipython_6 = callPackage ../development/python-modules/ipython { };
 
-  ipython_genutils = buildPythonPackage rec {
-    version = "0.2.0";
-    name = "ipython_genutils-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/i/ipython_genutils/${name}.tar.gz";
-      sha256 = "eb2e116e75ecef9d4d228fdc66af54269afa26ab4463042e33785b887c628ba8";
-    };
-
-    LC_ALL = "en_US.UTF-8";
-    buildInputs = with self; [ nose pkgs.glibcLocales ];
-
-    checkPhase = ''
-      nosetests -v ipython_genutils/tests
-    '';
-
-    meta = {
-      description = "Vestigial utilities from IPython";
-      homepage = http://ipython.org/;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ fridh ];
-    };
-  };
-
+  ipython_genutils = callPackage ../development/python-modules/ipython_genutils { };
 
   ipywidgets = callPackage ../development/python-modules/ipywidgets { };
 
