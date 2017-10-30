@@ -163,6 +163,8 @@ with pkgs;
 
   packer = callPackage ../development/tools/packer { };
 
+  mht2htm = callPackage ../tools/misc/mht2htm { };
+
   fetchpatch = callPackage ../build-support/fetchpatch { };
 
   fetchs3 = callPackage ../build-support/fetchs3 { };
