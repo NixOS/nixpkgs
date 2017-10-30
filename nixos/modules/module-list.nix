@@ -328,6 +328,7 @@
   ./services/misc/parsoid.nix
   ./services/misc/phd.nix
   ./services/misc/plex.nix
+  ./services/misc/plexpy.nix
   ./services/misc/pykms.nix
   ./services/misc/radarr.nix
   ./services/misc/redmine.nix

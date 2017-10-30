@@ -18,6 +18,7 @@ pythonPackages.buildPythonApplication rec {
     click click-log click-threading
     requests_toolbelt
     requests
+    requests_oauthlib # required for google oauth sync
     atomicwrites
   ];
 
