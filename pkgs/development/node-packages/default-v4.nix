@@ -1,4 +1,4 @@
-{pkgs, system, nodejs}:
+{pkgs, system, nodejs, stdenv}:
 
 let
   nodePackages = import ./composition-v4.nix {
@@ -43,7 +43,7 @@ nodePackages // {
     buildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper ];
     postInstall = ''
       for prog in bower2nix fetch-bower; do
-        wrapProgram "$out/bin/$prog" --prefix PATH : "${pkgs.git}/bin"
+        wrapProgram "$out/bin/$prog" --prefix PATH : ${stdenv.lib.makeBinPath [ pkgs.git pkgs.nix ]}
       done
     '';
   });
