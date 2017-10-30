@@ -119,9 +119,7 @@ let
       platforms = platforms.all;
     };
   };
-
 in rec {
-
   perl = perl524;
 
   perl522 = common {
@@ -130,8 +128,7 @@ in rec {
   };
 
   perl524 = common {
-    version = "5.24.2";
-    sha256 = "1x4yj814a79lcarwb3ab6bbcb36hvb5n4ph4zg3yb0nabsjfi6v0";
+    version = "5.24.3";
+    sha256 = "1m2px85kq2fyp2d4rx3bw9kg3car67qfqwrs5vlv96dx0x8rl06b";
   };
-
 }
