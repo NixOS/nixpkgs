@@ -195,10 +195,8 @@ with pkgs;
 
   fetchzip = callPackage ../build-support/fetchzip { };
 
-  gitRepoToName = callPackage ../build-support/fetchgit/gitrepotoname.nix { };
-
   fetchFromGitHub = {
-    owner, repo, rev, name ? gitRepoToName repo rev,
+    owner, repo, rev, name ? "source",
     fetchSubmodules ? false, private ? false,
     githubBase ? "github.com", varPrefix ? null,
     ... # For hash agility
@@ -231,7 +229,7 @@ with pkgs;
   in fetcher fetcherArgs // { meta.homepage = baseUrl; inherit rev; };
 
   fetchFromBitbucket = {
-    owner, repo, rev, name ? gitRepoToName repo rev,
+    owner, repo, rev, name ? "source",
     ... # For hash agility
   }@args: fetchzip ({
     inherit name;
@@ -242,7 +240,7 @@ with pkgs;
 
   # cgit example, snapshot support is optional in cgit
   fetchFromSavannah = {
-    repo, rev, name ? gitRepoToName repo rev,
+    repo, rev, name ? "source",
     ... # For hash agility
   }@args: fetchzip ({
     inherit name;
@@ -252,7 +250,7 @@ with pkgs;
 
   # gitlab example
   fetchFromGitLab = {
-    owner, repo, rev, name ? gitRepoToName repo rev,
+    owner, repo, rev, name ? "source",
     ... # For hash agility
   }@args: fetchzip ({
     inherit name;
@@ -262,7 +260,7 @@ with pkgs;
 
   # gitweb example, snapshot support is optional in gitweb
   fetchFromRepoOrCz = {
-    repo, rev, name ? gitRepoToName repo rev,
+    repo, rev, name ? "source",
     ... # For hash agility
   }@args: fetchzip ({
     inherit name;
