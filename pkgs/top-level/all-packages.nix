@@ -152,14 +152,53 @@ with pkgs;
 
   etBook = callPackage ../data/fonts/et-book { };
 
+  /* `fetchbower name version target outputHash` fetches a package from the
+     bower package manager (https://bower.io/)
+
+     Examples:
+       fetchbower "jquery" "2.2.2" "1.9.1 - 2" "10sp5h98sqwk90y4k6hbdviwqzvzwqf47r3r51pakch5ii2y7js1"
+
+       fetchbower "angular-toastr" "1.6.0" "1.6.0" "1szigf1m28bgpfyg8hbm5rffr5zi7wr9n73nc1fqhk0yqh7gzysh"
+  */
   fetchbower = callPackage ../build-support/fetchbower {
     inherit (nodePackages) bower2nix;
   };
 
+  /* `fetchbzr` fetches a project using the bazaar version control system
+     (http://bazaar.canonical.com/en/).
+
+     Example:
+        fetchbzr {
+          url = https://code.launchpad.net/~shantanu-goel/xwinwrap/devel;
+          rev = version;
+          sha256 = "1annhqc71jcgx5zvcy31c1c488ygx4q1ygrwyy2y0ww743smbchw";
+        };
+  */
   fetchbzr = callPackage ../build-support/fetchbzr { };
 
+  /* `fetchcvs` fetches a project using the Concurrent Version Control (CVS)
+     version control system
+
+     Example:
+        fetchcvs {
+          cvsRoot = ":pserver:anonymous@cvs.savannah.nongnu.org:/sources/hurdextras";
+          module = "smbfs";
+          sha256 = "5941d1a5da4488cbf0efe9aa0b41fe4ff5ba57b84ed24f7ff7c0feda4501d3e3";
+          date = "2012-03-15";
+        };
+  */
   fetchcvs = callPackage ../build-support/fetchcvs { };
 
+  /* `fetchdarcs` fetches a project using the darcs version control system
+     (http://darcs.net/)
+
+     Example:
+        fetchdarcs {
+          url = http://hub.darcs.net/simon/darcsum;
+          context = ./darcs_context;
+          sha256 = "18dyk2apmnjapd604a5njfqwjri1mc7lgjaajy9phicpibgdrwzh";
+        };
+  */
   fetchdarcs = callPackage ../build-support/fetchdarcs { };
 
   fetchdocker = callPackage ../build-support/fetchdocker { };
@@ -168,12 +207,51 @@ with pkgs;
 
   fetchDockerLayer = callPackage ../build-support/fetchdocker/fetchDockerLayer.nix { };
 
+  /* `fetchfossil` fetches a project using the fossil version control system
+     (https://www.fossil-scm.org)
+
+     Example:
+        fetchfossil {
+          name = "example"
+          url = "http://example.com";
+          rev = "2eea7584d57b80c053c5e9c5041a8b8185f566f23debe2cb80b83dfc1579c1d9"
+          sha256 = "18dyk2apmnjapd604a5njfqwjri1mc7lgjaajy9phicpibgdrwzh";
+        };
+  */
   fetchfossil = callPackage ../build-support/fetchfossil { };
 
+  /* `fetchgit` fetches a project using the git version control system
+     (https://git-scm.com/)
+
+     Options:
+      - url: URL of the repo
+      - rev: Revision to fetch, uses HEAD when not provided
+      - md5: optional md5 hash
+      - sha256: optional sha256 hash
+      - leaveDotGit: Whether to leave the .git folder in the resulting derivation
+      - fetchSubmodules: Whether to also fetch submodules
+      - deepClone: Clone the entire repository
+      - branchName: Name of the branch to fetch
+
+     Example:
+        fetchgit {
+          url = "git://git.ardour.org/ardour/ardour.git";
+          rev = "ae0dcdc0c5d13483271065c360e378202d20170a";
+          sha256 = "0mla5lm51ryikc2rrk53max2m7a5ds6i1ai921l2h95wrha45nkr";
+        };
+  */
   fetchgit = callPackage ../build-support/fetchgit {
     git = gitMinimal;
   };
 
+  /* `fetchgitPrivate` fetches a project from a private git repository
+     (https://www.git-scm.com)
+
+     Arguments are the same as that of fetchgit
+
+     Requires nix-path to be configured such that <ssh-config-file> points to
+     a file that will allow ssh to access private repositories.
+  */
   fetchgitPrivate = callPackage ../build-support/fetchgit/private.nix { };
 
   fetchgitLocal = callPackage ../build-support/fetchgitlocal { };
