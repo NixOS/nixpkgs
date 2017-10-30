@@ -1,4 +1,4 @@
-{ stdenv, fetchurl , skktools }:
+{ stdenv, fetchurl, skktools }:
 
 let
   # kana to kanji
@@ -68,6 +68,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/skk-dev/dict;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = with stdenv.lib.maintainers; [ yuriaisaka ];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    platforms = with stdenv.lib.platforms; linux;
   };
 }
