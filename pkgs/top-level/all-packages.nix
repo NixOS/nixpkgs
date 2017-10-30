@@ -3966,6 +3966,8 @@ with pkgs;
 
   plex = callPackage ../servers/plex { enablePlexPass = config.plex.enablePlexPass or false; };
 
+  plexpy = callPackage ../servers/plexpy { python = python2; };
+
   ploticus = callPackage ../tools/graphics/ploticus {
     libpng = libpng12;
   };
