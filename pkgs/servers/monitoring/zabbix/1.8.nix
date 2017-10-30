@@ -1,13 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, postgresql, curl, openssl, zlib, pcre, libevent, libiconv }:
+{ stdenv, fetchurl, pkgconfig, postgresql, curl, openssl, zlib }:
 
 let
 
-  version = "3.4.3";
+  version = "1.8.22";
 
   src = fetchurl {
     url = "mirror://sourceforge/zabbix/zabbix-${version}.tar.gz";
-    sha256 = "1kyq9y6mlrb824v60c7h2hjjrlysdmmz64sxj3is2cnk0fspvs00";
+    sha256 = "0cjj3c4j4b9sl3hgh1fck330z9q0gz2k68g227y0paal6k6f54g7";
   };
+
+  preConfigure =
+    ''
+      substituteInPlace ./configure \
+        --replace " -static" "" \
+        ${stdenv.lib.optionalString (stdenv.cc.libc != null) ''
+          --replace /usr/include/iconv.h ${stdenv.lib.getDev stdenv.cc.libc}/include/iconv.h
+        ''}
+    '';
 
 in
 
@@ -16,29 +25,21 @@ in
   server = stdenv.mkDerivation {
     name = "zabbix-${version}";
 
-    inherit src;
+    inherit src preConfigure;
 
-    configureFlags = [
-      "--enable-server"
-      "--with-postgresql"
-      "--with-libcurl"
-      "--with-libpcre=${pcre.dev}"
-      "--with-libevent=${libevent.dev}"
-      "--with-iconv=${libiconv}"
-    ];
+    configureFlags = "--enable-agent --enable-server --with-pgsql --with-libcurl";
 
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ postgresql curl openssl zlib pcre libevent libiconv ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ postgresql curl openssl zlib ];
 
     postInstall =
       ''
         mkdir -p $out/share/zabbix
         cp -prvd frontends/php $out/share/zabbix/php
         mkdir -p $out/share/zabbix/db/data
-        cp -prvd database/postgresql/data.sql $out/share/zabbix/db/data/data.sql
-        cp -prvd database/postgresql/images.sql $out/share/zabbix/db/data/images_pgsql.sql
+        cp -prvd create/data/*.sql $out/share/zabbix/db/data
         mkdir -p $out/share/zabbix/db/schema
-        cp -prvd database/postgresql/schema.sql $out/share/zabbix/db/schema/postgresql.sql
+        cp -prvd create/schema/*.sql $out/share/zabbix/db/schema
       '';
 
     meta = {
@@ -53,15 +54,9 @@ in
   agent = stdenv.mkDerivation {
     name = "zabbix-agent-${version}";
 
-    inherit src;
+    inherit src preConfigure;
 
-    configureFlags = [
-      "--enable-agent"
-      "--with-libpcre=${pcre.dev}"
-      "--with-iconv=${libiconv}"
-    ];
-
-    buildInputs = [ pcre libiconv ];
+    configureFlags = "--enable-agent";
 
     meta = with stdenv.lib; {
       description = "An enterprise-class open source distributed monitoring solution (client-side agent)";
