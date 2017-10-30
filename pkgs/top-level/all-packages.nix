@@ -19692,6 +19692,8 @@ with pkgs;
 
   xosd = callPackage ../misc/xosd { };
 
+  xosview2 = callPackage ../tools/X11/xosview2 { };
+
   xpad = callPackage ../applications/misc/xpad {
     inherit (gnome3) gtksourceview;
   };
