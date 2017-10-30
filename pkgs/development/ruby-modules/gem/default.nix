@@ -65,6 +65,8 @@ let
         inherit (attrs.source) url rev sha256 fetchSubmodules;
         leaveDotGit = true;
       }
+    else if type == "url" then
+      fetchurl attrs.source
     else
       throw "buildRubyGem: don't know how to build a gem of type \"${type}\""
   );
@@ -84,7 +86,8 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
 
   buildInputs = [
     ruby makeWrapper
-  ] ++ lib.optionals (type == "git") [ git bundler ]
+  ] ++ lib.optionals (type == "git") [ git ]
+    ++ lib.optionals (type != "gem") [ bundler ]
     ++ lib.optional stdenv.isDarwin darwin.libobjc
     ++ buildInputs;
 
@@ -159,14 +162,22 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
 
     echo "buildFlags: $buildFlags"
 
+    ${lib.optionalString (type ==  "url") ''
+    ruby ${./nix-bundle-install.rb} \
+      "path" \
+      '${gemName}' \
+      '${version}' \
+      '${lib.escapeShellArgs buildFlags}'
+    ''}
     ${lib.optionalString (type == "git") ''
     ruby ${./nix-bundle-install.rb} \
-      ${gemName} \
-      ${attrs.source.url} \
-      ${src} \
-      ${attrs.source.rev} \
-      ${version} \
-      ${lib.escapeShellArgs buildFlags}
+      "git" \
+      '${gemName}' \
+      '${version}' \
+      '${lib.escapeShellArgs buildFlags}' \
+      '${attrs.source.url}' \
+      '${src}' \
+      '${attrs.source.rev}'
     ''}
 
     ${lib.optionalString (type == "gem") ''
