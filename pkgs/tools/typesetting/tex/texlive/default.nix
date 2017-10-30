@@ -189,9 +189,9 @@ in
             extraName = "combined" + lib.removePrefix "scheme" pname;
           })
         )
-        { inherit (tl) scheme-full
-            scheme-tetex scheme-medium scheme-small scheme-basic scheme-minimal
-            scheme-context scheme-gust scheme-xml;
+        { inherit (tl)
+            scheme-basic scheme-context scheme-full scheme-gust scheme-infraonly
+            scheme-medium scheme-minimal scheme-small scheme-tetex;
         }
     );
   }
