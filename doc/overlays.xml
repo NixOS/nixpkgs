@@ -88,35 +88,37 @@ as <filename>overlays.nix</filename> and imported as the value of <literal>nixpk
 <title>Defining overlays</title>
 
 <para>Overlays are Nix functions which accept two arguments, 
-conventionally called <varname>self</varname> and <varname>super</varname>, 
+conventionally called <varname>final</varname> and <varname>previous</varname>,
 and return a set of packages. For example, the following is a valid overlay.</para>
 
 <programlisting>
-self: super:
+final: previous:
 
 {
-  boost = super.boost.override {
-    python = self.python3;
+  boost = previous.boost.override {
+    python = final.python3;
   };
-  rr = super.callPackage ./pkgs/rr {
-    stdenv = self.stdenv_32bit;
+  rr = previous.callPackage ./pkgs/rr {
+    stdenv = final.stdenv_32bit;
   };
 }
 </programlisting>
 
-<para>The first argument (<varname>self</varname>) corresponds to the final package
-set. You should use this set for the dependencies of all packages specified in your
-overlay. For example, all the dependencies of <varname>rr</varname> in the example above come
-from <varname>self</varname>, as well as the overridden dependencies used in the
-<varname>boost</varname> override.</para>
+<para>The first argument (<varname>final</varname>) corresponds to the
+resulting package set after all the overlays are applied. You should use this
+set for the dependencies of all packages specified in your overlay. For
+example, all the dependencies of <varname>rr</varname> in the example above
+come from <varname>final</varname>, as well as the overridden dependencies
+used in the <varname>boost</varname> override.</para>
 
-<para>The second argument (<varname>super</varname>)
-corresponds to the result of the evaluation of the previous stages of
+<para>The second argument (<varname>previous</varname>)
+corresponds to the the evaluation of <literal>Nixpkgs</literal> with the
+overlays applied prior to the application of the current overlay.
 Nixpkgs. It does not contain any of the packages added by the current
 overlay, nor any of the following overlays. This set should be used either
 to refer to packages you wish to override, or to access functions defined
 in Nixpkgs. For example, the original recipe of <varname>boost</varname>
-in the above example, comes from <varname>super</varname>, as well as the
+in the above example, comes from <varname>previous</varname>, as well as the
 <varname>callPackage</varname> function.</para>
 
 <para>The value returned by this function should be a set similar to
@@ -126,7 +128,7 @@ overridden and/or new packages.</para>
 <para>Overlays are similar to other methods for customizing Nixpkgs, in particular
 the <literal>packageOverrides</literal> attribute described in <xref linkend="sec-modify-via-packageOverrides"/>.
 Indeed, <literal>packageOverrides</literal> acts as an overlay with only the 
-<varname>super</varname> argument. It is therefore appropriate for basic use, 
+<varname>previous</varname> argument. It is therefore appropriate for basic use,
 but overlays are more powerful and easier to distribute.</para>
 
 </section>
