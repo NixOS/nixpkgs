@@ -19,6 +19,7 @@ stdenv.mkDerivation {
     # and /usr/lib. It's a stupid feature anyway. Likewise, when searching for
     # included Makefiles, don't look in /usr/include and friends.
     ./impure-dirs.patch
+    ./pselect.patch
   ];
 
   buildInputs = stdenv.lib.optionals guileSupport [ guile pkgconfig ];
