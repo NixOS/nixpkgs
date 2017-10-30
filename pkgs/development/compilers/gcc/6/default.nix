@@ -326,7 +326,44 @@ stdenv.mkDerivation ({
   + stdenv.lib.optionalString (langJava || langGo) ''
     export lib=$out;
   ''
-  ;
+  + stdenv.lib.optionalString (buildPlatform != hostPlatform)
+  (let yesFuncs = [
+        "asprintf" "atexit"
+        "basename" "bcmp" "bcopy" "bsearch" "bzero"
+        "calloc" "canonicalize_file_name" "clock"
+        "dup3"
+        "ffs" "fork" "__fsetlocking"
+        "getcwd" "getpagesize" "getrlimit" "getrusage" "gettimeofday"
+        "index" "insque"
+        "memchr" "memcmp" "mempcpy" "memcpy" "memmem" "memmove" "memset" "mkstemps"
+        "on_exit"
+        "psignal" "putenv"
+        "random" "realpath" "rename" "rindex"
+        "sbrk" "setenv" "setrlimit" "sigsetmask" "snprintf"
+        "stpcpy" "stpncpy" "strcasecmp" "strchr" "strdup"
+        "strerror" "strncasecmp" "strndup" "strnlen" "strrchr" "strsignal" "strstr"
+        "strtod" "strtol" "strtoul" "strtoll" "strtoull" "strverscmp"
+        "sysconf" "sysctl"
+        "times" "tmpnam"
+        "vfork" "vasprintf" "vfprintf" "vprintf" "vsprintf" "vsnprintf"
+        "wait3" "wait4" "waitpid"
+      ];
+      noFuncs = [
+        "_doprnt"
+        "getsysinfo"
+        "pstat_getdynamic" "pstat_getstatic"
+        "setproctitle" "spawnvpe" "spawnve" "sysmp"
+        "table"
+      ];
+   in stdenv.lib.concatStringsSep "\n"
+        ([ ''
+           export ac_cv_search_strerror=""
+           export libiberty_cv_var_sys_errlist=yes
+           export libiberty_cv_var_sys_nerr=yes
+           export libiberty_cv_var_sys_siglist=yes
+         ''] ++ map (func: "export ac_cv_func_${func}=yes") yesFuncs
+         ++ map (func: "export ac_cv_func_${func}=no") noFuncs)
+  );
 
   dontDisableStatic = true;
 
