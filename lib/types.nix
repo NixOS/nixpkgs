@@ -297,7 +297,7 @@ rec {
             # This is mandatory as some option declaration might use the
             # "name" attribute given as argument of the submodule and use it
             # as the default of option declarations.
-            args.name = "<name>";
+            args.name = "&lt;name&gt;";
           }).options;
         getSubModules = opts';
         substSubModules = m: submodule m;
