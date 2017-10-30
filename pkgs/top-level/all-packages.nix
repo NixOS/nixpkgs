@@ -126,15 +126,6 @@ with pkgs;
     vs = vs90wrapper;
   };
 
-  fetchadc = callPackage ../build-support/fetchadc {
-    adc_user = if config ? adc_user
-      then config.adc_user
-      else throw "You need an adc_user attribute in your config to download files from Apple Developer Connection";
-    adc_pass = if config ? adc_pass
-      then config.adc_pass
-      else throw "You need an adc_pass attribute in your config to download files from Apple Developer Connection";
-  };
-
   fetchbower = callPackage ../build-support/fetchbower {
     inherit (nodePackages) bower2nix;
   };
