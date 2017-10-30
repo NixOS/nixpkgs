@@ -128,6 +128,19 @@ checkConfigOutput "\"42\"" config.value ./declare-coerced-value.nix
 checkConfigOutput "\"24\"" config.value ./declare-coerced-value.nix ./define-value-string.nix
 checkConfigError 'The option value .* in .* is not a string or integer.' config.value ./declare-coerced-value.nix ./define-value-list.nix
 
+# Check that mkForwardSubmoduleOptionDefinitions is capable of extracting
+# option definitions from the submodules.
+set -- config.enable ./declare-enable.nix ./declare-loaOfSub-any-enable.nix
+checkConfigOutput "false" "$@"
+checkConfigOutput "false" "$@" ./define-forward-loaOfSub-enable.nix
+checkConfigOutput "false" "$@" ./define-loaOfSub-foo.nix
+checkConfigOutput "false" "$@" ./define-loaOfSub-foo.nix ./define-forward-loaOfSub-enable.nix
+checkConfigOutput "false" "$@"  ./define-loaOfSub-foo-enable.nix
+checkConfigOutput "true" "$@"  ./define-loaOfSub-foo-enable.nix ./define-forward-loaOfSub-enable.nix
+checkConfigOutput "true" "$@"  ./define-loaOfSub-foo-enable.nix ./define-loaOfSub-bar-enable.nix ./define-forward-loaOfSub-enable.nix
+
+
+
 cat <<EOF
 ====== module tests ======
 $pass Pass

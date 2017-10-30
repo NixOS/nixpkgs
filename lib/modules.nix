@@ -84,7 +84,10 @@ rec {
             res set._definedNames
         else
           res;
-      result = { inherit options config; };
+      result = {
+        inherit options;
+        config = config // { _options = options; };
+      };
     in result;
 
 
@@ -525,6 +528,36 @@ rec {
       (optional (isOption option && option.isDefined)
         (wrap (mkMerge option.definitions)));
 
+  # Forward the option the option definitions of a submodules, such that the
+  # we do not evaluate a merge function multiple time, in case the merge of
+  # the submodule destroys the input content, and it cannot be re-entered
+  # without losses.
+  #
+  # The first argument is the list of submodules from which the definitions
+  # should be extracted.
+  #
+  # The second argument is a function to retrieve the option from the
+  # configuration of the submodule.
+  #
+  #   services = [ { extraConfig = "42"; } { extraConfig = "51"; } ];
+  #   extraConfig = lib.mkForwardSubmoduleOptionDefinitions
+  #     cfg.services (cfg: extractConfig);
+  #
+  #   namedServices = {
+  #     foo = { extraConfig = "42"; };
+  #     bar = { extraConfig = "51"; };
+  #   };
+  #   extraConfig = lib.mkForwardSubmoduleOptionDefinitions
+  #     (lib.attrValues cfg.services) (cfg: extractConfig);
+  #
+  mkForwardSubmoduleOptionDefinitions = submodules: optionFun:
+    mkMerge (
+      flip concatMap submodules (sm:
+        let option = optionFun sm._options; in
+          (optionals (isOption option && option.isDefined)
+            option.definitions)
+      )
+    );
 
   /* Compatibility. */
   fixMergeModules = modules: args: evalModules { inherit modules args; check = false; };
