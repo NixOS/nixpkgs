@@ -145,6 +145,8 @@ stdenv.mkDerivation ({
   # prevent a retained dependency on the bootstrap tools in the stdenv-linux
   # bootstrap.
   BASH_SHELL = "/bin/sh";
+
+  noAbsoluteSoname = true;
 }
 
 // (removeAttrs args [ "withLinuxHeaders" "withGd" ]) //

@@ -47,6 +47,7 @@ let
       ../../build-support/setup-hooks/compress-man-pages.sh
       ../../build-support/setup-hooks/strip.sh
       ../../build-support/setup-hooks/patch-shebangs.sh
+      ../../build-support/setup-hooks/set-soname.sh
     ]
       # FIXME this on Darwin; see
       # https://github.com/NixOS/nixpkgs/commit/94d164dd7#commitcomment-22030369
