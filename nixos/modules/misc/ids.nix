@@ -212,6 +212,7 @@
       lambdabot = 191;
       asterisk = 192;
       plex = 193;
+      plexpy = 195;
       grafana = 196;
       skydns = 197;
       # ripple-rest = 198; # unused, removed 2017-08-12
