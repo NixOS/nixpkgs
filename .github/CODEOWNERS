@@ -34,6 +34,10 @@ pkgs/development/haskell-modules/hoogle.nix          @peti
 pkgs/applications/science/math/R @peti
 pkgs/development/r-modules       @peti
 
+# Ruby
+pkgs/development/interpreters/ruby/* @zimbatm
+pkgs/development/ruby-modules/*      @zimbatm
+
 # Darwin-related
 /pkgs/stdenv/darwin/             @org/darwin-maintainers
 /pkgs/os-specific/darwin/        @org/darwin-maintainers
