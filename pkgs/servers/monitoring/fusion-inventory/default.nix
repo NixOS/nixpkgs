@@ -1,22 +1,28 @@
-{ stdenv, fetchurl, buildPerlPackage, perlPackages
+{ stdenv, lib, fetchurl, buildPerlPackage, perlPackages, gnused, nix, dmidecode, pciutils, usbutils, iproute, nettools
+, fetchFromGitHub, makeWrapper
 }:
 
 buildPerlPackage rec {
-  version = "2.3.18";
   name = "FusionInventory-Agent-${version}";
+  version = "2.3.21";
   src = fetchurl {
-    url = "mirror://cpan/authors/id/G/GR/GROUSSE/${name}.tar.gz";
-    sha256 = "543d96fa61b8f2a2bc599fe9f694f19d1f2094dc5506bc514d00b8a445bc5401";
+    url = "mirror://cpan/authors/id/G/GB/GBOUGARD/${name}.tar.gz";
+    sha256 = "0c2ijild03bfw125h2gyaip2mg1jxk72dcanrlx9n6pjh2ay90zh";
   };
 
   patches = [ ./remove_software_test.patch ];
 
   postPatch = ''
     patchShebangs bin
+
+    substituteInPlace "lib/FusionInventory/Agent/Tools/Linux.pm" \
+      --replace /sbin/ip ${iproute}/sbin/ip
+    substituteInPlace "lib/FusionInventory/Agent/Task/Inventory/Linux/Networks.pm" \
+      --replace /sbin/ip ${iproute}/sbin/ip
   '';
 
   buildTools = [];
-  buildInputs = with perlPackages; [
+  buildInputs = [ makeWrapper ] ++ (with perlPackages; [
     CGI
     DataStructureUtil
     FileCopyRecursive
@@ -28,6 +34,7 @@ buildPerlPackage rec {
     IPCRun
     JSON
     LWPProtocolhttps
+    ModuleInstall
     NetSNMP
     TestCompile
     TestDeep
@@ -35,7 +42,7 @@ buildPerlPackage rec {
     TestMockModule
     TestMockObject
     TestNoWarnings
-  ];
+  ]);
   propagatedBuildInputs = with perlPackages; [
     FileWhich
     LWP
@@ -52,7 +59,10 @@ buildPerlPackage rec {
     cp -r lib $out
 
     for cur in $out/bin/*; do
-      sed -e "s|./lib|$out/lib|" -i "$cur"
+      if [ -x "$cur" ]; then
+        sed -e "s|./lib|$out/lib|" -i "$cur"
+        wrapProgram "$cur" --prefix PATH : ${lib.makeBinPath [nix dmidecode pciutils usbutils nettools]}
+      fi
     done
   '';
 
