@@ -8,6 +8,7 @@ use File::Basename;
 use File::Slurp;
 use File::stat;
 
+umask(0022);
 
 sub uniq {
     my %seen;
