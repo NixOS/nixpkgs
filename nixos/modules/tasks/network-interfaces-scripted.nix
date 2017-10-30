@@ -93,6 +93,7 @@ let
             after = [ "network-pre.target" "systemd-udevd.service" "systemd-sysctl.service" ];
             before = [ "network.target" "shutdown.target" ];
             wants = [ "network.target" ];
+            partOf = map (i: "network-addresses-${i.name}.service") interfaces;
             conflicts = [ "shutdown.target" ];
             wantedBy = [ "multi-user.target" ] ++ optional hasDefaultGatewaySet "network-online.target";
 
@@ -171,8 +172,6 @@ let
               "network-link-${i.name}.service"
               "network.target"
             ];
-            # propagate stop and reload from network-setup
-            partOf = [ "network-setup.service" ];
             # order before network-setup because the routes that are configured
             # there may need ip addresses configured
             before = [ "network-setup.service" ];
