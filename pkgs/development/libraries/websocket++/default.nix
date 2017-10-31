@@ -2,21 +2,22 @@
 
 stdenv.mkDerivation rec {
   name = "websocket++-${version}";
-  version = "0.4.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "zaphoyd";
     repo = "websocketpp";
     rev = version;
-    sha256 = "1n6j0dh3qpis0f7crd49a2nhxd5459h0blch408z3kwlasx2g0i5";
+    sha256 = "1i64sps52kvy8yffysjbmmbb109pi28kqai0qdxxz1dcj3xfckqd";
   };
 
   buildInputs = [ cmake ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.zaphoyd.com/websocketpp/;
     description = "C++/Boost Asio based websocket client/server library";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.bsd3;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ andir ];
   };
 }
