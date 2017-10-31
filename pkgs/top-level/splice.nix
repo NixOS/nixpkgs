@@ -67,7 +67,7 @@ let
     if actuallySplice
     then splicer defaultBuildScope defaultRunScope // {
       # These should never be spliced under any circumstances
-      inherit (pkgs) pkgs buildPackages __targetPackages
+      inherit (pkgs) pkgs buildPackages targetPackages
         buildPlatform targetPlatform hostPlatform;
     }
     else pkgs // pkgs.xorg;

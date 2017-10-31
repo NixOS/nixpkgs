@@ -98,7 +98,7 @@ stageFuns: let
     then args'
     else allPackages ((builtins.removeAttrs args' ["selfBuild"]) // {
       buildPackages = if args.selfBuild or true then null else prevStage;
-      __targetPackages = if args.selfBuild or true then null else nextStage;
+      targetPackages = if args.selfBuild or true then null else nextStage;
     });
 
 in dfold folder {} {} withAllowCustomOverrides
