@@ -35,19 +35,16 @@
   </varlistentry>
 </variablelist>
 
-<para>Integer related types:</para>
+<para>Integer-related types:</para>
 
 <variablelist>
   <varlistentry>
-    <term>
-      <varname>types.ints.signed</varname>
-    </term>
-    <listitem><para>A signed integer.
-    </para></listitem>
+    <term><varname>types.int</varname></term>
+    <listitem><para>A signed integer.</para></listitem>
   </varlistentry>
   <varlistentry>
     <term>
-      <varname>types.ints{signed8, signed16, signed32}</varname>
+      <varname>types.ints.{s8, s16, s32}</varname>
     </term>
     <listitem>
       <para>Signed integers with a fixed length (8, 16 or 32 bits).
@@ -61,20 +58,15 @@
     </para></listitem>
   </varlistentry>
   <varlistentry>
-    <term><varname>types.int</varname></term>
-    <listitem><para>A convenience alias for <literal>ints.signed</literal>.
-    </para></listitem>
-  </varlistentry>
-  <varlistentry>
     <term>
       <varname>types.ints.unsigned</varname>
     </term>
-    <listitem><para>An unsigned integer (that is ≥ 0).
+    <listitem><para>An unsigned integer (that is >= 0).
     </para></listitem>
   </varlistentry>
   <varlistentry>
     <term>
-      <varname>types.ints{unsigned8, unsigned16, unsigned32}</varname>
+      <varname>types.ints.{u8, u16, u32}</varname>
     </term>
     <listitem>
       <para>Unsigned integers with a fixed length (8, 16 or 32 bits).
@@ -86,15 +78,9 @@
         for 8 bits).
     </para></listitem>
   </varlistentry>
-  <varlistentry>
-    <term>
-      <varname>types.port</varname>
-    </term>
-    <listitem><para>A network port number (0–65635).</para></listitem>
-  </varlistentry>
 </variablelist>
 
-<para>String related types:</para>
+<para>String-related types:</para>
 
 <variablelist>
   <varlistentry>
@@ -123,7 +109,7 @@
 
  <section><title>Value Types</title>
 
-   <para>Value types are type that take a value parameter.</para>
+   <para>Value types are types that take a value parameter.</para>
 
 <variablelist>
   <varlistentry>
@@ -147,7 +133,7 @@
     </term>
     <listitem><para>An integer between <replaceable>lowest</replaceable>
         and <replaceable>highest</replaceable> (both inclusive).
-        Useful for e.g. creating types like <literal>types.port</literal>.
+        Useful for creating types like <literal>types.port</literal>.
     </para></listitem>
   </varlistentry>
   <varlistentry>
