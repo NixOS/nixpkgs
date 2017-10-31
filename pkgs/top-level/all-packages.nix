@@ -3057,6 +3057,15 @@ with pkgs;
     enableNpm = false;
   };
 
+  nodejs-9_x = callPackage ../development/web/nodejs/v9.nix {
+    libtool = darwin.cctools;
+  };
+
+  nodejs-slim-9_x = callPackage ../development/web/nodejs/v9.nix {
+    libtool = darwin.cctools;
+    enableNpm = false;
+  };
+
   nodePackages_6_x = callPackage ../development/node-packages/default-v6.nix {
     nodejs = pkgs.nodejs-6_x;
   };
