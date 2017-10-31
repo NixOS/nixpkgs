@@ -1,9 +1,9 @@
 { lib
 , fetchurl
 , buildPythonPackage
-, pytest
+, cython
+, pytest, psutil, pytestrunner
 , isPy3k
-, psutil
 }:
 
 let
@@ -17,11 +17,8 @@ in buildPythonPackage rec {
     sha256 = "e76909da2fad6966281d4e0e4ccfd3c3025699ebcc30806afa09fa1384c3532b";
   };
 
-  checkInputs = [ pytest psutil ];
-
-  checkPhase = ''
-    py.test
-  '';
+  buildInputs = [ cython ];
+  checkInputs = [ pytest psutil pytestrunner ];
 
   disabled = !isPy3k;
 

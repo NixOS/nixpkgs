@@ -411,7 +411,8 @@ stdenv.mkDerivation rec {
     ++ optionals isLinux [ alsaLib libraw1394 libv4l ]
     ++ optionals nvenc [ nvidia-video-sdk ]
     ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation
-                                   MediaToolbox VideoDecodeAcceleration ];
+                                   MediaToolbox VideoDecodeAcceleration
+                                   libiconv ];
 
   # Build qt-faststart executable
   buildPhase = optional qtFaststartProgram ''make tools/qt-faststart'';

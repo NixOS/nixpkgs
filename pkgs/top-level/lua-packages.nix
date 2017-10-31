@@ -438,12 +438,15 @@ let
   };
 
 
-  luastdlib = buildLuaPackage {
-    name = "stdlib";
+  luastdlib = buildLuaPackage rec {
+    name = "stdlib-${version}";
+    version = "41.2.1";
 
-    src = fetchzip {
-      url = "https://github.com/lua-stdlib/lua-stdlib/archive/release.zip";
-      sha256 = "0636absdfjx8ybglwydmqxwfwmqz1c4b9s5mhxlgm4ci18lw3hms";
+    src = fetchFromGitHub {
+      owner = "lua-stdlib";
+      repo = "lua-stdlib";
+      rev = "release-v${version}";
+      sha256 = "03wd1qvkrj50fjszb2apzdkc8d5bpfbbi9pajl0vbrlzzmmi3jlq";
     };
 
     nativeBuildInputs = [ autoreconfHook unzip ];
@@ -616,7 +619,7 @@ let
     # NOTE: For updating, new Lua mpack bindings live at:
     # https://github.com/libmpack/libmpack-lua.
     src = libmpack.src;
-    sourceRoot = "libmpack-${libmpack.rev}-src/binding/lua";
+    sourceRoot = "${src.name}/binding/lua";
 
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libmpack ]; # ++ [ libtool lua ];

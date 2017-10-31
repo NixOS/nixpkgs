@@ -158,7 +158,7 @@ in
       serviceConfig = {
         User = "dnschain";
         Restart = "on-failure";
-        ExecStart = "${pkgs.dnschain}/bin/dnschain";
+        ExecStart = "${pkgs.nodePackages.dnschain}/bin/dnschain";
       };
 
       preStart = ''
