@@ -619,7 +619,7 @@ let
     # NOTE: For updating, new Lua mpack bindings live at:
     # https://github.com/libmpack/libmpack-lua.
     src = libmpack.src;
-    sourceRoot = "libmpack-${libmpack.rev}-src/binding/lua";
+    sourceRoot = "${src.name}/binding/lua";
 
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libmpack ]; # ++ [ libtool lua ];
