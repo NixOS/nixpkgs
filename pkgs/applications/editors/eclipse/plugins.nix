@@ -424,6 +424,29 @@ rec {
     };
   };
 
+  spotbugs = buildEclipsePlugin rec {
+    name = "spotbugs-${version}";
+    version = "3.1.0.r201710241414-11c9895";
+
+    srcFeature = fetchurl {
+      url = "https://spotbugs.github.io/eclipse/features/com.github.spotbugs.plugin.eclipse_${version}.jar";
+      sha256 = "084dj2bid5issh28j32hi5w9vx5xs829h7d5lbz5hqj1fyn9h6bs";
+    };
+
+    srcPlugin = fetchurl {
+      url = "https://spotbugs.github.io/eclipse/plugins/com.github.spotbugs.plugin.eclipse_${version}.jar";
+      sha256 = "1mqpl3gx06f54w13jm01qd8fbniab3x989mi3lysx078vrp23jas";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://spotbugs.github.io/;
+      description = "Plugin that uses static analysis to look for bugs in Java code";
+      license = licenses.lgpl21;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
   testng = buildEclipsePlugin rec {
     name = "testng-${version}";
     version = "6.9.13.201609291640";
