@@ -22,6 +22,9 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i -e 's%"\(/usr/sbin\|/usr/pkg/sbin\|/usr/local/sbin\)/[^"]*",%%g' ./src/nm-l2tp-service.c
 
+    substituteInPlace ./Makefile.am \
+      --replace '$(sysconfdir)/dbus-1/system.d' "$out/etc/dbus-1/system.d"
+
     substituteInPlace ./src/nm-l2tp-service.c \
       --replace /sbin/ipsec  ${strongswan}/bin/ipsec \
       --replace /sbin/xl2tpd ${xl2tpd}/bin/xl2tpd
@@ -38,11 +41,16 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
+  configureFlags = [
+    "--with-gnome=${if withGnome then "yes" else "no"}"
+    "--localstatedir=/var"
+  ] ;
+
 
   meta = with stdenv.lib; {
     description = "L2TP plugin for NetworkManager";
     inherit (networkmanager.meta) platforms;
-    homepage = https://github.com/nm-l2tp/network-manager-l2tp;
+    homepage = http://github.com/nm-l2tp/network-manager-l2tp;
     license = licenses.gpl2;
     maintainers = with maintainers; [ abbradar obadz ];
   };
