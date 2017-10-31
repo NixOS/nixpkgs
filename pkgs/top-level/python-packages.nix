@@ -4976,6 +4976,7 @@ in {
     checkPhase = ''
       py.test testing
     '';
+    __darwinAllowLocalNetworking = true;
     meta = {
       description = "Rapid multi-Python deployment";
       license = licenses.gpl2;
