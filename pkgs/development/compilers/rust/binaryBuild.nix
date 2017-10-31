@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, cacert, zlib, buildRustPackage, curl
+{ stdenv, fetchurl, makeWrapper, cacert, zlib, buildRustPackage, curl, darwin
 , version
 , src
 , platform
@@ -36,6 +36,8 @@ rec {
 
     phases = ["unpackPhase" "installPhase"];
 
+    propagatedBuildInputs = stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+
     installPhase = ''
       ./install.sh --prefix=$out \
         --components=${installComponents}
@@ -48,6 +50,11 @@ rec {
           --set-rpath "${stdenv.lib.makeLibraryPath [ curl zlib ]}" \
           --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
           "$out/bin/cargo"
+      ''}
+      ${optionalString (stdenv.isDarwin && bootstrapping) ''
+        install_name_tool -change /usr/lib/libiconv.2.dylib '${darwin.libiconv}/lib/libiconv.2.dylib' "$out/bin/cargo"
+        install_name_tool -change /usr/lib/libcurl.4.dylib '${stdenv.lib.getLib curl}/lib/libcurl.4.dylib' "$out/bin/cargo"
+        install_name_tool -change /usr/lib/libz.1.dylib '${stdenv.lib.getLib zlib}/lib/libz.1.dylib' "$out/bin/cargo"
       ''}
 
       ${optionalString needsPatchelf ''

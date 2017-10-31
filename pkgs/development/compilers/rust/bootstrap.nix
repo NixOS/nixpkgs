@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, cacert, zlib, curl }:
+{ stdenv, fetchurl, makeWrapper, cacert, zlib, curl, darwin }:
 
 let
   # Note: the version MUST be one version prior to the version we're
@@ -30,7 +30,7 @@ let
   };
 
 in import ./binaryBuild.nix
-  { inherit stdenv fetchurl makeWrapper cacert zlib curl;
+  { inherit stdenv fetchurl makeWrapper cacert zlib curl darwin;
     buildRustPackage = null;
     inherit version src platform;
     versionType = "bootstrap";
