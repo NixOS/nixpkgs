@@ -10791,6 +10791,8 @@ with pkgs;
 
   tet = callPackage ../development/tools/misc/tet { };
 
+  theft = callPackage ../development/libraries/theft { };
+
   thrift = callPackage ../development/libraries/thrift {
     inherit (pythonPackages) twisted;
   };
