@@ -335,6 +335,7 @@ in {
 
       preStart = ''
         mkdir -m 700 -p /etc/NetworkManager/system-connections
+        mkdir -m 700 -p /etc/ipsec.d
         mkdir -m 755 -p ${stateDirs}
       '';
     };

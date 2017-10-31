@@ -41,16 +41,11 @@ stdenv.mkDerivation rec {
   ];
 
   enableParallelBuilding = true;
-  configureFlags = [
-    "--with-gnome=${if withGnome then "yes" else "no"}"
-    "--localstatedir=/var"
-  ] ;
-
 
   meta = with stdenv.lib; {
     description = "L2TP plugin for NetworkManager";
     inherit (networkmanager.meta) platforms;
-    homepage = http://github.com/nm-l2tp/network-manager-l2tp;
+    homepage = https://github.com/nm-l2tp/network-manager-l2tp;
     license = licenses.gpl2;
     maintainers = with maintainers; [ abbradar obadz ];
   };
