@@ -65,6 +65,8 @@ checkConfigError 'The option .* defined in .* does not exist.' config.enable ./d
 # unsigned
 checkConfigOutput "42" config.value ./declare-int-unsigned-value.nix ./define-value-int-positive.nix
 checkConfigError 'The option value .* in .* is not of type.*unsigned integer.*' config.value ./declare-int-unsigned-value.nix ./define-value-int-negative.nix
+# positive
+checkConfigError 'The option value .* in .* is not of type.*positive integer.*' config.value ./declare-int-positive-value.nix ./define-value-int-zero.nix
 # between
 checkConfigOutput "42" config.value ./declare-int-between-value.nix ./define-value-int-positive.nix
 checkConfigError 'The option value .* in .* is not of type.*between.*-21 and 43.*inclusive.*' config.value ./declare-int-between-value.nix ./define-value-int-negative.nix

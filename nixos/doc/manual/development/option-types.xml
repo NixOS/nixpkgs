@@ -78,6 +78,13 @@
         for 8 bits).
     </para></listitem>
   </varlistentry>
+  <varlistentry>
+    <term>
+      <varname>types.ints.positive</varname>
+    </term>
+    <listitem><para>A positive integer (that is > 0).
+    </para></listitem>
+  </varlistentry>
 </variablelist>
 
 <para>String-related types:</para>

@@ -151,6 +151,10 @@ rec {
           name = "unsignedInt";
           description = "unsigned integer, meaning >=0";
         };
+        positive = addCheck types.int (x: x > 0) // {
+          name = "positiveInt";
+          description = "positive integer, meaning >0";
+        };
         u8 = unsign 8 256;
         u16 = unsign 16 65536;
         u32 = unsign 32 4294967296;
