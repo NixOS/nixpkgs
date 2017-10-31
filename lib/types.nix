@@ -107,18 +107,16 @@ rec {
       merge = mergeEqualOption;
     };
 
-    int = ints.signed;
+    int = mkOptionType rec {
+        name = "int";
+        description = "signed integer";
+        check = isInt;
+        merge = mergeOneOption;
+      };
 
     # specialized subdomains of int
     ints =
       let
-        int = mkOptionType rec {
-          name = "int";
-          description = "signed integer";
-          check = isInt;
-          merge = mergeOneOption;
-        };
-
         betweenDesc = lowest: highest:
           "${toString lowest} and ${toString highest} (both inclusive)";
         between = lowest: highest: assert lowest <= highest;
@@ -153,18 +151,16 @@ rec {
           name = "unsignedInt";
           description = "unsigned integer, meaning >=0";
         };
-        unsigned8 = unsign 8 256;
-        unsigned16 = unsign 16 65536;
-        unsigned32 = unsign 32 4294967296;
+        u8 = unsign 8 256;
+        u16 = unsign 16 65536;
+        u32 = unsign 32 4294967296;
         # the biggest int the nix lexer accepts is 9223372036854775808
         # the smallest int the nix lexer accepts is -9223372036854775807
         # unsigned64 = unsign 64 18446744073709551616;
 
-        signed = int;
-        signed8 = sign 8 256;
-        signed16 = sign 16 65536;
-        signed32 = sign 32 4294967296;
-
+        s8 = sign 8 256;
+        s16 = sign 16 65536;
+        s32 = sign 32 4294967296;
       };
 
     str = mkOptionType {
