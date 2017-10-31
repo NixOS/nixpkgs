@@ -7461,6 +7461,8 @@ with pkgs;
 
   patchelfUnstable = lowPrio (callPackage ../development/tools/misc/patchelf/unstable.nix { });
 
+  patchwork = callPackage ../applications/networking/patchwork { };
+
   peg = callPackage ../development/tools/parsing/peg { };
 
   pgcli = callPackage ../development/tools/database/pgcli {};
