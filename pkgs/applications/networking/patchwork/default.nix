@@ -1,4 +1,4 @@
-{ stdenv, pkgs, lib, fetchFromGitHub, nodePackages, callPackage }:
+{ stdenv, pkgs, lib, fetchFromGitHub, nodePackages, callPackage, xorg }:
 
 with stdenv.lib;
 
@@ -19,6 +19,8 @@ in nodePackages.buildNodePackage rec {
     rev = "${version}";
     sha256 = "1g7v0qhvgzpb050hf45pibp68qd67hnnry5npw58f4dvaxdd8yhd";
   };
+
+  buildInputs = [ xorg.libX11 ];
 
   meta = with lib; {
     description = "A decentralized messaging and sharing app built on top of Secure Scuttlebutt (SSB)";
