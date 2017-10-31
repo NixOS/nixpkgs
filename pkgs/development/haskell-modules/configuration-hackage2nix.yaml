@@ -37,7 +37,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 9.10
+  # LTS Haskell 9.11
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -323,7 +323,7 @@ default-package-overrides:
   - bytestring-strict-builder ==0.4.5
   - bytestring-tree-builder ==0.2.7.1
   - bytestring-trie ==0.2.4.1
-  - bzlib-conduit ==0.2.1.4
+  - bzlib-conduit ==0.2.1.5
   - c2hs ==0.28.2
   - Cabal ==1.24.2.0
   - cabal-dependency-licenses ==0.2.0.0
@@ -669,7 +669,7 @@ default-package-overrides:
   - expiring-cache-map ==0.0.6.1
   - explicit-exception ==0.1.9
   - exp-pairs ==0.1.5.2
-  - extensible ==0.4.5
+  - extensible ==0.4.6
   - extensible-effects ==1.11.1.0
   - extensible-exceptions ==0.1.1.4
   - extra ==1.5.3
@@ -686,6 +686,7 @@ default-package-overrides:
   - fclabels ==2.0.3.2
   - fdo-notify ==0.3.1
   - feature-flags ==0.1.0.1
+  - fedora-haskell-tools ==0.3
   - feed ==0.3.12.0
   - FenwickTree ==0.1.2.1
   - fft ==0.1.8.6
@@ -790,7 +791,7 @@ default-package-overrides:
   - gi-soup ==2.4.14
   - git ==0.2.0
   - github ==0.16.0
-  - github-release ==1.0.6
+  - github-release ==1.0.7
   - github-types ==0.2.1
   - github-webhook-handler ==0.0.8
   - github-webhook-handler-snap ==0.0.7
@@ -948,7 +949,7 @@ default-package-overrides:
   - haddock-api ==2.17.4
   - haddock-library ==1.4.3
   - haddock-test ==0.0.1
-  - hailgun ==0.4.1.5
+  - hailgun ==0.4.1.6
   - hailgun-simple ==0.1.0.0
   - hakyll ==4.9.8.0
   - hakyll-favicon ==0.1.0
@@ -1024,12 +1025,12 @@ default-package-overrides:
   - hebrew-time ==0.1.1
   - hedgehog ==0.5
   - hedgehog-quickcheck ==0.1
-  - hedis ==0.9.10
+  - hedis ==0.9.11
   - here ==1.2.11
   - heredoc ==0.2.0.0
   - heterocephalus ==1.0.5.0
   - hex ==0.1.2
-  - hexml ==0.3.2
+  - hexml ==0.3.3
   - hexpat ==0.20.13
   - hexstring ==0.11.1
   - hformat ==0.3.1.0
@@ -1090,8 +1091,8 @@ default-package-overrides:
   - hsebaysdk ==0.4.0.0
   - hse-cpp ==0.2
   - hsemail ==2
-  - hset ==2.2.0
   - HSet ==0.0.1
+  - hset ==2.2.0
   - hsexif ==0.6.1.4
   - hs-GeoIP ==0.3
   - hsignal ==0.2.7.5
@@ -1207,7 +1208,7 @@ default-package-overrides:
   - inline-c ==0.5.6.1
   - inline-c-cpp ==0.1.0.0
   - inline-java ==0.6.5
-  - inline-r ==0.9.0.1
+  - inline-r ==0.9.0.2
   - insert-ordered-containers ==0.2.1.0
   - instance-control ==0.1.2.0
   - integer-logarithms ==1.0.2
@@ -1232,10 +1233,10 @@ default-package-overrides:
   - ip6addr ==0.5.3
   - iproute ==1.7.1
   - IPv6Addr ==1.0.1
-  - IPv6DB ==0.2.2
+  - IPv6DB ==0.2.3
   - irc ==0.6.1.0
   - irc-client ==0.4.4.4
-  - irc-conduit ==0.2.2.3
+  - irc-conduit ==0.2.2.4
   - irc-ctcp ==0.1.3.0
   - irc-dcc ==2.0.1
   - islink ==0.1.0.0
@@ -1283,7 +1284,7 @@ default-package-overrides:
   - kraken ==0.0.3
   - l10n ==0.1.0.1
   - labels ==0.3.3
-  - lackey ==0.4.3
+  - lackey ==0.4.4
   - lame ==0.1.1
   - language-c ==0.6.1
   - language-c-quote ==0.12.1
@@ -1349,7 +1350,7 @@ default-package-overrides:
   - lmdb ==0.2.5
   - loch-th ==0.2.1
   - log ==0.9.0.1
-  - log-base ==0.7.3.0
+  - log-base ==0.7.4.0
   - log-domain ==0.11.2
   - log-elasticsearch ==0.9.1.0
   - logfloat ==0.13.3.3
@@ -1630,14 +1631,14 @@ default-package-overrides:
   - perf ==0.1.2
   - persistable-record ==0.5.1.1
   - persistable-types-HDBC-pg ==0.0.1.5
-  - persistent ==2.7.0
+  - persistent ==2.7.1
   - persistent-mongoDB ==2.6.0
-  - persistent-mysql ==2.6.1
+  - persistent-mysql ==2.6.2.1
   - persistent-mysql-haskell ==0.3.0.0
-  - persistent-postgresql ==2.6.1
+  - persistent-postgresql ==2.6.2
   - persistent-redis ==2.5.2
   - persistent-refs ==0.4
-  - persistent-sqlite ==2.6.2
+  - persistent-sqlite ==2.6.3
   - persistent-template ==2.5.3
   - pgp-wordlist ==0.1.0.2
   - pg-transact ==0.1.0.1
@@ -1646,7 +1647,7 @@ default-package-overrides:
   - picoparsec ==0.1.2.3
   - picosat ==0.1.4
   - pid1 ==0.1.2.0
-  - pinboard ==0.9.12.5
+  - pinboard ==0.9.12.6
   - pinch ==0.3.2.0
   - pinchot ==0.24.0.0
   - pipes ==4.3.6
@@ -1735,8 +1736,8 @@ default-package-overrides:
   - prompt ==0.1.1.2
   - protobuf ==0.2.1.1
   - protobuf-simple ==0.1.0.4
-  - protocol-buffers ==2.4.4
-  - protocol-buffers-descriptor ==2.4.4
+  - protocol-buffers ==2.4.5
+  - protocol-buffers-descriptor ==2.4.5
   - proto-lens ==0.2.1.0
   - proto-lens-arbitrary ==0.1.1.1
   - proto-lens-combinators ==0.1.0.7
@@ -1752,7 +1753,7 @@ default-package-overrides:
   - publicsuffix ==0.20170508
   - pure-io ==0.2.1
   - pureMD5 ==2.1.3
-  - purescript-bridge ==0.11.1.0
+  - purescript-bridge ==0.11.1.1
   - pusher-http-haskell ==1.2.0.1
   - pwstore-fast ==2.4.4
   - QuasiText ==0.1.2.6
@@ -1783,7 +1784,7 @@ default-package-overrides:
   - rank-product ==0.2.0.1
   - Rasterific ==0.7.2.1
   - rasterific-svg ==0.3.3
-  - ratel ==0.3.5
+  - ratel ==0.3.6
   - ratel-wai ==0.2.0
   - rattletrap ==2.5.0
   - rawfilepath ==0.2.4
@@ -1852,7 +1853,7 @@ default-package-overrides:
   - result ==0.2.6.0
   - rethinkdb ==2.2.0.10
   - rethinkdb-client-driver ==0.0.25
-  - retry ==0.7.4.2
+  - retry ==0.7.4.3
   - rev-state ==0.1.2
   - rfc5051 ==0.1.0.3
   - rng-utils ==0.2.1
@@ -1921,16 +1922,16 @@ default-package-overrides:
   - servant-mock ==0.8.2
   - servant-purescript ==0.8.0.1
   - servant-ruby ==0.2.1.0
-  - servant-server ==0.11
+  - servant-server ==0.11.0.1
   - servant-static-th ==0.1.0.6
   - servant-subscriber ==0.6.0.0
   - servant-swagger ==1.1.3.1
-  - servant-swagger-ui ==0.2.4.3.0.20
+  - servant-swagger-ui ==0.2.4.3.4.0
   - servant-yaml ==0.1.0.0
   - serversession ==1.0.1
   - serversession-frontend-wai ==1.0
   - serversession-frontend-yesod ==1.0
-  - servius ==1.2.0.2
+  - servius ==1.2.0.3
   - set-cover ==0.0.8
   - setenv ==0.1.1.3
   - setlocale ==1.0.0.5
@@ -2251,7 +2252,7 @@ default-package-overrides:
   - typography-geometry ==1.0.0.1
   - tz ==0.1.3.0
   - tzdata ==0.1.20170320.0
-  - ua-parser ==0.7.4
+  - ua-parser ==0.7.4.1
   - uglymemo ==0.1.0.1
   - unbound ==0.5.1
   - unbounded-delays ==0.1.1.0
@@ -2357,7 +2358,7 @@ default-package-overrides:
   - wai-routes ==0.10.0
   - wai-routing ==0.13.0
   - wai-session ==0.3.2
-  - wai-session-postgresql ==0.2.1.0
+  - wai-session-postgresql ==0.2.1.1
   - wai-slack-middleware ==0.2.0
   - waitra ==0.0.4.0
   - wai-transformers ==0.0.7
