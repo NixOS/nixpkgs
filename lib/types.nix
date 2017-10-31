@@ -167,9 +167,6 @@ rec {
 
       };
 
-    /* A network port number */
-    port = ints.unsigned16;
-
     str = mkOptionType {
       name = "str";
       description = "string";
