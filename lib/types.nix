@@ -122,17 +122,17 @@ rec {
         between = lowest: highest: assert lowest <= highest;
           addCheck int (x: x >= lowest && x <= highest) // {
             name = "intBetween";
-            description = "Integer between ${betweenDesc lowest highest}.";
+            description = "integer between ${betweenDesc lowest highest}";
           };
         ign = lowest: highest: name: docStart:
           between lowest highest // {
             inherit name;
-            description = docStart + " Between ${betweenDesc lowest highest}.";
+            description = docStart + "; between ${betweenDesc lowest highest}";
           };
         unsign = bit: range: ign 0 (range - 1)
-          "unsignedInt${toString bit}" "${toString bit} bit unsigned integer.";
+          "unsignedInt${toString bit}" "${toString bit} bit unsigned integer";
         sign = bit: range: ign (0 - (range / 2)) (range / 2 - 1)
-          "signedInt${toString bit}" "${toString bit} bit signed integer.";
+          "signedInt${toString bit}" "${toString bit} bit signed integer";
 
       in rec {
         /* An int with a fixed range.
