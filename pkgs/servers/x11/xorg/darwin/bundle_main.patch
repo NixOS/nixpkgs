@@ -1,0 +1,118 @@
+cstrahan:
+
+This patch makes it possible (and necessary) to specify the default
+shell, xterm client, and startx script from environment variables. These
+defaults are used when launching the XQuartz.app, which in turn needs to know
+how to start the X server. I've patched `command_from_prefs' so that it ignores
+the preferences settings and immediately sets them to whatever the environment
+variables are.
+
+When developing an installable package for XQuartz/XQuartz.app, we'll need to
+set an `LSEnvironment' entry in the plist for the XQuartz.app, we'll also need
+to wrap the XQuartz.app/Contents/MacOS/X11 script (the Xquartz server will
+invoke this script during initialization. See stub.patch for more details.).
+
+diff --git a/hw/xquartz/mach-startup/bundle-main.c b/hw/xquartz/mach-startup/bundle-main.c
+index b403662..b1e2070 100644
+--- a/hw/xquartz/mach-startup/bundle-main.c
++++ b/hw/xquartz/mach-startup/bundle-main.c
+@@ -77,13 +77,7 @@ FatalError(const char *f, ...) _X_ATTRIBUTE_PRINTF(1, 2) _X_NORETURN;
+ 
+ extern int noPanoramiXExtension;
+ 
+-#define DEFAULT_CLIENT X11BINDIR "/xterm"
+-#define DEFAULT_STARTX X11BINDIR "/startx -- " X11BINDIR "/Xquartz"
+-#define DEFAULT_SHELL  "/bin/sh"
+-
+-#ifndef BUILD_DATE
+ #define BUILD_DATE ""
+-#endif
+ #ifndef XSERVER_VERSION
+ #define XSERVER_VERSION "?"
+ #endif
+@@ -718,14 +712,14 @@ main(int argc, char **argv, char **envp)
+         pid_t child1, child2;
+         int status;
+ 
+-        pref_app_to_run = command_from_prefs("app_to_run", DEFAULT_CLIENT);
++        pref_app_to_run = command_from_prefs("app_to_run", getenv("XQUARTZ_DEFAULT_CLIENT"));
+         assert(pref_app_to_run);
+ 
+-        pref_login_shell = command_from_prefs("login_shell", DEFAULT_SHELL);
++        pref_login_shell = command_from_prefs("login_shell", getenv("XQUARTZ_DEFAULT_SHELL"));
+         assert(pref_login_shell);
+ 
+         pref_startx_script = command_from_prefs("startx_script",
+-                                                DEFAULT_STARTX);
++                                                getenv("XQUARTZ_DEFAULT_STARTX"));
+         assert(pref_startx_script);
+ 
+         /* Do the fork-twice trick to avoid having to reap zombies */
+@@ -804,10 +798,12 @@ execute(const char *command)
+ static char *
+ command_from_prefs(const char *key, const char *default_value)
+ {
++    if (default_value == NULL)
++        return NULL;
++
+     char *command = NULL;
+ 
+     CFStringRef cfKey;
+-    CFPropertyListRef PlistRef;
+ 
+     if (!key)
+         return NULL;
+@@ -817,40 +813,24 @@ command_from_prefs(const char *key, const char *default_value)
+     if (!cfKey)
+         return NULL;
+ 
+-    PlistRef = CFPreferencesCopyAppValue(cfKey,
+-                                         kCFPreferencesCurrentApplication);
++    CFStringRef cfDefaultValue = CFStringCreateWithCString(
++        NULL, default_value, kCFStringEncodingASCII);
++    int len = strlen(default_value) + 1;
+ 
+-    if ((PlistRef == NULL) ||
+-        (CFGetTypeID(PlistRef) != CFStringGetTypeID())) {
+-        CFStringRef cfDefaultValue = CFStringCreateWithCString(
+-            NULL, default_value, kCFStringEncodingASCII);
+-        int len = strlen(default_value) + 1;
++    if (!cfDefaultValue)
++        goto command_from_prefs_out;
+ 
+-        if (!cfDefaultValue)
+-            goto command_from_prefs_out;
++    CFPreferencesSetAppValue(cfKey, cfDefaultValue,
++                             kCFPreferencesCurrentApplication);
++    CFPreferencesAppSynchronize(kCFPreferencesCurrentApplication);
++    CFRelease(cfDefaultValue);
+ 
+-        CFPreferencesSetAppValue(cfKey, cfDefaultValue,
+-                                 kCFPreferencesCurrentApplication);
+-        CFPreferencesAppSynchronize(kCFPreferencesCurrentApplication);
+-        CFRelease(cfDefaultValue);
+-
+-        command = (char *)malloc(len * sizeof(char));
+-        if (!command)
+-            goto command_from_prefs_out;
+-        strcpy(command, default_value);
+-    }
+-    else {
+-        int len = CFStringGetLength((CFStringRef)PlistRef) + 1;
+-        command = (char *)malloc(len * sizeof(char));
+-        if (!command)
+-            goto command_from_prefs_out;
+-        CFStringGetCString((CFStringRef)PlistRef, command, len,
+-                           kCFStringEncodingASCII);
+-    }
++    command = (char *)malloc(len * sizeof(char));
++    if (!command)
++        goto command_from_prefs_out;
++    strcpy(command, default_value);
+ 
+ command_from_prefs_out:
+-    if (PlistRef)
+-        CFRelease(PlistRef);
+     if (cfKey)
+         CFRelease(cfKey);
+     return command;

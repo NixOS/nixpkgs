@@ -1,0 +1,374 @@
+diff --git a/plat/associate.py b/plat/associate.py
+index 0f3cd31..f9b5a76 100644
+--- a/plat/associate.py
++++ b/plat/associate.py
+@@ -31,69 +31,8 @@
+ Holds functions that associate Miro with certain protocols
+ """
+ 
+-import gconf
+-from miro.plat.config import gconf_lock
+-
+ def associate_protocols(command):
+-    _associate_protocol("magnet", command, False)
++    pass
+ 
+ def disassociate_protocols(command):
+-    _disassociate_protocol("magnet", command)
+-
+-def _associate_protocol(name, command, overwrite_existing=False):
+-    url_handlers_key = "/desktop/gnome/url-handlers/" + name + "/"
+-    if not _is_associated(name) or overwrite_existing:
+-        gconf_lock.acquire()
+-        try:
+-            gconf_client = gconf.client_get_default()
+-            if gconf_client.set_string(url_handlers_key + "command", command):
+-                gconf_client.set_bool(url_handlers_key + "needs_terminal", False)
+-                gconf_client.set_bool(url_handlers_key + "enabled", True)
+-                success = True
+-            else:
+-                success = False
+-        finally:
+-            gconf_lock.release()
+-    else:
+-        success = True
+-    return success
+-
+-def _disassociate_protocol(name, command):
+-    url_handlers_key = "/desktop/gnome/url-handlers/" + name + "/"
+-    if _is_associated(name, command):
+-        gconf_lock.acquire()
+-        try:
+-            gconf_client = gconf.client_get_default()
+-            if gconf_client.set_bool(url_handlers_key + "enabled", False):
+-                success = True
+-            else:
+-                success = False
+-        finally:
+-            gconf_lock.release()
+-    else:
+-        success = True
+-    return success
+-
+-def _is_associated(protocol, command=None):
+-    """ Checks whether a protocol currently is
+-        associated with the given command, or,
+-        if none is given, whether the protocol
+-        is associated with anything at all.
+-    """
+-    url_handlers_key = "/desktop/gnome/url-handlers/" + protocol + "/"
+-    gconf_lock.acquire()
+-    try:
+-        gconf_client = gconf.client_get_default()
+-        key = gconf_client.get(url_handlers_key + "command")
+-        if key is None:
+-            associated = False
+-        else:
+-            enabled = gconf_client.get(url_handlers_key + "enabled")
+-            if command:
+-                associated = key.get_string() == command and enabled.get_bool()
+-            else:
+-                associated = key.get_string() != "" and enabled.get_bool()
+-    finally:
+-        gconf_lock.release()
+-    return associated
+-
++    pass
+diff --git a/plat/config.py b/plat/config.py
+index 40895af..24f8815 100644
+--- a/plat/config.py
++++ b/plat/config.py
+@@ -39,51 +39,20 @@ Preferences are listed in miro.pref and also miro.plat.options.
+ import os
+ import logging
+ from miro import prefs
+-import gconf
++import shelve
+ import threading
+ from miro.plat import options
+ from miro.plat import resources
+ 
+-client = gconf.client_get_default()
+-gconf_lock = threading.RLock()
+-
+-
+-def gconf_key(key):
+-    if options.gconf_name is None:
+-        options.gconf_name = "miro"
+-    return '/apps/%s/%s' % (options.gconf_name, key)
+-
+-
+-def _convert_gconf_value(value):
+-    if value.type == gconf.VALUE_STRING:
+-        return value.get_string()
+-    if value.type == gconf.VALUE_INT:
+-        return value.get_int()
+-    if value.type == gconf.VALUE_BOOL:
+-        return value.get_bool()
+-    if value.type == gconf.VALUE_FLOAT:
+-        return value.get_float()
+-    if value.type == gconf.VALUE_LIST:
+-        return [_convert_gconf_value(v) for v in value.get_list()]
+-    raise TypeError("unknown gconf type %s" % value.type)
+-
+-
+-def _get_gconf(fullkey, default=None):
+-    gconf_lock.acquire()
+-    try:
+-        value = client.get(fullkey)
+-        if value != None:
+-            try:
+-                return _convert_gconf_value(value)
+-            except TypeError, e:
+-                logging.warn("type error while getting gconf value %s: %s",
+-                        fullkey, str(e))
+-        return default
+-    finally:
+-        gconf_lock.release()
+-
+-
+-class GconfDict:
++
++class ConfigFile(object):
++    def __init__(self):
++        support_dir = get(prefs.SUPPORT_DIRECTORY)
++        if not os.path.exists(support_dir):
++            os.makedirs(support_dir)
++        path = os.path.join(support_dir, 'config')
++        self.conf = shelve.open(path, 'c', -1, True)
++
+     def get(self, key, default=None):
+         if not isinstance(key, str):
+             raise TypeError()
+@@ -91,19 +56,16 @@ class GconfDict:
+         if "MIRO_%s" % key.upper() in os.environ:
+             return os.environ["MIRO_%s" % key.upper()]
+ 
+-        fullkey = gconf_key(key)
+-        return _get_gconf(fullkey, default)
++        return self.conf.get(key, default)
++
++    def __del__(self):
++        self.conf.close()
+ 
+     def __contains__(self, key):
+         if "MIRO_%s" % key.upper() in os.environ:
+             return True
+ 
+-        gconf_lock.acquire()
+-        try:
+-            fullkey = gconf_key(key)
+-            return client.get(fullkey) is not None
+-        finally:
+-            gconf_lock.release()
++        return key in self.conf
+ 
+     def __getitem__(self, key):
+         rv = self.get(key)
+@@ -116,43 +78,11 @@ class GconfDict:
+         if "MIRO_%s" % key.upper() in os.environ:
+             return
+ 
+-        gconf_lock.acquire()
+-        try:
+-            if not isinstance(key, str):
+-                raise TypeError()
+-
+-            fullkey = gconf_key(key)
+-            if isinstance(value, str):
+-                client.set_string(fullkey, value)
+-            elif isinstance(value, bool):
+-                client.set_bool(fullkey, value)
+-            elif isinstance(value, int):
+-                client.set_int(fullkey, value)
+-            elif isinstance(value, float):
+-                client.set_float(fullkey, value)
+-            elif isinstance(value, list):
+-                # this is lame, but there isn't enough information to
+-                # figure it out another way
+-                if len(value) == 0 or isinstance(value[0], str):
+-                    list_type = gconf.VALUE_STRING
+-                elif isinstance(value[0], int):
+-                    list_type = gconf.VALUE_INT
+-                elif isinstance(value[0], float):
+-                    list_type = gconf.VALUE_FLOAT
+-                elif isinstance(value[0], bool):
+-                    list_type = gconf.VALUE_BOOL
+-                else:
+-                    raise TypeError("unknown gconf type %s" % type(value[0]))
+-
+-                client.set_list(fullkey, list_type, value)
+-            else:
+-                raise TypeError()
+-        finally:
+-            gconf_lock.release()
++        self.conf[key] = value
+ 
+ 
+ def load():
+-    return GconfDict()
++    return ConfigFile()
+ 
+ 
+ def save(data):
+@@ -208,25 +138,4 @@ def get(descriptor):
+         value = get(prefs.SUPPORT_DIRECTORY)
+         value = os.path.join(value, 'miro-helper.log')
+ 
+-    elif descriptor == prefs.HTTP_PROXY_ACTIVE:
+-        return _get_gconf("/system/http_proxy/use_http_proxy")
+-
+-    elif descriptor == prefs.HTTP_PROXY_HOST:
+-        return _get_gconf("/system/http_proxy/host")
+-
+-    elif descriptor == prefs.HTTP_PROXY_PORT:
+-        return _get_gconf("/system/http_proxy/port")
+-
+-    elif descriptor == prefs.HTTP_PROXY_AUTHORIZATION_ACTIVE:
+-        return _get_gconf("/system/http_proxy/use_authentication")
+-
+-    elif descriptor == prefs.HTTP_PROXY_AUTHORIZATION_USERNAME:
+-        return _get_gconf("/system/http_proxy/authentication_user")
+-
+-    elif descriptor == prefs.HTTP_PROXY_AUTHORIZATION_PASSWORD:
+-        return _get_gconf("/system/http_proxy/authentication_password")
+-
+-    elif descriptor == prefs.HTTP_PROXY_IGNORE_HOSTS:
+-        return _get_gconf("/system/http_proxy/ignore_hosts", [])
+-
+     return value
+diff --git a/plat/frontends/widgets/application.py b/plat/frontends/widgets/application.py
+index a1eaaf3..20f4c23 100644
+--- a/plat/frontends/widgets/application.py
++++ b/plat/frontends/widgets/application.py
+@@ -35,7 +35,6 @@ except RuntimeError:
+     sys.exit(1)
+ import gobject
+ import os
+-import gconf
+ import shutil
+ import platform
+ 
+@@ -53,7 +52,6 @@ from miro import prefs
+ from miro.frontends.widgets.application import Application
+ # from miro.plat.frontends.widgets import threads
+ from miro.plat import renderers, options
+-from miro.plat.config import gconf_lock, gconf_key
+ try:
+     from miro.plat.frontends.widgets import miroappindicator
+     APP_INDICATOR_SUPPORT = True
+@@ -77,29 +75,13 @@ import sys
+ 
+ 
+ def _get_pref(key, getter_name):
+-    gconf_lock.acquire()
+-    try:
+-        client = gconf.client_get_default()
+-        fullkey = gconf_key(key)
+-        value = client.get(fullkey)
+-        if value is not None:
+-            getter = getattr(value, getter_name)
+-            return getter()
+-        else:
+-            return None
+-    finally:
+-        gconf_lock.release()
++    # XXX: ugly!
++    return app.config._data.get(key)
+ 
+ 
+ def _set_pref(key, setter_name, value):
+-    gconf_lock.acquire()
+-    try:
+-        client = gconf.client_get_default()
+-        fullkey = gconf_key(key)
+-        setter = getattr(client, setter_name)
+-        setter(fullkey, value)
+-    finally:
+-        gconf_lock.release()
++    # XXX: ugly!
++    app.config._data[key] = value
+ 
+ 
+ def get_int(key):
+diff --git a/plat/options.py b/plat/options.py
+index 4ea1a67..8e75e20 100644
+--- a/plat/options.py
++++ b/plat/options.py
+@@ -69,14 +69,14 @@ USE_RENDERER = LinuxPref(
+ 
+ GSTREAMER_IMAGESINK = LinuxPref(
+     key="DefaultGstreamerImagesink",
+-    default="gconfvideosink",
++    default="autovideosink",
+     alias="gstreamer-imagesink",
+     helptext=("Which GStreamer image sink to use for video.  "
+               "(autovideosink, ximagesink, xvimagesink, gconfvideosink, ...)"))
+ 
+ GSTREAMER_AUDIOSINK = LinuxPref(
+     key="DefaultGstreamerAudiosink",
+-    default="gconfaudiosink",
++    default="autoaudiosink",
+     alias="gstreamer-audiosink",
+     helptext=("Which GStreamer sink to use for audio.  "
+               "(autoaudiosink, osssink, alsasink, gconfaudiosink, ...)"))
+diff --git a/plat/upgrade.py b/plat/upgrade.py
+index 9677e3a..f812ad4 100644
+--- a/plat/upgrade.py
++++ b/plat/upgrade.py
+@@ -30,7 +30,6 @@
+ import os
+ import shutil
+ from miro.plat import resources
+-import gconf
+ 
+ 
+ def upgrade():
+@@ -64,47 +63,3 @@ def upgrade():
+             os.remove(old_file)
+         except OSError:
+             pass
+-
+-    # gconf settings
+-    client = gconf.client_get_default()
+-
+-    def _copy_gconf(src, dst):
+-        for entry in client.all_entries(src):
+-            entry_dst = dst + '/' + entry.key.split('/')[-1]
+-            client.set(entry_dst, entry.value)
+-        for subdir in client.all_dirs(src):
+-            subdir_dst = dst + '/' + subdir.split('/')[-1]
+-            _copy_gconf(subdir, subdir_dst)
+-
+-    if ((client.dir_exists("/apps/democracy/player")
+-         and not client.dir_exists("/apps/miro"))):
+-        _copy_gconf("/apps/democracy/player", "/apps/miro")
+-        client.recursive_unset("/apps/democracy", 1)
+-
+-    # Set the MoviesDirectory and NonVideoDirectory based on the
+-    # possibilities that we've had over the years and what exists on
+-    # the user's system.  This codifies it in the user's gconf so that
+-    # when we change it in future, then the user isn't affected.
+-    from miro.plat import options
+-    if options.gconf_name is None:
+-        options.gconf_name = "miro"
+-    key = "/apps/%s/MoviesDirectory" % options.gconf_name
+-    if client.get(key) is None:
+-        for mem in ["~/.miro/Movies",     # packages
+-                    "~/Videos/Miro",
+-                    "~/Movies/Miro",      # pre 3.5
+-                    "~/Movies/Democracy"  # democracy player
+-                    ]:
+-            mem = os.path.expanduser(mem)
+-            if os.path.exists(mem):
+-                client.set_string(key, mem)
+-                break
+-
+-    key = "/apps/%s/NonVideoDirectory" % options.gconf_name
+-    if client.get(key) is None:
+-        for mem in ["~/.miro/Nonvideo"   # packages
+-                    ]:
+-            mem = os.path.expanduser(mem)
+-            if os.path.exists(mem):
+-                client.set_string(key, mem)
+-                break

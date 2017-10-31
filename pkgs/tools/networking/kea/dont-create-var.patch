@@ -1,0 +1,28 @@
+diff --git a/Makefile.am b/Makefile.am
+index 897be34..b146729 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -103,11 +103,6 @@ cppcheck:
+ 		--template '{file}:{line}: check_fail: {message} ({severity},{id})' \
+ 		src
+ 
+-# These steps are necessary during installation
+-install-exec-hook:
+-	mkdir -p $(DESTDIR)${localstatedir}/log/
+-	mkdir -p $(DESTDIR)${localstatedir}/run/${PACKAGE_NAME}
+-
+ EXTRA_DIST  = tools/path_replacer.sh
+ EXTRA_DIST += tools/mk_cfgrpt.sh
+ 
+diff --git a/src/lib/dhcpsrv/Makefile.am b/src/lib/dhcpsrv/Makefile.am
+index 066b410..16d3135 100755
+--- a/src/lib/dhcpsrv/Makefile.am
++++ b/src/lib/dhcpsrv/Makefile.am
+@@ -210,7 +210,3 @@ EXTRA_DIST += database_backends.dox libdhcpsrv.dox
+ # Specification file
+ EXTRA_DIST += logging.spec
+ 
+-install-data-local:
+-	$(mkinstalldirs) $(DESTDIR)$(dhcp_data_dir)
+-
+-

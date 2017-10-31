@@ -1,0 +1,15 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -127,8 +127,9 @@ if(CMAKE_BUILD_TYPE MATCHES Release)
+     if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU" AND
+         NOT "${CMAKE_CXX_COMPILER_VERSION}" VERSION_LESS "4.9.0" AND NOT MINGW)
+       message(STATUS "Using gcc specific binutils for LTO.")
+-      set(CMAKE_AR     "/usr/bin/gcc-ar")
+-      set(CMAKE_RANLIB "/usr/bin/gcc-ranlib")
++      # Just let PATH do its job
++      set(CMAKE_AR     "gcc-ar")
++      set(CMAKE_RANLIB "gcc-ranlib")
+     endif()
+   endif (HAS_LTO_FLAG)
+ endif()

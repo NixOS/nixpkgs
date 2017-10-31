@@ -1,0 +1,58 @@
+diff -ru xoscope-2.0-old//gtkdatabox-0.6.0.0/gtk/gtkdatabox.c xoscope-2.0/gtkdatabox-0.6.0.0/gtk/gtkdatabox.c
+--- xoscope-2.0-old//gtkdatabox-0.6.0.0/gtk/gtkdatabox.c	2010-06-07 10:42:24.000000000 +0200
++++ xoscope-2.0/gtkdatabox-0.6.0.0/gtk/gtkdatabox.c	2010-06-07 10:45:40.000000000 +0200
+@@ -661,7 +661,7 @@
+ static void
+ gtk_databox_calculate_hcanvas (GtkDatabox *box)
+ {
+-   if (!GTK_WIDGET_VISIBLE (box))
++   if (!gtk_widget_get_visible (box))
+       return;
+    
+    if (box->priv->adjX->page_size == 1.0)
+@@ -698,7 +698,7 @@
+ static void
+ gtk_databox_calculate_vcanvas (GtkDatabox *box)
+ {
+-   if (!GTK_WIDGET_VISIBLE (box))
++   if (!gtk_widget_get_visible (box))
+       return;
+    
+    if (box->priv->adjY->page_size == 1.0)
+@@ -780,7 +780,7 @@
+    gtk_databox_draw (box, event);
+ 
+    gdk_draw_drawable (widget->window,
+-                      widget->style->fg_gc[GTK_WIDGET_STATE (widget)],
++                      widget->style->fg_gc[gtk_widget_get_state (widget)],
+                       box->priv->canvas.pixmap, event->area.x, event->area.y,
+                       event->area.x, event->area.y, event->area.width,
+                       event->area.height);
+@@ -940,7 +940,7 @@
+    GtkWidget *widget = GTK_WIDGET (box);
+ 
+    g_return_if_fail (GTK_IS_DATABOX (box));
+-   g_return_if_fail (GTK_WIDGET_VISIBLE (widget));
++   g_return_if_fail (gtk_widget_get_visible (widget));
+ 
+    gdk_draw_rectangle (box->priv->canvas.pixmap, widget->style->bg_gc[0], 
+                        TRUE, 0, 0,
+@@ -1150,7 +1150,7 @@
+    /* Copy a part of the pixmap to the screen */
+    if (pixmapCopyRect)
+       gdk_draw_drawable (widget->window,
+-                         widget->style->fg_gc[GTK_WIDGET_STATE (box)],
++                         widget->style->fg_gc[gtk_widget_get_state (box)],
+                          box->priv->canvas.pixmap,
+                          pixmapCopyRect->x,
+                          pixmapCopyRect->y,
+--- xoscope-2.0-old//gtkdatabox-0.6.0.0/gtk/Makefile.in	2011-09-02 16:43:43.000000000 +0200
++++ xoscope-2.0/gtkdatabox-0.6.0.0/gtk/Makefile.in	2011-09-02 16:43:57.000000000 +0200
+@@ -196,7 +196,6 @@
+ 			-DG_DISABLE_DEPRECATED\
+ 			-DGDK_DISABLE_DEPRECATED\
+ 			-DGDK_PIXBUF_DISABLE_DEPRECATED\
+-			-DGTK_DISABLE_DEPRECATED\
+ 			`pkg-config gtk+-2.0 --cflags`
+ 
+ all: all-am

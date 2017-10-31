@@ -1,0 +1,12 @@
+diff -ru recoll-1.21.3-orig/recollinstall.in recoll-1.21.3/recollinstall.in
+--- recoll-1.21.3-orig/recollinstall.in	2015-09-28 08:08:42.000000000 +0100
++++ recoll-1.21.3/recollinstall.in	2015-12-13 22:48:30.361776374 +0000
+@@ -45,9 +45,6 @@
+    mandir=$DESTDIR/$mandir
+    ROOTFORPYTHON="--root=${DESTDIR}"
+ fi
+-if test -f /etc/debian_version ; then
+-   OPTSFORPYTHON=--install-layout=deb
+-fi
+ 
+ echo "Installing to $PREFIX"

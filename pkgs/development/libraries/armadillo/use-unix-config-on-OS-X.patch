@@ -1,0 +1,11 @@
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -84,7 +84,7 @@ message(STATUS "DETECT_HDF5                = ${DETECT_HDF5}"               )
+ ##
+ ## Find LAPACK and BLAS libraries, or their optimised versions
+ ##
+-
++set(APPLE false)
+ if(APPLE)
+   
+   set(ARMA_OS macos)

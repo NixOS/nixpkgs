@@ -1,0 +1,37 @@
+--- function.c	2011/04/18 01:25:20	1.121
++++ function.c	2011/05/02 12:35:01	1.122
+@@ -706,7 +706,7 @@
+   const char *word_iterator = argv[0];
+   char buf[20];
+ 
+-  while (find_next_token (&word_iterator, (unsigned int *) 0) != 0)
++  while (find_next_token (&word_iterator, NULL) != 0)
+     ++i;
+ 
+   sprintf (buf, "%d", i);
+@@ -1133,21 +1133,14 @@
+ 
+   /* Find the maximum number of words we'll have.  */
+   t = argv[0];
+-  wordi = 1;
+-  while (*t != '\0')
++  wordi = 0;
++  while ((p = find_next_token (&t, NULL)) != 0)
+     {
+-      char c = *(t++);
+-
+-      if (! isspace ((unsigned char)c))
+-        continue;
+-
++      ++t;
+       ++wordi;
+-
+-      while (isspace ((unsigned char)*t))
+-        ++t;
+     }
+ 
+-  words = xmalloc (wordi * sizeof (char *));
++  words = xmalloc ((wordi == 0 ? 1 : wordi) * sizeof (char *));
+ 
+   /* Now assign pointers to each string in the array.  */
+   t = argv[0];

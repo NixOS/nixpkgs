@@ -1,0 +1,16 @@
+diff -ru3 SDL-1.2.15/sdl-config.in SDL-1.2.15-new/sdl-config.in
+--- SDL-1.2.15/sdl-config.in	2012-01-19 10:30:06.000000000 +0400
++++ SDL-1.2.15-new/sdl-config.in	2016-08-22 05:32:52.716397920 +0300
+@@ -42,7 +42,11 @@
+       echo @SDL_VERSION@
+       ;;
+     --cflags)
+-      echo -I@includedir@/SDL @SDL_CFLAGS@
++      SDL_CFLAGS=""
++      for i in @includedir@/SDL $SDL_PATH; do
++        SDL_CFLAGS="$SDL_CFLAGS -I$i"
++      done
++      echo $SDL_CFLAGS @SDL_CFLAGS@
+       ;;
+ @ENABLE_SHARED_TRUE@    --libs)
+ @ENABLE_SHARED_TRUE@      echo -L@libdir@ @SDL_RLD_FLAGS@ @SDL_LIBS@

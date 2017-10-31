@@ -1,0 +1,14 @@
+--- souper-1be75fe6a96993b57dcba038798fe6d1c7d113eb-src/CMakeLists.txt.orig     2017-01-20 13:55:14.783632588 -0600
++++ souper-1be75fe6a96993b57dcba038798fe6d1c7d113eb-src/CMakeLists.txt  2017-01-20 13:55:20.505728456 -0600
+@@ -33,7 +33,10 @@
+   OUTPUT_VARIABLE LLVM_SYSTEM_LIBS
+   OUTPUT_STRIP_TRAILING_WHITESPACE
+ )
+-set(LLVM_LIBS "${LLVM_LIBS} ${LLVM_SYSTEM_LIBS}")
++
++if (LLVM_SYSTEM_LIBS)
++  set(LLVM_LIBS "${LLVM_LIBS} ${LLVM_SYSTEM_LIBS}")
++endif()
+
+ execute_process(
+   COMMAND ${LLVM_CONFIG_EXECUTABLE} --ldflags

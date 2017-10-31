@@ -1,0 +1,151 @@
+From d321df349d10f038f0c89b9c11f8059572264f1b Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Niklas=20Hamb=C3=BCchen?= <mail@nh2.me>
+Date: Sat, 13 May 2017 18:54:36 +0200
+Subject: [PATCH] python: Remove all uses of find_library. Fixes #1450593
+
+`find_library()` doesn't consider LD_LIBRARY_PATH on Python < 3.6.
+---
+ api/examples/getvolfile.py                                     |  2 +-
+ geo-replication/syncdaemon/libcxattr.py                        |  3 +--
+ geo-replication/syncdaemon/libgfchangelog.py                   |  3 +--
+ tests/features/ipctest.py                                      | 10 ++--------
+ tests/utils/libcxattr.py                                       |  5 ++---
+ tools/glusterfind/src/libgfchangelog.py                        |  3 +--
+ .../features/changelog/lib/examples/python/libgfchangelog.py   |  3 +--
+ 7 files changed, 9 insertions(+), 20 deletions(-)
+
+diff --git a/api/examples/getvolfile.py b/api/examples/getvolfile.py
+index 0c95213..32c2268 100755
+--- a/api/examples/getvolfile.py
++++ b/api/examples/getvolfile.py
+@@ -3,7 +3,7 @@
+ import ctypes
+ import ctypes.util
+ 
+-api = ctypes.CDLL(ctypes.util.find_library("gfapi"))
++api = ctypes.CDLL("libgfapi.so")
+ api.glfs_get_volfile.argtypes = [ctypes.c_void_p,
+                                  ctypes.c_void_p,
+                                  ctypes.c_ulong]
+diff --git a/geo-replication/syncdaemon/libcxattr.py b/geo-replication/syncdaemon/libcxattr.py
+index 3671e10..f576648 100644
+--- a/geo-replication/syncdaemon/libcxattr.py
++++ b/geo-replication/syncdaemon/libcxattr.py
+@@ -10,7 +10,6 @@
+ 
+ import os
+ from ctypes import CDLL, create_string_buffer, get_errno
+-from ctypes.util import find_library
+ 
+ 
+ class Xattr(object):
+@@ -25,7 +24,7 @@ class Xattr(object):
+          sizes we expect
+     """
+ 
+-    libc = CDLL(find_library("c"), use_errno=True)
++    libc = CDLL("libc.so.6", use_errno=True)
+ 
+     @classmethod
+     def geterrno(cls):
+diff --git a/geo-replication/syncdaemon/libgfchangelog.py b/geo-replication/syncdaemon/libgfchangelog.py
+index d87b56c..003c28c 100644
+--- a/geo-replication/syncdaemon/libgfchangelog.py
++++ b/geo-replication/syncdaemon/libgfchangelog.py
+@@ -10,12 +10,11 @@
+ 
+ import os
+ from ctypes import CDLL, RTLD_GLOBAL, create_string_buffer, get_errno, byref, c_ulong
+-from ctypes.util import find_library
+ from syncdutils import ChangelogException, ChangelogHistoryNotAvailable
+ 
+ 
+ class Changes(object):
+-    libgfc = CDLL(find_library("gfchangelog"), mode=RTLD_GLOBAL, use_errno=True)
++    libgfc = CDLL("libgfchangelog.so", mode=RTLD_GLOBAL, use_errno=True)
+ 
+     @classmethod
+     def geterrno(cls):
+diff --git a/tests/features/ipctest.py b/tests/features/ipctest.py
+index 5aff319..9339248 100755
+--- a/tests/features/ipctest.py
++++ b/tests/features/ipctest.py
+@@ -1,14 +1,8 @@
+ #!/usr/bin/python
+ 
+ import ctypes
+-import ctypes.util
+-
+-# find_library does not lookup LD_LIBRARY_PATH and may miss the
+-# function. In that case, retry with less portable but explicit name.
+-libgfapi = ctypes.util.find_library("gfapi")
+-if libgfapi == None:
+-	libgfapi = "libgfapi.so"
+-api = ctypes.CDLL(libgfapi,mode=ctypes.RTLD_GLOBAL)
++
++api = ctypes.CDLL("libgfapi.so",mode=ctypes.RTLD_GLOBAL)
+ 
+ api.glfs_ipc.argtypes = [ ctypes.c_void_p, ctypes.c_int, ctypes.c_void_p, ctypes.c_void_p ]
+ api.glfs_ipc.restype = ctypes.c_int
+diff --git a/tests/utils/libcxattr.py b/tests/utils/libcxattr.py
+index 149db72..4e6e6c4 100644
+--- a/tests/utils/libcxattr.py
++++ b/tests/utils/libcxattr.py
+@@ -11,7 +11,6 @@
+ import os
+ import sys
+ from ctypes import CDLL, c_int, create_string_buffer
+-from ctypes.util import find_library
+ 
+ 
+ class Xattr(object):
+@@ -28,9 +27,9 @@ class Xattr(object):
+ 
+     if sys.hexversion >= 0x02060000:
+         from ctypes import DEFAULT_MODE
+-        libc = CDLL(find_library("libc"), DEFAULT_MODE, None, True)
++        libc = CDLL("libc.so.6", DEFAULT_MODE, None, True)
+     else:
+-        libc = CDLL(find_library("libc"))
++        libc = CDLL("libc.so.6")
+ 
+     @classmethod
+     def geterrno(cls):
+diff --git a/tools/glusterfind/src/libgfchangelog.py b/tools/glusterfind/src/libgfchangelog.py
+index dd8153e..da822cf 100644
+--- a/tools/glusterfind/src/libgfchangelog.py
++++ b/tools/glusterfind/src/libgfchangelog.py
+@@ -12,14 +12,13 @@
+ import os
+ from ctypes import CDLL, get_errno, create_string_buffer, c_ulong, byref
+ from ctypes import RTLD_GLOBAL
+-from ctypes.util import find_library
+ 
+ 
+ class ChangelogException(OSError):
+     pass
+ 
+ 
+-libgfc = CDLL(find_library("gfchangelog"), use_errno=True, mode=RTLD_GLOBAL)
++libgfc = CDLL("libgfchangelog.so", use_errno=True, mode=RTLD_GLOBAL)
+ 
+ 
+ def raise_oserr():
+diff --git a/xlators/features/changelog/lib/examples/python/libgfchangelog.py b/xlators/features/changelog/lib/examples/python/libgfchangelog.py
+index 10e73c0..2cdbf11 100644
+--- a/xlators/features/changelog/lib/examples/python/libgfchangelog.py
++++ b/xlators/features/changelog/lib/examples/python/libgfchangelog.py
+@@ -1,9 +1,8 @@
+ import os
+ from ctypes import *
+-from ctypes.util import find_library
+ 
+ class Changes(object):
+-    libgfc = CDLL(find_library("gfchangelog"), mode=RTLD_GLOBAL, use_errno=True)
++    libgfc = CDLL("libgfchangelog.so", mode=RTLD_GLOBAL, use_errno=True)
+ 
+     @classmethod
+     def geterrno(cls):
+-- 
+2.7.4
+

@@ -1,0 +1,61 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    backports (3.6.8)
+    database_cleaner (1.5.3)
+    diff-lcs (1.2.5)
+    directory_watcher (1.5.1)
+    ledger_web (1.5.2)
+      database_cleaner
+      directory_watcher (~> 1.5.1)
+      pg
+      rack (>= 1.3.6)
+      rspec
+      sequel
+      sinatra
+      sinatra-contrib
+      sinatra-session
+    multi_json (1.12.1)
+    pg (0.18.4)
+    rack (1.6.4)
+    rack-protection (1.5.3)
+      rack
+    rack-test (0.6.3)
+      rack (>= 1.0)
+    rspec (3.5.0)
+      rspec-core (~> 3.5.0)
+      rspec-expectations (~> 3.5.0)
+      rspec-mocks (~> 3.5.0)
+    rspec-core (3.5.2)
+      rspec-support (~> 3.5.0)
+    rspec-expectations (3.5.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.5.0)
+    rspec-mocks (3.5.0)
+      diff-lcs (>= 1.2.0, < 2.0)
+      rspec-support (~> 3.5.0)
+    rspec-support (3.5.0)
+    sequel (4.37.0)
+    sinatra (1.4.7)
+      rack (~> 1.5)
+      rack-protection (~> 1.4)
+      tilt (>= 1.3, < 3)
+    sinatra-contrib (1.4.7)
+      backports (>= 2.0)
+      multi_json
+      rack-protection
+      rack-test
+      sinatra (~> 1.4.0)
+      tilt (>= 1.3, < 3)
+    sinatra-session (1.0.0)
+      sinatra (>= 1.0)
+    tilt (2.0.5)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  ledger_web (= 1.5.2)
+
+BUNDLED WITH
+   1.12.5

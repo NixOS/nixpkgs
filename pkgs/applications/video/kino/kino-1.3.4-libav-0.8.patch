@@ -1,0 +1,57 @@
+--- kino-1.3.4.orig/src/frame.cc	2012-05-14 19:55:42.153772418 -0700
++++ kino-1.3.4/src/frame.cc	2012-05-14 20:28:34.448838653 -0700
+@@ -101,8 +101,9 @@
+ #if defined(HAVE_LIBAVCODEC)
+ 	pthread_mutex_lock( &avcodec_mutex );
+ 	av_register_all();
+-	libavcodec = avcodec_alloc_context();
+-	avcodec_open( libavcodec, avcodec_find_decoder( CODEC_ID_DVVIDEO ) );
++	libavcodec = avcodec_alloc_context3(NULL);
++	avcodec_open2( libavcodec,
++                       avcodec_find_decoder( CODEC_ID_DVVIDEO ), NULL );
+ 	pthread_mutex_unlock( &avcodec_mutex );
+ 	data = ( unsigned char* ) av_mallocz( 144000 );
+ #if defined(HAVE_SWSCALE)
+@@ -1338,7 +1339,7 @@
+ 		if ( avformatEncoder )
+ 		{
+ 			avformatEncoder->oformat = av_guess_format( "dv", NULL, NULL );
+-			AVStream* vst = av_new_stream( avformatEncoder, 0 );
++			AVStream* vst = avformat_new_stream( avformatEncoder, NULL );
+ 			vst->codec->codec_type = AVMEDIA_TYPE_VIDEO;
+ 			vst->codec->codec_id = CODEC_ID_DVVIDEO;
+ 			vst->codec->bit_rate = 25000000;
+@@ -1364,12 +1365,10 @@
+ 			vst->sample_aspect_ratio = avcodecEncoder->sample_aspect_ratio;
+ #endif
+ 			avcodecEncoder->thread_count = 2;
+-			avcodec_thread_init( avcodecEncoder, avcodecEncoder->thread_count );
+ 			avcodecEncoder->time_base= isPAL ? ( AVRational ){ 1, 25 } : ( AVRational ){ 1001, 30000 };
+ 			avcodecEncoder->pix_fmt = isPAL ? PIX_FMT_YUV420P : PIX_FMT_YUV411P;
+ 			avcodecEncoder->flags |= CODEC_FLAG_INTERLACED_DCT;
+-			av_set_parameters( avformatEncoder, NULL );
+-			avcodec_open( avcodecEncoder, avcodec_find_encoder( CODEC_ID_DVVIDEO ) );
++			avcodec_open2( avcodecEncoder, avcodec_find_encoder( CODEC_ID_DVVIDEO ), NULL );
+ 			av_new_packet( &avpacketEncoder, 144000 );
+ 			tempImage = ( uint8_t* ) av_malloc(
+ 				avpicture_get_size( avcodecEncoder->pix_fmt, avcodecEncoder->width, avcodecEncoder->height ) );
+@@ -1475,16 +1474,16 @@
+ 
+ 			// Encode
+ 			bytesInFrame = avcodec_encode_video( avcodecEncoder, avpacketEncoder.data, size, output );
+-			url_open_buf( &avformatEncoder->pb, data, bytesInFrame, URL_WRONLY );
++                        avformatEncoder->pb = avio_alloc_context(data, bytesInFrame, 0, NULL, NULL, NULL, NULL);
+ 			avpacketEncoder.size = bytesInFrame;
+ 			if ( !isEncoderHeaderWritten )
+ 			{
+-				av_write_header( avformatEncoder );
++				avformat_write_header( avformatEncoder, NULL );
+ 				isEncoderHeaderWritten = true;
+ 			}
+ 			av_write_frame( avformatEncoder, &avpacketEncoder );
+ #if LIBAVFORMAT_VERSION_INT >= ((52<<16)+(0<<8)+0)
+-			url_close_buf( avformatEncoder->pb );
++			avio_close( avformatEncoder->pb );
+ #else
+ 			url_close_buf( &avformatEncoder->pb );
+ #endif

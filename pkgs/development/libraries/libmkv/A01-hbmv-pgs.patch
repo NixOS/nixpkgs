@@ -1,0 +1,12 @@
+diff --git a/include/libmkv.h b/include/libmkv.h
+index 146a91f..f03d608 100644
+--- a/include/libmkv.h
++++ b/include/libmkv.h
+@@ -94,6 +94,7 @@ extern "C" {
+ #define MK_SUBTITLE_USF    "S_TEXT/USF"
+ #define MK_SUBTITLE_VOBSUB "S_VOBSUB"
+ #define MK_SUBTITLE_BMP    "S_IMAGE/BMP"
++#define MK_SUBTITLE_PGS    "S_HDMV/PGS"
+ 
+ /* Official Tags */
+ #define MK_TAG_TITLE		"TITLE"

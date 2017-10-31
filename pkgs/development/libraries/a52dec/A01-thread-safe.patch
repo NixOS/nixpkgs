@@ -1,0 +1,462 @@
+diff -Naur a52dec.old/include/a52.h a52dec.new/include/a52.h
+--- a52dec.old/include/a52.h	2012-07-16 14:24:14.000000000 +0200
++++ a52dec.new/include/a52.h	2012-07-16 14:31:37.000000000 +0200
+@@ -42,6 +42,11 @@
+ } expbap_t;
+ 
+ typedef struct {
++    sample_t real;
++    sample_t imag;
++} complex_t;
++
++typedef struct {
+     uint8_t fscod;            /* sample rate */
+     uint8_t halfrate;         /* halfrate factor */
+     uint8_t acmod;            /* coded channels */
+@@ -94,6 +99,20 @@
+ 
+     sample_t * samples;
+     int downmixed;
++
++    /* Root values for IFFT */
++    sample_t * roots16;           // size 3
++    sample_t * roots32;           // size 7
++    sample_t * roots64;           // size 15
++    sample_t * roots128;          // size 31
++
++    /* Twiddle factors for IMDCT */
++    complex_t * pre1;             // size 128
++    complex_t * post1;            // size 64
++    complex_t * pre2;             // size 64
++    complex_t * post2;            // size 32
++
++    sample_t * a52_imdct_window;  // size 256
+ } a52_state_t;
+ 
+ #define A52_CHANNEL 0
+diff -Naur a52dec.old/liba52/a52_internal.h a52dec.new/liba52/a52_internal.h
+--- a52dec.old/liba52/a52_internal.h	2012-07-16 14:24:14.000000000 +0200
++++ a52dec.new/liba52/a52_internal.h	2012-07-16 14:28:33.000000000 +0200
+@@ -49,6 +49,6 @@
+ 		  sample_t clev, sample_t slev);
+ void a52_upmix (sample_t * samples, int acmod, int output);
+ 
+-void a52_imdct_init (uint32_t mm_accel);
+-void a52_imdct_256 (sample_t * data, sample_t * delay, sample_t bias);
+-void a52_imdct_512 (sample_t * data, sample_t * delay, sample_t bias);
++void a52_imdct_init (a52_state_t * state, uint32_t mm_accel);
++void a52_imdct_256 (a52_state_t * state, sample_t * data, sample_t * delay, sample_t bias);
++void a52_imdct_512 (a52_state_t * state, sample_t * data, sample_t * delay, sample_t bias);
+diff -Naur a52dec.old/liba52/imdct.c a52dec.new/liba52/imdct.c
+--- a52dec.old/liba52/imdct.c	2012-07-16 14:24:14.000000000 +0200
++++ a52dec.new/liba52/imdct.c	2012-07-16 14:33:00.000000000 +0200
+@@ -40,11 +40,6 @@
+ #include "a52_internal.h"
+ #include "mm_accel.h"
+ 
+-typedef struct complex_s {
+-    sample_t real;
+-    sample_t imag;
+-} complex_t;
+-
+ static uint8_t fftorder[] = {
+       0,128, 64,192, 32,160,224, 96, 16,144, 80,208,240,112, 48,176,
+       8,136, 72,200, 40,168,232,104,248,120, 56,184, 24,152,216, 88,
+@@ -56,22 +51,8 @@
+       6,134, 70,198, 38,166,230,102,246,118, 54,182, 22,150,214, 86
+ };
+ 
+-/* Root values for IFFT */
+-static sample_t roots16[3];
+-static sample_t roots32[7];
+-static sample_t roots64[15];
+-static sample_t roots128[31];
+-
+-/* Twiddle factors for IMDCT */
+-static complex_t pre1[128];
+-static complex_t post1[64];
+-static complex_t pre2[64];
+-static complex_t post2[32];
+-
+-static sample_t a52_imdct_window[256];
+-
+-static void (* ifft128) (complex_t * buf);
+-static void (* ifft64) (complex_t * buf);
++static void (* ifft128) (a52_state_t * state, complex_t * buf);
++static void (* ifft64) (a52_state_t * state, complex_t * buf);
+ 
+ static inline void ifft2 (complex_t * buf)
+ {
+@@ -167,7 +148,7 @@
+     a1.imag += tmp4;				\
+ } while (0)
+ 
+-static inline void ifft8 (complex_t * buf)
++static inline void ifft8 (a52_state_t * state, complex_t * buf)
+ {
+     double tmp1, tmp2, tmp3, tmp4, tmp5, tmp6, tmp7, tmp8;
+ 
+@@ -175,7 +156,7 @@
+     ifft2 (buf + 4);
+     ifft2 (buf + 6);
+     BUTTERFLY_ZERO (buf[0], buf[2], buf[4], buf[6]);
+-    BUTTERFLY_HALF (buf[1], buf[3], buf[5], buf[7], roots16[1]);
++    BUTTERFLY_HALF (buf[1], buf[3], buf[5], buf[7], state->roots16[1]);
+ }
+ 
+ static void ifft_pass (complex_t * buf, sample_t * weight, int n)
+@@ -205,66 +186,66 @@
+     } while (--i);
+ }
+ 
+-static void ifft16 (complex_t * buf)
++static void ifft16 (a52_state_t * state, complex_t * buf)
+ {
+-    ifft8 (buf);
++    ifft8 (state, buf);
+     ifft4 (buf + 8);
+     ifft4 (buf + 12);
+-    ifft_pass (buf, roots16 - 4, 4);
++    ifft_pass (buf, state->roots16 - 4, 4);
+ }
+ 
+-static void ifft32 (complex_t * buf)
++static void ifft32 (a52_state_t * state, complex_t * buf)
+ {
+-    ifft16 (buf);
+-    ifft8 (buf + 16);
+-    ifft8 (buf + 24);
+-    ifft_pass (buf, roots32 - 8, 8);
++    ifft16 (state, buf);
++    ifft8 (state, buf + 16);
++    ifft8 (state, buf + 24);
++    ifft_pass (buf, state->roots32 - 8, 8);
+ }
+ 
+-static void ifft64_c (complex_t * buf)
++static void ifft64_c (a52_state_t * state, complex_t * buf)
+ {
+-    ifft32 (buf);
+-    ifft16 (buf + 32);
+-    ifft16 (buf + 48);
+-    ifft_pass (buf, roots64 - 16, 16);
++    ifft32 (state, buf);
++    ifft16 (state, buf + 32);
++    ifft16 (state, buf + 48);
++    ifft_pass (buf, state->roots64 - 16, 16);
+ }
+ 
+-static void ifft128_c (complex_t * buf)
++static void ifft128_c (a52_state_t * state, complex_t * buf)
+ {
+-    ifft32 (buf);
+-    ifft16 (buf + 32);
+-    ifft16 (buf + 48);
+-    ifft_pass (buf, roots64 - 16, 16);
++    ifft32 (state, buf);
++    ifft16 (state, buf + 32);
++    ifft16 (state, buf + 48);
++    ifft_pass (buf, state->roots64 - 16, 16);
+ 
+-    ifft32 (buf + 64);
+-    ifft32 (buf + 96);
+-    ifft_pass (buf, roots128 - 32, 32);
++    ifft32 (state, buf + 64);
++    ifft32 (state, buf + 96);
++    ifft_pass (buf, state->roots128 - 32, 32);
+ }
+ 
+-void a52_imdct_512 (sample_t * data, sample_t * delay, sample_t bias)
++void a52_imdct_512 (a52_state_t * state, sample_t * data, sample_t * delay, sample_t bias)
+ {
+     int i, k;
+     sample_t t_r, t_i, a_r, a_i, b_r, b_i, w_1, w_2;
+-    const sample_t * window = a52_imdct_window;
++    const sample_t * window = state->a52_imdct_window;
+     complex_t buf[128];
+ 	
+     for (i = 0; i < 128; i++) {
+ 	k = fftorder[i];
+-	t_r = pre1[i].real;
+-	t_i = pre1[i].imag;
++	t_r = state->pre1[i].real;
++	t_i = state->pre1[i].imag;
+ 
+ 	buf[i].real = t_i * data[255-k] + t_r * data[k];
+ 	buf[i].imag = t_r * data[255-k] - t_i * data[k];
+     }
+ 
+-    ifft128 (buf);
++    ifft128 (state, buf);
+ 
+     /* Post IFFT complex multiply plus IFFT complex conjugate*/
+     /* Window and convert to real valued signal */
+     for (i = 0; i < 64; i++) {
+ 	/* y[n] = z[n] * (xcos1[n] + j * xsin1[n]) ; */
+-	t_r = post1[i].real;
+-	t_i = post1[i].imag;
++	t_r = state->post1[i].real;
++	t_i = state->post1[i].imag;
+ 
+ 	a_r = t_r * buf[i].real     + t_i * buf[i].imag;
+ 	a_i = t_i * buf[i].real     - t_r * buf[i].imag;
+@@ -285,18 +266,18 @@
+     }
+ }
+ 
+-void a52_imdct_256(sample_t * data, sample_t * delay, sample_t bias)
++void a52_imdct_256(a52_state_t * state, sample_t * data, sample_t * delay, sample_t bias)
+ {
+     int i, k;
+     sample_t t_r, t_i, a_r, a_i, b_r, b_i, c_r, c_i, d_r, d_i, w_1, w_2;
+-    const sample_t * window = a52_imdct_window;
++    const sample_t * window = state->a52_imdct_window;
+     complex_t buf1[64], buf2[64];
+ 
+     /* Pre IFFT complex multiply plus IFFT cmplx conjugate */
+     for (i = 0; i < 64; i++) {
+ 	k = fftorder[i];
+-	t_r = pre2[i].real;
+-	t_i = pre2[i].imag;
++	t_r = state->pre2[i].real;
++	t_i = state->pre2[i].imag;
+ 
+ 	buf1[i].real = t_i * data[254-k] + t_r * data[k];
+ 	buf1[i].imag = t_r * data[254-k] - t_i * data[k];
+@@ -305,15 +286,15 @@
+ 	buf2[i].imag = t_r * data[255-k] - t_i * data[k+1];
+     }
+ 
+-    ifft64 (buf1);
+-    ifft64 (buf2);
++    ifft64 (state, buf1);
++    ifft64 (state, buf2);
+ 
+     /* Post IFFT complex multiply */
+     /* Window and convert to real valued signal */
+     for (i = 0; i < 32; i++) {
+ 	/* y1[n] = z1[n] * (xcos2[n] + j * xs in2[n]) ; */ 
+-	t_r = post2[i].real;
+-	t_i = post2[i].imag;
++	t_r = state->post2[i].real;
++	t_i = state->post2[i].imag;
+ 
+ 	a_r = t_r * buf1[i].real    + t_i * buf1[i].imag;
+ 	a_i = t_i * buf1[i].real    - t_r * buf1[i].imag;
+@@ -362,7 +343,7 @@
+     return bessel;
+ }
+ 
+-void a52_imdct_init (uint32_t mm_accel)
++void a52_imdct_init (a52_state_t * state, uint32_t mm_accel)
+ {
+     int i, k;
+     double sum;
+@@ -371,50 +352,50 @@
+     sum = 0;
+     for (i = 0; i < 256; i++) {
+ 	sum += besselI0 (i * (256 - i) * (5 * M_PI / 256) * (5 * M_PI / 256));
+-	a52_imdct_window[i] = sum;
++	state->a52_imdct_window[i] = sum;
+     }
+     sum++;
+     for (i = 0; i < 256; i++)
+-	a52_imdct_window[i] = sqrt (a52_imdct_window[i] / sum);
++	state->a52_imdct_window[i] = sqrt (state->a52_imdct_window[i] / sum);
+ 
+     for (i = 0; i < 3; i++)
+-	roots16[i] = cos ((M_PI / 8) * (i + 1));
++	state->roots16[i] = cos ((M_PI / 8) * (i + 1));
+ 
+     for (i = 0; i < 7; i++)
+-	roots32[i] = cos ((M_PI / 16) * (i + 1));
++	state->roots32[i] = cos ((M_PI / 16) * (i + 1));
+ 
+     for (i = 0; i < 15; i++)
+-	roots64[i] = cos ((M_PI / 32) * (i + 1));
++	state->roots64[i] = cos ((M_PI / 32) * (i + 1));
+ 
+     for (i = 0; i < 31; i++)
+-	roots128[i] = cos ((M_PI / 64) * (i + 1));
++	state->roots128[i] = cos ((M_PI / 64) * (i + 1));
+ 
+     for (i = 0; i < 64; i++) {
+ 	k = fftorder[i] / 2 + 64;
+-	pre1[i].real = cos ((M_PI / 256) * (k - 0.25));
+-	pre1[i].imag = sin ((M_PI / 256) * (k - 0.25));
++	state->pre1[i].real = cos ((M_PI / 256) * (k - 0.25));
++	state->pre1[i].imag = sin ((M_PI / 256) * (k - 0.25));
+     }
+ 
+     for (i = 64; i < 128; i++) {
+ 	k = fftorder[i] / 2 + 64;
+-	pre1[i].real = -cos ((M_PI / 256) * (k - 0.25));
+-	pre1[i].imag = -sin ((M_PI / 256) * (k - 0.25));
++	state->pre1[i].real = -cos ((M_PI / 256) * (k - 0.25));
++	state->pre1[i].imag = -sin ((M_PI / 256) * (k - 0.25));
+     }
+ 
+     for (i = 0; i < 64; i++) {
+-	post1[i].real = cos ((M_PI / 256) * (i + 0.5));
+-	post1[i].imag = sin ((M_PI / 256) * (i + 0.5));
++	state->post1[i].real = cos ((M_PI / 256) * (i + 0.5));
++	state->post1[i].imag = sin ((M_PI / 256) * (i + 0.5));
+     }
+ 
+     for (i = 0; i < 64; i++) {
+ 	k = fftorder[i] / 4;
+-	pre2[i].real = cos ((M_PI / 128) * (k - 0.25));
+-	pre2[i].imag = sin ((M_PI / 128) * (k - 0.25));
++	state->pre2[i].real = cos ((M_PI / 128) * (k - 0.25));
++	state->pre2[i].imag = sin ((M_PI / 128) * (k - 0.25));
+     }
+ 
+     for (i = 0; i < 32; i++) {
+-	post2[i].real = cos ((M_PI / 128) * (i + 0.5));
+-	post2[i].imag = sin ((M_PI / 128) * (i + 0.5));
++	state->post2[i].real = cos ((M_PI / 128) * (i + 0.5));
++	state->post2[i].imag = sin ((M_PI / 128) * (i + 0.5));
+     }
+ 
+ #ifdef LIBA52_DJBFFT
+diff -Naur a52dec.old/liba52/parse.c a52dec.new/liba52/parse.c
+--- a52dec.old/liba52/parse.c	2012-07-16 14:24:14.000000000 +0200
++++ a52dec.new/liba52/parse.c	2012-07-16 14:33:00.000000000 +0200
+@@ -56,16 +56,53 @@
+     a52_state_t * state;
+     int i;
+ 
+-    state = malloc (sizeof (a52_state_t));
++    state = calloc (1, sizeof (a52_state_t));
+     if (state == NULL)
+ 	return NULL;
+ 
+     state->samples = memalign (16, 256 * 12 * sizeof (sample_t));
+     if (state->samples == NULL) {
+-	free (state);
+-	return NULL;
++        goto fail;
+     }
+ 
++    /* Root values for IFFT */
++    state->roots16 = memalign (16, 3 * sizeof (sample_t));
++    if (state->roots16 == NULL)
++        goto fail;
++
++    state->roots32 = memalign (16, 7 * sizeof (sample_t));
++    if (state->roots32 == NULL)
++        goto fail;
++
++    state->roots64 = memalign (16, 15 * sizeof (sample_t));
++    if (state->roots64 == NULL)
++        goto fail;
++
++    state->roots128 = memalign (16, 31 * sizeof (sample_t));
++    if (state->roots128 == NULL)
++        goto fail;
++
++    /* Twiddle factors for IMDCT */
++    state->pre1 = memalign (16, 128 * sizeof (complex_t));
++    if (state->pre1 == NULL)
++        goto fail;
++
++    state->post1 = memalign (16, 64 * sizeof (complex_t));
++    if (state->post1 == NULL)
++        goto fail;
++
++    state->pre2 = memalign (16, 64 * sizeof (complex_t));
++    if (state->pre2 == NULL)
++        goto fail;
++
++    state->post2 = memalign (16, 32 * sizeof (complex_t));
++    if (state->post2 == NULL)
++        goto fail;
++
++    state->a52_imdct_window = memalign (16, 256 * sizeof (sample_t));
++    if (state->a52_imdct_window == NULL)
++        goto fail;
++
+     for (i = 0; i < 256 * 12; i++)
+ 	state->samples[i] = 0;
+ 
+@@ -73,9 +110,27 @@
+ 
+     state->lfsr_state = 1;
+ 
+-    a52_imdct_init (mm_accel);
++    a52_imdct_init (state, mm_accel);
+ 
+     return state;
++
++fail:
++    if ( state )
++    {
++        free (state->a52_imdct_window);
++        free (state->post2);
++        free (state->pre2);
++        free (state->post1);
++        free (state->pre1);
++        free (state->roots128);
++        free (state->roots64);
++        free (state->roots32);
++        free (state->roots16);
++        free (state->samples);
++        free (state);
++    }
++    return NULL;
++
+ }
+ 
+ sample_t * a52_samples (a52_state_t * state)
+@@ -825,7 +880,7 @@
+ 		       state->dynrng, 0, 7);
+ 	    for (i = 7; i < 256; i++)
+ 		(samples-256)[i] = 0;
+-	    a52_imdct_512 (samples - 256, samples + 1536 - 256, state->bias);
++	    a52_imdct_512 (state, samples - 256, samples + 1536 - 256, state->bias);
+ 	} else {
+ 	    /* just skip the LFE coefficients */
+ 	    coeff_get (state, samples + 1280, &state->lfe_expbap, &quantizer,
+@@ -854,10 +909,10 @@
+ 
+ 	    if (coeff[i]) {
+ 		if (blksw[i])
+-		    a52_imdct_256 (samples + 256 * i, samples + 1536 + 256 * i,
++		    a52_imdct_256 (state, samples + 256 * i, samples + 1536 + 256 * i,
+ 				   bias);
+ 		else 
+-		    a52_imdct_512 (samples + 256 * i, samples + 1536 + 256 * i,
++		    a52_imdct_512 (state, samples + 256 * i, samples + 1536 + 256 * i,
+ 				   bias);
+ 	    } else {
+ 		int j;
+@@ -883,11 +938,11 @@
+ 
+ 	if (blksw[0])
+ 	    for (i = 0; i < nfchans; i++)
+-		a52_imdct_256 (samples + 256 * i, samples + 1536 + 256 * i,
++		a52_imdct_256 (state, samples + 256 * i, samples + 1536 + 256 * i,
+ 			       state->bias);
+ 	else 
+ 	    for (i = 0; i < nfchans; i++)
+-		a52_imdct_512 (samples + 256 * i, samples + 1536 + 256 * i,
++		a52_imdct_512 (state, samples + 256 * i, samples + 1536 + 256 * i,
+ 			       state->bias);
+     }
+ 
+@@ -896,6 +951,15 @@
+ 
+ void a52_free (a52_state_t * state)
+ {
++    free (state->a52_imdct_window);
++    free (state->post2);
++    free (state->pre2);
++    free (state->post1);
++    free (state->pre1);
++    free (state->roots128);
++    free (state->roots64);
++    free (state->roots32);
++    free (state->roots16);
+     free (state->samples);
+     free (state);
+ }

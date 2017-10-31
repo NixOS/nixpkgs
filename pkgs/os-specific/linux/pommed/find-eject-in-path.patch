@@ -1,0 +1,12 @@
+diff -Naur pommed-1.39-orig/pommed/cd_eject.c pommed-1.39/pommed/cd_eject.c
+--- pommed-1.39-orig/pommed/cd_eject.c	2011-06-02 05:24:05.000000000 -0400
++++ pommed-1.39/pommed/cd_eject.c	2012-03-20 14:25:33.397712520 -0400
+@@ -100,7 +100,7 @@
+       for (fd = 3; fd < max_fd; fd++)
+ 	close(fd);
+ 
+-      execve("/usr/bin/eject", eject_argv, eject_envp);
++      execvpe("eject", eject_argv, eject_envp);
+ 
+       logmsg(LOG_ERR, "Could not execute eject: %s", strerror(errno));
+       exit(1);

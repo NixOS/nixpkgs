@@ -1,0 +1,16 @@
+diff --git a/functions/fenv.apply.fish b/functions/fenv.apply.fish
+index 34a25e3..6837e7f 100644
+--- a/functions/fenv.apply.fish
++++ b/functions/fenv.apply.fish
+@@ -30,8 +30,9 @@ function fenv.apply
+ 
+         if test "$key" = 'PATH'
+           set value (echo $value | tr ':' '\n')
++          set -g -x $key $value ^/dev/null
++        else
++          set -g -x $key $value
+         end
+-
+-        set -g -x $key $value
+     end
+ end

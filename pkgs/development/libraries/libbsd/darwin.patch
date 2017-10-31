@@ -1,0 +1,675 @@
+diff --git a/configure.ac b/configure.ac
+index 5a432d4..a69ae0b 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -55,7 +55,7 @@ AS_CASE([$host_os],
+ )
+ 
+ # Checks for header files.
+-AC_CHECK_HEADERS([sys/ndir.h sys/dir.h ndir.h dirent.h])
++AC_CHECK_HEADERS([sys/ndir.h sys/dir.h ndir.h dirent.h stdio_ext.h])
+ 
+ # Checks for typedefs, structures, and compiler characteristics.
+ AC_TYPE_UID_T
+@@ -143,6 +143,31 @@ AC_CHECK_FUNCS([clearenv dirfd fopencookie __fpurge \
+                 pstat_getproc sysconf])
+ AM_CONDITIONAL(HAVE_GETENTROPY, [test "x$ac_cv_func_getentropy" = "xtrue"])
+ 
++HostOS=`echo "$host" | sed 's/.*-//'`
++os_is_macosx=false
++nonLinuxOS=false
++AC_SUBST(HostOS)
++case ${HostOS} in
++	darwin* | powerpc*-*-darwin* | freebsd* | netbsd* | openbsd*)
++		os_is_macosx=true
++		nonLinuxOS=true
++		echo HostOS="$HostOS"
++		;;
++	*)
++		echo host="$host"
++		echo HostOS="$HostOS"
++		os_is_macosx=false
++		nonLinuxOS=false
++		;;
++esac		
++AM_CONDITIONAL([IS_DARWIN], [test x$os_is_macosx = xtrue])
++AM_COND_IF([IS_DARWIN],
++	[AC_DEFINE([IS_DARWIN], [1], [Get HostOS Type is Darwin])])
++
++AM_CONDITIONAL([NON_LINUX], [test x$userdefine_gethostbyname_r = xtrue])
++AM_COND_IF([NON_LINUX],
++	[AC_DEFINE([NON_LINUX], [1], [Get HostOS Type])])
++
+ AC_CONFIG_FILES([
+ 	Makefile
+ 	include/Makefile
+diff --git a/include/bsd/libutil.h b/include/bsd/libutil.h
+index ebb6160..ce882bf 100644
+--- a/include/bsd/libutil.h
++++ b/include/bsd/libutil.h
+@@ -39,7 +39,9 @@
+ #ifndef _LIBUTIL_H_
+ #define _LIBUTIL_H_
+ 
++#ifdef HAVE_FEATURES_H
+ #include <features.h>
++#endif
+ #include <sys/cdefs.h>
+ #include <sys/types.h>
+ #include <stdint.h>
+diff --git a/include/bsd/stdio.h b/include/bsd/stdio.h
+index 7697425..ef34c4f 100644
+--- a/include/bsd/stdio.h
++++ b/include/bsd/stdio.h
+@@ -44,12 +44,16 @@
+ __BEGIN_DECLS
+ const char *fmtcheck(const char *, const char *);
+ 
++#if !defined(darwin) && !defined(__APPLE__) && !defined(MACOSX)
+ /* XXX: The function requires cooperation from the system libc to store the
+  * line buffer in the FILE struct itself. */
+ char *fgetln(FILE *fp, size_t *lenp)
+ 	__attribute__((deprecated("This functions cannot be safely ported, "
+ 	                          "use getline(3) instead, as it is supported "
+ 	                          "by GNU and POSIX.1-2008.")));
++#else
++char *fgetln(FILE *fp, size_t *lenp);
++#endif
+ 
+ /*
+  * Note: We diverge from the FreeBSD, OpenBSD and DragonFlyBSD declarations,
+diff --git a/include/bsd/string.h b/include/bsd/string.h
+index ee2f953..a3ab077 100644
+--- a/include/bsd/string.h
++++ b/include/bsd/string.h
+@@ -37,11 +37,14 @@
+ #include <sys/types.h>
+ 
+ __BEGIN_DECLS
+-size_t strlcpy(char *dst, const char *src, size_t siz);
+-size_t strlcat(char *dst, const char *src, size_t siz);
+ char *strnstr(const char *str, const char *find, size_t str_len);
++#if defined(darwin) || defined(__APPLE__) || defined(MACOSX)
++size_t bsd_strlcpy(char *dst, const char *src, size_t siz);
++size_t bsd_strlcat(char *dst, const char *src, size_t siz);
++void bsd_strmode(mode_t mode, char *str);
++#else
+ void strmode(mode_t mode, char *str);
+-
++#endif
+ void explicit_bzero(void *buf, size_t len);
+ __END_DECLS
+ 
+diff --git a/src/Makefile.am b/src/Makefile.am
+index ad83dbf..0f2a7ee 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -54,17 +54,21 @@ libbsd_la_DEPENDENCIES = \
+ 	libbsd.map
+ libbsd_la_LIBADD = \
+ 	$(CLOCK_GETTIME_LIBS)
++
++if IS_DARWIN
++libbsd_la_LDFLAGS = \
++	-Wl \
++	-version-number $(LIBBSD_ABI)
++else
+ libbsd_la_LDFLAGS = \
+ 	-Wl,--version-script=$(srcdir)/libbsd.map \
+ 	-version-number $(LIBBSD_ABI)
++endif
++
+ libbsd_la_SOURCES = \
+ 	arc4random.c \
+-	arc4random.h \
+-	arc4random_unix.h \
+-	arc4random_openbsd.h \
+ 	arc4random_uniform.c \
+ 	bsd_getopt.c \
+-	chacha_private.h \
+ 	closefrom.c \
+ 	dehumanize_number.c \
+ 	err.c \
+@@ -117,6 +121,15 @@ libbsd_la_SOURCES += \
+ 	$(nil)
+ endif
+ 
++noinst_HEADERS = \
++	arc4random.h \
++	arc4random_bsd.h \
++	arc4random_linux.h \
++	arc4random_unix.h \
++	arc4random_osx.h \
++	arc4random_openbsd.h \
++	chacha_private.h
++
+ libbsd_ctor_a_SOURCES = \
+ 	setproctitle_ctor.c \
+ 	$(nil)
+diff --git a/src/arc4random_bsd.h b/src/arc4random_bsd.h
+new file mode 100644
+index 0000000..ece2f85
+--- /dev/null
++++ b/src/arc4random_bsd.h
+@@ -0,0 +1,86 @@
++/*	$OpenBSD: arc4random_freebsd.h,v 1.2 2015/01/15 06:57:18 deraadt Exp $	*/
++
++/*
++ * Copyright (c) 1996, David Mazieres <dm@uun.org>
++ * Copyright (c) 2008, Damien Miller <djm@openbsd.org>
++ * Copyright (c) 2013, Markus Friedl <markus@openbsd.org>
++ * Copyright (c) 2014, Theo de Raadt <deraadt@openbsd.org>
++ *
++ * Permission to use, copy, modify, and distribute this software for any
++ * purpose with or without fee is hereby granted, provided that the above
++ * copyright notice and this permission notice appear in all copies.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
++ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
++ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
++ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
++ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
++ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
++ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
++ */
++
++/*
++ * Stub functions for portability.
++ */
++
++#include <sys/mman.h>
++
++#include <pthread.h>
++#include <signal.h>
++
++static pthread_mutex_t arc4random_mtx = PTHREAD_MUTEX_INITIALIZER;
++#define _ARC4_LOCK()   pthread_mutex_lock(&arc4random_mtx)
++#define _ARC4_UNLOCK() pthread_mutex_unlock(&arc4random_mtx)
++
++/*
++ * Unfortunately, pthread_atfork() is broken on FreeBSD (at least 9 and 10) if
++ * a program does not link to -lthr. Callbacks registered with pthread_atfork()
++ * appear to fail silently. So, it is not always possible to detect a PID
++ * wraparound.
++ */
++#define _ARC4_ATFORK(f) pthread_atfork(NULL, NULL, (f))
++
++static inline void
++_getentropy_fail(void)
++{
++	raise(SIGKILL);
++}
++
++static volatile sig_atomic_t _rs_forked;
++
++static inline void
++_rs_forkhandler(void)
++{
++	_rs_forked = 1;
++}
++
++static inline void
++_rs_forkdetect(void)
++{
++	static pid_t _rs_pid = 0;
++	pid_t pid = getpid();
++
++	if (_rs_pid == 0 || _rs_pid != pid || _rs_forked) {
++		_rs_pid = pid;
++		_rs_forked = 0;
++		if (rs)
++			memset(rs, 0, sizeof(*rs));
++	}
++}
++
++static inline int
++_rs_allocate(struct _rs **rsp, struct _rsx **rsxp)
++{
++	if ((*rsp = mmap(NULL, sizeof(**rsp), PROT_READ|PROT_WRITE,
++	    MAP_ANON|MAP_PRIVATE, -1, 0)) == MAP_FAILED)
++		return (-1);
++
++	if ((*rsxp = mmap(NULL, sizeof(**rsxp), PROT_READ|PROT_WRITE,
++	    MAP_ANON|MAP_PRIVATE, -1, 0)) == MAP_FAILED) {
++		munmap(*rsp, sizeof(**rsp));
++		return (-1);
++	}
++
++	_ARC4_ATFORK(_rs_forkhandler);
++	return (0);
++}
+diff --git a/src/arc4random_linux.h b/src/arc4random_linux.h
+new file mode 100644
+index 0000000..d61a8db
+--- /dev/null
++++ b/src/arc4random_linux.h
+@@ -0,0 +1,86 @@
++/*	$OpenBSD: arc4random_linux.h,v 1.8 2014/08/13 06:04:10 deraadt Exp $	*/
++
++/*
++ * Copyright (c) 1996, David Mazieres <dm@uun.org>
++ * Copyright (c) 2008, Damien Miller <djm@openbsd.org>
++ * Copyright (c) 2013, Markus Friedl <markus@openbsd.org>
++ * Copyright (c) 2014, Theo de Raadt <deraadt@openbsd.org>
++ *
++ * Permission to use, copy, modify, and distribute this software for any
++ * purpose with or without fee is hereby granted, provided that the above
++ * copyright notice and this permission notice appear in all copies.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
++ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
++ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
++ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
++ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
++ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
++ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
++ */
++
++/*
++ * Stub functions for portability.
++ */
++
++#include <sys/mman.h>
++
++#include <pthread.h>
++#include <signal.h>
++
++static pthread_mutex_t arc4random_mtx = PTHREAD_MUTEX_INITIALIZER;
++#define _ARC4_LOCK()   pthread_mutex_lock(&arc4random_mtx)
++#define _ARC4_UNLOCK() pthread_mutex_unlock(&arc4random_mtx)
++
++#ifdef __GLIBC__
++extern void *__dso_handle;
++extern int __register_atfork(void (*)(void), void(*)(void), void (*)(void), void *);
++#define _ARC4_ATFORK(f) __register_atfork(NULL, NULL, (f), __dso_handle)
++#else
++#define _ARC4_ATFORK(f) pthread_atfork(NULL, NULL, (f))
++#endif
++
++static inline void
++_getentropy_fail(void)
++{
++	raise(SIGKILL);
++}
++
++static volatile sig_atomic_t _rs_forked;
++
++static inline void
++_rs_forkhandler(void)
++{
++	_rs_forked = 1;
++}
++
++static inline void
++_rs_forkdetect(void)
++{
++	static pid_t _rs_pid = 0;
++	pid_t pid = getpid();
++
++	if (_rs_pid == 0 || _rs_pid != pid || _rs_forked) {
++		_rs_pid = pid;
++		_rs_forked = 0;
++		if (rs)
++			memset(rs, 0, sizeof(*rs));
++	}
++}
++
++static inline int
++_rs_allocate(struct _rs **rsp, struct _rsx **rsxp)
++{
++	if ((*rsp = mmap(NULL, sizeof(**rsp), PROT_READ|PROT_WRITE,
++	    MAP_ANON|MAP_PRIVATE, -1, 0)) == MAP_FAILED)
++		return (-1);
++
++	if ((*rsxp = mmap(NULL, sizeof(**rsxp), PROT_READ|PROT_WRITE,
++	    MAP_ANON|MAP_PRIVATE, -1, 0)) == MAP_FAILED) {
++		munmap(*rsp, sizeof(**rsp));
++		return (-1);
++	}
++
++	_ARC4_ATFORK(_rs_forkhandler);
++	return (0);
++}
+diff --git a/src/arc4random_osx.h b/src/arc4random_osx.h
+new file mode 100644
+index 0000000..14771a6
+--- /dev/null
++++ b/src/arc4random_osx.h
+@@ -0,0 +1,82 @@
++/*	$OpenBSD: arc4random_osx.h,v 1.10 2015/09/11 11:52:55 deraadt Exp $	*/
++
++/*
++ * Copyright (c) 1996, David Mazieres <dm@uun.org>
++ * Copyright (c) 2008, Damien Miller <djm@openbsd.org>
++ * Copyright (c) 2013, Markus Friedl <markus@openbsd.org>
++ * Copyright (c) 2014, Theo de Raadt <deraadt@openbsd.org>
++ *
++ * Permission to use, copy, modify, and distribute this software for any
++ * purpose with or without fee is hereby granted, provided that the above
++ * copyright notice and this permission notice appear in all copies.
++ *
++ * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
++ * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
++ * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
++ * ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
++ * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
++ * ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
++ * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
++ */
++
++/*
++ * Stub functions for portability.
++ */
++
++#include <sys/mman.h>
++
++#include <unistd.h>
++#include <pthread.h>
++#include <signal.h>
++
++static pthread_mutex_t arc4random_mtx = PTHREAD_MUTEX_INITIALIZER;
++#define _ARC4_LOCK()   pthread_mutex_lock(&arc4random_mtx)
++#define _ARC4_UNLOCK() pthread_mutex_unlock(&arc4random_mtx)
++
++#define _ARC4_ATFORK(f) pthread_atfork(NULL, NULL, (f))
++
++static inline void
++_getentropy_fail(void)
++{
++	raise(SIGKILL);
++}
++
++static volatile sig_atomic_t _rs_forked;
++
++static inline void
++_rs_forkhandler(void)
++{
++	_rs_forked = 1;
++}
++
++static inline void
++_rs_forkdetect(void)
++{
++	static pid_t _rs_pid = 0;
++	pid_t pid = getpid();
++
++	if (_rs_pid == 0 || _rs_pid != pid || _rs_forked) {
++		_rs_pid = pid;
++		_rs_forked = 0;
++		if (rs)
++			memset(rs, 0, sizeof(*rs));
++	}
++}
++
++static inline int
++_rs_allocate(struct _rs **rsp, struct _rsx **rsxp)
++{
++	if ((*rsp = mmap(NULL, sizeof(**rsp), PROT_READ|PROT_WRITE,
++	    MAP_ANON|MAP_PRIVATE, -1, 0)) == MAP_FAILED)
++		return (-1);
++
++	if ((*rsxp = mmap(NULL, sizeof(**rsxp), PROT_READ|PROT_WRITE,
++	    MAP_ANON|MAP_PRIVATE, -1, 0)) == MAP_FAILED) {
++		munmap(*rsp, sizeof(**rsp));
++		*rsp = NULL;
++		return (-1);
++	}
++
++	_ARC4_ATFORK(_rs_forkhandler);
++	return (0);
++}
+diff --git a/src/fgetln.c b/src/fgetln.c
+index 4d1726e..9c73788 100644
+--- a/src/fgetln.c
++++ b/src/fgetln.c
+@@ -30,7 +30,9 @@
+ #include <sys/types.h>
+ #include <string.h>
+ 
++#if !defined(darwin) && !defined(__APPLE__) && !defined(MACOSX)
+ #include "local-link.h"
++#endif
+ 
+ #ifdef HAVE_GETLINE
+ struct filebuf {
+@@ -75,9 +77,11 @@ fgetln(FILE *stream, size_t *len)
+ 		return fb->buf;
+ 	}
+ }
++#if !defined(darwin) && !defined(__APPLE__) && !defined(MACOSX)
+ libbsd_link_warning(fgetln,
+                     "This functions cannot be safely ported, use getline(3) "
+                     "instead, as it is supported by GNU and POSIX.1-2008.")
++#endif
+ #else
+ #error "Function fgetln() needs to be ported."
+ #endif
+diff --git a/src/fpurge.c b/src/fpurge.c
+index 462535a..e7eb46f 100644
+--- a/src/fpurge.c
++++ b/src/fpurge.c
+@@ -26,9 +26,11 @@
+ 
+ #include <errno.h>
+ #include <stdio.h>
++#if HAVE___FPURGE
+ #include <stdio_ext.h>
++#endif
+ 
+-#ifdef HAVE___FPURGE
++#ifdef HAVE___FPURGE                   /* glibc >= 2.2, Haiku, Solaris >= 7 */
+ int
+ fpurge(FILE *fp)
+ {
+@@ -42,5 +44,55 @@ fpurge(FILE *fp)
+ 	return 0;
+ }
+ #else
+-#error "Function fpurge() needs to be ported."
++#define fp_ fp
++//#error "Function fpurge() needs to be ported."
++//#elif HAVE_FPURGE                   /* FreeBSD, NetBSD, OpenBSD, DragonFly, Mac OS X, Cygwin 1.7 */
++int
++fpurge(FILE *fp)
++{
++	if (fp == NULL || fileno(fp) < 0) {
++		errno = EBADF;
++		return EOF;
++	}
++
++  /* Call the system's fpurge function.  */
++# undef fpurge
++# if !HAVE_DECL_FPURGE
++  extern int fpurge (FILE *);
++# endif
++  int result = fpurge (fp);
++# if defined __sferror || defined __DragonFly__ /* FreeBSD, NetBSD, OpenBSD, DragonFly, Mac OS X, Cygwin */
++  if (result == 0)
++    /* Correct the invariants that fpurge broke.
++       <stdio.h> on BSD systems says:
++         "The following always hold: if _flags & __SRD, _w is 0."
++       If this invariant is not fulfilled and the stream is read-write but
++       currently reading, subsequent putc or fputc calls will write directly
++       into the buffer, although they shouldn't be allowed to.  */
++    if ((fp_->_flags & __SRD) != 0)
++      fp_->_w = 0;
++#endif
++  return result;
++}
++//#endif
++#endif
++
++#ifdef TEST
++int
++main()
++{
++	static FILE fp_bad;
++	FILE *fp;
++
++	if (fpurge(&fp_bad) == 0)
++		return 1;
++
++	fp = fopen("/dev/zero", "r");
++	if (fpurge(fp) < 0)
++		return 1;
++
++	fclose(fp);
++
++	return 0;
++}
+ #endif
+diff --git a/src/funopen.c b/src/funopen.c
+index 7d6ae31..9963162 100644
+--- a/src/funopen.c
++++ b/src/funopen.c
+@@ -137,6 +137,7 @@ funopen(const void *cookie,
+ 
+ 	return fopencookie(cookiewrap, mode, funcswrap);
+ }
++#elif defined(darwin) || defined(__APPLE__) || defined(MACOSX)
+ #else
+ #error "Function funopen() needs to be ported."
+ #endif
+diff --git a/src/getentropy.c b/src/getentropy.c
+index 3f11a1e..8a23a07 100644
+--- a/src/getentropy.c
++++ b/src/getentropy.c
+@@ -28,9 +28,7 @@
+ #include "getentropy_linux.c"
+ #elif defined(__GNU__)
+ #include "getentropy_hurd.c"
+-#elif defined(__FreeBSD__) || defined(__FreeBSD_kernel__)
+-#include "getentropy_bsd.c"
+-#elif defined(__NetBSD__)
++#elif defined(__FreeBSD__) || defined(__FreeBSD_kernel__) || defined(__NetBSD__)
+ #include "getentropy_bsd.c"
+ #elif defined(__sun)
+ #include "getentropy_solaris.c"
+diff --git a/src/hash/sha512.h b/src/hash/sha512.h
+index 4f368a1..ab22fc1 100644
+--- a/src/hash/sha512.h
++++ b/src/hash/sha512.h
+@@ -29,7 +29,11 @@
+ #ifndef _SHA512_H_
+ #define _SHA512_H_
+ 
++#if defined(darwin) || defined(__APPLE__) || defined(MACOSX)
++#include <stdint.h>
++#else
+ #include <sys/types.h>
++#endif
+ 
+ #define SHA512_DIGEST_LENGTH		64
+ 
+diff --git a/src/hash/sha512c.c b/src/hash/sha512c.c
+index c2a93be..f69013d 100644
+--- a/src/hash/sha512c.c
++++ b/src/hash/sha512c.c
+@@ -27,7 +27,11 @@
+ #include <sys/cdefs.h>
+ __FBSDID("$FreeBSD$");
+ 
++#if defined(darwin) || defined(__APPLE__) || defined(MACOSX)
++#include <machine/endian.h>
++#else
+ #include <sys/endian.h>
++#endif
+ #include <sys/types.h>
+ 
+ #include <string.h>
+diff --git a/src/nlist.c b/src/nlist.c
+index 0cffe55..f785b61 100644
+--- a/src/nlist.c
++++ b/src/nlist.c
+@@ -27,6 +27,7 @@
+  * SUCH DAMAGE.
+  */
+ 
++#if !defined(darwin) && !defined(__APPLE__) && !defined(MACOSX)
+ #if defined(LIBC_SCCS) && !defined(lint)
+ static char sccsid[] = "@(#)nlist.c	8.1 (Berkeley) 6/4/93";
+ #endif /* LIBC_SCCS and not lint */
+@@ -409,3 +410,4 @@ elf_sym_to_nlist(struct nlist *nl, Elf_Sym *s, Elf_Shdr *shdr, int shnum)
+ 		nl->n_type |= N_EXT;
+ }
+ #endif /* _NLIST_DO_ELF */
++#endif
+diff --git a/src/setproctitle.c b/src/setproctitle.c
+index c18c61c..b1b1591 100644
+--- a/src/setproctitle.c
++++ b/src/setproctitle.c
+@@ -32,6 +32,11 @@
+ #include <unistd.h>
+ #include <string.h>
+ 
++#if defined(darwin) || defined(__APPLE__) || defined(MACOSX)
++#define __asm__(x)
++extern char **environ;
++#endif
++
+ static struct {
+ 	/* Original value. */
+ 	const char *arg0;
+@@ -287,7 +292,14 @@ __asm__(".symver setproctitle_impl,setproctitle@@LIBBSD_0.5");
+  * for code linking against that version, and change the default to use the
+  * new version, so that new code depends on the implemented version. */
+ #ifdef HAVE_TYPEOF
++#if defined(darwin) || defined(__APPLE__) || defined(MACOSX)
++//
++// HACK: even weak aliasing breaks in clang so just comment this out for now
++//
++// extern typeof(setproctitle_impl) setproctitle_stub __attribute__((weak, alias("setproctitle_impl")));
++#else
+ extern typeof(setproctitle_impl) setproctitle_stub __attribute__((alias("setproctitle_impl")));
++#endif
+ #else
+ void setproctitle_stub(const char *fmt, ...)
+ 	__attribute__((alias("setproctitle_impl")));
+diff --git a/src/strlcat.c b/src/strlcat.c
+index 21c8afb..e036132 100644
+--- a/src/strlcat.c
++++ b/src/strlcat.c
+@@ -27,7 +27,11 @@
+  * If retval >= siz, truncation occurred.
+  */
+ size_t
++#if defined(darwin) || defined(__APPLE__) || defined(MACOSX)
++bsd_strlcat(char *dst, const char *src, size_t siz)
++#else
+ strlcat(char *dst, const char *src, size_t siz)
++#endif
+ {
+ 	char *d = dst;
+ 	const char *s = src;
+diff --git a/src/strlcpy.c b/src/strlcpy.c
+index 1719d35..c63591d 100644
+--- a/src/strlcpy.c
++++ b/src/strlcpy.c
+@@ -25,7 +25,11 @@
+  * Returns strlen(src); if retval >= siz, truncation occurred.
+  */
+ size_t
++#if defined(darwin) || defined(__APPLE__) || defined(MACOSX)
++bsd_strlcpy(char *dst, const char *src, size_t siz)
++#else
+ strlcpy(char *dst, const char *src, size_t siz)
++#endif
+ {
+ 	char *d = dst;
+ 	const char *s = src;
+diff --git a/src/strmode.c b/src/strmode.c
+index 8d825ae..c1b5f8d 100644
+--- a/src/strmode.c
++++ b/src/strmode.c
+@@ -37,7 +37,11 @@ static char sccsid[] = "@(#)strmode.c	8.3 (Berkeley) 8/15/94";
+ #include <string.h>
+ 
+ void
++#if defined(darwin) || defined(__APPLE__) || defined(MACOSX)
++bsd_strmode(mode_t mode, char *p)
++#else
+ strmode(mode_t mode, char *p)
++#endif
+ {
+ 	 /* print type */
+ 	switch (mode & S_IFMT) {

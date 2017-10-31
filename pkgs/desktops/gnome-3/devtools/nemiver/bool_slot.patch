@@ -1,0 +1,13 @@
+--- a/src/dbgengine/nmv-dbg-common.h	2014-07-09 10:36:05.000000000 +0200
++++ b/src/dbgengine/nmv-dbg-common.h	2016-08-04 22:40:28.447842746 +0200
+@@ -171,7 +171,9 @@
+ 
+     bool has_slot () const
+     {
+-        return m_slot;
++        //return m_slot;
++        // https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=822502
++        return static_cast<bool> (m_slot);
+     }
+ 
+     template<class T>

@@ -1,0 +1,27 @@
+From e4a14c61bff3a55de42718dc11b282c4d5342995 Mon Sep 17 00:00:00 2001
+From: Will Dietz <w@wdtz.org>
+Date: Tue, 14 Mar 2017 07:51:02 -0500
+Subject: [PATCH] doc/themes: install all themes, not just 'dark.theme'.
+
+---
+ doc/themes/CMakeLists.txt | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+diff --git a/doc/themes/CMakeLists.txt b/doc/themes/CMakeLists.txt
+index a954576..3a3b453 100644
+--- a/doc/themes/CMakeLists.txt
++++ b/doc/themes/CMakeLists.txt
+@@ -2,5 +2,8 @@ cmake_minimum_required (VERSION 2.8)
+ 
+ message ("-- Configuring theme documentation")
+ 
+-install (FILES README     DESTINATION ${TIMEW_DOCDIR}/doc/themes)
+-install (FILES dark.theme DESTINATION ${TIMEW_DOCDIR}/doc/themes)
++install (FILES README           DESTINATION ${TIMEW_DOCDIR}/doc/themes)
++install (FILES dark.theme       DESTINATION ${TIMEW_DOCDIR}/doc/themes)
++install (FILES dark_blue.theme  DESTINATION ${TIMEW_DOCDIR}/doc/themes)
++install (FILES dark_green.theme DESTINATION ${TIMEW_DOCDIR}/doc/themes)
++install (FILES dark_red.theme   DESTINATION ${TIMEW_DOCDIR}/doc/themes)
+-- 
+2.12.0
+

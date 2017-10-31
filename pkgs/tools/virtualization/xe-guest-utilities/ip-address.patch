@@ -1,0 +1,16 @@
+diff -uNr a/xe-update-guest-attrs b/xe-update-guest-attrs
+--- a/xe-update-guest-attrs	2012-09-25 12:45:14.000000000 +0200
++++ b/xe-update-guest-attrs	2012-11-21 16:46:35.000000000 +0100
+@@ -177,9 +177,9 @@
+ #           collisions:0 txqueuelen:0 
+ #           RX bytes:3604609 (3.4 MiB)  TX bytes:3604609 (3.4 MiB)
+ 
+-ifs=`/sbin/ifconfig | sed -n -e 's/^\([a-z0-9]\+\).*/name \1/p' \
+-    -e 's/.*inet addr:\('$IPADDR_RE'\) .*/ipv4 \1/p' \
+-    -e 's+.*inet6 addr: \('$IPADDR6_RE'\)/.*+ipv6 \1+p' | \
++ifs=`ip addr show | sed -n -e 's/^[[:digit:]]*: \([a-z0-9]*\): .*/name \1 /gp;' \
++    -e 's/^[[:space:]]\{4\}inet \('${IPADDR_RE}'\)\/.*/ipv4 \1 /gp;' \
++    -e 's/^[[:space:]]\{4\}inet6 \('${IPADDR6_RE}'\)\/.*/ipv6 \1 /gp;' | \
+ while read tag value; do
+     case "${tag}" in
+         name)

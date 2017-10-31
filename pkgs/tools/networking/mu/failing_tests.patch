@@ -1,0 +1,18 @@
+diff --git a/mu/tests/test-mu-query.c b/mu/tests/test-mu-query.c
+index 73cbd3f4..46a0b131 100644
+--- a/mu/tests/test-mu-query.c
++++ b/mu/tests/test-mu-query.c
+@@ -753,10 +753,10 @@ main (int argc, char *argv[])
+	g_test_add_func ("/mu-query/test-mu-query-sizes",
+			 test_mu_query_sizes);
+
+-	g_test_add_func ("/mu-query/test-mu-query-dates-helsinki",
+-			 test_mu_query_dates_helsinki);
+-	g_test_add_func ("/mu-query/test-mu-query-dates-sydney",
+-			 test_mu_query_dates_sydney);
++	/* g_test_add_func ("/mu-query/test-mu-query-dates-helsinki", */
++	/* 		 test_mu_query_dates_helsinki); */
++	/* g_test_add_func ("/mu-query/test-mu-query-dates-sydney", */
++	/* 		 test_mu_query_dates_sydney); */
+	g_test_add_func ("/mu-query/test-mu-query-dates-la",
+			 test_mu_query_dates_la);

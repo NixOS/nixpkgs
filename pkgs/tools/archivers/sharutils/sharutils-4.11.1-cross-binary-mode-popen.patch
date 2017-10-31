@@ -1,0 +1,63 @@
+diff -Naur sharutils-4.11.1.orig/configure sharutils-4.11.1/configure
+--- sharutils-4.11.1.orig/configure	2011-06-20 11:07:40.000000000 -0400
++++ sharutils-4.11.1/configure	2011-06-20 11:09:30.000000000 -0400
+@@ -26962,33 +26962,33 @@
+   CATALOGS="$new_CATALOGS"
+ fi
+ 
+-if test "$cross_compiling" = yes; then :
+-  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
+-$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
+-as_fn_error $? "cannot run test program while cross compiling
+-See \`config.log' for more details" "$LINENO" 5; }
+-else
+-  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+-/* end confdefs.h.  */
+-
+-int
+-main ()
+-{
+-    FILE * fp = popen ("date", "rb");
+-    exit (fp == NULL);
+-  ;
+-  return 0;
+-}
+-_ACEOF
+-if ac_fn_c_try_run "$LINENO"; then :
+-
++#if test "$cross_compiling" = yes; then :
++#  { { $as_echo "$as_me:${as_lineno-$LINENO}: error: in \`$ac_pwd':" >&5
++#$as_echo "$as_me: error: in \`$ac_pwd':" >&2;}
++#as_fn_error $? "cannot run test program while cross compiling
++#See \`config.log' for more details" "$LINENO" 5; }
++#else
++#  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
++#/* end confdefs.h.  */
++#
++#int
++#main ()
++#{
++#    FILE * fp = popen ("date", "rb");
++#    exit (fp == NULL);
++#  ;
++#  return 0;
++#}
++#_ACEOF
++#if ac_fn_c_try_run "$LINENO"; then :
++#
+ $as_echo "#define BINARY_MODE_POPEN 1" >>confdefs.h
+-
+-
+-fi
+-rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
+-  conftest.$ac_objext conftest.beam conftest.$ac_ext
+-fi
++#
++#
++#fi
++#rm -f core *.core core.conftest.* gmon.out bb.out conftest$ac_exeext \
++#  conftest.$ac_objext conftest.beam conftest.$ac_ext
++#fi
+ 
+ 
+ 

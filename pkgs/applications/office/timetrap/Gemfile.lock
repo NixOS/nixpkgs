@@ -1,0 +1,19 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    chronic (0.10.2)
+    sequel (4.0.0)
+    sqlite3 (1.3.11)
+    timetrap (1.10.0)
+      chronic (~> 0.10.2)
+      sequel (~> 4.0.0)
+      sqlite3 (~> 1.3.3)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  timetrap
+
+BUNDLED WITH
+   1.10.6

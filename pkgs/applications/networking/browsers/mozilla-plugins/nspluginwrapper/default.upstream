@@ -1,0 +1,4 @@
+name nspluginwrapper
+target default.nix
+url http://nspluginwrapper.org/download/
+version_link /nspluginwrapper-[0-9]+

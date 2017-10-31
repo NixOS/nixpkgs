@@ -1,0 +1,294 @@
+#! /usr/bin/perl -w
+
+# Typical command to generate the list of tarballs:
+
+# export i="mirror://xorg/X11R7.7/src/everything/"; cat $(PRINT_PATH=1 nix-prefetch-url $i | tail -n 1) | perl -e 'while (<>) { if (/(href|HREF)="([^"]*.bz2)"/) { print "$ENV{'i'}$2\n"; }; }' | sort > tarballs-7.7.list
+# manually update extra.list
+# then run: cat tarballs-7.7.list extra.list old.list | perl ./generate-expr-from-tarballs.pl
+# tarballs-x.y.list is generated + changes for individual packages
+# extra.list are packages not contained in the tarballs
+# old.list are packages that used to be part of the tarballs
+
+
+use strict;
+
+my $tmpDir = "/tmp/xorg-unpack";
+
+
+my %pkgURLs;
+my %pkgHashes;
+my %pkgNames;
+my %pkgRequires;
+
+my %pcMap;
+
+my %extraAttrs;
+
+
+my @missingPCs = ("fontconfig", "libdrm", "libXaw", "zlib", "perl", "python", "mesa", "mkfontscale", "mkfontdir", "bdftopcf", "libxslt", "openssl", "gperf", "m4");
+$pcMap{$_} = $_ foreach @missingPCs;
+$pcMap{"freetype2"} = "freetype";
+$pcMap{"libpng12"} = "libpng";
+$pcMap{"libpng"} = "libpng";
+$pcMap{"dbus-1"} = "dbus";
+$pcMap{"uuid"} = "libuuid";
+$pcMap{"libudev"} = "udev";
+$pcMap{"gl"} = "mesa";
+$pcMap{"\$PIXMAN"} = "pixman";
+$pcMap{"\$RENDERPROTO"} = "renderproto";
+$pcMap{"\$DRI3PROTO"} = "dri3proto";
+$pcMap{"\$DRI2PROTO"} = "dri2proto";
+
+
+my $downloadCache = "./download-cache";
+$ENV{'NIX_DOWNLOAD_CACHE'} = $downloadCache;
+mkdir $downloadCache, 0755;
+
+
+while (<>) {
+    chomp;
+    my $tarball = "$_";
+    print "\nDOING TARBALL $tarball\n";
+
+    my $pkg;
+    if ($tarball =~ s/:([a-zA-Z0-9_]+)$//) {
+      $pkg = $1;
+    } else {
+      $tarball =~ /\/((?:(?:[A-Za-z0-9]|(?:-[^0-9])|(?:-[0-9]*[a-z]))+))[^\/]*$/;
+      die unless defined $1;
+      $pkg = $1;
+      $pkg =~ s/-//g;
+      #next unless $pkg eq "xcbutil";
+    }
+
+    $tarball =~ /\/([^\/]*)\.tar\.(bz2|gz|xz)$/;
+    my $pkgName = $1;
+
+    print "  $pkg $pkgName\n";
+
+    if (defined $pkgNames{$pkg}) {
+        print "  SKIPPING\n";
+        next;
+    }
+
+    $pkgURLs{$pkg} = $tarball;
+    $pkgNames{$pkg} = $pkgName;
+
+    my ($hash, $path) = `PRINT_PATH=1 QUIET=1 nix-prefetch-url '$tarball'`;
+    chomp $hash;
+    chomp $path;
+    $pkgHashes{$pkg} = $hash;
+
+    print "\nunpacking $path\n";
+    system "rm -rf '$tmpDir'";
+    mkdir $tmpDir, 0700;
+    system "cd '$tmpDir' && tar xf '$path'";
+    die "cannot unpack `$path'" if $? != 0;
+    print "\n";
+
+    my $pkgDir = `echo $tmpDir/*`;
+    chomp $pkgDir;
+
+    my $provides = `find $pkgDir -name "*.pc.in"`;
+    my @provides2 = split '\n', $provides;
+    my @requires = ();
+
+    foreach my $pcFile (@provides2) {
+        my $pc = $pcFile;
+        $pc =~ s/.*\///;
+        $pc =~ s/.pc.in//;
+        print "PROVIDES $pc\n";
+        die "collision with $pcMap{$pc}" if defined $pcMap{$pc};
+        $pcMap{$pc} = $pkg;
+
+        open FOO, "<$pcFile" or die;
+        while (<FOO>) {
+            if (/Requires:(.*)/) {
+                my @reqs = split ' ', $1;
+                foreach my $req (@reqs) {
+                    next unless $req =~ /^[a-z]+$/;
+                    print "REQUIRE (from $pc): $req\n";
+                    push @requires, $req;
+                }
+            }
+        }
+        close FOO;
+
+    }
+
+    my $file;
+    {
+        local $/;
+        open FOO, "cd '$tmpDir'/* && grep -v '^ *#' configure.ac |";
+        $file = <FOO>;
+        close FOO;
+    }
+
+    if ($file =~ /XAW_CHECK_XPRINT_SUPPORT/) {
+        push @requires, "libXaw";
+    }
+
+    if ($file =~ /zlib is required/ || $file =~ /AC_CHECK_LIB\(z\,/) {
+        push @requires, "zlib";
+    }
+
+    if ($file =~ /Perl is required/) {
+        push @requires, "perl";
+    }
+
+    if ($file =~ /AC_PATH_PROG\(BDFTOPCF/) {
+        push @requires, "bdftopcf";
+    }
+
+    if ($file =~ /AC_PATH_PROG\(MKFONTSCALE/) {
+        push @requires, "mkfontscale";
+    }
+
+    if ($file =~ /AC_PATH_PROG\(MKFONTDIR/) {
+        push @requires, "mkfontdir";
+    }
+
+    if ($file =~ /AM_PATH_PYTHON/) {
+        push @requires, "python";
+    }
+
+    if ($file =~ /AC_PATH_PROG\(FCCACHE/) {
+        # Don't run fc-cache.
+        die if defined $extraAttrs{$pkg};
+        $extraAttrs{$pkg} = " preInstall = \"installFlags=(FCCACHE=true)\"; ";
+    }
+
+    my $isFont;
+
+    if ($file =~ /XORG_FONT_BDF_UTILS/) {
+        push @requires, "bdftopcf", "mkfontdir";
+        $isFont = 1;
+    }
+
+    if ($file =~ /XORG_FONT_SCALED_UTILS/) {
+        push @requires, "mkfontscale", "mkfontdir";
+        $isFont = 1;
+    }
+
+    if ($file =~ /XORG_FONT_UCS2ANY/) {
+        push @requires, "fontutil", "mkfontscale";
+        $isFont = 1;
+    }
+
+    if ($isFont) {
+        $extraAttrs{$pkg} = " configureFlags = \"--with-fontrootdir=\$(out)/lib/X11/fonts\"; ";
+    }
+
+    sub process {
+        my $requires = shift;
+        my $s = shift;
+        $s =~ s/\[/\ /g;
+        $s =~ s/\]/\ /g;
+        $s =~ s/\,/\ /g;
+        foreach my $req (split / /, $s) {
+            next if $req eq ">=";
+            #next if $req =~ /^\$/;
+            next if $req =~ /^[0-9]/;
+            next if $req =~ /^\s*$/;
+            next if $req eq '$REQUIRED_MODULES';
+            next if $req eq '$REQUIRED_LIBS';
+            next if $req eq '$XDMCP_MODULES';
+            next if $req eq '$XORG_MODULES';
+            print "REQUIRE: $req\n";
+            push @{$requires}, $req;
+        }
+    }
+
+    #process \@requires, $1 while $file =~ /PKG_CHECK_MODULES\([^,]*,\s*[\[]?([^\)\[]*)/g;
+    process \@requires, $1 while $file =~ /PKG_CHECK_MODULES\([^,]*,([^\)\,]*)/g;
+    process \@requires, $1 while $file =~ /MODULES=\"(.*)\"/g;
+    process \@requires, $1 while $file =~ /REQUIRED_LIBS=\"(.*)\"/g;
+    process \@requires, $1 while $file =~ /REQUIRED_MODULES=\"(.*)\"/g;
+    process \@requires, $1 while $file =~ /REQUIRES=\"(.*)\"/g;
+    process \@requires, $1 while $file =~ /X11_REQUIRES=\'(.*)\'/g;
+    process \@requires, $1 while $file =~ /XDMCP_MODULES=\"(.*)\"/g;
+    process \@requires, $1 while $file =~ /XORG_MODULES=\"(.*)\"/g;
+    process \@requires, $1 while $file =~ /NEEDED=\"(.*)\"/g;
+    process \@requires, $1 while $file =~ /ivo_requires=\"(.*)\"/g;
+    process \@requires, $1 while $file =~ /XORG_DRIVER_CHECK_EXT\([^,]*,([^\)]*)\)/g;
+
+    push @requires, "libxslt" if $pkg =~ /libxcb/;
+    push @requires, "gperf", "m4", "xproto" if $pkg =~ /xcbutil/;
+
+    print "REQUIRES $pkg => @requires\n";
+    $pkgRequires{$pkg} = \@requires;
+
+    print "done\n";
+}
+
+
+print "\nWRITE OUT\n";
+
+open OUT, ">default.nix";
+
+print OUT "";
+print OUT <<EOF;
+# THIS IS A GENERATED FILE.  DO NOT EDIT!
+args @ { clangStdenv, fetchurl, fetchgit, fetchpatch, stdenv, pkgconfig, intltool, freetype, fontconfig
+, libxslt, expat, libpng, zlib, perl, mesa_drivers, spice_protocol
+, dbus, libuuid, openssl, gperf, m4, libevdev, tradcpp, libinput, mcpp, makeWrapper, autoreconfHook
+, autoconf, automake, libtool, xmlto, asciidoc, flex, bison, python, mtdev, pixman, ... }: with args;
+
+let
+
+  mkDerivation = name: attrs:
+    let newAttrs = (overrides."\${name}" or (x: x)) attrs;
+        stdenv = newAttrs.stdenv or args.stdenv;
+      in stdenv.mkDerivation ((removeAttrs newAttrs [ "stdenv" ]) // {
+        hardeningDisable = [ "bindnow" "relro" ];
+      });
+
+  overrides = import ./overrides.nix {inherit args xorg;};
+
+  xorg = rec {
+
+  inherit pixman;
+
+EOF
+
+
+foreach my $pkg (sort (keys %pkgURLs)) {
+    print "$pkg\n";
+
+    my %requires = ();
+    my $inputs = "";
+    foreach my $req (sort @{$pkgRequires{$pkg}}) {
+        if (defined $pcMap{$req}) {
+            # Some packages have .pc that depends on itself.
+            next if $pcMap{$req} eq $pkg;
+            if (!defined $requires{$pcMap{$req}}) {
+                $inputs .= "$pcMap{$req} ";
+                $requires{$pcMap{$req}} = 1;
+            }
+        } else {
+            print "  NOT FOUND: $req\n";
+        }
+    }
+
+    my $extraAttrs = $extraAttrs{"$pkg"};
+    $extraAttrs = "" unless defined $extraAttrs;
+
+    print OUT <<EOF
+  $pkg = (mkDerivation "$pkg" {
+    name = "$pkgNames{$pkg}";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = $pkgURLs{$pkg};
+      sha256 = "$pkgHashes{$pkg}";
+    };
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ $inputs];$extraAttrs
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) // {inherit $inputs;};
+
+EOF
+}
+
+print OUT "}; in xorg\n";
+
+close OUT;

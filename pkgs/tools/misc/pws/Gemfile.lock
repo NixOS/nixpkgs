@@ -1,0 +1,19 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    clipboard (1.0.6)
+    paint (1.0.1)
+    pbkdf2-ruby (0.2.1)
+    pws (1.0.6)
+      clipboard (~> 1.0.5)
+      paint (>= 0.8.7)
+      pbkdf2-ruby
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  pws
+
+BUNDLED WITH
+   1.11.2

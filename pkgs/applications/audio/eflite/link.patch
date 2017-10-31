@@ -1,0 +1,11 @@
+--- eflite-0.4.1/Makefile.in	2007-01-19 01:01:09.000000000 +0100
++++ eflite-0.4.1-new/Makefile.in	2017-03-01 23:25:34.223615492 +0100
+@@ -34,7 +34,7 @@
+ 	$(CC) $(LDFLAGS) -o $@ $^ -lm $(LIBS) $(FLITE_LIBS) $(AUDIOLIBS)
+ 
+ fs.o: fs.c
+-	$(CC) $(CFLAGS) @AUDIODEFS@ -I. -I$(flite_include_dir) -DREGISTER_VOX=register_$(subst cmu_us_kal16,cmu_us_kal,$(FL_VOX)) -DSTANDALONE -DEFLITE -c -o $@ $<
++	$(CC) $(CFLAGS) @AUDIODEFS@ -I. -I$(flite_include_dir) -DREGISTER_VOX=register_$(FL_VOX) -DSTANDALONE -DEFLITE -c -o $@ $<
+ 
+ tone.o: tone.c
+ 	$(CC) $(CFLAGS) -I$(flite_include_dir) -DEFLITE -c -o $@ $<

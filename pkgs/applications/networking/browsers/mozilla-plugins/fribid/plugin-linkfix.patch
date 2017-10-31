@@ -1,0 +1,11 @@
+--- a/plugin/Makefile	2013-09-18 13:55:11.091652553 +0200
++++ b/plugin/Makefile	2013-09-18 13:58:27.513618750 +0200
+@@ -60,7 +60,7 @@
+ 	for path in $(NPAPI_PLUGIN_PATHS); do \
+ 	    (../configure --internal--remove-link $(DESTDIR)$$path/libfribidplugin.so $(NPAPI_PLUGIN_LIB) || exit 1) && \
+ 	    install -d $(DESTDIR)$$path && \
+-	    ln -sf $(NPAPI_PLUGIN_LIB) $(DESTDIR)$$path/libfribidplugin.so; \
++	    ln -sf $(DESTDIR)$(NPAPI_PLUGIN_LIB) $(DESTDIR)$$path/libfribidplugin.so; \
+ 	done
+
+ uninstall:

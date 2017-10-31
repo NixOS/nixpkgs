@@ -1,0 +1,40 @@
+From ba59a779ed41e08fa16805c1c60da39885546d0e Mon Sep 17 00:00:00 2001
+From: Jeremy Huddleston Sequoia <jeremyhu@apple.com>
+Date: Tue, 20 May 2014 10:53:00 -0700
+Subject: [PATCH 13/13] darwin: Fix test for kCGLPFAOpenGLProfile support at
+ runtime
+
+Signed-off-by: Jeremy Huddleston Sequoia <jeremyhu@apple.com>
+(cherry picked from commit 7a109268ab5b3544e7f7b99e84ef1fdf54023fb4)
+---
+ src/glx/apple/apple_visual.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/src/glx/apple/apple_visual.c b/src/glx/apple/apple_visual.c
+index 282934f..238c248 100644
+--- a/src/glx/apple/apple_visual.c
++++ b/src/glx/apple/apple_visual.c
+@@ -73,11 +73,15 @@ apple_visual_create_pfobj(CGLPixelFormatObj * pfobj, const struct glx_config * m
+    GLint vsref = 0;
+    CGLError error = 0;
+ 
+-   /* Request an OpenGL 3.2 profile if one is available */
+-   if(apple_cgl.version_major > 1 || (apple_cgl.version_major == 1 && apple_cgl.version_minor >= 3)) {
+-      attr[numattr++] = kCGLPFAOpenGLProfile;
+-      attr[numattr++] = kCGLOGLPVersion_3_2_Core;
+-   }
++   /* Request an OpenGL 3.2 profile if one is available and supported */
++   attr[numattr++] = kCGLPFAOpenGLProfile;
++   attr[numattr++] = kCGLOGLPVersion_3_2_Core;
++
++   /* Test for kCGLPFAOpenGLProfile support at runtime and roll it out if not supported */
++   attr[numattr] = 0;
++   error = apple_cgl.choose_pixel_format(attr, pfobj, &vsref);
++   if (error == kCGLBadAttribute)
++      numattr -= 2;
+ 
+    if (offscreen) {
+       apple_glx_diagnostic
+-- 
+1.9.2
+

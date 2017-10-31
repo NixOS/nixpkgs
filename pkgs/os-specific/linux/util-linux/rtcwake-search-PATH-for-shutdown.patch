@@ -1,0 +1,27 @@
+Search $PATH for the shutdown binary instead of hard-coding /sbin/shutdown,
+which isn't valid on NixOS (and a compatibility link on most other modern
+distros anyway).
+
+  -- nckx <github@tobias.gr>
+--- a/include/pathnames.h
++++ b/include/pathnames.h
+@@ -53,7 +53,7 @@
+ #ifndef _PATH_LOGIN
+ #define _PATH_LOGIN		"/bin/login"
+ #endif
+-#define _PATH_SHUTDOWN		"/sbin/shutdown"
++#define _PATH_SHUTDOWN   "shutdown"
+
+ #define _PATH_TERMCOLORS_DIRNAME "terminal-colors.d"
+ #define _PATH_TERMCOLORS_DIR	"/etc/" _PATH_TERMCOLORS_DIRNAME
+--- a/sys-utils/rtcwake.c
++++ b/sys-utils/rtcwake.c
+@@ -575,7 +575,7 @@ int main(int argc, char **argv)
+ 		arg[i++] = "now";
+ 		arg[i]   = NULL;
+ 		if (!ctl.dryrun) {
+-			execv(arg[0], arg);
++			execvp(arg[0], arg);
+ 			warn(_("failed to execute %s"), _PATH_SHUTDOWN);
+ 			rc = EXIT_FAILURE;
+ 		}

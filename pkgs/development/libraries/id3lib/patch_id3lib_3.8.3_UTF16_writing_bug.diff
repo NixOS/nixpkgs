@@ -1,0 +1,39 @@
+diff -ruN id3lib-3.8.3.orig/ChangeLog id3lib-3.8.3/ChangeLog
+--- id3lib-3.8.3.orig/ChangeLog	2003-03-02 01:23:00.000000000 +0100
++++ id3lib-3.8.3/ChangeLog	2006-02-22 00:33:59.946214472 +0100
+@@ -1,3 +1,8 @@
++2006-02-17  Jerome Couderc
++
++    * Patch from Spoon to fix UTF-16 writing bug
++      http://sourceforge.net/tracker/index.php?func=detail&aid=1016290&group_id=979&atid=300979
++
+ 2003-03-02 Sunday 17:38   Thijmen Klok <thijmen@id3lib.org>
+ 
+ 	* THANKS (1.20): added more people 
+diff -ruN id3lib-3.8.3.orig/src/io_helpers.cpp id3lib-3.8.3/src/io_helpers.cpp
+--- id3lib-3.8.3.orig/src/io_helpers.cpp	2003-03-02 01:23:00.000000000 +0100
++++ id3lib-3.8.3/src/io_helpers.cpp	2006-02-22 00:35:02.926639992 +0100
+@@ -363,11 +363,22 @@
+     // Write the BOM: 0xFEFF
+     unicode_t BOM = 0xFEFF;
+     writer.writeChars((const unsigned char*) &BOM, 2);
++    // Patch from Spoon : 2004-08-25 14:17
++    //   http://sourceforge.net/tracker/index.php?func=detail&aid=1016290&group_id=979&atid=300979
++    // Wrong code
++    //for (size_t i = 0; i < size; i += 2)
++    //{
++    //  unicode_t ch = (data[i] << 8) | data[i+1];
++    //  writer.writeChars((const unsigned char*) &ch, 2);
++    //}
++    // Right code
++    unsigned char *pdata = (unsigned char *) data.c_str();
+     for (size_t i = 0; i < size; i += 2)
+     {
+-      unicode_t ch = (data[i] << 8) | data[i+1];
++      unicode_t ch = (pdata[i] << 8) | pdata[i+1];
+       writer.writeChars((const unsigned char*) &ch, 2);
+     }
++    // End patch
+   }
+   return writer.getCur() - beg;
+ }

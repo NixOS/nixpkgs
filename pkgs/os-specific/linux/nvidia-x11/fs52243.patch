@@ -1,0 +1,14 @@
+--- a/kernel/nv-drm.c
++++ b/kernel/nv-drm.c
+@@ -115,7 +115,11 @@
+ };
+ 
+ static struct drm_driver nv_drm_driver = {
++#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 9, 0)
++    .driver_features = DRIVER_GEM | DRIVER_PRIME | DRIVER_LEGACY,
++#else
+     .driver_features = DRIVER_GEM | DRIVER_PRIME,
++#endif
+     .load = nv_drm_load,
+     .unload = nv_drm_unload,
+     .fops = &nv_drm_fops,

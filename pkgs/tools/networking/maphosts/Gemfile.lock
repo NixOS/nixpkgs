@@ -1,0 +1,19 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    colorize (0.8.0)
+    hosts (0.1.1)
+      linebreak (~> 2.0.1)
+    linebreak (2.0.1)
+    maphosts (1.1.1)
+      colorize (~> 0.7)
+      hosts (~> 0.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  maphosts
+
+BUNDLED WITH
+   1.12.5

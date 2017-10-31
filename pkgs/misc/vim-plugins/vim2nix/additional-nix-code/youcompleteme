@@ -1,0 +1,16 @@
+    buildPhase = ''
+      substituteInPlace plugin/youcompleteme.vim \
+        --replace "'ycm_path_to_python_interpreter', '''" \
+                  "'ycm_path_to_python_interpreter', '${python}/bin/python'"
+
+      rm -r third_party/ycmd
+      ln -s ${ycmd}/lib/ycmd third_party
+    '';
+
+    meta = {
+      description = "Fastest non utf-8 aware word and C completion engine for Vim";
+      homepage = http://github.com/Valloric/YouCompleteMe;
+      license = stdenv.lib.licenses.gpl3;
+      maintainers = with stdenv.lib.maintainers; [marcweber jagajaga];
+      platforms = stdenv.lib.platforms.unix;
+    };

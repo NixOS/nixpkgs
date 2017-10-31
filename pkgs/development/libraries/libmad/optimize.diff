@@ -1,0 +1,77 @@
+Index: libmad-0.15.1b/configure.ac
+===================================================================
+--- libmad-0.15.1b.orig/configure.ac	2008-03-07 20:31:23.000000000 +0000
++++ libmad-0.15.1b/configure.ac	2008-03-07 20:34:26.000000000 +0000
+@@ -124,71 +124,7 @@
+ 
+ if test "$GCC" = yes
+ then
+-    if test -z "$arch"
+-    then
+-	case "$host" in
+-	    i386-*)           ;;
+-	    i?86-*)           arch="-march=i486" ;;
+-	    arm*-empeg-*)     arch="-march=armv4 -mtune=strongarm1100" ;;
+-	    armv4*-*)         arch="-march=armv4 -mtune=strongarm" ;;
+-	    powerpc-*)        ;;
+-	    mips*-agenda-*)   arch="-mcpu=vr4100" ;;
+-	    mips*-luxsonor-*) arch="-mips1 -mcpu=r3000 -Wa,-m4010" ;;
+-	esac
+-    fi
+-
+-    case "$optimize" in
+-	-O|"-O "*)
+-	    optimize="-O"
+-	    optimize="$optimize -fforce-mem"
+-	    optimize="$optimize -fforce-addr"
+-	    : #x optimize="$optimize -finline-functions"
+-	    : #- optimize="$optimize -fstrength-reduce"
+-	    optimize="$optimize -fthread-jumps"
+-	    optimize="$optimize -fcse-follow-jumps"
+-	    optimize="$optimize -fcse-skip-blocks"
+-	    : #x optimize="$optimize -frerun-cse-after-loop"
+-	    : #x optimize="$optimize -frerun-loop-opt"
+-	    : #x optimize="$optimize -fgcse"
+-	    optimize="$optimize -fexpensive-optimizations"
+-	    optimize="$optimize -fregmove"
+-	    : #* optimize="$optimize -fdelayed-branch"
+-	    : #x optimize="$optimize -fschedule-insns"
+-	    optimize="$optimize -fschedule-insns2"
+-	    : #? optimize="$optimize -ffunction-sections"
+-	    : #? optimize="$optimize -fcaller-saves"
+-	    : #> optimize="$optimize -funroll-loops"
+-	    : #> optimize="$optimize -funroll-all-loops"
+-	    : #x optimize="$optimize -fmove-all-movables"
+-	    : #x optimize="$optimize -freduce-all-givs"
+-	    : #? optimize="$optimize -fstrict-aliasing"
+-	    : #* optimize="$optimize -fstructure-noalias"
+-
+-	    case "$host" in
+-		arm*-*)
+-		    optimize="$optimize -fstrength-reduce"
+-		    ;;
+-		mips*-*)
+-		    optimize="$optimize -fstrength-reduce"
+-		    optimize="$optimize -finline-functions"
+-		    ;;
+-		i?86-*)
+-		    optimize="$optimize -fstrength-reduce"
+-		    ;;
+-		powerpc-apple-*)
+-		    # this triggers an internal compiler error with gcc2
+-		    : #optimize="$optimize -fstrength-reduce"
+-
+-		    # this is really only beneficial with gcc3
+-		    : #optimize="$optimize -finline-functions"
+-		    ;;
+-		*)
+-		    # this sometimes provokes bugs in gcc 2.95.2
+-		    : #optimize="$optimize -fstrength-reduce"
+-		    ;;
+-	    esac
+-	    ;;
+-    esac
++    optimize="-O2"
+ fi
+ 
+ case "$host" in

@@ -1,0 +1,71 @@
+https://savannah.gnu.org/bugs/?23922
+
+From 6f3684710a0f832533191f8657a57bc2fbba90ba Mon Sep 17 00:00:00 2001
+From: eliz <eliz>
+Date: Sat, 7 May 2011 08:29:13 +0000
+Subject: [PATCH]  job.c (construct_command_argv_internal): Don't assume
+ shellflags  is always non-NULL.  Escape-protect characters
+ special to the  shell when copying the value of SHELL into
+ new_line.  Fixes  Savannah bug #23922.
+
+---
+ ChangeLog |  7 +++++++
+ job.c     | 23 ++++++++++++++++-------
+ 2 files changed, 23 insertions(+), 7 deletions(-)
+
+diff --git job.c job.c
+index 67b402d..c2ce84d 100644
+--- job.c
++++ job.c
+@@ -2844,12 +2844,12 @@ construct_command_argv_internal (char *line, char **restp, char *shell,
+ 
+     unsigned int shell_len = strlen (shell);
+     unsigned int line_len = strlen (line);
+-    unsigned int sflags_len = strlen (shellflags);
++    unsigned int sflags_len = shellflags ? strlen (shellflags) : 0;
+     char *command_ptr = NULL; /* used for batch_mode_shell mode */
+     char *new_line;
+ 
+ # ifdef __EMX__ /* is this necessary? */
+-    if (!unixy_shell)
++    if (!unixy_shell && shellflags)
+       shellflags[0] = '/'; /* "/c" */
+ # endif
+ 
+@@ -2911,19 +2911,28 @@ construct_command_argv_internal (char *line, char **restp, char *shell,
+ 
+ 	new_argv = xmalloc (4 * sizeof (char *));
+ 	new_argv[0] = xstrdup(shell);
+-	new_argv[1] = xstrdup(shellflags);
++	new_argv[1] = xstrdup(shellflags ? shellflags : "");
+ 	new_argv[2] = line;
+ 	new_argv[3] = NULL;
+ 	return new_argv;
+       }
+ 
+-    new_line = alloca (shell_len + 1 + sflags_len + 1
++    new_line = alloca ((shell_len*2) + 1 + sflags_len + 1
+                              + (line_len*2) + 1);
+     ap = new_line;
+-    memcpy (ap, shell, shell_len);
+-    ap += shell_len;
++    /* Copy SHELL, escaping any characters special to the shell.  If
++       we don't escape them, construct_command_argv_internal will
++       recursively call itself ad nauseam, or until stack overflow,
++       whichever happens first.  */
++    for (p = shell; *p != '\0'; ++p)
++      {
++	if (strchr (sh_chars, *p) != 0)
++	  *(ap++) = '\\';
++	*(ap++) = *p;
++      }
+     *(ap++) = ' ';
+-    memcpy (ap, shellflags, sflags_len);
++    if (shellflags)
++      memcpy (ap, shellflags, sflags_len);
+     ap += sflags_len;
+     *(ap++) = ' ';
+     command_ptr = ap;
+-- 
+1.7.12
+

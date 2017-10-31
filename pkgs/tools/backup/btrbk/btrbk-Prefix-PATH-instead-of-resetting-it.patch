@@ -1,0 +1,39 @@
+From d5978c207f2b266165140dd21e9746ace5792daf Mon Sep 17 00:00:00 2001
+From: Moritz Ulrich <moritz@tarn-vedra.de>
+Date: Fri, 18 Mar 2016 14:01:22 +0100
+Subject: [PATCH] btrbk: Prefix PATH instead of resetting it.
+
+Some distros don't even install use /usr/bin, /sbin, etc. (notably
+NixOS). Instead, they use PATH to specify which programs are available
+to a given executable.
+
+This patch changes the behavior or `btrbk` so it extends PATH with its
+own search paths instead of resetting it. This allows users and distros
+to specify their own custom location for `btrfs` via `PATH`.
+---
+ btrbk | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
+
+diff --git a/btrbk b/btrbk
+index ab15858..0b91cbe 100755
+--- a/btrbk
++++ b/btrbk
+@@ -2464,10 +2464,11 @@ sub exit_status
+ 
+ MAIN:
+ {
+-  # set PATH instead of using absolute "/sbin/btrfs" (for now), as
+-  # different distros (and even different versions of btrfs-progs)
+-  # install the "btrfs" executable to different locations.
+-  $ENV{PATH} = '/sbin:/bin:/usr/sbin:/usr/bin';
++  # Prefix PATH with /sbin etc. instead of using absolute
++  # "/sbin/btrfs" (for now), as different distros (and even different
++  # versions of btrfs-progs) install the "btrfs" executable to
++  # different locations.
++  $ENV{PATH} .= '/sbin:/bin:/usr/sbin:/usr/bin';
+ 
+   Getopt::Long::Configure qw(gnu_getopt);
+   $Data::Dumper::Sortkeys = 1;
+-- 
+2.7.3
+

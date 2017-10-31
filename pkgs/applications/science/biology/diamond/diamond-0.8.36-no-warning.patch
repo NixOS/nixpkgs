@@ -1,0 +1,20 @@
+diff -u -r diamond-0.8.36/src/dp/scalar_traceback.h diamond-0.8.36-patched/src/dp/scalar_traceback.h
+--- diamond-0.8.36/src/dp/scalar_traceback.h	2017-02-06 16:32:05.000000000 +0100
++++ diamond-0.8.36-patched/src/dp/scalar_traceback.h	2017-02-23 15:13:24.000000000 +0100
+@@ -19,6 +19,7 @@
+ #ifndef SCALAR_TRACEBACK_H_
+ #define SCALAR_TRACEBACK_H_
+ 
++#include <cmath>
+ #include <exception>
+ #include "../basic/score_matrix.h"
+ 
+@@ -31,7 +32,7 @@
+ template<>
+ inline bool almost_equal<float>(float x, float y)
+ {
+-	return abs(x - y) < 0.001f;
++	return std::abs(x - y) < 0.001f;
+ }
+ 
+ template<typename _score>

@@ -1,0 +1,59 @@
+diff --git luabind-0.9.1/luabind/detail/call_function.hpp luabind-0.9.1-fixed/luabind/detail/call_function.hpp
+index 1b45ec1..8f5afff 100644
+--- luabind-0.9.1/luabind/detail/call_function.hpp
++++ luabind-0.9.1-fixed/luabind/detail/call_function.hpp
+@@ -323,7 +323,8 @@ namespace luabind
+ 
+ #endif // LUABIND_CALL_FUNCTION_HPP_INCLUDED
+ 
+-#elif BOOST_PP_ITERATION_FLAGS() == 1
++#else
++#if BOOST_PP_ITERATION_FLAGS() == 1
+ 
+ #define LUABIND_TUPLE_PARAMS(z, n, data) const A##n *
+ #define LUABIND_OPERATOR_PARAMS(z, n, data) const A##n & a##n
+@@ -440,4 +441,5 @@ namespace luabind
+ 
+ 
+ #endif
++#endif
+ 
+diff --git luabind-0.9.1/luabind/detail/call_member.hpp luabind-0.9.1-fixed/luabind/detail/call_member.hpp
+index de8d563..e63555b 100644
+--- luabind-0.9.1/luabind/detail/call_member.hpp
++++ luabind-0.9.1-fixed/luabind/detail/call_member.hpp
+@@ -316,7 +316,8 @@ namespace luabind
+ 
+ #endif // LUABIND_CALL_MEMBER_HPP_INCLUDED
+ 
+-#elif BOOST_PP_ITERATION_FLAGS() == 1
++#else
++#if BOOST_PP_ITERATION_FLAGS() == 1
+ 
+ #define LUABIND_TUPLE_PARAMS(z, n, data) const A##n *
+ #define LUABIND_OPERATOR_PARAMS(z, n, data) const A##n & a##n
+@@ -360,4 +361,5 @@ namespace luabind
+ #undef LUABIND_TUPLE_PARAMS
+ 
+ #endif
++#endif
+ 
+diff --git luabind-0.9.1/luabind/wrapper_base.hpp luabind-0.9.1-fixed/luabind/wrapper_base.hpp
+index d54c668..0f88cc5 100755
+--- luabind-0.9.1/luabind/wrapper_base.hpp
++++ luabind-0.9.1-fixed/luabind/wrapper_base.hpp
+@@ -89,7 +89,8 @@ namespace luabind
+ 
+ #endif // LUABIND_WRAPPER_BASE_HPP_INCLUDED
+ 
+-#elif BOOST_PP_ITERATION_FLAGS() == 1
++#else
++#if BOOST_PP_ITERATION_FLAGS() == 1
+ 
+ #define LUABIND_TUPLE_PARAMS(z, n, data) const A##n *
+ #define LUABIND_OPERATOR_PARAMS(z, n, data) const A##n & a##n
+@@ -188,3 +189,4 @@ namespace luabind
+ #undef N
+ 
+ #endif
++#endif

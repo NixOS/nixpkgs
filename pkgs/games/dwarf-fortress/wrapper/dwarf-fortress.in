@@ -1,0 +1,6 @@
+#!@stdenv_shell@ -e
+
+source @dfInit@
+
+cd "$DF_DIR"
+exec "$env_dir/libs/Dwarf_Fortress" "$@"
