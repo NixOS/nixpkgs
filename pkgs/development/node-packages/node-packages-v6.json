@@ -12,6 +12,7 @@
 , "dnschain"
 , "docker-registry-server"
 , "elasticdump"
+, "elm-oracle"
 , "emoj"
 , "eslint"
 , "eslint_d"
