@@ -23,14 +23,12 @@ in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "lame-${version}";
-  version = "3.99.5";
+  version = "3.100";
 
   src = fetchurl {
     url = "mirror://sourceforge/lame/${name}.tar.gz";
-    sha256 = "1zr3kadv35ii6liia0bpfgxpag27xcivp571ybckpbz4b10nnd14";
+    sha256 = "07nsn5sy3a8xbmw1bidxnsj5fj6kg9ai04icmqw40ybkp353dznx";
   };
-
-  patches = [ ./gcc-4.9.patch ];
 
   outputs = [ "out" "lib" "doc" ]; # a small single header
   outputMan = "out";
