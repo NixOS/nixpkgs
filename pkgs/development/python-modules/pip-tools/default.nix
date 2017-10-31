@@ -1,5 +1,5 @@
 { stdenv, fetchurl, buildPythonPackage, pip, pytest, click, six, first
-, setuptools_scm, glibcLocales, mock }:
+, setuptools_scm, git, glibcLocales, mock }:
 
 buildPythonPackage rec {
   pname = "pip-tools";
@@ -12,12 +12,18 @@ buildPythonPackage rec {
   };
 
   LC_ALL = "en_US.UTF-8";
-  checkInputs = [ pytest glibcLocales mock ];
+  checkInputs = [ pytest git glibcLocales mock ];
   propagatedBuildInputs = [ pip click six first setuptools_scm ];
 
   checkPhase = ''
-    export HOME=$(mktemp -d)
-    py.test -k "not test_realistic_complex_sub_dependencies" # requires network
+    export HOME=$(mktemp -d) VIRTUAL_ENV=1
+    tests_without_network_access="
+      not test_realistic_complex_sub_dependencies \
+      and not test_editable_package_vcs \
+      and not test_generate_hashes_all_platforms \
+      and not test_generate_hashes_without_interfering_with_each_other \
+    "
+    py.test -k "$tests_without_network_access"
   '';
 
   meta = with stdenv.lib; {
