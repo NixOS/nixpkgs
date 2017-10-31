@@ -7367,24 +7367,7 @@ in {
     };
   };
 
-  raven = buildPythonPackage rec {
-    name = "raven-6.3.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/raven/${name}.tar.gz";
-      sha256 = "1wgddbd092vih6k6mknp68vvm1pp12fikjqzglw6mnyw8njnbr7k";
-    };
-
-    # way too many dependencies to run tests
-    # see https://github.com/getsentry/raven-python/blob/master/setup.py
-    doCheck = false;
-
-    propagatedBuildInputs = optionals (!isPy3k) [ self.contextlib2 ];
-
-    meta = {
-      maintainers = with maintainers; [ primeos ];
-    };
-  };
+  raven = callPackage ../development/python-modules/raven { };
 
   rethinkdb = buildPythonPackage rec {
     name = "rethinkdb-${version}";
@@ -10574,27 +10557,7 @@ in {
 
   keyring = callPackage ../development/python-modules/keyring { };
 
-  keyutils = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "keyutils";
-    version = "0.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/k/${pname}/${name}.tar.gz";
-      sha256 = "0dskys71vkn59vlsfs1ljli0qnzk7b10iv4pawxawnk2hvyjrf10";
-    };
-
-    buildInputs = with self; [ pkgs.keyutils pytestrunner ];
-
-    doCheck = false;
-
-    meta = {
-      description = "A set of python bindings for keyutils";
-      homepage = https://github.com/sassoftware/python-keyutils;
-      license = licenses.asl20;
-      maintainers = with maintainers; [ primeos ];
-    };
-  };
+  keyutils = callPackage ../development/python-modules/keyutils { };
 
   klaus = buildPythonPackage rec {
     version = "0.9.1";
@@ -21860,25 +21823,7 @@ EOF
     };
   });
 
-  zipstream = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "zipstream";
-    version = "1.1.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/z/${pname}/${name}.tar.gz";
-      sha256 = "01im5anqdyggmwkigqcjg0qw2a5bnn84h33mfaqjjd69a28lpwif";
-    };
-
-    buildInputs = with self; [ nose ];
-
-    meta = {
-      description = "A zip archive generator";
-      homepage = "https://github.com/allanlei/python-zipstream";
-      license = licenses.gpl3Plus;
-      maintainers = with maintainers; [ primeos ];
-    };
-  };
+  zipstream = callPackage ../development/python-modules/zipstream { };
 
   zodb = callPackage ../development/python-modules/zodb {};
 
