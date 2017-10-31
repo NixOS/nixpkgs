@@ -24,7 +24,7 @@
 , enableTesseract ? false, tesseract, leptonica
 , enableDocs      ? false, doxygen, graphviz-nox
 
-, AVFoundation, Cocoa, QTKit
+, AVFoundation, Cocoa, QTKit, VideoDecodeAcceleration, bzip2
 }:
 
 let
@@ -180,7 +180,7 @@ stdenv.mkDerivation rec {
     # cnn_3dobj and dnn_modern modules
     # ++ lib.optionals buildContrib [ caffe glog boost google-gflags ]
 
-    ++ lib.optionals stdenv.isDarwin [ AVFoundation Cocoa QTKit ]
+    ++ lib.optionals stdenv.isDarwin [ AVFoundation Cocoa QTKit VideoDecodeAcceleration bzip2 ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ];
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
