@@ -21,7 +21,7 @@ let
           daemon reads in addition to the the user's authorized_keys file.
           You can combine the <literal>keys</literal> and
           <literal>keyFiles</literal> options.
-          Warning: If you are using <literal>NixOps</literal> then don't use this 
+          Warning: If you are using <literal>NixOps</literal> then don't use this
           option since it will replace the key required for deployment via ssh.
         '';
       };
@@ -114,6 +114,8 @@ in
 
       permitRootLogin = mkOption {
         default = "prohibit-password";
+        # When changing the allowed types, you must also update
+        # userHasSSHCreds in nixos/modules/config/users-groups.nix!
         type = types.enum ["yes" "without-password" "prohibit-password" "forced-commands-only" "no"];
         description = ''
           Whether the root user can login using ssh.
