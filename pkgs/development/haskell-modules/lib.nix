@@ -3,33 +3,127 @@
 { pkgs, lib }:
 
 rec {
+  /* This function takes a file like `hackage-packages.nix` and constructs
+     a full package set out of that.
+   */
   makePackageSet = import ./make-package-set.nix;
 
+  /* The function overrideCabal lets you alter the arguments to the
+     mkDerivation function.
+
+     Example:
+
+     First, note how the aeson package is constructed in hackage-packages.nix:
+
+         "aeson" = callPackage ({ mkDerivation, attoparsec, <snip>
+                                }:
+                                  mkDerivation {
+                                    pname = "aeson";
+                                    <snip>
+                                    homepage = "https://github.com/bos/aeson";
+                                  })
+
+     The mkDerivation function of haskellPackages will take care of putting
+     the homepage in the right place, in meta.
+
+         > haskellPackages.aeson.meta.homepage
+         "https://github.com/bos/aeson"
+
+         > x = haskell.lib.overrideCabal haskellPackages.aeson (old: { homepage = old.homepage + "#readme"; })
+         > x.meta.homepage
+         "https://github.com/bos/aeson#readme"
+
+   */
   overrideCabal = drv: f: (drv.override (args: args // {
     mkDerivation = drv: (args.mkDerivation drv).override f;
   })) // {
     overrideScope = scope: overrideCabal (drv.overrideScope scope) f;
   };
 
+  /* doCoverage modifies a haskell package to enable the generation
+     and installation of a coverage report.
+
+     See https://wiki.haskell.org/Haskell_program_coverage
+   */
   doCoverage = drv: overrideCabal drv (drv: { doCoverage = true; });
+
+  /* dontCoverage modifies a haskell package to disable the generation
+     and installation of a coverage report.
+   */
   dontCoverage = drv: overrideCabal drv (drv: { doCoverage = false; });
 
+  /* doHaddock modifies a haskell package to enable the generation and
+     installation of API documentation from code comments using the
+     haddock tool.
+   */
   doHaddock = drv: overrideCabal drv (drv: { doHaddock = true; });
+
+  /* dontHaddock modifies a haskell package to disable the generation and
+     installation of API documentation from code comments using the
+     haddock tool.
+   */
   dontHaddock = drv: overrideCabal drv (drv: { doHaddock = false; });
 
+  /* doJailbreak enables the removal of version bounds from the cabal
+     file. You may want to avoid this function.
+
+     This is useful when a package reports that it can not be built
+     due to version mismatches. In some cases, removing the version
+     bounds entirely is an easy way to make a package build, but at
+     the risk of breaking software in non-obvious ways now or in the
+     future.
+
+     Instead of jailbreaking, you can patch the cabal file.
+   */
   doJailbreak = drv: overrideCabal drv (drv: { jailbreak = true; });
+
+  /* dontJailbreak restores the use of the version bounds the check
+     the use of dependencies in the package description.
+   */
   dontJailbreak = drv: overrideCabal drv (drv: { jailbreak = false; });
 
+  /* doCheck enables dependency checking, compilation and execution
+     of test suites listed in the package description file.
+   */
   doCheck = drv: overrideCabal drv (drv: { doCheck = true; });
+  /* dontCheck disables dependency checking, compilation and execution
+     of test suites listed in the package description file.
+   */
   dontCheck = drv: overrideCabal drv (drv: { doCheck = false; });
 
+  /* doBenchmark enables dependency checking, compilation and execution
+     for benchmarks listed in the package description file.
+   */
   doBenchmark = drv: overrideCabal drv (drv: { doBenchmark = true; });
+  /* dontBenchmark disables dependency checking, compilation and execution
+     for benchmarks listed in the package description file.
+   */
   dontBenchmark = drv: overrideCabal drv (drv: { doBenchmark = false; });
 
+  /* doDistribute enables the distribution of binaries for the package
+     via hydra.
+   */
   doDistribute = drv: overrideCabal drv (drv: { hydraPlatforms = drv.platforms or ["i686-linux" "x86_64-linux" "x86_64-darwin"]; });
+  /* dontDistribute disables the distribution of binaries for the package
+     via hydra.
+   */
   dontDistribute = drv: overrideCabal drv (drv: { hydraPlatforms = []; });
 
+  /* appendConfigureFlag adds a single argument that will be passed to the
+     cabal configure command, after the arguments that have been defined
+     in the initial declaration or previous overrides.
+
+     Example:
+
+         > haskell.lib.appendConfigureFlag haskellPackages.servant "--profiling-detail=all-functions"
+   */
   appendConfigureFlag = drv: x: overrideCabal drv (drv: { configureFlags = (drv.configureFlags or []) ++ [x]; });
+
+  /* removeConfigureFlag drv x is a Haskell package like drv, but with
+     all cabal configure arguments that are equal to x removed.
+
+         > haskell.lib.removeConfigureFlag haskellPackages.servant "--verbose"
+   */
   removeConfigureFlag = drv: x: overrideCabal drv (drv: { configureFlags = lib.remove x (drv.configureFlags or []); });
 
   addBuildTool = drv: x: addBuildTools drv [x];
@@ -76,17 +170,28 @@ rec {
 
   disableHardening = drv: flags: overrideCabal drv (drv: { hardeningDisable = flags; });
 
-  # Controls if Nix should strip the binary files (removes debug symbols)
+  /* Let Nix strip the binary files.
+   * This removes debugging symbols.
+   */
   doStrip = drv: overrideCabal drv (drv: { dontStrip = false; });
+
+  /* Stop Nix from stripping the binary files.
+   * This keeps debugging symbols.
+   */
   dontStrip = drv: overrideCabal drv (drv: { dontStrip = true; });
 
-  # Useful for debugging segfaults with gdb.
-  # -g: enables debugging symbols
-  # --disable-*-stripping: tell GHC not to strip resulting binaries
-  # dontStrip: see above
+  /* Useful for debugging segfaults with gdb.
+   * This includes dontStrip.
+   */
   enableDWARFDebugging = drv:
+   # -g: enables debugging symbols
+   # --disable-*-stripping: tell GHC not to strip resulting binaries
+   # dontStrip: see above
    appendConfigureFlag (dontStrip drv) "--ghc-options=-g --disable-executable-stripping --disable-library-stripping";
 
+  /* Create a source distribution tarball like those found on hackage,
+     instead of building the package.
+   */
   sdistTarball = pkg: lib.overrideDerivation pkg (drv: {
     name = "${drv.pname}-source-${drv.version}";
     # Since we disable the haddock phase, we also need to override the
@@ -99,10 +204,15 @@ rec {
     fixupPhase = ":";
   });
 
+  /* Use the gold linker. It is a linker for ELF that is designed
+     "to run as fast as possible on modern systems"
+   */
   linkWithGold = drv : appendConfigureFlag drv
     "--ghc-option=-optl-fuse-ld=gold --ld-option=-fuse-ld=gold --with-ld=ld.gold";
 
-  # link executables statically against haskell libs to reduce closure size
+  /* link executables statically against haskell libs to reduce
+     closure size
+   */
   justStaticExecutables = drv: overrideCabal drv (drv: {
     enableSharedExecutables = false;
     isLibrary = false;
@@ -112,6 +222,11 @@ rec {
     configureFlags = (drv.configureFlags or []) ++ ["--ghc-option=-optl=-dead_strip"];
   });
 
+  /* Build a source distribution tarball instead of using the source files
+     directly. The effect is that the package is built as if it were published
+     on hackage. This can be used as a test for the source distribution,
+     assuming the build fails when packaging mistakes are in the cabal file.
+   */
   buildFromSdist = pkg: lib.overrideDerivation pkg (drv: {
     unpackPhase = let src = sdistTarball pkg; tarname = "${pkg.pname}-${pkg.version}"; in ''
       echo "Source tarball is at ${src}/${tarname}.tar.gz"
@@ -120,10 +235,22 @@ rec {
     '';
   });
 
+  /* Build the package in a strict way to uncover potential problems.
+     This includes buildFromSdist and failOnAllWarnings.
+   */
   buildStrictly = pkg: buildFromSdist (failOnAllWarnings pkg);
 
+  /* Turn on most of the compiler warnings and fail the build if any
+     of them occur. */
   failOnAllWarnings = drv: appendConfigureFlag drv "--ghc-option=-Wall --ghc-option=-Werror";
 
+  /* Add a post-build check to verify that dependencies declared in
+     the cabal file are actually used.
+
+     The first attrset argument can be used to configure the strictness
+     of this check and a list of ignored package names that would otherwise 
+     cause false alarms.
+   */
   checkUnusedPackages =
     { ignoreEmptyImports ? false
     , ignoreMainModule   ? false
@@ -142,8 +269,14 @@ rec {
 
   buildStackProject = pkgs.callPackage ./generic-stack-builder.nix { };
 
+  /* Add a dummy command to trigger a build despite an equivalent
+     earlier build that is present in the store or cache.
+   */
   triggerRebuild = drv: i: overrideCabal drv (drv: { postUnpack = ": trigger rebuild ${toString i}"; });
 
+  /* Override the sources for the package and optionaly the version.
+     This also takes of removing editedCabalFile.
+   */
   overrideSrc = drv: { src, version ? drv.version }:
     overrideCabal drv (_: { inherit src version; editedCabalFile = null; });
 
