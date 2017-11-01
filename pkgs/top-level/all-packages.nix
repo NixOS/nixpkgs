@@ -13339,6 +13339,8 @@ with pkgs;
   ipafont = callPackage ../data/fonts/ipafont {};
   ipaexfont = callPackage ../data/fonts/ipaexfont {};
 
+  iwona = callPackage ../data/fonts/iwona { };
+
   junicode = callPackage ../data/fonts/junicode { };
 
   kawkab-mono-font = callPackage ../data/fonts/kawkab-mono {};
