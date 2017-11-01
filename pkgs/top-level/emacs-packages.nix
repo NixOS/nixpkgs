@@ -268,6 +268,8 @@ let
     };
   };
 
+  icicles = callPackage ../applications/editors/emacs-modes/icicles { };
+
   rtags = melpaBuild rec {
     pname = "rtags";
     version = "2.12";
