@@ -1420,6 +1420,8 @@ with pkgs;
     hiredis = null;
   };
 
+  tuntox = callPackage ../tools/networking/tuntox { } ;
+
   mar1d = callPackage ../games/mar1d { } ;
 
   mcrypt = callPackage ../tools/misc/mcrypt { };
