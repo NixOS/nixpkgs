@@ -7402,29 +7402,23 @@ let self = _self // overrides; _self = with self; {
   };
 
   Inline = buildPerlPackage rec {
-    name = "Inline-0.64";
-
+    name = "Inline-0.80";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/E/ET/ETJ/${name}.tar.gz";
-      sha256 = "17n3gbc9jigpfwqfhgmxpvbgr9rkdrij8jayxqpzw611ixcxrplw";
+      url = "mirror://cpan/authors/id/I/IN/INGY/${name}.tar.gz";
+      sha256 = "7e2bd984b1ebd43e336b937896463f2c6cb682c956cbd2c311a464363d2ccef6";
     };
-
     buildInputs = [ TestWarn ];
     propagatedBuildInputs = [ ParseRecDescent ];
-
     meta = {
-      description = "Inline -- Write Perl subroutines in other programming languages";
-
+      homepage = https://github.com/ingydotnet/inline-pm;
+      description = "Write Perl Subroutines in Other Programming Languages";
       longDescription = ''
         The Inline module allows you to put source code from other
         programming languages directly "inline" in a Perl script or
         module. The code is automatically compiled as needed, and then loaded
         for immediate access from Perl.
       '';
-
-      license = stdenv.lib.licenses.artistic2;
-
-      maintainers = [ ];
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
