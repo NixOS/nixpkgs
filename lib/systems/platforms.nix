@@ -480,6 +480,11 @@ rec {
     uboot = null;
   };
 
+  bb-org-beaglebone = beaglebone // {
+    name = "bb-org-beaglebone";
+    kernelBaseConfig = "bb.org_defconfig";
+  };
+
   armv7l-hf-multiplatform = {
     name = "armv7l-hf-multiplatform";
     kernelMajor = "2.6"; # Using "2.6" enables 2.6 kernel syscalls in glibc.
