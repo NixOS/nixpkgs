@@ -47,7 +47,7 @@
         description = "Master PDF Editor";
         homepage = "https://code-industry.net/free-pdf-editor/";
         license = licenses.unfreeRedistributable;
-        platforms = platforms.linux;
+        platforms = with platforms; [ "x86_64-linux" ];
         maintainers = with maintainers; [ cmcdragonkai flokli ];
       };
     }
