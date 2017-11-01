@@ -5229,13 +5229,14 @@ let self = _self // overrides; _self = with self; {
   };
 
   ExtUtilsPkgConfig = buildPerlPackage rec {
-    name = "ExtUtils-PkgConfig-1.15";
+    name = "ExtUtils-PkgConfig-1.16";
     src = fetchurl {
       url = "mirror://cpan/authors/id/X/XA/XAOC/${name}.tar.gz";
-      sha256 = "1cxh6w8vmyqmhl6afys2q6z6jkp1m6zvacpk70196zmk48p1kcv9";
+      sha256 = "bbeaced995d7d8d10cfc51a3a5a66da41ceb2bc04fedcab50e10e6300e801c6e";
     };
     propagatedBuildInputs = [ pkgs.pkgconfig ];
     meta = {
+      homepage = http://gtk2-perl.sourceforge.net;
       description = "Simplistic interface to pkg-config";
       license = stdenv.lib.licenses.lgpl21Plus;
     };
