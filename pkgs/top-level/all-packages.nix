@@ -3028,41 +3028,17 @@ with pkgs;
 
   nodejs-slim = nodejs-slim-6_x;
 
-  nodejs-4_x = callPackage ../development/web/nodejs/v4.nix {
-    libtool = darwin.cctools;
-  };
+  nodejs-4_x = callPackage ../development/web/nodejs/v4.nix {};
+  nodejs-slim-4_x = callPackage ../development/web/nodejs/v4.nix { enableNpm = false; };
 
-  nodejs-slim-4_x = callPackage ../development/web/nodejs/v4.nix {
-    libtool = darwin.cctools;
-    enableNpm = false;
-  };
+  nodejs-6_x = callPackage ../development/web/nodejs/v6.nix {};
+  nodejs-slim-6_x = callPackage ../development/web/nodejs/v6.nix { enableNpm = false; };
 
-  nodejs-6_x = callPackage ../development/web/nodejs/v6.nix {
-    libtool = darwin.cctools;
-  };
+  nodejs-8_x = callPackage ../development/web/nodejs/v8.nix {};
+  nodejs-slim-8_x = callPackage ../development/web/nodejs/v8.nix { enableNpm = false; };
 
-  nodejs-slim-6_x = callPackage ../development/web/nodejs/v6.nix {
-    libtool = darwin.cctools;
-    enableNpm = false;
-  };
-
-  nodejs-8_x = callPackage ../development/web/nodejs/v8.nix {
-    libtool = darwin.cctools;
-  };
-
-  nodejs-slim-8_x = callPackage ../development/web/nodejs/v8.nix {
-    libtool = darwin.cctools;
-    enableNpm = false;
-  };
-
-  nodejs-9_x = callPackage ../development/web/nodejs/v9.nix {
-    libtool = darwin.cctools;
-  };
-
-  nodejs-slim-9_x = callPackage ../development/web/nodejs/v9.nix {
-    libtool = darwin.cctools;
-    enableNpm = false;
-  };
+  nodejs-9_x = callPackage ../development/web/nodejs/v9.nix {};
+  nodejs-slim-9_x = callPackage ../development/web/nodejs/v9.nix { enableNpm = false; };
 
   nodePackages_6_x = callPackage ../development/node-packages/default-v6.nix {
     nodejs = pkgs.nodejs-6_x;
