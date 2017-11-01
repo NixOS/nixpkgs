@@ -31,16 +31,16 @@ if ! test -e "$mountPoint"; then
 fi
 
 # Create a few of the standard directories in the target root directory.
-mkdir -m 0755 -p $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/etc $mountPoint/run $mountPoint/home
-mkdir -m 01777 -p $mountPoint/tmp
-mkdir -m 0755 -p $mountPoint/tmp/root
-mkdir -m 0755 -p $mountPoint/var
-mkdir -m 0700 -p $mountPoint/root
+install -m 0755 -d $mountPoint/dev $mountPoint/proc $mountPoint/sys $mountPoint/etc $mountPoint/run $mountPoint/home
+install -m 01777 -d $mountPoint/tmp
+install -m 0755 -d $mountPoint/tmp/root
+install -m 0755 -d $mountPoint/var
+install -m 0700 -d $mountPoint/root
 
 ln -sf /run $mountPoint/var/run
 
 # Create the necessary Nix directories on the target device
-mkdir -m 0755 -p \
+install -m 0755 -d \
     $mountPoint/nix/var/nix/gcroots \
     $mountPoint/nix/var/nix/temproots \
     $mountPoint/nix/var/nix/userpool \
@@ -48,7 +48,7 @@ mkdir -m 0755 -p \
     $mountPoint/nix/var/nix/db \
     $mountPoint/nix/var/log/nix/drvs
 
-mkdir -m 1775 -p $mountPoint/nix/store
+install -m 1775 -d $mountPoint/nix/store
 
 # All Nix operations below should operate on our target store, not /nix/store.
 # N.B: this relies on Nix 1.12 or higher
@@ -80,7 +80,7 @@ if [ ! -x $mountPoint/@shell@ ]; then
     echo "Error: @shell@ wasn't included in the closure" >&2
     exit 1
 fi
-mkdir -m 0755 -p $mountPoint/bin
+install -m 0755 -d $mountPoint/bin
 ln -sf @shell@ $mountPoint/bin/sh
 
 echo "setting the system closure to '$system'..."
@@ -89,17 +89,16 @@ nix-env "${extraBuildFlags[@]}" -p $mountPoint/nix/var/nix/profiles/system --set
 ln -sfn /nix/var/nix/profiles/system $mountPoint/run/current-system
 
 # Copy the NixOS/Nixpkgs sources to the target as the initial contents of the NixOS channel.
-mkdir -m 0755 -p $mountPoint/nix/var/nix/profiles
-mkdir -m 1777 -p $mountPoint/nix/var/nix/profiles/per-user
-mkdir -m 0755 -p $mountPoint/nix/var/nix/profiles/per-user/root
+install -m 0755 -d $mountPoint/nix/var/nix/profiles
+install -m 1777 -d $mountPoint/nix/var/nix/profiles/per-user
+install -m 0755 -d $mountPoint/nix/var/nix/profiles/per-user/root
 
 if [ -z "$noChannelCopy" ] && [ -n "$channel" ]; then
     echo "copying channel..."
     nix-env --option build-use-substitutes false "${extraBuildFlags[@]}" -p $mountPoint/nix/var/nix/profiles/per-user/root/channels --set "$channel" --quiet
 fi
-mkdir -m 0700 -p $mountPoint/root/.nix-defexpr
+install -m 0700 -d $mountPoint/root/.nix-defexpr
 ln -sfn /nix/var/nix/profiles/per-user/root/channels $mountPoint/root/.nix-defexpr/channels
 
 # Mark the target as a NixOS installation, otherwise switch-to-configuration will chicken out.
 touch $mountPoint/etc/NIXOS
-
