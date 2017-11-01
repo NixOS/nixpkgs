@@ -537,7 +537,7 @@ in
               type = types.bool;
               default = false;
               description = ''
-                Wether the container is automatically started at boot-time.
+                Whether the container is automatically started at boot-time.
               '';
             };
 
