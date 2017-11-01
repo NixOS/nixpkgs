@@ -152,7 +152,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${name}.tar.gz";
       sha256 = "2e3376d03bfa5f172f43d4c615ba496281c9ffe3093a828c539683e17e2fbbcb";
     };
-    propagatedBuildInputs = [ AnyEvent CommonSense ];
+    propagatedBuildInputs = [ AnyEvent commonsense ];
   };
 
   AnyEventI3 = buildPerlPackage rec {
@@ -2194,7 +2194,10 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CommonSense = buildPerlPackage rec {
+  # For backwards compatibility.
+  CommonSense = self.commonsense;
+
+  commonsense = buildPerlPackage rec {
     name = "common-sense-3.74";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/ML/MLEHMANN/${name}.tar.gz";
@@ -2202,6 +2205,8 @@ let self = _self // overrides; _self = with self; {
     };
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
+      description = "Implements some sane defaults for Perl programs";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -4938,7 +4943,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "2ae7f8734e2e4945510252152c3bea4be35f4aa58aad3db0504c38844b08a991";
     };
     buildInputs = [ CanaryStability ];
-    propagatedBuildInputs = [ CommonSense ];
+    propagatedBuildInputs = [ commonsense ];
     meta = {
       license = stdenv.lib.licenses.gpl1Plus;
     };
@@ -7584,7 +7589,7 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/M/ML/MLEHMANN/JSON-XS-2.34.tar.gz;
       sha256 = "1sh0i73skxp3rvd9w8phxqncw9m1r5ibnb9qxxm21bmrfwkxybx6";
     };
-    propagatedBuildInputs = [ CommonSense ];
+    propagatedBuildInputs = [ commonsense ];
     meta = {
       homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
       platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
@@ -7822,7 +7827,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/modules/by-module/Linux/${name}.tar.gz";
       sha256 = "1l916p8xak6c51x4x1vrzd8wpi55bld74wf0p5w5m4vr80zjb7dw";
     };
-    propagatedBuildInputs = [ CommonSense ];
+    propagatedBuildInputs = [ commonsense ];
   };
 
   ListAllUtils = buildPerlPackage {
