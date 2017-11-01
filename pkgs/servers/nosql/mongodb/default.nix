@@ -81,6 +81,8 @@ in stdenv.mkDerivation rec {
       --replace 'engine("wiredTiger")' 'engine("mmapv1")'
   '';
 
+  NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.cc.isClang "-Wno-unused-command-line-argument";
+
   buildPhase = ''
     scons -j $NIX_BUILD_CORES core --release ${other-args}
   '';
