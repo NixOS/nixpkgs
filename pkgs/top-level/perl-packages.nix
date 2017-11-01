@@ -227,11 +227,11 @@ let self = _self // overrides; _self = with self; {
       url = mirror://cpan/authors/id/S/SH/SHAY/Apache-Test-1.40.tar.gz;
       sha256 = "0h5fsi0is6nhclsd3wwkkqx2hfgl3bpdazxycafm9sqxr3qkgx9w";
     };
-    checkPhase = ''
-      make test \
-        NIX_REDIRECTS=/etc/protocols=${pkgs.iana-etc}/etc/protocols \
-        LD_PRELOAD=${pkgs.libredirect}/lib/libredirect.so
-    '';
+    doCheck = false;
+    meta = {
+      description = "Test.pm wrapper with helpers for testing Apache";
+      license = stdenv.lib.licenses.asl20;
+    };
   };
 
   AppCLI = buildPerlPackage {
