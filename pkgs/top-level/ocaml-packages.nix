@@ -407,7 +407,10 @@ let
 
     ocaml_data_notation = callPackage ../development/ocaml-modules/odn { };
 
-    ocaml_expat = callPackage ../development/ocaml-modules/expat { };
+    ocaml_expat =
+    if lib.versionAtLeast ocaml.version "4.02"
+    then callPackage ../development/ocaml-modules/expat { }
+    else callPackage ../development/ocaml-modules/expat/0.9.nix { };
 
     frontc = callPackage ../development/ocaml-modules/frontc { };
 

@@ -1,51 +1,32 @@
-{stdenv, fetchurl, ocaml, findlib, ounit, expat}:
-
-let
-  pname = "ocaml-expat";
-  testcase = fetchurl {
-    url = "http://www.w3.org/TR/1998/REC-xml-19980210.xml";
-    sha256 = "00a3gsfvlkdhmcbziqhvpvy1zmcgbcihfqwcvl6ay03zf7gvw0k1";
-  };
-
-in
+{ stdenv, fetchFromGitHub, expat, ocaml, findlib, ounit }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  version = "0.9.1";
+	name = "ocaml${ocaml.version}-expat-${version}";
+	version = "1.0.0";
 
-  src = fetchurl {
-    url = "http://www.xs4all.nl/~mmzeeman/ocaml/${pname}-${version}.tar.gz";
-    sha256 = "16n2j3y0jc9xgqyshw9plrwqnjiz30vnpbhahmgxlidbycw8rgjz";
-  };
+	src = fetchFromGitHub {
+		owner = "whitequark";
+		repo = "ocaml-expat";
+		rev = "v${version}";
+		sha256 = "0rb47v08ra2hhh73p3d8sl4sizqwiwc37gnkl22b23sbwbjrpbz0";
+	};
 
-  buildInputs = [ocaml findlib ounit expat];
+	prePatch = ''
+		substituteInPlace Makefile --replace "gcc" "\$(CC)"
+	'';
 
-  createFindlibDestdir = true;
+	buildInputs = [ ocaml findlib expat ounit ];
 
-  patches = [ ./unittest.patch ];
+	doCheck = !stdenv.lib.versionAtLeast ocaml.version "4.06";
+	checkTarget = "testall";
 
-  postPatch = ''
-    substituteInPlace "unittest.ml" \
-      --replace "/home/maas/xml-samples/REC-xml-19980210.xml.txt" "${testcase}"
-    substituteInPlace Makefile --replace "EXPAT_LIBDIR=/usr/local/lib" "EXPAT_LIBDIR=${expat.out}/lib" \
-      --replace "EXPAT_INCDIR=/usr/local/include" "EXPAT_INCDIR=${expat.dev}/include" \
-      --replace "gcc" "\$(CC)"
-  '';
+	createFindlibDestdir = true;
 
-  configurePhase = "true";  	# Skip configure
-
-  buildPhase = ''
-    make all allopt
-  '';
-
-  doCheck = true;
-
-  checkTarget = "testall";
-
-  meta = {
-    homepage = http://www.xs4all.nl/~mmzeeman/ocaml/;
-    description = "An ocaml wrapper for the Expat XML parsing library";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.roconnor ];
-  };
+	meta = {
+		description = "OCaml wrapper for the Expat XML parsing library";
+		license = stdenv.lib.licenses.mit;
+		maintainers = [ stdenv.lib.maintainers.vbgl ];
+		inherit (src.meta) homepage;
+		inherit (ocaml.meta) platforms;
+	};
 }
