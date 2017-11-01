@@ -6,7 +6,7 @@ let
   bits = if stdenv.system == "x86_64-linux" then "x64"
          else "ia32";
 
-  version = "0.5.12";
+  version = "0.5.13";
 
   runtimeDeps = [
     udev libnotify
@@ -23,8 +23,8 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/saenzramiro/rambox/releases/download/${version}/Rambox_${version}-${bits}.deb";
     sha256 = if bits == "x64" then
-      "1jlvpq7wryz4vf6xlsb9c38jrhjiv18rdf2ndlv76png60wl8418" else
-      "063j3gcpp18wdvspy7d43cgv7i5v8c42hn2zpp083jixw9ddsqwa";
+      "0bn562fr1wsnn3xsd4q2rrxi6c56vckrkfmjl2dqb30hpmj2vn0d" else
+      "180ndvkil5mk5idwnn7spfygnhhll6pjc342pfzgmzk46a723qs4";
   };
 
   # don't remove runtime deps
