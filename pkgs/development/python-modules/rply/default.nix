@@ -3,11 +3,11 @@
 buildPythonPackage rec {
   pname = "rply";
   name = "${pname}-${version}";
-  version = "0.7.4";
+  version = "0.7.5";
 
   src = fetchurl {
     url = "mirror://pypi/r/rply/${name}.tar.gz";
-    sha256 = "12rp1d9ba7nvd5rhaxi6xzx1rm67r1k1ylsrkzhpwnphqpb06cvj";
+    sha256 = "0lv428895zxsz43968qx0q9bimwqnfykndz4dpjbq515w2gvzhjh";
   };
 
   buildInputs = [ appdirs ];
