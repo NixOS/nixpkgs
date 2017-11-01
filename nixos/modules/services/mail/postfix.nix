@@ -60,11 +60,11 @@ let
     manpage_directory    = "${pkgs.postfix}/share/man";
     html_directory       = "${pkgs.postfix}/share/postfix/doc/html";
     shlib_directory      = false;
-    relayhost            = if cfg.lookupMX || cfg.relayHost == ""
-                             then cfg.relayHost
-                             else
-			       "[${cfg.relayHost}]"
-			       + optionalString (cfg.relayPort != null) ":${toString cfg.relayPort}";
+    relayhost            = if cfg.relayHost == "" then "" else
+                             if cfg.lookupMX
+                             then "${cfg.relayHost}:${toString cfg.relayPort}"
+                             else "[${cfg.relayHost}]:${toString cfg.relayPort}";
+
     mail_spool_directory = "/var/spool/mail/";
     setgid_group         = setgidGroup;
   }
@@ -461,13 +461,10 @@ in
       };
 
       relayPort = mkOption {
-        type = types.nullOr types.int;
-        default = null;
-        example = 587;
+        type = types.int;
+        default = 25;
         description = "
-          Specify an optional port for outbound mail relay. (Note:
-          only used if an explicit <option>relayHost</option> is
-          defined.)
+          SMTP port for relay mail relay.
         ";
       };
 
