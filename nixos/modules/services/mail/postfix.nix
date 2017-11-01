@@ -63,7 +63,7 @@ let
     relayhost            = if cfg.relayHost == "" then "" else
                              if cfg.lookupMX
                              then "${cfg.relayHost}:${toString cfg.relayPort}"
-                             else "[${cfg.relayHost}]:${toString cfg.relayPort}"
+                             else "[${cfg.relayHost}]:${toString cfg.relayPort}";
 
     mail_spool_directory = "/var/spool/mail/";
     setgid_group         = setgidGroup;
