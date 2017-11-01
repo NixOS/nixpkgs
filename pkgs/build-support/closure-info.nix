@@ -8,7 +8,10 @@
 
 { rootPaths }:
 
-if builtins.langVersion >= 5 then
+#if builtins.langVersion >= 5 then
+# FIXME: it doesn't work on Hydra, failing to find mkdir;
+#   perhaps .attrs.sh clobbers PATH with new nix?
+if false then
 
   # Nix >= 1.12: Include NAR hash / size info.
 
@@ -19,7 +22,7 @@ if builtins.langVersion >= 5 then
 
     exportReferencesGraph.closure = rootPaths;
 
-    nativeBuildInputs = [ jq ];
+    PATH = "${coreutils}/bin:${jq}/bin";
 
     builder = builtins.toFile "builder"
       ''
