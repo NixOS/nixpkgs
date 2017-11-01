@@ -1,12 +1,12 @@
 { stdenv, fetchurl, glibc, sane-backends, qtbase, qtsvg, libXext, libX11, libXdmcp, libXau, libxcb }:
   let
-    version = "4.2.70";
+    version = "4.3.61";
   in
     stdenv.mkDerivation {
       name = "masterpdfeditor-${version}";
       src = fetchurl {
         url = "http://get.code-industry.net/public/master-pdf-editor-${version}_qt5.amd64.tar.gz";
-        sha256 = "0vl5gc1fzsmzl56vd9g3av48557if8a04vhhl5yna8by26h6xz0c";
+        sha256 = "1g6mx8nch6ypf78h6xsb673wim19wn5ni5840armzg0pvi3sfknm";
       };
       libPath = stdenv.lib.makeLibraryPath [
         stdenv.cc.cc
@@ -34,10 +34,10 @@
                  $out/bin/masterpdfeditor4
       '';
       meta = with stdenv.lib; {
-        description = "PDF Editor";
+        description = "Master PDF Editor";
         homepage = "https://code-industry.net/free-pdf-editor/";
         license = licenses.unfreeRedistributable;
         platforms = platforms.linux;
-        maintainers = maintainers.cmcdragonkai;
+        maintainers = with maintainers; [ cmcdragonkai flokli ];
       };
     }
