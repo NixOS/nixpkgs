@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, cacert, zlib, curl }:
+{ stdenv, fetchurl, callPackage }:
 
 let
   # Note: the version MUST be one version prior to the version we're
@@ -29,9 +29,8 @@ let
      sha256 = hashes."${platform}";
   };
 
-in import ./binaryBuild.nix
-  { inherit stdenv fetchurl makeWrapper cacert zlib curl;
+in callPackage ./binaryBuild.nix
+  { inherit version src platform;
     buildRustPackage = null;
-    inherit version src platform;
     versionType = "bootstrap";
   }
