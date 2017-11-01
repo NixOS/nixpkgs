@@ -17965,6 +17965,8 @@ with pkgs;
 
   rocksndiamonds = callPackage ../games/rocksndiamonds { };
 
+  runescape-launcher = callPackage ../games/runescape-launcher { };
+
   saga = callPackage ../applications/gis/saga { };
 
   samplv1 = callPackage ../applications/audio/samplv1 { };
