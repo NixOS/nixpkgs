@@ -1542,7 +1542,7 @@ with pkgs;
   skk-dicts = callPackage ../tools/inputmethods/skk/skk-dicts { };
 
   ibus = callPackage ../tools/inputmethods/ibus {
-    inherit (gnome3) dconf glib;
+    inherit (gnome3) dconf gconf glib;
   };
 
   ibus-qt = callPackage ../tools/inputmethods/ibus/ibus-qt.nix { };
