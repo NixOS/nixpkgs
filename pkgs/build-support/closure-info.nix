@@ -19,7 +19,7 @@ if builtins.langVersion >= 5 then
 
     exportReferencesGraph.closure = rootPaths;
 
-    PATH = "${coreutils}/bin:${jq}/bin";
+    nativeBuildInputs = [ jq ];
 
     builder = builtins.toFile "builder"
       ''
