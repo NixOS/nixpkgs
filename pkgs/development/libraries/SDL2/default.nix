@@ -2,6 +2,7 @@
 , openglSupport ? false, mesa_noglu
 , alsaSupport ? true, alsaLib
 , x11Support ? true, libICE, libXi, libXScrnSaver, libXcursor, libXinerama, libXext, libXxf86vm, libXrandr
+, waylandSupport ? true, wayland, wayland-protocols, libxkbcommon
 , dbusSupport ? false, dbus
 , udevSupport ? false, udev
 , ibusSupport ? false, ibus
@@ -17,7 +18,7 @@ assert openglSupport -> (stdenv.isDarwin || mesa_noglu != null && x11Support);
 
 let
   configureFlagsFun = attrs: [
-      "--disable-oss" "--disable-x11-shared"
+      "--disable-oss" "--disable-x11-shared" "--disable-wayland-shared"
       "--disable-pulseaudio-shared" "--disable-alsa-shared"
     ] ++ lib.optional alsaSupport "--with-alsa-prefix=${attrs.alsaLib.out}/lib"
       ++ lib.optional (!x11Support) "--without-x";
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
 
   # Since `libpulse*.la' contain `-lgdbm', PulseAudio must be propagated.
   propagatedBuildInputs = lib.optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ] ++
+    lib.optionals waylandSupport [ wayland wayland-protocols libxkbcommon ] ++
     lib.optional pulseaudioSupport libpulseaudio;
 
   buildInputs = [ audiofile ] ++
