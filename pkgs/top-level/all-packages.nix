@@ -9384,8 +9384,6 @@ with pkgs;
 
   libmatroska = callPackage ../development/libraries/libmatroska { };
 
-  libmcs = callPackage ../development/libraries/libmcs { };
-
   libmd = callPackage ../development/libraries/libmd { };
 
   libmemcached = callPackage ../development/libraries/libmemcached { };
