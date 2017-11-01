@@ -22,13 +22,23 @@
       ];
       dontStrip = true;
       installPhase = ''
-        mkdir -pv $out/bin
+        mkdir -p $out/bin $out/share/applications $out/share/pixmaps
+
+        substituteInPlace masterpdfeditor4.desktop \
+          --replace 'Exec=/opt/master-pdf-editor-4' "Exec=$out/bin" \
+          --replace 'Path=/opt/master-pdf-editor-4' "Path=$out/bin" \
+          --replace 'Icon=/opt/master-pdf-editor-4' "Icon=$out/share/pixmaps"
+
         cp -v masterpdfeditor4 $out/bin/masterpdfeditor4
-        cp -v masterpdfeditor4.png $out/bin/masterpdfeditor4.png
+        cp -v masterpdfeditor4.png $out/share/pixmaps/
+        cp -v masterpdfeditor4.desktop $out/share/applications
+
         cp -v -r stamps $out/bin/stamps
         cp -v -r templates $out/bin/templates
         cp -v -r lang $out/bin/lang
         cp -v -r fonts $out/bin/fonts
+        install -D license.txt $out/share/$name/LICENSE
+
         patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
                  --set-rpath $libPath \
                  $out/bin/masterpdfeditor4
