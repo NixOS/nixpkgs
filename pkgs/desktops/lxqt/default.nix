@@ -34,7 +34,6 @@ let
     libfm-qt = callPackage ./core/libfm-qt { };
     lxqt-about = callPackage ./core/lxqt-about { };
     lxqt-admin = callPackage ./core/lxqt-admin { };
-    lxqt-common = callPackage ./core/lxqt-common { };
     lxqt-config = callPackage ./core/lxqt-config { };
     lxqt-globalkeys = callPackage ./core/lxqt-globalkeys { };
     lxqt-l10n = callPackage ./core/lxqt-l10n { };
@@ -85,7 +84,6 @@ let
       libfm-qt
       lxqt-about
       lxqt-admin
-      lxqt-common
       lxqt-config
       lxqt-globalkeys
       lxqt-l10n
