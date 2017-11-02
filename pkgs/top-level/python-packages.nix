@@ -16856,25 +16856,7 @@ in {
     inherit (pkgs) openldap cyrus_sasl openssl;
   };
 
-  ldap3 = buildPythonPackage rec {
-    version = "1.0.4";
-    name = "ldap3-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/ldap3/${name}.tar.gz";
-      sha256 = "0j4qqj9vq022hy7wfqn8s0j4vm2g6paabbzas1vbyspawvcfai98";
-    };
-
-    buildInputs = with self; [ gssapi ];
-
-    propagatedBuildInputs = with self; [ pyasn1 ];
-
-    meta = {
-      homepage = https://pypi.python.org/pypi/ldap3;
-      description = "A strictly RFC 4510 conforming LDAP V3 pure Python client library";
-      license = licenses.lgpl3;
-    };
-  };
+  ldap3 = callPackage ../development/python-modules/ldap3 {};
 
   ptest = buildPythonPackage rec {
     name = pname + "-" + version;
