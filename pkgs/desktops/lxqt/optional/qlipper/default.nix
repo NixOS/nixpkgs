@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   pname = "qlipper";
   version = "5.0.0";
 
-  srcs = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "pvanek";
     repo = pname;
     rev = version;

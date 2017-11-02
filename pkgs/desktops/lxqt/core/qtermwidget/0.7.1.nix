@@ -1,22 +1,20 @@
-{ stdenv, fetchFromGitHub, cmake, qt5, lxqt }:
+{ stdenv, fetchFromGitHub, cmake, qt5 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  name = "${pname}_0_7_1-${version}";
   pname = "qtermwidget";
-  version = "0.8.0";
+  version = "0.7.1";
 
-  src = fetchFromGitHub {
+  srcs = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "14yjz6b1l2yd7sfsxjv26yg5153fpyq23443kswkgkd9jh32gxj4";
+    sha256 = "0awp33cnkpi9brpx01mz5hwj7j2lq1wdi8cabk3wassd99vvxdxz";
   };
 
-  nativeBuildInputs = [ cmake lxqt.lxqt-build-tools ];
+  nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ qt5.qtbase qt5.qttools];
-
-  cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
+  buildInputs = [ qt5.qtbase ];
 
   meta = with stdenv.lib; {
     description = "A terminal emulator widget for Qt 5";

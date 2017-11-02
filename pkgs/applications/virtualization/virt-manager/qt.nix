@@ -19,8 +19,9 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    qtbase qtmultimedia qtsvg lxqt.qtermwidget
-    libvirt libvncserver pcre pixman spice_gtk spice_protocol
+    # virt-manager-qt currently does not compile with qtermwidget-0.8.0
+    qtbase qtmultimedia qtsvg lxqt.qtermwidget_0_7_1
+    libvirt libvncserver pixman spice_gtk spice_protocol
   ];
 
   nativeBuildInputs = [ cmake pkgconfig ];

@@ -2,24 +2,28 @@
 
 stdenv.mkDerivation rec {
   name = "libqtxdg-${version}";
-  version = "2.0.0";
+  version = "3.1.0";
 
   src = fetchFromGitHub {
     owner = "lxde";
     repo = "libqtxdg";
     rev = version;
-    sha256 = "1s5jw4q6gcivk7mc95ir9q2nry4yyhfwy039ddf5ymh79nynv8vy";
+    sha256 = "03kdrx5sgrl93yband87n30i0k2mv6dknwdw2adz45j5z9rhd3z6";
   };
 
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ qt5.qtbase qt5.qtsvg ];
 
+  preConfigure = ''
+    cmakeFlags+=" -DQTXDGX_ICONENGINEPLUGIN_INSTALL_PATH=$out/$qtPluginPrefix"
+  '';
+
   meta = with stdenv.lib; {
     description = "Qt implementation of freedesktop.org xdg specs";
     homepage = https://github.com/lxde/libqtxdg;
     license = licenses.lgpl21;
-    maintainers = with maintainers; [ romildo ];
     platforms = with platforms; unix;
+    maintainers = with maintainers; [ romildo ];
   };
 }
