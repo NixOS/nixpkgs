@@ -141,16 +141,15 @@ in
 
       production = mkOption {
         type = types.bool;
-        default = false;
+        default = true;
         description = ''
           If set to true, use Let's Encrypt's production environment
           instead of the staging environment. The main benefit of the
           staging environment is to get much higher rate limits.
 
-          See https://letsencrypt.org/docs/staging-environment for
-          more detail.
-        '';
-      };
+          See
+          <literal>https://letsencrypt.org/docs/staging-environment</literal>
+          for more detail.  ''; };
 
       certs = mkOption {
         default = { };
