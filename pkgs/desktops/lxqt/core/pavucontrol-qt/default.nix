@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qt5, lxqt, libpulseaudio, pcre }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, lxqt, libpulseaudio, pcre, qtbase, qttools, qtx11extras }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -19,9 +19,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    qt5.qtbase
-    qt5.qttools
-    qt5.qtx11extras
+    qtbase
+    qttools
+    qtx11extras
     libpulseaudio
     pcre
   ];
