@@ -15524,21 +15524,7 @@ in {
   };
 
 
-  pyasn1 = buildPythonPackage rec {
-    name = "pyasn1-0.1.9";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyasn1/${name}.tar.gz";
-      sha256 = "0zraxni14bqi20kr4bi6nwsh32aibz0fq0xaczfisw0zdpcsqg45";
-    };
-
-    meta = {
-      description = "ASN.1 tools for Python";
-      homepage = http://pyasn1.sourceforge.net/;
-      license = "mBSD";
-      platforms = platforms.unix;  # arbitrary choice
-    };
-  };
+  pyasn1 = callPackage ../development/python-modules/pyasn1 { };
 
   pyasn1-modules = buildPythonPackage rec {
     name = "pyasn1-modules-${version}";
