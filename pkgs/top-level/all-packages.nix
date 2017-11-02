@@ -6860,7 +6860,6 @@ with pkgs;
   apacheAnt = callPackage ../development/tools/build-managers/apache-ant { };
 
   apacheKafka = apacheKafka_1_0;
-  apacheKafka_0_8 = callPackage ../servers/apache-kafka { majorVersion = "0.8"; };
   apacheKafka_0_9 = callPackage ../servers/apache-kafka { majorVersion = "0.9"; };
   apacheKafka_0_10 = callPackage ../servers/apache-kafka { majorVersion = "0.10"; };
   apacheKafka_0_11 = callPackage ../servers/apache-kafka { majorVersion = "0.11"; };
