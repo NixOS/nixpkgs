@@ -11606,23 +11606,7 @@ in {
 
   hyperframe = callPackage ../development/python-modules/hyperframe { };
 
-  h2 = buildPythonPackage rec {
-    name = "h2-${version}";
-    version = "2.5.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/h2/${name}.tar.gz";
-      sha256 = "0xhzm5vcfhdq3mihynwh4ljwi0r06lvzk3ypr0gmmbcp1x43ffb7";
-    };
-
-    propagatedBuildInputs = with self; [ enum34 hpack hyperframe ];
-
-    meta = {
-      description = "HTTP/2 State-Machine based protocol implementation";
-      homepage = "http://hyper.rtfd.org/";
-      license = licenses.mit;
-    };
-  };
+  h2 = callPackage ../development/python-modules/h2 { };
 
   editorconfig = buildPythonPackage rec {
     name = "EditorConfig-${version}";
