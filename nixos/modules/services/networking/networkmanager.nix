@@ -32,6 +32,11 @@ let
     ipv6.ip6-privacy=2
     ethernet.cloned-mac-address=${cfg.ethernet.macAddress}
     wifi.cloned-mac-address=${cfg.wifi.macAddress}
+    ${optionalString (cfg.wifi.powersave != null)
+      ''wifi.powersave=${if cfg.wifi.powersave then "3" else "2"}''}
+
+    [device]
+    wifi.scan-rand-mac-address=${if cfg.wifi.scanRandMacAddress then "yes" else "no"}
   '';
 
   /*
@@ -179,7 +184,27 @@ in {
       };
 
       ethernet.macAddress = macAddressOpt;
-      wifi.macAddress = macAddressOpt;
+
+      wifi = {
+        macAddress = macAddressOpt;
+
+        powersave = mkOption {
+          type = types.nullOr types.bool;
+          default = null;
+          description = ''
+            Whether to enable Wi-Fi power saving.
+          '';
+        };
+
+        scanRandMacAddress = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Whether to enable MAC address randomization of a Wi-Fi device
+            during scanning.
+          '';
+        };
+      };
 
       useDnsmasq = mkOption {
         type = types.bool;
