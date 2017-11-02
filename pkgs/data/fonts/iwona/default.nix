@@ -5,13 +5,12 @@ stdenv.mkDerivation rec {
   version = "0_995";
 
   src = fetchzip {
-    url = "jmn.pl/pliki/Iwona-otf-${version}.zip";
+    url = "http://jmn.pl/pliki/Iwona-otf-${version}.zip";
     sha256 = "1wj5bxbxpz5a8p3rhw708cyjc0lgqji8g0iv6brmmbrrkpb3jq2s";
   };
 
   installPhase = ''
-    mkdir -p $out/share/fonts/opentype/
-    cp -v *.otf $out/share/fonts/opentype/
+    install -m 444 -D -t $out/share/fonts/opentype/ *.otf
   '';
 
   outputHashAlgo = "sha256";
