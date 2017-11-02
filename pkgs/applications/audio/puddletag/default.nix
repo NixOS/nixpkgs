@@ -11,7 +11,9 @@ python2Packages.buildPythonApplication rec {
     sha256 = "1g6wa91awy17z5b704yi9kfynnvfm9lkrvpfvwccscr1h8s3qmiz";
   };
 
-  sourceRoot = "source/source";
+  setSourceRoot = ''
+    sourceRoot=$(echo */source)
+  '';
 
   disabled = python2Packages.isPy3k; # work to support python 3 has not begun
 

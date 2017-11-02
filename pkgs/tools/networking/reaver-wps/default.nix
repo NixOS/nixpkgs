@@ -13,7 +13,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ libpcap sqlite ];
 
-  sourceRoot = "reaver-${version}/src";
+
+  setSourceRoot = ''
+    sourceRoot=$(echo */src)
+  '';
 
   configureFlags = "--sysconfdir=${confdir}";
 
