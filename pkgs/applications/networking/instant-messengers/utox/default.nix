@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libtoxcore dbus libvpx libX11 openal freetype
     libv4l libXrender fontconfig libXext libXft filter-audio
-    libsodium libopus check
+    libsodium libopus
   ];
 
   nativeBuildInputs = [
-    cmake git pkgconfig
+    cmake git pkgconfig check
   ];
 
   cmakeFlags = [
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = false;
+
+  checkTarget = "test";
 
   meta = with stdenv.lib; {
     description = "Lightweight Tox client";
