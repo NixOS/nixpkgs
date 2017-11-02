@@ -54,6 +54,19 @@ in
         Extra configuration text appended to <filename>sudoers</filename>.
       '';
     };
+
+    security.sudo.package = mkOption {
+      type = types.package;
+      default = sudo;
+      example = literalExample ''
+        sudo.override {
+          withInsults = true;
+        }
+      '';
+      description = ''
+        The package which contains the `sudo` binary.
+      '';
+    };
   };
 
 
@@ -78,11 +91,11 @@ in
       '';
 
     security.wrappers = {
-      sudo.source = "${pkgs.sudo.out}/bin/sudo";
-      sudoedit.source = "${pkgs.sudo.out}/bin/sudoedit";
+      sudo.source = "${cfg.package.out}/bin/sudo";
+      sudoedit.source = "${cfg.package.out}/bin/sudoedit";
     };
 
-    environment.systemPackages = [ sudo ];
+    environment.systemPackages = [ cfg.package ];
 
     security.pam.services.sudo = { sshAgentAuth = true; };
 
@@ -92,7 +105,7 @@ in
           { src = pkgs.writeText "sudoers-in" cfg.configFile; }
           # Make sure that the sudoers file is syntactically valid.
           # (currently disabled - NIXOS-66)
-          "${pkgs.sudo}/sbin/visudo -f $src -c && cp $src $out";
+          "${cfg.package}/sbin/visudo -f $src -c && cp $src $out";
         target = "sudoers";
         mode = "0440";
       };
