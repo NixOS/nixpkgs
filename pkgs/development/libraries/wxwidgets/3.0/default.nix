@@ -3,13 +3,13 @@
 , withMesa ? true, mesa_glu ? null, mesa_noglu ? null
 , compat24 ? false, compat26 ? true, unicode ? true
 , withGtk2 ? true
-, withWebKit ? false, webkitgtk24x-gtk2 ? null, webkitgtk216x ? null
+, withWebKit ? false, webkitgtk24x-gtk2 ? null, webkitgtk218x ? null
 , AGL ? null, Carbon ? null, Cocoa ? null, Kernel ? null, QTKit ? null
 }:
 
 
 assert withMesa -> mesa_glu != null && mesa_noglu != null;
-assert withWebKit -> (if withGtk2 then webkitgtk24x-gtk2 else webkitgtk216x) != null;
+assert withWebKit -> (if withGtk2 then webkitgtk24x-gtk2 else webkitgtk218x) != null;
 
 with stdenv.lib;
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
     [ (if withGtk2 then gtk2 else gtk3) libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer
       gst-plugins-base GConf ]
     ++ optional withMesa mesa_glu
-    ++ optional withWebKit (if withGtk2 then webkitgtk24x-gtk2 else webkitgtk216x)
+    ++ optional withWebKit (if withGtk2 then webkitgtk24x-gtk2 else webkitgtk218x)
     ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QTKit ];
 
   nativeBuildInputs = [ pkgconfig ];

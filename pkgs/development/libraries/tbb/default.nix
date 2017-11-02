@@ -1,15 +1,20 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub, compiler ? if stdenv.cc.isClang then "clang" else null, stdver ? null }:
 
-stdenv.mkDerivation {
-  name = "tbb-4.4-u2";
+with stdenv.lib; stdenv.mkDerivation rec {
+  name = "tbb-${version}";
+  version = "2018_U1";
 
-  src = fetchurl {
-    url = "https://www.threadingbuildingblocks.org/sites/default/files/software_releases/source/tbb44_20151115oss_src.tgz";
-    sha256 = "1fvprkjdxj7529hr1qkzkxkk18mx6zllrpiwglq4k3y1hpyc9m9x";
+  src = fetchFromGitHub {
+    owner = "01org";
+    repo = "tbb";
+    rev = version;
+    sha256 = "1lygz07va6hsv2vlx9zwz5d2n81rxsdhmh0pqxgj8n1bvb1rp0qw";
   };
 
-  checkTarget = "test";
-  doCheck = false;
+  makeFlags = concatStringsSep " " (
+    optional (compiler != null) "compiler=${compiler}" ++
+    optional (stdver != null) "stdver=${stdver}"
+  );
 
   installPhase = ''
     mkdir -p $out/{lib,share/doc}
@@ -23,8 +28,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Intel Thread Building Blocks C++ Library";
-    homepage = http://threadingbuildingblocks.org/;
-    license = stdenv.lib.licenses.lgpl3Plus;
+    homepage = "http://threadingbuildingblocks.org/";
+    license = licenses.asl20;
     longDescription = ''
       Intel Threading Building Blocks offers a rich and complete approach to
       expressing parallelism in a C++ program. It is a library that helps you
@@ -33,7 +38,7 @@ stdenv.mkDerivation {
       represents a higher-level, task-based parallelism that abstracts platform
       details and threading mechanisms for scalability and performance.
     '';
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
-    maintainers = with stdenv.lib.maintainers; [ peti thoughtpolice ];
+    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [ peti thoughtpolice dizfer ];
   };
 }

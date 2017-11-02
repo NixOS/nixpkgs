@@ -22,8 +22,8 @@ let
   );
 
   graphiteApiConfig = pkgs.writeText "graphite-api.yaml" ''
-    time_zone: ${config.time.timeZone}
     search_index: ${dataDir}/index
+    ${optionalString (!isNull config.time.timeZone) ''time_zone: ${config.time.timeZone}''}
     ${optionalString (cfg.api.finders != []) ''finders:''}
     ${concatMapStringsSep "\n" (f: "  - " + f.moduleName) cfg.api.finders}
     ${optionalString (cfg.api.functions != []) ''functions:''}
@@ -536,7 +536,7 @@ in {
         environment = {
           PYTHONPATH = let
               aenv = pkgs.python.buildEnv.override {
-                extraLibs = [ cfg.api.package pkgs.cairo ] ++ cfg.api.finders;
+                extraLibs = [ cfg.api.package pkgs.cairo pkgs.pythonPackages.cffi ] ++ cfg.api.finders;
               };
             in "${aenv}/${pkgs.python.sitePackages}";
           GRAPHITE_API_CONFIG = graphiteApiConfig;

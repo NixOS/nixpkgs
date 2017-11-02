@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "alertmanager-${version}";
-  version = "0.8.0";
+  version = "0.9.1";
   rev = "v${version}";
 
   goPackagePath = "github.com/prometheus/alertmanager";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "prometheus";
     repo = "alertmanager";
-    sha256 = "0bqc58j0nrq7y8nbd927z7x74m8mcd2782cxkqwscpq6d9983qql";
+    sha256 = "1lkfj63pp4jf58xmn015r7s42p1wyj6fryihpmdn0k76b0ccwqzj";
   };
 
   # Tests exist, but seem to clash with the firewall.

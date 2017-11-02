@@ -55,6 +55,10 @@ configuration file located at
 </programlisting>
 </para>
 
+<para>Note that we are not able to test or build unfree software on Hydra
+due to policy. Most unfree licenses prohibit us from either executing or
+distributing the software.</para>
+
 <section xml:id="sec-allow-broken">
   <title>Installing broken packages</title>
 

@@ -85,6 +85,9 @@ stdenv.mkDerivation {
     # https://reviews.llvm.org/rL281650
     rm -vr src/test/run-pass/issue-36474.rs || true
 
+    # On Hydra: `TcpListener::bind(&addr)`: Address already in use (os error 98)'
+    sed '/^ *fn fast_rebind()/i#[ignore]' -i src/libstd/net/tcp.rs
+
     # Disable some failing gdb tests. Try re-enabling these when gdb
     # is updated past version 7.12.
     rm src/test/debuginfo/basic-types-globals.rs

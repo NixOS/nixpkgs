@@ -144,6 +144,10 @@ let
   appleDerivation_ = name: version: sha256: attrs: stdenv.mkDerivation ({
     inherit version;
     name = "${name}-${version}";
+    enableParallelBuilding = true;
+    meta = {
+      platforms = stdenv.lib.platforms.darwin;
+    };
   } // (if attrs ? srcs then {} else {
     src  = fetchApple version sha256 name;
   }) // attrs);
@@ -153,7 +157,7 @@ let
       name = builtins.elemAt (stdenv.lib.splitString "/" namePath) 0;
       appleDerivation = appleDerivation_ name version sha256;
       callPackage = pkgs.newScope (packages // pkgs.darwin // { inherit appleDerivation name version; });
-    in callPackage (./. + builtins.toPath "/${namePath}");
+    in callPackage (./. + "/${namePath}");
 
   libsecPackage = pkgs.callPackage ./libsecurity_generic {
     inherit applePackage appleDerivation_;
