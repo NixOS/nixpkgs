@@ -1396,7 +1396,7 @@ with pkgs;
   clementine = callPackage ../applications/audio/clementine {
     boost = boost155;
     gst_plugins =
-      with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly ];
+      with gst_all_1; [ gst-plugins-base gst-plugins-good gst-plugins-ugly gst-libav ];
   };
 
   clementineFree = clementine.free;
