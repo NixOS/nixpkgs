@@ -18,9 +18,13 @@ let
   };
 
   apcu51 = assert isPhp7; buildPecl {
-    name = "apcu-5.1.2";
+    name = "apcu-5.1.8";
 
-    sha256 = "0r5pfbjbmdj46h20jm3iqmy969qd27ajyf0phjhgykv6j0cqjlgd";
+    sha256 = "01dfbf0245d8cc0f51ba16467a60b5fad08e30b28df7846e0dd213da1143ecce";
+
+    doCheck = true;
+    checkTarget = "test";
+    checkFlagsArray = ["REPORT_EXIT_STATUS=1" "NO_INTERACTION=1"];
   };
 
   ast = assert isPhp7; buildPecl {
