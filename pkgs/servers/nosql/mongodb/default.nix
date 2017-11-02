@@ -85,6 +85,24 @@ in stdenv.mkDerivation rec {
     # don't fail by default on i686
     substituteInPlace src/mongo/db/storage/storage_options.h \
       --replace 'engine("wiredTiger")' 'engine("mmapv1")'
+  ''
+    # pcrecpp.h used to export some "using std::foo;" directives before 8.41,
+    # therefore adding them next to the include should be safe.
+    # Upstream patch for 3.2 branch apparently doesn't work for our 3.2.9
+    # https://github.com/mongodb/mongo/commit/18f4c63869a3
+  + ''
+    sed '/^#include <pcrecpp\.h>/i using std::string;' \
+      -i src/mongo/util/version.cpp.in \
+      -i src/mongo/util/options_parser/constraints.cpp \
+      -i src/mongo/util/net/miniwebserver.cpp \
+      -i src/mongo/shell/dbshell.cpp \
+      -i src/mongo/shell/bench.cpp \
+      -i src/mongo/s/catalog/replset/catalog_manager_replica_set_test.cpp \
+      -i src/mongo/s/catalog/replset/catalog_manager_replica_set.cpp \
+      -i src/mongo/s/catalog/legacy/catalog_manager_legacy.cpp \
+      -i src/mongo/db/repl/master_slave.cpp \
+      -i src/mongo/db/matcher/expression_leaf.cpp \
+      -i src/mongo/db/dbwebserver.cpp
   '';
 
   buildPhase = ''
