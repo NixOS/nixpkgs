@@ -1,5 +1,5 @@
 { stdenv, fetchurl, jre, makeWrapper, bash,
-  majorVersion ? "0.9" }:
+  majorVersion ? "1.0" }:
 
 let
   versionMap = {
