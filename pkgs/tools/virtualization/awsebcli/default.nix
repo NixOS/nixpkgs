@@ -3,6 +3,16 @@ let
 
   localPython = python.override {
     packageOverrides = self: super: rec {
+      cement = super.cement.overridePythonAttrs (oldAttrs: rec {
+        version = "2.8.2";
+
+        src = super.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          sha256 = "1li2whjzfhbpg6fjb6r1r92fb3967p1xv6hqs3j787865h2ysrc7";
+        };
+      });
+
       colorama = super.colorama.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.7";
 
