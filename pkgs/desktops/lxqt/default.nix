@@ -29,6 +29,8 @@ let
     lxqt-themes = callPackage ./core/lxqt-themes { };
     pavucontrol-qt = callPackage ./core/pavucontrol-qt { };
     qtermwidget = callPackage ./core/qtermwidget { };
+    # for now keep version 0.7.1 because virt-manager-qt currently does not compile with qtermwidget-0.8.0
+    qtermwidget_0_7_1 = callPackage ./core/qtermwidget/0.7.1.nix { };
 
     ### CORE 2
     lxqt-panel = callPackage ./core/lxqt-panel { };
