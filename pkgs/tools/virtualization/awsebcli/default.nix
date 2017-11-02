@@ -1,4 +1,4 @@
- { stdenv, python }:
+{ stdenv, python }:
 let
 
   localPython = python.override {
