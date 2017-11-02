@@ -61,6 +61,12 @@ in stdenv.mkDerivation rec {
         name = "boost160.patch";
         sha256 = "0bvsf3499zj55pzamwjmsssr6x63w434944w76273fr5rxwzcmh8";
       })
+      # probably not needed for > 3.4.10
+      (fetchpatch {
+        url = https://github.com/mongodb/mongo/commit/218a7b1d4ea3d3b.diff;
+        name = "pcre-8.41.patch";
+        sha256 = "1dra51gw130bq78l2yfkdaj0jkha95ikpv4ig21rapbl63ip3znj";
+      })
     ];
 
   postPatch = ''
