@@ -1,5 +1,5 @@
 {
-  stdenv, fetchFromGitHub, fetchurl,
+  stdenv, fetchFromGitHub,
   cmake, pkgconfig, lxqt-build-tools,
   qtbase, qttools, qtx11extras, qtsvg, libdbusmenu, kwindowsystem, solid,
   kguiaddons, liblxqt, libqtxdg, lxqt-globalkeys, libsysstat,

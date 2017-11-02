@@ -7,7 +7,7 @@
 
 with stdenv.lib;
 
-let version = "3.2.9";
+let version = "3.4.2";
     system-libraries = [
       "pcre"
       #"asio" -- XXX use package?
@@ -43,8 +43,8 @@ in stdenv.mkDerivation rec {
   name = "mongodb-${version}";
 
   src = fetchurl {
-    url = "http://downloads.mongodb.org/src/mongodb-src-r${version}.tar.gz";
-    sha256 = "06q6j2bjy31pjwqws53wdpmn2x8w2hafzsnv1s3wx15pc9vq3y15";
+    url = "https://fastdl.mongodb.org/src/mongodb-src-r${version}.tar.gz";
+    sha256 = "0n8vspccrpd2z9xk3yjpz4gprd730dfacw914ksjzz9iadn0zdi9";
   };
 
   nativeBuildInputs = [ scons ];
@@ -52,12 +52,6 @@ in stdenv.mkDerivation rec {
 
   patches =
     [
-      # When not building with the system valgrind, the build should use the
-      # vendored header file - regardless of whether or not we're using the system
-      # tcmalloc - so we need to lift the include path manipulation out of the
-      # conditional.
-      ./valgrind-include.patch
-
       # MongoDB keeps track of its build parameters, which tricks nix into
       # keeping dependencies to build inputs in the final output.
       # We remove the build flags from buildInfo data.
@@ -86,6 +80,8 @@ in stdenv.mkDerivation rec {
     substituteInPlace src/mongo/db/storage/storage_options.h \
       --replace 'engine("wiredTiger")' 'engine("mmapv1")'
   '';
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.cc.isClang "-Wno-unused-command-line-argument";
 
   buildPhase = ''
     scons -j $NIX_BUILD_CORES core --release ${other-args}

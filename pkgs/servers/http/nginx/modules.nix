@@ -35,7 +35,7 @@
       owner = "openresty";
       repo = "headers-more-nginx-module";
       rev = "v0.26";
-      sha256 = "01wkqhk8mk8jgmzi7jbzmg5kamffx3lmhj5yfwryvnvs6xqs74wn";
+      sha256 = "0zhr3ai4xf5yghxvlbrwv8n06fgx33f1n1d4a6gmsczdfjzf8g6g";
     };
   };
 

@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "15j619kvmdgj2hpma92mkxbzjvgn8147a7500zl3bap9g8bkylqg";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libxml2 gnome2.GConf libxslt glib_networking ];
 

@@ -22,6 +22,11 @@
 # them with our own.
 
 let
+  ## Prefetch commands to run after update, from this directory:
+  ## e.g. with Emacs: C-u M-x shell-command
+  # nix-prefetch-url ../../../../ -A dropbox.src
+  # nix-prefetch-url ../../../../ -A pkgsi686Linux.dropbox.src
+
   # NOTE: When updating, please also update in current stable,
   # as older versions stop working
   version = "37.4.29";

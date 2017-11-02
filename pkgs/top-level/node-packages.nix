@@ -66,7 +66,7 @@ in rec {
     bower2nix.buildInputs = [ pkgs.makeWrapper ];
     bower2nix.postInstall = ''
       for prog in bower2nix fetch-bower; do
-        wrapProgram "$out/bin/$prog" --prefix PATH : "${pkgs.git}/bin"
+        wrapProgram "$out/bin/$prog" --prefix PATH : ${stdenv.lib.makeBinPath [ pkgs.git pkgs.nix ]}
       done
     '';
   } // args.overrides or {};

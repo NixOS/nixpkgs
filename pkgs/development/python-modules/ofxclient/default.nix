@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi,
- ofxhome, ofxparse, beautifulsoup, lxml, keyring
+ ofxhome, ofxparse, beautifulsoup4, lxml, keyring
 }:
 
 buildPythonPackage rec {
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   # ImportError: No module named tests
   doCheck = false;
 
-  propagatedBuildInputs = [ ofxhome ofxparse beautifulsoup lxml keyring ];
+  propagatedBuildInputs = [ ofxhome ofxparse beautifulsoup4 lxml keyring ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/captin411/ofxclient;

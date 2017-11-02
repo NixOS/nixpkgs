@@ -1,4 +1,4 @@
-{pkgs, system, nodejs}:
+{pkgs, system, nodejs, stdenv}:
 
 let
   nodePackages = import ./composition-v6.nix {
@@ -6,6 +6,13 @@ let
   };
 in
 nodePackages // {
+  dnschain =  nodePackages.dnschain.override (oldAttrs: {
+    buildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper nodePackages.coffee-script ];
+    postInstall = ''
+      wrapProgram $out/bin/dnschain --suffix PATH : ${pkgs.openssl.bin}/bin
+    '';
+  });
+
   node-inspector = nodePackages.node-inspector.override (oldAttrs: {
     buildInputs = oldAttrs.buildInputs ++ [ nodePackages.node-pre-gyp ];
   });
@@ -41,7 +48,7 @@ nodePackages // {
     buildInputs = oldAttrs.buildInputs ++ [ pkgs.makeWrapper ];
     postInstall = ''
       for prog in bower2nix fetch-bower; do
-        wrapProgram "$out/bin/$prog" --prefix PATH : "${pkgs.git}/bin"
+        wrapProgram "$out/bin/$prog" --prefix PATH : ${stdenv.lib.makeBinPath [ pkgs.git pkgs.nix ]}
       done
     '';
   });
