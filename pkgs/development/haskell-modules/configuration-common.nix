@@ -976,4 +976,6 @@ self: super: {
   # Build with gi overloading feature disabled.
   ltk = super.ltk.overrideScope (self: super: { haskell-gi-overloading = self.haskell-gi-overloading_0_0; });
 
+  # missing dependencies: Glob >=0.7.14 && <0.8, data-fix ==0.0.4
+  stack2nix = doJailbreak super.stack2nix;
 }

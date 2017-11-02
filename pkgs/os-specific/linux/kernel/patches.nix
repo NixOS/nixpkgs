@@ -58,15 +58,6 @@ rec {
 
   cpu-cgroup-v2 = import ./cpu-cgroup-v2-patches;
 
-  DCCP_double_free_vulnerability_CVE-2017-6074 = rec
-    { name = "DCCP_double_free_vulnerability_CVE-2017-6074.patch";
-      patch = fetchpatch {
-        inherit name;
-        url = "https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/patch/?id=5edabca9d4cff7f1f2b68f0bac55ef99d9798ba4";
-        sha256 = "10dmv3d3gj8rvj9h40js4jh8xbr5wyaqiy0kd819mya441mj8ll2";
-      };
-    };
-
   tag_hardened = rec {
     name = "tag-hardened";
     patch = ./tag-hardened.patch;

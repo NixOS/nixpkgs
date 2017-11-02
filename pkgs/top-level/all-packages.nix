@@ -2525,7 +2525,6 @@ with pkgs;
   hardlink = callPackage ../tools/system/hardlink { };
 
   hashcat = callPackage ../tools/security/hashcat { };
-  hashcat3 = callPackage ../tools/security/hashcat/hashcat3 { };
 
   hash-slinger = callPackage ../tools/security/hash-slinger { };
 
@@ -3028,41 +3027,17 @@ with pkgs;
 
   nodejs-slim = nodejs-slim-6_x;
 
-  nodejs-4_x = callPackage ../development/web/nodejs/v4.nix {
-    libtool = darwin.cctools;
-  };
+  nodejs-4_x = callPackage ../development/web/nodejs/v4.nix {};
+  nodejs-slim-4_x = callPackage ../development/web/nodejs/v4.nix { enableNpm = false; };
 
-  nodejs-slim-4_x = callPackage ../development/web/nodejs/v4.nix {
-    libtool = darwin.cctools;
-    enableNpm = false;
-  };
+  nodejs-6_x = callPackage ../development/web/nodejs/v6.nix {};
+  nodejs-slim-6_x = callPackage ../development/web/nodejs/v6.nix { enableNpm = false; };
 
-  nodejs-6_x = callPackage ../development/web/nodejs/v6.nix {
-    libtool = darwin.cctools;
-  };
+  nodejs-8_x = callPackage ../development/web/nodejs/v8.nix {};
+  nodejs-slim-8_x = callPackage ../development/web/nodejs/v8.nix { enableNpm = false; };
 
-  nodejs-slim-6_x = callPackage ../development/web/nodejs/v6.nix {
-    libtool = darwin.cctools;
-    enableNpm = false;
-  };
-
-  nodejs-8_x = callPackage ../development/web/nodejs/v8.nix {
-    libtool = darwin.cctools;
-  };
-
-  nodejs-slim-8_x = callPackage ../development/web/nodejs/v8.nix {
-    libtool = darwin.cctools;
-    enableNpm = false;
-  };
-
-  nodejs-9_x = callPackage ../development/web/nodejs/v9.nix {
-    libtool = darwin.cctools;
-  };
-
-  nodejs-slim-9_x = callPackage ../development/web/nodejs/v9.nix {
-    libtool = darwin.cctools;
-    enableNpm = false;
-  };
+  nodejs-9_x = callPackage ../development/web/nodejs/v9.nix {};
+  nodejs-slim-9_x = callPackage ../development/web/nodejs/v9.nix { enableNpm = false; };
 
   nodePackages_6_x = callPackage ../development/node-packages/default-v6.nix {
     nodejs = pkgs.nodejs-6_x;
@@ -12419,11 +12394,12 @@ with pkgs;
     };
   };
 
+  # linux mptcp is based on the 4.4 kernel
   linux_mptcp = callPackage ../os-specific/linux/kernel/linux-mptcp.nix {
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         kernelPatches.p9_fixes
-        kernelPatches.DCCP_double_free_vulnerability_CVE-2017-6074
+        kernelPatches.cpu-cgroup-v2."4.4"
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -13343,6 +13319,8 @@ with pkgs;
 
   ipafont = callPackage ../data/fonts/ipafont {};
   ipaexfont = callPackage ../data/fonts/ipaexfont {};
+
+  iwona = callPackage ../data/fonts/iwona { };
 
   junicode = callPackage ../data/fonts/junicode { };
 
@@ -15712,6 +15690,7 @@ with pkgs;
     lua5_sockets = lua5_1_sockets;
     youtube-dl = pythonPackages.youtube-dl;
     libva = libva-full;
+    waylandSupport = stdenv.isLinux;
   };
 
   mpvScripts = {
