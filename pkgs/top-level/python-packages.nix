@@ -11604,21 +11604,7 @@ in {
     };
   };
 
-  hyperframe = buildPythonPackage rec {
-    name = "hyperframe-${version}";
-    version = "4.0.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/hyperframe/${name}.tar.gz";
-      sha256 = "0hsfq0jigwa0i58z7vbnp62l7za49gmlg75vnygq2ijhkidkcmwa";
-    };
-
-    meta = {
-      description = "HTTP/2 framing layer for Python";
-      homepage = "http://hyper.rtfd.org/";
-      license = licenses.mit;
-    };
-  };
+  hyperframe = callPackage ../development/python-modules/hyperframe { };
 
   h2 = buildPythonPackage rec {
     name = "h2-${version}";
