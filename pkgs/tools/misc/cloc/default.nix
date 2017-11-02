@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1ihma4f6f92jp1mvzr4rjrgyh9m5wzrlxngaxfn7g0a8r2kyi65b";
   };
 
-  sourceRoot = "source/Unix";
+  setSourceRoot = ''
+    sourceRoot=$(echo */Unix)
+  '';
 
   buildInputs = [ makeWrapper perl AlgorithmDiff RegexpCommon ];
 

@@ -16,8 +16,6 @@ stdenv.mkDerivation rec
 
   buildInputs = [ zlib python cmake ];
 
-  sourceRoot = "ptex-v${version}-src";
-
   enableParallelBuilding = true;
 
   buildPhase = ''

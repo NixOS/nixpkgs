@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "18bbcrjk6ladr46kl3dvqz5pq2xcv4nnwmajqllb4sl3k1xqsngy";
   };
 
-  sourceRoot = "source/src/unetbootin";
+  setSourceRoot = ''
+    sourceRoot=$(echo */src/unetbootin)
+  '';
 
   buildInputs = [ qt4 ];
   nativeBuildInputs = [ makeWrapper qmake4Hook ];

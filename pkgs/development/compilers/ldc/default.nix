@@ -11,24 +11,28 @@ stdenv.mkDerivation rec {
     repo = "ldc";
     rev = "v${version}";
     sha256 = "1ac3j4cwwgjpayhijxx4d6478bc3iqksjxkd7xp7byx7k8w1ppdl";
+    name = "ldc-v${version}-src";
   })
   (fetchFromGitHub {
     owner = "ldc-developers";
     repo = "druntime";
     rev = "ldc-v${version}";
     sha256 = "1m13370wnj3sizqk3sdpzi9am5d24srf27d613qblhqa9n8vwz30";
+    name = "druntime-ldc-v${version}-src";
   })
   (fetchFromGitHub {
     owner = "ldc-developers";
     repo = "phobos";
     rev = "ldc-v${version}";
     sha256 = "0fhcdfi7a00plwj27ysfyv783nhk0kspq7hawf6vbsl3s1nyvn8g";
+    name = "phobos-ldc-v${version}-src";
   })
   (fetchFromGitHub {
     owner = "ldc-developers";
     repo = "dmd-testsuite";
     rev = "ldc-v${version}";
     sha256 = "0dmdkp220gqhxjrmrjfkf0vsvylwfaj70hswavq4q3v4dg17pzmj";
+    name = "dmd-testsuite-ldc-v${version}-src";
   })
   ];
 
