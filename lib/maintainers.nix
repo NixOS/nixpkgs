@@ -585,6 +585,7 @@
   snyh = "Xia Bin <snyh@snyh.org>";
   solson = "Scott Olson <scott@solson.me>";
   sorpaas = "Wei Tang <hi@that.world>";
+  sorki = "Richard Marko <srk@48.io>";
   spacefrogg = "Michael Raitza <spacefrogg-nixos@meterriblecrew.net>";
   spencerjanssen = "Spencer Janssen <spencerjanssen@gmail.com>";
   spinus = "Tomasz Czyż <tomasz.czyz@gmail.com>";
