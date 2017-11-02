@@ -45,6 +45,7 @@ let
     lxqt-qtplugin = callPackage ./core/lxqt-qtplugin { };
     lxqt-session = callPackage ./core/lxqt-session { };
     lxqt-sudo = callPackage ./core/lxqt-sudo { };
+    lxqt-themes = callPackage ./core/lxqt-themes { };
     pavucontrol-qt = callPackage ./core/pavucontrol-qt { };
     qtermwidget = callPackage ./core/qtermwidget { };
 
@@ -95,6 +96,7 @@ let
       lxqt-qtplugin
       lxqt-session
       lxqt-sudo
+      lxqt-themes
       pavucontrol-qt
 
       ### CORE 2
