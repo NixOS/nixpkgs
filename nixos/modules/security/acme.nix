@@ -149,7 +149,8 @@ in
 
           See
           <literal>https://letsencrypt.org/docs/staging-environment</literal>
-          for more detail.  ''; };
+          for more detail.
+      ''; };
 
       certs = mkOption {
         default = { };
