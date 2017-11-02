@@ -2506,6 +2506,28 @@ rec {
 
   };
 
+  vim-docbk = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-docbk-2015-04-01";
+    src = fetchgit {
+      url = "https://github.com/jhradilek/vim-docbk";
+      rev = "6ac0346ce96dbefe982b9e765a81c072997f2e9e";
+      sha256 = "1jnx39m152hf9j620ygagaydg6h8m8gxkr1fmxj6kgqf71jr0n9d";
+    };
+    dependencies = [];
+
+  };
+
+  vim-docbk-snippets = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-docbk-snippets-2017-11-02";
+    src = fetchgit {
+      url = "https://github.com/jhradilek/vim-snippets";
+      rev = "69cce66defdf131958f152ea7a7b26c21ca9d009";
+      sha256 = "1363b2fmv69axrl2hm74dmx51cqd8k7rk116890qllnapzw1zjgc";
+    };
+    dependencies = [];
+
+  };
+
   vim2hs = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim2hs-2014-04-16";
     src = fetchgit {

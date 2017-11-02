@@ -71,6 +71,8 @@
 "github:jceb/vim-orgmode"
 "github:jeetsukumaran/vim-buffergator"
 "github:jgdavey/tslime.vim"
+"github:jhradilek/vim-docbk"
+"github:jhradilek/vim-snippets"
 "github:jiangmiao/auto-pairs"
 "github:jistr/vim-nerdtree-tabs"
 "github:jnurmine/zenburn"
