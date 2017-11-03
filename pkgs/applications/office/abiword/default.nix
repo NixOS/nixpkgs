@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   patches = [
-  (fetchurl { url = https://gist.githubusercontent.com/ylwghst/f65fef2a751e81af57e2d64d40128247/raw/; sha256 = "1ni2sc7jhqafwkkjdwchdx56fv7rp91grxblravp2kymrf9j1add"; })
+    (fetchurl { url = https://gist.github.com/ylwghst/b28ef051980f41aca56df7a8affd9526/raw/; sha256 = "02p8kz02xm1197zcpzjs010mna9hxsbq5lwgxr8b7qhh9yxja7al"; })
   ];
 
   buildInputs =
