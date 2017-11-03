@@ -12,13 +12,13 @@
 # `contents = {object = ...; symlink = /init;}' is a typical
 # argument.
 
-{ stdenv, perl, cpio, contents, ubootChooser, compressor, prepend
+{ stdenv, perl, cpio, contents, compressor, prepend, ubootTools
 , hostPlatform
 }:
 
 let
   inputsFun = ubootName : [ perl cpio ]
-    ++ stdenv.lib.optional (ubootName != null) [ (ubootChooser ubootName) ];
+    ++ stdenv.lib.optional (ubootName != null) ubootTools;
   makeUInitrdFun = ubootName : (ubootName != null);
 in
 stdenv.mkDerivation {
