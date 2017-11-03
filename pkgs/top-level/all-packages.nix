@@ -3717,6 +3717,10 @@ with pkgs;
 
   openvpn_learnaddress = callPackage ../tools/networking/openvpn/openvpn_learnaddress.nix { };
 
+  openvpn-auth-ldap = callPackage ../tools/networking/openvpn/openvpn-auth-ldap.nix {
+    stdenv = clangStdenv;
+  };
+
   update-resolv-conf = callPackage ../tools/networking/openvpn/update-resolv-conf.nix { };
 
   open-pdf-presenter = callPackage ../applications/misc/open-pdf-presenter { };
