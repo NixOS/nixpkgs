@@ -16908,16 +16908,16 @@ in {
   };
 
   ldap3 = buildPythonPackage rec {
-    version = "1.0.4";
+    version = "2.2.4";
     name = "ldap3-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/ldap3/${name}.tar.gz";
-      sha256 = "0j4qqj9vq022hy7wfqn8s0j4vm2g6paabbzas1vbyspawvcfai98";
+      sha256 = "0116c2rmysf1l5035s6c9l4j43415dcxkqr95sx4dw70x1qddi20";
     };
 
     buildInputs = with self; [ gssapi ];
-
+    doCheck = pythonOlder "3.5";
     propagatedBuildInputs = with self; [ pyasn1 ];
 
     meta = {
