@@ -1,14 +1,14 @@
 { stdenv, pkgs, fetchurl, python3Packages, fetchFromGitHub, fetchzip, python3, beancount }:
 
 python3Packages.buildPythonApplication rec {
-  version = "1.3";
+  version = "1.5";
   name = "fava-${version}";
 
   src = fetchFromGitHub {
     owner = "beancount";
     repo = "fava";
     rev = "v${version}";
-    sha256 = "0g0aj0qcmpny6dipi00nks7h3mf5a4jfd6bxjm1rb5807wswcpg8";
+    sha256 = "03wgggc2lzma1d57l1l4z8q7dsqxlg90alg2p1734jhavskfqw63";
   };
 
   assets = fetchzip {
