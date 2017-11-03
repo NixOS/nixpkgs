@@ -286,7 +286,7 @@ stdenv.mkDerivation {
         *) echo "Multiple dynamic linkers found for platform '${targetPlatform.config}'." >&2;;
       esac
 
-      if [ -n "$dynamicLinker" ]; then
+      if [ -n "''${dynamicLinker:-}" ]; then
         echo $dynamicLinker > $out/nix-support/dynamic-linker
 
     '' + (if targetPlatform.isDarwin then ''
@@ -296,7 +296,9 @@ stdenv.mkDerivation {
           echo ${libc_lib}/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
         fi
 
-        local ldflagsBefore=(-dynamic-linker "$dynamicLinker")
+     if [ -n "''${dynamicLinker:-}" ]; then
+             local ldflagsBefore=(-dynamic-linker "$dynamicLinker")
+     fi
     '') + ''
       fi
 
