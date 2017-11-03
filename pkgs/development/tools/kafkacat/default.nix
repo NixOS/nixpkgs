@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib rdkafka yajl ];
 
+  preConfigure = ''
+    patchShebangs ./configure
+  '';
+
   meta = with stdenv.lib; {
     description = "A generic non-JVM producer and consumer for Apache Kafka";
     homepage = https://github.com/edenhill/kafkacat;
