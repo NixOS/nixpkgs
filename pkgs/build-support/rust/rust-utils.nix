@@ -3,30 +3,30 @@
 # This file is licensed under the Apache-2.0 license, and under the
 # MIT license, at your convenience.
 
-{ lib, buildPlatform, stdenv }:
+{ lib, buildPlatform, stdenv, pkgs }:
 
-let buildCrate = { crateName, crateVersion, dependencies, complete, crateFeatures, libName, build, release, libPath, crateType, metadata, crateBin, finalBins, verboseBuild }:
+let buildCrate = { crateName, crateVersion, dependencies, complete,
+                   crateFeatures, libName, build, release, libPath,
+                   crateType, metadata, crateBin, finalBins, verboseBuild }:
 
-      let depsDir = builtins.foldl' (deps: dep: deps + " " + dep.out) "" dependencies;
-          completeDepsDir = builtins.foldl' (deps: dep: deps + " " + dep.out) "" complete;
+      let depsDir = lib.concatStringsSep " " dependencies;
+          completeDepsDir = lib.concatStringsSep " " complete;
           deps =
-            builtins.foldl' (deps: dep:
+            lib.concatMapStringsSep " " (dep:
               let extern = lib.strings.replaceStrings ["-"] ["_"] dep.libName; in
-              deps + (if dep.crateType == "lib" then
+              (if dep.crateType == "lib" then
                  " --extern ${extern}=${dep.out}/lib${extern}-${dep.metadata}.rlib"
               else
                  " --extern ${extern}=${dep.out}/lib${extern}-${dep.metadata}.so")
-            ) "" dependencies;
+            ) dependencies;
           optLevel = if release then 3 else 0;
           rustcOpts = (if release then "-C opt-level=3" else "-C debuginfo=2");
-          rustcMeta = "-C metadata=" + metadata + " -C extra-filename=-" + metadata;
+          rustcMeta = "-C metadata=${metadata} -C extra-filename=-${metadata}";
       in ''
-
       norm="$(printf '\033[0m')" #returns to "normal"
       bold="$(printf '\033[0;1m')" #set bold
       green="$(printf '\033[0;32m')" #set red
       boldgreen="$(printf '\033[0;1;32m')" #set bold, and set red.
-
       mkdir -p target/deps
       mkdir -p target/build
       chmod uga+w target -R
@@ -52,15 +52,15 @@ let buildCrate = { crateName, crateVersion, dependencies, complete, crateFeature
       BUILD_OUT_DIR=""
       export CARGO_PKG_NAME=${crateName}
       export CARGO_PKG_VERSION=${crateVersion}
-      export CARGO_CFG_TARGET_ARCH=$(echo ${buildPlatform.system} | sed -e "s/\([^-]*\)-\([^-]*\)/\1/")
-      export CARGO_CFG_TARGET_OS=$(echo ${buildPlatform.system} | sed -e "s/\([^-]*\)-\([^-]*\)/\2/")
+      export CARGO_CFG_TARGET_ARCH=${buildPlatform.parsed.cpu.name}
+      export CARGO_CFG_TARGET_OS=${buildPlatform.parsed.kernel.name}
 
       export CARGO_CFG_TARGET_ENV="gnu"
       export CARGO_MANIFEST_DIR="."
       export DEBUG="${toString (!release)}"
       export OPT_LEVEL="${toString optLevel}"
-      export TARGET="${buildPlatform.system}-gnu"
-      export HOST="${buildPlatform.system}-gnu"
+      export TARGET="${buildPlatform.config}"
+      export HOST="${buildPlatform.config}"
       export PROFILE=${if release then "release" else "debug"}
       export OUT_DIR=$(pwd)/target/build/${crateName}.out
 
@@ -71,12 +71,16 @@ let buildCrate = { crateName, crateVersion, dependencies, complete, crateFeature
          BUILD="build.rs"
       fi
       if [[ ! -z "$BUILD" ]] ; then
-         echo "$boldgreen" "Building $BUILD (${libName})" "$norm"
+         echo "$boldgreen""Building $BUILD (${libName})""$norm"
          mkdir -p target/build/${crateName}
          if [ -e target/link_ ]; then
-           rustc --crate-name build_script_build $BUILD --crate-type bin ${rustcOpts} ${crateFeatures} --out-dir target/build/${crateName} --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow $(cat target/link_)
+           rustc --crate-name build_script_build $BUILD --crate-type bin ${rustcOpts} \
+             ${crateFeatures} --out-dir target/build/${crateName} --emit=dep-info,link \
+             -L dependency=target/deps ${deps} --cap-lints allow $(cat target/link_)
          else
-           rustc --crate-name build_script_build $BUILD --crate-type bin ${rustcOpts} ${crateFeatures} --out-dir target/build/${crateName} --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow
+           rustc --crate-name build_script_build $BUILD --crate-type bin ${rustcOpts} \
+             ${crateFeatures} --out-dir target/build/${crateName} --emit=dep-info,link \
+             -L dependency=target/deps ${deps} --cap-lints allow
          fi
          mkdir -p target/build/${crateName}.out
          export RUST_BACKTRACE=1
@@ -84,14 +88,17 @@ let buildCrate = { crateName, crateVersion, dependencies, complete, crateFeature
          mkdir -p $OUT_DIR
          target/build/${crateName}/build_script_build > target/build/${crateName}.opt
          set +e
-         EXTRA_BUILD=$(grep "^cargo:rustc-flags=" target/build/${crateName}.opt | sed -e "s/cargo:rustc-flags=\(.*\)/\1/")
-         EXTRA_FEATURES=$(grep "^cargo:rustc-cfg=" target/build/${crateName}.opt | sed -e "s/cargo:rustc-cfg=\(.*\)/--cfg \1/")
-
-         EXTRA_LINK=$(grep "^cargo:rustc-link-lib=" target/build/${crateName}.opt | sed -e "s/cargo:rustc-link-lib=\(.*\)/\1/")
-         EXTRA_LINK_SEARCH=$(grep "^cargo:rustc-link-search=" target/build/${crateName}.opt | sed -e "s/cargo:rustc-link-search=\(.*\)/\1/")
+         EXTRA_BUILD=$(sed -n "s/^cargo:rustc-flags=\(.*\)/\1/p" target/build/${crateName}.opt)
+         EXTRA_FEATURES=$(sed -n "s/^cargo:rustc-cfg=\(.*\)/--cfg \1/p" target/build/${crateName}.opt)
+         EXTRA_LINK=$(sed -n "s/^cargo:rustc-link-lib=\(.*\)/\1/p" target/build/${crateName}.opt)
+         EXTRA_LINK_SEARCH=$(sed -n "s/^cargo:rustc-link-search=\(.*\)/\1/p" target/build/${crateName}.opt)
          CRATENAME=$(echo ${crateName} | sed -e "s/\(.*\)-sys$/\1/" | tr '[:lower:]' '[:upper:]')
-
-         grep "^cargo:" target/build/${crateName}.opt | grep -v "^cargo:rustc-" | grep -v "^cargo:warning=" | grep -v "^cargo:rerun-if-changed=" | grep -v "^cargo:rerun-if-env-changed" | sed -e "s/cargo:\([^=]*\)=\(.*\)/export DEP_$(echo $CRATENAME)_\U\1\E=\2/" > target/env
+         grep "^cargo:" target/build/${crateName}.opt \
+            | grep -v "^cargo:rustc-" \
+            | grep -v "^cargo:warning=" \
+            | grep -v "^cargo:rerun-if-changed=" \
+            | grep -v "^cargo:rerun-if-env-changed" \
+            | sed -e "s/cargo:\([^=]*\)=\(.*\)/export DEP_$(echo $CRATENAME)_\U\1\E=\2/" > target/env
 
          set -e
          if [ -n "$(ls target/build/${crateName}.out)" ]; then
@@ -103,31 +110,36 @@ let buildCrate = { crateName, crateVersion, dependencies, complete, crateFeature
             fi
          fi
       fi
-      # echo "Features: ${crateFeatures}" $EXTRA_FEATURES
 
       EXTRA_LIB=""
       CRATE_NAME=$(echo ${libName} | sed -e "s/-/_/g")
-      # echo "Libname" ${libName} ${libPath}
-      # echo "Deps: ${deps}"
+
       if [ -e "${libPath}" ] ; then
 
-         echo "$boldgreen" "Building ${libPath}" "$norm"
          if ${verboseBuild}; then
-           echo "$boldgreen" "Running" "$norm" "rustc --crate-name $CRATE_NAME ${libPath} --crate-type ${crateType} ${rustcOpts} ${rustcMeta} ${crateFeatures} --out-dir target/deps --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES"
+           echo $boldgreen""Building ${libPath}$norm rustc --crate-name $CRATE_NAME ${libPath} --crate-type ${crateType} ${rustcOpts} ${rustcMeta} ${crateFeatures} --out-dir target/deps --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES
          fi
-         rustc --crate-name $CRATE_NAME ${libPath} --crate-type ${crateType} ${rustcOpts} ${rustcMeta} ${crateFeatures} --out-dir target/deps --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES
+         rustc --crate-name $CRATE_NAME ${libPath} --crate-type ${crateType} \
+           ${rustcOpts} ${rustcMeta} ${crateFeatures} --out-dir target/deps \
+           --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow \
+           $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES
+
          EXTRA_LIB=" --extern $CRATE_NAME=target/deps/lib$CRATE_NAME-${metadata}.rlib"
          if [ -e target/deps/lib$CRATE_NAME-${metadata}.so ]; then
             EXTRA_LIB="$EXTRA_LIB --extern $CRATE_NAME=target/deps/lib$CRATE_NAME-${metadata}.so"
          fi
       elif [ -e src/lib.rs ] ; then
 
-         echo "$boldgreen" "Building src/lib.rs (${libName})" "$norm"
-         if ${verboseBuild}; then
-           echo "$boldgreen" "Running" "$norm" "rustc --crate-name $CRATE_NAME src/lib.rs --crate-type ${crateType} ${rustcOpts} ${rustcMeta} ${crateFeatures} --out-dir target/deps --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES";
-         fi
+         echo "$boldgreen""Building src/lib.rs (${libName})""$norm"
 
-         rustc --crate-name $CRATE_NAME src/lib.rs --crate-type ${crateType} ${rustcOpts} ${rustcMeta} ${crateFeatures} --out-dir target/deps --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES
+         if ${verboseBuild}; then
+           echo $boldgreen""Running$norm rustc --crate-name $CRATE_NAME src/lib.rs --crate-type ${crateType} ${rustcOpts} ${rustcMeta} ${crateFeatures} --out-dir target/deps --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES
+         fi
+         rustc --crate-name $CRATE_NAME src/lib.rs --crate-type ${crateType} \
+           ${rustcOpts} ${rustcMeta} ${crateFeatures} --out-dir target/deps \
+           --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow \
+           $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES
+
          EXTRA_LIB=" --extern $CRATE_NAME=target/deps/lib$CRATE_NAME-${metadata}.rlib"
          if [ -e target/deps/lib$CRATE_NAME-${metadata}.so ]; then
             EXTRA_LIB="$EXTRA_LIB --extern $CRATE_NAME=target/deps/lib$CRATE_NAME-${metadata}.so"
@@ -135,13 +147,15 @@ let buildCrate = { crateName, crateVersion, dependencies, complete, crateFeature
 
       elif [ -e src/${libName}.rs ] ; then
 
-         echo "$boldgreen" "Building src/${libName}.rs" "$norm"
-
+         echo "$boldgreen""Building src/${libName}.rs""$norm"
          if ${verboseBuild}; then
-            echo "rustc --crate-name $CRATE_NAME src/${libName}.rs --crate-type ${crateType} ${rustcOpts} ${rustcMeta} ${crateFeatures} --out-dir target/deps --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES"
+           echo $boldgreen""Running$norm rustc --crate-name $CRATE_NAME src/${libName}.rs --crate-type ${crateType} ${rustcOpts} ${rustcMeta} ${crateFeatures} --out-dir target/deps --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES
          fi
+         rustc --crate-name $CRATE_NAME src/${libName}.rs --crate-type ${crateType} \
+           ${rustcOpts} ${rustcMeta} ${crateFeatures} --out-dir target/deps \
+           --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow \
+           $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES
 
-         rustc --crate-name $CRATE_NAME src/${libName}.rs --crate-type ${crateType} ${rustcOpts} ${rustcMeta} ${crateFeatures} --out-dir target/deps --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES
          EXTRA_LIB=" --extern $CRATE_NAME=target/deps/lib$CRATE_NAME-${metadata}.rlib"
          if [ -e target/deps/lib$CRATE_NAME-${metadata}.so ]; then
             EXTRA_LIB="$EXTRA_LIB --extern $CRATE_NAME=target/deps/lib$CRATE_NAME-${metadata}.so"
@@ -176,24 +190,32 @@ let buildCrate = { crateName, crateVersion, dependencies, complete, crateFeature
       mkdir -p target/bin
       echo "${crateBin}" | sed -n 1'p' | tr ',' '\n' | while read BIN; do
          if [ ! -z "$BIN" ]; then
-           printf "%s" "$boldgreen"
-           echo "Building $BIN"
-           printf "%s" "$norm"
+           echo "`tput setaf 2``tput bold`Building $BIN`tput sgr0`"
            if ${verboseBuild}; then
-              echo "$boldgreen" "Running" "$norm" " rustc --crate-name $BIN --crate-type bin ${rustcOpts} ${crateFeatures} --out-dir target/bin --emit=dep-info,link -L dependency=target/deps $LINK ${deps}$EXTRA_LIB --cap-lints allow $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES"
+             echo -n "`tput setaf 2``tput bold`Running`tput sgr0`"
+             set -x
            fi
-           rustc --crate-name $BIN --crate-type bin ${rustcOpts} ${crateFeatures} --out-dir target/bin --emit=dep-info,link -L dependency=target/deps $LINK ${deps}$EXTRA_LIB --cap-lints allow $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES
+           rustc --crate-name $BIN --crate-type bin ${rustcOpts} ${crateFeatures} \
+             --out-dir target/bin --emit=dep-info,link -L dependency=target/deps \
+             $LINK ${deps}$EXTRA_LIB --cap-lints allow \
+             $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES
+           set +x
          fi
       done
       if [[ (-z "${crateBin}") && (-e src/main.rs) ]]; then
-         printf "%s" "$boldgreen"
-         echo "Building src/main.rs"
-         printf "%s" "$norm"
+         echo "`tput setaf 2``tput bold`Building src/main.rs (${crateName})`tput sgr0`"
          if ${verboseBuild}; then
-            echo "$boldgreen" "Running" "$norm" "rustc --crate-name $CRATE_NAME src/main.rs --crate-type bin ${rustcOpts} ${crateFeatures} --out-dir target/bin --emit=dep-info,link -L dependency=target/deps $LINK ${deps}$EXTRA_LIB --cap-lints allow $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES"
+           echo -n "`tput setaf 2``tput bold`Running`tput sgr0`"
+           set -x
          fi
-         rustc --crate-name $CRATE_NAME src/main.rs --crate-type bin ${rustcOpts} ${crateFeatures} --out-dir target/bin --emit=dep-info,link -L dependency=target/deps $LINK ${deps}$EXTRA_LIB --cap-lints allow $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES
+         rustc --crate-name $CRATE_NAME src/main.rs --crate-type bin ${rustcOpts} \
+           ${crateFeatures} --out-dir target/bin --emit=dep-info,link \
+           -L dependency=target/deps $LINK ${deps}$EXTRA_LIB --cap-lints allow
+           $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES
+         set +x
       fi
+      # Remove object files to avoid "wrong ELF type"
+      rm -f $(find target -name "*.o")
     '' + finalBins;
 
     installCrate = crateName: ''
@@ -221,13 +243,13 @@ crate: rust: stdenv.mkDerivation rec {
 
     release = if crate ? release then crate.release else false;
     name = "rust_${crate.crateName}-${crate.version}";
-    buildInputs = [ rust ] ++ (lib.attrByPath ["buildInputs"] [] crate);
+    buildInputs = [ rust pkgs.ncurses ] ++ (lib.attrByPath ["buildInputs"] [] crate);
     dependencies = builtins.map (dep: dep rust) (lib.attrByPath ["dependencies"] [] crate);
 
     complete = builtins.foldl' (comp: dep: if lib.lists.any (x: x == comp) dep.complete then comp ++ dep.complete else comp) dependencies dependencies;
 
     crateFeatures = if crate ? features then
-       builtins.foldl' (features: f: features + " --cfg feature=\\\"${f}\\\"") "" crate.features
+       lib.concatMapStringsSep " " (f: "--cfg feature=\\\"${f}\\\"") crate.features
     else "";
 
     libName = if crate ? libName then crate.libName else crate.crateName;
