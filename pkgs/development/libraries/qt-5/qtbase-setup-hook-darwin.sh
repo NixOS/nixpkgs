@@ -3,7 +3,7 @@ qtQmlPrefix=@qtQmlPrefix@
 qtDocPrefix=@qtDocPrefix@
 
 _qtRmCMakeLink() {
-    find "${!outputLib}" -name "*.cmake" -type l | xargs rm
+    find "${!outputLib}" -name "*.cmake" -type l -delete
 }
 
 postInstallHooks+=(_qtRmCMakeLink)
