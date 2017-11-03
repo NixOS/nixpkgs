@@ -68,11 +68,12 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
     echo -e '#!/bin/sh\n'"$out/share/ccl-installation/${CCL_RUNTIME}"' "$@"\n' > "$out"/bin/"${CCL_RUNTIME}"
     chmod a+x "$out"/bin/"${CCL_RUNTIME}"
+    ln -s "$out"/bin/"${CCL_RUNTIME}" "$out"/bin/ccl
   '';
 
   meta = with stdenv.lib; {
     description = "Clozure Common Lisp";
-    homepage    = http://ccl.clozure.com/;
+    homepage    = https://ccl.clozure.com/;
     maintainers = with maintainers; [ raskin muflax tohl ];
     platforms   = attrNames options;
     license     = licenses.lgpl21;

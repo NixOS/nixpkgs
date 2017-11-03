@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A database that uses JSON for documents, JavaScript for MapReduce queries, and regular HTTP for an API";
-    homepage = "http://couchdb.apache.org";
+    homepage = http://couchdb.apache.org;
     license = licenses.asl20;
     platforms = platforms.all;
     maintainers = with maintainers; [ garbas ];

@@ -9,8 +9,9 @@ stdenv.mkDerivation  rec {
     sha256 = "1fi2m4gmvxdi260821y09lxsimq82yv4k5bbgk3kyc3x1nyhn7vx";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    alsaLib libjack2 pkgconfig libpulseaudio xorg.libX11 xorg.libXext
+    alsaLib libjack2 libpulseaudio xorg.libX11 xorg.libXext
     xorg.xproto
   ];
 
@@ -27,7 +28,7 @@ stdenv.mkDerivation  rec {
     description = "A range of synthesiser, electric piano and organ emulations";
     homepage = http://bristol.sourceforge.net;
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = ["x86_64-linux" "i686-linux"];
     maintainers = [ maintainers.goibhniu ];
   };
 }

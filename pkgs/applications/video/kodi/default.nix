@@ -38,10 +38,11 @@ assert pulseSupport -> libpulseaudio != null;
 assert rtmpSupport  -> rtmpdump != null;
 
 let
+  kodi_version = "17.4";
   rel = "Krypton";
-  ffmpeg_3_1_6 = fetchurl {
-    url = "https://github.com/xbmc/FFmpeg/archive/3.1.6-${rel}.tar.gz";
-    sha256 = "14jicb26s20nr3qmfpazszpc892yjwjn81zbsb8szy3a5xs19y81";
+  ffmpeg_3_1_9 = fetchurl {
+    url = "https://github.com/xbmc/FFmpeg/archive/3.1.9-${rel}-${kodi_version}.tar.gz";
+    sha256 = "0rhjz505ljfg2jqbm3rd7qbcjq4vnp8h9a8vad8rjf84v3alglpa";
   };
   # Usage of kodi fork of libdvdnav and libdvdread is necessary for functional dvd playback:
   libdvdnav_src = fetchurl {
@@ -53,18 +54,17 @@ let
     sha256 = "e7179b2054163652596a56301c9f025515cb08c6d6310b42b897c3ad11c0199b";
   };
 in stdenv.mkDerivation rec {
+    version = kodi_version;
     name = "kodi-${version}";
-    version = "17.1";
 
     src = fetchurl {
       url = "https://github.com/xbmc/xbmc/archive/${version}-${rel}.tar.gz";
-      sha256 = "1vmvrq0qdjnphw34yils2b5jnm05cmsg777hc4lwqz5mrc1kjgrh";
+      sha256 = "1p1lxkapynjbd85ns7m4jybl4k35kxzv7105xkh03hlz8kkqc23b";
     };
 
     buildInputs = [
-      makeWrapper libxml2 gnutls
-      pkgconfig cmake gnumake yasm python2
-      boost libmicrohttpd autoreconfHook
+      libxml2 gnutls yasm python2
+      boost libmicrohttpd
       gettext pcre-cpp yajl fribidi libva
       openssl gperf tinyxml2 taglib libssh swig jre
       libX11 xproto inputproto which
@@ -91,6 +91,9 @@ in stdenv.mkDerivation rec {
     ++ lib.optional rtmpSupport rtmpdump
     ++ lib.optional joystickSupport SDL2;
 
+    nativeBuildInputs = [
+      autoreconfHook cmake gnumake makeWrapper pkgconfig
+    ];
 
     dontUseCmakeConfigure = true;
 
@@ -99,7 +102,7 @@ in stdenv.mkDerivation rec {
         --replace 'usr/share/zoneinfo' 'etc/zoneinfo'
       substituteInPlace tools/depends/target/ffmpeg/autobuild.sh \
         --replace "/bin/bash" "${bash}/bin/bash -ex"
-      cp ${ffmpeg_3_1_6} tools/depends/target/ffmpeg/ffmpeg-3.1.6-${rel}.tar.gz
+      cp ${ffmpeg_3_1_9} tools/depends/target/ffmpeg/ffmpeg-3.1.9-${rel}-${version}.tar.gz
       ln -s ${libdvdcss.src} tools/depends/target/libdvdcss/libdvdcss-master.tar.gz
       cp ${libdvdnav_src} tools/depends/target/libdvdnav/libdvdnav-master.tar.gz
       cp ${libdvdread_src} tools/depends/target/libdvdread/libdvdread-master.tar.gz
@@ -114,7 +117,7 @@ in stdenv.mkDerivation rec {
       sed -i '/TestWebServer.cpp/d'  xbmc/network/test/{Makefile,CMakeLists.txt}
     '';
 
-    enableParallelBuild = true;
+    enableParallelBuilding = true;
 
     doCheck = true;
 
@@ -136,7 +139,7 @@ in stdenv.mkDerivation rec {
     '';
 
     meta = with stdenv.lib; {
-      homepage = http://kodi.tv/;
+      homepage = https://kodi.tv/;
       description = "Media center";
       license = licenses.gpl2;
       platforms = platforms.linux;

@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "xterm-327";
+  name = "xterm-330";
 
   src = fetchurl {
-    url = "ftp://invisible-island.net/xterm/${name}.tgz";
-    sha256 = "02qmfr1y24y5vq6kddksw84b8gxalc96n9wwaj7i8hmk6mn2zyv6";
+    url = "http://invisible-mirror.net/archives/xterm/${name}.tgz";
+    sha256 = "1psnfmqd23v9gxj8a98nzrgvymrk0p1whwqi92gy15bbkzrgkvks";
   };
 
   buildInputs =
@@ -49,6 +49,9 @@ stdenv.mkDerivation rec {
     for bin in $out/bin/*; do
       wrapProgram $bin --set XAPPLRESDIR $out/lib/X11/app-defaults/
     done
+
+    install -D -t $out/share/applications xterm.desktop
+    install -D -t $out/share/icons/hicolor/48x48/apps icons/xterm-color_48x48.xpm
   '';
 
   meta = {

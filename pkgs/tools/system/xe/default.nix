@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   
   meta = with lib; {
     description = "Simple xargs and apply replacement";
-    homepage = "https://github.com/chneukirchen/xe";
+    homepage = https://github.com/chneukirchen/xe;
     license = licenses.publicDomain;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ndowens ];

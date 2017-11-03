@@ -13,7 +13,8 @@ rec {
       sha256 = "178kfgq08cmgdzv7g8dwyjp4adwx8q04riimncq4nqkm8ng9ywbv";
     };
 
-    buildInputs = [ pkgconfig libsndfile ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libsndfile ];
 
     meta = with stdenv.lib; {
       description = "Audio processing plugin system for plugins that extract descriptive information from audio data";

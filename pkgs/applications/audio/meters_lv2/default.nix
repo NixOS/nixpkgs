@@ -25,7 +25,8 @@ in
 stdenv.mkDerivation {
   inherit name;
 
-  buildInputs = [ pkgconfig lv2 mesa gtk2 cairo pango fftw ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ lv2 mesa gtk2 cairo pango fftw ];
 
   srcs = [ src robtkSrc ];
   sourceRoot = name;

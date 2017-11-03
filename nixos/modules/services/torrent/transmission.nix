@@ -6,7 +6,7 @@ let
   cfg = config.services.transmission;
   apparmor = config.security.apparmor.enable;
 
-  homeDir = "/var/lib/transmission";
+  homeDir = cfg.home;
   downloadDir = "${homeDir}/Downloads";
   incompleteDir = "${homeDir}/.incomplete";
 
@@ -68,6 +68,14 @@ in
         type = types.int;
         default = 9091;
         description = "TCP port number to run the RPC/web interface.";
+      };
+
+      home = mkOption {
+        type = types.path;
+        default = "/var/lib/transmission";
+        description = ''
+          The directory where transmission will create files.
+        '';
       };
     };
   };

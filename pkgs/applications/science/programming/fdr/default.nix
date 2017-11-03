@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     cp -r * "$out"
     # Hack around lack of libtinfo in NixOS
     ln -s ${ncurses.out}/lib/libncursesw.so.6 $out/lib/libtinfo.so.5
-    ln -s ${qtbase.out}/lib/qt5/plugins $out/lib/qt_plugins
+    ln -s ${qtbase.out}/$qtPluginPrefix $out/lib/qt_plugins
     ln -s ${zlib.out}/lib/libz.so.1 $out/lib/libz.so.1
 
     for b in fdr4 _fdr4 refines _refines cspmprofiler cspmexplorerprof

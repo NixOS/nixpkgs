@@ -1,10 +1,10 @@
 { stdenv, fetchurl, dpkg
-, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib, gnome2
-, libnotify, nspr, nss, systemd, xorg }:
+, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
+, gnome2, libnotify, libxcb, nspr, nss, systemd, xorg }:
 
 let
 
-  version = "2.5.2";
+  version = "2.8.2";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
@@ -22,6 +22,7 @@ let
     gnome2.gtk
     gnome2.pango
     libnotify
+    libxcb
     nspr
     nss
     stdenv.cc.cc
@@ -45,7 +46,7 @@ let
     if stdenv.system == "x86_64-linux" then
       fetchurl {
         url = "https://downloads.slack-edge.com/linux_releases/slack-desktop-${version}-amd64.deb";
-        sha256 = "0mg8js18lnnwyvqksrhpym7d04bin16bh7sdmxbm36iijb9ajxmi";
+        sha256 = "019gzij6m1y9bv561nhbhgf2njp2svjqi5hs907pdjf7xwciwrkm";
       }
     else
       throw "Slack is not supported on ${stdenv.system}";
@@ -83,7 +84,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Desktop client for Slack";
-    homepage = "https://slack.com";
+    homepage = https://slack.com;
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };

@@ -1,66 +1,12 @@
-Index: pylib/gyp/xcode_emulation.py
-diff --git a/pylib/gyp/xcode_emulation.py b/pylib/gyp/xcode_emulation.py
-index b2aab986a427d5285d70558bf97f0a42bfe1556e..20592c73fae660009aac621097cf3c4fb61d6cb6 100644
 --- a/pylib/gyp/xcode_emulation.py
 +++ b/pylib/gyp/xcode_emulation.py
-@@ -236,8 +236,14 @@ class XcodeSettings(object):
-     if sdk_root.startswith('/'):
-       return sdk_root
-     if sdk_root not in XcodeSettings._sdk_path_cache:
--      XcodeSettings._sdk_path_cache[sdk_root] = self._GetSdkVersionInfoItem(
--          sdk_root, 'Path')
-+      try:
-+        XcodeSettings._sdk_path_cache[sdk_root] = self._GetSdkVersionInfoItem(
-+            sdk_root, 'Path')
-+      except:
-+        # if this fails it's because xcodebuild failed, which means
-+        # the user is probably on a CLT-only system, where there
-+        # is no valid SDK root
-+        XcodeSettings._sdk_path_cache[sdk_root] = None
-     return XcodeSettings._sdk_path_cache[sdk_root]
- 
-   def _AppendPlatformVersionMinFlags(self, lst):
-@@ -340,10 +346,11 @@ class XcodeSettings(object):
- 
-     cflags += self._Settings().get('WARNING_CFLAGS', [])
- 
--    config = self.spec['configurations'][self.configname]
--    framework_dirs = config.get('mac_framework_dirs', [])
--    for directory in framework_dirs:
--      cflags.append('-F' + directory.replace('$(SDKROOT)', sdk_root))
+@@ -1470,7 +1470,8 @@
+     sdk_root = xcode_settings._SdkRoot(configuration)
+     if not sdk_root:
+       sdk_root = xcode_settings._XcodeSdkPath('')
+-    env['SDKROOT'] = sdk_root
 +    if sdk_root:
-+      config = self.spec['configurations'][self.configname]
-+      framework_dirs = config.get('mac_framework_dirs', [])
-+      for directory in framework_dirs:
-+        cflags.append('-F' + directory.replace('$(SDKROOT)', sdk_root))
++      env['SDKROOT'] = sdk_root
  
-     self.configname = None
-     return cflags
-@@ -573,10 +580,11 @@ class XcodeSettings(object):
-     for rpath in self._Settings().get('LD_RUNPATH_SEARCH_PATHS', []):
-       ldflags.append('-Wl,-rpath,' + rpath)
- 
--    config = self.spec['configurations'][self.configname]
--    framework_dirs = config.get('mac_framework_dirs', [])
--    for directory in framework_dirs:
--      ldflags.append('-F' + directory.replace('$(SDKROOT)', self._SdkPath()))
-+    if self._SdkPath():
-+      config = self.spec['configurations'][self.configname]
-+      framework_dirs = config.get('mac_framework_dirs', [])
-+      for directory in framework_dirs:
-+        ldflags.append('-F' + directory.replace('$(SDKROOT)', self._SdkPath()))
- 
-     self.configname = None
-     return ldflags
-@@ -701,7 +709,10 @@ class XcodeSettings(object):
-         l = '-l' + m.group(1)
-       else:
-         l = library
--    return l.replace('$(SDKROOT)', self._SdkPath(config_name))
-+    if self._SdkPath():
-+      return l.replace('$(SDKROOT)', self._SdkPath(config_name))
-+    else:
-+      return l
- 
-   def AdjustLibraries(self, libraries, config_name=None):
-     """Transforms entries like 'Cocoa.framework' in libraries into entries like
+   if not additional_settings:
+     additional_settings = {}

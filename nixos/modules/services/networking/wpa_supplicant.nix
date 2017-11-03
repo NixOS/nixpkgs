@@ -148,6 +148,7 @@ in {
       wants = [ "network.target" ];
       requires = lib.concatMap deviceUnit ifaces;
       wantedBy = [ "multi-user.target" ];
+      stopIfChanged = false;
 
       path = [ pkgs.wpa_supplicant ];
 

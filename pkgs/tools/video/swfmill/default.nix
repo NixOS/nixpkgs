@@ -10,11 +10,15 @@ stdenv.mkDerivation rec {
     sha256 = "15mcpql448vvgsbxs7wd0vdk1ln6rdcpnif6i2zjm5l4xng55s7r";
   };
 
-  buildInputs = [ pkgconfig libxslt freetype libpng libxml2 ];
+  # Fixes build with GCC 6
+  NIX_CFLAGS_COMPILE = "-std=c++03";
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libxslt freetype libpng libxml2 ];
 
   meta = {
     description = "An xml2swf and swf2xml processor with import functionalities";
-    homepage = "http://swfmill.org";
+    homepage = http://swfmill.org;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
   };

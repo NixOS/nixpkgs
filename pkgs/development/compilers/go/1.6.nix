@@ -113,6 +113,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./remove-tools-1.5.patch
     ./creds-test.patch
+    ./fix-systime-1.6.patch
 
     # This test checks for the wrong thing with recent tzdata. It's been fixed in master but the patch
     # actually works on old versions too.
@@ -127,6 +128,7 @@ stdenv.mkDerivation rec {
            else if stdenv.system == "i686-linux" then "386"
            else if stdenv.system == "x86_64-linux" then "amd64"
            else if stdenv.isArm then "arm"
+           else if stdenv.isAarch64 then "arm64"
            else throw "Unsupported system";
   GOARM = stdenv.lib.optionalString (stdenv.system == "armv5tel-linux") "5";
   GO386 = 387; # from Arch: don't assume sse2 on i686

@@ -24,7 +24,9 @@ releaseTools.sourceTarball rec {
     eval "$preConfigure"
     releaseName=nixpkgs-$VERSION$VERSION_SUFFIX
     echo -n $VERSION_SUFFIX > .version-suffix
+    echo -n ${nixpkgs.rev or nixpkgs.shortRev} > .git-revision
     echo "release name is $releaseName"
+    echo "git-revision is $(cat .git-revision)"
   '';
 
   dontBuild = false;
@@ -57,8 +59,15 @@ releaseTools.sourceTarball rec {
     fi
 
     # Run the regression tests in `lib'.
-    res="$(nix-instantiate --eval --strict --show-trace lib/tests.nix)"
-    if test "$res" != "[ ]"; then
+    if
+        # `set -e` doesn't work inside here, so need to && instead :(
+        res="$(nix-instantiate --eval --strict lib/tests/misc.nix)" \
+        && [[ "$res" == "[ ]" ]] \
+        && res="$(nix-instantiate --eval --strict lib/tests/systems.nix)" \
+        && [[ "$res" == "[ ]" ]]
+    then
+        true
+    else
         echo "regression tests for lib failed, got: $res"
         exit 1
     fi

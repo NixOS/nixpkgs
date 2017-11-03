@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libudev, pkgconfig, qtbase, qmakeHook, zlib }:
+{ stdenv, fetchFromGitHub, libudev, pkgconfig, qtbase, qmake, zlib }:
 
 stdenv.mkDerivation rec {
   version = "0.2.6";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig
-    qmakeHook
+    qmake
   ];
 
   patches = [
@@ -29,8 +29,12 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   installPhase = ''
+    runHook preInstall
+
     install -D --mode 0755 --target-directory $out/bin bin/ckb-daemon bin/ckb
     install -D --mode 0755 --target-directory $out/libexec/ckb-animations bin/ckb-animations/*
+
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {

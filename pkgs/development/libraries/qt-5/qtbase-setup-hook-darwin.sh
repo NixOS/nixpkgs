@@ -1,3 +1,13 @@
+qtPluginPrefix=@qtPluginPrefix@
+qtQmlPrefix=@qtQmlPrefix@
+qtDocPrefix=@qtDocPrefix@
+
+_qtRmCMakeLink() {
+    find "${!outputLib}" -name "*.cmake" -type l | xargs rm
+}
+
+postInstallHooks+=(_qtRmCMakeLink)
+
 addToSearchPathOnceWithCustomDelimiter() {
     local delim="$1"
     local search="$2"
@@ -25,30 +35,28 @@ propagateOnce() {
 }
 
 _qtPropagate() {
-    for dir in "lib/qt5/plugins" "lib/qt5/qml" "lib/qt5/imports"; do
+    for dir in $qtPluginPrefix $qtQmlPrefix; do
         if [ -d "$1/$dir" ]; then
             propagateOnce propagatedBuildInputs "$1"
             break
         fi
     done
-    addToSearchPathOnce QT_PLUGIN_PATH "$1/lib/qt5/plugins"
-    addToSearchPathOnce QML_IMPORT_PATH "$1/lib/qt5/imports"
-    addToSearchPathOnce QML2_IMPORT_PATH "$1/lib/qt5/qml"
+    addToSearchPathOnce QT_PLUGIN_PATH "$1/$qtPluginPrefix"
+    addToSearchPathOnce QML2_IMPORT_PATH "$1/$qtQmlPrefix"
 }
 
 crossEnvHooks+=(_qtPropagate)
 
 _qtPropagateNative() {
-    for dir in "lib/qt5/plugins" "lib/qt5/qml" "lib/qt5/imports"; do
+    for dir in $qtPluginPrefix $qtQmlPrefix; do
         if [ -d "$1/$dir" ]; then
             propagateOnce propagatedNativeBuildInputs "$1"
             break
         fi
     done
     if [ -z "$crossConfig" ]; then
-        addToSearchPathOnce QT_PLUGIN_PATH "$1/lib/qt5/plugins"
-        addToSearchPathOnce QML_IMPORT_PATH "$1/lib/qt5/imports"
-        addToSearchPathOnce QML2_IMPORT_PATH "$1/lib/qt5/qml"
+    addToSearchPathOnce QT_PLUGIN_PATH "$1/$qtPluginPrefix"
+    addToSearchPathOnce QML2_IMPORT_PATH "$1/$qtQmlPrefix"
     fi
 }
 
@@ -112,10 +120,9 @@ if [ -z "$NIX_QT5_TMP" ]; then
     cat >"$NIX_QT5_TMP/bin/qt.conf" <<EOF
 [Paths]
 Prefix = $NIX_QT5_TMP
-Plugins = lib/qt5/plugins
-Imports = lib/qt5/imports
-Qml2Imports = lib/qt5/qml
-Documentation = share/doc/qt5
+Plugins = $qtPluginPrefix
+Qml2Imports = $qtQmlPrefix
+Documentation = $qtDocPrefix
 EOF
     echo "bin/qt.conf" >> "$NIX_QT5_TMP/nix-support/qt-inputs"
 
@@ -175,7 +182,8 @@ _qtFixCMakePaths() {
     find "${!outputLib}" -name "*.cmake" | while read file; do
         substituteInPlace "$file" \
             --subst-var-by NIX_OUT "${!outputLib}" \
-            --subst-var-by NIX_DEV "${!outputDev}"
+            --subst-var-by NIX_DEV "${!outputDev}" \
+            --subst-var-by NIX_BIN "${!outputBin}"
     done
 }
 

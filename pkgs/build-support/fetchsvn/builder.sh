@@ -18,6 +18,10 @@ if test -n "$http_proxy"; then
     export HOME="$PWD"
 fi;
 
+if test -z "$LC_ALL"; then
+    export LC_ALL="en_US.UTF-8"
+fi;
+
 # Pipe the "p" character into Subversion to force it to accept the
 # server's certificate.  This is perfectly safe: we don't care
 # whether the server is being spoofed --- only the cryptographic

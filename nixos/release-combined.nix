@@ -4,7 +4,8 @@
 
 { nixpkgs ? { outPath = ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
-, supportedSystems ? [ "x86_64-linux" "i686-linux" ]
+, supportedSystems ? [ "x86_64-linux" ]
+, limitedSupportedSystems ? [ "i686-linux" ]
 }:
 
 let
@@ -19,10 +20,16 @@ let
       else pkgs.lib.mapAttrs (n: v: removeMaintainers v) set
     else set;
 
+  allSupportedNixpkgs = builtins.removeAttrs (removeMaintainers (import ../pkgs/top-level/release.nix {
+    supportedSystems = supportedSystems ++ limitedSupportedSystems;
+    nixpkgs = nixpkgsSrc;
+  })) [ "unstable" ];
+
 in rec {
 
   nixos = removeMaintainers (import ./release.nix {
-    inherit stableBranch supportedSystems;
+    inherit stableBranch;
+    supportedSystems = supportedSystems ++ limitedSupportedSystems;
     nixpkgs = nixpkgsSrc;
   });
 
@@ -35,11 +42,13 @@ in rec {
     name = "nixos-${nixos.channel.version}";
     meta = {
       description = "Release-critical builds for the NixOS channel";
-      maintainers = [ pkgs.lib.maintainers.eelco ];
+      maintainers = with pkgs.lib.maintainers; [ eelco fpletz ];
     };
     constituents =
-      let all = x: map (system: x.${system}) supportedSystems; in
-      [ nixos.channel
+      let
+        all = x: map (system: x.${system}) supportedSystems;
+      in [
+        nixos.channel
         (all nixos.dummy)
         (all nixos.manual)
 
@@ -51,7 +60,8 @@ in rec {
         nixos.tests.chromium
         (all nixos.tests.firefox)
         (all nixos.tests.firewall)
-        nixos.tests.gnome3.x86_64-linux # FIXME: i686-linux
+        (all nixos.tests.gnome3)
+        nixos.tests.installer.zfsroot.x86_64-linux # ZFS is 64bit only
         (all nixos.tests.installer.lvm)
         (all nixos.tests.installer.luksroot)
         (all nixos.tests.installer.separateBoot)
@@ -59,6 +69,7 @@ in rec {
         (all nixos.tests.installer.simple)
         (all nixos.tests.installer.simpleLabels)
         (all nixos.tests.installer.simpleProvided)
+        (all nixos.tests.installer.simpleUefiSystemdBoot)
         (all nixos.tests.installer.swraid)
         (all nixos.tests.installer.btrfsSimple)
         (all nixos.tests.installer.btrfsSubvols)
@@ -68,10 +79,18 @@ in rec {
         (all nixos.tests.boot.uefiCdrom)
         (all nixos.tests.boot.uefiUsb)
         (all nixos.tests.boot-stage1)
-        nixos.tests.hibernate.x86_64-linux # i686 is flaky, see #23107
+        (all nixos.tests.hibernate)
+        nixos.tests.docker
         (all nixos.tests.ecryptfs)
+        (all nixos.tests.env)
         (all nixos.tests.ipv6)
         (all nixos.tests.i3wm)
+        (all nixos.tests.keymap.azerty)
+        (all nixos.tests.keymap.colemak)
+        (all nixos.tests.keymap.dvorak)
+        (all nixos.tests.keymap.dvp)
+        (all nixos.tests.keymap.neo)
+        (all nixos.tests.keymap.qwertz)
         (all nixos.tests.plasma5)
         #(all nixos.tests.lightdm)
         (all nixos.tests.login)
@@ -94,12 +113,13 @@ in rec {
         (all nixos.tests.proxy)
         (all nixos.tests.sddm.default)
         (all nixos.tests.simple)
+        (all nixos.tests.slim)
         (all nixos.tests.udisks2)
         (all nixos.tests.xfce)
 
         nixpkgs.tarball
-        (all nixpkgs.emacs)
-        (all nixpkgs.jdk)
+        (all allSupportedNixpkgs.emacs)
+        (all allSupportedNixpkgs.jdk)
       ];
   });
 

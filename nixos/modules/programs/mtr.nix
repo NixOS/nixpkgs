@@ -19,8 +19,9 @@ in {
   };
 
   config = mkIf cfg.enable {
-    security.wrappers.mtr = {
-      source = "${pkgs.mtr}/bin/mtr";
+    environment.systemPackages = with pkgs; [ mtr ];
+    security.wrappers.mtr-packet = {
+      source = "${pkgs.mtr}/bin/mtr-packet";
       capabilities = "cap_net_raw+p";
     };
   };

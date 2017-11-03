@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     url = "http://www.creytiv.com/pub/baresip-${version}.tar.gz";
     sha256 = "0yi80gi2vb600n7wi6mk81zfdi1n5pg1dsz7458sb3z5cv5gj8yg";
   };
-  buildInputs = [zlib openssl libre librem pkgconfig
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [zlib openssl libre librem
     cairo mpg123 gstreamer gst-ffmpeg gst-plugins-base gst-plugins-bad gst-plugins-good
     alsaLib SDL libv4l celt libsndfile srtp ffmpeg gsm speex portaudio spandsp libuuid
     ccache libvpx
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     -DHAVE_INTTYPES_H -D__GLIBC__
     -D__need_timeval -D__need_timespec -D__need_time_t '';
   meta = {
-    homepage = "http://www.creytiv.com/baresip.html";
+    homepage = http://www.creytiv.com/baresip.html;
     platforms = with stdenv.lib.platforms; linux;
     maintainers = with stdenv.lib.maintainers; [raskin];
     license = stdenv.lib.licenses.bsd3;

@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1qpsk3bla6b6m7m0i1xpr183yj79liy3p34xhnz1grgq0776wg5l";
   };
 
-  buildInputs = [ openssl flex bison pkgconfig groff libxml2 utillinux libtool
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl flex bison groff libxml2 utillinux libtool
                   which ];
 
   enableParallelBuilding = true;
@@ -29,8 +30,9 @@ stdenv.mkDerivation rec {
 
    for f in $(find ./ -name Makefile.in); do
      echo patching $f...
-     sed -i $f -e '/PBS_MKDIRS/d'
+     sed -i $f -e '/PBS_MKDIRS/d' -e '/chmod u+s/d'
    done
+
   '';
 
   postInstall = ''

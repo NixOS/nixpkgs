@@ -75,6 +75,7 @@ let
       exec ${qemu}/bin/qemu-kvm \
           -name ${vmName} \
           -m ${toString config.virtualisation.memorySize} \
+          -smp ${toString config.virtualisation.cores} \
           ${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
           ${concatStringsSep " " config.virtualisation.qemu.networkingOptions} \
           -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
@@ -91,7 +92,7 @@ let
             -drive index=0,id=drive1,file=$NIX_DISK_IMAGE,if=${cfg.qemu.diskInterface},cache=writeback,werror=report \
             -kernel ${config.system.build.toplevel}/kernel \
             -initrd ${config.system.build.toplevel}/initrd \
-            -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo} ${kernelConsole} $QEMU_KERNEL_PARAMS" \
+            -append "$(cat ${config.system.build.toplevel}/kernel-params) init=${config.system.build.toplevel}/init regInfo=${regInfo}/registration ${kernelConsole} $QEMU_KERNEL_PARAMS" \
           ''} \
           $extraDisks \
           ${qemuGraphics} \
@@ -101,15 +102,7 @@ let
     '';
 
 
-  regInfo = pkgs.runCommand "reginfo"
-    { exportReferencesGraph =
-        map (x: [("closure-" + baseNameOf x) x]) config.virtualisation.pathsInNixDB;
-      buildInputs = [ pkgs.perl ];
-      preferLocalBuild = true;
-    }
-    ''
-      printRegistration=1 perl ${pkgs.pathsFromGraph} closure-* > $out
-    '';
+  regInfo = pkgs.closureInfo { rootPaths = config.virtualisation.pathsInNixDB; };
 
 
   # Generate a hard disk image containing a /boot partition and GRUB
@@ -125,7 +118,7 @@ let
               bootFlash=$out/bios.bin
               ${qemu}/bin/qemu-img create -f qcow2 $diskImage "40M"
               ${if cfg.useEFIBoot then ''
-                cp ${pkgs.OVMF-CSM}/FV/OVMF.fd $bootFlash
+                cp ${pkgs.OVMF-CSM.fd}/FV/OVMF.fd $bootFlash
                 chmod 0644 $bootFlash
               '' else ''
               ''}
@@ -241,6 +234,18 @@ in
           ''
             Whether to run QEMU with a graphics window, or access
             the guest computer serial port through the host tty.
+          '';
+      };
+
+    virtualisation.cores =
+      mkOption {
+        default = 1;
+        type = types.int;
+        description =
+          ''
+            Specify the number of cores the guest is permitted to use.
+            The number can be higher than the available cores on the
+            host system.
           '';
       };
 

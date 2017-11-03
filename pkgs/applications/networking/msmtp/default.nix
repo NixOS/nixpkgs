@@ -1,5 +1,6 @@
 { stdenv, lib, fetchurl, autoreconfHook, pkgconfig
 , openssl, netcat-gnu, gnutls, gsasl, libidn, Security
+, withKeyring ? true, libsecret ? null
 , systemd ? null }:
 
 let
@@ -20,7 +21,9 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openssl gnutls gsasl libidn ]
-    ++ stdenv.lib.optional stdenv.isDarwin Security;
+    ++ stdenv.lib.optional stdenv.isDarwin Security
+    ++ stdenv.lib.optional withKeyring libsecret;
+
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   configureFlags =
@@ -42,7 +45,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple and easy to use SMTP client with excellent sendmail compatibility";
-    homepage = "http://msmtp.sourceforge.net/";
+    homepage = http://msmtp.sourceforge.net/;
     license = licenses.gpl3;
     maintainers = with maintainers; [ garbas peterhoeg ];
     platforms = platforms.unix;

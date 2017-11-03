@@ -1,21 +1,17 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
+fetchzip rec {
   name = "cabin-1.005";
 
-  src = fetchFromGitHub {
-    owner = "impallari";
-    repo = "Cabin";
-    rev = "982839c790e9dc57c343972aa34c51ed3b3677fd";
-    sha256 = "16v7spviphvdh2rrr8klv11lc9hxphg12ddf0qs7xdx801ri0ppn";
-  };
+  url = https://github.com/impallari/Cabin/archive/982839c790e9dc57c343972aa34c51ed3b3677fd.zip;
 
-  installPhase = ''
-    mkdir -p $out/share/fonts/opentype
-    mkdir -p $out/share/doc/${name}
-    cp -v "fonts/OTF/"*.otf $out/share/fonts/opentype/
-    cp -v README.md FONTLOG.txt $out/share/doc/${name}
+  postFetch = ''
+    mkdir -p $out/share/{doc,fonts}
+    unzip -j $downloadedFile \*.otf                    -d $out/share/fonts/opentype
+    unzip -j $downloadedFile \*README.md \*FONTLOG.txt -d "$out/share/doc/${name}"
   '';
+
+  sha256 = "1ax5c2iab48qsk9zn3gjvqaib2lnlm25f1wr0aysf5ngw0y0jkrd";
 
   meta = with stdenv.lib; {
     description = "A humanist sans with 4 weights and true italics";

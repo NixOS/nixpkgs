@@ -1,5 +1,5 @@
 { lib
-, crossSystem, config
+, crossSystem, config, overlays
 , bootStages
 , ...
 }:
@@ -7,14 +7,13 @@
 assert crossSystem == null;
 
 bootStages ++ [
-  (prevStage: let
-    inherit (prevStage) stdenv;
-  in {
-    inherit (prevStage) buildPlatform hostPlatform targetPlatform;
+  (prevStage: {
     inherit config overlays;
 
     stdenv = import ../generic rec {
       inherit config;
+
+      inherit (prevStage.stdenv) buildPlatform hostPlatform targetPlatform;
 
       preHook = ''
         export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
@@ -24,14 +23,11 @@ bootStages ++ [
 
       initialPath = (import ../common-path.nix) { pkgs = prevStage; };
 
-      system = stdenv.system;
-
       cc = import ../../build-support/cc-wrapper {
         nativeTools = false;
-        nativePrefix = stdenv.lib.optionalString stdenv.isSunOS "/usr";
+        nativePrefix = lib.optionalString hostPlatform.isSunOS "/usr";
         nativeLibc = true;
-        inherit stdenv;
-        inherit (prevStage) binutils coreutils gnugrep;
+        inherit (prevStage) stdenvNoCC binutils coreutils gnugrep;
         cc = prevStage.gcc.cc;
         isGNU = true;
         shell = prevStage.bash + "/bin/sh";
@@ -39,7 +35,7 @@ bootStages ++ [
 
       shell = prevStage.bash + "/bin/sh";
 
-      fetchurlBoot = stdenv.fetchurlBoot;
+      fetchurlBoot = prevStage.stdenv.fetchurlBoot;
 
       overrides = self: super: {
         inherit cc;

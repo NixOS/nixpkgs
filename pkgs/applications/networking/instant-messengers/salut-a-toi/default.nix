@@ -15,7 +15,7 @@ in
 
     buildInputs = with python27Packages; 
     [
-      python twisted urwid beautifulsoup wxPython pygobject2
+      python twisted urwid wxPython pygobject2
       wokkel dbus-python pyfeed wrapPython setuptools file 
       pycrypto pyxdg
     ];

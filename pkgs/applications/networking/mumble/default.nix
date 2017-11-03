@@ -20,7 +20,7 @@ let
     patches = optional jackSupport ./mumble-jack-support.patch;
 
     nativeBuildInputs = [ pkgconfig python ]
-      ++ { qt4 = [ qmake4Hook ]; qt5 = [ qt5.qmakeHook ]; }."qt${toString source.qtVersion}"
+      ++ { qt4 = [ qmake4Hook ]; qt5 = [ qt5.qmake ]; }."qt${toString source.qtVersion}"
       ++ (overrides.nativeBuildInputs or [ ]);
     buildInputs = [ boost protobuf avahi ]
       ++ { qt4 = [ qt4 ]; qt5 = [ qt5.qtbase ]; }."qt${toString source.qtVersion}"
@@ -60,7 +60,7 @@ let
 
     meta = {
       description = "Low-latency, high quality voice chat software";
-      homepage = "http://mumble.sourceforge.net/";
+      homepage = https://mumble.info;
       license = licenses.bsd3;
       maintainers = with maintainers; [ viric jgeerds wkennington ];
       platforms = platforms.linux;
@@ -70,7 +70,7 @@ let
   client = source: generic {
     type = "mumble";
 
-    nativeBuildInputs = optionals (source.qtVersion == 5) [ qt5.qttools qt5.makeQtWrapper ];
+    nativeBuildInputs = optionals (source.qtVersion == 5) [ qt5.qttools ];
     buildInputs = [ libopus libsndfile speex ]
       ++ optional (source.qtVersion == 5) qt5.qtsvg
       ++ optional stdenv.isLinux alsaLib
@@ -91,10 +91,6 @@ let
       mkdir -p $out/share/icons{,/hicolor/scalable/apps}
       cp icons/mumble.svg $out/share/icons
       ln -s $out/share/icon/mumble.svg $out/share/icons/hicolor/scalable/apps
-
-      ${optionalString (source.qtVersion == 5) ''
-        wrapQtProgram $out/bin/mumble
-      ''}
     '';
   } source;
 
@@ -123,14 +119,14 @@ let
   };
 
   gitSource = rec {
-    version = "2017-04-16";
+    version = "2017-05-25";
     qtVersion = 5;
 
     # Needs submodules
     src = fetchgit {
       url = "https://github.com/mumble-voip/mumble";
-      rev = "eb63d0b14a7bc19bfdf34f80921798f0a67cdedf";
-      sha256 = "1nirbx0fnvi1nl6s5hrm4b0v7s2i22yshkmqnfjhxyr0y272s7lh";
+      rev = "3754898ac94ed3f1e86408114917d1b4c06f17b3";
+      sha256 = "1qh49x3y7m0c0h0gcs6amkf8nb75p6g611zwn19mbplwmi7h9y8f";
     };
   };
 in {
@@ -138,6 +134,6 @@ in {
   mumble_git = client gitSource;
   murmur     = server stableSource;
   murmur_git = (server gitSource).overrideAttrs (old: {
-    meta = old.meta // { broken = true; };
+    meta = old.meta // { broken = iceSupport; };
   });
 }

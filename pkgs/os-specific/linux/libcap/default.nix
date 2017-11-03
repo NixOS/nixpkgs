@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qjiqc5pknaal57453nxcbz3mn1r4hkyywam41wfcglq3v2qlg39";
   };
 
-  outputs = [ "out" "dev" "lib" "doc" ]
+  outputs = [ "out" "dev" "lib" "man" "doc" ]
     ++ stdenv.lib.optional (pam != null) "pam";
 
   nativeBuildInputs = [ perl ];
@@ -30,9 +30,8 @@ stdenv.mkDerivation rec {
 
     # ensure capsh can find bash in $PATH
     substituteInPlace progs/capsh.c --replace execve execvpe
-  '';
 
-  preInstall = ''
+    # set prefixes
     substituteInPlace Make.Rules \
       --replace 'prefix=/usr' "prefix=$lib" \
       --replace 'exec_prefix=' "exec_prefix=$out" \

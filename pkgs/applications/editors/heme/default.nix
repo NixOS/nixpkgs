@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
   meta = with lib; {
     description = "Portable and fast console hex editor for unix operating systems";
-    homepage = "http://heme.sourceforge.net/";
+    homepage = http://heme.sourceforge.net/;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ cstrahan ];

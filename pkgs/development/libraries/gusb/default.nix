@@ -14,8 +14,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig autoconf automake libtool which gtkdoc gettext gobjectIntrospection libxslt
+    autoconf automake libtool which gtkdoc gettext gobjectIntrospection libxslt
     systemd vala_0_23 glib
   ];
 
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "GLib libusb wrapper";
-    homepage = http://people.freedesktop.org/~hughsient/releases/;
+    homepage = https://people.freedesktop.org/~hughsient/releases/;
     license = stdenv.lib.licenses.lgpl21;
     maintainers = [stdenv.lib.maintainers.marcweber];
     platforms = stdenv.lib.platforms.linux;

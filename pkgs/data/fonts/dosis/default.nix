@@ -1,21 +1,17 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchzip}:
 
-stdenv.mkDerivation rec {
+fetchzip rec {
   name = "dosis-1.007";
 
-  src = fetchFromGitHub {
-    owner = "impallari";
-    repo = "Dosis";
-    rev = "12df1e13e58768f20e0d48ff15651b703f9dd9dc";
-    sha256 = "0glniyg07z5gx5gsa1ymarg2gsncjyf94wi6j9bf68v5s2w3v7md";
-  };
+  url = https://github.com/impallari/Dosis/archive/12df1e13e58768f20e0d48ff15651b703f9dd9dc.zip;
 
-  installPhase = ''
-    mkdir -p $out/share/fonts/opentype
-    mkdir -p $out/share/doc/${name}
-    cp -v "fonts/OTF v1.007 Fontlab/"*.otf $out/share/fonts/opentype/
-    cp -v README.md FONTLOG.txt $out/share/doc/${name}
+  postFetch = ''
+    mkdir -p $out/share/{doc,fonts}
+    unzip -j $downloadedFile \*.otf                    -d $out/share/fonts/opentype
+    unzip -j $downloadedFile \*README.md \*FONTLOG.txt -d "$out/share/doc/${name}"
   '';
+
+  sha256 = "11a8jmgaly14l7rm3jxkwwv3ngr8fdlkp70nicjk2rg0nny2cvfq";
 
   meta = with stdenv.lib; {
     description = "A very simple, rounded, sans serif family";

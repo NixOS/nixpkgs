@@ -18,7 +18,8 @@ in stdenv.mkDerivation rec {
     ./vte-0.28.2-limit-arguments.patch
   ];
 
-  buildInputs = [ intltool pkgconfig glib gtk ncurses ] ++
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool glib gtk ncurses ] ++
                 stdenv.lib.optionals pythonSupport [python pygtk];
 
   configureFlags = ''
@@ -33,7 +34,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.gnome.org/;
+    homepage = https://www.gnome.org/;
     description = "A library implementing a terminal emulator widget for GTK+";
     longDescription = ''
       VTE is a library (libvte) implementing a terminal emulator widget for

@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ taskwarrior perl ncurses ];
 
   meta = {
-    homepage = "https://github.com/mjheagle8/tasknc";
+    homepage = https://github.com/mjheagle8/tasknc;
     description = "A ncurses wrapper around taskwarrior";
     maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];
     platforms = stdenv.lib.platforms.linux; # Cannot test others

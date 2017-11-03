@@ -17,7 +17,8 @@ in stdenv.mkDerivation rec {
 
   kernel = optional (_kernel != null) _kernel.dev;
 
-  buildInputs = [ makeWrapper pkgconfig utillinux openssl libcap_ng python27
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ makeWrapper utillinux openssl libcap_ng python27
                   perl procps which ];
 
   configureFlags = [
@@ -70,7 +71,7 @@ in stdenv.mkDerivation rec {
       support distribution across multiple physical servers similar
       to VMware's vNetwork distributed vswitch or Cisco's Nexus 1000V.
       '';
-    homepage = "http://openvswitch.org/";
+    homepage = http://openvswitch.org/;
     license = licenses.asl20;
   };
 }

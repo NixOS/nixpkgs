@@ -1,17 +1,15 @@
-{ fetchurl, stdenv, makeDesktopItem, unzip, bash, jre8 }:
+{ fetchurl, stdenv, makeDesktopItem, makeWrapper, unzip, bash, jre8 }:
 
 stdenv.mkDerivation rec {
   name = "josm-${version}";
-  version = "11826";
+  version = "13053";
 
   src = fetchurl {
     url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
-    sha256 = "0x59n6klkxkaqcqgbkscdynyp0grfxdil2fxmg710yp8vkzg0zk2";
+    sha256 = "0czsmx0gsml3vqzx6940jw2xpmh16idypydw0d4147k4fi9gzyz6";
   };
 
-  phases = [ "installPhase" ];
-
-  buildInputs = [ jre8 ];
+  buildInputs = [ jre8 makeWrapper ];
 
   desktopItem = makeDesktopItem {
     name = "josm";
@@ -23,14 +21,12 @@ stdenv.mkDerivation rec {
     categories = "Education;Geoscience;Maps;";
   };
 
-  installPhase = ''
+  buildCommand = ''
     mkdir -p $out/bin $out/share/java
     cp -v $src $out/share/java/josm.jar
-    cat > $out/bin/josm <<EOF
-    #!${bash}/bin/bash
-    exec ${jre8}/bin/java -jar $out/share/java/josm.jar "\$@"
-    EOF
-    chmod 755 $out/bin/josm
+
+    makeWrapper ${jre8}/bin/java $out/bin/josm \
+      --add-flags "-jar $out/share/java/josm.jar"
 
     mkdir -p $out/share/applications
     cp $desktopItem/share/applications"/"* $out/share/applications
@@ -39,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "An extensible editor for ​OpenStreetMap";
+    description = "An extensible editor for OpenStreetMap";
     homepage = https://josm.openstreetmap.de/;
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.rycee ];

@@ -1,5 +1,5 @@
 skip () {
-    if [ -n "$NIX_DEBUG" ]; then
+    if (( "${NIX_DEBUG:-0}" >= 1 )); then
         echo "skipping impure path $1" >&2
     fi
 }
@@ -24,25 +24,21 @@ badPath() {
 }
 
 expandResponseParams() {
-    local inparams=("$@")
-    local n=0
-    local p
-    params=()
-    while [ $n -lt ${#inparams[*]} ]; do
-        p=${inparams[n]}
-        case $p in
-            @*)
-                if [ -e "${p:1}" ]; then
-                    args=$(<"${p:1}")
-                    eval 'for arg in '${args//$/\\$}'; do params+=("$arg"); done'
-                else
-                    params+=("$p")
-                fi
-                ;;
-            *)
-                params+=("$p")
-                ;;
-        esac
-        n=$((n + 1))
+    declare -ga params=("$@")
+    local arg
+    for arg in "$@"; do
+        if [[ "$arg" == @* ]]; then
+            # phase separation makes this look useless
+            # shellcheck disable=SC2157
+            if [ -x "@expandResponseParams@" ]; then
+                # params is used by caller
+                #shellcheck disable=SC2034
+                readarray -d '' params < <("@expandResponseParams@" "$@")
+                return 0
+            else
+                echo "Response files aren't supported during bootstrapping" >&2
+                return 1
+            fi
+        fi
     done
 }

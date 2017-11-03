@@ -13,7 +13,8 @@ buildPythonPackage {
 
   patches = [ ./codegendir.patch ];
 
-  buildInputs = [ python pkgconfig pygobject2 glib pygtk gnome2.gtksourceview ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ python pygobject2 glib pygtk gnome2.gtksourceview ];
 
   meta = {
     platforms = lib.platforms.unix;

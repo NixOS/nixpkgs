@@ -11,7 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "15bcxprkxf0xqxljsqhb0jpi7p1vwqcb00sjs7nzrj7vh2p7mqla";
   };
  
-  buildInputs = [ pkgconfig fuse pcre ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ fuse pcre ];
+
+  prePatch = ''
+    # do not set sticky bit in nix store
+    substituteInPlace Makefile --replace 6755 0755
+  '';
 
   preConfigure = "substituteInPlace Makefile --replace /usr/local $out";
 

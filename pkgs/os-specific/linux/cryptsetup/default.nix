@@ -5,17 +5,18 @@
 assert enablePython -> python2 != null;
 
 stdenv.mkDerivation rec {
-  name = "cryptsetup-1.7.3";
+  name = "cryptsetup-1.7.5";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/cryptsetup/v1.7/${name}.tar.xz";
-    sha256 = "00nwd96m9yq4k3cayc04i5y7iakkzana35zxky6hpx2w8zl08axg";
+    sha256 = "1gail831j826lmpdx2gsc83lp3br6wfnwh3vqwxaa1nn1lfwsc1b";
   };
 
   configureFlags = [ "--enable-cryptsetup-reencrypt" "--with-crypto_backend=openssl" ]
                 ++ stdenv.lib.optional enablePython "--enable-python";
 
-  buildInputs = [ devicemapper openssl libuuid pkgconfig popt ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ devicemapper openssl libuuid popt ]
              ++ stdenv.lib.optional enablePython python2;
 
   meta = {

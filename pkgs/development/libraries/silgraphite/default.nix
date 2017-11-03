@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "9b07c6e91108b1fa87411af4a57e25522784cfea0deb79b34ced608444f2ed65";
   };
 
-  buildInputs = [pkgconfig freetype libXft pango fontconfig];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ freetype libXft pango fontconfig];
 
   NIX_CFLAGS_COMPILE = "-I${freetype.dev}/include/freetype2";
 

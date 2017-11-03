@@ -2,16 +2,17 @@
 
 stdenv.mkDerivation rec {
   name = "rpm-${version}";
-  version = "4.13.0.1";
+  version = "4.14.0";
 
   src = fetchurl {
-    url = "http://ftp.rpm.org/releases/rpm-4.13.x/rpm-${version}.tar.bz2";
-    sha256 = "27fc7ba7d419622b1ce34d6507aa70b0808bc344021d298072a0c2ec165f9b0d";
+    url = "http://ftp.rpm.org/releases/rpm-4.14.x/rpm-${version}.tar.bz2";
+    sha256 = "053396glswgszzg6wizn76vc8zc5m2bicw025vj44g0dc1aav806";
   };
 
   outputs = [ "out" "dev" "man" ];
 
-  buildInputs = [ cpio zlib bzip2 file libarchive nspr nss db xz python lua pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ cpio zlib bzip2 file libarchive nspr nss db xz python lua ];
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
   propagatedBuildInputs = [ popt elfutils nss db bzip2 libarchive binutils ];
@@ -25,8 +26,6 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sharedstatedir=/com"
   ];
-
-  patches = [ ./rpm-4.13.0.1-bfd-config.patch ];
 
   postPatch = ''
     # For Python3, the original expression evaluates as 'python3.4' but we want 'python3.4m' here

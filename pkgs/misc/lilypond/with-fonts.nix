@@ -29,7 +29,7 @@ stdenv.mkDerivation {
       install -m755 -Dt $out/bin ${lilypond}/bin/*
 
       for p in $out/bin/*; do
-        substituteInPlace $p --replace "exec -a ${lilypond}" "exec -a $out"
+        substituteInPlace $p --replace "exec -a \"${lilypond}" "exec -a \"$out"
       done
   '';
 }

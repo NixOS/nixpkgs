@@ -52,6 +52,6 @@ in stdenv.mkDerivation rec {
     description = "Free, private and secure password management tool and e-wallet";
     license = licenses.unfree;
     maintainers = with maintainers; [ guillaumekoenig ];
-    platform = platforms.linux;
+    platforms = platforms.linux;
   };
 }

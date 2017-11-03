@@ -9,14 +9,15 @@ assert pythonSupport -> python != null && swig != null;
 assert docSupport -> doxygen != null;
 
 stdenv.mkDerivation rec {
-  name = "libftdi1-1.2";
-  
+  name = "libftdi1-1.3";
+
   src = fetchurl {
     url = "http://www.intra2net.com/en/developer/libftdi/download/${name}.tar.bz2";
-    sha256 = "1ml8hiahnqm4z0xzyjv8kyrkzvhw6l431c3jndg026cjh9f7ksm6";
+    sha256 = "1x41mbzh4qy7mrv2n86r2cr176rx03iacn0a99c3dkzv9g4rb34s";
   };
 
-  buildInputs = with stdenv.lib; [ cmake pkgconfig confuse ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = with stdenv.lib; [ cmake confuse ]
     ++ optionals cppSupport [ boost ]
     ++ optionals pythonSupport [ python swig ]
     ++ optionals docSupport [ doxygen ];
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library to talk to FTDI chips using libusb";
-    homepage = http://www.intra2net.com/en/developer/libftdi/;
+    homepage = https://www.intra2net.com/en/developer/libftdi/;
     license = with licenses; [ lgpl2 gpl2 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

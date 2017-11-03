@@ -1,16 +1,22 @@
-{ stdenv, fetchurl, qt4, cmake }:
+{ stdenv, fetchFromGitHub, qtbase, qtserialport, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "cutecom-0.22.0";
-  src = fetchurl {
-    url = "http://cutecom.sourceforge.net/${name}.tar.gz";
-    sha256 = "199fvl463nyn77r3nm8xgzgifs28j5759kkcnc5xbwww2nk20rhv";
+  name = "cutecom-${version}";
+  version = "0.40.0";
+  src = fetchFromGitHub {
+    owner = "neundorf";
+    repo = "CuteCom";
+    rev = "v${version}";
+    sha256 = "1bn6vndqlvn73riq6p0nanmcl35ja9gsil5hvfpf509r7i8gx4ds";
   };
-  buildInputs = [qt4 cmake];
+
+  preConfigure = ''
+    substituteInPlace CMakeLists.txt --replace "#find_package(Serialport REQUIRED)" "find_package(Qt5SerialPort REQUIRED)"
+  '';
+  buildInputs = [qtbase qtserialport cmake];
 
   meta = {
     description = "A graphical serial terminal";
-    version = "0.22.0";
     homepage = http://cutecom.sourceforge.net/;
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.bennofs ];

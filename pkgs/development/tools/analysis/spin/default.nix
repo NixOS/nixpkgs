@@ -7,15 +7,12 @@ let
 
 in stdenv.mkDerivation rec {
   name = "spin-${version}";
-  version = "6.4.5";
+  version = "6.4.7";
   url-version = stdenv.lib.replaceChars ["."] [""] version;
 
   src = fetchurl {
-    # The homepage is behind CloudFlare anti-DDoS protection, which blocks cURL.
-    # Dropbox mirror from developers:
-    # https://www.dropbox.com/sh/fgzipzp4wpo3qc1/AADZPqS4aoR-pjNF6OQXRLQHa
-    url = "https://www.dropbox.com/sh/fgzipzp4wpo3qc1/AAANRpxsSyWC7iHZB-XgBwJFa/spin645.tar.gz?raw=1";
-    sha256 = "0x8qnwm2xa8f176c52mzpvnfzglxs6xgig7bcgvrvkb3xf114224";
+    url = "http://spinroot.com/spin/Src/spin${url-version}.tar.gz";
+    sha256 = "17m2xaag0jns8hsa4466zxq35ylg9fnzynzvjjmx4ympbiil6mqv";
   };
 
   nativeBuildInputs = [ makeWrapper ];

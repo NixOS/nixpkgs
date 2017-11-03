@@ -58,7 +58,7 @@ stdenv.mkDerivation {
     homepage = https://support.apple.com/downloads/DL1877;
     license = licenses.unfree;
     maintainers = with maintainers; [ womfoo grahamc ];
-    platforms = platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 
 }

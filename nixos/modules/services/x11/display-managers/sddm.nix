@@ -9,7 +9,7 @@ let
   cfg = dmcfg.sddm;
   xEnv = config.systemd.services."display-manager".environment;
 
-  sddm = cfg.package;
+  inherit (pkgs) sddm;
 
   xserverWrapper = pkgs.writeScript "xserver-wrapper" ''
     #!/bin/sh
@@ -19,6 +19,17 @@ let
 
   Xsetup = pkgs.writeScript "Xsetup" ''
     #!/bin/sh
+
+    # Prior to Qt 5.9.2, there is a QML cache invalidation bug which sometimes
+    # strikes new Plasma 5 releases. If the QML cache is not invalidated, SDDM
+    # will segfault without explanation. We really tore our hair out for awhile
+    # before finding the bug:
+    # https://bugreports.qt.io/browse/QTBUG-62302
+    # We work around the problem by deleting the QML cache before startup. It
+    # will be regenerated, causing a small but perceptible delay when SDDM
+    # starts.
+    rm -fr /var/lib/sddm/.cache/sddm-greeter/qmlcache
+
     ${cfg.setupScript}
   '';
 
@@ -37,8 +48,8 @@ let
 
     [Theme]
     Current=${cfg.theme}
-    ThemeDir=${sddm}/share/sddm/themes
-    FacesDir=${sddm}/share/sddm/faces
+    ThemeDir=/run/current-system/sw/share/sddm/themes
+    FacesDir=/run/current-system/sw/share/sddm/faces
 
     [Users]
     MaximumUid=${toString config.ids.uids.nixbld}
@@ -69,7 +80,7 @@ let
     let
       dm = xcfg.desktopManager.default;
       wm = xcfg.windowManager.default;
-    in dm + optionalString (wm != "none") (" + " + wm);
+    in dm + optionalString (wm != "none") ("+" + wm);
 
 in
 {
@@ -102,15 +113,6 @@ in
         default = "";
         description = ''
           Greeter theme to use.
-        '';
-      };
-
-      package = mkOption {
-        type = types.package;
-        default = pkgs.sddm;
-        description = ''
-          The SDDM package to install.
-          The default package can be overridden to provide extra themes.
         '';
       };
 
@@ -205,7 +207,15 @@ in
     services.xserver.displayManager.job = {
       logsXsession = true;
 
-      execCmd = "exec ${sddm}/bin/sddm";
+      environment = {
+        # Load themes from system environment
+        QT_PLUGIN_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtPluginPrefix;
+        QML2_IMPORT_PATH = "/run/current-system/sw/" + pkgs.qt5.qtbase.qtQmlPrefix;
+
+        XDG_DATA_DIRS = "/run/current-system/sw/share";
+      };
+
+      execCmd = "exec /run/current-system/sw/bin/sddm";
     };
 
     security.pam.services = {
@@ -254,7 +264,8 @@ in
 
     users.extraGroups.sddm.gid = config.ids.gids.sddm;
 
-    services.dbus.packages = [ sddm.unwrapped ];
+    environment.systemPackages = [ sddm ];
+    services.dbus.packages = [ sddm ];
 
     # To enable user switching, allow sddm to allocate TTYs/displays dynamically.
     services.xserver.tty = null;

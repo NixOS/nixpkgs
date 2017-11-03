@@ -1,20 +1,39 @@
-{stdenv, fetchgit, coq, coqPackages}:
+{ stdenv, fetchgit, coq, ssreflect }:
 
-let revision = "b73a594af5460567dc233b2f2e7b0f781ae0490d"; in
+let param =
+  {
+    "8.4" = {
+      version = "20160529";
+      rev = "a9e89f1d4246a787bf1d8873072077a319635c3e";
+      sha256 = "14ng71p890q12xvsj00si2a3fjcbsap2gy0r8sxpw4zndnlq74wa";
+    };
+
+    "8.5" = {
+      version = "20170512";
+      rev = "31eb050ae5ce57ab402db9726fb7cd945a0b4d03";
+      sha256 = "033ch10i5wmqyw8j6wnr0dlbnibgfpr1vr0c07q3yj6h23xkmqpg";
+    };
+
+    "8.6" = {
+      version = "20170616";
+      rev = "366ee3f8e599b5cab438a63a09713f44ac544c5a";
+      sha256 = "06kwnrfndnr6w8bmaa2s0i0rkqyv081zj55z3vcyn0wr6x6mlsz9";
+    };
+
+  }."${coq.coq-version}"
+; in
 
 stdenv.mkDerivation rec {
 
-  name = "coq-QuickChick-${coq.coq-version}-${version}";
-  version = "20150605-${builtins.substring 0 7 revision}";
+  name = "coq${coq.coq-version}-QuickChick-${param.version}";
 
   src = fetchgit {
     url = git://github.com/QuickChick/QuickChick.git;
-    rev = revision;
-    sha256 = "1prlihkgi2yvgzd62x80fsnxp5w1n0wyk7zrd6zwa8dbqx9pbr09";
+    inherit (param) rev sha256;
   };
 
   buildInputs = [ coq.ocaml coq.camlp5 ];
-  propagatedBuildInputs = [ coq coqPackages.ssreflect ];
+  propagatedBuildInputs = [ coq ssreflect ];
 
   enableParallelBuilding = true;
 

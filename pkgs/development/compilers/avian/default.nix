@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     homepage = https://readytalk.github.io/avian/;
     license = stdenv.lib.licenses.isc;
     platforms = stdenv.lib.platforms.all;
+    maintainers = [ stdenv.lib.maintainers.earldouglas ];
   };
 }

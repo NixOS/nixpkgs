@@ -24,13 +24,14 @@ stdenv.mkDerivation rec {
     export configureFlags="$configureFlags --target-cpu=$(uname -m)"
   '';
 
-  buildInputs = [which pkgconfig file glib gtk2 gtk3 curl libXt];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [which file glib gtk2 gtk3 curl libXt];
 
   preferLocalBuild = true;
 
   meta = {
     description = ''A wrapper to run browser plugins out-of-process'';
-    homepage = "http://nspluginwrapper.org/";
+    homepage = http://nspluginwrapper.org/;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.raskin ];

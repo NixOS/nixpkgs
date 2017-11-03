@@ -8,8 +8,9 @@ let
 
   script = exec: ''
     #!${stdenv.shell}
-    nohup sh -c "sleep 1 && pkill -SIGSTOP kodi" &
-    nohup sh -c "${exec} '$@' -f;pkill -SIGCONT kodi"
+    nohup sh -c "pkill -SIGTSTP kodi" &
+    # https://forum.kodi.tv/showthread.php?tid=185074&pid=1622750#pid1622750
+    nohup sh -c "sleep 10 && ${exec} '$@' -f;pkill -SIGCONT kodi"
   '';
   scriptSh = exec: pkgs.writeScript ("kodi-"+exec.name) (script exec.path);
   execs = map (core: rec { name = core.core; path = core+"/bin/retroarch-"+name;}) cores;
@@ -31,8 +32,8 @@ stdenv.mkDerivation rec {
     description = "Kodi retroarch advanced launchers";
     longDescription = ''
       These retroarch launchers are intended to be used with
-      anglescry advanced launcher for Kodi since device input is
-      caught by both Kodi and the retroarch process.
+      advanced (emulation) launcher for Kodi since device input is
+      otherwise caught by both Kodi and the retroarch process.
     '';
     license = stdenv.lib.licenses.gpl3;
   };

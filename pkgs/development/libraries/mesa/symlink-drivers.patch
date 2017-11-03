@@ -11,11 +11,12 @@ diff -ru -x '*~' mesa-12.0.3-orig/src/gallium/targets/dri/Makefile.am mesa-12.0.
  install-data-hook:
  	for i in $(TARGET_DRIVERS); do                                  \
 -		ln -f $(DESTDIR)$(dridir)/gallium_dri.so                \
-+		ln -srf $(DESTDIR)$(dridir)/gallium_dri.so               \
++		ln -srf $(DESTDIR)$(dridir)/gallium_dri.so              \
  		      $(DESTDIR)$(dridir)/$${i}_dri.so;                 \
  	done;                                                           \
--	$(RM) $(DESTDIR)$(dridir)/gallium_dri.*
-+	$(RM) $(DESTDIR)$(dridir)/gallium_dri.la
+-	$(RM) $(DESTDIR)$(dridir)/gallium_dri.*;                        \
++	$(RM) $(DESTDIR)$(dridir)/gallium_dri.la                        \
+ 	$(RM) -d $(DESTDIR)$(dridir) &>/dev/null || true
  
  uninstall-hook:
  	for i in $(TARGET_DRIVERS); do                                  \
@@ -60,8 +61,9 @@ diff -ru -x '*~' mesa-12.0.3-orig/src/gallium/targets/vdpau/Makefile.am mesa-12.
  		ln -sf $${l}						\
  		       $${dest_dir}/$${k};				\
  	done;								\
--	$(RM) $${dest_dir}/libvdpau_gallium.*
-+	$(RM) $${dest_dir}/libvdpau_gallium.la
+-	$(RM) $${dest_dir}/libvdpau_gallium.*;				\
++	$(RM) $${dest_dir}/libvdpau_gallium.la				\
+ 	$(RM) -d $${dest_dir} &>/dev/null || true
  
  uninstall-hook:
  	for i in $(TARGET_DRIVERS); do					\
@@ -73,7 +75,7 @@ diff -ru -x '*~' mesa-12.0.3-orig/src/gallium/targets/xvmc/Makefile.am mesa-12.0
  		k=libXvMC$${i}.$(LIB_EXT);				\
  		l=$${k}.$(XVMC_MAJOR).$(XVMC_MINOR).0;			\
 -		ln -f $${dest_dir}/$${j}.$(XVMC_MAJOR).$(XVMC_MINOR).0	\
-+		ln -srf $${dest_dir}/$${j}.$(XVMC_MAJOR).$(XVMC_MINOR).0	\
++		ln -srf $${dest_dir}/$${j}.$(XVMC_MAJOR).$(XVMC_MINOR).0 \
  		      $${dest_dir}/$${l};				\
  		ln -sf $${l}						\
  		       $${dest_dir}/$${k}.$(XVMC_MAJOR).$(XVMC_MINOR);	\
@@ -81,8 +83,9 @@ diff -ru -x '*~' mesa-12.0.3-orig/src/gallium/targets/xvmc/Makefile.am mesa-12.0
  		ln -sf $${l}						\
  		       $${dest_dir}/$${k};				\
  	done;								\
--	$(RM) $${dest_dir}/libXvMCgallium.*
-+	$(RM) $${dest_dir}/libXvMCgallium.la
+-	$(RM) $${dest_dir}/libXvMCgallium.*;				\
++	$(RM) $${dest_dir}/libXvMCgallium.la				\
+ 	$(RM) -d $${dest_dir} &>/dev/null || true
  
  uninstall-hook:
  	for i in $(TARGET_DRIVERS); do					\

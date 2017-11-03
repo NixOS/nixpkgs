@@ -2,14 +2,15 @@
 
 stdenv.mkDerivation rec {
   name = "xapian-omega-${version}";
-  version = (builtins.parseDrvName xapian.name).version;
+  inherit (xapian) version;
 
   src = fetchurl {
     url = "http://oligarchy.co.uk/xapian/${version}/xapian-omega-${version}.tar.xz";
-    sha256 = "07s341m1csk4v7mc44mqrzc1nxpnmdkji9k1cirbx6q0nlshdz0h";
+    sha256 = "0pl9gs0sbavxykfgrkm8syswqnfynmmqhf8429bv8a5qjh5pkp8l";
   };
 
-  buildInputs = [ pkgconfig xapian perl pcre zlib libmagic ];
+  buildInputs = [ xapian perl pcre zlib libmagic ];
+  nativeBuildInputs = [ pkgconfig ];
 
   meta = with stdenv.lib; {
     description = "Indexer and CGI search front-end built on Xapian library";

@@ -36,7 +36,8 @@ let
         ./no-sys-dirs.patch
       ]
       ++ optional stdenv.isSunOS ./ld-shared.patch
-      ++ optional stdenv.isDarwin [ ./cpp-precomp.patch ];
+      ++ optional stdenv.isDarwin ./cpp-precomp.patch
+      ++ optional (stdenv.isDarwin && versionAtLeast version "5.24") ./sw_vers.patch;
 
     postPatch = ''
       pwd="$(type -P pwd)"
@@ -68,9 +69,6 @@ let
 
     enableParallelBuilding = true;
 
-    # FIXME needs gcc 4.9 in bootstrap tools
-    hardeningDisable = [ "stackprotector" ];
-
     preConfigure =
       ''
         configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3"
@@ -93,23 +91,23 @@ let
 
     passthru.libPrefix = "lib/perl5/site_perl";
 
-  # TODO: it seems like absolute paths to some coreutils is required.
-  postInstall =
-    ''
-      # Remove dependency between "out" and "man" outputs.
-      rm "$out"/lib/perl5/*/*/.packlist
+    # TODO: it seems like absolute paths to some coreutils is required.
+    postInstall =
+      ''
+        # Remove dependency between "out" and "man" outputs.
+        rm "$out"/lib/perl5/*/*/.packlist
 
-      # Remove dependencies on glibc and gcc
-      sed "/ *libpth =>/c    libpth => ' '," \
-        -i "$out"/lib/perl5/*/*/Config.pm
-      # TODO: removing those paths would be cleaner than overwriting with nonsense.
-      substituteInPlace "$out"/lib/perl5/*/*/Config_heavy.pl \
-        --replace "${libcInc}" /no-such-path \
-        --replace "${
-            if stdenv.cc.cc or null != null then stdenv.cc.cc else "/no-such-path"
-          }" /no-such-path \
-        --replace "$man" /no-such-path
-    ''; # */
+        # Remove dependencies on glibc and gcc
+        sed "/ *libpth =>/c    libpth => ' '," \
+          -i "$out"/lib/perl5/*/*/Config.pm
+        # TODO: removing those paths would be cleaner than overwriting with nonsense.
+        substituteInPlace "$out"/lib/perl5/*/*/Config_heavy.pl \
+          --replace "${libcInc}" /no-such-path \
+          --replace "${
+              if stdenv.cc.cc or null != null then stdenv.cc.cc else "/no-such-path"
+            }" /no-such-path \
+          --replace "$man" /no-such-path
+      ''; # */
 
     meta = {
       homepage = https://www.perl.org/;
@@ -118,20 +116,16 @@ let
       platforms = platforms.all;
     };
   };
-
 in rec {
-
-  perl = perl522;
-
-  perl520 = common {
-    version = "5.20.3";
-    sha256 = "0jlvpd5l5nk7lzfd4akdg1sw6vinbkj6izclyyr0lrbidfky691m";
-
-  };
+  perl = perl524;
 
   perl522 = common {
-    version = "5.22.2";
-    sha256 = "1hl3v85ggm027v9h2ycas4z5i3401s2k2l3qpnw8q5mahmiikbc1";
+    version = "5.22.4";
+    sha256 = "1yk1xn4wmnrf2ph02j28khqarpyr24qwysjzkjnjv7vh5dygb7ms";
   };
 
+  perl524 = common {
+    version = "5.24.3";
+    sha256 = "1m2px85kq2fyp2d4rx3bw9kg3car67qfqwrs5vlv96dx0x8rl06b";
+  };
 }

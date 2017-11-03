@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1wlzs604mgmqmrgpk4pljx2nrlxzdfi3r8k59qlm90fx8qkqkc63";
   };
 
-  nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ pkgconfig zeromq3 jdk ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ zeromq3 jdk ];
 
   preConfigure = ''
     ${if stdenv.system == "x86_64-darwin" then
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://www.zeromq.org";
+    homepage = http://www.zeromq.org;
     description = "Java bindings for ZeroMQ";
     platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.lgpl3;

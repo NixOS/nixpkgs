@@ -1,13 +1,15 @@
-{ stdenv, fetchurl, readline, compat ? false }:
+{ stdenv, fetchurl, readline, compat ? false
+, hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   name = "lua-${version}";
   luaversion = "5.3";
-  version = "${luaversion}.0";
+  version = "${luaversion}.4";
 
   src = fetchurl {
-    url = "http://www.lua.org/ftp/${name}.tar.gz";
-    sha256 = "00fv1p6dv4701pyjrlvkrr6ykzxqy9hy1qxzj6qmwlb0ssr5wjmf";
+    url = "https://www.lua.org/ftp/${name}.tar.gz";
+    sha256 = "0320a8dg3aci4hxla380dx1ifkw8gj4gbw5c4dz41g1kh98sm0gn";
   };
 
   nativeBuildInputs = [ readline ];
@@ -54,21 +56,15 @@ stdenv.mkDerivation rec {
   '';
 
   crossAttrs = let
-    isMingw = stdenv.cross.libc == "msvcrt";
-    isDarwin = stdenv.cross.libc == "libSystem";
+    inherit (hostPlatform) isDarwin isMingw;
   in {
     configurePhase = ''
       makeFlagsArray=(
         INSTALL_TOP=$out
         INSTALL_MAN=$out/share/man/man1
-        CC=${stdenv.cross.config}-gcc
-        STRIP=:
-        RANLIB=${stdenv.cross.config}-ranlib
         V=${luaversion}
         R=${version}
         ${if isMingw then "mingw" else stdenv.lib.optionalString isDarwin ''
-        AR="${stdenv.cross.config}-ar rcu"
-        macosx
         ''}
       )
     '' + stdenv.lib.optionalString isMingw ''
@@ -85,7 +81,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = "http://www.lua.org";
+    homepage = http://www.lua.org;
     description = "Powerful, fast, lightweight, embeddable scripting language";
     longDescription = ''
       Lua combines simple procedural syntax with powerful data

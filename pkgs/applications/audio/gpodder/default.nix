@@ -51,6 +51,13 @@ python2Packages.buildPythonApplication rec {
     feedparser dbus-python mygpoclient pygtk eyeD3 podcastparser html5lib
   ] ++ stdenv.lib.optional ipodSupport libgpod;
 
+  preBuild = ''
+    make PREFIX="$out" \
+      share/applications/gpodder-url-handler.desktop \
+      share/applications/gpodder.desktop \
+      share/dbus-1/services/org.gpodder.service
+  '';
+
   checkPhase = ''
     LC_ALL=C python -m gpodder.unittests
   '';
@@ -61,7 +68,7 @@ python2Packages.buildPythonApplication rec {
       gPodder downloads and manages free audio and video content (podcasts)
       for you. Listen directly on your computer or on your mobile devices.
     '';
-    homepage = "http://gpodder.org/";
+    homepage = http://gpodder.org/;
     license = licenses.gpl3;
     platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ skeidel mic92 ];

@@ -35,6 +35,12 @@ or <literal>ext4</literal>, then it’s best to specify
 <option>fsType</option> to ensure that the kernel module is
 available.</para>
 
+<note><para>System startup will fail if any of the filesystems fails to mount,
+dropping you to the emergency shell.
+You can make a mount asynchronous and non-critical by adding
+<literal>options = [ "nofail" ];</literal>.
+</para></note>
+
 <xi:include href="luks-file-systems.xml" />
 
 </chapter>

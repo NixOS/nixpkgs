@@ -25,7 +25,7 @@ let
     gnome-sharp gtk-sharp-2_0
   ];
 
-  ver = "5.5.3";
+  ver = "5.6.1";
   build = "f1";
 
 in stdenv.mkDerivation rec {
@@ -33,8 +33,8 @@ in stdenv.mkDerivation rec {
   version = "${ver}x${build}";
 
   src = fetchurl {
-    url = "http://beta.unity3d.com/download/a2454d41e248/unity-editor-installer-${version}Linux.sh";
-    sha256 = "1hvas4n1hm0qp0265gk1nh03kypd9690fnxvzg70f5ni9q97pvm0";
+    url = "http://beta.unity3d.com/download/6a86e542cf5c/unity-editor-installer-${version}Linux.sh";
+    sha256 = "10z4h94c9h967gx4b3gwb268zn7bnrb7ylnqnmnqhx6byac7cf4m";
   };
 
   nosuidLib = ./unity-nosuid.c;
@@ -50,40 +50,11 @@ in stdenv.mkDerivation rec {
   '';
 
   buildPhase = ''
-    patchFile() {
-      ftype="$(file -b "$1")"
-      if [[ "$ftype" =~ LSB\ .*dynamically\ linked ]]; then
-        if [[ "$ftype" =~ 32-bit ]]; then
-          rpath="${libPath32}"
-          intp="$(cat $NIX_CC/nix-support/dynamic-linker-m32)"
-        else
-          rpath="${libPath64}"
-          intp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-        fi
-
-        rpath="$(patchelf --print-rpath "$1"):$rpath"
-        if [[ "$ftype" =~ LSB\ shared ]]; then
-          patchelf \
-            --set-rpath "$rpath" \
-            "$1"
-        elif [[ "$ftype" =~ LSB\ executable ]]; then
-          patchelf \
-            --set-rpath "$rpath" \
-            --interpreter "$intp" \
-            "$1"
-        fi
-      fi
-    }
 
     cd Editor
 
     $CC -fPIC -shared -o libunity-nosuid.so $nosuidLib -ldl
     strip libunity-nosuid.so
-
-    # Exclude PlaybackEngines to build something that can be run on FHS-compliant Linuxes
-    find . -name PlaybackEngines -prune -o -executable -type f -print | while read path; do
-      patchFile "$path"
-    done
 
     cd ..
   '';
@@ -120,6 +91,40 @@ in stdenv.mkDerivation rec {
       --prefix PATH : "${developBinPath}" \
       --prefix LD_LIBRARY_PATH : "${developLibPath}" \
       --prefix MONO_GAC_PREFIX : "${developDotnetPath}"
+  '';
+
+  preFixup = ''
+    patchFile() {
+      ftype="$(file -b "$1")"
+      if [[ "$ftype" =~ LSB\ .*dynamically\ linked ]]; then
+        if [[ "$ftype" =~ 32-bit ]]; then
+          rpath="${libPath32}"
+          intp="$(cat $NIX_CC/nix-support/dynamic-linker-m32)"
+        else
+          rpath="${libPath64}"
+          intp="$(cat $NIX_CC/nix-support/dynamic-linker)"
+        fi
+
+        oldRpath="$(patchelf --print-rpath "$1")"
+        # Always search at least for libraries in origin directory.
+        rpath="''${oldRpath:-\$ORIGIN}:$rpath"
+        if [[ "$ftype" =~ LSB\ shared ]]; then
+          patchelf \
+            --set-rpath "$rpath" \
+            "$1"
+        elif [[ "$ftype" =~ LSB\ executable ]]; then
+          patchelf \
+            --set-rpath "$rpath" \
+            --interpreter "$intp" \
+            "$1"
+        fi
+      fi
+    }
+
+    # Exclude PlaybackEngines to build something that can be run on FHS-compliant Linuxes
+    find $unitydir -name PlaybackEngines -prune -o -type f -print | while read path; do
+      patchFile "$path"
+    done
   '';
 
   dontStrip = true;

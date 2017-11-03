@@ -2,14 +2,15 @@
 
 stdenv.mkDerivation rec {
   name = "frei0r-plugins-${version}";
-  version = "1.4";
+  version = "1.6.1";
 
   src = fetchurl {
     url = "https://files.dyne.org/frei0r/releases/${name}.tar.gz";
-    sha256 = "0mxyhdp1p1a3ga8170ijygb870zwbww1dgp3kdr1nd4zvsmzqw44";
+    sha256 = "0pji26fpd0dqrx1akyhqi6729s394irl73dacnyxk58ijqq4dhp0";
   };
 
-  buildInputs = [ autoconf cairo opencv pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf cairo opencv ];
 
   meta = with stdenv.lib; {
     homepage = http://frei0r.dyne.org;

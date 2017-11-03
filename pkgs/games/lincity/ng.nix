@@ -1,39 +1,41 @@
-{stdenv, fetchurl
+{stdenv, fetchgit
 , zlib, jam, pkgconfig, gettext, libxml2, libxslt, xproto, libX11, mesa, SDL
-, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, physfs
+, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, physfs, autoconf, automake, libtool
 }:
-let s = # Generated upstream information
-  rec {
-    baseName="lincity";
-    version="2.0";
-    name="lincity-2.0";
-    hash="01k6n304qj0z5zmqr49gqirp0jmx2b0cpisgkxk1ga67vyjhdcm6";
-    url="http://pkgs.fedoraproject.org/repo/pkgs/lincity-ng/lincity-ng-2.0.tar.bz2"
-      + "/1bd0f58e0f2b131d70044f4230600ed1/lincity-ng-2.0.tar.bz2";
-      # berlios shut down; I found no better mirror
-    sha256="01k6n304qj0z5zmqr49gqirp0jmx2b0cpisgkxk1ga67vyjhdcm6";
-  };
-  buildInputs = [zlib jam pkgconfig gettext libxml2 libxslt xproto libX11 mesa 
-    SDL SDL_mixer SDL_image SDL_ttf SDL_gfx physfs];
-in
 stdenv.mkDerivation rec {
-  inherit (s) name version;
-  src = fetchurl {
-    inherit (s) url sha256;
+  name = "lincity-ng-${version}";
+  version = "2.9beta.20170715";
+
+  src = fetchgit {
+    url = "https://github.com/lincity-ng/lincity-ng";
+    rev = "0c19714b811225238f310633e59f428934185e6b";
+    sha256 = "1gaj9fq97zmb0jsdw4rzrw34pimkmkwbfqps0glpqij4w3srz5f3";
   };
 
   hardeningDisable = [ "format" ];
 
-  inherit buildInputs;
+  nativeBuildInputs = [
+    jam autoconf automake libtool pkgconfig
+  ];
 
-  buildPhase = "jam";
-  installPhase="jam install";
+  buildInputs = [
+    zlib gettext libxml2 libxslt xproto libX11 mesa SDL SDL_mixer SDL_image
+    SDL_ttf SDL_gfx physfs
+  ];
+
+   preConfigure = ''
+     ./autogen.sh
+   '';
+
+   installPhase = ''
+     touch CREDITS
+     AR='ar r' jam install
+   '';
 
   meta = {
     documentation = ''City building game'';
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [stdenv.lib.maintainers.raskin];
-    inherit (s) version;
   };
 }

@@ -26,8 +26,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig atk cairo glib gtk
+    atk cairo glib gtk
     pango libxml2Python perl intltool
     gettext
   ] ++ optionals stdenv.isDarwin [

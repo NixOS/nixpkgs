@@ -1,4 +1,4 @@
-{ lib, stdenv, glibc, fetchurl, zlib, readline, libossp_uuid, openssl, makeWrapper }:
+{ lib, stdenv, glibc, fetchurl, zlib, readline, libossp_uuid, openssl, libxml2, makeWrapper }:
 
 let
 
@@ -11,11 +11,11 @@ let
       inherit sha256;
     };
 
-    outputs = [ "out" "lib" "doc" ];
+    outputs = [ "out" "lib" "doc" "man" ];
     setOutputFlags = false; # $out retains configureFlags :-/
 
     buildInputs =
-      [ zlib readline openssl makeWrapper ]
+      [ zlib readline openssl libxml2 makeWrapper ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
     enableParallelBuilding = true;
@@ -24,6 +24,7 @@ let
 
     configureFlags = [
       "--with-openssl"
+      "--with-libxml"
       "--sysconfdir=/etc"
       "--libdir=$(lib)/lib"
     ]
@@ -79,51 +80,44 @@ let
     };
 
     meta = with lib; {
-      homepage = http://www.postgresql.org/;
+      homepage = https://www.postgresql.org;
       description = "A powerful, open source object-relational database system";
       license = licenses.postgresql;
       maintainers = [ maintainers.ocharles ];
       platforms = platforms.unix;
-      hydraPlatforms = platforms.linux;
     };
   });
 
 in {
 
-  postgresql91 = common {
-    version = "9.1.24";
-    psqlSchema = "9.1";
-    sha256 = "1lz5ibvgz6cxprxlnd7a8iwv387idr7k53bdsvy4bw9ayglq83fy";
-  };
-
-  postgresql92 = common {
-    version = "9.2.20";
-    psqlSchema = "9.2";
-    sha256 = "09lgvl996py3mciybnlv0hycfwfxr41n0wksb2jvxjh0hjpbv2hb";
-  };
-
   postgresql93 = common {
-    version = "9.3.16";
+    version = "9.3.19";
     psqlSchema = "9.3";
-    sha256 = "0wv8qsi0amdhcl1qvkvas3lm37w6zsi818f5fxm6n0ngr155wpw4";
+    sha256 = "1d9gmi1psg4aa6h6ylvsrdm5jnnb7p36pn4h2qrvl9z9v4n8g7pv";
   };
 
   postgresql94 = common {
-    version = "9.4.11";
+    version = "9.4.14";
     psqlSchema = "9.4";
-    sha256 = "08wxrk8wdhnz0756dsa8jkj0pqanjfpw7w715lyv10618p853sz3";
+    sha256 = "0szc0navrcjnpyafw2sai8cmwr3znsy0w6031lv7n1ab20xg4zcf";
   };
 
   postgresql95 = common {
-    version = "9.5.6";
+    version = "9.5.9";
     psqlSchema = "9.5";
-    sha256 = "0bz1b9r249ffjfvldaiah2g78ccwq30ddh8hdvlq61z26inmz7mv";
+    sha256 = "1m6d4y3m3ir20dzl6q3s3yvmr0a7hq3si2v1hg5hanmbck3db379";
   };
 
   postgresql96 = common {
-    version = "9.6.2";
+    version = "9.6.5";
     psqlSchema = "9.6";
-    sha256 = "1jahzqqw5inyvmacic2ihhj5f8z50lapci2fwws91h719ccbb1q1";
+    sha256 = "0k3ls2x182jz6djjiqj9kycddabdl2gk1y1ajq1vipnxwfki5nh6";
+  };
+
+  postgresql100 = common {
+    version = "10.0";
+    psqlSchema = "10.0";
+    sha256 = "1lbzwpmdxmk5bh0ix0rn72qbd52dq5cb55nzajscb0bvwa95abvi";
   };
 
 }

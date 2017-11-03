@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, qt4, fontconfig, freetype, libpng, zlib, libjpeg
+{ stdenv, fetchFromGitHub, fetchpatch, qt4, fontconfig, freetype, libpng, zlib, libjpeg
 , openssl, libX11, libXext, libXrender, overrideDerivation }:
 
 stdenv.mkDerivation rec {
-  version = "0.12.3.2";
+  version = "0.12.4";
   name = "wkhtmltopdf-${version}";
 
   src = fetchFromGitHub {
     owner  = "wkhtmltopdf";
     repo   = "wkhtmltopdf";
-    rev    = "${version}";
-    sha256 = "1yyqjhxv4dvpkad79scs7xdx4iz8jpyidr9ya86k3zpfyvh4gq3s";
+    rev    = version;
+    sha256 = "09yzj9ylc6ci4a1qlhz60cgxi1nm9afwjrjxfikf8wwjd3i24vp2";
   };
 
   wkQt = overrideDerivation qt4 (deriv: {
@@ -105,13 +105,26 @@ stdenv.mkDerivation rec {
       '';
   });
 
-  buildInputs = [ wkQt fontconfig freetype libpng zlib libjpeg openssl
-                  libX11 libXext libXrender
-                ];
+  buildInputs = [
+    wkQt fontconfig freetype libpng zlib libjpeg openssl
+    libX11 libXext libXrender
+  ];
+
+  prePatch = ''
+    for f in src/image/image.pro src/pdf/pdf.pro ; do
+      substituteInPlace $f --replace '$(INSTALL_ROOT)' ""
+    done
+  '';
+
+  patches = [
+    (fetchpatch {
+      name = "make-0.12.4-compile.patch";
+      url = "https://github.com/efx/aports/raw/eb9f8e6bb9a488460929db747b15b8fceddd7abd/testing/wkhtmltopdf/10-patch1.patch";
+      sha256 = "1c136jz0klr2rmhmy13gdbgsgkpjfdp2sif8bnw8d23mr9pym3s1";
+    })
+  ];
 
   configurePhase = "qmake wkhtmltopdf.pro INSTALLBASE=$out";
-
-  patches = [ ./makefix.patch ];
 
   enableParallelBuilding = true;
 

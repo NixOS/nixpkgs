@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "irony-server-${version}";
   inherit (irony) version;
 
-  buildInputs = [ cmake llvmPackages.clang ];
+  nativeBuildInputs = [ cmake ];
 
   dontUseCmakeBuildDir = true;
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     description = "The server part of irony.";
     homepage = "https://melpa.org/#/irony";
     maintainers = [ stdenv.lib.maintainers.deepfire ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.free;
   };
 }

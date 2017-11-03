@@ -3,7 +3,8 @@
 }:
 
 buildPythonPackage rec {
-  name = "pygame-${version}";
+  pname = "pygame";
+  name = "${pname}-${version}";
   version = "1.9.3";
 
   src = fetchurl {
@@ -37,7 +38,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python library for games";
-    homepage = "http://www.pygame.org/";
+    homepage = http://www.pygame.org/;
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
   };

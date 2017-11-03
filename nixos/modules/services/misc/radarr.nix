@@ -22,14 +22,14 @@ in
           echo "Creating radarr data directory in /var/lib/radarr/"
           mkdir -p /var/lib/radarr/
         }
-        chown -R radarr /var/lib/radarr/
+        chown -R radarr:radarr /var/lib/radarr/
         chmod 0700 /var/lib/radarr/
       '';
 
       serviceConfig = {
         Type = "simple";
         User = "radarr";
-        Group = "nogroup";
+        Group = "radarr";
         PermissionsStartOnly = "true";
         ExecStart = "${pkgs.radarr}/bin/Radarr";
         Restart = "on-failure";
@@ -37,8 +37,11 @@ in
     };
 
     users.extraUsers.radarr = {
+      uid = config.ids.uids.radarr;
       home = "/var/lib/radarr";
+      group = "radarr";
     };
+    users.extraGroups.radarr.gid = config.ids.gids.radarr;
 
   };
 }

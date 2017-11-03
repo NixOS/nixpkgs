@@ -6,10 +6,28 @@ let
 
   inherit (pkgs) mysql gzip;
 
-  cfg = config.services.mysqlBackup ;
-  location = cfg.location ;
-  mysqlBackupCron = db : ''
-    ${cfg.period} ${cfg.user} ${mysql}/bin/mysqldump ${if cfg.singleTransaction then "--single-transaction" else ""} ${db} | ${gzip}/bin/gzip -c > ${location}/${db}.gz
+  cfg = config.services.mysqlBackup;
+  defaultUser = "mysqlbackup";
+
+  backupScript = ''
+    set -o pipefail
+    failed=""
+    ${concatMapStringsSep "\n" backupDatabaseScript cfg.databases}
+    if [ -n "$failed" ]; then
+      echo "Backup of database(s) failed:$failed"
+      exit 1
+    fi
+  '';
+  backupDatabaseScript = db: ''
+    dest="${cfg.location}/${db}.gz"
+    if ${mysql}/bin/mysqldump ${if cfg.singleTransaction then "--single-transaction" else ""} ${db} | ${gzip}/bin/gzip -c > $dest.tmp; then
+      mv $dest.tmp $dest
+      echo "Backed up to $dest"
+    else
+      echo "Failed to back up to $dest"
+      rm -f $dest.tmp
+      failed="$failed ${db}"
+    fi
   '';
 
 in
@@ -26,17 +44,16 @@ in
         '';
       };
 
-      period = mkOption {
-        default = "15 01 * * *";
+      calendar = mkOption {
+        type = types.str;
+        default = "01:15:00";
         description = ''
-          This option defines (in the format used by cron) when the
-          databases should be dumped.
-          The default is to update at 01:15 (at night) every day.
+          Configured when to run the backup service systemd unit (DayOfWeek Year-Month-Day Hour:Minute:Second).
         '';
       };
 
       user = mkOption {
-        default = "mysql";
+        default = defaultUser;
         description = ''
           User to be used to perform backup.
         '';
@@ -66,16 +83,49 @@ in
 
   };
 
-  config = mkIf config.services.mysqlBackup.enable {
+  config = mkIf cfg.enable {
+    users.extraUsers = optionalAttrs (cfg.user == defaultUser) (singleton
+      { name = defaultUser;
+        isSystemUser = true;
+        createHome = false;
+        home = cfg.location;
+        group = "nogroup";
+      });
 
-    services.cron.systemCronJobs = map mysqlBackupCron config.services.mysqlBackup.databases;
+    services.mysql.ensureUsers = [{
+      name = cfg.user;
+      ensurePermissions = with lib;
+        let
+          privs = "SELECT, SHOW VIEW, TRIGGER, LOCK TABLES";
+          grant = db: nameValuePair "${db}.*" privs;
+        in
+          listToAttrs (map grant cfg.databases);
+    }];
 
-    system.activationScripts.mysqlBackup = stringAfter [ "stdio" "users" ]
-      ''
-        mkdir -m 0700 -p ${config.services.mysqlBackup.location}
-        chown ${config.services.mysqlBackup.user} ${config.services.mysqlBackup.location}
-      '';
-
+    systemd = {
+      timers."mysql-backup" = {
+        description = "Mysql backup timer";
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          OnCalendar = cfg.calendar;
+          AccuracySec = "5m";
+          Unit = "mysql-backup.service";
+        };
+      };
+      services."mysql-backup" = {
+        description = "Mysql backup service";
+        enable = true;
+        serviceConfig = {
+          User = cfg.user;
+          PermissionsStartOnly = true;
+        };
+        preStart = ''
+          mkdir -m 0700 -p ${cfg.location}
+          chown -R ${cfg.user} ${cfg.location}
+        '';
+        script = backupScript;
+      };
+    };
   };
 
 }

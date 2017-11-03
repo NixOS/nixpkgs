@@ -13,6 +13,7 @@
 , callPackage
 , self
 , CF, configd
+, python-setup-hook
 # For the Python package set
 , pkgs, packageOverrides ? (self: super: {})
 }:
@@ -26,7 +27,7 @@ with stdenv.lib;
 
 let
   majorVersion = "3.5";
-  minorVersion = "3";
+  minorVersion = "4";
   minorVersionSuffix = "";
   pythonVersion = majorVersion;
   version = "${majorVersion}.${minorVersion}${minorVersionSuffix}";
@@ -47,7 +48,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.python.org/ftp/python/${majorVersion}.${minorVersion}/Python-${version}.tar.xz";
-    sha256 = "1c6v1n9nz4mlx9mw1125fxpmbrgniqdbbx9hnqx44maqazb2mzpf";
+    sha256 = "0k68ai0a204piwibz013ds6ck7hgj9gk4nin2259y41vpgx3pncl";
   };
 
   NIX_LDFLAGS = optionalString stdenv.isLinux "-lgcc_s";
@@ -64,11 +65,8 @@ in stdenv.mkDerivation {
   '';
 
   patches = [
-    (fetchpatch {
-      name = "glibc-2.25-enosys.patch";
-      url = https://github.com/python/cpython/commit/035ba5da3e53e.patch;
-      sha256 = "1y74ir1w5cq542w27rgzgp70chhq2x047db9911mihpab8p2nj71";
-    })
+    ./no-ldconfig.patch
+    ./ld_library_path.patch
   ];
 
   postPatch = ''
@@ -102,13 +100,16 @@ in stdenv.mkDerivation {
      ''}
   '';
 
-  setupHook = ./setup-hook.sh;
+  setupHook = python-setup-hook sitePackages;
 
   postInstall = ''
     # needed for some packages, especially packages that backport functionality
     # to 2.x from 3.x
     for item in $out/lib/python${majorVersion}/test/*; do
-      if [[ "$item" != */test_support.py* ]]; then
+      if [[ "$item" != */test_support.py*
+         && "$item" != */test/support
+         && "$item" != */test/libregrtest
+         && "$item" != */test/regrtest.py* ]]; then
         rm -rf "$item"
       else
         echo $item
@@ -128,11 +129,17 @@ in stdenv.mkDerivation {
 
     # Use Python3 as default python
     ln -s "$out/bin/idle3" "$out/bin/idle"
-    ln -s "$out/bin/pip3" "$out/bin/pip"
     ln -s "$out/bin/pydoc3" "$out/bin/pydoc"
     ln -s "$out/bin/python3" "$out/bin/python"
     ln -s "$out/bin/python3-config" "$out/bin/python-config"
     ln -s "$out/lib/pkgconfig/python3.pc" "$out/lib/pkgconfig/python.pc"
+
+    # Get rid of retained dependencies on -dev packages, and remove
+    # some $TMPDIR references to improve binary reproducibility.
+    # Note that the .pyc file of _sysconfigdata.py should be regenerated!
+    for i in $out/lib/python${majorVersion}/_sysconfigdata.py $out/lib/python${majorVersion}/config-${majorVersion}m/Makefile; do
+      sed -i $i -e "s|-I/nix/store/[^ ']*||g" -e "s|-L/nix/store/[^ ']*||g" -e "s|$TMPDIR|/no-such-path|g"
+    done
 
     # Determinism: rebuild all bytecode
     # We exclude lib2to3 because that's Python 2 code which fails
@@ -140,17 +147,6 @@ in stdenv.mkDerivation {
     find $out -name "*.py" | $out/bin/python -m compileall -q -f -x "lib2to3" -i -
     find $out -name "*.py" | $out/bin/python -O -m compileall -q -f -x "lib2to3" -i -
     find $out -name "*.py" | $out/bin/python -OO -m compileall -q -f -x "lib2to3" -i -
-  '';
-
-  postFixup = ''
-    # Get rid of retained dependencies on -dev packages, and remove
-    # some $TMPDIR references to improve binary reproducibility.
-    for i in $out/lib/python${majorVersion}/_sysconfigdata.py $out/lib/python${majorVersion}/config-${majorVersion}m/Makefile; do
-      sed -i $i -e "s|-I/nix/store/[^ ']*||g" -e "s|-L/nix/store/[^ ']*||g" -e "s|$TMPDIR|/no-such-path|g"
-    done
-
-    # FIXME: should regenerate this.
-    rm $out/lib/python${majorVersion}/__pycache__/_sysconfigdata.cpython*
   '';
 
   passthru = let

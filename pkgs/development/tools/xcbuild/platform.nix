@@ -102,6 +102,22 @@ let
       };
     }
     {
+      Identifier = "com.apple.package-type.static-library";
+      Type = "PackageType";
+      Name = "Mach-O Static Library";
+      DefaultBuildSettings = {
+        EXECUTABLE_PREFIX = "lib";
+        EXECUTABLE_SUFFIX = ".a";
+        EXECUTABLE_NAME = "$(EXECUTABLE_PREFIX)$(PRODUCT_NAME)$(EXECUTABLE_VARIANT_SUFFIX)$(EXECUTABLE_SUFFIX)";
+        EXECUTABLE_PATH = "$(EXECUTABLE_NAME)";
+      };
+      ProductReference = {
+        FileType = "archive.ar";
+        Name = "$(EXECUTABLE_NAME)";
+        IsLaunchable = "NO";
+      };
+    }
+    {
       Identifier = "com.apple.package-type.wrapper";
       Type = "PackageType";
       Name = "Wrapper";
@@ -172,6 +188,42 @@ let
       Type = "ProductType";
       Name = "Dynamic Library";
       PackageTypes = [ "com.apple.package-type.mach-o-dylib" ];
+      DefaultBuildProperties = {
+        FULL_PRODUCT_NAME = "$(EXECUTABLE_NAME)";
+        MACH_O_TYPE = "mh_dylib";
+        REZ_EXECUTABLE = "YES";
+        EXECUTABLE_SUFFIX = ".$(EXECUTABLE_EXTENSION)";
+        EXECUTABLE_EXTENSION = "dylib";
+        DYLIB_COMPATIBILITY_VERSION = "1";
+        DYLIB_CURRENT_VERSION = "1";
+        FRAMEWORK_FLAG_PREFIX = "-framework";
+        LIBRARY_FLAG_PREFIX = "-l";
+        LIBRARY_FLAG_NOSPACE = "YES";
+        STRIP_STYLE = "debugging";
+        GCC_INLINES_ARE_PRIVATE_EXTERN = "YES";
+        CODE_SIGNING_ALLOWED = "YES";
+        CODE_SIGNING_REQUIRED = "NO";
+      };
+    }
+    {
+      Identifier = "com.apple.product-type.library.static";
+      Type = "ProductType";
+      Name = "Static Library";
+      PackageTypes = [ "com.apple.package-type.static-library" ];
+      DefaultBuildProperties = {
+        FULL_PRODUCT_NAME = "$(EXECUTABLE_NAME)";
+        MACH_O_TYPE = "staticlib";
+        REZ_EXECUTABLE = "YES";
+        EXECUTABLE_PREFIX = "lib";
+        EXECUTABLE_SUFFIX = ".$(EXECUTABLE_EXTENSION)";
+        EXECUTABLE_EXTENSION = "a";
+        FRAMEWORK_FLAG_PREFIX = "-framework";
+        LIBRARY_FLAG_PREFIX = "-l";
+        LIBRARY_FLAG_NOSPACE = "YES";
+        STRIP_STYLE = "debugging";
+        SEPARATE_STRIP = "YES";
+        CLANG_ENABLE_MODULE_DEBUGGING = "NO";
+      };
     }
     {
       Type = "ProductType";
@@ -211,7 +263,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "nixpkgs.platform";
+  name = "MacOSX.platform";
   buildInputs = [ xcbuild ];
   buildCommand = ''
     mkdir -p $out/
@@ -228,6 +280,6 @@ stdenv.mkDerivation {
 
     mkdir -p $out/Developer/SDKs/
     cd $out/Developer/SDKs/
-    ln -s ${sdk}
+    cp -r ${sdk} ${sdk.name}
   '';
 }

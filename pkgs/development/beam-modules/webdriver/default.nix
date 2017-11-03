@@ -2,9 +2,9 @@
 
 let
   shell = drv: stdenv.mkDerivation {
-          name = "interactive-shell-${drv.name}";
-          buildInputs = [ drv ];
-    };
+    name = "interactive-shell-${drv.name}";
+    buildInputs = [ drv ];
+  };
 
   pkg = self: stdenv.mkDerivation rec {
     name = "webdriver";
@@ -28,7 +28,7 @@ let
     meta = {
       description = "WebDriver implementation in Erlang";
       license = stdenv.lib.licenses.mit;
-      homepage = "https://github.com/Quviq/webdrv";
+      homepage = https://github.com/Quviq/webdrv;
       maintainers = with stdenv.lib.maintainers; [ ericbmerritt ];
     };
 

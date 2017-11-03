@@ -25,7 +25,14 @@ in
 {
   options.programs.command-not-found = {
 
-    enable = mkEnableOption "command-not-found hook for interactive shell";
+    enable = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether interactive shells should show which Nix package (if
+        any) provides a missing command.
+      '';
+    };
 
     dbPath = mkOption {
       default = "/nix/var/nix/profiles/per-user/root/channels/nixos/programs.sqlite" ;
@@ -44,7 +51,7 @@ in
       ''
         # This function is called whenever a command is not found.
         command_not_found_handle() {
-          local p=${commandNotFound}
+          local p=${commandNotFound}/bin/command-not-found
           if [ -x $p -a -f ${cfg.dbPath} ]; then
             # Run the helper program.
             $p "$@"
@@ -65,7 +72,7 @@ in
       ''
         # This function is called whenever a command is not found.
         command_not_found_handler() {
-          local p=${commandNotFound}
+          local p=${commandNotFound}/bin/command-not-found
           if [ -x $p -a -f ${cfg.dbPath} ]; then
             # Run the helper program.
             $p "$@"

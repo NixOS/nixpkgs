@@ -2,8 +2,8 @@
 
 stdenv.mkDerivation rec {
 
-  name = "coq-fiat-${coq.coq-version}-${version}";
-  version = "20161024";
+  name = "coq-fiat-${coq.coq-version}-unstable-${version}";
+  version = "2016-10-24";
 
   src = fetchgit {
     url = "https://github.com/mit-plv/fiat.git";
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     description = "A library for the Coq proof assistant for synthesizing efficient correct-by-construction programs from declarative specifications";
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;
+    broken = stdenv.lib.versionAtLeast coq.coq-version "8.6";
   };
 
 }

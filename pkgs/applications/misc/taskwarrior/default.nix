@@ -16,8 +16,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake libuuid gnutls ];
 
   postInstall = ''
-    mkdir -p "$out/etc/bash_completion.d"
-    ln -s "../../share/doc/task/scripts/bash/task.sh" "$out/etc/bash_completion.d/"
+    mkdir -p "$out/share/bash-completion/completions"
+    ln -s "../../doc/task/scripts/bash/task.sh" "$out/share/bash-completion/completions/"
+    mkdir -p "$out/share/fish/vendor_completions.d"
+    ln -s "../../../share/doc/task/scripts/fish/task.fish" "$out/share/fish/vendor_completions.d/"
   '';
 
   meta = with stdenv.lib; {

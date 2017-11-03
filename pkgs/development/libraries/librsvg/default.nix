@@ -6,11 +6,11 @@
 # no introspection by default, it's too big
 
 stdenv.mkDerivation rec {
-  name = "librsvg-2.40.16";
+  name = "librsvg-2.40.17";
 
   src = fetchurl {
     url    = "mirror://gnome/sources/librsvg/2.40/${name}.tar.xz";
-    sha256 = "0bpz6gsq8xi1pb5k9ax6vinph460v14znch3y5yz167s0dmwz2yl";
+    sha256 = "1k39gyf7f5m9x0jvpcxvfcqswdb04xhm1lbwbjabn1f4xk5wbxp6";
   };
 
   NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
@@ -47,6 +47,10 @@ stdenv.mkDerivation rec {
         -i gdk-pixbuf-loader/Makefile
     sed -e "s#\$(GDK_PIXBUF_QUERYLOADERS)#GDK_PIXBUF_MODULEDIR=$GDK_PIXBUF/loaders \$(GDK_PIXBUF_QUERYLOADERS)#" \
          -i gdk-pixbuf-loader/Makefile
+
+    # Fix thumbnailer path
+    sed -e "s#@bindir@\(/gdk-pixbuf-thumbnailer\)#${gdk_pixbuf}/bin\1#g" \
+        -i gdk-pixbuf-loader/librsvg.thumbnailer.in
   '';
 
   # Merge gdkpixbuf and librsvg loaders

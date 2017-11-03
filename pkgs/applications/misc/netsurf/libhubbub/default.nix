@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "101781iw32p47386fxqr01nrkywi12w17ajh02k2vlga4z8zyv86";
   };
 
-  buildInputs = [ pkgconfig perl
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ perl
     buildsystem
     libparserutils
   ];
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.netsurf-browser.org/";
+    homepage = http://www.netsurf-browser.org/;
     description = "HTML5 parser library for netsurf browser";
     license = licenses.gpl2;
     maintainers = [ maintainers.vrthra ];

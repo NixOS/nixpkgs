@@ -1,12 +1,14 @@
 { buildPythonPackage
+, fetchPypi
 , python
 , stdenv
 , fetchurl
-, nose
+, pytest
 , glibcLocales
 , cython
 , dateutil
 , scipy
+, moto
 , numexpr
 , pytz
 , xlrd
@@ -18,7 +20,6 @@
 , openpyxl
 , tables
 , xlwt
-, darwin ? {}
 , libcxx ? null
 }:
 
@@ -27,16 +28,16 @@ let
   inherit (stdenv) isDarwin;
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.19.2";
+  version = "0.21.0";
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "6f0f4f598c2b16746803c8bafef7c721c57e4844da752d36240c0acf97658014";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0nf50ls2cnlsd2635nyji7l70xc91dw81qg5y01g5sifwwqcpmaw";
   };
 
   LC_ALL = "en_US.UTF-8";
-  buildInputs = [ nose glibcLocales ] ++ optional isDarwin libcxx;
+  buildInputs = [ pytest glibcLocales ] ++ optional isDarwin libcxx;
   propagatedBuildInputs = [
     cython
     dateutil
@@ -52,43 +53,49 @@ in buildPythonPackage rec {
     openpyxl
     tables
     xlwt
-  ] ++ optional isDarwin darwin.locale; # provides the locale command
+  ];
 
   # For OSX, we need to add a dependency on libcxx, which provides
   # `complex.h` and other libraries that pandas depends on to build.
-  patchPhase = optionalString isDarwin ''
+  postPatch = optionalString isDarwin ''
     cpp_sdk="${libcxx}/include/c++/v1";
     echo "Adding $cpp_sdk to the setup.py common_include variable"
     substituteInPlace setup.py \
       --replace "['pandas/src/klib', 'pandas/src']" \
                 "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
-
-  # disable clipboard tests since pbcopy/pbpaste are not open source
-    substituteInPlace pandas/io/tests/test_clipboard.py \
-      --replace pandas.util.clipboard no_such_module \
-      --replace OSError ImportError
   '';
 
-  # The flag `-A 'not network'` will disable tests that use internet.
-  # The `-e` flag disables a few problematic tests.
-
+  checkInputs = [ moto ];
   checkPhase = ''
     runHook preCheck
-    # The flag `-w` provides the initial directory to search for tests.
-    # The flag `-A 'not network'` will disable tests that use internet.
-    nosetests -w $out/${python.sitePackages}/pandas --no-path-adjustment -A 'not slow and not network' --stop \
-      --verbosity=3
-     runHook postCheck
+  ''
+  # TODO: Get locale and clipboard support working on darwin.
+  #       Until then we disable the tests.
+  + optionalString isDarwin ''
+    # Fake the impure dependencies pbpaste and pbcopy
+    echo "#!/bin/sh" > pbcopy
+    echo "#!/bin/sh" > pbpaste
+    chmod a+x pbcopy pbpaste
+    export PATH=$(pwd):$PATH
+  '' + ''
+    # since dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
+    # was supposed to be solved by https://github.com/dateutil/dateutil/issues/321, but is not the case
+    py.test $out/${python.sitePackages}/pandas --skip-slow --skip-network \
+      -k "not test_fallback_plural and \
+          not test_ambiguous_flags and \
+          not test_ambiguous_compat \
+          ${optionalString isDarwin "and not test_locale and not test_clipboard"}"
+    runHook postCheck
   '';
 
   meta = {
     # https://github.com/pandas-dev/pandas/issues/14866
     # pandas devs are no longer testing i686 so safer to assume it's broken
     broken = stdenv.isi686;
-    homepage = "http://pandas.pydata.org/";
+    homepage = http://pandas.pydata.org/;
     description = "Python Data Analysis Library";
     license = stdenv.lib.licenses.bsd3;
-    maintainers = with stdenv.lib.maintainers; [ raskin fridh ];
+    maintainers = with stdenv.lib.maintainers; [ raskin fridh knedlsepp ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

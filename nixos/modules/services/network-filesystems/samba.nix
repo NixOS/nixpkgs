@@ -28,7 +28,7 @@ let
   configFile = pkgs.writeText "smb.conf"
     (if cfg.configText != null then cfg.configText else
     ''
-      [ global ]
+      [global]
       security = ${cfg.securityType}
       passwd program = /run/wrappers/bin/passwd %u
       pam password change = ${smbToString cfg.syncPasswordsByPam}
@@ -243,7 +243,7 @@ in
           };
         };
 
-        security.pam.services.sambda = {};
+        security.pam.services.samba = {};
 
       })
     ];

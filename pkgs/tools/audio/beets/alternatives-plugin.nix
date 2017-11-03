@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pythonPackages }:
+{ stdenv, fetchFromGitHub, beets, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
   name = "beets-alternatives-${version}";
@@ -13,13 +13,18 @@ pythonPackages.buildPythonApplication rec {
 
   postPatch = ''
     sed -i -e '/install_requires/,/\]/{/beets/d}' setup.py
+    sed -i -e '/test_suite/d' setup.py
   '';
+
+  nativeBuildInputs = [ beets pythonPackages.nose ];
+
+  checkPhase = "nosetests";
 
   propagatedBuildInputs = with pythonPackages; [ futures ];
 
   meta = {
     description = "Beets plugin to manage external files";
-    homepage = "https://github.com/geigerzaehler/beets-alternatives";
+    homepage = https://github.com/geigerzaehler/beets-alternatives;
     license = stdenv.lib.licenses.mit;
   };
 }

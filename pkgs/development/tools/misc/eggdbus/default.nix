@@ -8,10 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "118hj63ac65zlg71kydv4607qcg1qpdlql4kvhnwnnhar421jnq4";
   };
   
-  buildInputs = [ pkgconfig glib dbus dbus_glib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib dbus dbus_glib ];
 
   meta = {
-    homepage = http://hal.freedesktop.org/releases/;
+    homepage = https://hal.freedesktop.org/releases/;
     description = "D-Bus bindings for GObject";
     platforms = stdenv.lib.platforms.linux;
   };

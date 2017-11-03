@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, pcre-cpp, sqlite, ncurses,
-  readline, zlib, bzip2, autoconf, automake }:
+{ stdenv, fetchFromGitHub, pcre-cpp, sqlite, ncurses
+, readline, zlib, bzip2, autoconf, automake, curl }:
 
 stdenv.mkDerivation rec {
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     owner = "tstack";
     repo = "lnav";
     rev = "v${meta.version}";
-    sha256 = "0pag2rl7b6s2xfl80c629vhwsdvvlhcdy6732yvpgfv94w0zyjp9";
+    sha256 = "1jdjn64cxgbhhyg73cisrfrk7vjg1hr9nvkmfdk8gxc4g82y3xxc";
     inherit name;
   };
 
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     pcre-cpp
     readline
     sqlite
+    curl
   ];
 
   preConfigure = ''
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/tstack/lnav";
+    homepage = https://github.com/tstack/lnav;
     description = "The Logfile Navigator";
     longDescription = ''
       The log file navigator, lnav, is an enhanced log file viewer that takes
@@ -42,8 +43,9 @@ stdenv.mkDerivation rec {
     '';
     downloadPage = "https://github.com/tstack/lnav/releases";
     license = licenses.bsd2;
-    version = "0.8.1";
+    version = "0.8.2";
     maintainers = [ maintainers.dochang ];
+    platforms = platforms.unix;
   };
 
 }

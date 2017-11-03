@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1nwb6b1qrpdyigwig7bvr42lf7na1ngm0q2cislcvb2v1nmk6nlz";
   };
 
-  buildInputs = [ pkgconfig cmake pixman libpthreadstubs gtkmm2 libXau libXdmcp
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake pixman libpthreadstubs gtkmm2 libXau libXdmcp
     lcms2 libiptcdata libcanberra_gtk2 fftw expat pcre libsigcxx ];
 
   NIX_CFLAGS_COMPILE = "-std=gnu++11 -Wno-deprecated-declarations -Wno-unused-result";

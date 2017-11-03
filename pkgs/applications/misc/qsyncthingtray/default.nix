@@ -1,23 +1,22 @@
-{ stdenv, lib, fetchFromGitHub, procps ? null
+{ mkDerivation, stdenv, lib, fetchFromGitHub, procps ? null
 , qtbase, qtwebengine, qtwebkit
-, cmake, makeQtWrapper
+, cmake
 , syncthing, syncthing-inotify ? null
 , preferQWebView ? false }:
 
-stdenv.mkDerivation rec {
-  version = "0.5.7";
+mkDerivation rec {
+  version = "0.5.8";
   name = "qsyncthingtray-${version}";
 
   src = fetchFromGitHub {
     owner  = "sieren";
     repo   = "QSyncthingTray";
     rev    = "${version}";
-    sha256 = "0crrdpdmlc4ahkvp5znzc4zhfwsdih655q1kfjf0g231mmynxhvq";
+    sha256 = "1n9g4j7qznvg9zl6x163pi9f7wsc3x6q76i33psnm7x2v1i22x5w";
   };
 
   buildInputs = [ qtbase qtwebengine ] ++ lib.optional preferQWebView qtwebkit;
-  nativeBuildInputs = [ cmake makeQtWrapper ];
-  enableParallelBuilding = true;
+  nativeBuildInputs = [ cmake ];
 
   cmakeFlags = lib.optional preferQWebView "-DQST_BUILD_WEBKIT=1";
 
@@ -36,22 +35,27 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = let qst = "qsyncthingtray"; in ''
+    runHook preInstall
+
     mkdir -p $out/bin
     install -m755 QSyncthingTray $out/bin/${qst}
     ln -s $out/bin/${qst} $out/bin/QSyncthingTray
+
+    runHook postInstall
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://github.com/sieren/QSyncthingTray/;
     description = "A Traybar Application for Syncthing written in C++";
     longDescription = ''
         A cross-platform status bar for Syncthing.
-        Currently supports OS X, Windows and Linux.
+        Currently supports macOS, Windows and Linux.
         Written in C++ with Qt.
     '';
     license = licenses.lgpl3;
     maintainers = with maintainers; [ zraexy peterhoeg ];
     platforms = platforms.all;
+    # 0.5.7 segfaults when opening the main panel with qt 5.7 and fails to compile with qt 5.8
     broken = builtins.compareVersions qtbase.version "5.7.0" >= 0;
   };
 }

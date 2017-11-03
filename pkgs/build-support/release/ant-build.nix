@@ -69,7 +69,7 @@ stdenv.mkDerivation (
 
       mkdir -p $out/bin
       cat >> $out/bin/${w.name} <<EOF
-      #! /bin/sh
+      #!${stdenv.shell}
       export JAVA_HOME=$jre
       $jre/bin/java ${cp w} ${if w ? mainClass then w.mainClass else "-jar ${w.jar}"} \$@
       EOF

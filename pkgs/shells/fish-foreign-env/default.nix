@@ -2,23 +2,25 @@
 
 stdenv.mkDerivation rec {
   name = "fish-foreign-env-${version}";
-  version = "git-20151223";
+  version = "git-20170324";
 
   src = fetchFromGitHub {
     owner = "oh-my-fish";
     repo = "plugin-foreign-env";
-    rev = "2dfe5b73fd2101702c83d1d7b566e2b9332c5ddc";
-    sha256 = "17jxlbljp7k2azcl1miz5h5xfyazlf9z9lrddcrnm6r7c1w1zdh5";
+    rev = "baefbd690f0b52cb8746f3e64b326d82834d07c5";
+    sha256 = "0lwp6hy3kfk7xfx4xvbk1ir8zkzm7gfjbm4bf6xg1y6iw9jq9dnl";
   };
 
-  buildCommand = ''
+  installPhase = ''
     mkdir -p $out/share/fish-foreign-env/functions/
-    cp $src/functions/* $out/share/fish-foreign-env/functions/
+    cp functions/* $out/share/fish-foreign-env/functions/
     sed -e "s|sed|${gnused}/bin/sed|" \
         -e "s|bash|${bash}/bin/bash|" \
         -e "s|\| tr|\| ${coreutils}/bin/tr|" \
         -i $out/share/fish-foreign-env/functions/*
   '';
+
+  patches = [ ./hide-path-warnings.patch ];
 
   meta = with stdenv.lib; {
     description = "A foreign environment interface for Fish shell";

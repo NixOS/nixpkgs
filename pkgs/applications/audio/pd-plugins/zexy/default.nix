@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ autoconf automake puredata ];
 
-  patchPhase = ''
+  preBuild = ''
+    export LD=$CXX
     cd src/
     for i in ${puredata}/include/pd/*; do
       ln -s $i .

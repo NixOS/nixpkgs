@@ -1,28 +1,35 @@
-{ stdenv, fetchurl, pkgconfig, glib, ncurses, mpd_clientlib, libintlOrEmpty }:
+{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, glib, ncurses
+, mpd_clientlib, gettext }:
 
-stdenv.mkDerivation rec {
-  version = "0.24";
+let
+  rpath = stdenv.lib.makeLibraryPath [
+    glib ncurses mpd_clientlib
+  ];
+in stdenv.mkDerivation rec {
   name = "ncmpc-${version}";
+  version = "0.28";
 
-  src = fetchurl {
-    url = "http://www.musicpd.org/download/ncmpc/0/ncmpc-${version}.tar.xz";
-    sha256 = "1sf3nirs3mcx0r5i7acm9bsvzqzlh730m0yjg6jcyj8ln6r7cvqf";
+  src = fetchFromGitHub {
+    owner  = "MusicPlayerDaemon";
+    repo   = "ncmpc";
+    rev    = "v${version}";
+    sha256 = "1z0bdkqsdb3f5k2lsws3qzav4r30fzk8fhxj9l0p738flcka6k4n";
   };
 
-  buildInputs = [ pkgconfig glib ncurses mpd_clientlib ]
-    ++ libintlOrEmpty;
+  buildInputs = [ glib ncurses mpd_clientlib ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext ];
 
-  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
-
-  configureFlags = [
-    "--enable-colors"
-    "--enable-lyrics-screen"
-  ];
+  postFixup = ''
+    for elf in "$out"/bin/*; do
+      patchelf --set-rpath '${rpath}':"$out/lib" "$elf"
+    done
+  '';
 
   meta = with stdenv.lib; {
     description = "Curses-based interface for MPD (music player daemon)";
     homepage    = http://www.musicpd.org/clients/ncmpc/;
     license     = licenses.gpl2Plus;
     platforms   = platforms.all;
+    maintainers = with maintainers; [ fpletz ];
   };
 }

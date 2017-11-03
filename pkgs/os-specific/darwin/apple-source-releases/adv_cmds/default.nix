@@ -16,7 +16,8 @@ let recentAdvCmds = fetchzip {
 };
 
 in appleDerivation {
-  buildInputs = [ bsdmake perl yacc flex ];
+  nativeBuildInputs = [ bsdmake perl yacc flex ];
+  buildInputs = [ flex ];
 
   patchPhase = ''
     substituteInPlace BSDmakefile \

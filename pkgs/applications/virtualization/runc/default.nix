@@ -5,39 +5,34 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "runc-${version}";
-  version = "1.0.0-rc2";
+  version = "1.0.0-rc4";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
-    sha256 = "06bxc4g3frh4i1lkzvwdcwmzmr0i52rz4a4pij39s15zaigm79wk";
+    sha256 = "0dh24x0zw90hs7618pnqvjhd2nx8dpz3b5jwc1vbs8dawj8prir2";
   };
-
-  patches = [
-    # Two patches to fix CVE-2016-9962
-    # From https://bugzilla.suse.com/show_bug.cgi?id=1012568
-    (fetchpatch {
-      name = "0001-libcontainer-nsenter-set-init-processes-as-non-dumpa.patch";
-      url = "https://bugzilla.suse.com/attachment.cgi?id=709048&action=diff&context=patch&collapsed=&headers=1&format=raw";
-      sha256 = "1cfsmsyhc45a2929825mdaql0mrhhbrgdm54ly0957j2f46072ck";
-    })
-    (fetchpatch {
-      name = "0002-libcontainer-init-only-pass-stateDirFd-when-creating.patch";
-      url = "https://bugzilla.suse.com/attachment.cgi?id=709049&action=diff&context=patch&collapsed=&headers=1&format=raw";
-      sha256 = "1ykwg1mbvsxsnsrk9a8i4iadma1g0rgdmaj19dvif457hsnn31wl";
-    })
-  ];
 
   outputs = [ "out" "man" ];
 
   hardeningDisable = ["fortify"];
 
-  buildInputs = [ removeReferencesTo go-md2man go pkgconfig libseccomp libapparmor apparmor-parser ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ removeReferencesTo go-md2man go libseccomp libapparmor apparmor-parser ];
 
   makeFlags = ''BUILDTAGS+=seccomp BUILDTAGS+=apparmor'';
 
+  preConfigure = ''
+    # Extract the source
+    cd "$NIX_BUILD_TOP"
+    mkdir -p "go/src/github.com/opencontainers"
+    mv "$sourceRoot" "go/src/github.com/opencontainers/runc"
+    export GOPATH=$NIX_BUILD_TOP/go:$GOPATH
+  '';
+
   preBuild = ''
+    cd go/src/github.com/opencontainers/runc
     patchShebangs .
     substituteInPlace libcontainer/apparmor/apparmor.go \
       --replace /sbin/apparmor_parser ${apparmor-parser}/bin/apparmor_parser

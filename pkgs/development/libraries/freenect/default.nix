@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   meta = {
-    description = "Drivers and libraries for the Xbox Kinect device on Windows, Linux, and OS X";
+    description = "Drivers and libraries for the Xbox Kinect device on Windows, Linux, and macOS";
     inherit version;
     homepage = http://openkinect.org;
     license = with stdenv.lib.licenses; [ gpl2 asl20 ];

@@ -1,9 +1,11 @@
-{ plasmaPackage, extra-cmake-modules, kcoreaddons, ki18n, kpty
-, knotifications, kdbusaddons
+{
+  mkDerivation,
+  extra-cmake-modules,
+  kcoreaddons, kdbusaddons, ki18n, knotifications, kpty, qtbase,
 }:
 
-plasmaPackage {
+mkDerivation {
   name = "kwrited";
   nativeBuildInputs = [ extra-cmake-modules ];
-  propagatedBuildInputs = [ kcoreaddons ki18n kpty knotifications kdbusaddons ];
+  buildInputs = [ kcoreaddons kdbusaddons ki18n knotifications kpty qtbase ];
 }

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   preFixup = ''
     wrapProgram "$out/bin/mousepad" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:${gtksourceview}/share" \
-      --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules"
+      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules"
   '';
 
   meta = {

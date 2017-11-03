@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libjpeg, mesa, freeglut, zlib, cmake, libX11, libxml2, libpng,
-  libXxf86vm, gcc6 }:
+  libXxf86vm }:
 
 stdenv.mkDerivation {
   name = "freepv-0.3.0";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ libjpeg mesa freeglut zlib cmake libX11 libxml2 libpng
-    libXxf86vm gcc6 ];
+    libXxf86vm ];
 
   postPatch = ''
     sed -i -e '/GECKO/d' CMakeLists.txt

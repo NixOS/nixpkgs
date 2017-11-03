@@ -1,0 +1,44 @@
+From a736c0dfd22cd4ab0da86c30a664c91843df1b98 Mon Sep 17 00:00:00 2001
+From: Adam Ruzicka <a.ruzicka@outlook.com>
+Date: Sat, 29 Jul 2017 12:16:29 +0200
+Subject: [PATCH] notmuch-0.25 compatibility fix
+
+---
+ notmuch-addrlookup.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/notmuch-addrlookup.c b/notmuch-addrlookup.c
+index c5cf5b4..a95ded0 100644
+--- a/notmuch-addrlookup.c
++++ b/notmuch-addrlookup.c
+@@ -171,6 +171,13 @@ create_queries (notmuch_database_t *db,
+       count += tmp;
+   if (notmuch_query_count_messages_st (queries[1], &tmp) == NOTMUCH_STATUS_SUCCESS)
+       count += tmp;
++#elif LIBNOTMUCH_MAJOR_VERSION >= 5
++  unsigned int count = 0;
++  unsigned int tmp;
++  if (notmuch_query_count_messages (queries[0], &tmp) == NOTMUCH_STATUS_SUCCESS)
++      count += tmp;
++  if (notmuch_query_count_messages (queries[1], &tmp) == NOTMUCH_STATUS_SUCCESS)
++      count += tmp;
+ #else
+   unsigned int count = notmuch_query_count_messages (queries[0])
+                      + notmuch_query_count_messages (queries[1]);
+@@ -233,6 +240,13 @@ run_queries (notmuch_database_t *db,
+ #if LIBNOTMUCH_MAJOR_VERSION >= 4 && LIBNOTMUCH_MINOR_VERSION >= 3
+       if (notmuch_query_search_messages_st (queries[i], &messages) != NOTMUCH_STATUS_SUCCESS)
+           continue;
++#elif LIBNOTMUCH_MAJOR_VERSION >= 5
++  unsigned int count = 0;
++  unsigned int tmp;
++  if (notmuch_query_count_messages (queries[0], &tmp) == NOTMUCH_STATUS_SUCCESS)
++      count += tmp;
++  if (notmuch_query_count_messages (queries[1], &tmp) == NOTMUCH_STATUS_SUCCESS)
++      count += tmp;
+ #else
+       if (!(messages = notmuch_query_search_messages (queries[i])))
+           continue;
+--
+2.13.3
+

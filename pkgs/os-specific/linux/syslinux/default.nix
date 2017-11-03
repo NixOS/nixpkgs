@@ -30,7 +30,8 @@ stdenv.mkDerivation rec {
   preBuild = ''
     substituteInPlace Makefile --replace /bin/pwd $(type -P pwd)
     substituteInPlace gpxe/src/Makefile.housekeeping --replace /bin/echo $(type -P echo)
-    substituteInPlace utils/ppmtolss16 gpxe/src/Makefile --replace /usr/bin/perl $(type -P perl)
+    substituteInPlace utils/ppmtolss16 --replace /usr/bin/perl $(type -P perl)
+    substituteInPlace gpxe/src/Makefile --replace /usr/bin/perl $(type -P perl)
   '';
 
   stripDebugList = "bin sbin share/syslinux/com32";
@@ -55,6 +56,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.syslinux.org/;
     description = "A lightweight bootloader";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

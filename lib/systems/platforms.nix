@@ -1,3 +1,4 @@
+{ lib }:
 rec {
   pcBase = {
     name = "pc";
@@ -19,6 +20,39 @@ rec {
 
   pc64_simplekernel = pc64 // {
     kernelAutoModules = false;
+  };
+
+  pogoplug4 = {
+    name = "pogoplug4";
+
+    gcc = {
+      arch = "armv5te";
+      float = "soft";
+    };
+
+    kernelMajor = "2.6";
+    kernelHeadersBaseConfig = "multi_v5_defconfig";
+    kernelBaseConfig = "multi_v5_defconfig";
+    kernelArch = "arm";
+    kernelAutoModules = false;
+    kernelExtraConfig =
+      ''
+        # Ubi for the mtd
+        MTD_UBI y
+        UBIFS_FS y
+        UBIFS_FS_XATTR y
+        UBIFS_FS_ADVANCED_COMPR y
+        UBIFS_FS_LZO y
+        UBIFS_FS_ZLIB y
+        UBIFS_FS_DEBUG n
+      '';
+    kernelMakeFlags = [ "LOADADDR=0x8000" ];
+    kernelTarget = "uImage";
+    # TODO reenable once manual-config's config actually builds a .dtb and this is checked to be working
+    #kernelDTB = true;
+
+    # XXX can be anything non-null, pkgs actually only cares if it is set or not
+    uboot = "pogoplug4";
   };
 
   sheevaplug = {
@@ -222,6 +256,10 @@ rec {
       arch = "armv6";
       fpu = "vfp";
       float = "hard";
+      # TODO(@Ericson2314) what is this and is it a good idea? It was
+      # used in some cross compilation examples but not others.
+      #
+      # abi = "aapcs-linux";
     };
   };
 
@@ -307,6 +345,43 @@ rec {
     uboot = null;
   };
 
+  scaleway-c1 = armv7l-hf-multiplatform // {
+    gcc = {
+      cpu = "cortex-a9";
+      fpu = "vfpv3";
+      float = "hard";
+    };
+  };
+
+  utilite = {
+    name = "utilite";
+    kernelMajor = "2.6";
+    kernelHeadersBaseConfig = "multi_v7_defconfig";
+    kernelBaseConfig = "multi_v7_defconfig";
+    kernelArch = "arm";
+    kernelAutoModules = false;
+    kernelExtraConfig =
+      ''
+        # Ubi for the mtd
+        MTD_UBI y
+        UBIFS_FS y
+        UBIFS_FS_XATTR y
+        UBIFS_FS_ADVANCED_COMPR y
+        UBIFS_FS_LZO y
+        UBIFS_FS_ZLIB y
+        UBIFS_FS_DEBUG n
+      '';
+    kernelMakeFlags = [ "LOADADDR=0x10800000" ];
+    kernelTarget = "uImage";
+    kernelDTB = true;
+    uboot = true; #XXX: any non-null value here is needed so that mkimage is present to build kernelTarget uImage
+    gcc = {
+      cpu = "cortex-a9";
+      fpu = "neon";
+      float = "hard";
+    };
+  };
+
   guruplug = sheevaplug // {
     # Define `CONFIG_MACH_GURUPLUG' (see
     # <http://kerneltrap.org/mailarchive/git-commits-head/2010/5/19/33618>)
@@ -390,7 +465,10 @@ rec {
     '';
     kernelTarget = "vmlinux";
     uboot = null;
-    gcc.arch = "loongson2f";
+    gcc = {
+      arch = "loongson2f";
+      abi = "n32";
+    };
   };
 
   beaglebone = armv7l-hf-multiplatform // {
@@ -466,6 +544,13 @@ rec {
 
       # Cavium ThunderX stuff.
       PCI_HOST_THUNDER_ECAM y
+
+      # Nvidia Tegra stuff.
+      PCI_TEGRA y
+
+      # The default (=y) forces us to have the XHCI firmware available in initrd,
+      # which our initrd builder can't currently do easily.
+      USB_XHCI_TEGRA m
     '';
     uboot = null;
     kernelTarget = "Image";

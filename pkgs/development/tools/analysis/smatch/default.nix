@@ -16,7 +16,8 @@ stdenv.mkDerivation {
     sha256 = "0r43qi6vryqg450fj73yjwbb7gzcgx64rhrhb3r1m6a252srijiy";
   };
 
-  buildInputs = [sqlite pkgconfig perl]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [sqlite perl]
    ++ stdenv.lib.optional buildllvmsparse llvm
    ++ stdenv.lib.optional buildc2xml libxml2;
 
@@ -27,7 +28,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A semantic analysis tool for C";
-    homepage = "http://smatch.sourceforge.net/";
+    homepage = http://smatch.sourceforge.net/;
     license = stdenv.lib.licenses.free; /* OSL, see http://www.opensource.org */
     platforms = stdenv.lib.platforms.linux;
   };

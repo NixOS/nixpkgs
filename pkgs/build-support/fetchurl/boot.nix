@@ -5,10 +5,11 @@ let mirrors = import ./mirrors.nix; in
 { url ? builtins.head urls
 , urls ? []
 , sha256
+, name ? baseNameOf (toString url)
 }:
 
 import <nix/fetchurl.nix> {
-  inherit system sha256;
+  inherit system sha256 name;
 
   url =
     # Handle mirror:// URIs. Since <nix/fetchurl.nix> currently

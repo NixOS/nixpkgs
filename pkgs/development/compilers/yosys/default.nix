@@ -1,28 +1,32 @@
-{ stdenv, fetchFromGitHub, fetchFromBitbucket, pkgconfig, tcl, readline, libffi, python3, bison, flex }:
+{ stdenv, fetchFromGitHub, fetchFromBitbucket
+, pkgconfig, tcl, readline, libffi, python3, bison, flex
+}:
 
 stdenv.mkDerivation rec {
   name = "yosys-${version}";
-  version = "2016.11.25";
+  version = "2017.10.16";
 
   srcs = [
     (fetchFromGitHub {
       owner = "cliffordwolf";
       repo = "yosys";
-      rev = "5c2c78e2dd12a860f830dafd73fbed8edf1a3823";
-      sha256 = "1cvfkg0hllp7k2g52mxczd8d0ad7inlpkg27rrbyani2kg0066bk";
+      rev = "716dbc92745aa8b41d85a60d50263433d5a79393";
+      sha256 = "0va77my4iddsw6psgjfhfgs0z0z1hpj0l8ipchcl8crpxipxcr77";
       name = "yosys";
     })
     (fetchFromBitbucket {
       owner = "alanmi";
       repo = "abc";
-      rev = "238674cd44f2";
-      sha256 = "18xk7lqai05am11zymixilgam4jvz5f2jwy9cgillz035man2yzw";
+      rev = "6283c5d99b06";
+      sha256 = "1mv8r1la4d4r9bk32sl4nq3flyxi8jf2ccaak64j5rz9hirrlpla";
       name = "yosys-abc";
     })
   ];
   sourceRoot = "yosys";
 
-  buildInputs = [ pkgconfig tcl readline libffi python3 bison flex ];
+  enableParallelBuilding = true;
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ tcl readline libffi python3 bison flex ];
   preBuild = ''
     chmod -R u+w ../yosys-abc
     ln -s ../yosys-abc abc
@@ -42,9 +46,9 @@ stdenv.mkDerivation rec {
       adding additional passes as needed by extending the yosys C++
       code base.
     '';
-    homepage = http://www.clifford.at/yosys/;
-    license = stdenv.lib.licenses.isc;
-    maintainers = [ stdenv.lib.maintainers.shell ];
-    platforms = stdenv.lib.platforms.linux;
+    homepage    = http://www.clifford.at/yosys/;
+    license     = stdenv.lib.licenses.isc;
+    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice ];
+    platforms   = stdenv.lib.platforms.linux;
   };
 }

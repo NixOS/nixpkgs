@@ -18,7 +18,7 @@ let
     inherit stdenv requireFile writeText fetchurl haskellPackages;
   };
 
-  remixPacks = imap (num: sha256: fetchurl rec {
+  remixPacks = imap1 (num: sha256: fetchurl rec {
     name = "uqm-remix-disc${toString num}.uqm";
     url = "mirror://sourceforge/sc2/${name}";
     inherit sha256;
@@ -59,7 +59,8 @@ in stdenv.mkDerivation rec {
     library can be found. Obviously, though, this is a hack. */
   NIX_LDFLAGS="-lgcc_s";
 
-  buildInputs = [SDL SDL_image libpng libvorbis libogg libmikmod unzip pkgconfig mesa];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [SDL SDL_image libpng libvorbis libogg libmikmod unzip mesa];
 
   postUnpack = ''
     mkdir -p uqm-${version}/content/packages

@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, qt4 }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.1";
+  version = "0.9.0";
   name = "qjson-${version}";
 
   src = fetchFromGitHub {
     owner = "flavio";
     repo = "qjson";
     rev = "${version}";
-    sha256 = "1rb3ydrhyd4bczqzfv0kqpi2mx4hlpq1k8jvnwpcmvyaypqpqg59";
+    sha256 = "1f4wnxzx0qdmxzc7hqk28m0sva7z9p9xmxm6aifvjlp0ha6pmfxs";
   };
 
   buildInputs = [ cmake qt4 ];

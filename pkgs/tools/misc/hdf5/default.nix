@@ -1,5 +1,7 @@
 { stdenv
 , fetchurl
+, gcc
+, removeReferencesTo
 , cpp ? false
 , gfortran ? null
 , zlib ? null
@@ -11,6 +13,9 @@
 # cpp and mpi options are mutually exclusive
 # (--enable-unsupported could be used to force the build)
 assert !cpp || mpi == null;
+
+# No point splitting version 1.8.18 into multiple outputs.
+# The library /lib/libhdf5.so has a reference to gcc-wrapper
 
 let inherit (stdenv.lib) optional optionals; in
 
@@ -26,6 +31,8 @@ stdenv.mkDerivation rec {
     mpiSupport = (mpi != null);
     inherit mpi;
   };
+
+  nativeBuildInputs = [ removeReferencesTo ];
 
   buildInputs = []
     ++ optional (gfortran != null) gfortran
@@ -44,6 +51,10 @@ stdenv.mkDerivation rec {
 
   patches = [./bin-mv.patch];
 
+  postInstall = ''
+    find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
+  '';
+
   meta = {
     description = "Data model, library, and file format for storing and managing data";
     longDescription = ''
@@ -52,7 +63,9 @@ stdenv.mkDerivation rec {
       applications to evolve in their use of HDF5. The HDF5 Technology suite includes tools and 
       applications for managing, manipulating, viewing, and analyzing data in the HDF5 format.
     '';
-    homepage = http://www.hdfgroup.org/HDF5/;
+    license = stdenv.lib.licenses.free; # BSD-like
+    homepage = https://www.hdfgroup.org/HDF5/;
     platforms = stdenv.lib.platforms.unix;
+    broken = (gfortran != null) && stdenv.isDarwin;
   };
 }

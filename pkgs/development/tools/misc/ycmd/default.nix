@@ -2,7 +2,7 @@
 , gocode ? null
 , godef ? null
 , rustracerd ? null
-, Cocoa ? null
+, fixDarwinDylibNames, Cocoa ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "0p5knlxgy66zi229ns1lfdhz5lram93vahmmk54w98fr3h8b1yfj";
   };
 
-  buildInputs = [ cmake boost ]  ++ stdenv.lib.optional stdenv.isDarwin Cocoa;
+  buildInputs = [ cmake boost ]
+    ++ stdenv.lib.optional stdenv.isDarwin [ fixDarwinDylibNames Cocoa ];
 
   buildPhase = ''
     export EXTRA_CMAKE_ARGS=-DPATH_TO_LLVM_ROOT=${llvmPackages.clang-unwrapped}
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
     " ycmd/__main__.py
 
     mkdir -p $out/lib/ycmd
-    cp -r ycmd/ CORE_VERSION libclang.so.* ycm_core.so $out/lib/ycmd/
+    cp -r ycmd/ CORE_VERSION libclang.so.* libclang.dylib* ycm_core.so $out/lib/ycmd/
 
     mkdir -p $out/bin
     ln -s $out/lib/ycmd/ycmd/__main__.py $out/bin/ycmd
@@ -78,7 +79,7 @@ stdenv.mkDerivation rec {
     description = "A code-completion and comprehension server";
     homepage = https://github.com/Valloric/ycmd;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ rasendubi cstrahan ];
+    maintainers = with maintainers; [ rasendubi cstrahan lnl7 ];
     platforms = platforms.all;
   };
 }

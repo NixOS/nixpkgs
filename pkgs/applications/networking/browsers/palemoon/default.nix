@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation rec {
   name = "palemoon-${version}";
-  version = "27.2.1";
+  version = "27.5.0";
 
   src = fetchFromGitHub {
     name   = "palemoon-src";
     owner  = "MoonchildProductions";
     repo   = "Pale-Moon";
     rev    = version + "_Release";
-    sha256 = "1yyipxd5lmavf4aca4vrcnp7hb8zkn4sv2zp6n2cm6w4pxlza0g4";
+    sha256 = "0m4fgwxn6hs8r240i6acaajx76cvqy1b7cqmdsxd33qpjrrj1h9d";
   };
 
   desktopItem = makeDesktopItem {

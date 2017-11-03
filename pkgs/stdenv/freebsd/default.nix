@@ -35,7 +35,10 @@ let inherit (localSystem) system; in
 
     stdenv = import ../generic {
       name = "stdenv-freebsd-boot-1";
-      inherit system config;
+      buildPlatform = localSystem;
+      hostPlatform = localSystem;
+      targetPlatform = localSystem;
+      inherit config;
       initialPath = [ "/" "/usr" ];
       shell = "${bootstrapTools}/bin/bash";
       fetchurlBoot = null;
@@ -50,31 +53,31 @@ let inherit (localSystem) system; in
 
     stdenv = import ../generic {
       name = "stdenv-freebsd-boot-0";
-      inherit system config;
+      inherit config;
       initialPath = [ prevStage.bootstrapTools ];
-      inherit (prevStage.stdenv) shell;
+      inherit (prevStage.stdenv)
+        buildPlatform hostPlatform targetPlatform
+        shell;
       fetchurlBoot = prevStage.fetchurl;
       cc = null;
     };
   })
 
   (prevStage: {
-    buildPlatform = localSystem;
-    hostPlatform = localSystem;
-    targetPlatform = localSystem;
     inherit config overlays;
     stdenv = import ../generic {
       name = "stdenv-freebsd-boot-3";
-      inherit system config;
+      inherit config;
 
       inherit (prevStage.stdenv)
+        buildPlatform hostPlatform targetPlatform
         initialPath shell fetchurlBoot;
 
       cc = import ../../build-support/cc-wrapper {
         nativeTools  = true;
         nativePrefix = "/usr";
         nativeLibc   = true;
-        inherit (prevStage) stdenv;
+        stdenvNoCC = prevStage.stdenv;
         cc           = {
           name    = "clang-9.9.9";
           cc      = "/usr";

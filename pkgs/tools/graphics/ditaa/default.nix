@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "Convert ascii art diagrams into proper bitmap graphics";
     homepage = http://ditaa.sourceforge.net/;
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
 }

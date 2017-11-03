@@ -9,11 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "0jpkskqs1yjiighab4s91jy0c0qxcscwadfn94xy2mm2bx2qwp4z";
   };
 
-  buildInputs = [ stdenv pkgconfig openexr libpng12 libjpeg ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ stdenv openexr libpng12 libjpeg ];
 
   meta = with stdenv.lib; {
     description = "Collection of utilities for manipulating OpenEXR images";
-    homepage = "http://scanline.ca/exrtools";
+    homepage = http://scanline.ca/exrtools;
     platforms = platforms.linux;
     license = licenses.mit;
     maintainers = [ maintainers.juliendehos ];

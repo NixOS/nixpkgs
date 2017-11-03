@@ -25,8 +25,8 @@ import ./make-test.nix ({ pkgs, ...} : {
         };
       users.users.sybil = { isNormalUser = true; group = "wheel"; };
       security.sudo = { enable = true; wheelNeedsPassword = false; };
-      security.hideProcessInformation = true;
-      users.users.alice = { isNormalUser = true; extraGroups = [ "proc" ]; };
+      boot.kernel.sysctl."vm.swappiness" = 1;
+      boot.kernelParams = [ "vsyscall=emulate" ];
     };
 
   testScript =
@@ -36,7 +36,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       };
 
       subtest "nixos-rebuild", sub {
-          $machine->succeed("nixos-rebuild --help | grep SYNOPSIS");
+          $machine->succeed("nixos-rebuild --help | grep 'NixOS module' ");
       };
 
       # Sanity check for uid/gid assignment.
@@ -120,11 +120,17 @@ import ./make-test.nix ({ pkgs, ...} : {
           $machine->succeed("su - sybil -c 'sudo true'");
       };
 
-      # Test hidepid
-      subtest "hidepid", sub {
-          $machine->succeed("grep -Fq hidepid=2 /proc/mounts");
-          $machine->succeed("[ `su - sybil -c 'pgrep -c -u root'` = 0 ]");
-          $machine->succeed("[ `su - alice -c 'pgrep -c -u root'` != 0 ]");
+      # Test sysctl
+      subtest "sysctl", sub {
+          $machine->waitForUnit("systemd-sysctl.service");
+          $machine->succeed('[ `sysctl -ne vm.swappiness` = 1 ]');
+          $machine->execute('sysctl vm.swappiness=60');
+          $machine->succeed('[ `sysctl -ne vm.swappiness` = 60 ]');
+      };
+
+      # Test boot parameters
+      subtest "bootparam", sub {
+          $machine->succeed('grep -Fq vsyscall=emulate /proc/cmdline');
       };
     '';
 })

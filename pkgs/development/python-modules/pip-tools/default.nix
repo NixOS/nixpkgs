@@ -1,23 +1,29 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, pip, pytest, click, six, first, glibcLocales }:
+{ stdenv, fetchurl, buildPythonPackage, pip, pytest, click, six, first
+, setuptools_scm, git, glibcLocales, mock }:
+
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "1.8.1rc3";
+  version = "1.10.1";
   name = "pip-tools-${version}";
 
-  src = fetchFromGitHub {
-    owner = "jazzband";
-    repo = "pip-tools";
-    rev = version;
-    sha256 = "09rbgzj71bfp1x1jfr1zx3vax4qjbw5l6vcd3fqvshsdvg9lcnpx";
+  src = fetchurl {
+    url = "mirror://pypi/p/pip-tools/${name}.tar.gz";
+    sha256 = "37b85d69ceed97337aeefb3e52e41fe0884a505c874757a5bbaa58d92b533ce0";
   };
 
   LC_ALL = "en_US.UTF-8";
-  buildInputs = [ pytest glibcLocales ];
-  propagatedBuildInputs = [ pip click six first ];
+  checkInputs = [ pytest git glibcLocales mock ];
+  propagatedBuildInputs = [ pip click six first setuptools_scm ];
 
   checkPhase = ''
-    export HOME=$(mktemp -d)
-    py.test -k "not test_realistic_complex_sub_dependencies" # requires network
+    export HOME=$(mktemp -d) VIRTUAL_ENV=1
+    tests_without_network_access="
+      not test_realistic_complex_sub_dependencies \
+      and not test_editable_package_vcs \
+      and not test_generate_hashes_all_platforms \
+      and not test_generate_hashes_without_interfering_with_each_other \
+    "
+    py.test -k "$tests_without_network_access"
   '';
 
   meta = with stdenv.lib; {

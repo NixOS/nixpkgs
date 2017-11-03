@@ -7,7 +7,7 @@ let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.plasma5;
 
-  inherit (pkgs) kdeWrapper kdeApplications plasma5 libsForQt5 qt5 xorg;
+  inherit (pkgs) kdeApplications plasma5 libsForQt5 qt5 xorg;
 
 in
 
@@ -30,24 +30,12 @@ in
         '';
       };
 
-      extraPackages = mkOption {
-        type = types.listOf types.package;
-        default = [];
-        description = ''
-          KDE packages that need to be installed system-wide.
-        '';
-      };
-
     };
 
   };
 
 
   config = mkMerge [
-    (mkIf (cfg.extraPackages != []) {
-      environment.systemPackages = [ (kdeWrapper cfg.extraPackages) ];
-    })
-
     (mkIf (xcfg.enable && cfg.enable) {
       services.xserver.desktopManager.session = singleton {
         name = "plasma5";
@@ -59,13 +47,13 @@ in
             ${getBin config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
           ''}
 
-          exec "${plasma5.startkde}"
+          exec "${getBin plasma5.plasma-workspace}/bin/startkde"
         '';
       };
 
       security.wrappers = {
-        kcheckpass.source = "${plasma5.plasma-workspace.out}/lib/libexec/kcheckpass";
-        "start_kdeinit".source = "${pkgs.kinit.out}/lib/libexec/kf5/start_kdeinit";
+        kcheckpass.source = "${lib.getBin plasma5.plasma-workspace}/lib/libexec/kcheckpass";
+        "start_kdeinit".source = "${lib.getBin pkgs.kinit}/lib/libexec/kf5/start_kdeinit";
       };
 
       environment.systemPackages = with pkgs; with qt5; with libsForQt5; with plasma5; with kdeApplications;
@@ -139,10 +127,14 @@ in
           plasma-workspace
           plasma-workspace-wallpapers
 
+          dolphin
           dolphin-plugins
           ffmpegthumbs
           kdegraphics-thumbnailers
+          khelpcenter
           kio-extras
+          konsole
+          oxygen
           print-manager
 
           breeze-icons
@@ -150,7 +142,8 @@ in
 
           kde-gtk-config breeze-gtk
 
-          phonon-backend-gstreamer
+          libsForQt56.phonon-backend-gstreamer
+          libsForQt5.phonon-backend-gstreamer
         ]
 
         ++ lib.optionals cfg.enableQt4Support [ breeze-qt4 pkgs.phonon-backend-gstreamer ]
@@ -162,16 +155,6 @@ in
         ++ lib.optional config.powerManagement.enable powerdevil
         ++ lib.optional config.services.colord.enable colord-kde
         ++ lib.optionals config.services.samba.enable [ kdenetwork-filesharing pkgs.samba ];
-
-      services.xserver.desktopManager.plasma5.extraPackages =
-        with kdeApplications; with plasma5;
-        [
-          khelpcenter
-          oxygen
-
-          dolphin
-          konsole
-        ];
 
       environment.pathsToLink = [ "/share" ];
 
@@ -192,7 +175,7 @@ in
         serif = [ "Noto Serif" ];
       };
 
-      programs.ssh.askPassword = "${plasma5.ksshaskpass.out}/bin/ksshaskpass";
+      programs.ssh.askPassword = mkDefault "${plasma5.ksshaskpass.out}/bin/ksshaskpass";
 
       # Enable helpful DBus services.
       services.udisks2.enable = true;
@@ -207,8 +190,7 @@ in
       ];
 
       services.xserver.displayManager.sddm = {
-        theme = "breeze";
-        package = pkgs.sddmPlasma5;
+        theme = mkDefault "breeze";
       };
 
       security.pam.services.kde = { allowNullPassword = true; };

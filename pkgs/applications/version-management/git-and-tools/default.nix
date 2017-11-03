@@ -34,6 +34,8 @@ rec {
 
   git = appendToName "minimal" gitBase;
 
+  git-fame = callPackage ./git-fame {};
+
   # The full-featured Git.
   gitFull = gitBase.override {
     svnSupport = true;
@@ -55,6 +57,8 @@ rec {
 
   # support for bugzilla
   git-bz = callPackage ./git-bz { };
+
+  git-codeowners = callPackage ./git-codeowners { };
 
   git-cola = callPackage ./git-cola { };
 

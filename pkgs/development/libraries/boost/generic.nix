@@ -1,13 +1,16 @@
 { stdenv, fetchurl, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
+, buildPlatform, hostPlatform
 , toolset ? if stdenv.cc.isClang then "clang" else null
 , enableRelease ? true
 , enableDebug ? false
 , enableSingleThreaded ? false
 , enableMultiThreaded ? true
-, enableShared ? !(stdenv.cross.libc or null == "msvcrt") # problems for now
+, enableShared ? !(hostPlatform.libc == "msvcrt") # problems for now
 , enableStatic ? !enableShared
 , enablePIC ? false
 , enableExceptions ? false
+, enablePython ? hostPlatform == buildPlatform
+, enableNumpy ? false, numpy ? null
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
 , patches ? null
 , mpi ? null
@@ -19,6 +22,9 @@
 
 # We must build at least one type of libraries
 assert !enableShared -> enableStatic;
+
+assert enablePython -> hostPlatform == buildPlatform;
+assert enableNumpy -> enablePython;
 
 with stdenv.lib;
 let
@@ -61,7 +67,8 @@ let
   ] ++ optional (link != "static") "runtime-link=${runtime-link}" ++ [
     "link=${link}"
     "${cflags}"
-  ] ++ optional (variant == "release") "debug-symbols=off";
+  ] ++ optional (variant == "release") "debug-symbols=off"
+    ++ optional (!enablePython) "--without-python";
 
   nativeB2Flags = [
     "-sEXPAT_INCLUDE=${expat.dev}/include"
@@ -75,12 +82,11 @@ let
     "-sEXPAT_LIBPATH=${expat.crossDrv}/lib"
     "--user-config=user-config.jam"
     "toolset=gcc-cross"
-    "--without-python"
-  ] ++ optionals (stdenv.cross.libc == "msvcrt") [
+  ] ++ optionals (hostPlatform.libc == "msvcrt") [
     "target-os=windows"
     "threadapi=win32"
     "binary-format=pe"
-    "address-model=${if hasPrefix "x86_64-" stdenv.cross.config then "64" else "32"}"
+    "address-model=${toString hostPlatform.parsed.cpu.bits}"
     "architecture=x86"
   ];
   crossB2Args = concatStringsSep " " (genericB2Flags ++ crossB2Flags);
@@ -110,8 +116,8 @@ let
       find include \( -name '*.hpp' -or -name '*.h' -or -name '*.ipp' \) \
         -exec sed '1i#line 1 "{}"' -i '{}' \;
     )
-  '' + optionalString (stdenv.cross.libc or null == "msvcrt") ''
-    ${stdenv.cross.config}-ranlib "$out/lib/"*.a
+  '' + optionalString (hostPlatform.libc == "msvcrt") ''
+    ${stdenv.cc.prefix}ranlib "$out/lib/"*.a
   '';
 
 in
@@ -122,7 +128,7 @@ stdenv.mkDerivation {
   inherit src patches;
 
   meta = {
-    homepage = "http://boost.org/";
+    homepage = http://boost.org/;
     description = "Collection of C++ libraries";
     license = stdenv.lib.licenses.boost;
 
@@ -147,13 +153,15 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   buildInputs = [ expat zlib bzip2 libiconv ]
-    ++ stdenv.lib.optionals (! stdenv ? cross) [ python icu ]
-    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+    ++ optional (hostPlatform == buildPlatform) icu
+    ++ optional stdenv.isDarwin fixDarwinDylibNames
+    ++ optional enablePython python
+    ++ optional enableNumpy numpy;
 
   configureScript = "./bootstrap.sh";
   configureFlags = commonConfigureFlags
     ++ [ "--with-python=${python.interpreter}" ]
-    ++ optional (! stdenv ? cross) "--with-icu=${icu.dev}"
+    ++ optional (hostPlatform == buildPlatform) "--with-icu=${icu.dev}"
     ++ optional (toolset != null) "--with-toolset=${toolset}";
 
   buildPhase = builder nativeB2Args;
@@ -177,7 +185,7 @@ stdenv.mkDerivation {
     buildPhase = builder crossB2Args;
     installPhase = installer crossB2Args;
     postFixup = fixup;
-  } // optionalAttrs (stdenv.cross.libc == "msvcrt") {
+  } // optionalAttrs (hostPlatform.libc == "msvcrt") {
     patches = fetchurl {
       url = "https://svn.boost.org/trac/boost/raw-attachment/ticket/7262/"
           + "boost-mingw.patch";

@@ -1,6 +1,6 @@
-{ pkgs }:
+{ pkgs, haskellLib }:
 
-with import ./lib.nix { inherit pkgs; };
+with haskellLib;
 
 self: super: {
 
@@ -36,9 +36,6 @@ self: super: {
   unix = null;
   xhtml = null;
 
-  # Enable latest version of cabal-install.
-  cabal-install = (dontCheck (super.cabal-install)).overrideScope (self: super: { Cabal = self.Cabal_1_24_2_0; });
-
   # Build jailbreak-cabal with the latest version of Cabal.
   jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_1_24_2_0; };
 
@@ -50,6 +47,9 @@ self: super: {
     url = "https://github.com/seereason/sr-extra/commit/29787ad4c20c962924b823d02a7335da98143603.patch";
     sha256 = "193i1xmq6z0jalwmq0mhqk1khz6zz0i1hs6lgfd7ybd6qyaqnf5f";
   });
+
+  # Requires ghc 8.2
+  ghc-proofs = dontDistribute super.ghc-proofs;
 
   # haddock: No input file(s).
   nats = dontHaddock super.nats;
@@ -167,6 +167,12 @@ self: super: {
   vector-algorithms = addBuildDepends (dontCheck super.vector-algorithms)
     [ self.mtl self.mwc-random ];
 
+  # vector with ghc < 8.0 needs semigroups
+  vector = addBuildDepend super.vector self.semigroups;
+
+  # too strict dependency on directory
+  tasty-ant-xml = doJailbreak super.tasty-ant-xml;
+
   # https://github.com/thoughtpolice/hs-ed25519/issues/13
   ed25519 = dontCheck super.ed25519;
 
@@ -180,7 +186,7 @@ self: super: {
 
   # GHC versions prior to 8.x require additional build inputs.
   dependent-map = addBuildDepend super.dependent-map self.semigroups;
-  distributive = addBuildDepend super.distributive self.semigroups;
+  distributive = addBuildDepend (dontCheck super.distributive) self.semigroups;
   mono-traversable = addBuildDepend super.mono-traversable self.semigroups;
   attoparsec = addBuildDepends super.attoparsec (with self; [semigroups fail]);
   Glob = addBuildDepends super.Glob (with self; [semigroups]);
@@ -193,14 +199,19 @@ self: super: {
   lens = addBuildDepend super.lens self.generic-deriving;
   optparse-applicative = addBuildDepend super.optparse-applicative self.semigroups;
   QuickCheck = addBuildDepend super.QuickCheck self.semigroups;
-  semigroups = addBuildDepends super.semigroups (with self; [hashable tagged text unordered-containers]);
+  semigroups = addBuildDepends (dontCheck super.semigroups) (with self; [hashable tagged text unordered-containers]);
   texmath = addBuildDepend super.texmath self.network-uri;
   yesod-auth-oauth2 = overrideCabal super.yesod-auth-oauth2 (drv: { testDepends = (drv.testDepends or []) ++ [ self.load-env self.yesod ]; });
+  natural-transformation = addBuildDepend super.natural-transformation self.semigroups;
   # cereal must have `fail` in pre-ghc-8.0.x versions
   # also tests require bytestring>=0.10.8.1
   cereal = dontCheck (addBuildDepend super.cereal self.fail);
 
   # Moved out from common as no longer the case for GHC8
   ghc-mod = super.ghc-mod.override { cabal-helper = self.cabal-helper_0_6_3_1; };
+
+  # The test suite requires Cabal 1.24.x or later to compile.
+  comonad = dontCheck super.comonad;
+  semigroupoids = dontCheck super.semigroupoids;
 
 }

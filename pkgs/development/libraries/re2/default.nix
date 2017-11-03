@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace Makefile --replace "/usr/local" "$out"
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    # Fixed in https://github.com/google/re2/commit/b2c9765b4a7afbea8b6be1dae548b6f4d5f39e42
+    substituteInPlace Makefile \
+        --replace '-dynamiclib' '-dynamiclib -Wl,-install_name,$(libdir)/libre2.so.$(SONAME)'
   '';
 
   meta = {

@@ -6,7 +6,8 @@ stdenv.mkDerivation {
   buildCommand = "exit 1";
 
   buildInputs = [ wget ];
-  nativeBuildInputs = [ 
+
+  nativeBuildInputs = [
     (rWrapper.override {
       packages = with rPackages; [
         data_table

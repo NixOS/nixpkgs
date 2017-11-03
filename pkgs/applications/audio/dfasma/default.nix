@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fftw, libsndfile, qtbase, qtmultimedia, qmakeHook, makeQtWrapper }:
+{ stdenv, fetchFromGitHub, fftw, libsndfile, qtbase, qtmultimedia, qmake }:
 
 let
 
@@ -37,9 +37,9 @@ in stdenv.mkDerivation rec {
     owner = "gillesdegottex";
   };
 
-  buildInputs = [ fftw libsndfile qtbase qtmultimedia qmakeHook ];
+  buildInputs = [ fftw libsndfile qtbase qtmultimedia ];
 
-  nativeBuildInputs = [ makeQtWrapper ];
+  nativeBuildInputs = [ qmake ];
 
   postPatch = ''
     substituteInPlace dfasma.pro --replace '$$DFASMAVERSIONGITPRO' '${version}'
@@ -52,10 +52,6 @@ in stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
-
-  postInstall = ''
-    wrapQtProgram "$out/bin/dfasma"
-  '';
 
   meta = with stdenv.lib; {
     description = "Analyse and compare audio files in time and frequency";

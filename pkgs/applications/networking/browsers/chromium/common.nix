@@ -1,9 +1,9 @@
-{ stdenv, ninja, which
+{ stdenv, ninja, which, nodejs, fetchurl, gnutar
 
 # default dependencies
 , bzip2, flac, speex, libopus
 , libevent, expat, libjpeg, snappy
-, libpng, libxml2, libxslt, libcap
+, libpng, libcap
 , xdg_utils, yasm, minizip, libwebp
 , libusb1, pciutils, nss, re2, zlib, libvpx
 
@@ -14,6 +14,7 @@
 , glib, gtk2, gtk3, dbus_glib
 , libXScrnSaver, libXcursor, libXtst, mesa
 , protobuf, speechd, libXdamage, cups
+, ffmpeg, harfbuzz, harfbuzz-icu, libxslt, libxml2
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
@@ -36,6 +37,8 @@ buildFun:
 
 with stdenv.lib;
 
+# see http://www.linuxfromscratch.org/blfs/view/cvs/xsoft/chromium.html
+
 let
   # The additional attributes for creating derivations based on the chromium
   # source tree.
@@ -57,7 +60,13 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   gnSystemLibraries = [
-    "flac" "libwebp" "libxml" "libxslt" "snappy" "yasm"
+    "flac" "libwebp" "libxslt" "yasm" "opus" "snappy" "libpng" "zlib"
+    # "libjpeg" # fails with multiple undefined references to chromium_jpeg_*
+    # "re2" # fails with linker errors
+    # "ffmpeg" # https://crbug.com/731766
+  ] ++ optionals (versionRange "62" "63") [
+    "harfbuzz-ng" # in versions over 63 harfbuzz and freetype are being built together
+                  # so we can't build with one from system and other from source
   ];
 
   opusWithCustomModes = libopus.override {
@@ -67,9 +76,13 @@ let
   defaultDependencies = [
     bzip2 flac speex opusWithCustomModes
     libevent expat libjpeg snappy
-    libpng libxml2 libxslt libcap
+    libpng libcap
     xdg_utils yasm minizip libwebp
     libusb1 re2 zlib
+    ffmpeg libxslt libxml2
+  ] ++ optionals (versionRange "62" "63") [
+    harfbuzz-icu # in versions over 63 harfbuzz and freetype are being built together
+                 # so we can't build with one from system and other from source
   ];
 
   # build paths and release info
@@ -77,6 +90,20 @@ let
   buildType = "Release";
   buildPath = "out/${buildType}";
   libExecPath = "$out/libexec/${packageName}";
+
+  freetype_source = fetchurl {
+    url = http://anduin.linuxfromscratch.org/BLFS/other/chromium-freetype.tar.xz;
+    sha256 = "1vhslc4xg0d6wzlsi99zpah2xzjziglccrxn55k7qna634wyxg77";
+  };
+
+  versionRange = min-version: upto-version:
+    let inherit (upstream-info) version;
+        result = versionAtLeast version min-version && versionOlder version upto-version;
+        stable-version = (import ./upstream-info.nix).stable.version;
+    in if versionAtLeast stable-version upto-version
+       then warn "chromium: stable version ${stable-version} is newer than a patchset bounded at ${upto-version}. You can safely delete it."
+            result
+       else result;
 
   base = rec {
     name = "${packageName}-${version}";
@@ -87,25 +114,40 @@ let
 
     nativeBuildInputs = [
       ninja which python2Packages.python perl pkgconfig
-      python2Packages.ply python2Packages.jinja2
+      python2Packages.ply python2Packages.jinja2 nodejs
+      gnutar
     ];
 
     buildInputs = defaultDependencies ++ [
       nspr nss systemd
       utillinux alsaLib
       bison gperf kerberos
-      glib gtk2 dbus_glib
+      glib gtk2 gtk3 dbus_glib
       libXScrnSaver libXcursor libXtst mesa
       pciutils protobuf speechd libXdamage
     ] ++ optional gnomeKeyringSupport libgnome_keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
-      ++ optional pulseSupport libpulseaudio
-      ++ optional (versionAtLeast version "56.0.0.0") gtk3;
+      ++ optional pulseSupport libpulseaudio;
 
     patches = [
       ./patches/nix_plugin_paths_52.patch
-    ] ++ optional (versionOlder version "57.0") ./patches/glibc-2.24.patch
+      # To enable ChromeCast, go to chrome://flags and set "Load Media Router Component Extension" to Enabled
+      # Fixes Chromecast: https://bugs.chromium.org/p/chromium/issues/detail?id=734325
+      ./patches/fix_network_api_crash.patch
+    ] # As major versions are added, you can trawl the gentoo and arch repos at
+      # https://gitweb.gentoo.org/repo/gentoo.git/plain/www-client/chromium/
+      # https://git.archlinux.org/svntogit/packages.git/tree/trunk?h=packages/chromium
+      # for updated patches and hints about build flags
+      ++ optionals (versionRange "62" "63") [
+      ./patches/chromium-gn-bootstrap-r17.patch
+      ./patches/chromium-gcc5-r3.patch
+      ./patches/chromium-glibc2.26-r1.patch
+    ]
+      ++ optionals (versionAtLeast version "63") [
+      ./patches/chromium-gcc5-r4.patch
+      ./patches/constexpr-fix.patch
+    ]
       ++ optional enableWideVine ./patches/widevine.patch;
 
     postPatch = ''
@@ -129,10 +171,29 @@ let
         :l; n; bl
       }' gpu/config/gpu_control_list.cc
 
+      # Allow to put extensions into the system-path.
+      sed -i -e 's,/usr,/run/current-system/sw,' chrome/common/chrome_paths.cc
+
       patchShebangs .
-    '' + optionalString (versionAtLeast version "52.0.0.0") ''
-      sed -i -re 's/([^:])\<(isnan *\()/\1std::\2/g' \
-        third_party/pdfium/xfa/fxbarcode/utils.h
+      # use our own nodejs
+      mkdir -p third_party/node/linux/node-linux-x64/bin
+      ln -s $(which node) third_party/node/linux/node-linux-x64/bin/node
+
+      # use patched freetype
+      # FIXME https://bugs.chromium.org/p/pdfium/issues/detail?id=733
+      # FIXME http://savannah.nongnu.org/bugs/?51156
+      tar -xJf ${freetype_source}
+
+      # remove unused third-party
+      for lib in ${toString gnSystemLibraries}; do
+        find -type f -path "*third_party/$lib/*"     \
+            \! -path "*third_party/$lib/chromium/*"  \
+            \! -path "*third_party/$lib/google/*"    \
+            \! -path "*base/third_party/icu/*"       \
+            \! -path "*base/third_party/libevent/*"  \
+            \! -regex '.*\.\(gn\|gni\|isolate\|py\)' \
+            -delete
+      done
     '';
 
     gnFlags = mkGnFlags ({
@@ -150,9 +211,14 @@ let
       enable_hotwording = enableHotwording;
       enable_widevine = enableWideVine;
       use_cups = cupsSupport;
-    } // {
+
       treat_warnings_as_errors = false;
       is_clang = false;
+      clang_use_chrome_plugins = false;
+      remove_webcore_debug_symbols = true;
+      use_gtk3 = true;
+      enable_swiftshader = false;
+      fieldtrial_testing_like_official_build = true;
 
       # Google API keys, see:
       #   http://www.chromium.org/developers/how-tos/api-keys
@@ -188,9 +254,14 @@ let
     '';
 
     buildPhase = let
+      # Build paralelism: on Hydra the build was frequently running into memory
+      # exhaustion, and even other users might be running into similar issues.
+      # -j is halved to avoid memory problems, and -l is slightly increased
+      # so that the build gets slight preference before others
+      # (it will often be on "critical path" and at risk of timing out)
       buildCommand = target: ''
         ninja -C "${buildPath}"  \
-          -j$NIX_BUILD_CORES -l$NIX_BUILD_CORES \
+          -j$(( ($NIX_BUILD_CORES+1) / 2 )) -l$(( $NIX_BUILD_CORES+1 )) \
           "${target}"
       '' + optionalString (target == "mksnapshot" || target == "chrome") ''
         paxmark m "${buildPath}/${target}"

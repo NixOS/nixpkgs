@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, jre, jdk, ant, saxon }:
+{ stdenv, fetchFromGitHub, jre_headless, jdk, ant, saxon }:
 
 stdenv.mkDerivation rec {
   name = "jing-trang-${version}";
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
     for tool in jing trang; do
     cat > "$out/bin/$tool" <<EOF
     #! $SHELL
-    export JAVA_HOME='${jre}'
-    exec '${jre}/bin/java' -jar '$out/share/java/$tool.jar' "\$@"
+    export JAVA_HOME='${jre_headless}'
+    exec '${jre_headless}/bin/java' -jar '$out/share/java/$tool.jar' "\$@"
     EOF
     done
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     # The homepage is www.thaiopensource.com, but it links to googlecode.com
     # for downloads and call it the "project site".
     homepage = http://www.thaiopensource.com/relaxng/jing.html;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
 }

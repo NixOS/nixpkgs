@@ -23,6 +23,9 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i "s,\(#define RUNIT\) .*,\1 \"$out/bin/runit\"," src/runit.h
+    # usernamespace sandbox of nix seems to conflict with runit's assumptions
+    # about unix users. Therefor skip the check
+    sed -i '/.\/chkshsgr/d' src/Makefile
   '' + stdenv.lib.optionalString (!static) ''
     sed -i 's,-static,,g' src/Makefile
   '';
@@ -46,7 +49,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "UNIX init scheme with service supervision";
     license = licenses.bsd3;
-    homepage = "http://smarden.org/runit";
+    homepage = http://smarden.org/runit;
     maintainers = with maintainers; [ rickynils joachifm ];
     platforms = platforms.unix;
   };

@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   name = "nextcloud-news-updater-${version}";
-  version = "9.0.2";
+  version = "10.0.0";
 
   src = fetchurl {
     url = "mirror://pypi/n/nextcloud_news_updater/nextcloud_news_updater-${version}.tar.gz";
-    sha256 = "1m6g4591zyvjl2fji4iwl9api02racgc9rqa0gf0mfsqwdr77alw";
+    sha256 = "00pscz0p4s10y1ymb6sm0gx4a5wdbhimn30582x8i28n58nnl8j0";
   };
 
   doCheck = false;
@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "Fast parallel feed updater for the Nextcloud news app";
-    homepage = "https://github.com/nextcloud/news-updater";
+    homepage = https://github.com/nextcloud/news-updater;
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ schneefux ];
   };

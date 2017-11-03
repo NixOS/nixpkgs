@@ -29,8 +29,10 @@ line. For instance, to create a container that has
 <literal>root</literal>:
 
 <screen>
-# nixos-container create foo --config 'services.openssh.enable = true; \
-  users.extraUsers.root.openssh.authorizedKeys.keys = ["ssh-dss AAAAB3N…"];'
+# nixos-container create foo --config '
+  services.openssh.enable = true;
+  users.extraUsers.root.openssh.authorizedKeys.keys = ["ssh-dss AAAAB3N…"];
+'
 </screen>
 
 </para>
@@ -55,7 +57,7 @@ Thus, if something went wrong, you can get status info using
 
 </para>
 
-<para>If the container has started succesfully, you can log in as
+<para>If the container has started successfully, you can log in as
 root using the <command>root-login</command> operation:
 
 <screen>
@@ -97,8 +99,11 @@ This will build and activate the new configuration. You can also
 specify a new configuration on the command line:
 
 <screen>
-# nixos-container update foo --config 'services.httpd.enable = true; \
-  services.httpd.adminAddr = "foo@example.org";'
+# nixos-container update foo --config '
+  services.httpd.enable = true;
+  services.httpd.adminAddr = "foo@example.org";
+  networking.firewall.allowedTCPPorts = [ 80 ];
+'
 
 # curl http://$(nixos-container show-ip foo)/
 &lt;!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">…

@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "jwm-${version}";
-  version = "1582";
+  version = "1651";
   
   src = fetchFromGitHub {
     owner = "joewing";
     repo = "jwm";
     rev = "s${version}";
-    sha256 = "1z6cxf18n69sjd20bbyxrnd19hhy955ddvakgpfyhiprpfjkkv70";
+    sha256 = "097wqipg1h7h19a5bqdx7iq60fkjrx2niwsgg1f8cfz106yhbp6q";
   };
 
   nativeBuildInputs = [ pkgconfig automake autoconf libtool gettext which ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   preConfigure = "./autogen.sh";
 
   meta = {
-    homepage = "http://joewing.net/projects/jwm/";
+    homepage = http://joewing.net/projects/jwm/;
     description = "Joe's Window Manager is a light-weight X11 window manager";
     license = stdenv.lib.licenses.gpl2;
     platforms   = stdenv.lib.platforms.unix;

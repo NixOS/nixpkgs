@@ -34,7 +34,9 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
-    substituteInPlace $out/bin/{pon,poff,plog} --replace "/usr/sbin" "$out/bin"
+    for tgt in pon poff plog; do
+      substituteInPlace "$out/bin/$tgt" --replace "/usr/sbin" "$out/bin"
+    done
   '';
 
   meta = {

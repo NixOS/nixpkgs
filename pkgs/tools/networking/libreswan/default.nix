@@ -24,8 +24,8 @@ stdenv.mkDerivation {
     sha256 = "0zginnakxw7m79zrdvfdvliaiyg78zgqfqkks9z5d1rjj5w13xig";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ pkgconfig bash iproute iptables systemd coreutils gnused gawk gmp unbound bison flex pam libevent
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  buildInputs = [ bash iproute iptables systemd coreutils gnused gawk gmp unbound bison flex pam libevent
                   libcap_ng curl nspr nss python ]
                 ++ optional docs xmlto;
 
@@ -67,7 +67,7 @@ stdenv.mkDerivation {
   enableParallelBuilding = false;
 
   meta = {
-    homepage = "https://libreswan.org";
+    homepage = https://libreswan.org;
     description = "A free software implementation of the VPN protocol based on IPSec and the Internet Key Exchange";
     platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin ++ stdenv.lib.platforms.freebsd;
     maintainers = [ stdenv.lib.maintainers.afranchuk ];

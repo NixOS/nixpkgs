@@ -4,14 +4,15 @@ assert lib.versionAtLeast kernel.version "3.18";
 
 stdenv.mkDerivation rec {
   name = "dpdk-${version}-${kernel.version}";
-  version = "16.07.2";
+  version = "17.05.1";
 
   src = fetchurl {
     url = "http://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
-    sha256 = "1mzwazmzpq8mvwiham80y6h53qpvjpp76v0d58gz9bfiphbi9876";
+    sha256 = "1w3nx5cqf8z600bdlbwz7brmdb5yn233qrqvv24kbmmxhbwp7qld";
   };
 
-  buildInputs = [ pkgconfig libvirt ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libvirt ];
 
   RTE_KERNELDIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
   RTE_TARGET = "x86_64-native-linuxapp-gcc";
@@ -20,45 +21,18 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-march=core2" ];
 
   enableParallelBuilding = true;
-  outputs = [ "out" "kmod" "examples" ];
+  outputs = [ "out" "kmod" ];
 
   hardeningDisable = [ "pic" ];
 
   configurePhase = ''
-    make T=x86_64-native-linuxapp-gcc config
-  '';
-
-  buildPhase = ''
-    make T=x86_64-native-linuxapp-gcc install
-    make T=x86_64-native-linuxapp-gcc examples
+    make T=${RTE_TARGET} config
   '';
 
   installPhase = ''
-    install -m 0755 -d $out/lib
-    install -m 0644 ${RTE_TARGET}/lib/*.a $out/lib
-
-    install -m 0755 -d $out/include
-    install -m 0644 ${RTE_TARGET}/include/*.h $out/include
-
-    install -m 0755 -d $out/include/generic
-    install -m 0644 ${RTE_TARGET}/include/generic/*.h $out/include/generic
-
-    install -m 0755 -d $out/include/exec-env
-    install -m 0644 ${RTE_TARGET}/include/exec-env/*.h $out/include/exec-env
-
-    install -m 0755 -d $out/${RTE_TARGET}
-    install -m 0644 ${RTE_TARGET}/.config $out/${RTE_TARGET}
-
-    install -m 0755 -d $out/${RTE_TARGET}/include
-    install -m 0644 ${RTE_TARGET}/include/rte_config.h $out/${RTE_TARGET}/include
-
-    cp -pr mk scripts $out/
-
-    mkdir -p $kmod/lib/modules/${kernel.modDirVersion}/kernel/drivers/net
-    cp ${RTE_TARGET}/kmod/*.ko $kmod/lib/modules/${kernel.modDirVersion}/kernel/drivers/net
-
-    mkdir -p $examples/bin
-    find examples ${RTE_TARGET}/app -type f -executable -exec cp {} $examples/bin \;
+    make install-runtime DESTDIR=$out prefix= includedir=/include datadir=/
+    make install-sdk DESTDIR=$out prefix= includedir=/include datadir=/
+    make install-kmod DESTDIR=$kmod
   '';
 
   meta = with stdenv.lib; {

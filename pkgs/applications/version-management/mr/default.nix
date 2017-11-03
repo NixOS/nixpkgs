@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, perl }:
+{ stdenv, fetchgit, perl }:
 
 stdenv.mkDerivation rec {
-  version = "1.20160123";
+  version = "1.20170129";
   name = "mr-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/joeyh/myrepos/archive/${version}.tar.gz";
-    sha256 = "1723cg5haplz2w9dwdzp6ds1ip33cx3awmj4wnb0h4yq171v5lqk";
+  src = fetchgit {
+    url = "git://myrepos.branchable.com/";
+    rev = "refs/tags/" + version;
+    sha256 = "15i9bs2i25l7ibv530ghy8280kklcgm5kr6j86s7iwcqqckd0czp";
   };
 
   buildInputs = [ perl ];

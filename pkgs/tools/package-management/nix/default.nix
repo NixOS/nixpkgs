@@ -1,15 +1,32 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, perl, curl, bzip2, sqlite, openssl ? null, xz
-, pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli
+, pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli, readline
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
+, libseccomp, busybox, nlohmann_json
+, hostPlatform
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
+, confDir ? "/etc"
 }:
 
 let
 
-  common = { name, suffix ? "", src, patchPhase ? "", fromGit ? false }: stdenv.mkDerivation rec {
-    inherit name src patchPhase;
+  sh = busybox.override {
+    useMusl = true;
+    enableStatic = true;
+    enableMinimal = true;
+    extraConfig = ''
+      CONFIG_ASH y
+      CONFIG_ASH_BUILTIN_ECHO y
+      CONFIG_ASH_BUILTIN_TEST y
+      CONFIG_ASH_OPTIMIZE_FOR_SIZE y
+    '';
+  };
+
+  common = { name, suffix ? "", src, fromGit ? false }: stdenv.mkDerivation rec {
+    inherit name src;
     version = lib.getVersion name;
+
+    is112 = lib.versionAtLeast version "1.12pre";
 
     VERSION_SUFFIX = lib.optionalString fromGit suffix;
 
@@ -17,13 +34,14 @@ let
 
     nativeBuildInputs =
       [ pkgconfig ]
-      ++ lib.optionals (!lib.versionAtLeast version "1.12pre") [ perl ]
+      ++ lib.optionals (!is112) [ perl ]
       ++ lib.optionals fromGit [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook5_xsl ];
 
     buildInputs = [ curl openssl sqlite xz ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-      ++ lib.optional fromGit brotli # Since 1.12
-      ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && lib.versionAtLeast version "1.12pre")
+      ++ lib.optionals fromGit [ brotli readline nlohmann_json ] # Since 1.12
+      ++ lib.optional stdenv.isLinux libseccomp
+      ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && is112)
           (aws-sdk-cpp.override {
             apis = ["s3"];
             customMemoryManagement = false;
@@ -43,14 +61,16 @@ let
     configureFlags =
       [ "--with-store-dir=${storeDir}"
         "--localstatedir=${stateDir}"
-        "--sysconfdir=/etc"
+        "--sysconfdir=${confDir}"
         "--disable-init-state"
         "--enable-gc"
       ]
-      ++ lib.optionals (!lib.versionAtLeast version "1.12pre") [
+      ++ lib.optionals (!is112) [
         "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
         "--with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}"
         "--with-www-curl=${perlPackages.WWWCurl}/${perl.libPrefix}"
+      ] ++ lib.optionals (is112 && stdenv.isLinux) [
+        "--with-sandbox-shell=${sh}/bin/busybox"
       ];
 
     makeFlags = "profiledir=$(out)/etc/profile.d";
@@ -58,6 +78,9 @@ let
     installFlags = "sysconfdir=$(out)/etc";
 
     doInstallCheck = true;
+
+    # socket path becomes too long otherwise
+    preInstallCheck = lib.optional stdenv.isDarwin "export TMPDIR=/tmp";
 
     separateDebugInfo = stdenv.isLinux;
 
@@ -76,8 +99,8 @@ let
           --disable-init-state
           --enable-gc
         '' + stdenv.lib.optionalString (
-            stdenv.cross ? nix && stdenv.cross.nix ? system
-        ) ''--with-system=${stdenv.cross.nix.system}'';
+            hostPlatform ? nix && hostPlatform.nix ? system
+        ) ''--with-system=${hostPlatform.nix.system}'';
 
       doInstallCheck = false;
     };
@@ -93,10 +116,11 @@ let
         a package, multi-user package management and easy setup of build
         environments.
       '';
-      homepage = http://nixos.org/;
+      homepage = https://nixos.org/;
       license = stdenv.lib.licenses.lgpl2Plus;
       maintainers = [ stdenv.lib.maintainers.eelco ];
       platforms = stdenv.lib.platforms.all;
+      outputsToInstall = [ "out" "man" ];
     };
 
     passthru = { inherit fromGit; };
@@ -116,8 +140,11 @@ let
     configureFlags =
       [ "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
         "--with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}"
-        "--with-www-curl=${perlPackages.WWWCurl}/${perl.libPrefix}"
       ];
+
+    preConfigure = "export NIX_STATE_DIR=$TMPDIR";
+
+    preBuild = "unset NIX_INDENT_MAKE";
   };
 
 in rec {
@@ -125,30 +152,21 @@ in rec {
   nix = nixStable;
 
   nixStable = (common rec {
-    name = "nix-1.11.8";
+    name = "nix-1.11.15";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "69e0f398affec2a14c47b46fec712906429c85312d5483be43e4c34da4f63f67";
+      sha256 = "d20f20e45d519f54fae5c61d55eadcf53e6d7cdbde9870eeec80d499f9805165";
     };
-
-    # Until 1.11.9 is released, we do this :)
-    patchPhase = ''
-      substituteInPlace src/libexpr/json-to-value.cc \
-        --replace 'std::less<Symbol>, gc_allocator<Value *>' \
-                  'std::less<Symbol>, gc_allocator<std::pair<const Symbol, Value *> >'
-
-      sed -i '/if (settings.readOnlyMode) {/a curSchema = getSchema();' src/libstore/local-store.cc
-    '';
   }) // { perl-bindings = nixStable; };
 
   nixUnstable = (lib.lowPrio (common rec {
     name = "nix-1.12${suffix}";
-    suffix = "pre5152_915f62fa";
+    suffix = "pre5663_c7af84ce";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "915f62fa19790d8f826aeb4dd3d2bb5bde2f67e9";
-      sha256 = "0mf7y7hvzw2x5dp482qy8774djr3vzcjaqq58cp82zdil8l7kwjd";
+      rev = "c7af84ce846a9deefa5b4db1b1bce1c091ca2a1e";
+      sha256 = "1sc6rkx0500jz4fyfqm7443s1q24whmpx10mfs12wdk516f0q8qh";
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings { nix = nixUnstable; }; };

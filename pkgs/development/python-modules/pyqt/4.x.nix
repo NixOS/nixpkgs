@@ -19,7 +19,7 @@ in buildPythonPackage {
 
     export PYTHONPATH=$PYTHONPATH:$out/lib/${python.libPrefix}/site-packages
     ${stdenv.lib.optionalString stdenv.isDarwin ''
-      export QMAKESPEC="unsupported/macx-clang-libc++" # OS X target after bootstrapping phase \
+      export QMAKESPEC="unsupported/macx-clang-libc++" # macOS target after bootstrapping phase \
     ''}
 
     substituteInPlace configure.py \
@@ -37,7 +37,8 @@ in buildPythonPackage {
     ${python.executable} configure.py $configureFlags "''${configureFlagsArray[@]}"
   '';
 
-  buildInputs = [ pkgconfig makeWrapper qt4 lndir dbus_libs ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ makeWrapper qt4 lndir dbus_libs ];
 
   propagatedBuildInputs = [ sip ];
 

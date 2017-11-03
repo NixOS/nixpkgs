@@ -1,4 +1,4 @@
-{ pkgs, fetchFromGitHub, stdenv, ffmpeg, cmake, libpng, pkgconfig
+{ pkgs, fetchFromGitHub, stdenv, ffmpeg, cmake, libpng, pkgconfig, libjpeg
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ ffmpeg libpng ];
+  buildInputs = [ ffmpeg libpng libjpeg ];
 
   meta = with stdenv.lib;  {
     homepage = https://github.com/dirkvdb/ffmpegthumbnailer;

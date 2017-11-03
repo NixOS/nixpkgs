@@ -13,6 +13,6 @@ stdenv.mkDerivation rec {
     homepage = http://sourceforge.net/projects/liblo;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [stdenv.lib.maintainers.marcweber];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }

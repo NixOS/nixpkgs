@@ -4,17 +4,46 @@ with lib;
 
 let
   cfg = config.services.logstash;
+  atLeast54 = versionAtLeast (builtins.parseDrvName cfg.package.name).version "5.4";
   pluginPath = lib.concatStringsSep ":" cfg.plugins;
   havePluginPath = lib.length cfg.plugins > 0;
   ops = lib.optionalString;
-  verbosityFlag = {
-    debug = "--debug";
-    info  = "--verbose";
-    warn  = ""; # intentionally empty
-    error = "--quiet";
-    fatal = "--silent";
-  }."${cfg.logLevel}";
+  verbosityFlag =
+    if atLeast54
+    then "--log.level " + cfg.logLevel
+    else {
+      debug = "--debug";
+      info  = "--verbose";
+      warn  = ""; # intentionally empty
+      error = "--quiet";
+      fatal = "--silent";
+    }."${cfg.logLevel}";
 
+  pluginsPath =
+    if atLeast54
+    then "--path.plugins ${pluginPath}"
+    else "--pluginpath ${pluginPath}";
+
+  logstashConf = pkgs.writeText "logstash.conf" ''
+    input {
+      ${cfg.inputConfig}
+    }
+
+    filter {
+      ${cfg.filterConfig}
+    }
+
+    output {
+      ${cfg.outputConfig}
+    }
+  '';
+
+  logstashSettingsYml = pkgs.writeText "logstash.yml" cfg.extraSettings;
+
+  logstashSettingsDir = pkgs.runCommand "logstash-settings" {inherit logstashSettingsYml;} ''
+    mkdir -p $out
+    ln -s $logstashSettingsYml $out/logstash.yml
+  '';
 in
 
 {
@@ -43,6 +72,15 @@ in
         default = [ ];
         example = literalExample "[ pkgs.logstash-contrib ]";
         description = "The paths to find other logstash plugins in.";
+      };
+
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/logstash";
+        description = ''
+          A path to directory writable by logstash that it uses to store data.
+          Plugins will also have access to this path.
+        '';
       };
 
       logLevel = mkOption {
@@ -116,6 +154,19 @@ in
         '';
       };
 
+      extraSettings = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Extra Logstash settings in YAML format.";
+        example = ''
+          pipeline:
+            batch:
+              size: 125
+              delay: 5
+        '';
+      };
+
+
     };
   };
 
@@ -123,31 +174,34 @@ in
   ###### implementation
 
   config = mkIf cfg.enable {
+    assertions = [
+      { assertion = atLeast54 -> !cfg.enableWeb;
+        message = ''
+          The logstash web interface is only available for versions older than 5.4.
+          So either set services.logstash.enableWeb = false,
+          or set services.logstash.package to an older logstash.
+        '';
+      }
+    ];
+
     systemd.services.logstash = with pkgs; {
       description = "Logstash Daemon";
       wantedBy = [ "multi-user.target" ];
       environment = { JAVA_HOME = jre; };
       path = [ pkgs.bash ];
       serviceConfig = {
-        ExecStart =
-          "${cfg.package}/bin/logstash agent " +
-          "-w ${toString cfg.filterWorkers} " +
-          ops havePluginPath "--pluginpath ${pluginPath} " +
-          "${verbosityFlag} " +
-          "-f ${writeText "logstash.conf" ''
-            input {
-              ${cfg.inputConfig}
-            }
-
-            filter {
-              ${cfg.filterConfig}
-            }
-
-            output {
-              ${cfg.outputConfig}
-            }
-          ''} " +
-          ops cfg.enableWeb "-- web -a ${cfg.listenAddress} -p ${cfg.port}";
+        ExecStartPre = ''${pkgs.coreutils}/bin/mkdir -p "${cfg.dataDir}" ; ${pkgs.coreutils}/bin/chmod 700 "${cfg.dataDir}"'';
+        ExecStart = concatStringsSep " " (filter (s: stringLength s != 0) [
+          "${cfg.package}/bin/logstash"
+          (ops (!atLeast54) "agent")
+          "-w ${toString cfg.filterWorkers}"
+          (ops havePluginPath pluginsPath)
+          "${verbosityFlag}"
+          "-f ${logstashConf}"
+          (ops atLeast54 "--path.settings ${logstashSettingsDir}")
+          (ops atLeast54 "--path.data ${cfg.dataDir}")
+          (ops cfg.enableWeb "-- web -a ${cfg.listenAddress} -p ${cfg.port}")
+        ]);
       };
     };
   };

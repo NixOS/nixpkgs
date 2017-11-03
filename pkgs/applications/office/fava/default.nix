@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0yn2psbn436g1w5ixn94z8ca6dfd54izg98979arn0k7slpiccvz";
   };
 
-  buildInputs = with python3Packages; [ pytest_30 ];
+  checkInputs = with python3Packages; [ pytest ];
 
   checkPhase = ''
     # pyexcel is optional

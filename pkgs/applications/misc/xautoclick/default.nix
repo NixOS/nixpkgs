@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/project/xautoclick/xautoclick/xautoclick-0.31/xautoclick-0.31.tar.gz";
     sha256 = "0h522f12a7v2b89411xm51iwixmjp2mp90rnizjgiakx9ajnmqnm";
   };
-  buildInputs = [ xorg.libX11 xorg.libXtst xorg.xinput xorg.libXi xorg.libXext pkgconfig ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ xorg.libX11 xorg.libXtst xorg.xinput xorg.libXi xorg.libXext ]
     ++ stdenv.lib.optionals gtkSupport [ gtk2 ]
     ++ stdenv.lib.optionals qtSupport [ qt4 ];
   patchPhase = ''

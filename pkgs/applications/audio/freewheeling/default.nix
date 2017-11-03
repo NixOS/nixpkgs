@@ -1,20 +1,23 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, gnutls, freetype
+{ lib, stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, gnutls, freetype
 , SDL, SDL_gfx, SDL_ttf, liblo, libxml2, alsaLib, libjack2, libvorbis
-, libSM, libsndfile, libogg
+, libSM, libsndfile, libogg, libtool
 }:
+let
+  makeSDLFlags = map (p: "-I${lib.getDev p}/include/SDL");
+in
 
 stdenv.mkDerivation rec {
   name = "freewheeling-${version}";
-  version = "2016-11-15";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "free-wheeling";
     repo = "freewheeling";
-    rev = "05ef3bf150fa6ba1b1d437b1fd70ef363289742f";
-    sha256 = "19plf7r0sq4271ln5bya95mp4i1j30x8hsxxga2kla27z953n9ih";
+    rev = "v${version}";
+    sha256 = "01hmp0jxzxpb5sl0x91hdlwmbw9n4yffrpra4f89s4n8cixrz3d9";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook libtool ];
   buildInputs = [
     freetype SDL SDL_gfx SDL_ttf
     liblo libxml2 libjack2 alsaLib libvorbis libsndfile libogg libSM
@@ -22,8 +25,7 @@ stdenv.mkDerivation rec {
       configureFlags = oldAttrs.configureFlags ++ [ "--enable-openssl-compatibility" ];
     }))
   ];
-
-  patches = [ ./am_path_sdl.patch ./xml.patch ];
+  NIX_CFLAGS_COMPILE = makeSDLFlags [ SDL SDL_ttf SDL_gfx ] ++ [ "-I${libxml2.dev}/include/libxml2" ];
 
   hardeningDisable = [ "format" ];
 
@@ -37,11 +39,11 @@ stdenv.mkDerivation rec {
         improv. We leave mice and menus, and dive into our own process
         of making sound.
 
-        Freewheeling runs under Mac OS X and Linux, and is open source
+        Freewheeling runs under macOS and Linux, and is open source
         software, released under the GNU GPL license.
     '' ;
 
-    homepage = "http://freewheeling.sourceforge.net";
+    homepage = http://freewheeling.sourceforge.net;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.sepi ];
     platforms = stdenv.lib.platforms.linux;

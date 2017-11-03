@@ -68,8 +68,7 @@
 
  <section><title>Value Types</title>
 
-   <para>Value types are type that take a value parameter. The only value type 
-     in the library is <literal>enum</literal>.</para>
+   <para>Value types are type that take a value parameter.</para>
 
 <variablelist>
   <varlistentry>
@@ -141,33 +140,43 @@
           str</literal>. Multiple definitions cannot be 
         merged.</para></listitem>
   </varlistentry>
+  <varlistentry>
+    <term><varname>types.coercedTo</varname> <replaceable>from</replaceable>
+        <replaceable>f</replaceable> <replaceable>to</replaceable></term>
+    <listitem><para>Type <replaceable>to</replaceable> or type
+        <replaceable>from</replaceable> which will be coerced to
+	type <replaceable>to</replaceable> using function
+	<replaceable>f</replaceable> which takes an argument of type
+        <replaceable>from</replaceable> and return a value of type
+	<replaceable>to</replaceable>. Can be used to preserve backwards
+        compatibility of an option if its type was changed.</para></listitem>
+  </varlistentry>
 </variablelist>
 
 </section>
 
 <section xml:id='section-option-types-submodule'><title>Submodule</title>
 
-  <para>Submodule is a very powerful type that defines a set of sub-options that 
-    are handled like a separate module.
-    It is especially interesting when used with composed types like 
-    <literal>attrsOf</literal> or <literal>listOf</literal>.</para>
+  <para><literal>submodule</literal> is a very powerful type that defines a set
+    of sub-options that are handled like a separate module.</para>
 
-  <para>The submodule type take a parameter <replaceable>o</replaceable>, that 
-    should be a set, or a function returning a set with an 
-    <literal>options</literal> key defining the sub-options.
-    The option set can be defined directly (<xref linkend='ex-submodule-direct' 
-      />) or as reference (<xref linkend='ex-submodule-reference' />).</para>
+  <para>It takes a parameter <replaceable>o</replaceable>, that should be a set,
+    or a function returning a set with an <literal>options</literal> key
+    defining the sub-options.
+    Submodule option definitions are type-checked accordingly to the
+    <literal>options</literal> declarations.
+    Of course, you can nest submodule option definitons for even higher
+    modularity.</para>
 
-  <para>Submodule option definitions are type-checked accordingly to the options 
-    declarations. It is possible to declare submodule options inside a submodule 
-    sub-options for even higher modularity.</para>
+  <para>The option set can be defined directly
+    (<xref linkend='ex-submodule-direct' />) or as reference
+    (<xref linkend='ex-submodule-reference' />).</para>
 
 <example xml:id='ex-submodule-direct'><title>Directly defined submodule</title>
 <screen>
 options.mod = mkOption {
-  name = "mod";
   description = "submodule example";
-  type = with types; listOf (submodule {
+  type = with types; submodule {
     options = {
       foo = mkOption {
         type = int;
@@ -176,10 +185,10 @@ options.mod = mkOption {
         type = str;
       };
     };
-  });
+  };
 };</screen></example>
 
-<example xml:id='ex-submodule-reference'><title>Submodule defined as a 
+<example xml:id='ex-submodule-reference'><title>Submodule defined as a
     reference</title>
 <screen>
 let
@@ -196,16 +205,20 @@ let
 in
 options.mod = mkOption {
   description = "submodule example";
-  type = with types; listOf (submodule modOptions);
+  type = with types; submodule modOptions;
 };</screen></example>
 
-<section><title>Composed with <literal>listOf</literal></title>
-
-  <para>When composed with <literal>listOf</literal>, submodule allows multiple 
-    definitions of the submodule option set.</para>
+  <para>The <literal>submodule</literal> type is especially interesting when
+    used with composed types like <literal>attrsOf</literal> or
+    <literal>listOf</literal>.
+    When composed with <literal>listOf</literal>
+    (<xref linkend='ex-submodule-listof-declaration' />),
+    <literal>submodule</literal> allows multiple definitions of the submodule
+    option set (<xref linkend='ex-submodule-listof-definition' />).</para>
+    
 
 <example xml:id='ex-submodule-listof-declaration'><title>Declaration of a list 
-    of submodules</title>
+    nof submodules</title>
 <screen>
 options.mod = mkOption {
   description = "submodule example";
@@ -229,13 +242,11 @@ config.mod = [
   { foo = 2; bar = "two"; }
 ];</screen></example>
 
-</section>
-
-
-<section><title>Composed with <literal>attrsOf</literal></title>
-
-  <para>When composed with <literal>attrsOf</literal>, submodule allows multiple 
-    named definitions of the submodule option set.</para>
+  <para>When composed with <literal>attrsOf</literal>
+    (<xref linkend='ex-submodule-attrsof-declaration' />),
+    <literal>submodule</literal> allows multiple named definitions of the
+    submodule option set (<xref linkend='ex-submodule-attrsof-definition' />).
+  </para>
 
 <example xml:id='ex-submodule-attrsof-declaration'><title>Declaration of 
     attribute sets of submodules</title>
@@ -261,7 +272,6 @@ config.mod.one = { foo = 1; bar = "one"; };
 config.mod.two = { foo = 2; bar = "two"; };</screen></example>
 
 </section>
-</section>
 
 <section><title>Extending types</title>
 
@@ -282,7 +292,7 @@ config.mod.two = { foo = 2; bar = "two"; };</screen></example>
 <screen>
 byte = mkOption {
   description = "An integer between 0 and 255.";
-  type = addCheck (x: x &gt;= 0 &amp;&amp; x &lt;= 255) types.int;
+  type = addCheck types.int (x: x &gt;= 0 &amp;&amp; x &lt;= 255);
 };</screen></example>
 
 <example xml:id='ex-extending-type-check-2'><title>Overriding a type 
@@ -386,7 +396,7 @@ code before creating a new type.</para>
     <listitem><para>For composed types that can take a submodule as type 
         parameter, this function can be used to substitute the parameter of a 
         submodule type. It takes a module as parameter and return the type with 
-        the submodule options substituted. It is usally defined as a type 
+        the submodule options substituted. It is usually defined as a type 
         function call with a recursive call to 
         <literal>substSubModules</literal>, e.g for a type 
         <literal>composedType</literal> that take an <literal>elemtype</literal> 

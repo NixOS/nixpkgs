@@ -1,23 +1,26 @@
-diff -rupN higan_v097-source.old/higan/GNUmakefile higan_v097-source/higan/GNUmakefile
---- higan_v097-source.old/higan/GNUmakefile	2016-01-24 09:21:45.822940200 +0100
-+++ higan_v097-source/higan/GNUmakefile	2016-01-24 09:24:03.028722500 +0100
-@@ -36,7 +36,7 @@ ifeq ($(platform),windows)
- else ifeq ($(platform),macosx)
-   flags += -march=native
- else ifneq ($(filter $(platform),linux bsd),)
--  flags += -march=native -fopenmp
-+  flags += -fopenmp
+diff -Naur higan_v105-source.old/higan/GNUmakefile higan_v105-source.new/higan/GNUmakefile
+--- higan_v105-source.old/higan/GNUmakefile	2017-10-07 01:34:22.000000000 -0300
++++ higan_v105-source.new/higan/GNUmakefile	2017-10-17 00:02:40.580957396 -0200
+@@ -26,7 +26,7 @@
+   flags += -fopenmp
    link += -fopenmp
-   link += -Wl,-export-dynamic
-   link += -lX11 -lXext
-diff -rupN higan_v097-source.old/nall/GNUmakefile higan_v097-source/nall/GNUmakefile
---- higan_v097-source.old/nall/GNUmakefile	2016-01-24 09:21:46.021749600 +0100
-+++ higan_v097-source/nall/GNUmakefile	2016-01-24 09:25:06.347100800 +0100
-@@ -40,8 +40,8 @@ cflags := -x c -std=c99
- objcflags := -x objective-c -std=c99
+   ifeq ($(binary),application)
+-    flags += -march=native
++    flags +=
+     link += -Wl,-export-dynamic
+     link += -lX11 -lXext
+   else ifeq ($(binary),library)
+diff -Naur higan_v105-source.old/nall/GNUmakefile higan_v105-source.new/nall/GNUmakefile
+--- higan_v105-source.old/nall/GNUmakefile	2017-09-23 18:34:22.000000000 -0300
++++ higan_v105-source.new/nall/GNUmakefile	2017-10-17 00:03:33.568916550 -0200
+@@ -40,8 +40,8 @@
+ objcflags := -x objective-c -std=c11
  cppflags := -x c++ -std=c++14
  objcppflags := -x objective-c++ -std=c++14
 -flags :=
 -link :=
 +flags := $(CXXFLAGS)
 +link := $(LDFLAGS)
+ 
+ # compiler detection
+ ifeq ($(compiler),)

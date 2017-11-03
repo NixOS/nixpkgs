@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, openssl, db48, boost
-, zlib, miniupnpc, qt4, qmake4Hook, utillinux, protobuf, qrencode
+, zlib, qt4, qmake4Hook, utillinux, protobuf, qrencode
 , withGui }:
 
 with stdenv.lib;
@@ -13,14 +13,18 @@ stdenv.mkDerivation rec{
     sha256 = "1iyh6dqrg0mirwci5br5n5qw3ghp2cs23wd8ygr56bh9ml4dr1m8";
   };
 
-  buildInputs = [ pkgconfig openssl db48 boost zlib
-                  miniupnpc utillinux protobuf ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl db48 boost zlib utillinux protobuf ]
                   ++ optionals withGui [ qt4 qmake4Hook qrencode ];
+
+  qmakeFlags = ["USE_UPNP=-"];
+  makeFlags = ["USE_UPNP=-"];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]
                      ++ optionals withGui [ "--with-gui=qt4" ];
 
-  preBuild = optional (!withGui) "cd src; cp makefile.unix Makefile";
+  preBuild = "unset AR;"
+             + (toString (optional (!withGui) "cd src; cp makefile.unix Makefile"));
 
   installPhase =
     if withGui
@@ -40,7 +44,7 @@ stdenv.mkDerivation rec{
       Memorycoin is based on the Bitcoin code, but with some key
       differences.
     '';
-    homepage = "http://www.bitcoin.org/";
+    homepage = http://www.bitcoin.org/;
     maintainers = with maintainers; [ AndersonTorres ];
     license = licenses.mit;
     platforms = platforms.unix;

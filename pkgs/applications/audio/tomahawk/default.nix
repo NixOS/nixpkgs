@@ -25,8 +25,9 @@ stdenv.mkDerivation rec {
     "-DLUCENEPP_LIBRARY_DIR=${lucenepp}/lib"
   ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cmake pkgconfig attica boost gnutls libechonest liblastfm lucenepp phonon
+    cmake attica boost gnutls libechonest liblastfm lucenepp phonon
     qca2 qjson qt4 qtkeychain quazip sparsehash taglib websocketpp
     makeWrapper
   ] ++ stdenv.lib.optional enableXMPP      libjreen
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A multi-source music player";
-    homepage = "http://tomahawk-player.org/";
+    homepage = http://tomahawk-player.org/;
     license = licenses.gpl3Plus;
     platforms = platforms.all;
     maintainers = [ maintainers.aszlig ];

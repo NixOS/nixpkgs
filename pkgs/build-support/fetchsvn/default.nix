@@ -1,4 +1,4 @@
-{stdenv, subversion, sshSupport ? false, openssh ? null}:
+{stdenv, subversion, glibcLocales, sshSupport ? false, openssh ? null}:
 {url, rev ? "HEAD", md5 ? "", sha256 ? "",
  ignoreExternals ? false, ignoreKeywords ? false, name ? null}:
 
@@ -31,7 +31,7 @@ else
 stdenv.mkDerivation {
   name = name_;
   builder = ./builder.sh;
-  buildInputs = [subversion];
+  buildInputs = [ subversion glibcLocales ];
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";

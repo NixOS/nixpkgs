@@ -11,13 +11,13 @@
 
 let
   pname = "discord.py";
-  version = "0.16.4";
+  version = "0.16.12";
 in buildPythonPackage rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "04q4gknv9lb8r2sdnsqs5nfcyyl850j4pcqcs0xjvmqhd7axa5ai";
+    sha256 = "17fb8814100fbaf7a79468baa432184db6cef3bbea4ad194fe297c7407d50108";
   };
 
   propagatedBuildInputs = [ asyncio aiohttp websockets pynacl ];
@@ -30,6 +30,9 @@ in buildPythonPackage rec {
   '';
 
   disabled = pythonOlder "3.5";
+
+  # No tests in archive
+  doCheck = false;
 
   meta = {
     description = "A python wrapper for the Discord API";

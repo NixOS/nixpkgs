@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   installFlags = "DESTDIR=\${out} PREFIX=";
 
+  postPatch = "sed -i '/chmod u+s/d' Makefile";
+
   preBuild = optionalString (conf != null) ''
     cp ${writeText "config.def.h" conf} config.def.h
   '';

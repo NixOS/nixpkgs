@@ -1,23 +1,24 @@
-{ stdenv, lib, fetchFromGitHub, python, cmake, pyqt5, numpy, scipy, libarcus }:
+{ stdenv, lib, fetchFromGitHub, python, cmake, pyqt5, numpy, scipy, libarcus, doxygen, gettext }:
 
 if lib.versionOlder python.version "3.5.0"
 then throw "Uranium not supported for interpreter ${python.executable}"
 else
 
 stdenv.mkDerivation rec {
-  name = "uranium-${version}";
-  version = "2.4.0";
+  version = "3.0.3";
+  pname = "uranium";
+  name = "${pname}-${version}";
   
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "Uranium";
     rev = version;
-    sha256 = "1jpl0ryk8xdppillk5wzr2415n50cpa09shn1xqj6y96fg22l2il";
+    sha256 = "1pyzpcdb6kb0basvhgpjdiws8x0bwl71k7nkf3j3s9wk1dvyw824";
   };
   
-  buildInputs = [ python ];
+  buildInputs = [ python gettext ];
   propagatedBuildInputs = [ pyqt5 numpy scipy libarcus ];
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake doxygen ];
 
   postPatch = ''
     sed -i 's,/python''${PYTHON_VERSION_MAJOR}/dist-packages,/python''${PYTHON_VERSION_MAJOR}.''${PYTHON_VERSION_MINOR}/site-packages,g' CMakeLists.txt

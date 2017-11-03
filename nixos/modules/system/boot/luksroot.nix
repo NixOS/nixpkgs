@@ -235,13 +235,23 @@ in
       '';
     };
 
+    boot.initrd.luks.forceLuksSupportInInitrd = mkOption {
+      type = types.bool;
+      default = false;
+      internal = true;
+      description = ''
+        Whether to configure luks support in the initrd, when no luks
+        devices are configured.
+      '';
+    };
+
     boot.initrd.luks.devices = mkOption {
       default = { };
       example = { "luksroot".device = "/dev/disk/by-uuid/430e9eff-d852-4f68-aa3b-2fa3599ebe08"; };
       description = ''
         The encrypted disk that should be opened before the root
         filesystem is mounted. Both LVM-over-LUKS and LUKS-over-LVM
-        setups are sypported. The unencrypted devices can be accessed as
+        setups are supported. The unencrypted devices can be accessed as
         <filename>/dev/mapper/<replaceable>name</replaceable></filename>.
       '';
 
@@ -417,7 +427,7 @@ in
     };
   };
 
-  config = mkIf (luks.devices != {}) {
+  config = mkIf (luks.devices != {} || luks.forceLuksSupportInInitrd) {
 
     # actually, sbp2 driver is the one enabling the DMA attack, but this needs to be tested
     boot.blacklistedKernelModules = optionals luks.mitigateDMAAttacks
@@ -434,7 +444,7 @@ in
       #!$out/bin/sh -e
       if [ -e /.luksopen_args ]; then
         cryptsetup \$(cat /.luksopen_args)
-        killall cryptsetup
+        killall -q cryptsetup
       else
         echo "Passphrase is not requested now"
         exit 1

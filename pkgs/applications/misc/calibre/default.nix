@@ -1,32 +1,26 @@
 { stdenv, fetchurl, fetchpatch, poppler_utils, pkgconfig, libpng
-, imagemagick, libjpeg, fontconfig, podofo, qtbase, qmakeHook, icu, sqlite
+, imagemagick, libjpeg, fontconfig, podofo, qtbase, qmake, icu, sqlite
 , makeWrapper, unrarSupport ? false, chmlib, python2Packages, xz, libusb1, libmtp
-, xdg_utils, makeDesktopItem
+, xdg_utils, makeDesktopItem, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.83.0";
+  version = "3.10.0";
   name = "calibre-${version}";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "1ar6hkcl50lhgwccss759201cqgnwasqmhw9japgnz04fj66w5ln";
+    sha256 = "01vb5xjis9ldva7rg1f720lwys5frkj00z8x7cajqwxliilhvais";
   };
 
   patches = [
     # Patches from Debian that:
     # - disable plugin installation (very insecure)
-    # - disables loading of web bug for privacy
     # - switches the version update from enabled to disabled by default
     (fetchpatch {
       name = "disable_plugins.patch";
       url = "http://bazaar.launchpad.net/~calibre-packagers/calibre/debian/download/head:/disable_plugins.py-20111220183043-dcl08ccfagjxt1dv-1/disable_plugins.py";
       sha256 = "19spdx52dhbrfn9lm084yl3cfwm6f90imd51k97sf7flmpl569pk";
-    })
-    (fetchpatch {
-      name = "links_privacy.patch";
-      url = "http://bazaar.launchpad.net/~calibre-packagers/calibre/debian/download/head:/linksprivacy.patch-20160417214308-6hvive72pc0r4awc-1/links-privacy.patch";
-      sha256 = "0f6pq2b7q56pxrq2j8yqd7bksc623q2zgq29qcli30f13vga1w60";
     })
     (fetchpatch {
       name = "no_updates_dialog.patch";
@@ -42,26 +36,29 @@ stdenv.mkDerivation rec {
 
     # Remove unneeded files and libs
     rm -rf resources/calibre-portable.* \
-           src/{chardet,cherrypy,html5lib,odf,routes}
+           src/odf
   '';
 
   dontUseQmakeConfigure = true;
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ makeWrapper pkgconfig qmakeHook ];
+  nativeBuildInputs = [ makeWrapper pkgconfig qmake ];
 
   buildInputs = [
     poppler_utils libpng imagemagick libjpeg
-    fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils
+    fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils wrapGAppsHook
   ] ++ (with python2Packages; [
-    apsw beautifulsoup cssselect cssutils dateutil lxml mechanize netifaces pillow
+    apsw cssselect cssutils dateutil html5-parser lxml mechanize netifaces pillow
     python pyqt5 sip
+    regex msgpack
     # the following are distributed with calibre, but we use upstream instead
-    chardet cherrypy html5lib_0_9999999 odfpy routes
+    odfpy
   ]);
 
   installPhase = ''
+    runHook preInstall
+
     export HOME=$TMPDIR/fakehome
     export POPPLER_INC_DIR=${poppler_utils.dev}/include/poppler
     export POPPLER_LIB_DIR=${poppler_utils.out}/lib
@@ -92,6 +89,11 @@ stdenv.mkDerivation rec {
     for entry in $out/share/applications/*.desktop; do
       substituteAllInPlace $entry
     done
+
+    mkdir -p $out/share
+    cp -a man-pages $out/share/man
+
+    runHook postInstall
   '';
 
   calibreDesktopItem = makeDesktopItem {

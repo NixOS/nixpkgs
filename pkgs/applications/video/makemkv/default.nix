@@ -4,20 +4,21 @@
 
 stdenv.mkDerivation rec {
   name = "makemkv-${ver}";
-  ver = "1.10.4";
+  ver = "1.10.7";
   builder = ./builder.sh;
 
   src_bin = fetchurl {
     url = "http://www.makemkv.com/download/makemkv-bin-${ver}.tar.gz";
-    sha256 = "bc6f66897c09b0b756b352cc02a092c5b3a9547e4c129b3472ae4c605eff94aa";
+    sha256 = "2b9a9e6fb779bc876371b2f88b23fddad3e92d6449fe5d1541dcd9ad04e01eac";
   };
 
   src_oss = fetchurl {
     url = "http://www.makemkv.com/download/makemkv-oss-${ver}.tar.gz";
-    sha256 = "bacbd6a27ebd67f2e6f6c4356cafb92918d54a8bb15872f694232043039f63c4";
+    sha256 = "be61fcee31dc52944ec7ef440ff8fffbc140d24877e6afb19149c541564eb654";
   };
 
-  buildInputs = [openssl qt4 mesa zlib pkgconfig libav];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [openssl qt4 mesa zlib libav];
 
   libPath = stdenv.lib.makeLibraryPath [stdenv.cc.cc openssl mesa qt4 zlib ]
           + ":" + stdenv.cc.cc + "/lib64";

@@ -11,13 +11,14 @@ stdenv.mkDerivation rec{
     sha256 = "11pk8a5manr751jhy0xrql57jzab57lwqjxbpd8kvm9m8b51icwq";
   };
 
-  buildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ ];
 
   meta = with stdenv.lib; {
     description = "Scaling, colorspace conversion and dithering library";
     homepage    = https://github.com/sekrit-twc/zimg;
     license     = licenses.wtfpl;
-    platforms   = platforms.linux; # check upstream issue #52
+    platforms   = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ rnhmjoj ];
   };
 }

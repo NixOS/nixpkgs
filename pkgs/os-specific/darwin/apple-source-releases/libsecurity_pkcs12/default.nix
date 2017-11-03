@@ -1,4 +1,4 @@
-{ appleDerivation, libsecurity_asn1, libsecurity_cdsa_client, libsecurity_cdsa_utils, libsecurity_keychain, osx_private_sdk }:
+{ appleDerivation, libsecurity_asn1, libsecurity_cdsa_client, libsecurity_cdsa_utils, libsecurity_keychain }:
 appleDerivation {
   patchPhase = ''
     substituteInPlace lib/pkcsoids.h --replace '#error' '#warning'

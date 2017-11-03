@@ -1,23 +1,28 @@
-{ stdenv, fetchurl, gzip, popt }:
+{ stdenv, fetchFromGitHub, mailutils, gzip, popt, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "logrotate-3.9.1";
+  name = "logrotate-${version}";
+  version = "3.12.3";
 
-  src = fetchurl {
-    url = "https://fedorahosted.org/releases/l/o/logrotate/${name}.tar.gz";
-    sha256 = "0i95qnacv5wf7kfkcpi38ys3i14fr01ifhm8b4ari04c53inj9q2";
+  src = fetchFromGitHub {
+    owner = "logrotate";
+    repo = "logrotate";
+    rev = version;
+    sha256 = "04ygb709fj4ai8m2f1c6imzcmkdvr3ib5zf5qw2lif4fsb30jvyi";
   };
 
   # Logrotate wants to access the 'mail' program; to be done.
   patchPhase = ''
     sed -i -e 's,[a-z/]\+gzip,${gzip}/bin/gzip,' \
-           -e 's,[a-z/]\+gunzip,${gzip}/bin/gunzip,' config.h
+           -e 's,[a-z/]\+gunzip,${gzip}/bin/gunzip,' \
+           -e 's,[a-z/]\+mail,${mailutils}/bin/mail,' configure.ac
   '';
 
-  preBuild = ''
-    makeFlags="BASEDIR=$out"
+  autoreconfPhase = ''
+    ./autogen.sh
   '';
 
+  nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ popt ];
 
   meta = {
@@ -27,5 +32,4 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.viric ];
     platforms = stdenv.lib.platforms.all;
   };
-
 }

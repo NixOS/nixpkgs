@@ -24,7 +24,8 @@ stdenv.mkDerivation {
     sha256 = "1406ns1533x5678d91s2xxxv19q7r238zsaxr37c6mv5jrx7s5jv";
   };
 
-  buildInputs = [ cmake pkgconfig git curl SDL xercesc openal lua libpng libjpeg vlc wxGTK
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake git curl SDL xercesc openal lua libpng libjpeg vlc wxGTK
     glib cppunit fontconfig freetype ftgl glew libogg libvorbis makeWrapper mesa_glu ];
 
   configurePhase = ''
@@ -42,7 +43,7 @@ stdenv.mkDerivation {
   meta = {
     description = "MegaGlest is an entertaining free (freeware and free software) and open source cross-platform 3D real-time strategy (RTS) game";
     license = stdenv.lib.licenses.gpl3;
-    homepage = "http://megaglest.org/";
+    homepage = http://megaglest.org/;
     maintainers = [ stdenv.lib.maintainers.matejc ];
     platforms = stdenv.lib.platforms.linux;
   };

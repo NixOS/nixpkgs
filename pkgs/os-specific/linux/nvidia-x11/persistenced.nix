@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   inherit (nvidia_x11) version;
 
   src = fetchurl {
-    url = "ftp://download.nvidia.com/XFree86/nvidia-persistenced/${name}.tar.bz2";
+    url = "https://download.nvidia.com/XFree86/nvidia-persistenced/${name}.tar.bz2";
     inherit sha256;
   };
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://www.nvidia.com/object/unix.html";
+    homepage = http://www.nvidia.com/object/unix.html;
     description = "Settings application for NVIDIA graphics cards";
     license = licenses.unfreeRedistributable;
     platforms = platforms.linux;

@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "0m2q01sbgf8z4559jpr6k3jivb8x98vxv1fhgx8nfcjbwz1q83gb";
   };
 
-  buildInputs = [ libusb pkgconfig pmutils udev ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libusb pmutils udev ];
 
   # shell thing didn't work so i replaced it using nix
   prePatch = ''
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.tinkerforge.com/;
+    homepage = https://www.tinkerforge.com/;
     description = "A daemon (or service on Windows) that acts as a bridge between the Bricks/Bricklets and the API bindings for the different programming languages";
     maintainers = [ stdenv.lib.maintainers.qknight ];
     license = stdenv.lib.licenses.gpl2;

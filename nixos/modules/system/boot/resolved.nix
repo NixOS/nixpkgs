@@ -31,8 +31,15 @@ in
       example = [ "example.com" ];
       type = types.listOf types.str;
       description = ''
-        A list of domains. These domains are used as search suffixes when resolving single-label host names (domain names which contain no dot), in order to qualify them into fully-qualified domain names (FQDNs).
-        For compatibility reasons, if this setting is not specified, the search domains listed in /etc/resolv.conf are used instead, if that file exists and any domains are configured in it.
+        A list of domains. These domains are used as search suffixes
+        when resolving single-label host names (domain names which
+        contain no dot), in order to qualify them into fully-qualified
+        domain names (FQDNs).
+        </para><para>
+        For compatibility reasons, if this setting is not specified,
+        the search domains listed in
+        <filename>/etc/resolv.conf</filename> are used instead, if
+        that file exists and any domains are configured in it.
       '';
     };
 
@@ -41,10 +48,30 @@ in
       example = "false";
       type = types.enum [ "true" "resolve" "false" ];
       description = ''
-        Controls Link-Local Multicast Name Resolution support (RFC 4794) on the local host.
-        If true, enables full LLMNR responder and resolver support.
-        If false, disables both.
-        If set to "resolve", only resolution support is enabled, but responding is disabled.
+        Controls Link-Local Multicast Name Resolution support
+        (RFC 4795) on the local host.
+        </para><para>
+        If set to
+        <variablelist>
+        <varlistentry>
+          <term><literal>"true"</literal></term>
+          <listitem><para>
+            Enables full LLMNR responder and resolver support.
+          </para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><literal>"false"</literal></term>
+          <listitem><para>
+            Disables both.
+          </para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><literal>"resolve"</literal></term>
+          <listitem><para>
+            Only resolution support is enabled, but responding is disabled.
+          </para></listitem>
+        </varlistentry>
+        </variablelist>
       '';
     };
 
@@ -53,9 +80,36 @@ in
       example = "true";
       type = types.enum [ "true" "allow-downgrade" "false" ];
       description = ''
-        If true all DNS lookups are DNSSEC-validated locally (excluding LLMNR and Multicast DNS). Note that this mode requires a DNS server that supports DNSSEC. If the DNS server does not properly support DNSSEC all validations will fail.
-        If set to "allow-downgrade" DNSSEC validation is attempted, but if the server does not support DNSSEC properly, DNSSEC mode is automatically disabled. Note that this mode makes DNSSEC validation vulnerable to "downgrade" attacks, where an attacker might be able to trigger a downgrade to non-DNSSEC mode by synthesizing a DNS response that suggests DNSSEC was not supported.
-        If set to false, DNS lookups are not DNSSEC validated.
+        If set to
+        <variablelist>
+        <varlistentry>
+          <term><literal>"true"</literal></term>
+          <listitem><para>
+            all DNS lookups are DNSSEC-validated locally (excluding
+            LLMNR and Multicast DNS). Note that this mode requires a
+            DNS server that supports DNSSEC. If the DNS server does
+            not properly support DNSSEC all validations will fail.
+          </para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><literal>"allow-downgrade"</literal></term>
+          <listitem><para>
+            DNSSEC validation is attempted, but if the server does not
+            support DNSSEC properly, DNSSEC mode is automatically
+            disabled. Note that this mode makes DNSSEC validation
+            vulnerable to "downgrade" attacks, where an attacker might
+            be able to trigger a downgrade to non-DNSSEC mode by
+            synthesizing a DNS response that suggests DNSSEC was not
+            supported.
+          </para></listitem>
+        </varlistentry>
+        <varlistentry>
+          <term><literal>"false"</literal></term>
+          <listitem><para>
+            DNS lookups are not DNSSEC validated.
+          </para></listitem>
+        </varlistentry>
+        </variablelist>
       '';
     };
 

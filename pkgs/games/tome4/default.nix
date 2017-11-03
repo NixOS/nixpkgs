@@ -34,7 +34,7 @@ EOF
     cp -r game $out/opt/tome4
   '';
   meta = with stdenv.lib; {
-    homepage = "http://te4.org/";
+    homepage = http://te4.org/;
     description = "Tales of Maj'eyal (rogue-like game)";
     maintainers = [ maintainers.chattered ];
     license = licenses.gpl3;

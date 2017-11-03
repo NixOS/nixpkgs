@@ -1,4 +1,6 @@
-{ fetchurl, stdenv, dejagnu, doCheck ? false }:
+{ fetchurl, stdenv, dejagnu, doCheck ? false
+, buildPlatform, hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   name = "libffi-3.2.1";
@@ -8,9 +10,13 @@ stdenv.mkDerivation rec {
     sha256 = "0dya49bnhianl0r65m65xndz6ls2jn1xngyn72gd28ls3n7bnvnh";
   };
 
-  patches = stdenv.lib.optional stdenv.isCygwin ./3.2.1-cygwin.patch;
+  patches = stdenv.lib.optional stdenv.isCygwin ./3.2.1-cygwin.patch ++
+    stdenv.lib.optional stdenv.isAarch64 (fetchurl {
+      url = https://src.fedoraproject.org/rpms/libffi/raw/ccffc1700abfadb0969495a6e51b964117fc03f6/f/libffi-aarch64-rhbz1174037.patch;
+      sha256 = "1vpirrgny43hp0885rswgv3xski8hg7791vskpbg3wdjdpb20wbc";
+    });
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [ "out" "dev" "man" "info" ];
 
   buildInputs = stdenv.lib.optional doCheck dejagnu;
 
@@ -21,7 +27,7 @@ stdenv.mkDerivation rec {
 
   inherit doCheck;
 
-  dontStrip = stdenv ? cross; # Don't run the native `strip' when cross-compiling.
+  dontStrip = hostPlatform != buildPlatform; # Don't run the native `strip' when cross-compiling.
 
   # Install headers and libs in the right places.
   postFixup = ''

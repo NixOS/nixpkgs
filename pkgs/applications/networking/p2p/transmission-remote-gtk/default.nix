@@ -1,5 +1,6 @@
-{ stdenv, autoconf, automake, libtool, makeWrapper, fetchFromGitHub, pkgconfig
-, intltool, gtk3, json_glib, curl, glib, autoconf-archive, appstream-glib }:
+{ stdenv, autoconf, automake, libtool, wrapGAppsHook, fetchFromGitHub, pkgconfig
+, intltool, gtk3, json_glib, curl, glib, autoconf-archive, appstream-glib
+, hicolor_icon_theme }:
 
 
 stdenv.mkDerivation rec {
@@ -15,18 +16,12 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
-  nativeBuildInputs= [ 
-    autoconf automake libtool makeWrapper 
-    pkgconfig intltool autoconf-archive 
+  nativeBuildInputs= [
+    autoconf automake libtool wrapGAppsHook
+    pkgconfig intltool autoconf-archive
     appstream-glib
   ];
-  buildInputs = [ gtk3 json_glib curl glib ];
-
-  preFixup = ''
-    wrapProgram "$out/bin/transmission-remote-gtk" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
-    rm $out/share/icons/hicolor/icon-theme.cache
-  '';
+  buildInputs = [ gtk3 json_glib curl glib hicolor_icon_theme ];
 
   meta = with stdenv.lib;
     { description = "GTK remote control for the Transmission BitTorrent client";

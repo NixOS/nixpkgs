@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GUI prototyping/mockup tool";
-    homepage = http://github.com/prikhi/pencil;
+    homepage = https://github.com/prikhi/pencil;
     license = licenses.gpl2; # Commercial license is also available
     maintainers = with maintainers; [ bjornfor prikhi ];
     platforms = platforms.linux;

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Phoebus graphics set for Dwarf Fortress";
-    homepage = "http://www.bay12forums.com/smf/index.php?topic=137096.0";
+    homepage = http://www.bay12forums.com/smf/index.php?topic=137096.0;
     platforms = platforms.all;
     maintainers = with maintainers; [ a1russell abbradar ];
     # https://github.com/fricy/Phoebus/issues/5

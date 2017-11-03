@@ -20,8 +20,9 @@ stdenv.mkDerivation rec {
     sha256 = "0wc64dzcxrzgi6kwcljz6y3cwm3ajdgf6aws7g58azbhvl1jk04l";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    openssl zlib asciidoc libxml2 libxslt docbook_xml_xslt pkgconfig luajit
+    openssl zlib asciidoc libxml2 libxslt docbook_xml_xslt luajit
   ];
 
   postPatch = ''
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://git.zx2c4.com/cgit/about/;
+    homepage = https://git.zx2c4.com/cgit/about/;
     repositories.git = git://git.zx2c4.com/cgit;
     description = "Web frontend for git repositories";
     license = stdenv.lib.licenses.gpl2;

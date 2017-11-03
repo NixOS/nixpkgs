@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "the-powder-toy-${version}";
-  version = "91.5.330";
+  version = "92.0.331";
 
   src = fetchFromGitHub {
     owner = "simtr";
     repo = "The-Powder-Toy";
     rev = "v${version}";
-    sha256 = "19m7jyg3pnppymvr6lz454mjiw18hvldpdhi33596m9ji3nrq8x7";
+    sha256 = "185zlg20qk6ic9llyf4xka923snqrpdazg568raz0jiafzzsirax";
   };
 
   patches = [ ./fix-env.patch ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A free 2D physics sandbox game";
-    homepage = "http://powdertoy.co.uk/";
+    homepage = http://powdertoy.co.uk/;
     platforms = platforms.unix;
     license = licenses.gpl3;
     maintainers = with maintainers; [ abbradar ];

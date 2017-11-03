@@ -23,8 +23,14 @@ stdenv.mkDerivation rec {
     sed -e 's@/sbin/@'"$out"'/sbin/@' -i ./lib/cleaner*.c
   '';
 
-  # FIXME: Remove after https://github.com/NixOS/patchelf/pull/98 is in
-  dontPatchELF = true;
+  # FIXME: https://github.com/NixOS/patchelf/pull/98 is in, but stdenv
+  # still doesn't use it
+  #
+  # To make sure patchelf doesn't mistakenly keep the reference via
+  # build directory
+  postInstall = ''
+    find . -name .libs | xargs rm -rf
+  '';
 
   meta = {
     description = "NILFS utilities";

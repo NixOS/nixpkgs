@@ -1,12 +1,9 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, removeReferencesTo, pkgconfig
-, go-md2man, go, containerd, runc, docker-proxy, tini
+, go-md2man, go, containerd, runc, docker-proxy, tini, libtool
 , sqlite, iproute, bridge-utils, devicemapper, systemd
 , btrfs-progs, iptables, e2fsprogs, xz, utillinux, xfsprogs
-, procps
+, procps, libseccomp
 }:
-
-# https://github.com/docker/docker/blob/master/project/PACKAGERS.md
-# https://github.com/docker/docker/blob/TAG/hack/dockerfile/binaries-commits
 
 with lib;
 
@@ -23,7 +20,7 @@ rec {
 
     src = fetchFromGitHub {
       owner = "docker";
-      repo = "docker";
+      repo = "docker-ce";
       rev = "v${version}";
       sha256 = sha256;
     };
@@ -47,6 +44,12 @@ rec {
         rev = containerdRev;
         sha256 = containerdSha256;
       };
+
+      # This should go into the containerd derivation once 1.0.0 is out
+      preBuild = ''
+        mkdir $(pwd)/vendor/src
+        mv $(pwd)/vendor/{github.com,golang.org,google.golang.org} $(pwd)/vendor/src/
+      '' + oldAttrs.preBuild;
     });
     docker-tini = tini.overrideAttrs  (oldAttrs: rec {
       name = "docker-init";
@@ -66,9 +69,13 @@ rec {
       ];
     });
 
+    # Optimizations break compilation of libseccomp c bindings
+    hardeningDisable = [ "fortify" ];
+
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [
-      makeWrapper removeReferencesTo pkgconfig go-md2man go
-      sqlite devicemapper btrfs-progs systemd
+      makeWrapper removeReferencesTo go-md2man go
+      sqlite devicemapper btrfs-progs systemd libtool libseccomp
     ];
 
     dontStrip = true;
@@ -76,28 +83,52 @@ rec {
     DOCKER_BUILDTAGS = []
       ++ optional (systemd != null) [ "journald" ]
       ++ optional (btrfs-progs == null) "exclude_graphdriver_btrfs"
-      ++ optional (devicemapper == null) "exclude_graphdriver_devicemapper";
-
-    # systemd 230 no longer has libsystemd-journal as a separate entity from libsystemd
-    postPatch = ''
-      substituteInPlace ./hack/make.sh                   --replace libsystemd-journal libsystemd
-      substituteInPlace ./daemon/logger/journald/read.go --replace libsystemd-journal libsystemd
-    '';
+      ++ optional (devicemapper == null) "exclude_graphdriver_devicemapper"
+      ++ optional (libseccomp != null) "seccomp";
 
     buildPhase = ''
-      patchShebangs .
+      # build engine
+      cd ./components/engine
       export AUTO_GOPATH=1
       export DOCKER_GITCOMMIT="${rev}"
       ./hack/make.sh dynbinary
+      cd -
+
+      # build cli
+      cd ./components/cli
+      # Mimic AUTO_GOPATH
+      mkdir -p .gopath/src/github.com/docker/
+      ln -sf $PWD .gopath/src/github.com/docker/cli
+      export GOPATH="$PWD/.gopath:$GOPATH"
+      export GITCOMMIT="${rev}"
+      export VERSION="${version}"
+      source ./scripts/build/.variables
+      export CGO_ENABLED=1
+      go build -tags pkcs11 --ldflags "$LDFLAGS" github.com/docker/cli/cmd/docker
+      cd -
     '';
+
+    # systemd 230 no longer has libsystemd-journal as a separate entity from libsystemd
+    patchPhase = ''
+      patchShebangs .
+      substituteInPlace ./components/engine/hack/make.sh                   --replace libsystemd-journal libsystemd
+      substituteInPlace ./components/engine/daemon/logger/journald/read.go --replace libsystemd-journal libsystemd
+      substituteInPlace ./components/cli/scripts/build/.variables --replace "set -eu" ""
+     '';
 
     outputs = ["out" "man"];
 
     extraPath = makeBinPath [ iproute iptables e2fsprogs xz xfsprogs procps utillinux ];
 
     installPhase = ''
-      install -Dm755 ./bundles/${version}/dynbinary-client/docker-${version} $out/libexec/docker/docker
-      install -Dm755 ./bundles/${version}/dynbinary-daemon/dockerd-${version} $out/libexec/docker/dockerd
+      install -Dm755 ./components/cli/docker $out/libexec/docker/docker
+
+      if [ -d "./components/engine/bundles/${version}" ]; then
+        install -Dm755 ./components/engine/bundles/${version}/dynbinary-daemon/dockerd-${version} $out/libexec/docker/dockerd
+      else
+        install -Dm755 ./components/engine/bundles/dynbinary-daemon/dockerd-${version} $out/libexec/docker/dockerd
+      fi
+
       makeWrapper $out/libexec/docker/docker $out/bin/docker \
         --prefix PATH : "$out/libexec/docker:$extraPath"
       makeWrapper $out/libexec/docker/dockerd $out/bin/dockerd \
@@ -111,18 +142,28 @@ rec {
       ln -s ${docker-tini}/bin/tini-static $out/libexec/docker/docker-init
 
       # systemd
-      install -Dm644 ./contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service
+      install -Dm644 ./components/engine/contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service
 
-      # completion
-      install -Dm644 ./contrib/completion/bash/docker $out/share/bash-completion/completions/docker
-      install -Dm644 ./contrib/completion/fish/docker.fish $out/share/fish/vendor_completions.d/docker.fish
-      install -Dm644 ./contrib/completion/zsh/_docker $out/share/zsh/site-functions/_docker
+      # completion (cli)
+      install -Dm644 ./components/cli/contrib/completion/bash/docker $out/share/bash-completion/completions/docker
+      install -Dm644 ./components/cli/contrib/completion/fish/docker.fish $out/share/fish/vendor_completions.d/docker.fish
+      install -Dm644 ./components/cli/contrib/completion/zsh/_docker $out/share/zsh/site-functions/_docker
 
-      # Include contributed man pages
-      man/md2man-all.sh -q
+      # Include contributed man pages (cli)
+      # Generate man pages from cobra commands
+      echo "Generate man pages from cobra"
+      cd ./components/cli
+      mkdir -p ./man/man1
+      go build -o ./gen-manpages github.com/docker/cli/man
+      ./gen-manpages --root . --target ./man/man1
+
+      # Generate legacy pages from markdown
+      echo "Generate legacy manpages"
+      ./man/md2man-all.sh -q
+
       manRoot="$man/share/man"
       mkdir -p "$manRoot"
-      for manDir in man/man?; do
+      for manDir in ./man/man?; do
         manBase="$(basename "$manDir")" # "man1"
         for manFile in "$manDir"/*; do
           manName="$(basename "$manFile")" # "docker-build.1"
@@ -137,34 +178,37 @@ rec {
     '';
 
     meta = {
-      homepage = http://www.docker.com/;
+      homepage = https://www.docker.com/;
       description = "An open source project to pack, ship and run any application as a lightweight container";
       license = licenses.asl20;
-      maintainers = with maintainers; [ offline tailhook ];
+      maintainers = with maintainers; [ nequissimus offline tailhook vdemeester ];
       platforms = platforms.linux;
     };
   };
 
-  docker_17_03 = dockerGen rec {
-    version = "17.03.1-ce";
-    rev = "c6d412e"; # git commit
-    sha256 = "1h3hkg15c3isfgaqpkp3mr7ys5826cz24hn3f3wz07jmismq98q7";
-    runcRev = "54296cf40ad8143b62dbcaa1d90e520a2136ddfe";
-    runcSha256 = "0ylymx7pi4jmvbqj94j2i8qspy8cpq0m91l6a0xiqlx43yx6qi2m";
-    containerdRev = "4ab9917febca54791c5f071a9d1f404867857fcc";
-    containerdSha256 = "06f2gsx4w9z4wwjhrpafmz6c829wi8p7crj6sya6x9ii50bkn8p6";
+  # Get revisions from
+  # https://github.com/docker/docker-ce/blob/v${version}/components/engine/hack/dockerfile/binaries-commits
+
+  docker_17_09 = dockerGen rec {
+    version = "17.09.0-ce";
+    rev = "afdb6d44a80f777069885a9ee0e0f86cf841b1bb"; # git commit
+    sha256 = "03g0imdcxqx9y4hhyymxqzvm8bqg4cqrmb7sjbxfdgrhzh9kcn1p";
+    runcRev = "3f2f8b84a77f73d38244dd690525642a72156c64";
+    runcSha256 = "0vaagmav8443kmyxac2y1y5l2ipcs1c7gdmsnvj48y9bafqx72rq";
+    containerdRev = "06b9cb35161009dcb7123345749fef02f7cea8e0";
+    containerdSha256 = "10hms8a2nn69nfnwly6923jzx40c3slpsdhjhff4bxh36flpf9gd";
     tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";
     tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
   };
 
-  docker_17_04 = dockerGen rec {
-    version = "17.04.0-ce";
-    rev = "4845c56"; # git commit
-    sha256 = "04farary19ws7xzsyack0sbrxjzp5xwjh26frxbpdd0a88pxnbj7";
-    runcRev = "9c2d8d184e5da67c95d601382adf14862e4f2228";
-    runcSha256 = "131jv8f77pbdlx88ar0zjwdsp0a5v8kydaw0w0cl3i0j3622ydjl";
-    containerdRev = "422e31ce907fd9c3833a38d7b8fdd023e5a76e73";
-    containerdSha256 = "1g0k82f1mk3vn57k130q776wp5c226d06qbiq1q148pqxxhym2r2";
+  docker_17_10 = dockerGen rec {
+    version = "17.10.0-ce";
+    rev = "f4ffd2511ce93aa9e5eefdf0e912f77543080b0b"; # git commit
+    sha256 = "07x47cfdaz4lhlga1pchcbqqy0nd2q6zch0ycag18vzi99w4gmh2";
+    runcRev = "0351df1c5a66838d0c392b4ac4cf9450de844e2d";
+    runcSha256 = "1cmkdv6rli7v0y0fddqxvrvzd486fg9ssp3kgkya3szkljzz4xj0";
+    containerdRev = "06b9cb35161009dcb7123345749fef02f7cea8e0";
+    containerdSha256 = "10hms8a2nn69nfnwly6923jzx40c3slpsdhjhff4bxh36flpf9gd";
     tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";
     tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
   };

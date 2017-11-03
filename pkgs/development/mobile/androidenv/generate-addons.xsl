@@ -60,6 +60,22 @@ in
     };
   };
 </xsl:for-each>
+
+<!-- Instant apps -->
+<xsl:for-each select="sdk:extra[sdk:path='instantapps']">
+  instant_apps = buildGoogleApis {
+    name = "instant_apps_sdk";
+    src = fetchurl {
+      url = https://dl.google.com/android/repository/<xsl:value-of select="sdk:archives/sdk:archive/sdk:url"/>;
+      sha1 = "<xsl:value-of select="sdk:archives/sdk:archive/sdk:checksum[@type='sha1']" />";
+    };
+    meta = {
+      description = "Android Instant Apps Development SDK";
+      url = "https://developer.android.com/";
+    };
+  };
+</xsl:for-each>
+
 }
 </xsl:template>
 

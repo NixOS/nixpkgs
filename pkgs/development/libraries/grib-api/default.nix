@@ -25,6 +25,10 @@ stdenv.mkDerivation rec{
                   pythonPackages.python
                 ];
 
+  propagatedBuildInputs = stdenv.lib.optionals enablePython [
+                  pythonPackages.numpy
+                ];
+
   cmakeFlags = [ "-DENABLE_PYTHON=${if enablePython then "ON" else "OFF"}"
                  "-DENABLE_PNG=ON"
                  "-DENABLE_FORTRAN=ON"
@@ -45,7 +49,7 @@ stdenv.mkDerivation rec{
 
 
   meta = with stdenv.lib; {
-    homepage = "https://software.ecmwf.int/wiki/display/GRIB/Home";
+    homepage = https://software.ecmwf.int/wiki/display/GRIB/Home;
     license = licenses.asl20;
     platforms = with platforms; linux ++ darwin;
     description = "ECMWF Library for the GRIB file format";

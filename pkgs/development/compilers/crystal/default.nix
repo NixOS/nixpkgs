@@ -1,81 +1,71 @@
-{ stdenv, fetchurl, boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm_39, makeWrapper }:
+{ stdenv, fetchurl, boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "0.21.0";
-  name = "crystal-${version}-1";
-  arch =
-    {
-      "x86_64-linux" = "linux-x86_64";
-      "i686-linux" = "linux-i686";
-      "x86_64-darwin" = "darwin-x86_64";
-    }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
-
-  prebuiltBinary = fetchurl {
-    url = "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-1-${arch}.tar.gz";
-    sha256 =
-      {
-        "x86_64-linux" = "0a44539df3813baea4381c314ad5f782b13cf1596e478851c52cd84193cc7a1f";
-        "i686-linux" = "9a45287f94d329f5ebe77f5a0d71cd0e09c3db79b0b56f6fe4a5166beed707ef";
-        "x86_64-darwin" = "e92abb33a9a592febb4e629ad68375b2577acd791a71220b8dc407904be469ee";
-      }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
-  };
+  name = "crystal-${version}";
+  version = "0.23.1";
 
   src = fetchurl {
     url = "https://github.com/crystal-lang/crystal/archive/${version}.tar.gz";
-    sha256 = "4dd01703f5304a0eda7f02fc362fba27ba069666097c0f921f8a3ee58808779c";
+    sha256 = "8cf1b9a4eab29fca2f779ea186ae18f7ce444ce189c621925fa1a0c61dd5ff55";
   };
 
+  prebuiltName = "crystal-0.23.0-1";
+  prebuiltSrc = let arch = {
+    "x86_64-linux" = "linux-x86_64";
+    "i686-linux" = "linux-i686";
+    "x86_64-darwin" = "darwin-x86_64";
+  }."${stdenv.system}" or (throw "system ${stdenv.system} not supported");
+  in fetchurl {
+    url = "https://github.com/crystal-lang/crystal/releases/download/0.23.0/${prebuiltName}-${arch}.tar.gz";
+    sha256 = {
+      "x86_64-linux" = "0nhs7swbll8hrk15kmmywngkhij80x62axiskb1gjmiwvzhlh0qx";
+      "i686-linux" = "03xp8d3lqflzzm26lpdn4yavj87qzgd6xyrqxp2pn9ybwrq8fx8a";
+      "x86_64-darwin" = "1prz6c1gs8z7dgpdy2id2mjn1c8f5p2bf9b39985bav448njbyjz";
+    }."${stdenv.system}";
+  };
+
+  srcs = [ src prebuiltSrc ];
+
   # crystal on Darwin needs libiconv to build
-  buildInputs = [
-    boehmgc libatomic_ops pcre libevent llvm_39 makeWrapper
+  libs = [
+    boehmgc libatomic_ops pcre libevent
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     libiconv
   ];
 
-  libPath = stdenv.lib.makeLibraryPath ([
-    boehmgc libatomic_ops pcre libevent
-  ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    libiconv
-  ]);
+  nativeBuildInputs = [ makeWrapper ];
 
-  unpackPhase = ''
-    tar zxf ${src}
-    tar zxf ${prebuiltBinary}
-  '';
+  buildInputs = libs ++ [ llvm ];
 
-  sourceRoot = ".";
+  libPath = stdenv.lib.makeLibraryPath libs;
+
+  sourceRoot = "${name}";
 
   fixPrebuiltBinary = if stdenv.isDarwin then ''
-    wrapProgram $(pwd)/crystal-${version}-1/embedded/bin/crystal \
+    wrapProgram ../${prebuiltName}/embedded/bin/crystal \
         --suffix DYLD_LIBRARY_PATH : $libPath
   ''
   else ''
     patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      crystal-${version}-1/embedded/bin/crystal
+      ../${prebuiltName}/embedded/bin/crystal
     patchelf --set-rpath ${ stdenv.lib.makeLibraryPath [ stdenv.cc.cc ] } \
-      crystal-${version}-1/embedded/bin/crystal
+      ../${prebuiltName}/embedded/bin/crystal
   '';
 
-  buildPhase = ''
-    # patch the script which launches the prebuilt compiler
-    substituteInPlace $(pwd)/crystal-${version}-1/bin/crystal --replace \
-      "/usr/bin/env bash" "${stdenv.shell}"
-    substituteInPlace $(pwd)/crystal-${version}/bin/crystal --replace \
-      "/usr/bin/env bash" "${stdenv.shell}"
-
+  preBuild = ''
+    patchShebangs bin/crystal
+    patchShebangs ../${prebuiltName}/bin/crystal
     ${fixPrebuiltBinary}
-
-    cd crystal-${version}
-    make release=1 PATH="../crystal-${version}-1/bin:$PATH"
-    make doc
+    export PATH="$(pwd)/../${prebuiltName}/bin:$PATH"
   '';
+
+  makeFlags = [ "CRYSTAL_CONFIG_VERSION=${version}" "release=1" "all" "doc" ];
 
   installPhase = ''
     install -Dm755 .build/crystal $out/bin/crystal
     wrapProgram $out/bin/crystal \
         --suffix CRYSTAL_PATH : $out/lib/crystal \
         --suffix LIBRARY_PATH : $libPath
-
     install -dm755 $out/lib/crystal
     cp -r src/* $out/lib/crystal/
 
@@ -86,17 +76,20 @@ stdenv.mkDerivation rec {
     install -Dm644 etc/completion.bash $out/share/bash-completion/completions/crystal
     install -Dm644 etc/completion.zsh $out/share/zsh/site-functions/_crystal
 
+    install -Dm644 man/crystal.1 $out/share/man/man1/crystal.1
+
     install -Dm644 LICENSE $out/share/licenses/crystal/LICENSE
   '';
 
   dontStrip = true;
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "A compiled language with Ruby like syntax and type inference";
-    homepage = "https://crystal-lang.org/";
+    homepage = https://crystal-lang.org/;
     license = stdenv.lib.licenses.asl20;
-    maintainers = with stdenv.lib.maintainers; [ mingchuan ];
+    maintainers = with stdenv.lib.maintainers; [ sifmelcara david50407 ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
   };
 }
-

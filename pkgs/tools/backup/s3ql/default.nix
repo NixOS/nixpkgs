@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
 
   buildInputs = [ which ]; # tests will fail without which
   propagatedBuildInputs = with python3Packages; [
-    sqlite apsw pycrypto requests2 defusedxml dugong llfuse
+    sqlite apsw pycrypto requests defusedxml dugong llfuse
     cython pytest pytest-catchlog
   ];
 
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A full-featured file system for online data storage";
-    homepage = "https://bitbucket.org/nikratio/s3ql";
+    homepage = https://bitbucket.org/nikratio/s3ql;
     license = licenses.gpl3;
     maintainers = with maintainers; [ rushmorem ];
     platforms = platforms.linux;

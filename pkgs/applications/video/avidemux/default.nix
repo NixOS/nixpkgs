@@ -14,11 +14,11 @@
 }:
 
 let
-  version = "2.6.18";
+  version = "2.7.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/avidemux/avidemux/${version}/avidemux_${version}.tar.gz";
-    sha256 = "1zmacx8wdhbjc8hpf8hmdmbh2pbkdkcyb23cl3j1mx7vkw06c31l";
+    sha256 = "1bf4l9qwxq3smc1mx5pybydc742a4qqsk17z50j9550d9iwnn7gy";
   };
 
   common = {
@@ -43,7 +43,7 @@ let
                   ;
 
     meta = {
-      homepage = "http://fixounet.free.fr/avidemux/";
+      homepage = http://fixounet.free.fr/avidemux/;
       description = "Free video editor designed for simple video editing tasks";
       maintainers = with stdenv.lib.maintainers; [ viric abbradar ];
       platforms = with stdenv.lib.platforms; linux;
@@ -88,6 +88,8 @@ let
 
       fixupPhase
     '';
+
+    meta = common.meta // args.meta or {};
   });
 
 in {
@@ -114,6 +116,8 @@ in {
     pluginUi = "GTK";
     isUi = true;
     buildDirs = [ "avidemux/gtk" ];
+    # Code seems unmaintained.
+    meta.broken = true;
   };
 
   avidemux_common = buildPlugin {

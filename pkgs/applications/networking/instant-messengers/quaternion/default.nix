@@ -1,8 +1,8 @@
-{ stdenv, fetchgit, qtbase, qtquickcontrols, cmake, makeQtWrapper }:
+{ mkDerivation, lib, fetchgit, qtbase, qtquickcontrols, cmake }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "quaternion-git-${version}";
-  version = "2017-04-15";
+  version = "2017-10-07";
 
   # quaternion and tensor share the same libqmatrixclient library as a git submodule
   #
@@ -12,34 +12,28 @@ stdenv.mkDerivation rec {
   # derivation.
 
   src = fetchgit {
-    url             = "https://github.com/Fxrh/Quaternion.git";
-    rev             = "c35475a6755cdb75e2a6c8ca5b943685d07d9707";
-    sha256          = "0cm5j4vdnp5cljfnv5jqf89ccymspaqc6j9bb4c1x891vr42np0m";
+    url             = "https://github.com/QMatrixClient/Quaternion.git";
+    rev             = "1007f2ca4ad5e8cc5dba437d6a0cdea07d1f1332";
+    sha256          = "0hvc81ld7fcwyrxsr2q3yvzh0rzhgmflby4nmyzcbjds7b7pv0xq";
     fetchSubmodules = true;
   };
 
-  enableParallelBuilding = true;
-
   buildInputs = [ qtbase qtquickcontrols ];
-  nativeBuildInputs = [ cmake makeQtWrapper ];
+  nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
     "-Wno-dev"
   ];
 
   postInstall = ''
-    wrapQtProgram $out/bin/quaternion
-
     substituteInPlace $out/share/applications/quaternion.desktop \
       --replace 'Exec=quaternion' "Exec=$out/bin/quaternion"
-
-    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://matrix.org/docs/projects/client/quaternion.html;
+  meta = with lib; {
     description = "Cross-platform desktop IM client for the Matrix protocol";
-    license = licenses.gpl3;
+    homepage    = https://matrix.org/docs/projects/client/quaternion.html;
+    license     = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     inherit (qtbase.meta) platforms;
     inherit version;

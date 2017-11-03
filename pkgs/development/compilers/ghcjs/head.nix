@@ -6,19 +6,15 @@ bootPkgs.callPackage ./base.nix {
   inherit bootPkgs;
 
   ghcjsSrc = fetchFromGitHub {
-    # TODO: switch back to the regular ghcjs repo
-    # when https://github.com/ghcjs/ghcjs/pull/573 is merged.
-    owner = "basvandijk";
+    owner = "ghcjs";
     repo = "ghcjs";
-    rev = "e6cdc71964a1c2e4184416a493e9d384c408914c";
-    sha256 = "00fk9qwyx4vpvr0h9jbqxwlrvl6w63l5sq8r357prsp6xyv5zniz";
+    rev = "2b3759942fb5b2fc1a58d314d9b098d4622fa6b6";
+    sha256 = "15asapg0va8dvcdycsx8dgk4xcpdnhml4h31wka6vvxf5anzz8aw";
   };
   ghcjsBootSrc = fetchgit {
-    # TODO: switch back to git://github.com/ghcjs/ghcjs-boot.git
-    # when https://github.com/ghcjs/ghcjs-boot/pull/41 is merged.
-    url = git://github.com/basvandijk/ghcjs-boot.git;
-    rev = "19a3b157ecb807c2224daffda5baecc92b76af35";
-    sha256 = "16sgr8vfr1nx5ljnk8gckgjk70zpa67ix4dbr9aizkwyz41ilfrb";
+    url = git://github.com/ghcjs/ghcjs-boot.git;
+    rev = "106e144cca6529a1b9612c11aea5d6ef65b96745";
+    sha256 = "0gxg8iiwvm93x1dwhxypczn9qiz4m1xvj8i7cf4snfdy2jdyhi5l";
     fetchSubmodules = true;
   };
 
@@ -49,4 +45,6 @@ bootPkgs.callPackage ./base.nix {
     "unix"
   ];
   stage2 = import ./head_stage2.nix;
+
+  patches = [ ./ghcjs-head.patch ];
 }

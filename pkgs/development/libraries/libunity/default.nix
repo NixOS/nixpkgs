@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library for instrumenting- and integrating with all aspects of the Unity shell";
-    homepage = "https://launchpad.net/libunity";
+    homepage = https://launchpad.net/libunity;
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

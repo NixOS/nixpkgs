@@ -14,12 +14,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.30.1";
-  name = "numba-${version}";
+  version = "0.35.0";
+  pname = "numba";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/n/numba/${name}.tar.gz";
-    sha256 = "66e6254b3002f448fd212c5df4c8a69964dff9b9f315fb733e3c95e7e2b6c8fd";
+    sha256 = "11564937757605bee590c5758c73cfe9fd6d569726b56d970316a6228971ecc3";
   };
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${libcxx}/include/c++/v1";

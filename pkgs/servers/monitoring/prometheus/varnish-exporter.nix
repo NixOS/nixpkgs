@@ -18,7 +18,7 @@ buildGoPackage rec {
   goDeps = ./varnish-exporter_deps.nix;
 
   meta = {
-    homepage = "https://github.com/jonnenauha/prometheus_varnish_exporter";
+    homepage = https://github.com/jonnenauha/prometheus_varnish_exporter;
     description = "Varnish exporter for Prometheus";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ MostAwesomeDude ];

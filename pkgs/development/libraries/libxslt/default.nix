@@ -1,6 +1,7 @@
 { stdenv, fetchurl, fetchpatch, libxml2, findXMLCatalogs, python2
+, buildPlatform, hostPlatform
 , cryptoSupport ? false
-, pythonSupport ? (! stdenv ? cross)
+, pythonSupport ? buildPlatform == hostPlatform
 }:
 
 assert pythonSupport -> python2 != null;
@@ -16,9 +17,22 @@ stdenv.mkDerivation rec {
     sha256 = "1klh81xbm9ppzgqk339097i39b7fnpmlj8lzn8bpczl3aww6x5xm";
   };
 
-  patches = stdenv.lib.optional stdenv.isSunOS ./patch-ah.patch;
+  patches = [
+    (fetchpatch {
+      name = "CVE-2017-5029";
+      url = "https://git.gnome.org/browse/libxslt/"
+        + "patch/?id=08ab2774b870de1c7b5a48693df75e8154addae5";
+      sha256 = "10azfmyffjf9d7b5js4ipxw9f20qi0kw3zq34bpqmbcpq3l338ky";
+    })
+  ] ++ stdenv.lib.optional stdenv.isSunOS ./patch-ah.patch;
 
-  outputs = [ "bin" "dev" "out" "doc" ] ++ stdenv.lib.optional pythonSupport "py";
+  # fixes: can't build x86_64-unknown-cygwin shared library unless -no-undefined is specified
+  postPatch = optionalString hostPlatform.isCygwin ''
+    substituteInPlace tests/plugins/Makefile.in \
+      --replace 'la_LDFLAGS =' 'la_LDFLAGS = $(WIN32_EXTRA_LDFLAGS)'
+  '';
+
+  outputs = [ "bin" "dev" "out" "man" "doc" ] ++ stdenv.lib.optional pythonSupport "py";
 
   buildInputs = [ libxml2.dev ] ++ stdenv.lib.optionals pythonSupport [ libxml2.py python2 ];
 
@@ -48,7 +62,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://xmlsoft.org/XSLT/;
     description = "A C library and tools to do XSL transformations";
-    license = "bsd";
+    license = licenses.mit;
     platforms = platforms.unix;
     maintainers = [ maintainers.eelco ];
   };

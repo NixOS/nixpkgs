@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0d9rankzgmnx5423pyfkbxy0qxw3ck2vrdjdnlhddy15wkk87i9f";
   };
 
-  buildInputs = [ makeWrapper gtk2 libsoup pkgconfig webkit gsettings_desktop_schemas ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ makeWrapper gtk2 libsoup webkit gsettings_desktop_schemas ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
       editor and also easily configurable during runtime. Vimb is mostly
       keyboard driven and does not detract you from your daily work.
     '';
-    homepage = "http://fanglingsu.github.io/vimb/";
+    homepage = http://fanglingsu.github.io/vimb/;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.rickynils ];
     platforms = with stdenv.lib.platforms; linux;

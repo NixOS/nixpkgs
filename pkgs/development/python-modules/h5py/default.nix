@@ -11,12 +11,13 @@ let
   mpiSupport = hdf5.mpiSupport;
 
 in buildPythonPackage rec {
-  name = "h5py-${version}";
-  version = "2.6.0";
+  version = "2.7.1";
+  pname = "h5py";
+  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/h/h5py/${name}.tar.gz";
-    sha256 = "0df46dg7i7xfking9lp221bfm8dbl974yvlrbi1w7r6m61ac7bxj";
+    sha256 = "180a688311e826ff6ae6d3bda9b5c292b90b28787525ddfcb10a29d5ddcae2cc";
   };
 
   configure_flags = "--hdf5=${hdf5}" + optionalString mpiSupport " --mpi";
@@ -27,7 +28,8 @@ in buildPythonPackage rec {
 
   preBuild = if mpiSupport then "export CC=${mpi}/bin/mpicc" else "";
 
-  buildInputs = [ hdf5 cython pkgconfig ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ hdf5 cython ]
     ++ optional mpiSupport mpi
     ;
   propagatedBuildInputs = [ numpy six]
@@ -37,7 +39,7 @@ in buildPythonPackage rec {
   meta = {
     description =
       "Pythonic interface to the HDF5 binary data format";
-    homepage = "http://www.h5py.org/";
+    homepage = http://www.h5py.org/;
     license = stdenv.lib.licenses.bsd2;
   };
 }

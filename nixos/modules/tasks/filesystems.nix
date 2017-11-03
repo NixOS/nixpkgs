@@ -115,11 +115,18 @@ let
 
     };
 
-    config = {
+    config = let
+      defaultFormatOptions =
+        # -F needed to allow bare block device without partitions
+        if (builtins.substring 0 3 config.fsType) == "ext" then "-F"
+        # -q needed for non-interactive operations
+        else if config.fsType == "jfs" then "-q"
+        # (same here)
+        else if config.fsType == "reiserfs" then "-q"
+        else null;
+    in {
       options = mkIf config.autoResize [ "x-nixos.autoresize" ];
-
-      # -F needed to allow bare block device without partitions
-      formatOptions = mkIf ((builtins.substring 0 3 config.fsType) == "ext") (mkDefault "-F");
+      formatOptions = mkIf (defaultFormatOptions != null) (mkDefault defaultFormatOptions);
     };
 
   };
@@ -217,7 +224,7 @@ in
     # Add the mount helpers to the system path so that `mount' can find them.
     system.fsPackages = [ pkgs.dosfstools ];
 
-    environment.systemPackages = [ pkgs.fuse ] ++ config.system.fsPackages;
+    environment.systemPackages = with pkgs; [ fuse3 fuse ] ++ config.system.fsPackages;
 
     environment.etc.fstab.text =
       let
@@ -294,7 +301,7 @@ in
       "/run" = { fsType = "tmpfs"; options = [ "nosuid" "nodev" "strictatime" "mode=755" "size=${config.boot.runSize}" ]; };
       "/dev" = { fsType = "devtmpfs"; options = [ "nosuid" "strictatime" "mode=755" "size=${config.boot.devSize}" ]; };
       "/dev/shm" = { fsType = "tmpfs"; options = [ "nosuid" "nodev" "strictatime" "mode=1777" "size=${config.boot.devShmSize}" ]; };
-      "/dev/pts" = { fsType = "devpts"; options = [ "nosuid" "noexec" "mode=620" "gid=${toString config.ids.gids.tty}" ]; };
+      "/dev/pts" = { fsType = "devpts"; options = [ "nosuid" "noexec" "mode=620" "ptmxmode=0666" "gid=${toString config.ids.gids.tty}" ]; };
 
       # To hold secrets that shouldn't be written to disk (generally used for NixOps, harmless elsewhere)
       "/run/keys" = { fsType = "ramfs"; options = [ "nosuid" "nodev" "mode=750" "gid=${toString config.ids.gids.keys}" ]; };

@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1pf4jkz3xyn1sqv70063im80ayb5kdsqwqwx11dc7vgypsl458cm";
   };
   cmakeFlags = "-DINTROSPECTION_GIRDIR=share/gir-1.0/ -DINTROSPECTION_TYPELIBDIR=lib/girepository-1.0";
-  buildInputs = [perl cmake vala pkgconfig gobjectIntrospection glib gtk3 gnome3.libgee gettext];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [perl cmake vala gobjectIntrospection glib gtk3 gnome3.libgee gettext];
   meta = {
     description = "An extension to GTK+ used by elementary OS";
     longDescription = "An extension to GTK+ that provides several useful widgets and classes to ease application development. Designed for elementary OS.";

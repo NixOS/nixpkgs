@@ -1,5 +1,7 @@
 { stdenv, fetchurl, cmake, zlib, freetype, libjpeg, libtiff, fontconfig
-, gcc5, openssl, libpng, lua5, pkgconfig, libidn, expat }:
+, openssl, libpng, lua5, pkgconfig, libidn, expat
+, gcc5 # TODO(@Dridus) remove this at next hash break
+}:
 
 stdenv.mkDerivation rec {
   name = "podofo-0.9.5";
@@ -11,17 +13,11 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ zlib freetype libjpeg libtiff fontconfig openssl libpng libidn expat ];
 
-  # Does Linux really need gcc5? Darwin doesn't seem to...
+  # TODO(@Dridus) remove the ++ ghc5 at next hash break
   nativeBuildInputs = [ cmake pkgconfig ] ++ stdenv.lib.optional stdenv.isLinux gcc5;
 
-  # Does Linux really need libc here? Darwin doesn't seem to...
+  # TODO(@Dridus) remove the ++ libc at next hash break
   buildInputs = [ lua5 ] ++ stdenv.lib.optional stdenv.isLinux stdenv.cc.libc;
-
-  crossAttrs = {
-    propagatedBuildInputs = [ zlib.crossDrv freetype.crossDrv libjpeg.crossDrv
-      libtiff.crossDrv fontconfig.crossDrv openssl.crossDrv libpng.crossDrv
-      lua5.crossDrv stdenv.ccCross.libc ];
-  };
 
   cmakeFlags = "-DPODOFO_BUILD_SHARED=ON -DPODOFO_BUILD_STATIC=OFF";
 

@@ -45,6 +45,13 @@ services.xserver.displayManager.lightdm.enable = true;
 </programlisting>
 </para>
 
+<para>You can set the keyboard layout (and optionally the layout variant):
+<programlisting>
+services.xserver.layout = "de";
+services.xserver.xkbVariant = "neo";
+</programlisting>
+</para>
+
 <para>The X server is started automatically at boot time.  If you
 don’t want this to happen, you can set:
 <programlisting>

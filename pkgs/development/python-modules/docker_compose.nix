@@ -1,17 +1,18 @@
-{ stdenv, buildPythonApplication, fetchurl, pythonOlder
+{ stdenv, buildPythonApplication, fetchPypi, pythonOlder
 , mock, pytest, nose
 , pyyaml, backports_ssl_match_hostname, colorama, docopt
-, dockerpty, docker, ipaddress, jsonschema, requests2
+, dockerpty, docker, ipaddress, jsonschema, requests
 , six, texttable, websocket_client, cached-property
 , enum34, functools32
 }:
 buildPythonApplication rec {
-  version = "1.10.0";
-  name = "docker-compose-${version}";
+  version = "1.15.0";
+  pname = "docker-compose";
+  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/d/docker-compose/${name}.tar.gz";
-    sha256 = "023y2yhkvglaq07d78i89g2p8h040d71il8nfbyg2f9fkffigx9z";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "0yg58m5kk22kihbra0h40miqnbdmkirjr9y47wns613sdikrymmg";
   };
 
   # lots of networking and other fails
@@ -19,7 +20,7 @@ buildPythonApplication rec {
   buildInputs = [ mock pytest nose ];
   propagatedBuildInputs = [
     pyyaml backports_ssl_match_hostname colorama dockerpty docker
-    ipaddress jsonschema requests2 six texttable websocket_client
+    ipaddress jsonschema requests six texttable websocket_client
     docopt cached-property
   ] ++
     stdenv.lib.optional (pythonOlder "3.4") enum34 ++
@@ -37,7 +38,7 @@ buildPythonApplication rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://docs.docker.com/compose/";
+    homepage = https://docs.docker.com/compose/;
     description = "Multi-container orchestration for Docker";
     license = licenses.asl20;
     platforms = platforms.linux;

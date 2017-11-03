@@ -1,19 +1,36 @@
 # This expression takes a file like `hackage-packages.nix` and constructs
 # a full package set out of that.
 
-# required dependencies:
-{ pkgs, stdenv, all-cabal-hashes }:
+{ # package-set used for non-haskell dependencies (all of nixpkgs)
+  pkgs
 
-# arguments:
-#  * ghc package to use
-#  * package-set: a function that takes { pkgs, stdenv, callPackage } as first arg and `self` as second
-{ ghc, package-set }:
+, # stdenv to use for building haskell packages
+  stdenv
+
+, haskellLib
+
+, # hashes for downloading Hackage packages
+  all-cabal-hashes
+
+, # compiler to use
+  ghc
+
+, # A function that takes `{ pkgs, stdenv, callPackage }` as the first arg and `self`
+  # as second, and returns a set of haskell packages
+  package-set
+
+, # The final, fully overriden package set usable with the nixpkgs fixpoint
+  # overriding functionality
+  extensible-self
+}:
 
 # return value: a function from self to the package set
-self: let
+self:
+
+let
 
   inherit (stdenv.lib) fix' extends makeOverridable;
-  inherit (import ./lib.nix { inherit pkgs; }) overrideCabal;
+  inherit (haskellLib) overrideCabal;
 
   mkDerivationImpl = pkgs.callPackage ./generic-builder.nix {
     inherit stdenv;
@@ -44,11 +61,37 @@ self: let
 
   mkDerivation = makeOverridable mkDerivationImpl;
 
-  callPackageWithScope = scope: drv: args: (stdenv.lib.callPackageWith scope drv args) // {
-    overrideScope = f: callPackageWithScope (mkScope (fix' (extends f scope.__unfix__))) drv args;
-  };
+  # manualArgs are the arguments that were explictly passed to `callPackage`, like:
+  #
+  # callPackage foo { bar = null; };
+  #
+  # here `bar` is a manual argument.
+  callPackageWithScope = scope: fn: manualArgs:
+    let
+      # this code is copied from callPackage in lib/customisation.nix
+      #
+      # we cannot use `callPackage` here because we want to call `makeOverridable`
+      # on `drvScope` (we cannot add `overrideScope` after calling `callPackage` because then it is
+      # lost on `.override`) but determine the auto-args based on `drv` (the problem here
+      # is that nix has no way to "passthrough" args while preserving the reflection
+      # info that callPackage uses to determine the arguments).
+      drv = if builtins.isFunction fn then fn else import fn;
+      auto = builtins.intersectAttrs (builtins.functionArgs drv) scope;
 
-  mkScope = scope: pkgs // pkgs.xorg // pkgs.gnome2 // scope;
+      # this wraps the `drv` function to add a `overrideScope` function to the result.
+      drvScope = allArgs: drv allArgs // {
+        overrideScope = f:
+          let newScope = mkScope (fix' (extends f scope.__unfix__));
+          # note that we have to be careful here: `allArgs` includes the auto-arguments that
+          # weren't manually specified. If we would just pass `allArgs` to the recursive call here,
+          # then we wouldn't look up any packages in the scope in the next interation, because it
+          # appears as if all arguments were already manually passed, so the scope change would do
+          # nothing.
+          in callPackageWithScope newScope drv manualArgs;
+      };
+    in stdenv.lib.makeOverridable drvScope (auto // manualArgs);
+
+  mkScope = scope: pkgs // pkgs.xorg // pkgs.gnome2 // { inherit stdenv; } // scope;
   defaultScope = mkScope self;
   callPackage = drv: args: callPackageWithScope defaultScope drv args;
 
@@ -63,7 +106,8 @@ self: let
       sha256Arg = if isNull sha256 then "--sha256=" else ''--sha256="${sha256}"'';
     in pkgs.stdenv.mkDerivation {
       name = "cabal2nix-${name}";
-      buildInputs = [ pkgs.cabal2nix ];
+      buildInputs = [ pkgs.haskellPackages.cabal2nix ];
+      preferLocalBuild = true;
       phases = ["installPhase"];
       LANG = "en_US.UTF-8";
       LOCALE_ARCHIVE = pkgs.lib.optionalString pkgs.stdenv.isLinux "${pkgs.glibcLocales}/lib/locale/locale-archive";
@@ -74,10 +118,23 @@ self: let
       '';
   };
 
-  hackage2nix = name: version: haskellSrc2nix {
+  all-cabal-hashes-component = name: import (pkgs.runCommand "all-cabal-hashes-component-${name}.nix" {}
+    ''
+      set +o pipefail
+      for component in ${all-cabal-hashes}/*; do
+        if ls $component | grep -q "^${name}$"; then
+          echo "builtins.storePath $component" > $out
+          exit 0
+        fi
+      done
+      echo "${name} not found in any all-cabal-hashes component, are you sure it's in hackage?" >&2
+      exit 1
+    '');
+
+  hackage2nix = name: version: let component = all-cabal-hashes-component name; in self.haskellSrc2nix {
     name   = "${name}-${version}";
-    sha256 = ''$(sed -e 's/.*"SHA256":"//' -e 's/".*$//' "${all-cabal-hashes}/${name}/${version}/${name}.json")'';
-    src    = "${all-cabal-hashes}/${name}/${version}/${name}.cabal";
+    sha256 = ''$(sed -e 's/.*"SHA256":"//' -e 's/".*$//' "${component}/${name}/${version}/${name}.json")'';
+    src    = "${component}/${name}/${version}/${name}.cabal";
   };
 
 in package-set { inherit pkgs stdenv callPackage; } self // {
@@ -87,7 +144,50 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     callHackage = name: version: self.callPackage (self.hackage2nix name version);
 
     # Creates a Haskell package from a source package by calling cabal2nix on the source.
-    callCabal2nix = name: src: self.callPackage (self.haskellSrc2nix { inherit src name; });
+    callCabal2nix = name: src: args: if builtins.typeOf src != "path"
+      then self.callPackage (haskellSrc2nix { inherit name src; }) args
+      else
+        # When `src` is a Nix path literal, only use `cabal2nix` on
+        # the cabal file, so that the "import-from-derivation" is only
+        # recomputed when the cabal file changes, and so your source
+        # code isn't duplicated into the nix store on every change.
+        # This can only be done when `src` is a Nix path literal
+        # because that is the only kind of source that
+        # `builtins.filterSource` works on. But this filtering isn't
+        # usually important on other kinds of sources, like
+        # `fetchFromGitHub`.
+        overrideCabal (self.callPackage (haskellSrc2nix {
+          inherit name;
+          src = builtins.filterSource (path: type: pkgs.lib.hasSuffix ".cabal" path) src;
+        }) args) (_: { inherit src; });
+
+    # : Map Name (Either Path VersionNumber) -> HaskellPackageOverrideSet
+    # Given a set whose values are either paths or version strings, produces
+    # a package override set (i.e. (self: super: { etc. })) that sets
+    # the packages named in the input set to the corresponding versions
+    packageSourceOverrides =
+      overrides: self: super: pkgs.lib.mapAttrs (name: src:
+        let isPath = x: builtins.substring 0 1 (toString x) == "/";
+            generateExprs = if isPath src
+                               then self.callCabal2nix
+                               else self.callHackage;
+        in generateExprs name src {}) overrides;
+
+    # : { root : Path
+    #   , source-overrides : Defaulted (Either Path VersionNumber)
+    #   , overrides : Defaulted (HaskellPackageOverrideSet)
+    #   } -> NixShellAwareDerivation
+    # Given a path to a haskell package directory whose cabal file is
+    # named the same as the directory name, an optional set of
+    # source overrides as appropriate for the 'packageSourceOverrides'
+    # function, and an optional set of arbitrary overrides,
+    # return a derivation appropriate for nix-build or nix-shell
+    # to build that package.
+    developPackage = { root, source-overrides ? {}, overrides ? self: super: {} }:
+      let name = builtins.baseNameOf root;
+          drv =
+            (extensible-self.extend (pkgs.lib.composeExtensions (self.packageSourceOverrides source-overrides) overrides)).callCabal2nix name root {};
+      in if pkgs.lib.inNixShell then drv.env else drv;
 
     ghcWithPackages = selectFrom: withPackages (selectFrom self);
 

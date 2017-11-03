@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
       walk parse trees.
     '';
     homepage = http://www.antlr.org/;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

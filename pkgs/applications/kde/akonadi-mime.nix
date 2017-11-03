@@ -1,15 +1,16 @@
 {
-  kdeApp, lib,
-  extra-cmake-modules,
-  akonadi, kdbusaddons, kio, kitemmodels, kmime
+  mkDerivation, lib, kdepimTeam,
+  extra-cmake-modules, shared_mime_info,
+  akonadi, kdbusaddons, ki18n, kio, kitemmodels, kmime
 }:
 
-kdeApp {
+mkDerivation {
   name = "akonadi-mime";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 ];
-    maintainers = [ lib.maintainers.ttuegel ];
+    maintainers = kdepimTeam;
   };
-  nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ akonadi kdbusaddons kio kitemmodels kmime ];
+  nativeBuildInputs = [ extra-cmake-modules shared_mime_info ];
+  buildInputs = [ akonadi kdbusaddons ki18n kio kitemmodels kmime ];
+  outputs = [ "out" "dev" ];
 }

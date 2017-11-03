@@ -23,15 +23,16 @@
 
 stdenv.mkDerivation rec {
   name = "gnuradio-${version}";
-  version = "3.7.10.1";
+  version = "3.7.11";
 
   src = fetchurl {
-    url = "http://gnuradio.org/releases/gnuradio/${name}.tar.gz";
-    sha256 = "0ds9mcw8hgm03f82jvp3j4mm02ha6zvsl77lp13jzqmbqifbdmv3";
+    url = "https://gnuradio.org/releases/gnuradio/${name}.tar.gz";
+    sha256 = "1m2jf8lafr6pr2dlm40nbvr6az8gwjfkzpbs4fxzv3l5hcqvmnc7";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cmake pkgconfig git boost cppunit fftw python swig2 orc lxml qt4
+    cmake git boost cppunit fftw python swig2 orc lxml qt4
     qwt alsaLib SDL libusb1 uhd gsl makeWrapper
   ];
 
@@ -41,8 +42,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postPatch = ''
+    substituteInPlace \
+        gr-fec/include/gnuradio/fec/polar_decoder_common.h \
+        --replace BOOST_CONSTEXPR_OR_CONST const
+  '';
+
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-unused-variable"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-unused-variable -std=c++11"
   '';
 
   # - Ensure we get an interactive backend for matplotlib. If not the gr_plot_*
@@ -53,7 +60,7 @@ stdenv.mkDerivation rec {
   postInstall = ''
     printf "backend : Qt4Agg\n" > "$out/share/gnuradio/matplotlibrc"
 
-    for file in "$out"/bin/* "$out"/share/gnuradio/examples/*/*.py; do
+    for file in $(find $out/bin $out/share/gnuradio/examples -type f -executable); do
         wrapProgram "$file" \
             --prefix PYTHONPATH : $PYTHONPATH:$(toPythonPath "$out") \
             --set MATPLOTLIBRC "$out/share/gnuradio"
@@ -71,7 +78,7 @@ stdenv.mkDerivation rec {
       environments to support both wireless communications research and
       real-world radio systems.
     '';
-    homepage = http://www.gnuradio.org;
+    homepage = https://www.gnuradio.org;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor fpletz ];

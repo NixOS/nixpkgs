@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, autoconf, libpcap, ncurses, pkgconfig, glib }:
+{ fetchurl, fetchpatch, stdenv, autoconf, libpcap, ncurses, pkgconfig, glib }:
 
 stdenv.mkDerivation rec {
   name = "jnettop-0.13.0";
@@ -8,9 +8,17 @@ stdenv.mkDerivation rec {
     sha256 = "1855np7c4b0bqzhf1l1dyzxb90fpnvrirdisajhci5am6als31z9";
   };
 
-  buildInputs = [ autoconf libpcap ncurses pkgconfig glib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf libpcap ncurses glib ];
 
-  patches = [ ./no-dns-resolution.patch ];
+  patches = [
+    ./no-dns-resolution.patch
+    (fetchpatch {
+      url = "https://sources.debian.net/data/main/j/jnettop/0.13.0-1/debian/patches/0001-Use-64-bit-integers-for-byte-totals-support-bigger-u.patch";
+      sha256 = "1b0alc12sj8pzcb66f8xslbqlbsvq28kz34v6jfhbb1q25hyr7jg";
+    })
+  ];
+
   preConfigure = '' autoconf '';
 
   meta = {

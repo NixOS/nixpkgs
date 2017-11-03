@@ -16,6 +16,7 @@ mounts = { '/' => 'host',
 # Propagate environment variables
 envvars = [ 'TERM',
             'DISPLAY',
+            'XAUTHORITY',
             'HOME',
             'XDG_RUNTIME_DIR',
             'LANG',

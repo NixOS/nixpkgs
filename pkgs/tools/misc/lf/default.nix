@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   name = "lf-unstable-${version}";
-  version = "2017-02-04";
+  version = "2017-10-30";
 
   src = fetchFromGitHub {
     owner = "gokcehan";
     repo = "lf";
-    rev = "c55c4bf254d59c4e943d5559cd6e062652751e36"; # nightly
-    sha256 = "0jq85pfhpzdplv083mxbys7pp8igcvhp4daa9dh0yn4xbd8x821d";
+    rev = "3f7bd0a62d1a243562e182d9051ebb54f3414aaa"; # nightly
+    sha256 = "0g6wf4j3dfy3yfkby3wlqajryv4kffqvhljq2q0x482fsrl4vipz";
   };
 
   goPackagePath = "github.com/gokcehan/lf";
@@ -22,7 +22,7 @@ buildGoPackage rec {
       the missing features are deliberately omitted since it is better if they
       are handled by external tools.
     '';
-    homepage = "https://godoc.org/github.com/gokcehan/lf";
+    homepage = https://godoc.org/github.com/gokcehan/lf;
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

@@ -1,16 +1,11 @@
-{ plasmaPackage
-, extra-cmake-modules
-, kidletime
-, kwayland
-, kwindowsystem
+{
+  mkDerivation,
+  extra-cmake-modules,
+  kidletime, kwayland, kwindowsystem, qtbase,
 }:
 
-plasmaPackage {
+mkDerivation {
   name = "kwayland-integration";
-  nativeBuildInputs = [
-    extra-cmake-modules
-  ];
-  propagatedBuildInputs = [
-    kidletime kwindowsystem kwayland
-  ];
+  nativeBuildInputs = [ extra-cmake-modules ];
+  buildInputs = [ kidletime kwindowsystem kwayland qtbase ];
 }

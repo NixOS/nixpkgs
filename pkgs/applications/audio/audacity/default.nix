@@ -1,17 +1,18 @@
 { stdenv, fetchurl, wxGTK30, pkgconfig, file, gettext, gtk2, glib, zlib, perl, intltool,
   libogg, libvorbis, libmad, libjack2, lv2, lilv, serd, sord, sratom, suil, alsaLib, libsndfile, soxr, flac, lame, fetchpatch,
-  expat, libid3tag, ffmpeg, soundtouch /*, portaudio - given up fighting their portaudio.patch */
+  expat, libid3tag, ffmpeg, soundtouch, /*, portaudio - given up fighting their portaudio.patch */
+  autoconf, automake, libtool
   }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "2.1.2";
+  version = "2.1.3";
   name = "audacity-${version}";
 
   src = fetchurl {
     url = "https://github.com/audacity/audacity/archive/Audacity-${version}.tar.gz";
-    sha256 = "1ggr6g0mk36rqj7ahsg8b0b1r9kphwajzvxgn43md263rm87n04h";
+    sha256 = "11mx7gb4dbqrgfp7hm0154x3m76ddnmhf2675q5zkxn7jc5qfc6b";
   };
   patches = [
     (fetchpatch {
@@ -20,19 +21,10 @@ stdenv.mkDerivation rec {
         + "/audacity-ffmpeg.patch?h=packages/audacity&id=0c1e35798d4d70692";
       sha256 = "19fr674mw844zmkp1476yigkcnmb6zyn78av64ccdwi3p68i00rf";
     })
-  ]
-    ++ optional (hasPrefix "gcc-6" stdenv.cc.cc.name)
-      (fetchpatch {
-        name = "gcc6.patch";
-        url = "https://github.com/audacity/audacity/commit/60f2322055756e8cacfe96530a12c63e9694482c.patch";
-        sha256 = "07jlxr8y7ap3nsblx3zh8v9rcx7ajbcfnvwzhwykmbwbsyirgqf2";
-      });
+  ];
 
   preConfigure = /* we prefer system-wide libs */ ''
-    mv lib-src lib-src-rm
-    mkdir lib-src
-    mv lib-src-rm/{Makefile*,lib-widget-extra,portaudio-v19,portmixer,portsmf,FileDialog,sbsms,libnyquist} lib-src/
-    rm -r lib-src-rm/
+    autoreconf -vi # use system libraries
 
     # we will get a (possibly harmless) warning during configure without this
     substituteInPlace configure \
@@ -59,10 +51,12 @@ stdenv.mkDerivation rec {
     "-lswscale"
   ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig file gettext wxGTK30 expat alsaLib
+    file gettext wxGTK30 expat alsaLib
     libsndfile soxr libid3tag libjack2 lv2 lilv serd sord sratom suil gtk2
     ffmpeg libmad lame libvorbis flac soundtouch
+    autoconf automake libtool # for the preConfigure phase
   ]; #ToDo: detach sbsms
 
   enableParallelBuilding = true;

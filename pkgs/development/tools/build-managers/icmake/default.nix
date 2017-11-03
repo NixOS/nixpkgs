@@ -11,7 +11,10 @@ stdenv.mkDerivation rec {
     owner = "fbb-git";
   };
 
-  sourceRoot = "icmake-${version}-src/icmake";
+
+  setSourceRoot = ''
+    sourceRoot=$(echo */icmake)
+  '';
 
   buildInputs = [ gcc ];
 

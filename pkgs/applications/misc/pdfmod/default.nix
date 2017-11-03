@@ -18,8 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "0fpz9ifr6476lqhd5rkb94dm68vlrwdq5w1aaxzgyjgdax9hxx81";
   }) ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig gnome_doc_utils intltool mono gtk-sharp-2_0 gnome-sharp
+    gnome_doc_utils intltool mono gtk-sharp-2_0 gnome-sharp
     hyena which makeWrapper wrapGAppsHook
   ];
 
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = with stdenv.lib; {
-    homepage = "https://wiki.gnome.org/Apps/PdfMod";
+    homepage = https://wiki.gnome.org/Apps/PdfMod;
     description = "A simple application for modifying PDF documents";
     platforms = platforms.all;
     maintainers = with maintainers; [ obadz ];

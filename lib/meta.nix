@@ -1,8 +1,7 @@
 /* Some functions for manipulating meta attributes, as well as the
    name attribute. */
 
-let lib = import ./default.nix;
-in
+{ lib }:
 
 rec {
 
@@ -15,6 +14,11 @@ rec {
   */
   addMetaAttrs = newAttrs: drv:
     drv // { meta = (drv.meta or {}) // newAttrs; };
+
+
+  /* Disable Hydra builds of given derivation.
+  */
+  dontDistribute = drv: addMetaAttrs { hydraPlatforms = []; } drv;
 
 
   /* Change the symbolic name of a package for presentation purposes
@@ -45,7 +49,7 @@ rec {
   /* Decrease the nix-env priority of the package, i.e., other
      versions/variants of the package will be preferred.
   */
-  lowPrio = drv: addMetaAttrs { priority = "10"; } drv;
+  lowPrio = drv: addMetaAttrs { priority = 10; } drv;
 
 
   /* Apply lowPrio to an attrset with derivations
@@ -56,7 +60,7 @@ rec {
   /* Increase the nix-env priority of the package, i.e., this
      version/variant of the package will be preferred.
   */
-  hiPrio = drv: addMetaAttrs { priority = "-10"; } drv;
+  hiPrio = drv: addMetaAttrs { priority = -10; } drv;
 
 
   /* Apply hiPrio to an attrset with derivations

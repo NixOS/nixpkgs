@@ -13,6 +13,7 @@
 , SDL # only for avplay in $bin, adds nontrivial closure to it
 , enableGPL ? true # ToDo: some additional default stuff may need GPL
 , enableUnfree ? faacSupport
+, hostPlatform
 }:
 
 assert faacSupport -> enableUnfree;
@@ -26,9 +27,10 @@ let inherit (stdenv.lib) optional optionals hasPrefix; in
 
 let
   result = {
+    # e.g. https://libav.org/releases/libav-11.11.tar.xz.sha1
     libav_0_8 = libavFun "0.8.20" "0c7a2417c3a01eb74072691bb93ce802ae1be08f";
-    libav_11  = libavFun  "11.8"  "d0e93f6b229ae46c49d13ec183b13cfee70a51f0";
-    libav_12  = libavFun "12"     "4ecde7274621c82a6882b7614d907b28de25cc4e";
+    libav_11  = libavFun "11.11"  "d7444fa4f135bdd7347cc962ab4b5228796b0f23";
+    libav_12  = libavFun "12.2"   "3784b15f88076ca0ab8fb6b0377e975b83a5c9f5";
   };
 
   libavFun = version : sha1 : stdenv.mkDerivation rec {
@@ -41,7 +43,7 @@ let
 
     patches = []
       ++ optional (vpxSupport && hasPrefix "0.8." version) ./vpxenc-0.8.17-libvpx-1.5.patch
-      ++ optional (vpxSupport && hasPrefix "11."  version) ./vpxenc-11.6-libvpx-1.5.patch;
+      ;
 
     preConfigure = "patchShebangs doc/texi2pod.pl";
 
@@ -69,7 +71,8 @@ let
       ++ optional freetypeSupport "--enable-libfreetype"
       ;
 
-    buildInputs = [ pkgconfig lame yasm zlib bzip2 SDL ]
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ lame yasm zlib bzip2 SDL ]
       ++ [ perl ] # for install-man target
       ++ optional mp3Support lame
       ++ optional speexSupport speex
@@ -105,19 +108,19 @@ let
     installCheckTarget = "check"; # tests need to be run *after* installation
 
     crossAttrs = {
-      dontSetConfigureCross = true;
+      configurePlatforms = [];
       configureFlags = configureFlags ++ [
-        "--cross-prefix=${stdenv.cross.config}-"
+        "--cross-prefix=${stdenv.cc.prefix}"
         "--enable-cross-compile"
         "--target_os=linux"
-        "--arch=${stdenv.cross.arch}"
+        "--arch=${hostPlatform.arch}"
         ];
     };
 
     passthru = { inherit vdpauSupport; };
 
     meta = with stdenv.lib; {
-      homepage = http://libav.org/;
+      homepage = https://libav.org/;
       description = "A complete, cross-platform solution to record, convert and stream audio and video (fork of ffmpeg)";
       license = with licenses; if enableUnfree then unfree #ToDo: redistributable or not?
         else if enableGPL then gpl2Plus else lgpl21Plus;

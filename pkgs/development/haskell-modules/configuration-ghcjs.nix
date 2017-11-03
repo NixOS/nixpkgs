@@ -2,14 +2,14 @@
 #
 # Please insert new packages *alphabetically*
 # in the OTHER PACKAGES section.
-{ pkgs }:
+{ pkgs, haskellLib }:
 
 let
   removeLibraryHaskellDepends = pnames: depends:
     builtins.filter (e: !(builtins.elem (e.pname or "") pnames)) depends;
 in
 
-with import ./lib.nix { inherit pkgs; };
+with haskellLib;
 
 self: super:
 
@@ -67,6 +67,9 @@ self: super:
   });
 
 ## OTHER PACKAGES
+
+  # haddock throws the error: No input file(s).
+  fail = dontHaddock super.fail;
 
   cereal = addBuildDepend super.cereal [ self.fail ];
 
@@ -149,6 +152,17 @@ self: super:
 
   http2 = addBuildDepends super.http2 [ self.aeson self.aeson-pretty self.hex self.unordered-containers self.vector self.word8 ];
   # ghcjsBoot uses async 2.0.1.6, protolude wants 2.1.*
+
+  # These are the correct dependencies specified when calling `cabal2nix --compiler ghcjs`
+  # By default, the `miso` derivation present in hackage-packages.nix
+  # does not contain dependencies suitable for ghcjs
+  miso = overrideCabal super.miso (drv: {
+      libraryHaskellDepends = with self; [
+        BoundedChan bytestring containers ghcjs-base aeson base
+        http-api-data http-types network-uri scientific servant text
+        transformers unordered-containers vector
+      ];
+    });
 
   pqueue = overrideCabal super.pqueue (drv: {
     postPatch = ''

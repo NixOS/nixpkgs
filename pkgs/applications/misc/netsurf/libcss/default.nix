@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "0qp4p1q1dwgdra4pkrzd081zjzisxkgwx650ijx323j8bj725daf";
   };
 
-  buildInputs = [ pkgconfig perl
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ perl
     buildsystem
     libwapcaplet
     libparserutils
@@ -27,7 +28,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.netsurf-browser.org/";
+    homepage = http://www.netsurf-browser.org/;
     description = "Cascading Style Sheets library for netsurf browser";
     license = licenses.gpl2;
     maintainers = [ maintainers.vrthra ];

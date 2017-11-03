@@ -25,9 +25,9 @@
 # * enabling/disabling certain features in packages
 #
 # If you have an override of this kind, see configuration-common.nix instead.
-{ pkgs }:
+{ pkgs, haskellLib }:
 
-with import ./lib.nix { inherit pkgs; };
+with haskellLib;
 
 # All of the overrides in this set should look like:
 #
@@ -64,8 +64,19 @@ self: super: builtins.intersectAttrs super {
       "--extra-include-dirs=${pkgs.cudatoolkit}/include"
     ];
     preConfigure = ''
-      unset CC          # unconfuse the haskell-cuda configure script
-      sed -i -e 's|/usr/local/cuda|${pkgs.cudatoolkit}|g' configure
+      export CUDA_PATH=${pkgs.cudatoolkit}
+    '';
+  });
+
+  nvvm = overrideCabal super.nvvm (drv: {
+    preConfigure = ''
+      export CUDA_PATH=${pkgs.cudatoolkit}
+    '';
+  });
+
+  cufft = overrideCabal super.cufft (drv: {
+    preConfigure = ''
+      export CUDA_PATH=${pkgs.cudatoolkit}
     '';
   });
 
@@ -93,6 +104,12 @@ self: super: builtins.intersectAttrs super {
     preConfigure = "sed -i -e /extra-lib-dirs/d -e /include-dirs/d haskakafka.cabal";
     configureFlags =  "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka";
   });
+
+  # library has hard coded directories that need to be removed. Reported upstream here https://github.com/haskell-works/hw-kafka-client/issues/32
+  hw-kafka-client = dontCheck (overrideCabal super.hw-kafka-client (drv: {
+    preConfigure = "sed -i -e /extra-lib-dirs/d -e /include-dirs/d -e /librdkafka/d hw-kafka-client.cabal";
+    configureFlags =  "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka";
+  }));
 
   # Foreign dependency name clashes with another Haskell package.
   libarchive-conduit = super.libarchive-conduit.override { archive = pkgs.libarchive; };
@@ -129,8 +146,8 @@ self: super: builtins.intersectAttrs super {
   gtksourceview2 = addPkgconfigDepend super.gtksourceview2 pkgs.gtk2;
 
   # Need WebkitGTK, not just webkit.
-  webkit = super.webkit.override { webkit = pkgs.webkitgtk2; };
-  websnap = super.websnap.override { webkit = pkgs.webkitgtk24x; };
+  webkit = super.webkit.override { webkit = pkgs.webkitgtk24x-gtk2; };
+  websnap = super.websnap.override { webkit = pkgs.webkitgtk24x-gtk3; };
 
   hs-mesos = overrideCabal super.hs-mesos (drv: {
     # Pass _only_ mesos; the correct protobuf is propagated.
@@ -198,9 +215,6 @@ self: super: builtins.intersectAttrs super {
   # Nix-specific workaround
   xmonad = appendPatch (dontCheck super.xmonad) ./patches/xmonad-nix.patch;
 
-  # https://github.com/ucsd-progsys/liquid-fixpoint/issues/44
-  liquid-fixpoint = overrideCabal super.liquid-fixpoint (drv: { preConfigure = "patchShebangs ."; });
-
   # wxc supports wxGTX >= 3.0, but our current default version points to 2.8.
   # http://hydra.cryp.to/build/1331287/log/raw
   wxc = (addBuildDepend super.wxc self.split).override { wxGTK = pkgs.wxGTK30; };
@@ -212,6 +226,12 @@ self: super: builtins.intersectAttrs super {
   # Tests attempt to use NPM to install from the network into
   # /homeless-shelter. Disabled.
   purescript = dontCheck super.purescript;
+
+  # https://github.com/haskell-foundation/foundation/pull/412
+  foundation =
+    if pkgs.stdenv.isDarwin
+    then dontCheck super.foundation
+    else super.foundation;
 
   # Hardcoded include path
   poppler = overrideCabal super.poppler (drv: {
@@ -411,6 +431,17 @@ self: super: builtins.intersectAttrs super {
     testHaskellDepends = (drv.testHaskellDepends or []) ++ [ self.test-framework self.test-framework-hunit ];
   });
 
+  # cabal2nix likes to generate dependencies on hinotify when hfsevents is really required
+  # on darwin: https://github.com/NixOS/cabal2nix/issues/146.
+  hinotify = if pkgs.stdenv.isDarwin then self.hfsevents else super.hinotify;
+
+  # FSEvents API is very buggy and tests are unreliable. See
+  # http://openradar.appspot.com/10207999 and similar issues.
+  # https://github.com/haskell-fswatch/hfsnotify/issues/62
+  fsnotify = if pkgs.stdenv.isDarwin
+    then addBuildDepend (dontCheck super.fsnotify) pkgs.darwin.apple_sdk.frameworks.Cocoa
+    else dontCheck super.fsnotify;
+
   hidapi = addExtraLibrary super.hidapi pkgs.libudev;
 
   hs-GeoIP = super.hs-GeoIP.override { GeoIP = pkgs.geoipWithDatabase; };
@@ -433,7 +464,7 @@ self: super: builtins.intersectAttrs super {
   haskell-gi-base = addBuildDepend super.haskell-gi-base pkgs.gobjectIntrospection;
 
   # Requires gi-javascriptcore API version 4
-  gi-webkit2 = super.gi-webkit2.override { gi-javascriptcore = self.gi-javascriptcore_4_0_11; };
+  gi-webkit2 = super.gi-webkit2.override { gi-javascriptcore = self.gi-javascriptcore_4_0_14; };
 
   # requires valid, writeable $HOME
   hatex-guide = overrideCabal super.hatex-guide (drv: {
@@ -454,4 +485,26 @@ self: super: builtins.intersectAttrs super {
       export PATH="$PWD/dist/build/intero:$PATH"
     '';
   });
+
+  # loc and loc-test depend on each other for testing. Break that infinite cycle:
+  loc-test = super.loc-test.override { loc = dontCheck self.loc; };
+
+  # The test suites try to run the "fixpoint" and "liquid" executables built just
+  # before and fail because the library search paths aren't configured properly.
+  # Also needs https://github.com/ucsd-progsys/liquidhaskell/issues/1038 resolved.
+  liquid-fixpoint = disableSharedExecutables super.liquid-fixpoint;
+  liquidhaskell = dontCheck (disableSharedExecutables super.liquidhaskell);
+
+  # Haskell OpenCV bindings need contrib code enabled in the C++ library.
+  opencv = super.opencv.override { opencv3 = pkgs.opencv3.override { enableContrib = true; }; };
+
+  # Without this override, the builds lacks pkg-config.
+  opencv-extra = addPkgconfigDepend super.opencv-extra (pkgs.opencv3.override { enableContrib = true; });
+
+  # Written against the 6.X series of megaparsec
+  htoml-megaparsec = super.htoml-megaparsec.override { megaparsec = self.megaparsec_6_2_0; };
+
+  # Break cyclic reference that results in an infinite recursion.
+  partial-semigroup = dontCheck super.partial-semigroup;
+
 }

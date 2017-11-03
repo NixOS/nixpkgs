@@ -47,13 +47,16 @@ let
   # the bootstrap.  In all stages, we build an stdenv and the package
   # set that can be built with that stdenv.
   stageFun = prevStage:
-    { name, overrides ? (self: super: {}), extraBuildInputs ? [] }:
+    { name, overrides ? (self: super: {}), extraNativeBuildInputs ? [] }:
 
     let
 
       thisStdenv = import ../generic {
-        inherit system config extraBuildInputs;
         name = "stdenv-linux-boot";
+        buildPlatform = localSystem;
+        hostPlatform = localSystem;
+        targetPlatform = localSystem;
+        inherit config extraNativeBuildInputs;
         preHook =
           ''
             # Don't patch #!/interpreter because it leads to retained
@@ -73,12 +76,15 @@ let
              else lib.makeOverridable (import ../../build-support/cc-wrapper) {
           nativeTools = false;
           nativeLibc = false;
+          buildPackages = lib.optionalAttrs (prevStage ? stdenv) {
+            inherit (prevStage) stdenv;
+          };
           cc = prevStage.gcc-unwrapped;
           isGNU = true;
           libc = prevStage.glibc;
           inherit (prevStage) binutils coreutils gnugrep;
           name = name;
-          stdenv = prevStage.ccWrapperStdenv;
+          stdenvNoCC = prevStage.ccWrapperStdenv;
         };
 
         extraAttrs = {
@@ -94,9 +100,6 @@ let
       };
 
     in {
-      buildPlatform = localSystem;
-      hostPlatform = localSystem;
-      targetPlatform = localSystem;
       inherit config overlays;
       stdenv = thisStdenv;
     };
@@ -214,9 +217,9 @@ in
         isl = isl_0_14;
       };
     };
-    extraBuildInputs = [ prevStage.patchelf prevStage.paxctl ] ++
+    extraNativeBuildInputs = [ prevStage.patchelf prevStage.paxctl ] ++
       # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
-      lib.optional (system == "aarch64-linux") prevStage.updateAutotoolsGnuConfigScriptsHook;
+      lib.optional localSystem.isAarch64 prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
 
 
@@ -236,16 +239,19 @@ in
         nativeTools = false;
         nativeLibc = false;
         isGNU = true;
+        buildPackages = {
+          inherit (prevStage) stdenv;
+        };
         cc = prevStage.gcc-unwrapped;
         libc = self.glibc;
-        inherit (self) stdenv binutils coreutils gnugrep;
+        inherit (self) stdenvNoCC binutils coreutils gnugrep;
         name = "";
         shell = self.bash + "/bin/bash";
       };
     };
-    extraBuildInputs = [ prevStage.patchelf prevStage.xz ] ++
+    extraNativeBuildInputs = [ prevStage.patchelf prevStage.xz ] ++
       # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
-      lib.optional (system == "aarch64-linux") prevStage.updateAutotoolsGnuConfigScriptsHook;
+      lib.optional localSystem.isAarch64 prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
 
   # Construct the final stdenv.  It uses the Glibc and GCC, and adds
@@ -256,12 +262,12 @@ in
   # dependency (`nix-store -qR') on bootstrapTools or the first
   # binutils built.
   (prevStage: {
-    buildPlatform = localSystem;
-    hostPlatform = localSystem;
-    targetPlatform = localSystem;
     inherit config overlays;
     stdenv = import ../generic rec {
-      inherit system config;
+      buildPlatform = localSystem;
+      hostPlatform = localSystem;
+      targetPlatform = localSystem;
+      inherit config;
 
       preHook = ''
         # Make "strip" produce deterministic output, by setting
@@ -273,9 +279,9 @@ in
       initialPath =
         ((import ../common-path.nix) {pkgs = prevStage;});
 
-      extraBuildInputs = [ prevStage.patchelf prevStage.paxctl ] ++
+      extraNativeBuildInputs = [ prevStage.patchelf prevStage.paxctl ] ++
         # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
-        lib.optional (system == "aarch64-linux") prevStage.updateAutotoolsGnuConfigScriptsHook;
+        lib.optional localSystem.isAarch64 prevStage.updateAutotoolsGnuConfigScriptsHook;
 
       cc = prevStage.gcc;
 
@@ -289,21 +295,35 @@ in
         shellPackage = prevStage.bash;
       };
 
-      /* outputs TODO
-      allowedRequisites = with prevStage;
-        [ gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
-          glibc gnumake gnused gnutar gnugrep gnupatch patchelf attr acl
-          paxctl zlib pcre linuxHeaders ed gcc gcc.cc libsigsegv
-        ] ++ lib.optional (system == "aarch64-linux") prevStage.updateAutotoolsGnuConfigScriptsHook;
-        */
+      # Mainly avoid reference to bootstrap tools
+      allowedRequisites = with prevStage; with lib;
+        # Simple executable tools
+        concatMap (p: [ (getBin p) (getLib p) ])
+          [ gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
+            gnumake gnused gnutar gnugrep gnupatch patchelf ed paxctl
+          ]
+        # Library dependencies
+        ++ map getLib (
+            [ attr acl zlib pcre ]
+            ++ lib.optional (gawk.libsigsegv != null) gawk.libsigsegv
+          )
+        # More complicated cases
+        ++ [
+            glibc.out glibc.dev glibc.bin/*propagated from .dev*/ linuxHeaders
+            gcc gcc.cc gcc.cc.lib gcc.expand-response-params
+          ]
+          ++ lib.optionals localSystem.isAarch64
+            [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ];
 
       overrides = self: super: {
-        gcc = cc;
-
         inherit (prevStage)
-          gzip bzip2 xz bash binutils coreutils diffutils findutils gawk
+          gzip bzip2 xz bash coreutils diffutils findutils gawk
           glibc gnumake gnused gnutar gnugrep gnupatch patchelf
           attr acl paxctl zlib pcre;
+      } // lib.optionalAttrs (super.targetPlatform == localSystem) {
+        # Need to get rid of these when cross-compiling.
+        inherit (prevStage) binutils;
+        gcc = cc;
       };
     };
   })

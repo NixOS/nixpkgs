@@ -1,8 +1,14 @@
-{ kdeFramework, lib, extra-cmake-modules, boost, kactivities, kconfig }:
+{
+  mkDerivation, lib,
+  extra-cmake-modules,
+  boost, kactivities, kconfig, qtbase,
+}:
 
-kdeFramework {
+mkDerivation {
   name = "kactivities-stats";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  propagatedBuildInputs = [ boost kactivities kconfig ];
+  buildInputs = [ boost kactivities kconfig ];
+  propagatedBuildInputs = [ qtbase ];
+  outputs = [ "out" "dev" ];
 }

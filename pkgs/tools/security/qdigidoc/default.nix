@@ -25,14 +25,15 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH : ${opensc}/lib/pkcs11/
   '';
 
-  buildInputs = [ cmake ccid qttools pkgconfig pcsclite qttranslations
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake ccid qttools pcsclite qttranslations
                   hicolor_icon_theme libdigidocpp opensc shared_mime_info
                   openldap gettext desktop_file_utils makeWrapper
                 ];
   
   meta = with stdenv.lib; {
     description = "Qt based UI application for verifying and signing digital signatures";
-    homepage = "http://www.id.ee/";
+    homepage = http://www.id.ee/;
     license = licenses.lgpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.jagajaga ];

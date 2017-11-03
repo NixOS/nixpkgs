@@ -16,7 +16,7 @@ let
   # "git describe" when _not_ on an annotated tag(!): MAJOR.MINOR-REV-HASH.
 
   # Version to build.
-  tag = "5.8";
+  tag = "5.12";
 
 in
 
@@ -25,12 +25,12 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "git://git.ardour.org/ardour/ardour.git";
-    rev = "e5c6f16126e0901654b09ecce990554b1ff73833";
-    sha256 = "1lcvslrcw6g4kp9w0h1jx46x6ilz4nzz0k2yrw4gd545k1rwx0c1";
+    rev = "ae0dcdc0c5d13483271065c360e378202d20170a";
+    sha256 = "0mla5lm51ryikc2rrk53max2m7a5ds6i1ai921l2h95wrha45nkr";
   };
 
   buildInputs =
-    [ alsaLib aubio boost cairomm curl doxygen dbus fftw fftwSinglePrec flac glibc
+    [ alsaLib aubio boost cairomm curl doxygen dbus fftw fftwSinglePrec flac
       glibmm graphviz gtkmm2 libjack2 libgnomecanvas libgnomecanvasmm liblo
       libmad libogg librdf librdf_raptor librdf_rasqal libsamplerate
       libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv lv2
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     GenericName=Digital Audio Workstation
     Comment=Multitrack harddisk recorder
     Exec=$out/bin/ardour5
-    Icon=$out/share/ardour5/icons/ardour_icon_256px.png
+    Icon=$out/share/ardour5/resources/Ardour-icon_256px.png
     Terminal=false
     Type=Application
     X-MultipleArgs=false

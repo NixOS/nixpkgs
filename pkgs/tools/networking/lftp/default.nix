@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, gnutls, pkgconfig, readline, zlib, libidn, gmp, libiconv }:
+{ stdenv, fetchurl, gnutls, pkgconfig, readline, zlib, libidn2, gmp, libiconv, libunistring, gettext }:
 
 stdenv.mkDerivation rec {
   name = "lftp-${version}";
-  version = "4.7.7";
+  version = "4.8.2";
 
   src = fetchurl {
     urls = [
@@ -10,11 +10,15 @@ stdenv.mkDerivation rec {
       "ftp://ftp.st.ryukoku.ac.jp/pub/network/ftp/lftp/${name}.tar.bz2"
       "http://lftp.yar.ru/ftp/old/${name}.tar.bz2"
       ];
-    sha256 = "104jvzmvbmblfg8n8ffrnrrg8za5l25n53lbkawwy5x3m4h1yi7y";
+    sha256 = "0a4sp9khqgny1md0b2c9vvg4c7sz0g31w3sfdslxw7dsvijin3mn";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gnutls readline zlib libidn gmp libiconv ];
+
+  buildInputs = [ gnutls readline zlib libidn2 gmp libiconv libunistring ]
+    ++ stdenv.lib.optional stdenv.isDarwin gettext;
+
+  hardeningDisable = stdenv.lib.optional stdenv.isDarwin "format";
 
   configureFlags = [
     "--with-readline=${readline.dev}"

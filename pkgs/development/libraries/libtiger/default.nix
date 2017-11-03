@@ -8,11 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "0rj1bmr9kngrgbxrjbn4f4f9pww0wmf6viflinq7ava7zdav4hkk";
   };
 
-  buildInputs = [ libkate pango cairo pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libkate pango cairo ];
 
   meta = {
     homepage = http://code.google.com/p/libtiger/;
-    authors = [ "Vincent Penquerc'h" ];
     description = "A rendering library for Kate streams using Pango and Cairo";
     platforms = stdenv.lib.platforms.unix;
   };

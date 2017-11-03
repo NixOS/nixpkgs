@@ -14,7 +14,8 @@ stdenv.mkDerivation {
 
   postUnpack = ''sourceRoot="$sourceRoot/unix"'';
 
-  buildInputs = [ python tcl tk vorbis-tools pkgconfig xlibsWrapper ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ python tcl tk vorbis-tools xlibsWrapper ];
 
   hardeningDisable = [ "format" ];
 

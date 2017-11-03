@@ -36,7 +36,7 @@ in nodePackages.buildNodePackage rec {
   meta = {
     description = "A web server/client for Quassel";
     license = licenses.mit;
-    homepage = "https://github.com/magne4000/quassel-webserver";
+    homepage = https://github.com/magne4000/quassel-webserver;
     maintainers = with maintainers; [ uwap ];
     platforms = platforms.unix;
   }; 

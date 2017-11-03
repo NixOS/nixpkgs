@@ -53,7 +53,6 @@ let
     meta = {
       description = "a well known password manager";
       homepage = https://www.enpass.io/;
-      maintainer = lib.maintainers.ronny;
       license = lib.licenses.unfree;
       platforms = lib.platforms.linux;
     };

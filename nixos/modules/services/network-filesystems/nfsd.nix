@@ -27,6 +27,14 @@ in
           '';
         };
 
+        extraNfsdConfig = mkOption {
+          type = types.str;
+          default = "";
+          description = ''
+            Extra configuration options for the [nfsd] section of /etc/nfs.conf.
+          '';
+        };
+
         exports = mkOption {
           type = types.lines;
           default = "";
@@ -107,6 +115,7 @@ in
       [nfsd]
       threads=${toString cfg.nproc}
       ${optionalString (cfg.hostName != null) "host=${cfg.hostName}"}
+      ${cfg.extraNfsdConfig}
 
       [mountd]
       ${optionalString (cfg.mountdPort != null) "port=${toString cfg.mountdPort}"}

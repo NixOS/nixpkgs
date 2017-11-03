@@ -1,4 +1,7 @@
-{ fetchurl, stdenv }:
+{ stdenv, fetchurl
+, buildPlatform, hostPlatform
+, enableSigbusFix ? false # required by kernels < 3.18.6
+}:
 
 stdenv.mkDerivation rec {
   name = "libsigsegv-2.11";
@@ -8,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "063swdvq7mbmc1clv0rnh20grwln1zfc2qnm0sa1hivcxyr2wz6x";
   };
 
-  doCheck = true;
+  patches = if enableSigbusFix then [ ./sigbus_fix.patch ] else null;
+
+  doCheck = hostPlatform == buildPlatform;
 
   meta = {
     homepage = http://www.gnu.org/software/libsigsegv/;

@@ -1,0 +1,11 @@
+--- qtbase-opensource-src-5.9.1.orig/mkspecs/common/mac.conf	2017-09-16 16:40:30.000000000 +0800
++++ qtbase-opensource-src-5.9.1/mkspecs/common/mac.conf	2017-09-16 16:41:27.000000000 +0800
+@@ -23,7 +23,7 @@
+ 
+ QMAKE_FIX_RPATH         = install_name_tool -id
+ 
+-QMAKE_LFLAGS_RPATH      = -Wl,-rpath,
++QMAKE_LFLAGS_RPATH      =
+ QMAKE_LFLAGS_GCSECTIONS = -Wl,-dead_strip
+ 
+ QMAKE_LFLAGS_REL_RPATH  =

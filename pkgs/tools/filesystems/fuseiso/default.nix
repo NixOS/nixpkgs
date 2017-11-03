@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "127xql52dcdhmh7s5m9xc6q39jdlj3zhbjar1j821kb6gl3jw94b";
   };
 
-  buildInputs = [ pkgconfig fuse zlib glib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ fuse zlib glib ];
 
   patches = let fetchPatchFromDebian = { patch, sha256 }:
     fetchpatch {

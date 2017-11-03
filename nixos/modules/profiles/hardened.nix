@@ -6,9 +6,31 @@
 with lib;
 
 {
+  boot.kernelPackages = mkDefault pkgs.linuxPackages_hardened;
+
   security.hideProcessInformation = mkDefault true;
 
+  security.lockKernelModules = mkDefault true;
+
   security.apparmor.enable = mkDefault true;
+
+  boot.kernelParams = [
+    # Overwrite free'd memory
+    "page_poison=1"
+
+    # Disable legacy virtual syscalls
+    "vsyscall=none"
+
+    # Disable hibernation (allows replacing the running kernel)
+    "nohibernate"
+  ];
+
+  boot.blacklistedKernelModules = [
+    # Obscure network protocols
+    "ax25"
+    "netrom"
+    "rose"
+  ];
 
   # Restrict ptrace() usage to processes with a pre-defined relationship
   # (e.g., parent/child)
@@ -32,4 +54,32 @@ with lib;
 
   # ... or at least apply some hardening to it
   boot.kernel.sysctl."net.core.bpf_jit_harden" = mkDefault true;
+
+  # A recurring problem with user namespaces is that there are
+  # still code paths where the kernel's permission checking logic
+  # fails to account for namespacing, instead permitting a
+  # namespaced process to act outside the namespace with the
+  # same privileges as it would have inside it.  This is particularly
+  # bad in the common case of running as root within the namespace.
+  #
+  # Setting the number of allowed user namespaces to 0 effectively disables
+  # the feature at runtime.  Attempting to create a user namespace
+  # with unshare will then fail with "no space left on device".
+  boot.kernel.sysctl."user.max_user_namespaces" = mkDefault 0;
+
+  # Raise ASLR entropy for 64bit & 32bit, respectively.
+  #
+  # Note: mmap_rnd_compat_bits may not exist on 64bit.
+  boot.kernel.sysctl."vm.mmap_rnd_bits" = mkDefault 32;
+  boot.kernel.sysctl."vm.mmap_rnd_compat_bits" = mkDefault 16;
+
+  # Allowing users to mmap() memory starting at virtual address 0 can turn a
+  # NULL dereference bug in the kernel into code execution with elevated
+  # privilege.  Mitigate by enforcing a minimum base addr beyond the NULL memory
+  # space.  This breaks applications that require mapping the 0 page, such as
+  # dosemu or running 16bit applications under wine.  It also breaks older
+  # versions of qemu.
+  #
+  # The value is taken from the KSPP recommendations (Debian uses 4096).
+  boot.kernel.sysctl."vm.mmap_min_addr" = mkDefault 65536;
 }

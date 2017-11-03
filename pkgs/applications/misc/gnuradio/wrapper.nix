@@ -11,10 +11,10 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     ln -s "${gnuradio}"/bin/* $out/bin/
 
-    for file in "$out"/bin/*; do
+    for file in $(find $out/bin -type f -executable); do
         wrapProgram "$file" \
             --prefix PYTHONPATH : ${stdenv.lib.concatStringsSep ":"
-                                      (map (path: "$(toPythonPath ${path})") extraPackages)} \
+                                     (map (path: "$(toPythonPath ${path})") extraPackages)} \
             --prefix GRC_BLOCKS_PATH : ${makeSearchPath "share/gnuradio/grc/blocks" extraPackages}
     done
 

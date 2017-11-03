@@ -20,11 +20,11 @@ let
 
   knownHosts = map (h: getAttr h cfg.knownHosts) (attrNames cfg.knownHosts);
 
-  knownHostsText = flip (concatMapStringsSep "\n") knownHosts
+  knownHostsText = (flip (concatMapStringsSep "\n") knownHosts
     (h: assert h.hostNames != [];
       concatStringsSep "," h.hostNames + " "
       + (if h.publicKey != null then h.publicKey else readFile h.publicKeyFile)
-    );
+    )) + "\n";
 
 in
 {
@@ -74,7 +74,7 @@ in
 
       startAgent = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = ''
           Whether to start the OpenSSH agent when you log in.  The OpenSSH agent
           remembers private keys for you so that you don't have to type in
@@ -148,11 +148,11 @@ in
           [
             {
               hostNames = [ "myhost" "myhost.mydomain.com" "10.10.1.4" ];
-              publicKeyFile = "./pubkeys/myhost_ssh_host_dsa_key.pub";
+              publicKeyFile = ./pubkeys/myhost_ssh_host_dsa_key.pub;
             }
             {
               hostNames = [ "myhost2" ];
-              publicKeyFile = "./pubkeys/myhost2_ssh_host_dsa_key.pub";
+              publicKeyFile = ./pubkeys/myhost2_ssh_host_dsa_key.pub;
             }
           ]
         '';
@@ -199,9 +199,8 @@ in
     environment.etc."ssh/ssh_known_hosts".text = knownHostsText;
 
     # FIXME: this should really be socket-activated for über-awesomeness.
-    systemd.user.services.ssh-agent =
-      { enable = cfg.startAgent;
-        description = "SSH Agent";
+    systemd.user.services.ssh-agent = mkIf cfg.startAgent
+      { description = "SSH Agent";
         wantedBy = [ "default.target" ];
         serviceConfig =
           { ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/ssh-agent";

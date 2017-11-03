@@ -15,13 +15,13 @@ stdenv.mkDerivation rec {
   preConfigure = "./autogen.sh";
 
   meta = {
-    homepage = "http://gravit.slowchop.com";
+    homepage = http://gravit.slowchop.com;
     description = "Beautiful OpenGL-based gravity simulator";
     license = stdenv.lib.licenses.gpl2;
 
     longDescription = ''
       Gravit is a gravity simulator which runs under Linux, Windows and
-      Mac OS X. It uses Newtonian physics using the Barnes-Hut N-body
+      macOS. It uses Newtonian physics using the Barnes-Hut N-body
       algorithm. Although the main goal of Gravit is to be as accurate
       as possible, it also creates beautiful looking gravity patterns.
       It records the history of each particle so it can animate and

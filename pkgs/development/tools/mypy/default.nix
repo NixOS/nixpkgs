@@ -1,22 +1,24 @@
-{ stdenv, fetchurl, python35Packages }:
-python35Packages.buildPythonApplication rec {
-  name = "mypy-${version}";
-  version = "0.501";
+{ stdenv, fetchPypi, buildPythonApplication, lxml, typed-ast }:
+
+buildPythonApplication rec {
+  name = "${pname}-${version}";
+  pname = "mypy";
+  version = "0.540";
 
   # Tests not included in pip package.
   doCheck = false;
 
-  src = fetchurl {
-    url = "mirror://pypi/m/mypy/${name}.tar.gz";
-    sha256 = "164g3dq2vzxa53n9lgvmbapg41qiwcxk1w9mvzmnqksvql5vm60h";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "5d82f51e228a88e5de6ac1d6699dd09e250ce7de217a5ff1256e317266e738ec";
   };
 
-  propagatedBuildInputs = with python35Packages; [ lxml typed-ast ];
+  propagatedBuildInputs = [ lxml typed-ast ];
 
   meta = with stdenv.lib; {
     description = "Optional static typing for Python";
     homepage    = "http://www.mypy-lang.org";
     license     = licenses.mit;
-    maintainers = with maintainers; [ martingms ];
+    maintainers = with maintainers; [ martingms lnl7 ];
   };
 }

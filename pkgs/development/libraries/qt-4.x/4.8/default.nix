@@ -1,4 +1,5 @@
 { stdenv, fetchurl, fetchpatch, substituteAll
+, hostPlatform
 , libXrender, libXinerama, libXcursor, libXmu, libXv, libXext
 , libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
 , libmng, which, mesaSupported, mesa, mesa_glu, openssl, dbus, cups, pkgconfig
@@ -6,7 +7,8 @@
 , buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst-plugins-base
 , buildWebkit ? (stdenv.isLinux || stdenv.isDarwin)
 , flashplayerFix ? false, gdk_pixbuf
-, gtkStyle ? false, libgnomeui, gtk2, GConf, gnome_vfs
+, gtkStyle ? true, gtk2
+, gnomeStyle ? false, libgnomeui, GConf, gnome_vfs
 , developerBuild ? false
 , docs ? false
 , examples ? false
@@ -73,18 +75,23 @@ stdenv.mkDerivation rec {
         glibc = stdenv.cc.libc.out;
         openglDriver = if mesaSupported then mesa.driverLink else "/no-such-path";
       })
-    ] ++ stdenv.lib.optional gtkStyle (substituteAll {
+    ] ++ stdenv.lib.optional gtkStyle (substituteAll ({
         src = ./dlopen-gtkstyle.diff;
         # substituteAll ignores env vars starting with capital letter
-        gconf = GConf.out;
         gtk = gtk2.out;
+      } // stdenv.lib.optionalAttrs gnomeStyle {
+        gconf = GConf.out;
         libgnomeui = libgnomeui.out;
         gnome_vfs = gnome_vfs.out;
-      })
+      }))
     ++ stdenv.lib.optional flashplayerFix (substituteAll {
         src = ./dlopen-webkit-nsplugin.diff;
         gtk = gtk2.out;
         gdk_pixbuf = gdk_pixbuf.out;
+      })
+    ++ stdenv.lib.optional stdenv.isAarch64 (fetchpatch {
+        url = "https://src.fedoraproject.org/rpms/qt/raw/ecf530486e0fb7fe31bad26805cde61115562b2b/f/qt-aarch64.patch";
+        sha256 = "1fbjh78nmafqmj7yk67qwjbhl3f6ylkp6x33b1dqxfw9gld8b3gl";
       })
     ++ [
       (fetchpatch {
@@ -111,6 +118,7 @@ stdenv.mkDerivation rec {
       -datadir $out/share/${name}
       -translationdir $out/share/${name}/translations
     "
+    unset LD # Makefile uses gcc for linking; setting LD interferes
   '' + optionalString stdenv.cc.isClang ''
     sed -i 's/QMAKE_CC = gcc/QMAKE_CC = clang/' mkspecs/common/g++-base.conf
     sed -i 's/QMAKE_CXX = g++/QMAKE_CXX = clang++/' mkspecs/common/g++-base.conf
@@ -175,14 +183,40 @@ stdenv.mkDerivation rec {
     sed -i 's/^\(LIBS[[:space:]]*=.*$\)/\1 -lobjc/' ./src/corelib/Makefile.Release
   '';
 
-  postInstall =
-    ''
-      rm -rf $out/tests
-    '';
+  installPhase = optionalString stdenv.isDarwin ''
+    runHook preInstall
+    cp -r lib $out
 
-  crossAttrs = let
-    isMingw = stdenv.cross.libc == "msvcrt";
-  in {
+    mkdir -p $out/Applications
+    mv bin/*.app $out/Applications
+    rm -rf bin/*.app
+
+    cp -r bin $out
+
+    mkdir -p $out/share/doc/${name}
+    mkdir -p $out/lib
+    mkdir -p $out/lib/qt4/plugins
+    mkdir -p $out/lib/qt4/imports
+    mkdir -p $out/bin
+    mkdir -p $out/include
+    mkdir -p $out/share/${name}
+
+    cp -r mkspecs $out/share/${name}
+    cp -r translations $out/share/${name}
+    cp -r tools/linguist/phrasebooks $out/share/${name}
+    cp tools/porting/src/q3porting.xml $out/share/${name}
+
+    cp -r plugins $out/lib/qt4
+    cp -r imports $out/lib/qt4
+    cp -r doc/* $out/share/doc/${name}
+    runHook postInstall
+  '';
+
+  postInstall = optionalString (!stdenv.isDarwin) ''
+      rm -rf $out/tests
+  '';
+
+  crossAttrs = {
     # I've not tried any case other than i686-pc-mingw32.
     # -nomake tools:   it fails linking some asian language symbols
     # -no-svg: it fails to build on mingw64
@@ -192,14 +226,14 @@ stdenv.mkDerivation rec {
       -no-svg
       -make qmake -make libs -nomake tools
       -nomake demos -nomake examples -nomake docs
-    '' + optionalString isMingw " -xplatform win32-g++-4.6";
+    '' + optionalString hostPlatform.isMinGW " -xplatform win32-g++-4.6";
     patches = [];
     preConfigure = ''
-      sed -i -e 's/ g++/ ${stdenv.cross.config}-g++/' \
-        -e 's/ gcc/ ${stdenv.cross.config}-gcc/' \
-        -e 's/ ar/ ${stdenv.cross.config}-ar/' \
-        -e 's/ strip/ ${stdenv.cross.config}-strip/' \
-        -e 's/ windres/ ${stdenv.cross.config}-windres/' \
+      sed -i -e 's/ g++/ ${stdenv.cc.prefix}g++/' \
+        -e 's/ gcc/ ${stdenv.cc.prefix}gcc/' \
+        -e 's/ ar/ ${stdenv.cc.prefix}ar/' \
+        -e 's/ strip/ ${stdenv.cc.prefix}strip/' \
+        -e 's/ windres/ ${stdenv.cc.prefix}windres/' \
         mkspecs/win32-g++/qmake.conf
     '';
 
@@ -207,9 +241,9 @@ stdenv.mkDerivation rec {
     postInstall = ''
       cp bin/qmake* $out/bin
     '';
-    dontSetConfigureCross = true;
+    configurePlatforms = [];
     dontStrip = true;
-  } // optionalAttrs isMingw {
+  } // optionalAttrs hostPlatform.isMinGW {
     propagatedBuildInputs = [ ];
   };
 

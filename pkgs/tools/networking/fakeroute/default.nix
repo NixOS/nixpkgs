@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://moxie.org/software/fakeroute/;
     license = licenses.bsd3;
-    platform = platforms.linux;
+    platforms = platforms.linux;
   };
 }

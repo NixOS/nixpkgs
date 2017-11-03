@@ -1,14 +1,16 @@
 {
-  kdeFramework, lib,
+  mkDerivation, lib,
   extra-cmake-modules,
-  ilmbase, karchive, qtbase
+  ilmbase, karchive, openexr, qtbase
 }:
 
-kdeFramework {
+let inherit (lib) getDev; in
+
+mkDerivation {
   name = "kimageformats";
   meta = { maintainers = [ lib.maintainers.ttuegel ]; };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ ilmbase qtbase ];
-  propagatedBuildInputs = [ karchive ];
-  NIX_CFLAGS_COMPILE = "-I${ilmbase.dev}/include/OpenEXR";
+  buildInputs = [ karchive openexr qtbase ];
+  outputs = [ "out" ]; # plugins only
+  NIX_CFLAGS_COMPILE = "-I${getDev ilmbase}/include/OpenEXR";
 }

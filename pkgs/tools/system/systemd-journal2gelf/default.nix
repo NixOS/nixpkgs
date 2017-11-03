@@ -2,15 +2,15 @@
 
 buildGoPackage rec {
   name = "SystemdJournal2Gelf-${version}";
-  version = "20160414";
+  version = "20170413";
 
   goPackagePath = "github.com/parse-nl/SystemdJournal2Gelf";
 
   src = fetchFromGitHub {
-    rev = "aba2f24e59f190ab8830bf40f92f890e62a9ec9f";
+    rev = "862b1d60d2ba12cd8480304ca95041066cc8bdd0";
     owner = "parse-nl";
     repo = "SystemdJournal2Gelf";
-    sha256 = "012fmnb44681dgz21n1dlb6vh923bpk5lkqir1q40kfz6pacq64n";
+    sha256 = "0xvvc7w2sxkhb33nkq5v626l673d5j2z0yc75wvmqzncwfkkv94v";
   };
 
   goDeps = ./deps.nix;

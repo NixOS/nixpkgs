@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, ncurses }:
+{ stdenv, fetchFromGitHub, autoreconfHook, ncurses, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "pick-${version}";
-  version = "1.4.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
-    owner = "thoughtbot";
+    owner = "calleerlandsson";
     repo = "pick";
     rev = "v${version}";
-    sha256 = "113if0jh7svwrwrxhrsbi7h1whfr5707v2ny4dc9kk2sjbv6b9pg";
+    sha256 = "0s0mn9iz17ldhvahggh9rsmgfrjh0kvk5bh4p9xhxcn7rcp0h5ka";
   };
 
   buildInputs = [ ncurses ];
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

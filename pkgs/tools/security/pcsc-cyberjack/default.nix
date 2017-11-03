@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "REINER SCT cyberJack USB chipcard reader user space driver";
-    homepage = "http://www.reiner-sct.com/";
+    homepage = http://www.reiner-sct.com/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ aszlig ];

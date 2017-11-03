@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, makeWrapper, libsoup, webkitgtk2, gtk2, gnutls
+{ stdenv, fetchgit, pkgconfig, makeWrapper, libsoup, webkitgtk24x-gtk2, gtk2, gnutls
 , json_c, m4, glib_networking, gsettings_desktop_schemas, dconf }:
 
 stdenv.mkDerivation {
@@ -10,15 +10,16 @@ stdenv.mkDerivation {
     sha256 = "1wg7pslcx7z4fw595a3nbnygxy2bwfj0h377i48mxhddvl3wzzbq";
   };
 
-  buildInputs = [ pkgconfig makeWrapper gsettings_desktop_schemas libsoup
-    webkitgtk2 gtk2 gnutls json_c m4 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ makeWrapper gsettings_desktop_schemas libsoup
+    webkitgtk24x-gtk2 gtk2 gnutls json_c m4 ];
 
   # There are Xlib and gtk warnings therefore I have set Wno-error
   makeFlags = ''PREFIX=$(out) GTK=2 CPPFLAGS="-Wno-error"'';
 
   preFixup=''
     wrapProgram "$out/bin/dwb" \
-     --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules:${dconf}/lib/gio/modules" \
+     --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules:${stdenv.lib.getLib dconf}/lib/gio/modules" \
      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
     wrapProgram "$out/bin/dwbem" \
      --prefix GIO_EXTRA_MODULES : "${glib_networking.out}/lib/gio/modules"

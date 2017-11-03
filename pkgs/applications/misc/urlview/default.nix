@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, automake111x, autoreconfHook }:
+{ stdenv, fetchurl, ncurses, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   version    = "0.9";
@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "746ff540ccf601645f500ee7743f443caf987d6380e61e5249fc15f7a455ed42";
   };
 
-  buildInputs = [ ncurses automake111x autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ ncurses ];
 
   preAutoreconf = ''
     touch NEWS

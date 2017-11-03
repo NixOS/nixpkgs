@@ -16,8 +16,8 @@ let
   gssapiSrc = fetchpatch {
     name = "openssh-gssapi.patch";
     url = "https://anonscm.debian.org/cgit/pkg-ssh/openssh.git/plain/debian"
-        + "/patches/gssapi.patch?id=a18d56bd84f04292ec9178b4b17ef6d56a0c7aef";
-    sha256 = "1sb929lfc3s45km2vpylmlbb6mpqcbr74xl6gx2s4cgnsrfd9kp3";
+        + "/patches/gssapi.patch?id=db2122d97eb1ecdd8d99b7bf79b0dd2b5addfd92";
+    sha256 = "1rw10pmvjw55521ys59x1kabvbvmla506znakwwjijggdsakvsjm";
   };
 
 in
@@ -49,9 +49,23 @@ stdenv.mkDerivation rec {
     ]
     ++ optional withGssapiPatches gssapiSrc;
 
-  buildInputs = [ zlib openssl libedit pkgconfig pam ]
+  postPatch =
+    # On Hydra this makes installation fail (sometimes?),
+    # and nix store doesn't allow such fancy permission bits anyway.
+    ''
+      substituteInPlace Makefile.in --replace '$(INSTALL) -m 4711' '$(INSTALL) -m 0711'
+    '';
+
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ zlib openssl libedit pam ]
     ++ optional withKerberos kerberos
     ++ optional hpnSupport autoreconfHook;
+
+  preConfigure = ''
+    # Setting LD causes `configure' and `make' to disagree about which linker
+    # to use: `configure' wants `gcc', but `make' wants `ld'.
+    unset LD
+  '';
 
   # I set --disable-strip because later we strip anyway. And it fails to strip
   # properly when cross building.
@@ -85,7 +99,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = "http://www.openssh.com/";
+    homepage = http://www.openssh.com/;
     description = "An implementation of the SSH protocol";
     license = stdenv.lib.licenses.bsd2;
     platforms = platforms.unix;

@@ -50,5 +50,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.phreedom maintainers.qknight maintainers.domenkozar ];
     platforms = platforms.linux;
+    broken = true;
   };
 }

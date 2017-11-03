@@ -11,7 +11,7 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "1gl1z7zg3s1xgx45i6b1bvx9iwviiiinl4my00h66qkhrw7ag8p1";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ futures requests2 six tqdm4 ];
+  propagatedBuildInputs = with pythonPackages; [ futures requests six tqdm ];
 
   checkPhase = ''
     python test_b2_command_line.py test

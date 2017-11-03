@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, uutf, sedlex, ppx_tools, js_of_ocaml
-, re }:
+, js_of_ocaml-camlp4, camlp4, re }:
 
 if stdenv.lib.versionOlder ocaml.version "4.03"
 then throw "xtmpl not supported for ocaml ${ocaml.version}"
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "1dj5b4b266y4d8q3v1g0xsivz4vkhj0gi0jis37w84xcnlgiik8k";
   };
 
-  buildInputs = [ ocaml findlib ppx_tools js_of_ocaml ];
+  buildInputs = [ ocaml findlib ppx_tools js_of_ocaml js_of_ocaml-camlp4 camlp4 ];
   propagatedBuildInputs = [ sedlex uutf re ];
 
   createFindlibDestdir = true;
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Xml template library for OCaml";
-    homepage = "https://zoggy.github.io/xtmpl/";
+    homepage = https://zoggy.github.io/xtmpl/;
     license = licenses.lgpl3;
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [ regnat ];

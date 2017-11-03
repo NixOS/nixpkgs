@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper
-, qtbase, makeQtWrapper, qtquickcontrols, qtscript, qtdeclarative, qmakeHook
+, qtbase, qtquickcontrols, qtscript, qtdeclarative, qmake
 , withDocumentation ? false
 }:
 
 with stdenv.lib;
 
 let
-  baseVersion = "4.2";
+  baseVersion = "4.4";
   revision = "1";
 in
 
@@ -15,13 +15,13 @@ stdenv.mkDerivation rec {
   version = "${baseVersion}.${revision}";
 
   src = fetchurl {
-    url = "http://download.qt-project.org/official_releases/qtcreator/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.gz";
-    sha256 = "0f2slaf579q2anflf524lbhmpwrwy3hzjfxzs10n44r7s7yc4dr5";
+    url = "http://download.qt-project.org/official_releases/qtcreator/${baseVersion}/${version}/qt-creator-opensource-src-${version}.tar.xz";
+    sha256 = "0kn1k2zvc93xin4kdp2fpiz21i5j0qymyx6jjzkqp7r3x8yxwr06";
   };
 
   buildInputs = [ qtbase qtscript qtquickcontrols qtdeclarative ];
 
-  nativeBuildInputs = [ qmakeHook makeQtWrapper makeWrapper ];
+  nativeBuildInputs = [ qmake makeWrapper ];
 
   doCheck = true;
 
@@ -32,23 +32,12 @@ stdenv.mkDerivation rec {
   installFlags = [ "INSTALL_ROOT=$(out)" ] ++ optional withDocumentation "install_docs";
 
   preBuild = optional withDocumentation ''
-    ln -s ${qtbase}/share/doc $NIX_QT5_TMP/share
+    ln -s ${getLib qtbase}/$qtDocPrefix $NIX_QT5_TMP/share
   '';
 
   postInstall = ''
-    # Install desktop file
-    mkdir -p "$out/share/applications"
-    cat > "$out/share/applications/qtcreator.desktop" << __EOF__
-    [Desktop Entry]
-    Exec=$out/bin/qtcreator
-    Name=Qt Creator
-    GenericName=Cross-platform IDE for Qt
-    Icon=QtProject-qtcreator.png
-    Terminal=false
-    Type=Application
-    Categories=Qt;Development;IDE;
-    __EOF__
-    wrapQtProgram $out/bin/qtcreator
+    substituteInPlace $out/share/applications/org.qt-project.qtcreator.desktop \
+      --replace "Exec=qtcreator" "Exec=$out/bin/qtcreator"
   '';
 
   meta = {
@@ -58,7 +47,7 @@ stdenv.mkDerivation rec {
       tailored to the needs of Qt developers. It includes features such as an
       advanced code editor, a visual debugger and a GUI designer.
     '';
-    homepage = "https://wiki.qt.io/Category:Tools::QtCreator";
+    homepage = https://wiki.qt.io/Category:Tools::QtCreator;
     license = "LGPL";
     maintainers = [ maintainers.akaWolf ];
     platforms = platforms.all;

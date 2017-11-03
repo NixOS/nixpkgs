@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Ren'Py Visual Novel Engine";
-    homepage = "http://renpy.org/";
+    homepage = http://renpy.org/;
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;
     # This is an ancient version, last updated in 2014 (3d59f42ce); it fails to
@@ -23,8 +23,9 @@ stdenv.mkDerivation {
     sha256 = "035342rr39zp7krp08z0xhcl73gqbqyilshgmljq0ynfrxxckn35";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    python cython pkgconfig wrapPython
+    python cython wrapPython
     SDL2 libpng ffmpeg freetype glew mesa fribidi zlib pygame_sdl2 glib
   ];
 

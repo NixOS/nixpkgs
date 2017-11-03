@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1dsbyz489fx7dp07i29q1rjkl7nhrfscc8ks8an2rdyhx3457asg";
   };
 
-  buildInputs = [ girara pkgconfig gtk webkitgtk makeWrapper gsettings_desktop_schemas ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ girara gtk webkitgtk makeWrapper gsettings_desktop_schemas ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
@@ -23,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Minimal web browser";
-    homepage = http://pwmt.org/projects/jumanji/;
+    homepage = https://pwmt.org/projects/jumanji/;
     platforms = platforms.all;
     maintainers = [ maintainers.koral ];
   };

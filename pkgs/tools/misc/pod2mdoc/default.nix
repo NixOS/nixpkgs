@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://mdocml.bsd.lv/";
+    homepage = http://mdocml.bsd.lv/;
     description = "converter from POD into mdoc";
     license = licenses.isc;
     platforms = platforms.all;

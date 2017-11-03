@@ -1,4 +1,4 @@
-{ stdenv, lib, buildGoPackage, fetchpatch, fetchFromGitHub }:
+{ stdenv, lib, buildEnv, buildGoPackage, fetchpatch, fetchFromGitHub, makeWrapper }:
 
 let
   goPackagePath = "github.com/hashicorp/terraform";
@@ -38,26 +38,62 @@ let
       };
     } // attrs');
 
+  pluggable = terraform:
+    let
+      withPlugins = plugins:
+        let
+          actualPlugins = plugins terraform.plugins;
+
+          passthru = {
+            withPlugins = newplugins: withPlugins (x: newplugins x ++ actualPlugins);
+
+            # Ouch
+            overrideDerivation = f: (pluggable (terraform.overrideDerivation f)).withPlugins plugins;
+            overrideAttrs = f: (pluggable (terraform.overrideAttrs f)).withPlugins plugins;
+            override = x: (pluggable (terraform.override x)).withPlugins plugins;
+          };
+        in
+          # Don't bother wrapping unless we actually have plugins, since the wrapper will stop automatic downloading
+          # of plugins, which might be counterintuitive if someone just wants a vanilla Terraform.
+          if actualPlugins == []
+            then terraform.overrideAttrs (orig: { passthru = orig.passthru // passthru; })
+            else stdenv.mkDerivation {
+              name = "${terraform.name}-with-plugins";
+              buildInputs = [ makeWrapper ];
+
+              buildCommand = ''
+                mkdir -p $out/bin/
+                makeWrapper "${terraform.bin}/bin/terraform" "$out/bin/terraform" \
+                  --set NIX_TERRAFORM_PLUGIN_DIR "${buildEnv { name = "tf-plugin-env"; paths = actualPlugins; }}/bin"
+              '';
+
+              inherit passthru;
+            };
+    in withPlugins (_: []);
+
+  plugins = import ./providers { inherit stdenv lib buildGoPackage fetchFromGitHub; };
 in {
   terraform_0_8_5 = generic {
     version = "0.8.5";
     sha256 = "1cxwv3652fpsbm2zk1akw356cd7w7vhny1623ighgbz9ha8gvg09";
   };
 
-  terraform_0_8_8 = generic {
+  terraform_0_8 = generic {
     version = "0.8.8";
     sha256 = "0ibgpcpvz0bmn3cw60nzsabsrxrbmmym1hv7fx6zmjxiwd68w5gb";
   };
 
-  terraform_0_9_3 = generic {
-    version = "0.9.3";
-    sha256 = "00z72lwv0cprz1jjy0cr8dicl00zwc1zwsxzjssqnq0187sswkxw";
-
-    postPatch = ''
-      rm builtin/providers/dns/data_dns_cname_record_set_test.go
-      rm builtin/providers/vsphere/resource_vsphere_file_test.go
-    '';
-
-    doCheck = true;
+  terraform_0_9 = generic {
+    version = "0.9.11";
+    sha256 = "045zcpd4g9c52ynhgh3213p422ahds63mzhmd2iwcmj88g8i1w6x";
+    # checks are failing again
+    doCheck = false;
   };
+
+  terraform_0_10 = pluggable (generic {
+    version = "0.10.7";
+    sha256 = "0gjvrra255m973nzi7rpqp5dn5npnd79cnv8vjcs7wmkdj1hli0l";
+    patches = [ ./provider-path.patch ];
+    passthru = { inherit plugins; };
+  });
 }

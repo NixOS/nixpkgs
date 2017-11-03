@@ -1,41 +1,43 @@
-{ stdenv, fetchFromGitHub, makeWrapper, cmake, llvmPackages, kernel,
-  flex, bison, elfutils, python, pythonPackages, luajit, netperf, iperf }:
+{ stdenv, fetchFromGitHub, makeWrapper, cmake, llvmPackages_5, kernel
+, flex, bison, elfutils, python, pythonPackages, luajit, netperf, iperf }:
 
 stdenv.mkDerivation rec {
-  version = "0.2.0";
+  version = "0.4.0";
   name = "bcc-${version}";
 
   src = fetchFromGitHub {
     owner = "iovisor";
     repo = "bcc";
     rev = "v${version}";
-    sha256 = "1xifh8lcqmn4mk6w4srjf4zk6mlwgck4fpcyhhliy39963ch5k08";
+    sha256 = "106ri3yhjhp3dgsjb05y4j6va153d5nqln3zjdz6qfz87svak0rw";
   };
 
-  buildInputs = [ makeWrapper cmake llvmPackages.llvm llvmPackages.clang-unwrapped kernel
-    flex bison elfutils python pythonPackages.netaddr luajit netperf iperf
+  buildInputs = [
+    llvmPackages_5.llvm llvmPackages_5.clang-unwrapped kernel
+    elfutils python pythonPackages.netaddr luajit netperf iperf
   ];
 
-  cmakeFlags="-DBCC_KERNEL_MODULES_DIR=${kernel.dev}/lib/modules -DBCC_KERNEL_HAS_SOURCE_DIR=1";
+  nativeBuildInputs = [ makeWrapper cmake flex bison ];
 
   postInstall = ''
     mkdir -p $out/bin $out/share
-    rm -r $out/share/bcc/tools/{old,doc/CMakeLists.txt}
+    rm -r $out/share/bcc/tools/old
     mv $out/share/bcc/tools/doc $out/share
     mv $out/share/bcc/man $out/share/
 
-    for f in $out/share/bcc/tools\/*; do
-      ln -s $f $out/bin/$(basename $f)
-      wrapProgram $f \
+    find $out/share/bcc/tools -type f -executable -print0 | \
+    while IFS= read -r -d ''$'\0' f; do
+      pythonLibs="$out/lib/python2.7/site-packages:${pythonPackages.netaddr}/lib/${python.libPrefix}/site-packages"
+      rm -f $out/bin/$(basename $f)
+      makeWrapper $f $out/bin/$(basename $f) \
         --prefix LD_LIBRARY_PATH : $out/lib \
-        --prefix PYTHONPATH : $out/lib/python2.7/site-packages \
-        --prefix PYTHONPATH : :${pythonPackages.netaddr}/lib/${python.libPrefix}/site-packages
+        --prefix PYTHONPATH : "$pythonLibs"
     done
   '';
 
   meta = with stdenv.lib; {
     description = "Dynamic Tracing Tools for Linux";
-    homepage = "https://iovisor.github.io/bcc/";
+    homepage = https://iovisor.github.io/bcc/;
     license = licenses.asl20;
     maintainers = with maintainers; [ ragge ];
   };

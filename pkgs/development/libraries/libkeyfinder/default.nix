@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fftw, qtbase, qmakeHook }:
+{ stdenv, fetchFromGitHub, fftw, qtbase, qmake }:
 
 stdenv.mkDerivation rec {
   name = "libkeyfinder-${version}";
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     owner = "ibsh";
   };
 
-  buildInputs = [ fftw qtbase qmakeHook ];
+  nativeBuildInputs = [ qmake ];
+  buildInputs = [ fftw qtbase ];
 
   postPatch = ''
     substituteInPlace LibKeyFinder.pro \

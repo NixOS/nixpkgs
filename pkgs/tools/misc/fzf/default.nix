@@ -1,8 +1,8 @@
-{ stdenv, lib, ncurses, buildGoPackage, fetchFromGitHub }:
+{ stdenv, lib, ncurses, buildGoPackage, fetchFromGitHub, writeText }:
 
 buildGoPackage rec {
   name = "fzf-${version}";
-  version = "0.16.6";
+  version = "0.17.0-2";
   rev = "${version}";
 
   goPackagePath = "github.com/junegunn/fzf";
@@ -11,10 +11,12 @@ buildGoPackage rec {
     inherit rev;
     owner = "junegunn";
     repo = "fzf";
-    sha256 = "0nzjbm40c4w9d0d34s5qnr9jkrh1vkn508xl2lfwfvmnzsnb9xbn";
+    sha256 = "0j4m3xf6qxfymfq6y5ml5rgz2rr1glh54k3b5xa9zi4cl5wg43qv";
   };
 
   outputs = [ "bin" "out" "man" ];
+
+  fishHook = writeText "load-fzf-keybindings.fish" "fzf_key_bindings";
 
   buildInputs = [ ncurses ];
 
@@ -25,12 +27,27 @@ buildGoPackage rec {
     sed -i -e "s|expand('<sfile>:h:h').'/bin/fzf-tmux'|'$bin/bin/fzf-tmux'|" plugin/fzf.vim
   '';
 
+  preInstall = ''
+    mkdir -p $bin/share/fish/vendor_functions.d $bin/share/fish/vendor_conf.d
+    cp $src/shell/key-bindings.fish $bin/share/fish/vendor_functions.d/fzf_key_bindings.fish
+    cp ${fishHook} $bin/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
+  '';
+
   postInstall = ''
     cp $src/bin/fzf-tmux $bin/bin
     mkdir -p $man/share/man
     cp -r $src/man/man1 $man/share/man
     mkdir -p $out/share/vim-plugins
     ln -s $out/share/go/src/github.com/junegunn/fzf $out/share/vim-plugins/${name}
+
+    cp -R $src/shell $bin/share/fzf
+    cat <<SCRIPT > $bin/bin/fzf-share
+    #!/bin/sh
+    # Run this script to find the fzf shared folder where all the shell
+    # integration scripts are living.
+    echo $bin/share/fzf
+    SCRIPT
+    chmod +x $bin/bin/fzf-share
   '';
 
   meta = with stdenv.lib; {

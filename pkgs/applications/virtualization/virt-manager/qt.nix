@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
-, qtbase, qtmultimedia, qtsvg, makeQtWrapper
-, lxqt, libvncserver, libvirt, pixman, spice_gtk, spice_protocol
+{ mkDerivation, lib, fetchFromGitHub, cmake, pkgconfig
+, qtbase, qtmultimedia, qtsvg
+, lxqt, libvncserver, libvirt, pcre, pixman, spice_gtk, spice_protocol
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   name = "virt-manager-qt-${version}";
-  version = "0.42.67";
+  version = "0.45.75";
 
   src = fetchFromGitHub {
     owner  = "F1ash";
     repo   = "qt-virt-manager";
     rev    = "${version}";
-    sha256 = "0hskaffc84wf8h9qck5xg840jw8x2krfy6cw4hqnq946z9lbyanr";
+    sha256 = "1s59g7kkz8481y8yyf89f549xwbg1978zj9ds61iy94mwz80b38n";
   };
 
   cmakeFlags = [
@@ -19,29 +19,24 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    qtbase qtmultimedia qtsvg lxqt.qtermwidget
+    # virt-manager-qt currently does not compile with qtermwidget-0.8.0
+    qtbase qtmultimedia qtsvg lxqt.qtermwidget_0_7_1
     libvirt libvncserver pixman spice_gtk spice_protocol
   ];
 
-  nativeBuildInputs = [ cmake pkgconfig makeQtWrapper ];
-
-  postFixup = ''
-    for f in $out/bin/* ; do
-      wrapQtProgram $f
-    done
-  '';
+  nativeBuildInputs = [ cmake pkgconfig ];
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
-    homepage = http://f1ash.github.io/qt-virt-manager;
+  meta = with lib; {
+    homepage    = https://f1ash.github.io/qt-virt-manager;
     description = "Desktop user interface for managing virtual machines (QT)";
     longDescription = ''
       The virt-manager application is a desktop user interface for managing
       virtual machines through libvirt. It primarily targets KVM VMs, but also
       manages Xen and LXC (linux containers).
     '';
-    license = licenses.gpl2;
+    license     = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
   };
 }

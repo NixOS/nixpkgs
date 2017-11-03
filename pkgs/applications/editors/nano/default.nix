@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub
+{ stdenv, hostPlatform, fetchurl, fetchFromGitHub
 , ncurses
 , texinfo
 , gettext ? null
@@ -20,11 +20,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "nano-${version}";
-  version = "2.8.1";
+  version = "2.8.7";
 
   src = fetchurl {
     url = "mirror://gnu/nano/${name}.tar.xz";
-    sha256 = "02vdnv30ms2s53ch5j4ldch5sxwjsg3098zkvwrwhi9k6yxshdg9";
+    sha256 = "0nhns59smd43mad2w6lnaxqnj4h6ifnlivi6cwydg646jm31gqzv";
   };
 
   nativeBuildInputs = [ texinfo ] ++ optional enableNls gettext;
@@ -43,7 +43,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.nano-editor.org/;
+    homepage = https://www.nano-editor.org/;
     description = "A small, user-friendly console text editor";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [

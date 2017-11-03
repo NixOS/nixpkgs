@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sed -i Makefile -e "s|^PREFIX=.*$|PREFIX=$out|g"
   '';
 
-  buildInputs = [ pkgconfig libxml2 llvm ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libxml2 llvm ];
   doCheck = true;
 
   meta = {

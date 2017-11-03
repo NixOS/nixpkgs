@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "lxd-${version}";
-  version = "2.0.2";
+  version = "2.16";
   rev = "lxd-${version}";
 
   goPackagePath = "github.com/lxc/lxd";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "lxc";
     repo = "lxd";
-    sha256 = "1rs9g1snjymg6pjz5bj77zk5wbs0w8xmrfxzqs32w6zr1dxhf9hs";
+    sha256 = "0i2mq9m8k9kznwz1i0xb48plp1ffpzvbdrvqvagis4sm17yab3fn";
   };
 
   goDeps = ./deps.nix;
@@ -21,7 +21,7 @@ buildGoPackage rec {
 
   meta = with stdenv.lib; {
     description = "Daemon based on liblxc offering a REST API to manage containers";
-    homepage = https://github.com/lxc/lxd;
+    homepage = https://linuxcontainers.org/lxd/;
     license = licenses.asl20;
     maintainers = with maintainers; [ globin fpletz ];
     platforms = platforms.linux;

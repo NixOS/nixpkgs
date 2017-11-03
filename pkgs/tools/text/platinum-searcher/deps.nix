@@ -4,8 +4,8 @@
     fetch = {
       type = "git";
       url = "https://gopkg.in/yaml.v2";
-      rev = "a83829b6f1293c91addabc89d0571c246397bbf4";
-      sha256 = "1m4dsmk90sbi17571h6pld44zxz7jc4lrnl4f27dpd1l8g5xvjhh";
+      rev = "a5b47d31c556af34a302ce5d659e6fea44d90de0";
+      sha256 = "0v6l48fshdjrqzyq1kwn22gy7vy434xdr1i0lm3prsf6jbln9fam";
     };
   }
   {
@@ -13,8 +13,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/jessevdk/go-flags";
-      rev = "1b89bf73cd2c3a911d7b2a279ab085c4a18cf539";
-      sha256 = "027nglc5xx1cm03z9sisg0iqrhwcj6gh5z254rrpl8p4fwrxx680";
+      rev = "4e64e4a4e2552194cf594243e23aa9baf3b4297e";
+      sha256 = "02x7f1wm8119s27h4dc3a4aw6shydnpnnkvzwg5xm0snn5kb4zxm";
     };
   }
   {
@@ -22,8 +22,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/BurntSushi/toml";
-      rev = "056c9bc7be7190eaa7715723883caffa5f8fa3e4";
-      sha256 = "0gkgkw04ndr5y7hrdy0r4v2drs5srwfcw2bs1gyas066hwl84xyw";
+      rev = "99064174e013895bbd9b025c31100bd1d9b590ca";
+      sha256 = "058qrar8rvw3wb0ci1mf1axnqq2729cvv9zmdr4ms2nn9s97yiz9";
     };
   }
   {
@@ -31,8 +31,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/text";
-      rev = "5eb8d4684c4796dd36c74f6452f2c0fa6c79597e";
-      sha256 = "1cjwm2pv42dbfqc6ylr7jmma902zg4gng5aarqrbjf1k2nf2vs14";
+      rev = "a49bea13b776691cb1b49873e5d8df96ec74831a";
+      sha256 = "1pcmgf88wml6ca8v63nh3nxsfvpzjv3c4qj2w2wkizbil826g7as";
     };
   }
   {
@@ -76,8 +76,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/shiena/ansicolor";
-      rev = "a5e2b567a4dd6cc74545b8a4f27c9d63b9e7735b";
-      sha256 = "0gwplb1b4fvav1vjf4b2dypy5rcp2w41vrbxkd1dsmac870cy75p";
+      rev = "a422bbe96644373c5753384a59d678f7d261ff10";
+      sha256 = "1dcn8a9z6a5dxa2m3fkppnajcls8lanbl38qggkf646yi5qsk1hc";
     };
   }
 ]

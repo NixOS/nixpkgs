@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   };
   meta = {
     description = "Advanced console ip subnet calculator";
-    homepage = "http://www.routemeister.net/projects/sipcalc/";
+    homepage = http://www.routemeister.net/projects/sipcalc/;
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.all;
   };

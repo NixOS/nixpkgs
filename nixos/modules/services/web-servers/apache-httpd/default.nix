@@ -16,7 +16,7 @@ let
 
   phpMajorVersion = head (splitString "." php.version);
 
-  mod_perl = pkgs.mod_perl.override { apacheHttpd = httpd; };
+  mod_perl = pkgs.apacheHttpdPackages.mod_perl.override { apacheHttpd = httpd; };
 
   defaultListen = cfg: if cfg.enableSSL
     then [{ip = "*"; port = 443;}]
@@ -676,6 +676,7 @@ in
       ''
         ; Needed for PHP's mail() function.
         sendmail_path = sendmail -t -i
+      '' + optionalString (!isNull config.time.timeZone) ''
 
         ; Apparently PHP doesn't use $TZ.
         date.timezone = "${config.time.timeZone}"

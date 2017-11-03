@@ -14,11 +14,11 @@
 buildPythonPackage rec {
   pname = "reikna";
   name = "${pname}-${version}";
-  version = "0.6.7";
+  version = "0.6.8";
 
   src = fetchurl {
     url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "810b349eb9339aa0d13bca99a3d8a380972708474b8c0990d188ec6074358d62";
+    sha256 = "34d92786237bef9ab5d37d78f01c155d0dcd1fc24df7782af9498a9f1786890c";
   };
 
   buildInputs = [ sphinx pytestcov pytest ];

@@ -30,7 +30,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Mach-O loader for Linux";
-    homepage = "https://github.com/shinh/maloader";
+    homepage = https://github.com/shinh/maloader;
     license = stdenv.lib.licenses.bsd2;
   };
 }

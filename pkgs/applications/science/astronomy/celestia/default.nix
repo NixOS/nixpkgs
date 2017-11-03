@@ -44,7 +44,8 @@ stdenv.mkDerivation {
     sha256 = "1i1lvhbgllsh2z8i6jj4mvrjak4a7r69psvk7syw03s4p7670mfk";
   };
 
-  buildInputs = [ freeglut gtk2 gtkglext libjpeg_turbo libtheora libXmu mesa pkgconfig lua
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ freeglut gtk2 gtkglext libjpeg_turbo libtheora libXmu mesa lua
     perl autoreconfHook ];
 
   patchPhase = ''
@@ -68,7 +69,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Free space simulation";
-    homepage = "http://www.shatters.net/celestia/";
+    homepage = http://www.shatters.net/celestia/;
     license = stdenv.lib.licenses.gpl2;
 
     platforms = stdenv.lib.platforms.linux;

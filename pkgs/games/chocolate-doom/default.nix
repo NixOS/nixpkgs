@@ -6,7 +6,8 @@ stdenv.mkDerivation rec {
     url = "https://github.com/chocolate-doom/chocolate-doom/archive/${name}.tar.gz";
     sha256 = "0i57smxmbhxj0wgvxq845ba9zsn5nx5wmzkl71rdchyd4q5jmida";
   };
-  buildInputs = [ autoreconfHook pkgconfig SDL SDL_mixer SDL_net ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ SDL SDL_mixer SDL_net ];
   patchPhase = ''
     sed -e 's#/games#/bin#g' -i src{,/setup}/Makefile.am
   '';

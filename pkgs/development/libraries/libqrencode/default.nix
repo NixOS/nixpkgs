@@ -11,14 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "0wiagx7i8p9zal53smf5abrnh9lr31mv0p36wg017401jrmf5577";
   };
 
-  buildInputs = [ autoconf automake pkgconfig libtool SDL2 libpng ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake libtool SDL2 libpng ];
 
   propagatedBuildInputs = [ SDL2 libpng ];
 
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = "http://fukuchi.org/works/qrencode/";
+    homepage = https://fukuchi.org/works/qrencode/;
     description = "A C library for encoding data in a QR Code symbol";
 
     longDescription = ''

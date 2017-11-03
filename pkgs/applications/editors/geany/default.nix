@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 let
-  version = "1.30.1";
+  version = "1.31";
 in
 
 stdenv.mkDerivation rec {
@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.geany.org/${name}.tar.bz2";
-    sha256 = "0ac360f1f3d6c28790a81d570252a7d40421f6e1d8e5a8d653756bd041d88491";
+    sha256 = "30fdb906bb76c4251a8bcf83ee267db28c26ef6ab867668a782cec1164a3aba5";
   };
 
   NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;
-  
+
   nativeBuildInputs = [ pkgconfig intltool ];
   buildInputs = [ gtk2 which file ];
 

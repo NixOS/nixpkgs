@@ -54,7 +54,29 @@ in {
       storageDriverPassword = mkOption {
         default = "root";
         type = types.str;
-        description = "Cadvisor storage driver password.";
+        description = ''
+          Cadvisor storage driver password.
+
+          Warning: this password is stored in the world-readable Nix store. It's
+          recommended to use the <option>storageDriverPasswordFile</option> option
+          since that gives you control over the security of the password.
+          <option>storageDriverPasswordFile</option> also takes precedence over <option>storageDriverPassword</option>.
+        '';
+      };
+
+      storageDriverPasswordFile = mkOption {
+        type = types.str;
+        description = ''
+          File that contains the cadvisor storage driver password.
+
+          <option>storageDriverPasswordFile</option> takes precedence over <option>storageDriverPassword</option>
+
+          Warning: when <option>storageDriverPassword</option> is non-empty this defaults to a file in the
+          world-readable Nix store that contains the value of <option>storageDriverPassword</option>.
+
+          It's recommended to override this with a path not in the Nix store.
+          Tip: use <link xlink:href='https://nixos.org/nixops/manual/#idm140737318306400'>nixops key management</link>
+        '';
       };
 
       storageDriverSecure = mkOption {
@@ -65,35 +87,44 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
-    systemd.services.cadvisor = {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "docker.service" "influxdb.service" ];
+  config = mkMerge [
+    { services.cadvisor.storageDriverPasswordFile = mkIf (cfg.storageDriverPassword != "") (
+        mkDefault (toString (pkgs.writeTextFile {
+          name = "cadvisor-storage-driver-password";
+          text = cfg.storageDriverPassword;
+        }))
+      );
+    }
 
-      postStart = mkBefore ''
-        until ${pkgs.curl.bin}/bin/curl -s -o /dev/null 'http://${cfg.listenAddress}:${toString cfg.port}/containers/'; do
-          sleep 1;
-        done
-      '';
+    (mkIf cfg.enable {
+      systemd.services.cadvisor = {
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" "docker.service" "influxdb.service" ];
 
-      serviceConfig = {
-        ExecStart = ''${pkgs.cadvisor}/bin/cadvisor \
-          -logtostderr=true \
-          -listen_ip=${cfg.listenAddress} \
-          -port=${toString cfg.port} \
-          ${optionalString (cfg.storageDriver != null) ''
-            -storage_driver ${cfg.storageDriver} \
-            -storage_driver_user ${cfg.storageDriverHost} \
-            -storage_driver_db ${cfg.storageDriverDb} \
-            -storage_driver_user ${cfg.storageDriverUser} \
-            -storage_driver_password ${cfg.storageDriverPassword} \
-            ${optionalString cfg.storageDriverSecure "-storage_driver_secure"}
-          ''}
+        postStart = mkBefore ''
+          until ${pkgs.curl.bin}/bin/curl -s -o /dev/null 'http://${cfg.listenAddress}:${toString cfg.port}/containers/'; do
+            sleep 1;
+          done
         '';
-        TimeoutStartSec=300;
-      };
-    };
 
-    virtualisation.docker.enable = mkDefault true;
-  };
+        script = ''
+          exec ${pkgs.cadvisor}/bin/cadvisor \
+            -logtostderr=true \
+            -listen_ip="${cfg.listenAddress}" \
+            -port="${toString cfg.port}" \
+            ${optionalString (cfg.storageDriver != null) ''
+              -storage_driver "${cfg.storageDriver}" \
+              -storage_driver_user "${cfg.storageDriverHost}" \
+              -storage_driver_db "${cfg.storageDriverDb}" \
+              -storage_driver_user "${cfg.storageDriverUser}" \
+              -storage_driver_password "$(cat "${cfg.storageDriverPasswordFile}")" \
+              ${optionalString cfg.storageDriverSecure "-storage_driver_secure"}
+            ''}
+        '';
+
+        serviceConfig.TimeoutStartSec=300;
+      };
+      virtualisation.docker.enable = mkDefault true;
+    })
+  ];
 }

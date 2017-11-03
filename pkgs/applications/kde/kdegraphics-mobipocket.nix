@@ -1,10 +1,10 @@
 {
-  kdeApp, lib,
+  mkDerivation, lib,
   extra-cmake-modules,
   kio
 }:
 
-kdeApp {
+mkDerivation {
   name = "kdegraphics-mobipocket";
   meta = {
     license = [ lib.licenses.gpl2Plus ];
@@ -12,4 +12,5 @@ kdeApp {
   };
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [ kio ];
+  outputs = [ "out" "dev" ];
 }

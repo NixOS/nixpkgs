@@ -65,6 +65,10 @@ in
       cp -v ${regular.file} $out/share/fonts/opentype/${regular.name}
     '';
 
+    outputHashAlgo = "sha256";
+    outputHashMode = "recursive";
+    outputHash = "0if9l8pzwgfnbdjg5yblcy08dwn9yj3wzz29l0fycia46xlzd4ym";
+
     meta = with stdenv.lib; {
       homepage = http://www.impallari.com/lobstertwo;
       description = "Script font with many ligatures";

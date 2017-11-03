@@ -214,7 +214,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "CUPS Linux drivers for Canon printers";
-    homepage = "http://www.canon.com/";
+    homepage = http://www.canon.com/;
     license = stdenv.lib.licenses.unfree;
   };
 }

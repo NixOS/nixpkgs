@@ -108,7 +108,7 @@ in
         after = [ "network.target" ];
 
         serviceConfig = {
-          ExecStart = "${mongodb}/bin/mongod --quiet --config ${mongoCnf} --fork --pidfilepath ${cfg.pidFile}";
+          ExecStart = "${mongodb}/bin/mongod --config ${mongoCnf} --fork --pidfilepath ${cfg.pidFile}";
           User = cfg.user;
           PIDFile = cfg.pidFile;
           Type = "forking";

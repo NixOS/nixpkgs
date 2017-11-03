@@ -3,7 +3,7 @@
 
 { lib, writeText, inherit-local }:
 
-{
+rec {
   withPackages = pkgs: let
       extras = map (x: x.emacsBufferSetup pkgs) (builtins.filter (builtins.hasAttr "emacsBufferSetup") pkgs);
     in writeText "dir-locals.el" ''
@@ -49,4 +49,28 @@
 
       ${lib.concatStringsSep "\n" extras}
     '';
+  # nix-buffer function for a project with a bunch of haskell packages
+  # in one directory
+  haskellMonoRepo = { project-root # The monorepo root
+                    , haskellPackages # The composed haskell packages set that contains all of the packages
+                    }: { root }:
+    let # The haskell paths.
+        haskell-paths = lib.filesystem.haskellPathsInDir project-root;
+        # Find the haskell package that the 'root' is in, if any.
+        haskell-path-parent =
+          let filtered = builtins.filter (name:
+            lib.hasPrefix (toString (project-root + "/${name}")) (toString root)
+          ) (builtins.attrNames haskell-paths);
+          in
+            if filtered == [] then null else builtins.head filtered;
+        # We're in the directory of a haskell package
+        is-haskell-package = haskell-path-parent != null;
+        haskell-package = haskellPackages.${haskell-path-parent};
+        # GHC environment with all needed deps for the haskell package
+        haskell-package-env =
+          builtins.head haskell-package.env.nativeBuildInputs;
+    in
+      if is-haskell-package
+        then withPackages [ haskell-package-env ]
+        else {};
 }

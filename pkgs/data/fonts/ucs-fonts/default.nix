@@ -33,6 +33,10 @@ stdenv.mkDerivation rec {
     mkfontscale
   '';
 
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "12fh3kbsib0baqwk6148fnzqrj9gs4vnl7yd5n9km72sic1z1xwk";
+
   meta = with stdenv.lib; {
     description = "Unicode bitmap fonts";
     maintainers = [ maintainers.raskin ];

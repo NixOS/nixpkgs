@@ -22,14 +22,14 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = "https://stockfishchess.org/";
+    homepage = https://stockfishchess.org/;
     description = "Strong open source chess engine";
     longDescription = ''
       Stockfish is one of the strongest chess engines in the world. It is also
       much stronger than the best human chess grandmasters.
       '';
     maintainers = with maintainers; [ luispedro peti ];
-    platforms = with platforms; i686 ++ x86_64;
+    platforms = ["x86_64-linux" "i686-linux"];
     license = licenses.gpl2;
   };
 

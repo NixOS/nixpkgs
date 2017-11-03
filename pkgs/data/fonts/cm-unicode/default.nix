@@ -1,22 +1,21 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
-  name = "cm-unicode-${version}";
+let
   version = "0.7.0";
+in fetchzip rec {
+  name = "cm-unicode-${version}";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/cm-unicode/cm-unicode/${version}/${name}-otf.tar.xz";
-    sha256 = "0a0w9qm9g8qz2xh3lr61bj1ymqslqsvk4w2ybc3v2qa89nz7x2jl";
-  };
+  url = "mirror://sourceforge/cm-unicode/cm-unicode/${version}/${name}-otf.tar.xz";
 
-  phases = [ "unpackPhase" "installPhase" ];
-
-  installPhase = ''
+  postFetch = ''
+    tar -xJvf $downloadedFile --strip-components=1
     mkdir -p $out/share/fonts/opentype
     mkdir -p $out/share/doc/${name}
     cp -v *.otf $out/share/fonts/opentype/
     cp -v README FontLog.txt $out/share/doc/${name}
   '';
+
+  sha256 = "1rzz7yhqq3lljyqxbg46jfzfd09qgpgx865lijr4sgc94riy1ypn";
 
   meta = with stdenv.lib; {
     homepage = http://canopus.iacp.dvo.ru/~panov/cm-unicode/;

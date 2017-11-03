@@ -21,15 +21,15 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "1.7.1";
+  version = "1.9.1";
   name = "weechat-${version}";
 
   src = fetchurl {
     url = "http://weechat.org/files/src/weechat-${version}.tar.bz2";
-    sha256 = "1020m1lsm8lg9n0dlxgp2wbn9b0r11g8r0namnzi2x6gvxn7iyf0";
+    sha256 = "1kgi079bq4n0wb7hc7mz8p7ay1b2m0a4wpvb92sfsxrnh10qr5m1";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "man" ];
 
   enableParallelBuilding = true;
   cmakeFlags = with stdenv.lib; [

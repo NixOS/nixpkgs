@@ -2,17 +2,16 @@
 
 stdenv.mkDerivation rec {
   name = "spdlog-${version}";
-  version = stdenv.lib.strings.substring 0 7 rev;
-  rev = "292bdc5eb4929f183c78d2c67082b715306f81c9";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
-    owner = "gabime";
-    repo = "spdlog";
-    inherit rev;
-    sha256 = "1b6b0c81a8hisaibqlzj5mrk3snrfl8p5sqa056q2f02i62zksbn";
+    owner  = "gabime";
+    repo   = "spdlog";
+    rev    = "v${version}";
+    sha256 = "13730429gwlabi432ilpnja3sfvy0nn2719vnhhmii34xcdyc57q";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   # cmakeFlags = [ "-DSPDLOG_BUILD_EXAMPLES=ON" ];
 
@@ -29,8 +28,5 @@ stdenv.mkDerivation rec {
     license        = licenses.mit;
     maintainers    = with maintainers; [ obadz ];
     platforms      = platforms.all;
-
-    # This is a header-only library, no point in hydra building it:
-    hydraPlatforms = [];
   };
 }

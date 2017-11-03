@@ -1,16 +1,17 @@
-{ stdenv, fetchurl, cmake, libuuid, gnutls }:
+{ stdenv, fetchurl, cmake, libuuid, gnutls, readline }:
 
 stdenv.mkDerivation rec {
   name = "tasksh-${version}";
-  version = "1.1.0";
+  version = "1.2.0";
 
   enableParallelBuilding = true;
 
   src = fetchurl {
     url = "http://taskwarrior.org/download/${name}.tar.gz";
-    sha256 = "0900nzfgvhcc106pl68d0v0qszvdc34yi59mw70b34b2gmkwdxzf";
+    sha256 = "1z8zw8lld62fjafjvy248dncjk0i4fwygw0ahzjdvyyppx4zjhkf";
   };
 
+  buildInputs = [ readline ];
   nativeBuildInputs = [ cmake ];
 
   meta = with stdenv.lib; {

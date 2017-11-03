@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A distributed init system";
-    homepage = http://coreos.com/using-coreos/clustering/;
+    homepage = https://coreos.com/using-coreos/clustering/;
     license = licenses.asl20;
     maintainers = with maintainers; [
       cstrahan

@@ -1,0 +1,10 @@
+--- a/meson.build	2017-10-31 22:08:01.132927689 +0100
++++ b/meson.build	2017-10-31 22:20:58.215784350 +0100
+@@ -5,7 +5,6 @@
+ 	default_options: [
+ 		'c_std=c11',
+ 		'warning_level=2',
+-		'werror=true',
+ 	],
+ )
+ 

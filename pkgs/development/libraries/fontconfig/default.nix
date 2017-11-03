@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, freetype, expat, libxslt, dejavu_fonts
-, substituteAll }:
+{ stdenv, substituteAll, fetchurl, fetchpatch
+, pkgconfig, freetype, expat, libxslt, dejavu_fonts
+, hostPlatform
+}:
 
 /** Font configuration scheme
  - ./config-compat.patch makes fontconfig try the following root configs, in order:
@@ -43,7 +45,8 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "lib" "out" ]; # $out contains all the config
 
   propagatedBuildInputs = [ freetype ];
-  buildInputs = [ pkgconfig expat ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ expat ];
 
   configureFlags = [
     "--with-cache-dir=/var/cache/fontconfig" # otherwise the fallback is in $out/
@@ -53,7 +56,7 @@ stdenv.mkDerivation rec {
   ];
 
   # We should find a better way to access the arch reliably.
-  crossArch = stdenv.cross.arch or null;
+  crossArch = hostPlatform.arch or null;
 
   preConfigure = ''
     if test -n "$crossConfig"; then

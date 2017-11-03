@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "elvish-${version}";
-  version = "0.5";
+  version = "0.10";
 
   goPackagePath = "github.com/elves/elvish";
 
@@ -10,16 +10,14 @@ buildGoPackage rec {
     repo = "elvish";
     owner = "elves";
     rev = version;
-    sha256 = "1dk5f8a2wpgd5cw45ippvx46fxk0yap64skfpzpiqz8bkbnrwbz6";
+    sha256 = "0v6byd81nz0fbd3sdlippi1jn1z3gbqc2shnr7akd1n6k9259vrj";
   };
 
-  goDeps = ./deps.nix;
-
   meta = with stdenv.lib; {
-    description = "A Novel unix shell in go language";
+    description = "A friendly and expressive Unix shell";
     homepage = https://github.com/elves/elvish;
     license = licenses.bsd2;
     maintainers = with maintainers; [ vrthra ];
-    platforms = with platforms; linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }

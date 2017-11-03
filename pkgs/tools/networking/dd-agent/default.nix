@@ -15,7 +15,7 @@ let
 
     propagatedBuildInputs = with pythonPackages; [
       six
-      requests2
+      requests
       websocket_client
       ipaddress
       backports_ssl_match_hostname
@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
     python
     unzip
     makeWrapper
-    pythonPackages.requests2
+    pythonPackages.requests
     pythonPackages.psycopg2
     pythonPackages.psutil
     pythonPackages.ntplib
@@ -64,6 +64,9 @@ in stdenv.mkDerivation rec {
     ln -s $out/agent/dogstatsd.py $out/bin/dogstatsd
     ln -s $out/agent/ddagent.py $out/bin/dd-forwarder
 
+    # Move out default conf.d so that /etc/dd-agent/conf.d is used
+    mv $out/agent/conf.d $out/agent/conf.d-system
+
     cat > $out/bin/dd-jmxfetch <<EOF
     #!/usr/bin/env bash
     exec ${python}/bin/python $out/agent/jmxfetch.py $@
@@ -84,7 +87,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "Event collector for the DataDog analysis service";
-    homepage    = http://www.datadoghq.com;
+    homepage    = https://www.datadoghq.com;
     license     = stdenv.lib.licenses.bsd3;
     platforms   = stdenv.lib.platforms.all;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice domenkozar ];

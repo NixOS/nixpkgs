@@ -1,14 +1,16 @@
-{ stdenv, fetchurl, getopt, lua, boost, pkgconfig, gcc }:
+{ stdenv, fetchFromGitHub, getopt, lua, boost, pkgconfig, gcc }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "highlight-${version}";
-  version = "3.35";
+  version = "3.40";
 
-  src = fetchurl {
-    url = "http://www.andre-simon.de/zip/${name}.tar.bz2";
-    sha256 = "8a14b49f5e0c07daa9f40b4ce674baa00bb20061079473a5d386656f6d236d05";
+  src = fetchFromGitHub {
+    owner = "andre-simon";
+    repo = "highlight";
+    rev = "${version}";
+    sha256 = "0bkywhz4y10qcajimdha1ck5mvn7fsrv3yn8nd6rqbva39gbfmfd";
   };
 
   nativeBuildInputs = [ pkgconfig ] ++ optional stdenv.isDarwin  gcc ;
@@ -26,8 +28,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Source code highlighting tool";
-    homepage = "http://www.andre-simon.de/doku/highlight/en/highlight.php";
+    homepage = http://www.andre-simon.de/doku/highlight/en/highlight.php;
     platforms = platforms.unix;
-    maintainers = [ maintainers.ndowens ];
+    maintainers = with maintainers; [ ndowens willibutz ];
   };
 }

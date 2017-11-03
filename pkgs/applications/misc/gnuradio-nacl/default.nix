@@ -16,8 +16,9 @@ stdenv.mkDerivation rec {
     sha256 = "0q28lgkndcw9921hm6cw5ilxd83n65hjajwl78j50mh6yc3bim35";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cmake pkgconfig boost gnuradio uhd makeWrapper libsodium cppunit
+    cmake boost gnuradio uhd makeWrapper libsodium cppunit
   ] ++ stdenv.lib.optionals pythonSupport [ python swig ];
 
   postInstall = ''

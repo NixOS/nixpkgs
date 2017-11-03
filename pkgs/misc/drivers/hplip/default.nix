@@ -1,41 +1,39 @@
 { stdenv, fetchurl, substituteAll
 , pkgconfig
+, makeWrapper
 , cups, zlib, libjpeg, libusb1, pythonPackages, sane-backends, dbus, usbutils
-, net_snmp, openssl, polkit
+, net_snmp, openssl, polkit, nettools
 , bash, coreutils, utillinux
-, qtSupport ? true
+, withQt5 ? true
 , withPlugin ? false
 }:
 
 let
 
   name = "hplip-${version}";
-  version = "3.16.11";
+  version = "3.17.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "094vkyr0rjng72m13dgr824cdl7q20x23qjxzih4w7l9njn0rqpn";
+    sha256 = "0y46jjq8jdfk9m4vjq55h8yggibvqbi9rl08vni7vbhxym1diamj";
   };
 
   plugin = fetchurl {
-    url = "http://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
-    sha256 = "1y3wdax2wb6kdd8bi40wl7v9s8ffyjz95bz42sjcpzzddmlhcaxg";
+    url = "http://hplipopensource.com/hplip-web/plugin/${name}-plugin.run";
+    sha256 = "10z8vzwcwmwni7s4j9xp0fa7l4lwrhl4kp450dga3fj0cck1gxwq";
   };
 
-  hplipState =
-    substituteAll
-      {
-        inherit version;
-        src = ./hplip.state;
-      };
+  hplipState = substituteAll {
+    inherit version;
+    src = ./hplip.state;
+  };
 
-  hplipPlatforms =
-    {
-      "i686-linux"   = "x86_32";
-      "x86_64-linux" = "x86_64";
-      "armv6l-linux" = "arm32";
-      "armv7l-linux" = "arm32";
-    };
+  hplipPlatforms = {
+    "i686-linux"   = "x86_32";
+    "x86_64-linux" = "x86_64";
+    "armv6l-linux" = "arm32";
+    "armv7l-linux" = "arm32";
+  };
 
   hplipArch = hplipPlatforms."${stdenv.system}"
     or (throw "HPLIP not supported on ${stdenv.system}");
@@ -65,15 +63,17 @@ pythonPackages.buildPythonApplication {
     pkgconfig
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  pythonPath = with pythonPackages; [
     dbus
     pillow
     pygobject2
     reportlab
     usbutils
-  ] ++ stdenv.lib.optionals qtSupport [
-    pyqt4
+  ] ++ stdenv.lib.optionals withQt5 [
+    pyqt5
   ];
+
+  makeWrapperArgs = [ ''--prefix PATH : "${nettools}/bin"'' ];
 
   prePatch = ''
     # HPLIP hardcodes absolute paths everywhere. Nuke from orbit.
@@ -89,6 +89,7 @@ pythonPackages.buildPythonApplication {
 
   preConfigure = ''
     export configureFlags="$configureFlags
+      --with-hpppddir=$out/share/cups/model/HP
       --with-cupsfilterdir=$out/lib/cups/filter
       --with-cupsbackenddir=$out/lib/cups/backend
       --with-icondir=$out/share/applications
@@ -145,6 +146,29 @@ pythonPackages.buildPythonApplication {
     rm $out/etc/udev/rules.d/56-hpmud.rules
   '';
 
+  # The installed executables are just symlinks into $out/share/hplip,
+  # but wrapPythonPrograms ignores symlinks. We cannot replace the Python
+  # modules in $out/share/hplip with wrapper scripts because they import
+  # each other as libraries. Instead, we emulate wrapPythonPrograms by
+  # 1. Calling patchPythonProgram on the original script in $out/share/hplip
+  # 2. Making our own wrapper pointing directly to the original script.
+  dontWrapPythonPrograms = true;
+  preFixup = ''
+    buildPythonPath "$out $pythonPath"
+
+    for bin in $out/bin/*; do
+      py=$(readlink -m $bin)
+      rm $bin
+      echo "patching \`$py'..."
+      patchPythonScript "$py"
+      echo "wrapping \`$bin'..."
+      makeWrapper "$py" "$bin" \
+          --prefix PATH ':' "$program_PATH" \
+          --set PYTHONNOUSERSITE "true" \
+          $makeWrapperArgs
+    done
+  '';
+
   postFixup = ''
     substituteInPlace $out/etc/hp/hplip.conf --replace /usr $out
   '' + stdenv.lib.optionalString (!withPlugin) ''
@@ -164,6 +188,6 @@ pythonPackages.buildPythonApplication {
       then licenses.unfree
       else with licenses; [ mit bsd2 gpl2Plus ];
     platforms = [ "i686-linux" "x86_64-linux" "armv6l-linux" "armv7l-linux" ];
-    maintainers = with maintainers; [ jgeerds nckx ];
+    maintainers = with maintainers; [ jgeerds ttuegel ];
   };
 }

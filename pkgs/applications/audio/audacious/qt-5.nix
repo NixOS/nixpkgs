@@ -1,9 +1,9 @@
 {
-  stdenv, lib, fetchurl,
-  gettext, makeQtWrapper, pkgconfig,
+  mkDerivation, lib, fetchurl,
+  gettext, pkgconfig,
   qtbase,
   alsaLib, curl, faad2, ffmpeg, flac, fluidsynth, gdk_pixbuf, lame, libbs2b,
-  libcddb, libcdio082, libcue, libjack2, libmad, libmcs, libmms, libmodplug,
+  libcddb, libcdio082, libcue, libjack2, libmad, libmms, libmodplug,
   libmowgli, libnotify, libogg, libpulseaudio, libsamplerate, libsidplayfp,
   libsndfile, libvorbis, libxml2, lirc, mpg123, neon, qtmultimedia, soxr,
   wavpack
@@ -24,16 +24,14 @@ let
   };
 in
 
-stdenv.mkDerivation {
+mkDerivation {
   inherit version;
   name = "audacious-qt5-${version}";
 
   sourceFiles = lib.attrValues sources;
   sourceRoots = lib.attrNames sources;
 
-  nativeBuildInputs = [
-    gettext makeQtWrapper pkgconfig
-  ];
+  nativeBuildInputs = [ gettext pkgconfig ];
 
   buildInputs = [
     # Core dependencies
@@ -41,7 +39,7 @@ stdenv.mkDerivation {
 
     # Plugin dependencies
     alsaLib curl faad2 ffmpeg flac fluidsynth gdk_pixbuf lame libbs2b libcddb
-    libcdio082 libcue libjack2 libmad libmcs libmms libmodplug libmowgli
+    libcdio082 libcue libjack2 libmad libmms libmodplug libmowgli
     libnotify libogg libpulseaudio libsamplerate libsidplayfp libsndfile
     libvorbis libxml2 lirc mpg123 neon qtmultimedia soxr wavpack
   ];
@@ -68,15 +66,9 @@ stdenv.mkDerivation {
       fi
 
     done
-
-    source $stdenv/setup
-    wrapQtProgram $out/bin/audacious
-    wrapQtProgram $out/bin/audtool
   '';
 
-  enableParallelBuilding = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Audio player";
     homepage = http://audacious-media-player.org/;
     maintainers = with maintainers; [ ttuegel ];

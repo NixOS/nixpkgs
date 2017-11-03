@@ -3,15 +3,14 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "lximage-qt";
-  version = "0.5.1";
+  version = "0.6.0";
 
-  srcs = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "0hyiarjjxjwvzinlfnfxbqx40dhgydd3ccv3xqwvj7yni1nfx7pb";
+    sha256 = "0zmrpfgmlq005zikyvhqbpip6mz6pfcf9aqjpncyc5vlggmh28ym";
   };
-
 
   nativeBuildInputs = [
     cmake

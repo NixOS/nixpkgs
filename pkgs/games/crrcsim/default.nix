@@ -14,6 +14,10 @@ stdenv.mkDerivation rec {
     mesa SDL SDL_mixer plib libjpeg
   ];
 
+  patches = [
+    ./gcc6.patch
+  ];
+
   meta = {
     description = "A model-airplane flight simulator";
     maintainers = with stdenv.lib.maintainers; [ raskin the-kenny ];

@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   name = "chase-${version}";
   version = "0.5.2";
 
-  buildInputs = [ pkgconfig libatomic_ops boehmgc ] ;
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libatomic_ops boehmgc ] ;
   src = fetchurl {
     url = "mirror://debian/pool/main/c/chase/chase_${version}.orig.tar.gz";
     sha256 = "68d95c2d4dc45553b75790fcea4413b7204a2618dff148116ca9bdb0310d737f";
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
     A commandline program that chases symbolic filesystems links to the original file
     '';
-    homepage = "https://qa.debian.org/developer.php?login=rotty%40debian.org";
+    homepage = https://qa.debian.org/developer.php?login=rotty%40debian.org;
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.polyrod ];
     platforms = platforms.all;

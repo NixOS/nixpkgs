@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, cmake, pkgconfig, pcre, libxkbcommon, epoxy
-, gtk3, poppler, freetype, libpthreadstubs, libXdmcp, libxshmfence
+, gtk3, poppler, freetype, libpthreadstubs, libXdmcp, libxshmfence, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -15,8 +15,13 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${poppler.dev}/include/poppler";
 
+  nativeBuildInputs = [
+    pkgconfig
+    wrapGAppsHook
+  ];
+
   buildInputs = [
-    pkgconfig cmake
+    cmake
     poppler pcre libxkbcommon epoxy
     freetype gtk3
     libpthreadstubs libXdmcp libxshmfence # otherwise warnings in compilation
@@ -41,10 +46,11 @@ stdenv.mkDerivation rec {
     # displays pdfStartup.pdf as default pdf entry
     mkdir -p $out/share/doc/apvlv/
     cp ../Startup.pdf $out/share/doc/apvlv/Startup.pdf
+    cp ../main_menubar.glade $out/share/doc/apvlv/main_menubar.glade
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://naihe2010.github.io/apvlv/";
+    homepage = http://naihe2010.github.io/apvlv/;
     description = "PDF viewer with Vim-like behaviour";
     longDescription = ''
       apvlv is a PDF/DJVU/UMD/TXT Viewer Under Linux/WIN32

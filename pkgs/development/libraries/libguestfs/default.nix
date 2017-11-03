@@ -18,8 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "0dhb69b7svjgnrmbyvizdz5vsgsrr95ypz0qvp3kz83jyj6sa76m";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    makeWrapper pkgconfig autoreconfHook ncurses cpio gperf perl
+    makeWrapper autoreconfHook ncurses cpio gperf perl
     cdrkit flex bison qemu pcre augeas libxml2 acl libcap libcap_ng libconfig
     systemd fuse yajl libvirt gmp readline file hivex libintlperl GetoptLong
     SysVirt numactl xen libapparmor getopt perlPackages.ModuleBuild
@@ -35,11 +36,15 @@ stdenv.mkDerivation rec {
     substituteInPlace ocaml/Makefile.in            --replace '$(DESTDIR)$(OCAMLLIB)' '$(out)/lib/ocaml'
     substituteInPlace v2v/test-harness/Makefile.am --replace '$(DESTDIR)$(OCAMLLIB)' '$(out)/lib/ocaml'
     substituteInPlace v2v/test-harness/Makefile.in --replace '$(DESTDIR)$(OCAMLLIB)' '$(out)/lib/ocaml'
+
+    # some scripts hardcore /usr/bin/env which is not available in the build env
+    patchShebangs .
   '';
   configureFlags = "--disable-appliance --disable-daemon";
   patches = [ ./libguestfs-syms.patch ];
   NIX_CFLAGS_COMPILE="-I${libxml2.dev}/include/libxml2/";
   installFlags = "REALLY_INSTALL=yes";
+  enableParallelBuilding = true;
 
   postInstall = ''
     for bin in $out/bin/*; do

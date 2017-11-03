@@ -15,34 +15,34 @@
 , mesa_noglu
 , makeWrapper
 , beignet
-}: 
+}:
 
 stdenv.mkDerivation rec {
   name = "beignet-${version}";
-  version = "1.2.1";
+  version = "1.3.2";
 
   src = fetchurl {
     url = "https://01.org/sites/default/files/${name}-source.tar.gz"; 
-    sha256 = "07y8ga545654jdbijmplga7a7j3jn04q5gfdjsl8cax16hsv0kmp";
-  };  
+    sha256 = "0hqb04jhjjslnmi3fnpzphanz84zywwkyw2sjr1k5qlx2jxfsmf5";
+  };
 
-  patches = [ ./clang_llvm.patch ]; 
+  patches = [ ./clang_llvm.patch ];
 
   enableParallelBuilding = true;
 
   postPatch = ''
     patchShebangs src/git_sha1.sh
-  ''; 
+  '';
 
   cmakeFlags = [ "-DCLANG_LIBRARY_DIR=${clang-unwrapped}/lib" ];
 
-  buildInputs = [ 
-    llvm 
+  buildInputs = [
+    llvm
     clang-unwrapped
-    libX11 
+    libX11
     libXext
     libpthreadstubs
-    libdrm 
+    libdrm
     libXdmcp
     libXdamage
     ocl-icd
@@ -98,14 +98,14 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = "https://cgit.freedesktop.org/beignet/";
+    homepage = https://cgit.freedesktop.org/beignet/;
     description = "OpenCL Library for Intel Ivy Bridge and newer GPUs";
     longDescription = ''
       The package provides an open source implementation of the OpenCL specification for Intel GPUs. 
       It supports the Intel OpenCL runtime library and compiler. 
     '';
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ artuuge ];
+    maintainers = with maintainers; [ artuuge zimbatm ];
     platforms = platforms.linux;
-  }; 
+  };
 }

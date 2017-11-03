@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       substituteInPlace user/legacy/Makefile.in \
         --replace '$(DESTDIR)/lib/drbd' '$(DESTDIR)$(LIBDIR)'
       substituteInPlace user/drbdadm_usage_cnt.c --replace /lib/drbd $out/lib/drbd
-      substituteInPlace scripts/drbd.rules --replace /sbin/drbdadm $out/sbin/drbdadm
+      substituteInPlace scripts/drbd.rules --replace /usr/sbin/drbdadm $out/sbin/drbdadm
     '';
 
   makeFlags = "SHELL=${stdenv.shell}";

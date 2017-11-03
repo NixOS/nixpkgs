@@ -37,7 +37,7 @@ let
             IPv6 = true
             SSL = ${boolToString confOpts.useSSL}
     </Listener>
-    
+
     <User ${confOpts.userName}>
             ${confOpts.passBlock}
             Admin = true
@@ -50,9 +50,13 @@ let
             ${ lib.concatStringsSep "\n" (lib.mapAttrsToList (name: net: ''
               <Network ${name}>
                   ${concatMapStrings (m: "LoadModule = ${m}\n") net.modules}
-                  Server = ${net.server} ${if net.useSSL then "+" else ""}${toString net.port}
-
+                  Server = ${net.server} ${lib.optionalString net.useSSL "+"}${toString net.port} ${net.password}
                   ${concatMapStrings (c: "<Chan #${c}>\n</Chan>\n") net.channels}
+                  ${lib.optionalString net.hasBitlbeeControlChannel ''
+                    <Chan &bitlbee>
+                    </Chan>
+                  ''}
+                  ${net.extraConf}
               </Network>
               '') confOpts.networks) }
     </User>
@@ -82,6 +86,23 @@ let
         example = 6697;
         description = ''
           IRC server port.
+        '';
+      };
+
+      userName = mkOption {
+        default = "";
+        example = "johntron";
+        type = types.string;
+        description = ''
+          A nick identity specific to the IRC server.
+        '';
+      };
+
+      password = mkOption {
+        type = types.str;
+        default = "";
+        description = ''
+          IRC server password, such as for a Slack gateway.
         '';
       };
 
@@ -117,6 +138,31 @@ let
         example = [ "nixos" ];
         description = ''
           IRC channels to join.
+        '';
+      };
+
+      hasBitlbeeControlChannel = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to add the special Bitlbee operations channel.
+        '';
+      };
+
+      extraConf = mkOption {
+        default = "";
+        type = types.lines;
+        example = ''
+          Encoding = ^UTF-8
+          FloodBurst = 4
+          FloodRate = 1.00
+          IRCConnectEnabled = true
+          Ident = johntron
+          JoinDelay = 0
+          Nick = johntron
+        '';
+        description = ''
+          Extra config for the network.
         '';
       };
     };
@@ -163,6 +209,14 @@ in
         type = types.path;
         description = ''
           The data directory. Used for configuration files and modules.
+        '';
+      };
+
+      openFirewall = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether to open ports in the firewall for ZNC.
         '';
       };
 
@@ -215,7 +269,7 @@ in
             "freenode" = {
               server = "chat.freenode.net";
               port = 6697;
-              ssl = true;
+              useSSL = true;
               modules = [ "simple_away" ];
             };
           };
@@ -234,7 +288,7 @@ in
           example = defaultPassBlock;
           type = types.string;
           description = ''
-            Generate with znc --makepass.
+            Generate with `nix-shell -p znc --command "znc --makepass"`.
             This is the password used to log in to the ZNC web admin interface.
           '';
         };
@@ -273,21 +327,21 @@ in
           A list of global znc module packages to add to znc.
         '';
       };
- 
+
       mutable = mkOption {
-        default = false;
+        default = true;
         type = types.bool;
         description = ''
           Indicates whether to allow the contents of the `dataDir` directory to be changed
           by the user at run-time.
-          If true, modifications to the ZNC configuration after its initial creation are not 
+          If true, modifications to the ZNC configuration after its initial creation are not
             overwritten by a NixOS system rebuild.
           If false, the ZNC configuration is rebuilt by every system rebuild.
           If the user wants to manage the ZNC service using the web admin interface, this value
             should be set to true.
         '';
       };
- 
+
       extraFlags = mkOption {
         default = [ ];
         example = [ "--debug" ];
@@ -303,6 +357,10 @@ in
   ###### Implementation
 
   config = mkIf cfg.enable {
+
+    networking.firewall = mkIf cfg.openFirewall {
+      allowedTCPPorts = [ cfg.confOptions.port ];
+    };
 
     systemd.services.znc = {
       description = "ZNC Server";
@@ -334,7 +392,7 @@ in
 
         if [[ ! -f ${cfg.dataDir}/znc.pem ]]; then
           ${pkgs.coreutils}/bin/echo "No znc.pem file found in ${cfg.dataDir}. Creating one now."
-          ${pkgs.znc}/bin/znc --makepem --datadir ${cfg.dataDir} 
+          ${pkgs.znc}/bin/znc --makepem --datadir ${cfg.dataDir}
         fi
 
         # Symlink modules
@@ -352,7 +410,7 @@ in
         home = cfg.dataDir;
         createHome = true;
       };
- 
+
     users.extraGroups = optional (cfg.user == defaultUser)
       { name = defaultUser;
         gid = config.ids.gids.znc;

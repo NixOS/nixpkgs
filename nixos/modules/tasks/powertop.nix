@@ -3,11 +3,11 @@
 with lib;
 
 let
-  cfg = config.powerManagment.powertop;
+  cfg = config.powerManagement.powertop;
 in {
   ###### interface
 
-  options.powerManagment.powertop.enable = mkEnableOption "powertop auto tuning on startup";
+  options.powerManagement.powertop.enable = mkEnableOption "powertop auto tuning on startup";
 
   ###### implementation
 
@@ -16,6 +16,7 @@ in {
       powertop = {
         wantedBy = [ "multi-user.target" ];
         description = "Powertop tunings";
+        path = [ pkgs.kmod ];
         serviceConfig = {
           Type = "oneshot";
           RemainAfterExit = "yes";

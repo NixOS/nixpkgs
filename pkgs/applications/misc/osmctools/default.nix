@@ -37,10 +37,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Command line tools for transforming Open Street Map files";
-    homepage = ''
-      http://wiki.openstreetmap.org/wiki/Osmconvert
+    homepage = [
+      https://wiki.openstreetmap.org/wiki/Osmconvert
       https://wiki.openstreetmap.org/wiki/Osmfilter
-    '';
+    ];
     platforms = platforms.unix;
   };
 }

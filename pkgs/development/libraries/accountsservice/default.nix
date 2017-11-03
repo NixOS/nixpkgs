@@ -3,15 +3,16 @@
 
 stdenv.mkDerivation rec {
   name = "accountsservice-${version}";
-  version = "0.6.43";
+  version = "0.6.45";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/accountsservice/accountsservice-${version}.tar.xz";
-    sha256 = "1k6n9079001sgcwlkq0bz6mkn4m8y4dwf6hs1qm85swcld5ajfzd";
+    sha256 = "09pg25ir7kjigvp2cxd9fkfw8c8ql8vrswfvymg9zmbmma9w43zv";
   };
 
-  buildInputs = [ pkgconfig glib intltool libtool makeWrapper
-                  gobjectIntrospection polkit systemd ];
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
+
+  buildInputs = [ glib intltool libtool gobjectIntrospection polkit systemd ];
 
   configureFlags = [ "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
                      "--localstatedir=/var" ];

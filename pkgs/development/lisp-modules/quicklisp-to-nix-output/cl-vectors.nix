@@ -1,33 +1,26 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''cl-vectors'';
-  version = ''20150407-git'';
+  version = ''20170630-git'';
 
   description = ''cl-paths: vectorial paths manipulation'';
 
-  deps = [ ];
+  deps = [ args."cl-aa" args."cl-paths" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/cl-vectors/2015-04-07/cl-vectors-20150407-git.tgz'';
-    sha256 = ''1qd7ywc2ayiyd5nw7shnjgh0nc14h328h0cw921g5b2n8j6y959w'';
+    url = ''http://beta.quicklisp.org/archive/cl-vectors/2017-06-30/cl-vectors-20170630-git.tgz'';
+    sha256 = ''0820qwi6pp8683rqp37x9l9shm0vh873bc4p9q38cz56ck7il740'';
   };
 
-  overrides = x: {
-    postInstall = ''
-      find "$out/lib/common-lisp/" -name '*.asd' | grep -iv '/cl-vectors[.]asd${"$"}' |
-        while read f; do
-          env -i \
-          NIX_LISP="$NIX_LISP" \
-          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(progn
-            (asdf:load-system :$(basename "$f" .asd))
-            (asdf:perform (quote asdf:compile-bundle-op) :$(basename "$f" .asd))
-            (ignore-errors (asdf:perform (quote asdf:deliver-asd-op) :$(basename "$f" .asd)))
-            )'" \
-            "$out"/bin/*-lisp-launcher.sh ||
-          mv "$f"{,.sibling}; done || true
-    '';
-  };
+  packageName = "cl-vectors";
+
+  asdFilesToKeep = ["cl-vectors.asd"];
+  overrides = x: x;
 }
-/* (SYSTEM cl-vectors DESCRIPTION cl-paths: vectorial paths manipulation SHA256 1qd7ywc2ayiyd5nw7shnjgh0nc14h328h0cw921g5b2n8j6y959w URL
-    http://beta.quicklisp.org/archive/cl-vectors/2015-04-07/cl-vectors-20150407-git.tgz MD5 9e255503bf4559912ea1511c919c474a NAME cl-vectors TESTNAME NIL
-    FILENAME cl-vectors DEPS NIL DEPENDENCIES NIL VERSION 20150407-git SIBLINGS (cl-aa-misc cl-aa cl-paths-ttf cl-paths)) */
+/* (SYSTEM cl-vectors DESCRIPTION cl-paths: vectorial paths manipulation SHA256
+    0820qwi6pp8683rqp37x9l9shm0vh873bc4p9q38cz56ck7il740 URL
+    http://beta.quicklisp.org/archive/cl-vectors/2017-06-30/cl-vectors-20170630-git.tgz
+    MD5 cee3bb14adbba3142b782c646f7651ce NAME cl-vectors FILENAME cl-vectors
+    DEPS ((NAME cl-aa FILENAME cl-aa) (NAME cl-paths FILENAME cl-paths))
+    DEPENDENCIES (cl-aa cl-paths) VERSION 20170630-git SIBLINGS
+    (cl-aa-misc cl-aa cl-paths-ttf cl-paths) PARASITES NIL) */

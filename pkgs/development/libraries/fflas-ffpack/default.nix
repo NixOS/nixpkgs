@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "0k1f4pb7azrm6ajncvg7vni7ixfmn6fssd5ld4xddbi6jqbsf9rd";
   };
-  buildInputs = [autoreconfHook givaro (liblapack.override {shared = true;}) openblas];
-  nativeBuildInputs = [pkgconfig];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ givaro (liblapack.override {shared = true;}) openblas];
   configureFlags = "--with-blas-libs=-lopenblas --with-lapack-libs=-llapack";
   meta = {
     inherit version;
@@ -18,6 +18,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = "https://linbox-team.github.io/fflas-ffpack/";
+    homepage = https://linbox-team.github.io/fflas-ffpack/;
   };
 }

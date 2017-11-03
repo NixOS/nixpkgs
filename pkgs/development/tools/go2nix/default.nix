@@ -3,7 +3,7 @@
 
 buildGoPackage rec {
   name = "go2nix-${version}";
-  version = "1.2.0";
+  version = "1.2.1";
   rev = "v${version}";
 
   goPackagePath = "github.com/kamilchm/go2nix";
@@ -12,7 +12,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "kamilchm";
     repo = "go2nix";
-    sha256 = "1hlanw56r1phj89sicpsfcz6sdjba9qjwhiblcsqka4wfqkai8pn";
+    sha256 = "0fr9aa50yvchfhv6h6zqblx8ynxk41i2hmv87b344zr2rz6rms72";
   };
 
   goDeps = ./deps.nix;

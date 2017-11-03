@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "0rgrpgwrgphw106l1xawxir002b7rmzc23rcxhv8ib6rymp1divx";
   };
 
-  buildInputs = [pkgconfig ocaml findlib gmetadom gtkmathview lablgtk];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ocaml findlib gmetadom gtkmathview lablgtk];
 
   createFindlibDestdir = true;
 

@@ -1,36 +1,40 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook,
-  glibc, zimg, imagemagick, libass, yasm, python3,
-  ocrSupport ? false, tesseract
+  zimg, libass, yasm, python3, libiconv, ApplicationServices,
+  ocrSupport ?  false, tesseract,
+  imwriSupport? true,  imagemagick7
 }:
 
-assert ocrSupport -> tesseract != null;
+assert ocrSupport   -> tesseract != null;
+assert imwriSupport -> imagemagick7 != null;
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "vapoursynth-${version}";
-  version = "R36";
+  version = "R38";
 
   src = fetchFromGitHub {
     owner  = "vapoursynth";
     repo   = "vapoursynth";
     rev    = version;
-    sha256 = "10yiccj7yd4bd3a6k15xahb5y3ymcagyaqavh0wal2rwzfck9k8c";
+    sha256 = "0nabl6949s7awy7rnr4ck52v50xr0hwr280fyzsqixgp8w369jn0";
   };
 
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [
-    pkgconfig autoreconfHook
-    zimg imagemagick libass glibc tesseract yasm
+    zimg libass tesseract yasm
     (python3.withPackages (ps: with ps; [ sphinx cython ]))
-  ] ++ optional ocrSupport tesseract;
+  ] ++ optionals stdenv.isDarwin [ libiconv ApplicationServices ]
+    ++ optional ocrSupport   tesseract
+    ++ optional imwriSupport imagemagick7;
 
   configureFlags = [
-    "--enable-imwri"
     "--disable-static"
-    (optionalString (!ocrSupport) "--disable-ocr")
+    (optionalString (!ocrSupport)   "--disable-ocr")
+    (optionalString (!imwriSupport) "--disable-imwri")
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A video processing framework with the future in mind";
     homepage    = http://www.vapoursynth.com/;
     license     = licenses.lgpl21;

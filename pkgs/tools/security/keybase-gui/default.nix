@@ -22,7 +22,7 @@ let
     pango
     systemd
     xorg.libX11
-    xorg.libXScrnSaver
+    xorg.libxcb
     xorg.libXcomposite
     xorg.libXcursor
     xorg.libXdamage
@@ -31,15 +31,16 @@ let
     xorg.libXi
     xorg.libXrandr
     xorg.libXrender
+    xorg.libXScrnSaver
     xorg.libXtst
   ];
 in
 stdenv.mkDerivation rec {
   name = "keybase-gui-${version}";
-  version = "1.0.18-20170209170023.17b641d";
+  version = "1.0.33-20171003193427.d9ceb86ac";
   src = fetchurl {
     url = "https://s3.amazonaws.com/prerelease.keybase.io/linux_binaries/deb/keybase_${version}_amd64.deb";
-    sha256 = "01mr6hyzs208g3ankl4swikna66n85xzn7ig4k7p6hxmnnvplgb3";
+    sha256 = "0sqani2fy5jzqmz35md1bdw2vwpx91l87b6s3x9z53halzq7vfy6";
   };
   phases = ["unpackPhase" "installPhase" "fixupPhase"];
   unpackPhase = ''
@@ -86,6 +87,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.keybase.io/;
     description = "The Keybase official GUI.";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ puffnfresh ];
+    maintainers = with maintainers; [ puffnfresh np ];
   };
 }

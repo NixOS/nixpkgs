@@ -11,14 +11,14 @@ stdenv.mkDerivation rec {
     echo 'Cflags: -I''${includedir}' >> glu.pc.in
   '';
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ mesa_noglu ];
 
   outputs = [ "out" "dev" ];
 
   meta = {
     description = "OpenGL utility library";
-    homepage = http://cgit.freedesktop.org/mesa/glu/;
+    homepage = https://cgit.freedesktop.org/mesa/glu/;
     license = stdenv.lib.licenses.sgi-b-20;
     platforms = stdenv.lib.platforms.unix;
   };

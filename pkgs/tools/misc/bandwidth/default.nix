@@ -11,11 +11,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "bandwidth-${version}";
-  version = "1.3.1";
+  version = "1.4.2";
 
   src = fetchurl {
     url = "http://zsmith.co/archives/${name}.tar.gz";
-    sha256 = "13a0mxrkybpwiynv4cj8wsy8zl5xir5xi1a03fzam5gw815dj4am";
+    sha256 = "1p1kp5s3fdgy667q7mc9ywnps0sbj4lpr42561yhi59m69n8c3kd";
   };
 
   buildInputs = [ nasm ];

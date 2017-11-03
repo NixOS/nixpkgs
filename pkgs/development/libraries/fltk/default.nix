@@ -6,20 +6,14 @@
 
 let inherit (composableDerivation) edf; in
 
-let version = "1.3.3"; in
+let version = "1.3.4"; in
 composableDerivation.composableDerivation {} {
   name = "fltk-${version}";
 
   src = fetchurl {
     url = "http://fltk.org/pub/fltk/${version}/fltk-${version}-source.tar.gz";
-    sha256 = "15qd7lkz5d5ynz70xhxhigpz3wns39v9xcf7ggkl0792syc8sfgq";
+    sha256 = "13y57pnayrkfzm8azdfvysm8b77ysac8zhhdsh8kxmb0x3203ay8";
   };
-
-  # http://www.fltk.org/str.php?L3156
-  postPatch = ''
-    substituteInPlace FL/x.H \
-      --replace 'class Fl_XFont_On_Demand' 'class FL_EXPORT Fl_XFont_On_Demand'
-  '';
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./nsosv.patch ];
 

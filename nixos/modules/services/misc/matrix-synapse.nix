@@ -605,6 +605,7 @@ in {
       } ];
 
     systemd.services.matrix-synapse = {
+      description = "Synapse Matrix homeserver";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       preStart = ''
@@ -620,6 +621,7 @@ in {
         WorkingDirectory = "/var/lib/matrix-synapse";
         PermissionsStartOnly = true;
         ExecStart = "${cfg.package}/bin/homeserver --config-path ${configFile} --keys-directory /var/lib/matrix-synapse";
+        Restart = "on-failure";
       };
     };
   };

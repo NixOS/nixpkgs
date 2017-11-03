@@ -19,15 +19,14 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ python softhsm openldap p11_kit.dev p11_kit.out gnupg ];
-  buildInputs = [ unbound pkgconfig unzip git libtasn1 db libmemcached cyrus_sasl openssl bash quickder
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ unbound unzip git libtasn1 db libmemcached cyrus_sasl openssl bash quickder
                   libkrb5 ldns libtool swig pkgs.pythonPackages.pip gnutls-kdh ]
                 ++ stdenv.lib.optional useSystemd systemd;
 
-  phases = [ "unpackPhase" "patchPhase" "postPatchPhase" "buildPhase" "installPhase" ]; 
-
   patches = [ ./fixing-rpath.patch ./configvar-fix.patch ];
 
-  postPatchPhase = ''
+  postPatch = ''
     substituteInPlace etc/tlspool.conf \
       --replace "dnssec_rootkey ../etc/root.key" "dnssec_rootkey $out/etc/root.key" \
       --replace "pkcs11_path /usr/local/lib/softhsm/libsofthsm2.so" "pkcs11_path ${softhsm}/lib/softhsm/libsofthsm2.so"
@@ -41,9 +40,7 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin $out/lib $out/sbin $out/man $out/etc/tlspool/ $out/include/${pname}/pulleyback
-    mkdir -p $out/${python.sitePackages}/tlspool
-    mkdir -p $out/bdb
+    mkdir -p $out/bin $out/lib $out/sbin $out/etc/tlspool/ $out/include/${pname}/pulleyback
     make DESTDIR=$out PREFIX=/ install
     cp -R etc/* $out/etc/tlspool/
     cp include/tlspool/*.h $out/include/${pname}

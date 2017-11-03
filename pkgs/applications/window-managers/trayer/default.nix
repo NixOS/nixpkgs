@@ -3,7 +3,8 @@
 stdenv.mkDerivation rec {
   name = "trayer-1.1.7";
 
-  buildInputs = [ pkgconfig gdk_pixbuf gtk2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gdk_pixbuf gtk2 ];
 
   src = fetchFromGitHub {
     owner = "sargon";
@@ -19,7 +20,7 @@ stdenv.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/sargon/trayer-srg;
+    homepage = https://github.com/sargon/trayer-srg;
     license = licenses.mit;
     description = "A lightweight GTK2-based systray for UNIX desktop";
     platforms = platforms.linux;

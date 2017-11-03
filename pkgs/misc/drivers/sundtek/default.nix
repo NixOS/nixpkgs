@@ -45,6 +45,6 @@ in
       maintainers = [ maintainers.simonvandel ];
       platforms = platforms.unix;
       license = licenses.unfree;
-      homepage = "http://support.sundtek.com/index.php/topic,1573.0.html";
+      homepage = http://support.sundtek.com/index.php/topic,1573.0.html;
     };
   }

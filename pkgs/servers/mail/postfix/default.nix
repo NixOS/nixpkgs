@@ -3,6 +3,7 @@
 , withPgSQL ? false, postgresql
 , withMySQL ? false, libmysql
 , withSQLite ? false, sqlite
+, withLDAP ? false, openldap
 }:
 
 let
@@ -11,28 +12,31 @@ let
     "-DHAS_DB_BYPASS_MAKEDEFS_CHECK"
    ] ++ lib.optional withPgSQL "-DHAS_PGSQL"
      ++ lib.optionals withMySQL [ "-DHAS_MYSQL" "-I${lib.getDev libmysql}/include/mysql" ]
-     ++ lib.optional withSQLite "-DHAS_SQLITE");
+     ++ lib.optional withSQLite "-DHAS_SQLITE"
+     ++ lib.optional withLDAP "-DHAS_LDAP");
    auxlibs = lib.concatStringsSep " " ([
      "-ldb" "-lnsl" "-lresolv" "-lsasl2" "-lcrypto" "-lssl"
    ] ++ lib.optional withPgSQL "-lpq"
      ++ lib.optional withMySQL "-lmysqlclient"
-     ++ lib.optional withSQLite "-lsqlite3");
+     ++ lib.optional withSQLite "-lsqlite3"
+     ++ lib.optional withLDAP "-lldap");
 
 in stdenv.mkDerivation rec {
 
   name = "postfix-${version}";
 
-  version = "3.1.3";
+  version = "3.2.3";
 
   src = fetchurl {
     url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${name}.tar.gz";
-    sha256 = "0ya9h7ynhq8h7zgq0qkvfwx5rsam7i3vkbyh6rx63qlpcxz15y2j";
+    sha256 = "1gs025smgynrlsg44cypjam99ds92mc9q46l5085d9sy0xfrf2sv";
   };
 
   buildInputs = [ makeWrapper gnused db openssl cyrus_sasl icu pcre ]
                 ++ lib.optional withPgSQL postgresql
                 ++ lib.optional withMySQL libmysql
-                ++ lib.optional withSQLite sqlite;
+                ++ lib.optional withSQLite sqlite
+                ++ lib.optional withLDAP openldap;
 
   hardeningDisable = [ "format" ];
   hardeningEnable = [ "pie" ];
@@ -83,7 +87,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://www.postfix.org/";
+    homepage = http://www.postfix.org/;
     description = "A fast, easy to administer, and secure mail server";
     license = lib.licenses.bsdOriginal;
     platforms = lib.platforms.linux;

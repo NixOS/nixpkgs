@@ -1,13 +1,13 @@
 { stdenv, fetchurl, dbus, gnutls, wxGTK30, libidn, tinyxml, gettext
 , pkgconfig, xdg_utils, gtk2, sqlite, pugixml, libfilezilla, nettle }:
 
-let version = "3.25.1"; in
+let version = "3.28.0"; in
 stdenv.mkDerivation {
   name = "filezilla-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/filezilla/FileZilla_Client/${version}/FileZilla_${version}_src.tar.bz2";
-    sha256 = "1h9g26i16wvc3yjavd39lxifr8d21q9mvfidnwjp9ksrc1qvwww8";
+    sha256 = "1dxzmpqrb3a29ln9vx10n438w5i649729vy911sm92bwn2p235p4";
   };
 
   configureFlags = [
@@ -20,13 +20,13 @@ stdenv.mkDerivation {
     pugixml libfilezilla nettle ];
 
   meta = with stdenv.lib; {
-    homepage = http://filezilla-project.org/;
+    homepage = https://filezilla-project.org/;
     description = "Graphical FTP, FTPS and SFTP client";
     license = licenses.gpl2;
     longDescription = ''
       FileZilla Client is a free, open source FTP client. It supports
       FTP, SFTP, and FTPS (FTP over SSL/TLS). The client is available
-      under many platforms, binaries for Windows, Linux and Mac OS X are
+      under many platforms, binaries for Windows, Linux and macOS are
       provided.
     '';
     platforms = platforms.linux;

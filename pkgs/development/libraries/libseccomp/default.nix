@@ -15,9 +15,8 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/scmp_sys_resolver --prefix LD_LIBRARY_PATH ":" $out/lib
-  '';
+  # Hack to ensure that patchelf --shrink-rpath get rids of a $TMPDIR reference.
+  preFixup = "rm -rfv src";
 
   meta = with stdenv.lib; {
     description = "High level library for the Linux Kernel seccomp filter";
@@ -27,4 +26,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ thoughtpolice wkennington ];
   };
 }
-

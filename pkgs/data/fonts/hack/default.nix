@@ -1,25 +1,20 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
-  name = "hack-font-${version}";
+let
   version = "2.020";
+in fetchzip rec {
+  name = "hack-font-${version}";
 
-  src = let
-    version_ = with stdenv.lib;
-      concatStringsSep "_" (splitString "." version);
-  in fetchurl {
-    sha256 = "16kkmc3psckw1b7k07ccn1gi5ymhlg9djh43nqjzg065g6p6d184";
-    url = "https://github.com/chrissimpkins/Hack/releases/download/v${version}/Hack-v${version_}-ttf.zip";
-  };
+  url = let
+    version_ = with stdenv.lib; concatStringsSep "_" (splitString "." version);
+  in "https://github.com/chrissimpkins/Hack/releases/download/v${version}/Hack-v${version_}-ttf.zip";
 
-  sourceRoot = ".";
-
-  nativeBuildInputs = [ unzip ];
-
-  installPhase = ''
-    mkdir -p $out/share/fonts/hack
-    cp *.ttf $out/share/fonts/hack
+  postFetch = ''
+    mkdir -p $out/share/fonts
+    unzip -j $downloadedFile \*.ttf -d $out/share/fonts/hack
   '';
+
+  sha256 = "0cpsglb9vnhmpsn496aqisfvmq3yxvjnj7c361dspy0fn6z8x60c";
 
   meta = with stdenv.lib; {
     description = "A typeface designed for source code";

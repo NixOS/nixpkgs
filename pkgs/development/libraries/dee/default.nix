@@ -13,11 +13,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib gobjectIntrospection icu ];
   nativeBuildInputs = [ python pkgconfig ];
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=misleading-indentation" ]; # gcc-6
+
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A library that uses DBus to provide objects allowing you to create Model-View-Controller type programs across DBus";
-    homepage = "https://launchpad.net/dee";
+    homepage = https://launchpad.net/dee;
     license = licenses.lgpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

@@ -1,39 +1,75 @@
 { lib
-, pythonPackages
-, fetchurl
+, fetchFromGitHub
+, python
 , transmission
 , deluge
 , config
 }:
 
-with pythonPackages;
+with python.pkgs;
 
-buildPythonPackage rec {
-  version = "1.2.337";
+buildPythonApplication rec {
+  version = "2.10.82";
   name = "FlexGet-${version}";
-  disabled = isPy3k;
 
-  src = fetchurl {
-    url = "mirror://pypi/F/FlexGet/${name}.tar.gz";
-    sha256 = "0f7aaf0bf37860f0c5adfb0ba59ca228aa3f5c582131445623a4c3bc82d45346";
+  src = fetchFromGitHub {
+    owner = "Flexget";
+    repo = "Flexget";
+    rev = version;
+    sha256 = "15508ihswfjbkzhf1f0qhn2ar1aiibz2ggp5d6r33icy8xwhpv09";
   };
 
-  doCheck = false;
+  doCheck = true;
+  # test_regexp requires that HOME exist, test_filesystem requires a
+  # unicode-capable filesystem (and setting LC_ALL doesn't work).
+  # setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
+  postPatch = ''
+    sed -i '/def test_non_ascii/i\    import pytest\
+        @pytest.mark.skip' flexget/tests/test_filesystem.py
 
-  buildInputs = [ nose ];
+    substituteInPlace requirements.txt \
+      --replace "chardet==3.0.3" "chardet" \
+      --replace "rebulk==0.8.2" "rebulk" \
+      --replace "cherrypy==10.2.2" "cherrypy" \
+      --replace "portend==1.8" "portend" \
+      --replace "sqlalchemy==1.1.10" "sqlalchemy" \
+      --replace "zxcvbn-python==4.4.15" "zxcvbn-python" \
+      --replace "flask-cors==3.0.2" "flask-cors" \
+      --replace "certifi==2017.4.17" "certifi"
+  '';
+
+  checkPhase = ''
+    export HOME=.
+    py.test --disable-pytest-warnings -k "not test_quality_failures \
+                                          and not test_group_quality \
+                                          and not crash_report \
+                                          and not test_multi_episode \
+                                          and not test_double_episodes \
+                                          and not test_inject_force \
+                                          and not test_double_prefered \
+                                          and not test_double"
+  '';
+
+  buildInputs = [ pytest mock vcrpy pytest-catchlog boto3 ];
   propagatedBuildInputs = [
-    paver feedparser sqlalchemy pyyaml rpyc
-    beautifulsoup_4_1_3 html5lib_0_9999999 pyrss2gen pynzb progressbar jinja2 flask
-    cherrypy requests dateutil_2_1 jsonschema python_tvrage tmdb3
-    guessit pathpy apscheduler ]
-  # enable deluge and transmission plugin support, if they're installed
-  ++ lib.optional (config.deluge or false) deluge
-  ++ lib.optional (transmission != null) transmissionrpc;
+    feedparser sqlalchemy pyyaml chardet
+    beautifulsoup4 html5lib PyRSS2Gen pynzb
+    rpyc jinja2 jsonschema requests dateutil jsonschema
+    pathpy guessit_2_0 APScheduler
+    terminaltables colorclass
+    cherrypy flask flask-restful flask-restplus
+    flask-compress flask_login flask-cors
+    pyparsing safe future zxcvbn-python
+    werkzeug tempora cheroot rebulk portend
+  ] ++ lib.optional (pythonOlder "3.4") pathlib
+    # enable deluge and transmission plugin support, if they're installed
+    ++ lib.optional (config.deluge or false) deluge
+    ++ lib.optional (transmission != null) transmissionrpc;
 
   meta = {
-    homepage = http://flexget.com/;
+    homepage = https://flexget.com/;
     description = "Multipurpose automation tool for content like torrents";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ domenkozar ];
+    maintainers = with lib.maintainers; [ domenkozar tari ];
   };
 }

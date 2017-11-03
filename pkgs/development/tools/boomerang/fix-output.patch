@@ -1,0 +1,24 @@
+From f3f5f888a1b1fe72ea8fc8cc96ef4ee386011e1c Mon Sep 17 00:00:00 2001
+From: Will Dietz <w@wdtz.org>
+Date: Thu, 30 Mar 2017 11:21:38 -0500
+Subject: [PATCH] don't default to writing to program directory
+
+---
+ boomerang.cpp | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/boomerang.cpp b/boomerang.cpp
+index 5951ed91..b592f482 100644
+--- a/boomerang.cpp
++++ b/boomerang.cpp
+@@ -601,7 +601,6 @@ int Boomerang::processCommand(QStringList &args) {
+  */
+ void Boomerang::setProgPath(const QString &p) {
+     progPath = p + "/";
+-    outputPath = progPath + "/output/"; // Default output path (can be overridden with -o below)
+ }
+ 
+ /**
+-- 
+2.11.0
+

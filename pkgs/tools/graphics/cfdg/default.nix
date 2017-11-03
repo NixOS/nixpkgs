@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "Context-free design grammar - a tool for graphics generation";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
-    homepage = http://contextfreeart.org/;
-    downloadPage = "http://contextfreeart.org/mediawiki/index.php/Download_page";
+    homepage = https://contextfreeart.org/;
+    downloadPage = "https://contextfreeart.org/mediawiki/index.php/Download_page";
   };
 }

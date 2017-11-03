@@ -1,22 +1,16 @@
 { stdenv, gcc, pkgconfig, cmake, bluez, ffmpeg, libao, mesa, gtk2, glib
-, gettext, git, libpthreadstubs, libXrandr, libXext, readline
-, openal, libXdmcp, portaudio, fetchgit, libusb, libevdev
+, pcre, gettext, libpthreadstubs, libXrandr, libXext, libSM, readline
+, openal, libXdmcp, portaudio, fetchFromGitHub, libusb, libevdev
 , libpulseaudio ? null }:
 
 stdenv.mkDerivation rec {
-  name = "dolphin-emu-20150802";
-  src = fetchgit {
-    url = git://github.com/dolphin-emu/dolphin.git;
-    rev = "5097a22844b850b429872f4de390bd958b11a616";
-    sha256 = "09jx61cxvfimnq1snkv6w3m9qidrgp0j0w81c7pbkpmcwysz8xya";
-    fetchSubmodules = false;
+  name = "dolphin-emu-20170902";
+  src = fetchFromGitHub {
+    owner = "dolphin-emu";
+    repo = "dolphin";
+    rev = "b073db51e5f3df8c9890e09a3f4f8a2276c31e3f";
+    sha256 = "0pr5inkd7swc6s7im7axhvmkdbqidhrha2wpflnr25aiwq0dzm10";
   };
-
-  postPatch = ''
-    for f in Source/Core/VideoBackends/{Software,OGL}/RasterFont.{h,cpp}; do
-      substituteInPlace "$f" --replace " CHAR_WIDTH " " CHARWIDTH "
-    done
-  '';
 
   cmakeFlags = ''
     -DGTK2_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include
@@ -27,9 +21,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ gcc pkgconfig cmake bluez ffmpeg libao mesa gtk2 glib
-                  gettext libpthreadstubs libXrandr libXext readline openal
-                  libevdev git libXdmcp portaudio libusb libpulseaudio ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gcc cmake bluez ffmpeg libao mesa gtk2 glib pcre
+                  gettext libpthreadstubs libXrandr libXext libSM readline openal
+                  libevdev libXdmcp portaudio libusb libpulseaudio ];
 
   meta = {
     homepage = http://dolphin-emu.org/;

@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A hosted VPN service that lets you securely extend LAN-like networks to distributed teams";
-    homepage = "https://secure.logmein.com/products/hamachi/";
+    homepage = https://secure.logmein.com/products/hamachi/;
     license = licenses.unfreeRedistributable;
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;

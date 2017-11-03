@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, pkgconfig, perl, makeQtWrapper
+{ stdenv, lib, fetchurl, pkgconfig, perl
 , libjpeg, udev
 , withUtils ? true
 , withGUI ? true, alsaLib, libX11, qtbase, mesa_glu
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     ln -s "$dev/include/libv4l1-videodev.h" "$dev/include/videodev.h"
   '';
 
-  nativeBuildInputs = [ pkgconfig perl ] ++ lib.optional (withUtils && withGUI) makeQtWrapper;
+  nativeBuildInputs = [ pkgconfig perl ];
 
   buildInputs = [ udev ] ++ lib.optionals (withUtils && withGUI) [ alsaLib libX11 qtbase mesa_glu ];
 
@@ -41,13 +41,9 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  postInstall = lib.optionalString (withUtils && withGUI) ''
-    wrapQtProgram $out/bin/qv4l2
-  '';
-
   meta = with stdenv.lib; {
     description = "V4L utils and libv4l, provide common image formats regardless of the v4l device";
-    homepage = http://linuxtv.org/projects.php;
+    homepage = https://linuxtv.org/projects.php;
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ codyopel viric ];
     platforms = platforms.linux;

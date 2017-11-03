@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     substituteInPlace snd_openal/snd_main.c --replace libopenal.so.1 ${openal}/lib/libopenal.so.1
   '';
-  buildInputs = [ unzip pkgconfig zlib curl libjpeg libpng libvorbis libtheora
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ unzip zlib curl libjpeg libpng libvorbis libtheora
                   libXxf86dga libXxf86vm libXinerama SDL mesa openal makeWrapper
                 ];
   installPhase = ''
@@ -52,7 +53,7 @@ stdenv.mkDerivation rec {
       Set in a futuristic cartoon-like world where rocketlauncher-wielding
       pigs and lasergun-carrying cyberpunks roam the streets, Warsow is a
       completely free fast-paced first-person shooter (FPS) for Windows, Linux
-      and Mac OS X.
+      and macOS.
     '';
     homepage = http://www.warsow.net;
     # Engine is under GPLv2, everything else is under

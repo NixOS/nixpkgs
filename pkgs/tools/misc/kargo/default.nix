@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2Packages }:
+{ stdenv, fetchurl, python2Packages, ansible2 }:
 
 python2Packages.buildPythonApplication rec {
   version = "0.4.6";
@@ -20,7 +20,7 @@ python2Packages.buildPythonApplication rec {
     markupsafe
     netaddr
     pyasn1
-    requests2
+    requests
     setuptools
   ];
 

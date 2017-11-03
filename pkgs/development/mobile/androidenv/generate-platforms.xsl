@@ -45,7 +45,7 @@ in
     };
     meta = {
       description = "<xsl:value-of select="sdk:description" />";
-<xsl:for-each select="sdk:desc-url">      url = <xsl:value-of select="." />;</xsl:for-each>
+<xsl:for-each select="sdk:desc-url">      homepage = <xsl:value-of select="." />;</xsl:for-each>
     };
   };
 </xsl:for-each>

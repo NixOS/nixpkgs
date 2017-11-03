@@ -9,11 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "1pl118qb7g0frpgl9ps43w4sd0psjirpmq54yg1kqcclqcqbbm49";
   };
 
-  buildInputs = [ pkgconfig libcaca ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libcaca ];
 
   meta = {
     description = "Display large colourful characters in text mode";
-    homepage = "http://caca.zoy.org/wiki/toilet";
+    homepage = http://caca.zoy.org/wiki/toilet;
     license = stdenv.lib.licenses.wtfpl;
     platforms = stdenv.lib.platforms.all;
   };

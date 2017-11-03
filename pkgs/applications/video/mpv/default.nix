@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchFromGitHub, makeWrapper
-, docutils, perl, pkgconfig, python3, which, ffmpeg_3_2
+, docutils, perl, pkgconfig, python3, which, ffmpeg
 , freefont_ttf, freetype, libass, libpthreadstubs
 , lua, lua5_sockets, libuchardet, libiconv ? null, darwin
 
@@ -33,6 +33,7 @@
 , vaapiSupport       ? true,  libva         ? null
 , drmSupport         ? !stdenv.isDarwin,  libdrm        ? null
 , vapoursynthSupport ? false, vapoursynth   ? null
+, archiveSupport     ? false, libarchive    ? null
 , jackaudioSupport   ? false, libjack2      ? null
 
 # scripts you want to be loaded by default
@@ -65,27 +66,28 @@ assert libpngSupport      -> available libpng;
 assert youtubeSupport     -> available youtube-dl;
 assert vapoursynthSupport -> available vapoursynth;
 assert jackaudioSupport   -> available libjack2;
+assert archiveSupport     -> available libarchive;
 assert vaapiSupport       -> available libva;
 assert drmSupport         -> available libdrm;
 
 let
   # Purity: Waf is normally downloaded by bootstrap.py, but
   # for purity reasons this behavior should be avoided.
-  wafVersion = "1.8.12";
+  wafVersion = "1.9.8";
   waf = fetchurl {
     urls = [ "http://waf.io/waf-${wafVersion}"
              "http://www.freehackers.org/~tnagy/release/waf-${wafVersion}" ];
-    sha256 = "12y9c352zwliw0zk9jm2lhynsjcf5jy0k1qch1c1av8hnbm2pgq1";
+    sha256 = "1gsd3zza1wixv2vhvq3inp4vb71i41a1kbwqnwixhnvdmcmw8z8n";
   };
 in stdenv.mkDerivation rec {
   name = "mpv-${version}";
-  version = "0.24.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "mpv-player";
     repo  = "mpv";
     rev    = "v${version}";
-    sha256 = "1aq1lvhw4l0i2gc9x6ijaaj2h3894jbcpd4j055n0y9vg9vqm6yy";
+    sha256 = "0746kmsg69675y5c70vn8imcr9d1zpjz97f27xr1vx00yjpd518v";
   };
 
   patchPhase = ''
@@ -101,8 +103,12 @@ in stdenv.mkDerivation rec {
     "--disable-libmpv-static"
     "--disable-static-build"
     "--disable-build-date" # Purity
+    (enableFeature archiveSupport "libarchive")
+    (enableFeature dvdreadSupport "dvdread")
+    (enableFeature dvdnavSupport "dvdnav")
     (enableFeature vaapiSupport "vaapi")
     (enableFeature waylandSupport "wayland")
+    (enableFeature stdenv.isLinux "dvbin")
   ];
 
   configurePhase = ''
@@ -112,7 +118,7 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ docutils makeWrapper perl pkgconfig python3 which ];
 
   buildInputs = [
-    ffmpeg_3_2 freetype libass libpthreadstubs
+    ffmpeg freetype libass libpthreadstubs
     lua lua5_sockets libuchardet
   ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
        libiconv Cocoa CoreAudio ])
@@ -136,6 +142,7 @@ in stdenv.mkDerivation rec {
     ++ optional vaapiSupport       libva
     ++ optional drmSupport         libdrm
     ++ optional vapoursynthSupport vapoursynth
+    ++ optional archiveSupport     libarchive
     ++ optionals dvdnavSupport     [ libdvdnav libdvdnav.libdvdread ]
     ++ optionals x11Support        [ libX11 libXext mesa libXxf86vm ]
     ++ optionals waylandSupport    [ wayland libxkbcommon ];
@@ -154,7 +161,7 @@ in stdenv.mkDerivation rec {
     ln -s ${freefont_ttf}/share/fonts/truetype/FreeSans.ttf $out/share/mpv/subfont.ttf
     # Ensure youtube-dl is available in $PATH for MPV
     wrapProgram $out/bin/mpv \
-      --add-flags "--script=${concatStringsSep "," scripts}" \
+      --add-flags "--scripts=${concatStringsSep "," scripts}" \
   '' + optionalString youtubeSupport ''
       --prefix PATH : "${youtube-dl}/bin" \
   '' + optionalString vapoursynthSupport ''

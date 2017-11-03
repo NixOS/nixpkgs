@@ -116,10 +116,13 @@ stdenv.mkDerivation rec {
     "CONFIG_WAV=y"
   ] ++ concatMap (a: a.flags) opts);
 
-  buildInputs = [ ncurses pkgconfig ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ncurses ]
     ++ stdenv.lib.optional stdenv.cc.isClang clangGCC
     ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv CoreAudio ]
     ++ concatMap (a: a.deps) opts;
+
+  makeFlags = [ "LD=$(CC)" ];
 
   meta = with stdenv.lib; {
     description = "Small, fast and powerful console music player for Linux and *BSD";

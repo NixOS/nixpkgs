@@ -1,16 +1,18 @@
 { stdenv, fetchurl, pkgconfig, libXtst, libvorbis, hunspell
 , libao, ffmpeg, libeb, lzo, xz, libtiff
-, qtbase, qtsvg, qtwebkit, qtx11extras, qttools, qmakeHook }:
+, qtbase, qtsvg, qtwebkit, qtx11extras, qttools, qmake }:
 stdenv.mkDerivation rec {
+
   name = "goldendict-1.5.0.rc2";
   src = fetchurl {
     url = "https://github.com/goldendict/goldendict/archive/1.5.0-RC2.tar.gz";
     sha256 = "1pizz39l61rbps0wby75fkvzyrah805257j33siqybwhsfiy1kmw";
   };
 
+  nativeBuildInputs = [ pkgconfig qmake ];
   buildInputs = [
-    pkgconfig qtbase qtsvg qtwebkit qtx11extras qttools libXtst libvorbis hunspell libao ffmpeg libeb
-    lzo xz libtiff qmakeHook
+    qtbase qtsvg qtwebkit qtx11extras qttools
+    libXtst libvorbis hunspell libao ffmpeg libeb lzo xz libtiff
   ];
 
   qmakeFlags = [ "CONFIG+=zim_support" ];

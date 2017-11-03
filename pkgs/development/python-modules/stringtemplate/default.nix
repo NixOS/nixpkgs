@@ -1,7 +1,8 @@
 {stdenv, fetchurl, buildPythonPackage, antlr, isPy3k}:
 
 buildPythonPackage rec {
-  name = "PyStringTemplate-${version}";
+  pname = "PyStringTemplate";
+  name = "${pname}-${version}";
   version = "3.2b1";
 
   src = fetchurl {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = {
-    homepage = "http://www.stringtemplate.org/";
+    homepage = http://www.stringtemplate.org/;
     description = "Text Templating Library";
     platforms = stdenv.lib.platforms.linux;
   };

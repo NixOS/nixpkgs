@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, ounit }:
 
 stdenv.mkDerivation {
-  name = "ocaml-fileutils-0.5.1";
+  name = "ocaml-fileutils-0.5.2";
 
   src = fetchurl {
-    url = https://forge.ocamlcore.org/frs/download.php/1651/ocaml-fileutils-0.5.1.tar.gz;
-    sha256 = "0g6zx2rcvacklxyli19ixcf6ich9ipxsps4k3jz98f5zlaab0a7g";
+    url = https://forge.ocamlcore.org/frs/download.php/1695/ocaml-fileutils-0.5.2.tar.gz;
+    sha256 = "06l8hva3jmb2b7n4aa84dhhh1lr2mj8632gz4q83glc00khkn1vv";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild ounit ];

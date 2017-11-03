@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     ];
     platforms = with stdenv.lib.platforms;
       linux;
-    homepage = "http://fdm.sourceforge.net/";
+    homepage = http://fdm.sourceforge.net/;
     inherit (sourceInfo) version;
     updateWalker = true;
   };

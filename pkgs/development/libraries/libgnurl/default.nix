@@ -1,29 +1,31 @@
-{ stdenv, fetchurl, perl, zlib, gnutls, gss, openssl, libssh2, libidn, libpsl, openldap }:
+{ stdenv, fetchurl, autoreconfHook, perl, zlib, gnutls, gss, openssl
+, libidn }:
 
 stdenv.mkDerivation rec {
-  version = "7.48.0";
+  version = "7.54.1";
 
   name = "libgnurl-${version}";
 
   src = fetchurl {
-    url = "https://gnunet.org/sites/default/files/gnurl-7_48_0.tar.bz2";
-    sha256 = "14gch4rdibrc8qs4mijsczxvl45dsclf234g17dk6c8nc2s4bm0a";
+    url = "https://gnunet.org/sites/default/files/gnurl-${version}.tar.bz2";
+    sha256 = "0szbj352h95sgc9kbx9wzkgjksmg3g5k6cvlc7hz3wrbdh5gb0a4";
   };
 
-  buildInputs = [ perl gnutls gss openssl zlib libidn libssh2 libpsl openldap ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ perl gnutls gss openssl zlib libidn ];
 
   preConfigure = ''
     sed -e 's|/usr/bin|/no-such-path|g' -i.bak configure
   '';
 
   configureFlags = [
-    "--with-zlib"
-    "--with-gssapi"
-    "--with-libssh2"
-    "--with-libidn"
-    "--with-libpsl"
-    "--enable-ldap"
-    "--enable-ldaps"
+    "--enable-ipv6" "--with-gnutls" "--without-libmetalink" "--without-winidn"
+    "--without-librtmp" "--without-nghttp2" "--without-nss" "--without-cyassl"
+    "--without-polarssl" "--without-ssl" "--without-winssl"
+    "--without-darwinssl" "--disable-sspi" "--disable-ntlm-wb" "--disable-ldap"
+    "--disable-rtsp" "--disable-dict" "--disable-telnet" "--disable-tftp"
+    "--disable-pop3" "--disable-imap" "--disable-smtp" "--disable-gopher"
+    "--disable-file" "--disable-ftp" "--disable-smb"
   ];
 
   meta = with stdenv.lib; {

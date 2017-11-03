@@ -6,11 +6,11 @@ in
 
 stdenv.mkDerivation {
 
-  name = "camlp5${if transitional then "_transitional" else ""}-6.17";
+  name = "camlp5${if transitional then "_transitional" else ""}-7.03";
 
   src = fetchzip {
-    url = https://github.com/camlp5/camlp5/archive/rel617.tar.gz;
-    sha256 = "0finmr6y0lyd7mnl61kmvwd32cmmf64m245vdh1iy0139rxf814c";
+    url = https://github.com/camlp5/camlp5/archive/rel703.tar.gz;
+    sha256 = "0bwzhp4qjypfa0x8drp8w434dfixm1nzrm6pcy9s5akpmqvb50a8";
   };
 
   buildInputs = [ ocaml ];
@@ -23,6 +23,8 @@ stdenv.mkDerivation {
   buildFlags = "world.opt";
 
   postInstall = "cp ${metafile} $out/lib/ocaml/${ocaml.version}/site-lib/camlp5/META";
+
+  dontStrip = true;
 
   meta = with stdenv.lib; {
     description = "Preprocessor-pretty-printer for OCaml";

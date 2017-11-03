@@ -11,10 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "1nvb19jd556v2h2bi7w4dcl507p3p8xvjkqfzrcsy7ccy3502brq";
   };
 
-  buildInputs = [ cmake pkgconfig mpd_clientlib openssl ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake mpd_clientlib openssl ];
 
   meta = {
-    homepage = "http://www.ympd.org";
+    homepage = http://www.ympd.org;
     description = "Standalone MPD Web GUI written in C, utilizing Websockets and Bootstrap/JS";
     maintainers = [ stdenv.lib.maintainers.siddharthist ];
     platforms = stdenv.lib.platforms.unix;

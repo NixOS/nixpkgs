@@ -4,17 +4,18 @@
 
 stdenv.mkDerivation rec {
   name    = "godot-${version}";
-  version = "2.1.1-stable";
+  version = "2.1.3-stable";
 
   src = fetchFromGitHub {
     owner  = "godotengine";
     repo   = "godot";
     rev    = version;
-    sha256 = "071qkm1l6yn2s9ha67y15w2phvy5m5wl3wqvrslhfmnsir3q3k01";
+    sha256 = "04qbab0icpv3ascr4dqgj18sqvw04a1jypcngb0ji8npa8q9wxb2";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gcc scons pkgconfig libX11 libXcursor libXinerama libXrandr libXrender
+    gcc scons libX11 libXcursor libXinerama libXrandr libXrender
     freetype openssl alsaLib libpulseaudio mesa_glu zlib
   ];
 
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage    = "http://godotengine.org";
+    homepage    = "https://godotengine.org";
     description = "Free and Open Source 2D and 3D game engine";
     license     = stdenv.lib.licenses.mit;
     platforms   = stdenv.lib.platforms.linux;

@@ -10,7 +10,7 @@ let
 in
 {
   imports = [
-    ../../profiles/minimal.nix
+    ../../profiles/base.nix
     ../../profiles/installation-device.nix
     ./sd-image.nix
   ];
@@ -28,8 +28,12 @@ in
   boot.loader.generic-extlinux-compatible.enable = true;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  boot.kernelParams = ["console=ttyS0,115200n8" "console=tty0"];
-  boot.consoleLogLevel = 7;
+
+  # The serial ports listed here are:
+  # - ttyS0: for Tegra (Jetson TX1)
+  # - ttyAMA0: for QEMU's -machine virt
+  # Also increase the amount of CMA to ensure the virtual console on the RPi3 works.
+  boot.kernelParams = ["cma=32M" "console=ttyS0,115200n8" "console=ttyAMA0,115200n8" "console=tty0"];
 
   # FIXME: this probably should be in installation-device.nix
   users.extraUsers.root.initialHashedPassword = "";

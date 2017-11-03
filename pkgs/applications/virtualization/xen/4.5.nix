@@ -1,4 +1,5 @@
 { stdenv, callPackage, fetchurl, fetchpatch, fetchgit
+, ocamlPackages_4_02
 , withInternalQemu ? true
 , withInternalTraditionalQemu ? true
 , withInternalSeabios ? true
@@ -31,13 +32,15 @@ let
     udev pciutils xorg.libX11 SDL pixman acl glusterfs spice_protocol usbredir
     alsaLib
   ];
+
+  xsa = import ./xsa-patches.nix { inherit fetchpatch; };
 in
 
 callPackage (import ./generic.nix (rec {
   version = "4.5.5";
 
   src = fetchurl {
-    url = "http://bits.xensource.com/oss-xen/release/${version}/xen-${version}.tar.gz";
+    url = "https://downloads.xenproject.org/release/xen/${version}/xen-${version}.tar.gz";
     sha256 = "1y74ms4yc3znf8jc3fgyq94va2y0pf7jh8m9pfqnpgklywqnw8g2";
   };
 
@@ -67,6 +70,14 @@ callPackage (import ./generic.nix (rec {
           name = "209-qemuu/0002-cirrus-add-blit_is_unsafe-call-to-cirrus_bitblt_cput";
           sha256 = "0avxqs9922qjfsxxlk7bh10432a526j2yyykhags8dk1bzxkpxwv";
         })
+        (xsaPatch {
+          name = "211-qemuu-4.6";
+          sha256 = "1g090xs8ca8676vyi78b99z5yjdliw6mxkr521b8kimhf8crx4yg";
+        })
+        (xsaPatch {
+          name = "216-qemuu-4.5";
+          sha256 = "0nh5akbal93czia1gh1pzvwq7gc4zwiyr1hbyk1m6wwdmqv6ph61";
+        })
       ];
       meta.description = "Xen's fork of upstream Qemu";
     };
@@ -94,6 +105,10 @@ callPackage (import ./generic.nix (rec {
         (xsaPatch {
           name = "209-qemut";
           sha256 = "1hq8ghfzw6c47pb5vf9ngxwgs8slhbbw6cq7gk0nam44rwvz743r";
+        })
+        (xsaPatch {
+          name = "211-qemut-4.5";
+          sha256 = "1z3phabvqmxv4b5923fx63hwdg4v1fnl15zbl88873ybqn0hp50f";
         })
       ];
       postPatch = ''
@@ -167,62 +182,55 @@ callPackage (import ./generic.nix (rec {
     ++ optional (withSeabios) "--with-system-seabios=${seabios}"
     ++ optional (!withInternalSeabios && !withSeabios) "--disable-seabios"
 
-    ++ optional (withOVMF) "--with-system-ovmf=${OVMF}"
+    ++ optional (withOVMF) "--with-system-ovmf=${OVMF.fd}/FV/OVMF.fd"
     ++ optional (withInternalOVMF) "--enable-ovmf";
 
-  patches =
-    [ ./0001-libxl-Spice-image-compression-setting-support-for-up.patch
-      ./0002-libxl-Spice-streaming-video-setting-support-for-upst.patch
-      ./0003-Add-qxl-vga-interface-support-for-upstream-qem.patch
-      (xsaPatch {
-        name = "190-4.5";
-        sha256 = "0f8pw38kkxky89ny3ic5h26v9zsjj9id89lygx896zc3w1klafqm";
-      })
-      (xsaPatch {
-        name = "191-4.6";
-        sha256 = "1wl1ndli8rflmc44pkp8cw4642gi8z7j7gipac8mmlavmn3wdqhg";
-      })
-      (xsaPatch {
-        name = "192-4.5";
-        sha256 = "0m8cv0xqvx5pdk7fcmaw2vv43xhl62plyx33xqj48y66x5z9lxpm";
-      })
-      (xsaPatch {
-        name = "193-4.5";
-        sha256 = "0k9mykhrpm4rbjkhv067f6s05lqmgnldcyb3vi8cl0ndlyh66lvr";
-      })
-      (xsaPatch {
-        name = "195";
-        sha256 = "0m0g953qnjy2knd9qnkdagpvkkgjbk3ydgajia6kzs499dyqpdl7";
-      })
-      (xsaPatch {
-        name = "196-0001-x86-emul-Correct-the-IDT-entry-calculation-in-inject";
-        sha256 = "0z53nzrjvc745y26z1qc8jlg3blxp7brawvji1hx3s74n346ssl6";
-      })
-      (xsaPatch {
-        name = "196-0002-x86-svm-Fix-injection-of-software-interrupts";
-        sha256 = "11cqvr5jn2s92wsshpilx9qnfczrd9hnyb5aim6qwmz3fq3hrrkz";
-      })
-      (xsaPatch {
-        name = "198";
-        sha256 = "0d1nndn4p520c9xa87ixnyks3mrvzcri7c702d6mm22m8ansx6d9";
-      })
-      (xsaPatch {
-        name = "200-4.6";
-        sha256 = "0k918ja83470iz5k4vqi15293zjvz2dipdhgc9sy9rrhg4mqncl7";
-      })
-      (xsaPatch {
-        name = "202-4.6";
-        sha256 = "0nnznkrvfbbc8z64dr9wvbdijd4qbpc0wz2j5vpmx6b32sm7932f";
-      })
-      (xsaPatch {
-        name = "204-4.5";
-        sha256 = "083z9pbdz3f532fnzg7n2d5wzv6rmqc0f4mvc3mnmkd0rzqw8vcp";
-      })
-      (xsaPatch {
-        name = "207";
-        sha256 = "0wdlhijmw9mdj6a82pyw1rwwiz605dwzjc392zr3fpb2jklrvibc";
-      })
-    ];
+  patches = with xsa; flatten [
+    ./0001-libxl-Spice-image-compression-setting-support-for-up.patch
+    ./0002-libxl-Spice-streaming-video-setting-support-for-upst.patch
+    ./0003-Add-qxl-vga-interface-support-for-upstream-qem.patch
+    XSA_190
+    XSA_191
+    XSA_192
+    XSA_193
+    XSA_195
+    XSA_196
+    XSA_198
+    XSA_200
+    XSA_202_45
+    XSA_204_45
+    XSA_206_45
+    XSA_207
+    XSA_212
+    XSA_213_45
+    XSA_214
+    XSA_215
+    XSA_217_45
+    XSA_218_45
+    XSA_219_45
+    XSA_220_45
+    XSA_221
+    XSA_222_45
+    XSA_223
+    XSA_224_45
+    XSA_227_45
+    XSA_230
+    XSA_231_45
+    XSA_232
+    XSA_233
+    XSA_234_45
+    XSA_235_45
+    XSA_236_45
+    XSA_237_45
+    XSA_238_45
+    XSA_239_45
+    XSA_240_45
+    XSA_241
+    XSA_242
+    XSA_243_45
+    XSA_244_45
+    XSA_245
+  ];
 
   # Fix build on Glibc 2.24.
   NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
@@ -234,4 +242,4 @@ callPackage (import ./generic.nix (rec {
       -i tools/libxl/libxl_device.c
   '';
 
-})) args
+})) ({ ocamlPackages = ocamlPackages_4_02; } // args)

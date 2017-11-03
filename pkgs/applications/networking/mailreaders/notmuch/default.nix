@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, fixDarwinDylibNames, gdb
+{ fetchurl, stdenv, fixDarwinDylibNames
 , pkgconfig, gnupg
 , xapian, gmime, talloc, zlib
 , doxygen, perl
@@ -6,11 +6,13 @@
 , bash-completion
 , emacs
 , ruby
-, which, dtach, openssl, bash
+, which, dtach, openssl, bash, gdb, man
 }:
 
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
-  version = "0.23.5";
+  version = "0.25";
   name = "notmuch-${version}";
 
   passthru = {
@@ -20,11 +22,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "0ry2k9sdwd1vw8cf6svch8wk98523s07mwxvsf7b8kghqnrr89n6";
+    sha256 = "02z6d87ip1hkipz8d7w0sfklg8dd5fd5vlgp768640ixg0gqvlk5";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig gnupg # undefined dependencies
+    gnupg # undefined dependencies
     xapian gmime talloc zlib  # dependencies described in INSTALL
     doxygen perl  # (optional) api docs
     pythonPackages.sphinx pythonPackages.python  # (optional) documentation -> doc/INSTALL
@@ -32,27 +35,19 @@ stdenv.mkDerivation rec {
     emacs  # (optional) to byte compile emacs code
     ruby  # (optional) ruby bindings
     which dtach openssl bash  # test dependencies
-    ]
-    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames
-    ++ stdenv.lib.optional (!stdenv.isDarwin) gdb;
+  ]
+  ++ optional stdenv.isDarwin fixDarwinDylibNames
+  ++ optionals (!stdenv.isDarwin) [ gdb man ]; # test dependencies
 
-  doCheck = !stdenv.isDarwin;
-  checkTarget = "test";
-
-  patchPhase = ''
-    # XXX: disabling few tests since i have no idea how to make them pass for now
-    rm -f test/T010-help-test.sh \
-          test/T350-crypto.sh \
-          test/T355-smime.sh
-
+  postPatch = ''
     find test -type f -exec \
       sed -i \
         -e "1s|#!/usr/bin/env bash|#!${bash}/bin/bash|" \
-        -e "s|gpg |${gnupg}/bin/gpg2 |" \
-        -e "s| gpg| ${gnupg}/bin/gpg2|" \
+        -e "s|gpg |${gnupg}/bin/gpg |" \
+        -e "s| gpg| ${gnupg}/bin/gpg|" \
         -e "s|gpgsm |${gnupg}/bin/gpgsm |" \
         -e "s| gpgsm| ${gnupg}/bin/gpgsm|" \
-        -e "s|crypto.gpg_path=gpg|crypto.gpg_path=${gnupg}/bin/gpg2|" \
+        -e "s|crypto.gpg_path=gpg|crypto.gpg_path=${gnupg}/bin/gpg|" \
         "{}" ";"
 
     for src in \
@@ -61,11 +56,13 @@ stdenv.mkDerivation rec {
       emacs/notmuch-crypto.el
     do
       substituteInPlace "$src" \
-        --replace \"gpg\" \"${gnupg}/bin/gpg2\"
+        --replace \"gpg\" \"${gnupg}/bin/gpg\"
     done
   '';
 
-  preFixup = stdenv.lib.optionalString stdenv.isDarwin ''
+  makeFlags = "V=1";
+
+  preFixup = optionalString stdenv.isDarwin ''
     set -e
 
     die() {
@@ -92,12 +89,16 @@ stdenv.mkDerivation rec {
     install_name_tool -change "$badname" "$goodname" "$prg"
   '';
 
+  doCheck = !stdenv.isDarwin && (versionAtLeast gmime.version "3.0");
+  checkTarget = "test V=1";
+
   postInstall = ''
     make install-man
   '';
+
   dontGzipMan = true; # already compressed
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Mail indexer";
     homepage    = https://notmuchmail.org/;
     license     = licenses.gpl3;

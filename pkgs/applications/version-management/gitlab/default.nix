@@ -1,28 +1,28 @@
-{ stdenv, lib, bundler, fetchurl, fetchFromGitHub, bundlerEnv, libiconv, ruby
-, tzdata, git, nodejs, procps, dpkg
+{ pkgs, stdenv, lib, bundler, fetchurl, fetchFromGitHub, bundlerEnv, libiconv
+, ruby, tzdata, git, procps, dpkg, nettools
 }:
 
 /* When updating the Gemfile add `gem "activerecord-nulldb-adapter"`
    to allow building the assets without a database */
 
 let
-  env = bundlerEnv {
-    name = "gitlab";
+  rubyEnv = bundlerEnv {
+    name = "gitlab-env-${version}";
     inherit ruby;
     gemdir = ./.;
     meta = with lib; {
       homepage = http://www.gitlab.com/;
       platforms = platforms.linux;
-      maintainers = with maintainers; [ fpletz ];
+      maintainers = with maintainers; [ fpletz globin ];
       license = licenses.mit;
     };
   };
 
-  version = "8.17.5";
+  version = "10.0.2";
 
   gitlabDeb = fetchurl {
     url = "https://packages.gitlab.com/gitlab/gitlab-ce/packages/debian/jessie/gitlab-ce_${version}-ce.0_amd64.deb/download";
-    sha256 = "1ga5ki1bh66sdk5yizjy0dqcg85hrzkdp0ag3si942yv28sjy1xk";
+    sha256 = "0jsqjarvjzbxv1yiddzp5xwsqqrq5cvam0xn749p1vzqhcp8pahc";
   };
 
 in
@@ -31,19 +31,20 @@ stdenv.mkDerivation rec {
   name = "gitlab-${version}";
 
   buildInputs = [
-    env ruby bundler tzdata git nodejs procps dpkg
+    rubyEnv ruby bundler tzdata git procps dpkg nettools
   ];
 
   src = fetchFromGitHub {
     owner = "gitlabhq";
     repo = "gitlabhq";
     rev = "v${version}";
-    sha256 = "0wvszxm28c80qwx6np5mi36saxzzg4n7jcp4ckvhhr3jvczn9m8g";
+    sha256 = "1602d6nkb41gg80n6p0wqxrjsn79s0z3817461d8dw2ha2dmbl34";
   };
 
   patches = [
     ./remove-hardcoded-locations.patch
     ./nulladapter.patch
+    ./fix-36783.patch
   ];
 
   postPatch = ''
@@ -77,20 +78,20 @@ stdenv.mkDerivation rec {
     mv -v opt/gitlab/embedded/service/gitlab-rails/public/assets public
     rm -rf opt
 
-    export GITLAB_DATABASE_ADAPTER=nulldb
-    export SKIP_STORAGE_VALIDATION=true
-    rake assets:precompile RAILS_ENV=production
-
     mv config/gitlab.yml config/gitlab.yml.example
-    rm config/secrets.yml
+    rm -f config/secrets.yml
     mv config config.dist
   '';
 
   installPhase = ''
+    rm -r tmp
     mkdir -p $out/share
     cp -r . $out/share/gitlab
+    rm -rf $out/share/gitlab/log
+    ln -sf /run/gitlab/log $out/share/gitlab/log
     ln -sf /run/gitlab/uploads $out/share/gitlab/public/uploads
     ln -sf /run/gitlab/config $out/share/gitlab/config
+    ln -sf /run/gitlab/tmp $out/share/gitlab/tmp
 
     # rake tasks to mitigate CVE-2017-0882
     # see https://about.gitlab.com/2017/03/20/gitlab-8-dot-17-dot-4-security-release/
@@ -98,7 +99,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit env;
+    inherit rubyEnv;
     inherit ruby;
   };
 }

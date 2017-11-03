@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Example OpenGL app using KMS/GBM";
-    homepage = "https://github.com/robclark/kmscube";
+    homepage = https://github.com/robclark/kmscube;
     license = licenses.mit;
     maintainers = with maintainers; [ dezgeg ];
     platforms = platforms.linux;

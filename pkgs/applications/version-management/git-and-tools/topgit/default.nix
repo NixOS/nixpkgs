@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://github.com/greenrd/topgit";
+    homepage = https://github.com/greenrd/topgit;
     description = "TopGit manages large amount of interdependent topic branches";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;

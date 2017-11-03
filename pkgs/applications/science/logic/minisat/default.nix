@@ -27,6 +27,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ gebner raskin ];
     platforms = platforms.unix;
     license = licenses.mit;
-    homepage = "http://minisat.se/";
+    homepage = http://minisat.se/;
   };
 }

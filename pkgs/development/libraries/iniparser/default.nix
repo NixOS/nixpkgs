@@ -1,17 +1,23 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub }:
 
 let
   inherit (stdenv.lib) optional;
-in
-stdenv.mkDerivation rec{
-  name = "iniparser-3.1";
 
-  src = fetchurl {
-    url = "${meta.homepage}/iniparser-3.1.tar.gz";
-    sha256 = "1igmxzcy0s25zcy9vmcw0kd13lh60r0b4qg8lnp1jic33f427pxf";
+in stdenv.mkDerivation rec {
+  name = "iniparser-${version}";
+  version = "4.0";
+
+  src = fetchFromGitHub {
+    owner = "ndevilla";
+    repo = "iniparser";
+    rev = "v${version}";
+    sha256 = "0339qa0qxa5z02xjcs5my8v91v0r9jm4piswrl1sa29kwyxgv5nb";
   };
 
   patches = ./no-usr.patch;
+
+  doCheck = true;
+  preCheck = "patchShebangs test/make-tests.sh";
 
   # TODO: Build dylib on Darwin
   buildFlags = (if stdenv.isDarwin then [ "libiniparser.a" ] else [ "libiniparser.so" ]) ++ [ "CC=cc" ];
@@ -23,7 +29,7 @@ stdenv.mkDerivation rec{
     cp src/*.h $out/include
 
     mkdir -p $out/share/doc/${name}
-    for i in AUTHORS INSTALL LICENSE README; do
+    for i in AUTHORS INSTALL LICENSE README.md; do
       bzip2 -c -9 $i > $out/share/doc/${name}/$i.bz2;
     done;
     cp -r html $out/share/doc/${name}
@@ -36,7 +42,7 @@ stdenv.mkDerivation rec{
   '');
 
   meta = {
-    homepage = http://ndevilla.free.fr/iniparser;
+    inherit (src.meta) homepage;
     description = "Free standalone ini file parsing library";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;

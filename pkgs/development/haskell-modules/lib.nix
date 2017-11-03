@@ -1,7 +1,9 @@
-{ pkgs }:
+# TODO(@Ericson2314): Remove `pkgs` param, which is only used for
+# `buildStackProject`, `justStaticExecutables` and `checkUnusedPackages`
+{ pkgs, lib }:
 
 rec {
-  makePackageSet = pkgs.callPackage ./make-package-set.nix {};
+  makePackageSet = import ./make-package-set.nix;
 
   overrideCabal = drv: f: (drv.override (args: args // {
     mkDerivation = drv: (args.mkDerivation drv).override f;
@@ -21,11 +23,14 @@ rec {
   doCheck = drv: overrideCabal drv (drv: { doCheck = true; });
   dontCheck = drv: overrideCabal drv (drv: { doCheck = false; });
 
+  doBenchmark = drv: overrideCabal drv (drv: { doBenchmark = true; });
+  dontBenchmark = drv: overrideCabal drv (drv: { doBenchmark = false; });
+
   doDistribute = drv: overrideCabal drv (drv: { hydraPlatforms = drv.platforms or ["i686-linux" "x86_64-linux" "x86_64-darwin"]; });
   dontDistribute = drv: overrideCabal drv (drv: { hydraPlatforms = []; });
 
   appendConfigureFlag = drv: x: overrideCabal drv (drv: { configureFlags = (drv.configureFlags or []) ++ [x]; });
-  removeConfigureFlag = drv: x: overrideCabal drv (drv: { configureFlags = pkgs.stdenv.lib.remove x (drv.configureFlags or []); });
+  removeConfigureFlag = drv: x: overrideCabal drv (drv: { configureFlags = lib.remove x (drv.configureFlags or []); });
 
   addBuildTool = drv: x: addBuildTools drv [x];
   addBuildTools = drv: xs: overrideCabal drv (drv: { buildTools = (drv.buildTools or []) ++ xs; });
@@ -71,8 +76,22 @@ rec {
 
   disableHardening = drv: flags: overrideCabal drv (drv: { hardeningDisable = flags; });
 
-  sdistTarball = pkg: pkgs.lib.overrideDerivation pkg (drv: {
+  # Controls if Nix should strip the binary files (removes debug symbols)
+  doStrip = drv: overrideCabal drv (drv: { dontStrip = false; });
+  dontStrip = drv: overrideCabal drv (drv: { dontStrip = true; });
+
+  # Useful for debugging segfaults with gdb.
+  # -g: enables debugging symbols
+  # --disable-*-stripping: tell GHC not to strip resulting binaries
+  # dontStrip: see above
+  enableDWARFDebugging = drv:
+   appendConfigureFlag (dontStrip drv) "--ghc-options=-g --disable-executable-stripping --disable-library-stripping";
+
+  sdistTarball = pkg: lib.overrideDerivation pkg (drv: {
     name = "${drv.pname}-source-${drv.version}";
+    # Since we disable the haddock phase, we also need to override the
+    # outputs since the separate doc output will not be produced.
+    outputs = ["out"];
     buildPhase = "./Setup sdist";
     haddockPhase = ":";
     checkPhase = ":";
@@ -89,9 +108,11 @@ rec {
     isLibrary = false;
     doHaddock = false;
     postFixup = "rm -rf $out/lib $out/nix-support $out/share/doc";
+  } // lib.optionalAttrs (pkgs.hostPlatform.isDarwin) {
+    configureFlags = (drv.configureFlags or []) ++ ["--ghc-option=-optl=-dead_strip"];
   });
 
-  buildFromSdist = pkg: pkgs.lib.overrideDerivation pkg (drv: {
+  buildFromSdist = pkg: lib.overrideDerivation pkg (drv: {
     unpackPhase = let src = sdistTarball pkg; tarname = "${pkg.pname}-${pkg.version}"; in ''
       echo "Source tarball is at ${src}/${tarname}.tar.gz"
       tar xf ${src}/${tarname}.tar.gz
@@ -99,7 +120,25 @@ rec {
     '';
   });
 
-  buildStrictly = pkg: buildFromSdist (appendConfigureFlag pkg "--ghc-option=-Wall --ghc-option=-Werror");
+  buildStrictly = pkg: buildFromSdist (failOnAllWarnings pkg);
+
+  failOnAllWarnings = drv: appendConfigureFlag drv "--ghc-option=-Wall --ghc-option=-Werror";
+
+  checkUnusedPackages =
+    { ignoreEmptyImports ? false
+    , ignoreMainModule   ? false
+    , ignorePackages     ? []
+    } : drv :
+      overrideCabal (appendConfigureFlag drv "--ghc-option=-ddump-minimal-imports") (_drv: {
+        postBuild = with lib;
+          let args = concatStringsSep " " (
+                       optional ignoreEmptyImports "--ignore-empty-imports" ++
+                       optional ignoreMainModule   "--ignore-main-module" ++
+                       map (pkg: "--ignore-package ${pkg}") ignorePackages
+                     );
+          in "${pkgs.haskellPackages.packunused}/bin/packunused" +
+             optionalString (args != "") " ${args}";
+      });
 
   buildStackProject = pkgs.callPackage ./generic-stack-builder.nix { };
 

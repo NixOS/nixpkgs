@@ -25,9 +25,10 @@ stdenv.mkDerivation rec {
   inherit name;
 
   srcs = [ src robtkSrc ];
-  sourceRoot = "sisco.lv2-${src.rev}-src";
+  sourceRoot = src.name;
 
-  buildInputs = [ pkgconfig lv2 pango cairo libjack2 mesa ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ lv2 pango cairo libjack2 mesa ];
 
   postUnpack = "chmod u+w -R ${robtkName}-src; mv ${robtkName}-src/* ${sourceRoot}/robtk";
   sisco_VERSION = version;
