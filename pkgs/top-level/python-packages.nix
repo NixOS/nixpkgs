@@ -11604,39 +11604,9 @@ in {
     };
   };
 
-  hyperframe = buildPythonPackage rec {
-    name = "hyperframe-${version}";
-    version = "4.0.1";
+  hyperframe = callPackage ../development/python-modules/hyperframe { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/hyperframe/${name}.tar.gz";
-      sha256 = "0hsfq0jigwa0i58z7vbnp62l7za49gmlg75vnygq2ijhkidkcmwa";
-    };
-
-    meta = {
-      description = "HTTP/2 framing layer for Python";
-      homepage = "http://hyper.rtfd.org/";
-      license = licenses.mit;
-    };
-  };
-
-  h2 = buildPythonPackage rec {
-    name = "h2-${version}";
-    version = "2.5.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/h/h2/${name}.tar.gz";
-      sha256 = "0xhzm5vcfhdq3mihynwh4ljwi0r06lvzk3ypr0gmmbcp1x43ffb7";
-    };
-
-    propagatedBuildInputs = with self; [ enum34 hpack hyperframe ];
-
-    meta = {
-      description = "HTTP/2 State-Machine based protocol implementation";
-      homepage = "http://hyper.rtfd.org/";
-      license = licenses.mit;
-    };
-  };
+  h2 = callPackage ../development/python-modules/h2 { };
 
   editorconfig = buildPythonPackage rec {
     name = "EditorConfig-${version}";
@@ -13842,21 +13812,7 @@ in {
 
   pecan = callPackage ../development/python-modules/pecan { };
 
-  kaitaistruct = buildPythonPackage rec {
-    name = "kaitaistruct-${version}";
-    version = "0.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/k/kaitaistruct/${name}.tar.gz";
-      sha256 = "0rwcrlz7f2bwmypqa38pag492bp71wp1bhz51hsaynjjyr9knr12";
-    };
-
-    meta = with stdenv.lib; {
-      description = "Kaitai Struct: runtime library for Python";
-      homepage = "https://github.com/kaitai-io/kaitai_struct_python_runtime";
-      license = licenses.mit;
-    };
-  };
+  kaitaistruct = callPackage ../development/python-modules/kaitaistruct { };
 
   Kajiki = buildPythonPackage rec {
     name = "Kajiki-${version}";
@@ -15568,41 +15524,9 @@ in {
   };
 
 
-  pyasn1 = buildPythonPackage rec {
-    name = "pyasn1-0.1.9";
+  pyasn1 = callPackage ../development/python-modules/pyasn1 { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyasn1/${name}.tar.gz";
-      sha256 = "0zraxni14bqi20kr4bi6nwsh32aibz0fq0xaczfisw0zdpcsqg45";
-    };
-
-    meta = {
-      description = "ASN.1 tools for Python";
-      homepage = http://pyasn1.sourceforge.net/;
-      license = "mBSD";
-      platforms = platforms.unix;  # arbitrary choice
-    };
-  };
-
-  pyasn1-modules = buildPythonPackage rec {
-    name = "pyasn1-modules-${version}";
-    version = "0.0.8";
-    disabled = isPyPy;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyasn1-modules/${name}.tar.gz";
-      sha256 = "0drqgw81xd3fxdlg89kgd79zzrabvfncvkbybi2wr6w2y4s1jmhh";
-    };
-
-    propagatedBuildInputs = with self; [ pyasn1 ];
-
-    meta = {
-      description = "A collection of ASN.1-based protocols modules";
-      homepage = https://pypi.python.org/pypi/pyasn1-modules;
-      license = licenses.bsd3;
-      platforms = platforms.unix;  # same as pyasn1
-    };
-  };
+  pyasn1-modules = callPackage ../development/python-modules/pyasn1-modules { };
 
   pyaudio = buildPythonPackage rec {
     name = "python-pyaudio-${version}";
@@ -16932,25 +16856,7 @@ in {
     inherit (pkgs) openldap cyrus_sasl openssl;
   };
 
-  ldap3 = buildPythonPackage rec {
-    version = "1.0.4";
-    name = "ldap3-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/ldap3/${name}.tar.gz";
-      sha256 = "0j4qqj9vq022hy7wfqn8s0j4vm2g6paabbzas1vbyspawvcfai98";
-    };
-
-    buildInputs = with self; [ gssapi ];
-
-    propagatedBuildInputs = with self; [ pyasn1 ];
-
-    meta = {
-      homepage = https://pypi.python.org/pypi/ldap3;
-      description = "A strictly RFC 4510 conforming LDAP V3 pure Python client library";
-      license = licenses.lgpl3;
-    };
-  };
+  ldap3 = callPackage ../development/python-modules/ldap3 {};
 
   ptest = buildPythonPackage rec {
     name = pname + "-" + version;
