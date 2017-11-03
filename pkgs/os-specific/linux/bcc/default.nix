@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     mv $out/share/bcc/man $out/share/
 
     find $out/share/bcc/tools -type f -executable -print0 | \
-    while IFS= read -r -d $'\0' f; do
+    while IFS= read -r -d ''$'\0' f; do
       pythonLibs="$out/lib/python2.7/site-packages:${pythonPackages.netaddr}/lib/${python.libPrefix}/site-packages"
       rm -f $out/bin/$(basename $f)
       makeWrapper $f $out/bin/$(basename $f) \
