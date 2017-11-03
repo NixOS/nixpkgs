@@ -1641,12 +1641,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   CGI = buildPerlPackage rec {
-    name = "CGI-4.36";
+    name = "CGI-4.37";
     src = fetchurl {
       url = "mirror://cpan/authors/id/L/LE/LEEJO/${name}.tar.gz";
-      sha256 = "142la7jagpni5z7m4s9h9v5vpg0pisc3y3z8kdzqc7j6yba89zpy";
+      sha256 = "7a14eee5df640f7141848f653cf48d99bfc9b5c68e18167338ee01b91cdfb883";
     };
-    buildInputs = [ TestDeep TestWarn ];
+    buildInputs = [ TestDeep TestNoWarnings TestWarn ];
     propagatedBuildInputs = [ HTMLParser self."if" ];
     meta = {
       homepage = https://metacpan.org/module/CGI;
