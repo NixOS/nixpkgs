@@ -64,13 +64,19 @@ let buildCrate = { crateName, crateVersion, dependencies, complete, crateFeature
       export PROFILE=${if release then "release" else "debug"}
       export OUT_DIR=$(pwd)/target/build/${crateName}.out
 
+      BUILD=""
       if [[ ! -z "${build}" ]] ; then
-         echo "$boldgreen" "Building ${build} (${libName})" "$norm"
+         BUILD=${build}
+      elif [[ -e "build.rs" ]]; then
+         BUILD="build.rs"
+      fi
+      if [[ ! -z "$BUILD" ]] ; then
+         echo "$boldgreen" "Building $BUILD (${libName})" "$norm"
          mkdir -p target/build/${crateName}
          if [ -e target/link_ ]; then
-           rustc --crate-name build_script_build ${build} --crate-type bin ${rustcOpts} ${crateFeatures} --out-dir target/build/${crateName} --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow $(cat target/link_)
+           rustc --crate-name build_script_build $BUILD --crate-type bin ${rustcOpts} ${crateFeatures} --out-dir target/build/${crateName} --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow $(cat target/link_)
          else
-           rustc --crate-name build_script_build ${build} --crate-type bin ${rustcOpts} ${crateFeatures} --out-dir target/build/${crateName} --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow
+           rustc --crate-name build_script_build $BUILD --crate-type bin ${rustcOpts} ${crateFeatures} --out-dir target/build/${crateName} --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow
          fi
          mkdir -p target/build/${crateName}.out
          export RUST_BACKTRACE=1
@@ -84,6 +90,7 @@ let buildCrate = { crateName, crateVersion, dependencies, complete, crateFeature
          EXTRA_LINK=$(grep "^cargo:rustc-link-lib=" target/build/${crateName}.opt | sed -e "s/cargo:rustc-link-lib=\(.*\)/\1/")
          EXTRA_LINK_SEARCH=$(grep "^cargo:rustc-link-search=" target/build/${crateName}.opt | sed -e "s/cargo:rustc-link-search=\(.*\)/\1/")
          CRATENAME=$(echo ${crateName} | sed -e "s/\(.*\)-sys$/\1/" | tr '[:lower:]' '[:upper:]')
+
          grep "^cargo:" target/build/${crateName}.opt | grep -v "^cargo:rustc-" | grep -v "^cargo:warning=" | grep -v "^cargo:rerun-if-changed=" | grep -v "^cargo:rerun-if-env-changed" | sed -e "s/cargo:\([^=]*\)=\(.*\)/export DEP_$(echo $CRATENAME)_\U\1\E=\2/" > target/env
 
          set -e
