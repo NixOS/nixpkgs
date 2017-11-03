@@ -3,15 +3,7 @@
 , gobjectIntrospection, sqlite, libsoup, gcab, attr, acl, docbook_xsl
 , libuuid, json_glib, autoconf-archive, meson, gperf, ninja, gdk_pixbuf
 }:
-let rpath = stdenv.lib.makeLibraryPath
-      [ libuuid.out
-        glib
-        libsoup
-        gdk_pixbuf
-        libarchive.lib
-        gcab
-      ];
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   name = "appstream-glib-0.7.2";
 
   src = fetchFromGitHub {
@@ -27,12 +19,6 @@ in stdenv.mkDerivation rec {
                   libarchive gobjectIntrospection gperf ];
   propagatedBuildInputs = [ gtk3 ];
   mesonFlags = [ "-Denable-rpm=false" "-Denable-stemmer=false" "-Denable-dep11=false" ];
-
-  postFixup = ''
-    for elf in "$out"/bin/* "$out"/lib/*.so; do
-      patchelf --set-rpath '${rpath}':"$out/lib" "$elf"
-    done
-  '';
 
   meta = with stdenv.lib; {
     description = "Objects and helper methods to read and write AppStream metadata";
