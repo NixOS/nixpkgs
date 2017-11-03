@@ -22,14 +22,14 @@ import ./make-test.nix ({ pkgs, ...} : {
       systemd.services.gitlab.serviceConfig.TimeoutStartSec = "10min";
       services.gitlab = {
         enable = true;
-        databasePassword = "dbPassword";
+        databasePassword = pkgs.writeText "dbPasswordFile" "dbPassword";
         secrets = {
-          secret = "secret";
-          otp = "otpsecret";
-          db = "dbsecret";
+          secret = pkgs.writeText "secretKeyFile" "secret";
+          otp    = pkgs.writeText "otpKeyFile"    "otpsecret";
+          db     = pkgs.writeText "dbKeyFile"     "dbsecret";
 
           # nix-shell -p openssl --run "openssl genrsa 2048"
-          jws = ''
+          jws = pkgs.writeText "jwsKeyFile" ''
             -----BEGIN RSA PRIVATE KEY-----
             MIIEpAIBAAKCAQEA13/qEio76OWUtWO0WIz9lWnsTWOU8Esv4sQHDq9PCEFsLt21
             PAXrlWhLjjWcxGfsrDwnh7YErGHYL62BMSxMdFJolaknlQK/O/V8UETDe45VoHM+

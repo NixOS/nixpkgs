@@ -97,6 +97,16 @@
        start org.nixos.nix-daemon</command>.
       </para>
      </listitem>
+     <listitem>
+       <para>
+         Several options for <literal>services.gitlab<literal> have been changed
+         into paths instead of strings and are no longer imported into the
+         store to avoid secrets being made world readable. To start Gitlab,
+         ensure that <literal>services.gitlab.databasePassword</literal> and all
+         options in <literal>services.gitlab.secrets</literal> are set to the
+         paths of the files that contain the relevant secrets.
+       </para>
+     </listitem>
     </itemizedlist>
    </listitem>
    <listitem>
