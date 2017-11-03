@@ -1,7 +1,10 @@
 { stdenv, fetchurl
-, odbcSupport ? false, unixODBC ? null }:
+, odbcSupport ? false, unixODBC ? null
+, sslSupport ? true, openssl ? null
+}:
 
 assert odbcSupport -> unixODBC != null;
+assert sslSupport -> openssl != null;
 
 stdenv.mkDerivation rec {
   name = "freetds-0.91";
@@ -13,9 +16,14 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  buildInputs = stdenv.lib.optional odbcSupport [ unixODBC ];
+  buildInputs =
+    stdenv.lib.optional odbcSupport [ unixODBC ] ++
+    stdenv.lib.optional sslSupport [ openssl.dev ];
 
-  configureFlags = stdenv.lib.optionalString odbcSupport "--with-odbc=${unixODBC}";
+  configureFlags = stdenv.lib.concatStringsSep " " (
+    stdenv.lib.optional odbcSupport "--with-odbc=${unixODBC}" ++
+    stdenv.lib.optional sslSupport "--with-openssl=${openssl.dev}"
+  );
 
   doDist = true;
 
