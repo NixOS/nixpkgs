@@ -1,17 +1,24 @@
 { stdenv, lib, janePackage, ocaml, ocamlbuild, cryptokit, ctypes, magic-mime,
-  ocaml-migrate-parsetree, octavius, ounit, ppx_deriving, re, zarith,
+  ocaml-migrate-parsetree, octavius, ounit, ppx_deriving, re, zarith, num,
   openssl }:
 
 rec {
 
   # Jane Street packages, up to ppx_core
 
-  sexplib = janePackage {
+  sexplib = janePackage ({
     name = "sexplib";
-    version = "0.9.2";
-    hash = "0szj7gi5ksy7kif5g71rkr6xhxc41xl8hq6s5zz610cjyngzyzjl";
     meta.description = "Automated S-expression conversion";
-  };
+  } // (if lib.versionAtLeast ocaml.version "4.05"
+    then {
+      version = "0.9.3";
+      hash = "0a2sqh235ja3qwy7b2k3qym2616dz7369a195qwi6ljy3cnh7s53";
+      buildInputs = [ num ];
+    } else {
+      version = "0.9.2";
+      hash = "0szj7gi5ksy7kif5g71rkr6xhxc41xl8hq6s5zz610cjyngzyzjl";
+    }
+  ));
 
   base = janePackage {
     name = "base";
