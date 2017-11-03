@@ -15,6 +15,11 @@ stdenv.lib.overrideDerivation (buildLinux (args // rec {
     sha256 = "19lb1gxz21x1d5zdznzqfq60kxg7iqmyl6l0mb9qg2vrl8fcgnxk";
   };
 
+  defconfig = {
+    "armv6l-linux" = "bcmrpi_defconfig";
+    "armv7l-linux" = "bcm2709_defconfig";
+  }.${stdenv.system} or (throw "linux_rpi not supported on '${stdenv.system}'");
+
   features = {
     efiBootStub = false;
   } // (args.features or {});

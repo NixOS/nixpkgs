@@ -167,7 +167,7 @@ rec {
   raspberrypi = {
     name = "raspberrypi";
     kernelMajor = "2.6";
-    kernelBaseConfig = "bcmrpi_defconfig";
+    kernelBaseConfig = "bcm2835_defconfig";
     kernelDTB = true;
     kernelArch = "arm";
     kernelAutoModules = false;
@@ -254,8 +254,6 @@ rec {
 
   raspberrypi2 = armv7l-hf-multiplatform // {
     name = "raspberrypi2";
-    kernelBaseConfig = "bcm2709_defconfig";
-    kernelDTB = true;
     kernelAutoModules = false;
     kernelExtraConfig = ''
       BLK_DEV_RAM y
