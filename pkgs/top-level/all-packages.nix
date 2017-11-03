@@ -16967,6 +16967,8 @@ with pkgs;
 
   photoqt = libsForQt5.callPackage ../applications/graphics/photoqt { };
 
+  photoflow = callPackage ../applications/graphics/photoflow { };
+
   phototonic = libsForQt5.callPackage ../applications/graphics/phototonic { };
 
   phrasendrescher = callPackage ../tools/security/phrasendrescher { };

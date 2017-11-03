@@ -2421,6 +2421,11 @@
     github = "mt-caret";
     name = "Masayuki Takeda";
   };
+  MtP = {
+    email = "marko.nixos@poikonen.de";
+    github = "MtP76";
+    name = "Marko Poikonen";
+  };
   mtreskin = {
     email = "zerthurd@gmail.com";
     github = "Zert";
