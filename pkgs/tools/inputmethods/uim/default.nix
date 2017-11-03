@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
   dontUseCmakeConfigure = true;
 
   src = fetchurl {
-    url = "http://uim.googlecode.com/files/uim-${version}.tar.bz2";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/uim/uim-${version}.tar.bz2";
     sha1 = "43b9dbdead6797880e6cfc9c032ecb2d37d42777";
   };
 
   meta = with stdenv.lib; {
-    homepage    = "http://code.google.com/p/uim/";
+    homepage    = "https://github.com/uim/uim";
     description = "A multilingual input method framework";
     license     = stdenv.lib.licenses.bsd3;
     platforms   = stdenv.lib.platforms.linux;
