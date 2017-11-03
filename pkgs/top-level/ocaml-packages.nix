@@ -387,6 +387,10 @@ let
       lwt = ocaml_lwt;
     };
 
+    num = if lib.versionOlder "4.06" ocaml.version
+      then callPackage ../development/ocaml-modules/num {}
+      else null;
+
     ocaml_batteries = callPackage ../development/ocaml-modules/batteries { };
 
     comparelib = callPackage ../development/ocaml-modules/comparelib { };
