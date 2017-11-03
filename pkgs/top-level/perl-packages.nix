@@ -12118,12 +12118,13 @@ let self = _self // overrides; _self = with self; {
   };
 
   SoftwareLicense = buildPerlPackage rec {
-    name = "Software-License-0.103012";
+    name = "Software-License-0.103013";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/R/RJ/RJBS/${name}.tar.gz";
-      sha256 = "47f9acb7f4eeed35e38c1bec37a71b61e651965233d67dadfae6390571517db1";
+      url = "mirror://cpan/authors/id/L/LE/LEONT/${name}.tar.gz";
+      sha256 = "2641d937390f43b08fa31c419713cd96a2f0bf160be04cab322631daf6810ff3";
     };
-    propagatedBuildInputs = [ DataSection TextTemplate TryTiny ];
+    buildInputs = [ TryTiny ];
+    propagatedBuildInputs = [ DataSection TextTemplate ];
     meta = {
       homepage = https://github.com/rjbs/Software-License;
       description = "Packages that provide templated software licenses";
