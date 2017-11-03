@@ -12267,6 +12267,8 @@ with pkgs;
 
   gfxtablet = callPackage ../os-specific/linux/gfxtablet {};
 
+  gmailieer = callPackage ../applications/networking/gmailieer {};
+
   gpm = callPackage ../servers/gpm {
     ncurses = null;  # Keep curses disabled for lack of value
   };
