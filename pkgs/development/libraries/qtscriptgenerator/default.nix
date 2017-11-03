@@ -10,27 +10,32 @@ stdenv.mkDerivation {
 
   patches = [ ./qtscriptgenerator.gcc-4.4.patch ./qt-4.8.patch ];
 
-  # Why isn't the author providing proper Makefile or a CMakeLists.txt ?
-  buildPhase = ''
+  postPatch = ''
     # remove phonon stuff which causes errors (thanks to Gentoo bug reports)
     sed -i "/typesystem_phonon.xml/d" generator/generator.qrc
     sed -i "/qtscript_phonon/d" qtbindings/qtbindings.pro
+  '';
 
-    cd generator
-    qmake
-    make
+  configurePhase = ''
+    ( cd generator; qmake )
+    ( cd qtbindings; qmake )
+  '';
+
+  buildPhase = ''
+    makeFlags="SHELL=$SHELL ''${enableParallelBuilding:+-j$NIX_BUILD_CORES -l$NIX_BUILD_CORES}"
+    make $makeFlags -C generator
+
     # Set QTDIR, see https://code.google.com/archive/p/qtscriptgenerator/issues/38
-    QTDIR=${qt4} ./generator
-    cd ../qtbindings
-    qmake
-    make
+    ( cd generator; QTDIR=${qt4} ./generator )
+    make $makeFlags -C qtbindings
   '';
 
   installPhase = ''
-    cd ..
     mkdir -p $out/lib/qt4/plugins/script
     cp -av plugins/script/* $out/lib/qt4/plugins/script
   '';
+
+  enableParallelBuilding = true;
 
   hardeningDisable = [ "format" ];
 
