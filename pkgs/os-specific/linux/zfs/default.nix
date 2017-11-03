@@ -140,9 +140,9 @@ in {
     incompatibleKernelVersion = null;
 
     # this package should point to the latest release.
-    version = "0.7.2";
+    version = "0.7.3";
 
-    sha256 = "1dl6i4sg7z0k4p1dmfcm9arx62x30lqsr9hycvhhs3pf58ks8z2v";
+    sha256 = "1bbajrwfilnmfhn1n69gvsaznyc4q29wi7nkwc0p9r4dli37w28b";
 
     extraPatches = [
       (fetchpatch {
