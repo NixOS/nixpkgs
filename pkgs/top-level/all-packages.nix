@@ -2971,6 +2971,8 @@ with pkgs;
 
   mkcast = callPackage ../applications/video/mkcast { };
 
+  mtail = callPackage ../servers/monitoring/mtail { };
+
   multitail = callPackage ../tools/misc/multitail { };
 
   mxt-app = callPackage ../misc/mxt-app { };
