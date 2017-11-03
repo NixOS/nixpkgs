@@ -51,8 +51,8 @@ in mapAttrs genericBuild {
   };
 
   prometheus2 = {
-    version = "2.0.0-rc.1";
-    sha256 = "0i44gsb6lhxkgjb3i489h1939c44szj3dslmmf910dm21497fapz";
+    version = "2.0.0-rc.2";
+    sha256 = "1bbfbc1rk85rfdl1iddm2402wgnn673vgjzxghjh8qaw7yp096nr";
     # Tests need lots of diskspace
     doCheck = false;
   };
