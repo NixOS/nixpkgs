@@ -1,0 +1,161 @@
+From 46388f407c893123d9b3824a7570b050fc3b049b Mon Sep 17 00:00:00 2001
+From: James Cameron <quozl@laptop.org>
+Date: Thu, 17 Aug 2017 15:05:39 +1000
+Subject: [PATCH] Fix flickering
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+- in GR_Caret::s_blink_timeout, avoid repeated calls by stopping the
+  timer, it will be restarted when needed,
+
+- in GR_Caret::s_enable, avoid extra unnecessary _blink calls when blink
+  is enabled, as they serve no purpose,
+
+- in XAP_UnixFrameImpl::_fe::expose, use the Cairo clip rectangle
+  instead of the expose event area, thanks to Hubert Figuière in
+  865c1dda7e13deff04573ffc42028b71fee07f9c,
+
+- in XAP_UnixFrameImpl::_fe::expose, do not return FALSE, as other
+  handlers will need to handle the draw event,
+
+- in GR_UnixCairoGraphics::flush, fix excessive draw events;
+  gtk_widget_queue_draw only marks the widget as needing redrawing,
+  which causes a draw event for each call to flush, therefore every
+  caret blink, so use gdk_flush instead,
+
+Fixes AbiSource #13791.
+Fixes Debian #851052.
+Fixes Fedora #1287835.
+Fixes Ubuntu LP: #1574278.
+Fixes Sugar Labs #4915.
+
+Signed-off-by: James Cameron <quozl@laptop.org>
+---
+ src/af/gr/gtk/gr_UnixCairoGraphics.cpp |  4 +---
+ src/af/gr/xp/gr_Caret.cpp              | 13 ++++---------
+ src/af/xap/gtk/xap_UnixFrameImpl.cpp   | 27 ++++++++++++++++++---------
+ src/af/xap/gtk/xap_UnixFrameImpl.h     |  2 +-
+ 4 files changed, 24 insertions(+), 22 deletions(-)
+
+diff --git a/src/af/gr/gtk/gr_UnixCairoGraphics.cpp b/src/af/gr/gtk/gr_UnixCairoGraphics.cpp
+index 509bd37..7c3c06f 100644
+--- a/src/af/gr/gtk/gr_UnixCairoGraphics.cpp
++++ b/src/af/gr/gtk/gr_UnixCairoGraphics.cpp
+@@ -577,9 +577,7 @@ void GR_UnixCairoGraphics::_endPaint()
+ 
+ void GR_UnixCairoGraphics::flush(void)
+ {
+-	if (m_Widget) {
+-		gtk_widget_queue_draw(m_Widget);
+-	}
++	gdk_flush();
+ }
+ 
+ bool GR_UnixCairoGraphics::queryProperties(GR_Graphics::Properties gp) const
+diff --git a/src/af/gr/xp/gr_Caret.cpp b/src/af/gr/xp/gr_Caret.cpp
+index 5d5d116..a8aa451 100644
+--- a/src/af/gr/xp/gr_Caret.cpp
++++ b/src/af/gr/xp/gr_Caret.cpp
+@@ -155,22 +155,17 @@ void GR_Caret::s_enable(UT_Worker * _w)
+ {
+ 	GR_Caret * c = static_cast<GR_Caret *>(_w->getInstanceData());
+ 
++	c->m_enabler->stop();
+ 	c->m_worker->stop();
+-	c->_blink(true);
+-	if (!c->m_bCursorIsOn)
+-		c->_blink(true); // blink again
+-	else
+-	{
+-		c->_blink(true); // ?? - MARCM
+-		c->_blink(true);
+-	}
+ 	c->m_worker->start();
+-	c->m_enabler->stop();
++	c->_blink(true);
+ }
+ 
+ void GR_Caret::s_blink_timeout(UT_Worker * _w)
+ {
+ 	GR_Caret * c = static_cast<GR_Caret *>(_w->getInstanceData());
++
++	c->m_blinkTimeout->stop();
+ 	if (c->isEnabled())
+ 		c->disable();
+ }
+diff --git a/src/af/xap/gtk/xap_UnixFrameImpl.cpp b/src/af/xap/gtk/xap_UnixFrameImpl.cpp
+index 780000e..e81961a 100644
+--- a/src/af/xap/gtk/xap_UnixFrameImpl.cpp
++++ b/src/af/xap/gtk/xap_UnixFrameImpl.cpp
+@@ -1208,15 +1208,23 @@ gint XAP_UnixFrameImpl::_fe::delete_event(GtkWidget * w, GdkEvent * /*event*/, g
+ }
+ 
+ #if GTK_CHECK_VERSION(3,0,0)
+-gint XAP_UnixFrameImpl::_fe::draw(GtkWidget * w, cairo_t * cr)
++gboolean XAP_UnixFrameImpl::_fe::draw(GtkWidget * w, cairo_t * cr)
+ #else
+ gint XAP_UnixFrameImpl::_fe::expose(GtkWidget * w, GdkEventExpose* pExposeEvent)
+ #endif
+ {
+ 	XAP_UnixFrameImpl * pUnixFrameImpl = static_cast<XAP_UnixFrameImpl *>(g_object_get_data(G_OBJECT(w), "user_data"));
+ 	FV_View * pView = static_cast<FV_View *>(pUnixFrameImpl->getFrame()->getCurrentView());
++	double x, y, width, height;
+ #if GTK_CHECK_VERSION(3,0,0)
+-	GdkEventExpose *pExposeEvent = reinterpret_cast<GdkEventExpose *>(gtk_get_current_event());
++	cairo_clip_extents (cr, &x, &y, &width, &height);
++	width -= x;
++	height -= y;
++#else
++	x = pExposeEvent->area.x;
++	y = pExposeEvent->area.y;
++	width = pExposeEvent->area.width;
++	height = pExposeEvent->area.height;
+ #endif
+ /* Jean: commenting out next lines since the zoom update code does draw only
+  * part of what needs to be updated. */
+@@ -1230,20 +1238,21 @@ gint XAP_UnixFrameImpl::_fe::expose(GtkWidget * w, GdkEventExpose* pExposeEvent)
+ 		UT_Rect rClip;
+ 		if (pGr->getPaintCount () > 0)
+ 			return TRUE;
+-		xxx_UT_DEBUGMSG(("Expose area: x %d y %d width %d  height %d \n",pExposeEvent->area.x,pExposeEvent->area.y,pExposeEvent->area.width,pExposeEvent->area.height));
+-		rClip.left = pGr->tlu(pExposeEvent->area.x);
+-		rClip.top = pGr->tlu(pExposeEvent->area.y);
+-		rClip.width = pGr->tlu(pExposeEvent->area.width)+1;
+-		rClip.height = pGr->tlu(pExposeEvent->area.height)+1;
+-#if GTK_CHECK_VERSION(3,0,0)
++		rClip.left = pGr->tlu(x);
++		rClip.top = pGr->tlu(y);
++ #if GTK_CHECK_VERSION(3,0,0)
++		rClip.width = pGr->tlu(width);
++		rClip.height = pGr->tlu(height);
+ 		static_cast<GR_CairoGraphics *>(pGr)->setCairo(cr);
+ 		pView->draw(&rClip);
+ 		static_cast<GR_CairoGraphics *>(pGr)->setCairo(NULL);
+ #else
++		rClip.width = pGr->tlu(width)+1;
++		rClip.height = pGr->tlu(height)+1;
+ 		pView->draw(&rClip);
+ #endif
+ 	}
+-	return FALSE;
++	return TRUE;
+ }
+ 
+ static bool bScrollWait = false;
+diff --git a/src/af/xap/gtk/xap_UnixFrameImpl.h b/src/af/xap/gtk/xap_UnixFrameImpl.h
+index 30ee5d8..26fbb2e 100644
+--- a/src/af/xap/gtk/xap_UnixFrameImpl.h
++++ b/src/af/xap/gtk/xap_UnixFrameImpl.h
+@@ -152,7 +152,7 @@ protected:
+ 			static gint key_release_event(GtkWidget* w, GdkEventKey* e);
+ 			static gint delete_event(GtkWidget * w, GdkEvent * /*event*/, gpointer /*data*/);
+ #if GTK_CHECK_VERSION(3,0,0)
+-			static gint draw(GtkWidget * w, cairo_t * cr);
++			static gboolean draw(GtkWidget * w, cairo_t * cr);
+ #else
+ 			static gint expose(GtkWidget * w, GdkEventExpose* pExposeEvent);
+ #endif
+-- 
+2.11.0
+
