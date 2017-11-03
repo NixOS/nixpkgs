@@ -70,6 +70,14 @@ let
 
   promTypes.scrape_config = types.submodule {
     options = {
+      honor_labels = mkOption {
+        type = types.nullOr types.bool;
+        default = null;
+        description = ''
+          Do not overwrite any labels exposed by the source server when
+          using federation.
+        '';
+      };
       job_name = mkOption {
         type = types.str;
         description = ''
