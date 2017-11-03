@@ -114,7 +114,7 @@ rec {
         merge = mergeOneOption;
       };
 
-    # specialized subdomains of int
+    # Specialized subdomains of int
     ints =
       let
         betweenDesc = lowest: highest:
@@ -225,7 +225,7 @@ rec {
     };
 
     # drop this in the future:
-    list = builtins.trace "`types.list' is deprecated; use `types.listOf' instead" types.listOf;
+    list = builtins.trace "`types.list` is deprecated; use `types.listOf` instead" types.listOf;
 
     listOf = elemType: mkOptionType rec {
       name = "listOf";
@@ -242,7 +242,7 @@ rec {
               ).optionalValue
             ) def.value
           else
-            throw "The option value `${showOption loc}' in `${def.file}' is not a list.") defs)));
+            throw "The option value `${showOption loc}` in `${def.file}` is not a list.") defs)));
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: listOf (elemType.substSubModules m);
@@ -313,7 +313,7 @@ rec {
         let nrNulls = count (def: def.value == null) defs; in
         if nrNulls == length defs then null
         else if nrNulls != 0 then
-          throw "The option `${showOption loc}' is defined both null and not null, in ${showFiles (getFiles defs)}."
+          throw "The option `${showOption loc}` is defined both null and not null, in ${showFiles (getFiles defs)}."
         else elemType.merge loc defs;
       getSubOptions = elemType.getSubOptions;
       getSubModules = elemType.getSubModules;
