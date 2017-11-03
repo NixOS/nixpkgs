@@ -6011,6 +6011,7 @@ with pkgs;
 
   julia_05 = callPackage ../development/compilers/julia/0.5.nix {
     gmp = gmp6;
+    libgit2 = libgit2_0_25;
     openblas = openblasCompat;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
     llvm = llvm_38;
