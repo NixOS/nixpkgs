@@ -18,9 +18,9 @@ python3Packages.buildPythonApplication rec {
     popd
   '';
 
-  postPatch = ''
-    sed -i -e 's|e.fix_rpath(install_rpath)||' mesonbuild/scripts/meson_install.py
-  '';
+  patches = [
+    ./rpath.patch
+  ];
 
   setupHook = ./setup-hook.sh;
 
