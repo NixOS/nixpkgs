@@ -4,6 +4,7 @@
 , fetchPypi
 , setuptools_scm
 , backports_weakref
+, backportsPostPatch
 }:
 
 buildPythonPackage rec {
@@ -26,6 +27,7 @@ buildPythonPackage rec {
 
   # requires https://pypi.org/project/backports.test.support
   doCheck = false;
+  postPatch = backportsPostPatch;
 
   meta = {
     description = "Backport of new features in Python's tempfile module";

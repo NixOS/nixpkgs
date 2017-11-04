@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, future }:
+{ stdenv, buildPythonPackage, fetchPypi, future, backportsPostPatch }:
 
 buildPythonPackage rec {
 
@@ -12,6 +12,7 @@ buildPythonPackage rec {
   };
 
   propogatedBuildInputs = [ future ];
+  postPatch = backportsPostPatch;
 
   meta = with stdenv.lib; {
     description = "Backport of Python 3 csv module";

@@ -80,10 +80,27 @@ let
         else throw "Unsupported kind ${kind}");
     in fetcher (builtins.removeAttrs attrs ["format"]) );
 
+  backportsInitCompiled = pkgs.runCommand "__init__.pyc" { } ''
+    mkdir $out
+    cp ${../development/python-modules/backports/__init__.py} $out/__init__.py
+    ${python}/bin/python -m py_compile $out/__init__.py
+  '';
+
+  backportsPostPatch = ''
+    ## See "absolutely essential rule" in https://pypi.python.org/pypi/backports
+    backports_init=$(find . -regex ".*/backports/__init__.py")
+    if [ -n "$backports_init" ]; then
+      cp -f ${backportsInitCompiled}/* "$(dirname "$backports_init")"
+    else
+      echo "package with backports namespace should contain backports/__init__.py file"
+      exit 1
+    fi
+  '';
+
 in {
 
   inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
-  inherit fetchPypi callPackage;
+  inherit fetchPypi callPackage backportsPostPatch;
 
   # helpers
 
@@ -1081,6 +1098,8 @@ in {
       ${python.interpreter} -m unittest discover
     '';
 
+    postPatch = backportsPostPatch;
+
     meta = {
       homepage = https://github.com/cython/backports_abc;
       license = licenses.psfl;
@@ -1099,6 +1118,7 @@ in {
 
     buildInputs = with self; [ setuptools_scm ];
     doCheck = false; # No proper test
+    postPatch = backportsPostPatch;
 
     meta = {
       description = "Backport of functools.lru_cache";
@@ -1116,6 +1136,8 @@ in {
       sha256 = "713e7a8228ae80341c70586d1cc0a8caa5207346927e23d09dcbcaf18eadec80";
     };
 
+    postPatch = backportsPostPatch;
+
     meta = {
       description = "A backport of the get_terminal_size function from Python 3.3’s shutil.";
       homepage = https://github.com/chrippa/backports.shutil_get_terminal_size;
@@ -1131,6 +1153,8 @@ in {
       sha256 = "07410e7fb09aab7bdaf5e618de66c3dac84e2e3d628352814dc4c37de321d6ae";
     };
 
+    postPatch = backportsPostPatch;
+
     meta = {
       description = "The Secure Sockets layer is only actually *secure*";
       homepage = http://bitbucket.org/brandon/backports.ssl_match_hostname;
@@ -1145,6 +1169,8 @@ in {
       url = "mirror://pypi/b/backports.ssl_match_hostname/${name}.tar.gz";
       sha256 = "1wndipik52cyqy0677zdgp90i435pmvwd89cz98lm7ri0y3xjajh";
     };
+
+    postPatch = backportsPostPatch;
 
     meta = {
       description = "The Secure Sockets layer is only actually *secure*";
@@ -1162,6 +1188,7 @@ in {
     };
 
     buildInputs = [ pkgs.lzma ];
+    postPatch = backportsPostPatch;
 
     meta = {
       describe = "Backport of Python 3.3's 'lzma' module for XZ/LZMA compressed files";
@@ -1182,6 +1209,8 @@ in {
       url = "mirror://pypi/b/babelfish/${name}.tar.gz";
       sha256 = "8380879fa51164ac54a3e393f83c4551a275f03617f54a99d70151358e444104";
     };
+
+    postPatch = backportsPostPatch;
 
     meta = {
       homepage = http://pypi.python.org/pypi/babelfish;
