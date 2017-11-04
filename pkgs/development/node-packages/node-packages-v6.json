@@ -74,6 +74,7 @@
 , "sloc"
 , "smartdc"
 , "socket.io"
+, "statsd"
 , "stylus"
 , "svgo"
 , "tern"
