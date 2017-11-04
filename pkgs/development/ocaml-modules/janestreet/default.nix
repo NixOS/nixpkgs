@@ -22,8 +22,8 @@ rec {
 
   base = janePackage {
     name = "base";
-    version = "0.9.3";
-    hash = "14v3zsr7za9h1gkxdmkk1yagnrfjk3y9snraywv9hsqbhv39ajvv";
+    version = "0.9.4";
+    hash = "0x85xi66b4zwlbdwmyc99zcmawgpp75gxqbl55rr67awavw162rw";
     propagatedBuildInputs = [ sexplib ];
     meta.description = "Full standard library replacement for OCaml";
   };
