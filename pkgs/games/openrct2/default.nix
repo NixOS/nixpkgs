@@ -24,8 +24,7 @@ in
 stdenv.mkDerivation rec {
   inherit name;
 
-  srcs = [ openrct2-src title-sequences-src ];
-  sourceRoot = ".";
+  src = openrct2-src;
 
   buildInputs = [
     SDL2
@@ -46,11 +45,7 @@ stdenv.mkDerivation rec {
   ];
 
   postUnpack = ''
-    cp -r ${openrct2-src}/* ${sourceRoot}
-    cp -r ${title-sequences-src} ${sourceRoot}/title
-
-    # creating temporary files in fixCmakeFiles fails otherwise
-    chmod -R u+w ${sourceRoot}
+    cp -r ${title-sequences-src} $sourceRoot/title
   '';
 
   cmakeFlags = [
