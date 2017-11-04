@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper cmake flex bison ];
 
+  cmakeFlags="-DBCC_KERNEL_MODULES_DIR=${kernel.dev}/lib/modules";
+
   postInstall = ''
     mkdir -p $out/bin $out/share
     rm -r $out/share/bcc/tools/old
