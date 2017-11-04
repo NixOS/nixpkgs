@@ -227,13 +227,16 @@ let
 
             (optionals (values.allowedIPsAsRoutes != false) (map (peer:
             (map (allowedIP:
-            "${ipCommand} route replace ${allowedIP} dev ${name} table ${values.table}"
+            if (allowedIP == "0.0.0.0/0") || (builtins.match "[0:]+/0" allowedIP != null)
+            then "${pkgs.wireguard}/bin/wg-default add ${name} ${allowedIP}"
+            else "${ipCommand} route replace ${allowedIP} dev ${name} table ${values.table}"
             ) peer.allowedIPs)
             ) values.peers))
 
             values.postSetup
           ]);
           ExecStop = flatten([
+            "${pkgs.wireguard}/bin/wg-default rm ${name}"
             "${ipCommand} link del dev ${name}"
             values.postShutdown
           ]);

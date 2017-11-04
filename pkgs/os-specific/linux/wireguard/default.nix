@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libmnl, kernel ? null }:
+{ stdenv, fetchurl, libmnl, iproute, kernel ? null }:
 
 # module requires Linux >= 3.10 https://www.wireguard.io/install/#kernel-requirements
 assert kernel != null -> stdenv.lib.versionAtLeast kernel.version "3.10";
@@ -41,7 +41,7 @@ let
   };
 
   tools = stdenv.mkDerivation {
-    inherit src meta name;
+    inherit src meta name iproute;
 
     preConfigure = "cd src";
 
@@ -63,6 +63,8 @@ let
     postInstall = ''
       substituteInPlace $out/lib/systemd/system/wg-quick@.service \
         --replace /usr/bin $out/bin
+      substituteAll ${./wg-default.sh} "$out"/bin/wg-default
+      chmod a+x "$out"/bin/wg-default
     '';
   };
 
