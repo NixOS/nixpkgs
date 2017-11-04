@@ -56,7 +56,8 @@ rec {
 
   stdio = janePackage {
     name = "stdio";
-    hash = "1c08jg930j7yxn0sjvlm3fs2fvwaf15sn9513yf1rb7y1lxrgwc4";
+    version = "0.9.1";
+    hash = "13rj3ii0rvmklfim9ild0ib44ssdadig7a9ccjbz22m0pw84a1sx";
     propagatedBuildInputs = [ base ];
     meta.description = "Standard IO library for OCaml";
   };
