@@ -11489,6 +11489,8 @@ with pkgs;
 
   exhibitor = callPackage ../servers/exhibitor { };
 
+  hyp = callPackage ../servers/http/hyp/default.nix { };
+
   prosody = callPackage ../servers/xmpp/prosody {
     lua5 = lua5_1;
     inherit (lua51Packages) luasocket luasec luaexpat luafilesystem luabitop luaevent luazlib;
