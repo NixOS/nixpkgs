@@ -6362,9 +6362,7 @@ with pkgs;
 
   ### DEVELOPMENT / INTERPRETERS
 
-  acl2 = callPackage ../development/interpreters/acl2 {
-    sbcl = sbcl_1_2_0;
-  };
+  acl2 = callPackage ../development/interpreters/acl2 { };
 
   angelscript = callPackage ../development/interpreters/angelscript {};
 
