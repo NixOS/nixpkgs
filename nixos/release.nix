@@ -270,6 +270,10 @@ in rec {
   tests.plasma5 = callTest tests/plasma5.nix {};
   tests.keymap = callSubTests tests/keymap.nix {};
   tests.initrdNetwork = callTest tests/initrd-network.nix {};
+  tests.kafka_0_9 = callTest tests/kafka_0_9.nix {};
+  tests.kafka_0_10 = callTest tests/kafka_0_10.nix {};
+  tests.kafka_0_11 = callTest tests/kafka_0_11.nix {};
+  tests.kafka_1_0 = callTest tests/kafka_1_0.nix {};
   tests.kernel-copperhead = callTest tests/kernel-copperhead.nix {};
   tests.kernel-latest = callTest tests/kernel-latest.nix {};
   tests.kernel-lts = callTest tests/kernel-lts.nix {};
@@ -330,7 +334,7 @@ in rec {
   tests.wordpress = callTest tests/wordpress.nix {};
   tests.xfce = callTest tests/xfce.nix {};
   tests.xmonad = callTest tests/xmonad.nix {};
-
+  tests.zookeeper = callTest tests/zookeeper.nix {};
 
   /* Build a bunch of typical closures so that Hydra can keep track of
      the evolution of closure sizes. */
