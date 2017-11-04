@@ -18098,7 +18098,9 @@ with pkgs;
 
   ultrastar-manager = libsForQt5.callPackage ../tools/misc/ultrastar-manager { };
 
-  ultrastardx = callPackage ../games/ultrastardx/default.nix { };
+  ultrastardx = callPackage ../games/ultrastardx/default.nix {
+    ffmpeg = ffmpeg_2;
+  };
 
   unnethack = callPackage ../games/unnethack { };
 
