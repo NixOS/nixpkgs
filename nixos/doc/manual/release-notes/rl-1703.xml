@@ -156,7 +156,7 @@ has the following highlights: </para>
   <listitem><para><literal>services/web-apps/atlassian/crowd.nix</literal></para></listitem>
   <listitem><para><literal>services/web-apps/atlassian/jira.nix</literal></para></listitem>
   <listitem><para><literal>services/web-apps/frab.nix</literal></para></listitem>
-  <listitem><para><literal>services/web-apps/nixbot.nix</literal></para></listitem>
+  <listitem><para><literal>services/web-apps/nixborg.nix</literal></para></listitem>
   <listitem><para><literal>services/web-apps/selfoss.nix</literal></para></listitem>
   <listitem><para><literal>services/web-apps/quassel-webserver.nix</literal></para></listitem>
   <listitem><para><literal>services/x11/unclutter-xfixes.nix</literal></para></listitem>

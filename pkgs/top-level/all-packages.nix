@@ -3567,7 +3567,7 @@ with pkgs;
 
   nitrogen = callPackage ../tools/X11/nitrogen {};
 
-  nixbot = callPackage ../tools/misc/nixbot {};
+  nixborg = callPackages ../tools/misc/nixborg {};
 
   notify-desktop = callPackage ../tools/misc/notify-desktop {};
 
