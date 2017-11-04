@@ -186,6 +186,7 @@ in {
       server_name = mkOption {
         type = types.str;
         example = "example.com";
+        default = config.networking.hostName;
         description = ''
           The domain name of the server, with optional explicit port.
           This is used by remote servers to connect to this server,
