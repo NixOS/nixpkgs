@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, gtk2, gtk3, libXinerama, libSM, libXxf86vm
+{ stdenv, fetchFromGitHub, fetchurl, fetchpatch, pkgconfig
+, gtk2, gtk3, libXinerama, libSM, libXxf86vm
 , xf86vidmodeproto , gstreamer, gst-plugins-base, GConf, setfile
 , withMesa ? true, mesa_glu ? null, mesa_noglu ? null
 , compat24 ? false, compat26 ? true, unicode ? true
@@ -37,9 +38,14 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = optional stdenv.isDarwin AGL;
 
-  patches =
+  patches = [
+    (fetchurl { # https://trac.wxwidgets.org/ticket/17942
+      url = "https://trac.wxwidgets.org/raw-attachment/ticket/17942/"
+          + "fix_assertion_using_hide_in_destroy.diff";
+      sha256 = "009y3dav79wiig789vkkc07g1qdqprg1544lih79199kb1h64lvy";
+    })
     # "Add support for WebKit2GTK+ in wxWebView". Will be in 3.0.4
-    optional (!withGtk2) (fetchpatch {
+  ] ++ optional (!withGtk2) (fetchpatch {
       url = "https://github.com/wxWidgets/wxWidgets/commit/ec6e54bc893fb7516731ca9c71e0d0bbc5ae9ff7.patch";
       sha256 = "0gxd83xajm7gdv9rdzyvqwa2p5nz29nr23i0zx2dgfpsvz2qjp3q";
     });
