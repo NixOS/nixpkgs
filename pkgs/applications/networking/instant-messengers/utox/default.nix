@@ -1,26 +1,26 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, libtoxcore, filter-audio, dbus, libvpx, libX11, openal, freetype, libv4l
-, libXrender, fontconfig, libXext, libXft, utillinux, git, libsodium }:
+, libXrender, fontconfig, libXext, libXft, utillinux, git, libsodium, libopus, check }:
 
 stdenv.mkDerivation rec {
   name = "utox-${version}";
-  # >= 0.14 should have unit tests and dbus support
-  version = "0.13.1";
+
+  version = "0.16.1";
 
   src = fetchFromGitHub {
     owner  = "uTox";
     repo   = "uTox";
     rev    = "v${version}";
-    sha256 = "07aa92isknxf7531jr9kgk89wl5rvv34jrvir043fs9xvim5zq99";
+    sha256 = "0ak10925v67yaga2pw9yzp0xkb5j1181srfjdyqpd29v8mi9j828";
   };
 
   buildInputs = [
     libtoxcore dbus libvpx libX11 openal freetype
     libv4l libXrender fontconfig libXext libXft filter-audio
-    libsodium
+    libsodium libopus
   ];
 
   nativeBuildInputs = [
-    cmake git pkgconfig
+    cmake git pkgconfig check
   ];
 
   cmakeFlags = [
@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = false;
+
+  checkTarget = "test";
 
   meta = with stdenv.lib; {
     description = "Lightweight Tox client";

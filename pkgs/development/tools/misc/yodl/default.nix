@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
     owner = "fbb-git";
   };
 
-  sourceRoot = "yodl-${version}-src/yodl";
+  setSourceRoot = ''
+    sourceRoot=$(echo */yodl)
+  '';
 
   preConfigure = ''
     patchShebangs ./build

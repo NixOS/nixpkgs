@@ -306,6 +306,7 @@ in rec {
   #tests.panamax = hydraJob (import tests/panamax.nix { system = "x86_64-linux"; });
   tests.peerflix = callTest tests/peerflix.nix {};
   tests.postgresql = callSubTests tests/postgresql.nix {};
+  tests.pgmanage = callTest tests/pgmanage.nix {};
   tests.postgis = callTest tests/postgis.nix {};
   #tests.pgjwt = callTest tests/pgjwt.nix {};
   tests.printing = callTest tests/printing.nix {};

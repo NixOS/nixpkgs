@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "mikutter-${version}";
-  version = "3.5.7";
+  version = "3.5.13";
 
   src = fetchurl {
     url = "https://mikutter.hachune.net/bin/mikutter.${version}.tar.gz";
-    sha256 = "1vh5ap92q869j69hmmbznailaflmdp0km4sqdv06cpq7v8pwm28w";
+    sha256 = "2e01cd6cfe0caad663a381e5263f6d8030f0fb7cd8d4f858d320166516c7c320";
   };
 
   env = bundlerEnv {
@@ -54,7 +54,6 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    broken = true;
     description = "An extensible Twitter client";
     homepage = https://mikutter.hachune.net;
     maintainers = with maintainers; [ midchildan ];

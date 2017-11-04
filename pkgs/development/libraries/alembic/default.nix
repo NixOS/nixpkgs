@@ -16,8 +16,6 @@ stdenv.mkDerivation rec
 
   buildInputs = [ unzip cmake openexr hdf5 ];
 
-  sourceRoot = "${name}-src";
-
   enableParallelBuilding = true;
 
   buildPhase = ''

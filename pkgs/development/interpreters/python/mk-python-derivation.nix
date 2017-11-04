@@ -8,7 +8,7 @@
 , ensureNewerSourcesHook
 }:
 
-{ name
+{ name ? "${attrs.pname}-${attrs.version}"
 
 # by default prefix `name` e.g. "python3.3-${name}"
 , namePrefix ? python.libPrefix + "-"
