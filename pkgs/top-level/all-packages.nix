@@ -6436,6 +6436,8 @@ with pkgs;
 
   jmeter = callPackage ../applications/networking/jmeter {};
 
+  joker = callPackage ../development/interpreters/joker {};
+
   davmail = callPackage ../applications/networking/davmail {};
 
   kanif = callPackage ../applications/networking/cluster/kanif { };
