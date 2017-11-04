@@ -94,6 +94,7 @@
   bramd = "Bram Duvigneau <bram@bramd.nl>";
   bstrik = "Berno Strik <dutchman55@gmx.com>";
   bzizou = "Bruno Bzeznik <Bruno@bzizou.net>";
+  c0bw3b = "Renaud <c0bw3b@gmail.com>";
   c0dehero = "CodeHero <codehero@nerdpol.ch>";
   calbrecht = "Christian Albrecht <christian.albrecht@mayflower.de>";
   calrama = "Moritz Maxeiner <moritz@ucworks.org>";
