@@ -1,0 +1,86 @@
+https://github.com/NixOS/nixpkgs/pull/31263
+
+Most use cases for buildFHSUserEnv include running dynamically linked binaries
+built for FHS-compliant Linux distributions. Sometimes these are wrapped with a
+shell script that rewrites LD_LIBRARY_PATH: see #21109, #31136, and a few other
+cases not on bug tracker (RPG Maker MV on Steam being one of them).
+
+Additionally, we use LD_LIBRARY_PATH for OpenGL.
+
+To make sure no one overrides our library paths, add NIX_LD_LIBRARY_PATH.
+
+_dl_fatal_printf doesn't report strerror(errno) because it causes compilation
+errors that, while can be fixed, require adding weak attribute to quite a few
+symbols which results in a much larger and thus less maintainable patch.
+
+diff -urNZ a/elf/Makefile b/elf/Makefile
+--- a/elf/Makefile	2017-08-02 12:57:16.000000000 +0000
++++ b/elf/Makefile	2017-12-18 06:58:43.136481013 +0000
+@@ -422,7 +422,7 @@
+ $(objpfx)librtld.map: $(objpfx)dl-allobjs.os $(common-objpfx)libc_pic.a
+ 	@-rm -f $@T
+ 	$(reloc-link) -o $@.o $(dummy-stack-chk-fail) \
+-		'-Wl,-(' $^ -lgcc '-Wl,-)' -Wl,-Map,$@T
++		'-Wl,-(' $^ -lgcc -z muldefs '-Wl,-)' -Wl,-Map,$@T
+ 	rm -f $@.o
+ 	mv -f $@T $@
+
+diff -urNZ a/elf/rtld.c b/elf/rtld.c
+--- a/elf/rtld.c	2017-08-02 12:57:16.000000000 +0000
++++ b/elf/rtld.c	2017-12-18 06:45:37.069588763 +0000
+@@ -42,6 +42,8 @@
+ #include <stap-probe.h>
+ #include <stackinfo.h>
+
++#include "../string/strncmp.c"
++
+ #include <assert.h>
+
+ /* Avoid PLT use for our local calls at startup.  */
+@@ -1315,9 +1317,34 @@
+   DL_SYSDEP_OSCHECK (_dl_fatal_printf);
+ #endif
+
++  char *nix_library_path = getenv ("NIX_LD_LIBRARY_PATH");
++  char *combined_library_path;
++
++  if (nix_library_path) {
++    size_t library_path_len = strlen (library_path);
++    size_t nix_library_path_len = strlen (nix_library_path);
++
++    combined_library_path = malloc (library_path_len + nix_library_path_len + 2);
++
++    if (!combined_library_path)
++      _dl_fatal_printf ("can't allocate combined_library_path\n");
++
++    strcpy (combined_library_path, library_path);
++
++    if (library_path_len > 0 && nix_library_path_len > 0)
++      strcat (combined_library_path, ":");
++
++    strcat (combined_library_path, nix_library_path);
++  } else {
++    combined_library_path = (char *) library_path;
++  }
++
+   /* Initialize the data structures for the search paths for shared
+      objects.  */
+-  _dl_init_paths (library_path);
++  _dl_init_paths (combined_library_path);
++
++  if (nix_library_path)
++    free (combined_library_path);
+
+   /* Initialize _r_debug.  */
+   struct r_debug *r = _dl_debug_initialize (GL(dl_rtld_map).l_addr,
+diff -urNZ a/sysdeps/generic/unsecvars.h b/sysdeps/generic/unsecvars.h
+--- a/sysdeps/generic/unsecvars.h	2017-08-02 12:57:16.000000000 +0000
++++ b/sysdeps/generic/unsecvars.h	2017-12-18 06:03:26.485322284 +0000
+@@ -18,6 +18,7 @@
+   "LD_DYNAMIC_WEAK\0"							      \
+   "LD_HWCAP_MASK\0"							      \
+   "LD_LIBRARY_PATH\0"							      \
++  "NIX_LD_LIBRARY_PATH\0"                                                     \
+   "LD_ORIGIN_PATH\0"							      \
+   "LD_PRELOAD\0"							      \
+   "LD_PROFILE\0"							      \
