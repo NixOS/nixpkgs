@@ -18,9 +18,13 @@ let
   };
 
   apcu51 = assert isPhp7; buildPecl {
-    name = "apcu-5.1.2";
+    name = "apcu-5.1.8";
 
-    sha256 = "0r5pfbjbmdj46h20jm3iqmy969qd27ajyf0phjhgykv6j0cqjlgd";
+    sha256 = "01dfbf0245d8cc0f51ba16467a60b5fad08e30b28df7846e0dd213da1143ecce";
+
+    doCheck = true;
+    checkTarget = "test";
+    checkFlagsArray = ["REPORT_EXIT_STATUS=1" "NO_INTERACTION=1"];
   };
 
   ast = assert isPhp7; buildPecl {
@@ -269,22 +273,16 @@ let
     buildInputs = [ pkgs.geoip ];
   };
 
-  redis = if isPhp7 then redisPhp7 else redis22;
+  redis = if isPhp7 then redis31 else redis22;
 
   redis22 = assert !isPhp7; buildPecl {
     name = "redis-2.2.7";
     sha256 = "00n9dpk9ak0bl35sbcd3msr78sijrxdlb727nhg7f2g7swf37rcm";
   };
 
-  # Not released yet
-  redisPhp7 = assert isPhp7; buildPecl rec {
-    name = "redis-php7";
-
-    src = fetchgit {
-      url = "https://github.com/phpredis/phpredis";
-      rev = "4a37e47d0256581ce2f7a3b15b5bb932add09f36";
-      sha256 = "1qm2ifa0zf95l1g967iiabmja17srpwz73lfci7z13ffdw1ayhfd";
-    };
+  redis31 = assert isPhp7; buildPecl {
+    name = "redis-3.1.4";
+    sha256 = "0rgjdrqfif8pfn3ipk1v4gyjkkdcdrdk479qbpda89w25vaxzsxd";
   };
 
   v8 = assert isPhp7; buildPecl rec {

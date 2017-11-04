@@ -16,7 +16,9 @@ stdenv.mkDerivation rec
 
   buildInputs = [ unzip openexr boost tbb jemalloc c-blosc ilmbase ];
 
-  sourceRoot = "openvdb-v${version}-src/openvdb";
+  setSourceRoot = ''
+    sourceRoot=$(echo */openvdb)
+  '';
 
   installTargets = "install_lib";
 

@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
       if [ -e git-export ]; then
         mv git-export/src/pypi2nix      $out/pkgs/pypi2nix
       else
-        mv pypi2nix*/src/pypi2nix       $out/pkgs/pypi2nix
+        mv source/src/pypi2nix          $out/pkgs/pypi2nix
       fi
     fi
   '';

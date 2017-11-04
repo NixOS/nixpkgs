@@ -13,13 +13,12 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0y0rkxhkv31v5sa0425dwskd80i6srwbqhqkrw1g1kbmbs9y0vxz";
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -p target/release/tokei $out/bin/
+  buildPhase = ''
+    # do not pass --frozen since Cargo.lock has the wrong tokei version
+    cargo build --release
   '';
 
   meta = with stdenv.lib; {
-    broken = true;
     description = "Count code, quickly";
     homepage = https://github.com/Aaronepower/tokei;
     license = licenses.mit;

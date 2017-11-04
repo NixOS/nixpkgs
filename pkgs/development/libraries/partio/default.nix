@@ -16,8 +16,6 @@ stdenv.mkDerivation rec
 
   buildInputs = [ unzip cmake freeglut mesa zlib swig python doxygen xorg.libXi xorg.libXmu ];
 
-  sourceRoot = "partio-v${version}-src";
-
   enableParallelBuilding = true;
 
   buildPhase = ''

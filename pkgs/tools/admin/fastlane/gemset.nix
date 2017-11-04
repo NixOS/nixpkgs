@@ -137,10 +137,10 @@
     dependencies = ["CFPropertyList" "addressable" "babosa" "colored" "commander-fastlane" "dotenv" "excon" "faraday" "faraday-cookie_jar" "faraday_middleware" "fastimage" "gh_inspector" "google-api-client" "highline" "json" "mini_magick" "multi_json" "multi_xml" "multipart-post" "plist" "public_suffix" "rubyzip" "security" "slack-notifier" "terminal-notifier" "terminal-table" "tty-screen" "word_wrap" "xcodeproj" "xcpretty" "xcpretty-travis-formatter"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1r6ci3rkrzsdk8cbxidzcjv94hbwq7ljwvm5whgxb8lcxcfl696k";
+      sha256 = "1al75bb3zq0y9r1ilrbhks198zmvwykmqnn2675jd9i2ijcbxv78";
       type = "gem";
     };
-    version = "2.62.1";
+    version = "2.63.0";
   };
   gh_inspector = {
     source = {

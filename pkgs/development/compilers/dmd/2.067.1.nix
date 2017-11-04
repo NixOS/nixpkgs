@@ -17,18 +17,21 @@ stdenv.mkDerivation rec {
     repo = "dmd";
     rev = "v${version}";
     sha256 = "0fm29lg8axfmzdaj0y6vg70lhwb5d9rv4aavnvdd15xjschinlcz";
+    name = "dmd-v${version}-src";
   })
   (fetchFromGitHub {
     owner = "dlang";
     repo = "druntime";
     rev = "v${version}";
     sha256 = "1n2qfw9kmnql0fk2nxikispqs7vh85nhvyyr00fk227n9lgnqf02";
+    name = "druntime-v${version}-src";
   })
   (fetchFromGitHub {
     owner = "dlang";
     repo = "phobos";
     rev = "v${version}";
     sha256 = "0fywgds9xvjcgnqxmpwr67p3wi2m535619pvj159cgwv5y0nr3p1";
+    name = "phobos-v${version}-src";
   })
   ];
 

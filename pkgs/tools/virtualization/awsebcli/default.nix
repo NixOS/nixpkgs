@@ -1,8 +1,18 @@
- { stdenv, python }:
+{ stdenv, python }:
 let
 
   localPython = python.override {
     packageOverrides = self: super: rec {
+      cement = super.cement.overridePythonAttrs (oldAttrs: rec {
+        version = "2.8.2";
+
+        src = super.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version;
+          sha256 = "1li2whjzfhbpg6fjb6r1r92fb3967p1xv6hqs3j787865h2ysrc7";
+        };
+      });
+
       colorama = super.colorama.overridePythonAttrs (oldAttrs: rec {
         version = "0.3.7";
 
@@ -67,11 +77,11 @@ let
 in with localPython.pkgs; buildPythonApplication rec {
   name = "${pname}-${version}";
   pname = "awsebcli";
-  version = "3.11.0";
+  version = "3.12.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "052388annhyirlzdr89hbgif8k7pw7win2zm1ybn4iiisr5l49zi";
+    sha256 = "0ljras4bgxpmk1l3plialmhi7jsm2cpzx0dcs9411ijykzkamdkd";
   };
 
   checkInputs = [

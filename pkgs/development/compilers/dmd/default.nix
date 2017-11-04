@@ -14,18 +14,21 @@ stdenv.mkDerivation rec {
     repo = "dmd";
     rev = "v${version}";
     sha256 = "0kq6r8rcghvzk5jcphg89l85rg734s29bssd2rcw3fygx0k9a9k5";
+    name = "dmd-v${version}-src";
   })
   (fetchFromGitHub {
     owner = "dlang";
     repo = "druntime";
     rev = "v${version}";
     sha256 = "0idn2v1lmp7hl637g3i7pdfj9mjk4sclkz4cm77nl8873k2fhk8j";
+    name = "druntime-v${version}-src";
   })
   (fetchFromGitHub {
     owner = "dlang";
     repo = "phobos";
     rev = "v${version}";
     sha256 = "1a7q5fd15yspgs5plxgx54jyrcwgzlyw3rahmz04jd2s5h56dj04";
+    name = "phobos-v${version}-src";
   })
   ];
 

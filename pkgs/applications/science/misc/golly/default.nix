@@ -20,7 +20,9 @@ stdenv.mkDerivation rec {
     inherit (s) url sha256;
   };
 
-  sourceRoot="${name}-src/gui-wx/configure";
+  setSourceRoot = ''
+    sourceRoot=$(echo */gui-wx/configure)
+  '';
 
   # Link against Python explicitly as it is needed for scripts
   makeFlags=[

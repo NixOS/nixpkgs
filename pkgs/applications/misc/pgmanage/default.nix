@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, runCommand, postgresql, openssl } :
 
 stdenv.mkDerivation rec {
-  name = "postage-${version}";
-  version = "3.2.18";
+  name = "pgmanage-${version}";
+  version = "10.0.2";
 
   src = fetchFromGitHub {
-    owner  = "workflowproducts";
-    repo   = "postage";
-    rev    = "eV${version}";
-    sha256 = "1kdg8pw2vxwkxw3b6dim4s740s60j3iyrh96524wi3lqkkq98krn";
+    owner  = "pgManage";
+    repo   = "pgManage";
+    rev    = "v${version}";
+    sha256 = "0g9kvhs9b6kc1s7j90fqv71amiy9v0w5p906yfvl0j7pf3ayq35a";
   };
 
   buildInputs = [ postgresql openssl ];
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
       the style of NGINX and Node.js. This heart makes Postage as fast as any
       PostgreSQL interface can hope to be.
     '';
-    homepage = http://www.workflowproducts.com/postage.html;
-    license = licenses.asl20;
+    homepage = https://github.com/pgManage/pgManage;
+    license = licenses.postgresql;
     maintainers = [ maintainers.basvandijk ];
   };
 }

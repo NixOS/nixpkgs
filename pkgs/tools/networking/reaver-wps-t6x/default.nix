@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ libpcap sqlite pixiewps ];
 
-  sourceRoot = "reaver-wps-fork-t6x-v${version}-src/src";
+  setSourceRoot = ''
+    sourceRoot=$(echo */src)
+  '';
 
   configureFlags = "--sysconfdir=${confdir}";
 

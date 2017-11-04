@@ -95,10 +95,10 @@
     ahungry-theme = callPackage ({ elpaBuild, emacs, fetchurl, lib }:
     elpaBuild {
         pname = "ahungry-theme";
-        version = "1.6.0";
+        version = "1.8.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ahungry-theme-1.6.0.tar";
-          sha256 = "1b0x7g753gn7mym8286b937zmxv50jgdish2h6wc05w1g1lygwsz";
+          url = "https://elpa.gnu.org/packages/ahungry-theme-1.8.0.tar";
+          sha256 = "14dhnrlbjzrxk5ligf0z2im5bgnxpjqqzqcrmqg5355xrgpbpb7v";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -700,10 +700,10 @@
     ebdb = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib, seq }:
     elpaBuild {
         pname = "ebdb";
-        version = "0.3.4";
+        version = "0.4.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ebdb-0.3.4.tar";
-          sha256 = "1jj7s0646wqg9ykmpi52cc6m6m0gk2inqc2h6h7cr7gr4v7n2l00";
+          url = "https://elpa.gnu.org/packages/ebdb-0.4.1.tar";
+          sha256 = "0gv1q1xkhjab0l77c92znn6x0dfdbnj6hc48axmrx6a7zwbm3g2r";
         };
         packageRequires = [ cl-lib emacs seq ];
         meta = {
@@ -945,10 +945,10 @@
     gnorb = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "gnorb";
-        version = "1.3.0";
+        version = "1.3.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/gnorb-1.3.0.tar";
-          sha256 = "0c256473llp7ahl1wbm6m236cj2lhp9ms1clmxpsfv51ds27ljqv";
+          url = "https://elpa.gnu.org/packages/gnorb-1.3.1.tar";
+          sha256 = "1g6xldkc6l6zlzd1slqizbbd5b9k4pbr66nrf5svidgiy7mlifw5";
         };
         packageRequires = [ cl-lib ];
         meta = {
@@ -1556,10 +1556,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20171016";
+        version = "20171030";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20171016.tar";
-          sha256 = "1196kv83p953nd9c5gxkn8ndw2kmm2kfw34dldap6m89khqflz5a";
+          url = "https://elpa.gnu.org/packages/org-20171030.tar";
+          sha256 = "1lszws6b5s4r7w871cyigs433dflf6w0y33fj6rzrq8240d5092i";
         };
         packageRequires = [];
         meta = {

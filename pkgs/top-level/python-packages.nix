@@ -6110,31 +6110,7 @@ in {
 
   jsbeautifier = callPackage ../development/python-modules/jsbeautifier {};
 
-  jug = buildPythonPackage rec {
-    version = "1.6.1";
-    name = "jug-${version}";
-    buildInputs = with self; [ nose numpy ];
-    propagatedBuildInputs = with self; [
-      bottle
-      pyyaml
-      redis
-      six
-
-      pkgs.zlib
-    ];
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/J/Jug/Jug-${version}.tar.gz";
-      sha256 = "15lv998mz6kpp65kh8wsfnrl5ay02bk1lm07nbbdv2k455bhrn1i";
-    };
-
-    meta = {
-      description = "A Task-Based Parallelization Framework";
-      license = licenses.mit;
-      url = https://jug.readthedocs.io/;
-      maintainers = with maintainers; [ luispedro ];
-    };
-  };
+  jug = callPackage ../development/python-modules/jug {};
 
   jsmin = callPackage ../development/python-modules/jsmin { };
 
@@ -15070,6 +15046,7 @@ in {
   };
 
   pip-tools = callPackage ../development/python-modules/pip-tools {
+    git = pkgs.gitMinimal;
     glibcLocales = pkgs.glibcLocales;
   };
 
@@ -15420,7 +15397,7 @@ in {
 
     meta = {
       description = "Process and system utilization information interface for python";
-      homepage = http://code.google.com/p/psutil/;
+      homepage = https://github.com/giampaolo/psutil;
     };
   };
 
@@ -15873,12 +15850,12 @@ in {
 
 
   pycdio = buildPythonPackage rec {
-    name = "pycdio-0.20";
+    name = "pycdio-0.21";
     disabled = !isPy27;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pycdio/${name}.tar.gz";
-      sha256 = "1mrh233pj584gf7la64d4xlmvdnfl4jwpxs95lnd3i4zd5drid14";
+      sha256 = "1bkcmg838l2yffsw5lln93ap5f8ks3vmqwg02mygmdmay647rc3v";
     };
 
     prePatch = ''
@@ -15892,8 +15869,6 @@ in {
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = [ self.setuptools self.nose pkgs.swig pkgs.libcdio ]
       ++ stdenv.lib.optional stdenv.isDarwin pkgs.libiconv;
-
-    patches = [ ../development/python-modules/pycdio/add-cdtext-toc.patch ];
 
     # Run tests using nosetests but first need to install the binaries
     # to the root source directory where they can be found.
@@ -18213,24 +18188,7 @@ in {
 
   rpkg = callPackage ../development/python-modules/rpkg/default.nix {};
 
-  rply = buildPythonPackage rec {
-    name = "rply-${version}";
-    version = "0.7.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/rply/${name}.tar.gz";
-      sha256 = "12rp1d9ba7nvd5rhaxi6xzx1rm67r1k1ylsrkzhpwnphqpb06cvj";
-    };
-
-    buildInputs = with self; [ appdirs ];
-
-    meta = with pkgs.stdenv.lib; {
-      description = "A python Lex/Yacc that works with RPython";
-      homepage = https://github.com/alex/rply;
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ nixy ];
-    };
-  };
+  rply = callPackage ../development/python-modules/rply/default.nix {};
 
   rpm = (pkgs.rpm.override{inherit python;});
 

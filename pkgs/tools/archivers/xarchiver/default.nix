@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, gtk2, pkgconfig, intltool }:
+{ stdenv, fetchFromGitHub, gtk3, pkgconfig, intltool, libxslt }:
 
 stdenv.mkDerivation rec {
-  version = "0.5.4.7";
+  version = "0.5.4.12";
   name = "xarchiver-${version}";
 
   src = fetchFromGitHub {
     owner = "ib";
     repo = "xarchiver";
-    rev = "${name}";
-    sha256 = "0w9lx8d8r50j48qfhn2r0dlcnwy3pjyy6xjvgpr0qagy5l1q1qj4";
+    rev = "${version}";
+    sha256 = "13d8slcx3frz0dhl1w4llj7001n57cjjb8r7dlaw5qacaas3xfwi";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk2 intltool ];
+  buildInputs = [ gtk3 intltool libxslt ];
 
   meta = {
     description = "GTK+ frontend to 7z,zip,rar,tar,bzip2, gzip,arj, lha, rpm and deb (open and extract only)";

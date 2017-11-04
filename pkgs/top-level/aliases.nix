@@ -116,6 +116,7 @@ mapAliases (rec {
   pgp-tools = signing-party; # added 2017-03-26
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatexSF = pidginlatex; # added 2014-11-02
+  postage = pgmanage; # added 2017-11-03
   poppler_qt5 = libsForQt5.poppler;  # added 2015-12-19
   PPSSPP = ppsspp; # added 2017-10-01
   prometheus-statsd-bridge = prometheus-statsd-exporter;  # added 2017-08-27
