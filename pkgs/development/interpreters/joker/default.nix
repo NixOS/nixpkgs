@@ -17,6 +17,8 @@ buildGoPackage rec {
 
   dontInstallSrc = true;
 
+  excludedPackages = "gen"; # Do not install private generators.
+
   goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
