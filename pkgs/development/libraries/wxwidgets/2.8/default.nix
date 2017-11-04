@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xf86vidmodeproto
+{ stdenv, fetchurl, fetchpatch, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xf86vidmodeproto
 , gstreamer, gst-plugins-base, GConf, libX11, cairo
 , withMesa ? true, mesa_glu ? null, mesa_noglu ? null
 , compat24 ? false, compat26 ? true, unicode ? true,
@@ -21,6 +21,16 @@ stdenv.mkDerivation rec {
     ++ optional withMesa mesa_glu;
 
   nativeBuildInputs = [ pkgconfig ];
+
+  patches = let
+    fix17942 = fetchpatch {
+      url = "https://trac.wxwidgets.org/attachment/ticket/17942/fix_assertion_using_hide_in_destroy.diff";
+      sha256 = "1gi6xcq1m3n8ca1dg18mjz17jjrqyr75vvbjxm82dbv8b8gzqwhm";
+    };
+  in
+  [
+    "${fix17942}"
+  ];
 
   hardeningDisable = [ "format" ];
 

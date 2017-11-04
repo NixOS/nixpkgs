@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xf86vidmodeproto
+{ stdenv, fetchurl, fetchpatch, pkgconfig, gtk2, libXinerama, libSM, libXxf86vm, xf86vidmodeproto
 , gstreamer, gst-plugins-base, GConf, setfile
 , withMesa ? true, mesa_glu ? null, mesa_noglu ? null
 , compat24 ? false, compat26 ? true, unicode ? true
@@ -9,10 +9,8 @@ assert withMesa -> mesa_glu != null && mesa_noglu != null;
 
 with stdenv.lib;
 
-let
+stdenv.mkDerivation rec {
   version = "2.9.4";
-in
-stdenv.mkDerivation {
   name = "wxwidgets-${version}";
 
   src = fetchurl {
@@ -29,6 +27,16 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ];
 
   propagatedBuildInputs = optional stdenv.isDarwin AGL;
+
+  patches = let
+    fix17942 = fetchpatch {
+      url = "https://trac.wxwidgets.org/attachment/ticket/17942/fix_assertion_using_hide_in_destroy.diff";
+      sha256 = "1gi6xcq1m3n8ca1dg18mjz17jjrqyr75vvbjxm82dbv8b8gzqwhm";
+    };
+  in
+  [
+    "${fix17942}"
+  ];
 
   configureFlags =
     [ "--enable-gtk2" "--disable-precomp-headers" "--enable-mediactrl"
@@ -65,7 +73,7 @@ stdenv.mkDerivation {
   };
 
   enableParallelBuilding = true;
-  
+
   meta = {
     platforms = with platforms; darwin ++ linux;
     license = licenses.wxWindows;

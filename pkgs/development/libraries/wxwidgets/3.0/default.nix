@@ -13,10 +13,8 @@ assert withWebKit -> (if withGtk2 then webkitgtk24x-gtk2 else webkitgtk218x) != 
 
 with stdenv.lib;
 
-let
+stdenv.mkDerivation rec {
   version = "3.0.3.1";
-in
-stdenv.mkDerivation {
   name = "wxwidgets-${version}";
 
   src = fetchFromGitHub {
@@ -37,9 +35,17 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = optional stdenv.isDarwin AGL;
 
-  patches =
+  patches = let
+    fix17942 = fetchpatch {
+      url = "https://trac.wxwidgets.org/attachment/ticket/17942/fix_assertion_using_hide_in_destroy.diff";
+      sha256 = "1gi6xcq1m3n8ca1dg18mjz17jjrqyr75vvbjxm82dbv8b8gzqwhm";
+    };
+  in
+  [
+    "${fix17942}"
+  ]
     # "Add support for WebKit2GTK+ in wxWebView". Will be in 3.0.4
-    optional (!withGtk2) (fetchpatch {
+    ++ optional (!withGtk2) (fetchpatch {
       url = "https://github.com/wxWidgets/wxWidgets/commit/ec6e54bc893fb7516731ca9c71e0d0bbc5ae9ff7.patch";
       sha256 = "0gxd83xajm7gdv9rdzyvqwa2p5nz29nr23i0zx2dgfpsvz2qjp3q";
     });
@@ -81,7 +87,7 @@ stdenv.mkDerivation {
   };
 
   enableParallelBuilding = true;
-  
+
   meta = {
     platforms = with platforms; darwin ++ linux;
     license = licenses.wxWindows;
