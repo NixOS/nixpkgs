@@ -341,7 +341,9 @@ in {
       };
       database_type = mkOption {
         type = types.enum [ "sqlite3" "psycopg2" ];
-        default = "sqlite3";
+        default = if versionAtLeast config.system.stateVersion "18.03"
+          then "psycopg2"
+          else "sqlite3";
         description = ''
           The database engine name. Can be sqlite or psycopg2.
         '';
