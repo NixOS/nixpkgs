@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   name = "timescaledb-${version}";
-  version = "0.5.0";
+  version = "0.6.0";
 
   buildInputs = [ postgresql ];
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "timescale";
     repo = "timescaledb";
     rev = version;
-    sha256 = "01swgjw563c42azxsg55ry7cyiipxkcvfrxmw71jil5dxl3s0fkz";
+    sha256 = "061z1ll3x7ca7fj12rl2difkdvmqykksqhpsql552qkkylg7iq4d";
   };
 
   installPhase = ''
