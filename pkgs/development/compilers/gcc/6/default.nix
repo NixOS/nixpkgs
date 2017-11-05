@@ -1,4 +1,4 @@
-{ stdenv, targetPackages, fetchurl, noSysDirs
+{ stdenv, buildPackages, targetPackages, fetchurl, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langObjC ? targetPlatform.isDarwin
 , langObjCpp ? targetPlatform.isDarwin
@@ -34,7 +34,6 @@
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , darwin ? null
 , buildPlatform, hostPlatform, targetPlatform
-, buildPackages
 }:
 
 assert langJava     -> zip != null && unzip != null
@@ -440,6 +439,11 @@ stdenv.mkDerivation ({
     platformFlags ++
     optional (targetPlatform != hostPlatform) crossConfigureFlags ++
     optional (!bootstrap) "--disable-bootstrap" ++
+    optionals (targetPlatform == hostPlatform) platformFlags ++
+    [
+      "CC_FOR_BUILD=${buildPackages.stdenv.cc.targetPrefix}gcc"
+      "CXX_FOR_BUILD=${buildPackages.stdenv.cc.targetPrefix}g++"
+    ] ++
 
     # Platform-specific flags
     optional (targetPlatform == hostPlatform && targetPlatform.isi686) "--with-arch=i686" ++
