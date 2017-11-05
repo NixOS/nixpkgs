@@ -84,6 +84,9 @@ in
 
 , # Meta information, if any.
   meta ? {}
+
+  # Passthru information, if any.
+, passthru ? {}
 }:
 
 assert builtins.isList urls;
@@ -139,4 +142,5 @@ else stdenv.mkDerivation {
   '';
 
   inherit meta;
+  inherit passthru;
 }
