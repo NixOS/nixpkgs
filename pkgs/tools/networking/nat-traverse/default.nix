@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, makeWrapper }:
+{ stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
   name = "nat-traverse-${version}";
@@ -9,13 +9,12 @@ stdenv.mkDerivation rec {
     sha256 = "0knwnqsjwv7sa5wjb863ghabs7s269a73qwkmxpsbngjw9s0j2ih";
   };
 
-  buildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ perl ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man1
     cp nat-traverse $out/bin
     gzip -c nat-traverse.1 > $out/share/man/man1/nat-traverse.1.gz
-    wrapProgram $out/bin/nat-traverse --prefix PATH : "${stdenv.lib.makeBinPath [ perl ]}"
   '';
 
   meta = with stdenv.lib; {
@@ -31,8 +30,8 @@ stdenv.mkDerivation rec {
       nat-traverse works out-of-the-box.
     '';
     homepage = https://www.speicherleck.de/iblech/nat-traverse/;
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl3Plus;
+    platforms = platforms.all;
     maintainers = [ maintainers.iblech ];
   };
 }
