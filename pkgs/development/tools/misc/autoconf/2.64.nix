@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, m4, perl }:
+{ stdenv, fetchurl, buildPackages, m4, perl }:
 
 stdenv.mkDerivation rec {
   name = "autoconf-2.64";
@@ -8,6 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0j3jdjpf5ly39dlp0bg70h72nzqr059k0x8iqxvaxf106chpgn9j";
   };
 
+  nativeBuildInputs = [ buildPackages.m4 ];
   buildInputs = [ m4 perl ];
 
   # Work around a known issue in Cygwin.  See
@@ -20,6 +21,10 @@ stdenv.mkDerivation rec {
   # Don't fixup "#! /bin/sh" in Autoconf, otherwise it will use the
   # "fixed" path in generated files!
   dontPatchShebangs = true;
+
+  # For some reason autoconf's configure doesn't find the host m4
+  # while cross-compiling unless we explicitly point it out.
+  configureFlags = '' M4=${buildPackages.m4}/bin/m4 '';
 
   enableParallelBuilding = true;
 
