@@ -8293,11 +8293,13 @@ with pkgs;
 
   icon-lang = callPackage ../development/interpreters/icon-lang { };
 
-  libgit2 = callPackage ../development/libraries/git2 (
-    stdenv.lib.optionalAttrs stdenv.isDarwin {
+  inherit (rec {
+    arg = stdenv.lib.optionalAttrs stdenv.isDarwin {
       inherit (darwin) libiconv;
-    }
-  );
+    };
+    libgit2 = callPackage ../development/libraries/git2 arg;
+    libgit2_0_25 = callPackage ../development/libraries/git2/0.25.nix arg;
+  }) libgit2 libgit2_0_25;
 
   gle = callPackage ../development/libraries/gle { };
 
