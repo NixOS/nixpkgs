@@ -296,9 +296,8 @@ stdenv.mkDerivation {
           echo ${libc_lib}/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
         fi
 
-     if [ -n "''${dynamicLinker:-}" ]; then
-             local ldflagsBefore=(-dynamic-linker "$dynamicLinker")
-     fi
+        local ldflagsBefore=(-dynamic-linker "$dynamicLinker")
+
     '') + ''
       fi
 
