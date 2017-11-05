@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "icestorm-${version}";
-  version = "2017.10.16";
+  version = "2017.11.05";
 
   src = fetchFromGitHub {
-    owner = "cliffordwolf";
-    repo = "icestorm";
-    rev = "d9d2a3dcaa749014f5b9a539768b8368bb529b28";
-    sha256 = "1a755jnbjq3v7a3l90qjlgihmrpbdfiiabb4g8sw3ay3qmvzwh6b";
+    owner  = "cliffordwolf";
+    repo   = "icestorm";
+    rev    = "3ba18d001754de563ab0baa2a1c8eecbe63ef121";
+    sha256 = "1c7yv91xi4vx0130xn2zq74gfjbf7fhm2q4fma9xgwj5xpdy8rmn";
   };
 
   buildInputs = [ python3 libftdi ];
