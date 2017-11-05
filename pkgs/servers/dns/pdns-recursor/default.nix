@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     "--with-systemd"
   ];
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "A recursive DNS server";
     homepage = http://www.powerdns.com/;
