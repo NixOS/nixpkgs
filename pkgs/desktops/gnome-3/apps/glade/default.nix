@@ -9,13 +9,13 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkgconfig intltool itstool makeWrapper docbook_xsl libxslt
     # reconfiguration
     autoreconfHook gnome3.gnome_common gnome3.yelp_tools
   ];
-  buildInputs = [ gtk3 glib intltool itstool libxml2 python
-                  gnome3.gsettings_desktop_schemas makeWrapper docbook_xsl
-                  gdk_pixbuf gnome3.defaultIconTheme librsvg libxslt ];
+  buildInputs = [ gtk3 glib libxml2 python
+                  gnome3.gsettings_desktop_schemas
+                  gdk_pixbuf gnome3.defaultIconTheme librsvg ];
 
   enableParallelBuilding = true;
 
