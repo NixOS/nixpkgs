@@ -15438,6 +15438,8 @@ with pkgs;
     inherit (gnome3) libpeas gsettings_desktop_schemas dconf;
   };
 
+  lightworks = callPackage ../applications/video/lightworks { };
+
   lingot = callPackage ../applications/audio/lingot {
     inherit (gnome2) libglade;
   };
