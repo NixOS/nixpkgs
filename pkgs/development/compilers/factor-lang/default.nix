@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchFromGitHub, glib, glibc, git,
   rlwrap, curl, pkgconfig, perl, makeWrapper, tzdata, ncurses,
   libX11, pango, cairo, gtk2, gdk_pixbuf, gtkglext,
-  mesa, libXmu, libXt, libICE, libSM }:
+  mesa_glu, libXmu, libXt, libICE, libSM }:
 
 stdenv.mkDerivation rec {
   name = "factor-lang-${version}";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ git rlwrap curl pkgconfig perl makeWrapper
     libX11 pango cairo gtk2 gdk_pixbuf gtkglext
-    mesa libXmu libXt libICE libSM ];
+    mesa_glu libXmu libXt libICE libSM ];
 
   buildPhase = ''
     make $(bash ./build-support/factor.sh make-target) GIT_LABEL=heads/master-${rev}
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     # to be a generic solution here.
     find $(echo ${stdenv.lib.makeLibraryPath [
         glib libX11 pango cairo gtk2 gdk_pixbuf gtkglext
-        mesa libXmu libXt libICE libSM ]} | sed -e 's#:# #g') -name \*.so.\* > $TMPDIR/so.lst
+        mesa_glu libXmu libXt libICE libSM ]} | sed -e 's#:# #g') -name \*.so.\* > $TMPDIR/so.lst
 
     (echo $(cat $TMPDIR/so.lst | wc -l) "libs found in cache \`/etc/ld.so.cache'";
     for l in $(<$TMPDIR/so.lst);
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/factor --prefix LD_LIBRARY_PATH : \
       "${stdenv.lib.makeLibraryPath [ glib
         libX11 pango cairo gtk2 gdk_pixbuf gtkglext
-        mesa libXmu libXt libICE libSM ]}"
+        mesa_glu libXmu libXt libICE libSM ]}"
 
     sed -ie 's#/bin/.factor-wrapped#/lib/factor/factor#g' $out/bin/factor
     mv $out/bin/.factor-wrapped $out/lib/factor/factor
