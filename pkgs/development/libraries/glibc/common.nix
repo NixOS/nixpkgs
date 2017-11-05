@@ -46,6 +46,8 @@ stdenv.mkDerivation ({
           $ git show --reverse glibc-2.25..release/2.25/master | gzip -n -9 --rsyncable - > 2.25-49.patch.gz
       */
       ./2.25-49.patch.gz
+      ./cve-2017-15670.patch
+      ./cve-2009-5064.patch
 
       /* Have rpcgen(1) look for cpp(1) in $PATH.  */
       ./rpcgen-path.patch

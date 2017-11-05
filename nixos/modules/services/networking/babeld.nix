@@ -6,26 +6,22 @@ let
 
   cfg = config.services.babeld;
 
-  babelToString = x: if builtins.typeOf x == "bool"
-                    then (if x then "true" else "false")
-                    else toString x;
-
   paramsString = params:
-    (toString (map (name: "${name} ${babelToString (getAttr name params)}")
-                   (attrNames params)));
+    concatMapStringsSep "" (name: "${name} ${boolToString (getAttr name params)}")
+                   (attrNames params);
 
   interfaceConfig = name:
     let
       interface = getAttr name cfg.interfaces;
     in
-    "interface ${name} ${paramsString interface} \n";
+    "interface ${name} ${paramsString interface}\n";
 
-  configFile = with cfg; pkgs.writeText "babeld.conf"
-    ''
-      ${optionalString (cfg.interfaceDefaults != null) ("default " + (paramsString cfg.interfaceDefaults))}
-      ${toString (map interfaceConfig (attrNames cfg.interfaces))}
-      ${extraConfig}
-    '';
+  configFile = with cfg; pkgs.writeText "babeld.conf" (
+    (optionalString (cfg.interfaceDefaults != null) ''
+      default ${paramsString cfg.interfaceDefaults}
+    '')
+    + (concatMapStrings interfaceConfig (attrNames cfg.interfaces))
+    + extraConfig);
 
 in
 
