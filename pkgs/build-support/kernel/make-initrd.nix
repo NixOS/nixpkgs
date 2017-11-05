@@ -16,17 +16,14 @@
 , hostPlatform
 }:
 
-let
-  inputsFun = ubootName : [ perl cpio ]
-    ++ stdenv.lib.optional (ubootName != null) ubootTools;
-  makeUInitrdFun = ubootName : (ubootName != null);
-in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "initrd";
   builder = ./make-initrd.sh;
-  nativeBuildInputs = inputsFun hostPlatform.platform.uboot;
 
-  makeUInitrd = makeUInitrdFun hostPlatform.platform.uboot;
+  makeUInitrd = hostPlatform.platform.kernelTarget == "uImage";
+
+  nativeBuildInputs = [ perl cpio ]
+    ++ stdenv.lib.optional makeUInitrd ubootTools;
 
   # !!! should use XML.
   objects = map (x: x.object) contents;

@@ -2,7 +2,6 @@
 rec {
   pcBase = {
     name = "pc";
-    uboot = null;
     kernelHeadersBaseConfig = "defconfig";
     kernelBaseConfig = "defconfig";
     # Build whatever possible as a module, if not stated in the extra config.
@@ -50,9 +49,6 @@ rec {
     kernelTarget = "uImage";
     # TODO reenable once manual-config's config actually builds a .dtb and this is checked to be working
     #kernelDTB = true;
-
-    # XXX can be anything non-null, pkgs actually only cares if it is set or not
-    uboot = "pogoplug4";
   };
 
   sheevaplug = {
@@ -162,9 +158,6 @@ rec {
     '';
     kernelMakeFlags = [ "LOADADDR=0x0200000" ];
     kernelTarget = "uImage";
-    uboot = "sheevaplug";
-    # Only for uboot = uboot :
-    ubootConfig = "sheevaplug_config";
     kernelDTB = true; # Beyond 3.10
     gcc = {
       arch = "armv5te";
@@ -251,7 +244,6 @@ rec {
       LATENCYTOP y
     '';
     kernelTarget = "zImage";
-    uboot = null;
     gcc = {
       arch = "armv6";
       fpu = "vfp";
@@ -342,7 +334,6 @@ rec {
       XEN? n
     '';
     kernelTarget = "zImage";
-    uboot = null;
   };
 
   scaleway-c1 = armv7l-hf-multiplatform // {
@@ -374,7 +365,6 @@ rec {
     kernelMakeFlags = [ "LOADADDR=0x10800000" ];
     kernelTarget = "uImage";
     kernelDTB = true;
-    uboot = true; #XXX: any non-null value here is needed so that mkimage is present to build kernelTarget uImage
     gcc = {
       cpu = "cortex-a9";
       fpu = "neon";
@@ -464,7 +454,6 @@ rec {
       FTRACE n
     '';
     kernelTarget = "vmlinux";
-    uboot = null;
     gcc = {
       arch = "loongson2f";
       abi = "n32";
@@ -477,7 +466,6 @@ rec {
     kernelAutoModules = false;
     kernelExtraConfig = ""; # TBD kernel config
     kernelTarget = "zImage";
-    uboot = null;
   };
 
   armv7l-hf-multiplatform = {
@@ -489,7 +477,6 @@ rec {
     kernelDTB = true;
     kernelAutoModules = true;
     kernelPreferBuiltin = true;
-    uboot = null;
     kernelTarget = "zImage";
     kernelExtraConfig = ''
       # Fix broken sunxi-sid nvmem driver.
@@ -552,7 +539,6 @@ rec {
       # which our initrd builder can't currently do easily.
       USB_XHCI_TEGRA m
     '';
-    uboot = null;
     kernelTarget = "Image";
     gcc = {
       arch = "armv8-a";
