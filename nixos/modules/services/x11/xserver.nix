@@ -562,7 +562,9 @@ in
                 + concatMapStringsSep ", " (x: x.output) primaryHeads;
       })
       { assertion = cfg.desktopManager.default == "none" && cfg.windowManager.default == "none" -> cfg.plainX;
-        message = "Either the desktop manager or the window manager shouldn't be `none`! To explicitly allow this, you can also set `services.xserver.plainX` to `true`.";
+        message = "Either the desktop manager or the window manager shouldn't be `none`! "
+                + "To explicitly allow this, you can also set `services.xserver.plainX` to `true`. "
+                + "The `default` value looks for enabled WMs/DMs and select the first one.";
       }
     ];
 
