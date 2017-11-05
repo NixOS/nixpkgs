@@ -1,22 +1,37 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, fetchFromGitHub, buildGoPackage }:
 
-stdenv.mkDerivation rec {
+buildGoPackage rec {
   name = "mattermost-${version}";
-  version = "4.1.0";
+  version = "4.2.0";
 
-  src = fetchurl {
-    url = "https://releases.mattermost.com/${version}/mattermost-team-${version}-linux-amd64.tar.gz";
-    sha256 = "0bp56i108pxsqcswxy1hdz3d8wq83lc29wcq6npimwx566rx4xhf";
+  src = fetchFromGitHub {
+    owner = "mattermost";
+    repo = "mattermost-server";
+    rev = "v${version}";
+    sha256 = "0ngkdckd5bwh7ycnzspy9n16cqpk6pp9ifq8n19nkjlzynhsw2zd";
   };
 
-  installPhase = ''
-    mkdir -p $out
-    mv * $out/
-    ln -s ./platform $out/bin/mattermost-platform
+  webApp = fetchurl {
+    url = "https://releases.mattermost.com/${version}/mattermost-team-${version}-linux-amd64.tar.gz";
+    sha256 = "0h52j1zmiij3g3rs10dr6xi2qdzqmb7xfj3rwbrlnvipjpnsa3v1";
+  };
+
+  goPackagePath = "github.com/mattermost/platform";
+
+  buildPhase = ''
+    runHook preBuild
+    cd go/src/${goPackagePath}/cmd/platform
+    go install
+    runHook postBuild
   '';
 
-  postFixup = ''
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $out/bin/platform
+  preInstall = ''
+    mkdir -p $bin
+    tar --strip 1 -C $bin -xf $webApp
+  '';
+
+  postInstall = ''
+    ln -s $bin/bin/platform $bin/bin/mattermost-platform
   '';
 
   meta = with stdenv.lib; {
@@ -24,6 +39,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.mattermost.org;
     license = with licenses; [ agpl3 asl20 ];
     maintainers = with maintainers; [ fpletz ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.unix;
   };
 }
