@@ -16509,9 +16509,7 @@ with pkgs;
 
   stella = callPackage ../misc/emulators/stella { };
 
-  statsd = callPackage ../tools/networking/statsd {
-    nodejs = nodejs-4_x;
-  };
+  statsd = nodePackages.statsd;
 
   linuxstopmotion = callPackage ../applications/video/linuxstopmotion { };
 
