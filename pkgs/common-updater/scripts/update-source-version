@@ -44,7 +44,7 @@ oldVersion=$(echo "$oldVersion" | sed -re 's|[.+]|\\&|g')
 
 if [ $(grep -c -E "^\s*(let\b)?\s*version\s*=\s*\"$oldVersion\"" "$nixFile") = 1 ]; then
     pattern="/\bversion\b\s*=/ s|\"$oldVersion\"|\"$newVersion\"|"
-elif [ $(grep -c -E "^\s*(let\b)?\s*name\s*=\s*\"[^-]+-$oldVersion\"" "$nixFile") = 1 ]; then
+elif [ $(grep -c -E "^\s*(let\b)?\s*name\s*=\s*\"[^\"]+-$oldVersion\"" "$nixFile") = 1 ]; then
     pattern="/\bname\b\s*=/ s|-$oldVersion\"|-$newVersion\"|"
 else
     die "Couldn't figure out where out where to patch in new version in '$attr'!"
