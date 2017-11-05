@@ -15036,6 +15036,8 @@ with pkgs;
 
   ht = callPackage ../applications/editors/ht { };
 
+  hubstaff = callPackage ../applications/misc/hubstaff { };
+
   hue-cli = callPackage ../tools/networking/hue-cli { };
 
   hugin = callPackage ../applications/graphics/hugin {
