@@ -102,7 +102,7 @@ in
 
       mkdir -p $out/share/plymouth/themes
       cp ${plymouth}/share/plymouth/plymouthd.defaults $out/share/plymouth
-      cp -r ${themesEnv}/share/plymouth/themes/{text,details,${cfg.theme}} $out/share/plymouth/themes
+      cp -rL ${themesEnv}/share/plymouth/themes/{text,details,${cfg.theme}} $out/share/plymouth/themes
       cp ${cfg.logo} $out/share/plymouth/logo.png
     '';
 
