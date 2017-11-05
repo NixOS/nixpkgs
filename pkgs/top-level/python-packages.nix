@@ -108,6 +108,8 @@ in {
 
   aenum = callPackage ../development/python-modules/aenum { };
 
+  affinity = callPackage ../development/python-modules/affinity { };
+
   agate = callPackage ../development/python-modules/agate { };
 
   agate-dbf = callPackage ../development/python-modules/agate-dbf { };
