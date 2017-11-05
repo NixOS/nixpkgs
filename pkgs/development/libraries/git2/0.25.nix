@@ -13,16 +13,6 @@ stdenv.mkDerivation (rec {
     sha256 = "1jhikg0gqpdzfzhgv44ybdpm24lvgkc7ki4306lc5lvmj1s2nylj";
   };
 
-  # TODO: `cargo` (rust's package manager) surfaced a serious bug in
-  # libgit2 when the `Security.framework` transport is used on Darwin.
-  # The upstream issue is tracked at
-  # https://github.com/libgit2/libgit2/issues/3885 - feel free to
-  # remove this patch as soon as it's resolved (i.E. when cargo is
-  # working fine without this patch)
-  patches = stdenv.lib.optionals stdenv.isDarwin [
-    ./disable-security.framework.patch
-  ];
-
   cmakeFlags = "-DTHREADSAFE=ON";
 
   nativeBuildInputs = [ cmake python pkgconfig ];
