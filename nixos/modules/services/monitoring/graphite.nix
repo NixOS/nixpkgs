@@ -467,7 +467,15 @@ in {
       ];
     })
 
-    (mkIf cfg.web.enable {
+    (mkIf cfg.web.enable (let
+      python27' = pkgs.python27.override {
+        packageOverrides = self: super: {
+          django = self.django_1_8;
+          django_tagging = self.django_tagging_0_4_3;
+        };
+      };
+      pythonPackages = python27'.pkgs;
+    in {
       systemd.services.graphiteWeb = {
         description = "Graphite Web Interface";
         wantedBy = [ "multi-user.target" ];
@@ -477,8 +485,8 @@ in {
           PYTHONPATH = let
               penv = pkgs.python.buildEnv.override {
                 extraLibs = [
-                  pkgs.python27Packages.graphite_web
-                  pkgs.python27Packages.pysqlite
+                  pythonPackages.graphite_web
+                  pythonPackages.pysqlite
                 ];
               };
               penvPack = "${penv}/${pkgs.python.sitePackages}";
@@ -516,17 +524,17 @@ in {
           fi
 
           # Only collect static files when graphite_web changes.
-          if ! [ "${dataDir}/current_graphite_web" -ef "${pkgs.python27Packages.graphite_web}" ]; then
+          if ! [ "${dataDir}/current_graphite_web" -ef "${pythonPackages.graphite_web}" ]; then
             mkdir -p ${staticDir}
             ${pkgs.pythonPackages.django_1_8}/bin/django-admin.py collectstatic  --noinput --clear
             chown -R graphite:graphite ${staticDir}
-            ln -sfT "${pkgs.python27Packages.graphite_web}" "${dataDir}/current_graphite_web"
+            ln -sfT "${pythonPackages.graphite_web}" "${dataDir}/current_graphite_web"
           fi
         '';
       };
 
-      environment.systemPackages = [ pkgs.python27Packages.graphite_web ];
-    })
+      environment.systemPackages = [ pythonPackages.graphite_web ];
+    }))
 
     (mkIf cfg.api.enable {
       systemd.services.graphiteApi = {
