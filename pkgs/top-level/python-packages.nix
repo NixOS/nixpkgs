@@ -19539,25 +19539,7 @@ in {
   };
 
 
-  six = buildPythonPackage rec {
-    name = "six-1.10.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/six/${name}.tar.gz";
-      sha256 = "0snmb8xffb3vsma0z67i0h0w2g2dy0p3gsgh9gi4i0kgc5l8spqh";
-    };
-
-    buildInputs = with self; [ pytest ];
-
-    checkPhase = ''
-      py.test test_six.py
-    '';
-
-    meta = {
-      description = "A Python 2 and 3 compatibility library";
-      homepage = http://pypi.python.org/pypi/six/;
-    };
-  };
+  six = callPackage ../development/python-modules/six { };
 
 
   skype4py = buildPythonPackage (rec {
