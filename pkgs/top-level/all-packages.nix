@@ -7426,9 +7426,7 @@ with pkgs;
 
   obuild = callPackage ../development/tools/ocaml/obuild { };
 
-  omake = callPackage ../development/tools/ocaml/omake {
-    inherit (ocamlPackages_4_02) ocaml;
-  };
+  omake = callPackage ../development/tools/ocaml/omake { };
 
   inherit (ocamlPackages) omake_rc1;
 
