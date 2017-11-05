@@ -8645,30 +8645,8 @@ in {
     };
   };
 
-  fastimport = buildPythonPackage rec {
-    name = "fastimport-${version}";
-    version = "0.9.4";
-
-    # Judging from SyntaxError
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/f/fastimport/${name}.tar.gz";
-      sha256 = "0k8x7552ypx9rc14vbsvg2lc6z0r8pv9laah28pdwyynbq10825d";
-    };
-
-    checkPhase = ''
-      ${python.interpreter} -m unittest discover
-    '';
-
-    meta = {
-      homepage = https://launchpad.net/python-fastimport;
-      description = "VCS fastimport/fastexport parser";
-      maintainers = with maintainers; [ koral ];
-      license = licenses.gpl2Plus;
-    };
-  };
-
+  fastimport = callPackage ../development/python-modules/fastimport { };
+ 
   feedgen = callPackage ../development/python-modules/feedgen { };
 
   feedgenerator = callPackage ../development/python-modules/feedgenerator {
