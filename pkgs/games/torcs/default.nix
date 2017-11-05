@@ -1,4 +1,4 @@
-{ fetchpatch, fetchurl, stdenv, mesa, freeglut, libX11, plib, openal, freealut, libXrandr, xproto,
+{ fetchpatch, fetchurl, stdenv, mesa_glu, freeglut, libX11, plib, openal, freealut, libXrandr, xproto,
 libXext, libSM, libICE, libXi, libXt, libXrender, libXxf86vm, libvorbis,
 libpng, zlib, bash, makeWrapper }:
 
@@ -29,17 +29,10 @@ stdenv.mkDerivation rec {
     sed -i -e s,/bin/bash,`type -P bash`, src/linux/torcs.in
   '';
 
-  buildInputs = [ mesa freeglut libX11 plib openal freealut libXrandr xproto
+  buildInputs = [ mesa_glu freeglut libX11 plib openal freealut libXrandr xproto
     libXext libSM libICE libXi libXt libXrender libXxf86vm libpng zlib libvorbis makeWrapper ];
 
-  nativeBuildInputs = [ bash ];
-
   installTargets = "install datainstall";
-
-  postInstall = ''
-    wrapProgram $out/bin/torcs \
-      --prefix LD_LIBRARY_PATH : ${mesa}/lib
-  '';
 
   meta = {
     description = "Car racing game";
