@@ -7,13 +7,13 @@ with stdenv.lib;
 
 buildGoPackage rec {
   name = "gitea-${version}";
-  version = "1.2.1";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
     rev = "v${version}";
-    sha256 = "15zw4b6hnx4hmzn2xlsi4p7jvh6jx4g4smbdidnrzrykzyq4rmpp";
+    sha256 = "0v24q14xzmqgwk10m7rqyn6pahd630v3bnc646ij4w8fbgr8hzja";
   };
 
   patches = [ ./static-root-path.patch ];
