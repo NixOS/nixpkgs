@@ -297,7 +297,6 @@ stdenv.mkDerivation {
         fi
 
         local ldflagsBefore=(-dynamic-linker "$dynamicLinker")
-
     '') + ''
       fi
 
