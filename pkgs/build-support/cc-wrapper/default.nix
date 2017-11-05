@@ -37,7 +37,6 @@ let
   ccVersion = (builtins.parseDrvName cc.name).version;
   ccName = (builtins.parseDrvName cc.name).name;
 
-  libc_bin = if libc == null then null else getBin libc;
   libc_dev = if libc == null then null else getDev libc;
   libc_lib = if libc == null then null else getLib libc;
   cc_solib = getLib cc;
@@ -64,7 +63,6 @@ let
 in
 
 # Ensure bintools matches
-assert libc_bin == bintools.libc_bin;
 assert libc_dev == bintools.libc_dev;
 assert libc_lib == bintools.libc_lib;
 assert nativeTools == bintools.nativeTools;
@@ -78,8 +76,8 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  inherit cc libc_bin libc_dev libc_lib bintools coreutils_bin;
-  shell = getBin shell + stdenv.lib.optionalString (stdenv ? shellPath) stdenv.shellPath;
+  inherit cc libc_dev libc_lib bintools coreutils_bin;
+  shell = getBin shell + shell.shellPath or "";
   gnugrep_bin = if nativeTools then "" else gnugrep;
 
   inherit targetPrefix infixSalt;
@@ -201,7 +199,7 @@ stdenv.mkDerivation {
       ln -s $ccPath/${targetPrefix}ghdl $out/bin/${targetPrefix}ghdl
     '';
 
-  propagatedBuildInputs = [ bintools ] ++ extraPackages;
+  propagatedBuildInputs = [ cc coreutils_bin bintools ] ++ extraPackages;
 
   setupHook = ./setup-hook.sh;
 

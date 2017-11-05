@@ -102,24 +102,6 @@ fi
 # dependencies.
 envHooks+=(ccWrapper_addCVars)
 
-# Note 1: these come *after* $out in the PATH (see setup.sh).
-# Note 2: phase separation makes this look useless to shellcheck.
-
-# shellcheck disable=SC2157
-if [ -n "@cc@" ]; then
-    appendToSearchPath _PATH @cc@/bin
-fi
-
-# shellcheck disable=SC2157
-if [ -n "@libc_bin@" ]; then
-    appendToSearchPath _PATH @libc_bin@/bin
-fi
-
-# shellcheck disable=SC2157
-if [ -n "@coreutils_bin@" ]; then
-    appendToSearchPath _PATH @coreutils_bin@/bin
-fi
-
 # Export tool environment variables so various build systems use the right ones.
 
 export NIX_${role_pre}CC=@out@

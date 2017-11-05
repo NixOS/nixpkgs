@@ -76,7 +76,7 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  inherit bintools_bin libc_bin libc_dev libc_lib coreutils_bin;
+  inherit libc_dev libc_lib coreutils_bin;
   shell = getBin shell + shell.shellPath or "";
   gnugrep_bin = if nativeTools then "" else gnugrep;
 
@@ -128,7 +128,7 @@ stdenv.mkDerivation {
 
       ldPath="${nativePrefix}/bin"
     '' else ''
-      echo $bintools_bin > $out/nix-support/orig-bintools
+      echo ${bintools_bin} > $out/nix-support/orig-bintools
 
       ldPath="${bintools_bin}/bin"
     ''
@@ -164,7 +164,7 @@ stdenv.mkDerivation {
       set +u
     '';
 
-  propagatedBuildInputs = extraPackages;
+  propagatedBuildInputs = [ bintools_bin libc_bin coreutils_bin ] ++ extraPackages;
 
   setupHook = ./setup-hook.sh;
 

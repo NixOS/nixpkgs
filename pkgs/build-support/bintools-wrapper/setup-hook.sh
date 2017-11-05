@@ -32,21 +32,6 @@ fi
 
 envHooks+=(bintoolsWrapper_addLDVars)
 
-# shellcheck disable=SC2157
-if [ -n "@bintools_bin@" ]; then
-    appendToSearchPath _PATH @bintools_bin@/bin
-fi
-
-# shellcheck disable=SC2157
-if [ -n "@libc_bin@" ]; then
-    appendToSearchPath _PATH @libc_bin@/bin
-fi
-
-# shellcheck disable=SC2157
-if [ -n "@coreutils_bin@" ]; then
-    appendToSearchPath _PATH @coreutils_bin@/bin
-fi
-
 # Export tool environment variables so various build systems use the right ones.
 
 export NIX_${role_pre}BINTOOLS=@out@
