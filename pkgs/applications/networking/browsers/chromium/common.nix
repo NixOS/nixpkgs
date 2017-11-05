@@ -60,10 +60,13 @@ let
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   gnSystemLibraries = [
-    "flac" "harfbuzz-ng" "libwebp" "libxslt" "yasm" "opus" "snappy" "libpng" "zlib"
+    "flac" "libwebp" "libxslt" "yasm" "opus" "snappy" "libpng" "zlib"
     # "libjpeg" # fails with multiple undefined references to chromium_jpeg_*
     # "re2" # fails with linker errors
     # "ffmpeg" # https://crbug.com/731766
+  ] ++ optionals (versionRange "62" "63") [
+    "harfbuzz-ng" # in versions over 63 harfbuzz and freetype are being built together
+                  # so we can't build with one from system and other from source
   ];
 
   opusWithCustomModes = libopus.override {
@@ -76,7 +79,10 @@ let
     libpng libcap
     xdg_utils yasm minizip libwebp
     libusb1 re2 zlib
-    ffmpeg harfbuzz-icu libxslt libxml2
+    ffmpeg libxslt libxml2
+  ] ++ optionals (versionRange "62" "63") [
+    harfbuzz-icu # in versions over 63 harfbuzz and freetype are being built together
+                 # so we can't build with one from system and other from source
   ];
 
   # build paths and release info

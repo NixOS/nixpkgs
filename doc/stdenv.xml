@@ -697,8 +697,14 @@ nothing.</para>
     <listitem><para>A list of strings passed as additional flags to
     <command>make</command>.  These flags are also used by the default
     install and check phase.  For setting make flags specific to the
-    build phase, use <varname>buildFlags</varname> (see
-    below).</para></listitem>
+    build phase, use <varname>buildFlags</varname> (see below).
+
+<programlisting>
+makeFlags = [ "PREFIX=$(out)" ];
+</programlisting>
+
+    <note><para>The flags are quoted in bash, but environment variables can
+    be specified by using the make syntax.</para></note></para></listitem>
   </varlistentry>
 
   <varlistentry>

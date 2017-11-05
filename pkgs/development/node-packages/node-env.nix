@@ -110,16 +110,16 @@ let
         text = ''
           var fs = require('fs');
           var path = require('path');
-          
+
           function resolveDependencyVersion(location, name) {
               if(location == process.env['NIX_STORE']) {
                   return null;
               } else {
                   var dependencyPackageJSON = path.join(location, "node_modules", name, "package.json");
-                  
+
                   if(fs.existsSync(dependencyPackageJSON)) {
                       var dependencyPackageObj = JSON.parse(fs.readFileSync(dependencyPackageJSON));
-                      
+
                       if(dependencyPackageObj.name == name) {
                           return dependencyPackageObj.version;
                       }
@@ -128,12 +128,12 @@ let
                   }
               }
           }
-          
+
           function replaceDependencies(dependencies) {
               if(typeof dependencies == "object" && dependencies !== null) {
                   for(var dependency in dependencies) {
                       var resolvedVersion = resolveDependencyVersion(process.cwd(), dependency);
-                      
+
                       if(resolvedVersion === null) {
                           process.stderr.write("WARNING: cannot pinpoint dependency: "+dependency+", context: "+process.cwd()+"\n");
                       } else {
@@ -142,17 +142,17 @@ let
                   }
               }
           }
-          
+
           /* Read the package.json configuration */
           var packageObj = JSON.parse(fs.readFileSync('./package.json'));
-          
+
           /* Pinpoint all dependencies */
           replaceDependencies(packageObj.dependencies);
           if(process.argv[2] == "development") {
               replaceDependencies(packageObj.devDependencies);
           }
           replaceDependencies(packageObj.optionalDependencies);
-          
+
           /* Write the fixed package.json file */
           fs.writeFileSync("package.json", JSON.stringify(packageObj, null, 2));
         '';
@@ -160,7 +160,7 @@ let
     in
     ''
       node ${pinpointDependenciesFromPackageJSON} ${if production then "production" else "development"}
-      
+
       ${stdenv.lib.optionalString (dependencies != [])
         ''
           if [ -d node_modules ]
@@ -171,11 +171,11 @@ let
           fi
         ''}
     '';
-  
+
   # Recursively traverses all dependencies of a package and pinpoints all
   # dependencies in the package.json file to the versions that are actually
   # being used.
-  
+
   pinpointDependenciesOfPackage = { packageName, dependencies ? [], production ? true, ... }@args:
     ''
       if [ -d "${packageName}" ]
@@ -210,7 +210,7 @@ let
 
       compositionScript = composePackage args;
       pinpointDependenciesScript = pinpointDependenciesOfPackage args;
-      
+
       passAsFile = [ "compositionScript" "pinpointDependenciesScript" ];
 
       installPhase = args.installPhase or ''
@@ -220,7 +220,7 @@ let
 
         # Compose the package and all its dependencies
         source $compositionScriptPath
-        
+
         # Pinpoint the versions of all dependencies to the ones that are actually being used
         echo "pinpointing versions of dependencies..."
         source $pinpointDependenciesScriptPath
@@ -287,31 +287,31 @@ let
 
         includeScript = includeDependencies { inherit dependencies; };
         pinpointDependenciesScript = pinpointDependenciesOfPackage args;
-        
+
         passAsFile = [ "includeScript" "pinpointDependenciesScript" ];
 
         buildCommand = ''
-          mkdir -p $out/lib
-          cd $out/lib
+          mkdir -p $out/${packageName}
+          cd $out/${packageName}
+
           source $includeScriptPath
-          
-          # Pinpoint the versions of all dependencies to the ones that are actually being used
-          echo "pinpointing versions of dependencies..."
-          source $pinpointDependenciesScriptPath
 
           # Create fake package.json to make the npm commands work properly
-          cat > package.json <<EOF
-          {
-              "name": "${packageName}",
-              "version": "${version}"
-          }
-          EOF
+          cp ${src}/package.json .
+          chmod 644 package.json
+
+          # Pinpoint the versions of all dependencies to the ones that are actually being used
+          echo "pinpointing versions of dependencies..."
+          cd ..
+          source $pinpointDependenciesScriptPath
+          cd ${packageName}
 
           # Patch the shebangs of the bundled modules to prevent them from
           # calling executables outside the Nix store as much as possible
           patchShebangs .
 
           export HOME=$PWD
+
           npm --registry http://www.example.com --nodedir=${nodeSources} ${npmFlags} ${stdenv.lib.optionalString production "--production"} rebuild
 
           ${stdenv.lib.optionalString (!dontNpmInstall) ''
@@ -321,6 +321,8 @@ let
             npm --registry http://www.example.com --nodedir=${nodeSources} ${npmFlags} ${stdenv.lib.optionalString production "--production"} install
           ''}
 
+          cd ..
+          mv ${packageName} lib
           ln -s $out/lib/node_modules/.bin $out/bin
         '';
       };

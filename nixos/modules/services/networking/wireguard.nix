@@ -79,13 +79,6 @@ let
         description = "A list of commands called after shutting down the interface.";
       };
 
-      addRoutes = mkOption {
-        default = true;
-        type = types.bool;
-        description = ''Whether to add routes to networks specified in
-        allowedIPs.'';
-      };
-
       table = mkOption {
         default = "main";
         type = types.str;
@@ -102,6 +95,14 @@ let
         type = with types; listOf (submodule peerOpts);
       };
 
+      allowedIPsAsRoutes = mkOption {
+        example = false;
+        default = true;
+        type = types.bool;
+        description = ''
+          Determines whether to add allowed IPs as routes or not.
+        '';
+      };
     };
 
   };
@@ -226,7 +227,7 @@ let
 
             "${ipCommand} link set up dev ${name}"
 
-            (optionals values.addRoutes (map (peer:
+            (optionals (values.allowedIPsAsRoutes != false) (map (peer:
             (map (allowedIP:
             "${ipCommand} route replace ${allowedIP} dev ${name} table ${values.table}"
             ) peer.allowedIPs)

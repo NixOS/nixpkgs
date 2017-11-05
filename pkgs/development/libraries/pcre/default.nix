@@ -9,7 +9,7 @@ with stdenv.lib;
 assert elem variant [ null "cpp" "pcre16" "pcre32" ];
 
 let
-  version = "8.40";
+  version = "8.41";
   pname = if (variant == null) then "pcre"
     else  if (variant == "cpp") then "pcre-cpp"
     else  variant;
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "ftp://ftp.csx.cam.ac.uk/pub/software/programming/pcre/pcre-${version}.tar.bz2";
-    sha256 = "1x7lpjn7jhk0n3sdvggxrlrhab8kkfjwl7qix0ypw9nlx8lpmqh0";
+    sha256 = "0c5m469p5pd7jip621ipq6hbgh7128lzh7xndllfgh77ban7wb76";
   };
 
   outputs = [ "bin" "dev" "out" "doc" "man" ];
@@ -30,8 +30,6 @@ in stdenv.mkDerivation rec {
     "--disable-cpp"
   ]
     ++ optional (variant != null) "--enable-${variant}";
-
-  patches = [ ./CVE-2017-7186.patch ];
 
   buildInputs = optional (hostPlatform.libc == "msvcrt") windows.mingw_w64_pthreads;
 

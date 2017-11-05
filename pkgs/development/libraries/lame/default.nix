@@ -55,6 +55,12 @@ stdenv.mkDerivation rec {
     (if debugSupport then "--enable-debug=alot" else "")
   ];
 
+  preConfigure = ''
+    # Prevent a build failure for 3.100 due to using outdated symbol list
+    # https://hydrogenaud.io/index.php/topic,114777.msg946373.html#msg946373
+    sed -i '/lame_init_old/d' include/libmp3lame.sym
+  '';
+
   meta = {
     description = "A high quality MPEG Audio Layer III (MP3) encoder";
     homepage    = http://lame.sourceforge.net;

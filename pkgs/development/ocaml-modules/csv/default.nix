@@ -4,8 +4,8 @@ let param =
   if stdenv.lib.versionAtLeast ocaml.version "4.2"
   then {
     version = "1.7";
-    url = https://math.umons.ac.be/anum/software/csv/csv-1.7.tar.gz;
-    sha256 = "1mmcjiiz0jppgipavpph5kn04xcpalw4scbjrw2z3drghvr3qqwf";
+    url = https://github.com/Chris00/ocaml-csv/releases/download/1.7/csv-1.7.tar.gz;
+    sha256 = "0696jg3404kq1x97lxvy6r82ldsryycd7lbckp9vyq4myn736zhh";
     lwtSupport = true;
   } else {
     version = "1.5";

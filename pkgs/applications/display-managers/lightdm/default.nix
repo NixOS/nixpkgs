@@ -7,15 +7,15 @@
 with stdenv.lib;
 
 let
-  ver_branch = "1.22";
-  version = "1.22.0";
+  ver_branch = "1.24";
+  version = "1.24.0";
 in
 stdenv.mkDerivation rec {
   name = "lightdm-${version}";
 
   src = fetchurl {
     url = "${meta.homepage}/${ver_branch}/${version}/+download/${name}.tar.xz";
-    sha256 = "0a5bvfl2h7r873al6q7c819h0kg564k9fh51rl6489z6lyvazfg4";
+    sha256 = "18j33bm54i8k7ncxcs69zqi4105s62n58jrydqn3ikrb71s9nl6d";
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];

@@ -27,8 +27,9 @@ let inherit (stdenv.lib) optional optionals hasPrefix; in
 
 let
   result = {
+    # e.g. https://libav.org/releases/libav-11.11.tar.xz.sha1
     libav_0_8 = libavFun "0.8.20" "0c7a2417c3a01eb74072691bb93ce802ae1be08f";
-    libav_11  = libavFun "11.10"  "38db6721ca8423682e4d614c170eccc33ba32e00";
+    libav_11  = libavFun "11.11"  "d7444fa4f135bdd7347cc962ab4b5228796b0f23";
     libav_12  = libavFun "12.1"   "df048240318b888e3938f649422b967f62e43e3c";
   };
 
