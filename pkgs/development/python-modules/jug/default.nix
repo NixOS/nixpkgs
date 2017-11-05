@@ -6,7 +6,7 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "Jug";
-  version = "1.6.3";
+  version = "1.6.4";
   buildInputs = [ nose numpy ];
   propagatedBuildInputs = [
     bottle
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dpcwjaf8zzqpdz8w8h0p7vmd6z6bzfz2805a6bdjqs9hhkhrg86";
+    sha256 = "e739b20e7fe53ac50f5954b9e32568bdd92012dd4bd199d13e2a675ccd69d97d";
   };
 
   meta = with stdenv.lib; {

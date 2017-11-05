@@ -3,13 +3,13 @@
 , git, glibcLocales }:
 
 buildPythonPackage rec {
-  version = "0.18.4";
+  version = "0.18.5";
   pname = "dulwich";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/d/dulwich/${name}.tar.gz";
-    sha256 = "b4baace48dde5e0a76f37b251c246c7e1829bda0617679f00cbade0e70a5ac5b";
+    sha256 = "838bac318fd0ed79e0eedb6cfd53b6424dc618fec6b99dc959881b12da7bd6e0";
   };
 
   LC_ALL = "en_US.UTF-8";

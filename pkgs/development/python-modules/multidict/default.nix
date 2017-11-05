@@ -8,13 +8,13 @@
 
 let
   pname = "multidict";
-  version = "3.3.0";
+  version = "3.3.2";
 in buildPythonPackage rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "e76909da2fad6966281d4e0e4ccfd3c3025699ebcc30806afa09fa1384c3532b";
+    sha256 = "f82e61c7408ed0dce1862100db55595481911f159d6ddec0b375d35b6449509b";
   };
 
   buildInputs = [ cython ];
