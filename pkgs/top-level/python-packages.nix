@@ -208,7 +208,7 @@ in {
   # version of nixpart.
   nixpart0 = callPackage ../tools/filesystems/nixpart/0.4 { };
 
-  nltk = callPackage ../development/python-modules/nltk.nix { };
+  nltk = callPackage ../development/python-modules/nltk { };
 
   ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
 
@@ -216,7 +216,7 @@ in {
 
   Pmw = callPackage ../development/python-modules/Pmw { };
 
-  pyaes = callPackage ../development/python-modules/pyaes.nix { };
+  pyaes = callPackage ../development/python-modules/pyaes { };
 
   pyatspi = if isPy3k then callPackage ../development/python-modules/pyatspi { } else throw "pyatspi not supported for interpreter ${python.executable}";
 
@@ -1659,7 +1659,7 @@ in {
 
   cram = callPackage ../development/python-modules/cram { };
 
-  csscompressor = callPackage ../development/python-modules/csscompressor.nix {};
+  csscompressor = callPackage ../development/python-modules/csscompressor {};
 
   csvkit =  callPackage ../development/python-modules/csvkit { };
 
@@ -3641,7 +3641,7 @@ in {
     };
   };
 
-  bcrypt = callPackage ../development/python-modules/bcrypt.nix { };
+  bcrypt = callPackage ../development/python-modules/bcrypt { };
 
   cffi = callPackage ../development/python-modules/cffi { };
 
@@ -3960,7 +3960,7 @@ in {
     };
   };
 
-  pytest-pep257 = callPackage ../development/python-modules/pytest-pep257.nix { };
+  pytest-pep257 = callPackage ../development/python-modules/pytest-pep257 { };
 
   pytest-raisesregexp = buildPythonPackage rec {
     name = "pytest-raisesregexp-${version}";
@@ -4737,7 +4737,7 @@ in {
 
   dns = callPackage ../development/python-modules/dns { };
 
-  docker = callPackage ../development/python-modules/docker.nix {};
+  docker = callPackage ../development/python-modules/docker {};
 
   dockerpty = buildPythonPackage rec {
     name = "dockerpty-0.4.1";
@@ -4932,7 +4932,7 @@ in {
     };
   };
 
-  ds4drv = callPackage ../development/python-modules/ds4drv.nix {
+  ds4drv = callPackage ../development/python-modules/ds4drv {
     inherit (pkgs) fetchFromGitHub bluez;
   };
 
@@ -5940,7 +5940,7 @@ in {
   });
 
 
-  htmlmin = callPackage ../development/python-modules/htmlmin.nix {};
+  htmlmin = callPackage ../development/python-modules/htmlmin {};
 
   httpauth = buildPythonPackage rec {
     version = "0.3";
@@ -8051,7 +8051,7 @@ in {
 
   django_extensions = callPackage ../development/python-modules/django-extensions { };
 
-  django_guardian = callPackage ../development/python-modules/django_guardian.nix { };
+  django_guardian = callPackage ../development/python-modules/django_guardian { };
 
   django-ipware = callPackage ../development/python-modules/django-ipware { };
 
@@ -8383,7 +8383,7 @@ in {
     };
   };
 
-  dulwich = callPackage ../development/python-modules/dulwich.nix {
+  dulwich = callPackage ../development/python-modules/dulwich {
     inherit (pkgs) git glibcLocales;
   };
 
@@ -8716,7 +8716,7 @@ in {
     };
   };
 
-  docker_compose = callPackage ../development/python-modules/docker_compose.nix {};
+  docker_compose = callPackage ../development/python-modules/docker_compose {};
 
   fdroidserver = buildPythonPackage rec {
     version = "2016-05-31";
@@ -8865,11 +8865,11 @@ in {
 
   flask-cors = callPackage ../development/python-modules/flask-cors { };
 
-  flask_elastic = callPackage ../development/python-modules/flask-elastic.nix { };
+  flask_elastic = callPackage ../development/python-modules/flask-elastic { };
 
-  flask_login = callPackage ../development/python-modules/flask-login.nix { };
+  flask_login = callPackage ../development/python-modules/flask-login { };
 
-  flask_ldap_login = callPackage ../development/python-modules/flask-ldap-login.nix { };
+  flask_ldap_login = callPackage ../development/python-modules/flask-ldap-login { };
 
   flask_mail = callPackage ../development/python-modules/flask-mail { };
 
@@ -8877,7 +8877,7 @@ in {
 
   flask_migrate = callPackage ../development/python-modules/flask-migrate { };
 
-  flask_oauthlib = callPackage ../development/python-modules/flask-oauthlib.nix { };
+  flask_oauthlib = callPackage ../development/python-modules/flask-oauthlib { };
 
   flask_principal = buildPythonPackage rec {
     name = "Flask-Principal-${version}";
@@ -8944,9 +8944,9 @@ in {
     };
   };
 
-  flask_testing = callPackage ../development/python-modules/flask-testing.nix { };
+  flask_testing = callPackage ../development/python-modules/flask-testing { };
 
-  flask_wtf = callPackage ../development/python-modules/flask-wtf.nix { };
+  flask_wtf = callPackage ../development/python-modules/flask-wtf { };
 
   wtforms = buildPythonPackage rec {
     version = "2.1";
@@ -9486,7 +9486,7 @@ in {
 
   gflags = callPackage ../development/python-modules/gflags { };
 
-  ghdiff = callPackage ../development/python-modules/ghdiff.nix { };
+  ghdiff = callPackage ../development/python-modules/ghdiff { };
 
   gipc = buildPythonPackage rec {
     name = "gipc-0.5.0";
@@ -9802,7 +9802,7 @@ in {
 
   rebulk = callPackage ../development/python-modules/rebulk { };
 
-  gunicorn = callPackage ../development/python-modules/gunicorn.nix { };
+  gunicorn = callPackage ../development/python-modules/gunicorn { };
 
   hawkauthlib = buildPythonPackage rec {
     name = "hawkauthlib-${version}";
@@ -9945,7 +9945,7 @@ in {
     propagatedBuildInputs = with self; [ requests ];
   };
 
-  hypothesis = callPackage ../development/python-modules/hypothesis.nix { };
+  hypothesis = callPackage ../development/python-modules/hypothesis { };
 
   colored = buildPythonPackage rec {
     name = "colored-${version}";
@@ -10391,7 +10391,7 @@ in {
     };
   };
 
-  jabberbot = callPackage ../development/python-modules/jabberbot.nix {};
+  jabberbot = callPackage ../development/python-modules/jabberbot {};
 
   jedi = callPackage ../development/python-modules/jedi { };
 
@@ -14886,7 +14886,7 @@ in {
     };
   };
 
-  pep257 = callPackage ../development/python-modules/pep257.nix { };
+  pep257 = callPackage ../development/python-modules/pep257 { };
 
   percol = buildPythonPackage rec {
     name = "percol-${version}";
@@ -15415,13 +15415,13 @@ in {
 
   });
 
-  protobuf = callPackage ../development/python-modules/protobuf.nix {
+  protobuf = callPackage ../development/python-modules/protobuf {
     disabled = isPyPy;
     doCheck = !isPy3k;
     protobuf = pkgs.protobuf;
   };
 
-  protobuf3_1 = callPackage ../development/python-modules/protobuf.nix {
+  protobuf3_1 = callPackage ../development/python-modules/protobuf {
     disabled = isPyPy;
     doCheck = !isPy3k;
     protobuf = pkgs.protobuf3_1;
@@ -16843,7 +16843,7 @@ in {
     buildInputs = with self; [ pyasn1 pycrypto ];
   };
 
-  pyudev = callPackage ../development/python-modules/pyudev.nix {
+  pyudev = callPackage ../development/python-modules/pyudev {
     inherit (pkgs) fetchurl systemd;
   };
 
@@ -16908,7 +16908,7 @@ in {
     };
   });
 
-  ldap = callPackage ../development/python-modules/ldap.nix {
+  ldap = callPackage ../development/python-modules/ldap {
     inherit (pkgs) openldap cyrus_sasl openssl;
   };
 
@@ -17230,9 +17230,9 @@ in {
     doCheck = false;
   };
 
-  rackspace-novaclient = callPackage ../development/python-modules/rackspace-novaclient.nix { };
+  rackspace-novaclient = callPackage ../development/python-modules/rackspace-novaclient { };
 
-  pyrax = callPackage ../development/python-modules/pyrax.nix {
+  pyrax = callPackage ../development/python-modules/pyrax {
     glibcLocales = pkgs.glibcLocales;
   };
 
@@ -17750,7 +17750,7 @@ in {
 
   requests_ntlm = callPackage ../development/python-modules/requests_ntlm { };
 
-  requests_oauthlib = callPackage ../development/python-modules/requests-oauthlib.nix { };
+  requests_oauthlib = callPackage ../development/python-modules/requests-oauthlib { };
 
   requests-toolbelt = callPackage ../development/python-modules/requests-toolbelt { };
   requests_toolbelt = self.requests-toolbelt; # Old attr, 2017-09-26
@@ -23883,7 +23883,7 @@ EOF
     };
   };
 
-  markdown2 = callPackage ../development/python-modules/markdown2.nix { };
+  markdown2 = callPackage ../development/python-modules/markdown2 { };
 
   evernote = buildPythonPackage rec {
     name = "evernote-${version}";
