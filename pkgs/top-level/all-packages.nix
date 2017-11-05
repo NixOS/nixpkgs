@@ -16793,6 +16793,8 @@ with pkgs;
 
   tint2 = callPackage ../applications/misc/tint2 { };
 
+  tixati = callPackage ../applications/networking/p2p/tixati { };
+
   tkcvs = callPackage ../applications/version-management/tkcvs { };
 
   tla = callPackage ../applications/version-management/arch { };
