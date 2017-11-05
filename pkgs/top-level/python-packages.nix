@@ -5299,6 +5299,10 @@ in {
     buildInputs = with self; [ fudge_9 nose ];
   };
 
+  faulthandler = if ! isPy3k
+    then callPackage ../development/python-modules/faulthandler {}
+    else throw "faulthandler is built into ${python.executable}";
+
   fedpkg = callPackage ../development/python-modules/fedpkg { };
 
   flit = callPackage ../development/python-modules/flit { };
@@ -16574,6 +16578,10 @@ in {
       license = licenses.gpl2Plus;
     };
   };
+
+  pyobjc = if stdenv.isDarwin && isPy3k
+    then callPackage ../development/python-modules/pyobjc {}
+    else throw "pyobjc can only be built on Mac OS";
 
   pyodbc = callPackage ../development/python-modules/pyodbc { };
 
