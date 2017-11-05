@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, openssl, openldap, kerberos, db, gettext,
+{ lib, stdenv, fetchurl, openssl, openldap, kerberos, db, gettext, libkrb5,
   pam, fixDarwinDylibNames, autoreconfHook, fetchpatch, enableLdap ? false }:
 
 with stdenv.lib;
