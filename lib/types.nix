@@ -288,8 +288,17 @@ rec {
           }).config;
         getSubOptions = prefix: (evalModules
           { modules = opts'; inherit prefix;
-            # FIXME: hack to get shit to evaluate.
-            args = { name = ""; }; }).options;
+            # This is a work-around due to the fact that some sub-modules,
+            # such as the one included in an attribute set, expects a "args"
+            # attribute to be given to the sub-module. As the option
+            # evaluation does not have any specific attribute name, we
+            # provide a default one for the documentation.
+            #
+            # This is mandatory as some option declaration might use the
+            # "name" attribute given as argument of the submodule and use it
+            # as the default of option declarations.
+            args.name = "&lt;name&gt;";
+          }).options;
         getSubModules = opts';
         substSubModules = m: submodule m;
         functor = (defaultFunctor name) // {

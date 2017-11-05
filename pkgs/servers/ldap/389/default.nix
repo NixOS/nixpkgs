@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
   passthru.version = version;
 
   meta = with stdenv.lib; {
-    homepage = https://directory.fedoraproject.org/;
+    homepage = http://www.port389.org/;
     description = "Enterprise-class Open Source LDAP server for Linux";
     license = licenses.gpl2;
     platforms = platforms.linux;

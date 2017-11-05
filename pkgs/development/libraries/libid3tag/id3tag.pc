@@ -1,7 +1,7 @@
 prefix=@out@
 exec_prefix=${prefix}
 libdir=${exec_prefix}/lib
-includedir=${exec_prefix}/include
+includedir=@dev@/include
 
 Name: libid3tag
 Description: ID3 tag manipulation library

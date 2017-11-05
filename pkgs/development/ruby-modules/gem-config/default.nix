@@ -22,7 +22,7 @@
 , pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
 , libmsgpack, qt48, libsodium, snappy, libossp_uuid, lxc, libpcap, xlibs, gtk2, buildRubyGem
-, re2
+, cairo, re2, rake, gobjectIntrospection, gdk_pixbuf
 }@args:
 
 let
@@ -41,7 +41,7 @@ in
 {
   atk = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 pcre ];
+    buildInputs = [ gtk2 pcre rake ];
   };
 
   bundler = attrs:
@@ -64,6 +64,11 @@ in
     buildInputs = [ gtk2 pcre xlibs.libpthreadstubs xlibs.libXdmcp];
   };
 
+  cairo-gobject = attrs: {
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ cairo pcre xlibs.libpthreadstubs xlibs.libXdmcp ];
+  };
+
   capybara-webkit = attrs: {
     buildInputs = [ qt48 ];
   };
@@ -71,7 +76,7 @@ in
   charlock_holmes = attrs: {
     buildInputs = [ which icu zlib ];
   };
-  
+
   curb = attrs: {
     buildInputs = [ curl ];
   };
@@ -91,6 +96,11 @@ in
   ffi = attrs: {
   nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libffi ];
+  };
+
+  gdk_pixbuf2 = attrs: {
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ rake gdk_pixbuf ];
   };
 
   gpgme = attrs: {
@@ -116,8 +126,10 @@ in
     CFLAGS = "-I${gtk2.dev}/include/gtk-2.0 -I/non-existent-path";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  gobject-introspection = attrs: { buildInputs = [ gtk2 pcre ]; };
+  gobject-introspection = attrs: {
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ gobjectIntrospection gtk2 pcre ];
+  };
 
   grpc = attrs: {
   nativeBuildInputs = [ pkgconfig ];

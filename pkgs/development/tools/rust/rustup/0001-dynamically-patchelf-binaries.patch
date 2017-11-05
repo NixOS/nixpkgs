@@ -1,0 +1,54 @@
+From c21cc756b69a5f33c8a7758b746a816f40f55932 Mon Sep 17 00:00:00 2001
+From: Leon Isenberg <ljli@users.noreply.github.com>
+Date: Sat, 28 Oct 2017 17:58:17 +0200
+Subject: [PATCH] nix customization: patchelf installed binaries
+
+---
+ src/rustup-dist/src/component/package.rs | 24 +++++++++++++++++++++++-
+ 1 file changed, 23 insertions(+), 1 deletion(-)
+
+diff --git a/src/rustup-dist/src/component/package.rs b/src/rustup-dist/src/component/package.rs
+index 8aa63db9..4d219826 100644
+--- a/src/rustup-dist/src/component/package.rs
++++ b/src/rustup-dist/src/component/package.rs
+@@ -99,7 +99,13 @@ impl Package for DirectoryPackage {
+             let src_path = root.join(&path);
+ 
+             match &*part.0 {
+-                "file" => try!(builder.copy_file(path.clone(), &src_path)),
++                "file" => {
++                    try!(builder.copy_file(path.clone(), &src_path));
++                    nix_patchelf_if_needed(
++                        &target.prefix().path().join(path.clone()),
++                        &src_path,
++                    )
++                }
+                 "dir" => try!(builder.copy_dir(path.clone(), &src_path)),
+                 _ => return Err(ErrorKind::CorruptComponent(name.to_owned()).into()),
+             }
+@@ -117,6 +123,22 @@ impl Package for DirectoryPackage {
+     }
+ }
+ 
++fn nix_patchelf_if_needed(dest_path: &Path, src_path: &Path) {
++    let is_bin = if let Some(p) = src_path.parent() {
++        p.ends_with("bin")
++    } else {
++        false
++    };
++
++    if is_bin {
++        let _ = ::std::process::Command::new("@patchelf@/bin/patchelf")
++            .arg("--set-interpreter")
++            .arg("@dynamicLinker@")
++            .arg(dest_path)
++            .output();
++    }
++}
++
+ // On Unix we need to set up the file permissions correctly so
+ // binaries are executable and directories readable. This shouldn't be
+ // necessary: the source files *should* have the right permissions,
+-- 
+2.14.1
+

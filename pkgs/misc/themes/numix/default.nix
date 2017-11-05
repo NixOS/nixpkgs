@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     repo = "numix-gtk-theme";
     owner = "numixproject";
     rev = version;
-    sha256 = "1fmlc6vi8prvwsq0nxxcd00lp04bwmapzjqf727wb1czqf2lf0dv";
+    sha256 = "12mw0kr0kkvg395qlbsvkvaqccr90cmxw5rrsl236zh43kj8grb7";
   };
 
   nativeBuildInputs = [ sass glib libxml2 gdk_pixbuf ];

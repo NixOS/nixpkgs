@@ -14,12 +14,21 @@ stdenv.mkDerivation rec {
   buildInputs = [ gmp readline libX11 libpthreadstubs tex perl ];
 
   configureScript = "./Configure";
-  configureFlags =
-    "--mt=pthread" +
-    "--with-gmp=${gmp.dev} " +
-    "--with-readline=${readline.dev}";
+  configureFlags = [
+    "--mt=pthread"
+    "--with-gmp=${gmp.dev}"
+    "--with-readline=${readline.dev}"
+  ] ++ stdenv.lib.optional stdenv.isDarwin "--host=x86_64-darwin";
 
-  makeFlags = "all";
+  preConfigure = ''
+    export LD=$CC
+  '';
+
+  postConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
+    echo 'echo x86_64-darwin' > config/arch-osname
+  '';
+
+  makeFlags = [ "all" ];
 
   meta = with stdenv.lib; {
     description = "Computer algebra system for high-performance number theory computations";
@@ -36,12 +45,12 @@ stdenv.mkDerivation rec {
        Bordeaux I, France), PARI is now under the GPL and maintained by Karim
        Belabas with the help of many volunteer contributors.
 
-       - PARI is a C library, allowing fast computations.  
+       - PARI is a C library, allowing fast computations.
        - gp is an easy-to-use interactive shell giving access to the
           PARI functions.
        - GP is the name of gp's scripting language.
-       - gp2c, the GP-to-C compiler, combines the best of both worlds 
-          by compiling GP scripts to the C language and transparently loading 
+       - gp2c, the GP-to-C compiler, combines the best of both worlds
+          by compiling GP scripts to the C language and transparently loading
           the resulting functions into gp. (gp2c-compiled scripts will typically
           run 3 or 4 times faster.) gp2c currently only understands a subset
            of the GP language.
@@ -50,7 +59,7 @@ stdenv.mkDerivation rec {
     downloadPage = "http://pari.math.u-bordeaux.fr/download.html";
     license     = licenses.gpl2Plus;
     maintainers = with maintainers; [ ertes raskin AndersonTorres ];
-    platforms   = platforms.linux;
+    platforms   = platforms.linux ++ platforms.darwin;
     updateWalker = true;
   };
 }

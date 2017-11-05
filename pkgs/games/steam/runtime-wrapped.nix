@@ -26,7 +26,7 @@ let
     xlibs.libICE
     gnome2.GConf
     freetype
-    curl
+    (curl.override { gnutlsSupport = true; sslSupport = false; })
     nspr
     nss
     fontconfig
@@ -57,6 +57,7 @@ let
     glew110
     openssl
     libidn
+    tbb
 
     # Other things from runtime
     xlibs.libXinerama

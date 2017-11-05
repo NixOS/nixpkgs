@@ -73,6 +73,7 @@
 , "sinopia"
 , "sloc"
 , "smartdc"
+, "socket.io"
 , "stylus"
 , "svgo"
 , "tern"

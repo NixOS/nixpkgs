@@ -54,8 +54,7 @@ rec {
       unpackPhase = ''
         # fetchFromGitHub produces ro sources, root dir gets a name that
         # is too long for shebangs. fixing
-        cp -a $src .
-        mv *-src tor-browser
+        cp -a $src tor-browser
         chmod -R +w tor-browser
         cd tor-browser
 
@@ -106,9 +105,10 @@ in rec {
     # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
     src = fetchFromGitHub {
       owner = "SLNOS";
-      repo  = "tor-browser";
-      rev   = "tor-browser-45.8.0esr-6.5-2";
-      sha256 = "0vbcp1qlxjlph0dqibylsyvb8iah3lnzdxc56hllpvbn51vrp39j";
+      repo = "tor-browser";
+      # branch "tor-browser-45.8.0esr-6.5-2"
+      rev = "e4140ea01b9906934f0347e95f860cec207ea824";
+      sha256 = "0a1qk3a9a3xxrl56bp4zbknbchv5x17k1w5kgcf4j3vklcv6av60";
     };
   } // commonAttrs) {
     stdenv = overrideCC stdenv gcc5;

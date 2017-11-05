@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "19hfmr8fa1js8ynazdyjxlyrqpjn6m1719ay70ilga4rayxrcyyi";
   };
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [
     pkgconfig intltool wrapGAppsHook
   ];
@@ -20,6 +22,8 @@ stdenv.mkDerivation rec {
    [ glib json_glib libsoup geoip
      dbus dbus_glib avahi
    ] ++ optionals (!stdenv.isDarwin) [ modemmanager ];
+
+  propagatedBuildInputs = [ dbus dbus_glib glib glib_networking ];
 
   preConfigure = ''
      substituteInPlace configure --replace "-Werror" ""
@@ -35,7 +39,9 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = optionalString stdenv.isDarwin " -lintl";
 
-  propagatedBuildInputs = [ dbus dbus_glib glib glib_networking ];
+  postInstall = ''
+    sed -i $dev/lib/pkgconfig/libgeoclue-2.0.pc -e "s|includedir=.*|includedir=$dev/include|"
+  '';
 
   meta = with stdenv.lib; {
     description = "Geolocation framework and some data providers";
