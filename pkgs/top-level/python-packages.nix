@@ -18190,8 +18190,6 @@ in {
       sha256 = "0d283g4zi0hr9papd24mjl70mi15gyzq6fx618rizi87dgipqqax";
     };
 
-    outputs = [ "out" "dev" ];
-
     preCheck = ''
       sed -i 's/test_set_default_verify_paths/noop/' tests/test_ssl.py
       # https://github.com/pyca/pyopenssl/issues/692
