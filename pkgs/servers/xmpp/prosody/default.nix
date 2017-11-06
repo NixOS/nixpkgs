@@ -67,6 +67,6 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     homepage = http://www.prosody.im;
     platforms = platforms.linux;
-    maintainers = [ maintainers.flosse ];
+    maintainers = [ ];
   };
 }
