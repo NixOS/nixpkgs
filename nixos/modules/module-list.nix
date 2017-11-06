@@ -304,7 +304,7 @@
   ./services/misc/gogs.nix
   ./services/misc/gollum.nix
   ./services/misc/gpsd.nix
-  #./services/misc/ihaskell.nix
+  ./services/misc/ihaskell.nix
   ./services/misc/irkerd.nix
   ./services/misc/jackett.nix
   ./services/misc/logkeys.nix
