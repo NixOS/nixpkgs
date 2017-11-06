@@ -8,6 +8,7 @@
 , mono
 , monodevelop
 , fsharp
+, fsharp41
 , unzip
 , overrides ? {}
 }:
@@ -43,6 +44,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     baseName = "FSharp.Compiler.CodeDom";
     version = "0.9.2";
     sha256 = "0cy9gbvmfx2g74m7bgp6x9mr4avb6s560yjii7cyyxb7jlwabfcj";
+    outputFiles = [ "lib/net40/*" ];
+  };
+
+  FSharpCompilerCodeDom_1 = fetchNuGet {
+    baseName = "FSharp.Compiler.CodeDom";
+    version = "1.0.0.1";
+    sha256 = "0751jxn8c241gd5q46c6bilwmiy4w4ih6ydw3mlybm34mqpm211m";
     outputFiles = [ "lib/net40/*" ];
   };
 
@@ -127,6 +135,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     baseName = "FSharp.Formatting";
     version = "2.9.8";
     sha256 = "1bswcpa68i2lqds4kkl2qxgkfrppbpxa4jkyja48azljajh0df3m";
+    outputFiles = [ "lib/net40/*" ];
+  };
+
+  FSharpFormatting_2_14_4 = fetchNuGet {
+    baseName = "FSharp.Formatting";
+    version = "2.14.4";
+    sha256 = "1qiyfvbxcccg6r2dhid2gnm90dnd08wyx88512rhpy0avcsgcpxh";
     outputFiles = [ "lib/net40/*" ];
   };
 
@@ -292,6 +307,14 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     version = "0.29.0";
     propagatedBuildInputs = [ FsPickler ];
     sha256 = "0rgqy0afwm50gq5ca94w16s565yx5wf961683ghfld6ir0k3dhln";
+    outputFiles = [ "lib/net40/*" ];
+  };
+
+  Suave_1_1_3 = fetchNuGet {
+    baseName = "Suave";
+    version = "1.1.3";
+    propagatedBuildInputs = [ FsPickler ];
+    sha256 = "02qk1g81gjkf98xi3nvmhscx7629g83d2wjdp1mqpjlgh6jgnhgs";
     outputFiles = [ "lib/net40/*" ];
   };
 
@@ -547,6 +570,62 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
+  FSharpAutoComplete_0_32_0 = buildDotnetPackage rec {
+    baseName = "FSharp.AutoComplete";
+    version = "0.32.0";
+
+    src = fetchFromGitHub {
+      owner = "fsharp";
+      repo = "FSharp.AutoComplete";
+      rev = version;
+      sha256 = "093a5srrds2rw08i39d7wxhvfamdi2pk1agcvi650q5m3a30g9k5";
+    };
+
+    buildInputs = [
+      fsharp41
+      dotnetPackages.FSharpCompilerService_11_0_9
+      dotnetPackages.FSharpCompilerServiceProjectCracker_11_0_9
+      dotnetPackages.DotnetProjInfo
+      dotnetPackages.FParsec
+      dotnetPackages.FSharpLintCore
+      dotnetPackages.SystemCollectionsImmutable131
+      dotnetPackages.SystemReflectionMetadata
+      dotnetPackages.Suave_1_1_3
+      dotnetPackages.NewtonsoftJson
+      dotnetPackages.NDeskOptions
+    ];
+
+    preBuild = ''
+      rm -rf packages
+      mkdir packages
+      ln -s ${dotnetPackages.DotnetProjInfo}/lib/dotnet/Dotnet.ProjInfo packages/Dotnet.ProjInfo
+      ln -s ${dotnetPackages.FParsec}/lib/dotnet/FParsec packages/FParsec
+      ln -s ${dotnetPackages.FSharpCompilerService_11_0_9}/lib/dotnet/FSharp.Compiler.Service packages/FSharp.Compiler.Service
+      ln -s ${dotnetPackages.FSharpCompilerServiceProjectCracker_11_0_9}/lib/dotnet/FSharp.Compiler.Service.ProjectCracker packages/FSharp.Compiler.Service.ProjectCracker
+      ln -s ${dotnetPackages.FSharpLintCore}/lib/dotnet/FSharpLint.Core packages/FSharpLint.Core
+      ln -s ${dotnetPackages.SystemCollectionsImmutable131}/lib/dotnet/System.Collections.Immutable packages/System.Collections.Immutable
+      ln -s ${dotnetPackages.SystemReflectionMetadata}/lib/dotnet/System.Reflection.Metadata packages/System.Reflection.Metadata
+      ln -s ${dotnetPackages.Suave_1_1_3}/lib/dotnet/Suave packages/Suave
+    '';
+
+    outputFiles = [ "src/FsAutoComplete/bin/Release/*" ];
+
+    dontStrip = true;
+
+    meta = {
+      description = "An interface to the FSharp.Compiler.Service project";
+      longDescription = ''
+        This project provides a command-line interface to the
+        FSharp.Compiler.Service project. It is intended to be used as a backend
+        service for rich editing or 'intellisense' features for editors.
+        '';
+      homepage = https://github.com/fsharp/FSharp.AutoComplete;
+      license = stdenv.lib.licenses.asl20;
+      maintainers = with stdenv.lib.maintainers; [ obadz ];
+      platforms = with stdenv.lib.platforms; linux;
+    };
+  };
+
   FSharpCompilerService = buildDotnetPackage rec {
     baseName = "FSharp.Compiler.Service";
     version = "0.0.90";
@@ -572,6 +651,41 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
     };
+  };
+
+  FSharpCompilerService_11_0_9 = fetchNuGet {
+    baseName = "FSharp.Compiler.Service";
+    version = "11.0.9";
+    sha256 = "196kd8w7i61l85bdh7as012f46spaniizcsnfvhw0qn7ggbk1rz2";
+    outputFiles = [ "*" ];
+  };
+
+  FSharpCompilerServiceProjectCracker_11_0_9 = fetchNuGet {
+    baseName = "FSharp.Compiler.Service.ProjectCracker";
+    version = "11.0.9";
+    sha256 = "13hvyqwqam00q5lrfqdab2whkwzv6scv29j6q44x6845zqs2lcfx";
+    outputFiles = [ "*" ];
+  };
+
+  FSharpLintCore = fetchNuGet {
+    baseName = "FSharpLint.Core";
+    version = "0.7.4-beta";
+    sha256 = "08y84dq377qs0a020kmd8lyliqjyahyirkflx45j3hyhxa20y5zh";
+    outputFiles = [ "*" ];
+  };
+
+  DotnetProjInfo = fetchNuGet {
+    baseName = "Dotnet.ProjInfo";
+    version = "0.6.0";
+    sha256 = "1fiw7x98rzib7vv5maqhj9il0yfbzg0iy6rsrl4fmkl42xra5p8h";
+    outputFiles = [ "*" ];
+  };
+
+  FParsec = fetchNuGet {
+    baseName = "FParsec";
+    version = "1.0.2";
+    sha256 = "0rwzkyn0zhhiiyfyz6jlzwj8gsf8mi1rarw4m479z1z25sb3y415";
+    outputFiles = [ "*" ];
   };
 
   FSharpData = buildDotnetPackage rec {
@@ -616,6 +730,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
     };
+  };
+
+  FSharpData_2_3_3 = fetchNuGet {
+    baseName = "FSharp.Data";
+    version = "2.3.3";
+    sha256 = "1cwx7asnfn8390r3ljyxn6ri4bnh77qqa15zk476v7rscr3351v8";
+    outputFiles = [ "*" ];
   };
 
   # FSharpxExtras = buildDotnetPackage rec {
