@@ -5874,7 +5874,8 @@ with pkgs;
   icedtea_web = icedtea8_web;
 
   idrisPackages = callPackage ../development/idris-modules {
-    idris =
+
+    idris-no-deps =
       let
         inherit (self.haskell) lib;
         haskellPackages = self.haskellPackages.override {
@@ -5890,6 +5891,8 @@ with pkgs;
       in
         haskellPackages.idris;
   };
+
+  idris = idrisPackages.with-packages [ idrisPackages.base ] ;
 
   intercal = callPackage ../development/compilers/intercal { };
 
