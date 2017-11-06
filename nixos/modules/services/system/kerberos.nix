@@ -34,16 +34,10 @@ in
   config = mkIf config.services.kerberos_server.enable {
 
     environment.systemPackages = [ heimdalFull ];
-
-    services.xinetd.enable = true;
-    services.xinetd.services = lib.singleton
-      { name = "kerberos-adm";
-        flags = "REUSE NAMEINARGS";
-        protocol = "tcp";
-        user = "root";
-        server = "${pkgs.tcp_wrappers}/bin/tcpd";
-        serverArgs = "${pkgs.heimdalFull}/libexec/heimdal/kadmind";
-      };
+    systemd.services.kadmind = {
+      description = "Kerberos Administration Daemon";
+      script = "${pkgs.heimdalFull}/libexec/heimdal/kadmind";
+    };
 
     systemd.services.kdc = {
       description = "Key Distribution Center daemon";
