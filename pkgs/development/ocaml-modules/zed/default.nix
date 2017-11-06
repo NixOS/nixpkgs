@@ -3,8 +3,8 @@
 let param =
   if stdenv.lib.versionAtLeast ocaml.version "4.02" then
   {
-    version = "1.5";
-    sha256 = "1nq884cxl1k4daa549bk7bxarwivbpp51k4blbiwyxwfhs29xgfr";
+    version = "1.6";
+    sha256 = "00hhxcjf3bj3w2qm8nzs9x6vrqkadf4i0277s5whzy2rmiknj63v";
     buildInputs = [ jbuilder ];
     extra = {
      buildPhase = "jbuilder build -p zed";
