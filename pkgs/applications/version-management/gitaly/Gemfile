@@ -3,3 +3,7 @@ source 'https://rubygems.org'
 gem 'github-linguist', '~> 4.7.0', require: 'linguist'
 gem 'gitaly-proto', '~> 0.37.0', require: 'gitaly'
 gem 'activesupport'
+
+group :development, :test do
+  gem 'gitlab-styles', '~> 2.0.0', require: false
+end
