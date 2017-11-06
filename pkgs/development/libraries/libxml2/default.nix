@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = (stdenv.hostPlatform == stdenv.buildPlatform) && !stdenv.isDarwin;
 
   crossAttrs = lib.optionalAttrs (hostPlatform.libc == "msvcrt") {
     # creating the DLL is broken ATM

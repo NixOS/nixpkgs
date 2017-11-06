@@ -6,11 +6,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "Shapely";
-  version = "1.6.1";
+  version = "1.6.2.post1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1iyhrkm6g233gwbd20sf4aq4by0kg52cz1d2k7imnqgzjpmkgqas";
+    sha256 = "07fba518e76b3276558f62a5829bdfa476f790cdef752383ccdc8c66b04b0899";
   };
 
   buildInputs = [ geos glibcLocales cython ];

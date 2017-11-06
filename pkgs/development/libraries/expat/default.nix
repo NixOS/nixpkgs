@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   outputMan = "dev"; # tiny page for a dev tool
 
-  doCheck = true;
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
   preCheck = ''
     patchShebangs ./run.sh

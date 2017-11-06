@@ -1,8 +1,8 @@
-{ stdenv, hostPlatform, fetchurl, perl, buildLinux, ... } @ args:
+{ stdenv, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
 import ./generic.nix (args // rec {
-  mptcpVersion = "0.92.1";
-  modDirVersion = "4.4.83";
+  mptcpVersion = "0.93";
+  modDirVersion = "4.9.60";
   version = "${modDirVersion}-mptcp_v${mptcpVersion}";
 
   extraMeta = {
@@ -10,9 +10,11 @@ import ./generic.nix (args // rec {
     maintainers = with stdenv.lib.maintainers; [ teto layus ];
   };
 
-  src = fetchurl {
-    url = "https://github.com/multipath-tcp/mptcp/archive/v${mptcpVersion}.tar.gz";
-    sha256 = "1afjqmxq9p5gyr6r607bx3mqpnx451kfpwlffzxwgdwnf93alngz";
+  src = fetchFromGitHub {
+    owner = "multipath-tcp";
+    repo = "mptcp";
+    rev = "v${mptcpVersion}";
+    sha256 = "1irlppzvcmckrazs2c4vg6y8ji31552izc3wqabf401v57jvxcys";
   };
 
   extraConfig = ''

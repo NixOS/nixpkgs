@@ -108,6 +108,8 @@ in {
 
   aenum = callPackage ../development/python-modules/aenum { };
 
+  affinity = callPackage ../development/python-modules/affinity { };
+
   agate = callPackage ../development/python-modules/agate { };
 
   agate-dbf = callPackage ../development/python-modules/agate-dbf { };
@@ -206,7 +208,7 @@ in {
   # version of nixpart.
   nixpart0 = callPackage ../tools/filesystems/nixpart/0.4 { };
 
-  nltk = callPackage ../development/python-modules/nltk.nix { };
+  nltk = callPackage ../development/python-modules/nltk { };
 
   ntlm-auth = callPackage ../development/python-modules/ntlm-auth { };
 
@@ -214,7 +216,7 @@ in {
 
   Pmw = callPackage ../development/python-modules/Pmw { };
 
-  pyaes = callPackage ../development/python-modules/pyaes.nix { };
+  pyaes = callPackage ../development/python-modules/pyaes { };
 
   pyatspi = if isPy3k then callPackage ../development/python-modules/pyatspi { } else throw "pyatspi not supported for interpreter ${python.executable}";
 
@@ -231,6 +233,8 @@ in {
   PyChromecast = callPackage ../development/python-modules/pychromecast { };
 
   pyexiv2 = if (!isPy3k) then callPackage ../development/python-modules/pyexiv2 {} else throw "pyexiv2 not supported for interpreter ${python.executable}";
+
+  py3exiv2 = callPackage ../development/python-modules/py3exiv2 { };
 
   pygame = callPackage ../development/python-modules/pygame { };
 
@@ -1657,7 +1661,7 @@ in {
 
   cram = callPackage ../development/python-modules/cram { };
 
-  csscompressor = callPackage ../development/python-modules/csscompressor.nix {};
+  csscompressor = callPackage ../development/python-modules/csscompressor {};
 
   csvkit =  callPackage ../development/python-modules/csvkit { };
 
@@ -3639,7 +3643,7 @@ in {
     };
   };
 
-  bcrypt = callPackage ../development/python-modules/bcrypt.nix { };
+  bcrypt = callPackage ../development/python-modules/bcrypt { };
 
   cffi = callPackage ../development/python-modules/cffi { };
 
@@ -3958,7 +3962,7 @@ in {
     };
   };
 
-  pytest-pep257 = callPackage ../development/python-modules/pytest-pep257.nix { };
+  pytest-pep257 = callPackage ../development/python-modules/pytest-pep257 { };
 
   pytest-raisesregexp = buildPythonPackage rec {
     name = "pytest-raisesregexp-${version}";
@@ -4735,7 +4739,7 @@ in {
 
   dns = callPackage ../development/python-modules/dns { };
 
-  docker = callPackage ../development/python-modules/docker.nix {};
+  docker = callPackage ../development/python-modules/docker {};
 
   dockerpty = buildPythonPackage rec {
     name = "dockerpty-0.4.1";
@@ -4930,7 +4934,7 @@ in {
     };
   };
 
-  ds4drv = callPackage ../development/python-modules/ds4drv.nix {
+  ds4drv = callPackage ../development/python-modules/ds4drv {
     inherit (pkgs) fetchFromGitHub bluez;
   };
 
@@ -5294,6 +5298,10 @@ in {
     propagatedBuildInputs = with self; [ paramiko pycrypto ];
     buildInputs = with self; [ fudge_9 nose ];
   };
+
+  faulthandler = if ! isPy3k
+    then callPackage ../development/python-modules/faulthandler {}
+    else throw "faulthandler is built into ${python.executable}";
 
   fedpkg = callPackage ../development/python-modules/fedpkg { };
 
@@ -5938,7 +5946,7 @@ in {
   });
 
 
-  htmlmin = callPackage ../development/python-modules/htmlmin.nix {};
+  htmlmin = callPackage ../development/python-modules/htmlmin {};
 
   httpauth = buildPythonPackage rec {
     version = "0.3";
@@ -8049,7 +8057,7 @@ in {
 
   django_extensions = callPackage ../development/python-modules/django-extensions { };
 
-  django_guardian = callPackage ../development/python-modules/django_guardian.nix { };
+  django_guardian = callPackage ../development/python-modules/django_guardian { };
 
   django-ipware = callPackage ../development/python-modules/django-ipware { };
 
@@ -8069,14 +8077,17 @@ in {
 
   django_tagging = callPackage ../development/python-modules/django_tagging { };
 
-  django_tagging_0_4_3 = self.django_tagging.overrideAttrs (attrs: rec {
+  django_tagging_0_4_3 = if
+       self.django != self.django_1_8
+  then throw "django_tagging_0_4_3 should be build with django_1_8"
+  else (callPackage ../development/python-modules/django_tagging {}).overrideAttrs (attrs: rec {
     name = "django-tagging-0.4.3";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/django-tagging/${name}.tar.gz";
       sha256 = "0617azpmp6jpg3d88v2ir97qrc9aqcs2s9gyvv9bgf2cp55khxhs";
     };
-    propagatedBuildInputs = with self; [ django_1_8 ];
+    propagatedBuildInputs = with self; [ django ];
   });
 
   django_classytags = buildPythonPackage rec {
@@ -8378,7 +8389,7 @@ in {
     };
   };
 
-  dulwich = callPackage ../development/python-modules/dulwich.nix {
+  dulwich = callPackage ../development/python-modules/dulwich {
     inherit (pkgs) git glibcLocales;
   };
 
@@ -8711,7 +8722,7 @@ in {
     };
   };
 
-  docker_compose = callPackage ../development/python-modules/docker_compose.nix {};
+  docker_compose = callPackage ../development/python-modules/docker_compose {};
 
   fdroidserver = buildPythonPackage rec {
     version = "2016-05-31";
@@ -8860,11 +8871,11 @@ in {
 
   flask-cors = callPackage ../development/python-modules/flask-cors { };
 
-  flask_elastic = callPackage ../development/python-modules/flask-elastic.nix { };
+  flask_elastic = callPackage ../development/python-modules/flask-elastic { };
 
-  flask_login = callPackage ../development/python-modules/flask-login.nix { };
+  flask_login = callPackage ../development/python-modules/flask-login { };
 
-  flask_ldap_login = callPackage ../development/python-modules/flask-ldap-login.nix { };
+  flask_ldap_login = callPackage ../development/python-modules/flask-ldap-login { };
 
   flask_mail = callPackage ../development/python-modules/flask-mail { };
 
@@ -8872,7 +8883,7 @@ in {
 
   flask_migrate = callPackage ../development/python-modules/flask-migrate { };
 
-  flask_oauthlib = callPackage ../development/python-modules/flask-oauthlib.nix { };
+  flask_oauthlib = callPackage ../development/python-modules/flask-oauthlib { };
 
   flask_principal = buildPythonPackage rec {
     name = "Flask-Principal-${version}";
@@ -8939,9 +8950,9 @@ in {
     };
   };
 
-  flask_testing = callPackage ../development/python-modules/flask-testing.nix { };
+  flask_testing = callPackage ../development/python-modules/flask-testing { };
 
-  flask_wtf = callPackage ../development/python-modules/flask-wtf.nix { };
+  flask_wtf = callPackage ../development/python-modules/flask-wtf { };
 
   wtforms = buildPythonPackage rec {
     version = "2.1";
@@ -9481,7 +9492,7 @@ in {
 
   gflags = callPackage ../development/python-modules/gflags { };
 
-  ghdiff = callPackage ../development/python-modules/ghdiff.nix { };
+  ghdiff = callPackage ../development/python-modules/ghdiff { };
 
   gipc = buildPythonPackage rec {
     name = "gipc-0.5.0";
@@ -9797,7 +9808,7 @@ in {
 
   rebulk = callPackage ../development/python-modules/rebulk { };
 
-  gunicorn = callPackage ../development/python-modules/gunicorn.nix { };
+  gunicorn = callPackage ../development/python-modules/gunicorn { };
 
   hawkauthlib = buildPythonPackage rec {
     name = "hawkauthlib-${version}";
@@ -9940,7 +9951,7 @@ in {
     propagatedBuildInputs = with self; [ requests ];
   };
 
-  hypothesis = callPackage ../development/python-modules/hypothesis.nix { };
+  hypothesis = callPackage ../development/python-modules/hypothesis { };
 
   colored = buildPythonPackage rec {
     name = "colored-${version}";
@@ -10386,7 +10397,7 @@ in {
     };
   };
 
-  jabberbot = callPackage ../development/python-modules/jabberbot.nix {};
+  jabberbot = callPackage ../development/python-modules/jabberbot {};
 
   jedi = callPackage ../development/python-modules/jedi { };
 
@@ -14837,7 +14848,7 @@ in {
     };
   };
 
-  pep257 = callPackage ../development/python-modules/pep257.nix { };
+  pep257 = callPackage ../development/python-modules/pep257 { };
 
   percol = buildPythonPackage rec {
     name = "percol-${version}";
@@ -15366,13 +15377,13 @@ in {
 
   });
 
-  protobuf = callPackage ../development/python-modules/protobuf.nix {
+  protobuf = callPackage ../development/python-modules/protobuf {
     disabled = isPyPy;
     doCheck = !isPy3k;
     protobuf = pkgs.protobuf;
   };
 
-  protobuf3_1 = callPackage ../development/python-modules/protobuf.nix {
+  protobuf3_1 = callPackage ../development/python-modules/protobuf {
     disabled = isPyPy;
     doCheck = !isPy3k;
     protobuf = pkgs.protobuf3_1;
@@ -16454,6 +16465,10 @@ in {
     };
   };
 
+  pyobjc = if stdenv.isDarwin
+    then callPackage ../development/python-modules/pyobjc {}
+    else throw "pyobjc can only be built on Mac OS";
+
   pyodbc = callPackage ../development/python-modules/pyodbc { };
 
   pyocr = callPackage ../development/python-modules/pyocr { };
@@ -16724,7 +16739,7 @@ in {
     buildInputs = with self; [ pyasn1 pycrypto ];
   };
 
-  pyudev = callPackage ../development/python-modules/pyudev.nix {
+  pyudev = callPackage ../development/python-modules/pyudev {
     inherit (pkgs) fetchurl systemd;
   };
 
@@ -16789,7 +16804,7 @@ in {
     };
   });
 
-  ldap = callPackage ../development/python-modules/ldap.nix {
+  ldap = callPackage ../development/python-modules/ldap {
     inherit (pkgs) openldap cyrus_sasl openssl;
   };
 
@@ -17093,9 +17108,9 @@ in {
     doCheck = false;
   };
 
-  rackspace-novaclient = callPackage ../development/python-modules/rackspace-novaclient.nix { };
+  rackspace-novaclient = callPackage ../development/python-modules/rackspace-novaclient { };
 
-  pyrax = callPackage ../development/python-modules/pyrax.nix {
+  pyrax = callPackage ../development/python-modules/pyrax {
     glibcLocales = pkgs.glibcLocales;
   };
 
@@ -17613,7 +17628,7 @@ in {
 
   requests_ntlm = callPackage ../development/python-modules/requests_ntlm { };
 
-  requests_oauthlib = callPackage ../development/python-modules/requests-oauthlib.nix { };
+  requests_oauthlib = callPackage ../development/python-modules/requests-oauthlib { };
 
   requests-toolbelt = callPackage ../development/python-modules/requests-toolbelt { };
   requests_toolbelt = self.requests-toolbelt; # Old attr, 2017-09-26
@@ -19400,25 +19415,7 @@ in {
   };
 
 
-  six = buildPythonPackage rec {
-    name = "six-1.10.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/six/${name}.tar.gz";
-      sha256 = "0snmb8xffb3vsma0z67i0h0w2g2dy0p3gsgh9gi4i0kgc5l8spqh";
-    };
-
-    buildInputs = with self; [ pytest ];
-
-    checkPhase = ''
-      py.test test_six.py
-    '';
-
-    meta = {
-      description = "A Python 2 and 3 compatibility library";
-      homepage = http://pypi.python.org/pypi/six/;
-    };
-  };
+  six = callPackage ../development/python-modules/six { };
 
 
   skype4py = buildPythonPackage (rec {
@@ -22660,7 +22657,11 @@ EOF
     };
   };
 
-  graphite_web = buildPythonPackage rec {
+  graphite_web = if
+          self.django != self.django_1_8
+       || self.django_tagging != self.django_tagging_0_4_3
+  then throw "graphite_web should be build with django_1_8 and django_tagging_0_4_3"
+  else buildPythonPackage rec {
     name = "graphite-web-${version}";
     disabled = isPy3k;
     version = graphiteVersion;
@@ -22671,7 +22672,7 @@ EOF
     };
 
     propagatedBuildInputs = with self; [
-      django_1_8 django_tagging_0_4_3 whisper pycairo cairocffi
+      django django_tagging whisper pycairo cairocffi
       ldap memcached pytz urllib3 scandir
     ];
 
@@ -23742,7 +23743,7 @@ EOF
     };
   };
 
-  markdown2 = callPackage ../development/python-modules/markdown2.nix { };
+  markdown2 = callPackage ../development/python-modules/markdown2 { };
 
   evernote = buildPythonPackage rec {
     name = "evernote-${version}";

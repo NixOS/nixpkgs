@@ -1,42 +1,183 @@
-{ stdenv, fetchurl, m4, perl, gfortran, texlive, ffmpeg, tk, gnused_422
-, imagemagick, liblapack, python, openssl, libpng 
+# TODO
+# - consider writing a script to convert spkgs to nix packages, similar to vim
+#   or cabal2nix. This would allow a more efficient and "cleaner" build, greater
+#   flexibility and the possibility to select which dependencies to add and which
+#   to remove. It would also allow to use system packages for some dependencies
+#   and recompile others (optimized for the system) without recompiling everything.
+# - add optdeps:
+#   - imagemagick
+#   - texlive full for documentation
+#   - ...
+# - further seperate build outputs. Also maybe run `make doc`.
+#   Configure flags like --bindir and --libdir oculd also be used for that, see
+#   ./configure --help`.
+
+# Other resources:
+# - https://wiki.debian.org/DebianScience/Sage
+# - https://github.com/cschwan/sage-on-gentoo
+# - https://git.archlinux.org/svntogit/community.git/tree/trunk?h=packages/sagemath
+
+{ stdenv
+, fetchurl
+, perl
+, gfortran
+, python
+, autoreconfHook
+, gettext
 , which
+, texlive
+, hevea
 }:
 
 stdenv.mkDerivation rec {
-  name = "sage-6.8";
+  version = "8.0";
+  name = "sage-${version}";
 
   src = fetchurl {
-    url = "http://old.files.sagemath.org/src-old/${name}.tar.gz";
-    sha256 = "102mrzzi215g1xn5zgcv501x9sghwg758jagx2jixvg1rj2jijj9";
-
+    # Note that the source is *not* fetched from github, since that doesn't
+    # the upstream folder with all the source tarballs of the spkgs.
+    # If those are not present they are fetched at build time, which breaks
+    # when building in a sandbox (and probably only works if you install the
+    # latest sage version).
+    urls = [
+      "http://mirrors.mit.edu/sage/src/sage-${version}.tar.gz"
+      "ftp://ftp.fu-berlin.de/unix/misc/sage/src/sage-${version}.tar.gz"
+      "http://sagemath.polytechnic.edu.na/src/sage-${version}.tar.gz"
+      "ftp://ftp.sun.ac.za/pub/mirrors/www.sagemath.org/src/sage-${version}.tar.gz"
+      "http://sagemath.mirror.ac.za/src/sage-${version}.tar.gz"
+      "http://ftp.leg.uct.ac.za/pub/packages/sage/src/sage-${version}.tar.gz"
+      "http://mirror.ufs.ac.za/sagemath/src/sage-${version}.tar.gz"
+      "http://mirrors-usa.go-parts.com/sage/sagemath/src/sage-${version}.tar.gz"
+      "http://www.cecm.sfu.ca/sage/src/sage-${version}.tar.gz"
+      "http://files.sagemath.org/src/sage-${version}.tar.gz"
+      "http://mirrors.xmission.com/sage/src/sage-${version}.tar.gz"
+      "http://sagemath.c3sl.ufpr.br/src/sage-${version}.tar.gz"
+      "http://linorg.usp.br/sage/src/sage-${version}.tar.gz"
+      "http://mirror.hust.edu.cn/sagemath/src/sage-${version}.tar.gz"
+      "http://ftp.iitm.ac.in/sage/src/sage-${version}.tar.gz"
+      "http://ftp.kaist.ac.kr/sage/src/sage-${version}.tar.gz"
+      "http://ftp.riken.jp/sagemath/src/sage-${version}.tar.gz"
+      "http://mirrors.tuna.tsinghua.edu.cn/sagemath/src/sage-${version}.tar.gz"
+      "http://mirrors.ustc.edu.cn/sagemath/src/sage-${version}.tar.gz"
+      "http://ftp.tsukuba.wide.ad.jp/software/sage/src/sage-${version}.tar.gz"
+      "http://ftp.yz.yamagata-u.ac.jp/pub/math/sage/src/sage-${version}.tar.gz"
+      "http://mirror.yandex.ru/mirrors/sage.math.washington.edu/src/sage-${version}.tar.gz"
+      "http://mirror.aarnet.edu.au/pub/sage/src/sage-${version}.tar.gz"
+      "http://sage.mirror.garr.it/mirrors/sage/src/sage-${version}.tar.gz"
+      "http://www.mirrorservice.org/sites/www.sagemath.org/src/sage-${version}.tar.gz"
+      "http://mirror.switch.ch/mirror/sagemath/src/sage-${version}.tar.gz"
+      "https://mirrors.up.pt/pub/sage/src/sage-${version}.tar.gz"
+      "http://www-ftp.lip6.fr/pub/math/sagemath/src/sage-${version}.tar.gz"
+      "http://ftp.ntua.gr/pub/sagemath/src/sage-${version}.tar.gz"
+    ];
+    sha256 = "1a9rhb8jby6fdqa2s7n2fl9jwqqlsl7qz7dbpbwvg6jwlrvni7fg";
   };
 
-  buildInputs = [ m4 perl gfortran texlive.combined.scheme-basic ffmpeg gnused_422 tk imagemagick liblapack
-                  python openssl libpng which ];
+  postPatch = ''
+    substituteAllInPlace src/bin/sage-env
+  '';
 
-  patches = [ ./spkg-singular.patch ./spkg-python.patch ./spkg-git.patch ];
+  installPhase = ''
+    # Sage installs during first `make`, `make install` is no-op and just takes time.
+  '';
+
+  outputs = [ "out" "doc" ];
+
+  buildInputs = [
+    perl # needed for the build
+    python # needed for the build
+    gfortran # needed to build giac
+    autoreconfHook # needed to configure sage with prefix
+    gettext # needed to build the singular spkg
+    hevea # needed to build the docs of the giac spkg
+    which # needed in configure of mpir
+    # needed to build the docs of the giac spkg
+    (texlive.combine { inherit (texlive)
+      scheme-basic
+      collection-pstricks # needed by giac
+      times # font needed by giac
+      stmaryrd # needed by giac
+      babel-greek # optional for giac, otherwise throws a bunch of latex command not founds
+      ;
+    })
+  ];
+
+  patches = [
+    # fix usages of /bin/rm
+    ./spkg-singular.patch
+    # help python find the crypt library
+    ./spkg-python2.patch
+    ./spkg-python3.patch
+    # fix usages of /usr/bin/perl
+    ./spkg-git.patch
+    # fix usages of /bin/cp and add necessary argument to function call
+    ./spkg-giac.patch
+    # environment
+    ./env.patch
+  ];
 
   enableParallelBuilding = true;
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [
+    "format" # needed to build palp, for lines like `printf(ctime(&_NFL->TIME))`
+    # TODO could be patched with `sed s|printf(ctime(\(.*\)))|%s... or fixed upstream
+  ];
 
   preConfigure = ''
     export SAGE_NUM_THREADS=$NIX_BUILD_CORES
     export SAGE_ATLAS_ARCH=fast
-    mkdir -p $out/sageHome
-    export HOME=$out/sageHome
-    export CPPFLAGS="-P"
+
+    export HOME=$out/sage-home
+    mkdir -p $out/sage-home
+
+    mkdir -p "$out"
+
+    # we need to keep the source around
+    dir="$PWD"
+    cd ..
+    mv "$dir" "$out/sage-root"
+
+    cd "$out/sage-root" # build in target dir, since `make` is also `make install`
   '';
 
-  preBuild = "patchShebangs build";
+  # for reference: http://doc.sagemath.org/html/en/installation/source.html
+  preBuild = ''
+    # TODO do this conditionally
+    export SAGE_SPKG_INSTALL_DOCS='no'
+    patchShebangs build
+  '';
 
-  installPhase = ''DESTDIR=$out make install'';
+  postBuild = ''
+    rm -r "$out/sage-root/upstream" # don't keep the sources of all the spkgs
+    rm -r "$out/sage-root/src/build"
+    rm -rf "$out/sage-root/src/.git"
+    rm -r "$out/sage-root/logs"
+    # Fix dependency cycle between out and doc
+    rm -f "$out/sage-root/config.status"
+    rm -f "$out/sage-root/build/make/Makefile-auto"
+    rm -f "$out/sage-home/.sage/gap/libgap-workspace-"*
+  '';
+
+  # TODO there are some doctest failures, which seem harmless.
+  # We should figure out a way to fix the failures or ignore only those tests.
+  doCheck = false;
+
+  checkTarget = "ptestalllong"; # all long tests in parallell
+  preCheck = ''
+    export SAGE_TIMEOUT=0 # no timeout
+    export SAGE_TIMEOUT_LONG=0 # no timeout
+  '';
 
   meta = {
     homepage = http://www.sagemath.org;
     description = "A free open source mathematics software system";
+    # taken from the homepage
+    longDescription = ''
+      SageMath is a free open-source mathematics software system licensed under the GPL. It builds on top of many existing open-source packages: NumPy, SciPy, matplotlib, Sympy, Maxima, GAP, FLINT, R and many more. Access their combined power through a common, Python-based language or directly via interfaces or wrappers.
+      Mission: Creating a viable free open source alternative to Magma, Maple, Mathematica and Matlab.
+    '';
     license = stdenv.lib.licenses.gpl2Plus;
-    broken = true;
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ timokau ];
   };
 }

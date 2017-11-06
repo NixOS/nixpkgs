@@ -122,6 +122,8 @@ with pkgs;
 
   dispad = callPackage ../tools/X11/dispad { };
 
+  dump1090 = callPackage ../applications/misc/dump1090 { };
+
   vsenv = callPackage ../build-support/vsenv {
     vs = vs90wrapper;
   };
@@ -176,6 +178,10 @@ with pkgs;
   };
 
   fetchRepoProject = callPackage ../build-support/fetchrepoproject { };
+
+  fetchipfs = import ../build-support/fetchipfs {
+    inherit curl stdenv;
+  };
 
   # fetchurlBoot is used for curl and its dependencies in order to
   # prevent a cyclic dependency (curl depends on curl.tar.bz2,
@@ -2678,15 +2684,13 @@ with pkgs;
   };
 
 
-  # ihaskell = callPackage ../development/tools/haskell/ihaskell/wrapper.nix {
-  #   inherit (haskellPackages) ihaskell ghcWithPackages;
+  ihaskell = callPackage ../development/tools/haskell/ihaskell/wrapper.nix {
+    inherit (haskellPackages) ihaskell ghcWithPackages;
 
-  #   ipython = python3.buildEnv.override {
-  #     extraLibs = with python3Packages; [ ipython ipykernel jupyter_client notebook ];
-  #   };
+    jupyter = python3.withPackages (ps: [ ps.jupyter ps.notebook ]);
 
-  #   packages = config.ihaskell.packages or (self: []);
-  # };
+    packages = config.ihaskell.packages or (self: []);
+  };
 
   imapproxy = callPackage ../tools/networking/imapproxy { };
 
@@ -3440,6 +3444,8 @@ with pkgs;
   namazu = callPackage ../tools/text/namazu { };
 
   nasty = callPackage ../tools/security/nasty { };
+
+  nat-traverse = callPackage ../tools/networking/nat-traverse { };
 
   nawk = callPackage ../tools/text/nawk { };
 
@@ -6235,12 +6241,6 @@ with pkgs;
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
   sbcl = callPackage ../development/compilers/sbcl {};
-  # For Maxima
-  sbcl_1_3_12 = callPackage ../development/compilers/sbcl/1.3.12.nix { };
-  # For ACL2
-  sbcl_1_2_0 = callPackage ../development/compilers/sbcl/1.2.0.nix {
-    clisp = clisp;
-  };
 
   scala_2_9 = callPackage ../development/compilers/scala/2.9.nix { };
   scala_2_10 = callPackage ../development/compilers/scala/2.10.nix { };
@@ -6363,9 +6363,7 @@ with pkgs;
 
   ### DEVELOPMENT / INTERPRETERS
 
-  acl2 = callPackage ../development/interpreters/acl2 {
-    sbcl = sbcl_1_2_0;
-  };
+  acl2 = callPackage ../development/interpreters/acl2 { };
 
   angelscript = callPackage ../development/interpreters/angelscript {};
 
@@ -6736,6 +6734,7 @@ with pkgs;
   spidermonkey_17 = callPackage ../development/interpreters/spidermonkey/17.nix { };
   spidermonkey_31 = callPackage ../development/interpreters/spidermonkey/31.nix { };
   spidermonkey_38 = callPackage ../development/interpreters/spidermonkey/38.nix { };
+  spidermonkey_52 = callPackage ../development/interpreters/spidermonkey/52.nix { };
   spidermonkey = spidermonkey_31;
 
   ssm-agent = callPackage ../applications/networking/cluster/ssm-agent { };
@@ -7427,9 +7426,7 @@ with pkgs;
 
   obuild = callPackage ../development/tools/ocaml/obuild { };
 
-  omake = callPackage ../development/tools/ocaml/omake {
-    inherit (ocamlPackages_4_02) ocaml;
-  };
+  omake = callPackage ../development/tools/ocaml/omake { };
 
   inherit (ocamlPackages) omake_rc1;
 
@@ -10923,6 +10920,8 @@ with pkgs;
 
   vmime = callPackage ../development/libraries/vmime { };
 
+  vrb = callPackage ../development/libraries/vrb { };
+
   vrpn = callPackage ../development/libraries/vrpn { };
 
   vsqlite = callPackage ../development/libraries/vsqlite { };
@@ -12417,7 +12416,8 @@ with pkgs;
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         kernelPatches.p9_fixes
-        kernelPatches.cpu-cgroup-v2."4.4"
+        kernelPatches.cpu-cgroup-v2."4.9"
+        kernelPatches.modinst_arg_list_too_long
       ]
       ++ lib.optionals ((platform.kernelArch or null) == "mips")
       [ kernelPatches.mips_fpureg_emu
@@ -13008,9 +13008,6 @@ with pkgs;
   trinity = callPackage ../os-specific/linux/trinity { };
 
   tunctl = callPackage ../os-specific/linux/tunctl { };
-
-  # TODO(dezgeg): either refactor & use ubootTools directly, or remove completely
-  ubootChooser = name: ubootTools;
 
   # Upstream U-Boots:
   inherit (callPackage ../misc/uboot {})
@@ -13656,6 +13653,8 @@ with pkgs;
   };
 
   adobe-reader = callPackage_i686 ../applications/misc/adobe-reader { };
+
+  masterpdfeditor = libsForQt5.callPackage ../applications/misc/masterpdfeditor { };
 
   aeolus = callPackage ../applications/audio/aeolus { };
 
@@ -15041,6 +15040,8 @@ with pkgs;
 
   ht = callPackage ../applications/editors/ht { };
 
+  hubstaff = callPackage ../applications/misc/hubstaff { };
+
   hue-cli = callPackage ../tools/networking/hue-cli { };
 
   hugin = callPackage ../applications/graphics/hugin {
@@ -15442,6 +15443,8 @@ with pkgs;
   liferea = callPackage ../applications/networking/newsreaders/liferea {
     inherit (gnome3) libpeas gsettings_desktop_schemas dconf;
   };
+
+  lightworks = callPackage ../applications/video/lightworks { };
 
   lingot = callPackage ../applications/audio/lingot {
     inherit (gnome2) libglade;
@@ -16269,14 +16272,37 @@ with pkgs;
 
   quiterss = libsForQt5.callPackage ../applications/networking/newsreaders/quiterss {};
 
-  quodlibet-without-gst-plugins = callPackage ../applications/audio/quodlibet { };
+  falkon = libsForQt5.callPackage ../applications/networking/browsers/falkon { };
 
   quodlibet = callPackage ../applications/audio/quodlibet {
-    withGstPlugins = true;
-    gst-plugins-bad = null;
+    keybinder3 = null;
+    libmodplug = null;
+    kakasi = null;
+    libappindicator-gtk3 = null;
   };
 
-  falkon = libsForQt5.callPackage ../applications/networking/browsers/falkon { };
+  quodlibet-without-gst-plugins = quodlibet.override {
+    withGstPlugins = false;
+    tag = "-without-gst-plugins";
+  };
+
+  quodlibet-xine = quodlibet.override { xineBackend = true; tag = "-xine"; };
+
+  quodlibet-full = callPackage ../applications/audio/quodlibet {
+    inherit (gnome2) gtksourceview;
+    withDbusPython = true;
+    withPyInotify = true;
+    withMusicBrainzNgs = true;
+    withPahoMqtt = true;
+    keybinder3 = keybinder3;
+    libmodplug = libmodplug;
+    kakasi = kakasi;
+    webkitgtk = webkitgtk24x-gtk3;
+    libappindicator-gtk3 = libappindicator-gtk3;
+    tag = "-full";
+  };
+
+  quodlibet-xine-full = quodlibet-full.override { xineBackend = true; tag = "-xine-full"; };
 
   qutebrowser = libsForQt5.callPackage ../applications/networking/browsers/qutebrowser {
     inherit (python3Packages) buildPythonApplication pyqt5 jinja2 pygments pyyaml pypeg2 cssutils pyopengl attrs;
@@ -16510,9 +16536,7 @@ with pkgs;
 
   stella = callPackage ../misc/emulators/stella { };
 
-  statsd = callPackage ../tools/networking/statsd {
-    nodejs = nodejs-4_x;
-  };
+  statsd = nodePackages.statsd;
 
   linuxstopmotion = callPackage ../applications/video/linuxstopmotion { };
 
@@ -16793,6 +16817,8 @@ with pkgs;
   timidity = callPackage ../tools/misc/timidity { };
 
   tint2 = callPackage ../applications/misc/tint2 { };
+
+  tixati = callPackage ../applications/networking/p2p/tixati { };
 
   tkcvs = callPackage ../applications/version-management/tkcvs { };
 
@@ -17989,6 +18015,8 @@ with pkgs;
 
   sdlmame = callPackage ../games/sdlmame { };
 
+  service-wrapper = callPackage ../os-specific/linux/service-wrapper { };
+
   sgtpuzzles = callPackage (callPackage ../games/sgt-puzzles) { };
 
   sienna = callPackage ../games/sienna { love = love_0_10; };
@@ -18099,7 +18127,9 @@ with pkgs;
 
   ultrastar-manager = libsForQt5.callPackage ../tools/misc/ultrastar-manager { };
 
-  ultrastardx = callPackage ../games/ultrastardx/default.nix { };
+  ultrastardx = callPackage ../games/ultrastardx/default.nix {
+    ffmpeg = ffmpeg_2;
+  };
 
   unnethack = callPackage ../games/unnethack { };
 
@@ -18627,6 +18657,7 @@ with pkgs;
     coqPackages = self;
 
     autosubst = callPackage ../development/coq-modules/autosubst {};
+    bignums = callPackage ../development/coq-modules/bignums {};
     coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
     coquelicot = callPackage ../development/coq-modules/coquelicot {};
     dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
@@ -19660,6 +19691,8 @@ with pkgs;
   xmagnify = callPackage ../tools/X11/xmagnify { };
 
   xosd = callPackage ../misc/xosd { };
+
+  xosview2 = callPackage ../tools/X11/xosview2 { };
 
   xpad = callPackage ../applications/misc/xpad {
     inherit (gnome3) gtksourceview;

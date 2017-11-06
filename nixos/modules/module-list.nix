@@ -304,7 +304,7 @@
   ./services/misc/gogs.nix
   ./services/misc/gollum.nix
   ./services/misc/gpsd.nix
-  #./services/misc/ihaskell.nix
+  ./services/misc/ihaskell.nix
   ./services/misc/irkerd.nix
   ./services/misc/jackett.nix
   ./services/misc/logkeys.nix
@@ -413,6 +413,7 @@
   ./services/networking/asterisk.nix
   ./services/networking/atftpd.nix
   ./services/networking/avahi-daemon.nix
+  ./services/networking/babeld.nix
   ./services/networking/bind.nix
   ./services/networking/autossh.nix
   ./services/networking/bird.nix

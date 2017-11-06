@@ -1,7 +1,7 @@
 { stdenv, fetchurl, intltool, pkgconfig, libglade, networkmanager, gnome3
-, libnotify, libsecret, polkit, isocodes, modemmanager, librsvg
+, libnotify, libsecret, polkit, isocodes, modemmanager
 , mobile_broadband_provider_info, glib_networking, gsettings_desktop_schemas
-, makeWrapper, udev, libgudev, hicolor_icon_theme, jansson, wrapGAppsHook, webkitgtk
+, udev, libgudev, hicolor_icon_theme, jansson, wrapGAppsHook, webkitgtk
 , withGnome ? false }:
 
 stdenv.mkDerivation rec {
@@ -24,13 +24,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gnome3.gtk libglade networkmanager libnotify libsecret gsettings_desktop_schemas
-    polkit isocodes makeWrapper udev libgudev gnome3.gconf gnome3.libgnome_keyring
-    modemmanager jansson librsvg glib_networking gnome3.dconf
+    polkit isocodes udev libgudev gnome3.libgnome_keyring
+    modemmanager jansson glib_networking
   ] ++ stdenv.lib.optional withGnome webkitgtk;
 
   nativeBuildInputs = [ intltool pkgconfig wrapGAppsHook ];
 
-  propagatedUserEnvPkgs = [ gnome3.gconf gnome3.gnome_keyring hicolor_icon_theme ];
+  propagatedUserEnvPkgs = [ gnome3.gnome_keyring hicolor_icon_theme ];
 
   makeFlags = [
     ''CFLAGS=-DMOBILE_BROADBAND_PROVIDER_INFO=\"${mobile_broadband_provider_info}/share/mobile-broadband-provider-info/serviceproviders.xml\"''

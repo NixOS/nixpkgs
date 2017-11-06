@@ -13,7 +13,7 @@ buildPythonPackage (rec {
   patches = [
    # fix tests
    (fetchpatch {
-     url = "https://github.com/mwhudson/urwid/commit/4b0ed8b6030450e6d99909a7c683e9642e546387.patch";
+     url = "https://github.com/urwid/urwid/commit/4b0ed8b6030450e6d99909a7c683e9642e546387.patch";
      sha256 = "0azpn0ylbg8mfpr0y27n4lnq0ph75a4d4m9wdv3napnhf1vh9ahx";
    })
    # fix tests

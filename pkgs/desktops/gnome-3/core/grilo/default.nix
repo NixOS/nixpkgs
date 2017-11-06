@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   major = "0.3"; # if you change this, also change ./setup-hook.sh
-  minor = "3";
+  minor = "4";
   name = "grilo-${major}.${minor}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/grilo/${major}/${name}.tar.xz";
-    sha256 = "1qx072m0gl6m3d5g5cbbf13p4h217icmlxjnrn829x5xqwi451sw";
+    sha256 = "0vh67gja6yn7czh77ssmx6ncp99fl2926pbi2hplqms27c2n8sbw";
   };
 
   setupHook = ./setup-hook.sh;

@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib intltool json_glib rest libsoup gtk gnome_online_accounts ];
 
   meta = with stdenv.lib; {
+    description = "GObject wrapper for the SkyDrive and Hotmail REST APIs";
     platforms = platforms.linux;
   };
 }
