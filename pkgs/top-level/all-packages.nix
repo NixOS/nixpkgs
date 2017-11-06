@@ -4379,6 +4379,8 @@ with pkgs;
 
   sigil = libsForQt56.callPackage ../applications/editors/sigil { };
 
+  signal-desktop = callPackage ../applications/networking/instant-messengers/signal-desktop { };
+
   # aka., pgp-tools
   signing-party = callPackage ../tools/security/signing-party { };
 
