@@ -207,7 +207,7 @@
       ripple-data-api = 186;
       mediatomb = 187;
       rdnssd = 188;
-      # ihaskell = 189; # unused
+      ihaskell = 189;
       i2p = 190;
       lambdabot = 191;
       asterisk = 192;
@@ -484,7 +484,7 @@
       #ripple-data-api = 186; #unused
       mediatomb = 187;
       #rdnssd = 188; # unused
-      # ihaskell = 189; # unused
+      ihaskell = 189;
       i2p = 190;
       lambdabot = 191;
       asterisk = 192;
