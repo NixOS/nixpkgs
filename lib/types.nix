@@ -224,6 +224,13 @@ rec {
       merge = mergeOneOption;
     };
 
+    relativePath = mkOptionType {
+      name = "relativePath";
+      # Hacky: there is no ‘isRelativePath’ primop.
+      check = x: builtins.substring 0 1 (toString x) != "/";
+      merge = mergeOneOption;
+    };
+
     # drop this in the future:
     list = builtins.trace "`types.list` is deprecated; use `types.listOf` instead" types.listOf;
 
