@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2.2.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge.net/xosview/${name}.tar.gz";
+    url = "mirror://sourceforge/xosview/${name}.tar.gz";
     sha256 = "3502e119a5305ff2396f559340132910807351c7d4e375f13b5c338404990406";
   };
 
