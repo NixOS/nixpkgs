@@ -118,10 +118,16 @@ let
       '';
   };
 
-  hackage2nix = name: version: self.haskellSrc2nix {
+  all-cabal-hashes-component = name: version: pkgs.runCommand "all-cabal-hashes-component-${name}-${version}" {} ''
+    tar --wildcards -xzvf ${all-cabal-hashes} \*/${name}/${version}/${name}.{json,cabal}
+    mkdir -p $out
+    mv */${name}/${version}/${name}.{json,cabal} $out
+  '';
+
+  hackage2nix = name: version: let component = all-cabal-hashes-component name version; in self.haskellSrc2nix {
     name   = "${name}-${version}";
-    sha256 = ''$(sed -e 's/.*"SHA256":"//' -e 's/".*$//' "${all-cabal-hashes}/${name}/${version}/${name}.json")'';
-    src    = "${all-cabal-hashes}/${name}/${version}/${name}.cabal";
+    sha256 = ''$(sed -e 's/.*"SHA256":"//' -e 's/".*$//' "${component}/${name}.json")'';
+    src    = "${component}/${name}.cabal";
   };
 
 in package-set { inherit pkgs stdenv callPackage; } self // {
