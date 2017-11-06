@@ -3,7 +3,7 @@ index 0b11ce3..ffc3faf 100644
 --- a/lib/gitlab_projects.rb
 +++ b/lib/gitlab_projects.rb
 @@ -8,7 +8,7 @@ require_relative 'gitlab_metrics'
- require_relative 'gitlab_reference_counter'
+ require_relative 'gitlab_metrics'
  
  class GitlabProjects
 -  GLOBAL_HOOKS_DIRECTORY = File.join(ROOT_PATH, 'hooks')
@@ -15,7 +15,7 @@ diff --git a/lib/gitlab_shell.rb b/lib/gitlab_shell.rb
 index e7d0254..181ec8a 100644
 --- a/lib/gitlab_shell.rb
 +++ b/lib/gitlab_shell.rb
-@@ -163,7 +163,8 @@ class GitlabShell
+@@ -188,7 +188,8 @@ class GitlabShell
      end
  
      # We use 'chdir: ROOT_PATH' to let the next executable know where config.yml is.
