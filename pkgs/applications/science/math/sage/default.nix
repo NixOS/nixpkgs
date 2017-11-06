@@ -177,7 +177,7 @@ stdenv.mkDerivation rec {
       Mission: Creating a viable free open source alternative to Magma, Maple, Mathematica and Matlab.
     '';
     license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ timokau ];
   };
 }
