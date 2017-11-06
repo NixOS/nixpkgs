@@ -90,6 +90,7 @@ ln -sfn /nix/var/nix/profiles/system $mountPoint/run/current-system
 
 # Copy the NixOS/Nixpkgs sources to the target as the initial contents of the NixOS channel.
 install -m 0755 -d $mountPoint/nix/var/nix/profiles
+install -m 1777 -d $mountPoint/nix/var/nix/profiles/nixup
 install -m 1777 -d $mountPoint/nix/var/nix/profiles/per-user
 install -m 0755 -d $mountPoint/nix/var/nix/profiles/per-user/root
 

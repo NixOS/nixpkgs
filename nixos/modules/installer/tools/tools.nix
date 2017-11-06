@@ -70,6 +70,17 @@ let
     inherit (config.system) nixosVersion nixosCodeName nixosRevision;
   };
 
+  nixup-rebuild =
+    let fallback = import ./nix-fallback-paths.nix; in
+    makeProg {
+      name = "nixup-rebuild";
+      src = ./nix__-rebuild.sh;
+      flavour = "nixup";
+      nix = config.nix.package.out;
+      nix_x86_64_linux = fallback.x86_64-linux;
+      nix_i686_linux = fallback.i686-linux;
+    };
+
 in
 
 {
@@ -87,7 +98,7 @@ in
       ];
 
     system.build = {
-      inherit nixos-install nixos-prepare-root nixos-generate-config nixos-option nixos-rebuild;
+      inherit nixos-install nixos-prepare-root nixos-generate-config nixos-option nixos-rebuild nixup-rebuild;
     };
 
   };

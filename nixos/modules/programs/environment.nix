@@ -15,6 +15,8 @@ with lib;
         PAGER = mkDefault "less -R";
         EDITOR = mkDefault "nano";
         XCURSOR_PATH = [ "$HOME/.icons" ];
+      } // optionalAttrs config.nixup.enable {
+        NIXUP_API = "${config.system.build.nixup-rebuild}";
       };
 
     environment.profiles =
@@ -52,6 +54,10 @@ with lib;
 
          export NIX_USER_PROFILE_DIR="/nix/var/nix/profiles/per-user/$USER"
          export NIX_PROFILES="${concatStringsSep " " (reverseList config.environment.profiles)}"
+         ${optionalString config.nixup.enable ''
+           export NIXUP_CONFIG="''${XDG_CONFIG_HOME:-$HOME/.config}/nixup/profile.nix"
+           export NIXUP_RUNTIME_DIR="''${XDG_RUNTIME_DIR:-/run/user/$(id -u $USER)}/nixup"
+         ''}
       '';
 
   };

@@ -448,6 +448,8 @@ in
           /nix/var/log/nix/drvs \
           /nix/var/nix/channel-cache
         mkdir -m 1777 -p \
+          /nix/var/nix/gcroots/nixup \
+          /nix/var/nix/profiles/nixup \
           /nix/var/nix/gcroots/per-user \
           /nix/var/nix/profiles/per-user \
           /nix/var/nix/gcroots/tmp

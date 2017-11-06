@@ -23,6 +23,7 @@ with lib;
         fi
 
         if test -w $HOME; then
+          ${if ! config.nixup.enable then ''
           if ! test -L $HOME/.nix-profile; then
               if test "$USER" != root; then
                   ln -s $NIX_USER_PROFILE_DIR/profile $HOME/.nix-profile
@@ -31,6 +32,33 @@ with lib;
                   ln -s /nix/var/nix/profiles/default $HOME/.nix-profile
               fi
           fi
+          '' else
+             let
+               defaultProfile = pkgs.writeText "nixup-default-profile"
+                 ''
+                   # NixUP configuration root file
+
+                   {config, lib, pkgs, ...}:
+
+                   with lib;
+
+                   {
+                     config = {
+
+                     };
+
+                   }
+                 '';
+             in ''
+          # Create default nixup configuration directory
+
+          if ! test -e ''${XDG_CONFIG_HOME:-$HOME/.config}/nixup; then
+              mkdir -m 0755 -p ''${XDG_CONFIG_HOME:-$HOME/.config}/nixup
+          fi
+          if [ -d ''${XDG_CONFIG_HOME:-$HOME/.config}/nixup -a ! -e ''${XDG_CONFIG_HOME:-$HOME/.config}/nixup/profile.nix ]; then
+              cat ${defaultProfile} > ''${XDG_CONFIG_HOME:-$HOME/.config}/nixup/profile.nix
+          fi
+          ''}
 
           # Subscribe the root user to the NixOS channel by default.
           if [ "$USER" = root -a ! -e $HOME/.nix-channels ]; then
