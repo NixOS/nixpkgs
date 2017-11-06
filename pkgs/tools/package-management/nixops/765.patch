@@ -1,0 +1,44 @@
+From 6aa5d6d85cbc94617a52d6b8f14dd6bb8b418b34 Mon Sep 17 00:00:00 2001
+From: Samuel Leathers <sam@appliedtrust.com>
+Date: Mon, 6 Nov 2017 15:01:55 -0500
+Subject: [PATCH] digital ocean: enp0s3 -> ens3
+
+---
+ nixops/backends/digital_ocean.py | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/nixops/backends/digital_ocean.py b/nixops/backends/digital_ocean.py
+index e883045e..63e47f19 100644
+--- a/nixops/backends/digital_ocean.py
++++ b/nixops/backends/digital_ocean.py
+@@ -8,7 +8,7 @@
+ 
+ I hit a few subtle problems along the way:
+ * DO doesn't do dhcp so we have to hard-code the network configuration
+-* Ubuntu still uses eth0, 1 etc, not enp0s3 etc so we have a network
++* Ubuntu still uses eth0, 1 etc, not ens3 etc so we have a network
+   link name change after the reboot.
+ * I had to modify nixos-infect to reflect the network link name changes,
+   and to not reboot to avoid ssh-interruption and therefore errors.
+@@ -86,10 +86,10 @@ def prefix_len(netmask):
+         networking = {
+             'defaultGateway': self.default_gateway,
+             'nameservers': ['8.8.8.8'], # default provided by DO
+-            ('interfaces', 'enp0s3', 'ip4'): [{"address": self.public_ipv4, 'prefixLength': prefix_len(self.netmask)}],
++            ('interfaces', 'ens3', 'ip4'): [{"address": self.public_ipv4, 'prefixLength': prefix_len(self.netmask)}],
+         }
+         if self.public_ipv6:
+-            networking[('interfaces', 'enp0s3', 'ip6')] = [{'address': self.public_ipv6['address'], 'prefixLength': self.public_ipv6['prefixLength']}]
++            networking[('interfaces', 'ens3', 'ip6')] = [{'address': self.public_ipv6['address'], 'prefixLength': self.public_ipv6['prefixLength']}]
+         if self.default_gateway6:
+             networking['defaultGateway6'] = self.default_gateway6
+ 
+@@ -188,7 +188,7 @@ def create(self, defn, check, allow_reboot, allow_recreate):
+ 
+         # run modified nixos-infect
+         # - no reboot
+-        # - predictable network interface naming (enp0s3 etc)
++        # - predictable network interface naming (ens3 etc)
+         self.wait_for_ssh()
+         self.log_start("running nixos-infect")
+         self.run_command('bash </dev/stdin 2>&1', stdin=open(infect_path))
