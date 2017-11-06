@@ -3267,6 +3267,8 @@ in {
     };
   };
 
+  json-rpc = callPackage ../development/python-modules/json-rpc {};
+
   jsonrpclib = buildPythonPackage rec {
     name = "jsonrpclib-${version}";
     version = "0.1.7";
