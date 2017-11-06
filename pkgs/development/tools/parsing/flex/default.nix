@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "15g9bv236nzi665p9ggqjlfn4dwck5835vf0bbw2cz7h5c1swyp8";
   };
 
+  # Also upstream, will be part of 2.6.5
+  # https://github.com/westes/flex/commit/24fd0551333e
   patches = [(fetchpatch {
     name = "glibc-2.26.patch";
     url = "https://raw.githubusercontent.com/lede-project/source/0fb14a2b1ab2f82c"
