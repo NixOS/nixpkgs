@@ -9,20 +9,38 @@ use Cwd 'abs_path';
 
 my $out = "@out@";
 
+my $flavour = "@flavour@";
+my %flavour;
+
+my $nixup_runtime_dir;
+
+if ($flavour eq "nixos") {
+    $flavour{'commandPrefix'} = "/run/systemd/";
+    $flavour{'mode'} = "boot";
+    $flavour{'commandFlag'} = "--system";
+} elsif ($flavour eq "nixup") {
+    $nixup_runtime_dir = $ENV{'NIXUP_RUNTIME_DIR'} or die "ERROR: NIXUP_RUNTIME_DIR not set";
+    $flavour{'commandPrefix'} = "$nixup_runtime_dir/systemd-";
+    $flavour{'mode'} = "login";
+    $flavour{'commandFlag'} = "--user";
+} else {
+    die;
+}
+
 # To be robust against interruption, record what units need to be started etc.
-my $startListFile = "/run/systemd/start-list";
-my $restartListFile = "/run/systemd/restart-list";
-my $reloadListFile = "/run/systemd/reload-list";
+my $startListFile = "$flavour{'commandPrefix'}start-list";
+my $restartListFile = "$flavour{'commandPrefix'}restart-list";
+my $reloadListFile = "$flavour{'commandPrefix'}reload-list";
 
 my $action = shift @ARGV;
 
-if (!defined $action || ($action ne "switch" && $action ne "boot" && $action ne "test" && $action ne "dry-activate")) {
+if (!defined $action || ($action ne "switch" && $action ne "$flavour{'mode'}" && $action ne "test" && $action ne "dry-activate")) {
     print STDERR <<EOF;
-Usage: $0 [switch|boot|test]
+Usage: $0 [switch|${$flavour{'mode'}}|test]
 
-switch:       make the configuration the boot default and activate now
-boot:         make the configuration the boot default
-test:         activate the configuration, but don\'t make it the boot default
+switch:       make the configuration the ${$flavour{'mode'}} default and activate now
+${$flavour{'mode'}}:         make the configuration the ${$flavour{'mode'}} default
+test:         activate the configuration, but don\'t make it the ${$flavour{'mode'}} default
 dry-activate: show what would be done if this configuration were activated
 EOF
     exit 1;
@@ -31,31 +49,33 @@ EOF
 # This is a NixOS installation if it has /etc/NIXOS or a proper
 # /etc/os-release.
 die "This is not a NixOS installation!\n" unless
-    -f "/etc/NIXOS" || (read_file("/etc/os-release", err_mode => 'quiet') // "") =~ /ID=nixos/s;
+    $flavour eq "nixup" || -f "/etc/NIXOS" || (read_file("/etc/os-release", err_mode => 'quiet') // "") =~ /ID=nixos/s;
 
-openlog("nixos", "", LOG_USER);
+openlog("$flavour", "", LOG_USER);
 
 # Install or update the bootloader.
-if ($action eq "switch" || $action eq "boot") {
+if ($flavour eq "nixos" && ($action eq "switch" || $action eq "boot")) {
     system("@installBootLoader@ $out") == 0 or exit 1;
 }
 
 # Just in case the new configuration hangs the system, do a sync now.
-system("@coreutils@/bin/sync", "-f", "/nix/store") unless ($ENV{"NIXOS_NO_SYNC"} // "") eq "1";
+system("@coreutils@/bin/sync", "-f", "/nix/store") unless ($ENV{uc($flavour)."_NO_SYNC"} // "") eq "1";
 
-exit 0 if $action eq "boot";
+exit 0 if $action eq $flavour{'mode'};
 
 # Check if we can activate the new configuration.
-my $oldVersion = read_file("/run/current-system/init-interface-version", err_mode => 'quiet') // "";
-my $newVersion = read_file("$out/init-interface-version");
+if ($flavour eq "nixos") {
+    my $oldVersion = read_file("/run/current-system/init-interface-version", err_mode => 'quiet') // "";
+    my $newVersion = read_file("$out/init-interface-version");
 
-if ($newVersion ne $oldVersion) {
-    print STDERR <<EOF;
+    if ($newVersion ne $oldVersion) {
+        print STDERR <<EOF;
 Warning: the new NixOS configuration has an ‘init’ that is
 incompatible with the current configuration.  The new configuration
 won\'t take effect until you reboot the system.
 EOF
-    exit 100;
+        exit 100;
+    }
 }
 
 # Ignore SIGHUP so that we're not killed if we're running on (say)
@@ -65,7 +85,7 @@ $SIG{PIPE} = "IGNORE";
 sub getActiveUnits {
     # FIXME: use D-Bus or whatever to query this, since parsing the
     # output of list-units is likely to break.
-    my $lines = `LANG= systemctl list-units --full --no-legend`;
+    my $lines = `LANG= @systemd@/bin/systemctl $flavour{'commandFlag'} list-units --full --no-legend`;
     my $res = {};
     foreach my $line (split '\n', $lines) {
         chomp $line;
@@ -147,14 +167,30 @@ my $activePrev = getActiveUnits;
 while (my ($unit, $state) = each %{$activePrev}) {
     my $baseUnit = $unit;
 
-    my $prevUnitFile = "/etc/systemd/system/$baseUnit";
-    my $newUnitFile = "$out/etc/systemd/system/$baseUnit";
+    my $prevUnitFile;
+    my $newUnitFile;
+
+    if ($flavour eq "nixos") {
+        $prevUnitFile = "/etc/systemd/system/$baseUnit";
+        $newUnitFile = "$out/etc/systemd/system/$baseUnit";
+    } elsif ($flavour eq "nixup") {
+        $prevUnitFile = "$nixup_runtime_dir/active-profile/systemd/$baseUnit";
+        $newUnitFile = "$out/systemd/$baseUnit";
+    } else {
+        die;
+    }
 
     # Detect template instances.
     if (!-e $prevUnitFile && !-e $newUnitFile && $unit =~ /^(.*)@[^\.]*\.(.*)$/) {
-      $baseUnit = "$1\@.$2";
-      $prevUnitFile = "/etc/systemd/system/$baseUnit";
-      $newUnitFile = "$out/etc/systemd/system/$baseUnit";
+      if ($flavour eq "nixos") {
+          $baseUnit = "$1\@.$2";
+          $prevUnitFile = "/etc/systemd/system/$baseUnit";
+          $newUnitFile = "$out/etc/systemd/system/$baseUnit";
+      } elsif ($flavour eq "nixup") {
+          #warn "TODO: handle template instances in NixUP";
+      } else {
+          die;
+      }
     }
 
     my $baseName = $baseUnit;
@@ -281,52 +317,58 @@ sub unique {
     return @res;
 }
 
-# Compare the previous and new fstab to figure out which filesystems
-# need a remount or need to be unmounted.  New filesystems are mounted
-# automatically by starting local-fs.target.  FIXME: might be nicer if
-# we generated units for all mounts; then we could unify this with the
-# unit checking code above.
-my ($prevFss, $prevSwaps) = parseFstab "/etc/fstab";
-my ($newFss, $newSwaps) = parseFstab "$out/etc/fstab";
-foreach my $mountPoint (keys %$prevFss) {
-    my $prev = $prevFss->{$mountPoint};
-    my $new = $newFss->{$mountPoint};
-    my $unit = pathToUnitName($mountPoint);
-    if (!defined $new) {
-        # Filesystem entry disappeared, so unmount it.
-        $unitsToStop{$unit} = 1;
-    } elsif ($prev->{fsType} ne $new->{fsType} || $prev->{device} ne $new->{device}) {
-        # Filesystem type or device changed, so unmount and mount it.
-        $unitsToStop{$unit} = 1;
-        $unitsToStart{$unit} = 1;
-        recordUnit($startListFile, $unit);
-    } elsif ($prev->{options} ne $new->{options}) {
-        # Mount options changes, so remount it.
-        $unitsToReload{$unit} = 1;
-        recordUnit($reloadListFile, $unit);
+if ($flavour eq "nixos") {
+    # Compare the previous and new fstab to figure out which filesystems
+    # need a remount or need to be unmounted.  New filesystems are mounted
+    # automatically by starting local-fs.target.  FIXME: might be nicer if
+    # we generated units for all mounts; then we could unify this with the
+    # unit checking code above.
+    my ($prevFss, $prevSwaps) = parseFstab "/etc/fstab";
+    my ($newFss, $newSwaps) = parseFstab "$out/etc/fstab";
+    foreach my $mountPoint (keys %$prevFss) {
+        my $prev = $prevFss->{$mountPoint};
+        my $new = $newFss->{$mountPoint};
+        my $unit = pathToUnitName($mountPoint);
+        if (!defined $new) {
+            # Filesystem entry disappeared, so unmount it.
+            $unitsToStop{$unit} = 1;
+        } elsif ($prev->{fsType} ne $new->{fsType} || $prev->{device} ne $new->{device}) {
+            # Filesystem type or device changed, so unmount and mount it.
+            $unitsToStop{$unit} = 1;
+            $unitsToStart{$unit} = 1;
+            recordUnit($startListFile, $unit);
+        } elsif ($prev->{options} ne $new->{options}) {
+            # Mount options changes, so remount it.
+            $unitsToReload{$unit} = 1;
+            recordUnit($reloadListFile, $unit);
+        }
+    }
+    
+    # Also handles swap devices.
+    foreach my $device (keys %$prevSwaps) {
+        my $prev = $prevSwaps->{$device};
+        my $new = $newSwaps->{$device};
+        if (!defined $new) {
+            # Swap entry disappeared, so turn it off.  Can't use
+            # "systemctl stop" here because systemd has lots of alias
+            # units that prevent a stop from actually calling
+            # "swapoff".
+            print STDERR "stopping swap device: $device\n";
+            system("@utillinux@/sbin/swapoff", $device);
+        }
+        # FIXME: update swap options (i.e. its priority).
     }
 }
 
-# Also handles swap devices.
-foreach my $device (keys %$prevSwaps) {
-    my $prev = $prevSwaps->{$device};
-    my $new = $newSwaps->{$device};
-    if (!defined $new) {
-        # Swap entry disappeared, so turn it off.  Can't use
-        # "systemctl stop" here because systemd has lots of alias
-        # units that prevent a stop from actually calling
-        # "swapoff".
-        print STDERR "stopping swap device: $device\n";
-        system("@utillinux@/sbin/swapoff", $device);
-    }
-    # FIXME: update swap options (i.e. its priority).
-}
-
-
-# Should we have systemd re-exec itself?
-my $prevSystemd = abs_path("/proc/1/exe") // "/unknown";
-my $newSystemd = abs_path("@systemd@/lib/systemd/systemd") or die;
-my $restartSystemd = $prevSystemd ne $newSystemd;
+my $restartSystemd;
+if ($flavour eq "nixos") {
+    # Should we have systemd re-exec itself?
+    my $prevSystemd = abs_path("/proc/1/exe") // "/unknown";
+    my $newSystemd = abs_path("@systemd@/lib/systemd/systemd") or die;
+    $restartSystemd = $prevSystemd ne $newSystemd;
+} else {
+    $restartSystemd = 0;
+};
 
 
 sub filterUnits {
@@ -359,12 +401,12 @@ if ($action eq "dry-activate") {
 }
 
 
-syslog(LOG_NOTICE, "switching to system configuration $out");
+syslog(LOG_NOTICE, "switching to $flavour configuration $out");
 
 if (scalar (keys %unitsToStop) > 0) {
     print STDERR "stopping the following units: ", join(", ", @unitsToStopFiltered), "\n"
         if scalar @unitsToStopFiltered;
-    system("systemctl", "stop", "--", sort(keys %unitsToStop)); # FIXME: ignore errors?
+    system("@systemd@/bin/systemctl", "$flavour{'commandFlag'}", "stop", "--", sort(keys %unitsToStop)); # FIXME: ignore errors?
 }
 
 print STDERR "NOT restarting the following changed units: ", join(", ", sort(keys %unitsToSkip)), "\n"
@@ -379,24 +421,26 @@ system("$out/activate", "$out") == 0 or $res = 2;
 # Restart systemd if necessary.
 if ($restartSystemd) {
     print STDERR "restarting systemd...\n";
-    system("@systemd@/bin/systemctl", "daemon-reexec") == 0 or $res = 2;
+    system("@systemd@/bin/systemctl", "$flavour{'commandFlag'}", "daemon-reexec") == 0 or $res = 2;
 }
 
 # Forget about previously failed services.
-system("@systemd@/bin/systemctl", "reset-failed");
+system("@systemd@/bin/systemctl", "$flavour{'commandFlag'}", "reset-failed");
 
 # Make systemd reload its units.
-system("@systemd@/bin/systemctl", "daemon-reload") == 0 or $res = 3;
+system("@systemd@/bin/systemctl", "$flavour{'commandFlag'}", "daemon-reload") == 0 or $res = 3;
 
-# Set the new tmpfiles
-print STDERR "setting up tmpfiles\n";
-system("@systemd@/bin/systemd-tmpfiles", "--create", "--remove", "--exclude-prefix=/dev") == 0 or $res = 3;
+if ($flavour eq "nixos") {
+    # Set the new tmpfiles
+    print STDERR "setting up tmpfiles\n";
+    system("@systemd@/bin/systemd-tmpfiles", "--create", "--remove", "--exclude-prefix=/dev") == 0 or $res = 3;
+}
 
 # Reload units that need it. This includes remounting changed mount
 # units.
 if (scalar(keys %unitsToReload) > 0) {
     print STDERR "reloading the following units: ", join(", ", sort(keys %unitsToReload)), "\n";
-    system("@systemd@/bin/systemctl", "reload", "--", sort(keys %unitsToReload)) == 0 or $res = 4;
+    system("@systemd@/bin/systemctl", "$flavour{'commandFlag'}", "reload", "--", sort(keys %unitsToReload)) == 0 or $res = 4;
     unlink($reloadListFile);
 }
 
@@ -404,7 +448,7 @@ if (scalar(keys %unitsToReload) > 0) {
 # than stopped and started).
 if (scalar(keys %unitsToRestart) > 0) {
     print STDERR "restarting the following units: ", join(", ", sort(keys %unitsToRestart)), "\n";
-    system("@systemd@/bin/systemctl", "restart", "--", sort(keys %unitsToRestart)) == 0 or $res = 4;
+    system("@systemd@/bin/systemctl", "$flavour{'commandFlag'}", "restart", "--", sort(keys %unitsToRestart)) == 0 or $res = 4;
     unlink($restartListFile);
 }
 
@@ -414,10 +458,38 @@ if (scalar(keys %unitsToRestart) > 0) {
 # that are symlinks to other units.  We shouldn't start both at the
 # same time because we'll get a "Failed to add path to set" error from
 # systemd.
-print STDERR "starting the following units: ", join(", ", @unitsToStartFiltered), "\n"
-    if scalar @unitsToStartFiltered;
-system("@systemd@/bin/systemctl", "start", "--", sort(keys %unitsToStart)) == 0 or $res = 4;
-unlink($startListFile);
+if (scalar(keys %unitsToStart) > 0) {
+    print STDERR "starting the following units: ", join(", ", @unitsToStartFiltered), "\n"
+        if scalar @unitsToStartFiltered;
+    system("@systemd@/bin/systemctl", "$flavour{'commandFlag'}", "start", "--", sort(keys %unitsToStart)) == 0 or $res = 4;
+    unlink($startListFile);
+}
+
+sub getEnabledUnits {
+    # FIXME: use D-Bus or whatever to query this, since parsing the
+    # output of list-units is likely to break.
+    my $lines = `LANG= @systemd@/bin/systemctl $flavour{'commandFlag'} list-unit-files --no-legend --state=enabled`;
+    my $res = {};
+    foreach my $line (split '\n', $lines) {
+        chomp $line;
+        last if $line eq "";
+        $line =~ /^(\S+)\s+(\S+)/ or next;
+        $res->{$1} = 1;
+    }
+    return $res;
+}
+
+if ($flavour eq "nixup") {
+    my $enabledNew = getEnabledUnits;
+    foreach my $enabledUnit (keys %$enabledNew) {
+        my $state = `LANG= @systemd@/bin/systemctl $flavour{'commandFlag'} show --property=ActiveState --value $enabledUnit`;
+        chomp $state;
+        if ($state eq "inactive") {
+            print STDERR "starting the following inactive unit: $enabledUnit\n";
+            system("@systemd@/bin/systemctl", "$flavour{'commandFlag'}", "start", "--", "$enabledUnit") == 0 or $res = 4;
+        }
+    }
+}
 
 
 # Print failed and new units.
@@ -429,7 +501,7 @@ while (my ($unit, $state) = each %{$activeNew}) {
     }
     elsif ($state->{state} eq "auto-restart") {
         # A unit in auto-restart state is a failure *if* it previously failed to start
-        my $lines = `@systemd@/bin/systemctl show '$unit'`;
+        my $lines = `@systemd@/bin/systemctl $flavour{'commandFlag'} show '$unit'`;
         my $info = {};
         parseKeyValues($info, split("\n", $lines));
 
@@ -449,15 +521,15 @@ if (scalar @failed > 0) {
     print STDERR "warning: the following units failed: ", join(", ", sort(@failed)), "\n";
     foreach my $unit (@failed) {
         print STDERR "\n";
-        system("COLUMNS=1000 @systemd@/bin/systemctl status --no-pager '$unit' >&2");
+        system("COLUMNS=1000 @systemd@/bin/systemctl $flavour{'commandFlag'} status --no-pager '$unit' >&2");
     }
     $res = 4;
 }
 
 if ($res == 0) {
-    syslog(LOG_NOTICE, "finished switching to system configuration $out");
+    syslog(LOG_NOTICE, "finished switching to $flavour configuration $out");
 } else {
-    syslog(LOG_ERR, "switching to system configuration $out failed (status $res)");
+    syslog(LOG_ERR, "switching to $flavour configuration $out failed (status $res)");
 }
 
 exit $res;
