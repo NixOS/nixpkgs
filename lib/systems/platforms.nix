@@ -183,11 +183,8 @@ rec {
     };
   };
 
-  raspberrypi2 = armv7l-hf-multiplatform // {
-    name = "raspberrypi2";
-    kernelAutoModules = false;
-    kernelTarget = "zImage";
-  };
+  # Legacy attribute, for compatibility with existing configs only.
+  raspberrypi2 = armv7l-hf-multiplatform;
 
   scaleway-c1 = armv7l-hf-multiplatform // {
     gcc = {
