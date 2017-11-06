@@ -16361,6 +16361,8 @@ with pkgs;
 
   recode = callPackage ../tools/text/recode { };
 
+  rednotebook = python3Packages.callPackage ../applications/editors/rednotebook { };
+
   remotebox = callPackage ../applications/virtualization/remotebox { };
 
   retroshare = libsForQt5.callPackage ../applications/networking/p2p/retroshare { };

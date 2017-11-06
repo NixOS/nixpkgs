@@ -1,22 +1,37 @@
-{ lib, buildPythonPackage, fetchurl, pygtk, pywebkitgtk, pyyaml, chardet }:
+{ lib, buildPythonApplication, fetchFromGitHub
+, gdk_pixbuf, glib, gtk3, pango, webkitgtk
+, pygobject3, pyyaml
+}:
 
-buildPythonPackage rec {
-  name = "rednotebook-1.8.1";
+buildPythonApplication rec {
+  name = "rednotebook-${version}";
+  version = "2.3";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/rednotebook/${name}.tar.gz";
-    sha256 = "00b7s4xpqpxsbzjvjx9qsx5d84m9pvn383c5di1nsfh35pig0rzn";
+  src = fetchFromGitHub {
+    owner = "jendrikseipp";
+    repo = "rednotebook";
+    rev = "v${version}";
+    sha256 = "0zkfid104hcsf20r6829v11wxdghqkd3j1zbgyvd1s7q4nxjn5lj";
   };
 
-  # no tests available
+  # We have not packaged tests.
   doCheck = false;
 
-  propagatedBuildInputs = [ pygtk pywebkitgtk pyyaml chardet ];
+  propagatedBuildInputs = [
+    gdk_pixbuf glib gtk3 pango webkitgtk
+    pygobject3 pyyaml
+  ];
+
+  makeWrapperArgs = [
+    "--set GI_TYPELIB_PATH $GI_TYPELIB_PATH"
+    "--prefix XDG_DATA_DIRS : $out/share"
+    "--suffix XDG_DATA_DIRS : $XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+  ];
 
   meta = with lib; {
-    homepage = http://rednotebook.sourceforge.net/index.html;
+    homepage = http://rednotebook.sourceforge.net/;
     description = "A modern journal that includes a calendar navigation, customizable templates, export functionality and word clouds";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ tstrobel ];
+    maintainers = with maintainers; [ orivej tstrobel ];
   };
 }
