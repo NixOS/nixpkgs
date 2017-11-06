@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, yacc, flex, xkeyboard_config, libxcb, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "libxkbcommon-0.7.1";
+  name = "libxkbcommon-0.7.2";
 
   src = fetchurl {
     url = "http://xkbcommon.org/download/${name}.tar.xz";
-    sha256 = "ba59305d2e19e47c27ea065c2e0df96ebac6a3c6e97e28ae5620073b6084e68b";
+    sha256 = "1n5rv5n210kjnkyrvbh04gfwaa7zrmzy1393p8nyqfw66lkxr918";
   };
 
   outputs = [ "out" "dev" ];

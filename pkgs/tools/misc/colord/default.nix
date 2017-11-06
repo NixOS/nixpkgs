@@ -1,51 +1,44 @@
 { stdenv, fetchurl, bash-completion
-, glib, polkit, pkgconfig, intltool, gusb, libusb1, lcms2, sqlite, systemd, dbus
-, gtk_doc, gobjectIntrospection, argyllcms, autoreconfHook
+, glib, polkit, pkgconfig, gettext, gusb, lcms2, sqlite, systemd, dbus
+, gobjectIntrospection, argyllcms, meson, ninja, libxml2, vala_0_38
 , libgudev, sane-backends }:
 
 stdenv.mkDerivation rec {
-  name = "colord-1.2.12";
+  name = "colord-1.4.1";
 
   src = fetchurl {
     url = "http://www.freedesktop.org/software/colord/releases/${name}.tar.xz";
-    sha256 = "0flcsr148xshjbff030pgyk9ar25an901m9q1pjgjdvaq5j1h96m";
+    sha256 = "0m854clp8szvq38z16jpazzlqfb3lb3icxcfnsisfrc25748y1ib";
   };
 
   enableParallelBuilding = true;
 
-  # Version mismatch requires intltoolize to overwrite
-  # with newer version.
-  preConfigure = ''
-    intltoolize --force
-  '';
-
-  configureFlags = [
-    "--enable-sane"
-    "--with-udevrulesdir=$(out)/lib/udev/rules.d"
-    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+  mesonFlags = [
+    "-Denable-sane=true"
+    "-Denable-vala=true"
     "--localstatedir=/var"
-    "--disable-bash-completion"
+    "-Denable-bash-completion=true"
+    # TODO: man page cannot be build with docbook2x
+    "-Denable-man=false"
+    "-Denable-docs=false"
   ];
 
+  patches = [
+    ./fix-build-paths.patch
+  ];
 
-  # don't touch /var at install time, colord creates what it needs at runtime
-  postPatch = ''
-    sed -e "s|if test -w .*;|if false;|" -i src/Makefile.{am,in}
-  '';
+  nativeBuildInputs = [ meson pkgconfig vala_0_38 ninja gettext libxml2 gobjectIntrospection ];
 
-  nativeBuildInputs = [ autoreconfHook intltool pkgconfig ];
-
-  buildInputs = [ glib polkit gusb libusb1 lcms2 sqlite systemd dbus gobjectIntrospection
+  buildInputs = [ glib polkit gusb lcms2 sqlite systemd dbus
                   bash-completion argyllcms libgudev sane-backends ];
 
   postInstall = ''
-    mkdir -p $out/etc/bash_completion.d
-    cp -v data/colormgr $out/etc/bash_completion.d
+    glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
   meta = {
     description = "System service to manage, install and generate color profiles to accurately color manage input and output devices";
-    homepage = http://www.freedesktop.org/software/colord/intro.html;
+    homepage = https://www.freedesktop.org/software/colord/;
     license = stdenv.lib.licenses.lgpl2Plus;
     maintainers = [stdenv.lib.maintainers.marcweber];
     platforms = stdenv.lib.platforms.linux;

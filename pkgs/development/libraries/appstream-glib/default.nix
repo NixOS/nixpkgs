@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gettext, gtk3, intltool, glib
-, gtk_doc, autoconf, automake, libtool, libarchive
-, gobjectIntrospection, sqlite, libsoup, gcab, attr, acl, docbook_xsl
-, libuuid, json_glib, autoconf-archive, meson, gperf, ninja, gdk_pixbuf
+{ stdenv, fetchFromGitHub, pkgconfig, gettext, gtk3, glib
+, gtk_doc, libarchive, gobjectIntrospection
+, sqlite, libsoup, gcab, attr, acl, docbook_xsl
+, libuuid, json_glib, meson, gperf, ninja
 }:
 stdenv.mkDerivation rec {
   name = "appstream-glib-0.7.2";

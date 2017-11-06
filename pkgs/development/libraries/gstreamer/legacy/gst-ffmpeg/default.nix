@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     urls = [
-      "http://gstreamer.freedesktop.org/src/gst-ffmpeg/${name}.tar.bz2"
+      "https://gstreamer.freedesktop.org/src/gst-ffmpeg/${name}.tar.bz2"
       "mirror://gentoo/distfiles/${name}.tar.bz2"
       ];
     sha256 = "0qmvgwcfybci78sd73mhvm4bsb7l0xsk9yljrgik80g011ds1z3n";
