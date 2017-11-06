@@ -37,7 +37,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 9.11
+  # LTS Haskell 9.12
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -327,7 +327,7 @@ default-package-overrides:
   - c2hs ==0.28.2
   - Cabal ==1.24.2.0
   - cabal-dependency-licenses ==0.2.0.0
-  - cabal-doctest ==1.0.2
+  - cabal-doctest ==1.0.3
   - cabal-file-th ==0.2.4
   - cabal-helper ==0.7.3.0
   - cabal-rpm ==0.11.2
@@ -363,7 +363,7 @@ default-package-overrides:
   - cheapskate-highlight ==0.1.0.0
   - cheapskate-lucid ==0.1.0.0
   - check-email ==1.0.2
-  - checkers ==0.4.7
+  - checkers ==0.4.9.5
   - chell ==0.4.0.1
   - choice ==0.2.2
   - chunked-data ==0.3.0
@@ -678,7 +678,7 @@ default-package-overrides:
   - fail ==4.9.0.0
   - farmhash ==0.1.0.5
   - fasta ==0.10.4.2
-  - fast-builder ==0.0.0.6
+  - fast-builder ==0.0.1.0
   - fast-digits ==0.2.1.0
   - fast-logger ==2.4.10
   - fast-math ==1.0.2
@@ -985,6 +985,7 @@ default-package-overrides:
   - haskell-src ==1.0.2.0
   - haskell-src-exts ==1.18.2
   - haskell-src-exts-simple ==1.19.0.0
+  - haskell-src-exts-util ==0.2.1.2
   - haskell-src-meta ==0.8.0.1
   - haskell-tools-ast ==0.8.1.0
   - haskell-tools-backend-ghc ==0.8.1.0
@@ -996,11 +997,11 @@ default-package-overrides:
   - haskell-tools-refactor ==0.8.1.0
   - haskell-tools-rewrite ==0.8.1.0
   - haskintex ==0.7.0.1
-  - hasmin ==0.3.3
+  - hasmin ==0.3.3.1
   - hasql ==0.19.18.2
   - hasql-migration ==0.1.3
-  - hasql-pool ==0.4.2.1
-  - hasql-transaction ==0.5.1
+  - hasql-pool ==0.4.3
+  - hasql-transaction ==0.5.2
   - hastache ==0.6.1
   - hasty-hamiltonian ==1.3.0
   - HaTeX ==3.17.3.1
@@ -1054,7 +1055,7 @@ default-package-overrides:
   - hjsonschema ==1.6.3
   - hlibgit2 ==0.18.0.16
   - hlibsass ==0.1.6.1
-  - hlint ==2.0.9
+  - hlint ==2.0.10
   - hmatrix ==0.18.0.0
   - hmatrix-gsl ==0.18.0.1
   - hmatrix-gsl-stats ==0.4.1.7
@@ -1154,7 +1155,7 @@ default-package-overrides:
   - http-types ==0.9.1
   - human-readable-duration ==0.2.0.3
   - HUnit ==1.5.0.0
-  - HUnit-approx ==1.1
+  - HUnit-approx ==1.1.1.1
   - hunit-dejafu ==0.6.0.0
   - hvect ==0.4.0.0
   - hw-balancedparens ==0.1.0.2
@@ -1199,7 +1200,7 @@ default-package-overrides:
   - imm ==1.2.0.0
   - immortal ==0.2.2.1
   - include-file ==0.1.0.3
-  - incremental-parser ==0.2.5.1
+  - incremental-parser ==0.2.5.2
   - indentation-core ==0.0.0.1
   - indentation-parsec ==0.0.0.1
   - indents ==0.4.0.0
@@ -1265,7 +1266,7 @@ default-package-overrides:
   - json-schema ==0.7.4.1
   - json-stream ==0.4.1.5
   - JuicyPixels ==3.2.8.3
-  - JuicyPixels-extra ==0.2.1
+  - JuicyPixels-extra ==0.2.2
   - JuicyPixels-scale-dct ==0.1.1.2
   - jvm ==0.2.2
   - jvm-streaming ==0.2
@@ -1284,7 +1285,7 @@ default-package-overrides:
   - kraken ==0.0.3
   - l10n ==0.1.0.1
   - labels ==0.3.3
-  - lackey ==0.4.4
+  - lackey ==0.4.5
   - lame ==0.1.1
   - language-c ==0.6.1
   - language-c-quote ==0.12.1
@@ -1372,7 +1373,7 @@ default-package-overrides:
   - machines-io ==0.2.0.13
   - machines-process ==0.2.0.8
   - magic ==1.1
-  - magicbane ==0.1.1
+  - magicbane ==0.1.2
   - mainland-pretty ==0.6.1
   - makefile ==1.0.0.4
   - managed ==1.0.5
@@ -1468,9 +1469,9 @@ default-package-overrides:
   - monoid-extras ==0.4.2
   - monoid-subclasses ==0.4.4
   - monoid-transformer ==0.0.3
-  - mono-traversable ==1.0.2.1
+  - mono-traversable ==1.0.4.0
   - mono-traversable-instances ==0.1.0.0
-  - morte ==1.6.10
+  - morte ==1.6.11
   - mountpoints ==1.0.2
   - mstate ==0.2.7
   - mtl ==2.2.1
@@ -1566,7 +1567,7 @@ default-package-overrides:
   - Only ==0.1
   - oo-prototypes ==0.1.0.0
   - opaleye ==0.5.4.0
-  - opaleye-trans ==0.3.6
+  - opaleye-trans ==0.3.7
   - OpenAL ==1.7.0.4
   - open-browser ==0.2.1.0
   - openexr-write ==0.1.0.1
@@ -1584,7 +1585,7 @@ default-package-overrides:
   - optparse-applicative ==0.13.2.0
   - optparse-generic ==1.2.2
   - optparse-helper ==0.2.1.1
-  - optparse-simple ==0.0.3
+  - optparse-simple ==0.0.4
   - optparse-text ==0.1.1.0
   - osdkeys ==0.0
   - overloaded-records ==0.4.2.0
@@ -1689,14 +1690,14 @@ default-package-overrides:
   - posix-realtime ==0.0.0.4
   - postgresql-binary ==0.12.1
   - postgresql-libpq ==0.9.3.1
-  - postgresql-schema ==0.1.11
+  - postgresql-schema ==0.1.13
   - postgresql-simple ==0.5.3.0
   - postgresql-simple-migration ==0.1.11.0
   - postgresql-simple-opts ==0.2.0.2
   - postgresql-simple-queue ==0.5.1.1
   - postgresql-simple-url ==0.2.0.0
   - postgresql-transactional ==1.1.1
-  - postgresql-typed ==0.5.1
+  - postgresql-typed ==0.5.2
   - post-mess-age ==0.2.1.0
   - pqueue ==1.3.2.3
   - prednote ==0.36.0.4
@@ -1784,7 +1785,7 @@ default-package-overrides:
   - rank-product ==0.2.0.1
   - Rasterific ==0.7.2.1
   - rasterific-svg ==0.3.3
-  - ratel ==0.3.6
+  - ratel ==0.3.7
   - ratel-wai ==0.2.0
   - rattletrap ==2.5.0
   - rawfilepath ==0.2.4
@@ -2138,7 +2139,7 @@ default-package-overrides:
   - terminal-progress-bar ==0.1.1.1
   - terminal-size ==0.3.2.1
   - terminfo ==0.4.1.0
-  - test-fixture ==0.5.0.2
+  - test-fixture ==0.5.1.0
   - test-framework ==0.8.1.1
   - test-framework-hunit ==0.3.0.2
   - test-framework-quickcheck2 ==0.3.0.4
@@ -2274,7 +2275,7 @@ default-package-overrides:
   - unit-constraint ==0.0.0
   - units ==2.4
   - units-defs ==2.0.1.1
-  - units-parser ==0.1.0.1
+  - units-parser ==0.1.1
   - universe ==1.0
   - universe-base ==1.0.2.1
   - universe-instances-base ==1.0
@@ -2449,12 +2450,12 @@ default-package-overrides:
   - xml-types ==0.3.6
   - xmonad ==0.13
   - xmonad-contrib ==0.13
-  - xmonad-extras ==0.13.1
+  - xmonad-extras ==0.13.2
   - xss-sanitize ==0.3.5.7
   - xturtle ==0.2.0.0
   - yackage ==0.8.1
   - yahoo-finance-api ==0.2.0.2
-  - yaml ==0.8.23.3
+  - yaml ==0.8.24
   - Yampa ==0.10.6.2
   - YampaSynth ==0.2
   - yesod ==1.4.5
