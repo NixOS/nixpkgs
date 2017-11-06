@@ -1,33 +1,38 @@
-{ stdenv, fetchurl, freetds, readline }:
+{ stdenv, fetchurl, autoreconfHook, freetds, readline }:
 
-stdenv.mkDerivation rec {
-  version = "2.5.16.1";
+let
+  mainVersion = "2.5";
+
+in stdenv.mkDerivation rec {
   name = "sqsh-${version}";
+  version = "${mainVersion}.16.1";
 
   src = fetchurl {
-    url = "http://www.mirrorservice.org/sites/downloads.sourceforge.net/s/sq/sqsh/sqsh/sqsh-2.5/${name}.tgz";
+    url    = "mirror://sourceforge/sqsh/sqsh/sqsh-${mainVersion}/${name}.tgz";
     sha256 = "1wi0hdmhk7l8nrz4j3kaa177mmxyklmzhj7sq1gj4q6fb8v1yr6n";
   };
 
-  preConfigure =
-    ''
+  preConfigure = ''
     export SYBASE=${freetds}
-    '';
 
-  buildInputs = [
-    freetds
-    readline
-  ];
+    substituteInPlace src/cmd_connect.c \
+      --replace CS_TDS_80 CS_TDS_73
+  '';
 
-  meta = {
+  enableParallelBuilding = true;
+
+  buildInputs = [ freetds readline ];
+
+  nativeBuildInputs = [ autoreconfHook ];
+
+  meta = with stdenv.lib; {
     description = "Command line tool for querying Sybase/MSSQL databases";
-    longDescription = 
-      ''
+    longDescription = ''
       Sqsh (pronounced skwish) is short for SQshelL (pronounced s-q-shell),
       it is intended as a replacement for the venerable 'isql' program supplied
       by Sybase.
-      '';
-    homepage = http://www.cs.washington.edu/~rose/sqsh/sqsh.html;
-    platforms = stdenv.lib.platforms.all;
+    '';
+    homepage = http://sourceforge.net/projects/sqsh/;
+    platforms = platforms.all;
   };
 }
