@@ -72,7 +72,7 @@ let
       description = "C extension module for Lua which adds bitwise operations on numbers";
       homepage = "http://bitop.luajit.org";
       license = licenses.mit;
-      maintainers = with maintainers; [ flosse ];
+      maintainers = with maintainers; [ ];
     };
   };
 
