@@ -30,7 +30,7 @@
   <section>
     <title>Platform parameters</title>
     <para>
-      Nixpkgs follows the the <link xlink:href="https://gcc.gnu.org/onlinedocs/gccint/Configure-Terms.html">common historical convention of GNU autoconf</link> of distinguishing between 3 types of platform: <wordasword>build</wordasword>, <wordasword>host</wordasword>, and <wordasword>target</wordasword>.
+      Nixpkgs follows the <link xlink:href="https://gcc.gnu.org/onlinedocs/gccint/Configure-Terms.html">common historical convention of GNU autoconf</link> of distinguishing between 3 types of platform: <wordasword>build</wordasword>, <wordasword>host</wordasword>, and <wordasword>target</wordasword>.
 
       In summary, <wordasword>build</wordasword> is the platform on which a package is being built, <wordasword>host</wordasword> is the platform on which it is to run. The third attribute, <wordasword>target</wordasword>, is relevant only for certain specific compilers and build tools.
     </para>
@@ -65,7 +65,7 @@
             It can be safely ignored for all other packages.
           </para>
           <para>
-            The build process of certain compilers is written in such a way such that the compiler resulting from a single build can itself only produce binaries for a single platform.
+            The build process of certain compilers is written in such a way that the compiler resulting from a single build can itself only produce binaries for a single platform.
             The task specifying this single "target platform" is thus pushed to build time of the compiler.
             The root cause of this mistake is often that the compiler (which will be run on the host) and the the standard library/runtime (which will be run on the target) are built by a single build process.
           </para>
