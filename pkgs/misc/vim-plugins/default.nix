@@ -3,7 +3,7 @@
 , which, fetchgit, llvmPackages
 , xkb_switch, rustracerd, fzf
 , python3, boost, icu
-, ycmd
+, ycmd, makeWrapper, rake
 , pythonPackages, python3Packages
 , Cocoa ? null, git
 }:
@@ -1903,18 +1903,17 @@ rec {
   };
 
   command-t = buildVimPluginFrom2Nix { # created by nix#NixDerivation
-    name = "command-t-2017-06-23";
+    name = "command-t-2017-09-29";
     src = fetchgit {
       url = "https://github.com/wincent/command-t";
-      rev = "29f2606a9665058a98b56f2d8062ba614a3f246e";
-      sha256 = "0q6kqjy88w1478k2q6vqyyid69whd72746i0cd33xnslgykwm2hn";
+      rev = "c5882de56f0ca3ce8e891c434f192519aca5c7bb";
+      sha256 = "0dbghh7fwy49zyjick7840dkbybqchjw2sg9c6p0kmp5w3j46b92";
     };
     dependencies = [];
-    buildInputs = [ perl ruby git ];
+    buildInputs = [ ruby rake ];
     buildPhase = ''
-      pushd ruby/command-t
-      gem build ./command-t.gemspec
-      popd
+      rake make
+      rm ruby/command-t/ext/command-t/*.o
     '';
   };
 
