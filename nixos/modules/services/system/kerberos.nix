@@ -60,5 +60,4 @@ in
       script = "${heimdalFull}/libexec/heimdal/kpasswdd";
     };
   };
-
 }
