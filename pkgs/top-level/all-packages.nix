@@ -3056,6 +3056,8 @@ with pkgs;
 
   ninka = callPackage ../development/tools/misc/ninka { };
 
+  nixup-tools = callPackage ../applications/misc/nixup-tools { };
+
   nodejs = hiPrio nodejs-6_x;
 
   nodejs-slim = nodejs-slim-6_x;
