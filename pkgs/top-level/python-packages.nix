@@ -8991,7 +8991,7 @@ in {
     };
   };
 
-  fuse = callPackage ../development/python-modules/python-fuse { };
+  fuse = callPackage ../development/python-modules/python-fuse { fuse = pkgs.fuse; };
 
   fusepy = buildPythonPackage rec {
     name = "fusepy-2.0.4";
