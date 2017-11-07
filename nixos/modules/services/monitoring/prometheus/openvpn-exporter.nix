@@ -19,7 +19,7 @@ in {
 
       listenPort = mkOption {
         type = types.int;
-        default = 9167;
+        default = 9176;
         description = ''
           Port to listen on for web interface and telemetry.
         '';
