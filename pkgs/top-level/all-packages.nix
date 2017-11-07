@@ -7484,6 +7484,8 @@ with pkgs;
 
   premake = premake4;
 
+  procodile = callPackage ../tools/system/procodile { };
+
   qtcreator = libsForQt5.callPackage ../development/qtcreator { };
 
   r10k = callPackage ../tools/system/r10k { };
