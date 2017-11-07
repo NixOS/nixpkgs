@@ -15489,8 +15489,10 @@ with pkgs;
 
   llpp = ocaml-ng.ocamlPackages.callPackage ../applications/misc/llpp { };
 
-  lmms = callPackage ../applications/audio/lmms {
-    stdenv = overrideCC stdenv gcc5;
+  lmms = libsForQt5.callPackage ../applications/audio/lmms {
+    lame = null;
+    libsoundio = null;
+    portaudio = null;
   };
 
   loxodo = callPackage ../applications/misc/loxodo { };
