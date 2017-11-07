@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, help2man, fuse, pam,
-  debugBuild ? false }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, help2man, fuse, pam
+, enableDebugBuild ? false }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig help2man autoreconfHook ];
   buildInputs = [ fuse pam ];
 
-  preConfigure = stdenv.lib.optionalString debugBuild ''
+  preConfigure = stdenv.lib.optionalString enableDebugBuild ''
     sed -i 's,#AM_CFLAGS += -DDEBUG,AM_CFLAGS += -DDEBUG,' Makefile.am
   '';
 
