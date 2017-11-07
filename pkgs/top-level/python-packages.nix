@@ -1329,6 +1329,7 @@ in {
       maintainers = with maintainers; [ pSub ];
     };
   };
+  betamax-serializers = callPackage ../development/python-modules/betamax-serializers { };
 
   bibtexparser = callPackage ../development/python-modules/bibtexparser { };
 
