@@ -21809,30 +21809,7 @@ EOF
     };
   };
 
-  testfixtures = buildPythonPackage rec {
-    name = "testfixtures-${version}";
-    version = "4.5.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/testfixtures/testfixtures-${version}.tar.gz";
-      sha256 = "0my8zq9d27mc7j78pz9971cn5wz6zi4vxlqa50szr2vq9j2xxkll";
-    };
-
-    buildInputs = with self; [ nose mock manuel ];
-
-    checkPhase = ''
-      nosetests -v
-    '';
-
-    # Test suite seems broken
-    # TypeError: TestSuite() missing 1 required positional argument: 'm'
-    # Haven't checked with newer version
-    doCheck = false;
-
-    meta = with stdenv.lib; {
-      homepage = "https://github.com/Simplistix/testfixtures";
-    };
-  };
+  testfixtures = callPackage ../development/python-modules/testfixtures {};
 
   tissue = buildPythonPackage rec {
     name = "tissue-0.9.2";
