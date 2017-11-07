@@ -19733,6 +19733,8 @@ in {
     };
   };
 
+  sybil = callPackage ../development/python-modules/sybil { };
+
   syncthing-gtk = buildPythonPackage rec {
     version = "0.9.2.3";
     name = "syncthing-gtk-${version}";
