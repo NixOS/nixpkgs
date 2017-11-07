@@ -31,8 +31,6 @@ in {
     systemd.services.lxcfs = {
       description = "FUSE filesystem for LXC";
       wantedBy = [ "multi-user.target" ];
-      requires = [ "cgmanager.service" ];
-      after = [ "cgmanager.service" ];
       before = [ "lxc.service" ];
       restartIfChanged = false;
       serviceConfig = {
