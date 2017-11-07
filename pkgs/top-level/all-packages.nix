@@ -20204,6 +20204,8 @@ with pkgs;
 
   megam = callPackage ../applications/science/misc/megam { };
 
+  ns-3 = callPackage ../development/libraries/science/networking/ns3 { };
+
   root = callPackage ../applications/science/misc/root {
     inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL;
   };
