@@ -63,6 +63,15 @@ following incompatible changes:</para>
       pass literal dollar signs through Postfix, double them.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The <literal>postage</literal> package (for web-based PostgreSQL
+      administration) has been renamed to <literal>pgmanage</literal>. The
+      corresponding module has also been renamed. To migrate please rename all
+      <option>services.postage</option> options to
+      <option>services.pgmanage</option>.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>

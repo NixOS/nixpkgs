@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, which, curl, makeWrapper }:
 
 let
   rev = "77686b3dfa20a34270cc52377c8e37c3a461e484";
@@ -17,9 +17,13 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
+  buildInputs = [ makeWrapper ];
+
   installPhase = ''
     mkdir -p $out/bin
     install bin/sbt $out/bin
+
+    wrapProgram $out/bin/sbt --prefix PATH : ${stdenv.lib.makeBinPath [ which curl]}
   '';
 
   meta = {

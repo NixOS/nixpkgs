@@ -7,8 +7,8 @@
 }:
 
 let
-    version = "2.0.46";
-    inherit (python2Packages) python wrapPython sqlalchemy pyaudio beautifulsoup httplib2 matplotlib pyqt4;
+    version = "2.0.47";
+    inherit (python2Packages) python wrapPython sqlalchemy pyaudio beautifulsoup4 httplib2 matplotlib pyqt4;
     qt4 = pyqt4.qt;
 in
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       sha256 = "01h51rbnj0r6lmjnn2vzxzaf7mxkc0azmg1v4mvf4pkpsp50a7hr";
     };
 
-    pythonPath = [ pyqt4 sqlalchemy pyaudio beautifulsoup httplib2 ]
+    pythonPath = [ pyqt4 sqlalchemy pyaudio beautifulsoup4 httplib2 ]
               ++ lib.optional plotsSupport matplotlib;
 
     buildInputs = [ python wrapPython lame mplayer libpulseaudio ];

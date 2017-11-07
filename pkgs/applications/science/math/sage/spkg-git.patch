@@ -1,10 +1,12 @@
---- old/build/pkgs/git/spkg-install	2015-07-26 15:34:43.000000000 +0200
-+++ new/build/pkgs/git/spkg-install	2015-09-17 08:28:03.586657451 +0200
-@@ -45,6 +45,8 @@
-     fi
- done
+diff --git a/build/pkgs/git/spkg-install b/build/pkgs/git/spkg-install
+index 8469cb58c2..d0dc9a1db9 100755
+--- a/build/pkgs/git/spkg-install
++++ b/build/pkgs/git/spkg-install
+@@ -35,6 +35,8 @@ fi
  
-+find . -exec sed -e 's@/usr/bin/perl@perl@g' -i '{}' ';'
+ cd src
+ 
++find . -type f -exec sed -e 's@/usr/bin/perl@perl@g' -i '{}' ';'
 +
  # We don't want to think about Fink or Macports
  export NO_FINK=1

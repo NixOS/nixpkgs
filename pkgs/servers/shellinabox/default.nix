@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://code.google.com/p/shellinabox;
+    homepage = https://github.com/shellinabox/shellinabox;
     description = "Web based AJAX terminal emulator";
     license = licenses.gpl2;
     maintainers = with maintainers; [ tomberek lihop ];

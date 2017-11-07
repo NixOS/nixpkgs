@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, mono, makeWrapper, lua
 , SDL2, freetype, openal, systemd, pkgconfig,
-  dotnetPackages, gnome3, curl, unzip, which
+  dotnetPackages, gnome3, curl, unzip, which, python
 }:
 
 stdenv.mkDerivation rec {
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   postInstall = with stdenv.lib; let
     runtime = makeLibraryPath [ SDL2 freetype openal systemd lua ];
-    binaries= makeBinPath [ which mono gnome3.zenity ];
+    binaries= makeBinPath [ which mono gnome3.zenity python ];
   in ''
     wrapProgram $out/lib/openra/launch-game.sh \
       --prefix PATH : "${binaries}" \

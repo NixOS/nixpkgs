@@ -10,7 +10,7 @@ let
     #! ${pkgs.stdenv.shell}
     ${cfg.extraSessionCommands}
     PATH="${sway}/bin:$PATH"
-    exec ${pkgs.dbus.dbus-launch} --exit-with-session "${sway}/bin/sway"
+    exec ${pkgs.dbus.dbus-launch} --exit-with-session sway-setcap
   '';
   swayJoined = pkgs.symlinkJoin {
     name = "sway-wrapped";
@@ -53,7 +53,8 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ swayJoined ] ++ cfg.extraPackages;
     security.wrappers.sway = {
-      source = "${swayJoined}/bin/sway";
+      program = "sway-setcap";
+      source = "${sway}/bin/sway";
       capabilities = "cap_sys_ptrace,cap_sys_tty_config=eip";
       owner = "root";
       group = "sway";

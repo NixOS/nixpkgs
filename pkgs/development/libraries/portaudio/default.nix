@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libjack2 ]
     ++ stdenv.lib.optional (!stdenv.isDarwin) alsaLib;
 
-  configureFlags = [ "--disable-mac-universal" ];
+  configureFlags = [ "--disable-mac-universal --enable-cxx" ];
 
   propagatedBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ AudioUnit AudioToolbox CoreAudio CoreServices Carbon ];
 

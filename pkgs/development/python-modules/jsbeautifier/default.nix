@@ -3,7 +3,7 @@
 buildPythonApplication rec {
   pname = "jsbeautifier";
   version = "1.7.4";
-  name = "jsbeautifier-1.6.14";
+  name = "${pname}-${version}";
 
   propagatedBuildInputs = [ six ];
 

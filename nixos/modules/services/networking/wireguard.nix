@@ -195,6 +195,7 @@ let
         description = "WireGuard Tunnel - ${name}";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
+        environment.DEVICE = name;
 
         serviceConfig = {
           Type = "oneshot";

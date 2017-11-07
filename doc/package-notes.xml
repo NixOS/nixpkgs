@@ -664,4 +664,34 @@ cp ${myEmacsConfig} $out/share/emacs/site-lisp/default.el
 
 </section>
 
+<section xml:id="sec-weechat">
+<title>Weechat</title>
+<para>
+Weechat can currently be configured to include your choice of plugins.
+To make use of this functionality, install an expression that overrides its configuration such as
+<programlisting>weechat.override {configure = {availablePlugins, ...}: {
+        plugins = with availablePlugins; [ python perl ];
+    }
+}</programlisting>
+</para>
+<para>
+The plugins currently available are <literal>python</literal>,
+<literal>perl</literal>, <literal>ruby</literal>, <literal>guile</literal>,
+<literal>tcl</literal> and <literal>lua</literal>.
+</para>
+<para>
+The python plugin allows the addition of extra libraries. For instance,
+the <literal>inotify.py</literal> script in weechat-scripts requires
+D-Bus or libnotify, and the <literal>fish.py</literal> script requires
+pycrypto. To use these scripts, use the <literal>python</literal>
+plugin's <literal>withPackages</literal> attribute:
+<programlisting>weechat.override {configure = {availablePlugins, ...}: {
+    plugins = with availablePlugins; [
+            (python.withPackages (ps: with ps; [ pycrypto python-dbus ]))
+        ];
+    }
+}
+</programlisting>
+</para>
+</section>
 </chapter>

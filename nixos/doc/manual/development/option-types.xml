@@ -23,10 +23,6 @@
         <literal>false</literal>.</para></listitem>
   </varlistentry>
   <varlistentry>
-    <term><varname>types.int</varname></term>
-    <listitem><para>An integer.</para></listitem>
-  </varlistentry>
-  <varlistentry>
     <term><varname>types.path</varname></term>
     <listitem><para>A filesystem path, defined as anything that when coerced to 
         a string starts with a slash. Even if derivations can be considered as 
@@ -39,7 +35,59 @@
   </varlistentry>
 </variablelist>
 
-<para>String related types:</para>
+<para>Integer-related types:</para>
+
+<variablelist>
+  <varlistentry>
+    <term><varname>types.int</varname></term>
+    <listitem><para>A signed integer.</para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>
+      <varname>types.ints.{s8, s16, s32}</varname>
+    </term>
+    <listitem>
+      <para>Signed integers with a fixed length (8, 16 or 32 bits).
+        They go from
+        <inlineequation><mathphrase>−2<superscript>n</superscript>/2</mathphrase>
+        </inlineequation> to <inlineequation>
+        <mathphrase>2<superscript>n</superscript>/2−1</mathphrase>
+        </inlineequation>
+        respectively (e.g. <literal>−128</literal> to <literal>127</literal>
+        for 8 bits).
+    </para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>
+      <varname>types.ints.unsigned</varname>
+    </term>
+    <listitem><para>An unsigned integer (that is >= 0).
+    </para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>
+      <varname>types.ints.{u8, u16, u32}</varname>
+    </term>
+    <listitem>
+      <para>Unsigned integers with a fixed length (8, 16 or 32 bits).
+        They go from
+        <inlineequation><mathphrase>0</mathphrase></inlineequation> to <inlineequation>
+        <mathphrase>2<superscript>n</superscript>−1</mathphrase>
+        </inlineequation>
+        respectively (e.g. <literal>0</literal> to <literal>255</literal>
+        for 8 bits).
+    </para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>
+      <varname>types.ints.positive</varname>
+    </term>
+    <listitem><para>A positive integer (that is > 0).
+    </para></listitem>
+  </varlistentry>
+</variablelist>
+
+<para>String-related types:</para>
 
 <variablelist>
   <varlistentry>
@@ -68,7 +116,7 @@
 
  <section><title>Value Types</title>
 
-   <para>Value types are type that take a value parameter.</para>
+   <para>Value types are types that take a value parameter.</para>
 
 <variablelist>
   <varlistentry>
@@ -83,6 +131,17 @@
     <listitem><para>A string with a custom separator
         <replaceable>sep</replaceable>, e.g. <literal>types.separatedString
           "|"</literal>.</para></listitem>
+  </varlistentry>
+  <varlistentry>
+    <term>
+      <varname>types.ints.between</varname>
+      <replaceable>lowest</replaceable>
+      <replaceable>highest</replaceable>
+    </term>
+    <listitem><para>An integer between <replaceable>lowest</replaceable>
+        and <replaceable>highest</replaceable> (both inclusive).
+        Useful for creating types like <literal>types.port</literal>.
+    </para></listitem>
   </varlistentry>
   <varlistentry>
     <term><varname>types.submodule</varname> <replaceable>o</replaceable></term>

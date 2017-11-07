@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
   meta = with stdenv.lib; {
     description = "Real-time data (de)compression library";

@@ -28,7 +28,7 @@ in {
       description = "Keybase service";
       serviceConfig = {
         ExecStart = ''
-          ${pkgs.keybase}/bin/keybase -d service --auto-forked
+          ${pkgs.keybase}/bin/keybase service --auto-forked
         '';
         Restart = "on-failure";
         PrivateTmp = true;

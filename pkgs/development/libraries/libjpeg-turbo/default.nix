@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
   checkTarget = "test";
 
   meta = with stdenv.lib; {
