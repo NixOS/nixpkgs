@@ -91,6 +91,20 @@ in stdenv.mkDerivation rec {
   + stdenv.lib.optionalString (enableSharedLibraries) ''
     substitute '${./llvm-outputs.patch}' ./llvm-outputs.patch --subst-var lib
     patch -p1 < ./llvm-outputs.patch
+  ''
+  + stdenv.lib.optionalString (stdenv ? glibc) ''
+    (
+      cd projects/compiler-rt
+      patch -p1 < ${
+        fetchpatch {
+          name = "sigaltstack.patch"; # for glibc-2.26
+          url = https://github.com/llvm-mirror/compiler-rt/commit/8a5e425a68d.diff;
+          sha256 = "0h4y5vl74qaa7dl54b1fcyqalvlpd8zban2d1jxfkxpzyi7m8ifi";
+        }
+      }
+      substituteInPlace lib/esan/esan_sideline_linux.cpp \
+        --replace 'struct sigaltstack' 'stack_t'
+    )
   '';
 
   # hacky fix: created binaries need to be run before installation

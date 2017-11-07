@@ -41,7 +41,7 @@ in
       name = "lxqt";
       bgSupport = true;
       start = ''
-        exec ${pkgs.lxqt.lxqt-common}/bin/startlxqt
+        exec ${pkgs.lxqt.lxqt-session}/bin/startlxqt
       '';
     };
 

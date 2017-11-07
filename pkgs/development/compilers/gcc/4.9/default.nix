@@ -72,6 +72,7 @@ let version = "4.9.4";
       # target libraries and tools.
       ++ optional langAda ../gnat-cflags.patch
       ++ optional langFortran ../gfortran-driving.patch
+      ++ [ ../struct-ucontext.patch ../struct-sigaltstack-4.9.patch ] # glibc-2.26
       ;
 
     javaEcj = fetchurl {

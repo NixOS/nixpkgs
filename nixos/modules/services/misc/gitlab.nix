@@ -572,7 +572,7 @@ in {
         rm -rf ${cfg.statePath}/config ${cfg.statePath}/shell/hooks
         mkdir -p ${cfg.statePath}/config
 
-        tr -dc A-Za-z0-9 < /dev/urandom | head -c 32 > ${cfg.statePath}/config/gitlab_shell_secret
+        ${pkgs.openssl}/bin/openssl rand -hex 32 > ${cfg.statePath}/config/gitlab_shell_secret
 
         # The uploads directory is hardcoded somewhere deep in rails. It is
         # symlinked in the gitlab package to /run/gitlab/uploads to make it
@@ -619,7 +619,7 @@ in {
         fi
 
         # enable required pg_trgm extension for gitlab
-        ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql gitlab -c "CREATE EXTENSION IF NOT EXISTS pg_trgm"
+        ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql ${cfg.databaseName} -c "CREATE EXTENSION IF NOT EXISTS pg_trgm"
         # Always do the db migrations just to be sure the database is up-to-date
         ${gitlab-rake}/bin/gitlab-rake db:migrate RAILS_ENV=production
 
@@ -634,7 +634,7 @@ in {
 
         # The gitlab:shell:create_hooks task seems broken for fixing links
         # so we instead delete all the hooks and create them anew
-        rm ${cfg.statePath}/repositories/**/*.git/hooks
+        rm -f ${cfg.statePath}/repositories/**/*.git/hooks
         ${gitlab-rake}/bin/gitlab-rake gitlab:shell:create_hooks RAILS_ENV=production
 
         # Change permissions in the last step because some of the

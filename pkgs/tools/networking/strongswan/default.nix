@@ -35,6 +35,8 @@ stdenv.mkDerivation rec {
     # the configuration files. In the absence of that we patch swanctl to look
     # for configuration files in /etc/swanctl.
     substituteInPlace src/swanctl/swanctl.h --replace "SWANCTLDIR" "\"/etc/swanctl\""
+    # glibc-2.26 reorganized internal includes
+    sed '1i#include <stdint.h>' -i src/libstrongswan/utils/utils/memory.h
     '';
 
   preConfigure = ''

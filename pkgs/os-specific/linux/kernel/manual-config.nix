@@ -1,5 +1,5 @@
 { runCommand, nettools, bc, perl, gmp, libmpc, mpfr, kmod, openssl
-, writeTextFile, ubootChooser
+, writeTextFile, ubootTools
 , hostPlatform
 }:
 
@@ -224,8 +224,8 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ perl bc nettools openssl gmp libmpc mpfr ] ++ optional (stdenv.platform.uboot != null)
-    (ubootChooser stdenv.platform.uboot);
+  nativeBuildInputs = [ perl bc nettools openssl gmp libmpc mpfr ]
+    ++ optional (stdenv.platform.kernelTarget == "uImage") ubootTools;
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" ];
 
@@ -244,10 +244,6 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
 
       karch = cp.kernelArch;
 
-      # !!! uboot has messed up cross-compiling, nativeDrv builds arm tools on x86,
-      # crossDrv builds x86 tools on x86 (but arm uboot). If this is fixed, uboot
-      # can just go into buildInputs (but not nativeBuildInputs since cp.uboot
-      # may be different from stdenv.platform.uboot)
-      buildInputs = optional (cp.uboot != null) (ubootChooser cp.uboot).crossDrv;
+      nativeBuildInputs = optional (cp.kernelTarget == "uImage") ubootTools;
   };
 })

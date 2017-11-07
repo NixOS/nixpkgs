@@ -3,14 +3,14 @@
 # To make use of this derivation, use the `programs.zsh.enableSyntaxHighlighting` option
 
 stdenv.mkDerivation rec {
-  version = "0.5.0";
+  version = "0.6.0";
   name = "zsh-syntax-highlighting-${version}";
 
   src = fetchFromGitHub {
     owner = "zsh-users";
     repo = "zsh-syntax-highlighting";
     rev = version;
-    sha256 = "0k0m5aw67lhi4z143sdawx93y1892scvvdfdnjvljb4hf0vzs2ww";
+    sha256 = "0zmq66dzasmr5pwribyh4kbkk23jxbpdw4rjxx0i7dx8jjp2lzl4";
   };
 
   buildInputs = [ zsh ];

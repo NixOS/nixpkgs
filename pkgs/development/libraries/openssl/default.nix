@@ -107,13 +107,13 @@ let
 in {
 
   openssl_1_0_2 = common {
-    version = "1.0.2l";
-    sha256 = "037kvpisc6qh5dkppcwbm5bg2q800xh2hma3vghz8xcycmdij1yf";
+    version = "1.0.2m";
+    sha256 = "03vvlfnxx4lhxc83ikfdl6jqph4h52y7lb7li03va6dkqrgg2vwc";
   };
 
   openssl_1_1_0 = common {
-    version = "1.1.0f";
-    sha256 = "0r97n4n552ns571diz54qsgarihrxvbn7kvyv8wjyfs9ybrldxqj";
+    version = "1.1.0g";
+    sha256 = "1bvka2wf33w2vxv7yw578nnjqyhz2b3chvfb0l4k2ffscw950kfy";
   };
 
 }

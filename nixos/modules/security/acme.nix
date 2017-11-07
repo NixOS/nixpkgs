@@ -139,6 +139,20 @@ in
         '';
       };
 
+      production = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          If set to true, use Let's Encrypt's production environment
+          instead of the staging environment. The main benefit of the
+          staging environment is to get much higher rate limits.
+
+          See
+          <literal>https://letsencrypt.org/docs/staging-environment</literal>
+          for more detail.
+        '';
+      };
+
       certs = mkOption {
         default = { };
         type = with types; attrsOf (submodule certOpts);
@@ -177,7 +191,9 @@ in
                 cmdline = [ "-v" "-d" domain "--default_root" data.webroot "--valid_min" cfg.validMin ]
                           ++ optionals (data.email != null) [ "--email" data.email ]
                           ++ concatMap (p: [ "-f" p ]) data.plugins
-                          ++ concatLists (mapAttrsToList (name: root: [ "-d" (if root == null then name else "${name}:${root}")]) data.extraDomains);
+                          ++ concatLists (mapAttrsToList (name: root: [ "-d" (if root == null then name else "${name}:${root}")]) data.extraDomains)
+                          ++ (if cfg.production then []
+                              else ["--server" "https://acme-staging.api.letsencrypt.org/directory"]);
                 acmeService = {
                   description = "Renew ACME Certificate for ${cert}";
                   after = [ "network.target" "network-online.target" ];

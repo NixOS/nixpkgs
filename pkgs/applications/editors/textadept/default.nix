@@ -32,7 +32,7 @@ let
       build_dir=$PWD
       cd $TMPDIR
 
-      local_path=$(basename ${store_path} .zip | sed -e 's/^[a-z0-9]*-//')
+      local_path=$(basename ${url} .zip)
 
       cp -r ${store_path} $local_path
       chmod u+rwX -R $local_path

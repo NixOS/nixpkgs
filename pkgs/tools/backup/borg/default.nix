@@ -1,14 +1,14 @@
-{ stdenv, fetchurl, python3Packages, acl, lz4, openssl }:
+{ stdenv, fetchurl, python3Packages, acl, lz4, openssl, openssh }:
 
 python3Packages.buildPythonApplication rec {
   name = "borgbackup-${version}";
-  version = "1.1.0";
+  version = "1.1.1";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://github.com/borgbackup/borg/releases/download/"
       + "${version}/${name}.tar.gz";
-    sha256 = "0vwyg0b4kxb0rspqwhvgi5c78dzimgkydf03wif27a40qhh1235l";
+    sha256 = "0iik5lq349cl87imlwra2pp0j36wjhpn8r1d3778azvvqpyjq2d5";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -26,6 +26,10 @@ python3Packages.buildPythonApplication rec {
     export BORG_OPENSSL_PREFIX="${openssl.dev}"
     export BORG_LZ4_PREFIX="${lz4.dev}"
   '';
+
+  makeWrapperArgs = [
+    ''--prefix PATH ':' "${openssh}/bin"''
+  ];
 
   postInstall = ''
     make -C docs singlehtml
@@ -45,6 +49,6 @@ python3Packages.buildPythonApplication rec {
     homepage = https://borgbackup.github.io/;
     license = licenses.bsd3;
     platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
-    maintainers = with maintainers; [ nckx ];
+    maintainers = with maintainers; [ nckx flokli ];
   };
 }

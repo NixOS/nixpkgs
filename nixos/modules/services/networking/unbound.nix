@@ -8,9 +8,9 @@ let
 
   stateDir = "/var/lib/unbound";
 
-  access = concatMapStrings (x: "  access-control: ${x} allow\n") cfg.allowedAccess;
+  access = concatMapStringsSep "\n  " (x: "access-control: ${x} allow") cfg.allowedAccess;
 
-  interfaces = concatMapStrings (x: "  interface: ${x}\n") cfg.interfaces;
+  interfaces = concatMapStringsSep "\n  " (x: "interface: ${x}") cfg.interfaces;
 
   isLocalAddress = x: substring 0 3 x == "::1" || substring 0 9 x == "127.0.0.1";
 

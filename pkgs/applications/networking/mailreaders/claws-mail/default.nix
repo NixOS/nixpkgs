@@ -39,6 +39,8 @@ stdenv.mkDerivation rec {
     sha256 = "0hlm2jipyr4z6izlrpvabpz4ivh49i13avnm848kr1nv68pkq2cd";
   };
 
+  outputs = [ "out" "dev" ];
+
   patches = [ ./mime.patch ];
 
   hardeningDisable = [ "format" ];

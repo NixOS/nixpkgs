@@ -17,6 +17,7 @@ overrideDerivation xorgserver (oldAttrs: {
     "--disable-xnest"
     "--disable-xquartz"
     "--disable-xwin"
+    "--enable-glamor"
     "--with-default-font-path="
     "--with-xkb-bin-directory=${xkbcomp}/bin"
     "--with-xkb-path=${xkeyboard_config}/etc/X11/xkb"

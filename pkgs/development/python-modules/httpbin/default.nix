@@ -5,7 +5,8 @@
 , markupsafe
 , decorator
 , itsdangerous
-, six }:
+, six
+}:
 
 buildPythonPackage rec {
   pname = "httpbin";
@@ -18,6 +19,9 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ flask markupsafe decorator itsdangerous six ];
+
+  # No tests
+  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/kennethreitz/httpbin;

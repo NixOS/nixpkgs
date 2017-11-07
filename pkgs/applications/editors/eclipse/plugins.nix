@@ -106,16 +106,16 @@ rec {
 
   anyedittools = buildEclipsePlugin rec {
     name = "anyedit-${version}";
-    version = "2.7.0.201705171641";
+    version = "2.7.1.201709201439";
 
     srcFeature = fetchurl {
       url = "http://andrei.gmxhome.de/eclipse/features/AnyEditTools_${version}.jar";
-      sha256 = "07k029nw5ibxpjc0siy06ihylbqrxllf59yz8c544gra8lc079c9";
+      sha256 = "1wqzl7wq85m9gil8rnvly45ps0a2m0svw613pg6djs5i7amhnayh";
     };
 
     srcPlugin = fetchurl {
-      url = "https://github.com/iloveeclipse/anyedittools/releases/download/2.7.0/de.loskutov.anyedit.AnyEditTools_${version}.jar";
-      sha256 = "0wbm8zfjh7gxrw5sy9m3siddiazh5czgxp7zyzxwzkdqyqzqs70h";
+      url = "https://github.com/iloveeclipse/anyedittools/releases/download/2.7.1/de.loskutov.anyedit.AnyEditTools_${version}.jar";
+      sha256 = "03iyb6j2srq74iigmg7dk098c2svyv0ygdfql5jqr44a32n07k8q";
     };
 
     meta = with stdenv.lib; {
@@ -394,7 +394,7 @@ rec {
       sha256 = "1xfj4j27d1h4bdf2v7f78zi8lz4zkkj7s9kskmsqx5jcs2d459yp";
       extraPostFetch =
         ''
-          mv "$out/${repo}-${rev}/releases/local-repo"/* "$out/"
+          mv "$out/${repo}-${rev}/releases/local-repo/"* "$out/"
         '';
     };
 
@@ -419,6 +419,29 @@ rec {
       homepage = http://scala-ide.org/;
       description = "The Scala IDE for Eclipse";
       license = licenses.bsd3;
+      platforms = platforms.all;
+      maintainers = [ maintainers.rycee ];
+    };
+  };
+
+  spotbugs = buildEclipsePlugin rec {
+    name = "spotbugs-${version}";
+    version = "3.1.0.r201710241414-11c9895";
+
+    srcFeature = fetchurl {
+      url = "https://spotbugs.github.io/eclipse/features/com.github.spotbugs.plugin.eclipse_${version}.jar";
+      sha256 = "084dj2bid5issh28j32hi5w9vx5xs829h7d5lbz5hqj1fyn9h6bs";
+    };
+
+    srcPlugin = fetchurl {
+      url = "https://spotbugs.github.io/eclipse/plugins/com.github.spotbugs.plugin.eclipse_${version}.jar";
+      sha256 = "1mqpl3gx06f54w13jm01qd8fbniab3x989mi3lysx078vrp23jas";
+    };
+
+    meta = with stdenv.lib; {
+      homepage = https://spotbugs.github.io/;
+      description = "Plugin that uses static analysis to look for bugs in Java code";
+      license = licenses.lgpl21;
       platforms = platforms.all;
       maintainers = [ maintainers.rycee ];
     };

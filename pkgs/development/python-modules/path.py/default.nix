@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "path.py";
-  version = "10.3.1";
+  version = "10.4";
   name = "path.py-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "412706be1cd8ab723c77829f9aa0c4d4b7c7b26c7b1be0275a6841c3cb1001e0";
+    sha256 = "c63c75777c8a01f7b273c0065a8ea1e3ba0c9b369fa4a2601831e412b2c4881a";
   };
 
   checkInputs = [ pytest pytestrunner ];

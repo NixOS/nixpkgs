@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper cmake flex bison ];
 
+  cmakeFlags="-DBCC_KERNEL_MODULES_DIR=${kernel.dev}/lib/modules";
+
   postInstall = ''
     mkdir -p $out/bin $out/share
     rm -r $out/share/bcc/tools/old
@@ -26,7 +28,7 @@ stdenv.mkDerivation rec {
     mv $out/share/bcc/man $out/share/
 
     find $out/share/bcc/tools -type f -executable -print0 | \
-    while IFS= read -r -d $'\0' f; do
+    while IFS= read -r -d ''$'\0' f; do
       pythonLibs="$out/lib/python2.7/site-packages:${pythonPackages.netaddr}/lib/${python.libPrefix}/site-packages"
       rm -f $out/bin/$(basename $f)
       makeWrapper $f $out/bin/$(basename $f) \
@@ -39,6 +41,6 @@ stdenv.mkDerivation rec {
     description = "Dynamic Tracing Tools for Linux";
     homepage = https://iovisor.github.io/bcc/;
     license = licenses.asl20;
-    maintainers = with maintainers; [ ragge ];
+    maintainers = with maintainers; [ ragge mic92 ];
   };
 }

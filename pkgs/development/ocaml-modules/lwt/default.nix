@@ -1,5 +1,5 @@
 { stdenv, buildOcaml, fetchzip, which, cryptopp, ocaml, findlib, ocamlbuild, camlp4
-, react, ssl, libev, pkgconfig, ncurses, ocaml_oasis, glib
+, react, ssl, libev, pkgconfig, ncurses, glib
 , ppx_tools, result, cppo
 , ppxSupport ? stdenv.lib.versionAtLeast ocaml.version "4.02"
 , version ? if stdenv.lib.versionAtLeast ocaml.version "4.02" then "2.7.1" else "2.6.0"
@@ -27,7 +27,7 @@ buildOcaml rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ocaml_oasis which cryptopp ocaml findlib ocamlbuild glib ncurses camlp4 cppo ]
+  buildInputs = [ which cryptopp ocaml findlib ocamlbuild glib ncurses camlp4 cppo ]
   ++ stdenv.lib.optional ppxSupport ppx_tools;
 
   propagatedBuildInputs = [ result ]

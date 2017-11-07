@@ -1,24 +1,22 @@
 {stdenv, fetchurl
 , automake, autoconf, libtool, which, gtkdoc, gettext, pkgconfig, gobjectIntrospection, libxslt
-, glib, systemd, libusb1, vala_0_23
+, glib, systemd, libusb1, vala_0_38
 }:
 stdenv.mkDerivation rec {
   name = "gusb-${version}";
-  version = "0.2.9";
+  version = "0.2.11";
   enableParallelBuilding = true;
 
   src = fetchurl {
-    url = "http://people.freedesktop.org/~hughsient/releases/libgusb-${version}.tar.xz";
-    sha256 = "056yxlppgycsfw1l8c9j6givk1n15jylhvx89wqhsxdi1b6vs83k";
+    url = "https://people.freedesktop.org/~hughsient/releases/libgusb-${version}.tar.xz";
+    sha256 = "1pppz17lw3khyz8by1dddxdqrv6qn4a23fpxs38c67db7x4l7ccw";
   };
 
   preConfigure = "./autogen.sh";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    autoconf automake libtool which gtkdoc gettext gobjectIntrospection libxslt
-    systemd vala_0_23 glib
-  ];
+  nativeBuildInputs = [ pkgconfig autoconf automake libtool which gtkdoc gettext
+                        gobjectIntrospection libxslt vala_0_38 ];
+  buildInputs = [ systemd  glib ];
 
   propagatedBuildInputs = [ libusb1 ];
 

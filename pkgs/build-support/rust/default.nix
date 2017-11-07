@@ -80,5 +80,5 @@ in stdenv.mkDerivation (args // {
     runHook postInstall
   '';
 
-  passthru = { inherit cargoDeps; };
+  passthru = { inherit cargoDeps; } // (args.passthru or {});
 })

@@ -338,7 +338,7 @@ rec {
     # Type-check the remaining definitions, and merge them.
     mergedValue = foldl' (res: def:
       if type.check def.value then res
-      else throw "The option value `${showOption loc}' in `${def.file}' is not a ${type.description}.")
+      else throw "The option value `${showOption loc}' in `${def.file}' is not of type `${type.description}'.")
       (type.merge loc defsFinal) defsFinal;
 
     isDefined = defsFinal != [];

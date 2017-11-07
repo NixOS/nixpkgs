@@ -22,12 +22,12 @@
 
 buildPythonPackage rec {
   pname = "magic-wormhole";
-  version = "0.10.2";
+  version = "0.10.3";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "55a423247faee7a0644d25f37760495978cd494ba0274fefd8cd1fad493954ee";
+    sha256 = "48465d58f9c0d729dc586627cf280830e7ed59f9e7999946ae1d763c6b8db999";
   };
 
   checkInputs = [ mock ];

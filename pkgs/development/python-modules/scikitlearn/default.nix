@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "scikit-learn";
-  version = "0.19.0";
+  version = "0.19.1";
   name = "${pname}-${version}";
   disabled = stdenv.isi686;  # https://github.com/scikit-learn/scikit-learn/issues/5534
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "07q261l9145c9xr8b4pcsa08ih1ifhclp05i4xwg43cyamkwpx94";
+    sha256 = "5ca0ad32ee04abe0d4ba02c8d89d501b4e5e0304bdf4d45c2e9875a735b323a0";
   };
 
   buildInputs = [ nose pillow gfortran glibcLocales ];

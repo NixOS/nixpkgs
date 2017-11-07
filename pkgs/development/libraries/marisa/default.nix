@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage    = https://code.google.com/p/marisa-trie/;
+    homepage    = https://github.com/s-yata/marisa-trie;
     description = "Static and space-efficient trie data structure library";
     license     = licenses.bsd3;
     maintainers = with maintainers; [ sifmelcara ];

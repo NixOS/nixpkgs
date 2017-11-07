@@ -3,16 +3,18 @@
 
 stdenv.mkDerivation rec {
   name = "unetbootin-${version}";
-  version = "655";
+  version = "657";
 
   src = fetchFromGitHub {
     owner  = "unetbootin";
     repo   = "unetbootin";
     rev    = version;
-    sha256 = "1gis75vy172k7lgh8bwgap74s259y9x1wg3rkqhhqncl2vv0w1py";
+    sha256 = "18bbcrjk6ladr46kl3dvqz5pq2xcv4nnwmajqllb4sl3k1xqsngy";
   };
 
-  sourceRoot = "${name}-src/src/unetbootin";
+  setSourceRoot = ''
+    sourceRoot=$(echo */src/unetbootin)
+  '';
 
   buildInputs = [ qt4 ];
   nativeBuildInputs = [ makeWrapper qmake4Hook ];
@@ -42,18 +44,17 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp unetbootin $out/bin
+    runHook preInstall
 
-    mkdir -p $out/share/unetbootin
-    cp unetbootin_*.qm  $out/share/unetbootin
-
-    mkdir -p $out/share/applications
-    cp unetbootin.desktop $out/share/applications
+    install -Dm755 -t $out/bin                unetbootin
+    install -Dm644 -t $out/share/unetbootin   unetbootin_*.qm
+    install -Dm644 -t $out/share/applications unetbootin.desktop
 
     wrapProgram $out/bin/unetbootin \
       --prefix PATH : ${stdenv.lib.makeBinPath [ mtools p7zip which ]} \
       --set QT_X11_NO_MITSHM 1
+
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {

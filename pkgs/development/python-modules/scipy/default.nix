@@ -1,16 +1,17 @@
-{lib, fetchurl, python, buildPythonPackage, isPyPy, gfortran, nose, numpy}:
+{lib, fetchurl, python, buildPythonPackage, isPyPy, gfortran, nose, pytest, numpy}:
 
 buildPythonPackage rec {
   pname = "scipy";
-  version = "0.19.1";
+  version = "1.0.0";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/s/scipy/scipy-${version}.tar.gz";
-    sha256 = "a19a2ca7a7336495ec180adeaa0dfdcf41e96dbbee90d51c3ed828ba570884e6";
+    sha256 = "87ea1f11a0e9ec08c264dc64551d501fa307289460705f6fccd84cbfc7926d10";
   };
 
-  buildInputs = [ gfortran nose numpy.blas ];
+  checkInputs = [ nose pytest ];
+  buildInputs = [ gfortran numpy.blas ];
   propagatedBuildInputs = [ numpy ];
 
   # Remove tests because of broken wrapper

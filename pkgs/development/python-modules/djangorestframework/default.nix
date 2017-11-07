@@ -1,12 +1,12 @@
 { stdenv, buildPythonPackage, fetchurl, django }:
 buildPythonPackage rec {
-  version = "3.6.4";
+  version = "3.7.1";
   pname = "djangorestframework";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/d/djangorestframework/${name}.tar.gz";
-    sha256 = "de8ac68b3cf6dd41b98e01dcc92dc0022a5958f096eafc181a17fa975d18ca42";
+    sha256 = "305b2c6564ca46d3b558ba21110ed717135c467adf1a6dfd192bd85f4bb04d50";
   };
 
   # Test settings are missing

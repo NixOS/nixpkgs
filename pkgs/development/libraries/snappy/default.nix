@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   name = "snappy-${version}";
   version = "1.1.4";
-  
+
   src = fetchurl {
     url = "http://github.com/google/snappy/releases/download/${version}/"
         + "snappy-${version}.tar.gz";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   doCheck = !stdenv.isDarwin;
 
   meta = with stdenv.lib; {
-    homepage = http://code.google.com/p/snappy/;
+    homepage = https://google.github.io/snappy/;
     license = licenses.bsd3;
     description = "Compression/decompression library for very high speeds";
     platforms = platforms.unix;
