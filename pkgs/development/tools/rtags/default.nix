@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   name = "rtags-${version}";
-  version = "2.12";
+  version = "2.15";
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ llvmPackages.llvm openssl emacs ]
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     rev = "refs/tags/v${version}";
     fetchSubmodules = true;
     url = "https://github.com/andersbakken/rtags.git";
-    sha256 = "0bgjcvyvkpqcgw4571iz39sqydmcaz6ymx7kxcmq6j7rffs6qs7l";
+    sha256 = "12nnyav2q1ddkz9wm0aclhn7r74xj4ibrb0x05k7mcf694bg79c0";
     # unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation
     postFetch = ''
