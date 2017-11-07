@@ -75,6 +75,14 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
   <itemizedlist>
    <listitem>
     <para>
+     The <varname>services.cassandra</varname> module has been reworked and
+     was rewritten from scratch. The service has succeeding tests for
+     the versions 2.1, 2.2, 3.0 and 3.11 of <link
+     xlink:href="https://cassandra.apache.org/">Apache Cassandra</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      There is a new <varname>services.foundationdb</varname> module for deploying
      <link xlink:href="https://www.foundationdb.org">FoundationDB</link> clusters.
     </para>
@@ -119,6 +127,12 @@ $ nix-instantiate -E '(import &lt;nixpkgsunstable&gt; {}).gitFull'
   </para>
 
   <itemizedlist>
+   <listitem>
+    <para>
+     The deprecated <varname>services.cassandra</varname> module has
+     seen a complete rewrite. (See above.)
+    </para>
+   </listitem>
    <listitem>
     <para>
      <literal>lib.strict</literal> is removed. Use
