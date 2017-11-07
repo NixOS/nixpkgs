@@ -23,6 +23,7 @@ pythonPackages.buildPythonPackage rec {
     homepage = https://github.com/madjar/nox;
     description = "Tools to make nix nicer to use";
     maintainers = [ lib.maintainers.madjar ];
+    license = lib.licenses.mit;
     platforms = lib.platforms.all;
   };
 }
