@@ -83,6 +83,7 @@ mapAliases (rec {
   kdiff3-qt5 = kdiff3; # added 2017-02-18
   keepassx2-http = keepassx-reboot; # added 2016-10-17
   keepassx-reboot = keepassx-community; # added 2017-02-01
+  keepassx-community = keepassxc; # added 2017-11
   keybase-go = keybase;  # added 2016-08-24
   krename-qt5 = krename; # added 2017-02-18
   letsencrypt = certbot; # added 2016-05-16
