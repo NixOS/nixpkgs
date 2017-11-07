@@ -1,5 +1,5 @@
 { stdenv, fetchPypi, buildPythonPackage, ed25519, ecdsa
-, semver, keepkey, trezor, mnemonic, ledgerblue, unidecode
+, semver, keepkey, trezor, mnemonic, ledgerblue, unidecode, mock, pytest
 }:
 
 buildPythonPackage rec {
@@ -17,9 +17,13 @@ buildPythonPackage rec {
     trezor mnemonic ledgerblue
   ];
 
-  propagatedBuildInputs = [
-    unidecode
-  ];
+  propagatedBuildInputs = [ unidecode ];
+
+  checkInputs = [ mock pytest ];
+
+  checkPhase = ''
+    py.test libagent/tests
+  '';
 
   meta = with stdenv.lib; {
     description = "Using hardware wallets as SSH/GPG agent";
