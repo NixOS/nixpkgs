@@ -8,6 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "1xchbxy0xql7yl7z4n1icj8r7dmly46i22fvm00vdjq64zlmqg3j";
   };
 
+  postPatch = ''
+    sed '1i#include <stdint.h>' -i src/xdr_sizeof.c
+  '';
+
   nativeBuildInputs = [ autoreconfHook ];
   propagatedBuildInputs = [ libkrb5 ];
 

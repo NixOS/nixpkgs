@@ -1,15 +1,16 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake, zlib, python, libssh2, openssl, curl, http-parser, libiconv }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, python
+, zlib, libssh2, openssl, http-parser, curl, libiconv
+}:
 
 stdenv.mkDerivation (rec {
+  version = "0.25.1";
   name = "libgit2-${version}";
-  version = "0.26.0";
-  # keep the version in sync with pythonPackages.pygit2 and gnome3.libgit2-glib
 
   src = fetchFromGitHub {
     owner = "libgit2";
     repo = "libgit2";
     rev = "v${version}";
-    sha256 = "0zrrmfkfhd2xb4879z5khjb6xsdklrm01f1lscrs2ks68v25fk78";
+    sha256 = "1jhikg0gqpdzfzhgv44ybdpm24lvgkc7ki4306lc5lvmj1s2nylj";
   };
 
   cmakeFlags = "-DTHREADSAFE=ON";
@@ -20,11 +21,11 @@ stdenv.mkDerivation (rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "The Git linkable library";
     homepage = https://libgit2.github.com/;
-    license = licenses.gpl2;
-    platforms = with platforms; all;
+    license = stdenv.lib.licenses.gpl2;
+    platforms = with stdenv.lib.platforms; all;
   };
 } // stdenv.lib.optionalAttrs (!stdenv.isLinux) {
   NIX_LDFLAGS = "-liconv";

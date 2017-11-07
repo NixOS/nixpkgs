@@ -6022,6 +6022,7 @@ with pkgs;
 
   julia_05 = callPackage ../development/compilers/julia/0.5.nix {
     gmp = gmp6;
+    libgit2 = libgit2_0_25;
     openblas = openblasCompat;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
     llvm = llvm_38;
@@ -8295,11 +8296,13 @@ with pkgs;
 
   icon-lang = callPackage ../development/interpreters/icon-lang { };
 
-  libgit2 = callPackage ../development/libraries/git2 (
-    stdenv.lib.optionalAttrs stdenv.isDarwin {
+  inherit (rec {
+    arg = stdenv.lib.optionalAttrs stdenv.isDarwin {
       inherit (darwin) libiconv;
-    }
-  );
+    };
+    libgit2 = callPackage ../development/libraries/git2 arg;
+    libgit2_0_25 = callPackage ../development/libraries/git2/0.25.nix arg;
+  }) libgit2 libgit2_0_25;
 
   gle = callPackage ../development/libraries/gle { };
 
@@ -10581,6 +10584,7 @@ with pkgs;
     openglSupport = mesaSupported;
     alsaSupport = stdenv.isLinux;
     x11Support = !stdenv.isCygwin;
+    waylandSupport = stdenv.isLinux;
     udevSupport = stdenv.isLinux;
     pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
     inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
