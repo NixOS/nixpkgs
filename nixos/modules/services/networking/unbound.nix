@@ -30,10 +30,15 @@ let
     "auto-trust-anchor-file: ${rootTrustAnchorFile}";
 
   confFile = pkgs.writeText "unbound.conf" ''
+    remote-control:
+      server-key-file: "${stateDir}/unbound_server.key"
+      server-cert-file: "${stateDir}/unbound_server.pem"
+      control-key-file: "${stateDir}/unbound_control.key"
+      control-cert-file: "${stateDir}/unbound_control.pem"
     server:
       directory: "${stateDir}"
       username: unbound
-      chroot: "${stateDir}"
+      chroot: ""
       pidfile: ""
       ${interfaces}
       ${access}
