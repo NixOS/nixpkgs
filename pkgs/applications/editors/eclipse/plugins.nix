@@ -152,16 +152,16 @@ rec {
 
   bytecode-outline = buildEclipsePlugin rec {
     name = "bytecode-outline-${version}";
-    version = "2.4.3";
+    version = "2.5.0.201711011753-5a57fdf";
 
     srcFeature = fetchurl {
       url = "http://andrei.gmxhome.de/eclipse/features/de.loskutov.BytecodeOutline.feature_${version}.jar";
-      sha256 = "0imhwp73gxy1y5d5gpjgd05ywn0xg3vqc5980wcx3fd51g4ifc67";
+      sha256 = "0yciqhcq0n5i326mwy57r4ywmkz2c2jky7r4pcmznmhvks3z65ps";
     };
 
     srcPlugin = fetchurl {
       url = "http://dl.bintray.com/iloveeclipse/plugins/de.loskutov.BytecodeOutline_${version}.jar";
-      sha256 = "0230i88mvvxhn11m9c5mv3494zhh1xkxyfyva9qahck0wbqwpzkw";
+      sha256 = "1vmsqv32jfl7anvdkw0vir342miv5sr9df7vd1w44lf1yf97vxlw";
     };
 
     meta = with stdenv.lib; {

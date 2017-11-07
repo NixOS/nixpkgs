@@ -25,6 +25,11 @@ stdenv.mkDerivation {
     echo Source root reset to ''${sourceRoot}
   '';
 
+  # https://sourceware.org/glibc/wiki/Release/2.26#Removal_of_.27xlocale.h.27
+  postPatch = if stdenv ? glibc
+    then "substituteInPlace i18n/digitlst.cpp --replace '<xlocale.h>' '<locale.h>'"
+    else null; # won't find locale_t on darwin
+
   inherit patchFlags patches;
 
   preConfigure = ''

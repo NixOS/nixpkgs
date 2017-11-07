@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, libtirpc
+{ fetchurl, stdenv, pkgconfig, libnsl, libtirpc
 , useSystemd ? true, systemd }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     ./sunrpc.patch
   ];
 
-  buildInputs = [ libtirpc ]
+  buildInputs = [ libnsl libtirpc ]
              ++ stdenv.lib.optional useSystemd systemd;
 
   configureFlags = [

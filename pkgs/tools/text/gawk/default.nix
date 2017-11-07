@@ -19,11 +19,11 @@ let
   inherit (stdenv.lib) optional;
 in
 stdenv.mkDerivation rec {
-  name = "gawk-4.1.4";
+  name = "gawk-4.2.0";
 
   src = fetchurl {
     url = "mirror://gnu/gawk/${name}.tar.xz";
-    sha256 = "0rn2mmjxm767zliqzd67j7h2ncjn4j0321c60y9fy3grs3i89qak";
+    sha256 = "1wm9lqj77y7xz07zi0n187aqm8zavzxzpm1j53ahxz81q0qwvwyl";
   };
 
   # When we do build separate interactive version, it makes sense to always include man.

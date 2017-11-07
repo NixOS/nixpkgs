@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     # copied from libsecurity_generic
-    ln -s ${osx_private_sdk}/PrivateSDK10.9.sparse.sdk/System/Library/Frameworks/Security.framework/Versions/A/PrivateHeaders Security
+    cp -R ${osx_private_sdk}/include/SecurityPrivateHeaders Security
 
     substituteInPlace cmsutil.c --replace \
       '<CoreServices/../Frameworks/CarbonCore.framework/Headers/MacErrors.h>' \

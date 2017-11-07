@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, vscode-utils }:
+{ stdenv, lib, fetchurl, callPackage, vscode-utils }:
 
 let
   inherit (vscode-utils) buildVscodeExtension buildVscodeMarketplaceExtension;
@@ -22,4 +22,6 @@ rec {
       license = licenses.mit;
     };
   };
+
+  ms-vscode.cpptools = callPackage ./cpptools {};
 }

@@ -1080,6 +1080,8 @@ with pkgs;
 
   go-dependency-manager = callPackage ../development/tools/gdm { };
 
+  geckodriver = callPackage ../development/tools/geckodriver { };
+
   geekbench = callPackage ../tools/misc/geekbench { };
 
   gencfsm = callPackage ../tools/security/gencfsm { };
@@ -4379,6 +4381,8 @@ with pkgs;
 
   sigil = libsForQt56.callPackage ../applications/editors/sigil { };
 
+  signal-desktop = callPackage ../applications/networking/instant-messengers/signal-desktop { };
+
   # aka., pgp-tools
   signing-party = callPackage ../tools/security/signing-party { };
 
@@ -6020,6 +6024,7 @@ with pkgs;
 
   julia_05 = callPackage ../development/compilers/julia/0.5.nix {
     gmp = gmp6;
+    libgit2 = libgit2_0_25;
     openblas = openblasCompat;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
     llvm = llvm_38;
@@ -7481,6 +7486,8 @@ with pkgs;
 
   premake = premake4;
 
+  procodile = callPackage ../tools/system/procodile { };
+
   qtcreator = libsForQt5.callPackage ../development/qtcreator { };
 
   r10k = callPackage ../tools/system/r10k { };
@@ -7593,7 +7600,7 @@ with pkgs;
     flex = flex_2_5_35;
   };
 
-  sqlitebrowser = libsForQt56.callPackage ../development/tools/database/sqlitebrowser { };
+  sqlitebrowser = libsForQt5.callPackage ../development/tools/database/sqlitebrowser { };
 
   sselp = callPackage ../tools/X11/sselp{ };
 
@@ -8293,11 +8300,13 @@ with pkgs;
 
   icon-lang = callPackage ../development/interpreters/icon-lang { };
 
-  libgit2 = callPackage ../development/libraries/git2 (
-    stdenv.lib.optionalAttrs stdenv.isDarwin {
+  inherit (rec {
+    arg = stdenv.lib.optionalAttrs stdenv.isDarwin {
       inherit (darwin) libiconv;
-    }
-  );
+    };
+    libgit2 = callPackage ../development/libraries/git2 arg;
+    libgit2_0_25 = callPackage ../development/libraries/git2/0.25.nix arg;
+  }) libgit2 libgit2_0_25;
 
   gle = callPackage ../development/libraries/gle { };
 
@@ -9253,6 +9262,8 @@ with pkgs;
   libnfsidmap = callPackage ../development/libraries/libnfsidmap { };
 
   libnice = callPackage ../development/libraries/libnice { };
+
+  libnsl = callPackage ../development/libraries/libnsl { };
 
   liboping = callPackage ../development/libraries/liboping { };
 
@@ -10579,6 +10590,7 @@ with pkgs;
     openglSupport = mesaSupported;
     alsaSupport = stdenv.isLinux;
     x11Support = !stdenv.isCygwin;
+    waylandSupport = stdenv.isLinux;
     udevSupport = stdenv.isLinux;
     pulseaudioSupport = config.pulseaudio or stdenv.isLinux;
     inherit (darwin.apple_sdk.frameworks) AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL;
@@ -11492,6 +11504,8 @@ with pkgs;
   ejabberd = callPackage ../servers/xmpp/ejabberd { };
 
   exhibitor = callPackage ../servers/exhibitor { };
+
+  hyp = callPackage ../servers/http/hyp/default.nix { };
 
   prosody = callPackage ../servers/xmpp/prosody {
     lua5 = lua5_1;
@@ -15475,8 +15489,10 @@ with pkgs;
 
   llpp = ocaml-ng.ocamlPackages.callPackage ../applications/misc/llpp { };
 
-  lmms = callPackage ../applications/audio/lmms {
-    stdenv = overrideCC stdenv gcc5;
+  lmms = libsForQt5.callPackage ../applications/audio/lmms {
+    lame = null;
+    libsoundio = null;
+    portaudio = null;
   };
 
   loxodo = callPackage ../applications/misc/loxodo { };
@@ -16358,6 +16374,8 @@ with pkgs;
   };
 
   recode = callPackage ../tools/text/recode { };
+
+  rednotebook = python3Packages.callPackage ../applications/editors/rednotebook { };
 
   remotebox = callPackage ../applications/virtualization/remotebox { };
 

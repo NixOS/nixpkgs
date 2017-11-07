@@ -78,7 +78,11 @@ let version = "4.8.5";
           sha256 = "01jd7pdarh54ki498g6sz64ijl9a1l5f9v8q2696aaxalvh2vwzl";
           excludes = [ "gcc/cp/ChangeLog" ];
         })]
-      ;
+      ++ [ # glibc-2.26
+        ../struct-ucontext-4.8.patch
+        ../sigsegv-not-declared.patch
+        ../res_state-not-declared.patch
+      ];
 
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at

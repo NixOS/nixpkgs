@@ -60,6 +60,8 @@ in stdenv.mkDerivation rec {
       "CXXFLAGS=-O2 -Wno-error=strict-aliasing"
     )
 
+    substituteInPlace 3rdparty/stout/include/stout/jsonify.hpp \
+      --replace '<xlocale.h>' '<locale.h>'
     # Fix cases where makedev(),major(),minor() are referenced through
     # <sys/types.h> instead of <sys/sysmacros.h>
     sed 1i'#include <sys/sysmacros.h>' -i src/linux/fs.cpp

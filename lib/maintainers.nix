@@ -265,6 +265,7 @@
   hbunke = "Hendrik Bunke <bunke.hendrik@gmail.com>";
   hce = "Hans-Christian Esperer <hc@hcesperer.org>";
   hectorj = "Hector Jusforgues <hector.jusforgues+nixos@gmail.com>";
+  hedning = "Tor Hedin Brønner <torhedinbronner@gmail.com>";
   heel = "Sergii Paryzhskyi <parizhskiy@gmail.com>";
   henrytill = "Henry Till <henrytill@gmail.com>";
   hhm = "hhm <heehooman+nixpkgs@gmail.com>";
@@ -517,6 +518,7 @@
   rardiol = "Ricardo Ardissone <ricardo.ardissone@gmail.com>";
   rasendubi = "Alexey Shmalko <rasen.dubi@gmail.com>";
   raskin = "Michael Raskin <7c6f434c@mail.ru>";
+  ravloony = "Tom Macdonald <ravloony@gmail.com>";
   rbasso = "Rafael Basso <rbasso@sharpgeeks.net>";
   redbaron = "Maxim Ivanov <ivanov.maxim@gmail.com>";
   redvers = "Redvers Davies <red@infect.me>";
