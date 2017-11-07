@@ -11844,6 +11844,7 @@ with pkgs;
   prometheus-pushgateway = callPackage ../servers/monitoring/prometheus/pushgateway.nix { };
   prometheus-snmp-exporter = callPackage ../servers/monitoring/prometheus/snmp-exporter.nix { };
   prometheus-statsd-exporter = callPackage ../servers/monitoring/prometheus/statsd-bridge.nix { };
+  prometheus-unbound-exporter = callPackage ../servers/monitoring/prometheus/unbound-exporter { };
   prometheus-unifi-exporter = callPackage ../servers/monitoring/prometheus/unifi-exporter { };
   prometheus-varnish-exporter = callPackage ../servers/monitoring/prometheus/varnish-exporter.nix { };
 
