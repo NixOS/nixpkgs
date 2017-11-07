@@ -15095,6 +15095,8 @@ in {
     };
   };
 
+  prawcore = callPackage ../development/python-modules/prawcore { };
+
   premailer = callPackage ../development/python-modules/premailer { };
 
   prettytable = buildPythonPackage rec {
