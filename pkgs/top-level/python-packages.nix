@@ -1311,24 +1311,8 @@ in {
     };
   };
 
-  betamax-matchers = buildPythonPackage rec {
-    name = "betamax-matchers-${version}";
-    version = "0.3.0";
+  betamax-matchers = callPackage ../development/python-modules/betamax-matchers { };
 
-    src = pkgs.fetchurl {
-       url = "mirror://pypi/b/betamax-matchers/${name}.tar.gz";
-      sha256 = "039kvqsdcvvlfxjc3n1x2xvjg6qkqbql0p7rc4z7bnxm9kcm88la";
-    };
-
-    buildInputs = with self; [ betamax requests_toolbelt ];
-
-    meta = with stdenv.lib; {
-      homepage = https://github.com/sigmavirus24/betamax_matchers;
-      description = "A group of experimental matchers for Betamax";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ pSub ];
-    };
-  };
   betamax-serializers = callPackage ../development/python-modules/betamax-serializers { };
 
   bibtexparser = callPackage ../development/python-modules/bibtexparser { };
