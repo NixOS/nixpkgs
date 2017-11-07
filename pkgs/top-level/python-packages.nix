@@ -1311,24 +1311,9 @@ in {
     };
   };
 
-  betamax-matchers = buildPythonPackage rec {
-    name = "betamax-matchers-${version}";
-    version = "0.3.0";
+  betamax-matchers = callPackage ../development/python-modules/betamax-matchers { };
 
-    src = pkgs.fetchurl {
-       url = "mirror://pypi/b/betamax-matchers/${name}.tar.gz";
-      sha256 = "039kvqsdcvvlfxjc3n1x2xvjg6qkqbql0p7rc4z7bnxm9kcm88la";
-    };
-
-    buildInputs = with self; [ betamax requests_toolbelt ];
-
-    meta = with stdenv.lib; {
-      homepage = https://github.com/sigmavirus24/betamax_matchers;
-      description = "A group of experimental matchers for Betamax";
-      license = licenses.asl20;
-      maintainers = with maintainers; [ pSub ];
-    };
-  };
+  betamax-serializers = callPackage ../development/python-modules/betamax-serializers { };
 
   bibtexparser = callPackage ../development/python-modules/bibtexparser { };
 
@@ -15066,34 +15051,9 @@ in {
     };
   };
 
-  praw = buildPythonPackage rec {
-    name = "praw-3.5.0";
+  praw = callPackage ../development/python-modules/praw { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/praw/${name}.zip";
-      sha256 = "1hwdzqbrjdkicqhyxpcpsmld21k0ndpy8d2gk6l5mv9isw3dm8qa";
-    };
-
-    propagatedBuildInputs = with self; [
-      requests
-      decorator
-      flake8
-      mock
-      six
-      update_checker
-    ];
-
-    # can't find the tests module?
-    doCheck = false;
-
-    meta = {
-      description = "Python Reddit API wrapper";
-      homepage = http://praw.readthedocs.org/;
-      license = licenses.gpl3;
-      platforms = platforms.all;
-      maintainers = with maintainers; [ jgeerds ];
-    };
-  };
+  prawcore = callPackage ../development/python-modules/prawcore { };
 
   premailer = callPackage ../development/python-modules/premailer { };
 
@@ -19733,6 +19693,8 @@ in {
     };
   };
 
+  sybil = callPackage ../development/python-modules/sybil { };
+
   syncthing-gtk = buildPythonPackage rec {
     version = "0.9.2.3";
     name = "syncthing-gtk-${version}";
@@ -20556,24 +20518,7 @@ in {
     };
   };
 
-  update_checker = buildPythonPackage rec {
-    name = "update_checker-0.11";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/u/update_checker/${name}.tar.gz";
-      sha256 = "681bc7c26cffd1564eb6f0f3170d975a31c2a9f2224a32f80fe954232b86f173";
-    };
-
-    propagatedBuildInputs = with self; [ requests ];
-
-    doCheck = false;
-
-    meta = {
-      description = "A python module that will check for package updates";
-      homepage = https://github.com/bboe/update_checker;
-      license = licenses.bsd2;
-    };
-  };
+  update_checker = callPackage ../development/python-modules/update_checker {};
 
   uritemplate = buildPythonPackage rec {
     name = "uritemplate-${version}";
@@ -21809,30 +21754,7 @@ EOF
     };
   };
 
-  testfixtures = buildPythonPackage rec {
-    name = "testfixtures-${version}";
-    version = "4.5.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/testfixtures/testfixtures-${version}.tar.gz";
-      sha256 = "0my8zq9d27mc7j78pz9971cn5wz6zi4vxlqa50szr2vq9j2xxkll";
-    };
-
-    buildInputs = with self; [ nose mock manuel ];
-
-    checkPhase = ''
-      nosetests -v
-    '';
-
-    # Test suite seems broken
-    # TypeError: TestSuite() missing 1 required positional argument: 'm'
-    # Haven't checked with newer version
-    doCheck = false;
-
-    meta = with stdenv.lib; {
-      homepage = "https://github.com/Simplistix/testfixtures";
-    };
-  };
+  testfixtures = callPackage ../development/python-modules/testfixtures {};
 
   tissue = buildPythonPackage rec {
     name = "tissue-0.9.2";
