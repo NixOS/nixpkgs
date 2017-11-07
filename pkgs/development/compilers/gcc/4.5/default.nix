@@ -153,6 +153,7 @@ stdenv.mkDerivation ({
     # target libraries and tools.
     ++ optional langAda ../gnat-cflags.patch
     ++ optional langVhdl ./ghdl-ortho-cflags.patch
+    ++ [ ../struct-ucontext-4.5.patch ] # glibc-2.26
     ;
 
   postPatch =
