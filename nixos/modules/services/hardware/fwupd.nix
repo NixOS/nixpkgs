@@ -14,6 +14,11 @@ let
       originalFiles = concatMap (d: map (f: "${d}/${f}") (listFiles "${pkgs.fwupd}/etc/${d}")) copiedDirs;
       mkEtcFile = n: nameValuePair n { source = "${pkgs.fwupd}/etc/${n}"; };
     in listToAttrs (map mkEtcFile originalFiles);
+  extraTrustedKeys =
+    let
+      mkName = p: "pki/fwupd/${baseNameOf (toString p)}";
+      mkEtcFile = p: nameValuePair (mkName p) { source = p; };
+    in listToAttrs (map mkEtcFile cfg.extraTrustedKeys);
 in {
 
   ###### interface
@@ -45,6 +50,15 @@ in {
           Allow blacklisting specific plugins
         '';
       };
+
+      extraTrustedKeys = mkOption {
+        type = types.listOf types.path;
+        default = [];
+        example = literalExample "[ /etc/nixos/fwupd/myfirmware.pem ]";
+        description = ''
+          Installing a public key allows firmware signed with a matching private key to be recognized as trusted, which may require less authentication to install than for untrusted files. By default trusted firmware can be upgraded (but not downgraded) without the user or administrator password. Only very few keys are installed by default.
+        '';
+      };
     };
   };
 
@@ -61,7 +75,7 @@ in {
           BlacklistPlugins=${lib.concatStringsSep ";" cfg.blacklistPlugins}
         '';
       };
-    } // originalEtc;
+    } // originalEtc // extraTrustedKeys;
 
     services.dbus.packages = [ pkgs.fwupd ];
 
