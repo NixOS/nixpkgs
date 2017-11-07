@@ -110,16 +110,24 @@ in
       description = "Unbound recursive Domain Name Server";
       after = [ "network.target" ];
       before = [ "nss-lookup.target" ];
-      wants = [" nss-lookup.target" ];
+      wants = [ "nss-lookup.target" ];
       wantedBy = [ "multi-user.target" ];
+      path = [ pkgs.openssl ];
 
       preStart = ''
         mkdir -m 0755 -p ${stateDir}/dev/
         cp ${confFile} ${stateDir}/unbound.conf
+
         ${optionalString cfg.enableRootTrustAnchor ''
         ${pkgs.unbound}/bin/unbound-anchor -a ${rootTrustAnchorFile}
         chown unbound ${stateDir} ${rootTrustAnchorFile}
         ''}
+
+        if [ ! -f ${stateDir}/.control_keys_generated ]; then
+          ${pkgs.unbound}/bin/unbound-control-setup -d ${stateDir}
+          touch ${stateDir}/.control_keys_generated
+        fi
+
         touch ${stateDir}/dev/random
         ${pkgs.utillinux}/bin/mount --bind -n /dev/urandom ${stateDir}/dev/random
       '';
