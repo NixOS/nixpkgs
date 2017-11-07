@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = http://jenkins-ci.org;
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ coconnor fpletz ];
+    maintainers = with maintainers; [ coconnor fpletz earldouglas ];
   };
 }
