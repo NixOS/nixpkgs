@@ -21,8 +21,6 @@ stdenv.mkDerivation rec {
                   gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad gst_all_1.gst-plugins-ugly
                   gst_all_1.gst-libav json_glib ];
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
-
   enableParallelBuilding = true;
 
   postPatch = ''

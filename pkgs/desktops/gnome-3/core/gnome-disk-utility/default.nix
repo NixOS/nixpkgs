@@ -6,8 +6,6 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
-
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext itstool libxslt docbook_xsl
