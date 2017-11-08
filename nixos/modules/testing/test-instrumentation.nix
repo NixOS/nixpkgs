@@ -5,9 +5,10 @@
 
 with lib;
 
-let kernel = config.boot.kernelPackages.kernel; in
-
-{
+let
+  display = (d: if d == null then 0 else d) config.services.xserver.display;
+  kernel = config.boot.kernelPackages.kernel;
+in {
 
   # This option is a dummy that if used in conjunction with
   # modules/virtualisation/qemu-vm.nix gets merged with the same option defined
@@ -28,7 +29,7 @@ let kernel = config.boot.kernelPackages.kernel; in
           ''
             export USER=root
             export HOME=/root
-            export DISPLAY=:0.0
+            export DISPLAY=:${toString display}
 
             source /etc/profile
 
