@@ -173,7 +173,18 @@ trap "exitHandler" EXIT
 # Helper functions.
 
 
+prependToSearchPathWithCustomDelimiter() {
+    (( "$#" == 3 ))
+    local delimiter="$1"
+    local varName="$2"
+    local dir="$3"
+    if [ -d "$dir" ]; then
+        export "${varName}=${dir}${!varName:+${delimiter}${!varName}}"
+    fi
+}
+
 appendToSearchPathWithCustomDelimiter() {
+    (( "$#" == 3 ))
     local delimiter="$1"
     local varName="$2"
     local dir="$3"
@@ -183,6 +194,10 @@ appendToSearchPathWithCustomDelimiter() {
 }
 
 PATH_DELIMITER=':'
+
+prependToSearchPath() {
+    prependToSearchPathWithCustomDelimiter "${PATH_DELIMITER}" "$@"
+}
 
 appendToSearchPath() {
     appendToSearchPathWithCustomDelimiter "${PATH_DELIMITER}" "$@"
@@ -317,7 +332,6 @@ findInputs() {
     esac
     unset -v varSlice
 
-    eval "$var"'+=("$pkg")'
 
     if ! [ -e "$pkg" ]; then
         echo "build input $pkg does not exist" >&2
@@ -334,6 +348,8 @@ findInputs() {
             findInputs "$pkgNext" "$var" "${propagatedBuildInputsFiles[@]}"
         done
     done
+
+    eval "$var"'+=("$pkg")'
 }
 
 # Add package to the future PATH and run setup hooks
@@ -348,7 +364,7 @@ activatePackage() {
     fi
 
     if [ -d "$pkg/bin" ]; then
-        appendToSearchPath _PATH "$pkg/bin"
+        prependToSearchPath _PATH "$pkg/bin"
     fi
 
     if [ -f "$pkg/nix-support/setup-hook" ]; then
@@ -360,19 +376,27 @@ activatePackage() {
 }
 
 declare -a nativePkgs crossPkgs
+# N.B. In both cases, default dependencies must be processed first, so
+# they are overriden by explicit ones.
 if [ -z "${crossConfig:-}" ]; then
     # Not cross-compiling - both buildInputs (and variants like propagatedBuildInputs)
     # are handled identically to nativeBuildInputs
-    for i in ${nativeBuildInputs:-} ${buildInputs:-} \
-             ${defaultNativeBuildInputs:-} ${defaultBuildInputs:-} \
-             ${propagatedNativeBuildInputs:-} ${propagatedBuildInputs:-}; do
+    for i in \
+        ${defaultNativeBuildInputs:-} ${defaultBuildInputs:-} \
+        ${nativeBuildInputs:-} ${propagatedNativeBuildInputs:-} \
+        ${buildInputs:-} ${propagatedBuildInputs:-}
+    do
         findInputs "$i" nativePkgs propagated-native-build-inputs propagated-build-inputs
     done
 else
-    for i in ${nativeBuildInputs:-} ${defaultNativeBuildInputs:-} ${propagatedNativeBuildInputs:-}; do
+    for i in \
+        ${defaultNativeBuildInputs:-} ${nativeBuildInputs:-} ${propagatedNativeBuildInputs:-}
+    do
         findInputs "$i" nativePkgs propagated-native-build-inputs
     done
-    for i in ${buildInputs:-} ${defaultBuildInputs:-} ${propagatedBuildInputs:-}; do
+    for i in \
+        ${defaultBuildInputs:-} ${buildInputs:-} ${propagatedBuildInputs:-}
+    do
         findInputs "$i" crossPkgs propagated-build-inputs
     done
 fi
