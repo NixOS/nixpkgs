@@ -6,7 +6,7 @@ let
 
   cfg = config.services.jira;
 
-  pkg = pkgs.atlassian-jira.override {
+  pkg = pkgs.atlassian-jira.override (optionalAttrs cfg.sso.enable {
     enableSSO = cfg.sso.enable;
     crowdProperties = ''
       application.name                        ${cfg.sso.applicationName}
@@ -21,7 +21,7 @@ let
       session.validationinterval              ${toString cfg.sso.validationInterval}
       session.lastvalidation                  session.lastvalidation
     '';
-  };
+  });
 
 in
 
@@ -183,14 +183,13 @@ in
           ${pkg}/conf/server.xml.dist > ${cfg.home}/server.xml
       '';
 
-      script = "${pkg}/bin/start-jira.sh -fg";
-      stopScript  = "${pkg}/bin/stop-jira.sh";
-
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
         PrivateTmp = true;
         PermissionsStartOnly = true;
+        ExecStart = "${pkg}/bin/start-jira.sh -fg";
+        ExecStop = "${pkg}/bin/stop-jira.sh";
       };
     };
   };

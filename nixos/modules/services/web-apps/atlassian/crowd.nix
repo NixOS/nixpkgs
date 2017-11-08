@@ -9,9 +9,10 @@ let
   pkg = pkgs.atlassian-crowd.override {
     home = cfg.home;
     port = cfg.listenPort;
-    proxyUrl = "${cfg.proxy.scheme}://${cfg.proxy.name}:${toString cfg.proxy.port}";
     openidPassword = cfg.openidPassword;
-  };
+  } // (optionalAttrs cfg.proxy.enable {
+    proxyUrl = "${cfg.proxy.scheme}://${cfg.proxy.name}:${toString cfg.proxy.port}";
+  });
 
 in
 
@@ -142,13 +143,12 @@ in
           ${pkg}/apache-tomcat/conf/server.xml.dist > ${cfg.home}/server.xml
       '';
 
-      script = "${pkg}/start_crowd.sh -fg";
-
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
         PrivateTmp = true;
         PermissionsStartOnly = true;
+        ExecStart = "${pkg}/start_crowd.sh -fg";
       };
     };
   };
