@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  checkPhase = "meson test";
+
   nativeBuildInputs = [ meson ninja pkgconfig gobjectIntrospection ];
   buildInputs = [ glib webkitgtk libsoup libxml2 libarchive ];
 
