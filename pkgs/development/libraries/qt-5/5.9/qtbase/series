@@ -1,9 +1,0 @@
-dlopen-resolv.patch
-tzdir.patch
-dlopen-libXcursor.patch
-library-paths.patch
-libressl.patch
-dlopen-gl.patch
-compose-search-path.patch
-cmake-paths.patch
-qgtk-env.patch

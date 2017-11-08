@@ -45,7 +45,6 @@ in buildPythonPackage {
     ${python.executable} configure.py  -w \
       --confirm-license \
       --dbus=${dbus_libs.dev}/include/dbus-1.0 \
-      --qmake=$QMAKE \
       --no-qml-plugin \
       --bindir=$out/bin \
       --destdir=$out/${python.sitePackages} \

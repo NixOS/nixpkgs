@@ -22,10 +22,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost libtorrentRasterbar qtbase qttools ]
     ++ optional guiSupport dbus_libs;
 
-  preConfigure = ''
-    export QT_QMAKE=$(dirname "$QMAKE")
-  '';
-
   configureFlags = [
     "--with-boost-libdir=${boost.out}/lib"
     "--with-boost=${boost.dev}"
