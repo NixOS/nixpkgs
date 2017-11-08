@@ -35,15 +35,6 @@ stdenv.mkDerivation rec {
       libcanberra_gtk3 zenity xkeyboard_config libxkbfile
       libxkbcommon ];
 
-  patches = [
-    # https://bugzilla.gnome.org/show_bug.cgi?id=760670
-    (fetchpatch {
-      name = "libgudev-232.patch";
-      url = https://bugzilla.gnome.org/attachment.cgi?id=358904;
-      sha256 = "0chvd7g9f2zp3a0gdhvinsfvp2h10rwb6a8ja386vsrl93ac8pix";
-    })
-  ];
-
   preFixup = ''
     wrapProgram "$out/bin/mutter" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
