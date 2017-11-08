@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, glib, itstool, libxml2, xorg, dbus
 , intltool, accountsservice, libX11, gnome3, systemd, autoreconfHook
 , gtk, libcanberra_gtk3, pam, libtool, gobjectIntrospection, plymouth
-, librsvg }:
+, librsvg, coreutils }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -9,6 +9,11 @@ stdenv.mkDerivation rec {
   # Only needed to make it build
   preConfigure = ''
     substituteInPlace ./configure --replace "/usr/bin/X" "${xorg.xorgserver.out}/bin/X"
+  '';
+
+  postPatch = ''
+    substituteInPlace daemon/gdm-manager.c --replace "/bin/plymouth" "${plymouth}/bin/plymouth"
+    substituteInPlace data/gdm.service.in  --replace "/bin/kill" "${coreutils}/bin/kill"
   '';
 
   configureFlags = [ "--sysconfdir=/etc"
