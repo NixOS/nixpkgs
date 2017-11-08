@@ -24,9 +24,7 @@ rec {
     buildEclipsePluginBase (attrs // {
       srcs = [ srcFeature srcPlugin ];
 
-      phases = [ "installPhase" ];
-
-      installPhase = ''
+      buildCommand = ''
         dropinDir="$out/eclipse/dropins/${name}"
 
         mkdir -p $dropinDir/features
@@ -35,7 +33,6 @@ rec {
         mkdir -p $dropinDir/plugins
         cp -v ${srcPlugin} $dropinDir/plugins/${name}.jar
       '';
-
     });
 
   # Helper for the case where the build directory has the layout of an
@@ -44,7 +41,8 @@ rec {
   # directories will be installed.
   buildEclipseUpdateSite = { name, ... } @ attrs:
     buildEclipsePluginBase (attrs // {
-      phases = [ "unpackPhase" "installPhase" ];
+      dontBuild = true;
+      doCheck = false;
 
       installPhase = ''
         dropinDir="$out/eclipse/dropins/${name}"
