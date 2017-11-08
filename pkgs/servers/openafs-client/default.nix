@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
 
   patches = [
    (fetchpatch {
-      url = "https://github.com/openafs/openafs/commit/c4dfc48b9a1294b3484ced632968da20552cc0c4.patch";
+      name = "fix-stdint-include.patch";
+      url = "http://git.openafs.org/?p=openafs.git;a=patch;h=c193e5cba18273a062d4162118c7055b54f7eb5e";
       sha256 = "1yc4gygcazwsslf6mzk1ai92as5jbsjv7212jcbb2dw83jydhc09";
     })
   ];
