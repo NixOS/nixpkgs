@@ -2687,7 +2687,7 @@ with pkgs;
 
 
   ihaskell = callPackage ../development/tools/haskell/ihaskell/wrapper.nix {
-    inherit (haskellPackages) ihaskell ghcWithPackages;
+    inherit (haskellPackages) ghcWithPackages;
 
     jupyter = python3.withPackages (ps: [ ps.jupyter ps.notebook ]);
 
