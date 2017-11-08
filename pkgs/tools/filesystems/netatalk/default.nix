@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, db, libgcrypt, avahi, libiconv, pam, openssl, acl, ed, glibc }:
+{ fetchurl, stdenv, pkgconfig, db, libgcrypt, avahi, libiconv, pam, openssl, acl, ed, glibc, perl, python2 }:
 
 stdenv.mkDerivation rec{
   name = "netatalk-3.1.11";
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec{
     sha256 = "3434472ba96d3bbe3b024274438daad83b784ced720f7662a4c1d0a1078799a6";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig perl python2 ];
   buildInputs = [ db libgcrypt avahi libiconv pam openssl acl ];
 
   patches = ./omitLocalstatedirCreation.patch;
