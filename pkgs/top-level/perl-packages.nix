@@ -12493,6 +12493,9 @@ let self = _self // overrides; _self = with self; {
     meta = {
       maintainers = with maintainers; [ ];
       platforms   = stdenv.lib.platforms.unix;
+
+      # http://cpansearch.perl.org/src/ROSCH/String-ShellQuote-1.04/README
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
