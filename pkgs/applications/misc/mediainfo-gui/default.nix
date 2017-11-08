@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "./MediaInfo/Project/GNU/GUI/";
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Supplies technical and tag information about a video or audio file (GUI version)";
     longDescription = ''

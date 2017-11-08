@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = "sh autogen.sh";
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Shared library for libmediainfo and mediainfo";
     homepage = https://mediaarea.net/;
