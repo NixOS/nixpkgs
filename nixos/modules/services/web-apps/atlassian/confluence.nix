@@ -178,14 +178,13 @@ in
           ${pkg}/conf/server.xml.dist > ${cfg.home}/server.xml
       '';
 
-      script = "${pkg}/bin/start-confluence.sh -fg";
-      stopScript  = "${pkg}/bin/stop-confluence.sh";
-
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
         PrivateTmp = true;
         PermissionsStartOnly = true;
+        ExecStart = "${pkg}/bin/start-confluence.sh -fg";
+        ExecStop = "${pkg}/bin/stop-confluence.sh";
       };
     };
   };
