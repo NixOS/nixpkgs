@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     patchShebangs ./src/
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "A high-performance theorem prover and SMT solver";
     homepage    = http://cvc4.cs.nyu.edu/web/;
