@@ -1158,6 +1158,8 @@ with pkgs;
 
   mp3fs = callPackage ../tools/filesystems/mp3fs { };
 
+  mpdas = callPackage ../tools/audio/mpdas { };
+
   mpdcron = callPackage ../tools/audio/mpdcron { };
 
   mpdris2 = callPackage ../tools/audio/mpdris2 { };
