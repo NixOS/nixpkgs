@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ mpd_clientlib curl ];
 
-  makeFlags = [ "DESTDIR=" "PREFIX=$(out)" ];
+  makeFlags = [ "CONFIG=/etc" "DESTDIR=" "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "Music Player Daemon AudioScrobbler";
