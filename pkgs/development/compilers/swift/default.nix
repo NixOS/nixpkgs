@@ -1,4 +1,5 @@
 { stdenv
+, targetPackages
 , cmake
 , coreutils
 , glibc
@@ -26,7 +27,6 @@
 , rsync
 , git
 , libgit2
-, binutils
 , fetchFromGitHub
 , paxctl
 , findutils
@@ -250,7 +250,7 @@ stdenv.mkDerivation rec {
 
     # TODO: Use wrappers to get these on the PATH for swift tools, instead
     ln -s ${clang}/bin/* $out/bin/
-    ln -s ${binutils}/bin/ar $out/bin/ar
+    ln -s ${targetPackages.stdenv.cc.bintools}/bin/ar $out/bin/ar
   '';
 
   # Hack to avoid TMPDIR in RPATHs.
