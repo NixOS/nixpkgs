@@ -8,7 +8,8 @@
 let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
                    completeDeps, completeBuildDeps,
                    crateFeatures, libName, build, release, libPath,
-                   crateType, metadata, crateBin, finalBins, verboseBuild }:
+                   crateType, metadata, crateBin, finalBins,
+                   verboseBuild, colors }:
 
       let depsDir = lib.concatStringsSep " " dependencies;
           completeDepsDir = lib.concatStringsSep " " completeDeps;
@@ -27,10 +28,17 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
           rustcOpts = (if release then "-C opt-level=3" else "-C debuginfo=2");
           rustcMeta = "-C metadata=${metadata} -C extra-filename=-${metadata}";
       in ''
-      norm="$(printf '\033[0m')" #returns to "normal"
-      bold="$(printf '\033[0;1m')" #set bold
-      green="$(printf '\033[0;32m')" #set red
-      boldgreen="$(printf '\033[0;1;32m')" #set bold, and set red.
+      norm=""
+      bold=""
+      green=""
+      boldgreen=""
+      if [[ "${colors}" -eq "always" ]]; then
+        norm="$(printf '\033[0m')" #returns to "normal"
+        bold="$(printf '\033[0;1m')" #set bold
+        green="$(printf '\033[0;32m')" #set green
+        boldgreen="$(printf '\033[0;1;32m')" #set bold, and set green.
+      fi
+
       mkdir -p target/deps
       mkdir -p target/build
       mkdir -p target/buildDeps
@@ -100,7 +108,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
          fi
          rustc --crate-name build_script_build $BUILD --crate-type bin ${rustcOpts} \
            ${crateFeatures} --out-dir target/build/${crateName} --emit=dep-info,link \
-           -L dependency=target/buildDeps ${buildDeps} --cap-lints allow $EXTRA_BUILD_FLAGS
+           -L dependency=target/buildDeps ${buildDeps} --cap-lints allow $EXTRA_BUILD_FLAGS --color ${colors}
 
          mkdir -p target/build/${crateName}.out
          export RUST_BACKTRACE=1
@@ -108,10 +116,10 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
          mkdir -p $OUT_DIR
          target/build/${crateName}/build_script_build > target/build/${crateName}.opt
          set +e
-         EXTRA_BUILD=$(sed -n "s/^cargo:rustc-flags=\(.*\)/\1/p" target/build/${crateName}.opt)
-         EXTRA_FEATURES=$(sed -n "s/^cargo:rustc-cfg=\(.*\)/--cfg \1/p" target/build/${crateName}.opt)
-         EXTRA_LINK=$(sed -n "s/^cargo:rustc-link-lib=\(.*\)/\1/p" target/build/${crateName}.opt)
-         EXTRA_LINK_SEARCH=$(sed -n "s/^cargo:rustc-link-search=\(.*\)/\1/p" target/build/${crateName}.opt)
+         EXTRA_BUILD=$(sed -n "s/^cargo:rustc-flags=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+         EXTRA_FEATURES=$(sed -n "s/^cargo:rustc-cfg=\(.*\)/--cfg \1/p" target/build/${crateName}.opt | tr '\n' ' ')
+         EXTRA_LINK=$(sed -n "s/^cargo:rustc-link-lib=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ')
+         EXTRA_LINK_SEARCH=$(sed -n "s/^cargo:rustc-link-search=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ')
          CRATENAME=$(echo ${crateName} | sed -e "s/\(.*\)-sys$/\1/" | tr '[:lower:]' '[:upper:]')
          grep "^cargo:" target/build/${crateName}.opt \
             | grep -v "^cargo:rustc-" \
@@ -134,6 +142,10 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
       EXTRA_LIB=""
       CRATE_NAME=$(echo ${libName} | sed -e "s/-/_/g")
 
+      if [ -e target/link_ ]; then
+        EXTRA_BUILD="$(cat target/link_) $EXTRA_BUILD"
+      fi
+
       if [ -e "${libPath}" ] ; then
 
          if ${verboseBuild}; then
@@ -142,7 +154,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
          rustc --crate-name $CRATE_NAME ${libPath} --crate-type ${crateType} \
            ${rustcOpts} ${rustcMeta} ${crateFeatures} --out-dir target/deps \
            --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow \
-           $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES
+           $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES --color ${colors}
 
          EXTRA_LIB=" --extern $CRATE_NAME=target/deps/lib$CRATE_NAME-${metadata}.rlib"
          if [ -e target/deps/lib$CRATE_NAME-${metadata}.so ]; then
@@ -158,7 +170,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
          rustc --crate-name $CRATE_NAME src/lib.rs --crate-type ${crateType} \
            ${rustcOpts} ${rustcMeta} ${crateFeatures} --out-dir target/deps \
            --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow \
-           $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES
+           $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES --color ${colors}
 
          EXTRA_LIB=" --extern $CRATE_NAME=target/deps/lib$CRATE_NAME-${metadata}.rlib"
          if [ -e target/deps/lib$CRATE_NAME-${metadata}.so ]; then
@@ -174,7 +186,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
          rustc --crate-name $CRATE_NAME src/${libName}.rs --crate-type ${crateType} \
            ${rustcOpts} ${rustcMeta} ${crateFeatures} --out-dir target/deps \
            --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow \
-           $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES
+           $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES --color ${colors}
 
          EXTRA_LIB=" --extern $CRATE_NAME=target/deps/lib$CRATE_NAME-${metadata}.rlib"
          if [ -e target/deps/lib$CRATE_NAME-${metadata}.so ]; then
@@ -210,29 +222,25 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
       mkdir -p target/bin
       echo "${crateBin}" | sed -n 1'p' | tr ',' '\n' | while read BIN; do
          if [ ! -z "$BIN" ]; then
-           echo "`tput setaf 2``tput bold`Building $BIN`tput sgr0`"
+           echo "$boldgreen""Building $BIN$norm"
            if ${verboseBuild}; then
-             echo -n "`tput setaf 2``tput bold`Running`tput sgr0`"
-             set -x
+             echo "$boldgreen""Running$norm rustc --crate-name $BIN --crate-type bin ${rustcOpts} ${crateFeatures} --out-dir target/bin --emit=dep-info,link -L dependency=target/deps $LINK ${deps}$EXTRA_LIB --cap-lints allow $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES"
            fi
            rustc --crate-name $BIN --crate-type bin ${rustcOpts} ${crateFeatures} \
              --out-dir target/bin --emit=dep-info,link -L dependency=target/deps \
              $LINK ${deps}$EXTRA_LIB --cap-lints allow \
-             $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES
-           set +x
+             $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES --color ${colors}
          fi
       done
       if [[ (-z "${crateBin}") && (-e src/main.rs) ]]; then
-         echo "`tput setaf 2``tput bold`Building src/main.rs (${crateName})`tput sgr0`"
+         echo "$boldgreen""Building src/main.rs (${crateName})$norm"
          if ${verboseBuild}; then
-           echo -n "`tput setaf 2``tput bold`Running`tput sgr0`"
-           set -x
+           echo "$boldgreen""Running$norm rustc --crate-name $CRATE_NAME src/main.rs --crate-type bin ${rustcOpts} ${crateFeatures} --out-dir target/bin --emit=dep-info,link -L dependency=target/deps $LINK ${deps}$EXTRA_LIB --cap-lints allow $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES"
          fi
          rustc --crate-name $CRATE_NAME src/main.rs --crate-type bin ${rustcOpts} \
            ${crateFeatures} --out-dir target/bin --emit=dep-info,link \
-           -L dependency=target/deps $LINK ${deps}$EXTRA_LIB --cap-lints allow
-           $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES
-         set +x
+           -L dependency=target/deps $LINK ${deps}$EXTRA_LIB --cap-lints allow \
+           $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES --color ${colors}
       fi
       # Remove object files to avoid "wrong ELF type"
       rm -f $(find target -name "*.o")
@@ -309,10 +317,11 @@ crate: rust: stdenv.mkDerivation rec {
       if lib.attrByPath ["procMacro"] false crate then "proc-macro" else
       if lib.attrByPath ["plugin"] false crate then "dylib" else "lib";
     verboseBuild = if lib.attrByPath [ "verbose" ] false crate then "true" else "false";
+    colors = lib.attrByPath [ "colors" ] "always" crate;
     buildPhase = buildCrate {
       inherit crateName dependencies buildDependencies completeDeps completeBuildDeps
               crateFeatures libName build release libPath crateType crateVersion
-              metadata crateBin finalBins verboseBuild;
+              metadata crateBin finalBins verboseBuild colors;
     };
     installPhase = installCrate crateName;
 }
