@@ -1,27 +1,34 @@
-{stdenv, fetchurl, libtool}:
+{ stdenv, fetchurl, libtool }:
 
-stdenv.mkDerivation {
-  name = "libtomcrypt-1.17";
+stdenv.mkDerivation rec {
+  name = "libtomcrypt-${version}";
+  version = "1.18.0";
 
   src = fetchurl {
-    url = "https://github.com/libtom/libtomcrypt/releases/download/1.17/crypt-1.17.tar.bz2";
-    sha256 = "e33b47d77a495091c8703175a25c8228aff043140b2554c08a3c3cd71f79d116";
+    url = "https://github.com/libtom/libtomcrypt/releases/download/v${version}/crypt-${version}.tar.xz";
+    sha256 = "0ymqi0zf5gzn8pq4mnylwgg6pskml2v1p9rsjrqspyja65mgb7fs";
   };
 
-  buildInputs = [libtool];
+  nativeBuildInputs = [ libtool ];
+
+  postPatch = ''
+    substituteInPlace makefile.shared --replace "LT:=glibtool" "LT:=libtool"
+  '';
 
   preBuild = ''
-    makeFlagsArray=(LIBPATH=$out/lib INCPATH=$out/include \
-      DATAPATH=$out/share/doc/libtomcrypt/pdf \
+    makeFlagsArray=(PREFIX=$out \
       INSTALL_GROUP=$(id -g) \
       INSTALL_USER=$(id -u))
   '';
 
   makefile = "makefile.shared";
 
-  meta = {
-    homepage = http://libtom.org/?page=features&newsitems=5&whatfile=crypt;
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
+    homepage = http://www.libtom.net/LibTomCrypt/;
     description = "A fairly comprehensive, modular and portable cryptographic toolkit";
-    platforms = stdenv.lib.platforms.linux;
+    license = with licenses; [ publicDomain wtfpl ];
+    platforms = platforms.linux;
   };
 }
