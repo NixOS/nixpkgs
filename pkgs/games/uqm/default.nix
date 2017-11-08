@@ -50,11 +50,6 @@ in stdenv.mkDerivation rec {
     sha256 = "10nbvcrr0lc0mxivxfkcbxnibwk3vwmamabrlvwdsjxd9pk8aw65";
   };
 
-  /* uses pthread_cancel(), which requires libgcc_s.so.1 to be
-     loadable at run-time. Adding the flag below ensures that the
-     library can be found. Obviously, though, this is a hack. */
-  NIX_LDFLAGS = "-lgcc_s";
-
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ SDL SDL_image libpng libvorbis libogg libmikmod mesa ];
 
