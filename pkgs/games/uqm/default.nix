@@ -70,6 +70,11 @@ in stdenv.mkDerivation rec {
     ln -s "${videos}" "uqm-${version}/content/addons/3dovideo"
   '';
 
+  # Using _STRINGS_H as include guard conflicts with glibc.
+  postPatch = ''
+    sed -i -e '/^#/s/_STRINGS_H/_UQM_STRINGS_H/g' src/uqm/comm/*/strings.h
+  '';
+
   # uqm has a 'unique' build system with a root script incidentally called
   # 'build.sh'.
   configurePhase = ''
