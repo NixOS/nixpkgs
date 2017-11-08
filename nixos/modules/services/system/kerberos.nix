@@ -27,7 +27,7 @@ in
     environment.systemPackages = [ pkgs.heimdalFull ];
     systemd.services.kadmind = {
       description = "Kerberos Administration Daemon";
-      script = "${pkgs.heimdalFull}/libexec/heimdal/kadmind";
+      serviceConfig.ExecStart = "${pkgs.heimdalFull}/libexec/heimdal/kadmind";
     };
 
     systemd.services.kdc = {
@@ -36,13 +36,13 @@ in
       preStart = ''
         mkdir -m 0755 -p ${stateDir}
       '';
-      script = "${pkgs.heimdalFull}/libexec/heimdal/kdc";
+      serviceConfig.ExecStart = "${pkgs.heimdalFull}/libexec/heimdal/kdc";
     };
 
     systemd.services.kpasswdd = {
       description = "Kerberos Password Changing daemon";
       wantedBy = [ "multi-user.target" ];
-      script = "${pkgs.heimdalFull}/libexec/heimdal/kpasswdd";
+      serviceConfig.ExecStart = "${pkgs.heimdalFull}/libexec/heimdal/kpasswdd";
     };
   };
 }
