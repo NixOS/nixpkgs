@@ -26,13 +26,13 @@
   # us to avoid expensive splicing.
   buildPackages
 
-, # The package set used in the next stage. If null, `__targetPackages` will be
+, # The package set used in the next stage. If null, `targetPackages` will be
   # defined internally as the final produced package set itself, just like with
   # `buildPackages` and for the same reasons.
   #
   # THIS IS A HACK for compilers that don't think critically about cross-
   # compilation. Please do *not* use unless you really know what you are doing.
-  __targetPackages
+  targetPackages
 
 , # The standard environment to use for building packages.
   stdenv
@@ -72,7 +72,7 @@ let
   stdenvBootstappingAndPlatforms = self: super: {
     buildPackages = (if buildPackages == null then self else buildPackages)
       // { recurseForDerivations = false; };
-    __targetPackages = (if __targetPackages == null then self else __targetPackages)
+    targetPackages = (if targetPackages == null then self else targetPackages)
       // { recurseForDerivations = false; };
     inherit stdenv;
   };
