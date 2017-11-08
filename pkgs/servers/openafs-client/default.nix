@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit, which, autoconf, automake, flex, yacc,
-  kernel, glibc, ncurses, perl, kerberos }:
+  kernel, glibc, ncurses, perl, kerberos, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "openafs-${version}-${kernel.version}";
@@ -15,6 +15,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
 
   hardeningDisable = [ "pic" ];
+
+  patches = [
+   (fetchpatch {
+      url = "https://github.com/openafs/openafs/commit/c4dfc48b9a1294b3484ced632968da20552cc0c4.patch";
+      sha256 = "1yc4gygcazwsslf6mzk1ai92as5jbsjv7212jcbb2dw83jydhc09";
+    })
+  ];
 
   preConfigure = ''
     ln -s "${kernel.dev}/lib/modules/"*/build $TMP/linux
