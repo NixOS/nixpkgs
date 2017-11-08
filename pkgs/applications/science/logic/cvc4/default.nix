@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
     "--with-boost=${boost.dev}"
   ];
 
+  prePatch = ''
+    patch -p1 -i ${./minisat-fenv.patch} -d src/prop/minisat
+    patch -p1 -i ${./minisat-fenv.patch} -d src/prop/bvminisat
+  '';
+
   preConfigure = ''
     patchShebangs ./src/
   '';
