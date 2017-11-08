@@ -118,23 +118,16 @@ let
       '';
   };
 
-  all-cabal-hashes-component = name: import (pkgs.runCommand "all-cabal-hashes-component-${name}.nix" {}
-    ''
-      set +o pipefail
-      for component in ${all-cabal-hashes}/*; do
-        if ls $component | grep -q "^${name}$"; then
-          echo "builtins.storePath $component" > $out
-          exit 0
-        fi
-      done
-      echo "${name} not found in any all-cabal-hashes component, are you sure it's in hackage?" >&2
-      exit 1
-    '');
+  all-cabal-hashes-component = name: version: pkgs.runCommand "all-cabal-hashes-component-${name}-${version}" {} ''
+    tar --wildcards -xzvf ${all-cabal-hashes} \*/${name}/${version}/${name}.{json,cabal}
+    mkdir -p $out
+    mv */${name}/${version}/${name}.{json,cabal} $out
+  '';
 
-  hackage2nix = name: version: let component = all-cabal-hashes-component name; in self.haskellSrc2nix {
+  hackage2nix = name: version: let component = all-cabal-hashes-component name version; in self.haskellSrc2nix {
     name   = "${name}-${version}";
-    sha256 = ''$(sed -e 's/.*"SHA256":"//' -e 's/".*$//' "${component}/${name}/${version}/${name}.json")'';
-    src    = "${component}/${name}/${version}/${name}.cabal";
+    sha256 = ''$(sed -e 's/.*"SHA256":"//' -e 's/".*$//' "${component}/${name}.json")'';
+    src    = "${component}/${name}.cabal";
   };
 
 in package-set { inherit pkgs stdenv callPackage; } self // {
