@@ -1,14 +1,13 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation {
-  name = "time-1.7";
+stdenv.mkDerivation rec {
+  name = "time-${version}";
+  version = "1.8";
 
   src = fetchurl {
-    url = mirror://gnu/time/time-1.7.tar.gz;
-    sha256 = "0va9063fcn7xykv658v2s9gilj2fq4rcdxx2mn2mmy1v4ndafzp3";
+    url = "mirror://gnu/time/${name}.tar.gz";
+    sha256 = "06rfg8dn0q2r8pdq8i6brrs6rqrsgvkwbbl4kfx3a6lnal0m8bwa";
   };
-
-  patches = [ ./max-resident.patch ];
 
   meta = {
     description = "Tool that runs programs and summarizes the system resources they use";
@@ -27,7 +26,7 @@ stdenv.mkDerivation {
       `time' reports unavailable information as zero values.
     '';
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = stdenv.lib.licenses.gpl3Plus;
     homepage = http://www.gnu.org/software/time/;
     platforms = stdenv.lib.platforms.unix;
   };
