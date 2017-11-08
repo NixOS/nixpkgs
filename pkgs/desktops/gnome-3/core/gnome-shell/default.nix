@@ -44,20 +44,12 @@ in stdenv.mkDerivation rec {
     ./fix-paths.patch
   ];
 
-  preBuild = ''
-    # meson setup-hook changes the directory so the files are located one level up
-    patchShebangs ../src/data-to-c.pl
+  postPatch = ''
+    patchShebangs src/data-to-c.pl
 
-    substituteInPlace ../src/gnome-shell-extension-tool.in --replace "@PYTHON@" "${pythonEnv}/bin/python"
-    substituteInPlace ../src/gnome-shell-perf-tool.in --replace "@PYTHON@" "${pythonEnv}/bin/python"
-  '';
-
-  preFixup = with gnome3; ''
-    gappsWrapperArgs+=(
-      --prefix PATH : "${unzip}/bin"
-    )
-
-    echo "${unzip}/bin" > $out/${passthru.mozillaPlugin}/extra-bin-path
+    substituteInPlace src/gnome-shell-extension-tool.in --replace "@PYTHON@" "${pythonEnv}/bin/python"
+    substituteInPlace src/gnome-shell-perf-tool.in --replace "@PYTHON@" "${pythonEnv}/bin/python"
+    substituteInPlace js/ui/extensionDownloader.js --replace "unzip" "${unzip}/bin/unzip"
   '';
 
   postInstall = ''
