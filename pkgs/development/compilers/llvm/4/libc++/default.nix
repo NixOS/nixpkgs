@@ -10,8 +10,12 @@ stdenv.mkDerivation rec {
     export LIBCXXABI_INCLUDE_DIR="$PWD/$(ls -d libcxxabi-${version}*)/include"
   '';
 
-  # https://github.com/llvm-mirror/libcxx/commit/bcc92d75df0274b9593ebd097fcae60494e3bffc
-  patches = [ ./pthread_mach_thread_np.patch ];
+  patches = [
+    # https://github.com/llvm-mirror/libcxx/commit/bcc92d75df0274b9593ebd097fcae60494e3bffc
+    ./pthread_mach_thread_np.patch
+    # glibc 2.26 fix
+    ./xlocale-glibc-2.26.patch
+  ];
 
   prePatch = ''
     substituteInPlace lib/CMakeLists.txt --replace "/usr/lib/libc++" "\''${LIBCXX_LIBCXXABI_LIB_PATH}/libc++"
