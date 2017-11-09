@@ -13598,6 +13598,8 @@ with pkgs;
 
   vistafonts = callPackage ../data/fonts/vista-fonts { };
 
+  vistafonts-chs = callPackage ../data/fonts/vista-fonts-chs { };
+
   wireless-regdb = callPackage ../data/misc/wireless-regdb { };
 
   wqy_microhei = callPackage ../data/fonts/wqy-microhei { };

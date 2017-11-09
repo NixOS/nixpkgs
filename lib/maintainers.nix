@@ -111,6 +111,7 @@
   changlinli = "Changlin Li <mail@changlinli.com>";
   chaoflow = "Florian Friesdorf <flo@chaoflow.net>";
   chattered = "Phil Scott <me@philscotted.com>";
+  ChengCat = "Yucheng Zhang <yu@cheng.cat>";
   choochootrain = "Hurshal Patel <hurshal@imap.cc>";
   chpatrick = "Patrick Chilton <chpatrick@gmail.com>";
   chris-martin = "Chris Martin <ch.martin@gmail.com>";
