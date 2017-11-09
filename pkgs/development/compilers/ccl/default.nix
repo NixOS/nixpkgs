@@ -1,4 +1,4 @@
-{ stdenv, fetchsvn, gcc, glibc, m4, coreutils }:
+{ stdenv, fetchsvn, fetchpatch, gcc, glibc, m4, coreutils }:
 
 let
   options = rec {
@@ -39,12 +39,18 @@ stdenv.mkDerivation rec {
     sha256 = cfg.sha256;
   };
 
+  patches = fetchpatch {
+    name = "ccl-1.11-glibc-2.26.patch";
+    url = https://patch-diff.githubusercontent.com/raw/Clozure/ccl/pull/80.patch;
+    sha256 = "02v6287w0nppfpvkn9dyd5rvq2zkgd47ia9gs17hrww2hgzr6agd";
+  };
+
   buildInputs = [ gcc glibc m4 ];
 
   CCL_RUNTIME = cfg.runtime;
   CCL_KERNEL = cfg.kernel;
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace lisp-kernel/${CCL_KERNEL}/Makefile \
       --replace "svnversion" "echo ${revision}" \
       --replace "/bin/rm"    "${coreutils}/bin/rm" \
