@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation rec {
   name = "allegro-${version}";
-  version = "5.2.2.0";
+  version = "5.2.3.0";
 
   src = fetchFromGitHub {
     owner = "liballeg";
     repo = "allegro5";
     rev = version;
-    sha256 = "1sf0dr0ahrzsy6gzzpvys9d7d9w0grayhak4cyymjv7w857hf51m";
+    sha256 = "0bx240x0filalfarylqjgqf3g80c7dhzhy4m162swjlg0vjpgblr";
   };
 
   buildInputs = [
