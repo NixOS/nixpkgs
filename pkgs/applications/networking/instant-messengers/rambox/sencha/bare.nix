@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     ./SenchaCmd*.sh -q -dir $out -varfile response.varfile
+    # disallow sencha writing into /nix/store/repo
+    echo "repo.local.dir=$TMP/repo" >> $out/sencha.cfg
     rm $out/shell-wrapper.sh $out/Uninstaller
   '';
 
