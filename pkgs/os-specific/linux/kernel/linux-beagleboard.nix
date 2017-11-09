@@ -17,10 +17,9 @@ import ./generic.nix (args // rec {
 
   kernelPatches = args.kernelPatches;
 
-  features.iwlwifi = true;
-  features.efiBootStub = true;
-  features.needsCifsUtils = true;
-  features.netfilterRPFilter = true;
+  features = {
+    efiBootStub = false;
+  } // (args.features or {});
 
   extraMeta.hydraPlatforms = [];
 } // (args.argsOverride or {}))
