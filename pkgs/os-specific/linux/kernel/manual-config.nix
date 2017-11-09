@@ -103,7 +103,16 @@ let
 
       configurePhase = ''
         runHook preConfigure
+        if [ -z "$buildRoot" ]; then
+
+          # assume we are in the $sourceRoot folder
+          echo "buildRoot is not set"
+          mkdir -p ../build
+          export buildRoot=$(pwd)/../build
+        fi
+
         ln -sv ${configfile} $buildRoot/.config
+        # ln -sv ${configfile} ''${buildRoot:=$(pwd)/../build}/.config
         make $makeFlags "''${makeFlagsArray[@]}" oldconfig
         runHook postConfigure
 
