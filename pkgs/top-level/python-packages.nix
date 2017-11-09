@@ -6520,13 +6520,13 @@ in {
 
   paperwork-backend = buildPythonPackage rec {
     name = "paperwork-backend-${version}";
-    version = "1.2.0";
+    version = "1.2.1";
 
     src = pkgs.fetchFromGitHub {
-      owner = "jflesch";
+      owner = "openpaperwork";
       repo = "paperwork-backend";
       rev = version;
-      sha256 = "1pzyy14f9wzh9vwn855k1z48a8mbs73j1dk8730kdlcdkmn3l1ms";
+      sha256 = "1lrawibm6jnykj1bkrl8196kcxrhndzp7r0brdrb4hs54gql7j5x";
     };
 
     # Python 2.x is not supported.
