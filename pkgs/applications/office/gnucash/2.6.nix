@@ -13,11 +13,11 @@ Two cave-ats right now:
 */
 
 stdenv.mkDerivation rec {
-  name = "gnucash-2.6.12";
+  name = "gnucash-2.6.18-1";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${name}.tar.bz2";
-    sha256 = "0x84f07p30pwhriamv8ifljgw755cj87rc12jy1xddf47spyj7rp";
+    sha256 = "1794qi7lkn1kbnhzk08wawacfcphbln3ngdl3q0qax5drv7hnwv8";
   };
 
   patches = [
