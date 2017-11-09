@@ -104,10 +104,6 @@ in stdenv.mkDerivation rec {
     --prefix PATH : ${stdenv.lib.makeBinPath [ qtbase ]}
   '';
 
-  preFixup = ''
-    rm -r ../__nix_qt5__
-  '';
-
   meta = with stdenv.lib; {
     description = "Headless WebKit with JavaScript API";
     longDescription = ''

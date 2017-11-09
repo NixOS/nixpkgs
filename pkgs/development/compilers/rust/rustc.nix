@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, fetchgit, fetchzip, file, python2, tzdata, procps
-, llvm, jemalloc, ncurses, darwin, binutils, rustPlatform, git, cmake, curl
+{ stdenv, targetPackages
+, fetchurl, fetchgit, fetchzip, file, python2, tzdata, procps
+, llvm, jemalloc, ncurses, darwin, rustPlatform, git, cmake, curl
 , which, libffi, gdb
 , version
 , forceBundledLLVM ? false
@@ -49,7 +50,7 @@ stdenv.mkDerivation {
                 ++ [ "--enable-local-rust" "--local-rust-root=${rustPlatform.rust.rustc}" "--enable-rpath" ]
                 ++ [ "--enable-vendor" "--disable-locked-deps" ]
                 # ++ [ "--jemalloc-root=${jemalloc}/lib"
-                ++ [ "--default-linker=${stdenv.cc}/bin/cc" "--default-ar=${binutils.out}/bin/ar" ]
+                ++ [ "--default-linker=${targetPackages.stdenv.cc}/bin/cc" "--default-ar=${targetPackages.stdenv.cc.bintools}/bin/ar" ]
                 ++ optional (!forceBundledLLVM) [ "--enable-llvm-link-shared" ]
                 ++ optional (stdenv.cc.cc ? isClang) "--enable-clang"
                 ++ optional (targets != []) "--target=${target}"

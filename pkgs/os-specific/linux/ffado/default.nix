@@ -41,7 +41,10 @@ stdenv.mkDerivation rec {
     optXdg_utils libxmlxx glibmm
   ];
 
-  patches = [ ./gcc6.patch ];
+  patches = [
+    ./gcc6.patch
+    ./glibc226.patch
+  ];
 
   postPatch = ''
     # SConstruct checks cpuinfo and an objdump of /bin/mount to determine the appropriate arch

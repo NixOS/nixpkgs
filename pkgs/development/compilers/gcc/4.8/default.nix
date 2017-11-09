@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, noSysDirs
+{ stdenv, targetPackages, fetchurl, fetchpatch, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langObjC ? targetPlatform.isDarwin
 , langObjCpp ? targetPlatform.isDarwin
@@ -153,8 +153,8 @@ let version = "4.8.5";
         withFloat +
         withMode +
         # Ensure that -print-prog-name is able to find the correct programs.
-        " --with-as=${binutils}/bin/${targetPlatform.config}-as" +
-        " --with-ld=${binutils}/bin/${targetPlatform.config}-ld" +
+        " --with-as=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as" +
+        " --with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld" +
         (if crossMingw && crossStageStatic then
           " --with-headers=${libcCross}/include" +
           " --with-gcc" +
@@ -303,7 +303,7 @@ stdenv.mkDerivation ({
     ++ (optional (zlib != null) zlib)
     ++ (optionals langJava [ boehmgc zip unzip ])
     ++ (optionals javaAwtGtk ([ gtk2 libart_lgpl ] ++ xlibs))
-    ++ (optionals (targetPlatform != hostPlatform) [binutils])
+    ++ (optionals (targetPlatform != hostPlatform) [targetPackages.stdenv.cc.bintools])
     ++ (optionals langAda [gnatboot])
     ++ (optionals langVhdl [gnat])
 

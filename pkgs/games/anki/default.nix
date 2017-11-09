@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
         # "http://ankisrs.net/download/mirror/${name}.tgz"
         # "http://ankisrs.net/download/mirror/archive/${name}.tgz"
       ];
-      sha256 = "01h51rbnj0r6lmjnn2vzxzaf7mxkc0azmg1v4mvf4pkpsp50a7hr";
+      sha256 = "067bsidqzy1zc301i2pk4biwp2kwvgk4kydp5z5s551acinkbdgv";
     };
 
     pythonPath = [ pyqt4 sqlalchemy pyaudio beautifulsoup4 httplib2 ]

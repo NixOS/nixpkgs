@@ -6520,13 +6520,13 @@ in {
 
   paperwork-backend = buildPythonPackage rec {
     name = "paperwork-backend-${version}";
-    version = "1.2.0";
+    version = "1.2.1";
 
     src = pkgs.fetchFromGitHub {
-      owner = "jflesch";
+      owner = "openpaperwork";
       repo = "paperwork-backend";
       rev = version;
-      sha256 = "1pzyy14f9wzh9vwn855k1z48a8mbs73j1dk8730kdlcdkmn3l1ms";
+      sha256 = "1lrawibm6jnykj1bkrl8196kcxrhndzp7r0brdrb4hs54gql7j5x";
     };
 
     # Python 2.x is not supported.
@@ -16043,21 +16043,21 @@ in {
 
   pyinsane2 = buildPythonPackage rec {
     name = "pyinsane2-${version}";
-    version = "2.0.9";
+    version = "2.0.10";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyinsane2/${name}.tar.gz";
-      sha256 = "1g4a1zhrrs7smmnsm7x8j5lvsz0r6rr2jgjykc9c1jlscz3yr747";
+      sha256 = "00d1wqb3w9bn1rxb2dwmdqbar2lr96izq855l5vzprc17dkgip3j";
     };
 
     postPatch = ''
       # pyinsane2 forks itself, so we need to re-inject the PYTHONPATH.
       sed -i -e '/os.putenv.*PYINSANE_DAEMON/ {
         a \        os.putenv("PYTHONPATH", ":".join(sys.path))
-      }' src/pyinsane2/sane/abstract_proc.py
+      }' pyinsane2/sane/abstract_proc.py
 
       sed -i -e 's,"libsane.so.1","${pkgs.sane-backends}/lib/libsane.so",' \
-        src/pyinsane2/sane/rawapi.py
+        pyinsane2/sane/rawapi.py
     '';
 
     # Tests require a scanner to be physically connected, so let's just do a

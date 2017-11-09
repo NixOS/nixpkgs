@@ -173,7 +173,7 @@ in
 
         preStart = ''
           mkdir -p ${cfg.statePath}/{data,config,logs}
-          ln -sf ${pkgs.mattermost}/{bin,fonts,i18n,templates,webapp} ${cfg.statePath}
+          ln -sf ${pkgs.mattermost}/{bin,fonts,i18n,templates,client} ${cfg.statePath}
         '' + lib.optionalString (!cfg.mutableConfig) ''
           ln -sf ${mattermostConfJSON} ${cfg.statePath}/config/config.json
         '' + lib.optionalString cfg.mutableConfig ''

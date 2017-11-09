@@ -1,4 +1,4 @@
-{ stdenv, steamArch, fetchurl, writeText, python2, dpkg, binutils }:
+{ stdenv, steamArch, fetchurl, writeText, python2, dpkg }:
 
 let input = builtins.getAttr steamArch (import ./runtime-generated.nix { inherit fetchurl; });
 
@@ -7,7 +7,7 @@ let input = builtins.getAttr steamArch (import ./runtime-generated.nix { inherit
 in stdenv.mkDerivation {
   name = "steam-runtime-2016-08-13";
 
-  nativeBuildInputs = [ python2 dpkg binutils ];
+  nativeBuildInputs = [ python2 dpkg stdenv.cc.bintools ];
 
   buildCommand = ''
     mkdir -p $out

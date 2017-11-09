@@ -1,5 +1,7 @@
 { fetchgit, pkgconfig, gettext, runCommand, makeWrapper
-, elfutils, kernel, gnumake, python2, pythonPackages, binutils }:
+, elfutils, kernel, gnumake, python2, pythonPackages
+}:
+
 let
   ## fetchgit info
   url = git://sourceware.org/git/systemtap.git;
@@ -55,5 +57,5 @@ in runCommand "systemtap-${kernel.version}-${version}" {
   rm $out/bin/stap
   makeWrapper $stapBuild/bin/stap $out/bin/stap \
     --add-flags "-r $kernelBuildDir" \
-    --prefix PATH : ${lib.makeBinPath [ stdenv.cc.cc binutils elfutils gnumake ]}
+    --prefix PATH : ${lib.makeBinPath [ stdenv.cc.cc stdenv.cc.bintools elfutils gnumake ]}
 ''
