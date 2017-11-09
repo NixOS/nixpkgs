@@ -473,16 +473,11 @@ rec {
 
   beaglebone = armv7l-hf-multiplatform // {
     name = "beaglebone";
-    kernelBaseConfig = "omap2plus_defconfig";
+    kernelBaseConfig = "bb.org_defconfig";
     kernelAutoModules = false;
     kernelExtraConfig = ""; # TBD kernel config
     kernelTarget = "zImage";
     uboot = null;
-  };
-
-  bb-org-beaglebone = beaglebone // {
-    name = "bb-org-beaglebone";
-    kernelBaseConfig = "bb.org_defconfig";
   };
 
   armv7l-hf-multiplatform = {
