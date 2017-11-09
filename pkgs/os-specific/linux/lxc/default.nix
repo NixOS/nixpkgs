@@ -29,6 +29,12 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./support-db2x.patch
+    # Fix build error against glibc 2.26
+    (fetchpatch {
+      url = "https://github.com/lxc/lxc/commit/"
+          + "180c477a326ce85632249ff16990e8c29db1b6fa.patch";
+      sha256 = "05jkiiixxk9ibj1fwzmy56rkkign28bd9mrmgiz12g92r2qahm2z";
+    })
   ];
 
   postPatch = ''
