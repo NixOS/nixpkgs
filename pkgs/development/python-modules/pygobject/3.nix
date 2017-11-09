@@ -3,8 +3,10 @@
 buildPythonPackage rec {
   major = "3.24";
   minor = "1";
-  name = "pygobject-${major}.${minor}";
+  version = "${major}.${minor}";
   format = "other";
+  pname = "pygobject";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://gnome/sources/pygobject/${major}/${name}.tar.xz";

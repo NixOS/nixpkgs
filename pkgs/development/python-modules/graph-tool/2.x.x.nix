@@ -3,8 +3,9 @@ pkgconfig, boost, expat, scipy, numpy, cgal, gmp, mpfr, lndir,
 gobjectIntrospection, pygobject3, gtk3, matplotlib }:
 
 stdenv.mkDerivation rec {
+  pname = python.libPrefix + "-graph-tool";
   version = "2.16";
-  name = "${python.libPrefix}-graph-tool-${version}";
+  name = pname + "-" + version;
 
   meta = with stdenv.lib; {
     description = "Python module for manipulation and statistical analysis of graphs";

@@ -5,11 +5,15 @@
 }:
 
 let
+  pname = "PyQt";
   version = "5.9";
+
   inherit (pythonPackages) buildPythonPackage python dbus-python sip;
 in buildPythonPackage {
-  name = "PyQt-${version}";
+  pname = pname;
+  version = version;
   format = "other";
+  name = pname + "-" + version;
 
   meta = with lib; {
     description = "Python bindings for Qt5";

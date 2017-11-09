@@ -11,8 +11,8 @@
 
 buildPythonPackage rec {
   pname = "PySoundFile";
-  name = "PySoundFile-${version}";
   version = "0.8.1";
+  name = pname + "-" + version;
 
   src = fetchPypi {
     inherit pname version;

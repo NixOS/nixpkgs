@@ -87,7 +87,10 @@ in {
 
   # helpers
 
-  wrapPython = callPackage ../development/interpreters/python/wrap-python.nix {inherit python; inherit (pkgs) makeSetupHook makeWrapper; };
+  wrapPython = callPackage ../development/interpreters/python/wrap-python.nix {
+    inherit python;
+    inherit (pkgs) makeSetupHook makeWrapper;
+ };
 
   # specials
 
@@ -369,15 +372,16 @@ in {
   python-sybase = callPackage ../development/python-modules/sybase {};
 
   alot = buildPythonPackage rec {
-    rev = "0.5.1";
-    name = "alot-${rev}";
+    pname = "alot";
+    version = "0.5.1";
+    name = pname + "-" + version;
 
     disabled = isPy3k;
 
     src = pkgs.fetchFromGitHub {
       owner = "pazz";
       repo = "alot";
-      inherit rev;
+      rev = version;
       sha256 = "0ipkhc5wllfq78lg47aiq4qih0yjq8ad9xkrbgc88xk8pk9166i8";
     };
 
@@ -414,7 +418,9 @@ in {
   };
 
   anyjson = buildPythonPackage rec {
-    name = "anyjson-0.3.3";
+    pname = "anyjson";
+    version = "0.3.3";
+    name = pname + "-" + version;
 
     # The tests are written in a python2 syntax but anyjson is python3 valid
     doCheck = !isPy3k;
@@ -433,7 +439,9 @@ in {
   };
 
   amqp_1 = buildPythonPackage rec {
-    name = "amqp-${version}";
+    pname = "amqp";
+    name = pname + "-" + version;
+
     version = "1.4.9";
     disabled = pythonOlder "2.6";
 
@@ -452,7 +460,9 @@ in {
   };
 
   amqp = buildPythonPackage rec {
-    name = "amqp-${version}";
+    pname = "amqp";
+    name = pname + "-" + version;
+
     version = "2.1.4";
     disabled = pythonOlder "2.6";
 
@@ -495,7 +505,9 @@ in {
 
   appnope = buildPythonPackage rec {
     version = "0.1.0";
-    name = "appnope-${version}";
+    pname = "appnope";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/appnope/${name}.tar.gz";
@@ -515,7 +527,9 @@ in {
   astor = callPackage ../development/python-modules/astor {};
 
   asyncio = if (pythonAtLeast "3.3") then buildPythonPackage rec {
-    name = "asyncio-${version}";
+    pname = "asyncio";
+    name = pname + "-" + version;
+
     version = "3.4.3";
 
 
@@ -559,7 +573,10 @@ in {
   arrow = callPackage ../development/python-modules/arrow { };
 
   async = buildPythonPackage rec {
-    name = "async-0.6.1";
+    pname = "async";
+    version = "0.6.1";
+    name = pname + "-" + version;
+
     disabled = isPy3k;
     meta.maintainers = with maintainers; [ mornfall ];
 
@@ -578,7 +595,9 @@ in {
 
   atomiclong = buildPythonPackage rec {
     version = "0.1.1";
-    name = "atomiclong-${version}";
+    pname = "atomiclong";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/atomiclong/atomiclong-${version}.tar.gz";
@@ -598,7 +617,9 @@ in {
 
   atomicwrites = buildPythonPackage rec {
     version = "0.1.9";
-    name = "atomicwrites-${version}";
+    pname = "atomicwrites";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/atomicwrites/atomicwrites-${version}.tar.gz";
@@ -619,7 +640,9 @@ in {
   astroid = callPackage ../development/python-modules/astroid { };
 
   attrdict = buildPythonPackage (rec {
-    name = "attrdict-2.0.0";
+    pname = "attrdict";
+    version = "2.0.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/attrdict/${name}.tar.gz";
@@ -640,7 +663,9 @@ in {
   audioread = callPackage ../development/python-modules/audioread { };
 
   audiotools = buildPythonPackage rec {
-    name = "audiotools-${version}";
+    pname = "audiotools";
+    name = pname + "-" + version;
+
     version = "3.1.1";
 
     buildInputs = optionals stdenv.isDarwin (with pkgs.darwin.apple_sdk.frameworks; [
@@ -664,7 +689,9 @@ in {
   autopep8 = callPackage ../development/python-modules/autopep8 { };
 
   av = buildPythonPackage rec {
-    name = "av-${version}";
+    pname = "av";
+    name = pname + "-" + version;
+
     version = "0.2.4";
 
     src = pkgs.fetchurl {
@@ -687,7 +714,9 @@ in {
   };
 
   avro = buildPythonPackage (rec {
-    name = "avro-1.7.6";
+    pname = "avro";
+    version = "1.7.6";
+    name = pname + "-" + version;
 
     disabled = isPy3k;
 
@@ -703,7 +732,9 @@ in {
   });
 
   avro3k = pkgs.lowPrio (buildPythonPackage (rec {
-    name = "avro3k-1.7.7-SNAPSHOT";
+    pname = "avro3k-1.7.7";
+    version = "SNAPSHOT";
+    name = pname + "-" + version;
 
     disabled = (!isPy3k);
 
@@ -725,7 +756,9 @@ in {
   awesome-slugify = callPackage ../development/python-modules/awesome-slugify {};
 
   noise = buildPythonPackage rec {
-    name = "noise-${version}";
+    pname = "noise";
+    name = pname + "-" + version;
+
     version = "1.2.2";
 
     src = pkgs.fetchurl {
@@ -743,7 +776,9 @@ in {
 
   azure = buildPythonPackage rec {
     version = "0.11.0";
-    name = "azure-${version}";
+    pname = "azure";
+    name = pname + "-" + version;
+
     disabled = pythonOlder "2.7";
 
     src = pkgs.fetchurl {
@@ -763,7 +798,9 @@ in {
 
   azure-nspkg = buildPythonPackage rec {
     version = "1.0.0";
-    name = "azure-nspkg-${version}";
+    pname = "azure-nspkg";
+    name = pname + "-" + version;
+
     src = pkgs.fetchurl {
       url = mirror://pypi/a/azure-nspkg/azure-nspkg-1.0.0.zip;
       sha256 = "1xqvc8by1lbd7j9dxyly03jz3rgbmnsiqnqgydhkf4pa2mn2hgr9";
@@ -778,7 +815,9 @@ in {
 
   azure-common = buildPythonPackage rec {
     version = "1.0.0";
-    name = "azure-common-${version}";
+    pname = "azure-common";
+    name = pname + "-" + version;
+
     disabled = isPyPy;
     src = pkgs.fetchurl {
       url = mirror://pypi/a/azure-common/azure-common-1.0.0.zip;
@@ -798,7 +837,9 @@ in {
 
   azure-mgmt-common = buildPythonPackage rec {
     version = "0.20.0";
-    name = "azure-mgmt-common-${version}";
+    pname = "azure-mgmt-common";
+    name = pname + "-" + version;
+
     src = pkgs.fetchurl {
       url = mirror://pypi/a/azure-mgmt-common/azure-mgmt-common-0.20.0.zip;
       sha256 = "1rmzpz3733wv31rsnqpdy4bbafvk5dhbqx7q0xf62dlz7p0i4f66";
@@ -818,7 +859,9 @@ in {
 
   azure-mgmt-compute = buildPythonPackage rec {
     version = "0.20.0";
-    name = "azure-mgmt-compute-${version}";
+    pname = "azure-mgmt-compute";
+    name = pname + "-" + version;
+
     src = pkgs.fetchurl {
       url = mirror://pypi/a/azure-mgmt-compute/azure-mgmt-compute-0.20.0.zip;
       sha256 = "12hr5vxdg2sk2fzr608a37f4i8nbchca7dgdmly2w5fc7x88jx2v";
@@ -843,7 +886,9 @@ in {
 
   azure-mgmt-network = buildPythonPackage rec {
     version = "0.20.1";
-    name = "azure-mgmt-network-${version}";
+    pname = "azure-mgmt-network";
+    name = pname + "-" + version;
+
     src = pkgs.fetchurl {
       url = mirror://pypi/a/azure-mgmt-network/azure-mgmt-network-0.20.1.zip;
       sha256 = "10vj22h6nxpw0qpvib5x2g6qs5j8z31142icvh4qk8k40fcrs9hx";
@@ -868,7 +913,9 @@ in {
 
   azure-mgmt-nspkg = buildPythonPackage rec {
     version = "1.0.0";
-    name = "azure-mgmt-nspkg-${version}";
+    pname = "azure-mgmt-nspkg";
+    name = pname + "-" + version;
+
     src = pkgs.fetchurl {
       url = mirror://pypi/a/azure-mgmt-nspkg/azure-mgmt-nspkg-1.0.0.zip;
       sha256 = "1rq92fj3kvnqkk18596dybw0kvhgscvc6cd8hp1dhy3wrkqnhwmq";
@@ -884,7 +931,9 @@ in {
 
   azure-mgmt-resource = buildPythonPackage rec {
     version = "0.20.1";
-    name = "azure-mgmt-resource-${version}";
+    pname = "azure-mgmt-resource";
+    name = pname + "-" + version;
+
     src = pkgs.fetchurl {
       url = mirror://pypi/a/azure-mgmt-resource/azure-mgmt-resource-0.20.1.zip;
       sha256 = "0slh9qfm5nfacrdm3lid0sr8kwqzgxvrwf27laf9v38kylkfqvml";
@@ -909,7 +958,9 @@ in {
 
   azure-mgmt-storage = buildPythonPackage rec {
     version = "0.20.0";
-    name = "azure-mgmt-storage-${version}";
+    pname = "azure-mgmt-storage";
+    name = pname + "-" + version;
+
     src = pkgs.fetchurl {
       url = mirror://pypi/a/azure-mgmt-storage/azure-mgmt-storage-0.20.0.zip;
       sha256 = "16iw7hqhq97vlzfwixarfnirc60l5mz951p57brpcwyylphl3yim";
@@ -934,7 +985,9 @@ in {
 
   azure-storage = buildPythonPackage rec {
     version = "0.20.3";
-    name = "azure-storage-${version}";
+    pname = "azure-storage";
+    name = pname + "-" + version;
+
     src = pkgs.fetchurl {
       url = mirror://pypi/a/azure-storage/azure-storage-0.20.3.zip;
       sha256 = "06bmw6k2000kln5jwk5r9bgcalqbyvqirmdh9gq4s6nb4fv3c0jb";
@@ -953,7 +1006,9 @@ in {
 
   azure-servicemanagement-legacy = buildPythonPackage rec {
     version = "0.20.1";
-    name = "azure-servicemanagement-legacy-${version}";
+    pname = "azure-servicemanagement-legacy";
+    name = pname + "-" + version;
+
     src = pkgs.fetchurl {
       url = mirror://pypi/a/azure-servicemanagement-legacy/azure-servicemanagement-legacy-0.20.1.zip;
       sha256 = "17dwrp99sx5x9cm4vldkaxhki9gbd6dlafa0lpr2n92xhh2838zs";
@@ -971,7 +1026,9 @@ in {
   };
 
   backports_abc = buildPythonPackage rec {
-    name = "backports_abc-${version}";
+    pname = "backports_abc";
+    name = pname + "-" + version;
+
     version = "0.4";
 
     src = pkgs.fetchurl {
@@ -991,7 +1048,9 @@ in {
   };
 
   backports_functools_lru_cache = buildPythonPackage rec {
-    name = "backports.functools_lru_cache-${version}";
+    pname = "backports.functools_lru_cache";
+    name = pname + "-" + version;
+
     version = "1.3";
 
     src = pkgs.fetchurl {
@@ -1010,7 +1069,9 @@ in {
   };
 
   backports_shutil_get_terminal_size = if !(pythonOlder "3.3") then null else buildPythonPackage rec {
-    name = "backports.shutil_get_terminal_size-${version}";
+    pname = "backports.shutil_get_terminal_size";
+    name = pname + "-" + version;
+
     version = "1.0.0";
 
     src = pkgs.fetchurl {
@@ -1026,7 +1087,9 @@ in {
   };
 
   backports_ssl_match_hostname_3_4_0_2 = self.buildPythonPackage rec {
-    name = "backports.ssl_match_hostname-3.4.0.2";
+    pname = "backports.ssl_match_hostname";
+    version = "3.4.0.2";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/backports.ssl_match_hostname/backports.ssl_match_hostname-3.4.0.2.tar.gz";
@@ -1040,7 +1103,9 @@ in {
   };
 
   backports_ssl_match_hostname = self.buildPythonPackage rec {
-    name = "backports.ssl_match_hostname-${version}";
+    pname = "backports.ssl_match_hostname";
+    name = pname + "-" + version;
+
     version = "3.5.0.1";
 
     src = pkgs.fetchurl {
@@ -1055,7 +1120,10 @@ in {
   };
 
   backports_lzma = self.buildPythonPackage rec {
-    name = "backports.lzma-0.0.3";
+    pname = "backports.lzma";
+    version = "0.0.3";
+    name = pname + "-" + version;
+
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -1078,7 +1146,9 @@ in {
 
   babelfish = buildPythonPackage rec {
     version = "0.5.5";
-    name = "babelfish-${version}";
+    pname = "babelfish";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/babelfish/${name}.tar.gz";
@@ -1116,7 +1186,9 @@ in {
 
   batinfo = buildPythonPackage rec {
     version = "0.3";
-    name = "batinfo-${version}";
+    pname = "batinfo";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/batinfo/${name}.tar.gz";
@@ -1136,7 +1208,9 @@ in {
   };
 
   bcdoc = buildPythonPackage rec {
-    name = "bcdoc-0.14.0";
+    pname = "bcdoc";
+    version = "0.14.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/bcdoc/${name}.tar.gz";
@@ -1158,7 +1232,9 @@ in {
   beautifulsoup4 = callPackage ../development/python-modules/beautifulsoup4 { };
 
   beaker = buildPythonPackage rec {
-    name = "Beaker-${version}";
+    pname = "Beaker";
+    name = pname + "-" + version;
+
     version = "1.8.0";
 
     # The pypy release do not contains the tests
@@ -1190,7 +1266,9 @@ in {
   };
 
   betamax = buildPythonPackage rec {
-    name = "betamax-0.8.0";
+    pname = "betamax";
+    version = "0.8.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/betamax/${name}.tar.gz";
@@ -1219,7 +1297,9 @@ in {
     assert visualizationSupport -> pyqtgraph != null;
 
     buildPythonPackage rec {
-    name = "binwalk-${version}";
+    pname = "binwalk";
+    name = pname + "-" + version;
+
     version = "2.1.1";
 
     src = pkgs.fetchFromGitHub {
@@ -1245,7 +1325,9 @@ in {
 
   caldavclientlibrary-asynk = buildPythonPackage rec {
     version = "asynkdev";
-    name = "caldavclientlibrary-asynk-${version}";
+    pname = "caldavclientlibrary-asynk";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchgit {
       url = "https://github.com/skarra/CalDAVClientLibrary.git";
@@ -1272,7 +1354,9 @@ in {
   };
 
   biopython = buildPythonPackage rec {
-    name = "biopython-${version}";
+    pname = "biopython";
+    name = pname + "-" + version;
+
     version = "1.68";
 
     src = pkgs.fetchurl {
@@ -1301,7 +1385,9 @@ in {
 
   bedup = buildPythonPackage rec {
     version = "0.10.1";
-    name = "bedup-${version}";
+    pname = "bedup";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchFromGitHub {
       owner = "g2p";
@@ -1342,7 +1428,9 @@ in {
   };
 
   buttersink = buildPythonPackage rec {
-    name = "buttersink-0.6.8";
+    pname = "buttersink";
+    version = "0.6.8";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       sha256 = "04gc63kfcqkw4qba5rijqk01xiphf04yk7hky9180ii64v2ip0j3";
@@ -1372,7 +1460,9 @@ in {
 
   cached-property = buildPythonPackage rec {
     version = "1.3.0";
-    name = "cached-property-${version}";
+    pname = "cached-property";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cached-property/${name}.tar.gz";
@@ -1397,7 +1487,10 @@ in {
   };
 
   capstone = buildPythonPackage rec {
-    name = "capstone-3.0.4";
+    pname = "capstone";
+    version = "3.0.4";
+    name = pname + "-" + version;
+
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/capstone/${name}.tar.gz";
       sha256 = "945d3b8c3646a1c3914824c416439e2cf2df8969dd722c8979cdcc23b40ad225";
@@ -1437,7 +1530,9 @@ in {
   cheroot = callPackage ../development/python-modules/cheroot {};
 
   circus = buildPythonPackage rec {
-    name = "circus-0.11.1";
+    pname = "circus";
+    version = "0.11.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/circus/${name}.tar.gz";
@@ -1470,7 +1565,9 @@ in {
   };
 
   colorlog = buildPythonPackage rec {
-    name = "colorlog-${version}";
+    pname = "colorlog";
+    name = pname + "-" + version;
+
     version = "2.6.1";
 
     src = pkgs.fetchurl {
@@ -1510,7 +1607,9 @@ in {
   constantly = callPackage ../development/python-modules/constantly { };
 
   cornice = buildPythonPackage rec {
-    name = "cornice-${version}";
+    pname = "cornice";
+    name = pname + "-" + version;
+
     version = "1.2.1";
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/cornice.git;
@@ -1560,7 +1659,7 @@ in {
   cycler = callPackage ../development/python-modules/cycler { };
 
   dlib = buildPythonPackage rec {
-    inherit (pkgs.dlib) name src nativeBuildInputs meta;
+    inherit (pkgs.dlib) name src nativeBuildInputs meta version;
 
     buildInputs = pkgs.dlib.buildInputs ++ [ self.boost ];
   };
@@ -1641,7 +1740,9 @@ in {
   };
 
   iowait = buildPythonPackage rec {
-    name = "iowait-0.2";
+    pname = "iowait";
+    version = "0.2";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/iowait/${name}.tar.gz";
@@ -1655,7 +1756,9 @@ in {
   };
 
   responses = self.buildPythonPackage rec {
-    name = "responses-0.4.0";
+    pname = "responses";
+    version = "0.4.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/responses/${name}.tar.gz";
@@ -1671,7 +1774,9 @@ in {
   rarfile = callPackage ../development/python-modules/rarfile { inherit (pkgs) libarchive; };
 
   proboscis = buildPythonPackage rec {
-    name = "proboscis-1.2.6.0";
+    pname = "proboscis";
+    version = "1.2.6.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/proboscis/proboscis-1.2.6.0.tar.gz";
@@ -1689,7 +1794,9 @@ in {
   };
 
   pyechonest = self.buildPythonPackage rec {
-    name = "pyechonest-8.0.2";
+    pname = "pyechonest";
+    version = "8.0.2";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyechonest/pyechonest-8.0.2.tar.gz";
@@ -1703,7 +1810,9 @@ in {
   };
 
   billiard = buildPythonPackage rec {
-    name = "billiard-${version}";
+    pname = "billiard";
+    name = pname + "-" + version;
+
     version = "3.5.0.2";
 
     disabled = isPyPy;
@@ -1724,7 +1833,9 @@ in {
 
 
   binaryornot = buildPythonPackage rec {
-    name = "binaryornot-${version}";
+    pname = "binaryornot";
+    name = pname + "-" + version;
+
     version = "0.4.0";
 
     src = pkgs.fetchurl {
@@ -1745,7 +1856,9 @@ in {
 
 
   bitbucket_api = buildPythonPackage rec {
-    name = "bitbucket-api-0.4.4";
+    pname = "bitbucket-api";
+    version = "0.4.4";
+    name = pname + "-" + version;
     # python3 does not support relative imports
     disabled = isPy3k;
 
@@ -1767,7 +1880,9 @@ in {
 
   # Should be moved out of python-packages.nix
   bitbucket-cli = buildPythonPackage rec {
-    name = "bitbucket-cli-0.5.1";
+    pname = "bitbucket-cli";
+    version = "0.5.1";
+    name = pname + "-" + version;
     src = pkgs.fetchurl {
        url = "mirror://pypi/b/bitbucket-cli/${name}.tar.gz";
        sha256 = "d881e21ec7ebfa006cfca6d10a5b7229aa59990568f8c6b8e3364769fa38b6f6";
@@ -1793,7 +1908,9 @@ in {
 
   # Needed for bleach 1.5.0
   html5lib_0_9999999 = self.html5lib.overridePythonAttrs rec {
-    name = "html5lib-${version}";
+    pname = "html5lib";
+    name = pname + "-" + version;
+
     disabled = isPy3k && pythonAtLeast "3.6";
     buildInputs = with self; [ nose flake8 ];
     propagatedBuildInputs = with self; [ six ];
@@ -1864,7 +1981,9 @@ in {
   };
 
   blinker = buildPythonPackage rec {
-    name = "blinker-${version}";
+    pname = "blinker";
+    name = pname + "-" + version;
+
     version = "1.4";
 
     src = pkgs.fetchurl {
@@ -1885,7 +2004,9 @@ in {
   bpython = callPackage ../development/python-modules/bpython {};
 
   bsddb3 = buildPythonPackage rec {
-    name = "bsddb3-${version}";
+    pname = "bsddb3";
+    name = pname + "-" + version;
+
     version = "6.1.1";
 
     src = pkgs.fetchurl {
@@ -1919,7 +2040,9 @@ in {
   bokeh = callPackage ../development/python-modules/bokeh { };
 
   boto = buildPythonPackage rec {
-    name = "boto-${version}";
+    pname = "boto";
+    name = pname + "-" + version;
+
     version = "2.47.0";
 
     src = pkgs.fetchurl {
@@ -1950,7 +2073,9 @@ in {
   };
 
   boto3 = buildPythonPackage rec {
-    name = "boto3-${version}";
+    pname = "boto3";
+    name = pname + "-" + version;
+
     version = "1.4.7";
 
     src = pkgs.fetchFromGitHub {
@@ -1991,7 +2116,9 @@ in {
 
   bottle = buildPythonPackage rec {
     version = "0.12.11";
-    name = "bottle-${version}";
+    pname = "bottle";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/bottle/${name}.tar.gz";
@@ -2010,7 +2137,9 @@ in {
   };
 
   box2d = buildPythonPackage rec {
-    name = "box2d-${version}";
+    pname = "box2d";
+    name = pname + "-" + version;
+
     version = "2.3b0";
     disabled = (!isPy27);
 
@@ -2038,7 +2167,9 @@ in {
   branca = callPackage ../development/python-modules/branca { };
 
   bugwarrior = buildPythonPackage rec {
-    name = "bugwarrior-${version}";
+    pname = "bugwarrior";
+    name = pname + "-" + version;
+
     version = "1.4.0";
 
     src = pkgs.fetchurl {
@@ -2064,26 +2195,10 @@ in {
     };
   };
 
-  # bugz = buildPythonPackage (rec {
-  #   name = "bugz-0.9.3";
-  #
-  #   src = pkgs.fetchgit {
-  #     url = "https://github.com/williamh/pybugz.git";
-  #     rev = "refs/tags/0.9.3";
-  #   };
-  #
-  #   propagatedBuildInputs = with self; [ self.argparse ];
-  #
-  #   doCheck = false;
-  #
-  #   meta = {
-  #     homepage = http://www.liquidx.net/pybugz/;
-  #     description = "Command line interface for Bugzilla";
-  #   };
-  # });
-
   bugzilla = buildPythonPackage rec {
-    name = "bugzilla-${version}";
+    pname = "bugzilla";
+    name = pname + "-" + version;
+
     version = "1.1.0";
 
     src = pkgs.fetchurl {
@@ -2111,8 +2226,9 @@ in {
   };
 
   check-manifest = buildPythonPackage rec {
-    name = "check-manifest";
+    pname = "check-manifest";
     version = "0.30";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/check-manifest/check-manifest-${version}.tar.gz";
@@ -2136,7 +2252,9 @@ in {
   zc_buildout = self.zc_buildout221;
 
   zc_buildout221 = buildPythonPackage rec {
-    name = "zc.buildout-2.2.1";
+    pname = "zc.buildout";
+    version = "2.2.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/z/zc.buildout/${name}.tar.gz";
@@ -2152,7 +2270,10 @@ in {
   };
 
   bunch = buildPythonPackage (rec {
-    name = "bunch-1.0.1";
+    pname = "bunch";
+    version = "1.0.1";
+    name = pname + "-" + version;
+
     meta.maintainers = with maintainers; [ mornfall ];
 
     src = pkgs.fetchurl {
@@ -2164,7 +2285,9 @@ in {
 
 
   cairocffi = buildPythonPackage rec {
-    name = "cairocffi-0.7.2";
+    pname = "cairocffi";
+    version = "0.7.2";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cairocffi/${name}.tar.gz";
@@ -2218,7 +2341,9 @@ in {
 
   cairosvg = buildPythonPackage rec {
     version = "1.0.18";
-    name = "cairosvg-${version}";
+    pname = "cairosvg";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/C/CairoSVG/CairoSVG-${version}.tar.gz";
@@ -2236,7 +2361,9 @@ in {
 
 
   carrot = buildPythonPackage rec {
-    name = "carrot-0.10.7";
+    pname = "carrot";
+    version = "0.10.7";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/carrot/${name}.tar.gz";
@@ -2260,7 +2387,9 @@ in {
 
   github-cli = buildPythonPackage rec {
     version = "1.0.0";
-    name = "github-cli-${version}";
+    pname = "github-cli";
+    name = pname + "-" + version;
+
     src = pkgs.fetchFromGitHub {
       owner = "jsmits";
       repo = "github-cli";
@@ -2279,7 +2408,9 @@ in {
   };
 
   case = buildPythonPackage rec {
-    name = "case-${version}";
+    pname = "case";
+    name = pname + "-" + version;
+
     version = "1.5.2";
 
     src = pkgs.fetchurl {
@@ -2298,7 +2429,9 @@ in {
   };
 
   cassandra-driver = buildPythonPackage rec {
-    name = "cassandra-driver-3.6.0";
+    pname = "cassandra-driver";
+    version = "3.6.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cassandra-driver/${name}.tar.gz";
@@ -2331,7 +2464,9 @@ in {
   cccolutils = callPackage ../development/python-modules/cccolutils/default.nix {};
 
   CDDB = buildPythonPackage rec {
-    name = "CDDB-1.4";
+    pname = "CDDB";
+    version = "1.4";
+    name = pname + "-" + version;
 
     disabled = !isPy27;
 
@@ -2369,7 +2504,9 @@ in {
   };
 
   celery = buildPythonPackage rec {
-    name = "celery-${version}";
+    pname = "celery";
+    name = pname + "-" + version;
+
     version = "4.0.2";
 
     src = pkgs.fetchurl {
@@ -2403,7 +2540,9 @@ in {
   };
 
   cerberus = buildPythonPackage rec {
-    name = "Cerberus-${version}";
+    pname = "Cerberus";
+    name = pname + "-" + version;
+
     version = "0.9.2";
 
     src = pkgs.fetchurl {
@@ -2424,7 +2563,9 @@ in {
 
   cheetah = buildPythonPackage rec {
     version = "2.4.4";
-    name = "cheetah-${version}";
+    pname = "cheetah";
+    name = pname + "-" + version;
+
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -2443,7 +2584,9 @@ in {
   cherrypy = callPackage ../development/python-modules/cherrypy {};
 
   cjson = buildPythonPackage rec {
-    name = "python-cjson-${version}";
+    pname = "python-cjson";
+    name = pname + "-" + version;
+
     version = "1.1.0";
     disabled = isPy3k || isPyPy;
 
@@ -2463,7 +2606,9 @@ in {
   cld2-cffi = callPackage ../development/python-modules/cld2-cffi {};
 
   clf = buildPythonPackage rec {
-    name = "clf-${version}";
+    pname = "clf";
+    name = pname + "-" + version;
+
     version = "0.5.2";
 
     src = pkgs.fetchurl {
@@ -2490,7 +2635,9 @@ in {
   };
 
   click = buildPythonPackage rec {
-    name = "click-6.7";
+    pname = "click";
+    version = "6.7";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/click/${name}.tar.gz";
@@ -2519,7 +2666,9 @@ in {
   };
 
   click_5 = buildPythonPackage rec {
-    name = "click-5.1";
+    pname = "click";
+    version = "5.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/click/${name}.tar.gz";
@@ -2540,7 +2689,9 @@ in {
 
   click-log = buildPythonPackage rec {
     version = "0.2.1";
-    name = "click-log-${version}";
+    pname = "click-log";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/click-log/${name}.tar.gz";
@@ -2561,7 +2712,9 @@ in {
 
   click-threading = buildPythonPackage rec {
     version = "0.4.2";
-    name = "click-threading-${version}";
+    pname = "click-threading";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/click-threading/${name}.tar.gz";
@@ -2592,7 +2745,9 @@ in {
      same as this, but it does not appear to be owned by Google.
      So we're pulling from Google's GitHub repo instead. */
   closure-linter = buildPythonPackage rec {
-    name = "closure-linter-${version}";
+    pname = "closure-linter";
+    name = pname + "-" + version;
+
     version = "2.3.19";
 
     /* This project has no Python 3 support, as noted by
@@ -2613,7 +2768,9 @@ in {
   };
 
   cloudpickle = buildPythonPackage rec {
-    name = "cloudpickle-${version}";
+    pname = "cloudpickle";
+    name = pname + "-" + version;
+
     version = "0.2.2";
 
     src = pkgs.fetchurl {
@@ -2662,7 +2819,9 @@ in {
 
   cogapp = buildPythonPackage rec {
     version = "2.3";
-    name    = "cogapp-${version}";
+    pname    = "cogapp";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url    = "mirror://pypi/c/cogapp/${name}.tar.gz";
@@ -2686,7 +2845,9 @@ in {
   colorlover = callPackage ../development/python-modules/colorlover { };
 
   CommonMark = buildPythonPackage rec {
-    name = "CommonMark-${version}";
+    pname = "CommonMark";
+    name = pname + "-" + version;
+
     version = "0.6.3";
 
     src = pkgs.fetchurl {
@@ -2709,7 +2870,9 @@ in {
   };
 
   CommonMark_54 = self.CommonMark.override rec {
-    name = "CommonMark-0.5.4";
+    pname = "CommonMark";
+    version = "0.5.4";
+    name = pname + "-" + version;
     src = pkgs.fetchurl {
       url = "mirror://pypi/C/CommonMark/${name}.tar.gz";
       sha256 = "34d73ec8085923c023930dfc0bcd1c4286e28a2a82de094bb72fabcc0281cbe5";
@@ -2718,7 +2881,9 @@ in {
 
 
   coilmq = buildPythonPackage (rec {
-    name = "CoilMQ-${version}";
+    pname = "CoilMQ";
+    name = pname + "-" + version;
+
     version = "1.0.0";
 
     src = pkgs.fetchurl {
@@ -2742,7 +2907,9 @@ in {
 
 
   colander = buildPythonPackage rec {
-    name = "colander-1.0";
+    pname = "colander";
+    version = "1.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/colander/${name}.tar.gz";
@@ -2759,7 +2926,9 @@ in {
 
   # Backported version of the ConfigParser library of Python 3.3
   configparser = if isPy3k then null else buildPythonPackage rec {
-    name = "configparser-${version}";
+    pname = "configparser";
+    name = pname + "-" + version;
+
     version = "3.5.0";
 
     # running install_egg_info
@@ -2788,7 +2957,9 @@ in {
 
 
   ColanderAlchemy = buildPythonPackage rec {
-    name = "ColanderAlchemy-${version}";
+    pname = "ColanderAlchemy";
+    name = pname + "-" + version;
+
     version = "0.3.3";
 
     src = pkgs.fetchurl {
@@ -2815,7 +2986,9 @@ in {
 
 
   configobj = buildPythonPackage (rec {
-    name = "configobj-5.0.6";
+    pname = "configobj";
+    version = "5.0.6";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/configobj/${name}.tar.gz";
@@ -2835,13 +3008,40 @@ in {
     };
   });
 
+  configshell_fb = buildPythonPackage rec {
+    version = "1.1.fb10";
+    pname = "configshell-fb";
+    name = pname + "-" + version;
+
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/agrover/configshell-fb/archive/v${version}.tar.gz";
+      sha256 = "1dd87xvm98nk3jzybb041gjdahi2z9b53pwqhyxcfj4a91y82ndy";
+    };
+
+    propagatedBuildInputs = with self; [
+      pyparsing
+      urwid
+    ];
+
+    # Fails on python 3 due to a None value where a string is expected
+    doCheck = !isPy3k;
+
+    meta = {
+      description = "A Python library for building configuration shells";
+      homepage = "https://github.com/agrover/configshell-fb";
+      platforms = platforms.linux;
+    };
+  };
 
   confluent-kafka = callPackage ../development/python-modules/confluent-kafka {};
 
   construct = callPackage ../development/python-modules/construct {};
 
   consul = buildPythonPackage (rec {
-    name = "python-consul-0.7.0";
+    pname = "python-consul";
+    version = "0.7.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/python-consul/${name}.tar.gz";
@@ -2862,7 +3062,9 @@ in {
   });
 
   contexter = buildPythonPackage rec {
-    name = "contexter-${version}";
+    pname = "contexter";
+    name = pname + "-" + version;
+
     version = "0.1.3";
 
     src = pkgs.fetchurl {
@@ -2876,7 +3078,9 @@ in {
 
   cookiecutter = buildPythonPackage rec {
     version = "1.4.0";
-    name = "cookiecutter-${version}";
+    pname = "cookiecutter";
+    name = pname + "-" + version;
+
 
     # not sure why this is broken
     disabled = isPyPy;
@@ -2899,7 +3103,9 @@ in {
   };
 
   cookies = buildPythonPackage rec {
-    name = "cookies-2.2.1";
+    pname = "cookies";
+    version = "2.2.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cookies/${name}.tar.gz";
@@ -2920,7 +3126,10 @@ in {
   coverage = callPackage ../development/python-modules/coverage { };
 
   covCore = buildPythonPackage rec {
-    name = "cov-core-1.15.0";
+    pname = "cov-core";
+    version = "1.15.0";
+    name = pname + "-" + version;
+
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cov-core/${name}.tar.gz";
       sha256 = "4a14c67d520fda9d42b0da6134638578caae1d374b9bb462d8de00587dba764c";
@@ -2932,7 +3141,10 @@ in {
   };
 
   crcmod = buildPythonPackage rec {
-    name = "crcmod-1.7";
+    pname = "crcmod";
+    version = "1.7";
+    name = pname + "-" + version;
+
     src = pkgs.fetchurl {
       url = mirror://pypi/c/crcmod/crcmod-1.7.tar.gz;
       sha256 = "07k0hgr42vw2j92cln3klxka81f33knd7459cn3d8aszvfh52w6w";
@@ -2951,7 +3163,9 @@ in {
   cytoolz = callPackage ../development/python-modules/cytoolz { };
 
   cryptacular = buildPythonPackage rec {
-    name = "cryptacular-1.4.1";
+    pname = "cryptacular";
+    version = "1.4.1";
+    name = pname + "-" + version;
 
     buildInputs = with self; [ coverage nose ];
     propagatedBuildInputs = with self; [ pbkdf2 ];
@@ -3032,7 +3246,9 @@ in {
   curtsies = callPackage ../development/python-modules/curtsies { };
 
   oslo-vmware = buildPythonPackage rec {
-    name = "oslo.vmware-${version}";
+    pname = "oslo.vmware";
+    name = pname + "-" + version;
+
     version = "1.22.0";
 
     src = pkgs.fetchurl {
@@ -3051,7 +3267,9 @@ in {
   };
 
   barbicanclient = buildPythonPackage rec {
-    name = "barbicanclient-${version}";
+    pname = "barbicanclient";
+    name = pname + "-" + version;
+
     version = "3.3.0";
 
     src = pkgs.fetchurl {
@@ -3074,7 +3292,9 @@ in {
 
 
   ironicclient = buildPythonPackage rec {
-    name = "ironicclient-${version}";
+    pname = "ironicclient";
+    name = pname + "-" + version;
+
     version = "0.9.0";
 
     src = pkgs.fetchurl {
@@ -3097,7 +3317,9 @@ in {
   };
 
   novaclient = buildPythonPackage rec {
-    name = "novaclient-${version}";
+    pname = "novaclient";
+    name = pname + "-" + version;
+
     version = "2.31.0";
 
     src = pkgs.fetchurl {
@@ -3131,7 +3353,9 @@ in {
   };
 
   tablib = buildPythonPackage rec {
-    name = "tablib-${version}";
+    pname = "tablib";
+    name = pname + "-" + version;
+
     version = "0.10.0";
 
     src = pkgs.fetchurl {
@@ -3149,7 +3373,9 @@ in {
 
 
   cliff-tablib = buildPythonPackage rec {
-    name = "cliff-tablib-${version}";
+    pname = "cliff-tablib";
+    name = pname + "-" + version;
+
     version = "1.1";
 
     src = pkgs.fetchurl {
@@ -3170,7 +3396,9 @@ in {
   };
 
   openant = buildPythonPackage rec {
-    name = "openant-unstable-2017-02-11";
+    pname = "openant";
+    version = "unstable-2017-02-11";
+    name = pname + "-" + version;
 
     meta = with stdenv.lib; {
       homepage = "https://github.com/Tigge/openant";
@@ -3213,7 +3441,9 @@ in {
   openidc-client = callPackage ../development/python-modules/openidc-client/default.nix {};
 
   openstackclient = buildPythonPackage rec {
-    name = "openstackclient-${version}";
+    pname = "openstackclient";
+    name = pname + "-" + version;
+
     version = "1.7.1";
 
     src = pkgs.fetchurl {
@@ -3258,7 +3488,9 @@ in {
   };
 
   mahotas = buildPythonPackage rec {
-    name = "python-mahotas-${version}";
+    pname = "python-mahotas";
+    name = pname + "-" + version;
+
     version = "1.4.2";
 
     src = pkgs.fetchurl {
@@ -3290,7 +3522,9 @@ in {
   MDP = callPackage ../development/python-modules/mdp {};
 
   minidb = buildPythonPackage rec {
-    name = "minidb-2.0.1";
+    pname = "minidb";
+    version = "2.0.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "https://thp.io/2010/minidb/${name}.tar.gz";
@@ -3307,7 +3541,9 @@ in {
 
   mixpanel = buildPythonPackage rec {
     version = "4.0.2";
-    name = "mixpanel-${version}";
+    pname = "mixpanel";
+    name = pname + "-" + version;
+
     disabled = isPy3k;
 
     src = pkgs.fetchzip {
@@ -3353,7 +3589,9 @@ in {
 
   pkginfo = buildPythonPackage rec {
     version = "1.3.2";
-    name = "pkginfo-${version}";
+    pname = "pkginfo";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pkginfo/${name}.tar.gz";
@@ -3379,7 +3617,9 @@ in {
   };
 
   pretend = buildPythonPackage rec {
-    name = "pretend-1.0.8";
+    pname = "pretend";
+    version = "1.0.8";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pretend/pretend-1.0.8.tar.gz";
@@ -3397,7 +3637,9 @@ in {
 
 
   detox = self.buildPythonPackage rec {
-    name = "detox-0.10.0";
+    pname = "detox";
+    version = "0.10.0";
+    name = pname + "-" + version;
 
     buildInputs = with self; [ pytest ];
     propagatedBuildInputs = with self; [ tox py eventlet ];
@@ -3422,7 +3664,9 @@ in {
 
 
   pbkdf2 = buildPythonPackage rec {
-    name = "pbkdf2-1.3";
+    pname = "pbkdf2";
+    version = "1.3";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pbkdf2/${name}.tar.gz";
@@ -3445,7 +3689,9 @@ in {
 
   pycontracts = buildPythonPackage rec {
     version = "1.7.9";
-    name = "PyContracts-${version}";
+    pname = "PyContracts";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PyContracts/${name}.tar.gz";
@@ -3464,7 +3710,9 @@ in {
   };
 
   pycparser = buildPythonPackage rec {
-    name = "pycparser-${version}";
+    pname = "pycparser";
+    name = pname + "-" + version;
+
     version = "2.14";
 
     src = pkgs.fetchurl {
@@ -3518,7 +3766,9 @@ in {
   python-jose = callPackage ../development/python-modules/python-jose {};
 
   pyhepmc = buildPythonPackage rec {
-    name = "pyhepmc-${version}";
+    pname = "pyhepmc";
+    name = pname + "-" + version;
+
     version = "0.5.0";
     disabled = isPy3k;
 
@@ -3580,7 +3830,9 @@ in {
   pytest-asyncio = callPackage ../development/python-modules/pytest-asyncio { };
 
   pytestcache = buildPythonPackage rec {
-    name = "pytest-cache-1.0";
+    pname = "pytest-cache";
+    version = "1.0";
+    name = pname + "-" + version;
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pytest-cache/pytest-cache-1.0.tar.gz";
       sha256 = "1a873fihw4rhshc722j4h6j7g3nj7xpgsna9hhg3zn6ksknnhx5y";
@@ -3604,7 +3856,9 @@ in {
   };
 
   pytest-catchlog = buildPythonPackage rec {
-    name = "pytest-catchlog-1.2.2";
+    pname = "pytest-catchlog";
+    version = "1.2.2";
+    name = pname + "-" + version;
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pytest-catchlog/${name}.zip";
       sha256 = "1w7wxh27sbqwm4jgwrjr9c2gy384aca5jzw9c0wzhl0pmk2mvqab";
@@ -3686,7 +3940,9 @@ in {
   pytest-flake8 = callPackage ../development/python-modules/pytest-flake8 { };
 
   pytestflakes = buildPythonPackage rec {
-    name = "pytest-flakes-${version}";
+    pname = "pytest-flakes";
+    name = pname + "-" + version;
+
     version = "1.0.1";
 
     src = pkgs.fetchurl {
@@ -3733,9 +3989,12 @@ in {
   pytest-warnings = callPackage ../development/python-modules/pytest-warnings { };
 
   pytestpep8 = buildPythonPackage rec {
-    name = "pytest-pep8";
+    pname = "pytest-pep8";
+    version = "1.0.6";
+    name = pname + "-" + version;
+
     src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pytest-pep8/pytest-pep8-1.0.6.tar.gz";
+      url = "mirror://pypi/p/pytest-pep8/${name}.tar.gz";
       sha256 = "06032agzhw1i9d9qlhfblnl3dw5hcyxhagn7b120zhrszbjzfbh3";
     };
 
@@ -3759,7 +4018,9 @@ in {
   pytest-pep257 = callPackage ../development/python-modules/pytest-pep257 { };
 
   pytest-raisesregexp = buildPythonPackage rec {
-    name = "pytest-raisesregexp-${version}";
+    pname = "pytest-raisesregexp";
+    name = pname + "-" + version;
+
     version = "2.0";
 
     src = pkgs.fetchurl {
@@ -3784,7 +4045,9 @@ in {
 
   pytestrunner = buildPythonPackage rec {
     version = "2.6.2";
-    name = "pytest-runner-${version}";
+    pname = "pytest-runner";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pytest-runner/${name}.tar.gz";
@@ -3804,7 +4067,9 @@ in {
   };
 
   pytestquickcheck = buildPythonPackage rec {
-    name = "pytest-quickcheck-0.8.2";
+    pname = "pytest-quickcheck";
+    version = "0.8.2";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pytest-quickcheck/pytest-quickcheck-0.8.2.tar.gz";
@@ -3847,7 +4112,9 @@ in {
   };
 
   pytest-shutil = buildPythonPackage rec {
-    name = "pytest-shutil-${version}";
+    pname = "pytest-shutil";
+    name = pname + "-" + version;
+
     version = "1.2.8";
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pytest-shutil/${name}.tar.gz";
@@ -3869,7 +4136,9 @@ in {
   };
 
   pytestcov = buildPythonPackage rec {
-    name = "pytest-cov-2.4.0";
+    pname = "pytest-cov";
+    version = "2.4.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pytest-cov/${name}.tar.gz";
@@ -3922,7 +4191,9 @@ in {
   pytest-localserver = callPackage ../development/python-modules/pytest-localserver { };
 
   pytest-subtesthack = buildPythonPackage rec {
-    name = "pytest-subtesthack-${version}";
+    pname = "pytest-subtesthack";
+    name = pname + "-" + version;
+
     version = "0.1.1";
 
     src = pkgs.fetchurl {
@@ -3945,7 +4216,9 @@ in {
   pytest-sugar = callPackage ../development/python-modules/pytest-sugar { };
 
   tinycss = buildPythonPackage rec {
-    name = "tinycss-${version}";
+    pname = "tinycss";
+    name = pname + "-" + version;
+
     version = "0.3";
 
     src = pkgs.fetchurl {
@@ -3973,7 +4246,9 @@ in {
 
 
   cssselect = buildPythonPackage rec {
-    name = "cssselect-${version}";
+    pname = "cssselect";
+    name = pname + "-" + version;
+
     version = "0.9.1";
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/cssselect/${name}.tar.gz";
@@ -3984,7 +4259,9 @@ in {
   };
 
   cssutils = buildPythonPackage (rec {
-    name = "cssutils-1.0.1";
+    pname = "cssutils";
+    version = "1.0.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = mirror://pypi/c/cssutils/cssutils-1.0.1.tar.gz;
@@ -4006,7 +4283,9 @@ in {
   });
 
   darcsver = buildPythonPackage (rec {
-    name = "darcsver-1.7.4";
+    pname = "darcsver";
+    version = "1.7.4";
+    name = pname + "-" + version;
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -4036,8 +4315,9 @@ in {
   dask = callPackage ../development/python-modules/dask { };
 
   datrie = buildPythonPackage rec {
-    name = "datrie";
+    pname = "datrie";
     version = "0.7.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/datrie/datrie-${version}.tar.gz";
@@ -4054,7 +4334,9 @@ in {
   };
 
   heapdict = buildPythonPackage rec {
-    name = "HeapDict-${version}";
+    pname = "HeapDict";
+    name = pname + "-" + version;
+
     version = "1.0.0";
 
     src = pkgs.fetchurl {
@@ -4072,7 +4354,9 @@ in {
 
   zict = buildPythonPackage rec {
 
-    name = "zict-${version}";
+    pname = "zict";
+    name = pname + "-" + version;
+
     version = "0.1.1";
 
     src = pkgs.fetchurl {
@@ -4093,7 +4377,9 @@ in {
 
   distributed = buildPythonPackage rec {
 
-    name = "distributed-${version}";
+    pname = "distributed";
+    name = pname + "-" + version;
+
     version = "1.15.1";
 
     src = pkgs.fetchurl {
@@ -4120,7 +4406,9 @@ in {
   };
 
   digital-ocean = buildPythonPackage rec {
-    name = "python-digitalocean-1.10.1";
+    pname = "python-digitalocean";
+    version = "1.10.1";
+    name = pname + "-" + version;
 
     propagatedBuildInputs = with self; [ requests ];
 
@@ -4149,7 +4437,9 @@ in {
   linuxfd = callPackage ../development/python-modules/linuxfd { };
 
   locket = buildPythonPackage rec {
-    name = "locket-${version}";
+    pname = "locket";
+    name = pname + "-" + version;
+
     version = "0.2.0";
 
     src = pkgs.fetchurl {
@@ -4172,7 +4462,9 @@ in {
   };
 
   tblib = buildPythonPackage rec {
-    name = "tblib-${version}";
+    pname = "tblib";
+    name = pname + "-" + version;
+
     version = "1.3.0";
 
     src = pkgs.fetchurl {
@@ -4189,7 +4481,9 @@ in {
   };
 
   s3fs = buildPythonPackage rec {
-    name = "s3fs-${version}";
+    pname = "s3fs";
+    name = pname + "-" + version;
+
     version = "0.0.8";
 
     src = pkgs.fetchurl {
@@ -4216,7 +4510,9 @@ in {
   datashape = callPackage ../development/python-modules/datashape { };
 
   requests-cache = buildPythonPackage (rec {
-    name = "requests-cache-${version}";
+    pname = "requests-cache";
+    name = pname + "-" + version;
+
     version = "0.4.13";
 
     src = pkgs.fetchurl {
@@ -4236,7 +4532,9 @@ in {
   });
 
   howdoi = buildPythonPackage (rec {
-    name = "howdoi-${version}";
+    pname = "howdoi";
+    name = pname + "-" + version;
+
     version = "1.1.7";
 
     src = pkgs.fetchurl {
@@ -4254,7 +4552,9 @@ in {
   });
 
   nose-parameterized = buildPythonPackage (rec {
-    name = "nose-parameterized-${version}";
+    pname = "nose-parameterized";
+    name = pname + "-" + version;
+
     version = "0.5.0";
 
     src = pkgs.fetchurl {
@@ -4282,7 +4582,9 @@ in {
   });
 
   neurotools = buildPythonPackage (rec {
-    name = "NeuroTools-${version}";
+    pname = "NeuroTools";
+    name = pname + "-" + version;
+
     version = "0.3.1";
 
     src = pkgs.fetchurl {
@@ -4316,7 +4618,9 @@ in {
   });
 
   jdatetime = buildPythonPackage (rec {
-    name = "jdatetime-${version}";
+    pname = "jdatetime";
+    name = pname + "-" + version;
+
     version = "1.7.1";
 
     src = pkgs.fetchurl {
@@ -4336,7 +4640,9 @@ in {
   daphne = callPackage ../development/python-modules/daphne { };
 
   dateparser = buildPythonPackage rec {
-    name = "dateparser-${version}";
+    pname = "dateparser";
+    name = pname + "-" + version;
+
     version = "0.3.2-pre-2016-01-21"; # Fix assert year 2016 == 2015
 
     src = pkgs.fetchgit {
@@ -4370,7 +4676,9 @@ in {
 
   # Buildbot 0.8.7p1 needs dateutil==1.5
   dateutil_1_5 = buildPythonPackage (rec {
-    name = "dateutil-1.5";
+    pname = "dateutil";
+    version = "1.5";
+    name = pname + "-" + version;
 
     disabled = isPy3k;
 
@@ -4388,8 +4696,10 @@ in {
     };
   });
 
-  ddar = buildPythonPackage {
-    name = "ddar-1.0";
+  ddar = buildPythonPackage rec {
+    pname = "ddar";
+    version = "1.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "https://github.com/basak/ddar/archive/v1.0.tar.gz";
@@ -4410,7 +4720,9 @@ in {
   };
 
   decorator = buildPythonPackage rec {
-    name = "decorator-${version}";
+    pname = "decorator";
+    name = pname + "-" + version;
+
     version = "4.0.11";
 
     src = pkgs.fetchurl {
@@ -4426,7 +4738,9 @@ in {
   };
 
   deform = buildPythonPackage rec {
-    name = "deform-2.0a2";
+    pname = "deform";
+    version = "2.0a2";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/deform/${name}.tar.gz";
@@ -4455,7 +4769,9 @@ in {
   demjson = callPackage ../development/python-modules/demjson { };
 
   derpconf = self.buildPythonPackage rec {
-    name = "derpconf-0.4.9";
+    pname = "derpconf";
+    version = "0.4.9";
+    name = pname + "-" + version;
 
     propagatedBuildInputs = with self; [ six ];
 
@@ -4472,7 +4788,9 @@ in {
   };
 
   deskcon = self.buildPythonPackage rec {
-    name = "deskcon-0.3";
+    pname = "deskcon";
+    version = "0.3";
+    name = pname + "-" + version;
     disabled = !isPy27;
 
     src = pkgs.fetchFromGitHub {
@@ -4514,7 +4832,9 @@ in {
   docker = callPackage ../development/python-modules/docker {};
 
   dockerpty = buildPythonPackage rec {
-    name = "dockerpty-0.4.1";
+    pname = "dockerpty";
+    version = "0.4.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/dockerpty/${name}.tar.gz";
@@ -4531,7 +4851,9 @@ in {
   };
 
   docker_pycreds = buildPythonPackage rec {
-    name = "docker-pycreds-${version}";
+    pname = "docker-pycreds";
+    name = pname + "-" + version;
+
     version = "0.2.1";
 
     src = pkgs.fetchurl {
@@ -4553,7 +4875,9 @@ in {
   };
 
   docker_registry_core = buildPythonPackage rec {
-    name = "docker-registry-core-2.0.3";
+    pname = "docker-registry-core";
+    version = "2.0.3";
+    name = pname + "-" + version;
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -4578,7 +4902,9 @@ in {
   };
 
   docker_registry = buildPythonPackage rec {
-    name = "docker-registry-0.9.1";
+    pname = "docker-registry";
+    version = "0.9.1";
+    name = pname + "-" + version;
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -4609,7 +4935,9 @@ in {
   };
 
   docopt = buildPythonPackage rec {
-    name = "docopt-0.6.2";
+    pname = "docopt";
+    version = "0.6.2";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/docopt/${name}.tar.gz";
@@ -4624,7 +4952,9 @@ in {
   };
 
   doctest-ignore-unicode = buildPythonPackage rec {
-    name = "doctest-ignore-unicode-${version}";
+    pname = "doctest-ignore-unicode";
+    name = pname + "-" + version;
+
     version = "0.1.2";
 
     src = pkgs.fetchurl {
@@ -4644,7 +4974,9 @@ in {
   dogpile_cache = callPackage ../development/python-modules/dogpile.cache { };
 
   dogpile_core = buildPythonPackage rec {
-    name = "dogpile.core-0.4.1";
+    pname = "dogpile.core";
+    version = "0.4.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/dogpile.core/dogpile.core-0.4.1.tar.gz";
@@ -4662,7 +4994,9 @@ in {
 
   dopy = buildPythonPackage rec {
     version = "2016-01-04";
-    name = "dopy-${version}";
+    pname = "dopy";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchFromGitHub {
       owner = "Wiredcraft";
@@ -4687,7 +5021,9 @@ in {
   urllib3 = callPackage ../development/python-modules/urllib3 {};
 
   dropbox = buildPythonPackage rec {
-    name = "dropbox-${version}";
+    pname = "dropbox";
+    name = pname + "-" + version;
+
     version = "8.0.0";
     doCheck = false; # Set DROPBOX_TOKEN environment variable to a valid token.
 
@@ -4715,7 +5051,9 @@ in {
   easydict = callPackage ../development/python-modules/easydict { };
 
   EasyProcess = buildPythonPackage rec {
-    name = "EasyProcess-0.2.3";
+    pname = "EasyProcess";
+    version = "0.2.3";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/E/EasyProcess/${name}.tar.gz";
@@ -4737,14 +5075,16 @@ in {
 
   eccodes = if (isPy27) then
       (pkgs.eccodes.overrideAttrs (oldattrs: {
-    name = "${python.libPrefix}-" + oldattrs.name;
+    name = python.libPrefix + "-" + oldattrs.name;
   })).override {
     enablePython = true;
     pythonPackages = self;
   } else throw "eccodes not supported for interpreter ${python.executable}";
 
   EditorConfig = buildPythonPackage rec {
-    name = "EditorConfig-${version}";
+    pname = "EditorConfig";
+    name = pname + "-" + version;
+
     version = "0.12.0";
 
     # fetchgit used to ensure test submodule is available
@@ -4771,7 +5111,9 @@ in {
   edward = callPackage ../development/python-modules/edward { };
 
   elasticsearch = buildPythonPackage (rec {
-    name = "elasticsearch-1.9.0";
+    pname = "elasticsearch";
+    version = "1.9.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/e/elasticsearch/${name}.tar.gz";
@@ -4794,7 +5136,9 @@ in {
 
 
   elasticsearchdsl = buildPythonPackage (rec {
-    name = "elasticsearch-dsl-0.0.9";
+    pname = "elasticsearch-dsl";
+    version = "0.0.9";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/e/elasticsearch-dsl/${name}.tar.gz";
@@ -4820,7 +5164,9 @@ in {
   enzyme = callPackage ../development/python-modules/enzyme {};
 
   escapism = buildPythonPackage rec {
-    name = "escapism-${version}";
+    pname = "escapism";
+    name = pname + "-" + version;
+
     version = "0.0.1";
 
     src = pkgs.fetchurl {
@@ -4840,7 +5186,9 @@ in {
   };
 
   etcd = buildPythonPackage rec {
-    name = "etcd-${version}";
+    pname = "etcd";
+    name = pname + "-" + version;
+
     version = "2.0.8";
 
     # PyPI package is incomplete
@@ -4867,7 +5215,9 @@ in {
 
   evdev = buildPythonPackage rec {
     version = "0.6.4";
-    name = "evdev-${version}";
+    pname = "evdev";
+    name = pname + "-" + version;
+
     disabled = isPy34;  # see http://bugs.python.org/issue21121
 
     src = pkgs.fetchurl {
@@ -4917,7 +5267,9 @@ in {
   };
 
   events = buildPythonPackage rec {
-    name = "Events-${version}";
+    pname = "Events";
+    name = pname + "-" + version;
+
     version = "0.2.1";
 
     src = pkgs.fetchurl {
@@ -4935,7 +5287,9 @@ in {
 
   eyeD3 = buildPythonPackage rec {
     version = "0.7.8";
-    name    = "eyeD3-${version}";
+    pname    = "eyeD3";
+    name = pname + "-" + version;
+
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
@@ -4999,7 +5353,9 @@ in {
   ezdxf = callPackage ../development/python-modules/ezdxf {};
 
   facebook-sdk = buildPythonPackage rec {
-    name = "facebook-sdk-0.4.0";
+    pname = "facebook-sdk";
+    version = "0.4.0";
+    name = pname + "-" + version;
 
     disabled = isPy3k;
 
@@ -5018,7 +5374,9 @@ in {
   faker = callPackage ../development/python-modules/faker { };
 
   fake_factory = buildPythonPackage rec {
-    name = "fake-factory-${version}";
+    pname = "fake-factory";
+    name = pname + "-" + version;
+
     version = "0.6.0";
 
     src = pkgs.fetchurl {
@@ -5041,7 +5399,9 @@ in {
   };
 
   factory_boy = buildPythonPackage rec {
-    name = "factory_boy-${version}";
+    pname = "factory_boy";
+    name = pname + "-" + version;
+
     version = "2.6.1";
 
     src = pkgs.fetchurl {
@@ -5059,7 +5419,9 @@ in {
   };
 
   Fabric = buildPythonPackage rec {
-    name = "Fabric-${version}";
+    pname = "Fabric";
+    name = pname + "-" + version;
+
     version = "1.13.2";
     src = pkgs.fetchurl {
       url = "mirror://pypi/F/Fabric/${name}.tar.gz";
@@ -5080,7 +5442,9 @@ in {
   flit = callPackage ../development/python-modules/flit { };
 
   Flootty = buildPythonPackage rec {
-    name = "Flootty-3.2.0";
+    pname = "Flootty";
+    version = "3.2.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/F/Flootty/${name}.tar.gz";
@@ -5096,7 +5460,9 @@ in {
   };
 
   flowlogs_reader = buildPythonPackage rec {
-    name = "flowlogs_reader-1.0.0";
+    pname = "flowlogs_reader";
+    version = "1.0.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/flowlogs_reader/${name}.tar.gz";
@@ -5119,7 +5485,9 @@ in {
   };
 
   frozendict = buildPythonPackage rec {
-    name = "frozendict-0.5";
+    pname = "frozendict";
+    version = "0.5";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/frozendict/${name}.tar.gz";
@@ -5135,7 +5503,9 @@ in {
 
   ftputil = buildPythonPackage rec {
     version = "3.3";
-    name = "ftputil-${version}";
+    pname = "ftputil";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/ftputil/${name}.tar.gz";
@@ -5153,7 +5523,9 @@ in {
   };
 
   fudge = buildPythonPackage rec {
-    name = "fudge-1.1.0";
+    pname = "fudge";
+    version = "1.1.0";
+    name = pname + "-" + version;
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/fudge/${name}.tar.gz";
       sha256 = "eba59a926fa1df1ab6dddd69a7a8af21865b16cad800cb4d1af75070b0f52afb";
@@ -5169,7 +5541,9 @@ in {
   };
 
   fudge_9 = self.fudge.override rec {
-    name = "fudge-0.9.6";
+    pname = "fudge";
+    version = "0.9.6";
+    name = pname + "-" + version;
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/fudge/${name}.tar.gz";
       sha256 = "34690c4692e8717f4d6a2ab7d841070c93c8d0ea0d2615b47064e291f750b1a0";
@@ -5178,7 +5552,9 @@ in {
 
 
   funcparserlib = buildPythonPackage rec {
-    name = "funcparserlib-0.3.6";
+    pname = "funcparserlib";
+    version = "0.3.6";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/funcparserlib/${name}.tar.gz";
@@ -5201,7 +5577,9 @@ in {
   };
 
   singledispatch = buildPythonPackage rec {
-    name = "singledispatch-3.4.0.3";
+    pname = "singledispatch";
+    version = "3.4.0.3";
+    name = pname + "-" + version;
 
     propagatedBuildInputs = with self; [ six ];
 
@@ -5216,7 +5594,9 @@ in {
   };
 
   functools32 = if isPy3k then null else buildPythonPackage rec {
-    name = "functools32-${version}";
+    pname = "functools32";
+    name = pname + "-" + version;
+
     version = "3.2.3-2";
 
     src = pkgs.fetchurl {
@@ -5232,7 +5612,9 @@ in {
   };
 
   gateone = buildPythonPackage rec {
-    name = "gateone-1.2-0d57c3";
+    pname = "gateone";
+    version = "1.2-0d57c3";
+    name = pname + "-" + version;
     disabled = ! isPy27;
     src = pkgs.fetchFromGitHub {
       rev = "1d0e8037fbfb7c270f3710ce24154e24b7031bea";
@@ -5253,7 +5635,9 @@ in {
   };
 
   gcutil = buildPythonPackage rec {
-    name = "gcutil-1.16.1";
+    pname = "gcutil";
+    version = "1.16.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = https://dl.google.com/dl/cloudsdk/release/artifacts/gcutil-1.16.1.tar.gz;
@@ -5288,7 +5672,9 @@ in {
   GeoIP = callPackage ../development/python-modules/GeoIP { };
 
   gmpy = buildPythonPackage rec {
-    name = "gmpy-1.17";
+    pname = "gmpy";
+    version = "1.17";
+    name = pname + "-" + version;
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
@@ -5308,7 +5694,9 @@ in {
   };
 
   gmpy2 = buildPythonPackage rec {
-    name = "gmpy2-2.0.6";
+    pname = "gmpy2";
+    version = "2.0.6";
+    name = pname + "-" + version;
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
@@ -5331,7 +5719,9 @@ in {
   };
 
   gmusicapi = with pkgs; buildPythonPackage rec {
-    name = "gmusicapi-10.1.0";
+    pname = "gmusicapi";
+    version = "10.1.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/gmusicapi/gmusicapi-10.1.0.tar.gz";
@@ -5365,7 +5755,9 @@ in {
 
   gnureadline = buildPythonPackage rec {
     version = "6.3.3";
-    name = "gnureadline-${version}";
+    pname = "gnureadline";
+    name = pname + "-" + version;
+
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
@@ -5380,9 +5772,12 @@ in {
   };
 
   gnutls = buildPythonPackage rec {
-    name = "python-gnutls";
+    pname = "python-gnutls";
+    version = "3.0.0";
+    name = pname + "-" + version;
+
     src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-gnutls/python-gnutls-3.0.0.tar.gz";
+      url = "mirror://pypi/p/python-gnutls/${name}.tar.gz";
       sha256 = "1yrdxcj5rzvz8iglircz6icvyggz5fmdcd010n6w3j60yp4p84kc";
     };
 
@@ -5398,7 +5793,9 @@ in {
   gpy = callPackage ../development/python-modules/gpy { };
 
   gitdb = buildPythonPackage rec {
-    name = "gitdb-0.6.4";
+    pname = "gitdb";
+    version = "0.6.4";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/gitdb/${name}.tar.gz";
@@ -5425,7 +5822,9 @@ in {
 
   GitPython = buildPythonPackage rec {
     version = "2.0.8";
-    name = "GitPython-${version}";
+    pname = "GitPython";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/G/GitPython/GitPython-${version}.tar.gz";
@@ -5455,7 +5854,9 @@ in {
 
   gplaycli = buildPythonPackage rec {
     version = "0.1.2";
-    name = "gplaycli-${version}";
+    pname = "gplaycli";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchFromGitHub {
       owner = "matlink";
@@ -5483,7 +5884,9 @@ in {
 
   gpsoauth = buildPythonPackage rec {
     version = "0.2.0";
-    name = "gpsoauth-${version}";
+    pname = "gpsoauth";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/gpsoauth/${name}.tar.gz";
@@ -5515,7 +5918,9 @@ in {
 
   grip = buildPythonPackage rec {
     version = "4.3.2";
-    name = "grip-${version}";
+    pname = "grip";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchFromGitHub {
       owner = "joeyespo";
@@ -5545,7 +5950,9 @@ in {
   };
 
   gtimelog = buildPythonPackage rec {
-    name = "gtimelog-${version}";
+    pname = "gtimelog";
+    name = pname + "-" + version;
+
     version = "0.9.1";
 
     disabled = isPy26;
@@ -5612,7 +6019,9 @@ in {
 
   humanize = buildPythonPackage rec {
     version = "0.5.1";
-    name = "humanize-${version}";
+    pname = "humanize";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/h/humanize/${name}.tar.gz";
@@ -5637,7 +6046,9 @@ in {
 
   hovercraft = buildPythonPackage rec {
     disabled = ! isPy3k;
-    name = "hovercraft-${version}";
+    pname = "hovercraft";
+    name = pname + "-" + version;
+
     version = "2.0";
 
     src = pkgs.fetchurl {
@@ -5660,7 +6071,9 @@ in {
   };
 
   hsaudiotag = buildPythonPackage (rec {
-    name = "hsaudiotag-1.1.1";
+    pname = "hsaudiotag";
+    version = "1.1.1";
+    name = pname + "-" + version;
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -5679,7 +6092,9 @@ in {
   });
 
   hsaudiotag3k = buildPythonPackage (rec {
-    name = "hsaudiotag3k-1.1.3";
+    pname = "hsaudiotag3k";
+    version = "1.1.3";
+    name = pname + "-" + version;
     disabled = !isPy3k;
 
     src = pkgs.fetchurl {
@@ -5702,7 +6117,9 @@ in {
 
   httpauth = buildPythonPackage rec {
     version = "0.3";
-    name = "httpauth-${version}";
+    pname = "httpauth";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/h/httpauth/${name}.tar.gz";
@@ -5722,7 +6139,9 @@ in {
   ijson = callPackage ../development/python-modules/ijson/default.nix {};
 
   imagesize = buildPythonPackage rec {
-    name = "imagesize-${version}";
+    pname = "imagesize";
+    name = pname + "-" + version;
+
     version = "0.7.0";
 
     src = pkgs.fetchurl {
@@ -5739,7 +6158,9 @@ in {
   };
 
   imread = buildPythonPackage rec {
-    name = "python-imread-${version}";
+    pname = "python-imread";
+    name = pname + "-" + version;
+
     version = "0.6";
 
     src = pkgs.fetchurl {
@@ -5767,7 +6188,9 @@ in {
   };
 
   ipfsapi = buildPythonPackage rec {
-    name = "ipfsapi-${version}";
+    pname = "ipfsapi";
+    name = pname + "-" + version;
+
     version = "0.4.2.post1";
     disabled = isPy26 || isPy27;
 
@@ -5789,7 +6212,9 @@ in {
   };
 
   itsdangerous = buildPythonPackage rec {
-    name = "itsdangerous-0.24";
+    pname = "itsdangerous";
+    version = "0.24";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/itsdangerous/${name}.tar.gz";
@@ -5804,7 +6229,9 @@ in {
 
   iniparse = buildPythonPackage rec {
 
-    name = "iniparse-${version}";
+    pname = "iniparse";
+    name = pname + "-" + version;
+
     version = "0.4";
 
     src = pkgs.fetchurl {
@@ -5828,7 +6255,9 @@ in {
 
   i3-py = buildPythonPackage rec {
     version = "0.6.4";
-    name = "i3-py-${version}";
+    pname = "i3-py";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/i3-py/i3-py-${version}.tar.gz";
@@ -5848,7 +6277,9 @@ in {
 
   jdcal = buildPythonPackage rec {
     version = "1.0";
-    name = "jdcal-${version}";
+    pname = "jdcal";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchFromGitHub {
       owner = "phn";
@@ -5877,7 +6308,9 @@ in {
   jsonpatch = callPackage ../development/python-modules/jsonpatch { };
 
   jsonpointer = buildPythonPackage rec {
-    name = "jsonpointer-1.9";
+    pname = "jsonpointer";
+    version = "1.9";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jsonpointer/${name}.tar.gz";
@@ -5892,7 +6325,9 @@ in {
   };
 
   jsonrpclib = buildPythonPackage rec {
-    name = "jsonrpclib-${version}";
+    pname = "jsonrpclib";
+    name = pname + "-" + version;
+
     version = "0.1.7";
 
     disabled = !isPy27;
@@ -5913,7 +6348,9 @@ in {
   };
 
   jsonwatch = buildPythonPackage rec {
-    name = "jsonwatch-0.2.0";
+    pname = "jsonwatch";
+    version = "0.2.0";
+    name = pname + "-" + version;
 
     disabled = isPyPy; # doesn't find setuptools
 
@@ -5947,7 +6384,9 @@ in {
   libsoundtouch = callPackage ../development/python-modules/libsoundtouch { };
 
   libthumbor = buildPythonPackage rec {
-    name = "libthumbor-${version}";
+    pname = "libthumbor";
+    name = pname + "-" + version;
+
     version = "1.3.2";
 
     src = pkgs.fetchurl {
@@ -5993,7 +6432,9 @@ in {
 
   lightning = buildPythonPackage rec {
     version = "1.2.1";
-    name = "lightning-python-${version}";
+    pname = "lightning-python";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/lightning-python/${name}.tar.gz";
@@ -6019,7 +6460,9 @@ in {
 
   jupyter = buildPythonPackage rec {
     version = "1.0.0";
-    name = "jupyter-${version}";
+    pname = "jupyter";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jupyter/${name}.tar.gz";
@@ -6050,7 +6493,9 @@ in {
   jupyter_console = callPackage ../development/python-modules/jupyter_console { };
 
   jupyterlab = buildPythonPackage rec {
-    name = "jupyterlab-${version}";
+    pname = "jupyterlab";
+    name = pname + "-" + version;
+
     version = "0.4.1";
 
     src = pkgs.fetchurl {
@@ -6072,7 +6517,9 @@ in {
 
   PyLTI = buildPythonPackage rec {
     version = "0.4.1";
-    name = "PyLTI-${version}";
+    pname = "PyLTI";
+    name = pname + "-" + version;
+
 
     disabled = !isPy27;
 
@@ -6122,7 +6569,9 @@ in {
   };
 
   logilab_astng = buildPythonPackage rec {
-    name = "logilab-astng-0.24.3";
+    pname = "logilab-astng";
+    version = "0.24.3";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "http://download.logilab.org/pub/astng/${name}.tar.gz";
@@ -6134,7 +6583,9 @@ in {
 
   lpod = buildPythonPackage rec {
     version = "1.1.7";
-    name = "python-lpod-${version}";
+    pname = "python-lpod";
+    name = pname + "-" + version;
+
     # lpod library currently does not support Python 3.x
     disabled = isPy3k;
 
@@ -6158,7 +6609,9 @@ in {
 
   mailchimp = buildPythonPackage rec {
     version = "2.0.9";
-    name = "mailchimp-${version}";
+    pname = "mailchimp";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/mailchimp/mailchimp-${version}.tar.gz";
@@ -6179,7 +6632,9 @@ in {
   };
 
   python-mapnik = buildPythonPackage rec {
-    name = "python-mapnik-${version}";
+    pname = "python-mapnik";
+    name = pname + "-" + version;
+
     version = "3.0.13";
 
     src = pkgs.fetchFromGitHub {
@@ -6204,7 +6659,9 @@ in {
 
   mwlib = let
     pyparsing = buildPythonPackage rec {
-      name = "pyparsing-1.5.7";
+      pname = "pyparsing";
+      version = "1.5.7";
+      name = pname + "-" + version;
       disabled = isPy3k;
 
       src = pkgs.fetchurl {
@@ -6218,7 +6675,9 @@ in {
     };
   in buildPythonPackage rec {
     version = "0.15.15";
-    name = "mwlib-${version}";
+    pname = "mwlib";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "http://pypi.pediapress.com/packages/mirror/${name}.tar.gz";
@@ -6261,7 +6720,9 @@ in {
 
   mwlib-ext = buildPythonPackage rec {
     version = "0.13.2";
-    name = "mwlib.ext-${version}";
+    pname = "mwlib.ext";
+    name = pname + "-" + version;
+
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -6278,7 +6739,9 @@ in {
 
   mwlib-rl = buildPythonPackage rec {
     version = "0.14.6";
-    name = "mwlib.rl-${version}";
+    pname = "mwlib.rl";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "http://pypi.pediapress.com/packages/mirror/${name}.zip";
@@ -6301,11 +6764,14 @@ in {
 
   natsort = callPackage ../development/python-modules/natsort { };
 
-  logster = buildPythonPackage {
-    name = "logster-7475c53822";
+  logster = buildPythonPackage rec {
+    pname = "logster";
+    version = "7475c53822";
+    name = pname + "-" + version;
+
     src = pkgs.fetchgit {
       url = git://github.com/etsy/logster;
-      rev = "7475c53822";
+      rev = version;
       sha256 = "0565wxxiwksnly8rakb2r77k7lwzniq16kv861qd2ns9hgsjgy31";
     };
   };
@@ -6314,7 +6780,9 @@ in {
 
   ndg-httpsclient = buildPythonPackage rec {
     version = "0.4.2";
-    name = "ndg-httpsclient-${version}";
+    pname = "ndg-httpsclient";
+    name = pname + "-" + version;
+
 
     propagatedBuildInputs = with self; [ pyopenssl ];
 
@@ -6371,7 +6839,9 @@ in {
 
 
   pamela = buildPythonPackage rec {
-    name = "pamela-${version}";
+    pname = "pamela";
+    name = pname + "-" + version;
+
     version = "0.3.0";
 
     src = pkgs.fetchurl {
@@ -6396,7 +6866,9 @@ in {
   pathspec = callPackage ../development/python-modules/pathspec { };
 
   pathtools = buildPythonPackage rec {
-    name = "pathtools-${version}";
+    pname = "pathtools";
+    name = pname + "-" + version;
+
     version = "0.1.2";
 
     src = pkgs.fetchurl {
@@ -6414,7 +6886,9 @@ in {
 
   paver = buildPythonPackage rec {
     version = "1.2.2";
-    name    = "Paver-${version}";
+    pname    = "Paver";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url    = "mirror://pypi/P/Paver/Paver-${version}.tar.gz";
@@ -6440,7 +6914,9 @@ in {
 
   path-and-address = buildPythonPackage rec {
     version = "2.0.1";
-    name = "path-and-address-${version}";
+    pname = "path-and-address";
+    name = pname + "-" + version;
+
 
     buildInputs = with self; [ pytest ];
 
@@ -6464,7 +6940,9 @@ in {
 
   pdfminer = buildPythonPackage rec {
     version = "20140328";
-    name = "pdfminer-${version}";
+    pname = "pdfminer";
+    name = pname + "-" + version;
+
 
     disabled = ! isPy27;
 
@@ -6484,7 +6962,9 @@ in {
   };
 
   peppercorn = buildPythonPackage rec {
-    name = "peppercorn-0.5";
+    pname = "peppercorn";
+    version = "0.5";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/peppercorn/${name}.tar.gz";
@@ -6498,7 +6978,9 @@ in {
   };
 
   pex = buildPythonPackage rec {
-    name = "pex-${version}";
+    pname = "pex";
+    name = pname + "-" + version;
+
     version = "1.2.7";
 
     src = self.fetchPypi {
@@ -6537,7 +7019,9 @@ in {
   pomegranate = callPackage ../development/python-modules/pomegranate { };
 
   poppler-qt4 = buildPythonPackage rec {
-    name = "poppler-qt4-${version}";
+    pname = "poppler-qt4";
+    name = pname + "-" + version;
+
     version = "0.18.1";
     disabled = isPy3k || isPyPy;
 
@@ -6568,7 +7052,9 @@ in {
 
   poyo = buildPythonPackage rec {
     version = "0.4.0";
-    name = "poyo-${version}";
+    pname = "poyo";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/poyo/${name}.tar.gz";
@@ -6583,7 +7069,9 @@ in {
   };
 
   pudb = buildPythonPackage rec {
-    name = "pudb-2016.2";
+    pname = "pudb";
+    version = "2016.2";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pudb/${name}.tar.gz";
@@ -6603,7 +7091,9 @@ in {
   };
 
   pycallgraph = buildPythonPackage rec {
-    name = "pycallgraph-${version}";
+    pname = "pycallgraph";
+    name = pname + "-" + version;
+
     version = "1.0.1";
 
     src = pkgs.fetchurl {
@@ -6654,7 +7144,9 @@ in {
   };
 
   pycares = buildPythonPackage rec {
-    name = "pycares-${version}";
+    pname = "pycares";
+    name = pname + "-" + version;
+
     version = "1.0.0";
 
     src = pkgs.fetchurl {
@@ -6683,7 +7175,9 @@ in {
   pyphen = callPackage ../development/python-modules/pyphen {};
 
   pypoppler = buildPythonPackage rec {
-    name = "pypoppler-${version}";
+    pname = "pypoppler";
+    name = pname + "-" + version;
+
     version = "0.12.2";
 
     src = pkgs.fetchurl {
@@ -6715,7 +7209,9 @@ in {
   };
 
   pypillowfight = buildPythonPackage rec {
-    name = "pypillowfight-${version}";
+    pname = "pypillowfight";
+    name = pname + "-" + version;
+
     version = "0.2.1";
 
     src = pkgs.fetchFromGitHub {
@@ -6745,7 +7241,9 @@ in {
   };
 
   python-axolotl = buildPythonPackage rec {
-    name = "python-axolotl-${version}";
+    pname = "python-axolotl";
+    name = pname + "-" + version;
+
     version = "0.1.39";
 
     src = pkgs.fetchurl {
@@ -6767,7 +7265,9 @@ in {
   };
 
   python-axolotl-curve25519 = buildPythonPackage rec {
-    name = "python-axolotl-curve25519-${version}";
+    pname = "python-axolotl-curve25519";
+    name = pname + "-" + version;
+
     version = "0.1";
 
     src = pkgs.fetchurl {
@@ -6785,7 +7285,9 @@ in {
   };
 
   pypolicyd-spf = buildPythonPackage rec {
-    name = "pypolicyd-spf-${version}";
+    pname = "pypolicyd-spf";
+    name = pname + "-" + version;
+
     majorVersion = "2.0";
     version = "${majorVersion}.1";
     disabled = !isPy3k;
@@ -6855,7 +7357,9 @@ in {
   pyramid_beaker = callPackage ../development/python-modules/pyramid_beaker { };
 
   pyramid_chameleon = buildPythonPackage rec {
-    name = "pyramid_chameleon-0.3";
+    pname = "pyramid_chameleon";
+    version = "0.3";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyramid_chameleon/${name}.tar.gz";
@@ -6876,7 +7380,9 @@ in {
 
 
   pyramid_jinja2 = buildPythonPackage rec {
-    name = "pyramid_jinja2-${version}";
+    pname = "pyramid_jinja2";
+    name = pname + "-" + version;
+
     version = "2.5";
 
     src = pkgs.fetchurl {
@@ -6895,7 +7401,9 @@ in {
 
 
   pyramid_mako = buildPythonPackage rec {
-    name = "pyramid_mako-0.3.1";
+    pname = "pyramid_mako";
+    version = "0.3.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyramid_mako/${name}.tar.gz";
@@ -6908,7 +7416,9 @@ in {
 
 
   pyramid_exclog = buildPythonPackage rec {
-    name = "pyramid_exclog-0.7";
+    pname = "pyramid_exclog";
+    version = "0.7";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyramid_exclog/${name}.tar.gz";
@@ -6925,7 +7435,9 @@ in {
 
 
   pyramid_multiauth = buildPythonPackage rec {
-    name = "pyramid_multiauth-${version}";
+    pname = "pyramid_multiauth";
+    name = pname + "-" + version;
+
     version = "0.8.0";
 
     src = pkgs.fetchurl {
@@ -6942,7 +7454,9 @@ in {
   };
 
   pyramid_hawkauth = buildPythonPackage rec {
-    name = "pyramidhawkauth-${version}";
+    pname = "pyramidhawkauth";
+    name = pname + "-" + version;
+
     version = "0.1.0";
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/pyramid_hawkauth.git;
@@ -6957,7 +7471,9 @@ in {
   pyroute2 = callPackage ../development/python-modules/pyroute2 { };
 
   pyspf = buildPythonPackage rec {
-    name = "pyspf-${version}";
+    pname = "pyspf";
+    name = pname + "-" + version;
+
     version = "2.0.12";
 
     src = pkgs.fetchurl {
@@ -6979,7 +7495,9 @@ in {
   pysrt = callPackage ../development/python-modules/pysrt { };
 
   pytools = buildPythonPackage rec {
-    name = "pytools-${version}";
+    pname = "pytools";
+    name = pname + "-" + version;
+
     version = "2017.4";
 
     src = pkgs.fetchFromGitHub {
@@ -7011,7 +7529,9 @@ in {
   };
 
   pytun = buildPythonPackage rec {
-    name = "pytun-${version}";
+    pname = "pytun";
+    name = pname + "-" + version;
+
     version = "2.2.1";
     rev = "v${version}";
 
@@ -7036,7 +7556,9 @@ in {
   raven = callPackage ../development/python-modules/raven { };
 
   rethinkdb = buildPythonPackage rec {
-    name = "rethinkdb-${version}";
+    pname = "rethinkdb";
+    name = pname + "-" + version;
+
     version = "2.3.0.post6";
 
     src = pkgs.fetchurl {
@@ -7055,7 +7577,9 @@ in {
 
   roman = buildPythonPackage rec {
     version = "2.0.0";
-    name = "roman-${version}";
+    pname = "roman";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/roman/${name}.zip";
@@ -7101,7 +7625,9 @@ in {
 
   safe = buildPythonPackage rec {
     version = "0.4";
-    name = "Safe-${version}";
+    pname = "Safe";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/S/Safe/${name}.tar.gz";
@@ -7117,7 +7643,9 @@ in {
   };
 
   samplerate = buildPythonPackage rec {
-    name = "scikits.samplerate-${version}";
+    pname = "scikits.samplerate";
+    name = pname + "-" + version;
+
     version = "0.3.3";
     src = pkgs.fetchgit {
       url = https://github.com/cournape/samplerate;
@@ -7141,7 +7669,9 @@ in {
   };
 
   sarge = buildPythonPackage rec {
-    name = "sarge-${version}";
+    pname = "sarge";
+    name = pname + "-" + version;
+
     version = "0.1.4";
 
     src = pkgs.fetchurl {
@@ -7163,7 +7693,9 @@ in {
   hyperlink = callPackage ../development/python-modules/hyperlink {};
 
   zope_copy = buildPythonPackage rec {
-    name = "zope.copy-4.0.2";
+    pname = "zope.copy";
+    version = "4.0.2";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/z/zope.copy/${name}.zip";
@@ -7179,7 +7711,9 @@ in {
 
 
   ssdeep = buildPythonPackage rec {
-    name = "ssdeep-3.1.1";
+    pname = "ssdeep";
+    version = "3.1.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/ssdeep/${name}.tar.gz";
@@ -7194,7 +7728,9 @@ in {
   s2clientprotocol = callPackage ../development/python-modules/s2clientprotocol { };
 
   statsd = buildPythonPackage rec {
-    name = "statsd-${version}";
+    pname = "statsd";
+    name = pname + "-" + version;
+
     version = "3.2.1";
 
     src = pkgs.fetchurl {
@@ -7222,7 +7758,9 @@ in {
 
   py3status = buildPythonPackage rec {
     version = "3.6";
-    name = "py3status-${version}";
+    pname = "py3status";
+    name = pname + "-" + version;
+
     src = pkgs.fetchFromGitHub {
       owner = "ultrabug";
       repo = "py3status";
@@ -7250,7 +7788,9 @@ in {
   };
 
   multi_key_dict = buildPythonPackage rec {
-    name = "multi_key_dict-${version}";
+    pname = "multi_key_dict";
+    name = pname + "-" + version;
+
     version = "2.0.3";
 
     src = pkgs.fetchurl {
@@ -7268,7 +7808,9 @@ in {
   pyrtlsdr = callPackage ../development/python-modules/pyrtlsdr { };
 
   random2 = self.buildPythonPackage rec {
-    name = "random2-1.0.1";
+    pname = "random2";
+    version = "1.0.1";
+    name = pname + "-" + version;
 
     doCheck = !isPyPy;
 
@@ -7279,7 +7821,9 @@ in {
   };
 
   scandir = self.buildPythonPackage rec {
-    name = "scandir-${version}";
+    pname = "scandir";
+    name = pname + "-" + version;
+
     version = "1.4";
 
     src = pkgs.fetchurl {
@@ -7296,7 +7840,9 @@ in {
   };
 
   scfbuild = self.buildPythonPackage rec {
-    name = "scfbuild-${version}";
+    pname = "scfbuild";
+    name = pname + "-" + version;
+
     version = "1.0.3";
 
     disabled = isPy3k;
@@ -7327,7 +7873,9 @@ in {
   };
 
   schedule = buildPythonPackage rec {
-    name = "schedule-0.3.2";
+    pname = "schedule";
+    version = "0.3.2";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/10/96/d101fab391753ebc81fa3bb0e744df1ddcfb032c31b036d38083f8994db1/schedule-0.3.2.tar.gz";
@@ -7346,7 +7894,9 @@ in {
   schema = callPackage ../development/python-modules/schema {};
 
   svg-path = buildPythonPackage rec {
-    name = "svg.path-${version}";
+    pname = "svg.path";
+    name = pname + "-" + version;
+
     version = "2.0b1";
 
     src = pkgs.fetchurl {
@@ -7363,7 +7913,9 @@ in {
   };
 
   regex = buildPythonPackage rec {
-    name = "regex-${version}";
+    pname = "regex";
+    name = pname + "-" + version;
+
     version = "2016.11.18";
 
     src = pkgs.fetchurl {
@@ -7381,7 +7933,9 @@ in {
   };
 
   repoze_lru = buildPythonPackage rec {
-    name = "repoze.lru-0.6";
+    pname = "repoze.lru";
+    version = "0.6";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/repoze.lru/${name}.tar.gz";
@@ -7397,7 +7951,9 @@ in {
 
 
   repoze_sphinx_autointerface = buildPythonPackage rec {
-    name = "repoze.sphinx.autointerface-0.7.1";
+    pname = "repoze.sphinx.autointerface";
+    version = "0.7.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/repoze.sphinx.autointerface/${name}.tar.gz";
@@ -7414,7 +7970,9 @@ in {
 
 
   setuptools-git = buildPythonPackage rec {
-    name = "setuptools-git-${version}";
+    pname = "setuptools-git";
+    name = pname + "-" + version;
+
     version = "1.1";
 
     src = pkgs.fetchurl {
@@ -7434,7 +7992,9 @@ in {
 
 
   watchdog = buildPythonPackage rec {
-    name = "watchdog-${version}";
+    pname = "watchdog";
+    name = pname + "-" + version;
+
     version = "0.8.3";
 
     propagatedBuildInputs = with self; [ argh pathtools pyyaml ];
@@ -7458,7 +8018,9 @@ in {
   };
 
   pywatchman = buildPythonPackage rec {
-    name = "pywatchman-${version}";
+    pname = "pywatchman";
+    name = pname + "-" + version;
+
     version = "1.3.0";
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pywatchman/pywatchman-${version}.tar.gz";
@@ -7476,7 +8038,9 @@ in {
   };
 
   zope_deprecation = buildPythonPackage rec {
-    name = "zope.deprecation-4.1.2";
+    pname = "zope.deprecation";
+    version = "4.1.2";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/z/zope.deprecation/${name}.tar.gz";
@@ -7492,7 +8056,9 @@ in {
   };
 
   validictory = buildPythonPackage rec {
-    name = "validictory-1.0.0a2";
+    pname = "validictory";
+    version = "1.0.0a2";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/v/validictory/validictory-1.0.0a2.tar.gz";
@@ -7511,7 +8077,9 @@ in {
   vcrpy = callPackage ../development/python-modules/vcrpy { };
 
   venusian = buildPythonPackage rec {
-    name = "venusian-1.0";
+    pname = "venusian";
+    version = "1.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/v/venusian/${name}.tar.gz";
@@ -7529,7 +8097,9 @@ in {
 
 
   chameleon = buildPythonPackage rec {
-    name = "Chameleon-2.25";
+    pname = "Chameleon";
+    version = "2.25";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/C/Chameleon/${name}.tar.gz";
@@ -7545,7 +8115,9 @@ in {
   };
 
   ddt = buildPythonPackage (rec {
-    name = "ddt-1.0.0";
+    pname = "ddt";
+    version = "1.0.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/ddt/${name}.tar.gz";
@@ -7564,7 +8136,9 @@ in {
   descartes = callPackage ../development/python-modules/descartes { };
 
   distutils_extra = buildPythonPackage rec {
-    name = "distutils-extra-${version}";
+    pname = "distutils-extra";
+    name = pname + "-" + version;
+
     version = "2.39";
 
     src = pkgs.fetchurl {
@@ -7580,7 +8154,9 @@ in {
   };
 
   pyxdg = buildPythonPackage rec {
-    name = "pyxdg-0.25";
+    pname = "pyxdg";
+    version = "0.25";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyxdg/${name}.tar.gz";
@@ -7607,7 +8183,9 @@ in {
   };
 
   django_1_8 = buildPythonPackage rec {
-    name = "Django-${version}";
+    pname = "Django";
+    name = pname + "-" + version;
+
     version = "1.8.18";
     disabled = pythonOlder "2.7";
 
@@ -7633,7 +8211,9 @@ in {
   django_appconf = callPackage ../development/python-modules/django_appconf { };
 
   django_colorful = buildPythonPackage rec {
-    name = "django-colorful-${version}";
+    pname = "django-colorful";
+    name = pname + "-" + version;
+
     version = "1.2";
 
     src = pkgs.fetchurl {
@@ -7659,7 +8239,9 @@ in {
   django_compat = callPackage ../development/python-modules/django-compat { };
 
   django_environ = buildPythonPackage rec {
-    name = "django-environ-${version}";
+    pname = "django-environ";
+    name = pname + "-" + version;
+
     version = "0.4.0";
 
     src = pkgs.fetchurl {
@@ -7679,7 +8261,10 @@ in {
   };
 
   django_evolution = buildPythonPackage rec {
-    name = "django_evolution-0.7.5";
+    pname = "django_evolution";
+    version = "0.7.5";
+    name = pname + "-" + version;
+
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -7721,7 +8306,9 @@ in {
        self.django != self.django_1_8
   then throw "django_tagging_0_4_3 should be build with django_1_8"
   else (callPackage ../development/python-modules/django_tagging {}).overrideAttrs (attrs: rec {
-    name = "django-tagging-0.4.3";
+    pname = "django-tagging";
+    version = "0.4.3";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/django-tagging/${name}.tar.gz";
@@ -7731,7 +8318,9 @@ in {
   });
 
   django_classytags = buildPythonPackage rec {
-    name = "django-classy-tags-${version}";
+    pname = "django-classy-tags";
+    name = pname + "-" + version;
+
     version = "0.6.1";
 
     src = pkgs.fetchurl {
@@ -7757,7 +8346,9 @@ in {
   django_hijack = callPackage ../development/python-modules/django-hijack { };
 
   django_nose = buildPythonPackage rec {
-    name = "django-nose-${version}";
+    pname = "django-nose";
+    name = pname + "-" + version;
+
     version = "1.4.4";
 
     src = pkgs.fetchurl {
@@ -7778,7 +8369,9 @@ in {
   };
 
   django_modelcluster = buildPythonPackage rec {
-    name = "django-modelcluster-${version}";
+    pname = "django-modelcluster";
+    name = pname + "-" + version;
+
     version = "0.6.2";
 
     src = pkgs.fetchurl {
@@ -7805,7 +8398,9 @@ in {
   django_redis = callPackage ../development/python-modules/django_redis { };
 
   django_reversion = buildPythonPackage rec {
-    name = "django-reversion-${version}";
+    pname = "django-reversion";
+    name = pname + "-" + version;
+
     version = "1.10.1";
 
     src = pkgs.fetchurl {
@@ -7824,7 +8419,9 @@ in {
   };
 
   django_silk = buildPythonPackage rec {
-    name = "django-silk-${version}";
+    pname = "django-silk";
+    name = pname + "-" + version;
+
     version = "0.5.6";
 
     src = pkgs.fetchurl {
@@ -7857,7 +8454,9 @@ in {
   };
 
   django_taggit = buildPythonPackage rec {
-    name = "django-taggit-${version}";
+    pname = "django-taggit";
+    name = pname + "-" + version;
+
     version = "0.17.0";
     disabled = pythonOlder "2.7";
 
@@ -7877,7 +8476,9 @@ in {
   };
 
   django_treebeard = buildPythonPackage rec {
-    name = "django-treebeard-${version}";
+    pname = "django-treebeard";
+    name = pname + "-" + version;
+
     version = "3.0";
 
     src = pkgs.fetchurl {
@@ -7897,7 +8498,9 @@ in {
   };
 
   django_pipeline = buildPythonPackage rec {
-    name = "django-pipeline-${version}";
+    pname = "django-pipeline";
+    name = pname + "-" + version;
+
     version = "1.5.1";
 
     src = pkgs.fetchurl {
@@ -7915,7 +8518,9 @@ in {
   };
 
   django_pipeline_1_3 = self.django_pipeline.overrideDerivation (super: rec {
-    name = "django-pipeline-1.3.27";
+    pname = "django-pipeline";
+    version = "1.3.27";
+    name = pname + "-" + version;
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/django-pipeline/${name}.tar.gz";
       sha256 = "0iva3cmnh5jw54c7w83nx9nqv523hjvkbjchzd2pb6vzilxf557k";
@@ -7927,7 +8532,9 @@ in {
                (versionAtLeast self.django.version "1.9")
             then throw "djblets only suported for Django<1.8.999,>=1.6.11"
             else buildPythonPackage rec {
-    name = "Djblets-0.9";
+    pname = "Djblets";
+    version = "0.9";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "http://downloads.reviewboard.org/releases/Djblets/0.9/${name}.tar.gz";
@@ -7946,7 +8553,9 @@ in {
   djmail = callPackage ../development/python-modules/djmail { };
 
   pillowfight = buildPythonPackage rec {
-    name = "pillowfight-${version}";
+    pname = "pillowfight";
+    name = pname + "-" + version;
+
     version = "0.2";
 
     src = pkgs.fetchurl {
@@ -7964,7 +8573,9 @@ in {
   };
 
   kaptan = buildPythonPackage rec {
-    name = "kaptan-${version}";
+    pname = "kaptan";
+    name = pname + "-" + version;
+
     version = "0.5.8";
 
     src = pkgs.fetchurl {
@@ -7984,7 +8595,9 @@ in {
   };
 
   keepalive = buildPythonPackage rec {
-    name = "keepalive-${version}";
+    pname = "keepalive";
+    name = pname + "-" + version;
+
     version = "0.5";
 
     src = pkgs.fetchurl {
@@ -8003,7 +8616,9 @@ in {
 
 
   SPARQLWrapper = buildPythonPackage rec {
-    name = "SPARQLWrapper-${version}";
+    pname = "SPARQLWrapper";
+    name = pname + "-" + version;
+
     version = "1.7.6";
 
     src = pkgs.fetchurl {
@@ -8034,8 +8649,9 @@ in {
   };
 
   hg-git = buildPythonPackage rec {
-    name = "hg-git-${version}";
+    pname = "hg-git";
     version = "0.8.10";
+    name = pname + "-" + version;
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -8054,7 +8670,9 @@ in {
 
 
   docutils = buildPythonPackage rec {
-    name = "docutils-${version}";
+    pname = "docutils";
+    name = pname + "-" + version;
+
     version = "0.13.1";
 
     src = pkgs.fetchurl {
@@ -8074,7 +8692,9 @@ in {
 
 
   dtopt = buildPythonPackage rec {
-    name = "dtopt-0.1";
+    pname = "dtopt";
+    version = "0.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/dtopt/${name}.tar.gz";
@@ -8091,7 +8711,9 @@ in {
 
 
   ecdsa = buildPythonPackage rec {
-    name = "ecdsa-${version}";
+    pname = "ecdsa";
+    name = pname + "-" + version;
+
     version = "0.13";
 
     src = pkgs.fetchurl {
@@ -8112,7 +8734,9 @@ in {
 
 
   elpy = buildPythonPackage rec {
-    name = "elpy-${version}";
+    pname = "elpy";
+    name = pname + "-" + version;
+
     version = "1.9.0";
     src = pkgs.fetchurl {
       url = "mirror://pypi/e/elpy/${name}.tar.gz";
@@ -8131,7 +8755,9 @@ in {
 
 
   enum = buildPythonPackage rec {
-    name = "enum-0.4.4";
+    pname = "enum";
+    version = "0.4.4";
+    name = pname + "-" + version;
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -8195,7 +8821,10 @@ in {
   };
 
   epc = buildPythonPackage rec {
-    name = "epc-0.0.3";
+    pname = "epc";
+    version = "0.0.3";
+    name = pname + "-" + version;
+
     src = pkgs.fetchurl {
       url = "mirror://pypi/e/epc/${name}.tar.gz";
       sha256 = "30b594bd4a4acbd5bda0d3fa3d25b4e8117f2ff8f24d2d1e3e36c90374f3c55e";
@@ -8212,7 +8841,9 @@ in {
 
   et_xmlfile = buildPythonPackage rec {
     version = "1.0.1";
-    name = "et_xmlfile-${version}";
+    pname = "et_xmlfile";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/e/et_xmlfile/${name}.tar.gz";
@@ -8266,7 +8897,9 @@ in {
   };
 
   exifread = buildPythonPackage rec {
-    name = "ExifRead-2.1.2";
+    pname = "ExifRead";
+    version = "2.1.2";
+    name = pname + "-" + version;
 
     meta = {
       description = "Easy to use Python module to extract Exif metadata from tiff and jpeg files";
@@ -8290,7 +8923,9 @@ in {
   };
 
   feedparser = buildPythonPackage (rec {
-    name = "feedparser-5.2.1";
+    pname = "feedparser";
+    version = "5.2.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/feedparser/${name}.tar.gz";
@@ -8310,7 +8945,9 @@ in {
 
   pyfribidi = buildPythonPackage rec {
     version = "0.11.0";
-    name = "pyfribidi-${version}";
+    pname = "pyfribidi";
+    name = pname + "-" + version;
+
     disabled = isPy3k || isPyPy;
 
     src = pkgs.fetchurl {
@@ -8329,7 +8966,9 @@ in {
 
   fdroidserver = buildPythonPackage rec {
     version = "2016-05-31";
-    name = "fdroidserver-git-${version}";
+    pname = "fdroidserver-git";
+    name = pname + "-" + version;
+
 
     disabled = ! isPy3k;
 
@@ -8352,7 +8991,9 @@ in {
 
   filebrowser_safe = buildPythonPackage rec {
     version = "0.3.6";
-    name = "filebrowser_safe-${version}";
+    pname = "filebrowser_safe";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/filebrowser_safe/${name}.tar.gz";
@@ -8387,7 +9028,9 @@ in {
   pycodestyle = callPackage ../development/python-modules/pycodestyle { };
 
   filebytes = buildPythonPackage rec {
-    name = "filebytes-0.9.12";
+    pname = "filebytes";
+    version = "0.9.12";
+    name = pname + "-" + version;
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/filebytes/${name}.tar.gz";
       sha256 = "6cd1c4ca823f6541c963a317e55382609789802dedad08209f4d038369e3f0ac";
@@ -8412,7 +9055,9 @@ in {
   flake8-future-import = callPackage ../development/python-modules/flake8-future-import { };
 
   flaky = buildPythonPackage rec {
-    name = "flaky-${version}";
+    pname = "flaky";
+    name = pname + "-" + version;
+
     version = "3.1.0";
 
     src = pkgs.fetchurl {
@@ -8435,7 +9080,9 @@ in {
   flask = callPackage ../development/python-modules/flask { };
 
   flask_assets = buildPythonPackage rec {
-    name = "Flask-Assets-${version}";
+    pname = "Flask-Assets";
+    name = pname + "-" + version;
+
     version = "0.12";
 
     src = pkgs.fetchurl {
@@ -8454,7 +9101,9 @@ in {
   };
 
   flask_cache = buildPythonPackage rec {
-    name = "Flask-Cache-0.13.1";
+    pname = "Flask-Cache";
+    version = "0.13.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/F/Flask-Cache/${name}.tar.gz";
@@ -8489,7 +9138,9 @@ in {
   flask_oauthlib = callPackage ../development/python-modules/flask-oauthlib { };
 
   flask_principal = buildPythonPackage rec {
-    name = "Flask-Principal-${version}";
+    pname = "Flask-Principal";
+    name = pname + "-" + version;
+
     version = "0.4.0";
 
     src = pkgs.fetchurl {
@@ -8515,7 +9166,9 @@ in {
   flask-restplus = callPackage ../development/python-modules/flask-restplus { };
 
   flask_script = buildPythonPackage rec {
-    name = "Flask-Script-${version}";
+    pname = "Flask-Script";
+    name = pname + "-" + version;
+
     version = "2.0.5";
 
     src = pkgs.fetchurl {
@@ -8536,7 +9189,9 @@ in {
   };
 
   flask_sqlalchemy = buildPythonPackage rec {
-    name = "Flask-SQLAlchemy-${version}";
+    pname = "Flask-SQLAlchemy";
+    name = pname + "-" + version;
+
     version = "2.1";
 
     src = pkgs.fetchurl {
@@ -8559,7 +9214,9 @@ in {
 
   wtforms = buildPythonPackage rec {
     version = "2.1";
-    name = "wtforms-${version}";
+    pname = "wtforms";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/W/WTForms/WTForms-${version}.zip";
@@ -8585,7 +9242,9 @@ in {
 
   grappelli_safe = buildPythonPackage rec {
     version = "0.3.13";
-    name = "grappelli_safe-${version}";
+    pname = "grappelli_safe";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/grappelli_safe/${name}.tar.gz";
@@ -8614,7 +9273,9 @@ in {
   pytorch = callPackage ../development/python-modules/pytorch { };
 
   python2-pythondialog = buildPythonPackage rec {
-    name = "python2-pythondialog-${version}";
+    pname = "python2-pythondialog";
+    name = pname + "-" + version;
+
     version = "3.3.0";
     disabled = !isPy27;
 
@@ -8633,7 +9294,9 @@ in {
   };
 
   pyRFC3339 = buildPythonPackage rec {
-    name = "pyRFC3339-${version}";
+    pname = "pyRFC3339";
+    name = pname + "-" + version;
+
     version = "0.2";
 
     src = pkgs.fetchurl {
@@ -8652,7 +9315,9 @@ in {
   vcversioner = callPackage ../development/python-modules/vcversioner { };
 
   falcon = buildPythonPackage (rec {
-    name = "falcon-1.0.0";
+    pname = "falcon";
+    version = "1.0.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/falcon/${name}.tar.gz";
@@ -8674,7 +9339,9 @@ in {
     };
   });
   hug = buildPythonPackage rec {
-    name = "hug-2.1.2";
+    pname = "hug";
+    version = "2.1.2";
+    name = pname + "-" + version;
     src = pkgs.fetchurl {
       url = "mirror://pypi/h/hug/${name}.tar.gz";
       sha256 = "93325e13706594933a9afb0d4f0b0748134494299038f07df41152baf6f89f4c";
@@ -8693,7 +9360,9 @@ in {
     };
   };
   flup = buildPythonPackage (rec {
-    name = "flup-1.0.2";
+    pname = "flup";
+    version = "1.0.2";
+    name = pname + "-" + version;
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -8719,7 +9388,9 @@ in {
   fonttools = callPackage ../development/python-modules/fonttools { };
 
   foolscap = buildPythonPackage (rec {
-    name = "foolscap-${version}";
+    pname = "foolscap";
+    name = pname + "-" + version;
+
     version = "0.12.6";
 
     src = pkgs.fetchurl {
@@ -8756,7 +9427,9 @@ in {
 
   forbiddenfruit = buildPythonPackage rec {
     version = "0.1.0";
-    name = "forbiddenfruit-${version}";
+    pname = "forbiddenfruit";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url= "mirror://pypi/f/forbiddenfruit/${name}.tar.gz";
@@ -8771,7 +9444,9 @@ in {
   };
 
   fs = buildPythonPackage rec {
-    name = "fs-0.5.4";
+    pname = "fs";
+    version = "0.5.4";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url    = "mirror://pypi/f/fs/${name}.tar.gz";
@@ -8805,7 +9480,9 @@ in {
   fuse = callPackage ../development/python-modules/python-fuse { fuse = pkgs.fuse; };
 
   fusepy = buildPythonPackage rec {
-    name = "fusepy-2.0.4";
+    pname = "fusepy";
+    version = "2.0.4";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/fusepy/${name}.tar.gz";
@@ -8838,7 +9515,8 @@ in {
   future = callPackage ../development/python-modules/future { };
 
   futures = buildPythonPackage rec {
-    name = "futures-${version}";
+    pname = "futures";
+    name = pname + "-" + version;
     version = "3.1.1";
 
     src = pkgs.fetchurl {
@@ -8866,7 +9544,8 @@ in {
 
   futures_2_2 = self.futures.override rec {
     version = "2.2.0";
-    name = "futures-${version}";
+    pname = "futures";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/f/futures/${name}.tar.gz";
@@ -8875,7 +9554,9 @@ in {
   };
 
   gcovr = buildPythonPackage rec {
-    name = "gcovr-2.4";
+    pname = "gcovr";
+    version = "2.4";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/gcovr/${name}.tar.gz";
@@ -8889,14 +9570,16 @@ in {
   };
 
   gdal = (pkgs.gdal.overrideDerivation (oldattrs: {
-    name = "${python.libPrefix}-" + oldattrs.name;
+    name = python.libPrefix + "-" + oldattrs.name;
   })).override {
     pythonPackages = self;
   };
 
   gdrivefs = buildPythonPackage rec {
     version = "0.14.8";
-    name = "gdrivefs-${version}";
+    pname = "gdrivefs";
+    name = pname + "-" + version;
+
     namePrefix = "";
     disabled = !isPy27;
 
@@ -8931,8 +9614,10 @@ in {
     };
   };
 
-  genshi = buildPythonPackage {
-    name = "genshi-0.7";
+  genshi = buildPythonPackage rec {
+    pname = "genshi";
+    version = "0.7";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = http://ftp.edgewall.com/pub/genshi/Genshi-0.7.tar.gz;
@@ -8961,7 +9646,9 @@ in {
   gevent = callPackage ../development/python-modules/gevent { };
 
   geventhttpclient = buildPythonPackage rec {
-    name = "geventhttpclient-${version}";
+    pname = "geventhttpclient";
+    name = pname + "-" + version;
+
     version = "1.3.1";
 
     src = pkgs.fetchurl {
@@ -8987,7 +9674,9 @@ in {
   };
 
   gevent-socketio = buildPythonPackage rec {
-    name = "gevent-socketio-0.3.6";
+    pname = "gevent-socketio";
+    version = "0.3.6";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/gevent-socketio/${name}.tar.gz";
@@ -9002,7 +9691,9 @@ in {
   geopandas = callPackage ../development/python-modules/geopandas { };
 
   gevent-websocket = buildPythonPackage rec {
-    name = "gevent-websocket-0.9.3";
+    pname = "gevent-websocket";
+    version = "0.9.3";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/gevent-websocket/${name}.tar.gz";
@@ -9016,8 +9707,10 @@ in {
 
   };
 
-  genzshcomp = buildPythonPackage {
-    name = "genzshcomp-0.5.1";
+  genzshcomp = buildPythonPackage rec {
+    pname = "genzshcomp";
+    version = "0.5.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/genzshcomp/genzshcomp-0.5.1.tar.gz";
@@ -9038,7 +9731,9 @@ in {
   ghdiff = callPackage ../development/python-modules/ghdiff { };
 
   gipc = buildPythonPackage rec {
-    name = "gipc-0.5.0";
+    pname = "gipc";
+    version = "0.5.0";
+    name = pname + "-" + version;
     disabled = !isPy26 && !isPy27;
 
     src = pkgs.fetchurl {
@@ -9065,7 +9760,9 @@ in {
   };
 
   git-sweep = buildPythonPackage rec {
-    name = "git-sweep-0.1.1";
+    pname = "git-sweep";
+    version = "0.1.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/git-sweep/${name}.tar.gz";
@@ -9083,7 +9780,9 @@ in {
   };
 
   glances = buildPythonPackage rec {
-    name = "glances-${version}";
+    pname = "glances";
+    name = pname + "-" + version;
+
     version = "2.11.1";
     disabled = isPyPy;
 
@@ -9112,7 +9811,9 @@ in {
   };
 
   github3_py = buildPythonPackage rec {
-    name = "github3.py-${version}";
+    pname = "github3.py";
+    name = pname + "-" + version;
+
     version = "1.0.0a4";
 
     src = pkgs.fetchurl {
@@ -9142,7 +9843,9 @@ in {
   };
 
   github-webhook = buildPythonPackage rec {
-    name = "github-webhook-${version}";
+    pname = "github-webhook";
+    name = pname + "-" + version;
+
     version = "unstable-2016-03-11";
 
     # There is a PyPI package but an older one.
@@ -9164,7 +9867,9 @@ in {
   };
 
   goobook = buildPythonPackage rec {
-    name = "goobook-1.9";
+    pname = "goobook";
+    version = "1.9";
+    name = pname + "-" + version;
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -9190,7 +9895,9 @@ in {
   };
 
   google_api_python_client = buildPythonPackage rec {
-    name = "google-api-python-client-${version}";
+    pname = "google-api-python-client";
+    name = pname + "-" + version;
+
     version = "1.5.1";
 
     src = pkgs.fetchurl {
@@ -9212,7 +9919,9 @@ in {
   };
 
   google_apputils = buildPythonPackage rec {
-    name = "google-apputils-0.4.1";
+    pname = "google-apputils";
+    version = "0.4.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/google-apputils/${name}.tar.gz";
@@ -9240,7 +9949,9 @@ in {
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
   greenlet = buildPythonPackage rec {
-    name = "greenlet-${version}";
+    pname = "greenlet";
+    name = pname + "-" + version;
+
     version = "0.4.10";
     disabled = isPyPy;  # builtin for pypy
 
@@ -9266,7 +9977,7 @@ in {
 
   grib-api = if (isPy27) then
       (pkgs.grib-api.overrideAttrs (oldattrs: {
-    name = "${python.libPrefix}-" + oldattrs.name;
+    name = python.libPrefix + "-" + oldattrs.name;
   })).override {
     enablePython = true;
     pythonPackages = self;
@@ -9274,7 +9985,9 @@ in {
 
   gspread = buildPythonPackage rec {
     version = "0.2.3";
-    name = "gspread-${version}";
+    pname = "gspread";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/gspread/${name}.tar.gz";
@@ -9290,7 +10003,9 @@ in {
 
   gssapi = buildPythonPackage rec {
     version = "1.1.4";
-    name = "gssapi-${version}";
+    pname = "gssapi";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/gssapi/${name}.tar.gz";
@@ -9315,7 +10030,9 @@ in {
   };
 
   gyp = buildPythonPackage rec {
-    name = "gyp-${version}";
+    pname = "gyp";
+    name = pname + "-" + version;
+
     version = "2015-06-11";
 
     src = pkgs.fetchgit {
@@ -9354,7 +10071,9 @@ in {
   gunicorn = callPackage ../development/python-modules/gunicorn { };
 
   hawkauthlib = buildPythonPackage rec {
-    name = "hawkauthlib-${version}";
+    pname = "hawkauthlib";
+    name = pname + "-" + version;
+
     version = "0.1.1";
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/hawkauthlib.git;
@@ -9370,7 +10089,9 @@ in {
   hcs_utils = callPackage ../development/python-modules/hcs_utils { };
 
   hetzner = buildPythonPackage rec {
-    name = "hetzner-${version}";
+    pname = "hetzner";
+    name = pname + "-" + version;
+
     version = "0.7.5";
 
     src = pkgs.fetchFromGitHub {
@@ -9393,7 +10114,9 @@ in {
 
 
   htmllaundry = buildPythonPackage rec {
-    name = "htmllaundry-2.0";
+    pname = "htmllaundry";
+    version = "2.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/h/htmllaundry/${name}.tar.gz";
@@ -9416,7 +10139,8 @@ in {
 
   html5lib = buildPythonPackage (rec {
     version = "0.999999999";
-    name = "html5lib-${version}";
+    pname = "html5lib";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "http://github.com/html5lib/html5lib-python/archive/${version}.tar.gz";
@@ -9447,7 +10171,9 @@ in {
   });
 
   http_signature = buildPythonPackage (rec {
-    name = "http_signature-0.1.4";
+    pname = "http_signature";
+    version = "0.1.4";
+    name = pname + "-" + version;
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -9467,7 +10193,9 @@ in {
   httpbin = callPackage ../development/python-modules/httpbin { };
 
   httplib2 = buildPythonPackage rec {
-    name = "httplib2-0.9.2";
+    pname = "httplib2";
+    version = "0.9.2";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/h/httplib2/${name}.tar.gz";
@@ -9483,7 +10211,9 @@ in {
   };
 
   hvac = buildPythonPackage rec {
-    name    = "hvac-${version}";
+    pname    = "hvac";
+    name = pname + "-" + version;
+
     version = "0.2.15";
 
     src = pkgs.fetchurl {
@@ -9497,7 +10227,9 @@ in {
   hypothesis = callPackage ../development/python-modules/hypothesis { };
 
   colored = buildPythonPackage rec {
-    name = "colored-${version}";
+    pname = "colored";
+    name = pname + "-" + version;
+
     version = "1.1.5";
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/colored/${name}.tar.gz";
@@ -9510,7 +10242,9 @@ in {
 
 
   xdis = buildPythonPackage rec {
-    name = "xdis-${version}";
+    pname = "xdis";
+    name = pname + "-" + version;
+
     version = "3.2.4";
     src = pkgs.fetchurl {
       url = "mirror://pypi/x/xdis/${name}.tar.gz";
@@ -9526,7 +10260,9 @@ in {
   };
 
   uncompyle6 = buildPythonPackage rec {
-    name = "uncompyle6-${version}";
+    pname = "uncompyle6";
+    name = pname + "-" + version;
+
     version = "2.8.3";
     src = pkgs.fetchurl {
       url = "mirror://pypi/u/uncompyle6/${name}.tar.gz";
@@ -9541,7 +10277,9 @@ in {
   };
 
   lsi = buildPythonPackage rec {
-    name = "lsi-${version}";
+    pname = "lsi";
+    name = pname + "-" + version;
+
     version = "0.2.2";
     disabled = isPy3k;
     src = pkgs.fetchurl {
@@ -9563,7 +10301,9 @@ in {
   };
 
   hkdf = buildPythonPackage rec {
-    name = "hkdf-${version}";
+    pname = "hkdf";
+    name = pname + "-" + version;
+
     version = "0.0.3";
 
     src = pkgs.fetchurl {
@@ -9585,7 +10325,9 @@ in {
   };
 
   httpretty = buildPythonPackage rec {
-    name = "httpretty-${version}";
+    pname = "httpretty";
+    name = pname + "-" + version;
+
     version = "0.8.10";
     doCheck = false;
 
@@ -9623,7 +10365,9 @@ in {
 
   icalendar = buildPythonPackage rec {
     version = "3.9.0";
-    name = "icalendar-${version}";
+    pname = "icalendar";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/icalendar/${name}.tar.gz";
@@ -9642,7 +10386,9 @@ in {
   };
 
   imageio = buildPythonPackage rec {
-    name = "imageio-${version}";
+    pname = "imageio";
+    name = pname + "-" + version;
+
     version = "1.6";
 
     src = pkgs.fetchurl {
@@ -9668,7 +10414,9 @@ in {
   };
 
   importlib = buildPythonPackage rec {
-    name = "importlib-1.0.2";
+    pname = "importlib";
+    version = "1.0.2";
+    name = pname + "-" + version;
 
     disabled = (!isPy26) || isPyPy;
 
@@ -9681,7 +10429,9 @@ in {
 
   inflection = buildPythonPackage rec {
      version = "0.3.1";
-     name = "inflection-${version}";
+     pname = "inflection";
+    name = pname + "-" + version;
+
 
      src = pkgs.fetchurl {
        url= "mirror://pypi/i/inflection/${name}.tar.gz";
@@ -9698,7 +10448,9 @@ in {
   };
 
   influxdb = buildPythonPackage rec {
-    name = "influxdb-4.0.0";
+    pname = "influxdb";
+    version = "4.0.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/influxdb/${name}.tar.gz";
@@ -9744,7 +10496,9 @@ in {
   };
 
   inifile = buildPythonPackage rec {
-    name = "inifile-0.3";
+    pname = "inifile";
+    version = "0.3";
+    name = pname + "-" + version;
 
     meta = {
       description = "A small INI library for Python";
@@ -9763,7 +10517,9 @@ in {
 
   iptools = buildPythonPackage rec {
     version = "0.6.1";
-    name = "iptools-${version}";
+    pname = "iptools";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/iptools/iptools-${version}.tar.gz";
@@ -9781,7 +10537,9 @@ in {
 
   ipy = buildPythonPackage rec {
     version = "0.74";
-    name = "ipy-${version}";
+    pname = "ipy";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/I/IPy/IPy-${version}.tar.gz";
@@ -9813,7 +10571,9 @@ in {
   ipywidgets = callPackage ../development/python-modules/ipywidgets { };
 
   ipaddr = buildPythonPackage rec {
-    name = "ipaddr-${version}";
+    pname = "ipaddr";
+    name = pname + "-" + version;
+
     version = "2.1.11";
     disabled = isPy3k;
 
@@ -9830,7 +10590,9 @@ in {
   };
 
   ipaddress = if (pythonAtLeast "3.3") then null else buildPythonPackage rec {
-    name = "ipaddress-1.0.18";
+    pname = "ipaddress";
+    version = "1.0.18";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/ipaddress/${name}.tar.gz";
@@ -9849,7 +10611,9 @@ in {
   };
 
   ipdb = buildPythonPackage rec {
-    name = "ipdb-${version}";
+    pname = "ipdb";
+    name = pname + "-" + version;
+
     version = "0.8.1";
 
     disabled = isPyPy;  # setupterm: could not find terminfo database
@@ -9860,8 +10624,10 @@ in {
     propagatedBuildInputs = with self; [ ipython ];
   };
 
-  ipdbplugin = buildPythonPackage {
-    name = "ipdbplugin-1.4";
+  ipdbplugin = buildPythonPackage rec {
+    pname = "ipdbplugin";
+    version = "1.4";
+    name = pname + "-" + version;
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/ipdbplugin/ipdbplugin-1.4.tar.gz";
       sha256 = "4778d78b5d0af1a2a6d341aed9e72eb73b1df6b179e145b4845d3a209137029c";
@@ -9870,7 +10636,9 @@ in {
   };
 
   pythonIRClib = buildPythonPackage rec {
-    name = "irclib-${version}";
+    pname = "irclib";
+    name = pname + "-" + version;
+
     version = "0.4.8";
 
     src = pkgs.fetchurl {
@@ -9901,7 +10669,9 @@ in {
   iso3166 = callPackage ../development/python-modules/iso3166 {};
 
   iso8601 = buildPythonPackage rec {
-    name = "iso8601-${version}";
+    pname = "iso8601";
+    name = pname + "-" + version;
+
     version = "0.1.11";
     src = pkgs.fetchurl {
       url = "mirror://pypi/i/iso8601/${name}.tar.gz";
@@ -9946,7 +10716,9 @@ in {
 
   jellyfish = buildPythonPackage rec {
     version = "0.5.2";
-    name = "jellyfish-${version}";
+    pname = "jellyfish";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jellyfish/${name}.tar.gz";
@@ -9963,7 +10735,9 @@ in {
   };
 
   j2cli = buildPythonPackage rec {
-    name = "j2cli-${version}";
+    pname = "j2cli";
+    name = pname + "-" + version;
+
     version = "0.3.1-0";
 
     src = pkgs.fetchurl {
@@ -9994,7 +10768,9 @@ in {
 
   jinja2_time = buildPythonPackage rec {
     version = "0.2.0";
-    name = "jinja2-time-${version}";
+    pname = "jinja2-time";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jinja2-time/${name}.tar.gz";
@@ -10011,7 +10787,9 @@ in {
   };
 
   jmespath = buildPythonPackage rec {
-    name = "jmespath-0.9.0";
+    pname = "jmespath";
+    version = "0.9.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/j/jmespath/${name}.tar.gz";
@@ -10033,7 +10811,7 @@ in {
   };
 
   jsonnet = buildPythonPackage {
-    inherit (pkgs.jsonnet) name src;
+    inherit (pkgs.jsonnet) name src version;
     # Python 3 is not yet supported https://github.com/google/jsonnet/pull/335
     disabled = isPy3k;
   };
@@ -10043,7 +10821,9 @@ in {
   jupyter_core = callPackage ../development/python-modules/jupyter_core { };
 
   jsonpath_rw = buildPythonPackage rec {
-    name = "jsonpath-rw-${version}";
+    pname = "jsonpath-rw";
+    name = pname + "-" + version;
+
     version = "1.4.0";
     disabled = isPyPy;
 
@@ -10069,7 +10849,9 @@ in {
   };
 
   kerberos = buildPythonPackage rec {
-    name = "kerberos-1.2.4";
+    pname = "kerberos";
+    version = "1.2.4";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/source/k/kerberos/${name}.tar.gz";
@@ -10091,7 +10873,9 @@ in {
 
   klaus = buildPythonPackage rec {
     version = "0.9.1";
-    name = "klaus-${version}";
+    pname = "klaus";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "https://github.com/jonashaag/klaus/archive/${version}.tar.gz";
@@ -10111,7 +10895,9 @@ in {
   };
 
   klein = buildPythonPackage rec {
-    name = "klein-15.3.1";
+    pname = "klein";
+    version = "15.3.1";
+    name = pname + "-" + version;
     src = pkgs.fetchurl {
       url = "mirror://pypi/k/klein/${name}.tar.gz";
       sha256 = "1hl2psnn1chm698rimyn9dgcpl1mxgc8dj11b3ipp8z37yfjs3z9";
@@ -10131,7 +10917,9 @@ in {
   koji = callPackage ../development/python-modules/koji { };
 
   kombu_3 = buildPythonPackage rec {
-    name = "kombu-${version}";
+    pname = "kombu";
+    name = pname + "-" + version;
+
     version = "3.0.35";
 
     disabled = pythonOlder "2.6";
@@ -10158,8 +10946,9 @@ in {
   };
 
   kombu = buildPythonPackage rec {
-    name = "kombu-${version}";
+    pname = "kombu";
     version = "4.0.2";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/k/kombu/${name}.tar.gz";
@@ -10186,7 +10975,9 @@ in {
   };
 
   konfig = buildPythonPackage rec {
-    name = "konfig-${version}";
+    pname = "konfig";
+    name = pname + "-" + version;
+
     version = "1.1";
 
     # konfig unconditionaly depend on configparser, even if it is part of
@@ -10229,7 +11020,9 @@ in {
   pylast = callPackage ../development/python-modules/pylast/default.nix { };
 
   pylru = buildPythonPackage rec {
-    name = "pylru-${version}";
+    pname = "pylru";
+    name = pname + "-" + version;
+
     version = "1.0.9";
 
     src = pkgs.fetchurl {
@@ -10247,7 +11040,9 @@ in {
   };
 
   lazy-object-proxy = buildPythonPackage rec {
-    name = "lazy-object-proxy-${version}";
+    pname = "lazy-object-proxy";
+    name = pname + "-" + version;
+
     version = "1.2.1";
 
     src = pkgs.fetchurl {
@@ -10272,7 +11067,9 @@ in {
   };
 
   le = buildPythonPackage rec {
-    name = "le-${version}";
+    pname = "le";
+    name = pname + "-" + version;
+
     version = "1.4.29";
 
     src = pkgs.fetchurl {
@@ -10293,7 +11090,9 @@ in {
   };
 
   lektor = buildPythonPackage rec {
-    name = "lektor-${version}";
+    pname = "lektor";
+    name = pname + "-" + version;
+
 
     version = "2.3";
 
@@ -10322,7 +11121,9 @@ in {
   };
 
   python-Levenshtein = buildPythonPackage rec {
-    name = "python-Levenshtein-${version}";
+    pname = "python-Levenshtein";
+    name = pname + "-" + version;
+
     version = "0.12.0";
 
     src = pkgs.fetchurl {
@@ -10342,7 +11143,9 @@ in {
   };
 
   libcloud = buildPythonPackage (rec {
-    name = "libcloud-1.2.1";
+    pname = "libcloud";
+    version = "1.2.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/apache-libcloud/apache-${name}.tar.bz2";
@@ -10382,7 +11185,9 @@ in {
     (pkgs.libxslt.override{pythonSupport=true; python2=python; inherit (self) libxml2;}).py;
 
   limnoria = buildPythonPackage rec {
-    name = "limnoria-${version}";
+    pname = "limnoria";
+    name = pname + "-" + version;
+
     version = "2016.05.06";
 
     src = pkgs.fetchurl {
@@ -10409,7 +11214,9 @@ in {
   line_profiler = callPackage ../development/python-modules/line_profiler { };
 
   linode = buildPythonPackage rec {
-    name = "linode-${version}";
+    pname = "linode";
+    name = pname + "-" + version;
+
     version = "0.4";
 
     src = pkgs.fetchurl {
@@ -10436,7 +11243,9 @@ in {
   };
 
   locustio = buildPythonPackage rec {
-    name = "locustio-0.7.2";
+    pname = "locustio";
+    version = "0.7.2";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/locustio/${name}.tar.gz";
@@ -10483,7 +11292,9 @@ in {
   logilab-constraint = callPackage ../development/python-modules/logilab/constraint.nix {};
 
   lxml = buildPythonPackage ( rec {
-    name = "lxml-3.8.0";
+    pname = "lxml";
+    version = "3.8.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/l/lxml/${name}.tar.gz";
@@ -10503,7 +11314,9 @@ in {
   });
 
   lxc = buildPythonPackage (rec {
-    name = "python-lxc-unstable-2016-08-25";
+    pname = "python-lxc";
+    version = "unstable-2016-08-25";
+    name = pname + "-" + version;
     disabled = !isPy27;
 
     src = pkgs.fetchFromGitHub {
@@ -10526,7 +11339,9 @@ in {
   ltc_scrypt = callPackage ../development/python-modules/ltc_scrypt/default.nix { };
 
   python_magic = buildPythonPackage rec {
-    name = "python-magic-0.4.10";
+    pname = "python-magic";
+    version = "0.4.10";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/python-magic/${name}.tar.gz";
@@ -10553,7 +11368,9 @@ in {
   };
 
   magic = buildPythonPackage rec {
-    name = "${pkgs.file.name}";
+    pname = pkgs.file.name;
+    version = "${pkgs.file.version}";
+    name = pname + "-" + version;
 
     src = pkgs.file.src;
 
@@ -10576,7 +11393,9 @@ in {
 
   m2crypto = buildPythonPackage rec {
     version = "0.24.0";
-    name = "m2crypto-${version}";
+    pname = "m2crypto";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/M/M2Crypto/M2Crypto-${version}.tar.gz";
@@ -10599,7 +11418,9 @@ in {
 
 
   Mako = buildPythonPackage rec {
-    name = "Mako-1.0.4";
+    pname = "Mako";
+    version = "1.0.4";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/M/Mako/${name}.tar.gz";
@@ -10637,7 +11458,9 @@ in {
   marionette-harness = callPackage ../development/python-modules/marionette-harness {};
 
   markupsafe = buildPythonPackage rec {
-    name = "markupsafe-${version}";
+    pname = "markupsafe";
+    name = pname + "-" + version;
+
     version = "1.0";
 
     src = pkgs.fetchurl {
@@ -10658,7 +11481,9 @@ in {
   marshmallow-sqlalchemy = callPackage ../development/python-modules/marshmallow-sqlalchemy { };
 
   manuel = buildPythonPackage rec {
-    name = "manuel-${version}";
+    pname = "manuel";
+    name = pname + "-" + version;
+
     version = "1.8.0";
 
     src = pkgs.fetchurl {
@@ -10677,7 +11502,9 @@ in {
 
   markdown = buildPythonPackage rec {
     version = "2.6.8";
-    name = "markdown-${version}";
+    pname = "markdown";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/M/Markdown/Markdown-${version}.tar.gz";
@@ -10695,7 +11522,9 @@ in {
   markdownsuperscript = callPackage ../development/python-modules/markdownsuperscript {};
 
   markdown-macros = buildPythonPackage rec {
-    name = "markdown-macros-${version}";
+    pname = "markdown-macros";
+    name = pname + "-" + version;
+
     version = "0.1.2";
 
     src = pkgs.fetchurl {
@@ -10731,7 +11560,9 @@ in {
                (versionAtLeast self.django.version "1.9")
             then throw "mathics only supports django-1.8.x"
             else buildPythonPackage rec {
-    name = "mathics-${version}";
+    pname = "mathics";
+    name = pname + "-" + version;
+
     version = "0.9";
     src = pkgs.fetchFromGitHub {
       owner = "mathics";
@@ -10784,7 +11615,9 @@ in {
   mccabe = callPackage ../development/python-modules/mccabe { };
 
   mechanize = buildPythonPackage (rec {
-    name = "mechanize-0.3.5";
+    pname = "mechanize";
+    version = "0.3.5";
+    name = pname + "-" + version;
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -10808,7 +11641,9 @@ in {
   MechanicalSoup = callPackage ../development/python-modules/MechanicalSoup/default.nix { };
 
   meld3 = buildPythonPackage rec {
-    name = "meld3-1.0.0";
+    pname = "meld3";
+    version = "1.0.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = mirror://pypi/m/meld3/meld3-1.0.0.tar.gz;
@@ -10827,7 +11662,9 @@ in {
   meliae = callPackage ../development/python-modules/meliae {};
 
   memcached = buildPythonPackage rec {
-    name = "memcached-1.51";
+    pname = "memcached";
+    version = "1.51";
+    name = pname + "-" + version;
 
     src = if isPy3k then pkgs.fetchurl {
       url = "mirror://pypi/p/python3-memcached/python3-${name}.tar.gz";
@@ -10845,7 +11682,9 @@ in {
 
 
   memory_profiler = buildPythonPackage rec {
-    name = "memory_profiler-${version}";
+    pname = "memory_profiler";
+    name = pname + "-" + version;
+
     version = "0.41";
 
     src = pkgs.fetchurl {
@@ -10867,7 +11706,9 @@ in {
 
   mezzanine = buildPythonPackage rec {
     version = "3.1.10";
-    name = "mezzanine-${version}";
+    pname = "mezzanine";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "https://github.com/stephenmcd/mezzanine/archive/${version}.tar.gz";
@@ -10921,7 +11762,9 @@ in {
 
   minimock = buildPythonPackage rec {
     version = "1.2.8";
-    name = "minimock-${version}";
+    pname = "minimock";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "https://bitbucket.org/jab/minimock/get/${version}.zip";
@@ -10939,7 +11782,9 @@ in {
   };
 
   moviepy = buildPythonPackage rec {
-    name = "moviepy-${version}";
+    pname = "moviepy";
+    name = pname + "-" + version;
+
     version = "0.2.2.11";
 
     src = pkgs.fetchurl {
@@ -10963,7 +11808,9 @@ in {
   multidict = callPackage ../development/python-modules/multidict { };
 
   munch = buildPythonPackage rec {
-    name = "munch-${version}";
+    pname = "munch";
+    name = pname + "-" + version;
+
     version = "2.0.4";
 
     src = pkgs.fetchurl {
@@ -10981,7 +11828,9 @@ in {
   nototools = callPackage ../data/fonts/noto-fonts/tools.nix { };
 
   rainbowstream = buildPythonPackage rec {
-    name = "rainbowstream-${version}";
+    pname = "rainbowstream";
+    name = pname + "-" + version;
+
     version = "1.3.7";
 
     src = pkgs.fetchurl {
@@ -11026,7 +11875,9 @@ in {
   };
 
   pocket = buildPythonPackage rec {
-    name = "pocket-${version}";
+    pname = "pocket";
+    name = pname + "-" + version;
+
     version = "0.3.6";
 
     src = pkgs.fetchurl {
@@ -11049,7 +11900,9 @@ in {
   mistune = callPackage ../development/python-modules/mistune { };
 
   brotlipy = buildPythonPackage rec {
-    name = "brotlipy-${version}";
+    pname = "brotlipy";
+    name = pname + "-" + version;
+
     version = "0.6.0";
 
     src = pkgs.fetchurl {
@@ -11067,7 +11920,9 @@ in {
   };
 
   sortedcontainers = buildPythonPackage rec {
-    name = "sortedcontainers-${version}";
+    pname = "sortedcontainers";
+    name = pname + "-" + version;
+
     version = "1.5.7";
 
     src = pkgs.fetchurl {
@@ -11087,7 +11942,9 @@ in {
   };
 
   sortedcollections = buildPythonPackage rec {
-    name = "sortedcollections-${version}";
+    pname = "sortedcollections";
+    name = pname + "-" + version;
+
     version = "0.4.2";
 
     src = pkgs.fetchurl {
@@ -11111,8 +11968,9 @@ in {
   h2 = callPackage ../development/python-modules/h2 { };
 
   editorconfig = buildPythonPackage rec {
-    name = "EditorConfig-${version}";
+    pname = "EditorConfig";
     version = "0.12.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/e/editorconfig/${name}.tar.gz";
@@ -11127,7 +11985,9 @@ in {
   };
 
   mock = buildPythonPackage (rec {
-    name = "mock-2.0.0";
+    pname = "mock";
+    version = "2.0.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/mock/${name}.tar.gz";
@@ -11149,7 +12009,9 @@ in {
   });
 
   modestmaps = buildPythonPackage rec {
-    name = "ModestMaps-1.4.6";
+    pname = "ModestMaps";
+    version = "1.4.6";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/M/ModestMaps/${name}.tar.gz";
@@ -11167,12 +12029,14 @@ in {
   };
 
   moinmoin = buildPythonPackage (rec {
-    name = "moinmoin-${ver}";
+    pname = "moinmoin";
+    name = pname + "-" + version;
+
     disabled = isPy3k;
-    ver = "1.9.8";
+    version = "1.9.8";
 
     src = pkgs.fetchurl {
-      url = "http://static.moinmo.in/files/moin-${ver}.tar.gz";
+      url = "http://static.moinmo.in/files/moin-${version}.tar.gz";
       sha256 = "19hi16iy75lpx9ch799djc4hr4gai5rmvi542n29x6zhikysfjx7";
     };
 
@@ -11190,7 +12054,9 @@ in {
   moto = callPackage ../development/python-modules/moto {};
 
   mox = buildPythonPackage rec {
-    name = "mox-0.5.3";
+    pname = "mox";
+    version = "0.5.3";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "http://pymox.googlecode.com/files/${name}.tar.gz";
@@ -11207,7 +12073,9 @@ in {
   };
 
   mozsvc = buildPythonPackage rec {
-    name = "mozsvc-${version}";
+    pname = "mozsvc";
+    name = pname + "-" + version;
+
     version = "0.8";
 
     src = pkgs.fetchgit {
@@ -11231,7 +12099,9 @@ in {
   };
 
   mpmath = buildPythonPackage rec {
-    name = "mpmath-0.19";
+    pname = "mpmath";
+    version = "0.19";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/mpmath/${name}.tar.gz";
@@ -11252,7 +12122,9 @@ in {
 
 
   mpd = buildPythonPackage rec {
-    name = "python-mpd-0.3.0";
+    pname = "python-mpd";
+    version = "0.3.0";
+    name = pname + "-" + version;
 
     disabled = isPy3k;
 
@@ -11269,7 +12141,9 @@ in {
   };
 
   mpd2 = buildPythonPackage rec {
-    name = "mpd2-${version}";
+    pname = "mpd2";
+    name = pname + "-" + version;
+
     version = "0.5.5";
 
     src = pkgs.fetchurl {
@@ -11292,7 +12166,9 @@ in {
   };
 
   mpv = buildPythonPackage rec {
-    name = "mpv-0.1";
+    pname = "mpv";
+    version = "0.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/mpv/${name}.tar.gz";
@@ -11311,7 +12187,9 @@ in {
 
 
   mrbob = buildPythonPackage rec {
-    name = "mrbob-${version}";
+    pname = "mrbob";
+    name = pname + "-" + version;
+
     version = "0.1.2";
 
     src = pkgs.fetchurl {
@@ -11335,7 +12213,9 @@ in {
   };
 
   msgpack = buildPythonPackage rec {
-    name = "msgpack-python-${version}";
+    pname = "msgpack-python";
+    name = pname + "-" + version;
+
     version = "0.4.7";
 
     src = pkgs.fetchurl {
@@ -11368,7 +12248,9 @@ in {
   multipledispatch = callPackage ../development/python-modules/multipledispatch { };
 
   multiprocess = buildPythonPackage rec {
-    name = "multiprocess-${version}";
+    pname = "multiprocess";
+    name = pname + "-" + version;
+
     version = "0.70.4";
 
     src = pkgs.fetchurl {
@@ -11389,7 +12271,9 @@ in {
   };
 
   munkres = buildPythonPackage rec {
-    name = "munkres-1.0.6";
+    pname = "munkres";
+    version = "1.0.6";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/munkres/${name}.tar.gz";
@@ -11409,7 +12293,9 @@ in {
 
 
   musicbrainzngs = buildPythonPackage rec {
-    name = "musicbrainzngs-0.5";
+    pname = "musicbrainzngs";
+    version = "0.5";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/musicbrainzngs/${name}.tar.gz";
@@ -11430,7 +12316,10 @@ in {
 
   mutag = buildPythonPackage rec {
     disabled = ! isPy3k;
-    name = "mutag-0.0.2-2ffa0258ca";
+    pname = "mutag";
+    version = "0.0.2-2ffa0258ca";
+    name = pname + "-" + version;
+
     src = pkgs.fetchgit {
       url = "https://github.com/aroig/mutag.git";
       sha256 = "0axdnwdypfd74a9dnw0g25m16xx1yygyl828xy0kpj8gyqdc6gb1";
@@ -11447,7 +12336,9 @@ in {
   };
 
   mutagen = buildPythonPackage (rec {
-    name = "mutagen-1.36";
+    pname = "mutagen";
+    version = "1.36";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/mutagen/${name}.tar.gz";
@@ -11477,7 +12368,9 @@ in {
 
 
   muttils = buildPythonPackage (rec {
-    name = "muttils-1.3";
+    pname = "muttils";
+    version = "1.3";
+    name = pname + "-" + version;
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -11496,7 +12389,9 @@ in {
   });
 
   mygpoclient = buildPythonPackage rec {
-    name = "mygpoclient-${version}";
+    pname = "mygpoclient";
+    name = pname + "-" + version;
+
     version = "1.7";
 
     src = pkgs.fetchurl {
@@ -11554,7 +12449,9 @@ in {
   };
 
   neuronpy = buildPythonPackage rec {
-    name = "neuronpy-${version}";
+    pname = "neuronpy";
+    name = pname + "-" + version;
+
     version = "0.1.6";
     disabled = !isPy27;
 
@@ -11576,7 +12473,9 @@ in {
   };
 
   pint = buildPythonPackage rec {
-    name = "pint-${version}";
+    pname = "pint";
+    name = pname + "-" + version;
+
     version = "0.7.2";
 
     meta = {
@@ -11617,7 +12516,9 @@ in {
   pyte = callPackage ../development/python-modules/pyte { };
 
   graphviz = buildPythonPackage rec {
-    name = "graphviz-${version}";
+    pname = "graphviz";
+    name = pname + "-" + version;
+
     version = "0.5.2";
 
     src = pkgs.fetchurl {
@@ -11664,7 +12565,9 @@ in {
   };
 
   pymysql = buildPythonPackage rec {
-    name = "pymysql-${version}";
+    pname = "pymysql";
+    name = pname + "-" + version;
+
     version = "0.6.6";
     src = pkgs.fetchgit {
       url = https://github.com/PyMySQL/PyMySQL.git;
@@ -11683,7 +12586,9 @@ in {
   };
 
   pymysqlsa = self.buildPythonPackage rec {
-    name = "pymysqlsa-${version}";
+    pname = "pymysqlsa";
+    name = pname + "-" + version;
+
     version = "1.0";
 
     propagatedBuildInputs = with self; [ pymysql sqlalchemy ];
@@ -11719,7 +12624,9 @@ in {
   };
 
   MySQL_python = buildPythonPackage rec {
-    name = "MySQL-python-1.2.5";
+    pname = "MySQL-python";
+    version = "1.2.5";
+    name = pname + "-" + version;
 
     disabled = isPy3k;
 
@@ -11744,7 +12651,9 @@ in {
 
 
   mysql_connector_repackaged = buildPythonPackage rec {
-    name = "mysql-connector-repackaged-0.3.1";
+    pname = "mysql-connector-repackaged";
+    version = "0.3.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/m/mysql-connector-repackaged/${name}.tar.gz";
@@ -11762,7 +12671,9 @@ in {
 
 
   namebench = buildPythonPackage (rec {
-    name = "namebench-1.3.1";
+    pname = "namebench";
+    version = "1.3.1";
+    name = pname + "-" + version;
     disabled = isPy3k || isPyPy;
 
     src = pkgs.fetchurl {
@@ -11804,7 +12715,9 @@ in {
 
 
   nameparser = buildPythonPackage rec {
-    name = "nameparser-${version}";
+    pname = "nameparser";
+    name = pname + "-" + version;
+
     version = "0.3.4";
 
     src = pkgs.fetchurl {
@@ -11828,7 +12741,9 @@ in {
   nbxmpp = callPackage ../development/python-modules/nbxmpp { };
 
   sleekxmpp = buildPythonPackage rec {
-    name = "sleekxmpp-${version}";
+    pname = "sleekxmpp";
+    name = pname + "-" + version;
+
     version = "1.3.1";
 
     propagatedBuildInputs = with self ; [ dns pyasn1 ];
@@ -11846,7 +12761,9 @@ in {
   };
 
   slixmpp = buildPythonPackage rec {
-    name = "slixmpp-${version}";
+    pname = "slixmpp";
+    name = pname + "-" + version;
+
     version = "1.2.4.post1";
 
     disabled = pythonOlder "3.4";
@@ -11902,7 +12819,9 @@ in {
 
   netifaces = buildPythonPackage rec {
     version = "0.10.6";
-    name = "netifaces-${version}";
+    pname = "netifaces";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/netifaces/${name}.tar.gz";
@@ -11916,7 +12835,9 @@ in {
   };
 
   hpack = buildPythonPackage rec {
-    name = "hpack-${version}";
+    pname = "hpack";
+    name = pname + "-" + version;
+
     version = "2.3.0";
 
     src = pkgs.fetchurl {
@@ -11931,13 +12852,13 @@ in {
   };
 
   nevow = buildPythonPackage (rec {
-    name = "nevow-${version}";
+    pname = "nevow";
     version = "0.14.2";
+    name = pname + "-" + version;
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/N/Nevow/Nevow-${version}.tar.gz";
+    src = fetchPypi {
+      inherit pname version;
       sha256 = "0wsh40ysj5gvfc777nrdvf5vbkr606r1gh7ibvw7x8b5g8afdy3y";
-      name = "${name}.tar.gz";
     };
 
     disabled = isPy3k;
@@ -11975,7 +12896,9 @@ in {
 
   nibabel = buildPythonPackage rec {
     version = "2.0.2";
-    name = "nibabel-${version}";
+    pname = "nibabel";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/nibabel/${name}.tar.gz";
@@ -12003,7 +12926,9 @@ in {
 
   nipy = buildPythonPackage rec {
     version = "0.4.0";
-    name = "nipy-${version}";
+    pname = "nipy";
+    name = pname + "-" + version;
+
 
     disabled = pythonOlder "2.6";
 
@@ -12046,7 +12971,9 @@ in {
 
   nipype = buildPythonPackage rec {
     version = "0.10.0";
-    name = "nipype-${version}";
+    pname = "nipype";
+    name = pname + "-" + version;
+
 
     # Uses python 2 print. Master seems to be Py3 compatible.
     disabled = isPy3k;
@@ -12078,7 +13005,9 @@ in {
 
   nose = buildPythonPackage rec {
     version = "1.3.7";
-    name = "nose-${version}";
+    pname = "nose";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/nose/${name}.tar.gz";
@@ -12103,7 +13032,9 @@ in {
   nose-exclude = callPackage ../development/python-modules/nose-exclude { };
 
   nose2 = if isPy26 then null else (buildPythonPackage rec {
-    name = "nose2-0.5.0";
+    pname = "nose2";
+    version = "0.5.0";
+    name = pname + "-" + version;
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/nose2/${name}.tar.gz";
       sha256 = "0595rh6b6dncbj0jigsyrgrh6h8fsl6w1fr69h76mxv9nllv0rlr";
@@ -12117,7 +13048,9 @@ in {
   });
 
   nose-cover3 = buildPythonPackage rec {
-    name = "nose-cover3-${version}";
+    pname = "nose-cover3";
+    name = pname + "-" + version;
+
     version = "0.1.0";
 
     src = pkgs.fetchurl {
@@ -12138,7 +13071,9 @@ in {
   };
 
   nosexcover = buildPythonPackage (rec {
-    name = "nosexcover-1.0.10";
+    pname = "nosexcover";
+    version = "1.0.10";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/nosexcover/${name}.tar.gz";
@@ -12156,8 +13091,10 @@ in {
     };
   });
 
-  nosejs = buildPythonPackage {
-    name = "nosejs-0.9.4";
+  nosejs = buildPythonPackage rec {
+    pname = "nosejs";
+    version = "0.9.4";
+    name = pname + "-" + version;
     src = pkgs.fetchurl {
       url = mirror://pypi/N/NoseJS/NoseJS-0.9.4.tar.gz;
       sha256 = "0qrhkd3sga56qf6k0sqyhwfcladwi05gl6aqmr0xriiq1sgva5dy";
@@ -12171,7 +13108,9 @@ in {
   };
 
   nose-cprof = buildPythonPackage rec {
-    name = "nose-cprof-${version}";
+    pname = "nose-cprof";
+    name = pname + "-" + version;
+
     version = "0.1.4";
 
     src = pkgs.fetchurl {
@@ -12191,7 +13130,9 @@ in {
   notebook = callPackage ../development/python-modules/notebook { };
 
   notify = pkgs.stdenv.mkDerivation (rec {
-    name = "python-notify-0.1.1";
+    pname = "python-notify";
+    version = "0.1.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = http://www.galago-project.org/files/releases/source/notify-python/notify-python-0.1.1.tar.bz2;
@@ -12222,7 +13163,9 @@ in {
   });
 
   notmuch = buildPythonPackage rec {
-    name = "python-${pkgs.notmuch.name}";
+    pname = "python-${pkgs.notmuch.name}";
+    version = pkgs.notmuch.version;
+    name = pname + "-" + version;
 
     src = pkgs.notmuch.src;
 
@@ -12246,7 +13189,9 @@ in {
 
   ntfy = buildPythonPackage rec {
     version = "1.2.0";
-    name = "ntfy-${version}";
+    pname = "ntfy";
+    name = pname + "-" + version;
+
     src = pkgs.fetchFromGitHub {
       owner = "dschep";
       repo = "ntfy";
@@ -12265,7 +13210,9 @@ in {
   };
 
   ntplib = buildPythonPackage rec {
-    name = "ntplib-0.3.3";
+    pname = "ntplib";
+    version = "0.3.3";
+    name = pname + "-" + version;
     src = pkgs.fetchurl {
       url = mirror://pypi/n/ntplib/ntplib-0.3.3.tar.gz;
       sha256 = "c4621b64d50be9461d9bd9a71ba0b4af06fbbf818bbd483752d95c1a4e273ede";
@@ -12284,7 +13231,9 @@ in {
 
   numexpr = buildPythonPackage rec {
     version = "2.6.2";
-    name = "numexpr-${version}";
+    pname = "numexpr";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/numexpr/${name}.tar.gz";
@@ -12325,7 +13274,9 @@ in {
     scons = pkgs.python27.withPackages(ps: [ pkgs.scons ]);
   in buildPythonPackage rec {
     version = "0.5.25";
-    name = "Nuitka-${version}";
+    pname = "Nuitka";
+    name = pname + "-" + version;
+
 
     # Latest version is not yet on PyPi
     src = pkgs.fetchurl {
@@ -12395,7 +13346,9 @@ in {
 
   dynd = buildPythonPackage rec {
     version = "0.7.2";
-    name = "dynd-${version}";
+    pname = "dynd";
+    name = pname + "-" + version;
+
     disabled = isPyPy;
 
     src = pkgs.fetchFromGitHub {
@@ -12428,7 +13381,9 @@ in {
 
   livestreamer = buildPythonPackage rec {
     version = "1.12.2";
-    name = "livestreamer-${version}";
+    pname = "livestreamer";
+    name = pname + "-" + version;
+
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
@@ -12460,7 +13415,9 @@ in {
 
   livestreamer-curses = buildPythonPackage rec {
     version = "1.5.2";
-    name = "livestreamer-curses-${version}";
+    pname = "livestreamer-curses";
+    name = pname + "-" + version;
+
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
@@ -12478,7 +13435,9 @@ in {
   };
 
   oauth = buildPythonPackage (rec {
-    name = "oauth-1.0.1";
+    pname = "oauth";
+    version = "1.0.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/o/oauth/oauth-1.0.1.tar.gz";
@@ -12497,7 +13456,9 @@ in {
   });
 
   oauth2 = buildPythonPackage (rec {
-    name = "oauth2-${version}";
+    pname = "oauth2";
+    name = pname + "-" + version;
+
     version = "1.9.0.post1";
 
     src = pkgs.fetchurl {
@@ -12522,7 +13483,9 @@ in {
   });
 
   oauth2client = buildPythonPackage rec {
-    name = "oauth2client-1.4.12";
+    pname = "oauth2client";
+    version = "1.4.12";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/o/oauth2client/${name}.tar.gz";
@@ -12541,7 +13504,9 @@ in {
 
   oauthlib = buildPythonPackage rec {
     version = "2.0.0";
-    name = "oauthlib-${version}";
+    pname = "oauthlib";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "https://github.com/idan/oauthlib/archive/v${version}.tar.gz";
@@ -12562,7 +13527,9 @@ in {
 
 
   obfsproxy = buildPythonPackage ( rec {
-    name = "obfsproxy-${version}";
+    pname = "obfsproxy";
+    name = pname + "-" + version;
+
     version = "0.2.13";
 
     src = pkgs.fetchgit {
@@ -12591,7 +13558,9 @@ in {
   });
 
   objgraph = buildPythonPackage rec {
-    name = "objgraph-${version}";
+    pname = "objgraph";
+    name = pname + "-" + version;
+
     version = "2.0.1";
 
     src = pkgs.fetchurl {
@@ -12614,7 +13583,9 @@ in {
   odo = callPackage ../development/python-modules/odo { };
 
   offtrac = buildPythonPackage rec {
-    name = "offtrac-0.1.0";
+    pname = "offtrac";
+    version = "0.1.0";
+    name = pname + "-" + version;
     meta.maintainers = with maintainers; [ mornfall ];
 
     src = pkgs.fetchurl {
@@ -12627,7 +13598,9 @@ in {
   openpyxl = callPackage ../development/python-modules/openpyxl { };
 
   ordereddict = buildPythonPackage rec {
-    name = "ordereddict-${version}";
+    pname = "ordereddict";
+    name = pname + "-" + version;
+
     version = "1.1";
 
     src = pkgs.fetchurl {
@@ -12668,7 +13641,9 @@ in {
   };
 
   ply = buildPythonPackage (rec {
-    name = "ply-3.8";
+    pname = "ply";
+    version = "3.8";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/ply/${name}.tar.gz";
@@ -12709,7 +13684,9 @@ in {
   });
 
   plyvel = buildPythonPackage (rec {
-    name = "plyvel-0.9";
+    pname = "plyvel";
+    version = "0.9";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/plyvel/${name}.tar.gz";
@@ -12729,8 +13706,11 @@ in {
     };
   });
 
-  osc = buildPythonPackage {
-    name = "osc-0.159.0-4-g2d44589";
+  osc = buildPythonPackage rec {
+    pname = "osc";
+    version = "0.159.0-4-g2d44589";
+    name = pname + "-" + version;
+
     disabled = isPy3k;
     src = pkgs.fetchFromGitHub {
       owner = "openSUSE";
@@ -12760,7 +13740,9 @@ in {
   };
 
   oslosphinx = buildPythonPackage rec {
-    name = "oslosphinx-3.3.1";
+    pname = "oslosphinx";
+    version = "3.3.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/o/oslosphinx/${name}.tar.gz";
@@ -12775,7 +13757,9 @@ in {
   };
 
   tempest-lib = buildPythonPackage rec {
-    name = "tempest-lib-${version}";
+    pname = "tempest-lib";
+    name = pname + "-" + version;
+
     version = "0.10.0";
 
     src = pkgs.fetchurl {
@@ -12798,7 +13782,9 @@ in {
   os-testr = callPackage ../development/python-modules/os-testr { };
 
   bandit = buildPythonPackage rec {
-    name = "bandit-${version}";
+    pname = "bandit";
+    name = pname + "-" + version;
+
     version = "0.16.1";
     disabled = isPy33;
     doCheck = !isPyPy; # a test fails
@@ -12837,7 +13823,9 @@ in {
   rfc3986 = callPackage ../development/python-modules/rfc3986 { };
 
   pycadf = buildPythonPackage rec {
-    name = "pycadf-${version}";
+    pname = "pycadf";
+    name = pname + "-" + version;
+
     version = "1.1.0";
 
     src = pkgs.fetchurl {
@@ -12883,7 +13871,9 @@ in {
   };
 
   oslo-middleware = buildPythonPackage rec {
-    name = "oslo.middleware-${version}";
+    pname = "oslo.middleware";
+    name = pname + "-" + version;
+
     version = "2.9.0";
 
     src = pkgs.fetchurl {
@@ -12909,7 +13899,9 @@ in {
   };
 
   oslo-versionedobjects = buildPythonPackage rec {
-     name = "oslo.versionedobjects-${version}";
+     pname = "oslo.versionedobjects";
+    name = pname + "-" + version;
+
      version = "0.11.0";
 
      src = pkgs.fetchurl {
@@ -12935,7 +13927,9 @@ in {
    cachetools = callPackage ../development/python-modules/cachetools {};
 
    futurist = buildPythonPackage rec {
-     name = "futurist-${version}";
+     pname = "futurist";
+    name = pname + "-" + version;
+
      version = "0.7.0";
 
      src = pkgs.fetchurl {
@@ -12959,7 +13953,9 @@ in {
    };
 
   oslo-messaging = buildPythonPackage rec {
-    name = "oslo.messaging-${version}";
+    pname = "oslo.messaging";
+    name = pname + "-" + version;
+
     version = "2.7.0";
 
     src = pkgs.fetchurl {
@@ -12986,7 +13982,9 @@ in {
   };
 
   os-brick = buildPythonPackage rec {
-   name = "os-brick-${version}";
+   pname = "os-brick";
+    name = pname + "-" + version;
+
    version = "0.5.0";
 
    src = pkgs.fetchurl {
@@ -13012,7 +14010,9 @@ in {
   };
 
   oslo-reports = buildPythonPackage rec {
-    name = "oslo.reports-${version}";
+    pname = "oslo.reports";
+    name = pname + "-" + version;
+
     version = "0.6.0";
 
     src = pkgs.fetchurl {
@@ -13033,7 +14033,9 @@ in {
   };
 
   cinderclient = buildPythonPackage rec {
-    name = "cinderclient-${version}";
+    pname = "cinderclient";
+    name = pname + "-" + version;
+
     version = "1.4.0";
 
     src = pkgs.fetchurl {
@@ -13059,7 +14061,9 @@ in {
   };
 
   neutronclient = buildPythonPackage rec {
-    name = "neutronclient-${version}";
+    pname = "neutronclient";
+    name = pname + "-" + version;
+
     version = "3.1.0";
 
     src = pkgs.fetchurl {
@@ -13088,7 +14092,9 @@ in {
   };
 
   cliff = buildPythonPackage rec {
-    name = "cliff-${version}";
+    pname = "cliff";
+    name = pname + "-" + version;
+
     version = "1.15.0";
 
     src = pkgs.fetchurl {
@@ -13111,7 +14117,9 @@ in {
   };
 
   cmd2 = buildPythonPackage rec {
-    name = "cmd2-${version}";
+    pname = "cmd2";
+    name = pname + "-" + version;
+
     version = "0.7.7";
 
     src = pkgs.fetchurl {
@@ -13136,7 +14144,9 @@ in {
 
 
   oslo-db = buildPythonPackage rec {
-    name = "oslo.db-${version}";
+    pname = "oslo.db";
+    name = pname + "-" + version;
+
     version = "3.0.0";
 
     src = pkgs.fetchurl {
@@ -13154,7 +14164,9 @@ in {
   };
 
   oslo-rootwrap = buildPythonPackage rec {
-    name = "oslo.rootwrap-${version}";
+    pname = "oslo.rootwrap";
+    name = pname + "-" + version;
+
     version = "2.4.0";
 
     src = pkgs.fetchurl {
@@ -13179,7 +14191,9 @@ in {
   };
 
   glanceclient = buildPythonPackage rec {
-   name = "glanceclient-${version}";
+   pname = "glanceclient";
+    name = pname + "-" + version;
+
    version = "1.1.0";
 
    src = pkgs.fetchurl {
@@ -13209,7 +14223,9 @@ in {
  };
 
  warlock = buildPythonPackage rec {
-   name = "warlock-${version}";
+   pname = "warlock";
+    name = pname + "-" + version;
+
    version = "1.2.0";
 
    src = pkgs.fetchurl {
@@ -13262,7 +14278,9 @@ in {
   };
 
   oslo-cache = buildPythonPackage rec {
-    name = "oslo.cache-${version}";
+    pname = "oslo.cache";
+    name = pname + "-" + version;
+
     version = "0.9.0";
 
     src = pkgs.fetchurl {
@@ -13283,10 +14301,10 @@ in {
 
   pecan = callPackage ../development/python-modules/pecan { };
 
-  kaitaistruct = callPackage ../development/python-modules/kaitaistruct { };
-
   Kajiki = buildPythonPackage rec {
-    name = "Kajiki-${version}";
+    pname = "Kajiki";
+    name = pname + "-" + version;
+
     version = "0.5.5";
 
     src = pkgs.fetchurl {
@@ -13304,7 +14322,9 @@ in {
   };
 
   ryu = buildPythonPackage rec {
-    name = "ryu-${version}";
+    pname = "ryu";
+    name = pname + "-" + version;
+
     version = "3.26";
 
     propagatedBuildInputs = with self; [
@@ -13329,7 +14349,9 @@ in {
   };
 
   WSME = buildPythonPackage rec {
-    name = "WSME-${version}";
+    pname = "WSME";
+    name = pname + "-" + version;
+
     version = "0.8.0";
 
     src = pkgs.fetchurl {
@@ -13357,7 +14379,9 @@ in {
   };
 
   taskflow = buildPythonPackage rec {
-    name = "taskflow-${version}";
+    pname = "taskflow";
+    name = pname + "-" + version;
+
     version = "1.23.0";
 
     src = pkgs.fetchurl {
@@ -13386,7 +14410,9 @@ in {
   };
 
   glance_store = buildPythonPackage rec {
-    name = "glance_store-${version}";
+    pname = "glance_store";
+    name = pname + "-" + version;
+
     version = "0.9.1";
 
     src = pkgs.fetchurl {
@@ -13415,7 +14441,9 @@ in {
   };
 
   swiftclient = buildPythonPackage rec {
-    name = "swiftclient-${version}";
+    pname = "swiftclient";
+    name = pname + "-" + version;
+
     version = "2.6.0";
 
     src = pkgs.fetchurl {
@@ -13442,7 +14470,9 @@ in {
 
 
   castellan = buildPythonPackage rec {
-    name = "castellan-${version}";
+    pname = "castellan";
+    name = pname + "-" + version;
+
     version = "0.2.1";
 
     src = pkgs.fetchurl {
@@ -13470,7 +14500,9 @@ in {
   };
 
   zake = buildPythonPackage rec {
-    name = "zake-${version}";
+    pname = "zake";
+    name = pname + "-" + version;
+
     version = "0.2.2";
 
     src = pkgs.fetchurl {
@@ -13490,7 +14522,9 @@ in {
   };
 
   automaton = buildPythonPackage rec {
-    name = "automaton-${version}";
+    pname = "automaton";
+    name = pname + "-" + version;
+
     version = "0.8.0";
 
     src = pkgs.fetchurl {
@@ -13510,7 +14544,9 @@ in {
   };
 
   networking-hyperv = buildPythonPackage rec {
-    name = "networking-hyperv-${version}";
+    pname = "networking-hyperv";
+    name = pname + "-" + version;
+
     version = "2015.1.0";
     disabled = isPy3k;  # failing tests
 
@@ -13537,7 +14573,9 @@ in {
   };
 
   kazoo = buildPythonPackage rec {
-    name = "kazoo-${version}";
+    pname = "kazoo";
+    name = pname + "-" + version;
+
     version = "2.2.1";
 
     src = pkgs.fetchurl {
@@ -13571,7 +14609,9 @@ in {
   };
 
   osprofiler = buildPythonPackage rec {
-    name = "osprofiler-${version}";
+    pname = "osprofiler";
+    name = pname + "-" + version;
+
     version = "0.3.0";
     disabled = isPyPy;
 
@@ -13596,7 +14636,9 @@ in {
   FormEncode = callPackage ../development/python-modules/FormEncode { };
 
   pycountry = buildPythonPackage rec {
-    name = "pycountry-${version}";
+    pname = "pycountry";
+    name = pname + "-" + version;
+
     version = "1.17";
 
     src = pkgs.fetchurl {
@@ -13606,7 +14648,9 @@ in {
   };
 
   nine = buildPythonPackage rec {
-    name = "nine-${version}";
+    pname = "nine";
+    name = pname + "-" + version;
+
     version = "0.3.4";
 
     src = pkgs.fetchurl {
@@ -13622,7 +14666,9 @@ in {
 
 
   logutils = buildPythonPackage rec {
-    name = "logutils-${version}";
+    pname = "logutils";
+    name = pname + "-" + version;
+
     version = "0.3.3";
 
     src = pkgs.fetchurl {
@@ -13632,7 +14678,9 @@ in {
   };
 
   oslo-policy = buildPythonPackage rec {
-    name = "oslo.policy-${version}";
+    pname = "oslo.policy";
+    name = pname + "-" + version;
+
     version = "0.12.0";
 
     src = pkgs.fetchurl {
@@ -13649,7 +14697,9 @@ in {
   };
 
   ldappool = buildPythonPackage rec {
-    name = "ldappool-${version}";
+    pname = "ldappool";
+    name = pname + "-" + version;
+
     version = "1.0";
 
     src = pkgs.fetchurl {
@@ -13667,7 +14717,9 @@ in {
 
 
   lz4 = buildPythonPackage rec {
-    name = "lz4-0.8.2";
+    pname = "lz4";
+    version = "0.8.2";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/b5/f0/e1de2bb7feb54011f3c4dcf35b7cca3536e19526764db051b50ea26b58e7/lz4-0.8.2.tar.gz";
@@ -13712,7 +14764,9 @@ in {
  };
 
  retrying = buildPythonPackage rec {
-    name = "retrying-${version}";
+    pname = "retrying";
+    name = pname + "-" + version;
+
     version = "1.3.3";
 
     src = pkgs.fetchurl {
@@ -13731,7 +14785,9 @@ in {
   };
 
   fasteners = buildPythonPackage rec {
-    name = "fasteners-${version}";
+    pname = "fasteners";
+    name = pname + "-" + version;
+
     version = "0.14.1";
 
     src = pkgs.fetchurl {
@@ -13755,7 +14811,9 @@ in {
   };
 
   aioeventlet = buildPythonPackage rec {
-    name = "aioeventlet-${version}";
+    pname = "aioeventlet";
+    name = pname + "-" + version;
+
     version = "0.4";
 
     src = pkgs.fetchurl {
@@ -13818,7 +14876,9 @@ in {
   };
 
   oslo-i18n = buildPythonPackage rec {
-    name = "oslo.i18n-${version}";
+    pname = "oslo.i18n";
+    name = pname + "-" + version;
+
     version = "3.18.0";
 
     src = pkgs.fetchurl {
@@ -13836,7 +14896,9 @@ in {
   oslo-config = callPackage ../development/python-modules/oslo-config { };
 
   oslotest = buildPythonPackage rec {
-    name = "oslotest-${version}";
+    pname = "oslotest";
+    name = pname + "-" + version;
+
     version = "2.18.0";
 
     src = pkgs.fetchurl {
@@ -13853,7 +14915,9 @@ in {
   };
 
   os-client-config = buildPythonPackage rec {
-    name = "os-client-config-${version}";
+    pname = "os-client-config";
+    name = pname + "-" + version;
+
     version = "1.28.0";
 
     src = pkgs.fetchurl {
@@ -13875,7 +14939,9 @@ in {
   keystoneauth1 = callPackage ../development/python-modules/keystoneauth1 {};
 
   requests-mock = buildPythonPackage rec {
-    name = "requests-mock-${version}";
+    pname = "requests-mock";
+    name = pname + "-" + version;
+
     version = "1.3.0";
 
     src = pkgs.fetchurl {
@@ -13892,7 +14958,9 @@ in {
   };
 
   mox3 = buildPythonPackage rec {
-    name = "mox3-${version}";
+    pname = "mox3";
+    name = pname + "-" + version;
+
     version = "0.23.0";
 
     src = pkgs.fetchurl {
@@ -13913,7 +14981,9 @@ in {
   };
 
   debtcollector = buildPythonPackage rec {
-    name = "debtcollector-${version}";
+    pname = "debtcollector";
+    name = pname + "-" + version;
+
     version = "1.17.0";
 
     src = pkgs.fetchurl {
@@ -13934,7 +15004,9 @@ in {
   doc8 = callPackage ../development/python-modules/doc8 { };
 
   wrapt = buildPythonPackage rec {
-    name = "wrapt-${version}";
+    pname = "wrapt";
+    name = pname + "-" + version;
+
     version = "1.10.5";
 
     # No tests in archive
@@ -13947,7 +15019,9 @@ in {
   };
 
   pagerduty = buildPythonPackage rec {
-    name = "pagerduty-${version}";
+    pname = "pagerduty";
+    name = pname + "-" + version;
+
     version = "0.2.1";
     disabled = isPy3k;
 
@@ -13962,7 +15036,9 @@ in {
   pandas_0_17_1 = callPackage ../development/python-modules/pandas/0.17.1.nix { };
 
   xlrd = buildPythonPackage rec {
-    name = "xlrd-${version}";
+    pname = "xlrd";
+    name = pname + "-" + version;
+
 
     version = "0.9.4";
     src = pkgs.fetchurl {
@@ -13980,7 +15056,9 @@ in {
   bottleneck = callPackage ../development/python-modules/bottleneck { };
 
   paho-mqtt = buildPythonPackage rec {
-    name = "paho-mqtt-${version}";
+    pname = "paho-mqtt";
+    name = pname + "-" + version;
+
     version = "1.1";
 
     disabled = isPyPy || isPy26;
@@ -14000,7 +15078,9 @@ in {
 
   pamqp = buildPythonPackage rec {
     version = "1.6.1";
-    name = "pamqp-${version}";
+    pname = "pamqp";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pamqp/${name}.tar.gz";
@@ -14017,7 +15097,9 @@ in {
   };
 
   parsedatetime = buildPythonPackage rec {
-    name = "parsedatetime-${version}";
+    pname = "parsedatetime";
+    name = pname + "-" + version;
+
     version = "2.3";
 
     meta = {
@@ -14074,7 +15156,9 @@ in {
   paramz = callPackage ../development/python-modules/paramz { };
 
   parsel = buildPythonPackage rec {
-    name = "parsel-${version}";
+    pname = "parsel";
+    name = pname + "-" + version;
+
     version = "1.1.0";
 
     src = pkgs.fetchurl {
@@ -14099,7 +15183,9 @@ in {
   parso = callPackage ../development/python-modules/parso { };
 
   partd = buildPythonPackage rec {
-    name = "partd-${version}";
+    pname = "partd";
+    name = pname + "-" + version;
+
     version = "0.3.7";
 
     src = pkgs.fetchurl {
@@ -14147,7 +15233,9 @@ in {
   };
 
   pathos = buildPythonPackage rec {
-    name = "pathos-${version}";
+    pname = "pathos";
+    name = pname + "-" + version;
+
     version = "0.2.0";
 
     src = pkgs.fetchurl {
@@ -14168,7 +15256,9 @@ in {
   };
 
   patsy = buildPythonPackage rec {
-    name = "patsy-${version}";
+    pname = "patsy";
+    name = pname + "-" + version;
+
     version = "0.3.0";
 
     src = pkgs.fetchurl{
@@ -14187,7 +15277,9 @@ in {
   };
 
   paste = buildPythonPackage rec {
-    name = "paste-${version}";
+    pname = "paste";
+    name = pname + "-" + version;
+
     version = "2.0.3";
 
     src = pkgs.fetchurl {
@@ -14212,7 +15304,9 @@ in {
 
   PasteDeploy = buildPythonPackage rec {
     version = "1.5.2";
-    name = "paste-deploy-${version}";
+    pname = "paste-deploy";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PasteDeploy/PasteDeploy-${version}.tar.gz";
@@ -14230,7 +15324,9 @@ in {
 
    pasteScript = buildPythonPackage rec {
     version = "1.7.5";
-    name = "PasteScript-${version}";
+    pname = "PasteScript";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PasteScript/${name}.tar.gz";
@@ -14249,7 +15345,9 @@ in {
   };
 
   pathlib = buildPythonPackage rec {
-    name = "pathlib-${version}";
+    pname = "pathlib";
+    name = pname + "-" + version;
+
     version = "1.0.1";
     disabled = pythonAtLeast "3.4"; # Was added to std library in Python 3.4
 
@@ -14270,7 +15368,9 @@ in {
   };
 
   pathlib2 = if !(pythonOlder "3.4") then null else buildPythonPackage rec {
-    name = "pathlib2-${version}";
+    pname = "pathlib2";
+    name = pname + "-" + version;
+
     version = "2.2.1";
 
     src = pkgs.fetchurl {
@@ -14291,7 +15391,9 @@ in {
   pathpy = callPackage ../development/python-modules/path.py { };
 
   paypalrestsdk = buildPythonPackage rec {
-    name = "paypalrestsdk-0.7.0";
+    pname = "paypalrestsdk";
+    version = "0.7.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/paypalrestsdk/${name}.tar.gz";
@@ -14316,7 +15418,9 @@ in {
   };
 
   pep8 = buildPythonPackage rec {
-    name = "pep8-${version}";
+    pname = "pep8";
+    name = pname + "-" + version;
+
     version = "1.7.0";
 
     src = pkgs.fetchurl {
@@ -14335,7 +15439,9 @@ in {
   pep257 = callPackage ../development/python-modules/pep257 { };
 
   percol = buildPythonPackage rec {
-    name = "percol-${version}";
+    pname = "percol";
+    name = pname + "-" + version;
+
     version = "0.0.8";
     disabled = isPy3k;
 
@@ -14355,7 +15461,9 @@ in {
   };
 
   pexif = buildPythonPackage rec {
-    name = "pexif-${version}";
+    pname = "pexif";
+    name = pname + "-" + version;
+
     version = "0.15";
 
     src = pkgs.fetchurl {
@@ -14373,7 +15481,9 @@ in {
 
   pexpect = buildPythonPackage rec {
     version = "4.2.1";
-    name = "pexpect-${version}";
+    pname = "pexpect";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pexpect/${name}.tar.gz";
@@ -14409,7 +15519,9 @@ in {
   };
 
   pdfkit = buildPythonPackage rec {
-    name = "pdfkit-${version}";
+    pname = "pdfkit";
+    name = pname + "-" + version;
+
     version = "0.5.0";
 
     src = pkgs.fetchurl {
@@ -14429,7 +15541,9 @@ in {
   };
 
   pg8000 = buildPythonPackage rec {
-    name = "pg8000-1.10.1";
+    pname = "pg8000";
+    version = "1.10.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pg8000/${name}.tar.gz";
@@ -14473,7 +15587,9 @@ in {
 
   pickleshare = buildPythonPackage rec {
     version = "0.7.4";
-    name = "pickleshare-${version}";
+    pname = "pickleshare";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pickleshare/${name}.tar.gz";
@@ -14494,7 +15610,9 @@ in {
 
   piep = buildPythonPackage rec {
     version = "0.8.0";
-    name = "piep-${version}";
+    pname = "piep";
+    name = pname + "-" + version;
+
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -14546,7 +15664,9 @@ in {
   };
 
   pika = buildPythonPackage rec {
-    name = "pika-${version}";
+    pname = "pika";
+    name = pname + "-" + version;
+
     version = "0.10.0";
 
     src = pkgs.fetchurl {
@@ -14572,7 +15692,9 @@ in {
   kmsxx = callPackage ../development/libraries/kmsxx { };
 
   pylibconfig2 = buildPythonPackage rec {
-    name = "pylibconfig2-${version}";
+    pname = "pylibconfig2";
+    name = pname + "-" + version;
+
     version = "0.2.4";
 
     src = pkgs.fetchurl {
@@ -14613,7 +15735,9 @@ in {
   };
 
   pysftp = buildPythonPackage rec {
-    name = "pysftp-${version}";
+    pname = "pysftp";
+    name = pname + "-" + version;
+
     version = "0.2.9";
     disabled = isPyPy;
 
@@ -14638,8 +15762,10 @@ in {
 
   pysoundfile = callPackage ../development/python-modules/pysoundfile { };
 
-  python3pika = buildPythonPackage {
-    name = "python3-pika-0.9.14";
+  python3pika = buildPythonPackage rec {
+    pname = "python3-pika";
+    version = "0.9.14";
+    name = pname + "-" + version;
     disabled = !isPy3k;
 
     # Unit tests adds dependencies on pyev, tornado and twisted (and twisted is disabled for Python 3)
@@ -14656,7 +15782,9 @@ in {
 
 
   python-jenkins = buildPythonPackage rec {
-    name = "python-jenkins-${version}";
+    pname = "python-jenkins";
+    name = pname + "-" + version;
+
     version = "0.4.14";
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/python-jenkins/${name}.tar.gz";
@@ -14685,7 +15813,9 @@ in {
   };
 
   pkgconfig = buildPythonPackage rec {
-    name = "pkgconfig-${version}";
+    pname = "pkgconfig";
+    name = pname + "-" + version;
+
     version = "1.1.0";
 
     # pypy: SyntaxError: __future__ statements must appear at beginning of file
@@ -14719,7 +15849,9 @@ in {
 
 
   polib = buildPythonPackage rec {
-    name = "polib-${version}";
+    pname = "polib";
+    name = pname + "-" + version;
+
     version = "1.0.4";
 
     src = pkgs.fetchurl {
@@ -14738,7 +15870,9 @@ in {
   };
 
   posix_ipc = buildPythonPackage rec {
-    name = "posix_ipc-${version}";
+    pname = "posix_ipc";
+    name = pname + "-" + version;
+
     version = "1.0.0";
 
     src = pkgs.fetchurl {
@@ -14758,7 +15892,9 @@ in {
   powerline = callPackage ../development/python-modules/powerline { };
 
   pox = buildPythonPackage rec {
-    name = "pox-${version}";
+    pname = "pox";
+    name = pname + "-" + version;
+
     version = "0.2.2";
 
     src = pkgs.fetchurl {
@@ -14774,7 +15910,9 @@ in {
   };
 
   ppft = buildPythonPackage rec {
-    name = "ppft-${version}";
+    pname = "ppft";
+    name = pname + "-" + version;
+
     version = "1.6.4.6";
 
     src = pkgs.fetchurl {
@@ -14798,7 +15936,9 @@ in {
   premailer = callPackage ../development/python-modules/premailer { };
 
   prettytable = buildPythonPackage rec {
-    name = "prettytable-0.7.1";
+    pname = "prettytable";
+    version = "0.7.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PrettyTable/${name}.tar.bz2";
@@ -14851,7 +15991,9 @@ in {
   psd-tools = callPackage ../development/python-modules/psd-tools { };
 
   psutil = buildPythonPackage rec {
-    name = "psutil-${version}";
+    pname = "psutil";
+    name = pname + "-" + version;
+
     version = "4.3.0";
 
     src = pkgs.fetchurl {
@@ -14872,7 +16014,9 @@ in {
   };
 
   psutil_1 = self.psutil.overrideDerivation (self: rec {
-    name = "psutil-1.2.1";
+    pname = "psutil";
+    version = "1.2.1";
+    name = pname + "-" + version;
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/psutil/${name}.tar.gz";
       sha256 = "0ibclqy6a4qmkjhlk3g8jhpvnk0v9aywknc61xm3hfi5r124m3jh";
@@ -14880,7 +16024,9 @@ in {
   });
 
   psycopg2 = buildPythonPackage rec {
-    name = "psycopg2-2.7.1";
+    pname = "psycopg2";
+    version = "2.7.1";
+    name = pname + "-" + version;
     disabled = isPyPy;
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/psycopg2/${name}.tar.gz";
@@ -14898,7 +16044,9 @@ in {
   ptpython = callPackage ../development/python-modules/ptpython {};
 
   publicsuffix = buildPythonPackage rec {
-    name = "publicsuffix-${version}";
+    pname = "publicsuffix";
+    name = pname + "-" + version;
+
     version = "1.1.0";
 
     src = pkgs.fetchurl {
@@ -14927,7 +16075,9 @@ in {
 
 
   pyacoustid = buildPythonPackage rec {
-    name = "pyacoustid-1.1.0";
+    pname = "pyacoustid";
+    version = "1.1.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyacoustid/${name}.tar.gz";
@@ -14952,8 +16102,10 @@ in {
   };
 
 
-  pyalgotrade = buildPythonPackage {
-    name = "pyalgotrade-0.16";
+  pyalgotrade = buildPythonPackage rec {
+    pname = "pyalgotrade";
+    version = "0.16";
+    name = pname + "-" + version;
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -14970,13 +16122,14 @@ in {
     };
   };
 
-
   pyasn1 = callPackage ../development/python-modules/pyasn1 { };
 
   pyasn1-modules = callPackage ../development/python-modules/pyasn1-modules { };
 
   pyaudio = buildPythonPackage rec {
-    name = "python-pyaudio-${version}";
+    pname = "python-pyaudio";
+    name = pname + "-" + version;
+
     version = "0.2.9";
 
     src = pkgs.fetchurl {
@@ -14996,7 +16149,9 @@ in {
   };
 
   pysaml2 = buildPythonPackage rec {
-    name = "pysaml2-${version}";
+    pname = "pysaml2";
+    name = pname + "-" + version;
+
     version = "3.0.2";
 
     src = pkgs.fetchurl {
@@ -15034,7 +16189,9 @@ in {
   };
 
   mongodict = buildPythonPackage rec {
-    name = "mongodict-${version}";
+    pname = "mongodict";
+    name = pname + "-" + version;
+
     version = "0.3.1";
 
     src = pkgs.fetchurl {
@@ -15054,7 +16211,9 @@ in {
 
 
   repoze_who = buildPythonPackage rec {
-    name = "repoze.who-${version}";
+    pname = "repoze.who";
+    name = pname + "-" + version;
+
     version = "2.2";
 
     src = pkgs.fetchurl {
@@ -15079,7 +16238,9 @@ in {
 
   vobject = buildPythonPackage rec {
     version = "0.9.3";
-    name = "vobject-${version}";
+    pname = "vobject";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchFromGitHub {
       owner = "eventable";
@@ -15104,7 +16265,9 @@ in {
 
   pycarddav = buildPythonPackage rec {
     version = "0.7.0";
-    name = "pycarddav-${version}";
+    pname = "pycarddav";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyCardDAV/pyCardDAV-${version}.tar.gz";
@@ -15124,7 +16287,9 @@ in {
   };
 
   pycosat = buildPythonPackage rec {
-    name = "pycosat-0.6.0";
+    pname = "pycosat";
+    version = "0.6.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pycosat/${name}.tar.gz";
@@ -15147,7 +16312,9 @@ in {
   pygit2 = callPackage ../development/python-modules/pygit2 { };
 
   Babel = buildPythonPackage (rec {
-    name = "Babel-2.3.4";
+    pname = "Babel";
+    version = "2.3.4";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/B/Babel/${name}.tar.gz";
@@ -15168,7 +16335,9 @@ in {
   pybfd = callPackage ../development/python-modules/pybfd { };
 
   pyblock = stdenv.mkDerivation rec {
-    name = "pyblock-${version}";
+    pname = "pyblock";
+    name = pname + "-" + version;
+
     version = "0.53";
     md5_path = "f6d33a8362dee358517d0a9e2ebdd044";
 
@@ -15197,8 +16366,9 @@ in {
   };
 
   pybcrypt = buildPythonPackage rec {
-    name = "pybcrypt";
+    pname = "pybcrypt";
     version = "0.4";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/py-bcrypt/py-bcrypt-${version}.tar.gz";
@@ -15213,7 +16383,9 @@ in {
   };
 
   pyblosxom = buildPythonPackage rec {
-    name = "pyblosxom-${version}";
+    pname = "pyblosxom";
+    name = pname + "-" + version;
+
     disabled = isPy3k;
     version = "1.5.3";
     # FAIL:test_generate_entry and test_time
@@ -15235,7 +16407,9 @@ in {
 
 
   pycapnp = buildPythonPackage rec {
-    name = "pycapnp-0.5.1";
+    pname = "pycapnp";
+    version = "0.5.1";
+    name = pname + "-" + version;
     disabled = isPyPy || isPy3k;
 
     src = pkgs.fetchurl {
@@ -15260,7 +16434,9 @@ in {
 
 
   pycdio = buildPythonPackage rec {
-    name = "pycdio-0.21";
+    pname = "pycdio";
+    version = "0.21";
+    name = pname + "-" + version;
     disabled = !isPy27;
 
     src = pkgs.fetchurl {
@@ -15298,7 +16474,9 @@ in {
 
 
   pycryptopp = buildPythonPackage (rec {
-    name = "pycryptopp-0.6.0.1206569328141510525648634803928199668821045408958";
+    pname = "pycryptopp";
+    version = "0.6.0.1206569328141510525648634803928199668821045408958";
+    name = pname + "-" + version;
     disabled = isPy3k || isPyPy;  # see https://bitbucket.org/pypy/pypy/issue/1190/
 
     src = pkgs.fetchurl {
@@ -15325,7 +16503,9 @@ in {
   });
 
   pycups = buildPythonPackage rec {
-    name = "pycups-${version}";
+    pname = "pycups";
+    name = pname + "-" + version;
+
     version = "1.9.73";
 
     src = pkgs.fetchurl {
@@ -15347,7 +16527,9 @@ in {
   };
 
   pycurl = buildPythonPackage (rec {
-    name = "pycurl-7.19.5.1";
+    pname = "pycurl";
+    version = "7.19.5.1";
+    name = pname + "-" + version;
     disabled = isPyPy; # https://github.com/pycurl/pycurl/issues/208
 
     src = pkgs.fetchurl {
@@ -15378,7 +16560,9 @@ in {
   });
 
   pycurl2 = buildPythonPackage (rec {
-    name = "pycurl2-7.20.0";
+    pname = "pycurl2";
+    version = "7.20.0";
+    name = pname + "-" + version;
     disabled = isPy3k;
 
     src = pkgs.fetchgit {
@@ -15401,7 +16585,9 @@ in {
 
   pydispatcher = buildPythonPackage (rec {
     version = "2.0.5";
-    name = "pydispatcher-${version}";
+    pname = "pydispatcher";
+    name = pname + "-" + version;
+
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PyDispatcher/PyDispatcher-${version}.tar.gz";
       sha256 = "1bswbmhlbqdxlgbxlb6xrlm4k253sg8nvpl1whgsys8p3fg0cw2m";
@@ -15423,7 +16609,9 @@ in {
   pydot = callPackage ../development/python-modules/pydot { };
 
   pydot_ng = buildPythonPackage rec {
-    name = "pydot_ng-1.0.0";
+    pname = "pydot_ng";
+    version = "1.0.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pydot-ng/${name}.tar.gz";
@@ -15447,7 +16635,9 @@ in {
   };
 
   pyelasticsearch = buildPythonPackage (rec {
-    name = "pyelasticsearch-1.4";
+    pname = "pyelasticsearch";
+    version = "1.4";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyelasticsearch/${name}.tar.gz";
@@ -15493,7 +16683,9 @@ in {
   };
 
   pyenchant = buildPythonPackage rec {
-    name = "pyenchant-1.6.6";
+    pname = "pyenchant";
+    version = "1.6.6";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyenchant/pyenchant-1.6.6.tar.gz";
@@ -15524,7 +16716,9 @@ in {
   pyev = callPackage ../development/python-modules/pyev { };
 
   pyexcelerator = buildPythonPackage rec {
-    name = "pyexcelerator-${version}";
+    pname = "pyexcelerator";
+    name = pname + "-" + version;
+
     version = "0.6.4.1";
 
     src = pkgs.fetchurl {
@@ -15548,7 +16742,9 @@ in {
   pyext = callPackage ../development/python-modules/pyext { };
 
   pyfantom = buildPythonPackage rec {
-     name = "pyfantom-${version}";
+     pname = "pyfantom";
+    name = pname + "-" + version;
+
      version = "unstable-2013-12-18";
 
      src = pkgs.fetchgit {
@@ -15585,7 +16781,9 @@ in {
   # For Pelican 3.6.3
   pygments_2_0 = self.pygments.overrideAttrs( oldAttrs: rec {
     version = "2.0.2";
-    name = "Pygments-${version}";
+    pname = "Pygments";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/Pygments/${name}.tar.gz";
@@ -15614,7 +16812,9 @@ in {
   pyspread = callPackage ../development/python-modules/pyspread { };
 
   pyx = buildPythonPackage rec {
-    name = "pyx-${version}";
+    pname = "pyx";
+    name = pname + "-" + version;
+
     version = "0.14.1";
 
     src = pkgs.fetchurl {
@@ -15636,12 +16836,13 @@ in {
 
   mmpython = buildPythonPackage rec {
     version = "0.4.10";
-    name = "mmpython-${version}";
+    pname = "mmpython";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = http://sourceforge.net/projects/mmpython/files/latest/download;
       sha256 = "1b7qfad3shgakj37gcj1b9h78j1hxlz6wp9k7h76pb4sq4bfyihy";
-      name = "${name}.tar.gz";
+      name = name + ".tar.gz";
     };
 
     disabled = isPyPy || isPy3k;
@@ -15656,7 +16857,9 @@ in {
 
   kaa-base = buildPythonPackage rec {
     version = "0.99.2dev-384-2b73caca";
-    name = "kaa-base-${version}";
+    pname = "kaa-base";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/k/kaa-base/kaa-base-0.99.2dev-384-2b73caca.tar.gz";
@@ -15699,7 +16902,9 @@ in {
 
   kaa-metadata = buildPythonPackage rec {
     version = "0.7.8dev-r4569-20111003";
-    name = "kaa-metadata-${version}";
+    pname = "kaa-metadata";
+    name = pname + "-" + version;
+
 
     doCheck = false;
 
@@ -15745,7 +16950,9 @@ in {
   };
 
   PyICU = buildPythonPackage rec {
-    name = "PyICU-1.9.7";
+    pname = "PyICU";
+    version = "1.9.7";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PyICU/${name}.tar.gz";
@@ -15766,7 +16973,9 @@ in {
   };
 
   pyinputevent = buildPythonPackage rec {
-    name = "pyinputevent-2016-10-18";
+    pname = "pyinputevent";
+    version = "2016-10-18";
+    name = pname + "-" + version;
 
     src = pkgs.fetchFromGitHub {
       owner = "ntzrmtthihu777";
@@ -15784,7 +16993,9 @@ in {
   };
 
   pyinotify = buildPythonPackage rec {
-    name = "pyinotify-${version}";
+    pname = "pyinotify";
+    name = pname + "-" + version;
+
     version = "0.9.6";
 
     src = pkgs.fetchurl {
@@ -15804,8 +17015,9 @@ in {
   };
 
   pyinsane2 = buildPythonPackage rec {
-    name = "pyinsane2-${version}";
+    pname = "pyinsane2";
     version = "2.0.10";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyinsane2/${name}.tar.gz";
@@ -15843,7 +17055,9 @@ in {
 
   pyjwt = buildPythonPackage rec {
     version = "1.5.3";
-    name = "pyjwt-${version}";
+    pname = "pyjwt";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchFromGitHub {
       owner = "progrium";
@@ -15872,7 +17086,9 @@ in {
   };
 
   pykickstart = buildPythonPackage rec {
-    name = "pykickstart-${version}";
+    pname = "pykickstart";
+    name = pname + "-" + version;
+
     version = "1.99.39";
     md5_path = "d249f60aa89b1b4facd63f776925116d";
 
@@ -15911,7 +17127,9 @@ in {
   pyparsing = callPackage ../development/python-modules/pyparsing { };
 
   pyparted = buildPythonPackage rec {
-    name = "pyparted-${version}";
+    pname = "pyparted";
+    name = pname + "-" + version;
+
     version = "3.10.7";
     disabled = isPyPy;
 
@@ -15954,7 +17172,9 @@ in {
 
 
   pyptlib = buildPythonPackage (rec {
-    name = "pyptlib-${version}";
+    pname = "pyptlib";
+    name = pname + "-" + version;
+
     disabled = isPyPy || isPy3k;
     version = "0.0.6";
 
@@ -15971,7 +17191,9 @@ in {
   });
 
   pyqtgraph = buildPythonPackage rec {
-    name = "pyqtgraph-${version}";
+    pname = "pyqtgraph";
+    name = pname + "-" + version;
+
     version = "0.9.10";
 
     doCheck = false;  # "PyQtGraph requires either PyQt4 or PySide; neither package could be imported."
@@ -15993,7 +17215,9 @@ in {
   };
 
   pystache = buildPythonPackage rec {
-    name = "pystache-${version}";
+    pname = "pystache";
+    name = pname + "-" + version;
+
     version = "0.5.4";
 
     src = pkgs.fetchurl {
@@ -16021,7 +17245,9 @@ in {
   };
 
   PyStemmer = buildPythonPackage (rec {
-    name = "PyStemmer-1.3.0";
+    pname = "PyStemmer";
+    version = "1.3.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/P/PyStemmer/${name}.tar.gz";
@@ -16043,7 +17269,9 @@ in {
   Pyro = callPackage ../development/python-modules/pyro { };
 
   pyrsistent = buildPythonPackage (rec {
-    name = "pyrsistent-0.11.12";
+    pname = "pyrsistent";
+    version = "0.11.12";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyrsistent/${name}.tar.gz";
@@ -16088,7 +17316,9 @@ in {
 
   pysmi = buildPythonPackage rec {
     version = "0.0.7";
-    name = "pysmi-${version}";
+    pname = "pysmi";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pysmi/${name}.tar.gz";
@@ -16111,7 +17341,9 @@ in {
 
   pysnmp = buildPythonPackage rec {
     version = "4.3.2";
-    name = "pysnmp-${version}";
+    pname = "pysnmp";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pysnmp/${name}.tar.gz";
@@ -16133,7 +17365,9 @@ in {
   };
 
   pysocks = buildPythonPackage rec {
-    name = "pysocks-${version}";
+    pname = "pysocks";
+    name = pname + "-" + version;
+
     version = "1.6.6";
 
     src = pkgs.fetchurl {
@@ -16156,7 +17390,9 @@ in {
   python_simple_hipchat = self.python-simple-hipchat;
 
   python_keyczar = buildPythonPackage rec {
-    name = "python-keyczar-0.71c";
+    pname = "python-keyczar";
+    version = "0.71c";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url    = "mirror://pypi/p/python-keyczar/${name}.tar.gz";
@@ -16179,7 +17415,9 @@ in {
   };
 
   pynzb = buildPythonPackage (rec {
-    name = "pynzb-0.1.0";
+    pname = "pynzb";
+    version = "0.1.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pynzb/${name}.tar.gz";
@@ -16221,7 +17459,9 @@ in {
   };
 
   progressbar = buildPythonPackage (rec {
-    name = "progressbar-2.2";
+    pname = "progressbar";
+    version = "2.2";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/progressbar/${name}.tar.gz";
@@ -16263,7 +17503,9 @@ in {
   };
 
   ptyprocess = buildPythonPackage rec {
-    name = "ptyprocess-${version}";
+    pname = "ptyprocess";
+    name = pname + "-" + version;
+
     version = "0.5";
 
     src = pkgs.fetchurl {
@@ -16281,7 +17523,9 @@ in {
   pylibacl = callPackage ../development/python-modules/pylibacl { };
 
   pyliblo = buildPythonPackage rec {
-    name = "pyliblo-${version}";
+    pname = "pyliblo";
+    name = pname + "-" + version;
+
     version = "0.9.2";
 
     disabled = isPyPy;
@@ -16303,7 +17547,9 @@ in {
   pypcap = callPackage ../development/python-modules/pypcap {};
 
   pyplatec = buildPythonPackage rec {
-    name = "PyPlatec-${version}";
+    pname = "PyPlatec";
+    name = pname + "-" + version;
+
     version = "1.4.0";
 
     src = pkgs.fetchurl {
@@ -16319,7 +17565,9 @@ in {
   };
 
   purepng = buildPythonPackage rec {
-    name = "purepng-${version}";
+    pname = "purepng";
+    name = pname + "-" + version;
+
     version = "0.2.0";
 
     src = pkgs.fetchurl {
@@ -16335,7 +17583,9 @@ in {
   };
 
   pymaging = buildPythonPackage rec {
-    name = "pymaging-unstable-2016-11-16";
+    pname = "pymaging";
+    version = "unstable-2016-11-16";
+    name = pname + "-" + version;
 
     src = pkgs.fetchFromGitHub {
       owner = "ojii";
@@ -16353,7 +17603,9 @@ in {
   };
 
   pymaging_png = buildPythonPackage rec {
-    name = "pymaging-png-unstable-2016-11-16";
+    pname = "pymaging-png-unstable";
+    version = "2016-11-16";
+    name = pname + "-" + version;
 
     src = pkgs.fetchFromGitHub {
       owner = "ojii";
@@ -16373,7 +17625,9 @@ in {
   };
 
   pyPdf = buildPythonPackage rec {
-    name = "pyPdf-1.13";
+    pname = "pyPdf";
+    version = "1.13";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyPdf/${name}.tar.gz";
@@ -16393,7 +17647,9 @@ in {
   };
 
   pypdf2 = buildPythonPackage rec {
-    name = "PyPDF2-${version}";
+    pname = "PyPDF2";
+    name = pname + "-" + version;
+
     version = "1.26.0";
 
     src = pkgs.fetchurl {
@@ -16420,7 +17676,9 @@ in {
   };
 
   pyopengl = buildPythonPackage rec {
-    name = "pyopengl-${version}";
+    pname = "pyopengl";
+    name = pname + "-" + version;
+
     version = "3.1.0";
 
     src = pkgs.fetchurl {
@@ -16489,7 +17747,9 @@ in {
 
 
   pyquery = buildPythonPackage rec {
-    name = "pyquery-${version}";
+    pname = "pyquery";
+    name = pname + "-" + version;
+
     version = "1.2.9";
 
     src = pkgs.fetchurl {
@@ -16509,7 +17769,9 @@ in {
   };
 
   pyreport = buildPythonPackage (rec {
-    name = "pyreport-0.3.4c";
+    pname = "pyreport";
+    version = "0.3.4c";
+    name = pname + "-" + version;
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -16528,7 +17790,9 @@ in {
   });
 
   pyscss = buildPythonPackage rec {
-    name = "pyScss-${version}";
+    pname = "pyScss";
+    name = pname + "-" + version;
+
     version = "1.3.5";
 
     src = pkgs.fetchFromGitHub {
@@ -16560,8 +17824,9 @@ in {
   pymongo = callPackage ../development/python-modules/pymongo {};
 
   pymongo_2_9_1 = buildPythonPackage rec {
-    name = "pymongo-2.9.1";
+    pname = "pymongo";
     version = "2.9.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pymongo/${name}.tar.gz";
@@ -16580,7 +17845,9 @@ in {
 
   pyperclip = buildPythonPackage rec {
     version = "1.5.27";
-    name = "pyperclip-${version}";
+    pname = "pyperclip";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyperclip/${name}.zip";
@@ -16597,7 +17864,9 @@ in {
   };
 
   pysphere = buildPythonPackage rec {
-    name = "pysphere-0.1.8";
+    pname = "pysphere";
+    version = "0.1.8";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "http://pysphere.googlecode.com/files/${name}.zip";
@@ -16614,7 +17883,9 @@ in {
   };
 
   pysqlite = buildPythonPackage rec {
-    name = "pysqlite-2.8.3";
+    pname = "pysqlite";
+    version = "2.8.3";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pysqlite/${name}.tar.gz";
@@ -16664,7 +17935,9 @@ in {
 
 
   pysvn = buildPythonPackage rec {
-    name = "pysvn-1.8.0";
+    pname = "pysvn";
+    version = "1.8.0";
+    name = pname + "-" + version;
     format = "other";
 
     src = pkgs.fetchurl {
@@ -16713,7 +17986,9 @@ in {
   };
 
   python-wifi = buildPythonPackage rec {
-    name = "python-wifi-${version}";
+    pname = "python-wifi";
+    name = pname + "-" + version;
+
     version = "0.6.0";
     disabled = ! (isPy26 || isPy27 );
 
@@ -16734,7 +18009,9 @@ in {
   };
 
   python-etcd = buildPythonPackage rec {
-    name = "python-etcd-${version}";
+    pname = "python-etcd";
+    name = pname + "-" + version;
+
     version = "0.4.3";
 
     src = pkgs.fetchurl {
@@ -16783,7 +18060,9 @@ in {
   };
 
   pyutil = buildPythonPackage (rec {
-    name = "pyutil-2.0.0";
+    pname = "pyutil";
+    version = "2.0.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyutil/${name}.tar.gz";
@@ -16821,7 +18100,9 @@ in {
 
 
   pywebkitgtk = buildPythonPackage rec {
-    name = "pywebkitgtk-${version}";
+    pname = "pywebkitgtk";
+    name = pname + "-" + version;
+
     version = "1.1.8";
     format = "other";
 
@@ -16848,7 +18129,9 @@ in {
   pyxattr = callPackage ../development/python-modules/pyxattr { };
 
   pyaml = buildPythonPackage (rec {
-    name = "pyaml-15.02.1";
+    pname = "pyaml";
+    version = "15.02.1";
+    name = pname + "-" + version;
     disabled = !isPy27;
 
     src = pkgs.fetchurl {
@@ -16866,7 +18149,9 @@ in {
 
 
   pyyaml = buildPythonPackage (rec {
-    name = "PyYAML-3.12";
+    pname = "PyYAML";
+    version = "3.12";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "http://pyyaml.org/download/pyyaml/${name}.zip";
@@ -16885,7 +18170,9 @@ in {
 
   rabbitpy = buildPythonPackage rec {
     version = "0.26.2";
-    name = "rabbitpy-${version}";
+    pname = "rabbitpy";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/rabbitpy/${name}.tar.gz";
@@ -16906,7 +18193,9 @@ in {
   radicale_infcloud = callPackage ../development/python-modules/radicale_infcloud {};
 
   recaptcha_client = buildPythonPackage rec {
-    name = "recaptcha-client-1.0.6";
+    pname = "recaptcha-client";
+    version = "1.0.6";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/recaptcha-client/${name}.tar.gz";
@@ -16922,7 +18211,9 @@ in {
   };
 
   rbtools = buildPythonPackage rec {
-    name = "rbtools-0.7.2";
+    pname = "rbtools";
+    version = "0.7.2";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "http://downloads.reviewboard.org/releases/RBTools/0.7/RBTools-0.7.2.tar.gz";
@@ -16942,7 +18233,9 @@ in {
   };
 
   rencode = buildPythonPackage rec {
-    name = "rencode-${version}";
+    pname = "rencode";
+    name = pname + "-" + version;
+
     version = "git20150810";
     disabled = isPy33;
 
@@ -16980,7 +18273,9 @@ in {
   requests_toolbelt = self.requests-toolbelt; # Old attr, 2017-09-26
 
   retry_decorator = buildPythonPackage rec {
-    name = "retry_decorator-1.0.0";
+    pname = "retry_decorator";
+    version = "1.0.0";
+    name = pname + "-" + version;
     src = pkgs.fetchurl {
       url = mirror://pypi/r/retry_decorator/retry_decorator-1.0.0.tar.gz;
       sha256 = "086zahyb6yn7ggpc58909c5r5h3jz321i1694l1c28bbpaxnlk88";
@@ -16995,7 +18290,9 @@ in {
     then throw "qscintilla-${pkgs.qscintilla.version} not supported for interpreter ${python.executable}"
     else buildPythonPackage rec {
       # TODO: Qt5 support
-      name = "qscintilla-${version}";
+      pname = "qscintilla";
+    name = pname + "-" + version;
+
       version = pkgs.qscintilla.version;
       format = "other";
 
@@ -17026,7 +18323,9 @@ in {
 
 
   qserve = buildPythonPackage rec {
-    name = "qserve-0.2.8";
+    pname = "qserve";
+    version = "0.2.8";
+    name = pname + "-" + version;
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -17050,7 +18349,9 @@ in {
   qtpy = callPackage ../development/python-modules/qtpy { };
 
   quantities = buildPythonPackage rec {
-    name = "quantities-0.10.1";
+    pname = "quantities";
+    version = "0.10.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/q/quantities/quantities-0.10.1.tar.gz";
@@ -17065,7 +18366,9 @@ in {
   };
 
   qutip = buildPythonPackage rec {
-    name = "qutip-2.2.0";
+    pname = "qutip";
+    version = "2.2.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "https://qutip.googlecode.com/files/QuTiP-2.2.0.tar.gz";
@@ -17102,7 +18405,9 @@ in {
   redis = callPackage ../development/python-modules/redis { };
 
   rednose = buildPythonPackage rec {
-    name = "rednose-${version}";
+    pname = "rednose";
+    name = pname + "-" + version;
+
     version = "1.2.1";
 
     src = pkgs.fetchurl {
@@ -17121,7 +18426,9 @@ in {
   reikna = callPackage ../development/python-modules/reikna { };
 
   repocheck = buildPythonPackage rec {
-    name = "repocheck-2015-08-05";
+    pname = "repocheck";
+    version = "2015-08-05";
+    name = pname + "-" + version;
     disabled = isPy26 || isPy27;
 
     src = pkgs.fetchFromGitHub {
@@ -17142,7 +18449,9 @@ in {
   restview = callPackage ../development/python-modules/restview { };
 
   readme = buildPythonPackage rec {
-    name = "readme-${version}";
+    pname = "readme";
+    name = pname + "-" + version;
+
     version = "0.6.0";
 
     src = pkgs.fetchurl {
@@ -17173,7 +18482,9 @@ in {
   rjsmin = callPackage ../development/python-modules/rjsmin { };
 
   pysolr = buildPythonPackage rec {
-    name = "pysolr-${version}";
+    pname = "pysolr";
+    name = pname + "-" + version;
+
     version = "3.3.3";
 
     src = pkgs.fetchurl {
@@ -17195,7 +18506,9 @@ in {
 
 
   django-haystack = buildPythonPackage rec {
-    name = "django-haystack-${version}";
+    pname = "django-haystack";
+    name = pname + "-" + version;
+
     version = "2.4.1";
 
     src = pkgs.fetchurl {
@@ -17221,7 +18534,9 @@ in {
   };
 
   geoalchemy2 = buildPythonPackage rec {
-    name = "GeoAlchemy2-${version}";
+    pname = "GeoAlchemy2";
+    name = pname + "-" + version;
+
     version = "0.3.0";
 
     src = pkgs.fetchurl {
@@ -17239,7 +18554,9 @@ in {
   };
 
   geopy = buildPythonPackage rec {
-    name = "geopy-${version}";
+    pname = "geopy";
+    name = pname + "-" + version;
+
     version = "1.11.0";
     disabled = !isPy27;
 
@@ -17259,7 +18576,9 @@ in {
   django-multiselectfield = callPackage ../development/python-modules/django-multiselectfield { };
 
   reviewboard = buildPythonPackage rec {
-    name = "ReviewBoard-2.5.1.1";
+    pname = "ReviewBoard";
+    version = "2.5.1.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "http://downloads.reviewboard.org/releases/ReviewBoard/2.5/${name}.tar.gz";
@@ -17280,7 +18599,9 @@ in {
 
 
   rdflib = buildPythonPackage (rec {
-    name = "rdflib-4.1.2";
+    pname = "rdflib";
+    version = "4.1.2";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/rdflib/${name}.tar.gz";
@@ -17299,7 +18620,9 @@ in {
   });
 
   isodate = buildPythonPackage rec {
-    name = "isodate-${version}";
+    pname = "isodate";
+    name = pname + "-" + version;
+
     version = "0.5.4";
 
     src = pkgs.fetchurl {
@@ -17350,7 +18673,9 @@ in {
 
   robotframework-selenium2library = buildPythonPackage rec {
     version = "1.6.0";
-    name = "robotframework-selenium2library-${version}";
+    pname = "robotframework-selenium2library";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/robotframework-selenium2library/${name}.tar.gz";
@@ -17372,7 +18697,9 @@ in {
 
   robotframework-tools = buildPythonPackage rec {
     version = "0.1a115";
-    name = "robotframework-tools-${version}";
+    pname = "robotframework-tools";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/robotframework-tools/${name}.tar.gz";
@@ -17395,7 +18722,9 @@ in {
 
   robotframework-requests = buildPythonPackage rec {
     version = "0.4.6";
-    name = "robotframework-requests-${version}";
+    pname = "robotframework-requests";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/ad/da/51359b11d2005ff425984205677890fafaf270a71b03df22c255501bc99d/robotframework-requests-0.4.6.tar.gz";
@@ -17446,7 +18775,9 @@ in {
   rpmfluff = callPackage ../development/python-modules/rpmfluff {};
 
   rpy2 = buildPythonPackage rec {
-    name = "rpy2-2.8.2";
+    pname = "rpy2";
+    version = "2.8.2";
+    name = pname + "-" + version;
     disabled = isPyPy;
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/rpy2/${name}.tar.gz";
@@ -17469,7 +18800,9 @@ in {
   };
 
   rpyc = buildPythonPackage rec {
-    name = "rpyc-${version}";
+    pname = "rpyc";
+    name = pname + "-" + version;
+
     version = "3.3.0";
 
     src = pkgs.fetchurl {
@@ -17487,7 +18820,9 @@ in {
   };
 
   rsa = buildPythonPackage rec {
-    name = "rsa-${version}";
+    pname = "rsa";
+    name = pname + "-" + version;
+
     version = "3.4.2";
 
     src = pkgs.fetchurl {
@@ -17506,7 +18841,9 @@ in {
   };
 
   squaremap = buildPythonPackage rec {
-    name = "squaremap-1.0.4";
+    pname = "squaremap";
+    version = "1.0.4";
+    name = pname + "-" + version;
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -17522,7 +18859,9 @@ in {
   };
 
   ruamel_base = buildPythonPackage rec {
-    name = "ruamel.base-${version}";
+    pname = "ruamel.base";
+    name = pname + "-" + version;
+
     version = "1.0.0";
 
     src = pkgs.fetchurl {
@@ -17538,7 +18877,9 @@ in {
   };
 
   ruamel_ordereddict = buildPythonPackage rec {
-    name = "ruamel.ordereddict-${version}";
+    pname = "ruamel.ordereddict";
+    name = pname + "-" + version;
+
     version = "0.4.9";
     disabled = isPy3k || isPyPy;
 
@@ -17555,7 +18896,9 @@ in {
   };
 
   typing = buildPythonPackage rec {
-    name = "typing-${version}";
+    pname = "typing";
+    name = pname + "-" + version;
+
     version = "3.5.3.0";
 
     src = pkgs.fetchurl {
@@ -17573,7 +18916,9 @@ in {
   typeguard = callPackage ../development/python-modules/typeguard { };
 
   ruamel_yaml = buildPythonPackage rec {
-    name = "ruamel.yaml-${version}";
+    pname = "ruamel.yaml";
+    name = pname + "-" + version;
+
     version = "0.13.7";
 
     # needs ruamel_ordereddict for python2 support
@@ -17597,7 +18942,9 @@ in {
   };
 
   runsnakerun = buildPythonPackage rec {
-    name = "runsnakerun-2.0.4";
+    pname = "runsnakerun";
+    version = "2.0.4";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/R/RunSnakeRun/RunSnakeRun-2.0.4.tar.gz";
@@ -17618,7 +18965,9 @@ in {
   seqdiag = callPackage ../development/python-modules/seqdiag { };
 
   pysendfile = buildPythonPackage rec {
-    name = "pysendfile-${version}";
+    pname = "pysendfile";
+    name = pname + "-" + version;
+
     version = "2.0.1";
 
     src = pkgs.fetchurl {
@@ -17638,7 +18987,9 @@ in {
   };
 
   qpid-python = buildPythonPackage rec {
-    name = "qpid-python-${version}";
+    pname = "qpid-python";
+    name = pname + "-" + version;
+
     version = "0.32";
     disabled = isPy3k;  # not supported
 
@@ -17653,7 +19004,9 @@ in {
   };
 
   xattr = buildPythonPackage rec {
-    name = "xattr-0.7.8";
+    pname = "xattr";
+    version = "0.7.8";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/x/xattr/${name}.tar.gz";
@@ -17677,7 +19030,9 @@ in {
   scipy = callPackage ../development/python-modules/scipy { };
 
   scikitimage = buildPythonPackage rec {
-    name = "scikit-image-${version}";
+    pname = "scikit-image";
+    name = pname + "-" + version;
+
     version = "0.12.3";
 
     src = pkgs.fetchurl {
@@ -17705,7 +19060,9 @@ in {
 
   scripttest = buildPythonPackage rec {
     version = "1.3";
-    name = "scripttest-${version}";
+    pname = "scripttest";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/scripttest/scripttest-${version}.tar.gz";
@@ -17732,7 +19089,9 @@ in {
   setuptools_scm = callPackage ../development/python-modules/setuptools_scm { };
 
   setuptoolsDarcs = buildPythonPackage rec {
-    name = "setuptools_darcs-${version}";
+    pname = "setuptools_darcs";
+    name = pname + "-" + version;
+
     version = "1.2.11";
 
     src = pkgs.fetchurl {
@@ -17785,7 +19144,9 @@ in {
   simanneal = callPackage ../development/python-modules/simanneal { };
 
   simplebayes = buildPythonPackage rec {
-    name = "simplebayes-${version}";
+    pname = "simplebayes";
+    name = pname + "-" + version;
+
     version = "1.5.8";
 
     # Use GitHub instead of pypi, because it contains tests.
@@ -17815,7 +19176,9 @@ in {
 
   simplegeneric = buildPythonPackage rec {
     version = "0.8.1";
-    name = "simplegeneric-${version}";
+    pname = "simplegeneric";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/simplegeneric/${name}.zip";
@@ -17831,7 +19194,9 @@ in {
 
 
   shortuuid = buildPythonPackage rec {
-    name = "shortuuid-${version}";
+    pname = "shortuuid";
+    name = pname + "-" + version;
+
     version = "0.4.3";
 
     disabled = isPy26;
@@ -17853,7 +19218,9 @@ in {
 
   shouldbe = buildPythonPackage rec {
     version = "0.1.0";
-    name = "shouldbe-${version}";
+    pname = "shouldbe";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/shouldbe/${name}.tar.gz";
@@ -17877,7 +19244,9 @@ in {
 
   simpleldap = buildPythonPackage rec {
     version = "0.8";
-    name = "simpleldap-${version}";
+    pname = "simpleldap";
+    name = pname + "-" + version;
+
 
     propagatedBuildInputs = with self; [ ldap ];
     buildInputs = with self; [ pep8 pytest tox ];
@@ -17901,7 +19270,9 @@ in {
 
   simpleparse = buildPythonPackage rec {
     version = "2.1.1";
-    name = "simpleparse-${version}";
+    pname = "simpleparse";
+    name = pname + "-" + version;
+
 
     disabled = isPy3k || isPyPy;
 
@@ -17921,7 +19292,9 @@ in {
   };
 
   sigal = buildPythonPackage rec {
-    name = "sigal-1.0.1";
+    pname = "sigal";
+    version = "1.0.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sigal/${name}.tar.gz";
@@ -17944,7 +19317,9 @@ in {
   };
 
   slob = buildPythonPackage rec {
-    name = "slob-unstable-2016-11-03";
+    pname = "slob-unstable";
+    version = "2016-11-03";
+    name = pname + "-" + version;
 
     disabled = !isPy3k;
 
@@ -17969,7 +19344,9 @@ in {
   };
 
   slowaes = buildPythonPackage rec {
-    name = "slowaes-${version}";
+    pname = "slowaes";
+    name = pname + "-" + version;
+
     version = "0.1a1";
 
     src = pkgs.fetchurl {
@@ -17987,7 +19364,9 @@ in {
   };
 
   snowballstemmer = buildPythonPackage rec {
-    name = "snowballstemmer-1.2.1";
+    pname = "snowballstemmer";
+    version = "1.2.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/snowballstemmer/${name}.tar.gz";
@@ -18008,7 +19387,9 @@ in {
   };
 
   spake2 = buildPythonPackage rec {
-    name = "spake2-${version}";
+    pname = "spake2";
+    name = pname + "-" + version;
+
     version = "0.7";
 
     src = pkgs.fetchurl {
@@ -18034,7 +19415,9 @@ in {
   sphfile = callPackage ../development/python-modules/sphfile { };
 
   sqlite3dbm = buildPythonPackage rec {
-    name = "sqlite3dbm-0.1.4";
+    pname = "sqlite3dbm";
+    version = "0.1.4";
+    name = pname + "-" + version;
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -18101,7 +19484,9 @@ in {
   shapely = callPackage ../development/python-modules/shapely { };
 
   sopel = buildPythonPackage rec {
-    name = "sopel-6.3.1";
+    pname = "sopel";
+    version = "6.3.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sopel/${name}.tar.gz";
@@ -18145,7 +19530,9 @@ in {
 
   tidylib = buildPythonPackage rec {
     version = "0.2.4";
-    name = "pytidylib-${version}";
+    pname = "pytidylib";
+    name = pname + "-" + version;
+
 
     propagatedBuildInputs = [ pkgs.html-tidy ];
 
@@ -18176,7 +19563,9 @@ in {
   };
 
   tilestache = self.buildPythonPackage rec {
-    name = "tilestache-${version}";
+    pname = "tilestache";
+    name = pname + "-" + version;
+
     version = "1.50.1";
 
     src = pkgs.fetchurl {
@@ -18197,7 +19586,9 @@ in {
   };
 
   timelib = buildPythonPackage rec {
-    name = "timelib-0.2.4";
+    pname = "timelib";
+    version = "0.2.4";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/timelib/${name}.zip";
@@ -18214,7 +19605,9 @@ in {
   };
 
   timeout-decorator = buildPythonPackage rec {
-    name    = "timeout-decorator-${version}";
+    pname    = "timeout-decorator";
+    name = pname + "-" + version;
+
     version = "0.3.2";
 
     src = pkgs.fetchurl {
@@ -18224,7 +19617,9 @@ in {
   };
 
   pid = buildPythonPackage rec {
-    name = "pid-${version}";
+    pname = "pid";
+    name = pname + "-" + version;
+
     version = "2.0.1";
 
     src = pkgs.fetchurl {
@@ -18245,7 +19640,9 @@ in {
   };
 
   pip2nix = buildPythonPackage rec {
-    name = "pip2nix-${version}";
+    pname = "pip2nix";
+    name = pname + "-" + version;
+
     version = "0.3.0";
 
     src = pkgs.fetchurl {
@@ -18259,7 +19656,9 @@ in {
   };
 
   pychef = buildPythonPackage rec {
-    name    = "PyChef-${version}";
+    pname    = "PyChef";
+    name = pname + "-" + version;
+
     version = "0.3.0";
 
     src = pkgs.fetchurl {
@@ -18310,7 +19709,9 @@ in {
     in if isPy3k then py3 else py2;
 
   pythondaemon = buildPythonPackage rec {
-    name = "python-daemon-${version}";
+    pname = "python-daemon";
+    name = pname + "-" + version;
+
     version = "2.1.1";
 
     src = pkgs.fetchurl {
@@ -18332,7 +19733,9 @@ in {
   };
 
   sympy = buildPythonPackage rec {
-    name = "sympy-1.0";
+    pname = "sympy";
+    version = "1.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url    = "mirror://pypi/s/sympy/${name}.tar.gz";
@@ -18360,7 +19763,9 @@ in {
   };
 
   pilkit = buildPythonPackage rec {
-    name = "pilkit-1.1.4";
+    pname = "pilkit";
+    version = "1.1.4";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pilkit/${name}.tar.gz";
@@ -18382,7 +19787,9 @@ in {
   };
 
   clint = buildPythonPackage rec {
-    name = "clint-0.5.1";
+    pname = "clint";
+    version = "0.5.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/clint/${name}.tar.gz";
@@ -18405,7 +19812,9 @@ in {
   };
 
   argh = buildPythonPackage rec {
-    name = "argh-0.26.1";
+    pname = "argh";
+    version = "0.26.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/a/argh/${name}.tar.gz";
@@ -18425,7 +19834,9 @@ in {
   };
 
   nose_progressive = buildPythonPackage rec {
-    name = "nose-progressive-1.5.1";
+    pname = "nose-progressive";
+    version = "1.5.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/nose-progressive/${name}.tar.gz";
@@ -18444,7 +19855,9 @@ in {
   };
 
   blessings = buildPythonPackage rec {
-    name = "blessings-1.6";
+    pname = "blessings";
+    version = "1.6";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/b/blessings/${name}.tar.gz";
@@ -18464,7 +19877,9 @@ in {
   secretstorage = callPackage ../development/python-modules/secretstorage { };
 
   semantic = buildPythonPackage rec {
-    name = "semantic-1.0.3";
+    pname = "semantic";
+    version = "1.0.3";
+    name = pname + "-" + version;
 
     disabled = isPy3k;
 
@@ -18486,7 +19901,9 @@ in {
   };
 
   sandboxlib = buildPythonPackage rec {
-    name = "sandboxlib-${version}";
+    pname = "sandboxlib";
+    name = pname + "-" + version;
+
     version = "0.31";
 
     disabled = isPy3k;
@@ -18506,7 +19923,9 @@ in {
   };
 
   scales = buildPythonPackage rec {
-    name = "scales-${version}";
+    pname = "scales";
+    name = pname + "-" + version;
+
     version = "1.0.9";
 
     src = pkgs.fetchurl {
@@ -18528,7 +19947,9 @@ in {
   };
 
   secp256k1 = buildPythonPackage rec {
-    name = "secp256k1-${version}";
+    pname = "secp256k1";
+    name = pname + "-" + version;
+
     version = "0.12.1";
 
     src = pkgs.fetchurl {
@@ -18565,7 +19986,9 @@ in {
   semantic-version = callPackage ../development/python-modules/semantic-version { };
 
   sexpdata = buildPythonPackage rec {
-    name = "sexpdata-0.0.2";
+    pname = "sexpdata";
+    version = "0.0.2";
+    name = pname + "-" + version;
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sexpdata/${name}.tar.gz";
       sha256 = "eb696bc66b35def5fb356de09481447dff4e9a3ed926823134e1d0f35eade428";
@@ -18581,7 +20004,9 @@ in {
 
 
   sh = buildPythonPackage rec {
-    name = "sh-1.11";
+    pname = "sh";
+    version = "1.11";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sh/${name}.tar.gz";
@@ -18598,7 +20023,9 @@ in {
 
 
   sipsimple = buildPythonPackage rec {
-    name = "sipsimple-${version}";
+    pname = "sipsimple";
+    name = pname + "-" + version;
+
     version = "3.0.0";
     disabled = isPy3k;
 
@@ -18612,11 +20039,12 @@ in {
     propagatedBuildInputs = with self; [ cython pkgs.openssl dns dateutil xcaplib msrplib lxml python-otr ];
   };
 
-
   six = callPackage ../development/python-modules/six { };
 
   smartdc = buildPythonPackage rec {
-    name = "smartdc-0.1.12";
+    pname = "smartdc";
+    version = "0.1.12";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = mirror://pypi/s/smartdc/smartdc-0.1.12.tar.gz;
@@ -18633,7 +20061,9 @@ in {
   };
 
   socksipy-branch = buildPythonPackage rec {
-    name = "SocksiPy-branch-1.01";
+    pname = "SocksiPy-branch";
+    version = "1.01";
+    name = pname + "-" + version;
     src = pkgs.fetchurl {
       url = mirror://pypi/S/SocksiPy-branch/SocksiPy-branch-1.01.tar.gz;
       sha256 = "01l41v4g7fy9fzvinmjxy6zcbhgqaif8dhdqm4w90fwcw9h51a8p";
@@ -18646,7 +20076,9 @@ in {
   };
 
   sockjs-tornado = buildPythonPackage rec {
-    name = "sockjs-tornado-${version}";
+    pname = "sockjs-tornado";
+    name = pname + "-" + version;
+
     version = "1.0.3";
 
     src = pkgs.fetchurl {
@@ -18665,7 +20097,9 @@ in {
   };
 
   sorl_thumbnail = buildPythonPackage rec {
-    name = "sorl-thumbnail-11.12";
+    pname = "sorl-thumbnail";
+    version = "11.12";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sorl-thumbnail/${name}.tar.gz";
@@ -18683,7 +20117,9 @@ in {
   };
 
   supervisor = buildPythonPackage rec {
-    name = "supervisor-3.1.4";
+    pname = "supervisor";
+    version = "3.1.4";
+    name = pname + "-" + version;
 
     disabled = isPy3k;
 
@@ -18728,7 +20164,9 @@ in {
   sphinx = callPackage ../development/python-modules/sphinx { };
 
   sphinx_1_2 = self.sphinx.overridePythonAttrs rec {
-    name = "sphinx-1.2.3";
+    pname = "sphinx";
+    version = "1.2.3";
+    name = pname + "-" + version;
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sphinx/sphinx-1.2.3.tar.gz";
       sha256 = "94933b64e2fe0807da0612c574a021c0dac28c7bd3c4a23723ae5a39ea8f3d04";
@@ -18743,7 +20181,9 @@ in {
   hieroglyph = callPackage ../development/python-modules/hieroglyph { };
 
   sphinx_rtd_theme = buildPythonPackage (rec {
-    name = "sphinx_rtd_theme-0.1.9";
+    pname = "sphinx_rtd_theme";
+    version = "0.1.9";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sphinx_rtd_theme/${name}.tar.gz";
@@ -18794,7 +20234,9 @@ in {
   });
 
   sphinxcontrib-openapi = buildPythonPackage (rec {
-    name = "sphinxcontrib-openapi-0.3.0";
+    pname = "sphinxcontrib-openapi";
+    version = "0.3.0";
+    name = pname + "-" + version;
 
     doCheck = false;
 
@@ -18807,7 +20249,9 @@ in {
   });
 
   sphinxcontrib_httpdomain = buildPythonPackage (rec {
-    name = "sphinxcontrib-httpdomain-1.5.0";
+    pname = "sphinxcontrib-httpdomain";
+    version = "1.5.0";
+    name = pname + "-" + version;
 
     # Check is disabled due to this issue:
     # https://bitbucket.org/pypa/setuptools/issue/137/typeerror-unorderable-types-str-nonetype
@@ -18830,7 +20274,9 @@ in {
   });
 
   sphinxcontrib_newsfeed = buildPythonPackage (rec {
-    name = "sphinxcontrib-newsfeed-${version}";
+    pname = "sphinxcontrib-newsfeed";
+    name = pname + "-" + version;
+
     version = "0.1.4";
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sphinxcontrib-newsfeed/${name}.tar.gz";
@@ -18847,7 +20293,9 @@ in {
   });
 
   sphinxcontrib_plantuml = buildPythonPackage (rec {
-    name = "sphinxcontrib-plantuml-0.7";
+    pname = "sphinxcontrib-plantuml";
+    version = "0.7";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sphinxcontrib-plantuml/${name}.tar.gz";
@@ -18907,7 +20355,9 @@ in {
   });
 
   sphinx_pypi_upload = buildPythonPackage (rec {
-    name = "Sphinx-PyPI-upload-0.2.1";
+    pname = "Sphinx-PyPI-upload";
+    version = "0.2.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/S/Sphinx-PyPI-upload/${name}.tar.gz";
@@ -18926,7 +20376,9 @@ in {
   spotipy = callPackage ../development/python-modules/spotipy { };
 
   Pweave = buildPythonPackage (rec {
-    name = "Pweave-0.25";
+    pname = "Pweave";
+    version = "0.25";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "https://pypi.python.org/packages/f6/2f/e9735b04747ae5ef29d64e0b215fb0e11f1c89826097ac17342efebbbb84/Pweave-0.25.tar.gz";
@@ -18987,7 +20439,9 @@ in {
   sqlalchemy_migrate = callPackage ../development/python-modules/sqlalchemy-migrate { };
 
   sqlparse = buildPythonPackage rec {
-    name = "sqlparse-${version}";
+    pname = "sqlparse";
+    name = pname + "-" + version;
+
     version = "0.2.2";
 
     src = pkgs.fetchurl {
@@ -19017,7 +20471,9 @@ in {
   statsmodels = callPackage ../development/python-modules/statsmodels { };
 
   python_statsd = buildPythonPackage rec {
-    name = "python-statsd-${version}";
+    pname = "python-statsd";
+    name = pname + "-" + version;
+
     version = "1.6.0";
     disabled = isPy3k;  # next release will be py3k compatible
 
@@ -19037,7 +20493,9 @@ in {
 
 
   stompclient = buildPythonPackage (rec {
-    name = "stompclient-0.3.2";
+    pname = "stompclient";
+    version = "0.3.2";
+    name = pname + "-" + version;
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -19058,7 +20516,9 @@ in {
 
   subdownloader = buildPythonPackage rec {
     version = "2.0.18";
-    name = "subdownloader-${version}";
+    pname = "subdownloader";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "https://launchpad.net/subdownloader/trunk/2.0.18/+download/subdownloader_2.0.18.orig.tar.gz";
@@ -19117,8 +20577,10 @@ in {
   };
 
   subunit = buildPythonPackage rec {
-    name = pkgs.subunit.name;
+    pname = pkgs.subunit.name;
     src = pkgs.subunit.src;
+    version = pkgs.subunit.version;
+    name = pname + "-" + version;
 
     propagatedBuildInputs = with self; [ testtools testscenarios ];
     nativeBuildInputs = [ pkgs.pkgconfig ];
@@ -19132,7 +20594,9 @@ in {
   };
 
   sure = buildPythonPackage rec {
-    name = "sure-${version}";
+    pname = "sure";
+    name = pname + "-" + version;
+
     version = "1.2.24";
 
     LC_ALL="en_US.UTF-8";
@@ -19156,7 +20620,9 @@ in {
   };
 
   structlog = buildPythonPackage rec {
-    name = "structlog-16.1.0";
+    pname = "structlog";
+    version = "16.1.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/structlog/${name}.tar.gz";
@@ -19179,7 +20645,9 @@ in {
   };
 
   svgwrite = buildPythonPackage rec {
-    name = "svgwrite-${version}";
+    pname = "svgwrite";
+    name = pname + "-" + version;
+
     version = "1.1.6";
 
     src = pkgs.fetchurl {
@@ -19198,7 +20666,9 @@ in {
   };
 
   freezegun = buildPythonPackage rec {
-    name = "freezegun-${version}";
+    pname = "freezegun";
+    name = pname + "-" + version;
+
     version = "0.3.8";
 
     src = pkgs.fetchurl {
@@ -19222,7 +20692,9 @@ in {
 
   syncthing-gtk = buildPythonPackage rec {
     version = "0.9.2.3";
-    name = "syncthing-gtk-${version}";
+    pname = "syncthing-gtk";
+    name = pname + "-" + version;
+
     src = pkgs.fetchFromGitHub {
       owner = "syncthing";
       repo = "syncthing-gtk";
@@ -19269,7 +20741,9 @@ in {
 
   taskw = buildPythonPackage rec {
     version = "1.0.3";
-    name = "taskw-${version}";
+    pname = "taskw";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/taskw/${name}.tar.gz";
@@ -19299,7 +20773,9 @@ in {
 
   tempita = buildPythonPackage rec {
     version = "0.5.2";
-    name = "tempita-${version}";
+    pname = "tempita";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/T/Tempita/Tempita-${version}.tar.gz";
@@ -19317,7 +20793,9 @@ in {
   };
 
   terminado = buildPythonPackage rec {
-    name = "terminado-${version}";
+    pname = "terminado";
+    name = pname + "-" + version;
+
     version = "0.6";
 
     src = pkgs.fetchurl {
@@ -19335,7 +20813,9 @@ in {
   };
 
   terminaltables = buildPythonPackage rec {
-    name = "terminaltables-${version}";
+    pname = "terminaltables";
+    name = pname + "-" + version;
+
     version = "3.1.0";
 
     src = pkgs.fetchurl {
@@ -19353,7 +20833,9 @@ in {
   keystoneclient = callPackage ../development/python-modules/keystoneclient { };
 
   keystonemiddleware = buildPythonPackage rec {
-    name = "keystonemiddleware-${version}";
+    pname = "keystonemiddleware";
+    name = pname + "-" + version;
+
     version = "2.4.1";
 
     src = pkgs.fetchurl {
@@ -19376,7 +20858,9 @@ in {
   };
 
   testscenarios = buildPythonPackage rec {
-    name = "testscenarios-${version}";
+    pname = "testscenarios";
+    name = pname + "-" + version;
+
     version = "0.4";
 
     src = pkgs.fetchurl {
@@ -19423,7 +20907,9 @@ in {
   };
 
   testrepository = buildPythonPackage rec {
-    name = "testrepository-${version}";
+    pname = "testrepository";
+    name = pname + "-" + version;
+
     version = "0.0.20";
 
     src = pkgs.fetchurl {
@@ -19446,7 +20932,9 @@ in {
   };
 
   testresources = buildPythonPackage rec {
-    name = "testresources-${version}";
+    pname = "testresources";
+    name = pname + "-" + version;
+
     version = "0.2.7";
 
     src = pkgs.fetchurl {
@@ -19466,7 +20954,9 @@ in {
   traitlets = callPackage ../development/python-modules/traitlets { };
 
   python_mimeparse = buildPythonPackage rec {
-    name = "python-mimeparse-${version}";
+    pname = "python-mimeparse";
+    name = pname + "-" + version;
+
     version = "0.1.4";
 
     src = pkgs.fetchurl {
@@ -19486,7 +20976,9 @@ in {
 
 
   extras = buildPythonPackage rec {
-    name = "extras-${version}";
+    pname = "extras";
+    name = pname + "-" + version;
+
     version = "0.0.3";
 
     src = pkgs.fetchurl {
@@ -19505,7 +20997,9 @@ in {
   };
 
   texttable = self.buildPythonPackage rec {
-    name = "texttable-0.8.4";
+    pname = "texttable";
+    version = "0.8.4";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/texttable/${name}.tar.gz";
@@ -19528,7 +21022,10 @@ in {
   tkinter = let
     py = python.override{x11Support=true;};
   in buildPythonPackage rec {
-    name = "tkinter-${python.version}";
+    pname = "tkinter";
+    version = python.version;
+    name = pname + "-" + version;
+
     src = py;
     format = "other";
 
@@ -19548,7 +21045,9 @@ in {
   };
 
   tlslite = buildPythonPackage rec {
-    name = "tlslite-${version}";
+    pname = "tlslite";
+    name = pname + "-" + version;
+
     version = "0.4.8";
 
     src = pkgs.fetchurl {
@@ -19564,7 +21063,9 @@ in {
   };
 
   qrcode = buildPythonPackage rec {
-    name = "qrcode-${version}";
+    pname = "qrcode";
+    name = pname + "-" + version;
+
     version = "5.3";
 
     src = pkgs.fetchurl {
@@ -19582,7 +21083,9 @@ in {
   };
 
   tmdb3 = buildPythonPackage rec {
-    name = "tmdb3-${version}";
+    pname = "tmdb3";
+    name = pname + "-" + version;
+
     version = "0.6.17";
 
     src = pkgs.fetchurl {
@@ -19600,7 +21103,9 @@ in {
   toolz = callPackage ../development/python-modules/toolz { };
 
   tox = buildPythonPackage rec {
-    name = "tox-${version}";
+    pname = "tox";
+    name = pname + "-" + version;
+
     version = "2.4.1";
 
     propagatedBuildInputs = with self; [ py virtualenv pluggy ];
@@ -19616,7 +21121,9 @@ in {
   tqdm = callPackage ../development/python-modules/tqdm { };
 
   smmap = buildPythonPackage rec {
-    name = "smmap-0.9.0";
+    pname = "smmap";
+    version = "0.9.0";
+    name = pname + "-" + version;
     disabled = isPyPy;  # This fails the tests if built with pypy
     meta.maintainers = with maintainers; [ mornfall ];
 
@@ -19629,7 +21136,9 @@ in {
   };
 
   traits = buildPythonPackage rec {
-    name = "traits-${version}";
+    pname = "traits";
+    name = pname + "-" + version;
+
     version = "4.5.0";
 
     src = pkgs.fetchurl {
@@ -19663,7 +21172,9 @@ in {
 
 
   transmissionrpc = buildPythonPackage rec {
-    name = "transmissionrpc-${version}";
+    pname = "transmissionrpc";
+    name = pname + "-" + version;
+
     version = "0.11";
 
     src = pkgs.fetchurl {
@@ -19681,7 +21192,9 @@ in {
   };
 
   eggdeps  = buildPythonPackage rec {
-     name = "eggdeps-${version}";
+     pname = "eggdeps";
+    name = pname + "-" + version;
+
      version = "0.4";
 
      src = pkgs.fetchurl {
@@ -19702,7 +21215,9 @@ in {
 
 
   tweepy = buildPythonPackage (rec {
-    name = "tweepy-3.5.0";
+    pname = "tweepy";
+    version = "3.5.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/tweepy/${name}.tar.gz";
@@ -19722,7 +21237,9 @@ in {
   });
 
   twiggy = buildPythonPackage rec {
-    name = "Twiggy-${version}";
+    pname = "Twiggy";
+    name = pname + "-" + version;
+
     version = "0.4.5";
 
     src = pkgs.fetchurl {
@@ -19745,7 +21262,9 @@ in {
   twill = callPackage ../development/python-modules/twill { };
 
   twitter = buildPythonPackage rec {
-    name = "twitter-${version}";
+    pname = "twitter";
+    name = pname + "-" + version;
+
     version = "1.15.0";
 
     src = pkgs.fetchurl {
@@ -19891,7 +21410,9 @@ in {
   ukpostcodeparser = callPackage ../development/python-modules/ukpostcodeparser { };
 
   umalqurra = buildPythonPackage rec {
-    name = "umalqurra-${version}";
+    pname = "umalqurra";
+    name = pname + "-" + version;
+
     version = "0.2";
 
     src = pkgs.fetchurl {
@@ -19916,7 +21437,9 @@ in {
 
   unicodecsv = buildPythonPackage rec {
     version = "0.14.1";
-    name = "unicodecsv-${version}";
+    pname = "unicodecsv";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/u/unicodecsv/${name}.tar.gz";
@@ -19935,7 +21458,9 @@ in {
 
   unittest2 = buildPythonPackage rec {
     version = "1.1.0";
-    name = "unittest2-${version}";
+    pname = "unittest2";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/u/unittest2/unittest2-${version}.tar.gz";
@@ -19964,7 +21489,9 @@ in {
   };
 
   uritemplate_py = buildPythonPackage rec {
-    name = "uritemplate.py-${version}";
+    pname = "uritemplate.py";
+    name = pname + "-" + version;
+
     version = "0.3.0";
 
     src = pkgs.fetchurl {
@@ -19984,7 +21511,9 @@ in {
 
   traceback2 = buildPythonPackage rec {
     version = "1.4.0";
-    name = "traceback2-${version}";
+    pname = "traceback2";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/traceback2/traceback2-${version}.tar.gz";
@@ -20002,7 +21531,9 @@ in {
   };
 
   linecache2 = buildPythonPackage rec {
-    name = "linecache2-${version}";
+    pname = "linecache2";
+    name = pname + "-" + version;
+
     version = "1.0.0";
 
     src = pkgs.fetchurl {
@@ -20022,7 +21553,9 @@ in {
 
   upass = buildPythonPackage rec {
     version = "0.1.4";
-    name = "upass-${version}";
+    pname = "upass";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "https://github.com/Kwpolska/upass/archive/v${version}.tar.gz";
@@ -20046,7 +21579,9 @@ in {
   update_checker = callPackage ../development/python-modules/update_checker {};
 
   uritemplate = buildPythonPackage rec {
-    name = "uritemplate-${version}";
+    pname = "uritemplate";
+    name = pname + "-" + version;
+
     version = "0.6";
 
     src = pkgs.fetchurl {
@@ -20068,7 +21603,9 @@ in {
   };
 
   uptime = buildPythonPackage rec {
-    name = "uptime-${version}";
+    pname = "uptime";
+    name = pname + "-" + version;
+
     version = "3.0.1";
 
     src = pkgs.fetchurl {
@@ -20089,13 +21626,15 @@ in {
   urwid = callPackage ../development/python-modules/urwid {};
 
   urwidtrees = buildPythonPackage rec {
-    name = "urwidtrees-${rev}";
-    rev = "1.0";
+    pname = "urwidtrees";
+    name = pname + "-" + version;
+
+    version = "1.0";
 
     src = pkgs.fetchFromGitHub {
       owner = "pazz";
       repo = "urwidtrees";
-      inherit rev;
+      rev = version;
       sha256 = "03gpcdi45z2idy1fd9zv8v9naivmpfx65hshm8r984k9wklv1dsa";
     };
 
@@ -20109,7 +21648,9 @@ in {
   };
 
   pyuv = buildPythonPackage rec {
-    name = "pyuv-1.2.0";
+    pname = "pyuv";
+    version = "1.2.0";
+    name = pname + "-" + version;
     disabled = isPyPy;  # see https://github.com/saghul/pyuv/issues/49
 
     src = pkgs.fetchurl {
@@ -20130,7 +21671,9 @@ in {
   };
 
   virtkey = buildPythonPackage rec {
-    name = "virtkey-${version}";
+    pname = "virtkey";
+    name = pname + "-" + version;
+
     majorVersion = "0.63";
     version = "${majorVersion}.0";
 
@@ -20156,7 +21699,9 @@ in {
 
 
   virtual-display = buildPythonPackage rec {
-    name = "PyVirtualDisplay-0.1.5";
+    pname = "PyVirtualDisplay";
+    version = "0.1.5";
+    name = pname + "-" + version;
 
     propagatedBuildInputs = with self; [ EasyProcess ];
 
@@ -20176,7 +21721,9 @@ in {
   virtualenv = callPackage ../development/python-modules/virtualenv { };
 
   virtualenv-clone = buildPythonPackage rec {
-    name = "virtualenv-clone-0.2.5";
+    pname = "virtualenv-clone";
+    version = "0.2.5";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/v/virtualenv-clone/${name}.tar.gz";
@@ -20197,7 +21744,9 @@ in {
   };
 
   virtualenvwrapper = buildPythonPackage (rec {
-    name = "virtualenvwrapper-4.3";
+    pname = "virtualenvwrapper";
+    version = "4.3";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/v/virtualenvwrapper/${name}.tar.gz";
@@ -20264,7 +21813,9 @@ EOF
 
   vmprof = buildPythonPackage rec {
     version = "0.3.3";
-    name = "vmprof-${version}";
+    pname = "vmprof";
+    name = pname + "-" + version;
+
 
     # Url using old scheme doesn't seem to work
     src = pkgs.fetchurl {
@@ -20287,7 +21838,9 @@ EOF
 
   vultr = buildPythonPackage rec {
     version = "0.1.2";
-    name = "vultr-${version}";
+    pname = "vultr";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchFromGitHub {
         owner = "spry-group";
@@ -20311,7 +21864,9 @@ EOF
   };
 
   waitress = buildPythonPackage rec {
-    name = "waitress-1.0.2";
+    pname = "waitress";
+    version = "1.0.2";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/w/waitress/${name}.tar.gz";
@@ -20329,7 +21884,9 @@ EOF
   waitress-django = callPackage ../development/python-modules/waitress-django { };
 
   webassets = buildPythonPackage rec {
-    name = "webassets-${version}";
+    pname = "webassets";
+    name = pname + "-" + version;
+
     version = "0.12.1";
 
     src = pkgs.fetchurl {
@@ -20356,7 +21913,9 @@ EOF
   };
 
   webcolors = buildPythonPackage rec {
-    name = "webcolors-1.4";
+    pname = "webcolors";
+    version = "1.4";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/w/webcolors/${name}.tar.gz";
@@ -20383,7 +21942,9 @@ EOF
   };
 
   wcwidth = buildPythonPackage rec {
-    name = "wcwidth-${version}";
+    pname = "wcwidth";
+    name = pname + "-" + version;
+
     version = "0.1.6";
 
     src = pkgs.fetchurl {
@@ -20410,7 +21971,9 @@ EOF
 
   web = buildPythonPackage rec {
     version = "0.37";
-    name = "web.py-${version}";
+    pname = "web.py";
+    name = pname + "-" + version;
+
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -20452,7 +22015,9 @@ EOF
 
   websockify = buildPythonPackage rec {
     version = "0.7.0";
-    name = "websockify-${version}";
+    pname = "websockify";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/w/websockify/websockify-${version}.tar.gz";
@@ -20470,7 +22035,9 @@ EOF
 
   webtest = buildPythonPackage rec {
     version = "2.0.20";
-    name = "webtest-${version}";
+    pname = "webtest";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/W/WebTest/WebTest-${version}.tar.gz";
@@ -20515,7 +22082,9 @@ EOF
   magic-wormhole = callPackage ../development/python-modules/magic-wormhole { };
 
   wsgiproxy2 = buildPythonPackage rec {
-    name = "WSGIProxy2-0.4.2";
+    pname = "WSGIProxy2";
+    version = "0.4.2";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/W/WSGIProxy2/${name}.zip";
@@ -20553,7 +22122,9 @@ EOF
   };
 
   xlib = buildPythonPackage (rec {
-    name = "xlib-${version}";
+    pname = "xlib";
+    name = pname + "-" + version;
+
     version = "0.17";
 
     src = pkgs.fetchFromGitHub {
@@ -20578,7 +22149,9 @@ EOF
   });
 
   xmltodict = buildPythonPackage (rec {
-    name = "xmltodict-0.9.2";
+    pname = "xmltodict";
+    version = "0.9.2";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/x/xmltodict/${name}.tar.gz";
@@ -20605,7 +22178,9 @@ EOF
   };
 
   zbase32 = buildPythonPackage (rec {
-    name = "zbase32-1.1.2";
+    pname = "zbase32";
+    version = "1.1.2";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/z/zbase32/${name}.tar.gz";
@@ -20631,7 +22206,9 @@ EOF
   zc_lockfile = callPackage ../development/python-modules/zc_lockfile { };
 
   zdaemon = buildPythonPackage rec {
-    name = "zdaemon-${version}";
+    pname = "zdaemon";
+    name = pname + "-" + version;
+
     version = "4.0.0";
 
     src = pkgs.fetchurl {
@@ -20654,7 +22231,9 @@ EOF
 
 
   zfec = buildPythonPackage (rec {
-    name = "zfec-1.4.24";
+    pname = "zfec";
+    version = "1.4.24";
+    name = pname + "-" + version;
     disabled = isPyPy;
 
     src = pkgs.fetchurl {
@@ -20694,7 +22273,9 @@ EOF
   persistent = callPackage ../development/python-modules/persistent {};
 
   xdot = buildPythonPackage rec {
-    name = "xdot-0.7";
+    pname = "xdot";
+    version = "0.7";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/x/xdot/xdot-0.7.tar.gz";
@@ -20713,7 +22294,9 @@ EOF
 
   you-get = buildPythonApplication rec {
     version = "0.4.390";
-    name = "you-get-${version}";
+    pname = "you-get";
+    name = pname + "-" + version;
+
     disabled = !isPy3k;
 
     # Tests aren't packaged, but they all hit the real network so
@@ -20737,7 +22320,9 @@ EOF
   zetup = callPackage ../development/python-modules/zetup { };
 
   zope_broken = buildPythonPackage rec {
-    name = "zope.broken-3.6.0";
+    pname = "zope.broken";
+    version = "3.6.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/z/zope.broken/${name}.zip";
@@ -20753,7 +22338,9 @@ EOF
 
 
   zope_component = buildPythonPackage rec {
-    name = "zope.component-4.2.1";
+    pname = "zope.component";
+    version = "4.2.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/z/zope.component/zope.component-4.2.1.tar.gz";
@@ -20775,7 +22362,9 @@ EOF
 
 
   zope_configuration = buildPythonPackage rec {
-    name = "zope.configuration-4.0.3";
+    pname = "zope.configuration";
+    version = "4.0.3";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/z/zope.configuration/zope.configuration-4.0.3.tar.gz";
@@ -20795,7 +22384,9 @@ EOF
 
 
   zope_contenttype = buildPythonPackage rec {
-    name = "zope.contenttype-4.0.1";
+    pname = "zope.contenttype";
+    version = "4.0.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/z/zope.contenttype/${name}.tar.gz";
@@ -20809,7 +22400,9 @@ EOF
 
 
   zope_dottedname = buildPythonPackage rec {
-    name = "zope.dottedname-3.4.6";
+    pname = "zope.dottedname";
+    version = "3.4.6";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/z/zope.dottedname/${name}.tar.gz";
@@ -20822,7 +22415,9 @@ EOF
 
 
   zope_event = buildPythonPackage rec {
-    name = "zope.event-${version}";
+    pname = "zope.event";
+    name = pname + "-" + version;
+
     version = "4.0.3";
 
     src = pkgs.fetchurl {
@@ -20840,7 +22435,9 @@ EOF
 
 
   zope_exceptions = buildPythonPackage rec {
-     name = "zope.exceptions-${version}";
+     pname = "zope.exceptions";
+    name = pname + "-" + version;
+
      version = "4.0.8";
 
      src = pkgs.fetchurl {
@@ -20863,7 +22460,9 @@ EOF
 
 
   zope_filerepresentation = buildPythonPackage rec {
-    name = "zope.filerepresentation-3.6.1";
+    pname = "zope.filerepresentation";
+    version = "3.6.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/z/zope.filerepresentation/${name}.tar.gz";
@@ -20879,7 +22478,9 @@ EOF
 
 
   zope_i18n = buildPythonPackage rec {
-    name = "zope.i18n-3.8.0";
+    pname = "zope.i18n";
+    version = "3.8.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/z/zope.i18n/${name}.tar.gz";
@@ -20895,7 +22496,9 @@ EOF
 
 
   zope_i18nmessageid = buildPythonPackage rec {
-    name = "zope.i18nmessageid-4.0.3";
+    pname = "zope.i18nmessageid";
+    version = "4.0.3";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/z/zope.i18nmessageid/zope.i18nmessageid-4.0.3.tar.gz";
@@ -20909,7 +22512,9 @@ EOF
 
 
   zope_lifecycleevent = buildPythonPackage rec {
-    name = "zope.lifecycleevent-3.7.0";
+    pname = "zope.lifecycleevent";
+    version = "3.7.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/z/zope.lifecycleevent/${name}.tar.gz";
@@ -20925,7 +22530,9 @@ EOF
 
 
   zope_location = buildPythonPackage rec {
-    name = "zope.location-4.0.3";
+    pname = "zope.location";
+    version = "4.0.3";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/z/zope.location/zope.location-4.0.3.tar.gz";
@@ -20948,7 +22555,9 @@ EOF
 
 
   zope_proxy = buildPythonPackage rec {
-    name = "zope.proxy-4.1.6";
+    pname = "zope.proxy";
+    version = "4.1.6";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/z/zope.proxy/${name}.tar.gz";
@@ -20967,7 +22576,9 @@ EOF
 
 
   zope_schema = buildPythonPackage rec {
-    name = "zope.schema-4.4.2";
+    pname = "zope.schema";
+    version = "4.4.2";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/z/zope.schema/${name}.tar.gz";
@@ -20988,7 +22599,9 @@ EOF
 
 
   zope_size = buildPythonPackage rec {
-    name = "zope.size-3.5.0";
+    pname = "zope.size";
+    version = "3.5.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/z/zope.size/${name}.tar.gz";
@@ -21004,7 +22617,9 @@ EOF
 
 
   zope_testing = buildPythonPackage rec {
-    name = "zope.testing-${version}";
+    pname = "zope.testing";
+    name = pname + "-" + version;
+
     version = "4.6.1";
 
     src = pkgs.fetchurl {
@@ -21032,7 +22647,9 @@ EOF
 
 
   hgsvn = buildPythonPackage rec {
-    name = "hgsvn-0.3.11";
+    pname = "hgsvn";
+    version = "0.3.11";
+    name = pname + "-" + version;
     src = pkgs.fetchurl rec {
       url = "mirror://pypi/h/hgsvn/${name}-hotfix.zip";
       sha256 = "0yvhwdh8xx8rvaqd3pnnyb99hfa0zjdciadlc933p27hp9rf880p";
@@ -21049,7 +22666,9 @@ EOF
   };
 
   cliapp = buildPythonPackage rec {
-    name = "cliapp-${version}";
+    pname = "cliapp";
+    name = pname + "-" + version;
+
     version = "1.20150305";
     disabled = isPy3k;
 
@@ -21072,7 +22691,9 @@ EOF
   };
 
   cmdtest = buildPythonPackage rec {
-    name = "cmdtest-${version}";
+    pname = "cmdtest";
+    name = pname + "-" + version;
+
     version = "0.18";
     disabled = isPy3k || isPyPy;
 
@@ -21095,7 +22716,9 @@ EOF
   tornado = callPackage ../development/python-modules/tornado { };
 
   tokenlib = buildPythonPackage rec {
-    name = "tokenlib-${version}";
+    pname = "tokenlib";
+    name = pname + "-" + version;
+
     version = "0.3.1";
     src = pkgs.fetchgit {
       url = https://github.com/mozilla-services/tokenlib.git;
@@ -21107,7 +22730,9 @@ EOF
   };
 
   tunigo = buildPythonPackage rec {
-    name = "tunigo-${version}";
+    pname = "tunigo";
+    name = pname + "-" + version;
+
     version = "1.0.0";
     propagatedBuildInputs = with self; [ requests ];
 
@@ -21129,7 +22754,9 @@ EOF
 
   screenkey = buildPythonPackage rec {
     version = "0.2-b3634a2c6eb6d6936c3b2c1ef5078bf3a84c40c6";
-    name = "screenkey-${version}";
+    pname = "screenkey";
+    name = pname + "-" + version;
+
 
     propagatedBuildInputs = with self; [ pygtk distutils_extra xlib pkgs.xorg.xmodmap ];
 
@@ -21161,7 +22788,9 @@ EOF
 
   tarman = buildPythonPackage rec {
     version = "0.1.3";
-    name = "tarman-${version}";
+    pname = "tarman";
+    name = pname + "-" + version;
+
 
     disabled = isPy3k;
 
@@ -21181,7 +22810,9 @@ EOF
   libarchive = self.python-libarchive; # The latter is the name upstream uses
   python-libarchive = buildPythonPackage rec {
     version = "3.1.2-1";
-    name = "libarchive-${version}";
+    pname = "libarchive";
+    name = pname + "-" + version;
+
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -21194,7 +22825,9 @@ EOF
   };
 
   libarchive-c = buildPythonPackage rec {
-    name = "libarchive-c-${version}";
+    pname = "libarchive-c";
+    name = pname + "-" + version;
+
     version = "2.7";
 
     src = pkgs.fetchurl {
@@ -21222,7 +22855,9 @@ EOF
   libarcus = callPackage ../development/python-modules/libarcus { };
 
   pybrowserid = buildPythonPackage rec {
-    name = "PyBrowserID-${version}";
+    pname = "PyBrowserID";
+    name = pname + "-" + version;
+
     version = "0.9.2";
     disabled = isPy3k; # Errors in the test suite.
 
@@ -21245,7 +22880,10 @@ EOF
   };
 
   pyzmq = buildPythonPackage rec {
-    name = "pyzmq-16.0.2";
+    pname = "pyzmq";
+    version = "16.0.2";
+    name = pname + "-" + version;
+
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyzmq/${name}.tar.gz";
       sha256 = "0322543fff5ab6f87d11a8a099c4c07dd8a1719040084b6ce9162bcdf5c45c9d";
@@ -21261,7 +22899,9 @@ EOF
   };
 
   tokenserver = buildPythonPackage rec {
-    name = "tokenserver-${version}";
+    pname = "tokenserver";
+    name = pname + "-" + version;
+
     version = "1.2.11";
 
     src = pkgs.fetchgit {
@@ -21282,7 +22922,9 @@ EOF
   testfixtures = callPackage ../development/python-modules/testfixtures {};
 
   tissue = buildPythonPackage rec {
-    name = "tissue-0.9.2";
+    pname = "tissue";
+    version = "0.9.2";
+    name = pname + "-" + version;
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/tissue/${name}.tar.gz";
       sha256 = "7e34726c3ec8fae358a7faf62de172db15716f5582e5192a109e33348bd76c2e";
@@ -21300,7 +22942,9 @@ EOF
   titlecase = callPackage ../development/python-modules/titlecase { };
 
   tracing = buildPythonPackage rec {
-    name = "tracing-${version}";
+    pname = "tracing";
+    name = pname + "-" + version;
+
     version = "0.8";
 
     src = pkgs.fetchurl rec {
@@ -21321,7 +22965,9 @@ EOF
   };
 
   translationstring = buildPythonPackage rec {
-    name = "translationstring-1.3";
+    pname = "translationstring";
+    version = "1.3";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/translationstring/${name}.tar.gz";
@@ -21336,7 +22982,9 @@ EOF
 
 
   ttystatus = buildPythonPackage rec {
-    name = "ttystatus-${version}";
+    pname = "ttystatus";
+    name = pname + "-" + version;
+
     version = "0.23";
     disabled = isPy3k;
 
@@ -21358,7 +23006,9 @@ EOF
   };
 
   larch = buildPythonPackage rec {
-    name = "larch-${version}";
+    pname = "larch";
+    name = pname + "-" + version;
+
     version = "1.20131130";
 
     src = pkgs.fetchurl rec {
@@ -21381,7 +23031,9 @@ EOF
 
 
   websocket_client = buildPythonPackage rec {
-    name = "websocket_client-0.40.0";
+    pname = "websocket_client";
+    version = "0.40.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/w/websocket-client/${name}.tar.gz";
@@ -21399,7 +23051,9 @@ EOF
 
 
   webhelpers = buildPythonPackage rec {
-    name = "WebHelpers-1.3";
+    pname = "WebHelpers";
+    version = "1.3";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/W/WebHelpers/${name}.tar.gz";
@@ -21419,7 +23073,9 @@ EOF
 
 
   whichcraft = buildPythonPackage rec {
-    name = "whichcraft-${version}";
+    pname = "whichcraft";
+    name = pname + "-" + version;
+
     version = "0.1.1";
 
     src = pkgs.fetchurl {
@@ -21438,7 +23094,9 @@ EOF
 
 
   whisper = buildPythonPackage rec {
-    name = "whisper-${version}";
+    pname = "whisper";
+    name = pname + "-" + version;
+
     version = graphiteVersion;
 
     src = pkgs.fetchurl {
@@ -21457,7 +23115,9 @@ EOF
   };
 
   worldengine = buildPythonPackage rec {
-    name = "worldengine-${version}";
+    pname = "worldengine";
+    name = pname + "-" + version;
+
     version = "0.19.0";
 
     src = pkgs.fetchFromGitHub {
@@ -21505,7 +23165,9 @@ EOF
   };
 
   carbon = buildPythonPackage rec {
-    name = "carbon-${version}";
+    pname = "carbon";
+    name = pname + "-" + version;
+
     version = graphiteVersion;
 
     src = pkgs.fetchurl {
@@ -21524,7 +23186,9 @@ EOF
 
 
   ujson = buildPythonPackage rec {
-    name = "ujson-1.35";
+    pname = "ujson";
+    version = "1.35";
+    name = pname + "-" + version;
 
     disabled = isPyPy;
 
@@ -21546,7 +23210,9 @@ EOF
   pyusb = callPackage ../development/python-modules/pyusb {};
 
   BlinkStick = buildPythonPackage rec {
-    name = "BlinkStick-${version}";
+    pname = "BlinkStick";
+    name = pname + "-" + version;
+
     version = "1.1.8";
 
     src = pkgs.fetchurl {
@@ -21626,7 +23292,9 @@ EOF
   };
 
   txamqp = buildPythonPackage rec {
-    name = "txamqp-${version}";
+    pname = "txamqp";
+    name = pname + "-" + version;
+
     version = "0.3";
 
     src = pkgs.fetchurl rec {
@@ -21644,7 +23312,9 @@ EOF
   };
 
   versiontools = buildPythonPackage rec {
-    name = "versiontools-1.9.1";
+    pname = "versiontools";
+    version = "1.9.1";
+    name = pname + "-" + version;
     doCheck = (!isPy3k);
 
     src = pkgs.fetchurl {
@@ -21655,7 +23325,9 @@ EOF
   };
 
   veryprettytable = buildPythonPackage rec {
-    name = "veryprettytable-${version}";
+    pname = "veryprettytable";
+    name = pname + "-" + version;
+
     version = "0.8.1";
 
     src = pkgs.fetchurl {
@@ -21677,7 +23349,8 @@ EOF
        || self.django_tagging != self.django_tagging_0_4_3
   then throw "graphite_web should be build with django_1_8 and django_tagging_0_4_3"
   else buildPythonPackage rec {
-    name = "graphite-web-${version}";
+    pname = "graphite-web";
+    name = pname + "-" + version;
     disabled = isPy3k;
     version = graphiteVersion;
 
@@ -21724,7 +23397,9 @@ EOF
   };
 
   graphite_api = buildPythonPackage rec {
-    name = "graphite-api-1.0.1";
+    pname = "graphite-api";
+    version = "1.0.1";
+    name = pname + "-" + version;
     disabled = isPyPy;
 
     src = pkgs.fetchgit {
@@ -21763,7 +23438,9 @@ EOF
   };
 
   graphite_beacon = buildPythonPackage rec {
-    name = "graphite_beacon-0.27.0";
+    pname = "graphite_beacon";
+    version = "0.27.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/graphite_beacon/${name}.tar.gz";
@@ -21783,7 +23460,9 @@ EOF
   };
 
   graphite_influxdb = buildPythonPackage rec {
-    name = "graphite-influxdb-0.3";
+    pname = "graphite-influxdb";
+    version = "0.3";
+    name = pname + "-" + version;
 
     src = pkgs.fetchgit {
       url = "https://github.com/vimeo/graphite-influxdb.git";
@@ -21803,7 +23482,9 @@ EOF
   };
 
   graphite_pager = buildPythonPackage rec {
-    name = "graphite-pager-${version}";
+    pname = "graphite-pager";
+    name = pname + "-" + version;
+
     version = "2bbfe91220ec1e0ca1cdf4b5564386482a44ed7d";
 
     src = pkgs.fetchgit {
@@ -21831,7 +23512,9 @@ EOF
 
 
   pyspotify = buildPythonPackage rec {
-    name = "pyspotify-${version}";
+    pname = "pyspotify";
+    name = pname + "-" + version;
+
 
     version = "2.0.5";
 
@@ -21869,7 +23552,9 @@ EOF
   };
 
   pykka = buildPythonPackage rec {
-    name = "pykka-${version}";
+    pname = "pykka";
+    name = pname + "-" + version;
+
 
     version = "1.2.0";
 
@@ -21892,7 +23577,9 @@ EOF
   ws4py = callPackage ../development/python-modules/ws4py {};
 
   gdata = buildPythonPackage rec {
-    name = "gdata-${version}";
+    pname = "gdata";
+    name = pname + "-" + version;
+
     version = "2.0.18";
 
     src = pkgs.fetchurl {
@@ -21911,7 +23598,9 @@ EOF
   };
 
   IMAPClient = buildPythonPackage rec {
-    name = "IMAPClient-${version}";
+    pname = "IMAPClient";
+    name = pname + "-" + version;
+
     version = "0.13";
     disabled = isPy34 || isPy35;
 
@@ -21935,7 +23624,9 @@ EOF
   };
 
   Logbook = buildPythonPackage rec {
-    name = "Logbook-${version}";
+    pname = "Logbook";
+    name = pname + "-" + version;
+
     version = "1.0.0";
 
     src = pkgs.fetchurl {
@@ -21959,8 +23650,11 @@ EOF
 
   libvirt = let
     version = "3.8.0";
-  in assert version == pkgs.libvirt.version; pkgs.stdenv.mkDerivation rec {
-    name = "libvirt-python-${version}";
+    pname = "libvirt-python";
+    name = pname + "-" + version;
+
+  in assert version == pkgs.libvirt.version; pkgs.stdenv.mkDerivation {
+    inherit name pname version;
 
     src = pkgs.fetchurl {
       url = "http://libvirt.org/sources/python/${name}.tar.gz";
@@ -21983,7 +23677,9 @@ EOF
   };
 
   rpdb = buildPythonPackage rec {
-    name = "rpdb-0.1.5";
+    pname = "rpdb";
+    version = "0.1.5";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/rpdb/${name}.tar.gz";
@@ -22024,7 +23720,9 @@ EOF
   first = callPackage ../development/python-modules/first {};
 
   flaskbabel = buildPythonPackage rec {
-    name = "Flask-Babel-0.11.1";
+    pname = "Flask-Babel";
+    version = "0.11.1";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/F/Flask-Babel/${name}.tar.gz";
@@ -22042,7 +23740,9 @@ EOF
   };
 
   speaklater = buildPythonPackage rec {
-    name = "speaklater-1.3";
+    pname = "speaklater";
+    version = "1.3";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/speaklater/${name}.tar.gz";
@@ -22058,7 +23758,9 @@ EOF
   };
 
   pushbullet = buildPythonPackage rec {
-    name = "pushbullet.py-${version}";
+    pname = "pushbullet.py";
+    name = pname + "-" + version;
+
     version = "0.10.0";
 
     src = pkgs.fetchurl {
@@ -22070,7 +23772,9 @@ EOF
   };
 
   power = buildPythonPackage rec {
-    name = "power-1.4";
+    pname = "power";
+    version = "1.4";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/power/${name}.tar.gz";
@@ -22092,7 +23796,9 @@ EOF
 
   # Should be bumped along with EFL!
   pythonefl = buildPythonPackage rec {
-    name = "python-efl-${version}";
+    pname = "python-efl";
+    name = pname + "-" + version;
+
     version = "1.20.0";
     src = pkgs.fetchurl {
       url = "http://download.enlightenment.org/rel/bindings/python/${name}.tar.xz";
@@ -22121,7 +23827,9 @@ EOF
   };
 
   tlsh = buildPythonPackage rec {
-    name = "tlsh-3.4.5";
+    pname = "tlsh";
+    version = "3.4.5";
+    name = pname + "-" + version;
     src = pkgs.fetchFromGitHub {
       owner = "trendmicro";
       repo = "tlsh";
@@ -22146,7 +23854,9 @@ EOF
   };
 
   toposort = buildPythonPackage rec {
-    name = "toposort-${version}";
+    pname = "toposort";
+    name = pname + "-" + version;
+
     version = "1.1";
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/toposort/toposort-1.1.tar.gz";
@@ -22162,7 +23872,9 @@ EOF
   };
 
   snapperGUI = buildPythonPackage rec {
-    name = "Snapper-GUI";
+    pname = "Snapper-GUI";
+    version = "unstable-11d9858";
+    name = pname + "-" + version;
 
     src = pkgs.fetchgit {
       url = "https://github.com/ricardomv/snapper-gui";
@@ -22188,7 +23900,9 @@ EOF
   uncertainties = callPackage ../development/python-modules/uncertainties { };
 
   funcy = buildPythonPackage rec {
-    name = "funcy-1.6";
+    pname = "funcy";
+    version = "1.6";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
         url = "mirror://pypi/f/funcy/${name}.tar.gz";
@@ -22206,8 +23920,10 @@ EOF
     };
   };
 
-  svg2tikz = self.buildPythonPackage {
-    name = "svg2tikz-1.0.0";
+  svg2tikz = self.buildPythonPackage rec {
+    pname = "svg2tikz";
+    version = "1.0.0";
+    name = pname + "-" + version;
     disabled = ! isPy27;
 
     propagatedBuildInputs = with self; [lxml];
@@ -22227,7 +23943,9 @@ EOF
   };
 
   syncserver = buildPythonPackage rec {
-    name = "syncserver-${version}";
+    pname = "syncserver";
+    name = pname + "-" + version;
+
     version = "1.5.2";
     disabled = ! isPy27;
 
@@ -22250,7 +23968,9 @@ EOF
   };
 
   serversyncstorage = buildPythonPackage rec {
-    name = "serversyncstorage-${version}";
+    pname = "serversyncstorage";
+    name = pname + "-" + version;
+
     version = "1.5.13";
     disabled = !isPy27;
 
@@ -22270,7 +23990,9 @@ EOF
   };
 
   WSGIProxy = buildPythonPackage rec {
-    name = "WSGIProxy-${version}";
+    pname = "WSGIProxy";
+    name = pname + "-" + version;
+
     version = "0.2.2";
 
     src = pkgs.fetchurl {
@@ -22291,7 +24013,9 @@ EOF
   };
 
   blist = buildPythonPackage rec {
-    name = "blist-${version}";
+    pname = "blist";
+    name = pname + "-" + version;
+
     version = "1.3.6";
     disabled = isPyPy;
 
@@ -22302,7 +24026,9 @@ EOF
   };
 
   canonicaljson = buildPythonPackage rec {
-    name = "canonicaljson-${version}";
+    pname = "canonicaljson";
+    name = pname + "-" + version;
+
     version = "1.0.0";
 
     src = pkgs.fetchgit {
@@ -22317,7 +24043,9 @@ EOF
   };
 
   daemonize = buildPythonPackage rec {
-    name = "daemonize-${version}";
+    pname = "daemonize";
+    name = pname + "-" + version;
+
     version = "2.4.2";
 
     src = pkgs.fetchurl {
@@ -22327,7 +24055,9 @@ EOF
   };
 
   pydenticon = buildPythonPackage rec {
-    name = "pydenticon-${version}";
+    pname = "pydenticon";
+    name = pname + "-" + version;
+
     version = "0.2";
 
     src = pkgs.fetchurl {
@@ -22340,7 +24070,9 @@ EOF
   };
 
   pynac = buildPythonPackage rec {
-    name = "pynac-${version}";
+    pname = "pynac";
+    name = pname + "-" + version;
+
     version = "0.2";
 
     src = pkgs.fetchurl {
@@ -22352,7 +24084,9 @@ EOF
   };
 
   pymacaroons-pynacl = buildPythonPackage rec {
-    name = "pymacaroons-pynacl-${version}";
+    pname = "pymacaroons-pynacl";
+    name = pname + "-" + version;
+
     version = "0.9.3";
 
     src = pkgs.fetchgit {
@@ -22365,7 +24099,9 @@ EOF
   };
 
   pynacl = buildPythonPackage rec {
-    name = "pynacl-${version}";
+    pname = "pynacl";
+    name = pname + "-" + version;
+
     version = "0.3.0";
 
     src = pkgs.fetchurl {
@@ -22385,7 +24121,9 @@ EOF
   service-identity = callPackage ../development/python-modules/service_identity { };
 
   signedjson = buildPythonPackage rec {
-    name = "signedjson-${version}";
+    pname = "signedjson";
+    name = pname + "-" + version;
+
     version = "1.0.0";
 
     src = pkgs.fetchgit {
@@ -22400,7 +24138,9 @@ EOF
   };
 
   unpaddedbase64 = buildPythonPackage rec {
-    name = "unpaddedbase64-${version}";
+    pname = "unpaddedbase64";
+    name = pname + "-" + version;
+
     version = "1.1.0";
 
     src = pkgs.fetchgit {
@@ -22412,7 +24152,9 @@ EOF
 
 
   thumbor = buildPythonPackage rec {
-    name = "thumbor-${version}";
+    pname = "thumbor";
+    name = pname + "-" + version;
+
     version = "6.3.2";
 
     disabled = ! isPy27;
@@ -22458,7 +24200,9 @@ EOF
   };
 
   thumborPexif = self.buildPythonPackage rec {
-    name = "thumbor-pexif-0.14";
+    pname = "thumbor-pexif";
+    version = "0.14";
+    name = pname + "-" + version;
     disabled = ! isPy27;
 
     src = pkgs.fetchurl {
@@ -22475,12 +24219,12 @@ EOF
 
   pync = buildPythonPackage rec {
     version  = "1.4";
-    baseName = "pync";
-    name     = "${baseName}-${version}";
+    pname = "pync";
+    name     = pname + "-" + version;
     disabled = ! isPy27;
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/p/${baseName}/${name}.tar.gz";
+      url = "mirror://pypi/p/${pname}/${name}.tar.gz";
       sha256 = "0lc1x0pai85avm1r452xnvxc12wijnhz87xv20yp3is9fs6rnkrh";
     };
 
@@ -22502,7 +24246,9 @@ EOF
   };
 
   weboob = buildPythonPackage rec {
-    name = "weboob-1.1";
+    pname = "weboob";
+    version = "1.1";
+    name = pname + "-" + version;
     disabled = ! isPy27;
 
     src = pkgs.fetchurl {
@@ -22523,7 +24269,9 @@ EOF
   };
 
   datadiff = buildPythonPackage rec {
-    name = "datadiff-1.1.6";
+    pname = "datadiff";
+    version = "1.1.6";
+    name = pname + "-" + version;
     disabled = ! isPy27;
 
     src = pkgs.fetchurl {
@@ -22541,7 +24289,9 @@ EOF
   };
 
   termcolor = buildPythonPackage rec {
-    name = "termcolor-1.1.0";
+    pname = "termcolor";
+    version = "1.1.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/termcolor/termcolor-1.1.0.tar.gz";
@@ -22556,7 +24306,9 @@ EOF
   };
 
   html2text = buildPythonPackage rec {
-    name = "html2text-2016.9.19";
+    pname = "html2text";
+    version = "2016.9.19";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/h/html2text/${name}.tar.gz";
@@ -22571,7 +24323,9 @@ EOF
   };
 
   pychart = buildPythonPackage rec {
-    name = "pychart-1.39";
+    pname = "pychart";
+    version = "1.39";
+    name = pname + "-" + version;
     disabled = ! isPy27;
 
     src = pkgs.fetchurl {
@@ -22588,7 +24342,9 @@ EOF
 
   parsimonious = buildPythonPackage rec {
     version = "0.7.0";
-    name = "parsimonious-${version}";
+    pname = "parsimonious";
+    name = pname + "-" + version;
+
     src = pkgs.fetchFromGitHub {
       repo = "parsimonious";
       owner = "erikrose";
@@ -22607,7 +24363,9 @@ EOF
 
   networkx = buildPythonPackage rec {
     version = "1.11";
-    name = "networkx-${version}";
+    pname = "networkx";
+    name = pname + "-" + version;
+
 
     # Currently broken on PyPy.
     # https://github.com/networkx/networkx/pull/1361
@@ -22634,7 +24392,9 @@ EOF
   ofxclient = callPackage ../development/python-modules/ofxclient {};
 
   ofxhome = buildPythonPackage rec {
-    name = "ofxhome-0.3.1";
+    pname = "ofxhome";
+    version = "0.3.1";
+    name = pname + "-" + version;
     src = pkgs.fetchurl {
       url = "mirror://pypi/o/ofxhome/${name}.tar.gz";
       sha256 = "0000db437fd1a8c7c65cea5d88ce9d3b54642a1f4844dde04f860e29330ac68d";
@@ -22653,7 +24413,9 @@ EOF
   };
 
   ofxparse = buildPythonPackage rec {
-    name = "ofxparse-0.14";
+    pname = "ofxparse";
+    version = "0.14";
+    name = pname + "-" + version;
     src = pkgs.fetchurl {
       url = "mirror://pypi/o/ofxparse/${name}.tar.gz";
       sha256 = "d8c486126a94d912442d040121db44fbc4a646ea70fa935df33b5b4dbfbbe42a";
@@ -22669,7 +24431,9 @@ EOF
   };
 
   ofxtools = buildPythonPackage rec {
-    name = "ofxtools-0.3.8";
+    pname = "ofxtools";
+    version = "0.3.8";
+    name = pname + "-" + version;
     src = pkgs.fetchurl {
       url = "mirror://pypi/o/ofxtools/${name}.tar.gz";
       sha256 = "88f289a60f4312a1599c38a8fb3216e2b46d10cc34476f9a16a33ac8aac7ec35";
@@ -22690,7 +24454,9 @@ EOF
   };
 
   basemap = buildPythonPackage rec {
-    name = "basemap-1.0.7";
+    pname = "basemap";
+    version = "1.0.7";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://sourceforge/project/matplotlib/matplotlib-toolkits/basemap-1.0.7/basemap-1.0.7.tar.gz";
@@ -22722,7 +24488,9 @@ EOF
   };
 
   dicttoxml = buildPythonPackage rec {
-    name = "dicttoxml-1.6.4";
+    pname = "dicttoxml";
+    version = "1.6.4";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/dicttoxml/dicttoxml-1.6.4.tar.gz";
@@ -22740,7 +24508,9 @@ EOF
   markdown2 = callPackage ../development/python-modules/markdown2 { };
 
   evernote = buildPythonPackage rec {
-    name = "evernote-${version}";
+    pname = "evernote";
+    name = pname + "-" + version;
+
     version = "1.25.0";
     disabled = ! isPy27; #some dependencies do not work with py3
 
@@ -22760,7 +24530,9 @@ EOF
   };
 
   setproctitle = buildPythonPackage rec {
-    name = "python-setproctitle-${version}";
+    pname = "python-setproctitle";
+    name = pname + "-" + version;
+
     version = "1.1.9";
 
     src = pkgs.fetchurl {
@@ -22777,7 +24549,9 @@ EOF
   };
 
   thrift = buildPythonPackage rec {
-    name = "thrift-${version}";
+    pname = "thrift";
+    name = pname + "-" + version;
+
     version = "0.9.3";
 
     src = pkgs.fetchurl {
@@ -22799,7 +24573,9 @@ EOF
 
   geeknote = buildPythonPackage rec {
     version = "2015-05-11";
-    name = "geeknote-${version}";
+    pname = "geeknote";
+    name = pname + "-" + version;
+
     disabled = ! isPy27;
 
     src = pkgs.fetchFromGitHub {
@@ -22835,7 +24611,8 @@ EOF
 
   neovim = buildPythonPackage rec {
     version = "0.2.0";
-    name = "neovim-${version}";
+    pname = "neovim";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/neovim/${name}.tar.gz";
@@ -22865,7 +24642,8 @@ EOF
   };
 
   neovim_gui = buildPythonPackage rec {
-    name = "neovim-pygui-${self.neovim.version}";
+    pname = "neovim-pygui";
+    name = pname + "-" + self.neovim.version;
     version = "0.1.3";
     disabled = !isPy27;
 
@@ -22898,7 +24676,9 @@ EOF
 
   ghp-import = buildPythonPackage rec {
     version = "0.4.1";
-    name = "ghp-import-${version}";
+    pname = "ghp-import";
+    name = pname + "-" + version;
+
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/ghp-import/${name}.tar.gz";
       sha256 = "6058810e1c46dd3b5b1eee87e203bdfbd566e10cfc77566edda7aa4dbf6a3053";
@@ -22920,7 +24700,9 @@ EOF
   };
 
   typogrify = buildPythonPackage rec {
-    name = "typogrify-2.0.7";
+    pname = "typogrify";
+    version = "2.0.7";
+    name = pname + "-" + version;
     src = pkgs.fetchurl {
       url = "mirror://pypi/t/typogrify/${name}.tar.gz";
       sha256 = "8be4668cda434163ce229d87ca273a11922cb1614cb359970b7dc96eed13cb38";
@@ -22939,7 +24721,9 @@ EOF
 
   smartypants = buildPythonPackage rec {
     version = "1.8.6";
-    name = "smartypants-${version}";
+    pname = "smartypants";
+    name = pname + "-" + version;
+
     src = pkgs.fetchhg {
       url = "https://bitbucket.org/livibetter/smartypants.py";
       rev = "v${version}";
@@ -22957,7 +24741,9 @@ EOF
 
   pypeg2 = buildPythonPackage rec {
     version = "2.15.2";
-    name = "pypeg2-${version}";
+    pname = "pypeg2";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/pyPEG2/pyPEG2-${version}.tar.gz";
@@ -22977,7 +24763,9 @@ EOF
   torchvision = callPackage ../development/python-modules/torchvision { };
 
   jenkinsapi = buildPythonPackage rec {
-    name = "jenkinsapi-${version}";
+    pname = "jenkinsapi";
+    name = pname + "-" + version;
+
     version = "0.2.32";
 
     src = pkgs.fetchurl {
@@ -22998,7 +24786,9 @@ EOF
   };
 
   jenkins-job-builder = buildPythonPackage rec {
-    name = "jenkins-job-builder-2.0.0.0b2";
+    pname = "jenkins-job-builder";
+    version = "2.0.0.0b2";
+    name = pname + "-" + version;
     disabled = ! (isPy26 || isPy27);
 
     src = pkgs.fetchurl {
@@ -23036,7 +24826,9 @@ EOF
   };
 
   dot2tex = buildPythonPackage rec {
-    name = "dot2tex-2.9.0";
+    pname = "dot2tex";
+    version = "2.9.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/d/dot2tex/dot2tex-2.9.0.tar.gz";
@@ -23058,7 +24850,9 @@ EOF
   };
 
   poezio = buildPythonApplication rec {
-    name = "poezio-${version}";
+    pname = "poezio";
+    name = pname + "-" + version;
+
     version = "0.11";
 
     disabled = pythonOlder "3.4";
@@ -23089,7 +24883,9 @@ EOF
 
   potr = buildPythonPackage rec {
     version = "1.0.1";
-    name = "potr-${version}";
+    pname = "potr";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/python-potr/python-${name}.zip";
@@ -23107,7 +24903,9 @@ EOF
   };
 
   pluggy = buildPythonPackage rec {
-    name = "pluggy-${version}";
+    pname = "pluggy";
+    name = pname + "-" + version;
+
     version = "0.3.1";
 
     src = pkgs.fetchurl {
@@ -23125,7 +24923,9 @@ EOF
 
   xcffib = buildPythonPackage rec {
     version = "0.3.2";
-    name = "xcffib-${version}";
+    pname = "xcffib";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/x/xcffib/${name}.tar.gz";
@@ -23150,7 +24950,9 @@ EOF
   pafy = callPackage ../development/python-modules/pafy { };
 
   suds = buildPythonPackage rec {
-    name = "suds-0.4";
+    pname = "suds";
+    version = "0.4";
+    name = pname + "-" + version;
     disabled = isPy3k;
 
     src = pkgs.fetchurl {
@@ -23172,7 +24974,9 @@ EOF
   };
 
   suds-jurko = buildPythonPackage rec {
-    name = "suds-jurko-${version}";
+    pname = "suds-jurko";
+    name = pname + "-" + version;
+
     version = "0.6";
     disabled = isPyPy;  # lots of failures
 
@@ -23196,7 +25000,9 @@ EOF
   };
 
   mailcap-fix = buildPythonPackage rec {
-    name = "mailcap-fix-${version}";
+    pname = "mailcap-fix";
+    name = pname + "-" + version;
+
     version = "1.0.1";
 
     disabled = isPy36; # this fix is merged into python 3.6
@@ -23214,7 +25020,9 @@ EOF
   };
 
   maildir-deduplicate = buildPythonPackage rec {
-    name = "maildir-deduplicate-${version}";
+    pname = "maildir-deduplicate";
+    name = pname + "-" + version;
+
     version = "1.0.2";
 
     disabled = !isPy27;
@@ -23235,7 +25043,9 @@ EOF
 
 
   mps-youtube = buildPythonPackage rec {
-    name = "mps-youtube-${version}";
+    pname = "mps-youtube";
+    name = pname + "-" + version;
+
     version = "0.2.7.1";
 
     disabled = (!isPy3k);
@@ -23268,7 +25078,9 @@ EOF
   };
 
   d2to1 = buildPythonPackage rec {
-    name = "d2to1-${version}";
+    pname = "d2to1";
+    name = pname + "-" + version;
+
     version = "0.2.11";
 
     buildInputs = with self; [ nose ];
@@ -23286,7 +25098,9 @@ EOF
   };
 
   ovh = buildPythonPackage rec {
-    name = "ovh-${version}";
+    pname = "ovh";
+    name = pname + "-" + version;
+
     version = "0.4.5";
     doCheck = false; #test needs packages too explicit
     buildInputs = with self; [ d2to1 ];
@@ -23306,7 +25120,9 @@ EOF
   };
 
   willow = buildPythonPackage rec {
-    name = "willow-${version}";
+    pname = "willow";
+    name = pname + "-" + version;
+
     version = "0.2.2";
     disabled = pythonOlder "2.7";
 
@@ -23330,13 +25146,13 @@ EOF
   };
 
   importmagic = buildPythonPackage rec {
-    simpleName = "importmagic";
-    name = "${simpleName}-${version}";
+    pname = "importmagic";
+    name = "${pname}-${version}";
     version = "0.1.3";
     doCheck = false;  # missing json file from tarball
 
     src = pkgs.fetchurl {
-      url = "mirror://pypi/i/${simpleName}/${name}.tar.gz";
+      url = "mirror://pypi/i/${pname}/${name}.tar.gz";
       sha256 = "194bl8l8sc2ibwi6g5kz6xydkbngdqpaj6r2gcsaw1fc73iswwrj";
     };
 
@@ -23350,7 +25166,9 @@ EOF
   };
 
   xgboost = buildPythonPackage rec {
-    name = "xgboost-${version}";
+    pname = "xgboost";
+    name = pname + "-" + version;
+
 
     inherit (pkgs.xgboost) version src meta;
 
@@ -23374,7 +25192,9 @@ EOF
   };
 
   xkcdpass = buildPythonPackage rec {
-    name = "xkcdpass-${version}";
+    pname = "xkcdpass";
+    name = pname + "-" + version;
+
     version = "1.4.2";
     src = pkgs.fetchurl {
       url = "mirror://pypi/x/xkcdpass/xkcdpass-1.4.2.tar.gz";
@@ -23394,7 +25214,9 @@ EOF
   };
 
   xstatic = buildPythonPackage rec {
-    name = "XStatic-${version}";
+    pname = "XStatic";
+    name = pname + "-" + version;
+
     version = "1.0.1";
     src = pkgs.fetchurl {
       url = "mirror://pypi/X/XStatic/XStatic-${version}.tar.gz";
@@ -23409,7 +25231,9 @@ EOF
   };
 
   xlsx2csv = buildPythonPackage rec {
-    name = "xlsx2csv-${version}";
+    pname = "xlsx2csv";
+    name = pname + "-" + version;
+
     version = "0.7.2";
     src = pkgs.fetchurl {
       url = "mirror://pypi/x/xlsx2csv/${name}.tar.gz";
@@ -23426,7 +25250,9 @@ EOF
   xmpppy = callPackage ../development/python-modules/xmpppy {};
 
   xstatic-bootbox = buildPythonPackage rec {
-    name = "XStatic-Bootbox-${version}";
+    pname = "XStatic-Bootbox";
+    name = pname + "-" + version;
+
     version = "4.3.0.1";
     src = pkgs.fetchurl {
       url = "mirror://pypi/X/XStatic-Bootbox/XStatic-Bootbox-${version}.tar.gz";
@@ -23442,7 +25268,9 @@ EOF
   };
 
   xstatic-bootstrap = buildPythonPackage rec {
-    name = "XStatic-Bootstrap-${version}";
+    pname = "XStatic-Bootstrap";
+    name = pname + "-" + version;
+
     version = "3.3.5.1";
     src = pkgs.fetchurl {
       url = "mirror://pypi/X/XStatic-Bootstrap/XStatic-Bootstrap-${version}.tar.gz";
@@ -23458,7 +25286,9 @@ EOF
   };
 
   xstatic-jquery = buildPythonPackage rec {
-    name = "XStatic-jQuery-${version}";
+    pname = "XStatic-jQuery";
+    name = pname + "-" + version;
+
     version = "1.10.2.1";
     src = pkgs.fetchurl {
       url = "mirror://pypi/X/XStatic-jQuery/XStatic-jQuery-${version}.tar.gz";
@@ -23474,7 +25304,9 @@ EOF
   };
 
   xstatic-jquery-file-upload = buildPythonPackage rec {
-    name = "XStatic-jQuery-File-Upload-${version}";
+    pname = "XStatic-jQuery-File-Upload";
+    name = pname + "-" + version;
+
     version = "9.7.0.1";
     propagatedBuildInputs = with self;[ xstatic-jquery ];
     src = pkgs.fetchurl {
@@ -23491,7 +25323,9 @@ EOF
   };
 
   xstatic-jquery-ui = buildPythonPackage rec {
-    name = "XStatic-jquery-ui-${version}";
+    pname = "XStatic-jquery-ui";
+    name = pname + "-" + version;
+
     version = "1.12.0.1";
     propagatedBuildInputs = with self; [ xstatic-jquery ];
     src = pkgs.fetchurl {
@@ -23508,7 +25342,9 @@ EOF
   };
 
   xstatic-pygments = buildPythonPackage rec {
-    name = "XStatic-Pygments-${version}";
+    pname = "XStatic-Pygments";
+    name = pname + "-" + version;
+
     version = "1.6.0.1";
     src = pkgs.fetchurl {
       url = "mirror://pypi/X/XStatic-Pygments/XStatic-Pygments-${version}.tar.gz";
@@ -23568,7 +25404,9 @@ EOF
 
   x11_hash = buildPythonPackage rec{
     version = "1.4";
-    name = "x11_hash-${version}";
+    pname = "x11_hash";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/x/x11_hash/${name}.tar.gz";
@@ -23584,7 +25422,9 @@ EOF
   };
 
   termstyle = buildPythonPackage rec {
-    name = "python-termstyle-${version}";
+    pname = "python-termstyle";
+    name = pname + "-" + version;
+
     version = "0.1.10";
     src = pkgs.fetchurl {
       url = "mirror://pypi/p/python-termstyle/${name}.tar.gz";
@@ -23600,7 +25440,9 @@ EOF
   };
 
   green = buildPythonPackage rec {
-    name = "green-${version}";
+    pname = "green";
+    name = pname + "-" + version;
+
     version = "2.3.0";
     src = pkgs.fetchurl {
       url = "mirror://pypi/g/green/${name}.tar.gz";
@@ -23620,7 +25462,9 @@ EOF
   topydo = throw "python3Packages.topydo was moved to topydo"; # 2017-09-22
 
   w3lib = buildPythonPackage rec {
-    name = "w3lib-${version}";
+    pname = "w3lib";
+    name = pname + "-" + version;
+
     version = "1.17.0";
 
     buildInputs = with self ; [ six pytest ];
@@ -23640,7 +25484,9 @@ EOF
 
   Quandl = buildPythonPackage rec {
     version = "3.0.0";
-    name = "Quandl-${version}";
+    pname = "Quandl";
+    name = pname + "-" + version;
+
 
     src = pkgs.fetchurl {
       url= "mirror://pypi/q/quandl/${name}.tar.gz";
@@ -23668,7 +25514,9 @@ EOF
   };
 
   queuelib = buildPythonPackage rec {
-    name = "queuelib-${version}";
+    pname = "queuelib";
+    name = pname + "-" + version;
+
     version = "1.4.2";
 
     src = pkgs.fetchurl {
@@ -23734,7 +25582,9 @@ EOF
   };
 
   repeated_test = buildPythonPackage rec {
-    name = "repeated_test-${version}";
+    pname = "repeated_test";
+    name = pname + "-" + version;
+
     version = "0.1a3";
 
     src = pkgs.fetchurl {
@@ -23759,7 +25609,9 @@ EOF
   Keras = callPackage ../development/python-modules/keras { };
 
   Lasagne = buildPythonPackage rec {
-    name = "Lasagne-${version}";
+    pname = "Lasagne";
+    name = pname + "-" + version;
+
     version = "0.1";
     disabled = isPy3k;
 
@@ -23785,7 +25637,9 @@ EOF
   };
 
   send2trash = buildPythonPackage (rec {
-    name = "Send2Trash-1.3.0";
+    pname = "Send2Trash";
+    version = "1.3.0";
+    name = pname + "-" + version;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/S/Send2Trash/${name}.tar.gz";
@@ -23803,7 +25657,9 @@ EOF
   });
 
   sigtools = buildPythonPackage rec {
-    name = "sigtools-${version}";
+    pname = "sigtools";
+    name = pname + "-" + version;
+
     version = "1.1a3";
 
     src = pkgs.fetchurl {
@@ -23833,7 +25689,9 @@ EOF
   };
 
   clize = buildPythonPackage rec {
-    name = "clize-${version}";
+    pname = "clize";
+    name = pname + "-" + version;
+
     version = "3.0";
 
     src = pkgs.fetchurl {
@@ -23856,7 +25714,9 @@ EOF
   };
 
   zerobin = buildPythonPackage rec {
-    name = "zerobin-${version}";
+    pname = "zerobin";
+    name = pname + "-" + version;
+
     version = "20160108";
 
     src = pkgs.fetchFromGitHub {
@@ -23901,7 +25761,9 @@ EOF
   };
 
   tflearn = buildPythonPackage rec {
-    name = "tflearn-0.2.1";
+    pname = "tflearn";
+    version = "0.2.1";
+    name = pname + "-" + version;
 
     meta = {
       description = "Deep learning library featuring a higher-level API for TensorFlow";
@@ -23919,7 +25781,9 @@ EOF
 
   simpleai = buildPythonPackage rec {
      version = "0.7.11";
-     name = "simpleai-${version}";
+     pname = "simpleai";
+    name = pname + "-" + version;
+
 
      src = pkgs.fetchurl {
        url= "https://pypi.python.org/packages/source/s/simpleai/${name}.tar.gz";
@@ -23941,7 +25805,9 @@ EOF
   };
 
   word2vec = buildPythonPackage rec {
-    name = "word2vec-${version}";
+    pname = "word2vec";
+    name = pname + "-" + version;
+
     version = "0.9.1";
 
     src = pkgs.fetchurl {
@@ -23965,7 +25831,9 @@ EOF
   };
 
   tvdb_api = buildPythonPackage rec {
-    name = "tvdb_api-${version}";
+    pname = "tvdb_api";
+    name = pname + "-" + version;
+
     version = "1.10";
 
     src = pkgs.fetchurl {
@@ -23984,7 +25852,9 @@ EOF
   };
 
   tvnamer = buildPythonPackage rec {
-    name = "tvnamer-${version}";
+    pname = "tvnamer";
+    name = pname + "-" + version;
+
     version = "2.4";
 
     src = pkgs.fetchurl {
@@ -24007,7 +25877,9 @@ EOF
   };
 
   pybrain = buildPythonPackage rec {
-    name = "pybrain-${version}";
+    pname = "pybrain";
+    name = pname + "-" + version;
+
     version = "0.3.3";
 
     src = pkgs.fetchurl {
@@ -24027,7 +25899,9 @@ EOF
   };
 
   threadpool = buildPythonPackage rec {
-    name = "threadpool-${version}";
+    pname = "threadpool";
+    name = pname + "-" + version;
+
     version = "1.3.2";
 
     src = pkgs.fetchurl {
@@ -24037,7 +25911,9 @@ EOF
   };
 
   rocket-errbot = buildPythonPackage rec {
-    name = "rocket-errbot-${version}";
+    pname = "rocket-errbot";
+    name = pname + "-" + version;
+
     version = "1.2.5";
 
     src = pkgs.fetchurl {
@@ -24047,7 +25923,9 @@ EOF
   };
 
   Yapsy = buildPythonPackage rec {
-    name = "Yapsy-${version}";
+    pname = "Yapsy";
+    name = pname + "-" + version;
+
     version = "1.11.223";
 
     src = pkgs.fetchurl {
@@ -24059,7 +25937,9 @@ EOF
   };
 
   ansi = buildPythonPackage rec {
-    name = "ansi-${version}";
+    pname = "ansi";
+    name = pname + "-" + version;
+
     version = "0.1.3";
 
     src = pkgs.fetchurl {
@@ -24069,7 +25949,9 @@ EOF
   };
 
   pygments-markdown-lexer = buildPythonPackage rec {
-    name = "pygments-markdown-lexer-${version}";
+    pname = "pygments-markdown-lexer";
+    name = pname + "-" + version;
+
     version = "0.1.0.dev39";
 
     src = pkgs.fetchurl {
@@ -24083,7 +25965,9 @@ EOF
   };
 
   telegram = buildPythonPackage rec {
-    name = "telegram-${version}";
+    pname = "telegram";
+    name = pname + "-" + version;
+
     version = "0.0.1";
 
     src = pkgs.fetchurl {
@@ -24093,7 +25977,9 @@ EOF
   };
 
   irc = buildPythonPackage rec {
-    name = "irc-${version}";
+    pname = "irc";
+    name = pname + "-" + version;
+
     version = "14.2.2";
 
     src = pkgs.fetchurl {
@@ -24112,7 +25998,9 @@ EOF
   };
 
   jaraco_logging = buildPythonPackage rec {
-    name = "jaraco.logging-${version}";
+    pname = "jaraco.logging";
+    name = pname + "-" + version;
+
     version = "1.5";
 
     src = pkgs.fetchurl {
@@ -24128,7 +26016,9 @@ EOF
   };
 
   jaraco_text = buildPythonPackage rec {
-    name = "jaraco.text-${version}";
+    pname = "jaraco.text";
+    name = pname + "-" + version;
+
     version = "1.7";
 
     src = pkgs.fetchurl {
@@ -24144,7 +26034,9 @@ EOF
   };
 
   jaraco_collections = buildPythonPackage rec {
-    name = "jaraco.collections-${version}";
+    pname = "jaraco.collections";
+    name = pname + "-" + version;
+
     version = "1.3.2";
 
     src = pkgs.fetchurl {
@@ -24165,7 +26057,9 @@ EOF
   };
 
   jaraco_itertools = buildPythonPackage rec {
-    name = "jaraco.itertools-${version}";
+    pname = "jaraco.itertools";
+    name = pname + "-" + version;
+
     version = "1.7.1";
 
     src = pkgs.fetchurl {
@@ -24181,7 +26075,9 @@ EOF
   };
 
   inflect = buildPythonPackage rec {
-    name = "inflect-${version}";
+    pname = "inflect";
+    name = pname + "-" + version;
+
     version = "0.2.5";
 
     src = pkgs.fetchurl {
@@ -24193,7 +26089,9 @@ EOF
   moreItertools = self.more-itertools;
 
   more-itertools = buildPythonPackage rec {
-    name = "more-itertools-${version}";
+    pname = "more-itertools";
+    name = pname + "-" + version;
+
     version = "2.4.1";
 
     src = pkgs.fetchurl {
@@ -24212,7 +26110,9 @@ EOF
   };
 
   jaraco_functools = buildPythonPackage rec {
-    name = "jaraco.functools-${version}";
+    pname = "jaraco.functools";
+    name = pname + "-" + version;
+
     version = "1.15.1";
 
     src = pkgs.fetchurl {
@@ -24228,7 +26128,9 @@ EOF
   };
 
   jaraco_classes = buildPythonPackage rec {
-    name = "jaraco.classes-${version}";
+    pname = "jaraco.classes";
+    name = pname + "-" + version;
+
     version = "1.4";
 
     src = pkgs.fetchurl {
@@ -24242,7 +26144,9 @@ EOF
   };
 
   jaraco_stream = buildPythonPackage rec {
-    name = "jaraco.stream-${version}";
+    pname = "jaraco.stream";
+    name = pname + "-" + version;
+
     version = "1.1.1";
 
     src = pkgs.fetchurl {
@@ -24258,7 +26162,9 @@ EOF
   };
 
   slackclient = buildPythonPackage rec {
-    name = "slackclient-${version}";
+    pname = "slackclient";
+    name = pname + "-" + version;
+
     version = "1.0.0";
 
     src = pkgs.fetchurl {
@@ -24275,7 +26181,9 @@ EOF
 
   pivy = buildPythonPackage rec {
     version = "20101207";
-    name = "pivy-${version}";
+    pname = "pivy";
+    name = pname + "-" + version;
+
     src = pkgs.fetchhg {
       url = "https://bitbucket.org/Coin3D/pivy";
       rev = "8eab90908f2a3adcc414347566f4434636202344";

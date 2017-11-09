@@ -4,7 +4,7 @@
 buildPythonPackage rec {
   pname = "nilearn";
   version = "0.3.1";
-  name = "nilearn-${version}";
+  name = pname + "-" + version;
 
   src = fetchPypi {
     inherit pname version;
