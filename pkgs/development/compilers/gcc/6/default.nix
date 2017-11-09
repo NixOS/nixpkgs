@@ -73,6 +73,7 @@ let version = "6.4.0";
       ++ optional langAda ../gnat-cflags.patch
       ++ optional langFortran ../gfortran-driving.patch
       ++ [ ../struct-ucontext.patch ../struct-sigaltstack.patch ] # glibc-2.26
+      ++ optional langJava [ ../struct-ucontext-libjava.patch ] # glibc-2.26
       ;
 
     javaEcj = fetchurl {
