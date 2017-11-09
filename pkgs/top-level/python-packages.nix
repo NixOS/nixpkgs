@@ -6520,7 +6520,7 @@ in {
 
     meta = {
       description = "Backend part of Paperwork (Python API, no UI)";
-      homepage = "https://github.com/jflesch/paperwork-backend";
+      homepage = https://openpaper.work/;
       license = licenses.gpl3Plus;
     };
   };

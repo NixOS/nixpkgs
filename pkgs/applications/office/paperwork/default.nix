@@ -73,7 +73,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = {
     description = "A personal document manager for scanned documents";
-    homepage = https://github.com/jflesch/paperwork;
+    homepage = https://openpaper.work/;
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.aszlig ];
     platforms = lib.platforms.linux;
