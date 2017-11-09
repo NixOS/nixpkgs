@@ -1,7 +1,9 @@
 { stdenv, buildPythonPackage, fetchurl, pytest }:
+
 buildPythonPackage rec {
-  name = "hyperlink-${version}";
+  pname = "hyperlink";
   version = "17.3.0";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/h/hyperlink/${name}.tar.gz";

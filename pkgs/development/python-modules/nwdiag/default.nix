@@ -3,7 +3,9 @@
 }:
 
 buildPythonPackage rec {
-  name = "nwdiag-1.0.3";
+  pname = "nwdiag";
+  version = "1.0.3";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/n/nwdiag/${name}.tar.gz";

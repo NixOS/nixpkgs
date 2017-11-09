@@ -1,7 +1,9 @@
 { stdenv, fetchurl, buildPythonPackage, isPyPy, python, libev, greenlet }:
 
 buildPythonPackage rec {
-  name = "gevent-1.2.2";
+  pname = "gevent";
+  version = "1.2.2";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/g/gevent/${name}.tar.gz";

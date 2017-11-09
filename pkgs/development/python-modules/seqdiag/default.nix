@@ -3,7 +3,9 @@
 }:
 
 buildPythonPackage rec {
-  name = "seqdiag-0.9.4";
+  pname = "seqdiag";
+  version = "0.9.4";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/s/seqdiag/${name}.tar.gz";
