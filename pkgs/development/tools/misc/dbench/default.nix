@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ autoconf popt zlib ];
 
+  patches = [
+    # patch has been also sent upstream and might be included in future versions
+    ./fix-missing-stdint.patch
+  ];
+
   preConfigure = ''
     ./autogen.sh
     configureFlagsArray+=("--datadir=$out/share/dbench")

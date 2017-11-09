@@ -17,17 +17,17 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildPhase = ''
+  patches = [ ./dont_static_link.patch ];
+
+  preBuild = ''
     patchShebangs scripts
-    make -j''${NIX_BUILD_CORES:-1} \
-         `pwd`/build/cgpt/cgpt \
-         `pwd`/build/futility/futility
   '';
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp build/cgpt/cgpt $out/bin
-    cp build/futility/futility $out/bin
+  makeFlags = [
+    "DESTDIR=$(out)"
+  ];
+
+  postInstall = ''
     mkdir -p $out/share/vboot
     cp -r tests/devkeys* $out/share/vboot/
   '';

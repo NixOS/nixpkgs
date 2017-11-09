@@ -18,11 +18,6 @@ stdenv.mkDerivation rec {
     hunspell makeWrapper # enchant
   ];
 
-  # bogus configure script tests
-  preConfigure = ''
-    NIX_CFLAGS_COMPILE+=" $(pkg-config --cflags Qt5Core)"
-  '';
-
   configureFlags = [
     "--enable-qt5"
     #"--without-included-boost"

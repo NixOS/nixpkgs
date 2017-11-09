@@ -1,8 +1,9 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, python
-, zlib, libssh2, openssl, http-parser, curl, libiconv
+, zlib, libssh2, openssl, http-parser, curl
+, libiconv, Security
 }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation rec {
   version = "0.25.1";
   name = "libgit2-${version}";
 
@@ -13,11 +14,14 @@ stdenv.mkDerivation (rec {
     sha256 = "1jhikg0gqpdzfzhgv44ybdpm24lvgkc7ki4306lc5lvmj1s2nylj";
   };
 
-  cmakeFlags = "-DTHREADSAFE=ON";
+  cmakeFlags = [ "-DTHREADSAFE=ON" ];
 
   nativeBuildInputs = [ cmake python pkgconfig ];
 
-  buildInputs = [ zlib libssh2 openssl http-parser curl ];
+  buildInputs = [ zlib libssh2 openssl http-parser curl ]
+    ++ stdenv.lib.optional stdenv.isDarwin Security;
+
+  propagatedBuildInputs = stdenv.lib.optional (!stdenv.isLinux) libiconv;
 
   enableParallelBuilding = true;
 
@@ -27,7 +31,4 @@ stdenv.mkDerivation (rec {
     license = stdenv.lib.licenses.gpl2;
     platforms = with stdenv.lib.platforms; all;
   };
-} // stdenv.lib.optionalAttrs (!stdenv.isLinux) {
-  NIX_LDFLAGS = "-liconv";
-  propagatedBuildInputs = [ libiconv ];
-})
+}

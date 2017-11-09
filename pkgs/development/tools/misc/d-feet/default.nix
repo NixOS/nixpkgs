@@ -2,7 +2,7 @@
 , pythonPackages, makeWrapper, gnome3, libwnck3 }:
 
 let
-  version = "${major}.11";
+  version = "${major}.12";
   major = "0.3";
 in pythonPackages.buildPythonApplication rec {
   name = "d-feet-${version}";
@@ -10,7 +10,7 @@ in pythonPackages.buildPythonApplication rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/d-feet/${major}/d-feet-${version}.tar.xz";
-    sha256 = "a3dc940c66f84b996c328531e3034d475ec690d7ff639445ff7ca746aa8cb9c2";
+    sha256 = "054hl56rii9ff7rzl42h7993ywjbxmhlcd7bk8fi1c2bx98c6s68";
   };
 
   nativeBuildInputs = [ pkgconfig ];

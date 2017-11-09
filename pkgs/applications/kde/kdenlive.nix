@@ -2,7 +2,6 @@
 , lib
 , extra-cmake-modules
 , kdoctools
-, qtscript
 , kactivities
 , kconfig
 , kcrash
@@ -27,7 +26,10 @@
 , kfilemetadata
 , ffmpeg
 , phonon-backend-gstreamer
+, qtdeclarative
 , qtquickcontrols
+, qtscript
+, qtwebkit
 }:
 
 mkDerivation {
@@ -56,8 +58,10 @@ mkDerivation {
     ktextwidgets
     mlt
     phonon-backend-gstreamer
+    qtdeclarative
     qtquickcontrols
     qtscript
+    qtwebkit
     shared_mime_info
     libv4l
     ffmpeg
