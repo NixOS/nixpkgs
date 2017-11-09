@@ -20,3 +20,13 @@ if [ -z "$dontUseMesonConfigure" -a -z "$configurePhase" ]; then
     setOutputFlags=
     configurePhase=mesonConfigurePhase
 fi
+
+mesonPreFixupPhase() {
+    for f in $(find . -name .nix-dont-strip); do
+        echo "Found $f, setting dontStrip"
+        export dontStrip=1
+        rm $f
+    done
+}
+
+preFixupPhases+=(mesonPreFixupPhase)

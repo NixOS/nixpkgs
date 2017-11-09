@@ -9,6 +9,8 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0qn5hyzvam3rimn7g3671s1igj7fbkwdnf5nc8jr4d5swy25mq61";
   };
 
+  patchPhase = "cat ${./depfixer_patchelf.py} >> mesonbuild/scripts/depfixer.py";
+
   postFixup = ''
     pushd $out/bin
     # undo shell wrapper as meson tools are called with python
@@ -16,10 +18,6 @@ python3Packages.buildPythonApplication rec {
       mv ".$i-wrapped" "$i"
     done
     popd
-  '';
-
-  postPatch = ''
-    sed -i -e 's|e.fix_rpath(install_rpath)||' mesonbuild/scripts/meson_install.py
   '';
 
   setupHook = ./setup-hook.sh;
