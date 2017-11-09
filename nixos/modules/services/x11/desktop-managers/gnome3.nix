@@ -108,6 +108,7 @@ in {
     services.gnome3.seahorse.enable = mkDefault true;
     services.gnome3.sushi.enable = mkDefault true;
     services.gnome3.tracker.enable = mkDefault true;
+    services.gnome3.tracker-miners.enable = mkDefault true;
     hardware.pulseaudio.enable = mkDefault true;
     services.telepathy.enable = mkDefault true;
     networking.networkmanager.enable = mkDefault true;
