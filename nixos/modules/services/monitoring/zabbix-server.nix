@@ -105,9 +105,9 @@ in
             if ! test -e "${libDir}/db-created"; then
                 ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/createuser --no-superuser --no-createdb --no-createrole zabbix || true
                 ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/createdb --owner zabbix zabbix || true
-                cat ${pkgs.zabbix.server}/share/zabbix/db/schema/postgresql.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c '${pkgs.postgresql}/bin/psql zabbix'
-                cat ${pkgs.zabbix.server}/share/zabbix/db/data/images_pgsql.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c '${pkgs.postgresql}/bin/psql zabbix'
-                cat ${pkgs.zabbix.server}/share/zabbix/db/data/data.sql | ${pkgs.su}/bin/su -s "$SHELL" zabbix -c '${pkgs.postgresql}/bin/psql zabbix'
+                cat ${pkgs.zabbix.server}/share/zabbix/db/schema/postgresql.sql | ${pkgs.sudo}/bin/sudo -u zabbix ${pkgs.postgresql}/bin/psql zabbix
+                cat ${pkgs.zabbix.server}/share/zabbix/db/data/images_pgsql.sql | ${pkgs.sudo}/bin/sudo -u zabbix ${pkgs.postgresql}/bin/psql zabbix
+                cat ${pkgs.zabbix.server}/share/zabbix/db/data/data.sql | ${pkgs.sudo}/bin/sudo -u zabbix ${pkgs.postgresql}/bin/psql zabbix
                 touch "${libDir}/db-created"
             fi
           '';
