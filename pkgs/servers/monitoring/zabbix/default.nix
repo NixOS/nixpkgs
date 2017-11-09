@@ -67,7 +67,7 @@ in
       description = "An enterprise-class open source distributed monitoring solution (client-side agent)";
       homepage = http://www.zabbix.com/;
       license = licenses.gpl2;
-      maintainers = [ maintainers.eelco ];
+      maintainers = [ maintainers.srhb ];
       platforms = platforms.linux;
     };
   };
