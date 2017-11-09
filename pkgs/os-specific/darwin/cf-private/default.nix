@@ -7,12 +7,14 @@ stdenv.mkDerivation {
     dest=$out/Library/Frameworks/CoreFoundation.framework/Headers
     mkdir -p $dest
     pushd $dest
-      cp -Lv ${osx_private_sdk}/include/CoreFoundationPrivateHeaders/* $dest
       for file in ${CF}/Library/Frameworks/CoreFoundation.framework/Headers/*; do
-        ln -sf $file 
+        ln -sf $file
       done
-    popd
 
+      # Copy or overwrite private headers, some of these might already
+      # exist in CF but the private versions have more information.
+      cp -Lfv ${osx_private_sdk}/include/CoreFoundationPrivateHeaders/* $dest
+    popd
   '';
 
   setupHook = ./setup-hook.sh;
