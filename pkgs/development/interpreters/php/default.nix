@@ -12,7 +12,7 @@ let
     let php7 = lib.versionAtLeast version "7.0";
         mysqlHeaders = mysql.lib.dev or mysql;
         mysqlndSupport = config.php.mysqlnd or false;
-        mysqlBuildInputs = if mysqlndSupport then [] else [ mysqlHeaders ];
+        mysqlBuildInputs = lib.optional (!mysqlndSupport) mysqlHeaders;
 
     in composableDerivation.composableDerivation {} (fixed: {
 
