@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "1lz4hwgwdq3znlqjmvl7cw3g3ilbayn608h0hwqdf7v2jq6n67kg";
   };
 
+  patches = [ ./glibc-2.26.patch ];
+
   buildInputs = [ bison flex geoip geolite-legacy libcli libnet libnl
     libnetfilter_conntrack libpcap libsodium liburcu ncurses perl
     pkgconfig zlib ];
