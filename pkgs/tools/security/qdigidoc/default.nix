@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
                   openldap gettext desktop_file_utils makeWrapper
                 ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Qt based UI application for verifying and signing digital signatures";
     homepage = http://www.id.ee/;
