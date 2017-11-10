@@ -698,6 +698,7 @@
   tvorog = "Marsel Zaripov <marszaripov@gmail.com>";
   tweber = "Thorsten Weber <tw+nixpkgs@360vier.de>";
   twey = "James ‘Twey’ Kay <twey@twey.co.uk>";
+  unode = "Renato Alves <alves.rjc@gmail.com>";
   uralbash = "Svintsov Dmitry <root@uralbash.ru>";
   utdemir = "Utku Demir <me@utdemir.com>";
   #urkud = "Yury G. Kudryashov <urkud+nix@ya.ru>"; inactive since 2012
