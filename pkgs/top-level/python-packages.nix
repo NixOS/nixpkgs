@@ -2066,39 +2066,7 @@ in {
     };
   };
 
-  botocore = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "botocore";
-    version = "1.7.20";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "16sy35bp9i2g9785l8jzcd4ddc2nydqs3wnkqwi36xx6l3bdbn13";
-    };
-
-    propagatedBuildInputs = with self; [
-      dateutil
-      jmespath
-      docutils
-      ordereddict
-      simplejson
-    ];
-
-    checkInputs = with self; [ mock nose ];
-
-    checkPhase = ''
-      nosetests -v
-    '';
-
-    # Network access
-    doCheck = false;
-
-    meta = {
-      homepage = https://github.com/boto/botocore;
-      license = "bsd";
-      description = "A low-level interface to a growing number of Amazon Web Services";
-    };
-  };
+  botocore = callPackage ../development/python-modules/botocore { };
 
   bottle = buildPythonPackage rec {
     version = "0.12.11";
@@ -8390,6 +8358,8 @@ in {
   feedgenerator = callPackage ../development/python-modules/feedgenerator {
     inherit (pkgs) glibcLocales;
   };
+
+  s3transfer = callPackage ../development/python-modules/s3transfer { };
 
   feedparser = buildPythonPackage (rec {
     name = "feedparser-5.2.1";
