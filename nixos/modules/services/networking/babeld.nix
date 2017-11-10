@@ -51,7 +51,7 @@ in
         type = types.nullOr (types.attrsOf types.unspecified);
         example =
           {
-            wired = true;
+            type = "tunnel";
             "split-horizon" = true;
           };
       };
@@ -65,7 +65,7 @@ in
         type = types.attrsOf (types.attrsOf types.unspecified);
         example =
           { enp0s2 =
-            { wired = true;
+            { type = "wired";
               "hello-interval" = 5;
               "split-horizon" = "auto";
             };
