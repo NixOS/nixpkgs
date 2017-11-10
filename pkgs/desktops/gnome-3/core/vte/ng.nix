@@ -2,21 +2,14 @@
 
 gnome3.vte.overrideAttrs (oldAttrs: rec {
   name = "vte-ng-${version}";
-  version = "0.46.1.a";
+  version = "0.50.2.a";
 
   src = fetchFromGitHub {
     owner = "thestinger";
     repo = "vte-ng";
     rev = version;
-    sha256 = "125fpibid1liz50d7vbxy71pnm8b01x90xnkr4z3419b90lybr0a";
+    sha256 = "0i6hfzw9sq8521kz0l7lld2km56r0bfp1hw6kxq3j1msb8z8svcf";
   };
-
-  # The patches apply the changes from https://github.com/GNOME/vte/pull/7 and
-  # can be removed once the commits are merged into vte-ng.
-  patches = [
-    ./fix_g_test_init_calls.patch
-    ./fix_vteseq_n_lookup_declaration.patch
-  ];
 
   preConfigure = oldAttrs.preConfigure + "; ./autogen.sh";
 
