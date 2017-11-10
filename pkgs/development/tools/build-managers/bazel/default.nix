@@ -89,6 +89,12 @@ stdenv.mkDerivation rec {
     cp scripts/zsh_completion/_bazel $out/share/zsh/site-functions/
   '';
 
+  # Save paths to hardcoded dependencies so Nix can detect them.
+  postFixup = ''
+    mkdir -p $out/nix-support
+    echo "${customBash} ${coreutils}" > $out/nix-support/depends
+  '';
+
   dontStrip = true;
   dontPatchELF = true;
 }
