@@ -7,7 +7,7 @@ let
   cfg = config.services.babeld;
 
   paramsString = params:
-    concatMapStringsSep "" (name: "${name} ${boolToString (getAttr name params)}")
+    concatMapStringsSep " " (name: "${name} ${boolToString (getAttr name params)}")
                    (attrNames params);
 
   interfaceConfig = name:
