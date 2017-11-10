@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, python3Packages }:
 
 let
-  version = "2.1.6";
-  sha256 = "1x76nvxjhjpagniyh075hqia4sl06972alnhi7628cjrq3pr4v9i";
+  version = "2.1.8";
+  sha256 = "0fnsk61s328dg16iv0chqxayni8ahkbcb84z012w0d9417i806lc";
 in
 
 python3Packages.buildPythonApplication {
