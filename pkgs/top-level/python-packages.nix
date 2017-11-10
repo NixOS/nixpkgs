@@ -735,91 +735,6 @@ in {
     };
   };
 
-  awscli =
-  let
-    colorama_3_7 = self.colorama.overrideAttrs (old: rec {
-      name = "${pname}-${version}";
-      pname = "colorama";
-      version = "0.3.7";
-      src = fetchPypi {
-        inherit pname version;
-        sha256 = "0avqkn6362v7k2kg3afb35g4sfdvixjgy890clip4q174p9whhz0";
-      };
-    });
-  in buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "awscli";
-    version = "1.11.162";
-    namePrefix = "";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0ff17fdzzncrzl7ps1cyrs0c5f82ncbvflnjz8sd1vkcmn9yij8r";
-    };
-
-    # No tests included
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [
-      botocore
-      bcdoc
-      s3transfer
-      six
-      colorama_3_7
-      docutils
-      rsa
-      pyyaml
-      pkgs.groff
-      pkgs.less
-    ];
-
-    postInstall = ''
-      mkdir -p $out/etc/bash_completion.d
-      echo "complete -C $out/bin/aws_completer aws" > $out/etc/bash_completion.d/awscli
-      mkdir -p $out/share/zsh/site-functions
-      mv $out/bin/aws_zsh_completer.sh $out/share/zsh/site-functions
-      rm $out/bin/aws.cmd
-    '';
-
-    meta = {
-      homepage = https://aws.amazon.com/cli/;
-      description = "Unified tool to manage your AWS services";
-      license = stdenv.lib.licenses.asl20;
-      maintainers = with maintainers; [ muflax ];
-    };
-  };
-
-  aws_shell = buildPythonPackage rec {
-    name = "aws-shell-${version}";
-    version = "0.1.1";
-    src = pkgs.fetchurl {
-        sha256 = "1pw9lrdjl24n6lrs6lnqpyiyic8bdxgvhyqvb2rx6kkbjrfhhgv5";
-        url = "mirror://pypi/a/aws-shell/aws-shell-${version}.tar.gz";
-      };
-
-    # Why does it propagate packages that are used for testing?
-    propagatedBuildInputs = with self; [
-      awscli prompt_toolkit boto3 configobj pygments
-    ];
-
-    #Checks are failing due to missing TTY, which won't exist.
-    doCheck = false;
-    preCheck = ''
-      mkdir -p check-phase
-      export HOME=$(pwd)/check-phase
-    '';
-
-    disabled = isPy35;
-
-
-    meta = {
-      homepage = https://github.com/awslabs/aws-shell;
-      description = "An integrated shell for working with the AWS CLI";
-      license = licenses.asl20;
-      maintainers = [ ];
-    };
-  };
-
   azure = buildPythonPackage rec {
     version = "0.11.0";
     name = "azure-${version}";
@@ -2066,39 +1981,7 @@ in {
     };
   };
 
-  botocore = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "botocore";
-    version = "1.7.20";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "16sy35bp9i2g9785l8jzcd4ddc2nydqs3wnkqwi36xx6l3bdbn13";
-    };
-
-    propagatedBuildInputs = with self; [
-      dateutil
-      jmespath
-      docutils
-      ordereddict
-      simplejson
-    ];
-
-    checkInputs = with self; [ mock nose ];
-
-    checkPhase = ''
-      nosetests -v
-    '';
-
-    # Network access
-    doCheck = false;
-
-    meta = {
-      homepage = https://github.com/boto/botocore;
-      license = "bsd";
-      description = "A low-level interface to a growing number of Amazon Web Services";
-    };
-  };
+  botocore = callPackage ../development/python-modules/botocore { };
 
   bottle = buildPythonPackage rec {
     version = "0.12.11";
@@ -8384,7 +8267,7 @@ in {
   };
 
   fastimport = callPackage ../development/python-modules/fastimport { };
- 
+
   feedgen = callPackage ../development/python-modules/feedgen { };
 
   feedgenerator = callPackage ../development/python-modules/feedgenerator {
@@ -17843,38 +17726,7 @@ in {
     };
   };
 
-  s3transfer = buildPythonPackage rec {
-    version = "0.1.10";
-    name = "s3transfer-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/s3transfer/${name}.tar.gz";
-      sha256 = "1h8g9bknvxflxkpbnxyfxmk8pvgykbbk9ljdvhqh6z4vjc2926ms";
-    };
-
-    foo = 1;
-
-    propagatedBuildInputs =
-      [ self.botocore
-      ] ++ stdenv.lib.optional (pythonOlder "3") self.futures;
-
-    buildInputs = with self; [ docutils mock nose coverage wheel unittest2 ];
-
-    checkPhase = ''
-      pushd s3transfer/tests
-      nosetests -v unit/ functional/
-      popd
-    '';
-
-    # version on pypi has no tests/ dir
-    doCheck = false;
-
-    meta = {
-      homepage = https://github.com/boto/s3transfer;
-      license = stdenv.lib.licenses.asl20;
-      description = "A library for managing Amazon S3 transfers";
-    };
-  };
+  s3transfer = callPackage ../development/python-modules/s3transfer { };
 
   seqdiag = callPackage ../development/python-modules/seqdiag { };
 

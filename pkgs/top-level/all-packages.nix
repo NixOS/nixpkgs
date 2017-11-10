@@ -513,13 +513,13 @@ with pkgs;
 
   avfs = callPackage ../tools/filesystems/avfs { };
 
-  awscli = pythonPackages.awscli; # Should be moved out of python-packages.nix
+  awscli = pythonPackages.callPackage ../tools/admin/awscli { };
 
   awsebcli = callPackage ../tools/virtualization/awsebcli {};
 
   awslogs = callPackage ../tools/admin/awslogs { };
 
-  aws_shell = python2Packages.aws_shell; # Should be moved out of python-packages.nix
+  aws_shell = pythonPackages.callPackage ../tools/admin/aws_shell { };
 
   azure-cli = nodePackages.azure-cli;
 
