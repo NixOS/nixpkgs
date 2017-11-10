@@ -32,6 +32,7 @@ let
       xdg_utils
       # Zoneinfo
       etc-zoneinfo
+      iana-etc
     ] ++ lib.optional withJava jdk
       ++ lib.optional withPrimus primus
       ++ extraPkgs pkgs;
