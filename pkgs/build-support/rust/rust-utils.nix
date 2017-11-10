@@ -197,15 +197,19 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
 
       echo "$EXTRA_LINK_SEARCH" | while read i; do
          if [ ! -z "$i" ]; then
-           echo "-L $i" >> target/link
-           L=$(echo $i | sed -e "s#$(pwd)/target/build#$out#")
-           echo "-L $L" >> target/link.final
+           for lib in $i; do
+             echo "-L $lib" >> target/link
+             L=$(echo $lib | sed -e "s#$(pwd)/target/build#$out#")
+             echo "-L $L" >> target/link.final
+           done
          fi
       done
       echo "$EXTRA_LINK" | while read i; do
          if [ ! -z "$i" ]; then
-           echo "-l $i" >> target/link
-           echo "-l $i" >> target/link.final
+           for lib in $i; do
+             echo "-l $lib" >> target/link
+             echo "-l $lib" >> target/link.final
+           done
          fi
       done
 
@@ -267,7 +271,12 @@ in
 
 crate: rust: stdenv.mkDerivation rec {
 
-    inherit (crate) crateName src;
+    inherit (crate) crateName;
+
+    src = if lib.hasAttr "src" crate then
+        crate.src
+      else
+        pkgs.fetchCrate { inherit (crate) crateName version sha256; };
 
     release = if crate ? release then crate.release else false;
     name = "rust_${crate.crateName}-${crate.version}";
