@@ -10917,6 +10917,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  Perlosnames = buildPerlPackage rec {
+    name = "Perl-osnames-0.11";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PERLANCAR/${name}.tar.gz";
+      sha256 = "fb22a1ed59dc2311f7f1ffca5685d90c0600020467f624f57b4dd3dba5bc659b";
+    };
+    meta = {
+      homepage = https://metacpan.org/release/Perl-osnames;
+      description = "List possible $^O ($OSNAME) values, with description";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   PerlCritic = buildPerlModule rec {
     name = "Perl-Critic-1.130";
     src = fetchurl {
@@ -11243,6 +11256,21 @@ let self = _self // overrides; _self = with self; {
     };
     meta = {
       description = "Perl extension to access the unix process table";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  ProcFind = buildPerlPackage rec {
+    name = "Proc-Find-0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PERLANCAR/${name}.tar.gz";
+      sha256 = "07d715c2b8644dc6d5b5a36ffcd2f02da017bf86a00027387aa47c53e2347a81";
+    };
+    buildInputs = [ Perlosnames ];
+    propagatedBuildInputs = [ ProcProcessTable ];
+    meta = {
+      homepage = https://metacpan.org/release/Proc-Find;
+      description = "Find processes by name, PID, or some other attributes";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
