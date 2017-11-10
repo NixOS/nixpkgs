@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, gettext, libmsgpack, libtermkey
-, libtool, libuv, luajit, luajitPackages, luaPackages, ncurses, perl, pkgconfig
+, libtool, libuv, luaPackages, ncurses, perl, pkgconfig
 , unibilium, makeWrapper, vimUtils, xsel, gperf
 
 , withPython ? true, pythonPackages, extraPythonPackages ? []
@@ -19,13 +19,13 @@ let
   # Note: this is NOT the libvterm already in nixpkgs, but some NIH silliness:
   neovimLibvterm = stdenv.mkDerivation rec {
     name = "neovim-libvterm-${version}";
-    version = "2016-10-07";
+    version = "2017-11-05";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "libvterm";
-      rev = "5a748f97fbf27003e141002b58933a99f3addf8d";
-      sha256 = "1fnd57f5n9h7z50a4vj7g96k6ndsdknjqsibgnxi9ndhyz244qbx";
+      rev = "4ca7ebf7d25856e90bc9d9cc49412e80be7c4ea8";
+      sha256 = "05kyvvz8af90mvig11ya5xd8f4mbvapwyclyrihm9lwas706lzf6";
     };
 
     buildInputs = [ perl ];
@@ -81,13 +81,13 @@ let
 
   neovim = stdenv.mkDerivation rec {
     name = "neovim-${version}";
-    version = "0.2.0";
+    version = "0.2.1";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "0fhjkgjwqqmzbfn9wk10l2vq9v74zkriz5j12b1rx0gdwzlfybn8";
+      sha256 = "19ppj0i59kk70j09gap6azm0jm4y95fr5fx7n9gx377y3xjs8h03";
     };
 
     enableParallelBuilding = true;
@@ -99,7 +99,6 @@ let
       ncurses
       neovimLibvterm
       unibilium
-      luajit
       luaPackages.lua
       gperf
     ] ++ optional withJemalloc jemalloc
@@ -115,7 +114,7 @@ let
     LUA_PATH = stdenv.lib.concatStringsSep ";" (map luaPackages.getLuaPath lualibs);
     LUA_CPATH = stdenv.lib.concatStringsSep ";" (map luaPackages.getLuaCPath lualibs);
 
-    lualibs = [ luaPackages.mpack luaPackages.lpeg luajitPackages.lpeg luaPackages.luabitop ];
+    lualibs = [ luaPackages.mpack luaPackages.lpeg luaPackages.luabitop ];
 
     cmakeFlags = [
       "-DLUA_PRG=${luaPackages.lua}/bin/lua"
@@ -163,7 +162,7 @@ let
       # those contributions were copied from Vim (identified in the commit logs
       # by the vim-patch token). See LICENSE for details."
       license = with licenses; [ asl20 vim ];
-      maintainers = with maintainers; [ manveru garbas ];
+      maintainers = with maintainers; [ manveru garbas rvolosatovs ];
       platforms   = platforms.unix;
     };
   };
