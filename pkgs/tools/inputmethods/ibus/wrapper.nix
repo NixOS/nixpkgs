@@ -1,11 +1,19 @@
 { stdenv, runCommand, makeWrapper, lndir
 , dconf, hicolor_icon_theme, ibus, librsvg, plugins
+, python3Packages
+, gobjectIntrospection
 }:
 
 let
   name = "ibus-with-plugins-" + (builtins.parseDrvName ibus.name).version;
+  python = python3Packages.python;
   env = {
-    buildInputs = [ ibus ] ++ plugins;
+    buildInputs = [ ibus ] ++ plugins ++ [
+      python python3Packages.pygobject3
+
+      # we need gobjectIntrospection for shell hook (to set $GI_TYPELIB_PATH)
+      gobjectIntrospection
+    ];
     nativeBuildInputs = [ lndir makeWrapper ];
     propagatedUserEnvPackages = [ hicolor_icon_theme ];
     paths = [ ibus ] ++ plugins;
@@ -21,7 +29,13 @@ let
         done
     done
 
-    for prog in ibus; do
+    cat > $out/bin/ibus-setup <<EOF
+    #!${stdenv.shell}
+    exec ${python}/bin/python ${ibus}/share/ibus/setup/main.py "\$@"
+    EOF
+    chmod +x $out/bin/ibus-setup
+
+    for prog in ibus ibus-setup; do
         wrapProgram "$out/bin/$prog" \
           --set GDK_PIXBUF_MODULE_FILE ${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache \
           --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH:$out/lib/girepository-1.0" \
@@ -42,6 +56,7 @@ let
 
     for prog in ibus-daemon; do
         wrapProgram "$out/bin/$prog" \
+          --set NIX_IBUS_SETUP_PATH $out/bin/ibus-setup \
           --set GDK_PIXBUF_MODULE_FILE ${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache \
           --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH:$out/lib/girepository-1.0" \
           --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules" \

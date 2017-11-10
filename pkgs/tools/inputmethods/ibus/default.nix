@@ -66,6 +66,15 @@ in stdenv.mkDerivation rec {
     sha256 = "07py16jb81kd7vkqhcia9cb2avsbg5jswp2kzf0k4bprwkxppd9n";
   };
 
+  patches = [
+    # The ibus-with-plugins wrapper will set an environment variable so that
+    # `ibus-daemon` knows where to find `ibus-setup`.
+    # This patches the pre-generated C code (generated from the original Vala
+    # source); if we want to support compilation of the original Vala source,
+    # we'll need to rework this patch.
+    ./setup-patch.patch
+  ];
+
   postPatch = ''
     # These paths will be set in the wrapper.
     sed -e "/export IBUS_DATAROOTDIR/ s/^.*$//" \
@@ -116,8 +125,10 @@ in stdenv.mkDerivation rec {
   doInstallCheck = true;
   installCheckPhase = "$out/bin/ibus version";
 
+  # The ibus-with-plugins wrapper will provide the ibus-setup executable.
+  # This is done to keep the closure small.
   postInstall = ''
-    moveToOutput "bin/ibus-setup" "$dev"
+    rm "$out/bin/ibus-setup"
   '';
 
   meta = with stdenv.lib; {

@@ -1,0 +1,13 @@
+diff --git a/ui/gtk3/panel.c b/ui/gtk3/panel.c
+index f1a8eea..1fc8ce9 100644
+--- a/ui/gtk3/panel.c
++++ b/ui/gtk3/panel.c
+@@ -4527,7 +4527,7 @@ static void panel_show_setup_dialog (Panel* self) {
+ 		}
+ 		self->priv->m_setup_pid = (GPid) 0;
+ 	}
+-	_tmp3_ = g_build_filename (BINDIR, "ibus-setup", NULL);
++	_tmp3_ = g_build_filename (getenv("NIX_IBUS_SETUP_PATH"), NULL);
+ 	binary = _tmp3_;
+ 	{
+ 		const gchar* _tmp4_;
