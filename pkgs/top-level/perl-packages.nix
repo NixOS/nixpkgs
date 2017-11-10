@@ -140,7 +140,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ AnyEvent ];
     doCheck = false; # does an DNS lookup
     meta = {
-      homepage = http://github.com/potyl/perl-AnyEvent-CacheDNS;
+      homepage = https://github.com/potyl/perl-AnyEvent-CacheDNS;
       description = "Simple DNS resolver with caching";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -373,7 +373,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ ParamsValidate ];
     doCheck = false;
     meta = {
-      homepage = http://metacpan.org/release/Attribute-Params-Validate;
+      homepage = https://metacpan.org/release/Attribute-Params-Validate;
       description = "Define validation through subroutine attributes";
       license = stdenv.lib.licenses.artistic2;
     };
@@ -694,7 +694,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ ModuleImplementation ModuleRuntime SubExporterProgressive ];
     meta = {
-      homepage = http://metacpan.org/release/B-Hooks-EndOfScope;
+      homepage = https://metacpan.org/release/B-Hooks-EndOfScope;
       description = "Execute code after a scope finished compilation";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -1254,7 +1254,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ CatalystRuntime DateTime Moose namespaceautoclean ];
     meta = {
-      homepage = http://metacpan.org/release/Catalyst-Plugin-AccessLog;
+      homepage = https://metacpan.org/release/Catalyst-Plugin-AccessLog;
       description = "Request logging from within Catalyst";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -2635,7 +2635,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ ArchiveExtract LogMessage ModulePluggable ObjectAccessor PackageConstants ];
     doCheck = false;
     meta = {
-      homepage = http://github.com/jib/cpanplus-devel;
+      homepage = https://github.com/jib/cpanplus-devel;
       description = "Ameliorated interface to the CPAN";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -3102,7 +3102,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ ParamsUtil SubInstall ];
     meta = {
-      homepage = http://github.com/rjbs/data-optlist;
+      homepage = https://github.com/rjbs/data-optlist;
       description = "Parse and validate simple name/value option pairs";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -3202,7 +3202,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestRequires ];
     propagatedBuildInputs = [ Moose PathClass SubExporter namespaceclean ];
     meta = {
-      homepage = http://metacpan.org/release/Data-Stream-Bulk;
+      homepage = https://metacpan.org/release/Data-Stream-Bulk;
       description = "N at a time iteration API";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -3283,7 +3283,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ Test2Suite ];
     propagatedBuildInputs = [ NetDomainTLD ];
     meta = {
-      homepage = http://metacpan.org/release/Data-Validate-Domain;
+      homepage = https://metacpan.org/release/Data-Validate-Domain;
       description = "Domain and host name validation";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.rycee ];
@@ -3299,7 +3299,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestRequires ];
     propagatedBuildInputs = [ NetAddrIP ];
     meta = {
-      homepage = http://metacpan.org/release/Data-Validate-IP;
+      homepage = https://metacpan.org/release/Data-Validate-IP;
       description = "IPv4 and IPv6 validation methods";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.rycee ];
@@ -3565,7 +3565,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestFatal TestWarnings ];
     propagatedBuildInputs = [ DateTime DateTimeLocale DateTimeTimeZone PackageDeprecationManager ParamsValidate TryTiny ];
     meta = {
-      homepage = http://metacpan.org/release/DateTime-Format-Strptime;
+      homepage = https://metacpan.org/release/DateTime-Format-Strptime;
       description = "Parse and format strp and strf time patterns";
       license = stdenv.lib.licenses.artistic2;
     };
@@ -3607,7 +3607,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ DistCheckConflicts TestFatal TestRequires TestWarnings ];
     propagatedBuildInputs = [ DistCheckConflicts ListMoreUtils ParamsValidate ];
     meta = {
-      homepage = http://metacpan.org/release/DateTime-Locale;
+      homepage = https://metacpan.org/release/DateTime-Locale;
       description = "Localization support for DateTime.pm";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -3635,7 +3635,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestFatal TestRequires ];
     propagatedBuildInputs = [ ClassSingleton ListAllUtils ModuleRuntime ParamsValidate TryTiny ];
     meta = {
-      homepage = http://metacpan.org/release/DateTime-TimeZone;
+      homepage = https://metacpan.org/release/DateTime-TimeZone;
       description = "Time zone object base class and factory";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -4082,7 +4082,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "e882ccd7f4cbab0d0cdad53897f3f3bf29bdcf47d2bdfde1ac07f1bc7d7ebd16";
     };
     meta = {
-      homepage = http://metacpan.org/release/Devel-StackTrace;
+      homepage = https://metacpan.org/release/Devel-StackTrace;
       description = "An object representing a stack trace";
       license = stdenv.lib.licenses.artistic2;
     };
@@ -4276,7 +4276,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ CaptureTiny DistZilla MooseAutobox perl ];
     propagatedBuildInputs = [ DistZilla DistZillaPluginMojibakeTests DistZillaPluginNoTabsTests DistZillaPluginTestCPANChanges DistZillaPluginTestCPANMetaJSON DistZillaPluginTestCompile DistZillaPluginTestDistManifest DistZillaPluginTestEOL DistZillaPluginTestKwalitee DistZillaPluginTestMinimumVersion DistZillaPluginTestPerlCritic DistZillaPluginTestPodLinkCheck DistZillaPluginTestPortability DistZillaPluginTestSynopsis DistZillaPluginTestUnusedVars DistZillaPluginTestVersion JSONPP ListMoreUtils Moose PodCoverageTrustPod TestCPANMeta TestPerlCritic TestVersion namespaceautoclean ];
     meta = {
-      homepage = http://metacpan.org/release/Dist-Zilla-PluginBundle-TestingMania/;
+      homepage = https://metacpan.org/release/Dist-Zilla-PluginBundle-TestingMania/;
       description = "Test your dist with every testing plugin conceivable";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -4377,7 +4377,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ CPANChanges DistZilla ];
     propagatedBuildInputs = [ CPANChanges DataSection DistZilla Moose ];
     meta = {
-      homepage = http://metacpan.org/release/Dist-Zilla-Plugin-Test-CPAN-Changes/;
+      homepage = https://metacpan.org/release/Dist-Zilla-Plugin-Test-CPAN-Changes/;
       description = "Release tests for your changelog";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -4422,7 +4422,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ CaptureTiny DistZilla MooseAutobox TestOutput ];
     propagatedBuildInputs = [ DistZilla Moose TestDistManifest ];
     meta = {
-      homepage = http://metacpan.org/release/Dist-Zilla-Plugin-Test-DistManifest/;
+      homepage = https://metacpan.org/release/Dist-Zilla-Plugin-Test-DistManifest/;
       description = "Release tests for the manifest";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -4467,7 +4467,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ DistZilla MooseAutobox TestOutput ];
     propagatedBuildInputs = [ DistZilla Moose TestMinimumVersion ];
     meta = {
-      homepage = http://metacpan.org/release/Dist-Zilla-Plugin-Test-MinimumVersion/;
+      homepage = https://metacpan.org/release/Dist-Zilla-Plugin-Test-MinimumVersion/;
       description = "Release tests for minimum required versions";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -4512,7 +4512,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ CaptureTiny DistZilla MooseAutobox TestOutput ];
     propagatedBuildInputs = [ DistZilla Moose TestPortabilityFiles ];
     meta = {
-      homepage = http://metacpan.org/release/Dist-Zilla-Plugin-Test-Portability/;
+      homepage = https://metacpan.org/release/Dist-Zilla-Plugin-Test-Portability/;
       description = "Release tests for portability";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -4527,7 +4527,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ CaptureTiny DistZilla MooseAutobox TestOutput ];
     propagatedBuildInputs = [ DistZilla Moose TestSynopsis ];
     meta = {
-      homepage = http://metacpan.org/release/Dist-Zilla-Plugin-Test-Synopsis/;
+      homepage = https://metacpan.org/release/Dist-Zilla-Plugin-Test-Synopsis/;
       description = "Release tests for synopses";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -4542,7 +4542,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ CaptureTiny DistZilla MooseAutobox TestOutput ];
     propagatedBuildInputs = [ DistZilla Moose TestVars namespaceautoclean ];
     meta = {
-      homepage = http://metacpan.org/release/Dist-Zilla-Plugin-Test-UnusedVars/;
+      homepage = https://metacpan.org/release/Dist-Zilla-Plugin-Test-UnusedVars/;
       description = "Release tests for unused variables";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -5553,7 +5553,7 @@ let self = _self // overrides; _self = with self; {
         --replace "/usr/share/file/magic.mgc" "${pkgs.file}/share/misc/magic.mgc"
     '';
     meta = {
-      homepage = http://metacpan.org/release/File::LibMagic;
+      homepage = https://metacpan.org/release/File::LibMagic;
       description = "Determine MIME types of data or files using libmagic";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.rycee ];
@@ -5680,7 +5680,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ FileShareDir ];
     meta = {
-      homepage = http://github.com/ingydotnet/file-share-pm/tree;
+      homepage = https://github.com/ingydotnet/file-share-pm/tree;
       description = "Extend File::ShareDir to Local Libraries";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ ];
@@ -6549,7 +6549,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ CacheCache CGI ClassContainer ExceptionClass HTMLParser LogAny ParamsValidate ];
     meta = {
-      homepage = http://metacpan.org/release/HTML-Mason;
+      homepage = https://metacpan.org/release/HTML-Mason;
       description = "High-performance, dynamic web site authoring system";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -7735,7 +7735,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestNoWarnings ];
     propagatedBuildInputs = [ LinguaENFindNumber LinguaENInflect LinguaENInflectNumber LinguaENNumberIsOrdinal LinguaENTagger ];
     meta = {
-      homepage = http://metacpan.org/release/Lingua-EN-Inflect-Phrase;
+      homepage = https://metacpan.org/release/Lingua-EN-Inflect-Phrase;
       description = "Inflect short English Phrases";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -7750,7 +7750,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestFatal TryTiny ];
     propagatedBuildInputs = [ LinguaENFindNumber ];
     meta = {
-      homepage = http://metacpan.org/release/Lingua-EN-Number-IsOrdinal;
+      homepage = https://metacpan.org/release/Lingua-EN-Number-IsOrdinal;
       description = "Detect if English number is ordinal or cardinal";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -7870,7 +7870,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestLeakTrace ];
     propagatedBuildInputs = [ ExporterTiny ModuleImplementation ];
     meta = {
-      homepage = http://metacpan.org/release/List-SomeUtils;
+      homepage = https://metacpan.org/release/List-SomeUtils;
       description = "Provide the stuff missing in List::Util";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -9225,7 +9225,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestFatal ];
     propagatedBuildInputs = [ Moose ];
     meta = {
-      homepage = http://metacpan.org/release/MooseX-ABC;
+      homepage = https://metacpan.org/release/MooseX-ABC;
       description = "Abstract base classes for Moose";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ ];
@@ -9531,7 +9531,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestMoose ];
     propagatedBuildInputs = [ BHooksEndOfScope Moose namespaceautoclean ];
     meta = {
-      homepage = http://metacpan.org/release/MooseX-MarkAsMethods/;
+      homepage = https://metacpan.org/release/MooseX-MarkAsMethods/;
       description = "Mark overload code symbols as methods";
       license = stdenv.lib.licenses.lgpl21;
     };
@@ -9614,7 +9614,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestFatal TestMoose ];
     propagatedBuildInputs = [ Moose ];
     meta = {
-      homepage = http://github.com/sartak/MooseX-Role-Parameterized/tree;
+      homepage = https://github.com/sartak/MooseX-Role-Parameterized/tree;
       description = "Roles with composition parameters";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -9629,7 +9629,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestCheckDeps TestNoWarnings ModuleMetadata];
     propagatedBuildInputs = [ aliased Moose namespaceautoclean namespaceclean ];
     meta = {
-      homepage = http://metacpan.org/release/MooseX-Role-WithOverloading;
+      homepage = https://metacpan.org/release/MooseX-Role-WithOverloading;
       description = "Roles which support overloading";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -9871,7 +9871,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ DateTime MooseXTypesDateTime TestFatal ];
     propagatedBuildInputs = [ DevelPartialDump Moose MooseXTypes SubExporter ];
     meta = {
-      homepage = http://metacpan.org/release/MooseX-Types-Structured;
+      homepage = https://metacpan.org/release/MooseX-Types-Structured;
       description = "MooseX::Types::Structured - Structured Type Constraints for Moose";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ ];
@@ -10454,7 +10454,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ CryptSSLeay LWPUserAgent NetOAuth URI ];
     doCheck = false;
     meta = {
-      homepage = http://github.com/semifor/Net-Twitter-Lite;
+      homepage = https://github.com/semifor/Net-Twitter-Lite;
       description = "A perl interface to the Twitter API";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -10633,7 +10633,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ TestFatal TestWarnings ];
     propagatedBuildInputs = [ PackageStash ParamsUtil SubInstall SubName namespaceautoclean ];
     meta = {
-      homepage = http://metacpan.org/release/Package-DeprecationManager;
+      homepage = https://metacpan.org/release/Package-DeprecationManager;
       description = "Manage deprecation warnings for your distribution";
       license = stdenv.lib.licenses.artistic2;
     };
@@ -10661,7 +10661,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ DistCheckConflicts TestFatal TestRequires ];
     propagatedBuildInputs = [ DistCheckConflicts ModuleImplementation ];
     meta = {
-      homepage = http://metacpan.org/release/Package-Stash;
+      homepage = https://metacpan.org/release/Package-Stash;
       description = "Routines for manipulating stashes";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -10675,7 +10675,7 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ TestRequires TestFatal ];
     meta = {
-      homepage = http://metacpan.org/release/Package-Stash-XS;
+      homepage = https://metacpan.org/release/Package-Stash-XS;
       description = "Faster and more correct implementation of the Package::Stash API";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -10742,7 +10742,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ ModuleBuild TestFatal TestRequires ];
     propagatedBuildInputs = [ ModuleImplementation ];
     meta = {
-      homepage = http://metacpan.org/release/Params-Validate;
+      homepage = https://metacpan.org/release/Params-Validate;
       description = "Validate method/function parameters";
       license = stdenv.lib.licenses.artistic2;
     };
@@ -11536,7 +11536,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ ModuleBuild ];
     propagatedBuildInputs = [ self."if" ];
     meta = {
-      homepage = http://github.com/timj/perl-Pod-LaTeX/tree/master;
+      homepage = https://github.com/timj/perl-Pod-LaTeX/tree/master;
       description = "Convert Pod data to formatted Latex";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -12186,7 +12186,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ CryptRC4 DigestPerlMD5 IOstringy OLEStorage_Lite ];
     meta = {
-      homepage = http://github.com/runrig/spreadsheet-parseexcel/;
+      homepage = https://github.com/runrig/spreadsheet-parseexcel/;
       description = "Read information from an Excel file";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -12949,7 +12949,7 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ ModuleBuild perl ];
     propagatedBuildInputs = [ EnvPath FileWhich GamesSolitaireVerify Inline InlineC ListMoreUtils Moo MooX PathTiny StringShellQuote TaskTestRunAllPlugins TemplateToolkit TestDataSplit TestDifferences TestPerlTidy TestRunPluginTrimDisplayedFilenames TestRunValgrind TestTrailingSpace YAMLLibYAML ];
     meta = {
-      homepage = http://metacpan.org/release/Task-FreecellSolver-Testing;
+      homepage = https://metacpan.org/release/Task-FreecellSolver-Testing;
       description = "Install the CPAN dependencies of the Freecell Solver test suite";
       license = stdenv.lib.licenses.mit;
     };
@@ -13215,7 +13215,7 @@ let self = _self // overrides; _self = with self; {
     doCheck = false;
 
     meta = {
-      homepage = http://sourceforge.net/projects/perl-trg/;
+      homepage = https://sourceforge.net/projects/perl-trg/;
       description = "Perl extension for the GNU Readline/History Library";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -13532,7 +13532,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "0qfdn71562xzmgnhmkkdbpp3vj851ldl1zlmxvharxsr16gjh6s3";
     };
     meta = {
-      homepage = http://metacpan.org/release/Test-EOL;
+      homepage = https://metacpan.org/release/Test-EOL;
       description = "Check the correct line endings in your project";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ ];
@@ -14265,7 +14265,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "8410438a2acf127bffcf1ab92205b747a615b487e80a48e8c3d0bb9fa0dbb2a8";
     };
     meta = {
-      homepage = http://github.com/audreyt/Test-use-ok/tree;
+      homepage = https://github.com/audreyt/Test-use-ok/tree;
       description = "Alternative to Test::More::use_ok";
       license = "unrestricted";
     };
@@ -15238,7 +15238,7 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ if_ ];
     meta = {
-      homepage = http://metacpan.org/release/Try-Tiny;
+      homepage = https://metacpan.org/release/Try-Tiny;
       description = "Minimal try/catch with proper preservation of $@";
       license = stdenv.lib.licenses.mit;
     };
@@ -15304,7 +15304,7 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ ModuleBuild ];
     meta = {
-      homepage = http://metacpan.org/release/Unicode-CaseFold;
+      homepage = https://metacpan.org/release/Unicode-CaseFold;
       description = "Unicode case-folding for case-insensitive lookups";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -15967,7 +15967,7 @@ let self = _self // overrides; _self = with self; {
     };
     meta = {
       description = "Base class for SAX Drivers and Filters";
-      homepage = http://github.com/grantm/XML-SAX-Base;
+      homepage = https://github.com/grantm/XML-SAX-Base;
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };

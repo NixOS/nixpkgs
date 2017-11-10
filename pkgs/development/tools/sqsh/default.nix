@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
       it is intended as a replacement for the venerable 'isql' program supplied
       by Sybase.
     '';
-    homepage = http://sourceforge.net/projects/sqsh/;
+    homepage = https://sourceforge.net/projects/sqsh/;
     platforms = platforms.all;
   };
 }

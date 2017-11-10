@@ -18,7 +18,7 @@ in rec {
     m2Path = "/com/nequissimus/maven-hello/${version}";
 
     meta = {
-      homepage = http://github.com/NeQuissimus/maven-hello/;
+      homepage = https://github.com/NeQuissimus/maven-hello/;
       description = "Maven Hello World";
       license = stdenv.lib.licenses.unlicense;
       platforms = stdenv.lib.platforms.all;

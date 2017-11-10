@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   makeFlags = "PREFIX=$(out)";
 
   meta = {
-    homepage = http://github.com/chneukirchen/lr;
+    homepage = https://github.com/chneukirchen/lr;
     description = "List files recursively";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.all;

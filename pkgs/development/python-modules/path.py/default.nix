@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A module wrapper for os.path";
-    homepage = http://github.com/jaraco/path.py;
+    homepage = https://github.com/jaraco/path.py;
     license = lib.licenses.mit;
   };
 

@@ -29050,7 +29050,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "Web Inspector based nodeJS debugger";
-      homepage = http://github.com/node-inspector/node-inspector;
+      homepage = https://github.com/node-inspector/node-inspector;
     };
     production = true;
   };

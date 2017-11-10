@@ -18,7 +18,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://pypi.python.org/pypi/gunicorn;
+    homepage = https://pypi.python.org/pypi/gunicorn;
     description = "WSGI HTTP Server for UNIX";
     license = licenses.mit;
   };

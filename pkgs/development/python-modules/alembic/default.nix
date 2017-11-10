@@ -17,7 +17,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ Mako sqlalchemy python-editor dateutil ];
 
   meta = with stdenv.lib; {
-    homepage = http://bitbucket.org/zzzeek/alembic;
+    homepage = https://bitbucket.org/zzzeek/alembic;
     description = "A database migration tool for SQLAlchemy";
     license = licenses.mit;
   };

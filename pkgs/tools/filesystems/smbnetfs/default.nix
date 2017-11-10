@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     downloadPage = "http://sourceforge.net/projects/smbnetfs/files/smbnetfs";
     updateWalker = true;
     inherit version;
-    homepage = http://sourceforge.net/projects/smbnetfs/;
+    homepage = https://sourceforge.net/projects/smbnetfs/;
   };
 }

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tools to manage kernel-level quotas in Linux";
-    homepage = http://sourceforge.net/projects/linuxquota/;
+    homepage = https://sourceforge.net/projects/linuxquota/;
     license = licenses.gpl2; # With some files being BSD as an exception
     platforms = platforms.linux;
     maintainers = [ maintainers.dezgeg ];
