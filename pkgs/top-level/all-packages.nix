@@ -14064,7 +14064,7 @@ with pkgs;
 
   confclerk = callPackage ../applications/misc/confclerk { };
 
-  copyq = callPackage ../applications/misc/copyq { };
+  copyq = libsForQt5.callPackage ../applications/misc/copyq { };
 
   coriander = callPackage ../applications/video/coriander {
     inherit (gnome2) libgnomeui GConf;
