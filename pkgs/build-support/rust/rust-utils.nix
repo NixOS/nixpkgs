@@ -121,12 +121,8 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
          EXTRA_LINK=$(sed -n "s/^cargo:rustc-link-lib=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ')
          EXTRA_LINK_SEARCH=$(sed -n "s/^cargo:rustc-link-search=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ')
          CRATENAME=$(echo ${crateName} | sed -e "s/\(.*\)-sys$/\1/" | tr '[:lower:]' '[:upper:]')
-         grep "^cargo:" target/build/${crateName}.opt \
-            | grep -v "^cargo:rustc-" \
-            | grep -v "^cargo:warning=" \
-            | grep -v "^cargo:rerun-if-changed=" \
-            | grep -v "^cargo:rerun-if-env-changed" \
-            | sed -e "s/cargo:\([^=]*\)=\(.*\)/export DEP_$(echo $CRATENAME)_\U\1\E=\2/" > target/env
+         grep -P "^cargo:(?!(rustc-|warning=|rerun-if-changed=|rerun-if-env-changed))" target/build/${crateName}.opt \
+           | sed -e "s/cargo:\([^=]*\)=\(.*\)/export DEP_$(echo $CRATENAME)_\U\1\E=\2/" > target/env
 
          set -e
          if [ -n "$(ls target/build/${crateName}.out)" ]; then
