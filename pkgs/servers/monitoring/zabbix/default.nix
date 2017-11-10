@@ -41,12 +41,12 @@ in
         cp -prvd database/postgresql/schema.sql $out/share/zabbix/db/schema/postgresql.sql
       '';
 
-    meta = {
-      description = "An enterprise-class open source distributed monitoring solution";
+    meta = with stdenv.lib; {
+      description = "An enterprise-class open source distributed monitoring solution (server)";
       homepage = http://www.zabbix.com/;
-      license = "GPL";
-      maintainers = [ stdenv.lib.maintainers.eelco ];
-      platforms = stdenv.lib.platforms.linux;
+      license = licenses.gpl2;
+      maintainers = [ maintainers.srhb ];
+      platforms = platforms.linux;
     };
   };
 
