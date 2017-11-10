@@ -978,4 +978,17 @@ self: super: {
 
   # missing dependencies: Glob >=0.7.14 && <0.8, data-fix ==0.0.4
   stack2nix = doJailbreak super.stack2nix;
+
+  # https://github.com/visq/language-c/issues/39
+  # tests are not present in hackage release, so they need to be disabled
+  # if you hit this assert you should check for a fix upstream
+  language-c = dontCheck (overrideCabal super.language-c (drv: assert (drv.version == "0.6.1"); {
+    doCheck = false;
+    src = pkgs.fetchFromGitHub {
+      owner = "corngood";
+      repo = "language-c";
+      rev = "667b019de90f6642b403eb30ce1fe7002b84a01d";
+      sha256 = "19hhihv6ngks7n0pks65713k7xfk9whsd2w483y50kdw42qyqvv7";
+    };
+  }));
 }
