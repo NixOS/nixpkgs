@@ -8352,14 +8352,12 @@ in {
   };
 
   fastimport = callPackage ../development/python-modules/fastimport { };
- 
+
   feedgen = callPackage ../development/python-modules/feedgen { };
 
   feedgenerator = callPackage ../development/python-modules/feedgenerator {
     inherit (pkgs) glibcLocales;
   };
-
-  s3transfer = callPackage ../development/python-modules/s3transfer { };
 
   feedparser = buildPythonPackage (rec {
     name = "feedparser-5.2.1";
@@ -17813,38 +17811,7 @@ in {
     };
   };
 
-  s3transfer = buildPythonPackage rec {
-    version = "0.1.10";
-    name = "s3transfer-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/s/s3transfer/${name}.tar.gz";
-      sha256 = "1h8g9bknvxflxkpbnxyfxmk8pvgykbbk9ljdvhqh6z4vjc2926ms";
-    };
-
-    foo = 1;
-
-    propagatedBuildInputs =
-      [ self.botocore
-      ] ++ stdenv.lib.optional (pythonOlder "3") self.futures;
-
-    buildInputs = with self; [ docutils mock nose coverage wheel unittest2 ];
-
-    checkPhase = ''
-      pushd s3transfer/tests
-      nosetests -v unit/ functional/
-      popd
-    '';
-
-    # version on pypi has no tests/ dir
-    doCheck = false;
-
-    meta = {
-      homepage = https://github.com/boto/s3transfer;
-      license = stdenv.lib.licenses.asl20;
-      description = "A library for managing Amazon S3 transfers";
-    };
-  };
+  s3transfer = callPackage ../development/python-modules/s3transfer { };
 
   seqdiag = callPackage ../development/python-modules/seqdiag { };
 
