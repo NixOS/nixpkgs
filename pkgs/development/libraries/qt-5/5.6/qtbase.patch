@@ -377,7 +377,7 @@ index 4c68cfd72f..f422f18266 100644
  
      check_examples {
 diff --git a/mkspecs/features/qt_functions.prf b/mkspecs/features/qt_functions.prf
-index 4a1d265a8b..abe0da95f6 100644
+index 4a1d265a8b..d346424b5b 100644
 --- a/mkspecs/features/qt_functions.prf
 +++ b/mkspecs/features/qt_functions.prf
 @@ -70,7 +70,7 @@ defineTest(qtHaveModule) {
@@ -385,7 +385,7 @@ index 4a1d265a8b..abe0da95f6 100644
      cmd = $$eval(QT_TOOL.$${2}.binary)
      isEmpty(cmd) {
 -        cmd = $$[QT_HOST_BINS]/$$2
-+        cmd = $$system("type -p $$2")
++        cmd = $$system("command -v $$2")
          exists($${cmd}.pl) {
              cmd = perl -w $$system_path($${cmd}.pl)
          } else: contains(QMAKE_HOST.os, Windows) {
