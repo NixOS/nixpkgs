@@ -13394,6 +13394,8 @@ with pkgs;
 
   libertine = callPackage ../data/fonts/libertine { };
 
+  libertinus = callPackage ../data/fonts/libertinus { };
+
   libre-baskerville = callPackage ../data/fonts/libre-baskerville { };
 
   libre-bodoni = callPackage ../data/fonts/libre-bodoni { };
