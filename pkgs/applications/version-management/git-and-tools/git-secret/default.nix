@@ -17,17 +17,17 @@ in stdenv.mkDerivation {
   buildInputs = [ makeWrapper ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp git-secret $out/bin
+    install -D git-secret $out/bin/git-secret
 
     wrapProgram $out/bin/git-secret \
       --prefix PATH : "${lib.makeBinPath [ git gnupg ]}"
 
-    cp -R man $out/
+    mkdir $out/share
+    cp -r man $out/share
   '';
 
   meta = {
-    description = "A bash-tool to store your private data inside a git repository.";
+    description = "A bash-tool to store your private data inside a git repository";
     homepage = http://git-secret.io;
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.lo1tuma ];
