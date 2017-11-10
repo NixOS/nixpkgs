@@ -11881,10 +11881,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   RoleTiny = buildPerlPackage rec {
-    name = "Role-Tiny-2.000005";
+    name = "Role-Tiny-2.000006";
     src = fetchurl {
       url = "mirror://cpan/authors/id/H/HA/HAARG/${name}.tar.gz";
-      sha256 = "593a29b621e029bf0218d0154d5dfdf6ec502afc49adeeadae6afd0c70063115";
+      sha256 = "cc73418c904a0286ecd8915eac11f5be2a8d1e17ea9cb54c9116b0340cd3e382";
     };
     meta = {
       description = "Roles. Like a nouvelle cuisine portion size slice of Moose";
