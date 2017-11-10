@@ -1,5 +1,6 @@
 { stdenv
 , fetch
+, fetchpatch
 , perl
 , groff
 , cmake
@@ -38,6 +39,22 @@ in stdenv.mkDerivation rec {
     # llvm-config --libfiles returns (non-existing) static libs
     ../fix-llvm-config.patch
   ];
+
+  postPatch = stdenv.lib.optionalString (stdenv ? glibc) ''
+    (
+     cd projects/compiler-rt
+      patch -p1 -F3 < ${
+        fetchpatch {
+          name = "sigaltstack.patch"; # for glibc-2.26
+          url = https://github.com/llvm-mirror/compiler-rt/commit/8a5e425a68d.diff;
+          sha256 = "0h4y5vl74qaa7dl54b1fcyqalvlpd8zban2d1jxfkxpzyi7m8ifi";
+        }
+      }
+
+      sed -i "s,#include <pthread.h>,&\n#include <signal.h>,g" \
+        lib/asan/asan_linux.cc
+    )
+  '';
 
   # hacky fix: created binaries need to be run before installation
   preBuild = ''
