@@ -17200,6 +17200,10 @@ in {
 
   readme_renderer = callPackage ../development/python-modules/readme_renderer { };
 
+  rivet = disabledIf isPy3k (toPythonModule (pkgs.rivet.override {
+    python2 = python;
+  }));
+
   rjsmin = callPackage ../development/python-modules/rjsmin { };
 
   pysolr = buildPythonPackage rec {
