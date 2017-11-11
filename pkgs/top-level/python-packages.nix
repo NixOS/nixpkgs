@@ -17031,37 +17031,7 @@ in {
     };
   };
 
-
-  reportlab =
-   let freetype = overrideDerivation pkgs.freetype (args: { dontDisableStatic = true; });
-   in buildPythonPackage rec {
-    name = "reportlab-3.2.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/reportlab/${name}.tar.gz";
-      sha256 = "14v212cq2w3p0j5xydfr8rav8c8qas1q845r0xj7fm6q5dk8grkj";
-    };
-
-    LC_ALL = "en_US.UTF-8";
-    buildInputs = with self; [ freetype pillow pip pkgs.glibcLocales ];
-
-    patchPhase = ''
-      rm tests/test_graphics_barcode.py
-      rm tests/test_graphics_render.py
-    '';
-
-    checkPhase = ''
-      ${python.interpreter} tests/runAll.py
-    '';
-
-    # See https://bitbucket.org/pypy/compatibility/wiki/reportlab%20toolkit
-    disabled = isPyPy;
-
-    meta = {
-      description = "An Open Source Python library for generating PDFs and graphics";
-      homepage = http://www.reportlab.com/;
-    };
-  };
+  reportlab = callPackage ../development/python-modules/reportlab { };
 
   requests2 = throw "requests2 has been deprecated. Use requests instead.";
 
