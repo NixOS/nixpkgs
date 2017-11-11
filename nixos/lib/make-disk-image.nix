@@ -35,11 +35,16 @@
 
 , # Disk image format, one of qcow2, vpc, raw.
   format ? "raw"
+
+, # Whether to compress the image, applicable only when the format is qcow2.
+  compressed ? false
 }:
 
 with lib;
 
 let
+  compress = optionalString compressed (assert format == "qcow2"; "-c");
+
   filename = "nixos." + {
     qcow2 = "qcow2";
     vpc   = "vhd";
@@ -136,7 +141,7 @@ in pkgs.vmTools.runInLinuxVM (
         ${if format == "raw" then ''
           mv $diskImage $out/${filename}
         '' else ''
-          ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${format} $diskImage $out/${filename}
+          ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${format} ${compress} $diskImage $out/${filename}
         ''}
         diskImage=$out/${filename}
         ${postVM}
