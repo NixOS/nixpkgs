@@ -5231,6 +5231,8 @@ with pkgs;
 
   bash-completion = callPackage ../shells/bash-completion { };
 
+  nix-bash-completions = callPackage ../shells/nix-bash-completions { };
+
   dash = callPackage ../shells/dash { };
 
   es = callPackage ../shells/es { };
