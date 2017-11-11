@@ -86,13 +86,9 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "checkInputs"
     inherit pythonModule;
   } // passthru;
 
-  meta = with lib.maintainers; {
+  meta = {
     # default to python's platforms
     platforms = python.meta.platforms;
-  } // meta // {
-    # add extra maintainer(s) to every package
-    maintainers = (meta.maintainers or []) ++ [ chaoflow ];
-    # a marker for release utilities to discover python packages
     isBuildPythonPackage = python.meta.platforms;
-  };
+  } // meta;
 })
