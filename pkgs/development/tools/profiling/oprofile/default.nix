@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
       --replace "/bin/cp" "${coreutils}/bin/cp"
   '';
 
-  buildInputs = [ binutils zlib popt pkgconfig linuxHeaders libiberty_static ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ binutils zlib popt linuxHeaders libiberty_static ]
     ++ stdenv.lib.optionals withGUI [ qt4 ];
 
   configureFlags = [

@@ -1,9 +1,9 @@
-{ stdenv, fetchgit, cmake, pkgconfig, boost, libunwind, libmemcached, pcre
-, libevent, gd, curl, libxml2, icu, flex, bison, openssl, zlib, php
+{ stdenv, fetchgit, fetchurl, cmake, pkgconfig, boost, libunwind, libmemcached
+, pcre, libevent, gd, curl, libxml2, icu, flex, bison, openssl, zlib, php
 , expat, libcap, oniguruma, libdwarf, libmcrypt, tbb, gperftools, glog, libkrb5
 , bzip2, openldap, readline, libelf, uwimap, binutils, cyrus_sasl, pam, libpng
-, libxslt, ocaml, freetype, gdb, git, perl, mariadb, gmp, libyaml, libedit
-, libvpx, imagemagick, fribidi, gperf, which
+, libxslt, freetype, gdb, git, perl, mariadb, gmp, libyaml, libedit
+, libvpx, imagemagick, fribidi, gperf, which, ocamlPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -22,12 +22,17 @@ stdenv.mkDerivation rec {
     [ cmake pkgconfig boost libunwind mariadb.client libmemcached pcre gdb git perl
       libevent gd curl libxml2 icu flex bison openssl zlib php expat libcap
       oniguruma libdwarf libmcrypt tbb gperftools bzip2 openldap readline
-      libelf uwimap binutils cyrus_sasl pam glog libpng libxslt ocaml libkrb5
+      libelf uwimap binutils cyrus_sasl pam glog libpng libxslt libkrb5
       gmp libyaml libedit libvpx imagemagick fribidi gperf which
+      ocamlPackages.ocaml ocamlPackages.ocamlbuild
     ];
 
   patches = [
     ./flexible-array-members-gcc6.patch
+    (fetchurl {
+      url = https://github.com/facebook/hhvm/commit/b506902af2b7c53de6d6c92491c2086472292004.patch;
+      sha256 = "1br7diczqks6b1xjrdsac599fc62m9l17gcx7dvkc0qj54lq7ys4";
+    })
   ];
 
   enableParallelBuilding = false; # occasional build problems;

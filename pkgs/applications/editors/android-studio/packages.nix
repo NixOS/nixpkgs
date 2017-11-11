@@ -1,4 +1,4 @@
-{  stdenv, callPackage, fetchurl, makeFontsConf }:
+{ stdenv, callPackage, fetchurl, makeFontsConf }:
 let
   mkStudio = opts: callPackage (import ./common.nix opts) {
     fontsConf = makeFontsConf {
@@ -6,11 +6,11 @@ let
     };
   };
 in rec {
-  stable = mkStudio rec {
+  stable = mkStudio {
     pname = "android-studio";
-    version = "2.3.3.0";
-    build = "162.4069837";
-    sha256Hash = "0zzis9m2xp44xwkj0zvcqw5rh3iyd3finyi5nqhgira1fkacz0qk";
+    version = "3.0.0.18"; # "Android Studio 3.0"
+    build = "171.4408382";
+    sha256Hash = "18npm7ckdybj6vc2vndr0wd50da19m9z2j7wld2mdidnl5ggk4br";
 
     meta = with stdenv.lib; {
       description = "The Official IDE for Android (stable version)";
@@ -25,16 +25,16 @@ in rec {
     };
   };
 
-  preview = mkStudio rec {
+  preview = mkStudio {
     pname = "android-studio-preview";
-    version = "3.0.0.14"; # "Android Studio 3.0 Beta 6"
-    build = "171.4333198";
-    sha256Hash = "071a3j0bnsspvhvhh10h9ygay3bi66glriiy8gl8vrwx1dnv55zk";
+    version = "3.1.0.0"; # "Android Studio 3.1 Canary 1"
+    build = "171.4415322";
+    sha256Hash = "08xgwv6mg2zxys9dqjfz66h60g640ni3snyb89ij0fkmd28rbxgj";
 
     meta = stable.meta // {
       description = "The Official IDE for Android (preview version)";
       homepage = https://developer.android.com/studio/preview/index.html;
-      maintainers = with stdenv.lib.maintainers; [ primeos tomsmeets ];
+      maintainers = with stdenv.lib.maintainers; [ primeos ];
     };
   };
 }

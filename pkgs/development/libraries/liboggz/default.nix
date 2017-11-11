@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ libogg ];
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
 
   meta = {
     homepage = https://xiph.org/oggz/;

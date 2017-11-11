@@ -87,7 +87,7 @@ rec {
     imageName = "nixos/nix";
     imageTag = "1.11";
     # this hash will need change if the tag is updated at docker hub
-    sha256 = "18xvcnl0yvj9kfi5bkimrhhjaa8xhm3jhshh2xd7c0sbfrmfqzvi";
+    sha256 = "0nncn9pn5miygan51w34c2p9qssi96jgsaqv44dxxdprc8pg0g83";
   };
 
   # 5. example of multiple contents, emacs and vi happily coexisting
@@ -107,11 +107,13 @@ rec {
   nix = buildImageWithNixDb {
     name = "nix";
     contents = [
-      # nix-store -qR uses the 'more' program which is not included in
-      # the pkgs.nix dependencies. We then have to manually get it
-      # from the 'eject' package:/
-      pkgs.eject
+      # nix-store uses cat program to display results as specified by
+      # the image env variable NIX_PAGER.
+      pkgs.coreutils
       pkgs.nix
     ];
+    config = {
+      Env = [ "NIX_PAGER=cat" ];
+    };
   };
 }

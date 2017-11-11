@@ -5,15 +5,15 @@
 # script that sets up the right environment variables so that the
 # compiler and the linker just "work".
 
-{ name ? "", stdenv, nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
-, cc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? stdenv.shell
+{ name ? "", stdenvNoCC, nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
+, cc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? stdenvNoCC.shell
 , zlib ? null, extraPackages ? [], extraBuildCommands ? ""
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
 , useMacosReexportHack ? false
 }:
 
-with stdenv.lib;
+with stdenvNoCC.lib;
 
 assert nativeTools -> nativePrefix != "";
 assert !nativeTools ->
@@ -25,6 +25,7 @@ assert (noLibc || nativeLibc) == (libc == null);
 assert cc.langVhdl or false -> zlib != null;
 
 let
+  stdenv = stdenvNoCC;
   inherit (stdenv) hostPlatform targetPlatform;
 
   # Prefix for binaries. Customarily ends with a dash separator.
@@ -96,6 +97,11 @@ stdenv.mkDerivation {
   outputs = [ "out" "man" ];
 
   passthru = {
+    # "cc" is the generic name for a C compiler, but there is no one for package
+    # providing the linker and related tools. The two we use now are GNU
+    # Binutils, and Apple's "cctools"; "binutils" as an attempt to find an
+    # unused middle-ground name that evokes both.
+    bintools = binutils_bin;
     inherit libc nativeTools nativeLibc nativePrefix isGNU isClang default_cxx_stdlib_compile
             prefix;
 
@@ -285,7 +291,7 @@ stdenv.mkDerivation {
         *) echo "Multiple dynamic linkers found for platform '${targetPlatform.config}'." >&2;;
       esac
 
-      if [ -n "$dynamicLinker" ]; then
+      if [ -n "''${dynamicLinker:-}" ]; then
         echo $dynamicLinker > $out/nix-support/dynamic-linker
 
     '' + (if targetPlatform.isDarwin then ''

@@ -10,7 +10,8 @@ stdenv.mkDerivation {
     sha256 = "02pqaaahra4wbv325264qh5i17mxwicmjx9nm33nw2dpmfmg9xhr";
   };
 
-  buildInputs = [ pkgconfig libusb ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libusb ];
 
   buildPhase = ''
     make all misc

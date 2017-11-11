@@ -1,21 +1,23 @@
-{ stdenv, fetchFromGitHub, cmake, gcc, zlib}:
+{ stdenv, fetchFromGitHub, cmake, gcc, zlib, bzip2, lzma }:
 
 stdenv.mkDerivation rec {
   name    = "freebayes-${version}";
-  version = "1.1.0";
+  version = "2017-08-23";
 
   src = fetchFromGitHub {
     name = "freebayes-${version}-src";
     owner  = "ekg";
     repo   = "freebayes";
-    rev    = "refs/tags/v${version}";
-    sha256 = "0xb8aicb36w9mfs1gq1x7mcp3p82kl7i61d162hfncqzg2npg8rr";
+    rev    = "8d2b3a060da473e1f4f89be04edfce5cba63f1d3";
+    sha256 = "0yyrgk2639lz1yvg4jf0ccahnkic31dy77q05pb3i28rjf37v45z";
     fetchSubmodules = true;
   };
 
-  buildInputs = [ cmake gcc zlib ];
+  buildInputs = [ zlib bzip2 lzma ];
 
-  builder = ./builder.sh;
+  installPhase = ''
+    install -vD bin/freebayes bin/bamleftalign scripts/* -t $out/bin
+  '';
 
   meta = with stdenv.lib; {
     description = "Bayesian haplotype-based polymorphism discovery and genotyping";

@@ -93,7 +93,6 @@ in
       preStop = ''
         ${pkgs.utillinux}/bin/umount /afs
         ${openafsPkgs}/sbin/afsd -shutdown
-        ${pkgs.kmod}/sbin/rmmod libafs
       '';
     };
   };

@@ -227,6 +227,12 @@ self: super: builtins.intersectAttrs super {
   # /homeless-shelter. Disabled.
   purescript = dontCheck super.purescript;
 
+  # https://github.com/haskell-foundation/foundation/pull/412
+  foundation =
+    if pkgs.stdenv.isDarwin
+    then dontCheck super.foundation
+    else super.foundation;
+
   # Hardcoded include path
   poppler = overrideCabal super.poppler (drv: {
     postPatch = ''
@@ -494,5 +500,11 @@ self: super: builtins.intersectAttrs super {
 
   # Without this override, the builds lacks pkg-config.
   opencv-extra = addPkgconfigDepend super.opencv-extra (pkgs.opencv3.override { enableContrib = true; });
+
+  # Written against the 6.X series of megaparsec
+  htoml-megaparsec = super.htoml-megaparsec.override { megaparsec = self.megaparsec_6_2_0; };
+
+  # Break cyclic reference that results in an infinite recursion.
+  partial-semigroup = dontCheck super.partial-semigroup;
 
 }

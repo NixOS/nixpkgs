@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "compton-conf";
-  version = "0.2.1";
+  version = "0.3.0";
 
-  srcs = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "lxde";
     repo = pname;
     rev = version;
-    sha256 = "1hmirhsz010h6a6k7my1krh5nw5ds4x00c5fq6apamrdd8d4zrmq";
+    sha256 = "1p1y7g5psczx1dgh6gd1h5iga8rylvczkwlfirzrh0rfl45dajgb";
   };
 
   nativeBuildInputs = [
@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [ "-DPULL_TRANSLATIONS=NO" ];
+
+  preConfigure = ''
+    substituteInPlace autostart/CMakeLists.txt \
+      --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg" \
+    '';
 
   meta = with stdenv.lib; {
     description = "GUI configuration tool for compton X composite manager";

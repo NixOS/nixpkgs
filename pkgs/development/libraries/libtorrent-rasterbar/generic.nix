@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, automake, autoconf, boost, openssl, lib, libtool, pkgconfig, zlib, python, libiconv, geoip
 # Version specific options
-, version, sha256
-, ... }:
+{ version, sha256, patches ? [] }:
+
+{ stdenv, fetchurl, automake, autoconf, boost, openssl, lib, libtool, pkgconfig, zlib, python, libiconv, geoip, ... }:
 
 let formattedVersion = lib.replaceChars ["."] ["_"] version;
 
@@ -15,9 +15,10 @@ stdenv.mkDerivation rec {
     inherit sha256;
   };
 
-  nativeBuildInputs = [automake autoconf libtool ];
+  inherit patches;
 
-  buildInputs = [ boost pkgconfig openssl zlib python libiconv geoip ];
+  nativeBuildInputs = [ automake autoconf libtool pkgconfig ];
+  buildInputs = [ boost openssl zlib python libiconv geoip ];
 
   preConfigure = "./autotool.sh";
 

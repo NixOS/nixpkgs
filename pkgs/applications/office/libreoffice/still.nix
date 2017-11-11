@@ -13,7 +13,7 @@
 , librevenge, libe-book, libmwaw, glm, glew, gst_all_1
 , gdb, commonsLogging, librdf_rasqal, makeWrapper, gsettings_desktop_schemas
 , defaultIconTheme, glib, ncurses
-, langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" "sl" "pl" "hu" ]
+, langs ? [ "en-US" "en-GB" "ca" "ru" "eo" "fr" "nl" "de" "sl" "pl" "hu" "it" ]
 , withHelp ? true
 , kdeIntegration ? false
 }:
@@ -63,7 +63,7 @@ in stdenv.mkDerivation rec {
   # It also seems not to mention libdl explicitly in some places.
   NIX_LDFLAGS = "-lcups -ldl";
 
-  # For some reason librdf_redland sometimes refers to rasqal.h instead 
+  # For some reason librdf_redland sometimes refers to rasqal.h instead
   # of rasqal/rasqal.h
   NIX_CFLAGS_COMPILE="-I${librdf_rasqal}/include/rasqal";
 

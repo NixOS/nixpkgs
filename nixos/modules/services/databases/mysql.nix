@@ -67,7 +67,7 @@ in
         type = types.nullOr types.str;
         default = null;
         example = literalExample "0.0.0.0";
-        description = "Address to bind to. The default it to bind to all addresses";
+        description = "Address to bind to. The default is to bind to all addresses";
       };
 
       port = mkOption {

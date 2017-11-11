@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
-  buildInputs = [ pkgconfig glib intltool itstool libxml2
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib intltool itstool libxml2
                   clutter_gtk libuuid webkitgtk gnome3.tracker
                   gnome3.gnome_online_accounts zeitgeist desktop_file_utils
                   gnome3.gsettings_desktop_schemas makeWrapper

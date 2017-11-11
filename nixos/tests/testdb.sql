@@ -8,3 +8,4 @@ insert into tests values (1, 'a');
 insert into tests values (2, 'b');
 insert into tests values (3, 'c');
 insert into tests values (4, 'd');
+insert into tests values (5, 'hello');

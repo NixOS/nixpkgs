@@ -36,7 +36,7 @@ let
 
       keyFile = mkOption {
         default = null;
-        example = "/root/.swapkey";
+        example = "/mnt-root/root/.swapkey";
         type = types.nullOr types.str;
         description = "File system location of keyfile. This unlocks the drive after the root has been mounted to <literal>/mnt-root</literal>.";
       };
@@ -57,7 +57,7 @@ in
 
   config = mkIf anyEncrypted {
     assertions = map (dev: {
-      assertion = dev.label != null;
+      assertion = dev.encrypted.label != null;
       message = ''
         The filesystem for ${dev.mountPoint} has encrypted.enable set to true, but no encrypted.label set
       '';
@@ -67,7 +67,6 @@ in
       luks = {
         devices =
           map (dev: { name = dev.encrypted.label; device = dev.encrypted.blkDev; } ) keylessEncDevs;
-        cryptoModules = [ "aes" "sha256" "sha1" "xts" ];
         forceLuksSupportInInitrd = true;
       };
       postMountCommands =

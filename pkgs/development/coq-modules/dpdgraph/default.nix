@@ -21,7 +21,8 @@ stdenv.mkDerivation {
     inherit (param) rev sha256;
   };
 
-  buildInputs = [ autoreconfHook coq ]
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ coq ]
   ++ (with ocamlPackages; [ ocaml findlib ocamlgraph ]);
 
   preInstall = ''

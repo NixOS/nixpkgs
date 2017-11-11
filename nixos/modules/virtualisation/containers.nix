@@ -537,7 +537,7 @@ in
               type = types.bool;
               default = false;
               description = ''
-                Wether the container is automatically started at boot-time.
+                Whether the container is automatically started at boot-time.
               '';
             };
 
@@ -596,6 +596,8 @@ in
                   { config, pkgs, ... }:
                   { services.postgresql.enable = true;
                     services.postgresql.package = pkgs.postgresql96;
+                    
+                    system.stateVersion = "17.03";
                   };
               };
           }

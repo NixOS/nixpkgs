@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig file wrapGAppsHook ];
 
-  buildInputs = [ gtk3 glib intltool libwnck3 libxml2 libxslt pkgconfig file
+  buildInputs = [ gtk3 glib intltool libwnck3 libxml2 libxslt file
                   webkitgtk libsoup libsecret gnome_desktop libnotify libtool
                   sqlite isocodes nss itstool p11_kit nspr icu gnome3.yelp_tools
                   gdk_pixbuf gnome3.defaultIconTheme librsvg which gnome_common

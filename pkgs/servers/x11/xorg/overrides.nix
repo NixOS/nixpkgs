@@ -71,13 +71,13 @@ in
   };
 
   libxcb = attrs : attrs // {
-    nativeBuildInputs = [ args.python ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ args.python ];
     configureFlags = "--enable-xkb --enable-xinput";
     outputs = [ "out" "dev" "man" "doc" ];
   };
 
   xcbproto = attrs : attrs // {
-    nativeBuildInputs = [ args.python ];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ args.python ];
   };
 
   libX11 = attrs: attrs // {
@@ -315,14 +315,15 @@ in
     installFlags = "sdkdir=\${out}/include/xorg";
   };
 
-  xf86inputlibinput = attrs: attrs // {
-    name = "xf86-input-libinput-0.25.1";
+  xf86inputlibinput = attrs: attrs // rec {
+    name = "xf86-input-libinput-0.26.0";
     src = args.fetchurl {
-      url = mirror://xorg/individual/driver/xf86-input-libinput-0.25.1.tar.bz2;
-      sha256 = "1q67hjd67ni1nq7kgxdrrdgkyhzaqvvn2vlnsiiq9w4y3icpv7s8";
+      url = "mirror://xorg/individual/driver/${name}.tar.bz2";
+      sha256 = "0yrqs88b7yn9nljwlxzn76jfmvf0sh939kzij5b2jvr2qa7mbjmb";
     };
+    outputs = [ "out" "dev" ];
     buildInputs = attrs.buildInputs ++ [ args.libinput ];
-    installFlags = "sdkdir=\${out}/include/xorg";
+    installFlags = "sdkdir=\${dev}/include/xorg";
   };
 
   xf86inputsynaptics = attrs: attrs // {
@@ -398,11 +399,6 @@ in
     let
       attrs = with args;
         if (args.abiCompat == null) then attrs_passed
-            # All this just for 1.19.2, as the tarball is incorrectly autotoolized.
-            // {
-              nativeBuildInputs = [ utilmacros fontutil ];
-              preConfigure = "libtoolize --force; aclocal; autoheader; automake -afi";
-            }
         else if (args.abiCompat == "1.17") then {
           name = "xorg-server-1.17.4";
           builder = ./builder.sh;
@@ -410,7 +406,8 @@ in
             url = mirror://xorg/individual/xserver/xorg-server-1.17.4.tar.bz2;
             sha256 = "0mv4ilpqi5hpg182mzqn766frhi6rw48aba3xfbaj4m82v0lajqc";
           };
-          buildInputs = [pkgconfig dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
+          nativeBuildInputs = [ pkgconfig ];
+          buildInputs = [ dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
           meta.platforms = stdenv.lib.platforms.unix;
         } else if (args.abiCompat == "1.18") then {
             name = "xorg-server-1.18.4";
@@ -419,7 +416,8 @@ in
               url = mirror://xorg/individual/xserver/xorg-server-1.18.4.tar.bz2;
               sha256 = "1j1i3n5xy1wawhk95kxqdc54h34kg7xp4nnramba2q8xqfr5k117";
             };
-            buildInputs = [pkgconfig dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
+            nativeBuildInputs = [ pkgconfig ];
+            buildInputs = [ dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
             meta.platforms = stdenv.lib.platforms.unix;
         } else throw "unsupported xorg abiCompat: ${args.abiCompat}";
 
@@ -539,7 +537,7 @@ in
   };
 
   twm = attrs: attrs // {
-    nativeBuildInputs = [args.bison args.flex];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [args.bison args.flex];
   };
 
   xcursorthemes = attrs: attrs // {
@@ -565,8 +563,15 @@ in
   };
 
   xf86videointel = attrs: attrs // {
+    # the update script only works with released tarballs :-/
+    name = "xf86-video-intel-2017-10-19";
+    src = args.fetchurl {
+      url = "http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/snapshot/"
+          + "4798e18b2b2c8b0a05dc967e6140fd9962bc1a73.tar.gz";
+      sha256 = "1zpgbibfpdassswfj68zwhhfpvd2p80rpxw92bis6lv81ssknwby";
+    };
     buildInputs = attrs.buildInputs ++ [xorg.libXfixes xorg.libXScrnSaver xorg.pixman];
-    nativeBuildInputs = [args.autoreconfHook xorg.utilmacros];
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [args.autoreconfHook xorg.utilmacros];
     configureFlags = "--with-default-dri=3 --enable-tools";
   };
 

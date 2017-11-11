@@ -15,8 +15,9 @@ stdenv.mkDerivation rec {
       --replace AS=\''${AS} AS=yasm
   '';
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    openssl ncurses curl pkgconfig gnutls readline perl libjpeg
+    openssl ncurses curl gnutls readline perl libjpeg
     sqlite pcre speex ldns libedit yasm which lua libopus
     libsndfile
   ];

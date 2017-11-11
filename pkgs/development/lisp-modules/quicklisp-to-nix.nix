@@ -2012,6 +2012,19 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "cl-protobufs" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-protobufs" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-protobufs.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "babel" = quicklisp-to-nix-packages."babel";
+           "closer-mop" = quicklisp-to-nix-packages."closer-mop";
+           "trivial-features" = quicklisp-to-nix-packages."trivial-features";
+           "trivial-garbage" = quicklisp-to-nix-packages."trivial-garbage";
+       }));
+
+
   "cl-ppcre-unicode" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."cl-ppcre-unicode" or (x: {}))

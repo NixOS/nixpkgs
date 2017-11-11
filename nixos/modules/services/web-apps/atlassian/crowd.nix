@@ -9,9 +9,10 @@ let
   pkg = pkgs.atlassian-crowd.override {
     home = cfg.home;
     port = cfg.listenPort;
-    proxyUrl = "${cfg.proxy.scheme}://${cfg.proxy.name}:${toString cfg.proxy.port}";
     openidPassword = cfg.openidPassword;
-  };
+  } // (optionalAttrs cfg.proxy.enable {
+    proxyUrl = "${cfg.proxy.scheme}://${cfg.proxy.name}:${toString cfg.proxy.port}";
+  });
 
 in
 
@@ -92,14 +93,11 @@ in
         };
       };
 
-      jrePackage = let
-        jreSwitch = unfree: free: if config.nixpkgs.config.allowUnfree or false then unfree else free;
-      in mkOption {
+      jrePackage = mkOption {
         type = types.package;
-        default = jreSwitch pkgs.oraclejre8 pkgs.openjdk8.jre;
-        defaultText = jreSwitch "pkgs.oraclejre8" "pkgs.openjdk8.jre";
-        example = literalExample "pkgs.openjdk8.jre";
-        description = "Java Runtime to use for Crowd. Note that Atlassian recommends the Oracle JRE.";
+        default = pkgs.oraclejre8;
+        defaultText = "pkgs.oraclejre8";
+        description = "Note that Atlassian only support the Oracle JRE (JRASERVER-46152).";
       };
     };
   };
@@ -142,13 +140,12 @@ in
           ${pkg}/apache-tomcat/conf/server.xml.dist > ${cfg.home}/server.xml
       '';
 
-      script = "${pkg}/start_crowd.sh";
-
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
         PrivateTmp = true;
         PermissionsStartOnly = true;
+        ExecStart = "${pkg}/start_crowd.sh -fg";
       };
     };
   };

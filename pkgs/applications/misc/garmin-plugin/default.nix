@@ -6,7 +6,8 @@ stdenv.mkDerivation {
     sha256 = "15gads1fj4sj970m5960dgnhys41ksi4cm53ldkf67wn8dc9i4k0";
   };
   sourceRoot = "GarminPlugin-0.3.26/src";
-  buildInputs = [ garmintools libusb libgcrypt pkgconfig tinyxml zlib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ garmintools libusb libgcrypt tinyxml zlib ];
   configureFlags = [
     "--with-libgcrypt-prefix=${libgcrypt.dev}"
     "--with-garmintools-incdir=${garmintools}/include"

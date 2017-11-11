@@ -2,18 +2,23 @@
 
 rustPlatform.buildRustPackage rec {
   name = "fd-${version}";
-  version = "3.1.0";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${version}";
-    sha256 = "0sv7iwl44a86n92i3mib2vlzd44q9ncif34yh1s0vqffai5s1rr6";
+    sha256 = "17y2fr3faaf32lv171ppkgi55v5zxq97jiilsgmjcn00rd9i6v0j";
   };
 
-  depsSha256 = "1irfx78k899qphzj8i8vr34pb6zaf9p5nx5c4zpgsrbknvn0ag5l";
+  cargoSha256 = "17f4plyj6mnz0d9f4ykgbmddsdp6c3f6q4kmgj406p49xsf0jjkc";
 
-  meta = {
+  preFixup = ''
+    mkdir -p "$out/man/man1"
+    cp "$src/doc/fd.1" "$out/man/man1"
+  '';
+
+  meta = with stdenv.lib; {
     description = "A simple, fast and user-friendly alternative to find";
     longDescription = ''
       `fd` is a simple, fast and user-friendly alternative to `find`.
@@ -22,7 +27,7 @@ rustPlatform.buildRustPackage rec {
       it provides sensible (opinionated) defaults for 80% of the use cases.
     '';
     homepage = "https://github.com/sharkdp/fd";
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.all;
+    license = with licenses; [ asl20 /* or */ mit ];
+    platforms = platforms.all;
   };
 }

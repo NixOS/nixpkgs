@@ -6,6 +6,14 @@
 
 <title>Release 18.03 (“Impala”, 2018/03/??)</title>
 
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-18.03-highlights">
+
+<title>Highlights</title>
+
 <para>In addition to numerous new and upgraded packages, this release
 has the following highlights: </para>
 
@@ -16,6 +24,15 @@ has the following highlights: </para>
   </listitem>
 </itemizedlist>
 
+</section>
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-18.03-new-services">
+
+<title>New Services</title>
+
 <para>The following new services were added since the last release:</para>
 
 <itemizedlist>
@@ -24,23 +41,56 @@ has the following highlights: </para>
   </listitem>
 </itemizedlist>
 
+</section>
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-18.03-incompatibilities">
+
+<title>Backward Incompatibilities</title>
+
 <para>When upgrading from a previous release, please be aware of the
 following incompatible changes:</para>
 
 <itemizedlist>
   <listitem>
     <para>
+      Dollar signs in options under <option>services.postfix</option> are
+      passed verbatim to Postfix, which will interpret them as the beginning of
+      a parameter expression. This was already true for string-valued options
+      in the previous release, but not for list-valued options. If you need to
+      pass literal dollar signs through Postfix, double them.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The <literal>postage</literal> package (for web-based PostgreSQL
+      administration) has been renamed to <literal>pgmanage</literal>. The
+      corresponding module has also been renamed. To migrate please rename all
+      <option>services.postage</option> options to
+      <option>services.pgmanage</option>.
     </para>
   </listitem>
 </itemizedlist>
 
-<para>Other notable improvements:</para>
+</section>
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="sec-release-18.03-notable-changes">
+
+<title>Other Notable Changes</title>
 
 <itemizedlist>
   <listitem>
     <para>
+      ZNC option <option>services.znc.mutable</option> now defaults to <literal>true</literal>.
+      That means that old configuration is not overwritten by default when update to the znc options are made.
     </para>
   </listitem>
 </itemizedlist>
 
+</section>
 </section>

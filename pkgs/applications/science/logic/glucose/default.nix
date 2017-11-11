@@ -1,19 +1,21 @@
 { stdenv, fetchurl, zlib }:
 stdenv.mkDerivation rec {
   name = "glucose-${version}";
-  version = "4.0";
+  version = "4.1";
 
   src = fetchurl {
-    url = "http://www.labri.fr/perso/lsimon/downloads/softwares/glucose-syrup.tgz";
-    sha256 = "0bq5l2jabhdfhng002qfk0mcj4pfi1v5853x3c7igwfrgx0jmfld";
+    url = "http://www.labri.fr/perso/lsimon/downloads/softwares/glucose-syrup-${version}.tgz";
+    sha256 = "0aahrkaq7n0z986fpqz66yz946nxardfi6dh8calzcfjpvqiraji";
   };
 
   buildInputs = [ zlib ];
 
-  sourceRoot = "glucose-syrup/simp";
+  sourceRoot = "glucose-syrup-${version}/simp";
   makeFlags = [ "r" ];
   installPhase = ''
     install -Dm0755 glucose_release $out/bin/glucose
+    mkdir -p "$out/share/doc/${name}/"
+    install -Dm0755 ../{LICEN?E,README*,Changelog*} "$out/share/doc/${name}/"
   '';
 
   meta = with stdenv.lib; {

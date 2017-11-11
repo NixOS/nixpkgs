@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0chsmj9ky80068vn458ijz9sh4sk5yc08dw2d6b8yddybpmr1143";
   };
 
-  buildInputs = [ pkgconfig libmnl libnfnetlink ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libmnl libnfnetlink ];
 
   meta = {
     homepage = http://www.netfilter.org/projects/libnetfilter_queue/;

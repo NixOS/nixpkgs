@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "132clk14j4nm8crln2jymdbbc2vhzar2j2hnxyh05m79pbq1lx24";
   };
 
-  buildInputs = [ pkgconfig libusb1 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libusb1 ];
 
   postInstall =
     ''

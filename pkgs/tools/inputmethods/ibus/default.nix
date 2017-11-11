@@ -10,11 +10,11 @@ let
     srcs = {
       data = fetchurl {
         url = "http://unicode.org/Public/emoji/5.0/emoji-data.txt";
-        sha256 = "0zfn3z61xy76yah3d24dd745qjssrib009m4nvqpnx4sf1r13i2x";
+        sha256 = "11jfz5rrvyc2ixliqfcjgmch4cn9mfy0x96qnpfcyz5fy1jvfyxf";
       };
       sequences = fetchurl {
         url = "http://unicode.org/Public/emoji/5.0/emoji-sequences.txt";
-        sha256 = "0xzk7hi2a8macx9s5gj2pb36d38y8fa9001sj71g6kw25c2h94cn";
+        sha256 = "09bii7f5mmladg0kl3n80fa9qaix6bv5ylm92x52j7wygzv0szb1";
       };
       variation-sequences = fetchurl {
         url = "http://unicode.org/Public/emoji/5.0/emoji-variation-sequences.txt";
@@ -22,11 +22,11 @@ let
       };
       zwj-sequences = fetchurl {
         url = "http://unicode.org/Public/emoji/5.0/emoji-zwj-sequences.txt";
-        sha256 = "0rrnk94mhm3k9vs74pvyvs4ir7f31f1libx7c196fmdqvp1qfafw";
+        sha256 = "16gvzv76mjv9g81lm1m6cr3rpfqyn2k4hb9a62xd329252dhl25q";
       };
       test = fetchurl {
         url = "http://unicode.org/Public/emoji/5.0/emoji-test.txt";
-        sha256 = "1dvxw5xp1xiy13c1p1c7l2xc9q8f8znk47kb7q8g7bbgbi21cq5m";
+        sha256 = "031qk2v8xdnba7hfinmgrmpglc9l8ll2hds6mw885p0hngdb3dgw";
       };
     };
   in stdenv.mkDerivation {
@@ -50,6 +50,12 @@ let
   };
   pyEnv = python3.buildEnv.override {
     extraLibs = [ python3.pkgs.pygobject3 ];
+
+    # ImportError: No module named site
+    postBuild = ''
+      makeWrapper '${glib.dev}/bin/glib-genmarshal' "$out"/bin/glib-genmarshal \
+        --unset PYTHONPATH
+    '';
   };
 in stdenv.mkDerivation rec {
   name = "ibus-${version}";
@@ -109,6 +115,10 @@ in stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = "$out/bin/ibus version";
+
+  postInstall = ''
+    moveToOutput "bin/ibus-setup" "$dev"
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/ibus/ibus;

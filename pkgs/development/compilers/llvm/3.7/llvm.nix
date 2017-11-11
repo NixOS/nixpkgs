@@ -1,5 +1,6 @@
 { stdenv
 , fetch
+, fetchpatch
 , perl
 , groff
 , cmake
@@ -45,6 +46,18 @@ in stdenv.mkDerivation rec {
   # those always succeed has the net effect of disabling all bindings.
   prePatch = ''
     substituteInPlace cmake/config-ix.cmake --replace "if(WIN32)" "if(1)"
+  ''
+  + stdenv.lib.optionalString (stdenv ? glibc) ''
+    (
+      cd projects/compiler-rt
+      patch -p1 < ${
+        fetchpatch {
+          name = "sigaltstack.patch"; # for glibc-2.26
+          url = https://github.com/llvm-mirror/compiler-rt/commit/8a5e425a68d.diff;
+          sha256 = "0h4y5vl74qaa7dl54b1fcyqalvlpd8zban2d1jxfkxpzyi7m8ifi";
+        }
+      }
+    )
   '';
 
   # hacky fix: created binaries need to be run before installation

@@ -63,7 +63,8 @@ stdenv.mkDerivation rec {
       qmake PREFIX="$out" ./qtikz.pro
   '';
 
-  buildInputs = [ gettext qt5.full poppler_qt5 pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gettext qt5.full poppler_qt5 ];
 
   enableParallelBuilding = true;
 }

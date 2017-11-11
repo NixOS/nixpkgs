@@ -10,8 +10,9 @@ stdenv.mkDerivation {
     sha256 = "0g5v74cm0q3p3pzl6xmnp4rqayaymfli7c6z8s78h9rgd24fwbvn";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    fftwFloat gtk2 ladspaPlugins libjack2 liblo libxml2 pkgconfig perl
+    fftwFloat gtk2 ladspaPlugins libjack2 liblo libxml2 perl
     perlXMLParser makeWrapper
   ];
   

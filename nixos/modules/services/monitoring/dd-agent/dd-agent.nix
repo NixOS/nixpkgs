@@ -23,7 +23,7 @@ let
     # proxy_password: password
 
     # tags: mytag0, mytag1
-    ${optionalString (cfg.tags != null ) "tags: ${concatStringsSep "," cfg.tags }"}
+    ${optionalString (cfg.tags != null ) "tags: ${concatStringsSep ", " cfg.tags }"}
 
     # collect_ec2_tags: no
     # recent_point_threshold: 30

@@ -8,6 +8,7 @@ use File::Basename;
 use File::Slurp;
 use File::stat;
 
+umask(0022);
 
 sub uniq {
     my %seen;
@@ -103,7 +104,7 @@ if (-e "/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors") {
 
     foreach $e (@desired_governors) {
         if (index($governors, $e) != -1) {
-            last if (push @attrs, "powerManagement.cpuFreqGovernor = \"$e\";");
+            last if (push @attrs, "powerManagement.cpuFreqGovernor = lib.mkDefault \"$e\";");
         }
     }
 }
@@ -398,19 +399,15 @@ EOF
 
     # Is this a btrfs filesystem?
     if ($fsType eq "btrfs") {
-        my ($status, @id_info) = runCommand("btrfs subvol show $rootDir$mountPoint");
-        if ($status != 0 || join("", @id_info) =~ /ERROR:/) {
+        my ($status, @info) = runCommand("btrfs subvol show $rootDir$mountPoint");
+        if ($status != 0 || join("", @info) =~ /ERROR:/) {
             die "Failed to retrieve subvolume info for $mountPoint\n";
         }
-        my @ids = join("", @id_info) =~ m/Subvolume ID:[ \t\n]*([^ \t\n]*)/;
+        my @ids = join("\n", @info) =~ m/^(?!\/\n).*Subvolume ID:[ \t\n]*([0-9]+)/s;
         if ($#ids > 0) {
             die "Btrfs subvol name for $mountPoint listed multiple times in mount\n"
         } elsif ($#ids == 0) {
-            my ($status, @path_info) = runCommand("btrfs subvol list $rootDir$mountPoint");
-            if ($status != 0) {
-                die "Failed to find $mountPoint subvolume id from btrfs\n";
-            }
-            my @paths = join("", @path_info) =~ m/ID $ids[0] [^\n]* path ([^\n]*)/;
+            my @paths = join("", @info) =~ m/^([^\n]*)/;
             if ($#paths > 0) {
                 die "Btrfs returned multiple paths for a single subvolume id, mountpoint $mountPoint\n";
             } elsif ($#paths != 0) {

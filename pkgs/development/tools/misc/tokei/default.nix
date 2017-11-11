@@ -11,11 +11,11 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1bzs3mr6f9bna39b9ddwwq0raas07nbn106mnq3widxg59i0gxhd";
   };
 
-  depsSha256 = "1cz93mrpxmyrza0ipdyg2a6mynl66plpsb446wxnmmy7y7zd6xbf";
+  cargoSha256 = "0y0rkxhkv31v5sa0425dwskd80i6srwbqhqkrw1g1kbmbs9y0vxz";
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -p target/release/tokei $out/bin/
+  buildPhase = ''
+    # do not pass --frozen since Cargo.lock has the wrong tokei version
+    cargo build --release
   '';
 
   meta = with stdenv.lib; {

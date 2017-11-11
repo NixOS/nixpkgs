@@ -3,7 +3,8 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  buildInputs = [ pkgconfig libxml2 gtk3 intltool ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libxml2 gtk3 intltool ];
 
   meta = with stdenv.lib; {
     description = "Gnome docking library";

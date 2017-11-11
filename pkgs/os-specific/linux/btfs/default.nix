@@ -12,8 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "0v0mypwnx832f7vg52wmiw0lyz7rrkhqsgi7zc261ak1gfaw4nwd";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    boost autoreconfHook pkgconfig
+    boost autoreconfHook
     fuse libtorrentRasterbar curl
   ];
 

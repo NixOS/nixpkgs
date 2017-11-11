@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace data/spice-vdagent.desktop --replace /usr $out
   '';
-  buildInputs = [ pkgconfig alsaLib spice_protocol glib
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ alsaLib spice_protocol glib
                   libpciaccess libxcb libXrandr libXinerama libXfixes
                   dbus systemd ] ;
   meta = {

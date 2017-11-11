@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, noSysDirs
+{ stdenv, targetPackages, fetchurl, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langJava ? false
 , langAda ? false
@@ -77,8 +77,8 @@ let version = "4.5.4";
       withCpu +
       withAbi +
       # Ensure that -print-prog-name is able to find the correct programs.
-      " --with-as=${binutils}/bin/${targetPlatform.config}-as" +
-      " --with-ld=${binutils}/bin/${targetPlatform.config}-ld" +
+      " --with-as=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as" +
+      " --with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld" +
       (if crossMingw && crossStageStatic then
         " --with-headers=${libcCross}/include" +
         " --with-gcc" +
@@ -153,6 +153,7 @@ stdenv.mkDerivation ({
     # target libraries and tools.
     ++ optional langAda ../gnat-cflags.patch
     ++ optional langVhdl ./ghdl-ortho-cflags.patch
+    ++ [ ../struct-ucontext-4.5.patch ] # glibc-2.26
     ;
 
   postPatch =
@@ -228,7 +229,7 @@ stdenv.mkDerivation ({
     ++ (optional langJava boehmgc)
     ++ (optionals langJava [zip unzip])
     ++ (optionals javaAwtGtk ([gtk2 pkgconfig libart_lgpl] ++ xlibs))
-    ++ (optionals (targetPlatform != hostPlatform) [binutils])
+    ++ (optionals (targetPlatform != hostPlatform) [targetPackages.stdenv.cc.bintools])
     ++ (optionals langAda [gnatboot])
     ++ (optionals langVhdl [gnat])
     ;

@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = "patchShebangs .";
 
-  buildInputs = [ pkgconfig libpng zlib lcms2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libpng zlib lcms2 ];
 
   meta = with stdenv.lib; {
     homepage = https://pngquant.org/;

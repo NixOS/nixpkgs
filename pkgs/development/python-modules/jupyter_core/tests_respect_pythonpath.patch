@@ -1,0 +1,24 @@
+--- a/jupyter_core/tests/test_command.py	2016-09-13 15:22:49.000000000 +0200
++++ b/jupyter_core/tests/test_command.py	2017-10-23 12:49:27.489527705 +0200
+@@ -113,7 +113,10 @@
+     witness = a.join(witness_cmd)
+     witness.write('#!%s\n%s\n' % (sys.executable, 'print("WITNESS ME")'))
+     witness.chmod(0o700)
+-    out = check_output([sys.executable, str(jupyter), 'witness'], env={'PATH': ''})
++    out = check_output(
++        [sys.executable, str(jupyter), 'witness'],
++        env={'PATH': '', 'PYTHONPATH': os.environ['PYTHONPATH']}
++    )
+     assert b'WITNESS' in out
+ 
+ 
+@@ -136,5 +139,8 @@
+     witness_b.write('#!%s\n%s\n' % (sys.executable, 'print("WITNESS B")'))
+     witness_b.chmod(0o700)
+ 
+-    out = check_output([sys.executable, str(jupyter), 'witness'], env={'PATH': str(b)})
++    out = check_output(
++        [sys.executable, str(jupyter), 'witness'],
++        env={'PATH': str(b), 'PYTHONPATH': os.environ['PYTHONPATH']}
++    )
+     assert b'WITNESS A' in out

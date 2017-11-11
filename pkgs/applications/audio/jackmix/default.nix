@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./no_error.patch ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig
     scons
     qt4
     lash

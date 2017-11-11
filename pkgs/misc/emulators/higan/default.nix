@@ -10,12 +10,12 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
 
   name = "higan-${version}";
-  version = "104";
+  version = "105";
   sourceName = "higan_v${version}-source";
 
   src = fetchurl {
     urls = [ "http://download.byuu.org/${sourceName}.7z" ];
-    sha256 = "0i2ma8zjjxadq4368n4m41vhmrb62na6s7pi219ajdsb96x0091l";
+    sha256 = "1lpj345vlnwcywhzq1fzxwl08zc2x4d103rgyyp7yw8m0f8f9sdl";
     curlOpts = "--user-agent 'Mozilla/5.0'"; # the good old user-agent trick...
   };
 
@@ -81,8 +81,3 @@ stdenv.mkDerivation rec {
     platforms = with platforms; unix;
   };
 }
-
-#
-# TODO:
-#   - fix the BML and BIOS paths - maybe submitting
-#     a custom patch to upstream would not be a bad idea...

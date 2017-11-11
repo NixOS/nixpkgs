@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
   propagatedBuildInputs = [ gdk_pixbuf gnome3.defaultIconTheme librsvg ];
 
-  buildInputs = [ pkgconfig gtk3 glib intltool itstool libxml2 file
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk3 glib intltool itstool libxml2 file
                   gnome3.gsettings_desktop_schemas makeWrapper ];
 
   preFixup = ''

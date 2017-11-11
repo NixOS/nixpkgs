@@ -1,6 +1,10 @@
 #! @shell@
-set -eu -o pipefail
+set -eu -o pipefail +o posix
 shopt -s nullglob
+
+if (( "${NIX_DEBUG:-0}" >= 7 )); then
+    set -x
+fi
 
 path_backup="$PATH"
 
@@ -57,10 +61,6 @@ while (( "$n" < "$nParams" )); do
         cppInclude=0
     elif [ "${p:0:1}" != - ]; then
         nonFlagArgs=1
-    elif [ "$p" = -m32 ]; then
-        if [ -e @out@/nix-support/dynamic-linker-m32 ]; then
-            NIX_@infixSalt@_LDFLAGS+=" -dynamic-linker $(< @out@/nix-support/dynamic-linker-m32)"
-        fi
     fi
     n+=1
 done
@@ -161,7 +161,7 @@ if [ "$*" = -v ]; then
 fi
 
 # Optionally print debug info.
-if [ -n "${NIX_DEBUG:-}" ]; then
+if (( "${NIX_DEBUG:-0}" >= 1 )); then
     # Old bash workaround, see ld-wrapper for explanation.
     echo "extra flags before to @prog@:" >&2
     printf "  %q\n" ${extraBefore+"${extraBefore[@]}"}  >&2

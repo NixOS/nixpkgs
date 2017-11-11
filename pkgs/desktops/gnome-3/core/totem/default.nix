@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
-  buildInputs = [ pkgconfig gtk3 glib intltool itstool libxml2 gnome3.grilo
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk3 glib intltool itstool libxml2 gnome3.grilo
                   clutter_gtk clutter-gst gnome3.totem-pl-parser gnome3.grilo-plugins
                   gst_all_1.gstreamer gst_all_1.gst-plugins-base
                   gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad gst_all_1.gst-plugins-ugly gst_all_1.gst-libav

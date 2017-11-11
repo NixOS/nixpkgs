@@ -35,14 +35,14 @@ in stdenv.mkDerivation rec {
 
     cp -r * $out/share/msf
 
-    for i in $out/share/msf/msf*; do
-      bin=$out/bin/$(basename $i)
-      cat > $bin <<EOF
-#!/bin/sh -e
-exec ${env}/bin/bundle exec ${ruby}/bin/ruby $i "\$@"
-EOF
-      chmod +x $bin
-    done
+    (
+      cd $out/share/msf/
+      for i in msf*; do
+        makeWrapper ${env}/bin/bundle $out/bin/$i \
+          --add-flags "exec ${ruby}/bin/ruby $out/share/msf/$i"
+      done
+    )
+
   '';
 
   meta = with stdenv.lib; {

@@ -4,17 +4,18 @@
 
 stdenv.mkDerivation rec {
   major = "0.3";
-  minor = "3";
+  minor = "5";
   name = "grilo-plugins-${major}.${minor}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/grilo-plugins/${major}/${name}.tar.xz";
-    sha256 = "fe66e887847fef9c361bcb7226047c43b2bc22b172aaf22afd5534947cc85b9c";
+    sha256 = "1yv8a0mfd5qmdbdrnd0is5c51s1mvibhw61na99iagnbirxq4xr9";
   };
 
   installFlags = [ "GRL_PLUGINS_DIR=$(out)/lib/grilo-${major}" ];
 
-  buildInputs = [ pkgconfig gnome3.grilo libxml2 gupnp gssdp gnome3.libgdata
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gnome3.grilo libxml2 gupnp gssdp gnome3.libgdata
                   lua5 liboauth gupnp_av sqlite gnome3.gnome_online_accounts
                   gnome3.totem-pl-parser gnome3.rest gmime json_glib
                   avahi gnome3.libmediaart tracker intltool itstool ];

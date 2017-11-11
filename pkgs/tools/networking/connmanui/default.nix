@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0ixx8c9cfdp480z21xfjb7n1x27sf1g8gmgbmcfhr0k888dmziyy";
   };
 
-  buildInputs = [ autoconf automake libtool glib gtk3 dbus pkgconfig file intltool connman ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake libtool glib gtk3 dbus file intltool connman ];
 
   preConfigure = ''
     rm m4/intltool.m4

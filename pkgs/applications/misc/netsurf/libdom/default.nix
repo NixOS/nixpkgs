@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "1kk6qbqagx5ypiy9kf0059iqdzyz8fqaw336vzhb5gnrzjw3wv4a";
   };
 
-  buildInputs = [ pkgconfig expat
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ expat
     buildsystem
     libparserutils
     libwapcaplet

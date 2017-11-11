@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ fuse pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ fuse ];
 
   postPatch = ''
     # very ugly way of replacing the adb calls

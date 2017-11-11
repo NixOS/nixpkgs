@@ -1,11 +1,12 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchipfs }:
 
 stdenv.mkDerivation rec {
   name = "hello-2.10";
 
-  src = fetchurl {
-    url = "mirror://gnu/hello/${name}.tar.gz";
-    sha256 = "0ssi1wpaf7plaswqqjwigppsg5fyh99vdlb9kzl7c9lng89ndq1i";
+  src = fetchipfs {
+    url    = "https://ftp.gnu.org/gnu/hello/hello-2.10.tar.gz";
+    ipfs   = "QmWyj65ak3wd8kG2EvPCXKd6Tij15m4SwJz6g2yG2rQ7w8";
+    sha256 = "1im1gglfm4k10bh4mdaqzmx3lm3kivnsmxrvl6vyvmfqqzljq75l";
   };
 
   doCheck = true;

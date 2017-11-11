@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0cfk8jjhs9nbfjfdy98plrj9ayi59aph0nx6ppslgjhlcvacm2xf";
   };
 
-  buildInputs = [ pkgconfig glib zlib libpng cmake gnumake3 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib zlib libpng cmake gnumake3 ];
 
   configureFlags = "-v";
 

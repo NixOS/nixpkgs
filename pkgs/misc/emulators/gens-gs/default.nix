@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "1ha5s6d3y7s9aq9f4zmn9p88109c3mrj36z2w68jhiw5xrxws833";
   };
 
-  buildInputs = [ pkgconfig gtk2 SDL nasm zlib libpng mesa ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 SDL nasm zlib libpng mesa ];
 
   # Work around build failures on recent GTK+.
   # See http://ubuntuforums.org/showthread.php?p=10535837

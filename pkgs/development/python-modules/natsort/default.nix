@@ -1,6 +1,8 @@
 { lib
 , buildPythonPackage
 , pythonOlder
+, isPy35
+, isPy36
 , fetchPypi
 , hypothesis
 , pytestcache
@@ -38,7 +40,8 @@ buildPythonPackage rec {
   };
 
   # do not run checks on nix_run_setup.py
-  patches = [ ./setup.patch ];
+  patches = lib.singleton ./setup.patch
+         ++ lib.optional (isPy35 || isPy36) ./python-3.6.3-test-failures.patch;
 
   # testing based on project's tox.ini
   checkPhase = ''

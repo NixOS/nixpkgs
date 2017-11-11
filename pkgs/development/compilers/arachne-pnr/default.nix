@@ -2,19 +2,19 @@
 
 stdenv.mkDerivation rec {
   name = "arachne-pnr-${version}";
-  version = "2017.06.29";
+  version = "2017.11.05";
 
   src = fetchFromGitHub {
-    owner = "cseed";
-    repo = "arachne-pnr";
-    rev = "7e135edb31feacde85ec5b7e5c03fc9157080977";
-    sha256 = "1wszcx6hgw4q4r778zswrlwdwvwxq834bkajck8w9yfqwxs9lmq8";
+    owner  = "cseed";
+    repo   = "arachne-pnr";
+    rev    = "1e81432830c75c505c76e419619f605a6c4c7583";
+    sha256 = "0lzblmi1klbsmd32h8nh027npm1z1a199lng13lcrqwr17lhb7my";
   };
 
-  preBuild = ''
-    makeFlags="DESTDIR=$out $makeFlags"
-  '';
-  makeFlags = "ICEBOX=${icestorm}/share/icebox";
+  enableParallelBuilding = true;
+  makeFlags =
+    [ "PREFIX=$(out)" "ICEBOX=${icestorm}/share/icebox"
+    ];
 
   meta = {
     description = "Place and route tool for FPGAs";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/cseed/arachne-pnr;
     license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.shell ];
+    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

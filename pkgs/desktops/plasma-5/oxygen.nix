@@ -14,5 +14,5 @@ mkDerivation {
     ki18n kservice kwayland kwidgetsaddons kwindowsystem qtdeclarative
     qtx11extras
   ];
-  outputs = [ "out" "dev" "bin" ];
+  outputs = [ "bin" "dev" "out" ];
 }

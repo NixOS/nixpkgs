@@ -6,24 +6,15 @@ with stdenv.lib;
 
 let
   ver_maj = "1.40";
-  ver_min = "11";
+  ver_min = "12";
 in
 stdenv.mkDerivation rec {
   name = "pango-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/pango/${ver_maj}/${name}.tar.xz";
-    sha256 = "5b11140590e632739e4151cae06b8116160d59e22bf36a3ccd5df76d1cf0383e";
+    sha256 = "75f1a9a8e4e2b28cbc078b50c1fa927ee4ded994d1ade97c5603e2d1f3161cfc";
   };
-
-  patches = [
-    # https://bugzilla.gnome.org/show_bug.cgi?id=785978#c9
-    (fetchpatch rec {
-      name = "pango-fix-gtk2-test-failures.patch";
-      url = "https://bug785978.bugzilla-attachments.gnome.org/attachment.cgi?id=357690&action=diff&collapsed=&context=patch&format=raw&headers=1";
-      sha256 = "055m2dllfr5pgw6bci72snw38f4hsyw1x7flj188c965ild8lq3a";
-    })
-  ];
 
   outputs = [ "bin" "dev" "out" "devdoc" ];
 

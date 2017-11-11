@@ -2,9 +2,12 @@
 , qtbase, pyqt5, jinja2, pygments, pyyaml, pypeg2, pyopengl, cssutils, glib_networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2, libxslt
 , gst-plugins-base, gst-plugins-good, gst-plugins-bad, gst-plugins-ugly, gst-libav
-, qtwebkit-plugins
-, withWebEngineDefault ? false
+, qtwebkit-plugins ? null
+, attrs
+, withWebEngineDefault ? true
 }:
+
+assert (! withWebEngineDefault) -> qtwebkit-plugins != null;
 
 let
   pdfjs = stdenv.mkDerivation rec {
@@ -25,30 +28,32 @@ let
   };
 
 in buildPythonApplication rec {
-  name = "qutebrowser-${version}";
-  version = "0.11.0";
+  name = "qutebrowser-${version}${fix_postfix}";
+  fix_postfix = "-1";
+  version = "1.0.3";
   namePrefix = "";
 
   src = fetchurl {
-    url = "https://github.com/The-Compiler/qutebrowser/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "13ihx66jm1dd6vx8px7pm0kbzf2sf9x43hhivc1rp17kahnxxdyv";
+    url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${name}.tar.gz";
+    sha256 = "04d6hg2yf2wjwn0sd05bpx3zngnb93g7rizbdq17bbpmnwxchzap";
   };
 
   # Needs tox
   doCheck = false;
 
   buildInputs = [
-    qtbase qtwebkit-plugins
+    qtbase
     gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav
     glib_networking
-  ];
+  ]
+    ++ lib.optional (! withWebEngineDefault) qtwebkit-plugins;
 
   nativeBuildInputs = [
     makeWrapper wrapGAppsHook asciidoc docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
   ];
 
   propagatedBuildInputs = [
-    pyyaml pyqt5 jinja2 pygments pypeg2 cssutils pyopengl
+    pyyaml pyqt5 jinja2 pygments pypeg2 cssutils pyopengl attrs
   ];
 
   postPatch = ''
@@ -62,7 +67,7 @@ in buildPythonApplication rec {
 
   postInstall = ''
     install -Dm644 doc/qutebrowser.1 "$out/share/man/man1/qutebrowser.1"
-    install -Dm644 qutebrowser.desktop \
+    install -Dm644 misc/qutebrowser.desktop \
         "$out/share/applications/qutebrowser.desktop"
     for i in 16 24 32 48 64 128 256 512; do
         install -Dm644 "icons/qutebrowser-''${i}x''${i}.png" \
@@ -73,8 +78,8 @@ in buildPythonApplication rec {
     install -Dm755 -t "$out/share/qutebrowser/userscripts/" misc/userscripts/*
   '';
 
-  postFixup = lib.optionalString withWebEngineDefault ''
-    wrapProgram $out/bin/qutebrowser --add-flags "--backend webengine"
+  postFixup = lib.optionalString (! withWebEngineDefault) ''
+    wrapProgram $out/bin/qutebrowser --add-flags "--backend webkit"
   '';
 
   meta = {

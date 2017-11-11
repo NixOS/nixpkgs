@@ -20,6 +20,14 @@ stdenv.mkDerivation {
     sha256 = "04jda4bns7cmp7xy68qz112yg0lribpc6xs5k9gilfqcyhshqlvc";
   };
 
+  patches = [
+    (fetchurl { # https://trac.wxwidgets.org/ticket/17942
+      url = "https://trac.wxwidgets.org/raw-attachment/ticket/17942/"
+          + "fix_assertion_using_hide_in_destroy.diff";
+      sha256 = "009y3dav79wiig789vkkc07g1qdqprg1544lih79199kb1h64lvy";
+    })
+  ];
+
   buildInputs =
     [ gtk2 libXinerama libSM libXxf86vm xf86vidmodeproto gstreamer
       gst-plugins-base GConf ]

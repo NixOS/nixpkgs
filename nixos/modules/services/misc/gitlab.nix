@@ -414,7 +414,7 @@ in {
           Make sure the secret is an RSA private key in PEM format. You can
           generate one with
 
-          openssl genrsa 2048openssl genpkey -algorithm RSA -out - -pkeyopt rsa_keygen_bits:2048
+          openssl genrsa 2048
         '';
       };
 
@@ -567,11 +567,12 @@ in {
         mkdir -p ${cfg.statePath}/log
         mkdir -p ${cfg.statePath}/tmp/pids
         mkdir -p ${cfg.statePath}/tmp/sockets
+        mkdir -p ${cfg.statePath}/shell
 
         rm -rf ${cfg.statePath}/config ${cfg.statePath}/shell/hooks
         mkdir -p ${cfg.statePath}/config
 
-        tr -dc A-Za-z0-9 < /dev/urandom | head -c 32 > ${cfg.statePath}/config/gitlab_shell_secret
+        ${pkgs.openssl}/bin/openssl rand -hex 32 > ${cfg.statePath}/config/gitlab_shell_secret
 
         # The uploads directory is hardcoded somewhere deep in rails. It is
         # symlinked in the gitlab package to /run/gitlab/uploads to make it
@@ -580,6 +581,7 @@ in {
         mkdir -p ${cfg.statePath}/{log,uploads}
         ln -sf ${cfg.statePath}/log /run/gitlab/log
         ln -sf ${cfg.statePath}/uploads /run/gitlab/uploads
+        ln -sf ${cfg.statePath}/tmp /run/gitlab/tmp
         chown -R ${cfg.user}:${cfg.group} /run/gitlab
 
         # Prepare home directory
@@ -617,7 +619,7 @@ in {
         fi
 
         # enable required pg_trgm extension for gitlab
-        ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql gitlab -c "CREATE EXTENSION IF NOT EXISTS pg_trgm"
+        ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql ${cfg.databaseName} -c "CREATE EXTENSION IF NOT EXISTS pg_trgm"
         # Always do the db migrations just to be sure the database is up-to-date
         ${gitlab-rake}/bin/gitlab-rake db:migrate RAILS_ENV=production
 
@@ -630,11 +632,23 @@ in {
           touch "${cfg.statePath}/db-seeded"
         fi
 
+        # The gitlab:shell:create_hooks task seems broken for fixing links
+        # so we instead delete all the hooks and create them anew
+        rm -f ${cfg.statePath}/repositories/**/*.git/hooks
+        ${gitlab-rake}/bin/gitlab-rake gitlab:shell:create_hooks RAILS_ENV=production
+
         # Change permissions in the last step because some of the
         # intermediary scripts like to create directories as root.
         chown -R ${cfg.user}:${cfg.group} ${cfg.statePath}
         chmod -R ug+rwX,o-rwx+X ${cfg.statePath}
         chmod -R u+rwX,go-rwx+X ${gitlabEnv.HOME}
+        chmod -R ug+rwX,o-rwx ${cfg.statePath}/repositories
+        chmod -R ug-s ${cfg.statePath}/repositories
+        find ${cfg.statePath}/repositories -type d -print0 | xargs -0 chmod g+s
+        chmod 770 ${cfg.statePath}/uploads
+        chown -R ${cfg.user} ${cfg.statePath}/uploads
+        find ${cfg.statePath}/uploads -type f -exec chmod 0644 {} \;
+        find ${cfg.statePath}/uploads -type d -not -path ${cfg.statePath}/uploads -exec chmod 0770 {} \;
       '';
 
       serviceConfig = {

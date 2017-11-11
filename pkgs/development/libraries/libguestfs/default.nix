@@ -18,8 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "0dhb69b7svjgnrmbyvizdz5vsgsrr95ypz0qvp3kz83jyj6sa76m";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    makeWrapper pkgconfig autoreconfHook ncurses cpio gperf perl
+    makeWrapper autoreconfHook ncurses cpio gperf perl
     cdrkit flex bison qemu pcre augeas libxml2 acl libcap libcap_ng libconfig
     systemd fuse yajl libvirt gmp readline file hivex libintlperl GetoptLong
     SysVirt numactl xen libapparmor getopt perlPackages.ModuleBuild

@@ -18,7 +18,7 @@ let
   # https://github.com/NixOS/nixpkgs/issues/26392
   # https://github.com/pypa/setuptools/issues/885
   pkg_resources = fetchurl {
-    url = "https://raw.githubusercontent.com/pypa/setuptools/v36.4.0/pkg_resources/__init__.py";
+    url = "https://raw.githubusercontent.com/pypa/setuptools/v36.0.1/pkg_resources/__init__.py";
     sha256 = "1wdnq3mammk75mifkdmmjx7yhnpydvnvi804na8ym4mj934l2jkv";
   };
 

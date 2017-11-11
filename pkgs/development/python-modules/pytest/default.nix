@@ -2,7 +2,7 @@
 , setuptools_scm
 }:
 buildPythonPackage rec {
-  version = "3.2.1";
+  version = "3.2.3";
   pname = "pytest";
   name = "${pname}-${version}";
 
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4c2159d2be2b4e13fa293e7a72bdf2f06848a017150d5c6d35112ce51cfd74ce";
+    sha256 = "27fa6617efc2869d3e969a3e75ec060375bfb28831ade8b5cdd68da3a741dc3c";
   };
 
   buildInputs = [ hypothesis setuptools_scm ];

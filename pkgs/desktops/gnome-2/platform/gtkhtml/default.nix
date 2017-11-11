@@ -13,5 +13,6 @@ stdenv.mkDerivation rec {
   #http://www.mail-archive.com/debian-bugs-rc@lists.debian.org/msg250091.html
   patches = [ ./01_remove-disable-deprecated.patch ];
 
-  buildInputs = [pkgconfig gtk intltool GConf enchant isocodes gnome_icon_theme ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk intltool GConf enchant isocodes gnome_icon_theme ];
 }

@@ -42,7 +42,7 @@ in
 
           Then you can Use this sieve filter:
             require ["fileinto", "reject", "envelope"];
-            
+
             if header :contains "X-Spam-Flag" "YES" {
               fileinto "spam";
             }
@@ -67,11 +67,11 @@ in
       initPreConf = mkOption {
         type = types.str;
         description = "The SpamAssassin init.pre config.";
-        default = 
-        ''          
+        default =
+        ''
           #
           # to update this list, run this command in the rules directory:
-          # grep 'loadplugin.*Mail::SpamAssassin::Plugin::.*' -o -h * | sort | uniq     
+          # grep 'loadplugin.*Mail::SpamAssassin::Plugin::.*' -o -h * | sort | uniq
           #
 
           #loadplugin Mail::SpamAssassin::Plugin::AccessDB
@@ -122,7 +122,11 @@ in
   config = mkIf cfg.enable {
 
     # Allow users to run 'spamc'.
-    environment.systemPackages = [ pkgs.spamassassin ];
+
+    environment = {
+      etc = singleton { source = spamdEnv; target = "spamassassin"; };
+      systemPackages = [ pkgs.spamassassin ];
+    };
 
     users.extraUsers = singleton {
       name = "spamd";
@@ -138,7 +142,7 @@ in
 
     systemd.services.sa-update = {
       script = ''
-        set +e 
+        set +e
         ${pkgs.su}/bin/su -s "${pkgs.bash}/bin/bash" -c "${pkgs.spamassassin}/bin/sa-update --gpghomedir=/var/lib/spamassassin/sa-update-keys/ --siteconfigpath=${spamdEnv}/" spamd
 
         v=$?
@@ -153,7 +157,7 @@ in
       '';
     };
 
-    systemd.timers.sa-update = { 
+    systemd.timers.sa-update = {
       description = "sa-update-service";
       partOf      = [ "sa-update.service" ];
       wantedBy    = [ "timers.target" ];
@@ -177,15 +181,10 @@ in
       # 0 and 1 no error, exitcode > 1 means error:
       # https://spamassassin.apache.org/full/3.1.x/doc/sa-update.html#exit_codes
       preStart = ''
-        # this abstraction requires no centralized config at all
-        if [ -d /etc/spamassassin ]; then
-          echo "This spamassassin does not support global '/etc/spamassassin' folder for configuration as this would be impure. Merge your configs into 'services.spamassassin' and remove the '/etc/spamassassin' folder to make this service work. Also see 'https://github.com/NixOS/nixpkgs/pull/26470'."; 
-          exit 1
-        fi
         echo "Recreating '/var/lib/spamasassin' with creating '3.004001' (or similar) and 'sa-update-keys'"
         mkdir -p /var/lib/spamassassin
         chown spamd:spamd /var/lib/spamassassin -R
-        set +e 
+        set +e
         ${pkgs.su}/bin/su -s "${pkgs.bash}/bin/bash" -c "${pkgs.spamassassin}/bin/sa-update --gpghomedir=/var/lib/spamassassin/sa-update-keys/ --siteconfigpath=${spamdEnv}/" spamd
         v=$?
         set -e

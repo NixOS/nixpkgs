@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, jre }:
+{ stdenv, fetchurl, jre, bc }:
 
 stdenv.mkDerivation rec {
   name = "sbt-${version}";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchurl {
     urls = [
@@ -10,11 +10,14 @@ stdenv.mkDerivation rec {
       "https://github.com/sbt/sbt/releases/download/v${version}/sbt-${version}.tgz"
       "https://cocl.us/sbt-${version}.tgz"
     ];
-    sha256 = "1w1f6nsdq3inxhqhy69mgljfjr51n1v1s8i51gcg11rd2bc67w63";
+    sha256 = "041cv25gxqsi3rlglw5d8aqgdzb6y5ak3f52dwqvzrrj854vyx13";
   };
 
   patchPhase = ''
     echo -java-home ${jre.home} >>conf/sbtopts
+
+    substituteInPlace bin/sbt-launch-lib.bash \
+      --replace "| bc)" "| ${bc}/bin/bc)"
   '';
 
   installPhase = ''

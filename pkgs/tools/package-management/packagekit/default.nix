@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, lib
 , intltool, glib, pkgconfig, polkit, python, sqlite, systemd
-, gobjectIntrospection, vala_0_23, gtk_doc, autoreconfHook, autoconf-archive
+, gobjectIntrospection, vala_0_38, gtk_doc, autoreconfHook, autoconf-archive
 # TODO: set enableNixBackend to true, as soon as it builds
 , nix, enableNixBackend ? false, boost
 , enableCommandNotFound ? false
@@ -8,16 +8,16 @@
 
 stdenv.mkDerivation rec {
   name = "packagekit-${version}";
-  version = "1.1.3";
+  version = "1.1.7";
 
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "PackageKit";
     rev = "PACKAGEKIT_${lib.replaceStrings ["."] ["_"] version}";
-    sha256 = "150mpar7bhlvwfpwsr6zrjn3yggvklzr6nlhk0shaxnrfkfxvvb6";
+    sha256 = "076rrczmyhapj87pxqldsar5pbz4mid6cm9l1n91zh2q403chdkb";
   };
 
-  buildInputs = [ glib polkit systemd python gobjectIntrospection vala_0_23 ]
+  buildInputs = [ glib polkit systemd python gobjectIntrospection vala_0_38 ]
                   ++ lib.optional enableBashCompletion bash-completion;
   propagatedBuildInputs = [ sqlite nix boost ];
   nativeBuildInputs = [ intltool pkgconfig autoreconfHook autoconf-archive gtk_doc ];

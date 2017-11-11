@@ -94,7 +94,8 @@ let
       rev = "v${version}";
       sha256 = "19sy49r3ijh36m7hl4vspw5c4i8pnfqdn4ldm2sqchxigkw56ayl";
     };
-    buildInputs = with external; [ autoconf automake libpng zlib poppler pkgconfig ];
+    nativeBuildInputs = [ external.pkgconfig ];
+    buildInputs = with external; [ autoconf automake libpng zlib poppler ];
     preBuild = "make server/epdfinfo";
     fileSpecs = [ "lisp/pdf-*.el" "server/epdfinfo" ];
     packageRequires = [ tablist let-alist ];
@@ -225,6 +226,8 @@ let
     };
   };
 
+  font-lock-plus = callPackage ../applications/editors/emacs-modes/font-lock-plus { };
+
   ghc-mod = melpaBuild rec {
     pname = "ghc";
     version = external.ghc-mod.version;
@@ -267,6 +270,8 @@ let
     };
   };
 
+  icicles = callPackage ../applications/editors/emacs-modes/icicles { };
+
   rtags = melpaBuild rec {
     pname = "rtags";
     version = "2.12";
@@ -305,6 +310,8 @@ let
   nyan-mode = callPackage ../applications/editors/emacs-modes/nyan-mode {
     inherit lib;
   };
+
+  gn = callPackage ../applications/editors/emacs-modes/gn { };
 
   shorten = melpaBuild rec {
     pname   = "shorten";

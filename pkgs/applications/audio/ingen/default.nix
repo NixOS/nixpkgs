@@ -13,8 +13,9 @@ stdenv.mkDerivation  rec {
     sha256 = "15s8nrzn68hc2s6iw0zshbz3lfnsq0mr6gflq05xm911b7xbp74k";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    boost ganv glibmm gtkmm2 libjack2 lilv lv2 makeWrapper pkgconfig
+    boost ganv glibmm gtkmm2 libjack2 lilv lv2 makeWrapper
     python raul serd sord sratom suil
   ];
 

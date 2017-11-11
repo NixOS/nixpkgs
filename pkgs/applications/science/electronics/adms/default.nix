@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1pcwq5khzdq4x33lid9hq967gv78dr5i4f2sk8m8rwkfqb9vdzrg";
   };
 
-  buildInputs = [ autoreconfHook flex bison gperf libxml2 perl gd perlPackages.XMLLibXML ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ flex bison gperf libxml2 perl gd perlPackages.XMLLibXML ];
   configureFlags = [ "--enable-maintainer-mode" ];
 
   meta = {

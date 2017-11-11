@@ -29,7 +29,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./bootstrap";
 
-  enableParallelBuilding = true;
+  # in 1.0.0: parser.hh:40:0: error: unterminated #ifndef
+  enableParallelBuilding = false;
 
   # See https://github.com/souffle-lang/souffle/issues/176
   hardeningDisable = [ "fortify" ];

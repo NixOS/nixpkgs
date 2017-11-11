@@ -74,6 +74,9 @@ symlinkJoin {
           --set "NIX_${ghcCommandCaps}PKG"     "$out/bin/${ghcCommand}-pkg" \
           --set "NIX_${ghcCommandCaps}_DOCDIR" "${docDir}"                  \
           --set "NIX_${ghcCommandCaps}_LIBDIR" "${libDir}"                  \
+          ${lib.optionalString (ghc.isGhcjs or false)
+            ''--set NODE_PATH "${ghc.socket-io}/lib/node_modules"''
+          } \
           ${lib.optionalString withLLVM ''--prefix "PATH" ":" "${llvm}"''}
       fi
     done

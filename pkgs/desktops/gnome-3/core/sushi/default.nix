@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good ];
 
-  buildInputs = [ pkgconfig file intltool gobjectIntrospection glib gtk3
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ file intltool gobjectIntrospection glib gtk3
                   clutter_gtk clutter-gst gnome3.gjs gtksourceview gdk_pixbuf
                   librsvg gnome3.defaultIconTheme libmusicbrainz5 webkitgtk
                   gnome3.evince icu makeWrapper harfbuzz ];

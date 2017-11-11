@@ -30,7 +30,6 @@ stdenv.mkDerivation rec {
     description = "Opinionated code formatter for Scala";
     homepage = http://scalafmt.org;
     license = licenses.asl20;
-    platforms = platforms.linux;
     maintainers = [ maintainers.markus1189 ];
   };
 }

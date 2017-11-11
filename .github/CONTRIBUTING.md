@@ -32,11 +32,14 @@ under the terms of [COPYING](../COPYING), which is an MIT-like license.
     The old config generation system used impure shell scripts and could break in specific circumstances (see #1234).
 
 * `meta.description` should:
-  * Be capitalized
-  * Not start with the package name
-  * Not have a dot at the end
+  * Be capitalized.
+  * Not start with the package name.
+  * Not have a period at the end.
+* `meta.license` must be set and fit the upstream license.
+  * If there is no upstream license, `meta.license` should default to `stdenv.lib.licenses.unfree`.
+* `meta.maintainers` must be set.
 
-See the nixpkgs manual for more details on how to [Submit changes to nixpkgs](https://nixos.org/nixpkgs/manual/#chap-submitting-changes).
+See the nixpkgs manual for more details on [standard meta-attributes](https://nixos.org/nixpkgs/manual/#sec-standard-meta-attributes) and on how to [submit changes to nixpkgs](https://nixos.org/nixpkgs/manual/#chap-submitting-changes).
 
 ## Writing good commit messages
 

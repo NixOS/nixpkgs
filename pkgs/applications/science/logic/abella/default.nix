@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "abella-${version}";
-  version = "2.0.2";
+  version = "2.0.4";
 
   src = fetchurl {
     url = "http://abella-prover.org/distributions/${name}.tar.gz";
-    sha256 = "b56d865ebdb198111f1dcd5b6fbcc0d7fc6dd1294f7601903ba4e3c3322c099c";
+    sha256 = "1hnccjlyzwgz7kqsr4xmx9y4wmalbxsj0g6fxdk6xrgpc84ihw2c";
   };
 
-  buildInputs = [ rsync ] ++ (with ocamlPackages; [ ocaml ocamlbuild ]);
+  buildInputs = [ rsync ] ++ (with ocamlPackages; [ ocaml ocamlbuild findlib ]);
 
   installPhase = ''
     mkdir -p $out/bin
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://abella-prover.org/;
     license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ bcdarwin ];
+    maintainers = with stdenv.lib.maintainers; [ bcdarwin ciil ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -6,7 +6,8 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  buildInputs = [ pkgconfig gtk3 glib libgtop intltool itstool
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk3 glib libgtop intltool itstool
                   makeWrapper file ];
 
   configureFlags = [ "--enable-extensions=all" ];

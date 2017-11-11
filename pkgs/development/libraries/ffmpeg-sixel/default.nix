@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "00s2lggfdj2ibpngpyqqg7360p7yb69ys1ppg59yvv0m0mxk5x3k";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig
     libsixel
     yasm
   ];

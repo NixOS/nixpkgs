@@ -1,5 +1,9 @@
 # Create a derivation that contains aspell and selected dictionaries.
 # Composition is done using `pkgs.buildEnv`.
+# Beware of that `ASPELL_CONF` used by this derivation is not always
+# respected by libaspell (#28815) and in some cases, when used as
+# dependency by another derivation, the passed dictionaries will be
+# missing. However, invoking aspell directly should be fine.
 
 { aspell
 , aspellDicts

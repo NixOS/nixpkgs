@@ -1,5 +1,6 @@
 { stdenv
 , fetch
+, fetchpatch
 , perl
 , groff
 , cmake
@@ -32,6 +33,28 @@ in stdenv.mkDerivation rec {
   buildInputs = [ perl groff cmake libxml2 python libffi ] ++ stdenv.lib.optional stdenv.isLinux valgrind;
 
   propagatedBuildInputs = [ ncurses zlib ];
+
+  prePatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace 'set(CMAKE_INSTALL_NAME_DIR "@rpath")' "set(CMAKE_INSTALL_NAME_DIR "$out/lib")" \
+      --replace 'set(CMAKE_INSTALL_RPATH "@executable_path/../lib")' ""
+  '';
+
+  postPatch = stdenv.lib.optionalString (stdenv ? glibc) ''
+    (
+      cd projects/compiler-rt
+      patch -p1 < ${
+        fetchpatch {
+          name = "sigaltstack.patch"; # for glibc-2.26
+          url = https://github.com/llvm-mirror/compiler-rt/commit/8a5e425a68d.diff;
+          sha256 = "0h4y5vl74qaa7dl54b1fcyqalvlpd8zban2d1jxfkxpzyi7m8ifi";
+        }
+      }
+
+      sed -i "s,#include <pthread.h>,&\n#include <signal.h>,g" \
+        lib/asan/asan_linux.cc
+    )
+  '';
 
   # hacky fix: created binaries need to be run before installation
   preBuild = ''

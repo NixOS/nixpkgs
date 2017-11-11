@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "099iv13c03y1dsn2ngdhfx2cnax0aj2gfh00w55hlzpvmjm8dsml";
   };
 
-  buildInputs = [ automake autoconf openssl expat libtool pkgconfig check ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ automake autoconf openssl expat libtool check ];
 
   dontDisableStatic = true;
 

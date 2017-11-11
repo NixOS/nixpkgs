@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1sw36w6zkzvabvjckqick032j5p5xi0qi3sgnh0znzxz31jqvf0d";
   };
   
-  buildInputs = [ makeWrapper pkgconfig python openldap pam ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ makeWrapper python openldap pam ];
 
   preConfigure = ''
     substituteInPlace Makefile.in --replace "install-data-local: " "# install-data-local: "

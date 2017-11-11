@@ -14,9 +14,6 @@ mkDerivation {
   propagatedBuildInputs = [ qtbase ];
   outputs = [ "out" "dev" ];
   patches = [ ./kdoctools-no-find-docbook-xml.patch ];
-  preConfigure = ''
-    outputBin=dev
-  '';
   cmakeFlags = [
     "-DDocBookXML4_DTD_DIR=${docbook_xml_dtd_45}/xml/dtd/docbook"
     "-DDocBookXSL_DIR=${docbook5_xsl}/xml/xsl/docbook"

@@ -10,7 +10,8 @@ stdenv.mkDerivation {
     sha256 = "1fx4jwq4s98p2wpvawsiww7d6568bpjgcjpks61dzfj8p2j32s4d";
   };
 
-  buildInputs = [ pkgconfig libX11 libXext libXft ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libX11 libXext libXft ];
 
   postPatch =
     ''

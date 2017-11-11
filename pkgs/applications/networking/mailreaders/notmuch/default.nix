@@ -25,8 +25,9 @@ stdenv.mkDerivation rec {
     sha256 = "02z6d87ip1hkipz8d7w0sfklg8dd5fd5vlgp768640ixg0gqvlk5";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig gnupg # undefined dependencies
+    gnupg # undefined dependencies
     xapian gmime talloc zlib  # dependencies described in INSTALL
     doxygen perl  # (optional) api docs
     pythonPackages.sphinx pythonPackages.python  # (optional) documentation -> doc/INSTALL

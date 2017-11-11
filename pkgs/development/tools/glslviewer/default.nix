@@ -25,8 +25,9 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
   '';
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    glfw mesa_glu pkgconfig glfw libXrandr libXdamage
+    glfw mesa_glu glfw libXrandr libXdamage
     libXext libXrender libXinerama libXcursor libXxf86vm
     libXi libX11
   ] ++ stdenv.lib.optional stdenv.isDarwin Cocoa;

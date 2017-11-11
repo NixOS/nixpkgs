@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1m91x3208z9zxppz998i6060alcalfly9ix9jxismj45xyp6mdx7";
   };
 
-  buildInputs = [ bitlbee autoconf automake libtool pkgconfig glib libgcrypt ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ bitlbee autoconf automake libtool glib libgcrypt ];
 
   preConfigure = ''
     export BITLBEE_PLUGINDIR=$out/lib/bitlbee

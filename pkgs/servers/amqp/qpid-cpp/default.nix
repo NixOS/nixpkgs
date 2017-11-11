@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     sed -i '/ENV/d' src/CMakeLists.txt
   '';
 
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations -Wno-error=unused-function";
+
   meta = {
     homepage = http://qpid.apache.org;
     repositories.git = git://git.apache.org/qpid.git;

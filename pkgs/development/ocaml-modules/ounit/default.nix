@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, camlp4 }:
+{ stdenv, fetchurl, fetchpatch, ocaml, findlib, ocamlbuild }:
 
 stdenv.mkDerivation {
   name = "ounit-2.0.0";
@@ -8,7 +8,13 @@ stdenv.mkDerivation {
     sha256 = "118xsadrx84pif9vaq13hv4yh22w9kmr0ypvhrs0viir1jr0ajjd";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild camlp4 ];
+  patches = with stdenv.lib;
+    optional (versionAtLeast ocaml.version "4.02") (fetchpatch {
+    url = "https://raw.githubusercontent.com/ocaml/opam-repository/master/packages/ounit/ounit.2.0.0/files/safe-string.patch";
+    sha256 = "0hbd2sqdz75lv5ax82yhsfdk1dlcvq12xpys6n85ysmrl0c3d3lk";
+  });
+
+  buildInputs = [ ocaml findlib ocamlbuild ];
 
   dontAddPrefix = true;
 

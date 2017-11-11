@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
     inherit (param) url sha256;
   };
 
-  buildInputs = [ ocaml findlib pkgconfig perl ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ocaml findlib perl ];
   propagatedBuildInputs = [ gmp ];
 
   patchPhase = "patchShebangs ./z_pp.pl";

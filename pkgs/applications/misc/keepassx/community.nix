@@ -6,14 +6,14 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "keepassx-community-${version}";
-  version = "2.2.0";
+  name = "keepassxc-${version}";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     rev = "${version}";
-    sha256 = "0gg75mjy2p7lyh8nnivmyn7bjp1zyx26zm8s1fak7d2di2r0mnjc";
+    sha256 = "01pqpa3vzk2q1vrj2lqayr7a3nzpnj176yhnqbrwlm3s9rga4wzn";
   };
 
   cmakeFlags = [ 

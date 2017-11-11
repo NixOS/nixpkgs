@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   patches = [ ./shellinabox-minus.patch ];
 
-  buildInputs = [ autoreconfHook pam openssl openssh makeWrapper ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ pam openssl openssh makeWrapper ];
 
   # Disable GSSAPIAuthentication errors. Also, paths in certain source files are
   # hardcoded. Replace the hardcoded paths with correct paths.
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://code.google.com/p/shellinabox;
+    homepage = https://github.com/shellinabox/shellinabox;
     description = "Web based AJAX terminal emulator";
     license = licenses.gpl2;
     maintainers = with maintainers; [ tomberek lihop ];

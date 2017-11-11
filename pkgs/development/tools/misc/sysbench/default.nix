@@ -4,7 +4,8 @@
 stdenv.mkDerivation rec {
   name = "sysbench-1.0.6";
 
-  buildInputs = [ autoreconfHook pkgconfig vim libmysql libaio ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ vim libmysql libaio ];
 
   src = fetchFromGitHub {
     owner = "akopytov";

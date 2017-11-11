@@ -5,14 +5,18 @@
 
 stdenv.mkDerivation rec {
   name = "abiword-${version}";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchurl {
-    url = "http://www.abisource.org/downloads/abiword/${version}/source/${name}.tar.gz";
-    sha256 = "1ik591rx15nn3n1297cwykl8wvrlgj78i528id9wbidgy3xzd570";
+    url = "http://www.abisource.com/downloads/abiword/${version}/source/${name}.tar.gz";
+    sha256 = "08imry821g81apdwym3gcs4nss0l9j5blqk31j5rv602zmcd9gxg";
   };
 
   enableParallelBuilding = true;
+
+  patches = [
+    ./patches/fix-13791.patch
+  ];
 
   buildInputs =
     [ pkgconfig gtk3 libglade librsvg bzip2 libgnomecanvas fribidi libpng popt
@@ -29,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.abisource.com/;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ];
+    maintainers = with maintainers; [ pSub ylwghst ];
   };
 }

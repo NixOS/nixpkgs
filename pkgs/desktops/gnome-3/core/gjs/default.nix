@@ -4,7 +4,8 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  buildInputs = [ libxml2 gobjectIntrospection pkgconfig gtk3 glib pango readline dbus ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libxml2 gobjectIntrospection gtk3 glib pango readline dbus ];
 
   propagatedBuildInputs = [ spidermonkey_38 ];
 

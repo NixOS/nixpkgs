@@ -32,7 +32,8 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
   };
 
-  buildInputs = [ pkgconfig ffmpeg mesa freetype libxml2 coreutils python34 which SDL ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ffmpeg mesa freetype libxml2 coreutils python34 which SDL ]
                 ++ optional enableNvidiaCgToolkit nvidia_cg_toolkit
                 ++ optionals stdenv.isLinux [ udev alsaLib libX11 libXext libXxf86vm libXdmcp libv4l libpulseaudio ];
 

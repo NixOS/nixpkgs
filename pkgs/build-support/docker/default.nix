@@ -32,20 +32,7 @@ rec {
     inherit pkgs buildImage pullImage shadowSetup buildImageWithNixDb;
   };
 
-  pullImage =
-    let
-      nameReplace = name: builtins.replaceStrings ["/" ":"] ["-" "-"] name;
-    in
-      # For simplicity we only support sha256.
-      { imageName, imageTag ? "latest", imageId ? "${imageName}:${imageTag}"
-      , sha256, name ? (nameReplace "docker-image-${imageName}-${imageTag}.tar") }:
-      runCommand name {
-        impureEnvVars=pkgs.stdenv.lib.fetchers.proxyImpureEnvVars;
-        outputHashMode="flat";
-        outputHashAlgo="sha256";
-        outputHash=sha256;
-      }
-      "${pkgs.skopeo}/bin/skopeo copy docker://${imageId} docker-archive://$out:${imageId}";
+  pullImage = callPackage ./pull.nix {};
 
   # We need to sum layer.tar, not a directory, hence tarsum instead of nix-hash.
   # And we cannot untar it, because then we cannot preserve permissions ecc.
@@ -137,7 +124,7 @@ rec {
         };
         inherit fromImage fromImageName fromImageTag;
 
-        buildInputs = [ utillinux e2fsprogs jshon rsync jq ];
+        buildInputs = [ utillinux e2fsprogs jshon rsync ];
       } ''
       rm -rf $out
 
@@ -146,29 +133,44 @@ rec {
       mount /dev/${vmTools.hd} disk
       cd disk
 
-      layers=""
       if [[ -n "$fromImage" ]]; then
         echo "Unpacking base image..."
         mkdir image
         tar -C image -xpf "$fromImage"
-        layers=$(jq -r '.[0].Layers | join(" ")' image/manifest.json)
+
+        # If the image name isn't set, read it from the image repository json.
+        if [[ -z "$fromImageName" ]]; then
+          fromImageName=$(jshon -k < image/repositories | head -n 1)
+          echo "From-image name wasn't set. Read $fromImageName."
+        fi
+
+        # If the tag isn't set, use the name as an index into the json
+        # and read the first key found.
+        if [[ -z "$fromImageTag" ]]; then
+          fromImageTag=$(jshon -e $fromImageName -k < image/repositories \
+                         | head -n1)
+          echo "From-image tag wasn't set. Read $fromImageTag."
+        fi
+
+        # Use the name and tag to get the parent ID field.
+        parentID=$(jshon -e $fromImageName -e $fromImageTag -u \
+                   < image/repositories)
       fi
 
-      # Unpack all of the layers into the image.
-      # Layer list is ordered starting from the base image
+      # Unpack all of the parent layers into the image.
       lowerdir=""
-      for layer in $layers; do
-        echo "Unpacking layer $layer"
-        layerDir=image/$(echo $layer | cut -d':' -f2)"_unpacked"
-        mkdir -p $layerDir
-        tar -C $layerDir -xpf image/$layer
-        chmod a+w image/$layer
-        rm image/$layer
+      while [[ -n "$parentID" ]]; do
+        echo "Unpacking layer $parentID"
+        mkdir -p image/$parentID/layer
+        tar -C image/$parentID/layer -xpf image/$parentID/layer.tar
+        rm image/$parentID/layer.tar
 
-        find $layerDir -name ".wh.*" -exec bash -c 'name="$(basename {}|sed "s/^.wh.//")"; mknod "$(dirname {})/$name" c 0 0; rm {}' \;
+        find image/$parentID/layer -name ".wh.*" -exec bash -c 'name="$(basename {}|sed "s/^.wh.//")"; mknod "$(dirname {})/$name" c 0 0; rm {}' \;
 
         # Get the next lower directory and continue the loop.
-        lowerdir=$lowerdir''${lowerdir:+:}$layerDir
+        lowerdir=$lowerdir''${lowerdir:+:}image/$parentID/layer
+        parentID=$(cat image/$parentID/json \
+                  | (jshon -e parent -u 2>/dev/null || true))
       done
 
       mkdir work
@@ -446,17 +448,26 @@ rec {
 
         mkdir image
         touch baseFiles
-        layers=""
         if [[ -n "$fromImage" ]]; then
           echo "Unpacking base image..."
           tar -C image -xpf "$fromImage"
-          config=$(jq -r '.[0].Config' image/manifest.json)
-          layers=$(jq -r '.[0].Layers | join(" ")' image/manifest.json)
-          for l in $layers; do
-            ls_tar image/$l >> baseFiles
+          # Do not import the base image configuration and manifest
+          chmod a+w image image/*.json
+          rm -f image/*.json
+
+          if [[ -z "$fromImageName" ]]; then
+            fromImageName=$(jshon -k < image/repositories|head -n1)
+          fi
+          if [[ -z "$fromImageTag" ]]; then
+            fromImageTag=$(jshon -e $fromImageName -k \
+                           < image/repositories|head -n1)
+          fi
+          parentID=$(jshon -e $fromImageName -e $fromImageTag -u \
+                     < image/repositories)
+
+          for l in image/*/layer.tar; do
+            ls_tar $l >> baseFiles
           done
-          chmod u+w image image/$config
-          rm image/$config
         fi
 
         chmod -R ug+rw image
@@ -483,27 +494,46 @@ rec {
         tar -rpf temp/layer.tar --mtime="@$SOURCE_DATE_EPOCH" \
           --owner=0 --group=0 --no-recursion --files-from newFiles
 
-        gzip temp/layer.tar
-        layerID="sha256:$(sha256sum temp/layer.tar.gz | cut -d ' ' -f 1)"
-        mv temp/layer.tar.gz image/$layerID
+        echo "Adding meta..."
 
-        echo "Generating image configuration and manifest..."
+        # If we have a parentID, add it to the json metadata.
+        if [[ -n "$parentID" ]]; then
+          cat temp/json | jshon -s "$parentID" -i parent > tmpjson
+          mv tmpjson temp/json
+        fi
+
+        # Take the sha256 sum of the generated json and use it as the layer ID.
+        # Compute the size and add it to the json under the 'Size' field.
+        layerID=$(sha256sum temp/json|cut -d ' ' -f 1)
+        size=$(stat --printf="%s" temp/layer.tar)
+        cat temp/json | jshon -s "$layerID" -i id -n $size -i Size > tmpjson
+        mv tmpjson temp/json
+
+        # Use the temp folder we've been working on to create a new image.
+        mv temp image/$layerID
+
+        # Create image json and image manifest
         imageJson=$(cat ${baseJson} | jq ". + {\"rootfs\": {\"diff_ids\": [], \"type\": \"layers\"}}")
         manifestJson=$(jq -n "[{\"RepoTags\":[\"$imageName:$imageTag\"]}]")
-
-        # The layer list is ordered starting from the base image
-        layers=$(echo $layers $layerID)
-        for i in $(echo $layers); do
+        currentID=$layerID
+        while [[ -n "$currentID" ]]; do
+          layerChecksum=$(sha256sum image/$currentID/layer.tar | cut -d ' ' -f1)
           imageJson=$(echo "$imageJson" | jq ".history |= [{\"created\": \"${created}\"}] + .")
-          diffId=$(gzip -dc image/$i | sha256sum | cut -d" " -f1)
-          imageJson=$(echo "$imageJson" | jq ".rootfs.diff_ids |= [\"sha256:$diffId\"] + .")
-          manifestJson=$(echo "$manifestJson" | jq ".[0].Layers |= [\"$i\"] + .")
+          imageJson=$(echo "$imageJson" | jq ".rootfs.diff_ids |= [\"sha256:$layerChecksum\"] + .")
+          manifestJson=$(echo "$manifestJson" | jq ".[0].Layers |= [\"$currentID/layer.tar\"] + .")
+
+          currentID=$(cat image/$currentID/json | (jshon -e parent -u 2>/dev/null || true))
         done
 
         imageJsonChecksum=$(echo "$imageJson" | sha256sum | cut -d ' ' -f1)
-        echo "$imageJson" > "image/sha256:$imageJsonChecksum"
-        manifestJson=$(echo "$manifestJson" | jq ".[0].Config = \"sha256:$imageJsonChecksum\"")
+        echo "$imageJson" > "image/$imageJsonChecksum.json"
+        manifestJson=$(echo "$manifestJson" | jq ".[0].Config = \"$imageJsonChecksum.json\"")
         echo "$manifestJson" > image/manifest.json
+
+        # Store the json under the name image/repositories.
+        jshon -n object \
+          -n object -s "$layerID" -i "$imageTag" \
+          -i "$imageName" > image/repositories
 
         # Make the image read-only.
         chmod -R a-w image

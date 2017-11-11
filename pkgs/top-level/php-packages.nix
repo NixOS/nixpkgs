@@ -18,9 +18,13 @@ let
   };
 
   apcu51 = assert isPhp7; buildPecl {
-    name = "apcu-5.1.2";
+    name = "apcu-5.1.8";
 
-    sha256 = "0r5pfbjbmdj46h20jm3iqmy969qd27ajyf0phjhgykv6j0cqjlgd";
+    sha256 = "01dfbf0245d8cc0f51ba16467a60b5fad08e30b28df7846e0dd213da1143ecce";
+
+    doCheck = true;
+    checkTarget = "test";
+    checkFlagsArray = ["REPORT_EXIT_STATUS=1" "NO_INTERACTION=1"];
   };
 
   ast = assert isPhp7; buildPecl {
@@ -33,7 +37,7 @@ let
     name = "couchbase-${version}";
     version = "2.3.4";
 
-    buildInputs = [ pkgs.libcouchbase pcs ];
+    buildInputs = [ pkgs.libcouchbase pkgs.zlib igbinary pcs ];
 
     src = pkgs.fetchFromGitHub {
       owner = "couchbase";
@@ -57,8 +61,29 @@ let
                if test -r $i/include/libcouchbase/couchbase.h; then
                  LIBCOUCHBASE_DIR=$i
                  AC_MSG_RESULT(found in $i)
+        @@ -154,6 +154,8 @@ COUCHBASE_FILES=" \
+             igbinary_inc_path="$phpincludedir"
+           elif test -f "$phpincludedir/ext/igbinary/igbinary.h"; then
+             igbinary_inc_path="$phpincludedir"
+        +  elif test -f "${igbinary.dev}/include/ext/igbinary/igbinary.h"; then
+        +    igbinary_inc_path="${igbinary.dev}/include"
+           fi
+           if test "$igbinary_inc_path" = ""; then
+             AC_MSG_WARN([Cannot find igbinary.h])
       '')
     ];
+  };
+
+  igbinary = buildPecl {
+    name = "igbinary-2.0.4";
+
+    configureFlags = [ "--enable-igbinary" ];
+
+    makeFlags = [ "phpincludedir=$(dev)/include" ];
+
+    outputs = [ "out" "dev" ];
+
+    sha256 = "0a55l4f0bgbf3f6sh34njd14niwagg829gfkvb8n5fs69xqab67d";
   };
 
   imagick = buildPecl {
@@ -91,7 +116,8 @@ let
       "--with-libmemcached-dir=${pkgs.libmemcached}"
     ];
 
-    buildInputs = with pkgs; [ pkgconfig cyrus_sasl zlib ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with pkgs; [ cyrus_sasl zlib ];
   };
 
   # Not released yet
@@ -109,7 +135,8 @@ let
       "--with-libmemcached-dir=${pkgs.libmemcached}"
     ];
 
-    buildInputs = with pkgs; [ pkgconfig cyrus_sasl zlib ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = with pkgs; [ cyrus_sasl zlib ];
   };
 
   pcs = buildPecl rec {
@@ -162,9 +189,7 @@ let
       "--with-yaml=${pkgs.libyaml}"
     ];
 
-    buildInputs = [
-      pkgs.pkgconfig
-    ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
   };
 
   yaml20 = assert isPhp7; buildPecl {
@@ -176,9 +201,7 @@ let
       "--with-yaml=${pkgs.libyaml}"
     ];
 
-    buildInputs = [
-      pkgs.pkgconfig
-    ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
   };
 
   # Since PHP 5.5 OPcache is integrated in the core and has to be enabled via --enable-opcache during compilation.
@@ -197,7 +220,7 @@ let
       "--with-zmq=${pkgs.zeromq}"
     ];
 
-    buildInputs = [ pkgs.pkgconfig ];
+    nativeBuildInputs = [ pkgs.pkgconfig ];
   };
 
   # No support for PHP 7 and probably never will be
@@ -250,63 +273,36 @@ let
     buildInputs = [ pkgs.geoip ];
   };
 
-  redis = if isPhp7 then redisPhp7 else redis22;
+  redis = if isPhp7 then redis31 else redis22;
 
   redis22 = assert !isPhp7; buildPecl {
     name = "redis-2.2.7";
     sha256 = "00n9dpk9ak0bl35sbcd3msr78sijrxdlb727nhg7f2g7swf37rcm";
   };
 
-  # Not released yet
-  redisPhp7 = assert isPhp7; buildPecl rec {
-    name = "redis-php7";
-
-    src = fetchgit {
-      url = "https://github.com/phpredis/phpredis";
-      rev = "4a37e47d0256581ce2f7a3b15b5bb932add09f36";
-      sha256 = "1qm2ifa0zf95l1g967iiabmja17srpwz73lfci7z13ffdw1ayhfd";
-    };
+  redis31 = assert isPhp7; buildPecl {
+    name = "redis-3.1.4";
+    sha256 = "0rgjdrqfif8pfn3ipk1v4gyjkkdcdrdk479qbpda89w25vaxzsxd";
   };
 
   v8 = assert isPhp7; buildPecl rec {
-    version = "0.1.0";
+    version = "0.1.9";
     name = "v8-${version}";
 
-    src = pkgs.fetchurl {
-      url = "https://github.com/pinepain/php-v8/archive/v${version}.tar.gz";
-      sha256 = "18smnxd34b486f5n8j0wk9z7r5x1w84v89mgf76z0bn7gxdxl0xj";
-    };
+    sha256 = "0bj77dfmld5wfwl4wgqnpa0i4f3mc1mpsp9dmrwqv050gs84m7h1";
 
-    buildInputs = [ pkgs.v8 ];
-    configureFlags = [ "--with-v8=${pkgs.v8}" ];
-
-    patches = [
-      (builtins.toFile "link-libv8_libbase.patch" ''
-        Index: php-v8/config.m4
-        ===================================================================
-        --- php-v8.orig/config.m4
-        +++ php-v8/config.m4
-        @@ -69,7 +69,7 @@ if test "$PHP_V8" != "no"; then
-               #static_link_extra="libv8_base.a libv8_libbase.a libv8_libplatform.a libv8_snapshot.a"
-               ;;
-             * )
-        -      static_link_extra="libv8_libplatform.a"
-        +      static_link_extra="libv8_libplatform.a libv8_libbase.a"
-               #static_link_extra="libv8_base.a libv8_libbase.a libv8_libplatform.a libv8_snapshot.a"
-               ;;
-           esac
-	''
-      )];
+    buildInputs = [ pkgs.v8_6_x ];
+    configureFlags = [ "--with-v8=${pkgs.v8_6_x}" ];
   };
 
   v8js = assert isPhp7; buildPecl rec {
-    version = "1.3.2";
+    version = "1.4.1";
     name = "v8js-${version}";
 
-    sha256 = "1x7gxi70zgj3vaxs89nfbnwlqcxrps1inlyfzz66pbzdbfwvc8z8";
+    sha256 = "0k5dc395gzva4l6n9mzvkhkjq914460cwk1grfandcqy73j6m89q";
 
-    buildInputs = [ pkgs.v8 ];
-    configureFlags = [ "--with-v8js=${pkgs.v8}" ];
+    buildInputs = [ pkgs.v8_6_x ];
+    configureFlags = [ "--with-v8js=${pkgs.v8_6_x}" ];
   };
 
   composer = pkgs.stdenv.mkDerivation rec {

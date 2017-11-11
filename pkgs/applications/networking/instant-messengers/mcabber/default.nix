@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1ggh865p1rf10ffsnf4g6qv9i8bls36dxdb1nzs5r9vdqci2rz04";
   };
 
-  buildInputs = [ openssl ncurses pkgconfig glib loudmouth libotr gpgme ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl ncurses glib loudmouth libotr gpgme ];
 
   configureFlags = "--with-openssl=${openssl.dev} --enable-modules --enable-otr";
 

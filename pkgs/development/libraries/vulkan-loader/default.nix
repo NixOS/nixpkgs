@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
   name = "vulkan-loader-${version}";
   inherit version src;
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ cmake pkgconfig git python3 python3Packages.lxml
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
+  buildInputs = [ cmake git python3 python3Packages.lxml
                   glslang spirv-tools x11 libxcb libXrandr libXext wayland
                 ];
   enableParallelBuilding = true;

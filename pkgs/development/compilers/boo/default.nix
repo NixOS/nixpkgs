@@ -16,8 +16,9 @@ in stdenv.mkDerivation rec {
     sha256 = "174abdwfpq8i3ijx6bwqll16lx7xwici374rgsbymyk8g8mla094";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig mono makeWrapper nant shared_mime_info gtksourceview
+    mono makeWrapper nant shared_mime_info gtksourceview
     gtk2
   ];
 

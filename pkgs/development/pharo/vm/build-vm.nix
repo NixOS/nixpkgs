@@ -103,7 +103,8 @@ stdenv.mkDerivation rec {
   # http://forum.world.st/OSProcess-fork-issue-with-Debian-built-VM-td4947326.html
   #
   # (stack protection is disabled above for gcc 4.8 compatibility.)
-  buildInputs = [ bash unzip glibc openssl gcc48 mesa freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share libuuid autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ bash unzip glibc openssl gcc48 mesa freetype xorg.libX11 xorg.libICE xorg.libSM alsaLib cairo pharo-share libuuid ];
 
   meta = {
     description = "Clean and innovative Smalltalk-inspired environment";

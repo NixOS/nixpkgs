@@ -10,6 +10,9 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "info" "devdoc" ];
 
+  # broken with gcc-7
+  #doCheck = (stdenv.buildPlatform == stdenv.hostPlatform) && !stdenv.isDarwin;
+
   hardeningDisable = [ "format" ];
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;

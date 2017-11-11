@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
     "--with-privsep-user=${privsepUser}"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
+    "--with-cacert=/etc/ssl/certs/ca-certificates.crt"
   ];
 
   buildInputs = [ libressl ];

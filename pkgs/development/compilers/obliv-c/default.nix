@@ -1,8 +1,9 @@
-{stdenv, fetchurl, ocaml, libgcrypt, fetchFromGitHub, ocamlPackages, perl}:
+{ stdenv, fetchurl, libgcrypt, fetchFromGitHub, ocamlPackages, perl }:
 stdenv.mkDerivation rec {
   name = "obliv-c-${version}";
   version = "0.0pre20170827";
-  buildInputs = [ ocaml ocamlPackages.findlib perl ];
+  buildInputs = [ perl ]
+  ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ]);
   propagatedBuildInputs = [ libgcrypt ];
   src = fetchFromGitHub {
     owner = "samee";

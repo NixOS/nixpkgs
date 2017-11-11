@@ -4,7 +4,8 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  buildInputs = [ pkgconfig gtk3 gnome3.defaultIconTheme gdk_pixbuf librsvg dconf
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk3 gnome3.defaultIconTheme gdk_pixbuf librsvg dconf
                   libxml2 clutter clutter_gtk wrapGAppsHook itstool intltool ];
 
   enableParallelBuilding = true;

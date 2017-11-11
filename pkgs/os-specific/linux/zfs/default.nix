@@ -2,7 +2,7 @@
 , configFile ? "all"
 
 # Userspace dependencies
-, zlib, libuuid, python, attr
+, zlib, libuuid, python, attr, openssl
 
 # Kernel dependencies
 , kernel ? null, spl ? null, splUnstable ? null
@@ -38,9 +38,11 @@ let
 
       patches = extraPatches;
 
-      buildInputs = [ autoreconfHook nukeReferences ]
-        ++ optionals buildKernel [ spl ]
-        ++ optionals buildUser [ zlib libuuid python attr ];
+      nativeBuildInputs = [ autoreconfHook nukeReferences ];
+      buildInputs =
+           optionals buildKernel [ spl ]
+        ++ optionals buildUser [ zlib libuuid python attr ]
+        ++ optionals (buildUser && isUnstable) [ openssl ];
 
       # for zdb to get the rpath to libgcc_s, needed for pthread_cancel to work
       NIX_CFLAGS_LINK = "-lgcc_s";
@@ -138,9 +140,9 @@ in {
     incompatibleKernelVersion = null;
 
     # this package should point to the latest release.
-    version = "0.7.1";
+    version = "0.7.3";
 
-    sha256 = "0czal6lpl8igrhwmqh5jcgx07rlcgnrfg6ywzf681vsyh3gaxj9n";
+    sha256 = "1bbajrwfilnmfhn1n69gvsaznyc4q29wi7nkwc0p9r4dli37w28b";
 
     extraPatches = [
       (fetchpatch {
@@ -157,10 +159,10 @@ in {
     incompatibleKernelVersion = null;
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2017-09-12";
+    version = "2017-10-16";
 
-    rev = "ded8f06a3cfee60b3a8ea5309e9c4d0e567ed3b5";
-    sha256 = "0yn4fg4a00hpflmmr0jbbhfb921nygpw2xbbjy35abl57k6zk375";
+    rev = "7670f721fc82e6cdcdd31f83760a79b6f2f2b998";
+    sha256 = "0ask9d9936s7mhs9q5wzvn6c8fd322i76hs2n7fajfk17b1a1lkj";
     isUnstable = true;
 
     extraPatches = [

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, noSysDirs
+{ stdenv, targetPackages, fetchurl, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langObjC ? targetPlatform.isDarwin
 , langObjCpp ? targetPlatform.isDarwin
@@ -31,7 +31,6 @@
 , libpthread ? null, libpthreadCross ? null  # required for GNU/Hurd
 , stripped ? true
 , gnused ? null
-, binutils ? null
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , darwin ? null
 , buildPlatform, hostPlatform, targetPlatform
@@ -51,7 +50,7 @@ assert libelf != null -> zlib != null;
 assert hostPlatform.isDarwin -> gnused != null;
 
 # Need c++filt on darwin
-assert hostPlatform.isDarwin -> binutils != null;
+assert hostPlatform.isDarwin -> targetPackages.stdenv.cc.bintools or null != null;
 
 # The go frontend is written in c++
 assert langGo -> langCC;
@@ -59,8 +58,8 @@ assert langGo -> langCC;
 with stdenv.lib;
 with builtins;
 
-let version = "5.4.0";
-    sha256 = "0fihlcy5hnksdxk0sn6bvgnyq8gfrgs8m794b1jxwd1dxinzg3b0";
+let version = "5.5.0";
+    sha256 = "11zd1hgzkli3b2v70qsm2hyqppngd4616qc96lmm9zl2kl9yl32k";
 
     # Whether building a cross-compiler for GNU/Hurd.
     crossGNU = targetPlatform != hostPlatform && targetPlatform.config == "i586-pc-gnu";
@@ -149,8 +148,8 @@ let version = "5.4.0";
         withFloat +
         withMode +
         # Ensure that -print-prog-name is able to find the correct programs.
-        " --with-as=${binutils}/bin/${targetPlatform.config}-as" +
-        " --with-ld=${binutils}/bin/${targetPlatform.config}-ld" +
+        " --with-as=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as" +
+        " --with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld" +
         (if crossMingw && crossStageStatic then
           " --with-headers=${libcCross}/include" +
           " --with-gcc" +
@@ -217,7 +216,7 @@ stdenv.mkDerivation ({
   builder = ../builder.sh;
 
   src = fetchurl {
-    url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.bz2";
+    url = "mirror://gnu/gcc/gcc-${version}/gcc-${version}.tar.xz";
     inherit sha256;
   };
 
@@ -312,7 +311,7 @@ stdenv.mkDerivation ({
     ++ (optional (zlib != null) zlib)
     ++ (optionals langJava [ boehmgc zip unzip ])
     ++ (optionals javaAwtGtk ([ gtk2 libart_lgpl ] ++ xlibs))
-    ++ (optionals (targetPlatform != hostPlatform) [binutils])
+    ++ (optionals (targetPlatform != hostPlatform) [targetPackages.stdenv.cc.bintools])
     ++ (optionals (buildPlatform != hostPlatform) [buildPackages.stdenv.cc])
     ++ (optionals langAda [gnatboot])
     ++ (optionals langVhdl [gnat])
@@ -320,7 +319,7 @@ stdenv.mkDerivation ({
     # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
     # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
     ++ (optional hostPlatform.isDarwin gnused)
-    ++ (optional hostPlatform.isDarwin binutils)
+    ++ (optional hostPlatform.isDarwin targetPackages.stdenv.cc.bintools)
     ;
 
   NIX_LDFLAGS = stdenv.lib.optionalString  hostPlatform.isSunOS "-lm -ldl";

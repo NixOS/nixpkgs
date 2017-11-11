@@ -14,8 +14,9 @@ stdenv.mkDerivation rec {
     sha256 = "1k0l59cdk8np4pff1my07dp7ivf3nchlhcpvm9xizp0my9rqgbxb";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    libetpan cmake icu cyrus_sasl libctemplate libuchardet pkgconfig glib
+    libetpan cmake icu cyrus_sasl libctemplate libuchardet glib
     libtidy libxml2 libuuid openssl
   ];
 

@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
   patchPhase =
     ''
       sed -e 's/install -o root/install/' -i Makefile
-      sed -e 's,/bin/ip,${iproute}/sbin/ip,' -i routing.c
     '';
   preConfigure =
     ''
-      makeFlagsArray=( PPPD=${ppp}/sbin/pppd BINDIR=$out/sbin \
-          MANDIR=$out/share/man/man8 PPPDIR=$out/etc/ppp )
+      makeFlagsArray=( IP=${iproute}/bin/ip PPPD=${ppp}/sbin/pppd \
+                       BINDIR=$out/sbin MANDIR=$out/share/man/man8 \
+                       PPPDIR=$out/etc/ppp )
     '';
 
   nativeBuildInputs = [ perl which ];

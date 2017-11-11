@@ -11,7 +11,8 @@ stdenv.mkDerivation {
   };
   configureFlags = "--with-ssl-headers=${openssl.dev}/include/openssl";
 
-  buildInputs = [bzip2 zlib newt newt openssl pkgconfig slang
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [bzip2 zlib newt newt openssl slang
     # automake autoconf libtool gettext
   ];
 

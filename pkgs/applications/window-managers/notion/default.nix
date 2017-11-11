@@ -32,7 +32,8 @@ stdenv.mkDerivation {
     substituteInPlace man/Makefile --replace "nroff -man -Tlatin1" "${mandoc}/bin/mandoc -T man"
   '';
 
-  buildInputs = [makeWrapper xlibsWrapper lua gettext mandoc pkgconfig which libXinerama libXrandr libX11 ] ++ stdenv.lib.optional enableXft libXft;
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [makeWrapper xlibsWrapper lua gettext mandoc which libXinerama libXrandr libX11 ] ++ stdenv.lib.optional enableXft libXft;
 
   buildFlags = "LUA_DIR=${lua} X11_PREFIX=/no-such-path PREFIX=\${out}";
   installFlags = "PREFIX=\${out}";

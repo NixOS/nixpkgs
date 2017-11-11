@@ -15,7 +15,8 @@ in stdenv.mkDerivation {
     substituteInPlace Makefile --replace /usr/local "$out"
   '';
 
-  buildInputs = [ scons libX11 pkgconfig libusb1 boost glib dbus_glib];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ scons libX11 libusb1 boost glib dbus_glib];
 
   meta = with stdenv.lib; {
     homepage = http://pingus.seul.org/~grumbel/xboxdrv/;

@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-anthy-zipcode=${anthy}/share/anthy/zipcode.t" ];
 
   buildInputs = [
-    anthy glib gobjectIntrospection gtk3 ibus python3
+    anthy glib gobjectIntrospection gtk3 ibus (python3.withPackages (ps: [ps.pygobject3]))
   ];
 
   nativeBuildInputs = [ intltool pkgconfig python3.pkgs.wrapPython ];

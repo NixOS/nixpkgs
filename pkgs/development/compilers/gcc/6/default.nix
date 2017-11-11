@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, noSysDirs
+{ stdenv, targetPackages, fetchurl, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langObjC ? targetPlatform.isDarwin
 , langObjCpp ? targetPlatform.isDarwin
@@ -31,7 +31,6 @@
 , libpthread ? null, libpthreadCross ? null  # required for GNU/Hurd
 , stripped ? true
 , gnused ? null
-, binutils ? null
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , darwin ? null
 , buildPlatform, hostPlatform, targetPlatform
@@ -50,7 +49,7 @@ assert libelf != null -> zlib != null;
 assert hostPlatform.isDarwin -> gnused != null;
 
 # Need c++filt on darwin
-assert hostPlatform.isDarwin -> binutils != null;
+assert hostPlatform.isDarwin -> targetPackages.stdenv.cc.bintools or null != null;
 
 # The go frontend is written in c++
 assert langGo -> langCC;
@@ -72,7 +71,10 @@ let version = "6.4.0";
       # The GNAT Makefiles did not pay attention to CFLAGS_FOR_TARGET for its
       # target libraries and tools.
       ++ optional langAda ../gnat-cflags.patch
-      ++ optional langFortran ../gfortran-driving.patch;
+      ++ optional langFortran ../gfortran-driving.patch
+      ++ [ ../struct-ucontext.patch ../struct-sigaltstack.patch ] # glibc-2.26
+      ++ optional langJava [ ../struct-ucontext-libjava.patch ] # glibc-2.26
+      ;
 
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
@@ -143,8 +145,8 @@ let version = "6.4.0";
         withFloat +
         withMode +
         # Ensure that -print-prog-name is able to find the correct programs.
-        " --with-as=${binutils}/bin/${targetPlatform.config}-as" +
-        " --with-ld=${binutils}/bin/${targetPlatform.config}-ld" +
+        " --with-as=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as" +
+        " --with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld" +
         (if crossMingw && crossStageStatic then
           " --with-headers=${libcCross}/include" +
           " --with-gcc" +
@@ -217,7 +219,8 @@ stdenv.mkDerivation ({
 
   inherit patches;
 
-  outputs = [ "out" "lib" "man" "info" ];
+  outputs = if langJava || langGo then ["out" "man" "info"]
+    else [ "out" "lib" "man" "info" ];
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
 
@@ -306,14 +309,14 @@ stdenv.mkDerivation ({
     ++ (optional (zlib != null) zlib)
     ++ (optionals langJava [ boehmgc zip unzip ])
     ++ (optionals javaAwtGtk ([ gtk2 libart_lgpl ] ++ xlibs))
-    ++ (optionals (targetPlatform != hostPlatform) [binutils])
+    ++ (optionals (targetPlatform != hostPlatform) [targetPackages.stdenv.cc.bintools])
     ++ (optionals langAda [gnatboot])
     ++ (optionals langVhdl [gnat])
 
     # The builder relies on GNU sed (for instance, Darwin's `sed' fails with
     # "-i may not be used with stdin"), and `stdenvNative' doesn't provide it.
     ++ (optional hostPlatform.isDarwin gnused)
-    ++ (optional hostPlatform.isDarwin binutils)
+    ++ (optional hostPlatform.isDarwin targetPackages.stdenv.cc.bintools)
     ;
 
   NIX_LDFLAGS = stdenv.lib.optionalString  hostPlatform.isSunOS "-lm -ldl";
@@ -323,7 +326,11 @@ stdenv.mkDerivation ({
     export LDFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $LDFLAGS_FOR_TARGET"
     export CXXFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CXXFLAGS_FOR_TARGET"
     export CFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CFLAGS_FOR_TARGET"
-  '';
+  ''
+  + stdenv.lib.optionalString (langJava || langGo) ''
+    export lib=$out;
+  ''
+  ;
 
   dontDisableStatic = true;
 
@@ -565,4 +572,10 @@ stdenv.mkDerivation ({
 // optionalAttrs (!stripped || targetPlatform != hostPlatform) { dontStrip = true; }
 
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
+
+// optionalAttrs (langJava) {
+     postFixup = ''
+       target="$(echo "$out/libexec/gcc"/*/*/ecj*)"
+       patchelf --set-rpath "$(patchelf --print-rpath "$target"):$out/lib" "$target"
+     '';}
 )

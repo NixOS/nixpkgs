@@ -17,11 +17,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  preConfigure = ''
-    export LIBMPDCLIENT_LIBS=${mpd_clientlib}/lib/libmpdclient.${if stdenv.isDarwin then mpd_clientlib.majorVersion + ".dylib" else "so." + mpd_clientlib.majorVersion + ".0." + mpd_clientlib.minorVersion}
-    export LIBMPDCLIENT_CFLAGS=${mpd_clientlib}
-  '';
-
   meta = with stdenv.lib; {
     description = "A minimalist command line interface to MPD";
     homepage = http://www.musicpd.org/clients/mpc/;

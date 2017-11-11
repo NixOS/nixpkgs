@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1yr92xv9n6kgyixwg9ps4zb404ic5pgb171k4bi3mv9p6k8gv59s";
   };
 
-  buildInputs = [ pkgconfig glib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib ];
 
   meta = with stdenv.lib; {
     homepage = http://ctpl.tuxfamily.org/;

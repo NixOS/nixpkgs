@@ -1,0 +1,10 @@
+--- libffado/src/libutil/PosixMessageQueue.cpp  (revision 2705)
++++ libffado/src/libutil/PosixMessageQueue.cpp  (revision 2706)
+@@ -30,6 +30,7 @@
+ #include <errno.h>
+ #include <string.h>
+ #include <poll.h>
++#include <signal.h>
+
+ #define MQ_INVALID_ID ((mqd_t) -1)
+ // one second

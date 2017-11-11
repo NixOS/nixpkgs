@@ -1,5 +1,6 @@
 { stdenv
 , fetch
+, fetchpatch
 , perl
 , groff
 , cmake
@@ -44,7 +45,23 @@ in stdenv.mkDerivation rec {
   # 10.9. This is a temporary measure until nixpkgs darwin support is
   # updated.
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
-        sed -i 's/os_trace(\(.*\)");$/printf(\1\\n");/g' ./projects/compiler-rt/lib/sanitizer_common/sanitizer_mac.cc
+    sed -i 's/os_trace(\(.*\)");$/printf(\1\\n");/g' ./projects/compiler-rt/lib/sanitizer_common/sanitizer_mac.cc
+
+    substituteInPlace CMakeLists.txt \
+      --replace 'set(CMAKE_INSTALL_NAME_DIR "@rpath")' "set(CMAKE_INSTALL_NAME_DIR "$out/lib")" \
+      --replace 'set(CMAKE_INSTALL_RPATH "@executable_path/../lib")' ""
+  ''
+  + stdenv.lib.optionalString (stdenv ? glibc) ''
+    (
+      cd projects/compiler-rt
+      patch -p1 < ${
+        fetchpatch {
+          name = "sigaltstack.patch"; # for glibc-2.26
+          url = https://github.com/llvm-mirror/compiler-rt/commit/8a5e425a68d.diff;
+          sha256 = "0h4y5vl74qaa7dl54b1fcyqalvlpd8zban2d1jxfkxpzyi7m8ifi";
+        }
+      }
+    )
   '';
 
   # hacky fix: created binaries need to be run before installation
@@ -75,7 +92,6 @@ in stdenv.mkDerivation rec {
   '';
 
   postInstall = stdenv.lib.optionalString (stdenv.isDarwin && enableSharedLibraries) ''
-    install_name_tool -id $out/lib/libLLVM.dylib $out/lib/libLLVM.dylib
     ln -s $out/lib/libLLVM.dylib $out/lib/libLLVM-${version}.dylib
   '';
 

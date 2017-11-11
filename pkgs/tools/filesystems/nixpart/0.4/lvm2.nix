@@ -15,7 +15,8 @@ stdenv.mkDerivation {
   configureFlags =
     "--disable-readline --enable-udev_rules --enable-udev_sync --enable-pkgconfig --enable-applib";
 
-  buildInputs = [ pkgconfig systemd ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ systemd ];
 
   preConfigure =
     ''
