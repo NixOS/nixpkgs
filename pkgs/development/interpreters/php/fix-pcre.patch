@@ -1,0 +1,33 @@
+--- php-7.1.11/main/php_compat.h	2017-10-25 09:04:42.000000000 +0200
++++ php-7.1.11/main/php_compat2.h	2017-11-11 16:38:08.373273355 +0100
+@@ -28,6 +28,30 @@
+ #endif
+ 
+ #if defined(HAVE_BUNDLED_PCRE) || !defined(PHP_VERSION)
++#define pcre_jit_stack_free       php_pcre_jit_stack_free
++#define pcre_get_compiled_regex_c php_pcre_get_compiled_regex_c
++#define pcre_jit_free_unused_memo php_pcre_jit_free_unused_memo
++#define pcre_get_compiled_regex   php_pcre_get_compiled_regex
++#define pcre_stack_guard          php_pcre_stack_guard
++#define pcre_get_compiled_regex_e php_pcre_get_compiled_regex_e
++#define pcre_globals_id           php_pcre_globals_id
++#define pcre_jit_stack_alloc      php_pcre_jit_stack_alloc
++#define pcre_free_study           php_pcre_free_study
++#define pcre_assign_jit_stack     php_pcre_assign_jit_stack
++#define pcre_clean_cache          php_pcre_clean_cache
++#define pcre_functions            php_pcre_functions
++#define pcre_module_entry         php_pcre_module_entry
++#define pcre_jit_stack_free       php_pcre_jit_stack_free
++#define pcre_get_compiled_regex_c php_pcre_get_compiled_regex_c
++#define pcre_jit_free_unused_memo php_pcre_jit_free_unused_memo
++#define pcre_get_compiled_regex   php_pcre_get_compiled_regex
++#define pcre_stack_guard          php_pcre_stack_guard
++#define pcre_get_compiled_regex_e php_pcre_get_compiled_regex_e
++#define pcre_globals_id           php_pcre_globals_id
++#define pcre_jit_stack_alloc      php_pcre_jit_stack_alloc
++#define pcre_free_study           php_pcre_free_study
++#define pcre_assign_jit_stack     php_pcre_assign_jit_stack
++#define pcre_jit_exec             php_pcre_jit
+ #define pcre_compile			php_pcre_compile
+ #define pcre_compile2			php_pcre_compile2
+ #define pcre_copy_substring		php_pcre_copy_substring
