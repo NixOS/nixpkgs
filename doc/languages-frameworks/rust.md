@@ -19,7 +19,7 @@ For daily builds (beta and nightly) use either rustup from
 nixpkgs or use the [Rust nightlies
 overlay](#using-the-rust-nightlies-overlay).
 
-## Packaging Rust applications
+## Compiling Rust applications with Cargo
 
 Rust applications are packaged by using the `buildRustPackage` helper from `rustPlatform`:
 
@@ -56,6 +56,83 @@ checksum can be then take from the failed build.
 
 To install crates with nix there is also an experimental project called
 [nixcrates](https://github.com/fractalide/nixcrates).
+
+## Compiling Rust crates using Nix instead of Cargo
+
+When run, `cargo build` produces a file called `Cargo.lock`,
+containing pinned versions of all dependencies. Nixpkgs contains a
+tool called `carnix` (`nix-env -iA nixos.carnix`), which can be used
+to turn a `Cargo.lock` into a Nix expression.
+
+That Nix expression calls `rustc` directly (hence bypassing Cargo),
+and can be used to compile a crate and all its dependencies. Here is
+an example for a minimal `hello` crate:
+
+
+    $ cargo new hello
+    $ cd hello
+    $ cargo build
+     Compiling hello v0.1.0 (file:///tmp/hello)
+      Finished dev [unoptimized + debuginfo] target(s) in 0.20 secs
+    $ carnix -o hello.nix --src ./. Cargo.lock
+    $ nix-build hello.nix
+
+Now, the file produced by the call to `carnix`, called `hello.nix`, looks like:
+
+```
+with import <nixpkgs> {};
+let release = true;
+    verbose = true;
+    hello_0_1_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "hello";
+      version = "0.1.0";
+      src = ./.;
+      inherit dependencies buildDependencies features release verbose;
+    };
+
+in
+rec {
+  hello_0_1_0 = hello_0_1_0_ {};
+}
+```
+
+In particular, note that the argument given as `--src` is copied
+verbatim to the source.  If we look at a more complicated
+dependencies, for instance by adding a single line `libc="*"` to our
+`Cargo.toml`, we get the following `hello.nix`:
+
+```
+with import <nixpkgs> {};
+let release = true;
+    verbose = true;
+    hello_0_1_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "hello";
+      version = "0.1.0";
+      src = ./.;
+      inherit dependencies buildDependencies features release verbose;
+    };
+    libc_0_2_33_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "libc";
+      version = "0.2.33";
+      sha256 = "1l7synziccnvarsq2kk22vps720ih6chmn016bhr2bq54hblbnl1";
+      inherit dependencies buildDependencies features release verbose;
+    };
+
+in
+rec {
+  hello_0_1_0 = hello_0_1_0_ {
+    dependencies = [ libc_0_2_33 ];
+  };
+  libc_0_2_33 = libc_0_2_33_ {
+    features = [ "use_std" ];
+  };
+}
+```
+
+Here, the `libc` crate has no `src` attribute, so `buildRustCrate`
+will fetch it from [crates.io](https://crates.io). A `sha256`
+attribute is still needed for Nix purity.
+
 
 ## Using the Rust nightlies overlay
 
