@@ -29,6 +29,11 @@ in stdenv.mkDerivation rec {
       gnome3.gnome-clocks # schemas needed
       at_spi2_core upower ibus gnome_desktop telepathy_logger gnome3.gnome_settings_daemon
       gobjectIntrospection (stdenv.lib.getLib dconf) ];
+  propagatedUserEnvPkgs = [
+    # Needed to support on-screen keyboard used with touch screen devices
+    # see https://github.com/NixOS/nixpkgs/issues/25968
+    gnome3.caribou
+  ];
 
   installFlags = [ "keysdir=$(out)/share/gnome-control-center/keybindings" ];
 
