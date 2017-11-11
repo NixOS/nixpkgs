@@ -27,14 +27,13 @@ in rec {
 
   preview = mkStudio {
     pname = "android-studio-preview";
-    version = "3.1.0.0"; # "Android Studio 3.1 Canary 1"
-    build = "171.4415322";
-    sha256Hash = "08xgwv6mg2zxys9dqjfz66h60g640ni3snyb89ij0fkmd28rbxgj";
+    version = "3.1.0.2"; # "Android Studio 3.1 Canary 3"
+    build = "171.4435470";
+    sha256Hash = "1yqzxmzqxvhq9q9k07yfchh2al0wdy0j5k5fmjv4zbw20panx10h";
 
     meta = stable.meta // {
       description = "The Official IDE for Android (preview version)";
       homepage = https://developer.android.com/studio/preview/index.html;
-      maintainers = with stdenv.lib.maintainers; [ primeos ];
     };
   };
 }
