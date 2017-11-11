@@ -20,12 +20,12 @@ assert dolphin-wxgui || dolphin-qtgui;
 assert !(dolphin-wxgui && dolphin-qtgui);
 
 stdenv.mkDerivation rec {
-  name = "dolphin-emu-20170902";
+  name = "dolphin-emu-20171218";
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "b073db51e5f3df8c9890e09a3f4f8a2276c31e3f";
-    sha256 = "0pr5inkd7swc6s7im7axhvmkdbqidhrha2wpflnr25aiwq0dzm10";
+    rev = "438e8b64a4b080370c7a65ed23af52838a4e7aaa";
+    sha256 = "0rrd0g1vg9jk1p4wdr6w2z34cabb7pgmpwfcl2a372ark3vi4ysc";
   };
 
   cmakeFlags = [
@@ -64,6 +64,7 @@ stdenv.mkDerivation rec {
     description = "Gamecube/Wii/Triforce emulator for x86_64 and ARM";
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ MP2E ];
+    branch = "master";
     # x86_32 is an unsupported platform.
     # Enable generic build if you really want a JIT-less binary.
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
