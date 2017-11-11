@@ -5104,6 +5104,19 @@ let self = _self // overrides; _self = with self; {
     buildInputs = [ PerlOSType ];
   };
 
+  ExtUtilsCChecker = buildPerlPackage rec {
+    name = "ExtUtils-CChecker-0.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/${name}.tar.gz";
+      sha256 = "50bfe76870fc1510f56bae4fa2dce0165d9ac4af4e7320d6b8fda14dfea4be0b";
+    };
+    buildInputs = [ ModuleBuild TestFatal ];
+    meta = {
+      description = "Configure-time utilities for using C headers,";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   ExtUtilsConfig = buildPerlPackage {
     name = "ExtUtils-Config-0.007";
     src = fetchurl {
@@ -5538,6 +5551,19 @@ let self = _self // overrides; _self = with self; {
       sha256 = "c30c688027a52ff4f58cd69d6d8ef35472a7cf106d4ce94eb73a796ba7c7ffa7";
     };
     propagatedBuildInputs = [ CryptRijndael ];
+  };
+
+  Filelchown = buildPerlPackage rec {
+    name = "File-lchown-0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/${name}.tar.gz";
+      sha256 = "a02fbf285406a8a4d9399284f032f2d55c56975154c2e1674bd109837b8096ec";
+    };
+    buildInputs = [ ExtUtilsCChecker ModuleBuild ];
+    meta = {
+      description = "Modify attributes of symlinks without dereferencing them";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   FileLibMagic = buildPerlPackage rec {
