@@ -33,7 +33,8 @@
 
 , name ? "nixos-disk-image"
 
-, format ? "raw"
+, # Disk image format, one of qcow2, vpc, raw.
+  format ? "raw"
 }:
 
 with lib;
@@ -45,7 +46,7 @@ let
     raw   = "img";
   };
 
-  nixpkgs = lib.cleanSource pkgs.path;
+  nixpkgs = cleanSource pkgs.path;
 
   channelSources = pkgs.runCommand "nixos-${config.system.nixosVersion}" {} ''
     mkdir -p $out
@@ -73,7 +74,7 @@ let
   targets = map (x: x.target) contents;
 
   prepareImage = ''
-    export PATH=${pkgs.lib.makeSearchPathOutput "bin" "bin" prepareImageInputs}
+    export PATH=${makeSearchPathOutput "bin" "bin" prepareImageInputs}
 
     mkdir $out
     diskImage=nixos.raw
@@ -87,7 +88,7 @@ let
     ''}
 
     faketime -f "1970-01-01 00:00:01" mkfs.${fsType} -F -L nixos -E offset=$offset $diskImage
-  
+
     root="$PWD/root"
     mkdir -p $root
 
@@ -132,7 +133,7 @@ let
     # shut it up someday but trying to do a stderr filter through grep is running into some nasty
     # bug in some eval nonsense we have in runInLinuxVM and I'm sick of trying to fix it.
     faketime -f "1970-01-01 00:00:00" \
-      cptofs ${pkgs.lib.optionalString partitioned "-P 1"} -t ${fsType} -i $diskImage $root/* /
+      cptofs ${optionalString partitioned "-P 1"} -t ${fsType} -i $diskImage $root/* /
   '';
 in pkgs.vmTools.runInLinuxVM (
   pkgs.runCommand name
