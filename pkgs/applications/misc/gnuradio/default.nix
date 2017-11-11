@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, writeText, makeWrapper
+{ stdenv, fetchFromGitHub, writeText, makeWrapper
 # Dependencies documented @ https://gnuradio.org/doc/doxygen/build_guide.html
 # => core dependencies
 , cmake, pkgconfig, git, boost, cppunit, fftw
@@ -26,11 +26,14 @@
 
 stdenv.mkDerivation rec {
   name = "gnuradio-${version}";
-  version = "3.7.11";
+  version = "3.7.11.1";
 
-  src = fetchurl {
-    url = "https://gnuradio.org/releases/gnuradio/${name}.tar.gz";
-    sha256 = "1m2jf8lafr6pr2dlm40nbvr6az8gwjfkzpbs4fxzv3l5hcqvmnc7";
+  src = fetchFromGitHub {
+    owner = "gnuradio";
+    repo = "gnuradio";
+    rev = "6d2221196082a4954c249dc6955e33d5832a56f2";
+    sha256 = "1fkrb8cnjbriy2x94lz73q6aqxar1rkvfbafp266ykdpm29b4xgm";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
