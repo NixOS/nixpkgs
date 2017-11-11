@@ -84,6 +84,8 @@ in buildFHSUserEnv rec {
 
   extraBuildCommands = ''
     mkdir -p steamrt
+    ln -s libbz2.so.1.0.6 $out/lib/libbz2.so.1.0
+    ln -s libbz2.so.1.0.6 $out/lib32/libbz2.so.1.0
     ln -s ../lib/steam-runtime steamrt/${steam-runtime-wrapped.arch}
     ${lib.optionalString (steam-runtime-wrapped-i686 != null) ''
       ln -s ../lib32/steam-runtime steamrt/${steam-runtime-wrapped-i686.arch}
@@ -101,6 +103,7 @@ in buildFHSUserEnv rec {
   profile = ''
     export STEAM_RUNTIME=/steamrt
     export TZDIR=/etc/zoneinfo
+    export LD_LIBRARY_PATH=$STEAM_RUNTIME/i386/lib/i386-linux-gnu:$STEAM_RUNTIME/i386/lib:$STEAM_RUNTIME/i386/usr/lib/i386-linux-gnu:$STEAM_RUNTIME/i386/usr/lib:$STEAM_RUNTIME/amd64/lib/x86_64-linux-gnu:$STEAM_RUNTIME/amd64/lib:$STEAM_RUNTIME/amd64/usr/lib/x86_64-linux-gnu:$STEAM_RUNTIME/amd64/usr/lib:$LD_LIBRARY_PATH
   '';
 
   runScript = "steam";
