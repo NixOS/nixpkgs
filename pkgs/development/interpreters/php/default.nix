@@ -1,6 +1,6 @@
 { lib, stdenv, fetchurl, composableDerivation, autoconf, automake, flex, bison
 , mysql, libxml2, readline, zlib, curl, postgresql, gettext
-, openssl, pkgconfig, sqlite, config, libjpeg, libpng, freetype
+, openssl, pcre, pkgconfig, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, freetds
 , uwimap, pam, gmp, apacheHttpd, libiconv, systemd }:
 
@@ -89,6 +89,11 @@ let
 
         pcntl = {
           configureFlags = [ "--enable-pcntl" ];
+        };
+
+        pcre = {
+          configureFlags = ["--with-pcre-regex=${pcre.dev} PCRE_LIBDIR=${pcre}"];
+          buildInputs = [ pcre ];
         };
 
         readline = {
@@ -240,6 +245,7 @@ let
         curlWrappersSupport = (!php7) && (config.php.curlWrappers or true);
         gettextSupport = config.php.gettext or true;
         pcntlSupport = config.php.pcntl or true;
+        pcreSupport = config.php.pcreExternal or true;
         postgresqlSupport = config.php.postgresql or true;
         pdo_pgsqlSupport = config.php.pdo_pgsql or true;
         readlineSupport = config.php.readline or true;
