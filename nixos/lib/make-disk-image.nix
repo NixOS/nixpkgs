@@ -65,7 +65,7 @@ let
     ${channelSources}
   '';
 
-  prepareImageInputs = with pkgs; [ rsync utillinux parted e2fsprogs lkl fakeroot libfaketime config.system.build.nixos-prepare-root ] ++ stdenv.initialPath;
+  prepareImageInputs = with pkgs; [ rsync utillinux parted e2fsprogs lkl fakeroot config.system.build.nixos-prepare-root ] ++ stdenv.initialPath;
 
   # I'm preserving the line below because I'm going to search for it across nixpkgs to consolidate
   # image building logic. The comment right below this now appears in 4 different places in nixpkgs :)
@@ -87,7 +87,7 @@ let
       offset=0
     ''}
 
-    faketime -f "1970-01-01 00:00:01" mkfs.${fsType} -F -L nixos -E offset=$offset $diskImage
+    mkfs.${fsType} -F -L nixos -E offset=$offset $diskImage
 
     root="$PWD/root"
     mkdir -p $root
@@ -125,15 +125,7 @@ let
     fakeroot nixos-prepare-root $root ${channelSources} ${config.system.build.toplevel} closure
 
     echo "copying staging root to image..."
-    # If we don't faketime, we can end up with timestamps other than 1 on the nix store, which
-    # will confuse Nix in some situations (e.g., breaking image builds in the target image)
-    # N.B: I use 0 here, which results in timestamp = 1 in the image. It's weird but see
-    # https://github.com/lkl/linux/issues/393. Also, running under faketime makes `cptofs` super
-    # noisy and it prints out that it can't find a bunch of files, and then works anyway. We'll
-    # shut it up someday but trying to do a stderr filter through grep is running into some nasty
-    # bug in some eval nonsense we have in runInLinuxVM and I'm sick of trying to fix it.
-    faketime -f "1970-01-01 00:00:00" \
-      cptofs ${optionalString partitioned "-P 1"} -t ${fsType} -i $diskImage $root/* /
+    cptofs ${pkgs.lib.optionalString partitioned "-P 1"} -t ${fsType} -i $diskImage $root/* /
   '';
 in pkgs.vmTools.runInLinuxVM (
   pkgs.runCommand name
