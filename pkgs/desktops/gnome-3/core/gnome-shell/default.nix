@@ -34,6 +34,11 @@ in stdenv.mkDerivation rec {
       at_spi2_core upower ibus gnome_desktop telepathy_logger gnome3.gnome_settings_daemon
       gst_all_1.gst-plugins-good # recording
       gobjectIntrospection (stdenv.lib.getLib dconf) ];
+  propagatedUserEnvPkgs = [
+    # Needed to support on-screen keyboard used with touch screen devices
+    # see https://github.com/NixOS/nixpkgs/issues/25968
+    gnome3.caribou
+  ];
 
   patches = [
     (fetchpatch {
