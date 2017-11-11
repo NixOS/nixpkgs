@@ -144,9 +144,12 @@ let
       ./patches/chromium-gcc5-r3.patch
       ./patches/chromium-glibc2.26-r1.patch
     ]
-      ++ optionals (versionAtLeast version "63") [
+      ++ optionals (versionRange "63" "64") [
       ./patches/chromium-gcc5-r4.patch
-      ./patches/constexpr-fix.patch
+      ./patches/include-math-for-round.patch
+    ]
+      ++ optionals (versionAtLeast version "64") [
+      ./patches/gn_bootstrap_observer.patch
     ]
       ++ optional enableWideVine ./patches/widevine.patch;
 
@@ -156,6 +159,9 @@ let
         --replace \
           'return sandbox_binary;' \
           'return base::FilePath(GetDevelSandboxPath());'
+
+      sed -i -e 's@"\(#!\)\?.*xdg-@"\1${xdg_utils}/bin/xdg-@' \
+        chrome/browser/shell_integration_linux.cc
 
       sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${systemd.lib}/lib/\1!' \
         device/udev_linux/udev?_loader.cc
@@ -265,6 +271,13 @@ let
           "${target}"
       '' + optionalString (target == "mksnapshot" || target == "chrome") ''
         paxmark m "${buildPath}/${target}"
+      '' + optionalString (versionAtLeast version "63") ''
+        (
+          source chrome/installer/linux/common/installer.include
+          PACKAGE=$packageName
+          MENUNAME="Chromium"
+          process_template chrome/app/resources/manpage.1.in "${buildPath}/chrome.1"
+        )
       '';
       targets = extraAttrs.buildTargets or [];
       commands = map buildCommand targets;

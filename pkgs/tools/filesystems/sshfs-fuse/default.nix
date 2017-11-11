@@ -4,7 +4,6 @@
 
 let
   inherit (stdenv.lib) optional;
-  rpath = stdenv.lib.makeLibraryPath [ fuse3 glib ];
 in stdenv.mkDerivation rec {
   version = "3.3.1";
   name = "sshfs-fuse-${version}";
@@ -28,10 +27,6 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/sbin
     ln -sf $out/bin/sshfs $out/sbin/mount.sshfs
-  '';
-
-  postFixup = ''
-       patchelf --set-rpath '${rpath}' "$out/bin/sshfs"
   '';
 
   meta = with stdenv.lib; {

@@ -1,20 +1,23 @@
-{ stdenv, fetchurl, pkgconfig, glib, cairo, libarchive, freetype, libjpeg, libtiff
-, openssl, bzip2, acl, attr, libxml2
+{ stdenv, fetchurl, meson, ninja, pkgconfig, glib, gobjectIntrospection, cairo
+, libarchive, freetype, libjpeg, libtiff
 }:
 
 stdenv.mkDerivation rec {
-  name = "libgxps-0.2.2";
+  name = "libgxps-0.3.0";
 
   src = fetchurl {
-    url = "http://ftp.acc.umu.se/pub/GNOME/core/3.10/3.10.2/sources/${name}.tar.xz";
-    sha256 = "1gi0b0x0354jyqc48vspk2hg2q1403cf2p9ibj847nzhkdrh9l9r";
+    url = "mirror://gnome/sources/libgxps/0.3/${name}.tar.xz";
+    sha256 = "412b1343bd31fee41f7204c47514d34c563ae34dafa4cc710897366bd6cd0fae";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib cairo freetype libjpeg libtiff acl openssl bzip2 attr libxml2 ];
+  nativeBuildInputs = [ meson ninja pkgconfig gobjectIntrospection ];
+  buildInputs = [ glib cairo freetype libjpeg libtiff ];
   propagatedBuildInputs = [ libarchive ];
 
-  configureFlags = "--without-liblcms2";
+  mesonFlags = [
+    "-Denable-test=false"
+    "-Dwith-liblcms2=false"
+  ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

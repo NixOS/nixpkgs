@@ -28,13 +28,14 @@ let
   };
 
 in buildPythonApplication rec {
-  name = "qutebrowser-${version}";
-  version = "1.0.2";
+  name = "qutebrowser-${version}${fix_postfix}";
+  fix_postfix = "-1";
+  version = "1.0.3";
   namePrefix = "";
 
   src = fetchurl {
-    url = "https://github.com/The-Compiler/qutebrowser/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "093nmvl9x3ykrpmvnmx98g9npg4wmq0mmf7qzgbzmg93dnyq2cpk";
+    url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${name}.tar.gz";
+    sha256 = "04d6hg2yf2wjwn0sd05bpx3zngnb93g7rizbdq17bbpmnwxchzap";
   };
 
   # Needs tox

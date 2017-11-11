@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Multiple Spanning Tree Protocol daemon";
-    homepage = http://sourceforge.net/projects/mstpd/;
+    homepage = https://sourceforge.net/projects/mstpd/;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ wkennington ];

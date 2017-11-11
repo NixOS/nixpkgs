@@ -226,6 +226,8 @@ let
     };
   };
 
+  font-lock-plus = callPackage ../applications/editors/emacs-modes/font-lock-plus { };
+
   ghc-mod = melpaBuild rec {
     pname = "ghc";
     version = external.ghc-mod.version;

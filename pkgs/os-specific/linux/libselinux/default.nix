@@ -39,6 +39,9 @@ stdenv.mkDerivation rec {
 
   postPatch = optionalString enablePython ''
     sed -i -e 's|\$(LIBDIR)/libsepol.a|${libsepol}/lib/libsepol.a|' src/Makefile
+  ''
+  + ''
+    sed '1i#include <sys/uio.h>' -i src/setrans_client.c
   '';
 
   preBuild = ''

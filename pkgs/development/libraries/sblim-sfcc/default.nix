@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Small Footprint CIM Client Library";
 
-    homepage = http://sourceforge.net/projects/sblim/;
+    homepage = https://sourceforge.net/projects/sblim/;
 
     maintainers = [ stdenv.lib.maintainers.deepfire ];
 

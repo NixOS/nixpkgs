@@ -1,35 +1,32 @@
-{ stdenv, fetchurl, pkgconfig, glib, gettext }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, glib, gettext, readline }:
 
 stdenv.mkDerivation rec {
-  name= "sdcv-0.4.2";
+  name = "sdcv-${version}";
+  version = "0.5.2";
 
-  meta = {
-    homepage = http://sdcv.sourceforge.net/;
-    description = "Console version of StarDict program";
-    maintainers = with stdenv.lib.maintainers; [ lovek323 ];
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-  };
-
-  src = fetchurl {
-    url = "mirror://sourceforge/sdcv/${name}.tar.bz2";
-    sha256 = "1cnyv7gd1qvz8ma8545d3aq726wxrx4km7ykl97831irx5wz0r51";
+  src = fetchFromGitHub {
+    owner = "Dushistov";
+    repo = "sdcv";
+    rev = "v${version}";
+    sha256 = "1b67s4nj0s5fh3cjk7858qvhiisc557xx72xwzrb8hq6ijpwx5k0";
   };
 
   hardeningDisable = [ "format" ];
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [ glib gettext readline ];
 
-  patches = ( if stdenv.isDarwin
-              then [ ./sdcv.cpp.patch-darwin ./utils.hpp.patch ]
-              else [ ./sdcv.cpp.patch ] );
-
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib gettext ];
-
-  preBuild = ''
-    sed -i 's/guint32 page_size/size_t page_size/' src/lib/lib.cpp
+  preInstall = ''
+    touch locale
   '';
 
   NIX_CFLAGS_COMPILE = "-D__GNU_LIBRARY__"
     + stdenv.lib.optionalString stdenv.isDarwin " -lintl";
-}
 
+  meta = with stdenv.lib; {
+    homepage = https://dushistov.github.io/sdcv/;
+    description = "Console version of StarDict";
+    maintainers = with maintainers; [ lovek323 ];
+    license = licenses.gpl2;
+    platforms = platforms.linux;
+  };
+}

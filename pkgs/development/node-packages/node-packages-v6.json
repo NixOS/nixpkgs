@@ -16,7 +16,7 @@
 , "eslint"
 , "eslint_d"
 , "emojione"
-, "fast-cli"
+, { "fast-cli": "1.x" }
 , "fetch-bower"
 , "forever"
 , "git-run"
@@ -74,6 +74,7 @@
 , "sloc"
 , "smartdc"
 , "socket.io"
+, "statsd"
 , "stylus"
 , "svgo"
 , "tern"

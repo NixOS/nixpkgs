@@ -1,6 +1,5 @@
-    buildInputs = [ perl ruby git ];
+    buildInputs = [ ruby rake ];
     buildPhase = ''
-      pushd ruby/command-t
-      gem build ./command-t.gemspec
-      popd
+      rake make
+      rm ruby/command-t/ext/command-t/*.o
     '';

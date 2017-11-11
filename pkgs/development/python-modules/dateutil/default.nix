@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Powerful extensions to the standard datetime module";
-    homepage = http://pypi.python.org/pypi/python-dateutil;
+    homepage = https://pypi.python.org/pypi/python-dateutil;
     license = "BSD-style";
   };
 }

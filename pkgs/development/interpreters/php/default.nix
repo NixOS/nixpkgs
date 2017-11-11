@@ -11,6 +11,8 @@ let
 
     let php7 = lib.versionAtLeast version "7.0";
         mysqlHeaders = mysql.lib.dev or mysql;
+        mysqlndSupport = config.php.mysqlnd or false;
+        mysqlBuildInputs = lib.optional (!mysqlndSupport) mysqlHeaders;
 
     in composableDerivation.composableDerivation {} (fixed: {
 
@@ -20,9 +22,11 @@ let
 
       enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig ];
+      nativeBuildInputs = [ pkgconfig ];
       buildInputs = [ flex bison ]
         ++ lib.optional stdenv.isLinux systemd;
+
+      CXXFLAGS = lib.optional stdenv.cc.isClang "-std=c++11";
 
       flags = {
 
@@ -110,13 +114,13 @@ let
         };
 
         mysql = {
-          configureFlags = ["--with-mysql"];
-          buildInputs = [ mysqlHeaders ];
+          configureFlags = ["--with-mysql${if mysqlndSupport then "=mysqlnd" else ""}"];
+          buildInputs = mysqlBuildInputs;
         };
 
         mysqli = {
-          configureFlags = ["--with-mysqli=${mysqlHeaders}/bin/mysql_config"];
-          buildInputs = [ mysqlHeaders ];
+          configureFlags = ["--with-mysqli=${if mysqlndSupport then "mysqlnd" else "${mysqlHeaders}/bin/mysql_config"}"];
+          buildInputs = mysqlBuildInputs;
         };
 
         mysqli_embedded = {
@@ -126,8 +130,8 @@ let
         };
 
         pdo_mysql = {
-          configureFlags = ["--with-pdo-mysql=${mysqlHeaders}"];
-          buildInputs = [ mysqlHeaders ];
+          configureFlags = ["--with-pdo-mysql=${if mysqlndSupport then "mysqlnd" else mysqlHeaders}"];
+          buildInputs = mysqlBuildInputs;
         };
 
         bcmath = {

@@ -18,6 +18,7 @@ import os
 import re
 import requests
 import toolz
+from concurrent.futures import ThreadPoolExecutor as pool
 
 INDEX = "https://pypi.io/pypi"
 """url of PyPI"""
@@ -235,7 +236,8 @@ def main():
 
     packages = map(os.path.abspath, args.package)
 
-    count = list(map(_update, packages))
+    with pool() as p:
+        count = list(p.map(_update, packages))
 
     logging.info("{} package(s) updated".format(sum(count)))
 

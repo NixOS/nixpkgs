@@ -94,6 +94,14 @@ in stdenv.mkDerivation {
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
       src/VBox/HostDrivers/adpctl/VBoxNetAdpCtl.cpp
+    patch -p0 < ${
+      fetchurl { # for glibc-2.26
+        name = "conflicting-types-for-greg_t.patch";
+        url = "http://www.linuxquestions.org/questions/"
+            + "attachment.php?attachmentid=25801&d=1504099531";
+        sha256 = "1bcyf9qrqxizyjp1s662k6n1cfyfjbl7256r4n20kbr65yxcydps";
+      }
+    }
   '';
 
   # first line: ugly hack, and it isn't yet clear why it's a problem

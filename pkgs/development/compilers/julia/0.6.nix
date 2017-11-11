@@ -80,6 +80,9 @@ stdenv.mkDerivation rec {
       mv test/$i.jl{,.off}
       touch test/$i.jl
     done
+
+    sed -e 's/Invalid Content-Type:/invalid Content-Type:/g' -i test/libgit2.jl
+    sed -e 's/Failed to resolve /failed to resolve /g' -i test/libgit2.jl
   '';
 
   buildInputs = [

@@ -2,7 +2,7 @@
 , IOKit ? null , ApplicationServices ? null }:
 
 let
-  version = "6.5";
+  version = "6.6";
 
   dbrev = "4548";
   drivedbBranch = "RELEASE_${builtins.replaceStrings ["."] ["_"] version}_DRIVEDB";
@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/smartmontools/${name}.tar.gz";
-    sha256 = "1g25r6sx85b5lay5n6sbnqv05qxzj6xsafsp93hnrg1h044bps49";
+    sha256 = "0m1hllbb78rr6cxkbalmz1gqkl0psgq8rrmv4gwcmz34n07kvx2i";
   };
 
   patches = [ ./smartmontools.patch ];

@@ -29,7 +29,6 @@
 , ...
 }:
 
-assert stdenv.platform.name == "sheevaplug" -> stdenv.platform.uboot != null;
 assert stdenv.isLinux;
 
 let

@@ -923,10 +923,22 @@ in
     assertions =
       (flip map interfaces (i: {
         assertion = i.subnetMask == null;
-        message = "The networking.interfaces.${i.name}.subnetMask option is defunct. Use prefixLength instead.";
+        message = ''
+          The networking.interfaces."${i.name}".subnetMask option is defunct. Use prefixLength instead.
+        '';
+      })) ++ (flip map interfaces (i: {
+        # With the linux kernel, interface name length is limited by IFNAMSIZ
+        # to 16 bytes, including the trailing null byte.
+        # See include/linux/if.h in the kernel sources
+        assertion = stringLength i.name < 16;
+        message = ''
+          The name of networking.interfaces."${i.name}" is too long, it needs to be less than 16 characters.
+        '';
       })) ++ (flip map slaveIfs (i: {
         assertion = i.ip4 == [ ] && i.ipAddress == null && i.ip6 == [ ] && i.ipv6Address == null;
-        message = "The networking.interfaces.${i.name} must not have any defined ips when it is a slave.";
+        message = ''
+          The networking.interfaces."${i.name}" must not have any defined ips when it is a slave.
+        '';
       })) ++ [
         {
           assertion = cfg.hostId == null || (stringLength cfg.hostId == 8 && isHexString cfg.hostId);

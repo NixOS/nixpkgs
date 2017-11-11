@@ -51,5 +51,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ phreedom ebzzry ];
     inherit (kdelibs4.meta) platforms;
     license = licenses.gpl2;
+    broken = true;
   };
 }

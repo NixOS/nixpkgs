@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , which
 , cmake
 , clang
@@ -26,6 +27,14 @@ stdenv.mkDerivation rec {
     rev    = "v${version}";
     sha256 = "16z58ix8kmk8csfy5qsqz8z30czhrap2vb8s8vdflmbcfnq31jcw";
   };
+
+  patches = [
+    (fetchpatch {
+      # glibc 2.26
+      url = https://github.com/dotnet/coreclr/commit/a8f83b615708c529b112898e7d2fbc3f618b26ee.patch;
+      sha256 = "047ph5gip4z2h7liwdxsmpnlaq0sd3hliaw4nyqjp647m80g3ffq";
+    })
+  ];
 
   buildInputs = [
     which

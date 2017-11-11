@@ -1,4 +1,4 @@
-{ stdenv, intltool, fetchurl, python
+{ stdenv, intltool, fetchurl, python, autoreconfHook
 , pkgconfig, gtk3, glib
 , makeWrapper, itstool, libxml2, docbook_xsl
 , gnome3, librsvg, gdk_pixbuf, libxslt }:
@@ -8,12 +8,24 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 glib intltool itstool libxml2 python
-                  gnome3.gsettings_desktop_schemas makeWrapper docbook_xsl
-                  gdk_pixbuf gnome3.defaultIconTheme librsvg libxslt ];
+  nativeBuildInputs = [
+    pkgconfig intltool itstool makeWrapper docbook_xsl libxslt
+    # reconfiguration
+    autoreconfHook gnome3.gnome_common gnome3.yelp_tools
+  ];
+  buildInputs = [ gtk3 glib libxml2 python
+                  gnome3.gsettings_desktop_schemas
+                  gdk_pixbuf gnome3.defaultIconTheme librsvg ];
 
   enableParallelBuilding = true;
+
+  patches = [
+    # https://bugzilla.gnome.org/show_bug.cgi?id=782161
+    (fetchurl {
+      url = https://bugzilla.gnome.org/attachment.cgi?id=351054;
+      sha256 = "093wjjj40027pkqqnm14jb2dp2i2m8p1bayqx1lw18pq66c8fahn";
+    })
+  ];
 
   preFixup = ''
     wrapProgram "$out/bin/glade" \

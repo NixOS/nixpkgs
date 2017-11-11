@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
 
   meta = with stdenv.lib; {
     description = "Library and utilities for working with the TIFF image file format";

@@ -9,32 +9,27 @@
 , jinja2
 , branca
 , six
+, requests
 }:
 
 buildPythonPackage rec {
   pname = "folium";
   version = "0.5.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "748944521146d85c6cd6230acf234e885864cd0f42fea3758d655488517e5e6e";
   };
 
-  postPatch = ''
-    # Causes trouble because a certain file cannot be found
-    rm tests/notebooks/test_notebooks.py
-  '';
-
   checkInputs = [ pytest numpy nbconvert pandas mock ];
-  propagatedBuildInputs = [ jinja2 branca six ];
+  propagatedBuildInputs = [ jinja2 branca six requests ];
 
-  #
-#   doCheck = false;
+  # No tests in archive
+  doCheck = false;
 
-#   checkPhase = ''
-#     py.test -k 'not test_notebooks'
-#   '';
+  checkPhase = ''
+    py.test
+  '';
 
   meta = {
     description = "Make beautiful maps with Leaflet.js & Python";
