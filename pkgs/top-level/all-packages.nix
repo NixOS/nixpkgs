@@ -6217,9 +6217,9 @@ with pkgs;
   rust = callPackage ../development/compilers/rust { };
   inherit (rust) cargo rustc;
 
-  mkRustCrate = callPackage ../build-support/rust/rust-utils.nix { };
+  buildRustCrate = callPackage ../build-support/rust/rust-utils.nix { };
 
-  carnix = (callPackage ../build-support/rust/carnix.nix { }).carnix_0_4_1 rustc;
+  carnix = (callPackage ../build-support/rust/carnix.nix { }).carnix_0_4_2 rustc;
 
   rustPlatform = recurseIntoAttrs (makeRustPlatform rust);
 

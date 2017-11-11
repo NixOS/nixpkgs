@@ -1,3 +1,9 @@
+# This file contains the nix expression necessary to compile carnix, a
+# tool to generate nix expression from Rust Cargo.lock files.
+#
+# Starts with functions that output crates, and then calls them with
+# the proper dependencies computed from the carnix's own Cargo.lock.
+
 { pkgs, ... }:
 with pkgs;
 let release = true;
@@ -14,7 +20,6 @@ let release = true;
       crateName = "ansi_term";
       version = "0.9.0";
       sha256 = "1vcd8m2hglrdi4zmqnkkz5zy3c73ifgii245k7vj6qr5dzpn9hij";
-      libName = "ansi_term";
       inherit dependencies buildDependencies features release verbose;
     };
     atty_0_2_3_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
@@ -48,10 +53,10 @@ let release = true;
       sha256 = "18h073l5jd88rx4qdr95fjddr9rk79pb1aqnshzdnw16cfmb9rws";
       inherit dependencies buildDependencies features release verbose;
     };
-    carnix_0_4_1_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    carnix_0_4_2_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
       crateName = "carnix";
-      version = "0.4.1";
-      sha256 = "1vp7f09njsssn78bhkyffl2fb2vc60hgxsx7pslgavyn7rr4d0ni";
+      version = "0.4.2";
+      sha256 = "1p13ba4wh19zkrrpba0vpgv47k2lx05pxh7nwcwc9yi710qs3mf3";
       inherit dependencies buildDependencies features release verbose;
     };
     cc_1_0_3_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
@@ -166,7 +171,6 @@ let release = true;
       crateName = "memchr";
       version = "1.0.2";
       sha256 = "0dfb8ifl9nrc9kzgd5z91q6qg87sh285q1ih7xgrsglmqfav9lg7";
-      libName = "memchr";
       inherit dependencies buildDependencies features release verbose;
     };
     nom_3_2_1_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
@@ -211,7 +215,6 @@ let release = true;
       version = "0.1.1";
       sha256 = "04s6yyzjca552hdaqlvqhp3vw0zqbc304md5czyd3axh56iry8wh";
       libPath = "src/lib.rs";
-      libName = "redox_termios";
       inherit dependencies buildDependencies features release verbose;
     };
     regex_0_2_2_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
@@ -230,7 +233,6 @@ let release = true;
       crateName = "rusqlite";
       version = "0.12.0";
       sha256 = "18fybr7bd012j7axf4gzpphx0iil2amksdlab4dhhipjl6hyam6j";
-      libName = "rusqlite";
       inherit dependencies buildDependencies features release verbose;
     };
     rustc_demangle_0_1_5_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
@@ -249,7 +251,6 @@ let release = true;
       crateName = "serde_derive";
       version = "1.0.19";
       sha256 = "1fbr1zi25fgwy49mvpjq8g611mnv3vcd4n0mgca2lfdsp5n2nw5v";
-      libName = "serde_derive";
       procMacro = true;
       inherit dependencies buildDependencies features release verbose;
     };
@@ -401,7 +402,7 @@ rec {
   bitflags_0_9_1 = bitflags_0_9_1_ {
     features = [ "example_generated" ];
   };
-  carnix_0_4_1 = carnix_0_4_1_ {
+  carnix_0_4_2 = carnix_0_4_2_ {
     dependencies = [ clap_2_27_1 env_logger_0_4_3 error_chain_0_11_0 log_0_3_8 nom_3_2_1 regex_0_2_2 rusqlite_0_12_0 serde_1_0_19 serde_derive_1_0_19 serde_json_1_0_5 tempdir_0_3_5 toml_0_4_5 ];
   };
   cc_1_0_3 = cc_1_0_3_ {

@@ -1,7 +1,8 @@
-# Copyright 2017 Pierre-Étienne Meunier
+# Code for buildRustCrate, a Nix function that builds Rust code, just
+# like Cargo, but using Nix instead.
 #
-# This file is licensed under the Apache-2.0 license, and under the
-# MIT license, at your convenience.
+# This can be useful for deploying packages with NixOps, and to share
+# binary dependencies between projects.
 
 { lib, buildPlatform, stdenv, pkgs }:
 
@@ -265,7 +266,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
     '';
 in
 
-crate: rust: stdenv.mkDerivation rec {
+crate: stdenv.mkDerivation rec {
 
     inherit (crate) crateName;
 
@@ -273,12 +274,19 @@ crate: rust: stdenv.mkDerivation rec {
         crate.src
       else
         pkgs.fetchCrate { inherit (crate) crateName version sha256; };
-
+    rust = pkgs.rustc;
     release = if crate ? release then crate.release else false;
     name = "rust_${crate.crateName}-${crate.version}";
     buildInputs = [ rust pkgs.ncurses ] ++ (lib.attrByPath ["buildInputs"] [] crate);
-    dependencies = builtins.map (dep: dep rust) (lib.attrByPath ["dependencies"] [] crate);
-    buildDependencies = builtins.map (dep: dep rust) (lib.attrByPath ["buildDependencies"] [] crate);
+    dependencies =
+      builtins.map
+        (dep: dep.overrideAttrs (attrs: { rust = rust; }))
+        (lib.attrByPath ["dependencies"] [] crate);
+
+    buildDependencies =
+      builtins.map
+        (dep: dep.overrideAttrs (attrs: { rust = rust; }))
+        (lib.attrByPath ["buildDependencies"] [] crate);
 
     completeDeps = builtins.foldl' (comp: dep: if lib.lists.any (x: x == comp) dep.completeDeps then comp ++ dep.complete else comp) dependencies dependencies;
     completeBuildDeps = builtins.foldl' (comp: dep: if lib.lists.any (x: x == comp) dep.completeBuildDeps then comp ++ dep.complete else comp) buildDependencies buildDependencies;
