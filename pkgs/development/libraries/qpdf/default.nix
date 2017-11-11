@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libjpeg, pcre, zlib, perl }:
+{ stdenv, fetchurl, libjpeg, zlib, perl }:
 
 let version = "7.0.0";
 in
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
 
-  buildInputs = [ pcre zlib libjpeg ];
+  buildInputs = [ zlib libjpeg ];
 
   postPatch = ''
     patchShebangs qpdf/fix-qdf
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://qpdf.sourceforge.net/;
     description = "A C++ library and set of programs that inspect and manipulate the structure of PDF files";
-    license = licenses.artistic2;
+    license = licenses.asl20; # as of 7.0.0, people may stay at artistic2
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.all;
   };
