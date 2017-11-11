@@ -8154,6 +8154,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  LWPAuthenOAuth = buildPerlPackage rec {
+    name = "LWP-Authen-OAuth-1.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TI/TIMBRODY/${name}.tar.gz";
+      sha256 = "e78e0bd7de8002cfb4760073258d555ef55b2c27c07a94b3d8a2166a17fd96bc";
+    };
+    propagatedBuildInputs = [ LWP URI ];
+    meta = {
+      description = "Generate signed OAuth requests";
+      license = stdenv.lib.licenses.unknown;
+    };
+  };
+
   LWPMediaTypes = buildPerlPackage {
     name = "LWP-MediaTypes-6.02";
     src = fetchurl {
