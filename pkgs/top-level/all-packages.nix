@@ -18711,6 +18711,7 @@ with pkgs;
     CoLoR = callPackage ../development/coq-modules/CoLoR {};
     math-classes = callPackage ../development/coq-modules/math-classes { };
     fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
+    equations = callPackage ../development/coq-modules/equations { };
   };
 
   coqPackages_8_4 = mkCoqPackages_8_4 coqPackages_8_4;
