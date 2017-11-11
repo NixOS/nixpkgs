@@ -10985,14 +10985,14 @@ in {
   };
 
   nototools = buildPythonPackage rec {
-    version = "git-2016-03-25";
+    version = "2017-09-25";
     name = "nototools-${version}";
 
     src = pkgs.fetchFromGitHub {
       owner = "googlei18n";
       repo = "nototools";
-      rev = "4f7b067d1b18f59288e5eaee34db5b0abd3a3f63";
-      sha256 = "05brbkfg77ij4pmcrhq9302albzdalr9gv6jfdsbyyi2k8j85gbn";
+      rev = "v2017-09-25-tooling-for-phase3-update";
+      sha256 = "03nzvcvwmrhfrcjhg218q2f3hfrm3vlivp4rk19sc397kh3hisiz";
     };
 
     propagatedBuildInputs = with self; [ fonttools numpy ];
