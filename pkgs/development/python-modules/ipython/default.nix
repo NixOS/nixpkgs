@@ -17,6 +17,7 @@
 , prompt_toolkit
 , pexpect
 , appnope
+, typing
 }:
 
 buildPythonPackage rec {
@@ -45,7 +46,8 @@ buildPythonPackage rec {
     traitlets
     prompt_toolkit
     pexpect
-  ] ++ lib.optionals stdenv.isDarwin [appnope];
+  ] ++ lib.optionals stdenv.isDarwin [appnope]
+    ++ lib.optionals (pythonOlder "3.5") [ typing ];
 
   LC_ALL="en_US.UTF-8";
 
