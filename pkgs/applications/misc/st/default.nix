@@ -25,7 +25,8 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://st.suckless.org/;
+    homepage = https://st.suckless.org/;
+    description = "Simple Terminal for X from Suckless.org Community";
     license = licenses.mit;
     maintainers = with maintainers; [viric andsild];
     platforms = platforms.linux;
