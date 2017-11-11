@@ -1,26 +1,26 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "0.1";
+  version = "0.2";
   name = "nix-bash-completions-${version}";
 
   src = fetchFromGitHub {
     owner = "hedning";
     repo = "nix-bash-completions";
     rev = "v${version}";
-    sha256 = "1gb6fmnask1xmjv5j5x0jb505lyp0p4lx2kbibfnb2gi57wapxaz";
+    sha256 = "0clr3c0zf73pnabab4n5b5x8cd2yilksvvlp4i0rj0cfbr1pzxgr";
   };
 
   installPhase = ''
     mkdir -p $out/share/bash-completion/completions
-    cp _* $out/share/bash-completion/completions
+    cp _nix $out/share/bash-completion/completions
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://github.com/hedning/nix-bash-completions;
     description = "Bash completions for Nix, NixOS, and NixOps";
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ hedning ];
+    license = licenses.bsd3;
+    platforms = platforms.all;
+    maintainers = with maintainers; [ hedning ];
   };
 }
