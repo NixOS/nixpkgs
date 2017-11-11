@@ -69,6 +69,8 @@ in buildFHSUserEnv rec {
 
   extraBuildCommands = ''
     mkdir -p steamrt
+    ln -s libbz2.so.1.0.6 $out/lib/libbz2.so.1.0
+    ln -s libbz2.so.1.0.6 $out/lib32/libbz2.so.1.0
     ln -s ../lib/steam-runtime steamrt/${steam-runtime-wrapped.arch}
     ${lib.optionalString (steam-runtime-wrapped-i686 != null) ''
       ln -s ../lib32/steam-runtime steamrt/${steam-runtime-wrapped-i686.arch}
