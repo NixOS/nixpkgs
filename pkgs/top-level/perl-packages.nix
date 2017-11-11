@@ -8189,7 +8189,7 @@ let self = _self // overrides; _self = with self; {
     propagatedBuildInputs = [ LWP URI ];
     meta = {
       description = "Generate signed OAuth requests";
-      license = stdenv.lib.licenses.unknown;
+      license = "unknown";
     };
   };
 
