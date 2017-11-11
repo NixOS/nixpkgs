@@ -8,7 +8,7 @@
 with pkgs;
 let release = true;
     verbose = true;
-    aho_corasick_0_6_3_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    aho_corasick_0_6_3_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "aho-corasick";
       version = "0.6.3";
       sha256 = "1cpqzf6acj8lm06z3f1cg41wn6c2n9l3v49nh0dvimv4055qib6k";
@@ -16,68 +16,68 @@ let release = true;
       crateBin = [ {  name = "aho-corasick-dot"; } ];
       inherit dependencies buildDependencies features release verbose;
     };
-    ansi_term_0_9_0_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    ansi_term_0_9_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "ansi_term";
       version = "0.9.0";
       sha256 = "1vcd8m2hglrdi4zmqnkkz5zy3c73ifgii245k7vj6qr5dzpn9hij";
       inherit dependencies buildDependencies features release verbose;
     };
-    atty_0_2_3_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    atty_0_2_3_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "atty";
       version = "0.2.3";
       sha256 = "0zl0cjfgarp5y78nd755lpki5bbkj4hgmi88v265m543yg29i88f";
       inherit dependencies buildDependencies features release verbose;
     };
-    backtrace_0_3_3_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    backtrace_0_3_3_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "backtrace";
       version = "0.3.3";
       sha256 = "0invfdxkj85v8zyrjs3amfxjdk2a36x8irq7wq7kny6q49hh8y0z";
       inherit dependencies buildDependencies features release verbose;
     };
-    backtrace_sys_0_1_16_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    backtrace_sys_0_1_16_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "backtrace-sys";
       version = "0.1.16";
       sha256 = "1cn2c8q3dn06crmnk0p62czkngam4l8nf57wy33nz1y5g25pszwy";
       build = "build.rs";
       inherit dependencies buildDependencies features release verbose;
     };
-    bitflags_0_7_0_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    bitflags_0_7_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "bitflags";
       version = "0.7.0";
       sha256 = "1hr72xg5slm0z4pxs2hiy4wcyx3jva70h58b7mid8l0a4c8f7gn5";
       inherit dependencies buildDependencies features release verbose;
     };
-    bitflags_0_9_1_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    bitflags_0_9_1_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "bitflags";
       version = "0.9.1";
       sha256 = "18h073l5jd88rx4qdr95fjddr9rk79pb1aqnshzdnw16cfmb9rws";
       inherit dependencies buildDependencies features release verbose;
     };
-    carnix_0_4_2_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    carnix_0_4_3_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "carnix";
-      version = "0.4.2";
-      sha256 = "1p13ba4wh19zkrrpba0vpgv47k2lx05pxh7nwcwc9yi710qs3mf3";
+      version = "0.4.3";
+      sha256 = "1q7gzkvw942crrfych8l8ygkl9fslz7k0jnkhs9xjzglbd166y4p";
       inherit dependencies buildDependencies features release verbose;
     };
-    cc_1_0_3_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    cc_1_0_3_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "cc";
       version = "1.0.3";
       sha256 = "193pwqgh79w6k0k29svyds5nnlrwx44myqyrw605d5jj4yk2zmpr";
       inherit dependencies buildDependencies features release verbose;
     };
-    cfg_if_0_1_2_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    cfg_if_0_1_2_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "cfg-if";
       version = "0.1.2";
       sha256 = "0x06hvrrqy96m97593823vvxcgvjaxckghwyy2jcyc8qc7c6cyhi";
       inherit dependencies buildDependencies features release verbose;
     };
-    clap_2_27_1_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    clap_2_27_1_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "clap";
       version = "2.27.1";
       sha256 = "0zx8rskqfl3iqn3vlyxzyd99hpifa7bm871akhxpz9wvrm688zaj";
       inherit dependencies buildDependencies features release verbose;
     };
-    dbghelp_sys_0_2_0_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    dbghelp_sys_0_2_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "dbghelp-sys";
       version = "0.2.0";
       sha256 = "0ylpi3bbiy233m57hnisn1df1v0lbl7nsxn34b0anzsgg440hqpq";
@@ -85,43 +85,43 @@ let release = true;
       build = "build.rs";
       inherit dependencies buildDependencies features release verbose;
     };
-    dtoa_0_4_2_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    dtoa_0_4_2_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "dtoa";
       version = "0.4.2";
       sha256 = "1bxsh6fags7nr36vlz07ik2a1rzyipc8x1y30kjk832hf2pzadmw";
       inherit dependencies buildDependencies features release verbose;
     };
-    env_logger_0_4_3_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    env_logger_0_4_3_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "env_logger";
       version = "0.4.3";
       sha256 = "0nrx04p4xa86d5kc7aq4fwvipbqji9cmgy449h47nc9f1chafhgg";
       inherit dependencies buildDependencies features release verbose;
     };
-    error_chain_0_11_0_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    error_chain_0_11_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "error-chain";
       version = "0.11.0";
       sha256 = "19nz17q6dzp0mx2jhh9qbj45gkvvgcl7zq9z2ai5a8ihbisfj6d7";
       inherit dependencies buildDependencies features release verbose;
     };
-    fuchsia_zircon_0_2_1_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    fuchsia_zircon_0_2_1_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "fuchsia-zircon";
       version = "0.2.1";
       sha256 = "0yd4rd7ql1vdr349p6vgq2dnwmpylky1kjp8g1zgvp250jxrhddb";
       inherit dependencies buildDependencies features release verbose;
     };
-    fuchsia_zircon_sys_0_2_0_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    fuchsia_zircon_sys_0_2_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "fuchsia-zircon-sys";
       version = "0.2.0";
       sha256 = "1yrqsrjwlhl3di6prxf5xmyd82gyjaysldbka5wwk83z11mpqh4w";
       inherit dependencies buildDependencies features release verbose;
     };
-    itoa_0_3_4_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    itoa_0_3_4_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "itoa";
       version = "0.3.4";
       sha256 = "1nfkzz6vrgj0d9l3yzjkkkqzdgs68y294fjdbl7jq118qi8xc9d9";
       inherit dependencies buildDependencies features release verbose;
     };
-    kernel32_sys_0_2_2_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    kernel32_sys_0_2_2_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "kernel32-sys";
       version = "0.2.2";
       sha256 = "1lrw1hbinyvr6cp28g60z97w32w8vsk6pahk64pmrv2fmby8srfj";
@@ -129,19 +129,19 @@ let release = true;
       build = "build.rs";
       inherit dependencies buildDependencies features release verbose;
     };
-    lazy_static_0_2_9_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    lazy_static_0_2_9_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "lazy_static";
       version = "0.2.9";
       sha256 = "08ldzr5292y3hvi6l6v8l4i6v95lm1aysmnfln65h10sqrfh6iw7";
       inherit dependencies buildDependencies features release verbose;
     };
-    libc_0_2_33_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    libc_0_2_33_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "libc";
       version = "0.2.33";
       sha256 = "1l7synziccnvarsq2kk22vps720ih6chmn016bhr2bq54hblbnl1";
       inherit dependencies buildDependencies features release verbose;
     };
-    libsqlite3_sys_0_8_1_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    libsqlite3_sys_0_8_1_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "libsqlite3-sys";
       version = "0.8.1";
       sha256 = "131bjlxzni2aw3048p7sj8cs3v0jpkb3fxdpc5i7ndyhvpz3gdza";
@@ -149,226 +149,226 @@ let release = true;
       build = "build.rs";
       inherit dependencies buildDependencies features release verbose;
     };
-    linked_hash_map_0_4_2_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    linked_hash_map_0_4_2_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "linked-hash-map";
       version = "0.4.2";
       sha256 = "04da208h6jb69f46j37jnvsw2i1wqplglp4d61csqcrhh83avbgl";
       inherit dependencies buildDependencies features release verbose;
     };
-    log_0_3_8_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    log_0_3_8_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "log";
       version = "0.3.8";
       sha256 = "1c43z4z85sxrsgir4s1hi84558ab5ic7jrn5qgmsiqcv90vvn006";
       inherit dependencies buildDependencies features release verbose;
     };
-    lru_cache_0_1_1_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    lru_cache_0_1_1_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "lru-cache";
       version = "0.1.1";
       sha256 = "1hl6kii1g54sq649gnscv858mmw7a02xj081l4vcgvrswdi2z8fw";
       inherit dependencies buildDependencies features release verbose;
     };
-    memchr_1_0_2_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    memchr_1_0_2_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "memchr";
       version = "1.0.2";
       sha256 = "0dfb8ifl9nrc9kzgd5z91q6qg87sh285q1ih7xgrsglmqfav9lg7";
       inherit dependencies buildDependencies features release verbose;
     };
-    nom_3_2_1_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    nom_3_2_1_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "nom";
       version = "3.2.1";
       sha256 = "1vcllxrz9hdw6j25kn020ka3psz1vkaqh1hm3yfak2240zrxgi07";
       inherit dependencies buildDependencies features release verbose;
     };
-    num_traits_0_1_40_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    num_traits_0_1_40_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "num-traits";
       version = "0.1.40";
       sha256 = "1fr8ghp4i97q3agki54i0hpmqxv3s65i2mqd1pinc7w7arc3fplw";
       inherit dependencies buildDependencies features release verbose;
     };
-    pkg_config_0_3_9_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    pkg_config_0_3_9_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "pkg-config";
       version = "0.3.9";
       sha256 = "06k8fxgrsrxj8mjpjcq1n7mn2p1shpxif4zg9y5h09c7vy20s146";
       inherit dependencies buildDependencies features release verbose;
     };
-    quote_0_3_15_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    quote_0_3_15_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "quote";
       version = "0.3.15";
       sha256 = "09il61jv4kd1360spaj46qwyl21fv1qz18fsv2jra8wdnlgl5jsg";
       inherit dependencies buildDependencies features release verbose;
     };
-    rand_0_3_18_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    rand_0_3_18_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "rand";
       version = "0.3.18";
       sha256 = "15d7c3myn968dzjs0a2pgv58hzdavxnq6swgj032lw2v966ir4xv";
       inherit dependencies buildDependencies features release verbose;
     };
-    redox_syscall_0_1_31_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    redox_syscall_0_1_31_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "redox_syscall";
       version = "0.1.31";
       sha256 = "0kipd9qslzin4fgj4jrxv6yz5l3l71gnbd7fq1jhk2j7f2sq33j4";
       libName = "syscall";
       inherit dependencies buildDependencies features release verbose;
     };
-    redox_termios_0_1_1_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    redox_termios_0_1_1_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "redox_termios";
       version = "0.1.1";
       sha256 = "04s6yyzjca552hdaqlvqhp3vw0zqbc304md5czyd3axh56iry8wh";
       libPath = "src/lib.rs";
       inherit dependencies buildDependencies features release verbose;
     };
-    regex_0_2_2_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    regex_0_2_2_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "regex";
       version = "0.2.2";
       sha256 = "1f1zrrynfylg0vcfyfp60bybq4rp5g1yk2k7lc7fyz7mmc7k2qr7";
       inherit dependencies buildDependencies features release verbose;
     };
-    regex_syntax_0_4_1_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    regex_syntax_0_4_1_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "regex-syntax";
       version = "0.4.1";
       sha256 = "01yrsm68lj86ad1whgg1z95c2pfsvv58fz8qjcgw7mlszc0c08ls";
       inherit dependencies buildDependencies features release verbose;
     };
-    rusqlite_0_12_0_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    rusqlite_0_12_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "rusqlite";
       version = "0.12.0";
       sha256 = "18fybr7bd012j7axf4gzpphx0iil2amksdlab4dhhipjl6hyam6j";
       inherit dependencies buildDependencies features release verbose;
     };
-    rustc_demangle_0_1_5_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    rustc_demangle_0_1_5_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "rustc-demangle";
       version = "0.1.5";
       sha256 = "096kkcx9j747700fhxj1s4rlwkj21pqjmvj64psdj6bakb2q13nc";
       inherit dependencies buildDependencies features release verbose;
     };
-    serde_1_0_19_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    serde_1_0_19_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "serde";
       version = "1.0.19";
       sha256 = "0dfhkkbrpr0vr1b2hhbddizb8bq4phi5ck0jhy3yx31bc2byb1l1";
       inherit dependencies buildDependencies features release verbose;
     };
-    serde_derive_1_0_19_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    serde_derive_1_0_19_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "serde_derive";
       version = "1.0.19";
       sha256 = "1fbr1zi25fgwy49mvpjq8g611mnv3vcd4n0mgca2lfdsp5n2nw5v";
       procMacro = true;
       inherit dependencies buildDependencies features release verbose;
     };
-    serde_derive_internals_0_17_0_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    serde_derive_internals_0_17_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "serde_derive_internals";
       version = "0.17.0";
       sha256 = "1g1j3v6pj9wbcz3v3w4smjpwrcdwjicmf6yd5cbai04as9iwhw74";
       inherit dependencies buildDependencies features release verbose;
     };
-    serde_json_1_0_5_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    serde_json_1_0_5_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "serde_json";
       version = "1.0.5";
       sha256 = "1yka3aa2gfi30415jpf0935k54r08jhyw6r7rjz2nv1kqgbw2brs";
       inherit dependencies buildDependencies features release verbose;
     };
-    strsim_0_6_0_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    strsim_0_6_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "strsim";
       version = "0.6.0";
       sha256 = "1lz85l6y68hr62lv4baww29yy7g8pg20dlr0lbaswxmmcb0wl7gd";
       inherit dependencies buildDependencies features release verbose;
     };
-    syn_0_11_11_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    syn_0_11_11_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "syn";
       version = "0.11.11";
       sha256 = "0yw8ng7x1dn5a6ykg0ib49y7r9nhzgpiq2989rqdp7rdz3n85502";
       inherit dependencies buildDependencies features release verbose;
     };
-    synom_0_11_3_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    synom_0_11_3_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "synom";
       version = "0.11.3";
       sha256 = "1l6d1s9qjfp6ng2s2z8219igvlv7gyk8gby97sdykqc1r93d8rhc";
       inherit dependencies buildDependencies features release verbose;
     };
-    tempdir_0_3_5_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    tempdir_0_3_5_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "tempdir";
       version = "0.3.5";
       sha256 = "0rirc5prqppzgd15fm8ayan349lgk2k5iqdkrbwrwrv5pm4znsnz";
       inherit dependencies buildDependencies features release verbose;
     };
-    termion_1_5_1_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    termion_1_5_1_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "termion";
       version = "1.5.1";
       sha256 = "02gq4vd8iws1f3gjrgrgpajsk2bk43nds5acbbb4s8dvrdvr8nf1";
       inherit dependencies buildDependencies features release verbose;
     };
-    textwrap_0_9_0_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    textwrap_0_9_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "textwrap";
       version = "0.9.0";
       sha256 = "18jg79ndjlwndz01mlbh82kkr2arqm658yn5kwp65l5n1hz8w4yb";
       inherit dependencies buildDependencies features release verbose;
     };
-    thread_local_0_3_4_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    thread_local_0_3_4_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "thread_local";
       version = "0.3.4";
       sha256 = "1y6cwyhhx2nkz4b3dziwhqdvgq830z8wjp32b40pjd8r0hxqv2jr";
       inherit dependencies buildDependencies features release verbose;
     };
-    time_0_1_38_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    time_0_1_38_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "time";
       version = "0.1.38";
       sha256 = "1ws283vvz7c6jfiwn53rmc6kybapr4pjaahfxxrz232b0qzw7gcp";
       inherit dependencies buildDependencies features release verbose;
     };
-    toml_0_4_5_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    toml_0_4_5_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "toml";
       version = "0.4.5";
       sha256 = "06zxqhn3y58yzjfaykhcrvlf7p2dnn54kn3g4apmja3cn5b18lkk";
       inherit dependencies buildDependencies features release verbose;
     };
-    unicode_width_0_1_4_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    unicode_width_0_1_4_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "unicode-width";
       version = "0.1.4";
       sha256 = "1rp7a04icn9y5c0lm74nrd4py0rdl0af8bhdwq7g478n1xifpifl";
       inherit dependencies buildDependencies features release verbose;
     };
-    unicode_xid_0_0_4_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    unicode_xid_0_0_4_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "unicode-xid";
       version = "0.0.4";
       sha256 = "1dc8wkkcd3s6534s5aw4lbjn8m67flkkbnajp5bl8408wdg8rh9v";
       inherit dependencies buildDependencies features release verbose;
     };
-    unreachable_1_0_0_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    unreachable_1_0_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "unreachable";
       version = "1.0.0";
       sha256 = "1am8czbk5wwr25gbp2zr007744fxjshhdqjz9liz7wl4pnv3whcf";
       inherit dependencies buildDependencies features release verbose;
     };
-    utf8_ranges_1_0_0_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    utf8_ranges_1_0_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "utf8-ranges";
       version = "1.0.0";
       sha256 = "0rzmqprwjv9yp1n0qqgahgm24872x6c0xddfym5pfndy7a36vkn0";
       inherit dependencies buildDependencies features release verbose;
     };
-    vcpkg_0_2_2_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    vcpkg_0_2_2_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "vcpkg";
       version = "0.2.2";
       sha256 = "1fl5j0ksnwrnsrf1b1a9lqbjgnajdipq0030vsbhx81mb7d9478a";
       inherit dependencies buildDependencies features release verbose;
     };
-    vec_map_0_8_0_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    vec_map_0_8_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "vec_map";
       version = "0.8.0";
       sha256 = "07sgxp3cf1a4cxm9n3r27fcvqmld32bl2576mrcahnvm34j11xay";
       inherit dependencies buildDependencies features release verbose;
     };
-    void_1_0_2_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    void_1_0_2_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "void";
       version = "1.0.2";
       sha256 = "0h1dm0dx8dhf56a83k68mijyxigqhizpskwxfdrs1drwv2cdclv3";
       inherit dependencies buildDependencies features release verbose;
     };
-    winapi_0_2_8_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    winapi_0_2_8_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "winapi";
       version = "0.2.8";
       sha256 = "0a45b58ywf12vb7gvj6h3j264nydynmzyqz8d8rqxsj6icqv82as";
       inherit dependencies buildDependencies features release verbose;
     };
-    winapi_build_0_1_1_ = { dependencies?[], buildDependencies?[], features?[] }: mkRustCrate {
+    winapi_build_0_1_1_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "winapi-build";
       version = "0.1.1";
       sha256 = "1lxlpi87rkhxcwp2ykf1ldw3p108hwm24nywf3jfrvmff4rjhqga";
@@ -402,7 +402,7 @@ rec {
   bitflags_0_9_1 = bitflags_0_9_1_ {
     features = [ "example_generated" ];
   };
-  carnix_0_4_2 = carnix_0_4_2_ {
+  carnix_0_4_3 = carnix_0_4_3_ {
     dependencies = [ clap_2_27_1 env_logger_0_4_3 error_chain_0_11_0 log_0_3_8 nom_3_2_1 regex_0_2_2 rusqlite_0_12_0 serde_1_0_19 serde_derive_1_0_19 serde_json_1_0_5 tempdir_0_3_5 toml_0_4_5 ];
   };
   cc_1_0_3 = cc_1_0_3_ {
