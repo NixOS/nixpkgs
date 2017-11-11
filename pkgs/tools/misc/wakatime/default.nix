@@ -2,13 +2,12 @@
 
 with pythonPackages;
 
-buildPythonPackage rec {
-  namePrefix = "";
+buildPythonApplication rec {
   name = "wakatime-${version}";
-  version = "7.0.4";
+  version = "8.0.2";
 
   src = fetchFromGitHub {
-    sha256 = "1cddabx9x11d2nxxcqlf4piysjnpfici0n5qy3n9gw81asz1djhf";
+    sha256 = "005irdzdii5cpd0nj1pindfg2mi93qpsfp91yh9qyljsz676fv8c";
     rev = version;
     repo = "wakatime";
     owner = "wakatime";
