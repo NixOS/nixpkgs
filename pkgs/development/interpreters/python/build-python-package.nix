@@ -1,7 +1,5 @@
-/* This function provides a generic Python package builder.  It is
-   intended to work with packages that use `distutils/setuptools'
-   (http://pypi.python.org/pypi/setuptools/), which represents a large
-   number of Python packages nowadays.  */
+# This function provides a generic Python package builder,
+# and can build packages that use distutils, setuptools or flit.
 
 { lib
 , python

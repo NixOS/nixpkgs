@@ -1,4 +1,4 @@
-/* Generic builder for Python packages that come without a setup.py. */
+# Generic builder.
 
 { lib
 , python
@@ -60,13 +60,15 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs [
 
   name = namePrefix + name;
 
-
-  buildInputs = [ wrapPython ] ++ buildInputs ++ pythonPath
-    ++ [ (ensureNewerSourcesHook { year = "1980"; }) ]
+  buildInputs = ([ wrapPython (ensureNewerSourcesHook { year = "1980"; }) ]
     ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip)
-    ++ lib.optionals doCheck checkInputs;
+    ++ lib.optionals doCheck checkInputs
+    ++ lib.optional catchConflicts setuptools # If we nog longer propagate setuptools
+    ++ buildInputs
+    ++ pythonPath
+  );
 
-  # propagate python/setuptools to active setup-hook in nix-shell
+  # Propagate python and setuptools. We should stop propagating setuptools.
   propagatedBuildInputs = propagatedBuildInputs ++ [ python setuptools ];
 
   # Python packages don't have a checkPhase, only an installCheckPhase
