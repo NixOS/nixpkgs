@@ -33,7 +33,6 @@
 , gnused ? null
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , darwin ? null
-, flex ? null
 , buildPlatform, hostPlatform, targetPlatform
 }:
 
@@ -169,7 +168,6 @@ let version = "7.2.0";
           else
           (if crossDarwin then " --with-sysroot=${getLib libcCross}/share/sysroot"
            else                " --with-headers=${getDev libcCross}/include") +
-          # Ensure that -print-prog-name is able to find the correct programs.
           " --enable-__cxa_atexit" +
           " --enable-long-long" +
           (if crossMingw then
@@ -302,7 +300,7 @@ stdenv.mkDerivation ({
     ++ (optional (perl != null) perl)
     ++ (optional javaAwtGtk pkgconfig);
 
-  buildInputs = [ gmp mpfr libmpc libelf flex ]
+  buildInputs = [ gmp mpfr libmpc libelf ]
     ++ (optional (isl != null) isl)
     ++ (optional (zlib != null) zlib)
     ++ (optionals langJava [ boehmgc zip unzip ])
@@ -424,8 +422,8 @@ stdenv.mkDerivation ({
     CC_FOR_TARGET = "${targetPlatform.config}-gcc";
     NM_FOR_TARGET = "${targetPlatform.config}-nm";
     CXX_FOR_TARGET = "${targetPlatform.config}-g++";
-    # If we are making a cross compiler, targetPlatform != hostPlatform
-    NIX_CC_CROSS = if targetPlatform == hostPlatform then "${stdenv.ccCross}" else "";
+    # If we are making a cross compiler, cross != null
+    NIX_CC_CROSS = optionalString (targetPlatform == hostPlatform) builtins.toString stdenv.cc;
     dontStrip = true;
     configureFlags = ''
       ${if enableMultilib then "" else "--disable-multilib"}
@@ -563,7 +561,7 @@ stdenv.mkDerivation ({
 }
 
 # Strip kills static libs of other archs (hence targetPlatform != hostPlatform)
-// optionalAttrs (!stripped || targetPlatform != hostPlatform) { dontStrip = true; NIX_STRIP_DEBUG = 0; }
+// optionalAttrs (!stripped || targetPlatform != hostPlatform) { dontStrip = true; }
 
 // optionalAttrs (enableMultilib) { dontMoveLib64 = true; }
 )
