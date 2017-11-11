@@ -16,6 +16,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Posix IPC-backed ASGI channel layer implementation";
     license = licenses.bsd3;
-    homepage = http://github.com/django/asgi_ipc/;
+    homepage = https://github.com/django/asgi_ipc/;
   };
 }

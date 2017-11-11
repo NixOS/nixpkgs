@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "jasper-${version}";
-  version = "2.0.13";
+  version = "2.0.14";
 
   src = fetchFromGitHub {
     repo = "jasper";
     owner = "mdadams";
     rev = "version-${version}";
-    sha256 = "1kd2xiszg9bxfavs3fadi4gi27m876d9zjjy0ns6mmbcjk109c0a";
+    sha256 = "0aarg8nbik9wrm7fx0451sbm5ypfdfr6i169pxzi354mpdp8gg7f";
   };
 
   # newer reconf to recognize a multiout flag

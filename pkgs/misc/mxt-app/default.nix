@@ -18,7 +18,7 @@ stdenv.mkDerivation rec{
 
   meta = with stdenv.lib; {
     description = "Command line utility for Atmel maXTouch devices";
-    homepage = http://github.com/atmel-maxtouch/mxt-app;
+    homepage = https://github.com/atmel-maxtouch/mxt-app;
     license = licenses.bsd2;
     maintainers = [ maintainers.colemickens ];
     platforms = platforms.unix;

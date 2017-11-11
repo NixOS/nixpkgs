@@ -18,7 +18,7 @@ rec {
 
     meta = with stdenv.lib; {
       description = "Audio processing plugin system for plugins that extract descriptive information from audio data";
-      homepage = http://sourceforge.net/projects/vamp;
+      homepage = https://sourceforge.net/projects/vamp;
       license = licenses.bsd3;
       maintainers = [ maintainers.goibhniu maintainers.marcweber ];
       platforms = platforms.linux;

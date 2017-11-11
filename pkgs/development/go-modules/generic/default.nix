@@ -145,7 +145,7 @@ go.stdenv.mkDerivation (
       if [ -n "$subPackages" ]; then
         echo "$subPackages" | sed "s,\(^\| \),\1$goPackagePath/,g"
       else
-        pushd go/src >/dev/null
+        pushd "$NIX_BUILD_TOP/go/src" >/dev/null
         find "$goPackagePath" -type f -name \*$type.go -exec dirname {} \; | grep -v "/vendor/" | sort | uniq
         popd >/dev/null
       fi

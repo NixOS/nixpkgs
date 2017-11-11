@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A Python 2 and 3 compatibility library";
-    homepage = http://pypi.python.org/pypi/six/;
+    homepage = https://pypi.python.org/pypi/six/;
     license = lib.licenses.mit;
   };
 }

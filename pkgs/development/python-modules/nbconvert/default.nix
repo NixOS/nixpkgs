@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   checkPhase = ''
     mkdir tmp
-    LC_ALL=en_US.utf8 HOME=`realpath tmp` py.test -v
+    LC_ALL=en_US.UTF-8 HOME=`realpath tmp` py.test -v
   '';
 
   meta = {

@@ -84,6 +84,8 @@ rec {
 
   git-remote-hg = callPackage ./git-remote-hg { };
 
+  git-secret = callPackage ./git-secret { };
+
   git-stree = callPackage ./git-stree { };
 
   git2cl = callPackage ./git2cl { };

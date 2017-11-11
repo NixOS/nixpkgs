@@ -10,8 +10,6 @@ stdenv.mkDerivation {
     rev = "61c373c8aa5556d51522290b82ad44e7166bced1";
   };
 
-  buildPhases = [ "unpackPhase" "installPhase" ];
-
   installPhase = ''
     mkdir -p $out/share/themes
     cp lambda-mod.zsh-theme $out/share/themes

@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, python2Packages }:
+{ stdenv, fetchurl, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
-  version = "2.9.3";
+  version = "2.9.4";
   name = "electron-cash-${version}";
 
-  src = fetchFromGitHub {
-    owner = "fyookball";
-    repo = "electrum";
-    rev = version;
-    sha256 = "1r39b5ag5fipzgr84pzb53cfm8a4dy53257608754dwr1gfpma3v";
+  src = fetchurl {
+    url = "https://electroncash.org/downloads/${version}/win-linux/Electron-Cash-${version}.tar.gz";
+    # Verified using official SHA-1 and signature from
+    # https://github.com/fyookball/keys-n-hashes
+    sha256 = "1y8mzwa6bb8zj4l92wm4c2icnr42wmhbfz6z5ymh356gwll914vh";
   };
 
   propagatedBuildInputs = with python2Packages; [
@@ -42,8 +42,8 @@ python2Packages.buildPythonApplication rec {
     mv $out/lib/python2.7/site-packages/nix/store"/"*/share $out
     rm -rf $out/lib/python2.7/site-packages/nix
 
-    substituteInPlace $out/share/applications/electron.desktop \
-      --replace "Exec=electrum %u" "Exec=$out/bin/electrum %u"
+    substituteInPlace $out/share/applications/electron-cash.desktop \
+      --replace "Exec=electron-cash %u" "Exec=$out/bin/electron-cash %u"
   '';
 
   doInstallCheck = true;
