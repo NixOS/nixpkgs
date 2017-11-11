@@ -13355,6 +13355,8 @@ with pkgs;
 
   musl = callPackage ../os-specific/linux/musl { };
   musl-fts = callPackage ../os-specific/linux/musl/fts.nix { };
+  musl-getconf = callPackage ../os-specific/linux/musl/getconf.nix { };
+  musl-getent = callPackage ../os-specific/linux/musl/getent.nix { };
 
   nettools = callPackage ../os-specific/linux/net-tools { };
 
