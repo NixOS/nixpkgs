@@ -248,7 +248,7 @@ index d2358cae4b..61d8cc0471 100644
          set_target_properties(Qt5::${Plugin} PROPERTIES
              \"IMPORTED_LOCATION_${Configuration}\" ${imported_location}
 diff --git a/mkspecs/features/qml_module.prf b/mkspecs/features/qml_module.prf
-index b09d42a0a4..f076265bdd 100644
+index 47ebe78400..25aa2b93e7 100644
 --- a/mkspecs/features/qml_module.prf
 +++ b/mkspecs/features/qml_module.prf
 @@ -17,10 +17,7 @@ fq_qml_files = $$_PRO_FILE_PWD_/qmldir
@@ -310,7 +310,7 @@ index 1848f00e90..2af93675c5 100644
 +    MODULE_QMAKE_OUTDIR = $$NIX_OUTPUT_OUT
  }
 diff --git a/mkspecs/features/qt_common.prf b/mkspecs/features/qt_common.prf
-index c1809468af..0a12ec24db 100644
+index 08b3f3e5af..5ffeafd9d8 100644
 --- a/mkspecs/features/qt_common.prf
 +++ b/mkspecs/features/qt_common.prf
 @@ -30,8 +30,8 @@ contains(TEMPLATE, .*lib) {
@@ -539,7 +539,7 @@ index 706304cf34..546420f6ad 100644
  set(_qt5_corelib_extra_includes \"$${CMAKE_INSTALL_DATA_DIR}mkspecs/$${CMAKE_MKSPEC}\")
  !!ENDIF
 diff --git a/src/corelib/kernel/qcoreapplication.cpp b/src/corelib/kernel/qcoreapplication.cpp
-index f5b15207cc..f85e0524bb 100644
+index bd3c12ce97..a796775970 100644
 --- a/src/corelib/kernel/qcoreapplication.cpp
 +++ b/src/corelib/kernel/qcoreapplication.cpp
 @@ -2533,6 +2533,15 @@ QStringList QCoreApplication::libraryPaths()
@@ -705,7 +705,7 @@ index 68caaeb6dc..fef4a81474 100644
              // specific curves requested, but not possible to set -> error
              sslContext->errorStr = msgErrorSettingEllipticCurves(QSslSocket::tr("OpenSSL version too old, need at least v1.0.2"));
 diff --git a/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp b/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp
-index 44f1d7e6ba..e24fe54326 100644
+index 338c7ca3be..dd52114bac 100644
 --- a/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp
 +++ b/src/plugins/platforminputcontexts/compose/generator/qtablegenerator.cpp
 @@ -251,12 +251,9 @@ void TableGenerator::initPossibleLocations()
@@ -723,7 +723,7 @@ index 44f1d7e6ba..e24fe54326 100644
  
  QString TableGenerator::findComposeFile()
 diff --git a/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp b/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp
-index 9bdedcc830..2559b2066b 100644
+index c2b7a562a9..4fa5f6d6a5 100644
 --- a/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp
 +++ b/src/plugins/platforms/xcb/gl_integrations/xcb_glx/qglxintegration.cpp
 @@ -570,7 +570,14 @@ void (*QGLXContext::getProcAddress(const QByteArray &procName)) ()
@@ -742,7 +742,7 @@ index 9bdedcc830..2559b2066b 100644
  #endif
              }
 diff --git a/src/plugins/platforms/xcb/qxcbcursor.cpp b/src/plugins/platforms/xcb/qxcbcursor.cpp
-index b321ed95dc..9e7a72521c 100644
+index 4646ced954..ff3111f393 100644
 --- a/src/plugins/platforms/xcb/qxcbcursor.cpp
 +++ b/src/plugins/platforms/xcb/qxcbcursor.cpp
 @@ -303,10 +303,10 @@ QXcbCursor::QXcbCursor(QXcbConnection *conn, QXcbScreen *screen)
