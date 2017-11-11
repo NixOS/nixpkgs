@@ -54,11 +54,12 @@ if disabled
 then throw "${name} not supported for interpreter ${python.executable}"
 else
 
-python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "checkInputs" "pythonModule"] // {
+python.stdenv.mkDerivation (builtins.removeAttrs attrs [
+    "disabled" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts"
+  ] // {
 
   name = namePrefix + name;
 
-  inherit pythonPath;
 
   buildInputs = [ wrapPython ] ++ buildInputs ++ pythonPath
     ++ [ (ensureNewerSourcesHook { year = "1980"; }) ]
