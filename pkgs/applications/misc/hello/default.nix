@@ -1,4 +1,4 @@
-{ stdenv, fetchipfs }:
+{ stdenv, fetchipfs, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "hello-2.10";
@@ -21,5 +21,10 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.all;
+  };
+
+  passthru.srcTarball = fetchurl {
+    inherit (src) url;
+    sha256 = "0ssi1wpaf7plaswqqjwigppsg5fyh99vdlb9kzl7c9lng89ndq1i";
   };
 }
