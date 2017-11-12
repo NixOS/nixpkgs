@@ -36,6 +36,13 @@
    )
  endif
  
+@@ -50,5 +50,5 @@
+   output : 'org.freedesktop.ColorManager.conf',
+   configuration : con2,
+   install: true,
+-  install_dir: join_paths(get_option('datadir'), 'dbus-1', 'system.d') ,
++  install_dir: join_paths(get_option('prefix'), 'etc', 'dbus-1', 'system.d') ,
+ )
 --- a/meson.build
 +++ b/meson.build
 @@ -258,6 +258,3 @@
