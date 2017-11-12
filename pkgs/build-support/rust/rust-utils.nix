@@ -244,7 +244,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
            $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES --color ${colors}
       fi
       # Remove object files to avoid "wrong ELF type"
-      rm -f $(find target -name "*.o")
+      find target -type f -name "*.o" -print0 | xargs -0 rm -f
     '' + finalBins;
 
     installCrate = crateName: ''
