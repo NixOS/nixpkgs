@@ -190,9 +190,7 @@ in {
 
   breathe = callPackage ../development/python-modules/breathe { };
 
-  browsermob-proxy = if ! isPy3k then
-    callPackage ../development/python-modules/browsermob-proxy {}
-  else throw "browsermob-proxy is not supported for ${python.executable}";
+  browsermob-proxy = disabledIf isPy3k (callPackage ../development/python-modules/browsermob-proxy {});
 
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
 
@@ -258,11 +256,11 @@ in {
 
   pyamf = callPackage ../development/python-modules/pyamf { };
 
-  pyatspi = if isPy3k then callPackage ../development/python-modules/pyatspi { } else throw "pyatspi not supported for interpreter ${python.executable}";
+  pyatspi = disabledIf (!isPy3k) (callPackage ../development/python-modules/pyatspi { });
 
   pycairo = callPackage ../development/python-modules/pycairo { };
 
-  pycangjie = if isPy3k then callPackage ../development/python-modules/pycangjie { } else throw "pycangjie not supported for interpreter ${python.executable}";
+  pycangjie = disabledIf (!isPy3k) (callPackage ../development/python-modules/pycangjie { });
 
   pycrypto = callPackage ../development/python-modules/pycrypto { };
 
@@ -272,7 +270,7 @@ in {
 
   PyChromecast = callPackage ../development/python-modules/pychromecast { };
 
-  pyexiv2 = if (!isPy3k) then callPackage ../development/python-modules/pyexiv2 {} else throw "pyexiv2 not supported for interpreter ${python.executable}";
+  pyexiv2 = disabledIf isPy3k (callPackage ../development/python-modules/pyexiv2 {});
 
   py3exiv2 = callPackage ../development/python-modules/py3exiv2 { };
 
@@ -334,13 +332,13 @@ in {
 
   PyWebDAV = callPackage ../development/python-modules/pywebdav { };
 
-  pyxml = if !isPy3k then callPackage ../development/python-modules/pyxml{ } else throw "pyxml not supported for interpreter ${python.executable}";
+  pyxml = disabledIf isPy3k (callPackage ../development/python-modules/pyxml{ });
 
   relatorio = callPackage ../development/python-modules/relatorio { };
 
   pyzufall = callPackage ../development/python-modules/pyzufall { };
 
-  rhpl = if !isPy3k then callPackage ../development/python-modules/rhpl {} else throw "rhpl not supported for interpreter ${python.executable}";
+  rhpl = disabledIf isPy3k (callPackage ../development/python-modules/rhpl {});
 
   simpleeval = callPackage ../development/python-modules/simpleeval { };
 
@@ -4771,11 +4769,11 @@ in {
 
   easy-thumbnails = callPackage ../development/python-modules/easy-thumbnails { };
 
-  eccodes = if (isPy27) then
-    toPythonModule (pkgs.eccodes.override {
+  eccodes = disabledIf (!isPy27)
+    (toPythonModule (pkgs.eccodes.override {
       enablePython = true;
       pythonPackages = self;
-    }) else throw "eccodes not supported for interpreter ${python.executable}";
+    }));
 
   EditorConfig = buildPythonPackage rec {
     name = "EditorConfig-${version}";
@@ -9296,11 +9294,11 @@ in {
     };
   };
 
-  grib-api = if (isPy27) then toPythonModule
+  grib-api = disabledIf (!isPy27) (toPythonModule
     (pkgs.grib-api.override {
       enablePython = true;
       pythonPackages = self;
-    }) else throw "grib-api not supported for interpreter ${python.executable}";
+    }));
 
   gspread = buildPythonPackage rec {
     version = "0.2.3";
@@ -10402,13 +10400,13 @@ in {
     inherit (pkgs) libsodium;
   };
 
-  libplist = if isPy3k then throw "libplist not supported for interpreter ${python.executable}" else
+  libplist = disabledIf isPy3k
     (toPythonModule (pkgs.libplist.override{python2Packages=self; })).py;
 
-  libxml2 = if isPy3k then throw "libxml2 not supported for interpreter ${python.executable}" else
+  libxml2 = disabledIf isPy3k
     (toPythonModule (pkgs.libxml2.override{pythonSupport=true; python2=python;})).py;
 
-  libxslt = if isPy3k then throw "libxslt not supported for interpreter ${python.executable}" else
+  libxslt = disabledIf isPy3k
     (toPythonModule (pkgs.libxslt.override{pythonSupport=true; python2=python; inherit (self) libxml2;})).py;
 
   limnoria = buildPythonPackage rec {
@@ -17021,9 +17019,8 @@ in {
     };
   };
 
-  qscintilla = if isPy3k || isPyPy
-    then throw "qscintilla-${pkgs.qscintilla.version} not supported for interpreter ${python.executable}"
-    else buildPythonPackage rec {
+  qscintilla = disabledIf (isPy3k || isPyPy)
+    (buildPythonPackage rec {
       # TODO: Qt5 support
       name = "qscintilla-${version}";
       version = pkgs.qscintilla.version;
@@ -17052,7 +17049,7 @@ in {
         maintainers = with maintainers; [ danbst ];
         platforms = platforms.linux;
       };
-    };
+    });
 
 
   qserve = buildPythonPackage rec {
@@ -24384,9 +24381,8 @@ EOF
   ROPGadget = callPackage ../development/python-modules/ROPGadget { };
 
   # We need "normal" libxml2 and not the python package by the same name.
-  pywbem = if !(isPy36)
-    then callPackage ../development/python-modules/pywbem { libxml2 = pkgs.libxml2; }
-    else throw "pywbem not supported for interpreter ${python.executable}";
+  pywbem = disabledIf isPy36
+    (callPackage ../development/python-modules/pywbem { libxml2 = pkgs.libxml2; });
 
   unicorn = callPackage ../development/python-modules/unicorn { };
 
@@ -24458,7 +24454,7 @@ EOF
 
   zeep = callPackage ../development/python-modules/zeep { };
 
-  zeitgeist = if isPy3k then throw "zeitgeist not supported for interpreter ${python.executable}" else
+  zeitgeist = disabledIf isPy3k
     (toPythonModule (pkgs.zeitgeist.override{python2Packages=self;})).py;
 
   zeroconf = callPackage ../development/python-modules/zeroconf { };
