@@ -16209,7 +16209,7 @@ tl: { # no indentation
   sha512.doc = "";
   sha512.source = "";
   hasRunfiles = true;
-  version = "2.2.1";
+  version = "2.4.1";
 };
 "mintspirit" = {
   stripPrefix = 0;
