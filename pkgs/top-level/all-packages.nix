@@ -17678,6 +17678,8 @@ with pkgs;
 
   blobby = callPackage ../games/blobby { };
 
+  braincurses = callPackage ../games/braincurses { };
+
   brogue = callPackage ../games/brogue { };
 
   bsdgames = callPackage ../games/bsdgames { };
