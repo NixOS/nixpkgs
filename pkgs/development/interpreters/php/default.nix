@@ -91,6 +91,7 @@ let
           configureFlags = [ "--enable-pcntl" ];
         };
 
+        # pcre functionality is tested in nixos/tests/php-pcre.nix
         pcre = {
           configureFlags = ["--with-pcre-regex=${pcre.dev} PCRE_LIBDIR=${pcre}"];
           buildInputs = [ pcre ];
