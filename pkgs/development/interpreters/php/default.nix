@@ -1,3 +1,5 @@
+# pcre functionality is tested in nixos/tests/php-pcre.nix
+
 { lib, stdenv, fetchurl, composableDerivation, autoconf, automake, flex, bison
 , mysql, libxml2, readline, zlib, curl, postgresql, gettext
 , openssl, pcre, pkgconfig, sqlite, config, libjpeg, libpng, freetype
@@ -91,7 +93,6 @@ let
           configureFlags = [ "--enable-pcntl" ];
         };
 
-        # pcre functionality is tested in nixos/tests/php-pcre.nix
         pcre = {
           configureFlags = ["--with-pcre-regex=${pcre.dev} PCRE_LIBDIR=${pcre}"];
           buildInputs = [ pcre ];
