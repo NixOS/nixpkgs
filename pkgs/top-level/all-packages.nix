@@ -6219,7 +6219,7 @@ with pkgs;
 
   buildRustCrate = callPackage ../build-support/rust/rust-utils.nix { };
 
-  carnix = (callPackage ../build-support/rust/carnix.nix { }).carnix_0_4_3;
+  carnix = (callPackage ../build-support/rust/carnix.nix { }).carnix_0_4_4;
 
   rustPlatform = recurseIntoAttrs (makeRustPlatform rust);
 

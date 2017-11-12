@@ -53,10 +53,10 @@ let release = true;
       sha256 = "18h073l5jd88rx4qdr95fjddr9rk79pb1aqnshzdnw16cfmb9rws";
       inherit dependencies buildDependencies features release verbose;
     };
-    carnix_0_4_3_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+    carnix_0_4_4_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "carnix";
-      version = "0.4.3";
-      sha256 = "1q7gzkvw942crrfych8l8ygkl9fslz7k0jnkhs9xjzglbd166y4p";
+      version = "0.4.4";
+      sha256 = "0p68sgslqqrk6lwzl9c5s89i1mcsm6m8489r1li39a3iqm77mvmx";
       inherit dependencies buildDependencies features release verbose;
     };
     cc_1_0_3_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
@@ -145,7 +145,6 @@ let release = true;
       crateName = "libsqlite3-sys";
       version = "0.8.1";
       sha256 = "131bjlxzni2aw3048p7sj8cs3v0jpkb3fxdpc5i7ndyhvpz3gdza";
-      buildInputs = [ pkgs.sqlite pkgs.pkgconfig ];
       build = "build.rs";
       inherit dependencies buildDependencies features release verbose;
     };
@@ -402,7 +401,7 @@ rec {
   bitflags_0_9_1 = bitflags_0_9_1_ {
     features = [ "example_generated" ];
   };
-  carnix_0_4_3 = carnix_0_4_3_ {
+  carnix_0_4_4 = carnix_0_4_4_ {
     dependencies = [ clap_2_27_1 env_logger_0_4_3 error_chain_0_11_0 log_0_3_8 nom_3_2_1 regex_0_2_2 rusqlite_0_12_0 serde_1_0_19 serde_derive_1_0_19 serde_json_1_0_5 tempdir_0_3_5 toml_0_4_5 ];
   };
   cc_1_0_3 = cc_1_0_3_ {
