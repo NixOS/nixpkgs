@@ -33,17 +33,17 @@
 
 , name ? "nixos-disk-image"
 
-, # Disk image format, one of qcow2, vpc, raw.
+, # Disk image format, one of qcow2, qcow2-compressed, vpc, raw.
   format ? "raw"
-
-, # Whether to compress the image, applicable only when the format is qcow2.
-  compressed ? false
 }:
 
 with lib;
 
-let
-  compress = optionalString compressed (assert format == "qcow2"; "-c");
+let format' = format; in let
+
+  format = if (format' == "qcow2-compressed") then "qcow2" else format;
+
+  compress = optionalString (format' == "qcow2-compressed") "-c";
 
   filename = "nixos." + {
     qcow2 = "qcow2";
