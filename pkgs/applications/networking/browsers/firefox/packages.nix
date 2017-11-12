@@ -13,7 +13,7 @@ rec {
     };
 
     patches =
-      [ ./no-buildconfig.patch ]
+      [ ./no-buildconfig.patch ./env_var_for_system_dir.patch ]
       ++ lib.optional stdenv.isi686 (fetchpatch {
         url = "https://hg.mozilla.org/mozilla-central/raw-rev/15517c5a5d37";
         sha256 = "1ba487p3hk4w2w7qqfxgv1y57vp86b8g3xhav2j20qd3j3phbbn7";
@@ -37,6 +37,9 @@ rec {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
       sha512 = "d80c7219548391d8a47b6e404662ea41e6acfa264a67d69365e76dd8943077e388ab24b030850919f8fc6681c11486bdbaaf170d441c861f4a12cedbe08955ab";
     };
+
+    patches =
+      [ ./env_var_for_system_dir.patch ];
 
     meta = firefox.meta // {
       description = "A web browser built from Firefox Extended Support Release source tree";
@@ -128,6 +131,9 @@ in rec {
       rev   = "tor-browser-52.3.0esr-7.0-1-slnos";
       sha256 = "0szbf8gjbl4dnrb4igy4mq5858i1y6ki4skhdw63iqqdd8w9v4yv";
     };
+
+    patches =
+      [ ./env_var_for_system_dir.patch ];
   } // commonAttrs) {};
 
   tor-browser = tor-browser-7-0;
