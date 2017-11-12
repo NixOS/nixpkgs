@@ -135,10 +135,17 @@ stdenv.mkDerivation {
           -e 's#sdk_val=$(/usr/bin/xcrun -sdk $sdk -find $(echo $val | cut -d \x27 \x27 -f 1))##' \
           -e 's#val=$(echo $sdk_val $(echo $val | cut -s -d \x27 \x27 -f 2-))##' \
           ./configure
-          substituteInPlace ./mkspecs/common/mac.conf \
-              --replace "/System/Library/Frameworks/OpenGL.framework/" "${darwin.apple_sdk.frameworks.OpenGL}/Library/Frameworks/OpenGL.framework/"
-          substituteInPlace ./mkspecs/common/mac.conf \
-              --replace "/System/Library/Frameworks/AGL.framework/" "${darwin.apple_sdk.frameworks.AGL}/Library/Frameworks/AGL.framework/"
+      substituteInPlace ./mkspecs/common/mac.conf \
+        --replace "/System/Library/Frameworks/OpenGL.framework/" "${darwin.apple_sdk.frameworks.OpenGL}/Library/Frameworks/OpenGL.framework/"
+      substituteInPlace ./mkspecs/common/mac.conf \
+        --replace "/System/Library/Frameworks/AGL.framework/" "${darwin.apple_sdk.frameworks.AGL}/Library/Frameworks/AGL.framework/"
+
+      # Recent Qt releases use SDK (and Objective-C) features beyond
+      # the 10.10 available in nixpkgs
+      substituteInPlace ./src/plugins/platforms/cocoa/qcocoawindow.mm \
+        --replace "NSEnumerator<NSWindow*>" "NSEnumerator"
+      substituteInPlace ./src/plugins/bearer/corewlan/qcorewlanengine.mm \
+        --replace "NSArray<NSString *>" "NSArray"
      '';
      # Note on the above: \x27 is a way if including a single-quote
      # character in the sed string arguments.
@@ -304,18 +311,18 @@ stdenv.mkDerivation {
       "-system-libjpeg"
       "-system-libpng"
       # gold linker of binutils 2.28 generates duplicate symbols
-      # TODO: remove for newer version of binutils 
+      # TODO: remove for newer version of binutils
       "-no-use-gold-linker"
     ]
     ++ lib.optional withGtk3 "-gtk"
-    ++ lib.optional (builtins.compareVersions version "5.9.0" >= 0) "-inotify"
-
+    ++ lib.optional (builtins.compareVersions version "5.9.0" >= 0 && !stdenv.isDarwin) "-inotify"
     ++ lib.optionals stdenv.isDarwin [
       "-platform macx-clang"
       "-no-use-gold-linker"
       "-no-fontconfig"
       "-qt-freetype"
       "-qt-libpng"
+      "-qt-harfbuzz"
     ];
 
   enableParallelBuilding = true;
