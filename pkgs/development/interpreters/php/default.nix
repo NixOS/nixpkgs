@@ -23,7 +23,7 @@ let
       enableParallelBuilding = true;
 
       nativeBuildInputs = [ pkgconfig ];
-      buildInputs = [ flex bison ]
+      buildInputs = [ flex bison pcre ]
         ++ lib.optional stdenv.isLinux systemd;
 
       CXXFLAGS = lib.optional stdenv.cc.isClang "-std=c++11";
@@ -91,11 +91,6 @@ let
 
         pcntl = {
           configureFlags = [ "--enable-pcntl" ];
-        };
-
-        pcre = {
-          configureFlags = ["--with-pcre-regex=${pcre.dev} PCRE_LIBDIR=${pcre}"];
-          buildInputs = [ pcre ];
         };
 
         readline = {
@@ -247,7 +242,6 @@ let
         curlWrappersSupport = (!php7) && (config.php.curlWrappers or true);
         gettextSupport = config.php.gettext or true;
         pcntlSupport = config.php.pcntl or true;
-        pcreSupport = config.php.pcreExternal or true;
         postgresqlSupport = config.php.postgresql or true;
         pdo_pgsqlSupport = config.php.pdo_pgsql or true;
         readlineSupport = config.php.readline or true;
@@ -293,6 +287,7 @@ let
 
       configureFlags = [
         "--with-config-file-scan-dir=/etc/php.d"
+        "--with-pcre-regex=${pcre.dev} PCRE_LIBDIR=${pcre}"
       ] ++ lib.optional stdenv.isDarwin "--with-iconv=${libiconv}"
         ++ lib.optional stdenv.isLinux  "--with-fpm-systemd";
 
