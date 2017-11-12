@@ -99,7 +99,9 @@ rec {
 In particular, note that the argument given as `--src` is copied
 verbatim to the source.  If we look at a more complicated
 dependencies, for instance by adding a single line `libc="*"` to our
-`Cargo.toml`, we get the following `hello.nix`:
+`Cargo.toml`, we first need to run `cargo build` to update the
+`Cargo.lock`. Then, `carnix` needs to be run again, and produces the
+following nix file:
 
 ```
 with import <nixpkgs> {};
