@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, cppo, gen, sequence, qtest, ounit, ocaml_oasis, result
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, cppo, gen, sequence, qtest, ounit, result
 , qcheck }:
 
 let
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
     sha256 = "1gjs9d6759zpgp68djv296zwmvhdc6dqfb27aip7dhj6ic2bwgil";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild cppo gen sequence qtest ounit ocaml_oasis qcheck ];
+  buildInputs = [ ocaml findlib ocamlbuild cppo gen sequence qtest ounit qcheck ];
 
   propagatedBuildInputs = [ result ];
 
