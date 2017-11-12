@@ -9287,28 +9287,7 @@ in {
     buildInputs = with self; [ nose ];
   };
 
-  ConfigArgParse = buildPythonPackage rec {
-    name = "ConfigArgParse-${version}";
-    version = "0.9.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/C/ConfigArgParse/ConfigArgParse-${version}.tar.gz";
-      sha256 = "0a984pvv7370yz7zbkl6s6i7yyl9myahx0m9jkjvg3hz5q8mf70l";
-    };
-
-    # no tests in tarball
-    doCheck = false;
-    propagatedBuildInputs = with self; [
-
-    ];
-    buildInputs = with self; [
-
-    ];
-
-    meta = with stdenv.lib; {
-      homepage = "https://github.com/zorro3/ConfigArgParse";
-    };
-  };
+  ConfigArgParse = callPackage ../development/python-modules/configargparse { };
 
   jsonschema = callPackage ../development/python-modules/jsonschema { };
 
