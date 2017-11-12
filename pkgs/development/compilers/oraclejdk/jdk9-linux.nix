@@ -7,7 +7,6 @@
 , xorg ? null
 , packageType ? "JDK" # JDK, JRE, or ServerJRE
 , pluginSupport ? true
-, installjce ? false
 , glib
 , libxml2
 , ffmpeg_2
@@ -33,16 +32,6 @@ let
   version = "9.0.1";
 
   downloadUrlBase = http://www.oracle.com/technetwork/java/javase/downloads;
-
-  jce =
-    if installjce then
-      requireFile {
-        name = "jce_policy-8.zip";
-        url = "${downloadUrlBase}/jce8-download-2133166.html";
-        sha256 = "0n8b6b8qmwb14lllk2lk1q1ahd3za9fnjigz5xn65mpg48whl0pk";
-      }
-    else
-      "";
 
   rSubPaths = [
     "lib/jli"
@@ -79,8 +68,7 @@ let result = stdenv.mkDerivation rec {
       }
     else abort "unknown package Type ${packageType}";
 
-  nativeBuildInputs = [ file ]
-    ++ stdenv.lib.optional installjce unzip;
+  nativeBuildInputs = [ file ];
 
   buildInputs = [ makeWrapper ];
 
@@ -107,11 +95,6 @@ let result = stdenv.mkDerivation rec {
         rm $file
       fi
     done
-
-    if test -n "${jce}"; then
-      unzip ${jce}
-      cp -v UnlimitedJCEPolicy*/*.jar $out/lib/security
-    fi
 
     if test -z "$pluginSupport"; then
       rm -f $out/bin/javaws
