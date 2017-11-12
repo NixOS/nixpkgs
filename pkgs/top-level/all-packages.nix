@@ -2600,6 +2600,7 @@ with pkgs;
   hevea = callPackage ../tools/typesetting/hevea { };
 
   hexd = callPackage ../tools/misc/hexd { };
+  pixd = callPackage ../tools/misc/pixd { };
 
   hhpc = callPackage ../tools/misc/hhpc { };
 
