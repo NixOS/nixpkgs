@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     makeFlagsArray+=("DESTDIR=$out")
   '';
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=implicit-fallthrough" ];
+
   passthru = { inherit se_release se_url; };
 
   meta = with stdenv.lib; {
