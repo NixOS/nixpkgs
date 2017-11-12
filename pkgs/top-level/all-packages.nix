@@ -9963,8 +9963,13 @@ with pkgs;
 
   notify-sharp = callPackage ../development/libraries/notify-sharp { };
 
-  ncurses5 = callPackage ../development/libraries/ncurses { abiVersion = "5"; };
-  ncurses6 = callPackage ../development/libraries/ncurses { abiVersion = "6"; };
+  ncurses5 = callPackage ../development/libraries/ncurses {
+    stdenv = if stdenv.cc.isGNU then overrideCC stdenv gcc6 else stdenv; # Hacky!
+    abiVersion = "5";
+  };
+  ncurses6 = callPackage ../development/libraries/ncurses {
+    abiVersion = "6";
+  };
   ncurses = if stdenv.isDarwin then ncurses5 else ncurses6;
 
   neardal = callPackage ../development/libraries/neardal { };
