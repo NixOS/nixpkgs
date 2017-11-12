@@ -9,9 +9,10 @@ in
 
 {
   cudnn_cudatoolkit_7 = generic rec {
-    version = "4.0";
+    # Old URL is v4 instead of v4.0 for some reason...
+    version = "4";
     cudatoolkit = cudatoolkit_7;
-    srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v${version}-prod.tgz";
+    srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v4.0-prod.tgz";
     sha256 = "0zgr6qdbc29qw6sikhrh6diwwz7150rqc8a49f2qf37j2rvyyr2f";
   };
 
