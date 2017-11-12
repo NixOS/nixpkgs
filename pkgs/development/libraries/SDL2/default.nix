@@ -54,7 +54,9 @@ stdenv.mkDerivation rec {
   # https://bugzilla.libsdl.org/show_bug.cgi?id=1431
   dontDisableStatic = true;
 
-  enableParallelBuilding = true;
+  # SDL_waylandevents.c:41:10: fatal error:
+  #   pointer-constraints-unstable-v1-client-protocol.h: No such file or directory
+  #enableParallelBuilding = true;
 
   # XXX: By default, SDL wants to dlopen() PulseAudio, in which case
   # we must arrange to add it to its RPATH; however, `patchelf' seems
