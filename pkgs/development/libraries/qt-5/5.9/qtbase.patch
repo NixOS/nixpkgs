@@ -674,7 +674,7 @@ index 0a008374e5..5e7cd92f6f 100644
  
      check_examples {
 diff --git a/mkspecs/features/qt_functions.prf b/mkspecs/features/qt_functions.prf
-index c00fdb73f8..6d8ba132cb 100644
+index c00fdb73f8..5789cd0c06 100644
 --- a/mkspecs/features/qt_functions.prf
 +++ b/mkspecs/features/qt_functions.prf
 @@ -69,7 +69,7 @@ defineTest(qtHaveModule) {
@@ -682,7 +682,7 @@ index c00fdb73f8..6d8ba132cb 100644
      cmd = $$eval(QT_TOOL.$${2}.binary)
      isEmpty(cmd) {
 -        cmd = $$[QT_HOST_BINS]/$$2
-+        cmd = $$system("type -p $$2")
++        cmd = $$system("command -v $$2")
          exists($${cmd}.pl) {
              $${1}_EXE = $${cmd}.pl
              cmd = perl -w $$system_path($${cmd}.pl)
