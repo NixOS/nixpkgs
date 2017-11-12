@@ -2599,6 +2599,8 @@ with pkgs;
 
   hevea = callPackage ../tools/typesetting/hevea { };
 
+  hexd = callPackage ../tools/misc/hexd { };
+
   hhpc = callPackage ../tools/misc/hhpc { };
 
   hiera-eyaml = callPackage ../tools/system/hiera-eyaml { };
