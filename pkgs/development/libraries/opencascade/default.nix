@@ -10,6 +10,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ mesa tcl tk file libXmu libtool qt4 ftgl freetype cmake ];
 
+  # Fix for glibc 2.26
+  postPatch = ''
+    sed -i -e 's/^\( *#include <\)x\(locale.h>\)//' \
+      src/Standard/Standard_CLocaleSentry.hxx
+  '';
+
   preConfigure = ''
     cmakeFlags="$cmakeFlags -DOCE_INSTALL_PREFIX=$out"
   '';
