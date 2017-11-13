@@ -1,25 +1,23 @@
 { pkgs, config, lib, ... } :
 
 let
-  inherit (lib) mkIf concatStringsSep concatMapStrings toList mapAttrs'
-    nameValuePair attrNames attrValues;
+  inherit (lib) mkIf concatStringsSep concatMapStrings toList mapAttrs
+    mapAttrsToList attrValues;
   cfg = config.services.kerberos_server;
   kerberos = config.krb5.kerberos;
   stateDir = "/var/heimdal";
-  aclFiles = mapAttrs'
-    (name: {acl, ...}: nameValuePair "${name}.acl" (
-      pkgs.writeText "${name}.acl" (concatMapStrings ((
-        {principal, access, target, ...} :
-        "${principal}\t${concatStringsSep "," (toList access)}\t${target}\n"
-      )) acl)
-    )) cfg.realms;
+  aclFiles = mapAttrs
+    (name: {acl, ...}: pkgs.writeText "${name}.acl" (concatMapStrings ((
+      {principal, access, target, ...} :
+      "${principal}\t${concatStringsSep "," (toList access)}\t${target}\n"
+    )) acl)) cfg.realms;
 
-  kdcConfigs = map (name: ''
+  kdcConfigs = mapAttrsToList (name: value: ''
     database = {
       dbname = ${stateDir}/heimdal
-      acl_file = /etc/heimdal-kdc/${name}.acl
+      acl_file = ${value}
     }
-  '') (attrNames cfg.realms);
+  '') aclFiles;
   kdcConfFile = pkgs.writeText "kdc.conf" ''
     [kdc]
     ${concatStringsSep "\n" kdcConfigs}
@@ -38,7 +36,7 @@ in
       '';
       serviceConfig.ExecStart =
         "${kerberos}/libexec/heimdal/kadmind --config-file=/etc/heimdal-kdc/kdc.conf";
-      restartTriggers = [ kdcConfFile ] ++ (attrValues aclFiles);
+      restartTriggers = [ kdcConfFile ];
     };
 
     systemd.services.kdc = {
@@ -59,16 +57,12 @@ in
         mkdir -m 0755 -p ${stateDir}
       '';
       serviceConfig.ExecStart = "${kerberos}/libexec/heimdal/kpasswdd";
-      restartTriggers = [ kdcConfFile ] ++ (attrValues aclFiles);
+      restartTriggers = [ kdcConfFile ];
     };
 
     environment.etc = {
       # Can be set via the --config-file option to KDC
       "heimdal-kdc/kdc.conf".source = kdcConfFile;
-    } // (
-      mapAttrs'
-      (name: value: nameValuePair "heimdal-kdc/${name}" {source = value;})
-      aclFiles
-    );
+    };
   };
 }

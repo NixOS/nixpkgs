@@ -2,7 +2,7 @@
 
 let
   inherit (lib) mkIf concatStrings concatStringsSep concatMapStrings toList
-    mapAttrs' nameValuePair attrNames attrValues;
+    mapAttrs mapAttrsToList attrValues;
   cfg = config.services.kerberos_server;
   kerberos = config.krb5.kerberos;
   stateDir = "/var/lib/krb5kdc";
@@ -11,19 +11,17 @@ let
     add = "a"; cpw = "c"; delete = "d"; get = "i"; list = "l"; modify = "m";
     all = "*";
   };
-  aclFiles = mapAttrs'
-    (name: {acl, ...}: nameValuePair "${name}.acl" (
-      pkgs.writeText "${name}.acl" (concatMapStrings (
-        {principal, access, target, ...} :
-        let access_code = map (a: aclMap.${a}) (toList access); in
-        "${principal} ${concatStrings access_code} ${target}\n"
-      ) acl)
-    )) cfg.realms;
-  kdcConfigs = map (name: ''
+  aclFiles = mapAttrs
+    (name: {acl, ...}: (pkgs.writeText "${name}.acl" (concatMapStrings (
+      {principal, access, target, ...} :
+      let access_code = map (a: aclMap.${a}) (toList access); in
+      "${principal} ${concatStrings access_code} ${target}\n"
+    ) acl))) cfg.realms;
+  kdcConfigs = mapAttrsToList (name: value: ''
     ${name} = {
-      acl_file = /etc/krb5kdc/${name}.acl
+      acl_file = ${value}
     }
-  '') (attrNames cfg.realms);
+  '') aclFiles;
   kdcConfFile = pkgs.writeText "kdc.conf" ''
     [realms]
     ${concatStringsSep "\n" kdcConfigs}
@@ -43,7 +41,7 @@ in
         mkdir -m 0755 -p ${stateDir}
       '';
       serviceConfig.ExecStart = "${kerberos}/bin/kadmind -nofork";
-      restartTriggers = [ kdcConfFile ] ++ (attrValues aclFiles);
+      restartTriggers = [ kdcConfFile ];
       environment = env;
     };
 
@@ -64,11 +62,7 @@ in
 
     environment.etc = {
       "krb5kdc/kdc.conf".source = kdcConfFile;
-    } // (
-      mapAttrs'
-      (name: value: nameValuePair "krb5kdc/${name}" {source = value;})
-      aclFiles
-    );
+    };
     environment.variables = env;
   };
 }
