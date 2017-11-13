@@ -41,7 +41,7 @@ with lib;
 
 let format' = format; in let
 
-  format = if (format' == "qcow2-compressed") then "qcow2" else format;
+  format = if (format' == "qcow2-compressed") then "qcow2" else format';
 
   compress = optionalString (format' == "qcow2-compressed") "-c";
 
