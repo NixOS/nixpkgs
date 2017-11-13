@@ -28,11 +28,9 @@
 # Set to `privacySupport` or `false`.
 
 , webrtcSupport ? !privacySupport
-, geolocationSupport ? !privacySupport
-, googleAPISupport ? geolocationSupport
+, googleAPISupport ? !privacySupport
 , crashreporterSupport ? false
 
-, safeBrowsingSupport ? false
 , drmSupport ? false
 
 ## other
