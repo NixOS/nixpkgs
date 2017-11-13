@@ -24,5 +24,6 @@ in stdenv.mkDerivation {
   meta = with lib; {
     license = licenses.apsl20;
     platforms = platforms.darwin;
+    maintainers = with maintainers; [ matthewbauer ];
   };
 }
