@@ -319,7 +319,7 @@ let
         outputsToInstall = [ "out" "dev" ];
       };
 
-      patches = if !php7 then [ ./fix-paths.patch ] else [ ./fix-paths-php7.patch ];
+      patches = if !php7 then [ ./fix-paths.patch ] else [ ./fix-paths-php7.patch ./fix-pcre.patch ];
 
       postPatch = lib.optional stdenv.isDarwin ''
         substituteInPlace configure --replace "-lstdc++" "-lc++"
