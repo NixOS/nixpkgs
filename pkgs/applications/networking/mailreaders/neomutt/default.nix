@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, which, autoreconfHook, ncurses, perl
-, cyrus_sasl, gss, gpgme, kerberos, libidn, notmuch, openssl, lmdb, libxslt, docbook_xsl }:
+, cyrus_sasl, gss, gpgme, kerberos, libidn, notmuch, openssl, lmdb, libxslt,
+docbook_xsl, makeWrapper }:
 
 stdenv.mkDerivation rec {
   version = "20170912";
@@ -12,7 +13,9 @@ stdenv.mkDerivation rec {
     sha256 = "0qndszmaihly3pp2wqiqm31nxbv9ys3j05kzffaqhzngfilmar9g";
   };
 
-  nativeBuildInputs = [ autoreconfHook docbook_xsl libxslt.bin which ];
+  nativeBuildInputs = [
+    autoreconfHook docbook_xsl libxslt.bin which makeWrapper
+  ];
   buildInputs = [
     cyrus_sasl gss gpgme kerberos libidn ncurses
     notmuch openssl perl lmdb
@@ -50,6 +53,10 @@ stdenv.mkDerivation rec {
   configureScript = "./prepare";
 
   enableParallelBuilding = true;
+
+  postInstall = ''
+    wrapProgram "$out/bin/mutt" --prefix PATH : "$out/lib/neomutt"
+  '';
 
   meta = with stdenv.lib; {
     description = "A small but very powerful text-based mail client";
