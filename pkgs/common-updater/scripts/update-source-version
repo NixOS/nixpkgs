@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-set -e
+set -e -o pipefail
 
 die() {
     echo "$0: error: $1" >&2
     exit 1
 }
 
-# Usage: update-source-hash <attr> <version> [<new-source-hash>]
+# Usage: update-source-hash <attr> [<version>] [<new-source-hash>]
 attr=$1
 newVersion=$2
 newHash=$3
@@ -32,6 +32,20 @@ oldVersion=$(nix-instantiate --eval -E "with import ./. {}; $attr.version or (bu
 
 if [ -z "$drvName" -o -z "$oldVersion" ]; then
     die "Couldn't evaluate name and version from '$attr.name'!"
+fi
+
+if [ -z "$newVersion" ]; then
+   # works for fetchFromGitHub & fetchgit
+   url=$(nix-instantiate --eval --strict --expr "with import ./. {}; if $attr ? src.meta.homepage then $attr.src.meta.homepage else $attr.src.url")
+   if [[ -z "$url" ]] || ! [[ "$url" =~ \"https://github.com/([^\)]+)/([^\)/]+)\" ]]; then
+       die "we can only automatically check for new versions for github-based projects, got '$url'"
+   fi
+   owner=${BASH_REMATCH[1]}
+   repo=${BASH_REMATCH[2]%.git}
+   newVersion=$(curl -s "https://api.github.com/repos/${owner}/${repo}/tags" | jq -r '.[0]?.name | gsub("^v"; "")')
+   if [[ $newVersion == "" ]]; then
+       die "no tags found for $url"
+   fi
 fi
 
 if [ "$oldVersion" = "$newVersion" ]; then
