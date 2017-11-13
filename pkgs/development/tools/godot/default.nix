@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gcc, scons, pkgconfig, libX11, libXcursor
+{ stdenv, fetchFromGitHub, gcc5, scons, pkgconfig, libX11, libXcursor
 , libXinerama, libXrandr, libXrender, freetype, openssl, alsaLib
 , libpulseaudio, mesa_glu, zlib }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gcc scons libX11 libXcursor libXinerama libXrandr libXrender
+    gcc5 scons libX11 libXcursor libXinerama libXrandr libXrender
     freetype openssl alsaLib libpulseaudio mesa_glu zlib
   ];
 
