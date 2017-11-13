@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, gettext, libmsgpack, libtermkey
 , libtool, libuv, luajit, luajitPackages, luaPackages, ncurses, perl, pkgconfig
-, unibilium, makeWrapper, vimUtils, xsel, gperf
+, unibilium, makeWrapper, vimUtils, xsel, gperf, callPackage
 
 , withPython ? true, pythonPackages, extraPythonPackages ? []
 , withPython3 ? true, python3Packages, extraPython3Packages ? []
@@ -45,13 +45,11 @@ let
     };
   };
 
-  rubyEnv = bundlerEnv {
-    name = "neovim-ruby-env";
-    gemdir = ./ruby_provider;
-  };
+  neovim-gem = callPackage ./ruby_provider {};
+  neovim-gem-bin =
+    "${neovim-gem}/bin/neovim-ruby-host";
 
-  rubyWrapper = ''--suffix PATH : \"${rubyEnv}/bin\" '' +
-                ''--suffix GEM_HOME : \"${rubyEnv}/${rubyEnv.ruby.gemPath}\" '';
+  rubyWrapper = ''--cmd \"let g:ruby_host_prog='${neovim-gem-bin}'\" '';
 
   pluginPythonPackages = if configure == null then [] else builtins.concatLists
     (map ({ pythonDependencies ? [], ...}: pythonDependencies)
@@ -74,20 +72,22 @@ let
     ignoreCollisions = true;
   };
   python3Wrapper = ''--cmd \"let g:python3_host_prog='$out/bin/nvim-python3'\" '';
-  pythonFlags = optionalString (withPython || withPython3) ''--add-flags "${
+  additionalFlags = optionalString (withPython || withPython3 || withRuby)
+  ''--add-flags "${
     (optionalString withPython pythonWrapper) +
-    (optionalString withPython3 python3Wrapper)
-  }"'';
+    (optionalString withPython3 python3Wrapper) +
+    (optionalString withRuby rubyWrapper)
+  }" --unset PYTHONPATH'';
 
   neovim = stdenv.mkDerivation rec {
     name = "neovim-${version}";
-    version = "0.2.0";
+    version = "0.2.1";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "0fhjkgjwqqmzbfn9wk10l2vq9v74zkriz5j12b1rx0gdwzlfybn8";
+      sha256 = "19ppj0i59kk70j09gap6azm0jm4y95fr5fx7n9gx377y3xjs8h03";
     };
 
     enableParallelBuilding = true;
@@ -143,7 +143,7 @@ let
     '' + optionalString withPython3 ''
       ln -s ${python3Env}/bin/python3 $out/bin/nvim-python3
     '' + optionalString (withPython || withPython3 || withRuby) ''
-      wrapProgram $out/bin/nvim ${rubyWrapper + pythonFlags}
+      wrapProgram $out/bin/nvim ${additionalFlags}
     '';
 
     meta = {
