@@ -1,5 +1,5 @@
 { stdenv
-, buildPythonPackage
+, buildPythonApplication
 , callPackage
 , lib
 , python
@@ -27,7 +27,7 @@ let
 
     qt4 = pyqt4.qt;
 
-in buildPythonPackage rec {
+in buildPythonApplication rec {
     version = "2.0.47";
     name = "anki-${version}";
 
