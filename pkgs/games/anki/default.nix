@@ -10,6 +10,12 @@ let
     version = "2.0.47";
     inherit (python2Packages) python wrapPython sqlalchemy pyaudio beautifulsoup4 httplib2 matplotlib pyqt4;
     qt4 = pyqt4.qt;
+
+    # Development version of anki has bumped to beautifulsoup4
+    beautifulsoup = python2Packages.callPackage ./beautifulsoup.nix {
+      pythonPackages = python2Packages;
+    };
+
 in
 stdenv.mkDerivation rec {
     name = "anki-${version}";
@@ -22,7 +28,7 @@ stdenv.mkDerivation rec {
       sha256 = "067bsidqzy1zc301i2pk4biwp2kwvgk4kydp5z5s551acinkbdgv";
     };
 
-    pythonPath = [ pyqt4 sqlalchemy pyaudio beautifulsoup4 httplib2 ]
+    pythonPath = [ pyqt4 sqlalchemy pyaudio beautifulsoup httplib2 ]
               ++ lib.optional plotsSupport matplotlib;
 
     buildInputs = [ python wrapPython lame mplayer libpulseaudio ];
