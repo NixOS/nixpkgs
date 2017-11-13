@@ -204,9 +204,6 @@ self: super: {
   # also tests require bytestring>=0.10.8.1
   cereal = dontCheck (addBuildDepend super.cereal self.fail);
 
-  # Moved out from common as no longer the case for GHC8
-  ghc-mod = super.ghc-mod.override { cabal-helper = self.cabal-helper_0_6_3_1; };
-
   # The test suite requires Cabal 1.24.x or later to compile.
   comonad = dontCheck super.comonad;
   semigroupoids = dontCheck super.semigroupoids;
