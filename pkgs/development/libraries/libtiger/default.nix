@@ -16,6 +16,6 @@ stdenv.mkDerivation rec {
     homepage = http://code.google.com/p/libtiger/;
     description = "A rendering library for Kate streams using Pango and Cairo";
     platforms = lib.platforms.unix;
-    maintainers = with lib; [ matthewbauer ];
+    maintainers = with lib.maintainers; [ matthewbauer ];
   };
 }

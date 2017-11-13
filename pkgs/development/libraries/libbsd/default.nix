@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = https://libbsd.freedesktop.org/;
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainer; [ matthewbauer ];
+    maintainers = with maintainers; [ matthewbauer ];
   };
 }
