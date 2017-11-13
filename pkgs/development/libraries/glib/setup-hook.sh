@@ -2,7 +2,7 @@
 make_glib_find_gsettings_schemas() {
     # For packages that need gschemas of other packages (e.g. empathy)
     if [ -d "$1"/share/gsettings-schemas/*/glib-2.0/schemas ]; then
-        addToSearchPath GSETTINGS_SCHEMAS_PATH "$1/share/gsettings-schemas/"*
+        appendToSearchPath GSETTINGS_SCHEMAS_PATH "$1/share/gsettings-schemas/"*
     fi
 }
 envHooks+=(make_glib_find_gsettings_schemas)
@@ -20,7 +20,7 @@ glibPreFixupPhase() {
         mv "${!outputLib}/share/glib-2.0/schemas" "${!outputLib}/share/gsettings-schemas/$name/glib-2.0/"
     fi
 
-    addToSearchPath GSETTINGS_SCHEMAS_PATH "${!outputLib}/share/gsettings-schemas/$name"
+    appendToSearchPath GSETTINGS_SCHEMAS_PATH "${!outputLib}/share/gsettings-schemas/$name"
 }
 preFixupPhases+=(glibPreFixupPhase)
 

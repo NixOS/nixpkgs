@@ -279,7 +279,7 @@ let
             --replace '@PHP_LDFLAGS@' ""
         done
 
-        #[[ -z "$libxml2" ]] || addToSearchPath PATH $libxml2/bin
+        #[[ -z "$libxml2" ]] || appendToSearchPath PATH $libxml2/bin
 
         export EXTENSION_DIR=$out/lib/php/extensions
 

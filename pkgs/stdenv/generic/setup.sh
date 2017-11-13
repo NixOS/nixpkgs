@@ -173,7 +173,7 @@ trap "exitHandler" EXIT
 # Helper functions.
 
 
-addToSearchPathWithCustomDelimiter() {
+appendToSearchPathWithCustomDelimiter() {
     local delimiter="$1"
     local varName="$2"
     local dir="$3"
@@ -184,8 +184,8 @@ addToSearchPathWithCustomDelimiter() {
 
 PATH_DELIMITER=':'
 
-addToSearchPath() {
-    addToSearchPathWithCustomDelimiter "${PATH_DELIMITER}" "$@"
+appendToSearchPath() {
+    appendToSearchPathWithCustomDelimiter "${PATH_DELIMITER}" "$@"
 }
 
 
@@ -270,7 +270,7 @@ shopt -s nullglob
 PATH=
 for i in $initialPath; do
     if [ "$i" = / ]; then i=; fi
-    addToSearchPath PATH "$i/bin"
+    appendToSearchPath PATH "$i/bin"
 done
 
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
@@ -348,7 +348,7 @@ activatePackage() {
     fi
 
     if [ -d "$pkg/bin" ]; then
-        addToSearchPath _PATH "$pkg/bin"
+        appendToSearchPath _PATH "$pkg/bin"
     fi
 
     if [ -f "$pkg/nix-support/setup-hook" ]; then

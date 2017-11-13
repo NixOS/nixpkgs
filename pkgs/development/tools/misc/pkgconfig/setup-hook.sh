@@ -1,6 +1,6 @@
 addPkgConfigPath () {
-    addToSearchPath PKG_CONFIG_PATH $1/lib/pkgconfig
-    addToSearchPath PKG_CONFIG_PATH $1/share/pkgconfig
+    appendToSearchPath PKG_CONFIG_PATH $1/lib/pkgconfig
+    appendToSearchPath PKG_CONFIG_PATH $1/share/pkgconfig
 }
 
 if test -n "$crossConfig"; then

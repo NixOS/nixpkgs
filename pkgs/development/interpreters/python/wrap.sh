@@ -17,7 +17,7 @@ buildPythonPath() {
     program_PYTHONPATH=
     program_PATH=
     pythonPathsSeen["@python@"]=1
-    addToSearchPath program_PATH @python@/bin
+    appendToSearchPath program_PATH @python@/bin
     for path in $pythonPath; do
         _addToPythonPath $path
     done
@@ -90,10 +90,10 @@ _addToPythonPath() {
     # Stop if we've already visited here.
     if [ -n "${pythonPathsSeen[$dir]}" ]; then return; fi
     pythonPathsSeen[$dir]=1
-    # addToSearchPath is defined in stdenv/generic/setup.sh. It will have
+    # appendToSearchPath is defined in stdenv/generic/setup.sh. It will have
     # the effect of calling `export program_X=$dir/...:$program_X`.
-    addToSearchPath program_PYTHONPATH $dir/lib/@libPrefix@/site-packages
-    addToSearchPath program_PATH $dir/bin
+    appendToSearchPath program_PYTHONPATH $dir/lib/@libPrefix@/site-packages
+    appendToSearchPath program_PATH $dir/bin
 
     # Inspect the propagated inputs (if they exist) and recur on them.
     local prop="$dir/nix-support/propagated-build-inputs"

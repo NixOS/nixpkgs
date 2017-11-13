@@ -139,7 +139,7 @@ let
           mkdir -p $out/nix-support
           cat > $out/nix-support/setup-hook <<EOF
           addGemPath() {
-            addToSearchPath GEM_PATH \$1/${passthru.gemPath}
+            appendToSearchPath GEM_PATH \$1/${passthru.gemPath}
           }
 
           envHooks+=(addGemPath)

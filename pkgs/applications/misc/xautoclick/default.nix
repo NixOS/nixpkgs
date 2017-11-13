@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   preConfigure = stdenv.lib.optional qtSupport ''
     mkdir .bin
     ln -s ${qt4}/bin/moc .bin/moc-qt4
-    addToSearchPath PATH .bin
+    appendToSearchPath PATH .bin
   '';
 
   meta = {

@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     fontPath=
     for i in $fontDirectories; do
       for j in $(find $i -name fonts.dir); do
-        addToSearchPathWithCustomDelimiter "," fontPath $(dirname $j)
+        appendToSearchPathWithCustomDelimiter "," fontPath $(dirname $j)
       done
     done
 

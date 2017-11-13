@@ -30,27 +30,27 @@ postInstall() {
     # add the current package to the paths
     local tmp="$out/lib/GNUstep/Applications"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_APPS" in *"${tmp}"*) false;; *) true;; esac; then
-	addToSearchPath NIX_GNUSTEP_SYSTEM_APPS "$tmp"
+	appendToSearchPath NIX_GNUSTEP_SYSTEM_APPS "$tmp"
     fi
     tmp="$out/lib/GNUstep/Applications"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_ADMIN_APPS" in *"${tmp}"*) false;; *) true;; esac; then
-	addToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_APPS "$tmp"
+	appendToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_APPS "$tmp"
     fi
     tmp="$out/lib/GNUstep/WebApplications"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_WEB_APPS" in *"${tmp}"*) false;; *) true;; esac; then
-	addToSearchPath NIX_GNUSTEP_SYSTEM_WEB_APPS "$tmp"
+	appendToSearchPath NIX_GNUSTEP_SYSTEM_WEB_APPS "$tmp"
     fi
     tmp="$out/bin"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_TOOLS" in *"${tmp}"*) false;; *) true;; esac; then
-	addToSearchPath NIX_GNUSTEP_SYSTEM_TOOLS "$tmp"
+	appendToSearchPath NIX_GNUSTEP_SYSTEM_TOOLS "$tmp"
     fi
     tmp="$out/sbin"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_ADMIN_TOOLS" in *"${tmp}"*) false;; *) true;; esac; then
-	addToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_TOOLS "$tmp"
+	appendToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_TOOLS "$tmp"
     fi
     tmp="$out/lib/GNUstep"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_LIBRARY" in *"${tmp}"*) false;; *) true;; esac; then
-    	addToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARY "$tmp"
+    	appendToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARY "$tmp"
     fi
     tmp="$out/include"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_HEADERS" in *"${tmp}"*) false;; *) true;; esac; then
@@ -62,19 +62,19 @@ postInstall() {
     fi
     tmp="$out/lib"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_LIBRARIES" in *"${tmp}"*) false;; *) true;; esac; then
-	addToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARIES "$tmp"
+	appendToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARIES "$tmp"
     fi
     tmp="$out/share/GNUstep/Documentation"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_DOC" in *"${tmp}"*) false;; *) true;; esac; then
-	addToSearchPath NIX_GNUSTEP_SYSTEM_DOC "$tmp"
+	appendToSearchPath NIX_GNUSTEP_SYSTEM_DOC "$tmp"
     fi
     tmp="$out/share/man"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_DOC_MAN" in *"${tmp}"*) false;; *) true;; esac; then
-	addToSearchPath NIX_GNUSTEP_SYSTEM_DOC_MAN "$tmp"
+	appendToSearchPath NIX_GNUSTEP_SYSTEM_DOC_MAN "$tmp"
     fi
     tmp="$out/share/info"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_DOC_INFO" in *"${tmp}"*) false;; *) true;; esac; then
-	addToSearchPath NIX_GNUSTEP_SYSTEM_DOC_INFO "$tmp"
+	appendToSearchPath NIX_GNUSTEP_SYSTEM_DOC_INFO "$tmp"
     fi
     
     # write the config file

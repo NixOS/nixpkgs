@@ -1,5 +1,5 @@
 addRLibPath () {
-    addToSearchPath R_LIBS_SITE $1/library
+    appendToSearchPath R_LIBS_SITE $1/library
 }
 
 envHooks+=(addRLibPath)
