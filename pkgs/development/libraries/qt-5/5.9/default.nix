@@ -67,7 +67,7 @@ let
         inherit (srcs.qtbase) src version;
         patches = patches.qtbase;
         inherit bison cups harfbuzz mesa;
-        withGtk3 = true; inherit dconf gtk3;
+        withGtk3 = !stdenv.isDarwin; inherit dconf gtk3;
         inherit developerBuild decryptSslTraffic;
       };
 
