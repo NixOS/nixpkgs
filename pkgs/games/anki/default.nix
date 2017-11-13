@@ -73,18 +73,15 @@ in buildPythonPackage rec {
 
       # Remove QT translation files. We'll use the standard QT ones.
       rm "locale/"*.qm
-
-      # Skip tests using network
-      rm tests/test_sync.py
-      rm tests/test_upgrade.py
     '';
 
     # UTF-8 locale needed for testing
     LC_ALL = "en_US.UTF-8";
 
     checkPhase = ''
-      # Anki writes some files to $HOME during tests
-      env HOME=$TMP pytest
+      # - Anki writes some files to $HOME during tests
+      # - Skip tests using network
+      env HOME=$TMP pytest --ignore tests/test_sync.py
     '';
 
     installPhase = ''
