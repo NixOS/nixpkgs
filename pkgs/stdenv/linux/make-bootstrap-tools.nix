@@ -216,7 +216,7 @@ rec {
       $CXX -v -o $out/bin/bar bar.cc
       $out/bin/bar
 
-      tar xvf ${hello.srcTarball}
+      tar xvf ${hello.src}
       cd hello-*
       ./configure --prefix=$out
       make
