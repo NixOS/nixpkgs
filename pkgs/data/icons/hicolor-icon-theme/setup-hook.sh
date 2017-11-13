@@ -3,7 +3,7 @@ hicolorIconThemeHook() {
 
     # where to find icon themes
     if [ -d "$1/share/icons" ]; then
-      appendToSearchPath XDG_ICON_DIRS $1/share
+      prependToSearchPath XDG_ICON_DIRS $1/share
     fi
 	
 }

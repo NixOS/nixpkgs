@@ -1,2 +1,2 @@
-appendToSearchPath PURE_INCLUDE $1/lib/pure
-appendToSearchPath PURE_LIBRARY $1/lib/pure
+prependToSearchPath PURE_INCLUDE $1/lib/pure
+prependToSearchPath PURE_LIBRARY $1/lib/pure

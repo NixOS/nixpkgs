@@ -1,5 +1,5 @@
 addErlLibPath() {
-    appendToSearchPath ERL_LIBS $1/lib/elixir/lib
+    prependToSearchPath ERL_LIBS $1/lib/elixir/lib
 }
 
 envHooks+=(addErlLibPath)

@@ -27,27 +27,27 @@ addEnvVars() {
 
     local tmp="$1/lib/GNUstep/Applications"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_APPS" in *"${tmp}"*) false;; *) true;; esac; then
-	appendToSearchPath NIX_GNUSTEP_SYSTEM_APPS "$tmp"
+	prependToSearchPath NIX_GNUSTEP_SYSTEM_APPS "$tmp"
     fi
     tmp="$1/lib/GNUstep/Applications"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_ADMIN_APPS" in *"${tmp}"*) false;; *) true;; esac; then
-	appendToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_APPS "$tmp"
+	prependToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_APPS "$tmp"
     fi
     tmp="$1/lib/GNUstep/WebApplications"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_WEB_APPS" in *"${tmp}"*) false;; *) true;; esac; then
-	appendToSearchPath NIX_GNUSTEP_SYSTEM_WEB_APPS "$tmp"
+	prependToSearchPath NIX_GNUSTEP_SYSTEM_WEB_APPS "$tmp"
     fi
     tmp="$1/bin"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_TOOLS" in *"${tmp}"*) false;; *) true;; esac; then
-	appendToSearchPath NIX_GNUSTEP_SYSTEM_TOOLS "$tmp"
+	prependToSearchPath NIX_GNUSTEP_SYSTEM_TOOLS "$tmp"
     fi
     tmp="$1/sbin"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_ADMIN_TOOLS" in *"${tmp}"*) false;; *) true;; esac; then
-	appendToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_TOOLS "$tmp"
+	prependToSearchPath NIX_GNUSTEP_SYSTEM_ADMIN_TOOLS "$tmp"
     fi
     tmp="$1/lib/GNUstep"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_LIBRARY" in *"${tmp}"*) false;; *) true;; esac; then
-    	appendToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARY "$tmp"
+    	prependToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARY "$tmp"
     fi
     tmp="$1/include"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_HEADERS" in *"${tmp}"*) false;; *) true;; esac; then
@@ -59,19 +59,19 @@ addEnvVars() {
     fi
     tmp="$1/lib"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_LIBRARIES" in *"${tmp}"*) false;; *) true;; esac; then
-	appendToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARIES "$tmp"
+	prependToSearchPath NIX_GNUSTEP_SYSTEM_LIBRARIES "$tmp"
     fi
     tmp="$1/share/GNUstep/Documentation"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_DOC" in *"${tmp}"*) false;; *) true;; esac; then
-	appendToSearchPath NIX_GNUSTEP_SYSTEM_DOC "$tmp"
+	prependToSearchPath NIX_GNUSTEP_SYSTEM_DOC "$tmp"
     fi
     tmp="$1/share/man"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_DOC_MAN" in *"${tmp}"*) false;; *) true;; esac; then
-	appendToSearchPath NIX_GNUSTEP_SYSTEM_DOC_MAN "$tmp"
+	prependToSearchPath NIX_GNUSTEP_SYSTEM_DOC_MAN "$tmp"
     fi
     tmp="$1/share/info"
     if [ -d "$tmp" ] && case "$NIX_GNUSTEP_SYSTEM_DOC_INFO" in *"${tmp}"*) false;; *) true;; esac; then
-	appendToSearchPath NIX_GNUSTEP_SYSTEM_DOC_INFO "$tmp"
+	prependToSearchPath NIX_GNUSTEP_SYSTEM_DOC_INFO "$tmp"
     fi
 }
 envHooks=(${envHooks[@]} addEnvVars)

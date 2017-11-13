@@ -18,7 +18,7 @@ let
     };
 
     setupHook = writeText "setupHook.sh" ''
-       appendToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
+       prependToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
     '';
 
     dontStrip = true;

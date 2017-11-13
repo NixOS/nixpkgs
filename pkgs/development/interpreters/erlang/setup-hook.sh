@@ -1,5 +1,5 @@
 addErlangLibPath() {
-    appendToSearchPath ERL_LIBS $1/lib/erlang/lib
+    prependToSearchPath ERL_LIBS $1/lib/erlang/lib
 }
 
 envHooks+=(addErlangLibPath)

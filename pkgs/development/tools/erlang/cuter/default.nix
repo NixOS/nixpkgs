@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   setupHook = writeText "setupHook.sh" ''
-    appendToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
+    prependToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
   '';
 
   nativeBuildInputs = [ autoreconfHook ];

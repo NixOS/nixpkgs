@@ -46,7 +46,7 @@ let
     inherit src;
 
     setupHook = writeText "setupHook.sh" ''
-       appendToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
+       prependToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
     '';
 
     postPatch = ''

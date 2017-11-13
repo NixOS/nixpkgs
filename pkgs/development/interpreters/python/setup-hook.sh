@@ -1,5 +1,5 @@
 addPythonPath() {
-    appendToSearchPathWithCustomDelimiter : PYTHONPATH $1/@sitePackages@
+    prependToSearchPathWithCustomDelimiter : PYTHONPATH $1/@sitePackages@
 }
 
 toPythonPath() {
