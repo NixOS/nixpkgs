@@ -3,6 +3,7 @@
   apis ? ["*"]
 , # Whether to enable AWS' custom memory management.
   customMemoryManagement ? true
+, darwin
 }:
 
 let
@@ -29,7 +30,11 @@ in stdenv.mkDerivation rec {
   separateDebugInfo = stdenv.isLinux;
 
   nativeBuildInputs = [ cmake curl ];
-  buildInputs = [ zlib curl openssl ];
+  buildInputs = [ zlib curl openssl ]
+    ++ lib.optionals (stdenv.isDarwin &&
+                        ((builtins.elem "text-to-speech" apis) ||
+                         (builtins.elem "*" apis)))
+         (with darwin.apple_sdk.frameworks; [ CoreAudio AudioToolbox ]);
 
   cmakeFlags =
     lib.optional (!customMemoryManagement) "-DCUSTOM_MEMORY_MANAGEMENT=0"
