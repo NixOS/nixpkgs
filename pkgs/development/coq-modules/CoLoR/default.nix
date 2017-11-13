@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, coq }:
+{ stdenv, fetchurl, coq, coqPackages }:
 
 if !stdenv.lib.versionAtLeast coq.coq-version "8.6"
 then throw "CoLoR is not available for Coq ${coq.coq-version}"
 else
 
 stdenv.mkDerivation {
-  name = "coq${coq.coq-version}-CoLoR-1.3.0";
+  name = "coq${coq.coq-version}-CoLoR-1.4.0";
 
   src = fetchurl {
-    url = https://gforge.inria.fr/frs/download.php/file/36399/color.1.3.0.tar.gz;
-    sha256 = "0n7431mc4a5bn9fsyk5167j2vnbxz4vgggjch4pm0x58lda8mxv1";
+    url = https://gforge.inria.fr/frs/download.php/file/37205/color.1.4.0.tar.gz;
+    sha256 = "1jsp9adsh7w59y41ihbwchryjhjpajgs9bhf8rnb4b3hzccqxgag";
   };
 
-  buildInputs = [ coq ];
-  enableParallelBuilding = true;
+  buildInputs = [ coq coqPackages.bignums ];
+  enableParallelBuilding = false;
 
   installPhase = ''
     make -f Makefile.coq COQLIB=$out/lib/coq/${coq.coq-version}/ install

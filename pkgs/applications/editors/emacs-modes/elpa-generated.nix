@@ -700,10 +700,10 @@
     ebdb = callPackage ({ cl-lib ? null, elpaBuild, emacs, fetchurl, lib, seq }:
     elpaBuild {
         pname = "ebdb";
-        version = "0.4.1";
+        version = "0.4.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ebdb-0.4.1.tar";
-          sha256 = "0gv1q1xkhjab0l77c92znn6x0dfdbnj6hc48axmrx6a7zwbm3g2r";
+          url = "https://elpa.gnu.org/packages/ebdb-0.4.2.tar";
+          sha256 = "1j9hgxa6csj3iz5vrl22xvhl9lxhig0n1cixgzhs1sb3z3nn2li6";
         };
         packageRequires = [ cl-lib emacs seq ];
         meta = {
@@ -1464,10 +1464,10 @@
       }) {};
     nlinum = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "nlinum";
-        version = "1.8";
+        version = "1.8.1";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/nlinum-1.8.el";
-          sha256 = "0bb1c8a68fzv59q2ri7ppbx8cm7sa8n4hxxvxv73db2dcgwrgwga";
+          url = "https://elpa.gnu.org/packages/nlinum-1.8.1.el";
+          sha256 = "0fx560yfjy6nqgs1d3fiv0h46i8q3r592clsia7nihkriah7rlwf";
         };
         packageRequires = [];
         meta = {
@@ -1556,10 +1556,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20171030";
+        version = "20171106";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20171030.tar";
-          sha256 = "1lszws6b5s4r7w871cyigs433dflf6w0y33fj6rzrq8240d5092i";
+          url = "https://elpa.gnu.org/packages/org-20171106.tar";
+          sha256 = "08gziccqfrl65v18ri2m6csb6smyafaz7pv86gnvpw05g7aj6alq";
         };
         packageRequires = [];
         meta = {

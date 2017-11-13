@@ -2308,15 +2308,16 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  ConfigGrammar = buildPerlPackage {
-    name = "Config-Grammar-1.11";
+  ConfigGrammar = buildPerlPackage rec {
+    name = "Config-Grammar-1.12";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DS/DSCHWEI/Config-Grammar-1.11.tar.gz;
-      sha256 = "dd819f89b19c51e9fac6965360cd9db54436e1328968c802416ac34188ca65ee";
+      url = "mirror://cpan/authors/id/D/DS/DSCHWEI/${name}.tar.gz";
+      sha256 = "7a52a3657d96e6f1f529caaa09ec3bf7dd6a245b47875382c323902f6d9590b0";
     };
     meta = {
+      homepage = https://github.com/schweikert/Config-Grammar;
       description = "A grammar-based, user-friendly config parser";
-      license = "unknown";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -4812,14 +4813,14 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  Encode = buildPerlPackage {
-    name = "Encode-2.78";
+  Encode = buildPerlPackage rec {
+    name = "Encode-2.93";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-2.78.tar.gz;
-      sha256 = "1fc8d5c0e75ef85beeac71d1fe4a3bfcb8207755a46b32f783a3a6682672762a";
+      url = "mirror://cpan/authors/id/D/DA/DANKOGAI/${name}.tar.gz";
+      sha256 = "2d06b0375c84a75cf3762685e6d94c3aef25833fd0427daa0ae87b04ae6f739c";
     };
     meta = {
-      description = "Unknown";
+      description = "Character encodings in Perl";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -5102,6 +5103,19 @@ let self = _self // overrides; _self = with self; {
       sha256 = "09d5sq9mgcnmjf2yp8rwd0cc1fa8kq7nbwjqxiqdykwmavmgm5ml";
     };
     buildInputs = [ PerlOSType ];
+  };
+
+  ExtUtilsCChecker = buildPerlPackage rec {
+    name = "ExtUtils-CChecker-0.10";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/${name}.tar.gz";
+      sha256 = "50bfe76870fc1510f56bae4fa2dce0165d9ac4af4e7320d6b8fda14dfea4be0b";
+    };
+    buildInputs = [ ModuleBuild TestFatal ];
+    meta = {
+      description = "Configure-time utilities for using C headers,";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   ExtUtilsConfig = buildPerlPackage {
@@ -5538,6 +5552,19 @@ let self = _self // overrides; _self = with self; {
       sha256 = "c30c688027a52ff4f58cd69d6d8ef35472a7cf106d4ce94eb73a796ba7c7ffa7";
     };
     propagatedBuildInputs = [ CryptRijndael ];
+  };
+
+  Filelchown = buildPerlPackage rec {
+    name = "File-lchown-0.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PE/PEVANS/${name}.tar.gz";
+      sha256 = "a02fbf285406a8a4d9399284f032f2d55c56975154c2e1674bd109837b8096ec";
+    };
+    buildInputs = [ ExtUtilsCChecker ModuleBuild ];
+    meta = {
+      description = "Modify attributes of symlinks without dereferencing them";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   FileLibMagic = buildPerlPackage rec {
@@ -8151,6 +8178,19 @@ let self = _self // overrides; _self = with self; {
       description = "The World-Wide Web library for Perl";
       license = with licenses; [ artistic1 gpl1Plus ];
       platforms = platforms.unix;
+    };
+  };
+
+  LWPAuthenOAuth = buildPerlPackage rec {
+    name = "LWP-Authen-OAuth-1.02";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TI/TIMBRODY/${name}.tar.gz";
+      sha256 = "e78e0bd7de8002cfb4760073258d555ef55b2c27c07a94b3d8a2166a17fd96bc";
+    };
+    propagatedBuildInputs = [ LWP URI ];
+    meta = {
+      description = "Generate signed OAuth requests";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 

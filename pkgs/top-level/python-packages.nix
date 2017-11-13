@@ -9082,7 +9082,7 @@ in {
 
     meta = {
       description = "A command-line tool that helps you clean up Git branches";
-      homepage = http://lab.arc90.com/2012/04/03/git-sweep/;
+      homepage = https://github.com/arc90/git-sweep;
       license = licenses.mit;
       maintainers = with maintainers; [ pSub ];
     };

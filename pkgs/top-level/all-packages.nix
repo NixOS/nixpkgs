@@ -5315,6 +5315,8 @@ with pkgs;
 
   bash-completion = callPackage ../shells/bash-completion { };
 
+  nix-bash-completions = callPackage ../shells/nix-bash-completions { };
+
   dash = callPackage ../shells/dash { };
 
   es = callPackage ../shells/es { };
@@ -6690,7 +6692,12 @@ with pkgs;
 
   pyrex096 = callPackage ../development/interpreters/pyrex/0.9.6.nix { };
 
-  racket = callPackage ../development/interpreters/racket { };
+  racket = callPackage ../development/interpreters/racket {
+    # racket 6.11 doesn't build with gcc6 + recent glibc:
+    # https://github.com/racket/racket/pull/1886
+    # https://github.com/NixOS/nixpkgs/pull/31017#issuecomment-343574769
+    stdenv = overrideCC stdenv gcc7;
+  };
 
   rakudo = callPackage ../development/interpreters/rakudo {
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
@@ -13730,7 +13737,7 @@ with pkgs;
 
   amsn = callPackage ../applications/networking/instant-messengers/amsn { };
 
-  androidStudioPackages = callPackage ../applications/editors/android-studio/packages.nix {};
+  androidStudioPackages = callPackage ../applications/editors/android-studio { };
   android-studio = androidStudioPackages.stable;
   android-studio-preview = androidStudioPackages.preview;
 
@@ -17671,6 +17678,8 @@ with pkgs;
 
   blobby = callPackage ../games/blobby { };
 
+  braincurses = callPackage ../games/braincurses { };
+
   brogue = callPackage ../games/brogue { };
 
   bsdgames = callPackage ../games/bsdgames { };
@@ -17680,6 +17689,8 @@ with pkgs;
   bzflag = callPackage ../games/bzflag { };
 
   cataclysm-dda = callPackage ../games/cataclysm-dda { };
+
+  cataclysm-dda-git = callPackage ../games/cataclysm-dda/git.nix { };
 
   chessdb = callPackage ../games/chessdb { };
 
@@ -18705,6 +18716,7 @@ with pkgs;
     HoTT = callPackage ../development/coq-modules/HoTT {};
     interval = callPackage ../development/coq-modules/interval {};
     mathcomp = callPackage ../development/coq-modules/mathcomp { };
+    metalib = callPackage ../development/coq-modules/metalib { };
     paco = callPackage ../development/coq-modules/paco {};
     ssreflect = callPackage ../development/coq-modules/ssreflect { };
     QuickChick = callPackage ../development/coq-modules/QuickChick {};

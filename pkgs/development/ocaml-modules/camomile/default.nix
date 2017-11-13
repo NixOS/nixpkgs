@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, jbuilder, cppo }:
 
 stdenv.mkDerivation rec {
-	version = "0.8.6";
+	version = "0.8.7";
 	name = "ocaml${ocaml.version}-camomile-${version}";
 
 	src = fetchFromGitHub {
 		owner = "yoriyuki";
 		repo = "camomile";
 		rev = "rel-${version}";
-		sha256 = "1jq1xhaikczk6lbvas7c35aa04q0kjaqd8m54c4jivpj80yvg4x9";
+		sha256 = "0rh58nl5jrnx01hf0yqbdcc2ncx107pq29zblchww82ci0x1xwsf";
 	};
 
 	buildInputs = [ ocaml findlib jbuilder cppo ];

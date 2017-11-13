@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, fetchurl, pkgconfig, libusb, readline, libewf, perl, zlib, openssl,
+{stdenv, fetchFromGitHub, fetchurl, fetchpatch, pkgconfig, libusb, readline, libewf, perl, zlib, openssl,
 gtk2 ? null, vte ? null, gtkdialog ? null,
 python ? null,
 ruby ? null,
@@ -13,15 +13,23 @@ let
   inherit (stdenv.lib) optional;
 in
 stdenv.mkDerivation rec {
-  version = "2.0.0";
+  version = "2.0.1";
   name = "radare2-${version}";
 
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
     rev = version;
-    sha256 = "1ahai9x6jc15wjzdbdkri3rc88ark2i5s8nv2pxcp0wwldvawlzi";
+    sha256 = "031ndvinsypagpkdszxjq0hj91ijq9zx4dzk53sz7il7s3zn65c7";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2017-15385.patch";
+      url = https://github.com/radare/radare2/commit/21a6f570ba33fa9f52f1bba87f07acc4e8c178f4.patch;
+      sha256 = "19qg5j9yr5r62nrq2b6mscxsz0wyyfah2z5jz8dvj9kqxq186d43";
+    })
+  ];
 
   postPatch = let
     cs_ver = "3.0.4"; # version from $sourceRoot/shlr/Makefile
