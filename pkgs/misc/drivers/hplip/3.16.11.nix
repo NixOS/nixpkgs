@@ -4,23 +4,23 @@
 , cups, zlib, libjpeg, libusb1, pythonPackages, sane-backends, dbus, usbutils
 , net_snmp, openssl, polkit, nettools
 , bash, coreutils, utillinux
-, withQt5 ? true
+, qtSupport ? true
 , withPlugin ? false
 }:
 
 let
 
   name = "hplip-${version}";
-  version = "3.17.10";
+  version = "3.16.11";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "0v27hg856b5z2rilczcbfgz8ksxn0n810g1glac3mxkj8qbl8wqg";
+    sha256 = "094vkyr0rjng72m13dgr824cdl7q20x23qjxzih4w7l9njn0rqpn";
   };
 
   plugin = fetchurl {
     url = "http://www.openprinting.org/download/printdriver/auxfiles/HP/plugins/${name}-plugin.run";
-    sha256 = "07am3dnl0ipgfswz5wndprryljh9rqbfhq7mm4d4yyj3bdnnzlig";
+    sha256 = "1y3wdax2wb6kdd8bi40wl7v9s8ffyjz95bz42sjcpzzddmlhcaxg";
   };
 
   hplipState = substituteAll {
@@ -69,8 +69,8 @@ pythonPackages.buildPythonApplication {
     pygobject2
     reportlab
     usbutils
-  ] ++ stdenv.lib.optionals withQt5 [
-    pyqt5
+  ] ++ stdenv.lib.optionals qtSupport [
+    pyqt4
   ];
 
   makeWrapperArgs = [ ''--prefix PATH : "${nettools}/bin"'' ];
