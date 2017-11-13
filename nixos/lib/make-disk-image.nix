@@ -33,18 +33,23 @@
 
 , name ? "nixos-disk-image"
 
-, # Disk image format, one of qcow2, vpc, raw.
+, # Disk image format, one of qcow2, qcow2-compressed, vpc, raw.
   format ? "raw"
 }:
 
 with lib;
 
-let
-  extensions = {
+let format' = format; in let
+
+  format = if (format' == "qcow2-compressed") then "qcow2" else format;
+
+  compress = optionalString (format' == "qcow2-compressed") "-c";
+
+  filename = "nixos." + {
     qcow2 = "qcow2";
     vpc   = "vhd";
     raw   = "img";
-  };
+  }.${format};
 
   nixpkgs = cleanSource pkgs.path;
 
@@ -125,7 +130,7 @@ let
     fakeroot nixos-prepare-root $root ${channelSources} ${config.system.build.toplevel} closure
 
     echo "copying staging root to image..."
-    cptofs ${pkgs.lib.optionalString partitioned "-P 1"} -t ${fsType} -i $diskImage $root/* /
+    cptofs ${optionalString partitioned "-P 1"} -t ${fsType} -i $diskImage $root/* /
   '';
 in pkgs.vmTools.runInLinuxVM (
   pkgs.runCommand name
@@ -134,12 +139,11 @@ in pkgs.vmTools.runInLinuxVM (
       exportReferencesGraph = [ "closure" metaClosure ];
       postVM = ''
         ${if format == "raw" then ''
-          mv $diskImage $out/nixos.img
-          diskImage=$out/nixos.img
+          mv $diskImage $out/${filename}
         '' else ''
-          ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${format} $diskImage $out/nixos.${extensions.${format}}
-          diskImage=$out/nixos.${extensions.${format}}
+          ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${format} ${compress} $diskImage $out/${filename}
         ''}
+        diskImage=$out/${filename}
         ${postVM}
       '';
       memSize = 1024;
