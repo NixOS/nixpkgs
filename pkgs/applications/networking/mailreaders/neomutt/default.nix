@@ -27,10 +27,12 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     cyrus_sasl gss gpgme kerberos libidn ncurses
-    notmuch openssl perl lmdb makeWrapper
+    notmuch openssl perl lmdb
   ];
 
-  nativeBuildInputs = [ autoreconfHook docbook_xsl docbook_xml_dtd_42 libxslt.bin which ];
+  nativeBuildInputs = [
+    autoreconfHook docbook_xsl docbook_xml_dtd_42 libxslt.bin which makeWrapper
+  ];
 
   enableParallelBuilding = true;
 
