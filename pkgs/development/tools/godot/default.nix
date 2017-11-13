@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   name    = "godot-${version}";
-  version = "2.1.4-stable";
+  version = "2.1.4";
 
   src = fetchFromGitHub {
     owner  = "godotengine";
     repo   = "godot";
-    rev    = version;
+    rev    = "${version}-stable";
     sha256 = "0d2zczn5k7296sky5gllq55cxd586nx134y2iwjpkqqjr62g0h48";
   };
 
