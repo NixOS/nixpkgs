@@ -71,11 +71,13 @@ ccWrapper_addCVars () {
     esac
 
     if [[ -d "$1/include" ]]; then
-        export NIX_${role}CFLAGS_COMPILE+=" ${ccIncludeFlag:--isystem} $1/include"
+        local var="NIX_${role}CFLAGS_COMPILE"
+        export ${var}="${ccIncludeFlag:--isystem} $1/include ${!var}"
     fi
 
     if [[ -d "$1/Library/Frameworks" ]]; then
-        export NIX_${role}CFLAGS_COMPILE+=" -F$1/Library/Frameworks"
+        local var="NIX_${role}CFLAGS_COMPILE"
+        export ${var}="-F$1/Library/Frameworks ${!var}"
     fi
 }
 

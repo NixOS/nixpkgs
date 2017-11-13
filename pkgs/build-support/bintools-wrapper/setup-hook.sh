@@ -11,12 +11,14 @@ bintoolsWrapper_addLDVars () {
             return 1 ;;
     esac
 
-    if [[ -d "$1/lib64" && ! -L "$1/lib64" ]]; then
-        export NIX_${role}LDFLAGS+=" -L$1/lib64"
+    if [[ -d "$1/lib" ]]; then
+        local var="NIX_${role}LDFLAGS"
+        export ${var}="-L$1/lib ${!var}"
     fi
 
-    if [[ -d "$1/lib" ]]; then
-        export NIX_${role}LDFLAGS+=" -L$1/lib"
+    if [[ -d "$1/lib64" && ! -L "$1/lib64" ]]; then
+        local var="NIX_${role}LDFLAGS"
+        export ${var}="-L$1/lib64 ${!var}"
     fi
 }
 

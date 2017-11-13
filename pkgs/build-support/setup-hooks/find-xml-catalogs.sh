@@ -2,10 +2,10 @@ addXMLCatalogs () {
     local d i
     # ‘xml/dtd’ and ‘xml/xsl’ are deprecated. Catalogs should be
     # installed underneath ‘share/xml’.
-    for d in $1/share/xml $1/xml/dtd $1/xml/xsl; do
+    for d in $1/xml/dtd $1/xml/xsl $1/share/xml; do
         if [ -d $d ]; then
             for i in $(find $d -name catalog.xml); do
-                XML_CATALOG_FILES+=" $i"
+                XML_CATALOG_FILES="$i $XML_CATALOG_FILES"
             done
         fi
     done

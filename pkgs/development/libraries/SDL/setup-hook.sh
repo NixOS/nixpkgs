@@ -1,11 +1,9 @@
 addSDLPath () {
-  if [ -e "$1/include/SDL" ]; then
-    export SDL_PATH="$SDL_PATH $1/include/SDL"
-  fi
+    prependToSearchPath SDL_PATH "1/include/SDL"
 }
 
 if test -n "$crossConfig"; then
-  crossEnvHooks+=(addSDLPath)
+    crossEnvHooks+=(addSDLPath)
 else
-  envHooks+=(addSDLPath)
+    envHooks+=(addSDLPath)
 fi

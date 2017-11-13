@@ -6,8 +6,8 @@ toPythonPath() {
     local paths="$1"
     local result=
     for i in $paths; do
-        p="$i/@sitePackages@"
-        result="${result}${result:+:}$p"
+        p="$i/@sitePackages@":
+        result="${p}${result:+:}${result}"
     done
     echo $result
 }

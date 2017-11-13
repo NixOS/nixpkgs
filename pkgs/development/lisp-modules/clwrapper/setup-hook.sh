@@ -1,6 +1,6 @@
 NIX_LISP_ASDF="@out@"
 
-CL_SOURCE_REGISTRY="${CL_SOURCE_REGISTRY:+$CL_SOURCE_REGISTRY:}@out@/lib/common-lisp/asdf/"
+CL_SOURCE_REGISTRY="@out@/lib/common-lisp/asdf/${CL_SOURCE_REGISTRY:+:}${CL_SOURCE_REGISTRY}"
 
 addASDFPaths () {
     for j in "$1"/lib/common-lisp-settings/*-path-config.sh; do
@@ -25,7 +25,7 @@ setLisp () {
 
 collectNixLispLDLP () {
      if echo "$1/lib"/lib*.so* | grep . > /dev/null; then
-	 export NIX_LISP_LD_LIBRARY_PATH="$NIX_LISP_LD_LIBRARY_PATH${NIX_LISP_LD_LIBRARY_PATH:+:}$1/lib"
+	 export NIX_LISP_LD_LIBRARY_PATH="$1/lib${NIX_LISP_LD_LIBRARY_PATH:+:}${NIX_LISP_LD_LIBRARY_PATH}"
      fi
 }
 

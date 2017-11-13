@@ -1,5 +1,5 @@
 addToGoPath() {
-    prependToSearchPath GOPATH $1/share/go
+    prependToSearchPath GOPATH "$1/share/go"
 }
 
-envHooks=(${envHooks[@]} addToGoPath)
+envHooks+=(addToGoPath)

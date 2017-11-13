@@ -22,8 +22,8 @@ export QMAKEMODULES
 
 addToQMAKEPATH() {
     if [ -d "$1/mkspecs" ]; then
-        QMAKEMODULES="${QMAKEMODULES}${QMAKEMODULES:+:}/mkspecs"
-        QMAKEPATH="${QMAKEPATH}${QMAKEPATH:+:}$1"
+        QMAKEMODULES="/mkspecs${QMAKEMODULES:+:}${QMAKEMODULES}"
+        QMAKEPATH="${1}${QMAKEPATH:+:}${QMAKEPATH}"
     fi
 }
 
@@ -37,9 +37,9 @@ qtEnvHook() {
     addToQMAKEPATH "$1"
     if providesQtRuntime "$1"; then
         if [ "z${!outputBin}" != "z${!outputDev}" ]; then
-            propagatedBuildInputs+=" $1"
+            propagatedBuildInputs="$1 $propagatedBuildInputs"
         fi
-        propagatedUserEnvPkgs+=" $1"
+        propagatedUserEnvPkgs="$1 $propagatedUserEnvPkgs"
     fi
 }
 if [ "$crossConfig" ]; then

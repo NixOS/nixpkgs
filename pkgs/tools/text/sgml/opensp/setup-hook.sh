@@ -1,7 +1,7 @@
 addSGMLCatalogs () {
       if test -d $1/sgml/dtd; then
           for i in $(find $1/sgml/dtd -name docbook.cat); do
-              export SGML_CATALOG_FILES="${SGML_CATALOG_FILES:+:}$i"
+              export SGML_CATALOG_FILES="$i${SGML_CATALOG_FILES:+:}${SGML_CATALOG_FILES}"
           done
       fi
 }

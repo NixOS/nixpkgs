@@ -1,18 +1,18 @@
 addCVars () {
     if test -d $1/include; then
-        export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem $1/include"
-    fi
-
-    if test -d $1/lib64; then
-        export NIX_LDFLAGS="$NIX_LDFLAGS -L$1/lib64"
+        export NIX_CFLAGS_COMPILE="-isystem $1/include $NIX_CFLAGS_COMPILE"
     fi
 
     if test -d $1/lib; then
-        export NIX_LDFLAGS="$NIX_LDFLAGS -L$1/lib"
+        export NIX_LDFLAGS="-L$1/lib $NIX_LDFLAGS"
+    fi
+
+    if test -d $1/lib64; then
+        export NIX_LDFLAGS="-L$1/lib64 $NIX_LDFLAGS"
     fi
 }
 
-envHooks=(${envHooks[@]} addCVars)
+envHooks+=(addCVars)
 
 # Note: these come *after* $out in the PATH (see setup.sh).
 

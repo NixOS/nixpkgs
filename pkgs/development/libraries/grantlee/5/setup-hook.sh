@@ -6,8 +6,8 @@ providesGrantleeRuntime() {
 
 _grantleeEnvHook() {
     if providesGrantleeRuntime "$1"; then
-        propagatedBuildInputs+=" $1"
-        propagatedUserEnvPkgs+=" $1"
+        propagatedBuildInputs="$1 $propagatedBuildInputs"
+        propagatedUserEnvPkgs="$1 $propagatedUserEnvPkgs"
     fi
 }
 if [ "$crossEnv" ]; then
