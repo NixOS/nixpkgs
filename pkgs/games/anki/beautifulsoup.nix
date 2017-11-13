@@ -1,6 +1,6 @@
-{ pythonPackages, isPy3k, pkgs }:
+{ buildPythonPackage, isPy3k, pkgs }:
 
-pythonPackages.buildPythonPackage rec {
+buildPythonPackage rec {
   name = "beautifulsoup-3.2.1";
   disabled = isPy3k;
 
