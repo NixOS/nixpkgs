@@ -220,6 +220,8 @@ in {
 
   diff-match-patch = callPackage ../development/python-modules/diff-match-patch { };
 
+  gssapi = callPackage ../development/python-modules/gssapi { };
+
   h5py = callPackage ../development/python-modules/h5py {
     hdf5 = pkgs.hdf5;
   };
@@ -9284,32 +9286,6 @@ in {
     meta = {
       description = "Google Spreadsheets client library";
       homepage = "https://github.com/burnash/gspread";
-      license = licenses.mit;
-    };
-  };
-
-  gssapi = buildPythonPackage rec {
-    version = "1.1.4";
-    name = "gssapi-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/gssapi/${name}.tar.gz";
-      sha256 = "0mdl7m6h57n0zkfmm6fqz0hldfxrb2d7d48k2lhc8hqbr3962c7x";
-    };
-
-    GSSAPI_SUPPORT_DETECT = "false";
-    LD_LIBRARY_PATH="${pkgs.krb5Full}/lib";
-
-    buildInputs = [ pkgs.gss pkgs.krb5Full pkgs.which
-                    self.nose self.shouldbe ];
-
-    propagatedBuildInputs = with self; [ decorator enum34 six ];
-
-    doCheck = false; # No such file or directory: '/usr/sbin/kadmin.local'
-
-    meta = {
-      homepage = https://pypi.python.org/pypi/gssapi;
-      description = "Python GSSAPI Wrapper";
       license = licenses.mit;
     };
   };
