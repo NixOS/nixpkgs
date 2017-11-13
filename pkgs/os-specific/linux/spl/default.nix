@@ -52,6 +52,8 @@ let
           kernel.
         '';
 
+        broken = stdenv.lib.versionAtLeast kernel.version "4.14";
+
         homepage = http://zfsonlinux.org/;
         platforms = platforms.linux;
         license = licenses.gpl2Plus;
