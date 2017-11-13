@@ -5479,6 +5479,8 @@ with pkgs;
 
   devpi-client = callPackage ../development/tools/devpi-client {};
 
+  dotty = callPackage ../development/compilers/scala/dotty.nix { jre = jre8;};
+
   drumstick = callPackage ../development/libraries/drumstick { };
 
   ecl = callPackage ../development/compilers/ecl { };
@@ -6264,7 +6266,6 @@ with pkgs;
   scala_2_10 = callPackage ../development/compilers/scala/2.10.nix { };
   scala_2_11 = callPackage ../development/compilers/scala/2.11.nix { };
   scala_2_12 = callPackage ../development/compilers/scala { jre = jre8; };
-  scala_dotty = callPackage ../development/compilers/scala/dotty.nix { jre = jre8;};
   scala = scala_2_12;
 
   scalafmt = callPackage ../development/tools/scalafmt { };

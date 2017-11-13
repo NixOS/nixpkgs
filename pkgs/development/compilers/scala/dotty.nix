@@ -16,19 +16,21 @@ stdenv.mkDerivation rec {
     mkdir -p $out
     mv * $out
 
-    for p in $out/bin/* ; do
-      file=$(basename $p)
-
-      # no need to wrap common
-      if [[ "$file" = "common" ]] ; then
-        continue
-      fi
-
-      wrapProgram $p --set JAVA_HOME ${jre}
-    done    
+    mkdir -p $out/shared
+    mv $out/bin/common $out/shared
   '';
 
-  meta = {
+  fixupPhase = ''
+    for file in $out/bin/* ; do
+      substituteInPlace $file \
+        --replace '$PROG_HOME/bin/common' $out/shared/common
+
+      wrapProgram $file \
+        --set JAVA_HOME ${jre}
+    done
+  '';
+
+  meta = with stdenv.lib; {
     description = "Research platform for new language concepts and compiler technologies for Scala.";
     longDescription = ''
        Dotty is a platform to try out new language concepts and compiler technologies for Scala.
@@ -37,7 +39,8 @@ stdenv.mkDerivation rec {
        The theory behind these constructs is researched in DOT, a calculus for dependent object types.
     '';
     homepage = http://dotty.epfl.ch/;
-    license = stdenv.lib.licenses.bsd3;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.bsd3;
+    platforms = platforms.all;
+    maintainers = [maintainers.karolchmist];
   };
 }
