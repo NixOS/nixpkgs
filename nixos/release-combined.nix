@@ -107,6 +107,7 @@ in rec {
         (all nixos.tests.nfs3)
         (all nixos.tests.nfs4)
         (all nixos.tests.openssh)
+        (all nixos.tests.php-pcre)
         (all nixos.tests.printing)
         (all nixos.tests.proxy)
         (all nixos.tests.sddm.default)
