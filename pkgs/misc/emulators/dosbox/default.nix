@@ -43,9 +43,10 @@ stdenv.mkDerivation rec {
      cp ${desktopItem}/share/applications/* $out/share/applications
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = http://www.dosbox.com/;
     description = "A DOS emulator";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [ matthewbauer ];
   };
 }
