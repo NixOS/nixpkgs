@@ -22927,12 +22927,12 @@ EOF
   trollius = callPackage ../development/python-modules/trollius {};
 
   neovim = buildPythonPackage rec {
-    version = "0.1.13";
+    version = "0.2.0";
     name = "neovim-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/neovim/${name}.tar.gz";
-      sha256 = "0pzk5639jjjx46a6arkwy31falmk5w1061icbml8njm3rbrwwhgx";
+      sha256 = "1ywkgbrxd95cwlglihydmffcw2d2aji6562aqncymxs3ld5y02yn";
     };
 
     buildInputs = with self; [ nose ];
