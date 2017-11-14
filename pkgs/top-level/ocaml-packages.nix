@@ -56,6 +56,8 @@ let
 
     bap = callPackage ../development/ocaml-modules/bap { cmdliner = cmdliner_0_9; };
 
+    batteries = callPackage ../development/ocaml-modules/batteries { };
+
     bitstring = callPackage ../development/ocaml-modules/bitstring { };
 
     bolt = callPackage ../development/ocaml-modules/bolt { };
@@ -286,7 +288,6 @@ let
     inifiles = callPackage ../development/ocaml-modules/inifiles { };
 
     jingoo = callPackage ../development/ocaml-modules/jingoo {
-      batteries = ocaml_batteries;
       pcre = ocaml_pcre;
     };
 
@@ -390,8 +391,6 @@ let
     num = if lib.versionOlder "4.06" ocaml.version
       then callPackage ../development/ocaml-modules/num {}
       else null;
-
-    ocaml_batteries = callPackage ../development/ocaml-modules/batteries { };
 
     comparelib = callPackage ../development/ocaml-modules/comparelib { };
 
