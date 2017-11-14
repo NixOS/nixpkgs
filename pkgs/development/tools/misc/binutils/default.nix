@@ -110,6 +110,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.gnu.org/software/binutils/;
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ ericson2314 ];
     platforms = platforms.unix;
 
     /* Give binutils a lower priority than gcc-wrapper to prevent a
