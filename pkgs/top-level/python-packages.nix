@@ -3345,6 +3345,8 @@ in {
     '';
   };
 
+  portpicker = callPackage ../development/python-modules/portpicker { };
+
   pkginfo = buildPythonPackage rec {
     version = "1.3.2";
     name = "pkginfo-${version}";
