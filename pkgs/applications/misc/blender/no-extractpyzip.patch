@@ -1,0 +1,37 @@
+diff -ur blender-2.79-orig/source/creator/CMakeLists.txt blender-2.79/source/creator/CMakeLists.txt
+--- blender-2.79-orig/source/creator/CMakeLists.txt	2017-11-19 01:48:52.000000000 -0600
++++ blender-2.79/source/creator/CMakeLists.txt	2017-11-19 01:53:31.000000000 -0600
+@@ -930,33 +930,6 @@
+ 			COMMAND ${CMAKE_COMMAND} -E chdir "${PYTHON_EXTRACT_DIR}/"
+ 				${CMAKE_COMMAND} -E tar xzfv "${LIBDIR}/release/${PYTHON_ZIP}"
+ 			DEPENDS ${LIBDIR}/release/${PYTHON_ZIP})
+-
+-		add_dependencies(blender extractpyzip)
+-
+-		# copy extracted python files
+-		install_dir(
+-			${PYTHON_EXTRACT_DIR}
+-			\${TARGETDIR_VER}
+-		)
+-		# copy site-packages files
+-		install_dir(
+-			${LIBDIR}/release/site-packages
+-			\${TARGETDIR_VER}/python/lib/python${PYTHON_VERSION}
+-		)
+-
+-		install(DIRECTORY ${LIBDIR}/python/bin
+-			DESTINATION ${TARGETDIR_VER}/python
+-			USE_SOURCE_PERMISSIONS
+-		)
+-
+-		# Needed for distutils/pip
+-		# get the last part of the include dir, will be 'python{version}{abiflag}',
+-		get_filename_component(_py_inc_suffix ${PYTHON_INCLUDE_DIR} NAME)
+-		install(
+-			FILES ${PYTHON_INCLUDE_DIR}/pyconfig.h
+-			DESTINATION ${TARGETDIR_VER}/python/include/${_py_inc_suffix}
+-		)
+-		unset(_py_inc_suffix)
+ 	endif()
+ 	
+ 	# install blenderplayer bundle - copy of blender.app above. re-using macros et al

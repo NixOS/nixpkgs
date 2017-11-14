@@ -1,0 +1,12 @@
+diff -ur blender-2.79-orig/intern/itasc/kdl/tree.hpp blender-2.79/intern/itasc/kdl/tree.hpp
+--- blender-2.79-orig/intern/itasc/kdl/tree.hpp	2017-09-10 23:34:59.000000000 -0500
++++ blender-2.79/intern/itasc/kdl/tree.hpp	2017-11-22 15:47:40.000000000 -0600
+@@ -34,7 +34,7 @@
+     //Forward declaration
+     class TreeElement;
+     // Eigen allocator is needed for alignment of Eigen data types
+-    typedef std::map<std::string,TreeElement, std::less<std::string>, Eigen::aligned_allocator<std::pair<std::string, TreeElement> > > SegmentMap;
++    typedef std::map<std::string,TreeElement, std::less<std::string>, Eigen::aligned_allocator<std::pair<const std::string, TreeElement> > > SegmentMap;
+ 
+     class TreeElement
+     {

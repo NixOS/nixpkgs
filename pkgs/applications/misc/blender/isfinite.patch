@@ -1,0 +1,47 @@
+diff -ur blender-2.79-orig/intern/elbeem/intern/mvmcoords.cpp blender-2.79/intern/elbeem/intern/mvmcoords.cpp
+--- blender-2.79-orig/intern/elbeem/intern/mvmcoords.cpp	2017-09-10 23:34:59.000000000 -0500
++++ blender-2.79/intern/elbeem/intern/mvmcoords.cpp	2017-11-22 15:45:28.000000000 -0600
+@@ -171,7 +171,7 @@
+ 			viter != tds.weights.end(); ++viter) {
+ 		viter->weight *= invTotalWeight;  
+ 		//assert(finite(viter->weight) != 0);
+-		if(!finite(viter->weight)) viter->weight=0.;
++		if(!isfinite(viter->weight)) viter->weight=0.;
+ 	}
+ }
+ 
+diff -ur blender-2.79-orig/intern/elbeem/intern/solver_adap.cpp blender-2.79/intern/elbeem/intern/solver_adap.cpp
+--- blender-2.79-orig/intern/elbeem/intern/solver_adap.cpp	2017-09-10 23:34:59.000000000 -0500
++++ blender-2.79/intern/elbeem/intern/solver_adap.cpp	2017-11-22 15:46:25.000000000 -0600
+@@ -1244,7 +1244,7 @@
+ 				uz  += (dfDvecZ[l]*m); 
+ 			} 
+ #ifndef WIN32
+-			if (!finite(rho)) {
++			if (!isfinite(rho)) {
+ 				errMsg("adaptTimestep","Brute force non-finite rho at"<<PRINT_IJK);  // DEBUG!
+ 				rho = 1.0;
+ 				ux = uy = uz = 0.0;
+diff -ur blender-2.79-orig/intern/elbeem/intern/solver_main.cpp blender-2.79/intern/elbeem/intern/solver_main.cpp
+--- blender-2.79-orig/intern/elbeem/intern/solver_main.cpp	2017-09-10 23:34:59.000000000 -0500
++++ blender-2.79/intern/elbeem/intern/solver_main.cpp	2017-11-22 15:46:08.000000000 -0600
+@@ -216,8 +216,8 @@
+ 
+ #ifndef WIN32
+ 	// good indicator for instabilities
+-	if( (!finite(mMxvx)) || (!finite(mMxvy)) || (!finite(mMxvz)) ) { CAUSE_PANIC; }
+-	if( (!finite(mCurrentMass)) || (!finite(mCurrentVolume)) ) { CAUSE_PANIC; }
++	if( (!isfinite(mMxvx)) || (!isfinite(mMxvy)) || (!isfinite(mMxvz)) ) { CAUSE_PANIC; }
++	if( (!isfinite(mCurrentMass)) || (!isfinite(mCurrentVolume)) ) { CAUSE_PANIC; }
+ #endif // WIN32
+ 
+ 	// output total step time
+@@ -250,7 +250,7 @@
+ 	if(!this->mPanic){ FSGR_FORIJK_BOUNDS(mMaxRefine) { \
+ 		if(RFLAG(mMaxRefine,i,j,k,mLevel[mMaxRefine].setCurr)&(CFFluid|CFInter)) { \
+ 		for(int l=0;l<dTotalNum;l++) { \
+-			if(!finite(QCELL(mMaxRefine,i,j,k,mLevel[mMaxRefine].setCurr,l))) { errMsg("NNOFIN"," "<<str<<" at "<<PRINT_IJK<<" l"<<l<<" "); }\
++			if(!isfinite(QCELL(mMaxRefine,i,j,k,mLevel[mMaxRefine].setCurr,l))) { errMsg("NNOFIN"," "<<str<<" at "<<PRINT_IJK<<" l"<<l<<" "); }\
+ 		}/*for*/ \
+ 		}/*if*/ \
+ 	} }
