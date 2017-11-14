@@ -270,6 +270,8 @@ in {
     pythonPackages = self;
   };
 
+  pysc2 = callPackage ../development/python-modules/pysc2 { };
+
   pyscard = callPackage ../development/python-modules/pyscard { inherit (pkgs.darwin.apple_sdk.frameworks) PCSC; };
 
   pyside = callPackage ../development/python-modules/pyside { };
