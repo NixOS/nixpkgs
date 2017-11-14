@@ -317,12 +317,12 @@ in
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2017.2.3"; /* updated by script */
+    version = "2017.2.4"; /* updated by script */
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "0ib96yaj7l0igiv2bcrqqpbfn2xn3ic7lxyjn99k6dh8ika1qvry"; /* updated by script */
+      sha256 = "0n1nps8jfk77i796yr90bvrx9j1vcdnl25sr4b5n4xznjrix4gki"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm";
     update-channel = "PyCharm_Release";
