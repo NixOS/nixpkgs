@@ -4832,6 +4832,8 @@ with pkgs;
 
   usbmuxd = callPackage ../tools/misc/usbmuxd {};
 
+  usync = callPackage ../applications/misc/usync { };
+
   uwsgi = callPackage ../servers/uwsgi {
     plugins = [];
     withPAM = stdenv.isLinux;
