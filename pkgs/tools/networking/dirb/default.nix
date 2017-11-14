@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, automake, autoconf, curl, autoreconfHook }:
+{ fetchurl, stdenv, autoreconfHook, curl }:
 
 let
   major = "2";
@@ -6,10 +6,14 @@ let
 in stdenv.mkDerivation rec {
   name = "dirb-${version}";
   version = "${major}.${minor}";
+
   src = fetchurl {
     url = "mirror://sourceforge/dirb/${version}/dirb${major}${minor}.tar.gz";
     sha256 = "0b7wc2gvgnyp54rxf1n9arn6ymrvdb633v6b3ah138hw4gg8lx7k";
   };
+
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ curl ];
 
   unpackPhase = ''
     tar -xf $src
@@ -17,7 +21,7 @@ in stdenv.mkDerivation rec {
     export sourceRoot="dirb222"
   '';
 
-  prePatch = ''
+  postPatch = ''
     sed -i "s#/usr#$out#" src/dirb.c
   '';
 
@@ -25,9 +29,6 @@ in stdenv.mkDerivation rec {
     mkdir -p $out/share/dirb/
     cp -r wordlists/ $out/share/dirb/
   '';
-
-  buildInputs = [ automake autoconf curl ];
-  preConfigure = "chmod +x configure";
 
   meta = {
     description = "A web content scanner";
