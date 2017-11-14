@@ -21,9 +21,11 @@ assert crossSystem == null;
 let
   inherit (localSystem) system platform;
 
-  libSystemProfile = ''
-    (import "${./standard-sandbox.sb}")
-  '';
+  commonImpureHostDeps = [
+    "/bin/sh"
+    "/usr/lib/libSystem.B.dylib"
+    "/usr/lib/system/libunc.dylib" # This ependency is "hidden", so our scanning code doesn't pick it up
+  ];
 in rec {
   commonPreHook = ''
     export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
@@ -37,11 +39,6 @@ in rec {
     export gl_cv_func_getcwd_abort_bug=no
   '';
 
-  # The one dependency of /bin/sh :(
-  binShClosure = ''
-    (allow file-read* (literal "/usr/lib/libncurses.5.4.dylib"))
-  '';
-
   bootstrapTools = derivation rec {
     inherit system;
 
@@ -53,7 +50,7 @@ in rec {
     reexportedLibrariesFile =
       ../../os-specific/darwin/apple-source-releases/Libsystem/reexported_libraries;
 
-    __sandboxProfile = binShClosure + libSystemProfile;
+    __impureHostDeps = commonImpureHostDeps;
   };
 
   stageFun = step: last: {shell             ? "${bootstrapTools}/bin/bash",
@@ -108,8 +105,8 @@ in rec {
         };
 
         # The stdenvs themselves don't use mkDerivation, so I need to specify this here
-        stdenvSandboxProfile = binShClosure + libSystemProfile;
-        extraSandboxProfile  = binShClosure + libSystemProfile;
+        __stdenvImpureHostDeps = commonImpureHostDeps;
+        __extraImpureHostDeps = commonImpureHostDeps;
 
         extraAttrs = {
           inherit platform;
@@ -167,7 +164,7 @@ in rec {
   };
 
   stage1 = prevStage: let
-    persistent = _: _: {};
+    persistent = _: super: { python = super.python.override { configd = null; }; };
   in with prevStage; stageFun 1 prevStage {
     extraPreHook = "export NIX_CFLAGS_COMPILE+=\" -F${bootstrapTools}/Library/Frameworks\"";
     extraNativeBuildInputs = [];
@@ -317,8 +314,8 @@ in rec {
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
 
-    stdenvSandboxProfile = binShClosure + libSystemProfile;
-    extraSandboxProfile  = binShClosure + libSystemProfile;
+    __stdenvImpureHostDeps = commonImpureHostDeps;
+    __extraImpureHostDeps = commonImpureHostDeps;
 
     initialPath = import ../common-path.nix { inherit pkgs; };
     shell       = "${pkgs.bash}/bin/bash";
@@ -364,6 +361,10 @@ in rec {
         clang = cc;
         llvmPackages = persistent'.llvmPackages // { clang = cc; };
         inherit cc;
+
+        darwin = super.darwin // {
+          xnu = super.darwin.xnu.override { python = super.python.override { configd = null; }; };
+        };
       };
   };
 
