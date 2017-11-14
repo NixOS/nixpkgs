@@ -7216,9 +7216,7 @@ with pkgs;
     inherit (ocamlPackages) ocaml findlib camlp4 sedlex ocamlbuild;
   };
 
-  framac = callPackage ../development/tools/analysis/frama-c {
-    ocamlPackages = ocamlPackages_4_03;
-  };
+  framac = callPackage ../development/tools/analysis/frama-c { };
 
   frame = callPackage ../development/libraries/frame { };
 
