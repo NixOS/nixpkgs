@@ -19,11 +19,13 @@ in stdenv.mkDerivation rec {
   buildInputs = [ glib ncurses mpd_clientlib ];
   nativeBuildInputs = [ meson ninja pkgconfig gettext ];
 
-  postFixup = ''
+  postFixup = stdenv.lib.optionalString stdenv.isLinux ''
     for elf in "$out"/bin/*; do
       patchelf --set-rpath '${rpath}':"$out/lib" "$elf"
     done
   '';
+
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lintl";
 
   meta = with stdenv.lib; {
     description = "Curses-based interface for MPD (music player daemon)";
