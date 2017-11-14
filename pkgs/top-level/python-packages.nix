@@ -3323,6 +3323,8 @@ in {
     };
   };
 
+  mpyq = callPackage ../development/python-modules/mpyq { };
+
   mxnet = buildPythonPackage rec {
     inherit (pkgs.mxnet) name version src meta;
 
