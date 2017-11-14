@@ -1,4 +1,4 @@
-{ stdenv, lib, makeDesktopItem, makeWrapper, config
+{ stdenv, lib, makeDesktopItem, makeWrapper, lndir, config
 
 ## various stuff that can be plugged in
 , flashplayer, hal-flash
@@ -46,6 +46,9 @@ let
       ++ lib.optional (cfg.enableAdobeReader or false) adobe-reader
       ++ lib.optional (cfg.enableEsteid or false) esteidfirefoxplugin
       ++ lib.optional (cfg.enableVLC or false) vlc_npapi
+     );
+  nativeMessagingHosts =
+     ([ ]
      );
   libs = (if ffmpegSupport then [ ffmpeg ] else with gst_all; [ gstreamer gst-plugins-base ])
          ++ lib.optional gssSupport kerberos
@@ -98,6 +101,7 @@ in stdenv.mkDerivation {
         --prefix-contents PATH ':' "$(filterExisting $(addSuffix /extra-bin-path $plugins))" \
         --suffix PATH ':' "$out/bin" \
         --set MOZ_APP_LAUNCHER "${browserName}${nameSuffix}" \
+        --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
         ${lib.optionalString (!ffmpegSupport)
             ''--prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH"''
         + lib.optionalString (browser ? gtk3)
@@ -116,6 +120,11 @@ in stdenv.mkDerivation {
     fi
 
     install -D -t $out/share/applications $desktopItem/share/applications/*
+
+    mkdir -p $out/lib/mozilla
+    for ext in ${toString nativeMessagingHosts}; do
+        ${lndir}/bin/lndir -silent $ext/lib/mozilla $out/lib/mozilla
+    done
 
     # For manpages, in case the program supplies them
     mkdir -p $out/nix-support
