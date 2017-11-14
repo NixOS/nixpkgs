@@ -90,7 +90,7 @@ let
 
       preUnpack = ''
         mkdir build
-        export buildRoot="$(pwd)/build"
+        export buildRoot="$PWD/build"
       '';
 
       patches = map (p: p.patch) kernelPatches;
@@ -109,8 +109,8 @@ let
 
           # assume we are in the $sourceRoot folder
           echo "buildRoot is not set"
-          mkdir -p ../build
-          export buildRoot=$(pwd)/../build
+          mkdir build
+          export buildRoot="$PWD/build"
         fi
 
         ln -sv ${configfile} $buildRoot/.config
