@@ -74,8 +74,8 @@ let version = "4.5.4";
       optional (gccCpu != null) "--with-cpu=${gccCpu}" ++
       optional (gccAbi != null) "--with-abi=${gccAbi}" ++
       # Ensure that -print-prog-name is able to find the correct programs.
-      [ " --with-as=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as"
-        " --with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld" ] ++
+      [ "--with-as=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as"
+        "--with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld" ] ++
       (if crossMingw && crossStageStatic then [
         "--with-headers=${libcCross}/include"
         "--with-gcc"
@@ -88,19 +88,21 @@ let version = "4.5.4";
         "--enable-sjlj-exceptions"
         "--enable-threads=win32"
         "--disable-win32-registry"
-        ] else if crossStageStatic then [
-        "--disable-libssp --disable-nls"
+      ] else if crossStageStatic then [
+        "--disable-libssp"
+        "--disable-nls"
         "--without-headers"
         "--disable-threads"
         "--disable-libmudflap"
-        "--disable-libgomp "
+        "--disable-libgomp"
         "--disable-shared"
         "--disable-decimal-float" # libdecnumber requires libc
-        ] else [
+      ] else [
         "--with-headers=${libcCross}/include"
         "--enable-__cxa_atexit"
         "--enable-long-long"
-        ] ++ (if crossMingw then [
+      ] ++
+        (if crossMingw then [
           "--enable-threads=win32"
           "--enable-sjlj-exceptions"
           "--enable-hash-synchronization"
@@ -108,12 +110,11 @@ let version = "4.5.4";
           "--disable-libssp"
           "--disable-nls"
           "--with-dwarf2"
-          ] else [
+        ] else [
           "--enable-threads=posix"
           "--enable-nls"
-          "--disable-decimal-float"
-        ]) # No final libdecnumber (it may work only in 386)
-      );
+          "--disable-decimal-float" # No final libdecnumber (it may work only in 386)
+        ]));
     stageNameAddon = if crossStageStatic then "-stage-static" else
       "-stage-final";
     crossNameAddon = if targetPlatform != hostPlatform then "-${targetPlatform.config}" + stageNameAddon else "";
@@ -274,11 +275,12 @@ stdenv.mkDerivation ({
 
     # Java options
     optionals langJava [
-      "--with-ecj-jar=${javaEcj} "
+      "--with-ecj-jar=${javaEcj}"
 
       # Follow Sun's layout for the convenience of IcedTea/OpenJDK.  See
       # <http://mail.openjdk.java.net/pipermail/distro-pkg-dev/2010-April/008888.html>.
-      "--enable-java-home --with-java-home=\${prefix}/lib/jvm/jre "
+      "--enable-java-home"
+      "--with-java-home=\${prefix}/lib/jvm/jre"
     ] ++
     optional javaAwtGtk "--enable-java-awt=gtk" ++
     optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr}" ++
