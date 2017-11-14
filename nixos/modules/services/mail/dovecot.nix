@@ -62,14 +62,14 @@ let
       }
     '')
 
-    ''
+    (optionalString (cfg.mailboxes != []) ''
       protocol imap {
         namespace inbox {
           inbox=yes
           ${concatStringsSep "\n" (map mailboxConfig cfg.mailboxes)}
         }
       }
-    ''
+    '')
 
     (optionalString cfg.enableQuota ''
       mail_plugins = $mail_plugins quota
