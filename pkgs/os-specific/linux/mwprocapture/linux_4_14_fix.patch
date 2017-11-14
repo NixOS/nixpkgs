@@ -1,0 +1,31 @@
+diff -Naur ProCaptureForLinux_3589/src/sources/ospi/linux-file.c ProCaptureForLinux_3589_new/src/sources/ospi/linux-file.c
+--- ProCaptureForLinux_3589/src/sources/ospi/linux-file.c	2017-08-17 02:46:07.000000000 -0700
++++ ProCaptureForLinux_3589_new/src/sources/ospi/linux-file.c	2017-11-13 19:49:46.710616748 -0800
+@@ -7,8 +7,8 @@
+ 
+ #include "linux-file.h"
+ 
+-#include <asm/uaccess.h>
+ #include <linux/sched.h>
++#include <asm/uaccess.h>
+ 
+ struct file *linux_file_open(const char *path, int flags, int mode)
+ {
+@@ -35,7 +35,7 @@
+ 
+     oldfs = get_fs();
+     set_fs(get_ds());
+-    ret = vfs_read(file, data, size, &offset);
++    ret = kernel_read(file, data, size, &offset);
+     set_fs(oldfs);
+ 
+     return ret;
+@@ -48,7 +48,7 @@
+ 
+     oldfs = get_fs();
+     set_fs(get_ds());
+-    ret = vfs_write(file, data, size, &offset);
++    ret = kernel_write(file, data, size, &offset);
+     set_fs(oldfs);
+ 
+     return ret;
