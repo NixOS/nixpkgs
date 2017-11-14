@@ -350,7 +350,7 @@ in rec {
       bzip2.bin llvmPackages.llvm llvmPackages.llvm.lib zlib.out zlib.dev libffi.out coreutils ed diffutils gnutar
       gzip ncurses.out ncurses.dev ncurses.man gnused bash gawk
       gnugrep llvmPackages.clang-unwrapped patch pcre.out binutils-raw.out
-      binutils-raw.dev binutils gettext
+      binutils gettext
       cc.expand-response-params
     ]) ++ (with pkgs.darwin; [
       dyld Libsystem CF cctools ICU libiconv locale
