@@ -53,10 +53,10 @@ let release = true;
       sha256 = "18h073l5jd88rx4qdr95fjddr9rk79pb1aqnshzdnw16cfmb9rws";
       inherit dependencies buildDependencies features release verbose;
     };
-    carnix_0_4_5_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+    carnix_0_4_6_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "carnix";
-      version = "0.4.5";
-      sha256 = "1j1d9rhgiajb92myg7asbdpz7w6hkjs6zwbphiv40x47g8ff9akn";
+      version = "0.4.6";
+      sha256 = "1payn3fj7rjjzi49aa0avz9zq6sm92r15w7c86ivxavab3ynis01";
       inherit dependencies buildDependencies features release verbose;
     };
     cc_1_0_3_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
@@ -402,7 +402,7 @@ rec {
   bitflags_0_9_1 = bitflags_0_9_1_ {
     features = [ "example_generated" ];
   };
-  carnix_0_4_5 = carnix_0_4_5_ {
+  carnix_0_4_6 = carnix_0_4_6_ {
     dependencies = [ clap_2_27_1 env_logger_0_4_3 error_chain_0_11_0 log_0_3_8 nom_3_2_1 regex_0_2_2 rusqlite_0_12_0 serde_1_0_19 serde_derive_1_0_19 serde_json_1_0_5 tempdir_0_3_5 toml_0_4_5 ];
   };
   cc_1_0_3 = cc_1_0_3_ {
