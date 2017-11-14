@@ -39,6 +39,12 @@ let
       ./ld-rpath-nonfinal.patch ./ld-ignore-rpath-link.patch
     ];
 
+    __propagatedImpureHostDeps = [
+      # As far as I can tell, otool from cctools is the only thing that depends on these two, and we should fix them
+      "/usr/lib/libobjc.A.dylib"
+      "/usr/lib/libobjc.dylib"
+    ];
+
     enableParallelBuilding = true;
 
     # TODO(@Ericson2314): Always pass "--target" and always prefix.
