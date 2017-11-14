@@ -1,6 +1,6 @@
 diff -Naur ProCaptureForLinux_3589/src/sources/ospi/linux-file.c ProCaptureForLinux_3589_new/src/sources/ospi/linux-file.c
 --- ProCaptureForLinux_3589/src/sources/ospi/linux-file.c	2017-08-17 02:46:07.000000000 -0700
-+++ ProCaptureForLinux_3589_new/src/sources/ospi/linux-file.c	2017-11-13 19:49:46.710616748 -0800
++++ ProCaptureForLinux_3589_new/src/sources/ospi/linux-file.c	2017-11-13 20:18:50.842947380 -0800
 @@ -7,8 +7,8 @@
  
  #include "linux-file.h"
@@ -11,7 +11,15 @@ diff -Naur ProCaptureForLinux_3589/src/sources/ospi/linux-file.c ProCaptureForLi
  
  struct file *linux_file_open(const char *path, int flags, int mode)
  {
-@@ -35,7 +35,7 @@
+@@ -28,27 +28,27 @@
+     filp_close(file, NULL);
+ }
+ 
+-ssize_t linux_file_read(struct file *file, loff_t offset, unsigned char *data, size_t size)
++ssize_t linux_file_read(struct file *file, loff_t offset, const void *data, size_t size)
+ {
+     mm_segment_t oldfs;
+     ssize_t ret;
  
      oldfs = get_fs();
      set_fs(get_ds());
@@ -20,7 +28,13 @@ diff -Naur ProCaptureForLinux_3589/src/sources/ospi/linux-file.c ProCaptureForLi
      set_fs(oldfs);
  
      return ret;
-@@ -48,7 +48,7 @@
+ }
+ 
+-ssize_t linux_file_write(struct file *file, loff_t offset, unsigned char *data, size_t size)
++ssize_t linux_file_write(struct file *file, loff_t offset, const void *data, size_t size)
+ {
+     mm_segment_t oldfs;
+     ssize_t ret;
  
      oldfs = get_fs();
      set_fs(get_ds());
