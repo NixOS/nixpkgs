@@ -110,6 +110,15 @@ in
         '';
       };
 
+      extraArguments = mkOption {
+        type = types.listOf types.string;
+        default = [];
+        example = [ "--skip-log-bin" ];
+        description = ''
+          Provide extra arguments to the MySQL daemon startup.
+        '';
+      };
+
       initialDatabases = mkOption {
         default = [];
         description = ''
@@ -267,7 +276,7 @@ in
             chown -R ${cfg.user} /run/mysqld
           '';
 
-        serviceConfig.ExecStart = "${mysql}/bin/mysqld --defaults-extra-file=${myCnf} ${mysqldOptions}";
+        serviceConfig.ExecStart = "${mysql}/bin/mysqld --defaults-extra-file=${myCnf} ${mysqldOptions} ${concatStringsSep " " cfg.extraArguments}";
 
         postStart =
           ''
