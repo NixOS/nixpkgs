@@ -1,4 +1,5 @@
 { stdenv
+, callPackage
 , lib
 , fetchurl
 , unzip
@@ -11,7 +12,8 @@ if !licenseAccepted then throw ''
     by setting nixpkgs config option 'sc2-headless.accept_license = true;'
   ''
 else assert licenseAccepted;
-stdenv.mkDerivation rec {
+let maps = callPackage ./maps.nix {};
+in stdenv.mkDerivation rec {
   version = "3.17";
   name = "sc2-headless-${version}";
 
@@ -30,6 +32,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out
     cp -r . "$out"
     rm -r $out/Libs
+
+    cp -r "${maps.minigames}"/* "$out"/Maps/
   '';
 
   preFixup = ''
@@ -50,5 +54,6 @@ stdenv.mkDerivation rec {
       url = "https://blzdistsc2-a.akamaihd.net/AI_AND_MACHINE_LEARNING_LICENSE.html";
       free = false;
     };
+    maintainers = with lib.maintainers; [ danharaj ];
   };
 }
