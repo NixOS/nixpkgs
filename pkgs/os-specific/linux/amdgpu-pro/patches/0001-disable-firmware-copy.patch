@@ -14,12 +14,12 @@ index 622ff13..e3cd009 100755
 @@ -35,8 +35,3 @@ find ttm -name '*.c' -exec grep EXPORT_SYMBOL {} + \
      | sort -u \
      | awk -F'[()]' '{print "#define "$2" amd"$2" //"$0}'\
-     > include/rename_symbol.h
+     >> include/rename_symbol.h
 -
 -FW_DIR="/lib/firmware/$KERNELVER"
 -mkdir -p $FW_DIR
--cp -ar /usr/src/amdgpu-pro-17.10-401251/firmware/radeon $FW_DIR
--cp -ar /usr/src/amdgpu-pro-17.10-401251/firmware/amdgpu $FW_DIR
--- 
+-cp -ar /usr/src/amdgpu-17.40-492261/firmware/radeon $FW_DIR
+-cp -ar /usr/src/amdgpu-17.40-492261/firmware/amdgpu $FW_DIR
+--
 2.12.2
 
