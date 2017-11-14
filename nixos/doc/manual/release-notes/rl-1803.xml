@@ -86,8 +86,18 @@ following incompatible changes:</para>
 <itemizedlist>
   <listitem>
     <para>
-      ZNC option <option>services.znc.mutable</option> now defaults to <literal>true</literal>.
-      That means that old configuration is not overwritten by default when update to the znc options are made.
+      ZNC option <option>services.znc.mutable</option> now defaults to
+      <literal>true</literal>. That means that old configuration is not
+      overwritten by default when update to the znc options are made.
+    </para>
+  </listitem>
+  <listitem>
+    <para>
+      The option <option>networking.wireless.networks.&lt;name&gt;.auth</option>
+      has been added for wireless networks with WPA-Enterprise authentication.
+      There is also a new <option>extraConfig</option> option to directly
+      configure <literal>wpa_supplicant</literal> and <option>hidden</option>
+      to connect to hidden networks.
     </para>
   </listitem>
 </itemizedlist>
