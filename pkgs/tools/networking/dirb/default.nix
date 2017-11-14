@@ -17,6 +17,15 @@ in stdenv.mkDerivation rec {
     export sourceRoot="dirb222"
   '';
 
+  prePatch = ''
+    sed -i "s#/usr#$out#" src/dirb.c
+  '';
+
+  postInstall = ''
+    mkdir -p $out/share/dirb/
+    cp -r wordlists/ $out/share/dirb/
+  '';
+
   buildInputs = [ automake autoconf curl ];
   preConfigure = "chmod +x configure";
 
