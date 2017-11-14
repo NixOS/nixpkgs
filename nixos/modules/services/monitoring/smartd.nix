@@ -17,7 +17,7 @@ let
     #! ${pkgs.stdenv.shell}
     ${optionalString nm.enable ''
       {
-      cat << EOF
+      ${pkgs.coreutils}/bin/cat << EOF
       From: smartd on ${host} <root>
       To: undisclosed-recipients:;
       Subject: SMART error on $SMARTD_DEVICESTRING: $SMARTD_FAILTYPE
@@ -30,7 +30,7 @@ let
     ''}
     ${optionalString nw.enable ''
       {
-      cat << EOF
+      ${pkgs.coreutils}/bin/cat << EOF
       Problem detected with disk: $SMARTD_DEVICESTRING
       Warning message from smartd is:
 
@@ -41,7 +41,7 @@ let
     ${optionalString nx.enable ''
       export DISPLAY=${nx.display}
       {
-      cat << EOF
+      ${pkgs.coreutils}/bin/cat << EOF
       Problem detected with disk: $SMARTD_DEVICESTRING
       Warning message from smartd is:
 
