@@ -230,7 +230,8 @@ genericBuild
     <listitem><para>
       Like <varname>nativeBuildInputs</varname>, but these dependencies are <emphasis>propagated</emphasis>:
       that is, the dependencies listed here are added to the <varname>nativeBuildInputs</varname> of any package that uses <emphasis>this</emphasis> package as a dependency.
-      So if package Y has <literal>propagatedBuildInputs = [X]</literal>, and package Z has <literal>buildInputs = [Y]</literal>, then package X will appear in Z’s build environment automatically.
+      So if package Y has <literal>propagatedNativeBuildInputs = [X]</literal>, and package Z has <literal>nativeBuildInputs = [Y]</literal>,
+      then package X will appear in Z’s build environment automatically.
     </para></listitem>
   </varlistentry>
 
