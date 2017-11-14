@@ -15294,6 +15294,8 @@ with pkgs;
 
   japa = callPackage ../applications/audio/japa { };
 
+  jdupes = callPackage ../tools/misc/jdupes { };
+
   jedit = callPackage ../applications/editors/jedit { };
 
   jigdo = callPackage ../applications/misc/jigdo { };
