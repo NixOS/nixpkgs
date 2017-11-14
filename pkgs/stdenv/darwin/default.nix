@@ -24,7 +24,7 @@ let
   commonImpureHostDeps = [
     "/bin/sh"
     "/usr/lib/libSystem.B.dylib"
-    "/usr/lib/system/libunc.dylib" # This ependency is "hidden", so our scanning code doesn't pick it up
+    "/usr/lib/system/libunc.dylib" # This dependency is "hidden", so our scanning code doesn't pick it up
   ];
 in rec {
   commonPreHook = ''
