@@ -39,7 +39,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
         green="$(printf '\033[0;32m')" #set green
         boldgreen="$(printf '\033[0;1;32m')" #set bold, and set green.
       fi
-
+      rustc --version
       mkdir -p target/deps
       mkdir -p target/build
       mkdir -p target/buildDeps
@@ -264,9 +264,10 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
         cp -P target/bin/* $out/bin # */
       fi
     '';
+
 in
 
-crate: stdenv.mkDerivation rec {
+crate: lib.makeOverridable ({ rust }: stdenv.mkDerivation rec {
 
     inherit (crate) crateName;
 
@@ -274,18 +275,17 @@ crate: stdenv.mkDerivation rec {
         crate.src
       else
         pkgs.fetchCrate { inherit (crate) crateName version sha256; };
-    rust = pkgs.rustc;
     release = if crate ? release then crate.release else false;
     name = "rust_${crate.crateName}-${crate.version}";
     buildInputs = [ rust pkgs.ncurses ] ++ (lib.attrByPath ["buildInputs"] [] crate);
     dependencies =
       builtins.map
-        (dep: dep.overrideAttrs (attrs: { rust = rust; }))
+        (dep: dep.override { rust = rust; })
         (lib.attrByPath ["dependencies"] [] crate);
 
     buildDependencies =
       builtins.map
-        (dep: dep.overrideAttrs (attrs: { rust = rust; }))
+        (dep: dep.override { rust = rust; })
         (lib.attrByPath ["buildDependencies"] [] crate);
 
     completeDeps = builtins.foldl' (comp: dep: if lib.lists.any (x: x == comp) dep.completeDeps then comp ++ dep.complete else comp) dependencies dependencies;
@@ -337,4 +337,4 @@ crate: stdenv.mkDerivation rec {
               metadata crateBin finalBins verboseBuild colors;
     };
     installPhase = installCrate crateName;
-}
+}) { rust = pkgs.rustc; }
