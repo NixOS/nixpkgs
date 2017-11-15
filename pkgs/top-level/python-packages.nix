@@ -19028,9 +19028,7 @@ in {
     };
   });
 
-  spyder = callPackage ../applications/science/spyder {
-    rope = if isPy3k then null else self.rope;
-  };
+  spyder = callPackage ../applications/science/spyder { };
 
   sqlalchemy = callPackage ../development/python-modules/sqlalchemy { };
 
