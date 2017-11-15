@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-    install -D 51-android.rules $out/lib/udev/rules.d/51-android.rules
+    install -D 51-android.rules $out/etc/udev/rules.d/51-android.rules
   '';
 
   meta = with stdenv.lib; {
