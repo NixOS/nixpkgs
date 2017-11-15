@@ -100,6 +100,9 @@ GCC_PLUGINS y # Enable gcc plugin options
 ${optionalString (versionAtLeast version "4.11") ''
   GCC_PLUGIN_STRUCTLEAK y # A port of the PaX structleak plugin
 ''}
+${optionalString (versionAtLeast version "4.14") ''
+  GCC_PLUGIN_STRUCTLEAK_BYREF_ALL y # Also cover structs passed by address
+''}
 
 # Disable various dangerous settings
 ACPI_CUSTOM_METHOD n # Allows writing directly to physical memory
