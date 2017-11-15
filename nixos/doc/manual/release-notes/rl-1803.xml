@@ -100,6 +100,14 @@ following incompatible changes:</para>
       to connect to hidden networks.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The option <option>services.xserver.desktopManager.default</option> is now <literal>none</literal> by default.
+      An assertion failure is thrown if WM's and DM's default are <literal>none</literal>.
+      To explicitly run a plain X session without and DM or WM, the newly introduced option <option>services.xserver.plainX</option>
+      must be set to true.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>
