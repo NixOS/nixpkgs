@@ -29,9 +29,11 @@
 # Set to `privacySupport` or `false`.
 
 , webrtcSupport ? !privacySupport
-, googleAPISupport ? !privacySupport
+, geolocationSupport ? !privacySupport
+, googleAPISupport ? geolocationSupport
 , crashreporterSupport ? false
 
+, safeBrowsingSupport ? false
 , drmSupport ? false
 
 ## other
@@ -159,8 +161,10 @@ stdenv.mkDerivation (rec {
   ++ flag gssSupport "negotiateauth"
   ++ lib.optional (!ffmpegSupport) "--disable-gstreamer"
   ++ flag webrtcSupport "webrtc"
+  ++ flag geolocationSupport "mozril-geoloc"
   ++ lib.optional googleAPISupport "--with-google-api-keyfile=ga"
   ++ flag crashreporterSupport "crashreporter"
+  ++ flag safeBrowsingSupport "safe-browsing"
   ++ lib.optional drmSupport "--enable-eme=widevine"
 
   ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
