@@ -3541,6 +3541,8 @@ with pkgs;
 
   newsbeuter = callPackage ../applications/networking/feedreaders/newsbeuter { };
 
+  newsboat = callPackage ../applications/networking/feedreaders/newsboat { };
+
   nextcloud = callPackage ../servers/nextcloud { };
 
   nextcloud-client = libsForQt56.callPackage ../applications/networking/nextcloud-client { };
