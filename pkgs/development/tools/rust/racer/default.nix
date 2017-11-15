@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   name = "racer-${version}";
-  version = "2.0.9";
+  version = "2.0.12";
 
   src = fetchFromGitHub {
     owner = "racer-rust";
     repo = "racer";
     rev = version;
-    sha256 = "06k50f2vj2w08afh3nrlhs0amcvw2i45bhfwr70sgs395xicjswp";
+    sha256 = "0y1xlpjr8y8gsmmrjlykx4vwzf8akk42g35kg3kc419ry4fli945";
   };
 
-  cargoSha256 = "1w5imxyqlyv24dvzncq6dy01zn2x8p1aciyvzh8ac1x1wdjcacjc";
+  cargoSha256 = "1h3jv4hajdv6k309kjr6b6298kxmd0faw081i3788sl794k9mp0j";
 
   buildInputs = [ makeWrapper ];
 
@@ -21,9 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = true;
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -p target/release/racer $out/bin/
+  postInstall = ''
     wrapProgram $out/bin/racer --set RUST_SRC_PATH "${rustPlatform.rustcSrc}"
   '';
 
