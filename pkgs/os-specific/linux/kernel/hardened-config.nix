@@ -82,6 +82,10 @@ HARDENED_USERCOPY y
 # Randomize allocator freelists.
 SLAB_FREELIST_RANDOM y
 
+${optionalString (versionAtLeast version "4.14") ''
+  SLAB_FREELIST_HARDENED y
+''}
+
 # Wipe higher-level memory allocations on free() with page_poison=1
 PAGE_POISONING y
 PAGE_POISONING_NO_SANITY y
