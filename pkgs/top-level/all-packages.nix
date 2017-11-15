@@ -13756,6 +13756,8 @@ with pkgs;
     stdenv = overrideCC stdenv gcc5;
   };
 
+  amarok-kf5 = libsForQt5.callPackage ../applications/audio/amarok/kf5.nix { };
+
   AMB-plugins = callPackage ../applications/audio/AMB-plugins { };
 
   ams-lv2 = callPackage ../applications/audio/ams-lv2 { };
