@@ -17126,6 +17126,8 @@ in {
 
   qtconsole = callPackage ../development/python-modules/qtconsole { };
 
+  qtpy = callPackage ../development/python-modules/qtpy { };
+
   quantities = buildPythonPackage rec {
     name = "quantities-0.10.1";
 
