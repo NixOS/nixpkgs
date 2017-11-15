@@ -143,7 +143,7 @@ stdenv.mkDerivation (rec {
   ]
 
   # and wants these
-  ++ lib.optionals isTorBrowserLike [
+  ++ lib.optionals isTorBrowserLike ([
     "--with-tor-browser-version=${version}"
     "--enable-signmar"
     "--enable-verify-mar"
@@ -153,7 +153,9 @@ stdenv.mkDerivation (rec {
     # possibilities on other platforms.
     # Lets save some space instead.
     "--with-system-nspr"
-  ]
+  ] ++ flag geolocationSupport "mozril-geoloc"
+    ++ flag safeBrowsingSupport "safe-browsing"
+  )
 
   ++ flag alsaSupport "alsa"
   ++ flag pulseaudioSupport "pulseaudio"
@@ -161,10 +163,8 @@ stdenv.mkDerivation (rec {
   ++ flag gssSupport "negotiateauth"
   ++ lib.optional (!ffmpegSupport) "--disable-gstreamer"
   ++ flag webrtcSupport "webrtc"
-  ++ flag geolocationSupport "mozril-geoloc"
   ++ lib.optional googleAPISupport "--with-google-api-keyfile=ga"
   ++ flag crashreporterSupport "crashreporter"
-  ++ flag safeBrowsingSupport "safe-browsing"
   ++ lib.optional drmSupport "--enable-eme=widevine"
 
   ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
