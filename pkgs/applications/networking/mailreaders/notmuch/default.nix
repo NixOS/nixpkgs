@@ -12,7 +12,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "0.25";
+  version = "0.25.2";
   name = "notmuch-${version}";
 
   passthru = {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "02z6d87ip1hkipz8d7w0sfklg8dd5fd5vlgp768640ixg0gqvlk5";
+    sha256 = "0ai6vbs9wzwfz7jcphgqsqpcbq137l34xhmcli4h5c8n82fvmdp4";
   };
 
   nativeBuildInputs = [ pkgconfig ];
