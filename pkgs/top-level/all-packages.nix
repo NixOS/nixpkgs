@@ -17859,6 +17859,8 @@ with pkgs;
 
   gogui = callPackage ../games/gogui {};
 
+  gtetrinet = callPackage ../games/gtetrinet { };
+
   gtypist = callPackage ../games/gtypist { };
 
   gzdoom = callPackage ../games/gzdoom { };
