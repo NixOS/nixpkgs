@@ -16,8 +16,8 @@ python3Packages.buildPythonApplication rec {
     sphinx sphinx_rtd_theme
   ];
   buildInputs = [
-    acl lz4 openssl python3Packages.setuptools_scm
-  ];
+    lz4 openssl python3Packages.setuptools_scm
+  ] ++ stdenv.lib.optionals stdenv.isLinux [ acl ];
   propagatedBuildInputs = with python3Packages; [
     cython llfuse msgpack
   ];
