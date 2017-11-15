@@ -1,7 +1,9 @@
 { stdenv, lib, fetchurl, openssl, libtool, perl, libxml2
-, enableSeccomp ? false, libseccomp ? null }:
+, enableSeccomp ? false, libseccomp ? null
+, enablePython ? false, python ? null }:
 
 assert enableSeccomp -> libseccomp != null;
+assert enablePython -> python != null;
 
 let version = "9.11.2"; in
 
@@ -18,8 +20,9 @@ stdenv.mkDerivation rec {
   patches = [ ./dont-keep-configure-flags.patch ./remove-mkdir-var.patch ] ++
     stdenv.lib.optional stdenv.isDarwin ./darwin-openssl-linking-fix.patch;
 
-  buildInputs = [ openssl libtool perl libxml2 ] ++
-    stdenv.lib.optional enableSeccomp libseccomp;
+  buildInputs = [ openssl libtool perl libxml2 ]
+    ++ lib.optional enableSeccomp libseccomp
+    ++ lib.optional enablePython python;
 
   STD_CDEFINES = [ "-DDIG_SIGCHASE=1" ]; # support +sigchase
 
@@ -28,6 +31,7 @@ stdenv.mkDerivation rec {
     "--with-libtool"
     "--with-libxml2=${libxml2.dev}"
     "--with-openssl=${openssl.dev}"
+    (if enablePython then "--with-python" else "--without-python")
     "--without-atf"
     "--without-dlopen"
     "--without-docbook-xsl"
@@ -36,7 +40,6 @@ stdenv.mkDerivation rec {
     "--without-idnlib"
     "--without-pkcs11"
     "--without-purify"
-    "--without-python"
   ] ++ lib.optional enableSeccomp "--enable-seccomp";
 
   postInstall = ''
