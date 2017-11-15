@@ -193,6 +193,8 @@
   ./services/databases/stanchion.nix
   ./services/databases/virtuoso.nix
   ./services/desktops/accountsservice.nix
+  ./services/desktops/dleyna-renderer.nix
+  ./services/desktops/dleyna-server.nix
   ./services/desktops/geoclue2.nix
   ./services/desktops/gnome3/at-spi2-core.nix
   ./services/desktops/gnome3/evolution-data-server.nix

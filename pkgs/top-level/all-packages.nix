@@ -1749,6 +1749,14 @@ with pkgs;
 
   disper = callPackage ../tools/misc/disper { };
 
+  dleyna-connector-dbus = callPackage ../development/libraries/dleyna-connector-dbus { };
+
+  dleyna-core = callPackage ../development/libraries/dleyna-core { };
+
+  dleyna-renderer = callPackage ../development/libraries/dleyna-renderer { };
+
+  dleyna-server = callPackage ../development/libraries/dleyna-server { };
+
   dmd_2_067_1 = callPackage ../development/compilers/dmd/2.067.1.nix {
     stdenv = if stdenv.hostPlatform.isDarwin then
                stdenv
@@ -2495,6 +2503,8 @@ with pkgs;
   };
 
   gupnp_av = callPackage ../development/libraries/gupnp-av {};
+
+  gupnp_dlna = callPackage ../development/libraries/gupnp-dlna {};
 
   gupnp_igd = callPackage ../development/libraries/gupnp-igd {};
 
