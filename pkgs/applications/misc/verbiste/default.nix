@@ -3,16 +3,18 @@
 stdenv.mkDerivation rec {
   name = "verbiste-${version}";
 
-  version = "0.1.44";
+  version = "0.1.45";
 
   src = fetchurl {
     url = "http://perso.b2b2c.ca/~sarrazip/dev/${name}.tar.gz";
-    sha256 = "0vmjr8w3qc64y312a0sj0ask309mmmlmyxp2fsii0ji35ls7m9sw";
+    sha256 = "180zyhdjspp7lk2291wsqs6bm7y27r7bd00447iimmjpx372s22c";
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ libgnomeui libxml2 ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = http://sarrazip.com/dev/verbiste.html;
