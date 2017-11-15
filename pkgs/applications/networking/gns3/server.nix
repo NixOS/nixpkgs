@@ -18,21 +18,11 @@ let
         };
         doInstallCheck = false;
       }));
-  yarl = if (!stable)
-    then (stdenv.lib.overrideDerivation pythonPackages.yarl (oldAttrs:
-      { propagatedBuildInputs = [ multidict_3_1_3 ]; }))
-    else (stdenv.lib.overrideDerivation pythonPackages.yarl (oldAttrs:
-      rec {
-        pname = "yarl";
-        version = "0.9.8";
-        name = "${pname}-${version}";
-        src = pythonPackages.fetchPypi {
-          inherit pname version;
-          sha256 = "1v2dsmr7bqp0yx51pwhbxyvzza8m2f88prsnbd926mi6ah38p0d7";
-        };
-      }));
-  aiohttp = if (!stable)
-    then (stdenv.lib.overrideDerivation pythonPackages.aiohttp (oldAttrs:
+  yarl = (stdenv.lib.overrideDerivation pythonPackages.yarl
+    (oldAttrs:
+      { propagatedBuildInputs = [ multidict_3_1_3 ]; }));
+  aiohttp = (stdenv.lib.overrideDerivation pythonPackages.aiohttp
+    (oldAttrs:
       rec {
         pname = "aiohttp";
         version = "2.2.5";
@@ -43,33 +33,10 @@ let
         };
         propagatedBuildInputs = [ yarl multidict_3_1_3 ]
           ++ (with pythonPackages; [ async-timeout chardet ]);
-      }))
-    else (stdenv.lib.overrideDerivation pythonPackages.aiohttp (oldAttrs:
-      rec {
-        pname = "aiohttp";
-        version = "1.3.5";
-        name = "${pname}-${version}";
-        src = pythonPackages.fetchPypi {
-          inherit pname version;
-          sha256 = "0hpqdiaifgyfqmxkyzwypwvrnvz5rqzgzylzhihfidc5ldfs856d";
-        };
-        propagatedBuildInputs = [ yarl ]
-          ++ (with pythonPackages; [ async-timeout chardet multidict ]);
       }));
-  aiohttp-cors = if (!stable)
-    then (stdenv.lib.overrideDerivation pythonPackages.aiohttp-cors (oldAttrs:
-      { propagatedBuildInputs = [ aiohttp ]; }))
-    else (stdenv.lib.overrideDerivation pythonPackages.aiohttp-cors (oldAttrs:
-      rec {
-        pname = "aiohttp-cors";
-        version = "0.5.1";
-        name = "${pname}-${version}";
-        src = pythonPackages.fetchPypi {
-          inherit pname version;
-          sha256 = "0szma27ri25fq4nwwvs36myddggw3jz4pyzmq63yz4xpw0jjdxck";
-        };
-        propagatedBuildInputs = [ aiohttp ];
-      }));
+  aiohttp-cors = (stdenv.lib.overrideDerivation pythonPackages.aiohttp-cors
+    (oldAttrs:
+      { propagatedBuildInputs = [ aiohttp ]; }));
 in pythonPackages.buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "gns3-server";
@@ -87,7 +54,7 @@ in pythonPackages.buildPythonPackage rec {
       prompt_toolkit
     ]);
 
-  postPatch = stdenv.lib.optionalString (!stable) ''
+  postPatch = ''
     sed -i 's/yarl>=0.11,<0.12/yarl/g' requirements.txt
   '';
 

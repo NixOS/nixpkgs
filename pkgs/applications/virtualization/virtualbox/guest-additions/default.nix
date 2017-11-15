@@ -19,14 +19,20 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "0vxhavlh55fdlm4zhvi21fyxzdydbn56y499bq5aghvsdsmwiy3d";
+    sha256 = "1r6dybr3pfclffk7gppf7n8gwj3ziw7pmfvbwwkdw00q9ah7h5l4";
   };
 
-  KERN_DIR = "${kernel.dev}/lib/modules/*/build";
+  KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  KERN_INCL = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/source/include";
+
+  patches = [
+    ./fix_kerndir.patch
+    ./fix_kernincl.patch
+  ];
 
   hardeningDisable = [ "pic" ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+  NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types -Wno-error=implicit-function-declaration";
 
   buildInputs = [ patchelf cdrkit makeWrapper dbus ];
 
@@ -55,22 +61,23 @@ stdenv.mkDerivation {
       else throw ("Architecture: "+stdenv.system+" not supported for VirtualBox guest additions")
     }
 
+    cd ../
+    patchPhase
+    cd install/src
 
     # Build kernel modules
-    cd src
+    export INSTALL_MOD_PATH=$out
 
-    for i in *
-    do
-        cd $i
-        find . -type f | xargs sed 's/depmod -a/true/' -i
-        make
-        cd ..
-    done
+    find . -type f | xargs sed 's/depmod -a/true/' -i
 
-    cd ..
+    cd vboxguest-${version}
+
+    make
+
+    cd ../..
 
     # Change the interpreter for various binaries
-    for i in sbin/VBoxService bin/{VBoxClient,VBoxControl} lib/VBoxGuestAdditions/mount.vboxsf
+    for i in sbin/VBoxService bin/{VBoxClient,VBoxControl} other/mount.vboxsf
     do
         ${if stdenv.system == "i686-linux" then ''
           patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2 $i
@@ -90,14 +97,14 @@ stdenv.mkDerivation {
 
     # FIXME: Virtualbox 4.3.22 moved VBoxClient-all (required by Guest Additions
     # NixOS module) to 98vboxadd-xclient. For now, just work around it:
-    mv lib/VBoxGuestAdditions/98vboxadd-xclient bin/VBoxClient-all
+    mv other/98vboxadd-xclient bin/VBoxClient-all
 
     # Remove references to /usr from various scripts and files
-    sed -i -e "s|/usr/bin|$out/bin|" share/VBoxGuestAdditions/vboxclient.desktop
+    sed -i -e "s|/usr/bin|$out/bin|" other/vboxclient.desktop
     sed -i -e "s|/usr/bin|$out/bin|" bin/VBoxClient-all
 
     # Install binaries
-    install -D -m 755 lib/VBoxGuestAdditions/mount.vboxsf $out/bin/mount.vboxsf
+    install -D -m 755 other/mount.vboxsf $out/bin/mount.vboxsf
     install -D -m 755 sbin/VBoxService $out/bin/VBoxService
 
     mkdir -p $out/bin
@@ -116,11 +123,11 @@ stdenv.mkDerivation {
 
     # Install desktop file
     mkdir -p $out/share/autostart
-    cp -v share/VBoxGuestAdditions/vboxclient.desktop $out/share/autostart
+    cp -v other/vboxclient.desktop $out/share/autostart
 
     # Install Xorg drivers
     mkdir -p $out/lib/xorg/modules/{drivers,input}
-    install -m 644 lib/VBoxGuestAdditions/vboxvideo_drv_${xserverABI}.so $out/lib/xorg/modules/drivers/vboxvideo_drv.so
+    install -m 644 other/vboxvideo_drv_${xserverABI}.so $out/lib/xorg/modules/drivers/vboxvideo_drv.so
 
     # Install kernel modules
     cd src

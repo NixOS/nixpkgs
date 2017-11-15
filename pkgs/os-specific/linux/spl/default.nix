@@ -52,6 +52,8 @@ let
           kernel.
         '';
 
+        broken = kernel != null && stdenv.lib.versionAtLeast kernel.version "4.14";
+
         homepage = http://zfsonlinux.org/;
         platforms = platforms.linux;
         license = licenses.gpl2Plus;
@@ -68,8 +70,8 @@ in
     };
 
     splUnstable = common {
-      version = "2017-10-16";
-      rev = "28920ea3346c1c905c5f727ea3e54297e6257568";
-      sha256 = "0m42na009ivb9q9gz15ra94wqx5xdw18waanm56aqzrjxbqqa3ll";
+      version = "2017-10-31";
+      rev = "35a44fcb8d6e346f51be82dfe57562c2ea0c6a9c";
+      sha256 = "193clx7b4p4qhgivmhc88dva0186rnhyv58fx0fwnb5zbx70dam1";
     };
 }

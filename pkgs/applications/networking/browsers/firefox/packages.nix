@@ -6,14 +6,14 @@ rec {
 
   firefox = common rec {
     pname = "firefox";
-    version = "56.0.2";
+    version = "57.0";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "35f81e8163a254b7e134fc073acbcff63aa1025b9c6392377650a8f2d0a5f0c77211adb0ae3d8ac85f036bb387246934b8847f14a03fceb7fcbc5b3cf94c9392";
+      sha512 = "bd99ff97a2a6f824e6fbd36fd00193903159e309506b1e6945dcbc43a17a95aaa54a05f32131c56872e8860878ba6063008667955550f03aa8c7084f834d14fc";
     };
 
     patches =
-      [ ./no-buildconfig.patch ]
+      [ ./no-buildconfig.patch ./env_var_for_system_dir.patch ]
       ++ lib.optional stdenv.isi686 (fetchpatch {
         url = "https://hg.mozilla.org/mozilla-central/raw-rev/15517c5a5d37";
         sha256 = "1ba487p3hk4w2w7qqfxgv1y57vp86b8g3xhav2j20qd3j3phbbn7";
@@ -32,11 +32,14 @@ rec {
 
   firefox-esr = common rec {
     pname = "firefox-esr";
-    version = "52.4.1esr";
+    version = "52.5.0esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${version}/source/firefox-${version}.source.tar.xz";
-      sha512 = "d80c7219548391d8a47b6e404662ea41e6acfa264a67d69365e76dd8943077e388ab24b030850919f8fc6681c11486bdbaaf170d441c861f4a12cedbe08955ab";
+      sha512 = "fe724108ba538e590b87a5c1b817471d3cca9b038ba2755642e4d7b8ebb6174322be1fe074f24ef181946f9a027106b50b500d2fa541d8a99ef44905822eda18";
     };
+
+    patches =
+      [ ./env_var_for_system_dir.patch ];
 
     meta = firefox.meta // {
       description = "A web browser built from Firefox Extended Support Release source tree";
@@ -128,6 +131,9 @@ in rec {
       rev   = "tor-browser-52.3.0esr-7.0-1-slnos";
       sha256 = "0szbf8gjbl4dnrb4igy4mq5858i1y6ki4skhdw63iqqdd8w9v4yv";
     };
+
+    patches =
+      [ ./env_var_for_system_dir.patch ];
   } // commonAttrs) {};
 
   tor-browser = tor-browser-7-0;

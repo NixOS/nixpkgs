@@ -51,9 +51,6 @@ self:
       cmake-mode = markBroken (dontConfigure super.cmake-mode);
 
       # upstream issue: missing file header
-      cn-outline = markBroken super.cn-outline;
-
-      # upstream issue: missing file header
       connection = markBroken super.connection;
 
       # upstream issue: missing file header

@@ -1,5 +1,7 @@
-{ lib, fetchurl, pythonPackages, pkgconfig, qtbase, qtsvg, qtwebkit, qtwebengine, dbus_libs
-, lndir, makeWrapper, qmake }:
+{ lib, fetchurl, pythonPackages, pkgconfig, makeWrapper, qmake
+, lndir, qtbase, qtsvg, qtwebkit, qtwebengine, dbus_libs
+, withWebSockets ? false, qtwebsockets
+}:
 
 let
   version = "5.9";
@@ -25,7 +27,7 @@ in buildPythonPackage {
 
   buildInputs = [
     lndir qtbase qtsvg qtwebkit qtwebengine dbus_libs
-  ];
+  ] ++ lib.optional withWebSockets qtwebsockets;
 
   propagatedBuildInputs = [ sip ];
 

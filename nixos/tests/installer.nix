@@ -7,7 +7,7 @@ with pkgs.lib;
 let
 
   # The configuration to install.
-  makeConfig = { bootLoader, grubVersion, grubDevice, grubIdentifier
+  makeConfig = { bootLoader, grubVersion, grubDevice, grubIdentifier, grubUseEfi
                , extraConfig, forceGrubReinstallCount ? 0
                }:
     pkgs.writeText "configuration.nix" ''
@@ -26,9 +26,16 @@ let
           ${optionalString (grubVersion == 1) ''
             boot.loader.grub.splashImage = null;
           ''}
-          boot.loader.grub.device = "${grubDevice}";
+
           boot.loader.grub.extraConfig = "serial; terminal_output.serial";
-          boot.loader.grub.fsIdentifier = "${grubIdentifier}";
+          ${if grubUseEfi then ''
+            boot.loader.grub.device = "nodev";
+            boot.loader.grub.efiSupport = true;
+            boot.loader.grub.efiInstallAsRemovable = true; # XXX: needed for OVMF?
+          '' else ''
+            boot.loader.grub.device = "${grubDevice}";
+            boot.loader.grub.fsIdentifier = "${grubIdentifier}";
+          ''}
 
           boot.loader.grub.configurationLimit = 100 + ${toString forceGrubReinstallCount};
         ''}
@@ -57,16 +64,17 @@ let
   # disk, and then reboot from the hard disk.  It's parameterized with
   # a test script fragment `createPartitions', which must create
   # partitions and filesystems.
-  testScriptFun = { bootLoader, createPartitions, grubVersion, grubDevice
+  testScriptFun = { bootLoader, createPartitions, grubVersion, grubDevice, grubUseEfi
                   , grubIdentifier, preBootCommands, extraConfig
                   }:
     let
       iface = if grubVersion == 1 then "ide" else "virtio";
+      isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
       qemuFlags =
         (if system == "x86_64-linux" then "-m 768 " else "-m 512 ") +
         (optionalString (system == "x86_64-linux") "-cpu kvm64 ");
       hdFlags = ''hda => "vm-state-machine/machine.qcow2", hdaInterface => "${iface}", ''
-        + optionalString (bootLoader == "systemd-boot") ''bios => "${pkgs.OVMF.fd}/FV/OVMF.fd", '';
+        + optionalString isEfi ''bios => "${pkgs.OVMF.fd}/FV/OVMF.fd", '';
     in
     ''
       $machine->start;
@@ -89,7 +97,7 @@ let
       $machine->succeed("cat /mnt/etc/nixos/hardware-configuration.nix >&2");
 
       $machine->copyFileFromHost(
-          "${ makeConfig { inherit bootLoader grubVersion grubDevice grubIdentifier extraConfig; } }",
+          "${ makeConfig { inherit bootLoader grubVersion grubDevice grubIdentifier grubUseEfi extraConfig; } }",
           "/mnt/etc/nixos/configuration.nix");
 
       # Perform the installation.
@@ -140,7 +148,7 @@ let
 
       # We need to a writable nix-store on next boot.
       $machine->copyFileFromHost(
-          "${ makeConfig { inherit bootLoader grubVersion grubDevice grubIdentifier extraConfig; forceGrubReinstallCount = 1; } }",
+          "${ makeConfig { inherit bootLoader grubVersion grubDevice grubIdentifier grubUseEfi extraConfig; forceGrubReinstallCount = 1; } }",
           "/etc/nixos/configuration.nix");
 
       # Check whether nixos-rebuild works.
@@ -158,7 +166,7 @@ let
       ${preBootCommands}
       $machine->waitForUnit("multi-user.target");
       $machine->copyFileFromHost(
-          "${ makeConfig { inherit bootLoader grubVersion grubDevice grubIdentifier extraConfig; forceGrubReinstallCount = 2; } }",
+          "${ makeConfig { inherit bootLoader grubVersion grubDevice grubIdentifier grubUseEfi extraConfig; forceGrubReinstallCount = 2; } }",
           "/etc/nixos/configuration.nix");
       $machine->succeed("nixos-rebuild boot >&2");
       $machine->shutdown;
@@ -176,7 +184,7 @@ let
     { createPartitions, preBootCommands ? "", extraConfig ? ""
     , extraInstallerConfig ? {}
     , bootLoader ? "grub" # either "grub" or "systemd-boot"
-    , grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid"
+    , grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid", grubUseEfi ? false
     , enableOCR ? false, meta ? {}
     }:
     makeTest {
@@ -244,7 +252,7 @@ let
 
       testScript = testScriptFun {
         inherit bootLoader createPartitions preBootCommands
-                grubVersion grubDevice grubIdentifier extraConfig;
+                grubVersion grubDevice grubIdentifier grubUseEfi extraConfig;
       };
     };
 
@@ -293,6 +301,29 @@ in {
           );
         '';
         bootLoader = "systemd-boot";
+    };
+
+  simpleUefiGrub = makeInstallerTest "simpleUefiGrub"
+    { createPartitions =
+        ''
+          $machine->succeed(
+              "parted /dev/vda mklabel gpt",
+              "parted -s /dev/vda -- mkpart ESP fat32 1M 50MiB", # /boot
+              "parted -s /dev/vda -- set 1 boot on",
+              "parted -s /dev/vda -- mkpart primary linux-swap 50MiB 1024MiB",
+              "parted -s /dev/vda -- mkpart primary ext2 1024MiB -1MiB", # /
+              "udevadm settle",
+              "mkswap /dev/vda2 -L swap",
+              "swapon -L swap",
+              "mkfs.ext3 -L nixos /dev/vda3",
+              "mount LABEL=nixos /mnt",
+              "mkfs.vfat -n BOOT /dev/vda1",
+              "mkdir -p /mnt/boot",
+              "mount LABEL=BOOT /mnt/boot",
+          );
+        '';
+        bootLoader = "grub";
+        grubUseEfi = true;
     };
 
   # Same as the previous, but now with a separate /boot partition.

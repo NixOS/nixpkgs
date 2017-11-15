@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   sources50Zip = fetchurl {
     url = http://files.pharo.org/sources/PharoV50.sources.zip;
-    sha256 = "0ykl1y0a4yy5qn8fwz0wkl8fcn4pqv9q0w0r2llhzdz3jdg1k69g";
+    sha256 = "1vmcah03zacvj1r2x27vdp63g6rcbz3prjd5sjy1z0a9xsjmqp25";
   };
 
   sources60Zip = fetchurl {

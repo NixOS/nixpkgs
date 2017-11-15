@@ -1,14 +1,11 @@
-{stdenv, fetchurl, perl, readline, rsh, ssh, pam}:
+{ stdenv, fetchurl, perl, readline, rsh, ssh, pam }:
 
-let
-  name = "pdsh-2.29";
-in
-stdenv.mkDerivation {
-  inherit name;
+stdenv.mkDerivation rec {
+  name = "pdsh-2.33";
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/pdsh/${name}.tar.bz2";
-    sha256 = "1kvzz01fyaxfqmbh53f4ljfsgvxdykh5jyr6fh4f1bw2ywxr1w2p";
+    url = "https://github.com/chaos/pdsh/releases/download/${name}/${name}.tar.gz";
+    sha256 = "0bwlkl9inj66iwvafg00pi3sk9n673phdi0kcc59y9nn55s0hs3k";
   };
 
   buildInputs = [perl readline ssh pam];

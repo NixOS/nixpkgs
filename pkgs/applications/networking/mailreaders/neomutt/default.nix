@@ -1,5 +1,6 @@
-{ stdenv, fetchFromGitHub, which, autoreconfHook, writeScript, ncurses, perl
-, cyrus_sasl, gss, gpgme, kerberos, libidn, notmuch, openssl, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42 }:
+{ stdenv, fetchFromGitHub, which, autoreconfHook, makeWrapper, writeScript,
+ncurses, perl , cyrus_sasl, gss, gpgme, kerberos, libidn, notmuch, openssl,
+lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42 }:
 
 let
   muttWrapper = writeScript "mutt" ''
@@ -29,7 +30,9 @@ in stdenv.mkDerivation rec {
     notmuch openssl perl lmdb
   ];
 
-  nativeBuildInputs = [ autoreconfHook docbook_xsl docbook_xml_dtd_42 libxslt.bin which ];
+  nativeBuildInputs = [
+    autoreconfHook docbook_xsl docbook_xml_dtd_42 libxslt.bin which makeWrapper
+  ];
 
   enableParallelBuilding = true;
 
@@ -65,6 +68,7 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     cp ${muttWrapper} $out/bin/mutt
+    wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/lib/neomutt"
   '';
 
   meta = with stdenv.lib; {
