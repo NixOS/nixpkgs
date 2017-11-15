@@ -17122,6 +17122,8 @@ in {
     };
   };
 
+  qtawesome = callPackage ../development/python-modules/qtawesome { };
+
   qtconsole = callPackage ../development/python-modules/qtconsole { };
 
   quantities = buildPythonPackage rec {
