@@ -13,8 +13,8 @@ let
 
   apcu40 = assert !isPhp7; buildPecl {
     name = "apcu-4.0.7";
-
     sha256 = "1mhbz56mbnq7dryf2d64l84lj3fpr5ilmg2424glans3wcg772hp";
+    buildInputs = [ pkgs.pcre ];
   };
 
   apcu51 = assert isPhp7; buildPecl {
