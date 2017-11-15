@@ -21,7 +21,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
               (if dep.crateType == "lib" then
                  " --extern ${extern}=${dep.out}/lib${extern}-${dep.metadata}.rlib"
               else
-                 " --extern ${extern}=${dep.out}/lib${extern}-${dep.metadata}.so")
+                 " --extern ${extern}=${dep.out}/lib${extern}-${dep.metadata}${buildPlatform.extensions.sharedLibrary}")
             ) dependencies);
           deps = makeDeps dependencies;
           buildDeps = makeDeps buildDependencies;
@@ -39,14 +39,13 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
         green="$(printf '\033[0;32m')" #set green
         boldgreen="$(printf '\033[0;1;32m')" #set bold, and set green.
       fi
-      rustc --version
       mkdir -p target/deps
       mkdir -p target/build
       mkdir -p target/buildDeps
       chmod uga+w target -R
       for i in ${completeDepsDir}; do
          ln -s -f $i/*.rlib target/deps #*/
-         ln -s -f $i/*.so target/deps #*/
+         ln -s -f $i/*.so $i/*.dylib target/deps #*/
          if [ -e "$i/link" ]; then
             cat $i/link >> target/link
             cat $i/link >> target/link.final
@@ -57,7 +56,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
       done
       for i in ${completeBuildDepsDir}; do
          ln -s -f $i/*.rlib target/buildDeps #*/
-         ln -s -f $i/*.so target/buildDeps #*/
+         ln -s -f $i/*.so $i/*.dylib target/buildDeps #*/
          if [ -e "$i/link" ]; then
             cat $i/link >> target/link.build
          fi
@@ -154,8 +153,8 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
            $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES --color ${colors}
 
          EXTRA_LIB=" --extern $CRATE_NAME=target/deps/lib$CRATE_NAME-${metadata}.rlib"
-         if [ -e target/deps/lib$CRATE_NAME-${metadata}.so ]; then
-            EXTRA_LIB="$EXTRA_LIB --extern $CRATE_NAME=target/deps/lib$CRATE_NAME-${metadata}.so"
+         if [ -e target/deps/lib$CRATE_NAME-${metadata}${buildPlatform.extensions.sharedLibrary} ]; then
+            EXTRA_LIB="$EXTRA_LIB --extern $CRATE_NAME=target/deps/lib$CRATE_NAME-${metadata}${buildPlatform.extensions.sharedLibrary}"
          fi
       elif [ -e src/lib.rs ] ; then
 
@@ -170,8 +169,8 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
            $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES --color ${colors}
 
          EXTRA_LIB=" --extern $CRATE_NAME=target/deps/lib$CRATE_NAME-${metadata}.rlib"
-         if [ -e target/deps/lib$CRATE_NAME-${metadata}.so ]; then
-            EXTRA_LIB="$EXTRA_LIB --extern $CRATE_NAME=target/deps/lib$CRATE_NAME-${metadata}.so"
+         if [ -e target/deps/lib$CRATE_NAME-${metadata}${buildPlatform.extensions.sharedLibrary} ]; then
+            EXTRA_LIB="$EXTRA_LIB --extern $CRATE_NAME=target/deps/lib$CRATE_NAME-${metadata}${buildPlatform.extensions.sharedLibrary}"
          fi
 
       elif [ -e src/${libName}.rs ] ; then
@@ -186,8 +185,8 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
            $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES --color ${colors}
 
          EXTRA_LIB=" --extern $CRATE_NAME=target/deps/lib$CRATE_NAME-${metadata}.rlib"
-         if [ -e target/deps/lib$CRATE_NAME-${metadata}.so ]; then
-            EXTRA_LIB="$EXTRA_LIB --extern $CRATE_NAME=target/deps/lib$CRATE_NAME-${metadata}.so"
+         if [ -e target/deps/lib$CRATE_NAME-${metadata}${buildPlatform.extensions.sharedLibrary} ]; then
+            EXTRA_LIB="$EXTRA_LIB --extern $CRATE_NAME=target/deps/lib$CRATE_NAME-${metadata}${buildPlatform.extensions.sharedLibrary}"
          fi
 
       fi
@@ -337,4 +336,5 @@ crate: lib.makeOverridable ({ rust }: stdenv.mkDerivation rec {
               metadata crateBin finalBins verboseBuild colors;
     };
     installPhase = installCrate crateName;
+
 }) { rust = pkgs.rustc; }
