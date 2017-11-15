@@ -219,8 +219,7 @@ rec {
 
     path = mkOptionType {
       name = "path";
-      # Hacky: there is no ‘isPath’ primop.
-      check = x: builtins.substring 0 1 (toString x) == "/";
+      check = x: isString x || isPath x;
       merge = mergeOneOption;
     };
 

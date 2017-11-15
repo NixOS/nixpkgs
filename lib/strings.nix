@@ -429,7 +429,7 @@ rec {
   */
   fixedWidthNumber = width: n: fixedWidthString width "0" (toString n);
 
-  /* Check whether a value is a store path.
+  /* Check whether a string or a path is a store path.
 
      Example:
        isStorePath "/nix/store/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11/bin/python"
@@ -438,13 +438,53 @@ rec {
        => true
        isStorePath pkgs.python
        => true
+       isStorePath ./types.nix
+       => true
        isStorePath [] || isStorePath 42 || isStorePath {} || …
        => false
   */
   isStorePath = x:
-       builtins.isString x
-    && builtins.substring 0 1 (toString x) == "/"
-    && dirOf (builtins.toPath x) == builtins.storeDir;
+    let
+      toStringContext = y: "${y}";
+    in (builtins.isString x || isPath x)
+    && builtins.substring 0 1 (toStringContext x) == "/"
+    && dirOf (toStringContext x) == builtins.storeDir;
+
+  /* Check whether a string or a path is in the store.
+
+     Example:
+       isInStore "/nix/store/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11/bin/python"
+       => true
+       isInStore "/nix/store/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11/"
+       => true
+       isInStore "/home/me/whatever.nix"
+       => false
+       isInStore ./types.nix
+       => true
+       isInStore (toString ./types.nix)
+       => false
+       isInStore [] || isInStore 42 || isInStore {} || …
+       => false
+  */
+  isInStore = s:
+      (builtins.isString s || isPath s)
+   && hasPrefix builtins.storeDir s;
+ 
+  /* Check whether a value is of type path.
+
+     Example:
+       isPath "./types.nix"
+       => false
+       isPath ./types.nix
+       => true
+       isPath [] || isPath 42 || isPath {} || …
+       => false
+  */
+  # Hacky: no isPath priomp
+  isPath = s:
+        (!builtins.isString s)
+     && (!builtins.isAttrs s)
+     && builtins.substring 0 1 (toString s) == "/";
 
   /* Convert string to int
      Obviously, it is a bit hacky to use fromJSON that way.

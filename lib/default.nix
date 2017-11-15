@@ -84,7 +84,7 @@ let
       toLower toUpper addContextFrom splitString removePrefix
       removeSuffix versionOlder versionAtLeast getVersion nameFromURL
       enableFeature fixedWidthString fixedWidthNumber isStorePath
-      toInt readPathsFromFile fileContents;
+      isInStore isPath toInt readPathsFromFile fileContents;
     inherit (stringsWithDeps) textClosureList textClosureMap
       noDepEntry fullDepEntry packEntry stringAfter;
     inherit (customisation) overrideDerivation makeOverridable
