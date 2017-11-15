@@ -1,15 +1,15 @@
 { stdenv, buildPackages
-, fetchurl, autoreconfHook264, bison, binutils
+, fetchurl, autoreconfHook264, bison, binutils-raw
 , libiberty, libbfd
 }:
 
 stdenv.mkDerivation rec {
   name = "libopcodes-${version}";
-  inherit (binutils) version src;
+  inherit (binutils-raw) version src;
 
   outputs = [ "out" "dev" ];
 
-  patches = binutils.patches ++ [
+  patches = binutils-raw.patches ++ [
     ../../tools/misc/binutils/build-components-separately.patch
   ];
 
