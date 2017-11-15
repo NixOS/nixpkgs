@@ -15309,6 +15309,8 @@ with pkgs;
 
   jedit = callPackage ../applications/editors/jedit { };
 
+  jgmenu = callPackage ../applications/misc/jgmenu { };
+
   jigdo = callPackage ../applications/misc/jigdo { };
 
   jitsi = callPackage ../applications/networking/instant-messengers/jitsi { };
