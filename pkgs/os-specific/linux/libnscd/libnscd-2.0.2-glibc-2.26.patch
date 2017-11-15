@@ -1,0 +1,12 @@
+diff --git a/src/libnscd.c b/src/libnscd.c
+index 5e1d3fd..73cb122 100644
+--- a/src/libnscd.c
++++ b/src/libnscd.c
+@@ -27,6 +27,7 @@
+ #include <unistd.h>
+ #include <sys/socket.h>
+ #include <sys/un.h>
++#include <sys/uio.h>
+ 
+ #include "libnscd.h"
+ 
