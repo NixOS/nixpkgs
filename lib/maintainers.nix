@@ -215,7 +215,7 @@ let maintainers = {
   ederoyd46 = { name = "Matthew Brown"; email = "matt@ederoyd.co.uk"; };
   eduarrrd = { name = "Eduard Bachmakov"; email = "e.bachmakov@gmail.com"; };
   edwtjo = { name = "Edward Tjörnhammar"; email = "ed@cflags.cc"; };
-  eelco = { name = "Eelco Dolstra"; email = "eelco.dolstra@logicblox.com"; };
+  eelco = { name = "Eelco Dolstra"; email = "eelco.dolstra@logicblox.com"; GitHub = "edolstra"; IRC = "niksnut"; };
   ehegnes = { name = "Eric Hegnes"; email = "eric.hegnes@gmail.com"; };
   ehmry = { name = "Emery Hemingway"; email = "emery@vfemail.net"; };
   eikek = { name = "Eike Kettner"; email = "eike.kettner@posteo.de"; };
