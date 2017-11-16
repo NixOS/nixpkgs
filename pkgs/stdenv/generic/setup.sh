@@ -324,6 +324,18 @@ findInputs() {
         exit 1
     fi
 
+    if [ -f "$pkg/nix-support/$propagatedBuildInputsFile" ]; then
+        local pkgNext
+        for pkgNext in $(< "$pkg/nix-support/$propagatedBuildInputsFile"); do
+            findInputs "$pkgNext" "$var" "$propagatedBuildInputsFile"
+        done
+    fi
+}
+
+# Add package to the future PATH and run setup hooks
+activatePackage() {
+    local pkg="$1"
+
     if [ -f "$pkg" ]; then
         local oldOpts="$(shopt -po nounset)"
         set +u
@@ -341,13 +353,6 @@ findInputs() {
         source "$pkg/nix-support/setup-hook"
         eval "$oldOpts"
     fi
-
-    if [ -f "$pkg/nix-support/$propagatedBuildInputsFile" ]; then
-        local pkgNext
-        for pkgNext in $(< "$pkg/nix-support/$propagatedBuildInputsFile"); do
-            findInputs "$pkgNext" "$var" "$propagatedBuildInputsFile"
-        done
-    fi
 }
 
 declare -a nativePkgs crossPkgs
@@ -359,14 +364,21 @@ if [ -z "${crossConfig:-}" ]; then
              ${propagatedNativeBuildInputs:-} ${propagatedBuildInputs:-}; do
         findInputs "$i" nativePkgs propagated-native-build-inputs
     done
+
+    for i in "${nativePkgs[@]}"; do
+        activatePackage "$i"
+    done
 else
     for i in ${buildInputs:-} ${defaultBuildInputs:-} ${propagatedBuildInputs:-}; do
         findInputs "$i" crossPkgs propagated-build-inputs
     done
 
-    declare -a nativePkgs
     for i in ${nativeBuildInputs:-} ${defaultNativeBuildInputs:-} ${propagatedNativeBuildInputs:-}; do
         findInputs "$i" nativePkgs propagated-native-build-inputs
+    done
+
+    for i in "${nativePkgs[@]}" "${crossPkgs[@]}"; do
+        activatePackage "$i"
     done
 fi
 
