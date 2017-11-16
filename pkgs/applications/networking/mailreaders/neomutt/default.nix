@@ -45,7 +45,7 @@ in stdenv.mkDerivation rec {
 
     # allow neomutt to map attachments to their proper mime.types if specified wrongly
     substituteInPlace sendlib.c \
-      --replace /etc/mime.types $out/share/doc/neomutt/mime.types
+      --replace /etc/mime.types $out/etc/mime.types
   '';
 
   configureFlags = [
@@ -72,6 +72,7 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     cp ${muttWrapper} $out/bin/mutt
+    mv $out/share/doc/neomutt/mime.types $out/etc
     wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/lib/neomutt"
   '';
 
