@@ -8032,6 +8032,7 @@ in {
   hg-git = buildPythonPackage rec {
     name = "hg-git-${version}";
     version = "0.8.10";
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/h/hg-git/${name}.tar.gz";
