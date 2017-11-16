@@ -24,6 +24,8 @@ let
       (lib.toUpper (lib.substring 0 1 browserName) + lib.substring 1 (-1) browserName)
     , nameSuffix ? ""
     , icon ? browserName
+    , extraPlugins ? []
+    , extraNativeMessagingHosts ? []
     }:
 
     let
@@ -50,9 +52,11 @@ let
           ++ lib.optional (cfg.enableAdobeReader or false) adobe-reader
           ++ lib.optional (cfg.enableEsteid or false) esteidfirefoxplugin
           ++ lib.optional (cfg.enableVLC or false) vlc_npapi
+          ++ extraPlugins
         );
       nativeMessagingHosts =
         ([ ]
+          ++ extraNativeMessagingHosts
         );
       libs = (if ffmpegSupport then [ ffmpeg ] else with gst_all; [ gstreamer gst-plugins-base ])
             ++ lib.optional gssSupport kerberos
