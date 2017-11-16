@@ -16253,7 +16253,6 @@ with pkgs;
   pythonmagick = callPackage ../applications/graphics/PythonMagick { };
 
   qbittorrent = libsForQt5.callPackage ../applications/networking/p2p/qbittorrent {
-    boost = boost;
     libtorrentRasterbar = libtorrentRasterbar_1_0;
   };
 
@@ -16506,9 +16505,7 @@ with pkgs;
 
   sbagen = callPackage ../applications/misc/sbagen { };
 
-  scantailor = callPackage ../applications/graphics/scantailor {
-    boost = boost155;
-  };
+  scantailor = callPackage ../applications/graphics/scantailor { };
 
   sc-im = callPackage ../applications/misc/sc-im { };
 
