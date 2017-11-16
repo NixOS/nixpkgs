@@ -1,4 +1,4 @@
-{ stdenv, writeText, toolchainName, sdkName, xcbuild }:
+{ stdenv, writeText, toolchainName, sdkName, xcbuild, darwin }:
 
 let
 
@@ -27,5 +27,7 @@ stdenv.mkDerivation {
 
     mkdir -p $out/System/Library/CoreServices/
     plutil -convert xml1 -o $out/System/Library/CoreServices/SystemVersion.plist ${writeText "SystemVersion.plist" (builtins.toJSON SystemVersion)}
+
+    ln -s ${darwin.apple_sdk.sdk} $out/usr
   '';
 }

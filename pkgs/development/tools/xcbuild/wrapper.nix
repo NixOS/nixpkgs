@@ -74,6 +74,7 @@ stdenv.mkDerivation {
 
   passthru = {
     raw = xcbuild;
+    inherit sdk;
   };
 
   preferLocalBuild = true;
