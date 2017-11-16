@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-pluggable-dialogs" "--enable-sound-settings" ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     homepage = http://www.xfce.org/projects/xfce4-settings;
     description = "Settings manager for Xfce";
