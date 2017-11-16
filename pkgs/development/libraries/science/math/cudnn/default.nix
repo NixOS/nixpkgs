@@ -13,7 +13,7 @@ in
     version = "4";
     cudatoolkit = cudatoolkit_7;
     srcName = "cudnn-${cudatoolkit.majorVersion}-linux-x64-v4.0-prod.tgz";
-    sha256 = "0zgr6qdbc29qw6sikhrh6diwwz7150rqc8a49f2qf37j2rvyyr2f";
+    sha256 = "01a4v5j4v9n2xjqcc4m28c3m67qrvsx87npvy7zhx7w8smiif2fd";
   };
 
   cudnn_cudatoolkit_7_5 = generic rec {
