@@ -1,28 +1,26 @@
-{ stdenv, fetchgit }:
+{ stdenv, fetchgit, autoreconfHook }:
 
-stdenv.mkDerivation {
-  name = "breakpad-2016-03-28";
+stdenv.mkDerivation rec {
+  name = "breakpad-2017-11-13";
   
   src = fetchgit {
     url = "https://chromium.googlesource.com/breakpad/breakpad";
-    rev = "512cac3a1b69721ab727f3079f4d29e4580467b1";
-    sha256 = "1ksilbdpi1krycxkidqd1dlly95qf7air3zy8h5zfnagrlkz7zzx";
+    rev = "70914b2d380d893364ad0110b8af18ba1ed5aaa3";
+    sha256 = "1k6wgggs6i6mzf0la5a0gqxyazl604jq1r4zikqk5rqwsn8srjk1";
   };
 
-  breakpad_lss = fetchgit {
+  linux-syscall-support = fetchgit {
     url = "https://chromium.googlesource.com/linux-syscall-support";
-    rev = "08056836f2b4a5747daff75435d10d649bed22f6";
-    sha256 = "1ryshs2nyxwa0kn3rlbnd5b3fhna9vqm560yviddcfgdm2jyg0hz";
+    rev = "e6527b0cd469e3ff5764785dadcb39bf7d787154";
+    sha256 = "09d1zw86jnbpqqxcfw6k4d37lv351v6haljxcsx20334ay4l7lml";
   };
 
   enableParallelBuilding = true;
 
-  prePatch = ''
-    cp -r $breakpad_lss src/third_party/lss
-    chmod +w -R src/third_party/lss
-  '';
+  nativeBuildInputs = [ autoreconfHook ];
+  preConfigure = "ln -s ${linux-syscall-support} src/third_party/lss";
 
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    platforms = platforms.unix;
   };
 }
