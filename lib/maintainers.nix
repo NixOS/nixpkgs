@@ -31,7 +31,7 @@
   ak = "Alexander Kjeldaas <ak@formalprivacy.com>";
   akaWolf = "Artjom Vejsel <akawolf0@gmail.com>";
   akc = "Anders Claesson <akc@akc.is>";
-  alexvorobiev = "Alex Vorobiev <alexander.vorobiev@gmail.com";
+  alexvorobiev = "Alex Vorobiev <alexander.vorobiev@gmail.com>";
   algorith = "Dries Van Daele <dries_van_daele@telenet.be>";
   alibabzo = "Alistair Bill <alistair.bill@gmail.com>";
   all = "Nix Committers <nix-commits@lists.science.uu.nl>";
@@ -329,7 +329,7 @@
   kamilchm = "Kamil Chmielewski <kamil.chm@gmail.com>";
   kampfschlaefer = "Arnold Krille <arnold@arnoldarts.de>";
   karolchmist = "karolchmist <info+nix@chmist.com>";
-  kentjames = "James Kent <jameschristopherkent@gmail.com";
+  kentjames = "James Kent <jameschristopherkent@gmail.com>";
   kevincox = "Kevin Cox <kevincox@kevincox.ca>";
   khumba = "Bryan Gardiner <bog@khumba.net>";
   KibaFox = "Kiba Fox <kiba.fox@foxypossibilities.com>";
@@ -479,13 +479,13 @@
   paholg = "Paho Lurie-Gregg <paho@paholg.com>";
   pakhfn = "Fedor Pakhomov <pakhfn@gmail.com>";
   palo = "Ingolf Wanger <palipalo9@googlemail.com>";
-  panaeon = "Vitalii Voloshyn <vitalii.voloshyn@gmail.com";
+  panaeon = "Vitalii Voloshyn <vitalii.voloshyn@gmail.com>";
   paperdigits = "Mica Semrick <mica@silentumbrella.com>";
   pashev = "Igor Pashev <pashev.igor@gmail.com>";
   patternspandemic = "Brad Christensen <patternspandemic@live.com>";
   pawelpacana = "Paweł Pacana <pawel.pacana@gmail.com>";
   pbogdan = "Piotr Bogdan <ppbogdan@gmail.com>";
-  periklis = "theopompos@gmail.com";
+  periklis = "Periklis Tsirakidis <theopompos@gmail.com>";
   pesterhazy = "Paulus Esterhazy <pesterhazy@gmail.com>";
   peterhoeg = "Peter Hoeg <peter@hoeg.com>";
   peterromfeldhk = "Peter Romfeld <peter.romfeld.hk@gmail.com>";
@@ -502,7 +502,7 @@
   pjones = "Peter Jones <pjones@devalot.com>";
   pkmx = "Chih-Mao Chen <pkmx.tw@gmail.com>";
   plcplc = "Philip Lykke Carlsen <plcplc@gmail.com>";
-  plumps = "Maksim Bronsky <maks.bronsky@web.de";
+  plumps = "Maksim Bronsky <maks.bronsky@web.de>";
   pmahoney = "Patrick Mahoney <pat@polycrystal.org>";
   pmiddend = "Philipp Middendorf <pmidden@secure.mailbox.org>";
   polyrod = "Maurizio Di Pietro <dc1mdp@gmail.com>";
@@ -555,7 +555,7 @@
   rushmorem = "Rushmore Mushambi <rushmore@webenchanter.com>";
   rvl = "Rodney Lorrimar <dev+nix@rodney.id.au>";
   rvlander = "Gaëtan André <rvlander@gaetanandre.eu>";
-  rvolosatovs = "Roman Volosatovs <rvolosatovs@riseup.net";
+  rvolosatovs = "Roman Volosatovs <rvolosatovs@riseup.net>";
   ryanartecona = "Ryan Artecona <ryanartecona@gmail.com>";
   ryansydnor = "Ryan Sydnor <ryan.t.sydnor@gmail.com>";
   ryantm = "Ryan Mulligan <ryan@ryantm.com>";
