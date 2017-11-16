@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, buildFHSUserEnv, writeTextFile, bash, wrapGAppsHook, gsettings_desktop_schemas, gtk3, gnome3 }:
+{ stdenv, fetchurl, buildFHSUserEnv, makeDesktopItem, runCommand, bash, wrapGAppsHook, gsettings_desktop_schemas, gtk3, gnome3 }:
 
 let
 version = "5.0.25";
@@ -37,12 +37,30 @@ fhsEnv = buildFHSUserEnv {
   ];
 };
 
-in writeTextFile {
-  name = "zotero";
-  destination = "/bin/zotero";
-  executable = true;
-  text = ''
-    #!${bash}/bin/bash
-    ${fhsEnv}/bin/zotero-fhs-env ${zoteroSrc}/bin/zotero
-  '';
-} // {inherit meta; }
+desktopItem = makeDesktopItem rec {
+  name = "zotero-${version}";
+  exec = "zotero -url %U";
+  icon = "zotero";
+  type = "Application";
+  comment = meta.description;
+  desktopName = "Zotero";
+  genericName = "Reference Management";
+  categories = "Office;Database;";
+  startupNotify = "true";
+};
+
+in runCommand "zotero-${version}" { inherit meta; } ''
+  mkdir -p $out/bin $out/share/applications
+  cat >$out/bin/zotero <<EOF
+#!${bash}/bin/bash
+${fhsEnv}/bin/zotero-fhs-env ${zoteroSrc}/bin/zotero
+EOF
+  chmod +x $out/bin/zotero
+
+  cp ${desktopItem}/share/applications/* $out/share/applications/
+
+  for size in 16 32 48 256; do
+    install -Dm444 ${zoteroSrc}/data/chrome/icons/default/default$size.png \
+      $out/share/icons/hicolor/''${size}x''${size}/apps/zotero.png
+  done
+''
