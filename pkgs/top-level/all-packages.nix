@@ -2364,6 +2364,7 @@ with pkgs;
   google-authenticator = callPackage ../os-specific/linux/google-authenticator { };
 
   google-cloud-sdk = python2.pkgs.google-cloud-sdk;
+  google-cloud-sdk-gce = python2.pkgs.google-cloud-sdk-gce;
 
   google-fonts = callPackage ../data/fonts/google-fonts { };
 
