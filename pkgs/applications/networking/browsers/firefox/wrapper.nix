@@ -8,6 +8,7 @@
 , google_talk_plugin, fribid, gnome3/*.gnome_shell*/
 , esteidfirefoxplugin
 , vlc_npapi
+, browserpass
 , libudev
 , kerberos
 }:
@@ -56,6 +57,7 @@ let
         );
       nativeMessagingHosts =
         ([ ]
+          ++ lib.optional (cfg.enableBrowserpass or false) browserpass
           ++ extraNativeMessagingHosts
         );
       libs = (if ffmpegSupport then [ ffmpeg ] else with gst_all; [ gstreamer gst-plugins-base ])
