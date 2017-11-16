@@ -1,8 +1,18 @@
-{ stdenv, lib, fetchurl, python, cffi, cryptography, pyopenssl, crcmod, google-compute-engine, makeWrapper }:
+# Make sure that the "with-gce" flag is set when building `google-cloud-sdk`
+# for GCE hosts. This flag prevents "google-compute-engine" from being a
+# default dependency which is undesirable because this package is
+#
+#   1) available only on GNU/Linux (requires `systemd` in particular)
+#   2) intended only for GCE guests (and is useless elsewhere)
+#   3) used by `google-cloud-sdk` only on GCE guests
+#
 
-# other systems not supported yet
+{ stdenv, lib, fetchurl, makeWrapper, python, cffi, cryptography, pyopenssl,
+  crcmod, google-compute-engine, with-gce ? false }:
+
 let
-  pythonInputs = [ cffi cryptography pyopenssl crcmod google-compute-engine ];
+  pythonInputs = [ cffi cryptography pyopenssl crcmod ]
+                 ++ lib.optional (with-gce) google-compute-engine;
   pythonPath = lib.makeSearchPath python.sitePackages pythonInputs;
 
   baseUrl = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads";
