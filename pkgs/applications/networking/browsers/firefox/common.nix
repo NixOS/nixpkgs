@@ -67,6 +67,9 @@ stdenv.mkDerivation (rec {
     # See NixOS/nixpkgs#27370
     substituteInPlace build/moz.configure/rust.configure \
       --replace staticlib cdylib
+    # see NixOS/nixpkgs#31725
+    substituteInPlace js/src/jsmath.cpp \
+      --replace "defined(HAVE___SINCOS)" 0
   '';
 
   buildInputs = [
@@ -86,7 +89,28 @@ stdenv.mkDerivation (rec {
   ++ lib.optionals ffmpegSupport [ gstreamer gst-plugins-base ]
   ++ lib.optional  gtk3Support gtk3
   ++ lib.optional  gssSupport kerberos
-  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreMedia xcbuild ]);
+
+  # lots of frameworks to make sure we have everything
+  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    xcbuild
+    CoreMedia
+    ExceptionHandling
+    CoreLocation
+    QuartzCore
+    Cocoa
+    OpenGL
+    Security
+    ServiceManagement
+    AudioUnit
+    AudioToolbox
+    CoreAudio
+    Carbon
+    AddressBook
+    SystemConfiguration
+    AVFoundation
+    CoreFoundation
+    CoreServices
+  ]);
 
   dontUseXcbuild = true;
 
