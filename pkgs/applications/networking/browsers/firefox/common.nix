@@ -46,6 +46,8 @@
 , enableOfficialBranding ? isTorBrowserLike
 
 , gcc
+
+, darwin, xcbuild
 }:
 
 assert stdenv.cc ? libc && stdenv.cc.libc != null;
@@ -60,6 +62,12 @@ stdenv.mkDerivation (rec {
   name = "${pname}-unwrapped-${version}";
 
   inherit src patches meta;
+
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+    # See NixOS/nixpkgs#27370
+    substituteInPlace build/moz.configure/rust.configure \
+      --replace staticlib cdylib
+  '';
 
   buildInputs = [
     gtk2 perl zip libIDL libjpeg zlib bzip2
@@ -77,7 +85,10 @@ stdenv.mkDerivation (rec {
   ++ lib.optional  pulseaudioSupport libpulseaudio # only headers are needed
   ++ lib.optionals ffmpegSupport [ gstreamer gst-plugins-base ]
   ++ lib.optional  gtk3Support gtk3
-  ++ lib.optional  gssSupport kerberos;
+  ++ lib.optional  gssSupport kerberos
+  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreMedia xcbuild ]);
+
+  dontUseXcbuild = true;
 
   NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss";
 
@@ -111,7 +122,6 @@ stdenv.mkDerivation (rec {
 
   configureFlags = [
     "--enable-application=browser"
-    "--with-system-jpeg"
     "--with-system-zlib"
     "--with-system-bz2"
     "--with-system-libevent"
@@ -133,10 +143,14 @@ stdenv.mkDerivation (rec {
     "--disable-gconf"
     "--enable-default-toolkit=${toolkit}"
   ]
+  # Firefox doesn't like the libjpeg built on Darwin
+  ++ lib.optionals (!stdenv.isDarwin) [
+    "--with-system-jpeg"
+  ]
   ++ lib.optionals (stdenv.lib.versionAtLeast version "56" && !stdenv.hostPlatform.isi686) [
     # on i686-linux: --with-libclang-path is not available in this configuration
     "--with-libclang-path=${llvmPackages.clang-unwrapped}/lib"
-    "--with-clang-path=${llvmPackages.clang}/binxbe/clang"
+    "--with-clang-path=${llvmPackages.clang}/bin/clang"
   ]
 
   # TorBrowser patches these
