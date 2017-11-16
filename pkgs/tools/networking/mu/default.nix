@@ -38,8 +38,14 @@ stdenv.mkDerivation rec {
       --replace "/toys/msg2pdf/msg2pdf" "/bin/msg2pdf"
   '';
 
-  # Install mug and msg2pdf
-  postInstall = stdenv.lib.optionalString withMug ''
+  postInstall = ''
+    # By default, mu4e is installed to share/emacs/site-lisp/mu4e. But even if
+    # we use the --with-lispdir configure flag, "mu4e" will be appended to
+    # that path. That's why it's best to move the emacs-lisp files here.
+    mv $out/share/emacs/site-lisp/mu4e/* $out/share/emacs/site-lisp/
+    rmdir $out/share/emacs/site-lisp/mu4e
+  '' + stdenv.lib.optionalString withMug ''
+    # Install mug and msg2pdf
     for f in msg2pdf mug ; do
       install -m755 toys/$f/$f $out/bin/$f
     done
