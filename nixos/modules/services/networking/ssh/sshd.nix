@@ -358,6 +358,21 @@ in
           HostKey ${k.path}
         '')}
 
+        ### Recommended settings from both:
+        # https://stribika.github.io/2015/01/04/secure-secure-shell.html
+        # and
+        # https://wiki.mozilla.org/Security/Guidelines/OpenSSH#Modern_.28OpenSSH_6.7.2B.29
+
+        KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group-exchange-sha256
+        Ciphers chacha20-poly1305@openssh.com,aes256-gcm@openssh.com,aes128-gcm@openssh.com,aes256-ctr,aes192-ctr,aes128-ctr
+        MACs hmac-sha2-512-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-ripemd160-etm@openssh.com,umac-128-etm@openssh.com,hmac-sha2-512,hmac-sha2-256,hmac-ripemd160,umac-128@openssh.com
+
+        # LogLevel VERBOSE logs user's key fingerprint on login.
+        # Needed to have a clear audit track of which key was used to log in.
+        LogLevel VERBOSE
+
+        # Use kernel sandbox mechanisms where possible in unprivileged processes.
+        UsePrivilegeSeparation sandbox
       '';
 
     assertions = [{ assertion = if cfg.forwardX11 then cfgc.setXAuthLocation else true;
