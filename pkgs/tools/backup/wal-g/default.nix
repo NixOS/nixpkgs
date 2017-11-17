@@ -9,7 +9,7 @@ buildGoPackage rec {
   goPackagePath = "github.com/wal-g/wal-g";
   meta = {
     homepage = https://github.com/wal-g/wal-g;
-    license = stdenv.lib.asl20;
+    license = stdenv.lib.licenses.asl20;
     description = "An archival restoration tool for Postgres";
     maintainers = [ stdenv.lib.maintainers.ocharles ];
   };
