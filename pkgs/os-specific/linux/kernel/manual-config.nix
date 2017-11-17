@@ -54,6 +54,7 @@ let
 
   commonMakeFlags = [
     "O=$(buildRoot)"
+
   ] ++ stdenv.lib.optionals (stdenv.platform ? kernelMakeFlags)
     stdenv.platform.kernelMakeFlags;
 
@@ -241,6 +242,8 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
   makeFlags = commonMakeFlags ++ [
     "ARCH=${stdenv.platform.kernelArch}"
   ];
+  # ++ stdenv.lib.optional enableParallelBuilding "-j{}";
+    # cfg.buildCores # TODO set
 
   karch = stdenv.platform.kernelArch;
 
