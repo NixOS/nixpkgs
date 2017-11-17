@@ -1,9 +1,9 @@
 { stdenv, lib, fetchurl, openssl, libtool, perl, libxml2
 , enableSeccomp ? false, libseccomp ? null
-, enablePython ? false, python ? null }:
+, enablePython ? false, python3 ? null }:
 
 assert enableSeccomp -> libseccomp != null;
-assert enablePython -> python != null;
+assert enablePython -> python3 != null;
 
 let version = "9.11.2"; in
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl libtool perl libxml2 ]
     ++ lib.optional enableSeccomp libseccomp
-    ++ lib.optional enablePython python;
+    ++ lib.optional enablePython python3;
 
   STD_CDEFINES = [ "-DDIG_SIGCHASE=1" ]; # support +sigchase
 

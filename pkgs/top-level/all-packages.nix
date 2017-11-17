@@ -11464,7 +11464,7 @@ with pkgs;
 
   bind = callPackage ../servers/dns/bind {
     enablePython = config.bind.enablePython or false;
-    python = python.withPackages (ps: with ps; [ ply ]);
+    python3 = python3.withPackages (ps: with ps; [ ply ]);
   };
   dnsutils = bind.dnsutils;
 
