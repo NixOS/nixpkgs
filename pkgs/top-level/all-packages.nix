@@ -9265,7 +9265,6 @@ with pkgs;
 
   libmsgpack = callPackage ../development/libraries/libmsgpack { };
   libmsgpack_2_0 = callPackage ../development/libraries/libmsgpack/2.0.nix { };
-  libmsgpack_1_4 = callPackage ../development/libraries/libmsgpack/1.4.nix { };
 
   libmysqlconnectorcpp = callPackage ../development/libraries/libmysqlconnectorcpp {
     mysql = mysql57;
