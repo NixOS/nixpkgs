@@ -1,5 +1,5 @@
 --- enlightenment-0.22.0.orig/meson/meson_inst.sh	2017-09-25 10:55:43.000000000 -0300
-+++ enlightenment-0.22.0/meson/meson_inst.sh	2017-11-12 09:04:33.356050746 -0200
++++ enlightenment-0.22.0/meson/meson_inst.sh	2017-11-15 08:31:03.336844920 -0200
 @@ -1,6 +1,19 @@
 -#!/bin/sh
 +#!/bin/sh -x
@@ -18,7 +18,7 @@
 +	b=$(basename "$f".orig)
 +	mv -v "$f"{,.orig}
 +	ln -sv /run/wrappers/bin/"$b" "$f"
-+	echo "    \"$b\".source = \"$f\";" >> $w
++	echo "    \"$b\".source = \"$f.orig\";" >> $w
  done
 +
 +echo "  };" >> $w

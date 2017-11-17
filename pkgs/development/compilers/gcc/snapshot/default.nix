@@ -541,6 +541,8 @@ stdenv.mkDerivation ({
       stdenv.lib.platforms.linux ++
       stdenv.lib.platforms.freebsd ++
       optionals (langAda == false) stdenv.lib.platforms.darwin;
+
+    broken = true;
   };
 }
 

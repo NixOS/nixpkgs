@@ -484,6 +484,7 @@
   ./services/networking/networkmanager.nix
   ./services/networking/nftables.nix
   ./services/networking/ngircd.nix
+  ./services/networking/nghttpx/default.nix
   ./services/networking/nix-serve.nix
   ./services/networking/nntp-proxy.nix
   ./services/networking/nsd.nix

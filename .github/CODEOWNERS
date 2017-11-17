@@ -80,3 +80,6 @@
 
 # Eclipse
 /pkgs/applications/editors/eclipse @rycee
+
+# https://github.com/NixOS/nixpkgs/issues/31401
+/lib/maintainers.nix @ghost

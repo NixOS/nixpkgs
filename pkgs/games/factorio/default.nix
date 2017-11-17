@@ -16,8 +16,8 @@ let
   #    where the ultimate "_" (before the version) is changed to a "-".
   binDists = {
     x86_64-linux = let bdist = bdistForArch { inUrl = "linux64"; inTar = "x64"; }; in {
-      alpha    = bdist { sha256 = "0phikwv00mbwpz4207wm6gz6blarm0b9p1f013ha2w5g7c2dxq4s"; fetcher = authenticatedFetch; };
-      headless = bdist { sha256 = "1m170cl8ji6k3d3jm6n48wx3b7xfsxp4wkaixh0qszaqzafsglp0"; };
+      alpha    = bdist { sha256 = "0y6d7pvf3dgyll175323xp4zmrbyrjn73zrb478y1gpl6dqh064d"; fetcher = authenticatedFetch; };
+      headless = bdist { sha256 = "1agkra3qq11la307ymsfb7v358wc2s2mdpmfbc5n0sb4gnmnqazq"; };
       demo     = bdist { sha256 = "03nwn4838yhqq0r76pf2m4wxi32rsq0knsxmq3qq4ycji89q1dyc"; version = "0.15.33"; };
     };
     i686-linux = let bdist = bdistForArch { inUrl = "linux32"; inTar = "i386"; }; in {
@@ -29,7 +29,7 @@ let
   actual = binDists.${stdenv.system}.${releaseType} or (throw "Factorio: unsupported platform");
 
   bdistForArch = arch: { sha256 ? null
-                       , version ? "0.15.34"
+                       , version ? "0.15.37"
                        , fetcher ? fetchurl
                        , nameMut ? x: x
                        }:
