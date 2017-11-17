@@ -1,14 +1,8 @@
-{ stdenv, fetchurl, fetchpatch, dpkg, curl, libarchive, openssl, ruby, buildRubyGem, libiconv
+{ stdenv, fetchurl, fetchpatch, dpkg, curl, libarchive, openssl, rake, ruby, buildRubyGem, libiconv
 , libxml2, libxslt, libffi, makeWrapper, p7zip, xar, gzip, cpio }:
 
 let
   version = "2.0.1";
-  rake = buildRubyGem {
-    inherit ruby;
-    gemName = "rake";
-    version = "10.4.2";
-    sha256 = "1rn03rqlf1iv6n87a78hkda2yqparhhaivfjpizblmxvlw2hk5r8";
-  };
 
   url = if stdenv.isLinux
     then "https://releases.hashicorp.com/vagrant/${version}/vagrant_${version}_${arch}.deb"
