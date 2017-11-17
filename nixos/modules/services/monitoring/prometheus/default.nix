@@ -66,6 +66,16 @@ let
           How frequently to evaluate rules by default.
         '';
       };
+
+      external_labels = mkOption {
+        type = types.attrsOf types.str;
+        description = ''
+          The labels to add to any time series or alerts when
+          communicating with external systems (federation, remote
+          storage, Alertmanager).
+        '';
+        default = {};
+      };
     };
   };
 
