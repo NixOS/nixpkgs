@@ -31,10 +31,9 @@ in stdenv.mkDerivation rec {
     stdenv.lib.optional stdenv.isDarwin [ "--with-macosx-keyring" ];
 
   postInstall = ''
-    install -d $out/share/doc/${pname}
-    install -Dm644 doc/*.example $out/share/doc/${pname}
     install -d $out/share/doc/${pname}/scripts
     cp -r scripts/{find_alias,msmtpqueue,msmtpq,set_sendmail} $out/share/doc/${pname}/scripts
+    install -Dm644 doc/*.example $out/share/doc/${pname}
 
     substitute scripts/msmtpq/msmtpq $out/bin/msmtpq \
       --replace @msmtp@      $out/bin/msmtp \
