@@ -152,7 +152,7 @@ stdenv.mkDerivation rec {
 
       wrapProgram $out/bin/dmd \
           --prefix PATH ":" "${stdenv.cc}/bin" \
-          --set CC "$""{CC:-$CC""}"
+          --set-default CC "$CC"
 
       cd $out/bin
       tee dmd.conf << EOF
