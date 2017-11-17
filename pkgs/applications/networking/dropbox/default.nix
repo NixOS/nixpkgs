@@ -69,7 +69,7 @@ buildFHSUserEnv {
         rm "$installer"
     fi
 
-    exec "$HOME/.dropbox-dist/dropboxd"
+    exec "$HOME/.dropbox-dist/dropboxd" "$@"
   '';
 
   meta = with lib; {
