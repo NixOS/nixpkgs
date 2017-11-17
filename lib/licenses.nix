@@ -441,6 +441,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "OpenSSL License";
   };
 
+  osl = spdx {
+    spdxId = "OSL-3.0";
+    fullName = "Open Software License 3.0";
+  };
+
   php301 = spdx {
     spdxId = "PHP-3.01";
     fullName = "PHP License v3.01";
