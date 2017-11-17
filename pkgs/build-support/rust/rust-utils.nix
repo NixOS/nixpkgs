@@ -19,9 +19,9 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
             (lib.concatMapStringsSep " " (dep:
               let extern = lib.strings.replaceStrings ["-"] ["_"] dep.libName; in
               (if dep.crateType == "lib" then
-                 " --extern ${extern}=${dep.out}/lib${extern}-${dep.metadata}.rlib"
+                 " --extern ${extern}=${dep.out}/rlibs/lib${extern}-${dep.metadata}.rlib"
               else
-                 " --extern ${extern}=${dep.out}/lib${extern}-${dep.metadata}${buildPlatform.extensions.sharedLibrary}")
+                 " --extern ${extern}=${dep.out}/rlibs/lib${extern}-${dep.metadata}${buildPlatform.extensions.sharedLibrary}")
             ) dependencies);
           deps = makeDeps dependencies;
           buildDeps = makeDeps buildDependencies;
@@ -44,21 +44,21 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
       mkdir -p target/buildDeps
       chmod uga+w target -R
       for i in ${completeDepsDir}; do
-         ln -s -f $i/*.rlib target/deps #*/
-         ln -s -f $i/*.so $i/*.dylib target/deps #*/
-         if [ -e "$i/link" ]; then
-            cat $i/link >> target/link
-            cat $i/link >> target/link.final
+         ln -s -f $i/rlibs/*.rlib target/deps #*/
+         ln -s -f $i/rlibs/*.so $i/rlibs/*.dylib target/deps #*/
+         if [ -e "$i/rlibs/link" ]; then
+            cat $i/rlibs/link >> target/link
+            cat $i/rlibs/link >> target/link.final
          fi
          if [ -e $i/env ]; then
             source $i/env
          fi
       done
       for i in ${completeBuildDepsDir}; do
-         ln -s -f $i/*.rlib target/buildDeps #*/
-         ln -s -f $i/*.so $i/*.dylib target/buildDeps #*/
-         if [ -e "$i/link" ]; then
-            cat $i/link >> target/link.build
+         ln -s -f $i/rlibs/*.rlib target/buildDeps #*/
+         ln -s -f $i/rlibs/*.so $i/rlibs/*.dylib target/buildDeps #*/
+         if [ -e "$i/rlibs/link" ]; then
+            cat $i/rlibs/link >> target/link.build
          fi
          if [ -e $i/env ]; then
             source $i/env
@@ -195,7 +195,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
          if [ ! -z "$i" ]; then
            for lib in $i; do
              echo "-L $lib" >> target/link
-             L=$(echo $lib | sed -e "s#$(pwd)/target/build#$out#")
+             L=$(echo $lib | sed -e "s#$(pwd)/target/build#$out/rlibs#")
              echo "-L $L" >> target/link.final
            done
          fi
@@ -248,15 +248,16 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
 
     installCrate = crateName: ''
       mkdir -p $out
+      mkdir $out/rlibs
       if [ -s target/env ]; then
         cp target/env $out/env
       fi
       if [ -s target/link.final ]; then
-        cp target/link.final $out/link
+        cp target/link.final $out/rlibs/link
       fi
-      cp target/deps/* $out # */
+#      cp target/deps/* $out/rlibs # */
       if [ "$(ls -A target/build)" ]; then # */
-        cp -r target/build/* $out # */
+	cp -r target/build/* $out/rlibs # */
       fi
       if [ "$(ls -A target/bin)" ]; then # */
         mkdir -p $out/bin
