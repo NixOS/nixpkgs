@@ -1096,6 +1096,8 @@ with pkgs;
 
   gist = callPackage ../tools/text/gist { };
 
+  gixy = callPackage ../tools/admin/gixy { };
+
   glide = callPackage ../development/tools/glide { };
 
   glock = callPackage ../development/tools/glock { };
