@@ -126,7 +126,7 @@ let
 
           If honor_labels is set to "false", label conflicts are
           resolved by renaming conflicting labels in the scraped data
-          to "exported_<original-label>" (for example
+          to "exported_&lt;original-label&gt;" (for example
           "exported_instance", "exported_job") and then attaching
           server-side labels. This is useful for use cases such as
           federation, where all labels specified in the target should
