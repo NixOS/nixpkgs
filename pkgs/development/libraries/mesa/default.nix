@@ -79,7 +79,7 @@ stdenv.mkDerivation {
       "ftp://ftp.freedesktop.org/pub/mesa/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/${version}/mesa-${version}.tar.xz"
       "ftp://ftp.freedesktop.org/pub/mesa/older-versions/${branch}.x/${version}/mesa-${version}.tar.xz"
-      "https://launchpad.net/mesa/trunk/${version}/+download/mesa-${version}.tar.xz"
+      "https://mesa.freedesktop.org/archive/mesa-${version}.tar.xz"
     ];
     sha256 = "0l75q9l4g15y66rqk2swqvj18qj60hpimv0f97jk44bfrpz0i92v";
   };

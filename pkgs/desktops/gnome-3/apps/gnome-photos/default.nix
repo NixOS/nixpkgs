@@ -2,7 +2,8 @@
 , pkgconfig, gtk3, glib
 , makeWrapper, itstool, gegl, babl, lcms2
 , desktop_file_utils, gmp, libmediaart, wrapGAppsHook
-, gnome3, librsvg, gdk_pixbuf, libexif, gexiv2, geocode_glib }:
+, gnome3, librsvg, gdk_pixbuf, libexif, gexiv2, geocode_glib
+, dleyna-renderer }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
                   gnome3.gfbgraph gnome3.grilo-plugins gnome3.grilo
                   gnome3.gnome_online_accounts gnome3.gnome_desktop
                   lcms2 libexif gnome3.tracker libxml2 desktop_file_utils
-                  wrapGAppsHook gexiv2 geocode_glib ];
+                  wrapGAppsHook gexiv2 geocode_glib dleyna-renderer ];
 
   enableParallelBuilding = true;
 

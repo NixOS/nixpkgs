@@ -1,5 +1,6 @@
-{ stdenv, fetchFromGitHub, which, autoreconfHook, writeScript, ncurses, perl
-, cyrus_sasl, gss, gpgme, kerberos, libidn, notmuch, openssl, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42 }:
+{ stdenv, fetchFromGitHub, which, autoreconfHook, makeWrapper, writeScript,
+ncurses, perl , cyrus_sasl, gss, gpgme, kerberos, libidn, notmuch, openssl,
+lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42 }:
 
 let
   muttWrapper = writeScript "mutt" ''
@@ -29,7 +30,9 @@ in stdenv.mkDerivation rec {
     notmuch openssl perl lmdb
   ];
 
-  nativeBuildInputs = [ autoreconfHook docbook_xsl docbook_xml_dtd_42 libxslt.bin which ];
+  nativeBuildInputs = [
+    autoreconfHook docbook_xsl docbook_xml_dtd_42 libxslt.bin which makeWrapper
+  ];
 
   enableParallelBuilding = true;
 
@@ -39,6 +42,10 @@ in stdenv.mkDerivation rec {
         --replace http://docbook.sourceforge.net/release/xsl/current     ${docbook_xsl}/share/xml/docbook-xsl \
         --replace http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd ${docbook_xml_dtd_42}/xml/dtd/docbook/docbookx.dtd
     done
+
+    # allow neomutt to map attachments to their proper mime.types if specified wrongly
+    substituteInPlace sendlib.c \
+      --replace /etc/mime.types $out/etc/mime.types
   '';
 
   configureFlags = [
@@ -65,6 +72,8 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     cp ${muttWrapper} $out/bin/mutt
+    mv $out/share/doc/neomutt/mime.types $out/etc
+    wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/lib/neomutt"
   '';
 
   meta = with stdenv.lib; {

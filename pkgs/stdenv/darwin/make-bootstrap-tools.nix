@@ -34,7 +34,7 @@ in rec {
 
       cp -rL ${darwin.Libsystem}/include $out
       chmod -R u+w $out/include
-      cp -rL ${icu.dev}/include*             $out/include
+      cp -rL ${darwin.ICU}/include*             $out/include
       cp -rL ${libiconv}/include/*       $out/include
       cp -rL ${gnugrep.pcre.dev}/include/*   $out/include
       mv $out/include $out/include-Libsystem
@@ -84,7 +84,7 @@ in rec {
       mkdir $out/include
       cp -rd ${llvmPackages.libcxx}/include/c++     $out/include
 
-      cp -d ${icu.out}/lib/libicu*.dylib $out/lib
+      cp -d ${darwin.ICU}/lib/libicu*.dylib $out/lib
       cp -d ${zlib.out}/lib/libz.*       $out/lib
       cp -d ${gmpxx.out}/lib/libgmp*.*   $out/lib
       cp -d ${xz.out}/lib/liblzma*.*     $out/lib

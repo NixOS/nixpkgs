@@ -697,13 +697,13 @@ let
         sha1 = "450d4dc9fa70de732762fbd2d4a28981419a0ccf";
       };
     };
-    "clone-1.0.2" = {
+    "clone-1.0.3" = {
       name = "clone";
       packageName = "clone";
-      version = "1.0.2";
+      version = "1.0.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/clone/-/clone-1.0.2.tgz";
-        sha1 = "260b7a99ebb1edfe247538175f783243cb19d149";
+        url = "https://registry.npmjs.org/clone/-/clone-1.0.3.tgz";
+        sha1 = "298d7e2231660f40c003c2ed3140decf3f53085f";
       };
     };
     "clone-stats-0.0.1" = {
@@ -2443,13 +2443,13 @@ let
         sha1 = "e8381cbebb5b5fd0ca8d2b09f6a0181a158db34d";
       };
     };
-    "ws-1.1.4" = {
+    "ws-1.1.5" = {
       name = "ws";
       packageName = "ws";
-      version = "1.1.4";
+      version = "1.1.5";
       src = fetchurl {
-        url = "https://registry.npmjs.org/ws/-/ws-1.1.4.tgz";
-        sha1 = "57f40d036832e5f5055662a397c4de76ed66bf61";
+        url = "https://registry.npmjs.org/ws/-/ws-1.1.5.tgz";
+        sha512 = "3iv2yz706h7wyg563jsfjdykkkxs8j49vz60r6qx5by0npfhs98rgc114kdqs15sc52mldscc22bkfpkrs08cwlqaxx8lfdjn5alwm3";
       };
     };
     "yargs-3.32.0" = {
@@ -4350,7 +4350,7 @@ in
           })
           (sources."vinyl-0.5.3" // {
             dependencies = [
-              sources."clone-1.0.2"
+              sources."clone-1.0.3"
               sources."clone-stats-0.0.1"
             ];
           })
@@ -4602,7 +4602,7 @@ in
         dependencies = [
           (sources."defaults-1.0.3" // {
             dependencies = [
-              sources."clone-1.0.2"
+              sources."clone-1.0.3"
             ];
           })
           (sources."glob-stream-3.1.18" // {
@@ -5764,7 +5764,7 @@ in
           sources."isexe-2.0.0"
         ];
       })
-      (sources."ws-1.1.4" // {
+      (sources."ws-1.1.5" // {
         dependencies = [
           sources."options-0.0.6"
           sources."ultron-1.0.2"
@@ -5816,7 +5816,7 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "Web Inspector based nodeJS debugger";
-      homepage = https://github.com/node-inspector/node-inspector;
+      homepage = http://github.com/node-inspector/node-inspector;
     };
     production = true;
   };

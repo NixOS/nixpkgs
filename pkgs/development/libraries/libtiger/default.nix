@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libkate, pango, cairo, pkgconfig }:
+{ stdenv, lib, fetchurl, libkate, pango, cairo, pkgconfig, darwin }:
 
 stdenv.mkDerivation rec {
   name = "libtiger-0.3.4";
@@ -9,11 +9,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libkate pango cairo ];
+  buildInputs = [ libkate pango cairo ]
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.ApplicationServices;
 
   meta = {
     homepage = https://code.google.com/archive/p/libtiger/;
     description = "A rendering library for Kate streams using Pango and Cairo";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ matthewbauer ];
   };
 }

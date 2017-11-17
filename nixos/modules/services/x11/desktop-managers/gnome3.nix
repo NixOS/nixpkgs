@@ -94,6 +94,8 @@ in {
     services.udisks2.enable = true;
     services.accounts-daemon.enable = true;
     services.geoclue2.enable = mkDefault true;
+    services.dleyna-renderer.enable = mkDefault true;
+    services.dleyna-server.enable = mkDefault true;
     services.gnome3.at-spi2-core.enable = true;
     services.gnome3.evolution-data-server.enable = true;
     services.gnome3.gnome-disks.enable = mkDefault true;

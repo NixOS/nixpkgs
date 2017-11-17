@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, freetype, harfbuzz, jbig2dec, libjpeg, libX11, mujs, mupdf, ncurses, openjpeg
+, freetype, harfbuzz, jbig2dec, libjpeg, libX11, mupdf, ncurses, openjpeg
 , openssl
 
 , imageSupport ? true, imlib2 ? null }:
@@ -27,14 +27,10 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   buildInputs = [
-    freetype harfbuzz jbig2dec libjpeg libX11 mujs mupdf ncurses openjpeg
+    freetype harfbuzz jbig2dec libjpeg libX11 mupdf ncurses openjpeg
     openssl
   ] ++ stdenv.lib.optionals imageSupport [
     imlib2
-  ];
-
-  patches = [
-    ./mupdf-1.9.patch
   ];
 
   configurePhase = ''

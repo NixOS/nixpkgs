@@ -7,6 +7,11 @@ let
   cfg = config.services.mysql;
 
   mysql = cfg.package;
+  
+  isMariaDB = 
+    let
+      pName = _p: (builtins.parseDrvName (_p.name)).name;
+    in pName mysql == pName pkgs.mariadb;
 
   atLeast55 = versionAtLeast mysql.mysqlVersion "5.5";
 
@@ -59,7 +64,7 @@ in
         type = types.package;
         example = literalExample "pkgs.mysql";
         description = "
-          Which MySQL derivation to use.
+          Which MySQL derivation to use. MariaDB packages are supported too.
         ";
       };
 
@@ -360,7 +365,7 @@ in
 
             ${concatMapStrings (user:
               ''
-                ( echo "CREATE USER IF NOT EXISTS '${user.name}'@'localhost' IDENTIFIED WITH ${if mysql == pkgs.mariadb then "unix_socket" else "auth_socket"};"
+                ( echo "CREATE USER IF NOT EXISTS '${user.name}'@'localhost' IDENTIFIED WITH ${if isMariaDB then "unix_socket" else "auth_socket"};"
                   ${concatStringsSep "\n" (mapAttrsToList (database: permission: ''
                   echo "GRANT ${permission} ON ${database} TO '${user.name}'@'localhost';"
                   '') user.ensurePermissions)}

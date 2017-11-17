@@ -339,7 +339,6 @@ let
     rtfbs = [ pkgs.zlib pkgs.pcre.dev pkgs.bzip2 pkgs.gzip pkgs.readline ];
     rtiff = [ pkgs.libtiff.dev ];
     runjags = [ pkgs.jags ];
-    RSymphony = [ pkgs.symphony ];
     RVowpalWabbit = [ pkgs.zlib.dev pkgs.boost ];
     rzmq = [ pkgs.zeromq3 ];
     SAVE = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre ];

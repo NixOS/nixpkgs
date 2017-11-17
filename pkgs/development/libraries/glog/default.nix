@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "glog-${version}";
-  version = "0.3.4";
+  version = "0.3.5";
 
   src = fetchFromGitHub {
-    owner = "Google";
+    owner = "google";
     repo = "glog";
     rev = "v${version}";
-    sha256 = "0ym5g15m7c8kjfr2c3zq6bz08ghin2d1r1nb6v2vnkfh1vn945x1";
+    sha256 = "12v7j6xy0ghya6a0f6ciy4fnbdc486vml2g07j9zm8y5xc6vx3pq";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

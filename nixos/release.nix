@@ -303,12 +303,14 @@ in rec {
   tests.nfs3 = callTest tests/nfs.nix { version = 3; };
   tests.nfs4 = callTest tests/nfs.nix { version = 4; };
   tests.nginx = callTest tests/nginx.nix { };
+  tests.nghttpx = callTest tests/nghttpx.nix { };
   tests.leaps = callTest tests/leaps.nix { };
   tests.nsd = callTest tests/nsd.nix {};
   tests.openssh = callTest tests/openssh.nix {};
   tests.pam-oath-login = callTest tests/pam-oath-login.nix {};
   #tests.panamax = hydraJob (import tests/panamax.nix { system = "x86_64-linux"; });
   tests.peerflix = callTest tests/peerflix.nix {};
+  tests.php-pcre = callTest tests/php-pcre.nix {};
   tests.postgresql = callSubTests tests/postgresql.nix {};
   tests.pgmanage = callTest tests/pgmanage.nix {};
   tests.postgis = callTest tests/postgis.nix {};

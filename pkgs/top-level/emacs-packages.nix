@@ -75,24 +75,14 @@ let
 
   ## START HERE
 
-  tablist = melpaBuild rec {
-    pname = "tablist";
-    inherit (pdf-tools) src version;
-    fileSpecs = [ "lisp/tablist.el" "lisp/tablist-filter.el" ];
-    meta = {
-      description = "Extended tabulated-list-mode";
-      license = gpl3;
-    };
-  };
-
   pdf-tools = melpaBuild rec {
     pname = "pdf-tools";
-    version = "0.70";
+    version = "0.80";
     src = fetchFromGitHub {
       owner = "politza";
       repo = "pdf-tools";
       rev = "v${version}";
-      sha256 = "19sy49r3ijh36m7hl4vspw5c4i8pnfqdn4ldm2sqchxigkw56ayl";
+      sha256 = "1i4647vax5na73basc5dz4lh9kprir00fh8ps4i0l1y3ippnjs2s";
     };
     nativeBuildInputs = [ external.pkgconfig ];
     buildInputs = with external; [ autoconf automake libpng zlib poppler ];
@@ -206,6 +196,9 @@ let
     };
   };
 
+  ess-R-object-popup =
+    callPackage ../applications/editors/emacs-modes/ess-R-object-popup { };
+
   find-file-in-project = melpaBuild rec {
     pname = "find-file-in-project";
     version = "3.5";
@@ -225,6 +218,8 @@ let
       license = gpl3Plus;
     };
   };
+
+  filesets-plus = callPackage ../applications/editors/emacs-modes/filesets-plus { };
 
   font-lock-plus = callPackage ../applications/editors/emacs-modes/font-lock-plus { };
 
@@ -257,6 +252,12 @@ let
     };
   };
 
+  hexrgb = callPackage ../applications/editors/emacs-modes/hexrgb { };
+
+  header2 = callPackage ../applications/editors/emacs-modes/header2 { };
+
+  helm-words = callPackage ../applications/editors/emacs-modes/helm-words { };
+
   hindent = melpaBuild rec {
     pname = "hindent";
     version = external.hindent.version;
@@ -271,6 +272,8 @@ let
   };
 
   icicles = callPackage ../applications/editors/emacs-modes/icicles { };
+
+  redshank = callPackage ../applications/editors/emacs-modes/redshank { };
 
   rtags = melpaBuild rec {
     pname = "rtags";
@@ -295,6 +298,9 @@ let
     };
   };
 
+  lib-requires =
+    callPackage ../applications/editors/emacs-modes/lib-requires { };
+
   lui = melpaBuild rec {
     pname   = "lui";
     version = circe.version;
@@ -311,6 +317,14 @@ let
     inherit lib;
   };
 
+  org-mac-link =
+    callPackage ../applications/editors/emacs-modes/org-mac-link { };
+
+  perl-completion =
+    callPackage ../applications/editors/emacs-modes/perl-completion { };
+
+  railgun = callPackage ../applications/editors/emacs-modes/railgun { };
+
   gn = callPackage ../applications/editors/emacs-modes/gn { };
 
   shorten = melpaBuild rec {
@@ -323,6 +337,8 @@ let
       license = gpl3Plus;
     };
   };
+
+  stgit = callPackage ../applications/editors/emacs-modes/stgit { };
 
   structured-haskell-mode = melpaBuild rec {
     pname = "shm";
@@ -338,6 +354,8 @@ let
       platforms = external.structured-haskell-mode.meta.platforms;
     };
   };
+
+  thingatpt-plus = callPackage ../applications/editors/emacs-modes/thingatpt-plus { };
 
   tramp = callPackage ../applications/editors/emacs-modes/tramp { };
 
@@ -359,6 +377,10 @@ let
       license = gpl3Plus;
     };
   };
+
+  yaoddmuse = callPackage ../applications/editors/emacs-modes/yaoddmuse { };
+
+  zeitgeist = callPackage ../applications/editors/emacs-modes/zeitgeist { };
 
   };
 

@@ -3,12 +3,12 @@
 stdenv.mkDerivation rec {
   name    = "chez-scheme-${version}";
   version = "9.5-${dver}";
-  dver    = "20171012";
+  dver    = "20171109";
 
   src = fetchgit {
     url    = "https://github.com/cisco/chezscheme.git";
-    rev    = "adb3b7bb22ddaa1ba91b98b6f4a647427c3a4d9b";
-    sha256 = "0hiynf7g0q77ipqxjsqdm2zb0m15bl1hhp615fn3i2hv0qz5a4xr";
+    rev    = "bc117fd4d567a6863689fec6814882a0f04e577a";
+    sha256 = "1adzw7bgdz0p4xmccc6awdkb7bp6xba9mnlsh3r3zvblqfci8i70";
     fetchSubmodules = true;
   };
 

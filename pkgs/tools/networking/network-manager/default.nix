@@ -8,12 +8,12 @@
 stdenv.mkDerivation rec {
   name    = "network-manager-${version}";
   pname   = "NetworkManager";
-  major   = "1.8";
-  version = "${major}.2";
+  major   = "1.10";
+  version = "${major}.0";
 
   src = fetchurl {
     url    = "mirror://gnome/sources/${pname}/${major}/${pname}-${version}.tar.xz";
-    sha256 = "1x0vzxvrck0snga2n3pc7g74m20zz74cr4r8gfspl8sckv6yz9bi";
+    sha256 = "1ph45rqpl8p9k4rirhss0hpf104clm8fp322p6kh6q75y06ddfwa";
   };
 
   outputs = [ "out" "dev" ];
