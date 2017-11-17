@@ -227,9 +227,9 @@ stdenv.mkDerivation {
     wrapProgram $out/sbin/ceph-create-keys ${wrapArgs}
     wrapProgram $out/sbin/ceph-disk ${wrapArgs}
 
-    # Bring in lib as a native build input
+    # Bring in lib as a run-time dependency
     mkdir -p $out/nix-support
-    echo "$lib" > $out/nix-support/propagated-native-build-inputs
+    echo "$lib" > $out/nix-support/propagated-build-inputs
 
     # Fix the python library loading
     find $lib/lib -name \*.pyc -or -name \*.pyd -exec rm {} \;

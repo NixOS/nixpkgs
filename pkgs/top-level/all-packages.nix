@@ -9748,7 +9748,7 @@ with pkgs;
     # the hook to find catalogs is hidden by buildEnv
     postBuild = ''
       mkdir "$out/nix-support"
-      cp '${libxml2.dev}/nix-support/propagated-native-build-inputs' "$out/nix-support/"
+      cp '${libxml2.dev}/nix-support/propagated-build-inputs' "$out/nix-support/"
     '';
   };
 
