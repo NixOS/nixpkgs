@@ -8,7 +8,8 @@ let
   journal = if stdenv.isLinux then "y" else "n";
 
 in stdenv.mkDerivation rec {
-  name = "msmtp-${version}";
+  pname = "msmtp";
+  name = "${pname}-${version}";
   version = "1.6.6";
 
   src = fetchurl {
@@ -30,6 +31,11 @@ in stdenv.mkDerivation rec {
     stdenv.lib.optional stdenv.isDarwin [ "--with-macosx-keyring" ];
 
   postInstall = ''
+    install -d $out/share/doc/${pname}
+    install -Dm644 doc/*.example $out/share/doc/${pname}
+    install -d $out/share/doc/${pname}/scripts
+    cp -r scripts/{find_alias,msmtpqueue,msmtpq,set_sendmail} $out/share/doc/${pname}/scripts
+
     substitute scripts/msmtpq/msmtpq $out/bin/msmtpq \
       --replace @msmtp@      $out/bin/msmtp \
       --replace @nc@         ${netcat-gnu}/bin/nc \
