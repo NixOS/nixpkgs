@@ -29,6 +29,8 @@ let
       sha256 = "0l45mvyags56jfi24rawms8j2ihbc45mq7v13pkrrwppghqrdn52";
     };
 
+    outputs = [ "out" "dev" ];
+
     nativeBuildInputs = [ autoconf automake libtool_2 ];
     buildInputs = [ libuuid ] ++
       # Only need llvm and clang if the stdenv isn't already clang-based (TODO: just make a stdenv.cc.isClang)
