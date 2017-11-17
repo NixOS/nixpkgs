@@ -1,31 +1,32 @@
-{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper }:
+{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper, rustup, substituteAll }:
 
 rustPlatform.buildRustPackage rec {
   name = "racer-${version}";
-  version = "2.0.9";
+  version = "2.0.12";
 
   src = fetchFromGitHub {
     owner = "racer-rust";
     repo = "racer";
     rev = version;
-    sha256 = "06k50f2vj2w08afh3nrlhs0amcvw2i45bhfwr70sgs395xicjswp";
+    sha256 = "0y1xlpjr8y8gsmmrjlykx4vwzf8akk42g35kg3kc419ry4fli945";
   };
 
-  cargoSha256 = "1w5imxyqlyv24dvzncq6dy01zn2x8p1aciyvzh8ac1x1wdjcacjc";
+  cargoSha256 = "1h3jv4hajdv6k309kjr6b6298kxmd0faw081i3788sl794k9mp0j";
 
-  buildInputs = [ makeWrapper ];
+  # rustup is required for test
+  buildInputs = [ makeWrapper rustup ];
 
   preCheck = ''
     export RUST_SRC_PATH="${rustPlatform.rustcSrc}"
   '';
-
+  patches = [
+    (substituteAll {
+      src = ./rust-src.patch;
+      inherit (rustPlatform) rustcSrc;
+    })
+    ./ignore-tests.patch
+  ];
   doCheck = true;
-
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -p target/release/racer $out/bin/
-    wrapProgram $out/bin/racer --set RUST_SRC_PATH "${rustPlatform.rustcSrc}"
-  '';
 
   meta = with stdenv.lib; {
     description = "A utility intended to provide Rust code completion for editors and IDEs";
