@@ -53,11 +53,6 @@ makeWrapper() {
             value="${params[$((n + 2))]}"
             n=$((n + 2))
             echo "export $varName=\${$varName-${value@Q}}" >> "$wrapper"
-        elif [[ "$p" == "--set-eval" ]]; then
-            varName="${params[$((n + 1))]}"
-            value="${params[$((n + 2))]}"
-            n=$((n + 2))
-            echo "export $varName=\$(eval echo ${value@Q})" >> "$wrapper"
         elif [[ "$p" == "--unset" ]]; then
             varName="${params[$((n + 1))]}"
             n=$((n + 1))
