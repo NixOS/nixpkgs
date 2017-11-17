@@ -6253,13 +6253,9 @@ with pkgs;
         inherit rust;
       };
 
-      rustcSrc = stdenv.mkDerivation {
-        name = "rust-src";
-        src = rust.rustc.src;
-        phases = ["unpackPhase" "installPhase"];
-        installPhase = "mv src $out";
+      rustcSrc = callPackage ../development/compilers/rust/rust-src.nix {
+        inherit (rust) rustc;
       };
-
     });
 
   cargo-edit = callPackage ../tools/package-management/cargo-edit { };
