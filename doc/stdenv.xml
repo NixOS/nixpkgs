@@ -532,10 +532,11 @@ Additional file types can be supported by setting the
 
   <varlistentry>
     <term><varname>patches</varname></term>
-    <listitem><para>The list of patches.  They must be in the format
-    accepted by the <command>patch</command> command, and may
-    optionally be compressed using <command>gzip</command>
-    (<filename>.gz</filename>), <command>bzip2</command>
+    <listitem><para>The list of patches. They must be in the format
+    accepted by the <command>patch</command> command (for further information
+    refer to the <link xlink:href="https://en.wikipedia.org/wiki/Patch_%28Unix%29">
+    Wikipedia article</link>), and may optionally be compressed using
+    <command>gzip</command> (<filename>.gz</filename>), <command>bzip2</command>
     (<filename>.bz2</filename>) or <command>xz</command>
     (<filename>.xz</filename>).</para></listitem>
   </varlistentry>

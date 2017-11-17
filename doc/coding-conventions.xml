@@ -662,7 +662,9 @@ src = fetchFromGitHub {
 
 <section xml:id="sec-patches"><title>Patches</title>
   <para>Only patches that are unique to <literal>nixpkgs</literal> should be
-    included in <literal>nixpkgs</literal> source.</para>
+  included in <literal>nixpkgs</literal> source. For further information about
+  patches refer to the <link xlink:href="https://en.wikipedia.org/wiki/Patch_%28Unix%29">
+  Wikipedia article</link>.</para>
   <para>Patches available online should be retrieved using
     <literal>fetchpatch</literal>.</para>
   <para>
