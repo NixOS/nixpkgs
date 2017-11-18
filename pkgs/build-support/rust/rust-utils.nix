@@ -40,7 +40,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
         boldgreen="$(printf '\033[0;1;32m')" #set bold, and set green.
       fi
       runHook preBuild
-      mkdir -p target/{deps,build,buildDeps}
+      mkdir -p target/{deps,lib,build,buildDeps}
       chmod uga+w target -R
       for i in ${completeDepsDir}; do
          ln -s -f $i/rlibs/*.rlib target/deps #*/
