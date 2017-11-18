@@ -39,10 +39,8 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
         green="$(printf '\033[0;32m')" #set green
         boldgreen="$(printf '\033[0;1;32m')" #set bold, and set green.
       fi
-      mkdir -p target/deps
-      mkdir -p target/lib
-      mkdir -p target/build
-      mkdir -p target/buildDeps
+      runHook preBuild
+      mkdir -p target/{deps,build,buildDeps}
       chmod uga+w target -R
       for i in ${completeDepsDir}; do
          ln -s -f $i/rlibs/*.rlib target/deps #*/
@@ -96,7 +94,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
       fi
       if [[ ! -z "$BUILD" ]] ; then
          echo "$boldgreen""Building $BUILD (${libName})""$norm"
-         mkdir -p target/build/${crateName}
+         mkdir -p target/build/{${crateName},${crateName}.out}
          EXTRA_BUILD_FLAGS=""
          if [ -e target/link_ ]; then
            EXTRA_BUILD_FLAGS=$(cat target/link_)
@@ -111,10 +109,8 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
            ${crateFeatures} --out-dir target/build/${crateName} --emit=dep-info,link \
            -L dependency=target/buildDeps ${buildDeps} --cap-lints allow $EXTRA_BUILD_FLAGS --color ${colors}
 
-         mkdir -p target/build/${crateName}.out
          export RUST_BACKTRACE=1
          BUILD_OUT_DIR="-L $OUT_DIR"
-         mkdir -p $OUT_DIR
          target/build/${crateName}/build_script_build > target/build/${crateName}.opt
          set +e
          EXTRA_BUILD=$(sed -n "s/^cargo:rustc-flags=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ')
@@ -245,9 +241,12 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
       fi
       # Remove object files to avoid "wrong ELF type"
       find target -type f -name "*.o" -print0 | xargs -0 rm -f
+
+      runHook postBuild
     '' + finalBins;
 
     installCrate = crateName: ''
+      runHook preInstall
       mkdir -p $out
       mkdir $out/rlibs
       if [ -s target/env ]; then
@@ -266,6 +265,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
         mkdir -p $out/bin
         cp -P target/bin/* $out/bin # */
       fi
+      runHook postInstall
     '';
 
 in
