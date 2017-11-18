@@ -4,6 +4,7 @@
 , removeReferencesTo
 , cpp ? false
 , gfortran ? null
+, fortran2003 ? false
 , zlib ? null
 , szip ? null
 , mpi ? null
@@ -13,6 +14,9 @@
 # cpp and mpi options are mutually exclusive
 # (--enable-unsupported could be used to force the build)
 assert !cpp || mpi == null;
+
+# Need a Fortran compiler for Fortran2003 bindings
+assert fortran2003 -> gfortran != null;
 
 # No point splitting version 1.8.18 into multiple outputs.
 # The library /lib/libhdf5.so has a reference to gcc-wrapper
@@ -45,6 +49,7 @@ stdenv.mkDerivation rec {
   configureFlags = []
     ++ optional cpp "--enable-cxx"
     ++ optional (gfortran != null) "--enable-fortran"
+    ++ optional fortran2003 "--enable-fortran2003"
     ++ optional (szip != null) "--with-szlib=${szip}"
     ++ optionals (mpi != null) ["--enable-parallel" "CC=${mpi}/bin/mpicc"]
     ++ optional enableShared "--enable-shared";
