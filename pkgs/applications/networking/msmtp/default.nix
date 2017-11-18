@@ -45,6 +45,8 @@ in stdenv.mkDerivation rec {
     substitute scripts/msmtpq/msmtp-queue $out/bin/msmtp-queue \
       --replace @msmtpq@ $out/bin/msmtpq
 
+    ln -s msmtp $out/bin/sendmail
+
     chmod +x $out/bin/*
   '';
 
