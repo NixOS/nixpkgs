@@ -45,6 +45,11 @@ self:
       # upstream issue: missing file header
       bufshow = markBroken super.bufshow;
 
+      # upstream issue: comes with a broken configure file
+      caml = super.caml.overrideAttrs (oldAttrs: rec {
+        configureScript = "true";
+      });
+
       # part of a larger package
       # upstream issue: missing package version
       cmake-mode = markBroken (dontConfigure super.cmake-mode);
