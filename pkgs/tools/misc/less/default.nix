@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses, lessSecure ? false }:
 
 stdenv.mkDerivation rec {
-  name = "less-520";
+  name = "less-529";
 
   src = fetchurl {
     url = "http://www.greenwoodsoftware.com/less/${name}.tar.gz";
-    sha256 = "12wh0j07971j53v7irfcv0vkb7wpi7f83jll4mwjy92wc27fm2bv";
+    sha256 = "02wspzv90cki8936m50qxk0vrribvwwqlva21nyvfx41qga2r96v";
   };
 
   configureFlags = [ "--sysconfdir=/etc" ] # Look for ‘sysless’ in /etc.
