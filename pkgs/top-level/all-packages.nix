@@ -6485,6 +6485,8 @@ with pkgs;
     gtk2 = gtk2-x11;
   };
 
+  lxtask = callPackage ../desktops/lxde/core/lxtask { };
+
   kona = callPackage ../development/interpreters/kona {};
 
   lolcode = callPackage ../development/interpreters/lolcode { };
