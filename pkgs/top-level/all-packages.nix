@@ -5314,6 +5314,8 @@ with pkgs;
 
   zsh-autosuggestions = callPackage ../shells/zsh-autosuggestions { };
 
+  zsh-powerlevel9k = callPackage ../shells/zsh-powerlevel9k { };
+
   zstd = callPackage ../tools/compression/zstd { };
   zstdmt = callPackage ../tools/compression/zstdmt { };
 
