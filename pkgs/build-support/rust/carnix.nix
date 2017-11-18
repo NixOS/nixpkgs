@@ -142,7 +142,6 @@ let aho_corasick_0_6_3_ = { dependencies?[], buildDependencies?[], features?[] }
       crateName = "libsqlite3-sys";
       version = "0.8.1";
       sha256 = "131bjlxzni2aw3048p7sj8cs3v0jpkb3fxdpc5i7ndyhvpz3gdza";
-      buildInputs = [ pkgs.sqlite pkgs.pkgconfig ];
       build = "build.rs";
       inherit dependencies buildDependencies features;
     };

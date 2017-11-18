@@ -102,7 +102,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
          if [ -e target/link.build ]; then
            EXTRA_BUILD_FLAGS="$EXTRA_BUILD_FLAGS $(cat target/link.build)"
          fi
-         ${optionalString verbose ''
+         ${lib.optionalString verbose ''
            echo $boldgreen""Running$norm rustc --crate-name build_script_build $BUILD --crate-type bin ${rustcOpts} ${crateFeatures} --out-dir target/build/${crateName} --emit=dep-info,link -L dependency=target/buildDeps ${buildDeps} --cap-lints allow $EXTRA_BUILD_FLAGS
          ''}
          rustc --crate-name build_script_build $BUILD --crate-type bin ${rustcOpts} \
@@ -141,7 +141,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
 
       if [ -e "${libPath}" ] ; then
 
-         ${optionalString verbose ''
+         ${lib.optionalString verbose ''
            echo $boldgreen""Building ${libPath}$norm rustc --crate-name $CRATE_NAME ${libPath} --crate-type ${crateType} ${rustcOpts} ${rustcMeta} ${crateFeatures} --out-dir target/lib --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES
          ''}
          rustc --crate-name $CRATE_NAME ${libPath} --crate-type ${crateType} \
@@ -157,7 +157,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
 
          echo "$boldgreen""Building src/lib.rs (${libName})""$norm"
 
-         ${optionalString verbose ''
+         ${lib.optionalString verbose ''
            echo $boldgreen""Running$norm rustc --crate-name $CRATE_NAME src/lib.rs --crate-type ${crateType} ${rustcOpts} ${rustcMeta} ${crateFeatures} --out-dir target/lib --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES
          ''}
          rustc --crate-name $CRATE_NAME src/lib.rs --crate-type ${crateType} \
@@ -173,7 +173,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
       elif [ -e src/${libName}.rs ] ; then
 
          echo "$boldgreen""Building src/${libName}.rs""$norm"
-         ${optionalString verbose ''
+         ${lib.optionalString verbose ''
            echo $boldgreen""Running$norm rustc --crate-name $CRATE_NAME src/${libName}.rs --crate-type ${crateType} ${rustcOpts} ${rustcMeta} ${crateFeatures} --out-dir target/lib --emit=dep-info,link -L dependency=target/deps ${deps} --cap-lints allow $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES
          ''}
          rustc --crate-name $CRATE_NAME src/${libName}.rs --crate-type ${crateType} \
@@ -220,7 +220,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
       echo "${crateBin}" | sed -n 1'p' | tr ',' '\n' | while read BIN; do
          if [ ! -z "$BIN" ]; then
            echo "$boldgreen""Building $BIN$norm"
-           ${optionalString verbose ''
+           ${lib.optionalString verbose ''
              echo "$boldgreen""Running$norm rustc --crate-name $BIN --crate-type bin ${rustcOpts} ${crateFeatures} --out-dir target/bin --emit=dep-info,link -L dependency=target/deps $LINK ${deps}$EXTRA_LIB --cap-lints allow $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES"
            ''}
            rustc --crate-name $BIN --crate-type bin ${rustcOpts} ${crateFeatures} \
@@ -231,7 +231,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
       done
       if [[ (-z "${crateBin}") && (-e src/main.rs) ]]; then
          echo "$boldgreen""Building src/main.rs (${crateName})$norm"
-         ${optionalString verbose ''
+         ${lib.optionalString verbose ''
            echo "$boldgreen""Running$norm rustc --crate-name $CRATE_NAME src/main.rs --crate-type bin ${rustcOpts} ${crateFeatures} --out-dir target/bin --emit=dep-info,link -L dependency=target/deps $LINK ${deps}$EXTRA_LIB --cap-lints allow $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES"
          ''}
          rustc --crate-name $CRATE_NAME src/main.rs --crate-type bin ${rustcOpts} \
@@ -270,7 +270,10 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
 
 in
 
-crate: lib.makeOverridable ({ rust, release, verbose }: stdenv.mkDerivation rec {
+crate_: lib.makeOverridable ({ rust, release, verbose, crateOverrides }:
+
+let crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverrides crate_); in
+stdenv.mkDerivation rec {
 
     inherit (crate) crateName;
 
@@ -279,60 +282,53 @@ crate: lib.makeOverridable ({ rust, release, verbose }: stdenv.mkDerivation rec 
       else
         pkgs.fetchCrate { inherit (crate) crateName version sha256; };
     name = "rust_${crate.crateName}-${crate.version}";
-    buildInputs = [ rust pkgs.ncurses ] ++ (lib.attrByPath ["buildInputs"] [] crate);
+    buildInputs = [ rust pkgs.ncurses ] ++ (crate.buildInputs or []);
     dependencies =
       builtins.map
         (dep: dep.override { rust = rust; release = release; verbose = verbose; })
-        (lib.attrByPath ["dependencies"] [] crate);
+        (crate.dependencies or []);
 
     buildDependencies =
       builtins.map
         (dep: dep.override { rust = rust; release = release; verbose = verbose; })
-        (lib.attrByPath ["buildDependencies"] [] crate);
+        (crate.buildDependencies or []);
 
     completeDeps = lib.lists.unique (dependencies ++ lib.lists.concatMap (dep: dep.completeDeps) dependencies);
     completeBuildDeps = lib.lists.unique (buildDependencies ++ lib.lists.concatMap (dep: dep.completeBuildDeps) buildDependencies);
-    #builtins.foldl' (comp: dep: if lib.lists.any (x: x == comp) dep.completeBuildDeps then comp ++ dep.complete else comp) buildDependencies buildDependencies;
 
-    crateFeatures = if crate ? features then
-       lib.concatMapStringsSep " " (f: "--cfg feature=\\\"${f}\\\"") crate.features
-    else "";
+    crateFeatures = lib.concatMapStringsSep " " (f: "--cfg feature=\\\"${f}\\\"") (crate.features or []);
 
-    libName = if crate ? libName then crate.libName else crate.crateName;
-    libPath = if crate ? libPath then crate.libPath else "";
+    libName = crate.libName or crate.crateName;
+    libPath = crate.libPath or "";
 
     metadata = builtins.substring 0 10 (builtins.hashString "sha256" (crateName + "-" + crateVersion));
 
-    crateBin = if crate ? crateBin then
+    crateBin =
        builtins.foldl' (bins: bin:
           let name =
-              lib.strings.replaceStrings ["-"] ["_"]
-                 (if bin ? name then bin.name else crateName);
-              path = if bin ? path then bin.path else "src/main.rs";
+              lib.strings.replaceStrings ["-"] ["_"] (bin.name or crateName);
+              path = bin.path or "src/main.rs";
           in
           bins + (if bin == "" then "" else ",") + "${name} ${path}"
 
-       ) "" crate.crateBin
-    else "";
+       ) "" (crate.crateBin or []);
 
-    finalBins = if crate ? crateBin then
+    finalBins =
        builtins.foldl' (bins: bin:
-          let name = lib.strings.replaceStrings ["-"] ["_"]
-                      (if bin ? name then bin.name else crateName);
-              new_name = if bin ? name then bin.name else crateName;
+          let name = lib.strings.replaceStrings ["-"] ["_"] (bin.name or crateName);
+              new_name = bin.name or crateName;
           in
           if name == new_name then bins else
           (bins + "mv target/bin/${name} target/bin/${new_name};")
 
-       ) "" crate.crateBin
-    else "";
+       ) "" (crate.crateBin or []);
 
-    build = if crate ? build then crate.build else "";
+    build = crate.build or "";
     crateVersion = crate.version;
     crateType =
-      if lib.attrByPath ["procMacro"] false crate then "proc-macro" else
-      if lib.attrByPath ["plugin"] false crate then "dylib" else "lib";
-    colors = lib.attrByPath [ "colors" ] "always" crate;
+      if crate ? procMacro then "proc-macro" else
+      if crate ? plugin then "dylib" else "lib";
+    colors = crate.colors or "always";
     buildPhase = buildCrate {
       inherit crateName dependencies buildDependencies completeDeps completeBuildDeps
               crateFeatures libName build release libPath crateType crateVersion
@@ -340,4 +336,9 @@ crate: lib.makeOverridable ({ rust, release, verbose }: stdenv.mkDerivation rec 
     };
     installPhase = installCrate crateName;
 
-}) { rust = pkgs.rustc; release = true; verbose = true; }
+}) {
+  rust = pkgs.rustc;
+  release = true;
+  verbose = true;
+  crateOverrides = import ./defaultCrateOverrides.nix { pkgs = pkgs; };
+}
