@@ -6342,6 +6342,8 @@ in {
     };
   };
 
+  jsonrpclib-pelix = callPackage ../development/python-modules/jsonrpclib-pelix {};
+
   jsonwatch = buildPythonPackage rec {
     name = "jsonwatch-0.2.0";
 
