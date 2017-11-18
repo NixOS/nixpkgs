@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, which, autoreconfHook, makeWrapper, writeScript,
 ncurses, perl , cyrus_sasl, gss, gpgme, kerberos, libidn, notmuch, openssl,
-lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42 }:
+lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, mime-types }:
 
 let
   muttWrapper = writeScript "mutt" ''
@@ -28,6 +28,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     cyrus_sasl gss gpgme kerberos libidn ncurses
     notmuch openssl perl lmdb
+    mime-types
   ];
 
   nativeBuildInputs = [
@@ -44,8 +45,9 @@ in stdenv.mkDerivation rec {
     done
 
     # allow neomutt to map attachments to their proper mime.types if specified wrongly
+    # and use a far more comprehensive list than the one shipped with neomutt
     substituteInPlace sendlib.c \
-      --replace /etc/mime.types $out/etc/mime.types
+      --replace /etc/mime.types ${mime-types}/etc/mime.types
   '';
 
   configureFlags = [
@@ -72,7 +74,6 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     cp ${muttWrapper} $out/bin/mutt
-    mv $out/share/doc/neomutt/mime.types $out/etc
     wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/lib/neomutt"
   '';
 
