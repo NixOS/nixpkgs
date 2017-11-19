@@ -48,6 +48,11 @@ stdenv.mkDerivation rec {
     # there) and causes a cycle between the lib and bin outputs, so
     # get rid of it.
     ./no-plugins.patch
+
+    # Help bfd choose between elf32-littlearm, elf32-littlearm-symbian, and
+    # elf32-littlearm-vxworks in favor of the first.
+    # https://github.com/NixOS/nixpkgs/pull/30484#issuecomment-345472766
+    ./disambiguate-arm-targets.patch
   ];
 
   outputs = [ "out" "info" ];
