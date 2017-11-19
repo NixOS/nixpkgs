@@ -2,18 +2,29 @@
   stdenv, lib,
   fetchFromGitHub, fetchurl,
   runCommand, writeText,
-  nodejs, ttfautohint, otfcc
+  nodejs, ttfautohint, otfcc,
+
+  # Custom font set options.
+  # See https://github.com/be5invis/Iosevka#build-your-own-style
+  design ? [], upright ? [], italic ? [], oblique ? [],
+  # Custom font set name. Required if any custom settings above.
+  set ? null
 }:
 
-with lib;
+assert (design != []) -> set != null;
+assert (upright != []) -> set != null;
+assert (italic != []) -> set != null;
+assert (oblique != []) -> set != null;
 
 let
   installPackageLock = import ./package-lock.nix { inherit fetchurl lib; };
 in
 
+let pname = if set != null then "iosevka-${set}" else "iosevka"; in
+
 let
   version = "1.13.3";
-  name = "iosevka-${version}";
+  name = "${pname}-${version}";
   src = fetchFromGitHub {
     owner = "be5invis";
     repo ="Iosevka";
@@ -22,8 +33,23 @@ let
   };
 in
 
+with lib;
+let unwords = concatStringsSep " "; in
+
+let
+  param = name: options:
+    if options != [] then "${name}='${unwords options}'" else null;
+  config = unwords (lib.filter (x: x != null) [
+    (param "design" design)
+    (param "upright" upright)
+    (param "italic" italic)
+    (param "oblique" oblique)
+  ]);
+  custom = design != [] || upright != [] || italic != [] || oblique != [];
+in
+
 stdenv.mkDerivation {
-  inherit name version src;
+  inherit name pname version src;
 
   nativeBuildInputs = [ nodejs ttfautohint otfcc ];
 
@@ -36,11 +62,30 @@ stdenv.mkDerivation {
     npm --offline rebuild
   '';
 
-  installPhase = ''
-    fontdir=$out/share/fonts/iosevka
+  configurePhase = ''
+    runHook preConfigure
 
-    mkdir -p $fontdir
-    cp -v dist/iosevka*/ttf/*.ttf $fontdir
+    ${optionalString custom ''make custom-config set=${set} ${config}''}
+
+    runHook postConfigure
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+
+    ${if custom then ''make custom set=${set}'' else ''make''}
+
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+
+    fontdir="$out/share/fonts/$pname"
+    install -d "$fontdir"
+    install "dist/$pname/ttf"/* "$fontdir"
+
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
