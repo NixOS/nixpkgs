@@ -1768,17 +1768,7 @@ with pkgs;
 
   dleyna-server = callPackage ../development/libraries/dleyna-server { };
 
-  dmd_2_067_1 = callPackage ../development/compilers/dmd/2.067.1.nix {
-    stdenv = if stdenv.hostPlatform.isDarwin then
-               stdenv
-             else
-               # Doesn't build with gcc6 on linux
-               overrideCC stdenv gcc5;
-  };
-
-  dmd = callPackage ../development/compilers/dmd {
-    bootstrapDmd = dmd_2_067_1;
-  };
+  dmd = callPackage ../development/compilers/dmd { };
 
   dmg2img = callPackage ../tools/misc/dmg2img { };
 
