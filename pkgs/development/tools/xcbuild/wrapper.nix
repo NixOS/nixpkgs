@@ -55,6 +55,8 @@ stdenv.mkDerivation {
     mkdir -p $out/Toolchains/
     ln -s ${toolchain} $out/Toolchains/nixpkgs.xctoolchain
 
+    ln -s ${platform}/Developer/SDKs $out/SDKs
+
     wrapProgram $out/bin/xcodebuild \
       --add-flags "-xcconfig ${xcconfig}" \
       --add-flags "DERIVED_DATA_DIR=." \
@@ -72,6 +74,7 @@ stdenv.mkDerivation {
 
   passthru = {
     raw = xcbuild;
+    inherit sdk;
   };
 
   preferLocalBuild = true;

@@ -20,8 +20,11 @@ in stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ nspr ];
 
-  prePatch = ''
+  prePatch = stdenv.lib.optionalString (!stdenv.isDarwin) ''
     xz -d < ${nssPEM} | patch -p1
+  '' + ''
+substituteInPlace nss/coreconf/Darwin.mk \
+  --replace @executable_path $out/lib
   '';
 
   patches =
@@ -45,7 +48,16 @@ in stdenv.mkDerivation rec {
     "NSS_ENABLE_ECC=1"
     "USE_SYSTEM_ZLIB=1"
     "NSS_USE_SYSTEM_SQLITE=1"
+    "CC=cc"
+    "CCC=c++"
   ] ++ stdenv.lib.optional stdenv.is64bit "USE_64=1";
+
+  preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
+    NIX_LDFLAGS+=" -dylib_file @executable_path/libplc4.dylib:${nspr.out}/lib/libplc4.dylib"
+    NIX_LDFLAGS+=" -dylib_file @executable_path/libplsd4.dylib:${nspr.out}/lib/libplds4.dylib"
+    NIX_LDFLAGS+=" -dylib_file @executable_path/libnspr4.dylib:${nspr.out}/lib/libnspr4.dylib"
+    export NIX_LDFLAGS
+  '';
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
@@ -83,14 +95,14 @@ in stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
+    moveToOutput bin "$tools"
+    moveToOutput bin/nss-config "$dev"
+  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     for libname in freebl3 nssdbm3 softokn3
     do
       libfile="$out/lib/lib$libname.so"
       LD_LIBRARY_PATH=$out/lib $out/bin/shlibsign -v -i "$libfile"
     done
-
-    moveToOutput bin "$tools"
-    moveToOutput bin/nss-config "$dev"
     moveToOutput lib/libcrmf.a "$dev" # needed by firefox, for example
     rm "$out"/lib/*.a
   '';
