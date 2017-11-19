@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "mattermost-${version}";
-  version = "4.4.0";
+  version = "4.4.1";
 
   src = fetchFromGitHub {
     owner = "mattermost";
@@ -13,7 +13,7 @@ buildGoPackage rec {
 
   webApp = fetchurl {
     url = "https://releases.mattermost.com/${version}/mattermost-team-${version}-linux-amd64.tar.gz";
-    sha256 = "1ifxx17sm24c6sihg38lzpnb5x24m04bk25nn5hrw9iwc37lfzlp";
+    sha256 = "1gnzv9xkqawi36z7v9xsy1gk16x71qf0kn8r059qvyarjlyp7888";
   };
 
   goPackagePath = "github.com/mattermost/mattermost-server";
@@ -38,7 +38,7 @@ buildGoPackage rec {
     description = "Open-Source, self-hosted Slack-alternative";
     homepage = https://www.mattermost.org;
     license = with licenses; [ agpl3 asl20 ];
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz ryantm ];
     platforms = platforms.unix;
   };
 }

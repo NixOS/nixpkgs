@@ -1,15 +1,20 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, python2 }:
 
 stdenv.mkDerivation rec {
   name = "fastjet-${version}";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchurl {
     url = "http://fastjet.fr/repo/fastjet-${version}.tar.gz";
-    sha256 = "1qvmab7l4ps5xd1wvmblgpzyhkbs2gff41qgyg7r7b9nlgqjgacn";
+    sha256 = "03x75mmnlw2m0a7669k82rf9a7dgjwygf8wjbk8cdgnb82c5pnp9";
   };
 
-  configureFlags = "--enable-allcxxplugins";
+  buildInputs = [ python2 ];
+
+  configureFlags = [
+    "--enable-allcxxplugins"
+    "--enable-pyext"
+    ];
 
   enableParallelBuilding = true;
 
