@@ -15661,7 +15661,9 @@ with pkgs;
 
   minidjvu = callPackage ../applications/graphics/minidjvu { };
 
-  minikube = callPackage ../applications/networking/cluster/minikube { };
+  minikube = callPackage ../applications/networking/cluster/minikube {
+    inherit (darwin.apple_sdk.frameworks) vmnet;
+  };
 
   minitube = callPackage ../applications/video/minitube { };
 

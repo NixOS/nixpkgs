@@ -1,4 +1,5 @@
 { stdenv, buildGoPackage, fetchFromGitHub, fetchurl, go-bindata, kubernetes, libvirt, qemu, docker-machine-kvm,
+  vmnet,
   gpgme, makeWrapper }:
 
 let
@@ -36,7 +37,8 @@ in buildGoPackage rec {
 
   # kubernetes is here only to shut up a loud warning when generating the completions below. minikube checks very eagerly
   # that kubectl is on the $PATH, even if it doesn't use it at all to generate the completions
-  buildInputs = [ go-bindata makeWrapper kubernetes gpgme ];
+  buildInputs = [ go-bindata makeWrapper kubernetes gpgme ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ vmnet ];
   subPackages = [ "cmd/minikube" ];
 
   preBuild = ''
