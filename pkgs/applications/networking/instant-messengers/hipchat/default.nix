@@ -78,8 +78,8 @@ stdenv.mkDerivation {
       --replace /opt/HipChat4/bin/HipChat4 $out/bin/hipchat
 
     makeWrapper $d/HipChat.bin $out/bin/hipchat \
-      --set HIPCHAT_LD_LIBRARY_PATH '"$LD_LIBRARY_PATH"' \
-      --set HIPCHAT_QT_PLUGIN_PATH '"$QT_PLUGIN_PATH"' \
+      --run 'export HIPCHAT_LD_LIBRARY_PATH=$LD_LIBRARY_PATH' \
+      --run 'export HIPCHAT_QT_PLUGIN_PATH=$QT_PLUGIN_PATH' \
       --set QT_XKB_CONFIG_ROOT ${xkeyboard_config}/share/X11/xkb \
       --set QTWEBENGINEPROCESS_PATH $d/QtWebEngineProcess
 
