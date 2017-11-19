@@ -1,7 +1,7 @@
 {pkgs, config, lib, ...}:
 
 let
-  inherit (lib) mkOption mkIf types;
+  inherit (lib) mkOption mkIf types length attrNames;
   cfg = config.services.kerberos_server;
   kerberos = config.krb5.kerberos;
 
@@ -72,5 +72,9 @@ in
 
   config = mkIf cfg.enable {
     environment.systemPackages = [ kerberos ];
+    assertions = [{
+      assertion = length (attrNames cfg.realms) <= 1;
+      message = "Only one realm per server is currently supported.";
+    }];
   };
 }
