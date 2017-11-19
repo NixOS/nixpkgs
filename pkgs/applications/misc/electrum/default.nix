@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, python2Packages }:
+{ stdenv, fetchurl, python2Packages,
+  plugins ? []
+}:
 
 python2Packages.buildPythonApplication rec {
   name = "electrum-${version}";
@@ -23,15 +25,7 @@ python2Packages.buildPythonApplication rec {
     qrcode
     requests
     tlslite
-
-    # plugins
-    keepkey
-    trezor
-
-    # TODO plugins
-    # amodem
-    # btchip
-  ];
+  ] ++ plugins;
 
   preBuild = ''
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
