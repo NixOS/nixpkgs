@@ -39,8 +39,8 @@ if [ "$oldVersion" = "$newVersion" ]; then
     exit 0
 fi
 
-# Escape dots, there should not be any other regex characters allowed in store path names
-oldVersion=$(echo "$oldVersion" | sed -re 's|\.|\\.|g')
+# Escape regex metacharacter that are allowed in store path names
+oldVersion=$(echo "$oldVersion" | sed -re 's|[.+]|\\&|g')
 
 if [ $(grep -c -E "^\s*(let\b)?\s*version\s+=\s+\"$oldVersion\"" "$nixFile") = 1 ]; then
     pattern="/\bversion\b\s*=/ s|\"$oldVersion\"|\"$newVersion\"|"
