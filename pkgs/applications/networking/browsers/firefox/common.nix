@@ -16,7 +16,7 @@
 ## optional libraries
 
 , alsaSupport ? stdenv.isLinux, alsaLib
-, pulseaudioSupport ? true, libpulseaudio
+, pulseaudioSupport ? (!stdenv.isDarwin), libpulseaudio
 , ffmpegSupport ? true, gstreamer, gst-plugins-base
 , gtk3Support ? !isTorBrowserLike, gtk2, gtk3, wrapGAppsHook
 , gssSupport ? true, kerberos
