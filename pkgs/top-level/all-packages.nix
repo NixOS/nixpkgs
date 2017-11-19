@@ -7598,6 +7598,8 @@ with pkgs;
 
   shellcheck = haskell.lib.justStaticExecutables haskellPackages.ShellCheck;
 
+  schemaspy = callPackage ../development/tools/database/schemaspy { };
+
   shncpd = callPackage ../tools/networking/shncpd { };
 
   sigrok-cli = callPackage ../development/tools/sigrok-cli { };
