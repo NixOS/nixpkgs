@@ -3171,6 +3171,8 @@ with pkgs;
 
   libxcomp = callPackage ../development/libraries/libxcomp { };
 
+  libxl = callPackage ../development/libraries/libxl {};
+
   libx86emu = callPackage ../development/libraries/libx86emu { };
 
   libzmf = callPackage ../development/libraries/libzmf {};
