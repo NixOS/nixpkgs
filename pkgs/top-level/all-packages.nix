@@ -13392,7 +13392,9 @@ with pkgs;
 
   input-fonts = callPackage ../data/fonts/input-fonts { };
 
-  iosevka = callPackage ../data/fonts/iosevka { };
+  iosevka = callPackage ../data/fonts/iosevka {
+    nodejs = nodejs-8_x;
+  };
 
   ipafont = callPackage ../data/fonts/ipafont {};
   ipaexfont = callPackage ../data/fonts/ipaexfont {};

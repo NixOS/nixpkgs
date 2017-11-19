@@ -1,18 +1,47 @@
-{ stdenv, fetchzip }:
+{
+  stdenv, lib,
+  fetchFromGitHub, fetchurl,
+  runCommand, writeText,
+  nodejs, ttfautohint, otfcc
+}:
+
+with lib;
+
+let
+  installPackageLock = import ./package-lock.nix { inherit fetchurl lib; };
+in
 
 let
   version = "1.13.3";
-in fetchzip rec {
   name = "iosevka-${version}";
+  src = fetchFromGitHub {
+    owner = "be5invis";
+    repo ="Iosevka";
+    rev = "v${version}";
+    sha256 = "0wfhfiahllq8ngn0mybvp29cfcm7b8ndk3fyhizd620wrj50bazf";
+  };
+in
 
-  url = "https://github.com/be5invis/Iosevka/releases/download/v${version}/iosevka-pack-${version}.zip";
+stdenv.mkDerivation {
+  inherit name version src;
 
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.ttc -d $out/share/fonts/iosevka
+  nativeBuildInputs = [ nodejs ttfautohint otfcc ];
+
+  passAsFile = [ "installPackageLock" ];
+  installPackageLock = installPackageLock ./package-lock.json;
+
+  preConfigure = ''
+    HOME=$TMPDIR
+    source "$installPackageLockPath";
+    npm --offline rebuild
   '';
 
-  sha256 = "0103rjxcp2sis42xp7fh7g8i03h5snvs8n78lgsf79g8ssw0p9d4";
+  installPhase = ''
+    fontdir=$out/share/fonts/iosevka
+
+    mkdir -p $fontdir
+    cp -v dist/iosevka*/ttf/*.ttf $fontdir
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://be5invis.github.io/Iosevka/;
@@ -23,6 +52,6 @@ in fetchzip rec {
     '';
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = [ maintainers.cstrahan ];
+    maintainers = with maintainers; [ cstrahan jfrankenau ];
   };
 }
