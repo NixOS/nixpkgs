@@ -44,7 +44,6 @@ database: {
 }
 event_cache_size: "${cfg.event_cache_size}"
 verbose: ${cfg.verbose}
-log_file: "${cfg.dataDir}/homeserver.log"
 log_config: "${logConfigFile}"
 rc_messages_per_second: ${cfg.rc_messages_per_second}
 rc_message_burst_count: ${cfg.rc_message_burst_count}
