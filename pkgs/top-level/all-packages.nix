@@ -709,6 +709,8 @@ with pkgs;
 
   bdf2psf = callPackage ../tools/misc/bdf2psf { };
 
+  bcat = callPackage ../tools/text/bcat {};
+
   bcache-tools = callPackage ../tools/filesystems/bcache-tools { };
 
   bchunk = callPackage ../tools/cd-dvd/bchunk { };
