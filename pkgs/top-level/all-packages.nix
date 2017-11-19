@@ -13545,6 +13545,8 @@ with pkgs;
 
   shaderc = callPackage ../development/compilers/shaderc { };
 
+  mime_types = callPackage ../data/misc/mime-types { };
+
   shared_mime_info = callPackage ../data/misc/shared-mime-info { };
 
   shared_desktop_ontologies = callPackage ../data/misc/shared-desktop-ontologies { };
