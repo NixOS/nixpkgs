@@ -235,6 +235,7 @@ in rec {
   tests.containers-tmpfs = callTest tests/containers-tmpfs.nix {};
   tests.containers-hosts = callTest tests/containers-hosts.nix {};
   tests.containers-macvlans = callTest tests/containers-macvlans.nix {};
+  tests.couchdb = callTest tests/couchdb.nix {};
   tests.docker = hydraJob (import tests/docker.nix { system = "x86_64-linux"; });
   tests.docker-edge = hydraJob (import tests/docker-edge.nix { system = "x86_64-linux"; });
   tests.dovecot = callTest tests/dovecot.nix {};
