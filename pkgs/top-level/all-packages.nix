@@ -11486,7 +11486,7 @@ with pkgs;
     erlang = erlangR17;
   };
 
-  couchdb2 = callPackage ../servers/http/couchdb/2.0.0.nix {
+  couchdb2 = callPackage ../servers/http/couchdb/couchdb2.nix {
     spidermonkey = spidermonkey_1_8_5;
   };
 
