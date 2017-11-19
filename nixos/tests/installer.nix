@@ -307,11 +307,11 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted /dev/vda mklabel gpt",
-              "parted -s /dev/vda -- mkpart ESP fat32 1M 50MiB", # /boot
-              "parted -s /dev/vda -- set 1 boot on",
-              "parted -s /dev/vda -- mkpart primary linux-swap 50MiB 1024MiB",
-              "parted -s /dev/vda -- mkpart primary ext2 1024MiB -1MiB", # /
+              "parted --script /dev/vda mklabel gpt",
+              "parted --script /dev/vda -- mkpart ESP fat32 1M 50MiB", # /boot
+              "parted --script /dev/vda -- set 1 boot on",
+              "parted --script /dev/vda -- mkpart primary linux-swap 50MiB 1024MiB",
+              "parted --script /dev/vda -- mkpart primary ext2 1024MiB -1MiB", # /
               "udevadm settle",
               "mkswap /dev/vda2 -L swap",
               "swapon -L swap",
