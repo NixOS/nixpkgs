@@ -9717,6 +9717,8 @@ with pkgs;
 
   libvorbis = callPackage ../development/libraries/libvorbis { };
 
+  libwebcam = callPackage ../os-specific/linux/libwebcam { };
+
   libwebp = callPackage ../development/libraries/libwebp { };
 
   libwmf = callPackage ../development/libraries/libwmf { };
