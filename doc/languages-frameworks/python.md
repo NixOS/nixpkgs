@@ -530,7 +530,6 @@ Based on the packages defined in `pkgs/top-level/python-packages.nix` an
 attribute set is created for each available Python interpreter. The available
 sets are
 
-* `pkgs.python26Packages`
 * `pkgs.python27Packages`
 * `pkgs.python34Packages`
 * `pkgs.python35Packages`
