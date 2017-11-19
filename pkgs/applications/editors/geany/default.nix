@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 let
-  version = "1.31";
+  version = "1.32";
 in
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://download.geany.org/${name}.tar.bz2";
-    sha256 = "30fdb906bb76c4251a8bcf83ee267db28c26ef6ab867668a782cec1164a3aba5";
+    sha256 = "8b7be10b95d0614eb07f845ba2280f7c026eacd5739d8fac4d5d26606f8c3c2d";
   };
 
   NIX_LDFLAGS = if stdenv.isDarwin then "-lintl" else null;

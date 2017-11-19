@@ -122,11 +122,8 @@ in
       "rc-local.service"
       "systemd-machined.service"
       "systemd-user-sessions.service"
-      "getty@tty1.service"
     ];
 
-    systemd.services."getty@tty1".enable = false;
-    systemd.services.display-manager.conflicts = [ "getty@tty1.service" ];
     systemd.services.display-manager.serviceConfig = {
       # Restart = "always"; - already defined in xserver.nix
       KillMode = "mixed";

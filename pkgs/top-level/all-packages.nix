@@ -713,6 +713,8 @@ with pkgs;
 
   bdf2psf = callPackage ../tools/misc/bdf2psf { };
 
+  bcat = callPackage ../tools/text/bcat {};
+
   bcache-tools = callPackage ../tools/filesystems/bcache-tools { };
 
   bchunk = callPackage ../tools/cd-dvd/bchunk { };
@@ -7601,6 +7603,8 @@ with pkgs;
   shards = callPackage ../development/tools/build-managers/shards { };
 
   shellcheck = haskell.lib.justStaticExecutables haskellPackages.ShellCheck;
+
+  schemaspy = callPackage ../development/tools/database/schemaspy { };
 
   shncpd = callPackage ../tools/networking/shncpd { };
 
@@ -15667,7 +15671,9 @@ with pkgs;
 
   minidjvu = callPackage ../applications/graphics/minidjvu { };
 
-  minikube = callPackage ../applications/networking/cluster/minikube { };
+  minikube = callPackage ../applications/networking/cluster/minikube {
+    inherit (darwin.apple_sdk.frameworks) vmnet;
+  };
 
   minitube = callPackage ../applications/video/minitube { };
 

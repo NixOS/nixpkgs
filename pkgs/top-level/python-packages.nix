@@ -220,6 +220,8 @@ in {
 
   pyaes = callPackage ../development/python-modules/pyaes { };
 
+  pyamf = callPackage ../development/python-modules/pyamf { };
+
   pyatspi = if isPy3k then callPackage ../development/python-modules/pyatspi { } else throw "pyatspi not supported for interpreter ${python.executable}";
 
   pycairo = callPackage ../development/python-modules/pycairo { };
