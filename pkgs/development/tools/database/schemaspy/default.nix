@@ -13,25 +13,23 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     jre
-    makeWrapper
   ];
 
-  buildPhase = "true";
+  nativeBuildInputs = [
+    makeWrapper
+  ];
 
   wrappedPath = lib.makeBinPath [
     graphviz
   ];
 
-  installPhase =
-    ''
-      mkdir -p "$out/share/java"
-      cp ${src} "$out/share/java/${name}.jar"
+  installPhase = ''
+    install -D ${src} "$out/share/java/${name}.jar"
 
-      mkdir -p $out/bin
-      makeWrapper ${jre}/bin/java $out/bin/schemaspy \
-        --add-flags "-jar $out/share/java/${name}.jar" \
-        --prefix PATH : "$wrappedPath"
-    '';
+    makeWrapper ${jre}/bin/java $out/bin/schemaspy \
+      --add-flags "-jar $out/share/java/${name}.jar" \
+      --prefix PATH : "$wrappedPath"
+  '';
 
   meta = with lib; {
     homepage = "http://schemaspy.org";
