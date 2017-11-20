@@ -1072,6 +1072,7 @@ default-package-overrides:
   - hourglass ==0.2.10
   - hourglass-orphans ==0.1.0.0
   - hp2pretty ==0.8.0.2
+  - hpack ==0.18.1
   - hpc-coveralls ==1.0.10
   - hPDB ==1.2.0.9
   - hPDB-examples ==1.2.0.7
