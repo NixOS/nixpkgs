@@ -16,6 +16,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ pcre zlib lzma ];
 
+  postInstall = ''
+    mkdir -p $out/etc/bash_completion.d
+    mv $out/share/the_silver_searcher/completions/ag.bashcomp.sh $out/etc/bash_completion.d
+    rm -r $out/share/the_silver_searcher
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://github.com/ggreer/the_silver_searcher/;
     description = "A code-searching tool similar to ack, but faster";
