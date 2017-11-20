@@ -16418,6 +16418,8 @@ with pkgs;
 
   rdesktop = callPackage ../applications/networking/remote/rdesktop { };
 
+  rdedup = callPackage ../tools/backup/rdedup { };
+
   rdup = callPackage ../tools/backup/rdup { };
 
   realpine = callPackage ../applications/networking/mailreaders/realpine {
