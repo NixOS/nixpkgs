@@ -29,12 +29,13 @@ in {
   # Patches for cross compiling only
   crossKernelPatches ? [],
   # The native kernel .config file
-  configfile,
+  configfile ? null,
   # The cross kernel .config file
   crossConfigfile ? configfile,
   # Manually specified nixexpr representing the config
   # If unspecified, this will be autodetected from the .config
-  config ? stdenv.lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
+  # config ? stdenv.lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
+  config ? null,
   # Cross-compiling config
   crossConfig ? if allowImportFromDerivation then (readConfig crossConfigfile) else config,
   # Whether to utilize the controversial import-from-derivation feature to parse the config
@@ -52,6 +53,7 @@ let
     cp -av $3 $4
   ''; };
 
+  # flags common to the cross-compiled and native builds
   commonMakeFlags = [
     "O=$(buildRoot)"
 
@@ -80,17 +82,23 @@ let
 
       installsFirmware = (config.isEnabled "FW_LOADER") &&
         (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL"));
-    in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
+    in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // rec {
       passthru = {
-        inherit version modDirVersion config kernelPatches configfile;
+        inherit version modDirVersion  kernelPatches configfile;
+        # inherit config;
       };
 
       inherit src;
 
-      preUnpack = ''
-        mkdir build
-        export buildRoot="$PWD/build"
-      '';
+      # why this
+      # preUnpack = ''
+      #   mkdir build
+      #   export buildRoot="$PWD/build"
+      # '';
+      autoModules = stdenv.platform.kernelAutoModules;
+      preferBuiltin = stdenv.platform.kernelPreferBuiltin or false;
+      arch = stdenv.platform.kernelArch;
+      kernelBaseConfig = stdenv.platform.kernelBaseConfig;
 
       patches = map (p: p.patch) kernelPatches;
 
@@ -100,10 +108,32 @@ let
             sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
         done
         sed -i Makefile -e 's|= depmod|= ${kmod}/bin/depmod|'
+      '' +
+      # Patch kconfig to print "###" after every question so that
+      # generate-config.pl from the generic builder can answer them.
+      ''
+        sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
       '';
 
+      # imported from generic.nix
+    buildConfigPhase = ''
+
+      echo "buildRoot  set to $buildRoot"
+      cd $buildRoot
+
+      # Get a basic config file for later refinement with $generateConfig.
+      make -C ../$sourceRoot O=$PWD ${kernelBaseConfig} ARCH=$arch
+
+      # Create the config file.
+      echo "generating kernel configuration..."
+      echo "$kernelConfig" > kernel-config
+      DEBUG=1 ARCH=$arch KERNEL_CONFIG=kernel-config AUTO_MODULES=$autoModules \
+           PREFER_BUILTIN=$preferBuiltin SRC=../$sourceRoot perl -w $generateConfig
+    '';
+
+    preConfigure = buildConfigPhase;
+
       configurePhase = ''
-        runHook preConfigure
         if [ -z "$buildRoot" ]; then
 
           # assume we are in the $sourceRoot folder
@@ -111,9 +141,8 @@ let
           mkdir build
           export buildRoot="$PWD/build"
         fi
+        runHook preConfigure
 
-        ln -sv ${configfile} $buildRoot/.config
-        # ln -sv ${configfile} ''${buildRoot:=$(pwd)/../build}/.config
         make $makeFlags "''${makeFlagsArray[@]}" oldconfig
         runHook postConfigure
 
@@ -208,6 +237,8 @@ let
         make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
           $installFlags "''${installFlagsArray[@]}"
       '');
+      # TODO add it as an output
+    # installPhase = "mv .config $out";
 
       requiredSystemFeatures = [ "big-parallel" ];
 
@@ -228,8 +259,8 @@ let
       };
     };
 in
-
-stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKernelPatches) configfile) // {
+# config ? stdenv.lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
+stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKernelPatches) configfile) // rec {
   name = "linux-${version}";
 
   enableParallelBuilding = true;
@@ -239,11 +270,16 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" ];
 
+  # concatenated from drvAttrs
+  # configurePhase = ''
+  #   '';
+
   makeFlags = commonMakeFlags ++ [
     "ARCH=${stdenv.platform.kernelArch}"
-  ];
-  # ++ stdenv.lib.optional enableParallelBuilding "-j{}";
+  ]
+  # ++ stdenv.lib.optional enableParallelBuilding "-j${cfg.buildCores}";
     # cfg.buildCores # TODO set
+    ;
 
   karch = stdenv.platform.kernelArch;
 
