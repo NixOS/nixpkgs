@@ -6,6 +6,7 @@
 }:
 
 let
+  # TODO import from config
   readConfig = configfile: import (runCommand "config.nix" {} ''
     echo "{" > "$out"
     while IFS='=' read key val; do
@@ -31,7 +32,7 @@ in {
   # Patches for cross compiling only
   crossKernelPatches ? [],
   # The native kernel .config file
-  configfile ? null,
+  configfile,
   # The cross kernel .config file
   crossConfigfile ? configfile,
   # Manually specified nixexpr representing the config
