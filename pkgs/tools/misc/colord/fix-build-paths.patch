@@ -61,3 +61,14 @@
 -  install_dir : join_paths(udev.get_pkgconfig_variable('udevdir'), 'rules.d')
 +  install_dir : join_paths(get_option('prefix'), 'lib', 'udev', 'rules.d')
  )
+--- a/src/plugins/meson.build
++++ b/src/plugins/meson.build
+@@ -66,7 +66,7 @@
+     install_dir: join_paths(get_option('libdir'), 'colord-plugins'),
+     c_args : [
+       cargs,
+-      '-DCOLORD_SANE_BINARY="' + join_paths(get_option('libexecdir'), 'colord-sane' + '"'),
++      '-DCOLORD_SANE_BINARY="' + join_paths(get_option('prefix'), get_option('libexecdir'), 'colord-sane' + '"'),
+     ],
+     dependencies : [
+       gio,
