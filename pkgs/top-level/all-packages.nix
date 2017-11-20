@@ -11988,6 +11988,8 @@ with pkgs;
 
   sambaFull = samba4Full;
 
+  shairplay = callPackage ../servers/shairplay { };
+
   shairport-sync = callPackage ../servers/shairport-sync { };
 
   serfdom = callPackage ../servers/serf { };
