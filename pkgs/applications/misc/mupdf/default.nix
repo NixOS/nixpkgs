@@ -4,7 +4,15 @@
 , enableCurl ? true, curl, openssl
 }:
 
-stdenv.mkDerivation rec {
+let
+
+  # OpenJPEG version is hardcoded in package source
+  openJpegVersion = with stdenv;
+    lib.concatStringsSep "." (lib.lists.take 2
+      (lib.splitString "." (lib.getVersion openjpeg)));
+
+
+in stdenv.mkDerivation rec {
   version = "1.11";
   name = "mupdf-${version}";
 
@@ -16,9 +24,9 @@ stdenv.mkDerivation rec {
   patches = [
     # Compatibility with new openjpeg
     (fetchpatch {
-      name = "mupdf-1.11-openjpeg-2.1.1.patch";
-      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/0001-mupdf-openjpeg.patch?h=packages/mupdf&id=3d997e7ff2ac20c44856ede22760ba6fbca81a5c";
-      sha256 = "1vr12kpzmmfr8pp3scwfhrm5laqwd58xm6vx971c4y8bxy60b2ig";
+      name = "mupdf-1.11-openjpeg-version.patch";
+      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/0001-mupdf-openjpeg.patch?h=packages/mupdf&id=c19349f42838e4dca02e564b97e0a5ab3e1b943f";
+      sha256 = "0sx7jq84sr8bj6sg2ahg9cdgqz8dh4w6r0ah2yil8vrsznn4la8r";
     })
 
     (fetchurl {
@@ -57,6 +65,10 @@ stdenv.mkDerivation rec {
       sha256 = "04kfww7y0wazg6372g44fa2k5kiiigq4616ihkvmp18rz86903n9";
     })
   ];
+
+  postPatch = ''
+    sed -i "s/__OPENJPEG__VERSION__/${openJpegVersion}/" source/fitz/load-jpx.c
+  '';
 
   makeFlags = [ "prefix=$(out)" ];
   nativeBuildInputs = [ pkgconfig ];
