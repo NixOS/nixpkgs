@@ -957,9 +957,6 @@ self: super: {
     optparse-applicative = self.optparse-applicative_0_14_0_0;
   });
 
-  # Break "hpack >=0.17.0 && <0.19".
-  stack = doJailbreak super.stack;
-
   # https://github.com/mgajda/json-autotype/issues/15
   json-autotype = doJailbreak super.json-autotype;
 
