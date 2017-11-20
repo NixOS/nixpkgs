@@ -63,7 +63,7 @@ rec {
   in
     stdenv.mkDerivation ((optionalAttrs (stdenv.isLinux) rec {
 
-    inherit docker-runc docker-containerd docker-tini;
+    inherit docker-runc docker-containerd docker-proxy docker-tini;
 
     DOCKER_BUILDTAGS = []
       ++ optional (systemd != null) [ "journald" ]
