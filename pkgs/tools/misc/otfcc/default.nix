@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/caryll/otfcc;
     license = licenses.asl20;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [ jfrankenau ttuegel ];
   };
 
 }
