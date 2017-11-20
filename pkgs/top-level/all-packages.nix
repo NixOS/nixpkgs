@@ -10742,6 +10742,8 @@ with pkgs;
 
   sqlite-interactive = appendToName "interactive" (sqlite.override { interactive = true; }).bin;
 
+  sqlite-jdbc = callPackage ../servers/sql/sqlite/jdbc { };
+
   sqlcipher = lowPrio (callPackage ../development/libraries/sqlcipher {
     readline = null;
     ncurses = null;
