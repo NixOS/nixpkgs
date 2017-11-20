@@ -4656,10 +4656,16 @@ with pkgs;
 
   telepresence = callPackage ../tools/networking/telepresence { };
 
-  texmacs = callPackage ../applications/editors/texmacs {
-    tex = texlive.combined.scheme-small;
-    extraFonts = true;
-  };
+  texmacs = if stdenv.isDarwin
+    then callPackage ../applications/editors/texmacs/darwin.nix {
+      inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa;
+      tex = texlive.combined.scheme-small;
+      extraFonts = true;
+    } else callPackage ../applications/editors/texmacs/default.nix {
+      tex = texlive.combined.scheme-small;
+      extraFonts = true;
+    };
+
 
   texmaker = callPackage ../applications/editors/texmaker { };
 
