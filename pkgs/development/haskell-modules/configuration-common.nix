@@ -957,9 +957,6 @@ self: super: {
     optparse-applicative = self.optparse-applicative_0_14_0_0;
   });
 
-  # https://github.com/mgajda/json-autotype/issues/15
-  json-autotype = doJailbreak super.json-autotype;
-
   # Depends on broken fluid.
   fluid-idl-http-client = markBroken super.fluid-idl-http-client;
   fluid-idl-scotty = markBroken super.fluid-idl-scotty;
