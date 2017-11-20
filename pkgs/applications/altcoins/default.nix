@@ -32,9 +32,6 @@ rec {
   };
   go-ethereum-classic = callPackage ./go-ethereum-classic { };
 
-  hivemind = callPackage ./hivemind.nix { withGui = true; };
-  hivemindd = callPackage ./hivemind.nix { withGui = false; };
-
   litecoin  = callPackage ./litecoin.nix { withGui = true; };
   litecoind = callPackage ./litecoin.nix { withGui = false; };
 
