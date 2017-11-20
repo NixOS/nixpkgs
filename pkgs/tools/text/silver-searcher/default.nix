@@ -11,16 +11,12 @@ stdenv.mkDerivation rec {
     sha256 = "0wcw4kyivb10m9b173183jrj46a0gisd35yqxi1mr9hw5l5dhkpa";
   };
 
+  patches = [ ./bash-completion.patch ];
+
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ pcre zlib lzma ];
-
-  postInstall = ''
-    mkdir -p $out/etc/bash_completion.d
-    mv $out/share/the_silver_searcher/completions/ag.bashcomp.sh $out/etc/bash_completion.d
-    rm -r $out/share/the_silver_searcher
-  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/ggreer/the_silver_searcher/;
