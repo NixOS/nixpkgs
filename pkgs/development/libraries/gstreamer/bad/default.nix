@@ -15,6 +15,12 @@ assert gtkSupport -> gtk3 != null;
 
 let
   inherit (stdenv.lib) optional optionalString;
+
+  # OpenJPEG version is hardcoded in package source
+  openJpegVersion = with stdenv;
+    lib.concatStringsSep "." (lib.lists.take 2
+      (lib.splitString "." (lib.getVersion openjpeg)));
+
 in
 stdenv.mkDerivation rec {
   name = "gst-plugins-bad-1.10.4";
@@ -31,6 +37,10 @@ stdenv.mkDerivation rec {
     license     = licenses.lgpl2Plus;
     platforms   = platforms.linux;
   };
+
+  patchPhase = ''
+    sed -i 's/openjpeg-2.1/openjpeg-${openJpegVersion}/' ext/openjpeg/*
+  '';
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-plugins-bad/${name}.tar.xz";
