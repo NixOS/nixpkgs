@@ -661,6 +661,8 @@ in {
     };
   };
 
+  autoflake = callPackage ../development/python-modules/autoflake { };
+
   autopep8 = callPackage ../development/python-modules/autopep8 { };
 
   av = buildPythonPackage rec {
