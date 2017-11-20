@@ -755,10 +755,10 @@
     el-search = callPackage ({ elpaBuild, emacs, fetchurl, lib, stream }:
     elpaBuild {
         pname = "el-search";
-        version = "1.3.2";
+        version = "1.4";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/el-search-1.3.2.tar";
-          sha256 = "0lf0hk2pvy9yrb02sa3bg0hipshbgl9m4hx7db46jvmz5bf15nfq";
+          url = "https://elpa.gnu.org/packages/el-search-1.4.tar";
+          sha256 = "0fzsq1wdkb94dk67ligdwc7kyl0x9bifgl2qvvf0hsj4zws4pgjg";
         };
         packageRequires = [ emacs stream ];
         meta = {
@@ -1053,10 +1053,10 @@
       }) {};
     hyperbole = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "hyperbole";
-        version = "6.0.2";
+        version = "7.0.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/hyperbole-6.0.2.tar";
-          sha256 = "0nyihi7j2061jpdzl4mf4pki840hkfpwj0m2sqz0nqxd689ckwpg";
+          url = "https://elpa.gnu.org/packages/hyperbole-7.0.0.tar";
+          sha256 = "07cy40yfxwka1r6i01pgrf9a3n9ms5xw2x486jd803dhfkm3113b";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -1570,10 +1570,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20171113";
+        version = "20171120";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20171113.tar";
-          sha256 = "0yynbzxbsjv0z12ydjgz81ysbg2irq37d9pzar8wspdjij15dypb";
+          url = "https://elpa.gnu.org/packages/org-20171120.tar";
+          sha256 = "0hxy061g1qd77pvx8mq5rb9avx139x4z5nmjhdq518xhg7kxmq6a";
         };
         packageRequires = [];
         meta = {
