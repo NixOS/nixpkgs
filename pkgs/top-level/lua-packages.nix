@@ -614,12 +614,16 @@ let
   };
 
   mpack = buildLuaPackage rec {
-    name = "lua-mpack-${libmpack.version}";
+    name = "lua-mpack-${version}";
+    version = "1.0.7_${rev}";
+    rev = "ef025224a799066b818120fb1f30a308543a6e99";
 
-    # NOTE: For updating, new Lua mpack bindings live at:
-    # https://github.com/libmpack/libmpack-lua.
-    src = libmpack.src;
-    sourceRoot = "${src.name}/binding/lua";
+    src = fetchFromGitHub {
+      owner = "libmpack";
+      repo = "libmpack-lua";
+      inherit rev;
+      sha256 = "1nydi6xbmxwl1fmi32v5v8n74msnmzblzqaqnb102w6vkinampsb";
+    };
 
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libmpack ]; # ++ [ libtool lua ];
@@ -627,18 +631,18 @@ let
 
     preInstall = ''
       mkdir -p $out/lib/lua/${lua.luaversion}
+      export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${libmpack}
     '';
 
     NIX_CFLAGS_COMPILE = "-Wno-error -fpic";
 
     installFlags = [
       "USE_SYSTEM_LUA=yes"
-      "LUA_VERSION_MAJ_MIN="
+      "USE_SYSTEM_MPACK=yes"
+      "MPACK_LUA_VERSION=${(builtins.parseDrvName lua.name).version}"
+      "LUA_INCLUDE=-I${lua}/include"
       "LUA_CMOD_INSTALLDIR=$$out/lib/lua/${lua.luaversion}"
     ];
-
-    # gcc -llua fails with luajit.
-    disabled = isLuaJIT;
 
     meta = with stdenv.lib; {
       description = "Lua bindings for libmpack";

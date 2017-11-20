@@ -15,15 +15,26 @@ buildPythonPackage rec {
   checkInputs = [ pytest git glibcLocales mock ];
   propagatedBuildInputs = [ pip click six first setuptools_scm ];
 
+  disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) [
+    # Depend on network tests:
+    "test_editable_package_vcs"
+    "test_generate_hashes_all_platforms"
+    "test_generate_hashes_without_interfering_with_each_other"
+    "test_realistic_complex_sub_dependencies"
+    # Expect specific version of "six":
+    "test_editable_package"
+    "test_input_file_without_extension"
+  ];
+
   checkPhase = ''
     export HOME=$(mktemp -d) VIRTUAL_ENV=1
     tests_without_network_access="
-      not test_realistic_complex_sub_dependencies \
-      and not test_editable_package_vcs \
-      and not test_generate_hashes_all_platforms \
-      and not test_generate_hashes_without_interfering_with_each_other \
+      not test_realistic_complex_sub_dependencies
+      and not test_editable_package_vcs
+      and not test_generate_hashes_all_platforms
+      and not test_generate_hashes_without_interfering_with_each_other
     "
-    py.test -k "$tests_without_network_access"
+    py.test -k "${disabledTests}"
   '';
 
   meta = with stdenv.lib; {

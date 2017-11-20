@@ -118,11 +118,8 @@ stdenv.mkDerivation rec {
       ./ssl-cert-file-1.9.patch
       ./creds-test.patch
       ./remove-test-pie-1.9.patch
-
-      (fetchpatch {
-        url = "https://github.com/golang/go/commit/29415eb2b92e78481897c4161ba99f5b09fa6102.patch";
-        sha256 = "01jkm4b2dazzjnfla7rdd0w2clzplga3zza6ybpmkjkk3i4bp73d";
-      })
+      ./go-1.9-skip-flaky-19608.patch
+      ./go-1.9-skip-flaky-20072.patch
     ];
 
   postPatch = optionalString stdenv.isDarwin ''

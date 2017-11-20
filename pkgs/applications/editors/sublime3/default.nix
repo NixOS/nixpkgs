@@ -61,7 +61,7 @@ in let
 
     installPhase = ''
       # Correct sublime_text.desktop to exec `sublime' instead of /opt/sublime_text
-      sed -e 's,/opt/sublime_text/sublime_text,sublime,' -i sublime_text.desktop
+      sed -e "s,/opt/sublime_text/sublime_text,$out/sublime_text," -i sublime_text.desktop
 
       mkdir -p $out
       cp -prvd * $out/
@@ -89,9 +89,15 @@ in stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    ln -s $sublime/sublime_text $out/bin/subl
-    ln -s $sublime/sublime_text $out/bin/sublime
-    ln -s $sublime/sublime_text $out/bin/sublime3
+
+    cat > $out/bin/subl <<-EOF
+    #!/bin/sh
+    exec $sublime/sublime_text "\$@"
+    EOF
+    chmod +x $out/bin/subl
+
+    ln $out/bin/subl $out/bin/sublime
+    ln $out/bin/subl $out/bin/sublime3
     mkdir -p $out/share/applications
     ln -s $sublime/sublime_text.desktop $out/share/applications/sublime_text.desktop
     ln -s $sublime/Icon/256x256/ $out/share/icons

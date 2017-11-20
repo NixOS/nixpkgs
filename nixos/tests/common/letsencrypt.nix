@@ -228,12 +228,12 @@ let
   # Retrieved via:
   # curl -s -I https://acme-v01.api.letsencrypt.org/terms \
   #   | sed -ne 's/^[Ll]ocation: *//p'
-  tosUrl = "https://letsencrypt.org/documents/LE-SA-v1.1.1-August-1-2016.pdf";
+  tosUrl = "https://letsencrypt.org/documents/2017.11.15-LE-SA-v1.2.pdf";
   tosPath = builtins.head (builtins.match "https?://[^/]+(.*)" tosUrl);
 
   tosFile = pkgs.fetchurl {
     url = tosUrl;
-    sha256 = "08b2gacdz23mzji2pjr1pwnk82a84rzvr36isif7mmi9kydl6wv3";
+    sha256 = "0yvyckqzj0b1xi61sypcha82nanizzlm8yqy828h2jbza7cxi26c";
   };
 
   resolver = let

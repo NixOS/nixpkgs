@@ -16,11 +16,11 @@ python3Packages.buildPythonApplication rec {
     sphinx guzzle_sphinx_theme
   ];
   buildInputs = [
-    acl lz4 openssl python3Packages.setuptools_scm
-  ];
+    lz4 openssl python3Packages.setuptools_scm
+  ] ++ stdenv.lib.optionals stdenv.isLinux [ acl ];
   propagatedBuildInputs = with python3Packages; [
-    cython llfuse msgpack
-  ];
+    cython msgpack
+  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ llfuse ];
 
   preConfigure = ''
     export BORG_OPENSSL_PREFIX="${openssl.dev}"

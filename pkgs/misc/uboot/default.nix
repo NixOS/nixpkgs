@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bc, dtc, python2
+{ stdenv, fetchurl, fetchpatch, bc, dtc, python2
 , hostPlatform
 }:
 
@@ -12,20 +12,37 @@ let
            stdenv.mkDerivation (rec {
 
     name = "uboot-${defconfig}-${version}";
-    version = "2017.03";
+    version = "2017.11";
 
     src = fetchurl {
       url = "ftp://ftp.denx.de/pub/u-boot/u-boot-${version}.tar.bz2";
-      sha256 = "0gqihplap05dlpwdb971wsqyv01nz2vabwq5g5649gr5jczsyjzm";
+      sha256 = "01bcsah5imy6m3fbjwhqywxg0pfk5fl8ks9ylb7kv3zmrb9qy0ba";
     };
+
+    patches = [
+      (fetchpatch {
+        url = https://github.com/dezgeg/u-boot/commit/rpi-2017-11-patch1.patch;
+        sha256 = "067yq55vv1slv4xy346px7h329pi14abdn04chg6s1s6hmf6c1x9";
+      })
+      (fetchpatch {
+        url = https://github.com/dezgeg/u-boot/commit/rpi-2017-11-patch2.patch;
+        sha256 = "0bbw0q027xvzvdxxvpzjajg4rm30a8mb7z74b6ma9q0l7y7bi0c4";
+      })
+      (fetchpatch {
+        url = https://github.com/dezgeg/u-boot/commit/pythonpath-2017-11.patch;
+        sha256 = "162b2lglp307pzxsf9m7nnmzwxqd7xkwp5j85bm6bg1a38ngpl9v";
+      })
+    ];
+
+    postPatch = ''
+      patchShebangs tools
+    '';
 
     nativeBuildInputs = [ bc dtc python2 ];
 
     hardeningDisable = [ "all" ];
 
-    postPatch = ''
-      patchShebangs tools
-    '';
+    makeFlags = [ "DTC=dtc" ];
 
     configurePhase = ''
       make ${defconfig}

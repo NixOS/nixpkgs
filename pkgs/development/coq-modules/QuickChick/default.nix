@@ -15,9 +15,15 @@ let param =
     };
 
     "8.6" = {
-      version = "20170616";
-      rev = "366ee3f8e599b5cab438a63a09713f44ac544c5a";
-      sha256 = "06kwnrfndnr6w8bmaa2s0i0rkqyv081zj55z3vcyn0wr6x6mlsz9";
+      version = "20171102";
+      rev = "0fdb769e1dc87a278383b44a9f5102cc7ccbafcf";
+      sha256 = "0fri4nih40vfb0fbr82dsi631ydkw48xszinq43lyinpknf54y17";
+    };
+
+    "8.7" = {
+      version = "20171102";
+      rev = "ddf746809c211fa7edfdbfe459d5a7e1cca47a44";
+      sha256 = "0jg3x0w8p088b8369qx492hjpq09f9h2i0li6ph3pny6hdkpdzsi";
     };
 
   }."${coq.coq-version}"
@@ -32,12 +38,14 @@ stdenv.mkDerivation rec {
     inherit (param) rev sha256;
   };
 
-  buildInputs = [ coq.ocaml coq.camlp5 ];
+  buildInputs = [ coq.ocaml coq.camlp5 coq.findlib ];
   propagatedBuildInputs = [ coq ssreflect ];
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+  installPhase = ''
+    make -f Makefile.coq COQLIB=$out/lib/coq/${coq.coq-version}/ install
+  '';
 
   meta = with stdenv.lib; {
     homepage = git://github.com/QuickChick/QuickChick.git;

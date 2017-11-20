@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, which, coq, coquelicot, flocq, mathcomp }:
+{ stdenv, fetchurl, which, coq, coquelicot, flocq, mathcomp
+, bignums ? null }:
 
 let param =
   if stdenv.lib.versionAtLeast coq.coq-version "8.5"
@@ -22,7 +23,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ which ];
   buildInputs = [ coq ];
-  propagatedBuildInputs = [ coquelicot flocq mathcomp ];
+  propagatedBuildInputs = [ bignums coquelicot flocq mathcomp ];
 
   configurePhase = "./configure --libdir=$out/lib/coq/${coq.coq-version}/user-contrib/Interval";
   buildPhase = "./remake";

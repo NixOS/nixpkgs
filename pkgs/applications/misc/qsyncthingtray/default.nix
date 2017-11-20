@@ -20,6 +20,8 @@ mkDerivation rec {
 
   cmakeFlags = lib.optional preferQWebView "-DQST_BUILD_WEBKIT=1";
 
+  patches = [ ./qsyncthingtray-0.5.8-qt-5.6.3.patch ];
+
   postPatch = ''
     ${lib.optionalString stdenv.isLinux ''
       substituteInPlace includes/platforms/linux/posixUtils.hpp \
@@ -43,6 +45,8 @@ mkDerivation rec {
 
     runHook postInstall
   '';
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = https://github.com/sieren/QSyncthingTray/;

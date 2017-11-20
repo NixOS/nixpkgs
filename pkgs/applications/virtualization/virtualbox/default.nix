@@ -19,10 +19,10 @@ let
   python = python2;
   buildType = "release";
   # Manually sha256sum the extensionPack file, must be hex!
-  extpack = "14f152228495a715f526eb74134d43c960919cc534d2bc67cfe34a63e6cf7721";
-  extpackRev = "117224";
-  main = "1af8h3d3sdpcxcp5g75qfq10z81l7m8gk0sz8zqix8c1wqsm0wdm";
-  version = "5.1.26";
+  extpack = "005ba9211862643e2516d549e98b80942918047f1f6c55fcfe08c490dd1947bc";
+  extpackRev = "118431";
+  main = "0m6y98pvkngprw5iaswvkbbfxmzvfl8yvgi984p1866zwap77z16";
+  version = "5.2.0";
 
   # See https://github.com/NixOS/nixpkgs/issues/672 for details
   extensionPack = requireFile rec {
@@ -94,14 +94,6 @@ in stdenv.mkDerivation {
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
       src/VBox/HostDrivers/adpctl/VBoxNetAdpCtl.cpp
-    patch -p0 < ${
-      fetchurl { # for glibc-2.26
-        name = "conflicting-types-for-greg_t.patch";
-        url = "http://www.linuxquestions.org/questions/"
-            + "attachment.php?attachmentid=25801&d=1504099531";
-        sha256 = "1bcyf9qrqxizyjp1s662k6n1cfyfjbl7256r4n20kbr65yxcydps";
-      }
-    }
   '';
 
   # first line: ugly hack, and it isn't yet clear why it's a problem

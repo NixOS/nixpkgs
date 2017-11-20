@@ -195,7 +195,12 @@ in
 
       boot.plymouth = {
         theme = mkDefault "breeze";
-        themePackages = mkDefault [ pkgs.breeze-plymouth ];
+        themePackages = mkDefault [
+          (pkgs.breeze-plymouth.override {
+            nixosBranding = true;
+            nixosVersion = config.system.nixosRelease;
+          })
+        ];
       };
 
       security.pam.services.kde = { allowNullPassword = true; };

@@ -2,20 +2,17 @@
 
 stdenv.mkDerivation rec {
   name = "libmpack-${version}";
-  version = "1.0.3-rev${rev}";
-  rev = "80bd55ea677e70b041f65a4b99438c1f059cce4b";
+  version = "1.0.5";
   src = fetchFromGitHub {
     owner = "tarruda";
     repo = "libmpack";
-    inherit rev;
-    sha256 = "1whnbgxd5580h59kvc2xgx6ymw7nk9kz6r4ajgsfv6c6h2xbwbl3";
+    rev = version;
+    sha256 = "0rai5djdkjz7bsn025k5489in7r1amagw1pib0z4qns6b52kiar2";
   };
   LIBTOOL = "libtool";
   buildInputs = [ libtool ];
-  installPhase = ''
-    mkdir -p $out/lib/libmpack
-    cp -R build/* $out/lib/libmpack
-    rm -rf $out/lib/libmpack/debug
+  preInstall = ''
+    export PREFIX=$out
   '';
   meta = with stdenv.lib; {
     description = "Simple implementation of msgpack in C";

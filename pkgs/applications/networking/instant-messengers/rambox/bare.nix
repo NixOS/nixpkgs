@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchNodeModules, nodejs-8_x, ruby, sencha }:
+{ stdenv, fetchFromGitHub, fetchNodeModules, nodejs-8_x, ruby, sencha, auth0ClientID, auth0Domain }:
 
 stdenv.mkDerivation rec {
   name = "rambox-bare-${version}";
@@ -21,12 +21,6 @@ stdenv.mkDerivation rec {
   };
 
   patches = [ ./hide-check-for-updates.patch ./isDev.patch ];
-
-  # These credentials are only for this derivation. If you want to get credentials
-  # for another distribution, go to https://auth0.com. If you want to reuse the same
-  # domain, drop a line at yegortimoshenko@gmail.com!
-  auth0ClientID = "0spuNKfIGeLAQ_Iki9t3fGxbfJl3k8SU";
-  auth0Domain = "nixpkgs.auth0.com";
 
   configurePhase = ''
     echo 'var auth0Cfg = { clientID: "${auth0ClientID}", domain: "${auth0Domain}" };' > env.js

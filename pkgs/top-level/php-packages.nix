@@ -13,15 +13,14 @@ let
 
   apcu40 = assert !isPhp7; buildPecl {
     name = "apcu-4.0.7";
-
     sha256 = "1mhbz56mbnq7dryf2d64l84lj3fpr5ilmg2424glans3wcg772hp";
+    buildInputs = [ pkgs.pcre ];
   };
 
   apcu51 = assert isPhp7; buildPecl {
     name = "apcu-5.1.8";
-
     sha256 = "01dfbf0245d8cc0f51ba16467a60b5fad08e30b28df7846e0dd213da1143ecce";
-
+    buildInputs = [ pkgs.pcre ];
     doCheck = true;
     checkTarget = "test";
     checkFlagsArray = ["REPORT_EXIT_STATUS=1" "NO_INTERACTION=1"];
@@ -74,6 +73,21 @@ let
     ];
   };
 
+  php_excel = assert isPhp7; buildPecl rec {
+    name = "php_excel";
+    version = "1.0.2";
+    phpVersion = "php7";
+
+    buildInputs = [ pkgs.libxl ];
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/iliaal/${name}/releases/download/Excel-1.0.2-PHP7/excel-${version}-${phpVersion}.tgz";
+      sha256 = "0dpvih9gpiyh1ml22zi7hi6kslkilzby00z1p8x248idylldzs2n";
+    };
+
+    configureFlags = [ "--with-excel" "--with-libxl-incdir=${pkgs.libxl}/include_c" "--with-libxl-libdir=${pkgs.libxl}/lib" ];
+  };
+
   igbinary = buildPecl {
     name = "igbinary-2.0.4";
 
@@ -91,6 +105,7 @@ let
     sha256 = "0siyxpszjz6s095s2g2854bhprjq49rf22v6syjiwvndg1pc9fsh";
     configureFlags = "--with-imagick=${pkgs.imagemagick.dev}";
     nativeBuildInputs = [ pkgs.pkgconfig ];
+    buildInputs = [ pkgs.pcre ];
   };
 
   # No support for PHP 7 yet

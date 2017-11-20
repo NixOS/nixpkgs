@@ -1,8 +1,8 @@
 { stdenv, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
 let
-  modDirVersion = "4.9.59";
-  tag = "r73";
+  modDirVersion = "4.9.61";
+  tag = "r76";
 in
 import ./generic.nix (args // rec {
   version = "${modDirVersion}-ti-${tag}";
@@ -12,7 +12,7 @@ import ./generic.nix (args // rec {
     owner = "beagleboard";
     repo = "linux";
     rev = "${version}";
-    sha256 = "1kzbbaqmzgvfls1v9jir2ck9vcdd774mq474vhr5x6dqjnnb5kg9";
+    sha256 = "0hcz4fwjyic42mrn8qsvzm4jq1g5k51awjj3d2das7k8frjalaby";
   };
 
   kernelPatches = args.kernelPatches;

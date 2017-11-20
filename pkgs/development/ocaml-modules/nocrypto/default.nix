@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, opam, topkg
 , cpuid, ocb-stubblr
-, cstruct, zarith, ocaml_oasis, ppx_sexp_conv, sexplib
+, cstruct, zarith, ppx_sexp_conv, sexplib
 , lwt ? null
 }:
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     sha256 = "0nhnlpbqh3mf9y2cxivlvfb70yfbdpvg6jslzq64xblpgjyg443p";
   };
 
-  buildInputs = [ ocaml ocaml_oasis findlib ocamlbuild topkg opam cpuid ocb-stubblr
+  buildInputs = [ ocaml findlib ocamlbuild topkg opam cpuid ocb-stubblr
     ppx_sexp_conv ];
   propagatedBuildInputs = [ cstruct zarith sexplib ] ++ optional withLwt lwt;
 

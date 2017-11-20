@@ -4,7 +4,7 @@ with stdenv.lib;
 
 pythonPackages.buildPythonPackage rec {
   name = "neovim-remote-${version}";
-  version = "v1.6.0";
+  version = "v1.8.6";
   disabled = !pythonPackages.isPy3k;
 
   src = fetchFromGitHub {
