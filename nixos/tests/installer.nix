@@ -307,11 +307,11 @@ in {
     { createPartitions =
         ''
           $machine->succeed(
-              "parted /dev/vda mklabel gpt",
-              "parted -s /dev/vda -- mkpart ESP fat32 1M 50MiB", # /boot
-              "parted -s /dev/vda -- set 1 boot on",
-              "parted -s /dev/vda -- mkpart primary linux-swap 50MiB 1024MiB",
-              "parted -s /dev/vda -- mkpart primary ext2 1024MiB -1MiB", # /
+              "parted --script /dev/vda mklabel gpt",
+              "parted --script /dev/vda -- mkpart ESP fat32 1M 50MiB", # /boot
+              "parted --script /dev/vda -- set 1 boot on",
+              "parted --script /dev/vda -- mkpart primary linux-swap 50MiB 1024MiB",
+              "parted --script /dev/vda -- mkpart primary ext2 1024MiB -1MiB", # /
               "udevadm settle",
               "mkswap /dev/vda2 -L swap",
               "swapon -L swap",
@@ -460,6 +460,47 @@ in {
         $machine->sendChars("supersecret\n");
       '';
     };
+
+  # Test whether opening encrypted filesystem with keyfile
+  # Checks for regression of missing cryptsetup, when no luks device without
+  # keyfile is configured
+  filesystemEncryptedWithKeyfile = makeInstallerTest "filesystemEncryptedWithKeyfile"
+    { createPartitions = ''
+       $machine->succeed(
+          "parted --script /dev/vda mklabel msdos",
+          "parted --script /dev/vda -- mkpart primary ext2 1M 50MB", # /boot
+          "parted --script /dev/vda -- mkpart primary linux-swap 50M 1024M",
+          "parted --script /dev/vda -- mkpart primary 1024M 1280M", # LUKS with keyfile
+          "parted --script /dev/vda -- mkpart primary 1280M -1s",
+          "udevadm settle",
+          "mkswap /dev/vda2 -L swap",
+          "swapon -L swap",
+          "mkfs.ext3 -L nixos /dev/vda4",
+          "mount LABEL=nixos /mnt",
+          "mkfs.ext3 -L boot /dev/vda1",
+          "mkdir -p /mnt/boot",
+          "mount LABEL=boot /mnt/boot",
+          "modprobe dm_mod dm_crypt",
+          "echo -n supersecret > /mnt/keyfile",
+          "cryptsetup luksFormat -q /dev/vda3 --key-file /mnt/keyfile",
+          "cryptsetup luksOpen --key-file /mnt/keyfile /dev/vda3 crypt",
+          "mkfs.ext3 -L test /dev/mapper/crypt",
+          "cryptsetup luksClose crypt",
+          "mkdir -p /mnt/test"
+        );
+      '';
+      extraConfig = ''
+        fileSystems."/test" =
+        { device = "/dev/disk/by-label/test";
+          fsType = "ext3";
+          encrypted.enable = true;
+          encrypted.blkDev = "/dev/vda3";
+          encrypted.label = "crypt";
+          encrypted.keyFile = "/mnt-root/keyfile";
+        };
+      '';
+    };
+
 
   swraid = makeInstallerTest "swraid"
     { createPartitions =

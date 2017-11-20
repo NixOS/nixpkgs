@@ -291,6 +291,7 @@ in rec {
   tests.mongodb = callTest tests/mongodb.nix {};
   tests.mumble = callTest tests/mumble.nix {};
   tests.munin = callTest tests/munin.nix {};
+  tests.mutableUsers = callTest tests/mutable-users.nix {};
   tests.mysql = callTest tests/mysql.nix {};
   tests.mysqlBackup = callTest tests/mysql-backup.nix {};
   tests.mysqlReplication = callTest tests/mysql-replication.nix {};
@@ -330,6 +331,7 @@ in rec {
   tests.slim = callTest tests/slim.nix {};
   tests.smokeping = callTest tests/smokeping.nix {};
   tests.snapper = callTest tests/snapper.nix {};
+  tests.switchTest = callTest tests/switch-test.nix {};
   tests.taskserver = callTest tests/taskserver.nix {};
   tests.tomcat = callTest tests/tomcat.nix {};
   tests.udisks2 = callTest tests/udisks2.nix {};

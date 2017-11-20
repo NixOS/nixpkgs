@@ -3565,7 +3565,7 @@ with pkgs;
 
   nextcloud = callPackage ../servers/nextcloud { };
 
-  nextcloud-client = libsForQt56.callPackage ../applications/networking/nextcloud-client { };
+  nextcloud-client = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
 
   nextcloud-news-updater = callPackage ../servers/nextcloud/news-updater.nix { };
 
@@ -11994,6 +11994,8 @@ with pkgs;
 
   sambaFull = samba4Full;
 
+  shairplay = callPackage ../servers/shairplay { };
+
   shairport-sync = callPackage ../servers/shairport-sync { };
 
   serfdom = callPackage ../servers/serf { };
@@ -13548,7 +13550,7 @@ with pkgs;
 
   shaderc = callPackage ../development/compilers/shaderc { };
 
-  mime_types = callPackage ../data/misc/mime-types { };
+  mime-types = callPackage ../data/misc/mime-types { };
 
   shared_mime_info = callPackage ../data/misc/shared-mime-info { };
 

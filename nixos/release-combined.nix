@@ -95,6 +95,7 @@ in rec {
         #(all nixos.tests.lightdm)
         (all nixos.tests.login)
         (all nixos.tests.misc)
+        (all nixos.tests.mutableUsers)
         (all nixos.tests.nat.firewall)
         (all nixos.tests.nat.standalone)
         (all nixos.tests.networking.scripted.loopback)
@@ -115,6 +116,7 @@ in rec {
         (all nixos.tests.sddm.default)
         (all nixos.tests.simple)
         (all nixos.tests.slim)
+        (all nixos.tests.switchTest)
         (all nixos.tests.udisks2)
         (all nixos.tests.xfce)
 
