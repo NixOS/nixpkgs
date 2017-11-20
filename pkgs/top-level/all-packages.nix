@@ -18165,7 +18165,6 @@ with pkgs;
   };
 
   stuntrally = callPackage ../games/stuntrally {
-    bullet = bullet283;
     mygui = mygui.override {
       withOgre = true;
     };
@@ -19857,7 +19856,6 @@ with pkgs;
   };
 
   bullet = callPackage ../development/libraries/bullet {};
-  bullet283 = callPackage ../development/libraries/bullet/bullet283.nix {};
 
   spdlog = callPackage ../development/libraries/spdlog { };
 
