@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "microcode-intel-${version}";
-  version = "20170707";
+  version = "20171117";
 
   src = fetchurl {
-    url = "https://downloadmirror.intel.com/26925/eng/microcode-${version}.tgz";
-    sha256 = "14zf7fbhg0msa3bm0kl139pclmkfm83s6l86x48sr9sjpxllgm2g";
+    url = "https://downloadmirror.intel.com/27337/eng/microcode-${version}.tgz";
+    sha256 = "1p14ypbg28bdkbza6dx6dpjrdr5p13vmgrh2cw0y1v2qzalivgck";
   };
 
   buildInputs = [ libarchive ];
