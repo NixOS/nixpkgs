@@ -724,6 +724,11 @@ in
 
     networking.dhcpcd.denyInterfaces = [ "ve-*" "vb-*" ];
 
+    services.udev.extraRules = optionalString config.networking.networkmanager.enable ''
+      # Don't manage interfaces created by nixos-container.
+      ENV{INTERFACE}=="v[e,b]-*", ENV{NM_UNMANAGED}="1"
+    '';
+
     environment.systemPackages = [ pkgs.nixos-container ];
   });
 }
