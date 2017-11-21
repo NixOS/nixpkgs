@@ -1,6 +1,7 @@
 { lib, fetchurl, pythonPackages, pkgconfig, makeWrapper, qmake
 , lndir, qtbase, qtsvg, qtwebkit, qtwebengine, dbus_libs
 , withWebSockets ? false, qtwebsockets
+, withConnectivity ? false, qtconnectivity
 }:
 
 let
@@ -27,7 +28,7 @@ in buildPythonPackage {
 
   buildInputs = [
     lndir qtbase qtsvg qtwebkit qtwebengine dbus_libs
-  ] ++ lib.optional withWebSockets qtwebsockets;
+  ] ++ lib.optional withWebSockets qtwebsockets ++ lib.optional withConnectivity qtconnectivity;
 
   propagatedBuildInputs = [ sip ];
 
