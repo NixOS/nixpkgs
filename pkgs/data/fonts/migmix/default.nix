@@ -23,18 +23,22 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  phases = [ "installPhase" ];
+  unpackPhase = ":";
 
   installPhase = ''
     mkdir -p $out/share/fonts/truetype/migmix
-    find ${toString srcs} -name '*.ttf' | xargs -I % cp % $out/share/fonts/truetype/migmix
+    find $srcs -name '*.ttf' | xargs install -m644 --target $out/share/fonts/truetype/migmix
   '';
+
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "1fhh8wg6lxwrnsg9rl4ihffl0bsp1wqa5gps9fx60kr6j9wpvmbg";
 
   meta = with stdenv.lib; {
     description = "A high-quality Japanese font based on M+ fonts and IPA fonts";
     homepage = http://mix-mplus-ipa.osdn.jp/migmix;
-    license = stdenv.lib.licenses.ipa;
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.ipa;
+    platforms = platforms.unix;
     maintainers = [ maintainers.mikoim ];
   };
 }
