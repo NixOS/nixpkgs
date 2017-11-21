@@ -2,13 +2,10 @@
 
 import ./generic.nix (rec {
   mptcpVersion = "0.93";
-  modDirVersion = "4.9.60";
-  version = "${modDirVersion}-mptcp_v${mptcpVersion}";
+  modVersion = "4.9.60";
+  version = "${modVersion}-mptcp_v${mptcpVersion}";
 
-  extraMeta = {
-    branch = "4.4";
-    maintainers = with stdenv.lib.maintainers; [ teto layus ];
-  };
+  extraMeta.maintainers = with stdenv.lib.maintainers; [ teto layus ];
 
   src = fetchFromGitHub {
     owner = "multipath-tcp";

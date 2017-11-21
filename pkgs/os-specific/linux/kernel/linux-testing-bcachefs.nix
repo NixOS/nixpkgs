@@ -2,7 +2,7 @@
 
 import ./generic.nix (args // rec {
   version = "4.11.2017.08.23";
-  modDirVersion = "4.11.0";
+  modVersion = "4.11.0";
   extraMeta.branch = "master";
   extraMeta.maintainers = [ stdenv.lib.maintainers.davidak ];
 
