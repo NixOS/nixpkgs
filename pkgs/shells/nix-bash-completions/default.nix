@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "0.4";
+  version = "0.5";
   name = "nix-bash-completions-${version}";
 
   src = fetchFromGitHub {
     owner = "hedning";
     repo = "nix-bash-completions";
     rev = "v${version}";
-    sha256 = "08gl9xnk738p180hpn3l7ggrz5zlky4pam7v74kb0gavjxm4fa2f";
+    sha256 = "095dbbqssaxf0y85xw73gajif6lzy2aja4scg3plplng3k9zbldz";
   };
 
   installPhase = ''
