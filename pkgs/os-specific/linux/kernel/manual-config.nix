@@ -219,10 +219,11 @@ let
     };
 in
 
-stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKernelPatches) configfile) // {
+stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKernelPatches) configfile) // rec {
   name = "linux-${version}";
 
   enableParallelBuilding = true;
+  NIX_BUILD_CORES=if enableParallelBuilding then 0 else 1;
 
   nativeBuildInputs = [ perl bc nettools openssl gmp libmpc mpfr ]
     ++ optional (stdenv.platform.kernelTarget == "uImage") ubootTools;
