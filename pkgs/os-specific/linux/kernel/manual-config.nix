@@ -110,7 +110,7 @@ let
         make $makeFlags prepare
         actualModDirVersion="$(cat $buildRoot/include/config/kernel.release)"
         if [ "$actualModDirVersion" != "${modDirVersion}" ]; then
-          echo "Error: modDirVersion specified in the Nix expression is wrong, it should be: $actualModDirVersion"
+          echo "Error: modDirVersion ${modDirVersion} specified in the Nix expression is wrong, it should be: $actualModDirVersion"
           exit 1
         fi
 
@@ -230,10 +230,11 @@ let
     };
 in
 
-stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKernelPatches) configfile) // {
+stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKernelPatches) configfile) // rec {
   name = "linux-${version}";
 
   enableParallelBuilding = true;
+  NIX_BUILD_CORES=if enableParallelBuilding then 0 else 1;
 
   nativeBuildInputs = [ perl bc nettools openssl gmp libmpc mpfr ]
     ++ optional (stdenv.platform.kernelTarget == "uImage") ubootTools;
