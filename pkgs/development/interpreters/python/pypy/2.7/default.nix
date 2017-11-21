@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi
+{ stdenv, substituteAll, fetchurl
+, zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi
 , sqlite, openssl, ncurses, python, expat, tcl, tk, tix, xlibsWrapper, libX11
 , makeWrapper, callPackage, self, gdbm, db
 , python-setup-hook
@@ -9,7 +10,7 @@
 assert zlibSupport -> zlib != null;
 
 let
-  majorVersion = "5.8";
+  majorVersion = "5.9";
   minorVersion = "0";
   minorVersionSuffix = "";
   pythonVersion = "2.7";
@@ -25,21 +26,13 @@ in stdenv.mkDerivation rec {
 
     src = fetchurl {
       url = "https://bitbucket.org/pypy/pypy/get/release-pypy${pythonVersion}-v${version}.tar.bz2";
-      sha256 = "0dibf1bx4icrbi8zsqk7cfwgwsd3hfx6biz59k8j5rys3fx9z418";
+      sha256 = "1q3kcnniyvnca1l7x10mbhp4xwjr03ajh2h8j6cbdllci38zdjy1";
     };
 
-    patches = [
-      # https://bitbucket.org/pypy/pypy/issues/2604/lib-python-27-test-test_ospy
-      ./2604-skip-urandom-fd-test.patch
-    ];
-
-    postPatch = ''
-      substituteInPlace "lib-python/2.7/lib-tk/Tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
-    '';
-
-  nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ bzip2 openssl pythonForPypy libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 makeWrapper gdbm db ]
-      ++ stdenv.lib.optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc
+    nativeBuildInputs = [ pkgconfig makeWrapper ];
+    buildInputs = [
+      bzip2 openssl pythonForPypy libffi ncurses expat sqlite tk tcl xlibsWrapper libX11 gdbm db
+    ] ++ stdenv.lib.optional (stdenv ? cc && stdenv.cc.libc != null) stdenv.cc.libc
       ++ stdenv.lib.optional zlibSupport zlib;
 
     hardeningDisable = stdenv.lib.optional stdenv.isi686 "pic";
@@ -48,7 +41,20 @@ in stdenv.mkDerivation rec {
     LIBRARY_PATH = stdenv.lib.makeLibraryPath buildInputs;
     LD_LIBRARY_PATH = stdenv.lib.makeLibraryPath (stdenv.lib.filter (x : x.outPath != stdenv.cc.libc.outPath or "") buildInputs);
 
-    preConfigure = ''
+    patches = [
+      (substituteAll {
+          src = ./tk_tcl_paths.patch;
+          inherit tk tcl;
+          tk_dev = tk.dev;
+          tcl_dev = tcl;
+          tk_libprefix = tk.libPrefix;
+          tcl_libprefix = tcl.libPrefix;
+      })
+    ];
+
+    postPatch = ''
+      substituteInPlace "lib-python/2.7/lib-tk/Tix.py" --replace "os.environ.get('TIX_LIBRARY')" "os.environ.get('TIX_LIBRARY') or '${tix}/lib'"
+
       # hint pypy to find nix ncurses
       substituteInPlace pypy/module/_minimal_curses/fficurses.py \
         --replace "/usr/include/ncurses/curses.h" "${ncurses.dev}/include/curses.h" \
@@ -56,30 +62,32 @@ in stdenv.mkDerivation rec {
         --replace "ncurses/term.h" "${ncurses.dev}/include/term.h" \
         --replace "libraries=['curses']" "libraries=['ncurses']"
 
-      # tkinter hints
-      substituteInPlace lib_pypy/_tkinter/tklib_build.py \
-        --replace "'/usr/include/tcl'" "'${tk}/include', '${tcl}/include'" \
-        --replace "linklibs = ['tcl' + _ver, 'tk' + _ver]" "linklibs=['${tcl.libPrefix}', '${tk.libPrefix}']" \
-        --replace "libdirs = []" "libdirs = ['${tk}/lib', '${tcl}/lib']"
-
       sed -i "s@libraries=\['sqlite3'\]\$@libraries=['sqlite3'], include_dirs=['${sqlite.dev}/include'], library_dirs=['${sqlite.out}/lib']@" lib_pypy/_sqlite3_build.py
     '';
 
     buildPhase = ''
-      ${pythonForPypy.interpreter} rpython/bin/rpython --make-jobs="$NIX_BUILD_CORES" -Ojit --batch pypy/goal/targetpypystandalone.py --withmod-_minimal_curses --withmod-unicodedata --withmod-thread --withmod-bz2 --withmod-_multiprocessing
+      ${pythonForPypy.interpreter} rpython/bin/rpython \
+        --make-jobs="$NIX_BUILD_CORES" \
+        -Ojit \
+        --batch pypy/goal/targetpypystandalone.py \
+        --withmod-_minimal_curses \
+        --withmod-unicodedata \
+        --withmod-thread \
+        --withmod-bz2 \
+        --withmod-_multiprocessing
     '';
 
     setupHook = python-setup-hook sitePackages;
 
     postBuild = ''
-      cd ./lib_pypy
+        pushd ./lib_pypy
         ../pypy-c ./_audioop_build.py
         ../pypy-c ./_curses_build.py
         ../pypy-c ./_pwdgrp_build.py
         ../pypy-c ./_sqlite3_build.py
         ../pypy-c ./_syslog_build.py
         ../pypy-c ./_tkinter/tklib_build.py
-      cd ..
+        popd
     '';
 
     doCheck = true;
