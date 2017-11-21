@@ -6,6 +6,7 @@
 , "browserify"
 , "castnow"
 , "coffee-script"
+, "coinmon"
 , "cordova"
 , "csslint"
 , "dhcp"
