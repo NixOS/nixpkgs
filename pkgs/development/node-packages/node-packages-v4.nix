@@ -2119,13 +2119,13 @@ let
         sha1 = "c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79";
       };
     };
-    "ajv-5.3.0" = {
+    "ajv-5.4.0" = {
       name = "ajv";
       packageName = "ajv";
-      version = "5.3.0";
+      version = "5.4.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/ajv/-/ajv-5.3.0.tgz";
-        sha1 = "4414ff74a50879c208ee5fdc826e32c303549eda";
+        url = "https://registry.npmjs.org/ajv/-/ajv-5.4.0.tgz";
+        sha1 = "32d1cf08dbc80c432f426f12e10b2511f6b46474";
       };
     };
     "har-schema-2.0.0" = {
@@ -2623,13 +2623,13 @@ let
         sha1 = "17eb2807987f76952e9c0485fc311d06a826a2e0";
       };
     };
-    "big-integer-1.6.25" = {
+    "big-integer-1.6.26" = {
       name = "big-integer";
       packageName = "big-integer";
-      version = "1.6.25";
+      version = "1.6.26";
       src = fetchurl {
-        url = "https://registry.npmjs.org/big-integer/-/big-integer-1.6.25.tgz";
-        sha1 = "1de45a9f57542ac20121c682f8d642220a34e823";
+        url = "https://registry.npmjs.org/big-integer/-/big-integer-1.6.26.tgz";
+        sha1 = "3af1672fa62daf2d5ecafacf6e5aa0d25e02c1c8";
       };
     };
     "camelcase-keys-2.1.0" = {
@@ -3343,13 +3343,13 @@ let
         sha1 = "c636c6c1f50eed7c927af06c1dbffab53c7abe28";
       };
     };
-    "nan-2.7.0" = {
+    "nan-2.8.0" = {
       name = "nan";
       packageName = "nan";
-      version = "2.7.0";
+      version = "2.8.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/nan/-/nan-2.7.0.tgz";
-        sha1 = "d95bf721ec877e08db276ed3fc6eb78f9083ad46";
+        url = "https://registry.npmjs.org/nan/-/nan-2.8.0.tgz";
+        sha1 = "ed715f3fe9de02b57a5e6252d90a96675e1f085a";
       };
     };
     "node-pre-gyp-0.6.39" = {
@@ -4835,7 +4835,7 @@ in
           })
           (sources."har-validator-5.0.3" // {
             dependencies = [
-              (sources."ajv-5.3.0" // {
+              (sources."ajv-5.4.0" // {
                 dependencies = [
                   sources."co-4.6.0"
                   sources."fast-deep-equal-1.0.0"
@@ -4986,7 +4986,7 @@ in
                 dependencies = [
                   (sources."bplist-parser-0.1.1" // {
                     dependencies = [
-                      sources."big-integer-1.6.25"
+                      sources."big-integer-1.6.26"
                     ];
                   })
                   (sources."meow-3.7.0" // {
@@ -5267,7 +5267,7 @@ in
       })
       (sources."v8-debug-1.0.1" // {
         dependencies = [
-          sources."nan-2.7.0"
+          sources."nan-2.8.0"
           (sources."node-pre-gyp-0.6.39" // {
             dependencies = [
               (sources."mkdirp-0.5.1" // {
@@ -5514,7 +5514,7 @@ in
       })
       (sources."v8-profiler-5.7.0" // {
         dependencies = [
-          sources."nan-2.7.0"
+          sources."nan-2.8.0"
           (sources."node-pre-gyp-0.6.39" // {
             dependencies = [
               (sources."mkdirp-0.5.1" // {
