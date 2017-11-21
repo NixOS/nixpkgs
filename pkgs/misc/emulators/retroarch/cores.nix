@@ -26,6 +26,8 @@ let
         --add-flags "-L $COREDIR/${d2u core}_libretro.so $@"
     '';
 
+    enableParallelBuilding = true;
+
     passthru = {
       core = core;
       libretroCore = "/lib/retroarch/cores";
