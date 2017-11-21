@@ -100,6 +100,8 @@ stdenv.mkDerivation {
     fi
   '';
 
+  enableParallelBuilding = true;
+
   meta = {
     homepage = http://math-atlas.sourceforge.net/;
     description = "Automatically Tuned Linear Algebra Software (ATLAS)";
