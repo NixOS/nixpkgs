@@ -1,6 +1,7 @@
-{ stdenv, buildPythonPackage, fetchPypi, pyflakes }:
+{ stdenv, python3Packages }:
 
-buildPythonPackage rec {
+with python3Packages;
+buildPythonApplication rec {
   pname = "autoflake";
   version = "1.0";
   name = "${pname}-${version}";
