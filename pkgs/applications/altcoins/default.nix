@@ -53,6 +53,8 @@ rec {
 
   stellar-core = callPackage ./stellar-core.nix { };
 
+  xmr-stak-cpu = callPackage ./xmr-stak-cpu.nix { donationLevel = "2.0"; };
+
   zcash = callPackage ./zcash {
     withGui = false;
     openssl = openssl_1_1_0;
