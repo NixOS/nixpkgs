@@ -1,4 +1,5 @@
-{ stdenv, lib, fetchurl, pkgs, makeWrapper, bash
+{ stdenv, fetchurl, makeWrapper
+, pkgconfig, openssl, fuse, libxml2
 , cabextract ? null
 , cdrkit ? null
 , mtools ? null
@@ -10,37 +11,34 @@ stdenv.mkDerivation rec {
   version = "1.12.0";
   name = "wimlib-${version}";
 
-  nativeBuildInputs = with pkgs; [ pkgconfig makeWrapper ];
-  buildInputs = with pkgs; [ openssl fuse libxml2 ntfs3g ];
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
+  buildInputs = [ openssl fuse libxml2 ntfs3g ];
 
   src = fetchurl {
     url = "https://wimlib.net/downloads/${name}.tar.gz";
     sha256 = "852cf59d682a91974f715f09fa98cab621b740226adcfea7a42360be0f86464f";
   };
 
- prefixPackages = [ cabextract cdrkit mtools ntfs3g syslinux ];
-
   preBuild = ''
-    substituteInPlace programs/mkwinpeimg.in --replace '/usr/lib/syslinux' "${syslinux}/share/syslinux"
+    substituteInPlace programs/mkwinpeimg.in \
+      --replace '/usr/lib/syslinux' "${syslinux}/share/syslinux"
   '';
 
-  postInstall = ''
+  postInstall = let
+    path = stdenv.lib.makeBinPath  [ cabextract cdrkit mtools ntfs3g syslinux ];
+  in ''
     for prog in $out/bin/*; do
-      wrapProgram $prog --prefix PATH : ${lib.makeBinPath prefixPackages}
+      wrapProgram $prog --prefix PATH : ${path}
     done
   '';
 
   doCheck = true;
 
-  checkPhase = ''
-    patchShebangs tests/
-    for testfile in tests/test-*; do
-      wrapProgram $testfile --prefix PATH : ${lib.makeBinPath prefixPackages}
-    done
-    make check
+  preCheck = ''
+    patchShebangs tests
   '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     homepage = https://wimlib.net;
     description = "A library and program to extract, create, and modify WIM files";
     platforms = platforms.unix;
