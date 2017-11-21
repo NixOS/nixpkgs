@@ -1,5 +1,5 @@
 { stdenv, fetchurl, sqlite, curl, pkgconfig, libxml2, stfl, json-c-0-11, ncurses
-, gettext, asciidoc, libiconv, makeWrapper, perl, fetchpatch }:
+, gettext, asciidoc, docbook_xml_xslt, libiconv, makeWrapper, perl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -11,8 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "82d5e3e2a6dab845aac0bf72580f46c2756375d49214905a627284e5bc32e327";
   };
 
+  outputs = [ "out" "doc" ];
+
   buildInputs
-    = [ pkgconfig sqlite curl libxml2 stfl json-c-0-11 ncurses gettext asciidoc perl libiconv ]
+    = [ pkgconfig sqlite curl libxml2 stfl json-c-0-11 ncurses gettext asciidoc docbook_xml_xslt libiconv ]
       ++ stdenv.lib.optional stdenv.isDarwin makeWrapper;
 
   preBuild = ''
