@@ -94,6 +94,7 @@ stdenv.mkDerivation (
       touch now
       touch -d "1970-01-01 00:00:00 UTC" then
       find $sourceRoot ! -newer then -print0 | xargs -0r touch --reference now
+      rm now then
       eval "$nextPostUnpack"
     '';
 

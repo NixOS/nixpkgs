@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, fetchFromGitHub }:
+{ stdenv, fetchpatch, fetchgit, fetchFromGitHub }:
 
 let
   # https://github.com/spwhitt/nix-zsh-completions/pull/2
@@ -18,9 +18,9 @@ in stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
   patches = [
-    (fetchurl {
+    (fetchpatch {
       url = "https://github.com/sorin-ionescu/prezto/pull/1028.patch";
-      sha256 = "0n2s7kfp9ljrq8lw5iibv0vyv66awrkzkqbyvy7hlcl06d8aykjv";
+      sha256 = "0yrj72s1hiaq13374xa82hxdig4s0kvqjn9apkmw0h7kzggxjfn3";
     })
   ];
   buildPhase = ''

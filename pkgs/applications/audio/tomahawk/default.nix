@@ -47,10 +47,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    description = "A multi-source music player";
+    description = "A multi-source music player (unmaintained)";
     homepage = http://tomahawk-player.org/;
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.aszlig ];
   };
 }

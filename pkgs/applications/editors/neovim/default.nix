@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, cmake, gettext, libmsgpack, libtermkey
 , libtool, libuv, luaPackages, ncurses, perl, pkgconfig
-, unibilium, makeWrapper, vimUtils, xsel, gperf
+, unibilium, makeWrapper, vimUtils, xsel, gperf, callPackage
 
 , withPython ? true, pythonPackages, extraPythonPackages ? []
 , withPython3 ? true, python3Packages, extraPython3Packages ? []
 , withJemalloc ? true, jemalloc
-, withRuby ? true, bundlerEnv
+, withRuby ? true, bundlerEnv, ruby
 
 , withPyGUI ? false
 , vimAlias ? false
@@ -48,10 +48,11 @@ let
   rubyEnv = bundlerEnv {
     name = "neovim-ruby-env";
     gemdir = ./ruby_provider;
+    postBuild = ''
+      ln -s ${ruby}/bin/* $out/bin
+    '';
   };
-
-  rubyWrapper = ''--suffix PATH : \"${rubyEnv}/bin\" '' +
-                ''--suffix GEM_HOME : \"${rubyEnv}/${rubyEnv.ruby.gemPath}\" '';
+  rubyWrapper = ''--cmd \"let g:ruby_host_prog='$out/bin/nvim-ruby'\" '';
 
   pluginPythonPackages = if configure == null then [] else builtins.concatLists
     (map ({ pythonDependencies ? [], ...}: pythonDependencies)
@@ -74,10 +75,14 @@ let
     ignoreCollisions = true;
   };
   python3Wrapper = ''--cmd \"let g:python3_host_prog='$out/bin/nvim-python3'\" '';
-  pythonFlags = optionalString (withPython || withPython3) ''--add-flags "${
-    (optionalString withPython pythonWrapper) +
-    (optionalString withPython3 python3Wrapper)
-  }"'';
+
+  additionalFlags =
+    optionalString (withPython || withPython3 || withRuby)
+      ''--add-flags "${(optionalString withPython pythonWrapper) +
+                       (optionalString withPython3 python3Wrapper) +
+                       (optionalString withRuby rubyWrapper)}" --unset PYTHONPATH '' +
+    optionalString (withRuby)
+      ''--suffix PATH : \"${rubyEnv}/bin\" --set GEM_HOME \"${rubyEnv}/${rubyEnv.ruby.gemPath}\" '';
 
   neovim = stdenv.mkDerivation rec {
     name = "neovim-${version}";
@@ -128,21 +133,23 @@ let
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
     '';
 
-    postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
-      echo patching $out/bin/nvim
+    postInstall = stdenv.lib.optionalString stdenv.isLinux ''
+      sed -i -e "s|'xsel|'${xsel}/bin/xsel|" $out/share/nvim/runtime/autoload/provider/clipboard.vim
+    '' + stdenv.lib.optionalString (withJemalloc && stdenv.isDarwin) ''
       install_name_tool -change libjemalloc.1.dylib \
                 ${jemalloc}/lib/libjemalloc.1.dylib \
                 $out/bin/nvim
-      sed -i -e "s|'xsel|'${xsel}/bin/xsel|" $out/share/nvim/runtime/autoload/provider/clipboard.vim
     '' + optionalString withPython ''
       ln -s ${pythonEnv}/bin/python $out/bin/nvim-python
+    '' + optionalString withPython3 ''
+      ln -s ${python3Env}/bin/python3 $out/bin/nvim-python3
+    '' + optionalString withPython3 ''
+      ln -s ${rubyEnv}/bin/neovim-ruby-host $out/bin/nvim-ruby
     '' + optionalString withPyGUI ''
       makeWrapper "${pythonEnv}/bin/pynvim" "$out/bin/pynvim" \
         --prefix PATH : "$out/bin"
-    '' + optionalString withPython3 ''
-      ln -s ${python3Env}/bin/python3 $out/bin/nvim-python3
     '' + optionalString (withPython || withPython3 || withRuby) ''
-      wrapProgram $out/bin/nvim ${rubyWrapper + pythonFlags}
+      wrapProgram $out/bin/nvim ${additionalFlags}
     '';
 
     meta = {

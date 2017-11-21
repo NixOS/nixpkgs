@@ -72,6 +72,29 @@ following incompatible changes:</para>
       <option>services.pgmanage</option>.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      <emphasis role="strong">
+        The OpenSSH service no longer enables support for DSA keys by default,
+        which could cause a system lock out. Update your keys or, unfavorably,
+        re-enable DSA support manually.
+      </emphasis>
+    </para>
+
+    <para>
+      DSA support was
+      <link xlink:href="https://www.openssh.com/legacy.html">deprecated in OpenSSH 7.0</link>,
+      due to it being too weak. To re-enable support, add
+      <literal>PubkeyAcceptedKeyTypes +ssh-dss</literal> to the end of your
+      <option>services.openssh.extraConfig</option>.
+    </para>
+
+    <para>
+      After updating the keys to be stronger, anyone still on a pre-17.03
+      version is safe to jump to 17.03, as vetted
+      <link xlink:href="https://search.nix.gsc.io/?q=stateVersion">here</link>.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>

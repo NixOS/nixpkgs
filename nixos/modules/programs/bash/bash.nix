@@ -197,8 +197,9 @@ in
         fi
       '';
 
-    # Configuration for readline in bash.
-    environment.etc."inputrc".source = ./inputrc;
+    # Configuration for readline in bash. We use "option default"
+    # priority to allow user override using both .text and .source.
+    environment.etc."inputrc".source = mkOptionDefault ./inputrc;
 
     users.defaultUserShell = mkDefault pkgs.bashInteractive;
 

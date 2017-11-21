@@ -11852,21 +11852,7 @@ in {
 
   nbmerge = callPackage ../development/python-modules/nbmerge { };
 
-  nbxmpp = buildPythonPackage rec {
-    name = "nbxmpp-${version}";
-    version = "0.5.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nbxmpp/${name}.tar.gz";
-      sha256 = "1gnzrzrdl4nii1sc5x8p5iw2ya5sl70j3nn34abqsny51p2pzmv6";
-    };
-
-    meta = {
-      homepage = "https://python-nbxmpp.gajim.org/";
-      description = "Non-blocking Jabber/XMPP module";
-      license = licenses.gpl3;
-    };
-  };
+  nbxmpp = callPackage ../development/python-modules/nbxmpp { };
 
   sleekxmpp = buildPythonPackage rec {
     name = "sleekxmpp-${version}";
