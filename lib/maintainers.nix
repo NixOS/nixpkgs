@@ -414,6 +414,7 @@
   michelk = "Michel Kuhlmann <michel@kuhlmanns.info>";
   midchildan = "midchildan <midchildan+nix@gmail.com>";
   mikefaille = "Michaël Faille <michael@faille.io>";
+  mikoim = "Eshin Kunishima <ek@esh.ink>";
   miltador = "Vasiliy Solovey <miltador@yandex.ua>";
   mimadrid = "Miguel Madrid <mimadrid@ucm.es>";
   mirdhyn = "Merlin Gaillard <mirdhyn@gmail.com>";
