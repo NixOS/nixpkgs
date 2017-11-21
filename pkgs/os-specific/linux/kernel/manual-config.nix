@@ -278,7 +278,8 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
   makeFlags = commonMakeFlags ++ [
     "ARCH=${stdenv.platform.kernelArch}"
   ]
-  # ++ stdenv.lib.optional enableParallelBuilding "-j${cfg.buildCores}";
+  # {cfg.buildCores}
+  ++ stdenv.lib.optional enableParallelBuilding "-j4"
     # cfg.buildCores # TODO set
     ;
 

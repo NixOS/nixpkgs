@@ -51,14 +51,10 @@ let
   config = configWithPlatform stdenv.platform;
   configCross = configWithPlatform hostPlatform.platform;
 
-  kernelConfigFun = baseConfig:
-    let
-      configFromPatches =
-        map ({extraConfig ? "", ...}: extraConfig) kernelPatches;
-    in lib.concatStringsSep "\n" ([baseConfig] ++ configFromPatches);
 
   # TODO moved it
-  # configfile = callPackage
+  # callPackage ./config.nix {};
+  configfile = (import ./config.nix);
 
     # TODO le transformer plutot en
   kernel = buildLinux {

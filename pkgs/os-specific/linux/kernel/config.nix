@@ -20,6 +20,11 @@
         sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
   '';
 
+  kernelConfigFun = baseConfig: kernelPatches:
+    let
+      configFromPatches =
+        map ({extraConfig ? "", ...}: extraConfig) kernelPatches;
+    in lib.concatStringsSep "\n" ([baseConfig] ++ configFromPatches);
 
   #
   buildKernelConfig = arch: autoModules: ''
@@ -35,12 +40,11 @@
            PREFER_BUILTIN=$preferBuiltin SRC=../$sourceRoot perl -w $generateConfig
     '';
 
-}
 # TODO we should be able to generate standalone config and config on the go
 # => we need functions with module etc
 # espcially we need a bash builder
 # TODO have a standalone
-   stdenv.mkDerivation {
+   kernelConfig = stdenv.mkDerivation {
     inherit ignoreConfigErrors;
     name = "linux-config-${version}";
 
@@ -93,6 +97,7 @@
     installPhase = "mv .config $out";
 
     enableParallelBuilding = true;
-  }
+  };
 
+}
 
