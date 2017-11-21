@@ -6,12 +6,13 @@
 let optional = stdenv.lib.optional;
     optStr = stdenv.lib.optionalString;
     buildShared = !stdenv.isDarwin;
-in
 
-assert withLibrary -> libtool != null;
-assert unicodeSupport -> ncurses.unicode && ncurses != null;
+    asserts =
+      assert withLibrary -> libtool != null;
+      assert unicodeSupport -> ncurses.unicode && ncurses != null;
+      [];
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   name = "dialog-${version}";
   version = "1.3-20160209";
 
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "11rzh14xy9s99gxdi5i7fgmgihjqsv0ls0ksavkmip2y37rgf503";
   };
 
-  buildInputs = [ ncurses ];
+  buildInputs = asserts ++ [ ncurses ];
 
   configureFlags = ''
     --disable-rpath-hacks

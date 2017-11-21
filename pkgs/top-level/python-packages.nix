@@ -239,11 +239,11 @@ in {
 
   pyamf = callPackage ../development/python-modules/pyamf { };
 
-  pyatspi = if isPy3k then callPackage ../development/python-modules/pyatspi { } else throw "pyatspi not supported for interpreter ${python.executable}";
+  pyatspi = if isPy3k then callPackage ../development/python-modules/pyatspi { } else pkgs.removed "pyatspi not supported for interpreter ${python.executable}";
 
   pycairo = callPackage ../development/python-modules/pycairo { };
 
-  pycangjie = if isPy3k then callPackage ../development/python-modules/pycangjie { } else throw "pycangjie not supported for interpreter ${python.executable}";
+  pycangjie = if isPy3k then callPackage ../development/python-modules/pycangjie { } else pkgs.removed "pycangjie not supported for interpreter ${python.executable}";
 
   pycrypto = callPackage ../development/python-modules/pycrypto { };
 
@@ -10754,10 +10754,7 @@ in {
     };
   };
 
-  mathics = if (versionOlder self.django.version "1.8") ||
-               (versionAtLeast self.django.version "1.9")
-            then throw "mathics only supports django-1.8.x"
-            else buildPythonPackage rec {
+  mathics = buildPythonPackage rec {
     name = "mathics-${version}";
     version = "0.9";
     src = pkgs.fetchFromGitHub {
@@ -10769,7 +10766,10 @@ in {
 
     disabled = isPy26;
 
-    buildInputs = with self; [ pexpect ];
+    buildInputs = if (versionOlder self.django.version "1.8") ||
+               (versionAtLeast self.django.version "1.9")
+            then throw "mathics only supports django-1.8.x"
+            else with self; [ pexpect ];
 
     prePatch = ''
       substituteInPlace setup.py --replace "sympy==0.7.6" "sympy"

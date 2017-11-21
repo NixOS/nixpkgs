@@ -1,8 +1,11 @@
 { stdenv, requireFile, unzip, xorg }:
 
-assert stdenv.system == "i686-linux";
+let
+  asserts =
+    assert stdenv.system == "i686-linux";
+    [];
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   name = "sun-java-wtk-2.5.2_01";
 
   src = requireFile {
@@ -13,7 +16,7 @@ stdenv.mkDerivation rec {
 
   builder = ./builder.sh;
 
-  buildInputs = [ unzip ];
+  buildInputs = asserts ++ [ unzip ];
 
   libraries = [ xorg.libXpm xorg.libXt xorg.libX11 xorg.libICE xorg.libSM stdenv.cc.cc ];
 

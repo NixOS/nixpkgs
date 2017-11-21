@@ -1,10 +1,11 @@
 { stdenv, pkgs, cores }:
 
-assert cores != [];
-
 with pkgs.lib;
 
 let
+  asserts =
+    assert cores != [];
+    true;
 
   script = exec: ''
     #!${stdenv.shell}
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
   name = "kodi-retroarch-advanced-launchers-${version}";
   version = "0.2";
 
-  dontBuild = true;
+  dontBuild = asserts;
 
   buildCommand = ''
     mkdir -p $out/bin

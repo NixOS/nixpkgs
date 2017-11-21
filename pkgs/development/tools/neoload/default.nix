@@ -5,15 +5,18 @@
 # This can be fixed by setting a different WM name:
 # http://www.haskell.org/haskellwiki/Xmonad/Frequently_asked_questions#Using_SetWMName
 
-if !licenseAccepted then throw ''
-    You have to accept the neoload EULA at
-    https://www.neotys.com/documents/legal/eula/neoload/eula_en.html
-    by setting nixpkgs config option 'neoload.accept_license = true';
-  ''
-else assert licenseAccepted;
-
 # the installer is very picky and demands 1.7.0.07
-let dotInstall4j = path: writeTextFile { name = "dot-install4j"; text = ''
+let
+    asserts =
+      if !licenseAccepted then throw ''
+          You have to accept the neoload EULA at
+          https://www.neotys.com/documents/legal/eula/neoload/eula_en.html
+          by setting nixpkgs config option 'neoload.accept_license = true';
+        ''
+      else assert licenseAccepted;
+      [];
+
+    dotInstall4j = path: writeTextFile { name = "dot-install4j"; text = ''
       JRE_VERSION	${path}	1	7	0	7
       JRE_INFO	${path}	94
     ''; };
@@ -41,7 +44,7 @@ in stdenv.mkDerivation rec {
       { url = http://neoload.installers.neotys.com/documents/download/neoload/v4.1/neoload_4_1_4_linux_x86.sh;
         sha256 = "1z66jiwcxixsqqwa0f4q8m2p5kna4knq6lic8y8l74dgv25mw912"; } );
 
-  buildInputs = [ makeWrapper ];
+  buildInputs = asserts ++ [ makeWrapper ];
   phases = [ "installPhase" ];
 
   # TODO: load generator / monitoring agent only builds

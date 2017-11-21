@@ -2,9 +2,12 @@
 , buildPlatform, hostPlatform
 }:
 
-assert !stdenv.isLinux || hostPlatform != buildPlatform; # TODO: improve on cross
+let
+  asserts =
+    assert !stdenv.isLinux || hostPlatform != buildPlatform; # TODO: improve on cross
+    [];
 
-stdenv.mkDerivation rec {
+in stdenv.mkDerivation rec {
   name = "libiconv-${version}";
   version = "1.15";
 
@@ -18,6 +21,7 @@ stdenv.mkDerivation rec {
       ''
         sed '/^_GL_WARN_ON_USE (gets/d' -i srclib/stdio.in.h
       '';
+  buildInputs = asserts;
 
   configureFlags =
     lib.optional stdenv.isFreeBSD "--with-pic";

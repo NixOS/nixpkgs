@@ -1,8 +1,11 @@
 {stdenv, fetchurl}:
 
-assert stdenv.system == "i686-linux";
+let
+  asserts =
+    assert stdenv.system == "i686-linux";
+    [];
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "folding-at-home-6.02";
 
   src = fetchurl {
@@ -15,6 +18,7 @@ stdenv.mkDerivation {
   # Otherwise it doesn't work at all, even ldd thinks it's not a dynamic executable
   dontStrip = true;
 
+  buildInputs = asserts;
   # This program, to run with '-smp', wants to execute the program mpiexec
   # as "./mpiexec", although it also expects to write the data files into "."
   # I suggest, if someone wants to run it, in the data directory set a link
@@ -22,7 +26,7 @@ stdenv.mkDerivation {
   # be considered a gcroot.
   installPhase = ''
     BINFILES="fah6 mpiexec";
-    for a in $BINFILES; do 
+    for a in $BINFILES; do
       patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $a
     done
     mkdir -p $out/bin

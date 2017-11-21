@@ -1,15 +1,17 @@
 {stdenv, fetchurl, openssl, fuse}:
 
-throw "It still does not build"
+let
+  asserts =
+    throw "It still does not build";
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "fsfs-0.1.1";
   src = fetchurl {
     url = mirror://sourceforge/fsfs/fsfs-0.1.1.tar.gz;
     sha256 = "05wka9aq182li2r7gxcd8bb3rhpns7ads0k59v7w1jza60l57c74";
   };
 
-  buildInputs = [ fuse openssl ];
+  buildInputs = asserts ++ [ fuse openssl ];
 
   patchPhase = ''
     sed -i -e 's,CONFDIR=\(.*\),CONFDIR='$out/etc, \

@@ -1,9 +1,12 @@
 { stdenv, config, fetchurl, patchelf, makeWrapper, gtk2, glib, udev, alsaLib, atk
 , nspr, fontconfig, cairo, pango, nss, freetype, gnome3, gdk_pixbuf, curl, systemd, xorg }:
 
-# TODO: use dynamic attributes once Nix 1.7 is out
-assert ((config.planetary_annihilation or null).url or null) != null;
-assert ((config.planetary_annihilation or null).sha256 or null) != null;
+let
+  asserts =
+    # TODO: use dynamic attributes once Nix 1.7 is out
+    assert ((config.planetary_annihilation or null).url or null) != null;
+    assert ((config.planetary_annihilation or null).sha256 or null) != null;
+    [];
 
 /* to setup:
  $ cat ~/.config/nixpkgs/config.nix
@@ -15,15 +18,15 @@ assert ((config.planetary_annihilation or null).sha256 or null) != null;
 }
 */
 
-stdenv.mkDerivation {
+in stdenv.mkDerivation {
   name = "planetary-annihalation";
 
   src = fetchurl {
     inherit (config.planetary_annihilation) url sha256;
   };
 
-  buildInputs = [ patchelf makeWrapper ];
- 
+  buildInputs = asserts ++ [ patchelf makeWrapper ];
+
   installPhase = ''
     mkdir -p $out/{bin,lib}
 
