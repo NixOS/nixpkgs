@@ -54,7 +54,8 @@ stdenv.mkDerivation rec {
   # https://bugzilla.libsdl.org/show_bug.cgi?id=1431
   dontDisableStatic = true;
 
-  enableParallelBuilding = true;
+  # Flaky: fatal error: pointer-constraints-....h: No such file or directory
+  #enableParallelBuilding = true;
 
   # XXX: By default, SDL wants to dlopen() PulseAudio, in which case
   # we must arrange to add it to its RPATH; however, `patchelf' seems
