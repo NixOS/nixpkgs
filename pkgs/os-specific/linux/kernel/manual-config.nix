@@ -110,7 +110,7 @@ let
         make $makeFlags prepare
         actualModDirVersion="$(cat $buildRoot/include/config/kernel.release)"
         if [ "$actualModDirVersion" != "${modDirVersion}" ]; then
-          echo "Error: modDirVersion specified in the Nix expression is wrong, it should be: $actualModDirVersion"
+          echo "Error: modDirVersion ${modDirVersion} specified in the Nix expression is wrong, it should be: $actualModDirVersion"
           exit 1
         fi
 
