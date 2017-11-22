@@ -1,21 +1,19 @@
-{ stdenv, lib, kernel, udev, autoconf, automake, libtool }:
+{ stdenv, kernel, udev, autoreconfHook, libtool }:
 
 stdenv.mkDerivation rec {
   name = "usbip-${kernel.name}";
 
   src = kernel.src;
 
-  buildInputs = [ udev autoconf automake libtool ];
+  nativeBuildInputs = [ autoreconfHook libtool ];
+  buildInputs = [ udev ];
 
-  preConfigure = ''
-    cd tools/usb/usbip/
-    ./autogen.sh
-  '';
+  sourceRoot = "${kernel.name}/tools/usb/usbip";
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://github.com/torvalds/linux/tree/master/tools/usb/usbip;
     description = "allows to pass USB device from server to client over the network";
-    license = lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
   };
 }
