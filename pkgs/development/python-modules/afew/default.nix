@@ -21,8 +21,6 @@ buildPythonPackage rec {
     chardet
   ] ++ stdenv.lib.optional (!isPy3k) subprocess32;
 
-  doCheck = false;
-
   postInstall = ''
     wrapProgram $out/bin/afew \
       --prefix LD_LIBRARY_PATH : ${notmuch}/lib
