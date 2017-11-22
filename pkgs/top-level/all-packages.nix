@@ -8062,7 +8062,7 @@ with pkgs;
 
   dhex = callPackage ../applications/editors/dhex { };
 
-  double_conversion = callPackage ../development/libraries/double-conversion { };
+  double-conversion = callPackage ../development/libraries/double-conversion { };
 
   dclib = callPackage ../development/libraries/dclib { };
 
