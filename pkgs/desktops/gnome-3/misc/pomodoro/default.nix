@@ -1,24 +1,24 @@
 { stdenv, fetchFromGitHub, autoconf-archive, appstream-glib, intltool, pkgconfig, libtool, wrapGAppsHook,
-  dbus_glib, libcanberra_gtk2, gst_all_1, vala, gnome3, gtk3,
+  dbus_glib, libcanberra_gtk2, gst_all_1, vala, gnome3, gtk3, libxml2,
   glib, gobjectIntrospection, libpeas
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.13.3";
+  version = "0.13.4";
   name = "gnome-shell-pomodoro-${version}";
 
   src = fetchFromGitHub {
     owner = "codito";
     repo = "gnome-pomodoro";
     rev = "${version}";
-    sha256 = "1hi4mdzyz2f8k19bkfzrrnavsbkr621w0bfpza8ij2yccpxz81h2";
+    sha256 = "0fiql99nhj168wbfhvzrhfcm4c4569gikd2zaf10vzszdqjahrl1";
   };
 
   configureScript = "./autogen.sh";
 
   nativeBuildInputs = [
     autoconf-archive libtool intltool appstream-glib
-    wrapGAppsHook pkgconfig
+    wrapGAppsHook pkgconfig libxml2
   ];
 
   buildInputs = [
