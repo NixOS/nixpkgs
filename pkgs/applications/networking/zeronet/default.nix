@@ -1,26 +1,5 @@
-{ stdenv, fetchFromGitHub, pythonPackages
-, zeronetDatadir ? "/var/lib/zeronet"
-, zeronetLogdir ? "/var/log/zeronet"
-, zeronetUIIP ? null
-, zeronetUIPassword ? null
-}:
+{ stdenv, fetchFromGitHub, pythonPackages }:
 
-let
-  config = builtins.toFile "zeronet.conf" ''
-    [global]
-    data_dir = ${zeronetDatadir}
-    log_dir = ${zeronetLogdir}
-  ''
-  + (if !isNull zeronetUIIP then
-      ''
-      ui_ip = ${zeronetUIIP}
-      '' else "")
-  + (if !isNull zeronetUIPassword then
-      ''
-      ui_password = ${zeronetUIPassword}
-      '' else "")
-  ;
-in
 pythonPackages.buildPythonApplication rec {
   version = "0.6.0";
   name = "zeronet-${version}";
@@ -39,7 +18,6 @@ pythonPackages.buildPythonApplication rec {
   installPhase = ''
     mkdir $out/bin -p
     cp ./* -r $out/bin
-    ln -s ${config} $out/bin/zeronet.conf
   '';
 
   meta = {
