@@ -11936,6 +11936,8 @@ with pkgs;
 
   restic = callPackage ../tools/backup/restic { };
 
+  restya-board = callPackage ../servers/web-apps/restya-board { };
+
   rethinkdb = callPackage ../servers/nosql/rethinkdb {
     libtool = darwin.cctools;
   };
