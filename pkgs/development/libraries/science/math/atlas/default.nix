@@ -100,7 +100,9 @@ stdenv.mkDerivation {
     fi
   '';
 
-  enableParallelBuilding = true;
+  # 1. /buildATLAS/build/bin/ATLrun.sh: multiple segfaults.
+  # 2. "atlas does its own parallel builds"
+  enableParallelBuilding = false;
 
   meta = {
     homepage = http://math-atlas.sourceforge.net/;
