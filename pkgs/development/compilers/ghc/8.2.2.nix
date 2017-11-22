@@ -9,7 +9,7 @@
 
 let
   inherit (bootPkgs) ghc;
-  version = "8.2.1.20171108";
+  version = "8.2.2";
 
   commonBuildInputs = [ alex autoconf automake ghc happy hscolour perl python3 sphinx ];
   commonPreConfigure =  ''
@@ -26,8 +26,8 @@ in stdenv.mkDerivation (rec {
   name = "ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/~ghc/8.2.2-rc3/${name}-src.tar.xz";
-    sha256 = "13h55vcrs243bv4hv8i4jq80rsx5hvhi09r3rcs562d8zk7k665w";
+    url = "https://downloads.haskell.org/~ghc/8.2.2/${name}-src.tar.xz";
+    sha256 = "1z05vkpaj54xdypmaml50hgsdpw29dhbs2r7magx0cm199iw73mv";
   };
 
   postPatch = "patchShebangs .";
