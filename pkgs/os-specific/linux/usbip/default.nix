@@ -8,7 +8,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook libtool ];
   buildInputs = [ udev ];
 
-  sourceRoot = "${kernel.name}/tools/usb/usbip";
+  postUnpack = ''
+    cd tools/usb/usbip
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/torvalds/linux/tree/master/tools/usb/usbip;
