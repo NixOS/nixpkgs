@@ -11232,12 +11232,12 @@ let self = _self // overrides; _self = with self; {
   };
 
   PPI = buildPerlPackage rec {
-    name = "PPI-1.224";
+    name = "PPI-1.236";
     src = fetchurl {
       url = "mirror://cpan/authors/id/M/MI/MITHALDU/${name}.tar.gz";
-      sha256 = "8d0f9faaea68515fb5aa6323115dcf98ea6c1dec4441f3844d3b9633b6cc9d94";
+      sha256 = "c6674b349c0b7d9a6d668e789a5e5215477d88ed4c8203aa69a2a50085308aec";
     };
-    buildInputs = [ ClassInspector FileRemove TestDeep TestObject TestSubCalls TestWarn ];
+    buildInputs = [ ClassInspector FileRemove TestDeep TestObject TestSubCalls ];
     propagatedBuildInputs = [ Clone IOString ListMoreUtils ParamsUtil TaskWeaken ];
 
     # Remove test that fails due to unexpected shebang after
