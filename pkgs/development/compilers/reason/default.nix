@@ -1,31 +1,32 @@
 { stdenv, makeWrapper, buildOcaml, fetchFromGitHub,
-  ocaml, opam, topkg, menhir, merlin_extend, ppx_tools_versioned, utop }:
+  ocaml, opam, jbuilder, menhir, merlin_extend, ppx_tools_versioned, utop }:
 
 buildOcaml rec {
   name = "reason";
-  version = "3.0.0";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "reason";
-    rev = version;
-    sha256 = "0vj3y9vlm9gqvj9grmb9n487avbrj4q5611m7wv1bsdpndvv96jr";
+    rev = "v${version}";
+    sha256 = "1rpaazy0m76qidxwdr51qrgs3ryyz875rndwp9p30siqd04raswq";
   };
 
   propagatedBuildInputs = [ menhir merlin_extend ppx_tools_versioned ];
 
-  buildInputs = [ makeWrapper opam topkg utop menhir opam topkg ];
+  buildInputs = [ makeWrapper opam jbuilder utop menhir ];
 
   buildFlags = [ "build" ]; # do not "make tests" before reason lib is installed
 
   createFindlibDestdir = true;
 
   postPatch = ''
-    substituteInPlace src/reasonbuild.ml --replace "refmt --print binary" "$out/bin/refmt --print binary"
+    substituteInPlace src/reasonbuild/myocamlbuild.ml \
+      --replace "refmt --print binary" "$out/bin/refmt --print binary"
   '';
 
   installPhase = ''
-    ${topkg.installPhase}
+    ${jbuilder.installPhase}
 
     wrapProgram $out/bin/rtop \
       --prefix PATH : "${utop}/bin" \
