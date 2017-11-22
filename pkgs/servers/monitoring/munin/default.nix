@@ -102,8 +102,8 @@ stdenv.mkDerivation rec {
     find "$out/lib/plugins" -type f -print0 | xargs -0 -L1 \
         sed -i -e "s|/usr/bin/||g" -e "s|/usr/sbin/||g" -e "s|\<bc\>|${bc}/bin/bc|g"
 
-    if test -e $out/nix-support/propagated-native-build-inputs; then
-        ln -s $out/nix-support/propagated-native-build-inputs $out/nix-support/propagated-user-env-packages
+    if test -e $out/nix-support/propagated-build-inputs; then
+        ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
     fi
 
     for file in "$out"/bin/munindoc "$out"/sbin/munin-* "$out"/lib/munin-* "$out"/www/cgi/*; do
