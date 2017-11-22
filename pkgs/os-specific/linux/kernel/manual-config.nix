@@ -1,3 +1,4 @@
+# defines buildLinux
 { runCommand, nettools, bc, perl, gmp, libmpc, mpfr, kmod, openssl
 , writeTextFile, ubootTools
 , hostPlatform
@@ -14,6 +15,7 @@ let
     done < "${configfile}"
     echo "}" >> $out
   '').outPath;
+  confHelpers = import ./config.nix;
 in {
   # Allow overriding stdenv on each buildLinux call
   stdenv,
@@ -35,8 +37,8 @@ in {
   crossConfigfile ? configfile,
   # Manually specified nixexpr representing the config
   # If unspecified, this will be autodetected from the .config
-  # config ? stdenv.lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
-  config ? null,
+  config ? stdenv.lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
+  # config ? null,
   # Cross-compiling config
   crossConfig ? if allowImportFromDerivation then (readConfig crossConfigfile) else config,
   # Whether to utilize the controversial import-from-derivation feature to parse the config
@@ -92,10 +94,10 @@ let
       inherit src;
 
       # why this
-      # preUnpack = ''
+      preUnpack = ''
       #   mkdir build
       #   export buildRoot="$PWD/build"
-      # '';
+      '';
       autoModules = stdenv.platform.kernelAutoModules;
       preferBuiltin = stdenv.platform.kernelPreferBuiltin or false;
       arch = stdenv.platform.kernelArch;
@@ -109,41 +111,28 @@ let
             sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
         done
         sed -i Makefile -e 's|= depmod|= ${kmod}/bin/depmod|'
-      '' +
-      # Patch kconfig to print "###" after every question so that
-      # generate-config.pl from the generic builder can answer them.
       ''
-        sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
-      '';
+      # if no configfile set then it means we have to generate it on the go
+      + stdenv.lib.optionalString (configfile == null) confHelpers.patchKconfig;
 
       # imported from generic.nix
-    buildConfigPhase = ''
 
-      echo "buildRoot  set to $buildRoot"
-      cd $buildRoot
-
-      # Get a basic config file for later refinement with $generateConfig.
-      make -C ../$sourceRoot O=$PWD ${kernelBaseConfig} ARCH=$arch
-
-      # Create the config file.
-      echo "generating kernel configuration..."
-      echo "$kernelConfig" > kernel-config
-      DEBUG=1 ARCH=$arch KERNEL_CONFIG=kernel-config AUTO_MODULES=$autoModules \
-           PREFER_BUILTIN=$preferBuiltin SRC=../$sourceRoot perl -w $generateConfig
-    '';
-
-    preConfigure = buildConfigPhase;
+    # preConfigure = buildConfigPhase;
 
       configurePhase = ''
-        if [ -z "$buildRoot" ]; then
+        # if [ -z "$buildRoot" ]; then
 
+          # we should be in $sourceRoot
           # assume we are in the $sourceRoot folder
+          # echo "buildRoot is not set"
           echo "buildRoot is not set"
           mkdir build
           export buildRoot="$PWD/build"
-        fi
+        # fi
         runHook preConfigure
 
+        # reads the existing .config file and prompts the user for options in
+        # the current kernel source that are not found in the file.
         make $makeFlags "''${makeFlagsArray[@]}" oldconfig
         runHook postConfigure
 
@@ -274,6 +263,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
   # concatenated from drvAttrs
   # configurePhase = ''
   #   '';
+  # TODO add an output for the config ?
 
   makeFlags = commonMakeFlags ++ [
     "ARCH=${stdenv.platform.kernelArch}"
