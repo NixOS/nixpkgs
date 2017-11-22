@@ -110,6 +110,8 @@ with pkgs;
 
   docker_compose = pythonPackages.docker_compose;
 
+  docker-ls = callPackage ../tools/misc/docker-ls { };
+
   dotfiles = callPackage ../applications/misc/dotfiles { };
 
   dotnetenv = callPackage ../build-support/dotnetenv {
