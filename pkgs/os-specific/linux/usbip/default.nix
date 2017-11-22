@@ -1,15 +1,16 @@
-{ stdenv, kernel, udev, autoreconfHook, libtool }:
+{ stdenv, kernel, udev, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
   name = "usbip-${kernel.name}";
 
   src = kernel.src;
 
-  nativeBuildInputs = [ autoreconfHook libtool ];
+  nativeBuildInputs = [ autoconf automake libtool ];
   buildInputs = [ udev ];
 
-  postUnpack = ''
+  preConfigure = ''
     cd tools/usb/usbip
+    ./autogen.sh
   '';
 
   meta = with stdenv.lib; {
