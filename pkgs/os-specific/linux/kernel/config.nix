@@ -20,6 +20,8 @@
         sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
   '';
 
+
+  # generates
   kernelConfigFun = baseConfig: kernelPatches:
     let
       configFromPatches =
@@ -44,7 +46,7 @@
 # => we need functions with module etc
 # espcially we need a bash builder
 # TODO have a standalone
-   kernelConfig = stdenv.mkDerivation {
+   kernelConfigDrv = stdenv.mkDerivation {
     inherit ignoreConfigErrors;
     name = "linux-config-${version}";
 

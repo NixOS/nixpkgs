@@ -6,7 +6,7 @@
 , # The kernel version.
   version
 
-, # Overrides to the kernel config.
+, # Appended verbatim to kernel .config
   extraConfig ? ""
 
 , # The version number used for the module directory
@@ -54,6 +54,7 @@ let
 
   # TODO moved it
   # callPackage ./config.nix {};
+  # configfile = stdenv.mkDerivation {
   configfile = (import ./config.nix);
 
     # TODO le transformer plutot en
