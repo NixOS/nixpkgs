@@ -4452,6 +4452,8 @@ in {
     };
   };
 
+  demjson = callPackage ../development/python-modules/demjson { };
+
   derpconf = self.buildPythonPackage rec {
     name = "derpconf-0.4.9";
 
