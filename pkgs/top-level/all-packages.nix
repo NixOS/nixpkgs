@@ -511,7 +511,7 @@ with pkgs;
     python3Packages = python34Packages;
   };
 
-  autoflake = callPackage ../development/python-modules/autoflake { };
+  autoflake = callPackage ../development/tools/analysis/autoflake { };
 
   avfs = callPackage ../tools/filesystems/avfs { };
 
