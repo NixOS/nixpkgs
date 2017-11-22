@@ -511,6 +511,8 @@ with pkgs;
     python3Packages = python34Packages;
   };
 
+  autoflake = callPackage ../development/tools/analysis/autoflake { };
+
   avfs = callPackage ../tools/filesystems/avfs { };
 
   awscli = pythonPackages.callPackage ../tools/admin/awscli { };
