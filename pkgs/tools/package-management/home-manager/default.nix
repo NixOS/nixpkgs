@@ -7,16 +7,20 @@
   # be tried before `$HOME/.config/nixpkgs/home-manager/modules` and
   # `$HOME/.nixpkgs/home-manager/modules`.
 , modulesPath ? null
+  # Extra path to Home Manager. If set then this path will be tried
+  # before `$HOME/.config/nixpkgs/home-manager` and
+  # `$HOME/.nixpkgs/home-manager`.
+, confPath ? ""
 }:
 
 stdenv.mkDerivation rec {
   name = "home-manager-${version}";
-  version = "2017-10-11";
+  version = "2017-11-22";
   src = fetchFromGitHub{
     owner = "rycee";
     repo = "home-manager";
-    rev = "7e6f3364bcf0a0ec838aa4853f550a9a7b5ed027";
-    sha256 = "04wl0jpha19fsnyc5a8y4pkss9by468k0i5w5bjswnaz792yji6v";
+    rev = "3c875267afdac6348e5e7177df10364db8bb5edd";
+    sha256 = "0wz73dsjpa4847n3j24lm7s9il622pgmhrqmjibzka9bk5wl4wzs";
   };
   nativeBuildInputs = [ makeWrapper ];
   dontBuild = true;
@@ -32,8 +36,9 @@ stdenv.mkDerivation rec {
       --subst-var-by bash "${bash}" \
       --subst-var-by coreutils "${coreutils}" \
       --subst-var-by less "${less}" \
-      --subst-var-by MODULES_PATH '${mod}' \
-      --subst-var-by HOME_MANAGER_EXPR_PATH "${dot}.nix"
+      --subst-var-by MODULES_PATH '${mod}:${dot}.nix' \
+      --subst-var-by HOME_MANAGER_EXPR_PATH "${dot}.nix"\
+      --subst-var-by HOME_MANAGER_PATH '${confPath}'
 
   '';
 
