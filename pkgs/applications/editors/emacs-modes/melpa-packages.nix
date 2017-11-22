@@ -147,9 +147,6 @@ self:
       # upstream issue: missing file footer
       seoul256-theme = markBroken super.seoul256-theme;
 
-      # bad dependencies
-      shm = markBroken super.shm;
-
       spaceline = super.spaceline.override {
         inherit (self.melpaPackages) powerline;
       };
