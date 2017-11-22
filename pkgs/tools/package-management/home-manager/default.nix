@@ -10,7 +10,6 @@
   # Extra path to Home Manager. If set then this path will be tried
   # before `$HOME/.config/nixpkgs/home-manager` and
   # `$HOME/.nixpkgs/home-manager`.
-, confPath ? ""
 }:
 
 stdenv.mkDerivation rec {
@@ -38,7 +37,8 @@ stdenv.mkDerivation rec {
       --subst-var-by less "${less}" \
       --subst-var-by MODULES_PATH '${mod}:${dot}.nix' \
       --subst-var-by HOME_MANAGER_EXPR_PATH "${dot}.nix"\
-      --subst-var-by HOME_MANAGER_PATH '${confPath}'
+      --subst-var-by HOME_MANAGER_PATH '${src}'
+
 
   '';
 
