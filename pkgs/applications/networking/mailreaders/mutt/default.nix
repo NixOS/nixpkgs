@@ -1,12 +1,15 @@
-{ stdenv, fetchurl, ncurses, which, perl
+{ stdenv, fetchurl, fetchpatch, ncurses, which, perl
 , gdbm ? null
 , openssl ? null
 , cyrus_sasl ? null
+, gnupg ? null
 , gpgme ? null
 , kerberos ? null
 , headerCache  ? true
 , sslSupport   ? true
 , saslSupport  ? true
+, smimeSupport ? false
+, gpgSupport   ? false
 , gpgmeSupport ? true
 , imapSupport  ? true
 , withSidebar  ? true
@@ -16,7 +19,9 @@
 assert headerCache  -> gdbm       != null;
 assert sslSupport   -> openssl    != null;
 assert saslSupport  -> cyrus_sasl != null;
-assert gpgmeSupport -> gpgme      != null;
+assert smimeSupport -> openssl    != null;
+assert gpgSupport   -> gnupg      != null;
+assert gpgmeSupport -> gpgme      != null && openssl != null;
 
 with stdenv.lib;
 
@@ -29,9 +34,10 @@ stdenv.mkDerivation rec {
     sha256 = "1c8vv4anl555a03pbnwf8wnf0d8pcnd4p35y3q8f5ikkcflq76vl";
   };
 
-  patchPhase = optionalString (openssl != null) ''
-    sed -i 's#/usr/bin/openssl#${openssl}/bin/openssl#' smime_keys.pl
-  '';
+  patches = optional smimeSupport (fetchpatch {
+    url    = "https://sources.debian.net/src/mutt/1.7.2-1/debian/patches/misc/smime.rc.patch";
+    sha256 = "0mdqa9w1p6cmli6976v4wi0sw9r4p5prkj7lzfd1877wk11c9c73";
+  });
 
   buildInputs =
     [ ncurses which perl ]
@@ -63,6 +69,22 @@ stdenv.mkDerivation rec {
   ] ++ optional sslSupport  "--with-ssl"
     ++ optional gssSupport  "--with-gss"
     ++ optional saslSupport "--with-sasl";
+
+  postPatch = optionalString (smimeSupport || gpgmeSupport) ''
+    sed -i 's#/usr/bin/openssl#${openssl}/bin/openssl#' smime_keys.pl
+  '';
+
+  postInstall = optionalString smimeSupport ''
+    # S/MIME setup
+    cp contrib/smime.rc $out/etc/smime.rc
+    sed -i 's#openssl#${openssl}/bin/openssl#' $out/etc/smime.rc
+    echo "source $out/etc/smime.rc" >> $out/etc/Muttrc
+  '' + optionalString gpgSupport ''
+    # GnuPG setup
+    cp contrib/gpg.rc $out/etc/gpg.rc
+    sed -i 's#\(command="\)gpg #\1${gnupg}/bin/gpg #' $out/etc/gpg.rc
+    echo "source $out/etc/gpg.rc" >> $out/etc/Muttrc
+  '';
 
   meta = {
     description = "A small but very powerful text-based mail client";
