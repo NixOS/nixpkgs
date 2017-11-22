@@ -45,8 +45,7 @@ stdenv.mkDerivation rec {
   # The file /nix/store/xxx-mono-2.4.2.1/lib/mscorlib.dll is an invalid CIL image
   dontStrip = true;
 
-  # Parallel building doesn't work, as shows http://hydra.nixos.org/build/2983601
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   # We want pkg-config to take priority over the dlls in the Mono framework and the GAC
   # because we control pkg-config
