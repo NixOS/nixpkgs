@@ -5967,6 +5967,12 @@ in {
       sha256 = "0ssxbqsshrm8p642g3h6wsq20z1fsqhpdvqdm827gn6dlr38868y";
     };
 
+    postUnpack = ''
+      substituteInPlace $sourceRoot/pamela.py --replace \
+        'find_library("pam")' \
+        '"${getLib pkgs.pam}/lib/libpam.so"'
+    '';
+
     doCheck = false;
 
     meta = {
