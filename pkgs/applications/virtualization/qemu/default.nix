@@ -4,7 +4,7 @@
 , makeWrapper
 , attr, libcap, libcap_ng
 , CoreServices, Cocoa, rez, setfile
-, numaSupport ? stdenv.isLinux, numactl
+, numaSupport ? stdenv.isLinux && !stdenv.isArm, numactl
 , seccompSupport ? stdenv.isLinux, libseccomp
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio
 , sdlSupport ? !stdenv.isDarwin, SDL
