@@ -6,6 +6,7 @@
 , "bower2nix"
 , "browserify"
 , "castnow"
+, "clean-css"
 , "coffee-script"
 , "coinmon"
 , "cordova"
