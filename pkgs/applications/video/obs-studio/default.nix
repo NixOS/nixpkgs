@@ -29,13 +29,13 @@ let
   optional = stdenv.lib.optional;
 in stdenv.mkDerivation rec {
   name = "obs-studio-${version}";
-  version = "20.1.0";
+  version = "20.1.3";
 
   src = fetchFromGitHub {
     owner = "jp9000";
     repo = "obs-studio";
     rev = "${version}";
-    sha256 = "1366nl301rhz8cfbq89ixiq1hdxdn8iimz9xyln274anghz02sbr";
+    sha256 = "0qdpa2xxiiw53ksvlrf80jm8gz6kxsn56sffv2v2ijxvy7kw5zcg";
   };
 
   patches = [ ./find-xcb.patch ];
