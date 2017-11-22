@@ -10976,35 +10976,7 @@ in {
     };
   };
 
-  nototools = buildPythonPackage rec {
-    version = "git-2016-03-25";
-    name = "nototools-${version}";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "googlei18n";
-      repo = "nototools";
-      rev = "4f7b067d1b18f59288e5eaee34db5b0abd3a3f63";
-      sha256 = "05brbkfg77ij4pmcrhq9302albzdalr9gv6jfdsbyyi2k8j85gbn";
-    };
-
-    propagatedBuildInputs = with self; [ fonttools numpy ];
-
-    postPatch = ''
-      sed -ie "s^join(_DATA_DIR_PATH,^join(\"$out/third_party/ucd\",^" nototools/unicode_data.py
-    '';
-
-    postInstall = ''
-      cp -r third_party $out
-    '';
-
-    disabled = isPy3k;
-
-    meta = {
-      description = "Noto fonts support tools and scripts plus web site generation";
-      license = licenses.asl20;
-      homepage = https://github.com/googlei18n/nototools;
-    };
-  };
+  notoTools = callPackage ../data/fonts/noto-fonts/tools.nix { };
 
   rainbowstream = buildPythonPackage rec {
     name = "rainbowstream-${version}";
