@@ -10976,7 +10976,7 @@ in {
     };
   };
 
-  notoTools = callPackage ../data/fonts/noto-fonts/tools.nix { };
+  nototools = callPackage ../data/fonts/noto-fonts/tools.nix { };
 
   rainbowstream = buildPythonPackage rec {
     name = "rainbowstream-${version}";
