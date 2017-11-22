@@ -59,7 +59,8 @@ while (( "$n" < "$nParams" )); do
         cppInclude=0
     elif [ "$p" = -nostdinc++ ]; then
         cppInclude=0
-    elif [ "${p:0:1}" != - ]; then
+    elif [[ "$p" != -?* ]]; then
+        # A dash alone signifies standard input; it is not a flag
         nonFlagArgs=1
     fi
     n+=1
