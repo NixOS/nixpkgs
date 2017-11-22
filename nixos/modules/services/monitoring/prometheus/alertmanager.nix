@@ -16,7 +16,7 @@ in {
 
       user = mkOption {
         type = types.str;
-        default = "nobody";
+        default = "alertmanager";
         description = ''
           User name under which Alertmanager shall be run.
         '';
@@ -24,9 +24,17 @@ in {
 
       group = mkOption {
         type = types.str;
-        default = "nogroup";
+        default = "alertmanager";
         description = ''
           Group under which Alertmanager shall be run.
+        '';
+      };
+
+      stateDir = mkOption {
+        type = types.str;
+        default = "/var/lib/alertmanager";
+        description = ''
+          Directory where alertmanager saves its state, i.e. silences.
         '';
       };
 
@@ -114,6 +122,13 @@ in {
   config = mkIf cfg.enable {
     networking.firewall.allowedTCPPorts = optional cfg.openFirewall cfg.port;
 
+    users.extraUsers."${cfg.user}".group = cfg.group;
+    users.extraGroups."${cfg.group}" = { };
+
+    systemd.tmpfiles.rules = [
+      "d ${cfg.stateDir} 0770 ${cfg.user} ${cfg.group} -"
+    ];
+
     systemd.services.alertmanager = {
       wantedBy = [ "multi-user.target" ];
       after    = [ "network.target" ];
@@ -122,6 +137,7 @@ in {
           --config.file ${alertmanagerYml} \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --log.level ${cfg.logLevel} \
+          --storage.path ${cfg.stateDir} \
           ${optionalString (cfg.webExternalUrl != null) ''--web.external-url ${cfg.webExternalUrl}''} \
           ${optionalString (cfg.logFormat != null) "--log.format ${cfg.logFormat}"} \
           ${toString (map (peer: "--mesh.peer ${peer}:6783") cfg.meshPeers)}
@@ -132,7 +148,7 @@ in {
         Group = cfg.group;
         Restart  = "always";
         PrivateTmp = true;
-        WorkingDirectory = "/tmp";
+        WorkingDirectory = cfg.stateDir;
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
     };
