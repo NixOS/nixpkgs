@@ -231,11 +231,11 @@ assert nvenc -> nvidia-video-sdk != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-full-${version}";
-  version = "3.3.4";
+  version = "3.3.5";
 
   src = fetchurl {
     url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.xz";
-    sha256 = "0mx9dvad3lkyhvsrblf280x2bz6dxajya1ylnspbdzldj0dpxfcq";
+    sha256 = "00nq8ng2p16yb48acargaz1hlp9kq24vfwvkqjlslz4a7864k4x8";
   };
 
   patchPhase = ''patchShebangs .
