@@ -96,4 +96,11 @@ in {
     patches = [ ./provider-path.patch ];
     passthru = { inherit plugins; };
   });
+
+  terraform_0_11 = pluggable (generic {
+    version = "0.11.0";
+    sha256 = "0qsydg6bn7k6d68pd1y4j5iys9i66c690yq21axcpnjfibxgqyff";
+    patches = [ ./provider-path.patch ];
+    passthru = { inherit plugins; };
+  });
 }
