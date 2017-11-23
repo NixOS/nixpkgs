@@ -39,7 +39,7 @@ in {
 
       group = mkOption {
         type = types.string;
-        default = "nogroup";
+        default = "syncthing";
         description = ''
           Syncthing will be run under this group (group will not be created if it doesn't exist.
           This can be your user name).
