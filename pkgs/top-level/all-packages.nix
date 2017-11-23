@@ -7257,6 +7257,8 @@ with pkgs;
 
   gede = callPackage ../development/tools/misc/gede { };
 
+  gdbgui = callPackage ../development/tools/misc/gdbgui { };
+
   pmd = callPackage ../development/tools/analysis/pmd { };
 
   jdepend = callPackage ../development/tools/analysis/jdepend { };
