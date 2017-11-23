@@ -55,7 +55,6 @@ stdenv.mkDerivation {
                 # ++ [ "--jemalloc-root=${jemalloc}/lib"
                 ++ [ "--default-linker=${targetPackages.stdenv.cc}/bin/cc" "--default-ar=${targetPackages.stdenv.cc.bintools}/bin/ar" ]
                 ++ optional (!forceBundledLLVM) [ "--enable-llvm-link-shared" ]
-                ++ optional (stdenv.cc.cc ? isClang) "--enable-clang"
                 ++ optional (targets != []) "--target=${target}"
                 ++ optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
 
@@ -120,12 +119,6 @@ stdenv.mkDerivation {
         --replace 'home_dir().is_some()' true
     rm -v src/test/run-pass/fds-are-cloexec.rs  # FIXME: pipes?
     rm -v src/test/run-pass/sync-send-in-std.rs  # FIXME: ???
-  '';
-
-  preConfigure = ''
-    # Needed flags as the upstream configure script has a broken prefix substitution
-    configureFlagsArray+=("--datadir=$out/share")
-    configureFlagsArray+=("--infodir=$out/share/info")
   '';
 
   # rustc unfortunately need cmake for compiling llvm-rt but doesn't
