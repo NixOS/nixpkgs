@@ -27,7 +27,6 @@ in
   };
 
   config = mkIf config.hardware.parallels.enable {
-
     services.xserver = {
       drivers = singleton
         { name = "prlvideo"; modules = [ prl-tools ]; libPath = [ prl-tools ]; };
@@ -55,7 +54,7 @@ in
 
     boot.extraModulePackages = [ prl-tools ];
 
-    boot.kernelModules = [ "prl_tg" "prl_eth" "prl_fs" "prl_fs_freeze" "acpi_memhotplug" ];
+    boot.kernelModules = [ "prl_tg" "prl_eth" "prl_fs" "prl_fs_freeze" ];
 
     services.timesyncd.enable = false;
 
@@ -86,6 +85,51 @@ in
       serviceConfig = {
         Type = "forking";
         ExecStart = "${prl-tools}/bin/prlshprint";
+      };
+    };
+
+    systemd.user.services = {
+      prlcc = {
+        description = "Parallels Control Center";
+        wantedBy = [ "graphical-session.target" ];
+        serviceConfig = {
+          ExecStart = "${prl-tools}/bin/prlcc";
+        };
+      };
+      prldnd = {
+        description = "Parallels Control Center";
+        wantedBy = [ "graphical-session.target" ];
+        serviceConfig = {
+          ExecStart = "${prl-tools}/bin/prldnd";
+        };
+      };
+      prl_wmouse_d  = {
+        description = "Parallels Walking Mouse Daemon";
+        wantedBy = [ "graphical-session.target" ];
+        serviceConfig = {
+          ExecStart = "${prl-tools}/bin/prl_wmouse_d";
+        };
+      };
+      prlcp = {
+        description = "Parallels CopyPaste Tool";
+        wantedBy = [ "graphical-session.target" ];
+        serviceConfig = {
+          ExecStart = "${prl-tools}/bin/prlcp";
+        };
+      };
+      prlsga = {
+        description = "Parallels Shared Guest Applications Tool";
+        wantedBy = [ "graphical-session.target" ];
+        serviceConfig = {
+          ExecStart = "${prl-tools}/bin/prlsga";
+        };
+      };
+      prlshprof = {
+        description = "Parallels Shared Profile Tool";
+        wantedBy = [ "graphical-session.target" ];
+        serviceConfig = {
+          ExecStart = "${prl-tools}/bin/prlshprof";
+        };
       };
     };
 

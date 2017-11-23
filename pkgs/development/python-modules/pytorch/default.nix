@@ -10,7 +10,7 @@ buildPythonPackage rec {
     owner  = "pytorch";
     repo   = "pytorch";
     rev    = "v${version}";
-    sha256 = "112mp3r70d8f15dhxm6k7912b5i6c2q8hv9462s808y84grr2jdm";
+    sha256 = "1s3f46ga1f4lfrcj3lpvvhgkdr1pi8i2hjd9xj9qiz3a9vh2sj4n";
   };
 
   checkPhase = ''
@@ -22,7 +22,7 @@ buildPythonPackage rec {
      git
      numpy.blas
   ];
-  
+
   propagatedBuildInputs = [
     cffi
     numpy
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   preConfigure = ''
     export NO_CUDA=1
   '';
-  
+
   meta = {
     description = "Tensors and Dynamic neural networks in Python with strong GPU acceleration.";
     homepage = http://pytorch.org/;

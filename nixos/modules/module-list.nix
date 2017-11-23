@@ -608,6 +608,7 @@
   ./services/web-apps/pgpkeyserver-lite.nix
   ./services/web-apps/piwik.nix
   ./services/web-apps/pump.io.nix
+  ./services/web-apps/restya-board.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/selfoss.nix
   ./services/web-apps/quassel-webserver.nix

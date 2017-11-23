@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkgconfig, boost, libevent
-, double_conversion, glog, google-gflags, python, libiberty, openssl }:
+, double-conversion, glog, google-gflags, python, libiberty, openssl }:
 
 stdenv.mkDerivation rec {
   name = "folly-${version}";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook python pkgconfig ];
-  buildInputs = [ libiberty boost libevent double_conversion glog google-gflags openssl ];
+  buildInputs = [ libiberty boost libevent double-conversion glog google-gflags openssl ];
 
   postPatch = "cd folly";
   preBuild = ''

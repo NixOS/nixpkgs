@@ -1,6 +1,7 @@
 { stdenv, lib, requireFile, makeWrapper, substituteAll, p7zip
 , gawk, utillinux, xorg, glib, dbus_glib, zlib
 , kernel ? null, libsOnly ? false
+, undmg, fetchurl
 }:
 
 assert (!libsOnly) -> kernel != null;
@@ -10,57 +11,35 @@ let xorgFullVer = (builtins.parseDrvName xorg.xorgserver.name).version;
     x64 = if stdenv.system == "x86_64-linux" then true
           else if stdenv.system == "i686-linux" then false
           else abort "Parallels Tools for Linux only support {x86-64,i686}-linux targets";
-    # We autostart user services by ourselves, because prlcc uses hardcoded paths.
-    autostart = [ { exec = "prlcc";
-                    description = "Parallels Control Center";
-                  }
-                  { exec = "prldhd";
-                    description = "Parallels Control Center"; # not a mistake
-                  }
-                  { exec = "prl_wmouse_d";
-                    description = "Parallels Walking Mouse Daemon";
-                  }
-                  { exec = "prlcp";
-                    description = "Parallels CopyPaste Tool";
-                  }
-                  { exec = "prlsga";
-                    description = "Parallels Shared Guest Applications Tool";
-                  }
-                  { exec = "prlshprof";
-                    description = "Parallels Shared Profile Tool";
-                  }
-                ];
 in
 stdenv.mkDerivation rec {
-  version = "10.0.2.27712";
+  version = "${prl_major}.2.1-41615";
+  prl_major = "12";
   name = "prl-tools-${version}";
 
-  src = requireFile rec {
-    name = "prl-tools-lin.iso";
-    sha256 = "07960jvyv7gihjlg922znjm6db6l6bd23x9mg6ympwibzf2mylmx";
-    message = ''
-      Please, place Parallels Tools for Linux image into Nix store
-      using either
-        nix-store --add-fixed sha256 ${name}
-      or
-        nix-prefetch-url file://path/to/${name}
-    '';
+  # We download the full distribution to extract prl-tools-lin.iso from
+  # => ${dmg}/Parallels\ Desktop.app/Contents/Resources/Tools/prl-tools-lin.iso
+  src = fetchurl {
+    url =  "https://download.parallels.com/desktop/v${prl_major}/${version}/ParallelsDesktop-${version}.dmg";
+    sha256 = "1jwzwif69qlhmfky9kigjaxpxfj0lyrl1iyrpqy4iwqvajdgbbym";
   };
 
-  hardeningDisable = [ "pic" ];
+  hardeningDisable = [ "pic" "format" ];
 
   # also maybe python2 to generate xorg.conf
-  nativeBuildInputs = [ p7zip ] ++ lib.optionals (!libsOnly) [ makeWrapper ];
+  nativeBuildInputs = [ p7zip undmg ] ++ lib.optionals (!libsOnly) [ makeWrapper ];
 
   inherit libsOnly;
 
   unpackPhase = ''
-    7z x $src
-    export sourceRoot=.
+    undmg < "${src}"
+
+    export sourceRoot=prl-tools-build
+    7z x "Parallels Desktop.app/Contents/Resources/Tools/prl-tools-lin.iso" -o$sourceRoot
     if test -z "$libsOnly"; then
-      ( cd kmods; tar -xaf prl_mod.tar.gz )
+      ( cd $sourceRoot/kmods; tar -xaf prl_mod.tar.gz )
     fi
-    ( cd tools; tar -xaf prltools${if x64 then ".x64" else ""}.tar.gz )
+    ( cd $sourceRoot/tools; tar -xaf prltools${if x64 then ".x64" else ""}.tar.gz )
   '';
 
   kernelVersion = if libsOnly then "" else (builtins.parseDrvName kernel.name).version;
@@ -88,11 +67,6 @@ stdenv.mkDerivation rec {
             stdenv.lib.makeLibraryPath ([ stdenv.cc.cc libXrandr libXext libX11 libXcomposite libXinerama ]
             ++ lib.optionals (!libsOnly) [ libXi glib dbus_glib zlib ]);
 
-  desktops = map (x: substituteAll ({
-               src = ./autostart.desktop;
-               name = x.exec + ".desktop";
-               version = version;
-             } // x)) autostart;
 
   installPhase = ''
     if test -z "$libsOnly"; then
@@ -124,7 +98,7 @@ stdenv.mkDerivation rec {
           patchelf \
             --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
             --set-rpath "$out/lib:$libPath" \
-            $i
+            $i || true
         done
 
         mkdir -p $out/bin
@@ -143,11 +117,6 @@ stdenv.mkDerivation rec {
         mkdir -p $out/lib/udev/rules.d
         for i in *.rules; do
           sed 's,/bin/bash,${stdenv.shell},g' $i > $out/lib/udev/rules.d/$i
-        done
-
-        mkdir -p $out/share/autostart
-        for i in $desktops; do
-          cat $i | sed "s,^Exec=,Exec=$out/bin/," > $out/share/autostart/$(basename $i)
         done
 
         (
@@ -189,8 +158,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Parallels Tools for Linux guests";
-    homepage = http://parallels.com;
-    platforms = platforms.linux;
+    homepage = https://parallels.com;
+    platforms = [ "i686-linux" "x86_64-linux" ];
     license = licenses.unfree;
     # I was making this package blindly and requesting testing from the real user,
     # so I can't even test it by myself and won't provide future updates.

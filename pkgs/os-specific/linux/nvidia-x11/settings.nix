@@ -44,7 +44,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ jansson libXv libXrandr libvdpau nvidia_x11 gtk2 dbus ]
              ++ lib.optionals withGtk3 [ gtk3 librsvg wrapGAppsHook ];
 
-  NIX_LDFLAGS = [ "-lvdpau" "-lXrandr" "-lXv" "-lnvidia-ml" ];
+# This next line makes the nvidia-settings binary fail to compile as of version 387.22
+# NIX_LDFLAGS = [ "-lvdpau" "-lXrandr" "-lXv" "-lnvidia-ml" ];
 
   makeFlags = [ "NV_USE_BUNDLED_LIBJANSSON=0" ];
   installFlags = [ "PREFIX=$(out)" ];

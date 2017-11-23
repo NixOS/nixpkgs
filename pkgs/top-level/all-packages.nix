@@ -114,6 +114,8 @@ with pkgs;
 
   docker_compose = pythonPackages.docker_compose;
 
+  docker-ls = callPackage ../tools/misc/docker-ls { };
+
   dotfiles = callPackage ../applications/misc/dotfiles { };
 
   dotnetenv = callPackage ../build-support/dotnetenv {
@@ -514,6 +516,8 @@ with pkgs;
   attic = callPackage ../tools/backup/attic {
     python3Packages = python34Packages;
   };
+
+  autoflake = callPackage ../development/tools/analysis/autoflake { };
 
   avfs = callPackage ../tools/filesystems/avfs { };
 
@@ -7257,6 +7261,8 @@ with pkgs;
 
   gede = callPackage ../development/tools/misc/gede { };
 
+  gdbgui = callPackage ../development/tools/misc/gdbgui { };
+
   pmd = callPackage ../development/tools/analysis/pmd { };
 
   jdepend = callPackage ../development/tools/analysis/jdepend { };
@@ -8064,7 +8070,7 @@ with pkgs;
 
   dhex = callPackage ../applications/editors/dhex { };
 
-  double_conversion = callPackage ../development/libraries/double-conversion { };
+  double-conversion = callPackage ../development/libraries/double-conversion { };
 
   dclib = callPackage ../development/libraries/dclib { };
 
@@ -9215,6 +9221,8 @@ with pkgs;
     inherit (pkgs.pythonPackages) mutagen;
     monoSupport = false;
   };
+
+  libgssglue = callPackage ../development/libraries/libgssglue { };
 
   libgsystem = callPackage ../development/libraries/libgsystem { };
 
@@ -10513,7 +10521,9 @@ with pkgs;
 
   qwt = callPackage ../development/libraries/qwt {};
 
-  qwt6_qt4 = callPackage ../development/libraries/qwt/6_qt4.nix { };
+  qwt6_qt4 = callPackage ../development/libraries/qwt/6_qt4.nix {
+    inherit (darwin.apple_sdk.frameworks) AGL;
+  };
 
   qxt = callPackage ../development/libraries/qxt {};
 
@@ -11942,6 +11952,8 @@ with pkgs;
 
   restic = callPackage ../tools/backup/restic { };
 
+  restya-board = callPackage ../servers/web-apps/restya-board { };
+
   rethinkdb = callPackage ../servers/nosql/rethinkdb {
     libtool = darwin.cctools;
   };
@@ -12718,6 +12730,8 @@ with pkgs;
 
     tp_smapi = callPackage ../os-specific/linux/tp_smapi { };
 
+    usbip = callPackage ../os-specific/linux/usbip { };
+
     v86d = callPackage ../os-specific/linux/v86d { };
 
     vhba = callPackage ../misc/emulators/cdemu/vhba.nix { };
@@ -13480,6 +13494,8 @@ with pkgs;
   meslo-lg = callPackage ../data/fonts/meslo-lg {};
 
   migmix = callPackage ../data/fonts/migmix {};
+
+  migu = callPackage ../data/fonts/migu {};
 
   miscfiles = callPackage ../data/misc/miscfiles { };
 
@@ -14249,10 +14265,10 @@ with pkgs;
 
   inherit (callPackage ../applications/virtualization/docker { })
     docker_17_09
-    docker_17_10;
+    docker_17_11;
 
   docker = docker_17_09;
-  docker-edge = docker_17_10;
+  docker-edge = docker_17_11;
 
   docker-proxy = callPackage ../applications/virtualization/docker/proxy.nix { };
 
@@ -14652,7 +14668,9 @@ with pkgs;
 
   gnuradio = callPackage ../applications/misc/gnuradio {
     inherit (python2Packages) cheetah lxml matplotlib numpy python pyopengl pyqt4 scipy wxPython pygtk;
+    inherit (darwin.apple_sdk.frameworks) CoreAudio;
     fftw = fftwFloat;
+    qwt = qwt6_qt4;
   };
 
   gnuradio-with-packages = callPackage ../applications/misc/gnuradio/wrapper.nix {
