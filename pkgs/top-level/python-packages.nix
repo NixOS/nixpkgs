@@ -14851,12 +14851,13 @@ in {
   psd-tools = callPackage ../development/python-modules/psd-tools { };
 
   psutil = buildPythonPackage rec {
-    name = "psutil-${version}";
-    version = "4.3.0";
+    pname = "psutil";
+    version = "4.4.2";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/psutil/${name}.tar.gz";
-      sha256 = "1w4r09fvn6kd80m5mx4ws1wz100brkaq6hzzpwrns8cgjzjpl6c6";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "01vbk72amnbzhccpjg0kk2xk7fcvdnc4k4kzc3maxqvzix1fcdqw";
     };
 
     # Certain tests fail due to being in a chroot.
