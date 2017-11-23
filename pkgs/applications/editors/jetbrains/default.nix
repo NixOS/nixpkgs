@@ -77,15 +77,15 @@ let
       };
     });
 
-  buildGogland = { name, version, src, license, description, wmClass, update-channel }:
+  buildGoland = { name, version, src, license, description, wmClass, update-channel }:
     lib.overrideDerivation (mkJetBrainsProduct {
       inherit name version src wmClass jdk;
-      product = "Gogland";
+      product = "Goland";
       meta = with stdenv.lib; {
         homepage = https://www.jetbrains.com/go/;
         inherit description license;
         longDescription = ''
-          Gogland is the codename for a new commercial IDE by JetBrains
+          Goland is the codename for a new commercial IDE by JetBrains
           aimed at providing an ergonomic environment for Go development.
           The new IDE extends the IntelliJ platform with the coding assistance
           and tool integrations specific for the Go language
@@ -96,9 +96,9 @@ let
     }) (attrs: {
       postFixup = (attrs.postFixup or "") + ''
         interp="$(cat $NIX_CC/nix-support/dynamic-linker)"
-        patchelf --set-interpreter $interp $out/gogland*/plugins/intellij-go-plugin/lib/dlv/linux/dlv
+        patchelf --set-interpreter $interp $out/goland*/plugins/intellij-go-plugin/lib/dlv/linux/dlv
 
-        chmod +x $out/gogland*/plugins/intellij-go-plugin/lib/dlv/linux/dlv
+        chmod +x $out/goland*/plugins/intellij-go-plugin/lib/dlv/linux/dlv
       '';
     });
 
@@ -250,17 +250,17 @@ in
     update-channel = "datagrip_2017_2";
   };
 
-  gogland = buildGogland rec {
-    name = "gogland-${version}";
-    version = "173.2696.28"; /* updated by script */
+  goland = buildGoland rec {
+    name = "goland-${version}";
+    version = "173.3727.79"; /* updated by script */
     description = "Up and Coming Go IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "07nz2pf7fnjxsvc82vihk2i880cji349czxzshr1dk50ixlydq7n"; /* updated by script */
+      sha256 = "0bmd7r3h76pg0s9m3i5qv7zfkcj3gannj0c12cw087b831ga7ccz"; /* updated by script */
     };
-    wmClass = "jetbrains-gogland";
-    update-channel = "gogland_1.0_EAP";
+    wmClass = "jetbrains-goland";
+    update-channel = "goland_1.0_EAP";
   };
 
   idea-community = buildIdea rec {
