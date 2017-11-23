@@ -51,7 +51,7 @@ callPackage ./common.nix { inherit stdenv; } {
 
     postInstall = ''
       if test -n "$installLocales"; then
-          make -j''${NIX_BUILD_CORES:-1} -l''${NIX_BUILD_CORES:-1} localedata/install-locales
+          make -j''${NIX_BUILD_CORES:-1} -l''${NIX_MAX_CORES:-} localedata/install-locales
       fi
 
       test -f $out/etc/ld.so.cache && rm $out/etc/ld.so.cache

@@ -829,7 +829,7 @@ buildPhase() {
         # Old bash empty array hack
         # shellcheck disable=SC2086
         local flagsArray=(
-            ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+            ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_MAX_CORES}}
             $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
             $buildFlags ${buildFlagsArray+"${buildFlagsArray[@]}"}
         )
@@ -849,7 +849,7 @@ checkPhase() {
     # Old bash empty array hack
     # shellcheck disable=SC2086
     local flagsArray=(
-        ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_BUILD_CORES}}
+        ${enableParallelBuilding:+-j${NIX_BUILD_CORES} -l${NIX_MAX_CORES}}
         $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
         ${checkFlags:-VERBOSE=y} ${checkFlagsArray+"${checkFlagsArray[@]}"}
         ${checkTarget:-check}

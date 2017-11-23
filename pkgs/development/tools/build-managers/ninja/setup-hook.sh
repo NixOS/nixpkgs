@@ -12,10 +12,11 @@ ninjaBuildPhase() {
         fi
 
         # shellcheck disable=SC2086
-        local flagsArray=( \
-            -j"$buildCores" -l"$NIX_BUILD_CORES" \
-            $ninjaFlags "${ninjaFlagsArray[@]}" \
-            $buildFlags "${buildFlagsArray[@]}")
+        local flagsArray=(
+            -j"$buildCores" -l"$NIX_MAX_CORES"
+            $ninjaFlags "${ninjaFlagsArray[@]}"
+            $buildFlags "${buildFlagsArray[@]}"
+        )
 
         echoCmd 'build flags' "${flagsArray[@]}"
         ninja "${flagsArray[@]}"

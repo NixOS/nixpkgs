@@ -188,7 +188,7 @@ stdenv.mkDerivation {
        '')
 
    + stdenv.lib.optionalString withManual ''# Install man pages and Info manual
-       make -j $NIX_BUILD_CORES -l $NIX_BUILD_CORES PERL_PATH="${perl}/bin/perl" cmd-list.made install install-info \
+       make -j$NIX_BUILD_CORES -l$NIX_MAX_CORES PERL_PATH="${perl}/bin/perl" cmd-list.made install install-info \
          -C Documentation ''
 
    + (if guiSupport then ''
