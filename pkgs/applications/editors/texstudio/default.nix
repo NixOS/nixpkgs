@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "texstudio";
-  version = "2.12.4";
+  version = "2.12.6";
   name = "${pname}-${version}";
   altname="Texstudio";
 
   src = fetchurl {
     url = "mirror://sourceforge/texstudio/${name}.tar.gz";
-    sha256 = "03917faqyy0a1k6b86blc2fcards5a1819ydgkc4jlhwiaym4iyw";
+    sha256 = "18rxd7ra5k2f7s4c296b3v3pqhxjmfix9xpy9i1g4jm87ygqrbnd";
   };
 
   nativeBuildInputs = [ qmake4Hook pkgconfig ];
