@@ -13487,6 +13487,8 @@ with pkgs;
 
   migmix = callPackage ../data/fonts/migmix {};
 
+  migu = callPackage ../data/fonts/migu {};
+
   miscfiles = callPackage ../data/misc/miscfiles { };
 
   media-player-info = callPackage ../data/misc/media-player-info {};
