@@ -19535,6 +19535,8 @@ with pkgs;
     pythonPackages = python3Packages;
   };
 
+  ricty = callPackage ../data/fonts/ricty { };
+
   rss-glx = callPackage ../misc/screensavers/rss-glx { };
 
   runit = callPackage ../tools/system/runit { };
