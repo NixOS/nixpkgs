@@ -6379,6 +6379,12 @@ in {
       sha256 = "0ssxbqsshrm8p642g3h6wsq20z1fsqhpdvqdm827gn6dlr38868y";
     };
 
+    postUnpack = ''
+      substituteInPlace $sourceRoot/pamela.py --replace \
+        'find_library("pam")' \
+        '"${getLib pkgs.pam}/lib/libpam.so"'
+    '';
+
     doCheck = false;
 
     meta = {
@@ -10042,6 +10048,8 @@ in {
 
   jupyter_core = callPackage ../development/python-modules/jupyter_core { };
 
+  jupyterhub = callPackage ../development/python-modules/jupyterhub { };
+
   jsonpath_rw = buildPythonPackage rec {
     name = "jsonpath-rw-${version}";
     version = "1.4.0";
@@ -10320,6 +10328,8 @@ in {
       flask pyopenssl ndg-httpsclient pkgs.glibcLocales
     ];
   };
+
+  python-oauth2 = callPackage ../development/python-modules/python-oauth2 { };
 
   python-Levenshtein = buildPythonPackage rec {
     name = "python-Levenshtein-${version}";

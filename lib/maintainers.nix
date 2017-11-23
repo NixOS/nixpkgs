@@ -286,6 +286,7 @@
   ironpinguin = "Michele Catalano <michele@catalano.de>";
   ivan-tkatchev = "Ivan Tkatchev <tkatchev@gmail.com>";
   ixmatus = "Parnell Springmeyer <parnell@digitalmentat.com>";
+  ixxie = "Matan Bendix Shenhav <matan@fluxcraft.net>";
   j-keck = "Jürgen Keck <jhyphenkeck@gmail.com>";
   jagajaga = "Arseniy Seroka <ars.seroka@gmail.com>";
   jammerful = "jammerful <jammerful@gmail.com>";
