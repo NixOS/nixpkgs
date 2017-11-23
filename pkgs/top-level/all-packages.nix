@@ -10056,6 +10056,8 @@ with pkgs;
 
   olm = callPackage ../development/libraries/olm { };
 
+  oneko = callPackage ../applications/misc/oneko { };   
+
   oniguruma = callPackage ../development/libraries/oniguruma { };
 
   openal = self.openalSoft;
