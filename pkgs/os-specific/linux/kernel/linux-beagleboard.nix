@@ -1,12 +1,13 @@
 { stdenv, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
 let
-  modDirVersion = "4.9.61";
+  modVersion = "4.9.61";
   tag = "r76";
 in
 import ./generic.nix (args // rec {
-  version = "${modDirVersion}-ti-${tag}";
-  inherit modDirVersion;
+  inherit modVersion;
+
+  version = "${modVersion}-ti-${tag}";
 
   src = fetchFromGitHub {
     owner = "beagleboard";

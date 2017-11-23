@@ -10,7 +10,7 @@
   extraConfig ? ""
 
 , # The version number used for the module directory
-  modDirVersion ? version
+  modVersion ? null
 
 , # An attribute set whose attributes express the availability of
   # certain features in this kernel.  E.g. `{iwlwifi = true;}'
@@ -118,7 +118,7 @@ let
   };
 
   kernel = buildLinux {
-    inherit version modDirVersion src kernelPatches stdenv;
+    inherit version src kernelPatches stdenv;
 
     configfile = configfile.nativeDrv or configfile;
 
@@ -127,6 +127,12 @@ let
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
 
     crossConfig = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
+
+    modDirVersion = if (modVersion == null) then
+        # modDirVersion needs to be x.y.z, will automatically add .0 if needed
+        with lib; (concatStrings (intersperse "." (take 3 (splitString "." "${version}.0"))))
+      else
+        modVersion;
   };
 
   passthru = {

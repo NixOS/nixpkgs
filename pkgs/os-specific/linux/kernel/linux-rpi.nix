@@ -1,12 +1,13 @@
 { stdenv, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
 let
-  modDirVersion = "4.9.59";
+  modVersion = "4.9.59";
   tag = "1.20171029";
 in
 stdenv.lib.overrideDerivation (import ./generic.nix (args // rec {
-  version = "${modDirVersion}-${tag}";
-  inherit modDirVersion;
+  inherit modVersion;
+
+  version = "${modVersion}-${tag}";
 
   src = fetchFromGitHub {
     owner = "raspberrypi";

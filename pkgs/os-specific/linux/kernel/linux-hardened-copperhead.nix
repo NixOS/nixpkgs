@@ -7,19 +7,12 @@ let
   revision = "a";
   sha256 = "0yp05xyz2ygxkhd17s85cqnvi93a49svgm0l1kbyb7y08mg5gp4j";
 
-  # modVersion needs to be x.y.z, will automatically add .0 if needed
-  modVersion = concatStrings (intersperse "." (take 3 (splitString "." "${version}.0")));
-
-  # branchVersion needs to be x.y
-  branchVersion = concatStrings (intersperse "." (take 2 (splitString "." version)));
-
-  modDirVersion = "${modVersion}-hardened";
+  modVersion = "${version}-hardened";
 in
 import ./generic.nix (args // {
-  inherit modDirVersion;
+  inherit modVersion;
 
   version = "${version}-${revision}";
-  extraMeta.branch = "${branchVersion}";
 
   src = fetchFromGitHub {
     inherit sha256;

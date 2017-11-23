@@ -226,6 +226,9 @@ let
           maintainers.thoughtpolice
         ];
         platforms = platforms.linux;
+
+        # branch needs to be x.y
+        branch = with stdenv.lib; concatStrings (intersperse "." (take 2 (splitString "." version)));
       };
     };
 in
