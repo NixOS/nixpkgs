@@ -469,6 +469,8 @@ with pkgs;
     withGui = false;
   };
 
+  arguments = callPackage ../development/libraries/arguments { };
+
   apitrace = libsForQt56.callPackage ../applications/graphics/apitrace {};
 
   argus = callPackage ../tools/networking/argus {};
@@ -1021,6 +1023,8 @@ with pkgs;
   dynamic-colors = callPackage ../tools/misc/dynamic-colors { };
 
   earlyoom = callPackage ../os-specific/linux/earlyoom { };
+
+  EBTKS = callPackage ../development/libraries/science/biology/EBTKS { };
 
   ecasound = callPackage ../applications/audio/ecasound { };
 
@@ -7864,6 +7868,8 @@ with pkgs;
 
   belle-sip = callPackage ../development/libraries/belle-sip { };
 
+  bicpl = callPackage ../development/libraries/science/biology/bicpl { };
+
   bobcat = callPackage ../development/libraries/bobcat { };
 
   boehmgc = callPackage ../development/libraries/boehm-gc { };
@@ -10063,6 +10069,8 @@ with pkgs;
   olm = callPackage ../development/libraries/olm { };
 
   oniguruma = callPackage ../development/libraries/oniguruma { };
+
+  oobicpl = callPackage ../development/libraries/science/biology/oobicpl { };
 
   openal = self.openalSoft;
 
@@ -18530,12 +18538,22 @@ with pkgs;
 
   emboss = callPackage ../applications/science/biology/emboss { };
 
+  ezminc = callPackage ../applications/science/biology/EZminc { };
+
   htslib = callPackage ../development/libraries/science/biology/htslib { };
 
   igv = callPackage ../applications/science/biology/igv { };
 
+  inormalize = callPackage ../applications/science/biology/inormalize {
+    inherit (perlPackages) GetoptTabular MNI-Perllib;
+  };
+
   iv = callPackage ../applications/science/biology/iv {
     neuron-version = neuron.version;
+  };
+
+  n3 = callPackage ../applications/science/biology/N3 {
+    inherit (perlPackages) perl GetoptTabular MNI-Perllib;
   };
 
   neuron = callPackage ../applications/science/biology/neuron {
@@ -18550,7 +18568,17 @@ with pkgs;
 
   mrbayes = callPackage ../applications/science/biology/mrbayes { };
 
-  minc_tools = callPackage ../applications/science/biology/minc-tools { };
+  minc_tools = callPackage ../applications/science/biology/minc-tools {
+    inherit (perlPackages) TextFormat;
+  };
+
+  minc_widgets = callPackage ../applications/science/biology/minc-widgets {
+    inherit (perlPackages) GetoptTabular MNI-Perllib;
+  };
+
+  mni_autoreg = callPackage ../applications/science/biology/mni_autoreg {
+    inherit (perlPackages) GetoptTabular MNI-Perllib;
+  };
 
   ncbi_tools = callPackage ../applications/science/biology/ncbi-tools { };
 

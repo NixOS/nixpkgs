@@ -8727,6 +8727,10 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  MNI-Perllib = import ../development/perl-modules/MNI {
+    inherit buildPerlPackage fetchFromGitHub stdenv perl;
+  };
+
   ModernPerl = buildPerlPackage {
     name = "Modern-Perl-1.20140107";
     src = fetchurl {
@@ -14574,6 +14578,21 @@ let self = _self // overrides; _self = with self; {
     meta = {
       description = "Perform diffs on files and record sets";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TextFormat = buildPerlPackage rec {
+    name = "Text-Format-0.60";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SH/SHLOMIF/${name}.tar.gz";
+      sha256 = "664f313570604624ff9e1fc9b26b6d04e06897b3e4eac83089fc0905a692a2b8";
+    };
+    buildInputs = [ ModuleBuild ];
+    meta = {
+      homepage = http://www.shlomifish.org/open-source/projects/Text-Format/;
+      description = "Format text";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainer = with maintainers; [ bcdarwin ];
     };
   };
 
