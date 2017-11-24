@@ -91,6 +91,7 @@ stdenv.mkDerivation ({
   configureFlags =
     [ "-C"
       "--enable-add-ons"
+      "--enable-obsolete-nsl"
       "--enable-obsolete-rpc"
       "--sysconfdir=/etc"
       "--enable-stackguard-randomization"

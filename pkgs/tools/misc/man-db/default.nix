@@ -28,6 +28,10 @@ stdenv.mkDerivation rec {
     "--with-systemdtmpfilesdir=\${out}/lib/tmpfiles.d"
   ];
 
+  preConfigure = ''
+    configureFlagsArray+=("--with-sections=1 n l 8 3 0 2 5 4 9 6 7")
+  '';
+
   postInstall = ''
     # apropos/whatis uses program name to decide whether to act like apropos or whatis
     # (multi-call binary). `apropos` is actually just a symlink to whatis. So we need to

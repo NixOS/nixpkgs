@@ -70,6 +70,11 @@ rec {
           --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
           "$out/bin/rustdoc"
       ''}
+      ${optionalString (stdenv.isDarwin && bootstrapping) ''
+        install_name_tool -change /usr/lib/libiconv.2.dylib '${darwin.libiconv}/lib/libiconv.2.dylib' "$out/bin/cargo"
+        install_name_tool -change /usr/lib/libcurl.4.dylib '${stdenv.lib.getLib curl}/lib/libcurl.4.dylib' "$out/bin/cargo"
+        install_name_tool -change /usr/lib/libz.1.dylib '${stdenv.lib.getLib zlib}/lib/libz.1.dylib' "$out/bin/cargo"
+      ''}
 
       ${patchBootstrapCargo}
 

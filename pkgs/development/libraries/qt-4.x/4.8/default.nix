@@ -164,7 +164,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl pkgconfig which ];
 
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   NIX_CFLAGS_COMPILE =
     optionalString stdenv.isLinux "-std=gnu++98" # gnu++ in (Obj)C flags is no good on Darwin

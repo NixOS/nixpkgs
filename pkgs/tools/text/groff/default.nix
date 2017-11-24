@@ -5,14 +5,15 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "groff-1.22.3";
+  name = "groff-${version}";
+  version = "1.22.3";
 
   src = fetchurl {
     url = "mirror://gnu/groff/${name}.tar.gz";
     sha256 = "1998v2kcs288d3y7kfxpvl369nqi06zbbvjzafyvyl3pr7bajj1s";
   };
 
-  outputs = [ "out" "man" "doc" "info" ];
+  outputs = [ "out" "man" "doc" "info" "perl" ];
 
   enableParallelBuilding = false;
 
@@ -30,8 +31,7 @@ stdenv.mkDerivation rec {
       --replace "@PNMTOPS_NOSETPAGE@" "${netpbm}/bin/pnmtops -nosetpage"
   '';
 
-  buildInputs = [ ghostscript psutils netpbm ];
-  nativeBuildInputs = [ perl ];
+  buildInputs = [ ghostscript psutils netpbm perl ];
 
   # Builds running without a chroot environment may detect the presence
   # of /usr/X11 in the host system, leading to an impure build of the
@@ -62,6 +62,41 @@ stdenv.mkDerivation rec {
     for f in 'man.local' 'mdoc.local'; do
         cat '${./site.tmac}' >>"$out/share/groff/site-tmac/$f"
     done
+
+    moveToOutput bin/gropdf $perl
+    moveToOutput bin/pdfmom $perl
+    moveToOutput bin/roff2text $perl
+    moveToOutput bin/roff2pdf $perl
+    moveToOutput bin/roff2ps $perl
+    moveToOutput bin/roff2dvi $perl
+    moveToOutput bin/roff2ps $perl
+    moveToOutput bin/roff2html $perl
+    moveToOutput bin/glilypond $perl
+    moveToOutput bin/mmroff $perl
+    moveToOutput bin/roff2x $perl
+    moveToOutput bin/afmtodit $perl
+    moveToOutput bin/gperl $perl
+    moveToOutput bin/chem $perl
+    moveToOutput share/groff/${version}/font/devpdf $perl
+
+    # idk if this is needed, but Fedora does it
+    moveToOutput share/groff/${version}/tmac/pdf.tmac $perl
+
+    moveToOutput bin/gpinyin $perl
+    moveToOutput lib/groff/gpinyin $perl
+    substituteInPlace $perl/bin/gpinyin \
+      --replace $out/lib/groff/gpinyin $perl/lib/groff/gpinyin
+
+    moveToOutput bin/groffer $perl
+    moveToOutput lib/groff/groffer $perl
+    substituteInPlace $perl/bin/groffer \
+      --replace $out/lib/groff/groffer $perl/lib/groff/groffer
+
+    moveToOutput bin/grog $perl
+    moveToOutput lib/groff/grog $perl
+    substituteInPlace $perl/bin/grog \
+      --replace $out/lib/groff/grog $perl/lib/groff/grog
+
   '';
 
   meta = with stdenv.lib; {
@@ -82,5 +117,7 @@ stdenv.mkDerivation rec {
       version gxditview of the X11 xditview previewer, and an
       implementation of the -mm macros.
     '';
+
+    outputsToInstall = [ "out" "perl" ];
   };
 }

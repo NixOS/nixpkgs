@@ -32,6 +32,7 @@ stdenv.mkDerivation {
     ./symlinks-in-bin.patch
     ./git-sh-i18n.patch
     ./ssh-path.patch
+    ./git-send-email-honor-PATH.patch
   ];
 
   postPatch = ''

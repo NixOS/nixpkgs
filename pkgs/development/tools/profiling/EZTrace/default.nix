@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, autoconf, libelf, libiberty, gfortran, zlib, binutils }:
+{ stdenv
+, fetchurl, autoconf, gfortran
+, libelf, libiberty, zlib, libbfd, libopcodes
+, buildPackages
+}:
 
 stdenv.mkDerivation rec {
   version = "1.0.6";
@@ -9,12 +13,15 @@ stdenv.mkDerivation rec {
     sha256 = "06q5y9qmdn1h0wjmy28z6gwswskmph49j7simfqcqwv05gvd9svr";
   };
 
-  # Goes past the rpl_malloc linking failure
+  # Goes past the rpl_malloc linking failure; fixes silent file breakage
   preConfigure = ''
     export ac_cv_func_malloc_0_nonnull=yes
+    substituteInPlace ./configure \
+      --replace "/usr/bin/file" "${buildPackages.file}/bin/file"
   '';
 
-  buildInputs = [ autoconf libelf libiberty gfortran zlib binutils ];
+  nativeBuildInputs = [ autoconf gfortran ];
+  buildInputs = [ libelf libiberty zlib libbfd libopcodes ];
 
   meta = {
     description = "Tool that aims at generating automatically execution trace from HPC programs";

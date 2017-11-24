@@ -10282,6 +10282,7 @@ let self = _self // overrides; _self = with self; {
       sha256 = "8565aff76b3d09084642f3a83c654fb4ced8220e8e19d35c78b661519b4c1be6";
     };
     propagatedBuildInputs = [ URI ];
+    __darwinAllowLocalNetworking = true;
     meta = {
       homepage = https://github.com/libwww-perl/Net-HTTP;
       description = "Low-level HTTP connection (client)";

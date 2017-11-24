@@ -29,6 +29,8 @@ let
       sha256 = "0l45mvyags56jfi24rawms8j2ihbc45mq7v13pkrrwppghqrdn52";
     };
 
+    outputs = [ "out" "dev" ];
+
     nativeBuildInputs = [ autoconf automake libtool_2 ];
     buildInputs = [ libuuid ] ++
       # Only need llvm and clang if the stdenv isn't already clang-based (TODO: just make a stdenv.cc.isClang)
@@ -37,6 +39,12 @@ let
 
     patches = [
       ./ld-rpath-nonfinal.patch ./ld-ignore-rpath-link.patch
+    ];
+
+    __propagatedImpureHostDeps = [
+      # As far as I can tell, otool from cctools is the only thing that depends on these two, and we should fix them
+      "/usr/lib/libobjc.A.dylib"
+      "/usr/lib/libobjc.dylib"
     ];
 
     enableParallelBuilding = true;

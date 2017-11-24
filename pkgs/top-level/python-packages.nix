@@ -4988,6 +4988,7 @@ in {
     checkPhase = ''
       py.test testing
     '';
+    __darwinAllowLocalNetworking = true;
     meta = {
       description = "Rapid multi-Python deployment";
       license = licenses.gpl2;
@@ -14046,6 +14047,8 @@ in {
     };
 
     propagatedBuildInputs = with self; [ cryptography pyasn1 ];
+
+    __darwinAllowLocalNetworking = true;
 
     # https://github.com/paramiko/paramiko/issues/449
     doCheck = !(isPyPy || isPy33);
