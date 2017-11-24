@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage    = https://newsboat.org/;
     description = "An open-source RSS/Atom feed reader for the text console";
-    maintainers = with maintainers; [ nicknovitsk tasmo ];
+    maintainers = with maintainers; [ nicknovitski tasmo ];
     license     = licenses.mit;
     platforms   = platforms.unix;
   };
