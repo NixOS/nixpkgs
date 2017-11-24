@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   buildInputs = [ mock ];
 
-  propagatedBuildInputs = lib.optional (isPy27 || isPyPy) [ futures ];
+  propagatedBuildInputs = lib.optionals (isPy27 || isPyPy) [ futures ];
 
   patches = [
     ./tests.patch
