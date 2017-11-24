@@ -19024,6 +19024,7 @@ with pkgs;
   opkg-utils = callPackage ../tools/package-management/opkg-utils { };
 
   postage = callPackage ../applications/misc/postage { };
+  pgmanage = callPackage ../applications/misc/pgmanage { };
 
   pgadmin = callPackage ../applications/misc/pgadmin { };
 

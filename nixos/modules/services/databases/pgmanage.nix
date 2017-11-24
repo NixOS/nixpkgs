@@ -3,16 +3,16 @@
 with lib;
 
 let
-  cfg = config.services.postage;
+  cfg = config.services.pgmanage;
 
   confFile = pkgs.writeTextFile {
-    name = "postage.conf";
+    name = "pgmanage.conf";
     text =  ''
-      connection_file = ${postageConnectionsFile}
+      connection_file = ${pgmanageConnectionsFile}
 
       allow_custom_connections = ${builtins.toJSON cfg.allowCustomConnections}
 
-      postage_port = ${toString cfg.port}
+      pgmanage_port = ${toString cfg.port}
 
       super_only = ${builtins.toJSON cfg.superOnly}
 
@@ -20,7 +20,7 @@ let
 
       login_timeout = ${toString cfg.loginTimeout}
 
-      web_root = ${cfg.package}/etc/postage/web_root
+      web_root = ${cfg.package}/etc/pgmanage/web_root
 
       data_root = ${cfg.dataRoot}
 
@@ -33,24 +33,24 @@ let
     '';
   };
 
-  postageConnectionsFile = pkgs.writeTextFile {
-    name = "postage-connections.conf";
+  pgmanageConnectionsFile = pkgs.writeTextFile {
+    name = "pgmanage-connections.conf";
     text = concatStringsSep "\n"
       (mapAttrsToList (name : conn : "${name}: ${conn}") cfg.connections);
   };
 
-  postage = "postage";
-in {
+  pgmanage = "pgmanage";
 
-  options.services.postage = {
+in {
+  options.services.pgmanage = {
     enable = mkEnableOption "PostgreSQL Administration for the web";
 
     package = mkOption {
       type = types.package;
-      default = pkgs.postage;
-      defaultText = "pkgs.postage";
+      default = pkgs.pgmanage;
+      defaultText = "pkgs.pgmanage";
       description = ''
-        The postage package to use.
+        The pgmanage package to use.
       '';
     };
 
@@ -62,14 +62,14 @@ in {
         "mini-server" = "hostaddr=127.0.0.1 port=5432 dbname=postgres sslmode=require";
       };
       description = ''
-        Postage requires at least one PostgreSQL server be defined.
+        pgmanage requires at least one PostgreSQL server be defined.
         </para><para>
         Detailed information about PostgreSQL connection strings is available at:
         <link xlink:href="http://www.postgresql.org/docs/current/static/libpq-connect.html"/>
         </para><para>
         Note that you should not specify your user name or password. That
         information will be entered on the login screen. If you specify a
-        username or password, it will be removed by Postage before attempting to
+        username or password, it will be removed by pgmanage before attempting to
         connect to a database.
       '';
     };
@@ -78,7 +78,7 @@ in {
       type = types.bool;
       default = false;
       description = ''
-        This tells Postage whether or not to allow anyone to use a custom
+        This tells pgmanage whether or not to allow anyone to use a custom
         connection from the login screen.
       '';
     };
@@ -87,7 +87,7 @@ in {
       type = types.int;
       default = 8080;
       description = ''
-        This tells Postage what port to listen on for browser requests.
+        This tells pgmanage what port to listen on for browser requests.
       '';
     };
 
@@ -95,7 +95,7 @@ in {
       type = types.bool;
       default = true;
       description = ''
-        This tells Postage whether or not to set the listening socket to local
+        This tells pgmanage whether or not to set the listening socket to local
         addresses only.
       '';
     };
@@ -104,10 +104,10 @@ in {
       type = types.bool;
       default = true;
       description = ''
-        This tells Postage whether or not to only allow super users to
+        This tells pgmanage whether or not to only allow super users to
         login. The recommended value is true and will restrict users who are not
         super users from logging in to any PostgreSQL instance through
-        Postage. Note that a connection will be made to PostgreSQL in order to
+        pgmanage. Note that a connection will be made to PostgreSQL in order to
         test if the user is a superuser.
       '';
     };
@@ -116,8 +116,8 @@ in {
       type = types.nullOr types.str;
       default = null;
       description = ''
-        This tells Postage to only allow users in a certain PostgreSQL group to
-        login to Postage. Note that a connection will be made to PostgreSQL in
+        This tells pgmanage to only allow users in a certain PostgreSQL group to
+        login to pgmanage. Note that a connection will be made to PostgreSQL in
         order to test if the user is a member of the login group.
       '';
     };
@@ -133,10 +133,10 @@ in {
 
     dataRoot = mkOption {
       type = types.str;
-      default = "/var/lib/postage";
+      default = "/var/lib/pgmanage";
       description = ''
-        This tells Postage where to put the SQL file history. All tabs are saved
-        to this location so that if you get disconnected from Postage you
+        This tells pgmanage where to put the SQL file history. All tabs are saved
+        to this location so that if you get disconnected from pgmanage you
         don't lose your work.
       '';
     };
@@ -156,15 +156,15 @@ in {
       });
       default = null;
       description = ''
-        These options tell Postage where the TLS Certificate and Key files
+        These options tell pgmanage where the TLS Certificate and Key files
         reside. If you use these options then you'll only be able to access
-        Postage through a secure TLS connection. These options are only
-        necessary if you wish to connect directly to Postage using a secure TLS
-        connection. As an alternative, you can set up Postage in a reverse proxy
+        pgmanage through a secure TLS connection. These options are only
+        necessary if you wish to connect directly to pgmanage using a secure TLS
+        connection. As an alternative, you can set up pgmanage in a reverse proxy
         configuration. This allows your web server to terminate the secure
-        connection and pass on the request to Postage. You can find help to set
+        connection and pass on the request to pgmanage. You can find help to set
         up this configuration in:
-        <link xlink:href="https://github.com/workflowproducts/postage/blob/master/INSTALL_NGINX.md"/>
+        <link xlink:href="https://github.com/pgManage/pgManage/blob/master/INSTALL_NGINX.md"/>
       '';
     };
 
@@ -178,32 +178,27 @@ in {
   };
 
   config = mkIf cfg.enable {
-    warnings = [
-      ''postage has been deprecated in favour of pgmanage and will be removed in NixOS-18.03.
-        To get rid of this warning change your 'services.postage' options to 'services.pgmanage'.''
-    ];
-
-    systemd.services.postage = {
-      description = "postage - PostgreSQL Administration for the web";
+    systemd.services.pgmanage = {
+      description = "pgmanage - PostgreSQL Administration for the web";
       wants    = [ "postgresql.service" ];
       after    = [ "postgresql.service" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        User         = postage;
-        Group        = postage;
-        ExecStart    = "${pkgs.postage}/sbin/postage -c ${confFile}" +
+        User         = pgmanage;
+        Group        = pgmanage;
+        ExecStart    = "${pkgs.pgmanage}/sbin/pgmanage -c ${confFile}" +
                        optionalString cfg.localOnly " --local-only=true";
       };
     };
     users = {
-      users."${postage}" = {
-        name  = postage;
-        group = postage;
+      users."${pgmanage}" = {
+        name  = pgmanage;
+        group = pgmanage;
         home  = cfg.dataRoot;
         createHome = true;
       };
-      groups."${postage}" = {
-        name = postage;
+      groups."${pgmanage}" = {
+        name = pgmanage;
       };
     };
   };
