@@ -10781,6 +10781,7 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ ModuleBuild TestFatal TestRequires ];
     propagatedBuildInputs = [ ModuleImplementation ];
+    perlPreHook = "export LD=$CC";
     meta = {
       homepage = https://metacpan.org/release/Params-Validate;
       description = "Validate method/function parameters";
