@@ -439,7 +439,9 @@ in
 
     virtualisation.pathsInNixDB = [ config.system.build.toplevel ];
 
-    virtualisation.qemu.options = [ "-vga std" "-usbdevice tablet" ];
+    # FIXME: Figure out how to make this work on non-x86
+    virtualisation.qemu.options =
+      mkIf (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) [ "-vga std" "-usbdevice tablet" ];
 
     # Mount the host filesystem via 9P, and bind-mount the Nix store
     # of the host into our own filesystem.  We use mkVMOverride to
