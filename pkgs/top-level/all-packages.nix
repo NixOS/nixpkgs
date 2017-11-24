@@ -7089,6 +7089,8 @@ with pkgs;
 
   "cl-launch" = callPackage ../development/tools/misc/cl-launch {};
 
+  cloudfoundry-cli = callPackage ../development/tools/cloudfoundry-cli { };
+
   coan = callPackage ../development/tools/analysis/coan { };
 
   compile-daemon = callPackage ../development/tools/compile-daemon { };
