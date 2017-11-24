@@ -1,13 +1,15 @@
-{ fetchurl, stdenv, python, gnupg }:
+{ fetchFromGitHub, stdenv, python, gnupg }:
 
 let version = "2.0.11"; in
 stdenv.mkDerivation {
   name = "pius-${version}";
   namePrefix = "";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/pgpius/pius/${version}/pius-${version}.tar.bz2";
-    sha256 = "0pdbyqz6k0bm182cz81ss7yckmpms5qhrrw0wcr4a1srzcjyzf5f";
+  src = fetchFromGitHub {
+    owner = "jaymzh";
+    repo = "pius";
+    rev = "v${version}";
+    sha256 = "0msqhk0bhnq0f3crr0zf3dc9qb01ghib25fh3sz9dbprxclr5ps9";
   };
 
   buildInputs = [ python ];
