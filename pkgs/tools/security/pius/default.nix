@@ -1,7 +1,7 @@
-{ fetchFromGitHub, stdenv, python, gnupg }:
+{ fetchFromGitHub, stdenv, pythonPackages, gnupg }:
 
-let version = "2.0.11"; in
-stdenv.mkDerivation {
+let version = "2.2.4"; in
+pythonPackages.buildPythonApplication {
   name = "pius-${version}";
   namePrefix = "";
 
@@ -9,23 +9,13 @@ stdenv.mkDerivation {
     owner = "jaymzh";
     repo = "pius";
     rev = "v${version}";
-    sha256 = "0msqhk0bhnq0f3crr0zf3dc9qb01ghib25fh3sz9dbprxclr5ps9";
+    sha256 = "1yk6ngpk55yjdnzhm5sj675xbzwp7rir816a3aris647gsph1vlx";
   };
 
-  buildInputs = [ python ];
-
   patchPhase = ''
-    sed -i "pius" -e's|/usr/bin/gpg|${gnupg}/bin/gpg|g'
-  '';
-
-  dontBuild = true;
-
-  installPhase = ''
-    mkdir -p "$out/bin"
-    cp -v pius "$out/bin"
-
-    mkdir -p "$out/doc/pius-${version}"
-    cp -v README "$out/doc/pius-${version}"
+    for file in libpius/constants.py pius-keyring-mgr; do
+      sed -i "$file" -E -e's|/usr/bin/gpg2?|${gnupg}/bin/gpg|g'
+    done
   '';
 
   meta = {
