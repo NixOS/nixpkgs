@@ -33,6 +33,6 @@ pythonPackages.buildPythonApplication {
     license = stdenv.lib.licenses.gpl2;
 
     platforms = stdenv.lib.platforms.gnu;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ fuuzetsu kierdavis ];
   };
 }
