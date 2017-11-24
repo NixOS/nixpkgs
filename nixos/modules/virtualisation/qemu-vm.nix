@@ -14,6 +14,12 @@ with lib;
 let
 
   qemu = config.system.build.qemu or pkgs.qemu_test;
+  qemuKvm = {
+    "i686-linux" = "${qemu}/bin/qemu-kvm";
+    "x86_64-linux" = "${qemu}/bin/qemu-kvm -cpu kvm64";
+    "armv7l-linux" = "${qemu}/bin/qemu-system-arm -enable-kvm -machine virt -cpu host";
+    "aarch64-linux" = "${qemu}/bin/qemu-system-aarch64 -enable-kvm -machine virt -cpu host";
+  }.${pkgs.stdenv.system};
 
   vmName =
     if config.networking.hostName == ""
@@ -72,11 +78,10 @@ let
       '')}
 
       # Start QEMU.
-      exec ${qemu}/bin/qemu-kvm \
+      exec ${qemuKvm} \
           -name ${vmName} \
           -m ${toString config.virtualisation.memorySize} \
           -smp ${toString config.virtualisation.cores} \
-          ${optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
           ${concatStringsSep " " config.virtualisation.qemu.networkingOptions} \
           -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
           -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
