@@ -9,11 +9,12 @@ date: 2017-03-05
 To install the rust compiler and cargo put
 
 ```
-rust
+rustc
+cargo
 ```
 
 into the `environment.systemPackages` or bring them into
-scope with `nix-shell -p rust`.
+scope with `nix-shell -p rustc cargo`.
 
 For daily builds (beta and nightly) use either rustup from
 nixpkgs or use the [Rust nightlies
