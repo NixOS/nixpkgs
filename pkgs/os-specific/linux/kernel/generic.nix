@@ -6,6 +6,10 @@
 , # The kernel version.
   version
 
+, # path to a .config file (or its content ?)
+  # if it s null we generate it
+  configfilename ? null
+
 , # Appended verbatim to kernel .config
   extraConfig ? ""
 
@@ -26,8 +30,9 @@
 , ignoreConfigErrors ? stdenv.platform.name != "pc"
 , extraMeta ? {}
 , hostPlatform
+, callPackage
 , ...
-}:
+} @ args:
 
 assert stdenv.isLinux;
 
@@ -51,20 +56,35 @@ let
   config = configWithPlatform stdenv.platform;
   configCross = configWithPlatform hostPlatform.platform;
 
+    configDrv = callPackage ./config.nix {
+    inherit ignoreConfigErrors;
+
+    inherit version src kernelPatches stdenv;
+    # modDirVersion
+    };
 
   # TODO moved it
   # callPackage ./config.nix {};
   # configfile = stdenv.mkDerivation {
-  configfile = (import ./config.nix);
+  # configfile = (import ./config.nix);
 
     # TODO le transformer plutot en
   kernel = buildLinux {
+    # TODO args
     inherit version modDirVersion src kernelPatches stdenv;
+    # inherit ignoreConfigErrors;
+    inherit configDrv;
 
-    configfile = configfile.nativeDrv or configfile;
-    # configfile = null;
+    # configfile = configfile.nativeDrv or configfile;
+    # configfile = configfile.nativeDrv or configfile;
 
-    crossConfigfile = configfile.crossDrv or configfile;
+    # this is really configfilename
+    # configfile = if configfilename then configfilename else (callPackage ./config.nix {});
+    configfile = null;
+
+
+    # TODO fix later
+    # crossConfigfile = configfile.crossDrv or configfile;
 
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
 

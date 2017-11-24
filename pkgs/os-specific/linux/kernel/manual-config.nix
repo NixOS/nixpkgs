@@ -1,23 +1,24 @@
-# defines buildLinux
+# defines buildLinux, aka returns a function
 { runCommand, nettools, bc, perl, gmp, libmpc, mpfr, kmod, openssl
 , libelf ? null
 , utillinux ? null
 , writeTextFile, ubootTools
+callPackage
 , hostPlatform
 }:
 
 let
   # TODO import from config
-  readConfig = configfile: import (runCommand "config.nix" {} ''
-    echo "{" > "$out"
-    while IFS='=' read key val; do
-      [ "x''${key#CONFIG_}" != "x$key" ] || continue
-      no_firstquote="''${val#\"}";
-      echo '  "'"$key"'" = "'"''${no_firstquote%\"}"'";' >> "$out"
-    done < "${configfile}"
-    echo "}" >> $out
-  '').outPath;
-  confHelpers = import ./config.nix;
+  # readConfig = configfile: import (runCommand "config.nix" {} ''
+  #   echo "{" > "$out"
+  #   while IFS='=' read key val; do
+  #     [ "x''${key#CONFIG_}" != "x$key" ] || continue
+  #     no_firstquote="''${val#\"}";
+  #     echo '  "'"$key"'" = "'"''${no_firstquote%\"}"'";' >> "$out"
+  #   done < "${configfile}"
+  #   echo "}" >> $out
+  # '').outPath;
+  confHelpers = callPackage ./config.nix {};
 in {
   # Allow overriding stdenv on each buildLinux call
   stdenv,
@@ -33,16 +34,20 @@ in {
   nativeKernelPatches ? [],
   # Patches for cross compiling only
   crossKernelPatches ? [],
+  # ignoreConfigErrors,
+  # NEW pass a set with config inside
+  configDrv,
   # The native kernel .config file
+  # TODO if null, generate it from  readFile configDrv
   configfile,
   # The cross kernel .config file
   crossConfigfile ? configfile,
   # Manually specified nixexpr representing the config
   # If unspecified, this will be autodetected from the .config
-  config ? stdenv.lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
+  config ? stdenv.lib.optionalAttrs allowImportFromDerivation (confHelpers.readConfig configfile),
   # config ? null,
   # Cross-compiling config
-  crossConfig ? if allowImportFromDerivation then (readConfig crossConfigfile) else config,
+  crossConfig ? if allowImportFromDerivation then (confHelpers.readConfig crossConfigfile) else config,
   # Whether to utilize the controversial import-from-derivation feature to parse the config
   allowImportFromDerivation ? false
 }:
@@ -95,6 +100,9 @@ let
 
       inherit src;
 
+      # to help debug
+      # inherit config crossConfig;
+
       # why this
       preUnpack = ''
       #   mkdir build
@@ -115,13 +123,24 @@ let
         sed -i Makefile -e 's|= depmod|= ${kmod}/bin/depmod|'
       ''
       # if no configfile set then it means we have to generate it on the go
-      + stdenv.lib.optionalString (configfile == null) confHelpers.patchKconfig;
+      # configfile == null
+      # configfile.patchKconfig
+      # + stdenv.lib.optionalString (true) confHelpers.patchKconfig;
+      + stdenv.lib.optionalString (true) configDrv.patchKconfig;
 
       # imported from generic.nix
 
     # preConfigure = buildConfigPhase;
 
-      configurePhase = ''
+    configurePhase = let
+
+        # if configfile is valid file
+        linkConfig = if (true) then ''ln -sv ${configfile} $buildRoot/.config
+        '' else ''
+          # TODO generate CONFIG !!!
+          '';
+
+      in ''
         # if [ -z "$buildRoot" ]; then
 
           # we should be in $sourceRoot
@@ -132,6 +151,13 @@ let
           export buildRoot="$PWD/build"
         # fi
         runHook preConfigure
+        ''
+        +
+        linkConfig
+        +
+        ''
+
+        # ln -sv ${configfile} $buildRoot/.config
 
         # reads the existing .config file and prompts the user for options in
         # the current kernel source that are not found in the file.
