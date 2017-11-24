@@ -3372,6 +3372,8 @@ with pkgs;
 
   miniball = callPackage ../development/libraries/miniball { };
 
+  minijail = callPackage ../tools/system/minijail { };
+
   minixml = callPackage ../development/libraries/minixml { };
 
   mir-qualia = callPackage ../tools/text/mir-qualia {
