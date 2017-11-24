@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
     # https://github.com/munin-monitoring/munin/pull/134
     ./adding_servicedir_munin-node.patch
 
+    ./adding_sconfdir_munin-node.patch
     ./preserve_environment.patch
   ];
 
