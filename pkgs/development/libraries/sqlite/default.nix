@@ -56,6 +56,11 @@ stdenv.mkDerivation {
     echo ""
   '';
 
+  postInstall =
+  ''
+    install -D -m 644 sqlite3.pc $outputDev/lib/pkgconfig/sqlite3.pc
+  '';
+
   meta = {
     homepage = http://www.sqlite.org/;
     description = "A self-contained, serverless, zero-configuration, transactional SQL database engine";
