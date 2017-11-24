@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libnotify, librsvg, psmisc, gtk3, syncthing, python2Packages }:
+{ stdenv, fetchFromGitHub, libnotify, librsvg, psmisc, gtk3, syncthing, wrapGAppsHook, gnome3, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
   version = "0.9.2.3";
@@ -11,17 +11,18 @@ python2Packages.buildPythonApplication rec {
     sha256 = "0chl0f0kp6z0z00d1f3xjlicjfr9rzabw39wmjr66fwb5w5hcc42";
   };
 
-  propagatedBuildInputs = with python2Packages; [
-    syncthing dateutil pyinotify libnotify
-    (librsvg.override { withGTK = true; })
-    psmisc pygobject3 gtk3
+  nativeBuildInputs = [ wrapGAppsHook ];
+
+  buildInputs = [
+    gtk3 (librsvg.override { enableIntrospection = true; })
+    libnotify psmisc
+    # Schemas with proxy configuration
+    gnome3.gsettings_desktop_schemas
   ];
 
-  preFixup = ''
-    wrapProgram $out/bin/syncthing-gtk \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH"
-  '';
+  propagatedBuildInputs = with python2Packages; [
+    syncthing dateutil pyinotify pygobject3
+  ];
 
   patchPhase = ''
     substituteInPlace setup.py --replace "version = get_version()" "version = '${version}'"
