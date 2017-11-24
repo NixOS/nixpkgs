@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "locustio";
-  version = "0.8";
+  version = "0.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0y3r2g31z7g120c7v91zdvcakwfxv2acbgs4flarv5yza2knl11c";
+    sha256 = "64583987ba1c330bb071aee3e29d2eedbfb7c8b342fa064bfb74fafcff660d61";
   };
 
   patchPhase = ''

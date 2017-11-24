@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "hyperlink";
-  version = "17.3.0";
+  version = "17.3.1";
   name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/h/hyperlink/${name}.tar.gz";
-    sha256 = "06mgnxwjzx8hv34bifc7jvgxz21ixhk5s6xy2kd84hdrlbfvpbfx";
+    sha256 = "bc4ffdbde9bdad204d507bd8f554f16bba82dd356f6130cb16f41422909c33bc";
   };
 
   checkInputs = [ pytest ];
