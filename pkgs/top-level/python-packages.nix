@@ -18143,6 +18143,8 @@ in {
     cudnnSupport = false;
   };
 
+  thespian = callPackage ../development/python-modules/thespian { };
+
   tidylib = buildPythonPackage rec {
     version = "0.2.4";
     name = "pytidylib-${version}";
