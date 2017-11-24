@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     homepage = https://z.cash/;
     maintainers = with maintainers; [ rht ];
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
   };
 }
