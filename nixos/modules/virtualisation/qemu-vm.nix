@@ -21,6 +21,11 @@ let
     "aarch64-linux" = "${qemu}/bin/qemu-system-aarch64 -enable-kvm -machine virt -cpu host";
   }.${pkgs.stdenv.system};
 
+  # FIXME: figure out a common place for this instead of copy pasting
+  serialDevice = if pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64 then "ttyS0"
+        else if pkgs.stdenv.isArm || pkgs.stdenv.isAarch64 then "ttyAMA0"
+        else throw "Unknown QEMU serial device for system '${pkgs.stdenv.system}'";
+
   vmName =
     if config.networking.hostName == ""
     then "noname"
@@ -29,7 +34,7 @@ let
   cfg = config.virtualisation;
 
   qemuGraphics = if cfg.graphics then "" else "-nographic";
-  kernelConsole = if cfg.graphics then "" else "console=ttyS0";
+  kernelConsole = if cfg.graphics then "" else "console=${serialDevice}";
   ttys = [ "tty1" "tty2" "tty3" "tty4" "tty5" "tty6" ];
 
   # Shell script to start the VM.
