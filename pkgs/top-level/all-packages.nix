@@ -18073,6 +18073,8 @@ with pkgs;
 
   privateer = callPackage ../games/privateer { };
 
+  pysolfc = callPackage ../games/pysolfc { };
+
   qweechat = callPackage ../applications/networking/irc/qweechat { };
 
   qqwing = callPackage ../games/qqwing { };
