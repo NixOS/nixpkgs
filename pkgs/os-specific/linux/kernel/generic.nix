@@ -27,9 +27,11 @@
 , extraMeta ? {}
 , hostPlatform
 , ...
-}:
+} @ args:
 
 assert stdenv.isLinux;
+
+if args ? argsOverride then throw "'argsOverride' is deprecated for linux kernels." else
 
 let
 

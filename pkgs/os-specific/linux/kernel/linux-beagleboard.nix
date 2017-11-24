@@ -4,7 +4,7 @@ let
   modDirVersion = "4.9.61";
   tag = "r76";
 in
-import ./generic.nix (args // rec {
+import ./generic.nix (rec {
   version = "${modDirVersion}-ti-${tag}";
   inherit modDirVersion;
 
@@ -22,4 +22,4 @@ import ./generic.nix (args // rec {
   } // (args.features or {});
 
   extraMeta.hydraPlatforms = [];
-} // (args.argsOverride or {}))
+} // args)

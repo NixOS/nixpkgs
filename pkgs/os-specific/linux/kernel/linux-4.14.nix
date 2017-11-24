@@ -2,7 +2,7 @@
 
 with stdenv.lib;
 
-import ./generic.nix (args // rec {
+import ./generic.nix (rec {
   version = "4.14.1";
 
   # modDirVersion needs to be x.y.z, will automatically add .0 if needed
@@ -15,4 +15,4 @@ import ./generic.nix (args // rec {
     url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";
     sha256 = "1rsdrdapjw8lhm8dyckwxfihykirbkincm5k0lwwx1pr09qgdfbg";
   };
-} // (args.argsOverride or {}))
+} // args)

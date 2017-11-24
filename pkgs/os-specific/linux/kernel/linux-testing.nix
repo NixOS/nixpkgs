@@ -1,6 +1,6 @@
 { stdenv, hostPlatform, fetchurl, perl, buildLinux, ... } @ args:
 
-import ./generic.nix (args // rec {
+import ./generic.nix (rec {
   version = "4.14-rc8";
   modDirVersion = "4.14.0-rc8";
   extraMeta.branch = "4.14";
@@ -13,4 +13,4 @@ import ./generic.nix (args // rec {
   # Should the testing kernels ever be built on Hydra?
   extraMeta.hydraPlatforms = [];
 
-} // (args.argsOverride or {}))
+} // args)

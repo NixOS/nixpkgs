@@ -15,7 +15,7 @@ let
 
   modDirVersion = "${modVersion}-hardened";
 in
-import ./generic.nix (args // {
+import ./generic.nix ( {
   inherit modDirVersion;
 
   version = "${version}-${revision}";
@@ -27,4 +27,4 @@ import ./generic.nix (args // {
     repo = "linux-hardened";
     rev = "${version}.${revision}";
   };
-} // (args.argsOverride or {}))
+} // args)

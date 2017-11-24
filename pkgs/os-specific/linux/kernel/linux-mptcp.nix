@@ -43,4 +43,4 @@ import ./generic.nix (rec {
     TCP_CONG_BALIA m
 
   '' + (args.extraConfig or "");
-} // args // (args.argsOverride or {}))
+} //  args)

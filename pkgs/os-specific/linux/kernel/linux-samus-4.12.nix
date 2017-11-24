@@ -2,7 +2,7 @@
 
 assert stdenv.is64bit;
 
-import ./generic.nix (args // rec {
+import ./generic.nix (rec {
   version = "4.12.2";
   extraMeta.branch = "4.12-2";
 
@@ -15,4 +15,4 @@ import ./generic.nix (args // rec {
     }; in "${upstream}/build/linux";
 
   extraMeta.hydraPlatforms = [];
-} // (args.argsOverride or {}))
+} // args)

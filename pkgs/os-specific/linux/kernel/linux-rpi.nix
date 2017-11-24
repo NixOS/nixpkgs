@@ -4,7 +4,7 @@ let
   modDirVersion = "4.9.59";
   tag = "1.20171029";
 in
-stdenv.lib.overrideDerivation (import ./generic.nix (args // rec {
+stdenv.lib.overrideDerivation (import ./generic.nix (rec {
   version = "${modDirVersion}-${tag}";
   inherit modDirVersion;
 
@@ -20,7 +20,7 @@ stdenv.lib.overrideDerivation (import ./generic.nix (args // rec {
   } // (args.features or {});
 
   extraMeta.hydraPlatforms = [];
-})) (oldAttrs: {
+} // (removeAttrs args ["features"]))) (oldAttrs: {
   postConfigure = ''
     # The v7 defconfig has this set to '-v7' which screws up our modDirVersion.
     sed -i $buildRoot/.config -e 's/^CONFIG_LOCALVERSION=.*/CONFIG_LOCALVERSION=""/'
