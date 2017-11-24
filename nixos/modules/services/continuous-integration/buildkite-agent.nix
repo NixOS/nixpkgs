@@ -86,10 +86,13 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         environment.HOME = "/var/lib/buildkite-agent";
+
+        ## NB: maximum care is taken so that secrets (ssh keys and the CI token)
+        ##     don't end up in the Nix store.
         preStart = ''
             ${pkgs.coreutils}/bin/mkdir -m 0700 -p /var/lib/buildkite-agent/.ssh
-            ${copyOrEcho cfg.openssh.privateKey "/var/lib/buildkite-agent/.ssh/id_rsa"     600}
-            ${copyOrEcho cfg.openssh.publicKey  "/var/lib/buildkite-agent/.ssh/id_rsa.pub" 600}
+            ${copyOrEcho (toString cfg.openssh.privateKey) "/var/lib/buildkite-agent/.ssh/id_rsa"     600}
+            ${copyOrEcho (toString cfg.openssh.publicKey)  "/var/lib/buildkite-agent/.ssh/id_rsa.pub" 600}
 
             cat > "/var/lib/buildkite-agent/buildkite-agent.cfg" <<EOF
             token="${catOrLiteral cfg.token}"
