@@ -4,7 +4,7 @@
 buildPythonPackage rec {
   pname = "pip-tools";
   version = "1.10.1";
-  name = "pip-tools-${version}";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/p/pip-tools/${name}.tar.gz";

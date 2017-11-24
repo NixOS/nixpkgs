@@ -10464,22 +10464,7 @@ in {
     fuse = pkgs.fuse;  # use "real" fuse, not the python module
   };
 
-  locustio = buildPythonPackage rec {
-    name = "locustio-0.7.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/locustio/${name}.tar.gz";
-      sha256 = "c9ca6fdfe6a6fb187a3d54ddf9b1518196348e8f20537f0a14ca81a264ffafa2";
-    };
-
-    propagatedBuildInputs = [ self.msgpack self.requests self.flask self.gevent self.pyzmq ];
-    buildInputs = [ self.mock self.unittest2 ];
-
-    meta = {
-      homepage = http://locust.io/;
-      description = "A load testing tool";
-    };
-  };
+  locustio = callPackage ../development/python-modules/locustio { };
 
   llvmlite = callPackage ../development/python-modules/llvmlite {llvm=pkgs.llvm_4;};
 
@@ -14881,31 +14866,13 @@ in {
 
   psd-tools = callPackage ../development/python-modules/psd-tools { };
 
-  psutil = buildPythonPackage rec {
-    name = "psutil-${version}";
-    version = "4.3.0";
+  psutil = callPackage ../development/python-modules/psutil { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/psutil/${name}.tar.gz";
-      sha256 = "1w4r09fvn6kd80m5mx4ws1wz100brkaq6hzzpwrns8cgjzjpl6c6";
-    };
-
-    # Certain tests fail due to being in a chroot.
-    # See also the older issue: https://code.google.com/p/psutil/issues/detail?id=434
-    doCheck = false;
-
-    buildInputs = with self; [ mock ] ++ optionals stdenv.isDarwin [ pkgs.darwin.IOKit ];
-
-    meta = {
-      description = "Process and system utilization information interface for python";
-      homepage = https://github.com/giampaolo/psutil;
-    };
-  };
-
-  psutil_1 = self.psutil.overrideDerivation (self: rec {
-    name = "psutil-1.2.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/psutil/${name}.tar.gz";
+  psutil_1 = self.psutil.overrideAttrs (oldAttrs: rec {
+    name = "${oldAttrs.pname}-${version}";
+    version = "1.2.1";
+    src = oldAttrs.src.override {
+      inherit version;
       sha256 = "0ibclqy6a4qmkjhlk3g8jhpvnk0v9aywknc61xm3hfi5r124m3jh";
     };
   });

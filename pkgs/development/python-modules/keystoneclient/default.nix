@@ -9,8 +9,9 @@
 }:
 
 buildPythonPackage rec {
-  name = "keystoneclient-${version}";
+  pname = "keystoneclient";
   version = "1.8.1";
+  name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = "openstack";
