@@ -12,10 +12,12 @@
 # the executables of git, mercurial and bazaar.
 
 buildPythonPackage rec {
-  rev  = "2.6";
-  name = "powerline-${rev}";
+  version  = "2.6";
+  pname = "powerline";
+  name = pname + "-" + version;
+
   src = fetchurl {
-    url    = "https://github.com/powerline/powerline/archive/${rev}.tar.gz";
+    url    = "https://github.com/powerline/powerline/archive/${version}.tar.gz";
     name   = "${name}.tar.gz";
     sha256 = "c108f11fe10dc910febb94b87d3abded85d4363fb950366a9e30282b9ba7c272";
   };

@@ -125,7 +125,7 @@ in
 stdenv.mkDerivation {
   name = "boost-${version}";
 
-  inherit src patches;
+  inherit src patches version;
 
   meta = {
     homepage = http://boost.org/;

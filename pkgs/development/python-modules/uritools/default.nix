@@ -2,8 +2,8 @@
 
 buildPythonPackage rec {
   pname = "uritools";
-  name = "uritools-${version}";
   version = "2.1.0";
+  name = pname + "-" + version;
 
   src = fetchPypi {
     inherit pname version;

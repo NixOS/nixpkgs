@@ -7,9 +7,9 @@
 }:
 
 buildPythonPackage rec {
-    baseName = "fuse";
+    pname = "fuse";
     version = "0.2.1";
-    name = "${baseName}-${version}";
+    name = pname + "-" + version;
     disabled = isPy3k;
 
     src = fetchurl {
