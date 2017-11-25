@@ -8,7 +8,7 @@
 { fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
 , perl, gtk2, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
-, fetchFromGitHub, libmpack, which
+, fetchFromGitHub, libmpack, which, libscrypt,
 }:
 
 let
@@ -271,6 +271,37 @@ let
     meta = with stdenv.lib; {
       description = "Lua bindings for POSIX iconv";
       homepage = "https://ittner.github.io/lua-iconv/";
+      license = licenses.mit;
+      maintainers = with maintainers; [ richardipsum ];
+      platforms = platforms.unix;
+    };
+  };
+
+  lua-scrypt = buildLuaPackage rec {
+    name = "lua-scrypt-${version}";
+    version = "1.2";
+    src = fetchurl {
+      url = "https://git.gitano.org.uk/lua-scrypt.git/snapshot/lua-scrypt-1.2.tar.bz2";
+      sha256 = "0n62ynlhan2m1axl6ilfrv5rp63dbqsidmpbakndl4niblsny2s2";
+    };
+
+    nativeBuildInputs = [ which pkgconfig ];
+    propagatedBuildInputs = [ libscrypt ];
+
+    preBuild = ''
+      makeFlagsArray=(
+        CFLAGS+=-DTRUST_LIBSCRYPT_SALT_GEN
+        INST_LIBDIR="$out/lib/lua/${lua.luaversion}"
+        INST_LUADIR="$out/share/lua/${lua.luaversion}"
+        LUA_BINDIR="$out/bin"
+        LUA_INCDIR="-I${lua}/include"
+        LUA_LIBDIR="-L${lua}/lib"
+      );
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Lua binding to libscrypt";
+      homepage = "https://www.gitano.org.uk/lua-scrypt/";
       license = licenses.mit;
       maintainers = with maintainers; [ richardipsum ];
       platforms = platforms.unix;
