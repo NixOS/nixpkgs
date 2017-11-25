@@ -11690,6 +11690,8 @@ with pkgs;
 
   neard = callPackage ../servers/neard { };
 
+  nghttp2 = callPackage ../servers/http/nghttp2 { };
+
   nginx = nginxStable;
 
   nginxStable = callPackage ../servers/http/nginx/stable.nix {
