@@ -188,8 +188,7 @@ let
       /* date format to be used while writing to the owncloud logfile */
       'logdateformat' => 'F d, Y H:i:s',
 
-      /* timezone used while writing to the owncloud logfile (default: UTC) */
-      'logtimezone' => '${serverInfo.fullConfig.time.timeZone}',
+      ${tzSetting}
 
       /* Append all database queries and parameters to the log file.
        (watch out, this option can increase the size of your log file)*/
@@ -339,6 +338,31 @@ let
 
     '';
 
+  tzSetting = let tz = serverInfo.fullConfig.time.timeZone; in optionalString (!isNull tz) ''
+    /* timezone used while writing to the owncloud logfile (default: UTC) */
+    'logtimezone' => '${tz}',
+  '';
+
+  postgresql = serverInfo.fullConfig.services.postgresql.package;
+
+  setupDb = pkgs.writeScript "setup-owncloud-db" ''
+    #!${pkgs.stdenv.shell}
+    PATH="${postgresql}/bin"
+    createuser --no-superuser --no-createdb --no-createrole "${config.dbUser}" || true
+    createdb "${config.dbName}" -O "${config.dbUser}" || true
+    psql -U postgres -d postgres -c "alter user ${config.dbUser} with password '${config.dbPassword}';" || true
+
+    QUERY="CREATE TABLE appconfig
+             ( appid       VARCHAR( 255 ) NOT NULL
+             , configkey   VARCHAR( 255 ) NOT NULL
+             , configvalue VARCHAR( 255 ) NOT NULL
+             );
+           GRANT ALL ON appconfig TO ${config.dbUser};
+           ALTER TABLE appconfig OWNER TO ${config.dbUser};"
+
+    psql -h "/tmp" -U postgres -d ${config.dbName} -Atw -c "$QUERY" || true
+  '';
+
 in
 
 rec {
@@ -373,7 +397,7 @@ rec {
       defaultText = "pkgs.owncloud70";
       example = literalExample "pkgs.owncloud70";
       description = ''
-          PostgreSQL package to use.
+          ownCloud package to use.
       '';
     };
 
@@ -574,13 +598,7 @@ rec {
       chmod -R o-rwx ${config.dataDir}
       chown -R wwwrun:wwwrun ${config.dataDir}
 
-      ${pkgs.postgresql}/bin/createuser -s -r postgres
-      ${pkgs.postgresql}/bin/createuser --no-superuser --no-createdb --no-createrole "${config.dbUser}" || true
-      ${pkgs.postgresql}/bin/createdb "${config.dbName}" -O "${config.dbUser}" || true
-      ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/psql -U postgres -d postgres -c "alter user ${config.dbUser} with password '${config.dbPassword}';" || true
-
-      QUERY="CREATE TABLE appconfig (appid VARCHAR( 255 ) NOT NULL ,configkey VARCHAR( 255 ) NOT NULL ,configvalue VARCHAR( 255 ) NOT NULL); GRANT ALL ON appconfig TO ${config.dbUser}; ALTER TABLE appconfig OWNER TO ${config.dbUser};"
-      ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/psql -h "/tmp" -U postgres -d ${config.dbName} -Atw -c "$QUERY" || true
+      ${pkgs.sudo}/bin/sudo -u postgres ${setupDb}
     fi
 
     if [ -e ${config.package}/config/ca-bundle.crt ]; then
@@ -591,7 +609,11 @@ rec {
 
     chown wwwrun:wwwrun ${config.dataDir}/owncloud.log || true
 
-    QUERY="INSERT INTO groups (gid) values('admin'); INSERT INTO users (uid,password) values('${config.adminUser}','${builtins.hashString "sha1" config.adminPassword}'); INSERT INTO group_user (gid,uid) values('admin','${config.adminUser}');"
-    ${pkgs.sudo}/bin/sudo -u postgres ${pkgs.postgresql}/bin/psql -h "/tmp" -U postgres -d ${config.dbName} -Atw -c "$QUERY" || true
+    QUERY="INSERT INTO groups (gid) values('admin');
+           INSERT INTO users (uid,password)
+             values('${config.adminUser}','${builtins.hashString "sha1" config.adminPassword}');
+           INSERT INTO group_user (gid,uid)
+             values('admin','${config.adminUser}');"
+    ${pkgs.sudo}/bin/sudo -u postgres ${postgresql}/bin/psql -h "/tmp" -U postgres -d ${config.dbName} -Atw -c "$QUERY" || true
   '';
 }
