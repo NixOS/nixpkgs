@@ -700,6 +700,7 @@
   womfoo = "Kranium Gikos Mendoza <kranium@gikos.net>";
   wscott = "Wayne Scott <wsc9tt@gmail.com>";
   wyvie = "Elijah Rum <elijahrum@gmail.com>";
+  xaverdh = "Dominik Xaver Hörl <hoe.dom@gmx.de>";
   xnwdd = "Guillermo NWDD <nwdd+nixos@no.team>";
   xvapx = "Marti Serra <marti.serra.coscollano@gmail.com>";
   xwvvvvwx = "David Terry <davidterry@posteo.de>";
