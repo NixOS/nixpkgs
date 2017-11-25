@@ -22,6 +22,18 @@ stdenv.mkDerivation rec {
       url = "http://git.openafs.org/?p=openafs.git;a=patch;h=c193e5cba18273a062d4162118c7055b54f7eb5e";
       sha256 = "1yc4gygcazwsslf6mzk1ai92as5jbsjv7212jcbb2dw83jydhc09";
     })
+    # linux 4.14
+    (fetchpatch {
+      name = "test-for-__vfs_write-rather-than-__vfs_read.patch";
+      url = "http://git.openafs.org/?p=openafs.git;a=patch;h=929e77a886fc9853ee292ba1aa52a920c454e94b";
+      sha256 = "0g4jxqzvyrjy2q7mhxc5ikhypj3ljw1wri4lipzm66crsvycp9x5";
+    })
+    # linux 4.14
+    (fetchpatch {
+      name = "use-kernel_read-kernel_write-when-__vfs-variants-are-unavailable.patch";
+      url = "http://git.openafs.org/?p=openafs.git;a=patch;h=5ee516b3789d3545f3d78fb3aba2480308359945";
+      sha256 = "1vx55qb120y857mn1l00i58fj9cckschp86ch3g6hqrdc5q5bxv2";
+    })
   ];
 
   preConfigure = ''
