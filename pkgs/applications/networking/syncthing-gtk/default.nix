@@ -17,17 +17,23 @@ python2Packages.buildPythonApplication rec {
     gtk3 (librsvg.override { enableIntrospection = true; })
     libnotify psmisc
     # Schemas with proxy configuration
-    gnome3.gsettings_desktop_schemas
+    syncthing gnome3.gsettings_desktop_schemas
   ];
 
   propagatedBuildInputs = with python2Packages; [
-    syncthing dateutil pyinotify pygobject3
+    dateutil pyinotify pygobject3
   ];
 
-  patchPhase = ''
+  patches = [
+    ./disable-syncthing-binary-configuration.patch
+  ];
+
+  postPatch = ''
     substituteInPlace setup.py --replace "version = get_version()" "version = '${version}'"
     substituteInPlace scripts/syncthing-gtk --replace "/usr/share" "$out/share"
     substituteInPlace syncthing_gtk/app.py --replace "/usr/share" "$out/share"
+    substituteInPlace syncthing_gtk/configuration.py --replace "/usr/bin/syncthing" "${syncthing}/bin/syncthing"
+    substituteInPlace syncthing_gtk/uisettingsdialog.py --replace "/usr/share" "$out/share"
     substituteInPlace syncthing_gtk/wizard.py --replace "/usr/share" "$out/share"
     substituteInPlace syncthing-gtk.desktop --replace "/usr/bin/syncthing-gtk" "$out/bin/syncthing-gtk"
   '';
