@@ -13715,6 +13715,8 @@ with pkgs;
 
   vanilla-dmz = callPackage ../data/icons/vanilla-dmz { };
 
+  vdrsymbols = callPackage ../data/fonts/vdrsymbols { };
+
   vistafonts = callPackage ../data/fonts/vista-fonts { };
 
   vistafonts-chs = callPackage ../data/fonts/vista-fonts-chs { };
