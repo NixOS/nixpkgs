@@ -68,4 +68,8 @@ nodePackages // {
     '';
     buildInputs = oldAttrs.buildInputs ++ [ pkgs.phantomjs2 ];
   });
+
+  # create an alias to ensure that Nix finds the appropriate package
+  # by adopting the naming convention (statsd-`type`-backend) for statsd plugins.
+  statsd-stackdriver-backend = nodePackages.stackdriver-statsd-backend;
 }
