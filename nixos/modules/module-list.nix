@@ -226,6 +226,7 @@
   ./services/hardware/bluetooth.nix
   ./services/hardware/brltty.nix
   ./services/hardware/freefall.nix
+  ./services/hardware/fwupd.nix
   ./services/hardware/illum.nix
   ./services/hardware/interception-tools.nix
   ./services/hardware/irqbalance.nix

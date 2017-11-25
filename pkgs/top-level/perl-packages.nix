@@ -1394,13 +1394,18 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  CatalystPluginHTMLWidget = buildPerlPackage {
+  CatalystPluginHTMLWidget = buildPerlPackage rec {
     name = "Catalyst-Plugin-HTML-Widget-1.1";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SR/SRI/Catalyst-Plugin-HTML-Widget-1.1.tar.gz;
-      sha256 = "1zzyfhmzlqvbwk2w930k3mqk8z1lzhrja9ynx9yfq5gmc8qqg95l";
+      url = "mirror://cpan/authors/id/B/BO/BOBTFISH/${name}.tar.gz";
+      sha256 = "b4a4873162f515ec7cead6272533fc347c34711d138cc4c5e46b63fa2b74feff";
     };
-    propagatedBuildInputs = [CatalystRuntime HTMLWidget];
+    propagatedBuildInputs = [ CatalystRuntime HTMLWidget ];
+    meta = {
+      description = "HTML Widget Catalyst Plugin";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      broken = true;
+    };
   };
 
   CatalystPluginLogHandler = buildPerlPackage rec {
@@ -2084,30 +2089,30 @@ let self = _self // overrides; _self = with self; {
   };
 
   ClassLoad = buildPerlPackage rec {
-    name = "Class-Load-0.23";
+    name = "Class-Load-0.24";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
-      sha256 = "13xjfh4fadq4pkq7fcj42b26544jl7gqdg2y3imnra9fwxwsbg7j";
+      sha256 = "0bb983da46c146534fc77a556d6e40d925142f2eb43103534025ee545265ca36";
     };
-    buildInputs = [ TestFatal TestRequires ];
+    buildInputs = [ TestFatal TestNeeds ];
     propagatedBuildInputs = [ DataOptList ModuleImplementation ModuleRuntime PackageStash TryTiny ];
     meta = {
-      homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
+      homepage = https://github.com/moose/Class-Load;
       description = "A working (require \"Class::Name\") and more";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
   ClassLoadXS = buildPerlPackage rec {
-    name = "Class-Load-XS-0.09";
+    name = "Class-Load-XS-0.10";
     src = fetchurl {
       url = "mirror://cpan/authors/id/E/ET/ETHER/${name}.tar.gz";
-      sha256 = "1aivalms81s3a2cj053ncgnmkpgl7vspna8ajlkqir7rdn8kpv5v";
+      sha256 = "5bc22cf536ebfd2564c5bdaf42f0d8a4cee3d1930fc8b44b7d4a42038622add1";
     };
-    buildInputs = [ ModuleImplementation TestFatal TestRequires ];
+    buildInputs = [ ModuleImplementation TestFatal TestNeeds ];
     propagatedBuildInputs = [ ClassLoad ];
     meta = {
-      homepage = http://search.cpan.org/perldoc?CPAN::Meta::Spec;
+      homepage = https://github.com/moose/Class-Load-XS;
       description = "XS implementation of parts of Class::Load";
       license = stdenv.lib.licenses.artistic2;
     };
@@ -10782,6 +10787,7 @@ let self = _self // overrides; _self = with self; {
     };
     buildInputs = [ ModuleBuild TestFatal TestRequires ];
     propagatedBuildInputs = [ ModuleImplementation ];
+    perlPreHook = "export LD=$CC";
     meta = {
       homepage = https://metacpan.org/release/Params-Validate;
       description = "Validate method/function parameters";
@@ -15325,11 +15331,11 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
-  UNIVERSALrequire = buildPerlPackage {
-    name = "UNIVERSAL-require-0.17";
+  UNIVERSALrequire = buildPerlPackage rec {
+    name = "UNIVERSAL-require-0.18";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NE/NEILB/UNIVERSAL-require-0.17.tar.gz;
-      sha256 = "5dc9f13f2d2bbdf852387e2a63c0753728c2bea9125dd628c313db3ef66ec4c3";
+      url = "mirror://cpan/authors/id/N/NE/NEILB/${name}.tar.gz";
+      sha256 = "b2a736a87967a143dab58c8a110501d5235bcdd2c8b2a3bfffcd3c0bd06b38ed";
     };
     meta = {
       description = "Require() modules from a variable";

@@ -41,7 +41,7 @@ self: super: {
 
   # cabal-install needs Cabal 2.x. hackage-security's test suite does not compile with
   # Cabal 2.x, though. See https://github.com/haskell/hackage-security/issues/188.
-  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_0_0_2; });
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_0_1_0; });
   hackage-security = dontCheck super.hackage-security;
 
   # Link statically to avoid runtime dependency on GHC.
