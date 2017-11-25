@@ -642,6 +642,7 @@
   theuni = "Christian Theune <ct@flyingcircus.io>";
   ThomasMader = "Thomas Mader <thomas.mader@gmail.com>";
   thoughtpolice = "Austin Seipp <aseipp@pobox.com>";
+  thpham = "Thomas Pham <thomas.pham@ithings.ch>";
   timbertson = "Tim Cuthbertson <tim@gfxmonk.net>";
   timokau = "Timo Kaufmann <timokau@zoho.com>";
   titanous = "Jonathan Rudenberg <jonathan@titanous.com>";

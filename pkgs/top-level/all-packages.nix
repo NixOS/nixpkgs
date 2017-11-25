@@ -19386,6 +19386,8 @@ with pkgs;
 
   keynav = callPackage ../tools/X11/keynav { };
 
+  kompose = callPackage ../applications/networking/cluster/kompose { };
+
   kops = callPackage ../applications/networking/cluster/kops { };
 
   lilypond = callPackage ../misc/lilypond { guile = guile_1_8; };
