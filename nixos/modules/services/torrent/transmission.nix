@@ -131,7 +131,7 @@ in
           ${getLib pkgs.xz}/lib/liblzma*.so*               mr,
           ${getLib pkgs.libgcrypt}/lib/libgcrypt*.so*      mr,
           ${getLib pkgs.libgpgerror}/lib/libgpg-error*.so* mr,
-          ${getLib pkgs.nghttp2}/lib/libnghttp2*.so*       mr,
+          ${getLib pkgs.libnghttp2}/lib/libnghttp2*.so*    mr,
           ${getLib pkgs.c-ares}/lib/libcares*.so*          mr,
           ${getLib pkgs.libcap}/lib/libcap*.so*            mr,
           ${getLib pkgs.attr}/lib/libattr*.so*             mr,

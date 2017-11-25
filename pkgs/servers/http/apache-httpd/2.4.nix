@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl, zlib, apr, aprutil, pcre, libiconv
 , proxySupport ? true
 , sslSupport ? true, openssl
-, http2Support ? true, nghttp2
+, http2Support ? true, libnghttp2
 , ldapSupport ? true, openldap
 , libxml2Support ? true, libxml2
 , luaSupport ? false, lua5
@@ -13,7 +13,7 @@ in
 
 assert sslSupport -> aprutil.sslSupport && openssl != null;
 assert ldapSupport -> aprutil.ldapSupport && openldap != null;
-assert http2Support -> nghttp2 != null;
+assert http2Support -> libnghttp2 != null;
 
 stdenv.mkDerivation rec {
   version = "2.4.29";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     optional sslSupport openssl ++
     optional ldapSupport openldap ++    # there is no --with-ldap flag
     optional libxml2Support libxml2 ++
-    optional http2Support nghttp2 ++
+    optional http2Support libnghttp2 ++
     optional stdenv.isDarwin libiconv;
 
   prePatch = ''

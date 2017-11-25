@@ -9505,6 +9505,8 @@ with pkgs;
 
   libnftnl = callPackage ../development/libraries/libnftnl { };
 
+  libnghttp2 = callPackage ../development/libraries/libnghttp2 { };
+
   libnih = callPackage ../development/libraries/libnih { };
 
   libnova = callPackage ../development/libraries/libnova { };
@@ -10032,11 +10034,6 @@ with pkgs;
   nettle = callPackage ../development/libraries/nettle { };
 
   newt = callPackage ../development/libraries/newt { };
-
-  nghttp2 = callPackage ../development/libraries/nghttp2 {
-    fetchurl = fetchurlBoot;
-  };
-  libnghttp2 = nghttp2.lib;
 
   nix-plugins = callPackage ../development/libraries/nix-plugins {};
 
