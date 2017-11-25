@@ -7,7 +7,7 @@ with stdenv.lib;
 let
   asserts =
     assert hdf5.mpiSupport -> mpi4py != null && hdf5.mpi == mpi4py.mpi;
-    []
+    [];
 
   mpi = hdf5.mpi;
   mpiSupport = hdf5.mpiSupport;

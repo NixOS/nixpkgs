@@ -5577,7 +5577,7 @@ with pkgs;
       else if targetPlatform.libc == "libSystem" then darwin.xcode
       else null;
     in wrapCCWith {
-      name = assert targetPlatform != buildPlatform; "gcc-cross-wrapper";
+      name = "gcc-cross-wrapper";
       cc = gccFun {
         # copy-pasted
         inherit noSysDirs;
@@ -5596,7 +5596,7 @@ with pkgs;
 
   # Only needed for mingw builds
   gccCrossMingw2 = wrapCCWith {
-    name = assert targetPlatform != buildPlatform; "gcc-cross-wrapper";
+    name = "gcc-cross-wrapper";
     cc = gccCrossStageStatic.gcc or gcc;
     libc = windows.mingw_headers2;
   };
