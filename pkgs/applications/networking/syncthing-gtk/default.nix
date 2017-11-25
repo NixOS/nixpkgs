@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, libnotify, librsvg, psmisc, gtk3, syncthing, wrapGAppsHook, gnome3, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
-  version = "0.9.2.3";
+  version = "0.9.2.7";
   name = "syncthing-gtk-${version}";
 
   src = fetchFromGitHub {
     owner = "syncthing";
     repo = "syncthing-gtk";
     rev = "v${version}";
-    sha256 = "0chl0f0kp6z0z00d1f3xjlicjfr9rzabw39wmjr66fwb5w5hcc42";
+    sha256 = "08k7vkibia85klwjxbnzk67h4pphrizka5v9zxwvvv3cisjiclc2";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -21,7 +21,7 @@ python2Packages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python2Packages; [
-    dateutil pyinotify pygobject3
+    dateutil pyinotify pygobject3 bcrypt
   ];
 
   patches = [

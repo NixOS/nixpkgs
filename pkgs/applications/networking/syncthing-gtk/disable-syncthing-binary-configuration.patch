@@ -18,7 +18,7 @@
                      <property name="yalign">0.51999998092651367</property>
 --- a/syncthing_gtk/configuration.py
 +++ b/syncthing_gtk/configuration.py
-@@ -166,6 +166,8 @@
+@@ -168,6 +168,8 @@
  			yield k
  	
  	def get(self, key):
@@ -49,10 +49,10 @@
  		self["lblDownloadProgress"].set_markup("<b>" + _("Download finished.") + "</b>")
 --- a/syncthing_gtk/wizard.py
 +++ b/syncthing_gtk/wizard.py
-@@ -58,7 +58,6 @@
+@@ -60,7 +60,6 @@
  		self.quit_button.connect("clicked", lambda *a : self.emit("cancel"))
  		# Pages
- 		self.add_page(IntroPage())
+ 		self.add_page(IntroPage(self))
 -		self.add_page(FindDaemonPage())
  		self.add_page(GenerateKeysPage())
  		self.add_page(HttpSettingsPage())
