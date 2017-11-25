@@ -4,6 +4,7 @@
 , removeReferencesTo
 , cpp ? false
 , gfortran ? null
+, fortran2003 ? false
 , zlib ? null
 , szip ? null
 , mpi ? null
@@ -14,14 +15,20 @@
 # (--enable-unsupported could be used to force the build)
 assert !cpp || mpi == null;
 
+# Need a Fortran compiler for Fortran2003 bindings
+assert fortran2003 -> gfortran != null;
+
+# No point splitting version 1.8.18 into multiple outputs.
+# The library /lib/libhdf5.so has a reference to gcc-wrapper
+
 let inherit (stdenv.lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  version = "1.10.1";
+  version = "1.8.19";
   name = "hdf5-${version}";
   src = fetchurl {
-    url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/${name}/src/${name}.tar.bz2";
-    sha256 = "1wpbi15za7kbsvih88kfcxblw412pjndl16x88dgnqr47piy2p4w";
+    url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.8/${name}/src/${name}.tar.bz2";
+    sha256 = "0f3jfbqpaaq21ighi40qzs52nb52kc2d2yjk541rjmsx20b3ih2r" ;
  };
 
   passthru = {
@@ -42,6 +49,7 @@ stdenv.mkDerivation rec {
   configureFlags = []
     ++ optional cpp "--enable-cxx"
     ++ optional (gfortran != null) "--enable-fortran"
+    ++ optional fortran2003 "--enable-fortran2003"
     ++ optional (szip != null) "--with-szlib=${szip}"
     ++ optionals (mpi != null) ["--enable-parallel" "CC=${mpi}/bin/mpicc"]
     ++ optional enableShared "--enable-shared";
