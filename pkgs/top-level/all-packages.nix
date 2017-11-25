@@ -19909,6 +19909,10 @@ with pkgs;
 
   snes9x-gtk = callPackage ../misc/emulators/snes9x-gtk { };
 
+  openmsx = callPackage ../misc/emulators/openmsx {
+    python = python27;
+  };
+
   higan = callPackage ../misc/emulators/higan {
     inherit (gnome2) gtksourceview;
   };
