@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   crossAttrs = {
-    makeFlags = "CROSS_COMPILE=${stdenv.cc.prefix}";
+    makeFlags = "CROSS_COMPILE=${stdenv.cc.targetPrefix}";
   };
 
   meta = with stdenv.lib; {

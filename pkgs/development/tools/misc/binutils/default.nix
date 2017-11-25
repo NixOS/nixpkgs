@@ -11,13 +11,13 @@ let
   version = "2.28.1";
   basename = "binutils-${version}";
   inherit (stdenv.lib) optional optionals optionalString;
-  # The prefix prepended to binary names to allow multiple binuntils on the
+  # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
-  prefix = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
+  targetPrefix = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-";
 in
 
 stdenv.mkDerivation rec {
-  name = prefix + basename;
+  name = targetPrefix + basename;
 
   src = fetchurl {
     url = "mirror://gnu/binutils/${basename}.tar.bz2";
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     then "-Wno-string-plus-int -Wno-deprecated-declarations"
     else "-static-libgcc";
 
-  # TODO(@Ericson2314): Always pass "--target" and always prefix.
+  # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
   configurePlatforms =
     # TODO(@Ericson2314): Figure out what's going wrong with Arm
     if hostPlatform == targetPlatform && targetPlatform.isArm
@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru = {
-    inherit prefix version;
+    inherit targetPrefix version;
   };
 
   meta = with stdenv.lib; {
