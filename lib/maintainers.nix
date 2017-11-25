@@ -120,6 +120,7 @@
   chrisrosset = "Christopher Rosset <chris@rosset.org.uk>";
   christopherpoole = "Christopher Mark Poole <mail@christopherpoole.net>";
   ciil = "Simon Lackerbauer <simon@lackerbauer.com>";
+  ck3d = "Christian Kögler <ck3d@gmx.de>";
   ckampka = "Christian Kampka <christian@kampka.net>";
   ckauhaus = "Christian Kauhaus <christian@kauhaus.de>";
   cko = "Christine Koppelt <christine.koppelt@gmail.com>";
