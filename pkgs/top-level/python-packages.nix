@@ -5879,6 +5879,8 @@ in {
     };
   };
 
+  i3ipc = callPackage ../development/python-modules/i3ipc { };
+
   jdcal = buildPythonPackage rec {
     version = "1.0";
     name = "jdcal-${version}";
