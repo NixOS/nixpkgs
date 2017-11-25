@@ -19236,6 +19236,10 @@ with pkgs;
   # this driver ships with pre-compiled 32-bit binary libraries
   cnijfilter_2_80 = callPackage_i686 ../misc/cups/drivers/cnijfilter_2_80 { };
 
+  cnijfilter_4_00 = callPackage ../misc/cups/drivers/cnijfilter_4_00 {
+    libusb = libusb1;
+  };
+
   cnijfilter2 = callPackage ../misc/cups/drivers/cnijfilter2 {
     libusb = libusb1;
   };
