@@ -15,16 +15,18 @@
 
 with stdenvNoCC.lib;
 
-assert nativeTools -> nativePrefix != "";
-assert !nativeTools ->
-  cc != null && binutils != null && coreutils != null && gnugrep != null;
-assert !(nativeLibc && noLibc);
-assert (noLibc || nativeLibc) == (libc == null);
-
-# For ghdl (the vhdl language provider to gcc) we need zlib in the wrapper.
-assert cc.langVhdl or false -> zlib != null;
-
 let
+  asserts =
+    assert nativeTools -> nativePrefix != "";
+    assert !nativeTools ->
+      cc != null && binutils != null && coreutils != null && gnugrep != null;
+    assert !(nativeLibc && noLibc);
+    assert (noLibc || nativeLibc) == (libc == null);
+
+    # For ghdl (the vhdl language provider to gcc) we need zlib in the wrapper.
+    assert cc.langVhdl or false -> zlib != null;
+    true;
+
   stdenv = stdenvNoCC;
   inherit (stdenv) hostPlatform targetPlatform;
 
@@ -117,7 +119,7 @@ stdenv.mkDerivation {
     '';
   };
 
-  dontBuild = true;
+  dontBuild = asserts;
   dontConfigure = true;
 
   unpackPhase = ''

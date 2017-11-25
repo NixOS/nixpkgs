@@ -56,7 +56,7 @@ with pkgs;
   stringsWithDeps = lib.stringsWithDeps;
 
   ### Evaluating the entire Nixpkgs naively will fail, make failure fast
-  AAAAAASomeThingsFailToEvaluate = throw ''
+  AAAAAASomeThingsFailToEvaluate = removed ''
     Please be informed that this pseudo-package is not the only part of
     Nixpkgs that fails to evaluate. You should not evaluate entire Nixpkgs
     without some special measures to handle failing packages, like those taken
@@ -5565,7 +5565,7 @@ with pkgs;
     stripped = false;
   }));
 
-  gccApple = throw "gccApple is no longer supported";
+  gccApple = removed "gccApple is no longer supported";
 
   libstdcxxHook = makeSetupHook
     { substitutions = { gcc = gcc-unwrapped; }; }
@@ -5581,7 +5581,7 @@ with pkgs;
 
   # The GCC used to build libc for the target platform. Normal gccs will be
   # built with, and use, that cross-compiled libc.
-  gccCrossStageStatic = assert targetPlatform != buildPlatform; let
+  gccCrossStageStatic = let
     libcCross1 =
       if targetPlatform.libc == "msvcrt" then targetPackages.windows.mingw_w64_headers
       else if targetPlatform.libc == "libSystem" then darwin.xcode
@@ -5605,9 +5605,9 @@ with pkgs;
   };
 
   # Only needed for mingw builds
-  gccCrossMingw2 = assert targetPlatform != buildPlatform; wrapCCWith {
+  gccCrossMingw2 = wrapCCWith {
     name = "gcc-cross-wrapper";
-    cc = gccCrossStageStatic.gcc;
+    cc = gccCrossStageStatic.gcc or gcc;
     libc = windows.mingw_headers2;
   };
 
@@ -6831,7 +6831,7 @@ with pkgs;
     samples = true;
   };
 
-  avrgcclibc = throw "avrgcclibs are now separate packages, install avrbinutils, avrgcc and avrlibc";
+  avrgcclibc = removed "avrgcclibs are now separate packages, install avrbinutils, avrgcc and avrlibc";
 
   avrbinutils = callPackage ../development/misc/avr/binutils {};
 
@@ -6893,7 +6893,9 @@ with pkgs;
 
   ### DEVELOPMENT / TOOLS
 
-  activator = throw ''
+  removed = reason: callPackage ({ stdenv }: stdenv.mkDerivation { buildInputs = throw reason; });
+
+  activator = removed ''
     Typesafe Activator was removed in 2017-05-08 as the actual package reaches end of life.
 
     See https://github.com/NixOS/nixpkgs/pull/25616
@@ -8395,7 +8397,7 @@ with pkgs;
     else if name == "libSystem" then darwin.xcode
     else throw "Unknown libc";
 
-  libcCross = assert targetPlatform != buildPlatform; libcCrossChooser targetPlatform.libc;
+  libcCross = libcCrossChooser targetPlatform.libc;
 
   # Only supported on Linux
   glibcLocales = if stdenv.isLinux then callPackage ../development/libraries/glibc/locales.nix { } else null;
@@ -9770,14 +9772,16 @@ with pkgs;
 
   libxml2 = callPackage ../development/libraries/libxml2 {
   };
-  libxml2Python = pkgs.buildEnv { # slightly hacky
-    name = "libxml2+py-${self.libxml2.version}";
-    paths = with libxml2; [ dev bin py ];
-    inherit (libxml2) passthru;
+  libxml2Python =
+    let libxml2Py = self.libxml2.override { pythonSupport = true; };
+  in pkgs.buildEnv { # slightly hacky
+    name = "libxml2+py-${libxml2Py.version}";
+    paths = with libxml2Py; [ dev bin py ];
+    inherit (libxml2Py) passthru;
     # the hook to find catalogs is hidden by buildEnv
     postBuild = ''
       mkdir "$out/nix-support"
-      cp '${libxml2.dev}/nix-support/propagated-native-build-inputs' "$out/nix-support/"
+      cp '${libxml2Py.dev}/nix-support/propagated-native-build-inputs' "$out/nix-support/"
     '';
   };
 
@@ -13139,7 +13143,7 @@ with pkgs;
 
   uclibcCross = lowPrio (callPackage ../os-specific/linux/uclibc {
     gccCross = gccCrossStageStatic;
-    cross = assert targetPlatform != buildPlatform; targetPlatform;
+    cross = targetPlatform;
   });
 
   udev = systemd;
@@ -14113,7 +14117,7 @@ with pkgs;
     enableNetworkManager = config.networking.networkmanager.enable or false;
   };
 
-  clfswm = callPackage ../applications/window-managers/clfswm { };
+  #clfswm = callPackage ../applications/window-managers/clfswm { };
 
   cligh = callPackage ../development/tools/github/cligh {};
 

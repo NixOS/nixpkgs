@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, setuptools_scm, mock }:
+{ stdenv, buildPythonPackage, fetchPypi, setuptools_scm, mock, backportsPostPatch }:
 
 buildPythonPackage rec {
   name = "${pname}-${version}";
@@ -13,6 +13,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ mock ];
 
   buildInputs = [ setuptools_scm ];
+
+  postPatch = backportsPostPatch;
 
   meta = with stdenv.lib; {
     description = "Provides a function install() which makes the mock module";

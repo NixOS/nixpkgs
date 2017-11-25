@@ -4,12 +4,15 @@
 , pythonSupport ? buildPlatform == hostPlatform
 }:
 
-assert pythonSupport -> python2 != null;
-assert pythonSupport -> libxml2.pythonSupport;
-
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
+let
+  asserts =
+    assert pythonSupport -> python2 != null;
+    assert pythonSupport -> libxml2.pythonSupport;
+    [];
+
+in stdenv.mkDerivation rec {
   name = "libxslt-1.1.29";
 
   src = fetchurl {
@@ -34,7 +37,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "dev" "out" "man" "doc" ] ++ stdenv.lib.optional pythonSupport "py";
 
-  buildInputs = [ libxml2.dev ] ++ stdenv.lib.optionals pythonSupport [ libxml2.py python2 ];
+  buildInputs = asserts ++ [ libxml2.dev ] ++
+    optionals pythonSupport [ libxml2.py python2 ];
 
   propagatedBuildInputs = [ findXMLCatalogs ];
 

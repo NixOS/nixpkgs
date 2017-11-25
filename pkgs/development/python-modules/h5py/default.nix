@@ -2,11 +2,13 @@
 , numpy, hdf5, cython, six, pkgconfig
 , mpi4py ? null }:
 
-assert hdf5.mpiSupport -> mpi4py != null && hdf5.mpi == mpi4py.mpi;
-
 with stdenv.lib;
 
 let
+  asserts =
+    assert hdf5.mpiSupport -> mpi4py != null && hdf5.mpi == mpi4py.mpi;
+    [];
+
   mpi = hdf5.mpi;
   mpiSupport = hdf5.mpiSupport;
 
@@ -29,7 +31,7 @@ in buildPythonPackage rec {
   preBuild = if mpiSupport then "export CC=${mpi}/bin/mpicc" else "";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ hdf5 cython ]
+  buildInputs = asserts ++ [ hdf5 cython ]
     ++ optional mpiSupport mpi
     ;
   propagatedBuildInputs = [ numpy six]

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libspotify, alsaLib, readline, pkgconfig, apiKey, unzip, gnused }:
+{ stdenv, fetchurl, libspotify, alsaLib, readline, pkgconfig, apiKey, unzip, gnused, removed }:
 
 let
   version = "12.1.51";
@@ -58,7 +58,7 @@ else stdenv.mkDerivation {
 
   passthru = {
     samples = if apiKey == null
-      then throw ''
+      then removed ''
         Please visit ${libspotify.meta.homepage} to get an api key then set config.libspotify.apiKey accordingly
       '' else stdenv.mkDerivation {
         name = "libspotify-samples-${version}";

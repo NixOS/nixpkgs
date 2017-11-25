@@ -4,6 +4,7 @@
 , setuptools_scm
 # , backports
 , python
+, backportsPostPatch
 }:
 
 buildPythonPackage rec {
@@ -24,6 +25,8 @@ buildPythonPackage rec {
   checkPhase = ''
     ${python.interpreter} -m unittest discover tests
   '';
+
+  postPatch = backportsPostPatch;
 
   meta = with stdenv.lib; {
     description = "Backports of new features in Python’s weakref module";

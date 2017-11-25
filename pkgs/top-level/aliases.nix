@@ -133,7 +133,7 @@ mapAliases (rec {
   rdmd = dtools;  # added 2017-08-19
   robomongo = robo3t; #added 2017-09-28
   rssglx = rss-glx; #added 2015-03-25
-  rubygems = throw "deprecated 2016-03-02: rubygems is now bundled with ruby";
+  rubygems = pkgs.removed "deprecated 2016-03-02: rubygems is now bundled with ruby";
   rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
   samsungUnifiedLinuxDriver = samsung-unified-linux-driver; # added 2016-01-25
   saneBackends = sane-backends; # added 2016-01-02
