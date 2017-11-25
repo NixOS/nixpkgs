@@ -18,50 +18,47 @@ stdenv.mkDerivation rec {
 
   patches = [ ./detect_serverbindir.patch ];
 
-  buildInputs =
-    [ intltool pkgconfig glib udev libusb1 cups xmlto
-      libxml2 docbook_xml_dtd_412 docbook_xsl desktop_file_utils
-      pythonPackages.python pythonPackages.wrapPython
-      libnotify gobjectIntrospection gdk_pixbuf pango atk
-      libgnome_keyring3
-    ];
+  buildInputs = [
+    intltool pkgconfig glib udev libusb1 cups xmlto
+    libxml2 docbook_xml_dtd_412 docbook_xsl desktop_file_utils
+
+    libnotify gobjectIntrospection gdk_pixbuf pango atk
+    libgnome_keyring3
+
+    (pythonPackages.python.withPackages (ps: with ps; [
+      pycups pycurl dbus-python pygobject3 requests pycairo
+    ]))
+  ];
 
   nativeBuildInputs = [ wrapGAppsHook ];
 
-  pythonPath = with pythonPackages;
-    [ pycups pycurl dbus-python pygobject3 requests pycairo pythonPackages.pycurl ];
-
-  configureFlags =
-    [ "--with-udev-rules"
-      "--with-udevdir=$(out)/etc/udev"
-      "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-    ];
+  configureFlags = [
+    "--with-udev-rules"
+    "--with-udevdir=$(out)/etc/udev"
+    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
+  ];
 
   stripDebugList = [ "bin" "lib" "etc/udev" ];
 
-  postInstall =
-    ''
-      buildPythonPath "$out $pythonPath"
-      gappsWrapperArgs+=(
-        --prefix PATH : "$program_PATH"
-        --set CUPS_DATADIR "${cups-filters}/share/cups"
-      )
+  postInstall = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "$program_PATH"
+      --prefix PYTHONPATH : "$out/${pythonPackages.python.sitePackages}"
+      --set CUPS_DATADIR "${cups-filters}/share/cups"
+    )
 
-      find $out/share/system-config-printer -name \*.py -type f -perm -0100 -print0 | while read -d "" f; do
-        patchPythonScript "$f"
-      done
+    # The below line will be unneeded when the next upstream release arrives.
+    sed -i -e "s|/usr/local/bin|$out/bin|" \
+      "$out/share/dbus-1/services/org.fedoraproject.Config.Printing.service"
 
-      # The below line will be unneeded when the next upstream release arrives.
-      sed -i -e "s|/usr/local/bin|$out/bin|" "$out/share/dbus-1/services/org.fedoraproject.Config.Printing.service"
+    # Manually expand literal "$(out)", which have failed to expand
+    sed -e "s|ExecStart=\$(out)|ExecStart=$out|" \
+      -i "$out/etc/systemd/system/configure-printer@.service"
+  '';
 
-      # Manually expand literal "$(out)", which have failed to expand
-      sed -e "s|ExecStart=\$(out)|ExecStart=$out|" \
-          -i "$out/etc/systemd/system/configure-printer@.service"
-    '';
-
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://cyberelk.net/tim/software/system-config-printer/;
-    platforms = stdenv.lib.platforms.linux;
-    license = stdenv.lib.licenses.gpl2;
+    platforms = platforms.linux;
+    license = licenses.gpl2;
   };
 }
