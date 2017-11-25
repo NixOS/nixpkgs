@@ -155,13 +155,11 @@ stdenv.mkDerivation {
       unset ldInner
     '') + ''
 
-      if [ -e ${bintools_bin}/bin/${targetPrefix}ld.gold ]; then
-        wrap ${targetPrefix}ld.gold ${./ld-wrapper.sh} ${bintools_bin}/bin/${targetPrefix}ld.gold
-      fi
-
-      if [ -e ${bintools_bin}/bin/ld.bfd ]; then
-        wrap ${targetPrefix}ld.bfd ${./ld-wrapper.sh} ${bintools_bin}/bin/${targetPrefix}ld.bfd
-      fi
+      for variant in ld.gold ld.bfd ld.lld; do
+        local underlying=$ldPath/${targetPrefix}$variant
+        [[ -e "$underlying" ]] || continue
+        wrap ${targetPrefix}$variant ${./ld-wrapper.sh} $underlying
+      done
 
       set +u
     '';
