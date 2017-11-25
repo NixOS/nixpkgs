@@ -655,13 +655,13 @@ let
 
   vicious = stdenv.mkDerivation rec {
     name = "vicious-${version}";
-    version = "2.2.0";
+    version = "2.3.0";
 
     src = fetchFromGitHub {
       owner = "Mic92";
       repo = "vicious";
       rev = "v${version}";
-      sha256 = "0dhy0vklrhqrnmxb9pyqbfvkwwy86lwysk93pzg1j1zwprx366fj";
+      sha256 = "1mrd8c46ljilag8dljvnagaxnjnab8bmg9mcbnwvrivgjzgf6a1k";
     };
 
     buildInputs = [ lua ];
