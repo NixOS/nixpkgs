@@ -1,4 +1,4 @@
-/* Generic builder for Python packages that come without a setup.py. */
+# Generic builder.
 
 { lib
 , python
@@ -6,12 +6,12 @@
 , setuptools
 , unzip
 , ensureNewerSourcesHook
+# Whether the derivation provides a Python module or not.
+, pythonModule
+, namePrefix
 }:
 
 { name ? "${attrs.pname}-${attrs.version}"
-
-# by default prefix `name` e.g. "python3.3-${name}"
-, namePrefix ? python.libPrefix + "-"
 
 # Dependencies for building the package
 , buildInputs ? []
@@ -54,18 +54,21 @@ if disabled
 then throw "${name} not supported for interpreter ${python.executable}"
 else
 
-python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "checkInputs"] // {
+python.stdenv.mkDerivation (builtins.removeAttrs attrs [
+    "disabled" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts"
+  ] // {
 
   name = namePrefix + name;
 
-  inherit pythonPath;
-
-  buildInputs = [ wrapPython ] ++ buildInputs ++ pythonPath
-    ++ [ (ensureNewerSourcesHook { year = "1980"; }) ]
+  buildInputs = ([ wrapPython (ensureNewerSourcesHook { year = "1980"; }) ]
     ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip)
-    ++ lib.optionals doCheck checkInputs;
+    ++ lib.optionals doCheck checkInputs
+    ++ lib.optional catchConflicts setuptools # If we nog longer propagate setuptools
+    ++ buildInputs
+    ++ pythonPath
+  );
 
-  # propagate python/setuptools to active setup-hook in nix-shell
+  # Propagate python and setuptools. We should stop propagating setuptools.
   propagatedBuildInputs = propagatedBuildInputs ++ [ python setuptools ];
 
   # Python packages don't have a checkPhase, only an installCheckPhase
@@ -83,15 +86,12 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs ["disabled" "checkInputs"
 
   passthru = {
     inherit python; # The python interpreter
+    inherit pythonModule;
   } // passthru;
 
-  meta = with lib.maintainers; {
+  meta = {
     # default to python's platforms
     platforms = python.meta.platforms;
-  } // meta // {
-    # add extra maintainer(s) to every package
-    maintainers = (meta.maintainers or []) ++ [ chaoflow ];
-    # a marker for release utilities to discover python packages
     isBuildPythonPackage = python.meta.platforms;
-  };
+  } // meta;
 })

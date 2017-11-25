@@ -31,10 +31,9 @@ let
 
   callPackage = pkgs.newScope self;
 
-  bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { };
+  namePrefix = python.libPrefix + "-";
 
-  mkPythonDerivation = makeOverridable( callPackage ../development/interpreters/python/mk-python-derivation.nix {
-  });
+  bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { };
 
   # Derivations built with `buildPythonPackage` can already be overriden with `override`, `overrideAttrs`, and `overrideDerivation`.
   # This function introduces `overridePythonAttrs` and it overrides the call to `buildPythonPackage`.
@@ -52,13 +51,20 @@ let
       }
       else ff;
 
-  buildPythonPackage = makeOverridablePythonPackage (callPackage ../development/interpreters/python/build-python-package.nix {
-    inherit mkPythonDerivation;
+  buildPythonPackage = makeOverridablePythonPackage ( makeOverridable (callPackage ../development/interpreters/python/build-python-package.nix {
     inherit bootstrapped-pip;
     flit = self.flit;
-  });
+    # We want Python libraries to be named like e.g. "python3.6-${name}"
+    inherit namePrefix;
+    pythonModule = python;
+  }));
 
-  buildPythonApplication = args: buildPythonPackage ({namePrefix="";} // args );
+  buildPythonApplication = makeOverridablePythonPackage ( makeOverridable (callPackage ../development/interpreters/python/build-python-package.nix {
+    inherit bootstrapped-pip;
+    flit = self.flit;
+    namePrefix = "";
+    pythonModule = false;
+  }));
 
   graphiteVersion = "1.0.2";
 
@@ -80,10 +86,40 @@ let
         else throw "Unsupported kind ${kind}");
     in fetcher (builtins.removeAttrs attrs ["format"]) );
 
+  # Check whether a derivation provides a Python module.
+  hasPythonModule = drv: (hasAttr "pythonModule" drv) && ( (getAttr "pythonModule" drv) == python);
+
+  # Get list of required Python modules given a list of derivations.
+  requiredPythonModules = drvs: let
+    filterNull = list: filter (x: !isNull x) list;
+    conditionalGetRecurse = attr: condition: drv: let f = conditionalGetRecurse attr condition; in
+      (if (condition drv) then unique [drv]++(concatMap f (filterNull(getAttr attr drv))) else []);
+    _required = drv: conditionalGetRecurse "propagatedBuildInputs" hasPythonModule drv;
+  in [python] ++ (unique (concatMap _required (filterNull drvs)));
+
+  # Create a PYTHONPATH from a list of derivations. This function recurses into the items to find derivations
+  # providing Python modules.
+  makePythonPath = drvs: stdenv.lib.makeSearchPath python.sitePackages (requiredPythonModules drvs);
+
+  # Convert derivation to a Python module.
+  toPythonModule = drv:
+    drv.overrideAttrs( oldAttrs: {
+      # Use passthru in order to prevent rebuilds when possible.
+      passthru = (oldAttrs.passthru or {})// {
+        name = namePrefix + oldAttrs.name;
+        pythonModule = python;
+        pythonPath = [ ]; # Deprecated, for compatibility.
+      };
+    });
+
+  disabledIf = x: drv:
+    if x then throw "${removePrefix namePrefix (drv.pname or drv.name)} not supported for interpreter ${python.executable}" else drv;
+
 in {
 
-  inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
+  inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k buildPythonPackage buildPythonApplication;
   inherit fetchPypi callPackage;
+  inherit hasPythonModule requiredPythonModules makePythonPath disabledIf;
 
   # helpers
 
@@ -1336,10 +1372,10 @@ in {
 
   # Build boost for this specific Python version
   # TODO: use separate output for libboost_python.so
-  boost = pkgs.boost.override {
+  boost = toPythonModule (pkgs.boost.override {
     inherit (self) python numpy;
     enablePython = true;
-  };
+  });
 
   buttersink = buildPythonPackage rec {
     name = "buttersink-0.6.8";
@@ -3200,15 +3236,15 @@ in {
     propagatedBuildInputs = with self; [ pyusb ];
   };
 
-  opencv = pkgs.opencv.override {
+  opencv = toPythonModule (pkgs.opencv.override {
     enablePython = true;
     pythonPackages = self;
-  };
+  });
 
-  opencv3 = pkgs.opencv3.override {
+  opencv3 = toPythonModule (pkgs.opencv3.override {
     enablePython = true;
     pythonPackages = self;
-  };
+  });
 
   openidc-client = callPackage ../development/python-modules/openidc-client/default.nix {};
 
@@ -4736,12 +4772,10 @@ in {
   easy-thumbnails = callPackage ../development/python-modules/easy-thumbnails { };
 
   eccodes = if (isPy27) then
-      (pkgs.eccodes.overrideAttrs (oldattrs: {
-    name = "${python.libPrefix}-" + oldattrs.name;
-  })).override {
-    enablePython = true;
-    pythonPackages = self;
-  } else throw "eccodes not supported for interpreter ${python.executable}";
+    toPythonModule (pkgs.eccodes.override {
+      enablePython = true;
+      pythonPackages = self;
+    }) else throw "eccodes not supported for interpreter ${python.executable}";
 
   EditorConfig = buildPythonPackage rec {
     name = "EditorConfig-${version}";
@@ -8712,10 +8746,10 @@ in {
 
   folium = callPackage ../development/python-modules/folium { };
 
-  fontforge = pkgs.fontforge.override {
+  fontforge = toPythonModule (pkgs.fontforge.override {
     withPython = true;
     inherit python;
-  };
+  });
 
   fonttools = callPackage ../development/python-modules/fonttools { };
 
@@ -8889,11 +8923,9 @@ in {
     };
   };
 
-  gdal = (pkgs.gdal.overrideDerivation (oldattrs: {
-    name = "${python.libPrefix}-" + oldattrs.name;
-  })).override {
+  gdal = toPythonModule (pkgs.gdal.override {
     pythonPackages = self;
-  };
+  });
 
   gdrivefs = buildPythonPackage rec {
     version = "0.14.8";
@@ -9265,13 +9297,11 @@ in {
     };
   };
 
-  grib-api = if (isPy27) then
-      (pkgs.grib-api.overrideAttrs (oldattrs: {
-    name = "${python.libPrefix}-" + oldattrs.name;
-  })).override {
-    enablePython = true;
-    pythonPackages = self;
-  } else throw "grib-api not supported for interpreter ${python.executable}";
+  grib-api = if (isPy27) then toPythonModule
+    (pkgs.grib-api.override {
+      enablePython = true;
+      pythonPackages = self;
+    }) else throw "grib-api not supported for interpreter ${python.executable}";
 
   gspread = buildPythonPackage rec {
     version = "0.2.3";
@@ -10374,13 +10404,13 @@ in {
   };
 
   libplist = if isPy3k then throw "libplist not supported for interpreter ${python.executable}" else
-    (pkgs.libplist.override{python2Packages=self; }).py;
+    (toPythonModule (pkgs.libplist.override{python2Packages=self; })).py;
 
   libxml2 = if isPy3k then throw "libxml2 not supported for interpreter ${python.executable}" else
-    (pkgs.libxml2.override{pythonSupport=true; python2=python;}).py;
+    (toPythonModule (pkgs.libxml2.override{pythonSupport=true; python2=python;})).py;
 
   libxslt = if isPy3k then throw "libxslt not supported for interpreter ${python.executable}" else
-    (pkgs.libxslt.override{pythonSupport=true; python2=python; inherit (self) libxml2;}).py;
+    (toPythonModule (pkgs.libxslt.override{pythonSupport=true; python2=python; inherit (self) libxml2;})).py;
 
   limnoria = buildPythonPackage rec {
     name = "limnoria-${version}";
@@ -17173,6 +17203,10 @@ in {
 
   readme_renderer = callPackage ../development/python-modules/readme_renderer { };
 
+  rivet = disabledIf isPy3k (toPythonModule (pkgs.rivet.override {
+    python2 = python;
+  }));
+
   rjsmin = callPackage ../development/python-modules/rjsmin { };
 
   pysolr = buildPythonPackage rec {
@@ -17444,7 +17478,7 @@ in {
 
   rply = callPackage ../development/python-modules/rply/default.nix {};
 
-  rpm = (pkgs.rpm.override{inherit python;});
+  rpm = toPythonModule (pkgs.rpm.override{inherit python;});
 
   rpmfluff = callPackage ../development/python-modules/rpmfluff {};
 
@@ -22093,7 +22127,7 @@ EOF
   };
 
   # For backwards compatibility. Please use nixpkgs.udiskie instead.
-  udiskie = pkgs.udiskie.override { pythonPackages = self; };
+  udiskie = toPythonModule (pkgs.udiskie.override { pythonPackages = self; });
 
   # Should be bumped along with EFL!
   pythonefl = buildPythonPackage rec {
@@ -24430,7 +24464,7 @@ EOF
   zeep = callPackage ../development/python-modules/zeep { };
 
   zeitgeist = if isPy3k then throw "zeitgeist not supported for interpreter ${python.executable}" else
-    (pkgs.zeitgeist.override{python2Packages=self;}).py;
+    (toPythonModule (pkgs.zeitgeist.override{python2Packages=self;})).py;
 
   zeroconf = callPackage ../development/python-modules/zeroconf { };
 
