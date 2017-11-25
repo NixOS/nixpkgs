@@ -400,6 +400,7 @@
   mbakke = "Marius Bakke <mbakke@fastmail.com>";
   mbbx6spp = "Susan Potter <me@susanpotter.net>";
   mbe = "Brandon Edens <brandonedens@gmail.com>";
+  mbode = "Maximilian Bode <maxbode@gmail.com>";
   mboes = "Mathieu Boespflug <mboes@tweag.net>";
   mbrgm = "Marius Bergmann <marius@yeai.de>";
   mcmtroffaes = "Matthias C. M. Troffaes <matthias.troffaes@gmail.com>";
