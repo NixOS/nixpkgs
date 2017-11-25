@@ -488,6 +488,7 @@
   patternspandemic = "Brad Christensen <patternspandemic@live.com>";
   pawelpacana = "Paweł Pacana <pawel.pacana@gmail.com>";
   pbogdan = "Piotr Bogdan <ppbogdan@gmail.com>";
+  pcarrier = "Pierre Carrier <pc@rrier.ca>";
   periklis = "theopompos@gmail.com";
   pesterhazy = "Paulus Esterhazy <pesterhazy@gmail.com>";
   peterhoeg = "Peter Hoeg <peter@hoeg.com>";
