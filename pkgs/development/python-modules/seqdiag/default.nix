@@ -3,11 +3,13 @@
 }:
 
 buildPythonPackage rec {
-  name = "seqdiag-0.9.4";
+  pname = "seqdiag";
+  version = "0.9.5";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/s/seqdiag/${name}.tar.gz";
-    sha256 = "1qa7d0m1wahvmrj95rxkb6128cbwd4w3gy8gbzncls66h46bifiz";
+    sha256 = "994402cb19fef77ee113d18810aa397a7290553cda5f900be2bb44e2c7742657";
   };
 
   buildInputs = [ pep8 nose unittest2 docutils ];

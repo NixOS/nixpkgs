@@ -4,7 +4,7 @@
 buildPythonPackage rec {
   pname = "python-fedora";
   version = "0.9.0";
-  name = "python-fedora-${version}";
+  name = pname + "-" + version;
 
   src = fetchPypi {
     inherit pname version;

@@ -201,7 +201,7 @@ in stdenv.mkDerivation {
     in rec {
       inherit libPrefix sitePackages x11Support hasDistutilsCxxPatch;
       executable = libPrefix;
-      buildEnv = callPackage ../../wrapper.nix { python = self; };
+      buildEnv = callPackage ../../wrapper.nix { python = self; inherit (pythonPackages) requiredPythonModules; };
       withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};
       pkgs = pythonPackages;
       isPy2 = true;

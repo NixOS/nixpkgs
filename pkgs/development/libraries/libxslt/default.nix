@@ -10,7 +10,9 @@ assert pythonSupport -> libxml2.pythonSupport;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "libxslt-1.1.29";
+  pname = "libxslt";
+  version = "1.1.29";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "http://xmlsoft.org/sources/${name}.tar.gz";
@@ -51,7 +53,7 @@ stdenv.mkDerivation rec {
     moveToOutput share/man/man1 "$bin"
   '' + optionalString pythonSupport ''
     mkdir -p $py/nix-support
-    echo ${libxml2.py} >> $py/nix-support/propagated-native-build-inputs
+    echo ${libxml2.py} >> $py/nix-support/propagated-build-inputs
     moveToOutput lib/python2.7 "$py"
   '';
 
