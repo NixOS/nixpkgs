@@ -3,12 +3,12 @@
 
 buildPythonPackage rec {
   pname = "pip-tools";
-  version = "1.10.1";
-  name = "pip-tools-${version}";
+  version = "1.10.2";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/p/pip-tools/${name}.tar.gz";
-    sha256 = "37b85d69ceed97337aeefb3e52e41fe0884a505c874757a5bbaa58d92b533ce0";
+    sha256 = "d381c7249eb48350cc49447cc106df3d90e9e806b13caaede602c1cd38f61b37";
   };
 
   LC_ALL = "en_US.UTF-8";

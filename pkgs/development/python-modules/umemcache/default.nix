@@ -1,9 +1,10 @@
 { stdenv, buildPythonPackage, isPy3k, fetchurl }:
 
 buildPythonPackage rec {
-  name = "umemcache-${version}";
+  pname = "umemcache";
   version = "1.6.3";
   disabled = isPy3k;
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/u/umemcache/${name}.zip";
