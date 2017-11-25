@@ -26,7 +26,7 @@ in {
     services.fwupd = {
       enable = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = ''
           Whether to enable fwupd, a DBus service that allows
           applications to update firmware.
