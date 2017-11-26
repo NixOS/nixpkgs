@@ -219,6 +219,9 @@ in {
 
         { target = "pulse/daemon.conf";
           source = writeText "daemon.conf" (lib.generators.toKeyValue {} cfg.daemon.config); }
+
+        { target = "openal/alsoft.conf";
+          source = writeText "alsoft.conf" "drivers=pulse"; }
       ];
 
       # Allow PulseAudio to get realtime priority using rtkit.
