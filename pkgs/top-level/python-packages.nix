@@ -3933,6 +3933,8 @@ in {
 
   pytest-expect = callPackage ../development/python-modules/pytest-expect { };
 
+  pytest-helpers-namespace = callPackage ../development/python-modules/pytest_helpers_namespace { };
+
   pytest-virtualenv = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "pytest-virtualenv";
