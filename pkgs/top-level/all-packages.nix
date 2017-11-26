@@ -2823,6 +2823,8 @@ with pkgs;
 
   jade = callPackage ../tools/text/sgml/jade { };
 
+  jazzy = callPackage ../development/tools/jazzy { };
+
   jd = callPackage ../development/tools/jd { };
 
   jd-gui = callPackage_i686 ../tools/security/jd-gui { };
