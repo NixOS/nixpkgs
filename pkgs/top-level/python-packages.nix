@@ -14412,6 +14412,8 @@ in {
     };
   };
 
+  pdfrw = callPackage ../development/python-modules/pdfrw { };
+
   pg8000 = buildPythonPackage rec {
     name = "pg8000-1.10.1";
 
