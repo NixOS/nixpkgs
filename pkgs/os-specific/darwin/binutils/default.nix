@@ -17,6 +17,7 @@ in
 # TODO loop over targetPrefixed binaries too
 stdenv.mkDerivation {
   name = "${targetPrefix}cctools-binutils-darwin";
+  outputs = [ "out" "info" "man" ];
   buildCommand = ''
     mkdir -p $out/bin $out/include
 
@@ -37,10 +38,16 @@ stdenv.mkDerivation {
       ln -sf "${cctools}/bin/$i" "$out/bin/$i"
     done
 
-    # FIXME: this will give us incorrect man pages for bits of cctools
     ln -s ${binutils-raw.bintools.out}/share $out/share
 
     ln -s ${cctools}/libexec $out/libexec
+
+    mkdir -p "$info/nix-support" "$man/nix-support"
+    printWords ${binutils-raw.bintools.info} \
+      >> $info/nix-support/propagated-build-inputs
+    # FIXME: cctools missing man pages
+    printWords ${binutils-raw.bintools.man} \
+      >> $man/nix-support/propagated-build-inputs
   '';
 
   passthru = {
