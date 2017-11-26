@@ -16955,6 +16955,8 @@ in {
     };
   };
 
+  ruffus = callPackage ../development/python-modules/ruffus { };
+
   qscintilla = disabledIf (isPy3k || isPyPy)
     (buildPythonPackage rec {
       # TODO: Qt5 support
