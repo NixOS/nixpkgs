@@ -56,6 +56,7 @@ let
       serviceConfig = {
         ExecStart = "${samba}/sbin/${appName} ${args}";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
+        LimitNOFILE = 16384;
         Type = "notify";
       };
 
