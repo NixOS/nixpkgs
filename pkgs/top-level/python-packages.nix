@@ -3933,6 +3933,8 @@ in {
 
   pytest-expect = callPackage ../development/python-modules/pytest-expect { };
 
+  pytest-helpers-namespace = callPackage ../development/python-modules/pytest_helpers_namespace { };
+
   pytest-virtualenv = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "pytest-virtualenv";
@@ -9709,6 +9711,7 @@ in {
     };
   };
 
+  img2pdf = callPackage ../development/python-modules/img2pdf { };
 
   inflection = buildPythonPackage rec {
      version = "0.3.1";
@@ -14410,6 +14413,8 @@ in {
     };
   };
 
+  pdfrw = callPackage ../development/python-modules/pdfrw { };
+
   pg8000 = buildPythonPackage rec {
     name = "pg8000-1.10.1";
 
@@ -16954,6 +16959,8 @@ in {
       license = licenses.mit;
     };
   };
+
+  ruffus = callPackage ../development/python-modules/ruffus { };
 
   qscintilla = disabledIf (isPy3k || isPyPy)
     (buildPythonPackage rec {
