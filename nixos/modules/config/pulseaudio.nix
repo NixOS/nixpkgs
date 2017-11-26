@@ -222,6 +222,9 @@ in {
 
         { target = "openal/alsoft.conf";
           source = writeText "alsoft.conf" "drivers=pulse"; }
+
+        { target = "libao.conf";
+          source = writeText "libao.conf" "default_driver=pulse"; }
       ];
 
       # Allow PulseAudio to get realtime priority using rtkit.
