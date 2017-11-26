@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Web-based kanban board";
-    license = licenses.osl;
+    license = licenses.osl3;
     homepage = http://restya.com;
     maintainers = with maintainers; [ tstrobel ];
     platforms = platforms.linux;
