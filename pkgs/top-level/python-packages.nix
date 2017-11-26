@@ -9711,6 +9711,7 @@ in {
     };
   };
 
+  img2pdf = callPackage ../development/python-modules/img2pdf { };
 
   inflection = buildPythonPackage rec {
      version = "0.3.1";
