@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Optimized OpenType builder and inspector";
     homepage = https://github.com/caryll/otfcc;
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = with maintainers; [ jfrankenau ttuegel ];
   };
 
