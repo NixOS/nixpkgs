@@ -28,7 +28,6 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
           optLevel = if release then 3 else 0;
           rustcOpts = (if release then "-C opt-level=3" else "-C debuginfo=2");
           rustcMeta = "-C metadata=${metadata} -C extra-filename=-${metadata}";
-          crateName_ = lib.strings.replaceStrings ["-"] ["_"] crateName;
           version_ = lib.splitString "-" crateVersion;
           versionPre = if lib.tail version_ == [] then "" else builtins.elemAt version_ 1;
           version = lib.splitString "." (lib.head version_);
@@ -109,15 +108,19 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
 
       build_bin() {
         crate_name=$1
+        crate_name_=$(echo $crate_name | sed -e "s/-/_/g")
 	main_file=""
 	if [ ! -z $2 ]; then
           main_file=$2
 	fi
 	echo_build_heading $@
-	noisily rustc --crate-name $crate_name $main_file --crate-type bin ${rustcOpts}\
+	noisily rustc --crate-name $crate_name_ $main_file --crate-type bin ${rustcOpts}\
           ${crateFeatures} --out-dir target/bin --emit=dep-info,link -L dependency=target/deps \
           $LINK ${deps}$EXTRA_LIB --cap-lints allow \
           $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES --color ${colors}
+        if [ "$crate_name_" -ne "$crate_name"]; then
+          mv target/bin/$crate_name_ target/bin/$crate_name
+        fi
       }
 
       runHook preBuild
@@ -257,7 +260,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
          fi
       done
       if [[ (-z "${crateBin}") && (-e src/main.rs) ]]; then
-         build_bin ${crateName_} src/main.rs
+         build_bin ${crateName} src/main.rs
       fi
       # Remove object files to avoid "wrong ELF type"
       find target -type f -name "*.o" -print0 | xargs -0 rm -f
