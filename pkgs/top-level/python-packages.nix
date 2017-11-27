@@ -9709,25 +9709,6 @@ in {
     };
   };
 
-
-  inflection = buildPythonPackage rec {
-     version = "0.3.1";
-     name = "inflection-${version}";
-
-     src = pkgs.fetchurl {
-       url= "mirror://pypi/i/inflection/${name}.tar.gz";
-       sha256 = "1jhnxgnw8y3mbzjssixh6qkc7a3afc4fygajhqrqalnilyvpzshq";
-     };
-
-     disabled = isPy3k;
-
-     meta = {
-       homepage = https://github.com/jpvanhal/inflection;
-       description = "A port of Ruby on Rails inflector to Python";
-       maintainers = with maintainers; [ NikolaMandic ];
-     };
-  };
-
   influxdb = buildPythonPackage rec {
     name = "influxdb-4.0.0";
 
@@ -24456,6 +24437,9 @@ EOF
   ephem = callPackage ../development/python-modules/ephem { };
 
   jsondate = callPackage ../development/python-modules/jsondate { };
+
+  inflection = callPackage ../development/python-modules/inflection { };
+
 });
 
 in fix' (extends overrides packages)
