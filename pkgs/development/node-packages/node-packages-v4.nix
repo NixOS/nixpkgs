@@ -2119,13 +2119,13 @@ let
         sha1 = "c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79";
       };
     };
-    "ajv-5.4.0" = {
+    "ajv-5.5.0" = {
       name = "ajv";
       packageName = "ajv";
-      version = "5.4.0";
+      version = "5.5.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/ajv/-/ajv-5.4.0.tgz";
-        sha1 = "32d1cf08dbc80c432f426f12e10b2511f6b46474";
+        url = "https://registry.npmjs.org/ajv/-/ajv-5.5.0.tgz";
+        sha1 = "eb2840746e9dc48bd5e063a36e3fd400c5eab5a9";
       };
     };
     "har-schema-2.0.0" = {
@@ -4045,13 +4045,13 @@ let
         sha1 = "6373db76909fe570e08d73583365ed828a74eeeb";
       };
     };
-    "commander-2.12.0" = {
+    "commander-2.12.1" = {
       name = "commander";
       packageName = "commander";
-      version = "2.12.0";
+      version = "2.12.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/commander/-/commander-2.12.0.tgz";
-        sha512 = "3drb1rxa9qbsn65n8gbwfj96afi8kv3kh9z30mm1x0hssz84kj7akkksd6qpbikcnpnmrm9fpxvqy5w6jw1xj9q4z3ijligiddjcl6h";
+        url = "https://registry.npmjs.org/commander/-/commander-2.12.1.tgz";
+        sha512 = "36cb2mrf9piidjbqiz8krwx7r9hikgirjxzfrbyk3hd39xpmg489lia9d3cmzci80sx99428hg960sz9j5b72fn7pi928z5289ln8rw";
       };
     };
     "is-my-json-valid-2.16.1" = {
@@ -4061,15 +4061,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/is-my-json-valid/-/is-my-json-valid-2.16.1.tgz";
         sha512 = "2wmvqb2vfzjbnd2znxkg4sqpksxb9mi1lbr4r5zv535ykxzfv8dbnafra1lhk415wrbg9r1lfhyimcw5xfj3k4ry7inbmcjlnr4zj51";
-      };
-    };
-    "@types/node-7.0.48" = {
-      name = "_at_types_slash_node";
-      packageName = "@types/node";
-      version = "7.0.48";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/@types/node/-/node-7.0.48.tgz";
-        sha512 = "3bjps45216v1znjwv914yqhiya6y0gxra26zk80bv49rzsqf84kxv7ilrzm7j6wj5895957a0jbqwsdy78ylfbx61v3w11pydlmgf9c";
       };
     };
     "generate-function-2.0.0" = {
@@ -4844,7 +4835,7 @@ in
           })
           (sources."har-validator-5.0.3" // {
             dependencies = [
-              (sources."ajv-5.4.0" // {
+              (sources."ajv-5.5.0" // {
                 dependencies = [
                   sources."co-4.6.0"
                   sources."fast-deep-equal-1.0.0"
@@ -6257,11 +6248,7 @@ in
                   sources."supports-color-2.0.0"
                 ];
               })
-              (sources."commander-2.12.0" // {
-                dependencies = [
-                  sources."@types/node-7.0.48"
-                ];
-              })
+              sources."commander-2.12.1"
               (sources."is-my-json-valid-2.16.1" // {
                 dependencies = [
                   sources."generate-function-2.0.0"
