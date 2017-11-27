@@ -117,7 +117,7 @@ let
         -exec sed '1i#line 1 "{}"' -i '{}' \;
     )
   '' + optionalString (hostPlatform.libc == "msvcrt") ''
-    ${stdenv.cc.prefix}ranlib "$out/lib/"*.a
+    ${stdenv.cc.targetPrefix}ranlib "$out/lib/"*.a
   '';
 
 in

@@ -5,9 +5,9 @@
 }:
 
 let
-  # The prefix prepended to binary names to allow multiple binuntils on the
+  # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
-  prefix = stdenv.lib.optionalString
+  targetPrefix = stdenv.lib.optionalString
     (targetPlatform != hostPlatform)
     "${targetPlatform.config}-";
 in
@@ -19,7 +19,7 @@ assert (!hostPlatform.isDarwin) -> (maloader != null && xctoolchain != null);
 
 let
   baseParams = rec {
-    name = "${prefix}cctools-port-${version}";
+    name = "${targetPrefix}cctools-port-${version}";
     version = "895";
 
     src = fetchFromGitHub {
@@ -49,7 +49,7 @@ let
 
     enableParallelBuilding = true;
 
-    # TODO(@Ericson2314): Always pass "--target" and always prefix.
+    # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
     configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
     configureFlags = stdenv.lib.optionals (!stdenv.isDarwin) [
       "CXXFLAGS=-I${libcxx}/include/c++/v1"
@@ -113,7 +113,7 @@ let
       '';
 
     passthru = {
-      inherit prefix;
+      inherit targetPrefix;
     };
 
     meta = {
