@@ -132,13 +132,19 @@ let
 
     # preConfigure = buildConfigPhase;
 
+
+    # we are in $sourceRoot
     configurePhase = let
 
         # if configfile is valid file
-        linkConfig = if (true) then ''ln -sv ${configfile} $buildRoot/.config
-        '' else ''
-          # TODO generate CONFIG !!!
-          '';
+        linkConfig = if (configfile) then ''
+          ln -sv ${configfile} $buildRoot/.config
+        '' else
+        configDrv.buildConfigCommands
+        # ''
+        #   # TODO generate CONFIG !!!
+        #   ''
+          ;
 
       in ''
         # if [ -z "$buildRoot" ]; then

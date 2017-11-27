@@ -29,6 +29,9 @@ kernel_config
 kernel-config is a file
 
 TODO doesn t need to be a derviation ?
+can 't we justr override the source or split into two derivations:
+- standalone
+- embedded
 */
 let
 
@@ -111,20 +114,24 @@ stdenv.mkDerivation {
     inherit (kernel) src patches preUnpack;
 
     # TODO replace with config.nix buildPhase
-    buildPhase = ''
-      cd $buildRoot
+    buildPhase =  buildConfigCommands;
+    buildConfigCommands = ''
+      # cd $buildRoot
+      set -x
 
       # Get a basic config file for later refinement with $generateConfig.
-      make -C ../$sourceRoot O=$PWD $kernelBaseConfig ARCH=$arch
+      make O=$buildRoot $kernelBaseConfig ARCH=$arch
+      # make -C ../$sourceRoot O=$PWD $kernelBaseConfig ARCH=$arch
 
       # Create the config file.
       echo "generating kernel configuration..."
       echo "$kernelConfig" > kernel-config
+      # TODO SRC ?
       DEBUG=1 ARCH=$arch KERNEL_CONFIG=kernel-config AUTO_MODULES=$autoModules \
-           PREFER_BUILTIN=$preferBuiltin SRC=../$sourceRoot perl -w $generateConfig
+           PREFER_BUILTIN=$preferBuiltin SRC=. perl -w $generateConfig
     '';
 
-    installPhase = "mv .config $out";
+    installPhase = "mv $buildRoot/.config $out";
 
     enableParallelBuilding = true;
 }
