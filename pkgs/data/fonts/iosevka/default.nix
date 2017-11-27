@@ -70,13 +70,7 @@ stdenv.mkDerivation {
     runHook postConfigure
   '';
 
-  buildPhase = ''
-    runHook preBuild
-
-    ${if custom then ''make custom set=${set}'' else ''make''}
-
-    runHook postBuild
-  '';
+  makeFlags = lib.optionals custom [ "custom" "set=${set}" ];
 
   installPhase = ''
     runHook preInstall
@@ -87,6 +81,8 @@ stdenv.mkDerivation {
 
     runHook postInstall
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = https://be5invis.github.io/Iosevka/;
