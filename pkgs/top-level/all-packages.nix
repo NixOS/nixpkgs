@@ -4808,6 +4808,7 @@ with pkgs;
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
 
   ttfautohint = libsForQt5.callPackage ../tools/misc/ttfautohint { };
+  ttfautohint-nox = ttfautohint.override { enableGUI = false; };
 
   tty-clock = callPackage ../tools/misc/tty-clock { };
 

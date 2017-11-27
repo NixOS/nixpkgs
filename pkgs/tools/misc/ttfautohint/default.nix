@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, freetype, harfbuzz, qtbase }:
+{ stdenv, lib, fetchurl, pkgconfig, freetype, harfbuzz, libiconv, qtbase, enableGUI ? true }:
 
 stdenv.mkDerivation rec {
   version = "1.7";
@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ freetype harfbuzz qtbase ];
+  buildInputs = [ freetype harfbuzz libiconv ] ++ lib.optional enableGUI qtbase;
+
+  configureFlags = lib.optional (!enableGUI) "--with-qt=no";
 
   enableParallelBuilding = true;
 
