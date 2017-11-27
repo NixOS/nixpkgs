@@ -110,7 +110,7 @@ stdenv.mkDerivation rec {
          network of workstations to Computational Grids.
       '';
     homepage = http://simgrid.gforge.inria.fr/;
-    maintainers = with maitainers; [ ];
+    maintainers = with maitainers; [ mickours ];
     platforms = platforms.x86_64;
     license = licenses.lgpl2Plus;
   };

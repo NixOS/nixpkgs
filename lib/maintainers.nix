@@ -414,6 +414,7 @@
   michaelpj = "Michael Peyton Jones <michaelpj@gmail.com>";
   michalrus = "Michal Rus <m@michalrus.com>";
   michelk = "Michel Kuhlmann <michel@kuhlmanns.info>";
+  mickours = "Michael Mercier <mickours@gmail.com<";
   midchildan = "midchildan <midchildan+nix@gmail.com>";
   mikefaille = "Michaël Faille <michael@faille.io>";
   mikoim = "Eshin Kunishima <ek@esh.ink>";
