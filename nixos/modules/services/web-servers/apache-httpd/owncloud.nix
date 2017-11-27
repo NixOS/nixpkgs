@@ -377,7 +377,7 @@ rec {
       ''}
 
       <Directory ${config.package}>
-        ${builtins.readFile "${config.package}/.htaccess"}
+        Include ${config.package}/.htaccess
       </Directory>
     '';
 
