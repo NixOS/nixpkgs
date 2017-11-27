@@ -142,9 +142,9 @@ for CMD in \
     ar as nm objcopy ranlib strip strings size ld windres
 do
     if
-        PATH=$_PATH type -p "@binPrefix@$CMD" > /dev/null
+        PATH=$_PATH type -p "@targetPrefix@$CMD" > /dev/null
     then
-        export "${role}$(echo "$CMD" | tr "[:lower:]" "[:upper:]")=@binPrefix@${CMD}";
+        export "${role}$(echo "$CMD" | tr "[:lower:]" "[:upper:]")=@targetPrefix@${CMD}";
     fi
 done
 
