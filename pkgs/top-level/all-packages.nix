@@ -745,6 +745,8 @@ with pkgs;
 
   blink = callPackage ../applications/networking/instant-messengers/blink { };
 
+  libqmatrixclient = libsForQt5.callPackage ../development/libraries/libqmatrixclient { };
+
   quaternion = libsForQt5.callPackage ../applications/networking/instant-messengers/quaternion { };
 
   tensor = libsForQt5.callPackage ../applications/networking/instant-messengers/tensor { };
@@ -1497,6 +1499,7 @@ with pkgs;
   m17n_lib = callPackage ../tools/inputmethods/m17n-lib { };
 
   skktools = callPackage ../tools/inputmethods/skk/skktools { };
+  skk-dicts = callPackage ../tools/inputmethods/skk/skk-dicts { };
 
   ibus = callPackage ../tools/inputmethods/ibus {
     inherit (gnome3) dconf glib;
@@ -2820,6 +2823,8 @@ with pkgs;
 
   jade = callPackage ../tools/text/sgml/jade { };
 
+  jazzy = callPackage ../development/tools/jazzy { };
+
   jd = callPackage ../development/tools/jd { };
 
   jd-gui = callPackage_i686 ../tools/security/jd-gui { };
@@ -3793,6 +3798,8 @@ with pkgs;
   ossec = callPackage ../tools/security/ossec {};
 
   ostree = callPackage ../tools/misc/ostree { };
+
+  otfcc = callPackage ../tools/misc/otfcc { };
 
   otpw = callPackage ../os-specific/linux/otpw { };
 
@@ -4800,7 +4807,8 @@ with pkgs;
 
   ttf2pt1 = callPackage ../tools/misc/ttf2pt1 { };
 
-  ttfautohint = callPackage ../tools/misc/ttfautohint { };
+  ttfautohint = libsForQt5.callPackage ../tools/misc/ttfautohint { };
+  ttfautohint-nox = ttfautohint.override { enableGUI = false; };
 
   tty-clock = callPackage ../tools/misc/tty-clock { };
 
@@ -5336,6 +5344,8 @@ with pkgs;
   zsh-autosuggestions = callPackage ../shells/zsh-autosuggestions { };
 
   zsh-powerlevel9k = callPackage ../shells/zsh-powerlevel9k { };
+
+  zsh-command-time = callPackage ../shells/zsh-command-time { };
 
   zstd = callPackage ../tools/compression/zstd { };
   zstdmt = callPackage ../tools/compression/zstdmt { };
@@ -7087,6 +7097,8 @@ with pkgs;
   cide = callPackage ../development/tools/continuous-integration/cide { };
 
   "cl-launch" = callPackage ../development/tools/misc/cl-launch {};
+
+  cloudfoundry-cli = callPackage ../development/tools/cloudfoundry-cli { };
 
   coan = callPackage ../development/tools/analysis/coan { };
 
@@ -10074,6 +10086,8 @@ with pkgs;
 
   olm = callPackage ../development/libraries/olm { };
 
+  oneko = callPackage ../applications/misc/oneko { };   
+
   oniguruma = callPackage ../development/libraries/oniguruma { };
 
   openal = self.openalSoft;
@@ -12995,16 +13009,16 @@ with pkgs;
 
   watch = callPackage ../os-specific/linux/procps/watch.nix { };
 
-  qemu_kvm = lowPrio (qemu.override { x86Only = true; });
+  qemu_kvm = lowPrio (qemu.override { hostCpuOnly = true; });
 
   # See `xenPackages` source for explanations.
   # Building with `xen` instead of `xen-slim` is possible, but makes no sense.
-  qemu_xen = lowPrio (qemu.override { x86Only = true; xenSupport = true; xen = xen-slim; });
-  qemu_xen-light = lowPrio (qemu.override { x86Only = true; xenSupport = true; xen = xen-light; });
-  qemu_xen_4_8 = lowPrio (qemu.override { x86Only = true; xenSupport = true; xen = xen_4_8-slim; });
-  qemu_xen_4_8-light = lowPrio (qemu.override { x86Only = true; xenSupport = true; xen = xen_4_8-light; });
+  qemu_xen = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xen-slim; });
+  qemu_xen-light = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xen-light; });
+  qemu_xen_4_8 = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xen_4_8-slim; });
+  qemu_xen_4_8-light = lowPrio (qemu.override { hostCpuOnly = true; xenSupport = true; xen = xen_4_8-light; });
 
-  qemu_test = lowPrio (qemu.override { x86Only = true; nixosTestRunner = true; });
+  qemu_test = lowPrio (qemu.override { hostCpuOnly = true; nixosTestRunner = true; });
 
   firmwareLinuxNonfree = callPackage ../os-specific/linux/firmware/firmware-linux-nonfree { };
 
@@ -13432,7 +13446,9 @@ with pkgs;
 
   input-fonts = callPackage ../data/fonts/input-fonts { };
 
-  iosevka = callPackage ../data/fonts/iosevka { };
+  iosevka = callPackage ../data/fonts/iosevka {
+    nodejs = nodejs-8_x;
+  };
 
   ipafont = callPackage ../data/fonts/ipafont {};
   ipaexfont = callPackage ../data/fonts/ipaexfont {};
@@ -17887,6 +17903,8 @@ with pkgs;
     boost = boost160;
   };
 
+  freesweep = callPackage ../games/freesweep { };
+
   frotz = callPackage ../games/frotz { };
 
   fsg = callPackage ../games/fsg {
@@ -19383,6 +19401,8 @@ with pkgs;
 
   keynav = callPackage ../tools/X11/keynav { };
 
+  kompose = callPackage ../applications/networking/cluster/kompose { };
+
   kops = callPackage ../applications/networking/cluster/kops { };
 
   lilypond = callPackage ../misc/lilypond { guile = guile_1_8; };
@@ -19901,6 +19921,10 @@ with pkgs;
   zsnes = callPackage_i686 ../misc/emulators/zsnes { };
 
   snes9x-gtk = callPackage ../misc/emulators/snes9x-gtk { };
+
+  openmsx = callPackage ../misc/emulators/openmsx {
+    python = python27;
+  };
 
   higan = callPackage ../misc/emulators/higan {
     inherit (gnome2) gtksourceview;

@@ -3,7 +3,7 @@
 , img ? "bzImage"
 , storeDir ? builtins.storeDir
 , rootModules ?
-    [ "virtio_pci" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "rtc_cmos" ]
+    [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "rtc_cmos" ]
 }:
 
 with pkgs;

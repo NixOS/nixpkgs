@@ -1,0 +1,13 @@
+diff --git a/Utils/Logger.cpp b/Utils/Logger.cpp
+index 747cd63..e3efdf1 100644
+--- a/Utils/Logger.cpp
++++ b/Utils/Logger.cpp
+@@ -29,7 +29,7 @@ Logger::Logger(char* tracepath) {
+ 	trace = fopen(tracepath, "w");
+ 
+ 	// dot file is not used, set null as default value
+-	dot = '\0';
++	dot = nullptr;
+ 	//dot = fopen("gcKons.dot", "w");
+ 	//fprintf(dot,"digraph G {\n");
+ }

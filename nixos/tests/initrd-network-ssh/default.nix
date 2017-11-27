@@ -1,19 +1,6 @@
-import ./make-test.nix ({ pkgs, lib, ... }:
+import ../make-test.nix ({ pkgs, lib, ... }:
 
-let
-  keys = pkgs.runCommand "gen-keys" {
-    outputs = [ "out" "dbPub" "dbPriv" "sshPub" "sshPriv" ];
-    buildInputs = with pkgs; [ dropbear openssh ];
-  }
-  ''
-    touch $out
-    dropbearkey -t rsa -f $dbPriv -s 4096 | sed -n 2p > $dbPub
-    ssh-keygen -q -t rsa -b 4096 -N "" -f client
-    mv client $sshPriv
-    mv client.pub $sshPub
-  '';
-
-in {
+{
   name = "initrd-network-ssh";
   meta = with lib.maintainers; {
     maintainers = [ willibutz ];
@@ -32,9 +19,9 @@ in {
           enable = true;
           ssh = {
             enable = true;
-            authorizedKeys = [ "${readFile keys.sshPub}" ];
+            authorizedKeys = [ "${readFile ./openssh.pub}" ];
             port = 22;
-            hostRSAKey = keys.dbPriv;
+            hostRSAKey = ./dropbear.priv;
           };
         };
         boot.initrd.preLVMCommands = ''
@@ -56,7 +43,7 @@ in {
             "${toString (head (splitString " " (
               toString (elemAt (splitString "\n" config.networking.extraHosts) 2)
             )))} "
-            "${readFile keys.dbPub}"
+            "${readFile ./dropbear.pub}"
           ];
         };
       };
@@ -65,7 +52,7 @@ in {
   testScript = ''
     startAll;
     $client->waitForUnit("network.target");
-    $client->copyFileFromHost("${keys.sshPriv}","/etc/sshKey");
+    $client->copyFileFromHost("${./openssh.priv}","/etc/sshKey");
     $client->succeed("chmod 0600 /etc/sshKey");
     $client->waitUntilSucceeds("ping -c 1 server");
     $client->succeed("ssh -i /etc/sshKey -o UserKnownHostsFile=/etc/knownHosts server 'touch /fnord'");

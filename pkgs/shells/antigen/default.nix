@@ -1,18 +1,18 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  version = "2.2.1";
+  version = "2.2.2";
   name = "antigen-${version}";
 
   src = fetchurl {
     url = "https://github.com/zsh-users/antigen/releases/download/v${version}/antigen.zsh";
-    sha256 = "0s32280ak0gd0rr66g5dj6r5px0si8w47bcxlqfpaijg7i8xk1i7";
+    sha256 = "0635dvnsqh7dpqdwx5qq3kx7m1cx2038zln6y9ycnbi3i0ilgj9z";
   };
+
   phases = "installPhase";
 
   installPhase = ''
     outdir=$out/share/antigen
-
     mkdir -p $outdir
     cp $src $outdir/antigen.zsh
   '';

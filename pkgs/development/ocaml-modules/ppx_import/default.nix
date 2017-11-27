@@ -4,15 +4,15 @@
 buildOcaml rec {
   name = "ppx_import";
 
-  version = "1.1";
+  version = "1.4";
 
   minimumSupportedOcamlVersion = "4.02";
 
   src = fetchFromGitHub {
-    owner = "whitequark";
+    owner = "ocaml-ppx";
     repo = "ppx_import";
     rev = "v${version}";
-    sha256 = "1hfvbc81dg58q7kkpn808b3j0xazrqfrr4v71sd1yvmnk71wak6k";
+    sha256 = "14c2lp7r9080c4hsb1y1drbxxx3v44b7ib5wfh3kkh3f1jfsjwbk";
   };
 
   buildInputs = [ cppo ounit ppx_deriving opam ];

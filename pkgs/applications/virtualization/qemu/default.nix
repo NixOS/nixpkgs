@@ -4,7 +4,7 @@
 , makeWrapper
 , attr, libcap, libcap_ng
 , CoreServices, Cocoa, rez, setfile
-, numaSupport ? stdenv.isLinux, numactl
+, numaSupport ? stdenv.isLinux && !stdenv.isArm, numactl
 , seccompSupport ? stdenv.isLinux, libseccomp
 , pulseSupport ? !stdenv.isDarwin, libpulseaudio
 , sdlSupport ? !stdenv.isDarwin, SDL
@@ -12,7 +12,7 @@
 , spiceSupport ? !stdenv.isDarwin, spice, spice_protocol
 , usbredirSupport ? spiceSupport, usbredir
 , xenSupport ? false, xen
-, x86Only ? false
+, hostCpuOnly ? false
 , nixosTestRunner ? false
 }:
 
@@ -23,12 +23,17 @@ let
   audio = optionalString (hasSuffix "linux" stdenv.system) "alsa,"
     + optionalString pulseSupport "pa,"
     + optionalString sdlSupport "sdl,";
+
+  hostCpuTargets = if stdenv.isi686 || stdenv.isx86_64 then "i386-softmmu,x86_64-softmmu"
+                      else if stdenv.isArm then "arm-softmmu"
+                      else if stdenv.isAarch64 then "aarch64-softmmu"
+                      else throw "Don't know how to build a 'hostCpuOnly = true' QEMU";
 in
 
 stdenv.mkDerivation rec {
   name = "qemu-"
     + stdenv.lib.optionalString xenSupport "xen-"
-    + stdenv.lib.optionalString x86Only "x86-only-"
+    + stdenv.lib.optionalString hostCpuOnly "host-cpu-only-"
     + stdenv.lib.optionalString nixosTestRunner "for-vm-tests-"
     + version;
 
@@ -75,7 +80,7 @@ stdenv.mkDerivation rec {
     ++ optional seccompSupport "--enable-seccomp"
     ++ optional spiceSupport "--enable-spice"
     ++ optional usbredirSupport "--enable-usb-redir"
-    ++ optional x86Only "--target-list=i386-softmmu,x86_64-softmmu"
+    ++ optional hostCpuOnly "--target-list=${hostCpuTargets}"
     ++ optional stdenv.isDarwin "--enable-cocoa"
     ++ optional stdenv.isLinux "--enable-linux-aio"
     ++ optional xenSupport "--enable-xen";

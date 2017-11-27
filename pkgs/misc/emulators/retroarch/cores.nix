@@ -16,7 +16,8 @@ let
 
     buildInputs = [ makeWrapper retroarch zlib ] ++ a.extraBuildInputs or [];
 
-    buildPhase = "make -f Makefile.libretro";
+    makefile = "Makefile.libretro";
+
     installPhase = ''
       COREDIR="$out/lib/retroarch/cores"
       mkdir -p $out/bin

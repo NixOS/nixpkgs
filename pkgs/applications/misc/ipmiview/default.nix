@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, patchelf, makeWrapper, xorg, gcc }:
+{ stdenv, fetchurl, patchelf, makeWrapper, xorg, gcc, gcc-unwrapped }:
 
 assert stdenv.isLinux;
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
    buildPhase = with xorg; ''
      patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ libX11 libXext libXrender libXtst libXi ]}" ./jre/lib/amd64/xawt/libmawt.so
-     patchelf --set-rpath "${gcc.cc}/lib" ./libiKVM64.so
+     patchelf --set-rpath "${gcc-unwrapped.lib}/lib" ./libiKVM64.so
      patchelf --set-rpath "${stdenv.lib.makeLibraryPath [ libXcursor libX11 libXext libXrender libXtst libXi ]}" --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./jre/bin/javaws
      patchelf --set-rpath "${gcc.cc}/lib:$out/jre/lib/amd64/jli" --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ./jre/bin/java
    '';

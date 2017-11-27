@@ -1,5 +1,8 @@
 { stdenv, fetchgit, qtbase, qtquickcontrols, qmake, makeDesktopItem }:
 
+# we now have libqmatrixclient so a future version of tensor that supports it
+# should use that
+
 stdenv.mkDerivation rec {
   name = "tensor-git-${version}";
   version = "2017-02-21";

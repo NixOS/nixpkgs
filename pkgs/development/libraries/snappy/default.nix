@@ -1,24 +1,28 @@
-{ stdenv, fetchurl, pkgconfig }:
+{ stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   name = "snappy-${version}";
-  version = "1.1.4";
+  version = "1.1.7";
 
-  src = fetchurl {
-    url = "http://github.com/google/snappy/releases/download/${version}/"
-        + "snappy-${version}.tar.gz";
-    sha256 = "0mq0nz8gbi1sp3y6xcg0a6wbvnd6gc717f3vh2xrjmfj5w9gwjqk";
+  src = fetchFromGitHub {
+    owner = "google";
+    repo = "snappy";
+    rev = "${version}";
+    sha256 = "1x7r8sjmdqlqjz0xfiwdyrqpgaj5yrvrgb28ivgpvnxgar5qv6m2";
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ cmake ];
 
   # -DNDEBUG for speed
   configureFlags = [ "CXXFLAGS=-DNDEBUG" ];
 
   # SIGILL on darwin
   doCheck = !stdenv.isDarwin;
+  checkPhase = ''
+    (cd .. && ./build/snappy_unittest)
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://google.github.io/snappy/;
