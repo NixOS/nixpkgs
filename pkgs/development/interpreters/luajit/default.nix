@@ -62,9 +62,7 @@ rec {
 
       installPhase   = ''
         make install PREFIX="$out"
-        for file in "$out"/include/luajit-*/*.h; do
-          ln -s $file  "$out"/include/.
-        done
+        ( cd "$out/include"; ln -s luajit-*/* . )
         ln -s "$out"/bin/luajit-* "$out"/bin/lua
       ''
         + stdenv.lib.optionalString (!isStable)
