@@ -56,7 +56,7 @@ mirror://xorg/individual/lib/libxshmfence-1.2.tar.bz2
 mirror://xorg/individual/lib/libfontenc-1.1.3.tar.bz2
 mirror://xorg/individual/lib/libFS-1.0.7.tar.bz2
 mirror://xorg/individual/lib/libICE-1.0.9.tar.bz2
-mirror://xorg/individual/lib/libpciaccess-0.13.5.tar.bz2
+mirror://xorg/individual/lib/libpciaccess-0.14.tar.bz2
 mirror://xorg/individual/lib/libSM-1.2.2.tar.bz2
 mirror://xorg/X11R7.7/src/everything/libWindowsWM-1.0.1.tar.bz2
 mirror://xorg/individual/lib/libX11-1.6.5.tar.bz2
