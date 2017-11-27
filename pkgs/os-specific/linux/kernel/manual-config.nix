@@ -137,9 +137,10 @@ let
     configurePhase = let
 
         # if configfile is valid file
-        linkConfig = if (configfile) then ''
+        linkConfig = if (configfile != null) then ''
           ln -sv ${configfile} $buildRoot/.config
         '' else
+        # TODO la le kernel config n est pas genere
         configDrv.buildConfigCommands
         # ''
         #   # TODO generate CONFIG !!!
@@ -163,7 +164,6 @@ let
         +
         ''
 
-        # ln -sv ${configfile} $buildRoot/.config
 
         # reads the existing .config file and prompts the user for options in
         # the current kernel source that are not found in the file.

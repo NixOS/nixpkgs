@@ -59,8 +59,9 @@ let
     configDrv = callPackage ./config.nix {
     inherit ignoreConfigErrors;
 
-    inherit version src kernelPatches stdenv;
+    inherit version src kernelPatches stdenv config;
     # modDirVersion
+    inherit kernel;
     };
 
   # TODO moved it
@@ -86,6 +87,7 @@ let
     # TODO fix later
     # crossConfigfile = configfile.crossDrv or configfile;
 
+    # erase parent config ???!
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
 
     crossConfig = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };

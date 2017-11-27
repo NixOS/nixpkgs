@@ -1,16 +1,20 @@
 {
   stdenv
 , lib
+# , config
 # , buildRoot
 # , srcRoot
 , ignoreConfigErrors, version
 # , kernelConfig
+, config, configCross ?null
+, kernelPatches
 , runCommand
+, kernel
 , perl, hostPlatform
 , ...
 }:
 
-with import lib.nix;
+# with import lib.nix;
 /*
 
 # TODO we should be able to generate standalone config and config on the go
@@ -62,16 +66,19 @@ let
         map ({extraConfig ? "", ...}: extraConfig) kernelPatches;
     in lib.concatStringsSep "\n" ([baseConfig] ++ configFromPatches);
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
     inherit ignoreConfigErrors;
     name = "linux-config-${version}";
 
+
+    # Runs generate-config
+    # my $pid = open2(\*IN, \*OUT, "make -C $ENV{SRC} O=$wd config SHELL=bash ARCH=$ENV{ARCH}");
     generateConfig = ./generate-config.pl;
 
     # string that will be echoed to kernel-config file
     # writeFile
     # echo "$kernelConfig" > kernel-config
-    kernelConfig = kernelConfigFun config kernel-patches;
+    kernelConfig = kernelConfigFun config kernelPatches;
 
     nativeBuildInputs = [ perl ];
 
@@ -111,24 +118,28 @@ stdenv.mkDerivation {
   '';
 
     prePatch = kernel.prePatch + patchKconfig;
+    # inherit (kernel) src patches preUnpack;
     inherit (kernel) src patches preUnpack;
 
     # TODO replace with config.nix buildPhase
+    # add a cd ?
     buildPhase =  buildConfigCommands;
+
+    # need to be in srcRoot before launching this !
     buildConfigCommands = ''
-      # cd $buildRoot
+      cd $buildRoot
       set -x
 
       # Get a basic config file for later refinement with $generateConfig.
-      make O=$buildRoot $kernelBaseConfig ARCH=$arch
-      # make -C ../$sourceRoot O=$PWD $kernelBaseConfig ARCH=$arch
+      # make O=$buildRoot $kernelBaseConfig ARCH=$arch
+      make -C ../$sourceRoot O=$PWD $kernelBaseConfig ARCH=$arch
 
       # Create the config file.
       echo "generating kernel configuration..."
       echo "$kernelConfig" > kernel-config
       # TODO SRC ?
       DEBUG=1 ARCH=$arch KERNEL_CONFIG=kernel-config AUTO_MODULES=$autoModules \
-           PREFER_BUILTIN=$preferBuiltin SRC=. perl -w $generateConfig
+           PREFER_BUILTIN=$preferBuiltin SRC=. perl -w ${generateConfig}
     '';
 
     installPhase = "mv $buildRoot/.config $out";
