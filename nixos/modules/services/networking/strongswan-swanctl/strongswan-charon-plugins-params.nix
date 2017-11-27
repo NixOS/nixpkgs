@@ -214,6 +214,11 @@ lib : with (import ./param-constructors.nix lib); {
     virtual IP.
   '';
 
+  eap-radius.accounting_send_class = mkYesNoParam no ''
+    If enabled, adds the Class attributes received in Access-Accept
+    message to the RADIUS accounting messages.
+  '';
+
   eap-radius.class_group = mkYesNoParam no ''
     Use the class attribute sent in the Access-Accept message as group
     membership information, see EapRadius.
@@ -914,6 +919,11 @@ lib : with (import ./param-constructors.nix lib); {
 
   systime-fix.threshold_format = mkStrParam "%Y" ''
     strptime(3) format used to parse threshold option.
+  '';
+
+  systime-fix.timeout = mkDurationParam "0s" ''
+    How long to wait for a valid system time if an interval is
+    configured. 0 to recheck indefinitely.
   '';
 
   tnc-ifmap.client_cert = mkOptionalStrParam ''

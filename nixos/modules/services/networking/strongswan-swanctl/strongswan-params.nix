@@ -144,12 +144,6 @@ in {
     '';
   };
 
-  pacman.database = mkOptionalStrParam ''
-    Database URI for the database that stores the package information. If it
-    contains a password, make sure to adjust the permissions of the config
-    file accordingly.
-  '';
-
   pki.load = mkSpaceSepListParam [] ''
     Plugins to load in ipsec pki tool.
   '';
@@ -173,6 +167,41 @@ in {
   scepclient.load = mkSpaceSepListParam [] ''
     Plugins to load in ipsec scepclient tool.
   '';
+
+  sec-updater = {
+    database = mkOptionalStrParam ''
+      Global IMV policy database URI. If it contains a password, make
+      sure to adjust the permissions of the config file accordingly.
+    '';
+
+    swid_gen.command = mkStrParam "/usr/local/bin/swid_generator" ''
+      SWID generator command to be executed.
+    '';
+
+    swid_gen.tag_creator.name = mkStrParam "strongSwan Project" ''
+      Name of the tagCreator entity.
+    '';
+
+    swid_gen.tag_creator.regid = mkStrParam "strongswan.org" ''
+      regid of the tagCreator entity.
+    '';
+
+    tnc_manage_command = mkStrParam "/var/www/tnc/manage.py" ''
+      strongTNC manage.py command used to import SWID tags.
+    '';
+
+    tmp.deb_file = mkStrParam "/tmp/sec-updater.deb" ''
+      Temporary storage for downloaded deb package file.
+    '';
+
+    tmp.tag_file = mkStrParam "/tmp/sec-updater.tag" ''
+      Temporary storage for generated SWID tags.
+    '';
+
+    load =  mkSpaceSepListParam [] ''
+      Plugins to load in sec-updater tool.
+    '';
+  };
 
   starter = {
     config_file = mkStrParam "\${sysconfdir}/ipsec.conf" ''

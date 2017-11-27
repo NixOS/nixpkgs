@@ -286,7 +286,7 @@ in {
       On initiators this setting specifies whether an INITIAL_CONTACT notify is
       sent during IKE_AUTH if no existing connection is found with the remote
       peer (determined by the identities of the first authentication
-      round). Only if set to keep or replace will the client send a notify.
+      round). Unless set to <literal>never</literal> the client will send a notify.
     '';
 
     reauth_time	= mkDurationParam "0s" ''
@@ -444,7 +444,12 @@ in {
         <literal>ike:</literal> prefix are configured any signature scheme
         constraint (without <literal>ike:</literal> prefix) will also apply to
         IKEv2 authentication, unless this is disabled in
-        <literal>strongswan.conf</literal>.
+        <literal>strongswan.conf</literal>. To use RSASSA-PSS signatures use
+        <literal>rsa/pss</literal> instead of <literal>pubkey</literal> or
+        <literal>rsa</literal> as in e.g.
+        <literal>ike:rsa/pss-sha256</literal>. If <literal>pubkey</literal> or
+        <literal>rsa</literal> constraints are configured RSASSA-PSS signatures
+        will only be used if enabled in <literal>strongswan.conf</literal>(5).
         </para></listitem>
         </itemizedlist>
       '';
@@ -585,7 +590,12 @@ in {
         <option>local</option> section's <option>auth</option> keyword for
         details), such key types and hash algorithms are also applied as
         constraints against IKEv2 signature authentication schemes used by the
-        remote side.
+        remote side. To require RSASSA-PSS signatures use
+        <literal>rsa/pss</literal> instead of <literal>pubkey</literal> or
+        <literal>rsa</literal> as in e.g. <literal>rsa/pss-sha256</literal>. If
+        <literal>pubkey</literal> or <literal>rsa</literal> constraints are
+        configured RSASSA-PSS signatures will only be accepted if enabled in
+        <literal>strongswan.conf</literal>(5).
         </para><para>
         To specify trust chain constraints for EAP-(T)TLS, append a colon to the
         EAP method, followed by the key type/size and hash algorithm as
@@ -872,27 +882,39 @@ in {
       '';
 
       mark_in = mkStrParam "0/0x00000000" ''
-        Netfilter mark and mask for input traffic. On Linux Netfilter may
-        require marks on each packet to match an SA having that option set. This
-        allows Netfilter rules to select specific tunnels for incoming
-        traffic. The special value <literal>%unique</literal> sets a unique mark
-        on each CHILD_SA instance, beyond that the value
-        <literal>%unique-dir</literal> assigns a different unique mark for each
-        CHILD_SA direction (in/out).
+        Netfilter mark and mask for input traffic. On Linux, Netfilter may
+        require marks on each packet to match an SA/policy having that option
+        set. This allows installing duplicate policies and enables Netfilter
+        rules to select specific SAs/policies for incoming traffic. Note that
+        inbound marks are only set on policies, by default, unless
+        <option>mark_in_sa</option> is enabled. The special value
+        <literal>%unique</literal> sets a unique mark on each CHILD_SA instance,
+        beyond that the value <literal>%unique-dir</literal> assigns a different
+        unique mark for each
         </para><para>
         An additional mask may be appended to the mark, separated by
         <literal>/</literal>. The default mask if omitted is
         <literal>0xffffffff</literal>.
       '';
 
+      mark_in_sa = mkYesNoParam no ''
+        Whether to set <option>mark_in</option> on the inbound SA. By default,
+        the inbound mark is only set on the inbound policy. The tuple destination
+        address, protocol and SPI is unique and the mark is not required to find
+        the correct SA, allowing to mark traffic after decryption instead (where
+        more specific selectors may be used) to match different policies. Marking
+        packets before decryption is still possible, even if no mark is set on
+        the SA.
+      '';
+
       mark_out = mkStrParam "0/0x00000000" ''
-        Netfilter mark and mask for output traffic. On Linux Netfilter may
-        require marks on each packet to match a policy having that option
-        set. This allows Netfilter rules to select specific tunnels for outgoing
-        traffic. The special value <literal>%unique</literal> sets a unique mark
-        on each CHILD_SA instance, beyond that the value
-        <literal>%unique-dir</literal> assigns a different unique mark for each
-        CHILD_SA direction (in/out).
+        Netfilter mark and mask for output traffic. On Linux, Netfilter may
+        require marks on each packet to match a policy/SA having that option
+        set. This allows installing duplicate policies and enables Netfilter
+        rules to select specific policies/SAs for outgoing traffic. The special
+        value <literal>%unique</literal> sets a unique mark on each CHILD_SA
+        instance, beyond that the value <literal>%unique-dir</literal> assigns a
+        different unique mark for each CHILD_SA direction (in/out).
         </para><para>
         An additional mask may be appended to the mark, separated by
         <literal>/</literal>. The default mask if omitted is

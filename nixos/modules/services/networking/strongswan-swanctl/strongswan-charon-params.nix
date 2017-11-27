@@ -431,6 +431,10 @@ in {
     Priority of the routing table.
   '';
 
+  rsa_pss = mkYesNoParam no ''
+    Whether to use RSA with PSS padding instead of PKCS#1 padding by default.
+  '';
+
   send_delay = mkIntParam 0 ''
     Delay in ms for sending packets, to simulate larger RTT.
   '';
