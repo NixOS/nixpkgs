@@ -5345,6 +5345,8 @@ with pkgs;
 
   zsh-powerlevel9k = callPackage ../shells/zsh-powerlevel9k { };
 
+  zsh-command-time = callPackage ../shells/zsh-command-time { };
+
   zstd = callPackage ../tools/compression/zstd { };
   zstdmt = callPackage ../tools/compression/zstdmt { };
 
