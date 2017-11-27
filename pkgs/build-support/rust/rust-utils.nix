@@ -28,6 +28,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
           optLevel = if release then 3 else 0;
           rustcOpts = (if release then "-C opt-level=3" else "-C debuginfo=2");
           rustcMeta = "-C metadata=${metadata} -C extra-filename=-${metadata}";
+          crateName_ = lib.strings.replaceStrings ["-"] ["_"] crateName;
           version_ = lib.splitString "-" crateVersion;
           versionPre = if lib.tail version_ == [] then "" else builtins.elemAt version_ 1;
           version = lib.splitString "." (lib.head version_);
@@ -225,7 +226,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
          if [ ! -z "$i" ]; then
            for lib in $i; do
              echo "-L $lib" >> target/link
-             L=$(echo $lib | sed -e "s#$(pwd)/target/build#$out#")
+             L=$(echo $lib | sed -e "s#$(pwd)/target/build#$out/lib#")
              echo "-L $L" >> target/link.final
            done
          fi
@@ -256,7 +257,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
          fi
       done
       if [[ (-z "${crateBin}") && (-e src/main.rs) ]]; then
-         build_bin ${crateName} src/main.rs
+         build_bin ${crateName_} src/main.rs
       fi
       # Remove object files to avoid "wrong ELF type"
       find target -type f -name "*.o" -print0 | xargs -0 rm -f
@@ -272,9 +273,6 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
         mkdir -p $out/lib
         cp target/link.final $out/lib/link
       fi
-      # if [ "$(ls -A target/deps)" ]; then
-      # cp target/deps/* $out # */
-      # fi
       if [ "$(ls -A target/lib)" ]; then
         mkdir -p $out/lib
         cp target/lib/* $out/lib #*/
