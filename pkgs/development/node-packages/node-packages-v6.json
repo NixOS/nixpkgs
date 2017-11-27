@@ -28,6 +28,7 @@
 , "gulp"
 , "hipache"
 , "htmlhint"
+, "html-minifier"
 , "ionic"
 , "ios-deploy"
 , "istanbul"
