@@ -21477,6 +21477,8 @@ EOF
     name = "carbon-${version}";
     version = graphiteVersion;
 
+    disabled = isPy3k;
+
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/carbon/${name}.tar.gz";
       sha256 = "142smpmgbnjinvfb6s4ijazish4vfgzyd8zcmdkh55y051fkixkn";
@@ -21488,6 +21490,7 @@ EOF
       homepage = http://graphite.wikidot.com/;
       description = "Backend data caching and persistence daemon for Graphite";
       maintainers = with maintainers; [ rickynils offline ];
+      license = licenses.asl20;
     };
   };
 
