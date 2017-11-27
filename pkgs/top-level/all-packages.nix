@@ -7238,6 +7238,8 @@ with pkgs;
 
   drake = callPackage ../development/tools/build-managers/drake { };
 
+  drake-factual = callPackage ../development/tools/build-managers/drake-factual { };
+
   drush = callPackage ../development/tools/misc/drush { };
 
   editorconfig-core-c = callPackage ../development/tools/misc/editorconfig-core-c { };
