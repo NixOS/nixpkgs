@@ -8,7 +8,7 @@
 #   '';
 
 stdenv.mkDerivation rec {
-  version = "rev-2111361";
+  version = "2017-05-09";
   name = "zsh-command-time-${version}";
 
   src = fetchFromGitHub {
