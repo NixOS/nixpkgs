@@ -1,8 +1,10 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, clutter, dbus, pythonPackages, libxml2
-, libxklavier, libXtst, gtk2, intltool, libxslt, at_spi2_core, autoreconfHook }:
+{ fetchurl, stdenv, pkgconfig, gnome3, clutter, dbus, python3Packages, libxml2
+, libxklavier, libXtst, gtk2, intltool, libxslt, at_spi2_core, autoreconfHook
+, wrapGAppsHook }:
 
 let
   majorVersion = "0.4";
+  pythonEnv = python3Packages.python.withPackages ( ps: with ps; [ pygobject3 ] );
 in
 stdenv.mkDerivation rec {
   name = "caribou-${majorVersion}.21";
@@ -12,11 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "0mfychh1q3dx0b96pjz9a9y112bm9yqyim40yykzxx1hppsdjhww";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkgconfig intltool libxslt libxml2 autoreconfHook wrapGAppsHook ];
 
   buildInputs = with gnome3;
-    [ glib gtk clutter at_spi2_core dbus pythonPackages.python
-      pythonPackages.pygobject3 libxml2 libXtst gtk2 intltool libxslt ];
+    [ glib gtk clutter at_spi2_core dbus pythonEnv python3Packages.pygobject3
+      libXtst gtk2 ];
 
   propagatedBuildInputs = [ gnome3.libgee libxklavier ];
 

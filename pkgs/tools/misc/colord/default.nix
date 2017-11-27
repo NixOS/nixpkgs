@@ -1,7 +1,7 @@
 { stdenv, fetchurl, bash-completion
 , glib, polkit, pkgconfig, gettext, gusb, lcms2, sqlite, systemd, dbus
 , gobjectIntrospection, argyllcms, meson, ninja, libxml2, vala_0_38
-, libgudev, sane-backends }:
+, libgudev, sane-backends, udev, gnome3, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "colord-1.4.1";
@@ -27,13 +27,19 @@ stdenv.mkDerivation rec {
     ./fix-build-paths.patch
   ];
 
-  nativeBuildInputs = [ meson pkgconfig vala_0_38 ninja gettext libxml2 gobjectIntrospection ];
+  nativeBuildInputs = [ meson pkgconfig vala_0_38 ninja gettext libxml2 gobjectIntrospection makeWrapper ];
 
   buildInputs = [ glib polkit gusb lcms2 sqlite systemd dbus
                   bash-completion argyllcms libgudev sane-backends ];
 
   postInstall = ''
     glib-compile-schemas $out/share/glib-2.0/schemas
+  '';
+
+  postFixup = ''
+    wrapProgram "$out/libexec/colord-session" \
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share" \
+      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules"
   '';
 
   meta = {

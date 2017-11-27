@@ -1,17 +1,16 @@
-{ stdenv, fetchurl, gnome3, pkgconfig, gtk3, intltool, glib
-, udev, itstool, libxml2, makeWrapper, libnotify, libcanberra_gtk3 }:
+{ stdenv, fetchurl, gnome3, meson, ninja, pkgconfig, gtk3, intltool, glib
+, udev, itstool, libxml2, wrapGAppsHook, libnotify, libcanberra_gtk3 }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ intltool glib gtk3 udev libxml2 gnome3.defaultIconTheme
-                  makeWrapper gnome3.gsettings_desktop_schemas itstool
-                  libnotify libcanberra_gtk3 ];
+  nativeBuildInputs = [ meson ninja intltool itstool pkgconfig libxml2 wrapGAppsHook ];
+  buildInputs = [ glib gtk3 udev libnotify libcanberra_gtk3
+                  gnome3.defaultIconTheme gnome3.gsettings_desktop_schemas ];
 
-  preFixup = ''
-    wrapProgram "$out/bin/bluetooth-sendto" \
-      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+  postPatch = ''
+    chmod +x meson_post_install.py # patchShebangs requires executable file
+    patchShebangs meson_post_install.py
   '';
 
   meta = with stdenv.lib; {

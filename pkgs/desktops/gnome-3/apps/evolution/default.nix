@@ -1,9 +1,8 @@
-{ stdenv, intltool, fetchurl, libxml2, webkitgtk, highlight
+{ stdenv, cmake, intltool, fetchurl, libxml2, webkitgtk, highlight
 , pkgconfig, gtk3, glib, libnotify, gtkspell3
 , wrapGAppsHook, itstool, shared_mime_info, libical, db, gcr, sqlite
-, gnome3, librsvg, gdk_pixbuf, libsecret, nss, nspr, icu, libtool
-, libcanberra_gtk3, bogofilter, gst_all_1, procps, p11_kit, openldap
-, cmake}:
+, gnome3, librsvg, gdk_pixbuf, libsecret, nss, nspr, icu
+, libcanberra_gtk3, bogofilter, gst_all_1, procps, p11_kit, openldap }:
 
 let
   majVer = gnome3.version;
@@ -15,10 +14,7 @@ in stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard
                             gnome3.evolution_data_server ];
 
-  propagatedBuildInputs = [ gnome3.gtkhtml ];
-
-  buildInputs = [ gtk3 glib intltool itstool libxml2 libtool
-                  gdk_pixbuf gnome3.defaultIconTheme librsvg db icu
+  buildInputs = [ gtk3 glib gdk_pixbuf gnome3.defaultIconTheme librsvg db icu
                   gnome3.evolution_data_server libsecret libical gcr
                   webkitgtk shared_mime_info gnome3.gnome_desktop gtkspell3
                   libcanberra_gtk3 bogofilter gnome3.libgdata sqlite
@@ -26,10 +22,9 @@ in stdenv.mkDerivation rec {
                   nss nspr libnotify procps highlight gnome3.libgweather
                   gnome3.gsettings_desktop_schemas
                   gnome3.libgnome_keyring gnome3.glib_networking openldap
-                  cmake
                 ];
 
-  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
+  nativeBuildInputs = [ cmake intltool itstool libxml2 pkgconfig wrapGAppsHook ];
 
 
   configureFlags = [ "--disable-pst-import" "--disable-autoar"
