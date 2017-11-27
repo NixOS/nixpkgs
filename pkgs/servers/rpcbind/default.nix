@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig, libtirpc
+{ fetchurl, stdenv, pkgconfig, libtirpc, fetchpatch
 , useSystemd ? true, systemd }:
 
 stdenv.mkDerivation rec {
@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./sunrpc.patch
+    (fetchpatch {
+      name = "CVE-2017-8779.patch";
+      url = "https://raw.githubusercontent.com/guidovranken/rpcbomb/e6da9e489aa8ad000b0ad5ac9abc5b4eefc3a769/rpcbind_patch.txt";
+      sha256 = "0w231w8fxihgrn526np078j3vbj3ylvjvxjmfpjvqhga5zg821ab";
+    })
   ];
 
   buildInputs = [ libtirpc ]
