@@ -7,10 +7,9 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     repo = pname;
-    owner = "flatland";
+    owner = "ninjudd";
     rev = version;
     sha256 = "1zl62wdwfak6z725asq5lcqb506la1aavj7ag78lvp155wyh8aq1";
-   #fetchSubmodules = true;
   };
 
   buildInputs = [ gcc jdk which ];
@@ -28,8 +27,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "a launcher for the Java Virtual Machine intended to be a drop-in replacement for the java command, only faster";
-    license = licenses.epl;
-    homepage = https://github.com/flatland/drip;
+    license = licenses.epl10;
+    homepage = https://github.com/ninjudd/drip;
     platforms = platforms.linux;
     maintainers = [ maintainers.rybern ];
   };
