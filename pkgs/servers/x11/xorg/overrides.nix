@@ -24,6 +24,10 @@ let
   compose = f: g: x: f (g x);
 in
 {
+  bdftopcf = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [ xorg.xproto xorg.fontsproto ];
+  };
+
   encodings = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [ xorg.mkfontscale ];
   };

@@ -44,16 +44,16 @@ let
   }) // {inherit libX11 xproto libXt ;};
 
   bdftopcf = (mkDerivation "bdftopcf" {
-    name = "bdftopcf-1.0.5";
+    name = "bdftopcf-1.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/app/bdftopcf-1.0.5.tar.bz2;
-      sha256 = "09i03sk878cmx2i40lkpsysn7zqcvlczb30j7x3lryb11jz4gx1q";
+      url = mirror://xorg/individual/app/bdftopcf-1.1.tar.bz2;
+      sha256 = "18hiscgljrz10zjcws25bis32nyrg3hzgmiq6scrh7izqmgz0kab";
     };
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libXfont ];
+    buildInputs = [ ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) // {inherit libXfont ;};
+  }) // {inherit ;};
 
   bigreqsproto = (mkDerivation "bigreqsproto" {
     name = "bigreqsproto-1.1.2";
