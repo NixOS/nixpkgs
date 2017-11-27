@@ -18,18 +18,14 @@ stdenv.mkDerivation rec {
     sha256 = "0hr9c7196wy9cg7vkmknszr2h446yvg9pqrq0rf3213kz074dhpg";
   };
 
-  phases = "installPhase";
-
   installPhase = ''
     install -D $src/command-time.plugin.zsh --target-directory=$out/share/zsh-command-time
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Plugin that output time: xx after long commands";
     homepage = https://github.com/popstas/zsh-command-time;
-    license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.mit;
+    platforms = platforms.unix;
   };
 }
-
-
