@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
 
   phases = [ "unpackPhase" "patchPhase" "configurePhase" "buildPhase" "checkPhase"];
 
-  meta = with stdenv; {
+  meta = with stdenv.lib; {
     description = "a simple-to-use, extensible, text-based data workflow tool that organizes command execution around data and its dependencies";
     homepage = https://github.com/Factual/drake;
-    license = licenses.epl;
-    platforms = lib.platforms.linux;
+    license = licenses.epl10;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ rybern ];
   };
 }
