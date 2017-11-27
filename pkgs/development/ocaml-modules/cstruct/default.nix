@@ -1,40 +1,28 @@
-{ stdenv, writeText, fetchFromGitHub, ocaml, ocamlbuild, ocplib-endian, sexplib, findlib, ppx_tools
-, async ? null, lwt ? null
-}:
+{ stdenv, fetchurl, ocaml, jbuilder, findlib, sexplib, ocplib-endian }:
 
-assert stdenv.lib.versionAtLeast ocaml.version "4.01";
+stdenv.mkDerivation rec {
+	name = "ocaml${ocaml.version}-cstruct-${version}";
+	version = "3.0.2";
+	src = fetchurl {
+		url = "https://github.com/mirage/ocaml-cstruct/releases/download/v${version}/cstruct-${version}.tbz";
+		sha256 = "03caxcyzfjmbnnwa15zy9s1ckkl4sc834d1qkgi4jcs3zqchvd8z";
+	};
 
-let param =
-  if stdenv.lib.versionAtLeast ocaml.version "4.02"
-  then { version = "2.3.2"; sha256 = "1fykack86hvvqhwngddyxxqlwm3xjljfaszsjbdrvjlrd1nlg079"; }
-  else { version = "1.9.0"; sha256 = "1c1j21zgmxi9spq23imy7byn50qr7hlds1cfpzxlsx9dp309jngy"; };
-in
+	unpackCmd = "tar -xjf $curSrc";
 
-let opt = b: "--${if b != null then "en" else "dis"}able"; in
+	buildInputs = [ ocaml jbuilder findlib ];
 
-stdenv.mkDerivation {
-  name = "ocaml${ocaml.version}-cstruct-${param.version}";
+	propagatedBuildInputs = [ sexplib ocplib-endian ];
 
-  src = fetchFromGitHub {
-    owner = "mirage";
-    repo = "ocaml-cstruct";
-    rev = "v${param.version}";
-    inherit (param) sha256;
-  };
+	buildPhase = "jbuilder build -p cstruct";
 
-  configureFlags = [ "${opt lwt}-lwt" "${opt async}-async" "${opt ppx_tools}-ppx" ];
+	inherit (jbuilder) installPhase;
 
-  buildInputs = [ ocaml findlib ocamlbuild ppx_tools lwt async ];
-  propagatedBuildInputs = [ ocplib-endian sexplib ];
-
-  createFindlibDestdir = true;
-  dontStrip = true;
-
-  meta = with stdenv.lib; {
-    homepage = https://github.com/mirage/ocaml-cstruct;
-    description = "Map OCaml arrays onto C-like structs";
-    license = stdenv.lib.licenses.isc;
-    maintainers = [ maintainers.vbgl maintainers.ericbmerritt ];
-    platforms = ocaml.meta.platforms or [];
-  };
+	meta = {
+		description = "Access C-like structures directly from OCaml";
+		license = stdenv.lib.licenses.isc;
+		maintainers = [ stdenv.lib.maintainers.vbgl ];
+		inherit (src.meta) homepage;
+		inherit (ocaml.meta) platforms;
+	};
 }
