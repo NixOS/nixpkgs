@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
       url = "https://anonscm.debian.org/git/pkg-exim4/exim4.git/plain/debian/patches/79_CVE-2017-1000369.patch?h=4.89-2%2bdeb9u1";
       sha256 = "0v46zywgkv1rdqhybqqrd0rwkdaj6q1f4x0a3vm9p0wz8vad3023";
     })
+    ./cve-2017-16943.patch
   ];
 
   buildInputs = [ coreutils db openssl pcre perl pkgconfig ];
