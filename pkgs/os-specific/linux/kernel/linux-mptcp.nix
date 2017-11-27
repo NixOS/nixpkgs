@@ -1,5 +1,6 @@
-{ stdenv, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
+{ stdenv, callPackage, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
+# ~ linux_mptcp = callPackage generic.nix (linux_mptcp.nix)
 import ./generic.nix (rec {
   mptcpVersion = "0.93";
   modDirVersion = "4.9.60";
@@ -43,4 +44,4 @@ import ./generic.nix (rec {
     TCP_CONG_BALIA m
 
   '' + (args.extraConfig or "");
-} // args // (args.argsOverride or {}))
+} // removeAttrs args ["extraConfig"])

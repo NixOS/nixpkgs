@@ -15,10 +15,12 @@ use Cwd;
 
 my $wd = getcwd;
 
+# exported via nix
 my $debug = $ENV{'DEBUG'};
 my $autoModules = $ENV{'AUTO_MODULES'};
 my $preferBuiltin = $ENV{'PREFER_BUILTIN'};
-    
+my $ignoreConfigErrors = $ENV{'ignoreConfigErrors'};
+
 $SIG{PIPE} = 'IGNORE';
 
 # Read the answers.
@@ -137,7 +139,7 @@ while (<CONFIG>) {
 close CONFIG;
 
 foreach my $name (sort (keys %answers)) {
-    my $f = $requiredAnswers{$name} && $ENV{'ignoreConfigErrors'} ne "1"
+    my $f = $requiredAnswers{$name} && $ignoreConfigErrors ne "1"
         ? sub { die "error: " . $_[0]; } : sub { warn "warning: " . $_[0]; };
     &$f("unused option: $name\n") unless defined $config{$name};
     &$f("option not set correctly: $name (wanted '$answers{$name}', got '$config{$name}')\n")

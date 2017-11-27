@@ -1,18 +1,21 @@
+# defines buildLinux, aka returns a function
 { runCommand, nettools, bc, perl, gmp, libmpc, mpfr, kmod, openssl
-, writeTextFile, ubootTools
+, writeTextFile, ubootTools, callPackage
 , hostPlatform
 }:
 
 let
-  readConfig = configfile: import (runCommand "config.nix" {} ''
-    echo "{" > "$out"
-    while IFS='=' read key val; do
-      [ "x''${key#CONFIG_}" != "x$key" ] || continue
-      no_firstquote="''${val#\"}";
-      echo '  "'"$key"'" = "'"''${no_firstquote%\"}"'";' >> "$out"
-    done < "${configfile}"
-    echo "}" >> $out
-  '').outPath;
+  # TODO import from config
+  # readConfig = configfile: import (runCommand "config.nix" {} ''
+  #   echo "{" > "$out"
+  #   while IFS='=' read key val; do
+  #     [ "x''${key#CONFIG_}" != "x$key" ] || continue
+  #     no_firstquote="''${val#\"}";
+  #     echo '  "'"$key"'" = "'"''${no_firstquote%\"}"'";' >> "$out"
+  #   done < "${configfile}"
+  #   echo "}" >> $out
+  # '').outPath;
+  confHelpers = callPackage ./config.nix {};
 in {
   # Allow overriding stdenv on each buildLinux call
   stdenv,
@@ -28,15 +31,20 @@ in {
   nativeKernelPatches ? [],
   # Patches for cross compiling only
   crossKernelPatches ? [],
+  # ignoreConfigErrors,
+  # NEW pass a set with config inside
+  configDrv,
   # The native kernel .config file
+  # TODO if null, generate it from  readFile configDrv
   configfile,
   # The cross kernel .config file
   crossConfigfile ? configfile,
   # Manually specified nixexpr representing the config
   # If unspecified, this will be autodetected from the .config
-  config ? stdenv.lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
+  config ? stdenv.lib.optionalAttrs allowImportFromDerivation (confHelpers.readConfig configfile),
+  # config ? null,
   # Cross-compiling config
-  crossConfig ? if allowImportFromDerivation then (readConfig crossConfigfile) else config,
+  crossConfig ? if allowImportFromDerivation then (confHelpers.readConfig crossConfigfile) else config,
   # Whether to utilize the controversial import-from-derivation feature to parse the config
   allowImportFromDerivation ? false
 }:
@@ -52,8 +60,10 @@ let
     cp -av $3 $4
   ''; };
 
+  # flags common to the cross-compiled and native builds
   commonMakeFlags = [
     "O=$(buildRoot)"
+
   ] ++ stdenv.lib.optionals (stdenv.platform ? kernelMakeFlags)
     stdenv.platform.kernelMakeFlags;
 
@@ -79,17 +89,26 @@ let
 
       installsFirmware = (config.isEnabled "FW_LOADER") &&
         (isModular || (config.isDisabled "FIRMWARE_IN_KERNEL"));
-    in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // {
+    in (optionalAttrs isModular { outputs = [ "out" "dev" ]; }) // rec {
       passthru = {
-        inherit version modDirVersion config kernelPatches configfile;
+        inherit version modDirVersion  kernelPatches configfile;
+        # inherit config;
       };
 
       inherit src;
 
+      # to help debug
+      # inherit config crossConfig;
+
+      # why this
       preUnpack = ''
-        mkdir build
-        export buildRoot="$(pwd)/build"
+      #   mkdir build
+      #   export buildRoot="$PWD/build"
       '';
+      autoModules = stdenv.platform.kernelAutoModules;
+      preferBuiltin = stdenv.platform.kernelPreferBuiltin or false;
+      arch = stdenv.platform.kernelArch;
+      kernelBaseConfig = stdenv.platform.kernelBaseConfig;
 
       patches = map (p: p.patch) kernelPatches;
 
@@ -99,11 +118,46 @@ let
             sed -i "$mf" -e 's|/usr/bin/||g ; s|/bin/||g ; s|/sbin/||g'
         done
         sed -i Makefile -e 's|= depmod|= ${kmod}/bin/depmod|'
-      '';
+      ''
+      # if no configfile set then it means we have to generate it on the go
+      # configfile == null
+      # configfile.patchKconfig
+      # + stdenv.lib.optionalString (true) confHelpers.patchKconfig;
+      + stdenv.lib.optionalString (true) configDrv.patchKconfig;
 
-      configurePhase = ''
+      # imported from generic.nix
+
+    # preConfigure = buildConfigPhase;
+
+    configurePhase = let
+
+        # if configfile is valid file
+        linkConfig = if (true) then ''ln -sv ${configfile} $buildRoot/.config
+        '' else ''
+          # TODO generate CONFIG !!!
+          '';
+
+      in ''
+        # if [ -z "$buildRoot" ]; then
+
+          # we should be in $sourceRoot
+          # assume we are in the $sourceRoot folder
+          # echo "buildRoot is not set"
+          echo "buildRoot is not set"
+          mkdir build
+          export buildRoot="$PWD/build"
+        # fi
         runHook preConfigure
-        ln -sv ${configfile} $buildRoot/.config
+        ''
+        +
+        linkConfig
+        +
+        ''
+
+        # ln -sv ${configfile} $buildRoot/.config
+
+        # reads the existing .config file and prompts the user for options in
+        # the current kernel source that are not found in the file.
         make $makeFlags "''${makeFlagsArray[@]}" oldconfig
         runHook postConfigure
 
@@ -209,6 +263,8 @@ let
         make firmware_install $makeFlags "''${makeFlagsArray[@]}" \
           $installFlags "''${installFlagsArray[@]}"
       '');
+      # TODO add it as an output
+    # installPhase = "mv .config $out";
 
       requiredSystemFeatures = [ "big-parallel" ];
 
@@ -229,8 +285,8 @@ let
       };
     };
 in
-
-stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKernelPatches) configfile) // {
+# config ? stdenv.lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
+stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKernelPatches) configfile) // rec {
   name = "linux-${version}";
 
   enableParallelBuilding = true;
@@ -240,9 +296,18 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" ];
 
+  # concatenated from drvAttrs
+  # configurePhase = ''
+  #   '';
+  # TODO add an output for the config ?
+
   makeFlags = commonMakeFlags ++ [
     "ARCH=${stdenv.platform.kernelArch}"
-  ];
+  ]
+  # {cfg.buildCores}
+  ++ stdenv.lib.optional enableParallelBuilding "-j4"
+    # cfg.buildCores # TODO set
+    ;
 
   karch = stdenv.platform.kernelArch;
 

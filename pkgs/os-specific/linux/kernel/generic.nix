@@ -6,7 +6,11 @@
 , # The kernel version.
   version
 
-, # Overrides to the kernel config.
+, # path to a .config file (or its content ?)
+  # if it s null we generate it
+  configfilename ? null
+
+, # Appended verbatim to kernel .config
   extraConfig ? ""
 
 , # The version number used for the module directory
@@ -26,8 +30,9 @@
 , ignoreConfigErrors ? stdenv.platform.name != "pc"
 , extraMeta ? {}
 , hostPlatform
+, callPackage
 , ...
-}:
+} @ args:
 
 assert stdenv.isLinux;
 
@@ -51,78 +56,35 @@ let
   config = configWithPlatform stdenv.platform;
   configCross = configWithPlatform hostPlatform.platform;
 
-  kernelConfigFun = baseConfig:
-    let
-      configFromPatches =
-        map ({extraConfig ? "", ...}: extraConfig) kernelPatches;
-    in lib.concatStringsSep "\n" ([baseConfig] ++ configFromPatches);
-
-  configfile = stdenv.mkDerivation {
+    configDrv = callPackage ./config.nix {
     inherit ignoreConfigErrors;
-    name = "linux-config-${version}";
 
-    generateConfig = ./generate-config.pl;
+    inherit version src kernelPatches stdenv;
+    # modDirVersion
+    };
 
-    kernelConfig = kernelConfigFun config;
+  # TODO moved it
+  # callPackage ./config.nix {};
+  # configfile = stdenv.mkDerivation {
+  # configfile = (import ./config.nix);
 
-    nativeBuildInputs = [ perl ];
-
-    platformName = stdenv.platform.name;
-    kernelBaseConfig = stdenv.platform.kernelBaseConfig;
-    kernelTarget = stdenv.platform.kernelTarget;
-    autoModules = stdenv.platform.kernelAutoModules;
-    preferBuiltin = stdenv.platform.kernelPreferBuiltin or false;
-    arch = stdenv.platform.kernelArch;
-
-    crossAttrs = let
-        cp = hostPlatform.platform;
-      in {
-        arch = cp.kernelArch;
-        platformName = cp.name;
-        kernelBaseConfig = cp.kernelBaseConfig;
-        kernelTarget = cp.kernelTarget;
-        autoModules = cp.kernelAutoModules;
-
-        # Just ignore all options that don't apply (We are lazy).
-        ignoreConfigErrors = true;
-
-        kernelConfig = kernelConfigFun configCross;
-
-        inherit (kernel.crossDrv) src patches preUnpack;
-      };
-
-    prePatch = kernel.prePatch + ''
-      # Patch kconfig to print "###" after every question so that
-      # generate-config.pl from the generic builder can answer them.
-      sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
-    '';
-
-    inherit (kernel) src patches preUnpack;
-
-    buildPhase = ''
-      cd $buildRoot
-
-      # Get a basic config file for later refinement with $generateConfig.
-      make -C ../$sourceRoot O=$PWD $kernelBaseConfig ARCH=$arch
-
-      # Create the config file.
-      echo "generating kernel configuration..."
-      echo "$kernelConfig" > kernel-config
-      DEBUG=1 ARCH=$arch KERNEL_CONFIG=kernel-config AUTO_MODULES=$autoModules \
-           PREFER_BUILTIN=$preferBuiltin SRC=../$sourceRoot perl -w $generateConfig
-    '';
-
-    installPhase = "mv .config $out";
-
-    enableParallelBuilding = true;
-  };
-
+    # TODO le transformer plutot en
   kernel = buildLinux {
+    # TODO args
     inherit version modDirVersion src kernelPatches stdenv;
+    # inherit ignoreConfigErrors;
+    inherit configDrv;
 
-    configfile = configfile.nativeDrv or configfile;
+    # configfile = configfile.nativeDrv or configfile;
+    # configfile = configfile.nativeDrv or configfile;
 
-    crossConfigfile = configfile.crossDrv or configfile;
+    # this is really configfilename
+    # configfile = if configfilename then configfilename else (callPackage ./config.nix {});
+    configfile = null;
+
+
+    # TODO fix later
+    # crossConfigfile = configfile.crossDrv or configfile;
 
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
 
