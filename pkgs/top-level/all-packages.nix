@@ -2164,8 +2164,6 @@ with pkgs;
 
   ftgl = callPackage ../development/libraries/ftgl { };
 
-  ftgl212 = callPackage ../development/libraries/ftgl/2.1.2.nix { };
-
   ftop = callPackage ../os-specific/linux/ftop { };
 
   fsfs = callPackage ../tools/filesystems/fsfs { };
@@ -10089,7 +10087,7 @@ with pkgs;
 
   olm = callPackage ../development/libraries/olm { };
 
-  oneko = callPackage ../applications/misc/oneko { };   
+  oneko = callPackage ../applications/misc/oneko { };
 
   oniguruma = callPackage ../development/libraries/oniguruma { };
 
