@@ -192,6 +192,8 @@ in {
 
   intelhex = callPackage ../development/python-modules/intelhex { };
 
+  lmtpd = callPackage ../development/python-modules/lmtpd { };
+
   mpi4py = callPackage ../development/python-modules/mpi4py {
     mpi = pkgs.openmpi;
   };
