@@ -1,8 +1,9 @@
-{ fetchurl, stdenv, pkgconfig, libxml2, libxslt, perl, perlPackages, gconf, guile
-, intltool, glib, gtk2, libofx, aqbanking, gwenhywfar, libgnomecanvas, goffice
-, webkit, glibcLocales, gsettings_desktop_schemas, makeWrapper, dconf, file
+{ fetchurl, fetchpatch, stdenv, intltool, pkgconfig, file, makeWrapper
+, libxml2, libxslt, perl, perlPackages, gconf, guile
+, glib, gtk2, libofx, aqbanking, gwenhywfar, libgnomecanvas, goffice
+, webkit, glibcLocales, gsettings_desktop_schemas, dconf
 , gettext, swig, slibGuile, enchant, bzip2, isocodes, libdbi, libdbiDrivers
-, pango, gdk_pixbuf, fetchpatch
+, pango, gdk_pixbuf
 }:
 
 /*
@@ -28,9 +29,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  nativeBuildInputs = [ intltool pkgconfig file makeWrapper ];
+
   buildInputs = [
     # general
-    intltool pkgconfig libxml2 libxslt glibcLocales file gettext swig enchant
+    libxml2 libxslt glibcLocales gettext swig enchant
     bzip2 isocodes
     # glib, gtk...
     glib gtk2 goffice webkit
@@ -44,12 +47,10 @@ stdenv.mkDerivation rec {
     guile slibGuile
     # database backends
     libdbi libdbiDrivers
-    # build
-    makeWrapper
   ];
 
   postPatch = ''
-  patchShebangs ./src
+    patchShebangs ./src
   '';
 
   configureFlags = [
