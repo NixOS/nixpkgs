@@ -788,11 +788,11 @@ let
   }) // {inherit compositeproto libX11 libXfixes xproto ;};
 
   libXcursor = (mkDerivation "libXcursor" {
-    name = "libXcursor-1.1.14";
+    name = "libXcursor-1.1.15";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXcursor-1.1.14.tar.bz2;
-      sha256 = "1prkdicl5y5yx32h1azh6gjfbijvjp415javv8dsakd13jrarilv";
+      url = mirror://xorg/individual/lib/libXcursor-1.1.15.tar.bz2;
+      sha256 = "0syzlfvh29037p0vnlc8f3jxz8nl55k65blswsakklkwsc6nfki9";
     };
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ fixesproto libX11 libXfixes xproto libXrender ];
