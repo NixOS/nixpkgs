@@ -18,7 +18,9 @@ stdenv.mkDerivation rec {
     sha256 = "19bxhdnkvgncgl9x6nbaf5nwgrdfw99icvdbi9adfh646pd5z64s";
   };
 
-  enableParallelBuilding = true;
+  # Dependencies are underspecified: "make -C src gtest/zcash_gtest-test_merkletree.o"
+  # fails with "fatal error: test/data/merkle_roots.json.h: No such file or directory"
+  enableParallelBuilding = false;
 
   buildInputs = [ pkgconfig gtest gmock gmp libsnark autoreconfHook openssl wget db62 boost zlib
                   protobuf libevent libsodium librustzcash ]
