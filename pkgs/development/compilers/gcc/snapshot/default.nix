@@ -395,7 +395,7 @@ stdenv.mkDerivation ({
   };
 
   # http://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
-  CC = if hostPlatform.system == "x86_64-solaris" then "gcc -m64" else "gcc";
+  ${if hostPlatform.system == "x86_64-solaris" then "CC" else null} = "gcc -m64";
 
   # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
   # library headers and binaries, regarless of the language being compiled.
