@@ -1,4 +1,4 @@
-{ stdenv, hostPlatform, fetchurl, perl, buildLinux, ... } @ args:
+{ stdenv, hostPlatform, fetchurl, perl, buildLinux, libelf, utillinux, ... } @ args:
 
 import ./generic.nix (args // rec {
   version = "4.15-rc1";
