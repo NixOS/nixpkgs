@@ -1,12 +1,11 @@
 { stdenv, fetchurl, pkgconfig, postgresql, curl, openssl, zlib, pcre, libevent, libiconv }:
 
 let
-
-  version = "3.4.3";
+  version = "3.4.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/zabbix/zabbix-${version}.tar.gz";
-    sha256 = "1kyq9y6mlrb824v60c7h2hjjrlysdmmz64sxj3is2cnk0fspvs00";
+    sha256 = "192klcwypbcsfs4q7jrs1cqfqk8pzwrg7dhaxhig6hfll1r4xs1f";
   };
 
 in
