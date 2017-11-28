@@ -1,4 +1,6 @@
 { runCommand, nettools, bc, perl, gmp, libmpc, mpfr, kmod, openssl
+, libelf ? null
+, utillinux ? null
 , writeTextFile, ubootTools
 , hostPlatform
 }:
@@ -230,13 +232,18 @@ let
     };
 in
 
+assert stdenv.lib.versionAtLeast version "4.15" -> libelf != null;
+assert stdenv.lib.versionAtLeast version "4.15" -> utillinux != null;
 stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKernelPatches) configfile) // {
   name = "linux-${version}";
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ perl bc nettools openssl gmp libmpc mpfr ]
-    ++ optional (stdenv.platform.kernelTarget == "uImage") ubootTools;
+      ++ optional (stdenv.platform.kernelTarget == "uImage") ubootTools
+      ++ optional (stdenv.lib.versionAtLeast version "4.15") libelf
+      ++ optional (stdenv.lib.versionAtLeast version "4.15") utillinux
+      ;
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" ];
 

@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [ ./glibc-2.26.patch ];
+
   nativeBuildInputs = [ autoconf automake pkgconfig libtool check
     bison git gettext gperf perl texinfo help2man ncurses
   ];
@@ -30,6 +32,8 @@ stdenv.mkDerivation rec {
     export RSYNC=true # set to rsync binary, eventhough it is not used.
     make PREFIX=$out config
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "The Directed Graph Shell";

@@ -64,6 +64,12 @@ in stdenv.mkDerivation rec {
       url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=82df2631d7d0446b206ea6b434ea609b6c28b0e8";
       sha256 = "04kfww7y0wazg6372g44fa2k5kiiigq4616ihkvmp18rz86903n9";
     })
+
+    (fetchurl {
+      name = "mupdf-1.11-CVE-2017-15369.patch";
+      url = "http://git.ghostscript.com/?p=mupdf.git;a=patch;h=c2663e51238ec8256da7fc61ad580db891d9fe9a";
+      sha256 = "0xx2mrbjcymi3gh0l3cq81m6bygp9dv79v1kyrbcvpl5z6wgl71y";
+    })
   ];
 
   postPatch = ''
