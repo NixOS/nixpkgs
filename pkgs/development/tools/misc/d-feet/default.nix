@@ -2,7 +2,7 @@
 , python3Packages, wrapGAppsHook, gnome3, libwnck3 }:
 
 let
-  version = "${major}.12";
+  version = "${major}.13";
   major = "0.3";
 in python3Packages.buildPythonApplication rec {
   name = "d-feet-${version}";
@@ -10,7 +10,7 @@ in python3Packages.buildPythonApplication rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/d-feet/${major}/d-feet-${version}.tar.xz";
-    sha256 = "054hl56rii9ff7rzl42h7993ywjbxmhlcd7bk8fi1c2bx98c6s68";
+    sha256 = "1md3lzs55sg04ds69dbginpxqvgg3qnf1lfx3vmsxph6bbd2y6ll";
   };
 
   nativeBuildInputs = [ pkgconfig itstool intltool wrapGAppsHook libxml2 ];
