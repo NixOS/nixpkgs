@@ -12135,6 +12135,9 @@ with pkgs;
 
   zabbix = recurseIntoAttrs (callPackages ../servers/monitoring/zabbix {});
 
+  zabbix22 = callPackage ../servers/monitoring/zabbix/2.2.nix { };
+
+
   ### OS-SPECIFIC
 
   afuse = callPackage ../os-specific/linux/afuse { };
