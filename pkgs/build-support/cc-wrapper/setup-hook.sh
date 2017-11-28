@@ -138,15 +138,15 @@ export NIX_${role}CC=@out@
 export ${role}CC=@named_cc@
 export ${role}CXX=@named_cxx@
 
-for CMD in \
+for cmd in \
     ar as nm objcopy ranlib strip strings size ld windres
 do
     if
-        PATH=$_PATH type -p "@targetPrefix@$CMD" > /dev/null
+        PATH=$_PATH type -p "@targetPrefix@${cmd}" > /dev/null
     then
-        export "${role}$(echo "$CMD" | tr "[:lower:]" "[:upper:]")=@targetPrefix@${CMD}";
+        export "${role}$(echo "$cmd" | tr "[:lower:]" "[:upper:]")=@targetPrefix@${cmd}";
     fi
 done
 
 # No local scope in sourced file
-unset role
+unset -v role cmd
