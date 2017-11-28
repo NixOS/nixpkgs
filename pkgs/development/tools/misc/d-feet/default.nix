@@ -1,10 +1,10 @@
 { stdenv, pkgconfig, fetchurl, itstool, intltool, libxml2, glib, gtk3
-, pythonPackages, wrapGAppsHook, gnome3, libwnck3 }:
+, python3Packages, wrapGAppsHook, gnome3, libwnck3 }:
 
 let
   version = "${major}.12";
   major = "0.3";
-in pythonPackages.buildPythonApplication rec {
+in python3Packages.buildPythonApplication rec {
   name = "d-feet-${version}";
   format = "other";
 
@@ -16,7 +16,7 @@ in pythonPackages.buildPythonApplication rec {
   nativeBuildInputs = [ pkgconfig itstool intltool wrapGAppsHook libxml2 ];
   buildInputs = [ glib gtk3 gnome3.defaultIconTheme libwnck3 ];
 
-  propagatedBuildInputs = with pythonPackages; [ pygobject3 pep8 ];
+  propagatedBuildInputs = with python3Packages; [ pygobject3 pep8 ];
 
   meta = {
     description = "D-Feet is an easy to use D-Bus debugger";
