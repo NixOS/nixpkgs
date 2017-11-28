@@ -31,5 +31,6 @@ python2Packages.buildPythonApplication rec {
     license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.all;
+    broken = true; # Incompatible with Git 2.15 object store.
   };
 }
