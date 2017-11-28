@@ -20,6 +20,8 @@ buildPythonPackage rec {
     extension = "zip";
   };
 
+  patches = [ ./test-selection.patch ];
+
   propagatedBuildInputs = [ zope_interface zope_exceptions zope_testing six ];
 
   meta = with stdenv.lib; {
