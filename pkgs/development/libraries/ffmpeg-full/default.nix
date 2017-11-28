@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl, texinfo, yasm
+{ stdenv, fetchurl, fetchpatch, pkgconfig, perl, texinfo, yasm
 , hostPlatform
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)
@@ -238,15 +238,16 @@ stdenv.mkDerivation rec {
     sha256 = "1vzvpx8ixy8m44f8qwp833hv253hpghybgzbc4n8b3div3j0dvmf";
   };
 
-  patchPhase = let
-    cve_2017_16840_patch = (fetchurl{
+  patches = [
+    (fetchurl {
       name = "CVE-2017-16840.patch";
       url = "http://git.videolan.org/?p=ffmpeg.git;a=patch;h=a94cb36ab2ad99d3a1331c9f91831ef593d94f74";
-      sha256 = "1rjr9lc71cyy43wsa2zxb9ygya292h9jflvr5wk61nf0vp97gjg3";
-    });
-  in
-  '' patch -p1 < ${cve_2017_16840_patch}
-     patchShebangs .
+      sha256 = "0zx0vh110hrykk7j863j04bx6igm2q8dlkv25mf5g4rbxafpqig3";
+    })
+  ];
+
+  prePatch = ''
+    patchShebangs .
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i 's/#ifndef __MAC_10_11/#if 1/' ./libavcodec/audiotoolboxdec.c
   '' + stdenv.lib.optionalString (frei0r != null) ''
