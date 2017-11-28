@@ -2,7 +2,7 @@
 , intltool, glib, gtk2, libofx, aqbanking, gwenhywfar, libgnomecanvas, goffice
 , webkit, glibcLocales, gsettings_desktop_schemas, makeWrapper, dconf, file
 , gettext, swig, slibGuile, enchant, bzip2, isocodes, libdbi, libdbiDrivers
-, pango, gdk_pixbuf
+, pango, gdk_pixbuf, fetchpatch
 }:
 
 /*
@@ -19,6 +19,14 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/gnucash/${name}.tar.bz2";
     sha256 = "0x84f07p30pwhriamv8ifljgw755cj87rc12jy1xddf47spyj7rp";
   };
+
+  patches = [
+    (fetchpatch {
+     sha256 = "11nlf9j7jm1i37mfcmmnkplxr3nlf257fxd01095vd65i2rn1m8h";
+     name = "fix-brittle-test.patch";
+     url = "https://github.com/Gnucash/gnucash/commit/42ac55e03a1a84739f4a5b7a247c31d91c0adc4a.patch";
+    })
+  ];
 
   buildInputs = [
     # general
@@ -40,7 +48,7 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  patchPhase = ''
+  postPatch = ''
   patchShebangs ./src
   '';
 
