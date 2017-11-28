@@ -1322,6 +1322,19 @@ rec {
       archs = ["noarch" "x86_64"];
       packages = commonCentOSPackages ++ [ "procps-ng" ];
     };
+
+    centos74x86_64 = rec {
+      name = "centos-7.4-x86_64";
+      fullName = "CentOS 7.4 (x86_64)";
+      # N.B. Switch to vault.centos.org when the next release comes out
+      urlPrefix = http://mirror.centos.org/centos-7/7.4.1708/os/x86_64;
+      packagesList = fetchurl {
+        url = "${urlPrefix}/repodata/b686d3a0f337323e656d9387b9a76ce6808b26255fc3a138b1a87d3b1cb95ed5-primary.xml.gz";
+        sha256 = "1mayp4f3nzd8n4wa3hsz4lk8p076djkvk1wkdmjkwcipyfhd71mn";
+      };
+      archs = ["noarch" "x86_64"];
+      packages = commonCentOSPackages ++ [ "procps-ng" ];
+    };
   };
 
 
