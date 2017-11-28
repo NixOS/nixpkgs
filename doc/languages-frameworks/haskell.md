@@ -48,7 +48,7 @@ trouble with packages like `3dmodels` and `4Blocks`, because these names are
 invalid identifiers in the Nix language. The issue of how to deal with these
 rare corner cases is currently unresolved.)
 
-Haskell packages who's Nix name (second column) begins with a `haskell-` prefix
+Haskell packages whose Nix name (second column) begins with a `haskell-` prefix
 are packages that provide a library whereas packages without that prefix
 provide just executables. Libraries may provide executables too, though: the
 package `haskell-pandoc`, for example, installs both a library and an
