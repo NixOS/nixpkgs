@@ -31,9 +31,6 @@ in
       post_max_size = 32M
       max_execution_time = 300
       max_input_time = 300
-
-      ; https://github.com/NixOS/nixpkgs/issues/31451
-      pcre.jit = false
     '';
 
   extraConfig = ''
