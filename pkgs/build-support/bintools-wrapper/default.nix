@@ -82,7 +82,7 @@ stdenv.mkDerivation {
 
   inherit targetPrefix infixSalt;
 
-  outputs = [ "out" "man" ];
+  outputs = [ "out" "info" "man" ];
 
   passthru = {
     inherit bintools libc nativeTools nativeLibc nativePrefix;
@@ -110,7 +110,7 @@ stdenv.mkDerivation {
     ''
       set -u
 
-      mkdir -p $out/bin $out/nix-support $man/nix-support
+      mkdir -p $out/bin {$out,$info,$man}/nix-support
 
       wrap() {
         local dst="$1"
@@ -231,6 +231,15 @@ stdenv.mkDerivation {
       # install the wrapper, you get tools like objdump, the manpages,
       # etc. as well (same for any binaries of libc).
       printWords ${bintools_bin} ${if libc == null then "" else libc_bin} > $out/nix-support/propagated-user-env-packages
+
+      ##
+      ## Man page and info support
+      ##
+
+      printWords ${bintools.info or ""} \
+        >> $info/nix-support/propagated-build-inputs
+      printWords ${bintools.man or ""} \
+        >> $man/nix-support/propagated-build-inputs
     ''
 
     + ''
