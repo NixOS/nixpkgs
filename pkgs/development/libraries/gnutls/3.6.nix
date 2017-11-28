@@ -14,5 +14,6 @@ callPackage ./generic.nix (args // rec {
   postPatch = ''
     sed '2iexit 77' -i tests/pkgconfig.sh
     sed '/^void doit(void)/,$s/{/{ exit(77);/; t' -i tests/trust-store.c
+    # TODO: remove just this line on some rebuild
   '';
 })
