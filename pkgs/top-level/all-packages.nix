@@ -12598,6 +12598,7 @@ with pkgs;
   linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
+      kernelPatches.p9_fixes
       kernelPatches.modinst_arg_list_too_long
     ] ++ lib.optionals ((platform.kernelArch or null) == "mips") [
       kernelPatches.mips_fpureg_emu
