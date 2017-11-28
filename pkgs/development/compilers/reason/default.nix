@@ -3,13 +3,13 @@
 
 buildOcaml rec {
   name = "reason";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "reason";
-    rev = "v${version}";
-    sha256 = "1rpaazy0m76qidxwdr51qrgs3ryyz875rndwp9p30siqd04raswq";
+    rev = version;
+    sha256 = "19kp1cnxi6dq89xh07c14q7kzkawbxdkwrvn1rl48l78d04agnxx";
   };
 
   propagatedBuildInputs = [ menhir merlin_extend ppx_tools_versioned ];
