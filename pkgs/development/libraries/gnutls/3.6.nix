@@ -4,7 +4,7 @@ callPackage ./generic.nix (args // rec {
   version = "3.6.1";
 
   src = fetchurl {
-    url = "http://www.gnupg.org/ftp/gcrypt/gnutls/v3.6/gnutls-${version}.tar.xz";
+    url = "mirror://gnupg/gnutls/v3.6/gnutls-${version}.tar.xz";
     sha256 = "1vdsir53ddxyapnxh5fpnfyij3scx3818iri4hl07g4lk4n0vc90";
   };
 
