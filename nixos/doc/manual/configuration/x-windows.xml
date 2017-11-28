@@ -115,13 +115,14 @@ hardware.opengl.driSupport32Bit = true;
 <para>Support for Synaptics touchpads (found in many laptops such as
 the Dell Latitude series) can be enabled as follows:
 <programlisting>
-services.xserver.synaptics.enable = true;
+services.xserver.libinput.enable = true;
 </programlisting>
 The driver has many options (see <xref linkend="ch-options"/>).  For
-instance, the following enables two-finger scrolling:
+instance, the following disables tap-to-click behavior:
 <programlisting>
-services.xserver.synaptics.twoFingerScroll = true;
+services.xserver.libinput.tapping = false;
 </programlisting>
+Note: the use of <literal>services.xserver.synaptics</literal> is deprecated since NixOS 17.09.
 </para>
 
 </simplesect>
