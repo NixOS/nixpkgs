@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gcc, jdk, which }:
+{ stdenv, fetchFromGitHub, jdk, which, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
@@ -12,21 +12,26 @@ stdenv.mkDerivation rec {
     sha256 = "1zl62wdwfak6z725asq5lcqb506la1aavj7ag78lvp155wyh8aq1";
   };
 
-  buildInputs = [ gcc jdk which ];
- 
-  patchPhase = ''
+  nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = [ jdk ];
+
+  postPatch = ''
+    patchShebangs .
+  '';
+
+  installPhase = ''
+    runHook preInstall
     mkdir $out
     cp ./* $out -r
-  '';
-
-  buildPhase = ''
+    wrapProgram $out/bin/drip \
+      --prefix PATH : "${which}/bin"
     $out/bin/drip version
+    runHook postInstall
   '';
-
-  phases = [ "unpackPhase" "patchPhase" "buildPhase" ];
 
   meta = with stdenv.lib; {
-    description = "a launcher for the Java Virtual Machine intended to be a drop-in replacement for the java command, only faster";
+    description = "A launcher for the Java Virtual Machine intended to be a drop-in replacement for the java command, only faster";
     license = licenses.epl10;
     homepage = https://github.com/ninjudd/drip;
     platforms = platforms.linux;
