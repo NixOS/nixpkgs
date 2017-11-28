@@ -779,22 +779,22 @@ let
   }) // {inherit fixesproto libX11 xextproto xproto ;};
 
   libXfont = (mkDerivation "libXfont" {
-    name = "libXfont-1.5.3";
+    name = "libXfont-1.5.4";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXfont-1.5.3.tar.bz2;
-      sha256 = "1l4k3i3xzqdmaszykh6bb2ah78p6c3z7fak7xzgq2d38s87w31db";
+      url = mirror://xorg/individual/lib/libXfont-1.5.4.tar.bz2;
+      sha256 = "0hiji1bvpl78aj3a3141hkk353aich71wv8l5l2z51scfy878zqs";
     };
     buildInputs = [pkgconfig libfontenc fontsproto freetype xproto xtrans zlib ];
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit libfontenc fontsproto freetype xproto xtrans zlib ;};
 
   libXfont2 = (mkDerivation "libXfont2" {
-    name = "libXfont2-2.0.2";
+    name = "libXfont2-2.0.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = mirror://xorg/individual/lib/libXfont2-2.0.2.tar.bz2;
-      sha256 = "04f1lswh1ridkycgaivf1hrr77l5ap8smbfr2rqjrm7phwxqs24l";
+      url = mirror://xorg/individual/lib/libXfont2-2.0.3.tar.bz2;
+      sha256 = "0klwmimmhm3axpj8pwn5l41lbggh47r5aazhw63zxkbwfgyvg2hf";
     };
     buildInputs = [pkgconfig libfontenc fontsproto freetype xproto xtrans zlib ];
     meta.platforms = stdenv.lib.platforms.unix;
