@@ -74,7 +74,7 @@ an example for a minimal `hello` crate:
     $ cargo build
      Compiling hello v0.1.0 (file:///tmp/hello)
       Finished dev [unoptimized + debuginfo] target(s) in 0.20 secs
-    $ carnix -o hello.nix --src ./. Cargo.lock
+    $ carnix -o hello.nix --src ./. Cargo.lock --standalone
     $ nix-build hello.nix
 
 Now, the file produced by the call to `carnix`, called `hello.nix`, looks like:

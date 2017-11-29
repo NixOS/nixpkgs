@@ -1,10 +1,4 @@
-# This file contains the nix expression necessary to compile carnix, a
-# tool to generate nix expression from Rust Cargo.lock files.
-#
-# Starts with functions that output crates, and then calls them with
-# the proper dependencies computed from the carnix's own Cargo.lock.
-{ pkgs, ... }:
-with pkgs;
+{ buildPlatform, buildRustCrate, ... }:
 let aho_corasick_0_6_3_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "aho-corasick";
       version = "0.6.3";
@@ -50,10 +44,10 @@ let aho_corasick_0_6_3_ = { dependencies?[], buildDependencies?[], features?[] }
       sha256 = "18h073l5jd88rx4qdr95fjddr9rk79pb1aqnshzdnw16cfmb9rws";
       inherit dependencies buildDependencies features;
     };
-    carnix_0_4_8_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+    carnix_0_4_9_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "carnix";
-      version = "0.4.8";
-      sha256 = "0n56wbbivmz0r0nyvpsnnqksmlpqc7f7m8jidj1pywm026jhh5yg";
+      version = "0.4.9";
+      sha256 = "18h073l5jd88rx4qdr95fjddr9rk79pb1aqnshzdnw16cfmb9rws";
       inherit dependencies buildDependencies features;
     };
     cc_1_0_3_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
@@ -398,7 +392,7 @@ rec {
   bitflags_0_9_1 = bitflags_0_9_1_ {
     features = [ "example_generated" ];
   };
-  carnix_0_4_8 = carnix_0_4_8_ {
+  carnix_0_4_9 = carnix_0_4_9_ {
     dependencies = [ clap_2_27_1 env_logger_0_4_3 error_chain_0_11_0 log_0_3_8 nom_3_2_1 regex_0_2_2 rusqlite_0_12_0 serde_1_0_19 serde_derive_1_0_19 serde_json_1_0_5 tempdir_0_3_5 toml_0_4_5 ];
   };
   cc_1_0_3 = cc_1_0_3_ {

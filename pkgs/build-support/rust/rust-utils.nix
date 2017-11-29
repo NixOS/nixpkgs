@@ -118,7 +118,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
           ${crateFeatures} --out-dir target/bin --emit=dep-info,link -L dependency=target/deps \
           $LINK ${deps}$EXTRA_LIB --cap-lints allow \
           $BUILD_OUT_DIR $EXTRA_BUILD $EXTRA_FEATURES --color ${colors}
-        if [ "$crate_name_" -ne "$crate_name"]; then
+        if [ "$crate_name_" -ne "$crate_name" ]; then
           mv target/bin/$crate_name_ target/bin/$crate_name
         fi
       }
@@ -195,7 +195,7 @@ let buildCrate = { crateName, crateVersion, buildDependencies, dependencies,
          EXTRA_FEATURES=$(sed -n "s/^cargo:rustc-cfg=\(.*\)/--cfg \1/p" target/build/${crateName}.opt | tr '\n' ' ')
          EXTRA_LINK=$(sed -n "s/^cargo:rustc-link-lib=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ')
          EXTRA_LINK_SEARCH=$(sed -n "s/^cargo:rustc-link-search=\(.*\)/\1/p" target/build/${crateName}.opt | tr '\n' ' ')
-         CRATENAME=$(echo ${crateName} | sed -e "s/\(.*\)-sys$/\1/" | tr '[:lower:]' '[:upper:]')
+         CRATENAME=$(echo ${crateName} | sed -e "s/\(.*\)-sys$/\U\1/")
          grep -P "^cargo:(?!(rustc-|warning=|rerun-if-changed=|rerun-if-env-changed))" target/build/${crateName}.opt \
            | sed -e "s/cargo:\([^=]*\)=\(.*\)/export DEP_$(echo $CRATENAME)_\U\1\E=\2/" > target/env
 
