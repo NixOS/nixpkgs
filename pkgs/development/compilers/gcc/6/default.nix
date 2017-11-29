@@ -391,6 +391,7 @@ stdenv.mkDerivation ({
       in "--with-native-system-header-dir=${incDir}"
     ) ++
 
+    optional (targetPlatform == hostPlatform) (mkPlatformFlags stdenv.platform) ++
     optional (targetPlatform != hostPlatform) crossConfigureFlags ++
     optional (!bootstrap) "--disable-bootstrap" ++
 
