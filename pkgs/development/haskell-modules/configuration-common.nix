@@ -454,9 +454,9 @@ self: super: {
   threads = dontCheck super.threads;
 
   # https://github.com/NixOS/nixpkgs/issues/32138
-  purescript = super.purescript.overrideScope (self: super: {
+  purescript = super.purescript.override {
     optparse-applicative = self.optparse-applicative_0_14_0_0;
-  });
+  };
 
   # Missing module.
   rematch = dontCheck super.rematch;            # https://github.com/tcrayford/rematch/issues/5
