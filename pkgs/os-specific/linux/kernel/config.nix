@@ -114,6 +114,7 @@ stdenv.mkDerivation rec {
     patchKconfig = ''
         # Patch kconfig to print "###" after every question so that
         # generate-config.pl from the generic builder can answer them.
+        echo "Patching Kconfig"
         sed -e '/fflush(stdout);/i\printf("###");' -i scripts/kconfig/conf.c
   '';
 
@@ -132,14 +133,15 @@ stdenv.mkDerivation rec {
 
       # Get a basic config file for later refinement with $generateConfig.
       # make O=$buildRoot $kernelBaseConfig ARCH=$arch
-      make -C ../$sourceRoot O=$PWD $kernelBaseConfig ARCH=$arch
+      make -C ../$sourceRoot O=$buildRoot $kernelBaseConfig ARCH=$arch
 
       # Create the config file.
       echo "generating kernel configuration..."
-      echo "$kernelConfig" > kernel-config
+      echo "${kernelConfig}" > $buildRoot/kernel-config
+      echo "Printing kernel config"
       # TODO SRC ?
-      DEBUG=1 ARCH=$arch KERNEL_CONFIG=kernel-config AUTO_MODULES=$autoModules \
-           PREFER_BUILTIN=$preferBuiltin SRC=. perl -w ${generateConfig}
+      DEBUG=1 ARCH=$arch KERNEL_CONFIG=$buildRoot/kernel-config AUTO_MODULES=$autoModules \
+           PREFER_BUILTIN=$preferBuiltin SRC=. BUILD_FOLDER=$buildRoot perl -w ${generateConfig}
     '';
 
     installPhase = "mv $buildRoot/.config $out";
