@@ -1100,7 +1100,9 @@ with pkgs;
 
   geekbench = callPackage ../tools/misc/geekbench { };
 
-  gencfsm = callPackage ../tools/security/gencfsm { };
+  gencfsm = callPackage ../tools/security/gencfsm {
+    vala = vala_0_34;
+  };
 
   genromfs = callPackage ../tools/filesystems/genromfs { };
 

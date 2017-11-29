@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
 
   preFixup = ''gappsWrapperArgs+=(--prefix PATH : ${encfs}/bin)'';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     homepage = http://www.libertyzero.com/GEncfsM/;
     downloadPage = https://launchpad.net/gencfsm/;
