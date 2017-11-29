@@ -47,7 +47,7 @@ let aho_corasick_0_6_3_ = { dependencies?[], buildDependencies?[], features?[] }
     carnix_0_4_9_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "carnix";
       version = "0.4.9";
-      sha256 = "18h073l5jd88rx4qdr95fjddr9rk79pb1aqnshzdnw16cfmb9rws";
+      sha256 = "0qvfgxrzdx30wzl424cp68hm27f3b66g0wq5mkqq8pn57pwglpfs";
       inherit dependencies buildDependencies features;
     };
     cc_1_0_3_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
