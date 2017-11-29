@@ -430,7 +430,7 @@ stdenv.mkDerivation ({
       optional langJava "--with-ecj-jar=${javaEcj.crossDrv}" ++
       optional javaAwtGtk "--enable-java-awt=gtk" ++
       optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr.crossDrv}" ++
-      optional (cloog != null) "--with-cloog=${cloog.crossDrv}" "--enable-cloog-backend=isl" ++
+      optionals (cloog != null) ["--with-cloog=${cloog.crossDrv}" "--enable-cloog-backend=isl"] ++
       [
         "--with-gmp=${gmp.crossDrv}"
         "--with-mpfr=${mpfr.crossDrv}"
