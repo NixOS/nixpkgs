@@ -1496,7 +1496,10 @@ with pkgs;
 
   libpinyin = callPackage ../development/libraries/libpinyin { };
 
-  libskk = callPackage ../development/libraries/libskk { gnome_common = gnome3.gnome_common; };
+  libskk = callPackage ../development/libraries/libskk {
+    gnome_common = gnome3.gnome_common;
+    vala = vala_0_34;
+  };
 
   m17n_db = callPackage ../tools/inputmethods/m17n-db { };
 

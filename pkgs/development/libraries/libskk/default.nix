@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
     ln -s ${skk-dicts}/share/SKK-JISYO.L $dictDir/
   '';
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "A library to deal with Japanese kana-to-kanji conversion method";
     longDescription = ''
