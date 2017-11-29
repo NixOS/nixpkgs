@@ -27,6 +27,8 @@ in stdenv.mkDerivation rec {
     sha256 = "0z5sxji8jh8sh0g3inbzndhsrbm4qyqlvjrxl5wkxbr61lnxa5k3";
   };
 
+  patches = [ ./nano-2.9.1-darwin.patch ];
+
   nativeBuildInputs = [ texinfo ] ++ optional enableNls gettext;
   buildInputs = [ ncurses ];
 
@@ -41,6 +43,8 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     cp ${nixSyntaxHighlight}/nix.nanorc $out/share/nano/
   '';
+
+  enableParallelBuilding = true;
 
   meta = {
     homepage = https://www.nano-editor.org/;

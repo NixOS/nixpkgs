@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
     ln -s ${isocodes}/share/xml/iso-codes $out/share/xml/iso-codes
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     homepage = https://www.freedesktop.org/software/PackageKit/;
     platforms = platforms.linux;

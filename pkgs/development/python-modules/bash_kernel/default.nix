@@ -4,6 +4,7 @@
 , fetchpatch
 , ipykernel
 , isPy27
+, python
 , pexpect
 }:
 buildPythonPackage rec {
@@ -35,7 +36,7 @@ buildPythonPackage rec {
   '';
 
   postInstall = ''
-    python -m bash_kernel.install --prefix $out
+    ${python.interpreter} -m bash_kernel.install --prefix $out
   '';
 
   meta = {

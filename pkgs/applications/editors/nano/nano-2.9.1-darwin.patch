@@ -1,0 +1,9 @@
+--- a/lib/stat.c
++++ b/lib/stat.c
+@@ -48,4 +48,6 @@ orig_stat (const char *filename, struct stat *buf)
+ #include "sys/stat.h"
+ 
++#include "stat-time.h"
++
+ #include <errno.h>
+ #include <limits.h>
