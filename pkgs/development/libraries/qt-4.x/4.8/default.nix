@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
   patches =
     [ ./glib-2.32.patch
       ./libressl.patch
+      ./parallel-configure.patch
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
         cups = if cups != null then stdenv.lib.getLib cups else null;
@@ -117,6 +118,7 @@ stdenv.mkDerivation rec {
       -demosdir $TMPDIR/share/doc/${name}/demos
       -datadir $out/share/${name}
       -translationdir $out/share/${name}/translations
+      --jobs=$NIX_BUILD_CORES
     "
     unset LD # Makefile uses gcc for linking; setting LD interferes
   '' + optionalString stdenv.cc.isClang ''
@@ -251,7 +253,7 @@ stdenv.mkDerivation rec {
     homepage    = http://qt-project.org/;
     description = "A cross-platform application framework for C++";
     license     = licenses.lgpl21Plus; # or gpl3
-    maintainers = with maintainers; [ lovek323 phreedom sander ];
+    maintainers = with maintainers; [ orivej lovek323 phreedom sander ];
     platforms   = platforms.unix;
   };
 }
