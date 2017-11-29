@@ -8918,6 +8918,8 @@ with pkgs;
 
   libabw = callPackage ../development/libraries/libabw { };
 
+  libamqpcpp = callPackage ../development/libraries/libamqpcpp { };
+
   libantlr3c = callPackage ../development/libraries/libantlr3c {};
 
   libappindicator-gtk2 = callPackage ../development/libraries/libappindicator { gtkVersion = "2"; };
