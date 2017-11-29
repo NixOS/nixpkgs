@@ -1639,6 +1639,7 @@ with pkgs;
     idnSupport = true;
     ldapSupport = true;
     gssSupport = true;
+    brotliSupport = true;
   };
 
   curl = callPackage ../tools/networking/curl rec {

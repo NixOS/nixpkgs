@@ -8,6 +8,7 @@
 , scpSupport ? false, libssh2 ? null
 , gssSupport ? false, gss ? null
 , c-aresSupport ? false, c-ares ? null
+, brotliSupport ? false, brotli ? null
 }:
 
 assert http2Support -> nghttp2 != null;
@@ -19,6 +20,7 @@ assert !(gnutlsSupport && sslSupport);
 assert gnutlsSupport -> gnutls != null;
 assert scpSupport -> libssh2 != null;
 assert c-aresSupport -> c-ares != null;
+assert brotliSupport -> brotli != null;
 
 stdenv.mkDerivation rec {
   name = "curl-7.57.0";
@@ -47,7 +49,8 @@ stdenv.mkDerivation rec {
     optional c-aresSupport c-ares ++
     optional sslSupport openssl ++
     optional gnutlsSupport gnutls ++
-    optional scpSupport libssh2;
+    optional scpSupport libssh2 ++
+    optional brotliSupport brotli;
 
   # for the second line see https://curl.haxx.se/mail/tracker-2014-03/0087.html
   preConfigure = ''
@@ -64,6 +67,7 @@ stdenv.mkDerivation rec {
       ( if ldapSupport then "--enable-ldap" else "--disable-ldap" )
       ( if ldapSupport then "--enable-ldaps" else "--disable-ldaps" )
       ( if idnSupport then "--with-libidn=${libidn.dev}" else "--without-libidn" )
+      ( if brotliSupport then "--with-brotli" else "--without-brotli" )
     ]
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
     ++ stdenv.lib.optional gssSupport "--with-gssapi=${gss}";
