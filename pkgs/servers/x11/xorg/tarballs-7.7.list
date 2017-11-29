@@ -1,6 +1,7 @@
 mirror://xorg/X11R7.7/src/everything/applewmproto-1.4.2.tar.bz2
 mirror://xorg/individual/app/bdftopcf-1.0.5.tar.bz2
 mirror://xorg/X11R7.7/src/everything/bigreqsproto-1.1.2.tar.bz2
+mirror://xorg/individual/app/bitmap-1.0.8.tar.gz
 mirror://xorg/X11R7.7/src/everything/compositeproto-0.4.2.tar.bz2
 mirror://xorg/X11R7.7/src/everything/damageproto-1.2.1.tar.bz2
 mirror://xorg/X11R7.7/src/everything/dmxproto-2.3.1.tar.bz2

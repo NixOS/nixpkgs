@@ -67,6 +67,18 @@ let
     meta.platforms = stdenv.lib.platforms.unix;
   }) // {inherit ;};
 
+  bitmap = (mkDerivation "bitmap" {
+    name = "bitmap-1.0.8";
+    builder = ./builder.sh;
+    src = fetchurl {
+      url = mirror://xorg/individual/app/bitmap-1.0.8.tar.gz;
+      sha256 = "1z06a1sn3iq72rmh73f11xgb7n46bdav1fvpgczxjp6al88bsbqs";
+    };
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libX11 libXaw xbitmaps libXmu xproto libXt ];
+    meta.platforms = stdenv.lib.platforms.unix;
+  }) // {inherit libX11 libXaw xbitmaps libXmu xproto libXt ;};
+
   compositeproto = (mkDerivation "compositeproto" {
     name = "compositeproto-0.4.2";
     builder = ./builder.sh;

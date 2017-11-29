@@ -24,6 +24,21 @@ let
   compose = f: g: x: f (g x);
 in
 {
+  bitmap = attrs: attrs // {
+    nativeBuildInputs = attrs.nativeBuildInputs ++ [ makeWrapper ];
+    postInstall = ''
+      paths=(
+        "$out/share/X11/%T/%N"
+        "$out/include/X11/%T/%N"
+        "${xorg.xbitmaps}/include/X11/%T/%N"
+      )
+      wrapProgram "$out/bin/bitmap" \
+        --suffix XFILESEARCHPATH : $(IFS=:; echo "''${paths[*]}")
+      makeWrapper "$out/bin/bitmap" "$out/bin/bitmap-color" \
+        --suffix XFILESEARCHPATH : "$out/share/X11/%T/%N-color"
+    '';
+  };
+
   encodings = attrs: attrs // {
     buildInputs = attrs.buildInputs ++ [ xorg.mkfontscale ];
   };
