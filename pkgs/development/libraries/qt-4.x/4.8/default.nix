@@ -126,6 +126,11 @@ stdenv.mkDerivation rec {
     sed -i 's/QMAKE_CXX = g++/QMAKE_CXX = clang++/' mkspecs/common/g++-base.conf
   '';
 
+  postConfigure = ''
+    echo "applying patch ${./parallel-build.patch}"
+    patch -p1 < ${./parallel-build.patch}
+  '';
+
   prefixKey = "-prefix ";
 
   configureFlags =
