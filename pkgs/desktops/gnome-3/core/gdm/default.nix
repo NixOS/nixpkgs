@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--sysconfdir=/etc"
                      "--localstatedir=/var"
                      "--with-plymouth=yes"
+                     "--with-initial-vt=7"
                      "--with-systemdsystemunitdir=$(out)/etc/systemd/system" ];
 
   buildInputs = [ pkgconfig glib itstool libxml2 intltool autoreconfHook
