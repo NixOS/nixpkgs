@@ -106,7 +106,7 @@ let version = "4.9.4";
         gccFpu = platform.gcc.fpu or null;
         gccFloat = platform.gcc.float or null;
         gccMode = platform.gcc.mode or null;
-     in
+      in
         optional (gccArch != null) "--with-arch=${gccArch}" ++
         optional (gccCpu != null) "--with-cpu=${gccCpu}" ++
         optional (gccAbi != null) "--with-abi=${gccAbi}" ++
@@ -421,7 +421,7 @@ stdenv.mkDerivation ({
     CC_FOR_TARGET = "${targetPlatform.config}-gcc";
     NM_FOR_TARGET = "${targetPlatform.config}-nm";
     CXX_FOR_TARGET = "${targetPlatform.config}-g++";
-    # If we are making a cross compiler, cross != null
+    # If we are making a cross compiler, targetPlatform != hostPlatform
     NIX_CC_CROSS = optionalString (targetPlatform == hostPlatform) builtins.toString stdenv.cc;
     dontStrip = true;
     configureFlags =
@@ -501,7 +501,7 @@ stdenv.mkDerivation ({
 
   EXTRA_TARGET_CFLAGS =
     if targetPlatform != hostPlatform && libcCross != null then [
-        "-idirafter ${libcCross.dev}/include"
+        "-idirafter ${getDev libcCross}/include"
       ]
       ++ optionals (! crossStageStatic) [
         "-B${libcCross.out}/lib"
