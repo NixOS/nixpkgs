@@ -2,6 +2,8 @@
 
 let
   generic = args: callPackage (import ./generic.nix args) { };
+  kernel = callPackage # a hacky way of extracting parameters from callPackage
+    ({ kernel, libsOnly ? false }: if libsOnly then { } else kernel) { };
 in
 {
   # Policy: use the highest stable version as the default (on our master).
@@ -29,8 +31,15 @@ in
     persistencedSha256 = "0zqws2vsrxbxhv6z0nn2galnghcsilcn3s0f70bpm6jqj9wzy7x8";
     useGLVND = false;
 
-    patches = [
-    ];
+    patches =
+      lib.optional (lib.versionOlder "4.14" (kernel.version or "0"))
+        (fetchurl {
+          url = "https://raw.githubusercontent.com/MilhouseVH/LibreELEC.tv/b5d2d6a1"
+              + "/packages/x11/driver/xf86-video-nvidia-legacy/patches/"
+              + "xf86-video-nvidia-legacy-0010-kernel-4.14.patch";
+          sha256 = "18clfpw03g8dxm61bmdkmccyaxir3gnq451z6xqa2ilm3j820aa5";
+        })
+      ;
   };
 
   legacy_304 = generic {
