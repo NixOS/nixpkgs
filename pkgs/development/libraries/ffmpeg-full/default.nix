@@ -447,7 +447,7 @@ stdenv.mkDerivation rec {
   crossAttrs = {
     configurePlatforms = [];
     configureFlags = configureFlags ++ [
-      "--cross-prefix=${stdenv.cc.prefix}"
+      "--cross-prefix=${stdenv.cc.targetPrefix}"
       "--enable-cross-compile"
       "--target_os=${hostPlatform.parsed.kernel.name}"
       "--arch=${hostPlatform.arch}"

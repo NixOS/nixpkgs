@@ -140,6 +140,7 @@ _multioutDocs() {
     moveToOutput share/info "${!outputInfo}"
     moveToOutput share/doc "${!outputDoc}"
     moveToOutput share/gtk-doc "${!outputDevdoc}"
+    moveToOutput share/devhelp/books "${!outputDevdoc}"
 
     # the default outputMan is in $bin
     moveToOutput share/man "${!outputMan}"

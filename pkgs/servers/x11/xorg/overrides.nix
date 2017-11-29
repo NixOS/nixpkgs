@@ -24,6 +24,10 @@ let
   compose = f: g: x: f (g x);
 in
 {
+  bdftopcf = attrs: attrs // {
+    buildInputs = attrs.buildInputs ++ [ xorg.xproto xorg.fontsproto ];
+  };
+
   bitmap = attrs: attrs // {
     nativeBuildInputs = attrs.nativeBuildInputs ++ [ makeWrapper ];
     postInstall = ''

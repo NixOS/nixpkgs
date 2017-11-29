@@ -1,27 +1,19 @@
-{ stdenv, intltool, fetchurl
-, pkgconfig, gtk3, glib
-, bash, wrapGAppsHook, itstool
-, gnome3, librsvg, gdk_pixbuf }:
+{ stdenv, meson, ninja, gettext, fetchurl
+, pkgconfig, gtk3, glib, libxml2
+, wrapGAppsHook, gnome3 }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
   doCheck = true;
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
+  checkPhase = "meson test";
 
-  propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext wrapGAppsHook libxml2 ];
+  buildInputs = [ gtk3 glib gnome3.gnome_desktop gnome3.defaultIconTheme ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 glib intltool itstool gnome3.gnome_desktop
-                  gdk_pixbuf gnome3.defaultIconTheme librsvg
-                  gnome3.gsettings_desktop_schemas wrapGAppsHook ];
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share"
-    )
-  '';
+  # Do not run meson-postinstall.sh
+  preConfigure = "sed -i '2,$ d'  meson-postinstall.sh";
 
   meta = with stdenv.lib; {
     description = "Program that can preview fonts and create thumbnails for fonts";

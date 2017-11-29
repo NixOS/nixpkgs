@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   ] # TODO(@Ericson2314): We now can get the ABI from
     # `hostPlatform.parsed.abi`, is this still a good idea?
     ++ stdenv.lib.optional (hostPlatform.platform.kernelArch == "arm") "CONFIG_AEABI=y"
-    ++ stdenv.lib.optional (hostPlatform != buildPlatform) "CROSS_COMPILE=${stdenv.cc.prefix}";
+    ++ stdenv.lib.optional (hostPlatform != buildPlatform) "CROSS_COMPILE=${stdenv.cc.targetPrefix}";
 
   # Install static binaries as well.
   postInstall = ''

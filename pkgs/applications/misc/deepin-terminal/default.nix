@@ -1,21 +1,22 @@
-{ stdenv, unzip, fetchFromGitHub, pkgconfig, gtk3, vala, cmake, vte, gee, wnck, gettext, libsecret, json_glib }:
+{ stdenv, unzip, fetchFromGitHub, pkgconfig, gtk3, vala, cmake, vte, libgee, wnck, gettext, libsecret, json_glib }:
 
 stdenv.mkDerivation rec {
   name = "deepin-terminal-${version}";
-  version = "2.3.3";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = "deepin-terminal";
     rev = version;
-    sha256 = "0qam34g1rannv8kvw1zbps763a9ii9vbrkxyxxdk737hlpxdzg8h";
+    sha256 = "11lylkrv69k2jvwparnxymr7z3x9cs82q9p0lr2wrfr48hnfwp8b";
   };
 
   patchPhase = ''
   substituteInPlace project_path.c --replace __FILE__ \"$out/share/deepin-terminal/\"
   '';
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ unzip gtk3 vala cmake vte gee wnck gettext libsecret json_glib ];
+
+  nativeBuildInputs = [ pkgconfig vala cmake gettext unzip ];
+  buildInputs = [ gtk3 vte libgee wnck libsecret json_glib ];
 
   meta = {
     description = "The default terminal emulation for Deepin";

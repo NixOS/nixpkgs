@@ -229,11 +229,11 @@ stdenv.mkDerivation rec {
     '' + optionalString hostPlatform.isMinGW " -xplatform win32-g++-4.6";
     patches = [];
     preConfigure = ''
-      sed -i -e 's/ g++/ ${stdenv.cc.prefix}g++/' \
-        -e 's/ gcc/ ${stdenv.cc.prefix}gcc/' \
-        -e 's/ ar/ ${stdenv.cc.prefix}ar/' \
-        -e 's/ strip/ ${stdenv.cc.prefix}strip/' \
-        -e 's/ windres/ ${stdenv.cc.prefix}windres/' \
+      sed -i -e 's/ g++/ ${stdenv.cc.targetPrefix}g++/' \
+        -e 's/ gcc/ ${stdenv.cc.targetPrefix}gcc/' \
+        -e 's/ ar/ ${stdenv.cc.targetPrefix}ar/' \
+        -e 's/ strip/ ${stdenv.cc.targetPrefix}strip/' \
+        -e 's/ windres/ ${stdenv.cc.targetPrefix}windres/' \
         mkspecs/win32-g++/qmake.conf
     '';
 

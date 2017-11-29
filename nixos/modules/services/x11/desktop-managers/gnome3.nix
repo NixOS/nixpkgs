@@ -108,6 +108,7 @@ in {
     services.gnome3.seahorse.enable = mkDefault true;
     services.gnome3.sushi.enable = mkDefault true;
     services.gnome3.tracker.enable = mkDefault true;
+    services.gnome3.tracker-miners.enable = mkDefault true;
     hardware.pulseaudio.enable = mkDefault true;
     services.telepathy.enable = mkDefault true;
     networking.networkmanager.enable = mkDefault true;
@@ -152,7 +153,7 @@ in {
           export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${mimeAppsList}/share
 
           # Override gsettings-desktop-schema
-          export XDG_DATA_DIRS=${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides''${XDG_DATA_DIRS:+:}$XDG_DATA_DIRS
+          export NIX_GSETTINGS_OVERRIDES_DIR=${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
 
           # Let nautilus find extensions
           export NAUTILUS_EXTENSION_DIR=${config.system.path}/lib/nautilus/extensions-3.0/

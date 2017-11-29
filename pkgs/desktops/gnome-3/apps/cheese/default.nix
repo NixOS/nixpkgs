@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
-
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Cheese;
     description = "Take photos and videos with your webcam, with fun graphical effects";

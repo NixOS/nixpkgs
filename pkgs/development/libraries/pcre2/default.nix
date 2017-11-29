@@ -29,6 +29,13 @@ stdenv.mkDerivation rec {
       stripLen = 2;
       addPrefixes = true;
     })
+    (fetchpatch {
+      name = "CVE-2017-8786.patch";
+      url = "https://vcs.pcre.org/pcre2/code/trunk/src/pcre2test.c?r1=692&r2=697&view=patch";
+      sha256 = "1c629nzrk4il2rfclwyc1a373q58m4q9ys9wr91zhl4skfk7x19b";
+      stripLen = 2;
+      addPrefixes = true;
+    })
   ];
 
   outputs = [ "bin" "dev" "out" "doc" "man" "devdoc" ];
