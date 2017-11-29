@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     homepage = http://palovandalo.com/memo/;
     downloadPage = https://github.com/mrVanDalo/memo/releases;
     license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.palo ];
+    maintainers = [ stdenv.lib.maintainers.mrVanDalo ];
     platforms = stdenv.lib.platforms.all;
   };
 }

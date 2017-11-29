@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
     homepage = http://aj-snapshot.sourceforge.net/;
     license = licenses.gpl2;
-    maintainers = [ maintainers.palo ];
+    maintainers = [ maintainers.mrVanDalo ];
     platforms = platforms.all;
   };
 }
