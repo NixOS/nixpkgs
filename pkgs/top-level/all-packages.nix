@@ -1548,8 +1548,6 @@ with pkgs;
 
   brotliUnstable = callPackage ../tools/compression/brotli/unstable.nix { };
 
-  libbrotli = callPackage ../development/libraries/libbrotli { };
-
   biosdevname = callPackage ../tools/networking/biosdevname { };
 
   c14 = callPackage ../applications/networking/c14 { };
