@@ -135,6 +135,46 @@ Here, the `libc` crate has no `src` attribute, so `buildRustCrate`
 will fetch it from [crates.io](https://crates.io). A `sha256`
 attribute is still needed for Nix purity.
 
+Some crates require external libraries. For crates from
+[crates.io](https://crates.io), such libraries can be specified in
+`<nixpkgs/pkgs/build-support/rust/defaultCrateOverrides.nix>`.
+
+Starting from that file, one can add more overrides, to add features
+or build inputs, as follows:
+
+```
+let
+  defaultOverrides = callPackage <nixpkgs/pkgs/build-support/rust/defaultCrateOverrides.nix> {};
+  overrides = defaultOverrides // {
+    hello = attrs: {
+      buildInputs = [ myPackage ];
+    };
+  };
+in
+
+hello_0_1_0.override { crateOverrides = overrides; };
+```
+
+Three more parameters can be overridden:
+
+- The version of rustc used to compile the crate:
+
+  ```
+  hello_0_1_0.override { rust = pkgs.rust; };
+  ```
+
+- Whether to build in release mode or debug mode (release mode by default):
+
+  ```
+  hello_0_1_0.override { release = false; };
+  ```
+
+- Whether to print the commands sent to rustc when building (equivalent to `--verbose` in cargo:
+
+  ```
+  hello_0_1_0.override { verbose = false; };
+  ```
+
 
 ## Using the Rust nightlies overlay
 
