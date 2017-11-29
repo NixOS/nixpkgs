@@ -11,7 +11,7 @@ in
 {
   options = {
     services.nexus = {
-      enable = mkEnableOption "SonarType Nexus3 OSS service";
+      enable = mkEnableOption "Sonatype Nexus3 OSS service";
 
       user = mkOption {
         type = types.str;
@@ -54,7 +54,7 @@ in
     users.extraGroups."${cfg.group}" = {};
 
     systemd.services.nexus = {
-      description = "SonarType Nexus3";
+      description = "Sonatype Nexus3";
 
       wantedBy = [ "multi-user.target" ];
 
