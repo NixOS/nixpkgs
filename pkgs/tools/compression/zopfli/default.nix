@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake }:
 
 stdenv.mkDerivation rec {
   name = "zopfli-${version}";
@@ -23,26 +23,25 @@ stdenv.mkDerivation rec {
       name = "zopfli-bug-and-typo-fixes.patch";
       url = "https://github.com/google/zopfli/commit/7190e08ecac2446c7c9157cfbdb7157b18912a92.patch";
     })
+    (fetchpatch {
+      name = "zopfli-cmake.patch";
+      url = "https://github.com/google/zopfli/commit/7554e4d34e7000b0595aa606e7d72357cf46ba86.patch";
+      sha256 = "1pvfhir2083v1l042a4dy5byqdmad7sxnd4jrprl2hzzb2avxbbn";
+    })
   ];
 
-  enableParallelBuilding = false; # problems, easily reproducible
-  buildFlags = [
-    "zopfli"
-    "libzopfli"
-    "zopflipng"
-    "libzopflipng"
-  ];
+  nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON" ];
 
   installPhase = ''
-    mkdir -p $out/bin
-    install -m755 zopfli{,png} $out/bin
-
-    mkdir -p $out/lib
-    install -m755 libzopfli{,png}.so* $out/lib
-
-    mkdir -p $out/share/doc/zopfli
-    install -m644 README* $out/share/doc/zopfli
+    install -D -t $out/bin zopfli*
+    install -d $out/lib
+    cp -d libzopfli* $out/lib
+    install -Dm444 -t $out/share/doc/zopfli ../README*
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
@@ -54,7 +53,7 @@ stdenv.mkDerivation rec {
       This library can only compress, not decompress. Existing zlib or
       deflate libraries can decompress the data.
     '';
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     license = licenses.asl20;
     maintainers = with maintainers; [ bobvanderlinden nckx ];
   };
