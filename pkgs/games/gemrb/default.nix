@@ -1,37 +1,39 @@
-{ stdenv, fetchurl, cmake, SDL, openal, zlib, libpng, python, libvorbis }:
-
-assert stdenv.cc.libc != null;
+{ stdenv, fetchFromGitHub, cmake
+, freetype, SDL2, SDL2_mixer, openal, zlib, libpng, python, libvorbis }:
 
 stdenv.mkDerivation rec {
-  name = "gemrb-0.8.1";
-  
-  src = fetchurl {
-    url = "mirror://sourceforge/gemrb/${name}.tar.gz";
-    sha256 = "1g68pc0x4azy6zm5y7813g0qky96q796si9v3vafiy7sa8ph49kl";
+  name = "gemrb-${version}";
+  version = "0.8.5";
+
+  src = fetchFromGitHub {
+    owner  = "gemrb";
+    repo   = "gemrb";
+    rev    = "v${version}";
+    sha256 = "0xkjsiawxz53rac26vqz9sfgva0syff8x8crabrpbpxgmbacih7a";
   };
 
-  buildInputs = [ cmake python openal SDL zlib libpng libvorbis ];
   # TODO: make libpng, libvorbis, sdl_mixer, freetype, vlc, glew (and other gl reqs) optional
+  buildInputs = [ freetype python openal SDL2 SDL2_mixer zlib libpng libvorbis ];
 
-  # Necessary to find libdl.
-  CMAKE_LIBRARY_PATH = "${stdenv.cc.libc.out}/lib";
+  nativeBuildInputs = [ cmake ];
 
-  # Can't have -werror because of the Vorbis header files.
-  cmakeFlags = "-DDISABLE_WERROR=ON -DCMAKE_VERBOSE_MAKEFILE=ON";
+  enableParallelBuilding = true;
 
-  # upstream prefers some symbols to remain
-  dontStrip = true;
+  cmakeFlags = [
+    "-DLAYOUT=opt"
+  ];
 
   meta = with stdenv.lib; {
     description = "A reimplementation of the Infinity Engine, used by games such as Baldur's Gate";
     longDescription = ''
-      GemRB (Game engine made with pre-Rendered Background) is a portable open-source implementation of
-      Bioware's Infinity Engine. It was written to support pseudo-3D role playing games based on the
-      Dungeons & Dragons ruleset (Baldur's Gate and Icewind Dale series, Planescape: Torment).
+      GemRB (Game engine made with pre-Rendered Background) is a portable
+      open-source implementation of Bioware's Infinity Engine. It was written to
+      support pseudo-3D role playing games based on the Dungeons & Dragons
+      ruleset (Baldur's Gate and Icewind Dale series, Planescape: Torment).
     '';
     homepage = http://gemrb.org/;
     license = licenses.gpl2;
-    platforms = stdenv.lib.platforms.all;
-    hydraPlatforms = [];
+    maintainer = with maintainers; [ peterhoeg ];
+    platforms = platforms.all;
   };
 }
