@@ -1100,7 +1100,9 @@ with pkgs;
 
   geekbench = callPackage ../tools/misc/geekbench { };
 
-  gencfsm = callPackage ../tools/security/gencfsm { };
+  gencfsm = callPackage ../tools/security/gencfsm {
+    vala = vala_0_34;
+  };
 
   genromfs = callPackage ../tools/filesystems/genromfs { };
 
@@ -1494,7 +1496,10 @@ with pkgs;
 
   libpinyin = callPackage ../development/libraries/libpinyin { };
 
-  libskk = callPackage ../development/libraries/libskk { gnome_common = gnome3.gnome_common; };
+  libskk = callPackage ../development/libraries/libskk {
+    gnome_common = gnome3.gnome_common;
+    vala = vala_0_34;
+  };
 
   m17n_db = callPackage ../tools/inputmethods/m17n-db { };
 
@@ -1547,10 +1552,6 @@ with pkgs;
   };
 
   brotli = callPackage ../tools/compression/brotli { };
-
-  brotliUnstable = callPackage ../tools/compression/brotli/unstable.nix { };
-
-  libbrotli = callPackage ../development/libraries/libbrotli { };
 
   biosdevname = callPackage ../tools/networking/biosdevname { };
 
