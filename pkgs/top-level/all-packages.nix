@@ -5456,7 +5456,9 @@ with pkgs;
 
   ccl = callPackage ../development/compilers/ccl { };
 
-  chez = callPackage ../development/compilers/chez { };
+  chez = callPackage ../development/compilers/chez {
+    inherit (darwin) cctools;
+  };
 
   clang = llvmPackages.clang;
 
