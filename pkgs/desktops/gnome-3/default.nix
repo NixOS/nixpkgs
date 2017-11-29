@@ -14,7 +14,7 @@ let
   callPackage = pkgs.newScope self;
 
   version = "3.26";
-  maintainers = with pkgs.lib.maintainers; [ lethalman ];
+  maintainers = with pkgs.lib.maintainers; [ lethalman jtojnar ];
 
   corePackages = with gnome3; [
     pkgs.desktop_file_utils pkgs.ibus
