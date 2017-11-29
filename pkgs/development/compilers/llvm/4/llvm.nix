@@ -24,11 +24,6 @@
 let
   src = fetch "llvm" "0l9bf7kdwhlj0kq1hawpyxhna1062z3h7qcz2y8nfl9dz2qksy6s";
 
-  aarch64Patch = fetchpatch {
-    url = https://reviews.llvm.org/file/data/2oqw5rhhklsapbjrhlpd/PHID-FILE-lvo4fcs6hjvkxb5wneg2/D40423.diff;
-    sha256 = "0b0h7n7lxw33pn2j061hm9050zn263gmiig937g5cmcvjimxlybb";
-  };
-
   # Used when creating a version-suffixed symlink of libLLVM.dylib
   shortVersion = with stdenv.lib;
     concatStringsSep "." (take 2 (splitString "." release_version));
@@ -87,7 +82,7 @@ in stdenv.mkDerivation rec {
         --replace 'struct sigaltstack' 'stack_t'
     )
   '' + stdenv.lib.optionalString stdenv.isAarch64 ''
-    patch -p0 < ${aarch64Patch}
+    patch -p0 < ${../aarch64.patch}
   '';
 
   # hacky fix: created binaries need to be run before installation

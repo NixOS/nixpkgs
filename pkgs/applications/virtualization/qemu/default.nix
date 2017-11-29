@@ -62,7 +62,12 @@ stdenv.mkDerivation rec {
 
   patches = [ ./no-etc-install.patch ]
     ++ optional nixosTestRunner ./force-uid0-on-9p.patch
-    ++ optional pulseSupport ./fix-hda-recording.patch;
+    ++ optional pulseSupport ./fix-hda-recording.patch
+    ++ [ (fetchpatch {
+           name = "qemu-CVE-2017-15118.patch";
+           url = "http://git.qemu.org/?p=qemu.git;a=patch;h=51ae4f8455c9e32c54770c4ebc25bf86a8128183";
+           sha256 = "0f9i096dz3h1i8g92y99vak23rjs1shf7prlcxqizsz0fah7wx7h"; })
+       ];
 
   hardeningDisable = [ "stackprotector" ];
 
