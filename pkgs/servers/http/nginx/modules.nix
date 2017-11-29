@@ -5,10 +5,10 @@
     src = fetchFromGitHub {
       owner = "google";
       repo = "ngx_brotli";
-      rev = "788615eab7c5e0a984278113c55248305620df14";
-      sha256 = "02514bbjdhm9m38vljdh626d3c1783jxsxawv5c6bzblwmb8xgvf";
+      rev = "bfd2885b2da4d763fed18f49216bb935223cd34b";
+      sha256 = "04yx1n0wi3l2x37jd1ynl9951qxkn8xp42yv0mfp1qz9svips81n";
+      fetchSubmodules = true;
     };
-    inputs = [ pkgs.libbrotli ];
   };
 
   rtmp = {
