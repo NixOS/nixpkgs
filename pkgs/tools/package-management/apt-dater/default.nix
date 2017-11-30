@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchFromGitHub
 , automake115x, autoconf, pkgconfig, gettext
 , vim, glib, libxml2, openssl, ncurses, popt, screen
 }:
@@ -7,9 +7,11 @@ stdenv.mkDerivation rec {
   name = "apt-dater-${version}";
   version = "1.0.3";
 
-  src = fetchurl {
-    url = "https://github.com/DE-IBH/apt-dater/archive/v${version}.tar.gz";
-    sha256 = "891b15e4dd37c7b35540811bbe444e5f2a8d79b1c04644730b99069eabf1e10f";
+  src = fetchFromGitHub {
+    owner = "DE-IBH";
+    repo = "apt-dater";
+    rev = "v1.0.3";
+    sha256 = "1flr6cm72cywmwp5h7pbmmpq057xsi9shkczyplxqaqrb2gns5fl";
   };
 
   nativeBuildInputs = [
