@@ -111,7 +111,7 @@ let buildCrate = { crateName, crateVersion, crateAuthors, buildDependencies,
         crate_name=$1
         crate_name_=$(echo $crate_name | sed -e "s/-/_/g")
 	main_file=""
-	if [ ! -z $2 ]; then
+	if [[ ! -z $2 ]]; then
           main_file=$2
 	fi
 	echo_build_heading $@
