@@ -143,16 +143,24 @@ Starting from that file, one can add more overrides, to add features
 or build inputs, as follows:
 
 ```
-let
-  defaultOverrides = callPackage <nixpkgs/pkgs/build-support/rust/defaultCrateOverrides.nix> {};
-  overrides = defaultOverrides // {
-    hello = attrs: {
-      buildInputs = [ myPackage ];
+with import <nixpkgs> {};
+let kernel = buildPlatform.parsed.kernel.name;
+    abi = buildPlatform.parsed.abi.name;
+    helo_0_1_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "helo";
+      version = "0.1.0";
+      authors = [ "pe@pijul.org <pe@pijul.org>" ];
+      src = ./.;
+      inherit dependencies buildDependencies features;
+    };
+in
+rec {
+  helo_0_1_0 = (helo_0_1_0_ {}).override {
+    crateOverrides = defaultCrateOverrides // {
+      helo = attrs: { buildInputs = [ openssl ]; };
     };
   };
-in
-
-hello_0_1_0.override { crateOverrides = overrides; }
+}
 ```
 
 Here, `crateOverrides` is expected to be a attribute set, where the
@@ -167,18 +175,29 @@ the override above can be read, as in the following example, which
 patches the derivation:
 
 ```
-let
-  defaultOverrides = callPackage <nixpkgs/pkgs/build-support/rust/defaultCrateOverrides.nix> {};
-  overrides = defaultOverrides // {
-    imaginary-timezone-crate = attrs: lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0")  {
-      postPatch = ''
-        substituteInPlace lib/zoneinfo.rs \
-          --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
-      '';
+with import <nixpkgs> {};
+let kernel = buildPlatform.parsed.kernel.name;
+    abi = buildPlatform.parsed.abi.name;
+    helo_0_1_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+      crateName = "helo";
+      version = "0.1.0";
+      authors = [ "pe@pijul.org <pe@pijul.org>" ];
+      src = ./.;
+      inherit dependencies buildDependencies features;
+    };
+in
+rec {
+  helo_0_1_0 = (helo_0_1_0_ {}).override {
+    crateOverrides = defaultCrateOverrides // {
+      helo = attrs: lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0")  {
+        postPatch = ''
+          substituteInPlace lib/zoneinfo.rs \
+            --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+        '';
+      };
     };
   };
-in
-hello_0_1_0.override { crateOverrides = overrides; }
+}
 ```
 
 
