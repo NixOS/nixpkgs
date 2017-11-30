@@ -1,5 +1,11 @@
 { stdenv, fetchurl, pkgconfig, ncurses, ocaml, findlib, ocaml_pcre, camlzip
-, gnutls, nettle }:
+, gnutls, nettle_3_3 }:
+
+# These overrides are just temporary, until ocamlnet supports nettle-3.4.
+let gnutls_orig = gnutls; in
+let gnutls = gnutls_orig.override { nettle = nettle_3_3; };
+    nettle = nettle_3_3;
+in
 
 let version = "4.1.4"; in
 

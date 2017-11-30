@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
       mv $out/share/gc $out/share/doc/gc
     '';
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "The Boehm-Demers-Weiser conservative garbage collector for C and C++";
 

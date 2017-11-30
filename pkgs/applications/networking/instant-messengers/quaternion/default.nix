@@ -1,29 +1,29 @@
-{ mkDerivation, lib, fetchgit, qtbase, qtquickcontrols, cmake }:
+{ stdenv, lib, fetchFromGitHub, qtbase, qtquickcontrols, cmake, libqmatrixclient }:
 
-mkDerivation rec {
-  name = "quaternion-git-${version}";
-  version = "2017-10-07";
+stdenv.mkDerivation rec {
+  name = "quaternion-${version}";
+  version = "0.0.4";
 
-  # quaternion and tensor share the same libqmatrixclient library as a git submodule
-  #
-  # As all 3 projects are in very early stages, we simply load the submodule.
-  #
-  # At some point in the future, we should separate out libqmatrixclient into its own
-  # derivation.
+  # libqmatrixclient doesn't support dynamic linking as of 0.1 so we simply pull in the source
 
-  src = fetchgit {
-    url             = "https://github.com/QMatrixClient/Quaternion.git";
-    rev             = "1007f2ca4ad5e8cc5dba437d6a0cdea07d1f1332";
-    sha256          = "0hvc81ld7fcwyrxsr2q3yvzh0rzhgmflby4nmyzcbjds7b7pv0xq";
-    fetchSubmodules = true;
+  src = fetchFromGitHub {
+    owner  = "QMatrixClient";
+    repo   = "Quaternion";
+    rev    = "v${version}";
+    sha256 = "1nbxlflm94pb19gdwb95z92kzg4px97dmp8av3mj4imk1ysnyrvi";
   };
 
-  buildInputs = [ qtbase qtquickcontrols ];
+  buildInputs = [ qtbase qtquickcontrols libqmatrixclient ];
+
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [
-    "-Wno-dev"
-  ];
+  enableParallelBuilding = true;
+
+  # take the source from libqmatrixclient
+  postPatch = ''
+    rm -rf lib
+    ln -s ${libqmatrixclient.src} lib
+  '';
 
   postInstall = ''
     substituteInPlace $out/share/applications/quaternion.desktop \

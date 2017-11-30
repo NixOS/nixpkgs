@@ -1,0 +1,13 @@
+--- a/mesonbuild/modules/gnome.py
++++ b/mesonbuild/modules/gnome.py
+@@ -427,6 +427,10 @@
+         scan_command += ['--no-libtool', '--namespace=' + ns, '--nsversion=' + nsversion, '--warn-all',
+                          '--output', '@OUTPUT@']
+ 
++        fallback_libpath = girtarget.get_custom_install_dir()[0]
++        if fallback_libpath is not None and isinstance(fallback_libpath, str) and len(fallback_libpath) > 0 and fallback_libpath[0] == "/":
++            scan_command += ['--fallback-library-path=' + fallback_libpath]
++
+         header = kwargs.pop('header', None)
+         if header:
+             if not isinstance(header, str):

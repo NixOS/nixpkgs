@@ -83,3 +83,4 @@
 
 # https://github.com/NixOS/nixpkgs/issues/31401
 /lib/maintainers.nix @ghost
+/lib/licenses.nix @ghost

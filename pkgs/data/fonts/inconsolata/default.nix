@@ -1,20 +1,18 @@
-{ stdenv, fetchzip }:
+{ stdenv, google-fonts }:
 
-let
-  version = "1.010";
-in fetchzip {
+stdenv.mkDerivation rec {
   name = "inconsolata-${version}";
 
-  url = "http://www.levien.com/type/myfonts/Inconsolata.otf";
+  inherit (google-fonts) src version;
 
-  postFetch = "install -Dm644 $downloadedFile $out/share/fonts/opentype/inconsolata.otf";
-
-  sha256 = "1yyf7agabfv0ia57c7in0r33x7c8ay445zf7c3dfc83j6w85g3i7";
+  installPhase = ''
+    install -m644 --target $out/share/fonts/truetype/inconsolata -D $src/ofl/inconsolata/*.ttf
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://www.levien.com/type/myfonts/inconsolata.html;
     description = "A monospace font for both screen and print";
-    maintainers = with maintainers; [ raskin rycee ];
+    maintainers = with maintainers; [ mikoim raskin rycee ];
     license = licenses.ofl;
     platforms = platforms.all;
   };

@@ -19,7 +19,7 @@ runCommand "nixpkgs-metrics"
       shift
 
       echo "running $@"
-      NIX_SHOW_STATS=1 time "$@" > /dev/null 2> stats
+      NIX_SHOW_STATS=1 time "$@" 2>&1 > /dev/null | tee stats
 
       cat stats
 
@@ -40,9 +40,12 @@ runCommand "nixpkgs-metrics"
       echo "$name.values $x" >> $out/nix-support/hydra-metrics
     }
 
-    run nixos.smallContainer nix-instantiate --dry-run ${nixpkgs}/nixos/release.nix -A closures.smallContainer.x86_64-linux
-    run nixos.kde nix-instantiate --dry-run ${nixpkgs}/nixos/release.nix -A closures.kde.x86_64-linux
-    run nixos.lapp nix-instantiate --dry-run ${nixpkgs}/nixos/release.nix -A closures.lapp.x86_64-linux
+    run nixos.smallContainer nix-instantiate --dry-run ${nixpkgs}/nixos/release.nix \
+      -A closures.smallContainer.x86_64-linux --show-trace
+    run nixos.kde nix-instantiate --dry-run ${nixpkgs}/nixos/release.nix \
+      -A closures.kde.x86_64-linux --show-trace
+    run nixos.lapp nix-instantiate --dry-run ${nixpkgs}/nixos/release.nix \
+      -A closures.lapp.x86_64-linux --show-trace
     run nix-env.qa nix-env -f ${nixpkgs} -qa
     run nix-env.qaDrv nix-env -f ${nixpkgs} -qa --drv-path --meta --xml
 

@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   name = "cockroach-${version}";
-  version = "1.1.1";
+  version = "1.1.2";
 
   goPackagePath = "github.com/cockroachdb/cockroach";
 
   src = fetchurl {
     url = "https://binaries.cockroachdb.com/cockroach-v${version}.src.tgz";
-    sha256 = "0d2nlm291k4x7hqi0kh76j6pj8b1dwbdww5f95brf0a9bl1n7qxr";
+    sha256 = "0h1fijzihp85a18flq4brdc3b38gj867kfkp31gncnmff0xb8kam";
   };
 
   nativeBuildInputs = [ cmake xz which autoconf ];

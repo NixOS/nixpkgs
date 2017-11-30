@@ -667,11 +667,13 @@ cp ${myEmacsConfig} $out/share/emacs/site-lisp/default.el
 <section xml:id="sec-weechat">
 <title>Weechat</title>
 <para>
-Weechat can currently be configured to include your choice of plugins.
-To make use of this functionality, install an expression that overrides its configuration such as
+Weechat can be configured to include your choice of plugins, reducing its
+closure size from the default configuration which includes all available
+plugins.  To make use of this functionality, install an expression that
+overrides its configuration such as
 <programlisting>weechat.override {configure = {availablePlugins, ...}: {
-        plugins = with availablePlugins; [ python perl ];
-    }
+    plugins = with availablePlugins; [ python perl ];
+  }
 }</programlisting>
 </para>
 <para>

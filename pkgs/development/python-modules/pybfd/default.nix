@@ -1,25 +1,27 @@
-{ lib, buildPythonPackage, isPyPy, isPy3k, fetchurl, gdb, binutils }:
+{ lib, fetchFromGitHub, buildPythonPackage, isPyPy, isPy3k, libbfd, libopcodes }:
 
 buildPythonPackage rec {
   name = "pybfd-0.1.1";
 
   disabled = isPyPy || isPy3k;
 
-  src = fetchurl {
-    url = "mirror://pypi/p/pybfd/${name}.tar.gz";
-    sha256 = "d99b32ad077e704ddddc0b488c83cae851c14919e5cbc51715d00464a1932df4";
+  src = fetchFromGitHub {
+    owner = "orivej";
+    repo = "pybfd";
+    rev = "a2c3a7b94a3c9f7a353b863f69a79174c6a41ebe";
+    sha256 = "0wrz234dz25hs0ajzcz5w8lzc1yzf64wqa8fj01hhr4yy23vjkcr";
   };
 
-  preConfigure = ''
-    substituteInPlace setup.py \
-      --replace '"/usr/include"' '"${gdb}/include"' \
-      --replace '"/usr/lib"' '"${binutils.lib}/lib"'
-  '';
+  LIBBFD_INCLUDE_DIR = "${libbfd.dev}/include";
+  LIBBFD_LIBRARY = "${libbfd}/lib/libbfd.so";
+  LIBOPCODES_INCLUDE_DIR = "${libopcodes.dev}/include";
+  LIBOPCODES_LIBRARY = "${libopcodes}/lib/libopcodes.so";
 
   meta = {
     homepage = https://github.com/Groundworkstech/pybfd;
     description = "A Python interface to the GNU Binary File Descriptor (BFD) library";
     license = lib.licenses.gpl2;
     platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ orivej ];
   };
 }

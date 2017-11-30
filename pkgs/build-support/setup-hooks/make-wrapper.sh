@@ -47,7 +47,12 @@ makeWrapper() {
             varName="${params[$((n + 1))]}"
             value="${params[$((n + 2))]}"
             n=$((n + 2))
-            echo "export $varName=\"$value\"" >> "$wrapper"
+            echo "export $varName=${value@Q}" >> "$wrapper"
+        elif [[ "$p" == "--set-default" ]]; then
+            varName="${params[$((n + 1))]}"
+            value="${params[$((n + 2))]}"
+            n=$((n + 2))
+            echo "export $varName=\${$varName-${value@Q}}" >> "$wrapper"
         elif [[ "$p" == "--unset" ]]; then
             varName="${params[$((n + 1))]}"
             n=$((n + 1))
@@ -63,9 +68,9 @@ makeWrapper() {
             n=$((n + 3))
             if test -n "$value"; then
                 if test "$p" = "--suffix"; then
-                    echo "export $varName=\$$varName\${$varName:+$separator}$value" >> "$wrapper"
+                    echo "export $varName=\$$varName\${$varName:+${separator@Q}}${value@Q}" >> "$wrapper"
                 else
-                    echo "export $varName=$value\${$varName:+$separator}\$$varName" >> "$wrapper"
+                    echo "export $varName=${value@Q}\${$varName:+${separator@Q}}\$$varName" >> "$wrapper"
                 fi
             fi
         elif [[ "$p" == "--suffix-each" ]]; then
@@ -74,7 +79,7 @@ makeWrapper() {
             values="${params[$((n + 3))]}"
             n=$((n + 3))
             for value in $values; do
-                echo "export $varName=\$$varName\${$varName:+$separator}$value" >> "$wrapper"
+                echo "export $varName=\$$varName\${$varName:+$separator}${value@Q}" >> "$wrapper"
             done
         elif [[ ("$p" == "--suffix-contents") || ("$p" == "--prefix-contents") ]]; then
             varName="${params[$((n + 1))]}"
@@ -82,10 +87,11 @@ makeWrapper() {
             fileNames="${params[$((n + 3))]}"
             n=$((n + 3))
             for fileName in $fileNames; do
+                contents="$(cat "$fileName")"
                 if test "$p" = "--suffix-contents"; then
-                    echo "export $varName=\$$varName\${$varName:+$separator}$(cat "$fileName")" >> "$wrapper"
+                    echo "export $varName=\$$varName\${$varName:+$separator}${contents@Q}" >> "$wrapper"
                 else
-                    echo "export $varName=$(cat "$fileName")\${$varName:+$separator}\$$varName" >> "$wrapper"
+                    echo "export $varName=${contents@Q}\${$varName:+$separator}\$$varName" >> "$wrapper"
                 fi
             done
         elif [[ "$p" == "--add-flags" ]]; then

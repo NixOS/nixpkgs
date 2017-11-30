@@ -614,34 +614,30 @@ let
   };
 
   mpack = buildLuaPackage rec {
-    name = "lua-mpack-${version}";
-    version = "1.0.7_${rev}";
-    rev = "ef025224a799066b818120fb1f30a308543a6e99";
+    name = "mpack-${version}";
+    version = "1.0.7";
 
     src = fetchFromGitHub {
       owner = "libmpack";
       repo = "libmpack-lua";
-      inherit rev;
+      rev = version;
       sha256 = "1nydi6xbmxwl1fmi32v5v8n74msnmzblzqaqnb102w6vkinampsb";
     };
 
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libmpack ]; # ++ [ libtool lua ];
+    buildInputs = [ libmpack ];
     dontBuild = true;
 
-    preInstall = ''
-      mkdir -p $out/lib/lua/${lua.luaversion}
-      export PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${libmpack}
+    postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace Makefile \
+        --replace '-shared' '-bundle -undefined dynamic_lookup -all_load'
     '';
-
-    NIX_CFLAGS_COMPILE = "-Wno-error -fpic";
 
     installFlags = [
       "USE_SYSTEM_LUA=yes"
       "USE_SYSTEM_MPACK=yes"
-      "MPACK_LUA_VERSION=${(builtins.parseDrvName lua.name).version}"
-      "LUA_INCLUDE=-I${lua}/include"
-      "LUA_CMOD_INSTALLDIR=$$out/lib/lua/${lua.luaversion}"
+      "MPACK_LUA_VERSION=${lua.version}"
+      "LUA_CMOD_INSTALLDIR=$(out)/lib/lua/${lua.luaversion}"
     ];
 
     meta = with stdenv.lib; {
@@ -655,13 +651,13 @@ let
 
   vicious = stdenv.mkDerivation rec {
     name = "vicious-${version}";
-    version = "2.2.0";
+    version = "2.3.0";
 
     src = fetchFromGitHub {
       owner = "Mic92";
       repo = "vicious";
       rev = "v${version}";
-      sha256 = "0dhy0vklrhqrnmxb9pyqbfvkwwy86lwysk93pzg1j1zwprx366fj";
+      sha256 = "1mrd8c46ljilag8dljvnagaxnjnab8bmg9mcbnwvrivgjzgf6a1k";
     };
 
     buildInputs = [ lua ];

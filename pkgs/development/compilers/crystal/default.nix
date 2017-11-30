@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -Dm755 .build/crystal $out/bin/crystal
     wrapProgram $out/bin/crystal \
-        --suffix CRYSTAL_PATH : $out/lib/crystal \
+        --suffix CRYSTAL_PATH : lib:$out/lib/crystal \
         --suffix LIBRARY_PATH : $libPath
     install -dm755 $out/lib/crystal
     cp -r src/* $out/lib/crystal/

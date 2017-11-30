@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, cpio, zlib, bzip2, file, elfutils, libarchive, nspr, nss, popt, db, xz, python, lua, pkgconfig, binutils, autoreconfHook }:
+{ stdenv
+, pkgconfig, autoreconfHook
+, fetchurl, cpio, zlib, bzip2, file, elfutils, libbfd, libarchive, nspr, nss, popt, db, xz, python, lua
+}:
 
 stdenv.mkDerivation rec {
   name = "rpm-${version}";
@@ -15,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cpio zlib bzip2 file libarchive nspr nss db xz python lua ];
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
-  propagatedBuildInputs = [ popt elfutils nss db bzip2 libarchive binutils ];
+  propagatedBuildInputs = [ popt elfutils nss db bzip2 libarchive libbfd ];
 
   NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss";
 

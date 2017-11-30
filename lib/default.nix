@@ -41,7 +41,6 @@ let
     generators = callLibs ./generators.nix;
     misc = callLibs ./deprecated.nix;
     # domain-specific
-    sandbox = callLibs ./sandbox.nix;
     fetchers = callLibs ./fetchers.nix;
 
     # Eval-time filesystem handling

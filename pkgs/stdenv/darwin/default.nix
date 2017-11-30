@@ -4,15 +4,15 @@
 # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
 , bootstrapFiles ? let
   fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
-    url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/10cbca5b30c6cb421ce15139f32ae3a4977292cf/${file}";
+    url = "http://tarballs.nixos.org/stdenv-darwin/x86_64/d5bdfcbfe6346761a332918a267e82799ec954d2/${file}";
     inherit (localSystem) system;
     inherit sha256 executable;
   }; in {
-    sh      = fetch { file = "sh";    sha256 = "0s8a9vpzj6vadq4jmf4r8cargwnsf327hdjydxgqsfxb8y1q39w3"; };
-    bzip2   = fetch { file = "bzip2"; sha256 = "1jqljpjr8mkiv7g5rl5impqx3all8vn1mxxdwa004pr3h48c1zgg"; };
-    mkdir   = fetch { file = "mkdir"; sha256 = "17zsjiwnq07i5r85q1hg7f6cnkcgllwy2amz9klaqwjy4vzz4vwh"; };
-    cpio    = fetch { file = "cpio";  sha256 = "04hrair58dgja6syh442pswiga5an9nl58ls57yknkn2pq51nx9m"; };
-    tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "103833hrci0vwi1gi978hkp69rncicvpdszn87ffpf1cq0jzpa14"; executable = false; };
+    sh      = fetch { file = "sh";    sha256 = "07wm33f1yzfpcd3rh42f8g096k4cvv7g65p968j28agzmm2s7s8m"; };
+    bzip2   = fetch { file = "bzip2"; sha256 = "0y9ri2aprkrp2dkzm6229l0mw4rxr2jy7vvh3d8mxv2698v2kdbm"; };
+    mkdir   = fetch { file = "mkdir"; sha256 = "0sb07xpy66ws6f2jfnpjibyimzb71al8n8c6y4nr8h50al3g90nr"; };
+    cpio    = fetch { file = "cpio";  sha256 = "0r5c54hg678w7zydx27bzl9p3v9fs25y5ix6vdfi1ilqim7xh65n"; };
+    tarball = fetch { file = "bootstrap-tools.cpio.bz2"; sha256 = "18hp5w6klr8g307ap4368r255qpzg9r0vwg9vqvj8f2zy1xilcjf"; executable = false; };
   }
 }:
 
@@ -21,9 +21,11 @@ assert crossSystem == null;
 let
   inherit (localSystem) system platform;
 
-  libSystemProfile = ''
-    (import "${./standard-sandbox.sb}")
-  '';
+  commonImpureHostDeps = [
+    "/bin/sh"
+    "/usr/lib/libSystem.B.dylib"
+    "/usr/lib/system/libunc.dylib" # This dependency is "hidden", so our scanning code doesn't pick it up
+  ];
 in rec {
   commonPreHook = ''
     export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
@@ -37,11 +39,6 @@ in rec {
     export gl_cv_func_getcwd_abort_bug=no
   '';
 
-  # The one dependency of /bin/sh :(
-  binShClosure = ''
-    (allow file-read* (literal "/usr/lib/libncurses.5.4.dylib"))
-  '';
-
   bootstrapTools = derivation rec {
     inherit system;
 
@@ -53,7 +50,7 @@ in rec {
     reexportedLibrariesFile =
       ../../os-specific/darwin/apple-source-releases/Libsystem/reexported_libraries;
 
-    __sandboxProfile = binShClosure + libSystemProfile;
+    __impureHostDeps = commonImpureHostDeps;
   };
 
   stageFun = step: last: {shell             ? "${bootstrapTools}/bin/bash",
@@ -108,8 +105,8 @@ in rec {
         };
 
         # The stdenvs themselves don't use mkDerivation, so I need to specify this here
-        stdenvSandboxProfile = binShClosure + libSystemProfile;
-        extraSandboxProfile  = binShClosure + libSystemProfile;
+        __stdenvImpureHostDeps = commonImpureHostDeps;
+        __extraImpureHostDeps = commonImpureHostDeps;
 
         extraAttrs = {
           inherit platform;
@@ -167,7 +164,7 @@ in rec {
   };
 
   stage1 = prevStage: let
-    persistent = _: _: {};
+    persistent = _: super: { python = super.python.override { configd = null; }; };
   in with prevStage; stageFun 1 prevStage {
     extraPreHook = "export NIX_CFLAGS_COMPILE+=\" -F${bootstrapTools}/Library/Frameworks\"";
     extraNativeBuildInputs = [];
@@ -317,8 +314,8 @@ in rec {
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
 
-    stdenvSandboxProfile = binShClosure + libSystemProfile;
-    extraSandboxProfile  = binShClosure + libSystemProfile;
+    __stdenvImpureHostDeps = commonImpureHostDeps;
+    __extraImpureHostDeps = commonImpureHostDeps;
 
     initialPath = import ../common-path.nix { inherit pkgs; };
     shell       = "${pkgs.bash}/bin/bash";
@@ -353,7 +350,7 @@ in rec {
       bzip2.bin llvmPackages.llvm llvmPackages.llvm.lib zlib.out zlib.dev libffi.out coreutils ed diffutils gnutar
       gzip ncurses.out ncurses.dev ncurses.man gnused bash gawk
       gnugrep llvmPackages.clang-unwrapped patch pcre.out binutils-raw.out
-      binutils-raw.dev binutils gettext
+      binutils gettext
       cc.expand-response-params
     ]) ++ (with pkgs.darwin; [
       dyld Libsystem CF cctools ICU libiconv locale
@@ -364,6 +361,10 @@ in rec {
         clang = cc;
         llvmPackages = persistent'.llvmPackages // { clang = cc; };
         inherit cc;
+
+        darwin = super.darwin // {
+          xnu = super.darwin.xnu.override { python = super.python.override { configd = null; }; };
+        };
       };
   };
 

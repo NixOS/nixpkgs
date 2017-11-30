@@ -63,7 +63,7 @@ let
     crossAttrs = {
       makeFlags = [
         "ARCH=${hostPlatform.platform.kernelArch}"
-        "CROSS_COMPILE=${stdenv.cc.prefix}"
+        "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
       ];
     };
 

@@ -36,8 +36,13 @@ rec {
         sha256 = containerdSha256;
       };
 
+      hardeningDisable = [ "fortify" ];
+
+      buildInputs = [ removeReferencesTo go btrfs-progs ];
+
       # This should go into the containerd derivation once 1.0.0 is out
       preBuild = ''
+        export GOPATH=$(pwd)/vendor
         mkdir $(pwd)/vendor/src
         mv $(pwd)/vendor/{github.com,golang.org,google.golang.org} $(pwd)/vendor/src/
       '' + oldAttrs.preBuild;
@@ -90,7 +95,7 @@ rec {
     buildInputs = [
       makeWrapper removeReferencesTo go-md2man go libtool
     ] ++ optionals (stdenv.isLinux) [
-      sqlite devicemapper btrfs-progs systemd libtool libseccomp
+      sqlite devicemapper btrfs-progs systemd libseccomp
     ];
 
     dontStrip = true;
@@ -214,14 +219,14 @@ rec {
     tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
   };
 
-  docker_17_10 = dockerGen rec {
-    version = "17.10.0-ce";
-    rev = "f4ffd2511ce93aa9e5eefdf0e912f77543080b0b"; # git commit
-    sha256 = "07x47cfdaz4lhlga1pchcbqqy0nd2q6zch0ycag18vzi99w4gmh2";
+  docker_17_11 = dockerGen rec {
+    version = "17.11.0-ce";
+    rev = "1caf76ce6baa889133ece59fab3c36aaf143d4ef"; # git commit
+    sha256 = "09s7lxcs4wdjj69l7z3nybbms7iqspk1wy7qnr4r52s8vr3fd5s4";
     runcRev = "0351df1c5a66838d0c392b4ac4cf9450de844e2d";
     runcSha256 = "1cmkdv6rli7v0y0fddqxvrvzd486fg9ssp3kgkya3szkljzz4xj0";
-    containerdRev = "06b9cb35161009dcb7123345749fef02f7cea8e0";
-    containerdSha256 = "10hms8a2nn69nfnwly6923jzx40c3slpsdhjhff4bxh36flpf9gd";
+    containerdRev = "992280e8e265f491f7a624ab82f3e238be086e49";
+    containerdSha256 = "1ci6jlgrrgz4ph451035sl98lj2jd467pd4qnv85ma9gzblrxs7n";
     tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";
     tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
   };

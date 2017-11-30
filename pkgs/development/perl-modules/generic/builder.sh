@@ -34,8 +34,8 @@ postFixup() {
     # dependencies in the user environment (since Perl modules don't
     # have something like an RPATH, so the only way to find the
     # dependencies is to have them in the PERL5LIB variable).
-    if test -e $out/nix-support/propagated-native-build-inputs; then
-        ln -s $out/nix-support/propagated-native-build-inputs $out/nix-support/propagated-user-env-packages
+    if test -e $out/nix-support/propagated-build-inputs; then
+        ln -s $out/nix-support/propagated-build-inputs $out/nix-support/propagated-user-env-packages
     fi
 }
 

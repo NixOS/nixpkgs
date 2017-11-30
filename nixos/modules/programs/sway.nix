@@ -8,8 +8,11 @@ let
 
   swayWrapped = pkgs.writeScriptBin "sway" ''
     #! ${pkgs.stdenv.shell}
+    if [ "$1" != "" ]; then
+      sway-setcap "$@"
+      exit
+    fi
     ${cfg.extraSessionCommands}
-    PATH="${sway}/bin:$PATH"
     exec ${pkgs.dbus.dbus-launch} --exit-with-session sway-setcap
   '';
   swayJoined = pkgs.symlinkJoin {

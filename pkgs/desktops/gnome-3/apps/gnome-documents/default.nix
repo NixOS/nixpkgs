@@ -1,6 +1,6 @@
-{ stdenv, intltool, fetchurl, evince, gjs
-, pkgconfig, gtk3, glib
-, makeWrapper, itstool, libxslt, webkitgtk
+{ stdenv, gettext, fetchurl, evince, gjs
+, pkgconfig, gtk3, glib, tracker, tracker-miners
+, itstool, libxslt, webkitgtk
 , gnome3, librsvg, gdk_pixbuf, libsoup, docbook_xsl
 , gobjectIntrospection, json_glib, inkscape, poppler_utils
 , gmp, desktop_file_utils, wrapGAppsHook }:
@@ -12,16 +12,13 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-getting-started" ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 glib intltool itstool libxslt
-                  docbook_xsl desktop_file_utils inkscape poppler_utils
-                  gnome3.gsettings_desktop_schemas makeWrapper gmp
+  nativeBuildInputs = [ pkgconfig gettext itstool libxslt desktop_file_utils docbook_xsl wrapGAppsHook ];
+  buildInputs = [ gtk3 glib inkscape poppler_utils
+                  gnome3.gsettings_desktop_schemas gmp
                   gdk_pixbuf gnome3.defaultIconTheme librsvg evince
                   libsoup webkitgtk gjs gobjectIntrospection gnome3.rest
-                  gnome3.tracker gnome3.libgdata gnome3.gnome_online_accounts
-                  gnome3.gnome_desktop gnome3.libzapojit json_glib
-                  wrapGAppsHook ]
-                ++ (with gnome3; [ libgepub ]);
+                  tracker tracker-miners gnome3.libgdata gnome3.gnome_online_accounts
+                  gnome3.gnome_desktop gnome3.libzapojit json_glib gnome3.libgepub ];
 
   enableParallelBuilding = true;
 

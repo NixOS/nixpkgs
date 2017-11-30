@@ -1,5 +1,5 @@
 {stdenv, buildOcaml, fetchFromGitHub, ocamlbuild, findlib, topkg, ocaml, opam,
- ppx_tools, ppx_sexp_conv, cstruct, sexplib, result, nocrypto, astring}:
+ ppx_tools, ppx_sexp_conv, cstruct, ppx_cstruct, sexplib, result, nocrypto, astring}:
 
 let ocamlFlags = "-I ${findlib}/lib/ocaml/${ocaml.version}/site-lib/"; in
 
@@ -16,7 +16,7 @@ buildOcaml rec {
     sha256 = "07zzix5mfsasqpqdx811m0x04gp8mq1ayf4b64998k98027v01rr";
   };
 
-  buildInputs = [ ocamlbuild findlib topkg ppx_tools ppx_sexp_conv opam ];
+  buildInputs = [ ocamlbuild findlib topkg ppx_tools ppx_sexp_conv opam ppx_cstruct ];
   propagatedBuildInputs = [ cstruct sexplib result nocrypto astring ];
 
   buildPhase = ''

@@ -1,0 +1,47 @@
+From 9a4396ddaedaf59ebee16d69900884e990b79cdd Mon Sep 17 00:00:00 2001
+From: Florian Klink <flokli@flokli.de>
+Date: Fri, 17 Nov 2017 13:21:37 +0100
+Subject: [PATCH] git-send-email: honor $PATH
+
+This will search $PATH for a sendmail binary, instead of the (previously
+fixed) list of paths.
+
+Signed-off-by: Florian Klink <flokli@flokli.de>
+---
+ Documentation/git-send-email.txt | 5 ++---
+ git-send-email.perl              | 3 ++-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/Documentation/git-send-email.txt b/Documentation/git-send-email.txt
+index bac9014ac..b9b1f2c41 100644
+--- a/Documentation/git-send-email.txt
++++ b/Documentation/git-send-email.txt
+@@ -203,9 +203,8 @@ a password is obtained using 'git-credential'.
+ 	specify a full pathname of a sendmail-like program instead;
+ 	the program must support the `-i` option.  Default value can
+ 	be specified by the `sendemail.smtpServer` configuration
+-	option; the built-in default is `/usr/sbin/sendmail` or
+-	`/usr/lib/sendmail` if such program is available, or
+-	`localhost` otherwise.
++	option; the built-in default is to search in $PATH if such program is
++	available, or `localhost` otherwise.
+ 
+ --smtp-server-port=<port>::
+ 	Specifies a port different from the default port (SMTP
+diff --git a/git-send-email.perl b/git-send-email.perl
+index 2208dcc21..8e357aeab 100755
+--- a/git-send-email.perl
++++ b/git-send-email.perl
+@@ -885,7 +885,8 @@ if (defined $initial_reply_to) {
+ }
+ 
+ if (!defined $smtp_server) {
+-	foreach (qw( /usr/sbin/sendmail /usr/lib/sendmail )) {
++	my @sendmail_paths = map {"$_/sendmail"} split /:/, $ENV{PATH};
++	foreach (@sendmail_paths) {
+ 		if (-x $_) {
+ 			$smtp_server = $_;
+ 			last;
+-- 
+2.15.0
+

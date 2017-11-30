@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, perl, texinfo, yasm
+{ stdenv, fetchurl, fetchpatch, pkgconfig, perl, texinfo, yasm
 , hostPlatform
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)
@@ -238,7 +238,16 @@ stdenv.mkDerivation rec {
     sha256 = "1vzvpx8ixy8m44f8qwp833hv253hpghybgzbc4n8b3div3j0dvmf";
   };
 
-  patchPhase = ''patchShebangs .
+  patches = [
+    (fetchurl {
+      name = "CVE-2017-16840.patch";
+      url = "http://git.videolan.org/?p=ffmpeg.git;a=patch;h=a94cb36ab2ad99d3a1331c9f91831ef593d94f74";
+      sha256 = "0zx0vh110hrykk7j863j04bx6igm2q8dlkv25mf5g4rbxafpqig3";
+    })
+  ];
+
+  prePatch = ''
+    patchShebangs .
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i 's/#ifndef __MAC_10_11/#if 1/' ./libavcodec/audiotoolboxdec.c
   '' + stdenv.lib.optionalString (frei0r != null) ''
@@ -438,7 +447,7 @@ stdenv.mkDerivation rec {
   crossAttrs = {
     configurePlatforms = [];
     configureFlags = configureFlags ++ [
-      "--cross-prefix=${stdenv.cc.prefix}"
+      "--cross-prefix=${stdenv.cc.targetPrefix}"
       "--enable-cross-compile"
       "--target_os=${hostPlatform.parsed.kernel.name}"
       "--arch=${hostPlatform.arch}"

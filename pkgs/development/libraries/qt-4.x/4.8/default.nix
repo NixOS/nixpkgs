@@ -67,6 +67,7 @@ stdenv.mkDerivation rec {
   patches =
     [ ./glib-2.32.patch
       ./libressl.patch
+      ./parallel-configure.patch
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
         cups = if cups != null then stdenv.lib.getLib cups else null;
@@ -117,6 +118,7 @@ stdenv.mkDerivation rec {
       -demosdir $TMPDIR/share/doc/${name}/demos
       -datadir $out/share/${name}
       -translationdir $out/share/${name}/translations
+      --jobs=$NIX_BUILD_CORES
     "
     unset LD # Makefile uses gcc for linking; setting LD interferes
   '' + optionalString stdenv.cc.isClang ''
@@ -128,7 +130,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     ''
-      -v -no-separate-debug-info -release -no-fast -confirm-license -opensource
+      -v -no-separate-debug-info -release -fast -confirm-license -opensource
 
       -${if stdenv.isFreeBSD then "no-" else ""}opengl -xrender -xrandr -xinerama -xcursor -xinput -xfixes -fontconfig
       -qdbus -${if cups == null then "no-" else ""}cups -glib -dbus-linked -openssl-linked
@@ -164,7 +166,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl pkgconfig which ];
 
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   NIX_CFLAGS_COMPILE =
     optionalString stdenv.isLinux "-std=gnu++98" # gnu++ in (Obj)C flags is no good on Darwin
@@ -229,11 +231,11 @@ stdenv.mkDerivation rec {
     '' + optionalString hostPlatform.isMinGW " -xplatform win32-g++-4.6";
     patches = [];
     preConfigure = ''
-      sed -i -e 's/ g++/ ${stdenv.cc.prefix}g++/' \
-        -e 's/ gcc/ ${stdenv.cc.prefix}gcc/' \
-        -e 's/ ar/ ${stdenv.cc.prefix}ar/' \
-        -e 's/ strip/ ${stdenv.cc.prefix}strip/' \
-        -e 's/ windres/ ${stdenv.cc.prefix}windres/' \
+      sed -i -e 's/ g++/ ${stdenv.cc.targetPrefix}g++/' \
+        -e 's/ gcc/ ${stdenv.cc.targetPrefix}gcc/' \
+        -e 's/ ar/ ${stdenv.cc.targetPrefix}ar/' \
+        -e 's/ strip/ ${stdenv.cc.targetPrefix}strip/' \
+        -e 's/ windres/ ${stdenv.cc.targetPrefix}windres/' \
         mkspecs/win32-g++/qmake.conf
     '';
 
@@ -251,7 +253,7 @@ stdenv.mkDerivation rec {
     homepage    = http://qt-project.org/;
     description = "A cross-platform application framework for C++";
     license     = licenses.lgpl21Plus; # or gpl3
-    maintainers = with maintainers; [ lovek323 phreedom sander ];
+    maintainers = with maintainers; [ orivej lovek323 phreedom sander ];
     platforms   = platforms.unix;
   };
 }

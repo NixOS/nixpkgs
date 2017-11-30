@@ -1,7 +1,9 @@
 { stdenv, fetchurl, buildPythonPackage, pyparsing, argparse, robotframework }:
 
 buildPythonPackage rec {
-  name = "robomachine-0.6";
+  pname = "robomachine";
+  version = "0.6";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/R/RoboMachine/RoboMachine-0.6.tar.gz";

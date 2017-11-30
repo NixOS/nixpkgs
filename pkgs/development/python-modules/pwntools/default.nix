@@ -7,7 +7,7 @@
 buildPythonPackage rec {
   version = "3.10.0";
   pname = "pwntools";
-  name = "pwntools-${version}";
+  name = pname + "-" + version;
 
   src = fetchPypi {
     inherit pname version;

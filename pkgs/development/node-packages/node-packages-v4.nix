@@ -1201,13 +1201,13 @@ let
         sha1 = "4c2bbc8a758998feebf5ed68580f76d46768b4bc";
       };
     };
-    "ini-1.3.4" = {
+    "ini-1.3.5" = {
       name = "ini";
       packageName = "ini";
-      version = "1.3.4";
+      version = "1.3.5";
       src = fetchurl {
-        url = "https://registry.npmjs.org/ini/-/ini-1.3.4.tgz";
-        sha1 = "0537cb79daf59b59a1a517dff706c86ec039162e";
+        url = "https://registry.npmjs.org/ini/-/ini-1.3.5.tgz";
+        sha512 = "1rjbvf1rg5ywhnba08sgagn2qf23lab330qrqmh7d891zap3xpxcyfyj1cblpf0f0rypglcfacybzyrpd4996aa1mbc820awa33k5j5";
       };
     };
     "which-1.3.0" = {
@@ -2119,13 +2119,13 @@ let
         sha1 = "c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79";
       };
     };
-    "ajv-5.4.0" = {
+    "ajv-5.5.0" = {
       name = "ajv";
       packageName = "ajv";
-      version = "5.4.0";
+      version = "5.5.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/ajv/-/ajv-5.4.0.tgz";
-        sha1 = "32d1cf08dbc80c432f426f12e10b2511f6b46474";
+        url = "https://registry.npmjs.org/ajv/-/ajv-5.5.0.tgz";
+        sha1 = "eb2840746e9dc48bd5e063a36e3fd400c5eab5a9";
       };
     };
     "har-schema-2.0.0" = {
@@ -3397,13 +3397,13 @@ let
         sha512 = "2r13vwvb5ick34k6flr7vgbjfsdka8zbj5a74rd0ba4bp0nqmhppbaw3qlwn7f4smpifpa4iy4hxj137y598rbvsmy3h0d8vxgvzwar";
       };
     };
-    "detect-libc-1.0.2" = {
+    "detect-libc-1.0.3" = {
       name = "detect-libc";
       packageName = "detect-libc";
-      version = "1.0.2";
+      version = "1.0.3";
       src = fetchurl {
-        url = "https://registry.npmjs.org/detect-libc/-/detect-libc-1.0.2.tgz";
-        sha1 = "71ad5d204bf17a6a6ca8f450c61454066ef461e1";
+        url = "https://registry.npmjs.org/detect-libc/-/detect-libc-1.0.3.tgz";
+        sha1 = "fa137c4bd698edf55cd5cd02ac559f91a4c4ba9b";
       };
     };
     "tar-pack-3.4.1" = {
@@ -4045,13 +4045,13 @@ let
         sha1 = "6373db76909fe570e08d73583365ed828a74eeeb";
       };
     };
-    "commander-2.11.0" = {
+    "commander-2.12.1" = {
       name = "commander";
       packageName = "commander";
-      version = "2.11.0";
+      version = "2.12.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/commander/-/commander-2.11.0.tgz";
-        sha512 = "2yi2hwf0bghfnv1fdgd4wvh7s0acjrgqbgww97ncm6i6s6ffs1zahnj48f6gqpqj6fsf0jigvnr0civ25k2160c38281r80wvg7jkkg";
+        url = "https://registry.npmjs.org/commander/-/commander-2.12.1.tgz";
+        sha512 = "36cb2mrf9piidjbqiz8krwx7r9hikgirjxzfrbyk3hd39xpmg489lia9d3cmzci80sx99428hg960sz9j5b72fn7pi928z5289ln8rw";
       };
     };
     "is-my-json-valid-2.16.1" = {
@@ -4484,7 +4484,7 @@ in
                               sources."parse-passwd-1.0.0"
                             ];
                           })
-                          sources."ini-1.3.4"
+                          sources."ini-1.3.5"
                           (sources."which-1.3.0" // {
                             dependencies = [
                               sources."isexe-2.0.0"
@@ -4835,7 +4835,7 @@ in
           })
           (sources."har-validator-5.0.3" // {
             dependencies = [
-              (sources."ajv-5.4.0" // {
+              (sources."ajv-5.5.0" // {
                 dependencies = [
                   sources."co-4.6.0"
                   sources."fast-deep-equal-1.0.0"
@@ -5245,7 +5245,7 @@ in
       (sources."rc-1.2.2" // {
         dependencies = [
           sources."deep-extend-0.4.2"
-          sources."ini-1.3.4"
+          sources."ini-1.3.5"
           sources."minimist-1.2.0"
           sources."strip-json-comments-2.0.1"
         ];
@@ -5454,7 +5454,7 @@ in
                 ];
               })
               sources."semver-5.4.1"
-              sources."detect-libc-1.0.2"
+              sources."detect-libc-1.0.3"
               (sources."tar-2.2.1" // {
                 dependencies = [
                   sources."block-stream-0.0.9"
@@ -5701,7 +5701,7 @@ in
                 ];
               })
               sources."semver-5.4.1"
-              sources."detect-libc-1.0.2"
+              sources."detect-libc-1.0.3"
               (sources."tar-2.2.1" // {
                 dependencies = [
                   sources."block-stream-0.0.9"
@@ -5894,7 +5894,7 @@ in
       (sources."rc-1.2.2" // {
         dependencies = [
           sources."deep-extend-0.4.2"
-          sources."ini-1.3.4"
+          sources."ini-1.3.5"
           sources."minimist-1.2.0"
           sources."strip-json-comments-2.0.1"
         ];
@@ -6022,7 +6022,7 @@ in
         ];
       })
       sources."semver-5.4.1"
-      sources."detect-libc-1.0.2"
+      sources."detect-libc-1.0.3"
       (sources."tar-2.2.1" // {
         dependencies = [
           sources."block-stream-0.0.9"
@@ -6248,7 +6248,7 @@ in
                   sources."supports-color-2.0.0"
                 ];
               })
-              sources."commander-2.11.0"
+              sources."commander-2.12.1"
               (sources."is-my-json-valid-2.16.1" // {
                 dependencies = [
                   sources."generate-function-2.0.0"

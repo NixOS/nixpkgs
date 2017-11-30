@@ -239,12 +239,12 @@ isScript() {
 
 # printf unfortunately will print a trailing newline regardless
 printLines() {
-    [[ "$#" -gt 0 ]] || return 0
+    (( "$#" > 0 )) || return 0
     printf '%s\n' "$@"
 }
 
 printWords() {
-    [[ "$#" -gt 0 ]] || return 0
+    (( "$#" > 0 )) || return 0
     printf '%s ' "$@"
 }
 
@@ -302,9 +302,9 @@ runHook addInputsHook
 
 # Recursively find all build inputs.
 findInputs() {
-    local pkg="$1"
-    local var="$2"
-    local propagatedBuildInputsFile="$3"
+    local pkg="$1"; shift
+    local var="$1"; shift
+    local propagatedBuildInputsFiles=("$@")
 
     # TODO(@Ericson2314): Restore using associative array once Darwin
     # nix-shell doesn't use impure bash. This should replace the O(n)
@@ -324,6 +324,22 @@ findInputs() {
         exit 1
     fi
 
+    local file
+    for file in "${propagatedBuildInputsFiles[@]}"; do
+        file="$pkg/nix-support/$file"
+        [[ -f "$file" ]] || continue
+
+        local pkgNext
+        for pkgNext in $(< "$file"); do
+            findInputs "$pkgNext" "$var" "${propagatedBuildInputsFiles[@]}"
+        done
+    done
+}
+
+# Add package to the future PATH and run setup hooks
+activatePackage() {
+    local pkg="$1"
+
     if [ -f "$pkg" ]; then
         local oldOpts="$(shopt -po nounset)"
         set +u
@@ -341,13 +357,6 @@ findInputs() {
         source "$pkg/nix-support/setup-hook"
         eval "$oldOpts"
     fi
-
-    if [ -f "$pkg/nix-support/$propagatedBuildInputsFile" ]; then
-        local pkgNext
-        for pkgNext in $(< "$pkg/nix-support/$propagatedBuildInputsFile"); do
-            findInputs "$pkgNext" "$var" "$propagatedBuildInputsFile"
-        done
-    fi
 }
 
 declare -a nativePkgs crossPkgs
@@ -357,18 +366,20 @@ if [ -z "${crossConfig:-}" ]; then
     for i in ${nativeBuildInputs:-} ${buildInputs:-} \
              ${defaultNativeBuildInputs:-} ${defaultBuildInputs:-} \
              ${propagatedNativeBuildInputs:-} ${propagatedBuildInputs:-}; do
-        findInputs "$i" nativePkgs propagated-native-build-inputs
+        findInputs "$i" nativePkgs propagated-native-build-inputs propagated-build-inputs
     done
 else
-    for i in ${buildInputs:-} ${defaultBuildInputs:-} ${propagatedBuildInputs:-}; do
-        findInputs "$i" crossPkgs propagated-build-inputs
-    done
-
-    declare -a nativePkgs
     for i in ${nativeBuildInputs:-} ${defaultNativeBuildInputs:-} ${propagatedNativeBuildInputs:-}; do
         findInputs "$i" nativePkgs propagated-native-build-inputs
     done
+    for i in ${buildInputs:-} ${defaultBuildInputs:-} ${propagatedBuildInputs:-}; do
+        findInputs "$i" crossPkgs propagated-build-inputs
+    done
 fi
+
+for i in ${nativePkgs+"${nativePkgs[@]}"} ${crossPkgs+"${crossPkgs[@]}"}; do
+    activatePackage "$i"
+done
 
 
 # Set the relevant environment variables to point to the build inputs
@@ -886,30 +897,18 @@ fixupPhase() {
 
     # Propagate build inputs and setup hook into the development output.
 
-    if [ -z "${crossConfig:-}" ]; then
-        # Not cross-compiling - propagatedBuildInputs are handled identically to propagatedNativeBuildInputs
-        local propagated="$propagatedNativeBuildInputs"
-        if [ -n "${propagatedBuildInputs:-}" ]; then
-            propagated+="${propagated:+ }$propagatedBuildInputs"
-        fi
-        if [ -n "${propagated:-}" ]; then
-            mkdir -p "${!outputDev}/nix-support"
-            # shellcheck disable=SC2086
-            printWords $propagated > "${!outputDev}/nix-support/propagated-native-build-inputs"
-        fi
-    else
-        if [ -n "${propagatedBuildInputs:-}" ]; then
-            mkdir -p "${!outputDev}/nix-support"
-            # shellcheck disable=SC2086
-            printWords $propagatedBuildInputs > "${!outputDev}/nix-support/propagated-build-inputs"
-        fi
-
-        if [ -n "${propagatedNativeBuildInputs:-}" ]; then
-            mkdir -p "${!outputDev}/nix-support"
-            # shellcheck disable=SC2086
-            printWords $propagatedNativeBuildInputs > "${!outputDev}/nix-support/propagated-native-build-inputs"
-        fi
+    if [ -n "${propagatedBuildInputs:-}" ]; then
+        mkdir -p "${!outputDev}/nix-support"
+        # shellcheck disable=SC2086
+        printWords $propagatedBuildInputs > "${!outputDev}/nix-support/propagated-build-inputs"
     fi
+
+    if [ -n "${propagatedNativeBuildInputs:-}" ]; then
+        mkdir -p "${!outputDev}/nix-support"
+        # shellcheck disable=SC2086
+        printWords $propagatedNativeBuildInputs > "${!outputDev}/nix-support/propagated-native-build-inputs"
+    fi
+
 
     if [ -n "${setupHook:-}" ]; then
         mkdir -p "${!outputDev}/nix-support"

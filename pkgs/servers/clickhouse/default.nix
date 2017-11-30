@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, libtool, boost, double_conversion, gperftools, icu, libmysql, lz4, openssl, poco, re2, rdkafka, readline, sparsehash, unixODBC, zookeeper_mt, zstd }:
+{ stdenv, fetchFromGitHub, cmake, libtool, boost, double-conversion, gperftools, icu, libmysql, lz4, openssl, poco, re2, rdkafka, readline, sparsehash, unixODBC, zookeeper_mt, zstd }:
 
 stdenv.mkDerivation rec {
   name = "clickhouse-${version}";
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake libtool ];
 
-  buildInputs = [ boost double_conversion gperftools icu libmysql lz4 openssl poco re2 rdkafka readline sparsehash unixODBC zookeeper_mt zstd ];
+  buildInputs = [ boost double-conversion gperftools icu libmysql lz4 openssl poco re2 rdkafka readline sparsehash unixODBC zookeeper_mt zstd ];
 
   cmakeFlags = [ "-DENABLE_TESTS=OFF" "-DUNBUNDLED=ON" "-DUSE_STATIC_LIBRARIES=OFF" ];
 

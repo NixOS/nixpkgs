@@ -1,5 +1,5 @@
 { stdenv, fetchurl, gnum4, pkgconfig, python2
-, intel-gpu-tools, libdrm, libva, libX11, mesa_noglu, wayland
+, intel-gpu-tools, libdrm, libva, libX11, mesa_noglu, wayland, libXext
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gnum4 pkgconfig python2 ];
 
-  buildInputs = [ intel-gpu-tools libdrm libva libX11 mesa_noglu wayland ];
+  buildInputs = [ intel-gpu-tools libdrm libva libX11 libXext mesa_noglu wayland ];
 
   meta = with stdenv.lib; {
     homepage = http://cgit.freedesktop.org/vaapi/intel-driver/;
