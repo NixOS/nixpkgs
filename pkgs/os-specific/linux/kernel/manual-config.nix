@@ -1,9 +1,9 @@
 # defines buildLinux, aka returns a function
-{ runCommand, nettools, bc, perl, gmp, libmpc, mpfr, kmod, openssl
+{ runCommand, stdenv, nettools, bc, perl, gmp, libmpc, mpfr, kmod, openssl
 , libelf ? null
 , utillinux ? null
 , writeTextFile, ubootTools
-callPackage
+# , callPackage
 , hostPlatform
 }:
 
@@ -18,7 +18,7 @@ let
   #   done < "${configfile}"
   #   echo "}" >> $out
   # '').outPath;
-  confHelpers = callPackage ./config.nix {};
+  confHelpers = stdenv.lib.callPackage ./config.nix {};
 in {
   # Allow overriding stdenv on each buildLinux call
   stdenv,
@@ -215,7 +215,7 @@ let
         unlink $out/lib/modules/${modDirVersion}/source
 
         mkdir -p $dev/lib/modules/${modDirVersion}/build
-        cp -dpR ../$sourceRoot $dev/lib/modules/${modDirVersion}/source
+        cp -dpR .. $dev/lib/modules/${modDirVersion}/source
         cd $dev/lib/modules/${modDirVersion}/source
 
         cp $buildRoot/{.config,Module.symvers} $dev/lib/modules/${modDirVersion}/build
@@ -321,7 +321,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
     "ARCH=${stdenv.platform.kernelArch}"
   ]
   # {cfg.buildCores}
-  ++ stdenv.lib.optional enableParallelBuilding "-j4"
+  # ++ stdenv.lib.optional enableParallelBuilding "-j4"
     # cfg.buildCores # TODO set
     ;
 

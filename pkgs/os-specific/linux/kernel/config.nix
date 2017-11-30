@@ -132,7 +132,7 @@ stdenv.mkDerivation rec {
       echo $PWD
       cd $buildRoot
 
-      # Get a basic config file for later refinement with $generateConfig.
+      # Get a basic config file for later refinement with $ generateConfig.
       # make O=$buildRoot $kernelBaseConfig ARCH=$arch
       # /$sourceRoot
       make -C .. O=$buildRoot $kernelBaseConfig ARCH=$arch
@@ -142,7 +142,9 @@ stdenv.mkDerivation rec {
       echo "${kernelConfig}" > $buildRoot/kernel-config
       echo "Printing kernel config"
       # TODO SRC ?
-      DEBUG=1 ARCH=$arch KERNEL_CONFIG=$buildRoot/kernel-config AUTO_MODULES=$autoModules \
+      DEBUG=1 ARCH=$arch KERNEL_CONFIG=$buildRoot/kernel-config \
+        AUTO_MODULES=${builtins.toString autoModules} \
+           ignoreConfigErrors=${builtins.toString ignoreConfigErrors} \
            PREFER_BUILTIN=$preferBuiltin SRC=. BUILD_FOLDER=$buildRoot perl -w ${generateConfig}
     '';
 
