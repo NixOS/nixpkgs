@@ -252,7 +252,7 @@ let buildCrate = { crateName, crateVersion, crateAuthors, buildDependencies,
        fi
 
       mkdir -p target/bin
-      echo "${crateBin}" | sed -n 1'p' 1 | tr ',' '\n' | while read BIN; do
+      echo "${crateBin}" | sed -n 1'p' | tr ',' '\n' | while read BIN; do
          if [ ! -z "$BIN" ]; then
            build_bin $BIN
          fi
