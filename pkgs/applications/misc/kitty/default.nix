@@ -17,6 +17,11 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
+  postPatch = ''
+    substituteInPlace kitty/utils.py \
+      --replace "find_library('startup-notification-1')" "'${libstartup_notification}/lib/libstartup-notification-1.so'"
+    '';
+
   buildPhase = ''
     python3 setup.py linux-package
   '';
@@ -25,7 +30,7 @@ buildPythonApplication rec {
     runHook preInstall
     mkdir -p $out
     cp -r linux-package/{bin,share,lib} $out
-    wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${stdenv.lib.makeBinPath [ imagemagick ]}"
+    wrapProgram "$out/bin/kitty" --prefix PATH : "$out/bin:${stdenv.lib.makeBinPath [ imagemagick xsel ]}"
     runHook postInstall
   '';
 
