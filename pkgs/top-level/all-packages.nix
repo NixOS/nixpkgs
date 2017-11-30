@@ -10046,6 +10046,7 @@ with pkgs;
   };
 
   nettle = callPackage ../development/libraries/nettle { };
+  nettle_3_3 = callPackage ../development/libraries/nettle/3.3.nix { };
 
   newt = callPackage ../development/libraries/newt { };
 
