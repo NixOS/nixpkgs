@@ -357,6 +357,10 @@ in
       "--with-xorg-conf-dir=$(out)/share/X11/xorg.conf.d"
       "--with-udev-rules-dir=$(out)/lib/udev/rules.d"
     ];
+
+    meta = attrs.meta // {
+      platforms = ["i686-linux" "x86_64-linux"];
+    };
   };
 
   # Obsolete drivers that don't compile anymore.
@@ -380,10 +384,19 @@ in
 
   xf86videovmware = attrs: attrs // {
     buildInputs =  attrs.buildInputs ++ [ args.mesa_drivers ]; # for libxatracker
+    meta = attrs.meta // {
+      platforms = ["i686-linux" "x86_64-linux"];
+    };
   };
 
   xf86videoqxl = attrs: attrs // {
     buildInputs =  attrs.buildInputs ++ [ args.spice_protocol ];
+  };
+
+  xf86videosiliconmotion = attrs: attrs // {
+    meta = attrs.meta // {
+      platforms = ["i686-linux" "x86_64-linux"];
+    };
   };
 
   xdriinfo = attrs: attrs // {
@@ -592,6 +605,10 @@ in
     buildInputs = attrs.buildInputs ++ [xorg.libXfixes xorg.libXScrnSaver xorg.pixman];
     nativeBuildInputs = attrs.nativeBuildInputs ++ [args.autoreconfHook xorg.utilmacros];
     configureFlags = "--with-default-dri=3 --enable-tools";
+
+    meta = attrs.meta // {
+      platforms = ["i686-linux" "x86_64-linux"];
+    };
   };
 
   xf86videoxgi = attrs: attrs // {
