@@ -41,7 +41,7 @@ in
     persistencedSha256 = "0zqws2vsrxbxhv6z0nn2galnghcsilcn3s0f70bpm6jqj9wzy7x8";
     useGLVND = false;
 
-    patches = maybePatch_drm_legacy;
+    patches = maybePatch_drm_legacy ++ [ ./vm_operations_struct-fault.patch ];
   };
 
   legacy_304 = generic {
