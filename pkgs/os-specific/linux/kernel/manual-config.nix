@@ -105,10 +105,9 @@ let
 
       # why this
       preUnpack = ''
-      #   mkdir build
-      #   export buildRoot="$PWD/build"
       '';
-      autoModules = stdenv.platform.kernelAutoModules;
+      # HAAAACCKKKKK
+      autoModules = false; # stdenv.platform.kernelAutoModules;
       preferBuiltin = stdenv.platform.kernelPreferBuiltin or false;
       arch = stdenv.platform.kernelArch;
       kernelBaseConfig = stdenv.platform.kernelBaseConfig;

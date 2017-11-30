@@ -89,7 +89,8 @@ stdenv.mkDerivation rec {
 
     # e.g. "bzImage"
     kernelTarget = stdenv.platform.kernelTarget;
-    autoModules = stdenv.platform.kernelAutoModules;
+    # HHHAAAACCKKK
+    autoModules = false; # stdenv.platform.kernelAutoModules;
     preferBuiltin = stdenv.platform.kernelPreferBuiltin or false;
     # kernel ARCH
     arch = stdenv.platform.kernelArch;
