@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, zlib, libjpeg, libpng, libtiff, pam
+{ stdenv, fetchurl, fetchpatch, pkgconfig, zlib, libjpeg, libpng, libtiff, pam
 , dbus, systemd, acl, gmp, darwin
 , libusb ? null, gnutls ? null, avahi ? null, libpaper ? null
 }:
@@ -9,18 +9,26 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "cups-${version}";
-  version = "2.2.2";
+  version = "2.2.6";
 
   passthru = { inherit version; };
 
   src = fetchurl {
     url = "https://github.com/apple/cups/releases/download/v${version}/cups-${version}-source.tar.gz";
-    sha256 = "1xp4ji4rz3xffsz6w6nd60ajxvvihn02pkyp2l4smhqxbmyvp2gm";
+    sha256 = "16qn41b84xz6khrr2pa2wdwlqxr29rrrkjfi618gbgdkq9w5ff20";
   };
 
   outputs = [ "out" "lib" "dev" "man" ];
 
+  patches = [
+    (fetchpatch {
+      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/cups-systemd-socket.patch?h=packages/cups";
+      sha256 = "1ddgdlg9s0l2ph6l8lx1m1lx6k50gyxqi3qiwr44ppq1rxs80ny5";
+    })
+  ];
+
   nativeBuildInputs = [ pkgconfig ];
+
   buildInputs = [ zlib libjpeg libpng libtiff libusb gnutls libpaper ]
     ++ optionals stdenv.isLinux [ avahi pam dbus systemd acl ]
     ++ optionals stdenv.isDarwin (with darwin; [
@@ -39,6 +47,7 @@ stdenv.mkDerivation rec {
 
     "--localstatedir=/var"
     "--sysconfdir=/etc"
+    "--with-rundir=/run"
     "--with-systemd=\${out}/lib/systemd/system"
     "--enable-raw-printing"
     "--enable-threads"
@@ -53,11 +62,6 @@ stdenv.mkDerivation rec {
     "--with-bundledir=$out"
     "--disable-launchd"
   ];
-
-  # XXX: Hackery until https://github.com/NixOS/nixpkgs/issues/24693
-  preBuild = if stdenv.isDarwin then ''
-    export DYLD_FRAMEWORK_PATH=/System/Library/Frameworks
-  '' else null;
 
   installFlags =
     [ # Don't try to write in /var at build time.
