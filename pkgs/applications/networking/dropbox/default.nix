@@ -34,8 +34,9 @@ buildFHSUserEnv {
 
   targetPkgs = pkgs: with pkgs; with xlibs; [
     libICE libSM libX11 libXcomposite libXdamage libXext libXfixes libXrender
-    libXxf86vm libxcb
-    curl dbus fontconfig freetype gcc glib gnutar libxml2 libxslt zlib
+    libXxf86vm libxcb xkeyboardconfig
+    curl dbus firefox-bin fontconfig freetype gcc glib gnutar libxml2 libxslt
+    procps zlib
   ];
 
   extraInstallCommands = ''
@@ -44,13 +45,34 @@ buildFHSUserEnv {
   '';
 
   runScript = writeScript "install-and-start-dropbox" ''
+    export BROWSER=firefox
+
+    set -e
+
+    do_install=
     if ! [ -d "$HOME/.dropbox-dist" ]; then
+        do_install=1
+    else
+        installed_version=$(cat "$HOME/.dropbox-dist/VERSION")
+        latest_version=$(printf "${version}\n$installed_version\n" | sort -V | head -n 1)
+        if [ "x$installed_version" != "x$latest_version" ]; then
+            do_install=1
+        fi
+    fi
+
+    if [ -n "$do_install" ]; then
+        installer=$(mktemp)
         # Dropbox is not installed.
         # Download and unpack the client. If a newer version is available,
         # the client will update itself when run.
-        curl '${installer}' | tar -C "$HOME" -x -z
+        curl '${installer}' >"$installer"
+        pkill dropbox || true
+        rm -fr "$HOME/.dropbox-dist"
+        tar -C "$HOME" -x -z -f "$installer"
+        rm "$installer"
     fi
-    exec "$HOME/.dropbox-dist/dropboxd"
+
+    exec "$HOME/.dropbox-dist/dropboxd" "$@"
   '';
 
   meta = with lib; {
