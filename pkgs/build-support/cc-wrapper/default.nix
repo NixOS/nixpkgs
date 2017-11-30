@@ -264,7 +264,7 @@ stdenv.mkDerivation {
       # compile, because it uses "#include_next <limits.h>" to find the
       # limits.h file in ../includes-fixed. To remedy the problem,
       # another -idirafter is necessary to add that directory again.
-      echo "-B${libc_lib}/lib/ -idirafter ${libc_dev}/include -idirafter ${cc}/lib/gcc/*/*/include-fixed" > $out/nix-support/libc-cflags
+      echo "-B${libc_lib}/lib/ -idirafter ${libc_dev}/include ${optionalString isGNU "-idirafter ${cc}/lib/gcc/*/*/include-fixed"}" > $out/nix-support/libc-cflags
 
       echo "-L${libc_lib}/lib" > $out/nix-support/libc-ldflags
 
