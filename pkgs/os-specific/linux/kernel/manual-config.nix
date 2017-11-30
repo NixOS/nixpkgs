@@ -153,9 +153,9 @@ let
           # we should be in $sourceRoot
           # assume we are in the $sourceRoot folder
           # echo "buildRoot is not set"
-          echo "buildRoot is not set"
           mkdir build
           export buildRoot="$PWD/build"
+          echo "buildRoot was not set, now is $buildRoot"
         # fi
         runHook preConfigure
         ''

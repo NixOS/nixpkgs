@@ -128,12 +128,14 @@ stdenv.mkDerivation rec {
 
     # need to be in srcRoot before launching this !
     buildConfigCommands = ''
-      cd $buildRoot
       set -x
+      echo $PWD
+      cd $buildRoot
 
       # Get a basic config file for later refinement with $generateConfig.
       # make O=$buildRoot $kernelBaseConfig ARCH=$arch
-      make -C ../$sourceRoot O=$buildRoot $kernelBaseConfig ARCH=$arch
+      # /$sourceRoot
+      make -C .. O=$buildRoot $kernelBaseConfig ARCH=$arch
 
       # Create the config file.
       echo "generating kernel configuration..."

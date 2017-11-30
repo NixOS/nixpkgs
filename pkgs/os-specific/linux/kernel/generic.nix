@@ -30,7 +30,7 @@
 , ignoreConfigErrors ? stdenv.platform.name != "pc"
 , extraMeta ? {}
 , hostPlatform
-, callPackage
+# , callPackage
 , ...
 } @ args:
 
@@ -56,7 +56,7 @@ let
   config = configWithPlatform stdenv.platform;
   configCross = configWithPlatform hostPlatform.platform;
 
-    configDrv = callPackage ./config.nix {
+    configDrv = stdenv.lib.callPackage ./config.nix {
     inherit ignoreConfigErrors;
 
     inherit version src kernelPatches stdenv config;
