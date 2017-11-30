@@ -24440,6 +24440,7 @@ EOF
 
   inflection = callPackage ../development/python-modules/inflection { };
 
+  quandl = callPackage ../development/python-modules/quandl { };
 });
 
 in fix' (extends overrides packages)
