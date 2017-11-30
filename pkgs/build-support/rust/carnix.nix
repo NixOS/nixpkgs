@@ -1,4 +1,4 @@
-{ buildPlatform, buildRustCrate, fetchgit, ... }:
+{ buildPlatform, buildRustCrate, fetchgit }:
 let kernel = buildPlatform.parsed.kernel.name;
     abi = buildPlatform.parsed.abi.name;
     aho_corasick_0_6_3_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {

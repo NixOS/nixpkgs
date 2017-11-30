@@ -152,8 +152,35 @@ let
   };
 in
 
-hello_0_1_0.override { crateOverrides = overrides; };
+hello_0_1_0.override { crateOverrides = overrides; }
 ```
+
+Here, `crateOverrides` is expected to be a attribute set, where the
+key is the crate name without version number and the value a function.
+The function gets all attributes passed to `buildRustCrate` as first
+argument and returns a set that contains all attribute that should be
+overwritten.
+
+For more complicated cases, such as when parts of the crate's
+derivation depend on the the crate's version, the `attrs` argument of
+the override above can be read, as in the following example, which
+patches the derivation:
+
+```
+let
+  defaultOverrides = callPackage <nixpkgs/pkgs/build-support/rust/defaultCrateOverrides.nix> {};
+  overrides = defaultOverrides // {
+    imaginary-timezone-crate = attrs: lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0")  {
+      postPatch = ''
+        substituteInPlace lib/zoneinfo.rs \
+          --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+      '';
+    };
+  };
+in
+hello_0_1_0.override { crateOverrides = overrides; }
+```
+
 
 Three more parameters can be overridden:
 
@@ -163,13 +190,15 @@ Three more parameters can be overridden:
   hello_0_1_0.override { rust = pkgs.rust; };
   ```
 
-- Whether to build in release mode or debug mode (release mode by default):
+- Whether to build in release mode or debug mode (release mode by
+  default):
 
   ```
   hello_0_1_0.override { release = false; };
   ```
 
-- Whether to print the commands sent to rustc when building (equivalent to `--verbose` in cargo:
+- Whether to print the commands sent to rustc when building
+  (equivalent to `--verbose` in cargo:
 
   ```
   hello_0_1_0.override { verbose = false; };

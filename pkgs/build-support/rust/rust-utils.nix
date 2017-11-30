@@ -252,14 +252,19 @@ let buildCrate = { crateName, crateVersion, crateAuthors, buildDependencies,
        fi
 
       mkdir -p target/bin
-      echo "${crateBin}" | sed -n 1'p' | tr ',' '\n' | while read BIN; do
+      echo "${crateBin}" | sed -n 1'p' 1 | tr ',' '\n' | while read BIN; do
          if [ ! -z "$BIN" ]; then
            build_bin $BIN
          fi
       done
-      if [[ (-z "${crateBin}") && (-e src/main.rs) ]]; then
-         build_bin ${crateName} src/main.rs
-      fi
+      ${lib.optionalString (crateBin == "") ''
+        if [[ -e src/main.rs ]]; then
+          build_bin ${crateName} src/main.rs
+        fi
+        for i in src/bin/*.rs; do #*/
+          build_bin "$(basename $i .rs)" "$i"
+        done
+      ''}
       # Remove object files to avoid "wrong ELF type"
       find target -type f -name "*.o" -print0 | xargs -0 rm -f
       runHook postBuild
