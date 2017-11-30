@@ -53,11 +53,11 @@ let kernel = buildPlatform.parsed.kernel.name;
       sha256 = "0p4b3nr0s5nda2qmm7xdhnvh4lkqk3xd8l9ffmwbvqw137vx7mj1";
       inherit dependencies buildDependencies features;
     };
-    carnix_0_4_10_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+    carnix_0_4_13_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "carnix";
-      version = "0.4.10";
+      version = "0.4.13";
       authors = [ "pe@pijul.org <pe@pijul.org>" ];
-      sha256 = "06zsvylwc21vrwgrr9lbg39kp5p71nil4vcwkk292j0wrm28s32z";
+      sha256 = "0zdlk1hyhhkmq80kkinn8h28nyrs16b3b15gdrbd63c560hpz3kl";
       inherit dependencies buildDependencies features;
     };
     cc_1_0_3_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
@@ -467,7 +467,7 @@ rec {
   bitflags_1_0_1 = bitflags_1_0_1_ {
     features = [ "example_generated" ];
   };
-  carnix_0_4_10 = carnix_0_4_10_ {
+  carnix_0_4_13 = carnix_0_4_13_ {
     dependencies = [ clap_2_28_0 env_logger_0_4_3 error_chain_0_11_0 itertools_0_7_3 log_0_3_8 nom_3_2_1 regex_0_2_2 rusqlite_0_13_0 serde_1_0_21 serde_derive_1_0_21 serde_json_1_0_6 tempdir_0_3_5 toml_0_4_5 ];
   };
   cc_1_0_3 = cc_1_0_3_ {
