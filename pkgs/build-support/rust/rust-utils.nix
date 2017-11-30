@@ -294,9 +294,11 @@ let buildCrate = { crateName, crateVersion, crateAuthors, buildDependencies,
     '';
 in
 
-crate_: lib.makeOverridable ({ rust, release, verbose, crateOverrides }:
+crate_: lib.makeOverridable ({ rust, release, verbose, features, buildInputs, crateOverrides }:
 
-let crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverrides crate_); in
+let crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverrides crate_);
+    buildInputs_ = buildInputs;
+in
 stdenv.mkDerivation rec {
 
     inherit (crate) crateName;
@@ -306,7 +308,7 @@ stdenv.mkDerivation rec {
       else
         fetchCrate { inherit (crate) crateName version sha256; };
     name = "rust_${crate.crateName}-${crate.version}";
-    buildInputs = [ rust ncurses ] ++ (crate.buildInputs or []);
+    buildInputs = [ rust ncurses ] ++ (crate.buildInputs or []) ++ buildInputs_;
     dependencies =
       builtins.map
         (dep: dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; })
@@ -324,8 +326,8 @@ stdenv.mkDerivation rec {
     );
 
     crateFeatures = if crate ? features then
-       lib.concatMapStringsSep " " (f: "--cfg feature=\\\"${f}\\\"") crate.features
-    else "";
+        lib.concatMapStringsSep " " (f: "--cfg feature=\\\"${f}\\\"") (crate.features ++ features)
+      else "";
 
     libName = if crate ? libName then crate.libName else crate.crateName;
     libPath = if crate ? libPath then crate.libPath else "";
@@ -374,5 +376,7 @@ stdenv.mkDerivation rec {
   rust = rustc;
   release = true;
   verbose = true;
+  features = [];
+  buildInputs = [];
   crateOverrides = defaultCrateOverrides;
 }
