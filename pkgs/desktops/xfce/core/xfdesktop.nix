@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
   patches =
     [
       (fetchurl {
-      url = https://git.xfce.org/users/eric/xfdesktop/patch/?id=cc311b61b82b7510a3a6cb0952d3a331e3551e05;
-      sha256 = "0wil8533v0hag5b6vn5qjx7nlw9h643idzbkjdxd910483la94vz";})
+      url = https://git.xfce.org/xfce/xfdesktop/patch?id=157f5b55cfc3629d595ef38984278de5915aac27;
+      sha256 = "07yvhci0yccbxnqymh2cf49j8yc0jsw147mnjzw9iy4kghj2rqxj";})
     ];
 
   enableParallelBuilding = true;
