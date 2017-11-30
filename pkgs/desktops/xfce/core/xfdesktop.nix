@@ -19,6 +19,13 @@ stdenv.mkDerivation rec {
       libglade xfce4panel thunar exo garcon libnotify hicolor_icon_theme
     ];
 
+  patches =
+    [
+      (fetchurl {
+      url = https://git.xfce.org/users/eric/xfdesktop/patch/?id=cc311b61b82b7510a3a6cb0952d3a331e3551e05;
+      sha256 = "0wil8533v0hag5b6vn5qjx7nlw9h643idzbkjdxd910483la94vz";})
+    ];
+
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
@@ -29,4 +36,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.eelco ];
   };
 }
-
