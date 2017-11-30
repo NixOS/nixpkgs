@@ -206,6 +206,14 @@ following incompatible changes:</para>
       overhead of a go package having non-versioned dependencies.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      When using <option>services.xserver.libinput</option> (enabled by default in GNOME),
+      it now handles all input devices, not just touchpads. As a result, you might need to
+      re-evaluate any custom Xorg configuration. In particular,
+      <literal>Option "XkbRules" "base"</literal> may result in broken keyboard layout.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>
