@@ -855,6 +855,7 @@ with pkgs;
   traefik = callPackage ../servers/traefik { };
 
   capstone = callPackage ../development/libraries/capstone { };
+  unicorn-emu = callPackage ../development/libraries/unicorn-emu { };
 
   cataract          = callPackage ../applications/misc/cataract { };
   cataract-unstable = callPackage ../applications/misc/cataract/unstable.nix { };
