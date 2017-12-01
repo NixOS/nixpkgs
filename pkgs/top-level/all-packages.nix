@@ -9329,7 +9329,9 @@ with pkgs;
 
   libchop = callPackage ../development/libraries/libchop { };
 
-  libclc = callPackage ../development/libraries/libclc { };
+  libclc = callPackage ../development/libraries/libclc {
+    llvmPackages = llvmPackages_5;
+  };
 
   libcli = callPackage ../development/libraries/libcli { };
 
