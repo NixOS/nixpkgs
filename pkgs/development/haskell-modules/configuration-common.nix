@@ -453,8 +453,10 @@ self: super: {
   # https://github.com/basvandijk/threads/issues/10
   threads = dontCheck super.threads;
 
-  # https://github.com/purescript/purescript/pull/3041
-  purescript = doJailbreak super.purescript;
+  # https://github.com/NixOS/nixpkgs/issues/32138
+  purescript = super.purescript.override {
+    optparse-applicative = self.optparse-applicative_0_14_0_0;
+  };
 
   # Missing module.
   rematch = dontCheck super.rematch;            # https://github.com/tcrayford/rematch/issues/5
