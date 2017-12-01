@@ -58,7 +58,7 @@ let kernel = buildPlatform.parsed.kernel.name;
       crateName = "carnix";
       version = "0.4.14";
       authors = [ "pe@pijul.org <pe@pijul.org>" ];
-      src = ./.;
+      sha256 = "1wdmpm3l6nyxxlw9h8h4jrxx63v7xc752mgqlmp5qmlbpnjvcla1";
       inherit dependencies buildDependencies features;
     };
     cc_1_0_3_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
