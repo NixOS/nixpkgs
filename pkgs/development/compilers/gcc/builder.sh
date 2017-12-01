@@ -5,11 +5,6 @@ oldOpts="$(shopt -po nounset)" || true
 set -euo pipefail
 
 
-if test -n "${NIX_CC_CROSS-}"; then
-    export NIX_CC="$NIX_CC_CROSS"
-fi
-
-
 export NIX_FIXINC_DUMMY="$NIX_BUILD_TOP/dummy"
 mkdir "$NIX_FIXINC_DUMMY"
 
