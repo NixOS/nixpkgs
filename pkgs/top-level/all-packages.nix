@@ -10432,7 +10432,10 @@ with pkgs;
 
   opencascade_oce = opencascade;
 
-  opencl-headers = callPackage ../development/libraries/opencl-headers { };
+  opencl-headersGen = v: callPackage ../development/libraries/opencl-headers { version = v; };
+  opencl-headers_1_2 = opencl-headersGen "12";
+  opencl-headers_2_2 = opencl-headersGen "22";
+  opencl-headers = opencl-headers_2_2;
 
   opencl-clhpp = callPackage ../development/libraries/opencl-clhpp { };
 
