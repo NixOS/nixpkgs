@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchgit, writeText, sbclBootstrap
+{ stdenv, fetchurl, writeText, sbclBootstrap
 , sbclBootstrapHost ? "${sbclBootstrap}/bin/sbcl --disable-debugger --no-userinit --no-sysinit"
 , threadSupport ? (stdenv.isi686 || stdenv.isx86_64 || "aarch64-linux" == stdenv.system)
   # Meant for sbcl used for creating binaries portable to non-NixOS via save-lisp-and-die.
@@ -9,16 +9,11 @@
 
 stdenv.mkDerivation rec {
   name    = "sbcl-${version}";
-  version = "1.4.1.0.20171104";
+  version = "1.4.2";
 
-  #src = fetchurl {
-  #  url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${name}-source.tar.bz2";
-  #  sha256 = "1qdaf847g5p2zgq00ax5hdy4r82bl3ss382psd0kkca1h83cdiz8";
-  #};
-  src = fetchgit {
-    url    = "https://git.code.sf.net/p/sbcl/sbcl";
-    sha256 = "1fq34h8h8pax5q17w84kwv5amiaag3ikkq3cdmb31r64736mxi6r";
-    rev    = "11aa57d23bc464d6a6867a80e946907404ceadd1";
+  src = fetchurl {
+    url    = "mirror://sourceforge/project/sbcl/sbcl/${version}/${name}-source.tar.bz2";
+    sha256 = "05s7wsx6bsnx4h6w3d8yim9apbvi8ih0glmvkmgjz7nrad4abjwd";
   };
 
   patchPhase = ''
