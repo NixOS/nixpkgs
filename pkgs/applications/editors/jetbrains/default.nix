@@ -1,6 +1,6 @@
 { lib, stdenv, callPackage, fetchurl, makeDesktopItem, makeWrapper, patchelf
 , coreutils, gnugrep, which, git, python, unzip, p7zip
-, androidsdk, jdk, cmake, libxml2, zlib, python2, ncurses
+, androidsdk, jdk, cmake, libxml2, zlib, python3, ncurses
 }:
 
 assert stdenv.isLinux;
@@ -41,11 +41,19 @@ let
           patchelf --set-interpreter $interp \
             --set-rpath "${lib.makeLibraryPath [ libxml2 zlib stdenv.cc.cc.lib ]}:$lldbLibPath" \
             bin/lldb/bin/lldb-server
-          patchelf --set-interpreter $interp \
-            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$lldbLibPath" \
-            bin/lldb/LLDBFrontend
+
+          for i in LLDBFrontend lldb lldb-argdumper; do
+            patchelf --set-interpreter $interp \
+              --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$lldbLibPath" \
+              "bin/lldb/bin/$i"
+          done
+
           patchelf \
-            --set-rpath "${lib.makeLibraryPath [ libxml2 zlib stdenv.cc.cc.lib python2 ]}:$lldbLibPath" \
+            --set-rpath "${lib.makeLibraryPath [ stdenv.cc.cc.lib ]}:$lldbLibPath" \
+            bin/lldb/lib/python3.*/lib-dynload/zlib.cpython-*m-x86_64-linux-gnu.so
+
+          patchelf \
+            --set-rpath "${lib.makeLibraryPath [ libxml2 zlib stdenv.cc.cc.lib python3 ]}:$lldbLibPath" \
             bin/lldb/lib/liblldb.so
 
           patchelf --set-interpreter $interp bin/gdb/bin/gdb
