@@ -342,11 +342,8 @@ stdenv.mkDerivation ({
         )
       )
     }
-    ${if targetPlatform == hostPlatform
-      then if hostPlatform.isDarwin
-        then " --with-native-system-header-dir=${darwin.usr-include}"
-        else " --with-native-system-header-dir=${getDev stdenv.cc.libc}/include"
-      else ""}
+    ${optionalString (!(crossMingw && crossStageStatic))
+      "--with-native-system-header-dir=${getDev (stdenv.ccCross or stdenv.cc).libc}/include"}
     ${if langAda then " --enable-libada" else ""}
     ${if targetPlatform == hostPlatform && targetPlatform.isi686 then "--with-arch=i686" else ""}
     ${if targetPlatform != hostPlatform then crossConfigureFlags else ""}
@@ -406,12 +403,13 @@ stdenv.mkDerivation ({
     STRIP_FOR_TARGET = "${targetPlatform.config}-strip";
     CC_FOR_TARGET = "${targetPlatform.config}-gcc";
     CXX_FOR_TARGET = "${targetPlatform.config}-g++";
-    # If we are making a cross compiler, cross != null
-    NIX_CC_CROSS = if targetPlatform == hostPlatform then "${stdenv.ccCross}" else "";
+
     dontStrip = true;
     buildFlags = "";
   };
 
+  NIX_BUILD_CC = stdenv.cc;
+  NIX_CC_CROSS = stdenv.ccCross or null;
 
   # Needed for the cross compilation to work
   AR = "ar";

@@ -274,6 +274,8 @@ stdenv.mkDerivation ({
         )
       )
     }
+    ${optionalString (!(crossMingw && crossStageStatic))
+      "--with-native-system-header-dir=${getDev (stdenv.ccCross or stdenv.cc).libc}/include"}
     ${ # Trick that should be taken out once we have a mips64el-linux not loongson2f
       if targetPlatform == hostPlatform && stdenv.system == "mips64el-linux" then "--with-arch=loongson2f" else ""}
     ${if langAda then " --enable-libada" else ""}
@@ -325,11 +327,12 @@ stdenv.mkDerivation ({
     STRIP_FOR_TARGET = "${targetPlatform.config}-strip";
     CC_FOR_TARGET = "${targetPlatform.config}-gcc";
     CXX_FOR_TARGET = "${targetPlatform.config}-g++";
-    # If we are making a cross compiler, cross != null
-    NIX_CC_CROSS = if targetPlatform == hostPlatform then "${stdenv.ccCross}" else "";
+
     dontStrip = true;
   };
- 
+
+  NIX_BUILD_CC = stdenv.cc;
+  NIX_CC_CROSS = stdenv.ccCross or null;
 
   # Needed for the cross compilation to work
   AR = "ar";
