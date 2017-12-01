@@ -9,9 +9,9 @@ let
   };
   setuptools_source = fetchPypi {
     pname = "setuptools";
-    version = "36.7.1";
+    version = "38.2.3";
     format = "wheel";
-    sha256 = "eaacfa35eb11199d0b017df416421781a75209817bff3f94820556e36c49bd77";
+    sha256 = "0c4j3jiiwc0h1bdv4xklinp90spgvgiv5fsxp119hif9934nfxfs";
   };
 
   # TODO: Shouldn't be necessary anymore for pip > 9.0.1!
