@@ -291,25 +291,25 @@ in
 
   phpstorm = buildPhpStorm rec {
     name = "phpstorm-${version}";
-    version = "2017.2.4"; /* updated by script */
+    version = "2017.3"; /* updated by script */
     description = "Professional IDE for Web and PHP developers";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/webide/PhpStorm-${version}.tar.gz";
-      sha256 = "0hn3x5wid2z7s2mhnxfqh2yhdkscccpbz7qgsxkjvmkxcynazrvy"; /* updated by script */
+      sha256 = "1byhlm5bnp6ic4n2xg17v4g34ipygy50i9xj4292b0xw7srxh910"; /* updated by script */
     };
     wmClass = "jetbrains-phpstorm";
-    update-channel = "PS2017.2";
+    update-channel = "PS2017.3";
   };
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2017.2.4"; /* updated by script */
+    version = "2017.3"; /* updated by script */
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "193f44s9vh5ksd7hs586h0j66lcqsh29wwxr5yhl05lq931la857"; /* updated by script */
+      sha256 = "1lca3g5h716l97pkqfb8i7apsnx445xzcc9j41d0y3yyncf5hwxr"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm-ce";
     update-channel = "PyCharm_Release";
