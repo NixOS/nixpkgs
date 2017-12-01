@@ -330,15 +330,15 @@ in
 
   rider = buildRider rec {
     name = "rider-${version}";
-    version = "2017.1.2"; /* updated by script */
+    version = "2017.2.1"; /* updated by script */
     description = "A cross-platform .NET IDE based on the IntelliJ platform and ReSharper";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/resharper/JetBrains.Rider-${version}.tar.gz";
-      sha256 = "0kphjxibrs4ss6hpxbssvs3n35xh9zzw7a1q09x79ibvvk73gwqh"; /* updated by script */
+      sha256 = "1zviknxamp1y7lrlg5qfj3ijp96z0dqvcr42ca0fbx1xb887wzww"; /* updated by script */
     };
     wmClass = "jetbrains-rider";
-    update-channel = "rider_2017_1";
+    update-channel = "rider_2017_2";
   };
 
   ruby-mine = buildRubyMine rec {
