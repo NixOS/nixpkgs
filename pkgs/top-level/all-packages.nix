@@ -16541,9 +16541,7 @@ with pkgs;
 
   ratmen = callPackage ../tools/X11/ratmen {};
 
-  ratox = callPackage ../applications/networking/instant-messengers/ratox {
-    libtoxcore = libtoxcore-old;
-  };
+  ratox = callPackage ../applications/networking/instant-messengers/ratox { };
 
   ratpoison = callPackage ../applications/window-managers/ratpoison { };
 
