@@ -1,10 +1,8 @@
-{ stdenv, hostPlatform, fetchurl, perl, buildLinux, callPackage, ... } @ args:
+{ stdenv, hostPlatform, ignoreConfigErrors ? true, fetchurl, perl, buildLinux, callPackage, ... } @ args:
 
 import ./generic.nix (args // rec {
   version = "4.9.65";
   extraMeta.branch = "4.9";
-
-  ignoreConfigErrors = true;
 
   extraConfig=''
     VIRTIO_PCI y

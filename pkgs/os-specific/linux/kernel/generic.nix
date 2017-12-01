@@ -54,8 +54,9 @@ let
     features = kernelFeatures; # Ensure we know of all extra patches, etc.
   };
 
-  config = configWithPlatform stdenv.platform;
-  configCross = configWithPlatform hostPlatform.platform;
+  # CARE I modified the line below
+  config = configWithPlatform hostPlatform;
+  configCross = configWithPlatform hostPlatform;
 
     configDrv = callPackage ./config.nix {
     inherit ignoreConfigErrors;

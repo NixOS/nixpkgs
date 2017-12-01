@@ -4,6 +4,8 @@
 , utillinux ? null
 , writeTextFile, ubootTools
 # , callPackage
+
+# in fact this should be a set like https://github.com/NixOS/nixpkgs/issues/24388
 , hostPlatform
 }:
 
@@ -56,6 +58,8 @@ let
   inherit (stdenv.lib)
     hasAttr getAttr optional optionalString optionalAttrs maintainers platforms;
 
+  platform = hostPlatform;
+
   installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
     #!${stdenv.shell} -e
     mkdir -p $4
@@ -68,7 +72,7 @@ let
     "O=$(buildRoot)"
 
   ] ++ stdenv.lib.optionals (stdenv.platform ? kernelMakeFlags)
-    stdenv.platform.kernelMakeFlags;
+    platform.kernelMakeFlags;
 
   drvAttrs = config_: platform: kernelPatches: configfile:
     let
@@ -107,10 +111,10 @@ let
       preUnpack = ''
       '';
       # HAAAACCKKKKK
-      autoModules = false; # stdenv.platform.kernelAutoModules;
-      preferBuiltin = stdenv.platform.kernelPreferBuiltin or false;
-      arch = stdenv.platform.kernelArch;
-      kernelBaseConfig = stdenv.platform.kernelBaseConfig;
+      autoModules = platform.kernelAutoModules;
+      preferBuiltin = platform.kernelPreferBuiltin or false;
+      arch = platform.kernelArch;
+      kernelBaseConfig = platform.kernelBaseConfig;
 
       patches = map (p: p.patch) kernelPatches;
 
@@ -296,7 +300,7 @@ in
 
 assert stdenv.lib.versionAtLeast version "4.15" -> libelf != null;
 assert stdenv.lib.versionAtLeast version "4.15" -> utillinux != null;
-stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKernelPatches) configfile) // {
+stdenv.mkDerivation ((drvAttrs config platform (kernelPatches ++ nativeKernelPatches) configfile) // {
 # config ? stdenv.lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
 # stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKernelPatches) configfile) // rec {
   name = "linux-${version}";
@@ -304,7 +308,7 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ perl bc nettools openssl gmp libmpc mpfr ]
-      ++ optional (stdenv.platform.kernelTarget == "uImage") ubootTools
+      ++ optional (platform.kernelTarget == "uImage") ubootTools
       ++ optional (stdenv.lib.versionAtLeast version "4.15") libelf
       ++ optional (stdenv.lib.versionAtLeast version "4.15") utillinux
       ;
@@ -317,14 +321,14 @@ stdenv.mkDerivation ((drvAttrs config stdenv.platform (kernelPatches ++ nativeKe
   # TODO add an output for the config ?
 
   makeFlags = commonMakeFlags ++ [
-    "ARCH=${stdenv.platform.kernelArch}"
+    "ARCH=${platform.kernelArch}"
   ]
   # {cfg.buildCores}
   # ++ stdenv.lib.optional enableParallelBuilding "-j4"
     # cfg.buildCores # TODO set
     ;
 
-  karch = stdenv.platform.kernelArch;
+  karch = platform.kernelArch;
 
   crossAttrs = let cp = hostPlatform.platform; in
     (drvAttrs crossConfig cp (kernelPatches ++ crossKernelPatches) crossConfigfile) // {
