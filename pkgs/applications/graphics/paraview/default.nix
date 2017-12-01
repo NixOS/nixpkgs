@@ -1,7 +1,7 @@
 {
 stdenv, fetchFromGitHub, cmake
 ,qtbase, qttools, python, mesa
-,libXt, qtx11extras, qtxmlpatterns 
+,libXt, qtx11extras, qtxmlpatterns
 }:
 
 stdenv.mkDerivation rec {
@@ -33,8 +33,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ 
+  nativeBuildInputs = [
     cmake
+  ];
+
+  buildInputs = [
     python
     mesa
     libXt
