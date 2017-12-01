@@ -41,7 +41,7 @@ in
       ''
         ALIASFILE=${xorg.fontalias}/share/fonts/X11/misc/fonts.alias
         test -f $ALIASFILE
-        ln -s $ALIASFILE $out/lib/X11/fonts/misc/fonts.alias
+        cp $ALIASFILE $out/lib/X11/fonts/misc/fonts.alias
       '';
   };
 
