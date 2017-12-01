@@ -1,7 +1,8 @@
 { stdenv, fetchurl, pkgconfig, expat, ncurses, pciutils, numactl
-, cairo, libX11
-, x11Support ? (!stdenv.isCygwin)
+, x11Support ? false, libX11 ? null, cairo ? null
 }:
+
+assert x11Support -> libX11 != null && cairo != null;
 
 with stdenv.lib;
 
