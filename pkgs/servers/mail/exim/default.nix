@@ -1,21 +1,12 @@
-{ coreutils, fetchurl, db, openssl, pcre, perl, pkgconfig, stdenv, fetchpatch }:
+{ coreutils, fetchurl, db, openssl, pcre, perl, pkgconfig, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "exim-4.89";
+  name = "exim-4.89.1";
 
   src = fetchurl {
     url = "http://ftp.exim.org/pub/exim/exim4/${name}.tar.xz";
-    sha256 = "09lndv34jsxwglq5zsh9y4xaqj5g37g9ca4x0zb25fvvm4f0lj8c";
+    sha256 = "157syn472gnp1x2lrazwdvqsg3zgwyv87952sq5rrnp220m3488s";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2017-1000369.patch";
-      url = "https://anonscm.debian.org/git/pkg-exim4/exim4.git/plain/debian/patches/79_CVE-2017-1000369.patch?h=4.89-2%2bdeb9u1";
-      sha256 = "0v46zywgkv1rdqhybqqrd0rwkdaj6q1f4x0a3vm9p0wz8vad3023";
-    })
-    ./cve-2017-16943.patch
-  ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ coreutils db openssl pcre perl ];

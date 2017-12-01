@@ -126,16 +126,11 @@ stdenv.mkDerivation rec {
     sed -i 's/QMAKE_CXX = g++/QMAKE_CXX = clang++/' mkspecs/common/g++-base.conf
   '';
 
-  postConfigure = ''
-    echo "applying patch ${./parallel-build.patch}"
-    patch -p1 < ${./parallel-build.patch}
-  '';
-
   prefixKey = "-prefix ";
 
   configureFlags =
     ''
-      -v -no-separate-debug-info -release -no-fast -confirm-license -opensource
+      -v -no-separate-debug-info -release -fast -confirm-license -opensource
 
       -${if stdenv.isFreeBSD then "no-" else ""}opengl -xrender -xrandr -xinerama -xcursor -xinput -xfixes -fontconfig
       -qdbus -${if cups == null then "no-" else ""}cups -glib -dbus-linked -openssl-linked

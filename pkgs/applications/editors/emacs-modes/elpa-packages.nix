@@ -36,6 +36,8 @@ self:
     };
 
     overrides = {
+      # upstream issue: missing footer
+      ebdb-i18n-chn = markBroken super.ebdb-i18n-chn;
       el-search = markBroken super.el-search; # requires emacs-25
       iterators = markBroken super.iterators; # requires emacs-25
       midi-kbd = markBroken super.midi-kbd; # requires emacs-25

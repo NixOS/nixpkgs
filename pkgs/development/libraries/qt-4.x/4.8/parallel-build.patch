@@ -1,6 +1,0 @@
---- a/tools/designer/src/lib/Makefile
-+++ b/tools/designer/src/lib/Makefile
-@@ -7167,2 +7167,3 @@ compiler_moc_header_clean:
-                .uic/release-shared/ui_qtgradientviewdialog.h \
-+               .uic/release-shared/ui_qtgradientview.h \
-                ../../../shared/qtgradienteditor/qtgradientviewdialog.h

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner  = "QMatrixClient";
     repo   = "Quaternion";
     rev    = "v${version}";
-    sha256 = "0an2nvwjs1hf7cb4maaj3rskhgsjgimzazsx53ndxskzwcssidvi";
+    sha256 = "1nbxlflm94pb19gdwb95z92kzg4px97dmp8av3mj4imk1ysnyrvi";
   };
 
   buildInputs = [ qtbase qtquickcontrols libqmatrixclient ];

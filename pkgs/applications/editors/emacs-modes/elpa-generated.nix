@@ -755,10 +755,10 @@
     el-search = callPackage ({ elpaBuild, emacs, fetchurl, lib, stream }:
     elpaBuild {
         pname = "el-search";
-        version = "1.4";
+        version = "1.4.0.4";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/el-search-1.4.tar";
-          sha256 = "0fzsq1wdkb94dk67ligdwc7kyl0x9bifgl2qvvf0hsj4zws4pgjg";
+          url = "https://elpa.gnu.org/packages/el-search-1.4.0.4.tar";
+          sha256 = "1l3wb0g6ipyi8yimxah0z6r83376l22pb2s9ba6kxfmhsq5wyc8a";
         };
         packageRequires = [ emacs stream ];
         meta = {
@@ -848,10 +848,10 @@
       }) {};
     exwm = callPackage ({ elpaBuild, fetchurl, lib, xelb }: elpaBuild {
         pname = "exwm";
-        version = "0.15";
+        version = "0.16";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/exwm-0.15.tar";
-          sha256 = "1y7nqry9y0a99bsdqkk9f554vczfw4sz6raadw3138835qy697jg";
+          url = "https://elpa.gnu.org/packages/exwm-0.16.tar";
+          sha256 = "0c4w5k9lzqj8yzhdqipdb4fs7ld2qklc6s137104jnfdvmrwcv2i";
         };
         packageRequires = [ xelb ];
         meta = {
@@ -929,6 +929,20 @@
           license = lib.licenses.free;
         };
       }) {};
+    gle-mode = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
+    elpaBuild {
+        pname = "gle-mode";
+        version = "1.1";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/gle-mode-1.1.el";
+          sha256 = "0p9glalhkf8i4486pjwvrb9z4lqxl6jcqfk6jrjl6b1xi72xmdi0";
+        };
+        packageRequires = [ cl-lib ];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/gle-mode.html";
+          license = lib.licenses.free;
+        };
+      }) {};
     gnome-c-style = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "gnome-c-style";
         version = "0.1";
@@ -945,10 +959,10 @@
     gnorb = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "gnorb";
-        version = "1.3.1";
+        version = "1.3.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/gnorb-1.3.1.tar";
-          sha256 = "1g6xldkc6l6zlzd1slqizbbd5b9k4pbr66nrf5svidgiy7mlifw5";
+          url = "https://elpa.gnu.org/packages/gnorb-1.3.2.tar";
+          sha256 = "054z6bnfkf7qkgc9xynhzy9xrz780x4csj1r206jhslygjrlf1sj";
         };
         packageRequires = [ cl-lib ];
         meta = {
@@ -1053,10 +1067,10 @@
       }) {};
     hyperbole = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "hyperbole";
-        version = "7.0.0";
+        version = "7.0.2";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/hyperbole-7.0.0.tar";
-          sha256 = "07cy40yfxwka1r6i01pgrf9a3n9ms5xw2x486jd803dhfkm3113b";
+          url = "https://elpa.gnu.org/packages/hyperbole-7.0.2.tar";
+          sha256 = "1hgwa740941a9s5wf1cqf76h3af8qbiiw9sc76biz6m3vx0hy1zs";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -1570,10 +1584,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20171120";
+        version = "20171127";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20171120.tar";
-          sha256 = "0hxy061g1qd77pvx8mq5rb9avx139x4z5nmjhdq518xhg7kxmq6a";
+          url = "https://elpa.gnu.org/packages/org-20171127.tar";
+          sha256 = "18a77yzfkx7x1pckc9c274b2fpswrcqz19nansvbqdr1harzvd20";
         };
         packageRequires = [];
         meta = {

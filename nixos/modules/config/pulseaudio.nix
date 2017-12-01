@@ -101,7 +101,8 @@ in {
           each user that tries to use the sound system. The server runs
           with user privileges. This is the recommended and most secure
           way to use PulseAudio. If true, one system-wide PulseAudio
-          server is launched on boot, running as the user "pulse".
+          server is launched on boot, running as the user "pulse", and
+          only users in the "audio" group will have access to the server.
           Please read the PulseAudio documentation for more details.
         '';
       };
