@@ -252,15 +252,15 @@ in
 
   goland = buildGoland rec {
     name = "goland-${version}";
-    version = "173.3727.79"; /* updated by script */
+    version = "2017.3"; /* updated by script */
     description = "Up and Coming Go IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "0bmd7r3h76pg0s9m3i5qv7zfkcj3gannj0c12cw087b831ga7ccz"; /* updated by script */
+      sha256 = "0l4l0lsmq1g4fwfrxhbrnfsp8nk38ml48cryvdr241zsxz43fax0"; /* updated by script */
     };
     wmClass = "jetbrains-goland";
-    update-channel = "goland_1.0_EAP";
+    update-channel = "goland_release";
   };
 
   idea-community = buildIdea rec {
