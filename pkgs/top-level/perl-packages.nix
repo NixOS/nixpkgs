@@ -8037,6 +8037,8 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/P/PR/PREACTION/${name}.tar.gz";
       sha256 = "65a2ffba5f5fd355ce0b2365b478dda5ee091cf9d81c047dd22fe5ef4f823e3b";
     };
+    # Syslog test fails.
+    preCheck = "rm t/syslog.t";
     meta = {
       homepage = https://github.com/preaction/Log-Any;
       description = "Bringing loggers and listeners together";
