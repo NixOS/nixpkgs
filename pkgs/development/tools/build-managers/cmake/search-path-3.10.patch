@@ -1,6 +1,5 @@
-diff -ur cmake-3.9.1/Modules/Platform/UnixPaths.cmake cmake-3.9.1-mod/Modules/Platform/UnixPaths.cmake
---- cmake-3.9.1/Modules/Platform/UnixPaths.cmake	2017-08-10 13:36:32.000000000 +0000
-+++ cmake-3.9.1-mod/Modules/Platform/UnixPaths.cmake	2017-09-03 01:24:31.901473539 +0000
+--- cmake-3.10.0/Modules/Platform/UnixPaths.cmake	2017-11-20 10:19:53.000000000 -0500
++++ cmake-3.10.0-mod/Modules/Platform/UnixPaths.cmake	2017-12-02 13:05:03.075339901 -0500
 @@ -22,9 +22,6 @@
  # List common installation prefixes.  These will be used for all
  # search types.
@@ -48,9 +47,8 @@ diff -ur cmake-3.9.1/Modules/Platform/UnixPaths.cmake cmake-3.9.1-mod/Modules/Pl
    )
  
  # Enable use of lib32 and lib64 search path variants by default.
-diff -ur cmake-3.9.1/Modules/Platform/WindowsPaths.cmake cmake-3.9.1-mod/Modules/Platform/WindowsPaths.cmake
---- cmake-3.9.1/Modules/Platform/WindowsPaths.cmake	2017-08-10 13:36:32.000000000 +0000
-+++ cmake-3.9.1-mod/Modules/Platform/WindowsPaths.cmake	2017-09-03 01:19:32.808355986 +0000
+--- cmake-3.10.0/Modules/Platform/WindowsPaths.cmake	2017-11-20 10:19:53.000000000 -0500
++++ cmake-3.10.0-mod/Modules/Platform/WindowsPaths.cmake	2017-12-02 13:05:56.605115987 -0500
 @@ -66,7 +66,7 @@
  
  if(CMAKE_CROSSCOMPILING AND NOT CMAKE_HOST_SYSTEM_NAME MATCHES "Windows")
