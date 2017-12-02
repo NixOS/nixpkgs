@@ -18806,7 +18806,6 @@ with pkgs;
       in
         recurseIntoAttrs contribs;
 
-    unimath = callPackage ../development/coq-modules/unimath {};
     ynot = callPackage ../development/coq-modules/ynot {};
   };
 
