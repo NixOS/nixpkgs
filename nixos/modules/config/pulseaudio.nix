@@ -46,6 +46,7 @@ let
   gid = ids.gids.pulseaudio;
 
   stateDir = "/run/pulse";
+  cookiePath = "${stateDir}/.config/pulse/cookie";
 
   # Create pulse/client.conf even if PulseAudio is disabled so
   # that we can disable the autospawn feature in programs that
@@ -269,8 +270,18 @@ in {
         extraGroups = [ "audio" ];
         description = "PulseAudio system service user";
         home = stateDir;
-        createHome = true;
       };
+
+      users.groups.pulse-access = {};
+
+      # Pulseaudio creates auth files like .esd_auth and cookie in user
+      # read-only mode, but then users are not able to use pulseaudio.
+      system.activationScripts.pulse = ''
+        umask 027
+        mkdir -p $(dirname ${cookiePath})
+        touch "${cookiePath}" "${stateDir}/.esd_auth"
+        chown -R pulse:pulse-access "${stateDir}"
+      '';
 
       users.extraGroups.pulse.gid = gid;
 
@@ -278,7 +289,6 @@ in {
         description = "PulseAudio System-Wide Server";
         wantedBy = [ "sound.target" ];
         before = [ "sound.target" ];
-        environment.PULSE_RUNTIME_PATH = stateDir;
         serviceConfig = {
           Type = "notify";
           ExecStart = "${binaryNoDaemon} --log-level=${cfg.daemon.logLevel} --system -n --file=${myConfigFile}";
@@ -287,7 +297,7 @@ in {
         };
       };
 
-      environment.variables.PULSE_COOKIE = "${stateDir}/.config/pulse/cookie";
+      environment.variables.PULSE_COOKIE = cookiePath;
     })
   ];
 
