@@ -5,15 +5,19 @@ in
 python27Packages.buildPythonApplication rec {
     name = "${pname}-${version}";
     pname = "gdbgui";
-    version = "0.9.0.1";
+    version = "0.9.1.0";
 
     buildInputs = [ gdb ];
     propagatedBuildInputs = builtins.attrValues deps.packages;
 
     src = python27Packages.fetchPypi {
       inherit pname version;
-      sha256 = "1gjc7dycrc4zafhrd9yib7qnh4agh7cpa6rlw4p5405rlmwmsbj3";
+      sha256 = "0ybgkk4h9zwhbx5d0j0fmfzxxgg8f6apm8v7djavm0ldpr6f5z26";
     };
+
+    postPatch = ''
+      echo ${version} > gdbgui/VERSION.txt
+    '';
 
     postInstall = ''
       wrapProgram $out/bin/gdbgui \
