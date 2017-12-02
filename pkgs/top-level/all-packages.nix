@@ -18792,7 +18792,6 @@ with pkgs;
   coq_8_7 = callPackage ../applications/science/logic/coq {
     version = "8.7.0";
   };
-  coq_HEAD = callPackage ../applications/science/logic/coq/HEAD.nix {};
 
   mkCoqPackages_8_4 = self: let callPackage = newScope self; in {
     inherit callPackage;
