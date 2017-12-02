@@ -18806,7 +18806,6 @@ with pkgs;
       in
         recurseIntoAttrs contribs;
 
-    coqeal = callPackage ../development/coq-modules/coqeal {};
     coquelicot = callPackage ../development/coq-modules/coquelicot {};
     domains = callPackage ../development/coq-modules/domains {};
     fiat = callPackage ../development/coq-modules/fiat {};
