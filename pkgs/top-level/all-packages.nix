@@ -18806,7 +18806,6 @@ with pkgs;
       in
         recurseIntoAttrs contribs;
 
-    ynot = callPackage ../development/coq-modules/ynot {};
   };
 
   mkCoqPackages = self: coq: let callPackage = newScope self; in rec {
