@@ -1,6 +1,7 @@
 { stdenv, intltool, fetchurl, wrapGAppsHook, gnome-video-effects, libcanberra_gtk3
 , pkgconfig, gtk3, glib, clutter_gtk, clutter-gst, udev, gst_all_1, itstool
-, libgudev, vala, appstream-glib
+, libgudev, autoreconfHook, vala, docbook_xml_dtd_43, docbook_xsl, appstream-glib
+, libxslt, yelp_tools, gnome_common
 , adwaita-icon-theme, librsvg, gdk_pixbuf, gnome3, gnome_desktop, libxml2 }:
 
 stdenv.mkDerivation rec {
@@ -8,12 +9,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig intltool itstool vala wrapGAppsHook libxml2 appstream-glib
+    libxslt docbook_xml_dtd_43 docbook_xsl
+    autoreconfHook yelp_tools gnome_common
   ];
   buildInputs = [ gtk3 glib gnome-video-effects
                   gdk_pixbuf adwaita-icon-theme librsvg udev gst_all_1.gstreamer
                   gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good gnome_desktop
                   gst_all_1.gst-plugins-bad clutter_gtk clutter-gst
                   libcanberra_gtk3 libgudev ];
+
+  outputs = [ "out" "man" ];
+
+  patches = [
+    gtk_doc.respect_xml_catalog_files_var_patch
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(
