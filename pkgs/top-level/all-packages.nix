@@ -18806,7 +18806,6 @@ with pkgs;
       in
         recurseIntoAttrs contribs;
 
-    bedrock = callPackage ../development/coq-modules/bedrock {};
     coqExtLib = callPackage ../development/coq-modules/coq-ext-lib {};
     coqeal = callPackage ../development/coq-modules/coqeal {};
     coquelicot = callPackage ../development/coq-modules/coquelicot {};
