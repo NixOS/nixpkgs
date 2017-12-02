@@ -1,11 +1,6 @@
 { config, pkgs, ... }:
 { nixpkgs.config.packageOverrides = pkgs': {
     hello-world-container = pkgs'.callPackage ./hello-world-container.nix { };
-    haskellPackages = pkgs'.haskellPackages.override {
-      overrides = new: old: {
-        hocker = pkgs'.haskell.lib.dontCheck old.hocker;
-      };
-    };
   };
 
   virtualisation.docker = {

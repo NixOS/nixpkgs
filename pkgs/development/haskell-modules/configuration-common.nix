@@ -984,4 +984,38 @@ self: super: {
     };
   }).override { language-c = self.language-c_0_7_0; };
 
+  hocker =
+    overrideCabal
+      # Not checking because it's failing on a test that needs a data
+      # file not included in its source distribution; this will be
+      # removed when that is fixed
+      ( dontCheck super.hocker )
+      ( oldDerivation: {
+          testToolDepends =
+            (oldDerivation.testToolDepends or []) ++[ pkgs.nix ];
+          buildDepends    =
+            (oldDerivation.buildDepends or []) ++ [ pkgs.makeWrapper ];
+
+          postInstall     =
+            (oldDerivation.postInstall or "") + ''
+              # Globbing for hocker-* fails with: Builder called die:
+              # makeWrapper doesn't understand the arg /nix/store/rsic1v6y6v63q6lkmpn3xmn7cnzx8irk-hocker-1.0.2/bin/hocker-image
+              wrapProgram $out/bin/hocker-image \
+                --suffix PATH : ${pkgs.nix}/bin
+
+              wrapProgram $out/bin/hocker-layer \
+                --suffix PATH : ${pkgs.nix}/bin
+
+              wrapProgram $out/bin/hocker-config \
+                --suffix PATH : ${pkgs.nix}/bin
+
+              wrapProgram $out/bin/hocker-manifest \
+                --suffix PATH : ${pkgs.nix}/bin
+
+              wrapProgram $out/bin/docker2nix \
+                --suffix PATH : ${pkgs.nix}/bin
+            '';
+        }
+      );
+
 }
