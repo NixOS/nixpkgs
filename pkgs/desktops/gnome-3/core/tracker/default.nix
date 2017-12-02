@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, intltool, pkgconfig
+{ stdenv, fetchurl, intltool, pkgconfig
 , libxml2, upower, glib, wrapGAppsHook, vala, sqlite, libxslt
 , gnome3, icu, libuuid, networkmanager, libsoup, json_glib }:
 
