@@ -18806,7 +18806,6 @@ with pkgs;
       in
         recurseIntoAttrs contribs;
 
-    flocq = callPackage ../development/coq-modules/flocq {};
     heq = callPackage ../development/coq-modules/heq {};
     interval = callPackage ../development/coq-modules/interval {};
     mathcomp = callPackage ../development/coq-modules/mathcomp {};
