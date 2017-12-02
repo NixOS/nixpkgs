@@ -2,7 +2,7 @@
 , pkgconfig, gtk3, glib, clutter_gtk, clutter-gst, udev, gst_all_1, itstool
 , libgudev, autoreconfHook, vala, docbook_xml_dtd_43, docbook_xsl, appstream-glib
 , libxslt, yelp_tools, gnome_common, gtk_doc
-, adwaita-icon-theme, librsvg, gdk_pixbuf, gnome3, gnome_desktop, libxml2 }:
+, adwaita-icon-theme, librsvg, totem, gdk_pixbuf, gnome3, gnome_desktop, libxml2 }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -30,6 +30,9 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "${gnome-video-effects}/share"
       # vp8enc preset
       --prefix GST_PRESET_PATH : "${gst_all_1.gst-plugins-good}/share/gstreamer-1.0/presets"
+      # Thumbnailers
+      --prefix XDG_DATA_DIRS : "${gdk_pixbuf}/share"
+      --prefix XDG_DATA_DIRS : "${totem}/share"
     )
   '';
 
