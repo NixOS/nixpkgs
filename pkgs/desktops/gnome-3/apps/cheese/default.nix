@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       # Effects
       --prefix XDG_DATA_DIRS : "${gnome-video-effects}/share"
+      # vp8enc preset
+      --prefix GST_PRESET_PATH : "${gst_all_1.gst-plugins-good}/share/gstreamer-1.0/presets"
     )
   '';
 
