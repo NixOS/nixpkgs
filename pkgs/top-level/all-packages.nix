@@ -18806,7 +18806,6 @@ with pkgs;
       in
         recurseIntoAttrs contribs;
 
-    ssreflect = callPackage ../development/coq-modules/ssreflect {};
     tlc = callPackage ../development/coq-modules/tlc {};
     unimath = callPackage ../development/coq-modules/unimath {};
     ynot = callPackage ../development/coq-modules/ynot {};
