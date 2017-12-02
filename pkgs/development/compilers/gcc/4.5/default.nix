@@ -339,18 +339,21 @@ stdenv.mkDerivation ({
   LD = "ld";
   CC = "gcc";
 
-  # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find
-  # the library headers and binaries, regarless of the language being
-  # compiled.
-
-  # Note: When building the Java AWT GTK+ peer, the build system doesn't
-  # honor `--with-gmp' et al., e.g., when building
-  # `libjava/classpath/native/jni/java-math/gnu_java_math_GMP.c', so we just
-  # add them to $CPATH and $LIBRARY_PATH in this case.
+  # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
+  # library headers and binaries, regarless of the language being compiled.
+  #
+  # Note: When building the Java AWT GTK+ peer, the build system doesn't honor
+  # `--with-gmp' et al., e.g., when building
+  # `libjava/classpath/native/jni/java-math/gnu_java_math_GMP.c', so we just add
+  # them to $CPATH and $LIBRARY_PATH in this case.
   #
   # Likewise, the LTO code doesn't find zlib.
+  #
+  # Cross-compiling, we need gcc not to read ./specs in order to build the g++
+  # compiler (after the specs for the cross-gcc are created). Having
+  # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
 
-  CPATH = makeSearchPathOutput "dev" "include" ([]
+  CPATH = optionals (targetPlatform == hostPlatform) (makeSearchPathOutput "dev" "include" ([]
     ++ optional (zlib != null) zlib
     ++ optional langJava boehmgc
     ++ optionals javaAwtGtk xlibs
@@ -360,41 +363,39 @@ stdenv.mkDerivation ({
 
     # On GNU/Hurd glibc refers to Mach & Hurd
     # headers.
-    ++ optionals (libcCross != null &&
-                  hasAttr "propagatedBuildInputs" libcCross)
-                 libcCross.propagatedBuildInputs);
+    ++ optionals (libcCross != null && libcCross ? "propagatedBuildInputs" )
+                 libcCross.propagatedBuildInputs
+  ));
 
-  LIBRARY_PATH = makeLibraryPath ([]
+  LIBRARY_PATH = optionals (targetPlatform == hostPlatform) (makeLibraryPath ([]
     ++ optional (zlib != null) zlib
     ++ optional langJava boehmgc
     ++ optionals javaAwtGtk xlibs
     ++ optionals javaAwtGtk [ gmp mpfr ]
-    ++ optional (libpthread != null) libpthread);
+    ++ optional (libpthread != null) libpthread)
+  );
 
-  EXTRA_TARGET_CFLAGS =
-    if targetPlatform != hostPlatform && libcCross != null then [
-        "-idirafter ${libcCross.dev}/include"
-      ]
-      ++ optionals (! crossStageStatic) [
-        "-B${libcCross.out}/lib"
-      ]
-    else null;
+  EXTRA_TARGET_FLAGS = optionals
+    (targetPlatform != hostPlatform && libcCross != null)
+    ([
+      "-idirafter ${libcCross.dev}/include"
+    ] ++ optionals (! crossStageStatic) [
+      "-B${libcCross.out}/lib"
+    ]);
 
-  EXTRA_TARGET_LDFLAGS =
-    if targetPlatform != hostPlatform && libcCross != null then [
-        "-Wl,-L${libcCross.out}/lib"
-      ]
-      ++ (if crossStageStatic then [
+  EXTRA_TARGET_LDFLAGS = optionals
+    (targetPlatform != hostPlatform && libcCross != null)
+    ([
+      "-Wl,-L${libcCross.out}/lib"
+    ] ++ (if crossStageStatic then [
         "-B${libcCross.out}/lib"
       ] else [
         "-Wl,-rpath,${libcCross.out}/lib"
         "-Wl,-rpath-link,${libcCross.out}/lib"
-      ])
-      ++ optionals (libpthreadCross != null) [
-        "-L${libpthreadCross}/lib"
-        "-Wl,${libpthreadCross.TARGET_LDFLAGS}"
-      ]
-    else null;
+    ]) ++ optionals (libpthreadCross != null) [
+      "-L${libpthreadCross}/lib"
+      "-Wl,${libpthreadCross.TARGET_LDFLAGS}"
+    ]);
 
   passthru = { inherit langC langCC langAda langFortran langVhdl
       enableMultilib version; isGNU = true; };

@@ -22,10 +22,10 @@ fi
 
 
 # GCC interprets empty paths as ".", which we don't want.
-if test -z "$CPATH"; then unset CPATH; fi
-if test -z "$LIBRARY_PATH"; then unset LIBRARY_PATH; fi
-echo "\$CPATH is \`$CPATH'"
-echo "\$LIBRARY_PATH is \`$LIBRARY_PATH'"
+if test -z "${CPATH-}"; then unset CPATH; fi
+if test -z "${LIBRARY_PATH-}"; then unset LIBRARY_PATH; fi
+echo "\$CPATH is \`${CPATH-}'"
+echo "\$LIBRARY_PATH is \`${LIBRARY_PATH-}'"
 
 if test "$noSysDirs" = "1"; then
 
@@ -82,15 +82,7 @@ if test "$noSysDirs" = "1"; then
         done
     done
 
-    if test -n "${targetConfig-}"; then
-        # Cross-compiling, we need gcc not to read ./specs in order to build the
-        # g++ compiler (after the specs for the cross-gcc are created).  Having
-        # LIBRARY_PATH= makes gcc read the specs from ., and the build
-        # breaks. Having this variable comes from the default.nix code to bring
-        # gcj in.
-        unset LIBRARY_PATH
-        unset CPATH
-    else
+    if test -z "${targetConfig-}"; then
         # host = target, so the flags are the same
         EXTRA_TARGET_FLAGS="$EXTRA_FLAGS"
         EXTRA_TARGET_LDFLAGS="$EXTRA_LDFLAGS"
