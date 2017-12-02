@@ -59,6 +59,11 @@ cmakeConfigurePhase() {
 
     cmake ${cmakeDir:-.} $cmakeFlags "${cmakeFlagsArray[@]}"
 
+    if ! [[ -v enableParallelBuilding ]]; then
+        enableParallelBuilding=1
+        echo "cmake: enabled parallel building"
+    fi
+
     runHook postConfigure
 }
 
