@@ -105,7 +105,7 @@ let version = "7.2.0";
         gccFpu = platform.gcc.fpu or null;
         gccFloat = platform.gcc.float or null;
         gccMode = platform.gcc.mode or null;
-     in
+      in
         optional (gccArch != null) "--with-arch=${gccArch}" ++
         optional (gccCpu != null) "--with-cpu=${gccCpu}" ++
         optional (gccAbi != null) "--with-abi=${gccAbi}" ++
@@ -426,7 +426,7 @@ stdenv.mkDerivation ({
     NM_FOR_TARGET = "${targetPlatform.config}-nm";
     CXX_FOR_TARGET = "${targetPlatform.config}-g++";
     # If we are making a cross compiler, targetPlatform != hostPlatform
-    NIX_CC_CROSS = if targetPlatform == hostPlatform then "${stdenv.ccCross}" else "";
+    NIX_CC_CROSS = optionalString (targetPlatform == hostPlatform) builtins.toString stdenv.cc;
     dontStrip = true;
     configureFlags =
       optional (!enableMultilib) "--disable-multilib" ++

@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
       cp tzfile.h "$dev/include/tzfile.h"
     '';
 
+  setupHook = ./tzdata-setup-hook.sh;
+
   meta = {
     homepage = http://www.iana.org/time-zones;
     description = "Database of current and historical time zones";

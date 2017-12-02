@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     sed "/^toolsdir=/ctoolsdir=$dev/bin" -i "$dev"/lib/pkgconfig/orc*.pc
   '';
 
-  doCheck = true;
+  # https://bugzilla.gnome.org/show_bug.cgi?id=728129#c15
+  doCheck = stdenv.system != "i686-linux"; # not sure about cross-compiling
 
   meta = with stdenv.lib; {
     description = "The Oil Runtime Compiler";
