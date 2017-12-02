@@ -18806,7 +18806,6 @@ with pkgs;
       in
         recurseIntoAttrs contribs;
 
-    interval = callPackage ../development/coq-modules/interval {};
     mathcomp = callPackage ../development/coq-modules/mathcomp {};
     paco = callPackage ../development/coq-modules/paco {};
     QuickChick = callPackage ../development/coq-modules/QuickChick {};
