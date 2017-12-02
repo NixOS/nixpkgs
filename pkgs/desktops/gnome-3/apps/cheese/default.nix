@@ -15,6 +15,13 @@ stdenv.mkDerivation rec {
                   gst_all_1.gst-plugins-bad clutter_gtk clutter-gst
                   libcanberra_gtk3 libgudev ];
 
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # Effects
+      --prefix XDG_DATA_DIRS : "${gnome-video-effects}/share"
+    )
+  '';
+
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
