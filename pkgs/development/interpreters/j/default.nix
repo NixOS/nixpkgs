@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
     cd make
 
-    sed -i *.sh -e 's@/bin/bash@/usr/bin/env bash@;'
+    patchShebangs .
     sed -i jvars.sh -e '
       s@~/gitdev/jsource@$SOURCE_DIR@;
       s@~/jbld@$HOME@;
