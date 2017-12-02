@@ -18798,14 +18798,6 @@ with pkgs;
     coq = coq_8_4;
     coqPackages = coqPackages_8_4;
 
-    contribs =
-      let contribs =
-        import ../development/coq-modules/contribs
-        contribs
-        callPackage { };
-      in
-        recurseIntoAttrs contribs;
-
   };
 
   mkCoqPackages = self: coq: let callPackage = newScope self; in rec {
