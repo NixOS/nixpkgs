@@ -18806,8 +18806,6 @@ with pkgs;
       in
         recurseIntoAttrs contribs;
 
-    fiat = callPackage ../development/coq-modules/fiat {};
-    fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
     flocq = callPackage ../development/coq-modules/flocq {};
     heq = callPackage ../development/coq-modules/heq {};
     interval = callPackage ../development/coq-modules/interval {};
