@@ -20,7 +20,11 @@ stdenv.mkDerivation {
     "--enable-pkgconfig"
     "--enable-applib"
     "--enable-cmdlib"
-  ] ++ stdenv.lib.optional enable_dmeventd " --enable-dmeventd";
+  ] ++ stdenv.lib.optional enable_dmeventd " --enable-dmeventd"
+  ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+    "ac_cv_func_malloc_0_nonnull=yes"
+    "ac_cv_func_realloc_0_nonnull=yes"
+  ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libudev libuuid thin-provisioning-tools ];
