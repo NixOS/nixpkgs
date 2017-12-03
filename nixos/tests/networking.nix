@@ -21,8 +21,8 @@ let
         firewall.allowedUDPPorts = [ 547 ];
         interfaces = mkOverride 0 (listToAttrs (flip map vlanIfs (n:
           nameValuePair "eth${toString n}" {
-            ipv4.addresses = [ { address = "192.168.${toString n}.1"; prefixLength = 24;} ];
-            ipv6.addresses = [ { address = "fd00:1234:5678:${toString n}::1"; prefixLength = 64;} ];
+            ipv4.addresses = [ { address = "192.168.${toString n}.1"; prefixLength = 24; } ];
+            ipv6.addresses = [ { address = "fd00:1234:5678:${toString n}::1"; prefixLength = 64; } ];
           })));
       };
       services.dhcpd4 = {
@@ -435,13 +435,13 @@ let
       name = "Virtual";
       machine = {
         networking.interfaces."tap0" = {
-          ip4 = [ { address = "192.168.1.1"; prefixLength = 24; } ];
-          ip6 = [ { address = "2001:1470:fffd:2096::"; prefixLength = 64; } ];
+          ipv4.addresses = [ { address = "192.168.1.1"; prefixLength = 24; } ];
+          ipv6.addresses = [ { address = "2001:1470:fffd:2096::"; prefixLength = 64; } ];
           virtual = true;
         };
         networking.interfaces."tun0" = {
-          ip4 = [ { address = "192.168.1.2"; prefixLength = 24; } ];
-          ip6 = [ { address = "2001:1470:fffd:2097::"; prefixLength = 64; } ];
+          ipv4.addresses = [ { address = "192.168.1.2"; prefixLength = 24; } ];
+          ipv6.addresses = [ { address = "2001:1470:fffd:2097::"; prefixLength = 64; } ];
           virtual = true;
         };
       };
@@ -481,9 +481,9 @@ let
         boot.kernel.sysctl."net.ipv6.conf.all.forwarding" = true;
         networking = {
           useNetworkd = networkd;
-          interfaces.eth1 = {
-            ipv6Address = "fd00:1234:5678:1::1";
-            ipv6PrefixLength = 64;
+          interfaces.eth1.ipv6.addresses = singleton {
+            address = "fd00:1234:5678:1::1";
+            prefixLength = 64;
           };
         };
         services.radvd = {
@@ -509,8 +509,8 @@ let
           useDHCP = true;
           interfaces.eth1 = {
             preferTempAddress = true;
-            ip4 = mkOverride 0 [ ];
-            ip6 = mkOverride 0 [ ];
+            ipv4.addresses = mkOverride 0 [ ];
+            ipv6.addresses = mkOverride 0 [ ];
           };
         };
       };
