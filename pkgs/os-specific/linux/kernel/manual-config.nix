@@ -5,7 +5,9 @@
 , writeTextFile, ubootTools
 # , callPackage
 
-# in fact this should be a set like https://github.com/NixOS/nixpkgs/issues/24388
+# in fact this refers to a system (see lib/systems/examples.nix) and not a "platform"
+# since this sometimes call
+# should be a set like https://github.com/NixOS/nixpkgs/issues/24388
 , hostPlatform
 }:
 
