@@ -114,9 +114,10 @@ in {
     sha256 = "1r65qlsjwp0n0fmlhvbp71h03b3x73r26jk9f4q687sjqnzmkvcr";
   };
 
+
   skypeforlinux_8_x = skype {
-    version = "8.9.76.64297";
-    sha256 = "19w3zycq8pib1iikrll5alqy0db7v4wvc0njhd6790spcy6y4chr";
+    version = "8.12.76.7";
+    sha256 = "12kv1y5cx7d19kdjmcxi4psshamy1llgd6885i5ca5pfrv4p4bm9";
   };
 }
      
