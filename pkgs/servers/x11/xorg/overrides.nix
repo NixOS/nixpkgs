@@ -450,6 +450,7 @@ in
             };
             nativeBuildInputs = [ pkgconfig ];
             buildInputs = [ dri2proto dri3proto renderproto libdrm openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
+            postPatch = "sed '1i#include <malloc.h>' -i include/os.h";
             meta.platforms = stdenv.lib.platforms.unix;
         } else throw "unsupported xorg abiCompat: ${args.abiCompat}";
 
