@@ -51,6 +51,10 @@ cmakeConfigurePhase() {
     # And build always Release, to ensure optimisation flags
     cmakeFlags="-DCMAKE_BUILD_TYPE=${cmakeBuildType:-Release} -DCMAKE_SKIP_BUILD_RPATH=ON $cmakeFlags"
 
+    if [ "$buildPhase" = ninjaBuildPhase ]; then
+        cmakeFlags="-GNinja $cmakeFlags"
+    fi
+
     echo "cmake flags: $cmakeFlags ${cmakeFlagsArray[@]}"
 
     cmake ${cmakeDir:-.} $cmakeFlags "${cmakeFlagsArray[@]}"
