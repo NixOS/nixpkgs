@@ -9709,6 +9709,8 @@ in {
     };
   };
 
+  inflection = callPackage ../development/python-modules/inflection { };
+
   influxdb = buildPythonPackage rec {
     name = "influxdb-4.0.0";
 
@@ -24412,8 +24414,6 @@ EOF
   ephem = callPackage ../development/python-modules/ephem { };
 
   jsondate = callPackage ../development/python-modules/jsondate { };
-
-  inflection = callPackage ../development/python-modules/inflection { };
 
 });
 
