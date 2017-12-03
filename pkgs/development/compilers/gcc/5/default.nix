@@ -110,7 +110,7 @@ let version = "5.5.0";
         gccFpu = platform.gcc.fpu or null;
         gccFloat = platform.gcc.float or null;
         gccMode = platform.gcc.mode or null;
-     in
+      in
         optional (gccArch != null) "--with-arch=${gccArch}" ++
         optional (gccCpu != null) "--with-cpu=${gccCpu}" ++
         optional (gccAbi != null) "--with-abi=${gccAbi}" ++
@@ -201,8 +201,6 @@ stdenv.mkDerivation ({
     inherit sha256;
   };
 
-  hardeningDisable = [ "format" ];
-
   inherit patches;
 
   outputs = [ "out" "lib" "man" "info" ];
@@ -210,6 +208,8 @@ stdenv.mkDerivation ({
   NIX_NO_SELF_RPATH = true;
 
   libc_dev = stdenv.cc.libc_dev;
+
+  hardeningDisable = [ "format" ];
 
   # This should kill all the stdinc frameworks that gcc and friends like to
   # insert into default search paths.
@@ -356,9 +356,6 @@ stdenv.mkDerivation ({
       }"
     ] ++
 
-    # Optional features
-    optional (isl != null) "--with-isl=${isl}" ++
-
     (if enableMultilib
       then ["--enable-multilib" "--disable-libquadmath"]
       else ["--disable-multilib"]) ++
@@ -366,6 +363,9 @@ stdenv.mkDerivation ({
     (if enablePlugin
       then ["--enable-plugin"]
       else ["--disable-plugin"]) ++
+
+    # Optional features
+    optional (isl != null) "--with-isl=${isl}" ++
 
     # Java options
     optionals langJava [
@@ -431,7 +431,7 @@ stdenv.mkDerivation ({
     CC_FOR_TARGET = "${targetPlatform.config}-gcc";
     NM_FOR_TARGET = "${targetPlatform.config}-nm";
     CXX_FOR_TARGET = "${targetPlatform.config}-g++";
-    # If we are making a cross compiler, cross != null
+    # If we are making a cross compiler, targetPlatform != hostPlatform
     NIX_CC_CROSS = optionalString (targetPlatform == hostPlatform) builtins.toString stdenv.cc;
     dontStrip = true;
     configureFlags =
@@ -490,7 +490,7 @@ stdenv.mkDerivation ({
 
   CPATH = makeSearchPathOutput "dev" "include" ([]
     ++ optional (zlib != null) zlib
-    ++ optionals langJava [ boehmgc ]
+    ++ optional langJava boehmgc
     ++ optionals javaAwtGtk xlibs
     ++ optionals javaAwtGtk [ gmp mpfr ]
     ++ optional (libpthread != null) libpthread

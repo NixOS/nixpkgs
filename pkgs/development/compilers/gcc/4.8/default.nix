@@ -115,7 +115,7 @@ let version = "4.8.5";
         gccFpu = platform.gcc.fpu or null;
         gccFloat = platform.gcc.float or null;
         gccMode = platform.gcc.mode or null;
-     in
+      in
         optional (gccArch != null) "--with-arch=${gccArch}" ++
         optional (gccCpu != null) "--with-cpu=${gccCpu}" ++
         optional (gccAbi != null) "--with-abi=${gccAbi}" ++
@@ -186,7 +186,7 @@ let version = "4.8.5";
     stageNameAddon = if crossStageStatic then "-stage-static" else "-stage-final";
     crossNameAddon = if targetPlatform != hostPlatform then "-${targetPlatform.config}" + stageNameAddon else "";
 
-    bootstrap = targetPlatform == hostPlatform && !hostPlatform.isArm && !hostPlatform.isMips;
+    bootstrap = targetPlatform == hostPlatform;
 
 in
 
@@ -343,14 +343,6 @@ stdenv.mkDerivation ({
       }"
     ] ++
 
-    # Optional features
-    optional (isl != null) "--with-isl=${isl}" ++
-    optionals (cloog != null) [
-      "--with-cloog=${cloog}"
-      "--disable-cloog-version-check"
-      "--enable-cloog-backend=isl"
-    ] ++
-
     (if enableMultilib
       then ["--enable-multilib" "--disable-libquadmath"]
       else ["--disable-multilib"]) ++
@@ -358,6 +350,14 @@ stdenv.mkDerivation ({
     (if enablePlugin
       then ["--enable-plugin"]
       else ["--disable-plugin"]) ++
+
+    # Optional features
+    optional (isl != null) "--with-isl=${isl}" ++
+    optionals (cloog != null) [
+      "--with-cloog=${cloog}"
+      "--disable-cloog-version-check"
+      "--enable-cloog-backend=isl"
+    ] ++
 
     # Java options
     optionals langJava [
@@ -422,7 +422,7 @@ stdenv.mkDerivation ({
     CC_FOR_TARGET = "${targetPlatform.config}-gcc";
     NM_FOR_TARGET = "${targetPlatform.config}-nm";
     CXX_FOR_TARGET = "${targetPlatform.config}-g++";
-    # If we are making a cross compiler, cross != null
+    # If we are making a cross compiler, targetPlatform != hostPlatform
     NIX_CC_CROSS = optionalString (targetPlatform == hostPlatform) builtins.toString stdenv.cc;
     dontStrip = true;
     configureFlags =
@@ -431,7 +431,7 @@ stdenv.mkDerivation ({
       optional langJava "--with-ecj-jar=${javaEcj.crossDrv}" ++
       optional javaAwtGtk "--enable-java-awt=gtk" ++
       optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr.crossDrv}" ++
-      optional (cloog != null) "--with-cloog=${cloog.crossDrv} --enable-cloog-backend=isl" ++
+      optionals (cloog != null) ["--with-cloog=${cloog.crossDrv}" "--enable-cloog-backend=isl"] ++
       [
         "--with-gmp=${gmp.crossDrv}"
         "--with-mpfr=${mpfr.crossDrv}"
@@ -502,7 +502,7 @@ stdenv.mkDerivation ({
 
   EXTRA_TARGET_CFLAGS =
     if targetPlatform != hostPlatform && libcCross != null then [
-        "-idirafter ${libcCross.dev}/include"
+        "-idirafter ${getDev libcCross}/include"
       ]
       ++ optionals (! crossStageStatic) [
         "-B${libcCross.out}/lib"

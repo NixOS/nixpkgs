@@ -163,7 +163,6 @@ stdenv.mkDerivation rec {
   # Julia's tests require read/write access to $HOME
   preCheck = ''
     export HOME="$NIX_BUILD_TOP"
-    set
   '';
 
   preBuild = ''

@@ -72,7 +72,9 @@ let
             where foo is a tag for a new version, for example "0.3.1-alpha".
             */
             elm-format = self.callPackage ./packages/elm-format.nix { };
-
+            elm-interface-to-json = self.callPackage ./packages/elm-interface-to-json.nix {
+              aeson-pretty = self.aeson-pretty_0_7_2;
+            };
           };
       in elmPkgs // {
         inherit elmPkgs;

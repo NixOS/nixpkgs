@@ -1,7 +1,7 @@
 { stdenv, fetchurl, buildPythonPackage, python, pkgconfig, glib, gobjectIntrospection, pycairo, cairo, which, ncurses}:
 
 buildPythonPackage rec {
-  major = "3.24";
+  major = "3.26";
   minor = "1";
   version = "${major}.${minor}";
   format = "other";
@@ -10,7 +10,7 @@ buildPythonPackage rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/pygobject/${major}/${name}.tar.xz";
-    sha256 = "1zdzznrj2s1gsrv2z4r0n88fzba8zjc1n2r313xi77lhl1daja56";
+    sha256 = "1afi0jdjd9sanrzjwhv7z1k7qxlb91fqa6yqc2dbpjkhkjdpnmzm";
   };
 
   outputs = [ "out" "dev" ];
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pycairo cairo ];
 
   meta = {
-    homepage = http://live.gnome.org/PyGObject;
+    homepage = https://pygobject.readthedocs.io/;
     description = "Python bindings for Glib";
     platforms = stdenv.lib.platforms.unix;
   };

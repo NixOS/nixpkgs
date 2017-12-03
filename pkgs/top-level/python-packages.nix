@@ -5483,6 +5483,10 @@ in {
     };
   };
 
+  git-annex-adapter = callPackage ../development/python-modules/git-annex-adapter {
+    inherit (pkgs.gitAndTools) git-annex;
+  };
+
   google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk { };
   google-cloud-sdk-gce = callPackage ../tools/admin/google-cloud-sdk { with-gce=true; };
 

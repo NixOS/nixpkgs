@@ -199,6 +199,6 @@ in stdenv.mkDerivation {
     description = "PC emulator";
     homepage = http://www.virtualbox.org/;
     maintainers = [ lib.maintainers.sander ];
-    platforms = lib.platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }
