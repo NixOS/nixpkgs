@@ -10046,6 +10046,8 @@ in {
     inherit (self) systemd pytest;
   };
 
+  jsondate = callPackage ../development/python-modules/jsondate { };
+
   jsonnet = buildPythonPackage {
     inherit (pkgs.jsonnet) name src;
     # Python 3 is not yet supported https://github.com/google/jsonnet/pull/335
@@ -24412,8 +24414,6 @@ EOF
   parse-type = callPackage ../development/python-modules/parse-type { };
 
   ephem = callPackage ../development/python-modules/ephem { };
-
-  jsondate = callPackage ../development/python-modules/jsondate { };
 
 });
 
