@@ -21,10 +21,8 @@ let
         firewall.allowedUDPPorts = [ 547 ];
         interfaces = mkOverride 0 (listToAttrs (flip map vlanIfs (n:
           nameValuePair "eth${toString n}" {
-            ipAddress = "192.168.${toString n}.1";
-            prefixLength = 24;
-            ipv6Address = "fd00:1234:5678:${toString n}::1";
-            ipv6PrefixLength = 64;
+            ipv4.addresses = [ { address = "192.168.${toString n}.1"; prefixLength = 24;} ];
+            ipv6.addresses = [ { address = "fd00:1234:5678:${toString n}::1"; prefixLength = 64;} ];
           })));
       };
       services.dhcpd4 = {
@@ -90,12 +88,12 @@ let
           firewall.allowPing = true;
           useDHCP = false;
           defaultGateway = "192.168.1.1";
-          interfaces.eth1.ip4 = mkOverride 0 [
+          interfaces.eth1.ipv4.addresses = mkOverride 0 [
             { address = "192.168.1.2"; prefixLength = 24; }
             { address = "192.168.1.3"; prefixLength = 32; }
             { address = "192.168.1.10"; prefixLength = 32; }
           ];
-          interfaces.eth2.ip4 = mkOverride 0 [
+          interfaces.eth2.ipv4.addresses = mkOverride 0 [
             { address = "192.168.2.2"; prefixLength = 24; }
           ];
         };
@@ -143,12 +141,12 @@ let
           firewall.allowPing = true;
           useDHCP = true;
           interfaces.eth1 = {
-            ip4 = mkOverride 0 [ ];
-            ip6 = mkOverride 0 [ ];
+            ipv4.addresses = mkOverride 0 [ ];
+            ipv6.addresses = mkOverride 0 [ ];
           };
           interfaces.eth2 = {
-            ip4 = mkOverride 0 [ ];
-            ip6 = mkOverride 0 [ ];
+            ipv4.addresses = mkOverride 0 [ ];
+            ipv6.addresses = mkOverride 0 [ ];
           };
         };
       };
@@ -198,10 +196,10 @@ let
           firewall.allowPing = true;
           useDHCP = false;
           interfaces.eth1 = {
-            ip4 = mkOverride 0 [ ];
+            ipv4.addresses = mkOverride 0 [ ];
             useDHCP = true;
           };
-          interfaces.eth2.ip4 = mkOverride 0 [ ];
+          interfaces.eth2.ipv4.addresses = mkOverride 0 [ ];
         };
       };
       testScript = { nodes, ... }:
@@ -241,9 +239,9 @@ let
             interfaces = [ "eth1" "eth2" ];
             driverOptions.mode = "balance-rr";
           };
-          interfaces.eth1.ip4 = mkOverride 0 [ ];
-          interfaces.eth2.ip4 = mkOverride 0 [ ];
-          interfaces.bond.ip4 = mkOverride 0
+          interfaces.eth1.ipv4.addresses = mkOverride 0 [ ];
+          interfaces.eth2.ipv4.addresses = mkOverride 0 [ ];
+          interfaces.bond.ipv4.addresses = mkOverride 0
             [ { inherit address; prefixLength = 30; } ];
         };
       };
@@ -274,7 +272,7 @@ let
           useNetworkd = networkd;
           firewall.allowPing = true;
           useDHCP = false;
-          interfaces.eth1.ip4 = mkOverride 0
+          interfaces.eth1.ipv4.addresses = mkOverride 0
             [ { inherit address; prefixLength = 24; } ];
         };
       };
@@ -289,9 +287,9 @@ let
           firewall.allowPing = true;
           useDHCP = false;
           bridges.bridge.interfaces = [ "eth1" "eth2" ];
-          interfaces.eth1.ip4 = mkOverride 0 [ ];
-          interfaces.eth2.ip4 = mkOverride 0 [ ];
-          interfaces.bridge.ip4 = mkOverride 0
+          interfaces.eth1.ipv4.addresses = mkOverride 0 [ ];
+          interfaces.eth2.ipv4.addresses = mkOverride 0 [ ];
+          interfaces.bridge.ipv4.addresses = mkOverride 0
             [ { address = "192.168.1.1"; prefixLength = 24; } ];
         };
       };
@@ -328,7 +326,7 @@ let
           firewall.allowPing = true;
           useDHCP = true;
           macvlans.macvlan.interface = "eth1";
-          interfaces.eth1.ip4 = mkOverride 0 [ ];
+          interfaces.eth1.ipv4.addresses = mkOverride 0 [ ];
         };
       };
       testScript = { nodes, ... }:
@@ -369,9 +367,9 @@ let
             local = address4;
             dev = "eth1";
           };
-          interfaces.eth1.ip4 = mkOverride 0
+          interfaces.eth1.ipv4.addresses = mkOverride 0
             [ { address = address4; prefixLength = 24; } ];
-          interfaces.sit.ip6 = mkOverride 0
+          interfaces.sit.ipv6.addresses = mkOverride 0
             [ { address = address6; prefixLength = 64; } ];
         };
       };
@@ -410,9 +408,9 @@ let
             id = 1;
             interface = "eth0";
           };
-          interfaces.eth0.ip4 = mkOverride 0 [ ];
-          interfaces.eth1.ip4 = mkOverride 0 [ ];
-          interfaces.vlan.ip4 = mkOverride 0
+          interfaces.eth0.ipv4.addresses = mkOverride 0 [ ];
+          interfaces.eth1.ipv4.addresses = mkOverride 0 [ ];
+          interfaces.vlan.ipv4.addresses = mkOverride 0
             [ { inherit address; prefixLength = 24; } ];
         };
       };
@@ -538,13 +536,13 @@ let
       machine = {
         networking.useDHCP = false;
         networking.interfaces."eth0" = {
-          ip4 = [ { address = "192.168.1.2"; prefixLength = 24; } ];
-          ip6 = [ { address = "2001:1470:fffd:2097::"; prefixLength = 64; } ];
-          ipv6Routes = [
+          ipv4.addresses = [ { address = "192.168.1.2"; prefixLength = 24; } ];
+          ipv6.addresses = [ { address = "2001:1470:fffd:2097::"; prefixLength = 64; } ];
+          ipv6.routes = [
             { address = "fdfd:b3f0::"; prefixLength = 48; }
             { address = "2001:1470:fffd:2098::"; prefixLength = 64; via = "fdfd:b3f0::1"; }
           ];
-          ipv4Routes = [
+          ipv4.routes = [
             { address = "10.0.0.0"; prefixLength = 16; options = { mtu = "1500"; }; }
             { address = "192.168.2.0"; prefixLength = 24; via = "192.168.1.1"; }
           ];

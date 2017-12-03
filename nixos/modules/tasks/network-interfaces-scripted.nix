@@ -20,14 +20,8 @@ let
     "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
 
   interfaceIps = i:
-    i.ip4 ++ optionals cfg.enableIPv6 i.ip6
-    ++ optional (i.ipAddress != null) {
-      address = i.ipAddress;
-      prefixLength = i.prefixLength;
-    } ++ optional (cfg.enableIPv6 && i.ipv6Address != null) {
-      address = i.ipv6Address;
-      prefixLength = i.ipv6PrefixLength;
-    };
+    i.ipv4.addresses
+    ++ optionals cfg.enableIPv6 i.ipv6.addresses;
 
   destroyBond = i: ''
     while true; do
@@ -207,7 +201,7 @@ let
                 state="/run/nixos/network/routes/${i.name}"
                 mkdir -p $(dirname "$state")
 
-                ${flip concatMapStrings (i.ipv4Routes ++ i.ipv6Routes) (route:
+                ${flip concatMapStrings (i.ipv4.routes ++ i.ipv6.routes) (route:
                   let
                     cidr = "${route.address}/${toString route.prefixLength}";
                     via = optionalString (route.via != null) ''via "${route.via}"'';

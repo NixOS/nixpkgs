@@ -1,4 +1,4 @@
-{ config, lib, pkgs, utils, stdenv, ... }:
+{ config, options, lib, pkgs, utils, stdenv, ... }:
 
 with lib;
 with utils;
@@ -182,7 +182,6 @@ let
   interfaceOpts = { name, ... }: {
 
     options = {
-
       name = mkOption {
         example = "eth0";
         type = types.str;
@@ -209,7 +208,7 @@ let
         '';
       };
 
-      ip4 = mkOption {
+      ipv4.addresses = mkOption {
         default = [ ];
         example = [
           { address = "10.0.0.1"; prefixLength = 16; }
@@ -221,7 +220,7 @@ let
         '';
       };
 
-      ip6 = mkOption {
+      ipv6.addresses = mkOption {
         default = [ ];
         example = [
           { address = "fdfd:b3f0:482::1"; prefixLength = 48; }
@@ -233,7 +232,7 @@ let
         '';
       };
 
-      ipv4Routes = mkOption {
+      ipv4.routes = mkOption {
         default = [];
         example = [
           { address = "10.0.0.0"; prefixLength = 16; }
@@ -245,7 +244,7 @@ let
         '';
       };
 
-      ipv6Routes = mkOption {
+      ipv6.routes = mkOption {
         default = [];
         example = [
           { address = "fdfd:b3f0::"; prefixLength = 48; }
@@ -254,53 +253,6 @@ let
         type = with types; listOf (submodule (routeOpts 6));
         description = ''
           List of extra IPv6 static routes that will be assigned to the interface.
-        '';
-      };
-
-      ipAddress = mkOption {
-        default = null;
-        example = "10.0.0.1";
-        type = types.nullOr types.str;
-        description = ''
-          IP address of the interface.  Leave empty to configure the
-          interface using DHCP.
-        '';
-      };
-
-      prefixLength = mkOption {
-        default = null;
-        example = 24;
-        type = types.nullOr types.int;
-        description = ''
-          Subnet mask of the interface, specified as the number of
-          bits in the prefix (<literal>24</literal>).
-        '';
-      };
-
-      subnetMask = mkOption {
-        default = null;
-        description = ''
-          Defunct, supply the prefix length instead.
-        '';
-      };
-
-      ipv6Address = mkOption {
-        default = null;
-        example = "2001:1470:fffd:2098::e006";
-        type = types.nullOr types.str;
-        description = ''
-          IPv6 address of the interface.  Leave empty to configure the
-          interface using NDP.
-        '';
-      };
-
-      ipv6PrefixLength = mkOption {
-        default = 64;
-        example = 64;
-        type = types.int;
-        description = ''
-          Subnet mask of the interface, specified as the number of
-          bits in the prefix (<literal>64</literal>).
         '';
       };
 
@@ -374,6 +326,32 @@ let
     config = {
       name = mkDefault name;
     };
+
+    # Renamed or removed options
+    imports =
+      let
+        defined = x: x != "_mkMergedOptionModule";
+      in [
+        (mkRenamedOptionModule [ "ip4" ] [ "ipv4" "addresses"])
+        (mkRenamedOptionModule [ "ip6" ] [ "ipv6" "addresses"])
+        (mkRemovedOptionModule [ "subnetMask" ] ''
+          Supply a prefix length instead; use option
+          networking.interfaces.<name>.ipv{4,6}.addresses'')
+        (mkMergedOptionModule
+          [ [ "ipAddress" ] [ "prefixLength" ] ]
+          [ "ipv4" "addresses" ]
+          (cfg: with cfg;
+            optional (defined ipAddress && defined prefixLength)
+            { address = ipAddress; prefixLength = prefixLength; }))
+        (mkMergedOptionModule
+          [ [ "ipv6Address" ] [ "ipv6PrefixLength" ] ]
+          [ "ipv6" "addresses" ]
+          (cfg: with cfg;
+            optional (defined ipv6Address && defined ipv6PrefixLength)
+            { address = ipv6Address; prefixLength = ipv6PrefixLength; }))
+
+        ({ options.warnings = options.warnings; })
+      ];
 
   };
 
@@ -511,7 +489,7 @@ in
     networking.interfaces = mkOption {
       default = {};
       example =
-        { eth0.ip4 = [ {
+        { eth0.ipv4 = [ {
             address = "131.211.84.78";
             prefixLength = 25;
           } ];
@@ -990,13 +968,10 @@ in
 
   config = {
 
+    warnings = concatMap (i: i.warnings) interfaces;
+
     assertions =
       (flip map interfaces (i: {
-        assertion = i.subnetMask == null;
-        message = ''
-          The networking.interfaces."${i.name}".subnetMask option is defunct. Use prefixLength instead.
-        '';
-      })) ++ (flip map interfaces (i: {
         # With the linux kernel, interface name length is limited by IFNAMSIZ
         # to 16 bytes, including the trailing null byte.
         # See include/linux/if.h in the kernel sources
@@ -1005,7 +980,7 @@ in
           The name of networking.interfaces."${i.name}" is too long, it needs to be less than 16 characters.
         '';
       })) ++ (flip map slaveIfs (i: {
-        assertion = i.ip4 == [ ] && i.ipAddress == null && i.ip6 == [ ] && i.ipv6Address == null;
+        assertion = i.ipv4.addresses == [ ] && i.ipv6.addresses == [ ];
         message = ''
           The networking.interfaces."${i.name}" must not have any defined ips when it is a slave.
         '';
