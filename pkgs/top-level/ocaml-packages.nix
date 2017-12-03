@@ -227,6 +227,8 @@ let
       lwt = ocaml_lwt;
     };
 
+    facile = callPackage ../development/ocaml-modules/facile { };
+
     faillib = callPackage ../development/ocaml-modules/faillib { };
 
     fieldslib_p4 = callPackage ../development/ocaml-modules/fieldslib { };
