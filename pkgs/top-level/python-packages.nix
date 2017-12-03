@@ -16936,6 +16936,10 @@ in {
     };
   };
 
+  quandl = callPackage ../development/python-modules/quandl { };
+  # alias for an older package which did not support Python 3
+  Quandl = callPackage ../development/python-modules/quandl { };
+
   qscintilla = disabledIf (isPy3k || isPyPy)
     (buildPythonPackage rec {
       # TODO: Qt5 support
@@ -24410,10 +24414,6 @@ EOF
   jsondate = callPackage ../development/python-modules/jsondate { };
 
   inflection = callPackage ../development/python-modules/inflection { };
-
-  quandl = callPackage ../development/python-modules/quandl { };
-  # alias for an older package which did not support Python 3
-  Quandl = callPackage ../development/python-modules/quandl { };
 
 });
 
