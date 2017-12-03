@@ -3115,6 +3115,8 @@ with pkgs;
 
   limesurvey = callPackage ../servers/limesurvey { };
 
+  localtime = callPackage ../tools/system/localtime { };
+
   logcheck = callPackage ../tools/system/logcheck {
     inherit (perlPackages) mimeConstruct;
   };
