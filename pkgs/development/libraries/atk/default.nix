@@ -2,14 +2,14 @@
 
 let
   ver_maj = "2.26";
-  ver_min = "0";
+  ver_min = "1";
 in
 stdenv.mkDerivation rec {
   name = "atk-${ver_maj}.${ver_min}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/atk/${ver_maj}/${name}.tar.xz";
-    sha256 = "eafe49d5c4546cb723ec98053290d7e0b8d85b3fdb123938213acb7bb4178827";
+    sha256 = "1jwpx8az0iifw176dc2hl4mmg6gvxzxdkd1qvg4ds7c5hdmzy07g";
   };
 
   enableParallelBuilding = true;
@@ -20,9 +20,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig perl ];
 
-  propagatedBuildInputs = [ glib gobjectIntrospection /*ToDo: why propagate*/ ];
+  propagatedBuildInputs = [
+    # Required by atk.pc
+    glib
+    # TODO: Why propagate?
+    gobjectIntrospection
+  ];
 
-  #doCheck = true; # no checks in there (2.22.0)
+  doCheck = true;
 
   meta = {
     description = "Accessibility toolkit";
