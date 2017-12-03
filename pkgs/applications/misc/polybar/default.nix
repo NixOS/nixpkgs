@@ -21,11 +21,11 @@ assert i3GapsSupport -> ! i3Support     && jsoncpp != null && i3-gaps != null;
 
 stdenv.mkDerivation rec {
     name = "polybar-${version}";
-    version = "3.0.5";
+    version = "3.1.0";
     src = fetchgit {
       url = "https://github.com/jaagr/polybar";
-      rev = "4e2e2a7a5e0fe81669031ade0f60e1d379b6516d";
-      sha256 = "1iiks9q13pbkgbjhdns18a5zgr6d40ydcm4qn168m73fs6ivf1vn";
+      rev = "bf16a4d415ea7d8845f578544de0c71e56ad314e";
+      sha256 = "1jcvqxl0477j0snvh1rzqsm1dkfsybix2lgrlsgiczdxfknwz8iy";
     };
 
     meta = with stdenv.lib; {
@@ -39,14 +39,6 @@ stdenv.mkDerivation rec {
       maintainers = [ maintainers.afldcr ];
       platforms = platforms.unix;
     };
-    # This patch should be removed with next stable release.
-    patches = [
-      (fetchpatch {
-        name = "polybar-remove-curlbuild.patch";
-        url = "https://github.com/jaagr/polybar/commit/d35abc7620c8f06618b4708d9a969dfa2f309e96.patch";
-        sha256 = "14xr65vsjvd51hzg9linj09w0nnixgn26dh9lqxy25bxachcyzxy";
-      })
-    ];
 
     buildInputs = [
       cairo libXdmcp libpthreadstubs libxcb pcre python2 xcbproto xcbutil
