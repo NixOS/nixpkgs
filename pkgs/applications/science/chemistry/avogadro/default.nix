@@ -1,11 +1,13 @@
-{ stdenv, fetchurl, cmake, qt4, zlib, eigen, openbabel, pkgconfig, mesa, libX11, doxygen }:
+{ stdenv, fetchFromGitHub, cmake, qt4, zlib, eigen, openbabel, pkgconfig, mesa, libX11, doxygen }:
 
 stdenv.mkDerivation rec {
-  name = "avogadro-1.1.1";
+  name = "avogadro-1.2";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/avogadro/${name}.tar.bz2";
-    sha256 = "050ag9p4vg7jg8hj1wqfv7lsm6ar2isxjw2vw85s49vsl7g7nvzy";
+  src = fetchFromGitHub {
+    owner = "cryos";
+    repo = "avogadro";
+    rev = "8ac8408ac6113d375cdcaf233f89854a23fa280c";
+    sha256 = "00mvkjdgsw6g8d2jwgfsin2r1my1pgh78p8p9ywvsvl4syc476fv";
   };
 
   buildInputs = [ qt4 eigen zlib openbabel mesa libX11 ];
