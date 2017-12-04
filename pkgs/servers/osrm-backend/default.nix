@@ -2,21 +2,14 @@
 
 stdenv.mkDerivation rec {
   name = "osrm-backend-${version}";
-  version = "4.9.1";
+  version = "5.12.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner  = "Project-OSRM";
     repo   = "osrm-backend";
-    sha256 = "1r4dwniwxgfppnb9asdh98w5qxqwkjhp9gc5fabmck0gk73cwkcc";
+    sha256 = "1ix18r1fylnawhk5rykimrx1sryww7qv59idldmxydzwdam0nb2z";
   };
-
-  patches = [
-    ./4.5.0-gcc-binutils.patch
-    (substituteAll {
-      src = ./4.5.0-default-profile-path.template.patch;
-    })
-  ];
 
   buildInputs = [ cmake luabind libosmpbf stxxl tbb boost expat protobuf bzip2 zlib ];
 
