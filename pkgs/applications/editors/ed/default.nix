@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
     sha256 = "1nqhk3n1s1p77g2bjnj55acicsrlyb2yasqxqwpx0w0djfx64ygm";
   };
 
-  unpackCmd = "tar --lzip -xf";
-
   nativeBuildInputs = [ lzip ];
 
   /* FIXME: Tests currently fail on Darwin:

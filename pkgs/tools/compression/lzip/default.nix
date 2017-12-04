@@ -13,7 +13,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = "CPPFLAGS=-DNDEBUG CFLAGS=-O3 CXXFLAGS=-O3";
 
+  setupHook = ./lzip-setup-hook.sh;
+
   doCheck = true;
+  enableParallelBuilding = true;
 
   meta = {
     homepage = http://www.nongnu.org/lzip/lzip.html;
