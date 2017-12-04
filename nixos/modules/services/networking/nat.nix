@@ -53,6 +53,12 @@ let
         -j DNAT --to-destination ${fwd.destination}
     '') cfg.forwardPorts}
 
+    ${optionalString (cfg.dmzHost != null) ''
+      iptables -w -t nat -A nixos-nat-pre \
+        -i ${cfg.externalInterface} -j DNAT \
+	--to-destination ${cfg.dmzHost}
+    ''}
+
     # Append our chains to the nat tables
     iptables -w -t nat -A PREROUTING -j nixos-nat-pre
     iptables -w -t nat -A POSTROUTING -j nixos-nat-post
@@ -125,15 +131,15 @@ in
       type = with types; listOf (submodule {
         options = {
           sourcePort = mkOption {
-            type = types.int;
+            type = types.either types.int (types.strMatching "[[:digit:]]+:[[:digit:]]+");
             example = 8080;
-            description = "Source port of the external interface";
+            description = "Source port of the external interface; to specify a port range, use a string with a colon (e.g. \"60000:61000\")";
           };
 
           destination = mkOption {
             type = types.str;
             example = "10.0.0.1:80";
-            description = "Forward connection to destination ip:port";
+            description = "Forward connection to destination ip:port; to specify a port range, use ip:start-end";
           };
 
           proto = mkOption {
@@ -150,6 +156,17 @@ in
         ''
           List of forwarded ports from the external interface to
           internal destinations by using DNAT.
+        '';
+    };
+
+    networking.nat.dmzHost = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      example = "10.0.0.1";
+      description =
+        ''
+          The local IP address to which all traffic that does not match any
+          forwarding rule is forwarded.
         '';
     };
 

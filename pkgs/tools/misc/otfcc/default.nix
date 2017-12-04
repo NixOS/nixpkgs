@@ -1,25 +1,24 @@
-{ stdenv, fetchurl, premake5, hostPlatform }:
+{ stdenv, fetchFromGitHub, premake5, ninja, hostPlatform }:
 
 stdenv.mkDerivation rec {
   name = "otfcc-${version}";
   version = "0.8.6";
 
-  src = fetchurl {
-    url = "https://github.com/caryll/otfcc/archive/v${version}.tar.gz";
-    sha256 = "0kap52bzrn21fmph8j2pc71f80f38ak1p2fcczzmrh0hb1r9c8dd";
+  src = fetchFromGitHub {
+    owner = "caryll";
+    repo = "otfcc";
+    rev = "v${version}";
+    sha256 = "0yy9awffxxs0cdlf0akld73ndnwmylxvplac4k6j7641m3vk1g8p";
   };
 
-  nativeBuildInputs = [ premake5 ];
+  nativeBuildInputs = [ premake5 ninja ];
 
   configurePhase = ''
-    premake5 gmake
+    premake5 ninja
   '';
 
-  preBuild = "cd build/gmake";
-
-  makeFlags = ''config=release_${if hostPlatform.isi686 then "x86" else "x64"}'';
-
-  postBuild = "cd ../..";
+  ninjaFlags = let x = if hostPlatform.isi686 then "x86" else "x64"; in
+    [ "-C" "build/ninja" "otfccdump_release_${x}" "otfccbuild_release_${x}" ];
 
   installPhase = ''
     mkdir -p $out/bin

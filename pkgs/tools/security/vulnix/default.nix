@@ -3,11 +3,11 @@
 pythonPackages.buildPythonApplication rec {
   name = "${pname}-${version}";
   pname = "vulnix";
-  version = "1.3.4";
+  version = "1.4.0";
 
   src = pythonPackages.fetchPypi {
     inherit pname version;
-    sha256 = "1js1i86pgkkqc9yzp1rck7rmaz79klv4048r9z7v56fam0a6sg05";
+    sha256 = "19kfqxlrigrgwn74x06m70ar2fhyhic5kfmdanjwjcbaxblha3l8";
   };
 
   buildInputs = with pythonPackages; [ flake8 pytest pytestcov ];

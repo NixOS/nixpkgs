@@ -27,7 +27,9 @@ with pkgs;
   # Used by wine, firefox with debugging version of Flash, ...
   pkgsi686Linux = forceSystem "i686-linux" "i386";
 
-  callPackage_i686 = pkgsi686Linux.callPackage;
+  callPackage_i686 = if stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux"
+    then pkgsi686Linux.callPackage
+    else throw "callPackage_i686 not supported on system '${stdenv.system}'";
 
   # A stdenv capable of building 32-bit binaries.  On x86_64-linux,
   # it uses GCC compiled with multilib support; on i686-linux, it's
@@ -828,10 +830,10 @@ with pkgs;
     enableSharedExecutables = false;
     executableToolDepends = [ makeWrapper ];
     postInstall = ''
-      exe=$out/libexec/${drv.pname}-${drv.version}/${drv.pname}
-      install -D $out/bin/${drv.pname} $exe
-      rm -rf $out/{bin,lib,share}
-      makeWrapper $exe $out/bin/${drv.pname} \
+      exe=$libexec/bin/${drv.pname}-${drv.version}/${drv.pname}
+      install -D $bin/bin/${drv.pname} $exe
+      rm -rf $bin/bin $out/lib $out/share
+      makeWrapper $exe $bin/bin/${drv.pname} \
         --prefix PATH ":" "${nix}/bin" \
         --prefix PATH ":" "${nix-prefetch-scripts}/bin"
       mkdir -p $out/share/{bash-completion/completions,zsh/vendor-completions,fish/completions}
@@ -845,7 +847,7 @@ with pkgs;
     executableToolDepends = [ makeWrapper ];
     postInstall = ''
       wrapProgram $out/bin/stack2nix \
-        --prefix PATH ":" "${git}/bin:${cabal2nix}/bin:${cabal-install}/bin:${stack}/bin"
+        ${lib.makeBinPath [ git cabal2nix cabal-install stack ]}
     '';
   });
 
@@ -3207,6 +3209,8 @@ with pkgs;
   libwebsockets = callPackage ../development/libraries/libwebsockets { };
 
   limesurvey = callPackage ../servers/limesurvey { };
+
+  localtime = callPackage ../tools/system/localtime { };
 
   logcheck = callPackage ../tools/system/logcheck {
     inherit (perlPackages) mimeConstruct;
