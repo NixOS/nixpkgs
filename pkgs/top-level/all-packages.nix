@@ -7269,7 +7269,7 @@ with pkgs;
   flow = callPackage ../development/tools/analysis/flow {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
     inherit (darwin) cf-private;
-    inherit (ocamlPackages) ocaml findlib camlp4 sedlex ocamlbuild;
+    inherit (ocamlPackages) ocaml findlib camlp4 sedlex ocamlbuild ocaml_lwt;
   };
 
   framac = callPackage ../development/tools/analysis/frama-c { };
