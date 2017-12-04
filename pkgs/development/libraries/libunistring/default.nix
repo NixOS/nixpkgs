@@ -1,11 +1,12 @@
 { fetchurl, stdenv, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "libunistring-0.9.7";
+  name = "libunistring-${version}";
+  version = "0.9.8";
 
   src = fetchurl {
     url = "mirror://gnu/libunistring/${name}.tar.gz";
-    sha256 = "1ra1baz2187kbw9im47g6kqb5mx9plq703mkjxaval8rxv5q3q4w";
+    sha256 = "1x9wnpzg7vxyjpnzab6vw0afbcijfbd57qrrkqrppynh0nyz54mp";
   };
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./clang.patch stdenv.secure-format-patch ];
