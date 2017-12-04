@@ -730,13 +730,8 @@ self: super: {
     '';
   });
 
-  # test suite cannot find its own "idris" binary
+  # The standard libraries are compiled separately
   idris = doJailbreak (dontCheck super.idris);
-
-  idris_1_1_1 = overrideCabal (doJailbreak (dontCheck super.idris_1_1_1)) (drv: {
-    # The standard libraries are compiled separately
-    configureFlags = (drv.configureFlags or []) ++ [ "-fexeconly" ];
-  });
 
   # https://github.com/bos/math-functions/issues/25
   math-functions = dontCheck super.math-functions;
