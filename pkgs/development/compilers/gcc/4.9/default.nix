@@ -100,12 +100,12 @@ let version = "4.9.4";
 
     /* Platform flags */
     platformFlags = let
-        gccArch = stdenv.platform.gcc.arch or null;
-        gccCpu = stdenv.platform.gcc.cpu or null;
-        gccAbi = stdenv.platform.gcc.abi or null;
-        gccFpu = stdenv.platform.gcc.fpu or null;
-        gccFloat = stdenv.platform.gcc.float or null;
-        gccMode = stdenv.platform.gcc.mode or null;
+        gccArch = targetPlatform.gcc.arch or null;
+        gccCpu = targetPlatform.gcc.cpu or null;
+        gccAbi = targetPlatform.gcc.abi or null;
+        gccFpu = targetPlatform.gcc.fpu or null;
+        gccFloat = targetPlatform.gcc.float or null;
+        gccMode = targetPlatform.gcc.mode or null;
         withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
         withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
         withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
@@ -372,7 +372,9 @@ stdenv.mkDerivation ({
     ${if targetPlatform != hostPlatform then crossConfigureFlags else ""}
     ${if !bootstrap then "--disable-bootstrap" else ""}
     ${if targetPlatform == hostPlatform then platformFlags else ""}
-  ";
+  " + optionalString
+        (hostPlatform != buildPlatform)
+        (platformFlags + " --target=${targetPlatform.config}");
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
@@ -385,18 +387,7 @@ stdenv.mkDerivation ({
     then "install-strip"
     else "install";
 
-  crossAttrs = let
-    xgccArch = targetPlatform.gcc.arch or null;
-    xgccCpu = targetPlatform.gcc.cpu or null;
-    xgccAbi = targetPlatform.gcc.abi or null;
-    xgccFpu = targetPlatform.gcc.fpu or null;
-    xgccFloat = targetPlatform.gcc.float or null;
-    xwithArch = if xgccArch != null then " --with-arch=${xgccArch}" else "";
-    xwithCpu = if xgccCpu != null then " --with-cpu=${xgccCpu}" else "";
-    xwithAbi = if xgccAbi != null then " --with-abi=${xgccAbi}" else "";
-    xwithFpu = if xgccFpu != null then " --with-fpu=${xgccFpu}" else "";
-    xwithFloat = if xgccFloat != null then " --with-float=${xgccFloat}" else "";
-  in {
+  crossAttrs = {
     AR_FOR_BUILD = "ar";
     AS_FOR_BUILD = "as";
     LD_FOR_BUILD = "ld";
@@ -438,39 +429,6 @@ stdenv.mkDerivation ({
     # If we are making a cross compiler, cross != null
     NIX_CC_CROSS = if targetPlatform == hostPlatform then "${stdenv.ccCross}" else "";
     dontStrip = true;
-    configureFlags = ''
-      ${if enableMultilib then "" else "--disable-multilib"}
-      ${if enableShared then "" else "--disable-shared"}
-      ${if cloog != null then "--with-cloog=${cloog.crossDrv} --enable-cloog-backend=isl" else ""}
-      ${if langJava then "--with-ecj-jar=${javaEcj.crossDrv}" else ""}
-      ${if javaAwtGtk then "--enable-java-awt=gtk" else ""}
-      ${if langJava && javaAntlr != null then "--with-antlr-jar=${javaAntlr.crossDrv}" else ""}
-      --with-gmp=${gmp.crossDrv}
-      --with-mpfr=${mpfr.crossDrv}
-      --with-mpc=${libmpc.crossDrv}
-      --disable-libstdcxx-pch
-      --without-included-gettext
-      --with-system-zlib
-      --enable-languages=${
-        concatStrings (intersperse ","
-          (  optional langC        "c"
-          ++ optional langCC       "c++"
-          ++ optional langFortran  "fortran"
-          ++ optional langJava     "java"
-          ++ optional langAda      "ada"
-          ++ optional langVhdl     "vhdl"
-          ++ optional langGo       "go"
-          )
-        )
-      }
-      ${if langAda then " --enable-libada" else ""}
-      --target=${targetPlatform.config}
-      ${xwithArch}
-      ${xwithCpu}
-      ${xwithAbi}
-      ${xwithFpu}
-      ${xwithFloat}
-    '';
     buildFlags = "";
   };
 

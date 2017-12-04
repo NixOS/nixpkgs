@@ -63,6 +63,28 @@ let version = "4.5.4";
 
     javaAwtGtk = langJava && gtk2 != null;
 
+    /* Platform flags */
+    platformFlags = let
+        gccArch = targetPlatform.gcc.arch or null;
+        gccCpu = targetPlatform.gcc.cpu or null;
+        gccAbi = targetPlatform.gcc.abi or null;
+        gccFpu = targetPlatform.gcc.fpu or null;
+        gccFloat = targetPlatform.gcc.float or null;
+        gccMode = targetPlatform.gcc.mode or null;
+        withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
+        withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
+        withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
+        withFpu = if gccFpu != null then " --with-fpu=${gccFpu}" else "";
+        withFloat = if gccFloat != null then " --with-float=${gccFloat}" else "";
+        withMode = if gccMode != null then " --with-mode=${gccMode}" else "";
+      in
+        withArch +
+        withCpu +
+        withAbi +
+        withFpu +
+        withFloat +
+        withMode;
+
     /* Cross-gcc settings */
     gccArch = stdenv.lib.attrByPath [ "gcc" "arch" ] null targetPlatform;
     gccCpu = stdenv.lib.attrByPath [ "gcc" "cpu" ] null targetPlatformt;
@@ -268,7 +290,10 @@ stdenv.mkDerivation ({
     ${if langAda then " --enable-libada" else ""}
     ${if targetPlatform == hostPlatform && targetPlatform.isi686 then "--with-arch=i686" else ""}
     ${if targetPlatform != hostPlatform then crossConfigureFlags else ""}
-  ";
+    ${if targetPlatform == hostPlatform then platformFlags else ""}
+  " + optionalString
+        (hostPlatform != buildPlatform)
+        (platformFlags + " --target=${targetPlatform.config}");
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
@@ -314,36 +339,6 @@ stdenv.mkDerivation ({
     # If we are making a cross compiler, cross != null
     NIX_CC_CROSS = if targetPlatform == hostPlatform then "${stdenv.ccCross}" else "";
     dontStrip = true;
-    configureFlags = ''
-      ${if enableMultilib then "" else "--disable-multilib"}
-      ${if enableShared then "" else "--disable-shared"}
-      ${if ppl != null then "--with-ppl=${ppl.crossDrv}" else ""}
-      ${if cloogppl != null then "--with-cloog=${cloogppl.crossDrv}" else ""}
-      ${if langJava then "--with-ecj-jar=${javaEcj.crossDrv}" else ""}
-      ${if javaAwtGtk then "--enable-java-awt=gtk" else ""}
-      ${if langJava && javaAntlr != null then "--with-antlr-jar=${javaAntlr.crossDrv}" else ""}
-      --with-gmp=${gmp.crossDrv}
-      --with-mpfr=${mpfr.crossDrv}
-      --with-mpc=${libmpc.crossDrv}
-      --disable-libstdcxx-pch
-      --without-included-gettext
-      --with-system-zlib
-      --enable-languages=${
-        concatStrings (intersperse ","
-          (  optional langC        "c"
-          ++ optional langCC       "c++"
-          ++ optional langFortran  "fortran"
-          ++ optional langJava     "java"
-          ++ optional langAda      "ada"
-          ++ optional langVhdl     "vhdl"
-          )
-        )
-      }
-      ${if langAda then " --enable-libada" else ""}
-      ${if targetplatform == hostPlatform && targetPlatform.isi686 then "--with-arch=i686" else ""}
-      ${if targetPlatform != hostPlatform then crossConfigureFlags else ""}
-      --target=${targetPlatform.config}
-    '';
   };
  
 
