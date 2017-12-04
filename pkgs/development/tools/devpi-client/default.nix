@@ -1,17 +1,21 @@
-{ stdenv, pythonPackages, glibcLocales} :
+{ stdenv
+, pythonPackages
+, glibcLocales
+, devpi-server
+} :
 
 pythonPackages.buildPythonApplication rec {
   name = "${pname}-${version}";
   pname = "devpi-client";
-  version = "3.1.0rc1";
+  version = "3.1.0";
 
   src = pythonPackages.fetchPypi {
     inherit pname version;
-    sha256 = "0kfyva886k9zxmilqb2yviwqzyvs3n36if3s56y4clbvw9hr2lc3";
+    sha256 = "0w47x3lkafcg9ijlaxllmq4886nsc91w49ck1cd7vn2gafkwjkgr";
   };
-  # requires devpi-server which is currently not packaged
+
   doCheck = true;
-  checkInputs = with pythonPackages; [ pytest webtest mock ];
+  checkInputs = with pythonPackages; [ pytest webtest mock devpi-server ];
   checkPhase = "py.test";
 
   LC_ALL = "en_US.UTF-8";
