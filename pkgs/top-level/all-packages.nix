@@ -15720,7 +15720,7 @@ with pkgs;
 
   merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
 
-  meshlab = callPackage ../applications/graphics/meshlab { };
+  meshlab = libsForQt5.callPackage ../applications/graphics/meshlab { };
 
   metersLv2 = callPackage ../applications/audio/meters_lv2 { };
 
