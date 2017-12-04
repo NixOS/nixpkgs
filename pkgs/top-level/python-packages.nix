@@ -9406,17 +9406,14 @@ in {
 
   hetzner = buildPythonPackage rec {
     name = "hetzner-${version}";
-    version = "0.7.5";
+    version = "0.8.0";
 
     src = pkgs.fetchFromGitHub {
       repo = "hetzner";
-      owner = "RedMoonStudios";
+      owner = "aszlig";
       rev = "v${version}";
-      sha256 = "1fw7i1z4a39i1ljd9qd4f5p1p3a4257jfglkdpw90xjwl7fdpq42";
+      sha256 = "04q2q2w2qkhfly8rfjg2h5pnh42gs18l6cmipqc37yf7qvkw3nd0";
     };
-
-    # not there yet, but coming soon.
-    doCheck = false;
 
     meta = {
       homepage = "https://github.com/RedMoonStudios/hetzner";
