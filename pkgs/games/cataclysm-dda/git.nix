@@ -33,7 +33,10 @@ stdenv.mkDerivation rec {
       --add-flags "--datadir $out/share/cataclysm-dda/"
   '';
 
-  enableParallelBuilding = true;
+  # https://hydra.nixos.org/build/65193254
+  # src/weather_data.cpp:203:1: fatal error: opening dependency file obj/tiles/weather_data.d: No such file or directory
+  # make: *** [Makefile:687: obj/tiles/weather_data.o] Error 1
+  enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
     description = "A free, post apocalyptic, zombie infested rogue-like";
