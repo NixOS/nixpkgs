@@ -771,4 +771,44 @@ in rec {
       sha256 = "1k6z5r7wnrswsczn2j3a1mc4nvxqm4ydj6n6rvgqizk2pszdkqg8";
     })
   ];
+
+  # 4.5 - 4.7
+  XSA_246_45 = [
+    (xsaPatch {
+      name = "246-4.7";
+      sha256 = "13rad4k8z3bq15d67dhgy96kdbrjiq9sy8px0jskbpx9ygjdahkn";
+    })
+  ];
+
+  # 4.8 - 4.9
+  XSA_246 = [
+    (xsaPatch {
+      name = "246-4.9";
+      sha256 = "0z68vm0z5zvv9gm06pxs9kxq2q9fdbl0l0cm71ggzdplg1vw0snz";
+    })
+  ];
+
+  # 4.8
+  XSA_247_48 = [
+    (xsaPatch {
+      name = "247-4.8/0001-p2m-Always-check-to-see-if-removing-a-p2m-entry-actu";
+      sha256 = "0kvjrk90n69s721c2qj2df5raml3pjk6bg80aig353p620w6s3xh";
+    })
+    (xsaPatch {
+      name = "247-4.8/0002-p2m-Check-return-value-of-p2m_set_entry-when-decreas";
+      sha256 = "1s9kv6h6dd8psi5qf5l5gpk9qhq8blckwhl76cjbldcgi6imb3nr";
+    })
+  ];
+
+  # 4.5
+  XSA_247_45 = [
+    (xsaPatch {
+      name = "247-4.5/0001-p2m-Always-check-to-see-if-removing-a-p2m-entry-actu";
+      sha256 = "0h1mp5s9si8aw2gipds317f27h9pi7bgnhj0bcmw11p0ch98sg1m";
+    })
+    (xsaPatch {
+      name = "247-4.5/0002-p2m-Check-return-value-of-p2m_set_entry-when-decreas";
+      sha256 = "0vjjybxbcm4xl26wbqvcqfiyvvlayswm4f98i1fr5a9abmljn5sb";
+    })
+  ];
 }
