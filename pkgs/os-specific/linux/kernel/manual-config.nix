@@ -60,7 +60,7 @@ let
   inherit (stdenv.lib)
     hasAttr getAttr optional optionalString optionalAttrs maintainers platforms;
 
-  platform = hostPlatform;
+  platform = stdenv.platform;
 
   installkernel = writeTextFile { name = "installkernel"; executable=true; text = ''
     #!${stdenv.shell} -e
