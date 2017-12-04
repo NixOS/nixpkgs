@@ -23,7 +23,7 @@
 , x11Support ? langJava
 , gnatboot ? null
 , enableMultilib ? false
-, enablePlugin ? true             # whether to support user-supplied plug-ins
+, enablePlugin ? hostPlatform == buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
 , libcCross ? null
 , crossStageStatic ? true
