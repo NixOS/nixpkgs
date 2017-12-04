@@ -4612,6 +4612,8 @@ with pkgs;
 
   surfraw = callPackage ../tools/networking/surfraw { };
 
+  swagger-codegen = callPackage ../tools/networking/swagger-codegen { };
+
   swec = callPackage ../tools/networking/swec {
     inherit (perlPackages) LWP URI HTMLParser HTTPServerSimple Parent;
   };
