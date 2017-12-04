@@ -4,6 +4,7 @@
 , sha256_i686
 , sha256_x86_64
 , sha256_armv7l
+, sha256_aarch64
 , jceName
 , jceDownloadUrl
 , sha256JCE
@@ -38,11 +39,12 @@
 
 assert stdenv.system == "i686-linux"
     || stdenv.system == "x86_64-linux"
-    || stdenv.system == "armv7l-linux";
+    || stdenv.system == "armv7l-linux"
+    || stdenv.system == "aarch64-linux";
 assert swingSupport -> xorg != null;
 
 let
-  abortArch = abort "jdk requires i686-linux, x86_64-linux, or armv7l-linux";
+  abortArch = abort "jdk requires i686-linux, x86_64-linux, aarch64-linux or armv7l-linux";
 
   /**
    * The JRE libraries are in directories that depend on the CPU.
@@ -54,6 +56,8 @@ let
       "amd64"
     else if stdenv.system == "armv7l-linux" then
       "arm"
+    else if stdenv.system == "aarch64-linux" then
+      "aarch64"
     else
       abortArch;
 
@@ -99,6 +103,12 @@ let result = stdenv.mkDerivation rec {
         url = downloadUrl;
         sha256 = sha256_armv7l;
       }
+    else if stdenv.system == "aarch64-linux" then
+      requireFile {
+        name = "jdk-${productVersion}u${patchVersion}-linux-arm64-vfp-hflt.tar.gz";
+        url = downloadUrl;
+        sha256 = sha256_aarch64;
+      }
     else
       abortArch;
 
@@ -116,7 +126,7 @@ let result = stdenv.mkDerivation rec {
     # Set PaX markings
     exes=$(file $sourceRoot/bin/* $sourceRoot/jre/bin/* 2> /dev/null | grep -E 'ELF.*(executable|shared object)' | sed -e 's/: .*$//')
     for file in $exes; do
-      paxmark m "$file"
+      paxmark m "$file" || true
       # On x86 for heap sizes over 700MB disable SEGMEXEC and PAGEEXEC as well.
       ${stdenv.lib.optionalString stdenv.isi686 ''paxmark msp "$file"''}
     done
@@ -212,7 +222,7 @@ let result = stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     license = licenses.unfree;
-    platforms = [ "i686-linux" "x86_64-linux" "armv7l-linux" ]; # some inherit jre.meta.platforms
+    platforms = [ "i686-linux" "x86_64-linux" "armv7l-linux" "aarch64-linux" ]; # some inherit jre.meta.platforms
   };
 
 }; in result
