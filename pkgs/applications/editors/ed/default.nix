@@ -26,8 +26,6 @@ stdenv.mkDerivation rec {
     */
   doCheck = !(hostPlatform.isDarwin || hostPlatform != buildPlatform);
 
-  installFlags = [ "DESTDIR=$(out)" ];
-
   configureFlags = [
     "--exec-prefix=${stdenv.cc.targetPrefix}"
     "CC=${stdenv.cc.targetPrefix}cc"
