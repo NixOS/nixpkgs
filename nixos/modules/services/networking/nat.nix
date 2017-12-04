@@ -131,15 +131,15 @@ in
       type = with types; listOf (submodule {
         options = {
           sourcePort = mkOption {
-            type = types.int;
+            type = types.either types.int (types.strMatching "[[:digit:]]+:[[:digit:]]+");
             example = 8080;
-            description = "Source port of the external interface";
+            description = "Source port of the external interface; to specify a port range, use a string with a colon (e.g. \"60000:61000\")";
           };
 
           destination = mkOption {
             type = types.str;
             example = "10.0.0.1:80";
-            description = "Forward connection to destination ip:port";
+            description = "Forward connection to destination ip:port; to specify a port range, use ip:start-end";
           };
 
           proto = mkOption {
