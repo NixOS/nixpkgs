@@ -897,6 +897,7 @@ self: super: {
   # Don't install internal mkReadme tool.
   hastache = overrideCabal super.hastache (drv: {
     doCheck = false;
+    enableSeparateBinOutput = false;
     postInstall = "rm $out/bin/mkReadme && rmdir $out/bin";
   });
 

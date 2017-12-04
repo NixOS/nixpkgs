@@ -10,7 +10,7 @@
 let
   inherit (bootPkgs) ghc;
   version = "8.2.1";
-
+  preReleaseName = "ghc-8.2.1";
   commonBuildInputs = [ alex autoconf automake ghc happy hscolour perl python3 sphinx ];
   commonPreConfigure =  ''
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure

@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     ./relocation.patch
   ];
 
-  buildInputs = [ ghc perl libxml2 libxslt docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42 hscolour ];
+  buildInputs = [ ghc perl libxml2 libxslt docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42 (stdenv.lib.getBin hscolour) ];
 
   enableParallelBuilding = true;
 

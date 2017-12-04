@@ -20,9 +20,9 @@ stdenv.mkDerivation rec {
     sed -ie 's|ld |${targetPackages.stdenv.cc.bintools}/bin/ld |g' src/scripts/ldkernel.in
   '';
   configureFlags = stdenv.lib.optional (!enableIntegerSimple) [ "--enable-gmp" ];
-  propagatedNativeBuildInputs = [ alex happy ];
+  propagatedNativeBuildInputs = [ (stdenv.lib.getBin alex) (stdenv.lib.getBin happy) ];
   buildInputs =
-   let haskellPkgs = [ alex happy bootPkgs.hscolour bootPkgs.cabal-install bootPkgs.haddock bootPkgs.hpc
+   let haskellPkgs = [ (stdenv.lib.getBin alex) (stdenv.lib.getBin happy) (stdenv.lib.getBin bootPkgs.hscolour) bootPkgs.cabal-install bootPkgs.haddock bootPkgs.hpc
     ]; in [ bootPkgs.ghc
             automake perl git targetPackages.stdenv.cc.bintools
             autoconf xen zlib ncurses.dev
