@@ -48,6 +48,14 @@ in
         '';
       };
 
+      hooks-path = mkOption {
+        type = types.str;
+        default = "${pkgs.buildkite-agent}/share/hooks";
+        description = ''
+          Path to the directory storing the hooks.
+        '';
+      };
+
       meta-data = mkOption {
         type = types.str;
         default = "";
@@ -114,10 +122,12 @@ in
             token="$(cat ${toString cfg.tokenPath})"
             name="${cfg.name}"
             meta-data="${cfg.meta-data}"
-            hooks-path="${pkgs.buildkite-agent}/share/hooks"
             build-path="${cfg.dataDir}/builds"
+            hooks-path="${cfg.hooks-path}"
             bootstrap-script="${pkgs.buildkite-agent}/share/bootstrap.sh"
             EOF
+
+            chmod +x ${cfg.hooks-path}/* 2>/dev/null || true # Guard against read-only paths.
           '';
 
         serviceConfig =
