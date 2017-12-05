@@ -147,8 +147,4 @@ rec {
   overrideSrc = drv: { src, version ? drv.version }:
     overrideCabal drv (_: { inherit src version; editedCabalFile = null; });
 
-  hasNoBinOutput = drv: overrideCabal drv (drv: { enableSeparateBinOutput = false; });
-
-  installOutputs = drv: outputs: overrideCabal drv
-    (drv: { outputsToInstall = outputs; });
 }
