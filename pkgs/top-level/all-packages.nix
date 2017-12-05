@@ -5530,6 +5530,8 @@ with pkgs;
 
   devpi-client = callPackage ../development/tools/devpi-client {};
 
+  devpi-server = callPackage ../development/tools/devpi-server {};
+
   dotty = callPackage ../development/compilers/scala/dotty.nix { jre = jre8;};
 
   drumstick = callPackage ../development/libraries/drumstick { };
