@@ -8,7 +8,7 @@
 , withQt4 ? withQt, qt4 ? null
 , withKde ? withQt
 , withKde4 ? withKde && withQt4, kdelibs4 ? null, automoc4 ? null
-, withKNotify4 ? withKde4
+, withKNotify4 ? false
 , withLibnotify ? !withKNotify4, libnotify ? null
 , withSqlite ? true, sqlite ? null
 , withNetworking ? true, curl ? null, openssl ? null
