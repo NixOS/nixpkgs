@@ -22,6 +22,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     description = "Per object permissions for Django";
     homepage = https://github.com/django-guardian/django-guardian;
-    licenses = [ licenses.mit licenses.bsd2 ];
+    license = [ licenses.mit licenses.bsd2 ];
   };
 }

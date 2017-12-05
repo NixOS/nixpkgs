@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.cs.waikato.ac.nz/ml/weka/;
     description = "Collection of machine learning algorithms for data mining tasks";
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainer = [stdenv.lib.maintainers.mimadrid];
+    maintainers = [ stdenv.lib.maintainers.mimadrid ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

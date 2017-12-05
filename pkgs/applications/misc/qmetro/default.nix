@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "Worldwide transit maps viewer";
     license = licenses.gpl3;
 
-    maintainter = with maintainers; [ orivej ];
+    maintainers = with maintainers; [ orivej ];
     platforms = platforms.unix;
   };
 }

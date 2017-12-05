@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     description = "XCB cursor library (libxcursor port)";
     homepage    = http://cgit.freedesktop.org/xcb/util-cursor;
     license     = licenses.mit;
-    maintainer  = with maintainers; [ lovek323 ];
+    maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.linux ++ platforms.darwin;
   };
 

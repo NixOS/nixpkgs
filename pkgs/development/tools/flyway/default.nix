@@ -24,6 +24,6 @@
         homepage = "https://flywaydb.org/";
         license = licenses.asl20;
         platforms = platforms.linux;
-        maintainers = maintainers.cmcdragonkai;
+        maintainers = [ maintainers.cmcdragonkai ];
       };
     }
