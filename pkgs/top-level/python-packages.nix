@@ -3768,6 +3768,8 @@ in {
     };
   };
 
+  pytest-timeout = callPackage ../development/python-modules/pytest-timeout { };
+
   pytest-warnings = callPackage ../development/python-modules/pytest-warnings { };
 
   pytestpep8 = buildPythonPackage rec {
@@ -24463,6 +24465,7 @@ EOF
   parse-type = callPackage ../development/python-modules/parse-type { };
 
   ephem = callPackage ../development/python-modules/ephem { };
+
 });
 
 in fix' (extends overrides packages)
