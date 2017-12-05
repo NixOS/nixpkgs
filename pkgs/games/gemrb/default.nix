@@ -4,7 +4,7 @@ assert stdenv.cc.libc != null;
 
 stdenv.mkDerivation rec {
   name = "gemrb-0.8.1";
-  
+
   src = fetchurl {
     url = "mirror://sourceforge/gemrb/${name}.tar.gz";
     sha256 = "1g68pc0x4azy6zm5y7813g0qky96q796si9v3vafiy7sa8ph49kl";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://gemrb.org/;
     license = licenses.gpl2;
-    platforms = stdenv.lib.platforms.all;
-    hydraPlatforms = [];
+    maintainers = with maintainers; [ peterhoeg ];
+    platforms = platforms.all;
   };
 }

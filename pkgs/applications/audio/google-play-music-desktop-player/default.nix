@@ -74,6 +74,6 @@ stdenv.mkDerivation {
     description = "A beautiful cross platform Desktop Player for Google Play Music";
     license = stdenv.lib.licenses.mit;
     platforms = [ "x86_64-linux" ];
-    maintainers = stdenv.lib.maintainers.SuprDewd;
+    maintainers = [ stdenv.lib.maintainers.SuprDewd ];
   };
 }

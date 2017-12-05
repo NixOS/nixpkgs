@@ -33,6 +33,6 @@ buildRustPackage rec {
     homepage = https://github.com/git-series/git-series;
 
     license = licenses.mit;
-    maintainer = [ maintainers.vmandela ];
+    maintainers = [ maintainers.vmandela ];
   };
 }

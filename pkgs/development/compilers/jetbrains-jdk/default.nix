@@ -73,7 +73,7 @@ let drv = stdenv.mkDerivation rec {
      your own risk.
     '';
     homepage = "https://bintray.com/jetbrains/intellij-jdk/";
-    licenses = licenses.gpl2;
+    license = licenses.gpl2;
     maintainers = with maintainers; [ edwtjo ];
     platforms = with platforms; [ "x86_64-linux" ];
   };

@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
     homepage = https://github.com/neeasade/xst;
     description = "Simple terminal fork that can load config from Xresources";
     license = licenses.mit;
-    maintainers = maintainers.vyp;
+    maintainers = [ maintainers.vyp ];
     platforms = platforms.linux;
   };
 }

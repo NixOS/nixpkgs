@@ -264,14 +264,14 @@ rec {
     name = "ppx_sexp_message";
     hash = "0r0skyr1zf2jh48xrxbs45gzywynhlivkq24xwc0qq435fmc2jqv";
     propagatedBuildInputs = [ ppx_sexp_conv ppx_here ];
-    meta.declarations = "A ppx rewriter for easy construction of s-expressions";
+    meta.description = "A ppx rewriter for easy construction of s-expressions";
   };
 
   ppx_sexp_value = janePackage {
     name = "ppx_sexp_value";
     hash = "0hha5mmx700m8fy9g4znb8278l09chgwlpshny83vsmmzgq2jhah";
     propagatedBuildInputs = [ ppx_sexp_conv ppx_here ];
-    meta.declarations = "A ppx rewriter that simplifies building s-expressions from OCaml values";
+    meta.description = "A ppx rewriter that simplifies building s-expressions from OCaml values";
   };
 
   ppx_typerep_conv = janePackage {

@@ -13,7 +13,7 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules qttools ];
   propagatedBuildInputs = [ qtbase qtsvg ];
   meta = {
-    shortDescription = "Libraries for creating business diagrams";
+    description = "Libraries for creating business diagrams";
     license = lib.licenses.gpl2;
     platforms = qtbase.meta.platforms;
     maintainers = [ lib.maintainers.ttuegel ];

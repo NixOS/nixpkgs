@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     inherit version;
     homepage = http://linvdr.org/projects/regionset/;
-    descriptions = "Tool for changing the region code setting of DVD players";
+    description = "Tool for changing the region code setting of DVD players";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };
