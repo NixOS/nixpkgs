@@ -59,6 +59,7 @@
 "github:flazz/vim-colorschemes"
 "github:floobits/floobits-neovim"
 "github:frigoeu/psc-ide-vim"
+"github:google/vim-codefmt"
 "github:google/vim-jsonnet"
 "github:google/vim-maktaba"
 "github:heavenshell/vim-jsdoc"

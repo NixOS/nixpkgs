@@ -820,6 +820,17 @@ rec {
 
   };
 
+  vim-codefmt = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-codefmt-2017-03-04";
+    src = fetchgit {
+      url = "https://github.com/google/vim-codefmt";
+      rev = "8bae55b45c3f030845ab636d6860cef4071915d1";
+      sha256 = "0wg0fplpwsgkbycjx1ryl29afbfzfsdv0j7xisjik26m9q8shn1k";
+    };
+    dependencies = ["maktaba"];
+
+  };
+
   vim-jsonnet = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-jsonnet-2017-04-06";
     src = fetchgit {
