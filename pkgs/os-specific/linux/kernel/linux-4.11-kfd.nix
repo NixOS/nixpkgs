@@ -1,4 +1,4 @@
-{ stdenv, hostPlatform, fetchgit, perl, buildLinux, ... } @ args:
+{ stdenv, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
 let
   ver = "4.11.0";
@@ -6,11 +6,14 @@ let
 in
 import ./generic.nix (args // rec {
   version = "${ver}-${revision}";
+  modDirVersion = "${ver}";
   extraMeta.branch = "4.11";
 
-  src = fetchgit {
-    url = "https://github.com/RadeonOpenCompute/ROCK-Kernel-Driver.git";
+  src = fetchFromGitHub {
+    owner = "RadeonOpenCompute";
+    repo = "ROCK-Kernel-Driver";
+    # url = "https://github.com/RadeonOpenCompute/ROCK-Kernel-Driver.git";
     rev = "roc-1.6.x";
-    sha256 = "0fwnmba25ww5q4asfz3mqdmbrhfdfgid388701h4xy20pwpjndsy";
+    sha256 = "1gl883j1lzysvh4qnls75k72x2g4kzmx36rm5d6zfknk3mrk2b4d";
   };
 } // (args.argsOverride or {}))
