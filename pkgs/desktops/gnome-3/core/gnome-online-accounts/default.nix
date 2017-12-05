@@ -9,12 +9,17 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${dbus_glib.dev}/include/dbus-1.0 -I${dbus_libs.dev}/include/dbus-1.0";
 
+  outputs = [ "out" "man" "dev" ];
+
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib libxslt gtk webkitgtk json_glib rest gnome_common wrapGAppsHook
-                  libsecret dbus_glib telepathy_glib glib_networking intltool icu libsoup vala
-                  docbook_xsl_ns docbook_xsl gnome3.defaultIconTheme ];
+  nativeBuildInputs = [
+    pkgconfig vala gnome_common intltool wrapGAppsHook
+    libxslt docbook_xsl_ns docbook_xsl
+  ];
+  buildInputs = [
+    glib gtk webkitgtk json_glib rest libsecret dbus_glib telepathy_glib glib_networking icu libsoup
+  ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
