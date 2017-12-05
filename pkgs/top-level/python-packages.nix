@@ -370,6 +370,8 @@ in {
 
   supervise_api = callPackage ../development/python-modules/supervise_api { };
 
+  syncserver = callPackage ../development/python-modules/syncserver {};
+
   tables = callPackage ../development/python-modules/tables {
     hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
   };
@@ -20110,29 +20112,6 @@ EOF
       description = "An SVG to TikZ converter";
       license = licenses.gpl2Plus;
       maintainers =  with maintainers; [ gal_bolle ];
-    };
-  };
-
-  syncserver = buildPythonPackage rec {
-    name = "syncserver-${version}";
-    version = "1.6.0";
-    disabled = ! isPy27;
-
-    src = pkgs.fetchgit {
-      url = https://github.com/mozilla-services/syncserver.git;
-      rev = "refs/tags/${version}";
-      sha256 = "1fsiwihgq3z5b5kmssxxil5g2abfvsf6wfikzyvi4sy8hnym77mb";
-    };
-
-    buildInputs = with self; [ unittest2 ];
-    propagatedBuildInputs = with self; [
-      cornice gunicorn pyramid requests simplejson sqlalchemy mozsvc tokenserver
-      serversyncstorage configparser
-    ];
-
-    meta = {
-      maintainers = [ ];
-      platforms = platforms.all;
     };
   };
 
