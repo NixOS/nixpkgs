@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [ "--with-opensp-includes=${opensp}/include/OpenSP" ];
-  buildInputs = [ opensp pkgconfig libxml2 curl ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ opensp libxml2 curl ];
 
   meta = { 
     description = "Opensource implementation of the Open Financial eXchange specification";

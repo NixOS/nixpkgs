@@ -1,27 +1,30 @@
-{stdenv, fetchurl, guile}:
+{ stdenv, fetchurl, guile }:
 
 stdenv.mkDerivation rec {
-  name = "guile-lint-14";
+  name = "guile-lint-${version}";
+  version = "14";
+
   src = fetchurl {
-    url = "http://download.tuxfamily.org/user42/" + name + ".tar.bz2";
-    sha256 = "5bfcf7a623338b2ef81ac097e3e136eaf32856dd0730b7eeaff3161067b5d0be";
+    url = "https://download.tuxfamily.org/user42/${name}.tar.bz2";
+    sha256 = "1gnhnmki05pkmzpbfc07vmb2iwza6vhy75y03bw2x2rk4fkggz2v";
   };
 
   buildInputs = [ guile ];
 
   unpackPhase = ''tar xjvf "$src" && sourceRoot="$PWD/${name}"'';
-  patchPhase = ''
-    cat guile-lint.in |						\
-    sed 's|^exec guile|exec $\{GUILE:-${guile}/bin/guile}|g' > ,,tmp &&	\
-    mv ,,tmp guile-lint.in
+
+  prePatch = ''
+    substituteInPlace guile-lint.in --replace \
+      "exec guile" "exec ${guile}/bin/guile"
   '';
 
   doCheck = true;
 
-  meta = {
-    description = "Guile-Lint checks syntax and semantics in a Guile program or module";
-    homepage = http://user42.tuxfamily.org/guile-lint/index.html;
-    license = "GPL";
-    broken = true;
+  meta = with stdenv.lib; {
+    description = "Checks syntax and semantics in a Guile program or module";
+    homepage = "https://user42.tuxfamily.org/guile-lint/index.html";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ vyp ];
+    platforms = platforms.all;
   };
 }

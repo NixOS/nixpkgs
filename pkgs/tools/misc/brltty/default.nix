@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0slrqanwj9cm7ql0rpb296xq676zrc1sjyr13lh5lygp4b8qfpci";
   };
   
-  buildInputs = [ pkgconfig bluez ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ bluez ]
     ++ stdenv.lib.optional alsaSupport alsaLib
     ++ stdenv.lib.optional systemdSupport systemd;
   

@@ -77,17 +77,19 @@ in rec {
 
         cc = if isNull last then "/dev/null" else import ../../build-support/cc-wrapper {
           inherit shell;
-          inherit (last) stdenv;
+          inherit (last) stdenvNoCC;
 
-          nativeTools  = true;
-          nativePrefix = bootstrapTools;
+          nativeTools  = false;
           nativeLibc   = false;
           buildPackages = lib.optionalAttrs (last ? stdenv) {
             inherit (last) stdenv;
           };
           libc         = last.pkgs.darwin.Libsystem;
           isClang      = true;
-          cc           = { name = "clang-9.9.9"; outPath = bootstrapTools; };
+          cc           = { name = "clang-9.9.9";     outPath = bootstrapTools; };
+          binutils     = { name = "binutils-9.9.9";  outPath = bootstrapTools; };
+          coreutils    = { name = "coreutils-9.9.9"; outPath = bootstrapTools; };
+          gnugrep      = { name = "gnugrep-9.9.9";   outPath = bootstrapTools; };
         };
 
         preHook = stage0.stdenv.lib.optionalString (shell == "${bootstrapTools}/bin/bash") ''
@@ -267,7 +269,16 @@ in rec {
     extraPreHook = ''
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
-    overrides = persistent;
+    overrides = self: super: (persistent self super) // {
+      # Hack to make sure we don't link ncurses in bootstrap tools. The proper
+      # solution is to avoid passing -L/nix-store/...-bootstrap-tools/lib,
+      # quite a sledgehammer just to get the C runtime.
+      gettext = super.gettext.overrideAttrs (old: {
+         configureFlags = old.configureFlags ++ [
+           "--disable-curses"
+         ];
+      });
+    };
   };
 
   stdenvDarwin = prevStage: let
@@ -283,7 +294,9 @@ in rec {
       };
 
       darwin = super.darwin // {
-        inherit (darwin) dyld ICU Libsystem cctools libiconv;
+        inherit (darwin) dyld ICU Libsystem libiconv;
+      } // lib.optionalAttrs (super.targetPlatform == localSystem) {
+        inherit (darwin) cctools;
       };
     } // lib.optionalAttrs (super.targetPlatform == localSystem) {
       # Need to get rid of these when cross-compiling.
@@ -300,6 +313,7 @@ in rec {
     targetPlatform = localSystem;
 
     preHook = commonPreHook + ''
+      export NIX_COREFOUNDATION_RPATH=${pkgs.darwin.CF}/Library/Frameworks
       export PATH_LOCALE=${pkgs.darwin.locale}/share/locale
     '';
 
@@ -310,7 +324,7 @@ in rec {
     shell       = "${pkgs.bash}/bin/bash";
 
     cc = lib.callPackageWith {} ../../build-support/cc-wrapper {
-      inherit (pkgs) stdenv;
+      inherit (pkgs) stdenvNoCC;
       inherit shell;
       nativeTools = false;
       nativeLibc  = false;
@@ -339,7 +353,7 @@ in rec {
       bzip2.bin llvmPackages.llvm llvmPackages.llvm.lib zlib.out zlib.dev libffi.out coreutils ed diffutils gnutar
       gzip ncurses.out ncurses.dev ncurses.man gnused bash gawk
       gnugrep llvmPackages.clang-unwrapped patch pcre.out binutils-raw.out
-      binutils-raw.dev binutils gettext
+      binutils gettext
       cc.expand-response-params
     ]) ++ (with pkgs.darwin; [
       dyld Libsystem CF cctools ICU libiconv locale

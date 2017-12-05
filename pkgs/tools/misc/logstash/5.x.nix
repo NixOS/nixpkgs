@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/logstash/${name}.tar.gz";
-    sha256 = "1z3rwpwafrn6h0rzdsmripnwj8ad33v92ryxq8xf9y7331rqb2gs";
+    sha256 = "11qg8i0svsccr1wd0yj0ivfzpza2hd68221g38v88shvj0bb737f";
   };
 
   dontBuild         = true;
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out
-    cp -r {Gemfile*,vendor,lib,bin,config,data,logstash-core,logstash-core-plugin-api} $out
+    cp -r {Gemfile*,modules,vendor,lib,bin,config,data,logstash-core,logstash-core-plugin-api} $out
 
     wrapProgram $out/bin/logstash \
        --set JAVA_HOME "${jre}"

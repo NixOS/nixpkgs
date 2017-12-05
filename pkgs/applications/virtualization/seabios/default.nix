@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.seabios.org;
     license = licenses.lgpl3;
     maintainers = [ maintainers.tstrobel ];
-    platforms = platforms.linux;
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }
 

@@ -1,5 +1,7 @@
 { stdenv
 , fetchurl
+, gcc
+, removeReferencesTo
 , cpp ? false
 , gfortran ? null
 , zlib ? null
@@ -30,6 +32,8 @@ stdenv.mkDerivation rec {
     inherit mpi;
   };
 
+  nativeBuildInputs = [ removeReferencesTo ];
+
   buildInputs = []
     ++ optional (gfortran != null) gfortran
     ++ optional (szip != null) szip;
@@ -47,6 +51,10 @@ stdenv.mkDerivation rec {
 
   patches = [./bin-mv.patch];
 
+  postInstall = ''
+    find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
+  '';
+
   meta = {
     description = "Data model, library, and file format for storing and managing data";
     longDescription = ''
@@ -55,7 +63,9 @@ stdenv.mkDerivation rec {
       applications to evolve in their use of HDF5. The HDF5 Technology suite includes tools and 
       applications for managing, manipulating, viewing, and analyzing data in the HDF5 format.
     '';
+    license = stdenv.lib.licenses.free; # BSD-like
     homepage = https://www.hdfgroup.org/HDF5/;
     platforms = stdenv.lib.platforms.unix;
+    broken = (gfortran != null) && stdenv.isDarwin;
   };
 }

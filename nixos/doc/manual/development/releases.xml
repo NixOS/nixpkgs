@@ -10,7 +10,7 @@
   <title>Release process</title>
 
   <para>
-    Going through an example of releasing NixOS 15.09:
+    Going through an example of releasing NixOS 17.09:
   </para>
 
   <section xml:id="one-month-before-the-beta">
@@ -18,13 +18,13 @@
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Send an email to nix-dev mailinglist as a warning about upcoming beta "feature freeze" in a month.
+          Send an email to the nix-devel mailinglist as a warning about upcoming beta "feature freeze" in a month.
         </para>
       </listitem>
       <listitem>
         <para>
           Discuss with Eelco Dolstra and the community (via IRC, ML) about what will reach the deadline.
-          Any issue or Pull Request targeting the release should have assigned milestone.
+          Any issue or Pull Request targeting the release should be included in the release milestone.
         </para>
       </listitem>
     </itemizedlist>
@@ -34,64 +34,6 @@
     <itemizedlist spacing="compact">
       <listitem>
         <para>
-          Rename <literal>rl-unstable.xml</literal> -&gt;
-          <literal>rl-1509.xml</literal>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>git tag -a -m &quot;Release 15.09-beta&quot; 15.09-beta &amp;&amp; git push --tags</literal>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          From the master branch run <literal>git checkout -B release-15.09</literal>.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/NixOS/nixos-org-configurations/pull/18">
-            Make sure channel is created at http://nixos.org/channels/.
-          </link>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/NixOS/nixpkgs/settings/branches">
-            Lock the branch on github (so developers can’t force push)
-          </link>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/NixOS/nixpkgs/compare/bdf161ed8d21...6b63c4616790">bump
-          <literal>system.defaultChannel</literal> attribute in
-          <literal>nixos/modules/misc/version.nix</literal></link>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/NixOS/nixpkgs/commit/d6b08acd1ccac0d9d502c4b635e00b04d3387f06">update
-          <literal>versionSuffix</literal> in
-          <literal>nixos/release.nix</literal></link>, use
-          <literal>git log --format=%an|wc -l</literal> to get commit
-          count
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <literal>echo -n &quot;16.03&quot; &gt; .version</literal> in
-          master.
-        </para>
-      </listitem>
-      <listitem>
-        <para>
-          <link xlink:href="https://github.com/NixOS/nixpkgs/commit/b8a4095003e27659092892a4708bb3698231a842">pick
-          a new name for unstable branch.</link>
-        </para>
-      </listitem>
-      <listitem>
-        <para>
           <link xlink:href="https://github.com/NixOS/nixpkgs/issues/13559">Create
             an issue for tracking Zero Hydra Failures progress. ZHF is an effort
             to get build failures down to zero.</link>
@@ -99,26 +41,81 @@
       </listitem>
       <listitem>
         <para>
-          Use https://lwn.net/Vulnerabilities/ and 
-          <link xlink:href="https://github.com/NixOS/nixpkgs/search?utf8=%E2%9C%93&amp;q=vulnerabilities&amp;type=Issues">triage vulnerabilities in an issue</link>.
+          <literal>git tag -a -s -m &quot;Release 17.09-beta&quot; 17.09-beta &amp;&amp; git push --tags</literal>
         </para>
       </listitem>
       <listitem>
         <para>
-          Create two Hydra jobsets: release-15.09 and release-15.09-small with <literal>stableBranch</literal> set to false
+          From the master branch run <literal>git checkout -B release-17.09</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/NixOS/nixos-org-configurations/pull/18">
+            Make sure a channel is created at http://nixos.org/channels/.
+          </link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/NixOS/nixpkgs/settings/branches">
+            Let a GitHub nixpkgs admin lock the branch on github for you.
+            (so developers can’t force push)
+          </link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/NixOS/nixpkgs/compare/bdf161ed8d21...6b63c4616790">
+            Bump the <literal>system.defaultChannel</literal> attribute in
+            <literal>nixos/modules/misc/version.nix</literal>
+          </link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/NixOS/nixpkgs/commit/d6b08acd1ccac0d9d502c4b635e00b04d3387f06">
+            Update <literal>versionSuffix</literal> in
+          <literal>nixos/release.nix</literal></link>, use
+          <literal>git log --format=%an|wc -l</literal> to get the commit
+          count
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <literal>echo -n &quot;18.03&quot; &gt; .version</literal> on
+          master.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link xlink:href="https://github.com/NixOS/nixpkgs/commit/b8a4095003e27659092892a4708bb3698231a842">
+            Pick a new name for the unstable branch.
+          </link>
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Create a new release notes file for the upcoming release + 1, in this
+          case <literal>rl-1803.xml</literal>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          Create two Hydra jobsets: release-17.09 and release-17.09-small with <literal>stableBranch</literal> set to false.
         </para>
       </listitem>
       <listitem>
         <para>
           Edit changelog at
-          <literal>nixos/doc/manual/release-notes/rl-1509.xml</literal>
+          <literal>nixos/doc/manual/release-notes/rl-1709.xml</literal>
           (double check desktop versions are noted)
         </para>
         <itemizedlist spacing="compact">
           <listitem>
             <para>
               Get all new NixOS modules
-              <literal>git diff release-14.12..release-15.09 nixos/modules/module-list.nix|grep ^+</literal>
+              <literal>git diff release-17.03..release-17.09 nixos/modules/module-list.nix|grep ^+</literal>
             </para>
           </listitem>
           <listitem>
@@ -130,9 +127,25 @@
       </listitem>
     </itemizedlist>
   </section>
+  <section xml:id="during-beta">
+    <title>During Beta</title>
+    <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Monitor the master branch for bugfixes and minor updates
+          and cherry-pick them to the release branch.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
   <section xml:id="before-the-final-release">
     <title>Before the final release</title>
     <itemizedlist spacing="compact">
+      <listitem>
+        <para>
+          Re-check that the release notes are complete.
+        </para>
+      </listitem>
       <listitem>
         <para>
           Release Nix (currently only Eelco Dolstra can do that).

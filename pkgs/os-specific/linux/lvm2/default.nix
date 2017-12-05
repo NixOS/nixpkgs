@@ -2,7 +2,7 @@
 , thin-provisioning-tools, enable_dmeventd ? false }:
 
 let
-  version = "2.02.173";
+  version = "2.02.175";
 in
 
 stdenv.mkDerivation {
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "ftp://sources.redhat.com/pub/lvm2/releases/LVM2.${version}.tgz";
-    sha256 = "0r4dx87z7ggxmxligdzz43chgfrwn9lyj7vaz63z97h0gs61dfff";
+    sha256 = "0n95cc2b0jb0fh2pd9jyg9ww7lyzpia9n9sryw9f4aq8dpna7dsd";
   };
 
   configureFlags = [
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   preConfigure =
     ''
       substituteInPlace scripts/lvm2_activation_generator_systemd_red_hat.c \
-        --replace /usr/bin/udevadm ${systemd.udev.bin}/bin/udevadm
+        --replace /usr/bin/udevadm ${systemd}/bin/udevadm
 
       sed -i /DEFAULT_SYS_DIR/d Makefile.in
       sed -i /DEFAULT_PROFILE_DIR/d conf/Makefile.in

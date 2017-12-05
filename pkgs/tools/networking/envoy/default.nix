@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, pkgconfig, bazel, c-ares, backward-cpp
 , libevent, gtest, gperftools, http-parser, lightstep-tracer-cpp
-, nghttp2, protobuf3_2, tclap, rapidjson, spdlog, boringssl, buildEnv
+, nghttp2, protobuf, tclap, rapidjson, spdlog, boringssl, buildEnv
 }:
 
 let
@@ -85,7 +85,7 @@ let
     };
 
     protobuf = {
-      pkg = protobuf3_2;
+      pkg = protobuf;
       srcs = ''glob(["lib/libproto*.so"])'';
       hdrs = ''glob(["include/google/protobuf/**/*.h"])'';
       includes = ''["include"]'';
@@ -201,7 +201,7 @@ let
     http-parser
     lightstep-tracer-cpp
     nghttp2
-    protobuf3_2
+    protobuf
     tclap
     rapidjson
     spdlog
@@ -233,7 +233,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./nixos.patch ];
 
-  hardeningDisable = "all";
+  hardeningDisable = [ "all" ];
   dontPatchELF = true;
   dontStrip = true;
 

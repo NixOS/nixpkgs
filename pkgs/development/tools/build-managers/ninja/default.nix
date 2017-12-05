@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     cp doc/manual.html $out/share/doc/ninja/
   '';
 
+  setupHook = ./setup-hook.sh;
+
   meta = with stdenv.lib; {
     description = "Small build system with a focus on speed";
     longDescription = ''

@@ -1,11 +1,11 @@
 { stdenv, fetchpatch, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "expat-2.2.4";
+  name = "expat-2.2.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/expat/${name}.tar.bz2";
-    sha256 = "17h1fb9zvqvf0sr78j211bngc6jpql5wzar8fg9b52jzjvdqbb83";
+    sha256 = "1xpd78sp7m34jqrw5x13bz7kgz0n6aj15wn4zj4gfx3ypbpk5p6r";
   };
 
   outputs = [ "out" "dev" ]; # TODO: fix referrers
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   outputMan = "dev"; # tiny page for a dev tool
 
-  doCheck = true;
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
   preCheck = ''
     patchShebangs ./run.sh

@@ -1,20 +1,18 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, perl }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, perl, pythonPackages, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "universal-ctags-${version}";
-  version = "2017-01-08";
+  version = "2017-09-22";
 
   src = fetchFromGitHub {
     owner = "universal-ctags";
     repo = "ctags";
-    rev = "9668032d8715265ca5b4ff16eb2efa8f1c450883";
-    sha256 = "0nwcf5mh3ba0g23zw7ym73pgpfdass412k2fy67ryr9vnc709jkj";
+    rev = "b9537289952cc7b26526aaff3094599d714d1729";
+    sha256 = "1kbw9ycl2ddzpfs1v4rbqa4gdhw4inrisf4awyaxb7zxfxmbzk1g";
   };
 
-  buildInputs = [ autoreconfHook pkgconfig ];
-
-  # remove when https://github.com/universal-ctags/ctags/pull/1267 is merged
-  patches = [ ./sed-test.patch ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig pythonPackages.docutils ];
+  buildInputs = stdenv.lib.optional stdenv.isDarwin libiconv;
 
   autoreconfPhase = ''
     ./autogen.sh --tmpdir

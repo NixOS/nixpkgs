@@ -17,14 +17,16 @@ in stdenv.mkDerivation rec {
   configFile = optionalString (conf!=null) (writeText "config.def.h" conf);
   preBuild = optionalString (conf!=null) "cp ${configFile} config.def.h";
 
-  buildInputs = [ pkgconfig libX11 ncurses libXext libXft fontconfig ] ++ extraLibs;
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libX11 ncurses libXext libXft fontconfig ] ++ extraLibs;
 
   installPhase = ''
     TERMINFO=$out/share/terminfo make install PREFIX=$out
   '';
 
   meta = {
-    homepage = http://st.suckless.org/;
+    homepage = https://st.suckless.org/;
+    description = "Simple Terminal for X from Suckless.org Community";
     license = licenses.mit;
     maintainers = with maintainers; [viric andsild];
     platforms = platforms.linux;

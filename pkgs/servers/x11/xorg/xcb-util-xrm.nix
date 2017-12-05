@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1h5vxwpd37dqfw9yj1l4zd9c5dj30r3g0szgysr6kd7xrqgaq04l";
   };
 
-  buildInputs = [ pkgconfig m4 libxcb xcbutil ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ m4 libxcb xcbutil ]
     ++ stdenv.lib.optional doCheck libX11;
   doCheck = true;
 

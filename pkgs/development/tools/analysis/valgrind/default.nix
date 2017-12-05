@@ -18,7 +18,15 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  patches = stdenv.lib.optionals (stdenv.isDarwin) [ ./valgrind-bzero.patch ];
+  preConfigure = stdenv.lib.optionalString stdenv.isDarwin (
+    let OSRELEASE = ''
+      $(awk -F '"' '/#define OSRELEASE/{ print $2 }' \
+      <${xnu}/Library/Frameworks/Kernel.framework/Headers/libkern/version.h)'';
+    in ''
+      echo "Don't derive our xnu version using uname -r."
+      substituteInPlace configure --replace "uname -r" "echo ${OSRELEASE}"
+    ''
+  );
 
   postPatch = stdenv.lib.optionalString (stdenv.isDarwin)
     # Apple's GCC doesn't recognize `-arch' (as of version 4.2.1, build 5666).

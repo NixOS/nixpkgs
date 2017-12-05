@@ -21,15 +21,18 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "man" "dev" ];
 
-  buildInputs =
-    [ linuxHeaders pkgconfig intltool gperf libcap kmod xz pam acl
-      /* cryptsetup */ libuuid m4 glib libxslt libgcrypt libgpgerror
-      libmicrohttpd kexectools libseccomp libffi audit lz4 libapparmor
-      iptables gnu-efi
+  nativeBuildInputs =
+    [ pkgconfig intltool gperf libxslt
       /* FIXME: we may be able to prevent the following dependencies
          by generating an autoconf'd tarball, but that's probably not
          worth it. */
       autoreconfHook gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
+    ];
+  buildInputs =
+    [ linuxHeaders libcap kmod xz pam acl
+      /* cryptsetup */ libuuid m4 glib libgcrypt libgpgerror
+      libmicrohttpd kexectools libseccomp libffi audit lz4 libapparmor
+      iptables gnu-efi
     ];
 
   configureFlags =
@@ -72,6 +75,15 @@ stdenv.mkDerivation rec {
     ];
 
   hardeningDisable = [ "stackprotector" ];
+
+  patches = [
+    # TODO: Remove this patch when we have a systemd version
+    # with https://github.com/systemd/systemd/pull/6678
+    (fetchpatch {
+        url = "https://github.com/systemd/systemd/commit/58a78ae77063eddfcd23ea272bd2e0ddc9ea3ff7.patch";
+        sha256 = "0g3pvqigs69mciw6lj3zg12dmxnhwxndwxdjg78af52xrp0djfg8";
+    })
+  ];
 
   preConfigure =
     ''

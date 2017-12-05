@@ -12,7 +12,7 @@ assert withQt  -> !withGtk && qt5  != null;
 with stdenv.lib;
 
 let
-  version = "2.4.0";
+  version = "2.4.2";
   variant = if withGtk then "gtk" else if withQt then "qt" else "cli";
 
 in stdenv.mkDerivation {
@@ -20,36 +20,24 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "http://www.wireshark.org/download/src/all-versions/wireshark-${version}.tar.xz";
-    sha256 = "011vvrj76z1azkpvyy2j40b1x1z56ymld508zfc4xw3gh8dv82w9";
+    sha256 = "0zglapd3sz08p2z9x8a5va3jnz17b3n5a1bskf7f2dgx6m3v5b6i";
   };
 
   cmakeFlags = optional withGtk "-DBUILD_wireshark_gtk=TRUE";
 
   nativeBuildInputs = [
-    bison cmake extra-cmake-modules flex
+    bison cmake extra-cmake-modules flex pkgconfig
   ] ++ optional withGtk wrapGAppsHook;
 
   buildInputs = [
-    gettext pcre perl pkgconfig libpcap lua5 libssh openssl libgcrypt
+    gettext pcre perl libpcap lua5 libssh openssl libgcrypt
     libgpgerror gnutls geoip c-ares python glib zlib
   ] ++ optionals withQt  (with qt5; [ qtbase qtmultimedia qtsvg qttools ])
     ++ optionals withGtk [ gtk3 librsvg gsettings_desktop_schemas ]
     ++ optionals stdenv.isLinux  [ libcap libnl ]
     ++ optionals stdenv.isDarwin [ SystemConfiguration ApplicationServices gmp ];
 
-  patches = [ ./wireshark-lookup-dumpcap-in-path.patch
-
-              # Backported from master. Will probably have to be dropped during next
-              # update.
-              (fetchpatch {
-                 name = "AUTHORS_add_newline_after_bracket";
-                 url = "https://code.wireshark.org/review/gitweb?p=wireshark.git;a=patch;h=27c6b12626d6e7b8e4d7a11784c2c5e2bfb87fde";
-                 sha256 = "1x30rkrq7dzgdlwrjv2r5ibdpdgwnn5wzvki77rdf13b0547vcw3";
-               })
-              # A file is missing from distribution. This should be fixed in upcoming
-              # releases
-              ./add_missing_udpdump_pod.patch
-            ];
+  patches = [ ./wireshark-lookup-dumpcap-in-path.patch ];
 
   postInstall = optionalString (withQt || withGtk) ''
     ${optionalString withGtk ''
@@ -78,7 +66,7 @@ in stdenv.mkDerivation {
       experts. It runs on UNIX, macOS and Windows.
     '';
 
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor fpletz ];
   };
 }

@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
     playerctl
   ];
 
-  buildPhases = [ "unpackPhase" "patchPhase" "installPhase" ];
   makeFlags = [
     "PREFIX=$(out)/bin"
   ];

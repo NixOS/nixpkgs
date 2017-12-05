@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "i3-${version}";
-  version = "4.13";
+  version = "4.14.1";
 
   src = fetchurl {
     url = "http://i3wm.org/downloads/${name}.tar.bz2";
-    sha256 = "12ngz32swh9n85xy0cz1lq16aqi9ys5hq19v589q9a97wn1k3hcl";
+    sha256 = "1cazmfbbx6n8c81h6x6pdayq3mxs2ml3adz165z8vapkc72kl1nh";
   };
 
   nativeBuildInputs = [ which pkgconfig makeWrapper ];
@@ -49,6 +49,8 @@ stdenv.mkDerivation rec {
     for program in $out/bin/i3-sensible-*; do
       sed -i 's/which/command -v/' $program
     done
+
+    install -vD -t $out/share/man/man1 man/*.{1,man}
   '';
 
   separateDebugInfo = true;

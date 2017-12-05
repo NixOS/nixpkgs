@@ -165,6 +165,7 @@ rec {
     useGoogleAPIs = true;
     useExtraSupportLibs = true;
     useGooglePlayServices = true;
+    useInstantApps = true;
   };
 
   androidsdk_7_0 = androidsdk {
@@ -179,6 +180,7 @@ rec {
     useGoogleAPIs = true;
     useExtraSupportLibs = true;
     useGooglePlayServices = true;
+    useInstantApps = true;
   };
 
   androidsdk_7_1_1 = androidsdk {
@@ -193,6 +195,7 @@ rec {
     useGoogleAPIs = true;
     useExtraSupportLibs = true;
     useGooglePlayServices = true;
+    useInstantApps = true;
   };
 
   androidsdk_8_0 = androidsdk {
@@ -207,6 +210,7 @@ rec {
     useGoogleAPIs = true;
     useExtraSupportLibs = true;
     useGooglePlayServices = true;
+    useInstantApps = true;
   };
 
   androidndk = import ./androidndk.nix {

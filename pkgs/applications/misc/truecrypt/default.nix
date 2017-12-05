@@ -46,7 +46,24 @@ library, use the 'NOGUI' parameter:
 
 stdenv.mkDerivation {
   name = "truecrypt-7.1a";
-  builder = ./builder.sh;
+
+  patchPhase = "patch -p0 < ${./gcc6.patch}";
+
+  preBuild = ''
+    cp $pkcs11h pkcs11.h
+    cp $pkcs11th pkcs11t.h
+    cp $pkcs11fh pkcs11f.h
+  '';
+
+  makeFlags = [
+    ''PKCS11_INC="`pwd`"''
+    (if wxGUI then "" else "NOGUI=1")
+  ];
+
+  installPhase = ''
+    install -D -t $out/bin Main/truecrypt
+    install -D License.txt $out/share/$name/LICENSE
+  '';
 
   src = fetchurl {
     url = https://fossies.org/linux/misc/old/TrueCrypt-7.1a-Source.tar.gz;
@@ -68,14 +85,14 @@ stdenv.mkDerivation {
     sha256 = "5ae6a4f32ca737e02def3bf314c9842fb89be82bf00b6f4022a97d8d565522b8";
   };
 
-  buildInputs = [ pkgconfig fuse devicemapper wxGTK nasm ]; 
-  makeFlags = if wxGUI then "" else "NOGUI=1";
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ fuse devicemapper wxGTK nasm ];
 
   meta = {
     description = "Free Open-Source filesystem on-the-fly encryption";
     homepage = http://www.truecrypt.org/;
     license = "TrueCrypt License Version 2.6";
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [ viric ryantm ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

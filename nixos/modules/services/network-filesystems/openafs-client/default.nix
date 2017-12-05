@@ -6,8 +6,8 @@ let
   cfg = config.services.openafsClient;
 
   cellServDB = pkgs.fetchurl {
-    url = http://dl.central.org/dl/cellservdb/CellServDB.2009-06-29;
-    sha256 = "be566f850e88130333ab8bc3462872ad90c9482e025c60a92f728b5bac1b4fa9";
+    url = http://dl.central.org/dl/cellservdb/CellServDB.2017-03-14;
+    sha256 = "1197z6c5xrijgf66rhaymnm5cvyg2yiy1i20y4ah4mrzmjx0m7sc";
   };
 
   afsConfig = pkgs.runCommand "afsconfig" {} ''
@@ -93,7 +93,6 @@ in
       preStop = ''
         ${pkgs.utillinux}/bin/umount /afs
         ${openafsPkgs}/sbin/afsd -shutdown
-        ${pkgs.kmod}/sbin/rmmod libafs
       '';
     };
   };

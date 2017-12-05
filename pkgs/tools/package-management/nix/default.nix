@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, perl, curl, bzip2, sqlite, openssl ? null, xz
 , pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli, readline
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
-, libseccomp, busybox
+, libseccomp, busybox, nlohmann_json
 , hostPlatform
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
@@ -39,7 +39,7 @@ let
 
     buildInputs = [ curl openssl sqlite xz ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-      ++ lib.optionals fromGit [ brotli readline ] # Since 1.12
+      ++ lib.optionals fromGit [ brotli readline nlohmann_json ] # Since 1.12
       ++ lib.optional stdenv.isLinux libseccomp
       ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && is112)
           (aws-sdk-cpp.override {
@@ -116,7 +116,7 @@ let
         a package, multi-user package management and easy setup of build
         environments.
       '';
-      homepage = http://nixos.org/;
+      homepage = https://nixos.org/;
       license = stdenv.lib.licenses.lgpl2Plus;
       maintainers = [ stdenv.lib.maintainers.eelco ];
       platforms = stdenv.lib.platforms.all;
@@ -152,21 +152,21 @@ in rec {
   nix = nixStable;
 
   nixStable = (common rec {
-    name = "nix-1.11.13";
+    name = "nix-1.11.15";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "0913975e262f8069fde6e71a5fae757bb3aef558c51d1711034c525146ea5913";
+      sha256 = "d20f20e45d519f54fae5c61d55eadcf53e6d7cdbde9870eeec80d499f9805165";
     };
   }) // { perl-bindings = nixStable; };
 
   nixUnstable = (lib.lowPrio (common rec {
-    name = "nix-1.12${suffix}";
-    suffix = "pre5511_c94f3d55";
+    name = "nix-unstable-1.12${suffix}";
+    suffix = "pre5732_fd10f6f2";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "c94f3d5575d7af5403274d1e9e2f3c9d72989751";
-      sha256 = "1akfzzm4f07wj6l7za916xv5rnh71pk3vl8dphgradjfqb37bv18";
+      rev = "fd10f6f2414521947ca60b9d1508d909f50e9faa";
+      sha256 = "17561jll94c8hdpxnyvdbjslnwr9g7ii4wqvrla7gfza236j9hff";
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings { nix = nixUnstable; }; };

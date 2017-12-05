@@ -1,5 +1,6 @@
 { stdenv, fetchurl, bash, callPackage, makeWrapper
-, clang, llvm, which, libcgroup }:
+, clang, llvm, which, libcgroup
+}:
 
 let
   afl-qemu = callPackage ./qemu.nix {};
@@ -7,13 +8,14 @@ let
     else if stdenv.system == "i686-linux" then "qemu-i386"
     else throw "afl: no support for ${stdenv.system}!";
 in
+
 stdenv.mkDerivation rec {
   name    = "afl-${version}";
-  version = "2.48b";
+  version = "2.51b";
 
   src = fetchurl {
     url    = "http://lcamtuf.coredump.cx/afl/releases/${name}.tgz";
-    sha256 = "00x7p8lqrpx60hwynl5dqwn6isr8yhl263avcwfw3dqc7v9lwhrz";
+    sha256 = "15xvjma2lpawg1wasnja9wmgrpss5mnm3f5xmh5yli5q6m5vjdfl";
   };
 
   # Note: libcgroup isn't needed for building, just for the afl-cgroup
@@ -23,7 +25,7 @@ stdenv.mkDerivation rec {
   buildPhase   = ''
     make PREFIX=$out
     cd llvm_mode
-    make PREFIX=$out CC=${clang}/bin/clang CXX=${clang}/bin/clang++
+    make PREFIX=$out
     cd ..
   '';
   installPhase = ''

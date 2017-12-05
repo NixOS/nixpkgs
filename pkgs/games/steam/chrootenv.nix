@@ -1,20 +1,15 @@
 { stdenv, lib, writeScript, buildFHSUserEnv, steam
-, steam-runtime, steam-runtime-i686 ? null
+, steam-runtime-wrapped, steam-runtime-wrapped-i686 ? null
 , withJava ? false
 , withPrimus ? false
 , extraPkgs ? pkgs: [ ] # extra packages to add to targetPkgs
 , nativeOnly ? false
 , runtimeOnly ? false
-, newStdcpp ? false
 }:
 
 let
   commonTargetPkgs = pkgs: with pkgs;
     let
-      primus2 = if newStdcpp then primus else primus.override {
-        stdenv = overrideInStdenv stdenv [ useOldCXXAbi ];
-        stdenv_i686 = overrideInStdenv pkgsi686Linux.stdenv [ useOldCXXAbi ];
-      };
       tzdir = "${pkgs.tzdata}/share/zoneinfo";
       # I'm not sure if this is the best way to add things like this
       # to an FHSUserEnv
@@ -37,9 +32,24 @@ let
       xdg_utils
       # Zoneinfo
       etc-zoneinfo
+      iana-etc
     ] ++ lib.optional withJava jdk
-      ++ lib.optional withPrimus primus2
+      ++ lib.optional withPrimus primus
       ++ extraPkgs pkgs;
+
+  ldPath = map (x: "/steamrt/${steam-runtime-wrapped.arch}/" + x) steam-runtime-wrapped.libs
+           ++ lib.optionals (steam-runtime-wrapped-i686 != null) (map (x: "/steamrt/${steam-runtime-wrapped-i686.arch}/" + x) steam-runtime-wrapped-i686.libs);
+
+  runSh = writeScript "run.sh" ''
+    #!${stdenv.shell}
+    runtime_paths="${lib.concatStringsSep ":" ldPath}"
+    if [ "$1" == "--print-steam-runtime-library-paths" ]; then
+      echo "$runtime_paths"
+      exit 0
+    fi
+    export LD_LIBRARY_PATH="$runtime_paths:$LD_LIBRARY_PATH"
+    exec "$@"
+  '';
 
 in buildFHSUserEnv rec {
   name = "steam";
@@ -68,16 +78,17 @@ in buildFHSUserEnv rec {
     xlibs.libpciaccess
 
     (steamPackages.steam-runtime-wrapped.override {
-      inherit nativeOnly runtimeOnly newStdcpp;
+      inherit nativeOnly runtimeOnly;
     })
   ];
 
   extraBuildCommands = ''
     mkdir -p steamrt
-    ln -s ../lib/steam-runtime steamrt/${steam-runtime.arch}
-    ${lib.optionalString (steam-runtime-i686 != null) ''
-      ln -s ../lib32/steam-runtime steamrt/${steam-runtime-i686.arch}
+    ln -s ../lib/steam-runtime steamrt/${steam-runtime-wrapped.arch}
+    ${lib.optionalString (steam-runtime-wrapped-i686 != null) ''
+      ln -s ../lib32/steam-runtime steamrt/${steam-runtime-wrapped-i686.arch}
     ''}
+    ln -s ${runSh} steamrt/run.sh
   '';
 
   extraInstallCommands = ''
@@ -100,19 +111,16 @@ in buildFHSUserEnv rec {
     targetPkgs = commonTargetPkgs;
     inherit multiPkgs extraBuildCommands;
 
-    runScript =
-      let ldPath = map (x: "/steamrt/${steam-runtime.arch}/" + x) steam-runtime.libs
-                 ++ lib.optionals (steam-runtime-i686 != null) (map (x: "/steamrt/${steam-runtime-i686.arch}/" + x) steam-runtime-i686.libs);
-      in writeScript "steam-run" ''
-        #!${stdenv.shell}
-        run="$1"
-        if [ "$run" = "" ]; then
-          echo "Usage: steam-run command-to-run args..." >&2
-          exit 1
-        fi
-        shift
-        export LD_LIBRARY_PATH=${lib.concatStringsSep ":" ldPath}:$LD_LIBRARY_PATH
-        exec "$run" "$@"
-      '';
+    runScript = writeScript "steam-run" ''
+      #!${stdenv.shell}
+      run="$1"
+      if [ "$run" = "" ]; then
+        echo "Usage: steam-run command-to-run args..." >&2
+        exit 1
+      fi
+      shift
+      export LD_LIBRARY_PATH=${lib.concatStringsSep ":" ldPath}:$LD_LIBRARY_PATH
+      exec "$run" "$@"
+    '';
   };
 }

@@ -1,13 +1,13 @@
 { stdenv, fetchurl, cmake, boost, python2}:
 
-let version = "1.8.1"; in
+let version = "1.8.2"; in
 
 stdenv.mkDerivation {
   name = "avro-c++-${version}";
 
   src = fetchurl {
     url = "mirror://apache/avro/avro-${version}/cpp/avro-cpp-${version}.tar.gz";
-    sha256 = "6559755ac525e908e42a2aa43444576cba91e522fe989088ee7f70c169bcc403";
+    sha256 = "1ars58bfw83s8f1iqbhnqp4n9wc9cxsph0gs2a8k7r9fi09vja2k";
   };
 
   buildInputs = [

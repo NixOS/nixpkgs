@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "screen-${version}";
-  version = "4.6.1";
+  version = "4.6.2";
 
   src = fetchurl {
     url = "mirror://gnu/screen/${name}.tar.gz";
-    sha256 = "0r3wpfxnr5kw73b8ndja26jk03nfbks06iyfmgb5aqb2rdkazadb";
+    sha256 = "0fps0fsipfbh7c2cnp7rjw9n79j0ysq21mk8hzifa33a1r924s8v";
   };
 
   configureFlags= [

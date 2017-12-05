@@ -27,6 +27,15 @@
     };
   }
   {
+    goPackagePath = "github.com/alecthomas/chroma";
+    fetch = {
+      type = "git";
+      url = "https://github.com/alecthomas/chroma";
+      rev = "b0295f66bdb7c61d54906003d7649185794e21b4";
+      sha256 = "1hnvv13nphbzr9xm21fys7lgm0kd6qlbk58vc8fi802lxzsfmdis";
+    };
+  }
+  {
     goPackagePath = "github.com/bep/gitmap";
     fetch = {
       type = "git";
@@ -40,8 +49,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/chaseadamsio/goorgeous";
-      rev = "677defd0e024333503d8c946dd4ba3f32ad3e5d2";
-      sha256 = "1mcncs3qdb62m9xwhkxy743ddvgsjfbmbl2djnhqmz1va05njna1";
+      rev = "098da33fde5f9220736531b3cb26a2dec86a8367";
+      sha256 = "1cwag5vzgrzy22rvcp12whzgqbgrmdmaxar0fl4nwqxdhy90s67k";
     };
   }
   {
@@ -54,12 +63,30 @@
     };
   }
   {
+    goPackagePath = "github.com/danwakefield/fnmatch";
+    fetch = {
+      type = "git";
+      url = "https://github.com/danwakefield/fnmatch";
+      rev = "cbb64ac3d964b81592e64f957ad53df015803288";
+      sha256 = "0cbf511ppsa6hf59mdl7nbyn2b2n71y0bpkzbmfkdqjhanqh1lqz";
+    };
+  }
+  {
     goPackagePath = "github.com/dchest/cssmin";
     fetch = {
       type = "git";
       url = "https://github.com/dchest/cssmin";
       rev = "fb8d9b44afdc258bfff6052d3667521babcb2239";
       sha256 = "09sdijfx5d05z4cd5k6lhl7k3kbpdf2amzlngv15h5v0fff9qw4s";
+    };
+  }
+  {
+    goPackagePath = "github.com/dlclark/regexp2";
+    fetch = {
+      type = "git";
+      url = "https://github.com/dlclark/regexp2";
+      rev = "487489b64fb796de2e55f4e8a4ad1e145f80e957";
+      sha256 = "144s81ndviwhyy20ipxvvfvap8phv5p762glxrz6aqxprkxfarj5";
     };
   }
   {
@@ -204,15 +231,6 @@
       url = "https://github.com/nicksnyder/go-i18n";
       rev = "3e70a1a463008cea6726380c908b1a6a8bdf7b24";
       sha256 = "0fxjgmwn9927wckl2xx8byv64cxgc0yxdwpfzval5n3wm5l5ij1i";
-    };
-  }
-  {
-    goPackagePath = "github.com/pelletier/go-buffruneio";
-    fetch = {
-      type = "git";
-      url = "https://github.com/pelletier/go-buffruneio";
-      rev = "c37440a7cf42ac63b919c752ca73a85067e05992";
-      sha256 = "0l83p1gg6g5mmhmxjisrhfimhbm71lwn1r2w7d6siwwqm9q08sd2";
     };
   }
   {

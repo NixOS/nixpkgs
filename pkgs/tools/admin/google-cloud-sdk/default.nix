@@ -1,33 +1,34 @@
-{stdenv, fetchurl, python27, python27Packages, makeWrapper}:
-
-with python27Packages;
+{ stdenv, lib, fetchurl, python, cffi, cryptography, pyopenssl, crcmod, google-compute-engine, makeWrapper }:
 
 # other systems not supported yet
-assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux" || stdenv.system == "x86_64-darwin";
+let
+  pythonInputs = [ cffi cryptography pyopenssl crcmod google-compute-engine ];
+  pythonPath = lib.makeSearchPath python.sitePackages pythonInputs;
 
-stdenv.mkDerivation rec {
+  sources = name: system: {
+    i686-linux = {
+      url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-linux-x86.tar.gz";
+      sha256 = "0aq938s1w9mzj60avmcc68kgll54pl7635vl2mi89f6r56n0xslp";
+    };
+
+    x86_64-darwin = {
+      url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-darwin-x86_64.tar.gz";
+      sha256 = "13k2i1svry9q800s1jgf8jss0rzfxwk6qci3hsy1wrb9b2mwlz5g";
+    };
+
+    x86_64-linux = {
+      url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-linux-x86_64.tar.gz";
+      sha256 = "1kvaz8p1iflsi85wwi7lb6km6frj70xsricyz1ah0sw3q71zyqmc";
+    };
+  }.${system};
+
+in stdenv.mkDerivation rec {
   name = "google-cloud-sdk-${version}";
-  version = "161.0.0";
+  version = "177.0.0";
 
-  src =
-    if stdenv.system == "i686-linux" then
-      fetchurl {
-        url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-linux-x86.tar.gz";
-        sha256 = "43a78a9d2c3ee9d9e50200b1e90512cd53ded40b56e05effe31fe9847b1bdd4c";
-      }
-    else if stdenv.system == "x86_64-darwin" then
-      fetchurl {
-        url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-darwin-x86_64.tar.gz";
-        sha256 = "0706dbea1279be2bc98a497d1bfed61a9cc29c305d908a376bcdb4403035b323";
-      }
-    else
-      fetchurl {
-        url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-linux-x86_64.tar.gz";
-        sha256 = "7aa6094d1f9c87f4c2c4a6bdad6a1113aac5e72ea673e659d9acbb059dfd037e";
-      };
+  src = fetchurl (sources name stdenv.system);
 
-
-  buildInputs = [python27 makeWrapper];
+  buildInputs = [ python makeWrapper ];
 
   phases = [ "installPhase" "fixupPhase" ];
 
@@ -46,15 +47,12 @@ stdenv.mkDerivation rec {
         programPath="$out/google-cloud-sdk/bin/$program"
         binaryPath="$out/bin/$program"
         wrapProgram "$programPath" \
-            --set CLOUDSDK_PYTHON "${python27}/bin/python" \
-            --prefix PYTHONPATH : "$(toPythonPath ${cffi}):$(toPythonPath ${cryptography}):$(toPythonPath ${pyopenssl}):$(toPythonPath ${crcmod})"
+            --set CLOUDSDK_PYTHON "${python}/bin/python" \
+            --prefix PYTHONPATH : "${pythonPath}"
 
         mkdir -p $out/bin
         ln -s $programPath $binaryPath
     done
-
-    # install man pages
-    mv "$out/google-cloud-sdk/help/man" "$out"
 
     # setup bash completion
     mkdir -p "$out/etc/bash_completion.d/"
@@ -68,11 +66,10 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Tools for the google cloud platform";
     longDescription = "The Google Cloud SDK. This package has the programs: gcloud, gsutil, and bq";
-    version = version;
     # This package contains vendored dependencies. All have free licenses.
     license = licenses.free;
-    homepage = https://cloud.google.com/sdk/;
-    maintainers = with maintainers; [stephenmw zimbatm];
-    platforms = with platforms; linux ++ darwin;
+    homepage = "https://cloud.google.com/sdk/";
+    maintainers = with maintainers; [ stephenmw zimbatm ];
+    platforms = [ "i686-linux" "x86_64-linux" "x86_64-darwin" ];
   };
 }

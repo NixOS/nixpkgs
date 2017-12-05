@@ -1,0 +1,12 @@
+diff -Naur ProCaptureForLinux_3589/src/sources/ospi/ospi-linux.h ProCaptureForLinux_3589_new/src/sources/ospi/ospi-linux.h
+--- ProCaptureForLinux_3589/src/sources/ospi/ospi-linux.h	2017-08-17 02:46:07.000000000 -0700
++++ ProCaptureForLinux_3589_new/src/sources/ospi/ospi-linux.h	2017-09-03 18:13:31.843510536 -0700
+@@ -172,7 +172,7 @@
+ #else
+     struct completion       done;
+ #endif
+-    wait_queue_t            waitq; // for multi wait
++    wait_queue_entry_t      waitq; // for multi wait
+ };
+ typedef struct _os_event_t *os_event_t;
+ 

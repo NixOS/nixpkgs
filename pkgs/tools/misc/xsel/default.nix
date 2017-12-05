@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "04mrc8j0rr7iy1k6brfxnx26pmxm800gh4nqrxn6j2lz6vd5y9m5";
   };
 
-  buildInputs = [ libX11 autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ libX11 ];
 
   # We need a README file, otherwise autoconf complains.
   postUnpack = ''

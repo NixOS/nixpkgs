@@ -17,11 +17,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "xdg-utils-${version}";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchurl {
     url = "https://portland.freedesktop.org/download/${name}.tar.gz";
-    sha256 = "09a1pk3ifsndc5qz2kcd1557i137gpgnv3d739pv22vfayi67pdh";
+    sha256 = "1k4b4m3aiyqn9k12a0ihcdahzlspl3zhskmm1d7228dvqvi546cm";
   };
 
   # just needed when built from git
@@ -45,6 +45,9 @@ stdenv.mkDerivation rec {
 
     substituteInPlace $out/bin/xdg-mime \
       --replace "/usr/bin/file" "${file}/bin/file"
+
+    substituteInPlace $out/bin/xdg-email \
+      --replace "/bin/echo" "${coreutils}/bin/echo"
 
     sed 's# which # type -P #g' -i "$out"/bin/*
   '';

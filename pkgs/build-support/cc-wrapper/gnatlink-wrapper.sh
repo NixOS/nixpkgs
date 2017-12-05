@@ -1,6 +1,10 @@
 #! @shell@
-set -eu -o pipefail
+set -eu -o pipefail +o posix
 shopt -s nullglob
+
+if (( "${NIX_DEBUG:-0}" >= 7 )); then
+    set -x
+fi
 
 # N.B. Gnat is not used during bootstrapping, so we don't need to
 # worry about the old bash empty array `set -u` workarounds.
@@ -24,17 +28,13 @@ extraBefore=()
 #export NIX_@infixSalt@_LDFLAGS_SET=1
 
 # Optionally print debug info.
-if [ -n "${NIX_DEBUG:-}" ]; then
+if (( "${NIX_DEBUG:-0}" >= 1 )); then
     echo "extra flags before to @prog@:" >&2
     printf "  %q\n" "${extraBefore[@]}"  >&2
     echo "original flags to @prog@:" >&2
     printf "  %q\n" "$@" >&2
     echo "extra flags after to @prog@:" >&2
     printf "  %q\n" "${extraAfter[@]}" >&2
-fi
-
-if [ -n "$NIX_@infixSalt@_GNAT_WRAPPER_EXEC_HOOK" ]; then
-    source "$NIX_@infixSalt@_GNAT_WRAPPER_EXEC_HOOK"
 fi
 
 exec @prog@ "${extraBefore[@]}" "$@" "${extraAfter[@]}"

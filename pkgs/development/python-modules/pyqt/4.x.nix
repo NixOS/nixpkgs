@@ -37,7 +37,8 @@ in buildPythonPackage {
     ${python.executable} configure.py $configureFlags "''${configureFlagsArray[@]}"
   '';
 
-  buildInputs = [ pkgconfig makeWrapper qt4 lndir dbus_libs ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ makeWrapper qt4 lndir dbus_libs ];
 
   propagatedBuildInputs = [ sip ];
 

@@ -23,8 +23,9 @@ stdenv.mkDerivation {
     sha256 = "035342rr39zp7krp08z0xhcl73gqbqyilshgmljq0ynfrxxckn35";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    python cython pkgconfig wrapPython
+    python cython wrapPython
     SDL2 libpng ffmpeg freetype glew mesa fribidi zlib pygame_sdl2 glib
   ];
 

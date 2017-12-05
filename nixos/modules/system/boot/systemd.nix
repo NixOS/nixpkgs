@@ -639,11 +639,7 @@ in
         Rules for creating and cleaning up temporary files
         automatically. See
         <citerefentry><refentrytitle>tmpfiles.d</refentrytitle><manvolnum>5</manvolnum></citerefentry>
-        for the exact format. You should not use this option to create
-        files required by systemd services, since there is no
-        guarantee that <command>systemd-tmpfiles</command> runs when
-        the system is reconfigured using
-        <command>nixos-rebuild</command>.
+        for the exact format.
       '';
     };
 
@@ -879,7 +875,12 @@ in
     systemd.services.systemd-remount-fs.restartIfChanged = false;
     systemd.services.systemd-update-utmp.restartIfChanged = false;
     systemd.services.systemd-user-sessions.restartIfChanged = false; # Restart kills all active sessions.
-    systemd.services.systemd-logind.restartTriggers = [ config.environment.etc."systemd/logind.conf".source ];
+    # Restarting systemd-logind breaks X11
+    # - upstream commit: https://cgit.freedesktop.org/xorg/xserver/commit/?id=dc48bd653c7e101
+    # - systemd announcement: https://github.com/systemd/systemd/blob/22043e4317ecd2bc7834b48a6d364de76bb26d91/NEWS#L103-L112
+    # - this might be addressed in the future by xorg
+    #systemd.services.systemd-logind.restartTriggers = [ config.environment.etc."systemd/logind.conf".source ];
+    systemd.services.systemd-logind.restartIfChanged = false;
     systemd.services.systemd-logind.stopIfChanged = false;
     systemd.services.systemd-journald.restartTriggers = [ config.environment.etc."systemd/journald.conf".source ];
     systemd.services.systemd-journald.stopIfChanged = false;

@@ -1,18 +1,18 @@
-{ lib, fetchurl, buildPythonPackage, isPy3k }:
+{ stdenv, fetchPypi, buildPythonPackage, isPy3k }:
 
 buildPythonPackage rec {
-  pname = "pywebdav";
-  name = "${pname}-${version}";
+  pname = "PyWebDAV";
   version = "0.9.8";
+  name = "${pname}-${version}";
   disabled = isPy3k;
-  src = fetchurl {
-    url = "mirror://pypi/p/pywebdav/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "1v10vg79h85milnq8w7yd75qq5z6297ywkn9b2kxajldzwqxn3ji";
   };
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://code.google.com/p/pywebdav/;
     description = "WebDAV library including a standalone server for python";
-    maintainers = with lib.maintainers; [ johbo ];
-    license = lib.licenses.gpl2Plus;
+    maintainers = with maintainers; [ johbo ];
+    license = licenses.gpl2Plus;
   };
 }

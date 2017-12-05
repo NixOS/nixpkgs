@@ -51,39 +51,12 @@ rec {
       patch = ./modinst-arg-list-too-long.patch;
     };
 
-  grsecurity_testing = throw ''
-    Upstream has ceased free support for grsecurity/PaX.
-
-    See https://grsecurity.net/passing_the_baton.php
-    and https://grsecurity.net/passing_the_baton_faq.php
-    for more information.
-  '';
-
   genksyms_fix_segfault =
     { name = "genksyms-fix-segfault";
       patch = ./genksyms-fix-segfault.patch;
     };
 
-  chromiumos_Kconfig_fix_entries_3_18 =
-    { name = "Kconfig_fix_entries_3_18";
-      patch = ./chromiumos-patches/fix-double-Kconfig-entry-3.18.patch;
-    };
-
-  chromiumos_no_link_restrictions =
-    { name = "chromium-no-link-restrictions";
-      patch = ./chromiumos-patches/no-link-restrictions.patch;
-    };
-
   cpu-cgroup-v2 = import ./cpu-cgroup-v2-patches;
-
-  DCCP_double_free_vulnerability_CVE-2017-6074 = rec
-    { name = "DCCP_double_free_vulnerability_CVE-2017-6074.patch";
-      patch = fetchpatch {
-        inherit name;
-        url = "https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git/patch/?id=5edabca9d4cff7f1f2b68f0bac55ef99d9798ba4";
-        sha256 = "10dmv3d3gj8rvj9h40js4jh8xbr5wyaqiy0kd819mya441mj8ll2";
-      };
-    };
 
   tag_hardened = rec {
     name = "tag-hardened";

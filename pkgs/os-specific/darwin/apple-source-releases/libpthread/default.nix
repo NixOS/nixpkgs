@@ -16,4 +16,8 @@ appleDerivation {
     cp -r sys $out/include
     cp -r sys/_pthread/*.h $out/include/sys/_types/
   '';
+
+  meta = {
+    platforms = stdenv.lib.platforms.darwin;
+  };
 }

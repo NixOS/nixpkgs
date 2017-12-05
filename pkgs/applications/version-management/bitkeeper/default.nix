@@ -15,8 +15,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    perl gperf bison groff libXft pkgconfig
+    perl gperf bison groff libXft
     pcre libtomcrypt libtommath lz4
   ];
 
@@ -50,5 +51,6 @@ stdenv.mkDerivation rec {
     license     = stdenv.lib.licenses.asl20;
     platforms   = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ wscott thoughtpolice ];
+    broken      = true; # seems to fail on recent glibc versions
   };
 }

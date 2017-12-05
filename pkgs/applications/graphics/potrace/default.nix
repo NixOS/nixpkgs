@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "potrace-${version}";
-  version = "1.14";
+  version = "1.15";
 
   src = fetchurl {
     url = "http://potrace.sourceforge.net/download/${version}/potrace-${version}.tar.gz";
-    sha256 = "0znr9i0ljb818qiwm22zw63g11a4v08gc5xkh0wbdp6g259vcwnv";
+    sha256 = "17ajildjp14shsy339xarh1lw1p0k60la08ahl638a73mh23kcx9";
   };
 
   configureFlags = [ "--with-libpotrace" ];

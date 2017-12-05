@@ -1,10 +1,12 @@
-with import ./lists.nix;
-with import ./strings.nix;
-with import ./trivial.nix;
-with import ./attrsets.nix;
-with import ./options.nix;
-with import ./debug.nix;
-with import ./types.nix;
+{ lib }:
+
+with lib.lists;
+with lib.strings;
+with lib.trivial;
+with lib.attrsets;
+with lib.options;
+with lib.debug;
+with lib.types;
 
 rec {
 
@@ -336,7 +338,7 @@ rec {
     # Type-check the remaining definitions, and merge them.
     mergedValue = foldl' (res: def:
       if type.check def.value then res
-      else throw "The option value `${showOption loc}' in `${def.file}' is not a ${type.description}.")
+      else throw "The option value `${showOption loc}' in `${def.file}' is not of type `${type.description}'.")
       (type.merge loc defsFinal) defsFinal;
 
     isDefined = defsFinal != [];

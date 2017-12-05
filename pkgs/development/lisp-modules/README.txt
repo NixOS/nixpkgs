@@ -1,16 +1,21 @@
-Prerequisite: have Quicklisp installed somehow.
+Want to add a package?  There are 3 simple steps!
+1. Add the needed system names to quicklisp-to-nix-systems.txt.
+2. cd <path to quicklisp-to-nix-systems.txt> ; nix-shell --run 'quicklisp-to-nix .'
+3. Add native libraries and whatever else is needed to quicklisp-to-nix-overrides.nix.
 
-Add to LD_LIBRARY_PATH all the things listed in quicklisp-to-nix-overrides.nix
-for library propagatedBuildInputs (a lot of these are done via addNativeLibs).
+To update to a more recent quicklisp dist modify
+lispPackages.quicklisp to have a more recent distinfo.
 
-Current list is:
-openssl fuse libuv mariadb libfixposix libev sqlite
+quicklisp-to-nix-system-info is responsible for installing a quicklisp
+package into an isolated environment and figuring out which packages
+are required by that system.  It also extracts other information that
+is readily available once the system is loaded.  The information
+produced by this program is fed into quicklisp-to-nix.  You usually
+don't need to run this program unless you're trying to understand why
+quicklisp-to-nix failed to handle a system.  The technique used by
+quicklisp-to-nix-system-info is described in its source.
 
-Add the needed system names to quicklisp-to-nix-systems.txt and load
-quicklisp-to-nix/ql-to-nix.lisp and call
-(ql-to-nix "/path/to/nixpkgs/pkgs/development/lisp-modules/") which is often
-just (ql-to-nix ".")
-
-Add native libraries and whatever else is needed to overrides.
-
-The lispPackages set is supposed to be buildable in its entirety.
+quicklisp-to-nix is responsible for reading
+quicklisp-to-nix-systems.txt, running quicklisp-to-nix-system-info,
+and generating the nix packages associated with the closure of
+quicklisp systems.

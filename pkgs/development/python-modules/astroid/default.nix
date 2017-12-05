@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A abstract syntax tree for Python with inference support";
-    homepage = http://bitbucket.org/logilab/astroid;
+    homepage = https://bitbucket.org/logilab/astroid;
     license = licenses.lgpl2;
     platforms = platforms.all;
     maintainers = with maintainers; [ nand0p ];

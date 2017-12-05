@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "c2ba4d6f94489acf8a8fac73982ae03d5ad4113146eb1f7d6558a956c57cb8ee";
   };
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ pure liblo ];
   makeFlags = "libdir=$(out)/lib prefix=$(out)/";
   setupHook = ../generic-setup-hook.sh;

@@ -3,11 +3,11 @@
 buildPythonPackage rec {
   pname = "m2r";
   name = "${pname}-${version}";
-  version = "0.1.7";
+  version = "0.1.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "771631d051a52764fe5b660f97ad028df3aff90c9859d345ccfd17a4c7c2ab39";
+    sha256 = "adfb86ebb7ff3fcd3ebb27ce8cd6f795c409a13f0c03363e265f17419ce5b9ab";
   };
 
   propagatedBuildInputs = [ mistune docutils ];

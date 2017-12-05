@@ -39,6 +39,7 @@ with luaPackages; stdenv.mkDerivation rec {
                   xcbutilxrm ];
 
   #cmakeFlags = "-DGENERATE_MANPAGES=ON";
+  cmakeFlags = "-DOVERRIDE_VERSION=${version}";
 
   LD_LIBRARY_PATH = "${stdenv.lib.makeLibraryPath [ cairo pango gobjectIntrospection ]}";
   GI_TYPELIB_PATH = "${pango.out}/lib/girepository-1.0";

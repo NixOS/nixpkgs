@@ -33,7 +33,8 @@
 
 , name ? "nixos-disk-image"
 
-, format ? "raw"
+, # Disk image format, one of qcow2, vpc, raw.
+  format ? "raw"
 }:
 
 with lib;
@@ -45,19 +46,7 @@ let
     raw   = "img";
   };
 
-  # Copied from https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/installer/cd-dvd/channel.nix
-  # TODO: factor out more cleanly
-
-  # Do not include these things:
-  #   - The '.git' directory
-  #   - Result symlinks from nix-build ('result', 'result-2', 'result-bin', ...)
-  #   - VIM/Emacs swap/backup files ('.swp', '.swo', '.foo.swp', 'foo~', ...)
-  filterFn = path: type: let basename = baseNameOf (toString path); in
-    if type == "directory" then basename != ".git"
-    else if type == "symlink" then builtins.match "^result(|-.*)$" basename == null
-    else builtins.match "^((|\..*)\.sw[a-z]|.*~)$" basename == null;
-
-  nixpkgs = builtins.filterSource filterFn pkgs.path;
+  nixpkgs = cleanSource pkgs.path;
 
   channelSources = pkgs.runCommand "nixos-${config.system.nixosVersion}" {} ''
     mkdir -p $out
@@ -85,21 +74,21 @@ let
   targets = map (x: x.target) contents;
 
   prepareImage = ''
-    export PATH=${pkgs.lib.makeSearchPathOutput "bin" "bin" prepareImageInputs}
+    export PATH=${makeSearchPathOutput "bin" "bin" prepareImageInputs}
 
     mkdir $out
     diskImage=nixos.raw
     truncate -s ${toString diskSize}M $diskImage
 
     ${if partitioned then ''
-      parted $diskImage -- mklabel msdos mkpart primary ext4 1M -1s
+      parted --script $diskImage -- mklabel msdos mkpart primary ext4 1M -1s
       offset=$((2048*512))
     '' else ''
       offset=0
     ''}
 
     mkfs.${fsType} -F -L nixos -E offset=$offset $diskImage
-  
+
     root="$PWD/root"
     mkdir -p $root
 

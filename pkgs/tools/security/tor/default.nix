@@ -3,14 +3,16 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "tor-0.3.0.10";
+  name = "tor-0.3.1.8";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${name}.tar.gz";
-    sha256 = "1cas30wk4bhcivi6l9dj7wwlz6pc2jj883x1vijax3b8l54nx3ls";
+    sha256 = "18dinpj03d036rashlad16lv7j2hba8gg742z07l37x5c242kxkx";
   };
 
   outputs = [ "out" "geoip" ];
+
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libevent openssl zlib ] ++

@@ -9,14 +9,14 @@ let
     } else fetchurl {
       name = "rescuetime-installer.deb";
       url = "https://www.rescuetime.com/installers/rescuetime_current_amd64.deb";
-      sha256 = "161f71kvcrilv9qxldwn8xsqs2g9c2f2g9wb5brbfc0lqbbc8n89";
+      sha256 = "1xjwaqz0gs12ndgw7c2f1nkvj0nqcl0bxhd54pwk0dwrx9pn9avz";
     };
 
 in
 
 stdenv.mkDerivation {
   # https://www.rescuetime.com/updates/linux_release_notes.html
-  name = "rescuetime-2.9.11.1285";
+  name = "rescuetime-2.9.11.1300";
   inherit src;
   buildInputs = [ dpkg makeWrapper ];
   unpackPhase = ''

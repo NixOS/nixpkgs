@@ -133,6 +133,7 @@ in with self; {
   LowMACAAnnotation = derive2 { name="LowMACAAnnotation"; version="0.99.3"; sha256="0ri301ci54s8wwkah1jccy5h44xg8yjk08j5b15qmdsm25hli4wm"; depends=[]; };
   LymphoSeqDB = derive2 { name="LymphoSeqDB"; version="0.99.2"; sha256="1cdyn2imjh4zr23szndc4vwyiacxs1jsp14gil2dyq9aifa25qr7"; depends=[]; };
   MafDb_1Kgenomes_phase1_hs37d5 = derive2 { name="MafDb.1Kgenomes.phase1.hs37d5"; version="3.4.0"; sha256="180z52y03gdkf36ycr76vcs1mz9qdbwywzxrbcj6yb5vcj8i5hdx"; depends=[BSgenome GenomicRanges IRanges VariantFiltering]; };
+  MafDb_1Kgenomes_phase3_hs37d5 = derive2 { name="MafDb.1Kgenomes.phase3.hs37d5"; version="3.4.0"; sha256="10968v506gmhzrnjz92z2p4484dbhgs6a20lkhs6f79bl66ckdbj"; depends=[BSgenome GenomicRanges IRanges VariantFiltering]; };
   MafDb_ESP6500SI_V2_SSA137 = derive2 { name="MafDb.ESP6500SI.V2.SSA137"; version="3.4.0"; sha256="1s5vqp3fnkswiv2slsh0wkd286psdhqcwvchcjq3gm4hq86h4pwh"; depends=[AnnotationDbi Biobase Biostrings GenomicRanges IRanges Rsamtools RSQLite VariantAnnotation VariantFiltering]; };
   MafDb_ESP6500SI_V2_SSA137_GRCh38 = derive2 { name="MafDb.ESP6500SI.V2.SSA137.GRCh38"; version="3.4.0"; sha256="1qaqqkshvrf7y6lwnnh8n47zvb35vn23l8vmvm29przz8y2xz22v"; depends=[BSgenome GenomicRanges IRanges VariantFiltering]; };
   MafDb_ESP6500SI_V2_SSA137_hs37d5 = derive2 { name="MafDb.ESP6500SI.V2.SSA137.hs37d5"; version="3.4.0"; sha256="0gxj4nghd99r6ivgzvs86gl8j1frr8laira4gld0vmfp0a4iv5fy"; depends=[BSgenome GenomicRanges IRanges VariantFiltering]; };

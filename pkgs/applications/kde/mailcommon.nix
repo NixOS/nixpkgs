@@ -3,7 +3,7 @@
   extra-cmake-modules, kdoctools,
   akonadi, akonadi-mime, karchive, kcodecs, kcompletion, kconfigwidgets,
   kdbusaddons, kdesignerplugin, kiconthemes, kio, kitemmodels, kldap,
-  kmailtransport, kwindowsystem, mailimporter, messagelib, phonon,
+  kmailtransport, kwindowsystem, mailimporter, messagelib, phonon, libkdepim
 }:
 
 mkDerivation {
@@ -16,7 +16,7 @@ mkDerivation {
   buildInputs = [
     akonadi akonadi-mime karchive kcodecs kcompletion kconfigwidgets kdbusaddons
     kdesignerplugin kiconthemes kio kitemmodels kldap kmailtransport
-    kwindowsystem mailimporter messagelib phonon
+    kwindowsystem mailimporter messagelib phonon libkdepim
   ];
   outputs = [ "out" "dev" ];
 }

@@ -102,7 +102,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = with pkgs; [ libvirt netcat-openbsd ];
+    environment.systemPackages = with pkgs; [ libvirt netcat-openbsd qemu_kvm ];
 
     boot.kernelModules = [ "tun" ];
 

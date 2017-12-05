@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "0wr4dandlfajhmg90nqyvwv61ikn9vdycji001310y3c4zfysprn";
   };
 
-  buildInputs = [ openssl pkgconfig libgcrypt commoncpp2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl libgcrypt commoncpp2 ];
 
   patches = [ ./gcc-4.6-fix.patch ];
 

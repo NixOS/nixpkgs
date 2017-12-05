@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "qgis-2.18.10";
+  name = "qgis-2.18.13";
 
   buildInputs = [ gdal qt4 flex openssl bison proj geos xlibsWrapper sqlite gsl qwt qscintilla
     fcgi libspatialindex libspatialite postgresql qjson qca2 txt2tags ] ++
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://qgis.org/downloads/${name}.tar.bz2";
-    sha256 = "1vrzxhnpzd75iia4xmhbxy90x0wlvj2w4210f0r8203hd2m4sxdj";
+    sha256 = "033l3wg3l7hv4642wmsdycjca1dw8p89sk9xyc51wpb3id17vgv2";
   };
 
   cmakeFlags = stdenv.lib.optional withGrass "-DGRASS_PREFIX7=${grass}/${grass.name}";

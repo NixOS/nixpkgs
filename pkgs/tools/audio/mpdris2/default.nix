@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     intltoolize -f
   '';
 
-  buildInputs = [ intltool autoreconfHook pythonPackages.wrapPython ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ intltool pythonPackages.wrapPython ];
   propagatedBuildInputs = with pythonPackages; [ python pygtk dbus-python  ];
   pythonPath = with pythonPackages; [ mpd pygtk dbus-python notify mutagen ];
   postInstall = "wrapPythonPrograms";

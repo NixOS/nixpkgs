@@ -102,16 +102,44 @@ fi
 extraBuildFlags+=(--option "build-users-group" "$buildUsersGroup")
 
 # Inherit binary caches from the host
-# TODO: will this still work with Nix 1.12 now that it has no perl? Probably not... 
+# TODO: will this still work with Nix 1.12 now that it has no perl? Probably not...
 binary_caches="$(@perl@/bin/perl -I @nix@/lib/perl5/site_perl/*/* -e 'use Nix::Config; Nix::Config::readConfig; print $Nix::Config::config{"binary-caches"};')"
 extraBuildFlags+=(--option "binary-caches" "$binary_caches")
 
-nixpkgs="$(readlink -f "$(nix-instantiate --find-file nixpkgs)")"
-export NIX_PATH="nixpkgs=$nixpkgs:nixos-config=$mountPoint/$NIXOS_CONFIG"
+# We only need nixpkgs in the path if we don't already have a system closure to install
+if [[ -z "$closure" ]]; then
+    nixpkgs="$(readlink -f "$(nix-instantiate --find-file nixpkgs)")"
+    export NIX_PATH="nixpkgs=$nixpkgs:nixos-config=$mountPoint/$NIXOS_CONFIG"
+fi
 unset NIXOS_CONFIG
 
-# TODO: do I need to set NIX_SUBSTITUTERS here or is the --option binary-caches above enough?
+# These get created in nixos-prepare-root as well, but we want to make sure they're here in case we're
+# running with --chroot. TODO: --chroot should just be split into a separate tool.
+mkdir -m 0755 -p "$mountPoint/dev" "$mountPoint/proc" "$mountPoint/sys"
 
+# Set up some bind mounts we'll want regardless of chroot or not
+mount --rbind /dev "$mountPoint/dev"
+mount --rbind /proc "$mountPoint/proc"
+mount --rbind /sys "$mountPoint/sys"
+
+# If we asked for a chroot, that means we're not actually installing anything (yeah I was confused too)
+# and we just want to run a command in the context of a $mountPoint that we're assuming has already been
+# set up by a previous nixos-install invocation. In that case we set up some remaining bind mounts and
+# exec the requested command, skipping the rest of the installation procedure.
+if [ -n "$runChroot" ]; then
+    mount -t tmpfs -o "mode=0755" none $mountPoint/run
+    rm -rf $mountPoint/var/run
+    ln -s /run $mountPoint/var/run
+    for f in /etc/resolv.conf /etc/hosts; do rm -f $mountPoint/$f; [ -f "$f" ] && cp -Lf $f $mountPoint/etc/; done
+    for f in /etc/passwd /etc/group;      do touch $mountPoint/$f; [ -f "$f" ] && mount --rbind -o ro $f $mountPoint/$f; done
+
+    if ! [ -L $mountPoint/nix/var/nix/profiles/system ]; then
+        echo "$0: installation not finished; cannot chroot into installation directory"
+        exit 1
+    fi
+    ln -s /nix/var/nix/profiles/system $mountPoint/run/current-system
+    exec chroot $mountPoint "${chrootCommand[@]}"
+fi
 
 # A place to drop temporary closures
 trap "rm -rf $tmpdir" EXIT
@@ -123,6 +151,9 @@ function closure() {
 }
 
 system_closure="$tmpdir/system.closure"
+# Use a FIFO for piping nix-store --export into nix-store --import, saving disk
+# I/O and space. nix-store --import is run by nixos-prepare-root.
+mkfifo $system_closure
 
 if [ -z "$closure" ]; then
     expr="(import <nixpkgs/nixos> {}).system"
@@ -132,7 +163,9 @@ else
     system_root=$closure
     # Create a temporary file ending in .closure (so nixos-prepare-root knows to --import it) to transport the store closure
     # to the filesytem we're preparing. Also delete it on exit!
-    nix-store --export $(nix-store -qR $closure) > $system_closure
+    # Run in background to avoid blocking while trying to write to the FIFO
+    # $system_closure refers to
+    nix-store --export $(nix-store -qR $closure) > $system_closure &
 fi
 
 channel_root="$(nix-env -p /nix/var/nix/profiles/per-user/root/channels -q nixos --no-name --out-path 2>/dev/null || echo -n "")"
@@ -145,9 +178,7 @@ nix-store --export $channel_root > $channel_closure
 # nixos-prepare-root doesn't currently do anything with file ownership, so we set it up here instead
 chown @root_uid@:@nixbld_gid@ $mountPoint/nix/store
 
-mount --rbind /dev $mountPoint/dev
-mount --rbind /proc $mountPoint/proc
-mount --rbind /sys $mountPoint/sys
+
 
 # Grub needs an mtab.
 ln -sfn /proc/mounts $mountPoint/etc/mtab

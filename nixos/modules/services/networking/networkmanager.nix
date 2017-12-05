@@ -32,6 +32,11 @@ let
     ipv6.ip6-privacy=2
     ethernet.cloned-mac-address=${cfg.ethernet.macAddress}
     wifi.cloned-mac-address=${cfg.wifi.macAddress}
+    ${optionalString (cfg.wifi.powersave != null)
+      ''wifi.powersave=${if cfg.wifi.powersave then "3" else "2"}''}
+
+    [device]
+    wifi.scan-rand-mac-address=${if cfg.wifi.scanRandMacAddress then "yes" else "no"}
   '';
 
   /*
@@ -130,7 +135,8 @@ in {
         default = { inherit networkmanager modemmanager wpa_supplicant
                             networkmanager_openvpn networkmanager_vpnc
                             networkmanager_openconnect networkmanager_fortisslvpn
-                            networkmanager_pptp networkmanager_l2tp; };
+                            networkmanager_pptp networkmanager_l2tp
+                            networkmanager_iodine; };
         internal = true;
       };
 
@@ -178,7 +184,27 @@ in {
       };
 
       ethernet.macAddress = macAddressOpt;
-      wifi.macAddress = macAddressOpt;
+
+      wifi = {
+        macAddress = macAddressOpt;
+
+        powersave = mkOption {
+          type = types.nullOr types.bool;
+          default = null;
+          description = ''
+            Whether to enable Wi-Fi power saving.
+          '';
+        };
+
+        scanRandMacAddress = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            Whether to enable MAC address randomization of a Wi-Fi device
+            during scanning.
+          '';
+        };
+      };
 
       useDnsmasq = mkOption {
         type = types.bool;
@@ -255,6 +281,9 @@ in {
       { source = "${networkmanager_strongswan}/etc/NetworkManager/VPN/nm-strongswan-service.name";
         target = "NetworkManager/VPN/nm-strongswan-service.name";
       }
+      { source = "${networkmanager_iodine}/etc/NetworkManager/VPN/nm-iodine-service.name";
+        target = "NetworkManager/VPN/nm-iodine-service.name";
+      }
     ] ++ optional (cfg.appendNameservers == [] || cfg.insertNameservers == [])
            { source = overrideNameserversScript;
              target = "NetworkManager/dispatcher.d/02overridedns";
@@ -278,6 +307,11 @@ in {
       name = "nm-openvpn";
       uid = config.ids.uids.nm-openvpn;
       extraGroups = [ "networkmanager" ];
+    }
+    {
+      name = "nm-iodine";
+      isSystemUser = true;
+      group = "networkmanager";
     }];
 
     systemd.packages = cfg.packages;

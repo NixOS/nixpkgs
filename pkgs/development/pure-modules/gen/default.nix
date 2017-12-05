@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   hsEnv = haskellPackages.ghcWithPackages (hsPkgs : [hsPkgs.language-c]);
-  buildInputs = [ pkgconfig hsEnv pure ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ hsEnv pure ];
   makeFlags = "libdir=$(out)/lib prefix=$(out)/";
 
   meta = {
@@ -20,6 +21,7 @@ stdenv.mkDerivation rec {
     homepage = http://puredocs.bitbucket.org/pure-gen.html;
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.linux;
+    hydraPlatforms = [];
     maintainers = with stdenv.lib.maintainers; [ asppsa ];
   };
 }

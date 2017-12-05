@@ -69,9 +69,6 @@ let
 
     enableParallelBuilding = true;
 
-    # FIXME needs gcc 4.9 in bootstrap tools
-    hardeningDisable = [ "stackprotector" ];
-
     preConfigure =
       ''
         configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3"
@@ -119,19 +116,16 @@ let
       platforms = platforms.all;
     };
   };
-
 in rec {
-
   perl = perl524;
 
   perl522 = common {
-    version = "5.22.3";
-    sha256 = "10q087l1ffdy3gpryr8z540jcnsr0dhm37raicyfqqkyvys1yd8v";
+    version = "5.22.4";
+    sha256 = "1yk1xn4wmnrf2ph02j28khqarpyr24qwysjzkjnjv7vh5dygb7ms";
   };
 
   perl524 = common {
-    version = "5.24.1";
-    sha256 = "1bqqb5ghfj4486nqr77kgsd8aff6a289jy7n2cdkznwvn34qbhg6";
+    version = "5.24.3";
+    sha256 = "1m2px85kq2fyp2d4rx3bw9kg3car67qfqwrs5vlv96dx0x8rl06b";
   };
-
 }

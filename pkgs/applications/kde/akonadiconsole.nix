@@ -2,7 +2,7 @@
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
   akonadi, akonadi-contacts, calendarsupport, kcalcore, kcompletion,
-  kconfigwidgets, kcontacts, kdbusaddons, kitemmodels, kpimtextedit,
+  kconfigwidgets, kcontacts, kdbusaddons, kitemmodels, kpimtextedit, libkdepim,
   ktextwidgets, kxmlgui, messagelib, qtbase,
 }:
 
@@ -16,6 +16,6 @@ mkDerivation {
   buildInputs = [
     akonadi akonadi-contacts calendarsupport kcalcore kcompletion kconfigwidgets
     kcontacts kdbusaddons kitemmodels kpimtextedit ktextwidgets kxmlgui
-    messagelib qtbase
+    messagelib qtbase libkdepim
   ];
 }

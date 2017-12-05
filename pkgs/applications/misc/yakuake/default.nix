@@ -18,15 +18,14 @@
 , qtx11extras
 }:
 
-let
+mkDerivation rec {
   pname = "yakuake";
-  version = "3.0.3";
-in mkDerivation rec {
+  version = "3.0.4";
   name = "${pname}-${version}";
 
     src = fetchurl {
       url = "http://download.kde.org/stable/${pname}/${version}/src/${name}.tar.xz";
-      sha256 = "ef51aa3325916d352fde17870cf706397e41105103e4c9289cc4032a1b8609a7";
+      sha256 = "1q31p1cqhz8b2bikqjrr7fww86kaq723ib4ys2zwablfa1ybbqhh";
     };
 
     buildInputs = [

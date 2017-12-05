@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "C++ wrappers for ATK accessibility toolkit";
     license = stdenv.lib.licenses.lgpl21Plus;
-    homepage = http://gtkmm.org;
+    homepage = https://gtkmm.org;
     platforms = stdenv.lib.platforms.unix;
   };
 }

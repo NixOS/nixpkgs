@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, cmake, gettext, pkgconfig, extra-cmake-modules
+{ stdenv, fetchurl, cmake, gettext, pkgconfig, extra-cmake-modules
 , boost, subversion, apr, aprutil, kwindowsystem
 , qtscript, qtwebkit, grantlee, karchive, kconfig, kcoreaddons, kguiaddons, kiconthemes, ki18n
 , kitemmodels, kitemviews, kio, kparts, sonnet, kcmutils, knewstuff, knotifications
@@ -6,7 +6,7 @@
 
 let
   pname = "kdevplatform";
-  version = "5.1.1";
+  version = "5.1.2";
 
 in
 stdenv.mkDerivation rec {
@@ -14,16 +14,8 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kde/stable/kdevelop/${version}/src/${name}.tar.xz";
-    sha256 = "3159440512b1373c1a4b35f401ba1f81217de9578372b45137af141eeda6e726";
+    sha256 = "e622ddad552a678baaf1166d5cbdc5fd1192d2324300c52ef2d25f1c6778664a";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "kdevplatform-project-selection.patch";
-      url = "https://cgit.kde.org/kdevplatform.git/patch/?id=da4c0fdfcf21dc2a8f48a2b1402213a32effd47a";
-      sha256 = "16ws8l6dciy2civjnsaj03ml2bzvg4a9g7gd4iyx4hprw65zrcxm";
-    })
-  ];
 
   nativeBuildInputs = [ cmake gettext pkgconfig extra-cmake-modules ];
 

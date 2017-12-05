@@ -6,15 +6,15 @@
 }:
 
 assert guiSupport -> (dbus_libs != null);
-
 with stdenv.lib;
+
 stdenv.mkDerivation rec {
   name = "qbittorrent-${version}";
-  version = "3.3.13";
+  version = "3.3.16";
 
   src = fetchurl {
     url = "mirror://sourceforge/qbittorrent/${name}.tar.xz";
-    sha256 = "13a6rv4f4xgbjh6nai7fnqb04rh7i2kjpp7y2z5j1wyy4x8pncc4";
+    sha256 = "0mxyn2pajvb55bhcaz55v64p2xzy15p0yy174s62b5y3f8cac27a";
   };
 
   nativeBuildInputs = [ pkgconfig which ];
@@ -22,9 +22,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost libtorrentRasterbar qtbase qttools ]
     ++ optional guiSupport dbus_libs;
 
-  preConfigure = ''
-    export QT_QMAKE=$(dirname "$QMAKE")
-  '';
+  # Otherwise qm_gen.pri assumes lrelease-qt5, which does not exist.
+  QMAKE_LRELEASE = "lrelease";
 
   configureFlags = [
     "--with-boost-libdir=${boost.out}/lib"
@@ -33,11 +32,7 @@ stdenv.mkDerivation rec {
     (if webuiSupport then "" else "--disable-webui")
   ] ++ optional debugSupport "--enable-debug";
 
-  # The lrelease binary is named lrelease instead of lrelease-qt4
-  patches = [ ./fix-lrelease.patch ];
-
-  # https://github.com/qbittorrent/qBittorrent/issues/1992
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   meta = {
     description = "Free Software alternative to µtorrent";

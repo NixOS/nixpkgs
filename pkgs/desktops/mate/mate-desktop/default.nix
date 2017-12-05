@@ -11,26 +11,22 @@ stdenv.mkDerivation rec {
     sha256 = "12iv2y4dan962fs7vkkxbjkp77pbvjnwfa43ggr0zkdsc3ydjbbg";
   };
 
-  propagatedUserEnvPkgs = [
-    gnome3.gnome_themes_standard
-  ];
-
-  buildInputs = [
-    gnome3.dconf
-    gnome3.gtk
-    gnome3.defaultIconTheme
-  ];
-
   nativeBuildInputs = [
     pkgconfig
     intltool
     wrapGAppsHook
   ];
 
+  buildInputs = [
+    gnome3.dconf
+    gnome3.gtk
+  ];
+
   meta = with stdenv.lib; {
     description = "Library with common API for various MATE modules";
     homepage = http://mate-desktop.org;
     license = licenses.gpl2;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
+    maintainers = [ maintainers.romildo ];
   };
 }

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     sha256 = "1svhbjibm448ybq6gnjjzj0ak42srhihssafj0w402aj71lgaq4a";
   };
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=pedantic";
+  NIX_CFLAGS_COMPILE = "-Wno-format -Wno-misleading-indentation -Wno-error";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ python3 dbus_libs evemu frame grail libX11 libXext libXi libXtst xorgserver ];

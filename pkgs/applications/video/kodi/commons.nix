@@ -77,7 +77,7 @@ rec {
     # them. Symlinking .so, as setting LD_LIBRARY_PATH is of no use
     installPhase = let n = namespace; in ''
       make install
-      ln -s $out/lib/addons/${n}/${n}.so.${version} $out/${pluginDir}/${n}.so
+      ln -s $out/lib/addons/${n}/${n}.so.${version} $out/${pluginDir}/${n}/${n}.so.${version}
     '';
 
   };

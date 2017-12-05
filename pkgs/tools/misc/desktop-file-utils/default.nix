@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1ianvr2a69yjv4rpyv30w7yjsmnsb23crrka5ndqxycj4rkk4dc4";
   };
 
-  buildInputs = [ pkgconfig glib libintlOrEmpty ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib libintlOrEmpty ];
 
   NIX_LDFLAGS = optionalString stdenv.isDarwin "-lintl";
 

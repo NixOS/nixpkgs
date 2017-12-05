@@ -11,19 +11,32 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ autoconf popt zlib ];
 
+  patches = [
+    # patch has been also sent upstream and might be included in future versions
+    ./fix-missing-stdint.patch
+  ];
+
   preConfigure = ''
     ./autogen.sh
+    configureFlagsArray+=("--datadir=$out/share/dbench")
   '';
 
   postInstall = ''
-    cp -R loadfiles/ $out/share/
+    cp -R loadfiles/* $out/share/dbench/doc/dbench/loadfiles
+
+    # dbench looks here for the file
+    ln -s doc/dbench/loadfiles/client.txt $out/share/dbench/client.txt
+
+    # backwards compatible to older nixpkgs packaging introduced by
+    # 3f27be8e5d5861cd4b9487d6c5212d88bf24316d
+    ln -s dbench/doc/dbench/loadfiles $out/share/loadfiles
   '';
 
   meta = with stdenv.lib; {
     description = "Filesystem benchmark tool based on load patterns";
     homepage = https://dbench.samba.org/;
     license = licenses.gpl3;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
   };
 }

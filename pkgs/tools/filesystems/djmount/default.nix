@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "0kqf0cy3h4cfiy5a2sigmisx0lvvsi1n0fbyb9ll5gacmy1b8nxa";
   };
 
-  buildInputs = [ pkgconfig fuse];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ fuse];
 
   meta = {
     homepage = http://djmount.sourceforge.net/;

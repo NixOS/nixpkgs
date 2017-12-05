@@ -7,12 +7,12 @@
 
 buildPythonPackage rec {
   pname = "requests_ntlm";
-  version = "1.0.0";
+  version = "1.1.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0hb689p2jyb867c2wlq5mjkqxgc0jq6lxv3rmhw8rq9qangk3jjk";
+    sha256 = "9189c92e8c61ae91402a64b972c4802b2457ce6a799d658256ebf084d5c7eb71";
   };
 
   propagatedBuildInputs = [ ntlm-auth requests ];

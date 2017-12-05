@@ -9,12 +9,24 @@ stdenv.mkDerivation rec {
     sha256 = "1bdvppyfx2184zmzcylskd87cxv56d8f32jf7g1qc8779l2hszjp";
   };
 
-  buildInputs = [
-    cmake imagemagick
+  patches = [
+  (fetchurl {
+    url = "https://git.archlinux.org/svntogit/community.git/plain/cuneiform/trunk/build-fix.patch?id=a2ec92f05de006b56d16ac6a6c370d54a554861a";
+    sha256 = "19cmrlx4khn30qqrpyayn7bicg8yi0wpz1x1bvqqrbvr3kwldxyj";
+  })
   ];
+
+  postPatch = ''
+    rm cuneiform_src/Kern/hhh/tigerh/h/strings.h
+  '';
+
+  buildInputs = [ imagemagick ];
+
+  nativeBuildInputs = [ cmake ];
 
   meta = {
     description = "Multi-language OCR system";
     platforms = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [raskin];
   };
 }

@@ -15,7 +15,8 @@ buildGoPackage rec {
 
   goDeps = ./deps.nix;
 
-  buildInputs = [ pkgconfig libappindicator-gtk3 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libappindicator-gtk3 ];
 
   meta = with stdenv.lib; {
     description = "Simple application tray for syncthing";

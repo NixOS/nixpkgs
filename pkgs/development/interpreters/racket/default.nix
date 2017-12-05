@@ -33,11 +33,11 @@ in
 
 stdenv.mkDerivation rec {
   name = "racket-${version}";
-  version = "6.9";
+  version = "6.11";
 
   src = fetchurl {
-    url = "http://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
-    sha256 = "1cd218ee2ba1dc683de858a866c6666eb72a11adee8d1df6cdd59c5c5a47b714";
+    url = "https://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
+    sha256 = "1nk7705x24jjlbqqhj8yvbgqkfscxx3m81bry1g56kjxysjmf3sw";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -47,13 +47,14 @@ stdenv.mkDerivation rec {
   buildInputs = [ fontconfig libffi libtool makeWrapper sqlite ];
 
   preConfigure = ''
+    unset AR
     substituteInPlace src/configure --replace /usr/bin/uname ${coreutils}/bin/uname
     mkdir src/build
     cd src/build
   '';
 
   shared = if stdenv.isDarwin then "dylib" else "shared";
-  configureFlags = [ "--enable-${shared}" "--enable-lt=${libtool}/bin/libtool" ]
+  configureFlags = [ "--enable-${shared}"  "--enable-lt=${libtool}/bin/libtool" ]
                    ++ stdenv.lib.optional disableDocs [ "--disable-docs" ]
                    ++ stdenv.lib.optional stdenv.isDarwin [ "--enable-xonx" ];
 
@@ -81,6 +82,6 @@ stdenv.mkDerivation rec {
     homepage = http://racket-lang.org/;
     license = licenses.lgpl3;
     maintainers = with maintainers; [ kkallio henrytill vrthra ];
-    platforms = platforms.x86_64;
+    platforms = [ "x86_64-linux" ];
   };
 }

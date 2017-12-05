@@ -2,7 +2,7 @@
   asciidoc, libxml2, libxslt, docbook_xml_xslt }:
 
 pythonPackages.buildPythonApplication rec {
-  version = "7.1.1";
+  version = "7.1.2";
   name = "offlineimap-${version}";
   namePrefix = "";
 
@@ -10,7 +10,7 @@ pythonPackages.buildPythonApplication rec {
     owner = "OfflineIMAP";
     repo = "offlineimap";
     rev = "v${version}";
-    sha256 = "12fv6fzi3cb0hkvs4h5vj2i440d85wzjjyjl90zvyxvlfy0pmljl";
+    sha256 = "1bvlbw3bsx3qs8np1qdqbhpdr9qykzsql9684gm7gg84gw51i667";
   };
 
   postPatch = ''
@@ -21,7 +21,7 @@ pythonPackages.buildPythonApplication rec {
   doCheck = false;
 
   nativeBuildInputs = [ asciidoc libxml2 libxslt docbook_xml_xslt ];
-  propagatedBuildInputs = [ pythonPackages.six ];
+  propagatedBuildInputs = [ pythonPackages.six pythonPackages.kerberos ];
 
   postInstall = ''
     make -C docs man

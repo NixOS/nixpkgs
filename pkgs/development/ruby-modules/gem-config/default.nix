@@ -22,6 +22,7 @@
 , pkgconfig , ncurses, xapian_1_2_22, gpgme, utillinux, fetchpatch, tzdata, icu, libffi
 , cmake, libssh2, openssl, mysql, darwin, git, perl, pcre, gecode_3, curl
 , libmsgpack, qt48, libsodium, snappy, libossp_uuid, lxc, libpcap, xlibs, gtk2, buildRubyGem
+, cairo, re2, rake, gobjectIntrospection, gdk_pixbuf
 }@args:
 
 let
@@ -38,7 +39,10 @@ let
 in
 
 {
-  atk = attrs: { buildInputs = [ gtk2 pcre pkgconfig ]; };
+  atk = attrs: {
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ gtk2 pcre rake ];
+  };
 
   bundler = attrs:
     let
@@ -56,7 +60,13 @@ in
     };
 
   cairo = attrs: {
-    buildInputs = [ gtk2 pcre pkgconfig xlibs.libpthreadstubs xlibs.libXdmcp];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ gtk2 pcre xlibs.libpthreadstubs xlibs.libXdmcp];
+  };
+
+  cairo-gobject = attrs: {
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ cairo pcre xlibs.libpthreadstubs xlibs.libXdmcp ];
   };
 
   capybara-webkit = attrs: {
@@ -65,6 +75,10 @@ in
 
   charlock_holmes = attrs: {
     buildInputs = [ which icu zlib ];
+  };
+
+  curb = attrs: {
+    buildInputs = [ curl ];
   };
 
   dep-selector-libgecode = attrs: {
@@ -80,24 +94,47 @@ in
   };
 
   ffi = attrs: {
-    buildInputs = [ libffi pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ libffi ];
+  };
+
+  gdk_pixbuf2 = attrs: {
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ rake gdk_pixbuf ];
   };
 
   gpgme = attrs: {
     buildInputs = [ gpgme ];
   };
 
-  gio2 = attrs: { buildInputs = [ gtk2 pcre pkgconfig ]; };
+  gio2 = attrs: {
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ gtk2 pcre ];
+  };
 
-  glib2 = attrs: { buildInputs = [ gtk2 pcre pkgconfig ]; };
+  gitlab-markup = attrs: { meta.priority = 1; };
+
+  glib2 = attrs: {
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ gtk2 pcre ];
+  };
 
   gtk2 = attrs: {
-    buildInputs = [ gtk2 pcre pkgconfig xlibs.libpthreadstubs xlibs.libXdmcp];
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ gtk2 pcre xlibs.libpthreadstubs xlibs.libXdmcp];
     # CFLAGS must be set for this gem to detect gdkkeysyms.h correctly
     CFLAGS = "-I${gtk2.dev}/include/gtk-2.0 -I/non-existent-path";
   };
 
-  gobject-introspection = attrs: { buildInputs = [ gtk2 pcre pkgconfig ]; };
+  gobject-introspection = attrs: {
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ gobjectIntrospection gtk2 pcre ];
+  };
+
+  grpc = attrs: {
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ openssl ];
+  };
 
   hitimes = attrs: {
     buildInputs =
@@ -159,7 +196,8 @@ in
   };
 
   pango = attrs: {
-    buildInputs = [ gtk2 xlibs.libXdmcp pcre pkgconfig xlibs.libpthreadstubs ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ gtk2 xlibs.libXdmcp pcre xlibs.libpthreadstubs ];
   };
 
   patron = attrs: {
@@ -187,13 +225,18 @@ in
   rbnacl = spec: {
     postInstall = ''
     sed -i $(cat $out/nix-support/gem-meta/install-path)/lib/rbnacl.rb -e "2a \
-    RBNACL_LIBSODIUM_GEM_LIB_PATH = '${libsodium.out}/lib/libsodium.${if stdenv.isDarwin then "dylib" else "so"}'
+    RBNACL_LIBSODIUM_GEM_LIB_PATH = '${libsodium.out}/lib/libsodium${stdenv.hostPlatform.extensions.sharedLibrary}'
     "
     '';
   };
 
+  re2 = attrs: {
+    buildInputs = [ re2 ];
+  };
+
   rmagick = attrs: {
-    buildInputs = [ imagemagick pkgconfig which ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ imagemagick which ];
   };
 
   ruby-lxc = attrs: {
@@ -208,7 +251,8 @@ in
     ];
   };
   rugged = attrs: {
-    buildInputs = [ cmake pkgconfig openssl libssh2 zlib ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ cmake openssl libssh2 zlib ];
   };
 
   scrypt = attrs:
@@ -285,7 +329,8 @@ in
   xapian-ruby = attrs: {
     # use the system xapian
     dontBuild = false;
-    buildInputs = [ xapian_1_2_22 pkgconfig zlib ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ xapian_1_2_22 zlib ];
     postPatch = ''
       cp ${./xapian-Rakefile} Rakefile
     '';

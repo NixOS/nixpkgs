@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1zb9hwdl783d4vd2s2rw642hg8hd6n0mfp6lrbiqmp9jmhlq5rsr";
   };
 
-  buildInputs = [ pkgconfig libexif popt ] ++ libintlOrEmpty;
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libexif popt ] ++ libintlOrEmpty;
 
   meta = {
     homepage = http://libexif.sourceforge.net/;

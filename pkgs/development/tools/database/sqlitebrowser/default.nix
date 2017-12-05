@@ -1,32 +1,39 @@
-{ mkDerivation, lib, fetchFromGitHub, qtbase, qttools, sqlite, cmake }:
+{ mkDerivation, lib, fetchFromGitHub, cmake, antlr
+, qtbase, qttools, qscintilla, sqlite }:
 
 mkDerivation rec {
-  version = "3.9.1";
+  version = "3.10.1";
   name = "sqlitebrowser-${version}";
 
   src = fetchFromGitHub {
     repo   = "sqlitebrowser";
     owner  = "sqlitebrowser";
     rev    = "v${version}";
-    sha256 = "1s7f2d7wx2i68x60z7wdws3il6m83k5n5w5wyjvr0mz0mih0s150";
+    sha256 = "1brzam8yv6sbdmbqsp7vglhd6wlx49g2ap8llr271zrkld4k3kar";
   };
 
-  buildInputs = [ qtbase qttools sqlite ];
-  nativeBuildInputs = [ cmake ];
+  buildInputs = [ qtbase qscintilla sqlite ];
 
-  cmakeFlags = [ "-DUSE_QT5=TRUE" ];
+  nativeBuildInputs = [ cmake antlr qttools ];
 
-  # A regression was introduced in CMakeLists.txt on v3.9.x
-  # See https://github.com/sqlitebrowser/sqlitebrowser/issues/832 and issues/755
+  enableParallelBuilding = true;
+
+  # We have to patch out Test and PrintSupport to make this work with Qt 5.9
+  # It can go when the application supports 5.9
   postPatch = ''
-    substituteInPlace CMakeLists.txt --replace 'project("DB Browser for SQLite")' 'project(sqlitebrowser)'
+    substituteInPlace CMakeLists.txt \
+      --replace Test         "" \
+      --replace PrintSupport ""
+
+    substituteInPlace libs/qcustomplot-source/CMakeLists.txt \
+      --replace PrintSupport ""
   '';
 
   meta = with lib; {
     description = "DB Browser for SQLite";
     homepage = http://sqlitebrowser.org/;
     license = licenses.gpl3;
-    maintainers = [ maintainers.matthiasbeyer ];
+    maintainers = with maintainers; [ matthiasbeyer ];
     platforms = platforms.linux; # can only test on linux
   };
 }

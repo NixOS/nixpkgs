@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0d3vcrh9z55rbal0dchmj661pqqrav9c400bx1c46grcl1q022ad";
   };
 
-  buildInputs = [ pkgconfig globalplatform openssl pcsclite ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ globalplatform openssl pcsclite ];
 
   meta = with stdenv.lib; {
     homepage = https://sourceforge.net/p/globalplatform/wiki/Home/;

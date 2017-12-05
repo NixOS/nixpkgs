@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "c1f2a5da73983efb5a54f86d57ba93713ebed20ff0c72de9b3467f10f2904ee0";
   };
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ pure portaudio fftw libsndfile libsamplerate ];
   makeFlags = "libdir=$(out)/lib prefix=$(out)/";
   setupHook = ../generic-setup-hook.sh;

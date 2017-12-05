@@ -7,17 +7,17 @@
 , glib, gtk3, pango, gdk_pixbuf, cairo, atk, gnome3
 , nss, nspr
 , patchelf, makeWrapper
-, proprietaryCodecs ? true, vivaldi-ffmpeg-codecs ? null
+, proprietaryCodecs ? false, vivaldi-ffmpeg-codecs ? null
 }:
 
 stdenv.mkDerivation rec {
   name = "${product}-${version}";
   product = "vivaldi";
-  version = "1.11.917.39-1";
+  version = "1.12.955.38-1";
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/stable/${product}-stable_${version}_amd64.deb";
-    sha256 = "0rsggp4ayj462g217zb9y9grhvbrcxa51a77l8l4qzhd9lg7zvx6";
+    sha256 = "1bq1ss6vkpr6rw5n0sw9zipxx19vficvxys1lra9symcxk1b4gqw";
   };
 
   unpackPhase = ''

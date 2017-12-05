@@ -12,15 +12,11 @@ stdenv.mkDerivation rec {
   };
 
   # LaTeX is used from $PATH, as people often want to have it with extra pkgs
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig qtbase qtsvg python file/*for libmagic*/ bc
+    qtbase qtsvg python file/*for libmagic*/ bc
     hunspell makeWrapper # enchant
   ];
-
-  # bogus configure script tests
-  preConfigure = ''
-    NIX_CFLAGS_COMPILE+=" $(pkg-config --cflags Qt5Core)"
-  '';
 
   configureFlags = [
     "--enable-qt5"

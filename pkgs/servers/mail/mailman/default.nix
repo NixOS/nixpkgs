@@ -1,11 +1,12 @@
 { stdenv, fetchurl, python, pythonPackages }:
 
 stdenv.mkDerivation rec {
-  name = "mailman-2.1.23";
+  name = "mailman-${version}";
+  version = "2.1.24";
 
   src = fetchurl {
     url = "mirror://gnu/mailman/${name}.tgz";
-    sha256 = "0s9ywix4m3n7qa0baws744ildg48hsa87jahpsfiqqilhmpwl8mh";
+    sha256 = "1r6sjapjmbav45xibjzc2a8y1xf4ikz09470ma1kw7iz174wn8z7";
   };
 
   buildInputs = [ python pythonPackages.dns ];

@@ -1,13 +1,13 @@
 { lib, buildPythonPackage, fetchPypi, six, pytest }:
 
 buildPythonPackage rec {
-  version = "3.1.1";
+  version = "3.1.2";
   name = "gflags-${version}";
 
   src = fetchPypi {
     inherit version;
     pname = "python-gflags";
-    sha256 = "0qvcizlz6r4511kl4jlg6fr34y1ka956dr2jj1q0qcklr94n9zxa";
+    sha256 = "40ae131e899ef68e9e14aa53ca063839c34f6a168afe622217b5b875492a1ee2";
   };
 
   buildInputs = [ pytest ];

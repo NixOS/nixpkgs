@@ -1,0 +1,35 @@
+https://github.com/saenzramiro/rambox/issues/1283
+
+diff -urNZ a/electron/menu.js b/electron/menu.js
+--- a/electron/menu.js	2017-11-02 22:02:59.753119865 +0000
++++ b/electron/menu.js	2017-11-02 22:08:34.419698562 +0000
+@@ -220,14 +220,6 @@
+ 					}
+ 				},
+ 				{
+-					label: locale['menu.help[5]'],
+-					click(item, win) {
+-						const webContents = win.webContents;
+-						const send = webContents.send.bind(win.webContents);
+-						send('autoUpdater:check-update');
+-					}
+-				},
+-				{
+ 					label: locale['menu.help[6]'],
+ 					click() {
+ 						sendAction('showAbout')
+@@ -290,14 +282,6 @@
+ 			type: 'separator'
+ 		});
+ 		helpSubmenu.push({
+-			label: `&`+locale['menu.help[5]'],
+-			click(item, win) {
+-				const webContents = win.webContents;
+-				const send = webContents.send.bind(win.webContents);
+-				send('autoUpdater:check-update');
+-			}
+-		});
+-		helpSubmenu.push({
+ 			label: `&`+locale['menu.help[6]'],
+ 			click() {
+ 				sendAction('showAbout')

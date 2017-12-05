@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   name = "mysql-${version}";
-  version = "5.7.19";
+  version = "5.7.20";
 
   src = fetchurl {
     url = "mirror://mysql/MySQL-5.7/${name}.tar.gz";
-    sha256 = "1c8y54yk756179nx4dgg79dijmjdq5n8l057cnqsg70pjdpyfl9y";
+    sha256 = "11v4g3igigv3zvknv67qml8in6fjrbs2vnr3q6bg6f62nydm95sk";
   };
 
   preConfigure = stdenv.lib.optional stdenv.isDarwin ''

@@ -9,22 +9,25 @@ let
   };
 in stdenv.mkDerivation rec {
   name = "vault-${version}";
-  version = "0.7.3";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "vault";
     rev = "v${version}";
-    sha256 = "15wj1pfgzwzjfrqy7b5bx4y9f0hbpqlfif58l5xamwm88229qk4m";
+    sha256 = "1dcmqbcdkj42614am2invb6wf8v29z4sp4d354a4d83rwhyb0qly";
   };
 
   nativeBuildInputs = [ go gox removeReferencesTo ];
 
   buildPhase = ''
+    patchShebangs ./
     substituteInPlace scripts/build.sh --replace 'git rev-parse HEAD' 'echo ${src.rev}'
 
     mkdir -p src/github.com/hashicorp
     ln -s $(pwd) src/github.com/hashicorp/vault
+
+    mkdir -p .git/hooks
 
     GOPATH=$(pwd) make
   '';

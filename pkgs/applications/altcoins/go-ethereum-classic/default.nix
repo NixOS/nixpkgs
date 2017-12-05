@@ -2,16 +2,15 @@
 
 buildGoPackage rec {
   name = "go-ethereum-classic-${version}";
-  version = "3.5.0";
-  rev = "402c1700fbefb9512e444b32fe12c2d674638ddb";
+  version = "4.0.0";
 
   goPackagePath = "github.com/ethereumproject/go-ethereum";
   subPackages = [ "cmd/evm" "cmd/geth" ];
 
   src = fetchgit {
-    inherit rev;
+    rev = "v${version}";
     url = "https://github.com/ethereumproject/go-ethereum";
-    sha256 = "15wji12wqcrgsb1glwwz4jv7rsas71bbxh7750iv2phn7jivm0fi";
+    sha256 = "06f1w7s45q4zva1xjrx92xinsdrixl0m6zhx5hvdjmg3xqcbwr79";
   };
 
   goDeps = ./deps.nix;
@@ -20,5 +19,6 @@ buildGoPackage rec {
     description = "Golang implementation of Ethereum Classic";
     homepage = https://github.com/ethereumproject/go-ethereum;
     license = with lib.licenses; [ lgpl3 gpl3 ];
+    maintainers = with lib.maintainers; [ sorpaas ];
   };
 }

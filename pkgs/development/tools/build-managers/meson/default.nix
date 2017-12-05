@@ -1,12 +1,12 @@
 { lib, python3Packages }:
 python3Packages.buildPythonApplication rec {
-  version = "0.41.2";
+  version = "0.43.0";
   pname = "meson";
   name = "${pname}-${version}";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0p69hir68ar3nzrjn0zjsnyzq181b0kq6arrcmxqpzl7g5qhf5xd";
+    sha256 = "0qn5hyzvam3rimn7g3671s1igj7fbkwdnf5nc8jr4d5swy25mq61";
   };
 
   postFixup = ''
@@ -17,6 +17,12 @@ python3Packages.buildPythonApplication rec {
     done
     popd
   '';
+
+  postPatch = ''
+    sed -i -e 's|e.fix_rpath(install_rpath)||' mesonbuild/scripts/meson_install.py
+  '';
+
+  setupHook = ./setup-hook.sh;
 
   meta = with lib; {
     homepage = http://mesonbuild.com;

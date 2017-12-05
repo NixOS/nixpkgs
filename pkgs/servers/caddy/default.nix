@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, fetchpatch }:
 
 buildGoPackage rec {
   name = "caddy-${version}";
-  version = "0.10.6";
+  version = "0.10.10";
 
   goPackagePath = "github.com/mholt/caddy";
 
@@ -12,7 +12,7 @@ buildGoPackage rec {
     owner = "mholt";
     repo = "caddy";
     rev = "v${version}";
-    sha256 = "17k8518mx1l0q5bjlx0c6f249ibr9qdrcgwn3wpwhd244cbg44gn";
+    sha256 = "1x7f1yz5vnsy9n50ak0vjrm4w8fqc1qvhv8fmqnsc8cgbp7f3p8w";
   };
 
   buildFlagsArray = ''

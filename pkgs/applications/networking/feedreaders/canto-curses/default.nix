@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, python34Packages, readline, ncurses, canto-daemon }:
 
 python34Packages.buildPythonApplication rec {
-  version = "0.9.7";
+  version = "0.9.9";
   name = "canto-curses-${version}";
 
   src = fetchFromGitHub {
     owner = "themoken";
     repo = "canto-curses";
     rev = "v${version}";
-    sha256 = "0ap1b4m5gbzi0l7vj6pwvvg77i2aarbynbdc147z2b1lzvr985zq";
+    sha256 = "1vzb9n1j4gxigzll6654ln79lzbrrm6yy0lyazd9kldyl349b8sr";
   };
 
   buildInputs = [ readline ncurses canto-daemon ];

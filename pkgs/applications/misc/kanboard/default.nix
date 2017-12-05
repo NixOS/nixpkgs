@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "kanboard-${version}";
-  version = "1.0.46";
+  version = "1.0.48";
 
   src = fetchzip {
-    url = "https://kanboard.net/${name}.zip";
-    sha256 = "00fzzijibj7x8pz8xwc601fcrzvdwz5fv45f2zzmbygl86khp82a";
+    url = "https://github.com/kanboard/kanboard/releases/download/v${version}/${name}.zip";
+    sha256 = "0ipyijlfcnfqlz9n20wcnaf9pw404a675x404pm9h2n4ld8x6m5v";
   };
 
   dontBuild = true;

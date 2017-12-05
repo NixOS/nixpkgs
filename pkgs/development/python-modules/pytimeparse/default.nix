@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
     pname = "pytimeparse";
-    version = "1.1.6";
+    version = "1.1.7";
     name = "${pname}-${version}";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0imbb68i5n5fm704gv47if1blpxd4f8g16qmp5ar07cavgh2mibl";
+      sha256 = "51b641bcd435e0cb6b9701ed79cf7ee97fa6bf2dbb5d41baa16e5486e5d9b17a";
     };
 
     propagatedBuildInputs = [ nose ];

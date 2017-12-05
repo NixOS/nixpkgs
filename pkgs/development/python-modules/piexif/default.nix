@@ -1,24 +1,30 @@
-{lib, buildPythonPackage, fetchurl, pillow}:
+{ stdenv, buildPythonPackage, fetchPypi, pillow }:
 
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "piexif";
-  version = "1.0.12";
+  version = "1.0.13";
 
   # pillow needed for unit tests
   buildInputs = [ pillow ];
 
-  # No .tar.gz source available at PyPI, only .zip source, so need to use
-  # fetchurl because fetchPypi doesn't support .zip.
-  src = fetchurl {
-    url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.zip";
-    sha256 = "15dvdr7b5xxsbsq5k6kq8h0xnzrkqzc08dzlih48a21x27i02bii";
+  postPatch = ''
+    # incompatibility with pillow => 4.2.0
+    # has been resolved in https://github.com/hMatoba/Piexif/commit/c3a8272f5e6418f223b25f6486d8ddda201bbdf1
+    # remove this in the next version
+    sed -i -e 's/RGBA/RGB/' tests/s_test.py
+  '';
+
+  src = fetchPypi {
+    inherit pname version;
+    extension = "zip";
+    sha256 = "1d3dde03bd6298393645bc11d585b67a6ea98fd7e9e1aded6d5d6ec3e4cfbdda";
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Simplify Exif manipulations with Python";
     homepage = https://github.com/hMatoba/Piexif;
-    license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ jluttine ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ jluttine ];
   };
 }

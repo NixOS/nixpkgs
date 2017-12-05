@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libgcrypt, curl, gnutls, pkgconfig }:
+{ stdenv, fetchurl, libgcrypt, curl, gnutls, pkgconfig, libiconv, libintlOrEmpty }:
 
 stdenv.mkDerivation rec {
   name = "libmicrohttpd-0.9.55";
@@ -9,7 +9,9 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" "devdoc" "info" ];
-  buildInputs = [ libgcrypt curl gnutls pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libgcrypt curl gnutls ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv libintlOrEmpty ];
 
   preCheck = ''
     # Since `localhost' can't be resolved in a chroot, work around it.
@@ -32,6 +34,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.gnu.org/software/libmicrohttpd/;
 
     maintainers = with maintainers; [ eelco vrthra fpletz ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }
+

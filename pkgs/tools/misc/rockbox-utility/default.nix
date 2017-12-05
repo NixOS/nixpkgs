@@ -2,6 +2,8 @@
 , qtbase, qttools, makeWrapper, qmake
 , withEspeak ? false, espeak ? null }:
 
+let inherit (stdenv.lib) getDev; in
+
 stdenv.mkDerivation  rec {
   name = "rockbox-utility-${version}";
   version = "1.4.0";
@@ -14,6 +16,11 @@ stdenv.mkDerivation  rec {
   buildInputs = [ libusb1 qtbase qttools ]
     ++ stdenv.lib.optional withEspeak espeak;
   nativeBuildInputs = [ makeWrapper pkgconfig qmake ];
+
+  postPatch = ''
+    sed -i rbutil/rbutilqt/rbutilqt.pro \
+        -e '/^lrelease.commands =/ s|$$\[QT_INSTALL_BINS\]/lrelease -silent|${getDev qttools}/bin/lrelease|'
+  '';
 
   preConfigure = ''
     cd rbutil/rbutilqt

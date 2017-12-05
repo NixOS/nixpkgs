@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, fetchgit, pkgconfig, gyp, cmake
+{ mkDerivation, lib, fetchgit, pkgconfig, gyp, cmake
 , qtbase, qtimageformats
 , breakpad, gtk3, libappindicator-gtk3, dee
 , ffmpeg, openalSoft, minizip, libopus, alsaLib, libpulseaudio
@@ -7,19 +7,20 @@
 
 mkDerivation rec {
   name = "telegram-desktop-${version}";
-  version = "1.1.7";
+  version = "1.1.23";
 
   # Submodules
   src = fetchgit {
-    url = "https://github.com/telegramdesktop/tdesktop";
-    rev = "refs/tags/v${version}";
-    sha256 = "0y0nc8d4vlhsmzayy26zdxc5jaiwcv0rb2s1v5fwnnx71gf89m2w";
+    url = "git://github.com/telegramdesktop/tdesktop";
+    rev = "v${version}";
+    sha256 = "0pdjrypjg015zvg8iydrja8kzvq0jsi1wz77r2cxvyyb4rkgyv7x";
+    fetchSubmodules = true;
   };
 
   tgaur = fetchgit {
     url = "https://aur.archlinux.org/telegram-desktop-systemqt.git";
-    rev = "83af81905de7fc5dc9fbea8f5318d56fa8a6efc6";
-    sha256 = "0v7g7y5cmxzp2yrcj6ylwzxlzr9yrqs2badzplm7sg012nc69yf9";
+    rev = "885d0594d8dfa0a17c14140579a3d27ef2b9bdd0";
+    sha256 = "0cdci8d8j3czhznp7gqn16w32j428njmzxr34pdsv40gggh0lbpn";
   };
 
   buildInputs = [
@@ -92,7 +93,7 @@ mkDerivation rec {
   installPhase = ''
     install -Dm755 Telegram $out/bin/telegram-desktop
     mkdir -p $out/share/applications $out/share/kde4/services
-    sed "s,/usr/bin,$out/bin,g" $tgaur/telegramdesktop.desktop > $out/share/applications/telegramdesktop.desktop
+    sed "s,/usr/bin,$out/bin,g" $tgaur/telegram-desktop.desktop > $out/share/applications/telegram-desktop.desktop
     sed "s,/usr/bin,$out/bin,g" $tgaur/tg.protocol > $out/share/kde4/services/tg.protocol
     for icon_size in 16 32 48 64 128 256 512; do
       install -Dm644 "../../../Telegram/Resources/art/icon''${icon_size}.png" "$out/share/icons/hicolor/''${icon_size}x''${icon_size}/apps/telegram-desktop.png"

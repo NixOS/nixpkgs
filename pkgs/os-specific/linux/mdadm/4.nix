@@ -22,14 +22,12 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "NIXOS=1" "INSTALL=install" "INSTALL_BINDIR=$(out)/sbin"
     "MANDIR=$(out)/share/man" "RUN_DIR=/dev/.mdadm"
+    "STRIP="
   ] ++ stdenv.lib.optionals (hostPlatform != buildPlatform) [
     "CROSS_COMPILE=${stdenv.cc.prefix}"
   ];
 
   nativeBuildInputs = [ groff ];
-
-  # Attempt removing if building with gcc5 when updating
-  NIX_CFLAGS_COMPILE = "-std=gnu89";
 
   preConfigure = ''
     sed -e 's@/lib/udev@''${out}/lib/udev@' \

@@ -34,5 +34,6 @@ stdenv.mkDerivation {
     maintainers = [
       maintainers.gal_bolle
     ];
+    broken = versionAtLeast ocaml.version "4.05";
   };
 }

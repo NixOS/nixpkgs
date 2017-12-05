@@ -46,6 +46,9 @@ self: super: {
   # Avoid inconsistent 'binary' versions from 'text' and 'Cabal'.
   cabal-install = super.cabal-install.overrideScope (self: super: { binary = dontCheck self.binary_0_8_5_1; });
 
+  # Requires ghc 8.2
+  ghc-proofs = dontDistribute super.ghc-proofs;
+
   # https://github.com/tibbe/hashable/issues/85
   hashable = dontCheck super.hashable;
 
@@ -101,6 +104,8 @@ self: super: {
   semigroups = addBuildDepends super.semigroups (with self; [nats bytestring-builder tagged unordered-containers transformers]);
   QuickCheck = addBuildDepends super.QuickCheck (with self; [nats semigroups]);
   optparse-applicative = addBuildDepend super.optparse-applicative self.semigroups;
+  text = addBuildDepend super.text self.bytestring-builder;
+  vector = addBuildDepend super.vector self.semigroups;
 
   # Newer versions don't compile any longer.
   network_2_6_3_1 = dontCheck super.network_2_6_3_1;

@@ -13,7 +13,8 @@ stdenv.mkDerivation {
     sha256 = "0rkyg6naidql0nv74608mlsr2lzjgnndnxnxv3s0hp4f6mbqnmkw";
   };
 
-  buildInputs = [ pkgconfig dbus_glib libxml2Python libxslt libxklavier popt which python shared_mime_info desktop_file_utils
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ dbus_glib libxml2Python libxslt libxklavier popt which python shared_mime_info desktop_file_utils
                   gtk gnome_doc_utils intltool GConf libglade libgnomekbd libunique libtool bzip2 
                   libgnomeui librsvg gnome_menus gnome_desktop gnome_panel metacity gnome_settings_daemon
                   libSM

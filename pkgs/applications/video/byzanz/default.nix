@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
-  buildInputs = [ which gnome3.gnome_common glib intltool pkgconfig libtool cairo gtk3 xorg.xwininfo ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ which gnome3.gnome_common glib intltool libtool cairo gtk3 xorg.xwininfo ]
   ++ (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-bad gst-plugins-good gst-plugins-ugly gst-libav wrapGAppsHook ]);
 
   meta = with stdenv.lib; {

@@ -11,13 +11,13 @@ let
   mpiSupport = hdf5.mpiSupport;
 
 in buildPythonPackage rec {
-  version = "2.7.0";
+  version = "2.7.1";
   pname = "h5py";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/h/h5py/${name}.tar.gz";
-    sha256 = "79254312df2e6154c4928f5e3b22f7a2847b6e5ffb05ddc33e37b16e76d36310";
+    sha256 = "180a688311e826ff6ae6d3bda9b5c292b90b28787525ddfcb10a29d5ddcae2cc";
   };
 
   configure_flags = "--hdf5=${hdf5}" + optionalString mpiSupport " --mpi";
@@ -28,7 +28,8 @@ in buildPythonPackage rec {
 
   preBuild = if mpiSupport then "export CC=${mpi}/bin/mpicc" else "";
 
-  buildInputs = [ hdf5 cython pkgconfig ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ hdf5 cython ]
     ++ optional mpiSupport mpi
     ;
   propagatedBuildInputs = [ numpy six]

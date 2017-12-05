@@ -2,7 +2,7 @@
 
 runCommand "fc-cache"
   rec {
-    buildInputs = [ fontconfig ];
+    buildInputs = [ fontconfig.bin ];
     passAsFile = [ "fontDirs" ];
     fontDirs = ''
       <!-- Font directories -->

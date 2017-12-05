@@ -32,8 +32,9 @@ stdenv.mkDerivation rec {
   # do not use x87's 80-bit arithmetic, rouding errors result in very different font binaries
   NIX_CFLAGS_COMPILE = lib.optionals stdenv.isi686 [ "-msse2" "-mfpmath=sse" ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    autoconf automake gnum4 libtool perl pkgconfig gettext uthash
+    autoconf automake gnum4 libtool perl gettext uthash
     python freetype zlib glib libungif libpng libjpeg libtiff libxml2
   ]
     ++ lib.optionals withSpiro [libspiro]

@@ -133,7 +133,7 @@
           test-framework-hunit test-framework-quickcheck2 text unix
         ];
         jailbreak = true;
-        homepage = http://github.com/tibbe/hashable;
+        homepage = https://github.com/tibbe/hashable;
         description = "A class for types that can be converted to a hash value";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -146,7 +146,7 @@
         doCheck = false;
         libraryHaskellDepends = [ base transformers ];
         jailbreak = true;
-        homepage = http://github.com/ekmett/mtl;
+        homepage = https://github.com/ekmett/mtl;
         description = "Monad classes, using functional dependencies";
         license = stdenv.lib.licenses.bsd3;
       }) {};
@@ -311,7 +311,7 @@
           test-framework-hunit test-framework-quickcheck2 text
         ];
         jailbreak = true;
-        homepage = http://github.com/ghcjs/ghcjs-base;
+        homepage = https://github.com/ghcjs/ghcjs-base;
         description = "Base library for GHCJS";
         license = stdenv.lib.licenses.mit;
       }) {};

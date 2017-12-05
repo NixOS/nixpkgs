@@ -3,11 +3,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "txaio";
-  version = "2.7.1";
+  version = "2.8.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lmllmjjsqzl3w4faq2qhlgkaqn1yn1m7d99k822ib7qgz18bsly";
+    sha256 = "484cd6c4cdd3f6081b87188f3b2b9a36e02fba6816e8256917c4f6571b567571";
   };
 
   buildInputs = [ pytest mock ];

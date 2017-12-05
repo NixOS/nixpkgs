@@ -18,4 +18,6 @@ stdenv.mkDerivation {
     mkdir CoreFoundation
     ln -sf ${darwin.CF}/Library/Frameworks/CoreFoundation.framework/Headers/* CoreFoundation
   '';
+
+  meta.platforms = stdenv.lib.platforms.darwin;
 }

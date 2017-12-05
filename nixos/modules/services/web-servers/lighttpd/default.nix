@@ -15,7 +15,8 @@ let
   # Some modules are always imported and should not appear in the config:
   # disallowedModules = [ "mod_indexfile" "mod_dirlisting" "mod_staticfile" ];
   #
-  # Get full module list: "ls -1 $lighttpd/lib/*.so"
+  # For full module list, see the output of running ./configure in the lighttpd
+  # source.
   allKnownModules = [
     "mod_rewrite"
     "mod_redirect"
@@ -38,12 +39,15 @@ let
     "mod_accesslog"
     # Remaining list of modules, order assumed to be unimportant.
     "mod_authn_file"
+    "mod_authn_gssapi"
+    "mod_authn_ldap"
     "mod_authn_mysql"
     "mod_cml"
     "mod_deflate"
     "mod_evasive"
     "mod_extforward"
     "mod_flv_streaming"
+    "mod_geoip"
     "mod_magnet"
     "mod_mysql_vhost"
     "mod_scgi"

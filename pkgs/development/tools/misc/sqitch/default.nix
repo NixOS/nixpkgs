@@ -11,7 +11,11 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/bin
     for d in bin/sqitch etc lib share ; do
-      ln -s ${sqitchModule}/$d $out/$d
+      # make sure dest alreay exists before symlink
+      # this prevents installing a broken link into the path
+      if [ -e ${sqitchModule}/$d ]; then
+        ln -s ${sqitchModule}/$d $out/$d
+      fi
     done
   '';
   dontStrip = true;

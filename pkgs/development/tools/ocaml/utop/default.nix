@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, ocaml, findlib, ocamlbuild, camlp4, ocaml_react
+{ stdenv, fetchurl, bash, ocaml, findlib, ocamlbuild, camlp4
 , lambdaTerm, ocaml_lwt, camomile, zed, cppo, ppx_tools, makeWrapper
 }:
 

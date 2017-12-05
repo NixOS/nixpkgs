@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "1467ha4ssbfjk1jh0ya2i5ljzm554ln18nyrppvsipg8shb1cshh";
   };
 
-  buildInputs = [ which pkgconfig libxcb xcbutilkeysyms xcbutilimage pam libX11
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ which libxcb xcbutilkeysyms xcbutilimage pam libX11
     libev cairo libxkbcommon libxkbfile ];
 
   makeFlags = "all";

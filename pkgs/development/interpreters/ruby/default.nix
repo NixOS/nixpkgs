@@ -66,8 +66,9 @@ let
         # Have `configure' avoid `/usr/bin/nroff' in non-chroot builds.
         NROFF = "${groff}/bin/nroff";
 
-        buildInputs = ops useRailsExpress [ autoreconfHook bison ]
-          ++ (op fiddleSupport libffi)
+        nativeBuildInputs = ops useRailsExpress [ autoreconfHook bison ];
+        buildInputs =
+             (op fiddleSupport libffi)
           ++ (ops cursesSupport [ ncurses readline ])
           ++ (op docSupport groff)
           ++ (op zlibSupport zlib)
@@ -83,7 +84,7 @@ let
 
         enableParallelBuilding = true;
 
-        hardeningDisable = lib.optional isRuby20 [ "format" ];
+        hardeningDisable = lib.optional isRuby20 "format";
 
         patches =
           (import ./patchsets.nix {
@@ -151,12 +152,12 @@ let
           sed -i "s|'--with-baseruby=${baseruby}/bin/ruby'||" $rbConfig
         '';
 
-        meta = {
-          license = stdenv.lib.licenses.ruby;
-          homepage = http://www.ruby-lang.org/en/;
+        meta = with stdenv.lib; {
           description = "The Ruby language";
-          maintainers = with stdenv.lib.maintainers; [ vrthra manveru ];
-          platforms = stdenv.lib.platforms.all;
+          homepage    = http://www.ruby-lang.org/en/;
+          license     = licenses.ruby;
+          maintainers = with maintainers; [ vrthra manveru ];
+          platforms   = platforms.all;
         };
 
         passthru = rec {
@@ -196,27 +197,27 @@ in {
     };
   };
 
-  ruby_2_2_7 = generic {
-    version = rubyVersion "2" "2" "7" "";
+  ruby_2_2_8 = generic {
+    version = rubyVersion "2" "2" "8" "";
     sha256 = {
-      src = "199xz5bvmp26c7vyzw47cpxkd8jk826kc8nlpavqzj5vqp388h9p";
-      git = "0i0nsm9ldjp39m9xq47v8w6wlg821ikczz530493cs150qkqa0a1";
+      src = "12i6v5i0djl4xx3x7fq12snqb5d4drqjmnwqs05fby4bagcbjdwg";
+      git = "16nw0795nhrj13crp5x4jis8hmi3gsyjl96pwk698wlrb89lf9bw";
     };
   };
 
-  ruby_2_3_4 = generic {
-    version = rubyVersion "2" "3" "4" "";
+  ruby_2_3_5 = generic {
+    version = rubyVersion "2" "3" "5" "";
     sha256 = {
-      src = "1hy0zr4vwkqcjbykh2hp0d6ifkrhgskaxlzy6878sc9kr4bqzqcq";
-      git = "0jjhgdjv3aayxb0flxjiny7xfzh3ggrqcpvgjv2ydm25padfbqmp";
+      src = "1k6x4g68lq30i0myip5bn56rcbwjxmqq95j1fkdgbvwbnaxzfqjl";
+      git = "0spwqz4b5xxqzs13azsd4xz4jkc3is7d9q4s6s2qilb8ib4863jl";
     };
   };
 
-  ruby_2_4_1 = generic {
-    version = rubyVersion "2" "4" "1" "";
+  ruby_2_4_2 = generic {
+    version = rubyVersion "2" "4" "2" "";
     sha256 = {
-      src = "0l0201fqwzwygnrgxay469gbb2w865bnqckq00x3prdmbh6y2c53";
-      git = "1gjn31ymypzzcwkrjx62hqw59fywz1x3cyvmi1f2yb9bwb3659ss";
+      src = "174cdiz3am1f76vsnm3iqi9c5vqphypbf9kbxx6vqqmj01gfgfck";
+      git = "1w83kzak3m6vv3k09ynfw9vpgc7vpmij3x3zmgrhwm4ds1sp5irl";
     };
   };
 }

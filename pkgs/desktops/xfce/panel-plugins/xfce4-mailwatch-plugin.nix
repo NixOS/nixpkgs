@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
-  buildInputs = [ pkgconfig intltool libxfce4util libxfce4ui xfce4panel
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool libxfce4util libxfce4ui xfce4panel
     libxfcegui4 xfconf gtk exo gnutls libgcrypt ];
 
   meta = {

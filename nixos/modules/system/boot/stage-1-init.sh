@@ -221,6 +221,9 @@ checkFS() {
     # Don't check resilient COWs as they validate the fs structures at mount time
     if [ "$fsType" = btrfs -o "$fsType" = zfs ]; then return 0; fi
 
+    # Skip fsck for bcachefs - not implemented yet.
+    if [ "$fsType" = bcachefs ]; then return 0; fi
+
     # Skip fsck for inherently readonly filesystems.
     if [ "$fsType" = squashfs ]; then return 0; fi
 

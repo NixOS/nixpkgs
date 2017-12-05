@@ -5,11 +5,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "gsoap-${version}";
-  version = "${majorVersion}.49";
+  version = "${majorVersion}.53";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/gsoap2/gsoap-${majorVersion}/gsoap_${version}.zip";
-    sha256 = "0414q7zabkq3iiccl2yql3vbihbr7ach9d517b37zv3mp7nhj2aj";
+    sha256 = "0n35dh32gidi65c36cwjd91304pwiabfblvd64kg21djpjl06qcr";
   };
 
   buildInputs = [ openssl zlib ];

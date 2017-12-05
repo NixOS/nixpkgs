@@ -1,20 +1,20 @@
 { stdenv, fetchurl, pkgconfig, hexdump, which
-, knot-dns, luajit, libuv, lmdb
-, cmocka, systemd, hiredis, libmemcached
-, gnutls, nettle
-, luajitPackages, makeWrapper
+, knot-dns, luajit, libuv, lmdb, gnutls, nettle
+, cmocka, systemd, dns-root-data, makeWrapper
+, extraFeatures ? false /* catch-all if defaults aren't enough */
+, hiredis, libmemcached, luajitPackages
 }:
 
 let
-  inherit (stdenv.lib) optional;
+  inherit (stdenv.lib) optional optionals optionalString;
 in
 stdenv.mkDerivation rec {
   name = "knot-resolver-${version}";
-  version = "1.3.3";
+  version = "1.5.0";
 
   src = fetchurl {
     url = "http://secure.nic.cz/files/knot-resolver/${name}.tar.xz";
-    sha256 = "c679238bea5744de8a99f4402a61e9e58502bc42b40ecfa370e53679ed5d5b80";
+    sha256 = "c032e63a6b922294746e1ab4002860346e7a6d92b8502965a13ba599088fcb42";
   };
 
   outputs = [ "out" "dev" ];
@@ -23,18 +23,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig which makeWrapper hexdump ];
 
-  buildInputs = [ knot-dns luajit libuv gnutls ]
-    ++ optional stdenv.isLinux lmdb # system lmdb causes some problems on Darwin
-    ## optional dependencies; TODO: libedit, dnstap?
+  # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
+  buildInputs = [ knot-dns luajit libuv gnutls nettle lmdb ]
     ++ optional doInstallCheck cmocka
-    ++ optional stdenv.isLinux systemd # socket activation
-    ++ [
-      nettle # DNS cookies
+    ++ optional stdenv.isLinux systemd # sd_notify
+    ++ optionals extraFeatures [
       hiredis libmemcached # additional cache backends
-      # http://knot-resolver.readthedocs.io/en/latest/build.html#requirements
     ];
+    ## optional dependencies; TODO: libedit, dnstap, http2 module?
 
-  makeFlags = [ "PREFIX=$(out)" ];
+  makeFlags = [ "PREFIX=$(out)" "ROOTHINTS=${dns-root-data}/root.hints" ];
   CFLAGS = [ "-O2" "-DNDEBUG" ];
 
   enableParallelBuilding = true;
@@ -45,18 +43,21 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH="$out/lib"
   '';
 
+  postInstall = ''
+    rm "$out"/etc/kresd/root.hints # using system-wide instead
+  ''
   # optional: to allow auto-bootstrapping root trust anchor via https
-  postInstall = with luajitPackages; ''
-    wrapProgram "$out/sbin/kresd" \
-      --set LUA_PATH '${
-        stdenv.lib.concatStringsSep ";"
-          (map getLuaPath [ luasec luasocket ])
-        }' \
-      --set LUA_CPATH '${
-        stdenv.lib.concatStringsSep ";"
-          (map getLuaCPath [ luasec luasocket ])
-        }'
-  '';
+  + (with luajitPackages; ''
+      wrapProgram "$out/sbin/kresd" \
+        --set LUA_PATH '${
+          stdenv.lib.concatStringsSep ";"
+            (map getLuaPath [ luasec luasocket ])
+          }' \
+        --set LUA_CPATH '${
+          stdenv.lib.concatStringsSep ";"
+            (map getLuaCPath [ luasec luasocket ])
+          }'
+    '');
 
   meta = with stdenv.lib; {
     description = "Caching validating DNS resolver, from .cz domain registry";

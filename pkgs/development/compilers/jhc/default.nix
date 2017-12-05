@@ -27,5 +27,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd3;
     platforms = ["x86_64-linux"]; # 32 bit builds are broken
     maintainers = with stdenv.lib.maintainers; [ aforemny thoughtpolice ];
+    broken = true; # https://hydra.nixos.org/build/61700723
   };
 }

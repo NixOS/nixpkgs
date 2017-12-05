@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, makeWrapper
-, python, git, gnupg1compat, less }:
+, python, git, gnupg, less, cacert
+}:
 
 stdenv.mkDerivation rec {
   name = "git-repo-${version}";
@@ -13,16 +14,23 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ python git gnupg1compat less ];
+  buildInputs = [ python ];
+
+  # TODO: Cleanup
+  patchPhase = ''
+    CA_PATH="$(echo '${cacert}/etc/ssl/certs/ca-bundle.crt' | sed 's/\//\\\//g')" # / -> \/
+    sed -i -E 's/urlopen\(url\)/urlopen(url, cafile="'$CA_PATH'")/' repo
+  '';
 
   installPhase = ''
     mkdir -p $out/bin
-    cp $src/repo $out/bin/repo
+    cp repo $out/bin/repo
   '';
 
+  # Important runtime dependencies
   postFixup = ''
     wrapProgram $out/bin/repo --prefix PATH ":" \
-      "${stdenv.lib.makeBinPath [ git gnupg1compat less ]}"
+      "${stdenv.lib.makeBinPath [ git gnupg less ]}"
   '';
 
   meta = with stdenv.lib; {

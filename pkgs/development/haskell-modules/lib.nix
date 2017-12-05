@@ -1,5 +1,5 @@
 # TODO(@Ericson2314): Remove `pkgs` param, which is only used for
-# `buildStackProject` and `justStaticExecutables`
+# `buildStackProject`, `justStaticExecutables` and `checkUnusedPackages`
 { pkgs, lib }:
 
 rec {
@@ -22,6 +22,9 @@ rec {
 
   doCheck = drv: overrideCabal drv (drv: { doCheck = true; });
   dontCheck = drv: overrideCabal drv (drv: { doCheck = false; });
+
+  doBenchmark = drv: overrideCabal drv (drv: { doBenchmark = true; });
+  dontBenchmark = drv: overrideCabal drv (drv: { doBenchmark = false; });
 
   doDistribute = drv: overrideCabal drv (drv: { hydraPlatforms = drv.platforms or ["i686-linux" "x86_64-linux" "x86_64-darwin"]; });
   dontDistribute = drv: overrideCabal drv (drv: { hydraPlatforms = []; });
@@ -73,6 +76,17 @@ rec {
 
   disableHardening = drv: flags: overrideCabal drv (drv: { hardeningDisable = flags; });
 
+  # Controls if Nix should strip the binary files (removes debug symbols)
+  doStrip = drv: overrideCabal drv (drv: { dontStrip = false; });
+  dontStrip = drv: overrideCabal drv (drv: { dontStrip = true; });
+
+  # Useful for debugging segfaults with gdb.
+  # -g: enables debugging symbols
+  # --disable-*-stripping: tell GHC not to strip resulting binaries
+  # dontStrip: see above
+  enableDWARFDebugging = drv:
+   appendConfigureFlag (dontStrip drv) "--ghc-options=-g --disable-executable-stripping --disable-library-stripping";
+
   sdistTarball = pkg: lib.overrideDerivation pkg (drv: {
     name = "${drv.pname}-source-${drv.version}";
     # Since we disable the haddock phase, we also need to override the
@@ -106,7 +120,25 @@ rec {
     '';
   });
 
-  buildStrictly = pkg: buildFromSdist (appendConfigureFlag pkg "--ghc-option=-Wall --ghc-option=-Werror");
+  buildStrictly = pkg: buildFromSdist (failOnAllWarnings pkg);
+
+  failOnAllWarnings = drv: appendConfigureFlag drv "--ghc-option=-Wall --ghc-option=-Werror";
+
+  checkUnusedPackages =
+    { ignoreEmptyImports ? false
+    , ignoreMainModule   ? false
+    , ignorePackages     ? []
+    } : drv :
+      overrideCabal (appendConfigureFlag drv "--ghc-option=-ddump-minimal-imports") (_drv: {
+        postBuild = with lib;
+          let args = concatStringsSep " " (
+                       optional ignoreEmptyImports "--ignore-empty-imports" ++
+                       optional ignoreMainModule   "--ignore-main-module" ++
+                       map (pkg: "--ignore-package ${pkg}") ignorePackages
+                     );
+          in "${pkgs.haskellPackages.packunused}/bin/packunused" +
+             optionalString (args != "") " ${args}";
+      });
 
   buildStackProject = pkgs.callPackage ./generic-stack-builder.nix { };
 

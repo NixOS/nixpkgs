@@ -14,7 +14,7 @@ let isCross = (ghc.cross or null) != null; in
 , configureFlags ? []
 , description ? ""
 , doCheck ? !isCross && (stdenv.lib.versionOlder "7.4" ghc.version)
-, withBenchmarkDepends ? false
+, doBenchmark ? false
 , doHoogle ? true
 , editedCabalFile ? null
 , enableLibraryProfiling ? false
@@ -150,16 +150,17 @@ let
   isSystemPkg = x: !isHaskellPkg x;
 
   allPkgconfigDepends = pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
-                        optionals doCheck testPkgconfigDepends ++ optionals withBenchmarkDepends benchmarkPkgconfigDepends;
+                        optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
 
-  nativeBuildInputs = buildTools ++ libraryToolDepends ++ executableToolDepends ++ [ removeReferencesTo ];
+  nativeBuildInputs = optional (allPkgconfigDepends != []) pkgconfig ++
+                      buildTools ++ libraryToolDepends ++ executableToolDepends ++ [ removeReferencesTo ];
   propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends;
   otherBuildInputs = setupHaskellDepends ++ extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++
-                     optionals (allPkgconfigDepends != []) ([pkgconfig] ++ allPkgconfigDepends) ++
+                     optionals (allPkgconfigDepends != []) allPkgconfigDepends ++
                      optionals doCheck (testDepends ++ testHaskellDepends ++ testSystemDepends ++ testToolDepends) ++
                      # ghcjs's hsc2hs calls out to the native hsc2hs
                      optional isGhcjs nativeGhc ++
-                     optionals withBenchmarkDepends (benchmarkDepends ++ benchmarkHaskellDepends ++ benchmarkSystemDepends ++ benchmarkToolDepends);
+                     optionals doBenchmark (benchmarkDepends ++ benchmarkHaskellDepends ++ benchmarkSystemDepends ++ benchmarkToolDepends);
   allBuildInputs = propagatedBuildInputs ++ otherBuildInputs;
 
   haskellBuildInputs = stdenv.lib.filter isHaskellPkg allBuildInputs;
@@ -361,8 +362,7 @@ stdenv.mkDerivation ({
 
     env = stdenv.mkDerivation {
       name = "interactive-${pname}-${version}-environment";
-      nativeBuildInputs = [ ghcEnv systemBuildInputs ]
-        ++ optional isGhcjs ghc."socket.io"; # for ghcjsi
+      nativeBuildInputs = [ ghcEnv systemBuildInputs ];
       LANG = "en_US.UTF-8";
       LOCALE_ARCHIVE = optionalString stdenv.isLinux "${glibcLocales}/lib/locale/locale-archive";
       shellHook = ''
@@ -401,7 +401,7 @@ stdenv.mkDerivation ({
 // optionalAttrs (preBuild != "")       { inherit preBuild; }
 // optionalAttrs (postBuild != "")      { inherit postBuild; }
 // optionalAttrs (doCheck)              { inherit doCheck; }
-// optionalAttrs (withBenchmarkDepends) { inherit withBenchmarkDepends; }
+// optionalAttrs (doBenchmark)          { inherit doBenchmark; }
 // optionalAttrs (checkPhase != "")     { inherit checkPhase; }
 // optionalAttrs (preCheck != "")       { inherit preCheck; }
 // optionalAttrs (postCheck != "")      { inherit postCheck; }

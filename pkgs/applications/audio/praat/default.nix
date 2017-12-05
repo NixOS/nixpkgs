@@ -18,7 +18,8 @@ stdenv.mkDerivation rec {
     cp praat $out/bin
   '';
 
-  buildInputs = [ alsaLib gtk2 pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ alsaLib gtk2 ];
 
   meta = {
     description = "Doing phonetics by computer";

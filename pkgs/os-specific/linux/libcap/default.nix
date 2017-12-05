@@ -30,9 +30,8 @@ stdenv.mkDerivation rec {
 
     # ensure capsh can find bash in $PATH
     substituteInPlace progs/capsh.c --replace execve execvpe
-  '';
 
-  preInstall = ''
+    # set prefixes
     substituteInPlace Make.Rules \
       --replace 'prefix=/usr' "prefix=$lib" \
       --replace 'exec_prefix=' "exec_prefix=$out" \

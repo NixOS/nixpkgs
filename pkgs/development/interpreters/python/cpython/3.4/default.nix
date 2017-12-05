@@ -64,6 +64,11 @@ in stdenv.mkDerivation {
     substituteInPlace configure --replace '-Wl,-stack_size,1000000' ' '
   '';
 
+  patches = [
+    ./no-ldconfig.patch
+    ./ld_library_path.patch
+  ];
+
   postPatch = ''
     # Determinism
     substituteInPlace "Lib/py_compile.py" --replace "source_stats['mtime']" "(1 if 'DETERMINISTIC_BUILD' in os.environ else source_stats['mtime'])"
@@ -107,7 +112,10 @@ in stdenv.mkDerivation {
     # needed for some packages, especially packages that backport functionality
     # to 2.x from 3.x
     for item in $out/lib/python${majorVersion}/test/*; do
-      if [[ "$item" != */test_support.py* ]]; then
+      if [[ "$item" != */test_support.py*
+         && "$item" != */test/support
+         && "$item" != */test/libregrtest
+         && "$item" != */test/regrtest.py* ]]; then
         rm -rf "$item"
       else
         echo $item

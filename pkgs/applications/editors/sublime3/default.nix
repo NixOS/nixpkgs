@@ -6,7 +6,7 @@ assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
 assert gksuSupport -> gksu != null;
 
 let
-  build = "3126";
+  build = "3143";
   libPath = stdenv.lib.makeLibraryPath [glib xorg.libX11 gtk2 cairo pango];
   redirects = [ "/usr/bin/pkexec=${pkexecPath}" ]
     ++ stdenv.lib.optional gksuSupport "/usr/bin/gksudo=${gksu}/bin/gksudo";
@@ -20,13 +20,13 @@ in let
         fetchurl {
           name = "sublimetext-${build}.tar.bz2";
           url = "https://download.sublimetext.com/sublime_text_3_build_${build}_x32.tar.bz2";
-          sha256 = "0acff4wj1s61x3xszdd93lkhaqa26lb7ryqdxnbphxzhf2jfzzwj";
+          sha256 = "0dgpx4wij2m77f478p746qadavab172166bghxmj7fb61nvw9v5i";
         }
       else
         fetchurl {
           name = "sublimetext-${build}.tar.bz2";
           url = "https://download.sublimetext.com/sublime_text_3_build_${build}_x64.tar.bz2";
-          sha256 = "0ykj33fq86iv7f9zx76h90pl9y86iri0idhlj09a6prhk8p17nqq";
+          sha256 = "06b554d2cvpxc976rvh89ix3kqc7klnngvk070xrs8wbyb221qcw";
         };
 
     dontStrip = true;

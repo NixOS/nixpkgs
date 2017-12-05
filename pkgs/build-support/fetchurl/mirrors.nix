@@ -159,8 +159,9 @@ rec {
   cpan = [
     http://ftp.gwdg.de/pub/languages/perl/CPAN/
     ftp://download.xs4all.nl/pub/mirror/CPAN/
-    ftp://ftp.nl.uu.net/pub/CPAN/
+    http://ftp.tuwien.ac.at/pub/CPAN/
     http://ftp.funet.fi/pub/CPAN/
+    https://cpan.metacpan.org/
     http://cpan.perl.org/
     http://backpan.perl.org/  # for old releases
   ];
@@ -266,15 +267,14 @@ rec {
   # Apache mirrors (see http://www.apache.org/mirrors/).
   apache = [
     http://www.eu.apache.org/dist/
-    ftp://ftp.inria.fr/pub/Apache/
-    http://apache.cict.fr/
+    http://wwwftp.ciril.fr/pub/apache/
     ftp://ftp.fu-berlin.de/unix/www/apache/
-    ftp://crysys.hit.bme.hu/pub/apache/dist/
+    http://ftp.tudelft.nl/apache/
     http://mirror.cc.columbia.edu/pub/software/apache/
     http://www.apache.org/dist/
     http://archive.apache.org/dist/ # fallback for old releases
     ftp://ftp.funet.fi/pub/mirrors/apache.org/
-    http://apache.cs.uu.nl/dist/
+    http://apache.cs.uu.nl/
     http://apache.cs.utah.edu/
   ];
 

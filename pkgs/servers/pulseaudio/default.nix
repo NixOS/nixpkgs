@@ -36,18 +36,14 @@
 
 stdenv.mkDerivation rec {
   name = "${if libOnly then "lib" else ""}pulseaudio-${version}";
-  version = "10.0";
+  version = "11.0";
 
   src = fetchurl {
     url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-${version}.tar.xz";
-    sha256 = "0mrg8qvpwm4ifarzphl3749p7p050kdx1l6mvsaj03czvqj6h653";
+    sha256 = "0sf92knqkvqmfhrbz4vlsagzqlps72wycpmln5dygicg07a0a8q7";
   };
 
-  patches = [ ./caps-fix.patch ]
-            ++ stdenv.lib.optional stdenv.isDarwin (fetchpatch {
-              url = "https://bugs.freedesktop.org/attachment.cgi?id=127889";
-              sha256 = "063h5vmh4ykgxjbxyxjlj6qhyyxhazbh3p18p1ik69kq24nkny9m";
-            });
+  patches = [ ./caps-fix.patch ];
 
   outputs = [ "out" "dev" ];
 
@@ -57,7 +53,7 @@ stdenv.mkDerivation rec {
     lib.optionals stdenv.isLinux [ libcap ];
 
   buildInputs =
-    [ libsndfile speexdsp fftwFloat ]
+    [ libtool libsndfile speexdsp fftwFloat ]
     ++ lib.optionals stdenv.isLinux [ glib dbus ]
     ++ lib.optionals stdenv.isDarwin [ CoreServices AudioUnit Cocoa ]
     ++ lib.optionals (!libOnly) (

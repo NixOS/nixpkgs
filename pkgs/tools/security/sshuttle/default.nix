@@ -1,6 +1,6 @@
 { stdenv, python3Packages, fetchurl, makeWrapper, pandoc
-, coreutils, iptables, nettools, openssh, procps }:
-  
+, coreutils, iptables, nettools, openssh, procps, fetchpatch }:
+
 python3Packages.buildPythonApplication rec {
   name = "sshuttle-${version}";
   version = "0.78.3";
@@ -10,7 +10,13 @@ python3Packages.buildPythonApplication rec {
     url = "mirror://pypi/s/sshuttle/${name}.tar.gz";
   };
 
-  patches = [ ./sudo.patch ];
+  patches = [
+    ./sudo.patch
+    (fetchpatch {
+      url = "https://github.com/sshuttle/sshuttle/commit/91aa6ff625f7c89a19e6f8702425cfead44a146f.patch";
+      sha256 = "0sqcc6kj53wlas2d3klbyilhns6vakzwbbp8y7j9wlmbnc530pks";
+    })
+  ];
 
   nativeBuildInputs = [ makeWrapper pandoc python3Packages.setuptools_scm ];
   buildInputs =
@@ -29,7 +35,7 @@ python3Packages.buildPythonApplication rec {
   wrapProgram $out/bin/sshuttle \
     --prefix PATH : "${mapPath (x: "${x}/bin") buildInputs}" \
   '';
-  
+
   meta = with stdenv.lib; {
     homepage = https://github.com/sshuttle/sshuttle/;
     description = "Transparent proxy server that works as a poor man's VPN";

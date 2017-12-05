@@ -1,5 +1,6 @@
-{ stdenv, fetchurl, fetchgit, fetchzip, file, python2, tzdata, procps
-, llvm, jemalloc, ncurses, darwin, binutils, rustPlatform, git, cmake, curl
+{ stdenv, targetPackages
+, fetchurl, fetchgit, fetchzip, file, python2, tzdata, procps
+, llvm, jemalloc, ncurses, darwin, rustPlatform, git, cmake, curl
 , which, libffi, gdb
 , version
 , forceBundledLLVM ? false
@@ -10,6 +11,7 @@
 , targetPatches
 , targetToolchains
 , doCheck ? true
+, broken ? false
 , buildPlatform, hostPlatform
 } @ args:
 
@@ -47,14 +49,17 @@ stdenv.mkDerivation {
   configureFlags = configureFlags
                 ++ [ "--enable-local-rust" "--local-rust-root=${rustPlatform.rust.rustc}" "--enable-rpath" ]
                 ++ [ "--enable-vendor" "--disable-locked-deps" ]
-                ++ [ "--enable-llvm-link-shared" ]
                 # ++ [ "--jemalloc-root=${jemalloc}/lib"
-                ++ [ "--default-linker=${stdenv.cc}/bin/cc" "--default-ar=${binutils.out}/bin/ar" ]
+                ++ [ "--default-linker=${targetPackages.stdenv.cc}/bin/cc" "--default-ar=${targetPackages.stdenv.cc.bintools}/bin/ar" ]
+                ++ optional (!forceBundledLLVM) [ "--enable-llvm-link-shared" ]
                 ++ optional (stdenv.cc.cc ? isClang) "--enable-clang"
                 ++ optional (targets != []) "--target=${target}"
                 ++ optional (!forceBundledLLVM) "--llvm-root=${llvmShared}";
 
   patches = patches ++ targetPatches;
+
+  # the rust build system complains that nix alters the checksums
+  dontFixLibtool = true;
 
   passthru.target = target;
 
@@ -80,6 +85,9 @@ stdenv.mkDerivation {
     # Disable test getting stuck on hydra - possible fix:
     # https://reviews.llvm.org/rL281650
     rm -vr src/test/run-pass/issue-36474.rs || true
+
+    # On Hydra: `TcpListener::bind(&addr)`: Address already in use (os error 98)'
+    sed '/^ *fn fast_rebind()/i#[ignore]' -i src/libstd/net/tcp.rs
 
     # Disable some failing gdb tests. Try re-enabling these when gdb
     # is updated past version 7.12.
@@ -154,5 +162,6 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ madjar cstrahan wizeman globin havvy wkennington ];
     license = [ licenses.mit licenses.asl20 ];
     platforms = platforms.linux ++ platforms.darwin;
+    broken = broken;
   };
 }

@@ -25,8 +25,9 @@ in stdenv.mkDerivation rec {
     })
   ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cmake libtool pkgconfig
+    cmake libtool
     libX11 libXrandr
     openal freealut mesa libvorbis libogg gettext zlib freetype
     curl fribidi bluez libjpeg libpng

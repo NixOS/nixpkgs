@@ -120,7 +120,6 @@ let
 
       # Run systemd-nspawn without startup notification (we'll
       # wait for the container systemd to signal readiness).
-      EXIT_ON_REBOOT=1 \
       exec ${config.systemd.package}/bin/systemd-nspawn \
         --keep-unit \
         -M "$INSTANCE" -D "$root" $extraFlags \
@@ -538,7 +537,7 @@ in
               type = types.bool;
               default = false;
               description = ''
-                Wether the container is automatically started at boot-time.
+                Whether the container is automatically started at boot-time.
               '';
             };
 
@@ -596,7 +595,9 @@ in
               { config =
                   { config, pkgs, ... }:
                   { services.postgresql.enable = true;
-                    services.postgresql.package = pkgs.postgresql92;
+                    services.postgresql.package = pkgs.postgresql96;
+                    
+                    system.stateVersion = "17.03";
                   };
               };
           }

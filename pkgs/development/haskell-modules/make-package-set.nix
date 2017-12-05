@@ -91,7 +91,7 @@ let
       };
     in stdenv.lib.makeOverridable drvScope (auto // manualArgs);
 
-  mkScope = scope: pkgs // pkgs.xorg // pkgs.gnome2 // scope;
+  mkScope = scope: pkgs // pkgs.xorg // pkgs.gnome2 // { inherit stdenv; } // scope;
   defaultScope = mkScope self;
   callPackage = drv: args: callPackageWithScope defaultScope drv args;
 
@@ -118,10 +118,16 @@ let
       '';
   };
 
-  hackage2nix = name: version: self.haskellSrc2nix {
+  all-cabal-hashes-component = name: version: pkgs.runCommand "all-cabal-hashes-component-${name}-${version}" {} ''
+    tar --wildcards -xzvf ${all-cabal-hashes} \*/${name}/${version}/${name}.{json,cabal}
+    mkdir -p $out
+    mv */${name}/${version}/${name}.{json,cabal} $out
+  '';
+
+  hackage2nix = name: version: let component = all-cabal-hashes-component name version; in self.haskellSrc2nix {
     name   = "${name}-${version}";
-    sha256 = ''$(sed -e 's/.*"SHA256":"//' -e 's/".*$//' "${all-cabal-hashes}/${name}/${version}/${name}.json")'';
-    src    = "${all-cabal-hashes}/${name}/${version}/${name}.cabal";
+    sha256 = ''$(sed -e 's/.*"SHA256":"//' -e 's/".*$//' "${component}/${name}.json")'';
+    src    = "${component}/${name}.cabal";
   };
 
 in package-set { inherit pkgs stdenv callPackage; } self // {
@@ -131,7 +137,22 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
     callHackage = name: version: self.callPackage (self.hackage2nix name version);
 
     # Creates a Haskell package from a source package by calling cabal2nix on the source.
-    callCabal2nix = name: src: self.callPackage (self.haskellSrc2nix { inherit src name; });
+    callCabal2nix = name: src: args: if builtins.typeOf src != "path"
+      then self.callPackage (haskellSrc2nix { inherit name src; }) args
+      else
+        # When `src` is a Nix path literal, only use `cabal2nix` on
+        # the cabal file, so that the "import-from-derivation" is only
+        # recomputed when the cabal file changes, and so your source
+        # code isn't duplicated into the nix store on every change.
+        # This can only be done when `src` is a Nix path literal
+        # because that is the only kind of source that
+        # `builtins.filterSource` works on. But this filtering isn't
+        # usually important on other kinds of sources, like
+        # `fetchFromGitHub`.
+        overrideCabal (self.callPackage (haskellSrc2nix {
+          inherit name;
+          src = builtins.filterSource (path: type: pkgs.lib.hasSuffix ".cabal" path) src;
+        }) args) (_: { inherit src; });
 
     # : Map Name (Either Path VersionNumber) -> HaskellPackageOverrideSet
     # Given a set whose values are either paths or version strings, produces

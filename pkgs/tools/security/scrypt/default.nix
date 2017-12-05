@@ -2,27 +2,26 @@
 
 stdenv.mkDerivation rec {
   name = "scrypt-${version}";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchurl {
     url = "https://www.tarsnap.com/scrypt/${name}.tgz";
-    sha256 = "1m39hpfby0fdjam842773i5w7pa0qaj7f0r22jnchxsj824vqm0p";
+    sha256 = "0xy5yhrwwv13skv9im9vm76rybh9f29j2dh4hlh2x01gvbkza8a6";
   };
 
   buildInputs = [ openssl ];
 
   patchPhase = ''
-    substituteInPlace Makefile.in \
-      --replace "command -p mv" "mv"
-    substituteInPlace autocrap/Makefile.am \
-      --replace "command -p mv" "mv"
+    for f in Makefile.in autotools/Makefile.am libcperciva/cpusupport/Build/cpusupport.sh ; do
+      substituteInPlace $f --replace "command -p " ""
+    done
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Encryption utility";
     homepage    = https://www.tarsnap.com/scrypt.html;
-    license     = stdenv.lib.licenses.bsd2;
-    platforms   = stdenv.lib.platforms.all;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = licenses.bsd2;
+    platforms   = platforms.all;
+    maintainers = with maintainers; [ thoughtpolice ];
   };
 }

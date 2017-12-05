@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl }:
+{ lib, stdenv, fetchurl, findXMLCatalogs }:
 
 let
 
@@ -9,6 +9,8 @@ let
       url = "mirror://sourceforge/docbook/${name}.tar.bz2";
       inherit sha256;
     };
+
+    propagatedBuildInputs = [ findXMLCatalogs ];
 
     dontBuild = true;
 

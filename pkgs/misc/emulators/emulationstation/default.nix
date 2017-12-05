@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "0cm0sq2wri2l9cvab1l0g02za59q7klj0h3p028vr96n6njj4w9v";
   };
 
-  buildInputs = [ pkgconfig cmake alsaLib boost curl eigen freeimage freetype libarchive mesa SDL2 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cmake alsaLib boost curl eigen freeimage freetype libarchive mesa SDL2 ];
 
   buildPhase = "cmake . && make";
   installPhase = ''

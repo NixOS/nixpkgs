@@ -18,7 +18,7 @@ appleDerivation {
       --replace "/usr/sbin/" "" \
       --replace "/bin/" "" \
       --replace "INSTALLNAME=/System" "INSTALLNAME=$out" \
-      --replace "install_name_tool -id /System" "install_name_tool -id $out" \
+      --replace "install_name_tool -id /System/Library/Frameworks" "install_name_tool -id @rpath" \
       --replace 'chown -RH -f root:wheel $(DSTBASE)/CoreFoundation.framework' "" \
       --replace 'chmod -RH' 'chmod -R'
 

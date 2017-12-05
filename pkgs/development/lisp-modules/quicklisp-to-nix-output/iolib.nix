@@ -3,35 +3,42 @@ rec {
   baseName = ''iolib'';
   version = ''v0.8.3'';
 
+  parasites = [ "iolib/multiplex" "iolib/os" "iolib/pathnames" "iolib/sockets" "iolib/streams" "iolib/syscalls" "iolib/trivial-sockets" "iolib/zstreams" ];
+
   description = ''I/O library.'';
 
-  deps = [ args."iolib_slash_streams" args."iolib_slash_sockets" args."iolib_slash_multiplex" ];
+  deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."idna" args."iolib_dot_asdf" args."iolib_dot_base" args."iolib_dot_conf" args."iolib_dot_grovel" args."split-sequence" args."swap-bytes" args."trivial-features" ];
 
   src = fetchurl {
     url = ''http://beta.quicklisp.org/archive/iolib/2017-06-30/iolib-v0.8.3.tgz'';
     sha256 = ''12gsvsjyxmclwidcjvyrfvd0773ib54a3qzmf33hmgc9knxlli7c'';
   };
-    
+
   packageName = "iolib";
 
-  overrides = x: {
-    postInstall = ''
-      find "$out/lib/common-lisp/" -name '*.asd' | grep -iv '/iolib[.]asd${"$"}' |
-        while read f; do
-          env -i \
-          NIX_LISP="$NIX_LISP" \
-          NIX_LISP_PRELAUNCH_HOOK="nix_lisp_run_single_form '(progn
-            (asdf:load-system :$(basename "$f" .asd))
-            (asdf:perform (quote asdf:compile-bundle-op) :$(basename "$f" .asd))
-            (ignore-errors (asdf:perform (quote asdf:deliver-asd-op) :$(basename "$f" .asd)))
-            )'" \
-            "$out"/bin/*-lisp-launcher.sh ||
-          mv "$f"{,.sibling}; done || true
-    '';
-  };
+  asdFilesToKeep = ["iolib.asd"];
+  overrides = x: x;
 }
-/* (SYSTEM iolib DESCRIPTION I/O library. SHA256 12gsvsjyxmclwidcjvyrfvd0773ib54a3qzmf33hmgc9knxlli7c URL
-    http://beta.quicklisp.org/archive/iolib/2017-06-30/iolib-v0.8.3.tgz MD5 fc28d4cad6f8e43972df3baa6a8ac45c NAME iolib TESTNAME NIL FILENAME iolib DEPS
-    ((NAME iolib/streams FILENAME iolib_slash_streams) (NAME iolib/sockets FILENAME iolib_slash_sockets) (NAME iolib/multiplex FILENAME iolib_slash_multiplex))
-    DEPENDENCIES (iolib/streams iolib/sockets iolib/multiplex) VERSION v0.8.3 SIBLINGS
-    (iolib.asdf iolib.base iolib.common-lisp iolib.conf iolib.examples iolib.grovel iolib.tests)) */
+/* (SYSTEM iolib DESCRIPTION I/O library. SHA256
+    12gsvsjyxmclwidcjvyrfvd0773ib54a3qzmf33hmgc9knxlli7c URL
+    http://beta.quicklisp.org/archive/iolib/2017-06-30/iolib-v0.8.3.tgz MD5
+    fc28d4cad6f8e43972df3baa6a8ac45c NAME iolib FILENAME iolib DEPS
+    ((NAME alexandria FILENAME alexandria) (NAME babel FILENAME babel)
+     (NAME bordeaux-threads FILENAME bordeaux-threads)
+     (NAME cffi FILENAME cffi) (NAME idna FILENAME idna)
+     (NAME iolib.asdf FILENAME iolib_dot_asdf)
+     (NAME iolib.base FILENAME iolib_dot_base)
+     (NAME iolib.conf FILENAME iolib_dot_conf)
+     (NAME iolib.grovel FILENAME iolib_dot_grovel)
+     (NAME split-sequence FILENAME split-sequence)
+     (NAME swap-bytes FILENAME swap-bytes)
+     (NAME trivial-features FILENAME trivial-features))
+    DEPENDENCIES
+    (alexandria babel bordeaux-threads cffi idna iolib.asdf iolib.base
+     iolib.conf iolib.grovel split-sequence swap-bytes trivial-features)
+    VERSION v0.8.3 SIBLINGS
+    (iolib.asdf iolib.base iolib.common-lisp iolib.conf iolib.examples
+     iolib.grovel iolib.tests)
+    PARASITES
+    (iolib/multiplex iolib/os iolib/pathnames iolib/sockets iolib/streams
+     iolib/syscalls iolib/trivial-sockets iolib/zstreams)) */

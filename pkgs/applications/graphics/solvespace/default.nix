@@ -11,8 +11,9 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cmake pkgconfig zlib libpng cairo freetype
+    cmake zlib libpng cairo freetype
     json_c fontconfig gtkmm3 pangomm glew mesa_glu
     xlibs.libpthreadstubs xlibs.libXdmcp pcre
   ];
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/share/applications/solvespace.desktop \
-      --replace /usr/bin/ $out/bin/ \
+      --replace /usr/bin/ $out/bin/
   '';
 
   meta = {

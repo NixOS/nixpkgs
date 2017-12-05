@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   name = "kt-${version}";
-  version = "11.1.0";
+  version = "12.1.0";
 
   src = fetchFromGitHub {
     owner = "fgeller";
     repo = "kt";
     rev = "v${version}";
-    sha256 = "1ymygd3l5pfbnjmdjcrspj520v29hnv3bdgxpim38dpv3qj518vq";
+    sha256 = "014q39bg88vg1xdq1bz6wj982zb148sip3a42hbrinh8qj41y4yg";
   };
 
   goPackagePath = "github.com/fgeller/kt";

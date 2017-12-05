@@ -42,7 +42,7 @@ let
     installPhase =
       let so =
             if bass.so ? ${stdenv.system} then bass.so.${stdenv.system}
-            else abort "${name} not packaged for ${stdenv.system} (yet).";
+            else throw "${name} not packaged for ${stdenv.system} (yet).";
       in ''
         mkdir -p $out/{lib,include}
         install -m644 -t $out/lib/ ${so}
@@ -53,6 +53,7 @@ let
       description = "Shareware audio library";
       homepage = https://www.un4seen.com/;
       license = licenses.unfreeRedistributable;
+      platforms = builtins.attrNames bass.so;
     };
   };
 

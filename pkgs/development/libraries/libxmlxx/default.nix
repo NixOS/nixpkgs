@@ -12,9 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig perl ];
 
-  buildInputs = [ glibmm ];
-
-  propagatedBuildInputs = [ libxml2 ];
+  propagatedBuildInputs = [ libxml2 glibmm ];
 
   meta = with stdenv.lib; {
     homepage = http://libxmlplusplus.sourceforge.net/;

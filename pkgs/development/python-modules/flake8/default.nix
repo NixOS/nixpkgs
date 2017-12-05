@@ -6,11 +6,11 @@
 buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "flake8";
-  version = "3.3.0";
+  version = "3.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04izn1q1lgbr408l9b3vkxqmpi6mq47bxwc0iwypb02mrxns41xr";
+    sha256 = "7253265f7abd8b313e3892944044a365e3f4ac3fcdcfb4298f55ee9ddf188ba0";
   };
 
   buildInputs = [ pytest mock pytestrunner ];
@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Code checking using pep8 and pyflakes";
-    homepage = http://pypi.python.org/pypi/flake8;
+    homepage = https://pypi.python.org/pypi/flake8;
     license = licenses.mit;
     maintainers = with maintainers; [ garbas ];
   };

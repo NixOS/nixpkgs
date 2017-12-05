@@ -15,8 +15,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zsh ];
 
-  buildPhases = [ "unpackPhase" "installPhase" ];
-
   installPhase = ''
     install -D zsh-autosuggestions.zsh \
       $out/share/zsh-autosuggestions/zsh-autosuggestions.zsh

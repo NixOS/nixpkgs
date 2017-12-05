@@ -17,7 +17,7 @@ with lib;
         default = false;
         description = ''
           Whether to enable GeoClue 2 daemon, a DBus service
-          that provides location informationfor accessing.
+          that provides location information for accessing.
         '';
       };
 

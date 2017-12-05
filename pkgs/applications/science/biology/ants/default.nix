@@ -2,23 +2,26 @@
 
 stdenv.mkDerivation rec {
   _name    = "ANTs";
-  _version = "2.1.0";
+  _version = "2.2.0";
   name  = "${_name}-${_version}";
 
   src = fetchFromGitHub {
-    owner  = "stnava";
+    owner  = "ANTsX";
     repo   = "ANTs";
-    rev    = "4e02aa76621698e3513330dd9e863e22917e14b7";
-    sha256 = "0gyys1lf69bl3569cskxc8r5llwcr0dsyzvlby5skhfpsyw0dh8r";
+    rev    = "37ad4e20be3a5ecd26c2e4e41b49e778a0246c3d";
+    sha256 = "1hrdwv3m9xh3yf7l0rm2ggxc2xzckfb8srs88g485ibfszx7i03q";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
   buildInputs = [ itk vtk ];
 
-  cmakeFlags = [ "-DANTS_SUPERBUILD=FALSE" "-DUSE_VTK=TRUE" ];
+  cmakeFlags = [ "-DANTS_SUPERBUILD=FALSE" "-DUSE_VTK=TRUE"
+                 # as cmake otherwise tries to download test data:
+                 "-DBUILD_TESTING=FALSE" ];
+
+  enableParallelBuilding = true;
 
   checkPhase = "ctest";
-  doCheck = false;
 
   postInstall = ''
     for file in $out/bin/*; do
@@ -27,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/stnava/ANTs;
+    homepage = https://github.com/ANTxS/ANTs;
     description = "Advanced normalization toolkit for medical image registration and other processing";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;

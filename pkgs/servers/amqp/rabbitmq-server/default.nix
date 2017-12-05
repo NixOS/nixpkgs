@@ -7,11 +7,11 @@
 stdenv.mkDerivation rec {
   name = "rabbitmq-server-${version}";
 
-  version = "3.6.6";
+  version = "3.6.10";
 
   src = fetchurl {
-    url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/rabbitmq_v3_6_6/rabbitmq-server-3.6.6.tar.xz";
-    sha256 = "13mpnyfxd026w525rsnkcw0f8bcrkbzl7k9g8pnqmm3zyny8jmir";
+    url = "https://www.rabbitmq.com/releases/rabbitmq-server/v${version}/${name}.tar.xz";
+    sha256 = "0k1rhg1a51201b1hp6vaf4fk48hqz7m9hw55b8xnnyz2ld88jiqg";
   };
 
   buildInputs =
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   postInstall =
     ''
       echo 'PATH=${erlang}/bin:''${PATH:+:}$PATH' >> $out/sbin/rabbitmq-env
-    ''; # */
+    '';
 
   meta = {
     homepage = http://www.rabbitmq.com/;

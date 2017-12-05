@@ -1,23 +1,16 @@
 { fetchFromGitHub, kernel, stdenv }:
 
-with stdenv.lib;
-
-let pkgName = "mba6x_bl";
-in
-
 stdenv.mkDerivation rec {
-  name = "${pkgName}-${version}";
-  version = "2016-04-22";
+  name = "mba6x_bl-2016-12-08";
 
   src = fetchFromGitHub {
     owner = "patjak";
-    repo = pkgName;
-    rev = "d05c125efe182376ddab30d486994ec00e144650";
-    sha256 = "15h90z3ijq4lv37nmx70xqggcvn21vr7mki2psk1jyj88in3j3xn";
+    repo = "mba6x_bl";
+    rev = "b96aafd30c18200b4ad1f6eb995bc19200f60c47";
+    sha256 = "10payvfxahazdxisch4wm29fhl8y07ki72q4c78sl4rn73sj6yjq";
   };
 
   enableParallelBuilding = true;
-
   hardeningDisable = [ "pic" ];
 
   makeFlags = [
@@ -25,7 +18,7 @@ stdenv.mkDerivation rec {
     "INSTALL_MOD_PATH=$(out)"
   ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "MacBook Air 6,1 and 6,2 (mid 2013) backlight driver";
     homepage = https://github.com/patjak/mba6x_bl;
     license = licenses.gpl2;

@@ -105,6 +105,12 @@ self: super: builtins.intersectAttrs super {
     configureFlags =  "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka";
   });
 
+  # library has hard coded directories that need to be removed. Reported upstream here https://github.com/haskell-works/hw-kafka-client/issues/32
+  hw-kafka-client = dontCheck (overrideCabal super.hw-kafka-client (drv: {
+    preConfigure = "sed -i -e /extra-lib-dirs/d -e /include-dirs/d -e /librdkafka/d hw-kafka-client.cabal";
+    configureFlags =  "--extra-include-dirs=${pkgs.rdkafka}/include/librdkafka";
+  }));
+
   # Foreign dependency name clashes with another Haskell package.
   libarchive-conduit = super.libarchive-conduit.override { archive = pkgs.libarchive; };
 
@@ -220,6 +226,12 @@ self: super: builtins.intersectAttrs super {
   # Tests attempt to use NPM to install from the network into
   # /homeless-shelter. Disabled.
   purescript = dontCheck super.purescript;
+
+  # https://github.com/haskell-foundation/foundation/pull/412
+  foundation =
+    if pkgs.stdenv.isDarwin
+    then dontCheck super.foundation
+    else super.foundation;
 
   # Hardcoded include path
   poppler = overrideCabal super.poppler (drv: {
@@ -488,5 +500,11 @@ self: super: builtins.intersectAttrs super {
 
   # Without this override, the builds lacks pkg-config.
   opencv-extra = addPkgconfigDepend super.opencv-extra (pkgs.opencv3.override { enableContrib = true; });
+
+  # Written against the 6.X series of megaparsec
+  htoml-megaparsec = super.htoml-megaparsec.override { megaparsec = self.megaparsec_6_2_0; };
+
+  # Break cyclic reference that results in an infinite recursion.
+  partial-semigroup = dontCheck super.partial-semigroup;
 
 }

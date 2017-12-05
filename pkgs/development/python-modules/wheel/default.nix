@@ -9,17 +9,20 @@
 
 buildPythonPackage rec {
   pname = "wheel";
-  version = "0.29.0";
+  version = "0.30.0";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ebb8ad7e26b448e9caa4773d2357849bf80ff9e313964bcaf79cbf0201a1648";
+    sha256 = "9515fe0a94e823fd90b08d22de45d7bde57c90edce705b22f5e1ecf7e1b653c8";
   };
 
-  buildInputs = [ pytest pytestcov coverage ];
+  checkInputs = [ pytest pytestcov coverage ];
 
   propagatedBuildInputs = [ jsonschema ];
+
+  # No tests in archive
+  doCheck = false;
 
   # We add this flag to ignore the copy installed by bootstrapped-pip
   installFlags = [ "--ignore-installed" ];

@@ -137,8 +137,8 @@ services.xserver.displayManager.enable = mkOption {
 };</screen></example>
 
 <example xml:id='ex-option-declaration-eot-backend-sddm'><title>Extending
-    <literal>services.foo.backend</literal> in the <literal>sddm</literal>
-    module</title>
+    <literal>services.xserver.displayManager.enable</literal> in the 
+    <literal>sddm</literal> module</title>
 <screen>
 services.xserver.displayManager.enable = mkOption {
   type = with types; nullOr (enum [ "sddm" ]);

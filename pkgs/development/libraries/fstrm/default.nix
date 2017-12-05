@@ -1,20 +1,24 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libevent }:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libevent, openssl }:
 
 stdenv.mkDerivation rec {
   name = "fstrm-${version}";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "farsightsec";
     repo = "fstrm";
     rev = "v${version}";
-    sha256 = "1n8hpywjgkzm0xh0hvryf5r6v2sbpgr3qy0grxq9yha7kqcam4f3";
+    sha256 = "135m0d4z1wbiaazs3bh6z53a35mgs33gvfki8pl4xfaw9cfcfpd2";
   };
 
   outputs = [ "bin" "out" "dev" ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ libevent ];
+  buildInputs = [ libevent openssl ];
+
+  preBuild = ''
+    NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -L${openssl}/lib"
+  '';
 
   doCheck = true;
 

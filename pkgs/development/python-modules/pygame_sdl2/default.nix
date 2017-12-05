@@ -1,4 +1,4 @@
-{ stdenv, pkgs, buildPythonPackage, fetchFromGitHub
+{ stdenv, pkgs, buildPythonPackage, fetchFromGitHub, isPy27
 , cython, SDL2, SDL2_image, SDL2_ttf, SDL2_mixer, libjpeg, libpng }:
 
 buildPythonPackage rec {
@@ -17,6 +17,9 @@ buildPythonPackage rec {
     SDL2 SDL2_image SDL2_ttf SDL2_mixer
     cython libjpeg libpng
   ];
+
+
+  doCheck = isPy27; # python3 tests are non-functional
 
   postInstall = ''
     ( cd "$out"/include/python*/ ;

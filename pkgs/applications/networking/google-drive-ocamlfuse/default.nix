@@ -1,16 +1,20 @@
-{ stdenv, fetchurl, zlib
+{ stdenv, fetchFromGitHub, zlib
 , ocaml, ocamlbuild, ocamlfuse, findlib, gapi_ocaml, ocaml_sqlite3, camlidl }:
 
 stdenv.mkDerivation rec {
-  name    = "google-drive-ocamlfuse-${version}";
-  version = "0.6.17";
+  name = "google-drive-ocamlfuse-${version}";
+  version = "0.6.21";
 
-  src = fetchurl {
-    url = "https://forge.ocamlcore.org/frs/download.php/1674/${name}.tar.gz";
-    sha256 = "1ldja7080pnjaibrbdvfqwakp4mac8yw1lkb95f7lgldmy96lxas";
+  src = fetchFromGitHub {
+    owner = "astrada";
+    repo = "google-drive-ocamlfuse";
+    rev = "v${version}";
+    sha256 = "14qvhz18pzxdgxk5vcs024ajbkxccfwc9p3z5r6vfkc9mm851v59";
   };
 
-  buildInputs = [ zlib ocaml ocamlbuild ocamlfuse findlib gapi_ocaml ocaml_sqlite3 camlidl];
+  nativeBuildInputs = [ ocamlbuild ];
+
+  buildInputs = [ zlib ocaml ocamlfuse findlib gapi_ocaml ocaml_sqlite3 camlidl ];
 
   configurePhase = "ocaml setup.ml -configure --prefix \"$out\"";
   buildPhase = "ocaml setup.ml -build";
