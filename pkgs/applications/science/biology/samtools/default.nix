@@ -3,12 +3,12 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "samtools";
-  major = "1.4";
+  major = "1.5";
   version = "${major}.0";
 
   src = fetchurl {
     url = "https://github.com/samtools/samtools/releases/download/${major}/samtools-${major}.tar.bz2";
-    sha256 = "1x73c0lxvd58ghrmaqqyp56z7bkmp28a71fk4ap82j976pw5pbls";
+    sha256 = "1xidmv0jmfy7l0kb32hdnlshcxgzi1hmygvig0cqrq1fhckdlhl5";
   };
 
   buildInputs = [ zlib ncurses ];

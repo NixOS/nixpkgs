@@ -1,20 +1,24 @@
 {
-  mkDerivation, lib,
+  mkDerivation, lib, kdepimTeam,
   extra-cmake-modules,
-  akonadi, akonadi-mime, grantlee, kcontacts, kdbusaddons, ki18n, kiconthemes,
-  kio, kitemmodels, kmime, ktextwidgets, qtwebengine,
+  qtwebengine,
+  grantlee,
+  kdbusaddons, ki18n, kiconthemes, kio, kitemmodels, ktextwidgets, prison,
+  akonadi, akonadi-mime, kcontacts, kmime,
 }:
 
 mkDerivation {
   name = "akonadi-contacts";
   meta = {
     license = with lib.licenses; [ gpl2 lgpl21 ];
-    maintainers = [ lib.maintainers.ttuegel ];
+    maintainers = kdepimTeam;
   };
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
-    akonadi-mime grantlee kcontacts kdbusaddons ki18n kiconthemes kio
-    kitemmodels kmime ktextwidgets qtwebengine
+    qtwebengine
+    grantlee
+    kdbusaddons ki18n kiconthemes kio kitemmodels ktextwidgets prison
+    akonadi-mime kcontacts kmime
   ];
   propagatedBuildInputs = [ akonadi ];
   outputs = [ "out" "dev" ];

@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   makeFlags = ["GUILE_AUTO_COMPILE=0"];
   meta = {
     description = "Bindings to SDL2 for GNU Guile";
-    homepage = "https://git.dthompson.us/guile-sdl2.git";
+    homepage = https://git.dthompson.us/guile-sdl2.git;
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.seppeljordan ];
     platforms = stdenv.lib.platforms.all;

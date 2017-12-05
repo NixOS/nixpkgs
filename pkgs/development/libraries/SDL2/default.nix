@@ -75,7 +75,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A cross-platform multimedia library";
-    homepage = "http://www.libsdl.org/";
+    homepage = http://www.libsdl.org/;
     license = licenses.zlib;
     platforms = platforms.all;
     maintainers = with maintainers; [ cpages ];

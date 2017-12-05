@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Digital modem program";
-    homepage = http://sourceforge.net/projects/fldigi/;
+    homepage = https://sourceforge.net/projects/fldigi/;
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [ relrod ftrvxmtrx ];
     platforms = stdenv.lib.platforms.linux;

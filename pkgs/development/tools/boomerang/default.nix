@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://boomerang.sourceforge.net/";
+    homepage = http://boomerang.sourceforge.net/;
     license = stdenv.lib.licenses.bsd3;
     description = "A general, open source, retargetable decompiler";
   };

@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
       - Asynchronous background rendering of the next page
       - Customizable multi-threaded caching
     '';
-    homepage = http://seasonofcode.com/pages/jfbview.html;
+    homepage = https://seasonofcode.com/pages/jfbview.html;
     license = licenses.asl20;
     platforms = platforms.linux;
     maintainers = with maintainers; [ nckx ];

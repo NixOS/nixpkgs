@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
       pgpdump is a PGP packet visualizer which displays the packet format of
       OpenPGP (RFC 4880) and PGP version 2 (RFC 1991).
     '';
-    homepage = "http://www.mew.org/~kazu/proj/pgpdump/en/";
+    homepage = http://www.mew.org/~kazu/proj/pgpdump/en/;
     license = licenses.bsd3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

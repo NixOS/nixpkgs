@@ -1,7 +1,7 @@
 {
   mkDerivation, lib,
   extra-cmake-modules, kdoctools,
-  kdelibs4support, kdnssd, libvncserver, libXtst
+  kdelibs4support, kdnssd, libvncserver, libXtst, qtx11extras
 }:
 
 mkDerivation {
@@ -11,6 +11,6 @@ mkDerivation {
     maintainers = with lib.maintainers; [ jerith666 ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [ libvncserver libXtst ];
+  buildInputs = [ libvncserver libXtst qtx11extras ];
   propagatedBuildInputs = [ kdelibs4support kdnssd ];
 }

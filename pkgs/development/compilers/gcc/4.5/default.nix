@@ -86,7 +86,6 @@ let version = "4.5.4";
         withMode;
 
     crossConfigureFlags =
-      "--target=${targetPlatform.config}" +
       platformFlags +
       # Ensure that -print-prog-name is able to find the correct programs.
       " --with-as=${binutils}/bin/${targetPlatform.config}-as" +
@@ -242,6 +241,8 @@ stdenv.mkDerivation ({
     ++ (optionals langVhdl [gnat])
     ;
 
+  # TODO(@Ericson2314): Always pass "--target" and always prefix.
+  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
   configureFlags = "
     ${if enableMultilib then "" else "--disable-multilib"}
     ${if enableShared then "" else "--disable-shared"}
@@ -278,11 +279,9 @@ stdenv.mkDerivation ({
       if targetPlatform == hostPlatform && stdenv.system == "mips64el-linux" then "--with-arch=loongson2f" else ""}
     ${if langAda then " --enable-libada" else ""}
     ${if targetPlatform == hostPlatform && targetPlatform.isi686 then "--with-arch=i686" else ""}
+    ${platformFlags}
     ${if targetPlatform != hostPlatform then crossConfigureFlags else ""}
-    ${if targetPlatform == hostPlatform then platformFlags else ""}
-  " + optionalString
-        (hostPlatform != buildPlatform)
-        (platformFlags + " --target=${targetPlatform.config}");
+  ";
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
@@ -329,7 +328,7 @@ stdenv.mkDerivation ({
     NIX_CC_CROSS = optionalString (targetPlatform == hostPlatform) builtins.toString stdenv.cc;
     dontStrip = true;
   };
- 
+
 
   # Needed for the cross compilation to work
   AR = "ar";
@@ -357,8 +356,7 @@ stdenv.mkDerivation ({
 
     # On GNU/Hurd glibc refers to Mach & Hurd
     # headers.
-    ++ optionals (libcCross != null &&
-                  hasAttr "propagatedBuildInputs" libcCross)
+    ++ optionals (libcCross != null && libcCross ? propagatedBuildInputs)
                  libcCross.propagatedBuildInputs);
 
   LIBRARY_PATH = makeLibraryPath ([]
@@ -466,7 +464,7 @@ stdenv.mkDerivation ({
   '';
 
   meta = {
-    homepage = "http://ghdl.free.fr/";
+    homepage = http://ghdl.free.fr/;
     license = stdenv.lib.licenses.gpl2Plus;
     description = "Complete VHDL simulator, using the GCC technology (gcc ${version})";
     maintainers = with stdenv.lib.maintainers; [viric];

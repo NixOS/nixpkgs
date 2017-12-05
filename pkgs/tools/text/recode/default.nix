@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://www.gnu.org/software/recode/";
+    homepage = http://www.gnu.org/software/recode/;
     description = "Converts files between various character sets and usages";
     platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.gpl2Plus;

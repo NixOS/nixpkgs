@@ -289,7 +289,8 @@ rec {
 
   configurator = janePackage {
     name = "configurator";
-    hash = "1ll90pnprc5nah621ckvqi1gwagvglzx2mzjpkppddw1kr320w80";
+    version = "0.9.1";
+    hash = "1q0s0ghcrcrxdj6zr9zr27g7sr4qr9l14kizjphwqwwvgbzawdix";
     propagatedBuildInputs = [ ppx_base ];
     meta.description = "Helper library for gathering system configuration";
   };

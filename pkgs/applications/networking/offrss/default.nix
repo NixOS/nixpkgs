@@ -13,7 +13,6 @@ stdenv.mkDerivation {
     preConfigure = ''
       sed 's/^PDF/#PDF/' -i Makefile
     '';
-    makeFlags = "CC=${stdenv.cross.config}-gcc";
   };
 
   buildInputs = [ curl libmrss podofo ]
@@ -29,7 +28,7 @@ stdenv.mkDerivation {
   };
 
   meta = {
-    homepage = "http://vicerveza.homeunix.net/~viric/cgi-bin/offrss";
+    homepage = http://vicerveza.homeunix.net/~viric/cgi-bin/offrss;
     description = "Offline RSS/Atom reader";
     license="AGPLv3+";
     maintainers = with stdenv.lib.maintainers; [viric];

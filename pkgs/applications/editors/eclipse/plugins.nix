@@ -106,16 +106,16 @@ rec {
 
   anyedittools = buildEclipsePlugin rec {
     name = "anyedit-${version}";
-    version = "2.6.0.201511291145";
+    version = "2.7.0.201705171641";
 
     srcFeature = fetchurl {
       url = "http://andrei.gmxhome.de/eclipse/features/AnyEditTools_${version}.jar";
-      sha256 = "1vllci75qcd28b6hn2jz29l6cabxx9ql5i6l9cwq9rxp49dhc96b";
+      sha256 = "07k029nw5ibxpjc0siy06ihylbqrxllf59yz8c544gra8lc079c9";
     };
 
     srcPlugin = fetchurl {
-      url = "https://github.com/iloveeclipse/anyedittools/releases/download/2.6.0/de.loskutov.anyedit.AnyEditTools_${version}.jar";
-      sha256 = "0mgq0ylfa7srjf7azyx0kbahlsjf0sdpazqphzx4f0bfn1l328s4";
+      url = "https://github.com/iloveeclipse/anyedittools/releases/download/2.7.0/de.loskutov.anyedit.AnyEditTools_${version}.jar";
+      sha256 = "0wbm8zfjh7gxrw5sy9m3siddiazh5czgxp7zyzxwzkdqyqzqs70h";
     };
 
     meta = with stdenv.lib; {
@@ -129,16 +129,16 @@ rec {
 
   autodetect-encoding = buildEclipsePlugin rec {
     name = "autodetect-encoding-${version}";
-    version = "1.8.3.201610171338";
+    version = "1.8.4.201708052053";
 
     srcFeature = fetchurl {
       url = "https://cypher256.github.io/eclipse-encoding-plugin/features/eclipse.encoding.plugin.feature_${version}.jar";
-      sha256 = "09xfn5j6vr9r7n0riqs5ja5ms98ax9pyi3f7irnv80flhzagdv7f";
+      sha256 = "1gbvib5dd75pp5mr17ckj2y66gnxjvpc067im5nsl9fyljdw867c";
     };
 
     srcPlugin = fetchurl {
       url = "https://cypher256.github.io/eclipse-encoding-plugin/plugins/mergedoc.encoding_${version}.jar";
-      sha256 = "0l2zw4whx1a7j0jl7i6n6igr2ki6jh6nwggx53n3ipzg7cgdcg0y";
+      sha256 = "0728zsbfs1mc4qvx2p92hkxpnknckqk0xvqlmzivsnr62b5qd5im";
     };
 
     meta = with stdenv.lib; {
@@ -194,12 +194,12 @@ rec {
 
   checkstyle = buildEclipseUpdateSite rec {
     name = "checkstyle-${version}";
-    version = "7.3.0.201612142232";
+    version = "8.0.0.201707161819";
 
     src = fetchzip {
       stripRoot = false;
-      url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/7.3.0/net.sf.eclipsecs-updatesite_${version}.zip";
-      sha256 = "1mbiszwnakfmjx5mnh9h2rrp9jzizkmz89p8z4spq2m9kwy1lkqj";
+      url = "mirror://sourceforge/project/eclipse-cs/Eclipse%20Checkstyle%20Plug-in/8.0.0/net.sf.eclipsecs-updatesite_${version}.zip";
+      sha256 = "1p07xcf71qc99sh73vqm9xxxgi819m58frv0cpvsn06y6ljr0aj2";
     };
 
     meta = with stdenv.lib; {
@@ -364,12 +364,12 @@ rec {
 
   jdt = buildEclipseUpdateSite rec {
     name = "jdt-${version}";
-    version = "4.6.2";
+    version = "4.7";
 
     src = fetchzip {
       stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.6.2-201611241400/org.eclipse.jdt-4.6.2.zip";
-      sha256 = "1nnlrl05lh1hcsh14dlisnx0vwmj21agm4wia98rv0gl2gkp19n1";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.7-201706120950/org.eclipse.jdt-4.7.zip";
+      sha256 = "0y17shnlh90gg9226lraknvdnp2i71ck91dnxbbzvxl8b64v8v1p";
     };
 
     meta = with stdenv.lib; {
@@ -416,7 +416,7 @@ rec {
     };
 
     meta = with stdenv.lib; {
-      homepage = "http://scala-ide.org/";
+      homepage = http://scala-ide.org/;
       description = "The Scala IDE for Eclipse";
       license = licenses.bsd3;
       platforms = platforms.all;

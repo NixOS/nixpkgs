@@ -7,7 +7,9 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/clucene/${name}.tar.bz2";
     sha256 = "202ee45af747f18642ae0a088d7c4553521714a511a1a9ec99b8144cf9928317";
   };
-  
+
+  patches = [ ./gcc6.patch ];
+
   meta = {
     description = "Core library for full-featured text search engine";
     longDescription = ''

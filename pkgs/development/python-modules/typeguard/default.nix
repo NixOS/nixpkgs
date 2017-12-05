@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "This library provides run-time type checking for functions defined with argument type annotations";
-    homepage = "https://github.com/agronholm/typeguard";
+    homepage = https://github.com/agronholm/typeguard;
     license = licenses.mit;
   };
 }

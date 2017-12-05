@@ -26,7 +26,7 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.mit ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = "http://foicica.com/gtdialog";
+    homepage = http://foicica.com/gtdialog;
     downloadPage = "http://foicica.com/gtdialog/download";
   };
 }

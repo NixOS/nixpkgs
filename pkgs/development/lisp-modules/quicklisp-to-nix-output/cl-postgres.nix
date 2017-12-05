@@ -11,6 +11,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/postmodern/2017-04-03/postmodern-20170403-git.tgz'';
     sha256 = ''1pklmp0y0falrmbxll79drrcrlgslasavdym5r45m8kkzi1zpv9p'';
   };
+    
+  packageName = "cl-postgres";
 
   overrides = x: {
     postInstall = ''
@@ -30,4 +32,4 @@ rec {
 }
 /* (SYSTEM cl-postgres DESCRIPTION Low-level client library for PostgreSQL SHA256 1pklmp0y0falrmbxll79drrcrlgslasavdym5r45m8kkzi1zpv9p URL
     http://beta.quicklisp.org/archive/postmodern/2017-04-03/postmodern-20170403-git.tgz MD5 7a4145a0a5ff5bcb7a4bf29b5c2915d2 NAME cl-postgres TESTNAME NIL
-    FILENAME cl-postgres DEPS ((NAME md5)) DEPENDENCIES (md5) VERSION postmodern-20170403-git SIBLINGS (postmodern s-sql simple-date)) */
+    FILENAME cl-postgres DEPS ((NAME md5 FILENAME md5)) DEPENDENCIES (md5) VERSION postmodern-20170403-git SIBLINGS (postmodern s-sql simple-date)) */

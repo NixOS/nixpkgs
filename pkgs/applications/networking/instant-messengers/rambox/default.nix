@@ -6,7 +6,18 @@ let
   bits = if stdenv.system == "x86_64-linux" then "x64"
          else "ia32";
 
-  version = "0.5.9";
+  version = "0.5.10";
+
+  runtimeDeps = [
+    udev libnotify
+  ];
+  deps = (with xorg; [
+    libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes
+    libXrender libX11 libXtst libXScrnSaver libxcb
+  ]) ++ [
+    gtk2 atk glib pango gdk_pixbuf cairo freetype fontconfig dbus
+    gnome2.GConf nss nspr alsaLib cups expat stdenv.cc.cc
+  ] ++ runtimeDeps;
 
   myIcon = fetchurl {
     url = "https://raw.githubusercontent.com/saenzramiro/rambox/9e4444e6297dd35743b79fe23f8d451a104028d5/resources/Icon.png";
@@ -25,23 +36,12 @@ in stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/saenzramiro/rambox/releases/download/${version}/Rambox-${version}-${bits}.tar.gz";
     sha256 = if bits == "x64" then
-      "0wx1cj3h1h28lhvl8ysmvr2wxq39lklk37361i598vph2pvnibi0" else
-      "1dqjd5rmml63h3y43n1r68il3pn8zwy0wwr0866cnpizsbis96fy";
+      "1i5jbhsfdbhr0rsb5w2pfpwjiagz47ppxk65qny3ay3lr4lbccn3" else
+      "1p1m6vsa9xvl3pjf3pygvllyk7j4q9vnlzmrizb8f5q30fpls25x";
   };
 
   # don't remove runtime deps
   dontPatchELF = true;
-
-  deps = (with xorg; [
-    libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes
-    libXrender libX11 libXtst libXScrnSaver libxcb
-  ]) ++ [
-    gtk2 atk glib pango gdk_pixbuf cairo freetype fontconfig dbus
-    gnome2.GConf nss nspr alsaLib cups expat stdenv.cc.cc
-  # runtime deps
-  ] ++ [
-    udev libnotify
-  ];
 
   installPhase = ''
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" rambox

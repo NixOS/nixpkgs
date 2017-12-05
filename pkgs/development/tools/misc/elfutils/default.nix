@@ -1,14 +1,16 @@
-{ lib, stdenv, fetchurl, m4, zlib, bzip2, bison, flex, gettext, xz }:
+{ lib, stdenv, fetchurl, m4, zlib, bzip2, bison, flex, gettext, xz, setupDebugInfoDirs }:
 
 # TODO: Look at the hardcoded paths to kernel, modules etc.
 stdenv.mkDerivation rec {
   name = "elfutils-${version}";
-  version = "0.168";
+  version = "0.169";
 
   src = fetchurl {
     url = "https://sourceware.org/elfutils/ftp/${version}/${name}.tar.bz2";
-    sha256 = "0xn2fbgda1i703csfs35frvm7l068ybmay4ssrykqdx17f4hg3dq";
+    sha256 = "1hiv1yqig3292dwqhrwsxwk3qjalxp5fpl8yphwbfwh8ng3zl4ll";
   };
+
+  patches = ./debug-info-from-env.patch;
 
   hardeningDisable = [ "format" ];
 
@@ -16,6 +18,8 @@ stdenv.mkDerivation rec {
   # as the host-bzip2 will be in the path.
   nativeBuildInputs = [ m4 bison flex gettext bzip2 ];
   buildInputs = [ zlib bzip2 xz ];
+
+  propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
 
   configureFlags =
     [ "--program-prefix=eu-" # prevent collisions with binutils

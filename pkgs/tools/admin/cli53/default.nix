@@ -1,27 +1,32 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, python2, fetchurl }:
 
-buildGoPackage rec {
+python2.pkgs.buildPythonApplication rec {
   name = "cli53-${version}";
-  version = "0.8.8";
+  version = "0.4.4";
 
-  goPackagePath = "github.com/barnybug/cli53";
-
-  src = fetchFromGitHub {
-    owner = "barnybug";
-    repo = "cli53";
-    rev = version;
-    sha256 = "1hbx64rn25qzp2xlfwv8xaqyfcax9b6pl30j9vciw7cb346i84gc";
+  src = fetchurl {
+    url = "mirror://pypi/c/cli53/${name}.tar.gz";
+    sha256 = "0s9jzigq6a16m2c3qklssx2lz16cf13g5zh80vh24kxazaxqzbig";
   };
 
-  buildPhase = ''
-    pushd go/src/${goPackagePath}/cmd/cli53
-    go get .
-    popd
+  postPatch = ''
+    substituteInPlace setup.py --replace "'argparse', " ""
   '';
 
-  goDeps = ./deps.nix;
+  checkPhase = ''
+    ${python2.interpreter} -m unittest discover -s tests
+  '';
 
-  meta = with stdenv.lib; {
+  # Tests do not function
+  doCheck = false;
+
+  propagatedBuildInputs = with python2.pkgs; [
+    argparse
+    boto
+    dns
+  ];
+
+  meta = with lib; {
     description = "CLI tool for the Amazon Route 53 DNS service";
     homepage = https://github.com/barnybug/cli53;
     license = licenses.mit;

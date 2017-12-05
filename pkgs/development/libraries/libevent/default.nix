@@ -1,27 +1,13 @@
 { stdenv, fetchurl, openssl, findutils }:
 
-let version = "2.0.22"; in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "libevent-${version}";
+  version = "2.1.8";
 
   src = fetchurl {
     url = "https://github.com/libevent/libevent/releases/download/release-${version}-stable/libevent-${version}-stable.tar.gz";
-    sha256 = "18qz9qfwrkakmazdlwxvjmw8p76g70n3faikwvdwznns1agw9hki";
+    sha256 = "1hhxnxlr0fsdv7bdmzsnhdz16fxf3jg2r6vyljcl3kj6pflcap4n";
   };
-
-  prePatch = let
-      # https://lwn.net/Vulnerabilities/714581/
-      debian = fetchurl {
-        url = "http://http.debian.net/debian/pool/main/libe/libevent/"
-            + "libevent_2.0.21-stable-3.debian.tar.xz";
-        sha256 = "0b2syswiq3cvfbdvi4lbca15c31lilxnahax4a4b4qxi5fcab7h5";
-      };
-    in ''
-      tar xf '${debian}'
-      patches="$patches $(cat debian/patches/series | grep -v '^$\|^#' \
-                          | grep -v '^20d6d445.patch' \
-                          | grep -v '^dh-autoreconf' | sed 's|^|debian/patches/|')"
-    '';
 
   # libevent_openssl is moved into its own output, so that openssl isn't present
   # in the default closure.

@@ -14,7 +14,7 @@ python27Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "FanFicFare is a tool for making eBooks from fanfiction web sites";
-    homepage = "https://github.com/JimmXinu/FanFicFare";
+    homepage = https://github.com/JimmXinu/FanFicFare;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lucas8 ];

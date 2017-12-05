@@ -19,7 +19,7 @@ pythonPackages.buildPythonApplication rec {
   doCheck = false;
 
   meta = {
-    homepage = "https://github.com/openstack-infra/git-review";
+    homepage = https://github.com/openstack-infra/git-review;
     description = "Tool to submit code to Gerrit";
     license = stdenv.lib.licenses.asl20;
   };

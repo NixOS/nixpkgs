@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, efl }:
+{ stdenv, fetchurl, pkgconfig, efl, curl, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "ephoto-${version}";
@@ -9,13 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "0l6zrk22fap6pylmzxwp6nycy8l5wdc7jza890h4zrwmpfag8w31";
   };
 
-  nativeBuildInputs = [
-    pkgconfig
-  ];
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
 
-  buildInputs = [
-    efl
- ];
+  buildInputs = [ efl curl ];
 
   NIX_CFLAGS_COMPILE = [
     "-I${efl}/include/ecore-con-1"
@@ -28,6 +24,10 @@ stdenv.mkDerivation rec {
     "-I${efl}/include/ethumb-1"
     "-I${efl}/include/ethumb-client-1"
   ];
+
+  postInstall = ''
+    wrapProgram $out/bin/ephoto --prefix LD_LIBRARY_PATH : ${curl.out}/lib
+  '';
 
   meta = {
     description = "Image viewer and editor written using the Enlightenment Foundation Libraries";

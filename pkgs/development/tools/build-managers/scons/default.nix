@@ -14,7 +14,7 @@ in python2Packages.buildPythonApplication {
   doCheck = false;
 
   meta = {
-    homepage = "http://scons.org/";
+    homepage = http://scons.org/;
     description = "An improved, cross-platform substitute for Make";
     license = stdenv.lib.licenses.mit;
     longDescription = ''

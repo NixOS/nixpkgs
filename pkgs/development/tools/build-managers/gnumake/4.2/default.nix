@@ -25,7 +25,7 @@ stdenv.mkDerivation {
 
   configureFlags = stdenv.lib.optional guileSupport "--with-guile";
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "man" "info" ];
 
   meta = with stdenv.lib; {
     homepage = http://www.gnu.org/software/make/;

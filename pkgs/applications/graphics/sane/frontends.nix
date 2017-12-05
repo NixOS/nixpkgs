@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 	(if libusb != null then [libusb] else []);
 
   meta = {
-    homepage = "http://www.sane-project.org/";
+    homepage = http://www.sane-project.org/;
     description = "Scanner Access Now Easy";
     license = stdenv.lib.licenses.gpl2Plus;
 

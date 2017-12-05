@@ -2,20 +2,22 @@
   xdg_utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick }:
 
 stdenv.mkDerivation rec {
-  rev = "ab240373f69824c56e9255d452b689cff3b1ecfb";
-  build = "2017-05-09-${builtins.substring 0 10 rev}";
+  rev = "de5554dbc0ec69329b75777d4a3b2f01851fc5ed";
+  build = "unstable-2017-07-13.git${builtins.substring 0 7 rev}";
   name = "far2l-2.1.${build}";
 
   src = fetchFromGitHub {
     owner = "elfmz";
     repo = "far2l";
     rev = rev;
-    sha256 = "1b6w6xhja3xkfzhrdy8a8qpbhxws75khm1zhwz8sc8la9ykd541q";
+    sha256 = "07l8w9p6zxm9qgh9wlci584lgv8gd4aw742jaqh9acgkxy9caih8";
   };
 
   nativeBuildInputs = [ cmake pkgconfig m4 makeWrapper imagemagick ];
 
   buildInputs = [ wxGTK30 glib pcre ];
+
+  patches = [ ./add-nix-syntax-highlighting.patch ];
 
   postPatch = ''
     echo 'echo ${build}' > far2l/bootstrap/scripts/vbuild.sh
@@ -62,7 +64,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An orthodox file manager";
-    homepage = http://github.com/elfmz/far2l;
+    homepage = https://github.com/elfmz/far2l;
     license = licenses.gpl2;
     maintainers = [ maintainers.volth ];
     platforms = platforms.all;

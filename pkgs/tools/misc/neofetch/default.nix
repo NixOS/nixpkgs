@@ -1,26 +1,33 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "neofetch-${version}";
-  version = "3.0.1";
+  version = "3.2.0";
   src = fetchFromGitHub {
     owner = "dylanaraps";
     repo = "neofetch";
     rev = version;
-    sha256 = "0ccdgyn9m7vbrmjlsxdwv7cagsdg8hy8x4n1mx334pkqvl820jjn";
+    sha256 = "1skkclvkqayqsbywja2fhv18l4rn9kg2da6bkip82zrwd713akl3";
   };
 
-  patchPhase = ''
-    substituteInPlace ./neofetch \
-    --replace "/usr/share" "$out/share"
-  '';
+  # This patch is only needed so that Neofetch 3.2.0 can look for
+  # configuration file, w3m directory (for fetching images) and ASCII
+  # directory properly. It won't be needed in subsequent releases.
+  patches = [
+    (fetchpatch {
+      name = "nixos.patch";
+      url = "https://github.com/konimex/neofetch/releases/download/3.2.0/nixos.patch";
+      sha256 = "0c6vsa74bxq6qlgbv3rrkhzkpvnq4304s6y2r1bl0sachyakaljy";
+    })
+  ];
+
 
   dontBuild = true;
 
 
   makeFlags = [
-    "DESTDIR=$(out)"
-    "PREFIX="
+    "PREFIX=$(out)"
+    "SYSCONFDIR=$(out)/etc"
   ];
 
   meta = with stdenv.lib; {
@@ -28,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/dylanaraps/neofetch;
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ alibabzo ];
+    maintainers = with maintainers; [ alibabzo konimex ];
   };
 }

@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.mit ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = "http://tools.suckless.org/sinit";
+    homepage = http://tools.suckless.org/sinit;
     downloadPage = "http://git.suckless.org/sinit";
   };
 }

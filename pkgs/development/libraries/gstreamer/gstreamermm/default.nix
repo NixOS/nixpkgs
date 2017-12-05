@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "C++ interface for GStreamer";
-    homepage = http://gstreamer.freedesktop.org/bindings/cplusplus.html;
+    homepage = https://gstreamer.freedesktop.org/bindings/cplusplus.html;
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ romildo ];
     platforms = platforms.unix;

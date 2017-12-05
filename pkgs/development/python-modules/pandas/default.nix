@@ -27,12 +27,12 @@ let
   inherit (stdenv) isDarwin;
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.20.2";
+  version = "0.20.3";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "92173c976fcca70cb19a958eccdacf98af62ef7301bf786d0321cb8857cdfae6";
+    sha256 = "a777e07633d83d546c55706420179551c8e01075b53c497dcf8ae4036766bc66";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -85,7 +85,7 @@ in buildPythonPackage rec {
     # https://github.com/pandas-dev/pandas/issues/14866
     # pandas devs are no longer testing i686 so safer to assume it's broken
     broken = stdenv.isi686;
-    homepage = "http://pandas.pydata.org/";
+    homepage = http://pandas.pydata.org/;
     description = "Python Data Analysis Library";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ raskin fridh knedlsepp ];

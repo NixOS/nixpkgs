@@ -22,8 +22,10 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace configure \
       --replace 'LIBINDICATOR_LIBS+="$LIBM"' 'LIBINDICATOR_LIBS+=" $LIBM"'
-    substituteInPlace {build-aux/ltmain.sh,configure,m4/libtool.m4} \
-      --replace /usr/bin/file ${file}/bin/file
+    for f in {build-aux/ltmain.sh,configure,m4/libtool.m4}; do
+      substituteInPlace $f\
+        --replace /usr/bin/file ${file}/bin/file
+    done
   '';
 
   configureFlags = [
@@ -40,7 +42,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A set of symbols and convenience functions for Ayatana indicators";
-    homepage = "https://launchpad.net/libindicator";
+    homepage = https://launchpad.net/libindicator;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.msteen ];

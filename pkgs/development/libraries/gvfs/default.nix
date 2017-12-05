@@ -32,9 +32,12 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # ToDo: one probably should specify schemas for samba and others here
   preFixup = ''
-    wrapProgram $out/libexec/gvfsd --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+    for f in $out/libexec/*; do
+      wrapProgram $f \
+        ${stdenv.lib.optionalString gnomeSupport "--prefix GIO_EXTRA_MODULES : \"${stdenv.lib.getLib gnome.dconf}/lib/gio/modules\""} \
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+    done
   '';
 
   meta = with stdenv.lib; {

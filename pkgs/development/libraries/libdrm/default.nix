@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libpthreadstubs, libpciaccess, valgrind-light }:
 
 stdenv.mkDerivation rec {
-  name = "libdrm-2.4.81";
+  name = "libdrm-2.4.82";
 
   src = fetchurl {
     url = "http://dri.freedesktop.org/libdrm/${name}.tar.bz2";
-    sha256 = "8cc05c195ac8708199979a94c4e4d1a928c14ec338ecbcb38ead09f54dae11ae";
+    sha256 = "43fa2dbd422d6d41ac141272cc9855360ce4d08c7cf7f2c7bb55dfe449c4ce1c";
   };
 
   outputs = [ "out" "dev" ];
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   crossAttrs.configureFlags = configureFlags ++ [ "--disable-intel" ];
 
   meta = {
-    homepage = http://dri.freedesktop.org/libdrm/;
+    homepage = https://dri.freedesktop.org/libdrm/;
     description = "Library for accessing the kernel's Direct Rendering Manager";
     license = "bsd";
     platforms = stdenv.lib.platforms.unix;

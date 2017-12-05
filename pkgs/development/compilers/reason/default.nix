@@ -2,12 +2,12 @@
   ocaml, opam, topkg, menhir, merlin_extend, ppx_tools_versioned, utop }:
 
 let 
-  version = "1.13.4";
+  version = "2.0.0";
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "reason";
     rev = version;
-    sha256 = "03r2ciikgwaq1dkzgzc8n7h7y0q95ajh6n9bb2n5bpgfhwkr1wqi";
+    sha256 = "0l3lwfvppplah707rq5nqjav2354lq6d7xfflfigkzhn74hlx6iy";
   };
   meta = with stdenv.lib; {
     homepage = https://facebook.github.io/reason/;

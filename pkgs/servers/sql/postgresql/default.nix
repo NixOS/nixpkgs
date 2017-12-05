@@ -1,4 +1,4 @@
-{ lib, stdenv, glibc, fetchurl, zlib, readline, libossp_uuid, openssl, makeWrapper }:
+{ lib, stdenv, glibc, fetchurl, zlib, readline, libossp_uuid, openssl, libxml2, makeWrapper }:
 
 let
 
@@ -15,7 +15,7 @@ let
     setOutputFlags = false; # $out retains configureFlags :-/
 
     buildInputs =
-      [ zlib readline openssl makeWrapper ]
+      [ zlib readline openssl libxml2 makeWrapper ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
     enableParallelBuilding = true;
@@ -24,6 +24,7 @@ let
 
     configureFlags = [
       "--with-openssl"
+      "--with-libxml"
       "--sysconfdir=/etc"
       "--libdir=$(lib)/lib"
     ]
@@ -97,33 +98,33 @@ in {
   };
 
   postgresql92 = common {
-    version = "9.2.20";
+    version = "9.2.21";
     psqlSchema = "9.2";
-    sha256 = "09lgvl996py3mciybnlv0hycfwfxr41n0wksb2jvxjh0hjpbv2hb";
+    sha256 = "0697e843523ee60c563f987f9c65bc4201294b18525d6e5e4b2c50c6d4058ef9";
   };
 
   postgresql93 = common {
-    version = "9.3.16";
+    version = "9.3.17";
     psqlSchema = "9.3";
-    sha256 = "0wv8qsi0amdhcl1qvkvas3lm37w6zsi818f5fxm6n0ngr155wpw4";
+    sha256 = "9c03e5f280cfe9bd202fa01af773eb146abd8ab3065f7279d574c568f6948dbe";
   };
 
   postgresql94 = common {
-    version = "9.4.11";
+    version = "9.4.12";
     psqlSchema = "9.4";
-    sha256 = "08wxrk8wdhnz0756dsa8jkj0pqanjfpw7w715lyv10618p853sz3";
+    sha256 = "fca055481875d1c49e31c28443f56472a1474b3fbe25b7ae64440c6118f82e64";
   };
 
   postgresql95 = common {
-    version = "9.5.6";
+    version = "9.5.7";
     psqlSchema = "9.5";
-    sha256 = "0bz1b9r249ffjfvldaiah2g78ccwq30ddh8hdvlq61z26inmz7mv";
+    sha256 = "8b1e936f82109325decc0f5575e846b93fb4fd384e8c4bde83ff5e7f87fc6cad";
   };
 
   postgresql96 = common {
-    version = "9.6.2";
+    version = "9.6.3";
     psqlSchema = "9.6";
-    sha256 = "1jahzqqw5inyvmacic2ihhj5f8z50lapci2fwws91h719ccbb1q1";
+    sha256 = "1645b3736901f6d854e695a937389e68ff2066ce0cde9d73919d6ab7c995b9c6";
   };
 
 }

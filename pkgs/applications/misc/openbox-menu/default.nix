@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   installPhase = "make install prefix=$out";
 
   meta = {
-    homepage = "http://fabrice.thiroux.free.fr/openbox-menu_en.html";
+    homepage = http://fabrice.thiroux.free.fr/openbox-menu_en.html;
     description = "Dynamic XDG menu generator for Openbox";
     longDescription = ''
       Openbox-menu is a pipemenu for Openbox window manager. It provides a

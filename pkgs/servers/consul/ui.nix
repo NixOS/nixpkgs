@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage    = http://www.consul.io/;
+    homepage    = https://www.consul.io/;
     description = "A tool for service discovery, monitoring and configuration";
     maintainers = with maintainers; [ cstrahan wkennington ];
     license     = licenses.mpl20 ;

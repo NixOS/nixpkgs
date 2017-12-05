@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ncurses, python, perl, textual-window-manager }:
 
 stdenv.mkDerivation rec {
-  version = "5.112";
+  version = "5.121";
   name = "byobu-" + version;
 
   src = fetchurl {
     url = "https://launchpad.net/byobu/trunk/${version}/+download/byobu_${version}.orig.tar.gz";
-    sha256 = "0avv1s8dh3z6rzkf1mn1375v3im1qc9c63w09yvwxdlcq5xznrsd";
+    sha256 = "0rbwb7kh0f458ad51grrhz56889g6xj1c29c838pi37cjdgl3wjx";
   };
 
   doCheck = true;

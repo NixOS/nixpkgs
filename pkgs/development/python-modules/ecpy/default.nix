@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Pure Pyhton Elliptic Curve Library";
-    homepage = "https://github.com/ubinity/ECPy";
+    homepage = https://github.com/ubinity/ECPy;
     license = licenses.asl20;
   };
 }

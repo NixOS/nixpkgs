@@ -1,0 +1,13 @@
+diff --git a/pecan/tests/test_conf.py b/pecan/tests/test_conf.py
+index 0573d84..7c98e16 100644
+--- a/pecan/tests/test_conf.py
++++ b/pecan/tests/test_conf.py
+@@ -157,7 +157,7 @@ class TestConf(PecanTestCase):
+
+             try:
+                 configuration.conf_from_file(f.name)
+-            except (ValueError, SystemError) as e:
++            except (ValueError, SystemError, ImportError) as e:
+                 assert 'relative import' in str(e)
+             else:
+                 raise AssertionError(

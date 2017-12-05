@@ -296,8 +296,8 @@ in
   google_play_services = buildGoogleApis {
     name = "google_play_services";
     src = fetchurl {
-      url = https://dl.google.com/android/repository/google_play_services_v11_rc16.zip;
-      sha1 = "55be81c50041f6a8f62947418f74f683369c971f";
+      url = https://dl.google.com/android/repository/google_play_services_v11_3_rc05.zip;
+      sha1 = "6b072d5b96fb8726405d363ccdbb4d26bec0b54f";
     };
     meta = {
       description = "Google Play services client library and sample code";

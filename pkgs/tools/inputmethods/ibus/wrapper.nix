@@ -25,7 +25,7 @@ let
         wrapProgram "$out/bin/$prog" \
           --set GDK_PIXBUF_MODULE_FILE ${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache \
           --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH:$out/lib/girepository-1.0" \
-          --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules" \
+          --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules" \
           --set IBUS_COMPONENT_PATH "$out/share/ibus/component/" \
           --set IBUS_DATAROOTDIR "$out/share" \
           --set IBUS_LIBEXECDIR "$out/libexec" \
@@ -44,7 +44,7 @@ let
         wrapProgram "$out/bin/$prog" \
           --set GDK_PIXBUF_MODULE_FILE ${librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache \
           --prefix GI_TYPELIB_PATH : "$GI_TYPELIB_PATH:$out/lib/girepository-1.0" \
-          --prefix GIO_EXTRA_MODULES : "${dconf}/lib/gio/modules" \
+          --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules" \
           --set IBUS_COMPONENT_PATH "$out/share/ibus/component/" \
           --set IBUS_DATAROOTDIR "$out/share" \
           --set IBUS_LIBEXECDIR "$out/libexec" \

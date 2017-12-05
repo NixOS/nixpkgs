@@ -25,14 +25,11 @@ stdenv.mkDerivation rec {
     TimeDate # == DateParse
     HTMLTemplate
     # IO::Socket::Socks is not in nixpkgs
-    # IOSocketSocks 
+    # IOSocketSocks
     IOSocketSSL
     NetSSLeay
     SOAPLite
   ]);
-
-
-  phases = [ "unpackPhase" "installPhase" "patchPhase" "postInstall" ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -42,11 +39,7 @@ stdenv.mkDerivation rec {
     cp -r * $out/bin
     cd $out/bin
     chmod +x *.pl
-  '';
 
-  patchPhase = "patchShebangs $out";
-
-  postInstall = ''
     find $out -name '*.pl' -executable | while read path; do
       wrapProgram "$path" \
         --prefix PERL5LIB : $PERL5LIB:$out/bin \
@@ -61,11 +54,9 @@ stdenv.mkDerivation rec {
     homepage = http://getpopfile.org;
     license = stdenv.lib.licenses.gpl2;
 
-    # Should work on OS X, but havent tested it.
+    # Should work on macOS, but havent tested it.
     # Windows support is more complicated.
     # http://getpopfile.org/docs/faq:systemrequirements
     platforms = stdenv.lib.platforms.linux;
   };
-
 }
-  

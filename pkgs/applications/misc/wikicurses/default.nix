@@ -23,7 +23,7 @@ pythonPackages.buildPythonApplication rec {
 
   meta = {
     description = "A simple curses interface for MediaWiki sites such as Wikipedia";
-    homepage = "https://github.com/ids1024/wikicurses/";
+    homepage = https://github.com/ids1024/wikicurses/;
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;
   };

@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "fsql-${version}";
-  version = "0.2.1";
+  version = "0.3.1";
 
   goPackagePath = "github.com/kshvmdn/fsql";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "kshvmdn";
     repo = "fsql";
     rev = "v${version}";
-    sha256 = "1izcfxm77hjj8z7a2nk9bbwbz4wc2yqzs2ir8v3k822m1hvgwb9a";
+    sha256 = "1accpxryk4744ydfrqc3la5k376ji11yr84n66dz5cx0f3n71vmz";
   };
 
   meta = with stdenv.lib; {

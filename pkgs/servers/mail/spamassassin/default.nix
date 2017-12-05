@@ -34,7 +34,7 @@ buildPerlPackage rec {
   '';
 
   meta = {
-    homepage = "http://spamassassin.apache.org/";
+    homepage = http://spamassassin.apache.org/;
     description = "Open-Source Spam Filter";
     license = stdenv.lib.licenses.asl20;
     platforms = stdenv.lib.platforms.linux;

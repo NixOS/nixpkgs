@@ -31,7 +31,7 @@ in stdenv.mkDerivation rec {
   dontPatchELF = true;
 
   meta = with stdenv.lib; {
-    homepage = "http://grub4dos.chenall.net/";
+    homepage = http://grub4dos.chenall.net/;
     description = "GRUB for DOS is the dos extension of GRUB";
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;

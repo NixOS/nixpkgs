@@ -21,6 +21,8 @@ let
           daemon reads in addition to the the user's authorized_keys file.
           You can combine the <literal>keys</literal> and
           <literal>keyFiles</literal> options.
+          Warning: If you are using <literal>NixOps</literal> then don't use this 
+          option since it will replace the key required for deployment via ssh.
         '';
       };
 

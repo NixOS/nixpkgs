@@ -55,7 +55,7 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://www.twister.net.co/";
+    homepage = http://www.twister.net.co/;
     description = "Peer-to-peer microblogging";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;

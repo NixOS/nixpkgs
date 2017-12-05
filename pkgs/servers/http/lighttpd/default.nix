@@ -26,6 +26,15 @@ stdenv.mkDerivation rec {
     sed -i "s:/usr/bin/file:${file}/bin/file:g" configure
   '';
 
+  postInstall = ''
+    mkdir -p "$out/share/lighttpd/doc/config"
+    cp -vr doc/config "$out/share/lighttpd/doc/"
+    # Remove files that references needless store paths (dependency bloat)
+    rm "$out/share/lighttpd/doc/config/Makefile"*
+    rm "$out/share/lighttpd/doc/config/conf.d/Makefile"*
+    rm "$out/share/lighttpd/doc/config/vhosts.d/Makefile"*
+  '';
+
   meta = with stdenv.lib; {
     description = "Lightweight high-performance web server";
     homepage = http://www.lighttpd.net/;

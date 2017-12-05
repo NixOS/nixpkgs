@@ -1,11 +1,11 @@
 { lib, stdenv, fetchurl, unzip, tcl }:
 
 stdenv.mkDerivation {
-  name = "sqlite3_analyzer-3.19.2";
+  name = "sqlite3_analyzer-3.20.0";
 
   src = fetchurl {
-    url = "https://www.sqlite.org/2017/sqlite-src-3190200.zip";
-    sha256 = "1hdbs41mdyyy641gix87pllsd29p8dim7gj4qvmiyfra2q5kg749";
+    url = "https://www.sqlite.org/2017/sqlite-src-3200000.zip";
+    sha256 = "1vjbc5i95wildrdfzalrsgai1ziz4m4gbah4wm8qc4jxm1vqwdab";
   };
 
   nativeBuildInputs = [ unzip ];

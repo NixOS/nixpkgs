@@ -11,7 +11,7 @@ let
 
   trim = chars: str: let
       nonchars = filter (x : !(elem x.value chars))
-                  (imap (i: v: {ind = (sub i 1); value = v;}) (stringToCharacters str));
+                  (imap0 (i: v: {ind = i; value = v;}) (stringToCharacters str));
     in
       if length nonchars == 0 then ""
       else substring (head nonchars).ind (add 1 (sub (last nonchars).ind (head nonchars).ind)) str;

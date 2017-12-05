@@ -39,7 +39,7 @@ in stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "Matrix Algebra on GPU and Multicore Architectures";
     license = licenses.bsd3;
-    homepage = "http://icl.cs.utk.edu/magma/index.html";
+    homepage = http://icl.cs.utk.edu/magma/index.html;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ianwookim ];
   };

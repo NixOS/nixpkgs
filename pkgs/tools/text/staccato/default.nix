@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
       and standard deviation. It can also compute these things about some
       subset of the stream, for example the lower 95% of values.
     '';
-    homepage = "https://docs.rs/crate/staccato";
+    homepage = https://docs.rs/crate/staccato;
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.all;
   };

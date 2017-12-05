@@ -11,6 +11,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/cl-syntax/2015-04-07/cl-syntax-20150407-git.tgz'';
     sha256 = ''1pz9a7hiql493ax5qgs9zb3bmvf0nnmmgdx14s4j2apdy2m34v8n'';
   };
+    
+  packageName = "cl-syntax-markup";
 
   overrides = x: {
     postInstall = ''
@@ -30,5 +32,5 @@ rec {
 }
 /* (SYSTEM cl-syntax-markup DESCRIPTION CL-Syntax Reader Syntax for CL-Markup SHA256 1pz9a7hiql493ax5qgs9zb3bmvf0nnmmgdx14s4j2apdy2m34v8n URL
     http://beta.quicklisp.org/archive/cl-syntax/2015-04-07/cl-syntax-20150407-git.tgz MD5 602b84143aafe59d65f4e08ac20a124a NAME cl-syntax-markup TESTNAME NIL
-    FILENAME cl-syntax-markup DEPS ((NAME cl-markup)) DEPENDENCIES (cl-markup) VERSION cl-syntax-20150407-git SIBLINGS
+    FILENAME cl-syntax-markup DEPS ((NAME cl-markup FILENAME cl-markup)) DEPENDENCIES (cl-markup) VERSION cl-syntax-20150407-git SIBLINGS
     (cl-syntax-annot cl-syntax-anonfun cl-syntax-clsql cl-syntax-fare-quasiquote cl-syntax-interpol cl-syntax)) */

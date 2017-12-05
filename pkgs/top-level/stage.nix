@@ -18,30 +18,6 @@
 , # Use to reevaluate Nixpkgs; a dirty hack that should be removed
   nixpkgsFun
 
-  ## Platform parameters
-  ##
-  ## The "build" "host" "target" terminology below comes from GNU Autotools. See
-  ## its documentation for more information on what those words mean. Note that
-  ## each should always be defined, even when not cross compiling.
-  ##
-  ## For purposes of bootstrapping, think of each stage as a "sliding window"
-  ## over a list of platforms. Specifically, the host platform of the previous
-  ## stage becomes the build platform of the current one, and likewise the
-  ## target platform of the previous stage becomes the host platform of the
-  ## current one.
-  ##
-
-, # The platform on which packages are built. Consists of `system`, a
-  # string (e.g.,`i686-linux') identifying the most import attributes of the
-  # build platform, and `platform` a set of other details.
-  buildPlatform
-
-, # The platform on which packages run.
-  hostPlatform
-
-, # The platform which build tools (especially compilers) build for in this stage,
-  targetPlatform
-
   ## Other parameters
   ##
 
@@ -69,10 +45,10 @@
 , # Non-GNU/Linux OSes are currently "impure" platforms, with their libc
   # outside of the store.  Thus, GCC, GFortran, & co. must always look for files
   # in standard system directories (/usr/include, etc.)
-  noSysDirs ? buildPlatform.system != "x86_64-freebsd"
-           && buildPlatform.system != "i686-freebsd"
-           && buildPlatform.system != "x86_64-solaris"
-           && buildPlatform.system != "x86_64-kfreebsd-gnu"
+  noSysDirs ? stdenv.buildPlatform.system != "x86_64-freebsd"
+           && stdenv.buildPlatform.system != "i686-freebsd"
+           && stdenv.buildPlatform.system != "x86_64-solaris"
+           && stdenv.buildPlatform.system != "x86_64-kfreebsd-gnu"
 
 , # The configuration attribute set
   config
@@ -98,21 +74,18 @@ let
       // { recurseForDerivations = false; };
     __targetPackages = (if __targetPackages == null then self else __targetPackages)
       // { recurseForDerivations = false; };
-    inherit stdenv
-      buildPlatform hostPlatform targetPlatform;
+    inherit stdenv;
   };
 
   # The old identifiers for cross-compiling. These should eventually be removed,
   # and the packages that rely on them refactored accordingly.
   platformCompat = self: super: let
-    # TODO(@Ericson2314) this causes infinite recursion
-    #inherit (self) buildPlatform hostPlatform targetPlatform;
+    inherit (super.stdenv) buildPlatform hostPlatform targetPlatform;
   in {
     stdenv = super.stdenv // {
-      inherit (buildPlatform) platform;
-    } // lib.optionalAttrs (hostPlatform != buildPlatform) {
-      cross = hostPlatform;
+      inherit (super.stdenv.buildPlatform) platform;
     };
+    inherit buildPlatform hostPlatform targetPlatform;
     inherit (buildPlatform) system platform;
   };
 

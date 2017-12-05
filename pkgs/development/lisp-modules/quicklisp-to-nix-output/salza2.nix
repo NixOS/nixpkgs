@@ -12,6 +12,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/salza2/2013-07-20/salza2-2.0.9.tgz'';
     sha256 = ''1m0hksgvq3njd9xa2nxlm161vgzw77djxmisq08v9pz2bz16v8va'';
   };
+    
+  packageName = "salza2";
 
   overrides = x: {
     postInstall = ''

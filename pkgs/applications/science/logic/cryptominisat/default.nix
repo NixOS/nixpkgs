@@ -1,18 +1,17 @@
-{ stdenv, fetchFromGitHub, fetchpatch, cmake, python, vim }:
+{ stdenv, fetchFromGitHub, fetchpatch, cmake, python, xxd }:
 
 stdenv.mkDerivation rec {
   name = "cryptominisat-${version}";
   version = "5.0.1";
 
   src = fetchFromGitHub {
-    owner = "msoos";
-    repo = "cryptominisat";
-    rev = version;
+    owner  = "msoos";
+    repo   = "cryptominisat";
+    rev    = version;
     sha256 = "0cpw5d9vplxvv3aaplhnga55gz1hy29p7s4pkw1306knkbhlzvkb";
   };
 
-  # vim for xxd binary
-  buildInputs = [ python vim ];
+  buildInputs = [ python xxd ];
   nativeBuildInputs = [ cmake ];
 
   patches = [(fetchpatch rec {
@@ -23,9 +22,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An advanced SAT Solver";
+    homepage    = https://github.com/msoos/cryptominisat;
+    license     = licenses.mit;
     maintainers = with maintainers; [ mic92 ];
-    platforms = platforms.unix;
-    license = licenses.mit;
-    homepage = https://github.com/msoos/cryptominisat;
+    platforms   = platforms.unix;
   };
 }

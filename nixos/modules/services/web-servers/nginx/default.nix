@@ -36,6 +36,11 @@ let
     http {
       include ${cfg.package}/conf/mime.types;
       include ${cfg.package}/conf/fastcgi.conf;
+      include ${cfg.package}/conf/uwsgi_params;
+
+      ${optionalString (cfg.resolver.addresses != []) ''
+        resolver ${toString cfg.resolver.addresses} ${optionalString (cfg.resolver.valid != "") "valid=${cfg.resolver.valid}"};
+      ''}
 
       ${optionalString (cfg.recommendedOptimisation) ''
         # optimisation
@@ -65,6 +70,7 @@ let
         gzip_proxied any;
         gzip_comp_level 9;
         gzip_types text/plain text/css application/json application/javascript text/xml application/xml application/xml+rss text/javascript;
+        gzip_vary on;
       ''}
 
       ${optionalString (cfg.recommendedProxySettings) ''
@@ -115,6 +121,7 @@ let
     http {
       include ${cfg.package}/conf/mime.types;
       include ${cfg.package}/conf/fastcgi.conf;
+      include ${cfg.package}/conf/uwsgi_params;
       ${cfg.httpConfig}
     }''}
 
@@ -122,46 +129,66 @@ let
   '';
 
   vhosts = concatStringsSep "\n" (mapAttrsToList (vhostName: vhost:
-      let
-        serverName = vhost.serverName;
-        ssl = vhost.enableSSL || vhost.forceSSL;
-        port = if vhost.port != null then vhost.port else (if ssl then 443 else 80);
-        listenString = toString port + optionalString ssl " ssl http2"
-          + optionalString vhost.default " default_server";
-        acmeLocation = optionalString vhost.enableACME (''
+    let
+        ssl = with vhost; addSSL || onlySSL || enableSSL;
+
+        defaultListen = with vhost;
+          if listen != [] then listen
+          else if onlySSL || enableSSL then
+               singleton                          { addr = "0.0.0.0"; port = 443; ssl = true;  }
+               ++ optional enableIPv6             { addr = "[::]";    port = 443; ssl = true;  }
+          else singleton                          { addr = "0.0.0.0"; port = 80;  ssl = false; }
+               ++ optional enableIPv6             { addr = "[::]";    port = 80;  ssl = false; }
+               ++ optional addSSL                 { addr = "0.0.0.0"; port = 443; ssl = true;  }
+               ++ optional (enableIPv6 && addSSL) { addr = "[::]";    port = 443; ssl = true;  };
+
+        hostListen =
+          if !vhost.forceSSL
+            then defaultListen
+            else filter (x: x.ssl) defaultListen;
+
+        listenString = { addr, port, ssl, ... }:
+          "listen ${addr}:${toString port} "
+          + optionalString ssl "ssl http2 "
+          + optionalString vhost.default "default_server "
+          + ";";
+
+        redirectListen = filter (x: !x.ssl) defaultListen;
+
+        redirectListenString = { addr, ... }:
+          "listen ${addr}:80 ${optionalString vhost.default "default_server"};";
+
+        acmeLocation = ''
           location /.well-known/acme-challenge {
             ${optionalString (vhost.acmeFallbackHost != null) "try_files $uri @acme-fallback;"}
             root ${vhost.acmeRoot};
             auth_basic off;
           }
-        '' + (optionalString (vhost.acmeFallbackHost != null) ''
-          location @acme-fallback {
-            auth_basic off;
-            proxy_pass http://${vhost.acmeFallbackHost};
-          }
-        ''));
+          ${optionalString (vhost.acmeFallbackHost != null) ''
+            location @acme-fallback {
+              auth_basic off;
+              proxy_pass http://${vhost.acmeFallbackHost};
+            }
+          ''}
+        '';
+
       in ''
         ${optionalString vhost.forceSSL ''
           server {
-            listen 80 ${optionalString vhost.default "default_server"};
-            ${optionalString enableIPv6
-              ''listen [::]:80 ${optionalString vhost.default "default_server"};''
-            }
+            ${concatMapStringsSep "\n" redirectListenString redirectListen}
 
-            server_name ${serverName} ${concatStringsSep " " vhost.serverAliases};
-            ${acmeLocation}
+            server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
+            ${optionalString vhost.enableACME acmeLocation}
             location / {
-              return 301 https://$host${optionalString (port != 443) ":${toString port}"}$request_uri;
+              return 301 https://$host$request_uri;
             }
           }
         ''}
 
         server {
-          listen ${listenString};
-          ${optionalString enableIPv6 "listen [::]:${listenString};"}
-
-          server_name ${serverName} ${concatStringsSep " " vhost.serverAliases};
-          ${acmeLocation}
+          ${concatMapStringsSep "\n" listenString hostListen}
+          server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
+          ${optionalString vhost.enableACME acmeLocation}
           ${optionalString (vhost.root != null) "root ${vhost.root};"}
           ${optionalString (vhost.globalRedirect != null) ''
             return 301 http${optionalString ssl "s"}://${vhost.globalRedirect}$request_uri;
@@ -378,9 +405,35 @@ in
         description = "Path to DH parameters file.";
       };
 
+      resolver = mkOption {
+        type = types.submodule {
+          options = {
+            addresses = mkOption {
+              type = types.listOf types.str;
+              default = [];
+              example = literalExample ''[ "[::1]" "127.0.0.1:5353" ]'';
+              description = "List of resolvers to use";
+            };
+            valid = mkOption {
+              type = types.str;
+              default = "";
+              example = "30s";
+              description = ''
+                By default, nginx caches answers using the TTL value of a response.
+                An optional valid parameter allows overriding it
+              '';
+            };
+          };
+        };
+        description = ''
+          Configures name servers used to resolve names of upstream servers into addresses
+        '';
+        default = {};
+      };
+
       virtualHosts = mkOption {
         type = types.attrsOf (types.submodule (import ./vhost-options.nix {
-          inherit lib;
+          inherit config lib;
         }));
         default = {
           localhost = {};
@@ -388,6 +441,7 @@ in
         example = literalExample ''
           {
             "hydra.example.com" = {
+              addSSL = true;
               forceSSL = true;
               enableACME = true;
               locations."/" = {
@@ -404,10 +458,39 @@ in
   config = mkIf cfg.enable {
     # TODO: test user supplied config file pases syntax test
 
-    assertions = let hostOrAliasIsNull = l: l.root == null || l.alias == null; in [
+    warnings =
+    let
+      deprecatedSSL = name: config: optional config.enableSSL
+      ''
+        config.services.nginx.virtualHosts.<name>.enableSSL is deprecated,
+        use config.services.nginx.virtualHosts.<name>.onlySSL instead.
+      '';
+
+    in flatten (mapAttrsToList deprecatedSSL virtualHosts);
+
+    assertions =
+    let
+      hostOrAliasIsNull = l: l.root == null || l.alias == null;
+    in [
       {
         assertion = all (host: all hostOrAliasIsNull (attrValues host.locations)) (attrValues virtualHosts);
         message = "Only one of nginx root or alias can be specified on a location.";
+      }
+
+      {
+        assertion = all (conf: with conf; !(addSSL && (onlySSL || enableSSL))) (attrValues virtualHosts);
+        message = ''
+          Options services.nginx.service.virtualHosts.<name>.addSSL and
+          services.nginx.virtualHosts.<name>.onlySSL are mutually esclusive
+        '';
+      }
+
+      {
+        assertion = all (conf: with conf; forceSSL -> addSSL) (attrValues virtualHosts);
+        message = ''
+          Option services.nginx.virtualHosts.<name>.forceSSL requires
+          services.nginx.virtualHosts.<name>.addSSL set to true.
+        '';
       }
     ];
 

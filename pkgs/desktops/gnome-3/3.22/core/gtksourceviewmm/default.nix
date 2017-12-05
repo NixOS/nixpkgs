@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
-    homepage = "https://developer.gnome.org/gtksourceviewmm/";
+    homepage = https://developer.gnome.org/gtksourceviewmm/;
     description = "C++ wrapper for gtksourceview";
     license = licenses.lgpl2;
     maintainers = [ maintainers.juliendehos ];

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
         Deepin terminal, it sharpens your focus in the world of command line!
         It is an advanced terminal emulator with workspace, multiple windows, remote management, quake mode and other features.
      '';
-    homepage = "https://github.com/linuxdeepin/deepin-terminal/";
+    homepage = https://github.com/linuxdeepin/deepin-terminal/;
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
   };

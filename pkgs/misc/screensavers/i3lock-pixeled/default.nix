@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple i3lock helper which pixels a screenshot by scaling it down and up to get a pixeled version of the screen when the lock is active.";
-    homepage = "https://github.com/Ma27/i3lock-pixeled";
+    homepage = https://github.com/Ma27/i3lock-pixeled;
     license = licenses.mit;
     platform = platforms.linux;
     maintainers = with maintainers; [ ma27 ];

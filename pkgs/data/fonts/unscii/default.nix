@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     license = http://unifoundry.com/LICENSE.txt;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = "http://pelulamu.net/unscii/";
+    homepage = http://pelulamu.net/unscii/;
   };
 }

@@ -24,7 +24,7 @@ in stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "http://notepadqq.altervista.org/";
+    homepage = http://notepadqq.altervista.org/;
     description = "Notepad++-like editor for the Linux desktop";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;

@@ -21,7 +21,7 @@ let
     security delete-keychain $keychainName
   '';
   
-  # On Mac OS X, the java executable shows an -unoffical postfix in the version
+  # On macOS, the java executable shows an -unoffical postfix in the version
   # number. This confuses the build script's version detector.
   # We fix this by creating a wrapper that strips it out of the output.
   
@@ -72,7 +72,7 @@ stdenv.mkDerivation {
     ${if target == "android" then
         ''
           ${stdenv.lib.optionalString (stdenv.system == "x86_64-darwin") ''
-            # Hack to make version detection work with OpenJDK on Mac OS X
+            # Hack to make version detection work with OpenJDK on macOS
             export PATH=${javaVersionFixWrapper}/bin:$PATH
             export JAVA_HOME=${javaVersionFixWrapper}
             javac -version

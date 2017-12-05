@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "axel-${version}";
-  version = "2.12";
+  version = "2.13.1";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/a/axel/axel_${version}.orig.tar.gz";
-    sha256 = "12sa5whd5mjn1idd83hbhm0rmsh5bvhhgvv03fk5cgxynwkbprr8";
+    sha256 = "15bi5wx6fyf9k0y03dy5mk2rv06mrfgiyrlh44add9n07wi574p1";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

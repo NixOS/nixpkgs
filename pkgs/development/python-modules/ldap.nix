@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "python-ldap";
-  version = "2.4.39";
+  version = "2.4.41";
   name = "${pname}-${version}";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3fb75108d27e8091de80dffa2ba3bf45c7a3bdc357e2959006aed52fa58bb2f3";
+    sha256 = "6d430ecf040f2fc704ee316d3390cb1f5419c191371e1e131baef54a0e42cef0";
   };
 
   # Needed by tests to setup a mockup ldap server.

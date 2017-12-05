@@ -11,6 +11,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/metabang-bind/2017-01-24/metabang-bind-20170124-git.tgz'';
     sha256 = ''1xyiyrc9c02ylg6b749h2ihn6922kb179x7k338dmglf4mpyqxwc'';
   };
+    
+  packageName = "metabang-bind";
 
   overrides = x: {
     postInstall = ''

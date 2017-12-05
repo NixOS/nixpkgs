@@ -15,10 +15,6 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  crossAttrs = {
-    CC = stdenv.cross.config + "-gcc";
-  };
-
   installPhase = "mkdir $out; mkdir -p $out/bin; cp -p watch $out/bin";
 
   meta = {

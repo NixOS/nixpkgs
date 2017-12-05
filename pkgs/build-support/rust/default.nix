@@ -1,5 +1,10 @@
-{ stdenv, cacert, git, rust, rustRegistry }:
+{ stdenv, callPackage, path, cacert, git, rust, rustRegistry }:
+
+let
+  rustRegistry' = rustRegistry;
+in
 { name, depsSha256
+, rustRegistry ? rustRegistry'
 , src ? null
 , srcs ? null
 , sourceRoot ? null
@@ -11,6 +16,8 @@
 , ... } @ args:
 
 let
+  lib = stdenv.lib;
+
   fetchDeps = import ./fetchcargo.nix {
     inherit stdenv cacert git rust rustRegistry;
   };

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake curl ];
 
   meta = with stdenv.lib; {
-    homepage = "http://josephp91.github.io/curlcpp/";
+    homepage = http://josephp91.github.io/curlcpp/;
     description = "Object oriented C++ wrapper for CURL";
     platforms = platforms.unix;
     license = licenses.mit;

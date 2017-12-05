@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = http://github.com/JonathanBeck/libplist;
+    homepage = https://github.com/JonathanBeck/libplist;
     platforms = stdenv.lib.platforms.all;
     maintainers = [ ];
   };

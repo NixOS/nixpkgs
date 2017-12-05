@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
       fwknop stands for the "FireWall KNock OPerator", and implements an
       authorization scheme called Single Packet Authorization (SPA).
     '';
-    homepage = "https://www.cipherdyne.org/fwknop/";
+    homepage = https://www.cipherdyne.org/fwknop/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];

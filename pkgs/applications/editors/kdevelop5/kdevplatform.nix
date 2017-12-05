@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, cmake, gettext, pkgconfig, extra-cmake-modules
-, boost, subversion, apr, aprutil
+, boost, subversion, apr, aprutil, kwindowsystem
 , qtscript, qtwebkit, grantlee, karchive, kconfig, kcoreaddons, kguiaddons, kiconthemes, ki18n
 , kitemmodels, kitemviews, kio, kparts, sonnet, kcmutils, knewstuff, knotifications
 , knotifyconfig, ktexteditor, threadweaver, kdeclarative, libkomparediff2 }:
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake gettext pkgconfig extra-cmake-modules ];
 
   buildInputs = [
-    boost subversion apr aprutil
+    boost subversion apr aprutil kwindowsystem
     qtscript qtwebkit grantlee karchive kconfig kcoreaddons kguiaddons kiconthemes
     ki18n kitemmodels kitemviews kio kparts sonnet kcmutils knewstuff
     knotifications knotifyconfig ktexteditor threadweaver kdeclarative

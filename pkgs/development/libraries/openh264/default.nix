@@ -1,11 +1,14 @@
-{ stdenv, fetchurl, nasm }:
+{ stdenv, fetchFromGitHub, nasm }:
 
 stdenv.mkDerivation rec {
-  name = "openh264-1.5.0";
+  name = "openh264-${version}";
+  version = "1.7.0";
 
-  src = fetchurl {
-    url = "https://github.com/cisco/openh264/archive/v1.5.0.tar.gz";
-    sha256 = "1d97dh5hzmy46jamfw03flvcz8md1hxp6y5n0b787h8ks7apn1wq";
+  src = fetchFromGitHub {
+    owner = "cisco";
+    repo = "openh264";
+    rev = "v${version}";
+    sha256 = "0ywrqni05bh925ws5fmd24bm6h9n6z2wp1q19v545v06biiwr46a";
   };
 
   buildInputs = [ nasm ];

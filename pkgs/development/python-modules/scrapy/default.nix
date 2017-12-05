@@ -31,7 +31,7 @@ buildPythonPackage rec {
 
     meta = with lib; {
       description = "A fast high-level web crawling and web scraping framework, used to crawl websites and extract structured data from their pages";
-      homepage = "http://scrapy.org/";
+      homepage = http://scrapy.org/;
       license = licenses.bsd3;
       maintainers = with maintainers; [ drewkett ];
       platforms = platforms.linux;

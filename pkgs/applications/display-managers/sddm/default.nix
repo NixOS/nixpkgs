@@ -14,7 +14,7 @@ let
   };
 
 in mkDerivation rec {
-  name = "sddm-unwrapped-${version}";
+  name = "sddm-${version}";
 
   src = fetchFromGitHub {
     owner = "sddm";
@@ -36,11 +36,7 @@ in mkDerivation rec {
   nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig qttools ];
 
   buildInputs = [
-    libxcb libpthreadstubs libXdmcp libXau pam systemd
-  ];
-
-  propagatedBuildInputs = [
-    qtbase qtdeclarative
+    libxcb libpthreadstubs libXdmcp libXau pam qtbase qtdeclarative systemd
   ];
 
   cmakeFlags = [
@@ -65,7 +61,7 @@ in mkDerivation rec {
 
   meta = with lib; {
     description = "QML based X11 display manager";
-    homepage = "https://github.com/sddm/sddm";
+    homepage = https://github.com/sddm/sddm;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ttuegel ];
   };

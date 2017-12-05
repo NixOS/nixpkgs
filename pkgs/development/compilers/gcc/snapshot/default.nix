@@ -124,8 +124,6 @@ let version = "7-20170409";
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
     crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";
     crossConfigureFlags =
-        "--target=${targetPlatform.config}" +
-        platformFlags +
         # Ensure that -print-prog-name is able to find the correct programs.
         " --with-as=${binutils}/bin/${targetPlatform.config}-as" +
         " --with-ld=${binutils}/bin/${targetPlatform.config}-ld" +
@@ -297,6 +295,8 @@ stdenv.mkDerivation ({
 
   dontDisableStatic = true;
 
+  # TODO(@Ericson2314): Always pass "--target" and always prefix.
+  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
   configureFlags = "
     ${if hostPlatform.isSunOS then
       " --enable-long-long --enable-libssp --enable-threads=posix --disable-nls --enable-__cxa_atexit " +
@@ -349,12 +349,10 @@ stdenv.mkDerivation ({
       else ""}
     ${if langAda then " --enable-libada" else ""}
     ${if targetPlatform == hostPlatform && targetPlatform.isi686 then "--with-arch=i686" else ""}
+    ${platformFlags}
     ${if targetPlatform != hostPlatform then crossConfigureFlags else ""}
     ${if !bootstrap then "--disable-bootstrap" else ""}
-    ${if targetPlatform == hostPlatform then platformFlags else ""}
-  " + optionalString
-        (hostPlatform != buildPlatform)
-        (platformFlags + " --target=${targetPlatform.config}");
+  ";
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
@@ -440,7 +438,7 @@ stdenv.mkDerivation ({
 
     # On GNU/Hurd glibc refers to Mach & Hurd
     # headers.
-    ++ optionals (libcCross != null && libcCross ? "propagatedBuildInputs")
+    ++ optionals (libcCross != null && libcCross ? propagatedBuildInputs)
                  libcCross.propagatedBuildInputs);
 
   LIBRARY_PATH = makeLibraryPath ([]

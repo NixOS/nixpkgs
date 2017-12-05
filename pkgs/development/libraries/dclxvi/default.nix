@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/agl/dclxvi";
+    homepage = https://github.com/agl/dclxvi;
     description = "Naehrig, Niederhagen and Schwabe's pairings code, massaged into a shared library";
     maintainers = with maintainers; [ wkennington ];
     platforms = platforms.x86_64;

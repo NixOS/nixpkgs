@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
       retention qualities - far longer than the magnetic or optical means that
       are generally used to back up computer data.
     '';
-    homepage = "http://www.jabberwocky.com/software/paperkey/";
+    homepage = http://www.jabberwocky.com/software/paperkey/;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ skeidel ];

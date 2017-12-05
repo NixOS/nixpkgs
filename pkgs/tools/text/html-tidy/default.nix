@@ -1,20 +1,22 @@
-{ stdenv, fetchFromGitHub, cmake, libxslt }:
+{ stdenv, fetchFromGitHub, cmake, libxslt
+, hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   name = "html-tidy-${version}";
-  version = "5.2.0";
+  version = "5.4.0";
 
   src = fetchFromGitHub {
     owner = "htacg";
     repo = "tidy-html5";
     rev = version;
-    sha256 = "1yxp3kjsxd5zwwn4r5rpyq5ndyylbcnb9pisdyf7dxjqd47z64bc";
+    sha256 = "1q9ag2dh2j636fw9vyz6gg0kiss8p6lvj22h25nqsw0daan57c32";
   };
 
   nativeBuildInputs = [ cmake libxslt/*manpage*/ ];
 
   cmakeFlags = stdenv.lib.optional
-    (stdenv.cross.libc or null == "msvcrt") "-DCMAKE_SYSTEM_NAME=Windows";
+    (hostPlatform.libc or null == "msvcrt") "-DCMAKE_SYSTEM_NAME=Windows";
 
   # ATM bin/tidy is statically linked, as upstream provides no other option yet.
   # https://github.com/htacg/tidy-html5/issues/326#issuecomment-160322107
@@ -31,4 +33,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ edwtjo ];
   };
 }
-

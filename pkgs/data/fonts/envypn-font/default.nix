@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
     mkfontscale
   '';
 
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "04sjxfrlvjc2f0679cy4w366mpzbn3fp6gnrjb8vy12vjd1ffnc1";
+
   meta = with stdenv.lib; {
     description = ''
       Readable bitmap font inspired by Envy Code R

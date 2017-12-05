@@ -29,7 +29,7 @@ pythonPackages.buildPythonApplication rec {
     ++ [ keybinder ];
 
   meta = with stdenv.lib; {
-    homepage = http://launchpad.net/dockbar/;
+    homepage = https://launchpad.net/dockbar/;
     description = "DockBarX is a lightweight taskbar / panel replacement for Linux which works as a stand-alone dock";
     license = licenses.gpl3;
     platforms = platforms.linux;

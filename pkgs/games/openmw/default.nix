@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An unofficial open source engine reimplementation of the game Morrowind";
-    homepage = "http://openmw.org";
+    homepage = http://openmw.org;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

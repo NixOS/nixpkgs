@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
 
   meta = {
     description = "A high-performance theorem prover and SMT solver, optimization edition";
-    homepage    = "http://github.com/Z3Prover/z3";
+    homepage    = "https://github.com/Z3Prover/z3";
     license     = stdenv.lib.licenses.mit;
     platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice sheganinans ];

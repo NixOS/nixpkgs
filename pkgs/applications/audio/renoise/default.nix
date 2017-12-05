@@ -1,36 +1,35 @@
-{ stdenv, lib, requireFile, demo, fetchurl, libX11, libXext, libXcursor, libXrandr, libjack2, alsaLib, ... }:
+{ stdenv, lib, fetchurl, libX11, libXext, libXcursor, libXrandr, libjack2, alsaLib, releasePath ? null }:
 
+# To use the full release version:
+# 1) Sign into https://backstage.renoise.com and download the appropriate (x86 or x86_64) version
+#    for your machine to some stable location.
+# 2) Override the releasePath attribute to point to the location of the newly downloaded bundle.
+# Note: Renoise creates an individual build for each license which screws somewhat with the
+# use of functions like requireFile as the hash will be different for every user.
+let fileversion = "3_1_0";
+in
 stdenv.mkDerivation rec {
   name = "renoise";
-
   buildInputs = [ libX11 libXext libXcursor libXrandr alsaLib libjack2 ];
 
   src =
     if stdenv.system == "x86_64-linux" then
-        if demo then
+        if builtins.isNull releasePath then
         fetchurl {
-            url = "http://files.renoise.com/demo/Renoise_3_0_1_Demo_x86_64.tar.bz2";
-            sha256 = "1q7f94wz2dbz659kpp53a3n1qyndsk0pkb29lxdff4pc3ddqwykg";
+            url = "http://files.renoise.com/demo/Renoise_${fileversion}_Demo_x86_64.tar.bz2";
+            sha256 = "0pan68fr22xbj7a930y29527vpry3f07q3i9ya4fp6g7aawffsga";
         }
         else
-        requireFile {
-            url = "http://backstage.renoise.com/frontend/app/index.html#/login";
-            name = "rns_3_0_1_linux_x86_64.tar.gz";
-            sha256 = "1yb5w5jrg9dk9fg5rfvfk6p0rxn4r4i32vxp2l9lzhbs02pv15wd";
-        }
+        releasePath
     else if stdenv.system == "i686-linux" then
-        if demo then
+        if builtins.isNull releasePath then
         fetchurl {
-            url = "http://files.renoise.com/demo/Renoise_3_0_1_Demo_x86.tar.bz2";
-            sha256 = "0dgqvib4xh2yhgh2wajj11wsb6xiiwgfkhyz32g8vnyaij5q8f58";
+            url = "http://files.renoise.com/demo/Renoise_${fileversion}_Demo_x86.tar.bz2";
+            sha256 = "1lccjj4k8hpqqxxham5v01v2rdwmx3c5kgy1p9lqvzqma88k4769";
         }
         else
-        requireFile {
-            url = "http://backstage.renoise.com/frontend/app/index.html#/login";
-            name = "rns_3_0_1_reg_x86.tar.gz";
-            sha256 = "1swax2jz0gswdpzz8alwjfd8rhigc2yfspj7p8wvdvylqrf7n8q7";
-        }
-    else throw "platform is not suppored by Renoise";
+        releasePath
+    else throw "Platform is not supported by Renoise";
 
   installPhase = ''
     cp -r Resources $out

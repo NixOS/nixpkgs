@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libuuid, gettext }:
+{ stdenv, fetchurl, pkgconfig, libuuid, gettext, texinfo }:
 
 stdenv.mkDerivation rec {
   name = "e2fsprogs-1.43.4";
@@ -8,9 +8,9 @@ stdenv.mkDerivation rec {
     sha256 = "a648a90a513f1b25113c7f981af978b8a19f832b3a32bd10707af3ff682ba66d";
   };
 
-  outputs = [ "bin" "dev" "out" "man" ];
+  outputs = [ "bin" "dev" "out" "man" "info" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig texinfo ];
   buildInputs = [ libuuid ] ++ stdenv.lib.optional (!stdenv.isLinux) gettext;
 
   crossAttrs = {

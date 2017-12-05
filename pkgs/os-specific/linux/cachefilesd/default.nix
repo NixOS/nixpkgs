@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Local network file caching management daemon";
-    homepage = "https://people.redhat.com/dhowells/fscache/";
+    homepage = https://people.redhat.com/dhowells/fscache/;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

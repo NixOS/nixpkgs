@@ -34,7 +34,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       };
 
       subtest "nixos-rebuild", sub {
-          $machine->succeed("nixos-rebuild --help | grep SYNOPSIS");
+          $machine->succeed("nixos-rebuild --help | grep 'NixOS module' ");
       };
 
       # Sanity check for uid/gid assignment.

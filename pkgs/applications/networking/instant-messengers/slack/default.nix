@@ -84,7 +84,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Desktop client for Slack";
-    homepage = "https://slack.com";
+    homepage = https://slack.com;
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
   };

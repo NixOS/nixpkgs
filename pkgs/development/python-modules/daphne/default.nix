@@ -1,14 +1,14 @@
-{ stdenv, buildPythonPackage, fetchurl,
+{ stdenv, buildPythonPackage, fetchPypi,
   asgiref, autobahn, twisted, hypothesis
 }:
 buildPythonPackage rec {
   pname = "daphne";
   name = "${pname}-${version}";
-  version = "1.2.0";
+  version = "1.3.0";
 
-  src = fetchurl {
-    url = "mirror://pypi/d/daphne/${name}.tar.gz";
-    sha256 = "084216isw7rwy693i62rbd8kvpqx418jvf1q72cplv833wz3in7l";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "1xmmjp21m1w88ljsgnkf6cbzw5nxamh9cfmfgzxffpn4cdmvn96i";
   };
 
   buildInputs = [ hypothesis ];

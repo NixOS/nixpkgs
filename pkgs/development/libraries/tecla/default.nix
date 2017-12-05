@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = {
-    homepage = "http://www.astro.caltech.edu/~mcs/tecla/";
+    homepage = http://www.astro.caltech.edu/~mcs/tecla/;
     description = "Command-line editing library";
     license = "as-is";
 

@@ -20,6 +20,12 @@ stdenv.mkDerivation rec {
     substituteInPlace configure --replace stdc++ c++
   '';
 
+  patches = [(fetchurl {
+    name = "gcc6.patch";
+    url = "http://pkgs.fedoraproject.org/rpms/kyotocabinet/raw/master/f/kyotocabinet-1.2.76-gcc6.patch";
+    sha256 = "1h5k38mkiq7lz8nd2gbn7yvimcz49g3z7phn1cr560bzjih8rz23";
+  })];
+
   buildInputs = [ zlib ];
 
   meta = with stdenv.lib; {

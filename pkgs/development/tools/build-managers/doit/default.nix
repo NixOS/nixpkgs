@@ -23,7 +23,7 @@ in python3Packages.buildPythonApplication {
   checkPhase = "py.test";
 
   meta = {
-    homepage = "http://pydoit.org/";
+    homepage = http://pydoit.org/;
     description = "A task management & automation tool";
     license = stdenv.lib.licenses.mit;
     longDescription = ''

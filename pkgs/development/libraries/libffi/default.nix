@@ -1,4 +1,6 @@
-{ fetchurl, stdenv, dejagnu, doCheck ? false }:
+{ fetchurl, stdenv, dejagnu, doCheck ? false
+, buildPlatform, hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   name = "libffi-3.2.1";
@@ -10,7 +12,7 @@ stdenv.mkDerivation rec {
 
   patches = stdenv.lib.optional stdenv.isCygwin ./3.2.1-cygwin.patch;
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [ "out" "dev" "man" "info" ];
 
   buildInputs = stdenv.lib.optional doCheck dejagnu;
 
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
 
   inherit doCheck;
 
-  dontStrip = stdenv ? cross; # Don't run the native `strip' when cross-compiling.
+  dontStrip = hostPlatform != buildPlatform; # Don't run the native `strip' when cross-compiling.
 
   # Install headers and libs in the right places.
   postFixup = ''

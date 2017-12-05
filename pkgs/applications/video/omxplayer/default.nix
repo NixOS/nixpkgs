@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, raspberrypifw, pcre, boost, freetype, zlib }:
+{ stdenv, fetchurl
+, raspberrypifw, pcre, boost, freetype, zlib
+, hostPlatform
+}:
 
 let
   ffmpeg = stdenv.mkDerivation rec {
@@ -46,10 +49,10 @@ let
     crossAttrs = {
       configurePlatforms = [];
       configureFlags = configureFlags ++ [
-        "--cross-prefix=${stdenv.cross.config}-"
+        "--cross-prefix=${stdenv.cc.prefix}"
         "--enable-cross-compile"
         "--target_os=linux"
-        "--arch=${stdenv.cross.arch}"
+        "--arch=${hostPlatform.arch}"
         ];
     };
 

@@ -11,6 +11,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/zpb-ttf/2013-07-20/zpb-ttf-1.0.3.tgz'';
     sha256 = ''1irv0d0pcbwi2wx6hhjjyxzw12lnw8pvyg6ljsljh8xmhppbg5j6'';
   };
+    
+  packageName = "zpb-ttf";
 
   overrides = x: {
     postInstall = ''

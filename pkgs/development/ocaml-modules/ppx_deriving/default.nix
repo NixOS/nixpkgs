@@ -1,4 +1,4 @@
-{ stdenv, buildOcaml, fetchzip
+{ stdenv, buildOcaml, ocaml, fetchzip
 , cppo, ppx_tools, result, ounit
 }:
 
@@ -25,5 +25,6 @@ buildOcaml rec {
     description = "deriving is a library simplifying type-driven code generation on OCaml >=4.02.";
     maintainers = [ maintainers.maurer ];
     license = licenses.mit;
+    broken = versionAtLeast ocaml.version "4.05";
   };
 }

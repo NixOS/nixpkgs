@@ -24,6 +24,12 @@ stdenv.mkDerivation rec {
           + "fe87462d9c7a6ee27e28f5be5e4fc0ac87b34574.patch";
       sha256 = "1jbmq6j32vg3qv20dbh82cp54886lgrh7gkcqins8a2y4l4dl3sc";
     })
+    # https://github.com/HaxeFoundation/neko/pull/165
+    (fetchpatch {
+      url = "https://github.com/HaxeFoundation/neko/commit/"
+          + "c6d9c6d796200990b3b6a53a4dc716c9192398e6.patch";
+      sha256 = "1pq0qhhb9gbhc3zbgylwp0amhwsz0q0ggpj6v2xgv0hfy7d63rcd";
+    })
   ];
 
   buildInputs =

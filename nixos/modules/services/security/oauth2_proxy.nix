@@ -21,21 +21,20 @@ let
     '';
 
     github = cfg: ''
-      $(optionalString (!isNull cfg.github.org) "--github-org=${cfg.github.org}") \
-      $(optionalString (!isNull cfg.github.team) "--github-org=${cfg.github.team}") \
+      ${optionalString (!isNull cfg.github.org) "--github-org=${cfg.github.org}"} \
+      ${optionalString (!isNull cfg.github.team) "--github-org=${cfg.github.team}"} \
     '';
 
     google = cfg: ''
       --google-admin-email=${cfg.google.adminEmail} \
       --google-service-account=${cfg.google.serviceAccountJSON} \
-      $(repeatedArgs (group: "--google-group=${group}") cfg.google.groups) \
+      ${repeatedArgs (group: "--google-group=${group}") cfg.google.groups} \
     '';
   };
 
   authenticatedEmailsFile = pkgs.writeText "authenticated-emails" cfg.email.addresses;
 
-  getProviderOptions = cfg: provider:
-    if providerSpecificOptions ? provider then providerSpecificOptions.provider cfg else "";
+  getProviderOptions = cfg: provider: providerSpecificOptions.${provider} or (_: "") cfg;
 
   mkCommandLine = cfg: ''
     --provider='${cfg.provider}' \

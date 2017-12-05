@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/chjj/compton/";
+    homepage = https://github.com/chjj/compton/;
     description = "A fork of XCompMgr, a sample compositing manager for X servers";
     longDescription = ''
       A fork of XCompMgr, which is a sample compositing manager for X

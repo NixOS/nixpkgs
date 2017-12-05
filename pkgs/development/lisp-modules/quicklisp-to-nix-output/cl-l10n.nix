@@ -11,6 +11,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/cl-l10n/2016-12-04/cl-l10n-20161204-darcs.tgz'';
     sha256 = ''1r8jgwks21az78c5kdxgw5llk9ml423vjkv1f93qg1vx3zma6vzl'';
   };
+    
+  packageName = "cl-l10n";
 
   overrides = x: {
     postInstall = ''
@@ -31,6 +33,7 @@ rec {
 /* (SYSTEM cl-l10n DESCRIPTION Portable CL Locale Support SHA256 1r8jgwks21az78c5kdxgw5llk9ml423vjkv1f93qg1vx3zma6vzl URL
     http://beta.quicklisp.org/archive/cl-l10n/2016-12-04/cl-l10n-20161204-darcs.tgz MD5 c7cb0bb584b061799abaaaf2bd65c9c5 NAME cl-l10n TESTNAME NIL FILENAME
     cl-l10n DEPS
-    ((NAME alexandria) (NAME cl-fad) (NAME cl-l10n-cldr) (NAME cl-ppcre) (NAME closer-mop) (NAME cxml) (NAME flexi-streams) (NAME iterate) (NAME local-time)
-     (NAME metabang-bind))
+    ((NAME alexandria FILENAME alexandria) (NAME cl-fad FILENAME cl-fad) (NAME cl-l10n-cldr FILENAME cl-l10n-cldr) (NAME cl-ppcre FILENAME cl-ppcre)
+     (NAME closer-mop FILENAME closer-mop) (NAME cxml FILENAME cxml) (NAME flexi-streams FILENAME flexi-streams) (NAME iterate FILENAME iterate)
+     (NAME local-time FILENAME local-time) (NAME metabang-bind FILENAME metabang-bind))
     DEPENDENCIES (alexandria cl-fad cl-l10n-cldr cl-ppcre closer-mop cxml flexi-streams iterate local-time metabang-bind) VERSION 20161204-darcs SIBLINGS NIL) */

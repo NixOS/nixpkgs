@@ -24,13 +24,13 @@ let
   };
 in pythonPackages.buildPythonApplication rec {
   name = "matrix-synapse-${version}";
-  version = "0.21.0";
+  version = "0.22.1";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "synapse";
     rev = "v${version}";
-    sha256 = "0mxgpfyh7265kh379hsb53lni43xcq9nffanbxwrg8hp8c79pcg3";
+    sha256 = "06kqqsfqmziff7i99yyxqvkqjm7fwi56abc2vy25g9kqzpdvkay7";
   };
 
   patches = [ ./matrix-synapse.patch ];

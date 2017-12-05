@@ -4,7 +4,7 @@
  * This is needed to build GCC on Darwin.
  *
  * These are the collection of headers that would normally be available under
- * /usr/include in OS X machines with command line tools installed. They need
+ * /usr/include in macOS machines with command line tools installed. They need
  * to be in one folder for gcc to use them correctly.
  */
 

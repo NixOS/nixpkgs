@@ -63,7 +63,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     license = stdenv.lib.licenses.gpl2;
-    homepage = "http://remmina.sourceforge.net/";
+    homepage = http://remmina.sourceforge.net/;
     description = "Remote desktop client written in GTK+";
     maintainers = [];
     platforms = platforms.linux;

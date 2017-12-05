@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://bbdb.sourceforge.net/";
+    homepage = http://bbdb.sourceforge.net/;
     description = "The Insidious Big Brother Database (BBDB), a contact management utility for Emacs";
     license = "GPL";
   };

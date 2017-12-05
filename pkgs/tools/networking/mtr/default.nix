@@ -14,6 +14,8 @@ stdenv.mkDerivation rec {
     sha256 = "17zi99n8bdqrwrnbfyjn327jz4gxx287wrq3vk459c933p34ff8r";
   };
 
+  preConfigure = "substituteInPlace Makefile.in --replace ' install-exec-hook' ''";
+
   configureFlags = optionalString (!withGtk) "--without-gtk";
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

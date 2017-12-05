@@ -38,7 +38,7 @@ stdenv.mkDerivation {
   installPhase = "ocaml setup.ml -install";
 
   meta = with stdenv.lib; {
-    homepage = "http://forge.ocamlcore.org/projects/cairo";
+    homepage = http://forge.ocamlcore.org/projects/cairo;
     description = "Binding to Cairo, a 2D Vector Graphics Library";
     longDescription = ''
       This is a binding to Cairo, a 2D graphics library with support for

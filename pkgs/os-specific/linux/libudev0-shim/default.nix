@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Shim to preserve libudev.so.0 compatibility";
-    homepage = "https://github.com/archlinux/libudev0-shim";
+    homepage = https://github.com/archlinux/libudev0-shim;
     platforms = platforms.linux;
     license = licenses.lgpl21;
     maintainers = with maintainers; [ abbradar ];

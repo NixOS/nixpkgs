@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
     A commandline program that chases symbolic filesystems links to the original file
     '';
-    homepage = "https://qa.debian.org/developer.php?login=rotty%40debian.org";
+    homepage = https://qa.debian.org/developer.php?login=rotty%40debian.org;
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.polyrod ];
     platforms = platforms.all;

@@ -15,7 +15,7 @@ under the terms of [COPYING](../COPYING), which is an MIT-like license.
 * Format the commits in the following way:
 
   ```
-  (pkg-name | service-name): (from -> to | init at version | refactor | etc)
+  (pkg-name | nixos/<module>): (from -> to | init at version | refactor | etc)
   
   (Motivation for change. Additional information.)
   ```
@@ -24,10 +24,10 @@ under the terms of [COPYING](../COPYING), which is an MIT-like license.
 
   * nginx: init at 2.0.1
   * firefox: 3.0 -> 3.1.1
-  * hydra service: add bazBaz option
+  * nixos/hydra: add bazBaz option
   
     Dual baz behavior is needed to do foo.
-  * nginx service: refactor config generation
+  * nixos/nginx: refactor config generation
     
     The old config generation system used impure shell scripts and could break in specific circumstances (see #1234).
 

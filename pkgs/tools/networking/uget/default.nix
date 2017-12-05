@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   
   buildInputs = [
     openssl curl libnotify gstreamer gst-plugins-base gst-plugins-good
-    gnome3.gtk gnome3.dconf
+    gnome3.gtk (stdenv.lib.getLib gnome3.dconf)
   ]
   ++ (stdenv.lib.optional (aria2 != null) aria2);
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       ${stdenv.lib.optionalString (aria2 != null) ''--suffix PATH : "${aria2}/bin"''} \
       --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
       --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH" \
-      --prefix GIO_EXTRA_MODULES : "${gnome3.dconf}/lib/gio/modules"
+      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules"
   '';
 
   meta = with stdenv.lib; {

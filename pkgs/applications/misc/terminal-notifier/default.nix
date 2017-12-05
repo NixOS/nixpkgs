@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp -r terminal-notifier.app $out/Applications
     cat >$out/bin/terminal-notifier <<EOF
+    #!${stdenv.shell}
     cd $out/Applications/terminal-notifier.app
     exec ./Contents/MacOS/terminal-notifier "\$@"
     EOF

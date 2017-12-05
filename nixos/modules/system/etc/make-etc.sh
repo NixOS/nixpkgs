@@ -6,8 +6,8 @@ set -f
 sources_=($sources)
 targets_=($targets)
 modes_=($modes)
-uids_=($uids)
-gids_=($gids)
+users_=($users)
+groups_=($groups)
 set +f
 
 for ((i = 0; i < ${#targets_[@]}; i++)); do
@@ -36,9 +36,9 @@ for ((i = 0; i < ${#targets_[@]}; i++)); do
         fi
         
         if test "${modes_[$i]}" != symlink; then
-            echo "${modes_[$i]}" > $out/etc/$target.mode
-            echo "${uids_[$i]}" > $out/etc/$target.uid
-            echo "${gids_[$i]}" > $out/etc/$target.gid
+            echo "${modes_[$i]}"  > $out/etc/$target.mode
+            echo "${users_[$i]}"  > $out/etc/$target.uid
+            echo "${groups_[$i]}" > $out/etc/$target.gid
         fi
         
     fi

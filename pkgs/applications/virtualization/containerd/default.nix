@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ removeReferencesTo go ];
 
   preBuild = ''
-    ln -s $(pwd) vendor/src/github.com/docker/containerd
+    ln -s $(pwd) vendor/src/github.com/containerd/containerd
   '';
 
   installPhase = ''

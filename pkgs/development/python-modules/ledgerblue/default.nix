@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Python library to communicate with Ledger Blue/Nano S";
-    homepage = "https://github.com/LedgerHQ/blue-loader-python";
+    homepage = https://github.com/LedgerHQ/blue-loader-python;
     license = licenses.asl20;
     maintainers = with maintainers; [ np ];
   };

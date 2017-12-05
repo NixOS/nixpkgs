@@ -39,7 +39,8 @@ stdenv.mkDerivation rec {
     moveToOutput "lib/libinstaller.so.1.0.0" "$out"
   '';
 
-  meta = (qtbase.meta) // {
+  meta = {
     description = ''Qt installer framework'';
+    inherit (qtbase.meta) platforms license homepage;
   };
 }

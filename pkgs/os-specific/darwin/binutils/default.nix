@@ -2,11 +2,12 @@
 , hostPlatform, targetPlatform
 }:
 
-let
-  prefix = stdenv.lib.optionalString
-    (targetPlatform != hostPlatform)
-    "${targetPlatform.config}-";
+# Make sure both underlying packages claim to have prepended their binaries
+# with the same prefix.
+assert binutils-raw.prefix == cctools.prefix;
 
+let
+  inherit (binutils-raw) prefix;
   cmds = [
     "ar" "ranlib" "as" "dsymutil" "install_name_tool"
     "ld" "strip" "otool" "lipo" "nm" "strings" "size"
@@ -50,4 +51,8 @@ stdenv.mkDerivation {
 
     ln -s ${cctools}/libexec $out/libexec
   '';
+
+  passthru = {
+    inherit prefix;
+  };
 }

@@ -26,10 +26,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A simple offline API documentation browser";
     longDescription = ''
-      Zeal is a simple offline API documentation browser inspired by Dash (OS X
+      Zeal is a simple offline API documentation browser inspired by Dash (macOS
       app), available for Linux and Windows.
     '';
-    homepage = "http://zealdocs.org/";
+    homepage = http://zealdocs.org/;
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ skeidel ];

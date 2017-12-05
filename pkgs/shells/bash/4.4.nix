@@ -23,7 +23,7 @@ let
     in
       import ./bash-4.4-patches.nix patch;
 
-  inherit (stdenv.lib) optional optionals;
+  inherit (stdenv.lib) optional optionals optionalString;
 in
 
 stdenv.mkDerivation rec {
@@ -36,10 +36,9 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  outputs = [ "out" "dev" "doc" "info" ];
-
-  # the man pages are small and useful enough
-  outputMan = if interactive then "out" else null;
+  outputs = [ "out" "dev" "doc" "info" ]
+    # the man pages are small and useful enough, so include them in $out in interactive builds
+    ++ stdenv.lib.optional (!interactive) "man";
 
   NIX_CFLAGS_COMPILE = ''
     -DSYS_BASHRC="/etc/bashrc"
@@ -52,8 +51,9 @@ stdenv.mkDerivation rec {
 
   patchFlags = "-p0";
 
-  patches = upstreamPatches
-      ++ optional hostPlatform.isCygwin ./cygwin-bash-4.3.33-1.src.patch;
+  patches = upstreamPatches;
+
+  postPatch = optionalString hostPlatform.isCygwin "patch -p2 < ${./cygwin-bash-4.4.11-2.src.patch}";
 
   configureFlags = [
     (if interactive then "--with-installed-readline" else "--disable-readline")
@@ -78,6 +78,11 @@ stdenv.mkDerivation rec {
   # Bash randomly fails to build because of a recursive invocation to
   # build `version.h'.
   enableParallelBuilding = false;
+
+  makeFlags = optional hostPlatform.isCygwin [
+    "LOCAL_LDFLAGS=-Wl,--export-all,--out-implib,libbash.dll.a"
+    "SHOBJ_LIBS=-lbash"
+  ];
 
   postInstall = ''
     ln -s bash "$out/bin/sh"

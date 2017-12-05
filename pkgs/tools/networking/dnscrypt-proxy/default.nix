@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1dhvklr4dg2vlw108n11xbamacaryyg3dbrg629b76lp7685p7z8";
   };
 
+  enableParallelBuilding = true;
+
   configureFlags = optional stdenv.isLinux "--with-systemd";
 
   nativeBuildInputs = [ pkgconfig ];

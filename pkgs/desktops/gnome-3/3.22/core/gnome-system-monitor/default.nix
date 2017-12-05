@@ -1,5 +1,5 @@
 { stdenv, intltool, fetchurl, pkgconfig, gtkmm3, libxml2
-, bash, gtk3, glib, makeWrapper
+, bash, gtk3, glib, wrapGAppsHook
 , itstool, gnome3, librsvg, gdk_pixbuf, libgtop }:
 
 stdenv.mkDerivation rec {
@@ -10,14 +10,14 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
   buildInputs = [ bash pkgconfig gtk3 glib intltool itstool libxml2
-                  gtkmm3 libgtop makeWrapper
+                  gtkmm3 libgtop wrapGAppsHook
                   gdk_pixbuf gnome3.defaultIconTheme librsvg
                   gnome3.gsettings_desktop_schemas ];
 
   preFixup = ''
-    wrapProgram "$out/bin/gnome-system-monitor" \
-      --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-      --prefix XDG_DATA_DIRS : "${gnome3.gnome_themes_standard}/share:$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH"
+    gappsWrapperArgs+=(
+      --prefix XDG_DATA_DIRS : "${gtk3.out}/share:${gnome3.gnome_themes_standard}/share"
+    )
   '';
 
   enableParallelBuilding = true;

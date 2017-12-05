@@ -46,7 +46,19 @@ let
       ServerTransportPlugin obfs2,obfs3 exec ${pkgs.pythonPackages.obfsproxy}/bin/obfsproxy managed
     ''}
   ''
+  + hiddenServices
   + cfg.extraConfig;
+
+  hiddenServices = concatStrings (mapAttrsToList (hiddenServiceDir: hs:
+    let
+      hsports = concatStringsSep "\n" (map mkHiddenServicePort hs.hiddenServicePorts);
+    in
+      "HiddenServiceDir ${hiddenServiceDir}\n${hsports}\n${hs.extraConfig}\n"
+    ) cfg.hiddenServices);
+
+    mkHiddenServicePort = hsport: let
+      trgt = optionalString (hsport.target != null) (" " + hsport.target);
+    in "HiddenServicePort ${toString hsport.virtualPort}${trgt}";
 
   torRcFile = pkgs.writeText "torrc" torRc;
 in
@@ -229,11 +241,11 @@ in
           default = null;
           example = "450 GBytes";
           description = ''
-            Specify maximum bandwidth allowed during an accounting
-            period. This allows you to limit overall tor bandwidth
-            over some time period. See the
-            <literal>AccountingMax</literal> option by looking at the
-            tor manual (<literal>man tor</literal>) for more.
+            Specify maximum bandwidth allowed during an accounting period. This
+            allows you to limit overall tor bandwidth over some time period.
+            See the <literal>AccountingMax</literal> option by looking at the
+            tor manual <citerefentry><refentrytitle>tor</refentrytitle>
+            <manvolnum>1</manvolnum></citerefentry> for more.
 
             Note this limit applies individually to upload and
             download; if you specify <literal>"500 GBytes"</literal>
@@ -247,10 +259,11 @@ in
           default = null;
           example = "month 1 1:00";
           description = ''
-            Specify length of an accounting period. This allows you to
-            limit overall tor bandwidth over some time period. See the
-            <literal>AccountingStart</literal> option by looking at
-            the tor manual (<literal>man tor</literal>) for more.
+            Specify length of an accounting period. This allows you to limit
+            overall tor bandwidth over some time period. See the
+            <literal>AccountingStart</literal> option by looking at the tor
+            manual <citerefentry><refentrytitle>tor</refentrytitle>
+            <manvolnum>1</manvolnum></citerefentry> for more.
           '';
         };
 
@@ -279,9 +292,10 @@ in
           type    = types.str;
           example = "143";
           description = ''
-            What port to advertise for Tor connections. This corresponds
-            to the <literal>ORPort</literal> section in the Tor manual; see
-            <literal>man tor</literal> for more details.
+            What port to advertise for Tor connections. This corresponds to the
+            <literal>ORPort</literal> section in the Tor manual; see
+            <citerefentry><refentrytitle>tor</refentrytitle>
+            <manvolnum>1</manvolnum></citerefentry> for more details.
 
             At a minimum, you should just specify the port for the
             relay to listen on; a common one like 143, 22, 80, or 443
@@ -313,6 +327,72 @@ in
             those destinations are down.
           '';
         };
+      };
+
+      hiddenServices = mkOption {
+        type = types.attrsOf (types.submodule ({
+          options = {
+            hiddenServicePorts = mkOption {
+              type = types.listOf (types.submodule {
+                options = {
+                  virtualPort = mkOption {
+                    type = types.int;
+                    example = 80;
+                    description = "Virtual port.";
+                  };
+                  target = mkOption {
+                    type = types.nullOr types.str;
+                    default = null;
+                    example = "127.0.0.1:8080";
+                    description = ''
+                      Target virtual Port shall be mapped to.
+
+                      You may override the target port, address, or both by
+                      specifying a target of addr, port, addr:port, or
+                      unix:path. (You can specify an IPv6 target as
+                      [addr]:port. Unix paths may be quoted, and may use
+                      standard C escapes.)
+                    '';
+                  };
+                };
+              });
+              example = [ { virtualPort = 80; target = "127.0.0.1:8080"; } { virtualPort = 6667; } ];
+              description = ''
+                If target is <literal>null</literal> the virtual port is mapped
+                to the same port on 127.0.0.1 over TCP. You may use
+                <literal>target</literal> to overwrite this behaviour (see
+                description of target).
+
+                This corresponds to the <literal>HiddenServicePort VIRTPORT
+                [TARGET]</literal> option by looking at the tor manual
+                <citerefentry><refentrytitle>tor</refentrytitle>
+                <manvolnum>1</manvolnum></citerefentry> for more information.
+              '';
+            };
+            extraConfig = mkOption {
+              type = types.str;
+              default = "";
+              description = ''
+                Extra configuration. Contents will be added in the current
+                hidden service context.
+              '';
+            };
+          };
+        }));
+        default = {};
+        example = {
+          "/var/lib/tor/webserver" = {
+            hiddenServicePorts = [ { virtualPort = 80; } ];
+          };
+        };
+        description = ''
+          Configure hidden services.
+
+          Please consult the tor manual
+          <citerefentry><refentrytitle>tor</refentrytitle>
+          <manvolnum>1</manvolnum></citerefentry> for a more detailed
+          explanation. (search for 'HIDDEN').
+        '';
       };
     };
   };

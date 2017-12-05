@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = {
-    homepage = "http://portmedia.sourceforge.net/portmidi/";
+    homepage = http://portmedia.sourceforge.net/portmidi/;
     description = "Platform independent library for MIDI I/O";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;

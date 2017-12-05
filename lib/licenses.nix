@@ -546,12 +546,12 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "zlib License";
   };
 
-  zpt20 = spdx { # FIXME: why zpt* instead of zpl*
+  zpl20 = spdx {
     spdxId = "ZPL-2.0";
     fullName = "Zope Public License 2.0";
   };
 
-  zpt21 = spdx {
+  zpl21 = spdx {
     spdxId = "ZPL-2.1";
     fullName = "Zope Public License 2.1";
   };

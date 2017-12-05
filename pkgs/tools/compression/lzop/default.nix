@@ -1,10 +1,10 @@
 {stdenv, fetchurl, lzo}:
 
-stdenv.mkDerivation {
-  name = "lzop-1.03";
+stdenv.mkDerivation rec {
+  name = "lzop-1.04";
   src = fetchurl {
-    url = http://www.lzop.org/download/lzop-1.03.tar.gz;
-    sha256 = "1jdjvc4yjndf7ihmlcsyln2rbnbaxa86q4jskmkmm7ylfy65nhn1";
+    url = "http://www.lzop.org/download/${name}.tar.gz";
+    sha256 = "0h9gb8q7y54m9mvy3jvsmxf21yx8fc3ylzh418hgbbv0i8mbcwky";
   };
 
   buildInputs = [ lzo ];

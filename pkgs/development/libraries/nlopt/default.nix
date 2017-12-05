@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
         "OCT_INSTALL_DIR=$(out)/${octave.sitePath}/oct ");
 
   meta = {
-    homepage = "http://ab-initio.mit.edu/nlopt/";
+    homepage = http://ab-initio.mit.edu/nlopt/;
     description = "Free open-source library for nonlinear optimization";
     license = stdenv.lib.licenses.lgpl21Plus;
     hydraPlatforms = stdenv.lib.platforms.linux;

@@ -1,6 +1,6 @@
-{ pkgs }:
+{ pkgs, haskellLib }:
 
-with import ./lib.nix { inherit pkgs; };
+with haskellLib;
 
 self: super: {
 
@@ -39,8 +39,8 @@ self: super: {
   # cabal-install can use the native Cabal library.
   cabal-install = super.cabal-install.override { Cabal = null; };
 
-  # jailbreak-cabal can use the native Cabal library.
-  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = null; };
+  # jailbreak-cabal doesn't seem to work right with the native Cabal version.
+  jailbreak-cabal = pkgs.haskell.packages.ghc802.jailbreak-cabal;
 
   # https://github.com/bmillwood/applicative-quoters/issues/6
   applicative-quoters = appendPatch super.applicative-quoters (pkgs.fetchpatch {
@@ -56,5 +56,11 @@ self: super: {
   # https://github.com/thoughtbot/yesod-auth-oauth2/pull/77
   yesod-auth-oauth2 = doJailbreak super.yesod-auth-oauth2;
 
+  # https://github.com/nominolo/ghc-syb/issues/20
+  ghc-syb-utils = dontCheck super.ghc-syb-utils;
+
+  # Work around overly restrictive constraints on the version of 'base'.
+  ChasingBottoms = doJailbreak super.ChasingBottoms;
+  hashable = doJailbreak super.hashable;
 
 }

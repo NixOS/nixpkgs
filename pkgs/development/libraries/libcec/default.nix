@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Allows you (with the right hardware) to control your device with your TV remote control using existing HDMI cabling";
-    homepage = "http://libcec.pulse-eight.com";
+    homepage = http://libcec.pulse-eight.com;
     repositories.git = "https://github.com/Pulse-Eight/libcec.git";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = platforms.linux;

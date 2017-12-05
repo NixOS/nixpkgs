@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An efficient hex editor";
-    homepage = "http://www.chiark.greenend.org.uk/~sgtatham/tweak";
+    homepage = http://www.chiark.greenend.org.uk/~sgtatham/tweak;
     license = licenses.mit;
     platforms = platforms.linux;
   };

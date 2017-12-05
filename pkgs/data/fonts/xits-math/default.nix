@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/khaledhosny/xits-math";
+    homepage = https://github.com/khaledhosny/xits-math;
     description = "OpenType implementation of STIX fonts with math support";
     license = licenses.ofl;
     platforms = platforms.all;

@@ -19,7 +19,7 @@
 , alsaSupport ? true, alsaLib
 , pulseaudioSupport ? true, libpulseaudio
 , ffmpegSupport ? true, gstreamer, gst-plugins-base
-, gtk3Support ? true, gtk2, gtk3, wrapGAppsHook
+, gtk3Support ? !isTorBrowserLike, gtk2, gtk3, wrapGAppsHook
 
 ## privacy-related options
 
@@ -153,7 +153,7 @@ stdenv.mkDerivation (rec {
   ++ lib.optional googleAPISupport "--with-google-api-keyfile=ga"
   ++ flag crashreporterSupport "crashreporter"
   ++ flag safeBrowsingSupport "safe-browsing"
-  ++ flag drmSupport "eme"
+  ++ lib.optional drmSupport "--enable-eme=widevine"
 
   ++ (if debugBuild then [ "--enable-debug" "--enable-profiling" ]
                     else [ "--disable-debug" "--enable-release"

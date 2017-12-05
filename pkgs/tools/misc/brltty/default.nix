@@ -4,14 +4,12 @@ assert alsaSupport -> alsaLib != null;
 assert systemdSupport -> systemd != null;
 
 stdenv.mkDerivation rec {
-  name = "brltty-5.4";
+  name = "brltty-5.5";
   
   src = fetchurl {
     url = "http://brltty.com/archive/${name}.tar.gz";
-    sha256 = "1993brxa76yf7z3ckax0bbmqv6jp8vjwxp19h425v4gpm0m17k7l";
+    sha256 = "0slrqanwj9cm7ql0rpb296xq676zrc1sjyr13lh5lygp4b8qfpci";
   };
-
-  patches = [ ./systemd.patch ];
   
   buildInputs = [ pkgconfig bluez ]
     ++ stdenv.lib.optional alsaSupport alsaLib

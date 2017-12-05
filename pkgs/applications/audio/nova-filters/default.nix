@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
     sed -i -e '4d' SConstruct
     sed -i "s@mfpmath=sse@mfpmath=sse -I ${boost.dev}/include@g" SConstruct
     sed -i "s@ladspa.h@${ladspaH}/include/ladspa.h@g" filters.cpp
+    sed -i "s@LADSPA_HINT_SAMPLE_RATE, 0, 0.5@LADSPA_HINT_SAMPLE_RATE, 0.0001, 0.5@g" filters.cpp
     sed -i "s/= check/= detail::filter_base<internal_type, checked>::check/" nova/source/dsp/filter.hpp
   '';
 
@@ -27,10 +28,11 @@ stdenv.mkDerivation rec {
     scons $sconsFlags "prefix=$out" install
   '';
 
-  meta = {
-    homepage = http://klingt.org/~tim/nova-filters/;
+  meta = with stdenv.lib; {
     description = "LADSPA plugins based on filters of nova";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.linux;
+    homepage = http://klingt.org/~tim/nova-filters/;
+    license = licenses.gpl2Plus;
+    maintainers = [ maintainers.magnetophon ];
+    platforms = platforms.linux;
   };
 }

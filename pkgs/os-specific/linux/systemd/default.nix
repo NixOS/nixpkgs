@@ -9,14 +9,14 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  version = "233";
+  version = "234";
   name = "systemd-${version}";
 
   src = fetchFromGitHub {
     owner = "nixos";
     repo = "systemd";
-    rev = "a5af87e469ed3bd806d1ac34716d4f17ce9d3464";
-    sha256 = "14slhk9p1f4ngxhhsmk8i1irl6jiffs1ln84ddcqc8iy22cyqvs3";
+    rev = "ba777535a890c2a2b7677dfacc63e12c578b9b3f";
+    sha256 = "1vb45fbqkrgczfwkb0y07ldnwhjqk2sh446hzfkdn8hrwl1lifg5";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
@@ -31,7 +31,6 @@ stdenv.mkDerivation rec {
          worth it. */
       autoreconfHook gettext docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_45
     ];
-
 
   configureFlags =
     [ "--localstatedir=/var"
@@ -76,6 +75,8 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
+      unset RANLIB
+
       ./autogen.sh
 
       # FIXME: patch this in systemd properly (and send upstream).
@@ -99,8 +100,6 @@ stdenv.mkDerivation rec {
         --replace /usr/lib/systemd/catalog/ $out/lib/systemd/catalog/
 
       configureFlagsArray+=("--with-ntp-servers=0.nixos.pool.ntp.org 1.nixos.pool.ntp.org 2.nixos.pool.ntp.org 3.nixos.pool.ntp.org")
-
-      #export NIX_CFLAGS_LINK+=" -Wl,-rpath,$libudev/lib"
     '';
 
   PYTHON_BINARY = "${coreutils}/bin/env python"; # don't want a build time dependency on Python
@@ -166,16 +165,6 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  /*
-  # some libs fail to link to liblzma and/or libffi
-  postFixup = let extraLibs = stdenv.lib.makeLibraryPath [ xz.out libffi.out zlib.out ];
-    in ''
-      for f in "$out"/lib/*.so.0.*; do
-        patchelf --set-rpath `patchelf --print-rpath "$f"`':${extraLibs}' "$f"
-      done
-    '';
-  */
-
   # The interface version prevents NixOS from switching to an
   # incompatible systemd at runtime.  (Switching across reboots is
   # fine, of course.)  It should be increased whenever systemd changes
@@ -185,7 +174,7 @@ stdenv.mkDerivation rec {
   passthru.interfaceVersion = 2;
 
   meta = {
-    homepage = "http://www.freedesktop.org/wiki/Software/systemd";
+    homepage = http://www.freedesktop.org/wiki/Software/systemd;
     description = "A system and service manager for Linux";
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.eelco ];

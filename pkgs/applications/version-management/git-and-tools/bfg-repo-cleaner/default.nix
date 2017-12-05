@@ -27,7 +27,7 @@ in
     '';
 
     meta = with stdenv.lib; {
-      homepage = "https://rtyley.github.io/bfg-repo-cleaner/";
+      homepage = https://rtyley.github.io/bfg-repo-cleaner/;
       # Descriptions taken with minor modification from the homepage of bfg-repo-cleaner
       description = "Removes large or troublesome blobs in a git repository like git-filter-branch does, but faster";
       longDescription = ''

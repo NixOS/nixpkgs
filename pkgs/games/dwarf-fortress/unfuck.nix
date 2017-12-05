@@ -37,7 +37,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Unfucked multimedia layer for Dwarf Fortress";
-    homepage = "https://github.com/svenstaro/dwarf_fortress_unfuck";
+    homepage = https://github.com/svenstaro/dwarf_fortress_unfuck;
     license = licenses.free;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

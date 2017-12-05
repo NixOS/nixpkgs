@@ -1,0 +1,18 @@
+Description: Fix endless loop in logger_isa (Python 3.6)
+Author: George Psarakis <giwrgos.psarakis@gmail.com>
+Origin: upstream, https://github.com/celery/celery/commit/9c950b47eca2b4e93fd2fe52cf80f158e6cf97ad
+Forwarded: not-needed
+Reviewed-By: Nishanth Aravamudan <nish.aravamudan@canonical.com>
+Last-Update: 2017-06-12
+
+--- celery-4.0.2.orig/celery/utils/log.py
++++ celery-4.0.2/celery/utils/log.py
+@@ -82,7 +82,7 @@ def logger_isa(l, p, max=1000):
+         else:
+             if this in seen:
+                 raise RuntimeError(
+-                    'Logger {0!r} parents recursive'.format(l),
++                    'Logger {0!r} parents recursive'.format(l.name),
+                 )
+             seen.add(this)
+             this = this.parent

@@ -47,6 +47,7 @@ Options:
       --leave-dotGit  Keep the .git directories.
       --fetch-submodules Fetch submodules.
       --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
+      --quiet         Only print the final json summary.
 "
     exit 1
 }
@@ -120,9 +121,8 @@ hash_from_ref(){
 url_to_name(){
     local url=$1
     local ref=$2
-    # basename removes the / and .git suffixes
     local base
-    base=$(basename "$url" .git)
+    base=$(basename "$url" .git | cut -d: -f2)
 
     if [[ $ref =~ ^[a-z0-9]+$ ]]; then
         echo "$base-${ref:0:7}"
@@ -283,8 +283,8 @@ _clone_user_rev() {
             if test -z "$(echo "$rev" | tr -d 0123456789abcdef)"; then
                 clone "$dir" "$url" "$rev" "" 1>&2
             else
-                echo 1>&2 "Bad commit hash or bad reference."
-                exit 1
+                # if revision is not hexadecimal it might be a tag
+                clone "$dir" "$url" "" "refs/tags/$rev" 1>&2
             fi;;
     esac
 

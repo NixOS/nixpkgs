@@ -325,17 +325,17 @@ let
 
 in {
   php56 = generic {
-    version = "5.6.30";
-    sha256 = "01krq8r9xglq59x376zlg261yikckq179jmhnlcg3gqxza9w41d1";
+    version = "5.6.31";
+    sha256 = "03xixkvfp64bqp97p8vlj3hp63bpjw7hc16b7fgm7w35rdlp2fcg";
   };
 
   php70 = generic {
-    version = "7.0.19";
-    sha256 = "0nbxgx5fkj1bcach97a3169kwic7jbd4b435n7v25v1aq2pw0fhg";
+    version = "7.0.22";
+    sha256 = "1ppxdlyb9vapcmzylml447vrlizam72h1w41vvn15pdbd5zv5q48";
   };
 
   php71 = generic {
-    version = "7.1.5";
-    sha256 = "15w60nrickdi0rlsy5yw6aa1j42m6z2chv90f7fbgn0v9xwa9si8";
+    version = "7.1.8";
+    sha256 = "1y527hs9yh9lmr38q3rf7gkhnvk49vh4nyhci6852mjhjh5a0r3h";
   };
 }

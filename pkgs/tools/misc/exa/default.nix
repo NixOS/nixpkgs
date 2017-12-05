@@ -21,15 +21,15 @@ let
   '';
 in buildRustPackage rec {
   name = "exa-${version}";
-  version = "0.6.0";
+  version = "0.7.0";
 
-  depsSha256 = "0c1vyl1c67xq18ss0xs5cjdfn892jpwj6ml51dfppzfyns3namm4";
+  depsSha256 = "0j320hhf2vqaha137pjj4pyiw6d3p5h3nhy3pl9vna1g5mnl1sn7";
 
   src = fetchFromGitHub {
     owner = "ogham";
     repo = "exa";
     rev = "v${version}";
-    sha256 = "0065gj4pbbppbnwp23s6bb7zlz428nrir00d0kz7axydxk6swhyv";
+    sha256 = "0i9psgna2wwv9qyw9cif4qznqiyi16vl763hpm2yr195aj700339";
   };
 
   nativeBuildInputs = [ cmake pkgconfig perl ];

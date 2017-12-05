@@ -6,6 +6,7 @@
   findutils,
   go,
   jshon,
+  jq,
   lib,
   pkgs,
   pigz,
@@ -42,7 +43,7 @@ rec {
     cp ${./tarsum.go} tarsum.go
     export GOPATH=$(pwd)
     mkdir src
-    ln -sT ${docker.src}/pkg/tarsum src/tarsum
+    ln -sT ${docker.src}/components/engine/pkg/tarsum src/tarsum
     go build
 
     cp tarsum $out
@@ -234,11 +235,10 @@ rec {
     # Files to add to the layer.
     contents ? null,
     # Additional commands to run on the layer before it is tar'd up.
-    extraCommands ? ""
+    extraCommands ? "", uid ? 0, gid ? 0
   }:
     runCommand "docker-layer-${name}" {
       inherit baseJson contents extraCommands;
-
       buildInputs = [ jshon rsync ];
     }
     ''
@@ -253,6 +253,8 @@ rec {
         echo "No contents to add to layer."
       fi
 
+      chmod ug+w layer
+
       if [[ -n $extraCommands ]]; then
         (cd layer; eval "$extraCommands")
       fi
@@ -260,7 +262,7 @@ rec {
       # Tar up the layer and throw it into 'layer.tar'.
       echo "Packing layer..."
       mkdir $out
-      tar -C layer --mtime="@$SOURCE_DATE_EPOCH" -cf $out/layer.tar .
+      tar -C layer --mtime="@$SOURCE_DATE_EPOCH" --owner=${toString uid} --group=${toString gid} -cf $out/layer.tar .
 
       # Compute a checksum of the tarball.
       echo "Computing layer checksum..."
@@ -312,6 +314,8 @@ rec {
           echo "Adding $item..."
           rsync -ak --chown=0:0 $item/ layer/
         done
+
+        chmod ug+w layer
       '';
 
       postMount = ''
@@ -375,11 +379,13 @@ rec {
     # Docker config; e.g. what command to run on the container.
     config ? null,
     # Optional bash script to run on the files prior to fixturizing the layer.
-    extraCommands ? "",
+    extraCommands ? "", uid ? 0, gid ? 0,
     # Optional bash script to run as root on the image when provisioning.
     runAsRoot ? null,
     # Size of the virtual machine disk to provision when building the image.
     diskSize ? 1024,
+    # Time of creation of the image.
+    created ? "1970-01-01T00:00:01Z",
   }:
 
     let
@@ -387,26 +393,26 @@ rec {
 
       # Create a JSON blob of the configuration. Set the date to unix zero.
       baseJson = writeText "${baseName}-config.json" (builtins.toJSON {
-        created = "1970-01-01T00:00:01Z";
+        inherit created config;
         architecture = "amd64";
         os = "linux";
-        config = config;
       });
 
       layer =
         if runAsRoot == null
         then mkPureLayer {
           name = baseName;
-          inherit baseJson contents extraCommands;
+          inherit baseJson contents extraCommands uid gid;
         } else mkRootLayer {
           name = baseName;
           inherit baseJson fromImage fromImageName fromImageTag
                   contents runAsRoot diskSize extraCommands;
         };
       result = runCommand "docker-image-${baseName}.tar.gz" {
-        buildInputs = [ jshon pigz coreutils findutils ];
-        imageName = name;
-        imageTag = tag;
+        buildInputs = [ jshon pigz coreutils findutils jq ];
+        # Image name and tag must be lowercase
+        imageName = lib.toLower name;
+        imageTag = lib.toLower tag;
         inherit fromImage baseJson;
         layerClosure = writeReferencesToFile layer;
         passthru.buildArgs = args;
@@ -430,6 +436,9 @@ rec {
         if [[ -n "$fromImage" ]]; then
           echo "Unpacking base image..."
           tar -C image -xpf "$fromImage"
+          # Do not import the base image configuration and manifest
+          chmod a+w image image/*.json
+          rm -f image/*.json
 
           if [[ -z "$fromImageName" ]]; then
             fromImageName=$(jshon -k < image/repositories|head -n1)
@@ -488,6 +497,24 @@ rec {
         # Use the temp folder we've been working on to create a new image.
         mv temp image/$layerID
 
+        # Create image json and image manifest
+        imageJson=$(cat ${baseJson} | jq ". + {\"rootfs\": {\"diff_ids\": [], \"type\": \"layers\"}}")
+        manifestJson=$(jq -n "[{\"RepoTags\":[\"$imageName:$imageTag\"]}]")
+        currentID=$layerID
+        while [[ -n "$currentID" ]]; do
+          layerChecksum=$(sha256sum image/$currentID/layer.tar | cut -d ' ' -f1)
+          imageJson=$(echo "$imageJson" | jq ".history |= [{\"created\": \"${created}\"}] + .")
+          imageJson=$(echo "$imageJson" | jq ".rootfs.diff_ids |= [\"sha256:$layerChecksum\"] + .")
+          manifestJson=$(echo "$manifestJson" | jq ".[0].Layers |= [\"$currentID/layer.tar\"] + .")
+
+          currentID=$(cat image/$currentID/json | (jshon -e parent -u 2>/dev/null || true))
+        done
+
+        imageJsonChecksum=$(echo "$imageJson" | sha256sum | cut -d ' ' -f1)
+        echo "$imageJson" > "image/$imageJsonChecksum.json"
+        manifestJson=$(echo "$manifestJson" | jq ".[0].Config = \"$imageJsonChecksum.json\"")
+        echo "$manifestJson" > image/manifest.json
+
         # Store the json under the name image/repositories.
         jshon -n object \
           -n object -s "$layerID" -i "$imageTag" \
@@ -497,7 +524,7 @@ rec {
         chmod -R a-w image
 
         echo "Cooking the image..."
-        tar -C image --mtime="@$SOURCE_DATE_EPOCH" -c . | pigz -nT > $out
+        tar -C image --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0 --xform s:'./':: -c . | pigz -nT > $out
 
         echo "Finished."
       '';

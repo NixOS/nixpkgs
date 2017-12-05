@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, which, cctools }:
 
 let
   generic = { version, sha256 }:
@@ -10,11 +10,14 @@ let
         inherit sha256;
       };
 
+      nativeBuildInputs = [] ++
+        stdenv.lib.optionals stdenv.isDarwin [ which cctools ];
+
       patches = stdenv.lib.optional stdenv.isFreeBSD ./freebsd.patch;
 
       doCheck = !stdenv.isFreeBSD;
 
-      installFlags = "PREFIX=$(out) INSTALLPREFIX=$(out)";
+      makeFlags = "PREFIX=$(out) INSTALLPREFIX=$(out)";
 
       meta = {
         homepage = http://miniupnp.free.fr/;

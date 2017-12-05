@@ -11,6 +11,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/clx-truetype/2016-08-25/clx-truetype-20160825-git.tgz'';
     sha256 = ''0ndy067rg9w6636gxwlpnw7f3ck9nrnjb03444pprik9r3c9in67'';
   };
+    
+  packageName = "clx-truetype";
 
   overrides = x: {
     postInstall = ''
@@ -31,5 +33,6 @@ rec {
 /* (SYSTEM clx-truetype DESCRIPTION clx-truetype is pure common lisp solution for antialiased TrueType font rendering using CLX and XRender extension. SHA256
     0ndy067rg9w6636gxwlpnw7f3ck9nrnjb03444pprik9r3c9in67 URL http://beta.quicklisp.org/archive/clx-truetype/2016-08-25/clx-truetype-20160825-git.tgz MD5
     7c9dedb21d52dedf727de741ac6d9c60 NAME clx-truetype TESTNAME NIL FILENAME clx-truetype DEPS
-    ((NAME cl-aa) (NAME cl-fad) (NAME cl-paths-ttf) (NAME cl-store) (NAME cl-vectors) (NAME clx) (NAME trivial-features) (NAME zpb-ttf)) DEPENDENCIES
-    (cl-aa cl-fad cl-paths-ttf cl-store cl-vectors clx trivial-features zpb-ttf) VERSION 20160825-git SIBLINGS NIL) */
+    ((NAME cl-aa FILENAME cl-aa) (NAME cl-fad FILENAME cl-fad) (NAME cl-paths-ttf FILENAME cl-paths-ttf) (NAME cl-store FILENAME cl-store)
+     (NAME cl-vectors FILENAME cl-vectors) (NAME clx FILENAME clx) (NAME trivial-features FILENAME trivial-features) (NAME zpb-ttf FILENAME zpb-ttf))
+    DEPENDENCIES (cl-aa cl-fad cl-paths-ttf cl-store cl-vectors clx trivial-features zpb-ttf) VERSION 20160825-git SIBLINGS NIL) */

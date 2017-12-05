@@ -32,9 +32,9 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = { 
+  meta = {
     description = "Flex SDK for Adobe Flash / ActionScript";
-    homepage = "http://www.adobe.com/support/documentation/en/flex/3/releasenotes_flex3_sdk.html#installation";
+    homepage = "http://www.adobe.com/products/flex.html";
     license = stdenv.lib.licenses.mpl11;
     platforms = stdenv.lib.platforms.unix;
   };

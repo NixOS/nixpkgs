@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "SDL image library";
-    homepage = "http://www.libsdl.org/projects/SDL_image/";
+    homepage = http://www.libsdl.org/projects/SDL_image/;
     platforms = platforms.linux;
     license = licenses.zlib;
   };

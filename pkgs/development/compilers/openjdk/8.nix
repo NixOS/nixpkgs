@@ -21,42 +21,42 @@ let
     else
       throw "openjdk requires i686-linux or x86_64 linux";
 
-  update = "131";
-  build = "11";
+  update = "152";
+  build = "04";
   baseurl = "http://hg.openjdk.java.net/jdk8u/jdk8u";
   repover = "jdk8u${update}-b${build}";
   paxflags = if stdenv.isi686 then "msp" else "m";
   jdk8 = fetchurl {
              url = "${baseurl}/archive/${repover}.tar.gz";
-             sha256 = "1k401wsickbdy50yxjd26v8qm9519kxayaj3b103cr6ygp2rd9s6";
+             sha256 = "1hnpbx0v89jmbg58ym4zm255da11zf5jq8y5s58zj4x2z6b1fpxi";
           };
   langtools = fetchurl {
              url = "${baseurl}/langtools/archive/${repover}.tar.gz";
-             sha256 = "1qj75bb17a9czvxz7rm246w97cavglrssx0l1mkbickx0i0wamm8";
+             sha256 = "060q01msfyspn14c9mkf9x0l8sprki9n8zb3cwlgglhnr2d4gfbr";
           };
   hotspot = fetchurl {
              url = "${baseurl}/hotspot/archive/${repover}.tar.gz";
-             sha256 = "0kh8rk5y3n4g3hyjzflc8nwc0kyakjivpwlpj1bncsm1sykw8lr8";
+             sha256 = "0705667y6llsmszvdcbhbxzbn1csv1f2rlyghwggx5xnaq46dhx6";
           };
   corba = fetchurl {
              url = "${baseurl}/corba/archive/${repover}.tar.gz";
-             sha256 = "0gqa58mwwyf6mbgp48j1akv1y8yq55zpwfziqrbdbpkcsaf603n7";
+             sha256 = "13f4h43lw9q1292fymn2d7whwvccpkcqraasdhvzf904101xcpsl";
           };
   jdk = fetchurl {
              url = "${baseurl}/jdk/archive/${repover}.tar.gz";
-             sha256 = "0ymvvi7srr9qkss20s1yg3x2mjw178bscrnxa6s8y82gsw02y820";
+             sha256 = "16wqinqv0aqyf6jg3nsn6rj5s7ggq82wvx86zm584g56011vkgf6";
           };
   jaxws = fetchurl {
              url = "${baseurl}/jaxws/archive/${repover}.tar.gz";
-             sha256 = "0507mxvir4s536pdz45pvmahwa6s3h2yhg6rwdzrb568ab06asmi";
+             sha256 = "0japl4nyb8y3w1mpfpkxn5vkf8fap1rg340vjnb6qm6fpqvl964f";
           };
   jaxp = fetchurl {
              url = "${baseurl}/jaxp/archive/${repover}.tar.gz";
-             sha256 = "0igbg8axk028kqs9q11m8hb5bg2fa0qcwffbpfbhilyw5gmf7cy8";
+             sha256 = "024zphx9r92ws9xjihvhyrbbbamfl7js0s24ff577v5z5gdb1lly";
           };
   nashorn = fetchurl {
              url = "${baseurl}/nashorn/archive/${repover}.tar.gz";
-             sha256 = "0l63zm5a7ql3xvfxy5kzazq2184mpx0zyqzinjmq7v0q573g8xak";
+             sha256 = "1crnbjjv1s6ndqpllcrggcpsxvqcnpr58zp51y0hjz3m3gpsxwcq";
           };
   openjdk8 = stdenv.mkDerivation {
     name = "openjdk-8u${update}b${build}";
@@ -97,6 +97,11 @@ let
       chmod +x configure
       substituteInPlace configure --replace /bin/bash "$shell"
       substituteInPlace hotspot/make/linux/adlc_updater --replace /bin/sh "$shell"
+      substituteInPlace hotspot/make/linux/makefiles/dtrace.make --replace /usr/include/sys/sdt.h "/no-such-path"
+    ''
+    # https://bugzilla.redhat.com/show_bug.cgi?id=1306558
+    + stdenv.lib.optionalString stdenv.cc.isGNU ''
+      NIX_CFLAGS_COMPILE+=" -fno-lifetime-dse -fno-delete-null-pointer-checks"
     '';
 
     configureFlags = [
@@ -202,7 +207,7 @@ let
       # any package that depends on the JRE has $CLASSPATH set up
       # properly.
       mkdir -p $jre/nix-support
-      echo -n "${setJavaClassPath}" > $jre/nix-support/propagated-native-build-inputs
+      printWords ${setJavaClassPath} > $jre/nix-support/propagated-native-build-inputs
 
       # Set JAVA_HOME automatically.
       mkdir -p $out/nix-support

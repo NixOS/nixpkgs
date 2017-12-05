@@ -119,12 +119,13 @@ in
 
   config = mkIf cfg.enable {
 
-    systemd.services.syncserver = {
+    systemd.services.syncserver = let
+      syncServerEnv = pkgs.python.withPackages(ps: with ps; [ syncserver pasteScript ]);
+    in {
       after = [ "network.target" ];
       description = "Firefox Sync Server";
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.pythonPackages.pasteScript pkgs.coreutils ];
-      environment.PYTHONPATH = "${pkgs.pythonPackages.syncserver}/lib/${pkgs.pythonPackages.python.libPrefix}/site-packages";
+      path = [ pkgs.coreutils syncServerEnv ];
       preStart = ''
         if ! test -e ${cfg.privateConfig}; then
           umask u=rwx,g=x,o=x
@@ -133,7 +134,7 @@ in
           echo >> ${cfg.privateConfig} "secret = $(head -c 20 /dev/urandom | sha1sum | tr -d ' -')"
         fi
       '';
-      serviceConfig.ExecStart = "${pkgs.pythonPackages.pasteScript}/bin/paster serve ${syncServerIni}";
+      serviceConfig.ExecStart = "${syncServerEnv}/bin/paster serve ${syncServerIni}";
     };
 
   };

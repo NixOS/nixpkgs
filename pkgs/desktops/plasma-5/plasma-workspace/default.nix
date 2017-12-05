@@ -20,8 +20,7 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     isocodes libdbusmenu libSM libXcursor libXtst pam wayland
-  ];
-  propagatedBuildInputs = [
+
     baloo kactivities kcmutils kconfig kcrash kdbusaddons kdeclarative
     kdelibs4support kdesu kglobalaccel kidletime kjsembed knewstuff
     knotifyconfig kpackage krunner kscreenlocker ktexteditor ktextwidgets

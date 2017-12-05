@@ -20,7 +20,9 @@ let
   common = rec {
     src = fetchurl {
       url = # "ftp://tug.org/historic/systems/texlive/${year}/"
-        "http://lipa.ms.mff.cuni.cz/~cunav5am/nix/texlive-2016" # FIXME: a proper mirror
+      #"http://lipa.ms.mff.cuni.cz/~cunav5am/nix/texlive-2016"
+      # FIXME: a proper mirror, though tarballs.nixos.org saves this case ATM
+        http://146.185.144.154/texlive-2016
         + "/texlive-${year}0523b-source.tar.xz";
       sha256 = "1v91vahxlxkdra0qz3f132vvx5d9cx2jy84yl1hkch0agyj2rcx8";
     };
@@ -130,8 +132,7 @@ core = stdenv.mkDerivation rec {
         '')
   + /* doc location identical with individual TeX pkgs */ ''
     mkdir -p "$doc/doc"
-    mv "$doc"/share/{man,info} "$doc"/doc
-    rmdir "$doc"/share
+    mv "$out"/share/{man,info} "$doc"/doc
   '' + cleanBrokenLinks;
 
   setupHook = ./setup-hook.sh; # TODO: maybe texmf-nix -> texmf (and all references)

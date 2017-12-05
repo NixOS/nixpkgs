@@ -150,7 +150,6 @@ in {
           PrivateDevices = true;
           ProtectSystem = "full";
           ProtectHome = true;
-          NoNewPrivileges = true;
           RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
           Type = "notify";
           ExecStart = "${cfg.phpPackage}/bin/php-fpm -y ${cfgFile} -c ${phpIni}";

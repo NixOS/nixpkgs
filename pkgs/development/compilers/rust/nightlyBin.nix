@@ -7,7 +7,7 @@ let
 
   bootstrapHash =
     if stdenv.system == "x86_64-linux"
-    then "21f38f46bf16373d3240a38b775e1acff9bb429f1570a4d4da8b3000315d0085"
+    then "0svlm4bxsdhdn4jsv46f278kid23a9w978q2137qrba4xnyb06kf"
     else throw "missing bootstrap hash for platform ${stdenv.system}";
 
   src = fetchurl {
@@ -15,7 +15,7 @@ let
      sha256 = bootstrapHash;
   };
 
-  version = "2017-05-30";
+  version = "2017-06-26";
 in import ./binaryBuild.nix
   { inherit stdenv fetchurl makeWrapper cacert zlib buildRustPackage curl;
     inherit version src platform;

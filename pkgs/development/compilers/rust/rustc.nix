@@ -114,13 +114,17 @@ stdenv.mkDerivation {
   dontUseCmakeConfigure = true;
 
   # ps is needed for one of the test cases
-  nativeBuildInputs = [ file python2 procps rustPlatform.rust.rustc git cmake
-    which libffi gdb ];
+  nativeBuildInputs =
+    [ file python2 procps rustPlatform.rust.rustc git cmake
+      which libffi
+    ]
+    # Only needed for the debuginfo tests
+    ++ optional (!stdenv.isDarwin) gdb;
 
   buildInputs = [ ncurses ] ++ targetToolchains
     ++ optional (!forceBundledLLVM) llvmShared;
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "man" "doc" ];
   setOutputFlags = false;
 
   # Disable codegen units for the tests.
@@ -138,8 +142,7 @@ stdenv.mkDerivation {
 
   inherit doCheck;
 
-  ${if buildPlatform == hostPlatform then "dontSetConfigureCross" else null} = true;
-  ${if buildPlatform != hostPlatform then "configurePlatforms" else null} = [];
+  configurePlatforms = [];
 
   # https://github.com/NixOS/nixpkgs/pull/21742#issuecomment-272305764
   # https://github.com/rust-lang/rust/issues/30181

@@ -3,7 +3,7 @@
   extra-cmake-modules, perl,
   giflib, karchive, kcodecs, kglobalaccel, ki18n, kiconthemes, kio, kjs,
   knotifications, kparts, ktextwidgets, kwallet, kwidgetsaddons, kwindowsystem,
-  kxmlgui, phonon, qtx11extras, sonnet
+  kxmlgui, phonon, qtx11extras, sonnet, gperf
 }:
 
 mkDerivation {
@@ -13,7 +13,7 @@ mkDerivation {
   buildInputs = [
     giflib karchive kcodecs kglobalaccel ki18n kiconthemes kio knotifications
     kparts ktextwidgets kwallet kwidgetsaddons kwindowsystem kxmlgui phonon
-    qtx11extras sonnet
+    qtx11extras sonnet gperf
   ];
   propagatedBuildInputs = [ kjs ];
 }

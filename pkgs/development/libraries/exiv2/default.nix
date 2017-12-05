@@ -1,11 +1,11 @@
 { stdenv, fetchurl, fetchpatch, zlib, expat, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "exiv2-0.25";
+  name = "exiv2-0.26";
 
   src = fetchurl {
-    url = "http://www.exiv2.org/${name}.tar.gz";
-    sha256 = "197g6vgcpyf9p2cwn5p5hb1r714xsk1v4p96f5pv1z8mi9vzq2y8";
+    url = "http://www.exiv2.org/builds/${name}-trunk.tar.gz";
+    sha256 = "1yza317qxd8yshvqnay164imm0ks7cvij8y8j86p1gqi1153qpn7";
   };
   postPatch = "patchShebangs ./src/svn_version.sh";
 

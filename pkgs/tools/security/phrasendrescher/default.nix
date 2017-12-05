@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Cracking tool that finds passphrases of SSH keys";
-    homepage = "http://leidecker.info/projects/phrasendrescher.shtml";
+    homepage = http://leidecker.info/projects/phrasendrescher.shtml;
     license = licenses.gpl2Plus;
     platforms = platforms.all;
     maintainers = with maintainers; [ bjornfor ];

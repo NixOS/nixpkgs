@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://love2d.org";
+    homepage = http://love2d.org;
     description = "A Lua-based 2D game engine/scripting language";
     license = stdenv.lib.licenses.zlib;
 

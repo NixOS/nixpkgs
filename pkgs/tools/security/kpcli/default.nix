@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       Use this program to access and manage your KeePass 1.x or 2.x databases from a Unix-like command line.
     '';
     license = licenses.artistic1;
-    homepage = "http://kpcli.sourceforge.net";
+    homepage = http://kpcli.sourceforge.net;
     platforms = platforms.all;
     maintainers = [ maintainers.j-keck ];
   };

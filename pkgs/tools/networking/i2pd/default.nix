@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://i2pd.website";
+    homepage = https://i2pd.website;
     description = "Minimal I2P router written in C++";
     license = licenses.gpl2;
     maintainers = with maintainers; [ edwtjo ];

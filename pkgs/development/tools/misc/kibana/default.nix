@@ -11,13 +11,13 @@ let
   elasticArch = archOverrides."${arch}" or arch;
   plat = elemAt info 1;
   shas = {
-    "x86_64-linux"  = "1md3y3a8rxvf37lnfc56kbirv2rjl68pa5672yxhfmjngrr20rcw";
-    "i686-linux"    = "0d77a2v14pg5vr711hzbva8jjy0sxw9w889f2r1vhwngrhcfz4pf";
-    "x86_64-darwin" = "1cajljx13h8bncmayzvlzsynwambz61cspjnsn2h19zghn2vj2c9";
+    "x86_64-linux"  = "1wnnrhhpgc58s09p99cmi8r2jmwsd5lmh2inb0k8nmizz5v1sjz0";
+    "i686-linux"    = "0sdx59jlfrf7r9793xpn2vxaxjdczgn3qfw8yny03dcs6fjaxi2y";
+    "x86_64-darwin" = "0rmp536kn001g52lxngpj6x6d0j3qj0r11d4djbz7h6s5ml03kza";
   };
 in stdenv.mkDerivation rec {
   name = "kibana-${version}";
-  version = "4.6.0";
+  version = "4.6.5";
 
   src = fetchurl {
     url = "https://download.elastic.co/kibana/kibana/${name}-${plat}-${elasticArch}.tar.gz";

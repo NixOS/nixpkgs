@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, efl, python2Packages, dbus, makeWrapper }:
+{ stdenv, fetchurl, pkgconfig, efl, python2Packages, dbus, curl, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "econnman-${version}";
@@ -11,12 +11,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper pkgconfig python2Packages.wrapPython ];
 
-  buildInputs = [ efl python2Packages.python dbus ];
+  buildInputs = [ efl python2Packages.python dbus curl ];
 
   pythonPath = [ python2Packages.pythonefl python2Packages.dbus-python ];
 
   postInstall = ''
     wrapPythonPrograms
+    wrapProgram $out/bin/econnman-bin --prefix LD_LIBRARY_PATH : ${curl.out}/lib
   '';
 
   meta = {

@@ -66,10 +66,6 @@ in
         # Don't edit this file. Set the NixOS options ‘security.sudo.configFile’
         # or ‘security.sudo.extraConfig’ instead.
 
-        # Environment variables to keep for root and %wheel.
-        Defaults:root,%wheel env_keep+=TERMINFO_DIRS
-        Defaults:root,%wheel env_keep+=TERMINFO
-
         # Keep SSH_AUTH_SOCK so that pam_ssh_agent_auth.so can do its magic.
         Defaults env_keep+=SSH_AUTH_SOCK
 

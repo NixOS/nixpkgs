@@ -10,11 +10,12 @@ bootStages ++ [
   (prevStage: let
     inherit (prevStage) stdenv;
   in {
-    inherit (prevStage) buildPlatform hostPlatform targetPlatform;
     inherit config overlays;
 
     stdenv = import ../generic rec {
       inherit config;
+
+      inherit (prevStage.stdenv) buildPlatform hostPlatform targetPlatform;
 
       preHook = ''
         export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
@@ -24,14 +25,10 @@ bootStages ++ [
 
       initialPath = (import ../common-path.nix) { pkgs = prevStage; };
 
-      inherit (prevStage.stdenv) hostPlatform targetPlatform;
-
       cc = import ../../build-support/cc-wrapper {
         nativeTools = false;
         nativePrefix = stdenv.lib.optionalString hostPlatform.isSunOS "/usr";
         nativeLibc = true;
-        hostPlatform = localSystem;
-        targetPlatform = localSystem;
         inherit stdenv;
         inherit (prevStage) binutils coreutils gnugrep;
         cc = prevStage.gcc.cc;

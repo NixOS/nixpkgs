@@ -97,7 +97,7 @@ symlinkJoin {
       fi
     done
   '' + (lib.optionalString stdenv.isDarwin ''
-    # Work around a linker limit in Mac OS X Sierra (see generic-builder.nix):
+    # Work around a linker limit in macOS Sierra (see generic-builder.nix):
     local packageConfDir="$out/lib/${ghc.name}/package.conf.d";
     local dynamicLinksDir="$out/lib/links"
     mkdir -p $dynamicLinksDir

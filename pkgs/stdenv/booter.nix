@@ -73,7 +73,7 @@ stageFuns: let
   # Take the list and disallow custom overrides in all but the final stage,
   # and allow it in the final flag. Only defaults this boolean field if it
   # isn't already set.
-  withAllowCustomOverrides = lib.lists.imap
+  withAllowCustomOverrides = lib.lists.imap1
     (index: stageFun: prevStage:
       # So true by default for only the first element because one
       # 1-indexing. Since we reverse the list, this means this is true

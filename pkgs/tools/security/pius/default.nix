@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   buildInputs = [ python ];
 
   patchPhase = ''
-    sed -i "pius" -e's|/usr/bin/gpg|${gnupg}/bin/gpg2|g'
+    sed -i "pius" -e's|/usr/bin/gpg|${gnupg}/bin/gpg|g'
   '';
 
   dontBuild = true;

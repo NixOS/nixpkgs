@@ -2,7 +2,7 @@ diff --git a/src-bin/Boot.hs b/src-bin/Boot.hs
 index db8b12e..7b815c5 100644
 --- a/src-bin/Boot.hs
 +++ b/src-bin/Boot.hs
-@@ -526,9 +526,7 @@ initPackageDB :: B ()
+@@ -540,9 +540,7 @@ initPackageDB :: B ()
  initPackageDB = do
    msg info "creating package databases"
    initDB "--global" <^> beLocations . blGlobalDB
@@ -12,7 +12,7 @@ index db8b12e..7b815c5 100644
      initDB dbName db = do
        rm_rf db >> mkdir_p db
        ghcjs_pkg_ ["init", toTextI db] `catchAny_` return ()
-@@ -552,29 +550,22 @@ installDevelopmentTree = subTop $ do
+@@ -566,29 +564,22 @@ installDevelopmentTree = subTop $ do
    msgD info $ "preparing development boot tree"
    checkpoint' "ghcjs-boot-git" "ghcjs-boot repository already cloned and prepared" $ do
      testGit "ghcjs-boot" >>= \case
@@ -46,7 +46,25 @@ index db8b12e..7b815c5 100644
        mapM_ patchPackage =<< allPackages
        preparePrimops
        buildGenPrim
-@@ -1110,14 +1101,14 @@ cabalInstallFlags parmakeGhcjs = do
+@@ -1141,7 +1132,7 @@ cabalStage1 pkgs = sub $ do
+   globalFlags <- cabalGlobalFlags
+   flags <- cabalInstallFlags (length pkgs == 1)
+   let args = globalFlags ++ ("install" : pkgs) ++
+-             [ "--solver=topdown" -- the modular solver refuses to install stage1 packages
++             [ "--allow-boot-library-installs"
+              ] ++ map ("--configure-option="<>) configureOpts ++ flags
+   checkInstallPlan pkgs args
+   cabal_ args
+@@ -1162,7 +1153,7 @@ cabalInstall pkgs = do
+ -- uses somewhat fragile parsing of --dry-run output, find a better way
+ checkInstallPlan :: [Package] -> [Text] -> B ()
+ checkInstallPlan pkgs opts = do
+-  plan <- cabal (opts ++ ["-v2", "--dry-run"])
++  plan <- cabal (opts ++ ["-vverbose+nowrap", "--dry-run"])
+   when (hasReinstalls plan || hasUnexpectedInstalls plan || hasNewVersion plan) (err plan)
+   where
+     hasReinstalls = T.isInfixOf "(reinstall)"   -- reject reinstalls
+@@ -1201,14 +1192,14 @@ cabalInstallFlags parmakeGhcjs = do
             , "--avoid-reinstalls"
             , "--builddir",      "dist"
             , "--with-compiler", ghcjs ^. pgmLocText

@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   makefile = "makefile.shared";
 
   meta = {
-    homepage = "http://libtom.org/?page=features&newsitems=5&whatfile=crypt";
+    homepage = http://libtom.org/?page=features&newsitems=5&whatfile=crypt;
     description = "A fairly comprehensive, modular and portable cryptographic toolkit";
     platforms = stdenv.lib.platforms.linux;
   };

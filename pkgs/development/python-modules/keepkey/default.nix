@@ -1,5 +1,5 @@
 { stdenv, fetchPypi, buildPythonPackage, ecdsa
-, mnemonic, protobuf3_0, hidapi }:
+, mnemonic, protobuf3_2, hidapi }:
 
 buildPythonPackage rec {
   name = "${pname}-${version}";
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     sha256 = "14d2r8dlx997ypgma2k8by90acw7i3l7hfq4gar9lcka0lqfj714";
   };
 
-  propagatedBuildInputs = [ protobuf3_0 hidapi ];
+  propagatedBuildInputs = [ protobuf3_2 hidapi ];
 
   buildInputs = [ ecdsa mnemonic ];
 

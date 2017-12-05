@@ -11,6 +11,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/cl-libuv/2016-08-25/cl-libuv-20160825-git.tgz'';
     sha256 = ''02vi9ph9pxbxgp9jsbgzb9nijsv0vyk3f1jyhhm88i0y1kb3595r'';
   };
+    
+  packageName = "cl-libuv";
 
   overrides = x: {
     postInstall = ''
@@ -30,4 +32,5 @@ rec {
 }
 /* (SYSTEM cl-libuv DESCRIPTION Low-level libuv bindings for Common Lisp. SHA256 02vi9ph9pxbxgp9jsbgzb9nijsv0vyk3f1jyhhm88i0y1kb3595r URL
     http://beta.quicklisp.org/archive/cl-libuv/2016-08-25/cl-libuv-20160825-git.tgz MD5 ba5e3cfaadcf710eaee67cc9e716e45a NAME cl-libuv TESTNAME NIL FILENAME
-    cl-libuv DEPS ((NAME alexandria) (NAME cffi) (NAME cffi-grovel)) DEPENDENCIES (alexandria cffi cffi-grovel) VERSION 20160825-git SIBLINGS NIL) */
+    cl-libuv DEPS ((NAME alexandria FILENAME alexandria) (NAME cffi FILENAME cffi) (NAME cffi-grovel FILENAME cffi-grovel)) DEPENDENCIES
+    (alexandria cffi cffi-grovel) VERSION 20160825-git SIBLINGS NIL) */

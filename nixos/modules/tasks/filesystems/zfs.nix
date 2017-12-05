@@ -24,11 +24,7 @@ let
 
   kernel = config.boot.kernelPackages;
 
-  packages = if config.boot.zfs.enableUnstable then {
-    spl = kernel.splUnstable;
-    zfs = kernel.zfsUnstable;
-    zfsUser = pkgs.zfsUnstable;
-  } else {
+  packages = {
     spl = kernel.spl;
     zfs = kernel.zfs;
     zfsUser = pkgs.zfs;
@@ -62,19 +58,6 @@ in
 
   options = {
     boot.zfs = {
-      enableUnstable = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          Use the unstable zfs package. This might be an option, if the latest
-          kernel is not yet supported by a published release of ZFS. Enabling
-          this option will install a development version of ZFS on Linux. The
-          version will have already passed an extensive test suite, but it is
-          more likely to hit an undiscovered bug compared to running a released
-          version of ZFS on Linux.
-        '';
-      };
-
       extraPools = mkOption {
         type = types.listOf types.str;
         default = [];

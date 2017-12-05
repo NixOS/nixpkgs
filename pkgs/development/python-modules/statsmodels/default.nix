@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Statistical computations and models for use with SciPy";
-    homepage = "https://www.github.com/statsmodels/statsmodels";
+    homepage = https://www.github.com/statsmodels/statsmodels;
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ fridh ];
   };

@@ -12,9 +12,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ openblasCompat superlu hdf5 ];
 
-  cmakeFlags = [ "-DDETECT_HDF5=ON" ];
+  cmakeFlags = let
+    libSuff = if stdenv.isDarwin then "dylib" else "so";
+  in [
+    "-DLAPACK_LIBRARY=${openblasCompat}/lib/libopenblas.${libSuff}"
+    "-DDETECT_HDF5=ON"
+  ];
 
- patches = [ ./use-unix-config-on-OS-X.patch ];
+  patches = [ ./use-unix-config-on-OS-X.patch ];
 
   meta = with stdenv.lib; {
     description = "C++ linear algebra library";

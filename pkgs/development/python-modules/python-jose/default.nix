@@ -21,7 +21,7 @@ buildPythonPackage rec {
   ];
   propagatedBuildInputs = [ future six ecdsa pycryptodome ];
   meta = with stdenv.lib; {
-    homepage = "https://github.com/mpdavis/python-jose";
+    homepage = https://github.com/mpdavis/python-jose;
     description = "A JOSE implementation in Python";
     platforms = platforms.all;
     license = licenses.mit;

@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "https://github.com/TheLocehiliosan/yadm";
+    homepage = https://github.com/TheLocehiliosan/yadm;
     description = "Yet Another Dotfiles Manager";
     longDescription = ''
     yadm is a dotfile management tool with 3 main features: Manages files across

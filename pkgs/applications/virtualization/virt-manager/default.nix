@@ -9,12 +9,12 @@ with stdenv.lib;
 
 python2Packages.buildPythonApplication rec {
   name = "virt-manager-${version}";
-  version = "1.4.1";
+  version = "1.4.2";
   namePrefix = "";
 
   src = fetchurl {
     url = "http://virt-manager.org/download/sources/virt-manager/${name}.tar.gz";
-    sha256 = "0i1rkxz730vw1nqghrp189jhhp53pw81k0h71hhxmyqlkyclkig6";
+    sha256 = "0x6mnqw8bng3r69pvmnq9q6yyhicxg22yz62b6dzbb4z16xl1r23";
   };
 
   nativeBuildInputs = [ wrapGAppsHook intltool file ];

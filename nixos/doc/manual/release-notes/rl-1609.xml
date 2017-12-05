@@ -78,13 +78,13 @@ following incompatible changes:</para>
     our package set it loosely based on the latest available LTS release, i.e.
     LTS 7.x at the time of this writing. New releases of NixOS and Nixpkgs will
     drop those old names entirely. <link
-    xlink:href="http://lists.science.uu.nl/pipermail/nix-dev/2016-June/020585.html">The
+    xlink:href="https://nixos.org/nix-dev/2016-June/020585.html">The
     motivation for this change</link> has been discussed at length on the
     <literal>nix-dev</literal> mailing list and in <link
     xlink:href="https://github.com/NixOS/nixpkgs/issues/14897">Github issue
     #14897</link>. Development strategies for Haskell hackers who want to rely
     on Nix and NixOS have been described in <link
-    xlink:href="http://lists.science.uu.nl/pipermail/nix-dev/2016-June/020642.html">another
+    xlink:href="https://nixos.org/nix-dev/2016-June/020642.html">another
     nix-dev article</link>.</para>
   </listitem>
 

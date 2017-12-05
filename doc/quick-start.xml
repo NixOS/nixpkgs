@@ -212,7 +212,7 @@ $ nix-env -f . -iA libfoo</screen>
 
   <listitem>
     <para>Optionally commit the new package and open a pull request, or send a patch to
-    <literal>nix-dev@cs.uu.nl</literal>.</para>
+    <literal>https://groups.google.com/forum/#!forum/nix-devel</literal>.</para>
   </listitem>
 
 

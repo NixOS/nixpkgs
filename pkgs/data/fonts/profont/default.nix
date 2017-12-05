@@ -1,26 +1,23 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchzip }:
 
-stdenv.mkDerivation rec {
+fetchzip rec {
   name = "profont";
 
-  src = fetchurl {
-    url = "http://tobiasjung.name/downloadfile.php?file=profont-x11.zip";
-    sha256 = "19ww5iayxzxxgixa9hgb842xd970mwghxfz2vsicp8wfwjh6pawr";
-  };
+  url = "http://tobiasjung.name/downloadfile.php?file=profont-x11.zip";
 
-  buildInputs = [ unzip ];
+  postFetch = ''
+    unzip -j $downloadedFile
 
-  phases = [ "unpackPhase" "installPhase" ];
-  installPhase =
-    ''
-      mkdir -p $out/share/doc/$name $out/share/fonts/misc
+    mkdir -p $out/share/doc/$name $out/share/fonts/misc
 
-      cp LICENSE $out/share/doc/$name/LICENSE
+    cp LICENSE $out/share/doc/$name/LICENSE
 
-      for f in *.pcf; do
-        gzip -c "$f" > $out/share/fonts/misc/"$f".gz
-      done
-    '';
+    for f in *.pcf; do
+      gzip -c "$f" > $out/share/fonts/misc/"$f".gz
+    done
+  '';
+
+  sha256 = "1calqmvrfv068w61f614la8mg8szas6m5i9s0lsmwjhb4qwjyxbw";
 
   meta = with stdenv.lib; {
     homepage = http://tobiasjung.name;

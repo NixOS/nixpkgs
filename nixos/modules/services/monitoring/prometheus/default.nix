@@ -66,15 +66,6 @@ let
           How frequently to evaluate rules by default.
         '';
       };
-
-      labels = mkOption {
-        type = types.attrsOf types.str;
-        default = {};
-        description = ''
-          The labels to add to any timeseries that this Prometheus instance
-          scrapes.
-        '';
-      };
     };
   };
 

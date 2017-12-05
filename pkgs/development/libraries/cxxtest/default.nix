@@ -16,7 +16,7 @@ in python2Packages.buildPythonApplication rec {
   sourceRoot = "${name}-src/python";
 
   meta = with stdenv.lib; {
-    homepage = "http://cxxtest.com";
+    homepage = http://cxxtest.com;
     description = "Unit testing framework for C++";
     platforms = platforms.unix ;
     license = licenses.lgpl3;

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   buildInputs = [ swig ];
 
   meta = {
-    homepage = "https://pyscard.sourceforge.io/";
+    homepage = https://pyscard.sourceforge.io/;
     description = "Smartcard library for python";
     license = stdenv.lib.licenses.lgpl21;
     maintainers = with stdenv.lib.maintainers; [ layus ];

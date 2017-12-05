@@ -16,7 +16,7 @@ stdenv.mkDerivation {
 
   # meta is all the information about the package..
   meta = with stdenv.lib; {
-    homepage = "http://www.minizinc.org/";
+    homepage = http://www.minizinc.org/;
     description = "MiniZinc is a medium-level constraint modelling language.";
 
     longDescription = ''

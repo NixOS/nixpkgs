@@ -43,7 +43,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A lightweight LLVM python binding for writing JIT compilers";
-    homepage = "http://llvmlite.pydata.org/";
+    homepage = http://llvmlite.pydata.org/;
     license = stdenv.lib.licenses.bsd2;
     maintainers = with stdenv.lib.maintainers; [ fridh ];
   };

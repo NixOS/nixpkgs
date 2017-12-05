@@ -11,6 +11,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/blackbird/2016-05-31/blackbird-20160531-git.tgz'';
     sha256 = ''0l053fb5fdz1q6dyfgys6nmbairc3aig4wjl5abpf8b1paf7gzq9'';
   };
+    
+  packageName = "blackbird";
 
   overrides = x: {
     postInstall = ''
@@ -30,4 +32,4 @@ rec {
 }
 /* (SYSTEM blackbird DESCRIPTION A promise implementation for Common Lisp. SHA256 0l053fb5fdz1q6dyfgys6nmbairc3aig4wjl5abpf8b1paf7gzq9 URL
     http://beta.quicklisp.org/archive/blackbird/2016-05-31/blackbird-20160531-git.tgz MD5 5cb13dc06a0eae8dcba14714d2b5365d NAME blackbird TESTNAME NIL FILENAME
-    blackbird DEPS ((NAME vom)) DEPENDENCIES (vom) VERSION 20160531-git SIBLINGS (blackbird-test)) */
+    blackbird DEPS ((NAME vom FILENAME vom)) DEPENDENCIES (vom) VERSION 20160531-git SIBLINGS (blackbird-test)) */

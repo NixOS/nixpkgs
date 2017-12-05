@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
 
   meta = {
-    homepage = "http://sourceforge.net/projects/ocamlfuse";
+    homepage = http://sourceforge.net/projects/ocamlfuse;
     license = stdenv.lib.licenses.gpl2;
     description = "ocaml binding for fuse";
     maintainers = with stdenv.lib.maintainers; [ bennofs ];

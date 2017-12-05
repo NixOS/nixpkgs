@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "https://github.com/hvesalai/scala-mode2";
+    homepage = https://github.com/hvesalai/scala-mode2;
     description = "An Emacs mode for editing Scala code";
     license = "permissive";
   };

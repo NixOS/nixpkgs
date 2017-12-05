@@ -7,7 +7,7 @@ index 903fb5b..d5611dc 100644
  
    ret = asprintf (&command,
 -		  "gpg --list-keys --with-colons --with-key-data '%s'",
-+		  "@out@/bin/gpg2 --list-keys --with-colons --with-key-data '%s'",
++		  "@out@/bin/gpg --list-keys --with-colons --with-key-data '%s'",
  		  keyid);
    assert (ret > 0);
  

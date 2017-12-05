@@ -5,28 +5,22 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.84.0";
+  version = "3.5.0";
   name = "calibre-${version}";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${version}/${name}.tar.xz";
-    sha256 = "1kvnmb6hsby4bdnx70bcy32f4dz1axzlr310dr6mkvnc8bqw59km";
+    sha256 = "1al0vy11zvlxlrf03i631p6b419hy47pbzmgydswrii4prndj4xv";
   };
 
   patches = [
     # Patches from Debian that:
     # - disable plugin installation (very insecure)
-    # - disables loading of web bug for privacy
     # - switches the version update from enabled to disabled by default
     (fetchpatch {
       name = "disable_plugins.patch";
       url = "http://bazaar.launchpad.net/~calibre-packagers/calibre/debian/download/head:/disable_plugins.py-20111220183043-dcl08ccfagjxt1dv-1/disable_plugins.py";
       sha256 = "19spdx52dhbrfn9lm084yl3cfwm6f90imd51k97sf7flmpl569pk";
-    })
-    (fetchpatch {
-      name = "links_privacy.patch";
-      url = "http://bazaar.launchpad.net/~calibre-packagers/calibre/debian/download/head:/linksprivacy.patch-20160417214308-6hvive72pc0r4awc-1/links-privacy.patch";
-      sha256 = "0f6pq2b7q56pxrq2j8yqd7bksc623q2zgq29qcli30f13vga1w60";
     })
     (fetchpatch {
       name = "no_updates_dialog.patch";
@@ -42,7 +36,7 @@ stdenv.mkDerivation rec {
 
     # Remove unneeded files and libs
     rm -rf resources/calibre-portable.* \
-           src/{chardet,cherrypy,html5lib,odf,routes}
+           src/odf
   '';
 
   dontUseQmakeConfigure = true;
@@ -55,10 +49,11 @@ stdenv.mkDerivation rec {
     poppler_utils libpng imagemagick libjpeg
     fontconfig podofo qtbase chmlib icu sqlite libusb1 libmtp xdg_utils wrapGAppsHook
   ] ++ (with python2Packages; [
-    apsw cssselect cssutils dateutil lxml mechanize netifaces pillow
+    apsw cssselect cssutils dateutil html5-parser lxml mechanize netifaces pillow
     python pyqt5 sip
+    regex msgpack
     # the following are distributed with calibre, but we use upstream instead
-    chardet cherrypy html5lib_0_9999999 odfpy routes
+    odfpy
   ]);
 
   installPhase = ''
@@ -94,6 +89,9 @@ stdenv.mkDerivation rec {
     for entry in $out/share/applications/*.desktop; do
       substituteAllInPlace $entry
     done
+
+    mkdir -p $out/share
+    cp -a man-pages $out/share/man
 
     runHook postInstall
   '';

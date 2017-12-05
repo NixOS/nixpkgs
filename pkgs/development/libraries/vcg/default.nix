@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://vcg.isti.cnr.it/vcglib/install.html";
+    homepage = http://vcg.isti.cnr.it/vcglib/install.html;
     description = "C++ library for manipulation, processing and displaying with OpenGL of triangle and tetrahedral meshes";
     license = licenses.gpl3;
     platforms = platforms.linux;

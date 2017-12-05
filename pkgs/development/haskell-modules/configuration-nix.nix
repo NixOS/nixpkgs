@@ -25,9 +25,9 @@
 # * enabling/disabling certain features in packages
 #
 # If you have an override of this kind, see configuration-common.nix instead.
-{ pkgs }:
+{ pkgs, haskellLib }:
 
-with import ./lib.nix { inherit pkgs; };
+with haskellLib;
 
 # All of the overrides in this set should look like:
 #
@@ -64,8 +64,19 @@ self: super: builtins.intersectAttrs super {
       "--extra-include-dirs=${pkgs.cudatoolkit}/include"
     ];
     preConfigure = ''
-      unset CC          # unconfuse the haskell-cuda configure script
-      sed -i -e 's|/usr/local/cuda|${pkgs.cudatoolkit}|g' configure
+      export CUDA_PATH=${pkgs.cudatoolkit}
+    '';
+  });
+
+  nvvm = overrideCabal super.nvvm (drv: {
+    preConfigure = ''
+      export CUDA_PATH=${pkgs.cudatoolkit}
+    '';
+  });
+
+  cufft = overrideCabal super.cufft (drv: {
+    preConfigure = ''
+      export CUDA_PATH=${pkgs.cudatoolkit}
     '';
   });
 
@@ -129,8 +140,8 @@ self: super: builtins.intersectAttrs super {
   gtksourceview2 = addPkgconfigDepend super.gtksourceview2 pkgs.gtk2;
 
   # Need WebkitGTK, not just webkit.
-  webkit = super.webkit.override { webkit = pkgs.webkitgtk2; };
-  websnap = super.websnap.override { webkit = pkgs.webkitgtk24x; };
+  webkit = super.webkit.override { webkit = pkgs.webkitgtk24x-gtk2; };
+  websnap = super.websnap.override { webkit = pkgs.webkitgtk24x-gtk3; };
 
   hs-mesos = overrideCabal super.hs-mesos (drv: {
     # Pass _only_ mesos; the correct protobuf is propagated.
@@ -408,6 +419,17 @@ self: super: builtins.intersectAttrs super {
     testHaskellDepends = (drv.testHaskellDepends or []) ++ [ self.test-framework self.test-framework-hunit ];
   });
 
+  # cabal2nix likes to generate dependencies on hinotify when hfsevents is really required
+  # on darwin: https://github.com/NixOS/cabal2nix/issues/146.
+  hinotify = if pkgs.stdenv.isDarwin then self.hfsevents else super.hinotify;
+
+  # FSEvents API is very buggy and tests are unreliable. See
+  # http://openradar.appspot.com/10207999 and similar issues.
+  # https://github.com/haskell-fswatch/hfsnotify/issues/62
+  fsnotify = if pkgs.stdenv.isDarwin
+    then addBuildDepend (dontCheck super.fsnotify) pkgs.darwin.apple_sdk.frameworks.Cocoa
+    else dontCheck super.fsnotify;
+
   hidapi = addExtraLibrary super.hidapi pkgs.libudev;
 
   hs-GeoIP = super.hs-GeoIP.override { GeoIP = pkgs.geoipWithDatabase; };
@@ -430,7 +452,7 @@ self: super: builtins.intersectAttrs super {
   haskell-gi-base = addBuildDepend super.haskell-gi-base pkgs.gobjectIntrospection;
 
   # Requires gi-javascriptcore API version 4
-  gi-webkit2 = super.gi-webkit2.override { gi-javascriptcore = self.gi-javascriptcore_4_0_12; };
+  gi-webkit2 = super.gi-webkit2.override { gi-javascriptcore = self.gi-javascriptcore_4_0_14; };
 
   # requires valid, writeable $HOME
   hatex-guide = overrideCabal super.hatex-guide (drv: {
@@ -460,5 +482,11 @@ self: super: builtins.intersectAttrs super {
   # Also needs https://github.com/ucsd-progsys/liquidhaskell/issues/1038 resolved.
   liquid-fixpoint = disableSharedExecutables super.liquid-fixpoint;
   liquidhaskell = dontCheck (disableSharedExecutables super.liquidhaskell);
+
+  # Haskell OpenCV bindings need contrib code enabled in the C++ library.
+  opencv = super.opencv.override { opencv3 = pkgs.opencv3.override { enableContrib = true; }; };
+
+  # Without this override, the builds lacks pkg-config.
+  opencv-extra = addPkgconfigDepend super.opencv-extra (pkgs.opencv3.override { enableContrib = true; });
 
 }

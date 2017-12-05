@@ -50,7 +50,7 @@ in buildPythonPackage rec {
     boto six netaddr dns ] ++ lib.optional windowsSupport pywinrm;
 
   meta = {
-    homepage = "http://www.ansible.com";
+    homepage = http://www.ansible.com;
     description = "A simple automation tool";
     license = with lib.licenses; [ gpl3] ;
     maintainers = with lib.maintainers; [

@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "https://robomongo.org/";
+    homepage = https://robomongo.org/;
     description = "Query GUI for mongodb";
     platforms = stdenv.lib.intersectLists stdenv.lib.platforms.linux stdenv.lib.platforms.x86_64;
     license = stdenv.lib.licenses.gpl3;

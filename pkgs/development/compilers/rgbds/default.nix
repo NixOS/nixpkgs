@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   installFlags = "PREFIX=\${out}";
 
   meta = with stdenv.lib; {
-    homepage = "https://www.anjbe.name/rgbds/";
+    homepage = https://www.anjbe.name/rgbds/;
     description = "An assembler/linker package that produces Game Boy programs";
     license = licenses.free;
     maintainers = with maintainers; [ matthewbauer ];

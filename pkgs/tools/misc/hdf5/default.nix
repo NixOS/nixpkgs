@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       applications to evolve in their use of HDF5. The HDF5 Technology suite includes tools and 
       applications for managing, manipulating, viewing, and analyzing data in the HDF5 format.
     '';
-    homepage = http://www.hdfgroup.org/HDF5/;
+    homepage = https://www.hdfgroup.org/HDF5/;
     platforms = stdenv.lib.platforms.unix;
   };
 }

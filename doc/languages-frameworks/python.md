@@ -340,7 +340,7 @@ other packages we like to have in the environment, all specified with `propagate
 Indeed, we can just add any package we like to have in our environment to `propagatedBuildInputs`.
 
 ```nix
-with import <nixpkgs>;
+with import <nixpkgs> {};
 with pkgs.python35Packages;
 
 buildPythonPackage rec {
@@ -423,7 +423,7 @@ and in this case the `python35` interpreter is automatically used.
 ### Interpreters
 
 Versions 2.7, 3.3, 3.4, 3.5 and 3.6 of the CPython interpreter are available as
-respectively `python27`, `python33`, `python34`, `python35` and `python36`. The PyPy interpreter
+respectively `python27`, `python34`, `python35` and `python36`. The PyPy interpreter
 is available as `pypy`. The aliases `python2` and `python3` correspond to respectively `python27` and
 `python35`. The default interpreter, `python`, maps to `python2`.
 The Nix expressions for the interpreters can be found in
@@ -469,7 +469,6 @@ sets are
 
 * `pkgs.python26Packages`
 * `pkgs.python27Packages`
-* `pkgs.python33Packages`
 * `pkgs.python34Packages`
 * `pkgs.python35Packages`
 * `pkgs.python36Packages`
@@ -545,6 +544,35 @@ All parameters from `mkDerivation` function are still supported.
 * `format`: Format of the source. Valid options are `setuptools` (default), `flit`, `wheel`, and `other`. `setuptools` is for when the source has a `setup.py` and `setuptools` is used to build a wheel, `flit`, in case `flit` should be used to build a wheel, and `wheel` in case a wheel is provided. In case you need to provide your own `buildPhase` and `installPhase` you can use `other`.
 * `catchConflicts` If `true`, abort package build if a package name appears more than once in dependency tree. Default is `true`.
 * `checkInputs` Dependencies needed for running the `checkPhase`. These are added to `buildInputs` when `doCheck = true`.
+
+##### Overriding Python packages
+
+The `buildPythonPackage` function has a `overridePythonAttrs` method that
+can be used to override the package. In the following example we create an
+environment where we have the `blaze` package using an older version of `pandas`.
+We override first the Python interpreter and pass
+`packageOverrides` which contains the overrides for packages in the package set.
+
+```nix
+with import <nixpkgs> {};
+
+(let
+  python = let
+    packageOverrides = self: super: {
+      pandas = super.pandas.overridePythonAttrs(old: rec {
+        version = "0.19.1";
+        name = "pandas-${version}";
+        src =  super.fetchPypi {
+          pname = "pandas";
+          inherit version;
+          sha256 = "08blshqj9zj1wyjhhw3kl2vas75vhhicvv72flvf1z3jvapgw295";
+        };
+      });
+    };
+  in pkgs.python3.override {inherit packageOverrides;};
+
+in python.withPackages(ps: [ps.blaze])).env
+```
 
 #### `buildPythonApplication` function
 
@@ -622,7 +650,7 @@ attribute. The `shell.nix` file from the previous section can thus be also writt
 ```nix
 with import <nixpkgs> {};
 
-(python33.withPackages (ps: [ps.numpy ps.requests])).env
+(python36.withPackages (ps: [ps.numpy ps.requests])).env
 ```
 
 In contrast to `python.buildEnv`, `python.withPackages` does not support the more advanced options
@@ -755,17 +783,17 @@ In the following example we rename the `pandas` package and build it.
 ```nix
 with import <nixpkgs> {};
 
-let
+(let
   python = let
     packageOverrides = self: super: {
-      pandas = super.pandas.override {name="foo";};
+      pandas = super.pandas.overridePythonAttrs(old: {name="foo";});
     };
   in pkgs.python35.override {inherit packageOverrides;};
 
-in python.pkgs.pandas
+in python.withPackages(ps: [ps.pandas])).env
 ```
-Using `nix-build` on this expression will build the package `pandas`
-but with the new name `foo`.
+Using `nix-build` on this expression will build an environment that contains the
+package `pandas` but with the new name `foo`.
 
 All packages in the package set will use the renamed package.
 A typical use case is to switch to another version of a certain package.

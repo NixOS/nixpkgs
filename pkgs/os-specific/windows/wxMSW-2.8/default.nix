@@ -1,7 +1,8 @@
-{ stdenv, fetchurl, compat24 ? false, compat26 ? true, unicode ? true,
+{ stdenv, fetchurl, compat24 ? false, compat26 ? true, unicode ? true
+, hostPlatform
 }:
 
-assert stdenv ? cross -> stdenv.cross.libc == "msvcrt";
+assert hostPlatform.isWindows;
 
 stdenv.mkDerivation {
   name = "wxMSW-2.8.11";
@@ -18,12 +19,6 @@ stdenv.mkDerivation {
     (if unicode then "--enable-unicode" else "")
     "--with-opengl"
   ];
-
-  # Cross build only tested for mingw32
-  checkCross = throw "This package can only be cross-built" false;
-  crossAttrs = {
-    checkCross = true;
-  };
 
   preConfigure = "
     substituteInPlace configure --replace /usr /no-such-path

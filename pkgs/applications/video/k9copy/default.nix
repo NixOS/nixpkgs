@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "DVD backup and DVD authoring program";
-    homepage = "http://k9copy-reloaded.sourceforge.net/";
+    homepage = http://k9copy-reloaded.sourceforge.net/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ flosse ];
     platforms = stdenv.lib.platforms.unix;

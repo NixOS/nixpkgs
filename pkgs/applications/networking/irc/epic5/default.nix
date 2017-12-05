@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, ncurses, libiconv, tcl, coreutils }:
+{ stdenv, fetchurl, openssl, ncurses, libiconv, tcl, coreutils, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "epic5-${version}";
@@ -13,6 +13,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl ncurses ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv tcl ];
 
+  patches = [
+    (fetchpatch {
+      url = "https://sources.debian.net/data/main/e/epic5/2.0.1-1/debian/patches/openssl-1.1.patch";
+      sha256 = "03bpsyv1sr5icajs2qkdvv8nnn6rz6yvvj7pgiq8gz9sbp6siyfv";
+    })
+  ];
+
   configureFlags = [ "--disable-debug" "--with-ipv6" ];
 
   postConfigure = ''
@@ -23,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://epicsol.org";
+    homepage = http://epicsol.org;
     description = "A IRC client that offers a great ircII interface";
     license = licenses.bsd3;
     maintainers = [ maintainers.ndowens ];

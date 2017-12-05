@@ -12,12 +12,9 @@ mkDerivation {
     maintainers = [ lib.maintainers.rongcuid ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  buildInputs = [ libpulseaudio alsaLib libcanberra_kde ];
-  propagatedBuildInputs = [
-    kglobalaccel kxmlgui kcoreaddons kdelibs4support
-    plasma-framework
+  buildInputs = [
+    alsaLib kglobalaccel kxmlgui kcoreaddons kdelibs4support
+    libcanberra_kde libpulseaudio plasma-framework
   ];
-  cmakeFlags = [
-    "-DKMIX_KF5_BUILD=1"
-  ];
+  cmakeFlags = [ "-DKMIX_KF5_BUILD=1" ];
 }

@@ -1,6 +1,6 @@
-{ pkgs }:
+{ pkgs, haskellLib }:
 
-with import ./lib.nix { inherit pkgs; };
+with haskellLib;
 
 self: super: {
 
@@ -79,5 +79,9 @@ self: super: {
 
   # Needs nats on pre 7.6.x compilers.
   semigroups = addBuildDepend super.semigroups self.nats;
+
+  # Newer versions don't compile any longer.
+  network_2_6_3_1 = dontCheck super.network_2_6_3_1;
+  network = self.network_2_6_3_1;
 
 }
