@@ -1,5 +1,22 @@
-{stdenv, fetchurl, intltool, pkgconfig, qt4, gtk2, gtk3, kdelibs4, ncurses,
- cmake, anthy, automoc4, m17n_lib, m17n_db}:
+{ stdenv, fetchurl, intltool, pkgconfig, cmake
+, ncurses, m17n_lib, m17n_db
+, withAnthy ? true, anthy ? null
+, withGtk ? true
+, withGtk2 ? withGtk, gtk2 ? null
+, withGtk3 ? withGtk, gtk3 ? null
+, withQt ? true
+, withQt4 ? withQt, qt4 ? null
+, withKde ? withQt
+, withKde4 ? withKde && withQt4, kdelibs4 ? null, automoc4 ? null
+}:
+
+with stdenv.lib;
+
+assert withAnthy -> anthy != null;
+assert withGtk2 -> gtk2 != null;
+assert withGtk3 -> gtk3 != null;
+assert withQt4 -> qt4 != null;
+assert withKde4 -> withQt4 && kdelibs4 != null && automoc4 != null;
 
 stdenv.mkDerivation rec {
   version = "1.8.6";
@@ -8,31 +25,36 @@ stdenv.mkDerivation rec {
   buildInputs = [
     intltool
     pkgconfig
-    qt4
-    gtk2
-    gtk3
-    kdelibs4
     ncurses
     cmake
-    anthy
-    automoc4
     m17n_lib
     m17n_db
+  ]
+  ++ optional withAnthy anthy
+  ++ optional withGtk2 gtk2
+  ++ optional withGtk3 gtk3
+  ++ optional withQt4 qt4
+  ++ optionals withKde4 [
+    kdelibs4 automoc4
   ];
 
   patches = [ ./data-hook.patch ];
 
   configureFlags = [
-    "--with-gtk2"
-    "--with-gtk3"
-    "--enable-kde4-applet"
-    "--enable-notify=knotify4"
     "--enable-pref"
-    "--with-qt4"
-    "--with-qt4-immodule"
     "--with-skk"
     "--with-x"
-    "--with-anthy-utf8"
+    "--with-xft"
+  ]
+  ++ optional withAnthy "--with-anthy-utf8"
+  ++ optional withGtk2 "--with-gtk2"
+  ++ optional withGtk3 "--with-gtk3"
+  ++ optionals withQt4 [
+    "--with-qt4"
+    "--with-qt4-immodule"
+  ] ++ optionals withKde4 [
+    "--enable-kde4-applet"
+    "--enable-notify=knotify4"
   ];
 
   dontUseCmakeConfigure = true;
