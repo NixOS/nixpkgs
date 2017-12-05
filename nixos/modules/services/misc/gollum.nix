@@ -32,6 +32,12 @@ in
       description = "Content of the configuration file";
     };
 
+    mathjax = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Enable support for math rendering using MathJax";
+    };
+
     branch = mkOption {
       type = types.str;
       default = "master";
@@ -84,6 +90,7 @@ in
             --host ${cfg.address} \
             --config ${builtins.toFile "gollum-config.rb" cfg.extraConfig} \
             --ref ${cfg.branch} \
+            ${optionalString cfg.mathjax "--mathjax"} \
             ${cfg.stateDir}
         '';
       };
