@@ -56,10 +56,6 @@ let isCross = (ghc.cross or null) != null; in
 , hardeningDisable ? lib.optional (ghc.isHaLVM or false) "all"
 , enableSeparateDataOutput ? false
 , enableSeparateDocOutput ? doHaddock
-, enableSeparateBinOutput ? isExecutable
-, outputsToInstall ? []
-, enableSeparateLibOutput ? true
-, enableSeparateEtcOutput ? (stdenv.lib.versionOlder "7.7" ghc.version)
 } @ args:
 
 assert editedCabalFile != null -> revision != null;
@@ -83,6 +79,9 @@ let
                         then "package-db"
                         else "package-conf";
 
+  # the target dir for haddock documentation
+  docdir = docoutput: docoutput + "/share/doc";
+
   newCabalFileUrl = "http://hackage.haskell.org/package/${pname}-${version}/revision/${revision}.cabal";
   newCabalFile = fetchurl {
     url = newCabalFileUrl;
@@ -96,13 +95,6 @@ let
                    '';
 
   hasActiveLibrary = isLibrary && (enableStaticLibraries || enableSharedLibraries || enableLibraryProfiling);
-  hasLibOutput = enableSeparateLibOutput && hasActiveLibrary;
-  libDir = if hasLibOutput then "$lib/lib/${ghc.name}" else "$out/lib/${ghc.name}";
-  binDir = if enableSeparateBinOutput then "$bin/bin" else "$out/bin";
-  libexecDir = if enableSeparateBinOutput then "$libexec/bin" else "$out/libexec";
-  etcDir = if enableSeparateEtcOutput then "$etc/etc" else "$out/etc";
-  docDir = if enableSeparateDocOutput then "$doc/share/doc" else "$out/share/doc";
-  dataDir = if enableSeparateDataOutput then "$data/share/${ghc.name}" else "$out/share/${ghc.name}";
 
   # We cannot enable -j<n> parallelism for libraries because GHC is far more
   # likely to generate a non-determistic library ID in that case. Further
@@ -121,20 +113,12 @@ let
     stdenv.lib.optionalString isCross (" " + stdenv.lib.concatStringsSep " " crossCabalFlags);
 
   defaultConfigureFlags = [
-    "--verbose" "--prefix=$out"
-    # Binary directory has to be $bin/bin instead of just $bin: this
-    # is so that the package is added to the PATH when it's used as a
-    # build input. Sadly mkDerivation won't add inputs that don't have
-    # bin subdirectory.
-    "--bindir=${binDir}"
-    "--libdir=${libDir}" "--libsubdir=\\$pkgid"
-    "--libexecdir=${libexecDir}"
-    (optionalString (enableSeparateEtcOutput) "--sysconfdir=${etcDir}") # Old versions of cabal don't support this flag.
-    "--datadir=${dataDir}"
-    "--docdir=${docDir}"
+    "--verbose" "--prefix=$out" "--libdir=\\$prefix/lib/\\$compiler" "--libsubdir=\\$pkgid"
+    (optionalString enableSeparateDataOutput "--datadir=$data/share/${ghc.name}")
+    (optionalString enableSeparateDocOutput "--docdir=${docdir "$doc"}")
     "--with-gcc=$CC" # Clang won't work without that extra information.
     "--package-db=$packageConfDir"
-    (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=${libDir}/${pname}-${version}")
+    (optionalString (enableSharedExecutables && stdenv.isLinux) "--ghc-option=-optl=-Wl,-rpath=$out/lib/${ghc.name}/${pname}-${version}")
     (optionalString (enableSharedExecutables && stdenv.isDarwin) "--ghc-option=-optl=-Wl,-headerpad_max_install_names")
     (optionalString enableParallelBuilding "--ghc-option=-j$NIX_BUILD_CORES")
     (optionalString useCpphs "--with-cpphs=${cpphs}/bin/cpphs --ghc-options=-cpp --ghc-options=-pgmP${cpphs}/bin/cpphs --ghc-options=-optP--cpp")
@@ -168,11 +152,8 @@ let
   allPkgconfigDepends = pkgconfigDepends ++ libraryPkgconfigDepends ++ executablePkgconfigDepends ++
                         optionals doCheck testPkgconfigDepends ++ optionals doBenchmark benchmarkPkgconfigDepends;
 
-  nativeBuildInputs = map stdenv.lib.getBin
-    ( optional (allPkgconfigDepends != []) pkgconfig
-      ++ buildTools ++ libraryToolDepends ++ executableToolDepends
-      ++ [ removeReferencesTo ]
-    );
+  nativeBuildInputs = optional (allPkgconfigDepends != []) pkgconfig ++
+                      buildTools ++ libraryToolDepends ++ executableToolDepends ++ [ removeReferencesTo ];
   propagatedBuildInputs = buildDepends ++ libraryHaskellDepends ++ executableHaskellDepends;
   otherBuildInputs = setupHaskellDepends ++ extraLibraries ++ librarySystemDepends ++ executableSystemDepends ++
                      optionals (allPkgconfigDepends != []) allPkgconfigDepends ++
@@ -201,15 +182,7 @@ assert allPkgconfigDepends != [] -> pkgconfig != null;
 stdenv.mkDerivation ({
   name = "${pname}-${version}";
 
-  outputs = if (args ? outputs) then args.outputs else
-    (  (optional enableSeparateBinOutput "bin")
-    ++ (optional enableSeparateBinOutput "libexec")
-    ++ [ "out" ]
-    ++ (optional enableSeparateDataOutput "data")
-    ++ (optional enableSeparateDocOutput "doc")
-    ++ (optional enableSeparateEtcOutput "etc")
-    ++ (optional hasLibOutput "lib")
-    );
+  outputs = if (args ? outputs) then args.outputs else ([ "out" ] ++ (optional enableSeparateDataOutput "data") ++ (optional enableSeparateDocOutput "doc"));
   setOutputFlags = false;
 
   pos = builtins.unsafeGetAttrPos "pname" args;
@@ -233,7 +206,7 @@ stdenv.mkDerivation ({
 
   postPatch = optionalString jailbreak ''
     echo "Run jailbreak-cabal to lift version restrictions on build inputs."
-    ${stdenv.lib.getBin jailbreak-cabal}/bin/jailbreak-cabal ${pname}.cabal
+    ${jailbreak-cabal}/bin/jailbreak-cabal ${pname}.cabal
   '' + postPatch;
 
   setupCompilerEnvironmentPhase = ''
@@ -241,7 +214,7 @@ stdenv.mkDerivation ({
 
     echo "Build with ${ghc}."
     export PATH="${ghc}/bin:$PATH"
-    ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${stdenv.lib.getBin hscolour}/bin:$PATH"}
+    ${optionalString (hasActiveLibrary && hyperlinkSource) "export PATH=${hscolour}/bin:$PATH"}
 
     packageConfDir="$TMPDIR/package.conf.d"
     mkdir -p $packageConfDir
@@ -268,7 +241,7 @@ stdenv.mkDerivation ({
     #
     # Create a local directory with symlinks of the *.dylib (macOS shared
     # libraries) from all the dependencies.
-    local dynamicLinksDir="${libDir}/links"
+    local dynamicLinksDir="$out/lib/links"
     mkdir -p $dynamicLinksDir
     for d in $(grep dynamic-library-dirs "$packageConfDir/"*|awk '{print $2}'); do
       ln -s "$d/"*.dylib $dynamicLinksDir
@@ -340,7 +313,7 @@ stdenv.mkDerivation ({
 
     ${if !hasActiveLibrary then "${setupCommand} install" else ''
       ${setupCommand} copy
-      local packageConfDir="${libDir}/package.conf.d"
+      local packageConfDir="$out/lib/${ghc.name}/package.conf.d"
       local packageConfFile="$packageConfDir/${pname}-${version}.conf"
       mkdir -p "$packageConfDir"
       ${setupCommand} register --gen-pkg-config=$packageConfFile
@@ -348,7 +321,7 @@ stdenv.mkDerivation ({
       mv $packageConfFile $packageConfDir/$pkgId.conf
     ''}
     ${optionalString isGhcjs ''
-      for exeDir in "${binDir}/"*.jsexe; do
+      for exeDir in "$out/bin/"*.jsexe; do
         exe="''${exeDir%.jsexe}"
         printWords '#!${nodejs}/bin/node' > "$exe"
         cat "$exeDir/all.js" >> "$exe"
@@ -357,68 +330,18 @@ stdenv.mkDerivation ({
     ''}
     ${optionalString doCoverage "mkdir -p $out/share && cp -r dist/hpc $out/share"}
     ${optionalString (enableSharedExecutables && isExecutable && !isGhcjs && stdenv.isDarwin && stdenv.lib.versionOlder ghc.version "7.10") ''
-      for exe in "${binDir}/"* ; do
-        install_name_tool -add_rpath "${libDir}/${pname}-${version}" "$exe"
+      for exe in "$out/bin/"* ; do
+        install_name_tool -add_rpath "$out/lib/ghc-${ghc.version}/${pname}-${version}" "$exe"
       done
     ''}
 
     ${optionalString enableSeparateDocOutput ''
-    # Remove references back to $out but also back to $lib if we have
-    # docs. $lib is needed as it stores path to haddock interfaces in the
-    # conf file which creates a cycle if docs refer back to library
-    # path.
-    mkdir -p ${docDir}
-
-    for x in ${docDir}/html/src/*.html; do
-      remove-references-to -t $out -t ${libDir} -t ${binDir} ${optionalString enableSeparateDataOutput "-t $data"} $x
+    for x in ${docdir "$doc"}/html/src/*.html; do
+      remove-references-to -t $out $x
     done
+    mkdir -p $doc
     ''}
-
-    ${optionalString hasLibOutput ''
-    # Even if we don't have binary output for the package, things like
-    # Paths files will embed paths to bin/libexec directories in themselves
-    # which results in .lib <-> $out cyclic store reference. We
-    # therefore patch out the paths from separate library if we don't have
-    # separate bin output too.
-    #
-    # If we _do_ have separate bin and lib outputs, we may still be in
-    # trouble in case of shared executables: executable contains path to
-    # .lib, .lib contains path (through Paths) to .bin and we have a
-    # cycle.
-    #
-    # Lastly we have to deal with references from .lib back into
-    # $out/share if we're not splitting out data directory.
-    #
-    # It may happen that we have hasLibOutput set but the library
-    # directory was not created: this happens in the case that library
-    # section is not exposing any modules. See "fail" package for an
-    # example where no modules are exposed for GHC >= 8.0.
-    if [ -d ${libDir} ]; then
-      find ${libDir} -type f -exec \
-        remove-references-to -t ${binDir} -t ${libexecDir} "{}" \;
-    fi
-    ''}
-
-    ${optionalString (hasLibOutput && ! enableSeparateDocOutput) ''
-    # If we don't have separate docs, we have to patch out the ref to
-    # docs in package conf. This will likely break Haddock
-    # cross-package links but is necessary to break store cycle…
-    find ${libDir}/ -type f -name '*.conf' -exec \
-      remove-references-to -t ${docDir} "{}" \;
-    ''}
-
-    ${optionalString (hasLibOutput && ! enableSeparateDataOutput) ''
-    # Just like for doc output path in $out potentially landing in
-    # *.conf, we have to also remove the data directory so that it
-    # doesn't appear under data-dir field creating a cycle.
-    find ${libDir}/ -type f -exec echo Removing ${dataDir} refs from "{}" \;
-    find ${libDir}/ -type f -exec \
-      remove-references-to -t ${dataDir} "{}" \;
-    ''}
-
-    ${optionalString enableSeparateDataOutput "mkdir -p ${dataDir}"}
-    ${optionalString enableSeparateBinOutput "mkdir -p ${binDir} ${libexecDir}"}
-    ${optionalString enableSeparateEtcOutput "mkdir -p ${etcDir}"}
+    ${optionalString enableSeparateDataOutput "mkdir -p $data"}
 
     runHook postInstall
   '';
@@ -435,7 +358,7 @@ stdenv.mkDerivation ({
     # the directory containing the haddock documentation.
     # `null' if no haddock documentation was built.
     # TODO: fetch the self from the fixpoint instead
-    haddockDir = self: if doHaddock then "${docDir}/html" else null;
+    haddockDir = self: if doHaddock then "${docdir self.doc}/html" else null;
 
     env = stdenv.mkDerivation {
       name = "interactive-${pname}-${version}-environment";
@@ -463,7 +386,6 @@ stdenv.mkDerivation ({
          // optionalAttrs (description != "")  { inherit description; }
          // optionalAttrs (maintainers != [])  { inherit maintainers; }
          // optionalAttrs (hydraPlatforms != platforms) { inherit hydraPlatforms; }
-         // optionalAttrs (outputsToInstall != []) { inherit outputsToInstall; }
          ;
 
 }
