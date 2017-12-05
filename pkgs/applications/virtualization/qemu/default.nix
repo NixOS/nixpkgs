@@ -56,7 +56,12 @@ stdenv.mkDerivation rec {
 
   patches = [ ./no-etc-install.patch ]
     ++ optional nixosTestRunner ./force-uid0-on-9p.patch
-    ++ optional pulseSupport ./fix-hda-recording.patch;
+    ++ optional pulseSupport ./fix-hda-recording.patch
+    ++ [ (fetchpatch {
+           name = "qemu-CVE-2017-17381.patch";
+           url = "https://git.kernel.org/pub/scm/virt/kvm/mst/qemu.git/patch/?id=758ead31c7e17bf17a9ef2e0ca1c3e86ab296b43";
+           sha256 = "17yw4bqsbywdrbmrikr94yjnfsg853bf4i3k4y3k169387da2yc5"; })
+       ];
 
   hardeningDisable = [ "stackprotector" ];
 
