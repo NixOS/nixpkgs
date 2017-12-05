@@ -561,6 +561,6 @@ rec {
       "armv6l-linux" = raspberrypi;
       "armv7l-linux" = armv7l-hf-multiplatform;
       "aarch64-linux" = aarch64-multiplatform;
-      "mips64el-linux" = fuloong2f_n32;
+      "mipsel-linux" = fuloong2f_n32;
     }.${system} or pcBase;
 }

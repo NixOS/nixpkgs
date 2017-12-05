@@ -51,7 +51,7 @@ rec {
   };
 
   fuloongminipc = rec {
-    config = "mips64el-unknown-linux-gnu";
+    config = "mipsel-unknown-linux-gnu";
     arch = "mips";
     float = "hard";
     platform = platforms.fuloong2f_n32;
