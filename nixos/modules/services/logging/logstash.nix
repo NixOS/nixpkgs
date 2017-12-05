@@ -23,12 +23,16 @@ let
 
   logstashSettingsYml = pkgs.writeText "logstash.yml" cfg.extraSettings;
 
+  logstashJvmOptionsFile = pkgs.writeText "jvm.options" cfg.extraJvmOptions;
+
   logstashSettingsDir = pkgs.runCommand "logstash-settings" {
+      inherit logstashJvmOptionsFile;
       inherit logstashSettingsYml;
       preferLocalBuild = true;
     } ''
     mkdir -p $out
     ln -s $logstashSettingsYml $out/logstash.yml
+    ln -s $logstashJvmOptionsFile $out/jvm.options
   '';
 in
 
@@ -152,6 +156,15 @@ in
         '';
       };
 
+      extraJvmOptions = mkOption {
+        type = types.lines;
+        default = "";
+        description = "Extra JVM options, one per line (jvm.options format).";
+        example = ''
+          -Xms2g
+          -Xmx2g
+        '';
+      };
 
     };
   };
