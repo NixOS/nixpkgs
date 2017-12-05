@@ -29,9 +29,11 @@
 # Set to `privacySupport` or `false`.
 
 , webrtcSupport ? !privacySupport
-, googleAPISupport ? !privacySupport
+, geolocationSupport ? !privacySupport
+, googleAPISupport ? geolocationSupport
 , crashreporterSupport ? false
 
+, safeBrowsingSupport ? false
 , drmSupport ? false
 
 ## other
@@ -141,7 +143,7 @@ stdenv.mkDerivation (rec {
   ]
 
   # and wants these
-  ++ lib.optionals isTorBrowserLike [
+  ++ lib.optionals isTorBrowserLike ([
     "--with-tor-browser-version=${version}"
     "--enable-signmar"
     "--enable-verify-mar"
@@ -151,7 +153,9 @@ stdenv.mkDerivation (rec {
     # possibilities on other platforms.
     # Lets save some space instead.
     "--with-system-nspr"
-  ]
+  ] ++ flag geolocationSupport "mozril-geoloc"
+    ++ flag safeBrowsingSupport "safe-browsing"
+  )
 
   ++ flag alsaSupport "alsa"
   ++ flag pulseaudioSupport "pulseaudio"

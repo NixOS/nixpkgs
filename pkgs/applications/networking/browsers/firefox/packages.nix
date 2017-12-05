@@ -109,7 +109,7 @@ in rec {
     src = fetchFromGitHub {
       owner = "SLNOS";
       repo = "tor-browser";
-      # branch "tor-browser-45.8.0esr-6.5-2"
+      # branch "tor-browser-45.8.0esr-6.5-2-slnos"
       rev = "e4140ea01b9906934f0347e95f860cec207ea824";
       sha256 = "0a1qk3a9a3xxrl56bp4zbknbchv5x17k1w5kgcf4j3vklcv6av60";
     };
@@ -128,8 +128,9 @@ in rec {
     src = fetchFromGitHub {
       owner = "SLNOS";
       repo  = "tor-browser";
-      rev   = "tor-browser-52.3.0esr-7.0-1-slnos";
-      sha256 = "0szbf8gjbl4dnrb4igy4mq5858i1y6ki4skhdw63iqqdd8w9v4yv";
+      # branch "tor-browser-52.5.0esr-7.0-1-slnos";
+      rev   = "830ff8d622ef20345d83f386174f790b0fc2440d";
+      sha256 = "169mjkr0bp80yv9nzza7kay7y2k03lpnx71h4ybcv9ygxgzdgax5";
     };
 
     patches =
