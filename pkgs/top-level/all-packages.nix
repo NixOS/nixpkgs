@@ -15555,7 +15555,7 @@ with pkgs;
   libreoffice-fresh = lowPrio (callPackage ../applications/office/libreoffice {
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome2) GConf ORBit2 gnome_vfs;
-    inherit (gnome3) gsettings_desktop_schemas defaultIconTheme;
+    inherit (gnome3) defaultIconTheme;
     zip = zip.override { enableNLS = false; };
     bluez5 = bluez5_28;
     fontsConf = makeFontsConf {
@@ -15575,7 +15575,7 @@ with pkgs;
   libreoffice-still = lowPrio (callPackage ../applications/office/libreoffice/still.nix {
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome2) GConf ORBit2 gnome_vfs;
-    inherit (gnome3) gsettings_desktop_schemas defaultIconTheme;
+    inherit (gnome3) defaultIconTheme;
     zip = zip.override { enableNLS = false; };
     #glm = glm_0954;
     bluez5 = bluez5_28;
