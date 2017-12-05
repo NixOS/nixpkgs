@@ -10404,6 +10404,10 @@ in {
     cudaSupport = pkgs.config.cudaSupport or false;
   };
 
+  librepo = toPythonModule (pkgs.librepo.override {
+    inherit python;
+  });
+
   libnacl = callPackage ../development/python-modules/libnacl {
     inherit (pkgs) libsodium;
   };
