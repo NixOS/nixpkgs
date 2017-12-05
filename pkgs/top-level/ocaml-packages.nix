@@ -233,6 +233,8 @@ let
 
     faraday = callPackage ../development/ocaml-modules/faraday { };
 
+    farfadet = callPackage ../development/ocaml-modules/farfadet { };
+
     fieldslib_p4 = callPackage ../development/ocaml-modules/fieldslib { };
 
     fileutils = callPackage ../development/ocaml-modules/fileutils { };
