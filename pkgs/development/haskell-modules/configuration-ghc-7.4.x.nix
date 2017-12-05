@@ -111,4 +111,7 @@ self: super: {
   network_2_6_3_1 = dontCheck super.network_2_6_3_1;
   network = self.network_2_6_3_1;
 
+  # Haddock fails with an internal error.
+  utf8-string = dontHaddock super.utf8-string;
+
 }
