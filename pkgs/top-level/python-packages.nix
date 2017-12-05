@@ -374,6 +374,8 @@ in {
     hdf5 = pkgs.hdf5.override { zlib = pkgs.zlib; };
   };
 
+  tokenserver = callPackage ../development/python-modules/tokenserver {};
+
   unifi = callPackage ../development/python-modules/unifi { };
 
   pyunbound = callPackage ../tools/networking/unbound/python.nix { };
@@ -19180,26 +19182,6 @@ EOF
     checkPhase = ''
       py.test $out/${python.sitePackages}/zmq/ -k "not test_large_send and not test_recv_json_cancelled"
     '';
-  };
-
-  tokenserver = buildPythonPackage rec {
-    name = "tokenserver-${version}";
-    version = "1.2.27";
-
-    src = pkgs.fetchgit {
-      url = https://github.com/mozilla-services/tokenserver.git;
-      rev = "refs/tags/${version}";
-      sha256 = "0il3bgjld495g9gxvvrm56kpan5swaizzg216qz3zxmb6w9ly3fm";
-    };
-
-    doCheck = false;
-    buildInputs = [ self.testfixtures ];
-    propagatedBuildInputs = with self; [ cornice mozsvc pybrowserid tokenlib
-      pymysql umemcache hawkauthlib alembic pymysqlsa paste boto ];
-
-    meta = {
-      platforms = platforms.all;
-    };
   };
 
   testfixtures = callPackage ../development/python-modules/testfixtures {};
