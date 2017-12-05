@@ -349,6 +349,8 @@ let
       lwt = ocaml_lwt;
     };
 
+    lru = callPackage ../development/ocaml-modules/lru { };
+
     lwt2 = callPackage ../development/ocaml-modules/lwt { };
 
     lwt3 = if lib.versionOlder "4.02" ocaml.version
