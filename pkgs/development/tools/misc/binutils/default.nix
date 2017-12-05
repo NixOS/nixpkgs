@@ -50,7 +50,8 @@ stdenv.mkDerivation rec {
     ++ [ "info" ]
     ++ optional (targetPlatform == hostPlatform) "dev";
 
-  nativeBuildInputs = [ bison ];
+  nativeBuildInputs = [ bison ]
+    ++ optional (hostPlatform != buildPlatform) buildPackages.stdenv.cc;
   buildInputs = [ zlib ];
 
   inherit noSysDirs;

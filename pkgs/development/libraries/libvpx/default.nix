@@ -148,7 +148,7 @@ stdenv.mkDerivation rec {
     isCygwin = stdenv.cross.libc == "msvcrt";
     isDarwin = stdenv.cross.libc == "libSystem";
   in {
-    dontSetConfigureCross = true;
+    configurePlatforms = [];
     configureFlags = configureFlags ++ [
       #"--extra-cflags="
       #"--extra-cxxflags="

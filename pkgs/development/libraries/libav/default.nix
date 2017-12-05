@@ -105,7 +105,7 @@ let
     installCheckTarget = "check"; # tests need to be run *after* installation
 
     crossAttrs = {
-      dontSetConfigureCross = true;
+      configurePlatforms = [];
       configureFlags = configureFlags ++ [
         "--cross-prefix=${stdenv.cross.config}-"
         "--enable-cross-compile"

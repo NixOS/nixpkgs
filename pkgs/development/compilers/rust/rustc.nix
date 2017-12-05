@@ -10,6 +10,7 @@
 , targetPatches
 , targetToolchains
 , doCheck ? true
+, buildPlatform, hostPlatform
 } @ args:
 
 let
@@ -137,7 +138,8 @@ stdenv.mkDerivation {
 
   inherit doCheck;
 
-  dontSetConfigureCross = true;
+  ${if buildPlatform == hostPlatform then "dontSetConfigureCross" else null} = true;
+  ${if buildPlatform != hostPlatform then "configurePlatforms" else null} = [];
 
   # https://github.com/NixOS/nixpkgs/pull/21742#issuecomment-272305764
   # https://github.com/rust-lang/rust/issues/30181

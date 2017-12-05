@@ -35,6 +35,7 @@
 , cloog # unused; just for compat with gcc4, as we override the parameter on some places
 , darwin ? null
 , buildPlatform, hostPlatform, targetPlatform
+, buildPackages
 }:
 
 assert langJava     -> zip != null && unzip != null
@@ -294,6 +295,7 @@ stdenv.mkDerivation ({
     ++ (optionals langJava [ boehmgc zip unzip ])
     ++ (optionals javaAwtGtk ([ gtk2 libart_lgpl ] ++ xlibs))
     ++ (optionals (targetPlatform != hostPlatform) [binutils])
+    ++ (optionals (buildPlatform != hostPlatform) [buildPackages.stdenv.cc])
     ++ (optionals langAda [gnatboot])
     ++ (optionals langVhdl [gnat])
 
@@ -371,7 +373,11 @@ stdenv.mkDerivation ({
     ${if targetPlatform == hostPlatform then platformFlags else ""}
   " + optionalString
         (hostPlatform != buildPlatform)
-        (platformFlags + " --target=${targetPlatform.config}");
+        (platformFlags + ''
+          --build=${buildPlatform.config}
+          --host=${hostPlatform.config}
+          --target=${targetPlatform.config}
+        '');
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
@@ -424,7 +430,7 @@ stdenv.mkDerivation ({
     CC_FOR_TARGET = "${targetPlatform.config}-gcc";
     CXX_FOR_TARGET = "${targetPlatform.config}-g++";
     # If we are making a cross compiler, cross != null
-    NIX_CC_CROSS = if targetPlatform == hostPlatform then "${stdenv.ccCross}" else "";
+    NIX_CC_CROSS = optionalString (targetPlatform == hostPlatform) builtins.toString stdenv.cc;
     dontStrip = true;
     buildFlags = "";
   };

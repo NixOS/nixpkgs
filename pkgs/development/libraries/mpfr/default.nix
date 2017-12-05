@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, gmp }:
+{ stdenv, fetchurl, gmp
+, buildPlatform, hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   name = "mpfr-3.1.3";
@@ -19,10 +21,10 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "stackprotector" ];
 
   configureFlags =
-    stdenv.lib.optional stdenv.isSunOS "--disable-thread-safe" ++
-    stdenv.lib.optional stdenv.is64bit "--with-pic";
+    stdenv.lib.optional hostPlatform.isSunOS "--disable-thread-safe" ++
+    stdenv.lib.optional hostPlatform.is64bit "--with-pic";
 
-  doCheck = true;
+  doCheck = hostPlatform == buildPlatform;
 
   enableParallelBuilding = true;
 

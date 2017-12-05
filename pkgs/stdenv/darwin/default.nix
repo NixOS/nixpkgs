@@ -73,6 +73,8 @@ in rec {
           nativeTools  = true;
           nativePrefix = bootstrapTools;
           nativeLibc   = false;
+          hostPlatform = localSystem;
+          targetPlatform = localSystem;
           libc         = last.pkgs.darwin.Libsystem;
           isClang      = true;
           cc           = { name = "clang-9.9.9"; outPath = bootstrapTools; };
@@ -295,6 +297,8 @@ in rec {
       inherit shell;
       nativeTools = false;
       nativeLibc  = false;
+      hostPlatform = localSystem;
+      targetPlatform = localSystem;
       inherit (pkgs) coreutils binutils gnugrep;
       inherit (pkgs.darwin) dyld;
       cc   = pkgs.llvmPackages.clang-unwrapped;

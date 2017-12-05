@@ -1,5 +1,7 @@
 { stdenv, fetchurl
-, windows ? null, variant ? null, pcre
+, pcre, windows ? null
+, buildPlatform, hostPlatform
+, variant ? null
 }:
 
 with stdenv.lib;
@@ -31,7 +33,9 @@ in stdenv.mkDerivation rec {
 
   patches = [ ./CVE-2017-7186.patch ];
 
-  doCheck = with stdenv; !(isCygwin || isFreeBSD);
+  buildInputs = optional (hostPlatform.libc == "msvcrt") windows.mingw_w64_pthreads;
+
+  doCheck = !(with hostPlatform; isCygwin || isFreeBSD) && hostPlatform == buildPlatform;
     # XXX: test failure on Cygwin
     # we are running out of stack on both freeBSDs on Hydra
 
@@ -41,10 +45,6 @@ in stdenv.mkDerivation rec {
     + optionalString (variant != null) ''
     ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.{so.*.*.*,*dylib}
   '';
-
-  crossAttrs = optionalAttrs (stdenv.cross.libc == "msvcrt") {
-    buildInputs = [ windows.mingw_w64_pthreads.crossDrv ];
-  };
 
   meta = {
     homepage = "http://www.pcre.org/";

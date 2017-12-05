@@ -4816,15 +4816,16 @@ with pkgs;
 
   x11_ssh_askpass = callPackage ../tools/networking/x11-ssh-askpass { };
 
-  xbursttools = assert stdenv ? glibc; callPackage ../tools/misc/xburst-tools {
+  xbursttools = assert stdenv ? glibc; callPackage ../tools/misc/xburst-tools rec {
     # It needs a cross compiler for mipsel to build the firmware it will
     # load into the Ben Nanonote
+    crossPrefix = "mipsel-unknown-linux";
     gccCross =
       let
         pkgsCross = nixpkgsFun {
           # Ben Nanonote system
           crossSystem = {
-            config = "mipsel-unknown-linux";
+            config = crossPrefix;
             bigEndian = true;
             arch = "mips";
             float = "soft";
@@ -4843,7 +4844,7 @@ with pkgs;
           };
         };
       in
-        pkgsCross.gccCrossStageStatic;
+        pkgsCross.buildPackages.gccCrossStageStatic;
   };
 
   xclip = callPackage ../tools/misc/xclip { };
@@ -5163,13 +5164,21 @@ with pkgs;
 
   gccApple = throw "gccApple is no longer supported";
 
+  # Can't just overrideCC, because then the stdenv-cross mkDerivation will be
+  # thrown away. TODO: find a better solution for this.
+  crossLibcStdenv = buildPackages.makeStdenvCross {
+    inherit (buildPackages.buildPackages) stdenv;
+    inherit buildPlatform hostPlatform targetPlatform;
+    cc = buildPackages.gccCrossStageStatic;
+  };
+
   gccCrossStageStatic = assert targetPlatform != buildPlatform; let
     libcCross1 =
-      if targetPlatform.libc == "msvcrt" then windows.mingw_w64_headers
+      if targetPlatform.libc == "msvcrt" then __targetPackages.windows.mingw_w64_headers
       else if targetPlatform.libc == "libSystem" then darwin.xcode
       else null;
-    in wrapGCCCross {
-      gcc = forcedNativePackages.gcc.cc.override {
+    in wrapCCCross {
+      cc = forcedNativePackages.gcc.cc.override {
         crossStageStatic = true;
         langCC = false;
         libcCross = libcCross1;
@@ -5179,19 +5188,17 @@ with pkgs;
       };
       libc = libcCross1;
       inherit (forcedNativePackages) binutils;
-      cross = targetPlatform;
   };
 
   # Only needed for mingw builds
-  gccCrossMingw2 = assert targetPlatform != buildPlatform; wrapGCCCross {
-    gcc = gccCrossStageStatic.gcc;
+  gccCrossMingw2 = assert targetPlatform != buildPlatform; wrapCCCross {
+    cc = gccCrossStageStatic.gcc;
     libc = windows.mingw_headers2;
     inherit (forcedNativePackages) binutils;
-    cross = targetPlatform;
   };
 
-  gccCrossStageFinal = assert targetPlatform != buildPlatform; wrapGCCCross {
-    gcc = forcedNativePackages.gcc.cc.override {
+  gccCrossStageFinal = assert targetPlatform != buildPlatform; wrapCCCross {
+    cc = forcedNativePackages.gcc.cc.override {
       crossStageStatic = false;
 
       # Why is this needed?
@@ -5199,7 +5206,6 @@ with pkgs;
     };
     libc = libcCross;
     inherit (forcedNativePackages) binutils;
-    cross = targetPlatform;
   };
 
   gcc45 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/4.5 {
@@ -5924,14 +5930,19 @@ with pkgs;
     libc = glibc;
   };
 
-  wrapGCCCross =
-    {gcc, libc, binutils, cross, shell ? "", name ? "gcc-cross-wrapper"}:
+  wrapCCCross =
+    {cc, libc, binutils, shell ? "", name ? "gcc-cross-wrapper"}:
 
-    forcedNativePackages.callPackage ../build-support/gcc-cross-wrapper {
+    forcedNativePackages.ccWrapperFun {
       nativeTools = false;
       nativeLibc = false;
       noLibc = (libc == null);
-      inherit gcc binutils libc shell name cross;
+
+      dyld = if stdenv.isDarwin then darwin.dyld else null;
+      isGNU = cc.isGNU or false;
+      isClang = cc.isClang or false;
+
+      inherit cc binutils libc shell name;
     };
 
   # prolog
@@ -7798,13 +7809,7 @@ with pkgs;
   # Being redundant to avoid cycles on boot. TODO: find a better way
   glibcCross = callPackage ../development/libraries/glibc {
     installLocales = config.glibc.locales or false;
-    # Can't just overrideCC, because then the stdenv-cross mkDerivation will be
-    # thrown away. TODO: find a better solution for this.
-    stdenv = buildPackages.makeStdenvCross
-      buildPackages.buildPackages.stdenv
-      buildPackages.targetPlatform
-      buildPackages.binutils
-      buildPackages.gccCrossStageStatic;
+    stdenv = crossLibcStdenv;
   };
 
   # We can choose:
@@ -7813,7 +7818,7 @@ with pkgs;
     # hack fixes the hack, *sigh*.
     /**/ if name == "glibc" then __targetPackages.glibcCross or glibcCross
     else if name == "uclibc" then uclibcCross
-    else if name == "msvcrt" then windows.mingw_w64
+    else if name == "msvcrt" then __targetPackages.windows.mingw_w64 or windows.mingw_w64
     else if name == "libSystem" then darwin.xcode
     else throw "Unknown libc";
 
@@ -12559,17 +12564,12 @@ with pkgs;
     };
 
     mingw_w64 = callPackage ../os-specific/windows/mingw-w64 {
-      gccCross = gccCrossStageStatic;
-      binutils = binutils;
+      stdenv = crossLibcStdenv;
     };
 
-    mingw_w64_headers = callPackage ../os-specific/windows/mingw-w64 {
-      onlyHeaders = true;
-    };
+    mingw_w64_headers = callPackage ../os-specific/windows/mingw-w64/headers.nix { };
 
-    mingw_w64_pthreads = callPackage ../os-specific/windows/mingw-w64 {
-      onlyPthreads = true;
-    };
+    mingw_w64_pthreads = callPackage ../os-specific/windows/mingw-w64/pthreads.nix { };
 
     pthreads = callPackage ../os-specific/windows/pthread-w32 {
       mingw_headers = mingw_headers3;
