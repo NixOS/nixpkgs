@@ -13,18 +13,8 @@ rec {
       , runcRev, runcSha256
       , containerdRev, containerdSha256
       , tiniRev, tiniSha256
-  } : stdenv.mkDerivation rec {
-    inherit version rev;
-
-    name = "docker-${version}";
-
-    src = fetchFromGitHub {
-      owner = "docker";
-      repo = "docker-ce";
-      rev = "v${version}";
-      sha256 = sha256;
-    };
-
+    } :
+  let
     docker-runc = runc.overrideAttrs (oldAttrs: rec {
       name = "docker-runc";
       src = fetchFromGitHub {
@@ -36,6 +26,7 @@ rec {
       # docker/runc already include these patches / are not applicable
       patches = [];
     });
+
     docker-containerd = containerd.overrideAttrs (oldAttrs: rec {
       name = "docker-containerd";
       src = fetchFromGitHub {
@@ -45,12 +36,18 @@ rec {
         sha256 = containerdSha256;
       };
 
+      hardeningDisable = [ "fortify" ];
+
+      buildInputs = [ removeReferencesTo go btrfs-progs ];
+
       # This should go into the containerd derivation once 1.0.0 is out
       preBuild = ''
+        export GOPATH=$(pwd)/vendor
         mkdir $(pwd)/vendor/src
         mv $(pwd)/vendor/{github.com,golang.org,google.golang.org} $(pwd)/vendor/src/
       '' + oldAttrs.preBuild;
     });
+
     docker-tini = tini.overrideAttrs  (oldAttrs: rec {
       name = "docker-init";
       src = fetchFromGitHub {
@@ -68,17 +65,10 @@ rec {
         "-DMINIMAL=ON"
       ];
     });
+  in
+    stdenv.mkDerivation ((optionalAttrs (stdenv.isLinux) rec {
 
-    # Optimizations break compilation of libseccomp c bindings
-    hardeningDisable = [ "fortify" ];
-
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [
-      makeWrapper removeReferencesTo go-md2man go
-      sqlite devicemapper btrfs-progs systemd libtool libseccomp
-    ];
-
-    dontStrip = true;
+    inherit docker-runc docker-containerd docker-proxy docker-tini;
 
     DOCKER_BUILDTAGS = []
       ++ optional (systemd != null) [ "journald" ]
@@ -86,14 +76,38 @@ rec {
       ++ optional (devicemapper == null) "exclude_graphdriver_devicemapper"
       ++ optional (libseccomp != null) "seccomp";
 
-    buildPhase = ''
+   }) // rec {
+    inherit version rev;
+
+    name = "docker-${version}";
+
+    src = fetchFromGitHub {
+      owner = "docker";
+      repo = "docker-ce";
+      rev = "v${version}";
+      sha256 = sha256;
+    };
+
+    # Optimizations break compilation of libseccomp c bindings
+    hardeningDisable = [ "fortify" ];
+
+    nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [
+      makeWrapper removeReferencesTo go-md2man go libtool
+    ] ++ optionals (stdenv.isLinux) [
+      sqlite devicemapper btrfs-progs systemd libseccomp
+    ];
+
+    dontStrip = true;
+
+    buildPhase = (optionalString (stdenv.isLinux) ''
       # build engine
       cd ./components/engine
       export AUTO_GOPATH=1
       export DOCKER_GITCOMMIT="${rev}"
       ./hack/make.sh dynbinary
       cd -
-
+    '') + ''
       # build cli
       cd ./components/cli
       # Mimic AUTO_GOPATH
@@ -110,27 +124,24 @@ rec {
 
     # systemd 230 no longer has libsystemd-journal as a separate entity from libsystemd
     patchPhase = ''
+      substituteInPlace ./components/cli/scripts/build/.variables --replace "set -eu" ""
+    '' + optionalString (stdenv.isLinux) ''
       patchShebangs .
       substituteInPlace ./components/engine/hack/make.sh                   --replace libsystemd-journal libsystemd
       substituteInPlace ./components/engine/daemon/logger/journald/read.go --replace libsystemd-journal libsystemd
-      substituteInPlace ./components/cli/scripts/build/.variables --replace "set -eu" ""
-     '';
+    '';
 
     outputs = ["out" "man"];
 
-    extraPath = makeBinPath [ iproute iptables e2fsprogs xz xfsprogs procps utillinux ];
+    extraPath = optionals (stdenv.isLinux) (makeBinPath [ iproute iptables e2fsprogs xz xfsprogs procps utillinux ]);
 
-    installPhase = ''
-      install -Dm755 ./components/cli/docker $out/libexec/docker/docker
-
+    installPhase = optionalString (stdenv.isLinux) ''
       if [ -d "./components/engine/bundles/${version}" ]; then
         install -Dm755 ./components/engine/bundles/${version}/dynbinary-daemon/dockerd-${version} $out/libexec/docker/dockerd
       else
         install -Dm755 ./components/engine/bundles/dynbinary-daemon/dockerd-${version} $out/libexec/docker/dockerd
       fi
 
-      makeWrapper $out/libexec/docker/docker $out/bin/docker \
-        --prefix PATH : "$out/libexec/docker:$extraPath"
       makeWrapper $out/libexec/docker/dockerd $out/bin/dockerd \
         --prefix PATH : "$out/libexec/docker:$extraPath"
 
@@ -143,6 +154,11 @@ rec {
 
       # systemd
       install -Dm644 ./components/engine/contrib/init/systemd/docker.service $out/etc/systemd/system/docker.service
+    '' + ''
+      install -Dm755 ./components/cli/docker $out/libexec/docker/docker
+
+      makeWrapper $out/libexec/docker/docker $out/bin/docker \
+        --prefix PATH : "$out/libexec/docker:$extraPath"
 
       # completion (cli)
       install -Dm644 ./components/cli/contrib/completion/bash/docker $out/share/bash-completion/completions/docker
@@ -174,17 +190,19 @@ rec {
     '';
 
     preFixup = ''
-      find $out -type f -exec remove-references-to -t ${go} -t ${stdenv.cc.cc} -t ${stdenv.glibc.dev} '{}' +
+      find $out -type f -exec remove-references-to -t ${go} -t ${stdenv.cc.cc} '{}' +
+    '' + optionalString (stdenv.isLinux) ''
+      find $out -type f -exec remove-references-to -t ${stdenv.glibc.dev} '{}' +
     '';
 
     meta = {
       homepage = https://www.docker.com/;
       description = "An open source project to pack, ship and run any application as a lightweight container";
       license = licenses.asl20;
-      maintainers = with maintainers; [ nequissimus offline tailhook vdemeester ];
-      platforms = platforms.linux;
+      maintainers = with maintainers; [ nequissimus offline tailhook vdemeester periklis ];
+      platforms = with platforms; linux ++ darwin;
     };
-  };
+  });
 
   # Get revisions from
   # https://github.com/docker/docker-ce/blob/v${version}/components/engine/hack/dockerfile/binaries-commits
@@ -201,14 +219,14 @@ rec {
     tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
   };
 
-  docker_17_10 = dockerGen rec {
-    version = "17.10.0-ce";
-    rev = "f4ffd2511ce93aa9e5eefdf0e912f77543080b0b"; # git commit
-    sha256 = "07x47cfdaz4lhlga1pchcbqqy0nd2q6zch0ycag18vzi99w4gmh2";
+  docker_17_11 = dockerGen rec {
+    version = "17.11.0-ce";
+    rev = "1caf76ce6baa889133ece59fab3c36aaf143d4ef"; # git commit
+    sha256 = "09s7lxcs4wdjj69l7z3nybbms7iqspk1wy7qnr4r52s8vr3fd5s4";
     runcRev = "0351df1c5a66838d0c392b4ac4cf9450de844e2d";
     runcSha256 = "1cmkdv6rli7v0y0fddqxvrvzd486fg9ssp3kgkya3szkljzz4xj0";
-    containerdRev = "06b9cb35161009dcb7123345749fef02f7cea8e0";
-    containerdSha256 = "10hms8a2nn69nfnwly6923jzx40c3slpsdhjhff4bxh36flpf9gd";
+    containerdRev = "992280e8e265f491f7a624ab82f3e238be086e49";
+    containerdSha256 = "1ci6jlgrrgz4ph451035sl98lj2jd467pd4qnv85ma9gzblrxs7n";
     tiniRev = "949e6facb77383876aeff8a6944dde66b3089574";
     tiniSha256 = "0zj4kdis1vvc6dwn4gplqna0bs7v6d1y2zc8v80s3zi018inhznw";
   };

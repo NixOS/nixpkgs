@@ -661,8 +661,6 @@ src = fetchFromGitHub {
 </section>
 
 <section xml:id="sec-patches"><title>Patches</title>
-  <para>Only patches that are unique to <literal>nixpkgs</literal> should be
-    included in <literal>nixpkgs</literal> source.</para>
   <para>Patches available online should be retrieved using
     <literal>fetchpatch</literal>.</para>
   <para>
@@ -676,5 +674,30 @@ patches = [
 ];
 </programlisting>
   </para>
+  <para>Otherwise, you can add a <literal>.patch</literal> file to the
+  <literal>nixpkgs</literal> repository. In the interest of keeping our
+  maintenance burden to a minimum, only patches that are unique
+  to <literal>nixpkgs</literal> should be added in this way.</para>
+<para><programlisting>
+patches = [ ./0001-changes.patch ];
+</programlisting></para>
+  <para>If you do need to do create this sort of patch file,
+  one way to do so is with git:
+  <orderedlist>
+    <listitem><para>Move to the root directory of the source code
+    you're patching.<screen>
+$ cd the/program/source</screen></para></listitem>
+    <listitem><para>If a git repository is not already present,
+    create one and stage all of the source files.<screen>
+$ git init
+$ git add .</screen></para></listitem>
+    <listitem><para>Edit some files to make whatever changes need
+    to be included in the patch.</para></listitem>
+    <listitem><para>Use git to create a diff, and pipe the output
+    to a patch file:<screen>
+$ git diff > nixpkgs/pkgs/the/package/0001-changes.patch</screen>
+    </para></listitem>
+  </orderedlist></para>
 </section>
+
 </chapter>

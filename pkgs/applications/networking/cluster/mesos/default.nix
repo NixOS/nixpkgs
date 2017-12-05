@@ -14,6 +14,8 @@ let
   #   src/common/command_utils.cpp
   # https://github.com/NixOS/nixpkgs/issues/13783
   tarWithGzip = lib.overrideDerivation gnutar (oldAttrs: {
+    # Original builder is bash 4.3.42 from bootstrap tools, too old for makeWrapper.
+    builder = "${bash}/bin/bash";
     buildInputs = (oldAttrs.buildInputs or []) ++ [ makeWrapper ];
     postInstall = (oldAttrs.postInstall or "") + ''
       wrapProgram $out/bin/tar --prefix PATH ":" "${gzip}/bin"

@@ -56,6 +56,8 @@ let
 
     bap = callPackage ../development/ocaml-modules/bap { cmdliner = cmdliner_0_9; };
 
+    batteries = callPackage ../development/ocaml-modules/batteries { };
+
     bitstring = callPackage ../development/ocaml-modules/bitstring { };
 
     bolt = callPackage ../development/ocaml-modules/bolt { };
@@ -174,9 +176,16 @@ let
 
     cryptokit = callPackage ../development/ocaml-modules/cryptokit { };
 
-    cstruct = callPackage ../development/ocaml-modules/cstruct {
+    cstruct =
+      if lib.versionAtLeast ocaml.version "4.2"
+      then callPackage ../development/ocaml-modules/cstruct {}
+      else callPackage ../development/ocaml-modules/cstruct/1.9.0.nix { lwt = ocaml_lwt; };
+
+    cstruct-lwt = callPackage ../development/ocaml-modules/cstruct/lwt.nix {
       lwt = ocaml_lwt;
     };
+
+    cstruct-unix = callPackage ../development/ocaml-modules/cstruct/unix.nix {};
 
     csv =
       if lib.versionAtLeast ocaml.version "4.2"
@@ -286,7 +295,6 @@ let
     inifiles = callPackage ../development/ocaml-modules/inifiles { };
 
     jingoo = callPackage ../development/ocaml-modules/jingoo {
-      batteries = ocaml_batteries;
       pcre = ocaml_pcre;
     };
 
@@ -379,9 +387,7 @@ let
 
     mtime =  callPackage ../development/ocaml-modules/mtime { };
 
-    nocrypto =  callPackage ../development/ocaml-modules/nocrypto {
-      lwt = ocaml_lwt;
-    };
+    nocrypto =  callPackage ../development/ocaml-modules/nocrypto { };
 
     notty = callPackage ../development/ocaml-modules/notty {
       lwt = ocaml_lwt;
@@ -390,8 +396,6 @@ let
     num = if lib.versionOlder "4.06" ocaml.version
       then callPackage ../development/ocaml-modules/num {}
       else null;
-
-    ocaml_batteries = callPackage ../development/ocaml-modules/batteries { };
 
     comparelib = callPackage ../development/ocaml-modules/comparelib { };
 
@@ -570,6 +574,8 @@ let
       if lib.versionAtLeast ocaml.version "4.02"
       then callPackage ../development/ocaml-modules/ppx_blob {}
       else null;
+
+    ppx_cstruct = callPackage ../development/ocaml-modules/cstruct/ppx.nix {};
 
     ppx_derivers = callPackage ../development/ocaml-modules/ppx_derivers {};
 

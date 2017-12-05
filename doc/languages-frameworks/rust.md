@@ -9,11 +9,12 @@ date: 2017-03-05
 To install the rust compiler and cargo put
 
 ```
-rust
+rustc
+cargo
 ```
 
 into the `environment.systemPackages` or bring them into
-scope with `nix-shell -p rust`.
+scope with `nix-shell -p rustc cargo`.
 
 For daily builds (beta and nightly) use either rustup from
 nixpkgs or use the [Rust nightlies
@@ -24,9 +25,7 @@ overlay](#using-the-rust-nightlies-overlay).
 Rust applications are packaged by using the `buildRustPackage` helper from `rustPlatform`:
 
 ```
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   name = "ripgrep-${version}";
   version = "0.4.0";
 
@@ -40,9 +39,9 @@ buildRustPackage rec {
   cargoSha256 = "0q68qyl2h6i0qsz82z840myxlnjay8p1w5z7hfyr8fqp7wgwa9cx";
 
   meta = with stdenv.lib; {
-    description = "A utility that combines the usability of The Silver Searcher with the raw speed of grep";
+    description = "A fast line-oriented regex search tool, similar to ag and ack";
     homepage = https://github.com/BurntSushi/ripgrep;
-    license = with licenses; [ unlicense ];
+    license = licenses.unlicense;
     maintainers = [ maintainers.tailhook ];
     platforms = platforms.all;
   };

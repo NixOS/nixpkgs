@@ -39,6 +39,7 @@ self:
       el-search = markBroken super.el-search; # requires emacs-25
       iterators = markBroken super.iterators; # requires emacs-25
       midi-kbd = markBroken super.midi-kbd; # requires emacs-25
+      rcirc-menu = markBroken super.rcirc-menu; # Missing file header
       stream = markBroken super.stream; # requires emacs-25
       cl-lib = null; # builtin
       tle = null; # builtin

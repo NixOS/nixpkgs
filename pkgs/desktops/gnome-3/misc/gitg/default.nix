@@ -1,11 +1,7 @@
-{ stdenv, fetchurl, fetchgit, vala_0_32, intltool, libgit2, pkgconfig, gtk3, glib
-, json_glib, webkitgtk, wrapGAppsHook, libpeas, bash, gobjectIntrospection
+{ stdenv, fetchurl, vala, intltool, pkgconfig, gtk3, glib
+, json_glib, wrapGAppsHook, libpeas, bash, gobjectIntrospection
 , gnome3, gtkspell3, shared_mime_info, libgee, libgit2-glib, librsvg, libsecret
-, dconf}:
-
-
-# TODO: icons and theme still does not work
-# use packaged gnome3.adwaita-icon-theme
+, libsoup }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -20,14 +16,11 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ shared_mime_info
                             gnome3.gnome_themes_standard ];
 
-  buildInputs = [ vala_0_32 libgit2 gtk3 glib json_glib webkitgtk libgee libpeas
+  buildInputs = [ gtk3 glib json_glib libgee libpeas gnome3.libsoup
                   libgit2-glib gtkspell3 gnome3.gtksourceview gnome3.gsettings_desktop_schemas
                   librsvg libsecret gobjectIntrospection gnome3.adwaita-icon-theme ];
 
-  nativeBuildInputs = [ wrapGAppsHook intltool pkgconfig ];
-
-  # https://bugzilla.gnome.org/show_bug.cgi?id=758240
-  preBuild = ''make -j$NIX_BUILD_CORES Gitg-1.0.gir'';
+  nativeBuildInputs = [ vala wrapGAppsHook intltool pkgconfig ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/action/show/Apps/Gitg;

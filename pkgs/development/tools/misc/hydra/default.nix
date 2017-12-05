@@ -62,15 +62,15 @@ let
   };
 in releaseTools.nixBuild rec {
   name = "hydra-${version}";
-  version = "2017-09-14";
+  version = "2017-11-21";
 
   inherit stdenv;
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "b828224fee451ad26e87cfe4eeb9c0704ee1062b";
-    sha256 = "05xv10ldsa1rahxbbgh5kwvl1dv4yvc8idczpifgb55fgqj8zazm";
+    rev = "b7bc4384b7b471d1ddf892cb03f16189a66d5a0d";
+    sha256 = "05g37z3ilazzqa5rqj5zljndwxjbvpc18xibh6jlwjwpvg3kpbbh";
   };
 
   buildInputs =

@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
   installCheckTarget = "check";
   preInstallCheck = ''
     export LD_LIBRARY_PATH="$out/lib"
+    sed '/^\thints$/c #' -i tests/config/test_config.mk
   '';
 
   postInstall = ''

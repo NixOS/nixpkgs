@@ -1,5 +1,5 @@
 { stdenv, buildOcaml, fetchFromGitHub, findlib, ocamlbuild, ocaml_oasis
-, ppx_tools, ppx_sexp_conv, result, x509, nocrypto, cstruct, ounit
+, ppx_tools, ppx_sexp_conv, result, x509, nocrypto, cstruct, ppx_cstruct, cstruct-unix, ounit
 , lwt     ? null}:
 
 with stdenv.lib;
@@ -19,7 +19,7 @@ buildOcaml rec {
     sha256 = "19q2hzxiasz9pzczgb63kikg0mc9mw98dfvch5falf2rincycj24";
   };
 
-  buildInputs = [ ocamlbuild findlib ocaml_oasis ppx_sexp_conv ounit ];
+  buildInputs = [ ocamlbuild findlib ocaml_oasis ppx_sexp_conv ounit ppx_cstruct cstruct-unix ];
   propagatedBuildInputs = [ cstruct nocrypto result x509 ] ++
                           optional withLwt lwt;
 

@@ -33,6 +33,8 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/kid3-qt --prefix QT_PLUGIN_PATH : $out/lib/qt4/plugins
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "A simple and powerful audio tag editor";
     longDescription = ''

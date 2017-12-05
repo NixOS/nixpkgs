@@ -2,7 +2,7 @@
 
 let
 
-  version = "2.2.0.0";
+  version = "2.4.0.2";
 
 in stdenv.mkDerivation rec {
 
@@ -10,7 +10,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://www.skarnet.org/software/s6-linux-utils/${name}.tar.gz";
-    sha256 = "1y9mva7wk1ca2djq3qjh7hz756zk57yv7ljdnldn7k7jzfmlaxsq";
+    sha256 = "0245rmk7wfyyfsi4g7f0niprwlvqlwkbyjxflb8kkbvhwfdavqip";
   };
 
   dontDisableStatic = true;

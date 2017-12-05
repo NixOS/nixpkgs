@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "jenkins-${version}";
-  version = "2.89";
+  version = "2.92";
 
   src = fetchurl {
     url = "http://mirrors.jenkins-ci.org/war/${version}/jenkins.war";
-    sha256 = "07dphsa093lcs9fk8g8f2ll7mkicrkg44pr5w8sl3dbrchb1ymg7";
+    sha256 = "085h2hfhizli7bpvi06vi6jsav1cn86jw8l6vdpqq4ddx2hrhn39";
   };
 
   buildCommand = ''

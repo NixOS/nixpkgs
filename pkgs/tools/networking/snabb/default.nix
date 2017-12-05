@@ -31,7 +31,9 @@ stdenv.mkDerivation rec {
     cp src/snabb $out/bin
   '';
 
-  enableParallelBuilding = true;
+  # Dependencies are underspecified: "make -C src obj/arch/sse2_c.o" fails with
+  # "Fatal error: can't create obj/arch/sse2_c.o: No such file or directory".
+  enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
     homepage = https://github.com/SnabbCo/snabbswitch;
@@ -49,4 +51,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.lukego maintainers.domenkozar ];
   };
 }
-

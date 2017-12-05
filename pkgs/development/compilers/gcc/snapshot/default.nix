@@ -433,7 +433,7 @@ stdenv.mkDerivation ({
     STRIP_FOR_TARGET = "${targetPlatform.config}-strip";
     CC_FOR_TARGET = "${targetPlatform.config}-gcc";
     CXX_FOR_TARGET = "${targetPlatform.config}-g++";
-    # If we are making a cross compiler, cross != null
+    # If we are making a cross compiler, targetPlatform != hostPlatform
     NIX_CC_CROSS = optionalString (targetPlatform == hostPlatform) builtins.toString stdenv.cc;
     dontStrip = true;
     buildFlags = "";
@@ -532,6 +532,8 @@ stdenv.mkDerivation ({
       stdenv.lib.platforms.linux ++
       stdenv.lib.platforms.freebsd ++
       optionals (langAda == false) stdenv.lib.platforms.darwin;
+
+    broken = true;
   };
 }
 

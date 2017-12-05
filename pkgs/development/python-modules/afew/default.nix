@@ -21,8 +21,6 @@ buildPythonPackage rec {
     chardet
   ] ++ stdenv.lib.optional (!isPy3k) subprocess32;
 
-  doCheck = false;
-
   postInstall = ''
     wrapProgram $out/bin/afew \
       --prefix LD_LIBRARY_PATH : ${notmuch}/lib
@@ -31,6 +29,6 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     homepage = https://github.com/afewmail/afew;
     description = "An initial tagging script for notmuch mail";
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ garbas andir flokli ];
   };
 }

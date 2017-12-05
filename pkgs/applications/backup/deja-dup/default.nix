@@ -2,7 +2,7 @@
 , gnome3, libnotify, intltool, itstool, glib, gtk3, libxml2
 , coreutils, libsecret, pcre, libxkbcommon, wrapGAppsHook
 , libpthreadstubs, libXdmcp, epoxy, at_spi2_core, dbus, libgpgerror
-, appstream-glib, desktop_file_utils, atk, pango, duplicity
+, appstream-glib, desktop_file_utils, duplicity
 }:
 
 stdenv.mkDerivation rec {
@@ -44,29 +44,15 @@ stdenv.mkDerivation rec {
     glib-compile-schemas $out/share/glib-2.0/schemas
   '';
 
-  # Manual rpath definition until https://github.com/mesonbuild/meson/issues/314 is fixed
-  postFixup =
-    let
-      rpath = stdenv.lib.makeLibraryPath [
-        glib
-        gtk3
-        gnome3.gnome_online_accounts
-        gnome3.libpeas
-        gnome3.nautilus
-        libgpgerror
-        libsecret
-        # Transitive
-        atk
-        pango
-      ];
-    in ''
-      # Unwrap accidentally wrapped library
-      mv $out/libexec/deja-dup/tools/.libduplicity.so-wrapped $out/libexec/deja-dup/tools/libduplicity.so
+  postFixup = ''
+    # Unwrap accidentally wrapped library
+    mv $out/libexec/deja-dup/tools/.libduplicity.so-wrapped $out/libexec/deja-dup/tools/libduplicity.so
 
-      for elf in "$out"/bin/.*-wrapped "$out"/libexec/deja-dup/.deja-dup-monitor-wrapped "$out"/libexec/deja-dup/tools/*.so "$out"/lib/deja-dup/*.so "$out"/lib/nautilus/extensions-3.0/*.so; do
-        patchelf --set-rpath '${rpath}':"$out/lib/deja-dup" "$elf"
-      done
-    '';
+    # Patched meson does not add internal libraries to rpath
+    for elf in "$out/bin/.deja-dup-wrapped" "$out/libexec/deja-dup/.deja-dup-monitor-wrapped" "$out/libexec/deja-dup/tools/libduplicity.so"; do
+      patchelf --set-rpath "$(patchelf --print-rpath "$elf"):$out/lib/deja-dup" "$elf"
+    done
+  '';
 
   meta = with stdenv.lib; {
     description = "A simple backup tool";

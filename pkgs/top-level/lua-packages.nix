@@ -614,31 +614,31 @@ let
   };
 
   mpack = buildLuaPackage rec {
-    name = "lua-mpack-${libmpack.version}";
+    name = "mpack-${version}";
+    version = "1.0.7";
 
-    # NOTE: For updating, new Lua mpack bindings live at:
-    # https://github.com/libmpack/libmpack-lua.
-    src = libmpack.src;
-    sourceRoot = "${src.name}/binding/lua";
+    src = fetchFromGitHub {
+      owner = "libmpack";
+      repo = "libmpack-lua";
+      rev = version;
+      sha256 = "1nydi6xbmxwl1fmi32v5v8n74msnmzblzqaqnb102w6vkinampsb";
+    };
 
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libmpack ]; # ++ [ libtool lua ];
+    buildInputs = [ libmpack ];
     dontBuild = true;
 
-    preInstall = ''
-      mkdir -p $out/lib/lua/${lua.luaversion}
+    postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace Makefile \
+        --replace '-shared' '-bundle -undefined dynamic_lookup -all_load'
     '';
-
-    NIX_CFLAGS_COMPILE = "-Wno-error -fpic";
 
     installFlags = [
       "USE_SYSTEM_LUA=yes"
-      "LUA_VERSION_MAJ_MIN="
-      "LUA_CMOD_INSTALLDIR=$$out/lib/lua/${lua.luaversion}"
+      "USE_SYSTEM_MPACK=yes"
+      "MPACK_LUA_VERSION=${lua.version}"
+      "LUA_CMOD_INSTALLDIR=$(out)/lib/lua/${lua.luaversion}"
     ];
-
-    # gcc -llua fails with luajit.
-    disabled = isLuaJIT;
 
     meta = with stdenv.lib; {
       description = "Lua bindings for libmpack";
@@ -651,13 +651,13 @@ let
 
   vicious = stdenv.mkDerivation rec {
     name = "vicious-${version}";
-    version = "2.2.0";
+    version = "2.3.0";
 
     src = fetchFromGitHub {
       owner = "Mic92";
       repo = "vicious";
       rev = "v${version}";
-      sha256 = "0dhy0vklrhqrnmxb9pyqbfvkwwy86lwysk93pzg1j1zwprx366fj";
+      sha256 = "1mrd8c46ljilag8dljvnagaxnjnab8bmg9mcbnwvrivgjzgf6a1k";
     };
 
     buildInputs = [ lua ];

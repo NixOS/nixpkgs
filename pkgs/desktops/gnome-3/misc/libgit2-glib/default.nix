@@ -8,7 +8,12 @@ stdenv.mkDerivation rec {
     gnome3.gnome_common libtool pkgconfig vala gtk_doc gobjectIntrospection
   ];
 
-  buildInputs = [ libssh2 libgit2 glib ];
+  propagatedBuildInputs = [
+    # Required by libgit2-glib-1.0.pc
+    libgit2 glib
+  ];
+
+  buildInputs = [ libssh2 ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

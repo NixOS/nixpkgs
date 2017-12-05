@@ -1,7 +1,7 @@
 { stdenv, intltool, fetchurl, python, autoreconfHook
-, pkgconfig, gtk3, glib
-, makeWrapper, itstool, libxml2, docbook_xsl
-, gnome3, librsvg, gdk_pixbuf, libxslt }:
+, pkgconfig, gtk3, glib, gobjectIntrospection
+, wrapGAppsHook, itstool, libxml2, docbook_xsl
+, gnome3, gdk_pixbuf, libxslt }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -9,13 +9,13 @@ stdenv.mkDerivation rec {
   propagatedUserEnvPkgs = [ gnome3.gnome_themes_standard ];
 
   nativeBuildInputs = [
-    pkgconfig intltool itstool makeWrapper docbook_xsl libxslt
+    pkgconfig intltool itstool wrapGAppsHook docbook_xsl libxslt gobjectIntrospection
     # reconfiguration
     autoreconfHook gnome3.gnome_common gnome3.yelp_tools
   ];
   buildInputs = [ gtk3 glib libxml2 python
                   gnome3.gsettings_desktop_schemas
-                  gdk_pixbuf gnome3.defaultIconTheme librsvg ];
+                  gdk_pixbuf gnome3.defaultIconTheme ];
 
   enableParallelBuilding = true;
 

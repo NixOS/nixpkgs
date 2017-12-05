@@ -1,0 +1,60 @@
+diff -Naur ProCaptureForLinux_3589/src/sources/ospi/linux-file.c ProCaptureForLinux_3589_new/src/sources/ospi/linux-file.c
+--- ProCaptureForLinux_3589/src/sources/ospi/linux-file.c	2017-08-17 02:46:07.000000000 -0700
++++ ProCaptureForLinux_3589_new/src/sources/ospi/linux-file.c	2017-11-13 20:18:50.842947380 -0800
+@@ -7,8 +7,8 @@
+ 
+ #include "linux-file.h"
+ 
+-#include <asm/uaccess.h>
+ #include <linux/sched.h>
++#include <asm/uaccess.h>
+ 
+ struct file *linux_file_open(const char *path, int flags, int mode)
+ {
+@@ -28,27 +28,27 @@
+     filp_close(file, NULL);
+ }
+ 
+-ssize_t linux_file_read(struct file *file, loff_t offset, unsigned char *data, size_t size)
++ssize_t linux_file_read(struct file *file, loff_t offset, const void *data, size_t size)
+ {
+     mm_segment_t oldfs;
+     ssize_t ret;
+ 
+     oldfs = get_fs();
+     set_fs(get_ds());
+-    ret = vfs_read(file, data, size, &offset);
++    ret = kernel_read(file, data, size, &offset);
+     set_fs(oldfs);
+ 
+     return ret;
+ }
+ 
+-ssize_t linux_file_write(struct file *file, loff_t offset, unsigned char *data, size_t size)
++ssize_t linux_file_write(struct file *file, loff_t offset, const void *data, size_t size)
+ {
+     mm_segment_t oldfs;
+     ssize_t ret;
+ 
+     oldfs = get_fs();
+     set_fs(get_ds());
+-    ret = vfs_write(file, data, size, &offset);
++    ret = kernel_write(file, data, size, &offset);
+     set_fs(oldfs);
+ 
+     return ret;
+diff -Naur ProCaptureForLinux_3589/src/sources/ospi/linux-file.h ProCaptureForLinux_3589_new/src/sources/ospi/linux-file.h
+--- ProCaptureForLinux_3589/src/sources/ospi/linux-file.h	2017-08-17 02:46:07.000000000 -0700
++++ ProCaptureForLinux_3589_new/src/sources/ospi/linux-file.h	2017-11-13 20:24:20.979690346 -0800
+@@ -13,9 +13,9 @@
+ 
+ void linux_file_close(struct file *file);
+ 
+-ssize_t linux_file_read(struct file *file, loff_t offset, unsigned char *data, size_t size);
++ssize_t linux_file_read(struct file *file, loff_t offset, const void *data, size_t size);
+ 
+-ssize_t linux_file_write(struct file *file, loff_t offset, unsigned char *data, size_t size);
++ssize_t linux_file_write(struct file *file, loff_t offset, const void *data, size_t size);
+ 
+ #endif /* __LINUX_FILE_H__ */
+ 

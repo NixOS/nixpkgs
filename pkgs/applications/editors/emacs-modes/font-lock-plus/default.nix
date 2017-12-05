@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, melpaBuild }:
+{ fetchurl, lib, stdenv, melpaBuild }:
 
 melpaBuild {
   pname = "font-lock-plus";
@@ -16,7 +16,7 @@ melpaBuild {
     name = "font-lock-plus";
   };
 
-  meta = with stdenv.lib; {
+  meta = {
     homepage = "https://melpa.org/#/font-lock+";
     license = lib.licenses.gpl2Plus;
   };

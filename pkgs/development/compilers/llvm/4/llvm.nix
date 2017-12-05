@@ -81,6 +81,8 @@ in stdenv.mkDerivation rec {
       substituteInPlace lib/esan/esan_sideline_linux.cpp \
         --replace 'struct sigaltstack' 'stack_t'
     )
+  '' + stdenv.lib.optionalString stdenv.isAarch64 ''
+    patch -p0 < ${../aarch64.patch}
   '';
 
   # hacky fix: created binaries need to be run before installation

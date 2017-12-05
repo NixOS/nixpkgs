@@ -179,7 +179,7 @@ let version = "6.4.0";
     stageNameAddon = if crossStageStatic then "-stage-static" else "-stage-final";
     crossNameAddon = if targetPlatform != hostPlatform then "-${targetPlatform.config}" + stageNameAddon else "";
 
-  bootstrap = targetPlatform == hostPlatform;
+    bootstrap = targetPlatform == hostPlatform;
 
 in
 
@@ -381,7 +381,7 @@ stdenv.mkDerivation ({
     # Ada
     optional langAda "--enable-libada" ++
 
-    # Cross compilation
+    # Cross-compilation
     optional (targetPlatform == hostPlatform) (
       let incDir = if hostPlatform.isDarwin
                      then "${darwin.usr-include}"
@@ -395,7 +395,7 @@ stdenv.mkDerivation ({
 
     # Platform-specific flags
     optional (targetPlatform == hostPlatform && targetPlatform.isi686) "--with-arch=i686" ++
-    optionals (hostPlatform.isSunOS) [
+    optionals hostPlatform.isSunOS [
       "--enable-long-long" "--enable-libssp" "--enable-threads=posix" "--disable-nls" "--enable-__cxa_atexit"
       # On Illumos/Solaris GNU as is preferred
       "--with-gnu-as" "--without-gnu-ld"
@@ -452,7 +452,7 @@ stdenv.mkDerivation ({
     STRIP_FOR_TARGET = "${targetPlatform.config}-strip";
     CC_FOR_TARGET = "${targetPlatform.config}-gcc";
     CXX_FOR_TARGET = "${targetPlatform.config}-g++";
-    # If we are making a cross compiler, cross != null
+    # If we are making a cross compiler, targetPlatform != hostPlatform
     NIX_CC_CROSS = optionalString (targetPlatform == hostPlatform) builtins.toString stdenv.cc;
     dontStrip = true;
     buildFlags = "";

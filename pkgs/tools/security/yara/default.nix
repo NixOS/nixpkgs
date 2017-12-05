@@ -5,14 +5,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.6.3";
+  version = "3.7.0";
   name = "yara-${version}";
 
   src = fetchFromGitHub {
     owner = "VirusTotal";
     repo = "yara";
     rev = "v${version}";
-    sha256 = "13znbdwin9lvql43wpms5hh13h8rk5x5wajgmphz18rxwp8h7j78";
+    sha256 = "1giq5677j0vh5vw0nsv5qcqddcif6jckqaxyqg13j0j54n1p6xyj";
   };
 
   # FIXME: this is probably not the right way to make it work
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The pattern matching swiss knife for malware researchers";
-    homepage    = http://plusvic.github.io/yara/;
+    homepage    = http://Virustotal.github.io/yara/;
     license     = licenses.asl20;
     platforms   = stdenv.lib.platforms.all;
   };

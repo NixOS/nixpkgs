@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   # probably it would be more ideal to pull a particular tag/revision
   # from the mercurial repo
   src = fetchurl {
-    url = "https://people.mozilla.org/~sstangl/mozjs-${version}.tar.bz2";
+    url = "https://people.freebsd.org/~sunpoet/sunpoet/mozjs-${version}.tar.bz2";
     sha256 = "0p4bmbpgkfsj54xschcny0a118jdrdgg0q29rwxigg3lh5slr681";
   };
 

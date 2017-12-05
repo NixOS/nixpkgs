@@ -1,38 +1,41 @@
-{ stdenv, fetchurl, openssl, trousers, automake, autoconf, libtool, bison, flex }:
+{ stdenv, fetchFromGitHub, openssl, trousers, autoreconfHook, libtool, bison, flex }:
 
 stdenv.mkDerivation rec {
-  version = "3.2";
   name = "opencryptoki-${version}";
+  version = "3.8.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/opencryptoki/opencryptoki/v${version}/opencryptoki-v${version}.tgz";
-    sha256 = "06r6zp299vxdspl6k65myzgjv0bihg7kc500v7s4jd3mcrkngd6h";
+  src = fetchFromGitHub {
+    owner = "opencryptoki";
+    repo = "opencryptoki";
+    rev = "v${version}";
+    sha256 = "1m618pjfzw18irmh6i4pfq1gvcxgyfh9ikjn33nrdj55v2l27g31";
   };
 
-  buildInputs = [ automake autoconf libtool openssl trousers bison flex ];
+  nativeBuildInputs = [ autoreconfHook libtool bison flex ];
+  buildInputs = [ openssl trousers ];
 
-  preConfigure = ''
-    substituteInPlace configure.in --replace "chown" "true"
-    substituteInPlace configure.in --replace "chgrp" "true"
-    sh bootstrap.sh --prefix=$out
+  postPatch = ''
+    substituteInPlace configure.ac \
+      --replace "usermod" "true" \
+      --replace "groupadd" "true" \
+      --replace "chmod" "true" \
+      --replace "chgrp" "true"
+    substituteInPlace usr/lib/Makefile.am --replace "DESTDIR" "out"
   '';
 
-  configureFlags = [ "--disable-ccatok" "--disable-icatok" ];
+  configureFlags = [
+    "--prefix=$(out)"
+    "--disable-ccatok"
+    "--disable-icatok"
+  ];
 
-  makeFlags = "DESTDIR=$(out)";
-
-  # work around the build script of opencryptoki
-  postInstall = ''
-    cp -r $out/$out/* $out
-    rm -r $out/nix
-    '';
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "PKCS#11 implementation for Linux";
-    homepage    = http://opencryptoki.sourceforge.net/;
+    homepage    = https://github.com/opencryptoki/opencryptoki;
     license     = licenses.cpl10;
     maintainers = [ maintainers.tstrobel ];
     platforms   = platforms.unix;
   };
 }
-

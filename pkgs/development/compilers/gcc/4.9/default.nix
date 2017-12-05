@@ -442,7 +442,7 @@ stdenv.mkDerivation ({
     STRIP_FOR_TARGET = "${targetPlatform.config}-strip";
     CC_FOR_TARGET = "${targetPlatform.config}-gcc";
     CXX_FOR_TARGET = "${targetPlatform.config}-g++";
-    # If we are making a cross compiler, cross != null
+    # If we are making a cross compiler, targetPlatform != hostPlatform
     NIX_CC_CROSS = optionalString (targetPlatform == hostPlatform) builtins.toString stdenv.cc;
     dontStrip = true;
     buildFlags = "";
@@ -488,7 +488,7 @@ stdenv.mkDerivation ({
 
   EXTRA_TARGET_CFLAGS =
     if targetPlatform != hostPlatform && libcCross != null then [
-        "-idirafter ${libcCross.dev}/include"
+        "-idirafter ${getDev libcCross}/include"
       ]
       ++ optionals (! crossStageStatic) [
         "-B${libcCross.out}/lib"

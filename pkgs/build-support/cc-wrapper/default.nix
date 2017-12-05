@@ -32,8 +32,8 @@ let
   #
   # TODO(@Ericson2314) Make unconditional, or optional but always true by
   # default.
-  prefix = stdenv.lib.optionalString (targetPlatform != hostPlatform)
-                                     (targetPlatform.config + "-");
+  targetPrefix = stdenv.lib.optionalString (targetPlatform != hostPlatform)
+                                           (targetPlatform.config + "-");
 
   ccVersion = (builtins.parseDrvName cc.name).version;
   ccName = (builtins.parseDrvName cc.name).name;
@@ -81,7 +81,7 @@ let
 in
 
 stdenv.mkDerivation {
-  name = prefix
+  name = targetPrefix
     + (if name != "" then name else "${ccName}-wrapper")
     + (stdenv.lib.optionalString (cc != null && ccVersion != "") "-${ccVersion}");
 
@@ -91,8 +91,7 @@ stdenv.mkDerivation {
   shell = getBin shell + shell.shellPath or "";
   gnugrep_bin = if nativeTools then "" else gnugrep;
 
-  binPrefix = prefix;
-  inherit infixSalt;
+  inherit targetPrefix infixSalt;
 
   outputs = [ "out" "man" ];
 
@@ -102,8 +101,7 @@ stdenv.mkDerivation {
     # Binutils, and Apple's "cctools"; "binutils" as an attempt to find an
     # unused middle-ground name that evokes both.
     bintools = binutils_bin;
-    inherit libc nativeTools nativeLibc nativePrefix isGNU isClang default_cxx_stdlib_compile
-            prefix;
+    inherit libc nativeTools nativeLibc nativePrefix isGNU isClang default_cxx_stdlib_compile;
 
     emacsBufferSetup = pkgs: ''
       ; We should handle propagation here too
@@ -154,7 +152,7 @@ stdenv.mkDerivation {
     + optionalString (targetPlatform.isSunOS && nativePrefix != "") ''
       # Solaris needs an additional ld wrapper.
       ldPath="${nativePrefix}/bin"
-      exec="$ldPath/${prefix}ld"
+      exec="$ldPath/${targetPrefix}ld"
       wrap ld-solaris ${./ld-solaris-wrapper.sh}
     '')
 
@@ -162,83 +160,83 @@ stdenv.mkDerivation {
       # Create a symlink to as (the assembler).  This is useful when a
       # cc-wrapper is installed in a user environment, as it ensures that
       # the right assembler is called.
-      if [ -e $ldPath/${prefix}as ]; then
-        ln -s $ldPath/${prefix}as $out/bin/${prefix}as
+      if [ -e $ldPath/${targetPrefix}as ]; then
+        ln -s $ldPath/${targetPrefix}as $out/bin/${targetPrefix}as
       fi
 
     '' + (if !useMacosReexportHack then ''
-      wrap ${prefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${prefix}ld}
+      wrap ${targetPrefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${targetPrefix}ld}
     '' else ''
-      ldInner="${prefix}ld-reexport-delegate"
-      wrap "$ldInner" ${./macos-sierra-reexport-hack.bash} ''${ld:-$ldPath/${prefix}ld}
-      wrap "${prefix}ld" ${./ld-wrapper.sh} "$out/bin/$ldInner"
+      ldInner="${targetPrefix}ld-reexport-delegate"
+      wrap "$ldInner" ${./macos-sierra-reexport-hack.bash} ''${ld:-$ldPath/${targetPrefix}ld}
+      wrap "${targetPrefix}ld" ${./ld-wrapper.sh} "$out/bin/$ldInner"
       unset ldInner
     '') + ''
 
-      if [ -e ${binutils_bin}/bin/${prefix}ld.gold ]; then
-        wrap ${prefix}ld.gold ${./ld-wrapper.sh} ${binutils_bin}/bin/${prefix}ld.gold
+      if [ -e ${binutils_bin}/bin/${targetPrefix}ld.gold ]; then
+        wrap ${targetPrefix}ld.gold ${./ld-wrapper.sh} ${binutils_bin}/bin/${targetPrefix}ld.gold
       fi
 
       if [ -e ${binutils_bin}/bin/ld.bfd ]; then
-        wrap ${prefix}ld.bfd ${./ld-wrapper.sh} ${binutils_bin}/bin/${prefix}ld.bfd
+        wrap ${targetPrefix}ld.bfd ${./ld-wrapper.sh} ${binutils_bin}/bin/${targetPrefix}ld.bfd
       fi
 
       # We export environment variables pointing to the wrapped nonstandard
       # cmds, lest some lousy configure script use those to guess compiler
       # version.
-      export named_cc=${prefix}cc
-      export named_cxx=${prefix}c++
+      export named_cc=${targetPrefix}cc
+      export named_cxx=${targetPrefix}c++
 
       export default_cxx_stdlib_compile="${default_cxx_stdlib_compile}"
 
-      if [ -e $ccPath/${prefix}gcc ]; then
-        wrap ${prefix}gcc ${./cc-wrapper.sh} $ccPath/${prefix}gcc
-        ln -s ${prefix}gcc $out/bin/${prefix}cc
-        export named_cc=${prefix}gcc
-        export named_cxx=${prefix}g++
+      if [ -e $ccPath/${targetPrefix}gcc ]; then
+        wrap ${targetPrefix}gcc ${./cc-wrapper.sh} $ccPath/${targetPrefix}gcc
+        ln -s ${targetPrefix}gcc $out/bin/${targetPrefix}cc
+        export named_cc=${targetPrefix}gcc
+        export named_cxx=${targetPrefix}g++
       elif [ -e $ccPath/clang ]; then
-        wrap ${prefix}clang ${./cc-wrapper.sh} $ccPath/clang
-        ln -s ${prefix}clang $out/bin/${prefix}cc
-        export named_cc=${prefix}clang
-        export named_cxx=${prefix}clang++
+        wrap ${targetPrefix}clang ${./cc-wrapper.sh} $ccPath/clang
+        ln -s ${targetPrefix}clang $out/bin/${targetPrefix}cc
+        export named_cc=${targetPrefix}clang
+        export named_cxx=${targetPrefix}clang++
       fi
 
-      if [ -e $ccPath/${prefix}g++ ]; then
-        wrap ${prefix}g++ ${./cc-wrapper.sh} $ccPath/${prefix}g++
-        ln -s ${prefix}g++ $out/bin/${prefix}c++
+      if [ -e $ccPath/${targetPrefix}g++ ]; then
+        wrap ${targetPrefix}g++ ${./cc-wrapper.sh} $ccPath/${targetPrefix}g++
+        ln -s ${targetPrefix}g++ $out/bin/${targetPrefix}c++
       elif [ -e $ccPath/clang++ ]; then
-        wrap ${prefix}clang++ ${./cc-wrapper.sh} $ccPath/clang++
-        ln -s ${prefix}clang++ $out/bin/${prefix}c++
+        wrap ${targetPrefix}clang++ ${./cc-wrapper.sh} $ccPath/clang++
+        ln -s ${targetPrefix}clang++ $out/bin/${targetPrefix}c++
       fi
 
       if [ -e $ccPath/cpp ]; then
-        wrap ${prefix}cpp ${./cc-wrapper.sh} $ccPath/cpp
+        wrap ${targetPrefix}cpp ${./cc-wrapper.sh} $ccPath/cpp
       fi
     ''
 
     + optionalString cc.langFortran or false ''
-      wrap ${prefix}gfortran ${./cc-wrapper.sh} $ccPath/${prefix}gfortran
-      ln -sv ${prefix}gfortran $out/bin/${prefix}g77
-      ln -sv ${prefix}gfortran $out/bin/${prefix}f77
+      wrap ${targetPrefix}gfortran ${./cc-wrapper.sh} $ccPath/${targetPrefix}gfortran
+      ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}g77
+      ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}f77
     ''
 
     + optionalString cc.langJava or false ''
-      wrap ${prefix}gcj ${./cc-wrapper.sh} $ccPath/${prefix}gcj
+      wrap ${targetPrefix}gcj ${./cc-wrapper.sh} $ccPath/${targetPrefix}gcj
     ''
 
     + optionalString cc.langGo or false ''
-      wrap ${prefix}gccgo ${./cc-wrapper.sh} $ccPath/${prefix}gccgo
+      wrap ${targetPrefix}gccgo ${./cc-wrapper.sh} $ccPath/${targetPrefix}gccgo
     ''
 
     + optionalString cc.langAda or false ''
-      wrap ${prefix}gnatgcc ${./cc-wrapper.sh} $ccPath/${prefix}gnatgcc
-      wrap ${prefix}gnatmake ${./gnat-wrapper.sh} $ccPath/${prefix}gnatmake
-      wrap ${prefix}gnatbind ${./gnat-wrapper.sh} $ccPath/${prefix}gnatbind
-      wrap ${prefix}gnatlink ${./gnatlink-wrapper.sh} $ccPath/${prefix}gnatlink
+      wrap ${targetPrefix}gnatgcc ${./cc-wrapper.sh} $ccPath/${targetPrefix}gnatgcc
+      wrap ${targetPrefix}gnatmake ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatmake
+      wrap ${targetPrefix}gnatbind ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatbind
+      wrap ${targetPrefix}gnatlink ${./gnatlink-wrapper.sh} $ccPath/${targetPrefix}gnatlink
     ''
 
     + optionalString cc.langVhdl or false ''
-      ln -s $ccPath/${prefix}ghdl $out/bin/${prefix}ghdl
+      ln -s $ccPath/${targetPrefix}ghdl $out/bin/${targetPrefix}ghdl
     '';
 
   propagatedBuildInputs = extraPackages;
@@ -362,10 +360,10 @@ stdenv.mkDerivation {
 
       # some linkers on some platforms don't support specific -z flags
       export hardening_unsupported_flags=""
-      if [[ "$($ldPath/${prefix}ld -z now 2>&1 || true)" =~ un(recognized|known)\ option ]]; then
+      if [[ "$($ldPath/${targetPrefix}ld -z now 2>&1 || true)" =~ un(recognized|known)\ option ]]; then
         hardening_unsupported_flags+=" bindnow"
       fi
-      if [[ "$($ldPath/${prefix}ld -z relro 2>&1 || true)" =~ un(recognized|known)\ option ]]; then
+      if [[ "$($ldPath/${targetPrefix}ld -z relro 2>&1 || true)" =~ un(recognized|known)\ option ]]; then
         hardening_unsupported_flags+=" relro"
       fi
     ''

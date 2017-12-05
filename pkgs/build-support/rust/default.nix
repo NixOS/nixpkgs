@@ -43,6 +43,10 @@ in stdenv.mkDerivation (args // {
   postUnpack = ''
     eval "$cargoDepsHook"
 
+    unpackFile "$cargoDeps"
+    cargoDepsCopy=$(stripHash $(basename $cargoDeps))
+    chmod -R +w "$cargoDepsCopy"
+
     mkdir .cargo
     cat >.cargo/config <<-EOF
       [source.crates-io]
@@ -50,8 +54,10 @@ in stdenv.mkDerivation (args // {
       replace-with = 'vendored-sources'
 
       [source.vendored-sources]
-      directory = '$cargoDeps'
+      directory = '$(pwd)/$cargoDepsCopy'
     EOF
+
+    unset cargoDepsCopy
 
     export RUST_LOG=${logLevel}
     export SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt

@@ -44,7 +44,6 @@ database: {
 }
 event_cache_size: "${cfg.event_cache_size}"
 verbose: ${cfg.verbose}
-log_file: "/var/log/matrix-synapse/homeserver.log"
 log_config: "${logConfigFile}"
 rc_messages_per_second: ${cfg.rc_messages_per_second}
 rc_message_burst_count: ${cfg.rc_message_burst_count}
@@ -53,8 +52,8 @@ federation_rc_sleep_limit: ${cfg.federation_rc_sleep_limit}
 federation_rc_sleep_delay: ${cfg.federation_rc_sleep_delay}
 federation_rc_reject_limit: ${cfg.federation_rc_reject_limit}
 federation_rc_concurrent: ${cfg.federation_rc_concurrent}
-media_store_path: "/var/lib/matrix-synapse/media"
-uploads_path: "/var/lib/matrix-synapse/uploads"
+media_store_path: "${cfg.dataDir}/media"
+uploads_path: "${cfg.dataDir}/uploads"
 max_upload_size: "${cfg.max_upload_size}"
 max_image_pixels: "${cfg.max_image_pixels}"
 dynamic_thumbnails: ${boolToString cfg.dynamic_thumbnails}
@@ -86,7 +85,7 @@ ${optionalString (cfg.macaroon_secret_key != null) ''
 expire_access_token: ${boolToString cfg.expire_access_token}
 enable_metrics: ${boolToString cfg.enable_metrics}
 report_stats: ${boolToString cfg.report_stats}
-signing_key_path: "/var/lib/matrix-synapse/homeserver.signing.key"
+signing_key_path: "${cfg.dataDir}/homeserver.signing.key"
 key_refresh_interval: "${cfg.key_refresh_interval}"
 perspectives:
   servers: {
@@ -348,7 +347,7 @@ in {
       database_args = mkOption {
         type = types.attrs;
         default = {
-          database = "/var/lib/matrix-synapse/homeserver.db";
+          database = "${cfg.dataDir}/homeserver.db";
         };
         description = ''
           Arguments to pass to the engine.
@@ -586,6 +585,14 @@ in {
           A yaml python logging config file
         '';
       };
+      dataDir = mkOption {
+        type = types.str;
+        default = "/var/lib/matrix-synapse";
+        description = ''
+          The directory where matrix-synapse stores its stateful data such as
+          certificates, media and uploads.
+        '';
+      };
     };
   };
 
@@ -593,7 +600,7 @@ in {
     users.extraUsers = [
       { name = "matrix-synapse";
         group = "matrix-synapse";
-        home = "/var/lib/matrix-synapse";
+        home = cfg.dataDir;
         createHome = true;
         shell = "${pkgs.bash}/bin/bash";
         uid = config.ids.uids.matrix-synapse;
@@ -611,16 +618,16 @@ in {
       preStart = ''
         ${cfg.package}/bin/homeserver \
           --config-path ${configFile} \
-          --keys-directory /var/lib/matrix-synapse \
+          --keys-directory ${cfg.dataDir} \
           --generate-keys
       '';
       serviceConfig = {
         Type = "simple";
         User = "matrix-synapse";
         Group = "matrix-synapse";
-        WorkingDirectory = "/var/lib/matrix-synapse";
+        WorkingDirectory = cfg.dataDir;
         PermissionsStartOnly = true;
-        ExecStart = "${cfg.package}/bin/homeserver --config-path ${configFile} --keys-directory /var/lib/matrix-synapse";
+        ExecStart = "${cfg.package}/bin/homeserver --config-path ${configFile} --keys-directory ${cfg.dataDir}";
         Restart = "on-failure";
       };
     };

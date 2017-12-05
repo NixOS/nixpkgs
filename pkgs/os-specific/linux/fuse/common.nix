@@ -25,12 +25,7 @@ in stdenv.mkDerivation rec {
         url = "https://github.com/libfuse/libfuse/commit/914871b20a901e3e1e981c92bc42b1c93b7ab81b.patch";
         sha256 = "1w4j6f1awjrycycpvmlv0x5v9gprllh4dnbjxl4dyl2jgbkaw6pa";
       })
-    ++ stdenv.lib.optionals isFuse3 [
-      ./fuse3-no-udev.patch # only required for udevrulesdir
-      ./fuse3-install.patch
-      # install_man makes the build non-reproducible by encoding the date
-      ./fuse3-install_man.patch
-    ];
+    ++ stdenv.lib.optional isFuse3 ./fuse3-install.patch;
 
 
   nativeBuildInputs = if isFuse3
@@ -39,6 +34,8 @@ in stdenv.mkDerivation rec {
   buildInputs = stdenv.lib.optional (!isFuse3) gettext;
 
   outputs = [ "out" ] ++ stdenv.lib.optional isFuse3 "common";
+
+  mesonFlags = stdenv.lib.optional isFuse3 "-Dudevrulesdir=etc/udev/rules.d";
 
   preConfigure = ''
     export MOUNT_FUSE_PATH=$out/sbin

@@ -1,22 +1,44 @@
-{ stdenv, fetchurl, buildPerlPackage, perlPackages
+{ stdenv, lib, fetchurl, buildPerlPackage, perlPackages, gnused, nix, dmidecode, pciutils, usbutils, iproute, nettools
+, fetchFromGitHub, makeWrapper
 }:
 
 buildPerlPackage rec {
-  version = "2.3.18";
   name = "FusionInventory-Agent-${version}";
-  src = fetchurl {
-    url = "mirror://cpan/authors/id/G/GR/GROUSSE/${name}.tar.gz";
-    sha256 = "543d96fa61b8f2a2bc599fe9f694f19d1f2094dc5506bc514d00b8a445bc5401";
+  version = "2.3.21";
+
+  src = fetchFromGitHub {
+    owner = "fusioninventory";
+    repo = "fusioninventory-agent";
+    rev = version;
+    sha256 = "034clffcn0agx85macjgml4lyhvvck7idn94pqd2c77pk6crvw2y";
   };
 
-  patches = [ ./remove_software_test.patch ];
+  patches = [
+    ./remove_software_test.patch
+    # support for os-release file
+    (fetchurl {
+      url = https://github.com/fusioninventory/fusioninventory-agent/pull/396.diff;
+      sha256 = "0bxrjmff80ab01n23xggci32ajsah6zvcmz5x4hj6ayy6dzwi6jb";
+    })
+    # support for Nix software inventory
+    (fetchurl {
+      url = https://github.com/fusioninventory/fusioninventory-agent/pull/397.diff;
+      sha256 = "0pyf7mp0zsb3zcqb6yysr1zfp54p9ciwjn1pzayw6s9flmcgrmbw";
+    })
+    ];
 
   postPatch = ''
+
     patchShebangs bin
+
+    substituteInPlace "lib/FusionInventory/Agent/Tools/Linux.pm" \
+      --replace /sbin/ip ${iproute}/sbin/ip
+    substituteInPlace "lib/FusionInventory/Agent/Task/Inventory/Linux/Networks.pm" \
+      --replace /sbin/ip ${iproute}/sbin/ip
   '';
 
   buildTools = [];
-  buildInputs = with perlPackages; [
+  buildInputs = [ makeWrapper ] ++ (with perlPackages; [
     CGI
     DataStructureUtil
     FileCopyRecursive
@@ -28,6 +50,7 @@ buildPerlPackage rec {
     IPCRun
     JSON
     LWPProtocolhttps
+    ModuleInstall
     NetSNMP
     TestCompile
     TestDeep
@@ -35,7 +58,7 @@ buildPerlPackage rec {
     TestMockModule
     TestMockObject
     TestNoWarnings
-  ];
+  ]);
   propagatedBuildInputs = with perlPackages; [
     FileWhich
     LWP
@@ -52,7 +75,10 @@ buildPerlPackage rec {
     cp -r lib $out
 
     for cur in $out/bin/*; do
-      sed -e "s|./lib|$out/lib|" -i "$cur"
+      if [ -x "$cur" ]; then
+        sed -e "s|./lib|$out/lib|" -i "$cur"
+        wrapProgram "$cur" --prefix PATH : ${lib.makeBinPath [nix dmidecode pciutils usbutils nettools iproute]}
+      fi
     done
   '';
 

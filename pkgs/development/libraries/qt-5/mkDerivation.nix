@@ -21,7 +21,7 @@ let
           (if debug then "-DCMAKE_BUILD_TYPE=Debug"
                     else "-DCMAKE_BUILD_TYPE=Release");
 
-    enableParallelBuilding = args.enableParallelBuilding or false;
+    enableParallelBuilding = args.enableParallelBuilding or true;
 
   };
 in
