@@ -123,27 +123,9 @@ let version = "6.3.0";
     /* Cross-gcc settings */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
     crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";
-    crossConfigureFlags = let
-        gccArch = targetPlatform.platform.gcc.arch or null;
-        gccCpu = targetPlatform.platform.gcc.cpu or null;
-        gccAbi = targetPlatform.platform.gcc.abi or null;
-        gccFpu = targetPlatform.platform.gcc.fpu or null;
-        gccFloat = targetPlatform.platform.gcc.float or null;
-        gccMode = targetPlatform.platform.gcc.mode or null;
-        withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
-        withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
-        withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
-        withFpu = if gccFpu != null then " --with-fpu=${gccFpu}" else "";
-        withFloat = if gccFloat != null then " --with-float=${gccFloat}" else "";
-        withMode = if gccMode != null then " --with-mode=${gccMode}" else "";
-      in
+    crossConfigureFlags =
         "--target=${targetPlatform.config}" +
-        withArch +
-        withCpu +
-        withAbi +
-        withFpu +
-        withFloat +
-        withMode +
+        platformFlags +
         # Ensure that -print-prog-name is able to find the correct programs.
         " --with-as=${binutils}/bin/${targetPlatform.config}-as" +
         " --with-ld=${binutils}/bin/${targetPlatform.config}-ld" +

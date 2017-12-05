@@ -85,20 +85,9 @@ let version = "4.5.4";
         withFloat +
         withMode;
 
-    /* Cross-gcc settings */
-    gccArch = stdenv.lib.attrByPath [ "gcc" "arch" ] null targetPlatform;
-    gccCpu = stdenv.lib.attrByPath [ "gcc" "cpu" ] null targetPlatformt;
-    gccAbi = stdenv.lib.attrByPath [ "gcc" "abi" ] null targetPlatform;
-    withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
-    withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
-    withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
-    crossMingw = (targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt");
-
     crossConfigureFlags =
       "--target=${targetPlatform.config}" +
-      withArch +
-      withCpu +
-      withAbi +
+      platformFlags +
       # Ensure that -print-prog-name is able to find the correct programs.
       " --with-as=${binutils}/bin/${targetPlatform.config}-as" +
       " --with-ld=${binutils}/bin/${targetPlatform.config}-ld" +
