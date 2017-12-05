@@ -831,6 +831,17 @@ rec {
 
   };
 
+  vim-maktaba = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-maktaba-2017-05-07";
+    src = fetchgit {
+      url = "https://github.com/google/vim-maktaba";
+      rev = "2ae8b4478ea9bc2c6c8106acb55ddfb935754fb9";
+      sha256 = "1w8paqn0qyk4j5wfx48rc2za7kzhgdaggikklmjr1vsv2y0b8fzc";
+    };
+    dependencies = [];
+
+  };
+
   vim-jsdoc = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-jsdoc-2017-02-11";
     src = fetchgit {

@@ -60,6 +60,7 @@
 "github:floobits/floobits-neovim"
 "github:frigoeu/psc-ide-vim"
 "github:google/vim-jsonnet"
+"github:google/vim-maktaba"
 "github:heavenshell/vim-jsdoc"
 "github:hecal3/vim-leader-guide"
 "github:idris-hackers/idris-vim"
