@@ -1,5 +1,5 @@
 { stdenv, fetchurl, intltool, pkgconfig, cmake
-, ncurses, m17n_lib, m17n_db
+, ncurses, m17n_lib, m17n_db, expat
 , withAnthy ? true, anthy ? null
 , withGtk ? true
 , withGtk2 ? withGtk, gtk2 ? null
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     cmake
     m17n_lib
     m17n_db
+    expat
   ]
   ++ optional withAnthy anthy
   ++ optional withGtk2 gtk2
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
     "--with-skk"
     "--with-x"
     "--with-xft"
+    "--with-expat=${expat.dev}"
   ]
   ++ optional withAnthy "--with-anthy-utf8"
   ++ optional withGtk2 "--with-gtk2"
