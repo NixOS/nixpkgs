@@ -200,6 +200,8 @@ let
 
     decompress =  callPackage ../development/ocaml-modules/decompress { };
 
+    digestif =  callPackage ../development/ocaml-modules/digestif { };
+
     dolmen =  callPackage ../development/ocaml-modules/dolmen { };
 
     dolog = callPackage ../development/ocaml-modules/dolog { };
