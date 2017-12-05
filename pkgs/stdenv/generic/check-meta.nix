@@ -126,7 +126,7 @@ let
       '';
 
   throwEvalHelp = { reason , errormsg ? "" }:
-    throw (''
+    (if reason != "unknown-meta" then throw else (x : builtins.trace x true)) (''
       Package ‘${attrs.name or "«name-missing»"}’ in ${pos_str} ${errormsg}, refusing to evaluate.
 
       '' + ((builtins.getAttr reason remediation) attrs));
