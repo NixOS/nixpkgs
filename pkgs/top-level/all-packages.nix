@@ -7812,6 +7812,7 @@ with pkgs;
     rubyBindings = config.radare.rubyBindings or false;
     luaBindings = config.radare.luaBindings or false;
   };
+  radare2-cutter = libsForQt5.callPackage ../development/tools/analysis/radare2-cutter { };
 
   ragel = ragelStable;
 
