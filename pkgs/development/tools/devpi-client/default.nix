@@ -1,7 +1,10 @@
 { stdenv
+, lib
 , pythonPackages
 , glibcLocales
 , devpi-server
+, git
+, mercurial
 } :
 
 pythonPackages.buildPythonApplication rec {
@@ -14,19 +17,31 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0w47x3lkafcg9ijlaxllmq4886nsc91w49ck1cd7vn2gafkwjkgr";
   };
 
-  doCheck = true;
-  checkInputs = with pythonPackages; [ pytest webtest mock devpi-server ];
-  checkPhase = "py.test";
+  checkInputs = with pythonPackages; [
+                    pytest webtest mock
+                    devpi-server tox
+                    sphinx wheel git mercurial detox
+                    setuptools
+                    ];
+  checkPhase = ''
+    export PATH=$PATH:$out/bin
+
+    # setuptools do not get propagated into the tox call (cannot import setuptools)
+    rm testing/test_test.py
+
+    # test tries to connect to upstream pypi
+    py.test -k 'not test_pypi_index_attributes' testing
+  '';
 
   LC_ALL = "en_US.UTF-8";
-  buildInputs = with pythonPackages; [ glibcLocales pkginfo tox check-manifest ];
-  propagatedBuildInputs = with pythonPackages; [ py devpi-common pluggy ];
+  buildInputs = with pythonPackages; [ glibcLocales pkginfo check-manifest ];
+  propagatedBuildInputs = with pythonPackages; [ py devpi-common pluggy setuptools ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://doc.devpi.net;
-    description = "Github-style pypi index server and packaging meta tool";
-    license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ lewo makefu ];
-
+    description = "Client for devpi, a pypi index server and packaging meta tool";
+    license = licenses.mit;
+    maintainers = with maintainers; [ lewo makefu ];
   };
+
 }
