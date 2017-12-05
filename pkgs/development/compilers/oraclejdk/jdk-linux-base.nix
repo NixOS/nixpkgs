@@ -42,7 +42,7 @@ assert stdenv.system == "i686-linux"
 assert swingSupport -> xorg != null;
 
 let
-  abortArch = abort "jdk requires i686-linux, x86_64-linux, or armv7l-linux";
+  abortArch = throw "Unsupported system: ${stdenv.system}";
 
   /**
    * The JRE libraries are in directories that depend on the CPU.
