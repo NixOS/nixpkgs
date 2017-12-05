@@ -54,7 +54,7 @@ buildFHSUserEnv {
         do_install=1
     else
         installed_version=$(cat "$HOME/.dropbox-dist/VERSION")
-        latest_version=$(printf "${version}\n$installed_version\n" | sort -V | head -n 1)
+        latest_version=$(printf "${version}\n$installed_version\n" | sort -rV | head -n 1)
         if [ "x$installed_version" != "x$latest_version" ]; then
             do_install=1
         fi
