@@ -6,7 +6,7 @@ let
   arch =
     if stdenv.system == "x86_64-linux" then "amd64"
     else if stdenv.system == "i686-linux" then "i386"
-    else abort "Unsupported architecture";
+    else throw "Unsupported system ${stdenv.system}";
   sha256 =
     if arch == "amd64"
     then "0dwnppn5snl5bwkdrgj4cyylnhngi0g66fn2k41j3dvis83x24k6"
