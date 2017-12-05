@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name    = "gambit-${version}";
-  version = "4.8.8-300db59";
+  version = "4.8.8-415-g29ed48bb";
   bootstrap = import ./bootstrap.nix ( pkgs );
 
   src = fetchgit {
     url = "https://github.com/feeley/gambit.git";
-    rev = "300db59e1d3b66bcd597f617849df0274d2a4472";
-    sha256 = "1mhy49lasakgvdaswkxasdssik11lx3hfx4h1gs2b6881488ssdp";
+    rev = "29ed48bb688e8302d2430b5d24a2fc7c2039aeec";
+    sha256 = "1h3kmczvjir0pi6cmqa2bsc09n68jhw0bxq7m6w4b1f0xvgvn3fr";
   };
 
   buildInputs = [ openssl git autoconf bootstrap ];
