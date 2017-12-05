@@ -7,11 +7,11 @@
 stdenv.mkDerivation rec {
   name    = "gerbil-${version}";
 
-  version = "0.12-DEV-777-gd855915";
+  version = "0.12-DEV-836-gcde6802";
   src = fetchgit {
     url = "https://github.com/vyzo/gerbil.git";
-    rev = "9db6187dc996eec4087f83b86339e7b17bb69bad";
-    sha256 = "1hqmsy77d62dvil3az4vdr0rmwvxhinjl1dbcxzamz2c2kcjv1jg";
+    rev = "2904b0014fac344409d0ae2ba5835d0e67ac83b5";
+    sha256 = "1nnirqdd11n6pkvidnf8pb39m45jjnpmwj2qy62di024r7ha3y18";
   };
 
   buildInputs = [
@@ -52,9 +52,9 @@ stdenv.mkDerivation rec {
 export GERBIL_HOME=$out
 case "\$1" in -:*) GSIOPTIONS=\$1 ; shift ;; esac
 if [[ \$# = 0 ]] ; then
-  ${gambit}/bin/gsi \$GSIOPTIONS \$GERBIL_HOME/lib/gxi-init \$GERBIL_HOME/lib/gxi-interactive - ;
+  exec ${gambit}/bin/gsi \$GSIOPTIONS \$GERBIL_HOME/lib/gxi-init \$GERBIL_HOME/lib/gxi-interactive - ;
 else
-  ${gambit}/bin/gsi \$GSIOPTIONS \$GERBIL_HOME/lib/gxi-init "\$@"
+  exec ${gambit}/bin/gsi \$GSIOPTIONS \$GERBIL_HOME/lib/gxi-init "\$@"
 fi
 EOF
     runHook postInstall
