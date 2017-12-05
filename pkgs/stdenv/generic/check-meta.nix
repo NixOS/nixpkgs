@@ -136,7 +136,7 @@ let
     description = str;
     longDescription = str;
     branch = str;
-    homepage = str;
+    homepage = either (listOf str) str;
     downloadPage = str;
     license = either (listOf lib.types.attrs) (either lib.types.attrs str);
     maintainers = listOf str;
@@ -158,6 +158,7 @@ let
     downloadURLRegexp = str;
     isFcitxEngine = bool;
     isIbusEngine = bool;
+    isGutenprint = bool;
   };
 
   checkMetaAttr = k: v:
