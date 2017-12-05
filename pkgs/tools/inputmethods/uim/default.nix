@@ -105,8 +105,8 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage    = "https://github.com/uim/uim";
     description = "A multilingual input method framework";
-    license     = stdenv.lib.licenses.bsd3;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = with maintainers; [ ericsagnes ];
+    license     = licenses.bsd3;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ ericsagnes oxij ];
   };
 }
