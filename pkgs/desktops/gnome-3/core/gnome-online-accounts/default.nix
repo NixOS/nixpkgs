@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, vala, glib, libxslt, gtk, wrapGAppsHook
 , webkitgtk, json_glib, rest, libsecret, dbus_glib, gnome_common, gtk_doc
 , telepathy_glib, intltool, dbus_libs, icu, glib_networking
-, libsoup, docbook_xsl_ns, docbook_xsl, gnome3
+, libsoup, docbook_xsl_ns, docbook_xsl, gnome3, gcr, kerberos
 }:
 
 stdenv.mkDerivation rec {
@@ -12,6 +12,10 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "man" "dev" "devdoc" ];
 
   configureFlags = [
+    "--enable-media-server"
+    "--enable-kerberos"
+    "--enable-lastfm"
+    "--enable-todoist"
     "--enable-gtk-doc"
   ];
 
@@ -23,6 +27,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     glib gtk webkitgtk json_glib rest libsecret dbus_glib telepathy_glib glib_networking icu libsoup
+    gcr kerberos
   ];
 
   meta = with stdenv.lib; {
