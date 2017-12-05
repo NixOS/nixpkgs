@@ -231,6 +231,8 @@ let
 
     faillib = callPackage ../development/ocaml-modules/faillib { };
 
+    faraday = callPackage ../development/ocaml-modules/faraday { };
+
     fieldslib_p4 = callPackage ../development/ocaml-modules/fieldslib { };
 
     fileutils = callPackage ../development/ocaml-modules/fileutils { };
