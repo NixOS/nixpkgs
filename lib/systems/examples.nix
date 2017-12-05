@@ -60,7 +60,7 @@ rec {
 
   pogoplug4 = rec {
     arch = "armv5tel";
-    config = "armv5tel-softfloat-linux-gnueabi";
+    config = "armv5tel-unknown-linux-gnueabi";
     float = "soft";
 
     platform = platforms.pogoplug4;
