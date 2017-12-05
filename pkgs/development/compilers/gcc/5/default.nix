@@ -104,12 +104,12 @@ let version = "5.4.0";
 
     /* Platform flags */
     platformFlags = let
-        gccArch = targetPlatform.gcc.arch or null;
-        gccCpu = targetPlatform.gcc.cpu or null;
-        gccAbi = targetPlatform.gcc.abi or null;
-        gccFpu = targetPlatform.gcc.fpu or null;
-        gccFloat = targetPlatform.gcc.float or null;
-        gccMode = targetPlatform.gcc.mode or null;
+        gccArch = targetPlatform.platform.gcc.arch or null;
+        gccCpu = targetPlatform.platform.gcc.cpu or null;
+        gccAbi = targetPlatform.platform.gcc.abi or null;
+        gccFpu = targetPlatform.platform.gcc.fpu or null;
+        gccFloat = targetPlatform.platform.gcc.float or null;
+        gccMode = targetPlatform.platform.gcc.mode or null;
         withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
         withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
         withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
@@ -128,12 +128,12 @@ let version = "5.4.0";
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
     crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";
     crossConfigureFlags = let
-        gccArch = targetPlatform.gcc.arch or null;
-        gccCpu = targetPlatform.gcc.cpu or null;
-        gccAbi = targetPlatform.gcc.abi or null;
-        gccFpu = targetPlatform.gcc.fpu or null;
-        gccFloat = targetPlatform.gcc.float or null;
-        gccMode = targetPlatform.gcc.mode or null;
+        gccArch = targetPlatform.platform.gcc.arch or null;
+        gccCpu = targetPlatform.platform.gcc.cpu or null;
+        gccAbi = targetPlatform.platform.gcc.abi or null;
+        gccFpu = targetPlatform.platform.gcc.fpu or null;
+        gccFloat = targetPlatform.platform.gcc.float or null;
+        gccMode = targetPlatform.platform.gcc.mode or null;
         withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
         withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
         withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
