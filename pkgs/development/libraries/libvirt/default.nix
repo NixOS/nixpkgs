@@ -27,9 +27,11 @@ stdenv.mkDerivation rec {
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap
   ] ++ optionals stdenv.isLinux [
     libpciaccess devicemapper lvm2 utillinux systemd libnl numad zfs
-    libapparmor libcap_ng numactl xen attr parted
+    libapparmor libcap_ng numactl attr parted
+  ] ++ optionals (stdenv.isLinux && stdenv.isx86_64) [
+    xen
   ] ++ optionals stdenv.isDarwin [
-     libiconv gmp
+    libiconv gmp
   ];
 
   preConfigure = optionalString stdenv.isLinux ''
