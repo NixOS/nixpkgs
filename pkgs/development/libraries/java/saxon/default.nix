@@ -68,4 +68,16 @@ in {
     };
     description = "Complete and conformant processor of XSLT 2.0, XQuery 1.0, and XPath 2.0";
   };
+
+  saxon-he = common {
+    pname = "saxon-he";
+    version = "9.8.0.6";
+    prog = "saxon-he";
+    jar = "saxon9he";
+    src = fetchurl {
+      url = mirror://sourceforge/saxon/Saxon-HE/9.8/SaxonHE9-8-0-6J.zip;
+      sha256 = "03r4djm298rxz8q7jph63h9niglrl3rifxskq1b3bclx5rgxi2lk";
+    };
+    description = "Processor for XSLT 3.0, XPath 2.0 and 3.1, and XQuery 3.1";
+  };
 }

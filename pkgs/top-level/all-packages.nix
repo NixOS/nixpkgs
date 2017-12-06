@@ -11327,7 +11327,8 @@ with pkgs;
   inherit (callPackages ../development/libraries/java/saxon { })
     saxon
     saxonb_8_8
-    saxonb_9_1;
+    saxonb_9_1
+    saxon-he;
 
   smack = callPackage ../development/libraries/java/smack { };
 
