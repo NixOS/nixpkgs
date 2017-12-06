@@ -12,4 +12,10 @@
         else if pkgs.stdenv.isArm || pkgs.stdenv.isAarch64 then "ttyAMA0"
         else throw "Unknown QEMU serial device for system '${pkgs.stdenv.system}'";
 
+  qemuBinary = qemuPkg: {
+    "i686-linux" = "${qemuPkg}/bin/qemu-kvm";
+    "x86_64-linux" = "${qemuPkg}/bin/qemu-kvm -cpu kvm64";
+    "armv7l-linux" = "${qemuPkg}/bin/qemu-system-arm -enable-kvm -machine virt -cpu host";
+    "aarch64-linux" = "${qemuPkg}/bin/qemu-system-aarch64 -enable-kvm -machine virt,gic-version=host -cpu host";
+  }.${pkgs.stdenv.system} or (throw "Unknown QEMU binary for '${pkgs.stdenv.system}'");
 }

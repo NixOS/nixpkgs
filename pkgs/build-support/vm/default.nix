@@ -23,8 +23,6 @@ rec {
     patches = [ ../../../nixos/modules/virtualisation/azure-qemu-220-no-etc-install.patch ];
   });
 
-  qemuProg = "${qemu}/bin/qemu-kvm";
-
 
   modulesClosure = makeModulesClosure {
     inherit kernel rootModules;
@@ -204,8 +202,7 @@ rec {
 
 
   qemuCommandLinux = ''
-    ${qemuProg} \
-      ${lib.optionalString (pkgs.stdenv.system == "x86_64-linux") "-cpu kvm64"} \
+    ${qemuBinary qemu} \
       -nographic -no-reboot \
       -device virtio-rng-pci \
       -virtfs local,path=${storeDir},security_model=none,mount_tag=store \
