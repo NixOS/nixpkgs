@@ -9,19 +9,15 @@ buildPythonPackage rec {
     sha256 = "7f8ae7f5bdf75671a718d2daf0a64b7885f74510bcd98b1a0bb420eb9a9d0cff";
   };
 
-  # Circular dependency on pytest
-  #inherit doCheck;
-
   checkInputs = stdenv.lib.optionals doCheck [ pytest ];
 
   checkPhase = ''
-    rm tox.ini
     pytest testing/
   '';
 
   meta = with stdenv.lib; {
-    description = "Plugin and hook calling mechanisms for Python";
-    homepage = "https://pypi.python.org/pypi/pluggy";
+    description = "A minimalist production ready plugin system";
+    homepage = "https://pluggy.readthedocs.io/en/latest/";
     license = licenses.mit;
     maintainers = with maintainers; [ jgeerds ];
   };
