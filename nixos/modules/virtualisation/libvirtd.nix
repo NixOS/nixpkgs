@@ -37,20 +37,13 @@ in {
       '';
     };
 
-    virtualisation.libvirtd.enableKVM = mkOption {
-      type = types.bool;
-      default = true;
-      description = ''
-        This option disables support for non-KVM guests in libvirtd (e.g. aarch64 on x86).
-        KVM is available even if this setting is false.
-      '';
-    };
-
     virtualisation.libvirtd.qemuPackage = mkOption {
       type = types.package;
-      default = if cfg.enableKVM then pkgs.qemu_kvm else pkgs.qemu;
+      default = pkgs.qemu;
       description = ''
-        Qemu package to use with libvirt
+        Qemu package to use with libvirt.
+        `pkgs.qemu` can emulate alien architectures (e.g. aarch64 on x86)
+        `pkgs.qemu_kvm` saves disk space allowing to emulate only host architectures.
       '';
     };
 
