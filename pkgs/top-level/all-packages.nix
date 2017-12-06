@@ -3486,6 +3486,8 @@ with pkgs;
 
   mycli = callPackage ../tools/admin/mycli { };
 
+  mydumper = callPackage ../tools/backup/mydumper { };
+
   mysql2pgsql = callPackage ../tools/misc/mysql2pgsql { };
 
   mysqltuner = callPackage ../tools/misc/mysqltuner { };
