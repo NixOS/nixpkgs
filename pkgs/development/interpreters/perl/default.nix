@@ -34,6 +34,11 @@ let
     patches =
       [ # Do not look in /usr etc. for dependencies.
         ./no-sys-dirs.patch
+        # Fix parallel building: https://rt.perl.org/Public/Bug/Display.html?id=132360
+        (fetchurlBoot {
+          url = "https://rt.perl.org/Public/Ticket/Attachment/1502646/807252/0001-Fix-missing-build-dependency-for-pods.patch";
+          sha256 = "1bb4mldfp8kq1scv480wm64n2jdsqa3ar46cjp1mjpby8h5dr2r0";
+        })
       ]
       ++ optional stdenv.isSunOS ./ld-shared.patch
       ++ optional stdenv.isDarwin ./cpp-precomp.patch
