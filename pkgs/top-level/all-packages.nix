@@ -1189,6 +1189,8 @@ with pkgs;
 
   nfdump = callPackage ../tools/networking/nfdump { };
 
+  onboard = callPackage ../applications/misc/onboard { };
+
   patdiff = callPackage ../tools/misc/patdiff { };
 
   playerctl = callPackage ../tools/audio/playerctl { };
