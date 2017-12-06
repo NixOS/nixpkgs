@@ -2,12 +2,12 @@
 , libxslt, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  version = "0.4.6";
+  version = "0.4.7.1_2017-09-03";
   name = "freeorion-${version}";
 
   src = fetchurl {
-    url = "https://github.com/freeorion/freeorion/releases/download/v0.4.6/FreeOrion_v0.4.6_2016-09-16.49f9123_Source.tar.gz";
-    sha256 = "04g3x1cymf7mnmc2f5mm3c2r5izjmy7z3pvk2ykzz8f8b2kz6gry";
+    url = "https://github.com/freeorion/freeorion/releases/download/v0.4.7.1/FreeOrion_v0.4.7.1_2017-09-03.139ffd9_Source.tar.gz";
+    sha256 = "0cd11yd93x4mybxhl0mwxpc3a65d8n8l6n53jldk4ilf64iy3b0m";
   };
 
   buildInputs = [ cmake boost SDL2 python2 freetype openal libogg libvorbis zlib libpng libtiff libjpeg mesa glew doxygen makeWrapper ];
