@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   name = "cla-theme-${version}";
-  version = "43.05-v23";
+  version = "44.01-v24";
 
   src = fetchFromGitHub {
     owner = "DFgraphics";
     repo = "CLA";
     rev = version;
-    sha256 = "1i74lyz7mpfrvh5g7rajxldhw7zddc2kp8f6bgfr3hl5l8ym5ci9";
+    sha256 = "1lyazrls2vr8z58vfk5nvaffyv048j5xkr4wjvp6vrqxxvrxyrfd";
   };
 
   installPhase = ''
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     cp -r data raw $out
   '';
 
-  passthru.dfVersion = "0.43.05";
+  passthru.dfVersion = "0.44.02";
 
   preferLocalBuild = true;
 
