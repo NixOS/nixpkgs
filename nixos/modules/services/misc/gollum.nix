@@ -104,7 +104,7 @@ in
             --ref ${cfg.branch} \
             ${optionalString cfg.mathjax "--mathjax"} \
             ${optionalString cfg.emoji "--emoji"} \
-            ${if cfg.enableUploads != null then "--enable-uploads ${cfg.enableUploads}" else ""} \
+            ${if cfg.allowUploads != null then "--allow-uploads ${cfg.allowUploads}" else ""} \
             ${cfg.stateDir}
         '';
       };
