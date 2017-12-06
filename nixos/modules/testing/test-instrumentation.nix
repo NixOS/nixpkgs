@@ -128,7 +128,7 @@ in
     # Make it easy to log in as root when running the test interactively.
     users.extraUsers.root.initialHashedPassword = mkOverride 150 "";
 
-    services.xserver.displayManager.logToJournal = true;
+    services.xserver.displayManager.job.logToJournal = true;
   };
 
 }
