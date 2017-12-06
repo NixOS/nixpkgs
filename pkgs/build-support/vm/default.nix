@@ -8,6 +8,7 @@
 }:
 
 with pkgs;
+with import ../../../nixos/lib/qemu-flags.nix { inherit pkgs; };
 
 rec {
 
@@ -197,7 +198,7 @@ rec {
       export PATH=/bin:/usr/bin:${coreutils}/bin
       echo "Starting interactive shell..."
       echo "(To run the original builder: \$origBuilder \$origArgs)"
-      exec ${busybox}/bin/setsid ${bashInteractive}/bin/bash < /dev/ttyS0 &> /dev/ttyS0
+      exec ${busybox}/bin/setsid ${bashInteractive}/bin/bash < /dev/${qemuSerialDevice} &> /dev/${qemuSerialDevice}
     fi
   '';
 
@@ -212,7 +213,7 @@ rec {
       ''${diskImage:+-drive file=$diskImage,if=virtio,cache=unsafe,werror=report} \
       -kernel ${kernel}/${img} \
       -initrd ${initrd}/initrd \
-      -append "console=ttyS0 panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk loglevel=4" \
+      -append "console=${qemuSerialDevice} panic=1 command=${stage2Init} out=$out mountDisk=$mountDisk loglevel=4" \
       $QEMU_OPTS
   '';
 
