@@ -41,7 +41,16 @@ in {
       type = types.bool;
       default = true;
       description = ''
-        This option enables support for QEMU/KVM in libvirtd.
+        This option disables support for non-KVM guests in libvirtd (e.g. aarch64 on x86).
+        KVM is available even if this setting is false.
+      '';
+    };
+
+    virtualisation.libvirtd.qemuPackage = mkOption {
+      type = types.package;
+      default = if cfg.enableKVM then pkgs.qemu_kvm else pkgs.qemu;
+      description = ''
+        Qemu package to use with libvirt
       '';
     };
 
@@ -102,7 +111,7 @@ in {
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = with pkgs; [ libvirt netcat-openbsd qemu_kvm ];
+    environment.systemPackages = with pkgs; [ libvirt netcat-openbsd cfg.qemuPackage ];
 
     boot.kernelModules = [ "tun" ];
 
@@ -154,9 +163,9 @@ in {
 
         # stable (not GC'able as in /nix/store) paths for using in <emulator> section of xml configs
         mkdir -p /run/libvirt/nix-emulators
-        ln -s --force ${pkgs.libvirt}/libexec/libvirt_lxc /run/libvirt/nix-emulators/
-        ${optionalString pkgs.stdenv.isAarch64 "ln -s --force ${pkgs.qemu}/bin/qemu-system-aarch64 /run/libvirt/nix-emulators/"}
-        ${optionalString cfg.enableKVM         "ln -s --force ${pkgs.qemu_kvm}/bin/qemu-kvm        /run/libvirt/nix-emulators/"}
+        for emulator in ${pkgs.libvirt}/libexec/libvirt_lxc ${cfg.qemuPackage}/bin/qemu-kvm ${cfg.qemuPackage}/bin/qemu-system-*; do
+          ln -s --force "$emulator" /run/libvirt/nix-emulators/
+        done
 
         ${optionalString cfg.qemuOvmf ''
             mkdir -p /run/libvirt/nix-ovmf
