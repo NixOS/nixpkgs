@@ -3594,6 +3594,8 @@ in {
     };
   };
 
+  pluggy = callPackage ../development/python-modules/pluggy { };
+
   pytest = self.pytest_32;
 
   pytest_27 = callPackage ../development/python-modules/pytest/2_7.nix {};
@@ -23088,23 +23090,6 @@ EOF
       homepage = "http://python-otr.pentabarf.de/";
       license = licenses.lgpl3Plus;
       maintainers = with maintainers; [ globin ];
-    };
-  };
-
-  pluggy = buildPythonPackage rec {
-    name = "pluggy-${version}";
-    version = "0.3.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pluggy/${name}.tar.gz";
-      sha256 = "18qfzfm40bgx672lkg8q9x5hdh76n7vax99aank7vh2nw21wg70m";
-    };
-
-    meta = {
-      description = "Plugin and hook calling mechanisms for Python";
-      homepage = "https://pypi.python.org/pypi/pluggy";
-      license = licenses.mit;
-      maintainers = with maintainers; [ jgeerds ];
     };
   };
 
