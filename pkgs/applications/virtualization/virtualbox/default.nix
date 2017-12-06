@@ -88,8 +88,13 @@ in stdenv.mkDerivation {
     set +x
   '';
 
-  patches = optional enableHardening ./hardened.patch
-    ++ [ ./qtx11extras.patch ];
+  patches =
+     optional enableHardening ./hardened.patch
+     # https://www.virtualbox.org/pipermail/vbox-dev/2017-December/014888.html
+  ++ optional headless [ ./HostServices-SharedClipboard-x11-stub.cpp-use-RT_NOR.patch ]
+  ++ [ ./qtx11extras.patch ];
+
+
 
   postPatch = ''
     sed -i -e 's|/sbin/ifconfig|${nettools}/bin/ifconfig|' \
