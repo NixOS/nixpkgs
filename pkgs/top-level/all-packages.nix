@@ -17919,9 +17919,7 @@ with pkgs;
 
   freedink = callPackage ../games/freedink { };
 
-  freeorion = callPackage ../games/freeorion {
-    boost = boost160;
-  };
+  freeorion = callPackage ../games/freeorion { };
 
   freesweep = callPackage ../games/freesweep { };
 
