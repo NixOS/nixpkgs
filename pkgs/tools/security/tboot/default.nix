@@ -31,6 +31,6 @@ stdenv.mkDerivation rec {
     homepage    = http://sourceforge.net/projects/tboot/;
     license     = licenses.bsd3;
     maintainers = with maintainers; [ ak ];
-    platforms   = platforms.linux;
+    platforms   = [ "x86_64-linux" "i686-linux" ];
   };
 }
