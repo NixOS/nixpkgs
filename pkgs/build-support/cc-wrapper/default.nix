@@ -31,7 +31,8 @@ let
   #
   # TODO(@Ericson2314) Make unconditional, or optional but always true by
   # default.
-  targetPrefix = targetPlatform.config + "-";
+  targetPrefix = stdenv.lib.optionalString (targetPlatform != hostPlatform)
+                                           (targetPlatform.config + "-");
 
   ccVersion = (builtins.parseDrvName cc.name).version;
   ccName = (builtins.parseDrvName cc.name).name;
@@ -142,74 +143,62 @@ stdenv.mkDerivation {
         ln -s "$bbin" "$out/bin/$(basename $bbin)"
       done
 
-      for prefix in "" "${targetPrefix}"; do
-          # We export environment variables pointing to the wrapped nonstandard
-          # cmds, lest some lousy configure script use those to guess compiler
-          # version.
-          export named_cc=''${prefix}cc
-          export named_cxx=''${prefix}c++
+      # We export environment variables pointing to the wrapped nonstandard
+      # cmds, lest some lousy configure script use those to guess compiler
+      # version.
+      export named_cc=${targetPrefix}cc
+      export named_cxx=${targetPrefix}c++
 
-          export default_cxx_stdlib_compile="${default_cxx_stdlib_compile}"
+      export default_cxx_stdlib_compile="${default_cxx_stdlib_compile}"
 
-          if [ -e $ccPath/''${prefix}gcc ]; then
-            wrap ''${prefix}gcc ${./cc-wrapper.sh} $ccPath/''${prefix}gcc
-            ln -s ''${prefix}gcc $out/bin/''${prefix}cc
-            export named_cc=''${prefix}gcc
-            export named_cxx=''${prefix}g++
-          # bootstrapping compilers may not have a prefix; accept this and use
-          # them to produce prefixed wrappers
-          elif [ -e $ccPath/gcc ]; then
-            wrap ''${prefix}gcc ${./cc-wrapper.sh} $ccPath/gcc
-            ln -s gcc $out/bin/''${prefix}cc
-            export named_cc=gcc
-            export named_cxx=g++
-          elif [ -e $ccPath/clang ]; then
-            wrap ''${prefix}clang ${./cc-wrapper.sh} $ccPath/clang
-            ln -s ''${prefix}clang $out/bin/''${prefix}cc
-            export named_cc=''${prefix}clang
-            export named_cxx=''${prefix}clang++
-          fi
+      if [ -e $ccPath/${targetPrefix}gcc ]; then
+        wrap ${targetPrefix}gcc ${./cc-wrapper.sh} $ccPath/${targetPrefix}gcc
+        ln -s ${targetPrefix}gcc $out/bin/${targetPrefix}cc
+        export named_cc=${targetPrefix}gcc
+        export named_cxx=${targetPrefix}g++
+      elif [ -e $ccPath/clang ]; then
+        wrap ${targetPrefix}clang ${./cc-wrapper.sh} $ccPath/clang
+        ln -s ${targetPrefix}clang $out/bin/${targetPrefix}cc
+        export named_cc=${targetPrefix}clang
+        export named_cxx=${targetPrefix}clang++
+      fi
 
-          if [ -e $ccPath/''${prefix}g++ ]; then
-            wrap ''${prefix}g++ ${./cc-wrapper.sh} $ccPath/''${prefix}g++
-            ln -s ''${prefix}g++ $out/bin/''${prefix}c++
-          elif [ -e $ccPath/clang++ ]; then
-            wrap ''${prefix}clang++ ${./cc-wrapper.sh} $ccPath/clang++
-            ln -s ''${prefix}clang++ $out/bin/''${prefix}c++
-          fi
+      if [ -e $ccPath/${targetPrefix}g++ ]; then
+        wrap ${targetPrefix}g++ ${./cc-wrapper.sh} $ccPath/${targetPrefix}g++
+        ln -s ${targetPrefix}g++ $out/bin/${targetPrefix}c++
+      elif [ -e $ccPath/clang++ ]; then
+        wrap ${targetPrefix}clang++ ${./cc-wrapper.sh} $ccPath/clang++
+        ln -s ${targetPrefix}clang++ $out/bin/${targetPrefix}c++
+      fi
 
-          if [ -e $ccPath/cpp ]; then
-            wrap ''${prefix}cpp ${./cc-wrapper.sh} $ccPath/cpp
-          fi
-        ''
+      if [ -e $ccPath/cpp ]; then
+        wrap ${targetPrefix}cpp ${./cc-wrapper.sh} $ccPath/cpp
+      fi
+    ''
 
-        + optionalString cc.langFortran or false ''
-          wrap ''${prefix}gfortran ${./cc-wrapper.sh} $ccPath/''${prefix}gfortran
-          ln -sv ''${prefix}gfortran $out/bin/''${prefix}g77
-          ln -sv ''${prefix}gfortran $out/bin/''${prefix}f77
-        ''
+    + optionalString cc.langFortran or false ''
+      wrap ${targetPrefix}gfortran ${./cc-wrapper.sh} $ccPath/${targetPrefix}gfortran
+      ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}g77
+      ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}f77
+    ''
 
-        + optionalString cc.langJava or false ''
-          wrap ''${prefix}gcj ${./cc-wrapper.sh} $ccPath/''${prefix}gcj
-        ''
+    + optionalString cc.langJava or false ''
+      wrap ${targetPrefix}gcj ${./cc-wrapper.sh} $ccPath/${targetPrefix}gcj
+    ''
 
-        + optionalString cc.langGo or false ''
-          wrap ''${prefix}gccgo ${./cc-wrapper.sh} $ccPath/''${prefix}gccgo
-        ''
+    + optionalString cc.langGo or false ''
+      wrap ${targetPrefix}gccgo ${./cc-wrapper.sh} $ccPath/${targetPrefix}gccgo
+    ''
 
-        + optionalString cc.langAda or false ''
-          wrap ''${prefix}gnatgcc ${./cc-wrapper.sh} $ccPath/''${prefix}gnatgcc
-          wrap ''${prefix}gnatmake ${./gnat-wrapper.sh} $ccPath/''${prefix}gnatmake
-          wrap ''${prefix}gnatbind ${./gnat-wrapper.sh} $ccPath/''${prefix}gnatbind
-          wrap ''${prefix}gnatlink ${./gnatlink-wrapper.sh} $ccPath/''${prefix}gnatlink
-        ''
+    + optionalString cc.langAda or false ''
+      wrap ${targetPrefix}gnatgcc ${./cc-wrapper.sh} $ccPath/${targetPrefix}gnatgcc
+      wrap ${targetPrefix}gnatmake ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatmake
+      wrap ${targetPrefix}gnatbind ${./gnat-wrapper.sh} $ccPath/${targetPrefix}gnatbind
+      wrap ${targetPrefix}gnatlink ${./gnatlink-wrapper.sh} $ccPath/${targetPrefix}gnatlink
+    ''
 
-        + optionalString cc.langVhdl or false ''
-          ln -s $ccPath/''${prefix}ghdl $out/bin/''${prefix}ghdl
-        ''
-
-        + ''
-      done
+    + optionalString cc.langVhdl or false ''
+      ln -s $ccPath/${targetPrefix}ghdl $out/bin/${targetPrefix}ghdl
     '';
 
   propagatedBuildInputs = [ bintools ];
