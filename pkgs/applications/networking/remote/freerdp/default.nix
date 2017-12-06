@@ -13,14 +13,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "freerdp-git-${version}";
-  version = "20170724";
+  name = "freerdp-${version}";
+  version = "2.0.0-rc1";
 
   src = fetchFromGitHub {
     owner  = "FreeRDP";
     repo   = "FreeRDP";
-    rev    = "2.0.0-rc0";
-    sha256 = "0ngwdy0lfv2k59z1z8yq1wj5zbhqigpyfqbgh38m9p35yzh33lv1";
+    rev    = version;
+    sha256 = "0m28n3mq3ax0j6j3ai4pnlx3shg2ap0md0bxlqkhfv6civ9r11nn";
   };
 
   # outputs = [ "bin" "out" "dev" ];
@@ -45,6 +45,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake pkgconfig
   ];
+
+  enableParallelBuilding = true;
 
   doCheck = false;
 

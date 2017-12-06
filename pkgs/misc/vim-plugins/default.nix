@@ -820,12 +820,34 @@ rec {
 
   };
 
+  vim-codefmt = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-codefmt-2017-03-04";
+    src = fetchgit {
+      url = "https://github.com/google/vim-codefmt";
+      rev = "8bae55b45c3f030845ab636d6860cef4071915d1";
+      sha256 = "0wg0fplpwsgkbycjx1ryl29afbfzfsdv0j7xisjik26m9q8shn1k";
+    };
+    dependencies = ["maktaba"];
+
+  };
+
   vim-jsonnet = buildVimPluginFrom2Nix { # created by nix#NixDerivation
     name = "vim-jsonnet-2017-04-06";
     src = fetchgit {
       url = "https://github.com/google/vim-jsonnet";
       rev = "2637e273713322befc476760809d46500e6088f3";
       sha256 = "0fxmqasznb3ra49r4j3fmksik7narnd3b6j1j4najp4l61x27ip2";
+    };
+    dependencies = [];
+
+  };
+
+  vim-maktaba = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-maktaba-2017-05-07";
+    src = fetchgit {
+      url = "https://github.com/google/vim-maktaba";
+      rev = "2ae8b4478ea9bc2c6c8106acb55ddfb935754fb9";
+      sha256 = "1w8paqn0qyk4j5wfx48rc2za7kzhgdaggikklmjr1vsv2y0b8fzc";
     };
     dependencies = [];
 

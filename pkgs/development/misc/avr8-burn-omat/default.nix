@@ -5,7 +5,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = http://avr8-burn-o-mat.aaabbb.de/AVR8_Burn-O-Mat_2_1_2.zip;
-    sha256 = "1sik243xqx7kbdddcq3va8h8q2wijf9ffhgp752hx725x3pjh9ss";
+    sha256 = "02k0fd0cd3y1yqip36wr3bkxbywp8913w4y7jdg6qwqxjnii58ln";
   };
 
   buildInputs = [ unzip ];

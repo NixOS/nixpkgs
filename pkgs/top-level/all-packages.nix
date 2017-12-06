@@ -855,6 +855,7 @@ with pkgs;
   traefik = callPackage ../servers/traefik { };
 
   capstone = callPackage ../development/libraries/capstone { };
+  unicorn-emu = callPackage ../development/libraries/unicorn-emu { };
 
   cataract          = callPackage ../applications/misc/cataract { };
   cataract-unstable = callPackage ../applications/misc/cataract/unstable.nix { };
@@ -5530,6 +5531,8 @@ with pkgs;
 
   devpi-client = callPackage ../development/tools/devpi-client {};
 
+  devpi-server = callPackage ../development/tools/devpi-server {};
+
   dotty = callPackage ../development/compilers/scala/dotty.nix { jre = jre8;};
 
   drumstick = callPackage ../development/libraries/drumstick { };
@@ -5948,7 +5951,6 @@ with pkgs;
           overrides = self: super: {
             binary = lib.dontCheck self.binary_0_8_5_1;
             cheapskate = self.cheapskate_0_1_1;
-            idris = self.idris_1_1_1;
             parsers = lib.dontCheck super.parsers;
             semigroupoids = lib.dontCheck super.semigroupoids;
             trifecta = lib.dontCheck super.trifecta;
@@ -6056,7 +6058,8 @@ with pkgs;
   supportsJDK =
     system == "i686-linux" ||
     system == "x86_64-linux" ||
-    system == "armv7l-linux";
+    system == "armv7l-linux" ||
+    system == "aarch64-linux";
 
   jdkdistro = oraclejdk8distro;
 
@@ -8911,6 +8914,8 @@ with pkgs;
   libaal = callPackage ../development/libraries/libaal { };
 
   libaccounts-glib = callPackage ../development/libraries/libaccounts-glib { };
+
+  libacr38u = callPackage ../tools/security/libacr38u { };
 
   libagar = callPackage ../development/libraries/libagar { };
   libagar_test = callPackage ../development/libraries/libagar/libagar_test.nix { };
@@ -14243,6 +14248,8 @@ with pkgs;
 
   dd-agent = callPackage ../tools/networking/dd-agent { };
 
+  ddgr = callPackage ../applications/misc/ddgr { };
+
   deadbeef = callPackage ../applications/audio/deadbeef {
     pulseSupport = config.pulseaudio or true;
   };
@@ -15548,7 +15555,7 @@ with pkgs;
   libreoffice-fresh = lowPrio (callPackage ../applications/office/libreoffice {
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome2) GConf ORBit2 gnome_vfs;
-    inherit (gnome3) gsettings_desktop_schemas defaultIconTheme;
+    inherit (gnome3) defaultIconTheme;
     zip = zip.override { enableNLS = false; };
     bluez5 = bluez5_28;
     fontsConf = makeFontsConf {
@@ -15568,7 +15575,7 @@ with pkgs;
   libreoffice-still = lowPrio (callPackage ../applications/office/libreoffice/still.nix {
     inherit (perlPackages) ArchiveZip CompressZlib;
     inherit (gnome2) GConf ORBit2 gnome_vfs;
-    inherit (gnome3) gsettings_desktop_schemas defaultIconTheme;
+    inherit (gnome3) defaultIconTheme;
     zip = zip.override { enableNLS = false; };
     #glm = glm_0954;
     bluez5 = bluez5_28;

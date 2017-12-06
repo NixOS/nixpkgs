@@ -13,11 +13,11 @@ in stdenv.mkDerivation {
 
   buildInputs = [ cmake ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = "https://gitlab.com/interception/linux/plugins/caps2esc";
     description = "Transforming the most useless key ever into the most useful one";
-    license = stdenv.lib.licenses.mit;
-    maintainers = stdenv.lib.maintainers.vyp;
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = [ maintainers.vyp ];
+    platforms = platforms.linux;
   };
 }

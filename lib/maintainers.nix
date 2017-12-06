@@ -80,6 +80,7 @@
   benley = "Benjamin Staffin <benley@gmail.com>";
   bennofs = "Benno Fünfstück <benno.fuenfstueck@gmail.com>";
   benwbooth = "Ben Booth <benwbooth@gmail.com>";
+  berce = "Bert Moens <bert.moens@gmail.com>";
   berdario = "Dario Bertini <berdario@gmail.com>";
   bergey = "Daniel Bergey <bergey@teallabs.org>";
   bhipple = "Benjamin Hipple <bhipple@protonmail.com>";

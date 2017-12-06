@@ -41,7 +41,7 @@ self: super: {
 
   # cabal-install needs Cabal 2.x. hackage-security's test suite does not compile with
   # Cabal 2.x, though. See https://github.com/haskell/hackage-security/issues/188.
-  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_0_1_0; });
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_0_1_1; });
   hackage-security = dontCheck super.hackage-security;
 
   # Link statically to avoid runtime dependency on GHC.
@@ -730,13 +730,8 @@ self: super: {
     '';
   });
 
-  # test suite cannot find its own "idris" binary
+  # The standard libraries are compiled separately
   idris = doJailbreak (dontCheck super.idris);
-
-  idris_1_1_1 = overrideCabal (doJailbreak (dontCheck super.idris_1_1_1)) (drv: {
-    # The standard libraries are compiled separately
-    configureFlags = (drv.configureFlags or []) ++ [ "-fexeconly" ];
-  });
 
   # https://github.com/bos/math-functions/issues/25
   math-functions = dontCheck super.math-functions;
