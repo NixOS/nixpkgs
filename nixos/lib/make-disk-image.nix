@@ -150,8 +150,6 @@ in pkgs.vmTools.runInLinuxVM (
     }
     ''
       ${if partitioned then ''
-        . /sys/class/block/vda1/uevent
-        mknod /dev/vda1 b $MAJOR $MINOR
         rootDisk=/dev/vda1
       '' else ''
         rootDisk=/dev/vda
