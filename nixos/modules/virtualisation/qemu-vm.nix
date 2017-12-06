@@ -18,7 +18,7 @@ let
     "i686-linux" = "${qemu}/bin/qemu-kvm";
     "x86_64-linux" = "${qemu}/bin/qemu-kvm -cpu kvm64";
     "armv7l-linux" = "${qemu}/bin/qemu-system-arm -enable-kvm -machine virt -cpu host";
-    "aarch64-linux" = "${qemu}/bin/qemu-system-aarch64 -enable-kvm -machine virt -cpu host";
+    "aarch64-linux" = "${qemu}/bin/qemu-system-aarch64 -enable-kvm -machine virt,gic-version=host -cpu host";
   }.${pkgs.stdenv.system};
 
   # FIXME: figure out a common place for this instead of copy pasting

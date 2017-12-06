@@ -239,6 +239,7 @@
   ./services/hardware/tlp.nix
   ./services/hardware/thinkfan.nix
   ./services/hardware/trezord.nix
+  ./services/hardware/u2f.nix
   ./services/hardware/udev.nix
   ./services/hardware/udisks2.nix
   ./services/hardware/upower.nix

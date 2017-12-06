@@ -1189,6 +1189,8 @@ with pkgs;
 
   nfdump = callPackage ../tools/networking/nfdump { };
 
+  onboard = callPackage ../applications/misc/onboard { };
+
   patdiff = callPackage ../tools/misc/patdiff { };
 
   playerctl = callPackage ../tools/audio/playerctl { };
@@ -4493,7 +4495,10 @@ with pkgs;
 
   sshguard = callPackage ../tools/security/sshguard {};
 
-  softhsm = callPackage ../tools/security/softhsm { };
+  softhsm = callPackage ../tools/security/softhsm {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   solr = callPackage ../servers/search/solr { };
 
@@ -14694,6 +14699,8 @@ with pkgs;
 
   ganttproject-bin = callPackage ../applications/misc/ganttproject-bin { };
 
+  gcal = callPackage ../applications/misc/gcal { };
+
   geany = callPackage ../applications/editors/geany { };
   geany-with-vte = callPackage ../applications/editors/geany/with-vte.nix { };
 
@@ -17914,9 +17921,7 @@ with pkgs;
 
   freedink = callPackage ../games/freedink { };
 
-  freeorion = callPackage ../games/freeorion {
-    boost = boost160;
-  };
+  freeorion = callPackage ../games/freeorion { };
 
   freesweep = callPackage ../games/freesweep { };
 

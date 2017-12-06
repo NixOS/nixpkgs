@@ -76,7 +76,7 @@ stdenv.mkDerivation {
     ${if cross != null then stdenv.lib.attrByPath [ "uclibc" "extraConfig" ] "" cross else ""}
     $extraCrossConfig
     EOF
-    make oldconfig
+    yes "" | make oldconfig
   '';
 
   hardeningDisable = [ "stackprotector" ];
@@ -88,7 +88,9 @@ stdenv.mkDerivation {
 
   buildInputs = stdenv.lib.optional (gccCross != null) gccCross;
 
-  enableParallelBuilding = true;
+  # `make libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrwlock.h`:
+  # error: bits/sysnum.h: No such file or directory
+  enableParallelBuilding = false;
 
   installPhase = ''
     mkdir -p $out

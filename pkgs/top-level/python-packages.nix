@@ -230,6 +230,8 @@ in {
 
   intelhex = callPackage ../development/python-modules/intelhex { };
 
+  lmtpd = callPackage ../development/python-modules/lmtpd { };
+
   mpi4py = callPackage ../development/python-modules/mpi4py {
     mpi = pkgs.openmpi;
   };
@@ -343,6 +345,8 @@ in {
   pyzufall = callPackage ../development/python-modules/pyzufall { };
 
   rhpl = disabledIf isPy3k (callPackage ../development/python-modules/rhpl {});
+
+  salmon = callPackage ../development/python-modules/salmon { };
 
   simpleeval = callPackage ../development/python-modules/simpleeval { };
 
@@ -3589,6 +3593,8 @@ in {
       platforms   = platforms.all;
     };
   };
+
+  pluggy = callPackage ../development/python-modules/pluggy { };
 
   pytest = self.pytest_32;
 
@@ -23084,23 +23090,6 @@ EOF
       homepage = "http://python-otr.pentabarf.de/";
       license = licenses.lgpl3Plus;
       maintainers = with maintainers; [ globin ];
-    };
-  };
-
-  pluggy = buildPythonPackage rec {
-    name = "pluggy-${version}";
-    version = "0.3.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pluggy/${name}.tar.gz";
-      sha256 = "18qfzfm40bgx672lkg8q9x5hdh76n7vax99aank7vh2nw21wg70m";
-    };
-
-    meta = {
-      description = "Plugin and hook calling mechanisms for Python";
-      homepage = "https://pypi.python.org/pypi/pluggy";
-      license = licenses.mit;
-      maintainers = with maintainers; [ jgeerds ];
     };
   };
 

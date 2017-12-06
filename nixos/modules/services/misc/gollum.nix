@@ -38,6 +38,18 @@ in
       description = "Enable support for math rendering using MathJax";
     };
 
+    allowUploads = mkOption {
+      type = types.nullOr (types.enum [ "dir" "page" ]);
+      default = null;
+      description = "Enable uploads of external files";
+    };
+
+    emoji = mkOption {
+      type = types.bool;
+      default = false;
+      description = "Parse and interpret emoji tags";
+    };
+
     branch = mkOption {
       type = types.str;
       default = "master";
@@ -91,6 +103,8 @@ in
             --config ${builtins.toFile "gollum-config.rb" cfg.extraConfig} \
             --ref ${cfg.branch} \
             ${optionalString cfg.mathjax "--mathjax"} \
+            ${optionalString cfg.emoji "--emoji"} \
+            ${optionalString (cfg.allowUploads != null) "--allow-uploads ${cfg.allowUploads}"} \
             ${cfg.stateDir}
         '';
       };
