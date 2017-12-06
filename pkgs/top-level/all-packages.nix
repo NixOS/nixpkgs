@@ -11322,9 +11322,12 @@ with pkgs;
 
   mockobjects = callPackage ../development/libraries/java/mockobjects { };
 
+  saxonb = saxonb_8_8;
+
   inherit (callPackages ../development/libraries/java/saxon { })
     saxon
-    saxonb;
+    saxonb_8_8
+    saxonb_9_1;
 
   smack = callPackage ../development/libraries/java/smack { };
 
