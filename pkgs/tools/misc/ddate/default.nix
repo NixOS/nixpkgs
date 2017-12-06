@@ -15,6 +15,6 @@ stdenv.mkDerivation {
     description = "Discordian version of the date program";
     license = stdenv.lib.licenses.publicDomain;
     maintainers = with stdenv.lib.maintainers; [kovirobi];
-    platforms = with stdenv.lib.platforms; linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
   };
 }
