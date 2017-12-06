@@ -401,6 +401,39 @@ let
     };
   };
 
+  php-parallel-lint = pkgs.stdenv.mkDerivation rec {
+    name = "php-parallel-lint-${version}";
+    version = "0.9.2";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "JakubOnderka";
+      repo = "PHP-Parallel-Lint";
+      rev = "v${version}";
+      sha256 = "0dzyi6arwpwbjgr366vw3qxibc3naq863p75q433ahznbdygzzm1";
+    };
+
+    buildInputs = [ pkgs.makeWrapper composer box ];
+
+    buildPhase = ''
+      composer dump-autoload
+      box build
+    '';
+
+    installPhase = ''
+      mkdir -p $out/bin
+      install -D parallel-lint.phar $out/libexec/php-parallel-lint/php-parallel-lint.phar
+      makeWrapper ${php}/bin/php $out/bin/php-parallel-lint \
+        --add-flags "$out/libexec/php-parallel-lint/php-parallel-lint.phar"
+    '';
+
+    meta = with pkgs.lib; {
+      description = "This tool check syntax of PHP files faster than serial check with fancier output";
+      license = licenses.bsd2;
+      homepage = https://github.com/JakubOnderka/PHP-Parallel-Lint;
+      maintainers = with maintainers; [ jtojnar ];
+    };
+  };
+
   phpcs = pkgs.stdenv.mkDerivation rec {
     name = "phpcs-${version}";
     version = "2.6.0";
