@@ -60,21 +60,6 @@ rec {
     ''; # */
 
 
-  createDeviceNodes = dev:
-    ''
-      mknod -m 666 ${dev}/null    c 1 3
-      mknod -m 666 ${dev}/zero    c 1 5
-      mknod -m 666 ${dev}/full    c 1 7
-      mknod -m 666 ${dev}/random  c 1 8
-      mknod -m 666 ${dev}/urandom c 1 9
-      mknod -m 666 ${dev}/tty     c 5 0
-      mknod -m 666 ${dev}/ttyS0   c 4 64
-      mknod ${dev}/rtc     c 254 0
-      . /sys/class/block/${hd}/uevent
-      mknod ${dev}/${hd} b $MAJOR $MINOR
-    '';
-
-
   stage1Init = writeScript "vm-run-stage1" ''
     #! ${initrdUtils}/bin/ash -e
 
@@ -109,8 +94,7 @@ rec {
       insmod $i
     done
 
-    mount -t tmpfs none /dev
-    ${createDeviceNodes "/dev"}
+    mount -t devtmpfs devtmpfs /dev
 
     ifconfig lo up
 
@@ -302,7 +286,6 @@ rec {
     touch /mnt/.debug
 
     mkdir /mnt/proc /mnt/dev /mnt/sys
-    ${createDeviceNodes "/mnt/dev"}
   '';
 
 
@@ -353,7 +336,6 @@ rec {
         ${kmod}/bin/modprobe iso9660
         ${kmod}/bin/modprobe ufs
         ${kmod}/bin/modprobe cramfs
-        mknod /dev/loop0 b 7 0
 
         mkdir -p $out
         mkdir -p tmp
@@ -377,8 +359,6 @@ rec {
         ${kmod}/bin/modprobe mtdblock
         ${kmod}/bin/modprobe jffs2
         ${kmod}/bin/modprobe zlib
-        mknod /dev/mtd0 c 90 0
-        mknod /dev/mtdblock0 b 31 0
 
         mkdir -p $out
         mkdir -p tmp
