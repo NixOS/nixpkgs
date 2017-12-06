@@ -230,6 +230,8 @@ in {
 
   intelhex = callPackage ../development/python-modules/intelhex { };
 
+  lmtpd = callPackage ../development/python-modules/lmtpd { };
+
   mpi4py = callPackage ../development/python-modules/mpi4py {
     mpi = pkgs.openmpi;
   };
@@ -343,6 +345,8 @@ in {
   pyzufall = callPackage ../development/python-modules/pyzufall { };
 
   rhpl = disabledIf isPy3k (callPackage ../development/python-modules/rhpl {});
+
+  salmon = callPackage ../development/python-modules/salmon { };
 
   simpleeval = callPackage ../development/python-modules/simpleeval { };
 
