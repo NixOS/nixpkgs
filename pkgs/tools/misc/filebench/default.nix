@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, autoreconfHook, bison, flex }:
 
 stdenv.mkDerivation rec {
   name = "filebench-${version}";
@@ -6,8 +6,10 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/filebench/${name}.tar.gz";
-    sha256 = "0y06f9mp4xry6j1jamqprzn963l0krqayv14yv66pm51hdh53ld1";
+    sha256 = "13hmx67lsz367sn8lrvz1780mfczlbiz8v80gig9kpkpf009yksc";
   };
+
+  nativeBuildInputs = [ autoreconfHook bison flex ];
 
   meta = with stdenv.lib; {
     description = "File system and storage benchmark that can generate both micro and macro workloads";

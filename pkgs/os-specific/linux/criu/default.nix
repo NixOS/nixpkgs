@@ -11,11 +11,13 @@ stdenv.mkDerivation rec {
     sha256 = "18m0sjgcfvzc86w49fd3kxw145nmrsvc5w7zf42nxdiklmszbr1k";
   };
 
+  patches = [ ./criu-2.12.1-glibc-2.26.patch ];
+
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig docbook_xsl ];
   buildInputs = [ protobuf protobufc asciidoc xmlto libpaper libnl libcap libnet python ];
 
-  patchPhase = ''
+  postPatch = ''
     chmod +w ./scripts/gen-offsets.sh
     substituteInPlace ./scripts/gen-offsets.sh --replace hexdump ${utillinux}/bin/hexdump
     substituteInPlace ./Documentation/Makefile --replace "2>/dev/null" ""

@@ -1,6 +1,6 @@
 { stdenv, hostPlatform, fetchFromGitHub, perl, buildLinux, ... } @ args:
 
-import ./generic.nix (args // rec {
+import ./generic.nix (rec {
   mptcpVersion = "0.93";
   modDirVersion = "4.9.60";
   version = "${modDirVersion}-mptcp_v${mptcpVersion}";
@@ -43,4 +43,4 @@ import ./generic.nix (args // rec {
     TCP_CONG_BALIA m
 
   '' + (args.extraConfig or "");
-} // (args.argsOverride or {}))
+} // args // (args.argsOverride or {}))

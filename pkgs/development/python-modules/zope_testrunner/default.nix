@@ -1,7 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, isPy3k
+, fetchpatch
 , zope_interface
 , zope_exceptions
 , zope_testing
@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "zope.testrunner";
-  version = "4.7.0";
-  name = "${pname}-${version}";
+  version = "4.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8ffcb4989829544a83d27e42b2eeb28f8fc134bd847d71ce8dca54f710526ef0";
-    extension = "zip";
+    sha256 = "039z9q5i1r6fqzlm224nmaxn896k4a9sb1237dv406ncdldd7jaz";
   };
+
+  patches = [ ./test-selection.patch ];
 
   propagatedBuildInputs = [ zope_interface zope_exceptions zope_testing six ];
 

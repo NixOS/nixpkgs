@@ -29,8 +29,8 @@ stdenv.mkDerivation rec {
   installFlags = [ "DESTDIR=$(out)" ];
 
   configureFlags = [
-    "--exec-prefix=${stdenv.cc.prefix}"
-    "CC=${stdenv.cc.prefix}cc"
+    "--exec-prefix=${stdenv.cc.targetPrefix}"
+    "CC=${stdenv.cc.targetPrefix}cc"
   ];
 
   meta = {

@@ -1,23 +1,34 @@
-{ stdenv, lib, fetchurl, python, cffi, cryptography, pyopenssl, crcmod, google-compute-engine, makeWrapper }:
+# Make sure that the "with-gce" flag is set when building `google-cloud-sdk`
+# for GCE hosts. This flag prevents "google-compute-engine" from being a
+# default dependency which is undesirable because this package is
+#
+#   1) available only on GNU/Linux (requires `systemd` in particular)
+#   2) intended only for GCE guests (and is useless elsewhere)
+#   3) used by `google-cloud-sdk` only on GCE guests
+#
 
-# other systems not supported yet
+{ stdenv, lib, fetchurl, makeWrapper, python, cffi, cryptography, pyopenssl,
+  crcmod, google-compute-engine, with-gce ? false }:
+
 let
-  pythonInputs = [ cffi cryptography pyopenssl crcmod google-compute-engine ];
+  pythonInputs = [ cffi cryptography pyopenssl crcmod ]
+                 ++ lib.optional (with-gce) google-compute-engine;
   pythonPath = lib.makeSearchPath python.sitePackages pythonInputs;
 
+  baseUrl = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads";
   sources = name: system: {
     i686-linux = {
-      url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-linux-x86.tar.gz";
+      url = "${baseUrl}/${name}-linux-x86.tar.gz";
       sha256 = "0aq938s1w9mzj60avmcc68kgll54pl7635vl2mi89f6r56n0xslp";
     };
 
     x86_64-darwin = {
-      url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-darwin-x86_64.tar.gz";
+      url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
       sha256 = "13k2i1svry9q800s1jgf8jss0rzfxwk6qci3hsy1wrb9b2mwlz5g";
     };
 
     x86_64-linux = {
-      url = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/${name}-linux-x86_64.tar.gz";
+      url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
       sha256 = "1kvaz8p1iflsi85wwi7lb6km6frj70xsricyz1ah0sw3q71zyqmc";
     };
   }.${system};

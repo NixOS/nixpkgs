@@ -31,6 +31,7 @@ assert withGtk3 -> gtk3 != null;
 
 let
   system-x86_64 = lib.elem stdenv.system lib.platforms.x86_64;
+  compareVersion = v: builtins.compareVersions version v;
 in
 
 stdenv.mkDerivation {
@@ -47,33 +48,36 @@ stdenv.mkDerivation {
 
       # Image formats
       libjpeg libpng libtiff
+      (if compareVersion "5.9.0" >= 0 then pcre2 else pcre16)
     ]
-    ++ (if builtins.compareVersions version "5.9.0" >= 0
-           then [ pcre2 ] else [ pcre16 ])
+    ++ (
+      if stdenv.isDarwin
+      then with darwin.apple_sdk.frameworks;
+        [
+          AGL AppKit ApplicationServices Carbon Cocoa CoreAudio CoreBluetooth
+          CoreLocation CoreServices DiskArbitration Foundation OpenGL
+          darwin.libobjc libiconv
+        ]
+      else
+        [
+          dbus glib udev
 
-    ++ lib.optional (mesaSupported && !stdenv.isDarwin) mesa
+          # Text rendering
+          fontconfig freetype
 
-    ++ lib.optionals (!stdenv.isDarwin) [
-      dbus glib udev
+          # X11 libs
+          libX11 libXcomposite libXext libXi libXrender libxcb libxkbcommon xcbutil
+          xcbutilimage xcbutilkeysyms xcbutilrenderutil xcbutilwm
+        ]
+        ++ lib.optional mesaSupported mesa
+    );
 
-      # Text rendering
-      fontconfig freetype
-
-      # X11 libs
-      libX11 libXcomposite libXext libXi libXrender libxcb libxkbcommon xcbutil
-      xcbutilimage xcbutilkeysyms xcbutilrenderutil xcbutilwm
-    ]
-
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-      AGL AppKit ApplicationServices Carbon Cocoa
-      CoreAudio CoreBluetooth CoreLocation CoreServices
-      DiskArbitration Foundation OpenGL
-      darwin.libobjc libiconv
-    ]);
-
-  buildInputs = [ ]
-    ++ lib.optional (!stdenv.isDarwin && withGtk3) gtk3
-    ++ lib.optional (!stdenv.isDarwin) libinput
+  buildInputs =
+    lib.optionals (!stdenv.isDarwin)
+    (
+      [ libinput ]
+      ++ lib.optional withGtk3 gtk3
+    )
     ++ lib.optional developerBuild gdb
     ++ lib.optional (cups != null) cups
     ++ lib.optional (mysql != null) mysql.lib
@@ -118,30 +122,35 @@ stdenv.mkDerivation {
       sed -i '/PATHS.*NO_DEFAULT_PATH/ d' mkspecs/features/data/cmake/Qt5BasicConfig.cmake.in
     ''
 
-    + lib.optionalString (mesaSupported && !stdenv.isDarwin) ''
-      sed -i mkspecs/common/linux.conf \
-          -e "/^QMAKE_INCDIR_OPENGL/ s|$|${mesa.dev or mesa}/include|" \
-          -e "/^QMAKE_LIBDIR_OPENGL/ s|$|${mesa.out}/lib|"
-    ''
-
-    + lib.optionalString stdenv.isDarwin ''
-      sed -i \
-          -e 's|! /usr/bin/xcode-select --print-path >/dev/null 2>&1;|false;|' \
-          -e 's|! /usr/bin/xcrun -find xcodebuild >/dev/null 2>&1;|false;|' \
-          -e 's|sysroot=$(/usr/bin/xcodebuild -sdk $sdk -version Path 2>/dev/null)|sysroot=/nonsense|' \
-          -e 's|sysroot=$(/usr/bin/xcrun --sdk $sdk --show-sdk-path 2>/dev/null)|sysroot=/nonsense|' \
-          -e 's|QMAKE_CONF_COMPILER=`getXQMakeConf QMAKE_CXX`|QMAKE_CXX="clang++"\nQMAKE_CONF_COMPILER="clang++"|' \
-          -e 's|XCRUN=`/usr/bin/xcrun -sdk macosx clang -v 2>&1`|XCRUN="clang -v 2>&1"|' \
-          -e 's#sdk_val=$(/usr/bin/xcrun -sdk $sdk -find $(echo $val | cut -d \x27 \x27 -f 1))##' \
-          -e 's#val=$(echo $sdk_val $(echo $val | cut -s -d \x27 \x27 -f 2-))##' \
-          ./configure
-          substituteInPlace ./mkspecs/common/mac.conf \
-              --replace "/System/Library/Frameworks/OpenGL.framework/" "${darwin.apple_sdk.frameworks.OpenGL}/Library/Frameworks/OpenGL.framework/"
-          substituteInPlace ./mkspecs/common/mac.conf \
-              --replace "/System/Library/Frameworks/AGL.framework/" "${darwin.apple_sdk.frameworks.AGL}/Library/Frameworks/AGL.framework/"
-     '';
-     # Note on the above: \x27 is a way if including a single-quote
-     # character in the sed string arguments.
+    + (
+      if stdenv.isDarwin
+      then
+        ''
+          sed -i \
+              -e 's|! /usr/bin/xcode-select --print-path >/dev/null 2>&1;|false;|' \
+              -e 's|! /usr/bin/xcrun -find xcodebuild >/dev/null 2>&1;|false;|' \
+              -e 's|sysroot=$(/usr/bin/xcodebuild -sdk $sdk -version Path 2>/dev/null)|sysroot=/nonsense|' \
+              -e 's|sysroot=$(/usr/bin/xcrun --sdk $sdk --show-sdk-path 2>/dev/null)|sysroot=/nonsense|' \
+              -e 's|QMAKE_CONF_COMPILER=`getXQMakeConf QMAKE_CXX`|QMAKE_CXX="clang++"\nQMAKE_CONF_COMPILER="clang++"|' \
+              -e 's|XCRUN=`/usr/bin/xcrun -sdk macosx clang -v 2>&1`|XCRUN="clang -v 2>&1"|' \
+              -e 's#sdk_val=$(/usr/bin/xcrun -sdk $sdk -find $(echo $val | cut -d \x27 \x27 -f 1))##' \
+              -e 's#val=$(echo $sdk_val $(echo $val | cut -s -d \x27 \x27 -f 2-))##' \
+              ./configure
+              substituteInPlace ./mkspecs/common/mac.conf \
+                  --replace "/System/Library/Frameworks/OpenGL.framework/" "${darwin.apple_sdk.frameworks.OpenGL}/Library/Frameworks/OpenGL.framework/"
+              substituteInPlace ./mkspecs/common/mac.conf \
+                  --replace "/System/Library/Frameworks/AGL.framework/" "${darwin.apple_sdk.frameworks.AGL}/Library/Frameworks/AGL.framework/"
+        ''
+        # Note on the above: \x27 is a way if including a single-quote
+        # character in the sed string arguments.
+      else
+        lib.optionalString mesaSupported
+          ''
+            sed -i mkspecs/common/linux.conf \
+                -e "/^QMAKE_INCDIR_OPENGL/ s|$|${mesa.dev or mesa}/include|" \
+                -e "/^QMAKE_LIBDIR_OPENGL/ s|$|${mesa.out}/lib|"
+          ''
+    );
 
   qtPluginPrefix = "lib/qt-${qtCompatVersion}/plugins";
   qtQmlPrefix = "lib/qt-${qtCompatVersion}/qml";
@@ -150,7 +159,7 @@ stdenv.mkDerivation {
   setOutputFlags = false;
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/lib:$PWD/plugins/platforms:$LD_LIBRARY_PATH"
-    ${lib.optionalString (builtins.compareVersions version "5.9.0" < 0) ''
+    ${lib.optionalString (compareVersion "5.9.0" < 0) ''
     # We need to set LD to CXX or otherwise we get nasty compile errors
     export LD=$CXX
     ''}
@@ -189,24 +198,25 @@ stdenv.mkDerivation {
       ''-DNIXPKGS_LIBXCURSOR="${libXcursor.out}/lib/libXcursor"''
     ]
 
-    ++ lib.optional (mesaSupported && !stdenv.isDarwin)
-       ''-DNIXPKGS_MESA_GL="${mesa.out}/lib/libGL"''
-
-    ++ lib.optionals (!stdenv.isDarwin && withGtk3)
-    [
-      ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
-      ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
-    ]
-
-    ++ lib.optionals stdenv.isDarwin
-    [
-      "-Wno-missing-sysroot"
-      "-D__MAC_OS_X_VERSION_MAX_ALLOWED=1090"
-      "-D__AVAILABILITY_INTERNAL__MAC_10_10=__attribute__((availability(macosx,introduced=10.10)))"
-      # Note that nixpkgs's objc4 is from macOS 10.11 while the SDK is
-      # 10.9 which necessitates the above macro definition that mentions
-      # 10.10
-    ]
+    ++ (
+      if stdenv.isDarwin
+      then
+        [
+          "-Wno-missing-sysroot"
+          "-D__MAC_OS_X_VERSION_MAX_ALLOWED=1090"
+          "-D__AVAILABILITY_INTERNAL__MAC_10_10=__attribute__((availability(macosx,introduced=10.10)))"
+          # Note that nixpkgs's objc4 is from macOS 10.11 while the SDK is
+          # 10.9 which necessitates the above macro definition that mentions
+          # 10.10
+        ]
+      else
+        lib.optional mesaSupported ''-DNIXPKGS_MESA_GL="${mesa.out}/lib/libGL"''
+        ++ lib.optionals withGtk3
+          [
+            ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
+            ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
+          ]
+    )
 
     ++ lib.optional decryptSslTraffic "-DQT_DECRYPT_SSL_TRAFFIC";
 
@@ -232,8 +242,15 @@ stdenv.mkDerivation {
       "-strip"
       "-system-proxies"
       "-pkg-config"
+
+      "-gui"
+      "-widgets"
+      "-opengl desktop"
+      "-qml-debug"
+      "-icu"
+      "-pch"
     ]
-    ++ lib.optionals (builtins.compareVersions version "5.9.0" < 0)
+    ++ lib.optionals (compareVersion "5.9.0" < 0)
     [
       "-c++11"
       "-no-reduce-relocations"
@@ -242,18 +259,11 @@ stdenv.mkDerivation {
       "-developer-build"
       "-no-warnings-are-errors"
     ]
-    ++ [
-      "-gui"
-      "-widgets"
-      "-opengl desktop"
-      "-qml-debug"
-      "-icu"
-      "-pch"
-    ]
-
-    ++ (if builtins.compareVersions version "5.9.0" >= 0
-           then [ (if system-x86_64 then "-sse2" else "-no-sse2") ]
-           else lib.optional (!system-x86_64) "-no-sse2")
+    ++ (
+      if (!system-x86_64)
+      then [ "-no-sse2" ]
+      else lib.optional (compareVersion "5.9.0" >= 0) [ "-sse2" ]
+    )
     ++ [
       "-no-sse3"
       "-no-ssse3"
@@ -277,46 +287,50 @@ stdenv.mkDerivation {
 
       "-make libs"
       "-make tools"
-      ''-${lib.optionalString (buildExamples == false) "no"}make examples''
-      ''-${lib.optionalString (buildTests == false) "no"}make tests''
+      ''-${lib.optionalString (!buildExamples) "no"}make examples''
+      ''-${lib.optionalString (!buildTests) "no"}make tests''
       "-v"
     ]
 
-    ++ lib.optionals (!stdenv.isDarwin) [
-      "-${lib.optionalString (builtins.compareVersions version "5.9.0" < 0) "no-"}rpath"
+    ++ (
+      if stdenv.isDarwin
+      then
+        [
+          "-platform macx-clang"
+          "-no-use-gold-linker"
+          "-no-fontconfig"
+          "-qt-freetype"
+          "-qt-libpng"
+        ]
+      else
+        [
+          "-${lib.optionalString (compareVersion "5.9.0" < 0) "no-"}rpath"
 
-      "-system-xcb"
-      "-xcb"
-      "-qpa xcb"
+          "-system-xcb"
+          "-xcb"
+          "-qpa xcb"
 
-      "-system-xkbcommon"
-      "-libinput"
-      "-xkbcommon-evdev"
+          "-system-xkbcommon"
+          "-libinput"
+          "-xkbcommon-evdev"
 
-      "-no-eglfs"
-      "-no-gbm"
-      "-no-kms"
-      "-no-linuxfb"
+          "-no-eglfs"
+          "-no-gbm"
+          "-no-kms"
+          "-no-linuxfb"
 
-      ''-${lib.optionalString (cups == null) "no-"}cups''
-      "-dbus-linked"
-      "-glib"
-      "-system-libjpeg"
-      "-system-libpng"
-      # gold linker of binutils 2.28 generates duplicate symbols
-      # TODO: remove for newer version of binutils 
-      "-no-use-gold-linker"
-    ]
-    ++ lib.optional withGtk3 "-gtk"
-    ++ lib.optional (builtins.compareVersions version "5.9.0" >= 0) "-inotify"
-
-    ++ lib.optionals stdenv.isDarwin [
-      "-platform macx-clang"
-      "-no-use-gold-linker"
-      "-no-fontconfig"
-      "-qt-freetype"
-      "-qt-libpng"
-    ];
+          ''-${lib.optionalString (cups == null) "no-"}cups''
+          "-dbus-linked"
+          "-glib"
+          "-system-libjpeg"
+          "-system-libpng"
+          # gold linker of binutils 2.28 generates duplicate symbols
+          # TODO: remove for newer version of binutils
+          "-no-use-gold-linker"
+        ]
+        ++ lib.optional withGtk3 "-gtk"
+        ++ lib.optional (compareVersion "5.9.0" >= 0) "-inotify"
+    );
 
   enableParallelBuilding = true;
 
@@ -360,27 +374,31 @@ stdenv.mkDerivation {
       moveToOutput bin "$dev"
     ''
 
-    # fixup .pc file (where to find 'moc' etc.)
-    + lib.optionalString (!stdenv.isDarwin) ''
-      sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \
-          -e "/^host_bins=/ c host_bins=$dev/bin"
-    ''
+    + (
+      if stdenv.isDarwin
+      then
+        ''
+          fixDarwinDylibNames_rpath() {
+            local flags=()
 
-    + lib.optionalString stdenv.isDarwin ''
-      fixDarwinDylibNames_rpath() {
-        local flags=()
+            for fn in "$@"; do
+              flags+=(-change "@rpath/$fn.framework/Versions/5/$fn" "$out/lib/$fn.framework/Versions/5/$fn")
+            done
 
-        for fn in "$@"; do
-          flags+=(-change "@rpath/$fn.framework/Versions/5/$fn" "$out/lib/$fn.framework/Versions/5/$fn")
-        done
-
-        for fn in "$@"; do
-          echo "$fn: fixing dylib"
-          install_name_tool -id "$out/lib/$fn.framework/Versions/5/$fn" "''${flags[@]}" "$out/lib/$fn.framework/Versions/5/$fn"
-        done
-      }
-      fixDarwinDylibNames_rpath "QtConcurrent" "QtPrintSupport" "QtCore" "QtSql" "QtDBus" "QtTest" "QtGui" "QtWidgets" "QtNetwork" "QtXml" "QtOpenGL"
-    '';
+            for fn in "$@"; do
+              echo "$fn: fixing dylib"
+              install_name_tool -id "$out/lib/$fn.framework/Versions/5/$fn" "''${flags[@]}" "$out/lib/$fn.framework/Versions/5/$fn"
+            done
+          }
+          fixDarwinDylibNames_rpath "QtConcurrent" "QtPrintSupport" "QtCore" "QtSql" "QtDBus" "QtTest" "QtGui" "QtWidgets" "QtNetwork" "QtXml" "QtOpenGL"
+        ''
+      else
+        # fixup .pc file (where to find 'moc' etc.)
+        ''
+          sed -i "$dev/lib/pkgconfig/Qt5Core.pc" \
+              -e "/^host_bins=/ c host_bins=$dev/bin"
+        ''
+    );
 
   setupHook = ../hooks/qtbase-setup-hook.sh;
 

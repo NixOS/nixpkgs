@@ -159,10 +159,10 @@ in {
     incompatibleKernelVersion = null;
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "2017-10-16";
+    version = "2017-11-16";
 
-    rev = "7670f721fc82e6cdcdd31f83760a79b6f2f2b998";
-    sha256 = "0ask9d9936s7mhs9q5wzvn6c8fd322i76hs2n7fajfk17b1a1lkj";
+    rev = "d4a72f23863382bdf6d0ae33196f5b5decbc48fd";
+    sha256 = "0q2gkkj11hy8m8cjd70g99bs69ldxvc17ym0x1pgwvs4722hzpha";
     isUnstable = true;
 
     extraPatches = [

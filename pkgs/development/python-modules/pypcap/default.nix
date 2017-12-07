@@ -1,14 +1,13 @@
-{ stdenv, lib, writeText, buildPythonPackage, fetchPypi, isPy3k, libpcap, dpkt }:
+{ stdenv, lib, writeText, buildPythonPackage, fetchPypi, libpcap, dpkt }:
 
 buildPythonPackage rec {
   pname = "pypcap";
-  version = "1.1.6";
+  version = "1.2.0";
   name = "${pname}-${version}";
-  disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1cx7qm0w2a91g5z8k3kmlwz0b8dkr0h8dlb64rwgyhp2laa33syi";
+    sha256 = "0n01xjgg8n5mf1cs9yg9ljsx1kvir8cm6wwrd2069fawjxdbk0b9";
   };
 
   patches = [
@@ -31,7 +30,8 @@ buildPythonPackage rec {
       '')
   ];
 
-  buildInputs = [ libpcap dpkt ];
+  buildInputs = [ libpcap ];
+  nativeBuildInputs = [ dpkt ];
 
   meta = {
     homepage = https://github.com/pynetwork/pypcap;

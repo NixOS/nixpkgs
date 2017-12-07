@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, perl, cmake, vala_0_23, pkgconfig, glib, gtk3, granite, gnome3, libnotify, gettext, makeWrapper }:
+{ stdenv, fetchurl, perl, cmake, vala_0_38, pkgconfig, glib, gtk3, granite, gnome3, libnotify, gettext, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  majorVersion = "0.3";
-  minorVersion = "1.3";
+  majorVersion = "0.4";
+  minorVersion = "3";
   name = "pantheon-terminal-${majorVersion}.${minorVersion}";
   src = fetchurl {
     url = "https://launchpad.net/pantheon-terminal/${majorVersion}.x/${majorVersion}.${minorVersion}/+download/${name}.tgz";
@@ -20,9 +20,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  nativeBuildInputs = [ perl cmake vala_0_38 pkgconfig makeWrapper ];
   buildInputs = with gnome3; [
-    perl cmake vala_0_23 pkgconfig glib gtk3 granite libnotify gettext makeWrapper
-    vte_290 libgee gsettings_desktop_schemas defaultIconTheme
+    glib gtk3 granite libnotify gettext vte_290 libgee
+    gsettings_desktop_schemas defaultIconTheme
   ];
   meta = {
     description = "Elementary OS's terminal";

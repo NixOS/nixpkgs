@@ -41,7 +41,7 @@ let
         type = types.bool;
         description = ''
           If set, users listed in
-          <filename>~/.yubico/u2f_keys</filename> are able to log in
+          <filename>~/.config/Yubico/u2f_keys</filename> are able to log in
           with the associated U2F key.
         '';
       };

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, python, libxml2Python, libxslt, which, libX11, gnome3, gtk3, glib
 , intltool, gnome_doc_utils, libxkbfile, xkeyboard_config, isocodes, itstool, wayland
-, gobjectIntrospection }:
+, libseccomp, gobjectIntrospection }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ python libxml2Python libxslt which libX11
                   xkeyboard_config isocodes itstool wayland
                   gtk3 glib intltool gnome_doc_utils libxkbfile
-                  gobjectIntrospection ];
+                   libseccomp gobjectIntrospection ];
 
   propagatedBuildInputs = [ gnome3.gsettings_desktop_schemas ];
 

@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://uhd.ettus.com/;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ bjornfor fpletz ];
   };
 }

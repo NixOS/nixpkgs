@@ -21,14 +21,18 @@ stdenv.mkDerivation rec {
     sed -i 's/FIND_LIBRARY(COCOA_LIBRARY Cocoa)//' CMakeLists.txt
   '';
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" "-DBUILD_CPU_DEMOS=OFF" ] ++
-    stdenv.lib.optionals stdenv.isDarwin [
-      "-DMACOSX_DEPLOYMENT_TARGET=\"10.9\""
-      "-DOPENGL_FOUND=true"
-      "-DOPENGL_LIBRARIES=${darwin.apple_sdk.frameworks.OpenGL}/Library/Frameworks/OpenGL.framework"
-      "-DOPENGL_INCLUDE_DIR=${darwin.apple_sdk.frameworks.OpenGL}/Library/Frameworks/OpenGL.framework"
-      "-DOPENGL_gl_LIBRARY=${darwin.apple_sdk.frameworks.OpenGL}/Library/Frameworks/OpenGL.framework"
-      "-DCOCOA_LIBRARY=${darwin.apple_sdk.frameworks.Cocoa}/Library/Frameworks/Cocoa.framework"];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DBUILD_CPU_DEMOS=OFF"
+    "-DINSTALL_EXTRA_LIBS=ON"
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [
+    "-DMACOSX_DEPLOYMENT_TARGET=\"10.9\""
+    "-DOPENGL_FOUND=true"
+    "-DOPENGL_LIBRARIES=${darwin.apple_sdk.frameworks.OpenGL}/Library/Frameworks/OpenGL.framework"
+    "-DOPENGL_INCLUDE_DIR=${darwin.apple_sdk.frameworks.OpenGL}/Library/Frameworks/OpenGL.framework"
+    "-DOPENGL_gl_LIBRARY=${darwin.apple_sdk.frameworks.OpenGL}/Library/Frameworks/OpenGL.framework"
+    "-DCOCOA_LIBRARY=${darwin.apple_sdk.frameworks.Cocoa}/Library/Frameworks/Cocoa.framework"
+  ];
 
   enableParallelBuilding = true;
 

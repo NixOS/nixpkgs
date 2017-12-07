@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-music-ogg-shared" ]
     ++ lib.optional enableNativeMidi " --enable-music-native-midi-gpl"
-    ++ lib.optional stdenv.isDarwin "--disable-sdltest";
+    ++ lib.optionals stdenv.isDarwin [ "--disable-sdltest" "--disable-smpegtest" ];
 
   meta = with stdenv.lib; {
     description = "SDL multi-channel audio mixer library";

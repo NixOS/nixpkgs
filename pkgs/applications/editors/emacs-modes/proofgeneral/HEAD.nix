@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation (rec {
   name = "ProofGeneral-unstable-${version}";
-  version = "2017-05-06";
+  version = "2017-11-06";
 
   src = fetchFromGitHub {
     owner = "ProofGeneral";
     repo = "PG";
-    rev = "574b0992e3cb4b7a4ad88400b9a5ab0198a96ca5";
-    sha256 = "1c1pgdmy58h78s53g0ga9b5ilbsibz0dr2lk52xgbs3q5m22v5fh";
+    rev = "2eab72c33751768c8a6cde36b978ea4a36b91843";
+    sha256 = "1l3n48d6d4l5q3wkhdyp8dc6hzdw1ckdzr57dj8rdm78j87vh2cg";
   };
 
   buildInputs = [ emacs texinfo perl which ] ++ stdenv.lib.optional enableDoc texLive;

@@ -3,11 +3,11 @@
 stdenv.mkDerivation rec {
   name = "gupnp-av-${version}";
   majorVersion = "0.12";
-  version = "${majorVersion}.7";
+  version = "${majorVersion}.10";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gupnp-av/${majorVersion}/${name}.tar.xz";
-    sha256 = "35e775bc4f7801d65dcb710905a6b8420ce751a239b5651e6d830615dc906ea8";
+    sha256 = "0nmq6wlbfsssanv3jgv2z0nhfkv8vzfr3gq5qa8svryvvn2fyf40";
   };
   
   nativeBuildInputs = [ pkgconfig ];

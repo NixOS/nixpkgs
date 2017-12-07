@@ -61,7 +61,7 @@ in
       '';
     }];
 
-    security.wrappers.e_freqset.source = "${e.enlightenment.out}/bin/e_freqset";
+    security.wrappers = (import (builtins.toPath "${e.enlightenment}/e-wrappers.nix")).security.wrappers;
 
     environment.etc = singleton
       { source = xcfg.xkbDir;

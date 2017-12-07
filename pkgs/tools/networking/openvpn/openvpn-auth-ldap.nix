@@ -19,22 +19,22 @@ stdenv.mkDerivation rec {
   name = "${srcName}-${version}";
   version = "${srcVersion}+deb${debianRev}";
 
-  srcs = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = "threerings";
     repo = srcName;
-    rev = "auth-ldap-${version}";
+    rev = "auth-ldap-${srcVersion}";
     sha256 = "1v635ylzf5x3l3lirf3n6173q1w8g0ssjjkf27qqw98c3iqp63sq";
   };
 
   patches = map fetchPatchFromDebian [
     {patch = "STARTTLS_before_auth.patch";
-     sha256 = "14d2vy366rhzggxb1zb3ld00wmaqxi2gq885vxhlldnwpgig0jx0";}
+     sha256 = "02kky73mgx9jf16lpabppl271zyjn4a1160k8b6a0fax5ic8gbwk";}
     {patch = "gobjc_4.7_runtime.patch";
-     sha256 = "11hpmd4i1cm3m27x8c77d9jrwxpir4cy5d74k2kxq0q77rawnxcm";}
+     sha256 = "0ljmdn70g5xp4kjcv59wg2wnqaifjdfdv1wlj356d10a7fzvxc76";}
     {patch = "openvpn_ldap_simpler_add_handler_4";
-     sha256 = "0qj7v2w921489c18mfrs5bmipzn1mcjj9avyp15x4531ss0lyanb";}
+     sha256 = "0nha9mazp3dywbs1ywj8xi4ahzsjsasyrcic87v8c0x2nwl9kaa0";}
     {patch = "auth-ldap-gnustep.patch";
-     sha256 = "0cz3jgyzgzi2p9bavd4lh69pnlnf4s7n9ihwg6zmmh6vqsynqss3";}
+     sha256 = "053jni1s3pacpi2s43dkmk95j79ifh8rybjly13yy2dqffbasr31";}
   ];
 
   nativeBuildInputs = [

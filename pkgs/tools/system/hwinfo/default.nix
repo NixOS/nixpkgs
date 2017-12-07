@@ -2,30 +2,33 @@
 
 stdenv.mkDerivation rec {
   name = "hwinfo-${version}";
-  version = "21.38";
+  version = "21.50";
 
   src = fetchFromGitHub {
     owner = "opensuse";
     repo = "hwinfo";
     rev = "${version}";
-    sha256 = "17a1nx906gdl9br1wf6xmhjy195szaxxmyb119vayw4q112rjdql";
+    sha256 = "1kkq979qqdalxdm6f0gyl3l9nk5rm6i6rbms43rmy52jfda5f5bv";
   };
 
   patchPhase = ''
-    # VERSION and changelog is usually generated using Git
-    echo "${version}" > VERSION
+    # VERSION and changelog are usually generated using Git
+    # unless HWINFO_VERSION is defined (see Makefile)
+    export HWINFO_VERSION="${version}"
     sed -i 's|^\(TARGETS\s*=.*\)\<changelog\>\(.*\)$|\1\2|g' Makefile
 
-    sed -i 's|lex isdn_cdb.lex|${flex}/bin/flex isdn_cdb.lex|g' src/isdn/cdb/Makefile
-    sed -i 's|/sbin|/bin|g' Makefile
-    sed -i 's|/usr/|/|g' Makefile
+    substituteInPlace Makefile --replace "/sbin" "/bin" --replace "/usr/" "/"
+    substituteInPlace src/isdn/cdb/Makefile --replace "lex isdn_cdb.lex" "flex isdn_cdb.lex"
+    substituteInPlace hwinfo.pc.in --replace "prefix=/usr" "prefix=$out"
   '';
 
-  installPhase = ''
-    make install DESTDIR=$out
-  '';
+  nativeBuildInputs = [ flex ];
+  buildInputs = [ libx86emu perl ];
 
-  buildInputs = [ libx86emu flex perl ];
+  makeFlags = [ "LIBDIR=/lib" ];
+  #enableParallelBuilding = true;
+
+  installFlags = [ "DESTDIR=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "Hardware detection tool from openSUSE";

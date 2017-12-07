@@ -1,6 +1,7 @@
-{ fetchurl, stdenv, pkgconfig, libxml2, libxslt, perl, perlPackages, gconf, guile
-, intltool, glib, gtk2, libofx, aqbanking, gwenhywfar, libgnomecanvas, goffice
-, webkit, glibcLocales, gsettings_desktop_schemas, makeWrapper, dconf, file
+{ fetchurl, fetchpatch, stdenv, intltool, pkgconfig, file, makeWrapper
+, libxml2, libxslt, perl, perlPackages, gconf, guile
+, glib, gtk2, libofx, aqbanking, gwenhywfar, libgnomecanvas, goffice
+, webkit, glibcLocales, gsettings_desktop_schemas, dconf
 , gettext, swig, slibGuile, enchant, bzip2, isocodes, libdbi, libdbiDrivers
 , pango, gdk_pixbuf
 }:
@@ -13,16 +14,26 @@ Two cave-ats right now:
 */
 
 stdenv.mkDerivation rec {
-  name = "gnucash-2.6.12";
+  name = "gnucash-2.6.18-1";
 
   src = fetchurl {
     url = "mirror://sourceforge/gnucash/${name}.tar.bz2";
-    sha256 = "0x84f07p30pwhriamv8ifljgw755cj87rc12jy1xddf47spyj7rp";
+    sha256 = "1794qi7lkn1kbnhzk08wawacfcphbln3ngdl3q0qax5drv7hnwv8";
   };
+
+  patches = [
+    (fetchpatch {
+     sha256 = "11nlf9j7jm1i37mfcmmnkplxr3nlf257fxd01095vd65i2rn1m8h";
+     name = "fix-brittle-test.patch";
+     url = "https://github.com/Gnucash/gnucash/commit/42ac55e03a1a84739f4a5b7a247c31d91c0adc4a.patch";
+    })
+  ];
+
+  nativeBuildInputs = [ intltool pkgconfig file makeWrapper ];
 
   buildInputs = [
     # general
-    intltool pkgconfig libxml2 libxslt glibcLocales file gettext swig enchant
+    libxml2 libxslt glibcLocales gettext swig enchant
     bzip2 isocodes
     # glib, gtk...
     glib gtk2 goffice webkit
@@ -36,12 +47,10 @@ stdenv.mkDerivation rec {
     guile slibGuile
     # database backends
     libdbi libdbiDrivers
-    # build
-    makeWrapper
   ];
 
-  patchPhase = ''
-  patchShebangs ./src
+  postPatch = ''
+    patchShebangs ./src
   '';
 
   configureFlags = [

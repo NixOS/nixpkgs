@@ -1,0 +1,20 @@
+diff --git a/pkg/minikube/bootstrapper/localkube/localkube.go b/pkg/minikube/bootstrapper/localkube/localkube.go
+index 1c4b5000..c9f120d4 100644
+--- a/pkg/minikube/bootstrapper/localkube/localkube.go
++++ b/pkg/minikube/bootstrapper/localkube/localkube.go
+@@ -113,14 +113,9 @@ func (lk *LocalkubeBootstrapper) UpdateCluster(config bootstrapper.KubernetesCon
+
+ 	copyableFiles := []assets.CopyableFile{}
+ 	var localkubeFile assets.CopyableFile
+-	var err error
+
+ 	//add url/file/bundled localkube to file list
+-	lCacher := localkubeCacher{config}
+-	localkubeFile, err = lCacher.fetchLocalkubeFromURI()
+-	if err != nil {
+-		return errors.Wrap(err, "Error updating localkube from uri")
+-	}
++	localkubeFile = assets.NewBinDataAsset("out/localkube", "/", "localkube", "0777")
+ 	copyableFiles = append(copyableFiles, localkubeFile)
+
+ 	// user added files

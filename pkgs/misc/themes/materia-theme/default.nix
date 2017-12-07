@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "materia-theme-${version}";
-  version = "20171005";
+  version = "20171112";
 
   src = fetchFromGitHub {
     owner = "nana-4";
     repo = "materia-theme";
     rev = "v${version}";
-    sha256 = "0znm7mx2nv2sgvy8fyams1ckp1ly3nbbs0k09d24w1zzd90xhzqp";
+    sha256 = "0iwak15mxkwazfnkxw4wf2qgr6s64jh8lxy0wfqvb2willzabprk";
   };
 
   nativeBuildInputs = [ gnome3.glib libxml2 ];

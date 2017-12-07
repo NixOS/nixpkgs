@@ -139,15 +139,13 @@ rec {
   };
 
   texturize = pluginDerivation {
-    name = "texturize-2.1";
-    src = fetchurl {
-      url = mirror://sourceforge/gimp-texturize/texturize-2.1_src.tgz;
-      sha256 = "0cdjq25g3yfxx6bzx6nid21kq659s1vl9id4wxyjs2dhcv229cg3";
+    name = "texturize-2.2.2017-07-28";
+    src = fetchFromGitHub {
+      owner = "lmanul";
+      repo = "gimp-texturize";
+      rev = "de4367f71e40fe6d82387eaee68611a80a87e0e1";
+      sha256 = "1zzvbczly7k456c0y6s92a1i8ph4ywmbvdl8i4rcc29l4qd2z8fw";
     };
-    buildInputs = with pkgs; [ perl ];
-    patchPhase = ''
-      sed -i '/.*gimpimage_pdb.h.*/ d' src/*.c*
-    '';
     installPhase = "installPlugins src/texturize";
   };
 

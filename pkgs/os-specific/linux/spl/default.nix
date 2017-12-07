@@ -13,6 +13,7 @@ let
   common = { version
     , sha256
     , rev ? "spl-${version}"
+    , broken ? false
     } @ args : stdenv.mkDerivation rec {
       name = "spl-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
 
@@ -52,6 +53,8 @@ let
           kernel.
         '';
 
+        inherit broken;
+
         homepage = http://zfsonlinux.org/;
         platforms = platforms.linux;
         license = licenses.gpl2Plus;
@@ -65,11 +68,13 @@ in
     splStable = common {
       version = "0.7.3";
       sha256 = "0j8mb9ky3pjz9hnz5w6fajpzajl15jq3p0xvxb6lhpqj3rjzsqxb";
+
+      broken = kernel != null && stdenv.lib.versionAtLeast kernel.version "4.14";
     };
 
     splUnstable = common {
-      version = "2017-10-16";
-      rev = "28920ea3346c1c905c5f727ea3e54297e6257568";
-      sha256 = "0m42na009ivb9q9gz15ra94wqx5xdw18waanm56aqzrjxbqqa3ll";
+      version = "2017-11-16";
+      rev = "ed19bccfb651843fa208232b3a2d3d22a4152bc8";
+      sha256 = "08ihjbf5fhcnhq9zavcwswg9djlbalbx1bil4rcv6i3d617wammb";
     };
 }

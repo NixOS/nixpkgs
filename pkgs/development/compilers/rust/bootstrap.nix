@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, makeWrapper, cacert, zlib, curl }:
+{ stdenv, fetchurl, callPackage }:
 
 let
   # Note: the version MUST be one version prior to the version we're
   # building
-  version = "1.19.0";
+  version = "1.20.0";
 
-  # fetch hashes by running `print-hashes.sh 1.19.0`
+  # fetch hashes by running `print-hashes.sh 1.20.0`
   hashes = {
-    i686-unknown-linux-gnu = "657b78f3c1a1b4412e12f7278e20cc318022fa276a58f0d38a0d15b515e39713";
-    x86_64-unknown-linux-gnu = "30ff67884464d32f6bbbde4387e7557db98868e87fb2afbb77c9b7716e3bff09";
-    i686-apple-darwin = "bdfd2189245dc5764c9f26bdba1429c2bf9d57477d8e6e3f0ba42ea0dc63edeb";
-    x86_64-apple-darwin = "5c668fb60a3ba3e97dc2cb8967fc4bb9422b629155284dcb89f94d116bb17820";
+    i686-unknown-linux-gnu = "abe592e06616cdc2fcca56ddbe482050dd49a1fada35e2af031c64fe6eb14668";
+    x86_64-unknown-linux-gnu = "ca1cf3aed73ff03d065a7d3e57ecca92228d35dc36d9274a6597441319f18eb8";
+    i686-apple-darwin = "b3c2470f8f132d285e6c989681e251592b67071bc9d93cac8a2e6b66f7bdfcb5";
+    x86_64-apple-darwin = "fa1fb8896d5e327cbe6deeb50e6e9a3346de629f2e6bcbd8c10f19f3e2ed67d5";
   };
 
   platform =
@@ -29,9 +29,8 @@ let
      sha256 = hashes."${platform}";
   };
 
-in import ./binaryBuild.nix
-  { inherit stdenv fetchurl makeWrapper cacert zlib curl;
+in callPackage ./binaryBuild.nix
+  { inherit version src platform;
     buildRustPackage = null;
-    inherit version src platform;
     versionType = "bootstrap";
   }

@@ -4,14 +4,6 @@ with lib;
 
 let
   cfg = config.services.buildkite-agent;
-  configFile = pkgs.writeText "buildkite-agent.cfg"
-    ''
-      token="${cfg.token}"
-      name="${cfg.name}"
-      meta-data="${cfg.meta-data}"
-      hooks-path="${cfg.package}/share/hooks"
-      build-path="${cfg.dataDir}"
-    '';
 in
 
 {
@@ -39,10 +31,13 @@ in
         type = types.listOf types.package;
       };
 
-      token = mkOption {
-        type = types.str;
+      tokenPath = mkOption {
+        type = types.path;
         description = ''
           The token from your Buildkite "Agents" page.
+
+          A run-time path to the token file, which is supposed to be provisioned
+          outside of Nix store.
         '';
       };
 
@@ -62,16 +57,22 @@ in
       };
 
       openssh =
-        { privateKey = mkOption {
-            type = types.str;
+        { privateKeyPath = mkOption {
+            type = types.path;
             description = ''
               Private agent key.
+
+              A run-time path to the key file, which is supposed to be provisioned
+              outside of Nix store.
             '';
           };
-          publicKey = mkOption {
-            type = types.str;
+          publicKeyPath = mkOption {
+            type = types.path;
             description = ''
               Public agent key.
+
+              A run-time path to the key file, which is supposed to be provisioned
+              outside of Nix store.
             '';
           };
         };
@@ -84,11 +85,15 @@ in
         home = cfg.dataDir;
         createHome = true;
         description = "Buildkite agent user";
+        extraGroups = [ "keys" ];
       };
 
     environment.systemPackages = [ cfg.package ];
 
     systemd.services.buildkite-agent =
+      let copy = x: target: perms:
+                 "cp -f ${x} ${target}; ${pkgs.coreutils}/bin/chmod ${toString perms} ${target}; ";
+      in
       { description = "Buildkite Agent";
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
@@ -97,18 +102,26 @@ in
           HOME = cfg.dataDir;
           NIX_REMOTE = "daemon";
         };
+
+        ## NB: maximum care is taken so that secrets (ssh keys and the CI token)
+        ##     don't end up in the Nix store.
         preStart = ''
-          ${pkgs.coreutils}/bin/mkdir -m 0700 -p ${cfg.dataDir}/.ssh
+            ${pkgs.coreutils}/bin/mkdir -m 0700 -p ${cfg.dataDir}/.ssh
+            ${copy (toString cfg.openssh.privateKeyPath) "${cfg.dataDir}/.ssh/id_rsa"     600}
+            ${copy (toString cfg.openssh.publicKeyPath)  "${cfg.dataDir}/.ssh/id_rsa.pub" 600}
 
-          echo "${cfg.openssh.privateKey}" > ${cfg.dataDir}/.ssh/id_rsa
-          ${pkgs.coreutils}/bin/chmod 600 ${cfg.dataDir}/.ssh/id_rsa
-
-          echo "${cfg.openssh.publicKey}" > ${cfg.dataDir}/.ssh/id_rsa.pub
-          ${pkgs.coreutils}/bin/chmod 600 ${cfg.dataDir}/.ssh/id_rsa.pub
-        '';
+            cat > "${cfg.dataDir}/buildkite-agent.cfg" <<EOF
+            token="$(cat ${toString cfg.tokenPath})"
+            name="${cfg.name}"
+            meta-data="${cfg.meta-data}"
+            hooks-path="${pkgs.buildkite-agent}/share/hooks"
+            build-path="${cfg.dataDir}/builds"
+            bootstrap-script="${pkgs.buildkite-agent}/share/bootstrap.sh"
+            EOF
+          '';
 
         serviceConfig =
-          { ExecStart = "${pkgs.buildkite-agent}/bin/buildkite-agent start --config ${configFile}";
+          { ExecStart = "${pkgs.buildkite-agent}/bin/buildkite-agent start --config /var/lib/buildkite-agent/buildkite-agent.cfg";
             User = "buildkite-agent";
             RestartSec = 5;
             Restart = "on-failure";
@@ -116,4 +129,9 @@ in
           };
       };
   };
+  imports = [
+    (mkRenamedOptionModule [ "services" "buildkite-agent" "token" ]                [ "services" "buildkite-agent" "tokenPath" ])
+    (mkRenamedOptionModule [ "services" "buildkite-agent" "openssh" "privateKey" ] [ "services" "buildkite-agent" "openssh" "privateKeyPath" ])
+    (mkRenamedOptionModule [ "services" "buildkite-agent" "openssh" "publicKey" ]  [ "services" "buildkite-agent" "openssh" "publicKeyPath" ])
+  ];
 }

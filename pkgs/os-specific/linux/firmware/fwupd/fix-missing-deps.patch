@@ -1,86 +1,99 @@
-diff -Naur fwupd-0.9.6-orig/data/meson.build fwupd-0.9.6/data/meson.build
---- fwupd-0.9.6-orig/data/meson.build	2017-08-03 05:45:02.000000000 -0400
-+++ fwupd-0.9.6/data/meson.build	2017-09-02 19:58:37.324596487 -0400
-@@ -20,7 +20,7 @@
+--- a/data/builder/meson.build
++++ b/data/builder/meson.build
+@@ -1,3 +0,0 @@
+-install_data('README.md',
+-  install_dir : join_paths(get_option('localstatedir'), 'lib', 'fwupd', 'builder')
+-)
+--- a/data/meson.build
++++ b/data/meson.build
+@@ -7,16 +7,12 @@
+   subdir('installed-tests')
+ endif
+ 
+-install_data(['daemon.conf'],
+-  install_dir : join_paths(get_option('sysconfdir'), 'fwupd')
+-)
+-
+ install_data(['org.freedesktop.fwupd.metainfo.xml'],
+   install_dir: join_paths(get_option('datadir'), 'metainfo')
  )
  
- install_data(['90-fwupd-devices.rules'],
--  install_dir : join_paths(udev.get_pkgconfig_variable('udevdir'), 'rules.d')
-+  install_dir : join_paths(get_option('prefix'), 'lib', 'udev', 'rules.d')
+ install_data(['org.freedesktop.fwupd.conf'],
+-  install_dir : join_paths(get_option('sysconfdir'), 'dbus-1', 'system.d')
++  install_dir : join_paths(get_option('prefix'), 'etc', 'dbus-1', 'system.d')
  )
  
- con2 = configuration_data()
-@@ -52,7 +52,7 @@
-     output : 'fwupd-offline-update.service',
-     configuration : con2,
-     install: true,
--    install_dir: systemd.get_pkgconfig_variable('systemdsystemunitdir'),
-+    install_dir: join_paths(get_option('prefix'), 'lib', 'systemd', 'system'),
+ install_data(['metadata.xml'],
+--- a/data/pki/meson.build
++++ b/data/pki/meson.build
+@@ -3,13 +3,13 @@
+       'GPG-KEY-Hughski-Limited',
+       'GPG-KEY-Linux-Vendor-Firmware-Service',
+     ],
+-    install_dir : join_paths(get_option('sysconfdir'), 'pki', 'fwupd')
++    install_dir : join_paths(get_option('prefix'), 'etc', 'pki', 'fwupd')
+   )
+ 
+   install_data([
+       'GPG-KEY-Linux-Vendor-Firmware-Service',
+     ],
+-    install_dir : join_paths(get_option('sysconfdir'), 'pki', 'fwupd-metadata')
++    install_dir : join_paths(get_option('prefix'), 'etc', 'pki', 'fwupd-metadata')
    )
  endif
  
-@@ -63,6 +63,6 @@
-     output : 'fwupd.service',
-     configuration : con2,
-     install: true,
--    install_dir: systemd.get_pkgconfig_variable('systemdsystemunitdir'),
-+    install_dir: join_paths(get_option('prefix'), 'lib', 'systemd', 'system'),
+@@ -17,12 +17,12 @@
+   install_data([
+       'LVFS-CA.pem',
+     ],
+-    install_dir : join_paths(get_option('sysconfdir'), 'pki', 'fwupd')
++    install_dir : join_paths(get_option('prefix'), 'etc', 'pki', 'fwupd')
+   )
+   install_data([
+       'LVFS-CA.pem',
+     ],
+-    install_dir : join_paths(get_option('sysconfdir'), 'pki', 'fwupd-metadata')
++    install_dir : join_paths(get_option('prefix'), 'etc', 'pki', 'fwupd-metadata')
    )
  endif
-diff -Naur fwupd-0.9.6-orig/libdfu/meson.build fwupd-0.9.6/libdfu/meson.build
---- fwupd-0.9.6-orig/libdfu/meson.build	2017-08-03 05:45:02.000000000 -0400
-+++ fwupd-0.9.6/libdfu/meson.build	2017-09-02 19:58:37.325596508 -0400
-@@ -23,6 +23,10 @@
-   giounix,
-   libm,
-   gusb,
-+  uuid,
-+  libarchive,
-+  soup,
-+  libgcab
- ]
  
- if get_option('enable-libelf')
-diff -Naur fwupd-0.9.6-orig/meson.build fwupd-0.9.6/meson.build
---- fwupd-0.9.6-orig/meson.build	2017-08-03 05:45:02.000000000 -0400
-+++ fwupd-0.9.6/meson.build	2017-09-02 19:59:07.406216716 -0400
-@@ -124,6 +124,7 @@
- if polkit.version().version_compare('>= 0.114')
-   conf.set('HAVE_POLKIT_0_114', '1')
- endif
-+libgcab = dependency('libgcab-1.0')
- gudev = dependency('gudev-1.0')
- appstream_glib = dependency('appstream-glib', version : '>= 0.6.9')
- gusb = dependency('gusb', version : '>= 0.2.9')
-@@ -200,7 +201,7 @@
-                         'fwupd-plugins-2')
- conf.set_quoted('PLUGINDIR', plugin_dir)
- 
--conf.set_quoted('SYSCONFDIR', get_option('sysconfdir'))
-+conf.set_quoted('SYSCONFDIR', '/etc')
- conf.set_quoted('BINDIR',
-                 join_paths(get_option('prefix'),
-                            get_option('bindir')))
-@@ -227,6 +228,9 @@
- plugin_deps += gmodule
- plugin_deps += gusb
- plugin_deps += soup
-+plugin_deps += libarchive
-+plugin_deps += uuid
-+plugin_deps += libgcab
- 
- subdir('data')
- subdir('docs')
-@@ -255,6 +259,3 @@
-   endif
+--- a/data/remotes.d/meson.build
++++ b/data/remotes.d/meson.build
+@@ -3,7 +3,7 @@
+       'lvfs.conf',
+       'lvfs-testing.conf',
+     ],
+-    install_dir : join_paths(get_option('sysconfdir'), 'fwupd', 'remotes.d')
++    install_dir : join_paths(get_option('prefix'), 'etc', 'fwupd', 'remotes.d')
+   )
  endif
  
--if get_option('enable-systemd')
--  meson.add_install_script('meson_post_install.sh', systemd.get_pkgconfig_variable('systemdsystemunitdir'), localstatedir)
--endif
-diff -Naur fwupd-0.9.6-orig/po/make-images.sh fwupd-0.9.6/po/make-images.sh
---- fwupd-0.9.6-orig/po/make-images.sh	2017-08-03 05:45:02.000000000 -0400
-+++ fwupd-0.9.6/po/make-images.sh	2017-09-02 19:58:37.328596570 -0400
+@@ -19,12 +19,12 @@
+   output : 'fwupd.conf',
+   configuration : con2,
+   install: true,
+-  install_dir: join_paths(get_option('sysconfdir'), 'fwupd', 'remotes.d'),
++  install_dir: join_paths(get_option('prefix'), 'etc', 'fwupd', 'remotes.d'),
+ )
+ configure_file(
+   input : 'vendor.conf',
+   output : 'vendor.conf',
+   configuration : con2,
+   install: true,
+-  install_dir: join_paths(get_option('sysconfdir'), 'fwupd', 'remotes.d'),
++  install_dir: join_paths(get_option('prefix'), 'etc', 'fwupd', 'remotes.d'),
+ )
+--- a/meson_post_install.sh
++++ b/meson_post_install.sh
+@@ -11,6 +11,4 @@
+     echo 'Updating systemd deps'
+     mkdir -p ${DESTDIR}${SYSTEMDUNITDIR}/system-update.target.wants
+     ln -sf ../fwupd-offline-update.service ${DESTDIR}${SYSTEMDUNITDIR}/system-update.target.wants/fwupd-offline-update.service
+-    echo 'Creating stateful directory'
+-    mkdir -p ${DESTDIR}${LOCALSTATEDIR}/lib/fwupd
+ #fi
+--- a/po/make-images.sh
++++ b/po/make-images.sh
 @@ -7,6 +7,7 @@
  #
  install -m 0755 -d ${MESON_INSTALL_DESTDIR_PREFIX}/share/locale/
@@ -89,26 +102,3 @@ diff -Naur fwupd-0.9.6-orig/po/make-images.sh fwupd-0.9.6/po/make-images.sh
  for x in ${MESON_INSTALL_DESTDIR_PREFIX}/share/locale/*/LC_IMAGES/*.bmp ; do
      gzip -f ${x}
  done
-diff -Naur fwupd-0.9.6-orig/src/meson.build fwupd-0.9.6/src/meson.build
---- fwupd-0.9.6-orig/src/meson.build	2017-08-03 05:45:02.000000000 -0400
-+++ fwupd-0.9.6/src/meson.build	2017-09-02 19:58:37.329596590 -0400
-@@ -24,6 +24,9 @@
-     polkit,
-     soup,
-     sqlite,
-+    uuid,
-+    libarchive,
-+    libgcab
-   ],
-   link_with : fwupd,
-   c_args : [
-@@ -73,6 +76,9 @@
-     gpgme,
-     gpgerror,
-     valgrind,
-+    uuid,
-+    libarchive,
-+    libgcab
-   ],
-   link_with : fwupd,
-   c_args : [

@@ -4,11 +4,11 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "pijul-${version}";
-  version = "0.7.3";
+  version = "0.8.0";
 
   src = fetchurl {
     url = "https://pijul.org/releases/${name}.tar.gz";
-    sha256 = "08cffv6nfp1iv9m2qhr9hggy9kg8xp07p8kqkjypfsdsb983vz5n";
+    sha256 = "00pi03yp2bgnjpsz2hgaapxfw2i4idbjqc88cagpvn4yr1612wqx";
   };
 
   sourceRoot = "${name}/pijul";
@@ -18,7 +18,7 @@ buildRustPackage rec {
 
   doCheck = false;
 
-  cargoSha256 = "0r69vghjd6b30v0qjsipyv56n92iwvyxmllrnwjzjf5pzhhjl7sy";
+  cargoSha256 = "1cnr08qbpia3336l37k1jli20d7kwnrw2gys8s9mg271cb4vdx03";
 
   meta = with stdenv.lib; {
     description = "A distributed version control system";

@@ -78,7 +78,7 @@ stdenv.mkDerivation rec {
     CONFIG_DEFAULT_SETFONT_DIR "/etc/kbd"
 
     ${extraConfig}
-    CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cc.prefix}"
+    CONFIG_CROSS_COMPILER_PREFIX "${stdenv.cc.targetPrefix}"
     EOF
 
     make oldconfig
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
   '';
 
   postConfigure = lib.optionalString useMusl ''
-    makeFlagsArray+=("CC=${stdenv.cc.prefix}gcc -isystem ${musl}/include -B${musl}/lib -L${musl}/lib")
+    makeFlagsArray+=("CC=${stdenv.cc.targetPrefix}gcc -isystem ${musl}/include -B${musl}/lib -L${musl}/lib")
   '';
 
   nativeBuildInputs = lib.optional (hostPlatform != buildPlatform) buildPackages.stdenv.cc;

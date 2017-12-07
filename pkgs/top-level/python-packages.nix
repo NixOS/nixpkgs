@@ -31,10 +31,9 @@ let
 
   callPackage = pkgs.newScope self;
 
-  bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { };
+  namePrefix = python.libPrefix + "-";
 
-  mkPythonDerivation = makeOverridable( callPackage ../development/interpreters/python/mk-python-derivation.nix {
-  });
+  bootstrapped-pip = callPackage ../development/python-modules/bootstrapped-pip { };
 
   # Derivations built with `buildPythonPackage` can already be overriden with `override`, `overrideAttrs`, and `overrideDerivation`.
   # This function introduces `overridePythonAttrs` and it overrides the call to `buildPythonPackage`.
@@ -52,13 +51,20 @@ let
       }
       else ff;
 
-  buildPythonPackage = makeOverridablePythonPackage (callPackage ../development/interpreters/python/build-python-package.nix {
-    inherit mkPythonDerivation;
+  buildPythonPackage = makeOverridablePythonPackage ( makeOverridable (callPackage ../development/interpreters/python/build-python-package.nix {
     inherit bootstrapped-pip;
     flit = self.flit;
-  });
+    # We want Python libraries to be named like e.g. "python3.6-${name}"
+    inherit namePrefix;
+    pythonModule = python;
+  }));
 
-  buildPythonApplication = args: buildPythonPackage ({namePrefix="";} // args );
+  buildPythonApplication = makeOverridablePythonPackage ( makeOverridable (callPackage ../development/interpreters/python/build-python-package.nix {
+    inherit bootstrapped-pip;
+    flit = self.flit;
+    namePrefix = "";
+    pythonModule = false;
+  }));
 
   graphiteVersion = "1.0.2";
 
@@ -80,10 +86,40 @@ let
         else throw "Unsupported kind ${kind}");
     in fetcher (builtins.removeAttrs attrs ["format"]) );
 
+  # Check whether a derivation provides a Python module.
+  hasPythonModule = drv: (hasAttr "pythonModule" drv) && ( (getAttr "pythonModule" drv) == python);
+
+  # Get list of required Python modules given a list of derivations.
+  requiredPythonModules = drvs: let
+    filterNull = list: filter (x: !isNull x) list;
+    conditionalGetRecurse = attr: condition: drv: let f = conditionalGetRecurse attr condition; in
+      (if (condition drv) then unique [drv]++(concatMap f (filterNull(getAttr attr drv))) else []);
+    _required = drv: conditionalGetRecurse "propagatedBuildInputs" hasPythonModule drv;
+  in [python] ++ (unique (concatMap _required (filterNull drvs)));
+
+  # Create a PYTHONPATH from a list of derivations. This function recurses into the items to find derivations
+  # providing Python modules.
+  makePythonPath = drvs: stdenv.lib.makeSearchPath python.sitePackages (requiredPythonModules drvs);
+
+  # Convert derivation to a Python module.
+  toPythonModule = drv:
+    drv.overrideAttrs( oldAttrs: {
+      # Use passthru in order to prevent rebuilds when possible.
+      passthru = (oldAttrs.passthru or {})// {
+        name = namePrefix + oldAttrs.name;
+        pythonModule = python;
+        pythonPath = [ ]; # Deprecated, for compatibility.
+      };
+    });
+
+  disabledIf = x: drv:
+    if x then throw "${removePrefix namePrefix (drv.pname or drv.name)} not supported for interpreter ${python.executable}" else drv;
+
 in {
 
-  inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k mkPythonDerivation buildPythonPackage buildPythonApplication;
+  inherit python bootstrapped-pip pythonAtLeast pythonOlder isPy26 isPy27 isPy33 isPy34 isPy35 isPy36 isPyPy isPy3k buildPythonPackage buildPythonApplication;
   inherit fetchPypi callPackage;
+  inherit hasPythonModule requiredPythonModules makePythonPath disabledIf;
 
   # helpers
 
@@ -105,6 +141,8 @@ in {
   py3to2 = callPackage ../development/python-modules/3to2 { };
   # Left for backwards compatibility
   "3to2" = self.py3to2;
+
+  absl-py = callPackage ../development/python-modules/absl-py { };
 
   aenum = callPackage ../development/python-modules/aenum { };
 
@@ -144,6 +182,8 @@ in {
     bap = pkgs.ocamlPackages_4_02.bap;
   };
 
+  bash_kernel = callPackage ../development/python-modules/bash_kernel { };
+
   bayespy = callPackage ../development/python-modules/bayespy { };
 
   bitcoin-price-api = callPackage ../development/python-modules/bitcoin-price-api { };
@@ -152,9 +192,7 @@ in {
 
   breathe = callPackage ../development/python-modules/breathe { };
 
-  browsermob-proxy = if ! isPy3k then
-    callPackage ../development/python-modules/browsermob-proxy {}
-  else throw "browsermob-proxy is not supported for ${python.executable}";
+  browsermob-proxy = disabledIf isPy3k (callPackage ../development/python-modules/browsermob-proxy {});
 
   bugseverywhere = callPackage ../applications/version-management/bugseverywhere {};
 
@@ -218,11 +256,13 @@ in {
 
   pyaes = callPackage ../development/python-modules/pyaes { };
 
-  pyatspi = if isPy3k then callPackage ../development/python-modules/pyatspi { } else throw "pyatspi not supported for interpreter ${python.executable}";
+  pyamf = callPackage ../development/python-modules/pyamf { };
+
+  pyatspi = disabledIf (!isPy3k) (callPackage ../development/python-modules/pyatspi { });
 
   pycairo = callPackage ../development/python-modules/pycairo { };
 
-  pycangjie = if isPy3k then callPackage ../development/python-modules/pycangjie { } else throw "pycangjie not supported for interpreter ${python.executable}";
+  pycangjie = disabledIf (!isPy3k) (callPackage ../development/python-modules/pycangjie { });
 
   pycrypto = callPackage ../development/python-modules/pycrypto { };
 
@@ -232,7 +272,7 @@ in {
 
   PyChromecast = callPackage ../development/python-modules/pychromecast { };
 
-  pyexiv2 = if (!isPy3k) then callPackage ../development/python-modules/pyexiv2 {} else throw "pyexiv2 not supported for interpreter ${python.executable}";
+  pyexiv2 = disabledIf isPy3k (callPackage ../development/python-modules/pyexiv2 {});
 
   py3exiv2 = callPackage ../development/python-modules/py3exiv2 { };
 
@@ -268,6 +308,8 @@ in {
     pythonPackages = self;
   };
 
+  pysc2 = callPackage ../development/python-modules/pysc2 { };
+
   pyscard = callPackage ../development/python-modules/pyscard { inherit (pkgs.darwin.apple_sdk.frameworks) PCSC; };
 
   pyside = callPackage ../development/python-modules/pyside { };
@@ -292,13 +334,13 @@ in {
 
   PyWebDAV = callPackage ../development/python-modules/pywebdav { };
 
-  pyxml = if !isPy3k then callPackage ../development/python-modules/pyxml{ } else throw "pyxml not supported for interpreter ${python.executable}";
+  pyxml = disabledIf isPy3k (callPackage ../development/python-modules/pyxml{ });
 
   relatorio = callPackage ../development/python-modules/relatorio { };
 
   pyzufall = callPackage ../development/python-modules/pyzufall { };
 
-  rhpl = if !isPy3k then callPackage ../development/python-modules/rhpl {} else throw "rhpl not supported for interpreter ${python.executable}";
+  rhpl = disabledIf isPy3k (callPackage ../development/python-modules/rhpl {});
 
   simpleeval = callPackage ../development/python-modules/simpleeval { };
 
@@ -1330,10 +1372,10 @@ in {
 
   # Build boost for this specific Python version
   # TODO: use separate output for libboost_python.so
-  boost = pkgs.boost.override {
+  boost = toPythonModule (pkgs.boost.override {
     inherit (self) python numpy;
     enablePython = true;
-  };
+  });
 
   buttersink = buildPythonPackage rec {
     name = "buttersink-0.6.8";
@@ -3194,15 +3236,15 @@ in {
     propagatedBuildInputs = with self; [ pyusb ];
   };
 
-  opencv = pkgs.opencv.override {
+  opencv = toPythonModule (pkgs.opencv.override {
     enablePython = true;
     pythonPackages = self;
-  };
+  });
 
-  opencv3 = pkgs.opencv3.override {
+  opencv3 = toPythonModule (pkgs.opencv3.override {
     enablePython = true;
     pythonPackages = self;
-  };
+  });
 
   openidc-client = callPackage ../development/python-modules/openidc-client/default.nix {};
 
@@ -3321,6 +3363,8 @@ in {
     };
   };
 
+  mpyq = callPackage ../development/python-modules/mpyq { };
+
   mxnet = buildPythonPackage rec {
     inherit (pkgs.mxnet) name version src meta;
 
@@ -3340,6 +3384,8 @@ in {
       ln -s ${pkgs.mxnet}/lib/libmxnet.so $out/${python.sitePackages}/mxnet
     '';
   };
+
+  portpicker = callPackage ../development/python-modules/portpicker { };
 
   pkginfo = buildPythonPackage rec {
     version = "1.3.2";
@@ -4442,6 +4488,8 @@ in {
     };
   };
 
+  demjson = callPackage ../development/python-modules/demjson { };
+
   derpconf = self.buildPythonPackage rec {
     name = "derpconf-0.4.9";
 
@@ -4723,13 +4771,11 @@ in {
 
   easy-thumbnails = callPackage ../development/python-modules/easy-thumbnails { };
 
-  eccodes = if (isPy27) then
-      (pkgs.eccodes.overrideAttrs (oldattrs: {
-    name = "${python.libPrefix}-" + oldattrs.name;
-  })).override {
-    enablePython = true;
-    pythonPackages = self;
-  } else throw "eccodes not supported for interpreter ${python.executable}";
+  eccodes = disabledIf (!isPy27)
+    (toPythonModule (pkgs.eccodes.override {
+      enablePython = true;
+      pythonPackages = self;
+    }));
 
   EditorConfig = buildPythonPackage rec {
     name = "EditorConfig-${version}";
@@ -4976,6 +5022,7 @@ in {
     checkPhase = ''
       py.test testing
     '';
+    __darwinAllowLocalNetworking = true;
     meta = {
       description = "Rapid multi-Python deployment";
       license = licenses.gpl2;
@@ -5437,6 +5484,7 @@ in {
   };
 
   google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk { };
+  google-cloud-sdk-gce = callPackage ../tools/admin/google-cloud-sdk { with-gce=true; };
 
   google-compute-engine = callPackage ../tools/virtualization/google-compute-engine { };
 
@@ -7178,6 +7226,7 @@ in {
     meta.broken = true; # Tests fail, and no reverse-dependencies anyway
   };
 
+  s2clientprotocol = callPackage ../development/python-modules/s2clientprotocol { };
 
   statsd = buildPythonPackage rec {
     name = "statsd-${version}";
@@ -8021,11 +8070,12 @@ in {
 
   hg-git = buildPythonPackage rec {
     name = "hg-git-${version}";
-    version = "0.8.5";
+    version = "0.8.10";
+    disabled = isPy3k;
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/h/hg-git/${name}.tar.gz";
-      sha256 = "10j7l1p2wx7s5nb6s35z1f3mcz2svz9ilcm26f3la9h9c76b7jpm";
+      sha256 = "03dzcs4l7hzq59sgjhngxgmi34xfyd7jcxyjl0f68rwq8b1yqrp3";
     };
 
     propagatedBuildInputs = with self; [ dulwich ];
@@ -8630,28 +8680,7 @@ in {
     buildInputs = with self; [ nose ];
   };
 
-  ConfigArgParse = buildPythonPackage rec {
-    name = "ConfigArgParse-${version}";
-    version = "0.9.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/C/ConfigArgParse/ConfigArgParse-${version}.tar.gz";
-      sha256 = "0a984pvv7370yz7zbkl6s6i7yyl9myahx0m9jkjvg3hz5q8mf70l";
-    };
-
-    # no tests in tarball
-    doCheck = false;
-    propagatedBuildInputs = with self; [
-
-    ];
-    buildInputs = with self; [
-
-    ];
-
-    meta = with stdenv.lib; {
-      homepage = "https://github.com/zorro3/ConfigArgParse";
-    };
-  };
+  ConfigArgParse = callPackage ../development/python-modules/configargparse { };
 
   jsonschema = callPackage ../development/python-modules/jsonschema { };
 
@@ -8717,10 +8746,10 @@ in {
 
   folium = callPackage ../development/python-modules/folium { };
 
-  fontforge = pkgs.fontforge.override {
+  fontforge = toPythonModule (pkgs.fontforge.override {
     withPython = true;
     inherit python;
-  };
+  });
 
   fonttools = callPackage ../development/python-modules/fonttools { };
 
@@ -8894,11 +8923,9 @@ in {
     };
   };
 
-  gdal = (pkgs.gdal.overrideDerivation (oldattrs: {
-    name = "${python.libPrefix}-" + oldattrs.name;
-  })).override {
+  gdal = toPythonModule (pkgs.gdal.override {
     pythonPackages = self;
-  };
+  });
 
   gdrivefs = buildPythonPackage rec {
     version = "0.14.8";
@@ -9270,13 +9297,11 @@ in {
     };
   };
 
-  grib-api = if (isPy27) then
-      (pkgs.grib-api.overrideAttrs (oldattrs: {
-    name = "${python.libPrefix}-" + oldattrs.name;
-  })).override {
-    enablePython = true;
-    pythonPackages = self;
-  } else throw "grib-api not supported for interpreter ${python.executable}";
+  grib-api = disabledIf (!isPy27) (toPythonModule
+    (pkgs.grib-api.override {
+      enablePython = true;
+      pythonPackages = self;
+    }));
 
   gspread = buildPythonPackage rec {
     version = "0.2.3";
@@ -10378,14 +10403,14 @@ in {
     inherit (pkgs) libsodium;
   };
 
-  libplist = if isPy3k then throw "libplist not supported for interpreter ${python.executable}" else
-    (pkgs.libplist.override{python2Packages=self; }).py;
+  libplist = disabledIf isPy3k
+    (toPythonModule (pkgs.libplist.override{python2Packages=self; })).py;
 
-  libxml2 = if isPy3k then throw "libxml2 not supported for interpreter ${python.executable}" else
-    (pkgs.libxml2.override{pythonSupport=true; python2=python;}).py;
+  libxml2 = disabledIf isPy3k
+    (toPythonModule (pkgs.libxml2.override{pythonSupport=true; python2=python;})).py;
 
-  libxslt = if isPy3k then throw "libxslt not supported for interpreter ${python.executable}" else
-    (pkgs.libxslt.override{pythonSupport=true; python2=python; inherit (self) libxml2;}).py;
+  libxslt = disabledIf isPy3k
+    (toPythonModule (pkgs.libxslt.override{pythonSupport=true; python2=python; inherit (self) libxml2;})).py;
 
   limnoria = buildPythonPackage rec {
     name = "limnoria-${version}";
@@ -10441,22 +10466,7 @@ in {
     fuse = pkgs.fuse;  # use "real" fuse, not the python module
   };
 
-  locustio = buildPythonPackage rec {
-    name = "locustio-0.7.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/locustio/${name}.tar.gz";
-      sha256 = "c9ca6fdfe6a6fb187a3d54ddf9b1518196348e8f20537f0a14ca81a264ffafa2";
-    };
-
-    propagatedBuildInputs = [ self.msgpack self.requests self.flask self.gevent self.pyzmq ];
-    buildInputs = [ self.mock self.unittest2 ];
-
-    meta = {
-      homepage = http://locust.io/;
-      description = "A load testing tool";
-    };
-  };
+  locustio = callPackage ../development/python-modules/locustio { };
 
   llvmlite = callPackage ../development/python-modules/llvmlite {llvm=pkgs.llvm_4;};
 
@@ -10984,35 +10994,7 @@ in {
     };
   };
 
-  nototools = buildPythonPackage rec {
-    version = "git-2016-03-25";
-    name = "nototools-${version}";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "googlei18n";
-      repo = "nototools";
-      rev = "4f7b067d1b18f59288e5eaee34db5b0abd3a3f63";
-      sha256 = "05brbkfg77ij4pmcrhq9302albzdalr9gv6jfdsbyyi2k8j85gbn";
-    };
-
-    propagatedBuildInputs = with self; [ fonttools numpy ];
-
-    postPatch = ''
-      sed -ie "s^join(_DATA_DIR_PATH,^join(\"$out/third_party/ucd\",^" nototools/unicode_data.py
-    '';
-
-    postInstall = ''
-      cp -r third_party $out
-    '';
-
-    disabled = isPy3k;
-
-    meta = {
-      description = "Noto fonts support tools and scripts plus web site generation";
-      license = licenses.asl20;
-      homepage = https://github.com/googlei18n/nototools;
-    };
-  };
+  nototools = callPackage ../data/fonts/noto-fonts/tools.nix { };
 
   rainbowstream = buildPythonPackage rec {
     name = "rainbowstream-${version}";
@@ -11859,21 +11841,7 @@ in {
 
   nbmerge = callPackage ../development/python-modules/nbmerge { };
 
-  nbxmpp = buildPythonPackage rec {
-    name = "nbxmpp-${version}";
-    version = "0.5.5";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/nbxmpp/${name}.tar.gz";
-      sha256 = "1gnzrzrdl4nii1sc5x8p5iw2ya5sl70j3nn34abqsny51p2pzmv6";
-    };
-
-    meta = {
-      homepage = "https://python-nbxmpp.gajim.org/";
-      description = "Non-blocking Jabber/XMPP module";
-      license = licenses.gpl3;
-    };
-  };
+  nbxmpp = callPackage ../development/python-modules/nbxmpp { };
 
   sleekxmpp = buildPythonPackage rec {
     name = "sleekxmpp-${version}";
@@ -14095,6 +14063,8 @@ in {
 
     propagatedBuildInputs = with self; [ cryptography pyasn1 ];
 
+    __darwinAllowLocalNetworking = true;
+
     # https://github.com/paramiko/paramiko/issues/449
     doCheck = !(isPyPy || isPy33);
     checkPhase = ''
@@ -14418,43 +14388,7 @@ in {
     };
   };
 
-
-  pexpect = buildPythonPackage rec {
-    version = "4.2.1";
-    name = "pexpect-${version}";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pexpect/${name}.tar.gz";
-      sha256 = "3d132465a75b57aa818341c6521392a06cc660feb3988d7f1074f39bd23c9a92";
-    };
-
-    # Wants to run pythonin a subprocess
-    doCheck = false;
-
-    propagatedBuildInputs = with self; [ ptyprocess ];
-
-    meta = {
-      homepage = http://www.noah.org/wiki/Pexpect;
-      description = "Automate interactive console applications such as ssh, ftp, etc";
-      license = licenses.mit;
-
-      longDescription = ''
-        Pexpect is similar to the Don Libes "Expect" system, but Pexpect
-        as a different interface that is easier to understand. Pexpect
-        is basically a pattern matching system. It runs programs and
-        watches output. When output matches a given pattern Pexpect can
-        respond as if a human were typing responses. Pexpect can be used
-        for automation, testing, and screen scraping. Pexpect can be
-        used for automating interactive console applications such as
-        ssh, ftp, passwd, telnet, etc. It can also be used to control
-        web applications via "lynx", "w3m", or some other text-based web
-        browser. Pexpect is pure Python. Unlike other Expect-like
-        modules for Python Pexpect does not require TCL or Expect nor
-        does it require C extensions to be compiled. It should work on
-        any platform that supports the standard Python pty module.
-      '';
-    };
-  };
+  pexpect = callPackage ../development/python-modules/pexpect { };
 
   pdfkit = buildPythonPackage rec {
     name = "pdfkit-${version}";
@@ -14898,31 +14832,13 @@ in {
 
   psd-tools = callPackage ../development/python-modules/psd-tools { };
 
-  psutil = buildPythonPackage rec {
-    name = "psutil-${version}";
-    version = "4.3.0";
+  psutil = callPackage ../development/python-modules/psutil { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/psutil/${name}.tar.gz";
-      sha256 = "1w4r09fvn6kd80m5mx4ws1wz100brkaq6hzzpwrns8cgjzjpl6c6";
-    };
-
-    # Certain tests fail due to being in a chroot.
-    # See also the older issue: https://code.google.com/p/psutil/issues/detail?id=434
-    doCheck = false;
-
-    buildInputs = with self; [ mock ] ++ optionals stdenv.isDarwin [ pkgs.darwin.IOKit ];
-
-    meta = {
-      description = "Process and system utilization information interface for python";
-      homepage = https://github.com/giampaolo/psutil;
-    };
-  };
-
-  psutil_1 = self.psutil.overrideDerivation (self: rec {
-    name = "psutil-1.2.1";
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/psutil/${name}.tar.gz";
+  psutil_1 = self.psutil.overrideAttrs (oldAttrs: rec {
+    name = "${oldAttrs.pname}-${version}";
+    version = "1.2.1";
+    src = oldAttrs.src.override {
+      inherit version;
       sha256 = "0ibclqy6a4qmkjhlk3g8jhpvnk0v9aywknc61xm3hfi5r124m3jh";
     };
   });
@@ -15213,29 +15129,7 @@ in {
     };
   });
 
-  pybfd = buildPythonPackage rec {
-    name = "pybfd-0.1.1";
-
-    disabled = isPyPy || isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pybfd/${name}.tar.gz";
-      sha256 = "d99b32ad077e704ddddc0b488c83cae851c14919e5cbc51715d00464a1932df4";
-    };
-
-    preConfigure = ''
-      substituteInPlace setup.py \
-        --replace '"/usr/include"' '"${pkgs.gdb}/include"' \
-        --replace '"/usr/lib"' '"${pkgs.libbfd}/lib"'
-    '';
-
-    meta = {
-      homepage = https://github.com/Groundworkstech/pybfd;
-      description = "A Python interface to the GNU Binary File Descriptor (BFD) library";
-      license = licenses.gpl2;
-      platforms = platforms.linux;
-    };
-  };
+  pybfd = callPackage ../development/python-modules/pybfd { };
 
   pyblock = stdenv.mkDerivation rec {
     name = "pyblock-${version}";
@@ -17061,9 +16955,8 @@ in {
     };
   };
 
-  qscintilla = if isPy3k || isPyPy
-    then throw "qscintilla-${pkgs.qscintilla.version} not supported for interpreter ${python.executable}"
-    else buildPythonPackage rec {
+  qscintilla = disabledIf (isPy3k || isPyPy)
+    (buildPythonPackage rec {
       # TODO: Qt5 support
       name = "qscintilla-${version}";
       version = pkgs.qscintilla.version;
@@ -17092,7 +16985,7 @@ in {
         maintainers = with maintainers; [ danbst ];
         platforms = platforms.linux;
       };
-    };
+    });
 
 
   qserve = buildPythonPackage rec {
@@ -17113,7 +17006,11 @@ in {
     };
   };
 
+  qtawesome = callPackage ../development/python-modules/qtawesome { };
+
   qtconsole = callPackage ../development/python-modules/qtconsole { };
+
+  qtpy = callPackage ../development/python-modules/qtpy { };
 
   quantities = buildPythonPackage rec {
     name = "quantities-0.10.1";
@@ -17235,6 +17132,10 @@ in {
   };
 
   readme_renderer = callPackage ../development/python-modules/readme_renderer { };
+
+  rivet = disabledIf isPy3k (toPythonModule (pkgs.rivet.override {
+    python2 = python;
+  }));
 
   rjsmin = callPackage ../development/python-modules/rjsmin { };
 
@@ -17481,24 +17382,7 @@ in {
 
   rootpy = callPackage ../development/python-modules/rootpy { };
 
-  rope = buildPythonPackage rec {
-    version = "0.10.2";
-    name = "rope-${version}";
-
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/r/rope/${name}.tar.gz";
-      sha256 = "0rdlvp8h74qs49wz1hx6qy8mgp2ddwlfs7z13h9139ynq04a3z7z";
-    };
-
-    meta = {
-      description = "Python refactoring library";
-      homepage = http://rope.sf.net;
-      maintainers = with maintainers; [ goibhniu ];
-      license = licenses.gpl2;
-    };
-  };
+  rope = callPackage ../development/python-modules/rope { };
 
   ropper = callPackage ../development/python-modules/ropper { };
 
@@ -17524,7 +17408,7 @@ in {
 
   rply = callPackage ../development/python-modules/rply/default.nix {};
 
-  rpm = (pkgs.rpm.override{inherit python;});
+  rpm = toPythonModule (pkgs.rpm.override{inherit python;});
 
   rpmfluff = callPackage ../development/python-modules/rpmfluff {};
 
@@ -18225,6 +18109,8 @@ in {
     cudaSupport = false;
     cudnnSupport = false;
   };
+
+  thespian = callPackage ../development/python-modules/thespian { };
 
   tidylib = buildPythonPackage rec {
     version = "0.2.4";
@@ -19032,9 +18918,7 @@ in {
     };
   });
 
-  spyder = callPackage ../applications/science/spyder {
-    rope = if isPy3k then null else self.rope;
-  };
+  spyder = callPackage ../applications/science/spyder { };
 
   sqlalchemy = callPackage ../development/python-modules/sqlalchemy { };
 
@@ -21382,6 +21266,7 @@ EOF
     };
   };
 
+  titlecase = callPackage ../development/python-modules/titlecase { };
 
   tracing = buildPythonPackage rec {
     name = "tracing-${version}";
@@ -21592,6 +21477,8 @@ EOF
     name = "carbon-${version}";
     version = graphiteVersion;
 
+    disabled = isPy3k;
+
     src = pkgs.fetchurl {
       url = "mirror://pypi/c/carbon/${name}.tar.gz";
       sha256 = "142smpmgbnjinvfb6s4ijazish4vfgzyd8zcmdkh55y051fkixkn";
@@ -21603,6 +21490,7 @@ EOF
       homepage = http://graphite.wikidot.com/;
       description = "Backend data caching and persistence daemon for Graphite";
       maintainers = with maintainers; [ rickynils offline ];
+      license = licenses.asl20;
     };
   };
 
@@ -22172,7 +22060,7 @@ EOF
   };
 
   # For backwards compatibility. Please use nixpkgs.udiskie instead.
-  udiskie = pkgs.udiskie.override { pythonPackages = self; };
+  udiskie = toPythonModule (pkgs.udiskie.override { pythonPackages = self; });
 
   # Should be bumped along with EFL!
   pythonefl = buildPythonPackage rec {
@@ -22918,12 +22806,12 @@ EOF
   trollius = callPackage ../development/python-modules/trollius {};
 
   neovim = buildPythonPackage rec {
-    version = "0.1.13";
+    version = "0.2.0";
     name = "neovim-${version}";
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/n/neovim/${name}.tar.gz";
-      sha256 = "0pzk5639jjjx46a6arkwy31falmk5w1061icbml8njm3rbrwwhgx";
+      sha256 = "1ywkgbrxd95cwlglihydmffcw2d2aji6562aqncymxs3ld5y02yn";
     };
 
     buildInputs = with self; [ nose ];
@@ -24434,9 +24322,8 @@ EOF
   ROPGadget = callPackage ../development/python-modules/ROPGadget { };
 
   # We need "normal" libxml2 and not the python package by the same name.
-  pywbem = if !(isPy36)
-    then callPackage ../development/python-modules/pywbem { libxml2 = pkgs.libxml2; }
-    else throw "pywbem not supported for interpreter ${python.executable}";
+  pywbem = disabledIf isPy36
+    (callPackage ../development/python-modules/pywbem { libxml2 = pkgs.libxml2; });
 
   unicorn = callPackage ../development/python-modules/unicorn { };
 
@@ -24508,8 +24395,8 @@ EOF
 
   zeep = callPackage ../development/python-modules/zeep { };
 
-  zeitgeist = if isPy3k then throw "zeitgeist not supported for interpreter ${python.executable}" else
-    (pkgs.zeitgeist.override{python2Packages=self;}).py;
+  zeitgeist = disabledIf isPy3k
+    (toPythonModule (pkgs.zeitgeist.override{python2Packages=self;})).py;
 
   zeroconf = callPackage ../development/python-modules/zeroconf { };
 

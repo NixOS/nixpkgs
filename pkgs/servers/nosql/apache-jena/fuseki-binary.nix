@@ -24,7 +24,7 @@ stdenv.mkDerivation {
     for i in "$out"/bin/*; do
       wrapProgram "$i" \
         --prefix "PATH" : "${java}/bin/" \
-        --set "FUSEKI_HOME" '"''${FUSEKI_HOME:-'"$out"'}"' \
+        --set-default "FUSEKI_HOME" "$out" \
         ;
     done
   '';

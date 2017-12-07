@@ -18,6 +18,8 @@ python2Packages.buildPythonApplication rec {
     buildPhase = "";
     installPhase = ''
       ${python2Packages.python.executable} setup.py install --prefix=$out
+      mkdir -p $out/share/doc/tortoisehg
+      cp COPYING.txt $out/share/doc/tortoisehg/Copying.txt.gz
       ln -s $out/bin/thg $out/bin/tortoisehg     #convenient alias
     '';
 

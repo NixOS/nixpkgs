@@ -18,6 +18,15 @@ python3Packages.buildPythonApplication rec {
     popd
   '';
 
+  patches = [
+    # Unlike libtool, vanilla Meson does not pass any information
+    # about the path library will be installed to to g-ir-scanner,
+    # breaking the GIR when path other than ${!outputLib}/lib is used.
+    # We patch Meson to add a --fallback-library-path argument with
+    # library install_dir to g-ir-scanner.
+    ./gir-fallback-path.patch
+  ];
+
   postPatch = ''
     sed -i -e 's|e.fix_rpath(install_rpath)||' mesonbuild/scripts/meson_install.py
   '';

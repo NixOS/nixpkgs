@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     "MANDIR=$(out)/share/man" "RUN_DIR=/dev/.mdadm"
     "STRIP="
   ] ++ stdenv.lib.optionals (hostPlatform != buildPlatform) [
-    "CROSS_COMPILE=${stdenv.cc.prefix}"
+    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
   ];
 
   nativeBuildInputs = [ groff ];

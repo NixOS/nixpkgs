@@ -82,6 +82,10 @@ HARDENED_USERCOPY y
 # Randomize allocator freelists.
 SLAB_FREELIST_RANDOM y
 
+${optionalString (versionAtLeast version "4.14") ''
+  SLAB_FREELIST_HARDENED y
+''}
+
 # Wipe higher-level memory allocations on free() with page_poison=1
 PAGE_POISONING y
 PAGE_POISONING_NO_SANITY y
@@ -95,6 +99,9 @@ GCC_PLUGINS y # Enable gcc plugin options
 
 ${optionalString (versionAtLeast version "4.11") ''
   GCC_PLUGIN_STRUCTLEAK y # A port of the PaX structleak plugin
+''}
+${optionalString (versionAtLeast version "4.14") ''
+  GCC_PLUGIN_STRUCTLEAK_BYREF_ALL y # Also cover structs passed by address
 ''}
 
 # Disable various dangerous settings

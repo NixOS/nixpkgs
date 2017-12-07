@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = with ocamlPackages; [
-    z3 ocaml findlib ocaml_batteries menhir stdint
+    z3 ocaml findlib batteries menhir stdint
     zarith camlp4 yojson pprint
   ];
 

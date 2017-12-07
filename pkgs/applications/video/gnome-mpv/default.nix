@@ -1,25 +1,32 @@
-{ stdenv, fetchurl
-, intltool, pkgconfig, wrapGAppsHook
+{ stdenv, fetchFromGitHub, meson, ninja
+, gettext, pkgconfig, desktop_file_utils, wrapGAppsHook
 , appstream-glib, epoxy, glib, gtk3, mpv
 }:
 
 stdenv.mkDerivation rec {
   name = "gnome-mpv-${version}";
-  version = "0.9";
+  version = "0.13";
 
-  src = fetchurl {
-    sha256 = "06pgxl6f3kkgxv8nlmyl7gy3pg55sqf8vgr8m6426mlpm4p3qdn0";
-    url = "https://github.com/gnome-mpv/gnome-mpv/releases/download/v${version}/${name}.tar.xz";
+  src = fetchFromGitHub {
+    owner = "gnome-mpv";
+    repo = "gnome-mpv";
+    rev = "0d73b33d60050fd32bf8fae77d831548970a0b69"; # upstream forgot to update appdata
+    # rev = "v${version}";
+    sha256 = "1cjhw3kz163iwj2japhnv354i1lr112xyyfkxw82cwy2554cfim4";
   };
 
-  nativeBuildInputs = [ intltool pkgconfig wrapGAppsHook ];
-  buildInputs = [ appstream-glib epoxy glib.dev gtk3 mpv ];
-
-  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+  nativeBuildInputs = [ meson ninja appstream-glib gettext pkgconfig desktop_file_utils wrapGAppsHook ];
+  buildInputs = [ epoxy glib gtk3 mpv ];
 
   enableParallelBuilding = true;
 
+  postPatch = ''
+    patchShebangs .
+    sed -i '/gtk-update-icon-cache/s/^/#/' meson_post_install.py
+  '';
+
   doCheck = true;
+  checkPhase = "meson test";
 
   meta = with stdenv.lib; {
     description = "Simple GTK+ frontend for the mpv video player";

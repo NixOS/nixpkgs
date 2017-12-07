@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  enableParallelBuilding = false; # occasional build problems;
+  enableParallelBuilding = true;
   dontUseCmakeBuildDir = true;
   NIX_LDFLAGS = "-lpam -L${pam}/lib";
 

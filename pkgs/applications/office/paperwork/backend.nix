@@ -9,7 +9,7 @@
 }:
 
 buildPythonPackage rec {
-  name = "paperwork-backend-${version}";
+  pname = "paperwork-backend";
   version = "1.2.1";
 
   src = fetchFromGitHub {

@@ -146,6 +146,7 @@ sub start {
             ($self->{allowReboot} ? "" : "-no-reboot ") .
             "-monitor unix:./monitor -chardev socket,id=shell,path=./shell " .
             "-device virtio-serial -device virtconsole,chardev=shell " .
+            "-device virtio-rng-pci " .
             ($showGraphics ? "-serial stdio" : "-nographic") . " " . ($ENV{QEMU_OPTS} || "");
         chdir $self->{stateDir} or die;
         exec $self->{startCommand};

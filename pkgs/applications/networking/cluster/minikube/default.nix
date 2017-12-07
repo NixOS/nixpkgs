@@ -1,5 +1,5 @@
 { stdenv, buildGoPackage, fetchFromGitHub, fetchurl, go-bindata, kubernetes, libvirt, qemu, docker-machine-kvm,
-  gpgme, makeWrapper }:
+  gpgme, makeWrapper, hostPlatform, vmnet }:
 
 let
   binPath = [ kubernetes ]
@@ -34,9 +34,13 @@ in buildGoPackage rec {
     sha256 = "1f7kjn26y7knmab5avj8spb40ny1y0jix5j5p0dqfjvg9climl0h";
   };
 
+  patches = [
+    ./localkube.patch
+  ];
+
   # kubernetes is here only to shut up a loud warning when generating the completions below. minikube checks very eagerly
   # that kubectl is on the $PATH, even if it doesn't use it at all to generate the completions
-  buildInputs = [ go-bindata makeWrapper kubernetes gpgme ];
+  buildInputs = [ go-bindata makeWrapper kubernetes gpgme ] ++ stdenv.lib.optional hostPlatform.isDarwin vmnet;
   subPackages = [ "cmd/minikube" ];
 
   preBuild = ''

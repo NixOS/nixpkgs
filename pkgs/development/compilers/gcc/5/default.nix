@@ -199,8 +199,6 @@ stdenv.mkDerivation ({
     inherit sha256;
   };
 
-  hardeningDisable = [ "format" ];
-
   inherit patches;
 
   outputs = [ "out" "lib" "man" "info" ];
@@ -208,6 +206,8 @@ stdenv.mkDerivation ({
   NIX_NO_SELF_RPATH = true;
 
   libc_dev = stdenv.cc.libc_dev;
+
+  hardeningDisable = [ "format" ];
 
   # This should kill all the stdinc frameworks that gcc and friends like to
   # insert into default search paths.
@@ -356,9 +356,6 @@ stdenv.mkDerivation ({
       }"
     ] ++
 
-    # Optional features
-    optional (isl != null) "--with-isl=${isl}" ++
-
     (if enableMultilib
       then ["--enable-multilib" "--disable-libquadmath"]
       else ["--disable-multilib"]) ++
@@ -366,6 +363,9 @@ stdenv.mkDerivation ({
     (if enablePlugin
       then ["--enable-plugin"]
       else ["--disable-plugin"]) ++
+
+    # Optional features
+    optional (isl != null) "--with-isl=${isl}" ++
 
     # Java options
     optionals langJava [
@@ -475,7 +475,7 @@ stdenv.mkDerivation ({
 
   CPATH = optionals (targetPlatform == hostPlatform) (makeSearchPathOutput "dev" "include" ([]
     ++ optional (zlib != null) zlib
-    ++ optionals langJava [ boehmgc ]
+    ++ optional langJava boehmgc
     ++ optionals javaAwtGtk xlibs
     ++ optionals javaAwtGtk [ gmp mpfr ]
     ++ optional (libpthread != null) libpthread

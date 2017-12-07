@@ -5,6 +5,8 @@
 , python3, boost, icu
 , ycmd, makeWrapper, rake
 , pythonPackages, python3Packages
+, substituteAll
+, languagetool
 , Cocoa ? null, git
 }:
 
@@ -1405,7 +1407,16 @@ rec {
       sha256 = "1mm8hd39q2sl4hi83c4zvrl27a8djr1pv35ch0pivg84ad9p7qq5";
     };
     dependencies = [];
-
+    # use `:GrammarousCheck` to initialize checking
+    # In neovim, you also want to use set
+    #   let g:grammarous#show_first_error = 1
+    # see https://github.com/rhysd/vim-grammarous/issues/39
+    patches = [
+      (substituteAll {
+        src = ./patches/vim-grammarous/set_default_languagetool.patch;
+        inherit languagetool;
+      })
+    ];
   };
 
   vim-puppet = buildVimPluginFrom2Nix { # created by nix#NixDerivation

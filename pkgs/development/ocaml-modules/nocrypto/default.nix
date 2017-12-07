@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, opam, topkg
 , cpuid, ocb-stubblr
 , cstruct, zarith, ppx_sexp_conv, sexplib
-, lwt ? null
+, cstruct-lwt ? null
 }:
 
 with stdenv.lib;
-let withLwt = lwt != null; in
+let withLwt = cstruct-lwt != null; in
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-nocrypto-${version}";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml findlib ocamlbuild topkg opam cpuid ocb-stubblr
     ppx_sexp_conv ];
-  propagatedBuildInputs = [ cstruct zarith sexplib ] ++ optional withLwt lwt;
+  propagatedBuildInputs = [ cstruct zarith sexplib ] ++ optional withLwt cstruct-lwt;
 
   buildPhase = ''
     LD_LIBRARY_PATH=${cpuid}/lib/ocaml/${ocaml.version}/site-lib/stubslibs/ \

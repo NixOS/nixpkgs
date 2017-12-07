@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, cmake, pkgconfig, qtbase, qtwebkit, qtkeychain, sqlite
+{ stdenv, fetchgit, cmake, pkgconfig, qtbase, qtwebkit, qtkeychain, qttools, sqlite
 , inotify-tools, withGnomeKeyring ? false, makeWrapper, libgnome_keyring }:
 
 stdenv.mkDerivation rec {
@@ -12,9 +12,12 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [ ./find-sql.patch ];
+  patchFlags = "-d client -p1";
+
   nativeBuildInputs = [ pkgconfig cmake ];
 
-  buildInputs = [ qtbase qtwebkit qtkeychain sqlite ]
+  buildInputs = [ qtbase qtwebkit qtkeychain qttools sqlite ]
     ++ stdenv.lib.optional stdenv.isLinux inotify-tools
     ++ stdenv.lib.optional withGnomeKeyring makeWrapper;
 

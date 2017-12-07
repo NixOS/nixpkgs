@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   };
 
   why2 = fetchurl {
-    url    = "http://why.lri.fr/download/why-2.37.tar.gz";
-    sha256 = "00xr8aq6zwln0ccfs1ng610j70r6ia6wqdyaqs9iqibqfa1scr3m";
+    url    = "http://why.lri.fr/download/why-2.39.tar.gz";
+    sha256 = "0nf17jl00s7q9z8gkbamnf7mglvxqrm3967c17ic4c9xz8g125a8";
   };
 
   nativeBuildInputs = [ autoconf makeWrapper ];

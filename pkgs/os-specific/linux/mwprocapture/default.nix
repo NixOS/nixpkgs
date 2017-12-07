@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
     sha256 = "1arwnwrq52rs8g9zfxw8saip40vc3201sf7qnbqd2p23h8vzwb8i";
   };
 
-  patches = [] ++ optional (versionAtLeast kernel.version "4.13") ./linux_4_13_fix.patch;
+  patches = [] ++ optional (versionAtLeast kernel.version "4.13") ./linux_4_13_fix.patch
+               ++ optional (versionAtLeast kernel.version "4.14") ./linux_4_14_fix.patch;
 
   preConfigure =
   ''

@@ -37,7 +37,7 @@ stdenv.mkDerivation ({
       wrapProgram $f \
         --set CHICKEN_REPOSITORY $CHICKEN_REPOSITORY \
         --prefix CHICKEN_REPOSITORY_EXTRA : "$out/lib/chicken/${toString chicken.binaryVersion}/:$CHICKEN_REPOSITORY_EXTRA" \
-        --prefix CHICKEN_INCLUDE_PATH \; \"$CHICKEN_INCLUDE_PATH\;$out/share/\" \
+        --prefix CHICKEN_INCLUDE_PATH \; "$CHICKEN_INCLUDE_PATH;$out/share/" \
         --prefix PATH : "$out/bin:${chicken}/bin:$CHICKEN_REPOSITORY_EXTRA:$CHICKEN_REPOSITORY"
     done
 

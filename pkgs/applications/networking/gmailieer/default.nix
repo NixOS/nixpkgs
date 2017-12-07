@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   name = "gmailieer";
-  version = "0.3";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "gauteh";
     repo = "gmailieer";
     rev = "v${version}";
-    sha256 = "1app783gf0p9p196nqsgbyl6s1bp304dfav86fqiq86h1scld787";
+    sha256 = "0vpc8nrh3cx91pcw45jjr2jllkqbx6w2khq7nyqv59gc4q5mz0p2";
   };
 
   propagatedBuildInputs = with python3Packages; [

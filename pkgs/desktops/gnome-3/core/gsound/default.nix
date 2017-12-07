@@ -3,15 +3,15 @@
 let
   majVer = "1.0";
 in stdenv.mkDerivation rec {
-  name = "gsound-${majVer}.1";
+  name = "gsound-${majVer}.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gsound/${majVer}/${name}.tar.xz";
-    sha256 = "ea0dd94429c0645f2f98824274ef04543fe459dd83a5449a68910acc3ba67f29";
+    sha256 = "bba8ff30eea815037e53bee727bbd5f0b6a2e74d452a7711b819a7c444e78e53";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib libcanberra_gtk2 gobjectIntrospection libtool ];
+  nativeBuildInputs = [ pkgconfig gobjectIntrospection libtool gnome3.vala ];
+  buildInputs = [ glib libcanberra_gtk2 ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/GSound;

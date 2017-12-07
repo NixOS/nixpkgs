@@ -153,7 +153,7 @@ in
         default= if versionAtLeast config.system.stateVersion "17.09" then "postgres" else "root";
         internal = true;
         description = ''
-          NixOS traditionally used `root` as superuser, most other distros use `postgres`.
+          NixOS traditionally used 'root' as superuser, most other distros use 'postgres'.
           From 17.09 we also try to follow this standard. Internal since changing this value
           would lead to breakage while setting up databases.
         '';

@@ -60,6 +60,6 @@ self: super: {
   apply-refact = super.apply-refact_0_3_0_1;
 
   # This builds needs the latest Cabal version.
-  cabal2nix = super.cabal2nix.overrideScope (self: super: { Cabal = self.Cabal_2_0_0_2; });
+  cabal2nix = super.cabal2nix.overrideScope (self: super: { Cabal = self.Cabal_2_0_1_0; });
 
 }

@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nixos";
     repo = "systemd";
-    rev = "ba777535a890c2a2b7677dfacc63e12c578b9b3f";
-    sha256 = "1vb45fbqkrgczfwkb0y07ldnwhjqk2sh446hzfkdn8hrwl1lifg5";
+    rev = "eef5613fda5";
+    sha256 = "0wgh5y319v56hcs82mhs58ipb100cz4x41vz3kh4bq1n7sx88cdz";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];

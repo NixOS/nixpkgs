@@ -27,7 +27,7 @@ stdenv.mkDerivation {
     # MojoSetups have a ZIP file at the end. ZIP’s magic string is
     # most often PK\x03\x04. This *should* work for future updates,
     # but feel free to come up with something more reasonable.
-    dataZipOffset=$(grep --max-count=1 --byte-offset --only-matching --text $'PK\x03\x04' $curSrc | cut -d: -f1)
+    dataZipOffset=$(grep --max-count=1 --byte-offset --only-matching --text ''$'PK\x03\x04' $curSrc | cut -d: -f1)
     dd bs=$dataZipOffset skip=1 if=$curSrc of=data.zip 2>/dev/null
     unzip -q data.zip "data/*"
     rm data.zip

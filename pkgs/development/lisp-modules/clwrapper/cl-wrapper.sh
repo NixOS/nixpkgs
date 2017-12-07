@@ -70,8 +70,12 @@ esac
 
 NIX_LISP_ASDF_REGISTRY_CODE="
   (progn
-    #+asdf3 (setf asdf:*default-source-registries*
-      '(asdf/source-registry:environment-source-registry))
+    (setf asdf:*source-registry-parameter*
+      '(:source-registry
+        $(for p in $NIX_LISP_ASDF_PATHS; do
+            echo "(:tree \"$p\")"
+          done)
+        :inherit-configuration))
     (asdf:initialize-source-registry)
     )
 "

@@ -13,8 +13,8 @@ let
 
   callPackage = pkgs.newScope self;
 
-  version = "3.24";
-  maintainers = with pkgs.lib.maintainers; [ lethalman ];
+  version = "3.26";
+  maintainers = with pkgs.lib.maintainers; [ lethalman jtojnar ];
 
   corePackages = with gnome3; [
     pkgs.desktop_file_utils pkgs.ibus
@@ -54,7 +54,7 @@ let
   gnome3 = self // { recurseForDerivations = false; };
   gtk = gtk3;
   gtkmm = gtkmm3;
-  vala = pkgs.vala_0_32;
+  vala = pkgs.vala_0_38;
   gegl_0_3 = pkgs.gegl_0_3.override { inherit gtk; };
 
 # Simplify the nixos module and gnome packages
@@ -237,7 +237,9 @@ let
 
   totem-pl-parser = callPackage ./core/totem-pl-parser { };
 
-  tracker = callPackage ./core/tracker { giflib = pkgs.giflib_5_0; };
+  tracker = callPackage ./core/tracker { };
+
+  tracker-miners = callPackage ./core/tracker-miners { };
 
   vte = callPackage ./core/vte { };
 

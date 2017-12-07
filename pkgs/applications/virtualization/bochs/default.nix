@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     sha256 = "1379cq4cnfprhw8mgh60i0q9j8fz8d7n3d5fnn2g9fdiv5znfnzf";
   };
 
+  patches = [ ./bochs-2.6.9-glibc-2.26.patch ];
+
   buildInputs = with stdenv.lib;
   [ pkgconfig libtool gtk2 mesa readline libX11 libXpm docbook_xml_dtd_45 docbook_xsl ]
   ++ optionals termSupport [ ncurses ]
@@ -106,6 +108,8 @@ stdenv.mkDerivation rec {
   NIX_LDFLAGS="-L${libtool.lib}/lib";
 
   hardeningDisable = [ "format" ];
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "An open-source IA-32 (x86) PC emulator";

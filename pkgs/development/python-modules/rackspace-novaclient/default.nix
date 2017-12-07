@@ -1,7 +1,9 @@
 { buildPythonPackage, fetchurl, isPy3k, requests, novaclient, six, lib }:
 let
 os-virtual-interfacesv2-python-novaclient-ext = buildPythonPackage rec {
-  name = "os_virtual_interfacesv2_python_novaclient_ext-0.20";
+  pname = "os_virtual_interfacesv2_python_novaclient_ext";
+  version = "0.20";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/o/os-virtual-interfacesv2-python-novaclient-ext/${name}.tar.gz";
@@ -18,7 +20,9 @@ os-virtual-interfacesv2-python-novaclient-ext = buildPythonPackage rec {
 };
 
 ip-associations-python-novaclient-ext = buildPythonPackage rec {
-  name = "ip_associations_python_novaclient_ext-0.2";
+  pname = "ip_associations_python_novaclient_ext";
+  version = "0.2";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/i/ip_associations_python_novaclient_ext/${name}.tar.gz";
@@ -34,9 +38,10 @@ ip-associations-python-novaclient-ext = buildPythonPackage rec {
   };
 };
 
-
 rackspace-auth-openstack = buildPythonPackage rec {
-  name = "rackspace-auth-openstack-1.3";
+  pname = "rackspace-auth-openstack";
+  version = "1.3";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/r/rackspace-auth-openstack/${name}.tar.gz";
@@ -52,7 +57,9 @@ rackspace-auth-openstack = buildPythonPackage rec {
   };
 };
 rax-default-network-flags-python-novaclient-ext = buildPythonPackage rec {
-  name = "rax_default_network_flags_python_novaclient_ext-0.4.0";
+  pname = "rax_default_network_flags_python_novaclient_ext";
+  version = "0.4.0";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/r/rax_default_network_flags_python_novaclient_ext/${name}.tar.gz";
@@ -68,7 +75,9 @@ rax-default-network-flags-python-novaclient-ext = buildPythonPackage rec {
   };
 };
 os-networksv2-python-novaclient-ext = buildPythonPackage rec {
-  name = "os_networksv2_python_novaclient_ext-0.26";
+  pname = "os_networksv2_python_novaclient_ext";
+  version = "0.26";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/o/os_networksv2_python_novaclient_ext/${name}.tar.gz";
@@ -85,7 +94,9 @@ os-networksv2-python-novaclient-ext = buildPythonPackage rec {
 };
 
 rax-scheduled-images-python-novaclient-ext = buildPythonPackage rec {
-  name = "rax_scheduled_images_python_novaclient_ext-0.3.1";
+  pname = "rax_scheduled_images_python_novaclient_ext";
+  version = "0.3.1";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/r/rax_scheduled_images_python_novaclient_ext/${name}.tar.gz";
@@ -102,7 +113,9 @@ rax-scheduled-images-python-novaclient-ext = buildPythonPackage rec {
 };
 
 os-diskconfig-python-novaclient-ext = buildPythonPackage rec {
-  name = "os_diskconfig_python_novaclient_ext-0.1.3";
+  pname = "os_diskconfig_python_novaclient_ext";
+  version = "0.1.3";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/o/os_diskconfig_python_novaclient_ext/${name}.tar.gz";
@@ -120,7 +133,9 @@ os-diskconfig-python-novaclient-ext = buildPythonPackage rec {
 
 in
 buildPythonPackage rec {
-  name = "rackspace-novaclient-2.1";
+  pname = "rackspace-novaclient";
+  version = "2.1";
+  name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/r/rackspace-novaclient/${name}.tar.gz";

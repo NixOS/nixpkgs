@@ -1,22 +1,25 @@
-{ stdenv, intltool, fetchurl, libgweather, libnotify
-, pkgconfig, gtk3, glib, gsound
-, makeWrapper, itstool, libcanberra_gtk3, libtool
-, gnome3, librsvg, gdk_pixbuf, geoclue2, wrapGAppsHook }:
+{ stdenv, fetchurl
+, meson, ninja, gettext, pkgconfig, wrapGAppsHook, itstool, desktop_file_utils
+, vala,  gtk3, glib, gsound, libcanberra_gtk3
+, gnome3, gdk_pixbuf, geoclue2, libgweather }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
   doCheck = true;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 glib intltool itstool libcanberra_gtk3
-                  gnome3.gsettings_desktop_schemas makeWrapper
-                  gdk_pixbuf gnome3.defaultIconTheme librsvg
+  nativeBuildInputs = [ vala meson ninja pkgconfig gettext itstool wrapGAppsHook desktop_file_utils ];
+  buildInputs = [ gtk3 glib libcanberra_gtk3
+                  gnome3.gsettings_desktop_schemas
+                  gdk_pixbuf gnome3.defaultIconTheme
                   gnome3.gnome_desktop gnome3.geocode_glib geoclue2
-                  libgweather libnotify libtool gsound
-                  wrapGAppsHook ];
+                  libgweather gsound ];
 
   enableParallelBuilding = true;
+
+  prePatch = "patchShebangs build-aux/";
+
+  checkPhase = "meson test";
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Clocks;

@@ -7,13 +7,14 @@ assert pythonSupport -> python != null && swig != null;
 
 stdenv.mkDerivation rec {
   name = "gnuradio-ais-${version}";
-  version = "2016-08-26";
+  version = "2015-12-20";
 
   src = fetchFromGitHub {
     owner = "bistromath";
     repo = "gr-ais";
-    rev = "1863d1bf8a7709a8dfedb3ddb8e2b99112e7c872";
-    sha256 = "1vl3kk8xr2mh5lf31zdld7yzmwywqffffah8iblxdzblgsdwxfl6";
+    # Upstream PR: https://github.com/bistromath/gr-ais/commit/8502d0252a2a1a9b8d1a71795eaeb5d820684054
+    "rev" = "8502d0252a2a1a9b8d1a71795eaeb5d820684054";
+    "sha256" = "1b9j0kc74cw12a7jv4lii77dgzqzg2s8ndzp4xmisxksgva1qfvh";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -27,11 +28,13 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Gnuradio block for ais";
     homepage = https://github.com/bistromath/gr-ais;
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ mog ];
   };
 }
