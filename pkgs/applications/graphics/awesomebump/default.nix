@@ -15,6 +15,7 @@ let
     name = "qtnproperty";
     inherit src;
     sourceRoot = "AwesomeBump/Sources/utils/QtnProperty";
+    patches = [ ./qtnproperty-parallel-building.patch ];
     buildInputs = [ qtscript qtbase qtdeclarative ];
     nativeBuildInputs = [ qmake flex bison ];
     postInstall = ''
@@ -45,6 +46,10 @@ in stdenv.mkDerivation rec {
     makeWrapper $d/AwesomeBump $out/bin/AwesomeBump \
         --run "cd $d"
   '';
+
+  passthru = {
+    inherit qtnproperty;
+  };
 
   meta = {
     homepage = https://github.com/kmkolasinski/AwesomeBump;
