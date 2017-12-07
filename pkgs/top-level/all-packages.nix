@@ -430,6 +430,8 @@ with pkgs;
 
   airsonic = callPackage ../servers/misc/airsonic { };
 
+  airspy = callPackage ../applications/misc/airspy { };
+
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
 
   albert = libsForQt5.callPackage ../applications/misc/albert {};
