@@ -1171,6 +1171,8 @@ with pkgs;
 
   iio-sensor-proxy = callPackage ../os-specific/linux/iio-sensor-proxy { };
 
+  lynis = callPackage ../tools/security/lynis { };
+
   mathics = pythonPackages.mathics;
 
   masscan = callPackage ../tools/security/masscan { };
