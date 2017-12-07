@@ -131,10 +131,10 @@
     dependencies = ["addressable" "chef" "chef-provisioning" "cookbook-omnifetch" "diff-lcs" "ffi-yajl" "minitar" "mixlib-cli" "mixlib-shellout" "paint" "solve"];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "06dnzlvwpkp9a2lrm3vn600i7j9328872nx4269hvbqnb9ix2cdk";
+      sha256 = "0zqbwkad61rn4wli6z8a7l7glfnnrhbg474vfshvr0k1sicy8z2d";
       type = "gem";
     };
-    version = "2.3.4";
+    version = "2.4.17";
   };
   chef-provisioning = {
     dependencies = ["cheffish" "inifile" "mixlib-install" "net-scp" "net-ssh" "net-ssh-gateway" "winrm" "winrm-elevated" "winrm-fs"];

@@ -71,7 +71,7 @@ GEM
       fuzzyurl
       mixlib-config (~> 2.0)
       mixlib-shellout (~> 2.0)
-    chef-dk (2.3.4)
+    chef-dk (2.4.17)
       addressable (>= 2.3.5, < 2.6)
       chef (~> 13.0)
       chef-provisioning (~> 2.0)
@@ -381,7 +381,7 @@ PLATFORMS
 
 DEPENDENCIES
   berkshelf
-  chef-dk
+  chef-dk (= 2.4.17)
   chef-provisioning
   chef-vault
   chefspec
