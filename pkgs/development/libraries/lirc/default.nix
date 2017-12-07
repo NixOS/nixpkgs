@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, alsaLib, bash, help2man, pkgconfig, xlibsWrapper
-, python3Packages, libxslt, systemd, libusb, libftdi1 }:
+{ stdenv, fetchurl, alsaLib, bash, help2man, pkgconfig, xlibsWrapper, python3
+, libxslt, systemd, libusb, libftdi1 }:
 
 stdenv.mkDerivation rec {
   name = "lirc-0.9.4d";
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig help2man ];
 
   buildInputs = [ alsaLib xlibsWrapper libxslt systemd libusb libftdi1 ]
-  ++ (with python3Packages; [ python pyyaml ]);
+  ++ (with python3.pkgs; [ python pyyaml ]);
 
   configureFlags = [
     "--sysconfdir=/etc"
