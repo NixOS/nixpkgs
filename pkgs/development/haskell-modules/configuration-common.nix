@@ -509,6 +509,21 @@ self: super: {
     preConfigure = "sed -i -e 's,time .* < 1.6,time >= 1.5,' -e 's,haddock-library >= 1.1 && < 1.3,haddock-library >= 1.1,' pandoc.cabal";
   });
 
+  # pandoc 2 dependency resolution
+  hslua_0_9_2 = super.hslua_0_9_2.override { lua5_1 = pkgs.lua5_3; };
+  hslua-module-text = super.hslua-module-text.override { hslua = self.hslua_0_9_2; };
+  texmath_0_10 = super.texmath_0_10.override { pandoc-types = self.pandoc-types_1_17_3; };
+  pandoc_2_0_4 = super.pandoc_2_0_4.override {
+    doctemplates = self.doctemplates_0_2_1;
+    pandoc-types = self.pandoc-types_1_17_3;
+    skylighting = self.skylighting_0_4_4_1;
+    texmath = self.texmath_0_10;
+  };
+  pandoc-citeproc_0_12_1 = super.pandoc-citeproc_0_12_1.override {
+    pandoc = self.pandoc_2_0_4;
+    pandoc-types = self.pandoc-types_1_17_3;
+  };
+
   # https://github.com/tych0/xcffib/issues/37
   xcffib = dontCheck super.xcffib;
 
