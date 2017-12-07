@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, libpcap }:
+{ stdenv, fetchFromGitHub, autoreconfHook, libpcap, makeWrapper, perlPackages }:
 
 stdenv.mkDerivation rec {
   name = "arp-scan-${version}";
@@ -11,8 +11,21 @@ stdenv.mkDerivation rec {
     sha256 = "15zpfdybk2kh98shqs8qqd0f9nyi2ch2wcyv729rfj7yp0hif5mb";
   };
 
+  perlModules = with perlPackages; [
+    HTTPDate
+    HTTPMessage
+    LWPUserAgent
+    URI
+  ];
+
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ libpcap ];
+  buildInputs = [ libpcap makeWrapper ];
+
+  postInstall = ''
+    for name in get-{oui,iab}; do
+      wrapProgram "$out/bin/$name" --set PERL5LIB "${stdenv.lib.makePerlPath perlModules }"
+    done;
+  '';
 
   meta = with stdenv.lib; {
     description = "ARP scanning and fingerprinting tool";
