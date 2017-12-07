@@ -25,7 +25,7 @@ in {
       name = "nixos-ova-${config.system.nixosLabel}-${pkgs.stdenv.system}";
 
       inherit pkgs lib config;
-      partitioned = true;
+      partitionTableType = "legacy";
       diskSize = cfg.baseImageSize;
 
       postVM =
