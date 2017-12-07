@@ -16982,7 +16982,9 @@ with pkgs;
     gtk = gtk3;
   };
 
-  timbreid = callPackage ../applications/audio/pd-plugins/timbreid { };
+  timbreid = callPackage ../applications/audio/pd-plugins/timbreid {
+    fftw = fftwSinglePrec;
+  };
 
   timescaledb = callPackage ../servers/sql/postgresql/timescaledb {};
 
