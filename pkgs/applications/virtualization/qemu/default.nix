@@ -106,6 +106,10 @@ stdenv.mkDerivation rec {
       fi
     '';
 
+  passthru = {
+    qemu-system-i386 = "bin/qemu-system-i386";
+  };
+
   meta = with stdenv.lib; {
     homepage = http://www.qemu.org/;
     description = "A generic and open source machine emulator and virtualizer";
