@@ -1,5 +1,7 @@
-{ stdenv, fetchurl, ncurses, gzip, pkgconfig
+{ stdenv, buildPackages
+, fetchurl, pkgconfig, ncurses, gzip
 , sslSupport ? true, openssl ? null
+, buildPlatform, hostPlatform
 }:
 
 assert sslSupport -> openssl != null;
@@ -15,7 +17,9 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-widec" ] ++ stdenv.lib.optional sslSupport "--with-ssl";
 
-  nativeBuildInputs = stdenv.lib.optional sslSupport pkgconfig;
+  nativeBuildInputs = stdenv.lib.optional sslSupport pkgconfig
+    ++ stdenv.lib.optional (hostPlatform != buildPlatform) buildPackages.stdenv.cc;
+
   buildInputs = [ ncurses gzip ] ++ stdenv.lib.optional sslSupport openssl.dev;
 
   meta = with stdenv.lib; {

@@ -1,4 +1,6 @@
-{ fetchurl, stdenv }:
+{ stdenv, fetchurl
+, buildPlatform, hostPlatform
+}:
 
 stdenv.mkDerivation rec {
   name = "ed-${version}";
@@ -28,11 +30,12 @@ stdenv.mkDerivation rec {
        make: *** [check] Error 127
 
     */
-  doCheck = !stdenv.isDarwin;
+  doCheck = !(hostPlatform.isDarwin || hostPlatform != buildPlatform);
 
-  crossAttrs = {
-    compileFlags = [ "CC=${stdenv.cross.config}-gcc" ];
-  };
+  configureFlags = if hostPlatform == buildPlatform then null else [
+    "--exec-prefix=${stdenv.cc.prefix}"
+    "CC=${stdenv.cc.prefix}cc"
+  ];
 
   meta = {
     description = "An implementation of the standard Unix editor";

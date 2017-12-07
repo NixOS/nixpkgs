@@ -209,7 +209,7 @@ stdenv.mkDerivation rec {
     postInstall = ''
       cp bin/qmake* $out/bin
     '';
-    dontSetConfigureCross = true;
+    configurePlatforms = [];
     dontStrip = true;
   } // optionalAttrs isMingw {
     propagatedBuildInputs = [ ];
