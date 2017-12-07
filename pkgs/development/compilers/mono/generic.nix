@@ -1,4 +1,11 @@
-{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc, python, version, sha256 }:
+{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11
+, callPackage, ncurses, zlib
+, cacert, Foundation, libobjc, python
+
+, version, sha256
+, withLLVM ? false
+, buildParallel ? true
+}:
 
 let
   llvm     = callPackage ./llvm.nix { };
@@ -40,7 +47,7 @@ stdenv.mkDerivation rec {
   # The file /nix/store/xxx-mono-2.4.2.1/lib/mscorlib.dll is an invalid CIL image
   dontStrip = true;
 
-  enableParallelBuilding = true;
+  enableParallelBuilding = buildParallel;
 
   # We want pkg-config to take priority over the dlls in the Mono framework and the GAC
   # because we control pkg-config
