@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, autoreconfHook
-, gtk2, intltool, pkgconfig }:
+{ stdenv, fetchFromGitHub, autoreconfHook, makeWrapper
+, gtk2, intltool, pkgconfig, which, xdotool }:
 
 stdenv.mkDerivation rec {
   name = "parcellite-${version}";
@@ -12,8 +12,14 @@ stdenv.mkDerivation rec {
     sha256 = "19q4x6x984s6gxk1wpzaxawgvly5vnihivrhmja2kcxhzqrnfhiy";
   };
 
-  nativeBuildInputs = [ autoreconfHook intltool pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook intltool pkgconfig makeWrapper ];
   buildInputs = [ gtk2 ];
+
+  postInstall = ''
+    wrapProgram $out/bin/parcellite \
+      --prefix PATH : "${which}/bin" \
+      --prefix PATH : "${xdotool}/bin"
+  '';
 
   meta = with stdenv.lib; {
     description = "Lightweight GTK+ clipboard manager";
