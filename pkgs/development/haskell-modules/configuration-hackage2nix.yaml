@@ -37,7 +37,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 9.16
+  # LTS Haskell 9.17
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -1299,6 +1299,7 @@ default-package-overrides:
   - language-javascript ==0.6.0.10
   - language-lua2 ==0.1.0.5
   - language-puppet ==1.3.8.1
+  - language-python ==0.5.4
   - language-thrift ==0.10.0.0
   - largeword ==1.2.5
   - latex ==0.1.0.3
@@ -2271,8 +2272,8 @@ default-package-overrides:
   - union-find ==0.2
   - uniplate ==1.6.12
   - uniq-deep ==1.1.0.0
-  - unique ==0
   - Unique ==0.4.7.1
+  - unique ==0
   - unit-constraint ==0.0.0
   - units ==2.4
   - units-defs ==2.0.1.1
