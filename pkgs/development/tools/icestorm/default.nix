@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3, libftdi }:
+{ stdenv, fetchFromGitHub, python3, libftdi, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "icestorm-${version}";
@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "18qy7gylnydgzmqry1b4r0ilm6lkjdcyn0wj03syxdig9dbjiacm";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ python3 libftdi ];
   preBuild = ''
     makeFlags="PREFIX=$out $makeFlags"
