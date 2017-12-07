@@ -2,21 +2,21 @@
 
 let
 
-  version = "0.9.7";
+  version = "1.0.1";
   rev = "v${version}";
 
   aptlySrc = fetchFromGitHub {
     inherit rev;
     owner = "smira";
     repo = "aptly";
-    sha256 = "0j1bmqdah4i83r2cf8zcq87aif1qg90yasgf82yygk3hj0gw1h00";
+    sha256 = "0rqxdhy2mlwndxhqb447gz626q92zd09rpvhysr2g1rx9nxa039p";
   };
 
   aptlyCompletionSrc = fetchFromGitHub {
     rev = version;
     owner = "aptly-dev";
     repo = "aptly-bash-completion";
-    sha256 = "1yz3pr2jfczqv81as2q3cizwywj5ksw76vi15xlbx5njkjp4rbm4";
+    sha256 = "0dkc4z687yk912lpv8rirv0nby7iny1zgdvnhdm5b47qmjr1sm5q";
   };
 
 in
@@ -27,12 +27,10 @@ buildGoPackage {
   src = aptlySrc;
 
   goPackagePath = "github.com/smira/aptly";
-  goDeps = ./deps.nix;
 
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    rm $bin/bin/man
     mkdir -p $bin/share/bash-completion/completions
     ln -s ${aptlyCompletionSrc}/aptly $bin/share/bash-completion/completions
     wrapProgram "$bin/bin/aptly" \

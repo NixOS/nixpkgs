@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Query or alter a process' scheduling policy under Linux";
-    homepage = "http://freequaos.host.sk/schedtool/";
+    homepage = http://freequaos.host.sk/schedtool/;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];

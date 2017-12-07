@@ -40,7 +40,7 @@ in buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = "https://fedoraproject.org/wiki/Blivet";
+    homepage = https://fedoraproject.org/wiki/Blivet;
     description = "Module for management of a system's storage configuration";
     license = with licenses; [ gpl2Plus lgpl21Plus ];
     platforms = platforms.linux;

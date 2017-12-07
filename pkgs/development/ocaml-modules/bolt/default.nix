@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, which, camlp4 }:
+{ stdenv, fetchurl, fetchpatch, ocaml, findlib, ocamlbuild, which, camlp4 }:
 
 let inherit (stdenv.lib) getVersion versionAtLeast; in
 
@@ -16,7 +16,13 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ocaml findlib ocamlbuild which camlp4 ];
 
-  patchPhase = ''
+  patches = [ (fetchpatch {
+      url = https://raw.githubusercontent.com/ocaml/opam-repository/master/packages/bolt/bolt.1.4/files/opam.patch;
+      sha256 = "08cl39r98w312sw23cskd5wian6zg20isn9ki41hnbcgkazhi7pb";
+    })
+  ];
+
+  postPatch = ''
     patch myocamlbuild.ml <<EOF
 70,74c70
 <         let camlp4of =
@@ -41,7 +47,7 @@ EOF
   checkTarget = "tests";
 
   meta = with stdenv.lib; {
-    homepage = "http://bolt.x9c.fr";
+    homepage = http://bolt.x9c.fr;
     description = "A logging tool for the OCaml language";
     longDescription = ''
       Bolt is a logging tool for the OCaml language. It is inspired by and

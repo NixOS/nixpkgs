@@ -1,21 +1,21 @@
-  { stdenv, fetchFromGitHub , xorg, freetype, alsaLib, libjack2
+  { stdenv, fetchFromGitHub , xorg, freetype, alsaLib, curl, libjack2
   , lv2, pkgconfig, mesa }:
 
   stdenv.mkDerivation rec {
-  version = "0.8.6";
+  version = "0.9.0";
   name = "helm-${version}";
 
   src = fetchFromGitHub {
     owner = "mtytel";
     repo = "helm";
-    rev = "19f86e6b4db83c1c6b143fc27883592ac4e43489";
-    sha256 = "0a46wnbfqkns8l136v79rr9gv4hhba065igjwkjddf045c9l94l8";
+    rev = "927d2ed27f71a735c3ff2a1226ce3129d1544e7e";
+    sha256 = "17ys2vvhncx9i3ydg3xwgz1d3gqv4yr5mqi7vr0i0ca6nad6x3d4";
   };
 
   buildInputs = [
     xorg.libX11 xorg.libXcomposite xorg.libXcursor xorg.libXext
     xorg.libXinerama xorg.libXrender xorg.libXrandr
-    freetype alsaLib libjack2 pkgconfig mesa lv2
+    freetype alsaLib curl libjack2 pkgconfig mesa lv2
   ];
 
   CXXFLAGS = "-DHAVE_LROUND";
@@ -26,6 +26,7 @@
 
   buildPhase = ''
     make lv2
+    make standalone
   '';
 
   installPhase = ''

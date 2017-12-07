@@ -77,15 +77,21 @@ rec {
   */
   foldl' = builtins.foldl' or foldl;
 
-  /* Map with index
-
-     FIXME(zimbatm): why does this start to count at 1?
+  /* Map with index starting from 0
 
      Example:
-       imap (i: v: "${v}-${toString i}") ["a" "b"]
+       imap0 (i: v: "${v}-${toString i}") ["a" "b"]
+       => [ "a-0" "b-1" ]
+  */
+  imap0 = f: list: genList (n: f n (elemAt list n)) (length list);
+
+  /* Map with index starting from 1
+
+     Example:
+       imap1 (i: v: "${v}-${toString i}") ["a" "b"]
        => [ "a-1" "b-2" ]
   */
-  imap = f: list: genList (n: f (n + 1) (elemAt list n)) (length list);
+  imap1 = f: list: genList (n: f (n + 1) (elemAt list n)) (length list);
 
   /* Map and concatenate the result.
 
@@ -470,5 +476,13 @@ rec {
        => [ 1 4 5 ]
   */
   subtractLists = e: filter (x: !(elem x e));
+
+  /* Test if two lists have no common element.
+     It should be slightly more efficient than (intersectLists a b == [])
+  */
+  mutuallyExclusive = a: b:
+    (builtins.length a) == 0 ||
+    (!(builtins.elem (builtins.head a) b) &&
+     mutuallyExclusive (builtins.tail a) b);
 
 }

@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Database administration tool for Firebird RDBMS";
-    homepage = "https://github.com/mariuz/flamerobin";
+    homepage = https://github.com/mariuz/flamerobin;
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ uralbash ];
     platforms = platforms.unix;

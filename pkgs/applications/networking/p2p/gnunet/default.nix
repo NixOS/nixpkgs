@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
       network are rewarded with better service.
     '';
 
-    homepage = http://gnunet.org/;
+    homepage = https://gnunet.org/;
 
     license = licenses.gpl2Plus;
 

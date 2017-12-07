@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Confluent's Apache Kafka client for Python";
-    homepage = "https://github.com/confluentinc/confluent-kafka-python";
+    homepage = https://github.com/confluentinc/confluent-kafka-python;
     license = licenses.asl20;
     maintainers = with maintainers; [ mlieberman85 ];
   };

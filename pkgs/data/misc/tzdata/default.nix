@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
     "TZDIR=$(out)/share/zoneinfo"
     "ETCDIR=$(TMPDIR)/etc"
     "LIBDIR=$(dev)/lib"
-    "MANDIR=$(man)/man"
+    "MANDIR=$(man)/share/man"
     "AWK=awk"
     "CFLAGS=-DHAVE_LINK=0"
   ];

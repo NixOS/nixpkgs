@@ -1,0 +1,27 @@
+From 2e9ac201af238b742c7032962b9b12a8b66bab0c Mon Sep 17 00:00:00 2001
+From: zimbatm <zimbatm@zimbatm.com>
+Date: Mon, 29 May 2017 22:36:15 +0100
+Subject: [PATCH] allow nologin on other paths
+
+---
+ google_compute_engine/accounts/accounts_utils.py | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/google_compute_engine/accounts/accounts_utils.py b/google_compute_engine/accounts/accounts_utils.py
+index 57e62be..d7eda06 100644
+--- a/google_compute_engine/accounts/accounts_utils.py
++++ b/google_compute_engine/accounts/accounts_utils.py
+@@ -295,8 +295,8 @@ class AccountsUtils(object):
+     # logins. This helps avoid problems caused by operator and root sharing
+     # a home directory in CentOS and RHEL.
+     pw_entry = self._GetUser(user)
+-    if pw_entry and pw_entry.pw_shell == '/sbin/nologin':
+-      message = 'Not updating user %s. User set /sbin/nologin as login shell.'
++    if pw_entry and os.path.basename(pw_entry.pw_shell) == 'nologin':
++      message = 'Not updating user %s. User set `nologin` as login shell.'
+       self.logger.debug(message, user)
+       return True
+ 
+-- 
+2.13.0
+

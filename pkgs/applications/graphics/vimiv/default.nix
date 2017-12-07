@@ -64,7 +64,7 @@ python3Packages.buildPythonApplication rec {
   postInstall = "make DESTDIR=\"$out\" install";
 
   meta = {
-    homepage = "https://github.com/karlch/vimiv";
+    homepage = https://github.com/karlch/vimiv;
     description = "An image viewer with Vim-like keybindings";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;

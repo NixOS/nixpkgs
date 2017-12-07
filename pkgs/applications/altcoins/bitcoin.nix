@@ -31,7 +31,7 @@ stdenv.mkDerivation rec{
       parties. Users hold the crypto keys to their own money and transact directly
       with each other, with the help of a P2P network to check for double-spending.
     '';
-    homepage = "http://www.bitcoin.org/";
+    homepage = http://www.bitcoin.org/;
     maintainers = with maintainers; [ roconnor AndersonTorres ];
     license = licenses.mit;
     platforms = platforms.unix;

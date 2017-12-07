@@ -18,7 +18,7 @@ let
 
     meta = with stdenv.lib; {
       description = "Compiler for GObject type system";
-      homepage = "http://live.gnome.org/Vala";
+      homepage = http://live.gnome.org/Vala;
       license = licenses.lgpl21Plus;
       platforms = platforms.unix;
       maintainers = with maintainers; [ antono lethalman peterhoeg ];

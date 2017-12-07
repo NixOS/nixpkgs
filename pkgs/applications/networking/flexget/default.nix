@@ -53,7 +53,7 @@ buildPythonApplication rec {
   ++ lib.optional (transmission != null) transmissionrpc;
 
   meta = {
-    homepage = http://flexget.com/;
+    homepage = https://flexget.com/;
     description = "Multipurpose automation tool for content like torrents";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ domenkozar tari ];

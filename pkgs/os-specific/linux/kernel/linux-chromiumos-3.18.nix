@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, perl, buildLinux, ncurses, ... } @ args:
+{ stdenv, hostPlatform, fetchgit, perl, buildLinux, ncurses, ... } @ args:
 
 # ChromiumOS requires a 64bit build host
 assert stdenv.is64bit;

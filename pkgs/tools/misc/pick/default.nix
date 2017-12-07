@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "pick-${version}";
-  version = "1.6.1";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
-    owner = "thoughtbot";
+    owner = "calleerlandsson";
     repo = "pick";
     rev = "v${version}";
-    sha256 = "0iw3yqwg8j0pg56xx52xwn7n95vxlqbqh71zrc934v4mq971qlhd";
+    sha256 = "1x7ql530rj4yj50dzp8526mz92g4hhqxnig1qgiq3h3k815p31qb";
   };
 
   buildInputs = [ ncurses ];

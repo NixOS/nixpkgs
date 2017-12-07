@@ -103,6 +103,8 @@ stdenv.mkDerivation {
   preConfigure = ''
     export LD_LIBRARY_PATH="$PWD/lib:$PWD/plugins/platforms:$LD_LIBRARY_PATH"
     export MAKEFLAGS=-j$NIX_BUILD_CORES
+    # We need to set LD to CXX or otherwise we get nasty compile errors
+    export LD=$CXX
 
     configureFlags+="\
         -plugindir $out/$qtPluginPrefix \
@@ -111,6 +113,8 @@ stdenv.mkDerivation {
 
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QT_PLUGIN_PREFIX=\"$qtPluginPrefix\""
     NIX_CFLAGS_COMPILE+=" -DNIXPKGS_QPA_PLATFORM_PLUGIN_PATH=\"''${!outputLib}/$qtPluginPrefix/platforms\""
+
+    unset LD
   '';
 
   prefixKey = "-prefix ";

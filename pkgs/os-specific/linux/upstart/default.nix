@@ -49,7 +49,7 @@ let
     '';
 
   meta = {
-    homepage = "http://upstart.ubuntu.com/";
+    homepage = http://upstart.ubuntu.com/;
     description = "An event-based replacement for the /sbin/init daemon";
     platforms = stdenv.lib.platforms.linux;
   };

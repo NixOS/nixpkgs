@@ -269,7 +269,7 @@ stdenv.mkDerivation rec {
       the backend output markups (which can be almost any type of SGML/XML
       markup) can be customized and extended by the user.
     '';
-    homepage = "http://www.methods.co.nz/asciidoc/";
+    homepage = http://www.methods.co.nz/asciidoc/;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];

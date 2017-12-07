@@ -8,6 +8,7 @@
 , kconfig
 , kconfigwidgets
 , kcoreaddons
+, kcrash
 , kdbusaddons
 , kemoticons
 , kglobalaccel
@@ -17,6 +18,7 @@
 , kitemviews
 , knotifications
 , knotifyconfig
+, kwindowsystem
 , kio
 , kparts
 , kwallet
@@ -27,13 +29,13 @@
 
 let
   pname = "konversation";
-  version = "1.6.2";
+  version = "1.7.2";
 in mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-    sha256 = "1798sslwz7a3h1v524ra33p0j5iqvcg0v1insyvb5qp4kv11slmn";
+    sha256 = "0616h59bsw5c3y8lij56v3fhv9by0rwdfcaa83yfxqg4rs26xyaz";
   };
 
   buildInputs = [
@@ -42,6 +44,7 @@ in mkDerivation rec {
     kconfig
     kconfigwidgets
     kcoreaddons
+    kcrash
     kdbusaddons
     kdoctools
     kemoticons
@@ -52,6 +55,7 @@ in mkDerivation rec {
     kitemviews
     knotifications
     knotifyconfig
+    kwindowsystem
     kio
     kparts
     kwallet

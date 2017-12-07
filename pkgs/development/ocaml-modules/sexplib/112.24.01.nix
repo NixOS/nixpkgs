@@ -1,4 +1,8 @@
-{stdenv, buildOcaml, fetchurl, type_conv, camlp4}:
+{ stdenv, buildOcaml, fetchurl, ocaml, type_conv, camlp4 }:
+
+if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+|| stdenv.lib.versionAtLeast ocaml.version "4.03"
+then throw "sexlib-112.24.01 is not available for OCaml ${ocaml.version}" else
 
 buildOcaml rec {
   minimumSupportedOcamlVersion = "4.02";

@@ -26,6 +26,21 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir $out
     mv * $out
+
+    # Clean up documentation.
+    mkdir -p $out/share/doc/${name}
+    mv $out/CHANGES.txt \
+       $out/LICENSE.txt \
+       $out/NEWS.txt \
+       $out/NOTICE.txt \
+       $out/javadoc \
+       $out/share/doc/${name}
+
+    if [[ -d $out/doc ]]; then
+      mv "$out/doc/"* $out/share/doc/${name}
+      rmdir $out/doc
+    fi
+
     for cmd in bin/cassandra bin/nodetool bin/sstablekeys \
       bin/sstableloader bin/sstableupgrade \
       tools/bin/cassandra-stress tools/bin/cassandra-stressd \

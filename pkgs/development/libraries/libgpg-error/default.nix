@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = "https://www.gnupg.org/related_software/libgpg-error/index.html";
+    homepage = https://www.gnupg.org/related_software/libgpg-error/index.html;
     description = "A small library that defines common error values for all GnuPG components";
 
     longDescription = ''

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "--no-warn-unused-cli" ];
 
   meta = with stdenv.lib; {
-    homepage = "http://cppcms.com/sql/cppdb/";
+    homepage = http://cppcms.com/sql/cppdb/;
     description = "C++ Connectivity library that supports MySQL, PostgreSQL, Sqlite3 databases and generic ODBC drivers";
     platforms = platforms.linux ;
     license = licenses.boost;

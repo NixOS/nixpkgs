@@ -110,7 +110,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "https://github.com/rebar/rebar3";
+    homepage = https://github.com/rebar/rebar3;
     description = "rebar 3.0 is an Erlang build tool that makes it easy to compile and test Erlang applications, port drivers and releases";
 
     longDescription = ''

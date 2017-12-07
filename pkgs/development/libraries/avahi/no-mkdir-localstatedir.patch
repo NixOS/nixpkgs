@@ -1,12 +1,12 @@
 Don't "mkdir $(localstatedir)" since we can't do it (/var).
 
---- avahi-0.6.27/avahi-daemon/Makefile.in	2010-07-13 05:06:35.000000000 +0200
-+++ avahi-0.6.27/avahi-daemon/Makefile.in	2010-07-13 18:03:45.000000000 +0200
-@@ -1554,7 +1554,6 @@ xmllint:
+--- a/avahi-daemon/Makefile.in
++++ b/avahi-daemon/Makefile.in
+@@ -1625,7 +1625,6 @@ xmllint:
  	done
  
  install-data-local:
--	test -z "$(localstatedir)/run" || $(MKDIR_P) "$(DESTDIR)$(localstatedir)/run"
+-	test -z "$(avahi_runtime_dir)" || $(MKDIR_P) "$(DESTDIR)$(avahi_runtime_dir)"
  
  update-systemd:
  	curl http://cgit.freedesktop.org/systemd/plain/src/sd-daemon.c > sd-daemon.c

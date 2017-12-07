@@ -1,4 +1,4 @@
-{ stdenv, rpmextract, ncurses, patchelf, makeWrapper, requireFile, unzip }:
+{ stdenv, rpmextract, ncurses5, patchelf, makeWrapper, requireFile, unzip }:
 
 assert stdenv.system == "x86_64-linux";
 
@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
       sha256 = "11jzvh25mlygflazd37gi05xv67im4rgq7sbs5nwgw3gxdh4xfjj";
     };
 
-  buildInputs = [rpmextract ncurses unzip makeWrapper];
+  buildInputs = [rpmextract ncurses5 unzip makeWrapper];
   libPath =
     stdenv.lib.makeLibraryPath
-       [ stdenv.cc.cc stdenv.cc.libc ncurses ];
+       [ stdenv.cc.cc stdenv.cc.libc ncurses5 ];
 
   buildCommand = ''
     mkdir -p $out/bin

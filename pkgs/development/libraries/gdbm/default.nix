@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, lib, buildPlatform, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "gdbm-1.13";
@@ -10,9 +10,22 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  # Linking static stubs on cygwin requires correct ordering.
+  # Consider upstreaming this.
+
+  # Disable dbmfetch03.at test because it depends on unlink()
+  # failing on a link in a chmod -w directory, which cygwin
+  # apparently allows.
+  postPatch = lib.optionalString buildPlatform.isCygwin ''
+      substituteInPlace tests/Makefile.in --replace \
+        '_LDADD = ../src/libgdbm.la ../compat/libgdbm_compat.la' \
+        '_LDADD = ../compat/libgdbm_compat.la ../src/libgdbm.la'
+      substituteInPlace tests/testsuite.at --replace \
+        'm4_include([dbmfetch03.at])' ""
+  '';
   configureFlags = [ "--enable-libgdbm-compat" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GNU dbm key/value database library";
 
     longDescription =

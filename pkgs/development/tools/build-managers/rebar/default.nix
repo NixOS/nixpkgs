@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "https://github.com/rebar/rebar";
+    homepage = https://github.com/rebar/rebar;
     description = "Erlang build tool that makes it easy to compile and test Erlang applications, port drivers and releases";
 
     longDescription = ''

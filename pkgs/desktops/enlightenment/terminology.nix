@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, efl }:
+{ stdenv, fetchurl, pkgconfig, efl, curl, makeWrapper }:
 
 stdenv.mkDerivation rec {
   name = "terminology-${version}";
@@ -9,9 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "1x4j2q4qqj10ckbka0zaq2r2zm66ff1x791kp8slv1ff7fw45vdz";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
 
-  buildInputs = [ efl ];
+  buildInputs = [ efl curl ];
 
   NIX_CFLAGS_COMPILE = [
     "-I${efl}/include/ecore-con-1"
@@ -21,6 +21,12 @@ stdenv.mkDerivation rec {
     "-I${efl}/include/eo-1"
     "-I${efl}/include/ethumb-1"
   ];
+
+  postInstall = ''
+    for f in $out/bin/*; do
+      wrapProgram $f --prefix LD_LIBRARY_PATH : ${curl.out}/lib
+    done
+  '';
 
   meta = {
     description = "The best terminal emulator written with the EFL";

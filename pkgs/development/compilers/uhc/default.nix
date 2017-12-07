@@ -38,7 +38,7 @@ in stdenv.mkDerivation rec {
   inherit clang;
 
   meta = with stdenv.lib; {
-    homepage = "http://www.cs.uu.nl/wiki/UHC";
+    homepage = http://www.cs.uu.nl/wiki/UHC;
     description = "Utrecht Haskell Compiler";
     maintainers = [ maintainers.phile314 ];
 

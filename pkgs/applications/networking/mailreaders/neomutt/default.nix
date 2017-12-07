@@ -1,20 +1,20 @@
 { stdenv, fetchFromGitHub, which, autoreconfHook, ncurses, perl
-, cyrus_sasl, gdbm, gpgme, kerberos, libidn, notmuch, openssl, lmdb, libxslt, docbook_xsl }:
+, cyrus_sasl, gss, gpgme, kerberos, libidn, notmuch, openssl, lmdb, libxslt, docbook_xsl }:
 
 stdenv.mkDerivation rec {
-  version = "20170602";
+  version = "20170714";
   name = "neomutt-${version}";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = "neomutt-${version}";
-    sha256 = "0rpvxmv10ypl7la4nmp0s02ixmm9g5pn9g9ms8ygzsix9pa86w45";
+    sha256 = "0jbh83hvq1jwb8ps7ffl2325y6i79wdnwcn6db0r5prmxax18hw1";
   };
 
   nativeBuildInputs = [ autoreconfHook docbook_xsl libxslt.bin which ];
   buildInputs = [
-    cyrus_sasl gdbm gpgme kerberos libidn ncurses
+    cyrus_sasl gss gpgme kerberos libidn ncurses
     notmuch openssl perl lmdb
   ];
 
@@ -28,23 +28,13 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--enable-debug"
     "--enable-gpgme"
-    "--enable-hcache"
-    "--enable-imap"
     "--enable-notmuch"
-    "--enable-pgp"
-    "--enable-pop"
-    "--enable-sidebar"
-    "--enable-keywords"
-    "--enable-smtp"
-    "--enable-nntp"
-    "--enable-compressed"
     "--with-homespool=mailbox"
     "--with-gss"
     "--with-mailpath="
     "--with-ssl"
     "--with-sasl"
     "--with-curses"
-    "--with-regex"
     "--with-idn"
     "--with-lmdb"
 
@@ -61,6 +51,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.neomutt.org;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ cstrahan vrthra erikryb ];
+    maintainers = with maintainers; [ cstrahan erikryb jfrankenau vrthra ];
   };
 }

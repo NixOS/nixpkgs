@@ -1,14 +1,16 @@
-{ stdenv, fetchurl
-, gettext, glib, json_glib, libelf, pkgconfig, scons, sphinx, utillinux }:
+{ stdenv, fetchFromGitHub,
+  gettext, glib, json_glib, libelf, pkgconfig, scons, sphinx, utillinux }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "rmlint-${version}";
-  version = "2.4.4";
+  version = "2.6.1";
 
-  src = fetchurl {
-    url = "https://github.com/sahib/rmlint/archive/v${version}.tar.gz";
-    sha256 = "1g38wmf58m9lbdngfsbz3dbkd44yqxppzvgi5mwag0w7r7khhir9";
+  src = fetchFromGitHub {
+    owner = "sahib";
+    repo = "rmlint";
+    rev = "v${version}";
+    sha256 = "1j09qk3zypw4my713q9g36kq37ggqd5v9vrs3h821p6p3qmmkdn8";
   };
 
   configurePhase = "scons config";
@@ -21,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Extremely fast tool to remove duplicates and other lint from your filesystem";
-    homepage = http://rmlint.readthedocs.org;
+    homepage = https://rmlint.readthedocs.org;
     platforms = platforms.linux;
     license = licenses.gpl3;
     maintainers = [ maintainers.koral ];

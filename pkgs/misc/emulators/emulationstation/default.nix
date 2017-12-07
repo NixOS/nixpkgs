@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A flexible emulator front-end supporting keyboardless navigation and custom system themes";
-    homepage = "http://emulationstation.org";
+    homepage = http://emulationstation.org;
     maintainers = [ stdenv.lib.maintainers.edwtjo ];
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;

@@ -4,16 +4,16 @@ with rustPlatform;
 
 buildRustPackage rec {
   name = "xsv-${version}";
-  version = "0.11.0";
+  version = "0.12.1";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
     repo = "xsv";
     rev = "${version}";
-    sha256 = "169rp4izcjhhlrqrhvlvsbiz7wqfi6g3kjfgrddgvahp0ls29hls";
+    sha256 = "0xmjx5grwjrx2zsqmpblid9pqpwkk9pv468ffqlza3w35n9x5dax";
   };
 
-  depsSha256 = "006sp66l2gybyk1n7lxp645k6drz5cgxcix376k8qr0v9jwadlqa";
+  depsSha256 = "0gdbxgykhy6wm89mbdvl7ck2v0f66hwlm0m1q7r64bkb7i10fmkd";
 
   meta = with stdenv.lib; {
     description = "A fast CSV toolkit written in Rust";

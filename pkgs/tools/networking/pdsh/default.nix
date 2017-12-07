@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "http://code.google.com/p/pdsh/";
+    homepage = http://code.google.com/p/pdsh/;
     description = "High-performance, parallel remote shell utility";
     license = stdenv.lib.licenses.gpl2;
 

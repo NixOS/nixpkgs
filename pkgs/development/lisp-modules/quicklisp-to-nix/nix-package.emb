@@ -7,12 +7,14 @@ rec {
 
   description = ''<% @var description %>'';
 
-  deps = [ <% @loop deps %>args."<% @var name %>" <% @endloop %>];
+  deps = [ <% @loop deps %>args."<% @var filename %>" <% @endloop %>];
 
   src = fetchurl {
     url = ''<% @var url %>'';
     sha256 = ''<% @var sha256 %>'';
   };
+    
+  packageName = "<% @var name %>";
 
   overrides = x: {
     postInstall = ''

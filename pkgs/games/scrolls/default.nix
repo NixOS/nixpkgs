@@ -6,7 +6,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A strategy collectible card game";
-    homepage = "https://scrolls.com/";
+    homepage = https://scrolls.com/;
     # http://www.reddit.com/r/Scrolls/comments/2j3pxw/linux_client_experimental/
 
     platforms = [ "x86_64-linux" ];

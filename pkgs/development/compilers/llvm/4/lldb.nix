@@ -17,7 +17,7 @@
 stdenv.mkDerivation {
   name = "lldb-${version}";
 
-  src = fetch "lldb" "0g83hbw1r4gd0z8hlph9i34xs6dlcc69vz3h2bqwkhb2qq2qzg9d";
+  src = fetch "lldb" "0yy43a27zx3r51b6gkv3v2mdiqcq3mf0ngki47ya0i30v3gx4cl4";
 
   patches = [ ./lldb-libedit.patch ];
   postPatch = ''

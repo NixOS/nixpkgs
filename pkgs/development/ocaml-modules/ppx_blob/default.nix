@@ -12,7 +12,7 @@ buildOcaml rec {
   buildInputs = [ ppx_tools ];
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/johnwhitington/ppx_blob";
+    homepage = https://github.com/johnwhitington/ppx_blob;
     description = "OCaml ppx to include binary data from a file as a string";
     license = licenses.unlicense;
   };

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/pfactum/pcapc";
+    homepage = https://github.com/pfactum/pcapc;
     description = "Compile libpcap filter expressions into BPF opcodes";
     license = licenses.gpl3;
     platforms = platforms.linux;

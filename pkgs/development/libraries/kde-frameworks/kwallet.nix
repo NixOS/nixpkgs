@@ -15,4 +15,8 @@ mkDerivation {
     knotifications kservice kwidgetsaddons kwindowsystem libgcrypt qgpgme
   ];
   propagatedBuildInputs = [ qtbase ];
+  patches = [ ./kwallet-dbus.patch ];
+  postFixup = ''
+    rm "''${!outputBin}/share/dbus-1/services/org.kde.kwalletd.service"
+  '';
 }

@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   CPPFLAGS = "-UGTK_DISABLE_DEPRECATED";
 
   meta = with stdenv.lib; {
-    homepage = http://projects.gnome.org/gtkglext/;
+    homepage = https://projects.gnome.org/gtkglext/;
     description = "GtkGLExt, an OpenGL extension to GTK+";
     longDescription =
       '' GtkGLExt is an OpenGL extension to GTK+. It provides additional GDK

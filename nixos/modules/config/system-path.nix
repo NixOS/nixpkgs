@@ -115,10 +115,12 @@ in
         "/share/mime"
         "/share/nano"
         "/share/org"
-        "/share/terminfo"
         "/share/themes"
         "/share/vim-plugins"
         "/share/vulkan"
+        "/share/kservices5"
+        "/share/kservicetypes5"
+        "/share/kxmlgui5"
       ];
 
     system.path = pkgs.buildEnv {

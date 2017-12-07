@@ -1,7 +1,9 @@
 { stdenv, lib, fetchurl, fetchpatch
 , zlib, xz, python2, findXMLCatalogs, libiconv
-, pythonSupport ? (! stdenv ? cross)
-, icuSupport ? false, icu ? null }:
+, buildPlatform, hostPlatform
+, pythonSupport ? buildPlatform == hostPlatform
+, icuSupport ? false, icu ? null
+}:
 
 let
   python = python2;
@@ -24,7 +26,7 @@ in stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "bin" "dev" "out" "doc" ]
+  outputs = [ "bin" "dev" "out" "man" "doc" ]
     ++ lib.optional pythonSupport "py";
   propagatedBuildOutputs = "out bin" + lib.optionalString pythonSupport " py";
 
@@ -45,7 +47,7 @@ in stdenv.mkDerivation rec {
 
   doCheck = !stdenv.isDarwin;
 
-  crossAttrs = lib.optionalAttrs (stdenv.cross.libc == "msvcrt") {
+  crossAttrs = lib.optionalAttrs (hostPlatform.libc == "msvcrt") {
     # creating the DLL is broken ATM
     dontDisableStatic = true;
     configureFlags = configureFlags ++ [ "--disable-shared" ];

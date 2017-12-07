@@ -1,4 +1,5 @@
 { stdenv, fetchFromGitHub, connman, dmenu }:
+
 stdenv.mkDerivation rec {
   name = "connman_dmenu-${version}";
   version = "git-29-9-2015";
@@ -12,10 +13,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ connman dmenu ];
 
-  phases = "unpackPhase patchPhase installPhase fixupPhase";
+  dontBuild = true;
 
   # remove root requirement, see: https://github.com/march-linux/connman_dmenu/issues/3
-  patchPhase = ''
+  postPatch = ''
     sed -i '89,92d' connman_dmenu
   '';
 

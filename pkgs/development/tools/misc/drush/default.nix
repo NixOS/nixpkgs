@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Command-line shell and Unix scripting interface for Drupal";
-    homepage    = http://github.com/drush-ops/drush;
+    homepage    = https://github.com/drush-ops/drush;
     license     = licenses.gpl2;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.all;

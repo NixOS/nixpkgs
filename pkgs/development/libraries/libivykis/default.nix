@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ file protobufc ];
 
   meta = with stdenv.lib; {
-    homepage = "http://libivykis.sourceforge.net/";
+    homepage = http://libivykis.sourceforge.net/;
     description = ''
       A thin wrapper over various OS'es implementation of I/O readiness
       notification facilities

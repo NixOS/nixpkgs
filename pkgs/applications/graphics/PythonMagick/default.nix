@@ -1,3 +1,5 @@
+# This expression provides Python bindings to ImageMagick. Python libraries are supposed to be called via `python-packages.nix`.
+
 {stdenv, fetchurl, python, boost, pkgconfig, imagemagick}:
 
 stdenv.mkDerivation rec {

@@ -1,12 +1,12 @@
-{
-  stdenv, lib, fetchurl, copyPathsToStore,
-  pkgconfig, which,
-  zlib, bzip2, libpng, gnumake, glib,
+{ stdenv, lib, fetchurl, copyPathsToStore
+, hostPlatform
+, pkgconfig, which
+, zlib, bzip2, libpng, gnumake, glib
 
-  # FreeType supports LCD filtering (colloquially referred to as sub-pixel rendering).
+, # FreeType supports LCD filtering (colloquially referred to as sub-pixel rendering).
   # LCD filtering is also known as ClearType and covered by several Microsoft patents.
   # This option allows it to be disabled. See http://www.freetype.org/patents.html.
-  useEncumberedCode ? true,
+  useEncumberedCode ? true
 }:
 
 let
@@ -67,7 +67,7 @@ in stdenv.mkDerivation {
 
   postInstall = glib.flattenInclude;
 
-  crossAttrs = stdenv.lib.optionalAttrs (stdenv.cross.libc or null != "msvcrt") {
+  crossAttrs = stdenv.lib.optionalAttrs (hostPlatform.libc or null != "msvcrt") {
     # Somehow it calls the unwrapped gcc, "i686-pc-linux-gnu-gcc", instead
     # of gcc. I think it's due to the unwrapped gcc being in the PATH. I don't
     # know why it's on the PATH.

@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   patches = [ ./automake.patch ];
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [ "format" "bindnow" ];
 
   prePatch = ''
       newPath=$(echo "${ddccontrol-db}/share/ddccontrol-db" | sed "s/\\//\\\\\\//g")
@@ -28,11 +28,13 @@ stdenv.mkDerivation {
       oldPath+="{datadir}\/ddccontrol-db"
       sed "s/$oldPath/$newPath/" <configure.ac.old >configure.ac
       rm configure.ac.old
+
+      sed -e "s/chmod 4711/chmod 0711/" -i src/ddcpci/Makefile*
   '';
 
   meta = with stdenv.lib; {
     description = "A program used to control monitor parameters by software";
-    homepage = "http://ddccontrol.sourceforge.net/";
+    homepage = http://ddccontrol.sourceforge.net/;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ stdenv.lib.maintainers.pakhfn ];

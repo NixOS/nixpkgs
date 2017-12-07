@@ -32,7 +32,13 @@ stdenv.mkDerivation rec {
     */
   doCheck = !(hostPlatform.isDarwin || hostPlatform != buildPlatform);
 
-  configureFlags = if hostPlatform == buildPlatform then null else [
+  # TODO(@Ericson2314): Use placeholder to make this a configure flag once Nix
+  # 1.12 is released.
+  preConfigure = ''
+    export DESTDIR=$out
+  '';
+
+  configureFlags = [
     "--exec-prefix=${stdenv.cc.prefix}"
     "CC=${stdenv.cc.prefix}cc"
   ];

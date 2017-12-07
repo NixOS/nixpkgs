@@ -250,7 +250,7 @@ trap cleanup EXIT
 # If --repair is given, don't try to use the Nix daemon, because the
 # flag can only be used directly.
 if [ -z "$repair" ] && systemctl show nix-daemon.socket nix-daemon.service | grep -q ActiveState=active; then
-    export NIX_REMOTE=${NIX_REMOTE:-daemon}
+    export NIX_REMOTE=${NIX_REMOTE-daemon}
 fi
 
 

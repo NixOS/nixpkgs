@@ -22,7 +22,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Free open-source planetarium";
-    homepage = "http://stellarium.org/";
+    homepage = http://stellarium.org/;
     license = licenses.gpl2;
 
     platforms = platforms.linux; # should be mesaPlatforms, but we don't have qt on darwin

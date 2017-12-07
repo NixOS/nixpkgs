@@ -90,7 +90,7 @@ let
 
       meta = with stdenv.lib; {
         description = "A compiler for NVIDIA GPUs, math libraries, and tools";
-        homepage = "https://developer.nvidia.com/cuda-toolkit";
+        homepage = https://developer.nvidia.com/cuda-toolkit;
         platforms = platforms.linux;
         license = licenses.unfree;
       };

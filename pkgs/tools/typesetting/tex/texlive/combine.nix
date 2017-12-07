@@ -155,18 +155,24 @@ in buildEnv {
         --prefix PERL5LIB : "$out/share/texmf/scripts/texlive"
 
       # avoid using non-nix shebang in $target by calling interpreter
-      if [[ "$(head -c 2 $target)" = "#!" ]]; then
-        local cmdline="$(head -n 1 $target | sed 's/^\#\! *//;s/ *$//')"
+      if [[ "$(head -c 2 "$target")" = "#!" ]]; then
+        local cmdline="$(head -n 1 "$target" | sed 's/^\#\! *//;s/ *$//')"
         local relative=`basename "$cmdline" | sed 's/^env //' `
         local newInterp=`echo "$relative" | cut -d\  -f1`
         local params=`echo "$relative" | cut -d\  -f2- -s`
-        local newPath="$(type -P $newInterp)"
+        local newPath="$(type -P "$newInterp")"
         if [[ -z "$newPath" ]]; then
           echo " Warning: unknown shebang '$cmdline' in '$target'"
           continue
         fi
         echo " and patching shebang '$cmdline'"
         sed "s|^exec |exec $newPath $params |" -i "$link"
+
+      elif head -n 1 "$target" | grep -q 'exec perl'; then
+        # see #24343 for details of the problem
+        echo " and patching weird perl shebang"
+        sed "s|^exec |exec '${perl}/bin/perl' -w |" -i "$link"
+
       else
         sed 's|^exec |exec -a "$0" |' -i "$link"
         echo

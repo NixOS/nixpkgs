@@ -1,6 +1,6 @@
 { mkDerivation, fetchurl, lib
 , extra-cmake-modules, kdoctools, wrapGAppsHook
-, kconfig, kinit, kpmcore
+, kconfig, kcrash, kinit, kpmcore
 , eject, libatasmart }:
 
 let
@@ -22,5 +22,5 @@ in mkDerivation rec {
   nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
   # refer to kpmcore for the use of eject
   buildInputs = [ eject libatasmart ];
-  propagatedBuildInputs = [ kconfig kinit kpmcore ];
+  propagatedBuildInputs = [ kconfig kcrash kinit kpmcore ];
 }

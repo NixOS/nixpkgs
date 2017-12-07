@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python library for Windows Remote Management";
-    homepage = "http://github.com/diyan/pywinrm/";
+    homepage = http://github.com/diyan/pywinrm/;
     license = licenses.mit;
     maintainers = with maintainers; [ elasticdog ];
     platforms = platforms.all;

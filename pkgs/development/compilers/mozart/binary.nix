@@ -63,7 +63,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://www.mozart-oz.org/";
+    homepage = http://www.mozart-oz.org/;
     description = "Multiplatform implementation of the Oz programming language";
     longDescription = ''
       The Mozart Programming System combines ongoing research in

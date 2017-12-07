@@ -18,7 +18,7 @@ stdenv.mkDerivation rec{
   preConfigure = "cd src";
 
   meta = {
-    homepage = "http://atari800.sourceforge.net/";
+    homepage = http://atari800.sourceforge.net/;
     description = "An Atari 8-bit emulator";
     longDescription = ''
       Atari800 is the emulator of Atari 8-bit computer systems and

@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
     homepage = http://pharo.org;
     license = stdenv.lib.licenses.mit;
     maintainers = [ ];
-    # Pharo VM sources are packaged separately for darwin (OS X)
+    # Pharo VM sources are packaged separately for darwin (macOS)
     platforms = with stdenv.lib;
                   intersectLists
                     platforms.mesaPlatforms

@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Alsa mixer application for Windowmaker";
-    homepage = "http://windowmaker.org/dockapps/?name=AlsaMixer.app";
+    homepage = http://windowmaker.org/dockapps/?name=AlsaMixer.app;
     license = stdenv.lib.licenses.gpl2;
     maintainers = [ stdenv.lib.maintainers.bstrik ];
   };

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, fetchpatch, nodejs, which, python27, utillinux }:
 
-let version = "19.1"; in
+let version = "20"; in
 stdenv.mkDerivation {
   name = "cjdns-"+version;
 
   src = fetchurl {
     url = "https://github.com/cjdelisle/cjdns/archive/cjdns-v${version}.tar.gz";
-    sha256 = "53c568a500215b055a9894178eb4477bd93a6e1abf751d0bc5ef2a03ea01a188";
+    sha256 = "1dyqxi9l2pmrgm16a161909rg3vfzvib40frr7p6ddpk8yfh5888";
   };
 
   buildInputs = [ which python27 nodejs ] ++

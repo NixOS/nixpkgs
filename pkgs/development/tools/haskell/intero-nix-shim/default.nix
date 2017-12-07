@@ -22,6 +22,6 @@ mkDerivation {
     ln -s ${cabal-install}/bin/cabal  $out/libexec
     ln -s ${intero       }/bin/intero $out/libexec
   '';
-  homepage = "https://github.com/michalrus/intero-nix-shim";
+  homepage = https://github.com/michalrus/intero-nix-shim;
   license = stdenv.lib.licenses.asl20;
 }

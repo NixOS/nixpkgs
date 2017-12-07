@@ -24,6 +24,10 @@ let
           let pluginname = substitute(d, ".*/", "", "")
           if !has_key(seen, pluginname)
             exec 'set runtimepath^='.d
+            let after = d."/after"
+            if isdirectory(after)
+              exec 'set runtimepath^='.after
+            endif
             let seen[pluginname] = 1
           endif
         endfor
@@ -85,7 +89,7 @@ composableDerivation {
           NIX_LDFLAGS = stdenv.lib.optional stdenv.isDarwin
             "/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation";
         };
-      } #Disable Darwin (Mac OS X) support.
+      } #Disable Darwin (macOS) support.
       // edf { name = "xsmp"; } #Disable XSMP session management
       // edf { name = "xsmp_interact"; } #Disable XSMP interaction
       // edf { name = "mzscheme"; feat = "mzschemeinterp";} #Include MzScheme interpreter.

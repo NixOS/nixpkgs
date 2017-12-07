@@ -32,12 +32,15 @@ stdenv.mkDerivation rec {
     "--enable-fixed-path=${gnupg}/bin"
   ];
 
-  # https://www.gnupg.org/documentation/manuals/gpgme/Largefile-Support-_0028LFS_0029.html
   NIX_CFLAGS_COMPILE =
-    lib.optional (system == "i686-linux") "-D_FILE_OFFSET_BITS=64";
+    # qgpgme uses Q_ASSERT which retains build inputs at runtime unless
+    # debugging is disabled
+    lib.optional (qtbase != null) "-DQT_NO_DEBUG"
+    # https://www.gnupg.org/documentation/manuals/gpgme/Largefile-Support-_0028LFS_0029.html
+    ++ lib.optional (system == "i686-linux") "-D_FILE_OFFSET_BITS=64";
 
   meta = with stdenv.lib; {
-    homepage = "https://gnupg.org/software/gpgme/index.html";
+    homepage = https://gnupg.org/software/gpgme/index.html;
     description = "Library for making GnuPG easier to use";
     longDescription = ''
       GnuPG Made Easy (GPGME) is a library designed to make access to GnuPG

@@ -179,9 +179,9 @@ rec {
       description = "list of ${elemType.description}s";
       check = isList;
       merge = loc: defs:
-        map (x: x.value) (filter (x: x ? value) (concatLists (imap (n: def:
+        map (x: x.value) (filter (x: x ? value) (concatLists (imap1 (n: def:
           if isList def.value then
-            imap (m: def':
+            imap1 (m: def':
               (mergeDefinitions
                 (loc ++ ["[definition ${toString n}-entry ${toString m}]"])
                 elemType
@@ -220,7 +220,7 @@ rec {
           if isList def.value then
             { inherit (def) file;
               value = listToAttrs (
-                imap (elemIdx: elem:
+                imap1 (elemIdx: elem:
                   { name = elem.name or "unnamed-${toString defIdx}.${toString elemIdx}";
                     value = elem;
                   }) def.value);
@@ -233,7 +233,7 @@ rec {
         name = "loaOf";
         description = "list or attribute set of ${elemType.description}s";
         check = x: isList x || isAttrs x;
-        merge = loc: defs: attrOnly.merge loc (imap convertIfList defs);
+        merge = loc: defs: attrOnly.merge loc (imap1 convertIfList defs);
         getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name?>"]);
         getSubModules = elemType.getSubModules;
         substSubModules = m: loaOf (elemType.substSubModules m);

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   
   meta = with stdenv.lib; {
     description = "Library for creating DigiDoc signature files";
-    homepage = "http://www.id.ee/";
+    homepage = http://www.id.ee/;
     license = licenses.lgpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.jagajaga ];

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Linux MultiMedia Studio";
-    homepage = "http://lmms.sourceforge.net";
+    homepage = http://lmms.sourceforge.net;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = [ maintainers.goibhniu ];

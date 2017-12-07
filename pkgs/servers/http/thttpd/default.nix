@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     sed -i -e 's/getline/getlineX/' extras/htpasswd.c
+    sed -i -e 's/chmod 2755/chmod 755/' extras/Makefile.in
   '';
 
   preInstall = ''
@@ -21,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Tiny/turbo/throttling HTTP server";
-    homepage = "http://www.acme.com/software/thttpd/";
+    homepage = http://www.acme.com/software/thttpd/;
     license = stdenv.lib.licenses.bsd2;
     platforms = stdenv.lib.platforms.linux;
   };

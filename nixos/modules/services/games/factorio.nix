@@ -39,7 +39,7 @@ let
     admins = [];
   };
   serverSettingsFile = pkgs.writeText "server-settings.json" (builtins.toJSON (filterAttrsRecursive (n: v: v != null) serverSettings));
-  modDir = pkgs.factorio-mkModDirDrv cfg.mods;
+  modDir = pkgs.factorio-utils.mkModDirDrv cfg.mods;
 in
 {
   options = {

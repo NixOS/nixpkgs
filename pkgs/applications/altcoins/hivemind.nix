@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
       into a blockchain so that Bitcoin-users can speculate in Prediction
       Markets.
     '';
-    homepage = "https://bitcoinhivemind.com";
+    homepage = https://bitcoinhivemind.com;
     maintainers = with maintainers; [ canndrew ];
     license = licenses.mit;
     platforms = platforms.unix;

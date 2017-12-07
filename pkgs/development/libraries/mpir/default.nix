@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
     downloadPage = "http://mpir.org/downloads.html";
-    homepage = "http://mpir.org/";
+    homepage = http://mpir.org/;
     updateWalker = true;
   };
 }

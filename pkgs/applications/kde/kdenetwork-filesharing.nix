@@ -11,5 +11,5 @@ mkDerivation {
     maintainers = [ lib.maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
-  propagatedBuildInputs = [ kcoreaddons ki18n kio kwidgetsaddons samba ];
+  buildInputs = [ kcoreaddons ki18n kio kwidgetsaddons samba ];
 }

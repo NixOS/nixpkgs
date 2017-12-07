@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake qt4 hdf5 mpich2 python libxml2 mesa libXt ];
 
   meta = {
-    homepage = "http://www.paraview.org/";
+    homepage = http://www.paraview.org/;
     description = "3D Data analysis and visualization application";
     license = stdenv.lib.licenses.free;
     maintainers = with stdenv.lib.maintainers; [viric guibert];

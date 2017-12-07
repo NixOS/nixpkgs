@@ -22,7 +22,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "https://pyzufall.readthedocs.io/de/latest/";
+    homepage = https://pyzufall.readthedocs.io/de/latest/;
     description = "Library for generating random data and sentences in german language";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ davidak ];

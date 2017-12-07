@@ -33,7 +33,7 @@ $curl --data-urlencode csrf_token="$csrf" \
 
 if grep -q 'Location: https://' headers; then
     # Now download. We need --insecure for this, but the sha256 should cover us.
-    $curl --insecure --location $url > $out
+    $curl --insecure --location --fail $url > $out || { echo "Login succeeded, but subsequent fetch failed."; exit 1; }
     set +x
 else
     set +x

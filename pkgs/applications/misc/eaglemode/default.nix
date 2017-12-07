@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = "http://eaglemode.sourceforge.net";
+    homepage = http://eaglemode.sourceforge.net;
     description = "Zoomable User Interface";
     license = licenses.gpl3;
     maintainers = with maintainers; [ viric ];

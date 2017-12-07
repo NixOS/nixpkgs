@@ -2,6 +2,10 @@
 , lambdaTerm, ocaml_lwt, camomile, zed, cppo, ppx_tools, makeWrapper
 }:
 
+if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+then throw "utop is not available for OCaml ${ocaml.version}"
+else
+
 stdenv.mkDerivation rec {
   version = "1.19.3";
   name = "utop-${version}";

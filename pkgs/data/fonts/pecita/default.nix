@@ -1,20 +1,19 @@
-{stdenv, fetchurl}:
+{stdenv, fetchzip}:
 
-stdenv.mkDerivation rec {
-  name = "pecita-${version}";
+let
   version = "5.4";
+in fetchzip rec {
+  name = "pecita-${version}";
 
-  src = fetchurl {
-    url = "http://archive.rycee.net/pecita/${name}.tar.xz";
-    sha256 = "1cqzj558ldzzsbfbvlwp5fjh2gxa03l16dki0n8z5lmrdq8hrkws";
-  };
+  url = "http://archive.rycee.net/pecita/${name}.tar.xz";
 
-  phases = ["unpackPhase" "installPhase"];
-
-  installPhase = ''
+  postFetch = ''
+    tar xJvf $downloadedFile --strip-components=1
     mkdir -p $out/share/fonts/opentype
     cp -v Pecita.otf $out/share/fonts/opentype/Pecita.otf
   '';
+
+  sha256 = "0pwm20f38lcbfkdqkpa2ydpc9kvmdg0ifc4h2dmipsnwbcb5rfwm";
 
   meta = with stdenv.lib; {
     homepage = http://pecita.eu/police-en.php;

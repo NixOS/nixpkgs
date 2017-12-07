@@ -5,6 +5,7 @@
   # If enabled GHC will be build with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
 , enableIntegerSimple ? false, gmp
+, version ? "8.3.20170808"
 }:
 
 let
@@ -12,8 +13,7 @@ let
 
   commonBuildInputs = [ ghc perl autoconf automake happy alex python3 ];
 
-  version = "8.1.20170106";
-  rev = "b4f2afe70ddbd0576b4eba3f82ba1ddc52e9b3bd";
+  rev = "14457cf6a50f708eecece8f286f08687791d51f7";
 
   commonPreConfigure =  ''
     echo ${version} >VERSION
@@ -34,7 +34,7 @@ in stdenv.mkDerivation (rec {
   src = fetchgit {
     url = "git://git.haskell.org/ghc.git";
     inherit rev;
-    sha256 = "1h064nikx5srsd7qvz19f6dxvnpfjp0b3b94xs1f4nar18hzf4j0";
+    sha256 = "08vj9ca7rq7rv8pjfl14fg2lg9d6zisrwlq6bi5vzr006816dy8y";
   };
 
   postPatch = "patchShebangs .";
@@ -87,7 +87,7 @@ in stdenv.mkDerivation (rec {
   };
 
   meta = {
-    homepage = "http://haskell.org/ghc";
+    homepage = http://haskell.org/ghc;
     description = "The Glasgow Haskell Compiler";
     maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
     inherit (ghc.meta) license platforms;

@@ -7,12 +7,12 @@ let
      sha256 = "12k1f1iarm29j8k16mhw83xx7r3bama4lp0fchhnj7iwxrpgs4gh";
   };
 in stdenv.mkDerivation rec {
-  name = "iwd-unstable-2017-04-21";
+  name = "iwd-unstable-2017-06-02";
 
   src = fetchgit {
     url = https://git.kernel.org/pub/scm/network/wireless/iwd.git;
-    rev = "f64dea81b8490e5e09888be645a4325419bb269c";
-    sha256 = "0maqhx5264ykgmwaf90s2806i1kx2028if34ph2axlirxrhdd3lg";
+    rev = "6c64ae34619bf7f18cba007d8b0374badbe7c17e";
+    sha256 = "19rkf6lk213hdfs40ija7salars08zw6k5i5djdlpcn1j6y69i36";
   };
 
   configureFlags = [

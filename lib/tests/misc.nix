@@ -285,6 +285,38 @@ runTests {
       expected = builtins.toJSON val;
   };
 
+  testToPretty = {
+    expr = mapAttrs (const (generators.toPretty {})) rec {
+      int = 42;
+      bool = true;
+      string = "fnord";
+      null_ = null;
+      function = x: x;
+      functionArgs = { arg ? 4, foo }: arg;
+      list = [ 3 4 function [ false ] ];
+      attrs = { foo = null; "foo bar" = "baz"; };
+      drv = derivation { name = "test"; system = builtins.currentSystem; };
+    };
+    expected = rec {
+      int = "42";
+      bool = "true";
+      string = "\"fnord\"";
+      null_ = "null";
+      function = "<λ>";
+      functionArgs = "<λ:{(arg),foo}>";
+      list = "[ 3 4 ${function} [ false ] ]";
+      attrs = "{ \"foo\" = null; \"foo bar\" = \"baz\"; }";
+      drv = "<δ>";
+    };
+  };
+
+  testToPrettyAllowPrettyValues = {
+    expr = generators.toPretty { allowPrettyValues = true; }
+             { __pretty = v: "«" + v + "»"; val = "foo"; };
+    expected  = "«foo»";
+  };
+
+
 # MISC
 
   testOverridableDelayableArgsTest = {

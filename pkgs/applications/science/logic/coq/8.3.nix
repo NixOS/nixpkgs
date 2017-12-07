@@ -73,7 +73,7 @@ stdenv.mkDerivation {
       together with an environment for semi-interactive development of
       machine-checked proofs.
     '';
-    homepage = "http://coq.inria.fr";
+    homepage = http://coq.inria.fr;
     license = licenses.lgpl21;
     branch = "8.3";
     maintainers = with maintainers; [ roconnor vbgl ];

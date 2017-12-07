@@ -20,7 +20,7 @@ mkDerivation {
     time
   ];
   jailbreak = true;
-  homepage = "http://elm-lang.org";
+  homepage = http://elm-lang.org;
   description = "A build tool for Elm projects";
   license = stdenv.lib.licenses.bsd3;
 }

@@ -17,7 +17,7 @@ buildRustPackage rec {
   buildInputs = [ lzo zlib ];
 
   meta = with stdenv.lib; {
-    homepage = "https://gitlab.wellbehavedsoftware.com/well-behaved-software/btrfs-dedupe";
+    homepage = https://gitlab.wellbehavedsoftware.com/well-behaved-software/btrfs-dedupe;
     description = "BTRFS deduplication utility";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];

@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   meta = { 
     description = "Application for viewing OpenEXR images on a display at various exposure settings";
-    homepage = "http://openexr.com";
+    homepage = http://openexr.com;
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.bsd3;
   };

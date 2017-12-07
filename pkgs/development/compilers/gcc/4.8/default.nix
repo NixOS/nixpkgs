@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, noSysDirs
+{ stdenv, fetchurl, fetchpatch, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langObjC ? targetPlatform.isDarwin
 , langObjCpp ? targetPlatform.isDarwin
@@ -72,7 +72,14 @@ let version = "4.8.5";
       # target libraries and tools.
       ++ optional langAda ../gnat-cflags.patch
       ++ optional langFortran ../gfortran-driving.patch
-      ++ optional hostPlatform.isDarwin ../gfortran-darwin-NXConstStr.patch;
+      ++ optional hostPlatform.isDarwin ../gfortran-darwin-NXConstStr.patch
+      ++ [(fetchpatch {
+          name = "libc_name_p.diff"; # needed to build with gcc6
+          url = "https://gcc.gnu.org/git/?p=gcc.git;a=commitdiff_plain;h=ec1cc0263f1";
+          sha256 = "01jd7pdarh54ki498g6sz64ijl9a1l5f9v8q2696aaxalvh2vwzl";
+          excludes = [ "gcc/cp/ChangeLog" ];
+        })]
+      ;
 
     javaEcj = fetchurl {
       # The `$(top_srcdir)/ecj.jar' file is automatically picked up at
@@ -123,8 +130,6 @@ let version = "4.8.5";
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
     crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";
     crossConfigureFlags =
-        "--target=${targetPlatform.config}" +
-        platformFlags +
         # Ensure that -print-prog-name is able to find the correct programs.
         " --with-as=${binutils}/bin/${targetPlatform.config}-as" +
         " --with-ld=${binutils}/bin/${targetPlatform.config}-ld" +
@@ -201,7 +206,7 @@ stdenv.mkDerivation ({
 
   hardeningDisable = [ "format" ];
 
-  outputs = [ "out" "lib" "doc" ];
+  outputs = [ "out" "lib" "man" "info" ];
   setOutputFlags = false;
   NIX_NO_SELF_RPATH = true;
 
@@ -293,6 +298,8 @@ stdenv.mkDerivation ({
 
   dontDisableStatic = true;
 
+  # TODO(@Ericson2314): Always pass "--target" and always prefix.
+  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
   configureFlags = "
     ${if hostPlatform.isSunOS then
       " --enable-long-long --enable-libssp --enable-threads=posix --disable-nls --enable-__cxa_atexit " +
@@ -343,12 +350,10 @@ stdenv.mkDerivation ({
       "--with-native-system-header-dir=${getDev stdenv.cc.libc}/include"}
     ${if langAda then " --enable-libada" else ""}
     ${if targetPlatform == hostPlatform && targetPlatform.isi686 then "--with-arch=i686" else ""}
+    ${platformFlags}
     ${if targetPlatform != hostPlatform then crossConfigureFlags else ""}
     ${if !bootstrap then "--disable-bootstrap" else ""}
-    ${if targetPlatform == hostPlatform then platformFlags else ""}
-  " + optionalString
-        (hostPlatform != buildPlatform)
-        (platformFlags + " --target=${targetPlatform.config}");
+  ";
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
@@ -437,7 +442,7 @@ stdenv.mkDerivation ({
 
     # On GNU/Hurd glibc refers to Mach & Hurd
     # headers.
-    ++ optionals (libcCross != null && libcCross ? "propagatedBuildInputs" )
+    ++ optionals (libcCross != null && libcCross ? propagatedBuildInputs)
                  libcCross.propagatedBuildInputs
   ));
 

@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Ren'Py Visual Novel Engine";
-    homepage = "http://renpy.org/";
+    homepage = http://renpy.org/;
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.linux;
     # This is an ancient version, last updated in 2014 (3d59f42ce); it fails to

@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "061ix4m64i8bvjpqm6hn83nnkvqrp5y0hh5gzmxiik2nz3by1rx5";
   };
 
-  goDeps = ./deps.nix;
+  goDeps = ./deps_0_11.nix;
 
   buildInputs = [ makeWrapper ];
 

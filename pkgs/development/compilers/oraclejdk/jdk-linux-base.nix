@@ -3,6 +3,7 @@
 , downloadUrl
 , sha256_i686
 , sha256_x86_64
+, sha256_armv7l
 , jceName
 , jceDownloadUrl
 , sha256JCE
@@ -26,7 +27,8 @@
 , mesa_noglu
 , freetype
 , fontconfig
-, gnome2
+, gtk2
+, pango
 , cairo
 , alsaLib
 , atk
@@ -34,10 +36,13 @@
 , setJavaClassPath
 }:
 
-assert stdenv.system == "i686-linux" || stdenv.system == "x86_64-linux";
+assert stdenv.system == "i686-linux"
+    || stdenv.system == "x86_64-linux"
+    || stdenv.system == "armv7l-linux";
 assert swingSupport -> xorg != null;
 
 let
+  abortArch = abort "jdk requires i686-linux, x86_64-linux, or armv7l-linux";
 
   /**
    * The JRE libraries are in directories that depend on the CPU.
@@ -47,8 +52,10 @@ let
       "i386"
     else if stdenv.system == "x86_64-linux" then
       "amd64"
+    else if stdenv.system == "armv7l-linux" then
+      "arm"
     else
-      abort "jdk requires i686-linux or x86_64 linux";
+      abortArch;
 
   jce =
     if installjce then
@@ -59,6 +66,14 @@ let
       }
     else
       "";
+
+  rSubPaths = [
+    "lib/${architecture}/jli"
+    "lib/${architecture}/server"
+    "lib/${architecture}/xawt"
+    "lib/${architecture}"
+  ];
+
 in
 
 let result = stdenv.mkDerivation rec {
@@ -78,8 +93,14 @@ let result = stdenv.mkDerivation rec {
         url = downloadUrl;
         sha256 = sha256_x86_64;
       }
+    else if stdenv.system == "armv7l-linux" then
+      requireFile {
+        name = "jdk-${productVersion}u${patchVersion}-linux-arm32-vfp-hflt.tar.gz";
+        url = downloadUrl;
+        sha256 = sha256_armv7l;
+      }
     else
-      abort "jdk requires i686-linux or x86_64 linux";
+      abortArch;
 
   nativeBuildInputs = [ file ]
     ++ stdenv.lib.optional installjce unzip;
@@ -134,18 +155,6 @@ let result = stdenv.mkDerivation rec {
       cp -v UnlimitedJCEPolicy*/*.jar $jrePath/lib/security
     fi
 
-    rpath=$rpath''${rpath:+:}$jrePath/lib/${architecture}/jli
-    rpath=$rpath''${rpath:+:}$jrePath/lib/${architecture}/server
-    rpath=$rpath''${rpath:+:}$jrePath/lib/${architecture}/xawt
-    rpath=$rpath''${rpath:+:}$jrePath/lib/${architecture}
-
-    # set all the dynamic linkers
-    find $out -type f -perm -0100 \
-        -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "$rpath" {} \;
-
-    find $out -name "*.so" -exec patchelf --set-rpath "$rpath" {} \;
-
     if test -z "$pluginSupport"; then
       rm -f $out/bin/javaws
       if test -n "$installjdk"; then
@@ -157,17 +166,28 @@ let result = stdenv.mkDerivation rec {
     ln -s $jrePath/lib/${architecture}/libnpjp2.so $jrePath/lib/${architecture}/plugins
 
     mkdir -p $out/nix-support
-    echo -n "${setJavaClassPath}" > $out/nix-support/propagated-native-build-inputs
+    printWords ${setJavaClassPath} > $out/nix-support/propagated-native-build-inputs
 
     # Set JAVA_HOME automatically.
     cat <<EOF >> $out/nix-support/setup-hook
     if [ -z "\$JAVA_HOME" ]; then export JAVA_HOME=$out; fi
     EOF
+  '';
+
+  postFixup = ''
+    rpath+="''${rpath:+:}${stdenv.lib.concatStringsSep ":" (map (a: "$jrePath/${a}") rSubPaths)}"
+
+    # set all the dynamic linkers
+    find $out -type f -perm -0100 \
+        -exec patchelf --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-rpath "$rpath" {} \;
+
+    find $out -name "*.so" -exec patchelf --set-rpath "$rpath" {} \;
 
     # Oracle Java Mission Control needs to know where libgtk-x11 and related is
-    if test -n "$installjdk"; then
+    if test -n "$installjdk" -a -x $out/bin/jmc; then
       wrapProgram "$out/bin/jmc" \
-          --suffix-each LD_LIBRARY_PATH ':' "${rpath}"
+          --suffix-each LD_LIBRARY_PATH ':' "$rpath"
     fi
   '';
 
@@ -177,7 +197,7 @@ let result = stdenv.mkDerivation rec {
    * libXt is only needed on amd64
    */
   libraries =
-    [stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt mesa_noglu xorg.libXxf86vm alsaLib fontconfig freetype gnome2.pango gnome2.gtk cairo gdk_pixbuf atk] ++
+    [stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt mesa_noglu xorg.libXxf86vm alsaLib fontconfig freetype pango gtk2 cairo gdk_pixbuf atk] ++
     (if swingSupport then [xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXp xorg.libXt xorg.libXrender stdenv.cc.cc] else []);
 
   rpath = stdenv.lib.strings.makeLibraryPath libraries;
@@ -192,7 +212,7 @@ let result = stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     license = licenses.unfree;
-    platforms = [ "i686-linux" "x86_64-linux" ]; # some inherit jre.meta.platforms
+    platforms = [ "i686-linux" "x86_64-linux" "armv7l-linux" ]; # some inherit jre.meta.platforms
   };
 
 }; in result

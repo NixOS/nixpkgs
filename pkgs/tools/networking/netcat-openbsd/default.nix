@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://packages.debian.org/netcat-openbsd";
+    homepage = http://packages.debian.org/netcat-openbsd;
     description = "TCP/IP swiss army knife, OpenBSD variant";
     platforms = stdenv.lib.platforms.linux;
   };

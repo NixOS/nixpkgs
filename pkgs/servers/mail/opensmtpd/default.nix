@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
       substituteInPlace smtpd/smtpctl.c --replace \
         'if (geteuid())' \
         'if (geteuid() != 0 && !(argc > 1 && !strcmp(argv[1], "encrypt")))'
+      substituteInPlace mk/smtpctl/Makefile.in --replace "chmod 2555" "chmod 0555"
     '';
 
   configureFlags = [

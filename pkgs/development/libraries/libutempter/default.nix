@@ -13,6 +13,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib ];
 
+  prePatch = ''
+    substituteInPlace Makefile --replace 2711 0711
+  '';
+
   installFlags = [
     "libdir=\${out}/lib"
     "libexecdir=\${out}/lib"

@@ -11,6 +11,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/lev/2015-05-05/lev-20150505-git.tgz'';
     sha256 = ''0lkkzb221ks4f0qjgh6pr5lyvb4884a87p96ir4m36x411pyk5xl'';
   };
+    
+  packageName = "lev";
 
   overrides = x: {
     postInstall = ''
@@ -30,4 +32,4 @@ rec {
 }
 /* (SYSTEM lev DESCRIPTION libev bindings for Common Lisp SHA256 0lkkzb221ks4f0qjgh6pr5lyvb4884a87p96ir4m36x411pyk5xl URL
     http://beta.quicklisp.org/archive/lev/2015-05-05/lev-20150505-git.tgz MD5 10f340f7500beb98b5c0d4a9876131fb NAME lev TESTNAME NIL FILENAME lev DEPS
-    ((NAME cffi)) DEPENDENCIES (cffi) VERSION 20150505-git SIBLINGS NIL) */
+    ((NAME cffi FILENAME cffi)) DEPENDENCIES (cffi) VERSION 20150505-git SIBLINGS NIL) */

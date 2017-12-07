@@ -63,6 +63,10 @@ stdenv.mkDerivation rec {
     cp -a *.ttf $out/share/fonts/truetype/
   '';
 
+  outputHashAlgo = "sha256";
+  outputHashMode = "recursive";
+  outputHash = "1rd3qql779dn9nl940hf988lvv4gfy5llgrlfqq0db0c22b2yfng";
+
   meta = {
     homepage = https://www.google.com/fonts/specimen/Roboto+Mono;
     description = "Google Roboto Mono fonts";

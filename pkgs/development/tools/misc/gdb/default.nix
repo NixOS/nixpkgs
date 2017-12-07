@@ -11,6 +11,8 @@
 
 # Additional dependencies for GNU/Hurd.
 , mig ? null, hurd ? null
+
+, setupDebugInfoDirs
 }:
 
 let
@@ -32,7 +34,9 @@ stdenv.mkDerivation rec {
     sha256 = "1vplyf8v70yn0rdqjx6awl9nmfbwaj5ynwwjxwa71rhp97z4z8pn";
   };
 
-  nativeBuildInputs = [ pkgconfig texinfo perl ]
+  patches = [ ./debug-info-from-env.patch ];
+
+  nativeBuildInputs = [ pkgconfig texinfo perl setupDebugInfoDirs ]
     # TODO(@Ericson2314) not sure if should be host or target
     ++ stdenv.lib.optional targetPlatform.isHurd mig;
 
@@ -41,12 +45,17 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional targetPlatform.isHurd hurd
     ++ stdenv.lib.optional doCheck dejagnu;
 
+  propagatedNativeBuildInputs = [ setupDebugInfoDirs ];
+
   enableParallelBuilding = true;
 
   # darwin build fails with format hardening since v7.12
   hardeningDisable = stdenv.lib.optionals stdenv.isDarwin [ "format" ];
 
   NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
+
+  # TODO(@Ericson2314): Always pass "--target" and always prefix.
+  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
 
   configureFlags = with stdenv.lib; [
     "--with-gmp=${gmp.dev}" "--with-mpfr=${mpfr.dev}" "--with-system-readline"
@@ -55,8 +64,6 @@ stdenv.mkDerivation rec {
       # TODO(@Ericson2314): make this conditional on whether host platform is NixOS
       "--with-separate-debug-dir=/run/current-system/sw/lib/debug"
     ++ stdenv.lib.optional (!pythonSupport) "--without-python"
-    # TODO(@Ericson2314): This should be done in stdenv, not per-package
-    ++ stdenv.lib.optional (targetPlatform != hostPlatform) "--target=${targetPlatform.config}"
     ++ stdenv.lib.optional multitarget "--enable-targets=all";
 
   postInstall =

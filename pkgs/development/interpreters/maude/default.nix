@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = "http://maude.cs.illinois.edu/";
+    homepage = http://maude.cs.illinois.edu/;
     description = "High-level specification language";
     license = stdenv.lib.licenses.gpl2;
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
       rewriting logic computation.
     '';
 
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

@@ -6,6 +6,8 @@
 
 # Malloc implementation
 , jemalloc ? null, gperftools ? null
+
+, enableLite ? false
 }:
 
 let
@@ -34,6 +36,9 @@ stdenv.mkDerivation rec {
   USE_SSE = "1";
   CMAKE_CXX_FLAGS = "-std=gnu++11";
   JEMALLOC_LIB = stdenv.lib.optionalString (malloc == jemalloc) "-ljemalloc";
+
+  ${if enableLite then "LIBNAME" else null} = "librocksdb_lite";
+  ${if enableLite then "CXXFLAGS" else null} = "-DROCKSDB_LITE=1";
 
   buildFlags = [
     "DEBUG_LEVEL=0"

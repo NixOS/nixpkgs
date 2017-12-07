@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, pkgconfig
+{ fetchurl, fetchpatch, stdenv, lib, pkgconfig
 , libgpgerror, libassuan, libcap ? null, ncurses ? null, gtk2 ? null, qt4 ? null
 }:
 
@@ -10,11 +10,11 @@ let
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "pinentry-0.9.7";
+  name = "pinentry-1.0.0";
 
   src = fetchurl {
     url = "mirror://gnupg/pinentry/${name}.tar.bz2";
-    sha256 = "1cp7wjqr6nx31mdclr61s2h84ijqjl0ph99kgj4vyawpjj1j1633";
+    sha256 = "0ni7g4plq6x78p32al7m8h2zsakvg1rhfz0qbc3kdc7yq7nw4whn";
   };
 
   buildInputs = [ libgpgerror libassuan libcap gtk2 ncurses qt4 ];
@@ -22,6 +22,15 @@ stdenv.mkDerivation rec {
   prePatch = ''
     substituteInPlace pinentry/pinentry-curses.c --replace ncursesw ncurses
   '';
+
+  patches = lib.optionals (gtk2 != null) [
+    (fetchpatch {
+       url = https://anonscm.debian.org/cgit/pkg-gnupg/pinentry.git/plain/debian/patches/0006-gtk2-Fix-a-problem-with-fvwm.patch;
+       sha256 = "1w3y4brqp74hy3fbfxqnqp6jf985bd6667ivy1crz50r3z9zsy09";
+  })(fetchpatch {
+       url = https://anonscm.debian.org/cgit/pkg-gnupg/pinentry.git/plain/debian/patches/0007-gtk2-When-X11-input-grabbing-fails-try-again-over-0..patch;
+       sha256 = "046jy7k0n7fj74s5w1h6sq1ljg8y77i0xwi301kv53bhsp0xsirx";
+  })];
 
   # configure cannot find moc on its own
   preConfigure = stdenv.lib.optionalString (qt4 != null) ''
@@ -41,7 +50,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
 
   meta = {
-    homepage = "http://gnupg.org/aegypten2/";
+    homepage = http://gnupg.org/aegypten2/;
     description = "GnuPG's interface to passphrase input";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.all;

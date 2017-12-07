@@ -5,15 +5,15 @@
 
 buildGoPackage rec {
   name = "gx-go-${version}";
-  version = "20160611-${stdenv.lib.strings.substring 0 7 rev}";
-  rev = "639fc0be1a153c59d8946904cceecf0b66ab2944";
+  version = "1.5.0";
+  rev = "refs/tags/v${version}";
 
   goPackagePath = "github.com/whyrusleeping/gx-go";
 
   src = fetchgit {
     inherit rev;
     url = "https://github.com/whyrusleeping/gx-go";
-    sha256 = "0qxp7gqrx1rhcbqvp4jdb3gj1dlj200bdc4gq8pfklc8fcz1lc6l";
+    sha256 = "0bg4h5lzs293qmlsr9n257vjpr5w6bxb4ampb25gsn3fgy3rvsis";
   };
 
   goDeps = ../deps.nix;

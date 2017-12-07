@@ -80,7 +80,8 @@ stdenv.mkDerivation {
        linkPath "$1" "share/emacs/site-lisp" "share/emacs/site-lisp"
      }
 
-     for pkg in $requires; do
+     # Iterate over the array of inputs (avoiding nix's own interpolation)
+     for pkg in "''${requires[@]}"; do
        linkEmacsPackage $pkg
      done
 

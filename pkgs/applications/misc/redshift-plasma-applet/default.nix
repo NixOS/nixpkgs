@@ -1,6 +1,6 @@
-{ stdenv, cmake, plasma-framework, redshift, fetchFromGitHub, }:
+{ stdenv, cmake, extra-cmake-modules, plasma-framework, redshift, fetchFromGitHub, }:
 
-let version = "1.0.17"; in
+let version = "1.0.18"; in
 
 stdenv.mkDerivation {
   name = "redshift-plasma-applet-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     owner = "kotelnik";
     repo = "plasma-applet-redshift-control";
     rev = "v${version}";
-    sha256 = "1lp1rb7i6c18lrgqxsglbvyvzh71qbm591abrbhw675ii0ca9hgj";
+    sha256 = "122nnbafa596rxdxlfshxk45lzch8c9342bzj7kzrsjkjg0xr9pq";
   };
 
   patchPhase = ''
@@ -24,17 +24,18 @@ stdenv.mkDerivation {
                 "'${redshift}/bin/redshift -V'"
   '';
 
-  buildInputs = [
+  nativeBuildInputs = [
     cmake
-    plasma-framework
+    extra-cmake-modules
   ];
 
+  buildInputs = [ plasma-framework ];
 
   meta = with stdenv.lib; {
     description = "KDE Plasma 5 widget for controlling Redshift";
     homepage = https://github.com/kotelnik/plasma-applet-redshift-control;
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ benley ];
+    maintainers = with maintainers; [ benley zraexy ];
   };
 }

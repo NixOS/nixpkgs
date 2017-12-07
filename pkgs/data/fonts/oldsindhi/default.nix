@@ -1,24 +1,22 @@
-{ stdenv, fetchurl, p7zip }:
+{ stdenv, fetchzip, p7zip }:
 
-stdenv.mkDerivation rec {
-  name = "oldsindhi-${version}";
+let
   version = "0.1";
+in fetchzip rec {
+  name = "oldsindhi-${version}";
 
-  src = fetchurl {
-    url = "https://github.com/MihailJP/oldsindhi/releases/download/0.1/OldSindhi-0.1.7z";
-    sha256 = "1sbmxyxi81k88hkfw7gnnpgd5vy2vyj5y5428cd6nz4zlaclgq8z";
-  };
+  url = "https://github.com/MihailJP/oldsindhi/releases/download/0.1/OldSindhi-0.1.7z";
 
-  buildInputs = [ p7zip ];
+  postFetch = ''
+    ${p7zip}/bin/7z x $downloadedFile
 
-  unpackCmd = "7z x $curSrc";
-
-  installPhase = ''
     mkdir -p $out/share/fonts/truetype
     mkdir -p $out/share/doc/${name}
-    cp -v *.ttf $out/share/fonts/truetype/
-    cp -v README *.txt $out/share/doc/${name}
+    cp -v OldSindhi/*.ttf $out/share/fonts/truetype/
+    cp -v OldSindhi/README OldSindhi/*.txt $out/share/doc/${name}
   '';
+
+  sha256 = "1na3lxyz008fji5ln3fqzyr562k6kch1y824byhfs4y0rwwz3f3q";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/MihailJP/oldsindhi;

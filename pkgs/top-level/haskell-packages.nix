@@ -1,24 +1,32 @@
-{ pkgs, callPackage, stdenv, buildPlatform, targetPlatform }:
+{ pkgs, lib, newScope, stdenv, buildPlatform, targetPlatform }:
 
-let # These are attributes in compiler and packages that don't support integer-simple.
-    integerSimpleExcludes = [
-      "ghc6102Binary"
-      "ghc704Binary"
-      "ghc742Binary"
-      "ghc6104"
-      "ghc6123"
-      "ghc704"
-      "ghc763"
-      "ghcjs"
-      "ghcjsHEAD"
-      "ghcCross"
-      "jhc"
-      "uhc"
-      "integer-simple"
-    ];
+let
+  # These are attributes in compiler and packages that don't support integer-simple.
+  integerSimpleExcludes = [
+    "ghc6102Binary"
+    "ghc704Binary"
+    "ghc742Binary"
+    "ghc6104"
+    "ghc6123"
+    "ghc704"
+    "ghc763"
+    "ghcjs"
+    "ghcjsHEAD"
+    "ghcCross"
+    "jhc"
+    "uhc"
+    "integer-simple"
+  ];
+
+  haskellLib = import ../development/haskell-modules/lib.nix {
+    inherit (pkgs) lib;
+    inherit pkgs;
+  };
+
+  callPackage = newScope { inherit haskellLib; };
+
 in rec {
-
-  lib = import ../development/haskell-modules/lib.nix { inherit pkgs; };
+  lib = haskellLib;
 
   compiler = {
 
@@ -76,7 +84,7 @@ in rec {
       selfPkgs = packages.ghc821;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix rec {
-      bootPkgs = packages.ghc7103;
+      bootPkgs = packages.ghc802;
       inherit (bootPkgs) alex happy;
       inherit buildPlatform targetPlatform;
       selfPkgs = packages.ghcHEAD;

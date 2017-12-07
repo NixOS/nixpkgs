@@ -1,5 +1,5 @@
 { stdenv, fetchurl, which, ocsigen_server, ocsigen_deriving, ocaml,
-  js_of_ocaml, ocaml_react, ocaml_lwt, calendar, cryptokit, tyxml,
+  js_of_ocaml, ocaml_react, lwt, calendar, cryptokit, tyxml,
   ipaddr, ocamlnet, ocaml_ssl, ocaml_pcre, ocaml_optcomp,
   reactivedata, opam, ppx_tools, ppx_deriving, findlib
 , ocamlbuild
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec
 
   buildInputs = [ ocaml which findlib ocamlbuild ocaml_optcomp opam ppx_tools ];
 
-  propagatedBuildInputs = [ ocaml_lwt reactivedata tyxml ipaddr ocsigen_server ppx_deriving
+  propagatedBuildInputs = [ lwt reactivedata tyxml ipaddr ocsigen_server ppx_deriving
                             ocsigen_deriving js_of_ocaml
                             calendar cryptokit ocamlnet ocaml_react ocaml_ssl ocaml_pcre ];
 

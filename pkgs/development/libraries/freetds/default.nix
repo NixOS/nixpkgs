@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   meta = {
     description =
       "Libraries to natively talk to Microsoft SQL Server and Sybase databases";
-    homepage = "http://www.freetds.org";
+    homepage = http://www.freetds.org;
     license = "lgpl";
     platforms = stdenv.lib.platforms.all;
   };

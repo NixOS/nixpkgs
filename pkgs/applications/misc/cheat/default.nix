@@ -17,6 +17,6 @@ python3Packages.buildPythonApplication rec {
     description = "cheat allows you to create and view interactive cheatsheets on the command-line";
     maintainers = with lib.maintainers; [ mic92 ];
     license = with lib.licenses; [gpl3 mit];
-    homepage = "https://github.com/chrisallenlane/cheat";
+    homepage = https://github.com/chrisallenlane/cheat;
   };
 }

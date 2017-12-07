@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Complete open source platform for building web and mobile apps in pure JavaScript";
-    homepage = "http://www.meteor.com";
+    homepage = http://www.meteor.com;
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ cstrahan ];

@@ -22,6 +22,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
 
   buildInputs = toBuildInputs pkgArches (with supportFlags; (pkgs:
   [ pkgs.freetype ]
+  ++ lib.optional stdenv.isLinux         pkgs.libcap
   ++ lib.optional pngSupport             pkgs.libpng
   ++ lib.optional jpegSupport            pkgs.libjpeg
   ++ lib.optional cupsSupport            pkgs.cups
@@ -105,7 +106,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (! isNull buildScript) {
   passthru = { inherit pkgArches; };
   meta = {
     inherit version platforms;
-    homepage = "http://www.winehq.org/";
+    homepage = http://www.winehq.org/;
     license = "LGPL";
     description = "An Open Source implementation of the Windows API on top of X, OpenGL, and Unix";
     maintainers = with stdenv.lib.maintainers; [ avnik raskin ];

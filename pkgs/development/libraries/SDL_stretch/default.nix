@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
      description = "Stretch Functions For SDL";
-     homepage = "http://sdl-stretch.sourceforge.net/";
+     homepage = http://sdl-stretch.sourceforge.net/;
      license = licenses.lgpl2;
      platforms = platforms.linux;
   };

@@ -11,6 +11,8 @@ rec {
     url = ''http://beta.quicklisp.org/archive/cl-fuse/2016-03-18/cl-fuse-20160318-git.tgz'';
     sha256 = ''1yllmnnhqp42s37a2y7h7vph854xgna62l1pidvlyskc90bl5jf6'';
   };
+    
+  packageName = "cl-fuse";
 
   overrides = x: {
     postInstall = ''
@@ -30,5 +32,8 @@ rec {
 }
 /* (SYSTEM cl-fuse DESCRIPTION CFFI bindings to FUSE (Filesystem in user space) SHA256 1yllmnnhqp42s37a2y7h7vph854xgna62l1pidvlyskc90bl5jf6 URL
     http://beta.quicklisp.org/archive/cl-fuse/2016-03-18/cl-fuse-20160318-git.tgz MD5 ce2e907e5ae2cece72fa314be1ced44c NAME cl-fuse TESTNAME NIL FILENAME
-    cl-fuse DEPS ((NAME bordeaux-threads) (NAME cffi) (NAME cffi-grovel) (NAME cl-utilities) (NAME iterate) (NAME trivial-backtrace) (NAME trivial-utf-8))
+    cl-fuse DEPS
+    ((NAME bordeaux-threads FILENAME bordeaux-threads) (NAME cffi FILENAME cffi) (NAME cffi-grovel FILENAME cffi-grovel)
+     (NAME cl-utilities FILENAME cl-utilities) (NAME iterate FILENAME iterate) (NAME trivial-backtrace FILENAME trivial-backtrace)
+     (NAME trivial-utf-8 FILENAME trivial-utf-8))
     DEPENDENCIES (bordeaux-threads cffi cffi-grovel cl-utilities iterate trivial-backtrace trivial-utf-8) VERSION 20160318-git SIBLINGS NIL) */

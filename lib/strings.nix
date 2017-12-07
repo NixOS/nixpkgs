@@ -33,7 +33,7 @@ rec {
        concatImapStrings (pos: x: "${toString pos}-${x}") ["foo" "bar"]
        => "1-foo2-bar"
   */
-  concatImapStrings = f: list: concatStrings (lib.imap f list);
+  concatImapStrings = f: list: concatStrings (lib.imap1 f list);
 
   /* Place an element between each element of a list
 
@@ -70,7 +70,7 @@ rec {
        concatImapStringsSep "-" (pos: x: toString (x / pos)) [ 6 6 6 ]
        => "6-3-2"
   */
-  concatImapStringsSep = sep: f: list: concatStringsSep sep (lib.imap f list);
+  concatImapStringsSep = sep: f: list: concatStringsSep sep (lib.imap1 f list);
 
   /* Construct a Unix-style search path consisting of each `subDir"
      directory of the given list of packages.

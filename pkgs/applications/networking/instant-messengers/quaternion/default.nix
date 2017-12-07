@@ -2,7 +2,7 @@
 
 mkDerivation rec {
   name = "quaternion-git-${version}";
-  version = "2017-04-15";
+  version = "2017-06-29";
 
   # quaternion and tensor share the same libqmatrixclient library as a git submodule
   #
@@ -12,9 +12,9 @@ mkDerivation rec {
   # derivation.
 
   src = fetchgit {
-    url             = "https://github.com/Fxrh/Quaternion.git";
-    rev             = "c35475a6755cdb75e2a6c8ca5b943685d07d9707";
-    sha256          = "0cm5j4vdnp5cljfnv5jqf89ccymspaqc6j9bb4c1x891vr42np0m";
+    url             = "https://github.com/QMatrixClient/Quaternion.git";
+    rev             = "1febc0178fd3d02b7426f58981b54924ad60c84d";
+    sha256          = "1whjhlphdhk7kgw2zqc0wj3k2i9gkp79qq2bnrh4mbcp3qmcqngr";
     fetchSubmodules = true;
   };
 
@@ -28,14 +28,12 @@ mkDerivation rec {
   postInstall = ''
     substituteInPlace $out/share/applications/quaternion.desktop \
       --replace 'Exec=quaternion' "Exec=$out/bin/quaternion"
-
-    rm $out/share/icons/hicolor/icon-theme.cache
   '';
 
   meta = with lib; {
-    homepage = https://matrix.org/docs/projects/client/quaternion.html;
     description = "Cross-platform desktop IM client for the Matrix protocol";
-    license = licenses.gpl3;
+    homepage    = https://matrix.org/docs/projects/client/quaternion.html;
+    license     = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     inherit (qtbase.meta) platforms;
     inherit version;

@@ -39,6 +39,12 @@
 with lib;
 
 let
+  extensions = {
+    qcow2 = "qcow2";
+    vpc   = "vhd";
+    raw   = "img";
+  };
+
   # Copied from https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/installer/cd-dvd/channel.nix
   # TODO: factor out more cleanly
 
@@ -142,8 +148,8 @@ in pkgs.vmTools.runInLinuxVM (
           mv $diskImage $out/nixos.img
           diskImage=$out/nixos.img
         '' else ''
-          ${pkgs.qemu}/bin/qemu-img convert -f raw -O qcow2 $diskImage $out/nixos.qcow2
-          diskImage=$out/nixos.qcow2
+          ${pkgs.qemu}/bin/qemu-img convert -f raw -O ${format} $diskImage $out/nixos.${extensions.${format}}
+          diskImage=$out/nixos.${extensions.${format}}
         ''}
         ${postVM}
       '';

@@ -2,7 +2,7 @@
 , crypto ? false, libgcrypt, gnutls, pkgconfig}:
 
 stdenv.mkDerivation rec {
-  pname = "ntfs-3g";
+  pname = "ntfs3g";
   version = "2017.3.23";
   name = "${pname}-${version}";
 

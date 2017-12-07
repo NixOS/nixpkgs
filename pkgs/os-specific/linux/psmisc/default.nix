@@ -3,11 +3,11 @@
 assert stdenv.isLinux;
 
 stdenv.mkDerivation rec {
-  name = "psmisc-23.0";
+  name = "psmisc-23.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/psmisc/${name}.tar.xz";
-    sha256 = "0k7hafh9388s3hh9j943jy1qk9g1c43j02nyk0xis0ngbs632lvm";
+    sha256 = "0c5s94hqpwfmyswx2f96gifa6wdbpxxpkyxcrlzbxpvmrxsd911f";
   };
 
   buildInputs = [ncurses];

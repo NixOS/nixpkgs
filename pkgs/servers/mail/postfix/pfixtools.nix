@@ -10,7 +10,7 @@ let
     sha256 = "1vmbrw686f41n6xfjphfshn96vl07ynvnsyjdw9yfn9bfnldcjcq";
   };
 
-  srcRoot = "pfixtools-${pfixtoolsSrc.rev}-src";
+  srcRoot = pfixtoolsSrc.name;
 
   libCommonSrc = fetchFromGitHub {
     owner = "Fruneau";

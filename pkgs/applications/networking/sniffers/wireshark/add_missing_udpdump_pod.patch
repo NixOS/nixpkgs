@@ -1,0 +1,132 @@
+diff -Nur wireshark-2.4.0/doc/udpdump.pod wireshark-2.4.0-p/doc/udpdump.pod
+--- wireshark-2.4.0/doc/udpdump.pod	1970-01-01 01:00:00.000000000 +0100
++++ wireshark-2.4.0-p/doc/udpdump.pod	2017-08-01 10:48:40.551431319 +0200
+@@ -0,0 +1,128 @@
++
++=head1 NAME
++
++udpdump - Provide an UDP receiver that gets packets from network devices (like Aruba routers) and exports them in PCAP format.
++
++=head1 SYNOPSIS
++
++B<udpdump>
++S<[ B<--help> ]>
++S<[ B<--version> ]>
++S<[ B<--extcap-interfaces> ]>
++S<[ B<--extcap-dlts> ]>
++S<[ B<--extcap-interface>=E<lt>interfaceE<gt> ]>
++S<[ B<--extcap-config> ]>
++S<[ B<--capture> ]>
++S<[ B<--fifo>=E<lt>path to file or pipeE<gt> ]>
++S<[ B<--port>=E<lt>portE<gt> ]>
++S<[ B<--payload>=E<lt>typeE<gt> ]>
++
++=head1 DESCRIPTION
++
++B<udpdump> is a extcap tool that provides an UDP receiver that listens for exported datagrams coming from
++any source (like Aruba routers) and exports them in PCAP format. This provides the user two basic
++functionalities: the first one is to have a listener that prevents the localhost to send back an ICMP
++port-unreachable packet. The second one is to strip out the lower layers (layer 2, IP, UDP) that are useless
++(are used just as export vector). The format of the exported datagrams are EXPORTED_PDU, as specified in
++https://code.wireshark.org/review/gitweb?p=wireshark.git;a=blob;f=epan/exported_pdu.h;hb=refs/heads/master
++
++=head1 OPTIONS
++
++=over 4
++
++=item --help
++
++Print program arguments.
++
++=item --version
++
++Print program version.
++
++=item --extcap-interfaces
++
++List available interfaces.
++
++=item --extcap-interface=E<lt>interfaceE<gt>
++
++Use specified interfaces.
++
++=item --extcap-dlts
++
++List DLTs of specified interface.
++
++=item --extcap-config
++
++List configuration options of specified interface.
++
++=item --capture
++
++Start capturing from specified interface save saved it in place specified by --fifo.
++
++=item --fifo=E<lt>path to file or pipeE<gt>
++
++Save captured packet to file or send it through pipe.
++
++=item --port=E<lt>portE<gt>
++
++Set the listerner port. Port 5555 is the default.
++
++=item --payload=E<lt>typeE<gt>
++
++Set the payload of the exported PDU. Default: data.
++
++=back
++
++=head1 EXAMPLES
++
++To see program arguments:
++
++    udpdump --help
++
++To see program version:
++
++    udpdump --version
++
++To see interfaces:
++
++    udpdump --extcap-interfaces
++
++  Example output:
++    interface {value=udpdump}{display=UDP Listener remote capture}
++
++To see interface DLTs:
++
++    udpdump --extcap-interface=udpdump --extcap-dlts
++
++  Example output:
++    dlt {number=252}{name=udpdump}{display=Exported PDUs}
++
++To see interface configuration options:
++
++    udpdump --extcap-interface=udpdump --extcap-config
++
++  Example output:
++    arg {number=0}{call=--port}{display=Listen port}{type=unsigned}{range=1,65535}{default=5555}{tooltip=The port the receiver listens on}
++
++To capture:
++
++    udpdump --extcap-interface=randpkt --fifo=/tmp/randpkt.pcapng --capture
++
++NOTE: To stop capturing CTRL+C/kill/terminate application.
++
++=head1 SEE ALSO
++
++wireshark(1), tshark(1), dumpcap(1), extcap(4)
++
++=head1 NOTES
++
++B<udpdump> is part of the B<Wireshark> distribution.  The latest version
++of B<Wireshark> can be found at L<https://www.wireshark.org>.
++
++HTML versions of the Wireshark project man pages are available at:
++L<https://www.wireshark.org/docs/man-pages>.
++
++=head1 AUTHORS
++
++  Original Author
++  ---------------
++  Dario Lombardo             <lomato[AT]gmail.com>

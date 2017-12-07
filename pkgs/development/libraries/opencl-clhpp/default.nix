@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "OpenCL Host API C++ bindings";
-    homepage = "http://github.khronos.org/OpenCL-CLHPP/";
+    homepage = http://github.khronos.org/OpenCL-CLHPP/;
     license = licenses.mit;
     platforms = platforms.unix;
   };

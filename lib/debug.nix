@@ -20,8 +20,32 @@ rec {
   traceXMLValMarked = str: x: trace (str + builtins.toXML x) x;
 
   # strict trace functions (traced structure is fully evaluated and printed)
+
+  /* `builtins.trace`, but the value is `builtins.deepSeq`ed first. */
   traceSeq = x: y: trace (builtins.deepSeq x x) y;
+
+  /* Like `traceSeq`, but only down to depth n.
+   * This is very useful because lots of `traceSeq` usages
+   * lead to an infinite recursion.
+   */
+  traceSeqN = depth: x: y: with lib;
+    let snip = v: if      isList  v then noQuotes "[…]" v
+                  else if isAttrs v then noQuotes "{…}" v
+                  else v;
+        noQuotes = str: v: { __pretty = const str; val = v; };
+        modify = n: fn: v: if (n == 0) then fn v
+                      else if isList  v then map (modify (n - 1) fn) v
+                      else if isAttrs v then mapAttrs
+                        (const (modify (n - 1) fn)) v
+                      else v;
+    in trace (generators.toPretty { allowPrettyValues = true; }
+               (modify depth snip x)) y;
+
+  /* `traceSeq`, but the same value is traced and returned */
   traceValSeq = v: traceVal (builtins.deepSeq v v);
+  /* `traceValSeq` but with fixed depth */
+  traceValSeqN = depth: v: traceSeqN depth v v;
+
 
   # this can help debug your code as well - designed to not produce thousands of lines
   traceShowVal = x: trace (showVal x) x;

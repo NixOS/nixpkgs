@@ -3,7 +3,7 @@
 with lib;
 
 {
-  meta.maintainers = [ maintainers.grahamc ];
+  meta.maintainers = with maintainers; [ grahamc ];
   options = {
 
     hardware.mcelog = {
@@ -19,19 +19,17 @@ with lib;
   };
 
   config = mkIf config.hardware.mcelog.enable {
-    systemd.services.mcelog = {
-      description = "Machine Check Exception Logging Daemon";
-      wantedBy = [ "multi-user.target" ];
+    systemd = {
+      packages = [ pkgs.mcelog ];
 
-      serviceConfig = {
-        ExecStart = "${pkgs.mcelog}/bin/mcelog --daemon --foreground";
-        SuccessExitStatus = [ 0 15 ];
-
-        ProtectHome = true;
-        PrivateNetwork = true;
-        PrivateTmp = true;
+      services.mcelog = {
+        wantedBy = [ "multi-user.target" ];
+        serviceConfig = {
+          ProtectHome = true;
+          PrivateNetwork = true;
+          PrivateTmp = true;
+        };
       };
     };
   };
-
 }

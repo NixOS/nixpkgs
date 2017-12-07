@@ -88,7 +88,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Command line interface to Mac OS X keychains and Security framework";
+    description = "Command line interface to macOS keychains and Security framework";
     maintainers = with maintainers; [
       copumpkin
       joelteon

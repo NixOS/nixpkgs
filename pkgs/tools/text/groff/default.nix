@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "1998v2kcs288d3y7kfxpvl369nqi06zbbvjzafyvyl3pr7bajj1s";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [ "out" "man" "doc" "info" ];
 
   enableParallelBuilding = false;
 
@@ -57,8 +57,11 @@ stdenv.mkDerivation rec {
   # Remove example output with (random?) colors and creation date
   # to avoid non-determinism in the output.
   postInstall = ''
-    rm $doc/share/doc/groff/examples/hdtbl/*color*ps
-    find $doc/share/doc/groff/ -type f -print0 | xargs -0 sed -i -e 's/%%CreationDate: .*//'
+    rm "$doc"/share/doc/groff/examples/hdtbl/*color*ps
+    find "$doc"/share/doc/groff/ -type f -print0 | xargs -0 sed -i -e 's/%%CreationDate: .*//'
+    for f in 'man.local' 'mdoc.local'; do
+        cat '${./site.tmac}' >>"$out/share/groff/site-tmac/$f"
+    done
   '';
 
   meta = with stdenv.lib; {

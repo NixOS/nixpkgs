@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     stdenv.lib.optionals linkStatic [ "--enable-static" "--disable-shared" ];
 
   meta = {
-    homepage = "http://www.bzip.org";
+    homepage = http://www.bzip.org;
     description = "High-quality data compression program";
 
     platforms = stdenv.lib.platforms.all;

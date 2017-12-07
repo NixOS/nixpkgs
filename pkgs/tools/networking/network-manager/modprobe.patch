@@ -1,0 +1,11 @@
+--- a/src/nm-core-utils.c	2017-02-15 13:10:27.000000000 +0100
++++ b/src/nm-core-utils.c	2017-07-06 14:28:41.575815695 +0200
+@@ -419,7 +419,7 @@
+ 
+ 	/* construct the argument list */
+ 	argv = g_ptr_array_sized_new (4);
+-	g_ptr_array_add (argv, "/sbin/modprobe");
++	g_ptr_array_add (argv, "@modprobeBinPath@");
+ 	g_ptr_array_add (argv, (char *) arg1);
+ 
+ 	va_start (ap, arg1);

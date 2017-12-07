@@ -31,7 +31,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = "http://www.cs.unm.edu/~mccune/mace4/";
+    homepage = http://www.cs.unm.edu/~mccune/mace4/;
     license = "GPL";
     description = "Automated theorem prover for first-order and equational logic";
     longDescription = ''

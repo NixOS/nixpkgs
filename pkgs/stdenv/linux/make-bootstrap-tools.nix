@@ -21,8 +21,8 @@ rec {
     enableMinimal = true;
     extraConfig = ''
       CONFIG_ASH y
-      CONFIG_ASH_BUILTIN_ECHO y
-      CONFIG_ASH_BUILTIN_TEST y
+      CONFIG_ASH_ECHO y
+      CONFIG_ASH_TEST y
       CONFIG_ASH_OPTIMIZE_FOR_SIZE y
       CONFIG_MKDIR y
       CONFIG_TAR y

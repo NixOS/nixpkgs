@@ -1,15 +1,17 @@
-{ stdenv, fetchurl, lib
+{ stdenv, fetchFromGitHub, lib
 , zsh, coreutils, inetutils, procps, txt2tags }:
 
 with lib;
 
 stdenv.mkDerivation rec {
   name = "grml-zsh-config-${version}";
-  version = "0.12.4";
+  version = "0.14.2";
 
-  src = fetchurl {
-    url = "http://deb.grml.org/pool/main/g/grml-etc-core/grml-etc-core_${version}.tar.gz";
-    sha256 = "1cbedc41e32787c37c2ed546355a26376dacf2ae1fab9551c9ace3e46d236b72";
+  src = fetchFromGitHub {
+    owner = "grml";
+    repo = "grml-etc-core";
+    rev = "v${version}";
+    sha256 = "1xvv2mnkfqa657w8y4q2zrchhindngdzij9fbalcg1gggz4zdwcm";
   };
 
   buildInputs = [ zsh coreutils inetutils procps txt2tags ];
@@ -33,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = http://grml.org/zsh/;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = [ maintainers.msteen ];
+    maintainers = with maintainers; [ msteen rvolosatovs ];
   };
 }

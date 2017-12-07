@@ -4,11 +4,9 @@
 , perl, proj, rastermagick, shapelib
 }:
 
-let
+stdenv.mkDerivation rec {
+  name = "xastir-${version}";
   version = "208";
-in
-stdenv.mkDerivation {
-  name = "xastir-"+version;
 
   src = fetchFromGitHub {
     owner = "Xastir";
@@ -17,15 +15,16 @@ stdenv.mkDerivation {
     sha256 = "1mm22vn3hws7dmg9wpaj4s0zkzb77i3aqa2ay3q6kqjkdhv25brl";
   };
 
-  buildInputs =
-    [ autoreconfHook
-      curl db gdal libgeotiff
-      libXpm libXt motif pcre
-      perl proj rastermagick shapelib
-    ];
+  buildInputs = [
+    autoreconfHook
+    curl db gdal libgeotiff
+    libXpm libXt motif pcre
+    perl proj rastermagick shapelib
+  ];
 
-  configureFlags =
-    [ "--with-motif-includes=${motif}/include" ];
+  configureFlags = [ "--with-motif-includes=${motif}/include" ];
+
+  postPatch = "patchShebangs .";
 
   meta = with stdenv.lib; {
     description = "Graphical APRS client";

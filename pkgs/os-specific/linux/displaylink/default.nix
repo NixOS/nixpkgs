@@ -48,6 +48,6 @@ in stdenv.mkDerivation rec {
     description = "DisplayLink DL-5xxx, DL-41xx and DL-3x00 Driver for Linux";
     platforms = [ "x86_64-linux" "i686-linux" ];
     license = licenses.unfree;
-    homepage = "http://www.displaylink.com/";
+    homepage = http://www.displaylink.com/;
   };
 }

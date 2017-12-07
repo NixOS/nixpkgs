@@ -15,11 +15,11 @@ in bootStages ++ [
 
   # Additional stage, built using custom stdenv
   (vanillaPackages: {
-    buildPlatform = localSystem;
-    hostPlatform = localSystem;
-    targetPlatform = localSystem;
     inherit config overlays;
-    stdenv = config.replaceStdenv { pkgs = vanillaPackages; };
+    stdenv =
+      assert vanillaPackages.hostPlatform == localSystem;
+      assert vanillaPackages.targetPlatform == localSystem;
+      config.replaceStdenv { pkgs = vanillaPackages; };
   })
 
 ]

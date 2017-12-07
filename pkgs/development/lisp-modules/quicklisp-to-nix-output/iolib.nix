@@ -1,16 +1,18 @@
 args @ { fetchurl, ... }:
 rec {
   baseName = ''iolib'';
-  version = ''v0.8.1'';
+  version = ''v0.8.3'';
 
   description = ''I/O library.'';
 
-  deps = [ args."alexandria" args."babel" args."bordeaux-threads" args."cffi" args."idna" args."split-sequence" args."swap-bytes" args."trivial-features" args."uiop" ];
+  deps = [ args."iolib_slash_streams" args."iolib_slash_sockets" args."iolib_slash_multiplex" ];
 
   src = fetchurl {
-    url = ''http://beta.quicklisp.org/archive/iolib/2016-03-18/iolib-v0.8.1.tgz'';
-    sha256 = ''090xmjzyx5d7arpk9g0fsyblwh6myq2d1cb7w52r3zy1394c9481'';
+    url = ''http://beta.quicklisp.org/archive/iolib/2017-06-30/iolib-v0.8.3.tgz'';
+    sha256 = ''12gsvsjyxmclwidcjvyrfvd0773ib54a3qzmf33hmgc9knxlli7c'';
   };
+    
+  packageName = "iolib";
 
   overrides = x: {
     postInstall = ''
@@ -28,8 +30,8 @@ rec {
     '';
   };
 }
-/* (SYSTEM iolib DESCRIPTION I/O library. SHA256 090xmjzyx5d7arpk9g0fsyblwh6myq2d1cb7w52r3zy1394c9481 URL
-    http://beta.quicklisp.org/archive/iolib/2016-03-18/iolib-v0.8.1.tgz MD5 cd34c4f7db4af7391757ebc3f4f61422 NAME iolib TESTNAME NIL FILENAME iolib DEPS
-    ((NAME alexandria) (NAME babel) (NAME bordeaux-threads) (NAME cffi) (NAME idna) (NAME split-sequence) (NAME swap-bytes) (NAME trivial-features)
-     (NAME uiop))
-    DEPENDENCIES (alexandria babel bordeaux-threads cffi idna split-sequence swap-bytes trivial-features uiop) VERSION v0.8.1 SIBLINGS NIL) */
+/* (SYSTEM iolib DESCRIPTION I/O library. SHA256 12gsvsjyxmclwidcjvyrfvd0773ib54a3qzmf33hmgc9knxlli7c URL
+    http://beta.quicklisp.org/archive/iolib/2017-06-30/iolib-v0.8.3.tgz MD5 fc28d4cad6f8e43972df3baa6a8ac45c NAME iolib TESTNAME NIL FILENAME iolib DEPS
+    ((NAME iolib/streams FILENAME iolib_slash_streams) (NAME iolib/sockets FILENAME iolib_slash_sockets) (NAME iolib/multiplex FILENAME iolib_slash_multiplex))
+    DEPENDENCIES (iolib/streams iolib/sockets iolib/multiplex) VERSION v0.8.3 SIBLINGS
+    (iolib.asdf iolib.base iolib.common-lisp iolib.conf iolib.examples iolib.grovel iolib.tests)) */

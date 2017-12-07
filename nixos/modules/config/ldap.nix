@@ -19,7 +19,6 @@ let
       bind_policy ${config.users.ldap.bind.policy}
       ${optionalString config.users.ldap.useTLS ''
         ssl start_tls
-        tls_checkpeer no
       ''}
       ${optionalString (config.users.ldap.bind.distinguishedName != "") ''
         binddn ${config.users.ldap.bind.distinguishedName}

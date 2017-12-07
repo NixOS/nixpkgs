@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Create bootable USB disks using the FAT filesystem and syslinux";
-    homepage = "http://advancemame.sourceforge.net/boot-readme.html";
+    homepage = http://advancemame.sourceforge.net/boot-readme.html;
     license = licenses.gpl2;
     maintainers = [ maintainers.ehmry ];
     platforms = platforms.linux;

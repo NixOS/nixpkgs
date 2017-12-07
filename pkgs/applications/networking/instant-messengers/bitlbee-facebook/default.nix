@@ -3,13 +3,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "bitlbee-facebook-${version}";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "jgeboski";
     repo = "bitlbee-facebook";
-    sha256 = "0qclyc2zz8144dc42bhfv2xxrahpiv9j2iwq9h3cmfxszvkb8r3s";
+    sha256 = "08ibjqqcrmq1a5nmj8z93rjrdabi0yy2a70p31xalnfrh200m24c";
   };
 
   nativeBuildInputs = [ autoconf automake libtool pkgconfig ];

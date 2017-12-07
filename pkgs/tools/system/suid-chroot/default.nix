@@ -11,6 +11,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace Makefile --replace /usr $out
+    sed -i -e '/chmod u+s/d' Makefile
   '';
 
   meta = with stdenv.lib; {

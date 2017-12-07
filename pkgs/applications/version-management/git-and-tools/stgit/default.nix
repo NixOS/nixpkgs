@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   checkTarget = "test";
 
   meta = {
-    homepage = "http://procode.org/stgit/";
+    homepage = http://procode.org/stgit/;
     description = "A patch manager implemented on top of Git";
     license = "GPL";
 

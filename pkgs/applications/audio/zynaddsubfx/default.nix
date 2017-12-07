@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation  rec {
   name = "zynaddsubfx-${version}";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/zynaddsubfx/zynaddsubfx-${version}.tar.bz2";
-    sha256 = "1qijvlbv41lnqaqbp6gh1i42xzf1syviyxz8wr39xbz55cw7y0d8";
+    sha256 = "09mr23lqc51r7gskry5b7hk84pghdpgn1s4vnrzvx7xpa21gvplm";
   };
 
   buildInputs = [ alsaLib cairo libjack2 fftw fltk13 lash libjpeg libXpm minixml ntk zlib liblo ];

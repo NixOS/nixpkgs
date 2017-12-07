@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, cmake, qt4, gdb, zlib }:
-stdenv.mkDerivation rec {
+{ stdenv, fetchurl, qt4, gdb, zlib }:
 
+stdenv.mkDerivation rec {
   name = "omapd-${version}";
   version = "0.9.2";
 
@@ -11,23 +11,20 @@ stdenv.mkDerivation rec {
 
   patches = [ ./zlib.patch ];
 
-  buildInputs = [ cmake qt4 zlib gdb ];
-
-  phases = [ "unpackPhase" "patchPhase" "buildPhase" "installPhase" ];
+  buildInputs = [ qt4 zlib gdb ];
 
   buildPhase = ''
     (cd plugins/RAMHashTables; qmake; make)
     qmake
     make
-    '';
+  '';
 
   installPhase = ''
-    mkdir -p $out $out/bin $out/etc $out/usr/lib/omapd/plugins
-    cp omapd $out/bin/.
-    cp omapd.conf $out/etc/.
-    cp plugins/libRAMHashTables.so $out/usr/lib/omapd/plugins/.
+    install -vD omapd $out/bin/omapd
+    install -vD omapd.conf $out/etc/omapd.conf
+    install -vD plugins/libRAMHashTables.so $out/usr/lib/omapd/plugins/libRAMHashTables.so
     ln -s $out/usr/lib/omapd/plugins $out/bin/plugins
-    '';
+  '';
 
   meta = with stdenv.lib; {
     homepage = http://code.google.com/p/omapd;

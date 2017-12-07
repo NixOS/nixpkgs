@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "das_watchdog-${version}";
-  version = "git-2015-04-02";
+  version = "git-2015-09-12";
 
   src = fetchgit {
     url = "https://github.com/kmatheussen/das_watchdog.git";
-    rev = "1c203d9a55455c4670c164f945ea2dd9fd197ba9";
-    sha256 = "c817491d67d31297dcd6177b9c33b5c3977c1c383eac588026631dd6961ba6bf";
+    rev = "5ac0db0b98e5b4e690aca0aa7fb6ec60ceddcb06";
+    sha256 = "02y1vfb3wh4908xjj1kpyf8kgxk29x8dw7yl3pnl220qz2gi99vr";
   };
 
   buildInputs = [ libgtop xmessage which pkgconfig ];

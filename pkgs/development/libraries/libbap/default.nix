@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://github.com/binaryanalysisplatform/bap-bindings;
+    homepage = https://github.com/binaryanalysisplatform/bap-bindings;
     description = "A C library for interacting with BAP";
     maintainers = [ stdenv.lib.maintainers.maurer ];
     platforms = stdenv.lib.platforms.unix;

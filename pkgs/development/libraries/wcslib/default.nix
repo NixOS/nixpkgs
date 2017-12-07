@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
     sha256 ="1s2nig327g4bimd9xshlk11ww09a7mrjmsbpdcd8smsmn2kl1glb";
   };
 
+  prePatch = ''
+    substituteInPlace GNUmakefile --replace 2775 0775
+    substituteInPlace C/GNUmakefile --replace 2775 0775
+  '';
+
   enableParallelBuilding = true;
 
   meta = {

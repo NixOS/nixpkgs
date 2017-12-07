@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   meta = with stdenv.lib; {
-    homepage = http://projects.gnome.org/gconf/;
+    homepage = https://projects.gnome.org/gconf/;
     description = "A system for storing application preferences";
     platforms = platforms.linux;
   };

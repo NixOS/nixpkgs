@@ -1,18 +1,20 @@
-{ stdenv, fetchgit, fuse, pkgconfig, which, attr, pandoc, git }:
+{ stdenv, fetchgit, autoconf, automake, pkgconfig, gettext, libtool, git, pandoc, which, attr, libiconv }:
 
 stdenv.mkDerivation rec {
   name = "mergerfs-${version}";
-  version = "2.16.1";
+  version = "2.23.0";
 
   # not using fetchFromGitHub because of changelog being built with git log
   src = fetchgit {
     url = "https://github.com/trapexit/mergerfs";
     rev = "refs/tags/${version}";
-    sha256 = "12fqgk54fnnibqiq82p4g2k6qnw3iy6dd64csmlf73yi67za5iwf";
+    sha256 = "0k4nn0f4c355q7hnni7iia8qi9m0khvyd04hx1hmlrnf0zsi9mfw";
     deepClone = true;
+    leaveDotGit = true;
   };
 
-  buildInputs = [ fuse pkgconfig which attr pandoc git ];
+  nativeBuildInputs = [ autoconf automake pkgconfig gettext libtool git pandoc which ];
+  buildInputs = [ attr libiconv ];
 
   makeFlags = [ "PREFIX=$(out)" "XATTR_AVAILABLE=1" ];
 
@@ -21,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/trapexit/mergerfs;
     license = stdenv.lib.licenses.isc;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ makefu ];
+    maintainers = with stdenv.lib.maintainers; [ jfrankenau makefu ];
   };
 }

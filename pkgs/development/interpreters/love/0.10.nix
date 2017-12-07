@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = [ "-DluaL_reg=luaL_Reg" ]; # needed since luajit-2.1.0-beta3
 
   meta = {
-    homepage = "http://love2d.org";
+    homepage = http://love2d.org;
     description = "A Lua-based 2D game engine/scripting language";
     license = stdenv.lib.licenses.zlib;
     platforms = stdenv.lib.platforms.linux;

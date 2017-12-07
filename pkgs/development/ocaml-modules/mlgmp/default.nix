@@ -1,5 +1,8 @@
 {stdenv, fetchurl, ocaml, findlib, gmp, mpfr, ncurses }:
 
+if stdenv.lib.versionAtLeast ocaml.version "4.03"
+then throw "mlgmp is not available for OCaml ${ocaml.version}" else
+
 let
   pname = "mlgmp";
 in
