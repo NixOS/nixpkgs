@@ -105,11 +105,11 @@ stdenv.mkDerivation {
     libiconv = libiconvReal;
   };
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.uclibc.org/;
     description = "A small implementation of the C library";
-    maintainers = with stdenv.lib.maintainers; [ rasendubi ];
-    license = stdenv.lib.licenses.lgpl2;
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ rasendubi ];
+    license = licenses.lgpl2;
+    platforms = subtractLists ["aarch64-linux"] platforms.linux;
   };
 }
