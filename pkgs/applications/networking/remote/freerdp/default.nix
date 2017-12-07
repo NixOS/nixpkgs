@@ -54,11 +54,11 @@ stdenv.mkDerivation rec {
     "-DCMAKE_INSTALL_LIBDIR=lib"
     "-DWITH_CUNIT=OFF"
     "-DWITH_OSS=OFF"
-  ] ++ optional (libpulseaudio != null) "-DWITH_PULSE=ON"
-    ++ optional (cups != null)          "-DWITH_CUPS=ON"
-    ++ optional (pcsclite != null)      "-DWITH_PCSC=ON"
-    ++ optional buildServer             "-DWITH_SERVER=ON"
-    ++ optional optimize                "-DWITH_SSE2=ON";
+  ] ++ optional (libpulseaudio != null)       "-DWITH_PULSE=ON"
+    ++ optional (cups != null)                "-DWITH_CUPS=ON"
+    ++ optional (pcsclite != null)            "-DWITH_PCSC=ON"
+    ++ optional buildServer                   "-DWITH_SERVER=ON"
+    ++ optional (optimize && stdenv.isx86_64) "-DWITH_SSE2=ON";
 
   meta = with lib; {
     description = "A Remote Desktop Protocol Client";
