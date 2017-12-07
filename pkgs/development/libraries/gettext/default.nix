@@ -1,4 +1,4 @@
-{ stdenv, lib, hostPlatform, fetchurl, libiconv, xz }:
+{ stdenv, lib, buildPackages, hostPlatform, fetchurl, libiconv, xz, acl}:
 
 stdenv.mkDerivation rec {
   name = "gettext-${version}";
@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
   LDFLAGS = if stdenv.isSunOS then "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec" else "";
 
   configureFlags = [ "--disable-csharp" "--with-xz" ]
+     ++ lib.optional (acl == null) "--disable-acl"
      # avoid retaining reference to CF during stdenv bootstrap
      ++ lib.optionals stdenv.isDarwin [
             "gt_cv_func_CFPreferencesCopyAppValue=no"
@@ -46,7 +47,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ xz xz.bin ];
   # HACK, see #10874 (and 14664)
-  buildInputs = stdenv.lib.optional (!stdenv.isLinux && !hostPlatform.isCygwin) libiconv;
+  buildInputs =
+    stdenv.lib.optional (!stdenv.isLinux && !hostPlatform.isCygwin) libiconv;
+    #++ stdenv.lib.optional (stdenv.isLinux) attr;
 
   setupHook = ./gettext-setup-hook.sh;
 
