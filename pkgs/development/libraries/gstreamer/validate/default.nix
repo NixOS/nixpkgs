@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gst-validate-1.12.2";
+  name = "gst-validate-1.12.3";
 
   meta = {
     description = "Integration testing infrastructure for the GStreamer framework";
