@@ -4,25 +4,27 @@
 , nose
 , six
 , numpy
-, scipy
+, scipy # optional, allows spline-related features (see patsy's docs)
 }:
 
 buildPythonPackage rec {
   pname = "patsy";
   version = "0.4.1";
 
+  # Not available via pypi as of 2017-12-07
   src = fetchurl {
     url = "https://github.com/pydata/patsy/archive/v${version}.zip";
     sha256 = "1wkjd71rx1akfrk6iimi4zm783gagxmkxm3ppjyr2c98asni009c";
   };
 
-  buildInputs = [ nose ];
+  checkInputs = [ nose ];
   checkPhase = "nosetests -v";
 
   propagatedBuildInputs = [
     six
     numpy
-  ] ++ lib.optional (!isNull scipy) [ scipy ];
+    scipy
+  ];
 
   meta = {
     description = "A Python package for describing statistical models";
