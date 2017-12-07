@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
     sha256 = "0hkdzc71pdnscbpdpgwljcchiyancarldjyd0w609sy18bky833x";
   };
 
+  makeFlags = "CC=${stdenv.cc.targetPrefix}cc";
+
   installPhase = ''
     make install prefix=$out
     mkdir -p $out/share/man/man1
