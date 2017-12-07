@@ -20,6 +20,14 @@ let
       USE_OPENMP = "1";
     };
 
+    aarch64-linux = {
+      BINARY = "64";
+      TARGET = "ARMV8";
+      DYNAMIC_ARCH = "1";
+      CC = "gcc";
+      USE_OPENMP = "1";
+    };
+
     i686-linux = {
       BINARY = "32";
       TARGET = "P2";
