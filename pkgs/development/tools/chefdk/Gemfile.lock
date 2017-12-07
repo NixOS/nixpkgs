@@ -71,7 +71,7 @@ GEM
       fuzzyurl
       mixlib-config (~> 2.0)
       mixlib-shellout (~> 2.0)
-    chef-dk (2.3.4)
+    chef-dk (2.4.17)
       addressable (>= 2.3.5, < 2.6)
       chef (~> 13.0)
       chef-provisioning (~> 2.0)
@@ -103,7 +103,7 @@ GEM
     cheffish (13.1.0)
       chef-zero (~> 13.0)
       net-ssh
-    chefspec (7.1.0)
+    chefspec (7.1.1)
       chef (>= 12.14.89)
       fauxhai (>= 4, < 6)
       rspec (~> 3.0)
@@ -112,11 +112,11 @@ GEM
     concurrent-ruby (1.0.5)
     cookbook-omnifetch (0.8.0)
       mixlib-archive (~> 0.4)
-    cucumber-core (3.0.0)
+    cucumber-core (3.1.0)
       backports (>= 3.8.0)
-      cucumber-tag_expressions (>= 1.0.1)
-      gherkin (>= 4.1.3)
-    cucumber-tag_expressions (1.0.1)
+      cucumber-tag_expressions (~> 1.1.0)
+      gherkin (>= 5.0.0)
+    cucumber-tag_expressions (1.1.1)
     diff-lcs (1.3)
     diffy (3.2.0)
     docker-api (1.34.0)
@@ -153,7 +153,7 @@ GEM
     httpclient (2.8.3)
     inifile (3.0.0)
     iniparse (1.4.4)
-    inspec (1.45.13)
+    inspec (1.47.0)
       addressable (~> 2.4)
       faraday (>= 0.9.0)
       hashie (~> 3.4)
@@ -172,7 +172,7 @@ GEM
       sslshake (~> 1.2)
       thor (~> 0.19)
       tomlrb (~> 1.2)
-      train (~> 0.29, >= 0.29.2)
+      train (~> 0.30)
     ipaddress (0.8.3)
     iso8601 (0.9.1)
     json (2.1.0)
@@ -227,7 +227,7 @@ GEM
     nori (2.6.0)
     octokit (4.7.0)
       sawyer (~> 0.8.0, >= 0.5.3)
-    ohai (13.6.0)
+    ohai (13.7.0)
       chef-config (>= 12.5.0.alpha.1, < 14)
       ffi (~> 1.9)
       ffi-yajl (~> 2.2)
@@ -327,7 +327,7 @@ GEM
     sslshake (1.2.0)
     syslog-logger (1.6.8)
     systemu (2.6.5)
-    test-kitchen (1.19.1)
+    test-kitchen (1.19.2)
       mixlib-install (~> 3.6)
       mixlib-shellout (>= 1.2, < 3.0)
       net-scp (~> 1.1)
@@ -337,12 +337,12 @@ GEM
       thor (~> 0.19, < 0.19.2)
       winrm (~> 2.0)
       winrm-elevated (~> 1.0)
-      winrm-fs (~> 1.0.2)
+      winrm-fs (~> 1.1.0)
     thor (0.19.1)
     timers (4.0.4)
       hitimes
     tomlrb (1.2.6)
-    train (0.29.2)
+    train (0.31.1)
       docker-api (~> 1.26)
       json (>= 1.8, < 3.0)
       mixlib-shellout (~> 2.0)
@@ -369,7 +369,7 @@ GEM
     winrm-elevated (1.1.0)
       winrm (~> 2.0)
       winrm-fs (~> 1.0)
-    winrm-fs (1.0.2)
+    winrm-fs (1.1.1)
       erubis (~> 2.7)
       logging (>= 1.6.1, < 3.0)
       rubyzip (~> 1.1)
@@ -381,7 +381,7 @@ PLATFORMS
 
 DEPENDENCIES
   berkshelf
-  chef-dk
+  chef-dk (= 2.4.17)
   chef-provisioning
   chef-vault
   chefspec
