@@ -70,4 +70,6 @@ stdenv.mkDerivation rec {
     ++ optional (!stdenv.isDarwin) wildmidi;
 
   LDFLAGS = optionalString stdenv.isDarwin "-lintl";
+
+  enableParallelBuilding = true;
 }

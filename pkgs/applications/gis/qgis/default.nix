@@ -14,8 +14,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake makeWrapper ];
 
+  # `make -f src/providers/wms/CMakeFiles/wmsprovider_a.dir/build.make src/providers/wms/CMakeFiles/wmsprovider_a.dir/qgswmssourceselect.cpp.o`:
   # fatal error: ui_qgsdelimitedtextsourceselectbase.h: No such file or directory
-  #enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   # To handle the lack of 'local' RPATH; required, as they call one of
   # their built binaries requiring their libs, in the build process.

@@ -131,6 +131,10 @@ stdenv.mkDerivation rec {
     ++ optional nvidiaSupport       "-DBUILD_NVIDIA=ON"
     ;
 
+  # `make -f src/CMakeFiles/conky.dir/build.make src/CMakeFiles/conky.dir/conky.cc.o`:
+  # src/conky.cc:137:23: fatal error: defconfig.h: No such file or directory
+  enableParallelBuilding = false;
+
   meta = with stdenv.lib; {
     homepage = http://conky.sourceforge.net/;
     description = "Advanced, highly configurable system monitor based on torsmo";

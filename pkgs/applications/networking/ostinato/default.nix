@@ -54,6 +54,10 @@ stdenv.mkDerivation rec {
     EOF
   '';
 
+  # `cd common; qmake ostproto.pro; make pdmlreader.o`:
+  # pdmlprotocol.h:23:25: fatal error: protocol.pb.h: No such file or directory
+  enableParallelBuilding = false;
+
   meta = with stdenv.lib; {
     description = "A packet traffic generator and analyzer";
     homepage    = http://ostinato.org;
