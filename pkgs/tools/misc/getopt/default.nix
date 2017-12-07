@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "1arvjfzw6p310zbgv629w5hkyslrj44imf3r3s2r4ry2jfcks221";
   };
   preBuild = ''
-    export buildFlags=CC="$CC" # for darwin
+    # for darwin
+    export buildFlags="CC=${stdenv.cc.targetPrefix}cc"
   '';
 
   meta = {
