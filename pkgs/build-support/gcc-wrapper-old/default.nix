@@ -6,7 +6,7 @@
 # variables so that the compiler and the linker just "work".
 
 { name ? "", stdenv, lib, nativeTools, nativeLibc, nativePrefix ? ""
-, gcc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? ""
+, gcc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? stdenv.shell
 , zlib ? null
 , hostPlatform, targetPlatform
 }:
@@ -56,15 +56,9 @@ stdenv.mkDerivation {
   langAda = if nativeTools then false else gcc ? langAda && gcc.langAda;
   langVhdl = if nativeTools then false else gcc ? langVhdl && gcc.langVhdl;
   zlib = if gcc != null && gcc ? langVhdl then zlib else null;
-  shell = if shell == "" then stdenv.shell else
-    if builtins.isAttrs shell then (shell + shell.shellPath)
-    else shell;
+  shell = shell + shell.shellPath or "";
 
   crossAttrs = {
-    shell = shell.crossDrv + shell.crossDrv.shellPath;
-    coreutils = coreutils.crossDrv;
-    binutils = binutils.crossDrv;
-    gcc = gcc.crossDrv;
     #
     # This is not the best way to do this. I think the reference should be
     # the style in the gcc-cross-wrapper, but to keep a stable stdenv now I
@@ -92,7 +86,7 @@ stdenv.mkDerivation {
       (if targetPlatform.system == "i686-linux"     then "ld-linux.so.2" else
        if targetPlatform.system == "x86_64-linux"   then "ld-linux-x86-64.so.2" else
        # ARM with a wildcard, which can be "" or "-armhf".
-       if targetPlatform.isArm32                    then "ld-linux*.so.3" else
+       if targetPlatform.isArm                      then "ld-linux*.so.3" else
        if targetPlatform.system == "aarch64-linux"  then "ld-linux-aarch64.so.1" else
        if targetPlatform.system == "powerpc-linux"  then "ld.so.1" else
        if targetPlatform.system == "mips64el-linux" then "ld.so.1" else

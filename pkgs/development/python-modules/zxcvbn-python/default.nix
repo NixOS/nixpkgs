@@ -5,13 +5,13 @@
 
 buildPythonPackage rec {
   pname = "zxcvbn-python";
-  version = "4.4.15";
+  version = "4.4.16";
 
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ef982a382518d217d353a42093aa8bb8608a50bc2df559c08885bba166782cd0";
+    sha256 = "63cc481bfb8950c43d4a87926be22cf8c4bb281ef7f818a8ef2d30b55a97c3e0";
   };
 
   # No tests in archive

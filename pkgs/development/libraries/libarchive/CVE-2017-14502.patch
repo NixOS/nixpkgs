@@ -1,0 +1,28 @@
+From 5562545b5562f6d12a4ef991fae158bf4ccf92b6 Mon Sep 17 00:00:00 2001
+From: Joerg Sonnenberger <joerg@bec.de>
+Date: Sat, 9 Sep 2017 17:47:32 +0200
+Subject: [PATCH] Avoid a read off-by-one error for UTF16 names in RAR
+ archives.
+
+Reported-By: OSS-Fuzz issue 573
+---
+ libarchive/archive_read_support_format_rar.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
+
+diff --git a/libarchive/archive_read_support_format_rar.c b/libarchive/archive_read_support_format_rar.c
+index cbb14c32d..751de6979 100644
+--- a/libarchive/archive_read_support_format_rar.c
++++ b/libarchive/archive_read_support_format_rar.c
+@@ -1496,7 +1496,11 @@ read_header(struct archive_read *a, struct archive_entry *entry,
+         return (ARCHIVE_FATAL);
+       }
+       filename[filename_size++] = '\0';
+-      filename[filename_size++] = '\0';
++      /*
++       * Do not increment filename_size here as the computations below
++       * add the space for the terminating NUL explicitly.
++       */
++      filename[filename_size] = '\0';
+ 
+       /* Decoded unicode form is UTF-16BE, so we have to update a string
+        * conversion object for it. */

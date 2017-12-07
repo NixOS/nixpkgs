@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib
   '';
 
-  buildInputs = [pkgconfig glib ncurses gpm];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib ncurses gpm];
 
   meta = with stdenv.lib; {
     homepage = http://libviper.sourceforge.net/;

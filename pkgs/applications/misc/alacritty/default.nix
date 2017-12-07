@@ -1,5 +1,5 @@
 { stdenv,
-  fetchFromGitHub,
+  fetchgit,
   rustPlatform,
   cmake,
   makeWrapper,
@@ -29,16 +29,19 @@ let
 in
 
 buildRustPackage rec {
-  name = "alacritty-unstable-2017-07-25";
+  name = "alacritty-unstable-${version}";
+  version = "2017-10-31";
 
-  src = fetchFromGitHub {
-    owner = "jwilm";
-    repo = "alacritty";
-    rev = "49c73f6d55e5a681a0e0f836cd3e9fe6af30788f";
-    sha256 = "0h5hrb2g0fpc6xn94hmvxjj21cqbj4vgqkznvd64jl84qbyh1xjl";
+  # At the moment we cannot handle git dependencies in buildRustPackage.
+  # This fork only replaces rust-fontconfig/libfontconfig with a git submodules.
+  src = fetchgit {
+    url = https://github.com/Mic92/alacritty.git;
+    rev = "rev-${version}";
+    sha256 = "1yybx23smwdkzb6byvxd6zxi7asmrzvp9h1ihmy6xlzwjfbsalj0";
+    fetchSubmodules = true;
   };
 
-  depsSha256 = "1pbb0swgpsbd6x3avxz6fv3q31dg801li47jibz721a4n9c0rssx";
+  cargoSha256 = "14bmm1f7hqh8i4mpb6ljh7szrm4g6mplzpq9zbgjrgxnc01w3s0i";
 
   buildInputs = [
     cmake
@@ -46,17 +49,20 @@ buildRustPackage rec {
     pkgconfig
   ] ++ rpathLibs;
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace copypasta/src/x11.rs \
       --replace Command::new\(\"xclip\"\) Command::new\(\"${xclip}/bin/xclip\"\)
   '';
 
   installPhase = ''
-    mkdir -p $out/bin
-    for f in $(find target/release -maxdepth 1 -type f); do
-      cp $f $out/bin
-    done;
+    runHook preInstall
+
+    install -D target/release/alacritty $out/bin/alacritty
     patchelf --set-rpath "${stdenv.lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
+
+    install -D Alacritty.desktop $out/share/applications/alacritty.desktop
+
+    runHook postInstall
   '';
 
   dontPatchELF = true;

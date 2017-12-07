@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, bootPkgs, perl, gmp, ncurses, binutils, autoconf, alex, happy, makeStaticLibraries
+{ stdenv, fetchgit, bootPkgs, perl, gmp, ncurses, targetPackages, autoconf, alex, happy, makeStaticLibraries
 , hscolour, xen, automake, gcc, git, zlib, libtool, enableIntegerSimple ? false
 }:
 
@@ -17,14 +17,14 @@ stdenv.mkDerivation rec {
     sed -i '305 d' Makefile
     sed -i '309,439 d' Makefile # Removes RPM packaging
     sed -i '20 d' src/scripts/halvm-cabal.in
-    sed -ie 's|ld |${binutils}/bin/ld |g' src/scripts/ldkernel.in
+    sed -ie 's|ld |${targetPackages.stdenv.cc.bintools}/bin/ld |g' src/scripts/ldkernel.in
   '';
   configureFlags = stdenv.lib.optional (!enableIntegerSimple) [ "--enable-gmp" ];
   propagatedNativeBuildInputs = [ alex happy ];
   buildInputs =
    let haskellPkgs = [ alex happy bootPkgs.hscolour bootPkgs.cabal-install bootPkgs.haddock bootPkgs.hpc
     ]; in [ bootPkgs.ghc
-            automake perl git binutils
+            automake perl git targetPackages.stdenv.cc.bintools
             autoconf xen zlib ncurses.dev
             libtool gmp ] ++ haskellPkgs;
   preConfigure = ''
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     inherit bootPkgs;
     cross.config = "halvm";
     cc = "${gcc}/bin/gcc";
-    ld = "${binutils}/bin/ld";
+    ld = "${targetPackages.stdenv.cc.bintools}/bin/ld";
   };
 
   meta = {
@@ -49,5 +49,6 @@ stdenv.mkDerivation rec {
     platforms = ["x86_64-linux"];       # other platforms don't have Xen
     maintainers = with stdenv.lib.maintainers; [ dmjio ];
     inherit (bootPkgs.ghc.meta) license;
+    broken = true;  # https://nix-cache.s3.amazonaws.com/log/6i98mhbq9nzzhwr4svlivm4gz91l2w0f-HaLVM-2.4.0.drv
   };
 }

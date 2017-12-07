@@ -19,7 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "1z7awzgw8d15aw17kpbj460pcxq8l2rhkaxk47w7yg9qrmg0xja4";
   };
 
-  buildInputs = [  pkgconfig which autoreconfHook
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ which
     rep-gtk pango gdk_pixbuf imlib gettext texinfo
     libXinerama libXrandr libXtst libICE libSM
     makeWrapper ];

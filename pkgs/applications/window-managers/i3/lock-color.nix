@@ -28,6 +28,9 @@ stdenv.mkDerivation rec {
     homepage = https://i3wm.org/i3lock/;
     maintainers = with maintainers; [ garbas malyn ];
     license = licenses.bsd3;
-    platforms = platforms.all;
+
+    # Needs the SSE2 instruction set. See upstream issue
+    # https://github.com/chrjguill/i3lock-color/issues/44
+    platforms = platforms.i686 ++ platforms.x86_64;
   };
 }

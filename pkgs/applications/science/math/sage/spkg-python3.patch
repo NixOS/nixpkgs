@@ -1,0 +1,12 @@
+--- old/build/pkgs/python3/spkg-install	2017-07-21 14:10:00.000000000 -0500
++++ new/build/pkgs/python3/spkg-install	2017-10-15 13:11:17.769261404 -0500
+@@ -22,6 +22,9 @@
+ 
+ cd src
+ 
++LDFLAGS="-lcrypt $LDFLAGS"		
++export LDFLAGS
++
+ if [ "$SAGE_DEBUG" = "yes" ]; then
+     echo "Building Python with pydebug"
+     PYTHON_CONFIGURE="$PYTHON_CONFIGURE --with-pydebug"

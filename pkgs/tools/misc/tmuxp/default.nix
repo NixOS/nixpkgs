@@ -2,13 +2,13 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "tmuxp-${version}";
-  version = "1.3.1";
+  version = "1.3.4";
 
   namePrefix = "";
 
   src = fetchurl {
     url = "mirror://pypi/t/tmuxp/${name}.tar.gz";
-    sha256 = "189mxnb2pxj3wjijn56j8y5x1r23fil00fn2q7d6bd13vgr0f85s";
+    sha256 = "149n35rr27n2c6yna1bla20x3w1zz9gxnjj3m3xxdfp4fbsd2y31";
   };
 
   patchPhase = ''

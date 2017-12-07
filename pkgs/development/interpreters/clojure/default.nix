@@ -20,10 +20,10 @@ stdenv.mkDerivation {
     makeWrapper ${jdk.jre}/bin/java $out/bin/clojure --add-flags "-cp $out/share/java/clojure.jar clojure.main"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A Lisp dialect for the JVM";
     homepage = https://clojure.org/;
-    license = stdenv.lib.licenses.bsd3;
+    license = licenses.epl10;
     longDescription = ''
       Clojure is a dynamic programming language that targets the Java
       Virtual Machine. It is designed to be a general-purpose language,
@@ -43,7 +43,7 @@ stdenv.mkDerivation {
       offers a software transactional memory system and reactive Agent
       system that ensure clean, correct, multithreaded designs.
     '';
-    maintainers = with stdenv.lib.maintainers; [ the-kenny ];
-    platforms = with stdenv.lib.platforms; unix;
+    maintainers = with maintainers; [ the-kenny ];
+    platforms = platforms.unix;
   };
 }

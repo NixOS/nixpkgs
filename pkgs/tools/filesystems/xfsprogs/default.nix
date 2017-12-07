@@ -2,19 +2,19 @@
 
 let
   gentooPatch = name: sha256: fetchpatch {
-    url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-fs/xfsprogs/files/${name}?id=8293574ab30c85e2965fb2b7dd890b44841b8404";
+    url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-fs/xfsprogs/files/${name}?id=f4055adc94e11d182033a71e32f97b357c034aff";
     inherit sha256;
   };
 in
 
 stdenv.mkDerivation rec {
   name = "xfsprogs-${version}";
-  version = "4.11.0";
+  version = "4.13.1";
 
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git";
     rev = "refs/tags/v${version}";
-    sha256 = "0icliinacg6c3ziaqzyyxfz9jykn80njj9fdv3milhsf81yhnrpn";
+    sha256 = "0h4wb8pp8wdcyqpz2ixlghz9yfd2sp9xa20s435g5rfp6ljrh6zb";
   };
 
   outputs = [ "bin" "dev" "out" "doc" ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   # Why is all this garbage needed? Why? Why?
   patches = [
-    (gentooPatch "xfsprogs-4.7.0-sharedlibs.patch" "1s83ihaccmjrw4zm0nbdwqk3jx4wc1rijpsqrg7ir71ln7qknwzz")
+    (gentooPatch "xfsprogs-4.12.0-sharedlibs.patch" "1i081749x91jvlrw84l4a3r081vqcvn6myqhnqbnfcfhd64h12bq")
     (gentooPatch "xfsprogs-4.7.0-libxcmd-link.patch" "1lvy1ajzml39a631a7jqficnzsd40bzkca7hkxv1ybiqyp8sf55s")
     (gentooPatch "xfsprogs-4.9.0-underlinking.patch" "1r7l8jphspy14i43zbfnjrnyrdm4cpgyfchblascxylmans0gci7")
   ];

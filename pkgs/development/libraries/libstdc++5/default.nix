@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
       sha256 = "11m5lc51b0addhc4yq4rz0dwpv6k73rrj73wya3lqdk8rly6cjpm";
       addPrefixes = true;
     })
+    # Required because of glibc 2.26
+    ./struct-ucontext.patch
   ];
 
   postPatch = ''

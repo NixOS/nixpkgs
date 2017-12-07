@@ -8,9 +8,9 @@
     "cmd/kube-controller-manager"
     "cmd/kube-proxy"
     "plugin/cmd/kube-scheduler"
-    "cmd/kube-dns"
     "federation/cmd/federation-apiserver"
     "federation/cmd/federation-controller-manager"
+    "test/e2e/e2e.test"
   ]
 }:
 
@@ -18,13 +18,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   name = "kubernetes-${version}";
-  version = "1.5.6";
+  version = "1.7.9";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "0mkg4vgz9szgq1k5ignkdr5gmg703xlq8zsrr422a1qfqb8zp15w";
+    sha256 = "0lxagvv8mysw6n0vp5vsccl87b628dgsjrf298dx2dqx7wn7zjgi";
   };
 
   buildInputs = [ removeReferencesTo makeWrapper which go rsync go-bindata ];
@@ -54,6 +54,10 @@ stdenv.mkDerivation rec {
     cp _output/local/go/bin/* "$out/bin/"
     cp build/pause/pause "$pause/bin/pause"
     cp -R docs/man/man1 "$man/share/man"
+
+    cp cluster/addons/addon-manager/kube-addons.sh $out/bin/kube-addons
+    patchShebangs $out/bin/kube-addons
+    wrapProgram $out/bin/kube-addons --set "KUBECTL_BIN" "$out/bin/kubectl"
 
     $out/bin/kubectl completion bash > $out/share/bash-completion/completions/kubectl
   '';

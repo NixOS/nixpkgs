@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "povray-${version}";
-  version = "3.7.0.3";
+  version = "3.7.0.4";
 
   src = fetchFromGitHub {
     owner = "POV-Ray";
     repo = "povray";
     rev = "v${version}";
-    sha256 = "0mzkgk3gn8jfrw1fq0z3kqbysdfq8nwdl8a28l18v8gzb31bblhq";
+    sha256 = "1wkwb43w5r9pa79yazy4w4s8n6g280igag97hgl7dyi289q39n0q";
   };
 
 

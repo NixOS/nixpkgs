@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "btrbk-${version}";
-  version = "0.24.0";
+  version = "0.25.1";
 
   src = fetchurl {
     url = "http://digint.ch/download/btrbk/releases/${name}.tar.xz";
-    sha256 = "01jrlswly28h4q4r3qfrzadz0pf0ms6wynmqhwddj1ahj31729h3";
+    sha256 = "02qc9vbd5l0ywnv01p60v9q3dcx2z92dfaf95qf7ccxqaa9zxfr5";
   };
 
   patches = [

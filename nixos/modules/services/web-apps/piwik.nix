@@ -24,14 +24,17 @@ in {
         default = false;
         description = ''
           Enable piwik web analytics with php-fpm backend.
+          Either the nginx option or the webServerUser option is mandatory.
         '';
       };
 
       webServerUser = mkOption {
-        type = types.str;
-        example = "nginx";
+        type = types.nullOr types.str;
+        default = null;
+        example = "lighttpd";
         description = ''
-          Name of the owner of the ${phpSocket} fastcgi socket for piwik.
+          Name of the web server user that forwards requests to the ${phpSocket} fastcgi socket for piwik if the nginx
+          option is not used. Either this option or the nginx option is mandatory.
           If you want to use another webserver than nginx, you need to set this to that server's user
           and pass fastcgi requests to `index.php` and `piwik.php` to this socket.
         '';
@@ -57,47 +60,43 @@ in {
       };
 
       nginx = mkOption {
-        # TODO: for maximum flexibility, it would be nice to use nginx's vhost_options module
-        #       but this only makes sense if we can somehow specify defaults suitable for piwik.
-        #       But users can always copy the piwik nginx config to their configuration.nix and customize it.
-        type = types.nullOr (types.submodule {
-          options = {
-            virtualHost = mkOption {
-              type = types.str;
-              default = "piwik.${config.networking.hostName}";
-              example = "piwik.$\{config.networking.hostName\}";
-              description = ''
-                  Name of the nginx virtualhost to use and set up.
-              '';
-            };
-            enableSSL = mkOption {
-              type = types.bool;
-              default = true;
-              description = "Whether to enable https.";
-            };
-            forceSSL = mkOption {
-              type = types.bool;
-              default = true;
-              description = "Whether to always redirect to https.";
-            };
-            enableACME = mkOption {
-              type = types.bool;
-              default = true;
-              description = "Whether to ask Let's Encrypt to sign a certificate for this vhost.";
-            };
-          };
-        });
+        type = types.nullOr (types.submodule (
+          recursiveUpdate
+            (import ../web-servers/nginx/vhost-options.nix { inherit config lib; })
+            {
+              # enable encryption by default,
+              # as sensitive login and piwik data should not be transmitted in clear text.
+              options.forceSSL.default = true;
+              options.enableACME.default = true;
+            }
+        )
+        );
         default = null;
-        example = { virtualHost = "stats.$\{config.networking.hostName\}"; };
+        example = {
+          serverName = "stats.$\{config.networking.hostName\}";
+          enableACME = false;
+        };
         description = ''
-            The options to use to configure an nginx virtualHost.
-            If null (the default), no nginx virtualHost will be configured.
+            With this option, you can customize an nginx virtualHost which already has sensible defaults for piwik.
+            Either this option or the webServerUser option is mandatory.
+            Set this to {} to just enable the virtualHost if you don't need any customization.
+            If enabled, then by default, the serverName is piwik.$\{config.networking.hostName\}, SSL is active,
+            and certificates are acquired via ACME.
+            If this is set to null (the default), no nginx virtualHost will be configured.
         '';
       };
     };
   };
 
   config = mkIf cfg.enable {
+    warnings = mkIf (cfg.nginx != null && cfg.webServerUser != null) [
+      "If services.piwik.nginx is set, services.piwik.nginx.webServerUser is ignored and should be removed."
+    ];
+
+    assertions = [ {
+        assertion = cfg.nginx != null || cfg.webServerUser != null;
+        message = "Either services.piwik.nginx or services.piwik.nginx.webServerUser is mandatory";
+    }];
 
     users.extraUsers.${user} = {
       isSystemUser = true;
@@ -153,10 +152,16 @@ in {
       serviceConfig.UMask = "0007";
     };
 
-    services.phpfpm.poolConfigs = {
+    services.phpfpm.poolConfigs = let
+      # workaround for when both are null and need to generate a string,
+      # which is illegal, but as assertions apparently are being triggered *after* config generation,
+      # we have to avoid already throwing errors at this previous stage.
+      socketOwner = if (cfg.nginx != null) then config.services.nginx.user
+      else if (cfg.webServerUser != null) then cfg.webServerUser else "";
+    in {
       ${pool} = ''
         listen = "${phpSocket}"
-        listen.owner = ${cfg.webServerUser}
+        listen.owner = ${socketOwner}
         listen.group = root
         listen.mode = 0600
         user = ${user}
@@ -170,12 +175,15 @@ in {
       # References:
       # https://fralef.me/piwik-hardening-with-nginx-and-php-fpm.html
       # https://github.com/perusio/piwik-nginx
-      ${cfg.nginx.virtualHost} = {
-        root = "${pkgs.piwik}/share";
-        enableSSL  = cfg.nginx.enableSSL;
-        enableACME = cfg.nginx.enableACME;
-        forceSSL   = cfg.nginx.forceSSL;
+      "${user}.${config.networking.hostName}" = mkMerge [ cfg.nginx {
+        # don't allow to override the root easily, as it will almost certainly break piwik.
+        # disadvantage: not shown as default in docs.
+        root = mkForce "${pkgs.piwik}/share";
 
+        # define locations here instead of as the submodule option's default
+        # so that they can easily be extended with additional locations if required
+        # without needing to redefine the piwik ones.
+        # disadvantage: not shown as default in docs.
         locations."/" = {
           index = "index.php";
         };
@@ -208,7 +216,7 @@ in {
         locations."= /piwik.js".extraConfig = ''
           expires 1M;
         '';
-      };
+      }];
     };
   };
 

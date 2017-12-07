@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1hrbg9l5qb7w0xvr7013qamkckyj0fqc426c851l69zpmhakqm1q";
   };
   
-  buildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool ];
   
   propagatedBuildInputs = [ gtkmm libglade ];
 }

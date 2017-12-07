@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   # Works around bunch of "format '%lu' expects argument of type 'long unsigned int', but argument 4 has type 'uint64_t {aka long long unsigned int}'" warnings
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isi686 "-Wno-error=format";
 
-  buildInputs = [ pkgconfig libusb ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libusb ];
   propagatedBuildInputs = [ libusb ];
 
   outputs = [ "out" "dev" ];

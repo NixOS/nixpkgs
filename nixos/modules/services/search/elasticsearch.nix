@@ -174,11 +174,13 @@ in {
         LimitNOFILE = "1024000";
       };
       preStart = ''
-        # Only set vm.max_map_count if lower than ES required minimum
-        # This avoids conflict if configured via boot.kernel.sysctl
-        if [ `${pkgs.procps}/bin/sysctl -n vm.max_map_count` -lt 262144 ]; then
-          ${pkgs.procps}/bin/sysctl -w vm.max_map_count=262144
-        fi
+        ${optionalString (!config.boot.isContainer) ''
+          # Only set vm.max_map_count if lower than ES required minimum
+          # This avoids conflict if configured via boot.kernel.sysctl
+          if [ `${pkgs.procps}/bin/sysctl -n vm.max_map_count` -lt 262144 ]; then
+            ${pkgs.procps}/bin/sysctl -w vm.max_map_count=262144
+          fi
+        ''}
 
         mkdir -m 0700 -p ${cfg.dataDir}
 

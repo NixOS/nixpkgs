@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
     cp bin/milu $out/bin
   '';
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-     pkgconfig
      glib
      unzip
      clang

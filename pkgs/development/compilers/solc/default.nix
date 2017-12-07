@@ -1,9 +1,9 @@
-{ stdenv, fetchzip, fetchgit, boost, cmake }:
+{ stdenv, fetchzip, fetchgit, boost, cmake, z3 }:
 
 let
-  version = "0.4.13";
-  rev = "0fb4cb1ab9bb4b6cc72e28cc5a1753ad14781f14";
-  sha256 = "0rhrm0bmk5s2358j40yx7dzr1938q17dchzflrxw6y7yvkhscxrm";
+  version = "0.4.17";
+  rev = "bdeb9e52a2211510644fb53df93fb98258b40a65";
+  sha256 = "1x6q2rlq6gxggidgsy6li7m4phwr1hcfi65pq9yimz64ddqfiira";
   jsoncppURL = https://github.com/open-source-parsers/jsoncpp/archive/1.7.7.tar.gz;
   jsoncpp = fetchzip {
     url = jsoncppURL;
@@ -23,16 +23,18 @@ stdenv.mkDerivation {
   patchPhase = ''
     echo >commit_hash.txt '${rev}'
     echo >prerelease.txt
-    substituteInPlace deps/jsoncpp.cmake \
+    substituteInPlace cmake/jsoncpp.cmake \
       --replace '${jsoncppURL}' ${jsoncpp}
     substituteInPlace cmake/EthCompilerSettings.cmake \
       --replace 'add_compile_options(-Werror)' ""
-    substituteInPlace cmake/EthDependencies.cmake \
-      --replace 'set(Boost_USE_STATIC_LIBS ON)'   \
-                'set(Boost_USE_STATIC_LIBS OFF)'
   '';
 
-  buildInputs = [ boost cmake ];
+  cmakeFlags = [
+    "-DBoost_USE_STATIC_LIBS=OFF"
+  ];
+
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ boost z3 ];
 
   meta = {
     description = "Compiler for Ethereum smart contract language Solidity";

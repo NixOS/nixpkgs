@@ -4,11 +4,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "htmlunit-driver-standalone-${version}";
-  version = "2.21";
+  version = "2.27";
 
   src = fetchurl {
-    url = "https://github.com/SeleniumHQ/htmlunit-driver/releases/download/${version}/htmlunit-driver-standalone-${version}.jar";
-    sha256 = "1wrbam0hb036717z3y73lsw4pwp5sdiw2i1818kg9pvc7i3fb3yn";
+    url = "https://github.com/SeleniumHQ/htmlunit-driver/releases/download/${version}/htmlunit-driver-${version}-with-dependencies.jar";
+    sha256 = "1sd3cwpamcbq9pv0mvcm8x6minqrlb4i0r12q3jg91girqswm2dp";
   };
 
   unpackPhase = "true";

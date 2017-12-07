@@ -17,9 +17,6 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  # FIXME needs gcc 4.9 in bootstrap tools
-  hardeningDisable = [ "stackprotector" ];
-
   # Libelf's custom NLS macros fail to determine the catalog file extension on
   # Darwin, so disable NLS for now.
   # FIXME: Eventually make Gettext a build input on all platforms.

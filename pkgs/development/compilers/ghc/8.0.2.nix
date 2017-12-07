@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchpatch, bootPkgs, perl, ncurses, libiconv, binutils, coreutils
+{ stdenv, lib, fetchurl, fetchpatch, bootPkgs, perl, ncurses, libiconv, targetPackages, coreutils
 , hscolour, patchutils, sphinx
 
   # If enabled GHC will be build with the GPL-free but slower integer-simple
@@ -65,7 +65,7 @@ stdenv.mkDerivation rec {
     for i in "$out/bin/"*; do
       test ! -h $i || continue
       egrep --quiet '^#!' <(head -n 1 $i) || continue
-      sed -i -e '2i export PATH="$PATH:${stdenv.lib.makeBinPath [ binutils coreutils ]}"' $i
+      sed -i -e '2i export PATH="$PATH:${stdenv.lib.makeBinPath [ targetPackages.stdenv.cc.bintools coreutils ]}"' $i
     done
   '';
 

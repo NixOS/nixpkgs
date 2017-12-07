@@ -2,13 +2,13 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "awslogs-${version}";
-  version = "0.7";
+  version = "0.10";
 
   src = fetchFromGitHub {
     owner = "jorgebastida";
     repo = "awslogs";
     rev = "${version}";
-    sha256 = "0dqf26h595l1fcnagxi8zsdarsxg3smsihxaqrvnki8fshhfdqsm";
+    sha256 = "18s3xxdhhbz96mgj9ipgyrdcax3p9gy8gpmr0rblw8g0grj31dsp";
   };
 
   doCheck = false;

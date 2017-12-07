@@ -1,12 +1,16 @@
-{ fetchurl, stdenv, bison, flex, pam, sendmailPath ? "/run/wrappers/bin/sendmail" }:
+{ fetchurl, stdenv, bison, flex, pam
+, sendmailPath ? "/run/wrappers/bin/sendmail"
+, atWrapperPath ? "/run/wrappers/bin/at"
+}:
 
-stdenv.mkDerivation {
-  name = "at-3.1.16";
+stdenv.mkDerivation rec {
+  name = "at-${version}";
+  version = "3.1.20";
 
   src = fetchurl {
     # Debian is apparently the last location where it can be found.
-    url = mirror://debian/pool/main/a/at/at_3.1.16.orig.tar.gz;
-    sha256 = "1hfmnhgi95vsfaa69qlakpwd22al0m0rhqms6sawxvaldafgb6nb";
+    url = "mirror://debian/pool/main/a/at/at_${version}.orig.tar.gz";
+    sha256 = "1fgsrqpx0r6qcjxmlsqnwilydhfxn976c870mjc0n1bkmcy94w88";
   };
 
   patches = [ ./install.patch ];
@@ -28,6 +32,13 @@ stdenv.mkDerivation {
        --with-jobdir=/var/spool/atjobs --with-atspool=/var/spool/atspool
        --with-daemon_username=atd --with-daemon_groupname=atd
     '';
+
+  # Ensure that "batch" can invoke the setuid "at" wrapper, if it exists, or
+  # else we get permission errors (on NixOS). "batch" is a shell script, so
+  # when the kernel executes it it drops setuid perms.
+  postInstall = ''
+    sed -i "6i test -x ${atWrapperPath} && exec ${atWrapperPath} -qb now  # exec doesn't return" "$out/bin/batch"
+  '';
 
   meta = {
     description = ''The classical Unix `at' job scheduling command'';

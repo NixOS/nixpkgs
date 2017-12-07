@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0v1a0hj96i4jhb5833336s4zcslzb6md5cnmnrvgywx8cmw40c0c";
   };
 
-  buildInputs = [ boost pkgconfig librevenge zlib ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ boost librevenge zlib ];
 
   meta = with stdenv.lib; {
     homepage = http://libwps.sourceforge.net/;

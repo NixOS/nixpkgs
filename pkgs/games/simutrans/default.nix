@@ -115,7 +115,8 @@ let
 
     sourceRoot = ".";
 
-    buildInputs = [ pkgconfig zlib libpng bzip2 SDL SDL_mixer unzip ];
+  nativeBuildInputs = [ pkgconfig ];
+    buildInputs = [ zlib libpng bzip2 SDL SDL_mixer unzip ];
 
     configurePhase = let
       # Configuration as per the readme.txt and config.template

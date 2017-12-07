@@ -101,6 +101,7 @@ let
       kdepim-runtime = callPackage ./kdepim-runtime.nix {};
       kdepim-apps-libs = callPackage ./kdepim-apps-libs {};
       kdf = callPackage ./kdf.nix {};
+      keditbookmarks = callPackage ./keditbookmarks.nix {};
       kgpg = callPackage ./kgpg.nix {};
       khelpcenter = callPackage ./khelpcenter.nix {};
       kholidays = callPackage ./kholidays.nix {};
@@ -124,6 +125,7 @@ let
       korganizer = callPackage ./korganizer.nix {};
       kpimtextedit = callPackage ./kpimtextedit.nix {};
       kqtquickcharts = callPackage ./kqtquickcharts.nix {};
+      krdc = callPackage ./krdc.nix {};
       krfb = callPackage ./krfb.nix {};
       ktnef = callPackage ./ktnef.nix {};
       kwalletmanager = callPackage ./kwalletmanager.nix {};
@@ -135,15 +137,18 @@ let
       libkipi = callPackage ./libkipi.nix {};
       libkleo = callPackage ./libkleo.nix {};
       libkomparediff2 = callPackage ./libkomparediff2.nix {};
+      libksane = callPackage ./libksane.nix {};
       libksieve = callPackage ./libksieve.nix {};
       mailcommon = callPackage ./mailcommon.nix {};
       mailimporter = callPackage ./mailimporter.nix {};
       marble = callPackage ./marble.nix {};
       mbox-importer = callPackage ./mbox-importer.nix {};
       messagelib = callPackage ./messagelib.nix {};
+      minuet = callPackage ./minuet.nix {};
       okteta = callPackage ./okteta.nix {};
       okular = callPackage ./okular.nix {};
       pimcommon = callPackage ./pimcommon.nix {};
+      pim-data-exporter = callPackage ./pim-data-exporter.nix {};
       pim-sieve-editor = callPackage ./pim-sieve-editor.nix {};
       print-manager = callPackage ./print-manager.nix {};
       spectacle = callPackage ./spectacle.nix {};

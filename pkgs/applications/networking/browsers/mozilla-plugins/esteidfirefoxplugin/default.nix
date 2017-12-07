@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
     cd src
   '';
 
-  buildInputs = [ gtk2 openssl pcsclite pkgconfig opensc ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk2 openssl pcsclite opensc ];
 
   buildPhase = ''
     sed -i "s|opensc-pkcs11.so|${opensc}/lib/pkcs11/opensc-pkcs11.so|" Makefile 

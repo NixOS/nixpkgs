@@ -1,25 +1,24 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gettext, gtk3, intltool, glib
-, gtk_doc, autoconf, automake, libtool, libarchive, libyaml
-, gobjectIntrospection, sqlite, libsoup, gcab, attr, acl, docbook_xsl
-, libuuid, json_glib, autoconf-archive
+{ stdenv, fetchFromGitHub, pkgconfig, gettext, gtk3, glib
+, gtk_doc, libarchive, gobjectIntrospection
+, sqlite, libsoup, gcab, attr, acl, docbook_xsl
+, libuuid, json_glib, meson, gperf, ninja
 }:
-
 stdenv.mkDerivation rec {
-  name = "appstream-glib-0.6.3";
+  name = "appstream-glib-0.7.2";
 
   src = fetchFromGitHub {
     owner = "hughsie";
     repo = "appstream-glib";
     rev = stdenv.lib.replaceStrings ["." "-"] ["_" "_"] name;
-    sha256 = "12l0vzhi9vpyrnf7vrpq21rb26mb6yskp5zgngdjyjanwhzmc617";
+    sha256 = "1jvwfida12d2snc8p9lpbpqzrixw2naaiwfmsrldwkrxsj3i19pl";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool pkgconfig intltool autoconf-archive ];
+  nativeBuildInputs = [ meson pkgconfig ninja ];
   buildInputs = [ glib gtk_doc gettext sqlite libsoup
                   gcab attr acl docbook_xsl libuuid json_glib
-                  libarchive libyaml gobjectIntrospection ];
+                  libarchive gobjectIntrospection gperf ];
   propagatedBuildInputs = [ gtk3 ];
-  configureScript = "./autogen.sh";
+  mesonFlags = [ "-Denable-rpm=false" "-Denable-stemmer=false" "-Denable-dep11=false" ];
 
   meta = with stdenv.lib; {
     description = "Objects and helper methods to read and write AppStream metadata";

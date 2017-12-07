@@ -1,12 +1,12 @@
 { stdenv, fetchzip, rpmextract, ncurses5, numactl, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "r4.0-59481";
   name = "intel-ocl-${version}";
+  version = "5.0-63503";
 
   src = fetchzip {
-    url = "https://software.intel.com/sites/default/files/managed/48/96/SRB4_linux64.zip";
-    sha256 = "1q69g28i6l7p13hnsk82g2qhdf2chwh4f0wvzac6xml67hna3v34";
+    url = "http://registrationcenter-download.intel.com/akdlm/irc_nas/11396/SRB5.0_linux64.zip";
+    sha256 = "0qbp63l74s0i80ysh9ya8x7r79xkddbbz4378nms9i7a0kprg9p2";
     stripRoot = false;
   };
 
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
 
   postUnpack = ''
     # Extract the RPMs contained within the source ZIP.
-    rpmextract SRB4_linux64.zip/intel-opencl-${version}.x86_64.rpm
-    rpmextract SRB4_linux64.zip/intel-opencl-cpu-${version}.x86_64.rpm
+    rpmextract source/intel-opencl-r${version}.x86_64.rpm
+    rpmextract source/intel-opencl-cpu-r${version}.x86_64.rpm
   '';
 
   patchPhase = ''

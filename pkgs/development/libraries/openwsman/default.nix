@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0gw2dsjxzpchg3s85kplwgp9xhd9l7q4fh37iy7r203pvir4k6s4";
   };
 
-  buildInputs = [ autoconf automake libtool pkgconfig libxml2 curl cmake pam sblim-sfcc ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake libtool libxml2 curl cmake pam sblim-sfcc ];
 
   cmakeFlags = [
     "-DCMAKE_BUILD_RUBY_GEM=no"

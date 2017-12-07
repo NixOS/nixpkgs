@@ -1,3 +1,0 @@
-{
-  hardware.enableRedistributableFirmware = true;
-}

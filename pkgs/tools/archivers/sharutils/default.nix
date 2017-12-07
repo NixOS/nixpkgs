@@ -13,6 +13,16 @@ stdenv.mkDerivation rec {
   # GNU Gettext is needed on non-GNU platforms.
   buildInputs = [ coreutils gettext ];
 
+  # These tests try to hit /etc/passwd to find out your username if pass in a submitter
+  # name on the command line. Since we block access to /etc/passwd on the Darwin sandbox
+  # that cause shar to just segfault. It isn't a problem on Linux because their sandbox
+  # remaps /etc/passwd to a trivial file, but we can't do that on Darwin so I do this
+  # instead. In this case, I pass in the very imaginative "submitter" as the submitter name
+  patchPhase = ''
+    substituteInPlace tests/shar-1 --replace '$''\{SHAR}' '$''\{SHAR} -s submitter'
+    substituteInPlace tests/shar-2 --replace '$''\{SHAR}' '$''\{SHAR} -s submitter'
+  '';
+
   doCheck = true;
 
   crossAttrs = {

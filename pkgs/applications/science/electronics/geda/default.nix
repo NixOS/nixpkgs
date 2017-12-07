@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = "--disable-update-xdg-database";
-  buildInputs = [ pkgconfig guile gtk2 flex gawk perl ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ guile gtk2 flex gawk perl ];
 
   meta = with stdenv.lib; {
     description = "Full GPL'd suite of Electronic Design Automation tools";

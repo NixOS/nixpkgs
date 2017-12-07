@@ -5,7 +5,7 @@
 , cmake, gettext, libtool
 , glproto, mesa_glu
 , gnutls, pam, nettle
-, xterm }:
+, xterm, openssh }:
 
 with stdenv.lib;
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   inherit fontDirectories;
 
-  patchPhase = ''
+  postPatch = ''
     sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -xkbdir ${xkeyboard_config}/etc/X11/xkb";' unix/vncserver
     fontPath=
     for i in $fontDirectories; do
@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
       done
     done
     sed -i -e '/^\$cmd \.= " -pn";/a$cmd .= " -fp '"$fontPath"'";' unix/vncserver
+    substituteInPlace vncviewer/vncviewer.cxx \
+       --replace '"/usr/bin/ssh' '"${openssh}/bin/ssh'
   '';
 
   dontUseCmakeBuildDir = true;
@@ -85,9 +87,10 @@ stdenv.mkDerivation rec {
     glproto mesa_glu
   ] ++ xorgserver.buildInputs;
 
-  nativeBuildInputs = [ cmake zlib gettext libtool ] ++ xorg.xorgserver.nativeBuildInputs;
+  nativeBuildInputs = with xorg; [ cmake zlib gettext libtool utilmacros fontutil ]
+    ++ xorg.xorgserver.nativeBuildInputs;
 
-  propagatedNativeBuildInputs = xorg.xorgserver.propagatedNativeBuildInputs;
+  propagatedBuildInputs = xorg.xorgserver.propagatedBuildInputs;
 
   enableParallelBuilding = true;
 

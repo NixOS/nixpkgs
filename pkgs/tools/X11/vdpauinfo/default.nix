@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1i2b0k9h8r0lnxlrkgqzmrjakgaw3f1ygqqwzx8w6676g85rcm20";
   };
 
-  buildInputs = [ pkgconfig libvdpau ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libvdpau ];
 
   meta = with stdenv.lib; {
     homepage = http://people.freedesktop.org/~aplattner/vdpau/;

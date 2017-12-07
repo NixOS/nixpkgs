@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
       Bullet 3D Game Multiphysics Library provides state of the art collision
       detection, soft body and rigid body dynamics.
     '';
-    homepage = http://code.google.com/p/bullet/;
+    homepage = http://bulletphysics.org;
     license = stdenv.lib.licenses.zlib;
     maintainers = with stdenv.lib.maintainers; [ aforemny ];
     platforms = with stdenv.lib.platforms; unix;

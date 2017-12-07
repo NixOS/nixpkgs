@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "out" "dev" "doc" ];
 
-  nativeBuildInputs = [ xlibsWrapper libXmu libXi ];
-  propagatedNativeBuildInputs = [ mesa_glu ]; # GL/glew.h includes GL/glu.h
+  buildInputs = [ xlibsWrapper libXmu libXi ];
+  propagatedBuildInputs = [ mesa_glu ]; # GL/glew.h includes GL/glu.h
 
   patchPhase = ''
     sed -i 's|lib64|lib|' config/Makefile.linux

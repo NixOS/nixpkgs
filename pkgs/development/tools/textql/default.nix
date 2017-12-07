@@ -4,7 +4,7 @@ buildGoPackage rec {
   name = "textql-${version}";
   version = "2.0.3";
   rev = "${version}";
-  
+
   goPackagePath = "github.com/dinedal/textql";
 
   src = fetchFromGitHub {

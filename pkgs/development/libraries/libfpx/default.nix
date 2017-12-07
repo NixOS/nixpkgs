@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "libfpx-1.3.1-7";
@@ -10,6 +10,13 @@ stdenv.mkDerivation rec {
 
   # Darwin gets misdetected as Windows without this
   NIX_CFLAGS_COMPILE = if stdenv.isDarwin then "-D__unix" else null;
+
+  patches = [
+    (fetchpatch {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/media-libs/libfpx/files/libfpx-1.3.1_p6-gcc6.patch?id=f28a947813dbc0a1fd1a8d4a712d58a64c48ca01";
+      sha256 = "032y8110zgnkdhkdq3745zk53am1x34d912rai8q70k3sskyq22p";
+    })
+  ];
 
   # This dead code causes a duplicate symbol error in Clang so just remove it
   postPatch = if stdenv.cc.isClang then ''

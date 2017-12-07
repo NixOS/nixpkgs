@@ -11,6 +11,7 @@ stdenv.mkDerivation {
   patches = [
     ./getcwd-chroot.patch
     ./CVE-2012-0804.patch
+    ./CVE-2017-12836.patch
   ];
 
   hardeningDisable = [ "fortify" "format" ];

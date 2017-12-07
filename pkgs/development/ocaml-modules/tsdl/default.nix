@@ -18,7 +18,8 @@ stdenv.mkDerivation {
     sha256 = "13af37w2wybx8yzgjr5zz5l50402ldl614qiwphl1q69hig5mag2";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg result pkgconfig opam ocb-stubblr ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ocaml findlib ocamlbuild topkg result opam ocb-stubblr ];
   propagatedBuildInputs = [ SDL2 ctypes ];
 
   createFindlibDestdir = true;

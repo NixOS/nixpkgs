@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "099224v5y0y1ggqrfc8vga8afr3nb93iicn7cj8xxgsrwa83s5nr";
   };
 
-  buildInputs = [pkgconfig m4];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ m4];
 
   meta = {
     homepage = http://libsigc.sourceforge.net/;

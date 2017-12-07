@@ -5,15 +5,15 @@
 # script that sets up the right environment variables so that the
 # compiler and the linker just "work".
 
-{ name ? "", stdenv, nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
-, cc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? stdenv.shell
+{ name ? "", stdenvNoCC, nativeTools, noLibc ? false, nativeLibc, nativePrefix ? ""
+, cc ? null, libc ? null, binutils ? null, coreutils ? null, shell ? stdenvNoCC.shell
 , zlib ? null, extraPackages ? [], extraBuildCommands ? ""
 , isGNU ? false, isClang ? cc.isClang or false, gnugrep ? null
 , buildPackages ? {}
 , useMacosReexportHack ? false
 }:
 
-with stdenv.lib;
+with stdenvNoCC.lib;
 
 assert nativeTools -> nativePrefix != "";
 assert !nativeTools ->
@@ -21,12 +21,11 @@ assert !nativeTools ->
 assert !(nativeLibc && noLibc);
 assert (noLibc || nativeLibc) == (libc == null);
 
-assert stdenv.targetPlatform != stdenv.hostPlatform -> runCommand != null;
-
 # For ghdl (the vhdl language provider to gcc) we need zlib in the wrapper.
 assert cc.langVhdl or false -> zlib != null;
 
 let
+  stdenv = stdenvNoCC;
   inherit (stdenv) hostPlatform targetPlatform;
 
   # Prefix for binaries. Customarily ends with a dash separator.
@@ -66,26 +65,18 @@ let
     else if targetPlatform.system == "i686-linux"     then "${libc_lib}/lib/ld-linux.so.2"
     else if targetPlatform.system == "x86_64-linux"   then "${libc_lib}/lib/ld-linux-x86-64.so.2"
     # ARM with a wildcard, which can be "" or "-armhf".
-    else if targetPlatform.isArm32                    then "${libc_lib}/lib/ld-linux*.so.3"
+    else if (with targetPlatform; isArm && isLinux)   then "${libc_lib}/lib/ld-linux*.so.3"
     else if targetPlatform.system == "aarch64-linux"  then "${libc_lib}/lib/ld-linux-aarch64.so.1"
     else if targetPlatform.system == "powerpc-linux"  then "${libc_lib}/lib/ld.so.1"
     else if targetPlatform.system == "mips64el-linux" then "${libc_lib}/lib/ld.so.1"
-    else if targetPlatform.system == "x86_64-darwin"  then "/usr/lib/dyld"
+    else if targetPlatform.isDarwin                   then "/usr/lib/dyld"
     else if stdenv.lib.hasSuffix "pc-gnu" targetPlatform.config then "ld.so.1"
     else null;
 
-  expand-response-params = if buildPackages.stdenv.cc or null != null && buildPackages.stdenv.cc != "/dev/null"
-  then buildPackages.stdenv.mkDerivation {
-    name = "expand-response-params";
-    src = ./expand-response-params.c;
-    buildCommand = ''
-      # Work around "stdenv-darwin-boot-2 is not allowed to refer to path /nix/store/...-expand-response-params.c"
-      cp "$src" expand-response-params.c
-      "$CC" -std=c99 -O3 -o "$out" expand-response-params.c
-      strip -S $out
-      ${optionalString hostPlatform.isLinux "patchelf --shrink-rpath $out"}
-    '';
-  } else "";
+  expand-response-params =
+    if buildPackages.stdenv.cc or null != null && buildPackages.stdenv.cc != "/dev/null"
+    then import ../expand-response-params { inherit (buildPackages) stdenv; }
+    else "";
 
 in
 
@@ -96,7 +87,8 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  inherit cc shell libc_bin libc_dev libc_lib binutils_bin coreutils_bin;
+  inherit cc libc_bin libc_dev libc_lib binutils_bin coreutils_bin;
+  shell = getBin shell + shell.shellPath or "";
   gnugrep_bin = if nativeTools then "" else gnugrep;
 
   binPrefix = prefix;
@@ -105,6 +97,11 @@ stdenv.mkDerivation {
   outputs = [ "out" "man" ];
 
   passthru = {
+    # "cc" is the generic name for a C compiler, but there is no one for package
+    # providing the linker and related tools. The two we use now are GNU
+    # Binutils, and Apple's "cctools"; "binutils" as an attempt to find an
+    # unused middle-ground name that evokes both.
+    bintools = binutils_bin;
     inherit libc nativeTools nativeLibc nativePrefix isGNU isClang default_cxx_stdlib_compile
             prefix;
 
@@ -120,8 +117,17 @@ stdenv.mkDerivation {
     '';
   };
 
-  buildCommand =
+  dontBuild = true;
+  dontConfigure = true;
+
+  unpackPhase = ''
+    src=$PWD
+  '';
+
+  installPhase =
     ''
+      set -u
+
       mkdir -p $out/bin $out/nix-support $man/nix-support
 
       wrap() {
@@ -133,110 +139,16 @@ stdenv.mkDerivation {
       }
     ''
 
-    + optionalString (libc != null) (''
-      if [[ -z ''${dynamicLinker+x} ]]; then
-        echo "Don't know the name of the dynamic linker for platform '${targetPlatform.config}', so guessing instead." >&2
-        dynamicLinker="${libc_lib}/lib/ld*.so.?"
-      fi
-
-      # Expand globs to fill array of options
-      dynamicLinker=($dynamicLinker)
-
-      case ''${#dynamicLinker[@]} in
-        0) echo "No dynamic linker found for platform '${targetPlatform.config}'." >&2;;
-        1) echo "Using dynamic linker: '$dynamicLinker'" >&2;;
-        *) echo "Multiple dynamic linkers found for platform '${targetPlatform.config}'." >&2;;
-      esac
-
-      if [ -n "$dynamicLinker" ]; then
-        echo $dynamicLinker > $out/nix-support/dynamic-linker
-
-    '' + (if targetPlatform.isDarwin then ''
-        printf "export LD_DYLD_PATH=%q\n" "$dynamicLinker" >> $out/nix-support/setup-hook
-    '' else ''
-        if [ -e ${libc_lib}/lib/32/ld-linux.so.2 ]; then
-          echo ${libc_lib}/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
-        fi
-
-        ldflagsBefore=(-dynamic-linker "$dynamicLinker")
-    '') + ''
-      fi
-
-      # The dynamic linker is passed in `ldflagsBefore' to allow
-      # explicit overrides of the dynamic linker by callers to gcc/ld
-      # (the *last* value counts, so ours should come first).
-      printWords "''${ldflagsBefore[@]}" > $out/nix-support/libc-ldflags-before
-    '')
-
-    + optionalString (libc != null) ''
-      # The "-B${libc_lib}/lib/" flag is a quick hack to force gcc to link
-      # against the crt1.o from our own glibc, rather than the one in
-      # /usr/lib.  (This is only an issue when using an `impure'
-      # compiler/linker, i.e., one that searches /usr/lib and so on.)
-      #
-      # Unfortunately, setting -B appears to override the default search
-      # path. Thus, the gcc-specific "../includes-fixed" directory is
-      # now longer searched and glibc's <limits.h> header fails to
-      # compile, because it uses "#include_next <limits.h>" to find the
-      # limits.h file in ../includes-fixed. To remedy the problem,
-      # another -idirafter is necessary to add that directory again.
-      echo "-B${libc_lib}/lib/ -idirafter ${libc_dev}/include -idirafter ${cc}/lib/gcc/*/*/include-fixed" > $out/nix-support/libc-cflags
-
-      echo "-L${libc_lib}/lib" > $out/nix-support/libc-ldflags
-
-      echo "${libc_lib}" > $out/nix-support/orig-libc
-      echo "${libc_dev}" > $out/nix-support/orig-libc-dev
-    ''
-
     + (if nativeTools then ''
+      echo ${if targetPlatform.isDarwin then cc else nativePrefix} > $out/nix-support/orig-cc
+
       ccPath="${if targetPlatform.isDarwin then cc else nativePrefix}/bin"
       ldPath="${nativePrefix}/bin"
     '' else ''
       echo $cc > $out/nix-support/orig-cc
 
-      # GCC shows ${cc_solib}/lib in `gcc -print-search-dirs', but not
-      # ${cc_solib}/lib64 (even though it does actually search there...)..
-      # This confuses libtool.  So add it to the compiler tool search
-      # path explicitly.
-      if [ -e "${cc_solib}/lib64" -a ! -L "${cc_solib}/lib64" ]; then
-        ccLDFlags+=" -L${cc_solib}/lib64"
-        ccCFlags+=" -B${cc_solib}/lib64"
-      fi
-      ccLDFlags+=" -L${cc_solib}/lib"
-      ccCFlags+=" -B${cc_solib}/lib"
-
-      ${optionalString cc.langVhdl or false ''
-        ccLDFlags+=" -L${zlib.out}/lib"
-      ''}
-
-      # Find the gcc libraries path (may work only without multilib).
-      ${optionalString cc.langAda or false ''
-        basePath=`echo ${cc_solib}/lib/*/*/*`
-        ccCFlags+=" -B$basePath -I$basePath/adainclude"
-        gnatCFlags="-aI$basePath/adainclude -aO$basePath/adalib"
-        echo "$gnatCFlags" > $out/nix-support/gnat-cflags
-      ''}
-
-      if [ -e $ccPath/clang ]; then
-        # Need files like crtbegin.o from gcc
-        # It's unclear if these will ever be provided by an LLVM project
-        ccCFlags="$ccCFlags -B$basePath"
-        ccCFlags="$ccCFlags -isystem$cc/lib/clang/$ccVersion/include"
-      fi
-
-      echo "$ccLDFlags" > $out/nix-support/cc-ldflags
-      echo "$ccCFlags" > $out/nix-support/cc-cflags
-
       ccPath="${cc}/bin"
       ldPath="${binutils_bin}/bin"
-
-      # Propagate the wrapped cc so that if you install the wrapper,
-      # you get tools like gcov, the manpages, etc. as well (including
-      # for binutils and Glibc).
-      printWords ${cc} ${binutils_bin} ${if libc == null then "" else libc_bin} > $out/nix-support/propagated-user-env-packages
-      printWords ${cc.man or ""}  > $man/nix-support/propagated-user-env-packages
-
-      printWords ${toString extraPackages} > $out/nix-support/propagated-native-build-inputs
     ''
 
     + optionalString (targetPlatform.isSunOS && nativePrefix != "") ''
@@ -327,15 +239,129 @@ stdenv.mkDerivation {
 
     + optionalString cc.langVhdl or false ''
       ln -s $ccPath/${prefix}ghdl $out/bin/${prefix}ghdl
+    '';
+
+  propagatedBuildInputs = extraPackages;
+
+  setupHook = ./setup-hook.sh;
+
+  postFixup =
+    ''
+      set -u
+    ''
+
+    + optionalString (libc != null) (''
+      ##
+      ## General libc support
+      ##
+
+      # The "-B${libc_lib}/lib/" flag is a quick hack to force gcc to link
+      # against the crt1.o from our own glibc, rather than the one in
+      # /usr/lib.  (This is only an issue when using an `impure'
+      # compiler/linker, i.e., one that searches /usr/lib and so on.)
+      #
+      # Unfortunately, setting -B appears to override the default search
+      # path. Thus, the gcc-specific "../includes-fixed" directory is
+      # now longer searched and glibc's <limits.h> header fails to
+      # compile, because it uses "#include_next <limits.h>" to find the
+      # limits.h file in ../includes-fixed. To remedy the problem,
+      # another -idirafter is necessary to add that directory again.
+      echo "-B${libc_lib}/lib/ -idirafter ${libc_dev}/include -idirafter ${cc}/lib/gcc/*/*/include-fixed" > $out/nix-support/libc-cflags
+
+      echo "-L${libc_lib}/lib" > $out/nix-support/libc-ldflags
+
+      echo "${libc_lib}" > $out/nix-support/orig-libc
+      echo "${libc_dev}" > $out/nix-support/orig-libc-dev
+
+      ##
+      ## Dynamic linker support
+      ##
+
+      if [[ -z ''${dynamicLinker+x} ]]; then
+        echo "Don't know the name of the dynamic linker for platform '${targetPlatform.config}', so guessing instead." >&2
+        local dynamicLinker="${libc_lib}/lib/ld*.so.?"
+      fi
+
+      # Expand globs to fill array of options
+      dynamicLinker=($dynamicLinker)
+
+      case ''${#dynamicLinker[@]} in
+        0) echo "No dynamic linker found for platform '${targetPlatform.config}'." >&2;;
+        1) echo "Using dynamic linker: '$dynamicLinker'" >&2;;
+        *) echo "Multiple dynamic linkers found for platform '${targetPlatform.config}'." >&2;;
+      esac
+
+      if [ -n "''${dynamicLinker:-}" ]; then
+        echo $dynamicLinker > $out/nix-support/dynamic-linker
+
+    '' + (if targetPlatform.isDarwin then ''
+        printf "export LD_DYLD_PATH=%q\n" "$dynamicLinker" >> $out/nix-support/setup-hook
+    '' else ''
+        if [ -e ${libc_lib}/lib/32/ld-linux.so.2 ]; then
+          echo ${libc_lib}/lib/32/ld-linux.so.2 > $out/nix-support/dynamic-linker-m32
+        fi
+
+        local ldflagsBefore=(-dynamic-linker "$dynamicLinker")
+    '') + ''
+      fi
+
+      # The dynamic linker is passed in `ldflagsBefore' to allow
+      # explicit overrides of the dynamic linker by callers to gcc/ld
+      # (the *last* value counts, so ours should come first).
+      printWords "''${ldflagsBefore[@]}" > $out/nix-support/libc-ldflags-before
+    '')
+
+    + optionalString (!nativeTools) ''
+
+      ##
+      ## Initial CFLAGS
+      ##
+
+      # GCC shows ${cc_solib}/lib in `gcc -print-search-dirs', but not
+      # ${cc_solib}/lib64 (even though it does actually search there...)..
+      # This confuses libtool.  So add it to the compiler tool search
+      # path explicitly.
+      if [ -e "${cc_solib}/lib64" -a ! -L "${cc_solib}/lib64" ]; then
+        ccLDFlags+=" -L${cc_solib}/lib64"
+        ccCFlags+=" -B${cc_solib}/lib64"
+      fi
+      ccLDFlags+=" -L${cc_solib}/lib"
+      ccCFlags+=" -B${cc_solib}/lib"
+
+      ${optionalString cc.langVhdl or false ''
+        ccLDFlags+=" -L${zlib.out}/lib"
+      ''}
+
+      # Find the gcc libraries path (may work only without multilib).
+      ${optionalString cc.langAda or false ''
+        basePath=`echo ${cc_solib}/lib/*/*/*`
+        ccCFlags+=" -B$basePath -I$basePath/adainclude"
+        gnatCFlags="-aI$basePath/adainclude -aO$basePath/adalib"
+        echo "$gnatCFlags" > $out/nix-support/gnat-cflags
+      ''}
+
+      echo "$ccLDFlags" > $out/nix-support/cc-ldflags
+      echo "$ccCFlags" > $out/nix-support/cc-cflags
+
+      ##
+      ## User env support
+      ##
+
+      # Propagate the wrapped cc so that if you install the wrapper,
+      # you get tools like gcov, the manpages, etc. as well (including
+      # for binutils and Glibc).
+      printWords ${cc} ${binutils_bin} ${if libc == null then "" else libc_bin} > $out/nix-support/propagated-user-env-packages
+      printWords ${cc.man or ""}  > $man/nix-support/propagated-user-env-packages
     ''
 
     + ''
-      substituteAll ${./setup-hook.sh} $out/nix-support/setup-hook.tmp
-      cat $out/nix-support/setup-hook.tmp >> $out/nix-support/setup-hook
-      rm $out/nix-support/setup-hook.tmp
+
+      ##
+      ## Hardening support
+      ##
 
       # some linkers on some platforms don't support specific -z flags
-      hardening_unsupported_flags=""
+      export hardening_unsupported_flags=""
       if [[ "$($ldPath/${prefix}ld -z now 2>&1 || true)" =~ un(recognized|known)\ option ]]; then
         hardening_unsupported_flags+=" bindnow"
       fi
@@ -352,16 +378,18 @@ stdenv.mkDerivation {
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       substituteAll ${./utils.sh} $out/nix-support/utils.sh
+
+      ##
+      ## Extra custom steps
+      ##
+
     ''
     + extraBuildCommands;
 
   inherit dynamicLinker expand-response-params;
 
-  expandResponseParams = expand-response-params; # for substitution in utils.sh
-
-  crossAttrs = {
-    shell = shell.crossDrv + shell.crossDrv.shellPath;
-  };
+  # for substitution in utils.sh
+  expandResponseParams = "${expand-response-params}/bin/expand-response-params";
 
   meta =
     let cc_ = if cc != null then cc else {}; in

@@ -1,3 +1,4 @@
+{ lib }:
 rec {
 
   /* The identity function
@@ -55,7 +56,7 @@ rec {
     isInt add sub lessThan
     seq deepSeq genericClosure;
 
-  inherit (import ./strings.nix) fileContents;
+  inherit (lib.strings) fileContents;
 
   # Return the Nixpkgs version number.
   nixpkgsVersion =
@@ -69,6 +70,16 @@ rec {
   # Return minimum/maximum of two numbers.
   min = x: y: if x < y then x else y;
   max = x: y: if x > y then x else y;
+
+  /* Integer modulus
+
+     Example:
+       mod 11 10
+       => 1
+       mod 1 10
+       => 1
+  */
+  mod = base: int: base - (int * (builtins.div base int));
 
   /* Reads a JSON file. */
   importJSON = path:

@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, composableDerivation, unzip, libjpeg, libtiff, zlib
+{ stdenv, fetchurl, unzip, libjpeg, libtiff, zlib
 , postgresql, mysql, libgeotiff, python, pythonPackages, proj, geos, openssl
 , libpng }:
 
-composableDerivation.composableDerivation {} (fixed: rec {
+stdenv.mkDerivation rec {
   version = "1.11.3";
   name = "gdal-${version}";
 
@@ -58,4 +58,4 @@ composableDerivation.composableDerivation {} (fixed: rec {
     maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
   };
-})
+}

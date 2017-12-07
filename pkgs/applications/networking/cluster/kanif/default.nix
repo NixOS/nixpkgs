@@ -4,8 +4,6 @@ stdenv.mkDerivation rec {
   version = "1.2.2";
   name = "kanif-${version}";
 
-  propagateBuildInputs = [ perl taktuk ];
-
   src = fetchurl {
     url = "http://gforge.inria.fr/frs/download.php/26773/${name}.tar.gz";
     sha256 = "3f0c549428dfe88457c1db293cfac2a22b203f872904c3abf372651ac12e5879";

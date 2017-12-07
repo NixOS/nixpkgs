@@ -1,17 +1,17 @@
 { stdenv, buildPythonPackage, fetchPypi
-, requests, pyjwt }:
+, requests, pyjwt, dateutil }:
 
 buildPythonPackage rec {
   pname = "adal";
-  version = "0.1.0";
+  version = "0.4.7";
   name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1f32k18ck54adqlgvh6fjhy4yavcyrwy813prjyqppqqq4bn1a09";
+    sha256 = "114046ac85d0054791c21b00922f26286822bc6f2ba3716db42e7e57f762ef20";
   };
 
-  propagatedBuildInputs =  [ requests pyjwt ];
+  propagatedBuildInputs =  [ requests pyjwt dateutil ];
 
   meta = with stdenv.lib; {
     description = "Library to make it easy for python application to authenticate to Azure Active Directory (AAD) in order to access AAD protected web resources";

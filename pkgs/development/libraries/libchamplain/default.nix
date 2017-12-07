@@ -1,17 +1,18 @@
 { fetchurl, stdenv, pkgconfig, glib, gtk3, cairo, clutter, sqlite
-, clutter_gtk, libsoup /*, libmemphis */ }:
+, clutter_gtk, libsoup, gobjectIntrospection /*, libmemphis */ }:
 
 stdenv.mkDerivation rec {
   major = "0.12";
-  version = "${major}.14";
+  version = "${major}.16";
   name = "libchamplain-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/libchamplain/${major}/${name}.tar.xz";
-    sha256 = "13snnka1jqc5qrgij8bm22xy02pncf3dn5ij3jh4rrpzq7g1sqpi";
+    sha256 = "13chvc2n074i0jw5jlb8i7cysda4yqx58ca6y3mrlrl9g37k2zja";
   };
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gobjectIntrospection ];
 
   propagatedBuildInputs = [ glib gtk3 cairo clutter_gtk sqlite libsoup ];
 

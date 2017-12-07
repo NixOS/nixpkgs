@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
-    url = "http://pdsh.googlecode.com/files/${name}.tar.bz2";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/pdsh/${name}.tar.bz2";
     sha256 = "1kvzz01fyaxfqmbh53f4ljfsgvxdykh5jyr6fh4f1bw2ywxr1w2p";
   };
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    homepage = http://code.google.com/p/pdsh/;
+    homepage = https://github.com/chaos/pdsh;
     description = "High-performance, parallel remote shell utility";
     license = stdenv.lib.licenses.gpl2;
 

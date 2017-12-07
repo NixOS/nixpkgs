@@ -8,6 +8,7 @@ use File::Basename;
 use File::Slurp;
 use File::stat;
 
+umask(0022);
 
 sub uniq {
     my %seen;
@@ -103,7 +104,7 @@ if (-e "/sys/devices/system/cpu/cpu0/cpufreq/scaling_available_governors") {
 
     foreach $e (@desired_governors) {
         if (index($governors, $e) != -1) {
-            last if (push @attrs, "powerManagement.cpuFreqGovernor = \"$e\";");
+            last if (push @attrs, "powerManagement.cpuFreqGovernor = lib.mkDefault \"$e\";");
         }
     }
 }
@@ -398,19 +399,15 @@ EOF
 
     # Is this a btrfs filesystem?
     if ($fsType eq "btrfs") {
-        my ($status, @id_info) = runCommand("btrfs subvol show $rootDir$mountPoint");
-        if ($status != 0 || join("", @id_info) =~ /ERROR:/) {
+        my ($status, @info) = runCommand("btrfs subvol show $rootDir$mountPoint");
+        if ($status != 0 || join("", @info) =~ /ERROR:/) {
             die "Failed to retrieve subvolume info for $mountPoint\n";
         }
-        my @ids = join("", @id_info) =~ m/Subvolume ID:[ \t\n]*([^ \t\n]*)/;
+        my @ids = join("\n", @info) =~ m/^(?!\/\n).*Subvolume ID:[ \t\n]*([0-9]+)/s;
         if ($#ids > 0) {
             die "Btrfs subvol name for $mountPoint listed multiple times in mount\n"
         } elsif ($#ids == 0) {
-            my ($status, @path_info) = runCommand("btrfs subvol list $rootDir$mountPoint");
-            if ($status != 0) {
-                die "Failed to find $mountPoint subvolume id from btrfs\n";
-            }
-            my @paths = join("", @path_info) =~ m/ID $ids[0] [^\n]* path ([^\n]*)/;
+            my @paths = join("", @info) =~ m/^([^\n]*)/;
             if ($#paths > 0) {
                 die "Btrfs returned multiple paths for a single subvolume id, mountpoint $mountPoint\n";
             } elsif ($#paths != 0) {
@@ -583,8 +580,14 @@ $bootLoaderConfig
   # List packages installed in system profile. To search by name, run:
   # \$ nix-env -qaP | grep wget
   # environment.systemPackages = with pkgs; [
-  #   wget
+  #   wget vim
   # ];
+
+  # Some programs need SUID wrappers, can be configured further or are
+  # started in user sessions.
+  # programs.bash.enableCompletion = true;
+  # programs.mtr.enable = true;
+  # programs.gnupg.agent = { enable = true; enableSSHSupport = true; };
 
   # List services that you want to enable:
 
@@ -605,6 +608,9 @@ $bootLoaderConfig
   # services.xserver.layout = "us";
   # services.xserver.xkbOptions = "eurosign:e";
 
+  # Enable touchpad support.
+  # services.xserver.libinput.enable = true;
+
   # Enable the KDE Desktop Environment.
   # services.xserver.displayManager.sddm.enable = true;
   # services.xserver.desktopManager.plasma5.enable = true;
@@ -615,8 +621,11 @@ $bootLoaderConfig
   #   uid = 1000;
   # };
 
-  # The NixOS release to be compatible with for stateful data such as databases.
-  system.stateVersion = "${\(qw(@nixosRelease@))}";
+  # This value determines the NixOS release with which your system is to be
+  # compatible, in order to avoid breaking some software such as database
+  # servers. You should change this only after NixOS release notes say you
+  # should.
+  system.stateVersion = "${\(qw(@nixosRelease@))}"; # Did you read the comment?
 
 }
 EOF

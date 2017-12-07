@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0wb95z5v1w4sk0p7y9pbn4v95w9hrbf80vw9k2z2sgs0156ljkb7";
   };
 
-  buildInputs = [ autoreconfHook pam ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ pam ];
 
   preConfigure = ''
     sed -i "s|libqrencode.so.3|${qrencode}/lib/libqrencode.so.3|" src/google-authenticator.c

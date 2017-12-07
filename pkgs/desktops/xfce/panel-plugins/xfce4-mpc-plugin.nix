@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "1kvgq1pq7cykqdc3227dq0izad093ppfw3nfsrcp9i8mi6i5f7z7";
   };
 
-  buildInputs = [ pkgconfig intltool libxfce4util libxfce4ui xfce4panel
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool libxfce4util libxfce4ui xfce4panel
     libxfcegui4 xfconf gtk exo ];
 
   meta = {

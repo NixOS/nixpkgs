@@ -9,8 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "1is9hca8an1b1n8436wkv7s08ml5lb95f7h9vznx9br597f106w9";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig directfb zlib libjpeg xproto
+    directfb zlib libjpeg xproto
   ];
       
   meta = {

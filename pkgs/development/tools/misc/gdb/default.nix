@@ -1,23 +1,24 @@
-{ fetchurl, stdenv, ncurses, readline, gmp, mpfr, expat, texinfo, zlib
-, dejagnu, perl, pkgconfig
+{ stdenv
+
+# Build time
+, fetchurl, pkgconfig, perl, texinfo, setupDebugInfoDirs
+
+# Run time
+, ncurses, readline, gmp, mpfr, expat, zlib, dejagnu
 
 , buildPlatform, hostPlatform, targetPlatform
 
 , pythonSupport ? hostPlatform == buildPlatform && !hostPlatform.isCygwin, python ? null
 , guile ? null
 
-# Support all known targets in one gdb binary.
-, multitarget ? false
-
 # Additional dependencies for GNU/Hurd.
 , mig ? null, hurd ? null
 
-, setupDebugInfoDirs
 }:
 
 let
   basename = "gdb-${version}";
-  version = "8.0";
+  version = "8.0.1";
 in
 
 assert targetPlatform.isHurd -> mig != null && hurd != null;
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}.tar.xz";
-    sha256 = "1vplyf8v70yn0rdqjx6awl9nmfbwaj5ynwwjxwa71rhp97z4z8pn";
+    sha256 = "1qwmcbaxf0jc7yjl0fimgcfj2yqcrl6h7azgs1d838kbwf9mzg9x";
   };
 
   patches = [ ./debug-info-from-env.patch ];
@@ -58,13 +59,16 @@ stdenv.mkDerivation rec {
   configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
 
   configureFlags = with stdenv.lib; [
-    "--with-gmp=${gmp.dev}" "--with-mpfr=${mpfr.dev}" "--with-system-readline"
-    "--with-system-zlib" "--with-expat" "--with-libexpat-prefix=${expat.dev}"
-  ] ++ stdenv.lib.optional hostPlatform.isLinux
-      # TODO(@Ericson2314): make this conditional on whether host platform is NixOS
-      "--with-separate-debug-dir=/run/current-system/sw/lib/debug"
-    ++ stdenv.lib.optional (!pythonSupport) "--without-python"
-    ++ stdenv.lib.optional multitarget "--enable-targets=all";
+    "--enable-targets=all" "--enable-64-bit-bfd"
+    "--disable-install-libbfd"
+    "--disable-shared" "--enable-static"
+    "--with-system-zlib"
+    "--with-system-readline"
+
+    "--with-gmp=${gmp.dev}"
+    "--with-mpfr=${mpfr.dev}"
+    "--with-expat" "--with-libexpat-prefix=${expat.dev}"
+  ] ++ stdenv.lib.optional (!pythonSupport) "--without-python";
 
   postInstall =
     '' # Remove Info files already provided by Binutils and other packages.

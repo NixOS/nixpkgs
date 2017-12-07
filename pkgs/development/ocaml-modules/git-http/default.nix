@@ -1,4 +1,4 @@
-{ stdenv, ocaml, findlib, jbuilder, git, cohttp }:
+{ stdenv, ocaml, findlib, jbuilder, git, cohttp-lwt }:
 
 stdenv.mkDerivation rec {
 	name = "ocaml${ocaml.version}-git-http-${version}";
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
 	buildInputs = [ ocaml findlib jbuilder ];
 
-	propagatedBuildInputs = [ git cohttp ];
+	propagatedBuildInputs = [ git cohttp-lwt ];
 
 	buildPhase = "jbuilder build -p git-http";
 

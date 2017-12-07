@@ -17,7 +17,10 @@ pythonPackages.buildPythonApplication rec {
       --replace 'certifi==2017.1.23' 'certifi' \
       --replace 'lxml==3.7.3' 'lxml' \
       --replace 'pyopenssl==16.2.0' 'pyopenssl' \
-      --replace 'pygments==2.1.3' 'pygments>=2.1,<3.0'
+      --replace 'pygments==2.1.3' 'pygments>=2.1,<3.0' \
+      --replace 'flask==0.12' 'flask==0.12.*' \
+      --replace 'requests[socks]==2.13.0' 'requests[socks]==2.*' \
+      --replace 'python-dateutil==2.6.0' 'python-dateutil==2.6.*'
   '';
 
   propagatedBuildInputs = with pythonPackages; [

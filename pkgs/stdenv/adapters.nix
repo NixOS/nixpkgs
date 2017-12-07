@@ -59,17 +59,18 @@ rec {
   makeStdenvCross = { stdenv
                     , cc
                     , buildPlatform, hostPlatform, targetPlatform
+                    , # Prior overrides are surely not valid as packages built
+                      # with this run on a different platform, so disable by
+                      # default.
+                      overrides ? _: _: {}
                     } @ overrideArgs: let
     stdenv = overrideArgs.stdenv.override {
       inherit
         buildPlatform hostPlatform targetPlatform
-        cc;
+        cc overrides;
 
       allowedRequisites = null;
-
-      # Overrides are surely not valid as packages built with this run on a
-      # different platform.
-      overrides = _: _: {};
+      extraBuildInputs = [ ]; # Old ones run on wrong platform
     };
   in stdenv // {
     mkDerivation =
@@ -87,25 +88,14 @@ rec {
         # buildInputs should be built with the usual gcc-wrapper
         # And the same for propagatedBuildInputs.
         nativeDrv = stdenv.mkDerivation args;
-
-        # Temporary expression until the cross_renaming, to handle the
-        # case of pkgconfig given as buildInput, but to be used as
-        # nativeBuildInput.
-        hostAsNativeDrv = drv:
-            builtins.unsafeDiscardStringContext drv.nativeDrv.drvPath
-            == builtins.unsafeDiscardStringContext drv.crossDrv.drvPath;
-        buildInputsNotNull = stdenv.lib.filter
-            (drv: builtins.isAttrs drv && drv ? nativeDrv) buildInputs;
-        nativeInputsFromBuildInputs = stdenv.lib.filter hostAsNativeDrv buildInputsNotNull;
       in
         stdenv.mkDerivation (args // {
           nativeBuildInputs = nativeBuildInputs
-            ++ nativeInputsFromBuildInputs
             ++ stdenv.lib.optional selfNativeBuildInput nativeDrv
               # without proper `file` command, libtool sometimes fails
               # to recognize 64-bit DLLs
             ++ stdenv.lib.optional (hostPlatform.config == "x86_64-w64-mingw32") pkgs.file
-            ++ stdenv.lib.optional (hostPlatform.config == "aarch64-linux-gnu") pkgs.updateAutotoolsGnuConfigScriptsHook
+            ++ stdenv.lib.optional hostPlatform.isAarch64 pkgs.updateAutotoolsGnuConfigScriptsHook
             ;
 
           # Cross-linking dynamic libraries, every buildInput should

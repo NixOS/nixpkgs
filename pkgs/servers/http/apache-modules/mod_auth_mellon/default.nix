@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     ./fixdeps.patch
   ];
 
-  buildInputs = [ apacheHttpd autoconf autoreconfHook automake curl glib lasso libtool libxml2 libxslt openssl pkgconfig xmlsec ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  buildInputs = [ apacheHttpd autoconf automake curl glib lasso libtool libxml2 libxslt openssl xmlsec ];
 
   configureFlags = ["--with-apxs2=${apacheHttpd.dev}/bin/apxs" "--exec-prefix=$out"];
 

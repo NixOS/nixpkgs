@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1fk4i9x0cpnpn3llam0zy2pkmhlr2hy3iaxhxg07v9sizd4dircj";
   };
 
-  buildInputs = [ SDL SDL_image pkgconfig libjpeg libpng libtiff ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ SDL SDL_image libjpeg libpng libtiff ];
 
   hardeningDisable = [ "format" ];
 

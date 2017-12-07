@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ wrapGAppsHook ];
 
   pythonPath = with pythonPackages;
-    [ pycups pycurl dbus-python pygobject3 requests pycairo pythonPackages.pycurl ];
+    [ pycups pycurl dbus-python pygobject3 requests pycairo pysmbc ];
 
   configureFlags =
     [ "--with-udev-rules"

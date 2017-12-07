@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, pkgconfig, openssl, botan, log4cplus
+{ stdenv, fetchurl, autoreconfHook, pkgconfig, openssl, botan2, log4cplus
 , boost, python3, postgresql, mysql, gmp, bzip2 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--localstatedir=/var"
-    "--with-botan-config=${botan}/bin/botan-config-1.10"
     "--with-dhcp-pgsql=${postgresql}/bin/pg_config"
     "--with-dhcp-mysql=${mysql.client.dev}/bin/mysql_config"
   ];
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [
     openssl log4cplus boost python3 mysql.client
-    botan gmp bzip2
+    botan2 gmp bzip2
   ];
 
   enableParallelBuilding = true;

@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A caching front-end based on the Dogpile lock";
-    homepage = http://bitbucket.org/zzzeek/dogpile.cache;
+    homepage = https://bitbucket.org/zzzeek/dogpile.cache;
     platforms = platforms.unix;
     license = licenses.bsd3;
   };

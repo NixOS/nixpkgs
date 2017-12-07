@@ -2,19 +2,20 @@
 
 python2Packages.buildPythonApplication rec {
   name = "electrum-${version}";
-  version = "2.9.0";
+  version = "2.9.3";
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "1lida5phq0c1lxnk75d9jsps0vw4zy7saaxhv0q4kv76rk2b3fhv";
+    sha256 = "0d0fzb653g7b8ka3x90nl21md4g3n1fv11czdxpdq3s9yr6js6f2";
   };
 
   propagatedBuildInputs = with python2Packages; [
     dns
     ecdsa
     jsonrpclib
+    matplotlib
     pbkdf2
-    protobuf3_2
+    protobuf
     pyaes
     pycrypto
     pyqt4
@@ -30,7 +31,6 @@ python2Packages.buildPythonApplication rec {
     # TODO plugins
     # amodem
     # btchip
-    # matplotlib
   ];
 
   preBuild = ''

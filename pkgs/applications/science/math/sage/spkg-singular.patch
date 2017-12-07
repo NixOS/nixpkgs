@@ -1,28 +1,12 @@
---- old/build/pkgs/singular/spkg-install	2015-07-26 15:34:43.000000000 +0200
-+++ new/build/pkgs/singular/spkg-install	2015-09-15 20:42:51.716505855 +0200
-@@ -115,6 +115,11 @@
-     done
- }
+--- old/build/pkgs/singular/spkg-install	2017-10-15 10:35:41.826540964 -0500
++++ new/build/pkgs/singular/spkg-install	2017-10-15 10:36:40.613743443 -0500
+@@ -4,6 +4,9 @@
+ ## Singular
+ ###########################################
  
-+nix_nuke_bin_rm()
-+{
-+    find . -exec sed -e 's@/bin/rm@rm@g' -i '{}' ';'
-+}
++find . -type f -exec sed -e 's@/bin/rm@rm@g' -i '{}' ';'
++#echo '#!/usr/bin/env bash\nIgnoring missing $1' > src/build-aux/missing
 +
- remove_old_version()
- {
-     rm -f "$SAGE_LOCAL"/bin/Singular*
-@@ -306,11 +311,11 @@
- 
- 
- # Actually run all the functions defined above
--for i in choose_patches apply_patches remove_old_version config \
-+for i in choose_patches apply_patches nix_nuke_bin_rm remove_old_version config \
-   build_singular build_libsingular build_factory build_libfac \
-   create_singular_script install_docs ; do
-     echo "### Singular spkg-install: $i ###"
--    cd "$SRC" && $i
-+    cd "$SRC" && pwd && $i
-     if [ $? -ne 0 ]; then
-         echo >&2 "Error building Singular (error in $i)."
-         exit 1
+ if [ -z "$SAGE_LOCAL" ]; then
+     echo >&2 "Error: SAGE_LOCAL undefined -- exiting..."
+     echo >&2 "Maybe run 'sage -sh'?"

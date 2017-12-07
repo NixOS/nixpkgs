@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "0dc9kvr6i7sh91cyhzlbx2bchwg84rfa4679ccppzjf0y65dv8p4";
   };
 
-  buildInputs = [ gst-plugins-base gstreamer pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gst-plugins-base gstreamer ];
 
   meta = {
     homepage = https://gstreamer.freedesktop.org/modules/gnonlin.html;

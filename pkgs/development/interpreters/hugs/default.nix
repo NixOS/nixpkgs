@@ -21,6 +21,8 @@ stdenv.mkDerivation {
 
   postUnpack = "find -type f -exec sed -i 's@/bin/cp@cp@' {} +";
 
+  preConfigure = "unset STRIP";
+
   configureFlags = [
     "--enable-char-encoding=utf8"       # require that the UTF-8 encoding is always used
     "--disable-path-canonicalization"

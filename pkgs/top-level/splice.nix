@@ -43,8 +43,9 @@ let
           // (lib.optionalAttrs (buildPkgs ? ${name}) { nativeDrv = buildValue; })
           // (lib.optionalAttrs (runPkgs ? ${name}) { crossDrv = runValue; });
         # Get the set of outputs of a derivation
-        getOutputs = value:
-          lib.genAttrs (value.outputs or []) (output: value.${output});
+        getOutputs = value: lib.genAttrs
+          (value.outputs or (lib.optional (value ? out) "out"))
+          (output: value.${output});
       in
         # Certain *Cross derivations will fail assertions, but we need their
         # nativeDrv. We are assuming anything that fails to evaluate is an
@@ -66,7 +67,7 @@ let
     if actuallySplice
     then splicer defaultBuildScope defaultRunScope // {
       # These should never be spliced under any circumstances
-      inherit (pkgs) pkgs buildPackages __targetPackages
+      inherit (pkgs) pkgs buildPackages targetPackages
         buildPlatform targetPlatform hostPlatform;
     }
     else pkgs // pkgs.xorg;

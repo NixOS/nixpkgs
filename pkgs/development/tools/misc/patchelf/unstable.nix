@@ -12,12 +12,13 @@ stdenv.mkDerivation rec {
 
   setupHook = [ ./setup-hook.sh ];
 
-  buildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ ];
 
   doCheck = true;
 
   meta = {
-    homepage = http://nixos.org/patchelf.html;
+    homepage = https://nixos.org/patchelf.html;
     license = "GPL";
     description = "A small utility to modify the dynamic linker and RPATH of ELF executables";
     maintainers = [ stdenv.lib.maintainers.eelco ];

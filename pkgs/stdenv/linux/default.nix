@@ -84,7 +84,7 @@ let
           libc = prevStage.glibc;
           inherit (prevStage) binutils coreutils gnugrep;
           name = name;
-          stdenv = prevStage.ccWrapperStdenv;
+          stdenvNoCC = prevStage.ccWrapperStdenv;
         };
 
         extraAttrs = {
@@ -219,7 +219,7 @@ in
     };
     extraNativeBuildInputs = [ prevStage.patchelf prevStage.paxctl ] ++
       # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
-      lib.optional (system == "aarch64-linux") prevStage.updateAutotoolsGnuConfigScriptsHook;
+      lib.optional localSystem.isAarch64 prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
 
 
@@ -244,14 +244,14 @@ in
         };
         cc = prevStage.gcc-unwrapped;
         libc = self.glibc;
-        inherit (self) stdenv binutils coreutils gnugrep;
+        inherit (self) stdenvNoCC binutils coreutils gnugrep;
         name = "";
         shell = self.bash + "/bin/bash";
       };
     };
     extraNativeBuildInputs = [ prevStage.patchelf prevStage.xz ] ++
       # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
-      lib.optional (system == "aarch64-linux") prevStage.updateAutotoolsGnuConfigScriptsHook;
+      lib.optional localSystem.isAarch64 prevStage.updateAutotoolsGnuConfigScriptsHook;
   })
 
   # Construct the final stdenv.  It uses the Glibc and GCC, and adds
@@ -281,7 +281,7 @@ in
 
       extraNativeBuildInputs = [ prevStage.patchelf prevStage.paxctl ] ++
         # Many tarballs come with obsolete config.sub/config.guess that don't recognize aarch64.
-        lib.optional (system == "aarch64-linux") prevStage.updateAutotoolsGnuConfigScriptsHook;
+        lib.optional localSystem.isAarch64 prevStage.updateAutotoolsGnuConfigScriptsHook;
 
       cc = prevStage.gcc;
 
@@ -303,13 +303,16 @@ in
             gnumake gnused gnutar gnugrep gnupatch patchelf ed paxctl
           ]
         # Library dependencies
-        ++ map getLib [ attr acl zlib pcre libsigsegv ]
+        ++ map getLib (
+            [ attr acl zlib pcre ]
+            ++ lib.optional (gawk.libsigsegv != null) gawk.libsigsegv
+          )
         # More complicated cases
         ++ [
             glibc.out glibc.dev glibc.bin/*propagated from .dev*/ linuxHeaders
-            gcc gcc.cc gcc.cc.lib gcc.expandResponseParams
+            gcc gcc.cc gcc.cc.lib gcc.expand-response-params
           ]
-          ++ lib.optionals (system == "aarch64-linux")
+          ++ lib.optionals localSystem.isAarch64
             [ prevStage.updateAutotoolsGnuConfigScriptsHook prevStage.gnu-config ];
 
       overrides = self: super: {

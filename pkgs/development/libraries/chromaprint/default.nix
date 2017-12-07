@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     description = "AcoustID audio fingerprinting library";
     maintainers = with maintainers; [ ehmry ];
     license = licenses.lgpl21Plus;
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }

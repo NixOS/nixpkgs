@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "027959xbzvi5c2w9y1x122sr5i26k9mvp43banz2wln6gd860n1a";
   };
 
-  buildInputs = [ qt4 perl pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ qt4 perl ];
 
   configurePhase = ''
     mkdir -p $out/{bin,man/man1}

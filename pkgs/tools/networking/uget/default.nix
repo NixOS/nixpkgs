@@ -1,32 +1,37 @@
-{ stdenv, fetchurl, pkgconfig, intltool, openssl, curl, libnotify, gstreamer,
-  gst-plugins-base, gst-plugins-good, gnome3, makeWrapper, aria2 ? null }:
+{ stdenv, fetchurl, pkgconfig, intltool, openssl, curl, libnotify,
+  libappindicator-gtk3, gst_all_1, gnome3, wrapGAppsHook, aria2 ? null
+}:
 
 stdenv.mkDerivation rec {
   name = "uget-${version}";
-  version = "2.0.8";
+  version = "2.0.10";
 
   src = fetchurl {
     url = "mirror://sourceforge/urlget/${name}.tar.gz";
-    sha256 = "0919cf7lfk1djdl003cahqjvafdliv7v2l8r5wg95n4isqggdk75";
+    sha256 = "1zldsiy83xxpm8jdh1i9h7zrh8ak52srgy38fiyszysfapl8nx8a";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool makeWrapper ];
+  nativeBuildInputs = [
+    pkgconfig
+    intltool
+    wrapGAppsHook
+  ];
   
   buildInputs = [
-    openssl curl libnotify gstreamer gst-plugins-base gst-plugins-good
-    gnome3.gtk (stdenv.lib.getLib gnome3.dconf)
+    openssl
+    curl
+    libnotify
+    libappindicator-gtk3
+    gnome3.gtk
+    (stdenv.lib.getLib gnome3.dconf)
   ]
+  ++ (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good ])
   ++ (stdenv.lib.optional (aria2 != null) aria2);
 
   enableParallelBuilding = true;
-  
-  preFixup = ''
-    wrapProgram $out/bin/uget-gtk \
-      ${stdenv.lib.optionalString (aria2 != null) ''--suffix PATH : "${aria2}/bin"''} \
-      --prefix XDG_DATA_DIRS : "$out/share:$GSETTINGS_SCHEMAS_PATH" \
-      --prefix GST_PLUGIN_SYSTEM_PATH : "$GST_PLUGIN_SYSTEM_PATH" \
-      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules"
-  '';
+
+  preFixup = stdenv.lib.optionalString (aria2 != null)
+               ''gappsWrapperArgs+=(--suffix PATH : "${aria2}/bin")'';
 
   meta = with stdenv.lib; {
     description = "Download manager using gtk+ and libcurl";
@@ -37,9 +42,9 @@ stdenv.mkDerivation rec {
       thinking that it "might be too powerful" because remember power is good
       and lightweight power is uGet!
     '';
-    license = licenses.lgpl21;
     homepage = http://www.ugetdm.com;
-    maintainers = with maintainers; [ romildo ];
+    license = licenses.lgpl21;
     platforms = platforms.unix;
+    maintainers = with maintainers; [ romildo ];
   };
 }

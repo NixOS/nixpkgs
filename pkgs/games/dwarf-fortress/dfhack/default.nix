@@ -1,6 +1,6 @@
-{ stdenv, fetchgit, cmake, writeScriptBin
-, perl, XMLLibXML, XMLLibXSLT
-, zlib
+{ stdenv, lib, fetchgit, cmake, writeScriptBin, callPackage
+, perl, XMLLibXML, XMLLibXSLT, zlib
+, enableStoneSense ? false,  allegro5, mesa
 }:
 
 let
@@ -43,11 +43,12 @@ in stdenv.mkDerivation rec {
     inherit rev sha256;
   };
 
-  patches = [ ./skip-ruby.patch ];
+  patches = [ ./fix-stonesense.patch ];
 
   nativeBuildInputs = [ cmake perl XMLLibXML XMLLibXSLT fakegit ];
   # We don't use system libraries because dfhack needs old C++ ABI.
-  buildInputs = [ zlib ];
+  buildInputs = [ zlib ]
+             ++ lib.optionals enableStoneSense [ allegro5 mesa ];
 
   preConfigure = ''
     # Trick build system into believing we have .git
@@ -59,7 +60,8 @@ in stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH="$PWD/depends/protobuf:$LD_LIBRARY_PATH"
   '';
 
-  cmakeFlags = [ "-DDFHACK_BUILD_ARCH=${arch}" ];
+  cmakeFlags = [ "-DDFHACK_BUILD_ARCH=${arch}" "-DDOWNLOAD_RUBY=OFF" ]
+            ++ lib.optionals enableStoneSense [ "-DBUILD_STONESENSE=ON" "-DSTONESENSE_INTERNAL_SO=OFF" ];
 
   enableParallelBuilding = true;
 

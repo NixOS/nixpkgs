@@ -8,11 +8,11 @@
 buildPythonPackage rec {
   pname = "xlwt";
   name = "${pname}-${version}";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "505669c1eb6a60823fd3e2e723b60eea95f2c56254113bf163091ed2bedb4ac9";
+    sha256 = "c59912717a9b28f1a3c2a98fd60741014b06b043936dcecbc113eaaada156c88";
   };
 
   buildInputs = [ nose ];

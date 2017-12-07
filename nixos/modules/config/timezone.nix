@@ -5,6 +5,9 @@ with lib;
 let
 
   tzdir = "${pkgs.tzdata}/share/zoneinfo";
+  nospace  = str: filter (c: c == " ") (stringToCharacters str) == [];
+  timezone = types.nullOr (types.addCheck types.str nospace)
+    // { description = "null or string without spaces"; };
 
 in
 
@@ -15,7 +18,7 @@ in
 
       timeZone = mkOption {
         default = null;
-        type = types.nullOr types.str;
+        type = timezone;
         example = "America/New_York";
         description = ''
           The time zone used when displaying times and dates. See <link

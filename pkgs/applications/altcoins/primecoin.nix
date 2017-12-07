@@ -16,7 +16,8 @@ stdenv.mkDerivation rec{
   qmakeFlags = ["USE_UPNP=-"];
   makeFlags = ["USE_UPNP=-"];
 
-  buildInputs = [ pkgconfig openssl db48 boost zlib utillinux protobuf ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl db48 boost zlib utillinux protobuf ]
                   ++ optionals withGui [ qt4 qmake4Hook qrencode ];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ]

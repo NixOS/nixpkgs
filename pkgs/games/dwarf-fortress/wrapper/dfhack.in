@@ -2,7 +2,7 @@
 
 source @dfInit@
 
-for i in dfhack.init-example dfhack-config/default hack/*; do
+for i in dfhack.init-example dfhack-config/default hack/* stonesense/*; do
   update_path "$i"
 done
 

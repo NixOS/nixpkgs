@@ -137,10 +137,7 @@ in
       after = [ "local-fs.target" ];
       wantedBy = [ "multi-user.target" ];
 
-      # FIXME use specific path
-      environment = {
-        PATH = "/run/current-system/sw/bin";
-      };
+      path = [ pkgs.fcron ];
 
       preStart = ''
         install \
@@ -149,7 +146,7 @@ in
           --group fcron \
           --directory /var/spool/fcron
         # load system crontab file
-        /run/wrappers/bin/fcrontab -u systab ${pkgs.writeText "systab" cfg.systab}
+        /run/wrappers/bin/fcrontab -u systab - < ${pkgs.writeText "systab" cfg.systab}
       '';
 
       serviceConfig = {

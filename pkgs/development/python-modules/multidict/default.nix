@@ -1,26 +1,24 @@
 { lib
 , fetchurl
 , buildPythonPackage
-, pytest
+, cython
+, pytest, psutil, pytestrunner
 , isPy3k
 }:
 
 let
   pname = "multidict";
-  version = "2.1.6";
+  version = "3.3.2";
 in buildPythonPackage rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://pypi/${builtins.substring 0 1 pname}/${pname}/${name}.tar.gz";
-    sha256 = "9ec33a1da4d2096949e29ddd66a352aae57fad6b5483087d54566a2f6345ae10";
+    sha256 = "f82e61c7408ed0dce1862100db55595481911f159d6ddec0b375d35b6449509b";
   };
 
-  buildInputs = [ pytest ];
-
-  checkPhase = ''
-    py.test
-  '';
+  buildInputs = [ cython ];
+  checkInputs = [ pytest psutil pytestrunner ];
 
   disabled = !isPy3k;
 

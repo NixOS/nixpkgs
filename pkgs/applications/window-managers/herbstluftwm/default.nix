@@ -15,7 +15,8 @@ stdenv.mkDerivation rec {
       --replace "/zsh/functions/Completion/X" "/zsh/site-functions"
   '';
 
-  buildInputs = [ pkgconfig glib libX11 libXext libXinerama ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib libX11 libXext libXinerama ];
 
   meta = {
     description = "A manual tiling window manager for X";

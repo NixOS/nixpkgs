@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, wrapGAppsHook, gettext, glib, gtk3
-, libmowgli, libmcs, dbus_glib, libxml2, xorg, gnome3, alsaLib
+, libmowgli, dbus_glib, libxml2, xorg, gnome3, alsaLib
 , libpulseaudio, libjack2, fluidsynth, libmad, libogg, libvorbis
 , libcdio082, libcddb, flac, ffmpeg, mpg123, libcue, libmms, libbs2b
 , libsndfile, libmodplug, libsamplerate, soxr, lirc, curl, wavpack
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gettext glib gtk3 libmowgli libmcs dbus_glib libxml2
+    gettext glib gtk3 libmowgli dbus_glib libxml2
     xorg.libXcomposite gnome3.defaultIconTheme alsaLib libjack2
     libpulseaudio fluidsynth libmad libogg libvorbis libcdio082
     libcddb flac ffmpeg mpg123 libcue libmms libbs2b libsndfile

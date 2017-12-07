@@ -7,10 +7,11 @@
  * Tests can be found in ./tests.nix
  * Documentation in the manual, #sec-generators
  */
-with import ./trivial.nix;
+{ lib }:
+with (lib).trivial;
 let
-  libStr = import ./strings.nix;
-  libAttr = import ./attrsets.nix;
+  libStr = lib.strings;
+  libAttr = lib.attrsets;
 
   flipMapAttrs = flip libAttr.mapAttrs;
 in

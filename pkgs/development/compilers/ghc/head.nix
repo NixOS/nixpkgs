@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchgit, bootPkgs, perl, ncurses, libiconv, binutils, coreutils
+{ stdenv, lib, fetchgit, bootPkgs, perl, ncurses, libiconv, targetPackages, coreutils
 , autoconf, automake, happy, alex, python3, buildPlatform, targetPlatform
 , selfPkgs, cross ? null
 
@@ -71,7 +71,7 @@ in stdenv.mkDerivation (rec {
     for i in "$out/bin/"*; do
       test ! -h $i || continue
       egrep --quiet '^#!' <(head -n 1 $i) || continue
-      sed -i -e '2i export PATH="$PATH:${stdenv.lib.makeBinPath [ binutils coreutils ]}"' $i
+      sed -i -e '2i export PATH="$PATH:${stdenv.lib.makeBinPath [ targetPackages.stdenv.cc.bintools coreutils ]}"' $i
     done
   '';
 

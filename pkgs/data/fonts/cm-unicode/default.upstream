@@ -1,7 +1,0 @@
-attribute_name cm_unicode
-url http://sourceforge.net/projects/cm-unicode/files/cm-unicode/
-SF_version_dir
-version_link '[-]otf[.]tar[.][a-z0-9]+/download$'
-SF_redirect
-ensure_hash
-do_overwrite() { do_overwrite_just_version; }

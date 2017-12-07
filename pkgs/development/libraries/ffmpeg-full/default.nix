@@ -231,11 +231,11 @@ assert nvenc -> nvidia-video-sdk != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-full-${version}";
-  version = "3.3.3";
+  version = "3.4";
 
   src = fetchurl {
     url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.xz";
-    sha256 = "07is8msrhxr1dk6vgwa192k2pl2a0in1h9w8f9cknlvbvhn01afj";
+    sha256 = "1vzvpx8ixy8m44f8qwp833hv253hpghybgzbc4n8b3div3j0dvmf";
   };
 
   patchPhase = ''patchShebangs .
@@ -411,7 +411,8 @@ stdenv.mkDerivation rec {
     ++ optionals isLinux [ alsaLib libraw1394 libv4l ]
     ++ optionals nvenc [ nvidia-video-sdk ]
     ++ optionals stdenv.isDarwin [ Cocoa CoreServices CoreAudio AVFoundation
-                                   MediaToolbox VideoDecodeAcceleration ];
+                                   MediaToolbox VideoDecodeAcceleration
+                                   libiconv ];
 
   # Build qt-faststart executable
   buildPhase = optional qtFaststartProgram ''make tools/qt-faststart'';

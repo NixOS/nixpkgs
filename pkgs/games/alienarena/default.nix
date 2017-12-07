@@ -9,7 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "03nnv4m2xmswr0020hssajncdb8sy95jp5yccsm53sgxga4r8igg";
   };
 
-  buildInputs = [ pkgconfig libjpeg libX11 curl libogg libvorbis
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libjpeg libX11 curl libogg libvorbis
                   freetype openal mesa libXxf86vm ];
 
   patchPhase = ''

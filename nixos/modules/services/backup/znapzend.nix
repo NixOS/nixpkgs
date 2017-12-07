@@ -27,7 +27,13 @@ in
       noDestroy = mkOption {
         type = types.bool;
         default = false;
-        description = "Does all changes to the filesystem except destroy";
+        description = "Does all changes to the filesystem except destroy.";
+      };
+
+      autoCreation = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Automatically create the dataset on dest if it does not exists.";
       };
     };
   };
@@ -44,7 +50,7 @@ in
         path = with pkgs; [ zfs mbuffer openssh ];
 
         serviceConfig = {
-          ExecStart = "${pkgs.znapzend}/bin/znapzend --logto=${cfg.logTo} --loglevel=${cfg.logLevel} ${optionalString cfg.noDestroy "--nodestroy"}";
+          ExecStart = "${pkgs.znapzend}/bin/znapzend --logto=${cfg.logTo} --loglevel=${cfg.logLevel} ${optionalString cfg.noDestroy "--nodestroy"} ${optionalString cfg.autoCreation "--autoCreation"}";
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           Restart = "on-failure";
         };

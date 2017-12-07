@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "libzip-${version}";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "http://www.nih.at/libzip/${name}.tar.gz";
-    sha256 = "17vxj2ffsxwh8lkc6801ppmwj15jp8q58rin76znxfbx88789ybc";
+    sha256 = "1633dvjc08zwwhzqhnv62rjf1abx8y5njmm8y16ik9iwd07ka6d9";
   };
 
   outputs = [ "out" "dev" ];

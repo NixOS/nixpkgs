@@ -1,0 +1,114 @@
+diff -Naur fwupd-0.9.6-orig/data/meson.build fwupd-0.9.6/data/meson.build
+--- fwupd-0.9.6-orig/data/meson.build	2017-08-03 05:45:02.000000000 -0400
++++ fwupd-0.9.6/data/meson.build	2017-09-02 19:58:37.324596487 -0400
+@@ -20,7 +20,7 @@
+ )
+ 
+ install_data(['90-fwupd-devices.rules'],
+-  install_dir : join_paths(udev.get_pkgconfig_variable('udevdir'), 'rules.d')
++  install_dir : join_paths(get_option('prefix'), 'lib', 'udev', 'rules.d')
+ )
+ 
+ con2 = configuration_data()
+@@ -52,7 +52,7 @@
+     output : 'fwupd-offline-update.service',
+     configuration : con2,
+     install: true,
+-    install_dir: systemd.get_pkgconfig_variable('systemdsystemunitdir'),
++    install_dir: join_paths(get_option('prefix'), 'lib', 'systemd', 'system'),
+   )
+ endif
+ 
+@@ -63,6 +63,6 @@
+     output : 'fwupd.service',
+     configuration : con2,
+     install: true,
+-    install_dir: systemd.get_pkgconfig_variable('systemdsystemunitdir'),
++    install_dir: join_paths(get_option('prefix'), 'lib', 'systemd', 'system'),
+   )
+ endif
+diff -Naur fwupd-0.9.6-orig/libdfu/meson.build fwupd-0.9.6/libdfu/meson.build
+--- fwupd-0.9.6-orig/libdfu/meson.build	2017-08-03 05:45:02.000000000 -0400
++++ fwupd-0.9.6/libdfu/meson.build	2017-09-02 19:58:37.325596508 -0400
+@@ -23,6 +23,10 @@
+   giounix,
+   libm,
+   gusb,
++  uuid,
++  libarchive,
++  soup,
++  libgcab
+ ]
+ 
+ if get_option('enable-libelf')
+diff -Naur fwupd-0.9.6-orig/meson.build fwupd-0.9.6/meson.build
+--- fwupd-0.9.6-orig/meson.build	2017-08-03 05:45:02.000000000 -0400
++++ fwupd-0.9.6/meson.build	2017-09-02 19:59:07.406216716 -0400
+@@ -124,6 +124,7 @@
+ if polkit.version().version_compare('>= 0.114')
+   conf.set('HAVE_POLKIT_0_114', '1')
+ endif
++libgcab = dependency('libgcab-1.0')
+ gudev = dependency('gudev-1.0')
+ appstream_glib = dependency('appstream-glib', version : '>= 0.6.9')
+ gusb = dependency('gusb', version : '>= 0.2.9')
+@@ -200,7 +201,7 @@
+                         'fwupd-plugins-2')
+ conf.set_quoted('PLUGINDIR', plugin_dir)
+ 
+-conf.set_quoted('SYSCONFDIR', get_option('sysconfdir'))
++conf.set_quoted('SYSCONFDIR', '/etc')
+ conf.set_quoted('BINDIR',
+                 join_paths(get_option('prefix'),
+                            get_option('bindir')))
+@@ -227,6 +228,9 @@
+ plugin_deps += gmodule
+ plugin_deps += gusb
+ plugin_deps += soup
++plugin_deps += libarchive
++plugin_deps += uuid
++plugin_deps += libgcab
+ 
+ subdir('data')
+ subdir('docs')
+@@ -255,6 +259,3 @@
+   endif
+ endif
+ 
+-if get_option('enable-systemd')
+-  meson.add_install_script('meson_post_install.sh', systemd.get_pkgconfig_variable('systemdsystemunitdir'), localstatedir)
+-endif
+diff -Naur fwupd-0.9.6-orig/po/make-images.sh fwupd-0.9.6/po/make-images.sh
+--- fwupd-0.9.6-orig/po/make-images.sh	2017-08-03 05:45:02.000000000 -0400
++++ fwupd-0.9.6/po/make-images.sh	2017-09-02 19:58:37.328596570 -0400
+@@ -7,6 +7,7 @@
+ #
+ install -m 0755 -d ${MESON_INSTALL_DESTDIR_PREFIX}/share/locale/
+ ${MESON_SOURCE_ROOT}/po/make-images "Installing firmware update…" ${MESON_INSTALL_DESTDIR_PREFIX}/share/locale/ ${MESON_SOURCE_ROOT}/po/LINGUAS
++shopt -s nullglob
+ for x in ${MESON_INSTALL_DESTDIR_PREFIX}/share/locale/*/LC_IMAGES/*.bmp ; do
+     gzip -f ${x}
+ done
+diff -Naur fwupd-0.9.6-orig/src/meson.build fwupd-0.9.6/src/meson.build
+--- fwupd-0.9.6-orig/src/meson.build	2017-08-03 05:45:02.000000000 -0400
++++ fwupd-0.9.6/src/meson.build	2017-09-02 19:58:37.329596590 -0400
+@@ -24,6 +24,9 @@
+     polkit,
+     soup,
+     sqlite,
++    uuid,
++    libarchive,
++    libgcab
+   ],
+   link_with : fwupd,
+   c_args : [
+@@ -73,6 +76,9 @@
+     gpgme,
+     gpgerror,
+     valgrind,
++    uuid,
++    libarchive,
++    libgcab
+   ],
+   link_with : fwupd,
+   c_args : [

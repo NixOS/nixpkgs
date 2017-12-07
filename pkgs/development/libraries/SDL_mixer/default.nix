@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL libogg libvorbis fluidsynth smpeg ];
 
-  configureFlags = [ "--disable-music-ogg-shared" ] ++ lib.optional enableNativeMidi " --enable-music-native-midi-gpl";
+  configureFlags = [ "--disable-music-ogg-shared" ]
+    ++ lib.optional enableNativeMidi " --enable-music-native-midi-gpl"
+    ++ lib.optional stdenv.isDarwin "--disable-sdltest";
 
   meta = with stdenv.lib; {
     description = "SDL multi-channel audio mixer library";

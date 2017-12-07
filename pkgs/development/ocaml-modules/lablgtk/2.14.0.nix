@@ -16,7 +16,8 @@ stdenv.mkDerivation (rec {
     sha256 = "1fnh0amm7lwgyjdhmlqgsp62gwlar1140425yc1j6inwmgnsp0a9";
   };
 
-  buildInputs = [ ocaml findlib pkgconfig gtk2 libgnomecanvas libglade gtksourceview camlp4 ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ocaml findlib gtk2 libgnomecanvas libglade gtksourceview camlp4 ];
 
   configureFlags = "--with-libdir=$(out)/lib/ocaml/${ocaml.version}/site-lib";
   buildFlags = "world";

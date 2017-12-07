@@ -1,17 +1,14 @@
-{ stdenv, pythonPackages, fetchFromGitHub }:
+{ stdenv, buildPythonApplication, fetchFromGitHub }:
 
-with pythonPackages;
-
-buildPythonPackage rec {
-  namePrefix = "";
+buildPythonApplication rec {
   name = "wakatime-${version}";
-  version = "7.0.4";
+  version = "10.0.1";
 
   src = fetchFromGitHub {
-    sha256 = "1cddabx9x11d2nxxcqlf4piysjnpfici0n5qy3n9gw81asz1djhf";
-    rev = version;
-    repo = "wakatime";
     owner = "wakatime";
+    repo = "wakatime";
+    rev = version;
+    sha256 = "1bg8fzd3rdc6na0a7z1d55m2gbnfq6d72mf2jlyzc817r6dr4bfx";
   };
 
   meta = with stdenv.lib; {

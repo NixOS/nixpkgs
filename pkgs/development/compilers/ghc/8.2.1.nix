@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, bootPkgs, perl, ncurses, libiconv, binutils, coreutils
+{ stdenv, lib, fetchurl, bootPkgs, perl, ncurses, libiconv, targetPackages, coreutils
 , autoconf, automake, happy, alex, python3, sphinx, hscolour
 , buildPlatform, targetPlatform , selfPkgs, cross ? null
 
@@ -10,12 +10,12 @@
 let
   inherit (bootPkgs) ghc;
   version = "8.2.1";
-  preReleaseName = "ghc-8.2.1";
+
   commonBuildInputs = [ alex autoconf automake ghc happy hscolour perl python3 sphinx ];
   commonPreConfigure =  ''
     sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
   '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
-    export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/${preReleaseName}"
+    export NIX_LDFLAGS="$NIX_LDFLAGS -rpath $out/lib/ghc-${version}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     export NIX_LDFLAGS+=" -no_dtrace_dof"
   '' + stdenv.lib.optionalString enableIntegerSimple ''
@@ -26,7 +26,7 @@ in stdenv.mkDerivation (rec {
   name = "ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/~ghc/${version}/${preReleaseName}-src.tar.xz";
+    url = "https://downloads.haskell.org/~ghc/${version}/${name}-src.tar.xz";
     sha256 = "1w4k0n23b9fg8kmarqhfamzpmf91p6jcdr6xlwzfmb4df2bd9hng";
   };
 
@@ -57,7 +57,7 @@ in stdenv.mkDerivation (rec {
   checkTarget = "test";
 
   postInstall = ''
-    paxmark m $out/lib/${preReleaseName}/bin/{ghc,haddock}
+    paxmark m $out/lib/${name}/bin/{ghc,haddock}
 
     # Install the bash completion file.
     install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/ghc
@@ -66,7 +66,7 @@ in stdenv.mkDerivation (rec {
     for i in "$out/bin/"*; do
       test ! -h $i || continue
       egrep --quiet '^#!' <(head -n 1 $i) || continue
-      sed -i -e '2i export PATH="$PATH:${stdenv.lib.makeBinPath [ binutils coreutils ]}"' $i
+      sed -i -e '2i export PATH="$PATH:${stdenv.lib.makeBinPath [ targetPackages.stdenv.cc.bintools coreutils ]}"' $i
     done
   '';
 
@@ -97,23 +97,23 @@ in stdenv.mkDerivation (rec {
 
   configureFlags = [
     "CC=${stdenv.ccCross}/bin/${cross.config}-cc"
-    "LD=${stdenv.binutils}/bin/${cross.config}-ld"
-    "AR=${stdenv.binutils}/bin/${cross.config}-ar"
-    "NM=${stdenv.binutils}/bin/${cross.config}-nm"
-    "RANLIB=${stdenv.binutils}/bin/${cross.config}-ranlib"
+    "LD=${targetPackages.stdenv.cc.bintools}/bin/${cross.config}-ld"
+    "AR=${targetPackages.stdenv.cc.bintools}/bin/${cross.config}-ar"
+    "NM=${targetPackages.stdenv.cc.bintools}/bin/${cross.config}-nm"
+    "RANLIB=${targetPackages.stdenv.cc.bintools}/bin/${cross.config}-ranlib"
     "--target=${cross.config}"
     "--enable-bootstrap-with-devel-snapshot"
   ] ++
     # fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
     lib.optional (cross.config or null == "aarch64-apple-darwin14") "--disable-large-address-space";
 
-  buildInputs = commonBuildInputs ++ [ stdenv.ccCross stdenv.binutils ];
+  buildInputs = commonBuildInputs ++ [ stdenv.ccCross stdenv.targetPackages.stdenv.cc.bintools ];
 
   dontSetConfigureCross = true;
 
   passthru = {
     inherit bootPkgs cross;
     cc = "${stdenv.ccCross}/bin/${cross.config}-cc";
-    ld = "${stdenv.binutils}/bin/${cross.config}-ld";
+    ld = "${stdenv.targetPackages.stdenv.cc.bintools}/bin/${cross.config}-ld";
   };
 })

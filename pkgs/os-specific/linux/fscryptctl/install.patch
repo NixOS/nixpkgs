@@ -1,0 +1,22 @@
+--- a/Makefile	2017-09-24 22:48:19.322116085 +0200
++++ b/Makefile	2017-09-24 22:50:07.655725022 +0200
+@@ -19,7 +19,7 @@
+ CFLAGS += -O2 -Wall
+ 
+ INSTALL = install
+-DESTDIR = /usr/local/bin
++DESTDIR ?= /usr/local/bin
+ 
+ OBJECTS = $(NAME).o sha512.o
+ 
+@@ -38,8 +38,8 @@
+ 	@python -m pytest test.py -s -q
+ 
+ install: $(NAME)
+-	$(INSTALL) -d $(DEST_DIR)
+-	$(INSTALL) $(NAME) $(DEST_DIR)
++	$(INSTALL) -d $(DESTDIR)
++	$(INSTALL) $(NAME) $(DESTDIR)
+ 
+ clean:
+ 	rm -f $(OBJECTS)

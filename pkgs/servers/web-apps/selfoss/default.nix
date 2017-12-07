@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
     sha256 = "00vrpw7sb95x6lwpaxrlzxyj98k98xblqcrjr236ykv0ha97xv30";
   };
 
-  buildPhases = ["unpackPhase" "installPhase"];
-
   installPhase = ''
     mkdir $out
     cp -ra * $out/

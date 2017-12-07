@@ -170,11 +170,16 @@ in
         mkdir -m 0770 -p ${cfg.dataDir}
         if [ "$(id -u)" = 0 ]; then chown -R ${cfg.user}:${cfg.group} ${cfg.dataDir}; fi
       '';
-      postStart = mkBefore ''
-        until ${pkgs.curl.bin}/bin/curl -s -o /dev/null 'http://127.0.0.1${toString configOptions.http.bind-address}'/ping; do
-          sleep 1;
-        done
-      '';
+      postStart =
+        let
+          scheme = if configOptions.http.https-enabled then "-k https" else "http";
+          bindAddr = (ba: if hasPrefix ":" ba then "127.0.0.1${ba}" else "${ba}")(toString configOptions.http.bind-address);
+        in
+        mkBefore ''
+          until ${pkgs.curl.bin}/bin/curl -s -o /dev/null ${scheme}://${bindAddr}/ping; do
+            sleep 1;
+          done
+        '';
     };
 
     users.extraUsers = optional (cfg.user == "influxdb") {

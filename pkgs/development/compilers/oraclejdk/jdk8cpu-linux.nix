@@ -1,9 +1,9 @@
 import ./jdk-linux-base.nix {
   productVersion = "8";
-  patchVersion = "144";
+  patchVersion = "151";
   downloadUrl = http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html;
-  sha256_i686 = "1i5pginc65xl5vxzwid21ykakmfkqn59v3g01vpr94v28w30jk32";
-  sha256_x86_64 = "1r5axvr8dg2qmr4zjanj73sk9x50m7p0w3vddz8c6ckgav7438z8";
+  sha256_i686 = "0w1snn9hxwvdnk77frhdzbsm6v30v99dy5zmpy8ij7yxd57z6ql0";
+  sha256_x86_64 = "0zq2dxbxmshz080yskhc8y2wbqi0y0kl9girxjbb4rwk837010n7";
   sha256_armv7l = "10r3nyssx8piyjaspravwgj2bnq4537041pn0lz4fk5b3473kgfb";
   jceName = "jce_policy-8.zip";
   jceDownloadUrl = http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html;

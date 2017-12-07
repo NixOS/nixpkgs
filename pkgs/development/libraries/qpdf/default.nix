@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, pcre, zlib, perl }:
+{ stdenv, fetchurl, libjpeg, zlib, perl }:
 
-let version = "6.0.0";
+let version = "7.0.0";
 in
 stdenv.mkDerivation rec {
   name = "qpdf-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/qpdf/qpdf/${version}/${name}.tar.gz";
-    sha256 = "0csj2p2gkxrc0rk8ykymlsdgfas96vzf1dip3y1x7z1q9plwgzd9";
+    sha256 = "0py6p27fx4qrwq9mvcybna42b0bdi359x38lzmggxl5a9khqvl7y";
   };
 
   nativeBuildInputs = [ perl ];
 
-  buildInputs = [ pcre zlib ];
+  buildInputs = [ zlib libjpeg ];
 
   postPatch = ''
     patchShebangs qpdf/fix-qdf
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = http://qpdf.sourceforge.net/;
     description = "A C++ library and set of programs that inspect and manipulate the structure of PDF files";
-    license = licenses.artistic2;
+    license = licenses.asl20; # as of 7.0.0, people may stay at artistic2
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.all;
   };

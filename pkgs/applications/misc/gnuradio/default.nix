@@ -30,8 +30,9 @@ stdenv.mkDerivation rec {
     sha256 = "1m2jf8lafr6pr2dlm40nbvr6az8gwjfkzpbs4fxzv3l5hcqvmnc7";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cmake pkgconfig git boost cppunit fftw python swig2 orc lxml qt4
+    cmake git boost cppunit fftw python swig2 orc lxml qt4
     qwt alsaLib SDL libusb1 uhd gsl makeWrapper
   ];
 
@@ -41,8 +42,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postPatch = ''
+    substituteInPlace \
+        gr-fec/include/gnuradio/fec/polar_decoder_common.h \
+        --replace BOOST_CONSTEXPR_OR_CONST const
+  '';
+
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-unused-variable"
+    export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -Wno-unused-variable -std=c++11"
   '';
 
   # - Ensure we get an interactive backend for matplotlib. If not the gr_plot_*

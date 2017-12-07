@@ -24,8 +24,9 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  buildInputs = [
-    alsaLib ffmpeg libjack2 libX11 libXext libXfixes mesa pkgconfig
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [  
+    alsaLib ffmpeg libjack2 libX11 libXext libXfixes mesa
     libpulseaudio qt4
   ];
 

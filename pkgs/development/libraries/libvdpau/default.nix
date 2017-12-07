@@ -10,7 +10,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = with xorg; [ pkgconfig dri2proto libXext ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = with xorg; [ dri2proto libXext ];
 
   propagatedBuildInputs = [ xorg.libX11 ];
 

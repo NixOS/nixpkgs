@@ -2,13 +2,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "rtl8723bs-${kernel.version}-${version}";
-  version = "2016-04-11";
+  version = "2017-04-06";
 
   src = fetchFromGitHub {
     owner = "hadess";
     repo = "rtl8723bs";
-    rev = "11ab92d8ccd71c80f0102828366b14ef6b676fb2";
-    sha256 = "05q7mf12xcb00v6ba4wwvqi53q7ph5brfkj17xf6vkx4jr7xxnmm";
+    rev = "db2c4f61d48fe3b47c167c8bcd722ce83c24aca5";
+    sha256 = "0pxqya14a61vv2v5ky1ldybc0mjfin9mpvmajlmv0lls904rph7g";
   };
 
   hardeningDisable = [ "pic" ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/hadess/rtl8723bs;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
-    broken = (! versionAtLeast kernel.version "3.19");
+    broken = (! versionOlder kernel.version "4.12"); # Now in kernel staging drivers
     maintainers = with maintainers; [ elitak ];
   };
 }

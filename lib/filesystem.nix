@@ -1,3 +1,4 @@
+{ lib }:
 { # haskellPathsInDir : Path -> Map String Path
   # A map of all haskell packages defined in the given path,
   # identified by having a cabal file with the same name as the

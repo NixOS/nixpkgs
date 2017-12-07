@@ -34,10 +34,11 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Font Collection by The League of Moveable Type";
 
-    longDescription = '' We're done with the tired old fontstacks of
-      yesteryear. The web is no longer limited, and now it's time to raise
-      our standards. Since 2009, The League has given only the most
-      well-made, free & open-source, @font-face ready fonts.
+    longDescription = ''
+      We're done with the tired old fontstacks of yesteryear. The web
+      is no longer limited, and now it's time to raise our standards.
+      Since 2009, The League has given only the most well-made, free &
+      open-source, @font-face ready fonts.
     '';
 
     homepage = https://www.theleagueofmoveabletype.com/;

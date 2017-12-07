@@ -68,7 +68,7 @@ rec {
         ${text}
         '';
       checkPhase = ''
-        ${stdenv.shell} -n $out
+        ${stdenv.shell} -n $out/bin/${name}
       '';
     };
 

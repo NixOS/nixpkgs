@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ]; # get rid of propagating systemd closure
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs =
     stdenv.lib.optional stdenv.isLinux systemd ++
     stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];

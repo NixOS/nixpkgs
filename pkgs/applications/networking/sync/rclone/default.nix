@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   name = "rclone-${version}";
-  version = "1.37";
+  version = "1.38";
 
   goPackagePath = "github.com/ncw/rclone";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "ncw";
     repo = "rclone";
     rev = "v${version}";
-    sha256 = "0krmdwzl4c68vxpbycqy2xba8vvqbka7xh3k2q6ldxsd8y2rypym";
+    sha256 = "0f56qm4lz55anzqf6dmjfywmvqy10zi5cl69zz8lda8lmvrpjm1d";
   };
 
   outputs = [ "bin" "out" "man" ];

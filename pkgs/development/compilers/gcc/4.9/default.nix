@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, noSysDirs
+{ stdenv, targetPackages, fetchurl, noSysDirs
 , langC ? true, langCC ? true, langFortran ? false
 , langObjC ? targetPlatform.isDarwin
 , langObjCpp ? targetPlatform.isDarwin
@@ -26,7 +26,7 @@
 , enablePlugin ? hostPlatform == buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
 , libcCross ? null
-, crossStageStatic ? true
+, crossStageStatic ? false
 , gnat ? null
 , libpthread ? null, libpthreadCross ? null  # required for GNU/Hurd
 , stripped ? true
@@ -73,6 +73,7 @@ let version = "4.9.4";
       # target libraries and tools.
       ++ optional langAda ../gnat-cflags.patch
       ++ optional langFortran ../gfortran-driving.patch
+      ++ [ ../struct-ucontext.patch ../struct-sigaltstack-4.9.patch ] # glibc-2.26
       ;
 
     javaEcj = fetchurl {
@@ -106,81 +107,79 @@ let version = "4.9.4";
         gccFpu = targetPlatform.platform.gcc.fpu or null;
         gccFloat = targetPlatform.platform.gcc.float or null;
         gccMode = targetPlatform.platform.gcc.mode or null;
-        withArch = if gccArch != null then " --with-arch=${gccArch}" else "";
-        withCpu = if gccCpu != null then " --with-cpu=${gccCpu}" else "";
-        withAbi = if gccAbi != null then " --with-abi=${gccAbi}" else "";
-        withFpu = if gccFpu != null then " --with-fpu=${gccFpu}" else "";
-        withFloat = if gccFloat != null then " --with-float=${gccFloat}" else "";
-        withMode = if gccMode != null then " --with-mode=${gccMode}" else "";
       in
-        withArch +
-        withCpu +
-        withAbi +
-        withFpu +
-        withFloat +
-        withMode;
+        optional (gccArch != null) "--with-arch=${gccArch}" ++
+        optional (gccCpu != null) "--with-cpu=${gccCpu}" ++
+        optional (gccAbi != null) "--with-abi=${gccAbi}" ++
+        optional (gccFpu != null) "--with-fpu=${gccFpu}" ++
+        optional (gccFloat != null) "--with-float=${gccFloat}" ++
+        optional (gccMode != null) "--with-mode=${gccMode}";
 
-    /* Cross-gcc settings */
+    /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
     crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";
     crossConfigureFlags =
-        # Ensure that -print-prog-name is able to find the correct programs.
-        " --with-as=${binutils}/bin/${targetPlatform.config}-as" +
-        " --with-ld=${binutils}/bin/${targetPlatform.config}-ld" +
-        (if crossMingw && crossStageStatic then
-          " --with-headers=${libcCross}/include" +
-          " --with-gcc" +
-          " --with-gnu-as" +
-          " --with-gnu-ld" +
-          " --with-gnu-ld" +
-          " --disable-shared" +
-          " --disable-nls" +
-          " --disable-debug" +
-          " --enable-sjlj-exceptions" +
-          " --enable-threads=win32" +
-          " --disable-win32-registry"
-          else if crossStageStatic then
-          " --disable-libssp --disable-nls" +
-          " --without-headers" +
-          " --disable-threads " +
-          " --disable-libgomp " +
-          " --disable-libquadmath" +
-          " --disable-shared" +
-          " --disable-libatomic " +  # libatomic requires libc
-          " --disable-decimal-float" # libdecnumber requires libc
-          else
-          (if crossDarwin then " --with-sysroot=${libcCross.out}/share/sysroot"
-           else                " --with-headers=${libcCross.dev}/include") +
-          " --enable-__cxa_atexit" +
-          " --enable-long-long" +
-          (if crossMingw then
-            " --enable-threads=win32" +
-            " --enable-sjlj-exceptions" +
-            " --enable-hash-synchronization" +
-            " --disable-libssp" +
-            " --disable-nls" +
-            " --with-dwarf2" +
-            # I think noone uses shared gcc libs in mingw, so we better do the same.
-            # In any case, mingw32 g++ linking is broken by default with shared libs,
-            # unless adding "-lsupc++" to any linking command. I don't know why.
-            " --disable-shared" +
-            # To keep ABI compatibility with upstream mingw-w64
-            " --enable-fully-dynamic-string"
-            else (if targetPlatform.libc == "uclibc" then
-              # libsanitizer requires netrom/netrom.h which is not
-              # available in uclibc.
-              " --disable-libsanitizer" +
-              # In uclibc cases, libgomp needs an additional '-ldl'
-              # and as I don't know how to pass it, I disable libgomp.
-              " --disable-libgomp" else "") +
-            " --enable-threads=posix" +
-            " --enable-nls" +
-            " --disable-decimal-float") # No final libdecnumber (it may work only in 386)
-          );
+      # Ensure that -print-prog-name is able to find the correct programs.
+      [ "--with-as=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as"
+        "--with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld" ] ++
+      (if crossMingw && crossStageStatic then [
+        "--with-headers=${libcCross}/include"
+        "--with-gcc"
+        "--with-gnu-as"
+        "--with-gnu-ld"
+        "--with-gnu-ld"
+        "--disable-shared"
+        "--disable-nls"
+        "--disable-debug"
+        "--enable-sjlj-exceptions"
+        "--enable-threads=win32"
+        "--disable-win32-registry"
+      ] else if crossStageStatic then [
+        "--disable-libssp"
+        "--disable-nls"
+        "--without-headers"
+        "--disable-threads"
+        "--disable-libgomp"
+        "--disable-libquadmath"
+        "--disable-shared"
+        "--disable-libatomic"  # libatomic requires libc
+        "--disable-decimal-float" # libdecnumber requires libc
+      ] else [
+        (if crossDarwin then "--with-sysroot=${getLib libcCross}/share/sysroot"
+         else                "--with-headers=${getDev libcCross}/include")
+        "--enable-__cxa_atexit"
+        "--enable-long-long"
+      ] ++
+        (if crossMingw then [
+          "--enable-threads=win32"
+          "--enable-sjlj-exceptions"
+          "--enable-hash-synchronization"
+          "--disable-libssp"
+          "--disable-nls"
+          "--with-dwarf2"
+          # I think noone uses shared gcc libs in mingw, so we better do the same.
+          # In any case, mingw32 g++ linking is broken by default with shared libs,
+          # unless adding "-lsupc++" to any linking command. I don't know why.
+          "--disable-shared"
+          # To keep ABI compatibility with upstream mingw-w64
+          "--enable-fully-dynamic-string"
+        ] else
+          optionals (targetPlatform.libc == "uclibc") [
+            # libsanitizer requires netrom/netrom.h which is not
+            # available in uclibc.
+            "--disable-libsanitizer"
+            # In uclibc cases, libgomp needs an additional '-ldl'
+            # and as I don't know how to pass it, I disable libgomp.
+            "--disable-libgomp"
+          ] ++ [
+          "--enable-threads=posix"
+          "--enable-nls"
+          "--disable-decimal-float" # No final libdecnumber (it may work only in 386)
+        ]));
     stageNameAddon = if crossStageStatic then "-stage-static" else "-stage-final";
     crossNameAddon = if targetPlatform != hostPlatform then "-${targetPlatform.config}" + stageNameAddon else "";
 
-  bootstrap = targetPlatform == hostPlatform;
+    bootstrap = targetPlatform == hostPlatform;
 
 in
 
@@ -262,7 +261,9 @@ stdenv.mkDerivation ({
         ''
     else null;
 
-  inherit noSysDirs staticCompiler langJava crossStageStatic
+  # TODO(@Ericson2314): Make passthru instead. Weird to avoid mass rebuild,
+  crossStageStatic = targetPlatform == hostPlatform || crossStageStatic;
+  inherit noSysDirs staticCompiler langJava
     libcCross crossMingw;
 
   nativeBuildInputs = [ texinfo which gettext ]
@@ -275,7 +276,7 @@ stdenv.mkDerivation ({
     ++ (optional (zlib != null) zlib)
     ++ (optionals langJava [ boehmgc zip unzip ])
     ++ (optionals javaAwtGtk ([ gtk2 libart_lgpl ] ++ xlibs))
-    ++ (optionals (targetPlatform != hostPlatform) [binutils])
+    ++ (optionals (targetPlatform != hostPlatform) [targetPackages.stdenv.cc.bintools])
     ++ (optionals langAda [gnatboot])
     ++ (optionals langVhdl [gnat])
 
@@ -299,59 +300,91 @@ stdenv.mkDerivation ({
   dontDisableStatic = true;
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
-  configureFlags = "
-    ${if hostPlatform.isSunOS then
-      " --enable-long-long --enable-libssp --enable-threads=posix --disable-nls --enable-__cxa_atexit " +
-      # On Illumos/Solaris GNU as is preferred
-      " --with-gnu-as --without-gnu-ld "
-      else ""}
-    --enable-lto
-    ${if enableMultilib then "--enable-multilib --disable-libquadmath" else "--disable-multilib"}
-    ${if enableShared then "" else "--disable-shared"}
-    ${if enablePlugin then "--enable-plugin" else "--disable-plugin"}
-    ${optionalString (isl != null) "--with-isl=${isl}"}
-    ${optionalString (cloog != null) "--with-cloog=${cloog} --disable-cloog-version-check --enable-cloog-backend=isl"}
-    ${if langJava then
-      "--with-ecj-jar=${javaEcj} " +
+  configurePlatforms =
+    # TODO(@Ericson2314): Figure out what's going wrong with Arm
+    if hostPlatform == targetPlatform && targetPlatform.isArm
+    then []
+    else [ "build" "host" ] ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
+
+  configureFlags =
+    # Basic dependencies
+    [
+      "--with-gmp-include=${gmp.dev}/include"
+      "--with-gmp-lib=${gmp.out}/lib"
+      "--with-mpfr=${mpfr.dev}"
+      "--with-mpc=${libmpc}"
+    ] ++
+    optional (libelf != null) "--with-libelf=${libelf}" ++
+    optional (!(crossMingw && crossStageStatic))
+      "--with-native-system-header-dir=${getDev stdenv.cc.libc}/include" ++
+
+    # Basic configuration
+    [
+      "--enable-lto"
+      "--disable-libstdcxx-pch"
+      "--without-included-gettext"
+      "--with-system-zlib"
+      "--enable-static"
+      "--enable-languages=${
+        concatStrings (intersperse ","
+          (  optional langC        "c"
+          ++ optional langCC       "c++"
+          ++ optional langFortran  "fortran"
+          ++ optional langJava     "java"
+          ++ optional langAda      "ada"
+          ++ optional langVhdl     "vhdl"
+          ++ optional langGo       "go"
+          ++ optional langObjC     "objc"
+          ++ optional langObjCpp   "obj-c++"
+          ++ optionals crossDarwin [ "objc" "obj-c++" ]
+          )
+        )
+      }"
+    ] ++
+
+    (if enableMultilib
+      then ["--enable-multilib" "--disable-libquadmath"]
+      else ["--disable-multilib"]) ++
+    optional (!enableShared) "--disable-shared" ++
+    (if enablePlugin
+      then ["--enable-plugin"]
+      else ["--disable-plugin"]) ++
+
+    # Optional features
+    optional (isl != null) "--with-isl=${isl}" ++
+    optionals (cloog != null) [
+      "--with-cloog=${cloog}"
+      "--disable-cloog-version-check"
+      "--enable-cloog-backend=isl"
+    ] ++
+
+    # Java options
+    optionals langJava [
+      "--with-ecj-jar=${javaEcj}"
 
       # Follow Sun's layout for the convenience of IcedTea/OpenJDK.  See
       # <http://mail.openjdk.java.net/pipermail/distro-pkg-dev/2010-April/008888.html>.
-      "--enable-java-home --with-java-home=\${prefix}/lib/jvm/jre "
-      else ""}
-    ${if javaAwtGtk then "--enable-java-awt=gtk" else ""}
-    ${if langJava && javaAntlr != null then "--with-antlr-jar=${javaAntlr}" else ""}
-    --with-gmp=${gmp.dev}
-    --with-mpfr=${mpfr.dev}
-    --with-mpc=${libmpc}
-    ${if libelf != null then "--with-libelf=${libelf}" else ""}
-    --disable-libstdcxx-pch
-    --without-included-gettext
-    --with-system-zlib
-    --enable-static
-    --enable-languages=${
-      concatStrings (intersperse ","
-        (  optional langC        "c"
-        ++ optional langCC       "c++"
-        ++ optional langFortran  "fortran"
-        ++ optional langJava     "java"
-        ++ optional langAda      "ada"
-        ++ optional langVhdl     "vhdl"
-        ++ optional langGo       "go"
-        ++ optional langObjC     "objc"
-        ++ optional langObjCpp   "obj-c++"
-        ++ optionals crossDarwin [ "objc" "obj-c++" ]
-        )
-      )
-    }
-    ${optionalString (!(crossMingw && crossStageStatic))
-      "--with-native-system-header-dir=${getDev stdenv.cc.libc}/include"}
-    ${if langAda then " --enable-libada" else ""}
-    ${if targetPlatform == hostPlatform && targetPlatform.isi686 then "--with-arch=i686" else ""}
-    ${platformFlags}
-    ${if targetPlatform != hostPlatform then crossConfigureFlags else ""}
-    ${if !bootstrap then "--disable-bootstrap" else ""}
-  ";
+      "--enable-java-home"
+      "--with-java-home=\${prefix}/lib/jvm/jre"
+    ] ++
+    optional javaAwtGtk "--enable-java-awt=gtk" ++
+    optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr}" ++
+
+    # Ada
+    optional langAda "--enable-libada" ++
+
+    platformFlags ++
+    optional (targetPlatform != hostPlatform) crossConfigureFlags ++
+    optional (!bootstrap) "--disable-bootstrap" ++
+
+    # Platform-specific flags
+    optional (targetPlatform == hostPlatform && targetPlatform.isi686) "--with-arch=i686" ++
+    optionals hostPlatform.isSunOS [
+      "--enable-long-long" "--enable-libssp" "--enable-threads=posix" "--disable-nls" "--enable-__cxa_atexit"
+      # On Illumos/Solaris GNU as is preferred
+      "--with-gnu-as" "--without-gnu-ld"
+    ]
+  ;
 
   targetConfig = if targetPlatform != hostPlatform then targetPlatform.config else null;
 
@@ -364,6 +397,7 @@ stdenv.mkDerivation ({
     then "install-strip"
     else "install";
 
+  /* For cross-built gcc (build != host == target) */
   crossAttrs = {
     AR_FOR_BUILD = "ar";
     AS_FOR_BUILD = "as";

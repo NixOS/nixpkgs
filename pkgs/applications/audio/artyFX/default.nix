@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "012hcy1mxl7gs2lipfcqp5x0xv1azb9hjrwf0h59yyxnzx96h7c9";
   };
 
-  buildInputs = [ cairomm cmake libjack2 libpthreadstubs libXdmcp libxshmfence libsndfile lv2 ntk pkgconfig   ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ cairomm cmake libjack2 libpthreadstubs libXdmcp libxshmfence libsndfile lv2 ntk   ];
 
   meta = with stdenv.lib; {
     homepage = http://openavproductions.com/artyfx/;

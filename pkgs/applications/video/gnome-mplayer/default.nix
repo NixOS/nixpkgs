@@ -8,7 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "1k5yplsvddcm7xza5h4nfb6vibzjcqsk8gzis890alizk07f5xp2";
   };
 
-  buildInputs = [pkgconfig glib gtk2 dbus dbus_glib GConf];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib gtk2 dbus dbus_glib GConf];
 
   hardeningDisable = [ "format" ];
 

@@ -37,7 +37,7 @@ import ./make-test.nix (pkgs: {
       $machine->waitForShutdown;
       $machine->start;
       $probe->waitForUnit("network.target");
-      $probe->waitUntilSucceeds("echo test | nc machine 4444");
+      $probe->waitUntilSucceeds("echo test | nc machine 4444 -q 0");
     '';
 
 })

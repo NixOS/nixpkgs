@@ -1,10 +1,6 @@
 { stdenv, fetchurl, pkgconfig, vpnc, openssl ? null, gnutls ? null, gmp, libxml2, stoken, zlib } :
 
-let
-  xor = a: b: (a || b) && (!(a && b));
-in
-
-assert xor (openssl != null) (gnutls != null);
+assert (openssl != null) == (gnutls == null);
 
 stdenv.mkDerivation rec {
   name = "openconnect-7.08";
@@ -15,6 +11,8 @@ stdenv.mkDerivation rec {
     ];
     sha256 = "00wacb79l2c45f94gxs63b9z25wlciarasvjrb8jb8566wgyqi0w";
   };
+
+  outputs = [ "out" "dev" ];
 
   preConfigure = ''
       export PKG_CONFIG=${pkgconfig}/bin/pkg-config
@@ -28,7 +26,7 @@ stdenv.mkDerivation rec {
     "--without-openssl-version-check"
   ];
 
-  buildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ vpnc openssl gnutls gmp libxml2 stoken zlib ];
 
   meta = {

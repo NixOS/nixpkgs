@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "1x41mbzh4qy7mrv2n86r2cr176rx03iacn0a99c3dkzv9g4rb34s";
   };
 
-  buildInputs = with stdenv.lib; [ cmake pkgconfig confuse ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = with stdenv.lib; [ cmake confuse ]
     ++ optionals cppSupport [ boost ]
     ++ optionals pythonSupport [ python swig ]
     ++ optionals docSupport [ doxygen ];

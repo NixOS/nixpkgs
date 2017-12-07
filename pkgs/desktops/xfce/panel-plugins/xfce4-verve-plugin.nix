@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
   };
   name = "${p_name}-${ver_maj}.${ver_min}";
 
-  buildInputs = [ pkgconfig intltool glib exo pcre libxfce4util libxfce4ui xfce4panel xfconf gtk ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool glib exo pcre libxfce4util libxfce4ui xfce4panel xfconf gtk ];
 
   hardeningDisable = [ "format" ];
 

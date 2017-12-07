@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchurl, python,
+{ stdenv, buildPythonPackage, fetchPypi, python,
   pbr, Babel, testrepository, subunit, testtools,
   coverage, oslosphinx, oslotest, testscenarios, six, ddt 
 }:
@@ -7,8 +7,8 @@ buildPythonPackage rec {
   pname = "os-testr";
   name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "mirror://pypi/o/os-testr/${name}.tar.gz";
+  src = fetchPypi {
+    inherit pname version;
     sha256 = "d8a60bd56c541714a5cab4d1996c8ddfdb5c7c35393d55be617803048c170837";
   };
 

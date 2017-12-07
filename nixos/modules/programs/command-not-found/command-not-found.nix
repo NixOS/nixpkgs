@@ -25,7 +25,14 @@ in
 {
   options.programs.command-not-found = {
 
-    enable = mkEnableOption "command-not-found hook for interactive shell";
+    enable = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Whether interactive shells should show which Nix package (if
+        any) provides a missing command.
+      '';
+    };
 
     dbPath = mkOption {
       default = "/nix/var/nix/profiles/per-user/root/channels/nixos/programs.sqlite" ;

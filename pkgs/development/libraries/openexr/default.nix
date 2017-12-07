@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
     ./bootstrap
   '';
 
-  buildInputs = [ autoconf automake libtool pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake libtool ];
   propagatedBuildInputs = [ ilmbase zlib ];
 
   enableParallelBuilding = true;

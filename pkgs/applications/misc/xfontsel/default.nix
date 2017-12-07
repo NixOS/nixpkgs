@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "1grir464hy52a71r3mpm9mzvkf7nwr3vk0b1vc27pd3gp588a38p";
   };
 
-  buildInputs = [libX11 makeWrapper pkgconfig libXaw];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [libX11 makeWrapper libXaw];
 
   # Without this, it gets Xmu as a dependency, but without rpath entry
   NIX_LDFLAGS = "-lXmu";

@@ -66,11 +66,6 @@ in rec {
       bootPkgs = packages.ghc784;
       inherit (bootPkgs) hscolour;
     };
-    ghc801 = callPackage ../development/compilers/ghc/8.0.1.nix rec {
-      bootPkgs = packages.ghc7103;
-      inherit (bootPkgs) hscolour;
-      sphinx = pkgs.python27Packages.sphinx;
-    };
     ghc802 = callPackage ../development/compilers/ghc/8.0.2.nix rec {
       bootPkgs = packages.ghc7103;
       inherit (bootPkgs) hscolour;
@@ -82,6 +77,13 @@ in rec {
       inherit buildPlatform targetPlatform;
       sphinx = pkgs.python3Packages.sphinx;
       selfPkgs = packages.ghc821;
+    };
+    ghc822 = callPackage ../development/compilers/ghc/8.2.2.nix rec {
+      bootPkgs = packages.ghc802;
+      inherit (bootPkgs) hscolour alex happy;
+      inherit buildPlatform targetPlatform;
+      sphinx = pkgs.python3Packages.sphinx;
+      selfPkgs = packages.ghc822;
     };
     ghcHEAD = callPackage ../development/compilers/ghc/head.nix rec {
       bootPkgs = packages.ghc802;
@@ -163,16 +165,16 @@ in rec {
       ghc = compiler.ghc7103;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
     };
-    ghc801 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc801;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.0.x.nix { };
-    };
     ghc802 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc802;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.0.x.nix { };
     };
     ghc821 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc821;
+      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
+    };
+    ghc822 = callPackage ../development/haskell-modules {
+      ghc = compiler.ghc822;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-8.2.x.nix { };
     };
     ghcHEAD = callPackage ../development/haskell-modules {

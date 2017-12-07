@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1slb7gajn30vdaq0hf5rikwdly1npmg1cf83hpjs82xd98knl13d";
   };
 
-   buildInputs = [ pkgconfig glib dbus_glib gmime libnotify libgnome_keyring openssl cyrus_sasl gnonlin sylpheed gob2 gettext intltool gnome2.GConf gnome2.libgnomeui dbus_glib gmime libnotify gnome2.gnome_keyring gnome2.scrollkeeper libxml2 gnome2.gnome_icon_theme hicolor_icon_theme tango-icon-theme ];
+  nativeBuildInputs = [ pkgconfig ];
+   buildInputs = [ glib dbus_glib gmime libnotify libgnome_keyring openssl cyrus_sasl gnonlin sylpheed gob2 gettext intltool gnome2.GConf gnome2.libgnomeui dbus_glib gmime libnotify gnome2.gnome_keyring gnome2.scrollkeeper libxml2 gnome2.gnome_icon_theme hicolor_icon_theme tango-icon-theme ];
 
   prePatch = ''
     sed -i  -e '/jb_rule_set_install_message/d' -e '/jb_rule_add_install_command/d' jbsrc/jb.c

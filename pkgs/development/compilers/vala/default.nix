@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, pkgconfig, flex, bison, libxslt
-, glib, libiconv, libintlOrEmpty
+{ stdenv, fetchurl, pkgconfig, flex, bison, libxslt, autoconf, graphviz
+, glib, libiconv, libintlOrEmpty, libtool, expat
 }:
 
 let
-  generic = { major, minor, sha256 }:
+  generic = { major, minor, sha256, extraNativeBuildInputs ? [], extraBuildInputs ? [] }:
   stdenv.mkDerivation rec {
     name = "vala-${major}.${minor}";
 
@@ -12,9 +12,9 @@ let
       inherit sha256;
     };
 
-    nativeBuildInputs = [ pkgconfig flex bison libxslt ];
+    nativeBuildInputs = [ pkgconfig flex bison libxslt ] ++ extraNativeBuildInputs;
 
-    buildInputs = [ glib libiconv ] ++ libintlOrEmpty;
+    buildInputs = [ glib libiconv ] ++ libintlOrEmpty ++ extraBuildInputs;
 
     meta = with stdenv.lib; {
       description = "Compiler for GObject type system";
@@ -55,6 +55,14 @@ in rec {
     major   = "0.34";
     minor   = "1";
     sha256  = "16cjybjw100qps6jg0jdyjh8hndz8a876zmxpybnf30a8vygrk7m";
+  };
+
+  vala_0_38 = generic {
+    major   = "0.38";
+    minor   = "1";
+    sha256  = "112hl3lkcyakrk8c3qgw12gzn3nxjkvx7bn0jhl5f2m57d7k8d8h";
+    extraNativeBuildInputs = [ autoconf ] ++ stdenv.lib.optionals stdenv.isDarwin [ libtool expat ];
+    extraBuildInputs = [ graphviz ];
   };
 
   vala = vala_0_34;

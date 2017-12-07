@@ -46,7 +46,8 @@ installPhase() {
 
     # Install ICDs.
     install -Dm644 nvidia.icd $out/etc/OpenCL/vendors/nvidia.icd
-    if [ -e nvidia_icd.json ]; then
+    if [ -e nvidia_icd.json.template ]; then
+        sed "s#__NV_VK_ICD__#libGLX_nvidia.so#" nvidia_icd.json.template > nvidia_icd.json
         install -Dm644 nvidia_icd.json $out/share/vulkan/icd.d/nvidia.json
     fi
     if [ "$useGLVND" = "1" ]; then

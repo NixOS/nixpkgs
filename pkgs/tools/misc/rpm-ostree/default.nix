@@ -28,8 +28,9 @@ in stdenv.mkDerivation {
     sha256 = "0a0wwklzk1kvk3bbxxfvxgk4ck5dn7a7v32shqidb674fr2d5pvb";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    which autoconf automake pkgconfig libtool libcap ostree rpm glib libgsystem gperf
+    which autoconf automake libtool libcap ostree rpm glib libgsystem gperf
     json_glib libarchive libsolv librepo gtk_doc libxslt docbook_xsl docbook_xml_dtd_42
     cmake pcre check python
     # FIXME: get rid of this once libarchive properly propagates this

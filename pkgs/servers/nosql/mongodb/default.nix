@@ -7,7 +7,7 @@
 
 with stdenv.lib;
 
-let version = "3.2.9";
+let version = "3.4.2";
     system-libraries = [
       "pcre"
       #"asio" -- XXX use package?
@@ -43,8 +43,8 @@ in stdenv.mkDerivation rec {
   name = "mongodb-${version}";
 
   src = fetchurl {
-    url = "http://downloads.mongodb.org/src/mongodb-src-r${version}.tar.gz";
-    sha256 = "06q6j2bjy31pjwqws53wdpmn2x8w2hafzsnv1s3wx15pc9vq3y15";
+    url = "https://fastdl.mongodb.org/src/mongodb-src-r${version}.tar.gz";
+    sha256 = "0n8vspccrpd2z9xk3yjpz4gprd730dfacw914ksjzz9iadn0zdi9";
   };
 
   nativeBuildInputs = [ scons ];
@@ -52,12 +52,6 @@ in stdenv.mkDerivation rec {
 
   patches =
     [
-      # When not building with the system valgrind, the build should use the
-      # vendored header file - regardless of whether or not we're using the system
-      # tcmalloc - so we need to lift the include path manipulation out of the
-      # conditional.
-      ./valgrind-include.patch
-
       # MongoDB keeps track of its build parameters, which tricks nix into
       # keeping dependencies to build inputs in the final output.
       # We remove the build flags from buildInfo data.
@@ -66,6 +60,12 @@ in stdenv.mkDerivation rec {
         url = https://projects.archlinux.org/svntogit/community.git/plain/trunk/boost160.patch?h=packages/mongodb;
         name = "boost160.patch";
         sha256 = "0bvsf3499zj55pzamwjmsssr6x63w434944w76273fr5rxwzcmh8";
+      })
+      # probably not needed for > 3.4.10
+      (fetchpatch {
+        url = https://github.com/mongodb/mongo/commit/218a7b1d4ea3d3b.diff;
+        name = "pcre-8.41.patch";
+        sha256 = "1dra51gw130bq78l2yfkdaj0jkha95ikpv4ig21rapbl63ip3znj";
       })
     ];
 
@@ -86,6 +86,8 @@ in stdenv.mkDerivation rec {
     substituteInPlace src/mongo/db/storage/storage_options.h \
       --replace 'engine("wiredTiger")' 'engine("mmapv1")'
   '';
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.cc.isClang "-Wno-unused-command-line-argument";
 
   buildPhase = ''
     scons -j $NIX_BUILD_CORES core --release ${other-args}

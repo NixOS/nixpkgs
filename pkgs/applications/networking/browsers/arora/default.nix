@@ -1,21 +1,25 @@
-{ stdenv, fetchurl, qt4, qmake4Hook }:
+{ stdenv, fetchFromGitHub, qt4, qmake4Hook }:
 
 stdenv.mkDerivation rec {
   name = "arora-${version}";
   version = "0.11.0";
 
-  src = fetchurl {
-    url = "http://arora.googlecode.com/files/${name}.tar.gz";
-    sha256 = "1ffkranxi93lrg5r7a90pix9j8xqmf0z1mb1m8579v9m34cyypvg";
+  src = fetchFromGitHub {
+    owner = "Arora";
+    repo = "arora";
+    rev = version;
+    sha256 = "0wmivgx3mw51rghi6q8fgivpkqc98z2mqmllf7c98ln0wd8rkf3c";
   };
 
   buildInputs = [ qt4 ];
   nativeBuildInputs = [ qmake4Hook ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     platforms = qt4.meta.platforms;
     maintainers = [ maintainers.phreedom ];
     description = "A cross-platform Qt4 Webkit browser";
-    homepage = http://arora.googlecode.com;
+    homepage = https://github.com/Arora/arora;
   };
 }

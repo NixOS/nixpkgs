@@ -55,8 +55,11 @@ in {
         Restart = "on-failure";
         PrivateTmp = true;
       };
+      wantedBy = [ "default.target" ];
     };
 
     services.keybase.enable = true;
+
+    environment.systemPackages = [ pkgs.kbfs ];
   };
 }

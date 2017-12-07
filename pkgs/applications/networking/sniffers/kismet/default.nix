@@ -2,14 +2,15 @@
 
 stdenv.mkDerivation rec {
   name = "kismet-${version}";
-  version = "2013-03-R1b";
+  version = "2016-07-R1";
 
   src = fetchurl {
     url = "http://www.kismetwireless.net/code/${name}.tar.xz";
-    sha256 = "0b3wabdkh0p3msphihm4kz5yw02p27ska5lfippfcyn6z1z4svb3";
+    sha256 = "0dz28y4ay4lskhl0lawqy2dkcrhgfkbg06v22qxzzw8i6caizcmx";
   };
 
-  buildInputs = [ pkgconfig libpcap ncurses expat pcre libnl ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libpcap ncurses expat pcre libnl ];
   postConfigure = ''
     sed -e 's/-o $(INSTUSR)//' \
         -e 's/-g $(INSTGRP)//' \
@@ -18,10 +19,10 @@ stdenv.mkDerivation rec {
         -i Makefile
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Wireless network sniffer";
-    homepage = http://www.kismetwireless.net/;
-    license = "GPL";
-    platforms = stdenv.lib.platforms.linux;
+    homepage = https://www.kismetwireless.net/;
+    license = licenses.gpl3;
+    platforms = platforms.linux;
   };
 }

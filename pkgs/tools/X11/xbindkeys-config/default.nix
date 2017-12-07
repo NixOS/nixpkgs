@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   name = "xbindkeys-config-${version}";
   version = "0.1.3";
 
-  buildInputs = [ gtk pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ gtk makeWrapper ];
 
   src = fetchurl {
     url = "mirror://debian/pool/main/x/xbindkeys-config/xbindkeys-config_${version}.orig.tar.gz";

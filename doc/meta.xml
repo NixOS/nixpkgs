@@ -200,11 +200,9 @@ meta-attributes</title>
 meta.platforms = stdenv.lib.platforms.linux;
 </programlisting>
 
-    Attribute Set <varname>stdenv.lib.platforms</varname> in
-    <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/platforms.nix">
-    <filename>nixpkgs/lib/platforms.nix</filename></link> defines various common
-    lists of platforms types.
-    </para></listitem>
+    Attribute Set <varname>stdenv.lib.platforms</varname> defines
+    <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/lib/systems/doubles.nix">
+    various common lists</link> of platforms types.</para></listitem>
   </varlistentry>
 
   <varlistentry>

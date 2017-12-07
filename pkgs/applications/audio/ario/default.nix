@@ -14,8 +14,9 @@ stdenv.mkDerivation rec {
 
   patches = [ ./glib-single-include.patch ];
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig gettext gtk2 expat intltool libgcrypt libunique gnutls
+    gettext gtk2 expat intltool libgcrypt libunique gnutls
     libxml2 curl mpd_clientlib dbus_glib libnotify libsoup avahi taglib
   ];
 

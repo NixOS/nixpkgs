@@ -8,10 +8,12 @@ let
 
   defaultSock = "local:/run/opendkim/opendkim.sock";
 
+  keyFile = "${cfg.keyPath}/${cfg.selector}.private";
+
   args = [ "-f" "-l"
            "-p" cfg.socket
            "-d" cfg.domains
-           "-k" cfg.keyFile
+           "-k" keyFile
            "-s" cfg.selector
          ] ++ optionals (cfg.configFile != null) [ "-x" cfg.configFile ];
 
@@ -57,9 +59,13 @@ in {
         '';
       };
 
-      keyFile = mkOption {
+      keyPath = mkOption {
         type = types.path;
-        description = "Secret key file used for signing messages.";
+        description = ''
+          The path that opendkim should put its generated private keys into.
+          The DNS settings will be found in this directory with the name selector.txt.
+        '';
+        default = "/var/lib/opendkim/keys";
       };
 
       selector = mkOption {
@@ -100,11 +106,25 @@ in {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
+      preStart = ''
+        mkdir -p "${cfg.keyPath}"
+        cd "${cfg.keyPath}"
+        if ! test -f ${cfg.selector}.private; then
+          ${pkgs.opendkim}/bin/opendkim-genkey -s ${cfg.selector} -d all-domains-generic-key
+          echo "Generated OpenDKIM key! Please update your DNS settings:\n"
+          echo "-------------------------------------------------------------"
+          cat ${cfg.selector}.txt
+          echo "-------------------------------------------------------------"
+        fi
+        chown ${cfg.user}:${cfg.group} ${cfg.selector}.private
+      '';
+
       serviceConfig = {
         ExecStart = "${pkgs.opendkim}/bin/opendkim ${escapeShellArgs args}";
         User = cfg.user;
         Group = cfg.group;
         RuntimeDirectory = optional (cfg.socket == defaultSock) "opendkim";
+        PermissionsStartOnly = true;
       };
     };
 

@@ -4,6 +4,10 @@ with lib;
 
 let
   cfg = config.services.firefox.syncserver;
+
+  defaultDbLocation = "/var/db/firefox-sync-server/firefox-sync-server.db";
+  defaultSqlUri = "sqlite:///${defaultDbLocation}";
+
   syncServerIni = pkgs.writeText "syncserver.ini" ''
     [DEFAULT]
     overrides = ${cfg.privateConfig}
@@ -25,6 +29,7 @@ let
     backend = tokenserver.verifiers.LocalVerifier
     audiences = ${removeSuffix "/" cfg.publicUrl}
   '';
+
 in
 
 {
@@ -65,6 +70,18 @@ in
         '';
       };
 
+      user = mkOption {
+        type = types.str;
+        default = "syncserver";
+        description = "User account under which syncserver runs.";
+      };
+
+      group = mkOption {
+        type = types.str;
+        default = "syncserver";
+        description = "Group account under which syncserver runs.";
+      };
+
       publicUrl = mkOption {
         type = types.str;
         default = "http://localhost:5000/";
@@ -85,7 +102,7 @@ in
 
       sqlUri = mkOption {
         type = types.str;
-        default = "sqlite:////var/db/firefox-sync-server.db";
+        default = defaultSqlUri;
         example = "postgresql://scott:tiger@localhost/test";
         description = ''
           The location of the database. This URL is composed of
@@ -126,16 +143,45 @@ in
       description = "Firefox Sync Server";
       wantedBy = [ "multi-user.target" ];
       path = [ pkgs.coreutils syncServerEnv ];
+
+      serviceConfig = {
+        User = cfg.user;
+        Group = cfg.group;
+        PermissionsStartOnly = true;
+      };
+
       preStart = ''
         if ! test -e ${cfg.privateConfig}; then
-          umask u=rwx,g=x,o=x
-          mkdir -p $(dirname ${cfg.privateConfig})
+          mkdir -m 700 -p $(dirname ${cfg.privateConfig})
           echo  > ${cfg.privateConfig} '[syncserver]'
           echo >> ${cfg.privateConfig} "secret = $(head -c 20 /dev/urandom | sha1sum | tr -d ' -')"
+        fi
+        chown ${cfg.user}:${cfg.group} ${cfg.privateConfig}
+      '' + optionalString (cfg.sqlUri == defaultSqlUri) ''
+        if ! test -e $(dirname ${defaultDbLocation}); then
+          mkdir -m 700 -p $(dirname ${defaultDbLocation})
+          chown ${cfg.user}:${cfg.group} $(dirname ${defaultDbLocation})
+        fi
+        # Move previous database file if it exists
+        oldDb="/var/db/firefox-sync-server.db"
+        if test -f $oldDb; then
+          mv $oldDb ${defaultDbLocation}
+          chown ${cfg.user}:${cfg.group} ${defaultDbLocation}
         fi
       '';
       serviceConfig.ExecStart = "${syncServerEnv}/bin/paster serve ${syncServerIni}";
     };
 
+    users.extraUsers = optionalAttrs (cfg.user == "syncserver")
+      (singleton {
+        name = "syncserver";
+        group = cfg.group;
+        isSystemUser = true;
+      });
+
+    users.extraGroups = optionalAttrs (cfg.group == "syncserver")
+      (singleton {
+        name = "syncserver";
+      });
   };
 }

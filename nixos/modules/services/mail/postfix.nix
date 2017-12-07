@@ -28,7 +28,7 @@ let
 
   mainCf = let
     escape = replaceStrings ["$"] ["$$"];
-    mkList = items: "\n  " + concatMapStringsSep "\n  " escape items;
+    mkList = items: "\n  " + concatStringsSep "\n  " items;
     mkVal = value:
       if isList value then mkList value
         else " " + (if value == true then "yes"
@@ -60,9 +60,11 @@ let
     manpage_directory    = "${pkgs.postfix}/share/man";
     html_directory       = "${pkgs.postfix}/share/postfix/doc/html";
     shlib_directory      = false;
-    relayhost            = if cfg.lookupMX || cfg.relayHost == ""
-                             then cfg.relayHost
-                             else "[${cfg.relayHost}]";
+    relayhost            = if cfg.relayHost == "" then "" else
+                             if cfg.lookupMX
+                             then "${cfg.relayHost}:${toString cfg.relayPort}"
+                             else "[${cfg.relayHost}]:${toString cfg.relayPort}";
+
     mail_spool_directory = "/var/spool/mail/";
     setgid_group         = setgidGroup;
   }
@@ -79,6 +81,12 @@ let
   // optionalAttrs haveTransport { transport_maps = "hash:/etc/postfix/transport"; }
   // optionalAttrs haveVirtual { virtual_alias_maps = "${cfg.virtualMapType}:/etc/postfix/virtual"; }
   // optionalAttrs (cfg.dnsBlacklists != []) { smtpd_client_restrictions = clientRestrictions; }
+  // optionalAttrs cfg.useSrs {
+    sender_canonical_maps = "tcp:127.0.0.1:10001";
+    sender_canonical_classes = "envelope_sender";
+    recipient_canonical_maps = "tcp:127.0.0.1:10002";
+    recipient_canonical_classes= "envelope_recipient";
+  }
   // optionalAttrs cfg.enableHeaderChecks { header_checks = "regexp:/etc/postfix/header_checks"; }
   // optionalAttrs (cfg.sslCert != "") {
     smtp_tls_CAfile = cfg.sslCACert;
@@ -452,6 +460,14 @@ in
         ";
       };
 
+      relayPort = mkOption {
+        type = types.int;
+        default = 25;
+        description = "
+          SMTP port for relay mail relay.
+        ";
+      };
+
       lookupMX = mkOption {
         type = types.bool;
         default = false;
@@ -626,6 +642,12 @@ in
         description = "Maps to be compiled and placed into /var/lib/postfix/conf.";
       };
 
+      useSrs = mkOption {
+        type = types.bool;
+        default = false;
+        description = "Whether to enable sender rewriting scheme";
+      };
+
     };
 
   };
@@ -645,6 +667,8 @@ in
         # This makes comfortable for root to run 'postqueue' for example.
         systemPackages = [ pkgs.postfix ];
       };
+
+      services.pfix-srsd.enable = config.services.postfix.useSrs;
 
       services.mail.sendmailSetuidWrapper = mkIf config.services.postfix.setSendmail {
         program = "sendmail";
@@ -835,12 +859,6 @@ in
     })
     (mkIf (cfg.dnsBlacklists != []) {
       services.postfix.mapFiles."client_access" = checkClientAccessFile;
-    })
-    (mkIf (cfg.extraConfig != "") {
-      warnings = [ "The services.postfix.extraConfig option was deprecated. Please use services.postfix.config instead." ];
-    })
-    (mkIf (cfg.extraMasterConf != "") {
-      warnings = [ "The services.postfix.extraMasterConf option was deprecated. Please use services.postfix.masterConfig instead." ];
     })
   ]);
 }

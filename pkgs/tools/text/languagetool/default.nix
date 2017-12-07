@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
     EXE
     chmod +x $out/bin/$lt
     done
+    cat > $out/bin/languagetool-http-server <<EXE
+    #!${stdenv.shell}
+    ${jdk}/bin/java -cp $out/share/languagetool-server.jar org.languagetool.server.HTTPServer "\$@"
+    EXE
+    chmod +x $out/bin/languagetool-http-server
   '';
 
   meta = with stdenv.lib; {

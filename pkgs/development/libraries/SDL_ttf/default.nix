@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL freetype ];
 
+  configureFlags = stdenv.lib.optional stdenv.isDarwin "--disable-sdltest";
+
   meta = with stdenv.lib; {
     description = "SDL TrueType library";
     license = licenses.zlib;

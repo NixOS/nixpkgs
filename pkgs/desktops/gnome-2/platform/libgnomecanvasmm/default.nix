@@ -8,5 +8,6 @@ stdenv.mkDerivation {
     sha256 = "996577f97f459a574919e15ba7fee6af8cda38a87a98289e9a4f54752d83e918";
   };
 
-  buildInputs = [ pkgconfig libgnomecanvas gtkmm ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ libgnomecanvas gtkmm ];
 }

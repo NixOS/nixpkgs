@@ -14,4 +14,5 @@ mkDerivation {
   propagatedBuildInputs = [
     dolphin kdelibs4support ki18n kio kxmlgui
   ];
+  outputs = [ "out" "dev" ];
 }

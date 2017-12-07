@@ -2,10 +2,10 @@
 # - The csdp program used for the Micromega tactic is statically referenced.
 #   However, coq can build without csdp by setting it to null.
 #   In this case some Micromega tactics will search the user's path for the csdp program and will fail if it is not found.
-# - The patch-level version can be specified through the `version` argument to
-#   the derivation; it defaults to the greatest.
+# - The exact version can be specified through the `version` argument to
+#   the derivation; it defaults to the latest stable version.
 
-{ stdenv, fetchurl, writeText, pkgconfig
+{ stdenv, fetchFromGitHub, writeText, pkgconfig
 , ocamlPackages, ncurses
 , buildIde ? true
 , csdp ? null
@@ -14,11 +14,13 @@
 
 let
   sha256 = {
-   "8.5pl1"	= "1w2xvm6w16khfn63bp95s25hnkn2ny3w0yqg3lq63gp11aqpbyjb";
-   "8.5pl2"	= "0wyywia0darak2zmc5v0ra9rn0b9whwdfiahralm8v5za499s8w3";
-   "8.5pl3"	= "0fyk2a4fpifibq8y8jhx1891k55qnsnlygglch64sva0bph94nrh";
-   "8.6"	= "1pw1xvy1657l1k69wrb911iqqflzhhp8wwsjvihbgc72r3skqg3f";
-   "8.6.1"      = "17cg2c40y9lskkiqfhngavp8yw3shpqgkpihh30xx0rlhn9amy1j";
+   "8.5pl1"    = "1976ki5xjg2r907xj9p7gs0kpdinywbwcqlgxqw75dgp0hkgi00n";
+   "8.5pl2"    = "109rrcrx7mz0fj7725kjjghfg5ydwb24hjsa5hspa27b4caah7rh";
+   "8.5pl3"    = "15c3rdk59nifzihsp97z4vjxis5xmsnrvpb86qiazj143z2fmdgw";
+   "8.6"       = "148mb48zpdax56c0blfi7v67lx014lnmrvxxasi28hsibyz2lvg4";
+   "8.6.1"     = "0llrxcxwy5j87vbbjnisw42rfw1n1pm5602ssx64xaxx3k176g6l";
+   "8.7+beta2" = "1r274m44z774xigvj43g211ms9z9bwgyp1g43rvq4fswb3gzxc4b";
+   "8.7.0"     = "1h18b7xpnx3ix9vsi5fx4zdcbxy7bhra7gd5c5yzxmk53cgf1p9m";
   }."${version}";
   coq-version = builtins.substring 0 3 version;
   camlp5 = ocamlPackages.camlp5_strict;
@@ -81,12 +83,15 @@ self = stdenv.mkDerivation {
     '';
   };
 
-  src = fetchurl {
-    url = "http://coq.inria.fr/distrib/V${version}/files/coq-${version}.tar.gz";
+  src = fetchFromGitHub {
+    owner = "coq";
+    repo = "coq";
+    rev = "V${version}";
     inherit sha256;
   };
 
-  buildInputs = [ pkgconfig ocamlPackages.ocaml ocamlPackages.findlib camlp5 ncurses ocamlPackages.lablgtk ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ocamlPackages.ocaml ocamlPackages.findlib camlp5 ncurses ocamlPackages.lablgtk ];
 
   postPatch = ''
     UNAME=$(type -tp uname)

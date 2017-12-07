@@ -6,24 +6,6 @@ let
     # For compiling information, see:
     # - https://github.com/lxde/lxqt/wiki/Building-from-source
 
-    standardPatch = ''
-      for file in $(find . -name CMakeLists.txt); do
-        substituteInPlace $file \
-          --replace "DESTINATION \''${LXQT_ETC_XDG_DIR}" "DESTINATION etc/xdg" \
-          --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg" \
-          --replace "DESTINATION \"\''${LXQT_SHARE_DIR}" "DESTINATION \"share/lxqt" \
-          --replace "DESTINATION \"\''${LXQT_GRAPHICS_DIR}" "DESTINATION \"share/lxqt/graphics" \
-          --replace "DESTINATION \"\''${QT_PLUGINS_DIR}" "DESTINATION \"$qtPluginPrefix" \
-          --replace "\''${LXQT_TRANSLATIONS_DIR}" share/lxqt/translations
-        echo ============================
-        echo $file
-        grep --color=always DESTINATION $file || true
-        grep --color=always share/lxqt/translations $file || true
-        grep --color=always platform $file || true
-      done
-      echo --------------------------------------------------------
-    '';
-
     ### BASE
     libqtxdg = callPackage ./base/libqtxdg { };
     lxqt-build-tools = callPackage ./base/lxqt-build-tools { };
@@ -34,7 +16,6 @@ let
     libfm-qt = callPackage ./core/libfm-qt { };
     lxqt-about = callPackage ./core/lxqt-about { };
     lxqt-admin = callPackage ./core/lxqt-admin { };
-    lxqt-common = callPackage ./core/lxqt-common { };
     lxqt-config = callPackage ./core/lxqt-config { };
     lxqt-globalkeys = callPackage ./core/lxqt-globalkeys { };
     lxqt-l10n = callPackage ./core/lxqt-l10n { };
@@ -45,8 +26,11 @@ let
     lxqt-qtplugin = callPackage ./core/lxqt-qtplugin { };
     lxqt-session = callPackage ./core/lxqt-session { };
     lxqt-sudo = callPackage ./core/lxqt-sudo { };
-    pavucontrol-qt = callPackage ./core/pavucontrol-qt { };
+    lxqt-themes = callPackage ./core/lxqt-themes { };
+    pavucontrol-qt = libsForQt5.callPackage ./core/pavucontrol-qt { };
     qtermwidget = callPackage ./core/qtermwidget { };
+    # for now keep version 0.7.1 because virt-manager-qt currently does not compile with qtermwidget-0.8.0
+    qtermwidget_0_7_1 = callPackage ./core/qtermwidget/0.7.1.nix { };
 
     ### CORE 2
     lxqt-panel = callPackage ./core/lxqt-panel { };
@@ -84,7 +68,6 @@ let
       libfm-qt
       lxqt-about
       lxqt-admin
-      lxqt-common
       lxqt-config
       lxqt-globalkeys
       lxqt-l10n
@@ -95,6 +78,7 @@ let
       lxqt-qtplugin
       lxqt-session
       lxqt-sudo
+      lxqt-themes
       pavucontrol-qt
 
       ### CORE 2

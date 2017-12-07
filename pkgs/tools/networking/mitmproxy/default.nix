@@ -1,41 +1,38 @@
-{ stdenv, fetchpatch, fetchFromGitHub, python3Packages }:
+{ stdenv, fetchpatch, fetchFromGitHub, fetchurl, python3, glibcLocales }:
 
-python3Packages.buildPythonPackage rec {
+python3.pkgs.buildPythonPackage rec {
   baseName = "mitmproxy";
-  name = "${baseName}-${version}";
-  version = "2.0.2";
+  name = "${baseName}-unstable-2017-10-31";
 
   src = fetchFromGitHub {
     owner = baseName;
     repo = baseName;
-    rev = "v${version}";
-    sha256 = "1x1a28al5clpfd69rjcpw26gjjnpsm1vfl4scrwpdd1jhkw044h9";
+    rev = "80a8eaa708ea31dd9c5e7e1ab6b02c69079039c0";
+    sha256 = "0rvwm11yryzlp3c1i42rk2iv1m38yn6r83k41jb51hwg6wzbwzvw";
   };
 
-  patches = [
-    # Bump pyopenssl dependency
-    # https://github.com/mitmproxy/mitmproxy/pull/2252
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/mitmproxy/mitmproxy/pull/2252.patch";
-      sha256 = "1smld21df79249qbh412w8gi2agcf4zjhxnlawy19yjl1fk2h67c";
-    })
-  ];
+  checkPhase = ''
+    export HOME=$(mktemp -d)
+    # test_echo resolves hostnames
+    LC_CTYPE=en_US.UTF-8 pytest -k 'not test_echo and not test_find_unclaimed_URLs '
+  '';
 
-  propagatedBuildInputs = with python3Packages; [
-    blinker click certifi construct cryptography
-    cssutils editorconfig h2 html2text hyperframe
-    jsbeautifier kaitaistruct passlib pyasn1 pyopenssl
+  propagatedBuildInputs = with python3.pkgs; [
+    blinker click certifi cryptography
+    h2 hyperframe
+    kaitaistruct passlib pyasn1 pyopenssl
     pyparsing pyperclip requests ruamel_yaml tornado
-    urwid watchdog brotlipy sortedcontainers
+    urwid brotlipy sortedcontainers ldap3
   ];
 
-  # Tests fail due to an error with a decorator
-  doCheck = false;
+  buildInputs = with python3.pkgs; [
+    beautifulsoup4 flask pytest pytestrunner glibcLocales
+  ];
 
   meta = with stdenv.lib; {
     description = "Man-in-the-middle proxy";
     homepage = http://mitmproxy.org/;
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz kamilchm ];
   };
 }

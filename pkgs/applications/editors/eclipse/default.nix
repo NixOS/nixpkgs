@@ -8,6 +8,9 @@
 
 assert stdenv ? glibc;
 
+# http://download.eclipse.org/eclipse/downloads/ is the main place to
+# find the downloads needed for new versions
+
 rec {
 
   buildEclipse = import ./build-eclipse.nix {
@@ -111,16 +114,16 @@ rec {
   };
 
   eclipse-platform-47 = buildEclipse {
-    name = "eclipse-platform-4.7";
+    name = "eclipse-platform-4.7.1a";
     description = "Eclipse Platform Oxygen";
     sources = {
       "x86_64-linux" = fetchurl {
-          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.7-201706120950/eclipse-platform-4.7-linux-gtk-x86_64.tar.gz;
-          sha256 = "0hrgijydxvd2zz1npv5qw8d79f48a6lsdw3qy1wqf7k59aqyg2fq";
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.7.1a-201710090410/eclipse-platform-4.7.1a-linux-gtk-x86_64.tar.gz;
+          sha256 = "13gyrnhyhdpsrbi5nl0fhpwrqz3gdyqq3r0m1f2z3y6yr75sgw33";
         };
       "i686-linux" = fetchurl {
-          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.7-201706120950/eclipse-platform-4.7-linux-gtk.tar.gz;
-          sha256 = "00m89j26m8nj190q144wx8d88mldx1z6i797p8isg3rhbz3x5dbc";
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.7.1a-201710090410/eclipse-platform-4.7.1a-linux-gtk.tar.gz;
+          sha256 = "013dfk23wa4jy177ywrkkr16wdjf6jxzjcz6mkl4ygki47yj9c5s";
         };
     };
   };
@@ -165,16 +168,16 @@ rec {
   };
 
   eclipse-sdk-47 = buildEclipse {
-    name = "eclipse-sdk-4.7";
+    name = "eclipse-sdk-4.7.1a";
     description = "Eclipse Oxygen Classic";
     sources = {
       "x86_64-linux" = fetchurl {
-          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.7-201706120950/eclipse-SDK-4.7-linux-gtk-x86_64.tar.gz;
-          sha256 = "1nz0hl0gg4a8iffnaggbhdw0ra8a7wljlimvijbbybh0nhvfd9n3";
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.7.1a-201710090410/eclipse-SDK-4.7.1a-linux-gtk-x86_64.tar.gz;
+          sha256 = "05xpdbig170rw7k5dx33dlyz187wv62mma8s5wxrqi7f4117sx4y";
         };
       "i686-linux" = fetchurl {
-          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.7-201706120950/eclipse-SDK-4.7-linux-gtk.tar.gz;
-          sha256 = "0dar69v7d7bkl18si45bccvil809a85ghb7k88m1q2cq1kd2r8z5";
+          url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.7.1a-201710090410/eclipse-SDK-4.7.1a-linux-gtk.tar.gz;
+          sha256 = "09c9m88k1cm9bhd900p5yf2q9pijrymgjcbhmagz0fcwhldrv0ys";
         };
     };
   };

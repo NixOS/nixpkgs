@@ -17,7 +17,7 @@ in stdenv.mkDerivation rec{
       "0mi3n9kplf82gd0g2m0np957agy53p4g1qh81pbban49r4n0ajcz" else
       "1dk400ap5qwdhjvn8lnk602f5akayr391fkljxdkrpn5xac01m97";
   };
-  
+
   meta = {
     description = "Office program originally named Kingsoft Office";
     homepage = http://wps-community.org/;
@@ -41,6 +41,10 @@ in stdenv.mkDerivation rec{
   ];
 
   dontPatchELF = true;
+
+  # wpsoffice uses `/build` in its own build system making nix things there
+  # references to nix own build directory
+  noAuditTmpdir = true;
 
   installPhase = ''
     prefix=$out/opt/kingsoft/wps-office

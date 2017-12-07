@@ -14,8 +14,9 @@ stdenv.mkDerivation rec {
     sed -e "s#@./scripts#sh scripts#" -i Makefile
   '';
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    alsaLib fftwSinglePrec freetype libjack2 pkgconfig premake3
+    alsaLib fftwSinglePrec freetype libjack2 premake3
     xorg.libX11 xorg.libXcomposite xorg.libXcursor xorg.libXext
     xorg.libXinerama xorg.libXrender ladspa-sdk
   ];

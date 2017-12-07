@@ -20,7 +20,8 @@ stdenv.mkDerivation  rec {
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin
     "-framework CoreAudio -framework CoreServices";
 
-  buildInputs = [ glib libsndfile pkgconfig ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ glib libsndfile ]
     ++ stdenv.lib.optionals (!stdenv.isDarwin) [ alsaLib libpulseaudio libjack2 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices CoreAudio AudioUnit ];
 

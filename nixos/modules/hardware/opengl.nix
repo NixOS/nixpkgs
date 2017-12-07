@@ -93,7 +93,7 @@ in
     hardware.opengl.extraPackages = mkOption {
       type = types.listOf types.package;
       default = [];
-      example = literalExample "with pkgs; [ vaapiIntel libvdpau-va-gl vaapiVdpau ]";
+      example = literalExample "with pkgs; [ vaapiIntel libvdpau-va-gl vaapiVdpau intel-ocl ]";
       description = ''
         Additional packages to add to OpenGL drivers. This can be used
         to add OpenCL drivers, VA-API/VDPAU drivers etc.

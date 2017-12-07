@@ -23,9 +23,9 @@ let
       patches = [ ./fix-module-path.patch ];
     };
     "git" = {
-        name = "git-20160617";
-        rev = "7d5b5eb76aa656baf5a8713f514937765f66b10a";
-        sha256 = "1jpj978r54086hypjxqxi0r3zacqpkr61dp6dbi0lykgx7m5bjfb";
+        name = "git-20170203";
+        rev = "d20f24e58ab62afceae2afb6262ffef3cc318b97";
+        sha256 = "1gi29ds1x6dq7lz8lamnhcvcrr3cvvrg5yappfkggyhyvib1ii70";
         patches = [];
     };
   }.${version};
@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     sbcl
     lispPackages.clx
     lispPackages.cl-ppcre
+    lispPackages.alexandria
     xdpyinfo
   ];
 

@@ -20,7 +20,8 @@ stdenv.mkDerivation rec {
     sha256 = "0pykmhi7pdmzq47glbj8i2im6iarp4wnj4l1pyvsrnba61f0939s";
   };
 
-  buildInputs = [ pkgconfig intltool file openssl curl libevent zlib ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ intltool file openssl curl libevent zlib ]
     ++ optionals enableGTK3 [ gtk3 makeWrapper ]
     ++ optionals enableSystemd [ systemd ]
     ++ optionals stdenv.isLinux [ inotify-tools ];

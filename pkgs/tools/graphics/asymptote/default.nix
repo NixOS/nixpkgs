@@ -50,6 +50,8 @@ stdenv.mkDerivation {
     sed -i -e 's|(asymptote/asymptote)|(asymptote)|' $out/share/info/asymptote.info
     rmdir $out/share/info/asymptote
     rm $out/share/info/dir
+
+    rm -rf "$out"/share/texmf
   '';
 
   enableParallelBuilding = true;

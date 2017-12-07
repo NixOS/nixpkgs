@@ -1,23 +1,19 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, ncurses }:
+{ stdenv, fetchFromGitHub, autoreconfHook, ncurses, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "pick-${version}";
-  version = "1.7.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "calleerlandsson";
     repo = "pick";
     rev = "v${version}";
-    sha256 = "1x7ql530rj4yj50dzp8526mz92g4hhqxnig1qgiq3h3k815p31qb";
+    sha256 = "0s0mn9iz17ldhvahggh9rsmgfrjh0kvk5bh4p9xhxcn7rcp0h5ka";
   };
 
   buildInputs = [ ncurses ];
 
-  nativeBuildInputs = [ autoreconfHook ];
-
-  postPatch = ''
-    sed -i -e 's/\[curses]/\[ncurses]/g' configure.ac
-  '';
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

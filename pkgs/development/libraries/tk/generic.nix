@@ -23,7 +23,8 @@ stdenv.mkDerivation {
     "--with-tcl=${tcl}/lib"
   ];
 
-  buildInputs = [ pkgconfig ]
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ]
     ++ stdenv.lib.optional stdenv.isDarwin fontconfig;
 
   propagatedBuildInputs = [ tcl libXft ];

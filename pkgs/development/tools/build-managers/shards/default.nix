@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     homepage = https://crystal-lang.org/;
     license = licenses.asl20;
     description = "Dependency manager for the Crystal language";
-    maintainers = with maintainers; [ mingchuan ];
+    maintainers = with maintainers; [ sifmelcara ];
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
   };
 }

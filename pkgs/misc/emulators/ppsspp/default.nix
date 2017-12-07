@@ -1,37 +1,43 @@
-{ stdenv, fetchgit, zlib, libpng, qt4, qmake4Hook, pkgconfig
-, withGamepads ? true, SDL # SDL is used for gamepad functionality
-}:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, qtbase, qtmultimedia
+, glew, libzip, snappy, zlib, withGamepads ? true, SDL2 }:
 
-assert withGamepads -> (SDL != null);
-
-let
-  version = "1.3";
-  fstat = x: fn: "-D" + fn + "=" + (if x then "ON" else "OFF");
-in
+assert withGamepads -> (SDL2 != null);
 with stdenv.lib;
-stdenv.mkDerivation rec{
-  name = "PPSSPP-${version}";
 
-  src = fetchgit {
-    url = "https://github.com/hrydgard/ppsspp.git";
-    rev = "refs/tags/v${version}";
+stdenv.mkDerivation rec {
+  name = "ppsspp-${version}";
+  version = "1.4.2";
+
+  src = fetchFromGitHub {
+    owner = "hrydgard";
+    repo = "ppsspp";
+    rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "0l8vgdlw657r8gv7rz8iqa6zd9zrbzw10pwhcnahzil7w9qrd03g";
+    sha256 = "0m4qkhx7q496sm7ibg2n7rm3npxzfr93iraxgndk0vhfk8vy8w75";
   };
 
-  buildInputs = [ zlib libpng qt4 ]
-                ++ (if withGamepads then [ SDL ] else [ ]);
+  patchPhase = ''
+    echo 'const char *PPSSPP_GIT_VERSION = "${src.rev}";' >> git-version.cpp
+    substituteInPlace UI/NativeApp.cpp --replace /usr/share $out/share
+  '';
 
-  nativeBuildInputs = [ pkgconfig qmake4Hook ];
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [ qtbase qtmultimedia glew libzip snappy zlib ]
+    ++ optionals withGamepads [ SDL2 SDL2.dev ];
 
-  qmakeFlags = [ "PPSSPPQt.pro" ];
+  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" "-DUSING_QT_UI=ON" ];
 
-  preConfigure = "cd Qt";
-  installPhase = "mkdir -p $out/bin && cp ppsspp $out/bin";
+  installPhase = ''
+    mkdir -p $out/bin $out/share/ppsspp
+    mv PPSSPPQt $out/bin/ppsspp
+    mv assets $out/share/ppsspp
+  '';
+
+  enableParallelBuilding = true;
 
   meta = {
-    homepage = http://www.ppsspp.org/;
-    description = "A PSP emulator, the Qt4 version";
+    homepage = https://www.ppsspp.org/;
+    description = "A PSP emulator for Android, Windows, Mac and Linux, written in C++";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ fuuzetsu AndersonTorres ];
     platforms = platforms.linux ++ platforms.darwin ++ platforms.cygwin;

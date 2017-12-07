@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [ perl bison flex pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ perl bison flex ];
   propagatedBuildInputs = [ glib libxml2 ] ++ libintlOrEmpty;
 
   patchPhase = ''
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    homepage = http://gstreamer.freedesktop.org;
+    homepage = https://gstreamer.freedesktop.org;
 
     description = "Library for constructing graphs of media-handling components";
 

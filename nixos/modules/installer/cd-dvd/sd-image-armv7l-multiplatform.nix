@@ -10,6 +10,7 @@ let
 in
 {
   imports = [
+    ../../profiles/base.nix
     ../../profiles/installation-device.nix
     ./sd-image.nix
   ];
@@ -27,6 +28,12 @@ in
   boot.loader.generic-extlinux-compatible.enable = true;
 
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  # The serial ports listed here are:
+  # - ttyS0: for Tegra (Jetson TK1)
+  # - ttymxc0: for i.MX6 (Wandboard)
+  # - ttyAMA0: for Allwinner (pcDuino3 Nano) and QEMU's -machine virt
+  # - ttyO0: for OMAP (BeagleBone Black)
+  # - ttySAC2: for Exynos (ODROID-XU3)
   boot.kernelParams = ["console=ttyS0,115200n8" "console=ttymxc0,115200n8" "console=ttyAMA0,115200n8" "console=ttyO0,115200n8" "console=ttySAC2,115200n8" "console=tty0"];
 
   # FIXME: this probably should be in installation-device.nix

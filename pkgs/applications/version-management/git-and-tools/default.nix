@@ -58,6 +58,8 @@ rec {
   # support for bugzilla
   git-bz = callPackage ./git-bz { };
 
+  git-codeowners = callPackage ./git-codeowners { };
+
   git-cola = callPackage ./git-cola { };
 
   git-crypt = callPackage ./git-crypt { };
@@ -81,6 +83,8 @@ rec {
   };
 
   git-remote-hg = callPackage ./git-remote-hg { };
+
+  git-secret = callPackage ./git-secret { };
 
   git-stree = callPackage ./git-stree { };
 

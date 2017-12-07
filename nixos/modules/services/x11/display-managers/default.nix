@@ -92,9 +92,12 @@ let
         ${config.hardware.pulseaudio.package.out}/bin/pactl load-module module-x11-publish "display=$DISPLAY"
       ''}
 
-      # Tell systemd about our $DISPLAY. This is needed by the
-      # ssh-agent unit.
-      ${config.systemd.package}/bin/systemctl --user import-environment DISPLAY
+      # Tell systemd about our $DISPLAY and $XAUTHORITY.
+      # This is needed by the ssh-agent unit.
+      #
+      # Also tell systemd about the dbus session bus address.
+      # This is required by user units using the session bus.
+      ${config.systemd.package}/bin/systemctl --user import-environment DISPLAY XAUTHORITY DBUS_SESSION_BUS_ADDRESS
 
       # Load X defaults.
       ${xorg.xrdb}/bin/xrdb -merge ${xresourcesXft}

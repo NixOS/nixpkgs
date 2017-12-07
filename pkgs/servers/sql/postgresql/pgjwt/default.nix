@@ -1,12 +1,12 @@
 { stdenv, fetchFromGitHub }:
 stdenv.mkDerivation rec {
   name = "pgjwt-${version}";
-  version = "0.0.1";
+  version = "unstable-2017-04-24";
   src = fetchFromGitHub {
     owner = "michelp";
     repo = "pgjwt";
-    rev = "12a41eef15e6d3a22399e03178560d5174d496a3";
-    sha256 = "1dgx7kqkf9d7j5qj3xykx238xm8jg0s6c8h7zyl4lx8dmbz9sgsv";
+    rev = "546a2911027b716586e241be7fd4c6f1785237cd";
+    sha256 = "1riz0xvwb6y02j0fljbr9hcbqb2jqs4njlivmavy9ysbcrrv1vrf";
   };
   dontBuild = true;
   installPhase = ''

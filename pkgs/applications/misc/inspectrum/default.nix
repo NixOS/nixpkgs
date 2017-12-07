@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
     sha256 = "1fvnr8gca25i6s9mg9b2hyqs0zzr4jicw13mimc9dhrgxklrr1yv";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    pkgconfig
     cmake
     qt5.qtbase
     fftwFloat

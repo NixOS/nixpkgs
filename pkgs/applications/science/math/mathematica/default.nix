@@ -3,6 +3,7 @@
 , patchelf
 , requireFile
 , alsaLib
+, dbus
 , fontconfig
 , freetype
 , gcc
@@ -12,6 +13,7 @@
 , opencv
 , openssl
 , unixODBC
+, xkeyboard_config
 , xorg
 , zlib
 , libxml2
@@ -26,7 +28,7 @@ let
       throw "Mathematica requires i686-linux or x86_64 linux";
 in
 stdenv.mkDerivation rec {
-  version = "11.0.1";
+  version = "11.2.0";
 
   name = "mathematica-${version}";
 
@@ -37,7 +39,7 @@ stdenv.mkDerivation rec {
       already part of the store. Find the file on your Mathematica CD
       and add it to the nix store with nix-store --add-fixed sha256 <FILE>.
     '';
-    sha256 = "1qqwz8gbw74rnnyirpbdanwx3d25s4x0i4zc7bs6kp959x66cdkw";
+    sha256 = "4a1293cc1c404303aa1cab1bd273c7be151d37ac5ed928fbbb18e9c5ab2d8df9";
   };
 
   buildInputs = [
@@ -45,6 +47,7 @@ stdenv.mkDerivation rec {
     patchelf
     alsaLib
     coreutils
+    dbus
     fontconfig
     freetype
     gcc.cc
@@ -54,6 +57,7 @@ stdenv.mkDerivation rec {
     opencv
     openssl
     unixODBC
+    xkeyboard_config
     libxml2
     libuuid
     zlib
@@ -99,6 +103,12 @@ stdenv.mkDerivation rec {
     cd $out/libexec/Mathematica/Executables
     for path in mathematica MathKernel Mathematica WolframKernel wolfram math; do
       sed -i -e 's#export LD_LIBRARY_PATH$#export LD_LIBRARY_PATH=${zlib}/lib:\''${LD_LIBRARY_PATH}#' $path
+    done
+
+    # Fix xkeyboard config path for Qt
+    for path in mathematica Mathematica; do
+      line=$(grep -n QT_PLUGIN_PATH $path | sed 's/:.*//')
+      sed -i -e "$line iexport QT_XKB_CONFIG_ROOT=\"${xkeyboard_config}/share/X11/xkb\"" $path
     done
   '';
 

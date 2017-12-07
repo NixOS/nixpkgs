@@ -28,11 +28,14 @@ stdenv.mkDerivation rec {
       --replace 'tmpnam(b)' '"'$TMPDIR'/foo"'
   '';
 
-  buildInputs = [ autoreconfHook zlib ];
+  nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ zlib ];
 
   enableParallelBuilding = true;
 
   doCheck = true;
+
+  dontDisableStatic = true;
 
   NIX_CFLAGS_COMPILE = with stdenv.lib;
     # gcc before 6 doesn't know this option

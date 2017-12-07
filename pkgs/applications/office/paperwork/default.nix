@@ -1,19 +1,19 @@
 { lib, python3Packages, fetchFromGitHub, gtk3, cairo
 , aspellDicts, buildEnv
-, gnome3, hicolor_icon_theme
+, gnome3, hicolor_icon_theme, librsvg
 , xvfb_run, dbus, libnotify
 }:
 
 python3Packages.buildPythonApplication rec {
   name = "paperwork-${version}";
   # Don't forget to also update paperwork-backend when updating this!
-  version = "1.2";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     repo = "paperwork";
-    owner = "jflesch";
+    owner = "openpaperwork";
     rev = version;
-    sha256 = "1cb9wnhhpm3dyxjrkyl9bbva56xx85vlwlb7z07m1icflcln14x5";
+    sha256 = "0lqnq74hdjj778j2k0syibwy4i37l8w932gmibs8617s4yi34rxz";
   };
 
   # Patch out a few paths that assume that we're using the FHS:
@@ -47,7 +47,9 @@ python3Packages.buildPythonApplication rec {
   }}/lib/aspell";
 
   checkInputs = [ xvfb_run dbus.daemon ];
-  buildInputs = [ gnome3.defaultIconTheme hicolor_icon_theme libnotify ];
+  buildInputs = [
+    gnome3.defaultIconTheme hicolor_icon_theme libnotify librsvg
+  ];
 
   # A few parts of chkdeps need to have a display and a dbus session, so we not
   # only need to run a virtual X server + dbus but also have a large enough
@@ -64,13 +66,14 @@ python3Packages.buildPythonApplication rec {
 
   makeWrapperArgs = [
     "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\""
+    "--set GDK_PIXBUF_MODULE_FILE \"$GDK_PIXBUF_MODULE_FILE\""
     "--prefix XDG_DATA_DIRS : \"$out/share\""
     "--suffix XDG_DATA_DIRS : \"$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH\""
   ];
 
   meta = {
     description = "A personal document manager for scanned documents";
-    homepage = https://github.com/jflesch/paperwork;
+    homepage = https://openpaper.work/;
     license = lib.licenses.gpl3Plus;
     maintainers = [ lib.maintainers.aszlig ];
     platforms = lib.platforms.linux;
