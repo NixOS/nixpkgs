@@ -264,7 +264,7 @@ rec {
 
     meta = with stdenv.lib; {
       homepage = https://forum.kodi.tv/showthread.php?tid=187421;
-      descritpion = "A comic book reader";
+      description = "A comic book reader";
       maintainers = with maintainers; [ edwtjo ];
     };
   };

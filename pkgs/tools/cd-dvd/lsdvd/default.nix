@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = https://sourceforge.net/projects/lsdvd/;
-    shortDescription = "Display information about audio, video, and subtitle tracks on a DVD";
+    description = "Display information about audio, video, and subtitle tracks on a DVD";
     platforms = stdenv.lib.platforms.linux;
   };
 }

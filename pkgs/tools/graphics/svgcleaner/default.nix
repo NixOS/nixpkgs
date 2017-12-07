@@ -20,6 +20,6 @@ buildRustPackage rec {
     homepage = "https://github.com/RazrFalcon/svgcleaner";
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainer = [ maintainers.mehandes ];
+    maintainers = [ maintainers.mehandes ];
   };
 }
