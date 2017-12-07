@@ -300,6 +300,8 @@ in {
 
   pyjwkest = callPackage ../development/python-modules/pyjwkest { };
 
+  pymc3 = callPackage ../development/python-modules/pymc3 { };
+
   pyqt4 = callPackage ../development/python-modules/pyqt/4.x.nix {
     pythonPackages = self;
   };
