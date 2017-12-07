@@ -7558,7 +7558,7 @@ with pkgs;
   premake4 = callPackage ../development/tools/misc/premake { };
 
   premake5 = callPackage ../development/tools/misc/premake/5.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
+    inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
   premake = premake4;
