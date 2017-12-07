@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = https://wiki.qt.io/Category:Tools::QtCreator;
     license = "LGPL";
     maintainers = [ maintainers.akaWolf ];
-    platforms = platforms.all;
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }
