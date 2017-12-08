@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
   pname = "setuptools";
   version = "36.7.1";
   name = "${python.libPrefix}-${pname}-${version}";
+  pythonModule = python;
 
   src = fetchPypi {
     inherit pname version;
