@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, fetchFromGitHub, perl, curl, bzip2, sqlite, openssl ? null, xz
-, pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli, readline
+, pkgconfig, boehmgc, perlPackages, libsodium, aws-sdk-cpp, brotli
 , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook5_xsl
-, libseccomp, busybox, nlohmann_json
+, libseccomp, busybox
 , hostPlatform
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
@@ -39,7 +39,7 @@ let
 
     buildInputs = [ curl openssl sqlite xz ]
       ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
-      ++ lib.optionals fromGit [ brotli readline nlohmann_json ] # Since 1.12
+      ++ lib.optionals fromGit [ brotli ] # Since 1.12
       ++ lib.optional stdenv.isLinux libseccomp
       ++ lib.optional ((stdenv.isLinux || stdenv.isDarwin) && is112)
           (aws-sdk-cpp.override {
