@@ -278,10 +278,12 @@ stdenv.mkDerivation rec {
   inherit phobosUnittests;
   name = "dmd-${version}";
   phases = "installPhase";
+  buildInputs = dmdBuild.buildInputs;
 
   installPhase = ''
     mkdir $out
     cp -r --symbolic-link ${dmdBuild}/* $out/
   '';
+  meta = dmdBuild.meta;
 }
 

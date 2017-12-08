@@ -87,10 +87,13 @@ stdenv.mkDerivation rec {
   inherit dubUnittests;
   name = "dub-${dubBuild.version}";
   phases = "installPhase";
+  buildInputs = dubBuild.buildInputs;
 
   installPhase = ''
     mkdir $out
     cp -r --symbolic-link ${dubBuild}/* $out/
   '';
+
+  meta = dubBuild.meta;
 }
 
