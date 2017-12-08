@@ -56,6 +56,8 @@ mkDerivation rec {
       repository.
     '';
 
+    knownVulnerabilities = [ "CVE-2017-1000385" ];
+
     platforms = ["x86_64-linux" "x86_64-darwin"];
     license = pkgs.stdenv.lib.licenses.asl20;
     maintainers = with pkgs.stdenv.lib.maintainers; [ mdaiter ];
