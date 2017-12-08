@@ -8342,6 +8342,8 @@ in {
   # See the Nixpkgs manual for examples on how to override the package set.
   django_hijack = callPackage ../development/python-modules/django-hijack { };
 
+  django_hijack_admin = callPackage ../development/python-modules/django-hijack-admin { };
+
   django_nose = buildPythonPackage rec {
     name = "django-nose-${version}";
     version = "1.4.4";
