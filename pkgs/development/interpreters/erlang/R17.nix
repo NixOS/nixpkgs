@@ -32,4 +32,6 @@ mkDerivation rec {
       ln -s "$i" "$out/share/man/''${prefix##*/}/''${i##*/}erl"
     done
   '';
+
+  meta.knownVulnerabilities = [ "CVE-2017-1000385" ];
 }

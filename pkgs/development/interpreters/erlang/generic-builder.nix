@@ -26,7 +26,7 @@
 , installTargets ? "install install-docs"
 , checkPhase ? "", preCheck ? "", postCheck ? ""
 , fixupPhase ? "", preFixup ? "", postFixup ? ""
-, meta ? null
+, meta ? {}
 }:
 
 assert wxSupport -> (if stdenv.isDarwin
@@ -101,7 +101,7 @@ in stdenv.mkDerivation ({
 
   setupHook = ./setup-hook.sh;
 
-  meta = with stdenv.lib; {
+  meta = with stdenv.lib; ({
     homepage = http://www.erlang.org/;
     downloadPage = "http://www.erlang.org/download.html";
     description = "Programming language used for massively scalable soft real-time systems";
@@ -118,7 +118,7 @@ in stdenv.mkDerivation ({
     platforms = platforms.unix;
     maintainers = with maintainers; [ the-kenny sjmackenzie couchemar gleber ];
     license = licenses.asl20;
-  };
+  } // meta);
 }
 // optionalAttrs (preUnpack != "")      { inherit preUnpack; }
 // optionalAttrs (postUnpack != "")     { inherit postUnpack; }
@@ -140,5 +140,4 @@ in stdenv.mkDerivation ({
 // optionalAttrs (fixupPhase != "")     { inherit fixupPhase; }
 // optionalAttrs (preFixup != "")       { inherit preFixup; }
 // optionalAttrs (postFixup != "")      { inherit postFixup; }
-// optionalAttrs (meta != null)         { inherit meta; }
 )
