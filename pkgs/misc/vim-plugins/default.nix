@@ -277,7 +277,7 @@ rec {
     buildInputs = [ unzip ];
     dependencies = [];
     meta = {
-       url = "http://www.vim.org/scripts/script.php?script_id=1234";
+       homepage = "http://www.vim.org/scripts/script.php?script_id=1234";
     };
 
     sourceRoot = ".";
@@ -2011,7 +2011,7 @@ rec {
     buildInputs = [ unzip ];
     dependencies = [];
     meta = {
-       url = "http://www.vim.org/scripts/script.php?script_id=39";
+       homepage = "http://www.vim.org/scripts/script.php?script_id=39";
     };
 
     unpackPhase = ''
@@ -2132,7 +2132,7 @@ rec {
     buildInputs = [ unzip ];
     dependencies = [];
     meta = {
-       url = "http://www.vim.org/scripts/script.php?script_id=273";
+       homepage = "http://www.vim.org/scripts/script.php?script_id=273";
     };
 
     setSourceRoot = ''

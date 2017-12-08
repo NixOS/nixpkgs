@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.lihaoyi.com/Ammonite/;
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    maintainer = [ lib.maintainers.nequissimus ];
+    maintainers = [ lib.maintainers.nequissimus ];
   };
 }

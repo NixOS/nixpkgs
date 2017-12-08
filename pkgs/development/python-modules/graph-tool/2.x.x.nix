@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     homepage    = http://graph-tool.skewed.de/;
     license     = licenses.gpl3;
     platforms   = platforms.all;
-    maintainer  = [ stdenv.lib.maintainers.joelmo ];
+    maintainers = [ stdenv.lib.maintainers.joelmo ];
     broken = true;
   };
 

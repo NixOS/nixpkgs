@@ -22,6 +22,6 @@ buildPythonPackage rec {
   meta = {
     homepage = https://github.com/erocarrera/pydot;
     description = "Allows to easily create both directed and non directed graphs from Python";
-    licenses = with lib.licenses; [ mit ];
+    license = lib.licenses.mit;
   };
 }

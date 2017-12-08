@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
    '';
 
   meta = {
-    documentation = ''City building game'';
+    description = ''City building game'';
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [stdenv.lib.maintainers.raskin];
