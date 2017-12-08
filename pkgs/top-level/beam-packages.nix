@@ -13,8 +13,6 @@ rec {
     erlang_odbc_javac = erlangR19_odbc_javac;
 
     # These are standard Erlang versions, using the generic builder.
-    erlangR16 = lib.callErlang ../development/interpreters/erlang/R16.nix {};
-    erlangR16_odbc = erlangR16.override { odbcSupport = true; };
     erlangR17 = lib.callErlang ../development/interpreters/erlang/R17.nix {};
     erlangR17_odbc = erlangR17.override { odbcSupport = true; };
     erlangR17_javac = erlangR17.override { javacSupport = true; };
@@ -70,7 +68,6 @@ rec {
 
     # Packages built with default Erlang version.
     erlang = packagesWith interpreters.erlang;
-    erlangR16 = packagesWith interpreters.erlangR16;
     erlangR17 = packagesWith interpreters.erlangR17;
     erlangR18 = packagesWith interpreters.erlangR18;
     erlangR19 = packagesWith interpreters.erlangR19;
