@@ -7268,13 +7268,13 @@ in {
   };
 
   py3status = buildPythonPackage rec {
-    version = "3.6";
+    version = "3.7";
     name = "py3status-${version}";
     src = pkgs.fetchFromGitHub {
       owner = "ultrabug";
       repo = "py3status";
       rev = version;
-      sha256 = "01qvrwgkphb0lr7g9dm0hncbxcds05kg4qgbsrvnc7d5j2vhfdkr";
+      sha256 = "1khrvxjjcm1bsswgrdgvyrdrimxx92yhql4gmji6a0kpp59dp541";
     };
     doCheck = false;
     propagatedBuildInputs = with self; [ requests ];
