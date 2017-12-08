@@ -25,7 +25,7 @@ in
         well. Gpredict uses the SGP4/SDP4 algorithms, which are compatible with the
         NORAD Keplerian elements.
       '';
-      license = lincenses.gpl2;
+      license = licenses.gpl2;
       platforms = platforms.linux;
       homepage = "https://sourceforge.net/projects/gpredict/";
       maintainers = maintainers.markuskowa;
