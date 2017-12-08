@@ -44,8 +44,8 @@ rec {
       javacSupport = true; odbcSupport = true;
     };
 
-    # Bash fork, using custom builder.
-    erlang_basho_R16B02 = lib.callErlang ../development/interpreters/erlang/R16B02-8-basho.nix {
+    # Basho fork, using custom builder.
+    erlang_basho_R16B02 = lib.callErlang ../development/interpreters/erlang/R16B02-basho.nix {
     };
     erlang_basho_R16B02_odbc = erlang_basho_R16B02.override {
       odbcSupport = true;
