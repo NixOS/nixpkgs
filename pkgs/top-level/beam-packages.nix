@@ -14,13 +14,6 @@ rec {
     erlang_nox = erlangR19_nox;
 
     # These are standard Erlang versions, using the generic builder.
-    erlangR17 = lib.callErlang ../development/interpreters/erlang/R17.nix {};
-    erlangR17_odbc = erlangR17.override { odbcSupport = true; };
-    erlangR17_javac = erlangR17.override { javacSupport = true; };
-    erlangR17_odbc_javac = erlangR17.override {
-      javacSupport = true; odbcSupport = true;
-    };
-    erlangR17_nox = erlangR17.override { wxSupport = false; };
     erlangR18 = lib.callErlang ../development/interpreters/erlang/R18.nix {
       wxGTK = wxGTK30;
     };
@@ -73,7 +66,6 @@ rec {
 
     # Packages built with default Erlang version.
     erlang = packagesWith interpreters.erlang;
-    erlangR17 = packagesWith interpreters.erlangR17;
     erlangR18 = packagesWith interpreters.erlangR18;
     erlangR19 = packagesWith interpreters.erlangR19;
     erlangR20 = packagesWith interpreters.erlangR20;
