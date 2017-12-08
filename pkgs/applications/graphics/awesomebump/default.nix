@@ -47,9 +47,9 @@ in stdenv.mkDerivation rec {
         --run "cd $d"
   '';
 
-  passthru = {
-    inherit qtnproperty;
-  };
+  # $ cd Sources; qmake; make ../workdir/linux-g++-dgb-gl4/obj/glwidget.o
+  # fatal error: properties/ImageProperties.peg.h: No such file or directory
+  enableParallelBuilding = false;
 
   meta = {
     homepage = https://github.com/kmkolasinski/AwesomeBump;
