@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gstreamer-editing-services-1.12.2";
+  name = "gstreamer-editing-services-1.12.3";
 
   meta = with stdenv.lib; {
     description = "Library for creation of audio/video non-linear editors";
