@@ -175,10 +175,10 @@
       }) {};
     auctex = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "auctex";
-        version = "11.91.0";
+        version = "11.92.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/auctex-11.91.0.tar";
-          sha256 = "1yh182mxgngjmwpkyv2n9km3vyq95bqfq8mnly3dbv78nwk7f2l3";
+          url = "https://elpa.gnu.org/packages/auctex-11.92.0.tar";
+          sha256 = "147xfb64jxpl4262xrn4cxm6h86ybgr3aa1qq6vs6isnqczh7491";
         };
         packageRequires = [];
         meta = {
@@ -483,10 +483,10 @@
       }) {};
     csv-mode = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "csv-mode";
-        version = "1.6";
+        version = "1.7";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/csv-mode-1.6.el";
-          sha256 = "1v86qna1ypnr55spf6kjiqybplfbb8ak5gnnifh9vghsgb5jkb6a";
+          url = "https://elpa.gnu.org/packages/csv-mode-1.7.el";
+          sha256 = "0r4bip0w3h55i8h6sxh06czf294mrhavybz0zypzrjw91m1bi7z6";
         };
         packageRequires = [];
         meta = {
@@ -755,10 +755,10 @@
     el-search = callPackage ({ elpaBuild, emacs, fetchurl, lib, stream }:
     elpaBuild {
         pname = "el-search";
-        version = "1.4.0.4";
+        version = "1.4.0.8";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/el-search-1.4.0.4.tar";
-          sha256 = "1l3wb0g6ipyi8yimxah0z6r83376l22pb2s9ba6kxfmhsq5wyc8a";
+          url = "https://elpa.gnu.org/packages/el-search-1.4.0.8.tar";
+          sha256 = "1gk42n04f1h2vc8sp86gvi795qgnvnh4cyyqfvy6sz1pfix76kfl";
         };
         packageRequires = [ emacs stream ];
         meta = {
@@ -959,10 +959,10 @@
     gnorb = callPackage ({ cl-lib ? null, elpaBuild, fetchurl, lib }:
     elpaBuild {
         pname = "gnorb";
-        version = "1.3.2";
+        version = "1.3.4";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/gnorb-1.3.2.tar";
-          sha256 = "054z6bnfkf7qkgc9xynhzy9xrz780x4csj1r206jhslygjrlf1sj";
+          url = "https://elpa.gnu.org/packages/gnorb-1.3.4.tar";
+          sha256 = "0yw46bzv80awd2zirwqc28bl70q1x431lqan71lm6qwli0bha2w0";
         };
         packageRequires = [ cl-lib ];
         meta = {
@@ -1106,10 +1106,10 @@
       }) {};
     ivy = callPackage ({ elpaBuild, emacs, fetchurl, lib }: elpaBuild {
         pname = "ivy";
-        version = "0.9.1";
+        version = "0.10.0";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/ivy-0.9.1.tar";
-          sha256 = "1jfc3zf6ln7i8pp5j0fpsai2w847v5g77b5fzlxbgvj80g3v5887";
+          url = "https://elpa.gnu.org/packages/ivy-0.10.0.tar";
+          sha256 = "01m58inpd8jbfvzqsrwigzjfld9a66nf36cbya26dmdy7vwdm8xm";
         };
         packageRequires = [ emacs ];
         meta = {
@@ -1584,10 +1584,10 @@
       }) {};
     org = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
         pname = "org";
-        version = "20171127";
+        version = "20171205";
         src = fetchurl {
-          url = "https://elpa.gnu.org/packages/org-20171127.tar";
-          sha256 = "18a77yzfkx7x1pckc9c274b2fpswrcqz19nansvbqdr1harzvd20";
+          url = "https://elpa.gnu.org/packages/org-20171205.tar";
+          sha256 = "0a1rm94ci47jf5579sxscily680ysmy3hnxjcs073n45nk76za04";
         };
         packageRequires = [];
         meta = {
@@ -1983,6 +1983,19 @@
         packageRequires = [];
         meta = {
           homepage = "https://elpa.gnu.org/packages/spinner.html";
+          license = lib.licenses.free;
+        };
+      }) {};
+    sql-indent = callPackage ({ elpaBuild, fetchurl, lib }: elpaBuild {
+        pname = "sql-indent";
+        version = "1.0";
+        src = fetchurl {
+          url = "https://elpa.gnu.org/packages/sql-indent-1.0.tar";
+          sha256 = "02cmi96mqk3bfmdh0xv5s0qx310cirs6kq0jqwk1ga41rpp596vl";
+        };
+        packageRequires = [];
+        meta = {
+          homepage = "https://elpa.gnu.org/packages/sql-indent.html";
           license = lib.licenses.free;
         };
       }) {};
