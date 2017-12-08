@@ -6260,6 +6260,8 @@ with pkgs;
 
   ber_metaocaml_003 = callPackage ../development/compilers/ocaml/ber-metaocaml-003.nix { };
 
+  ber_metaocaml = callPackage ../development/compilers/ocaml/ber-metaocaml-104.nix { };
+
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
   ocaml-top = callPackage ../development/tools/ocaml/ocaml-top { };
