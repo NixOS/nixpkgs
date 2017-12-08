@@ -134,7 +134,7 @@ with
 ```nix
 with import <nixpkgs> {};
 
-python35.withPackages (ps: [ps.numpy ps.toolz])
+python35.withPackages (ps: [ps.numpy ps.toolz]).nix
 ```
 Executing `nix-shell` gives you again a Nix shell from which you can run Python.
 
