@@ -19435,6 +19435,8 @@ with pkgs;
 
   kompose = callPackage ../applications/networking/cluster/kompose { };
 
+  kontemplate = callPackage ../applications/networking/cluster/kontemplate { };
+
   kops = callPackage ../applications/networking/cluster/kops { };
 
   lilypond = callPackage ../misc/lilypond { guile = guile_1_8; };
