@@ -10106,7 +10106,7 @@ with pkgs;
       url = "https://github.com/jbeder/yaml-cpp/archive/release-0.3.0.tar.gz";
       sha256 = "12aszqw6svwlnb6nzhsbqhz3c7vnd5ahd0k6xlj05w8lm83hx3db";
       };
-    });
+  });
 
   # interception-tools needs this. This should be removed when there is a new
   # release of libyamlcpp, i.e. when the version of libyamlcpp is newer than

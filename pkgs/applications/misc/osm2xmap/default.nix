@@ -31,8 +31,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.mpickering ];
     platforms = with stdenv.lib.platforms; linux;
   };
-
-
 }
-
-
