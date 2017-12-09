@@ -139,6 +139,6 @@ in stdenv.mkDerivation rec {
     homepage = https://www.google.com/chrome/browser/;
     license = licenses.unfree;
     maintainers = [ maintainers.msteen ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
   };
 }

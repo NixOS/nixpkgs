@@ -45,6 +45,6 @@ buildPythonPackage rec {
     description = "A simple packaging tool for simple packages";
     homepage = https://github.com/takluyver/flit;
     license = lib.licenses.bsd3;
-    maintainer = lib.maintainers.fridh;
+    maintainers = [ lib.maintainers.fridh ];
   };
 }

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "adapta-backgrounds-${version}";
-  version = "0.4.0.6";
+  version = "0.5.1.1";
 
   src = fetchFromGitHub {
     owner = "adapta-project";
     repo = "adapta-backgrounds";
     rev = version;
-    sha256 = "1yqxrwhjl6g92wm52kalbns41i2l5g45qbd4185b22crhbrn5x79";
+    sha256 = "00gwiraq6c9jh1xl5mmmi5fdj9l3r75ii5wk8jnw856qvrajhxyq";
   };
 
   nativeBuildInputs = [ autoreconfHook  ];

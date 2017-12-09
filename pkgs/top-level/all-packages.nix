@@ -430,6 +430,8 @@ with pkgs;
 
   airsonic = callPackage ../servers/misc/airsonic { };
 
+  airspy = callPackage ../applications/misc/airspy { };
+
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
 
   albert = libsForQt5.callPackage ../applications/misc/albert {};
@@ -1188,6 +1190,8 @@ with pkgs;
   mpdris2 = callPackage ../tools/audio/mpdris2 { };
 
   nfdump = callPackage ../tools/networking/nfdump { };
+
+  onboard = callPackage ../applications/misc/onboard { };
 
   patdiff = callPackage ../tools/misc/patdiff { };
 
@@ -2025,6 +2029,8 @@ with pkgs;
     cloudpinyin = callPackage ../tools/inputmethods/fcitx-engines/fcitx-cloudpinyin { };
 
     libpinyin = callPackage ../tools/inputmethods/fcitx-engines/fcitx-libpinyin { };
+
+    skk = callPackage ../tools/inputmethods/fcitx-engines/fcitx-skk { };
   };
 
   fcitx-configtool = callPackage ../tools/inputmethods/fcitx/fcitx-configtool.nix { };
@@ -2386,6 +2392,8 @@ with pkgs;
   gparted = callPackage ../tools/misc/gparted { };
 
   gpodder = callPackage ../applications/audio/gpodder { };
+
+  gpredict = callPackage ../applications/science/astronomy/gpredict { };
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
@@ -3484,6 +3492,8 @@ with pkgs;
 
   mycli = callPackage ../tools/admin/mycli { };
 
+  mydumper = callPackage ../tools/backup/mydumper { };
+
   mysql2pgsql = callPackage ../tools/misc/mysql2pgsql { };
 
   mysqltuner = callPackage ../tools/misc/mysqltuner { };
@@ -4493,7 +4503,10 @@ with pkgs;
 
   sshguard = callPackage ../tools/security/sshguard {};
 
-  softhsm = callPackage ../tools/security/softhsm { };
+  softhsm = callPackage ../tools/security/softhsm {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   solr = callPackage ../servers/search/solr { };
 
@@ -5139,6 +5152,8 @@ with pkgs;
   vlan = callPackage ../tools/networking/vlan { };
 
   vmtouch = callPackage ../tools/misc/vmtouch { };
+
+  vncdo = callPackage ../tools/admin/vncdo { };
 
   volumeicon = callPackage ../tools/audio/volumeicon { };
 
@@ -6468,7 +6483,7 @@ with pkgs;
   beam = callPackage ./beam-packages.nix { };
 
   inherit (beam.interpreters)
-    erlang erlangR17 erlangR18 erlangR19 erlangR20
+    erlang erlangR18 erlangR19 erlangR20
     erlang_odbc erlang_javac erlang_odbc_javac erlang_nox erlang_basho_R16B02
     elixir elixir_1_5 elixir_1_4 elixir_1_3
     lfe lfe_1_2;
@@ -7551,7 +7566,7 @@ with pkgs;
   premake4 = callPackage ../development/tools/misc/premake { };
 
   premake5 = callPackage ../development/tools/misc/premake/5.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
+    inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
   premake = premake4;
@@ -8162,8 +8177,6 @@ with pkgs;
   expat = callPackage ../development/libraries/expat { };
 
   eventlog = callPackage ../development/libraries/eventlog { };
-
-  facile = callPackage ../development/libraries/facile { };
 
   faac = callPackage ../development/libraries/faac { };
 
@@ -10051,7 +10064,6 @@ with pkgs;
   };
 
   nettle = callPackage ../development/libraries/nettle { };
-  nettle_3_3 = callPackage ../development/libraries/nettle/3.3.nix { };
 
   newt = callPackage ../development/libraries/newt { };
 
@@ -11549,7 +11561,7 @@ with pkgs;
     spidermonkey = spidermonkey_1_8_5;
     python = python27;
     sphinx = python27Packages.sphinx;
-    erlang = erlangR17;
+    erlang = erlangR19;
   };
 
   couchdb2 = callPackage ../servers/http/couchdb/2.0.0.nix {
@@ -11596,7 +11608,7 @@ with pkgs;
 
   prosody = callPackage ../servers/xmpp/prosody {
     lua5 = lua5_1;
-    inherit (lua51Packages) luasocket luasec luaexpat luafilesystem luabitop luaevent luazlib;
+    inherit (lua51Packages) luasocket luasec luaexpat luafilesystem luabitop luaevent luazlib luadbi;
   };
 
   biboumi = callPackage ../servers/xmpp/biboumi { };
@@ -13742,6 +13754,8 @@ with pkgs;
 
   zeal = libsForQt5.callPackage ../data/documentation/zeal { };
 
+  zilla-slab = callPackage ../data/fonts/zilla-slab { };
+
 
   ### APPLICATIONS
 
@@ -14666,8 +14680,11 @@ with pkgs;
 
   fldigi = callPackage ../applications/audio/fldigi { };
 
+  flink = flink_1_3;
+  flink_1_3 = callPackage ../applications/networking/cluster/flink { version = "1.3"; };
+
   fluidsynth = callPackage ../applications/audio/fluidsynth {
-     inherit (darwin.apple_sdk.frameworks) CoreServices CoreAudio AudioUnit;
+     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio CoreMIDI CoreServices;
   };
 
   fmit = libsForQt5.callPackage ../applications/audio/fmit { };
@@ -14693,6 +14710,8 @@ with pkgs;
   fvwm = callPackage ../applications/window-managers/fvwm { };
 
   ganttproject-bin = callPackage ../applications/misc/ganttproject-bin { };
+
+  gcal = callPackage ../applications/misc/gcal { };
 
   geany = callPackage ../applications/editors/geany { };
   geany-with-vte = callPackage ../applications/editors/geany/with-vte.nix { };
@@ -15624,9 +15643,7 @@ with pkgs;
     polarssl = mbedtls_1_3;
   };
 
-  linuxsampler = callPackage ../applications/audio/linuxsampler {
-    bison = bison2;
-  };
+  linuxsampler = callPackage ../applications/audio/linuxsampler { };
 
   llpp = ocaml-ng.ocamlPackages.callPackage ../applications/misc/llpp { };
 
@@ -15717,7 +15734,7 @@ with pkgs;
 
   merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
 
-  meshlab = callPackage ../applications/graphics/meshlab { };
+  meshlab = libsForQt5.callPackage ../applications/graphics/meshlab { };
 
   metersLv2 = callPackage ../applications/audio/meters_lv2 { };
 
@@ -16379,7 +16396,7 @@ with pkgs;
 
   qrcode = callPackage ../tools/graphics/qrcode {};
 
-  qsampler = callPackage ../applications/audio/qsampler { };
+  qsampler = libsForQt5.callPackage ../applications/audio/qsampler { };
 
   qscreenshot = callPackage ../applications/graphics/qscreenshot {
     qt = qt4;
@@ -16390,7 +16407,7 @@ with pkgs;
 
   qstopmotion = callPackage ../applications/video/qstopmotion { };
 
-  qsynth = callPackage ../applications/audio/qsynth { };
+  qsynth = libsForQt5.callPackage ../applications/audio/qsynth { };
 
   qtbitcointrader = callPackage ../applications/misc/qtbitcointrader { };
 
@@ -17914,9 +17931,7 @@ with pkgs;
 
   freedink = callPackage ../games/freedink { };
 
-  freeorion = callPackage ../games/freeorion {
-    boost = boost160;
-  };
+  freeorion = callPackage ../games/freeorion { };
 
   freesweep = callPackage ../games/freesweep { };
 

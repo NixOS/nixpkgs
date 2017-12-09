@@ -289,6 +289,7 @@
   ironpinguin = "Michele Catalano <michele@catalano.de>";
   ivan-tkatchev = "Ivan Tkatchev <tkatchev@gmail.com>";
   ixmatus = "Parnell Springmeyer <parnell@digitalmentat.com>";
+  izorkin = "Yurii Izorkin <Izorkin@gmail.com>";
   j-keck = "Jürgen Keck <jhyphenkeck@gmail.com>";
   jagajaga = "Arseniy Seroka <ars.seroka@gmail.com>";
   jammerful = "jammerful <jammerful@gmail.com>";
@@ -390,6 +391,7 @@
   manveru = "Michael Fellinger <m.fellinger@gmail.com>";
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
   markus1189 = "Markus Hauck <markus1189@gmail.com>";
+  markuskowa = "Markus Kowalewski <markus.kowalewski@gmail.com>";
   markWot = "Markus Wotringer <markus@wotringer.de>";
   martijnvermaat = "Martijn Vermaat <martijn@vermaat.name>";
   martingms = "Martin Gammelsæter <martin@mg.am>";
@@ -401,6 +403,7 @@
   mbakke = "Marius Bakke <mbakke@fastmail.com>";
   mbbx6spp = "Susan Potter <me@susanpotter.net>";
   mbe = "Brandon Edens <brandonedens@gmail.com>";
+  mbode = "Maximilian Bode <maxbode@gmail.com>";
   mboes = "Mathieu Boespflug <mboes@tweag.net>";
   mbrgm = "Marius Bergmann <marius@yeai.de>";
   mcmtroffaes = "Matthias C. M. Troffaes <matthias.troffaes@gmail.com>";

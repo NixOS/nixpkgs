@@ -14,15 +14,6 @@ rec {
     erlang_nox = erlangR19_nox;
 
     # These are standard Erlang versions, using the generic builder.
-    erlangR16 = lib.callErlang ../development/interpreters/erlang/R16.nix {};
-    erlangR16_odbc = erlangR16.override { odbcSupport = true; };
-    erlangR17 = lib.callErlang ../development/interpreters/erlang/R17.nix {};
-    erlangR17_odbc = erlangR17.override { odbcSupport = true; };
-    erlangR17_javac = erlangR17.override { javacSupport = true; };
-    erlangR17_odbc_javac = erlangR17.override {
-      javacSupport = true; odbcSupport = true;
-    };
-    erlangR17_nox = erlangR17.override { wxSupport = false; };
     erlangR18 = lib.callErlang ../development/interpreters/erlang/R18.nix {
       wxGTK = wxGTK30;
     };
@@ -51,8 +42,8 @@ rec {
     };
     erlangR20_nox = erlangR20.override { wxSupport = false; };
 
-    # Bash fork, using custom builder.
-    erlang_basho_R16B02 = lib.callErlang ../development/interpreters/erlang/R16B02-8-basho.nix {
+    # Basho fork, using custom builder.
+    erlang_basho_R16B02 = lib.callErlang ../development/interpreters/erlang/R16B02-basho.nix {
     };
     erlang_basho_R16B02_odbc = erlang_basho_R16B02.override {
       odbcSupport = true;
@@ -75,8 +66,6 @@ rec {
 
     # Packages built with default Erlang version.
     erlang = packagesWith interpreters.erlang;
-    erlangR16 = packagesWith interpreters.erlangR16;
-    erlangR17 = packagesWith interpreters.erlangR17;
     erlangR18 = packagesWith interpreters.erlangR18;
     erlangR19 = packagesWith interpreters.erlangR19;
     erlangR20 = packagesWith interpreters.erlangR20;

@@ -33,6 +33,6 @@ buildRustPackage rec {
     '';
     homepage = https://the.exa.website;
     license = licenses.mit;
-    maintainer = [ maintainers.ehegnes ];
+    maintainers = [ maintainers.ehegnes ];
   };
 }

@@ -50,11 +50,9 @@ stdenv.mkDerivation {
       fontconfig intltool
     ];
 
-  # Note: the build may fail with e.g.:
-  #   CXX      edl.o
+  # $ make -C cinelerra edl.o
   # edl.C:50:25: fatal error: versioninfo.h: No such file or directory
-  #  #include "versioninfo.h"
-  enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   meta = {
     description = "Video Editor";

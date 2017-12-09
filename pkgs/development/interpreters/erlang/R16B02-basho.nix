@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   baseName = "erlang";
-  version = "16B02";
+  version = "16B02.basho10";
 
   src = pkgs.fetchFromGitHub {
     owner = "basho";
     repo = "otp";
-    rev = "OTP_R16B02_basho8";
-    sha256 = "1w0hbm0axxxa45v3kl6bywc9ayir5vwqxjpnjlzc616ldszb2m0x";
+    rev = "OTP_R16B02_basho10";
+    sha256 = "1s2c3ag9dnp6xmcr27kh95n1w50xly97n1mp8ivc2a3gpv4blqmj";
   };
 
   preConfigure = ''
@@ -27,7 +27,7 @@ mkDerivation rec {
   installTargets = "install";
   postInstall = let
     manpages = pkgs.fetchurl {
-      url = "http://www.erlang.org/download/otp_doc_man_R${version}.tar.gz";
+      url = "http://www.erlang.org/download/otp_doc_man_R16B02.tar.gz";
       sha256 = "12apxjmmd591y9g9bhr97z5jbd1jarqg7wj0y2sqhl21hc1yp75p";
     };
   in ''
@@ -55,6 +55,8 @@ mkDerivation rec {
       This version of Erlang is Basho's version, forked from Ericsson's
       repository.
     '';
+
+    knownVulnerabilities = [ "CVE-2017-1000385" ];
 
     platforms = ["x86_64-linux" "x86_64-darwin"];
     license = pkgs.stdenv.lib.licenses.asl20;

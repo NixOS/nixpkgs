@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     homepage    = http://aa-project.sourceforge.net/bb;
     description = "AA-lib demo";
     license     = licenses.gpl2;
-    maintainers = maintainers.rnhmjoj;
+    maintainers = [ maintainers.rnhmjoj ];
     platforms   = platforms.unix;
   };
 }

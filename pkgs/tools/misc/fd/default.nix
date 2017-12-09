@@ -2,16 +2,21 @@
 
 rustPlatform.buildRustPackage rec {
   name = "fd-${version}";
-  version = "5.0.0";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "fd";
     rev = "v${version}";
-    sha256 = "17y2fr3faaf32lv171ppkgi55v5zxq97jiilsgmjcn00rd9i6v0j";
+    sha256 = "1pzb6ha9c89zq6nxx0zsyv24diix4z23p8lf7113bfili3as3k5q";
   };
 
-  cargoSha256 = "17f4plyj6mnz0d9f4ykgbmddsdp6c3f6q4kmgj406p49xsf0jjkc";
+  cargoSha256 = "0y4svzv1y94baciiy08byhywwfshdfqn3nx0c4z23i7ashy8yhnf";
+
+  buildPhase = ''
+    # do not pass --frozen
+    cargo build --release
+  '';
 
   preFixup = ''
     mkdir -p "$out/man/man1"

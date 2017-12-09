@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pam, pkgconfig, libxcb, glib, libXdmcp, itstool, libxml2
-, intltool, xlibsWrapper, libxklavier, libgcrypt, libaudit
+, intltool, xlibsWrapper, libxklavier, libgcrypt, libaudit, coreutils
 , qt4 ? null
 , withQt5 ? false, qtbase
 }:
@@ -35,6 +35,11 @@ stdenv.mkDerivation rec {
     "sysconfdir=\${out}/etc"
     "localstatedir=\${TMPDIR}"
   ];
+
+  prePatch = ''
+    substituteInPlace src/shared-data-manager.c \
+      --replace /bin/rm ${coreutils}/bin/rm
+  '';
 
   meta = {
     homepage = https://launchpad.net/lightdm;

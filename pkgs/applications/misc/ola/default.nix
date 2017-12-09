@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A framework for controlling entertainment lighting equipment.";
     maintainers = [ maintainers.globin ];
-    licenses = with licenses; [ lgpl21 gpl2Plus ];
+    license = with licenses; [ lgpl21 gpl2Plus ];
     platforms = platforms.all;
   };
 }

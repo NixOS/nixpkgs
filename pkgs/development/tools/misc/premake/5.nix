@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, CoreServices }:
+{ stdenv, fetchFromGitHub, Foundation, readline }:
 
 with stdenv.lib;
 
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1h3hr96pdz94njn4bg02ldcz0k5j1x017d8svc7fdyvl2b77nqzf";
   };
 
-  buildInputs = optional stdenv.isDarwin [ CoreServices ];
+  buildInputs = optionals stdenv.isDarwin [ Foundation readline ];
 
   patchPhase = optional stdenv.isDarwin ''
     substituteInPlace premake5.lua \

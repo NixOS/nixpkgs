@@ -31,6 +31,8 @@ in
     inherit (darwin) opencflite;
   };
 
+  insert_dylib = callPackage ../os-specific/darwin/insert_dylib { };
+
   ios-cross = callPackage ../os-specific/darwin/ios-cross {
     inherit (darwin) binutils;
   };

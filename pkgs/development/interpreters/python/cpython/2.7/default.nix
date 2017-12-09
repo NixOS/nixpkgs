@@ -16,6 +16,8 @@
 , libffi
 , CF, configd, coreutils
 , python-setup-hook
+# Some proprietary libs assume UCS2 unicode, especially on darwin :(
+, ucsEncoding ? 4
 # For the Python package set
 , pkgs, packageOverrides ? (self: super: {})
 }:
@@ -107,7 +109,7 @@ let
   configureFlags = [
     "--enable-shared"
     "--with-threads"
-    "--enable-unicode=ucs4"
+    "--enable-unicode=ucs${toString ucsEncoding}"
   ] ++ optionals (hostPlatform.isCygwin || hostPlatform.isAarch64) [
     "--with-system-ffi"
   ] ++ optionals hostPlatform.isCygwin [

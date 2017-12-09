@@ -230,6 +230,8 @@ in {
 
   intelhex = callPackage ../development/python-modules/intelhex { };
 
+  lmtpd = callPackage ../development/python-modules/lmtpd { };
+
   mpi4py = callPackage ../development/python-modules/mpi4py {
     mpi = pkgs.openmpi;
   };
@@ -343,6 +345,8 @@ in {
   pyzufall = callPackage ../development/python-modules/pyzufall { };
 
   rhpl = disabledIf isPy3k (callPackage ../development/python-modules/rhpl {});
+
+  salmon = callPackage ../development/python-modules/salmon { };
 
   simpleeval = callPackage ../development/python-modules/simpleeval { };
 
@@ -1090,7 +1094,7 @@ in {
     buildInputs = [ pkgs.lzma ];
 
     meta = {
-      describe = "Backport of Python 3.3's 'lzma' module for XZ/LZMA compressed files";
+      description = "Backport of Python 3.3's 'lzma' module for XZ/LZMA compressed files";
       homepage = https://github.com/peterjc/backports.lzma;
       license = licenses.bsd3;
     };
@@ -1975,13 +1979,13 @@ in {
 
   boto3 = buildPythonPackage rec {
     name = "boto3-${version}";
-    version = "1.4.7";
+    version = "1.4.8";
 
     src = pkgs.fetchFromGitHub {
       owner = "boto";
       repo  = "boto3";
       rev   = version;
-      sha256 = "0ca08xkkx6py08gqgn1aci9pklidwivxbvpwjv7623jr21avakdi";
+      sha256 = "11ysd7a9l5y98q7b7az56phsj2m7w90abf4jabwrknp2c43sq9bi";
     };
 
     propagatedBuildInputs = [ self.botocore self.jmespath self.s3transfer ] ++
@@ -7234,13 +7238,13 @@ in {
   };
 
   py3status = buildPythonPackage rec {
-    version = "3.6";
+    version = "3.7";
     name = "py3status-${version}";
     src = pkgs.fetchFromGitHub {
       owner = "ultrabug";
       repo = "py3status";
       rev = version;
-      sha256 = "01qvrwgkphb0lr7g9dm0hncbxcds05kg4qgbsrvnc7d5j2vhfdkr";
+      sha256 = "1khrvxjjcm1bsswgrdgvyrdrimxx92yhql4gmji6a0kpp59dp541";
     };
     doCheck = false;
     propagatedBuildInputs = with self; [ requests ];
@@ -18258,7 +18262,7 @@ in {
     meta = {
       description = "Library to implement a well-behaved Unix daemon process";
       homepage = https://alioth.debian.org/projects/python-daemon/;
-      licenses =  [ licenses.gpl3Plus licenses.asl20 ];
+      license = [ licenses.gpl3Plus licenses.asl20 ];
     };
   };
 
@@ -20509,22 +20513,7 @@ EOF
     };
   });
 
-  xmltodict = buildPythonPackage (rec {
-    name = "xmltodict-0.9.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/x/xmltodict/${name}.tar.gz";
-      sha256 = "00crqnjh1kbvcgfnn3b8c7vq30lf4ykkxp1xf3pf7mswr5l1wp97";
-    };
-
-    buildInputs = with self; [ coverage nose ];
-
-    meta = {
-      description = "Makes working with XML feel like you are working with JSON";
-      homepage = https://github.com/martinblech/xmltodict;
-      license = licenses.mit;
-    };
-  });
+  xmltodict = callPackage ../development/python-modules/xmltodict { };
 
   xarray = callPackage ../development/python-modules/xarray { };
 
