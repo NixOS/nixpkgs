@@ -128,7 +128,7 @@ let
 
     ocaml_cairo = callPackage ../development/ocaml-modules/ocaml-cairo { };
 
-    ocaml_cairo2 = callPackage ../development/ocaml-modules/ocaml-cairo2 { };
+    cairo2 = callPackage ../development/ocaml-modules/cairo2 { };
 
     cil = callPackage ../development/ocaml-modules/cil { };
 
