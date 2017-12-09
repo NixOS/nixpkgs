@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl, libiconv, zlib, popt
+{ stdenv, fetchurl, fetchpatch, perl, libiconv, zlib, popt
 , enableACLs ? true, acl ? null
 , enableCopyDevicesPatch ? false
 }:
@@ -6,7 +6,7 @@
 assert enableACLs -> acl != null;
 
 let
-  base = import ./base.nix { inherit stdenv fetchurl; };
+  base = import ./base.nix { inherit stdenv fetchurl fetchpatch; };
 in
 stdenv.mkDerivation rec {
   name = "rsync-${base.version}";
