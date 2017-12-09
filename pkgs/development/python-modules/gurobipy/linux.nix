@@ -1,12 +1,10 @@
 { stdenv, fetchurl, python }:
-assert python.isPy27;
-let utf = if python.ucsEncoding == 2
-            then "16"
-          else if python.ucsEncoding == 4
-            then "32"
-          else throw "Unsupported python UCS encoding UCS${toString python.ucsEncoding}";
-in
-stdenv.mkDerivation
+assert python.pkgs.isPy27;
+let utf =
+  if python.ucsEncoding == 2 then "16"
+  else if python.ucsEncoding == 4 then "32"
+  else throw "Unsupported python UCS encoding UCS${toString python.ucsEncoding}";
+in stdenv.mkDerivation
   { name = "gurobipy-7.0.2";
     src = fetchurl
       { url = "http://packages.gurobi.com/7.0/gurobi7.0.2_linux64.tar.gz";

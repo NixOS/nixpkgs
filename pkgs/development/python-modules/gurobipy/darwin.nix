@@ -1,5 +1,5 @@
 { stdenv, fetchurl, python, xar, cpio, cctools, insert_dylib }:
-assert python.isPy27 && python.ucsEncoding == 2;
+assert python.pkgs.isPy27 && python.ucsEncoding == 2;
 stdenv.mkDerivation
   { name = "gurobipy-7.0.2";
     src = fetchurl
