@@ -128,7 +128,7 @@ int main(int argc, char *argv[]) {
     // If we are root, no need to create new user namespace.
     if (uid == 0) {
       if (unshare(CLONE_NEWNS) < 0)
-        errorf(EX_OSERR, "unshare");
+        errorf(EX_OSERR, "unshare() failed: You may have an old kernel or have CLONE_NEWUSER disabled by your distribution security settings.");
       // Mark all mounted filesystems as slave so changes
       // don't propagate to the parent mount namespace.
       if (mount(NULL, "/", NULL, MS_REC | MS_SLAVE, NULL) < 0)
