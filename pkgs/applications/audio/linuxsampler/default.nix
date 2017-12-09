@@ -10,10 +10,6 @@ stdenv.mkDerivation rec {
     sha256 = "0fdxpw7jjfi058l95131d6d8538h05z7n94l60i6mhp9xbplj2jf";
   };
 
-  # It fails to compile without this option. I'm not sure what the bug
-  # is, but everything works OK for me (goibhniu).
-  configureFlags = [ "--disable-nptl-bug-check" ];
-
   preConfigure = ''
     make -f Makefile.svn
   '';
