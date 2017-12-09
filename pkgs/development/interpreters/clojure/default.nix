@@ -1,23 +1,32 @@
-{ stdenv, fetchurl, unzip, ant, jdk, makeWrapper }:
+{ stdenv, fetchurl, jdk, makeWrapper, rlwrap }:
 
-let version = "1.8.0"; in
-
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   name = "clojure-${version}";
+  version = "1.9.0";
+  tools-version = "273";
+  clj-tools = "clojure-tools-${version}.${tools-version}";
 
   src = fetchurl {
-    url = "http://repo1.maven.org/maven2/org/clojure/clojure/${version}/clojure-${version}.zip";
-    sha256 = "1nip095fz5c492sw15skril60i1vd21ibg6szin4jcvyy3xr6cym";
+    url = "https://download.clojure.org/install/${clj-tools}.tar.gz";
+    sha256 = "0xmrq3xvr002jgq8m1j0y5ld0rcr49608g3gqxgyxzjqswacglb4";
   };
 
-  buildInputs = [ unzip ant jdk makeWrapper ];
+  buildInputs = [ jdk makeWrapper ];
 
-  buildPhase = "ant jar";
+  buildPhase = null;
 
   installPhase = ''
-    mkdir -p $out/share/java $out/bin
-    install -t $out/share/java clojure.jar
-    makeWrapper ${jdk.jre}/bin/java $out/bin/clojure --add-flags "-cp $out/share/java/clojure.jar clojure.main"
+    mkdir -p $out/clojure/libexec $out/bin
+    cp -t $out/clojure/libexec ${clj-tools}.jar
+    cp -t $out/clojure deps.edn example-deps.edn
+
+    sed -i -e "s@PREFIX@$out/clojure@g" clojure
+    install -t $out/bin clojure clj
+
+    wrapProgram $out/bin/clojure --set JAVA_CMD ${jdk.jre}/bin/java
+    wrapProgram $out/bin/clj \
+      --prefix PATH : "${stdenv.lib.makeBinPath [ rlwrap ]}" \
+      --prefix PATH : "$out/bin"
   '';
 
   meta = with stdenv.lib; {
