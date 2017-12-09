@@ -15637,7 +15637,7 @@ with pkgs;
   };
 
   linuxsampler = callPackage ../applications/audio/linuxsampler {
-    bison = bison2;
+    bison = bison3;
   };
 
   llpp = ocaml-ng.ocamlPackages.callPackage ../applications/misc/llpp { };
