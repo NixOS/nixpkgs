@@ -4,7 +4,7 @@
 
 , version, sha256
 , withLLVM ? false
-, buildParallel ? true
+, enableParallelBuilding ? true
 }:
 
 let
@@ -47,8 +47,6 @@ stdenv.mkDerivation rec {
   # The file /nix/store/xxx-mono-2.4.2.1/lib/mscorlib.dll is an invalid CIL image
   dontStrip = true;
 
-  enableParallelBuilding = buildParallel;
-
   # We want pkg-config to take priority over the dlls in the Mono framework and the GAC
   # because we control pkg-config
   patches = [ ./pkgconfig-before-gac.patch ];
@@ -84,6 +82,8 @@ stdenv.mkDerivation rec {
   + ''
     ln -s $out/bin/mcs $out/bin/gmcs
   '';
+
+  inherit enableParallelBuilding;
 
   meta = {
     homepage = http://mono-project.com/;
