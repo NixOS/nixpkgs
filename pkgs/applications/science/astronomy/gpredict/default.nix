@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, pkgconfig 
-, gtk2-x11, glib, curl, goocanvas, intltool  
-}: 
+{ stdenv, fetchurl, pkgconfig
+, gtk2-x11, glib, curl, goocanvas, intltool
+}:
 
 let
   version = "1.3";
@@ -13,8 +13,8 @@ stdenv.mkDerivation {
     sha256 = "18ym71r2f5mwpnjcnrpwrk3py2f6jlqmj8hzp89wbcm1ipnvxxmh";
   };
 
-  buildInputs = [ curl glib gtk2-x11 goocanvas intltool ];
-  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ curl glib gtk2-x11 goocanvas ];
+  nativeBuildInputs = [ pkgconfig intltool ];
 
   meta = with stdenv.lib; {
     description = "Real time satellite tracking and orbit prediction";
@@ -28,7 +28,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2;
     platforms = platforms.linux;
     homepage = "https://sourceforge.net/projects/gpredict/";
-    maintainers = maintainers.markuskowa;
+    maintainers = [ maintainers.markuskowa ];
   };
 }
-
