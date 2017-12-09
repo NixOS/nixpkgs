@@ -1,5 +1,6 @@
 { stdenv, fetchgit, cmake, pkgconfig, zlib, libpng, cairo, freetype
 , json_c, fontconfig, gtkmm3, pangomm, glew, mesa_glu, xlibs, pcre
+, wrapGAppsHook
 }:
 stdenv.mkDerivation rec {
   name = "solvespace-2.3-20170808";
@@ -11,8 +12,12 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  nativeBuildInputs = [
+    pkgconfig cmake wrapGAppsHook
+  ];
+
   buildInputs = [
-    cmake pkgconfig zlib libpng cairo freetype
+    zlib libpng cairo freetype
     json_c fontconfig gtkmm3 pangomm glew mesa_glu
     xlibs.libpthreadstubs xlibs.libXdmcp pcre
   ];
@@ -34,14 +39,14 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/share/applications/solvespace.desktop \
-      --replace /usr/bin/ $out/bin/ \
+      --replace /usr/bin/ $out/bin/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A parametric 3d CAD program";
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ edef ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.gpl3;
+    maintainers = [ maintainers.edef ];
+    platforms = platforms.linux;
     homepage = http://solvespace.com;
   };
 }
