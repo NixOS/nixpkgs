@@ -2393,6 +2393,8 @@ with pkgs;
 
   gpodder = callPackage ../applications/audio/gpodder { };
 
+  gpredict = callPackage ../applications/science/astronomy/gpredict { };
+
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
   grafx2 = callPackage ../applications/graphics/grafx2 {};
