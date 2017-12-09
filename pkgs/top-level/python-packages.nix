@@ -20559,22 +20559,7 @@ EOF
     };
   });
 
-  xmltodict = buildPythonPackage (rec {
-    name = "xmltodict-0.9.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/x/xmltodict/${name}.tar.gz";
-      sha256 = "00crqnjh1kbvcgfnn3b8c7vq30lf4ykkxp1xf3pf7mswr5l1wp97";
-    };
-
-    buildInputs = with self; [ coverage nose ];
-
-    meta = {
-      description = "Makes working with XML feel like you are working with JSON";
-      homepage = https://github.com/martinblech/xmltodict;
-      license = licenses.mit;
-    };
-  });
+  xmltodict = callPackage ../development/python-modules/xmltodict { };
 
   xarray = callPackage ../development/python-modules/xarray { };
 
