@@ -15,14 +15,14 @@ let
   '';
 
 in stdenv.mkDerivation rec {
-  version = "20171027";
+  version = "20171208";
   name = "neomutt-${version}";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = "neomutt-${version}";
-    sha256 = "0pwc5zdxc9h23658dfkzndfj1ld3ijyvcxmsiv793y3i4dig0s3n";
+    sha256 = "1fn28q4akfz0nq3ysp8n53j8yqp2mx6yhbvb59c4zm6zgd4qzgp1";
   };
 
   buildInputs = [
@@ -51,26 +51,25 @@ in stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--enable-debug"
-    "--enable-gpgme"
-    "--enable-notmuch"
-    "--with-curses"
-    "--with-gss"
+    "--with-ui=ncurses"
+    "--debug"
+    "--gss"
+    "--idn"
+    "--gpgme"
+    "--homespool=1"
     "--with-homespool=mailbox"
-    "--with-idn"
-    "--with-lmdb"
-    "--with-mailpath="
-    "--with-sasl"
-    "--with-ssl"
-
-    # Look in $PATH at runtime, instead of hardcoding /usr/bin/sendmail
-    "ac_cv_path_SENDMAIL=sendmail"
+    "--ssl"
+    "--sasl"
+    "--notmuch"
+    "--lmdb"
   ];
 
   # Fix missing libidn in mutt;
   # this fix is ugly since it links all binaries in mutt against libidn
   # like pgpring, pgpewrap, ...
   NIX_LDFLAGS = "-lidn";
+
+  configureScript = "./configure.autosetup";
 
   postInstall = ''
     cp ${muttWrapper} $out/bin/mutt
@@ -85,3 +84,4 @@ in stdenv.mkDerivation rec {
     platforms   = platforms.unix;
   };
 }
+
