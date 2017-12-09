@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pytest, six, doCheck ? true }:
+{ stdenv, buildPythonPackage, fetchPypi, pytest, six }:
 buildPythonPackage rec {
   pname = "pluggy";
   version = "0.6.0";
