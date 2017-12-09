@@ -5630,6 +5630,12 @@ in {
     };
   };
 
+  gurobipy = if stdenv.system == "x86_64-darwin"
+    then callPackage ../development/python-modules/gurobipy/darwin.nix
+           { inherit (pkgs.darwin) cctools insert_dylib;
+           }
+  else throw "gurobipy not yet supported on ${stdenv.system}";
+
   helper = buildPythonPackage rec {
     pname = "helper";
     version = "2.4.1";
