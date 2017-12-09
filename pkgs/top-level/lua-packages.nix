@@ -8,6 +8,7 @@
 { fetchurl, fetchzip, stdenv, lua, callPackage, unzip, zziplib, pkgconfig, libtool
 , pcre, oniguruma, gnulib, tre, glibc, sqlite, openssl, expat, cairo
 , perl, gtk2, python, glib, gobjectIntrospection, libevent, zlib, autoreconfHook
+, libmysql, postgresql, cyrus_sasl
 , fetchFromGitHub, libmpack, which
 }:
 
@@ -71,7 +72,7 @@ let
       description = "C extension module for Lua which adds bitwise operations on numbers";
       homepage = "http://bitop.luajit.org";
       license = licenses.mit;
-      maintainers = with maintainers; [ flosse ];
+      maintainers = with maintainers; [ ];
     };
   };
 
@@ -102,6 +103,35 @@ let
       license = licenses.mit;
       maintainers = with maintainers; [ vyp ];
       platforms = platforms.unix;
+    };
+  };
+
+  luacyrussasl = buildLuaPackage rec {
+    version = "1.1.0";
+    name = "lua-cyrussasl-${version}";
+    src = fetchFromGitHub {
+      owner = "JorjBauer";
+      repo = "lua-cyrussasl";
+      rev = "v${version}";
+      sha256 = "14kzm3vk96k2i1m9f5zvpvq4pnzaf7s91h5g4h4x2bq1mynzw2s1";
+    };
+
+    preBuild = ''
+      makeFlagsArray=(
+        CFLAGS="-O2 -fPIC"
+        LDFLAGS="-O -shared -fpic -lsasl2"
+        LUAPATH="$out/share/lua/${lua.luaversion}"
+        CPATH="$out/lib/lua/${lua.luaversion}"
+      );
+      mkdir -p $out/{share,lib}/lua/${lua.luaversion}
+    '';
+
+    buildInputs = [ cyrus_sasl ];
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/JorjBauer/lua-cyrussasl";
+      description = "Cyrus SASL library for Lua 5.1+";
+      license = licenses.bsd3;
     };
   };
 
@@ -140,7 +170,6 @@ let
   luaexpat = buildLuaPackage rec {
     version = "1.3.0";
     name = "expat-${version}";
-    isLibrary = true;
 
     src = fetchurl {
       url = "https://matthewwild.co.uk/projects/luaexpat/luaexpat-${version}.tar.gz";
@@ -172,14 +201,42 @@ let
     };
   };
 
+  luadbi = buildLuaPackage rec {
+    name = "luadbi-${version}";
+    version = "0.5";
+    src = fetchurl {
+      url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/luadbi/luadbi.${version}.tar.gz";
+      sha256 = "07ikxgxgfpimnwf7zrqwcwma83ss3wm2nzjxpwv2a1c0vmc684a9";
+    };
+    sourceRoot = ".";
+
+    buildInputs = [ libmysql postgresql sqlite ];
+
+    NIX_CFLAGS_COMPILE = [
+      "-I${libmysql.dev}/include/mysql"
+      "-I${postgresql}/include/server"
+    ];
+
+    installPhase = ''
+      mkdir -p $out/lib/lua/${lua.luaversion}
+      install -p DBI.lua *.so $out/lib/lua/${lua.luaversion}
+    '';
+
+    meta = with stdenv.lib; {
+      homepage = "https://code.google.com/archive/p/luadbi/";
+      platforms = stdenv.lib.platforms.unix;
+    };
+  };
+
   luafilesystem = buildLuaPackage rec {
-    name = "filesystem-1.6.2";
+    version = "1.6.3";
+    name = "filesystem-${version}";
 
     src = fetchFromGitHub {
       owner = "keplerproject";
       repo = "luafilesystem";
-      rev = "v1_6_2";
-      sha256 = "134azkxw84xp9g5qmzjsmcva629jm7plwcmjxkdzdg05vyd7kig1";
+      rev = "v${stdenv.lib.replaceChars ["."] ["_"] version}";
+      sha256 = "1hxcnqj53540ysyw8fzax7f09pl98b8f55s712gsglcdxp2g2pri";
     };
 
     preConfigure = ''
@@ -224,12 +281,12 @@ let
   };
 
   lpty = buildLuaPackage rec {
+    version = "1.2.1";
     name = "lpty-${version}";
-    version = "1.1.1";
 
     src = fetchurl {
-      url = "http://www.tset.de/downloads/lpty-1.1-1.tar.gz";
-      sha256 = "0d4ffda654dcf37dd8c99bcd100d0ee0dde7782cbd0ba9200ef8711c5cab02f1";
+      url = "http://www.tset.de/downloads/lpty-${version}-1.tar.gz";
+      sha256 = "0rgvbpymcgdkzdwfag607xfscs9xyqxg0dj0qr5fv906mi183gs6";
     };
 
     preBuild = ''
@@ -330,6 +387,8 @@ let
         prefix=$out
       );
     '';
+
+    installTargets = [ "install" "install-unix" ];
 
     meta = with stdenv.lib; {
       description = "Network support for Lua";
