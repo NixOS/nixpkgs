@@ -21,6 +21,7 @@ python3Packages.buildPythonApplication {
   propagatedBuildInputs = with python3Packages; [
     vobject
     passlib
+    pytz
   ];
 
   meta = with stdenv.lib; {
