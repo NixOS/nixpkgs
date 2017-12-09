@@ -1273,7 +1273,7 @@ rec {
     dependencies = [];
     buildPhase = ''
       substituteInPlace ftplugin/python_yapf.vim \
-        --replace '"yapf"' '"${pkgs.yapf}/bin/yapf"'
+        --replace '"yapf"' '"${python3Packages.yapf}/bin/yapf"'
     '';
   };
 
