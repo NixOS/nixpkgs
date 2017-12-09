@@ -2,14 +2,14 @@
 SDL2_mixer, freetype, gettext }:
 
 stdenv.mkDerivation rec {
-  version = "2017-07-12";
+  version = "2017-12-09";
   name = "cataclysm-dda-git-${version}";
 
   src = fetchFromGitHub {
     owner = "CleverRaven";
     repo = "Cataclysm-DDA";
-    rev = "2d7aa8c";
-    sha256 = "0xx7si4k5ivyb5gv98fzlcghrg3w0dfblri547x7x4is7fj5ffjd";
+    rev = "24e92956db5587809750283873c242cc0796d7e6";
+    sha256 = "1a7kdmx76na4g65zra01qaq98lxp9j2dl9ddv09r0p5yxaizw68z";
   };
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
