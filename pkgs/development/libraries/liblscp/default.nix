@@ -1,19 +1,19 @@
-{ stdenv, fetchsvn, autoconf, automake, libtool, pkgconfig }:
+{ stdenv, fetchurl, autoconf, automake, libtool, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "liblscp-svn-${version}";
-  version = "2319";
+  name = "liblscp-${version}";
+  version = "0.5.8";
 
-  src = fetchsvn {
-    url = "https://svn.linuxsampler.org/svn/liblscp/trunk";
-    rev = "${version}";
-    sha256 = "0jgdy9gi9n8x2pqrbll9158vhx8293lnxv8vzl0szcincslgk7hi";
+  src = fetchurl {
+    url = "http://download.linuxsampler.org/packages/${name}.tar.gz";
+    sha256 = "00cfafkw1n80sdjwm9zdsg5vx287wqpgpbajd3zmiz415wzr84dn";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ autoconf automake libtool ];
+  nativeBuildInputs = [ autoconf automake libtool pkgconfig ];
 
-  preConfigure = "make -f Makefile.svn";
+  preConfigure = "make -f Makefile.git";
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = http://www.linuxsampler.org;
