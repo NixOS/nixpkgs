@@ -369,7 +369,7 @@ let
 
     magick = callPackage ../development/ocaml-modules/magick { };
 
-    markup = callPackage ../development/ocaml-modules/markup { lwt = lwt2; };
+    markup = callPackage ../development/ocaml-modules/markup { lwt = ocaml_lwt; };
 
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
