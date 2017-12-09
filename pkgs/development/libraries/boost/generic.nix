@@ -1,15 +1,14 @@
-{ stdenv, fetchurl, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
-, which
-, buildPackages, buildPlatform, hostPlatform
-, toolset ? /**/ if stdenv.cc.isClang                                then "clang"
-            else if stdenv.cc.isGNU && hostPlatform != buildPlatform then "gcc-cross"
-            else null
+{ stdenv, fetchurl, which, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
+, buildPlatform, hostPlatform, buildPackages
+, toolset ? if stdenv.cc.isClang then "clang" else null
 , enableRelease ? true
 , enableDebug ? false
 , enableSingleThreaded ? false
 , enableMultiThreaded ? true
 , enableShared ? !(hostPlatform.libc == "msvcrt") # problems for now
 , enableStatic ? !enableShared
+, enablePIC ? false
+, enableExceptions ? false
 , enablePython ? hostPlatform == buildPlatform
 , enableNumpy ? enablePython && stdenv.lib.versionAtLeast version "1.65"
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
@@ -24,9 +23,22 @@
 # We must build at least one type of libraries
 assert enableShared || enableStatic;
 
-# Python isn't supported when cross-compiling
 assert enablePython -> hostPlatform == buildPlatform;
 assert enableNumpy -> enablePython;
+
+# The plan for cross-compilation:
+#
+# Cross-compiling boost is a bit of a nightmare due to its build system,
+# boost-build. When not cross-compiling the bootstrap.sh script will compiling
+# bjam, the boost build system's executable, and then use it to build the library.
+#
+# In principle it is possible for the bootstrap.sh script to use a cross
+# compiler to build bjam. However, in practice boost-build is so terribly broken
+# that this is all but impossible (see, for instance, boost ticket #5917, which
+# makes it impossible to specify a non-standard compiler path to bootstrap.sh).
+#
+# Because of this, we instead compile and package the bjam utility when not
+# cross-compiling and then use it as a nativeBuildInput when cross-compiling.
 
 with stdenv.lib;
 let
@@ -48,6 +60,16 @@ let
   # To avoid library name collisions
   layout = if taggedLayout then "tagged" else "system";
 
+  cflags = concatStringsSep " "
+    (optional (enablePIC) "-fPIC" ++
+     optional (enableExceptions) "-fexceptions");
+
+  cxxflags = optionalString (enablePIC) "-fPIC";
+
+  linkflags = optionalString (enablePIC) "-fPIC";
+
+  withToolset = stdenv.lib.optionalString (toolset != null) "--with-toolset=${toolset}";
+
   b2Args = concatStringsSep " " ([
     "--includedir=$dev/include"
     "--libdir=$out/lib"
@@ -59,6 +81,10 @@ let
     "link=${link}"
     "-sEXPAT_INCLUDE=${expat.dev}/include"
     "-sEXPAT_LIBPATH=${expat.out}/lib"
+  ] ++ optionals (cflags != "") [
+    "cflags=\"${cflags}\""
+    "cxxflags=\"${cflags}\""
+    "linkflags=\"${cflags}\""
   ] ++ optional (variant == "release") "debug-symbols=off"
     ++ optional (toolset != null) "toolset=${toolset}"
     ++ optional (mpi != null || hostPlatform != buildPlatform) "--user-config=user-config.jam"
@@ -68,7 +94,11 @@ let
     "binary-format=pe"
     "address-model=${toString hostPlatform.parsed.cpu.bits}"
     "architecture=x86"
-  ]);
+  ] ++ optional (variant == "release") "debug-symbols=off"
+    ++ optional (enablePython) "--with-python"
+    ++ optional (hostPlatform != buildPlatform) "toolset=gcc-cross");
+
+  b2 = if hostPlatform == buildPlatform then "./b2" else "${buildPackages.boost.bjam}/bin/bjam";
 
 in
 
@@ -103,8 +133,12 @@ stdenv.mkDerivation {
     using mpi : ${mpi}/bin/mpiCC ;
     EOF
   '' + optionalString (hostPlatform != buildPlatform) ''
-    cat << EOF >> user-config.jam
-    using gcc : cross : ${stdenv.cc.targetPrefix}c++ ;
+    cat << EOF > user-config.jam
+    using gcc : cross :
+        ${stdenv.cc.targetPrefix}c++ :
+        <archiver>${stdenv.cc.targetPrefix}ar
+        <ranlib>${stdenv.cc.targetPrefix}ranlib
+        ;
     EOF
   '';
 
@@ -113,24 +147,32 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ which buildPackages.stdenv.cc ];
   buildInputs = [ expat zlib bzip2 libiconv ]
     ++ optional (hostPlatform == buildPlatform) icu
     ++ optional stdenv.isDarwin fixDarwinDylibNames
     ++ optional enablePython python
     ++ optional enableNumpy python.pkgs.numpy;
+  nativeBuildInputs = [ which ]
+    ++ optional (hostPlatform != buildPlatform) buildPackages.boost.bjam;
 
   configureScript = "./bootstrap.sh";
   configurePlatforms = [];
   configureFlags = [
     "--includedir=$(dev)/include"
     "--libdir=$(out)/lib"
-  ] ++ optional enablePython "--with-python=${python.interpreter}"
-    ++ [ (if hostPlatform == buildPlatform then "--with-icu=${icu.dev}" else "--without-icu") ]
-    ++ optional (toolset != null) "--with-toolset=${toolset}";
+  ] ++ optional (toolset != null) "--with-toolset=${toolset}"
+    ++ (if hostPlatform == buildPlatform then [
+      "--with-icu=${icu.dev}"
+      "--with-python=${python.interpreter}"
+    ] else [
+      "--without-icu"
+      "--with-bjam=${buildPackages.boost.bjam}/bin/bjam"
+    ]);
 
   buildPhase = ''
-    ./b2 ${b2Args}
+    export AR=${stdenv.cc.targetPrefix}ar
+    export RANLIB=${stdenv.cc.targetPrefix}ranlib
+    ${b2} ${b2Args}
   '';
 
   installPhase = ''
@@ -139,7 +181,12 @@ stdenv.mkDerivation {
     cp -a tools/boostbook/{xsl,dtd} $dev/share/boostbook/
 
     # Let boost install everything else
-    ./b2 ${b2Args} install
+    ${b2} ${b2Args} install
+
+  '' # See the plan for cross-compiling above.
+     + optionalString (hostPlatform == buildPlatform) ''
+    mkdir -p $bjam/bin
+    cp ./bjam $bjam/bin
   '';
 
   postFixup = ''
@@ -147,9 +194,11 @@ stdenv.mkDerivation {
     cd "$dev" && find include \( -name '*.hpp' -or -name '*.h' -or -name '*.ipp' \) \
       -exec sed '1i#line 1 "{}"' -i '{}' \;
   '' + optionalString (hostPlatform.libc == "msvcrt") ''
-    $RANLIB "$out/lib/"*.a
+    ${stdenv.cc.targetPrefix}ranlib "$out/lib/"*.a
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" ]
+    # See the plan for cross-compiling above.
+    ++ optional (buildPlatform == hostPlatform) "bjam";
   setOutputFlags = false;
 }
