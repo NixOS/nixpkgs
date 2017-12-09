@@ -9,7 +9,7 @@
 
 with stdenv.lib;
 
-# if you update, also bump pythonPackages.libvirt or it will break
+# if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> or it will break
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
   version = "3.10.0";
