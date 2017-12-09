@@ -1,15 +1,17 @@
-{ stdenv, fetchurl, alsaLib, fluidsynth, libjack2, qt4 }:
+{ stdenv, fetchurl, alsaLib, fluidsynth, libjack2, qtbase, qttools, qtx11extras, cmake, pkgconfig }:
 
 stdenv.mkDerivation  rec {
   name = "qsynth-${version}";
-  version = "0.3.9";
+  version = "0.4.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/qsynth/${name}.tar.gz";
-    sha256 = "08kyn6cl755l9i1grzjx8yi3f8mgiz4gx0hgqad1n0d8yz85087b";
+    sha256 = "0qhfnikx3xcllkvs60kj6vcf2rwwzh31y41qkk6kwfhzgd219y8f";
   };
 
-  buildInputs = [ alsaLib fluidsynth libjack2 qt4 ];
+  nativeBuildInputs = [ cmake pkgconfig ];
+
+  buildInputs = [ alsaLib fluidsynth libjack2 qtbase qttools qtx11extras ];
 
   meta = with stdenv.lib; {
     description = "Fluidsynth GUI";
