@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   preConfigure = "make -f Makefile.svn";
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     homepage = http://www.linuxsampler.org;
     description = "Graphical frontend to LinuxSampler";
