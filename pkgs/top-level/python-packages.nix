@@ -21942,30 +21942,7 @@ EOF
     };
   };
 
-  libvirt = let
-    version = "3.8.0";
-  in assert version == pkgs.libvirt.version; pkgs.stdenv.mkDerivation rec {
-    name = "libvirt-python-${version}";
-
-    src = pkgs.fetchurl {
-      url = "http://libvirt.org/sources/python/${name}.tar.gz";
-      sha256 = "02spx8kfcsnqwsshd7bk2plyic2lbpwzg16sf3csh0avck5akjsz";
-    };
-
-    nativeBuildInputs = [ pkgs.pkgconfig ];
-    buildInputs = with self; [ python pkgs.libvirt lxml ];
-
-    buildPhase = "${python.interpreter} setup.py build";
-
-    installPhase = "${python.interpreter} setup.py install --prefix=$out";
-
-    meta = {
-      homepage = http://www.libvirt.org/;
-      description = "libvirt Python bindings";
-      license = licenses.lgpl2;
-      maintainers = [ maintainers.fpletz ];
-    };
-  };
+  libvirt-python = callPackage ../development/python-modules/libvirt { };
 
   rpdb = buildPythonPackage rec {
     name = "rpdb-0.1.5";
