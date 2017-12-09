@@ -212,6 +212,13 @@ let
 
     buildInputs = [ libmysql postgresql sqlite ];
 
+    preConfigure = ''
+      substituteInPlace Makefile --replace CC=gcc CC=cc
+    '' + stdenv.lib.optionalString stdenv.isDarwin ''
+      substituteInPlace Makefile \
+        --replace '-shared' '-bundle -undefined dynamic_lookup -all_load'
+    '';
+
     NIX_CFLAGS_COMPILE = [
       "-I${libmysql.dev}/include/mysql"
       "-I${postgresql}/include/server"
