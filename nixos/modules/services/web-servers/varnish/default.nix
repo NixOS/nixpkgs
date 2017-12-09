@@ -90,7 +90,6 @@ in
     system.extraDependencies = [
       (pkgs.stdenv.mkDerivation {
         name = "check-varnish-syntax";
-        preferLocalBuild = true;
         buildCommand = "${pkgs.varnish}/sbin/varnishd -C ${commandLine} 2> $out";
       })
     ];
