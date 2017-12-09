@@ -15636,9 +15636,7 @@ with pkgs;
     polarssl = mbedtls_1_3;
   };
 
-  linuxsampler = callPackage ../applications/audio/linuxsampler {
-    bison = bison2;
-  };
+  linuxsampler = callPackage ../applications/audio/linuxsampler { };
 
   llpp = ocaml-ng.ocamlPackages.callPackage ../applications/misc/llpp { };
 
