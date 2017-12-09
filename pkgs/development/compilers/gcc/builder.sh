@@ -28,37 +28,55 @@ if test "$noSysDirs" = "1"; then
         EXTRA_BUILD_FLAGS EXTRA_FLAGS EXTRA_TARGET_FLAGS \
         EXTRA_BUILD_LDFLAGS EXTRA_TARGET_LDFLAGS
 
+    # Extract flags from Bintools Wrappers
+    for pre in 'BUILD_' ''; do
+        curBintools="NIX_${pre}BINTOOLS"
+
+        declare -a extraLDFlags=()
+        if [[ -e "${!curBintools}/nix-support/orig-libc" ]]; then
+            # Figure out what extra flags when linking to pass to the gcc
+            # compilers being generated to make sure that they use our libc.
+            extraLDFlags=($(< "${!curBintools}/nix-support/libc-ldflags") $(< "${!curBintools}/nix-support/libc-ldflags-before" || true))
+
+            # The path to the Libc binaries such as `crti.o'.
+            libc_libdir="$(< "${!curBintools}/nix-support/orig-libc")/lib"
+        else
+            # Hack: support impure environments.
+            extraLDFlags=("-L/usr/lib64" "-L/usr/lib")
+            libc_libdir="/usr/lib"
+        fi
+        extraLDFlags=("-L$libc_libdir" "-rpath" "$libc_libdir"
+                      "${extraLDFlags[@]}")
+        for i in "${extraLDFlags[@]}"; do
+            declare EXTRA_${pre}LDFLAGS+=" -Wl,$i"
+        done
+    done
+
+    # Extract flags from CC Wrappers
     for pre in 'BUILD_' ''; do
         curCC="NIX_${pre}CC"
         curFIXINC="NIX_${pre}FIXINC_DUMMY"
 
-        declare -a extraFlags=() extraLDFlags=()
+        declare -a extraFlags=()
         if [[ -e "${!curCC}/nix-support/orig-libc" ]]; then
-            # Figure out what extra flags to pass to the gcc compilers being
-            # generated to make sure that they use our glibc.
-            extraFlags=($(cat "${!curCC}/nix-support/libc-cflags"))
-            extraLDFlags=($(cat "${!curCC}/nix-support/libc-ldflags") $(cat "${!curCC}/nix-support/libc-ldflags-before" || true))
+            # Figure out what extra compiling flags to pass to the gcc compilers
+            # being generated to make sure that they use our libc.
+            extraFlags=($(< "${!curCC}/nix-support/libc-cflags"))
 
-            # The path to the Glibc binaries such as `crti.o'.
-            glibc_libdir="$(cat "${!curCC}/nix-support/orig-libc")/lib"
-            glibc_devdir="$(cat "${!curCC}/nix-support/orig-libc-dev")"
+            # The path to the Libc headers
+            libc_devdir="$(< "${!curCC}/nix-support/orig-libc-dev")"
 
             # Use *real* header files, otherwise a limits.h is generated that
-            # does not include Glibc's limits.h (notably missing SSIZE_MAX,
+            # does not include Libc's limits.h (notably missing SSIZE_MAX,
             # which breaks the build).
-            declare NIX_${pre}FIXINC_DUMMY="$glibc_devdir/include"
+            declare NIX_${pre}FIXINC_DUMMY="$libc_devdir/include"
         else
             # Hack: support impure environments.
             extraFlags=("-isystem" "/usr/include")
-            extraLDFlags=("-L/usr/lib64" "-L/usr/lib")
-            glibc_libdir="/usr/lib"
             declare NIX_${pre}FIXINC_DUMMY=/usr/include
         fi
 
-        extraFlags=("-I${!curFIXINC}"
-                    "${extraFlags[@]}")
-        extraLDFlags=("-L$glibc_libdir" "-rpath" "$glibc_libdir"
-                      "${extraLDFlags[@]}")
+        extraFlags=("-I${!curFIXINC}" "${extraFlags[@]}")
 
         # BOOT_CFLAGS defaults to `-g -O2'; since we override it below, make
         # sure to explictly add them so that files compiled with the bootstrap
@@ -72,9 +90,6 @@ if test "$noSysDirs" = "1"; then
         fi
 
         declare EXTRA_${pre}FLAGS="${extraFlags[*]}"
-        for i in "${extraLDFlags[@]}"; do
-            declare EXTRA_${pre}LDFLAGS+=" -Wl,$i"
-        done
     done
 
     if test -z "${targetConfig-}"; then
