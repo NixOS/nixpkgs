@@ -5,7 +5,7 @@
   # If enabled GHC will be build with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
 , enableIntegerSimple ? false, gmp
-, version ? "8.3.20170808"
+, version ? "8.5.20171209"
 }:
 
 let
@@ -13,7 +13,7 @@ let
 
   commonBuildInputs = [ ghc perl autoconf automake happy alex python3 ];
 
-  rev = "14457cf6a50f708eecece8f286f08687791d51f7";
+  rev = "4335c07ca7e64624819b22644d7591853826bd75";
 
   commonPreConfigure =  ''
     echo ${version} >VERSION
@@ -34,7 +34,7 @@ in stdenv.mkDerivation (rec {
   src = fetchgit {
     url = "git://git.haskell.org/ghc.git";
     inherit rev;
-    sha256 = "08vj9ca7rq7rv8pjfl14fg2lg9d6zisrwlq6bi5vzr006816dy8y";
+    sha256 = "19csad94sk0bw2nj97ppmnwh4c193jg0jmg5w2sx9rqm9ih4yg85";
   };
 
   postPatch = "patchShebangs .";
