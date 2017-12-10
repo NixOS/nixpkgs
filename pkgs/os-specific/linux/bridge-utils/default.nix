@@ -10,6 +10,9 @@ stdenv.mkDerivation rec {
 
   # Remove patch once the kernel headers are updated
   patches = [ ./add-ip6-header.patch ];
+  postPatch = ''
+    substituteInPlace libbridge/Makefile.in --replace "AR=ar" "AR=${stdenv.cc.targetPrefix}ar"
+  '';
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ ];
