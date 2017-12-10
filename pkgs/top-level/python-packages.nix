@@ -56,14 +56,14 @@ let
     flit = self.flit;
     # We want Python libraries to be named like e.g. "python3.6-${name}"
     inherit namePrefix;
-    pythonModule = python;
+    inherit toPythonModule;
   }));
 
   buildPythonApplication = makeOverridablePythonPackage ( makeOverridable (callPackage ../development/interpreters/python/build-python-package.nix {
     inherit bootstrapped-pip;
     flit = self.flit;
     namePrefix = "";
-    pythonModule = false;
+    toPythonModule = x: x; # Application does not provide modules.
   }));
 
   graphiteVersion = "1.0.2";
@@ -91,11 +91,9 @@ let
 
   # Get list of required Python modules given a list of derivations.
   requiredPythonModules = drvs: let
-    filterNull = list: filter (x: !isNull x) list;
-    conditionalGetRecurse = attr: condition: drv: let f = conditionalGetRecurse attr condition; in
-      (if (condition drv) then unique [drv]++(concatMap f (filterNull(getAttr attr drv))) else []);
-    _required = drv: conditionalGetRecurse "propagatedBuildInputs" hasPythonModule drv;
-  in [python] ++ (unique (concatMap _required (filterNull drvs)));
+    removeNull = list: filter (x: !isNull x) list;
+    modules = filter hasPythonModule (removeNull drvs);
+  in unique ([python] ++ modules ++ concatLists (catAttrs "requiredPythonModules" modules));
 
   # Create a PYTHONPATH from a list of derivations. This function recurses into the items to find derivations
   # providing Python modules.
@@ -106,9 +104,9 @@ let
     drv.overrideAttrs( oldAttrs: {
       # Use passthru in order to prevent rebuilds when possible.
       passthru = (oldAttrs.passthru or {})// {
-        name = namePrefix + oldAttrs.name;
         pythonModule = python;
         pythonPath = [ ]; # Deprecated, for compatibility.
+        requiredPythonModules = requiredPythonModules drv.propagatedBuildInputs;
       };
     });
 
