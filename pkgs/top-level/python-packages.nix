@@ -87,12 +87,11 @@ let
     in fetcher (builtins.removeAttrs attrs ["format"]) );
 
   # Check whether a derivation provides a Python module.
-  hasPythonModule = drv: (hasAttr "pythonModule" drv) && ( (getAttr "pythonModule" drv) == python);
+  hasPythonModule = drv: drv?pythonModule && drv.pythonModule == python;
 
   # Get list of required Python modules given a list of derivations.
   requiredPythonModules = drvs: let
-    removeNull = list: filter (x: !isNull x) list;
-    modules = filter hasPythonModule (removeNull drvs);
+    modules = filter hasPythonModule drvs;
   in unique ([python] ++ modules ++ concatLists (catAttrs "requiredPythonModules" modules));
 
   # Create a PYTHONPATH from a list of derivations. This function recurses into the items to find derivations
