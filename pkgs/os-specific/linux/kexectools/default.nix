@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" "pic" "relro" ];
 
+  configureFlags = [ "BUILD_CC=${buildPackages.stdenv.cc.targetPrefix}cc" ];
   nativeBuildInputs = [ buildPackages.stdenv.cc ];
   buildInputs = [ zlib ];
 
