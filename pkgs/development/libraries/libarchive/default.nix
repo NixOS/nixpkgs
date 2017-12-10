@@ -44,6 +44,8 @@ stdenv.mkDerivation rec {
       -e 's|-llzo2|-L${lzo}/lib -llzo2|'
   '';
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "Multi-format archive and compression library";
     longDescription = ''
