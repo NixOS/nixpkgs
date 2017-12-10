@@ -970,10 +970,6 @@ let
 
     matita_130312 = callPackage ../applications/science/logic/matita/130312.nix { };
 
-    ott = callPackage ../applications/science/logic/ott {
-      camlp5 = camlp5_transitional;
-    };
-
   };
     in (ocamlPackages.janeStreet // ocamlPackages);
     in lib.fix' (lib.extends overrides packageSet);
