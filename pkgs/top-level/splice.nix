@@ -37,12 +37,15 @@ let
       inherit name;
       value = let
         defaultValue = mash.${name};
-        buildValue = buildPkgs.${name} or {};
-        runValue = runPkgs.${name} or {};
+        buildValue = buildPkgs.${name};
+        runValue = runPkgs.${name};
         augmentedValue = defaultValue
           // (lib.optionalAttrs (buildPkgs ? ${name}) { nativeDrv = buildValue; })
           // (lib.optionalAttrs (runPkgs ? ${name}) { crossDrv = runValue; });
         # Get the set of outputs of a derivation
+        tryGetOutputs = value0: let
+          eval = builtins.tryEval value0;
+        in getOutputs (if eval.success then eval.value else {});
         getOutputs = value: lib.genAttrs
           (value.outputs or (lib.optional (value ? out) "out"))
           (output: value.${output});
@@ -54,7 +57,7 @@ let
         # The derivation along with its outputs, which we recur
         # on to splice them together.
         else if lib.isDerivation defaultValue then augmentedValue
-          // splicer (getOutputs buildValue) (getOutputs runValue)
+          // splicer (tryGetOutputs buildValue) (getOutputs runValue)
         # Just recur on plain attrsets
         else if lib.isAttrs defaultValue then splicer buildValue runValue
         # Don't be fancy about non-derivations. But we could have used used
