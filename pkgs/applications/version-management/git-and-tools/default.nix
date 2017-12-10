@@ -7,6 +7,7 @@ let
     svnSupport = false;         # for git-svn support
     guiSupport = false;         # requires tcl/tk
     sendEmailSupport = false;   # requires plenty of perl libraries
+    perlSupport = true;
     perlLibs = [perlPackages.LWP perlPackages.URI perlPackages.TermReadKey];
     smtpPerlLibs = [
       perlPackages.NetSMTP perlPackages.NetSMTPSSL

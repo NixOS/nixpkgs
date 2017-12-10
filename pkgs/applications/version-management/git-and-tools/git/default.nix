@@ -3,7 +3,8 @@
 , gzip, openssh, pcre2
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
 , libxslt, tcl, tk, makeWrapper, libiconv
-, svnSupport, subversionClient, perlLibs, smtpPerlLibs, gitwebPerlLibs
+, svnSupport, subversionClient
+, perlSupport, perlLibs, smtpPerlLibs, gitwebPerlLibs
 , guiSupport
 , withManual ? true
 , pythonSupport ? true
@@ -14,7 +15,7 @@
 
 let
   version = "2.16.2";
-  svn = subversionClient.override { perlBindings = true; };
+  svn = subversionClient.override { perlBindings = perlSupport; };
 in
 
 stdenv.mkDerivation {
@@ -42,7 +43,8 @@ stdenv.mkDerivation {
     done
   '';
 
-  buildInputs = [curl openssl zlib expat gettext cpio makeWrapper libiconv perl]
+  buildInputs = [curl openssl zlib expat gettext cpio makeWrapper libiconv]
+    ++ stdenv.lib.optional perlSupport perl
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ]
     ++ stdenv.lib.optionals guiSupport [tcl tk]
@@ -54,7 +56,8 @@ stdenv.mkDerivation {
   NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.cc.isClang) "-lgcc_s"
               + stdenv.lib.optionalString (stdenv.isFreeBSD) "-lthr";
 
-  makeFlags = "prefix=\${out} PERL_PATH=${perl}/bin/perl SHELL_PATH=${stdenv.shell} "
+  makeFlags = "prefix=\${out} SHELL_PATH=${stdenv.shell} "
+      + (if perlSupport then "PERL_PATH=${perl}/bin/python" else "NO_PERL=1")
       + (if pythonSupport then "PYTHON_PATH=${python}/bin/python" else "NO_PYTHON=1")
       + (if stdenv.isSunOS then " INSTALL=install NO_INET_NTOP= NO_INET_PTON=" else "")
       + (if stdenv.isDarwin then " NO_APPLE_COMMON_CRYPTO=1" else " sysconfdir=/etc/ ")
@@ -115,9 +118,10 @@ stdenv.mkDerivation {
       SCRIPT="$(cat <<'EOS'
         BEGIN{
           @a=(
-            '${perl}/bin/perl', '${gnugrep}/bin/grep', '${gnused}/bin/sed', '${gawk}/bin/awk',
+            '${gnugrep}/bin/grep', '${gnused}/bin/sed', '${gawk}/bin/awk',
             '${coreutils}/bin/cut', '${coreutils}/bin/basename', '${coreutils}/bin/dirname',
             '${coreutils}/bin/wc', '${coreutils}/bin/tr'
+            ${stdenv.lib.optionalString perlSupport ", '${perl}/bin/perl'"}
           );
         }
         foreach $c (@a) {
@@ -133,19 +137,22 @@ stdenv.mkDerivation {
       substituteInPlace $out/libexec/git-core/git-sh-i18n \
           --subst-var-by gettext ${gettext}
 
+      # Also put git-http-backend into $PATH, so that we can use smart
+      # HTTP(s) transports for pushing
+      ln -s $out/libexec/git-core/git-http-backend $out/bin/git-http-backend
+
       # gzip (and optionally bzip2, xz, zip) are runtime dependencies for
       # gitweb.cgi, need to patch so that it's found
       sed -i -e "s|'compressor' => \['gzip'|'compressor' => ['${gzip}/bin/gzip'|" \
           $out/share/gitweb/gitweb.cgi
       # Give access to CGI.pm and friends (was removed from perl core in 5.22)
+    ''
+
+    + stdenv.lib.optionalString perlSupport ''
       for p in ${stdenv.lib.concatStringsSep " " gitwebPerlLibs}; do
           sed -i -e "/use CGI /i use lib \"$p/lib/perl5/site_perl\";" \
               "$out/share/gitweb/gitweb.cgi"
       done
-
-      # Also put git-http-backend into $PATH, so that we can use smart
-      # HTTP(s) transports for pushing
-      ln -s $out/libexec/git-core/git-http-backend $out/bin/git-http-backend
 
       # wrap perl commands
       gitperllib=$out/lib/perl5/site_perl
