@@ -43,10 +43,11 @@ stdenv.mkDerivation {
     done
   '';
 
+  nativeBuildInputs =
+    stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
+         docbook_xsl docbook_xml_dtd_45 libxslt ];
   buildInputs = [curl openssl zlib expat gettext cpio makeWrapper libiconv]
     ++ stdenv.lib.optional perlSupport perl
-    ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
-         docbook_xsl docbook_xml_dtd_45 libxslt ]
     ++ stdenv.lib.optionals guiSupport [tcl tk]
     ++ stdenv.lib.optionals withpcre2 [ pcre2 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.Security ];
