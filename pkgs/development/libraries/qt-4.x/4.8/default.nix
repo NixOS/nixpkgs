@@ -187,30 +187,27 @@ stdenv.mkDerivation rec {
 
   installPhase = optionalString stdenv.isDarwin ''
     runHook preInstall
+
+    mkdir -p $out
     cp -r lib $out
 
     mkdir -p $out/Applications
     mv bin/*.app $out/Applications
-    rm -rf bin/*.app
-
     cp -r bin $out
 
     mkdir -p $out/share/doc/${name}
-    mkdir -p $out/lib
-    mkdir -p $out/lib/qt4/plugins
-    mkdir -p $out/lib/qt4/imports
-    mkdir -p $out/bin
-    mkdir -p $out/include
-    mkdir -p $out/share/${name}
+    cp -r doc/* $out/share/doc/${name}
 
+    mkdir -p $out/lib/qt4
+    cp -r plugins $out/lib/qt4
+    cp -r imports $out/lib/qt4
+
+    mkdir -p $out/share/${name}
     cp -r mkspecs $out/share/${name}
     cp -r translations $out/share/${name}
     cp -r tools/linguist/phrasebooks $out/share/${name}
     cp tools/porting/src/q3porting.xml $out/share/${name}
 
-    cp -r plugins $out/lib/qt4
-    cp -r imports $out/lib/qt4
-    cp -r doc/* $out/share/doc/${name}
     runHook postInstall
   '';
 
