@@ -44,7 +44,9 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs =
-    stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
+    [ perl # Used during installation
+      gettext
+    ] ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ];
   buildInputs = [curl openssl zlib expat gettext cpio makeWrapper libiconv]
     ++ stdenv.lib.optional perlSupport perl
@@ -57,14 +59,21 @@ stdenv.mkDerivation {
   NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.cc.isClang) "-lgcc_s"
               + stdenv.lib.optionalString (stdenv.isFreeBSD) "-lthr";
 
-  makeFlags = "prefix=\${out} SHELL_PATH=${stdenv.shell} "
-      + (if perlSupport then "PERL_PATH=${perl}/bin/python" else "NO_PERL=1")
-      + (if pythonSupport then "PYTHON_PATH=${python}/bin/python" else "NO_PYTHON=1")
-      + (if stdenv.isSunOS then " INSTALL=install NO_INET_NTOP= NO_INET_PTON=" else "")
-      + (if stdenv.isDarwin then " NO_APPLE_COMMON_CRYPTO=1" else " sysconfdir=/etc/ ")
-      # XXX: USE_PCRE2 might be useful in general, look into it
-      # XXX other alpine options?
-      + (if stdenv.hostPlatform.isMusl then "NO_SYS_POLL_H=1 NO_GETTEXT=YesPlease" else "");
+  configureFlags = stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "ac_cv_fread_reads_directories=yes"
+    "ac_cv_snprintf_returns_bogus=no"
+  ];
+
+  makeFlags = [ "prefix=\${out}" "SHELL_PATH=${stdenv.shell}" ]
+    ++ stdenv.lib.optional (!guiSupport) "NO_TCLTK=1 "
+    ++ (if perlSupport then ["PERL_PATH=${perl}/bin/perl"] else ["NO_PERL=1"])
+    ++ (if pythonSupport then ["PYTHON_PATH=${python}/bin/python"] else ["NO_PYTHON=1"])
+    ++ stdenv.lib.optionals stdenv.isSunOS ["INSTALL=install" "NO_INET_NTOP=" "NO_INET_PTON="]
+    ++ (if stdenv.isDarwin then ["NO_APPLE_COMMON_CRYPTO=1"] else ["sysconfdir=/etc/"]);
+    # XXX: USE_PCRE2 might be useful in general, look into it
+    # XXX other alpine options?
+    ++ stdenv.optionals stdenv.hostPlatform.isMusl ["NO_SYS_POLL_H=1" "NO_GETTEXT=YesPlease"];
+
 
   # build git-credential-osxkeychain if darwin
   postBuild = stdenv.lib.optionalString stdenv.isDarwin ''
@@ -141,15 +150,15 @@ stdenv.mkDerivation {
       # Also put git-http-backend into $PATH, so that we can use smart
       # HTTP(s) transports for pushing
       ln -s $out/libexec/git-core/git-http-backend $out/bin/git-http-backend
+    ''
 
+    + stdenv.lib.optionalString perlSupport ''
       # gzip (and optionally bzip2, xz, zip) are runtime dependencies for
       # gitweb.cgi, need to patch so that it's found
       sed -i -e "s|'compressor' => \['gzip'|'compressor' => ['${gzip}/bin/gzip'|" \
           $out/share/gitweb/gitweb.cgi
       # Give access to CGI.pm and friends (was removed from perl core in 5.22)
-    ''
 
-    + stdenv.lib.optionalString perlSupport ''
       for p in ${stdenv.lib.concatStringsSep " " gitwebPerlLibs}; do
           sed -i -e "/use CGI /i use lib \"$p/lib/perl5/site_perl\";" \
               "$out/share/gitweb/gitweb.cgi"
