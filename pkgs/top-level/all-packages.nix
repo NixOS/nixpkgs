@@ -16513,7 +16513,6 @@ with pkgs;
 
   rawtherapee = callPackage ../applications/graphics/rawtherapee {
     fftw = fftwSinglePrec;
-    cmake = cmake_2_8; # problems after 3.4 -> 3.6.0
   };
 
   rclone = callPackage ../applications/networking/sync/rclone { };
