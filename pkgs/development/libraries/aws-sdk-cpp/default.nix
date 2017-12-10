@@ -28,7 +28,8 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
   separateDebugInfo = stdenv.isLinux;
 
-  buildInputs = [ cmake curl ];
+  nativeBuildInputs = [ cmake curl ];
+  buildInputs = [ zlib curl openssl ];
 
   cmakeFlags =
     lib.optional (!customMemoryManagement) "-DCUSTOM_MEMORY_MANAGEMENT=0"
@@ -50,10 +51,6 @@ in stdenv.mkDerivation rec {
     ''
       rm aws-cpp-sdk-core-tests/aws/auth/AWSCredentialsProviderTest.cpp
     '';
-
-  NIX_LDFLAGS = lib.concatStringsSep " " (
-    (map (pkg: "-rpath ${lib.getOutput "lib" pkg}/lib"))
-      [ curl openssl zlib stdenv.cc.cc ]);
 
   meta = {
     description = "A C++ interface for Amazon Web Services";
