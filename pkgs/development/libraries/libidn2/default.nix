@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, libiconv, libunistring, help2man, ronn }:
+{ fetchurl, stdenv, buildPackages, libiconv, libunistring, help2man, ronn }:
 
 with stdenv.lib;
 
@@ -17,6 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libunistring ronn ]
     ++ optionals stdenv.isDarwin [ libiconv help2man ];
+  nativeBuildInputs = [ buildPackages.stdenv.cc ];
 
   meta = {
     homepage = "https://www.gnu.org/software/libidn/#libidn2";
