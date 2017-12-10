@@ -10,7 +10,7 @@ python2Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python2Packages; [
-    dns
+    dnspython
     ecdsa
     pbkdf2
     protobuf
