@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   # configure script is not autotools-based, doesn't support these options
   configurePlatforms = [ ];
 
+  makeFlags = "CC=${stdenv.cc.targetPrefix}cc AR=${stdenv.cc.bintools.targetPrefix}";
   installTargets = [ "install" "install-lib-shared" "install-lib-so-link" ];
   postInstall = "make -C librhash install-headers";
 
