@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, xlibsWrapper }:
+{ stdenv, fetchurl, ncurses, libX11, xproto, buildEnv }:
 
 let
    useX11 = stdenv.isi686 || stdenv.isx86_64;
@@ -7,52 +7,65 @@ let
 in
 
 stdenv.mkDerivation rec {
-  
+
   name = "ber-metaocaml-${version}";
-  version = "003";
-  
+  version = "104";
+
   src = fetchurl {
-    url = "http://caml.inria.fr/pub/distrib/ocaml-3.11/ocaml-3.11.2.tar.bz2";
-    sha256 = "0hw1yp1mmfyn1pmda232d0ry69m7ln1z0fn5lgi8nz3y1mx3iww6";
+    url = "http://caml.inria.fr/pub/distrib/ocaml-4.04/ocaml-4.04.0.tar.gz";
+    sha256 = "1pi2hdm9lxhn45qvfqfss1hpa4jijm14qgmrgajsadxqdiplhqyb";
   };
 
   metaocaml = fetchurl {
-    url = "http://okmij.org/ftp/ML/ber-metaocaml.tar.gz";
-    sha256 = "1kq1if25c1wvcdiy4g46xk05dkc1am2gc4qvmg4x19wvvaz09gzf";
+    url = "http://okmij.org/ftp/ML/ber-metaocaml-104.tar.gz";
+    sha256 = "1gmwlxairxqcmqa2r6kbf8b4dxc7pfhfbh48g1s14d3z20rj8nib";
   };
 
   # Needed to avoid a SIGBUS on the final executable on mips
   NIX_CFLAGS_COMPILE = if stdenv.isMips then "-fPIC" else "";
 
-  patches = optionals stdenv.isDarwin [ ./gnused-on-osx-fix.patch ];
+  x11env = buildEnv { name = "x11env"; paths = [libX11 xproto];};
+  x11lib = x11env + "/lib";
+  x11inc = x11env + "/include";
 
   prefixKey = "-prefix ";
-  configureFlags = ["-no-tk"] ++ optionals useX11 [ "-x11lib" xlibsWrapper ];
-  buildFlags = "core coreboot all"; # "world" + optionalString useNativeCompilers " bootstrap world.opt";
-  buildInputs = [ncurses] ++ optionals useX11 [ xlibsWrapper ];
+  configureFlags = optionals useX11 [ "-x11lib" x11lib
+                                      "-x11include" x11inc ];
+
+  dontStrip = true;
+  buildInputs = [ncurses] ++ optionals useX11 [ libX11 xproto ];
   installFlags = "-i";
   installTargets = "install"; # + optionalString useNativeCompilers " installopt";
-  prePatch = ''
-    CAT=$(type -tp cat)
-    sed -e "s@/bin/cat@$CAT@" -i config/auto-aux/sharpbang
-    patch -p0 < ${./mips64.patch}
-  '';
+
   postConfigure = ''
     tar -xvzf $metaocaml
     cd ${name}
     make patch
     cd ..
   '';
-  postBuild = ''
+  buildPhase = ''
+    make world
+    make -i install
+
+    make bootstrap
+    make opt.opt
+    make installopt
     mkdir -p $out/include
     ln -sv $out/lib/ocaml/caml $out/include/caml
-  '';
-  postInstall = ''
     cd ${name}
     make all
     make install
+    make install.opt
+    cd ..
+ '';
+  installPhase = "";
+  postBuild = ''
+  '';
+  checkPhase = ''
+    cd ${name}
     make test
     make test-compile
+    make test-native
     cd ..
   '';
 
@@ -67,6 +80,5 @@ stdenv.mkDerivation rec {
       A conservative extension of OCaml with the primitive type of code values,
       and three basic multi-stage expression forms: Brackets, Escape, and Run
     '';
-    broken = true;
   };
 }
