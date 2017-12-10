@@ -33,6 +33,7 @@ rec {
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
   go-ethereum-classic = callPackage ./go-ethereum-classic { };
+  go-ubiq = callPackage ./go-ubiq.nix { };
 
   litecoin  = callPackage ./litecoin.nix { withGui = true; };
   litecoind = callPackage ./litecoin.nix { withGui = false; };
