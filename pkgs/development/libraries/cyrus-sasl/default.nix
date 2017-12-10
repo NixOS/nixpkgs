@@ -4,11 +4,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "cyrus-sasl-${version}${optionalString (kerberos == null) "-without-kerberos"}";
-  version = "2.1.27rc3";
+  version = "2.1.27-rc5";
 
   src = fetchurl {
     url = "ftp://ftp.cyrusimap.org/cyrus-sasl/cyrus-sasl-${version}.tar.gz";
-    sha256 = "0aivwvkacfwhblqfl8xj006633dw85pxplgdy6wa64yk5822j3x5";
+    sha256 = "0pnkp00xlqrh5ph7j8m4xwfgcca5hr9xvrpvn8k1lxa8xhnh8d6p";
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
@@ -23,10 +23,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./missing-size_t.patch # https://bugzilla.redhat.com/show_bug.cgi?id=906519
-    (fetchpatch { # CVE-2013-4122
-      url = "http://sourceforge.net/projects/miscellaneouspa/files/glibc217/cyrus-sasl-2.1.26-glibc217-crypt.diff";
-      sha256 = "05l7dh1w9d5fvzg0pjwzqh0fy4ah8y5cv6v67s4ssbq8xwd4pkf2";
-    })
   ] ++ lib.optional stdenv.isFreeBSD (
       fetchurl {
         url = "http://www.linuxfromscratch.org/patches/blfs/svn/cyrus-sasl-2.1.26-fixes-3.patch";
@@ -49,6 +45,9 @@ stdenv.mkDerivation rec {
   '';
 
   installFlags = lib.optional stdenv.isDarwin [ "framedir=$(out)/Library/Frameworks/SASL2.framework" ];
+
+  # Due to format warnings in plugins/scram.c
+  hardeningDisable = [ "format" ];
 
   postInstall = ''
     for f in $out/lib/*.la $out/lib/sasl2/*.la; do
