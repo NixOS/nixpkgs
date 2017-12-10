@@ -37,26 +37,25 @@ let
       inherit name;
       value = let
         defaultValue = mash.${name};
-        buildValue = buildPkgs.${name};
-        runValue = runPkgs.${name};
+        # `or {}` is for the non-derivation attsert splicing case, where `{}` is the identity.
+        buildValue = buildPkgs.${name} or {};
+        runValue = runPkgs.${name} or {};
         augmentedValue = defaultValue
           // (lib.optionalAttrs (buildPkgs ? ${name}) { nativeDrv = buildValue; })
           // (lib.optionalAttrs (runPkgs ? ${name}) { crossDrv = runValue; });
-        # Get the set of outputs of a derivation
+        # Get the set of outputs of a derivation. If one derivation fails to
+        # evaluate we don't want to diverge the entire splice, so we fall back
+        # on {}
         tryGetOutputs = value0: let
-          eval = builtins.tryEval value0;
-        in getOutputs (if eval.success then eval.value else {});
+          inherit (builtins.tryEval value0) success value;
+        in getOutputs (lib.optionalAttrs success value);
         getOutputs = value: lib.genAttrs
           (value.outputs or (lib.optional (value ? out) "out"))
           (output: value.${output});
       in
-        # Certain *Cross derivations will fail assertions, but we need their
-        # nativeDrv. We are assuming anything that fails to evaluate is an
-        # attrset (including derivation) and thus can be unioned.
-        if !(builtins.tryEval defaultValue).success then augmentedValue
         # The derivation along with its outputs, which we recur
         # on to splice them together.
-        else if lib.isDerivation defaultValue then augmentedValue
+        if lib.isDerivation defaultValue then augmentedValue
           // splicer (tryGetOutputs buildValue) (getOutputs runValue)
         # Just recur on plain attrsets
         else if lib.isAttrs defaultValue then splicer buildValue runValue
