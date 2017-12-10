@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder, nose, dns
+{ stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder, nose, dnspython
 ,  chardet, lmtpd, pythondaemon, six, jinja2, mock }:
 
 buildPythonPackage rec {
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ nose jinja2 mock ];
-  propagatedBuildInputs = [ chardet dns lmtpd pythondaemon six ];
+  propagatedBuildInputs = [ chardet dnspython lmtpd pythondaemon six ];
 
   meta = with stdenv.lib; {
     homepage = http://salmon-mail.readthedocs.org/;

@@ -21,7 +21,7 @@ python2Packages.buildPythonApplication rec {
     qrcode
     ltc_scrypt
     protobuf
-    dns
+    dnspython
     jsonrpclib
   ];
 

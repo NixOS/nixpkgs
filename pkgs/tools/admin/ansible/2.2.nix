@@ -38,7 +38,7 @@ in buildPythonPackage rec {
   dontPatchShebangs = false;
 
   propagatedBuildInputs = [
-    pycrypto paramiko jinja pyyaml httplib2 boto six netaddr dns
+    pycrypto paramiko jinja pyyaml httplib2 boto six netaddr dnspython
   ] ++ stdenv.lib.optional windowsSupport pywinrm;
 
   meta = with stdenv.lib; {
