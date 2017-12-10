@@ -1,4 +1,4 @@
-{ stdenv
+{ stdenv, buildPackages
 
 # Build time
 , fetchurl, pkgconfig, perl, texinfo, setupDebugInfoDirs
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./debug-info-from-env.patch ];
 
-  nativeBuildInputs = [ pkgconfig texinfo perl setupDebugInfoDirs ]
+  nativeBuildInputs = [ pkgconfig texinfo perl setupDebugInfoDirs buildPackages.stdenv.cc ]
     # TODO(@Ericson2314) not sure if should be host or target
     ++ stdenv.lib.optional targetPlatform.isHurd mig;
 
