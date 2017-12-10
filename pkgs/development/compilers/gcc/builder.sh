@@ -12,7 +12,7 @@ mkdir "$NIX_FIXINC_DUMMY"
 if test "$staticCompiler" = "1"; then
     EXTRA_LDFLAGS="-static"
 else
-    EXTRA_LDFLAGS="-Wl,-rpath,$lib/lib"
+    EXTRA_LDFLAGS="-Wl,-rpath,${!outputLib}/lib"
 fi
 
 
