@@ -189,9 +189,9 @@ rec {
   # https://github.com/docker/docker-ce/blob/v${version}/components/engine/hack/dockerfile/binaries-commits
 
   docker_17_09 = dockerGen rec {
-    version = "17.09.0-ce";
-    rev = "afdb6d44a80f777069885a9ee0e0f86cf841b1bb"; # git commit
-    sha256 = "03g0imdcxqx9y4hhyymxqzvm8bqg4cqrmb7sjbxfdgrhzh9kcn1p";
+    version = "17.09.1-ce";
+    rev = "19e2cf6259bd7f027a3fff180876a22945ce4ba8"; # git commit
+    sha256 = "10glpbaw7bg2acgf1nmfn79is2b3xsm4shz67rp72dmpzzaavb42";
     runcRev = "3f2f8b84a77f73d38244dd690525642a72156c64";
     runcSha256 = "0vaagmav8443kmyxac2y1y5l2ipcs1c7gdmsnvj48y9bafqx72rq";
     containerdRev = "06b9cb35161009dcb7123345749fef02f7cea8e0";
