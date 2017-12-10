@@ -9010,6 +9010,8 @@ with pkgs;
 
   libcello = callPackage ../development/libraries/libcello {};
 
+  libcerf = callPackage ../development/libraries/libcerf {};
+
   libcdaudio = callPackage ../development/libraries/libcdaudio { };
 
   libcddb = callPackage ../development/libraries/libcddb { };
