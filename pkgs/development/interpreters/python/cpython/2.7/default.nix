@@ -201,7 +201,7 @@ in stdenv.mkDerivation {
     passthru = let
       pythonPackages = callPackage ../../../../../top-level/python-packages.nix {python=self; overrides=packageOverrides;};
     in rec {
-      inherit libPrefix sitePackages x11Support hasDistutilsCxxPatch;
+      inherit libPrefix sitePackages x11Support hasDistutilsCxxPatch ucsEncoding;
       executable = libPrefix;
       buildEnv = callPackage ../../wrapper.nix { python = self; inherit (pythonPackages) requiredPythonModules; };
       withPackages = import ../../with-packages.nix { inherit buildEnv pythonPackages;};

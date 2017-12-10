@@ -64,7 +64,7 @@ let
     !allowUnfreePredicate attrs;
 
   allowInsecureDefaultPredicate = x: builtins.elem x.name (config.permittedInsecurePackages or []);
-  allowInsecurePredicate = x: (config.allowUnfreePredicate or allowInsecureDefaultPredicate) x;
+  allowInsecurePredicate = x: (config.allowInsecurePredicate or allowInsecureDefaultPredicate) x;
 
   hasAllowedInsecure = attrs:
     (attrs.meta.knownVulnerabilities or []) == [] ||

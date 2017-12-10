@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
     [ ./glib-2.32.patch
       ./libressl.patch
       ./parallel-configure.patch
+      ./qt-4.8.7-unixmake-darwin.patch
       (substituteAll {
         src = ./dlopen-absolute-paths.diff;
         cups = if cups != null then stdenv.lib.getLib cups else null;
@@ -76,7 +77,19 @@ stdenv.mkDerivation rec {
         glibc = stdenv.cc.libc.out;
         openglDriver = if mesaSupported then mesa.driverLink else "/no-such-path";
       })
-    ] ++ stdenv.lib.optional gtkStyle (substituteAll ({
+      (fetchpatch {
+        name = "fix-medium-font.patch";
+        url = "http://anonscm.debian.org/cgit/pkg-kde/qt/qt4-x11.git/plain/debian/patches/"
+          + "kubuntu_39_fix_medium_font.diff?id=21b342d71c19e6d68b649947f913410fe6129ea4";
+        sha256 = "0bli44chn03c2y70w1n8l7ss4ya0b40jqqav8yxrykayi01yf95j";
+      })
+      (fetchpatch {
+        name = "qt4-gcc6.patch";
+        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qt4-gcc6.patch?h=packages/qt4&id=ca773a144f5abb244ac4f2749eeee9333cac001f";
+        sha256 = "07lrva7bjh6i40p7b3ml26a2jlznri8bh7y7iyx5zmvb1gfxmj34";
+      })
+    ]
+    ++ stdenv.lib.optional gtkStyle (substituteAll ({
         src = ./dlopen-gtkstyle.diff;
         # substituteAll ignores env vars starting with capital letter
         gtk = gtk2.out;
@@ -93,20 +106,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isAarch64 (fetchpatch {
         url = "https://src.fedoraproject.org/rpms/qt/raw/ecf530486e0fb7fe31bad26805cde61115562b2b/f/qt-aarch64.patch";
         sha256 = "1fbjh78nmafqmj7yk67qwjbhl3f6ylkp6x33b1dqxfw9gld8b3gl";
-      })
-    ++ [
-      (fetchpatch {
-        name = "fix-medium-font.patch";
-        url = "http://anonscm.debian.org/cgit/pkg-kde/qt/qt4-x11.git/plain/debian/patches/"
-          + "kubuntu_39_fix_medium_font.diff?id=21b342d71c19e6d68b649947f913410fe6129ea4";
-        sha256 = "0bli44chn03c2y70w1n8l7ss4ya0b40jqqav8yxrykayi01yf95j";
-      })
-      (fetchpatch {
-        name = "qt4-gcc6.patch";
-        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qt4-gcc6.patch?h=packages/qt4&id=ca773a144f5abb244ac4f2749eeee9333cac001f";
-        sha256 = "07lrva7bjh6i40p7b3ml26a2jlznri8bh7y7iyx5zmvb1gfxmj34";
-      })
-    ];
+      });
 
   preConfigure = ''
     export LD_LIBRARY_PATH="`pwd`/lib:$LD_LIBRARY_PATH"
@@ -185,37 +185,8 @@ stdenv.mkDerivation rec {
     sed -i 's/^\(LIBS[[:space:]]*=.*$\)/\1 -lobjc/' ./src/corelib/Makefile.Release
   '';
 
-  installPhase = optionalString stdenv.isDarwin ''
-    runHook preInstall
-    cp -r lib $out
-
-    mkdir -p $out/Applications
-    mv bin/*.app $out/Applications
-    rm -rf bin/*.app
-
-    cp -r bin $out
-
-    mkdir -p $out/share/doc/${name}
-    mkdir -p $out/lib
-    mkdir -p $out/lib/qt4/plugins
-    mkdir -p $out/lib/qt4/imports
-    mkdir -p $out/bin
-    mkdir -p $out/include
-    mkdir -p $out/share/${name}
-
-    cp -r mkspecs $out/share/${name}
-    cp -r translations $out/share/${name}
-    cp -r tools/linguist/phrasebooks $out/share/${name}
-    cp tools/porting/src/q3porting.xml $out/share/${name}
-
-    cp -r plugins $out/lib/qt4
-    cp -r imports $out/lib/qt4
-    cp -r doc/* $out/share/doc/${name}
-    runHook postInstall
-  '';
-
-  postInstall = optionalString (!stdenv.isDarwin) ''
-      rm -rf $out/tests
+  postInstall = ''
+    rm -rf $out/tests
   '';
 
   crossAttrs = {
