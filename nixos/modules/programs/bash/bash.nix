@@ -20,7 +20,7 @@ let
       nullglobStatus=$(shopt -p nullglob)
       shopt -s nullglob
       for p in $NIX_PROFILES; do
-        for m in "$p/etc/bash_completion.d/"* "$p/share/bash-completion/completions/"*; do
+        for m in "$p/etc/bash_completion.d/"*; do
           . $m
         done
       done
