@@ -147,6 +147,21 @@ stdenv.mkDerivation {
         ln -s $ldPath/${targetPrefix}as $out/bin/${targetPrefix}as
       fi
 
+      # Create a symlink to ar (the archiver).
+      if [ -e $ldPath/${targetPrefix}ar ]; then
+        ln -s $ldPath/${targetPrefix}ar $out/bin/${targetPrefix}ar
+      fi
+
+      # Create a symlink to ranlib (the archive indexer).
+      if [ -e $ldPath/${targetPrefix}ranlib ]; then
+        ln -s $ldPath/${targetPrefix}ranlib $out/bin/${targetPrefix}ranlib
+      fi
+
+      # Create a symlink to strip
+      if [ -e $ldPath/${targetPrefix}strip ]; then
+        ln -s $ldPath/${targetPrefix}strip $out/bin/${targetPrefix}strip
+      fi
+
     '' + (if !useMacosReexportHack then ''
       wrap ${targetPrefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${targetPrefix}ld}
     '' else ''
