@@ -48,11 +48,11 @@ stdenv.mkDerivation {
     done
   '';
 
-  nativeBuildInputs = [ perl ];
-  buildInputs = [curl openssl zlib expat gettext cpio makeWrapper libiconv]
-    ++ stdenv.lib.optionals perlSupport [ perl ]
+  nativeBuildInputs = [ gettext perl ]
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
-         docbook_xsl docbook_xml_dtd_45 libxslt ]
+         docbook_xsl docbook_xml_dtd_45 libxslt ];
+  buildInputs = [curl openssl zlib expat cpio makeWrapper libiconv]
+    ++ stdenv.lib.optionals perlSupport [ perl ]
     ++ stdenv.lib.optionals guiSupport [tcl tk]
     ++ stdenv.lib.optionals withpcre2 [ pcre2 ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.Security ];
@@ -61,6 +61,11 @@ stdenv.mkDerivation {
   # required to support pthread_cancel()
   NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.cc.isClang) "-lgcc_s"
               + stdenv.lib.optionalString (stdenv.isFreeBSD) "-lthr";
+
+  configureFlags = stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "ac_cv_fread_reads_directories=yes"
+    "ac_cv_snprintf_returns_bogus=no"
+  ];
 
   makeFlags = [
     "prefix=\${out}"
