@@ -127,7 +127,7 @@ in {
 
   recursivePthLoader = callPackage ../development/python-modules/recursive-pth-loader { };
 
-  setuptools = callPackage ../development/python-modules/setuptools { };
+  setuptools = toPythonModule (callPackage ../development/python-modules/setuptools { });
 
   vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit {
     pythonPackages = self;
