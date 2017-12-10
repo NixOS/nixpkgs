@@ -1,4 +1,5 @@
-{ lib, stdenv, fetchurl, zlib, gd, texinfo4, makeWrapper, readline
+{ lib, stdenv, fetchurl, makeWrapper, pkgconfig, texinfo
+, cairo, gd, libcerf, pango, readline, zlib
 , withTeXLive ? false, texlive
 , withLua ? false, lua
 , emacs ? null
@@ -8,9 +9,6 @@
 , libXaw ? null
 , aquaterm ? false
 , withWxGTK ? false, wxGTK ? null
-, pango ? null
-, cairo ? null
-, pkgconfig ? null
 , fontconfig ? null
 , gnused ? null
 , coreutils ? null
@@ -28,8 +26,10 @@ stdenv.mkDerivation rec {
     sha256 = "18diyy7aib9mn098x07g25c7jij1x7wbfpicz0z8gwxx08px45m4";
   };
 
+  nativeBuildInputs = [ makeWrapper pkgconfig texinfo ];
+
   buildInputs =
-    [ zlib gd texinfo4 readline pango cairo pkgconfig makeWrapper ]
+    [ cairo gd libcerf pango readline zlib ]
     ++ lib.optional withTeXLive (texlive.combine { inherit (texlive) scheme-small; })
     ++ lib.optional withLua lua
     ++ lib.optionals withX [ libX11 libXpm libXt libXaw ]
@@ -49,6 +49,8 @@ stdenv.mkDerivation rec {
        --prefix PATH : '${fontconfig.bin}/bin' \
        --run '. ${./set-gdfontpath-from-fontconfig.sh}'
   '';
+
+  enableParallelBuilding = true;
 
   meta = with lib; {
     homepage = http://www.gnuplot.info/;
