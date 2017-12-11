@@ -1,11 +1,20 @@
 { stdenv, fetchurl, fetchpatch, bc, dtc, openssl, python2, swig
+, armTrustedFirmwareAllwinner
 , hostPlatform, buildPackages
 }:
 
 let
+  # Various changes for 64-bit sunxi boards, (hopefully) destined for 2018.05
+  sunxiPatch = fetchpatch {
+    name = "sunxi.patch";
+    url = "https://github.com/u-boot/u-boot/compare/v2018.03...dezgeg:2018-03-sunxi.patch";
+    sha256 = "1pqn7c6c06hfygwpcgaraqvqxcjhz99j0rx5psfhj8igy0qvk2dq";
+  };
+
   buildUBoot = { filesToInstall
             , installDir ? "$out"
             , defconfig
+            , extraPatches ? []
             , extraMakeFlags ? []
             , extraMeta ? {}
             , ... } @ args:
@@ -36,7 +45,7 @@ let
         url = https://github.com/dezgeg/u-boot/commit/extlinux-path-length-2018-03.patch;
         sha256 = "07jafdnxvqv8lz256qy29agjc2k1zj5ad4k28r1w5qkhwj4ixmf8";
       })
-    ];
+    ] ++ extraPatches;
 
     postPatch = ''
       patchShebangs tools
@@ -198,6 +207,14 @@ in rec {
     defconfig = "sheevaplug_defconfig";
     extraMeta.platforms = ["armv5tel-linux"];
     filesToInstall = ["u-boot.bin"];
+  };
+
+  ubootSopine = buildUBoot rec {
+    extraPatches = [sunxiPatch];
+    defconfig = "sopine_baseboard_defconfig";
+    extraMeta.platforms = ["aarch64-linux"];
+    BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
   ubootUtilite = buildUBoot rec {
