@@ -62,6 +62,7 @@ stdenv.mkDerivation {
     for i in *
     do
         cd $i
+        patch -d vboxvideo -p6 < ${./linux-4.14.patch}
         find . -type f | xargs sed 's/depmod -a/true/' -i
         make
         cd ..
