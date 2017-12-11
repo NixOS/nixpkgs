@@ -37,7 +37,8 @@ makeWrapper() {
 
     mkdir -p "$(dirname "$wrapper")"
 
-    echo "#! $SHELL -e" > "$wrapper"
+    echo "#! $SHELL -eu" > "$wrapper"
+    echo "declare -a extraFlagsArray=()" >> "$wrapper"
 
     while (( $# )); do
     case "$1" in
@@ -61,7 +62,9 @@ makeWrapper() {
         --run)
             local command="$2"
             shift 2
+            echo "set +u" >> "$wrapper"
             echo "$command" >> "$wrapper"
+            echo "set -u" >> "$wrapper"
             ;;
         --suffix | --prefix)
             local flag="$1"
@@ -120,8 +123,10 @@ makeWrapper() {
     # that may be set by --run actions.
     # Silence warning about unexpanded extraFlagsArray:
     # shellcheck disable=SC2016
+    echo "set +u" >> "$wrapper"
     echo exec ${argv0:+-a "${argv0@Q}"} "${original@Q}" \
         "${flagsBefore[@]}" '"${extraFlagsArray[@]}"' '"$@"' >> "$wrapper"
+    echo "set -u" >> "$wrapper"
 
     chmod +x "$wrapper"
 }
