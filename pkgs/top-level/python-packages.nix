@@ -6780,8 +6780,8 @@ in {
     };
 
     propagatedBuildInputs = with self; [ python-axolotl-curve25519 protobuf pycrypto ];
-    # IV == 0 in tests is not supported by pycrytpodom (our pycrypto drop-in)
-    doCheck = !isPy3k;
+    # IV == 0 in tests is not supported by pycryptodome (our pycrypto drop-in)
+    doCheck = false;
 
     meta = {
       homepage = "https://github.com/tgalal/python-axolotl";
