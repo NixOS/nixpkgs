@@ -13165,6 +13165,7 @@ with pkgs;
     ubootBeagleboneBlack
     ubootJetsonTK1
     ubootOdroidXU3
+    ubootOrangePiPc
     ubootPcduino3Nano
     ubootRaspberryPi
     ubootRaspberryPi2
