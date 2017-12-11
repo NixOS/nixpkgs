@@ -4622,9 +4622,9 @@ with pkgs;
     preCheck = "export PATH=dist/build/stutter:$PATH";
   });
 
-  strongswan = callPackage ../tools/networking/strongswan { };
-
-  strongswanTNC = callPackage ../tools/networking/strongswan { enableTNC=true; };
+  strongswan    = callPackage ../tools/networking/strongswan { };
+  strongswanTNC = callPackage ../tools/networking/strongswan { enableTNC = true; };
+  strongswanNM  = callPackage ../tools/networking/strongswan { enableNetworkManager = true; };
 
   su = shadow.su;
 
