@@ -19517,6 +19517,7 @@ in {
     };
 
     propagatedBuildInputs = with self; [ six pillow pymaging_png ];
+    checkInputs = [ self.mock ];
 
     meta = {
       description = "Quick Response code generation for Python";
