@@ -14050,6 +14050,7 @@ with pkgs;
     ubootRaspberryPi3_32bit
     ubootRaspberryPi3_64bit
     ubootSheevaplug
+    ubootSopine
     ubootUtilite
     ubootWandboard
     ;
