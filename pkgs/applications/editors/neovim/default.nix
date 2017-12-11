@@ -143,7 +143,7 @@ let
       ln -s ${pythonEnv}/bin/python $out/bin/nvim-python
     '' + optionalString withPython3 ''
       ln -s ${python3Env}/bin/python3 $out/bin/nvim-python3
-    '' + optionalString withPython3 ''
+    '' + optionalString withRuby ''
       ln -s ${rubyEnv}/bin/neovim-ruby-host $out/bin/nvim-ruby
     '' + optionalString withPyGUI ''
       makeWrapper "${pythonEnv}/bin/pynvim" "$out/bin/pynvim" \
