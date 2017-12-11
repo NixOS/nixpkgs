@@ -999,4 +999,10 @@ self: super: {
     libraryToolDepends = drv.libraryToolDepends or [] ++ [pkgs.postgresql];
     testToolDepends = drv.testToolDepends or [] ++ [pkgs.procps];
   });
+
+  # Newer hpack's needs newer HUnit, but we cannot easily override the version
+  # used in the build, so we take the easy way out and disable the test suite.
+  hpack_0_20_0 = dontCheck super.hpack_0_20_0;
+  hpack_0_21_0 = dontCheck super.hpack_0_21_0;
+
 }
