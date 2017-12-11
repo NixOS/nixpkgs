@@ -7,7 +7,7 @@
 , unzip
 , ensureNewerSourcesHook
 # Whether the derivation provides a Python module or not.
-, pythonModule
+, toPythonModule
 , namePrefix
 }:
 
@@ -60,7 +60,7 @@ if disabled
 then throw "${name} not supported for interpreter ${python.executable}"
 else
 
-python.stdenv.mkDerivation (builtins.removeAttrs attrs [
+toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
     "disabled" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts"
   ] // {
 
@@ -95,14 +95,9 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs [
     ${python.interpreter} ${./catch_conflicts}/catch_conflicts.py
   '' + attrs.postFixup or '''';
 
-  passthru = {
-    inherit python; # The python interpreter
-    inherit pythonModule;
-  } // passthru;
-
   meta = {
     # default to python's platforms
     platforms = python.meta.platforms;
     isBuildPythonPackage = python.meta.platforms;
   } // meta;
-})
+}))
