@@ -21,6 +21,10 @@ let
 
     patches = [
       (fetchpatch {
+        url = https://github.com/dezgeg/u-boot/commit/cbsize-2017-11.patch;
+        sha256 = "08rqsrj78aif8vaxlpwiwwv1jwf0diihbj0h88hc0mlp0kmyqxwm";
+      })
+      (fetchpatch {
         url = https://github.com/dezgeg/u-boot/commit/rpi-2017-11-patch1.patch;
         sha256 = "067yq55vv1slv4xy346px7h329pi14abdn04chg6s1s6hmf6c1x9";
       })
