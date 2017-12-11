@@ -111,7 +111,7 @@ makeWrapper() {
             shift 2
             ;;
         *)
-            die "makeWrapper doesn't understand the arg $1"
+            die "makeWrapper doesn't understand the arg ${1@Q}"
             ;;
     esac
     done
@@ -120,7 +120,7 @@ makeWrapper() {
     # that may be set by --run actions.
     # Silence warning about unexpanded extraFlagsArray:
     # shellcheck disable=SC2016
-    echo exec ${argv0:+-a \"$argv0\"} \""$original"\" \
+    echo exec ${argv0:+-a "${argv0@Q}"} "${original@Q}" \
         "${flagsBefore[@]}" '"${extraFlagsArray[@]}"' '"$@"' >> "$wrapper"
 
     chmod +x "$wrapper"
