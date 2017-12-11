@@ -20,7 +20,7 @@ let
       '';
     };
     # WARNING: DON'T DO THIS IN PRODUCTION!
-    # This puts secrets (albeit hashed) directly into the Nix store for ease of testing.
+    # This puts unhashed secrets directly into the Nix store for ease of testing.
     environment.etc."radicale/htpasswd".source = pkgs.runCommand "htpasswd" {} ''
       ${pkgs.apacheHttpd}/bin/htpasswd -bcB "$out" ${user} ${password}
     '';
