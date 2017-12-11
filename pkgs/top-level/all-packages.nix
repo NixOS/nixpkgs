@@ -13169,6 +13169,7 @@ with pkgs;
     ubootOdroidXU3
     ubootOrangePiPc
     ubootPcduino3Nano
+    ubootQemuArm
     ubootRaspberryPi
     ubootRaspberryPi2
     ubootRaspberryPi3_32bit

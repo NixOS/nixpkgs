@@ -134,6 +134,12 @@ in rec {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
+  ubootQemuArm = buildUBoot rec {
+    defconfig = "qemu_arm_defconfig";
+    targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot.bin"];
+  };
+
   ubootRaspberryPi = buildUBoot rec {
     defconfig = "rpi_defconfig";
     targetPlatforms = ["armv6l-linux"];
