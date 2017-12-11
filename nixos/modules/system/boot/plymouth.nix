@@ -8,9 +8,14 @@ let
 
   cfg = config.boot.plymouth;
 
+  breezePlymouth = pkgs.breeze-plymouth.override {
+    nixosBranding = true;
+    nixosVersion = config.system.nixosRelease;
+  };
+
   themesEnv = pkgs.buildEnv {
     name = "plymouth-themes";
-    paths = [ plymouth ] ++ cfg.themePackages;
+    paths = [ plymouth breezePlymouth ] ++ cfg.themePackages;
   };
 
   configFile = pkgs.writeText "plymouthd.conf" ''
@@ -38,7 +43,7 @@ in
       };
 
       theme = mkOption {
-        default = "fade-in";
+        default = "breeze";
         type = types.str;
         description = ''
           Splash screen theme.
