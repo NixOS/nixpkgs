@@ -493,6 +493,13 @@ with pkgs;
 
   arm-frc-linux-gnueabi-gcc = callPackage ../development/compilers/arm-frc-linux-gnueabi-gcc {};
 
+  # Arm Trusted Firmware
+  inherit (callPackage ../misc/arm-trusted-firmware {})
+    buildArmTrustedFirmware
+    armTrustedFirmwareAllwinner
+    armTrustedFirmwareQemu
+    ;
+
   arp-scan = callPackage ../tools/misc/arp-scan { };
 
   inherit (callPackages ../data/fonts/arphic {})
