@@ -6,11 +6,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "dconf-${version}";
-  version = "${majorVersion}.0";
+  version = "${majorVersion}.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/dconf/${majorVersion}/${name}.tar.xz";
-    sha256 = "1jaqsr1r0grpd25rbsc2v3vb0sc51lia9w31wlqswgqsncp2k0w6";
+    sha256 = "0da587hpiqy8h3pswn1102h4b905x8k6mk3ajpi7kf4kzkvv30ym";
   };
 
   outputs = [ "out" "lib" "dev" ];

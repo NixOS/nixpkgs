@@ -1051,21 +1051,7 @@ in {
     };
   };
 
-  backports_shutil_get_terminal_size = if !(pythonOlder "3.3") then null else buildPythonPackage rec {
-    name = "backports.shutil_get_terminal_size-${version}";
-    version = "1.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/backports.shutil_get_terminal_size/${name}.tar.gz";
-      sha256 = "713e7a8228ae80341c70586d1cc0a8caa5207346927e23d09dcbcaf18eadec80";
-    };
-
-    meta = {
-      description = "A backport of the get_terminal_size function from Python 3.3’s shutil.";
-      homepage = https://github.com/chrippa/backports.shutil_get_terminal_size;
-      license = with licenses; [ mit ];
-    };
-  };
+  backports_shutil_get_terminal_size = callPackage ../development/python-modules/backports_shutil_get_terminal_size { };
 
   backports_ssl_match_hostname_3_4_0_2 = self.buildPythonPackage rec {
     name = "backports.ssl_match_hostname-3.4.0.2";
@@ -2464,23 +2450,7 @@ in {
 
   characteristic = callPackage ../development/python-modules/characteristic { };
 
-  cheetah = buildPythonPackage rec {
-    version = "2.4.4";
-    name = "cheetah-${version}";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/C/Cheetah/Cheetah-${version}.tar.gz";
-      sha256 = "be308229f0c1e5e5af4f27d7ee06d90bb19e6af3059794e5fd536a6f29a9b550";
-    };
-
-    propagatedBuildInputs = with self; [ self.markdown ];
-
-    meta = {
-      homepage = http://www.cheetahtemplate.org/;
-      description = "A template engine and code generation tool";
-    };
-  };
+  cheetah = callPackage ../development/python-modules/cheetah { };
 
   cherrypy = callPackage ../development/python-modules/cherrypy {};
 
@@ -14309,24 +14279,7 @@ in {
     };
   };
 
-  pathlib2 = if !(pythonOlder "3.4") then null else buildPythonPackage rec {
-    name = "pathlib2-${version}";
-    version = "2.2.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pathlib2/${name}.tar.gz";
-      sha256 = "ce9007df617ef6b7bd8a31cd2089ed0c1fed1f7c23cf2bf1ba140b3dd563175d";
-    };
-
-    propagatedBuildInputs = with self; [ six ] ++ optional (pythonOlder "3.5") scandir;
-
-    meta = {
-      description = "This module offers classes representing filesystem paths with semantics appropriate for different operating systems.";
-      homepage = https://pypi.python.org/pypi/pathlib2/;
-      license = with licenses; [ mit ];
-    };
-
-  };
+  pathlib2 = callPackage ../development/python-modules/pathlib2 { };
 
   pathpy = callPackage ../development/python-modules/path.py { };
 
@@ -19691,6 +19644,7 @@ in {
      };
    };
 
+  TurboCheetah = callPackage ../development/python-modules/TurboCheetah { };
 
   tweepy = buildPythonPackage (rec {
     name = "tweepy-3.5.0";

@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "gst-python";
-  version = "1.12.2";
+  version = "1.12.3";
   name = "${pname}-${version}";
 
   src = fetchurl {

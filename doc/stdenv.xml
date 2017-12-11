@@ -251,10 +251,17 @@ genericBuild
 
   <varlistentry>
     <term><varname>enableParallelBuilding</varname></term>
-    <listitem><para>If set, <literal>stdenv</literal> will pass specific
-    flags to <literal>make</literal> and other build tools to enable
-    parallel building with up to <literal>build-cores</literal>
-    workers.</para></listitem>
+    <listitem>
+      <para>If set to <literal>true</literal>, <literal>stdenv</literal> will
+      pass specific flags to <literal>make</literal> and other build tools to
+      enable parallel building with up to <literal>build-cores</literal>
+      workers.</para>
+
+      <para>Unless set to <literal>false</literal>, some build systems with good
+      support for parallel building including <literal>cmake</literal>,
+      <literal>meson</literal>, and <literal>qmake</literal> will set it to
+      <literal>true</literal>.</para>
+    </listitem>
   </varlistentry>
 
   <varlistentry>

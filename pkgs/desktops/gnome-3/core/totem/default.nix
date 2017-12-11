@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # https://bugs.launchpad.net/ubuntu/+source/totem/+bug/1712021
+  # https://bugzilla.gnome.org/show_bug.cgi?id=784236
+  # https://github.com/mesonbuild/meson/issues/1994
   enableParallelBuilding = false;
 
   NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
