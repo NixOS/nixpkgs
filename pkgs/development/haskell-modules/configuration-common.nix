@@ -510,8 +510,8 @@ self: super: {
   });
 
   # pandoc 2 dependency resolution
-  hslua_0_9_2 = super.hslua_0_9_2.override { lua5_1 = pkgs.lua5_3; };
-  hslua-module-text = super.hslua-module-text.override { hslua = self.hslua_0_9_2; };
+  hslua_0_9_3 = super.hslua_0_9_3.override { lua5_1 = pkgs.lua5_3; };
+  hslua-module-text = super.hslua-module-text.override { hslua = self.hslua_0_9_3; };
   texmath_0_10 = super.texmath_0_10.override { pandoc-types = self.pandoc-types_1_17_3; };
   pandoc_2_0_4 = super.pandoc_2_0_4.override {
     doctemplates = self.doctemplates_0_2_1;
