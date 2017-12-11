@@ -31,8 +31,7 @@ makeWrapper() {
     local original="$1"
     local wrapper="$2"
     shift 2
-    local varName value command separator fileNames
-    local argv0 flagsBefore flags
+    local flagsBefore
 
     assertExecutable "$original"
 
@@ -43,32 +42,32 @@ makeWrapper() {
     while (( $# )); do
     case "$1" in
         --set)
-            varName="$2"
-            value="$3"
+            local varName="$2"
+            local value="$3"
             shift 3
             echo "export $varName=${value@Q}" >> "$wrapper"
             ;;
         --set-default)
-            varName="$2"
-            value="$3"
+            local varName="$2"
+            local value="$3"
             shift 3
             echo "export $varName=\${$varName-${value@Q}}" >> "$wrapper"
             ;;
         --unset)
-            varName="$2"
+            local varName="$2"
             shift 2
             echo "unset $varName" >> "$wrapper"
             ;;
         --run)
-            command="$2"
+            local command="$2"
             shift 2
             echo "$command" >> "$wrapper"
             ;;
         --suffix | --prefix)
-            flag="$1"
-            varName="$2"
-            separator="$3"
-            value="$4"
+            local flag="$1"
+            local varName="$2"
+            local separator="$3"
+            local value="$4"
             shift 4
             if test -n "$value"; then
                 if test "$flag" = "--suffix"; then
@@ -79,19 +78,19 @@ makeWrapper() {
             fi
             ;;
         --suffix-each)
-            varName="$2"
-            separator="$3"
-            values="$4"
+            local varName="$2"
+            local separator="$3"
+            local values="$4"
             shift 4
             for value in $values; do
                 echo "export $varName=\$$varName\${$varName:+$separator}${value@Q}" >> "$wrapper"
             done
             ;;
         --suffix-contents | --prefix-contents)
-            flag="$1"
-            varName="$2"
-            separator="$3"
-            fileNames="$4"
+            local flag="$1"
+            local varName="$2"
+            local separator="$3"
+            local fileNames="$4"
             shift 4
             for fileName in $fileNames; do
                 contents="$(cat "$fileName")"
@@ -103,12 +102,12 @@ makeWrapper() {
             done
             ;;
         --add-flags)
-            flags="$2"
+            local flags="$2"
             shift 2
             flagsBefore="$flagsBefore $flags"
             ;;
         --argv0)
-            argv0="$2"
+            local argv0="$2"
             shift 2
             ;;
         *)
