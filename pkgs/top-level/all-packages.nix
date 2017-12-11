@@ -19453,6 +19453,8 @@ with pkgs;
 
   cups-bjnp = callPackage ../misc/cups/drivers/cups-bjnp { };
 
+  cups-brother-hl1110 = callPackage_i686 ../misc/cups/drivers/hl1110 { };
+
   # this driver ships with pre-compiled 32-bit binary libraries
   cnijfilter_2_80 = callPackage_i686 ../misc/cups/drivers/cnijfilter_2_80 { };
 
