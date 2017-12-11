@@ -22,7 +22,7 @@ let
 
     name = "arm-trusted-firmware-${platform}-${version}";
 
-    hardeningDisable = [ "all" ];
+    hardeningDisable = [ "stackprotector" ];
 
     makeFlags = ["PLAT=${platform}"];
 
