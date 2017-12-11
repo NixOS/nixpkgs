@@ -15415,6 +15415,8 @@ with pkgs;
 
   monero = callPackage ../applications/misc/monero { };
 
+  xmr-stak = callPackage ../applications/misc/xmr-stak { };
+
   monkeysAudio = callPackage ../applications/audio/monkeys-audio { };
 
   monkeysphere = callPackage ../tools/security/monkeysphere { };
