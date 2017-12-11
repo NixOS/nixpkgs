@@ -31,7 +31,7 @@ makeWrapper() {
     local original="$1"
     local wrapper="$2"
     shift 2
-    local flagsBefore
+    local -a flagsBefore=()
 
     assertExecutable "$original"
 
@@ -104,7 +104,7 @@ makeWrapper() {
         --add-flags)
             local flags="$2"
             shift 2
-            flagsBefore="$flagsBefore $flags"
+            flagsBefore+=($flags)
             ;;
         --argv0)
             local argv0="$2"
@@ -121,7 +121,7 @@ makeWrapper() {
     # Silence warning about unexpanded extraFlagsArray:
     # shellcheck disable=SC2016
     echo exec ${argv0:+-a \"$argv0\"} \""$original"\" \
-         "$flagsBefore" '"${extraFlagsArray[@]}"' '"$@"' >> "$wrapper"
+        "${flagsBefore[@]}" '"${extraFlagsArray[@]}"' '"$@"' >> "$wrapper"
 
     chmod +x "$wrapper"
 }
