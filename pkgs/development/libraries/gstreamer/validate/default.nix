@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gst-validate/${name}.tar.xz";
-    sha256 = "1pgycs35bwmp4aicyxwyzlfy1i5l2rzmh2a8ivhgy21azp8jaykb";
+    sha256 = "17j812pkzgbyn9ys3b305yl5mrf9nbm8whwj4iqdskr742fr8fai";
   };
 
   outputs = [ "out" "dev" ];

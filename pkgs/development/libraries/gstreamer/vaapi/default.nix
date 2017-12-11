@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "${meta.homepage}/src/gstreamer-vaapi/gstreamer-vaapi-${version}.tar.xz";
-    sha256 = "0fhncs27hcdcnb9a4prkxlyvr883hnzsx148zzk7lg2b8zh19ir3";
+    sha256 = "0kbl2c4zv004qwhm9mc0jlhz2pc3dqrng2vwj68a81lnzpcazkgl";
   };
 
   outputs = [ "out" "dev" ];
