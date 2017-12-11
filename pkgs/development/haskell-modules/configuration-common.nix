@@ -1005,4 +1005,15 @@ self: super: {
   hpack_0_20_0 = dontCheck super.hpack_0_20_0;
   hpack_0_21_0 = dontCheck super.hpack_0_21_0;
 
+  # Stack 1.6.1 needs newer versions than LTS-9 provides.
+  stack = super.stack.overrideScope (self: super: {
+    ansi-terminal = self.ansi-terminal_0_7_1_1;
+    ansi-wl-pprint = self.ansi-wl-pprint_0_6_8_1;
+    extra = dontCheck super.extra_1_6_2;
+    hpack = super.hpack_0_20_0;
+    path = dontCheck super.path_0_6_1;
+    path-io = self.path-io_1_3_3;
+    unliftio = self.unliftio_0_2_0_0;
+  });
+
 }
