@@ -5597,7 +5597,7 @@ with pkgs;
 
   wrapClangMulti = clang:
     if system == "x86_64-linux" then
-      callPackages ../development/compilers/llvm/multi.nix {
+      callPackage ../development/compilers/llvm/multi.nix {
         inherit clang;
         gcc32 = pkgsi686Linux.gcc;
         gcc64 = pkgs.gcc;
