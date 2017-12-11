@@ -10265,6 +10265,8 @@ in {
     };
   };
 
+  lark-parser = callPackage ../development/python-modules/lark-parser { };
+
   lazy-object-proxy = buildPythonPackage rec {
     name = "lazy-object-proxy-${version}";
     version = "1.2.1";
