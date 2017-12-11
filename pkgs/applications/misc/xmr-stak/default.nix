@@ -1,6 +1,6 @@
 { stdenv, lib, fetchFromGitHub, cmake, libuv, libmicrohttpd, openssl
 , opencl-headers, ocl-icd, hwloc, cudatoolkit
-, devDonationLevel ? 0.0
+, devDonationLevel ? "0.0"
 , cudaSupport ? false  # doesn't work currently
 }:
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace xmrstak/donate-level.hpp \
-      --replace 'fDevDonationLevel = 2.0' 'fDevDonationLevel = ${toString devDonationLevel}'
+      --replace 'fDevDonationLevel = 2.0' 'fDevDonationLevel = ${devDonationLevel}'
   '';
 
   meta = with lib; {
