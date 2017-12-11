@@ -19017,7 +19017,7 @@ with pkgs;
     boost = boost160;
   };
 
-  kicad-unstable = callPackage ../applications/science/electronics/kicad/unstable.nix {
+  kicad-unstable = python.pkgs.callPackage ../applications/science/electronics/kicad/unstable.nix {
     wxGTK = wxGTK30;
     boost = boost160;
   };
