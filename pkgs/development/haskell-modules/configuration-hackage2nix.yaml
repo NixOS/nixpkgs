@@ -2540,6 +2540,7 @@ extra-packages:
   - happy <1.19.6                       # newer versions break Agda
   - haskell-gi-overloading == 0.0       # gi-* packages use this dependency to disable overloading support
   - haskell-src-exts == 1.19.*          # required by hindent and structured-haskell-mode
+  - hpack == 0.20.*                     # required by stack-1.6.1
   - language-c == 0.7.0                 # required by c2hs hack to work around https://github.com/haskell/c2hs/issues/192.
   - mtl < 2.2                           # newer versions require transformers > 0.4.x, which we cannot provide in GHC 7.8.x
   - mtl-prelude < 2                     # required for to build postgrest on mtl 2.1.x platforms
