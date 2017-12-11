@@ -27,6 +27,8 @@ stdenv.mkDerivation {
     LD_LIBRARY_PATH=build/ build/unit-tests
   '';
 
+  outputs = [ "dev" "out" ];
+
   meta = with stdenv.lib; {
     homepage = "http://named-data.net/";
     description = "A Named Data Neworking (NDN) or Content Centric Networking (CCN) abstraction";
