@@ -15993,6 +15993,8 @@ with pkgs;
 
   polybar = callPackage ../applications/misc/polybar { };
 
+  projectlibre = callPackage ../applications/office/projectlibre { };
+
   ptex = callPackage ../development/libraries/ptex {};
 
   rssguard = libsForQt5.callPackage ../applications/networking/feedreaders/rssguard { };
