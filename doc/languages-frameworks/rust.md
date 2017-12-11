@@ -200,6 +200,21 @@ rec {
 }
 ```
 
+Another situation is when we want to override a nested
+dependency. This actually works in the exact same way, since the
+`crateOverrides` parameter is forwarded to the crate's
+dependencies. For instance, to override the build inputs for crate
+`libc` in the example above, where `libc` is a dependency of the main
+crate, we could do:
+
+```
+(import helo.nix).helo_0_1_0.override {
+    crateOverrides = defaultCrateOverrides // {
+      libc = attrs: { buildInputs = []; };
+    };
+  };
+}
+```
 
 Three more parameters can be overridden:
 
