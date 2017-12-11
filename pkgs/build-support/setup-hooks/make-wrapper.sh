@@ -43,25 +43,30 @@ makeWrapper() {
     for ((n = 2; n < ${#params[*]}; n += 1)); do
         p="${params[$n]}"
 
-        if [[ "$p" == "--set" ]]; then
+    case "$p" in
+        --set)
             varName="${params[$((n + 1))]}"
             value="${params[$((n + 2))]}"
             n=$((n + 2))
             echo "export $varName=${value@Q}" >> "$wrapper"
-        elif [[ "$p" == "--set-default" ]]; then
+            ;;
+        --set-default)
             varName="${params[$((n + 1))]}"
             value="${params[$((n + 2))]}"
             n=$((n + 2))
             echo "export $varName=\${$varName-${value@Q}}" >> "$wrapper"
-        elif [[ "$p" == "--unset" ]]; then
+            ;;
+        --unset)
             varName="${params[$((n + 1))]}"
             n=$((n + 1))
             echo "unset $varName" >> "$wrapper"
-        elif [[ "$p" == "--run" ]]; then
+            ;;
+        --run)
             command="${params[$((n + 1))]}"
             n=$((n + 1))
             echo "$command" >> "$wrapper"
-        elif [[ ("$p" == "--suffix") || ("$p" == "--prefix") ]]; then
+            ;;
+        --suffix | --prefix)
             varName="${params[$((n + 1))]}"
             separator="${params[$((n + 2))]}"
             value="${params[$((n + 3))]}"
@@ -73,7 +78,8 @@ makeWrapper() {
                     echo "export $varName=${value@Q}\${$varName:+${separator@Q}}\$$varName" >> "$wrapper"
                 fi
             fi
-        elif [[ "$p" == "--suffix-each" ]]; then
+            ;;
+        --suffix-each)
             varName="${params[$((n + 1))]}"
             separator="${params[$((n + 2))]}"
             values="${params[$((n + 3))]}"
@@ -81,7 +87,8 @@ makeWrapper() {
             for value in $values; do
                 echo "export $varName=\$$varName\${$varName:+$separator}${value@Q}" >> "$wrapper"
             done
-        elif [[ ("$p" == "--suffix-contents") || ("$p" == "--prefix-contents") ]]; then
+            ;;
+        --suffix-contents | --prefix-contents)
             varName="${params[$((n + 1))]}"
             separator="${params[$((n + 2))]}"
             fileNames="${params[$((n + 3))]}"
@@ -94,16 +101,20 @@ makeWrapper() {
                     echo "export $varName=${contents@Q}\${$varName:+$separator}\$$varName" >> "$wrapper"
                 fi
             done
-        elif [[ "$p" == "--add-flags" ]]; then
+            ;;
+        --add-flags)
             flags="${params[$((n + 1))]}"
             n=$((n + 1))
             flagsBefore="$flagsBefore $flags"
-        elif [[ "$p" == "--argv0" ]]; then
+            ;;
+        --argv0)
             argv0="${params[$((n + 1))]}"
             n=$((n + 1))
-        else
+            ;;
+        *)
             die "makeWrapper doesn't understand the arg $p"
-        fi
+            ;;
+    esac
     done
 
     # Note: extraFlagsArray is an array containing additional flags
