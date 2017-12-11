@@ -96,7 +96,7 @@ makeWrapper() {
             local fileNames="$4"
             shift 4
             for fileName in $fileNames; do
-                contents="$(cat "$fileName")"
+                contents="$(< "$fileName")"
                 if test "$flag" = "--suffix-contents"; then
                     echo "export $varName=\$$varName\${$varName:+$separator}${contents@Q}" >> "$wrapper"
                 else
