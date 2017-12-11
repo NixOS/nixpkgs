@@ -118,6 +118,12 @@ in rec {
     filesToInstall = ["u-boot-dtb.bin"];
   };
 
+  ubootOrangePiPc = buildUBoot rec {
+    defconfig = "orangepi_pc_defconfig";
+    targetPlatforms = ["armv7l-linux"];
+    filesToInstall = ["u-boot-sunxi-with-spl.bin"];
+  };
+
   ubootPcduino3Nano = buildUBoot rec {
     defconfig = "Linksprite_pcDuino3_Nano_defconfig";
     targetPlatforms = ["armv7l-linux"];
