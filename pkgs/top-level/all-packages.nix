@@ -17415,9 +17415,13 @@ with pkgs;
 
   vimpc = callPackage ../applications/audio/vimpc { };
 
-  neovim = callPackage ../applications/editors/neovim {
+  wrapNeovim = callPackage ../applications/editors/neovim/wrapper.nix { };
+
+  neovim-unwrapped = callPackage ../applications/editors/neovim {
     luaPackages = luajitPackages;
   };
+
+  neovim = wrapNeovim neovim-unwrapped { };
 
   neovim-qt = libsForQt5.callPackage ../applications/editors/neovim/qt.nix { };
 
