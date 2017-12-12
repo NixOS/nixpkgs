@@ -25,10 +25,6 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ pbr six netaddr stevedore debtcollector rfc3986 pyyaml oslo-i18n ];
   checkInputs = [ mock bandit reno openstackdocstheme sphinx coverage oslotest ];
 
-  postPatch = ''
-    substituteInPlace requirements.txt --replace "argparse" ""
-  '';
-
   meta = with lib; {
     description = "Oslo Configuration API";
     homepage = "https://docs.openstack.org/oslo.config/latest/";
