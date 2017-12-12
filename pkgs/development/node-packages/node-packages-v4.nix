@@ -346,13 +346,13 @@ let
         sha1 = "4065e2013cf9fb916ddfd82efb506ad4c6769062";
       };
     };
-    "fancy-log-1.3.0" = {
+    "fancy-log-1.3.1" = {
       name = "fancy-log";
       packageName = "fancy-log";
-      version = "1.3.0";
+      version = "1.3.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/fancy-log/-/fancy-log-1.3.0.tgz";
-        sha1 = "45be17d02bb9917d60ccffd4995c999e6c8c9948";
+        url = "https://registry.npmjs.org/fancy-log/-/fancy-log-1.3.1.tgz";
+        sha1 = "c4a3462ba14adf5dfbab79731fd3844a2069cbbb";
       };
     };
     "gulplog-1.0.0" = {
@@ -454,6 +454,15 @@ let
         sha1 = "b0455b38fc5e0cf30d4325132e461970c2091cde";
       };
     };
+    "ansi-gray-0.1.1" = {
+      name = "ansi-gray";
+      packageName = "ansi-gray";
+      version = "0.1.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/ansi-gray/-/ansi-gray-0.1.1.tgz";
+        sha1 = "2962cf54ec9792c48510a3deb524436861ef7251";
+      };
+    };
     "time-stamp-1.1.0" = {
       name = "time-stamp";
       packageName = "time-stamp";
@@ -461,6 +470,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/time-stamp/-/time-stamp-1.1.0.tgz";
         sha1 = "764a5a11af50561921b133f3b44e618687e0f5c3";
+      };
+    };
+    "ansi-wrap-0.1.0" = {
+      name = "ansi-wrap";
+      packageName = "ansi-wrap";
+      version = "0.1.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/ansi-wrap/-/ansi-wrap-0.1.0.tgz";
+        sha1 = "a82250ddb0015e9a27ca82e82ea603bbfa45efaf";
       };
     };
     "glogg-1.0.0" = {
@@ -1642,13 +1660,13 @@ let
         sha1 = "3ff21f198cad2175f9f3b781853fd94d0d19b590";
       };
     };
-    "natives-1.1.0" = {
+    "natives-1.1.1" = {
       name = "natives";
       packageName = "natives";
-      version = "1.1.0";
+      version = "1.1.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/natives/-/natives-1.1.0.tgz";
-        sha1 = "e9ff841418a6b2ec7a495e939984f78f163e6e31";
+        url = "https://registry.npmjs.org/natives/-/natives-1.1.1.tgz";
+        sha512 = "08a9lf00d2pkqmdi6ipp00pjin0gwl6fh283cjdjbayaz834lppwrw19kn4s642kwa46bfcway3033j6rbqd96iy86qrzrfgz35mr7i";
       };
     };
     "minimist-0.0.8" = {
@@ -4270,8 +4288,13 @@ in
           sources."array-uniq-1.0.3"
           sources."beeper-1.1.1"
           sources."dateformat-2.2.0"
-          (sources."fancy-log-1.3.0" // {
+          (sources."fancy-log-1.3.1" // {
             dependencies = [
+              (sources."ansi-gray-0.1.1" // {
+                dependencies = [
+                  sources."ansi-wrap-0.1.0"
+                ];
+              })
               sources."time-stamp-1.1.0"
             ];
           })
@@ -4668,7 +4691,7 @@ in
           })
           (sources."graceful-fs-3.0.11" // {
             dependencies = [
-              sources."natives-1.1.0"
+              sources."natives-1.1.1"
             ];
           })
           (sources."mkdirp-0.5.1" // {
@@ -6093,10 +6116,10 @@ in
   npm = nodeEnv.buildNodePackage {
     name = "npm";
     packageName = "npm";
-    version = "5.5.1";
+    version = "5.6.0";
     src = fetchurl {
-      url = "https://registry.npmjs.org/npm/-/npm-5.5.1.tgz";
-      sha512 = "3chqlcr8vp121jxny46vi43cm5r0p31l7a24jbbq5jz4zzi0bvp0isk0i8xqylllcas38b75a9nl9p9pj0azbmbqf1bcyf793q8wxik";
+      url = "https://registry.npmjs.org/npm/-/npm-5.6.0.tgz";
+      sha512 = "0nnr796ik5h8bsd3k9ygivivr3na2ksnf5iipf8dsnn20j10i9sgmhmsnzbimd2pqgjbrpp8gbpl2q7j5c7yjqjfirrh8xcc3v3gpws";
     };
     buildInputs = globalBuildInputs;
     meta = {
