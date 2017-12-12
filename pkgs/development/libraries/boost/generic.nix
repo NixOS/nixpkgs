@@ -10,7 +10,7 @@
 , enablePIC ? false
 , enableExceptions ? false
 , enablePython ? hostPlatform == buildPlatform
-, enableNumpy ? true
+, enableNumpy ? false
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
 , patches ? null
 , mpi ? null
