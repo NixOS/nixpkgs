@@ -2850,6 +2850,8 @@ in {
 
   confluent-kafka = callPackage ../development/python-modules/confluent-kafka {};
 
+  kafka-python = callPackage ../development/python-modules/kafka-python {};
+
   construct = callPackage ../development/python-modules/construct {};
 
   consul = buildPythonPackage (rec {
