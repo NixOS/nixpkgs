@@ -13816,6 +13816,8 @@ in {
 
   oslo-config = callPackage ../development/python-modules/oslo-config { };
 
+  reno = callPackage ../development/python-modules/reno { };
+
   openstackdocstheme = callPackage ../development/python-modules/openstackdocstheme { };
 
   oslotest = buildPythonPackage rec {
