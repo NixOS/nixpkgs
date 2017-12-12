@@ -3045,24 +3045,7 @@ in {
 
   curtsies = callPackage ../development/python-modules/curtsies { };
 
-  oslo-vmware = buildPythonPackage rec {
-    name = "oslo.vmware-${version}";
-    version = "1.22.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/oslo.vmware/${name}.tar.gz";
-      sha256 = "1119q3x2y3hjz3p784byr13aqay75pbj4cb8v43gjq5piqlpp16x";
-    };
-
-    propagatedBuildInputs = with self; [
-      pbr stevedore netaddr iso8601 six oslo-i18n oslo-utils Babel pyyaml eventlet
-      requests urllib3 oslo-concurrency suds-jurko
-    ];
-    buildInputs = with self; [
-      bandit oslosphinx coverage testtools testscenarios testrepository mock
-
-    ];
-  };
+  oslo-vmware = callPackage ../development/python-modules/oslo-vmware { };
 
   barbicanclient = buildPythonPackage rec {
     name = "barbicanclient-${version}";
