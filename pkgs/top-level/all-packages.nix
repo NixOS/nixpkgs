@@ -202,6 +202,8 @@ with pkgs;
 
   fetchzip = callPackage ../build-support/fetchzip { };
 
+  fetchCrate = callPackage ../build-support/rust/fetchcrate.nix { };
+
   fetchFromGitHub = {
     owner, repo, rev, name ? "source",
     fetchSubmodules ? false, private ? false,
