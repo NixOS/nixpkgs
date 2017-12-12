@@ -811,4 +811,57 @@ in rec {
       sha256 = "0vjjybxbcm4xl26wbqvcqfiyvvlayswm4f98i1fr5a9abmljn5sb";
     })
   ];
+
+	# 4.5
+  XSA_248_45 = [
+    (xsaPatch {
+      name = "248-4.5";
+      sha256 = "0csxg6h492ddsa210b45av28iqf7cn2dfdqk4zx10zwf1pv2shyn";
+    })
+  ];
+
+  # 4.8
+  XSA_248_48 = [
+    (xsaPatch {
+      name = "248-4.8";
+      sha256 = "1ycw29q22ymxg18kxpr5p7vhpmp8klssbp5gq77hspxzz2mb96q1";
+    })
+  ];
+
+  # 4.5 .. 4.9
+  XSA_249 = [
+   (xsaPatch {
+      name = "249";
+      sha256 = "0v6ngzqhkz7yv4n83xlpxfbkr2qyg5b1cds7ikkinm86hiqy6agl";
+    })
+  ];
+  # 4.5
+  XSA_250_45 = [
+   (xsaPatch {
+      name = "250-4.5";
+      sha256 = "0pqldl6qnl834gvfp90z247q9xcjh3835s2iffnajz7jhjb2145d";
+    })
+  ];
+  # 4.8 ...
+  XSA_250 = [
+   (xsaPatch {
+      name = "250";
+      sha256 = "1wpigg8kmha57sspqqln3ih9nbczsw6rx3v72mc62lh62qvwd7x8";
+    })
+  ];
+  # 4.5
+  XSA_251_45 = [
+   (xsaPatch {
+      name = "251-4.5";
+      sha256 = "0lc94cx271z09r0mhxaypyd9d4740051p28idf5calx5228dqjgm";
+    })
+  ];
+  # 4.8
+  XSA_251_48 = [
+   (xsaPatch {
+      name = "251-4.8";
+      sha256 = "079wi0j6iydid2zj7k584w2c393kgh588w7sjz2nn4039qn8k9mq";
+    })
+  ];
+
 }
