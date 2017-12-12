@@ -1,21 +1,29 @@
-{ lib, buildPythonPackage, fetchPypi, pbr, six, netaddr, stevedore, mock,
-debtcollector, rfc3986, pyyaml, oslo-i18n }:
+{ lib, buildPythonPackage, fetchPypi
+, pbr, six, netaddr
+, stevedore, mock
+, debtcollector
+, rfc3986
+, pyyaml
+, oslo-i18n
+, bandit
+, reno
+, openstackdocstheme
+, sphinx
+, coverage
+, oslotest
+}:
 
 buildPythonPackage rec {
   pname = "oslo.config";
-  version = "4.13.2";
-  name = "${pname}-${version}";
+  version = "5.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "882e5f1dcc0e5b0d7af877b2df0e2692113c5975db8cbbbf0dd3d2b905aefc0b";
+    sha256 = "0c1wcw1j8cz2rb0ihqidvnb47r7yh9vzaafw5l18fqr452s6wp70";
   };
 
   propagatedBuildInputs = [ pbr six netaddr stevedore debtcollector rfc3986 pyyaml oslo-i18n ];
-  buildInputs = [ mock ];
-
-  # TODO: circular import on oslo-i18n
-  doCheck = false;
+  checkInputs = [ mock bandit reno openstackdocstheme sphinx coverage oslotest ];
 
   postPatch = ''
     substituteInPlace requirements.txt --replace "argparse" ""
