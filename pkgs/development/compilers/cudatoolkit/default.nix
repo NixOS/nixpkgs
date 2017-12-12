@@ -80,6 +80,9 @@ let
         # Change the #error on GCC > 4.9 to a #warning.
         sed -i $out/include/host_config.h -e 's/#error\(.*unsupported GNU version\)/#warning\1/'
 
+        # Fix builds with newer glibc version
+        sed -i "1 i#define _BITS_FLOATN_H" "$out/include/host_defines.h"
+
         # Ensure that cmake can find CUDA.
         mkdir -p $out/nix-support
         echo "cmakeFlags+=' -DCUDA_TOOLKIT_ROOT_DIR=$out'" >> $out/nix-support/setup-hook
