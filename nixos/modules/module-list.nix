@@ -110,6 +110,7 @@
   ./programs/wireshark.nix
   ./programs/xfs_quota.nix
   ./programs/xonsh.nix
+  ./programs/yabar.nix
   ./programs/zsh/oh-my-zsh.nix
   ./programs/zsh/zsh.nix
   ./programs/zsh/zsh-syntax-highlighting.nix
