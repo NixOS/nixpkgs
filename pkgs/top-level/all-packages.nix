@@ -16888,6 +16888,8 @@ with pkgs;
 
   symlinks = callPackage ../tools/system/symlinks { };
 
+  syncplay = callPackage ../applications/networking/syncplay { };
+
   syncthing = callPackage ../applications/networking/syncthing { };
 
   syncthing012 = callPackage ../applications/networking/syncthing012 { };
