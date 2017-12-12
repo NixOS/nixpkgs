@@ -119,14 +119,13 @@ makeWrapper() {
     esac
     done
 
+    echo "set +u" >> "$wrapper"
     # Note: extraFlagsArray is an array containing additional flags
     # that may be set by --run actions.
     # Silence warning about unexpanded extraFlagsArray:
     # shellcheck disable=SC2016
-    echo "set +u" >> "$wrapper"
     echo exec ${argv0:+-a "${argv0@Q}"} "${original@Q}" \
         "${flagsBefore[@]}" '"${extraFlagsArray[@]}"' '"$@"' >> "$wrapper"
-    echo "set -u" >> "$wrapper"
 
     chmod +x "$wrapper"
 }
