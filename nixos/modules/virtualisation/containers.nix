@@ -726,7 +726,7 @@ in
 
     services.udev.extraRules = optionalString config.networking.networkmanager.enable ''
       # Don't manage interfaces created by nixos-container.
-      ENV{INTERFACE}=="v[e,b]-*", ENV{NM_UNMANAGED}="1"
+      ENV{INTERFACE}=="v[eb]-*", ENV{NM_UNMANAGED}="1"
     '';
 
     environment.systemPackages = [ pkgs.nixos-container ];
