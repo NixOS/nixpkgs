@@ -81,23 +81,23 @@ Now, the file produced by the call to `carnix`, called `hello.nix`, looks like:
 
 ```
 with import <nixpkgs> {};
-let release = true;
-    verbose = true;
+let kernel = buildPlatform.parsed.kernel.name;
+    # ... (content skipped)
     hello_0_1_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "hello";
       version = "0.1.0";
+      authors = [ "Authorname <user@example.com>" ];
       src = ./.;
-      inherit dependencies buildDependencies features release verbose;
+      inherit dependencies buildDependencies features;
     };
-
 in
 rec {
-  hello_0_1_0 = hello_0_1_0_ {};
+  hello_0_1_0 = hello_0_1_0_ rec {};
 }
 ```
 
 In particular, note that the argument given as `--src` is copied
-verbatim to the source.  If we look at a more complicated
+verbatim to the source. If we look at a more complicated
 dependencies, for instance by adding a single line `libc="*"` to our
 `Cargo.toml`, we first need to run `cargo build` to update the
 `Cargo.lock`. Then, `carnix` needs to be run again, and produces the
@@ -105,29 +105,32 @@ following nix file:
 
 ```
 with import <nixpkgs> {};
-let release = true;
-    verbose = true;
+let kernel = buildPlatform.parsed.kernel.name;
+    # ... (content skipped)
     hello_0_1_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "hello";
       version = "0.1.0";
+      authors = [ "Jörg Thalheim <joerg@thalheim.io>" ];
       src = ./.;
-      inherit dependencies buildDependencies features release verbose;
+      inherit dependencies buildDependencies features;
     };
-    libc_0_2_33_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
+    libc_0_2_34_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
       crateName = "libc";
-      version = "0.2.33";
-      sha256 = "1l7synziccnvarsq2kk22vps720ih6chmn016bhr2bq54hblbnl1";
-      inherit dependencies buildDependencies features release verbose;
+      version = "0.2.34";
+      authors = [ "The Rust Project Developers" ];
+      sha256 = "11jmqdxmv0ka10ay0l8nzx0nl7s2lc3dbrnh1mgbr2grzwdyxi2s";
+      inherit dependencies buildDependencies features;
     };
-
 in
 rec {
-  hello_0_1_0 = hello_0_1_0_ {
-    dependencies = [ libc_0_2_33 ];
+  hello_0_1_0 = hello_0_1_0_ rec {
+    dependencies = [ libc_0_2_34 ];
   };
-  libc_0_2_33 = libc_0_2_33_ {
-    features = [ "use_std" ];
+  libc_0_2_34_features."default".from_hello_0_1_0__default = true;
+  libc_0_2_34 = libc_0_2_34_ rec {
+    features = mkFeatures libc_0_2_34_features;
   };
+  libc_0_2_34_features."use_std".self_default = hasDefault libc_0_2_34_features;
 }
 ```
 
@@ -137,28 +140,16 @@ attribute is still needed for Nix purity.
 
 Some crates require external libraries. For crates from
 [crates.io](https://crates.io), such libraries can be specified in
-`<nixpkgs/pkgs/build-support/rust/defaultCrateOverrides.nix>`.
+`defaultCrateOverrides` package in nixpkgs itself.
 
 Starting from that file, one can add more overrides, to add features
-or build inputs, as follows:
+or build inputs by overriding the hello crate in a seperate file.
 
 ```
 with import <nixpkgs> {};
-let kernel = buildPlatform.parsed.kernel.name;
-    abi = buildPlatform.parsed.abi.name;
-    helo_0_1_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
-      crateName = "helo";
-      version = "0.1.0";
-      authors = [ "pe@pijul.org <pe@pijul.org>" ];
-      src = ./.;
-      inherit dependencies buildDependencies features;
-    };
-in
-rec {
-  helo_0_1_0 = (helo_0_1_0_ {}).override {
-    crateOverrides = defaultCrateOverrides // {
-      helo = attrs: { buildInputs = [ openssl ]; };
-    };
+(import ./hello.nix).hello_0_1_0.override {
+  crateOverrides = defaultCrateOverrides // {
+    hello = attrs: { buildInputs = [ openssl ]; };
   };
 }
 ```
@@ -176,25 +167,13 @@ patches the derivation:
 
 ```
 with import <nixpkgs> {};
-let kernel = buildPlatform.parsed.kernel.name;
-    abi = buildPlatform.parsed.abi.name;
-    helo_0_1_0_ = { dependencies?[], buildDependencies?[], features?[] }: buildRustCrate {
-      crateName = "helo";
-      version = "0.1.0";
-      authors = [ "pe@pijul.org <pe@pijul.org>" ];
-      src = ./.;
-      inherit dependencies buildDependencies features;
-    };
-in
-rec {
-  helo_0_1_0 = (helo_0_1_0_ {}).override {
-    crateOverrides = defaultCrateOverrides // {
-      helo = attrs: lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0")  {
-        postPatch = ''
-          substituteInPlace lib/zoneinfo.rs \
-            --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
-        '';
-      };
+(import ./hello.nix).hello_0_1_0.override {
+  crateOverrides = defaultCrateOverrides // {
+    hello = attrs: lib.optionalAttrs (lib.versionAtLeast attrs.version "1.0")  {
+      postPatch = ''
+        substituteInPlace lib/zoneinfo.rs \
+          --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"
+      '';
     };
   };
 }
@@ -208,10 +187,10 @@ dependencies. For instance, to override the build inputs for crate
 crate, we could do:
 
 ```
-(import helo.nix).helo_0_1_0.override {
-    crateOverrides = defaultCrateOverrides // {
-      libc = attrs: { buildInputs = []; };
-    };
+with import <nixpkgs> {};
+(import hello.nix).hello_0_1_0.override {
+  crateOverrides = defaultCrateOverrides // {
+    libc = attrs: { buildInputs = []; };
   };
 }
 ```
