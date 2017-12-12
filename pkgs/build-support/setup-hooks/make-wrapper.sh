@@ -74,9 +74,9 @@ makeWrapper() {
             shift 4
             if test -n "$value"; then
                 if test "$flag" = "--suffix"; then
-                    echo "export $varName=\$$varName\${$varName:+${separator@Q}}${value@Q}" >> "$wrapper"
+                    echo "export $varName+=\${$varName:+${separator@Q}}${value@Q}" >> "$wrapper"
                 else
-                    echo "export $varName=${value@Q}\${$varName:+${separator@Q}}\$$varName" >> "$wrapper"
+                    echo "export $varName=${value@Q}\${$varName:+${separator@Q}\$$varName}" >> "$wrapper"
                 fi
             fi
             ;;
@@ -86,7 +86,7 @@ makeWrapper() {
             local values="$4"
             shift 4
             for value in $values; do
-                echo "export $varName=\$$varName\${$varName:+${separator@Q}}${value@Q}" >> "$wrapper"
+                echo "export $varName+=\${$varName:+${separator@Q}}${value@Q}" >> "$wrapper"
             done
             ;;
         --suffix-contents | --prefix-contents)
@@ -98,9 +98,9 @@ makeWrapper() {
             for fileName in $fileNames; do
                 contents="$(< "$fileName")"
                 if test "$flag" = "--suffix-contents"; then
-                    echo "export $varName=\$$varName\${$varName:+${separator@Q}}${contents@Q}" >> "$wrapper"
+                    echo "export $varName+=\${$varName:+${separator@Q}}${contents@Q}" >> "$wrapper"
                 else
-                    echo "export $varName=${contents@Q}\${$varName:+${separator@Q}}\$$varName" >> "$wrapper"
+                    echo "export $varName=${contents@Q}\${$varName:+${separator@Q}\$$varName}" >> "$wrapper"
                 fi
             done
             ;;
