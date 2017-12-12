@@ -160,6 +160,10 @@ callPackage (import ./generic.nix (rec {
     XSA_245
     XSA_246
     XSA_247_48
+    XSA_248_48
+    XSA_249
+    XSA_250
+    XSA_251_48
   ];
 
   # Fix build on Glibc 2.24.
