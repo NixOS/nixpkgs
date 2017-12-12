@@ -36,10 +36,6 @@ for i in "$@"; do
         dontLink=1
     elif [ "${i:0:1}" != - ]; then
         nonFlagArgs=1
-    elif [ "$i" = -m32 ]; then
-        if [ -e @out@/nix-support/dynamic-linker-m32 ]; then
-            NIX_@infixSalt@_LDFLAGS+=" -dynamic-linker $(< @out@/nix-support/dynamic-linker-m32)"
-        fi
     fi
 done
 
