@@ -509,6 +509,21 @@ self: super: {
     preConfigure = "sed -i -e 's,time .* < 1.6,time >= 1.5,' -e 's,haddock-library >= 1.1 && < 1.3,haddock-library >= 1.1,' pandoc.cabal";
   });
 
+  # pandoc 2 dependency resolution
+  hslua_0_9_3 = super.hslua_0_9_3.override { lua5_1 = pkgs.lua5_3; };
+  hslua-module-text = super.hslua-module-text.override { hslua = self.hslua_0_9_3; };
+  texmath_0_10 = super.texmath_0_10.override { pandoc-types = self.pandoc-types_1_17_3; };
+  pandoc_2_0_4 = super.pandoc_2_0_4.override {
+    doctemplates = self.doctemplates_0_2_1;
+    pandoc-types = self.pandoc-types_1_17_3;
+    skylighting = self.skylighting_0_4_4_1;
+    texmath = self.texmath_0_10;
+  };
+  pandoc-citeproc_0_12_1 = super.pandoc-citeproc_0_12_1.override {
+    pandoc = self.pandoc_2_0_4;
+    pandoc-types = self.pandoc-types_1_17_3;
+  };
+
   # https://github.com/tych0/xcffib/issues/37
   xcffib = dontCheck super.xcffib;
 
@@ -984,4 +999,21 @@ self: super: {
     libraryToolDepends = drv.libraryToolDepends or [] ++ [pkgs.postgresql];
     testToolDepends = drv.testToolDepends or [] ++ [pkgs.procps];
   });
+
+  # Newer hpack's needs newer HUnit, but we cannot easily override the version
+  # used in the build, so we take the easy way out and disable the test suite.
+  hpack_0_20_0 = dontCheck super.hpack_0_20_0;
+  hpack_0_21_0 = dontCheck super.hpack_0_21_0;
+
+  # Stack 1.6.1 needs newer versions than LTS-9 provides.
+  stack = super.stack.overrideScope (self: super: {
+    ansi-terminal = self.ansi-terminal_0_7_1_1;
+    ansi-wl-pprint = self.ansi-wl-pprint_0_6_8_1;
+    extra = dontCheck super.extra_1_6_2;
+    hpack = super.hpack_0_20_0;
+    path = dontCheck super.path_0_6_1;
+    path-io = self.path-io_1_3_3;
+    unliftio = self.unliftio_0_2_0_0;
+  });
+
 }

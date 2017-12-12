@@ -15,4 +15,5 @@ stdenv.mkDerivation
         mkdir -p $out/bin
         install -m755 $prog $out/bin
       '';
+    meta.platforms = stdenv.lib.platforms.darwin;
   }

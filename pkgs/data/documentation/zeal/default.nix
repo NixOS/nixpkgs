@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   name = "zeal-${version}";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner  = "zealdocs";
     repo   = "zeal";
     rev    = "v${version}";
-    sha256 = "1mfcw843g4slr79bvidb5s88m7a3swr9by6srdn233b88j8mqwzl";
+    sha256 = "14gm9n2zmqgig4nz5i3089dhn0a7c175g1szr0zg9yzr9j2hk0mr";
   };
 
   # while ads can be disabled from the user settings, by default they are not so
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = http://zealdocs.org/;
     license     = licenses.gpl3;
-    maintainers = with maintainers; [ skeidel ];
+    maintainers = with maintainers; [ skeidel peterhoeg ];
     platforms   = platforms.linux;
   };
 }

@@ -2,12 +2,6 @@
 
 let param =
   {
-    "8.4" = {
-      version = "20160529";
-      rev = "a9e89f1d4246a787bf1d8873072077a319635c3e";
-      sha256 = "14ng71p890q12xvsj00si2a3fjcbsap2gy0r8sxpw4zndnlq74wa";
-    };
-
     "8.5" = {
       version = "20170512";
       rev = "31eb050ae5ce57ab402db9726fb7cd945a0b4d03";

@@ -135,6 +135,9 @@ stdenv.mkDerivation (rec {
     "--with-libclang-path=${llvmPackages.clang-unwrapped}/lib"
     "--with-clang-path=${llvmPackages.clang}/bin/clang"
   ]
+  ++ lib.optionals (stdenv.lib.versionAtLeast version "57") [
+    "--enable-webrender=build"
+  ]
 
   # TorBrowser patches these
   ++ lib.optionals (!isTorBrowserLike) [

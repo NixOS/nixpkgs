@@ -76,7 +76,7 @@ stdenv.mkDerivation {
     ${if cross != null then stdenv.lib.attrByPath [ "uclibc" "extraConfig" ] "" cross else ""}
     $extraCrossConfig
     EOF
-    make oldconfig </dev/null
+    ( set +o pipefail; yes "" | make oldconfig )
   '';
 
   hardeningDisable = [ "stackprotector" ];
