@@ -43,6 +43,13 @@ stdenv.mkDerivation rec {
     ++ optional pythonBindings [python]
     ++ optional luaBindings [lua];
 
+  postInstall = ''
+    # replace symlinks pointing into the build directory with the files they point to
+    rm -f $out/bin/{r2-docker,r2-indent}
+    cp sys/r2-docker.sh $out/bin/r2-docker
+    cp sys/indent.sh    $out/bin/r2-indent
+  '';
+
   meta = {
     description = "unix-like reverse engineering framework and commandline tools";
     homepage = http://radare.org/;
