@@ -4351,33 +4351,7 @@ in {
 
   daphne = callPackage ../development/python-modules/daphne { };
 
-  dateparser = buildPythonPackage rec {
-    name = "dateparser-${version}";
-    version = "0.3.2-pre-2016-01-21"; # Fix assert year 2016 == 2015
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/scrapinghub/dateparser.git";
-      rev = "d20a63f1d1cee5b4bd19c9f745774cfa9f219549";
-      sha256 = "0na7b4hvf7vykrk48482gxiq5xny67rvs8ilamxcxw3y9gfgdjfd";
-    };
-
-    # Does not seem to work on Python 3 because of relative import.
-    # Upstream Travis configuration is wrong and tests only 2.7
-    disabled = isPy3k;
-
-    LC_ALL = "en_US.UTF-8";
-
-    buildInputs = with self; [ nose nose-parameterized mock pkgs.glibcLocales ];
-
-    propagatedBuildInputs = with self; [ six jdatetime pyyaml dateutil umalqurra pytz ];
-
-    meta = {
-      description = "Date parsing library designed to parse dates from HTML pages";
-      homepage = https://pypi.python.org/pypi/dateparser;
-      license = licenses.bsd3;
-      broken = true;
-    };
-  };
+  dateparser = callPackage ../development/python-modules/dateparser { };
 
   # Actual name of package
   python-dateutil = callPackage ../development/python-modules/dateutil { };
@@ -17524,9 +17498,6 @@ in {
     name = "ruamel.yaml-${version}";
     version = "0.13.7";
 
-    # needs ruamel_ordereddict for python2 support
-    disabled = !isPy3k;
-
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/ruamel.yaml/${name}.tar.gz";
       sha256 = "1vca2552k0kmhr9msg1bbfdvp3p9im17x1a6npaw221vlgg15z7h";
@@ -17535,7 +17506,8 @@ in {
     # Tests cannot load the module to test
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ ruamel_base typing ];
+    propagatedBuildInputs = with self; [ ruamel_base typing ] ++
+    (optional (!isPy3k) self.ruamel_ordereddict);
 
     meta = {
       description = "YAML parser/emitter that supports roundtrip preservation of comments, seq/map flow style, and map key order";
