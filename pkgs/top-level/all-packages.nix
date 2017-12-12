@@ -6307,6 +6307,10 @@ with pkgs;
   rust = callPackage ../development/compilers/rust { };
   inherit (rust) cargo rustc;
 
+  buildRustCrate = callPackage ../build-support/rust/build-rust-crate.nix { };
+
+  defaultCrateOverrides = callPackage ../build-support/rust/default-crate-overrides.nix { };
+
   rustPlatform = recurseIntoAttrs (makeRustPlatform rust);
 
   makeRustPlatform = rust: lib.fix (self:
