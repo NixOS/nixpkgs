@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   name = "electrum-${version}";
-  version = "3.0.2";
+  version = "3.0.3";
 
   src = fetchurl {
     url = "https://download.electrum.org/${version}/Electrum-${version}.tar.gz";
-    sha256 = "0lsg513lxs8qqpr7c0ibb7pma69hxiy3zqybganh6vs9byy7bzsd";
+    sha256 = "09h3s1mbkliwh8758prbdk3sm19bnma7wy3k10pl9q9fkarbhp75";
   };
 
   propagatedBuildInputs = with python3Packages; [
