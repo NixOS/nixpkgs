@@ -13832,6 +13832,8 @@ in {
 
   oslo-config = callPackage ../development/python-modules/oslo-config { };
 
+  openstackdocstheme = callPackage ../development/python-modules/openstackdocstheme { };
+
   oslotest = buildPythonPackage rec {
     name = "oslotest-${version}";
     version = "2.18.0";
