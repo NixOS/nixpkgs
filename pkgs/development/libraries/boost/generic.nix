@@ -10,7 +10,7 @@
 , enablePIC ? false
 , enableExceptions ? false
 , enablePython ? hostPlatform == buildPlatform
-, enableNumpy ? false, numpy ? null
+, enableNumpy ? false
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
 , patches ? null
 , mpi ? null
@@ -156,7 +156,7 @@ stdenv.mkDerivation {
     ++ optional (hostPlatform == buildPlatform) icu
     ++ optional stdenv.isDarwin fixDarwinDylibNames
     ++ optional enablePython python
-    ++ optional enableNumpy numpy;
+    ++ optional enableNumpy python.pkgs.numpy;
 
   configureScript = "./bootstrap.sh";
   configureFlags = commonConfigureFlags
