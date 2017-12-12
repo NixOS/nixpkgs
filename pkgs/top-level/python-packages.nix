@@ -13781,22 +13781,7 @@ in {
     '';
   };
 
-  oslo-context = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "oslo.context";
-    version = "2.18.1";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "1sc7qrwffsm15m91c17k0xiglv6bxh9sbksvxvrrgja82m57mgh6";
-    };
-
-    propagatedBuildInputs = with self; [ pbr Babel ];
-    buildInputs = with self; [ oslotest coverage oslosphinx ];
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
-  };
+  oslo-context = callPackage ../development/python-modules/oslo-context { };
 
   oslo-i18n = buildPythonPackage rec {
     name = "oslo.i18n-${version}";
