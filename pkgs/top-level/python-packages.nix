@@ -12861,23 +12861,8 @@ in {
   };
 
 
-  oslo-utils = buildPythonPackage rec {
-    pname = "oslo.utils";
-    version = "3.29.0";
-    name = "${pname}-${version}";
+  oslo-utils = callPackage ../development/python-modules/oslo-utils { };
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0l90ijw96czjd6z8bw88983rsnq5753iw86rhk1wi064w4rs19ig";
-    };
-
-    propagatedBuildInputs = with self; [ pbr Babel six iso8601 pytz netaddr netifaces
-                                         monotonic oslo-i18n wrapt debtcollector ];
-    buildInputs = with self; [ oslotest mock coverage oslosphinx ];
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
-  };
 
   oslo-middleware = buildPythonPackage rec {
     name = "oslo.middleware-${version}";
