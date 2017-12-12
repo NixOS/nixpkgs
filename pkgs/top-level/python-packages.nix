@@ -13704,25 +13704,7 @@ in {
 
   olefile = callPackage ../development/python-modules/olefile { };
 
-  oslo-log = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "oslo.log";
-    version = "3.31.0";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "1w08cl98n8592pvb2gw01mqlwi8nnnpg1zy10mvj6xdpvfk2yqzz";
-    };
-
-    propagatedBuildInputs = with self; [
-      pbr Babel six iso8601 debtcollector dateutil
-      oslo-utils oslo-i18n oslo-config oslo-serialization oslo-context
-    ] ++ stdenv.lib.optional stdenv.isLinux pyinotify;
-    buildInputs = with self; [ oslotest oslosphinx ];
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
-  };
+  oslo-log = callPackage ../development/python-modules/oslo-log { };
 
   oslo-context = callPackage ../development/python-modules/oslo-context { };
 
