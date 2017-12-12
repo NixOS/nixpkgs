@@ -6221,7 +6221,7 @@ with pkgs;
 
   carnix = (callPackage ../build-support/rust/carnix.nix { }).carnix_0_5_0;
 
-  defaultCrateOverrides = callPackage ../build-support/rust/defaultCrateOverrides.nix { };
+  defaultCrateOverrides = callPackage ../build-support/rust/default-crate-overrides.nix { };
 
   rustPlatform = recurseIntoAttrs (makeRustPlatform rust);
 
