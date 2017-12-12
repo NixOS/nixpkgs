@@ -44,6 +44,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
+    bash
     jdk
   ];
 
