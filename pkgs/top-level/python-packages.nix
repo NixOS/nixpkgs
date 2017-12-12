@@ -12811,24 +12811,7 @@ in {
 
   os-testr = callPackage ../development/python-modules/os-testr { };
 
-  bandit = buildPythonPackage rec {
-    name = "bandit-${version}";
-    version = "0.16.1";
-    disabled = isPy33;
-    doCheck = !isPyPy; # a test fails
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/bandit/${name}.tar.gz";
-      sha256 = "0qd9kxknac5n5xfl5zjnlmk6jr94krkcx29zgyna8p9lyb828hsk";
-    };
-
-    propagatedBuildInputs = with self; [ pbr six pyyaml appdirs stevedore ];
-    buildInputs = with self; [ beautifulsoup4 oslosphinx testtools testscenarios
-                               testrepository fixtures mock ];
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
-  };
+  bandit = callPackage ../development/python-modules/bandit { };
 
   oslo-serialization = buildPythonPackage rec {
     pname = "oslo.serialization";
