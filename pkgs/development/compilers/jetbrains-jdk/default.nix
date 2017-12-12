@@ -16,7 +16,7 @@ let drv = stdenv.mkDerivation rec {
       sha256 = "1768f02i3dxdbxn8n29d522h8v0mkgnhpb8ixzq5p54vwjmfl6md";
     }
   else
-    abort "unsupported system: ${stdenv.system}";
+    throw "unsupported system: ${stdenv.system}";
 
   nativeBuildInputs = [ file ];
 

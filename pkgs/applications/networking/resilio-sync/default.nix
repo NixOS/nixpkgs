@@ -4,7 +4,7 @@ let
   arch = {
     "x86_64-linux" = "x64";
     "i686-linux" = "i386";
-  }.${stdenv.system};
+  }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.libc ];
 
 in stdenv.mkDerivation rec {
