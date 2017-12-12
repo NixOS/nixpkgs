@@ -6217,7 +6217,7 @@ with pkgs;
   rust = callPackage ../development/compilers/rust { };
   inherit (rust) cargo rustc;
 
-  buildRustCrate = callPackage ../build-support/rust/rust-utils.nix { };
+  buildRustCrate = callPackage ../build-support/rust/build-rust-crate.nix { };
 
   carnix = (callPackage ../build-support/rust/carnix.nix { }).carnix_0_5_0;
 
