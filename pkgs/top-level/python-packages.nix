@@ -12951,26 +12951,7 @@ in {
    };
   };
 
-  oslo-reports = buildPythonPackage rec {
-    name = "oslo.reports-${version}";
-    version = "0.6.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/oslo.reports/${name}.tar.gz";
-      sha256 = "0j27mbsa5y1fn9lxn98xs7p9vipcig47srm5sgbgma0ilv125b65";
-    };
-
-    propagatedBuildInputs = with self; [
-      oslo-i18n oslo-utils oslo-serialization six psutil_1 Babel jinja2 pbr psutil_1
-    ];
-    buildInputs = with self; [
-      coverage greenlet eventlet oslosphinx oslotest
-    ];
-
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
-  };
+  oslo-reports = callPackage ../development/python-modules/oslo-reports { };
 
   cinderclient = buildPythonPackage rec {
     name = "cinderclient-${version}";
