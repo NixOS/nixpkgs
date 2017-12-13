@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, atk, cairo, glib, gtk3, pango
-, libxml2, perl, intltool, gettext, gnome3, dbus, xvfb_run, shared_mime_info }:
+, libxml2, perl, intltool, gettext, gnome3, gobjectIntrospection, dbus, xvfb_run, shared_mime_info }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig intltool gettext perl ]
+  nativeBuildInputs = [ pkgconfig intltool gettext perl gobjectIntrospection ]
     ++ stdenv.lib.optionals doCheck checkInputs;
   buildInputs = [ atk cairo glib pango libxml2 ];
   checkInputs = [ xvfb_run dbus ];
