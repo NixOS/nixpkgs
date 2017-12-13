@@ -19174,6 +19174,8 @@ in {
 
   testtools = callPackage ../development/python-modules/testtools { };
 
+  stestr = callPackage ../development/python-modules/stestr { };
+
   traitlets = callPackage ../development/python-modules/traitlets { };
 
   python_mimeparse = buildPythonPackage rec {
