@@ -16113,7 +16113,6 @@ with pkgs;
   notmuch-addrlookup = callPackage ../applications/networking/mailreaders/notmuch-addrlookup { };
 
   # Open Stack
-  keystone = callPackage ../applications/virtualization/openstack/keystone.nix { };
   neutron = callPackage ../applications/virtualization/openstack/neutron.nix { };
   glance = callPackage ../applications/virtualization/openstack/glance.nix { };
 

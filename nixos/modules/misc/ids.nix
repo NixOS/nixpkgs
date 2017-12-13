@@ -281,7 +281,7 @@
       stanchion = 262;
       riak-cs = 263;
       infinoted = 264;
-      keystone = 265;
+      # keystone = 265; # unused, removed 2017-12-13
       glance = 266;
       couchpotato = 267;
       gogs = 268;
@@ -551,7 +551,7 @@
       stanchion = 262;
       riak-cs = 263;
       infinoted = 264;
-      keystone = 265;
+      # keystone = 265; # unused, removed 2017-12-13
       glance = 266;
       couchpotato = 267;
       gogs = 268;
