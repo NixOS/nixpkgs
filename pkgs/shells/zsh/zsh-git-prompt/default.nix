@@ -56,7 +56,7 @@ haskell.packages.${ghcVersion}.callPackage
         mkdir -p $gpshare/src $gpdoc
         cp README.md $gpdoc
         cp zshrc.sh gitstatus.py $gpshare
-        mv $out/bin $gpshare/src/.bin
+        mv $bin/bin $gpshare/src/.bin
      '';
      isLibrary = false;
      isExecutable = true;
