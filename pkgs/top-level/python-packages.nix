@@ -12840,29 +12840,7 @@ in {
    cachetools_1 = callPackage ../development/python-modules/cachetools/1.nix {};
    cachetools = callPackage ../development/python-modules/cachetools {};
 
-   futurist = buildPythonPackage rec {
-     name = "futurist-${version}";
-     version = "0.7.0";
-
-     src = pkgs.fetchurl {
-       url = "mirror://pypi/f/futurist/${name}.tar.gz";
-       sha256 = "0wf0k9xf5xzmi79418xq8zxwr7w7a4g4alv3dds9afb2l8bh9crg";
-     };
-
-     patchPhase = ''
-       sed -i "s/test_gather_stats/noop/" futurist/tests/test_executors.py
-     '';
-
-     propagatedBuildInputs = with self; [
-       contextlib2 pbr six monotonic futures eventlet
-     ];
-     buildInputs = with self; [
-       testtools testscenarios testrepository oslotest subunit
-     ];
-
-     # breaks in sandboxing
-     doCheck = false;
-   };
+  futurist = callPackage ../development/python-modules/futurist {};
 
   oslo-messaging = callPackage ../development/python-modules/oslo-messaging {};
 
