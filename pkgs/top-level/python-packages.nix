@@ -12890,6 +12890,7 @@ in {
     };
   };
 
+  osc-lib = callPackage ../development/python-modules/osc-lib {};
 
   oslo-db = buildPythonPackage rec {
     name = "oslo.db-${version}";
