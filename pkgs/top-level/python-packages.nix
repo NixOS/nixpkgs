@@ -13325,32 +13325,7 @@ in {
     '';
   };
 
-  networking-hyperv = buildPythonPackage rec {
-    name = "networking-hyperv-${version}";
-    version = "2015.1.0";
-    disabled = isPy3k;  # failing tests
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/networking-hyperv/${name}.tar.gz";
-      sha256 = "04wfkl8rffxp6gp7qvhhc8y80cy0akmh3z7k7y2sj6savg9q7jdj";
-    };
-
-    propagatedBuildInputs = with self; [
-      pbr Babel oslo-config oslo-i18n oslo-serialization oslo-utils oslo-log
-    ];
-    buildInputs = with self; [
-      testtools testscenarios testrepository oslotest oslosphinx subunit eventlet
-      fixtures mock
-    ];
-
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-      # it has pinned pbr<1.0
-      sed -i '/pbr/d' requirements.txt
-      # https://github.com/openstack/networking-hyperv/commit/56d66fc012846620a60cb8f18df5a1c889fe0e26
-      sed -i 's/from oslo import i18n/import oslo_i18n as i18n/' hyperv/common/i18n.py
-    '';
-  };
+  networking-hyperv =  callPackage ../development/python-modules/networking-hyperv { };
 
   kazoo = buildPythonPackage rec {
     name = "kazoo-${version}";
