@@ -13287,31 +13287,7 @@ in {
 
   glance_store = callPackage ../development/python-modules/glance_store { };
 
-  swiftclient = buildPythonPackage rec {
-    name = "swiftclient-${version}";
-    version = "2.6.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-swiftclient/python-swiftclient-${version}.tar.gz";
-      sha256 = "1j33l4z9vqh0scfncl4fxg01zr1hgqxhhai6gvcih1gccqm4nd7p";
-    };
-
-    propagatedBuildInputs = with self; [
-      pbr requests futures six
-    ];
-    buildInputs = with self; [
-      testtools testrepository mock
-    ];
-
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Python bindings to the OpenStack Object Storage API";
-      homepage = "http://www.openstack.org/";
-    };
-  };
+  python-swiftclient = callPackage ../development/python-modules/python-swiftclient { };
 
 
   castellan = buildPythonPackage rec {
