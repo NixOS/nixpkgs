@@ -12864,32 +12864,7 @@ in {
      doCheck = false;
    };
 
-  oslo-messaging = buildPythonPackage rec {
-    name = "oslo.messaging-${version}";
-    version = "2.7.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/oslo.messaging/${name}.tar.gz";
-      sha256 = "1af7l4ri3xfjcnjp2yhngz34h3ls00yyj1x8i64dxb86ryy43kd1";
-    };
-
-    propagatedBuildInputs = with self; [
-      pbr oslo-config oslo-context oslo-log oslo-utils oslo-serialization
-      oslo-i18n stevedore six eventlet greenlet webob pyyaml kombu_3 trollius
-      aioeventlet cachetools_1 oslo-middleware futurist redis oslo-service
-      eventlet pyzmq
-    ];
-
-    buildInputs = with self; [
-      oslotest mock mox3 subunit testtools testscenarios testrepository
-      fixtures oslosphinx
-    ];
-
-    preBuild = ''
-      # transient failure https://bugs.launchpad.net/oslo.messaging/+bug/1510481
-      sed -i 's/test_send_receive/noop/' oslo_messaging/tests/drivers/test_impl_rabbit.py
-    '';
-  };
+  oslo-messaging = callPackage ../development/python-modules/oslo-messaging {};
 
   os-brick = buildPythonPackage rec {
    name = "os-brick-${version}";
