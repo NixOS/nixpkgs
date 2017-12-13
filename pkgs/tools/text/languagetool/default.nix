@@ -29,6 +29,6 @@ stdenv.mkDerivation rec {
       edwtjo
       jgeerds
     ];
-    descrption = "A proofreading program for English, French German, Polish, and more";
+    description = "A proofreading program for English, French German, Polish, and more";
   };
 }
