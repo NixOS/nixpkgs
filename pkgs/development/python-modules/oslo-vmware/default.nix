@@ -38,7 +38,8 @@ buildPythonPackage rec {
   '';
 
   postPatch = ''
-
+    # remove eventlet pinning for new version
+    sed -i 's/^\(eventlet\).*/\1/' requirements.txt
     sed -i 's@python@${python.interpreter}@' .testr.conf
     '';
 
