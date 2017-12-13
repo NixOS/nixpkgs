@@ -2,12 +2,12 @@
 
 buildPythonPackage rec {
   pname = "raven";
-  version = "6.3.0";
+  version = "6.4.0";
   name = pname + "-" + version;
 
   src = fetchurl {
     url = "mirror://pypi/r/raven/${name}.tar.gz";
-    sha256 = "1wgddbd092vih6k6mknp68vvm1pp12fikjqzglw6mnyw8njnbr7k";
+    sha256 = "00m985w9fja2jf8dpvdhygcr26rwabxkgvcc2v5j6v7d6lrvpvdq";
   };
 
   # way too many dependencies to run tests
