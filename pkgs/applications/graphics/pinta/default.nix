@@ -56,9 +56,9 @@ buildDotnetPackage rec {
     '';
 
   makeWrapperArgs = [
-    ''--prefix MONO_GAC_PREFIX ':' "${gtksharp}"''
-    ''--prefix LD_LIBRARY_PATH ':' "${gtksharp}/lib"''
-    ''--prefix LD_LIBRARY_PATH ':' "${gtksharp.gtk.out}/lib"''
+    ''--prefix MONO_GAC_PREFIX : ${gtksharp}''
+    ''--prefix LD_LIBRARY_PATH : ${gtksharp}/lib''
+    ''--prefix LD_LIBRARY_PATH : ${gtksharp.gtk.out}/lib''
   ];
 
   postInstall = ''

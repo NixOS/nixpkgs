@@ -90,7 +90,7 @@ let
 
       mkdir -p $out/share/icons{,/hicolor/scalable/apps}
       cp icons/mumble.svg $out/share/icons
-      ln -s $out/share/icon/mumble.svg $out/share/icons/hicolor/scalable/apps
+      ln -s $out/share/icons/mumble.svg $out/share/icons/hicolor/scalable/apps
     '';
   } source;
 

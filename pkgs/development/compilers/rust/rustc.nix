@@ -34,6 +34,9 @@ stdenv.mkDerivation {
 
   __darwinAllowLocalNetworking = true;
 
+  # The build will fail at the very end on AArch64 without this.
+  dontUpdateAutotoolsGnuConfigScripts = if stdenv.isAarch64 then true else null;
+
   NIX_LDFLAGS = optionalString stdenv.isDarwin "-rpath ${llvmShared}/lib";
 
   # Enable nightly features in stable compiles (used for

@@ -39,6 +39,8 @@ in {
   config ? stdenv.lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
   # Cross-compiling config
   crossConfig ? if allowImportFromDerivation then (readConfig crossConfigfile) else config,
+  # Use defaultMeta // extraMeta
+  extraMeta ? {},
   # Whether to utilize the controversial import-from-derivation feature to parse the config
   allowImportFromDerivation ? false
 }:
@@ -228,7 +230,7 @@ let
           maintainers.thoughtpolice
         ];
         platforms = platforms.linux;
-      };
+      } // extraMeta;
     };
 in
 

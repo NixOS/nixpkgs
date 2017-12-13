@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, tzdata, iana-etc, go_bootstrap, runCommand, writeScriptBin
-, perl, which, pkgconfig, patch, fetchpatch
+, perl, which, pkgconfig, patch, procps
 , pcre, cacert, llvm
 , Security, Foundation, bash
 , makeWrapper, git, subversion, mercurial, bazaar }:
@@ -35,7 +35,8 @@ stdenv.mkDerivation rec {
   };
 
   # perl is used for testing go vet
-  nativeBuildInputs = [ perl which pkgconfig patch makeWrapper ];
+  nativeBuildInputs = [ perl which pkgconfig patch makeWrapper ]
+    ++ optionals stdenv.isLinux [ procps ];
   buildInputs = [ pcre ]
     ++ optionals stdenv.isLinux [ stdenv.glibc.out stdenv.glibc.static ];
   propagatedBuildInputs = optionals stdenv.isDarwin [ Security Foundation ];
@@ -150,6 +151,7 @@ stdenv.mkDerivation rec {
     export GOROOT=$out/share/go
     export GOBIN=$GOROOT/bin
     export PATH=$GOBIN:$PATH
+    ulimit -a
   '';
 
   postConfigure = optionalString stdenv.isDarwin ''

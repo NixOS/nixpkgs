@@ -43,10 +43,10 @@ let
       overrideWith = newArgs: origArgs // (if builtins.isFunction newArgs then newArgs origArgs else newArgs);
     in
       if builtins.isAttrs ff then (ff // {
-        overridePythonAttrs = newArgs: makeOverridable f (overrideWith newArgs);
+        overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
       })
       else if builtins.isFunction ff then {
-        overridePythonAttrs = newArgs: makeOverridable f (overrideWith newArgs);
+        overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
         __functor = self: ff;
       }
       else ff;
@@ -56,14 +56,14 @@ let
     flit = self.flit;
     # We want Python libraries to be named like e.g. "python3.6-${name}"
     inherit namePrefix;
-    pythonModule = python;
+    inherit toPythonModule;
   }));
 
   buildPythonApplication = makeOverridablePythonPackage ( makeOverridable (callPackage ../development/interpreters/python/build-python-package.nix {
     inherit bootstrapped-pip;
     flit = self.flit;
     namePrefix = "";
-    pythonModule = false;
+    toPythonModule = x: x; # Application does not provide modules.
   }));
 
   graphiteVersion = "1.0.2";
@@ -87,15 +87,12 @@ let
     in fetcher (builtins.removeAttrs attrs ["format"]) );
 
   # Check whether a derivation provides a Python module.
-  hasPythonModule = drv: (hasAttr "pythonModule" drv) && ( (getAttr "pythonModule" drv) == python);
+  hasPythonModule = drv: drv?pythonModule && drv.pythonModule == python;
 
   # Get list of required Python modules given a list of derivations.
   requiredPythonModules = drvs: let
-    filterNull = list: filter (x: !isNull x) list;
-    conditionalGetRecurse = attr: condition: drv: let f = conditionalGetRecurse attr condition; in
-      (if (condition drv) then unique [drv]++(concatMap f (filterNull(getAttr attr drv))) else []);
-    _required = drv: conditionalGetRecurse "propagatedBuildInputs" hasPythonModule drv;
-  in [python] ++ (unique (concatMap _required (filterNull drvs)));
+    modules = filter hasPythonModule drvs;
+  in unique ([python] ++ modules ++ concatLists (catAttrs "requiredPythonModules" modules));
 
   # Create a PYTHONPATH from a list of derivations. This function recurses into the items to find derivations
   # providing Python modules.
@@ -106,9 +103,9 @@ let
     drv.overrideAttrs( oldAttrs: {
       # Use passthru in order to prevent rebuilds when possible.
       passthru = (oldAttrs.passthru or {})// {
-        name = namePrefix + oldAttrs.name;
         pythonModule = python;
         pythonPath = [ ]; # Deprecated, for compatibility.
+        requiredPythonModules = requiredPythonModules drv.propagatedBuildInputs;
       };
     });
 
@@ -129,7 +126,7 @@ in {
 
   recursivePthLoader = callPackage ../development/python-modules/recursive-pth-loader { };
 
-  setuptools = callPackage ../development/python-modules/setuptools { };
+  setuptools = toPythonModule (callPackage ../development/python-modules/setuptools { });
 
   vowpalwabbit = callPackage ../development/python-modules/vowpalwabbit {
     pythonPackages = self;
@@ -161,6 +158,8 @@ in {
   aioamqp = callPackage ../development/python-modules/aioamqp { };
 
   ansicolor = callPackage ../development/python-modules/ansicolor { };
+
+  argon2_cffi = callPackage ../development/python-modules/argon2_cffi { };
 
   asana = callPackage ../development/python-modules/asana { };
 
@@ -227,6 +226,8 @@ in {
   };
 
   intelhex = callPackage ../development/python-modules/intelhex { };
+
+  lmtpd = callPackage ../development/python-modules/lmtpd { };
 
   mpi4py = callPackage ../development/python-modules/mpi4py {
     mpi = pkgs.openmpi;
@@ -341,6 +342,8 @@ in {
   pyzufall = callPackage ../development/python-modules/pyzufall { };
 
   rhpl = disabledIf isPy3k (callPackage ../development/python-modules/rhpl {});
+
+  salmon = callPackage ../development/python-modules/salmon { };
 
   simpleeval = callPackage ../development/python-modules/simpleeval { };
 
@@ -1045,21 +1048,7 @@ in {
     };
   };
 
-  backports_shutil_get_terminal_size = if !(pythonOlder "3.3") then null else buildPythonPackage rec {
-    name = "backports.shutil_get_terminal_size-${version}";
-    version = "1.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/backports.shutil_get_terminal_size/${name}.tar.gz";
-      sha256 = "713e7a8228ae80341c70586d1cc0a8caa5207346927e23d09dcbcaf18eadec80";
-    };
-
-    meta = {
-      description = "A backport of the get_terminal_size function from Python 3.3’s shutil.";
-      homepage = https://github.com/chrippa/backports.shutil_get_terminal_size;
-      license = with licenses; [ mit ];
-    };
-  };
+  backports_shutil_get_terminal_size = callPackage ../development/python-modules/backports_shutil_get_terminal_size { };
 
   backports_ssl_match_hostname_3_4_0_2 = self.buildPythonPackage rec {
     name = "backports.ssl_match_hostname-3.4.0.2";
@@ -1102,7 +1091,7 @@ in {
     buildInputs = [ pkgs.lzma ];
 
     meta = {
-      describe = "Backport of Python 3.3's 'lzma' module for XZ/LZMA compressed files";
+      description = "Backport of Python 3.3's 'lzma' module for XZ/LZMA compressed files";
       homepage = https://github.com/peterjc/backports.lzma;
       license = licenses.bsd3;
     };
@@ -1987,13 +1976,13 @@ in {
 
   boto3 = buildPythonPackage rec {
     name = "boto3-${version}";
-    version = "1.4.7";
+    version = "1.4.8";
 
     src = pkgs.fetchFromGitHub {
       owner = "boto";
       repo  = "boto3";
       rev   = version;
-      sha256 = "0ca08xkkx6py08gqgn1aci9pklidwivxbvpwjv7623jr21avakdi";
+      sha256 = "11ysd7a9l5y98q7b7az56phsj2m7w90abf4jabwrknp2c43sq9bi";
     };
 
     propagatedBuildInputs = [ self.botocore self.jmespath self.s3transfer ] ++
@@ -2458,23 +2447,7 @@ in {
 
   characteristic = callPackage ../development/python-modules/characteristic { };
 
-  cheetah = buildPythonPackage rec {
-    version = "2.4.4";
-    name = "cheetah-${version}";
-    disabled = isPy3k;
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/C/Cheetah/Cheetah-${version}.tar.gz";
-      sha256 = "be308229f0c1e5e5af4f27d7ee06d90bb19e6af3059794e5fd536a6f29a9b550";
-    };
-
-    propagatedBuildInputs = with self; [ self.markdown ];
-
-    meta = {
-      homepage = http://www.cheetahtemplate.org/;
-      description = "A template engine and code generation tool";
-    };
-  };
+  cheetah = callPackage ../development/python-modules/cheetah { };
 
   cherrypy = callPackage ../development/python-modules/cherrypy {};
 
@@ -2873,6 +2846,8 @@ in {
 
 
   confluent-kafka = callPackage ../development/python-modules/confluent-kafka {};
+
+  kafka-python = callPackage ../development/python-modules/kafka-python {};
 
   construct = callPackage ../development/python-modules/construct {};
 
@@ -3766,6 +3741,8 @@ in {
     };
   };
 
+  pytest-timeout = callPackage ../development/python-modules/pytest-timeout { };
+
   pytest-warnings = callPackage ../development/python-modules/pytest-warnings { };
 
   pytestpep8 = buildPythonPackage rec {
@@ -4371,33 +4348,7 @@ in {
 
   daphne = callPackage ../development/python-modules/daphne { };
 
-  dateparser = buildPythonPackage rec {
-    name = "dateparser-${version}";
-    version = "0.3.2-pre-2016-01-21"; # Fix assert year 2016 == 2015
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/scrapinghub/dateparser.git";
-      rev = "d20a63f1d1cee5b4bd19c9f745774cfa9f219549";
-      sha256 = "0na7b4hvf7vykrk48482gxiq5xny67rvs8ilamxcxw3y9gfgdjfd";
-    };
-
-    # Does not seem to work on Python 3 because of relative import.
-    # Upstream Travis configuration is wrong and tests only 2.7
-    disabled = isPy3k;
-
-    LC_ALL = "en_US.UTF-8";
-
-    buildInputs = with self; [ nose nose-parameterized mock pkgs.glibcLocales ];
-
-    propagatedBuildInputs = with self; [ six jdatetime pyyaml dateutil umalqurra pytz ];
-
-    meta = {
-      description = "Date parsing library designed to parse dates from HTML pages";
-      homepage = https://pypi.python.org/pypi/dateparser;
-      license = licenses.bsd3;
-      broken = true;
-    };
-  };
+  dateparser = callPackage ../development/python-modules/dateparser { };
 
   # Actual name of package
   python-dateutil = callPackage ../development/python-modules/dateutil { };
@@ -4545,7 +4496,8 @@ in {
 
   discogs_client = callPackage ../development/python-modules/discogs_client { };
 
-  dns = callPackage ../development/python-modules/dns { };
+  dnspython = callPackage ../development/python-modules/dnspython { };
+  dns = self.dnspython; # Alias for compatibility, 2017-12-10
 
   docker = callPackage ../development/python-modules/docker {};
 
@@ -5483,6 +5435,10 @@ in {
     };
   };
 
+  git-annex-adapter = callPackage ../development/python-modules/git-annex-adapter {
+    inherit (pkgs.gitAndTools) git-annex;
+  };
+
   google-cloud-sdk = callPackage ../tools/admin/google-cloud-sdk { };
   google-cloud-sdk-gce = callPackage ../tools/admin/google-cloud-sdk { with-gce=true; };
 
@@ -5617,6 +5573,14 @@ in {
       platforms = platforms.unix;
     };
   };
+
+  gurobipy = if stdenv.system == "x86_64-darwin"
+  then callPackage ../development/python-modules/gurobipy/darwin.nix {
+    inherit (pkgs.darwin) cctools insert_dylib;
+  }
+  else if stdenv.system == "x86_64-linux"
+  then callPackage ../development/python-modules/gurobipy/linux.nix {}
+  else throw "gurobipy not yet supported on ${stdenv.system}";
 
   helper = buildPythonPackage rec {
     pname = "helper";
@@ -5946,6 +5910,8 @@ in {
       maintainers = [ stdenv.lib.maintainers.joachifm ];
     };
   };
+
+  jsonrpclib-pelix = callPackage ../development/python-modules/jsonrpclib-pelix {};
 
   jsonwatch = buildPythonPackage rec {
     name = "jsonwatch-0.2.0";
@@ -6789,8 +6755,8 @@ in {
     };
 
     propagatedBuildInputs = with self; [ python-axolotl-curve25519 protobuf pycrypto ];
-    # IV == 0 in tests is not supported by pycrytpodom (our pycrypto drop-in)
-    doCheck = !isPy3k;
+    # IV == 0 in tests is not supported by pycryptodome (our pycrypto drop-in)
+    doCheck = false;
 
     meta = {
       homepage = "https://github.com/tgalal/python-axolotl";
@@ -7256,13 +7222,13 @@ in {
   };
 
   py3status = buildPythonPackage rec {
-    version = "3.6";
+    version = "3.7";
     name = "py3status-${version}";
     src = pkgs.fetchFromGitHub {
       owner = "ultrabug";
       repo = "py3status";
       rev = version;
-      sha256 = "01qvrwgkphb0lr7g9dm0hncbxcds05kg4qgbsrvnc7d5j2vhfdkr";
+      sha256 = "1khrvxjjcm1bsswgrdgvyrdrimxx92yhql4gmji6a0kpp59dp541";
     };
     doCheck = false;
     propagatedBuildInputs = with self; [ requests ];
@@ -9402,17 +9368,14 @@ in {
 
   hetzner = buildPythonPackage rec {
     name = "hetzner-${version}";
-    version = "0.7.5";
+    version = "0.8.0";
 
     src = pkgs.fetchFromGitHub {
       repo = "hetzner";
-      owner = "RedMoonStudios";
+      owner = "aszlig";
       rev = "v${version}";
-      sha256 = "1fw7i1z4a39i1ljd9qd4f5p1p3a4257jfglkdpw90xjwl7fdpq42";
+      sha256 = "04q2q2w2qkhfly8rfjg2h5pnh42gs18l6cmipqc37yf7qvkw3nd0";
     };
-
-    # not there yet, but coming soon.
-    doCheck = false;
 
     meta = {
       homepage = "https://github.com/RedMoonStudios/hetzner";
@@ -10277,6 +10240,8 @@ in {
     };
   };
 
+  lark-parser = callPackage ../development/python-modules/lark-parser { };
+
   lazy-object-proxy = buildPythonPackage rec {
     name = "lazy-object-proxy-${version}";
     version = "1.2.1";
@@ -10398,6 +10363,10 @@ in {
     clblas = pkgs.clblas.override { boost = self.boost; };
     cudaSupport = pkgs.config.cudaSupport or false;
   };
+
+  librepo = toPythonModule (pkgs.librepo.override {
+    inherit python;
+  });
 
   libnacl = callPackage ../development/python-modules/libnacl {
     inherit (pkgs) libsodium;
@@ -11847,7 +11816,7 @@ in {
     name = "sleekxmpp-${version}";
     version = "1.3.1";
 
-    propagatedBuildInputs = with self ; [ dns pyasn1 ];
+    propagatedBuildInputs = with self ; [ dnspython pyasn1 ];
 
     src = pkgs.fetchurl {
       url = "mirror://pypi/s/sleekxmpp/${name}.tar.gz";
@@ -14287,24 +14256,7 @@ in {
     };
   };
 
-  pathlib2 = if !(pythonOlder "3.4") then null else buildPythonPackage rec {
-    name = "pathlib2-${version}";
-    version = "2.2.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pathlib2/${name}.tar.gz";
-      sha256 = "ce9007df617ef6b7bd8a31cd2089ed0c1fed1f7c23cf2bf1ba140b3dd563175d";
-    };
-
-    propagatedBuildInputs = with self; [ six ] ++ optional (pythonOlder "3.5") scandir;
-
-    meta = {
-      description = "This module offers classes representing filesystem paths with semantics appropriate for different operating systems.";
-      homepage = https://pypi.python.org/pypi/pathlib2/;
-      license = with licenses; [ mit ];
-    };
-
-  };
+  pathlib2 = callPackage ../development/python-modules/pathlib2 { };
 
   pathpy = callPackage ../development/python-modules/path.py { };
 
@@ -16708,7 +16660,7 @@ in {
 
     buildInputs = with self; [ nose mock pyopenssl ];
 
-    propagatedBuildInputs = with self; [ urllib3 dns];
+    propagatedBuildInputs = with self; [ urllib3 dnspython ];
 
     postPatch = ''
       sed -i '19s/dns/"dnspython"/' setup.py
@@ -17543,9 +17495,6 @@ in {
     name = "ruamel.yaml-${version}";
     version = "0.13.7";
 
-    # needs ruamel_ordereddict for python2 support
-    disabled = !isPy3k;
-
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/ruamel.yaml/${name}.tar.gz";
       sha256 = "1vca2552k0kmhr9msg1bbfdvp3p9im17x1a6npaw221vlgg15z7h";
@@ -17554,7 +17503,8 @@ in {
     # Tests cannot load the module to test
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ ruamel_base typing ];
+    propagatedBuildInputs = with self; [ ruamel_base typing ] ++
+    (optional (!isPy3k) self.ruamel_ordereddict);
 
     meta = {
       description = "YAML parser/emitter that supports roundtrip preservation of comments, seq/map flow style, and map key order";
@@ -18296,7 +18246,7 @@ in {
     meta = {
       description = "Library to implement a well-behaved Unix daemon process";
       homepage = https://alioth.debian.org/projects/python-daemon/;
-      licenses =  [ licenses.gpl3Plus licenses.asl20 ];
+      license = [ licenses.gpl3Plus licenses.asl20 ];
     };
   };
 
@@ -18578,7 +18528,7 @@ in {
 
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = with pkgs; [ alsaLib ffmpeg libv4l sqlite libvpx ];
-    propagatedBuildInputs = with self; [ cython pkgs.openssl dns dateutil xcaplib msrplib lxml python-otr ];
+    propagatedBuildInputs = with self; [ cython pkgs.openssl dnspython dateutil xcaplib msrplib lxml python-otr ];
   };
 
 
@@ -19542,6 +19492,7 @@ in {
     };
 
     propagatedBuildInputs = with self; [ six pillow pymaging_png ];
+    checkInputs = [ self.mock ];
 
     meta = {
       description = "Quick Response code generation for Python";
@@ -19669,6 +19620,7 @@ in {
      };
    };
 
+  TurboCheetah = callPackage ../development/python-modules/TurboCheetah { };
 
   tweepy = buildPythonPackage (rec {
     name = "tweepy-3.5.0";
@@ -20546,22 +20498,7 @@ EOF
     };
   });
 
-  xmltodict = buildPythonPackage (rec {
-    name = "xmltodict-0.9.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/x/xmltodict/${name}.tar.gz";
-      sha256 = "00crqnjh1kbvcgfnn3b8c7vq30lf4ykkxp1xf3pf7mswr5l1wp97";
-    };
-
-    buildInputs = with self; [ coverage nose ];
-
-    meta = {
-      description = "Makes working with XML feel like you are working with JSON";
-      homepage = https://github.com/martinblech/xmltodict;
-      license = licenses.mit;
-    };
-  });
+  xmltodict = callPackage ../development/python-modules/xmltodict { };
 
   xarray = callPackage ../development/python-modules/xarray { };
 
@@ -21929,29 +21866,8 @@ EOF
     };
   };
 
-  libvirt = let
-    version = "3.8.0";
-  in assert version == pkgs.libvirt.version; pkgs.stdenv.mkDerivation rec {
-    name = "libvirt-python-${version}";
-
-    src = pkgs.fetchurl {
-      url = "http://libvirt.org/sources/python/${name}.tar.gz";
-      sha256 = "02spx8kfcsnqwsshd7bk2plyic2lbpwzg16sf3csh0avck5akjsz";
-    };
-
-    nativeBuildInputs = [ pkgs.pkgconfig ];
-    buildInputs = with self; [ python pkgs.libvirt lxml ];
-
-    buildPhase = "${python.interpreter} setup.py build";
-
-    installPhase = "${python.interpreter} setup.py install --prefix=$out";
-
-    meta = {
-      homepage = http://www.libvirt.org/;
-      description = "libvirt Python bindings";
-      license = licenses.lgpl2;
-      maintainers = [ maintainers.fpletz ];
-    };
+  libvirt = callPackage ../development/python-modules/libvirt {
+    inherit (pkgs) libvirt;
   };
 
   rpdb = buildPythonPackage rec {
@@ -24457,6 +24373,7 @@ EOF
   parse-type = callPackage ../development/python-modules/parse-type { };
 
   ephem = callPackage ../development/python-modules/ephem { };
+
 });
 
 in fix' (extends overrides packages)

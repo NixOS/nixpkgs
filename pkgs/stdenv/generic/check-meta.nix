@@ -64,7 +64,7 @@ let
     !allowUnfreePredicate attrs;
 
   allowInsecureDefaultPredicate = x: builtins.elem x.name (config.permittedInsecurePackages or []);
-  allowInsecurePredicate = x: (config.allowUnfreePredicate or allowInsecureDefaultPredicate) x;
+  allowInsecurePredicate = x: (config.allowInsecurePredicate or allowInsecureDefaultPredicate) x;
 
   hasAllowedInsecure = attrs:
     (attrs.meta.knownVulnerabilities or []) == [] ||
@@ -125,18 +125,25 @@ let
 
       '';
 
-  throwEvalHelp = { reason , errormsg ? "" }:
-    throw (''
-      Package ‘${attrs.name or "«name-missing»"}’ in ${pos_str} ${errormsg}, refusing to evaluate.
+  handleEvalIssue = { reason , errormsg ? "" }:
+    let
+      msg = ''
+        Package ‘${attrs.name or "«name-missing»"}’ in ${pos_str} ${errormsg}, refusing to evaluate.
 
-      '' + ((builtins.getAttr reason remediation) attrs));
+      '' + (builtins.getAttr reason remediation) attrs;
+
+      handler = if config ? "handleEvalIssue"
+        then config.handleEvalIssue reason
+        else throw;
+    in handler msg;
+
 
   metaTypes = with lib.types; rec {
     # These keys are documented
     description = str;
     longDescription = str;
     branch = str;
-    homepage = str;
+    homepage = either (listOf str) str;
     downloadPage = str;
     license = either (listOf lib.types.attrs) (either lib.types.attrs str);
     maintainers = listOf str;
@@ -158,11 +165,12 @@ let
     downloadURLRegexp = str;
     isFcitxEngine = bool;
     isIbusEngine = bool;
+    isGutenprint = bool;
   };
 
   checkMetaAttr = k: v:
     if metaTypes?${k} then
-      if metaTypes.${k}.check v then null else "key '${k}' has a value ${v} of an invalid type ${builtins.typeOf v}; expected ${metaTypes.${k}.description}"
+      if metaTypes.${k}.check v then null else "key '${k}' has a value ${toString v} of an invalid type ${builtins.typeOf v}; expected ${metaTypes.${k}.description}"
     else "key '${k}' is unrecognized; expected one of: \n\t      [${lib.concatMapStringsSep ", " (x: "'${x}'") (lib.attrNames metaTypes)}]";
   checkMeta = meta: if shouldCheckMeta then lib.remove null (lib.mapAttrsToList checkMetaAttr meta) else [];
 
@@ -191,7 +199,7 @@ let
   validityCondition =
          let v = checkValidity attrs;
          in if !v.valid
-           then throwEvalHelp (removeAttrs v ["valid"])
+           then handleEvalIssue (removeAttrs v ["valid"])
            else true;
 
 in

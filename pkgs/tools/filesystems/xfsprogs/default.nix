@@ -9,12 +9,12 @@ in
 
 stdenv.mkDerivation rec {
   name = "xfsprogs-${version}";
-  version = "4.13.1";
+  version = "4.14.0";
 
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/fs/xfs/xfsprogs-dev.git";
     rev = "refs/tags/v${version}";
-    sha256 = "0h4wb8pp8wdcyqpz2ixlghz9yfd2sp9xa20s435g5rfp6ljrh6zb";
+    sha256 = "19mg3avm188xz215hqbbh7251q27qwm7g1xr8ffrjwvzmdq55rxj";
   };
 
   outputs = [ "bin" "dev" "out" "doc" ];

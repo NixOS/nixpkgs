@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook
+{ mkDerivation, lib, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook, fetchpatch
 
 # For `digitaglinktree`
 , perl, sqlite
@@ -99,8 +99,6 @@ mkDerivation rec {
     threadweaver
   ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [
     "-DENABLE_MYSQLSUPPORT=1"
     "-DENABLE_INTERNALMYSQL=1"
@@ -113,6 +111,20 @@ mkDerivation rec {
       --replace "/usr/bin/perl" "${perl}/bin/perl" \
       --replace "/usr/bin/sqlite3" "${sqlite}/bin/sqlite3"
   '';
+
+  patches = [
+    # fix Qt-5.9.3 empty album problem
+    (fetchpatch {
+      url = "https://cgit.kde.org/digikam.git/patch/?id=855ba5b7d4bc6337234720a72ea824ddd3b32e5b";
+      sha256 = "0zk8p182piy6xn9v0mhwawya9ciq596vql1qc3lgnx371a97mmni";
+    })
+  ];
+
+  patchFlags = "-d core -p1";
+
+  # `en make -f core/utilities/assistants/expoblending/CMakeFiles/expoblending_src.dir/build.make core/utilities/assistants/expoblending/CMakeFiles/expoblending_src.dir/manager/expoblendingthread.cpp.o`:
+  # digikam_version.h:37:24: fatal error: gitversion.h: No such file or directory
+  enableParallelBuilding = false;
 
   meta = with lib; {
     description = "Photo Management Program";

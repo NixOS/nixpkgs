@@ -24,6 +24,6 @@ stdenv.mkDerivation {
     homepage = https://github.com/google/rowhammer-test;
     license = licenses.asl20;
     maintainers = [ maintainers.viric ];
-    platforms = platforms.unix;
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib;
     { description = "Hard Drive Active Protection System Daemon";
-      hompage = "http://hdaps.sf.net/";
+      homepage = "http://hdaps.sf.net/";
       license = licenses.gpl2;
       platforms = platforms.linux;
       maintainers = [ maintainers.ehmry ];

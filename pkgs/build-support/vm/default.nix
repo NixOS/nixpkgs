@@ -60,21 +60,6 @@ rec {
     ''; # */
 
 
-  createDeviceNodes = dev:
-    ''
-      mknod -m 666 ${dev}/null    c 1 3
-      mknod -m 666 ${dev}/zero    c 1 5
-      mknod -m 666 ${dev}/full    c 1 7
-      mknod -m 666 ${dev}/random  c 1 8
-      mknod -m 666 ${dev}/urandom c 1 9
-      mknod -m 666 ${dev}/tty     c 5 0
-      mknod -m 666 ${dev}/ttyS0   c 4 64
-      mknod ${dev}/rtc     c 254 0
-      . /sys/class/block/${hd}/uevent
-      mknod ${dev}/${hd} b $MAJOR $MINOR
-    '';
-
-
   stage1Init = writeScript "vm-run-stage1" ''
     #! ${initrdUtils}/bin/ash -e
 
@@ -109,8 +94,7 @@ rec {
       insmod $i
     done
 
-    mount -t tmpfs none /dev
-    ${createDeviceNodes "/dev"}
+    mount -t devtmpfs devtmpfs /dev
 
     ifconfig lo up
 
@@ -302,7 +286,6 @@ rec {
     touch /mnt/.debug
 
     mkdir /mnt/proc /mnt/dev /mnt/sys
-    ${createDeviceNodes "/mnt/dev"}
   '';
 
 
@@ -353,7 +336,6 @@ rec {
         ${kmod}/bin/modprobe iso9660
         ${kmod}/bin/modprobe ufs
         ${kmod}/bin/modprobe cramfs
-        mknod /dev/loop0 b 7 0
 
         mkdir -p $out
         mkdir -p tmp
@@ -377,8 +359,6 @@ rec {
         ${kmod}/bin/modprobe mtdblock
         ${kmod}/bin/modprobe jffs2
         ${kmod}/bin/modprobe zlib
-        mknod /dev/mtd0 c 90 0
-        mknod /dev/mtdblock0 b 31 0
 
         mkdir -p $out
         mkdir -p tmp
@@ -1322,6 +1302,19 @@ rec {
       archs = ["noarch" "x86_64"];
       packages = commonCentOSPackages ++ [ "procps-ng" ];
     };
+
+    centos74x86_64 = rec {
+      name = "centos-7.4-x86_64";
+      fullName = "CentOS 7.4 (x86_64)";
+      # N.B. Switch to vault.centos.org when the next release comes out
+      urlPrefix = http://mirror.centos.org/centos-7/7.4.1708/os/x86_64;
+      packagesList = fetchurl {
+        url = "${urlPrefix}/repodata/b686d3a0f337323e656d9387b9a76ce6808b26255fc3a138b1a87d3b1cb95ed5-primary.xml.gz";
+        sha256 = "1mayp4f3nzd8n4wa3hsz4lk8p076djkvk1wkdmjkwcipyfhd71mn";
+      };
+      archs = ["noarch" "x86_64"];
+      packages = commonCentOSPackages ++ [ "procps-ng" ];
+    };
   };
 
 
@@ -1967,22 +1960,22 @@ rec {
     };
 
     debian8i386 = {
-      name = "debian-8.9-jessie-i386";
-      fullName = "Debian 8.9 Jessie (i386)";
+      name = "debian-8.10-jessie-i386";
+      fullName = "Debian 8.10 Jessie (i386)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-i386/Packages.xz;
-        sha256 = "3c78bdf3b693f2f37737c52d6a7718b3a545956f2a853da79f04a2d15541e811";
+        sha256 = "b3aa33bfe0256f72b7aad07b6c714b790d9a20d86c1a448a6f36b35652a82ff0";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;
     };
 
     debian8x86_64 = {
-      name = "debian-8.9-jessie-amd64";
-      fullName = "Debian 8.9 Jessie (amd64)";
+      name = "debian-8.10-jessie-amd64";
+      fullName = "Debian 8.10 Jessie (amd64)";
       packagesList = fetchurl {
         url = mirror://debian/dists/jessie/main/binary-amd64/Packages.xz;
-        sha256 = "0605589ae7a63c690f37bd2567dc12e02a2eb279d9dc200a7310072ad3593e53";
+        sha256 = "689e77cdf5334a3fffa5ca504e8131ee9ec88a7616f12c9ea5a3d5ac3100a710";
       };
       urlPrefix = mirror://debian;
       packages = commonDebianPackages;

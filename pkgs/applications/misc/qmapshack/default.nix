@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = https://bitbucket.org/maproom/qmapshack/wiki/Home;
     description = "Plan your next outdoor trip";
     license = licenses.gpl3;
-    maintainter = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda ];
     platforms = with platforms; linux;
   };
 }

@@ -2,6 +2,17 @@
 
 let
   generic = args: callPackage (import ./generic.nix args) { };
+  kernel = callPackage # a hacky way of extracting parameters from callPackage
+    ({ kernel, libsOnly ? false }: if libsOnly then { } else kernel) { };
+
+  maybePatch_drm_legacy =
+    lib.optional (lib.versionOlder "4.14" (kernel.version or "0"))
+      (fetchurl {
+        url = "https://raw.githubusercontent.com/MilhouseVH/LibreELEC.tv/b5d2d6a1"
+            + "/packages/x11/driver/xf86-video-nvidia-legacy/patches/"
+            + "xf86-video-nvidia-legacy-0010-kernel-4.14.patch";
+        sha256 = "18clfpw03g8dxm61bmdkmccyaxir3gnq451z6xqa2ilm3j820aa5";
+      });
 in
 {
   # Policy: use the highest stable version as the default (on our master).
@@ -21,31 +32,23 @@ in
     persistencedSha256 = "08315rb9l932fgvy758an5vh3jgks0qc4g36xip4l32pkxd9k963";
   };
 
+
   legacy_340 = generic {
-    version = "340.102";
-    sha256_32bit = "0a484i37j00d0rc60q0bp6fd2wfrx2c4r32di9w5svqgmrfkvcb1";
-    sha256_64bit = "0nnz51d48a5fpnnmlz1znjp937k3nshdq46fw1qm8h00dkrd55ib";
-    settingsSha256 = "0nm5c06b09p6wsxpyfaqrzsnal3p1047lk6p4p2a0vksb7id9598";
-    persistencedSha256 = "1jwmggbph9zd8fj4syihldp2a5bxff7q1i2l9c55xz8cvk0rx08i";
+    version = "340.104";
+    sha256_32bit = "1l8w95qpxmkw33c4lsf5ar9w2fkhky4x23rlpqvp1j66wbw1b473";
+    sha256_64bit = "18k65gx6jg956zxyfz31xdp914sq3msn665a759bdbryksbk3wds";
+    settingsSha256 = "1vvpqimvld2iyfjgb9wvs7ca0b0f68jzfdpr0icbyxk4vhsq7sxk";
+    persistencedSha256 = "0zqws2vsrxbxhv6z0nn2galnghcsilcn3s0f70bpm6jqj9wzy7x8";
     useGLVND = false;
 
-    patches = [
-      (fetchpatch {
-        name = "kernel-4.10.patch";
-        url = https://git.archlinux.org/svntogit/packages.git/plain/nvidia-340xx/trunk/4.10.0_kernel.patch?id=53fb1df89;
-        sha256 = "171hb57m968qdjcr3h8ppfzhrchf573f39rdja86a1qq1gmrv7pa";
-      })
-      # from https://git.archlinux.org/svntogit/packages.git/plain/trunk/fs52243.patch?h=packages/nvidia-340xx
-      # with datestamps removed
-      ./fs52243.patch
-    ];
+    patches = maybePatch_drm_legacy ++ [ ./vm_operations_struct-fault.patch ];
   };
 
   legacy_304 = generic {
-    version = "304.135";
-    sha256_32bit = "14qdl39wird04sqba94dcb77i63igmxxav62ndr4qyyavn8s3c2w";
-    sha256_64bit = "125mianhvq591np7y5jjrv9vmpbvixnkicr49ni48mcr0yjnjqkh";
-    settingsSha256 = "1y7swikdngq4nlwzkrq20yfah9zr31n1a5i6nw37awnp8xjilhzm";
+    version = "304.137";
+    sha256_32bit = "1y34c2gvmmacxk2c72d4hsysszncgfndc4s1nzldy2q9qagkg66a";
+    sha256_64bit = "1qp3jv6279k83k3z96p6vg3dd35y9bhmlyyyrkii7sib7bdmc7zb";
+    settingsSha256 = "0i5znfq6jkabgi8xpcy12pdpww6a67i8mq60z1kjq36mmnb25pmi";
     persistencedSha256 = null;
     useGLVND = false;
     useProfiles = false;
@@ -63,7 +66,8 @@ in
           sed 's|^\([+-]\{3\} [ab]\)/|\1/kernel/|' -i ${prefix}/*.patch
           patches="$patches ${lib.concatMapStringsSep " " (pname: "${prefix}/${pname}.patch") pnames}"
         '';
-    in applyPatches [ "fix-typos" "drm-driver-legacy" "deprecated-cpu-events" "disable-mtrr" ];
+    in applyPatches [ "fix-typos" ];
+    patches = maybePatch_drm_legacy;
   };
 
   legacy_173 = callPackage ./legacy173.nix { };

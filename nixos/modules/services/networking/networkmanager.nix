@@ -241,6 +241,19 @@ in {
           A list of scripts which will be executed in response to  network  events.
         '';
       };
+
+      enableStrongSwan = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Enable the StrongSwan plugin.
+          </para><para>
+          If you enable this option the
+          <literal>networkmanager_strongswan</literal> plugin will be added to
+          the <option>networking.networkmanager.packages</option> option
+          so you don't need to to that yourself.
+        '';
+      };
     };
   };
 
@@ -333,13 +346,13 @@ in {
       wireless.enable = lib.mkDefault false;
     };
 
-    powerManagement.resumeCommands = ''
-      ${config.systemd.package}/bin/systemctl restart network-manager
-    '';
-
     security.polkit.extraConfig = polkitConf;
 
-    services.dbus.packages = cfg.packages;
+    networking.networkmanager.packages =
+      mkIf cfg.enableStrongSwan [ pkgs.networkmanager_strongswan ];
+
+    services.dbus.packages =
+      optional cfg.enableStrongSwan pkgs.strongswanNM ++ cfg.packages;
 
     services.udev.packages = cfg.packages;
   };

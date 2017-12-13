@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, coreutils, ncurses, libX11 }:
+{ stdenv, fetchgit, coreutils, cctools, ncurses, libiconv, libX11 }:
 
 stdenv.mkDerivation rec {
   name    = "chez-scheme-${version}";
@@ -12,8 +12,9 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  enableParallelBuilding = true;
-  buildInputs = [ ncurses libX11 ];
+  nativeBuildInputs = [ coreutils ] ++ stdenv.lib.optional stdenv.isDarwin cctools;
+
+  buildInputs = [ ncurses libiconv libX11 ];
 
   /* We patch out a very annoying 'feature' in ./configure, which
   ** tries to use 'git' to update submodules.
@@ -27,11 +28,14 @@ stdenv.mkDerivation rec {
       --replace "git submodule init && git submodule update || exit 1" "true"
 
     substituteInPlace ./workarea \
-      --replace "/bin/ln" "${coreutils}/bin/ln" \
-      --replace "/bin/cp" "${coreutils}/bin/cp"
+      --replace "/bin/ln" ln \
+      --replace "/bin/cp" cp
 
     substituteInPlace ./makefiles/installsh \
       --replace "/usr/bin/true" "${coreutils}/bin/true"
+
+    substituteInPlace zlib/configure \
+      --replace "/usr/bin/libtool" libtool
   '';
 
   /* Don't use configureFlags, since that just implicitly appends
@@ -42,11 +46,13 @@ stdenv.mkDerivation rec {
     ./configure --threads --installprefix=$out --installman=$out/share/man
   '';
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "A powerful and incredibly fast R6RS Scheme compiler";
     homepage    = "http://www.scheme.com";
     license     = stdenv.lib.licenses.asl20;
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
   };
 }

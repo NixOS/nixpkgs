@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, zlib, glucose }:
+{ stdenv, zlib, glucose }:
 stdenv.mkDerivation rec {
   name = "glucose-syrup-${version}";
   version = glucose.version;

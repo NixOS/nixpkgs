@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, botan }:
+{ stdenv, fetchurl, botan, libobjc, Security }:
 
 stdenv.mkDerivation rec {
 
@@ -17,6 +17,9 @@ stdenv.mkDerivation rec {
     "--localstatedir=$out/var"
     ];
 
+  propagatedBuildInputs =
+    stdenv.lib.optionals stdenv.isDarwin [ libobjc Security ];
+
   buildInputs = [ botan ];
 
   postInstall = "rm -rf $out/var";
@@ -26,6 +29,6 @@ stdenv.mkDerivation rec {
     description = "Cryptographic store accessible through a PKCS #11 interface";
     license = licenses.bsd2;
     maintainers = [ maintainers.leenaars ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

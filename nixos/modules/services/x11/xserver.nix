@@ -578,6 +578,22 @@ in
             target = "X11/xkb";
           }
         ])
+      # localectl looks into 00-keyboard.conf
+      ++ [
+        {
+          text = ''
+            Section "InputClass"
+              Identifier "Keyboard catchall"
+              MatchIsKeyboard "on"
+              Option "XkbModel" "${cfg.xkbModel}"
+              Option "XkbLayout" "${cfg.layout}"
+              Option "XkbOptions" "${cfg.xkbOptions}"
+              Option "XkbVariant" "${cfg.xkbVariant}"
+            EndSection
+          '';
+          target = "X11/xorg.conf.d/00-keyboard.conf";
+        }
+      ]
       # Needed since 1.18; see https://bugs.freedesktop.org/show_bug.cgi?id=89023#c5
       ++ (let cfgPath = "/X11/xorg.conf.d/10-evdev.conf"; in
         [{
@@ -695,15 +711,6 @@ in
         Section "Monitor"
           Identifier "Monitor[0]"
           ${cfg.monitorSection}
-        EndSection
-
-        Section "InputClass"
-          Identifier "Keyboard catchall"
-          MatchIsKeyboard "on"
-          Option "XkbModel" "${cfg.xkbModel}"
-          Option "XkbLayout" "${cfg.layout}"
-          Option "XkbOptions" "${cfg.xkbOptions}"
-          Option "XkbVariant" "${cfg.xkbVariant}"
         EndSection
 
         # Additional "InputClass" sections

@@ -151,7 +151,9 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
         # `fetchFromGitHub`.
         overrideCabal (self.callPackage (haskellSrc2nix {
           inherit name;
-          src = builtins.filterSource (path: type: pkgs.lib.hasSuffix ".cabal" path) src;
+          src = builtins.filterSource (path: type:
+            pkgs.lib.hasSuffix "${name}.cabal" path || pkgs.lib.hasSuffix "package.yaml" path
+          ) src;
         }) args) (_: { inherit src; });
 
     # : Map Name (Either Path VersionNumber) -> HaskellPackageOverrideSet

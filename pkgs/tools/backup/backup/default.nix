@@ -12,7 +12,7 @@ bundlerEnv {
     description = "Easy full stack backup operations on UNIX-like systems";
     homepage    = http://backup.github.io/backup/v4/;
     license     = licenses.mit;
-    maintainers = [ maintainers.palo ];
+    maintainers = [ maintainers.mrVanDalo ];
     platforms   = platforms.unix;
   };
 }

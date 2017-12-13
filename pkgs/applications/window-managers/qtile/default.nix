@@ -41,6 +41,8 @@ python27Packages.buildPythonApplication rec {
       --run 'export QTILE_SAVED_PATH=$PATH'
   '';
 
+  doCheck = false; # Requires X server.
+
   meta = with stdenv.lib; {
     homepage = http://www.qtile.org/;
     license = licenses.mit;
@@ -49,4 +51,3 @@ python27Packages.buildPythonApplication rec {
     maintainers = with maintainers; [ kamilchm ];
   };
 }
-

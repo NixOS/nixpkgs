@@ -279,7 +279,6 @@ let
     ncdf4 = [ pkgs.netcdf ];
     nloptr = [ pkgs.nlopt ];
     odbc = [ pkgs.unixODBC ];
-    openssl = [ pkgs.openssl pkgs.openssl.dev ];
     outbreaker = [ pkgs.gsl_1 ];
     pander = [ pkgs.pandoc pkgs.which ];
     pbdMPI = [ pkgs.openmpi ];
@@ -304,7 +303,6 @@ let
     rcdd = [ pkgs.gmp.dev ];
     RcppCNPy = [ pkgs.zlib.dev ];
     RcppGSL = [ pkgs.gsl_1 ];
-    RcppOctave = [ pkgs.zlib pkgs.bzip2.dev pkgs.icu pkgs.lzma.dev pkgs.pcre.dev pkgs.octave ];
     RcppZiggurat = [ pkgs.gsl_1 ];
     rgdal = [ pkgs.proj pkgs.gdal ];
     rgeos = [ pkgs.geos ];
@@ -837,10 +835,8 @@ let
     });
 
     openssl = old.openssl.overrideDerivation (attrs: {
-      OPENSSL_INCLUDES = "${pkgs.openssl.dev}/include";
-      preConfigure = ''
-        sed -i.bak 's|^\( *PKG_LIBS_VERSIONED=\).*$|\1$PKG_LIBS|' configure
-        '';
+      PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
+      PKGCONFIG_LIBS = "-Wl,-rpath,${pkgs.openssl.out}/lib -L${pkgs.openssl.out}/lib -lssl -lcrypto";
     });
 
     Rserve = old.Rserve.overrideDerivation (attrs: {

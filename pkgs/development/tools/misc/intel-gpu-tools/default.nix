@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     homepage = https://01.org/linuxgraphics/;
     description = "Tools for development and testing of the Intel DRM driver";
     license = licenses.mit;
-    platforms = platforms.unix;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ pSub ];
   };
 }

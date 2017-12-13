@@ -25,8 +25,12 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib libxml2 gtk3 gtkvnc gmp libgcrypt gnupg cyrus_sasl shared_mime_info
     libvirt yajl gsettings_desktop_schemas makeWrapper libvirt-glib
-    libcap_ng numactl libapparmor xen
-  ] ++ optionals spiceSupport [ spice_gtk spice_protocol libcap gdbm ];
+    libcap_ng numactl libapparmor
+  ] ++ optionals stdenv.isx86_64 [
+    xen
+  ] ++ optionals spiceSupport [
+    spice_gtk spice_protocol libcap gdbm
+  ];
 
   postInstall = ''
     for f in "$out"/bin/*; do

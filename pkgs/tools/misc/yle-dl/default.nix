@@ -2,13 +2,13 @@
 
 pythonPackages.buildPythonApplication rec {
   name = "yle-dl-${version}";
-  version = "2.27";
+  version = "2.28";
 
   src = fetchFromGitHub {
     owner = "aajanki";
     repo = "yle-dl";
     rev = version;
-    sha256 = "1wxl074vxy7dlnk3ykcgnk3ms7bwh0zs7b9pxwhx5hsd894c8fpg";
+    sha256 = "1nb3gmkizgkd09slihc2iaf3rh1s7bdhy9zydkfghmqi7nv4mmq0";
   };
 
   propagatedBuildInputs = with pythonPackages; [ lxml pyamf pycrypto requests ];

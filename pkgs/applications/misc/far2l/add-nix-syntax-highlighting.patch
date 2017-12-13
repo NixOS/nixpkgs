@@ -77,8 +77,8 @@ index 0000000..1bd9bb5
 +      <block start="/(\()/"   end="/(\))/" scheme="NixExpression" region00="Symbol"        region01="PairStart" region10="Symbol"        region11="PairEnd"/>
 +      <block start="/(\[)/"   end="/(\])/" scheme="NixExpression" region00="Symbol"        region01="PairStart" region10="Symbol"        region11="PairEnd"/>
 +
-+      <regexp match="/(\.\.|\.|\~|)\/[\w\d.+=?-]+(\/[\w\d.+=?-]+)*/"            region0="Path"/>
-+      <regexp match="/&lt;[\w\d\/.-]+&gt;/"                                     region0="Path"/>
++      <regexp match="/[\w\d.+=?~-]*(\/[\w\d.+=?~-]+)+/"                         region0="Path"/>
++      <regexp match="/&lt;[\w\d\/.+=?~-]+&gt;/"                                 region0="Path"/>
 +      <regexp match="/(ftp|mirror|http|https|git):\/\/[\w\d\/:?=&amp;.~-]+/"    region0="URL"/>
 +      <block start="/(&quot;)/"       end="/(&quot;)/"       scheme="String"      region="String" region00="def:StringEdge" region01="def:PairStart" region10="def:StringEdge" region11="def:PairEnd"/>
 +      <block start="/(&apos;&apos;)/" end="/(&apos;&apos;)/" scheme="BlockString" region="String" region00="def:StringEdge" region01="def:PairStart" region10="def:StringEdge" region11="def:PairEnd"/>
@@ -91,6 +91,7 @@ index 0000000..1bd9bb5
 +        <word name="inherit"/>
 +        <word name="import"/>
 +        <word name="let"/>
++        <word name="or"/>
 +        <word name="rec"/>
 +        <word name="then"/>
 +        <word name="throw"/>

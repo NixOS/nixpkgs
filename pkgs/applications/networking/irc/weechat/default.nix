@@ -11,7 +11,7 @@
 , rubySupport ? true, ruby
 , tclSupport ? true, tcl
 , extraBuildInputs ? []
-, configure ? null
+, configure ? { availablePlugins, ... }: { plugins = builtins.attrValues availablePlugins; }
 , runCommand }:
 
 let
@@ -121,9 +121,9 @@ in if configure == null then weechat else
         ln -s $plugin $out/plugins
       done
     '';
-  in writeScriptBin "weechat" ''
+  in (writeScriptBin "weechat" ''
     #!${stdenv.shell}
     export WEECHAT_EXTRA_LIBDIR=${pluginsDir}
     ${lib.concatMapStringsSep "\n" (p: lib.optionalString (p ? extraEnv) p.extraEnv) plugins}
     exec ${weechat}/bin/weechat "$@"
-  ''
+  '') // { unwrapped = weechat; }
