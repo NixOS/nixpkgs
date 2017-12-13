@@ -16112,8 +16112,6 @@ with pkgs;
 
   notmuch-addrlookup = callPackage ../applications/networking/mailreaders/notmuch-addrlookup { };
 
-  # Open Stack
-
   nova-filters =  callPackage ../applications/audio/nova-filters { };
 
   nspluginwrapper = callPackage ../applications/networking/browsers/mozilla-plugins/nspluginwrapper {};
