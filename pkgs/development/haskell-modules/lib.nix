@@ -295,6 +295,8 @@ rec {
   overrideSrc = drv: { src, version ? drv.version }:
     overrideCabal drv (_: { inherit src version; editedCabalFile = null; });
 
+  hasNoBinOutput = drv: overrideCabal drv (drv: { enableSeparateBinOutput = false; });
+
   # Extract the haskell build inputs of a haskell package.
   # This is useful to build environments for developing on that
   # package.
@@ -381,6 +383,9 @@ rec {
         inherit propagatedBuildInputs otherBuildInputs
           allPkgconfigDepends;
       };
+
+  installOutputs = drv: outputs: overrideCabal drv
+    (drv: { outputsToInstall = outputs; });
 
   # Utility to convert a directory full of `cabal2nix`-generated files into a
   # package override set
