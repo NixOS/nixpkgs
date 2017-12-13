@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   PBR_VERSION = "${version}";
 
-  buildInputs = [
+  checkInputs = [
     pbr testtools testresources testrepository requests-mock fixtures openssl
     oslotest pep8
   ];
