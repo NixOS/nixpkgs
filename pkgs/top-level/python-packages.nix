@@ -3029,28 +3029,7 @@ in {
 
   oslo-vmware = callPackage ../development/python-modules/oslo-vmware { };
 
-  barbicanclient = buildPythonPackage rec {
-    name = "barbicanclient-${version}";
-    version = "3.3.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-barbicanclient/python-barbicanclient-${version}.tar.gz";
-      sha256 = "1kxnxiijvkkc8ahlfbkslpzxcbah7y5pi86hvkyac62xzda87inm";
-    };
-
-    propagatedBuildInputs = with self; [
-      pbr argparse requests six keystoneclient cliff oslo-i18n oslo-serialization
-      oslo-utils
-    ];
-    buildInputs = with self; [
-      oslosphinx oslotest requests-mock
-    ];
-
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
-  };
-
+  barbicanclient = callPackage ../development/python-modules/barbicanclient {};
 
   ironicclient = buildPythonPackage rec {
     name = "ironicclient-${version}";
