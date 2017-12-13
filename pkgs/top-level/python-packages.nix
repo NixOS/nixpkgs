@@ -3087,63 +3087,6 @@ in {
   };
 
 
-  ironicclient = buildPythonPackage rec {
-    name = "ironicclient-${version}";
-    version = "0.9.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-ironicclient/python-ironicclient-${version}.tar.gz";
-      sha256 = "16kaixrmnx6a32mfv281w22h8lavjh0k9yiqikmwc986ydh85s4d";
-    };
-
-    propagatedBuildInputs = with self; [
-      six keystoneclient prettytable oslo-utils oslo-i18n lxml httplib2 cliff
-      dogpile_cache appdirs anyjson pbr openstackclient
-    ];
-    buildInputs = with self; [
-      httpretty
-    ];
-
-    meta = with stdenv.lib; {
-      description = "Python bindings for the Ironic API";
-      homepage = "http://www.openstack.org/";
-    };
-  };
-
-  novaclient = buildPythonPackage rec {
-    name = "novaclient-${version}";
-    version = "2.31.0";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/openstack/python-novaclient/archive/${version}.tar.gz";
-      sha256 = "0cd49yz9qhpv1srg6wwjnivyb3i8zjxda0h439158qv9w6bfqhdf";
-    };
-
-    PBR_VERSION = "${version}";
-
-    buildInputs = with self; [
-      pbr testtools testscenarios testrepository requests-mock fixtures ];
-    propagatedBuildInputs = with self; [
-      Babel argparse prettytable requests simplejson six iso8601
-      keystoneclient tempest-lib ];
-
-    # TODO: check if removing this test is really harmless
-    preCheck = ''
-      substituteInPlace novaclient/tests/unit/v2/test_servers.py --replace "test_get_password" "noop"
-    '';
-
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
-
-    meta = {
-      homepage = https://github.com/openstack/python-novaclient/;
-      description = "Client library and command line tool for the OpenStack Nova API";
-      license = stdenv.lib.licenses.asl20;
-      platforms = stdenv.lib.platforms.linux;
-    };
-  };
-
   tablib = buildPythonPackage rec {
     name = "tablib-${version}";
     version = "0.10.0";
@@ -3225,33 +3168,6 @@ in {
   });
 
   openidc-client = callPackage ../development/python-modules/openidc-client/default.nix {};
-
-  openstackclient = buildPythonPackage rec {
-    name = "openstackclient-${version}";
-    version = "1.7.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-openstackclient/python-openstackclient-${version}.tar.gz";
-      sha256 = "0h1jkrwx06l32k50zq5gs9iba132q2x2jjb3z5gkxxlcd3apk8y9";
-    };
-
-    propagatedBuildInputs = with self; [
-     pbr six Babel cliff os-client-config oslo-config oslo-i18n oslo-utils
-     glanceclient keystoneclient novaclient cinderclient neutronclient requests
-     stevedore cliff-tablib
-    ];
-    buildInputs = with self; [
-     requests-mock
-    ];
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
-
-    meta = with stdenv.lib; {
-      homepage = "http://wiki.openstack.org/OpenStackClient";
-    };
-  };
-
 
 
   idna = buildPythonPackage rec {
@@ -16419,12 +16335,6 @@ in {
     propagatedBuildInputs = with self; [ cssselect lxml webob ];
     # circular dependency on webtest
     doCheck = false;
-  };
-
-  rackspace-novaclient = callPackage ../development/python-modules/rackspace-novaclient { };
-
-  pyrax = callPackage ../development/python-modules/pyrax {
-    glibcLocales = pkgs.glibcLocales;
   };
 
   pyreport = buildPythonPackage (rec {
