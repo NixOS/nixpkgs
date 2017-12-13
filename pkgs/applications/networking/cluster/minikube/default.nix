@@ -65,6 +65,8 @@ in buildGoPackage rec {
   postInstall = ''
     mkdir -p $bin/share/bash-completion/completions/
     MINIKUBE_WANTUPDATENOTIFICATION=false HOME=$PWD $bin/bin/minikube completion bash > $bin/share/bash-completion/completions/minikube
+    mkdir -p $bin/share/zsh/site-functions/
+    MINIKUBE_WANTUPDATENOTIFICATION=false HOME=$PWD $bin/bin/minikube completion zsh > $bin/share/zsh/site-functions/_minikube
   '';
 
   postFixup = "wrapProgram $bin/bin/${pname} --prefix PATH : ${stdenv.lib.makeBinPath binPath}";
