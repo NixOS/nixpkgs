@@ -17,8 +17,15 @@ buildPythonPackage rec {
     sha256 = "fcf0d60234f1544da717a9738325812de1f42c2fa085e2d9252d8fff5712b2ef";
   };
 
-  propagatedBuildInputs = [ pbr testtools mock ];
+  propagatedBuildInputs = [ pbr mock ];
 
+  # cyclic dependency with testtools, see https://github.com/testing-cabal/fixtures/issues/38
+  postPatch = ''
+    sed -i '/testtools/d' requirements.txt
+  '';
+
+  doCheck = false;
+  checkInputs = [ testtools ];
   checkPhase = ''
     ${python.interpreter} -m testtools.run fixtures.test_suite
   '';

@@ -7626,7 +7626,7 @@ with pkgs;
 
   redo-sh = callPackage ../development/tools/build-managers/redo-sh { };
 
-  reno = callPackage ../development/tools/reno { };
+  reno = pythonPackages.reno;
 
   re2c = callPackage ../development/tools/parsing/re2c { };
 

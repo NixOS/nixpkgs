@@ -493,25 +493,7 @@ in {
     };
   };
 
-  amqp = buildPythonPackage rec {
-    name = "amqp-${version}";
-    version = "2.1.4";
-    disabled = pythonOlder "2.6";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/a/amqp/${name}.tar.gz";
-      sha256 = "1ybywzkd840v1qvb1p2bs08js260vq1jscjg8182hv7bmwacqy0k";
-    };
-
-    buildInputs = with self; [ pytest case ];
-    propagatedBuildInputs = with self; [ vine ];
-
-    meta = {
-      homepage = https://github.com/celery/py-amqp;
-      description = "Python client for the Advanced Message Queuing Procotol (AMQP). This is a fork of amqplib which is maintained by the Celery project";
-      license = licenses.lgpl21;
-    };
-  };
+  amqp = callPackage ../development/python-modules/amqp {};
 
 
   amqplib = callPackage ../development/python-modules/amqplib {};
@@ -3045,47 +3027,9 @@ in {
 
   curtsies = callPackage ../development/python-modules/curtsies { };
 
-  oslo-vmware = buildPythonPackage rec {
-    name = "oslo.vmware-${version}";
-    version = "1.22.0";
+  oslo-vmware = callPackage ../development/python-modules/oslo-vmware { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/oslo.vmware/${name}.tar.gz";
-      sha256 = "1119q3x2y3hjz3p784byr13aqay75pbj4cb8v43gjq5piqlpp16x";
-    };
-
-    propagatedBuildInputs = with self; [
-      pbr stevedore netaddr iso8601 six oslo-i18n oslo-utils Babel pyyaml eventlet
-      requests urllib3 oslo-concurrency suds-jurko
-    ];
-    buildInputs = with self; [
-      bandit oslosphinx coverage testtools testscenarios testrepository mock
-
-    ];
-  };
-
-  barbicanclient = buildPythonPackage rec {
-    name = "barbicanclient-${version}";
-    version = "3.3.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-barbicanclient/python-barbicanclient-${version}.tar.gz";
-      sha256 = "1kxnxiijvkkc8ahlfbkslpzxcbah7y5pi86hvkyac62xzda87inm";
-    };
-
-    propagatedBuildInputs = with self; [
-      pbr argparse requests six keystoneclient cliff oslo-i18n oslo-serialization
-      oslo-utils
-    ];
-    buildInputs = with self; [
-      oslosphinx oslotest requests-mock
-    ];
-
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
-  };
-
+  barbicanclient = callPackage ../development/python-modules/barbicanclient {};
 
   ironicclient = buildPythonPackage rec {
     name = "ironicclient-${version}";
@@ -3110,39 +3054,7 @@ in {
     };
   };
 
-  novaclient = buildPythonPackage rec {
-    name = "novaclient-${version}";
-    version = "2.31.0";
-
-    src = pkgs.fetchurl {
-      url = "https://github.com/openstack/python-novaclient/archive/${version}.tar.gz";
-      sha256 = "0cd49yz9qhpv1srg6wwjnivyb3i8zjxda0h439158qv9w6bfqhdf";
-    };
-
-    PBR_VERSION = "${version}";
-
-    buildInputs = with self; [
-      pbr testtools testscenarios testrepository requests-mock fixtures ];
-    propagatedBuildInputs = with self; [
-      Babel argparse prettytable requests simplejson six iso8601
-      keystoneclient tempest-lib ];
-
-    # TODO: check if removing this test is really harmless
-    preCheck = ''
-      substituteInPlace novaclient/tests/unit/v2/test_servers.py --replace "test_get_password" "noop"
-    '';
-
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
-
-    meta = {
-      homepage = https://github.com/openstack/python-novaclient/;
-      description = "Client library and command line tool for the OpenStack Nova API";
-      license = stdenv.lib.licenses.asl20;
-      platforms = stdenv.lib.platforms.linux;
-    };
-  };
+  novaclient = callPackage ../development/python-modules/python-novaclient {};
 
   tablib = buildPythonPackage rec {
     name = "tablib-${version}";
@@ -7548,22 +7460,7 @@ in {
     };
   };
 
-  ddt = buildPythonPackage (rec {
-    name = "ddt-1.0.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/d/ddt/${name}.tar.gz";
-      sha256 = "e24ecb7e2cf0bf43fa9d4255d3ae2bd0b7ce30b1d1b89ace7aa68aca1152f37a";
-    };
-
-    meta = {
-      description = "Data-Driven/Decorated Tests, a library to multiply test cases";
-
-      homepage = https://github.com/txels/ddt;
-
-      license = licenses.mit;
-    };
-  });
+  ddt = callPackage ../development/python-modules/ddt { };
 
   descartes = callPackage ../development/python-modules/descartes { };
 
@@ -8246,28 +8143,7 @@ in {
     };
   };
 
-  eventlet = buildPythonPackage rec {
-    pname = "eventlet";
-    version = "0.20.0";
-    name = "${pname}-${version}";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "15bq5ybbigxnp5xwkps53zyhlg15lmcnq3ny2dppj0r0bylcs5rf";
-    };
-
-    buildInputs = with self; [ nose httplib2 pyopenssl  ];
-
-    doCheck = false;  # too much transient errors to bother
-
-    propagatedBuildInputs = optionals (!isPyPy) [ self.greenlet ] ++
-      (with self; [ enum-compat ]) ;
-
-    meta = {
-      homepage = https://pypi.python.org/pypi/eventlet/;
-      description = "A concurrent networking library for Python";
-    };
-  };
+  eventlet = callPackage ../development/python-modules/eventlet { };
 
   exifread = buildPythonPackage rec {
     name = "ExifRead-2.1.2";
@@ -10154,33 +10030,7 @@ in {
     };
   };
 
-  kombu = buildPythonPackage rec {
-    name = "kombu-${version}";
-    version = "4.0.2";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/k/kombu/${name}.tar.gz";
-      sha256 = "18hiricdnbnlz6hx3hbaa4dni6npv8rbid4dhf7k02k16qm6zz6h";
-    };
-
-    # Backport fix for python-3.6 from master (see issue https://github.com/celery/kombu/issues/675)
-    # TODO remove at next update
-    patches = [ (pkgs.fetchpatch {
-      url = "https://github.com/celery/kombu/commit/dc3fceff59d79ceac3f8f11a5d697beabb4b7a7f.patch";
-      sha256 = "0s6gsihzjvmpffc7xrrcijw00r56yb74jg0sbjgng2v1324z1da9";
-      name = "don-t-modify-dict-size-while-iterating-over-it";
-    }) ];
-
-    buildInputs = with self; [ pytest case pytz ];
-
-    propagatedBuildInputs = with self; [ amqp ];
-
-    meta = {
-      description = "Messaging library for Python";
-      homepage    = "http://github.com/celery/kombu";
-      license     = licenses.bsd3;
-    };
-  };
+  kombu = callPackage ../development/python-modules/kombu {};
 
   konfig = buildPythonPackage rec {
     name = "konfig-${version}";
@@ -12785,24 +12635,9 @@ in {
 
   os-testr = callPackage ../development/python-modules/os-testr { };
 
-  bandit = buildPythonPackage rec {
-    name = "bandit-${version}";
-    version = "0.16.1";
-    disabled = isPy33;
-    doCheck = !isPyPy; # a test fails
+  bandit = callPackage ../development/python-modules/bandit { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/b/bandit/${name}.tar.gz";
-      sha256 = "0qd9kxknac5n5xfl5zjnlmk6jr94krkcx29zgyna8p9lyb828hsk";
-    };
-
-    propagatedBuildInputs = with self; [ pbr six pyyaml appdirs stevedore ];
-    buildInputs = with self; [ beautifulsoup4 oslosphinx testtools testscenarios
-                               testrepository fixtures mock ];
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
-  };
+  neutron-lib = callPackage ../development/python-modules/neutron-lib {};
 
   oslo-serialization = buildPythonPackage rec {
     pname = "oslo.serialization";
@@ -12852,49 +12687,9 @@ in {
   };
 
 
-  oslo-utils = buildPythonPackage rec {
-    pname = "oslo.utils";
-    version = "3.29.0";
-    name = "${pname}-${version}";
+  oslo-utils = callPackage ../development/python-modules/oslo-utils { };
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0l90ijw96czjd6z8bw88983rsnq5753iw86rhk1wi064w4rs19ig";
-    };
-
-    propagatedBuildInputs = with self; [ pbr Babel six iso8601 pytz netaddr netifaces
-                                         monotonic oslo-i18n wrapt debtcollector ];
-    buildInputs = with self; [ oslotest mock coverage oslosphinx ];
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
-  };
-
-  oslo-middleware = buildPythonPackage rec {
-    name = "oslo.middleware-${version}";
-    version = "2.9.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/oslo.middleware/${name}.tar.gz";
-      sha256 = "14acinchdpmc1in39mz9kh1h2rd1ygwg3zdhbwzrlhy8wbzzi4w9";
-    };
-
-    propagatedBuildInputs = with self; [
-      oslo-i18n six oslo-utils pbr oslo-config Babel oslo-context stevedore
-      jinja2 webob debtcollector
-    ];
-    buildInputs = with self; [
-      coverage testtools oslosphinx oslotest
-    ];
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-      sed -i '/ordereddict/d' requirements.txt
-    '';
-
-    meta = with stdenv.lib; {
-      homepage = "http://wiki.openstack.org/wiki/Oslo#oslo.middleware";
-    };
-  };
+  oslo-middleware = callPackage ../development/python-modules/oslo-middleware { };
 
   oslo-versionedobjects = buildPythonPackage rec {
      name = "oslo.versionedobjects-${version}";
@@ -12922,56 +12717,9 @@ in {
    cachetools_1 = callPackage ../development/python-modules/cachetools/1.nix {};
    cachetools = callPackage ../development/python-modules/cachetools {};
 
-   futurist = buildPythonPackage rec {
-     name = "futurist-${version}";
-     version = "0.7.0";
+  futurist = callPackage ../development/python-modules/futurist {};
 
-     src = pkgs.fetchurl {
-       url = "mirror://pypi/f/futurist/${name}.tar.gz";
-       sha256 = "0wf0k9xf5xzmi79418xq8zxwr7w7a4g4alv3dds9afb2l8bh9crg";
-     };
-
-     patchPhase = ''
-       sed -i "s/test_gather_stats/noop/" futurist/tests/test_executors.py
-     '';
-
-     propagatedBuildInputs = with self; [
-       contextlib2 pbr six monotonic futures eventlet
-     ];
-     buildInputs = with self; [
-       testtools testscenarios testrepository oslotest subunit
-     ];
-
-     # breaks in sandboxing
-     doCheck = false;
-   };
-
-  oslo-messaging = buildPythonPackage rec {
-    name = "oslo.messaging-${version}";
-    version = "2.7.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/oslo.messaging/${name}.tar.gz";
-      sha256 = "1af7l4ri3xfjcnjp2yhngz34h3ls00yyj1x8i64dxb86ryy43kd1";
-    };
-
-    propagatedBuildInputs = with self; [
-      pbr oslo-config oslo-context oslo-log oslo-utils oslo-serialization
-      oslo-i18n stevedore six eventlet greenlet webob pyyaml kombu_3 trollius
-      aioeventlet cachetools_1 oslo-middleware futurist redis oslo-service
-      eventlet pyzmq
-    ];
-
-    buildInputs = with self; [
-      oslotest mock mox3 subunit testtools testscenarios testrepository
-      fixtures oslosphinx
-    ];
-
-    preBuild = ''
-      # transient failure https://bugs.launchpad.net/oslo.messaging/+bug/1510481
-      sed -i 's/test_send_receive/noop/' oslo_messaging/tests/drivers/test_impl_rabbit.py
-    '';
-  };
+  oslo-messaging = callPackage ../development/python-modules/oslo-messaging {};
 
   os-brick = buildPythonPackage rec {
    name = "os-brick-${version}";
@@ -12999,26 +12747,9 @@ in {
    };
   };
 
-  oslo-reports = buildPythonPackage rec {
-    name = "oslo.reports-${version}";
-    version = "0.6.0";
+  tenacity = callPackage ../development/python-modules/tenacity {};
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/oslo.reports/${name}.tar.gz";
-      sha256 = "0j27mbsa5y1fn9lxn98xs7p9vipcig47srm5sgbgma0ilv125b65";
-    };
-
-    propagatedBuildInputs = with self; [
-      oslo-i18n oslo-utils oslo-serialization six psutil_1 Babel jinja2 pbr psutil_1
-    ];
-    buildInputs = with self; [
-      coverage greenlet eventlet oslosphinx oslotest
-    ];
-
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
-  };
+  oslo-reports = callPackage ../development/python-modules/oslo-reports { };
 
   cinderclient = buildPythonPackage rec {
     name = "cinderclient-${version}";
@@ -13046,57 +12777,9 @@ in {
     };
   };
 
-  neutronclient = buildPythonPackage rec {
-    name = "neutronclient-${version}";
-    version = "3.1.0";
+  neutronclient = callPackage ../development/python-modules/neutronclient {};
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-neutronclient/python-neutronclient-${version}.tar.gz";
-      sha256 = "0g96x5b8lz407in70j6v7jbj613y6sd61b21j1y03x06b2rk5i02";
-    };
-
-    propagatedBuildInputs = with self; [
-      pbr six simplejson keystoneclient requests oslo-utils oslo-serialization
-      oslo-i18n netaddr iso8601 cliff argparse
-    ];
-    buildInputs = with self; [
-      tempest-lib mox3 oslotest requests-mock
-    ];
-
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-      # test fails on py3k
-      ${if isPy3k then "substituteInPlace neutronclient/tests/unit/test_cli20_port.py --replace 'test_list_ports_with_fixed_ips_in_csv' 'noop'" else ""}
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Python bindings to the Neutron API";
-      homepage = "http://www.openstack.org/";
-    };
-  };
-
-  cliff = buildPythonPackage rec {
-    name = "cliff-${version}";
-    version = "1.15.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/cliff/${name}.tar.gz";
-      sha256 = "1rrbq1nvc84x417hbfm9sc1scia16nilr8nm8ycm8iq5jkh6zfpm";
-    };
-
-    propagatedBuildInputs = with self; [
-      argparse pyyaml pbr six cmd2 stevedore unicodecsv prettytable pyparsing
-    ];
-    buildInputs = with self; [
-      httplib2 oslosphinx coverage mock nose tempest-lib
-    ];
-
-    meta = with stdenv.lib; {
-      homepage = "https://launchpad.net/python-cliff";
-      # requires an update, incompatible with current dependencies (pbr)
-      broken = true;
-    };
-  };
+  cliff = callPackage ../development/python-modules/cliff {};
 
   cmd2 = buildPythonPackage rec {
     name = "cmd2-${version}";
@@ -13122,6 +12805,7 @@ in {
     };
   };
 
+  osc-lib = callPackage ../development/python-modules/osc-lib {};
 
   oslo-db = buildPythonPackage rec {
     name = "oslo.db-${version}";
@@ -13249,25 +12933,7 @@ in {
     };
   };
 
-  oslo-cache = buildPythonPackage rec {
-    name = "oslo.cache-${version}";
-    version = "0.9.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/o/oslo.cache/${name}.tar.gz";
-      sha256 = "0dzvm5xkfj1alf469d7v3syig9f91kjh4p55k57ykgaww3y4cdjp";
-    };
-
-    propagatedBuildInputs = with self; [
-      Babel dogpile_cache six oslo-config oslo-i18n oslo-log oslo-utils
-    ];
-    buildInputs = with self; [
-      oslosphinx oslotest memcached pymongo
-    ];
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
-  };
+  oslo-cache = callPackage ../development/python-modules/oslo-cache { };
 
   pecan = callPackage ../development/python-modules/pecan { };
 
@@ -13373,89 +13039,12 @@ in {
     '';
   };
 
-  glance_store = buildPythonPackage rec {
-    name = "glance_store-${version}";
-    version = "0.9.1";
+  glance_store = callPackage ../development/python-modules/glance_store { };
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/glance_store/${name}.tar.gz";
-      sha256 = "16az3lq9szl0ixna9rd82dmn4sfxqyivhn4z3z79vk8qdfip1sr9";
-    };
-
-    # remove on next version bump
-    patches = [
-       ../development/python-modules/fix_swiftclient_mocking.patch
-    ];
-
-    propagatedBuildInputs = with self; [
-      oslo-config oslo-i18n oslo-serialization oslo-utils oslo-concurrency stevedore
-      enum34 eventlet six jsonschema swiftclient httplib2 pymongo
-    ];
-    buildInputs = with self; [
-      mock fixtures subunit requests-mock testrepository testscenarios testtools
-      oslotest oslosphinx boto oslo-vmware
-    ];
-
-    meta = with stdenv.lib; {
-      description = "Glance Store Library";
-      homepage = "http://www.openstack.org/";
-    };
-  };
-
-  swiftclient = buildPythonPackage rec {
-    name = "swiftclient-${version}";
-    version = "2.6.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-swiftclient/python-swiftclient-${version}.tar.gz";
-      sha256 = "1j33l4z9vqh0scfncl4fxg01zr1hgqxhhai6gvcih1gccqm4nd7p";
-    };
-
-    propagatedBuildInputs = with self; [
-      pbr requests futures six
-    ];
-    buildInputs = with self; [
-      testtools testrepository mock
-    ];
-
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Python bindings to the OpenStack Object Storage API";
-      homepage = "http://www.openstack.org/";
-    };
-  };
+  python-swiftclient = callPackage ../development/python-modules/python-swiftclient { };
 
 
-  castellan = buildPythonPackage rec {
-    name = "castellan-${version}";
-    version = "0.2.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/castellan/${name}.tar.gz";
-      sha256 = "1im9b4qzq4yhn17jjc8927b3hn06h404vsx8chddw2jfp0v4ryfj";
-    };
-
-    propagatedBuildInputs = with self; [
-      pbr Babel cryptography oslo-config oslo-context oslo-log oslo-policy
-      oslo-serialization oslo-utils
-    ];
-    buildInputs = with self; [
-      subunit barbicanclient oslosphinx oslotest testrepository testtools
-      testscenarios
-    ];
-
-    preCheck = ''
-      # uses /etc/castellan/castellan-functional.conf
-      rm castellan/tests/functional/key_manager/test_barbican_key_manager.py
-    '';
-
-    meta = with stdenv.lib; {
-      homepage = "https://github.com/yahoo/Zake";
-    };
-  };
+  castellan = callPackage ../development/python-modules/castellan {};
 
   zake = buildPythonPackage rec {
     name = "zake-${version}";
@@ -13497,32 +13086,7 @@ in {
     '';
   };
 
-  networking-hyperv = buildPythonPackage rec {
-    name = "networking-hyperv-${version}";
-    version = "2015.1.0";
-    disabled = isPy3k;  # failing tests
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/n/networking-hyperv/${name}.tar.gz";
-      sha256 = "04wfkl8rffxp6gp7qvhhc8y80cy0akmh3z7k7y2sj6savg9q7jdj";
-    };
-
-    propagatedBuildInputs = with self; [
-      pbr Babel oslo-config oslo-i18n oslo-serialization oslo-utils oslo-log
-    ];
-    buildInputs = with self; [
-      testtools testscenarios testrepository oslotest oslosphinx subunit eventlet
-      fixtures mock
-    ];
-
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-      # it has pinned pbr<1.0
-      sed -i '/pbr/d' requirements.txt
-      # https://github.com/openstack/networking-hyperv/commit/56d66fc012846620a60cb8f18df5a1c889fe0e26
-      sed -i 's/from oslo import i18n/import oslo_i18n as i18n/' hyperv/common/i18n.py
-    '';
-  };
+  networking-hyperv =  callPackage ../development/python-modules/networking-hyperv { };
 
   kazoo = buildPythonPackage rec {
     name = "kazoo-${version}";
@@ -13636,23 +13200,7 @@ in {
     ];
   };
 
-  ldappool = buildPythonPackage rec {
-    name = "ldappool-${version}";
-    version = "1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/l/ldappool/${name}.tar.gz";
-      sha256 = "1akmzf51cjfvmd0nvvm562z1w9vq45zsx6fa72kraqgsgxhnrhqz";
-    };
-
-    # Judging from SyntaxError
-    disabled = isPy3k;
-
-    meta = with stdenv.lib; {
-      homepage = "https://github.com/mozilla-services/ldappool";
-    };
-  };
-
+  ldappool = callPackage ../development/python-modules/ldappool { };
 
   lz4 = buildPythonPackage rec {
     name = "lz4-0.8.2";
@@ -13768,42 +13316,9 @@ in {
 
   olefile = callPackage ../development/python-modules/olefile { };
 
-  oslo-log = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "oslo.log";
-    version = "3.31.0";
+  oslo-log = callPackage ../development/python-modules/oslo-log { };
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "1w08cl98n8592pvb2gw01mqlwi8nnnpg1zy10mvj6xdpvfk2yqzz";
-    };
-
-    propagatedBuildInputs = with self; [
-      pbr Babel six iso8601 debtcollector dateutil
-      oslo-utils oslo-i18n oslo-config oslo-serialization oslo-context
-    ] ++ stdenv.lib.optional stdenv.isLinux pyinotify;
-    buildInputs = with self; [ oslotest oslosphinx ];
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
-  };
-
-  oslo-context = buildPythonPackage rec {
-    name = "${pname}-${version}";
-    pname = "oslo.context";
-    version = "2.18.1";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "1sc7qrwffsm15m91c17k0xiglv6bxh9sbksvxvrrgja82m57mgh6";
-    };
-
-    propagatedBuildInputs = with self; [ pbr Babel ];
-    buildInputs = with self; [ oslotest coverage oslosphinx ];
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-    '';
-  };
+  oslo-context = callPackage ../development/python-modules/oslo-context { };
 
   oslo-i18n = buildPythonPackage rec {
     name = "oslo.i18n-${version}";
@@ -13822,6 +13337,10 @@ in {
   };
 
   oslo-config = callPackage ../development/python-modules/oslo-config { };
+
+  reno = callPackage ../development/python-modules/reno { };
+
+  openstackdocstheme = callPackage ../development/python-modules/openstackdocstheme { };
 
   oslotest = buildPythonPackage rec {
     name = "oslotest-${version}";
@@ -19367,23 +18886,11 @@ in {
     };
   };
 
-  testresources = buildPythonPackage rec {
-    name = "testresources-${version}";
-    version = "0.2.7";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/t/testresources/${name}.tar.gz";
-      sha256 = "0cbj3plbllyz42c4b5xxgwaa7mml54lakslrn4kkhinxhdri22md";
-    };
-
-    meta = {
-      description = "Pyunit extension for managing expensive test resources";
-      homepage = https://pypi.python.org/pypi/testresources/;
-      license = licenses.bsd2;
-    };
-  };
+  testresources = callPackage ../development/python-modules/testresources { };
 
   testtools = callPackage ../development/python-modules/testtools { };
+
+  stestr = callPackage ../development/python-modules/stestr { };
 
   traitlets = callPackage ../development/python-modules/traitlets { };
 
@@ -19407,24 +18914,7 @@ in {
   };
 
 
-  extras = buildPythonPackage rec {
-    name = "extras-${version}";
-    version = "0.0.3";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/e/extras/extras-${version}.tar.gz";
-      sha256 = "1h7zx4dfyclalg0fqnfjijpn0f793a9mx8sy3b27gd31nr6dhq3s";
-    };
-
-    # error: invalid command 'test'
-    doCheck = false;
-
-    meta = {
-      description = "A module provides basic functions for parsing mime-type names and matching them against a list of media-ranges";
-      homepage = https://code.google.com/p/mimeparse/;
-      license = licenses.mit;
-    };
-  };
+  extras = callPackage ../development/python-modules/extras { };
 
   texttable = self.buildPythonPackage rec {
     name = "texttable-0.8.4";

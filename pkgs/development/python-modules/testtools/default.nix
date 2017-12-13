@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "testtools";
-  version = "1.9.0";
+  version = "2.3.0";
   name = "${pname}-${version}";
 
   # Python 2 only judging from SyntaxError
@@ -24,10 +24,13 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b46eec2ad3da6e83d53f2b0eca9a8debb687b4f71343a074f83a16bbdb3c0644";
+    sha256 = "0n8519lk8aaa91vymz842831181wf7fss98hyllhygi3z1nfq9sq";
   };
 
-  propagatedBuildInputs = [ pbr python_mimeparse extras lxml unittest2 pyrsistent ];
+  propagatedBuildInputs = [
+    pbr python_mimeparse extras lxml unittest2
+    pyrsistent fixtures
+  ];
   buildInputs = [ traceback2 ];
 
   # No tests in archive
