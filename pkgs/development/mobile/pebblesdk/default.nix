@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   pythonEnv = (python27.withPackages (ps: with ps; builtins.attrValues pebble-libs ++
     [ colorama httplib2 oauth2client packaging progressbar2 pyasn1 pygeoip
-      pyparsing pyqrcode requests2 websocket_client wrapPython ]));
+      pyparsing pyqrcode requests virtualenv websocket_client wrapPython ]));
 
   buildInputs = [ makeWrapper pythonEnv ];
   # Pebble needs some extra environment variables, and the compiler needs to be
@@ -59,7 +59,8 @@ stdenv.mkDerivation rec {
      --prefix LD_LIBRARY_PATH : "${pebble-rpath}" \
      --set PEBBLE_PATH $out/ \
      --set PEBBLE_TOOLCHAIN_PATH $out/arm-cs-tools/bin \
-     --set PHONESIM_PATH ${pebble-libs.pypkjs}/bin/pypkjs
+     --set PHONESIM_PATH ${pebble-libs.pypkjs}/bin/pypkjs \
+     --set PATH $PATH:${nodejs}/bin
   '';
 
   meta = with stdenv.lib; {

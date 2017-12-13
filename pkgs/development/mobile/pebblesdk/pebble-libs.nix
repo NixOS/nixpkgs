@@ -37,7 +37,7 @@ rec {
       pygeoip
       pypng
       dateutil
-      requests2
+      requests
       sh
       six
       websocket_client
