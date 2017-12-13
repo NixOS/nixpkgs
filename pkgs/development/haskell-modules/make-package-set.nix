@@ -272,4 +272,6 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
       withHoogle = self.ghcWithHoogle;
     };
 
+    tests = callPackage ./tests.nix {};
+
   }
