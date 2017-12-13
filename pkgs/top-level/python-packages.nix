@@ -12974,28 +12974,7 @@ in {
     };
   };
 
-  cliff = buildPythonPackage rec {
-    name = "cliff-${version}";
-    version = "1.15.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/c/cliff/${name}.tar.gz";
-      sha256 = "1rrbq1nvc84x417hbfm9sc1scia16nilr8nm8ycm8iq5jkh6zfpm";
-    };
-
-    propagatedBuildInputs = with self; [
-      argparse pyyaml pbr six cmd2 stevedore unicodecsv prettytable pyparsing
-    ];
-    buildInputs = with self; [
-      httplib2 oslosphinx coverage mock nose tempest-lib
-    ];
-
-    meta = with stdenv.lib; {
-      homepage = "https://launchpad.net/python-cliff";
-      # requires an update, incompatible with current dependencies (pbr)
-      broken = true;
-    };
-  };
+  cliff = callPackage ../development/python-modules/cliff {};
 
   cmd2 = buildPythonPackage rec {
     name = "cmd2-${version}";
