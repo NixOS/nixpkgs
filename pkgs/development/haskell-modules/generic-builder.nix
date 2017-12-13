@@ -114,7 +114,7 @@ let
                    '';
 
   hasActiveLibrary = isLibrary && (enableStaticLibraries || enableSharedLibraries || enableLibraryProfiling);
-  hasLibOutput = enableSeparateLibOutput && hasActiveLibrary;
+  hasLibOutput = enableSeparateLibOutput && (hasActiveLibrary || stdenv.isDarwin);
   libDir = if hasLibOutput then "$lib/lib/${ghc.name}" else "$out/lib/${ghc.name}";
   binDir = if enableSeparateBinOutput then "$bin/bin" else "$out/bin";
   libexecDir = if enableSeparateBinOutput then "$libexec/bin" else "$out/libexec";
@@ -491,6 +491,15 @@ stdenv.mkDerivation ({
     ${optionalString enableSeparateDataOutput "mkdir -p ${dataDir}"}
     ${optionalString enableSeparateBinOutput "mkdir -p ${binDir} ${libexecDir}"}
     ${optionalString enableSeparateEtcOutput "mkdir -p ${etcDir}"}
+
+    ${optionalString (stdenv.isDarwin && enableSeparateBinOutput && ! hasLibOutput) ''
+      find ${binDir} -type f -exec \
+        remove-references-to -t "$out/lib" {} \;
+    ''}
+    ${optionalString (stdenv.isDarwin && enableSeparateBinOutput && ! enableSeparateDataOutput) ''
+      find ${binDir} -type f -exec \
+        remove-references-to -t "$out/share" {} \;
+    ''}
 
     runHook postInstall
   '';
