@@ -18874,6 +18874,8 @@ with pkgs;
   };
   cvc4 = callPackage ../applications/science/logic/cvc4 {};
 
+  drat-trim = callPackage ../applications/science/logic/drat-trim {};
+
   ekrhyper = callPackage ../applications/science/logic/ekrhyper {
     inherit (ocamlPackages_4_02) ocaml;
   };
