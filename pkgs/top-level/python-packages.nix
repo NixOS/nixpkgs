@@ -13285,34 +13285,7 @@ in {
     '';
   };
 
-  glance_store = buildPythonPackage rec {
-    name = "glance_store-${version}";
-    version = "0.9.1";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/g/glance_store/${name}.tar.gz";
-      sha256 = "16az3lq9szl0ixna9rd82dmn4sfxqyivhn4z3z79vk8qdfip1sr9";
-    };
-
-    # remove on next version bump
-    patches = [
-       ../development/python-modules/fix_swiftclient_mocking.patch
-    ];
-
-    propagatedBuildInputs = with self; [
-      oslo-config oslo-i18n oslo-serialization oslo-utils oslo-concurrency stevedore
-      enum34 eventlet six jsonschema swiftclient httplib2 pymongo
-    ];
-    buildInputs = with self; [
-      mock fixtures subunit requests-mock testrepository testscenarios testtools
-      oslotest oslosphinx boto oslo-vmware
-    ];
-
-    meta = with stdenv.lib; {
-      description = "Glance Store Library";
-      homepage = "http://www.openstack.org/";
-    };
-  };
+  glance_store = callPackage ../development/python-modules/glance_store { };
 
   swiftclient = buildPythonPackage rec {
     name = "swiftclient-${version}";
