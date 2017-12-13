@@ -125,11 +125,18 @@ let
 
       '';
 
-  throwEvalHelp = { reason , errormsg ? "" }:
-    throw (''
-      Package ‘${attrs.name or "«name-missing»"}’ in ${pos_str} ${errormsg}, refusing to evaluate.
+  handleEvalIssue = { reason , errormsg ? "" }:
+    let
+      msg = ''
+        Package ‘${attrs.name or "«name-missing»"}’ in ${pos_str} ${errormsg}, refusing to evaluate.
 
-      '' + ((builtins.getAttr reason remediation) attrs));
+      '' + (builtins.getAttr reason remediation) attrs;
+
+      handler = if config ? "handleEvalIssue"
+        then config.handleEvalIssue reason
+        else throw;
+    in handler msg;
+
 
   metaTypes = with lib.types; rec {
     # These keys are documented
@@ -192,7 +199,7 @@ let
   validityCondition =
          let v = checkValidity attrs;
          in if !v.valid
-           then throwEvalHelp (removeAttrs v ["valid"])
+           then handleEvalIssue (removeAttrs v ["valid"])
            else true;
 
 in
