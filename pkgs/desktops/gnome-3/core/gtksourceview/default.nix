@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
     shared_mime_info
   ];
 
+  outputs = [ "out" "dev" ];
+
   nativeBuildInputs = [ pkgconfig intltool gettext perl ]
     ++ stdenv.lib.optionals doCheck checkInputs;
   buildInputs = [ atk cairo glib pango libxml2 ];
