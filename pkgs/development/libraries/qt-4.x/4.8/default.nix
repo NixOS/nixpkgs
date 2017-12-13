@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
 
   postConfigure = ''
     echo "applying patch ${./parallel-build.patch}"
-    patch -p1 -i ${./parallel-build.patch}
+    patch -p1 < ${./parallel-build.patch}
   '';
 
   prefixKey = "-prefix ";

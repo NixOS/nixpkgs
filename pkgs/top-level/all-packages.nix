@@ -1639,6 +1639,7 @@ with pkgs;
     idnSupport = true;
     ldapSupport = true;
     gssSupport = true;
+    brotliSupport = true;
   };
 
   curl = callPackage ../tools/networking/curl rec {
@@ -5585,7 +5586,20 @@ with pkgs;
       '';
   }) else throw "Multilib ${cc.name} not supported on ‘${system}’";
 
+  wrapClangMulti = clang:
+    if system == "x86_64-linux" then
+      callPackages ../development/compilers/llvm/multi.nix {
+        inherit clang;
+        gcc32 = pkgsi686Linux.gcc;
+        gcc64 = pkgs.gcc;
+      }
+    else throw "Multilib ${clang.cc.name} not supported on '${system}'";
+
   gcc_multi = wrapCCMulti gcc;
+  clang_multi = wrapClangMulti clang;
+
+  gccMultiStdenv = overrideCC stdenv gcc_multi;
+  clangMultiStdenv = overrideCC stdenv clang_multi;
 
   gcc_debug = lowPrio (wrapCC (gcc.cc.override {
     stripped = false;
@@ -20076,6 +20090,9 @@ with pkgs;
     cc-wrapper-clang-5 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_5.stdenv; };
     cc-wrapper-libcxx-5 = callPackage ../test/cc-wrapper { stdenv = llvmPackages_5.libcxxStdenv; };
     stdenv-inputs = callPackage ../test/stdenv-inputs { };
+
+    cc-multilib-gcc = callPackage ../test/cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
+    cc-multilib-clang = callPackage ../test/cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
 
     macOSSierraShared = callPackage ../test/macos-sierra-shared {};
   };
