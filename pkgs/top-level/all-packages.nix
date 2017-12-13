@@ -10641,6 +10641,8 @@ with pkgs;
 
     telepathy = callPackage ../development/libraries/telepathy/qt { };
 
+    telegram = callPackage ../applications/networking/instant-messengers/telegram/telegram-qt { };
+
     vlc = lowPrio (callPackage ../applications/video/vlc {
       qt4 = null;
       withQt5 = true;
