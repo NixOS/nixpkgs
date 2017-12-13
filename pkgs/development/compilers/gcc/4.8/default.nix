@@ -444,6 +444,7 @@ stdenv.mkDerivation ({
     buildFlags = "";
   };
 
+  NIX_BUILD_BINTOOLS = buildPackages.stdenv.cc.bintools;
   NIX_BUILD_CC = buildPackages.stdenv.cc;
 
   # Needed for the cross compilation to work

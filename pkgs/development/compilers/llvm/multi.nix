@@ -36,6 +36,10 @@ let
     # Most of the magic is done by setting the --gcc-toolchain option below
     libc = gcc_multi_sysroot;
 
+    bintools = clang.bintools.override {
+      libc = gcc_multi_sysroot;
+    };
+
     extraBuildCommands = ''
       sed -e '$a --gcc-toolchain=${gcc_multi_sysroot}' -i $out/nix-support/libc-cflags
     '';

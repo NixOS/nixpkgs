@@ -74,14 +74,6 @@ ccWrapper_addCVars () {
         export NIX_${role}CFLAGS_COMPILE+=" ${ccIncludeFlag:--isystem} $1/include"
     fi
 
-    if [[ -d "$1/lib64" && ! -L "$1/lib64" ]]; then
-        export NIX_${role}LDFLAGS+=" -L$1/lib64"
-    fi
-
-    if [[ -d "$1/lib" ]]; then
-        export NIX_${role}LDFLAGS+=" -L$1/lib"
-    fi
-
     if [[ -d "$1/Library/Frameworks" ]]; then
         export NIX_${role}CFLAGS_COMPILE+=" -F$1/Library/Frameworks"
     fi
@@ -119,11 +111,6 @@ if [ -n "@cc@" ]; then
 fi
 
 # shellcheck disable=SC2157
-if [ -n "@binutils_bin@" ]; then
-    addToSearchPath _PATH @binutils_bin@/bin
-fi
-
-# shellcheck disable=SC2157
 if [ -n "@libc_bin@" ]; then
     addToSearchPath _PATH @libc_bin@/bin
 fi
@@ -142,17 +129,5 @@ export ${role_pre}CXX=@named_cxx@
 export CC${role_post}=@named_cc@
 export CXX${role_post}=@named_cxx@
 
-for cmd in \
-    ar as ld nm objcopy objdump readelf ranlib strip strings size windres
-do
-    if
-        PATH=$_PATH type -p "@targetPrefix@${cmd}" > /dev/null
-    then
-        upper_case="$(echo "$cmd" | tr "[:lower:]" "[:upper:]")"
-        export "${role_pre}${upper_case}=@targetPrefix@${cmd}";
-        export "${upper_case}${role_post}=@targetPrefix@${cmd}";
-    fi
-done
-
 # No local scope in sourced file
-unset -v role_pre role_post cmd upper_case
+unset -v role_pre role_post
