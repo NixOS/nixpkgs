@@ -16113,7 +16113,6 @@ with pkgs;
   notmuch-addrlookup = callPackage ../applications/networking/mailreaders/notmuch-addrlookup { };
 
   # Open Stack
-  neutron = callPackage ../applications/virtualization/openstack/neutron.nix { };
 
   nova-filters =  callPackage ../applications/audio/nova-filters { };
 
