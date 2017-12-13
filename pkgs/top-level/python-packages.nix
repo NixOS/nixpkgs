@@ -12760,6 +12760,8 @@ in {
 
   bandit = callPackage ../development/python-modules/bandit { };
 
+  neutron-lib = callPackage ../development/python-modules/neutron-lib {};
+
   oslo-serialization = buildPythonPackage rec {
     pname = "oslo.serialization";
     version = "2.20.0";
