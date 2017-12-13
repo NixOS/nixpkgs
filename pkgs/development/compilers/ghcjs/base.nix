@@ -107,6 +107,7 @@ in mkDerivation (rec {
   jailbreak = true;
   doHaddock = false;
   doCheck = false;
+  enableSeparateDataOutput = true;
   buildDepends = [
     filepath HTTP mtl network random stm time zlib aeson attoparsec
     bzlib data-default ghc-paths hashable haskell-src-exts haskell-src-meta
@@ -128,17 +129,17 @@ in mkDerivation (rec {
       --replace "/usr/bin/env" "${coreutils}/bin/env"
 
     substituteInPlace src/Compiler/Info.hs \
-      --replace "@PREFIX@" "$out"          \
+      --replace "@PREFIX@" "$lib"          \
       --replace "@VERSION@" "${version}"
 
     substituteInPlace src-bin/Boot.hs \
-      --replace "@PREFIX@" "$out"     \
+      --replace "@PREFIX@" "$lib"     \
       --replace "@CC@"     "${stdenv.cc}/bin/cc"
   '';
   preBuild = ''
     export HOME="$TMP"
 
-    local topDir=$out/lib/ghcjs-${version}
+    local topDir=$lib/lib/ghcjs-${version}
     mkdir -p $topDir
 
     cp -r ${ghcjsBoot} $topDir/ghcjs-boot
@@ -158,15 +159,18 @@ in mkDerivation (rec {
   # This is necessary due to: https://github.com/haskell/cabal/commit/af19fb2c2d231d8deff1cb24164a2bf7efb8905a
   # Cabal otherwise fails to build: http://hydra.nixos.org/build/31824079/nixlog/1/raw
   postInstall = ''
-    PATH=$out/bin:$PATH LD_LIBRARY_PATH=${gmp.out}/lib:${stdenv.cc}/lib64:$LD_LIBRARY_PATH \
-      env -u GHC_PACKAGE_PATH $out/bin/ghcjs-boot \
+    PATH=$bin/bin:$PATH LD_LIBRARY_PATH=${gmp.out}/lib:${stdenv.cc}/lib64:$LD_LIBRARY_PATH \
+      env -u GHC_PACKAGE_PATH $bin/bin/ghcjs-boot \
         --dev \
         --quick \
         --with-cabal ${cabal-install}/bin/cabal \
         --with-gmp-includes ${gmp.dev}/include \
-        --with-gmp-libraries ${gmp.out}/lib
+        --with-gmp-libraries ${gmp.out}/lib \
+        --with-datadir $data/share/ghc-*/*/ghcjs-*/ \
+        --with-ghcjs-bin $bin/bin
+      find $lib -name setup-config -o -name config.log -o -name config.status | xargs rm
   '' + lib.optionalString (ghcLibdir != null) ''
-    printf '%s' '${ghcLibdir}' > "$out/lib/ghcjs-${version}/ghc_libdir"
+    printf '%s' '${ghcLibdir}' > "$lib/lib/ghcjs-${version}/ghc_libdir"
   '';
   passthru = {
     inherit bootPkgs;
