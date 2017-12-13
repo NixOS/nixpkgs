@@ -8,10 +8,11 @@ stdenv.mkDerivation rec {
     sha256 = "0ssjcdjv4qf9liph5ry1kngam1y7zp8fzr9xv4wzzrma22kabldn";
   };
 
-  cmakeFlags = [ "-DWITH_ASF=ON" "-DWITH_MP4=ON" ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [ zlib ];
-  nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
   meta = with stdenv.lib; {
     homepage = http://taglib.org/;
