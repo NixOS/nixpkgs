@@ -12835,34 +12835,7 @@ in {
     };
   };
 
-  neutronclient = buildPythonPackage rec {
-    name = "neutronclient-${version}";
-    version = "3.1.0";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/python-neutronclient/python-neutronclient-${version}.tar.gz";
-      sha256 = "0g96x5b8lz407in70j6v7jbj613y6sd61b21j1y03x06b2rk5i02";
-    };
-
-    propagatedBuildInputs = with self; [
-      pbr six simplejson keystoneclient requests oslo-utils oslo-serialization
-      oslo-i18n netaddr iso8601 cliff argparse
-    ];
-    buildInputs = with self; [
-      tempest-lib mox3 oslotest requests-mock
-    ];
-
-    patchPhase = ''
-      sed -i 's@python@${python.interpreter}@' .testr.conf
-      # test fails on py3k
-      ${if isPy3k then "substituteInPlace neutronclient/tests/unit/test_cli20_port.py --replace 'test_list_ports_with_fixed_ips_in_csv' 'noop'" else ""}
-    '';
-
-    meta = with stdenv.lib; {
-      description = "Python bindings to the Neutron API";
-      homepage = "http://www.openstack.org/";
-    };
-  };
+  neutronclient = callPackage ../development/python-modules/neutronclient {};
 
   cliff = callPackage ../development/python-modules/cliff {};
 
