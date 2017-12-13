@@ -8330,7 +8330,6 @@ dont-distribute-packages:
   type-level-bst:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   type-level-natural-number-induction:          [ i686-linux, x86_64-linux, x86_64-darwin ]
   type-level-natural-number-operations:         [ i686-linux, x86_64-linux, x86_64-darwin ]
-  type-of-html:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
   type-ord-spine-cereal:                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   type-ord:                                     [ i686-linux, x86_64-linux, x86_64-darwin ]
   type-prelude:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
