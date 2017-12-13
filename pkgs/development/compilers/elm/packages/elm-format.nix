@@ -29,7 +29,7 @@ mkDerivation {
   ];
   jailbreak = true;
   postInstall = ''
-    ln -s $out/bin/elm-format-0.18 $out/bin/elm-format
+    ln -s $bin/bin/elm-format-0.18 $bin/bin/elm-format
   '';
   postPatch = ''
     sed -i "s|desc <-.*||" ./Setup.hs

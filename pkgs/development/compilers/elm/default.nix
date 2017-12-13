@@ -58,7 +58,7 @@ let
               postInstall =
                 let bins = lib.makeBinPath [ nodejs self.elm-make ];
                 in ''
-                  wrapProgram $out/bin/elm-repl \
+                  wrapProgram $bin/bin/elm-repl \
                     --prefix PATH ':' ${bins}
                 '';
             });
