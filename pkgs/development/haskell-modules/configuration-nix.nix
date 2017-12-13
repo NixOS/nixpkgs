@@ -549,7 +549,7 @@ self: super: builtins.intersectAttrs super {
   });
   Agda = overrideCabal super.Agda (drv: {
     postInstall = ''
-      files=("$out/share/"*"-ghc-"*"/Agda-"*"/lib/prim/Agda/"{Primitive.agda,Builtin"/"*.agda})
+      files=("$data/share/ghc-"*"/"*"-ghc-"*"/Agda-"*"/lib/prim/Agda/"{Primitive.agda,Builtin"/"*.agda})
       for f in "''${files[@]}" ; do
         $bin/bin/agda $f
       done
