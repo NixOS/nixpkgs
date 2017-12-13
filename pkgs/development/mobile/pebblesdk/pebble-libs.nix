@@ -1,10 +1,12 @@
 { pkgs, python27Packages }:
 
 rec {
-  libpebble2 = python27Packages.buildPythonPackage {
-    name = "libpebble2-0.0.26";
-    src = pkgs.fetchurl {
-      url = "https://pypi.python.org/packages/17/1c/0625cca1b3ef9e0c0b9cc2ab5bb5e496e0e43fd3d4f72d1b011158f81346/libpebble2-0.0.26.tar.gz";
+  libpebble2 = python27Packages.buildPythonPackage rec {
+    name = "${pname}-${version}";
+    pname = "libpebble2";
+    version = "0.0.26";
+    src = python27Packages.fetchPypi {
+      inherit pname version;
       sha256 = "16n69xxma7k8mhl8birdwa0fsqvf902g08s80mjb477s4dcxrvaz";
     };
 
