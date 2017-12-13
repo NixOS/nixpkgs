@@ -1,14 +1,13 @@
 { stdenv, fetchurl, pkgconfig, atk, cairo, glib, gtk3, pango
-, libxml2Python, perl, intltool, gettext, gnome3 }:
+, libxml2, perl, intltool, gettext, gnome3 }:
 
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
   propagatedBuildInputs = [ gtk3 ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ atk cairo glib pango
-                  libxml2Python perl intltool gettext ];
+  nativeBuildInputs = [ pkgconfig intltool gettext perl ];
+  buildInputs = [ atk cairo glib pango libxml2 ];
 
   preBuild = ''
     substituteInPlace gtksourceview/gtksourceview-utils.c --replace "@NIX_SHARE_PATH@" "$out/share"
