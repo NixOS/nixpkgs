@@ -97,15 +97,31 @@ rec {
          , preferLocalBuild ? true
          , allowSubstitutes ? false
          , postBuild ? ""
+         , extraOutputsToInstall ? []
          , ...
          }:
     let
-      args = removeAttrs args_ [ "name" "postBuild" ]
-        // { inherit preferLocalBuild allowSubstitutes; }; # pass the defaults
+      # Handle multiple outputs
+      dirs = (map (drv: 
+          # First add the usual output(s): respect if user has chosen explicitly,
+          # and otherwise use `meta.outputsToInstall`. The attribute is guaranteed
+          # to exist in mkDerivation-created cases. The other cases (e.g. runCommand)
+          # aren't expected to have multiple outputs.
+          (if drv.outputUnspecified or false
+              && drv.meta.outputsToInstall or null != null
+            then map (outName: drv.${outName}) drv.meta.outputsToInstall
+            else [ drv ])
+          # Add any extra outputs specified by the caller of `buildEnv`.
+          ++ lib.filter (p: p!=null)
+            (builtins.map (outName: drv.${outName} or null) extraOutputsToInstall)
+      ) paths);
+
+      args = removeAttrs args_ [ "name" "postBuild" "paths"]
+        // { inherit preferLocalBuild allowSubstitutes dirs; }; # pass the defaults
     in runCommand name args
       ''
         mkdir -p $out
-        for i in $paths; do
+        for i in $dirs; do
           ${lndir}/bin/lndir -silent $i $out
         done
         ${postBuild}
