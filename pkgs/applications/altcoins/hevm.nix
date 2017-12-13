@@ -28,6 +28,8 @@ lib.overrideDerivation (mkDerivation rec {
   isLibrary = false;
   isExecutable = true;
   enableSharedExecutables = false;
+  # TODO: it creates cycle between out and bin
+  enableSeparateBinOutput = false;
 
   postInstall = ''
     wrapProgram $out/bin/hevm \
