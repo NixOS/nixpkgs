@@ -6,18 +6,18 @@
 , oslo-serialization, oslo-config, oslo-i18n, oslo-utils
 , Babel, prettytable, requests, six, iso8601, stevedore
 , netaddr, debtcollector, bandit, webob, mock, pycrypto
+, keystoneauth1
 }:
 
 buildPythonPackage rec {
   pname = "keystoneclient";
-  version = "1.8.1";
-  name = pname + "-" + version;
+  version = "3.14.0";
 
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-keystoneclient";
     rev = version;
-    sha256 = "0yayn1hb3mncqb0isy8vy6d519xya7mhf5pcbn60fzdqjrkj2prq";
+    sha256 = "01pc6mrh046idj2gd6jj5bf0cwwv5q6dc9pyfbvdhx29g1m4vag0";
   };
 
   PBR_VERSION = "${version}";
@@ -30,6 +30,7 @@ buildPythonPackage rec {
     oslo-serialization oslo-config oslo-i18n oslo-utils
     Babel prettytable requests six iso8601 stevedore
     netaddr debtcollector bandit webob mock pycrypto
+    keystoneauth1
   ];
 
   postPatch = ''
