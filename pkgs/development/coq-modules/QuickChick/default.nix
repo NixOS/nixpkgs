@@ -2,12 +2,6 @@
 
 let param =
   {
-    "8.4" = {
-      version = "20160529";
-      rev = "a9e89f1d4246a787bf1d8873072077a319635c3e";
-      sha256 = "14ng71p890q12xvsj00si2a3fjcbsap2gy0r8sxpw4zndnlq74wa";
-    };
-
     "8.5" = {
       version = "20170512";
       rev = "31eb050ae5ce57ab402db9726fb7cd945a0b4d03";
@@ -21,9 +15,9 @@ let param =
     };
 
     "8.7" = {
-      version = "20171102";
-      rev = "ddf746809c211fa7edfdbfe459d5a7e1cca47a44";
-      sha256 = "0jg3x0w8p088b8369qx492hjpq09f9h2i0li6ph3pny6hdkpdzsi";
+      version = "20171212";
+      rev = "195e550a1cf0810497734356437a1720ebb6d744";
+      sha256 = "0zm23y89z0h4iamy74qk9qi2pz2cj3ga6ygav0w79n0qyqwhxcq1";
     };
 
   }."${coq.coq-version}"

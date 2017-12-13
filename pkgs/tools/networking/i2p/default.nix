@@ -27,10 +27,10 @@ let wrapper = stdenv.mkDerivation rec {
 in
 
 stdenv.mkDerivation rec {
-  name = "i2p-0.9.31";
+  name = "i2p-0.9.32";
   src = fetchurl {
     url = "https://github.com/i2p/i2p.i2p/archive/${name}.tar.gz";
-    sha256 = "1v2my5jqcj8zidxij34h0lpa533rr6ianzz8yld01sxi6gg41w28";
+    sha256 = "1c82yckwzp51wqrr8qhww3sifm1a9nzrymsf9qv99ngsxq4n5l6i";
   };
   buildInputs = [ jdk ant gettext which ];
   patches = [ ./i2p.patch ];

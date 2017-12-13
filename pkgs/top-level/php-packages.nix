@@ -100,6 +100,12 @@ let
     sha256 = "0a55l4f0bgbf3f6sh34njd14niwagg829gfkvb8n5fs69xqab67d";
   };
 
+  mailparse = assert isPhp7; buildPecl {
+    name = "mailparse-3.0.2";
+
+    sha256 = "0fw447ralqihsjnn0fm2hkaj8343cvb90v0d1wfclgz49256y6nq";
+  };
+
   imagick = buildPecl {
     name = "imagick-3.4.3RC1";
     sha256 = "0siyxpszjz6s095s2g2854bhprjq49rf22v6syjiwvndg1pc9fsh";
@@ -344,6 +350,93 @@ let
       license = licenses.mit;
       homepage = https://getcomposer.org/;
       maintainers = with maintainers; [ globin offline ];
+    };
+  };
+
+  box = pkgs.stdenv.mkDerivation rec {
+    name = "box-${version}";
+    version = "2.7.5";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/box-project/box2/releases/download/${version}/box-${version}.phar";
+      sha256 = "1zmxdadrv0i2l8cz7xb38gnfmfyljpsaz2nnkjzqzksdmncbgd18";
+    };
+
+    phases = [ "installPhase" ];
+    buildInputs = [ pkgs.makeWrapper ];
+
+    installPhase = ''
+      mkdir -p $out/bin
+      install -D $src $out/libexec/box/box.phar
+      makeWrapper ${php}/bin/php $out/bin/box \
+        --add-flags "-d phar.readonly=0 $out/libexec/box/box.phar"
+    '';
+
+    meta = with pkgs.lib; {
+      description = "An application for building and managing Phars";
+      license = licenses.mit;
+      homepage = https://box-project.github.io/box2/;
+      maintainers = with maintainers; [ jtojnar ];
+    };
+  };
+
+  php-cs-fixer = pkgs.stdenv.mkDerivation rec {
+    name = "php-cs-fixer-${version}";
+    version = "2.9.0";
+
+    src = pkgs.fetchurl {
+      url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
+      sha256 = "12z1fan4yyxll03an51zhx6npr1d49s84dvmrvnzzf9jhckl5mqd";
+    };
+
+    phases = [ "installPhase" ];
+    buildInputs = [ pkgs.makeWrapper ];
+
+    installPhase = ''
+      mkdir -p $out/bin
+      install -D $src $out/libexec/php-cs-fixer/php-cs-fixer.phar
+      makeWrapper ${php}/bin/php $out/bin/php-cs-fixer \
+        --add-flags "$out/libexec/php-cs-fixer/php-cs-fixer.phar"
+    '';
+
+    meta = with pkgs.lib; {
+      description = "A tool to automatically fix PHP coding standards issues";
+      license = licenses.mit;
+      homepage = http://cs.sensiolabs.org/;
+      maintainers = with maintainers; [ jtojnar ];
+    };
+  };
+
+  php-parallel-lint = pkgs.stdenv.mkDerivation rec {
+    name = "php-parallel-lint-${version}";
+    version = "0.9.2";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "JakubOnderka";
+      repo = "PHP-Parallel-Lint";
+      rev = "v${version}";
+      sha256 = "0dzyi6arwpwbjgr366vw3qxibc3naq863p75q433ahznbdygzzm1";
+    };
+
+    buildInputs = [ pkgs.makeWrapper composer box ];
+
+    buildPhase = ''
+      composer dump-autoload
+      box build
+    '';
+
+    installPhase = ''
+      mkdir -p $out/bin
+      install -D parallel-lint.phar $out/libexec/php-parallel-lint/php-parallel-lint.phar
+      makeWrapper ${php}/bin/php $out/bin/php-parallel-lint \
+        --add-flags "$out/libexec/php-parallel-lint/php-parallel-lint.phar"
+    '';
+
+    meta = with pkgs.lib; {
+      description = "This tool check syntax of PHP files faster than serial check with fancier output";
+      license = licenses.bsd2;
+      homepage = https://github.com/JakubOnderka/PHP-Parallel-Lint;
+      maintainers = with maintainers; [ jtojnar ];
     };
   };
 

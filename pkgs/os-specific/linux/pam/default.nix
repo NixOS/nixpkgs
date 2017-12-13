@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "linux-pam-${version}";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchurl {
     url = "http://www.linux-pam.org/library/Linux-PAM-${version}.tar.bz2";
-    sha256 = "1n9lnf9gjs72kbj1g354v1xhi2j27aqaah15vykh7cnkq08i4arl";
+    sha256 = "1fyi04d5nsh8ivd0rn2y0z83ylgc0licz7kifbb6xxi2ylgfs6i4";
   };
 
   outputs = [ "out" "doc" "man" /* "modules" */ ];

@@ -205,6 +205,7 @@
   elijahcaine = "Elijah Caine <elijahcainemv@gmail.com>";
   elitak = "Eric Litak <elitak@gmail.com>";
   ellis = "Ellis Whitehead <nixos@ellisw.net>";
+  enzime = "Michael Hoang <enzime@users.noreply.github.com>";
   eperuffo = "Emanuele Peruffo <info@emanueleperuffo.com>";
   epitrochoid = "Mabry Cervin <mpcervin@uncg.edu>";
   eqyiel = "Ruben Maher <r@rkm.id.au>";
@@ -289,6 +290,7 @@
   ironpinguin = "Michele Catalano <michele@catalano.de>";
   ivan-tkatchev = "Ivan Tkatchev <tkatchev@gmail.com>";
   ixmatus = "Parnell Springmeyer <parnell@digitalmentat.com>";
+  izorkin = "Yurii Izorkin <Izorkin@gmail.com>";
   j-keck = "Jürgen Keck <jhyphenkeck@gmail.com>";
   jagajaga = "Arseniy Seroka <ars.seroka@gmail.com>";
   jammerful = "jammerful <jammerful@gmail.com>";
@@ -390,6 +392,7 @@
   manveru = "Michael Fellinger <m.fellinger@gmail.com>";
   marcweber = "Marc Weber <marco-oweber@gmx.de>";
   markus1189 = "Markus Hauck <markus1189@gmail.com>";
+  markuskowa = "Markus Kowalewski <markus.kowalewski@gmail.com>";
   markWot = "Markus Wotringer <markus@wotringer.de>";
   martijnvermaat = "Martijn Vermaat <martijn@vermaat.name>";
   martingms = "Martin Gammelsæter <martin@mg.am>";
@@ -401,6 +404,7 @@
   mbakke = "Marius Bakke <mbakke@fastmail.com>";
   mbbx6spp = "Susan Potter <me@susanpotter.net>";
   mbe = "Brandon Edens <brandonedens@gmail.com>";
+  mbode = "Maximilian Bode <maxbode@gmail.com>";
   mboes = "Mathieu Boespflug <mboes@tweag.net>";
   mbrgm = "Marius Bergmann <marius@yeai.de>";
   mcmtroffaes = "Matthias C. M. Troffaes <matthias.troffaes@gmail.com>";
@@ -430,6 +434,7 @@
   mog = "Matthew O'Gorman <mog-lists@rldn.net>";
   montag451 = "montag451 <montag451@laposte.net>";
   moosingin3space = "Nathan Moos <moosingin3space@gmail.com>";
+  moredread = "André-Patrick Bubel <code@apb.name>";
   moretea = "Maarten Hoogendoorn <maarten@moretea.nl>";
   mornfall = "Petr Ročkai <me@mornfall.net>";
   MostAwesomeDude = "Corbin Simpson <cds@corbinsimpson.com>";
@@ -513,6 +518,7 @@
   plcplc = "Philip Lykke Carlsen <plcplc@gmail.com>";
   plumps = "Maksim Bronsky <maks.bronsky@web.de";
   pmahoney = "Patrick Mahoney <pat@polycrystal.org>";
+  pmeunier = "Pierre-Étienne Meunier <pierre-etienne.meunier@inria.fr>";
   pmiddend = "Philipp Middendorf <pmidden@secure.mailbox.org>";
   polyrod = "Maurizio Di Pietro <dc1mdp@gmail.com>";
   pradeepchhetri = "Pradeep Chhetri <pradeep.chhetri89@gmail.com>";

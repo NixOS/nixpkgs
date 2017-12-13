@@ -9,14 +9,14 @@
 
 with stdenv.lib;
 
-# if you update, also bump pythonPackages.libvirt or it will break
+# if you update, also bump <nixpkgs/pkgs/development/python-modules/libvirt/default.nix> or it will break
 stdenv.mkDerivation rec {
   name = "libvirt-${version}";
-  version = "3.8.0";
+  version = "3.10.0";
 
   src = fetchurl {
     url = "http://libvirt.org/sources/${name}.tar.xz";
-    sha256 = "1y83z4jb2by6ara0nw4sivh7svqcrw97yfhqwdscxl4y10saisvk";
+    sha256 = "03kb37iv3dvvdlslznlc0njvjpmq082lczmsslz5p4fcwb50kwfz";
   };
 
   patches = [ ./build-on-bsd.patch ];
@@ -27,9 +27,11 @@ stdenv.mkDerivation rec {
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap
   ] ++ optionals stdenv.isLinux [
     libpciaccess devicemapper lvm2 utillinux systemd libnl numad zfs
-    libapparmor libcap_ng numactl xen attr parted
+    libapparmor libcap_ng numactl attr parted
+  ] ++ optionals (stdenv.isLinux && stdenv.isx86_64) [
+    xen
   ] ++ optionals stdenv.isDarwin [
-     libiconv gmp
+    libiconv gmp
   ];
 
   preConfigure = optionalString stdenv.isLinux ''

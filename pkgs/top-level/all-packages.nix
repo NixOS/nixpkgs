@@ -202,6 +202,8 @@ with pkgs;
 
   fetchzip = callPackage ../build-support/fetchzip { };
 
+  fetchCrate = callPackage ../build-support/rust/fetchcrate.nix { };
+
   fetchFromGitHub = {
     owner, repo, rev, name ? "source",
     fetchSubmodules ? false, private ? false,
@@ -429,6 +431,8 @@ with pkgs;
   airfield = callPackage ../tools/networking/airfield { };
 
   airsonic = callPackage ../servers/misc/airsonic { };
+
+  airspy = callPackage ../applications/misc/airspy { };
 
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
 
@@ -853,6 +857,12 @@ with pkgs;
 
   caddy = callPackage ../servers/caddy { };
   traefik = callPackage ../servers/traefik { };
+
+  calamares = libsForQt59.callPackage ../tools/misc/calamares {
+    python = python3;
+    boost = pkgs.boost.override { python = python3; };
+    libyamlcpp = callPackage ../development/libraries/libyaml-cpp { inherit boost; };
+  };
 
   capstone = callPackage ../development/libraries/capstone { };
   unicorn-emu = callPackage ../development/libraries/unicorn-emu { };
@@ -2027,6 +2037,8 @@ with pkgs;
     cloudpinyin = callPackage ../tools/inputmethods/fcitx-engines/fcitx-cloudpinyin { };
 
     libpinyin = callPackage ../tools/inputmethods/fcitx-engines/fcitx-libpinyin { };
+
+    skk = callPackage ../tools/inputmethods/fcitx-engines/fcitx-skk { };
   };
 
   fcitx-configtool = callPackage ../tools/inputmethods/fcitx/fcitx-configtool.nix { };
@@ -2338,7 +2350,7 @@ with pkgs;
   };
   gnupg = gnupg22;
 
-  gnuplot = callPackage ../tools/graphics/gnuplot { qt = qt4; };
+  gnuplot = libsForQt5.callPackage ../tools/graphics/gnuplot { };
 
   gnuplot_qt = gnuplot.override { withQt = true; };
 
@@ -2388,6 +2400,8 @@ with pkgs;
   gparted = callPackage ../tools/misc/gparted { };
 
   gpodder = callPackage ../applications/audio/gpodder { };
+
+  gpredict = callPackage ../applications/science/astronomy/gpredict { };
 
   gptfdisk = callPackage ../tools/system/gptfdisk { };
 
@@ -3485,6 +3499,8 @@ with pkgs;
   munge = callPackage ../tools/security/munge { };
 
   mycli = callPackage ../tools/admin/mycli { };
+
+  mydumper = callPackage ../tools/backup/mydumper { };
 
   mysql2pgsql = callPackage ../tools/misc/mysql2pgsql { };
 
@@ -4608,9 +4624,9 @@ with pkgs;
     preCheck = "export PATH=dist/build/stutter:$PATH";
   });
 
-  strongswan = callPackage ../tools/networking/strongswan { };
-
-  strongswanTNC = callPackage ../tools/networking/strongswan { enableTNC=true; };
+  strongswan    = callPackage ../tools/networking/strongswan { };
+  strongswanTNC = callPackage ../tools/networking/strongswan { enableTNC = true; };
+  strongswanNM  = callPackage ../tools/networking/strongswan { enableNetworkManager = true; };
 
   su = shadow.su;
 
@@ -5144,6 +5160,8 @@ with pkgs;
   vlan = callPackage ../tools/networking/vlan { };
 
   vmtouch = callPackage ../tools/misc/vmtouch { };
+
+  vncdo = callPackage ../tools/admin/vncdo { };
 
   volumeicon = callPackage ../tools/audio/volumeicon { };
 
@@ -6245,7 +6263,7 @@ with pkgs;
 
   metaocaml_3_09 = callPackage ../development/compilers/ocaml/metaocaml-3.09.nix { };
 
-  ber_metaocaml_003 = callPackage ../development/compilers/ocaml/ber-metaocaml-003.nix { };
+  ber_metaocaml = callPackage ../development/compilers/ocaml/ber-metaocaml-104.nix { };
 
   ocaml_make = callPackage ../development/ocaml-modules/ocamlmake { };
 
@@ -6279,6 +6297,12 @@ with pkgs;
   # For beta and nightly releases use the nixpkgs-mozilla overlay
   rust = callPackage ../development/compilers/rust { };
   inherit (rust) cargo rustc;
+
+  buildRustCrate = callPackage ../build-support/rust/build-rust-crate.nix { };
+
+  carnix = (callPackage ../build-support/rust/carnix.nix { }).carnix_0_5_0;
+
+  defaultCrateOverrides = callPackage ../build-support/rust/default-crate-overrides.nix { };
 
   rustPlatform = recurseIntoAttrs (makeRustPlatform rust);
 
@@ -6464,7 +6488,7 @@ with pkgs;
   beam = callPackage ./beam-packages.nix { };
 
   inherit (beam.interpreters)
-    erlang erlangR17 erlangR18 erlangR19 erlangR20
+    erlang erlangR18 erlangR19 erlangR20
     erlang_odbc erlang_javac erlang_odbc_javac erlang_nox erlang_basho_R16B02
     elixir elixir_1_5 elixir_1_4 elixir_1_3
     lfe lfe_1_2;
@@ -7547,7 +7571,7 @@ with pkgs;
   premake4 = callPackage ../development/tools/misc/premake { };
 
   premake5 = callPackage ../development/tools/misc/premake/5.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreServices;
+    inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
   premake = premake4;
@@ -8158,8 +8182,6 @@ with pkgs;
   expat = callPackage ../development/libraries/expat { };
 
   eventlog = callPackage ../development/libraries/eventlog { };
-
-  facile = callPackage ../development/libraries/facile { };
 
   faac = callPackage ../development/libraries/faac { };
 
@@ -8992,6 +9014,8 @@ with pkgs;
   libcec_platform = callPackage ../development/libraries/libcec/platform.nix { };
 
   libcello = callPackage ../development/libraries/libcello {};
+
+  libcerf = callPackage ../development/libraries/libcerf {};
 
   libcdaudio = callPackage ../development/libraries/libcdaudio { };
 
@@ -10047,7 +10071,6 @@ with pkgs;
   };
 
   nettle = callPackage ../development/libraries/nettle { };
-  nettle_3_3 = callPackage ../development/libraries/nettle/3.3.nix { };
 
   newt = callPackage ../development/libraries/newt { };
 
@@ -11313,9 +11336,13 @@ with pkgs;
 
   mockobjects = callPackage ../development/libraries/java/mockobjects { };
 
-  saxon = callPackage ../development/libraries/java/saxon { };
+  saxonb = saxonb_8_8;
 
-  saxonb = callPackage ../development/libraries/java/saxon/default8.nix { };
+  inherit (callPackages ../development/libraries/java/saxon { })
+    saxon
+    saxonb_8_8
+    saxonb_9_1
+    saxon-he;
 
   smack = callPackage ../development/libraries/java/smack { };
 
@@ -11545,7 +11572,7 @@ with pkgs;
     spidermonkey = spidermonkey_1_8_5;
     python = python27;
     sphinx = python27Packages.sphinx;
-    erlang = erlangR17;
+    erlang = erlangR19;
   };
 
   couchdb2 = callPackage ../servers/http/couchdb/2.0.0.nix {
@@ -11592,7 +11619,7 @@ with pkgs;
 
   prosody = callPackage ../servers/xmpp/prosody {
     lua5 = lua5_1;
-    inherit (lua51Packages) luasocket luasec luaexpat luafilesystem luabitop luaevent luazlib;
+    inherit (lua51Packages) luasocket luasec luaexpat luafilesystem luabitop luaevent luazlib luadbi;
   };
 
   biboumi = callPackage ../servers/xmpp/biboumi { };
@@ -11737,6 +11764,8 @@ with pkgs;
   nginxShibboleth = callPackage ../servers/http/nginx/stable.nix {
     modules = [ nginxModules.rtmp nginxModules.dav nginxModules.moreheaders nginxModules.shibboleth ];
   };
+
+  libmodsecurity = callPackage ../tools/security/libmodsecurity { };
 
   ngircd = callPackage ../servers/irc/ngircd { };
 
@@ -13141,7 +13170,9 @@ with pkgs;
     ubootBeagleboneBlack
     ubootJetsonTK1
     ubootOdroidXU3
+    ubootOrangePiPc
     ubootPcduino3Nano
+    ubootQemuArm
     ubootRaspberryPi
     ubootRaspberryPi2
     ubootRaspberryPi3_32bit
@@ -13738,6 +13769,8 @@ with pkgs;
 
   zeal = libsForQt5.callPackage ../data/documentation/zeal { };
 
+  zilla-slab = callPackage ../data/fonts/zilla-slab { };
+
 
   ### APPLICATIONS
 
@@ -13892,8 +13925,7 @@ with pkgs;
   altcoins = recurseIntoAttrs ( callPackage ../applications/altcoins { } );
   bitcoin = altcoins.bitcoin;
   bitcoin-xt = altcoins.bitcoin-xt;
-
-  cryptop = callPackage ../applications/altcoins/cryptop { };
+  cryptop = altcoins.cryptop;
 
   libbitcoin = callPackage ../tools/misc/libbitcoin/libbitcoin.nix {
     secp256k1 = secp256k1.override { enableECDH = true; };
@@ -14586,7 +14618,7 @@ with pkgs;
   emacs25WithPackages = emacs25PackagesNg.emacsWithPackages;
   emacsWithPackages = emacsPackagesNg.emacsWithPackages;
 
-  # inherit (gnome3) empathy;
+  inherit (gnome3) empathy;
 
   enhanced-ctorrent = callPackage ../applications/networking/enhanced-ctorrent { };
 
@@ -14662,8 +14694,11 @@ with pkgs;
 
   fldigi = callPackage ../applications/audio/fldigi { };
 
+  flink = flink_1_3;
+  flink_1_3 = callPackage ../applications/networking/cluster/flink { version = "1.3"; };
+
   fluidsynth = callPackage ../applications/audio/fluidsynth {
-     inherit (darwin.apple_sdk.frameworks) CoreServices CoreAudio AudioUnit;
+     inherit (darwin.apple_sdk.frameworks) AudioUnit CoreAudio CoreMIDI CoreServices;
   };
 
   fmit = libsForQt5.callPackage ../applications/audio/fmit { };
@@ -14689,6 +14724,8 @@ with pkgs;
   fvwm = callPackage ../applications/window-managers/fvwm { };
 
   ganttproject-bin = callPackage ../applications/misc/ganttproject-bin { };
+
+  gcal = callPackage ../applications/misc/gcal { };
 
   geany = callPackage ../applications/editors/geany { };
   geany-with-vte = callPackage ../applications/editors/geany/with-vte.nix { };
@@ -15620,9 +15657,7 @@ with pkgs;
     polarssl = mbedtls_1_3;
   };
 
-  linuxsampler = callPackage ../applications/audio/linuxsampler {
-    bison = bison2;
-  };
+  linuxsampler = callPackage ../applications/audio/linuxsampler { };
 
   llpp = ocaml-ng.ocamlPackages.callPackage ../applications/misc/llpp { };
 
@@ -15713,7 +15748,7 @@ with pkgs;
 
   merkaartor = libsForQt5.callPackage ../applications/misc/merkaartor { };
 
-  meshlab = callPackage ../applications/graphics/meshlab { };
+  meshlab = libsForQt5.callPackage ../applications/graphics/meshlab { };
 
   metersLv2 = callPackage ../applications/audio/meters_lv2 { };
 
@@ -15765,6 +15800,8 @@ with pkgs;
   mod-distortion = callPackage ../applications/audio/mod-distortion { };
 
   monero = callPackage ../applications/misc/monero { };
+
+  xmr-stak = callPackage ../applications/misc/xmr-stak { };
 
   monkeysAudio = callPackage ../applications/audio/monkeys-audio { };
 
@@ -16375,7 +16412,7 @@ with pkgs;
 
   qrcode = callPackage ../tools/graphics/qrcode {};
 
-  qsampler = callPackage ../applications/audio/qsampler { };
+  qsampler = libsForQt5.callPackage ../applications/audio/qsampler { };
 
   qscreenshot = callPackage ../applications/graphics/qscreenshot {
     qt = qt4;
@@ -16386,7 +16423,7 @@ with pkgs;
 
   qstopmotion = callPackage ../applications/video/qstopmotion { };
 
-  qsynth = callPackage ../applications/audio/qsynth { };
+  qsynth = libsForQt5.callPackage ../applications/audio/qsynth { };
 
   qtbitcointrader = callPackage ../applications/misc/qtbitcointrader { };
 
@@ -16493,13 +16530,7 @@ with pkgs;
 
   rawtherapee = callPackage ../applications/graphics/rawtherapee {
     fftw = fftwSinglePrec;
-    cmake = cmake_2_8; # problems after 3.4 -> 3.6.0
   };
-
-  rawtherapee-git = lowPrio (callPackage ../applications/graphics/rawtherapee/dev.nix {
-    fftw = fftwSinglePrec;
-    cmake = cmake_2_8; # problems after 3.4 -> 3.6.0
-  });
 
   rclone = callPackage ../applications/networking/sync/rclone { };
 
@@ -16855,6 +16886,8 @@ with pkgs;
   sylpheed = callPackage ../applications/networking/mailreaders/sylpheed { };
 
   symlinks = callPackage ../tools/system/symlinks { };
+
+  syncplay = callPackage ../applications/networking/syncplay { };
 
   syncthing = callPackage ../applications/networking/syncthing { };
 
@@ -17910,9 +17943,7 @@ with pkgs;
 
   freedink = callPackage ../games/freedink { };
 
-  freeorion = callPackage ../games/freeorion {
-    boost = boost160;
-  };
+  freeorion = callPackage ../games/freeorion { };
 
   freesweep = callPackage ../games/freesweep { };
 
@@ -18788,39 +18819,6 @@ with pkgs;
   coq_8_7 = callPackage ../applications/science/logic/coq {
     version = "8.7.0";
   };
-  coq_HEAD = callPackage ../applications/science/logic/coq/HEAD.nix {};
-
-  mkCoqPackages_8_4 = self: let callPackage = newScope self; in {
-    inherit callPackage;
-    coq = coq_8_4;
-    coqPackages = coqPackages_8_4;
-
-    contribs =
-      let contribs =
-        import ../development/coq-modules/contribs
-        contribs
-        callPackage { };
-      in
-        recurseIntoAttrs contribs;
-
-    bedrock = callPackage ../development/coq-modules/bedrock {};
-    coqExtLib = callPackage ../development/coq-modules/coq-ext-lib {};
-    coqeal = callPackage ../development/coq-modules/coqeal {};
-    coquelicot = callPackage ../development/coq-modules/coquelicot {};
-    domains = callPackage ../development/coq-modules/domains {};
-    fiat = callPackage ../development/coq-modules/fiat {};
-    fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
-    flocq = callPackage ../development/coq-modules/flocq {};
-    heq = callPackage ../development/coq-modules/heq {};
-    interval = callPackage ../development/coq-modules/interval {};
-    mathcomp = callPackage ../development/coq-modules/mathcomp {};
-    paco = callPackage ../development/coq-modules/paco {};
-    QuickChick = callPackage ../development/coq-modules/QuickChick {};
-    ssreflect = callPackage ../development/coq-modules/ssreflect {};
-    tlc = callPackage ../development/coq-modules/tlc {};
-    unimath = callPackage ../development/coq-modules/unimath {};
-    ynot = callPackage ../development/coq-modules/ynot {};
-  };
 
   mkCoqPackages = self: coq: let callPackage = newScope self; in rec {
     inherit callPackage coq;
@@ -18848,7 +18846,6 @@ with pkgs;
     equations = callPackage ../development/coq-modules/equations { };
   };
 
-  coqPackages_8_4 = mkCoqPackages_8_4 coqPackages_8_4;
   coqPackages_8_5 = mkCoqPackages coqPackages_8_5 coq_8_5;
   coqPackages_8_6 = mkCoqPackages coqPackages_8_6 coq_8_6;
   coqPackages_8_7 = mkCoqPackages coqPackages_8_7 coq_8_7;
@@ -19415,6 +19412,8 @@ with pkgs;
   keynav = callPackage ../tools/X11/keynav { };
 
   kompose = callPackage ../applications/networking/cluster/kompose { };
+
+  kontemplate = callPackage ../applications/networking/cluster/kontemplate { };
 
   kops = callPackage ../applications/networking/cluster/kops { };
 

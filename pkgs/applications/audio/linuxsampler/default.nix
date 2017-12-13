@@ -1,31 +1,24 @@
-{ stdenv, fetchsvn, alsaLib, asio, autoconf, automake, bison
-, libjack2, libgig, libsndfile, libtool, lv2, pkgconfig }:
+{ stdenv, fetchurl, autoconf, automake, bison, libtool, pkgconfig, which
+, alsaLib, asio, libjack2, libgig, libsndfile, lv2 }:
 
 stdenv.mkDerivation rec {
-  name = "linuxsampler-svn-${version}";
-  version = "2340";
+  name = "linuxsampler-${version}";
+  version = "2.1.0";
 
-  src = fetchsvn {
-    url = "https://svn.linuxsampler.org/svn/linuxsampler/trunk";
-    rev = "${version}";
-    sha256 = "0zsrvs9dwwhjx733m45vfi11yjkqv33z8qxn2i9qriq5zs1f0kd7";
+  src = fetchurl {
+    url = "http://download.linuxsampler.org/packages/${name}.tar.bz2";
+    sha256 = "0fdxpw7jjfi058l95131d6d8538h05z7n94l60i6mhp9xbplj2jf";
   };
 
-  patches = ./linuxsampler_lv2_sfz_fix.diff;
-
-  # It fails to compile without this option. I'm not sure what the bug
-  # is, but everything works OK for me (goibhniu).
-  configureFlags = [ "--disable-nptl-bug-check" ];
-
   preConfigure = ''
-    sed -e 's/which/type -P/g' -i scripts/generate_parser.sh
-    make -f Makefile.cvs
+    make -f Makefile.svn
   '';
 
-  buildInputs = [ 
-   alsaLib asio autoconf automake bison libjack2 libgig libsndfile
-   libtool lv2 pkgconfig
-  ];
+  nativeBuildInputs = [ autoconf automake bison libtool pkgconfig which ];
+
+  buildInputs = [ alsaLib asio libjack2 libgig libsndfile lv2 ];
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = http://www.linuxsampler.org;
@@ -40,7 +33,7 @@ stdenv.mkDerivation rec {
       prior written permission by the LinuxSampler authors. If you
       have questions on the subject, that are not yet covered by the
       FAQ, please contact us.
-    ''; 
+    '';
     license = licenses.unfree;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

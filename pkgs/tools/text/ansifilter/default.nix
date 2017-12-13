@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.gpl1;
-    maintainers = maintainers.Adjective-Object;
+    maintainers = [ maintainers.Adjective-Object ];
     platforms = platforms.linux;
   };
 }

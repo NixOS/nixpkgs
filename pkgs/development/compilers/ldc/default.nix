@@ -249,10 +249,13 @@ stdenv.mkDerivation rec {
   inherit ldcUnittests;
   name = "ldc-${version}";
   phases = "installPhase";
+  buildInputs = ldcBuild.buildInputs;
 
   installPhase = ''
     mkdir $out
     cp -r --symbolic-link ${ldcBuild}/* $out/
   '';
+
+  meta = ldcBuild.meta;
 }
 

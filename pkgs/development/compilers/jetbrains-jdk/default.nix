@@ -16,7 +16,7 @@ let drv = stdenv.mkDerivation rec {
       sha256 = "1768f02i3dxdbxn8n29d522h8v0mkgnhpb8ixzq5p54vwjmfl6md";
     }
   else
-    abort "unsupported system: ${stdenv.system}";
+    throw "unsupported system: ${stdenv.system}";
 
   nativeBuildInputs = [ file ];
 
@@ -73,7 +73,7 @@ let drv = stdenv.mkDerivation rec {
      your own risk.
     '';
     homepage = "https://bintray.com/jetbrains/intellij-jdk/";
-    licenses = licenses.gpl2;
+    license = licenses.gpl2;
     maintainers = with maintainers; [ edwtjo ];
     platforms = with platforms; [ "x86_64-linux" ];
   };

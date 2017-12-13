@@ -10,11 +10,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "knot-resolver-${version}";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchurl {
     url = "http://secure.nic.cz/files/knot-resolver/${name}.tar.xz";
-    sha256 = "c032e63a6b922294746e1ab4002860346e7a6d92b8502965a13ba599088fcb42";
+    sha256 = "146dcb24422ef685fb4167e3c536a838cf4101acaa85fcfa0c150eebdba78f81";
   };
 
   outputs = [ "out" "dev" ];
@@ -37,11 +37,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  doCheck = true;
   doInstallCheck = true;
-  installCheckTarget = "check";
   preInstallCheck = ''
-    export LD_LIBRARY_PATH="$out/lib"
-    sed '/^\thints$/c #' -i tests/config/test_config.mk
+    patchShebangs tests/config/runtest.sh
   '';
 
   postInstall = ''

@@ -227,6 +227,8 @@ let
       lwt = ocaml_lwt;
     };
 
+    facile = callPackage ../development/ocaml-modules/facile { };
+
     faillib = callPackage ../development/ocaml-modules/faillib { };
 
     fieldslib_p4 = callPackage ../development/ocaml-modules/fieldslib { };
@@ -367,7 +369,7 @@ let
 
     magick = callPackage ../development/ocaml-modules/magick { };
 
-    markup = callPackage ../development/ocaml-modules/markup { lwt = lwt2; };
+    markup = callPackage ../development/ocaml-modules/markup { lwt = ocaml_lwt; };
 
     menhir = callPackage ../development/ocaml-modules/menhir { };
 

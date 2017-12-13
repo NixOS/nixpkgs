@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     description = "Uptime check plugin for Sensu/Nagios/others";
     homepage    = https://github.com/madrisan/nagios-plugins-uptime;
     license     = licenses.gpl3;
-    maintainer  = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg ];
   };
 }

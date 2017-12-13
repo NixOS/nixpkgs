@@ -18,7 +18,6 @@ rec {
     libc = "glibc";
     platform = platforms.sheevaplug;
     openssl.system = "linux-generic32";
-    inherit (platform) gcc;
   };
 
   raspberryPi = rec {
@@ -31,7 +30,6 @@ rec {
     libc = "glibc";
     platform = platforms.raspberrypi;
     openssl.system = "linux-generic32";
-    inherit (platform) gcc;
   };
 
   armv7l-hf-multiplatform = rec {
@@ -44,7 +42,6 @@ rec {
     libc = "glibc";
     platform = platforms.armv7l-hf-multiplatform;
     openssl.system = "linux-generic32";
-    inherit (platform) gcc;
   };
 
   aarch64-multiplatform = rec {
@@ -54,23 +51,20 @@ rec {
     withTLS = true;
     libc = "glibc";
     platform = platforms.aarch64-multiplatform;
-    inherit (platform) gcc;
   };
 
   scaleway-c1 = armv7l-hf-multiplatform // rec {
     platform = platforms.scaleway-c1;
-    inherit (platform) gcc;
-    inherit (gcc) fpu;
+    inherit (platform.gcc) fpu;
   };
 
   pogoplug4 = rec {
     arch = "armv5tel";
-    config = "armv5tel-softfloat-linux-gnueabi";
+    config = "armv5tel-unknown-linux-gnueabi";
     float = "soft";
 
     platform = platforms.pogoplug4;
 
-    inherit (platform) gcc;
     libc = "glibc";
 
     withTLS = true;
@@ -86,7 +80,6 @@ rec {
     libc = "glibc";
     platform = platforms.fuloong2f_n32;
     openssl.system = "linux-generic32";
-    inherit (platform) gcc;
   };
 
   #
