@@ -12892,6 +12892,8 @@ in {
    };
   };
 
+  tenacity = callPackage ../development/python-modules/tenacity {};
+
   oslo-reports = callPackage ../development/python-modules/oslo-reports { };
 
   cinderclient = buildPythonPackage rec {
