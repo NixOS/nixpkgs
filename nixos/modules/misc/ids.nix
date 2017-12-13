@@ -282,7 +282,7 @@
       riak-cs = 263;
       infinoted = 264;
       # keystone = 265; # unused, removed 2017-12-13
-      glance = 266;
+      # glance = 266; # unused, removed 2017-12-13
       couchpotato = 267;
       gogs = 268;
       pdns-recursor = 269;
@@ -552,7 +552,7 @@
       riak-cs = 263;
       infinoted = 264;
       # keystone = 265; # unused, removed 2017-12-13
-      glance = 266;
+      # glance = 266; # unused, removed 2017-12-13
       couchpotato = 267;
       gogs = 268;
       kresd = 270;
