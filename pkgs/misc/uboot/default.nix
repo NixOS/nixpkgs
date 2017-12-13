@@ -154,7 +154,6 @@ in rec {
     defconfig = "sopine_baseboard_defconfig";
     targetPlatforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
-    buildFlags = "DEVICE_TREE=sun50i-a64-sopine-baseboard";
     filesToInstall = ["spl/sunxi-spl.bin" "u-boot.itb"];
   };
 
