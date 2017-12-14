@@ -513,14 +513,14 @@ self: super: {
   hslua_0_9_3 = super.hslua_0_9_3.override { lua5_1 = pkgs.lua5_3; };
   hslua-module-text = super.hslua-module-text.override { hslua = self.hslua_0_9_3; };
   texmath_0_10 = super.texmath_0_10.override { pandoc-types = self.pandoc-types_1_17_3; };
-  pandoc_2_0_4 = super.pandoc_2_0_4.override {
+  pandoc_2_0_5 = super.pandoc_2_0_5.override {
     doctemplates = self.doctemplates_0_2_1;
     pandoc-types = self.pandoc-types_1_17_3;
     skylighting = self.skylighting_0_4_4_1;
     texmath = self.texmath_0_10;
   };
   pandoc-citeproc_0_12_1 = super.pandoc-citeproc_0_12_1.override {
-    pandoc = self.pandoc_2_0_4;
+    pandoc = self.pandoc_2_0_5;
     pandoc-types = self.pandoc-types_1_17_3;
   };
 
