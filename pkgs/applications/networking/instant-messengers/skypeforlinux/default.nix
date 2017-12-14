@@ -4,6 +4,8 @@
 
 let
 
+  # Please keep the version x.y.0.z and do not update to x.y.76.z because the
+  # source of the latter disappears much faster.
   version = "8.11.0.4";
 
   rpath = stdenv.lib.makeLibraryPath [
