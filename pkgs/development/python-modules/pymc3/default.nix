@@ -8,7 +8,6 @@
 , tqdm
 , six
 , h5py
-, run-tests ? false # these are quite heavy
 , pytest
 , nose
 , nose-parameterized
@@ -41,12 +40,14 @@ buildPythonPackage rec {
     nose
     nose-parameterized
   ];
-  doCheck = run-tests;
-  # If enabled tests are run during the install phase.
-  preInstall = ''
-    echo "Setting HOME for theano as it tries to write in ~/.theano"
-    export HOME=$(mktemp -d)
-  '';
+
+  # The test suite is computationally intensive and test failures are not
+  # indicative for package usability hence tests are disabled by default.
+  doCheck = false;
+
+  # For some reason tests are run as a part of the *install* phase if enabled.
+  # Theano writes compiled code to ~/.theano hence we set $HOME.
+  preInstall = "export HOME=$(mktemp -d)";
   postInstall = "rm -rf $HOME";
 
   meta = {
