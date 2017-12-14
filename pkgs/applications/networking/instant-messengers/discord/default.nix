@@ -7,12 +7,12 @@
 stdenv.mkDerivation rec {
 
     pname = "discord";
-    version = "0.0.2";
+    version = "0.0.3";
     name = "${pname}-${version}";
 
     src = fetchurl {
-        url = "https://cdn.discordapp.com/apps/linux/${version}/${pname}-${version}.tar.gz";
-        sha256 = "0sb7l0rrpqxzn4fndjr50r5xfiid1f81p22gda4mz943yv37mhfz";
+        url = "https://cdn.discordapp.com/apps/linux/${version}/${name}.tar.gz";
+        sha256 = "1yxxy9q75zlgk1b4winw4zy9yxk5pn8x4camh52n6v3mw6gq0bfh";
     };
 
     nativeBuildInputs = [ makeWrapper ];
