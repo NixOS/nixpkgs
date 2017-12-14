@@ -1016,4 +1016,7 @@ self: super: {
     unliftio = self.unliftio_0_2_0_0;
   });
 
+  # Hoogle needs a newer version than lts-9 provides.
+  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_20_1; };
+
 }
