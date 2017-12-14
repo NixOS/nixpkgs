@@ -8,18 +8,16 @@
   pyOpenSSL ? null, ndg-httpsclient ? null, pyasn1 ? null
 }:
 
-let
+buildPythonPackage rec {
+  pname = "quandl";
   version = "3.2.1";
   sha256 = "0vc0pzs2px9yaqkqcmd2m1b2bq1iils8fs0xbl0989hjq791a4jr";
 
-in buildPythonPackage rec {
-  pname = "quandl";
-  inherit version;
-
   patches = [ ./allow-requests-v2.18.patch ];
 
+  # Tests do not work with fetchPypi
   src = fetchFromGitHub {
-    owner = "quandl";
+    owner = pname;
     repo = "quandl-python";
     rev = "refs/tags/v${version}";
     inherit sha256;
