@@ -7636,6 +7636,8 @@ with pkgs;
 
   remake = callPackage ../development/tools/build-managers/remake { };
 
+  retdec = callPackage ../development/tools/analysis/retdec { };
+
   rhc = callPackage ../development/tools/rhc { };
 
   rman = callPackage ../development/tools/misc/rman { };
