@@ -48,7 +48,7 @@ let
   ld32 =
     if stdenv.system == "x86_64-linux" then "${stdenv.cc}/nix-support/dynamic-linker-m32"
     else if stdenv.system == "i686-linux" then "${stdenv.cc}/nix-support/dynamic-linker"
-    else abort "Unsupported platform for PlayOnLinux: ${stdenv.system}";
+    else throw "Unsupported platform for PlayOnLinux: ${stdenv.system}";
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
   libs = pkgs: stdenv.lib.makeLibraryPath [ pkgs.xlibs.libX11 ];
 

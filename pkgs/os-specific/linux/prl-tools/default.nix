@@ -9,7 +9,7 @@ let xorgFullVer = (builtins.parseDrvName xorg.xorgserver.name).version;
     xorgVer = lib.concatStringsSep "." (lib.take 2 (lib.splitString "." xorgFullVer));
     x64 = if stdenv.system == "x86_64-linux" then true
           else if stdenv.system == "i686-linux" then false
-          else abort "Parallels Tools for Linux only support {x86-64,i686}-linux targets";
+          else throw "Parallels Tools for Linux only support {x86-64,i686}-linux targets";
     # We autostart user services by ourselves, because prlcc uses hardcoded paths.
     autostart = [ { exec = "prlcc";
                     description = "Parallels Control Center";

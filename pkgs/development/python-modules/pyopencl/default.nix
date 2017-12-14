@@ -30,10 +30,10 @@ buildPythonPackage rec {
   # gcc: error: pygpu_language_opencl.cpp: No such file or directory
   doCheck = false;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Python wrapper for OpenCL";
     homepage = https://github.com/pyopencl/pyopencl;
-    license = stdenv.lib.licenses.mit;
-    maintainer = stdenv.lib.maintainers.fridh;
+    license = licenses.mit;
+    maintainers = [ maintainers.fridh ];
   };
 }

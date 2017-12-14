@@ -2,7 +2,7 @@
 
 let arch = if stdenv.system == "x86_64-linux" then "amd64"
            else if stdenv.system == "i686-linux" then "i386"
-           else abort "Unsupported platform";
+           else throw "Unsupported platform";
 
     input = builtins.getAttr arch (import ./runtime-generated.nix { inherit fetchurl; });
 

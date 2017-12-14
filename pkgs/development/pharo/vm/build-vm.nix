@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     else if stdenv.isLinux && stdenv.isx86_64  then "linux64x64"
     else if stdenv.isDarwin && stdenv.isi686   then "macos32x86"
     else if stdenv.isDarwin && stdenv.isx86_64 then "macos64x64"
-    else abort "Unsupported platform: only Linux/Darwin x86/x64 are supported.";
+    else throw "Unsupported platform: only Linux/Darwin x86/x64 are supported.";
 
   # Shared data (for the sources file)
   pharo-share = import ./share.nix { inherit stdenv fetchurl unzip; };

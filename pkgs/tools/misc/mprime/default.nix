@@ -5,12 +5,13 @@ let
     if stdenv.system == "x86_64-linux" then "linux64"
     else if stdenv.system == "i686-linux" then "linux"
     else if stdenv.system == "x86_64-darwin" then "macosx64"
-    else abort "Unsupported platform";
+    else throwSystem;
+  throwSystem = throw "Unsupported system: ${stdenv.system}";
   gwnum =
     if stdenv.system == "x86_64-linux" then "make64"
     else if stdenv.system == "i686-linux" then "makefile"
     else if stdenv.system == "x86_64-darwin" then "makemac"
-    else abort "Unsupported platform";
+    else throwSystem;
 in
 
 stdenv.mkDerivation {
