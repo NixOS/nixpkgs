@@ -13,12 +13,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtsvg ];
 
+  postInstall = stdenv.lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    mv CuteMaze.app $out/Applications
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://gottcode.org/cutemaze/;
     description = "Simple, top-down game in which mazes are randomly generated";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ dotlambda ];
-    # TODO: add darwin once tested
-    platforms = with platforms; linux;
+    platforms = platforms.unix;
   };
 }
