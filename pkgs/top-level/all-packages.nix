@@ -4274,6 +4274,8 @@ with pkgs;
 
   reckon = callPackage ../tools/text/reckon { };
 
+  recoverjpeg = callPackage ../tools/misc/recoverjpeg { };
+
   reposurgeon = callPackage ../applications/version-management/reposurgeon { };
 
   reptyr = callPackage ../os-specific/linux/reptyr {};
