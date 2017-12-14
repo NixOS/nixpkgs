@@ -7,17 +7,17 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   name = "keepassx-community-${version}";
-  version = "2.2.2";
+  version = "2.2.4";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     rev = "${version}";
-    sha256 = "01pqpa3vzk2q1vrj2lqayr7a3nzpnj176yhnqbrwlm3s9rga4wzn";
+    sha256 = "0q913v2ka6p7jr7c4w9fq8aqh5v6nxqgcv9h7zllk5p0amsf8d80";
   };
 
-  cmakeFlags = [ 
-    "-DWITH_GUI_TESTS=ON" 
+  cmakeFlags = [
+    "-DWITH_GUI_TESTS=ON"
     "-DWITH_XC_AUTOTYPE=ON"
     "-DWITH_XC_YUBIKEY=ON"
   ] ++ (optional withKeePassHTTP "-DWITH_XC_HTTP=ON");
