@@ -39,7 +39,8 @@ let
       curl http://mirror.ctan.org/tex-archive/systems/texlive/tlnet/tlpkg/texlive.tlpdb.xz \
         | xzcat | uniq -u | sed -rn -f ./tl2nix.sed > ./pkgs.nix */
     orig = import ./pkgs.nix tl; # XXX XXX XXX FIXME: the file is probably too big now XXX XXX XXX XXX XXX XXX
-    clean = orig // {
+    removeSelfDep = lib.mapAttrs (n: p: if p ? deps then p // { deps = lib.filterAttrs (dn: _: n != dn) p.deps; } else p);
+    clean = removeSelfDep (orig // {
       # overrides of texlive.tlpdb
 
       dvidvi = orig.dvidvi // {
@@ -70,7 +71,7 @@ let
       collection-genericextra = orig.collection-genericextra // {
         deps = orig.collection-genericextra.deps // { inherit (tl) xdvi; };
       };
-    }; # overrides
+    }); # overrides
 
     # tl =
     in lib.mapAttrs flatDeps clean;
@@ -111,8 +112,8 @@ let
 
       url = args.url or "${urlPrefix}/${urlName}.tar.xz";
       urlPrefix = args.urlPrefix or
-        http://146.185.144.154/texlive-2016
-        #http://lipa.ms.mff.cuni.cz/~cunav5am/nix/texlive-2016
+        https://gateway.ipfs.io/ipfs/QmRLK45EC828vGXv5YDaBsJBj2LjMjjA2ReLVrXsasRzy7/texlive-2017
+        #http://146.185.144.154/texlive-2017
         ;
       # XXX XXX XXX FIXME: mirror the snapshot XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
       #  ("${mirror}/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive");
@@ -188,9 +189,9 @@ in
             extraName = "combined" + lib.removePrefix "scheme" pname;
           })
         )
-        { inherit (tl) scheme-full
-            scheme-tetex scheme-medium scheme-small scheme-basic scheme-minimal
-            scheme-context scheme-gust scheme-xml;
+        { inherit (tl)
+            scheme-basic scheme-context scheme-full scheme-gust scheme-infraonly
+            scheme-medium scheme-minimal scheme-small scheme-tetex;
         }
     );
   }

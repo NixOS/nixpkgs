@@ -1,16 +1,14 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
   name = "abcMIDI-${version}";
-  version = "2017.11.27";
+  version = "2017.12.10";
 
   # You can find new releases on http://ifdo.ca/~seymour/runabc/top.html
-  src = fetchurl {
+  src = fetchzip {
     url = "http://ifdo.ca/~seymour/runabc/${name}.zip";
-    sha256 = "095nnyaqnsr3v7hsswpad9g0hxdnr4s6z8yk1bmr3g1j0cfv1xs9";
+    sha256 = "0m6mv6hlpzg14y5vsjicvi6lpmymsi1q4wz8sfliric3n1zb7ygz";
   };
-
-  nativeBuildInputs = [ unzip ];
 
   # There is also a file called "makefile" which seems to be preferred by the standard build phase
   makefile = "Makefile";

@@ -2850,6 +2850,8 @@ in {
 
   confluent-kafka = callPackage ../development/python-modules/confluent-kafka {};
 
+  kafka-python = callPackage ../development/python-modules/kafka-python {};
+
   construct = callPackage ../development/python-modules/construct {};
 
   consul = buildPythonPackage (rec {
@@ -4349,33 +4351,7 @@ in {
 
   daphne = callPackage ../development/python-modules/daphne { };
 
-  dateparser = buildPythonPackage rec {
-    name = "dateparser-${version}";
-    version = "0.3.2-pre-2016-01-21"; # Fix assert year 2016 == 2015
-
-    src = pkgs.fetchgit {
-      url = "https://github.com/scrapinghub/dateparser.git";
-      rev = "d20a63f1d1cee5b4bd19c9f745774cfa9f219549";
-      sha256 = "0na7b4hvf7vykrk48482gxiq5xny67rvs8ilamxcxw3y9gfgdjfd";
-    };
-
-    # Does not seem to work on Python 3 because of relative import.
-    # Upstream Travis configuration is wrong and tests only 2.7
-    disabled = isPy3k;
-
-    LC_ALL = "en_US.UTF-8";
-
-    buildInputs = with self; [ nose nose-parameterized mock pkgs.glibcLocales ];
-
-    propagatedBuildInputs = with self; [ six jdatetime pyyaml dateutil umalqurra pytz ];
-
-    meta = {
-      description = "Date parsing library designed to parse dates from HTML pages";
-      homepage = https://pypi.python.org/pypi/dateparser;
-      license = licenses.bsd3;
-      broken = true;
-    };
-  };
+  dateparser = callPackage ../development/python-modules/dateparser { };
 
   # Actual name of package
   python-dateutil = callPackage ../development/python-modules/dateutil { };
@@ -5937,6 +5913,8 @@ in {
       maintainers = [ stdenv.lib.maintainers.joachifm ];
     };
   };
+
+  jsonrpclib-pelix = callPackage ../development/python-modules/jsonrpclib-pelix {};
 
   jsonwatch = buildPythonPackage rec {
     name = "jsonwatch-0.2.0";
@@ -9697,24 +9675,7 @@ in {
     };
   };
 
-
-  inflection = buildPythonPackage rec {
-     version = "0.3.1";
-     name = "inflection-${version}";
-
-     src = pkgs.fetchurl {
-       url= "mirror://pypi/i/inflection/${name}.tar.gz";
-       sha256 = "1jhnxgnw8y3mbzjssixh6qkc7a3afc4fygajhqrqalnilyvpzshq";
-     };
-
-     disabled = isPy3k;
-
-     meta = {
-       homepage = https://github.com/jpvanhal/inflection;
-       description = "A port of Ruby on Rails inflector to Python";
-       maintainers = with maintainers; [ NikolaMandic ];
-     };
-  };
+  inflection = callPackage ../development/python-modules/inflection { };
 
   influxdb = buildPythonPackage rec {
     name = "influxdb-4.0.0";
@@ -10050,6 +10011,8 @@ in {
   journalwatch = callPackage ../tools/system/journalwatch {
     inherit (self) systemd pytest;
   };
+
+  jsondate = callPackage ../development/python-modules/jsondate { };
 
   jsonnet = buildPythonPackage {
     inherit (pkgs.jsonnet) name src;
@@ -16932,6 +16895,10 @@ in {
     };
   };
 
+  quandl = callPackage ../development/python-modules/quandl { };
+  # alias for an older package which did not support Python 3
+  Quandl = callPackage ../development/python-modules/quandl { };
+
   qscintilla = disabledIf (isPy3k || isPyPy)
     (buildPythonPackage rec {
       # TODO: Qt5 support
@@ -17520,9 +17487,6 @@ in {
     name = "ruamel.yaml-${version}";
     version = "0.13.7";
 
-    # needs ruamel_ordereddict for python2 support
-    disabled = !isPy3k;
-
     src = pkgs.fetchurl {
       url = "mirror://pypi/r/ruamel.yaml/${name}.tar.gz";
       sha256 = "1vca2552k0kmhr9msg1bbfdvp3p9im17x1a6npaw221vlgg15z7h";
@@ -17531,7 +17495,8 @@ in {
     # Tests cannot load the module to test
     doCheck = false;
 
-    propagatedBuildInputs = with self; [ ruamel_base typing ];
+    propagatedBuildInputs = with self; [ ruamel_base typing ] ++
+    (optional (!isPy3k) self.ruamel_ordereddict);
 
     meta = {
       description = "YAML parser/emitter that supports roundtrip preservation of comments, seq/map flow style, and map key order";
@@ -23553,35 +23518,6 @@ EOF
     };
   };
 
-  Quandl = buildPythonPackage rec {
-    version = "3.0.0";
-    name = "Quandl-${version}";
-
-    src = pkgs.fetchurl {
-      url= "mirror://pypi/q/quandl/${name}.tar.gz";
-      sha256 = "d4e698eb39291e0b281975813054101f3dfb379dead10d34d7b536e1aad60584";
-    };
-
-    propagatedBuildInputs = with self; [
-      numpy
-      ndg-httpsclient
-      dateutil
-      inflection
-      more-itertools
-      requests
-      pandas
-    ];
-
-    # No tests in archive
-    doCheck = false;
-
-    meta = {
-      homepage = https://github.com/quandl/quandl-python;
-      description = "A Python library for Quandl’s RESTful API";
-      maintainers = with maintainers; [ NikolaMandic ];
-    };
-  };
-
   queuelib = buildPythonPackage rec {
     name = "queuelib-${version}";
     version = "1.4.2";
@@ -24285,18 +24221,22 @@ EOF
   suseapi = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "suseapi";
-    version = "0.24-5-g9937e3b";
+    version = "0.24-31-g0fcbe96";
 
     src = pkgs.fetchFromGitHub {
       owner = "openSUSE";
       repo = "python-${pname}";
       rev = version;
-      sha256 = "1144h26wrzazzy6y3yy163fccqmggk5hazjkk8l9a547390ilgrv";
+      sha256 = "0hyzq0h1w8gp0zfvhqh7qsgcg1wp05a14371m6bn5a7gss93rbv4";
     };
 
     propagatedBuildInputs = with self; [
       django suds-jurko ldap mechanize beautifulsoup4 pyxdg dateutil requests
     ];
+
+    buildInputs = with self; [ httpretty ];
+
+    doCheck = false;
 
     meta = {
       homepage = "https://github.com/openSUSE/python-suseapi/";

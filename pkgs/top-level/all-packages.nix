@@ -202,6 +202,8 @@ with pkgs;
 
   fetchzip = callPackage ../build-support/fetchzip { };
 
+  fetchCrate = callPackage ../build-support/rust/fetchcrate.nix { };
+
   fetchFromGitHub = {
     owner, repo, rev, name ? "source",
     fetchSubmodules ? false, private ? false,
@@ -600,6 +602,8 @@ with pkgs;
   genymotion = callPackage ../development/mobile/genymotion { };
 
   git-fire = callPackage ../tools/misc/git-fire { };
+
+  gitless = callPackage ../applications/version-management/gitless/default.nix { };
 
   grc = callPackage ../tools/misc/grc { };
 
@@ -4272,6 +4276,8 @@ with pkgs;
 
   reckon = callPackage ../tools/text/reckon { };
 
+  recoverjpeg = callPackage ../tools/misc/recoverjpeg { };
+
   reposurgeon = callPackage ../applications/version-management/reposurgeon { };
 
   reptyr = callPackage ../os-specific/linux/reptyr {};
@@ -4622,9 +4628,9 @@ with pkgs;
     preCheck = "export PATH=dist/build/stutter:$PATH";
   });
 
-  strongswan = callPackage ../tools/networking/strongswan { };
-
-  strongswanTNC = callPackage ../tools/networking/strongswan { enableTNC=true; };
+  strongswan    = callPackage ../tools/networking/strongswan { };
+  strongswanTNC = callPackage ../tools/networking/strongswan { enableTNC = true; };
+  strongswanNM  = callPackage ../tools/networking/strongswan { enableNetworkManager = true; };
 
   su = shadow.su;
 
@@ -4712,7 +4718,7 @@ with pkgs;
 
   thc-hydra = callPackage ../tools/security/thc-hydra { };
 
-  thefuck = callPackage ../tools/misc/thefuck { };
+  thefuck = python3Packages.callPackage ../tools/misc/thefuck { };
 
   thin-provisioning-tools = callPackage ../tools/misc/thin-provisioning-tools {  };
 
@@ -6304,6 +6310,12 @@ with pkgs;
   # For beta and nightly releases use the nixpkgs-mozilla overlay
   rust = callPackage ../development/compilers/rust { };
   inherit (rust) cargo rustc;
+
+  buildRustCrate = callPackage ../build-support/rust/build-rust-crate.nix { };
+
+  carnix = (callPackage ../build-support/rust/carnix.nix { }).carnix_0_5_0;
+
+  defaultCrateOverrides = callPackage ../build-support/rust/default-crate-overrides.nix { };
 
   rustPlatform = recurseIntoAttrs (makeRustPlatform rust);
 
@@ -8776,6 +8788,10 @@ with pkgs;
   hunspellWithDicts = dicts: callPackage ../development/libraries/hunspell/wrapper.nix { inherit dicts; };
 
   hwloc = callPackage ../development/libraries/hwloc {};
+
+  hwloc-nox = callPackage ../development/libraries/hwloc {
+    x11Support = false;
+  };
 
   hydra = callPackage ../development/tools/misc/hydra { };
 
@@ -11337,9 +11353,13 @@ with pkgs;
 
   mockobjects = callPackage ../development/libraries/java/mockobjects { };
 
-  saxon = callPackage ../development/libraries/java/saxon { };
+  saxonb = saxonb_8_8;
 
-  saxonb = callPackage ../development/libraries/java/saxon/default8.nix { };
+  inherit (callPackages ../development/libraries/java/saxon { })
+    saxon
+    saxonb_8_8
+    saxonb_9_1
+    saxon-he;
 
   smack = callPackage ../development/libraries/java/smack { };
 
@@ -13169,6 +13189,7 @@ with pkgs;
     ubootOdroidXU3
     ubootOrangePiPc
     ubootPcduino3Nano
+    ubootQemuArm
     ubootRaspberryPi
     ubootRaspberryPi2
     ubootRaspberryPi3_32bit
@@ -14614,7 +14635,7 @@ with pkgs;
   emacs25WithPackages = emacs25PackagesNg.emacsWithPackages;
   emacsWithPackages = emacsPackagesNg.emacsWithPackages;
 
-  # inherit (gnome3) empathy;
+  inherit (gnome3) empathy;
 
   enhanced-ctorrent = callPackage ../applications/networking/enhanced-ctorrent { };
 
@@ -15797,7 +15818,9 @@ with pkgs;
 
   monero = callPackage ../applications/misc/monero { };
 
-  xmr-stak = callPackage ../applications/misc/xmr-stak { };
+  xmr-stak = callPackage ../applications/misc/xmr-stak {
+    hwloc = hwloc-nox;
+  };
 
   monkeysAudio = callPackage ../applications/audio/monkeys-audio { };
 
@@ -16883,6 +16906,8 @@ with pkgs;
 
   symlinks = callPackage ../tools/system/symlinks { };
 
+  syncplay = callPackage ../applications/networking/syncplay { };
+
   syncthing = callPackage ../applications/networking/syncthing { };
 
   syncthing012 = callPackage ../applications/networking/syncthing012 { };
@@ -17866,6 +17891,8 @@ with pkgs;
   crawl = callPackage ../games/crawl { };
 
   crrcsim = callPackage ../games/crrcsim {};
+
+  cutemaze = libsForQt5.callPackage ../games/cutemaze {};
 
   cuyo = callPackage ../games/cuyo { };
 
@@ -18926,7 +18953,7 @@ with pkgs;
 
   opensmt = callPackage ../applications/science/logic/opensmt { };
 
-  inherit (ocamlPackages) ott;
+  ott = callPackage ../applications/science/logic/ott { };
 
   otter = callPackage ../applications/science/logic/otter {};
 
@@ -19671,7 +19698,7 @@ with pkgs;
   # convenience if someone doesn't want to have to think about which plugins to use.
   terraform_0_10-full = terraform_0_10.withPlugins lib.attrValues;
 
-  terraform = terraform_0_9;
+  terraform = terraform_0_11;
 
   terraform-inventory = callPackage ../applications/networking/cluster/terraform-inventory {};
 

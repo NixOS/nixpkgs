@@ -205,6 +205,7 @@
   elijahcaine = "Elijah Caine <elijahcainemv@gmail.com>";
   elitak = "Eric Litak <elitak@gmail.com>";
   ellis = "Ellis Whitehead <nixos@ellisw.net>";
+  enzime = "Michael Hoang <enzime@users.noreply.github.com>";
   eperuffo = "Emanuele Peruffo <info@emanueleperuffo.com>";
   epitrochoid = "Mabry Cervin <mpcervin@uncg.edu>";
   eqyiel = "Ruben Maher <r@rkm.id.au>";
@@ -285,6 +286,7 @@
   iblech = "Ingo Blechschmidt <iblech@speicherleck.de>";
   igsha = "Igor Sharonov <igor.sharonov@gmail.com>";
   ikervagyok = "Balázs Lengyel <ikervagyok@gmail.com>";
+  ilya-kolpakov = "Ilya Kolpakov <ilya.kolpakov@gmail.com>";
   infinisil = "Silvan Mosberger <infinisil@icloud.com>";
   ironpinguin = "Michele Catalano <michele@catalano.de>";
   ivan-tkatchev = "Ivan Tkatchev <tkatchev@gmail.com>";
@@ -433,6 +435,7 @@
   mog = "Matthew O'Gorman <mog-lists@rldn.net>";
   montag451 = "montag451 <montag451@laposte.net>";
   moosingin3space = "Nathan Moos <moosingin3space@gmail.com>";
+  moredread = "André-Patrick Bubel <code@apb.name>";
   moretea = "Maarten Hoogendoorn <maarten@moretea.nl>";
   mornfall = "Petr Ročkai <me@mornfall.net>";
   MostAwesomeDude = "Corbin Simpson <cds@corbinsimpson.com>";
@@ -516,6 +519,7 @@
   plcplc = "Philip Lykke Carlsen <plcplc@gmail.com>";
   plumps = "Maksim Bronsky <maks.bronsky@web.de";
   pmahoney = "Patrick Mahoney <pat@polycrystal.org>";
+  pmeunier = "Pierre-Étienne Meunier <pierre-etienne.meunier@inria.fr>";
   pmiddend = "Philipp Middendorf <pmidden@secure.mailbox.org>";
   polyrod = "Maurizio Di Pietro <dc1mdp@gmail.com>";
   pradeepchhetri = "Pradeep Chhetri <pradeep.chhetri89@gmail.com>";

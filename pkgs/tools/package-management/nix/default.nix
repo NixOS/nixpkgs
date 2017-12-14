@@ -152,21 +152,21 @@ in rec {
   nix = nixStable;
 
   nixStable = (common rec {
-    name = "nix-1.11.15";
+    name = "nix-1.11.16";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "d20f20e45d519f54fae5c61d55eadcf53e6d7cdbde9870eeec80d499f9805165";
+      sha256 = "0ca5782fc37d62238d13a620a7b4bff6a200bab1bd63003709249a776162357c";
     };
   }) // { perl-bindings = nixStable; };
 
   nixUnstable = (lib.lowPrio (common rec {
     name = "nix-unstable-1.12${suffix}";
-    suffix = "pre5788_e3013543";
+    suffix = "pre5810_5d5b931f";
     src = fetchFromGitHub {
       owner = "NixOS";
       repo = "nix";
-      rev = "e3013543d36926ecfe51e9eceab42c88cb40b138";
-      sha256 = "0cj6gc930jbs53dgar3kq7l7z6lnii9ava3pvjk2xvq3007xcx2h";
+      rev = "5d5b931fb178046ba286b8ef2b56a00b3a85c51c";
+      sha256 = "0sspf8np53j335dvgxw03lid0w43wzjkcbx6fqym2kqdcvbzw57j";
     };
     fromGit = true;
   })) // { perl-bindings = perl-bindings { nix = nixUnstable; }; };
