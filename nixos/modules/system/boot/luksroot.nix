@@ -5,7 +5,7 @@ with lib;
 let
   luks = config.boot.initrd.luks;
 
-  openCommand = name': { name, device, header, keyFile, keyFileSize, allowDiscards, yubikey, fallback, ... }: assert name' == name; ''
+  openCommand = name': { name, device, header, keyFile, keyFileSize, allowDiscards, yubikey, fallbackToPassword, ... }: assert name' == name; ''
 
     # Wait for a target (e.g. device, keyFile, header, ...) to appear.
     wait_target() {
@@ -45,10 +45,10 @@ let
           ${optionalString (header != null) "--header=${header}"} \
           > /.luksopen_args
         ${optionalString (keyFile != null) ''
-        ${optionalString fallback "if [ -e ${keyFile} ]; then"}
+        ${optionalString fallbackToPassword "if [ -e ${keyFile} ]; then"}
             echo " --key-file=${keyFile} ${optionalString (keyFileSize != null) "--keyfile-size=${toString keyFileSize}"}" \
               >> /.luksopen_args
-        ${optionalString fallback ''
+        ${optionalString fallbackToPassword ''
         else
             echo "keyfile ${keyFile} not found -- fallback to interactive unlocking"
         fi
@@ -332,7 +332,7 @@ in
             '';
           };
 
-          fallback = mkOption {
+          fallbackToPassword = mkOption {
             default = false;
             type = types.bool;
             description = ''
