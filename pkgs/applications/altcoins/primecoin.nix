@@ -31,6 +31,10 @@ stdenv.mkDerivation rec{
     then "install -D bitcoin-qt $out/bin/primecoin-qt"
     else "install -D bitcoind $out/bin/primecoind";
 
+  # `make build/version.o`:
+  # make: *** No rule to make target 'build/build.h', needed by 'build/version.o'.  Stop.
+  enableParallelBuilding = false;
+
   meta = {
     description = "A new type cryptocurrency which is proof-of-work based on searching for prime numbers";
     longDescription= ''

@@ -3,7 +3,7 @@
 bundlerEnv {
   # Last updated via:
   # nix-shell -p bundix -p gcc -p libxml2 -p zlib --run "bundix -mdl"
-  name = "chefdk-2.3.4";
+  name = "chefdk-2.4.17";
 
   ruby = ruby_2_4;
   gemdir = ./.;

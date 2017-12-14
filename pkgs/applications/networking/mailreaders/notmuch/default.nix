@@ -12,7 +12,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "0.25.2";
+  version = "0.25.3";
   name = "notmuch-${version}";
 
   passthru = {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "http://notmuchmail.org/releases/${name}.tar.gz";
-    sha256 = "0ai6vbs9wzwfz7jcphgqsqpcbq137l34xhmcli4h5c8n82fvmdp4";
+    sha256 = "1fyx20rjpwbf2j1v5fpa5s0rjnwhcgvijzh2qyinp8rlbh1qxmab";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -40,14 +40,9 @@ stdenv.mkDerivation rec {
   ++ optionals (!stdenv.isDarwin) [ gdb man ]; # test dependencies
 
   postPatch = ''
-    find test -type f -exec \
+    find test/ -type f -exec \
       sed -i \
         -e "1s|#!/usr/bin/env bash|#!${bash}/bin/bash|" \
-        -e "s|gpg |${gnupg}/bin/gpg |" \
-        -e "s| gpg| ${gnupg}/bin/gpg|" \
-        -e "s|gpgsm |${gnupg}/bin/gpgsm |" \
-        -e "s| gpgsm| ${gnupg}/bin/gpgsm|" \
-        -e "s|crypto.gpg_path=gpg|crypto.gpg_path=${gnupg}/bin/gpg|" \
         "{}" ";"
 
     for src in \
@@ -102,7 +97,7 @@ stdenv.mkDerivation rec {
     description = "Mail indexer";
     homepage    = https://notmuchmail.org/;
     license     = licenses.gpl3;
-    maintainers = with maintainers; [ chaoflow garbas ];
+    maintainers = with maintainers; [ chaoflow garbas the-kenny ];
     platforms   = platforms.unix;
   };
 }

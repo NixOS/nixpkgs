@@ -1,6 +1,6 @@
 { stdenv, fetchurl, unzip }:
 
-let 
+let
 
   src = fetchurl {
     url = http://www.oasis-open.org/docbook/sgml/4.1/docbk41.zip;
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   unpackPhase = "true";
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   installPhase =
     ''

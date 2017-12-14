@@ -3,14 +3,16 @@
 , ncurses, glib, gtk2, libsndfile, zlib
 }:
 
+let dfVersion = "0.44.02"; in
+
 stdenv.mkDerivation {
-  name = "dwarf_fortress_unfuck-2016-07-13";
+  name = "dwarf_fortress_unfuck-${dfVersion}";
 
   src = fetchFromGitHub {
     owner = "svenstaro";
     repo = "dwarf_fortress_unfuck";
-    rev = "d6a4ee67e7b41bec1caa87548640643db35a6080";
-    sha256 = "17p7jzmwd5z54wn6bxmic0i8y8mma3q359zcy3r9x2mp2wv1yd7p";
+    rev = dfVersion;
+    sha256 = "0gfchfqrzx0h59mdv01hik8q2a2yx170q578agfck0nv39yhi6i5";
   };
 
   cmakeFlags = [
@@ -33,7 +35,7 @@ stdenv.mkDerivation {
   # Breaks dfhack because of inlining.
   hardeningDisable = [ "fortify" ];
 
-  passthru.dfVersion = "0.43.05";
+  passthru = { inherit dfVersion; };
 
   meta = with stdenv.lib; {
     description = "Unfucked multimedia layer for Dwarf Fortress";

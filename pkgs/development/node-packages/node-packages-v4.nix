@@ -175,13 +175,13 @@ let
         sha1 = "0054e1e744502e27c04c187c3ecc505dd54bbb4f";
       };
     };
-    "interpret-1.0.4" = {
+    "interpret-1.1.0" = {
       name = "interpret";
       packageName = "interpret";
-      version = "1.0.4";
+      version = "1.1.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/interpret/-/interpret-1.0.4.tgz";
-        sha1 = "820cdd588b868ffb191a809506d6c9c8f212b1b0";
+        url = "https://registry.npmjs.org/interpret/-/interpret-1.1.0.tgz";
+        sha1 = "7ed1b1410c6a0e0f78cf95d3b8440c63f78b8614";
       };
     };
     "liftoff-2.3.0" = {
@@ -1300,13 +1300,13 @@ let
         sha1 = "a794af0c05ab1752846ee753a1f211a05ba0c44f";
       };
     };
-    "array-slice-1.0.0" = {
+    "array-slice-1.1.0" = {
       name = "array-slice";
       packageName = "array-slice";
-      version = "1.0.0";
+      version = "1.1.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/array-slice/-/array-slice-1.0.0.tgz";
-        sha1 = "e73034f00dcc1f40876008fd20feae77bd4b7c2f";
+        url = "https://registry.npmjs.org/array-slice/-/array-slice-1.1.0.tgz";
+        sha512 = "3myjiz16qi117x0k52sisqyn0cqx6yxvpgr43bkil9shgs7yhs8wpdgd3wjwfzgwxsw330yqwhp880gsyx2kxj1lfyb6gs1fh7qqnh7";
       };
     };
     "for-own-1.0.0" = {
@@ -2119,13 +2119,13 @@ let
         sha1 = "c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79";
       };
     };
-    "ajv-5.5.0" = {
+    "ajv-5.5.1" = {
       name = "ajv";
       packageName = "ajv";
-      version = "5.5.0";
+      version = "5.5.1";
       src = fetchurl {
-        url = "https://registry.npmjs.org/ajv/-/ajv-5.5.0.tgz";
-        sha1 = "eb2840746e9dc48bd5e063a36e3fd400c5eab5a9";
+        url = "https://registry.npmjs.org/ajv/-/ajv-5.5.1.tgz";
+        sha1 = "b38bb8876d9e86bee994956a04e721e88b248eb2";
       };
     };
     "har-schema-2.0.0" = {
@@ -4045,13 +4045,13 @@ let
         sha1 = "6373db76909fe570e08d73583365ed828a74eeeb";
       };
     };
-    "commander-2.12.1" = {
+    "commander-2.12.2" = {
       name = "commander";
       packageName = "commander";
-      version = "2.12.1";
+      version = "2.12.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/commander/-/commander-2.12.1.tgz";
-        sha512 = "36cb2mrf9piidjbqiz8krwx7r9hikgirjxzfrbyk3hd39xpmg489lia9d3cmzci80sx99428hg960sz9j5b72fn7pi928z5289ln8rw";
+        url = "https://registry.npmjs.org/commander/-/commander-2.12.2.tgz";
+        sha512 = "007wb3baahjcrv17kgxryqjlsyr3c3kl2y07p85m4ia78pba9xyjr3cgi95jjrwq8qq550s78hj06f7z0ab8ssrxk6w06afjsmxln84";
       };
     };
     "is-my-json-valid-2.16.1" = {
@@ -4356,7 +4356,7 @@ in
           })
         ];
       })
-      sources."interpret-1.0.4"
+      sources."interpret-1.1.0"
       (sources."liftoff-2.3.0" // {
         dependencies = [
           sources."extend-3.0.1"
@@ -4518,7 +4518,7 @@ in
               (sources."object.defaults-1.1.0" // {
                 dependencies = [
                   sources."array-each-1.0.1"
-                  sources."array-slice-1.0.0"
+                  sources."array-slice-1.1.0"
                   (sources."for-own-1.0.0" // {
                     dependencies = [
                       sources."for-in-1.0.2"
@@ -4835,7 +4835,7 @@ in
           })
           (sources."har-validator-5.0.3" // {
             dependencies = [
-              (sources."ajv-5.5.0" // {
+              (sources."ajv-5.5.1" // {
                 dependencies = [
                   sources."co-4.6.0"
                   sources."fast-deep-equal-1.0.0"
@@ -6248,7 +6248,7 @@ in
                   sources."supports-color-2.0.0"
                 ];
               })
-              sources."commander-2.12.1"
+              sources."commander-2.12.2"
               (sources."is-my-json-valid-2.16.1" // {
                 dependencies = [
                   sources."generate-function-2.0.0"

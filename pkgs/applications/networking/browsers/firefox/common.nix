@@ -29,9 +29,11 @@
 # Set to `privacySupport` or `false`.
 
 , webrtcSupport ? !privacySupport
-, googleAPISupport ? !privacySupport
+, geolocationSupport ? !privacySupport
+, googleAPISupport ? geolocationSupport
 , crashreporterSupport ? false
 
+, safeBrowsingSupport ? false
 , drmSupport ? false
 
 ## other
@@ -133,6 +135,9 @@ stdenv.mkDerivation (rec {
     "--with-libclang-path=${llvmPackages.clang-unwrapped}/lib"
     "--with-clang-path=${llvmPackages.clang}/bin/clang"
   ]
+  ++ lib.optionals (stdenv.lib.versionAtLeast version "57") [
+    "--enable-webrender=build"
+  ]
 
   # TorBrowser patches these
   ++ lib.optionals (!isTorBrowserLike) [
@@ -141,7 +146,7 @@ stdenv.mkDerivation (rec {
   ]
 
   # and wants these
-  ++ lib.optionals isTorBrowserLike [
+  ++ lib.optionals isTorBrowserLike ([
     "--with-tor-browser-version=${version}"
     "--enable-signmar"
     "--enable-verify-mar"
@@ -151,7 +156,9 @@ stdenv.mkDerivation (rec {
     # possibilities on other platforms.
     # Lets save some space instead.
     "--with-system-nspr"
-  ]
+  ] ++ flag geolocationSupport "mozril-geoloc"
+    ++ flag safeBrowsingSupport "safe-browsing"
+  )
 
   ++ flag alsaSupport "alsa"
   ++ flag pulseaudioSupport "pulseaudio"

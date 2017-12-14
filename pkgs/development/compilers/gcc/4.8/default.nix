@@ -23,7 +23,7 @@
 , x11Support ? langJava
 , gnatboot ? null
 , enableMultilib ? false
-, enablePlugin ? true             # whether to support user-supplied plug-ins
+, enablePlugin ? hostPlatform == buildPlatform # Whether to support user-supplied plug-ins
 , name ? "gcc"
 , libcCross ? null
 , crossStageStatic ? false
@@ -33,6 +33,7 @@
 , gnused ? null
 , darwin ? null
 , buildPlatform, hostPlatform, targetPlatform
+, buildPackages
 }:
 
 assert langJava     -> zip != null && unzip != null
@@ -108,13 +109,13 @@ let version = "4.8.5";
     javaAwtGtk = langJava && x11Support;
 
     /* Platform flags */
-    mkPlatformFlags = platform: let
-        gccArch = platform.gcc.arch or null;
-        gccCpu = platform.gcc.cpu or null;
-        gccAbi = platform.gcc.abi or null;
-        gccFpu = platform.gcc.fpu or null;
-        gccFloat = platform.gcc.float or null;
-        gccMode = platform.gcc.mode or null;
+    platformFlags = let
+        gccArch = targetPlatform.platform.gcc.arch or null;
+        gccCpu = targetPlatform.platform.gcc.cpu or null;
+        gccAbi = targetPlatform.platform.gcc.abi or null;
+        gccFpu = targetPlatform.platform.gcc.fpu or null;
+        gccFloat = targetPlatform.platform.gcc.float or null;
+        gccMode = targetPlatform.platform.gcc.mode or null;
       in
         optional (gccArch != null) "--with-arch=${gccArch}" ++
         optional (gccCpu != null) "--with-cpu=${gccCpu}" ++
@@ -127,8 +128,6 @@ let version = "4.8.5";
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
     crossDarwin = targetPlatform != hostPlatform && targetPlatform.libc == "libSystem";
     crossConfigureFlags =
-      mkPlatformFlags targetPlatform ++
-
       # Ensure that -print-prog-name is able to find the correct programs.
       [ "--with-as=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as"
         "--with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld" ] ++
@@ -318,6 +317,8 @@ stdenv.mkDerivation ({
       "--with-mpc=${libmpc}"
     ] ++
     optional (libelf != null) "--with-libelf=${libelf}" ++
+    optional (!(crossMingw && crossStageStatic))
+      "--with-native-system-header-dir=${getDev stdenv.cc.libc}/include" ++
 
     # Basic configuration
     [
@@ -374,15 +375,7 @@ stdenv.mkDerivation ({
     # Ada
     optional langAda "--enable-libada" ++
 
-    # Cross-compilation
-    optional (targetPlatform == hostPlatform) (
-      let incDir = if hostPlatform.isDarwin
-                     then "${darwin.usr-include}"
-                     else "${getDev stdenv.cc.libc}/include";
-      in "--with-native-system-header-dir=${incDir}"
-    ) ++
-
-    optional (targetPlatform == hostPlatform) (mkPlatformFlags stdenv.platform) ++
+    platformFlags ++
     optional (targetPlatform != hostPlatform) crossConfigureFlags ++
     optional (!bootstrap) "--disable-bootstrap" ++
 
@@ -406,62 +399,52 @@ stdenv.mkDerivation ({
     then "install-strip"
     else "install";
 
-  crossAttrs = let
-    xgccArch = targetPlatform.gcc.arch or null;
-    xgccCpu = targetPlatform.gcc.cpu or null;
-    xgccAbi = targetPlatform.gcc.abi or null;
-    xgccFpu = targetPlatform.gcc.fpu or null;
-    xgccFloat = targetPlatform.gcc.float or null;
-  in {
+  /* For cross-built gcc (build != host == target) */
+  crossAttrs =  {
+    AR_FOR_BUILD = "ar";
+    AS_FOR_BUILD = "as";
+    LD_FOR_BUILD = "ld";
+    NM_FOR_BUILD = "nm";
+    OBJCOPY_FOR_BUILD = "objcopy";
+    OBJDUMP_FOR_BUILD = "objdump";
+    RANLIB_FOR_BUILD = "ranlib";
+    SIZE_FOR_BUILD = "size";
+    STRINGS_FOR_BUILD = "strings";
+    STRIP_FOR_BUILD = "strip";
+    CC_FOR_BUILD = "gcc";
+    CXX_FOR_BUILD = "g++";
+
     AR = "${targetPlatform.config}-ar";
+    AS = "${targetPlatform.config}-as";
     LD = "${targetPlatform.config}-ld";
+    NM = "${targetPlatform.config}-nm";
+    OBJCOPY = "${targetPlatform.config}-objcopy";
+    OBJDUMP = "${targetPlatform.config}-objdump";
+    RANLIB = "${targetPlatform.config}-ranlib";
+    SIZE = "${targetPlatform.config}-size";
+    STRINGS = "${targetPlatform.config}-strings";
+    STRIP = "${targetPlatform.config}-strip";
     CC = "${targetPlatform.config}-gcc";
-    CXX = "${targetPlatform.config}-gcc";
+    CXX = "${targetPlatform.config}-g++";
+
     AR_FOR_TARGET = "${targetPlatform.config}-ar";
+    AS_FOR_TARGET = "${targetPlatform.config}-as";
     LD_FOR_TARGET = "${targetPlatform.config}-ld";
-    CC_FOR_TARGET = "${targetPlatform.config}-gcc";
     NM_FOR_TARGET = "${targetPlatform.config}-nm";
+    OBJCOPY_FOR_TARGET = "${targetPlatform.config}-objcopy";
+    OBJDUMP_FOR_TARGET = "${targetPlatform.config}-objdump";
+    RANLIB_FOR_TARGET = "${targetPlatform.config}-ranlib";
+    SIZE_FOR_TARGET = "${targetPlatform.config}-size";
+    STRINGS_FOR_TARGET = "${targetPlatform.config}-strings";
+    STRIP_FOR_TARGET = "${targetPlatform.config}-strip";
+    CC_FOR_TARGET = "${targetPlatform.config}-gcc";
     CXX_FOR_TARGET = "${targetPlatform.config}-g++";
-    # If we are making a cross compiler, targetPlatform != hostPlatform
-    NIX_CC_CROSS = optionalString (targetPlatform == hostPlatform) builtins.toString stdenv.cc;
+
     dontStrip = true;
-    configureFlags =
-      optional (!enableMultilib) "--disable-multilib" ++
-      optional (!enableShared) "--disable-shared" ++
-      optional langJava "--with-ecj-jar=${javaEcj.crossDrv}" ++
-      optional javaAwtGtk "--enable-java-awt=gtk" ++
-      optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr.crossDrv}" ++
-      optionals (cloog != null) ["--with-cloog=${cloog.crossDrv}" "--enable-cloog-backend=isl"] ++
-      [
-        "--with-gmp=${gmp.crossDrv}"
-        "--with-mpfr=${mpfr.crossDrv}"
-        "--with-mpc=${libmpc.crossDrv}"
-        "--disable-libstdcxx-pch"
-        "--without-included-gettext"
-        "--with-system-zlib"
-        "--enable-languages=${
-          concatStrings (intersperse ","
-            (  optional langC        "c"
-            ++ optional langCC       "c++"
-            ++ optional langFortran  "fortran"
-            ++ optional langJava     "java"
-            ++ optional langAda      "ada"
-            ++ optional langVhdl     "vhdl"
-            ++ optional langGo       "go"
-            )
-          )
-        }"
-      ] ++
-      optional langAda "--enable-libada" ++
-      optional (xgccArch != null) "--with-arch=${xgccArch}" ++
-      optional (xgccCpu != null) "--with-cpu=${xgccCpu}" ++
-      optional (xgccAbi != null) "--with-abi=${xgccAbi}" ++
-      optional (xgccFpu != null) "--with-fpu=${xgccFpu}" ++
-      optional (xgccFloat != null) "--with-float=${xgccFloat}"
-    ;
     buildFlags = "";
   };
 
+  NIX_BUILD_CC = buildPackages.stdenv.cc;
 
   # Needed for the cross compilation to work
   AR = "ar";
@@ -469,18 +452,21 @@ stdenv.mkDerivation ({
   # http://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
   CC = if stdenv.system == "x86_64-solaris" then "gcc -m64" else "gcc";
 
-  # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find
-  # the library headers and binaries, regarless of the language being
-  # compiled.
-
-  # Note: When building the Java AWT GTK+ peer, the build system doesn't
-  # honor `--with-gmp' et al., e.g., when building
-  # `libjava/classpath/native/jni/java-math/gnu_java_math_GMP.c', so we just
-  # add them to $CPATH and $LIBRARY_PATH in this case.
+  # Setting $CPATH and $LIBRARY_PATH to make sure both `gcc' and `xgcc' find the
+  # library headers and binaries, regarless of the language being compiled.
+  #
+  # Note: When building the Java AWT GTK+ peer, the build system doesn't honor
+  # `--with-gmp' et al., e.g., when building
+  # `libjava/classpath/native/jni/java-math/gnu_java_math_GMP.c', so we just add
+  # them to $CPATH and $LIBRARY_PATH in this case.
   #
   # Likewise, the LTO code doesn't find zlib.
+  #
+  # Cross-compiling, we need gcc not to read ./specs in order to build the g++
+  # compiler (after the specs for the cross-gcc are created). Having
+  # LIBRARY_PATH= makes gcc read the specs from ., and the build breaks.
 
-  CPATH = makeSearchPathOutput "dev" "include" ([]
+  CPATH = optionals (targetPlatform == hostPlatform) (makeSearchPathOutput "dev" "include" ([]
     ++ optional (zlib != null) zlib
     ++ optional langJava boehmgc
     ++ optionals javaAwtGtk xlibs
@@ -491,39 +477,38 @@ stdenv.mkDerivation ({
     # On GNU/Hurd glibc refers to Mach & Hurd
     # headers.
     ++ optionals (libcCross != null && libcCross ? propagatedBuildInputs)
-                 libcCross.propagatedBuildInputs);
+                 libcCross.propagatedBuildInputs
+  ));
 
-  LIBRARY_PATH = makeLibraryPath ([]
+  LIBRARY_PATH = optionals (targetPlatform == hostPlatform) (makeLibraryPath ([]
     ++ optional (zlib != null) zlib
     ++ optional langJava boehmgc
     ++ optionals javaAwtGtk xlibs
     ++ optionals javaAwtGtk [ gmp mpfr ]
-    ++ optional (libpthread != null) libpthread);
+    ++ optional (libpthread != null) libpthread)
+  );
 
-  EXTRA_TARGET_CFLAGS =
-    if targetPlatform != hostPlatform && libcCross != null then [
-        "-idirafter ${getDev libcCross}/include"
-      ]
-      ++ optionals (! crossStageStatic) [
-        "-B${libcCross.out}/lib"
-      ]
-    else null;
+  EXTRA_TARGET_FLAGS = optionals
+    (targetPlatform != hostPlatform && libcCross != null)
+    ([
+      "-idirafter ${libcCross.dev}/include"
+    ] ++ optionals (! crossStageStatic) [
+      "-B${libcCross.out}/lib"
+    ]);
 
-  EXTRA_TARGET_LDFLAGS =
-    if targetPlatform != hostPlatform && libcCross != null then [
-        "-Wl,-L${libcCross.out}/lib"
-      ]
-      ++ (if crossStageStatic then [
+  EXTRA_TARGET_LDFLAGS = optionals
+    (targetPlatform != hostPlatform && libcCross != null)
+    ([
+      "-Wl,-L${libcCross.out}/lib"
+    ] ++ (if crossStageStatic then [
         "-B${libcCross.out}/lib"
       ] else [
         "-Wl,-rpath,${libcCross.out}/lib"
         "-Wl,-rpath-link,${libcCross.out}/lib"
-      ])
-      ++ optionals (libpthreadCross != null) [
-        "-L${libpthreadCross}/lib"
-        "-Wl,${libpthreadCross.TARGET_LDFLAGS}"
-      ]
-    else null;
+    ]) ++ optionals (libpthreadCross != null) [
+      "-L${libpthreadCross}/lib"
+      "-Wl,${libpthreadCross.TARGET_LDFLAGS}"
+    ]);
 
   passthru =
     { inherit langC langCC langObjC langObjCpp langAda langFortran langVhdl langGo version; isGNU = true; };

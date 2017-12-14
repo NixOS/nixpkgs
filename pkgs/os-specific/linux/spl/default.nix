@@ -66,10 +66,8 @@ in
   assert buildKernel -> kernel != null;
 {
     splStable = common {
-      version = "0.7.3";
-      sha256 = "0j8mb9ky3pjz9hnz5w6fajpzajl15jq3p0xvxb6lhpqj3rjzsqxb";
-
-      broken = kernel != null && stdenv.lib.versionAtLeast kernel.version "4.14";
+      version = "0.7.4";
+      sha256 = "0vmakqi3zm8ka5cglif45ll2m6ynq7r55mhk8d1rzjkgi191cddh";
     };
 
     splUnstable = common {

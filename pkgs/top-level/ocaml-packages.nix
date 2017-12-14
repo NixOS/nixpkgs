@@ -227,6 +227,8 @@ let
       lwt = ocaml_lwt;
     };
 
+    facile = callPackage ../development/ocaml-modules/facile { };
+
     faillib = callPackage ../development/ocaml-modules/faillib { };
 
     fieldslib_p4 = callPackage ../development/ocaml-modules/fieldslib { };
@@ -367,7 +369,7 @@ let
 
     magick = callPackage ../development/ocaml-modules/magick { };
 
-    markup = callPackage ../development/ocaml-modules/markup { lwt = lwt2; };
+    markup = callPackage ../development/ocaml-modules/markup { lwt = ocaml_lwt; };
 
     menhir = callPackage ../development/ocaml-modules/menhir { };
 
@@ -967,10 +969,6 @@ let
     };
 
     matita_130312 = callPackage ../applications/science/logic/matita/130312.nix { };
-
-    ott = callPackage ../applications/science/logic/ott {
-      camlp5 = camlp5_transitional;
-    };
 
   };
     in (ocamlPackages.janeStreet // ocamlPackages);

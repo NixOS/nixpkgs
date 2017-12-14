@@ -131,6 +131,12 @@ following incompatible changes:</para>
       must be set to true.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      The option <option>services.logstash.listenAddress</option> is now <literal>127.0.0.1</literal> by default.
+      Previously the default behaviour was to listen on all interfaces.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>

@@ -1,0 +1,153 @@
+From 9ac54c606b581847a170ac2fe525419aff2e5341 Mon Sep 17 00:00:00 2001
+From: Florian Klink <flokli@flokli.de>
+Date: Wed, 6 Dec 2017 23:58:20 +0100
+Subject: [PATCH] HostServices/SharedClipboard/x11-stub.cpp: use RT_NOREF
+ rather than NOREF
+
+Currently, build process fails when configuring with --build-headless like this:
+
+```
+kBuild: Compiling VBoxSharedClipboard - /tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/service.cpp
+kBuild: Compiling VBoxSharedClipboard - /tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp:58:29: error: macro "NOREF" passed 2 arguments, but takes just 1
+     NOREF(pClient, fHeadless);
+                             ^
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp:94:30: error: macro "NOREF" passed 2 arguments, but takes just 1
+     NOREF(pClient, u32Formats);
+                              ^
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp:110:37: error: macro "NOREF" passed 4 arguments, but takes just 1
+     NOREF(pClient, u32Format, pv, cb);
+                                     ^
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp:128:37: error: macro "NOREF" passed 4 arguments, but takes just 1
+     NOREF(pClient, pv, cb, u32Format);
+                                     ^
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp: In function 'int vboxClipboardConnect(VBOXCLIPBOARDCLIENTDATA*, bool)':
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp:58:5: error: 'NOREF' was not declared in this scope
+     NOREF(pClient, fHeadless);
+     ^~~~~
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp:55:52: warning: unused parameter 'pClient' [-Wunused-parameter]
+ int vboxClipboardConnect (VBOXCLIPBOARDCLIENTDATA *pClient,
+                                                    ^~~~~~~
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp:56:32: warning: unused parameter 'fHeadless' [-Wunused-parameter]
+                           bool fHeadless)
+                                ^~~~~~~~~
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp: In function 'void vboxClipboardFormatAnnounce(VBOXCLIPBOARDCLIENTDATA*, uint32_t)':
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp:94:5: error: 'NOREF' was not declared in this scope
+     NOREF(pClient, u32Formats);
+     ^~~~~
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp:91:60: warning: unused parameter 'pClient' [-Wunused-parameter]
+ void vboxClipboardFormatAnnounce (VBOXCLIPBOARDCLIENTDATA *pClient,
+                                                            ^~~~~~~
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp:92:44: warning: unused parameter 'u32Formats' [-Wunused-parameter]
+                                   uint32_t u32Formats)
+                                            ^~~~~~~~~~
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp: In function 'int vboxClipboardReadData(VBOXCLIPBOARDCLIENTDATA*, uint32_t, void*, uint32_t, uint32_t*)':
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp:110:5: error: 'NOREF' was not declared in this scope
+     NOREF(pClient, u32Format, pv, cb);
+     ^~~~~
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp:107:53: warning: unused parameter 'pClient' [-Wunused-parameter]
+ int vboxClipboardReadData (VBOXCLIPBOARDCLIENTDATA *pClient, uint32_t u32Format,
+                                                     ^~~~~~~
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp:107:71: warning: unused parameter 'u32Format' [-Wunused-parameter]
+ int vboxClipboardReadData (VBOXCLIPBOARDCLIENTDATA *pClient, uint32_t u32Format,
+                                                                       ^~~~~~~~~
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp:108:34: warning: unused parameter 'pv' [-Wunused-parameter]
+                            void *pv, uint32_t cb, uint32_t *pcbActual)
+                                  ^~
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp:108:47: warning: unused parameter 'cb' [-Wunused-parameter]
+                            void *pv, uint32_t cb, uint32_t *pcbActual)
+                                               ^~
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp: In function 'void vboxClipboardWriteData(VBOXCLIPBOARDCLIENTDATA*, void*, uint32_t, uint32_t)':
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp:128:5: error: 'NOREF' was not declared in this scope
+     NOREF(pClient, pv, cb, u32Format);
+     ^~~~~
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp:125:55: warning: unused parameter 'pClient' [-Wunused-parameter]
+ void vboxClipboardWriteData (VBOXCLIPBOARDCLIENTDATA *pClient, void *pv,
+                                                       ^~~~~~~
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp:125:70: warning: unused parameter 'pv' [-Wunused-parameter]
+ void vboxClipboardWriteData (VBOXCLIPBOARDCLIENTDATA *pClient, void *pv,
+                                                                      ^~
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp:126:39: warning: unused parameter 'cb' [-Wunused-parameter]
+                              uint32_t cb, uint32_t u32Format)
+                                       ^~
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp:126:52: warning: unused parameter 'u32Format' [-Wunused-parameter]
+                              uint32_t cb, uint32_t u32Format)
+                                                    ^~~~~~~~~
+kmk: *** [/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/out/linux.amd64/release/obj/VBoxSharedClipboard/x11-stub.o] Error 1
+The failing command:
+@g++ -c -O2 -g -pipe -pedantic -Wshadow -Wall -Wextra -Wno-missing-field-initializers -Wno-unused -Wno-trigraphs -fdiagnostics-show-option -Wno-unused-parameter     -Wlogical-op   -Wno-variadic-macros
+-Wno-long-long -Wunused-variable -Wunused-function -Wunused-label -Wunused-parameter  -Wno-overloaded-virtual -Wno-variadic-macros -O2 -mtune=generic -fno-omit-frame-pointer -fno-strict-aliasing
+-fvisibility=hidden -DVBOX_HAVE_VISIBILITY_HIDDEN -DRT_USE_VISIBILITY_DEFAULT -fvisibility-inlines-hidden   -fPIC -m64
+-I/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/out/linux.amd64/release/obj/VBoxSharedClipboard/dtrace -I/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/include
+-I/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/out/linux.amd64/release -DVBOX -DVBOX_OSE -DVBOX_WITH_64_BITS_GUESTS -DVBOX_WITH_REM -DVBOX_WITH_RAW_MODE -DRT_OS_LINUX -D_FILE_OFFSET_BITS=64
+-DRT_ARCH_AMD64 -D__AMD64__ -DVBOX_WITH_DEBUGGER -DVBOX_WITH_HARDENING -DRTPATH_APP_PRIVATE=\"/nix/store/fqjnpbzq25ffpkpk6hsl3x19ydin2pp1-virtualbox-5.2.2/share/virtualbox\"
+-DRTPATH_APP_PRIVATE_ARCH=\"/nix/store/fqjnpbzq25ffpkpk6hsl3x19ydin2pp1-virtualbox-5.2.2/libexec/virtualbox\"
+-DRTPATH_APP_PRIVATE_ARCH_TOP=\"/nix/store/fqjnpbzq25ffpkpk6hsl3x19ydin2pp1-virtualbox-5.2.2/share/virtualbox\"
+-DRTPATH_SHARED_LIBS=\"/nix/store/fqjnpbzq25ffpkpk6hsl3x19ydin2pp1-virtualbox-5.2.2/libexec/virtualbox\" -DRTPATH_APP_DOCS=\"/nix/store/fqjnpbzq25ffpkpk6hsl3x19ydin2pp1-virtualbox-5.2.2/doc\"
+-DIN_RING3 -DHC_ARCH_BITS=64 -DGC_ARCH_BITS=64 -DVBOX_WITH_DTRACE -DVBOX_WITH_DTRACE_R3 -DPIC -DVBOX_WITH_HGCM
+-Wp,-MD,/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/out/linux.amd64/release/obj/VBoxSharedClipboard/x11-stub.o.dep
+-Wp,-MT,/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/out/linux.amd64/release/obj/VBoxSharedClipboard/x11-stub.o -Wp,-MP -o
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/out/linux.amd64/release/obj/VBoxSharedClipboard/x11-stub.o
+/tmp/nix-build-virtualbox-5.2.2.drv-0/VirtualBox-5.2.2/src/VBox/HostServices/SharedClipboard/x11-stub.cpp
+```
+
+This seems to be caused by the usage of NOREF in
+src/VBox/HostServices/SharedClipboard/x11-stub.cpp, so use RT_NOREFN
+instead.
+
+Signed-off-by: Florian Klink <flokli@flokli.de>
+---
+ src/VBox/HostServices/SharedClipboard/x11-stub.cpp | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
+
+diff --git a/src/VBox/HostServices/SharedClipboard/x11-stub.cpp b/src/VBox/HostServices/SharedClipboard/x11-stub.cpp
+index d890215..57ba883 100644
+--- a/src/VBox/HostServices/SharedClipboard/x11-stub.cpp
++++ b/src/VBox/HostServices/SharedClipboard/x11-stub.cpp
+@@ -55,7 +55,7 @@ void vboxClipboardDestroy (void)
+ int vboxClipboardConnect (VBOXCLIPBOARDCLIENTDATA *pClient,
+                           bool fHeadless)
+ {
+-    NOREF(pClient, fHeadless);
++    RT_NOREF2(pClient, fHeadless);
+     LogFlowFunc(("called, returning VINF_SUCCESS.\n"));
+     return VINF_SUCCESS;
+ }
+@@ -77,7 +77,7 @@ int vboxClipboardSync (VBOXCLIPBOARDCLIENTDATA * /* pClient */)
+  */
+ void vboxClipboardDisconnect (VBOXCLIPBOARDCLIENTDATA *pClient)
+ {
+-    NOREF(pClient);
++    RT_NOREF1(pClient);
+     LogFlowFunc(("called, returning.\n"));
+ }
+ 
+@@ -91,7 +91,7 @@ void vboxClipboardDisconnect (VBOXCLIPBOARDCLIENTDATA *pClient)
+ void vboxClipboardFormatAnnounce (VBOXCLIPBOARDCLIENTDATA *pClient,
+                                   uint32_t u32Formats)
+ {
+-    NOREF(pClient, u32Formats);
++    RT_NOREF2(pClient, u32Formats);
+     LogFlowFunc(("called, returning.\n"));
+ }
+ 
+@@ -107,7 +107,7 @@ void vboxClipboardFormatAnnounce (VBOXCLIPBOARDCLIENTDATA *pClient,
+ int vboxClipboardReadData (VBOXCLIPBOARDCLIENTDATA *pClient, uint32_t u32Format,
+                            void *pv, uint32_t cb, uint32_t *pcbActual)
+ {
+-    NOREF(pClient, u32Format, pv, cb);
++    RT_NOREF4(pClient, u32Format, pv, cb);
+     LogFlowFunc(("called, returning VINF_SUCCESS.\n"));
+     /* No data available. */
+     *pcbActual = 0;
+@@ -125,6 +125,6 @@ int vboxClipboardReadData (VBOXCLIPBOARDCLIENTDATA *pClient, uint32_t u32Format,
+ void vboxClipboardWriteData (VBOXCLIPBOARDCLIENTDATA *pClient, void *pv,
+                              uint32_t cb, uint32_t u32Format)
+ {
+-    NOREF(pClient, pv, cb, u32Format);
++    RT_NOREF4(pClient, pv, cb, u32Format);
+     LogFlowFunc(("called, returning.\n"));
+ }
+-- 
+2.15.0
+

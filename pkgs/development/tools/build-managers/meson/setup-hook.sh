@@ -13,6 +13,11 @@ mesonConfigurePhase() {
     meson build $mesonFlags "${mesonFlagsArray[@]}"
     cd build
 
+    if ! [[ -v enableParallelBuilding ]]; then
+        enableParallelBuilding=1
+        echo "meson: enabled parallel building"
+    fi
+
     runHook postConfigure
 }
 

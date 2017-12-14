@@ -99,8 +99,6 @@ mkDerivation rec {
     threadweaver
   ];
 
-  enableParallelBuilding = true;
-
   cmakeFlags = [
     "-DENABLE_MYSQLSUPPORT=1"
     "-DENABLE_INTERNALMYSQL=1"
@@ -123,6 +121,10 @@ mkDerivation rec {
   ];
 
   patchFlags = "-d core -p1";
+
+  # `en make -f core/utilities/assistants/expoblending/CMakeFiles/expoblending_src.dir/build.make core/utilities/assistants/expoblending/CMakeFiles/expoblending_src.dir/manager/expoblendingthread.cpp.o`:
+  # digikam_version.h:37:24: fatal error: gitversion.h: No such file or directory
+  enableParallelBuilding = false;
 
   meta = with lib; {
     description = "Photo Management Program";

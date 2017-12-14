@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://gemrb.org/;
     license = licenses.gpl2;
-    maintainer = with maintainers; [ peterhoeg ];
+    maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.all;
   };
 }

@@ -51,6 +51,6 @@ stdenv.mkDerivation rec {
 
     license = "custom";
     maintainers = with stdenv.lib.maintainers; [ pierron thoughtpolice ];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = ["x86_64-linux"];
   };
 }

@@ -4,13 +4,13 @@
 }:
 
 let
-  dfVersion = "0.43.05";
-  version = "${dfVersion}-r2";
+  dfVersion = "0.44.02";
+  version = "${dfVersion}-alpha1";
   rev = "refs/tags/${version}";
-  sha256 = "18zbxri5rch750m431pdmlk4xi7nc14iif3i7glxrgy2h5nfaw5c";
+  sha256 = "1cdp2jwhxl54ym92jm58xyrz942ajp6idl31qrmzcqzawp2fl620";
 
   # revision of library/xml submodule
-  xmlRev = "3322beb2e7f4b28ff8e573e9bec738c77026b8e9";
+  xmlRev = "e2e256066cc4a5c427172d9d27db25b7823e4e86";
 
   arch =
     if stdenv.system == "x86_64-linux" then "64"

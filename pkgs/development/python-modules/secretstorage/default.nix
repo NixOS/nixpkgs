@@ -21,6 +21,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/mitya57/secretstorage";
     description = "Python bindings to FreeDesktop.org Secret Service API";
     license = licenses.bsdOriginal;
-    maintainer = with maintainers; [ teto ];
+    maintainers = with maintainers; [ teto ];
   };
 }

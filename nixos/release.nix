@@ -1,6 +1,6 @@
 { nixpkgs ? { outPath = ./..; revCount = 56789; shortRev = "gfedcba"; }
 , stableBranch ? false
-, supportedSystems ? [ "x86_64-linux" ]
+, supportedSystems ? [ "x86_64-linux" "aarch64-linux" ]
 }:
 
 with import ../lib;
@@ -89,6 +89,27 @@ let
       });
   }).config));
 
+  makeNetboot = config:
+    let
+      config_evaled = import lib/eval-config.nix config;
+      build = config_evaled.config.system.build;
+      kernelTarget = config_evaled.pkgs.stdenv.platform.kernelTarget;
+    in
+      pkgs.symlinkJoin {
+        name="netboot";
+        paths=[
+          build.netbootRamdisk
+          build.kernel
+          build.netbootIpxeScript
+        ];
+        postBuild = ''
+          mkdir -p $out/nix-support
+          echo "file ${kernelTarget} $out/${kernelTarget}" >> $out/nix-support/hydra-build-products
+          echo "file initrd $out/initrd" >> $out/nix-support/hydra-build-products
+          echo "file ipxe $out/netboot.ipxe" >> $out/nix-support/hydra-build-products
+        '';
+      };
+
 
 in rec {
 
@@ -103,28 +124,22 @@ in rec {
   # Build the initial ramdisk so Hydra can keep track of its size over time.
   initialRamdisk = buildFromConfig ({ pkgs, ... }: { }) (config: config.system.build.initialRamdisk);
 
-  netboot.x86_64-linux = let build = (import lib/eval-config.nix {
+  netboot = {
+    x86_64-linux = makeNetboot {
       system = "x86_64-linux";
       modules = [
         ./modules/installer/netboot/netboot-minimal.nix
         versionModule
       ];
-    }).config.system.build;
-  in
-    pkgs.symlinkJoin {
-      name="netboot";
-      paths=[
-        build.netbootRamdisk
-        build.kernel
-        build.netbootIpxeScript
-      ];
-      postBuild = ''
-        mkdir -p $out/nix-support
-        echo "file bzImage $out/bzImage" >> $out/nix-support/hydra-build-products
-        echo "file initrd $out/initrd" >> $out/nix-support/hydra-build-products
-        echo "file ipxe $out/netboot.ipxe" >> $out/nix-support/hydra-build-products
-      '';
     };
+  } // (optionalAttrs (elem "aarch64-linux" supportedSystems) {
+    aarch64-linux = makeNetboot {
+      system = "aarch64-linux";
+      modules = [
+        ./modules/installer/netboot/netboot-minimal.nix
+        versionModule
+      ];
+    };});
 
   iso_minimal = forAllSystems (system: makeIso {
     module = ./modules/installer/cd-dvd/installation-cd-minimal.nix;
@@ -332,10 +347,12 @@ in rec {
   tests.slim = callTest tests/slim.nix {};
   tests.smokeping = callTest tests/smokeping.nix {};
   tests.snapper = callTest tests/snapper.nix {};
+  tests.statsd = callTest tests/statsd.nix {};
   tests.switchTest = callTest tests/switch-test.nix {};
   tests.taskserver = callTest tests/taskserver.nix {};
   tests.tomcat = callTest tests/tomcat.nix {};
   tests.udisks2 = callTest tests/udisks2.nix {};
+  tests.vault = callTest tests/vault.nix {};
   tests.virtualbox = callSubTests tests/virtualbox.nix { system = "x86_64-linux"; };
   tests.wordpress = callTest tests/wordpress.nix {};
   tests.xfce = callTest tests/xfce.nix {};

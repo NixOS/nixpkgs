@@ -84,3 +84,9 @@
 # https://github.com/NixOS/nixpkgs/issues/31401
 /lib/maintainers.nix @ghost
 /lib/licenses.nix @ghost
+
+# Qt / KDE
+/pkgs/applications/kde @ttuegel
+/pkgs/desktops/plasma-5 @ttuegel
+/pkgs/development/libraries/kde-frameworks @ttuegel
+/pkgs/development/libraries/qt-5 @ttuegel

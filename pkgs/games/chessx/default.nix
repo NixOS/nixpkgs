@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig qmake ];
 
   # RCC: Error in 'resources.qrc': Cannot find file 'i18n/chessx_da.qm'
-  #enableParallelBuilding = true;
+  enableParallelBuilding = false;
 
   installPhase = ''
       runHook preInstall
