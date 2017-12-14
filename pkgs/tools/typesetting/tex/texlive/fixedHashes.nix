@@ -7582,6 +7582,8 @@
 "unicode-bidi.doc-0.01"="8x4zk0spvhmq3sc8ygvidk03gfzm2875";
 "unisugar-0.92"="wfr974a1y4wzlbw0wwzfr6r0yp9nyasl";
 "unisugar.doc-0.92"="hcnqifbhpj44cwbr8sh4c71phg4i5327";
+"xdvi-22.87.03"="g5irfc0gf7bra3vngv6kdbkhbyicdz84";
+"xdvi.doc-22.87.03"="h2d03izpvnpsii465g3hf299z3ndv4vl";
 "xebaposter-2.51"="glxmnnhjpy8wjab9avncl4v0wmdf0pv7";
 "xebaposter.doc-2.51"="sbpqsj7cqhhhs9gq8jia92hxrdgnhzkk";
 "xechangebar-1.0"="1f2zszj2l5mkqv5zs5bs8g5w4c8rirpv";
