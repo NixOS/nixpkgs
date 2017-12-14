@@ -11,13 +11,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  phases = "installPhase";
+  unpackPhase = ":";
 
   installPhase = ''
     mkdir -p $out/bin
     cp ${src} $out/bin/coursier
     chmod +x $out/bin/coursier
-    wrapProgram $out/bin/coursier --prefix PATH ":" ${jre}/bin ;
+    wrapProgram $out/bin/coursier --prefix PATH ":" ${jre}/bin
   '';
 
   meta = with stdenv.lib; {
