@@ -642,7 +642,8 @@ self: super: {
     '';
   });
 
-  # Fine-tune the build.
+  # Build the latest git version instead of the official release. This isn't
+  # ideal, but Chris doesn't seem to make official releases any more.
   structured-haskell-mode = (overrideCabal super.structured-haskell-mode (drv: {
     src = pkgs.fetchFromGitHub {
       owner = "chrisdone";
