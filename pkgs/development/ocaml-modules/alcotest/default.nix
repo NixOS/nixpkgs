@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, topkg, opam, jbuilder
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, topkg, jbuilder
 , cmdliner, astring, fmt, result
 }:
 
@@ -12,7 +12,7 @@ let param =
   } else {
     version = "0.7.2";
     sha256 = "1qgsz2zz5ky6s5pf3j3shc4fjc36rqnjflk8x0wl1fcpvvkr52md";
-    buildInputs = [ ocamlbuild opam topkg ];
+    buildInputs = [ ocamlbuild topkg ];
     inherit (topkg) buildPhase installPhase;
   };
 in

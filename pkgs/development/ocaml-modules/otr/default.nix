@@ -1,7 +1,6 @@
-{stdenv, buildOcaml, fetchFromGitHub, ocamlbuild, findlib, topkg, ocaml, opam,
- ppx_tools, ppx_sexp_conv, cstruct, ppx_cstruct, sexplib, result, nocrypto, astring}:
-
-let ocamlFlags = "-I ${findlib}/lib/ocaml/${ocaml.version}/site-lib/"; in
+{ stdenv, buildOcaml, fetchFromGitHub, ocamlbuild, findlib, topkg, ocaml
+, ppx_tools, ppx_sexp_conv, cstruct, ppx_cstruct, sexplib, result, nocrypto, astring
+}:
 
 buildOcaml rec {
   name = "otr";
@@ -16,23 +15,15 @@ buildOcaml rec {
     sha256 = "07zzix5mfsasqpqdx811m0x04gp8mq1ayf4b64998k98027v01rr";
   };
 
-  buildInputs = [ ocamlbuild findlib topkg ppx_tools ppx_sexp_conv opam ppx_cstruct ];
+  buildInputs = [ ocamlbuild findlib topkg ppx_tools ppx_sexp_conv ppx_cstruct ];
   propagatedBuildInputs = [ cstruct sexplib result nocrypto astring ];
 
-  buildPhase = ''
-    ocaml ${ocamlFlags} pkg/pkg.ml build \
-      --tests true
-  '';
+  buildPhase = "${topkg.run} build --tests true";
 
-  installPhase = ''
-    opam-installer --prefix=$out --script | sh
-    ln -s $out/lib/otr $out/lib/ocaml/${ocaml.version}/site-lib
-  '';
+  inherit (topkg) installPhase;
 
   doCheck = true;
-  checkPhase = "ocaml ${ocamlFlags} pkg/pkg.ml test";
-
-  createFindlibDestdir = true;
+  checkPhase = "${topkg.run} test";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/hannesm/ocaml-otr;

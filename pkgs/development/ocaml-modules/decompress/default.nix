@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, topkg, opam
+{ stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, topkg
 }:
 
 if !stdenv.lib.versionAtLeast ocaml.version "4.03"
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 		sha256 = "0hfs5zrvimzvjwdg57vrxx9bb7irvlm07dk2yv3s5qhj30zimd08";
 	};
 
-	buildInputs = [ ocaml findlib ocamlbuild topkg opam ];
+	buildInputs = [ ocaml findlib ocamlbuild topkg ];
 
 	inherit (topkg) buildPhase installPhase;
 
