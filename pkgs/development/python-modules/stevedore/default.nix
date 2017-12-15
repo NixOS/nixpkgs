@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, oslosphinx, pbr, six, argparse }:
+{ stdenv, buildPythonPackage, fetchPypi, pbr, six, argparse }:
 
 buildPythonPackage rec {
   pname = "stevedore";
@@ -12,7 +12,6 @@ buildPythonPackage rec {
 
   doCheck = false;
 
-  buildInputs = [ oslosphinx ];
   propagatedBuildInputs = [ pbr six argparse ];
 
   meta = with stdenv.lib; {
