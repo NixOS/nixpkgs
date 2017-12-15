@@ -1,16 +1,14 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, gnum4, pkgconfig, python2
+{ stdenv, fetchurl, gnum4, pkgconfig, python2
 , intel-gpu-tools, libdrm, libva, libX11, mesa_noglu, wayland, libXext
 }:
 
 stdenv.mkDerivation rec {
   name = "intel-vaapi-driver-${version}";
-  inherit (libva) version;
+  version = "1.8.2";
 
-  src = fetchFromGitHub {
-    owner  = "01org";
-    repo   = "libva-intel-driver";
-    rev    = version;
-    sha256 = "1832nnva3d33wv52bj59bv62q7a807sdxjqqq0my7l9x7a4qdkzz";
+  src = fetchurl {
+    url = "http://www.freedesktop.org/software/vaapi/releases/libva-intel-driver/${name}.tar.bz2";
+    sha256 = "00mpcvininwr5c4wyhp16s4bddg7vclxxjm2sfq5h7lifjcxyv46";
   };
 
   patchPhase = ''
@@ -27,11 +25,9 @@ stdenv.mkDerivation rec {
     "--enable-wayland"
   ];
 
-  nativeBuildInputs = [ autoreconfHook gnum4 pkgconfig python2 ];
+  nativeBuildInputs = [ gnum4 pkgconfig python2 ];
 
   buildInputs = [ intel-gpu-tools libdrm libva libX11 libXext mesa_noglu wayland ];
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     homepage = http://cgit.freedesktop.org/vaapi/intel-driver/;
