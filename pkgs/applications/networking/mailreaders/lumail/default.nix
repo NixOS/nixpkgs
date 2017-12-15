@@ -2,14 +2,14 @@
 , perl, perlPackages }:
 
 let
-  version = "2.9";
+  version = "3.1";
 in
 stdenv.mkDerivation {
   name = "lumail-${version}";
 
   src = fetchurl {
     url = "https://lumail.org/download/lumail-${version}.tar.gz";
-    sha256 = "1rni5lbic36v4cd1r0l28542x0hlmfqkl6nac79gln491in2l2sc";
+    sha256 = "0vj7p7f02m3w8wb74ilajcwznc4ai4h2ikkz9ildy0c00aqsi5w4";
   };
 
   nativeBuildInputs = [ pkgconfig ];
