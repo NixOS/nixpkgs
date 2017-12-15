@@ -166,6 +166,8 @@ with pkgs;
 
   mht2htm = callPackage ../tools/misc/mht2htm { };
 
+  fetchMaven = callPackage ../build-support/fetchMaven { };
+
   fetchpatch = callPackage ../build-support/fetchpatch { };
 
   fetchs3 = callPackage ../build-support/fetchs3 { };
