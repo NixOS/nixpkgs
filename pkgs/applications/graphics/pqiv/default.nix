@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, getopt, which, pkgconfig, gtk3,
-ffmpeg, imagemagick, libarchive, libspectre, libwebp, poppler
+{ stdenv, fetchFromGitHub, pkgconfig
+, ffmpeg, gtk3, imagemagick, libarchive, libspectre, libwebp, poppler
 }:
 
 stdenv.mkDerivation (rec {
@@ -14,10 +14,7 @@ stdenv.mkDerivation (rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    getopt which gtk3
-    ffmpeg imagemagick libarchive libspectre libwebp poppler
-  ];
+  buildInputs = [ ffmpeg gtk3 imagemagick libarchive libspectre libwebp poppler ];
 
   prePatch = "patchShebangs .";
 
