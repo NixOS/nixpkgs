@@ -1,12 +1,14 @@
 { stdenv, fetchurl, writeText, jre, makeWrapper, fetchMavenArtifact
-, mysqlSupport ? true, mysql_jdbc ? null }:
+, mysqlSupport ? true, mysql_jdbc ? null
+, postgresSupport ? true, postgresql_jdbc ? null }:
 
 assert mysqlSupport -> mysql_jdbc != null;
+assert postgresSupport -> postgresql_jdbc != null;
 
 with stdenv.lib;
 let
-  extraJars = optional mysqlSupport mysql_jdbc;
-
+  extraJars = optional mysqlSupport mysql_jdbc ++
+    optional postgresSupport postgresql_jdbc;
 in
 
 stdenv.mkDerivation rec {
