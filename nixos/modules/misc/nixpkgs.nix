@@ -142,6 +142,14 @@ in
         Ignored when <code>nixpkgs.pkgs</code> is set.
       '';
     };
+
+    crossSystem = mkOption {
+      default = null;
+      example = "i686-linux";
+      description = ''
+        TODO
+      '';
+    };
   };
 
   config = {
