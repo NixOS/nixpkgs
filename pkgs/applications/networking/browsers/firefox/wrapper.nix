@@ -3,7 +3,7 @@
 ## various stuff that can be plugged in
 , flashplayer, hal-flash
 , MPlayerPlugin, ffmpeg, gst_all, xorg, libpulseaudio, libcanberra_gtk2
-, supportsJDK, jrePlugin, icedtea_web
+, jrePlugin, icedtea_web
 , trezor-bridge, bluejeans, djview4, adobe-reader
 , google_talk_plugin, fribid, gnome3/*.gnome_shell*/
 , esteidfirefoxplugin
