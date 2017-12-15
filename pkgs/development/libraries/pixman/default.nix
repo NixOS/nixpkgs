@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = stdenv.lib.optional stdenv.isArm "--disable-arm-iwmmxt";
 
-  doCheck = true;
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
   postInstall = glib.flattenInclude;
 
