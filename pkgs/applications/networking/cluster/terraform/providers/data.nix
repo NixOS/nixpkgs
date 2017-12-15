@@ -112,6 +112,13 @@
       version = "1.0.0";
       sha256  = "1008lrvdqn3kk8gwvq094nwknh00b429jmwi0hq4brick7vyvbvz";
     };
+  ct =
+    {
+      owner   = "coreos";
+      repo    = "terraform-provider-ct";
+      version = "0.2.0";
+      sha256  = "147vp5vvp7g0h6z34j7xmj3dvi59ksxhknggab89cf6p1rza4ywq";
+    };
   datadog =
     {
       owner   = "terraform-providers";
