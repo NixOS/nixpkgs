@@ -6056,6 +6056,7 @@ in {
 
   paperwork-backend = callPackage ../applications/office/paperwork/backend.nix { };
 
+  papis = callPackage ../applications/office/papis { };
 
   papis-python-rofi = callPackage ../development/python-modules/papis-python-rofi { };
 
