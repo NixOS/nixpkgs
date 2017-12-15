@@ -1,23 +1,23 @@
-{ stdenv, fetchgit, coq }:
+{ stdenv, fetchgit, coq, ssreflect }:
 
 let param =
   {
     "8.5" = {
-      version = "20171214";
-      rev = "d319043533585f60f0c89919a8370f85a9cf572b";
-      sha256 = "154a8sx5igw86wby0ybk3rv5y21cji8489amgxhgqxfys9zmx2di";
+      version = "20171215";
+      rev = "e2cf8b270c2efa3b56fab1ef6acc376c2c3de968";
+      sha256 = "09dq1vvshhlhgjccrhqgbhnq2hrys15xryfszqq11rzpgvl2zgdv";
     };
 
     "8.6" = {
-      version = "20171214";
-      rev = "d319043533585f60f0c89919a8370f85a9cf572b";
-      sha256 = "154a8sx5igw86wby0ybk3rv5y21cji8489amgxhgqxfys9zmx2di";
+      version = "20171215";
+      rev = "e2cf8b270c2efa3b56fab1ef6acc376c2c3de968";
+      sha256 = "09dq1vvshhlhgjccrhqgbhnq2hrys15xryfszqq11rzpgvl2zgdv";
     };
 
     "8.7" = {
-      version = "20171214";
-      rev = "d319043533585f60f0c89919a8370f85a9cf572b";
-      sha256 = "154a8sx5igw86wby0ybk3rv5y21cji8489amgxhgqxfys9zmx2di";
+      version = "20171215";
+      rev = "e2cf8b270c2efa3b56fab1ef6acc376c2c3de968";
+      sha256 = "09dq1vvshhlhgjccrhqgbhnq2hrys15xryfszqq11rzpgvl2zgdv";
     };
 
   }."${coq.coq-version}"
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ coq.ocaml coq.camlp5 coq.findlib ];
-  propagatedBuildInputs = [ coq ];
+  propagatedBuildInputs = [ coq ssreflect ];
 
   enableParallelBuilding = false;
 
