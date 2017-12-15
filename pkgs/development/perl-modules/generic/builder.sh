@@ -17,10 +17,7 @@ preConfigure() {
             first=$(dd if="$fn" count=2 bs=1 2> /dev/null)
             if test "$first" = "#!"; then
                 echo "patching $fn..."
-                sed < "$fn" > "$fn".tmp \
-                    -e "s|^#\!\(.*/perl.*\)$|#\! \1$perlFlags|"
-                if test -x "$fn"; then chmod +x "$fn".tmp; fi
-                mv "$fn".tmp "$fn"
+                sed -i "$fn" -e "s|^#\!\(.*[ /]perl.*\)$|#\!\1$perlFlags|"
             fi
         fi
     done
