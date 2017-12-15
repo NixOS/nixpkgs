@@ -110,15 +110,16 @@ let
       tlName = urlName + "-${version}";
       fixedHash = fixedHashes.${tlName} or null; # be graceful about missing hashes
 
-      url = args.url or "${urlPrefix}/${urlName}.tar.xz";
-      urlPrefix = args.urlPrefix or
-        https://gateway.ipfs.io/ipfs/QmRLK45EC828vGXv5YDaBsJBj2LjMjjA2ReLVrXsasRzy7/texlive-2017
-        #http://146.185.144.154/texlive-2017
-        ;
-      # XXX XXX XXX FIXME: mirror the snapshot XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX XXX
-      #  ("${mirror}/pub/tex/historic/systems/texlive/${bin.texliveYear}/tlnet-final/archive");
-      #mirror = "http://ftp.math.utah.edu";
-      src = fetchurl { inherit url sha512; };
+      urls = args.urls or (if args ? url then [ args.url ] else
+              map (up: "${up}/${urlName}.tar.xz") urlPrefixes
+            );
+      urlPrefixes = args.urlPrefixes or [
+        http://146.185.144.154/texlive-2017
+        # IPFS GW is second, as it doesn't have a good time-outing behavior
+        http://gateway.ipfs.io/ipfs/QmRLK45EC828vGXv5YDaBsJBj2LjMjjA2ReLVrXsasRzy7/texlive-2017
+      ];
+
+      src = fetchurl { inherit urls sha512; };
 
       passthru = {
         inherit pname tlType version;
@@ -132,7 +133,7 @@ let
     in if sha512 == "" then
       # hash stripped from pkgs.nix to save space -> fetch&unpack in a single step
       fetchurl {
-        inherit url;
+        inherit urls;
         sha1 = if fixedHash == null then throw "TeX Live package ${tlName} is missing hash!"
           else fixedHash;
         name = tlName;
