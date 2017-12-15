@@ -1,4 +1,4 @@
-{ stdenv, buildOcaml, fetchpatch, fetchFromGitHub, findlib, topkg, opam, ocb-stubblr
+{ stdenv, buildOcaml, fetchpatch, fetchFromGitHub, findlib, topkg, ocb-stubblr
 , result, uucp, uuseg, uutf
 , lwt     ? null }:
 
@@ -24,7 +24,7 @@ buildOcaml rec {
     sha256 = "0pklplbnjbsjriqj73pc8fsadg404px534w7zknz2617zb44m6x6";
   })];
 
-  buildInputs = [ findlib opam topkg ocb-stubblr ];
+  buildInputs = [ findlib topkg ocb-stubblr ];
   propagatedBuildInputs = [ result uucp uuseg uutf ] ++
                           optional withLwt lwt;
 

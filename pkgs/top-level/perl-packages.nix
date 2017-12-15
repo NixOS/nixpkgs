@@ -3402,6 +3402,19 @@ let self = _self // overrides; _self = with self; {
     };
   };
 
+  DateTimeCalendarJulian = buildPerlPackage rec {
+    name = "DateTime-Calendar-Julian-0.04";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/P/PI/PIJLL/${name}.tar.gz";
+      sha256 = "03h0llkwsiw2d2ci1ah5x9sp8xrvnbgd471i5hnpgl5w32nnhndv";
+    };
+    propagatedBuildInputs = [ DateTime ];
+    meta = {
+      description = "Dates in the Julian calendar";
+      license = stdenv.lib.licenses.artistic2;
+    };
+  };
+
   DateTimeEventICal = buildPerlPackage rec {
     name = "DateTime-Event-ICal-0.13";
     src = fetchurl {
@@ -12207,6 +12220,19 @@ let self = _self // overrides; _self = with self; {
       description = "Packages that provide templated software licenses";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = [ maintainers.rycee ];
+    };
+  };
+
+  SortKey = buildPerlPackage rec {
+    name = "Sort-Key-1.33";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SA/SALVA/${name}.tar.gz";
+      sha256 = "1kqs10s2plj6c96srk0j8d7xj8dxk1704r7mck8rqk09mg7lqspd";
+    };
+    buildInputs = [ TestMore ];
+    meta = {
+      description = "Sort arrays by one or multiple calculated keys";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 

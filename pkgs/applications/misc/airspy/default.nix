@@ -4,7 +4,7 @@
 
 let
   version = "1.0.9";
-in  
+in
   stdenv.mkDerivation {
     name = "airspy-${version}";
 
@@ -17,15 +17,14 @@ in
 
     nativeBuildInputs = [ cmake pkgconfig ];
     buildInputs = [ libusb ];
- 
+
     cmakeFlags = [ "-DINSTALL_UDEV_RULES=OFF" ];
-   
+
     meta = with stdenv.lib; {
       homepage = http://github.com/airspy/airspyone_host;
       description = "Host tools and driver library for the AirSpy SDR";
       license = licenses.free;
       platforms = platforms.linux;
-      maintainer = with maintainers; [ markuskowa ];
+      maintainers = with maintainers; [ markuskowa ];
     };
   }
-

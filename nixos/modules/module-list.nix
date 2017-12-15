@@ -354,6 +354,7 @@
   ./services/misc/taskserver
   ./services/misc/tzupdate.nix
   ./services/misc/uhub.nix
+  ./services/misc/xmr-stak.nix
   ./services/misc/zookeeper.nix
   ./services/monitoring/apcupsd.nix
   ./services/monitoring/arbtt.nix
@@ -748,6 +749,4 @@
   ./virtualisation/vmware-guest.nix
   ./virtualisation/xen-dom0.nix
   ./virtualisation/xe-guest-utilities.nix
-  ./virtualisation/openstack/keystone.nix
-  ./virtualisation/openstack/glance.nix
 ]

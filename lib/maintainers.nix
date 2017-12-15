@@ -286,6 +286,7 @@
   iblech = "Ingo Blechschmidt <iblech@speicherleck.de>";
   igsha = "Igor Sharonov <igor.sharonov@gmail.com>";
   ikervagyok = "Balázs Lengyel <ikervagyok@gmail.com>";
+  ilya-kolpakov = "Ilya Kolpakov <ilya.kolpakov@gmail.com>";
   infinisil = "Silvan Mosberger <infinisil@icloud.com>";
   ironpinguin = "Michele Catalano <michele@catalano.de>";
   ivan-tkatchev = "Ivan Tkatchev <tkatchev@gmail.com>";

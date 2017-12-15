@@ -36,7 +36,7 @@ stdenv.mkDerivation {
           hasBadPaths=1
         fi
         if [ "$mode" != 444 ] && [ "$mode" != 555 ]; then
-          echo "Store path '$path' has invalid permissions."
+          echo "Store path '$path' has invalid permissions ($mode)."
           hasBadPaths=1
         fi
       done

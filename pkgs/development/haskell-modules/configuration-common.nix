@@ -95,7 +95,7 @@ self: super: {
       name = "git-annex-${drv.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + drv.version;
-      sha256 = "1bnnrwamw3d37fz7cwykxhi1ryy22dq8r6ld59gsbgcv23drqzax";
+      sha256 = "1fd7lyrwr60dp55swc5iwl0mkkzmdzpmj9qmx1qca2r7y9wc5w5k";
     };
   })).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -513,14 +513,14 @@ self: super: {
   hslua_0_9_3 = super.hslua_0_9_3.override { lua5_1 = pkgs.lua5_3; };
   hslua-module-text = super.hslua-module-text.override { hslua = self.hslua_0_9_3; };
   texmath_0_10 = super.texmath_0_10.override { pandoc-types = self.pandoc-types_1_17_3; };
-  pandoc_2_0_4 = super.pandoc_2_0_4.override {
+  pandoc_2_0_5 = super.pandoc_2_0_5.override {
     doctemplates = self.doctemplates_0_2_1;
     pandoc-types = self.pandoc-types_1_17_3;
     skylighting = self.skylighting_0_4_4_1;
     texmath = self.texmath_0_10;
   };
   pandoc-citeproc_0_12_1 = super.pandoc-citeproc_0_12_1.override {
-    pandoc = self.pandoc_2_0_4;
+    pandoc = self.pandoc_2_0_5;
     pandoc-types = self.pandoc-types_1_17_3;
   };
 
@@ -642,7 +642,8 @@ self: super: {
     '';
   });
 
-  # Fine-tune the build.
+  # Build the latest git version instead of the official release. This isn't
+  # ideal, but Chris doesn't seem to make official releases any more.
   structured-haskell-mode = (overrideCabal super.structured-haskell-mode (drv: {
     src = pkgs.fetchFromGitHub {
       owner = "chrisdone";
@@ -1003,7 +1004,7 @@ self: super: {
   # Newer hpack's needs newer HUnit, but we cannot easily override the version
   # used in the build, so we take the easy way out and disable the test suite.
   hpack_0_20_0 = dontCheck super.hpack_0_20_0;
-  hpack_0_21_0 = dontCheck super.hpack_0_21_0;
+  hpack_0_21_2 = dontCheck super.hpack_0_21_2;
 
   # Stack 1.6.1 needs newer versions than LTS-9 provides.
   stack = super.stack.overrideScope (self: super: {
@@ -1015,5 +1016,8 @@ self: super: {
     path-io = self.path-io_1_3_3;
     unliftio = self.unliftio_0_2_0_0;
   });
+
+  # Hoogle needs a newer version than lts-9 provides.
+  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_20_1; };
 
 }

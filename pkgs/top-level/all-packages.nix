@@ -603,6 +603,8 @@ with pkgs;
 
   git-fire = callPackage ../tools/misc/git-fire { };
 
+  gitless = callPackage ../applications/version-management/gitless/default.nix { };
+
   grc = callPackage ../tools/misc/grc { };
 
   green-pdfviewer = callPackage ../applications/misc/green-pdfviewer {
@@ -1327,13 +1329,14 @@ with pkgs;
   bgs = callPackage ../tools/X11/bgs { };
 
   biber = callPackage ../tools/typesetting/biber {
-    inherit (perlPackages)
+    inherit (perlPackages) buildPerlModule
       autovivification BusinessISBN BusinessISMN BusinessISSN ConfigAutoConf
       DataCompare DataDump DateSimple EncodeEUCJPASCII EncodeHanExtra EncodeJIS2K
+      DateTime DateTimeFormatBuilder DateTimeCalendarJulian
       ExtUtilsLibBuilder FileSlurp IPCRun3 Log4Perl LWPProtocolHttps ListAllUtils
-      ListMoreUtils ModuleBuild MozillaCA ReadonlyXS RegexpCommon TextBibTeX
+      ListMoreUtils MozillaCA ReadonlyXS RegexpCommon TextBibTeX
       UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
-      ClassAccessor TextRoman DataUniqid LinguaTranslit UnicodeNormalize;
+      ClassAccessor TextCSV TextRoman DataUniqid LinguaTranslit UnicodeNormalize SortKey;
   };
 
   blueman = callPackage ../tools/bluetooth/blueman {
@@ -4274,6 +4277,8 @@ with pkgs;
 
   reckon = callPackage ../tools/text/reckon { };
 
+  recoverjpeg = callPackage ../tools/misc/recoverjpeg { };
+
   reposurgeon = callPackage ../applications/version-management/reposurgeon { };
 
   reptyr = callPackage ../os-specific/linux/reptyr {};
@@ -4499,6 +4504,8 @@ with pkgs;
 
   smbnetfs = callPackage ../tools/filesystems/smbnetfs {};
 
+  smenu = callPackage ../tools/misc/smenu { };
+
   smugline = python3Packages.smugline;
 
   snabb = callPackage ../tools/networking/snabb { } ;
@@ -4714,7 +4721,7 @@ with pkgs;
 
   thc-hydra = callPackage ../tools/security/thc-hydra { };
 
-  thefuck = callPackage ../tools/misc/thefuck { };
+  thefuck = python3Packages.callPackage ../tools/misc/thefuck { };
 
   thin-provisioning-tools = callPackage ../tools/misc/thin-provisioning-tools {  };
 
@@ -7683,6 +7690,8 @@ with pkgs;
 
   remake = callPackage ../development/tools/build-managers/remake { };
 
+  retdec = callPackage ../development/tools/analysis/retdec { };
+
   rhc = callPackage ../development/tools/rhc { };
 
   rman = callPackage ../development/tools/misc/rman { };
@@ -8836,6 +8845,10 @@ with pkgs;
 
   hwloc = callPackage ../development/libraries/hwloc {};
 
+  hwloc-nox = callPackage ../development/libraries/hwloc {
+    x11Support = false;
+  };
+
   hydra = callPackage ../development/tools/misc/hydra { };
 
   hydraAntLogger = callPackage ../development/libraries/java/hydra-ant-logger { };
@@ -9822,6 +9835,7 @@ with pkgs;
 
   libva = callPackage ../development/libraries/libva { };
   libva-full = libva.override { minimal = false; };
+  libva-utils = callPackage ../development/libraries/libva-utils { };
 
   libvdpau = callPackage ../development/libraries/libvdpau { };
 
@@ -11590,7 +11604,8 @@ with pkgs;
   cassandra_2_1 = callPackage ../servers/nosql/cassandra/2.1.nix { };
   cassandra_2_2 = callPackage ../servers/nosql/cassandra/2.2.nix { };
   cassandra_3_0 = callPackage ../servers/nosql/cassandra/3.0.nix { };
-  cassandra = cassandra_3_0;
+  cassandra_3_11 = callPackage ../servers/nosql/cassandra/3.11.nix { };
+  cassandra = cassandra_3_11;
 
   apache-jena = callPackage ../servers/nosql/apache-jena/binary.nix {
     java = jdk;
@@ -14162,7 +14177,7 @@ with pkgs;
     openjpeg = openjpeg_1;
   };
 
-  camlistore = callPackage ../applications/misc/camlistore { };
+  perkeep = callPackage ../applications/misc/perkeep { };
 
   canto-curses = callPackage ../applications/networking/feedreaders/canto-curses { };
 
@@ -15861,7 +15876,9 @@ with pkgs;
 
   monero = callPackage ../applications/misc/monero { };
 
-  xmr-stak = callPackage ../applications/misc/xmr-stak { };
+  xmr-stak = callPackage ../applications/misc/xmr-stak {
+    hwloc = hwloc-nox;
+  };
 
   monkeysAudio = callPackage ../applications/audio/monkeys-audio { };
 
@@ -16162,12 +16179,6 @@ with pkgs;
   muchsync = callPackage ../applications/networking/mailreaders/notmuch/muchsync.nix { };
 
   notmuch-addrlookup = callPackage ../applications/networking/mailreaders/notmuch-addrlookup { };
-
-  # Open Stack
-  nova = callPackage ../applications/virtualization/openstack/nova.nix { };
-  keystone = callPackage ../applications/virtualization/openstack/keystone.nix { };
-  neutron = callPackage ../applications/virtualization/openstack/neutron.nix { };
-  glance = callPackage ../applications/virtualization/openstack/glance.nix { };
 
   nova-filters =  callPackage ../applications/audio/nova-filters { };
 
@@ -17933,6 +17944,8 @@ with pkgs;
 
   crrcsim = callPackage ../games/crrcsim {};
 
+  cutemaze = libsForQt5.callPackage ../games/cutemaze {};
+
   cuyo = callPackage ../games/cuyo { };
 
   dhewm3 = callPackage ../games/dhewm3 {};
@@ -18904,6 +18917,8 @@ with pkgs;
     math-classes = callPackage ../development/coq-modules/math-classes { };
     fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
     equations = callPackage ../development/coq-modules/equations { };
+    coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
+    category-theory = callPackage ../development/coq-modules/category-theory { };
   };
 
   coqPackages_8_5 = mkCoqPackages coqPackages_8_5 coq_8_5;
@@ -18992,7 +19007,7 @@ with pkgs;
 
   opensmt = callPackage ../applications/science/logic/opensmt { };
 
-  inherit (ocamlPackages) ott;
+  ott = callPackage ../applications/science/logic/ott { };
 
   otter = callPackage ../applications/science/logic/otter {};
 
@@ -19037,6 +19052,7 @@ with pkgs;
     gmp-static = gmp.override { withStatic = true; };
   };
 
+  z3_4_5_0 = callPackage ../applications/science/logic/z3/4.5.0.nix {};
   z3 = callPackage ../applications/science/logic/z3 {};
 
   aiger = callPackage ../applications/science/logic/aiger {};
@@ -19737,7 +19753,7 @@ with pkgs;
   # convenience if someone doesn't want to have to think about which plugins to use.
   terraform_0_10-full = terraform_0_10.withPlugins lib.attrValues;
 
-  terraform = terraform_0_9;
+  terraform = terraform_0_11;
 
   terraform-inventory = callPackage ../applications/networking/cluster/terraform-inventory {};
 
