@@ -18867,6 +18867,7 @@ with pkgs;
     math-classes = callPackage ../development/coq-modules/math-classes { };
     fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
     equations = callPackage ../development/coq-modules/equations { };
+    coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
   };
 
   coqPackages_8_5 = mkCoqPackages coqPackages_8_5 coq_8_5;
