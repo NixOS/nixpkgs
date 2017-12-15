@@ -18825,57 +18825,12 @@ with pkgs;
 
   boogie = dotnetPackages.Boogie;
 
-  coq_8_3 = callPackage ../applications/science/logic/coq/8.3.nix {
-    make = pkgs.gnumake3;
-    inherit (ocamlPackages_3_12_1) ocaml findlib;
-    camlp5 = ocamlPackages_3_12_1.camlp5_transitional;
-    lablgtk = ocamlPackages_3_12_1.lablgtk_2_14;
-  };
-  coq_8_4 = callPackage ../applications/science/logic/coq/8.4.nix {
-    inherit (ocamlPackages_4_02) ocaml findlib lablgtk;
-    camlp5 = ocamlPackages_4_02.camlp5_transitional;
-  };
-  coq_8_5 = callPackage ../applications/science/logic/coq {
-    version = "8.5pl3";
-  };
-  coq_8_6 = callPackage ../applications/science/logic/coq {};
-  coq_8_7 = callPackage ../applications/science/logic/coq {
-    version = "8.7.1";
-  };
-
-  mkCoqPackages = self: coq: let callPackage = newScope self; in rec {
-    inherit callPackage coq;
-    coqPackages = self;
-
-    autosubst = callPackage ../development/coq-modules/autosubst {};
-    bignums = if stdenv.lib.versionAtLeast coq.coq-version "8.6"
-      then callPackage ../development/coq-modules/bignums {}
-      else null;
-    coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
-    coquelicot = callPackage ../development/coq-modules/coquelicot {};
-    dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
-    flocq = callPackage ../development/coq-modules/flocq {};
-    heq = callPackage ../development/coq-modules/heq {};
-    HoTT = callPackage ../development/coq-modules/HoTT {};
-    interval = callPackage ../development/coq-modules/interval {};
-    mathcomp = callPackage ../development/coq-modules/mathcomp { };
-    metalib = callPackage ../development/coq-modules/metalib { };
-    paco = callPackage ../development/coq-modules/paco {};
-    ssreflect = callPackage ../development/coq-modules/ssreflect { };
-    QuickChick = callPackage ../development/coq-modules/QuickChick {};
-    CoLoR = callPackage ../development/coq-modules/CoLoR {};
-    math-classes = callPackage ../development/coq-modules/math-classes { };
-    fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
-    equations = callPackage ../development/coq-modules/equations { };
-    coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
-    category-theory = callPackage ../development/coq-modules/category-theory { };
-  };
-
-  coqPackages_8_5 = mkCoqPackages coqPackages_8_5 coq_8_5;
-  coqPackages_8_6 = mkCoqPackages coqPackages_8_6 coq_8_6;
-  coqPackages_8_7 = mkCoqPackages coqPackages_8_7 coq_8_7;
-  coqPackages = coqPackages_8_6;
-  coq = coqPackages.coq;
+  inherit (callPackage ./coq-packages.nix {})
+    mkCoqPackages
+    coq_8_3 coq_8_4 coq_8_5 coq_8_6 coq_8_7
+    coqPackages_8_5 coqPackages_8_6 coqPackages_8_7
+    coqPackages coq
+  ;
 
   coq2html = callPackage ../applications/science/logic/coq2html {
     make = pkgs.gnumake3;
