@@ -1,38 +1,38 @@
-{ stdenv, fetchFromGitHub, buildPerlPackage, autovivification, BusinessISBN
+{ stdenv, fetchFromGitHub, buildPerlModule, autovivification, BusinessISBN
 , BusinessISMN, BusinessISSN, ConfigAutoConf, DataCompare, DataDump, DateSimple
+, DateTime, DateTimeFormatBuilder, DateTimeCalendarJulian
 , EncodeEUCJPASCII, EncodeHanExtra, EncodeJIS2K, ExtUtilsLibBuilder
 , FileSlurp, IPCRun3, Log4Perl, LWPProtocolHttps, ListAllUtils, ListMoreUtils
-, ModuleBuild, MozillaCA, ReadonlyXS, RegexpCommon, TextBibTeX, UnicodeCollate
+, MozillaCA, ReadonlyXS, RegexpCommon, TextBibTeX, UnicodeCollate
 , UnicodeLineBreak, URI, XMLLibXMLSimple, XMLLibXSLT, XMLWriter, ClassAccessor
-, TextRoman, DataUniqid, LinguaTranslit, UnicodeNormalize }:
+, TextCSV, TextRoman, DataUniqid, LinguaTranslit, UnicodeNormalize, SortKey }:
 
-let
-  version = "2.5";
-in
-buildPerlPackage {
+buildPerlModule rec {
   name = "biber-${version}";
+  version = "2.7";
   src = fetchFromGitHub {
     owner = "plk";
     repo = "biber";
     rev = "v${version}";
-    sha256 = "1ldkszsr2n11nib4nvmpvsxmvp0qd9w3lxijyqlf01cfaryjdzgr";
+    sha256 = "04jmsh59g2s0b61rm25z0hwb6yliqyh5gjs4y74va93d2b9mrd17";
   };
 
   buildInputs = [
     autovivification BusinessISBN BusinessISMN BusinessISSN ConfigAutoConf
     DataCompare DataDump DateSimple EncodeEUCJPASCII EncodeHanExtra EncodeJIS2K
+    DateTime DateTimeFormatBuilder DateTimeCalendarJulian
     ExtUtilsLibBuilder FileSlurp IPCRun3 Log4Perl LWPProtocolHttps ListAllUtils
-    ListMoreUtils ModuleBuild MozillaCA ReadonlyXS RegexpCommon TextBibTeX
+    ListMoreUtils MozillaCA ReadonlyXS RegexpCommon TextBibTeX
     UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
-    ClassAccessor TextRoman DataUniqid LinguaTranslit UnicodeNormalize
+    ClassAccessor TextCSV TextRoman DataUniqid LinguaTranslit UnicodeNormalize SortKey
   ];
-  preConfigure = "touch Makefile.PL";
-  buildPhase = "perl Build.PL --prefix=$out; ./Build build";
-  checkPhase = "./Build test";
-  installPhase = "./Build install";
 
   # Tests seem to be broken
   doCheck = false;
+
+  postUnpack = ''
+    sed '1s/env perl/perl/' -i */bin/biber
+  '';
 
   meta = {
     description = "Backend for BibLaTeX";
