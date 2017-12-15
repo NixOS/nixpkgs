@@ -5,6 +5,7 @@ stdenv.mkDerivation {
 
   src = kernel.src;
 
+  nativeBuildInputs = [ gettext ];
   buildInputs = [ coreutils pciutils gettext ];
 
   configurePhase = ''
@@ -15,7 +16,7 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
-    make
+    make CROSS=${stdenv.cc.targetPrefix}
   '';
 
   installPhase = ''
