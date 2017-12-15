@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = stdenv.lib.optional doCheck perl;
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
   checkTarget = "-C tests/";
 
   installPhase = ''
