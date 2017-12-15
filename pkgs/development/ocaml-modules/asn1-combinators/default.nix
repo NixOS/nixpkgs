@@ -1,6 +1,4 @@
-{ stdenv, buildOcaml, fetchFromGitHub, ocaml, findlib, cstruct, zarith, ounit, result, topkg, opam }:
-
-let ocamlFlags = "-I ${findlib}/lib/ocaml/${ocaml.version}/site-lib/"; in
+{ stdenv, buildOcaml, fetchFromGitHub, ocaml, findlib, cstruct, zarith, ounit, result, topkg }:
 
 buildOcaml rec {
   name = "asn1-combinators";
@@ -15,20 +13,17 @@ buildOcaml rec {
     sha256 = "0hpn049i46sdnv2i6m7r6m6ch0jz8argybh71wykbvcqdby08zxj";
   };
 
-  buildInputs = [ ocaml findlib ounit topkg opam ];
+  buildInputs = [ ocaml findlib ounit topkg ];
   propagatedBuildInputs = [ result cstruct zarith ];
 
   createFindlibDestdir = true;
 
-  buildPhase = "ocaml ${ocamlFlags} pkg/pkg.ml build --tests true";
+  buildPhase = "${topkg.run} build --tests true";
 
-  installPhase = ''
-    opam-installer --script --prefix=$out | sh
-    ln -s $out/lib/asn1-combinators $out/lib/ocaml/${ocaml.version}/site-lib
-  '';
+  inherit (topkg) installPhase;
 
   doCheck = true;
-  checkPhase = "ocaml ${ocamlFlags} pkg/pkg.ml test";
+  checkPhase = "${topkg.run} test";
 
   meta = {
     homepage = https://github.com/mirleft/ocaml-asn1-combinators;
