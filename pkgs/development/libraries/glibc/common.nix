@@ -222,6 +222,6 @@ stdenv.mkDerivation ({
 
   # To avoid a dependency on the build system 'bash'.
   preFixup = ''
-    rm $bin/bin/{ldd,tzselect,catchsegv,xtrace}
+    rm -f $bin/bin/{ldd,tzselect,catchsegv,xtrace}
   '';
 })
