@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   autoreconfPhase = "libtoolize --install && autoreconf";
+  prePatch = '' substituteInPlace lib/Makefile.in --replace 'AR = ar' "" '';
+  configureFlags = [ "AR=${stdenv.cc.bintools}/bin/${stdenv.cc.bintools.targetPrefix}ar" ];
   patches = [ ./fix-configure.patch ];
 
   meta = {
