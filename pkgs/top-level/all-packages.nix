@@ -1395,6 +1395,8 @@ with pkgs;
 
   caudec = callPackage ../applications/audio/caudec { };
 
+  ccd2iso = callPackage ../tools/cd-dvd/ccd2iso { };
+
   ccid = callPackage ../tools/security/ccid { };
 
   ccrypt = callPackage ../tools/security/ccrypt { };
