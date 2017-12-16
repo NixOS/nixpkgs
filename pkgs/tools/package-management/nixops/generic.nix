@@ -25,6 +25,7 @@ python2Packages.buildPythonApplication {
       pysqlite
       datadog
       digital-ocean
+      vultr
     ];
 
   doCheck = false;
