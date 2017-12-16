@@ -6,19 +6,13 @@ rec {
 
   # Jane Street packages, up to ppx_core
 
-  sexplib = janePackage ({
+  sexplib = janePackage {
     name = "sexplib";
     meta.description = "Automated S-expression conversion";
-  } // (if lib.versionAtLeast ocaml.version "4.05"
-    then {
-      version = "0.9.3";
-      hash = "0a2sqh235ja3qwy7b2k3qym2616dz7369a195qwi6ljy3cnh7s53";
-      buildInputs = [ num ];
-    } else {
-      version = "0.9.2";
-      hash = "0szj7gi5ksy7kif5g71rkr6xhxc41xl8hq6s5zz610cjyngzyzjl";
-    }
-  ));
+    version = "0.10.0";
+    hash = "1agw649n0rnf6h4y2dr1zs1970nncxgjmf90848vbxv8y9im4yy2";
+    buildInputs = [ num ];
+  };
 
   base = janePackage {
     name = "base";
