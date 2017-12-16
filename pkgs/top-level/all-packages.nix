@@ -3975,11 +3975,12 @@ with pkgs;
 
   philter = callPackage ../tools/networking/philter { };
 
-  pinentry = callPackage ../tools/security/pinentry {
-    libcap = if stdenv.isDarwin then null else libcap;
+  pinentry = pinentry_ncurses.override {
+    inherit gtk2;
   };
 
-  pinentry_ncurses = pinentry.override {
+  pinentry_ncurses = callPackage ../tools/security/pinentry {
+    libcap = if stdenv.isDarwin then null else libcap;
     gtk2 = null;
   };
 
