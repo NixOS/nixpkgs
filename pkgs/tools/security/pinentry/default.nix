@@ -7,7 +7,6 @@ let
   mkEnable = mkFlag "enable" "disable";
   mkWith = mkFlag "with" "without";
 in
-with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "pinentry-1.1.0";
 
@@ -24,9 +23,10 @@ stdenv.mkDerivation rec {
 
   patches = lib.optionals (gtk2 != null) [
     (fetchpatch {
-       url = https://anonscm.debian.org/cgit/pkg-gnupg/pinentry.git/plain/debian/patches/0007-gtk2-When-X11-input-grabbing-fails-try-again-over-0..patch;
-       sha256 = "046jy7k0n7fj74s5w1h6sq1ljg8y77i0xwi301kv53bhsp0xsirx";
-  })];
+      url = https://anonscm.debian.org/cgit/pkg-gnupg/pinentry.git/plain/debian/patches/0007-gtk2-When-X11-input-grabbing-fails-try-again-over-0..patch;
+      sha256 = "046jy7k0n7fj74s5w1h6sq1ljg8y77i0xwi301kv53bhsp0xsirx";
+    })
+  ];
 
   configureFlags = [
     (mkWith   (libcap != null)    "libcap")
@@ -40,15 +40,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://gnupg.org/aegypten2/;
-    description = "GnuPG's interface to passphrase input";
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = stdenv.lib.platforms.all;
+    description = "GnuPG’s interface to passphrase input";
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
     longDescription = ''
       Pinentry provides a console and (optional) GTK+ and Qt GUIs allowing users
       to enter a passphrase when `gpg' or `gpg2' is run and needs it.
     '';
-    maintainers = [ stdenv.lib.maintainers.ttuegel ];
+    maintainers = [ maintainers.ttuegel ];
   };
 }
