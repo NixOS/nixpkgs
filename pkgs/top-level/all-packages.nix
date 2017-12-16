@@ -3977,7 +3977,6 @@ with pkgs;
 
   pinentry = callPackage ../tools/security/pinentry {
     libcap = if stdenv.isDarwin then null else libcap;
-    qt4 = null;
   };
 
   pinentry_ncurses = pinentry.override {
@@ -3989,11 +3988,11 @@ with pkgs;
   };
 
   pinentry_qt4 = pinentry_ncurses.override {
-    inherit qt4;
+    qt = qt4;
   };
 
-  pinentry_qt5 = libsForQt5.callPackage ../tools/security/pinentry/qt5.nix {
-    libcap = if stdenv.isDarwin then null else libcap;
+  pinentry_qt5 = pinentry_ncurses.override {
+    qt = qt5.qtbase;
   };
 
   pinentry_mac = callPackage ../tools/security/pinentry-mac {

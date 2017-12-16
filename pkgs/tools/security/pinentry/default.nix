@@ -1,5 +1,5 @@
 { fetchurl, fetchpatch, stdenv, lib, pkgconfig
-, libgpgerror, libassuan, libcap ? null, libsecret ? null, ncurses ? null, gtk2 ? null, gcr ? null, qt4 ? null
+, libgpgerror, libassuan, libcap ? null, libsecret ? null, ncurses ? null, gtk2 ? null, gcr ? null, qt ? null
 }:
 
 let
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ni7g4plq6x78p32al7m8h2zsakvg1rhfz0qbc3kdc7yq7nw4whn";
   };
 
-  buildInputs = [ libgpgerror libassuan libcap libsecret gtk2 gcr ncurses qt4 ];
+  buildInputs = [ libgpgerror libassuan libcap libsecret gtk2 gcr ncurses qt ];
 
   prePatch = ''
     substituteInPlace pinentry/pinentry-curses.c --replace ncursesw ncurses
@@ -31,12 +31,6 @@ stdenv.mkDerivation rec {
        sha256 = "046jy7k0n7fj74s5w1h6sq1ljg8y77i0xwi301kv53bhsp0xsirx";
   })];
 
-  # configure cannot find moc on its own
-  preConfigure = stdenv.lib.optionalString (qt4 != null) ''
-    export QTDIR="${qt4}"
-    export MOC="${qt4}/bin/moc"
-  '';
-
   configureFlags = [
     (mkWith   (libcap != null)    "libcap")
     (mkEnable (libsecret != null) "libsecret")
@@ -44,7 +38,7 @@ stdenv.mkDerivation rec {
     (mkEnable true                "pinentry-tty")
     (mkEnable (gtk2 != null)      "pinentry-gtk2")
     (mkEnable (gcr != null)       "pinentry-gnome3")
-    (mkEnable (qt4 != null)       "pinentry-qt")
+    (mkEnable (qt != null)        "pinentry-qt")
   ];
 
   nativeBuildInputs = [ pkgconfig ];
