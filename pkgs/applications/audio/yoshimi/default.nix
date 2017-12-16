@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, boost, cairo, cmake, fftwSinglePrec, fltk
+{ stdenv, fetchurl, alsaLib, boost, cairo, cmake, fftwSinglePrec, fltk, pcre
 , libjack2, libsndfile, libXdmcp, readline, lv2, mesa, minixml, pkgconfig, zlib, xorg
 }:
 
@@ -6,22 +6,23 @@ assert stdenv ? glibc;
 
 stdenv.mkDerivation  rec {
   name = "yoshimi-${version}";
-  version = "1.5.4.1";
+  version = "1.5.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/yoshimi/${name}.tar.bz2";
-    sha256 = "1r5mgjlxyabm3nd3vcnfwywk46531vy2j3k8pjbfwadjkvp52vj6";
+    sha256 = "0h71x9742bswifwll7bma1fz648fd5xd0yfp7byvsczy6zhjz5pf";
   };
 
   buildInputs = [
     alsaLib boost cairo fftwSinglePrec fltk libjack2 libsndfile libXdmcp readline lv2 mesa
-    minixml zlib xorg.libpthreadstubs
+    minixml zlib xorg.libpthreadstubs pcre
   ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
   patchPhase = ''
-    sed -i -e 's,/usr/share,'$out/share,g src/Misc/Config.cpp src/Misc/Bank.cpp
+    substituteInPlace src/Misc/Config.cpp --replace /usr $out
+    substituteInPlace src/Misc/Bank.cpp --replace /usr $out
   '';
 
   preConfigure = "cd src";
