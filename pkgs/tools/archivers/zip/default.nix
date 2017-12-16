@@ -20,7 +20,7 @@ stdenv.mkDerivation {
 
   makefile = "unix/Makefile";
   buildFlags = if stdenv.isCygwin then "cygwin" else "generic";
-  installFlags = "prefix=$(out) INSTALL=cp";
+  installFlags = "prefix=$(out) CC=${stdenv.cc.targetPrefix}cc INSTALL=cp";
 
   patches = if (enableNLS && !stdenv.isCygwin) then [ ./natspec-gentoo.patch.bz2 ] else [];
 
