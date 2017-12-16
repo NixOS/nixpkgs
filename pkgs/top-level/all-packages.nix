@@ -16308,6 +16308,10 @@ with pkgs;
 
   opera = callPackage ../applications/networking/browsers/opera {};
 
+  orca = python3Packages.callPackage ../applications/misc/orca {
+    inherit (gnome3) yelp_tools;
+  };
+
   osmctools = callPackage ../applications/misc/osmctools { };
 
   vivaldi = callPackage ../applications/networking/browsers/vivaldi {};
