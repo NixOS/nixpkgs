@@ -60,10 +60,10 @@ in rec {
   coq_8_5 = callPackage ../applications/science/logic/coq {
     version = "8.5pl3";
   };
-  coq_8_6 = callPackage ../applications/science/logic/coq {};
-  coq_8_7 = callPackage ../applications/science/logic/coq {
-    version = "8.7.1";
+  coq_8_6 = callPackage ../applications/science/logic/coq {
+    version = "8.6.1";
   };
+  coq_8_7 = callPackage ../applications/science/logic/coq {};
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;
   coqPackages_8_6 = mkCoqPackages coq_8_6;
