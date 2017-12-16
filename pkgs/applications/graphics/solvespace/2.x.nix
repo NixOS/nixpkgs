@@ -6,9 +6,10 @@ stdenv.mkDerivation rec {
   name = "solvespace-2.x";
   rev = "b1d87bf284b32e875c8edba592113e691ea10bcd";
   src = fetchgit {
-    url = https://github.com/solvespace/solvespace;
+    url = https://github.com/solvespace/solvespace.git;
     inherit rev;
     fetchSubmodules = true;
+    sha256 = "160qam04pfrwkh9qskfmjkj01wrjwhl09xi6jjxi009yqg3cff9l";
   };
 
   nativeBuildInputs = [
