@@ -23232,6 +23232,8 @@ EOF
     };
   };
 
+  XlsxWriter = callPackage ../development/python-modules/XlsxWriter { };
+
   yowsup = callPackage ../development/python-modules/yowsup { };
 
   wptserve = callPackage ../development/python-modules/wptserve { };
