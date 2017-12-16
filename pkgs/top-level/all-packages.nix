@@ -1333,10 +1333,11 @@ with pkgs;
       autovivification BusinessISBN BusinessISMN BusinessISSN ConfigAutoConf
       DataCompare DataDump DateSimple EncodeEUCJPASCII EncodeHanExtra EncodeJIS2K
       DateTime DateTimeFormatBuilder DateTimeCalendarJulian
-      ExtUtilsLibBuilder FileSlurp IPCRun3 Log4Perl LWPProtocolHttps ListAllUtils
+      ExtUtilsLibBuilder FileSlurp FileWhich IPCRun3 Log4Perl LWPProtocolHttps ListAllUtils
       ListMoreUtils MozillaCA ReadonlyXS RegexpCommon TextBibTeX
       UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
-      ClassAccessor TextCSV TextRoman DataUniqid LinguaTranslit UnicodeNormalize SortKey;
+      ClassAccessor TextCSV TextCSV_XS TextRoman DataUniqid LinguaTranslit UnicodeNormalize SortKey
+      TestDifferences;
   };
 
   blueman = callPackage ../tools/bluetooth/blueman {

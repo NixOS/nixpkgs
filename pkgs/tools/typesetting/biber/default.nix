@@ -2,10 +2,11 @@
 , BusinessISMN, BusinessISSN, ConfigAutoConf, DataCompare, DataDump, DateSimple
 , DateTime, DateTimeFormatBuilder, DateTimeCalendarJulian
 , EncodeEUCJPASCII, EncodeHanExtra, EncodeJIS2K, ExtUtilsLibBuilder
-, FileSlurp, IPCRun3, Log4Perl, LWPProtocolHttps, ListAllUtils, ListMoreUtils
+, FileSlurp, FileWhich, IPCRun3, Log4Perl, LWPProtocolHttps, ListAllUtils, ListMoreUtils
 , MozillaCA, ReadonlyXS, RegexpCommon, TextBibTeX, UnicodeCollate
 , UnicodeLineBreak, URI, XMLLibXMLSimple, XMLLibXSLT, XMLWriter, ClassAccessor
-, TextCSV, TextRoman, DataUniqid, LinguaTranslit, UnicodeNormalize, SortKey }:
+, TextCSV, TextCSV_XS, TextRoman, DataUniqid, LinguaTranslit, UnicodeNormalize, SortKey
+, TestDifferences }:
 
 buildPerlModule rec {
   name = "biber-${version}";
@@ -21,13 +22,14 @@ buildPerlModule rec {
     autovivification BusinessISBN BusinessISMN BusinessISSN ConfigAutoConf
     DataCompare DataDump DateSimple EncodeEUCJPASCII EncodeHanExtra EncodeJIS2K
     DateTime DateTimeFormatBuilder DateTimeCalendarJulian
-    ExtUtilsLibBuilder FileSlurp IPCRun3 Log4Perl LWPProtocolHttps ListAllUtils
+    ExtUtilsLibBuilder FileSlurp FileWhich IPCRun3 Log4Perl LWPProtocolHttps ListAllUtils
     ListMoreUtils MozillaCA ReadonlyXS RegexpCommon TextBibTeX
     UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
-    ClassAccessor TextCSV TextRoman DataUniqid LinguaTranslit UnicodeNormalize SortKey
+    ClassAccessor TextCSV TextCSV_XS TextRoman DataUniqid LinguaTranslit UnicodeNormalize SortKey
+    TestDifferences
   ];
 
-  # Tests seem to be broken
+  # Tests depend on the precise Unicode-Collate version (expects 1.19, but we have 1.25)
   doCheck = false;
 
   postUnpack = ''
