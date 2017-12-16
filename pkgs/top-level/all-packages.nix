@@ -18838,7 +18838,7 @@ with pkgs;
   };
   coq_8_6 = callPackage ../applications/science/logic/coq {};
   coq_8_7 = callPackage ../applications/science/logic/coq {
-    version = "8.7.0";
+    version = "8.7.1";
   };
 
   mkCoqPackages = self: coq: let callPackage = newScope self; in rec {
