@@ -12,11 +12,11 @@ assert glSupport -> mesa_noglu != null;
 let inherit (stdenv.lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  name = "cairo-1.14.10";
+  name = "cairo-1.14.12";
 
   src = fetchurl {
     url = "http://cairographics.org/releases/${name}.tar.xz";
-    sha256 = "02banr0wxckq62nbhc3mqidfdh2q956i2r7w2hd9bjgjb238g1vy";
+    sha256 = "05mzyxkvsfc1annjw2dja8vka01ampp9pp93lg09j8hba06g144c";
   };
 
   patches = [
