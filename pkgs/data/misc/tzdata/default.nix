@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, buildPackages }:
 
 stdenv.mkDerivation rec {
   name = "tzdata-${version}";
@@ -14,9 +14,11 @@ stdenv.mkDerivation rec {
         sha256 = "1dvrq0b2hz7cjqdyd7x21wpy4qcng3rvysr61ij0c2g64fyb9s41";
       })
     ];
+  patches = [ ./fix-toolchain-paths.patch ];
 
   sourceRoot = ".";
 
+  nativeBuildPackages = [ buildPackages.stdenv.cc ];
   outputs = [ "out" "man" "dev" ];
   propagatedBuildOutputs = [];
 
@@ -27,6 +29,9 @@ stdenv.mkDerivation rec {
     "LIBDIR=$(dev)/lib"
     "MANDIR=$(man)/share/man"
     "AWK=awk"
+    # FIXME: The absolute paths shouldn't be necessary
+    "CC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
+    "AR=${buildPackages.stdenv.cc.bintools}/bin/${buildPackages.stdenv.cc.bintools.targetPrefix}ar"
     "CFLAGS=-DHAVE_LINK=0"
   ];
 

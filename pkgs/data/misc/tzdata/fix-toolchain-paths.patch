@@ -1,0 +1,17 @@
+diff --git a/Makefile b/Makefile
+index c92edc0..612ac74 100644
+--- a/Makefile
++++ b/Makefile
+@@ -395,10 +395,10 @@ GZIPFLAGS=	-9n
+ 
+ #MAKE=		make
+ 
+-cc=		cc
++#cc=		cc
+ CC=		$(cc) -DTZDIR=\"$(TZDIR)\"
+ 
+-AR=		ar
++#AR=		ar
+ 
+ # ':' on typical hosts; 'ranlib' on the ancient hosts that still need ranlib.
+ RANLIB=		:
