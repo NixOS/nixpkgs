@@ -7,7 +7,9 @@ stdenv.mkDerivation {
     sha256 = "1md83dip8rf29y40cm5r7nn19705f54iraz6545zhwa6y8zyq9yz";
   };
 
-  buildInputs = [ xmlto docbook_xml_dtd_412 docbook_xsl libxml2 ];
+  nativeBuildInputs = [ xmlto docbook_xml_dtd_412 docbook_xsl ];
+  buildInputs = [ libxml2 ];
+
   meta = {
     description = "A library for reading and writing gif images";
     platforms = stdenv.lib.platforms.unix;
