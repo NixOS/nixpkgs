@@ -15456,10 +15456,10 @@ let self = _self // overrides; _self = with self; {
   };
 
   UnicodeLineBreak = buildPerlPackage rec {
-    name = "Unicode-LineBreak-2015.07.16";
+    name = "Unicode-LineBreak-2017.004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/N/NE/NEZUMI/${name}.tar.gz";
-      sha256 = "0fycsfc3jhnalad7zvx47f13dpxihdh9c8fy8w7psjlyd5svs6sb";
+      sha256 = "0xnb80na1ps1b5gmj3n70bk28brjzrn725kqv5q0gbb0rg2c6nv5";
     };
     propagatedBuildInputs = [ MIMECharset ];
     meta = {
