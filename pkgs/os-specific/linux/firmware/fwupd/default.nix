@@ -5,12 +5,12 @@
 , pillow, ninja, gcab, gnutls, python3Packages, wrapGAppsHook
 }:
 let
-  version = "1.0.1";
+  version = "1.0.2";
 in stdenv.mkDerivation {
   name = "fwupd-${version}";
   src = fetchurl {
     url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-    sha256 = "1k627rja7df51dkzqvkzgbwrrj4049k6408d01m34n66zwr2fp59";
+    sha256 = "15hrl6jq2kyvbxgjkv3qafqj2962il27gryakm39kvz2p2l1bacj";
   };
 
   nativeBuildInputs = [
