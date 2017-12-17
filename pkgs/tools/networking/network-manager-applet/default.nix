@@ -2,7 +2,7 @@
 , libnotify, libsecret, polkit, isocodes, modemmanager
 , mobile_broadband_provider_info, glib_networking, gsettings_desktop_schemas
 , udev, libgudev, hicolor_icon_theme, jansson, wrapGAppsHook, webkitgtk
-, withGnome ? false }:
+, libindicator-gtk3, libappindicator-gtk3, withGnome ? false }:
 
 stdenv.mkDerivation rec {
   name    = "${pname}-${major}.${minor}";
@@ -18,6 +18,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=/etc"
     "--without-selinux"
+    "--with-appindicator"
   ];
 
   outputs = [ "out" "dev" ];
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
     gnome3.gtk libglade networkmanager libnotify libsecret gsettings_desktop_schemas
     polkit isocodes udev libgudev gnome3.libgnome_keyring
     modemmanager jansson glib_networking
+    libindicator-gtk3 libappindicator-gtk3
   ] ++ stdenv.lib.optional withGnome webkitgtk;
 
   nativeBuildInputs = [ intltool pkgconfig wrapGAppsHook ];
