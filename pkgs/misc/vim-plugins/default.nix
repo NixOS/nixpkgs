@@ -88,6 +88,7 @@ rec {
   polyglot            = vim-polyglot;
   quickrun            = vim-quickrun;
   repeat              = vim-repeat;
+  rhubarb             = vim-rhubarb;
   signature           = vim-signature;
   stylish-haskell     = vim-stylish-haskell;
   stylishHaskell      = stylish-haskell; # backwards compat, added 2014-10-18
@@ -1717,6 +1718,17 @@ rec {
       url = "https://github.com/tpope/vim-repeat";
       rev = "070ee903245999b2b79f7386631ffd29ce9b8e9f";
       sha256 = "1grsaaar2ng1049gc3r8wbbp5imp31z1lcg399vhh3k36y34q213";
+    };
+    dependencies = [];
+
+  };
+
+  vim-rhubarb = buildVimPluginFrom2Nix { # created by nix#NixDerivation
+    name = "vim-rhubarb-2017-06-28";
+    src = fetchgit {
+      url = "https://github.com/tpope/vim-rhubarb";
+      rev = "6caad2b61afcc1b7c476b0ae3dea9ee5f2b1d14a";
+      sha256 = "1bmc5j9056bgdhyhvylbd93jkp1k9067mv3af6skzh0r77rx1a0g";
     };
     dependencies = [];
 

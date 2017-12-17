@@ -138,6 +138,7 @@
 "github:tpope/vim-dispatch"
 "github:tpope/vim-eunuch"
 "github:tpope/vim-repeat"
+"github:tpope/vim-rhubarb"
 "github:tpope/vim-speeddating"
 "github:travitch/hasksyn"
 "github:twinside/vim-haskellconceal"
