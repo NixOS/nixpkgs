@@ -49,6 +49,11 @@ mapAliases ({
   bashCompletion = bash-completion; # Added 2016-09-28
   bridge_utils = bridge-utils;  # added 2015-02-20
   btrfsProgs = btrfs-progs; # added 2016-01-03
+  buildbot = pythonPackages.buildbot; # added 2018-10-11
+  buildbot-full = pythonPackages.buildbot-full; # added 2018-10-11
+  buildbot-pkg = pythonPackages.buildbot-pkg; # added 2018-10-11
+  buildbot-ui = pythonPackages.buildbot-ui; # added 2018-10-11
+  buildbot-worker = pythonPackages.buildbot-worker; # added 2018-10-11
   bundler_HEAD = bundler; # added 2015-11-15
   cantarell_fonts = cantarell-fonts; # added 2018-03-03
   checkbashism = checkbashisms; # added 2016-08-16
