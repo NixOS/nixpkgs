@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     ./regen.sh
 
     ${stdenv.lib.optionalString (kerberos != null)
-      "export KRB5_CONFIG=${kerberos}/bin/krb5-config"}
+      "export KRB5_CONFIG=${kerberos.dev}/bin/krb5-config"}
 
     configureFlagsArray=(
       "--with-linux-kernel-build=$TMP/linux"

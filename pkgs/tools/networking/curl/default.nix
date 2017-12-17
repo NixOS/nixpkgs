@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
       ( if idnSupport then "--with-libidn=${libidn.dev}" else "--without-libidn" )
     ]
     ++ stdenv.lib.optional c-aresSupport "--enable-ares=${c-ares}"
-    ++ stdenv.lib.optional gssSupport "--with-gssapi=${kerberos}";
+    ++ stdenv.lib.optional gssSupport "--with-gssapi=${kerberos.dev}";
 
   CXX = "c++";
   CXXCPP = "c++ -E";
