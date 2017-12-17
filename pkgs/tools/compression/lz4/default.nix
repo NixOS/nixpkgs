@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, valgrind }:
+{ stdenv, fetchFromGitHub, valgrind, withStatic ? false }:
 
 stdenv.mkDerivation rec {
   name = "lz4-${version}";
@@ -17,14 +17,16 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  makeFlags = [ "PREFIX=$(out)" "INCLUDEDIR=$(dev)/include" ];
+  makeFlags = let static = if withStatic then "yes" else "no"; in [
+    "PREFIX=$(out)"
+    "INCLUDEDIR=$(dev)/include"
+    "BUILD_STATIC=${static}"
+  ];
 
   doCheck = false; # tests take a very long time
   checkTarget = "test";
 
   patches = [ ./install-on-freebsd.patch ] ;
-
-  postInstall = "rm $out/lib/*.a";
 
   meta = with stdenv.lib; {
     description = "Extremely fast compression algorithm";
