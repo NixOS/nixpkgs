@@ -19,8 +19,13 @@ stdenv.mkDerivation rec {
     sha256 = "15cc81h7nh5dk6gj6mc4ylcgdznfriilhb43n1g3xwyq3s8iaibz";
   };
 
-  cmakeFlags = [ "-DKICAD_VERSION=${version}" ]
-    ++ optionals (oceSupport) [ "-DKICAD_USE_OCE=ON" "-DOCE_DIR=${opencascade_oce}" ]
+  postPatch = ''
+    substituteInPlace CMakeModules/KiCadVersion.cmake \
+      --replace no-vcs-found ${version}
+  '';
+
+  cmakeFlags =
+    optionals (oceSupport) [ "-DKICAD_USE_OCE=ON" "-DOCE_DIR=${opencascade_oce}" ]
     ++ optional (ngspiceSupport) "-DKICAD_SPICE=ON"
     ++ optionals (scriptingSupport) [
       "-DKICAD_SCRIPTING=ON"
