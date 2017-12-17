@@ -14300,6 +14300,8 @@ in {
 
   pyocr = callPackage ../development/python-modules/pyocr { };
 
+  pyparser = callPackage ../development/python-modules/pyparser { };
+
   pyparsing = callPackage ../development/python-modules/pyparsing { };
 
   pyparted = buildPythonPackage rec {
