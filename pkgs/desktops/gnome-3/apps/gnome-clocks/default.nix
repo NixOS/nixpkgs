@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , meson, ninja, gettext, pkgconfig, wrapGAppsHook, itstool, desktop_file_utils
-, vala,  gtk3, glib, gsound, libcanberra_gtk3
+, vala,  gtk3, glib, gsound
 , gnome3, gdk_pixbuf, geoclue2, libgweather }:
 
 stdenv.mkDerivation rec {
@@ -8,14 +8,13 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  nativeBuildInputs = [ vala meson ninja pkgconfig gettext itstool wrapGAppsHook desktop_file_utils ];
-  buildInputs = [ gtk3 glib libcanberra_gtk3
-                  gnome3.gsettings_desktop_schemas
-                  gdk_pixbuf gnome3.defaultIconTheme
-                  gnome3.gnome_desktop gnome3.geocode_glib geoclue2
-                  libgweather gsound ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [
+    vala meson ninja pkgconfig gettext itstool wrapGAppsHook desktop_file_utils
+  ];
+  buildInputs = [
+    gtk3 glib gnome3.gsettings_desktop_schemas gdk_pixbuf gnome3.defaultIconTheme
+    gnome3.gnome_desktop gnome3.geocode_glib geoclue2 libgweather gsound
+  ];
 
   prePatch = "patchShebangs build-aux/";
 
