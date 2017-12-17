@@ -4,11 +4,12 @@ let
   baseName = "scalafmt";
   version = "1.3.0";
   deps = stdenv.mkDerivation {
-    name = "${baseName}-${version}-deps";
+    name = "${baseName}-deps-${version}";
     buildCommand = ''
       export COURSIER_CACHE=$(pwd)
+      ${coursier}/bin/coursier fetch com.geirsson:scalafmt-cli_2.12:${version} > deps
       mkdir -p $out/share/java
-      cp $(${coursier}/bin/coursier fetch com.geirsson:scalafmt-cli_2.12:${version}) $out/share/java/
+      cp $(< deps) $out/share/java/
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";

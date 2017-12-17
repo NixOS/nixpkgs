@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-	version = "0.99.0";
+	version = "1.0.0";
 	name = "ocaml${ocaml.version}-cohttp-${version}";
 
 	src = fetchFromGitHub {
 		owner = "mirage";
 		repo = "ocaml-cohttp";
 		rev = "v${version}";
-		sha256 = "0y8qhzfwrc6486apmp2rsj822cnfhnz4w8rsb52w5wqmsgjxx1bj";
+		sha256 = "0h9ak2bvhmcdxickvybpg45il33xszh2ksacpjgqrnnslxnh81ig";
 	};
 
 	buildInputs = [ ocaml findlib jbuilder jsonm ppx_fields_conv ppx_sexp_conv ];

@@ -1,10 +1,7 @@
 { productVersion
 , patchVersion
 , downloadUrl
-, sha256_i686
-, sha256_x86_64
-, sha256_armv7l
-, sha256_aarch64
+, sha256
 , jceName
 , jceDownloadUrl
 , sha256JCE
@@ -37,29 +34,19 @@
 , setJavaClassPath
 }:
 
-assert stdenv.system == "i686-linux"
-    || stdenv.system == "x86_64-linux"
-    || stdenv.system == "armv7l-linux"
-    || stdenv.system == "aarch64-linux";
 assert swingSupport -> xorg != null;
 
 let
-  abortArch = throw "Unsupported system: ${stdenv.system}";
 
   /**
    * The JRE libraries are in directories that depend on the CPU.
    */
-  architecture =
-    if stdenv.system == "i686-linux" then
-      "i386"
-    else if stdenv.system == "x86_64-linux" then
-      "amd64"
-    else if stdenv.system == "armv7l-linux" then
-      "arm"
-    else if stdenv.system == "aarch64-linux" then
-      "aarch64"
-    else
-      abortArch;
+  architecture = {
+    i686-linux    = "i386";
+    x86_64-linux  = "amd64";
+    armv7l-linux  = "arm";
+    aarch64-linux = "aarch64";
+  }.${stdenv.system};
 
   jce =
     if installjce then
@@ -84,33 +71,16 @@ let result = stdenv.mkDerivation rec {
   name =
     if installjdk then "oraclejdk-${productVersion}u${patchVersion}" else "oraclejre-${productVersion}u${patchVersion}";
 
-  src =
-    if stdenv.system == "i686-linux" then
-      requireFile {
-        name = "jdk-${productVersion}u${patchVersion}-linux-i586.tar.gz";
-        url = downloadUrl;
-        sha256 = sha256_i686;
-      }
-    else if stdenv.system == "x86_64-linux" then
-      requireFile {
-        name = "jdk-${productVersion}u${patchVersion}-linux-x64.tar.gz";
-        url = downloadUrl;
-        sha256 = sha256_x86_64;
-      }
-    else if stdenv.system == "armv7l-linux" then
-      requireFile {
-        name = "jdk-${productVersion}u${patchVersion}-linux-arm32-vfp-hflt.tar.gz";
-        url = downloadUrl;
-        sha256 = sha256_armv7l;
-      }
-    else if stdenv.system == "aarch64-linux" then
-      requireFile {
-        name = "jdk-${productVersion}u${patchVersion}-linux-arm64-vfp-hflt.tar.gz";
-        url = downloadUrl;
-        sha256 = sha256_aarch64;
-      }
-    else
-      abortArch;
+  src = requireFile {
+    name = {
+      i686-linux    = "jdk-${productVersion}u${patchVersion}-linux-i586.tar.gz";
+      x86_64-linux  = "jdk-${productVersion}u${patchVersion}-linux-x64.tar.gz";
+      armv7l-linux  = "jdk-${productVersion}u${patchVersion}-linux-arm32-vfp-hflt.tar.gz";
+      aarch64-linux = "jdk-${productVersion}u${patchVersion}-linux-arm64-vfp-hflt.tar.gz";
+    }.${stdenv.system};
+    url = downloadUrl;
+    sha256 = sha256.${stdenv.system};
+  };
 
   nativeBuildInputs = [ file ]
     ++ stdenv.lib.optional installjce unzip;

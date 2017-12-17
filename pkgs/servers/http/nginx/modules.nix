@@ -1,4 +1,4 @@
-{ fetchFromGitHub, pkgs }:
+{ fetchFromGitHub, fetchurl, lib, pkgs }:
 
 {
   brotli = {
@@ -11,12 +11,12 @@
     };
   };
 
-  rtmp = {
+  rtmp ={
     src = fetchFromGitHub {
       owner = "arut";
       repo = "nginx-rtmp-module";
-      rev = "v1.1.11";
-      sha256 = "09zrnf8lk179mpqnx92zm24xl7m3bq4ca84wc2zwi5hc8kxjbwxc";
+      rev = "v1.2.1";
+      sha256 = "0na1aam176irz6w148hnvamqy1ilbn4abhdzkva0yrm35a3ksbzn";
     };
   };
 
@@ -51,8 +51,8 @@
     src = fetchFromGitHub {
       owner = "SpiderLabs";
       repo = "ModSecurity-nginx";
-      rev = "abbf2c47f6f3205484a1a9db618e067dce213b89";
-      sha256 = "04ar51bnqjca6g4p2irymgdmc8rh5nsi8ml43srm4krllnkvw8qn";
+      rev = "a2a5858d249222938c2f5e48087a922c63d7f9d8";
+      sha256 = "1zj0fq35hddzf7b3x40xlbss866lg7w2vd1bbm8g1hcq1ny2s84n";
     };
     inputs = [ pkgs.curl pkgs.geoip pkgs.libmodsecurity pkgs.libxml2 pkgs.lmdb pkgs.yajl ];
   };

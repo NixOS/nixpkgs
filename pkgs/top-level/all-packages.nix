@@ -603,6 +603,8 @@ with pkgs;
 
   git-fire = callPackage ../tools/misc/git-fire { };
 
+  gitless = callPackage ../applications/version-management/gitless/default.nix { };
+
   grc = callPackage ../tools/misc/grc { };
 
   green-pdfviewer = callPackage ../applications/misc/green-pdfviewer {
@@ -701,7 +703,7 @@ with pkgs;
 
   azureus = callPackage ../tools/networking/p2p/azureus { };
 
-  backblaze-b2 = callPackage ../development/tools/backblaze-b2 { };
+  backblaze-b2 = python.pkgs.callPackage ../development/tools/backblaze-b2 { };
 
   backup = callPackage ../tools/backup/backup { };
 
@@ -1181,6 +1183,8 @@ with pkgs;
 
   iio-sensor-proxy = callPackage ../os-specific/linux/iio-sensor-proxy { };
 
+  lynis = callPackage ../tools/security/lynis { };
+
   mathics = pythonPackages.mathics;
 
   masscan = callPackage ../tools/security/masscan { };
@@ -1327,13 +1331,15 @@ with pkgs;
   bgs = callPackage ../tools/X11/bgs { };
 
   biber = callPackage ../tools/typesetting/biber {
-    inherit (perlPackages)
+    inherit (perlPackages) buildPerlModule
       autovivification BusinessISBN BusinessISMN BusinessISSN ConfigAutoConf
       DataCompare DataDump DateSimple EncodeEUCJPASCII EncodeHanExtra EncodeJIS2K
-      ExtUtilsLibBuilder FileSlurp IPCRun3 Log4Perl LWPProtocolHttps ListAllUtils
-      ListMoreUtils ModuleBuild MozillaCA ReadonlyXS RegexpCommon TextBibTeX
+      DateTime DateTimeFormatBuilder DateTimeCalendarJulian
+      ExtUtilsLibBuilder FileSlurp FileWhich IPCRun3 Log4Perl LWPProtocolHttps ListAllUtils
+      ListMoreUtils MozillaCA ReadonlyXS RegexpCommon TextBibTeX
       UnicodeCollate UnicodeLineBreak URI XMLLibXMLSimple XMLLibXSLT XMLWriter
-      ClassAccessor TextRoman DataUniqid LinguaTranslit UnicodeNormalize;
+      ClassAccessor TextCSV TextCSV_XS TextRoman DataUniqid LinguaTranslit UnicodeNormalize SortKey
+      TestDifferences;
   };
 
   blueman = callPackage ../tools/bluetooth/blueman {
@@ -1390,6 +1396,8 @@ with pkgs;
   can-utils = callPackage ../os-specific/linux/can-utils { };
 
   caudec = callPackage ../applications/audio/caudec { };
+
+  ccd2iso = callPackage ../tools/cd-dvd/ccd2iso { };
 
   ccid = callPackage ../tools/security/ccid { };
 
@@ -3977,12 +3985,12 @@ with pkgs;
 
   philter = callPackage ../tools/networking/philter { };
 
-  pinentry = callPackage ../tools/security/pinentry {
-    libcap = if stdenv.isDarwin then null else libcap;
-    qt4 = null;
+  pinentry = pinentry_ncurses.override {
+    inherit gtk2;
   };
 
-  pinentry_ncurses = pinentry.override {
+  pinentry_ncurses = callPackage ../tools/security/pinentry {
+    libcap = if stdenv.isDarwin then null else libcap;
     gtk2 = null;
   };
 
@@ -3991,11 +3999,11 @@ with pkgs;
   };
 
   pinentry_qt4 = pinentry_ncurses.override {
-    inherit qt4;
+    qt = qt4;
   };
 
-  pinentry_qt5 = libsForQt5.callPackage ../tools/security/pinentry/qt5.nix {
-    libcap = if stdenv.isDarwin then null else libcap;
+  pinentry_qt5 = pinentry_ncurses.override {
+    qt = qt5.qtbase;
   };
 
   pinentry_mac = callPackage ../tools/security/pinentry-mac {
@@ -4501,6 +4509,8 @@ with pkgs;
 
   smbnetfs = callPackage ../tools/filesystems/smbnetfs {};
 
+  smenu = callPackage ../tools/misc/smenu { };
+
   smugline = python3Packages.smugline;
 
   snabb = callPackage ../tools/networking/snabb { } ;
@@ -4716,7 +4726,7 @@ with pkgs;
 
   thc-hydra = callPackage ../tools/security/thc-hydra { };
 
-  thefuck = callPackage ../tools/misc/thefuck { };
+  thefuck = python3Packages.callPackage ../tools/misc/thefuck { };
 
   thin-provisioning-tools = callPackage ../tools/misc/thin-provisioning-tools {  };
 
@@ -6080,26 +6090,17 @@ with pkgs;
 
   jre8Plugin = lowPrio (pkgs.oraclejdk8distro false true);
 
-  supportsJDK =
-    system == "i686-linux" ||
-    system == "x86_64-linux" ||
-    system == "armv7l-linux" ||
-    system == "aarch64-linux";
-
   jdkdistro = oraclejdk8distro;
 
   oraclejdk8distro = installjdk: pluginSupport:
-    assert supportsJDK;
     (if pluginSupport then appendToName "with-plugin" else x: x)
       (callPackage ../development/compilers/oraclejdk/jdk8cpu-linux.nix { inherit installjdk pluginSupport; });
 
   oraclejdk8psu_distro = installjdk: pluginSupport:
-    assert supportsJDK;
     (if pluginSupport then appendToName "with-plugin" else x: x)
       (callPackage ../development/compilers/oraclejdk/jdk8psu-linux.nix { inherit installjdk pluginSupport; });
 
   oraclejdk9distro = packageType: pluginSupport:
-    assert supportsJDK;
     (if pluginSupport then appendToName "with-plugin" else x: x)
       (callPackage ../development/compilers/oraclejdk/jdk9-linux.nix { inherit packageType pluginSupport; });
 
@@ -7634,6 +7635,8 @@ with pkgs;
 
   remake = callPackage ../development/tools/build-managers/remake { };
 
+  retdec = callPackage ../development/tools/analysis/retdec { };
+
   rhc = callPackage ../development/tools/rhc { };
 
   rman = callPackage ../development/tools/misc/rman { };
@@ -8786,6 +8789,10 @@ with pkgs;
   hunspellWithDicts = dicts: callPackage ../development/libraries/hunspell/wrapper.nix { inherit dicts; };
 
   hwloc = callPackage ../development/libraries/hwloc {};
+
+  hwloc-nox = callPackage ../development/libraries/hwloc {
+    x11Support = false;
+  };
 
   hydra = callPackage ../development/tools/misc/hydra { };
 
@@ -11541,7 +11548,8 @@ with pkgs;
   cassandra_2_1 = callPackage ../servers/nosql/cassandra/2.1.nix { };
   cassandra_2_2 = callPackage ../servers/nosql/cassandra/2.2.nix { };
   cassandra_3_0 = callPackage ../servers/nosql/cassandra/3.0.nix { };
-  cassandra = cassandra_3_0;
+  cassandra_3_11 = callPackage ../servers/nosql/cassandra/3.11.nix { };
+  cassandra = cassandra_3_11;
 
   apache-jena = callPackage ../servers/nosql/apache-jena/binary.nix {
     java = jdk;
@@ -11948,6 +11956,8 @@ with pkgs;
   cbfstool = callPackage ../applications/virtualization/cbfstool { };
 
   vmfs-tools = callPackage ../tools/filesystems/vmfs-tools { };
+
+  pgbouncer = callPackage ../servers/sql/pgbouncer/default.nix { };
 
   pgpool93 = pgpool.override { postgresql = postgresql93; };
   pgpool94 = pgpool.override { postgresql = postgresql94; };
@@ -13587,6 +13597,8 @@ with pkgs;
 
   mustache-spec = callPackage ../data/documentation/mustache-spec { };
 
+  myrica = callPackage ../data/fonts/myrica { };
+
   nafees = callPackage ../data/fonts/nafees { };
 
   inherit (callPackages ../data/fonts/noto-fonts {})
@@ -14113,7 +14125,7 @@ with pkgs;
     openjpeg = openjpeg_1;
   };
 
-  camlistore = callPackage ../applications/misc/camlistore { };
+  perkeep = callPackage ../applications/misc/perkeep { };
 
   canto-curses = callPackage ../applications/networking/feedreaders/canto-curses { };
 
@@ -15812,7 +15824,9 @@ with pkgs;
 
   monero = callPackage ../applications/misc/monero { };
 
-  xmr-stak = callPackage ../applications/misc/xmr-stak { };
+  xmr-stak = callPackage ../applications/misc/xmr-stak {
+    hwloc = hwloc-nox;
+  };
 
   monkeysAudio = callPackage ../applications/audio/monkeys-audio { };
 
@@ -16113,12 +16127,6 @@ with pkgs;
   muchsync = callPackage ../applications/networking/mailreaders/notmuch/muchsync.nix { };
 
   notmuch-addrlookup = callPackage ../applications/networking/mailreaders/notmuch-addrlookup { };
-
-  # Open Stack
-  nova = callPackage ../applications/virtualization/openstack/nova.nix { };
-  keystone = callPackage ../applications/virtualization/openstack/keystone.nix { };
-  neutron = callPackage ../applications/virtualization/openstack/neutron.nix { };
-  glance = callPackage ../applications/virtualization/openstack/glance.nix { };
 
   nova-filters =  callPackage ../applications/audio/nova-filters { };
 
@@ -16769,7 +16777,9 @@ with pkgs;
 
   lightdm_qt = lightdm.override { withQt5 = true; };
 
-  lightdm_gtk_greeter = callPackage ../applications/display-managers/lightdm-gtk-greeter { };
+  lightdm_gtk_greeter = callPackage ../applications/display-managers/lightdm-gtk-greeter {
+    inherit (xfce) exo;
+  };
 
   slic3r = callPackage ../applications/misc/slic3r { };
 
@@ -17884,6 +17894,8 @@ with pkgs;
 
   crrcsim = callPackage ../games/crrcsim {};
 
+  cutemaze = libsForQt5.callPackage ../games/cutemaze {};
+
   cuyo = callPackage ../games/cuyo { };
 
   dhewm3 = callPackage ../games/dhewm3 {};
@@ -18828,7 +18840,7 @@ with pkgs;
   };
   coq_8_6 = callPackage ../applications/science/logic/coq {};
   coq_8_7 = callPackage ../applications/science/logic/coq {
-    version = "8.7.0";
+    version = "8.7.1";
   };
 
   mkCoqPackages = self: coq: let callPackage = newScope self; in rec {
@@ -18855,6 +18867,8 @@ with pkgs;
     math-classes = callPackage ../development/coq-modules/math-classes { };
     fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
     equations = callPackage ../development/coq-modules/equations { };
+    coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
+    category-theory = callPackage ../development/coq-modules/category-theory { };
   };
 
   coqPackages_8_5 = mkCoqPackages coqPackages_8_5 coq_8_5;
@@ -18875,6 +18889,8 @@ with pkgs;
     gmp = lib.overrideDerivation gmp (a: { dontDisableStatic = true; });
   };
   cvc4 = callPackage ../applications/science/logic/cvc4 {};
+
+  drat-trim = callPackage ../applications/science/logic/drat-trim {};
 
   ekrhyper = callPackage ../applications/science/logic/ekrhyper {
     inherit (ocamlPackages_4_02) ocaml;
@@ -18988,6 +19004,7 @@ with pkgs;
     gmp-static = gmp.override { withStatic = true; };
   };
 
+  z3_4_5_0 = callPackage ../applications/science/logic/z3/4.5.0.nix {};
   z3 = callPackage ../applications/science/logic/z3 {};
 
   aiger = callPackage ../applications/science/logic/aiger {};
@@ -19015,6 +19032,11 @@ with pkgs;
   gtkwave = callPackage ../applications/science/electronics/gtkwave { };
 
   kicad = callPackage ../applications/science/electronics/kicad {
+    wxGTK = wxGTK30;
+    boost = boost160;
+  };
+
+  kicad-unstable = python.pkgs.callPackage ../applications/science/electronics/kicad/unstable.nix {
     wxGTK = wxGTK30;
     boost = boost160;
   };
@@ -19688,7 +19710,7 @@ with pkgs;
   # convenience if someone doesn't want to have to think about which plugins to use.
   terraform_0_10-full = terraform_0_10.withPlugins lib.attrValues;
 
-  terraform = terraform_0_9;
+  terraform = terraform_0_11;
 
   terraform-inventory = callPackage ../applications/networking/cluster/terraform-inventory {};
 

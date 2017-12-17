@@ -36,6 +36,9 @@ import ./make-test.nix ({ pkgs, ...} : {
     startAll;
 
     $master->waitForUnit("jenkins");
+
+    $master->mustSucceed("curl http://localhost:8080 | grep 'Authentication required'");
+
     print $master->execute("sudo -u jenkins groups");
     $master->mustSucceed("sudo -u jenkins groups | grep jenkins | grep users");
 

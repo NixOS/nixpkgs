@@ -15,5 +15,6 @@ stdenv.mkDerivation rec {
 	meta = {
 		description = "Client implementation of the “Smart” HTTP Git protocol in pure OCaml";
 		inherit (git.meta) homepage license maintainers platforms;
+		broken = true;
 	};
 }

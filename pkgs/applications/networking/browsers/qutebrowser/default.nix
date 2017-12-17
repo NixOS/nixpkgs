@@ -29,13 +29,13 @@ let
 
 in buildPythonApplication rec {
   name = "qutebrowser-${version}${fix_postfix}";
-  fix_postfix = "-1";
-  version = "1.0.3";
+  fix_postfix = "";
+  version = "1.0.4";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${name}.tar.gz";
-    sha256 = "04d6hg2yf2wjwn0sd05bpx3zngnb93g7rizbdq17bbpmnwxchzap";
+    sha256 = "0z8zrgr914bfmimqk3l17dxyc7gzh42sw8lfp041zzvj6fxw3lkr";
   };
 
   # Needs tox

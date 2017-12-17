@@ -506,5 +506,6 @@ self: super: builtins.intersectAttrs super {
 
   # Break cyclic reference that results in an infinite recursion.
   partial-semigroup = dontCheck super.partial-semigroup;
+  colour = dontCheck super.colour;
 
 }
