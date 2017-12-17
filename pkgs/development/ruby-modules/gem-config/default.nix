@@ -109,7 +109,7 @@ in
 
   gio2 = attrs: {
     nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ gtk2 pcre ];
+    buildInputs = [ gtk2 pcre gobjectIntrospection ];
   };
 
   gitlab-markup = attrs: { meta.priority = 1; };
