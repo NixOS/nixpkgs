@@ -14497,6 +14497,8 @@ with pkgs;
       python = python2;
       gnused = gnused_422;
       icu = icu59;
+      cargo = rust119bin.cargo;
+      rustc = rust119bin.rustc;
     };
   });
 
