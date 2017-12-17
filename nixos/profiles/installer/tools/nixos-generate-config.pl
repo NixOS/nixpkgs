@@ -290,7 +290,7 @@ if ($virt eq "systemd-nspawn") {
 
 # Provide firmware for devices that are not detected by this script,
 # unless we're in a VM/container.
-push @imports, "<nixpkgs/nixos/modules/installer/scan/not-detected.nix>"
+push @imports, "<nixpkgs/nixos/profiles/installer/scan/not-detected.nix>"
     if $virt eq "none";
 
 

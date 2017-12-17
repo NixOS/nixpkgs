@@ -315,7 +315,7 @@ fi
 # nixos-version shows something useful).
 if [ -n "$canRun" ]; then
     if nixpkgs=$(nix-instantiate --find-file nixpkgs "${extraBuildFlags[@]}"); then
-        suffix=$($SHELL $nixpkgs/nixos/modules/installer/tools/get-version-suffix "${extraBuildFlags[@]}" || true)
+        suffix=$($SHELL $nixpkgs/nixos/profiles/installer/tools/get-version-suffix "${extraBuildFlags[@]}" || true)
         if [ -n "$suffix" ]; then
             echo -n "$suffix" > "$nixpkgs/.version-suffix" || true
         fi

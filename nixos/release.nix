@@ -128,7 +128,7 @@ in rec {
     x86_64-linux = makeNetboot {
       system = "x86_64-linux";
       modules = [
-        ./modules/installer/netboot/netboot-minimal.nix
+        ./profiles/installer/netboot/netboot-minimal.nix
         versionModule
       ];
     };
@@ -136,19 +136,19 @@ in rec {
     aarch64-linux = makeNetboot {
       system = "aarch64-linux";
       modules = [
-        ./modules/installer/netboot/netboot-minimal.nix
+        ./profiles/installer/netboot/netboot-minimal.nix
         versionModule
       ];
     };});
 
   iso_minimal = forAllSystems (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-minimal.nix;
+    module = ./profiles/installer/cd-dvd/installation-cd-minimal.nix;
     type = "minimal";
     inherit system;
   });
 
   iso_graphical = genAttrs [ "x86_64-linux" ] (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-graphical-kde.nix;
+    module = ./profiles/installer/cd-dvd/installation-cd-graphical-kde.nix;
     type = "graphical";
     inherit system;
   });
@@ -156,7 +156,7 @@ in rec {
   # A variant with a more recent (but possibly less stable) kernel
   # that might support more hardware.
   iso_minimal_new_kernel = genAttrs [ "x86_64-linux" ] (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-minimal-new-kernel.nix;
+    module = ./profiles/installer/cd-dvd/installation-cd-minimal-new-kernel.nix;
     type = "minimal-new-kernel";
     inherit system;
   });
@@ -171,7 +171,7 @@ in rec {
       inherit system;
       modules =
         [ versionModule
-          ./modules/installer/virtualbox-demo.nix
+          ./profiles/installer/virtualbox-demo.nix
         ];
     }).config.system.build.virtualBoxOVA)
 
@@ -198,7 +198,7 @@ in rec {
   # in a machine faster than the sheevpalug
   /*
   system_tarball_pc = forAllSystems (system: makeSystemTarball {
-    module = ./modules/installer/cd-dvd/system-tarball-pc.nix;
+    module = ./profiles/installer/cd-dvd/system-tarball-pc.nix;
     inherit system;
   });
   */
@@ -213,14 +213,14 @@ in rec {
   system_tarball_fuloong2f =
     assert builtins.currentSystem == "mips64-linux";
     makeSystemTarball {
-      module = ./modules/installer/cd-dvd/system-tarball-fuloong2f.nix;
+      module = ./profiles/installer/cd-dvd/system-tarball-fuloong2f.nix;
       system = "mips64-linux";
     };
 
   system_tarball_sheevaplug =
     assert builtins.currentSystem == "armv5tel-linux";
     makeSystemTarball {
-      module = ./modules/installer/cd-dvd/system-tarball-sheevaplug.nix;
+      module = ./profiles/installer/cd-dvd/system-tarball-sheevaplug.nix;
       system = "armv5tel-linux";
     };
   */

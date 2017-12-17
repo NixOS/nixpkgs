@@ -8,7 +8,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   machine =
     { config, pkgs, lib, ... }:
-    { imports = [ ../modules/installer/cd-dvd/channel.nix ];
+    { imports = [ ../profiles/installer/cd-dvd/channel.nix ];
       virtualisation.writableStore = true;
       virtualisation.memorySize = 768;
       # Make sure we always have all the required dependencies for creating a

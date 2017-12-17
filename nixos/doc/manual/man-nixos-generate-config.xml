@@ -155,7 +155,7 @@ look like this:
 
 {
   imports =
-    [ &lt;nixos/modules/installer/scan/not-detected.nix>
+    [ &lt;nixos/profiles/installer/scan/not-detected.nix&gt;
     ];
 
   boot.initrd.availableKernelModules = [ "ehci_hcd" "ahci" ];

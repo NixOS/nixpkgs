@@ -13,7 +13,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   machine =
     { config, pkgs, ... }:
-    { imports = [ ../modules/installer/cd-dvd/channel.nix ];
+    { imports = [ ../profiles/installer/cd-dvd/channel.nix ];
       virtualisation.writableStore = true;
       virtualisation.memorySize = 768;
 

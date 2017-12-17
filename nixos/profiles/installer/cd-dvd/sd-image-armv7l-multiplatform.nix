@@ -1,5 +1,5 @@
 # To build, use:
-# nix-build nixos -I nixos-config=nixos/modules/installer/cd-dvd/sd-image-armv7l-multiplatform.nix -A config.system.build.sdImage
+# nix-build nixos -I nixos-config=nixos/profiles/installer/cd-dvd/sd-image-armv7l-multiplatform.nix -A config.system.build.sdImage
 { config, lib, pkgs, ... }:
 
 let

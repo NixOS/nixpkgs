@@ -6,7 +6,7 @@ with lib;
 
 {
   imports =
-    [ ../../../modules/installer/cd-dvd/channel.nix
+    [ ../../../profiles/installer/cd-dvd/channel.nix
       ../../../modules/virtualisation/nova-config.nix
     ];
 
