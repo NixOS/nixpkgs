@@ -11964,6 +11964,8 @@ with pkgs;
 
   vmfs-tools = callPackage ../tools/filesystems/vmfs-tools { };
 
+  pgbouncer = callPackage ../servers/sql/pgbouncer/default.nix { };
+
   pgpool93 = pgpool.override { postgresql = postgresql93; };
   pgpool94 = pgpool.override { postgresql = postgresql94; };
 
