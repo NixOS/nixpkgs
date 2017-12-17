@@ -10,6 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "1m9q47dfnvdli1z3kb1jvvbm0dgaw725k1aw6h9w00bggqb91bqh";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile --replace gcc cc
+  '';
+
   installPhase = ''
     install -Dt $out/bin drat-trim
   '';
