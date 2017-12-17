@@ -54,7 +54,6 @@
   ./i18n/input-method/nabi.nix
   ./i18n/input-method/uim.nix
   ./installer/tools/auto-upgrade.nix
-  ./installer/tools/tools.nix
   ./misc/assertions.nix
   ./misc/crashdump.nix
   ./misc/extra-arguments.nix
@@ -677,6 +676,7 @@
   ./services/x11/xserver.nix
   ./system/activation/activation-script.nix
   ./system/activation/top-level.nix
+  ./system/base/tools.nix
   ./system/boot/coredump.nix
   ./system/boot/emergency-mode.nix
   ./system/boot/grow-partition.nix
