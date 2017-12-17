@@ -2,7 +2,7 @@
 +++ b/data/builder/meson.build
 @@ -1,3 +0,0 @@
 -install_data('README.md',
--  install_dir : join_paths(get_option('localstatedir'), 'lib', 'fwupd', 'builder')
+-  install_dir : join_paths(localstatedir, 'lib', 'fwupd', 'builder')
 -)
 --- a/data/meson.build
 +++ b/data/meson.build
@@ -11,15 +11,15 @@
  endif
  
 -install_data(['daemon.conf'],
--  install_dir : join_paths(get_option('sysconfdir'), 'fwupd')
+-  install_dir : join_paths(sysconfdir, 'fwupd')
 -)
 -
  install_data(['org.freedesktop.fwupd.metainfo.xml'],
-   install_dir: join_paths(get_option('datadir'), 'metainfo')
+   install_dir: join_paths(datadir, 'metainfo')
  )
  
  install_data(['org.freedesktop.fwupd.conf'],
--  install_dir : join_paths(get_option('sysconfdir'), 'dbus-1', 'system.d')
+-  install_dir : join_paths(sysconfdir, 'dbus-1', 'system.d')
 +  install_dir : join_paths(get_option('prefix'), 'etc', 'dbus-1', 'system.d')
  )
  
@@ -30,14 +30,14 @@
        'GPG-KEY-Hughski-Limited',
        'GPG-KEY-Linux-Vendor-Firmware-Service',
      ],
--    install_dir : join_paths(get_option('sysconfdir'), 'pki', 'fwupd')
+-    install_dir : join_paths(sysconfdir, 'pki', 'fwupd')
 +    install_dir : join_paths(get_option('prefix'), 'etc', 'pki', 'fwupd')
    )
  
    install_data([
        'GPG-KEY-Linux-Vendor-Firmware-Service',
      ],
--    install_dir : join_paths(get_option('sysconfdir'), 'pki', 'fwupd-metadata')
+-    install_dir : join_paths(sysconfdir, 'pki', 'fwupd-metadata')
 +    install_dir : join_paths(get_option('prefix'), 'etc', 'pki', 'fwupd-metadata')
    )
  endif
@@ -46,13 +46,13 @@
    install_data([
        'LVFS-CA.pem',
      ],
--    install_dir : join_paths(get_option('sysconfdir'), 'pki', 'fwupd')
+-    install_dir : join_paths(sysconfdir, 'pki', 'fwupd')
 +    install_dir : join_paths(get_option('prefix'), 'etc', 'pki', 'fwupd')
    )
    install_data([
        'LVFS-CA.pem',
      ],
--    install_dir : join_paths(get_option('sysconfdir'), 'pki', 'fwupd-metadata')
+-    install_dir : join_paths(sysconfdir, 'pki', 'fwupd-metadata')
 +    install_dir : join_paths(get_option('prefix'), 'etc', 'pki', 'fwupd-metadata')
    )
  endif
@@ -63,7 +63,7 @@
        'lvfs.conf',
        'lvfs-testing.conf',
      ],
--    install_dir : join_paths(get_option('sysconfdir'), 'fwupd', 'remotes.d')
+-    install_dir : join_paths(sysconfdir, 'fwupd', 'remotes.d')
 +    install_dir : join_paths(get_option('prefix'), 'etc', 'fwupd', 'remotes.d')
    )
  endif
@@ -72,7 +72,7 @@
    output : 'fwupd.conf',
    configuration : con2,
    install: true,
--  install_dir: join_paths(get_option('sysconfdir'), 'fwupd', 'remotes.d'),
+-  install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
 +  install_dir: join_paths(get_option('prefix'), 'etc', 'fwupd', 'remotes.d'),
  )
  configure_file(
@@ -80,7 +80,7 @@
    output : 'vendor.conf',
    configuration : con2,
    install: true,
--  install_dir: join_paths(get_option('sysconfdir'), 'fwupd', 'remotes.d'),
+-  install_dir: join_paths(sysconfdir, 'fwupd', 'remotes.d'),
 +  install_dir: join_paths(get_option('prefix'), 'etc', 'fwupd', 'remotes.d'),
  )
 --- a/meson_post_install.sh
