@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk, libxfce4util, libxfce4ui
+{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, gtk, libxfce4util, libxfce4ui
 , libwnck, xfconf, libglade, xfce4panel, thunar, exo, garcon, libnotify
 , hicolor_icon_theme }:
 let
