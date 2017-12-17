@@ -1,9 +1,48 @@
-{ stdenv, lib, makeDesktopItem, makeWrapper
-, alsaLib, atk, cairo, cups, dbus, expat, fetchurl, fontconfig, freetype
-, gdk_pixbuf, glib, gnome2, libXScrnSaver, nspr, nss, udev, xlibs
+{ stdenv, lib, fetchurl, makeDesktopItem, makeWrapper
+, alsaLib, atk, cairo, cups, curl, dbus, expat, ffmpeg, fontconfig, freetype
+, gdk_pixbuf, glib, glibc, gnome2, gtk2, libX11, libXScrnSaver, libXcomposite
+, libXcursor, libXdamage, libXext, libXfixes, libXi, libXrandr, libXrender
+, libXtst, libopus, libpulseaudio, libxcb, nspr, nss, pango, udev, x264
 }:
 
-stdenv.mkDerivation rec {
+let libPath = lib.makeLibraryPath [
+  alsaLib
+  atk
+  cairo
+  cups
+  curl
+  dbus
+  expat
+  ffmpeg
+  fontconfig
+  freetype
+  gdk_pixbuf
+  glib
+  glibc
+  gnome2.GConf
+  gtk2
+  libopus
+  nspr
+  nss
+  pango
+  stdenv.cc.cc
+  udev
+  x264
+  libX11
+  libXScrnSaver
+  libXcomposite
+  libXcursor
+  libXdamage
+  libXext
+  libXfixes
+  libXi
+  libXrandr
+  libXrender
+  libXtst
+  libpulseaudio
+  libxcb
+];
+in stdenv.mkDerivation rec {
   pname = "airtame";
   version = "3.0.1";
   name = "${pname}-${version}";
@@ -32,56 +71,24 @@ stdenv.mkDerivation rec {
     cp -R . "$opt"
     mkdir -p "$out/bin"
     ln -s "$opt/${longName}" "$out/bin/"
-    ln -s "${udev.lib}/lib/libudev.so.1" "$opt/libudev.so.1"
     mkdir -p "$out/share"
     cp -r "${desktopItem}/share/applications" "$out/share/"
     mkdir -p "$out/share/icons"
     ln -s "$opt/icon.png" "$out/share/icons/airtame.png"
+
+    # Flags and rpath are copied from launch-airtame.sh.
+    interp="$(< $NIX_CC/nix-support/dynamic-linker)"
+    vendorlib="$opt/resources/app.asar.unpacked/streamer/vendor/airtame-core/lib"
+    rpath="${libPath}:$opt:$vendorlib:$opt/resources/app.asar.unpacked/encryption/out/lib"
+    rm $vendorlib/libcurl.so*
+    find "$opt" \( -type f -executable -o -name "*.so" -o -name "*.so.*" \) \
+      -exec patchelf --set-rpath "$rpath" {} \;
+    # The main binary also needs libudev which was removed by --shrink-rpath.
+    patchelf --set-interpreter "$interp" $opt/${longName}
+    wrapProgram $opt/${longName} --add-flags "--disable-gpu --enable-transparent-visuals"
   '';
 
-  preFixup = let
-    libPath = lib.makeLibraryPath [
-      alsaLib
-      atk
-      cairo
-      cups
-      dbus.lib
-      expat
-      fontconfig
-      freetype
-      gdk_pixbuf
-      glib
-      gnome2.GConf
-      gnome2.gtk
-      gnome2.pango
-      nspr
-      nss
-      udev.lib
-      stdenv.cc.cc.lib
-      xlibs.libX11
-      xlibs.libXScrnSaver
-      xlibs.libXcomposite
-      xlibs.libXcursor
-      xlibs.libXdamage
-      xlibs.libXext
-      xlibs.libXfixes
-      xlibs.libXi
-      xlibs.libXrandr
-      xlibs.libXrender
-      xlibs.libXtst
-      xlibs.libxcb
-    ];
-  in ''
-    patchelf $opt/${longName} \
-      --set-interpreter "$(< $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "$opt:${libPath}"
-  '';
-
-  postFixup = ''
-    wrapProgram $opt/${longName} \
-      --set LD_LIBRARY_PATH "$opt/resources/app.asar.unpacked/streamer/vendor/airtame-core/lib:$opt/resources/app.asar.unpacked/encryption/out/lib" \
-      --add-flags "--disable-gpu --enable-transparent-visuals"
-  '';
+  dontPatchELF = true;
 
   meta = with stdenv.lib; {
     homepage = https://airtame.com/download;
