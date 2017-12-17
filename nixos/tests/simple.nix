@@ -5,7 +5,7 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   machine = { config, pkgs, ... }: {
-    imports = [ ../modules/profiles/minimal.nix ];
+    imports = [ ../profiles/minimal.nix ];
   };
 
   testScript =

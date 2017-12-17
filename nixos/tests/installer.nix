@@ -202,8 +202,8 @@ let
           { config, lib, pkgs, ... }:
 
           { imports =
-              [ ../modules/profiles/installation-device.nix
-                ../modules/profiles/base.nix
+              [ ../profiles/installation-device.nix
+                ../profiles/base.nix
                 extraInstallerConfig
               ];
 

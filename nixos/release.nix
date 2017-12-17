@@ -370,7 +370,7 @@ in rec {
 
     tinyContainer = makeClosure ({ pkgs, ... }:
       { boot.isContainer = true;
-        imports = [ modules/profiles/minimal.nix ];
+        imports = [ ./profiles/minimal.nix ];
       });
 
     ec2 = makeClosure ({ pkgs, ... }:

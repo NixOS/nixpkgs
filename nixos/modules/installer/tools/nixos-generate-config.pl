@@ -272,7 +272,7 @@ if ($virt eq "oracle") {
 
 # Likewise for QEMU.
 if ($virt eq "qemu" || $virt eq "kvm" || $virt eq "bochs") {
-    push @imports, "<nixpkgs/nixos/modules/profiles/qemu-guest.nix>";
+    push @imports, "<nixpkgs/nixos/profiles/qemu-guest.nix>";
 }
 
 # Also for Hyper-V.

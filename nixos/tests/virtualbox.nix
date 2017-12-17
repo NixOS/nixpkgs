@@ -88,7 +88,7 @@ let
     cfg = (import ../lib/eval-config.nix {
       system = "i686-linux";
       modules = [
-        ../modules/profiles/minimal.nix
+        ../profiles/minimal.nix
         (testVMConfig vmName vmScript)
       ];
     }).config;

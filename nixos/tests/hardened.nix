@@ -9,7 +9,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     with lib;
     { users.users.alice = { isNormalUser = true; extraGroups = [ "proc" ]; };
       users.users.sybil = { isNormalUser = true; group = "wheel"; };
-      imports = [ ../modules/profiles/hardened.nix ];
+      imports = [ ../profiles/hardened.nix ];
       virtualisation.emptyDiskImages = [ 4096 ];
       boot.initrd.postDeviceCommands = ''
         ${pkgs.dosfstools}/bin/mkfs.vfat -n EFISYS /dev/vdb

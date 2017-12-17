@@ -7,8 +7,8 @@ with lib;
   imports =
     [ # Enable devices which are usually scanned, because we don't know the
       # target system.
-      ../installer/scan/detected.nix
-      ../installer/scan/not-detected.nix
+      ./installer/scan/detected.nix
+      ./installer/scan/not-detected.nix
 
       # Allow "nixos-rebuild" to work properly by providing
       # /etc/nixos/configuration.nix.
@@ -16,7 +16,7 @@ with lib;
 
       # Include a copy of Nixpkgs so that nixos-install works out of
       # the box.
-      ../installer/cd-dvd/channel.nix
+      ./installer/cd-dvd/channel.nix
     ];
 
   config = {

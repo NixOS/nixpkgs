@@ -11,7 +11,7 @@ let
       modules = [
         ../maintainers/scripts/ec2/amazon-image.nix
         ../modules/testing/test-instrumentation.nix
-        ../modules/profiles/qemu-guest.nix
+        ../profiles/qemu-guest.nix
         { ec2.hvm = true;
 
           # Hack to make the partition resizing work in QEMU.
@@ -23,7 +23,7 @@ let
 
           # Needed by nixos-rebuild due to the lack of network
           # access. Mostly copied from
-          # modules/profiles/installation-device.nix.
+          # profiles/installation-device.nix.
           system.extraDependencies =
             with pkgs; [
               stdenv busybox perlPackages.ArchiveCpio unionfs-fuse mkinitcpio-nfs-utils
@@ -148,7 +148,7 @@ in {
         imports = [
           <nixpkgs/nixos/modules/virtualisation/amazon-image.nix>
           <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
-          <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
+          <nixpkgs/nixos/profiles/qemu-guest.nix>
         ];
         environment.etc.testFile = {
           text = "whoa";
