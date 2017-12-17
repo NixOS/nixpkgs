@@ -703,7 +703,7 @@ with pkgs;
 
   azureus = callPackage ../tools/networking/p2p/azureus { };
 
-  backblaze-b2 = callPackage ../development/tools/backblaze-b2 { };
+  backblaze-b2 = python.pkgs.callPackage ../development/tools/backblaze-b2 { };
 
   backup = callPackage ../tools/backup/backup { };
 
