@@ -593,6 +593,8 @@ in {
 
   arrow = callPackage ../development/python-modules/arrow { };
 
+  arxiv2bib = callPackage ../development/python-modules/arxiv2bib { };
+
   async = buildPythonPackage rec {
     name = "async-0.6.1";
     disabled = isPy3k;
