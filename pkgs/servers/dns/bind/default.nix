@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, openssl, libtool, perl, libxml2
+{ stdenv, lib, buildPackages, fetchurl, openssl, libtool, perl, libxml2, lmdb
 , enableSeccomp ? false, libseccomp ? null }:
 
 assert enableSeccomp -> libseccomp != null;
@@ -18,9 +18,11 @@ stdenv.mkDerivation rec {
   patches = [ ./dont-keep-configure-flags.patch ./remove-mkdir-var.patch ] ++
     stdenv.lib.optional stdenv.isDarwin ./darwin-openssl-linking-fix.patch;
 
-  nativeBuildInputs = [ perl ];
-  buildInputs = [ openssl libtool libxml2 ] ++
+  nativeBuildInputs = [ perl ] ++
+    stdenv.lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) buildPackages.stdenv.cc;
+  buildInputs = [ openssl libtool libxml2 lmdb ] ++
     stdenv.lib.optional enableSeccomp libseccomp;
+    #stdenv.lib.optional (stdenv.buildPlatform == stdenv.hostPlatform) perl;
 
   STD_CDEFINES = [ "-DDIG_SIGCHASE=1" ]; # support +sigchase
 
@@ -39,7 +41,16 @@ stdenv.mkDerivation rec {
     "--without-pkcs11"
     "--without-purify"
     "--without-python"
-  ] ++ lib.optional enableSeccomp "--enable-seccomp";
+    "--with-randomdev=/dev/random"
+    "--with-ecdsa=yes"
+    "--with-gost=yes"
+    "AR=${stdenv.cc.bintools}/bin/${stdenv.cc.bintools.targetPrefix}ar"
+  ] ++ lib.optional enableSeccomp "--enable-seccomp"
+  ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    # TODO: The full path shouldn't be needed here
+    "BUILD_CC=${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc"
+  ];
+    #++ lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "--disable-symtable";
 
   postInstall = ''
     moveToOutput bin/bind9-config $dev
