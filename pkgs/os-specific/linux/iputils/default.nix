@@ -1,8 +1,8 @@
-{ stdenv, fetchurl
+{ stdenv, fetchFromGitHub, SGMLSpm
 , libsysfs, gnutls, openssl
-, libcap, opensp, docbook_sgml_dtd_31
-, libidn, nettle
-, SGMLSpm, libgcrypt }:
+, libcap, libidn2, nettle, libgcrypt
+, libxslt, docbook_xsl, docbook_xml_dtd_45 }:
+
 
 let
   time = "20161105";
@@ -10,22 +10,22 @@ in
 stdenv.mkDerivation rec {
   name = "iputils-${time}";
 
-  src = fetchurl {
-    url = "https://github.com/iputils/iputils/archive/s${time}.tar.gz";
-    sha256 = "12mdmh4qbf5610csaw3rkzhpzf6djndi4jsl4gyr8wni0cphj4zq";
+  src = fetchFromGitHub {
+    owner = "iputils";
+    repo = "iputils";
+    rev = "9f7f1d4c4fd4fd90d2c5e66d6deb7f87f2eb1cea";
+    sha256 = null;
   };
 
   prePatch = ''
-    sed -e s/sgmlspl/sgmlspl.pl/ \
-        -e s/nsgmls/onsgmls/ \
-      -i doc/Makefile
+    substituteInPlace doc/Makefile --replace '/usr/bin/xsltproc' 'xsltproc'
   '';
 
-  # Disable idn usage w/musl: https://github.com/iputils/iputils/pull/111
-  makeFlags = [ "USE_GNUTLS=no" ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "USE_IDN=no";
+  makeFlags = "USE_GNUTLS=no";
 
+  nativeBuildInputs = [ libxslt docbook_xsl docbook_xml_dtd_45 ];
   buildInputs = [
-    libsysfs opensp openssl libcap docbook_sgml_dtd_31 SGMLSpm libgcrypt nettle
+    libsysfs openssl libcap libgcrypt libidn2 nettle
   ] ++ stdenv.lib.optional (!stdenv.hostPlatform.isMusl) libidn;
 
   buildFlags = "man all ninfod";
