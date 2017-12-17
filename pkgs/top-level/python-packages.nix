@@ -13041,6 +13041,8 @@ in {
 
   pylibmc = callPackage ../development/python-modules/pylibmc {};
 
+  pylibgen = callPackage ../development/python-modules/pylibgen { };
+
   pymetar = buildPythonPackage rec {
     name = "${pname}-${version}";
     pname = "pymetar";
