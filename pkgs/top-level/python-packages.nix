@@ -13311,13 +13311,13 @@ in {
 
 
   vobject = buildPythonPackage rec {
-    version = "0.9.3";
+    version = "0.9.5";
     name = "vobject-${version}";
 
     src = pkgs.fetchFromGitHub {
       owner = "eventable";
       repo = "vobject";
-      sha256 = "00vbii5awwqwfh5hfklj1q79w7d85gjigvf2imgyb71g03sb8cjv";
+      sha256 = "1f5lw9kpssr66bdirkjba3izbnm68p8pd47546m5yl4c7x76s1ld";
       rev = version;
     };
 
