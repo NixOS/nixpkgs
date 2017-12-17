@@ -11,14 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "026a6himvg3y4ssnccdbgr3c2pq3w2d47nayn05v512875z4f2w3";
   };
 
+  patches = [ ./fix-toolchain-paths.patch ];
   postUnpack = "sourceRoot=\${sourceRoot}/libraries/liblmdb";
 
   outputs = [ "bin" "out" "dev" ];
 
-  makeFlags = [ "prefix=$(out)" "CC=cc" ]
+  makeFlags = [ "prefix=$(out)" ]
     ++ stdenv.lib.optional stdenv.isDarwin "LDFLAGS=-Wl,-install_name,$(out)/lib/liblmdb.so";
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform == stdenv.hostPlatform;
   checkPhase = "make test";
 
   postInstall = ''
