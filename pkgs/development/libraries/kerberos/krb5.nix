@@ -22,9 +22,10 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--with-tcl=no" "--localstatedir=/var/lib"]
     ++ optional stdenv.isFreeBSD ''WARN_CFLAGS=""'';
 
-  nativeBuildInputs = [ pkgconfig perl yacc ]
+  nativeBuildInputs = [ pkgconfig perl ]
+    ++ optional (!libOnly) yacc
     # Provides the mig command used by the build scripts
-    ++ optional stdenv.isDarwin bootstrap_cmds;
+    ++ optional (stdenv.isDarwin && !libOnly) bootstrap_cmds;
   buildInputs = [ openssl ]
     ++ optionals (!libOnly) [ openldap libedit ];
 
