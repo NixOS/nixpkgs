@@ -1,4 +1,4 @@
-{ callPackage, libva-full }:
+{ callPackage, libva-full_1 }:
 
 rec {
   gstreamer = callPackage ./core { };
