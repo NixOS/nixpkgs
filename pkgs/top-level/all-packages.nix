@@ -9830,9 +9830,19 @@ with pkgs;
     withUtils = false;
   });
 
-  libva = callPackage ../development/libraries/libva { };
-  libva-full = libva.override { minimal = false; };
-  libva-utils = callPackage ../development/libraries/libva-utils { };
+  inherit (callPackage ../development/libraries/libva { })
+    libva_1
+    libva-full_1
+    libva_2
+    libva-full_2;
+
+  inherit (callPackage ../development/libraries/libva-utils { })
+    libva-utils_1
+    libva-utils_2;
+
+  libva = libva_2;
+  libva-full = libva-full_2;
+  libva-utils = libva-utils_2;
 
   libvdpau = callPackage ../development/libraries/libvdpau { };
 
@@ -11085,9 +11095,10 @@ with pkgs;
 
   v8_static = lowPrio (self.v8.override { static = true; });
 
-  vaapiIntel = callPackage ../development/libraries/vaapi-intel {
-    libva = libva-full; # also wants libva-{x11,drm,wayland}
-  };
+  inherit (callPackage ../development/libraries/vaapi-intel { })
+    vaapiIntel_1
+    vaapiIntel_2;
+  vaapiIntel = vaapiIntel_2;
 
   vaapiVdpau = callPackage ../development/libraries/vaapi-vdpau {
     libva = libva-full; # needs libva-{x11,glx}
@@ -15976,7 +15987,7 @@ with pkgs;
     lua = lua5_1;
     lua5_sockets = lua5_1_sockets;
     youtube-dl = pythonPackages.youtube-dl;
-    libva = libva-full;
+    libva = libva-full_1; # Version > 0.27 should be able to use libva-full (ie v2)
     waylandSupport = stdenv.isLinux;
   };
 
