@@ -1,6 +1,7 @@
-{ lib, stdenv, fetchgit, cmake, pkgconfig
+{ lib, stdenv, fetchgit, cmake, pkgconfig, makeWrapper
 , wlc, dbus_libs, wayland, libxkbcommon, pixman, libinput, udev, zlib, libpng
 , libdrm, libX11
+, bemenu, westonLite
 }:
 
 stdenv.mkDerivation rec {
@@ -14,12 +15,19 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
 
   buildInputs = [
     wlc dbus_libs wayland libxkbcommon pixman libinput udev zlib libpng libX11
     libdrm
   ];
+
+  postFixup = ''
+    wrapProgram $out/bin/orbment \
+      --prefix PATH : "${stdenv.lib.makeBinPath [ bemenu westonLite ]}"
+  '';
+
+  enableParallelBuilding = true;
 
   meta = {
     description = "Modular Wayland compositor";

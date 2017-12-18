@@ -14114,6 +14114,8 @@ with pkgs;
     guile = guile_1_8;
   };
 
+  bemenu = callPackage ../applications/misc/bemenu { };
+
   bevelbar = callPackage ../applications/window-managers/bevelbar { };
 
   bibletime = callPackage ../applications/misc/bibletime { };
