@@ -79,6 +79,9 @@ self:
         inherit (self.melpaPackages) ess popup;
       };
 
+      # upstream issue: doesn't build
+      eterm-256color = markBroken super.emacs-256color;
+
       # upstream issue: missing dependency highlight
       evil-search-highlight-persist = markBroken super.evil-search-highlight-persist;
 
@@ -148,6 +151,9 @@ self:
 
       # upstream issue: missing file header
       stgit = markBroken super.stgit;
+
+      # upstream issue: missing file header
+      tawny-mode = markBroken super.tawny-mode;
 
       # upstream issue: missing file header
       textmate = markBroken super.textmate;

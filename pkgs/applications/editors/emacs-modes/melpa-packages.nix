@@ -138,6 +138,9 @@ self:
       # missing OCaml
       ocp-indent = markBroken super.ocp-indent;
 
+      # upstream issue: missing dependency
+      org-readme = markBroken super.org-readme;
+
       # upstream issue: missing file header
       perl-completion = markBroken super.perl-completion;
 
@@ -173,6 +176,9 @@ self:
       stgit = markBroken super.stgit;
 
       # upstream issue: missing file header
+      tawny-mode = markBroken super.tawny-mode;
+
+      # upstream issue: missing file header
       textmate = markBroken super.textmate;
 
       # missing OCaml
@@ -180,6 +186,9 @@ self:
 
       # upstream issue: missing file header
       voca-builder = markBroken super.voca-builder;
+
+      # upstream issue: missing dependency
+      weechat-alert = markBroken super.weechat-alert;
 
       # upstream issue: missing file header
       window-numbering = markBroken super.window-numbering;
