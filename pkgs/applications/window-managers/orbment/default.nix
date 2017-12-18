@@ -1,10 +1,12 @@
-{ lib, stdenv, fetchgit, cmake, pkgconfig, makeWrapper
+{ lib, stdenv, fetchgit, cmake, pkgconfig, makeWrapper, callPackage
 , wlc, dbus_libs, wayland, libxkbcommon, pixman, libinput, udev, zlib, libpng
 , libdrm, libX11
-, bemenu, westonLite
+, westonLite
 }:
 
-stdenv.mkDerivation rec {
+let
+  bemenu = callPackage ./bemenu.nix {};
+in stdenv.mkDerivation rec {
   name = "orbment-${version}";
   version = "git-2016-08-13";
 

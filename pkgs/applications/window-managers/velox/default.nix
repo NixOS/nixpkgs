@@ -1,10 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, makeWrapper
-, swc, libxkbcommon
-, wld, wayland, pixman, fontconfig
-, dmenu-wayland, st-wayland
+{ lib, stdenv, fetchFromGitHub, pkgconfig, makeWrapper, newScope
+, libxkbcommon
+, wayland, pixman, fontconfig
+, stConf ? null, stPatches ? []
 }:
 
-stdenv.mkDerivation rec {
+let
+  callPackage = newScope self;
+  self = {
+    swc = callPackage ./swc.nix {};
+    wld = callPackage ./wld.nix {};
+    dmenu-velox = callPackage ./dmenu.nix {};
+    st-velox = callPackage ./st.nix {
+      conf = stConf;
+      patches = stPatches;
+    };
+  };
+in with self; stdenv.mkDerivation rec {
   name = "velox-${version}";
   version = "git-2017-07-04";
 
@@ -33,7 +44,7 @@ stdenv.mkDerivation rec {
   '';
   postFixup = ''
     wrapProgram $out/bin/velox \
-      --prefix PATH : "${stdenv.lib.makeBinPath [ dmenu-wayland st-wayland ]}"
+      --prefix PATH : "${stdenv.lib.makeBinPath [ dmenu-velox st-velox ]}"
   '';
 
   enableParallelBuilding = true;

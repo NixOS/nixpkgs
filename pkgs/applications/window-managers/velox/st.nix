@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, pkgconfig, writeText
 , ncurses, wayland, wayland-protocols, wld, libxkbcommon, fontconfig, pixman
-, conf ? null, patches ? [] }:
+, conf, patches }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "st-wayland-${version}";
+  name = "st-velox-${version}";
   version = "git-2016-12-22";
 
   src = fetchFromGitHub {

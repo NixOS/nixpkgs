@@ -5,7 +5,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "dmenu-wayland-${version}";
+  name = "dmenu-velox-${version}";
   version = "git-2017-04-07";
 
   src = fetchFromGitHub {
