@@ -231,20 +231,12 @@ assert nvenc -> nvidia-video-sdk != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   name = "ffmpeg-full-${version}";
-  version = "3.4";
+  version = "3.4.1";
 
   src = fetchurl {
     url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.xz";
-    sha256 = "1vzvpx8ixy8m44f8qwp833hv253hpghybgzbc4n8b3div3j0dvmf";
+    sha256 = "1h4iz7q10wj04awr2wvmp60n7b09pfwrgwbbw9sgl7klcf52fxss";
   };
-
-  patches = [
-    (fetchurl {
-      name = "CVE-2017-16840.patch";
-      url = "http://git.videolan.org/?p=ffmpeg.git;a=patch;h=a94cb36ab2ad99d3a1331c9f91831ef593d94f74";
-      sha256 = "0zx0vh110hrykk7j863j04bx6igm2q8dlkv25mf5g4rbxafpqig3";
-    })
-  ];
 
   prePatch = ''
     patchShebangs .
