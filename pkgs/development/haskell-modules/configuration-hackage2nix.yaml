@@ -6824,6 +6824,7 @@ dont-distribute-packages:
   partial:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
   partly:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   passage:                                      [ i686-linux, x86_64-linux, x86_64-darwin ]
+  passman-cli:                                  [ i686-linux, x86_64-linux, x86_64-darwin ]
   PasswordGenerator:                            [ i686-linux, x86_64-linux, x86_64-darwin ]
   pasta:                                        [ i686-linux, x86_64-linux, x86_64-darwin ]
   pastis:                                       [ i686-linux, x86_64-linux, x86_64-darwin ]
