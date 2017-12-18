@@ -11,7 +11,7 @@ let
       owner  = "01org";
       repo   = "libva-utils";
       rev    = version;
-      sha256 = "02n51cvp8bzzjk4fargwvgh7z71y8spg24hqgaawbp3p3ahh7xxi";
+      inherit sha256;
     };
 
     nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -30,7 +30,6 @@ let
   };
 
 in {
-  # libva-utils 1.8.3 requires libva 2.0.0+
-  libva-utils_1 = generic "0pxd9v783p9zh8a9zyi6kaknsbjd4s6lxcyaqqlrbkn1n4yq96ai" libva_2;
+  libva-utils_1 = generic "0pxd9v783p9zh8a9zyi6kaknsbjd4s6lxcyaqqlrbkn1n4yq96ai" libva_1;
   libva-utils_2 = generic "02n51cvp8bzzjk4fargwvgh7z71y8spg24hqgaawbp3p3ahh7xxi" libva_2;
 }
