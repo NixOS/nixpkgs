@@ -11974,7 +11974,9 @@ with pkgs;
     postgresql96
     postgresql100;
 
-  postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc { };
+    postgresql_jdbc = callPackage ../servers/sql/postgresql/jdbc {
+      fetchMaven = callPackage ../development/java-modules/m2install.nix { };
+    };
 
   prom2json = callPackage ../servers/monitoring/prometheus/prom2json.nix { };
   prometheus = callPackage ../servers/monitoring/prometheus { };
