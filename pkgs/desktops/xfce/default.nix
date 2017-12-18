@@ -59,11 +59,12 @@ xfce_self = rec { # the lines are very long but it seems better than the even-od
   ristretto       = callPackage ./applications/ristretto.nix { };
   terminal        = xfce4terminal; # it has changed its name
   xfce4mixer      = callPackage ./applications/xfce4-mixer.nix { };
+  xfce4mixer_pulse = callPackage ./applications/xfce4-mixer.nix { pulseaudioSupport = true; };
   xfce4notifyd    = callPackage ./applications/xfce4-notifyd.nix { };
   xfce4taskmanager= callPackage ./applications/xfce4-taskmanager.nix { };
   xfce4terminal   = callPackage ./applications/terminal.nix { };
   xfce4-screenshooter = callPackage ./applications/xfce4-screenshooter.nix { };
-  xfce4volumed_gst = callPackage ./applications/xfce4-volumed.nix { };
+  xfce4volumed    = callPackage ./applications/xfce4-volumed.nix { };
   xfce4volumed_pulse = callPackage ./applications/xfce4-volumed-pulse.nix { };
 
   #### ART                  from "mirror://xfce/src/art/${p_name}/${ver_maj}/${name}.tar.bz2"
