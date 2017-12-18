@@ -24,18 +24,23 @@ stdenv.mkDerivation rec {
     sha256 = "0ahwhmscrmnpvl1r732wg93dzkhv8c1sph2yrqgsrhr73c1616ix";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkgconfig
+  ] ++ lib.optionals withDocs [
+    doxygen Po4a w3m docbook_xml_dtd_45
+  ];
 
   buildInputs = [
     cmake perl curl gtest lzma bzip2 lz4 db dpkg libxslt.bin
-  ] ++ lib.optionals withDocs [
-    doxygen Po4a w3m docbook_xml_dtd_45
   ] ++ lib.optionals withNLS [
     gettext
   ];
 
   preConfigure = ''
     export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}${Po4a}/lib/perl5";
+
+    # w3m will want to write to ~/.w3m
+    export HOME=$TMPDIR
 
     cmakeFlagsArray+=(
       -DBERKELEY_DB_INCLUDE_DIRS="${db}"/include
