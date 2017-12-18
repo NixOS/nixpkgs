@@ -1,7 +1,7 @@
 { stdenv, lib, libXScrnSaver, makeWrapper, fetchurl, unzip, atomEnv }:
 
 let
-  version = "1.8.1";
+  version = "1.7.9";
   name = "electron-${version}";
 
   meta = with stdenv.lib; {
@@ -9,7 +9,7 @@ let
     homepage = https://github.com/electron/electron;
     license = licenses.mit;
     maintainers = [ maintainers.travisbhartwell ];
-    platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" "armv7l-linux" "aarch64-linux" ];
+    platforms = [ "x86_64-darwin" "x86_64-linux" "i686-linux" "armv7l-linux" ];
   };
 
   linux = {
@@ -18,23 +18,15 @@ let
     src = {
       i686-linux = fetchurl {
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-ia32.zip";
-        sha256 = "0djqlcs4m9n9354idaqcs4cwskq2m3sf9mzvxpp4wy0a93pk78bw";
-        name = "${name}.zip";
+        sha256 = "0m87n7hqimg93z3m8pa1ggs69f3h5mjrsrrl7x80hxmp3w142krc";
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-x64.zip";
-        sha256 = "0as7bgs050wsc9ywzr7f4i2c9dp1ynddcmiblm2b0hdcvw61k9q2";
-        name = "${name}.zip";
+        sha256 = "17ii0x6326mwjd0x5dj2693r67y0jra88hkqcpddcq08vf1knr2f";
       };
       armv7l-linux = fetchurl {
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-armv7l.zip";
-        sha256 = "19x9c12kdr3rj39x4kshv3zi132dpnki7vaqrhadsn23q85n56ig";
-        name = "${name}.zip";
-      };
-      aarch64-linux = fetchurl {
-        url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-arm64.zip";
-        sha256 = "12w1ajj94rqwh4906dzswh3vhs3micn80jvd015qxwss3n4n1lsz";
-        name = "${name}.zip";
+        sha256 = "17jkma50d6az8dbyrym8z2lsw2n0r6jhdlm8pb5c928bzgshryqm";
       };
     }.${stdenv.system};
 
@@ -62,8 +54,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-darwin-x64.zip";
-      sha256 = "0r0zbiqblwkcrljkljkj7zvfwr078bfgd38lhb1ivbj73fri17ir";
-      name = "${name}.zip";
+      sha256 = "1s8kslp101xyaffb3rf8p5cw3p6zij2mn19fa68ykx4naykkwaly";
     };
 
     buildInputs = [ unzip ];
