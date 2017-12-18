@@ -1,21 +1,21 @@
-{ lib, stdenv, fetchurl, pkgconfig
-, wld, wayland, xwayland, fontconfig, pixman, libdrm, libinput, libevdev, libxkbcommon, libxcb, xcbutilwm
+{ lib, stdenv, fetchFromGitHub, pkgconfig
+, wld, wayland, wayland-protocols, fontconfig, pixman, libdrm, libinput, libevdev, libxkbcommon, libxcb, xcbutilwm
 }:
 
 stdenv.mkDerivation rec {
   name = "swc-${version}";
-  version = "git-2016-02-09";
-  repo = "https://github.com/michaelforney/swc";
-  rev = "1da0ef13fddc572accea12439a4471b4d2f64ddd";
+  version = "git-2017-06-28";
 
-  src = fetchurl {
-    url = "${repo}/archive/${rev}.tar.gz";
-    sha256 = "d1894612d8aa1ce828efb78f1570290f84bba6563e21eb777e08c3c3859b7bbe";
+  src = fetchFromGitHub {
+    owner = "michaelforney";
+    repo = "swc";
+    rev = "5b20050872f8ad29cfc97729f8af47b6b3df5393";
+    sha256 = "1lxpm17v5d8png6ixc0zn0w00xgrhz2n5b8by9vx6800b18246z8";
   };
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ wld wayland xwayland fontconfig pixman libdrm libinput libevdev libxkbcommon libxcb xcbutilwm ];
+  buildInputs = [ wld wayland wayland-protocols fontconfig pixman libdrm libinput libevdev libxkbcommon libxcb xcbutilwm ];
 
   prePatch = ''
     substituteInPlace launch/local.mk --replace 4755 755
@@ -24,9 +24,11 @@ stdenv.mkDerivation rec {
   makeFlags = "PREFIX=$(out)";
   installPhase = "PREFIX=$out make install";
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "A library for making a simple Wayland compositor";
-    homepage    = repo;
+    homepage    = src.meta.homepage;
     license     = lib.licenses.mit;
     platforms   = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ];

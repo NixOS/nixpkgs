@@ -1,16 +1,16 @@
-{ lib, stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchFromGitHub, pkgconfig
 , wayland, fontconfig, pixman, freetype, libdrm
 }:
 
 stdenv.mkDerivation rec {
   name = "wld-${version}";
-  version = "git-2015-09-01";
-  repo = "https://github.com/michaelforney/wld";
-  rev = "efe0a1ed1856a2e4a1893ed0f2d7dde43b5627f0";
+  version = "git-2017-10-31";
 
-  src = fetchurl {
-    url = "${repo}/archive/${rev}.tar.gz";
-    sha256 = "09388f7828e18c75e7b8d41454903886a725d7a868f60e66c128bd7d2e953ee1";
+  src = fetchFromGitHub {
+    owner = "michaelforney";
+    repo = "wld";
+    rev = "b4e902bbecb678c45485b52c3aa183cbc932c595";
+    sha256 = "0j2n776flnzyw3vhxl0r8h1c48wrihi4g6bs2z8j4hbw5pnwq1k6";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -20,9 +20,11 @@ stdenv.mkDerivation rec {
   makeFlags = "PREFIX=$(out)";
   installPhase = "PREFIX=$out make install";
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "A primitive drawing library targeted at Wayland";
-    homepage    = repo;
+    homepage    = src.meta.homepage;
     license     = lib.licenses.mit;
     platforms   = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ];
