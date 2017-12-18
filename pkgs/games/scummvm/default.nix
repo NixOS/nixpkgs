@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     description = "Program to run certain classic graphical point-and-click adventure games (such as Monkey Island)";
     homepage = http://www.scummvm.org/;
     license = licenses.gpl2;
-    maintainers = [ peterhoeg ];
+    maintainers = [ maintainers.peterhoeg ];
     platforms = platforms.linux;
   };
 }
