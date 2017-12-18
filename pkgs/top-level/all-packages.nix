@@ -575,6 +575,8 @@ with pkgs;
 
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
 
+  bmap-tools = callPackage ../tools/misc/bmap-tools { };
+
   bonnie = callPackage ../tools/filesystems/bonnie { };
 
   bonfire = callPackage ../tools/misc/bonfire { };
