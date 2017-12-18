@@ -434,6 +434,8 @@ with pkgs;
 
   airspy = callPackage ../applications/misc/airspy { };
 
+  airtame = callPackage ../applications/misc/airtame { };
+
   aj-snapshot  = callPackage ../applications/audio/aj-snapshot { };
 
   albert = libsForQt5.callPackage ../applications/misc/albert {};
