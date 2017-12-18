@@ -36,6 +36,9 @@ self:
     });
 
     overrides = {
+      # Expects bash to be at /bin/bash
+      ac-rtags = markBroken super.ac-rtags;
+
       # upstream issue: mismatched filename
       ack-menu = markBroken super.ack-menu;
 
@@ -52,6 +55,9 @@ self:
       # part of a larger package
       # upstream issue: missing package version
       cmake-mode = markBroken (dontConfigure super.cmake-mode);
+
+      # Expects bash to be at /bin/bash
+      company-rtags = markBroken super.company-rtags;
 
       # upstream issue: missing file header
       connection = markBroken super.connection;
@@ -89,6 +95,9 @@ self:
       # missing OCaml
       flycheck-ocaml = markBroken super.flycheck-ocaml;
 
+      # Expects bash to be at /bin/bash
+      flycheck-rtags = markBroken super.flycheck-rtags;
+
       # upstream issue: missing file header
       fold-dwim = markBroken super.fold-dwim;
 
@@ -98,6 +107,9 @@ self:
       # upstream issue: mismatched filename
       helm-lobsters = markBroken super.helm-lobsters;
 
+      # Expects bash to be at /bin/bash
+      helm-rtags = markBroken super.helm-rtags;
+
       # upstream issue: missing file header
       helm-words = markBroken super.helm-words;
 
@@ -106,6 +118,9 @@ self:
 
       # upstream issue: missing file header
       initsplit = markBroken super.initsplit;
+
+      # Expects bash to be at /bin/bash
+      ivy-rtags = markBroken super.ivy-rtags;
 
       # upstream issue: missing file header
       jsfmt = markBroken super.jsfmt;
