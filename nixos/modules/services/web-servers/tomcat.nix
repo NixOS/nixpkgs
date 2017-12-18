@@ -40,6 +40,21 @@ in
         description = "Location where Tomcat stores configuration files, webapplications and logfiles";
       };
 
+      logDirs = mkOption {
+        default = [];
+        description = "Directories to create in baseDir/logs/";
+      };
+
+      extraConfigFiles = mkOption {
+        default = [];
+        description = "Extra configuration files to pull into the tomcat conf directory";
+      };
+
+      environment = mkOption {
+        default = "";
+        description = "File to be sourced before executing tomcat. Can be used to set environment variables";
+      };
+
       extraGroups = mkOption {
         default = [];
         example = [ "users" ];
@@ -69,6 +84,14 @@ in
       sharedLibs = mkOption {
         default = [];
         description = "List containing JAR files or directories with JAR files which are libraries shared by the web applications";
+      };
+
+      serverXml = mkOption {
+        default = "";
+        description = "
+          Verbatim server.xml configuration.
+          This is mutualyl exclusive with the virtualHosts options.
+        ";
       };
 
       commonLibs = mkOption {
@@ -147,6 +170,8 @@ in
         # Create the base directory
         mkdir -p ${cfg.baseDir}
 
+        mkdir -p ${cfg.baseDir}
+
         # Create a symlink to the bin directory of the tomcat component
         ln -sfn ${tomcat}/bin ${cfg.baseDir}/bin
 
@@ -160,6 +185,13 @@ in
             ln -sfn ${tomcat}/conf/$i ${cfg.baseDir}/conf/`basename $i`
         done
 
+        ${if cfg.extraConfigFiles != [] then ''
+          for i in ${toString cfg.extraConfigFiles}
+          do
+            ln -sfn $i ${cfg.baseDir}/conf/`basename $i`
+          done
+        '' else ""}
+
         # Create subdirectory for virtual hosts
         mkdir -p ${cfg.baseDir}/virtualhosts
 
@@ -169,14 +201,24 @@ in
             -e 's|shared.loader=|shared.loader=''${catalina.base}/shared/lib/*.jar|' \
             ${tomcat}/conf/catalina.properties > ${cfg.baseDir}/conf/catalina.properties
 
-        # Create a modified server.xml which also includes all virtual hosts
-        sed -e "/<Engine name=\"Catalina\" defaultHost=\"localhost\">/a\  ${
-                     toString (map (virtualHost: ''<Host name=\"${virtualHost.name}\" appBase=\"virtualhosts/${virtualHost.name}/webapps\" unpackWARs=\"true\" autoDeploy=\"true\" xmlValidation=\"false\" xmlNamespaceAware=\"false\" >${if cfg.logPerVirtualHost then ''<Valve className=\"org.apache.catalina.valves.AccessLogValve\" directory=\"logs/${virtualHost.name}\"  prefix=\"${virtualHost.name}_access_log.\" pattern=\"combined\" resolveHosts=\"false\"/>'' else ""}</Host>'') cfg.virtualHosts)}" \
-            ${tomcat}/conf/server.xml > ${cfg.baseDir}/conf/server.xml
-
+        ${if cfg.serverXml != "" then ''
+          cat <<'EOF' > ${cfg.baseDir}/conf/server.xml
+          ${cfg.serverXml}EOF
+          '' else ''
+          # Create a modified server.xml which also includes all virtual hosts
+          sed -e "/<Engine name=\"Catalina\" defaultHost=\"localhost\">/a\  ${toString (map (virtualHost: ''<Host name=\"${virtualHost.name}\" appBase=\"virtualhosts/${virtualHost.name}/webapps\" unpackWARs=\"true\" autoDeploy=\"true\" xmlValidation=\"false\" xmlNamespaceAware=\"false\" >${if cfg.logPerVirtualHost then ''<Valve className=\"org.apache.catalina.valves.AccessLogValve\" directory=\"logs/${virtualHost.name}\"  prefix=\"${virtualHost.name}_access_log.\" pattern=\"combined\" resolveHosts=\"false\"/>'' else ""}</Host>'') cfg.virtualHosts)}" \
+                ${tomcat}/conf/server.xml > ${cfg.baseDir}/conf/server.xml
+          ''
+        }
         # Create a logs/ directory
         mkdir -p ${cfg.baseDir}/logs
         chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/logs
+        ${if cfg.logDirs != [] then ''
+            for i in ${toString cfg.logDirs}; do
+                mkdir -p ${cfg.baseDir}/logs/$i
+                chown ${cfg.user}:${cfg.group} ${cfg.baseDir}/logs/$i
+            done
+        '' else ""}
         ${if cfg.logPerVirtualHost then
            toString (map (h: ''
                                 mkdir -p ${cfg.baseDir}/logs/${h.name}
@@ -353,6 +395,11 @@ in
       '';
 
       script = ''
+          ${if cfg.environment != "" then ''
+              if [ -r ${cfg.environment} ]; then
+                  . ${cfg.environment}
+              fi
+          '' else ""}
           ${pkgs.su}/bin/su -s ${pkgs.bash}/bin/sh ${cfg.user} -c 'CATALINA_BASE=${cfg.baseDir} JAVA_HOME=${cfg.jdk} JAVA_OPTS="${cfg.javaOpts}" CATALINA_OPTS="${cfg.catalinaOpts}" ${tomcat}/bin/startup.sh'
       '';
 
