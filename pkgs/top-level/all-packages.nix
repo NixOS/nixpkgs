@@ -15975,7 +15975,7 @@ with pkgs;
     lua = lua5_1;
     lua5_sockets = lua5_1_sockets;
     youtube-dl = pythonPackages.youtube-dl;
-    libva = libva-full;
+    libva = libva-full_1; # Version > 0.27 should be able to use libva-full (ie v2)
     waylandSupport = stdenv.isLinux;
   };
 
