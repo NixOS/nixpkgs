@@ -502,7 +502,7 @@ self: super: builtins.intersectAttrs super {
   opencv-extra = addPkgconfigDepend super.opencv-extra (pkgs.opencv3.override { enableContrib = true; });
 
   # Written against the 6.X series of megaparsec
-  htoml-megaparsec = super.htoml-megaparsec.override { megaparsec = self.megaparsec_6_2_0; };
+  htoml-megaparsec = super.htoml-megaparsec.override { megaparsec = self.megaparsec_6_3_0; };
 
   # Break cyclic reference that results in an infinite recursion.
   partial-semigroup = dontCheck super.partial-semigroup;
