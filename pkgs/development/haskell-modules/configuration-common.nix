@@ -519,7 +519,7 @@ self: super: {
     skylighting = self.skylighting_0_4_4_1;
     texmath = self.texmath_0_10;
   };
-  pandoc-citeproc_0_12_1 = super.pandoc-citeproc_0_12_1.override {
+  pandoc-citeproc_0_12_1_1 = super.pandoc-citeproc_0_12_1_1.override {
     pandoc = self.pandoc_2_0_5;
     pandoc-types = self.pandoc-types_1_17_3;
   };
