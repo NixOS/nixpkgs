@@ -37,7 +37,7 @@ core-packages:
   - ghcjs-base-0
 
 default-package-overrides:
-  # LTS Haskell 9.18
+  # LTS Haskell 9.20
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -196,7 +196,7 @@ default-package-overrides:
   - async-timer ==0.1.4.0
   - atom-basic ==0.2.5
   - atom-conduit ==0.4.0.3
-  - atomic-primops ==0.8.1
+  - atomic-primops ==0.8.1.1
   - atomic-write ==0.2.0.5
   - attoparsec ==0.13.1.0
   - attoparsec-binary ==0.2
@@ -250,6 +250,7 @@ default-package-overrides:
   - binary-parser ==0.5.5
   - binary-parsers ==0.2.3.0
   - binary-search ==1.0.0.3
+  - binary-shared ==0.8.3
   - binary-tagged ==0.1.4.2
   - binary-typed ==1.0
   - bindings-DSL ==1.0.24
@@ -365,7 +366,7 @@ default-package-overrides:
   - cheapskate-lucid ==0.1.0.0
   - check-email ==1.0.2
   - checkers ==0.4.9.5
-  - chell ==0.4.0.1
+  - chell ==0.4.0.2
   - choice ==0.2.2
   - chunked-data ==0.3.0
   - cipher-aes ==0.2.11
@@ -592,7 +593,7 @@ default-package-overrides:
   - DRBG ==0.5.5
   - drifter ==0.2.3
   - drifter-postgresql ==0.1.0
-  - dsp ==0.2.3.1
+  - dsp ==0.2.4
   - dual-tree ==0.2.1
   - dvorak ==0.1.0.0
   - dynamic-state ==0.2.2.0
@@ -627,7 +628,7 @@ default-package-overrides:
   - enclosed-exceptions ==1.0.2
   - encoding-io ==0.0.1
   - engine-io ==1.2.17
-  - engine-io-wai ==1.0.6
+  - engine-io-wai ==1.0.7
   - EntrezHTTP ==1.0.3
   - entropy ==0.3.8
   - enummapset ==0.5.2.1
@@ -701,7 +702,7 @@ default-package-overrides:
   - fileplow ==0.1.0.0
   - filter-logger ==0.6.0.0
   - find-clumpiness ==0.2.3.1
-  - fingertree ==0.1.3.0
+  - fingertree ==0.1.3.1
   - fingertree-psqueue ==0.3
   - finite-typelits ==0.1.3.0
   - fixed ==0.2.1.1
@@ -771,7 +772,7 @@ default-package-overrides:
   - ghcjs-codemirror ==0.0.0.1
   - ghcjs-perch ==0.3.3.2
   - ghc-paths ==0.1.0.9
-  - ghc-prof ==1.4.0.3
+  - ghc-prof ==1.4.0.4
   - ghc-syb-utils ==0.2.3.3
   - ghc-tcplugins-extra ==0.2.1
   - ghc-typelits-extra ==0.2.3
@@ -785,13 +786,15 @@ default-package-overrides:
   - gi-glib ==2.0.15
   - gi-gobject ==2.0.15
   - gi-gtk ==3.0.18
+  - gi-gtk-hs ==0.3.5.0
+  - gi-gtksource ==3.0.15
   - gi-javascriptcore ==3.0.14
   - ginger ==0.5.3.0
   - gio ==0.13.4.0
   - gi-pango ==1.0.15
   - giphy-api ==0.5.2.0
   - gi-soup ==2.4.14
-  - git ==0.2.0
+  - git ==0.2.1
   - github ==0.16.0
   - github-release ==1.0.7
   - github-types ==0.2.1
@@ -936,12 +939,13 @@ default-package-overrides:
   - groundhog-sqlite ==0.8
   - groundhog-th ==0.8.0.2
   - group-by-date ==0.1.0.2
-  - grouped-list ==0.2.1.3
+  - grouped-list ==0.2.1.4
   - groupoids ==4.0
   - groups ==0.4.1.0
   - gtk ==0.14.7
   - gtk2hs-buildtools ==0.13.3.1
   - gtk3 ==0.14.8
+  - gtksourceview3 ==0.13.3.1
   - gym-http-api ==0.1.0.0
   - H ==0.9.0.1
   - h2c ==1.0.0
@@ -973,7 +977,7 @@ default-package-overrides:
   - hashable-time ==0.2.0.1
   - hashmap ==1.3.2
   - hashtables ==1.2.2.1
-  - haskeline ==0.7.4.1
+  - haskeline ==0.7.4.2
   - haskell-gi ==0.20.3
   - haskell-gi-base ==0.20.7
   - haskell-gi-overloading ==1.0
@@ -1085,7 +1089,7 @@ default-package-overrides:
   - hquantlib ==0.0.4.0
   - hreader ==1.1.0
   - hreader-lens ==0.1.3.0
-  - hruby ==0.3.4.4
+  - hruby ==0.3.5
   - hsass ==0.4.2
   - hsb2hs ==0.3.1
   - hs-bibutils ==5.5
@@ -1096,8 +1100,8 @@ default-package-overrides:
   - hsebaysdk ==0.4.0.0
   - hse-cpp ==0.2
   - hsemail ==2
-  - hset ==2.2.0
   - HSet ==0.0.1
+  - hset ==2.2.0
   - hsexif ==0.6.1.5
   - hs-GeoIP ==0.3
   - hsignal ==0.2.7.5
@@ -1142,7 +1146,7 @@ default-package-overrides:
   - html-conduit ==1.2.1.2
   - html-email-validate ==0.2.0.0
   - htoml ==1.0.0.3
-  - HTTP ==4000.3.8
+  - HTTP ==4000.3.9
   - http2 ==1.6.3
   - http-api-data ==0.3.7.1
   - http-client ==0.5.7.1
@@ -1320,7 +1324,7 @@ default-package-overrides:
   - lens-labels ==0.1.0.2
   - lens-regex ==0.1.0
   - lens-simple ==0.1.0.9
-  - lentil ==1.0.9.0
+  - lentil ==1.0.9.1
   - leveldb-haskell ==0.6.5
   - lexer-applicative ==2.1.0.1
   - lhs2tex ==1.19
@@ -1334,7 +1338,7 @@ default-package-overrides:
   - libxml-sax ==0.7.5
   - LibZip ==1.0.1
   - licensor ==0.2.1
-  - lifted-async ==0.9.3
+  - lifted-async ==0.9.3.2
   - lifted-base ==0.2.3.11
   - lift-generics ==0.1.2
   - line ==3.1.0
@@ -1376,13 +1380,13 @@ default-package-overrides:
   - machines-io ==0.2.0.13
   - machines-process ==0.2.0.8
   - magic ==1.1
-  - magicbane ==0.1.3
+  - magicbane ==0.1.4
   - mainland-pretty ==0.6.1
   - makefile ==1.0.0.4
   - managed ==1.0.5
   - mandrill ==0.5.3.2
   - markdown ==0.1.16
-  - markdown-unlit ==0.4.0
+  - markdown-unlit ==0.4.1
   - markov-chain ==0.0.3.4
   - markup ==3.1.0
   - marvin ==0.2.5
@@ -1474,7 +1478,7 @@ default-package-overrides:
   - monoid-transformer ==0.0.3
   - mono-traversable ==1.0.5.0
   - mono-traversable-instances ==0.1.0.0
-  - morte ==1.6.12
+  - morte ==1.6.13
   - mountpoints ==1.0.2
   - mstate ==0.2.7
   - mtl ==2.2.1
@@ -1674,7 +1678,7 @@ default-package-overrides:
   - pkcs10 ==0.2.0.0
   - placeholders ==0.1
   - plan-b ==0.2.1
-  - plot ==0.2.3.8
+  - plot ==0.2.3.9
   - plot-gtk ==0.2.0.4
   - plot-gtk3 ==0.1.0.2
   - plot-gtk-ui ==0.3.0.2
@@ -1720,7 +1724,7 @@ default-package-overrides:
   - prettyprinter-compat-annotated-wl-pprint ==1
   - prettyprinter-compat-ansi-wl-pprint ==1.0.1
   - prettyprinter-compat-wl-pprint ==1.0.0.1
-  - pretty-show ==1.6.14
+  - pretty-show ==1.6.15
   - pretty-simple ==2.0.1.0
   - pretty-types ==0.2.3.1
   - primes ==0.2.1.0
@@ -1740,8 +1744,8 @@ default-package-overrides:
   - prompt ==0.1.1.2
   - protobuf ==0.2.1.1
   - protobuf-simple ==0.1.0.5
-  - protocol-buffers ==2.4.5
-  - protocol-buffers-descriptor ==2.4.5
+  - protocol-buffers ==2.4.6
+  - protocol-buffers-descriptor ==2.4.6
   - proto-lens ==0.2.1.0
   - proto-lens-arbitrary ==0.1.1.1
   - proto-lens-combinators ==0.1.0.7
@@ -1757,7 +1761,7 @@ default-package-overrides:
   - publicsuffix ==0.20170508
   - pure-io ==0.2.1
   - pureMD5 ==2.1.3
-  - purescript-bridge ==0.11.1.1
+  - purescript-bridge ==0.11.1.2
   - pusher-http-haskell ==1.2.0.1
   - pwstore-fast ==2.4.4
   - QuasiText ==0.1.2.6
@@ -1857,7 +1861,7 @@ default-package-overrides:
   - result ==0.2.6.0
   - rethinkdb ==2.2.0.10
   - rethinkdb-client-driver ==0.0.25
-  - retry ==0.7.5.0
+  - retry ==0.7.5.1
   - rev-state ==0.1.2
   - rfc5051 ==0.1.0.3
   - rng-utils ==0.2.1
@@ -1898,7 +1902,7 @@ default-package-overrides:
   - search-algorithms ==0.2.0
   - securemem ==0.1.9
   - SegmentTree ==0.3
-  - selda ==0.1.11.1
+  - selda ==0.1.11.2
   - selda-postgresql ==0.1.7.0
   - selda-sqlite ==0.1.6.0
   - semigroupoid-extras ==5
@@ -1958,7 +1962,7 @@ default-package-overrides:
   - simple-download ==0.0.2
   - simple-log ==0.9.3
   - simple-reflect ==0.3.2
-  - simple-sendfile ==0.2.25
+  - simple-sendfile ==0.2.26
   - simple-session ==0.10.1.1
   - simple-templates ==0.8.0.1
   - singleton-bool ==0.1.2.0
@@ -2012,7 +2016,7 @@ default-package-overrides:
   - Spock-lucid ==0.4.0.1
   - Spock-worker ==0.3.1.0
   - spool ==0.1
-  - spreadsheet ==0.1.3.6
+  - spreadsheet ==0.1.3.7
   - sqlite-simple ==0.4.14.0
   - sqlite-simple-errors ==0.6.0.0
   - sql-words ==0.1.5.1
@@ -2332,7 +2336,7 @@ default-package-overrides:
   - versions ==3.1.1
   - vhd ==0.2.2
   - ViennaRNAParser ==1.3.3
-  - viewprof ==0.0.0.11
+  - viewprof ==0.0.0.12
   - vinyl ==0.5.3
   - vinyl-utils ==0.3.0.0
   - void ==0.7.2
@@ -2505,7 +2509,7 @@ default-package-overrides:
   - yi-snippet ==0.14.1
   - yjsvg ==0.2.0.1
   - yjtools ==0.9.18
-  - yoga ==0.0.0.1
+  - yoga ==0.0.0.2
   - youtube ==0.2.1.1
   - zero ==0.1.4
   - zeromq4-haskell ==0.6.7
