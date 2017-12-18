@@ -18545,6 +18545,8 @@ with pkgs;
 
   deepin-gtk-theme = callPackage ../misc/themes/deepin { };
 
+  elementary-gtk-theme = callPackage ../misc/themes/elementary { };
+
   albatross = callPackage ../misc/themes/albatross { };
 
   gtk_engines = callPackage ../misc/themes/gtk2/gtk-engines { };
