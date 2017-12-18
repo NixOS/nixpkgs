@@ -12,6 +12,7 @@ let
 
   generic = version: sha256: minimal: stdenv.mkDerivation rec {
     name = "libva-${lib.optionalString (!minimal) "full-"}${version}";
+    inherit version;
 
     src = fetchFromGitHub {
       owner  = "01org";
@@ -37,8 +38,6 @@ let
     installFlags = [
       "dummy_drv_video_ladir=$(out)/lib/dri"
     ];
-
-    passthru = { inherit version; };
 
     meta = with stdenv.lib; {
       description = "VAAPI library: Video Acceleration API";
