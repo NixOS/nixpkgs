@@ -24,6 +24,13 @@ stdenv.mkDerivation rec {
     sha256 = "0ki7hnyfpz7bdmsxqnm9qvyk040iyv1fawnhzfbyyzrh4nc5jd3x";
   })];
 
+  patches =
+    [
+      (fetchpatch {
+      url = https://git.xfce.org/xfce/xfdesktop/patch?id=157f5b55cfc3629d595ef38984278de5915aac27;
+      sha256 = "07yvhci0yccbxnqymh2cf49j8yc0jsw147mnjzw9iy4kghj2rqxj";})
+    ];
+
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
