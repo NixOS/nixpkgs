@@ -242,7 +242,7 @@ in rec {
   tests.etcd = hydraJob (import tests/etcd.nix { system = "x86_64-linux"; });
   tests.ec2-nixops = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-nixops;
   #tests.ec2-config = hydraJob (import tests/ec2.nix { system = "x86_64-linux"; }).boot-ec2-config; # broken since 2017-04-03
-  tests.elk = hydraJob (import tests/elk.nix { system = "x86_64-linux"; });
+  tests.elk = callSubTests tests/elk.nix { system = "x86_64-linux"; };
   tests.ferm = callTest tests/ferm.nix {};
   tests.firefox = callTest tests/firefox.nix {};
   tests.firewall = callTest tests/firewall.nix {};

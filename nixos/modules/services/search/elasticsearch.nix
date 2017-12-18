@@ -6,6 +6,7 @@ let
   cfg = config.services.elasticsearch;
 
   es5 = builtins.compareVersions (builtins.parseDrvName cfg.package.name).version "5" >= 0;
+  es6 = builtins.compareVersions (builtins.parseDrvName cfg.package.name).version "6" >= 0;
 
   esConfig = ''
     network.host: ${cfg.listenAddress}
@@ -92,8 +93,6 @@ in {
         node.name: "elasticsearch"
         node.master: true
         node.data: false
-        index.number_of_shards: 5
-        index.number_of_replicas: 1
       '';
     };
 
@@ -165,7 +164,10 @@ in {
       path = [ pkgs.inetutils ];
       environment = {
         ES_HOME = cfg.dataDir;
-        ES_JAVA_OPTS = toString ([ "-Des.path.conf=${configDir}" ] ++ cfg.extraJavaOptions);
+        ES_JAVA_OPTS = toString ( optional (!es6) [ "-Des.path.conf=${configDir}" ]
+                                  ++ cfg.extraJavaOptions);
+      } // optionalAttrs es6 {
+        ES_PATH_CONF = configDir;
       };
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/elasticsearch ${toString cfg.extraCmdLineOptions}";
