@@ -7,8 +7,8 @@ assert postgresqlSupport -> postgresql_jdbc != null;
 
 with stdenv.lib;
 let
-  extraJars = optional mysqlSupport mysql_jdbc ++
-    optional postgresqlSupport postgresql_jdbc;
+  extraJars = optional mysqlSupport (mysql_jdbc + "/share/java") ++
+    optional postgresqlSupport (postgresql_jdbc + "/m2/org/postgresql/postgresql/*");
 in
 
 stdenv.mkDerivation rec {
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       # taken from the executable script in the source
       CP="$out/liquibase.jar"
       ${addJars "$out/lib"}
-      ${concatStringsSep "\n" (map (p: addJars "${p}/share/java") extraJars)}
+      ${concatStringsSep "\n" (map (p: addJars "${p}") extraJars)}
 
       ${getBin jre}/bin/java -cp "\$CP" \$JAVA_OPTS \
         liquibase.integration.commandline.Main \''${1+"\$@"}
