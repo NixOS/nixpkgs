@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, libcanberra_gtk2, gobjectIntrospection, libtool, gnome3 }:
+{ stdenv, fetchurl, pkgconfig, glib, libcanberra, gobjectIntrospection, libtool, gnome3 }:
 
 let
   majVer = "1.0";
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig gobjectIntrospection libtool gnome3.vala ];
-  buildInputs = [ glib libcanberra_gtk2 ];
+  buildInputs = [ glib libcanberra ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/GSound;

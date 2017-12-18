@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   pname = "pulsemixer";
-  version = "1.3.0-license";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "GeorgeFilipkin";
     repo = pname;
     rev = version;
-    sha256 = "186xbzyn35w2j58l68mccj0cnf0wxj93zb7s0r26zj4cppwszn90";
+    sha256 = "0l5zawv36d46sj3k31k5w6imnnxzyn62r83wdhr7fp5mi3ls1h5x";
   };
 
   inherit libpulseaudio;

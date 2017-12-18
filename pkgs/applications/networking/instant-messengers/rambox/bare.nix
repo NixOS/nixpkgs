@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, fetchNodeModules, nodejs-8_x, ruby, sencha, auth0ClientID, auth0Domain }:
+{ stdenv, fetchFromGitHub, fetchNodeModules, nodejs-8_x, ruby, sencha
+, auth0ClientID, auth0Domain, disableTooltips }:
 
 stdenv.mkDerivation rec {
   name = "rambox-bare-${version}";
@@ -20,7 +21,8 @@ stdenv.mkDerivation rec {
     sha256 = "1y3q8ggyvfywxqi5hn9mvr1sjfylspis43iyf4b7snyr1a1br3r4";
   };
 
-  patches = [ ./hide-check-for-updates.patch ./isDev.patch ];
+  patches = [ ./hide-check-for-updates.patch ./isDev.patch ]
+    ++ stdenv.lib.optionals disableTooltips [ ./disable-tooltips.patch ];
 
   configurePhase = ''
     echo 'var auth0Cfg = { clientID: "${auth0ClientID}", domain: "${auth0Domain}" };' > env.js

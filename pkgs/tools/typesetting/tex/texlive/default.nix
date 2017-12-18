@@ -68,8 +68,8 @@ let
       collection-metapost = orig.collection-metapost // {
         deps = orig.collection-metapost.deps // { inherit (tl) metafont; };
       };
-      collection-genericextra = orig.collection-genericextra // {
-        deps = orig.collection-genericextra.deps // { inherit (tl) xdvi; };
+      collection-plaingeneric = orig.collection-plaingeneric // {
+        deps = orig.collection-plaingeneric.deps // { inherit (tl) xdvi; };
       };
     }); # overrides
 

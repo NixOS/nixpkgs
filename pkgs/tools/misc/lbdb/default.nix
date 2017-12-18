@@ -6,7 +6,7 @@
 }:
 
 let
-  version = "0.44";
+  version = "0.45.3";
 in
 with stdenv.lib;
 with perlPackages;
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
   name = "lbdb-${version}";
   src = fetchurl {
     url = "http://www.spinnaker.de/debian/lbdb_${version}.tar.gz";
-    sha256 = "0kjz3n2ilrg6yrz8z40714ppdprgwhbgvzcsjzs822l6da4qxna3";
+    sha256 = "01lx1nb5nlhwz663v35gg7crd36c78hnipq4z0dqyb9wjigwwg9k";
   };
 
   buildInputs = [ goobook makeWrapper perl ConvertASN1 NetLDAP AuthenSASL ]
@@ -37,8 +37,9 @@ stdenv.mkDerivation {
 
   meta = {
     homepage = http://www.spinnaker.de/lbdb/;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl2;
+    platforms = platforms.all;
     description = "The Little Brother's Database";
+    maintainers = [ maintainers.kaiha ];
   };
 }

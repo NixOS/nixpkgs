@@ -6,17 +6,16 @@
 
 let
   inherit (stdenv.lib) optionals;
-  pname = "ocaml-cairo2";
-  version = "0.4.6";
+  version = "0.5";
 in
 
 stdenv.mkDerivation {
 
-  name = "${pname}-${version}";
+  name = "ocaml${ocaml.version}-cairo2-${version}";
 
   src = fetchurl {
-    url = "http://forge.ocamlcore.org/frs/download.php/1279/cairo2-0.4.6.tar.gz";
-    sha256 = "1lc1iv5yz49avbc0wbrw9nrx8dn0c35r7cykivjln1zc2fwscf7w";
+    url = "https://github.com/Chris00/ocaml-cairo/releases/download/${version}/cairo2-${version}.tar.gz";
+    sha256 = "1559df74rzh4v7c9hr6phymq1f5121s83q0xy3r83x4apj74dchj";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -39,7 +38,7 @@ stdenv.mkDerivation {
   installPhase = "ocaml setup.ml -install";
 
   meta = with stdenv.lib; {
-    homepage = http://forge.ocamlcore.org/projects/cairo;
+    homepage = "https://github.com/Chris00/ocaml-cairo";
     description = "Binding to Cairo, a 2D Vector Graphics Library";
     longDescription = ''
       This is a binding to Cairo, a 2D graphics library with support for

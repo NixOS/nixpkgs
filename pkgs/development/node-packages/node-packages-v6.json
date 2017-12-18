@@ -1,5 +1,6 @@
 [
   "alloy"
+, "asar"
 , "azure-cli"
 , "bower"
 , "bower2nix"

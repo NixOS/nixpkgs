@@ -3,8 +3,8 @@
 stdenv.mkDerivation rec {
   inherit (import ./src.nix fetchurl) name src;
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ file intltool glib gtk3 libxklavier makeWrapper ];
+  nativeBuildInputs = [ pkgconfig file intltool makeWrapper ];
+  buildInputs = [ glib gtk3 libxklavier ];
 
   preFixup = ''
     wrapProgram $out/bin/gkbd-keyboard-display \

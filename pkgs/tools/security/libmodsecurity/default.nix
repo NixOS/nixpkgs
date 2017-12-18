@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation rec {
   name = "libmodsecurity-${version}";
-  version = "3.0.0-2017-11-17";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "SpiderLabs";
     repo = "ModSecurity";
     fetchSubmodules = true;
-    rev = "81e1cdced3c0266d4b02a68e5f99c30a9c992303";
-    sha256 = "120bpvjq6ws2lv4vw98rx2s0c9yn0pfhlaphlgfv2rxqm3q7yhrr";
+    rev = "v${version}";
+    sha256 = "1y9nxbf5vgip4zl948a27xpw4mpimqd7xmskfi40k6g0cmmsx1x1";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = ''
-      Libmodsecurity is one component of the ModSecurity v3 project.
+      ModSecurity v3 library component.
     '';
     longDescription = ''
       Libmodsecurity is one component of the ModSecurity v3 project. The
@@ -44,4 +44,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ izorkin ];
   };
 }
-

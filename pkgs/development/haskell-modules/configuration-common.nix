@@ -628,6 +628,19 @@ self: super: {
   # https://github.com/lens/lens-aeson/issues/18
   lens-aeson = dontCheck super.lens-aeson;
 
+  # Install icons and metadata, remove broken hgettext dependency.
+  # https://github.com/vasylp/hgettext/issues/10
+  bustle = overrideCabal super.bustle (drv: {
+    configureFlags = drv.configureFlags or [] ++ ["-f-hgettext"];
+    executableHaskellDepends = pkgs.lib.remove self.hgettext drv.executableHaskellDepends;
+    buildDepends = [ pkgs.libpcap ];
+    buildTools = with pkgs; [ gettext perl help2man intltool ];
+    doCheck = false; # https://github.com/wjt/bustle/issues/6
+    postInstall = ''
+      make install PREFIX=$out
+    '';
+  });
+
   # Byte-compile elisp code for Emacs.
   ghc-mod = overrideCabal super.ghc-mod (drv: {
     preCheck = "export HOME=$TMPDIR";
