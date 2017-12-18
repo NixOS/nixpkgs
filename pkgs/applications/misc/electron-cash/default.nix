@@ -1,24 +1,31 @@
-{ stdenv, fetchurl, python2Packages }:
+{ stdenv, fetchurl, python3Packages, qtbase }:
 
-python2Packages.buildPythonApplication rec {
-  version = "2.9.4";
+let
+
+  python = python3Packages.python;
+
+in
+
+python3Packages.buildPythonApplication rec {
+  version = "3.0";
   name = "electron-cash-${version}";
 
   src = fetchurl {
-    url = "https://electroncash.org/downloads/${version}/win-linux/Electron-Cash-${version}.tar.gz";
+    url = "https://electroncash.org/downloads/${version}/win-linux/ElectronCash-${version}.tar.gz";
     # Verified using official SHA-1 and signature from
     # https://github.com/fyookball/keys-n-hashes
-    sha256 = "1y8mzwa6bb8zj4l92wm4c2icnr42wmhbfz6z5ymh356gwll914vh";
+    sha256 = "f0e2bf5c6d29da714eddd50b45761fea9fc905a0172c7b92df8fca7427439f1a";
   };
 
-  propagatedBuildInputs = with python2Packages; [
+  propagatedBuildInputs = with python3Packages; [
     dnspython
     ecdsa
-    jsonrpclib
+    jsonrpclib-pelix
+    matplotlib
     pbkdf2
     pyaes
     pycrypto
-    pyqt4
+    pyqt5
     pysocks
     qrcode
     requests
@@ -31,16 +38,18 @@ python2Packages.buildPythonApplication rec {
 
   preBuild = ''
     sed -i 's,usr_share = .*,usr_share = "'$out'/share",g' setup.py
-    pyrcc4 icons.qrc -o gui/qt/icons_rc.py
+    pyrcc5 icons.qrc -o gui/qt/icons_rc.py
     # Recording the creation timestamps introduces indeterminism to the build
     sed -i '/Created: .*/d' gui/qt/icons_rc.py
   '';
 
+  doCheck = false;
+
   postInstall = ''
     # Despite setting usr_share above, these files are installed under
     # $out/nix ...
-    mv $out/lib/python2.7/site-packages/nix/store"/"*/share $out
-    rm -rf $out/lib/python2.7/site-packages/nix
+    mv $out/${python.sitePackages}/nix/store"/"*/share $out
+    rm -rf $out/${python.sitePackages}/nix
 
     substituteInPlace $out/share/applications/electron-cash.desktop \
       --replace "Exec=electron-cash %u" "Exec=$out/bin/electron-cash %u"
