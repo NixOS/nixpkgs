@@ -15346,7 +15346,6 @@ with pkgs;
   wlroots = callPackage ../development/libraries/wlroots { };
   orbment = callPackage ../applications/window-managers/orbment { };
   sway = callPackage ../applications/window-managers/sway { };
-  swaylock = callPackage ../applications/window-managers/sway { };
 
   velox = callPackage ../applications/window-managers/velox {
     stConf = config.st.conf or null;
