@@ -2,11 +2,11 @@
 , sqlite, libsoup, libnice, gnutls}:
 
 stdenv.mkDerivation rec {
-  name = "telepathy-gabble-0.18.2";
+  name = "telepathy-gabble-0.18.3";
 
   src = fetchurl {
     url = "${meta.homepage}/releases/telepathy-gabble/${name}.tar.gz";
-    sha256 = "00ag32ccbj0hmy41rb0fg9gp40m7zbq45r4yijnyslk2mpkvg7c9";
+    sha256 = "1hl9k6jwn2afwwv7br16wfw5szdhwxqziba47xd8vjwvgrh19iwf";
   };
 
   nativeBuildInputs = [ pkgconfig libxslt ];
@@ -19,8 +19,9 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = http://telepathy.freedesktop.org;
+    homepage = https://telepathy.freedesktop.org/components/telepathy-gabble/;
     description = "Jabber/XMPP connection manager for the Telepathy framework";
+    license = licenses.lgpl21Plus;
     platforms = stdenv.lib.platforms.gnu;
   };
 }
