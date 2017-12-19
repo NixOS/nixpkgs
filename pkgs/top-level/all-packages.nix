@@ -3129,6 +3129,10 @@ with pkgs;
   nodejs-9_x = callPackage ../development/web/nodejs/v9.nix {};
   nodejs-slim-9_x = callPackage ../development/web/nodejs/v9.nix { enableNpm = false; };
 
+  nodePackages_8_x = callPackage ../development/node-packages/default-v8.nix {
+    nodejs = pkgs.nodejs-8_x;
+  };
+
   nodePackages_6_x = callPackage ../development/node-packages/default-v6.nix {
     nodejs = pkgs.nodejs-6_x;
   };
