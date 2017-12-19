@@ -1432,8 +1432,8 @@ default-package-overrides:
   - ListLike ==4.5.1
   - listsafe ==0.1.0.1
   - list-t ==1.0.0.1
-  - llvm-hs ==5.1.1
-  - llvm-hs-pure ==5.1.1
+  - llvm-hs ==5.1.0
+  - llvm-hs-pure ==5.1.0
   - lmdb ==0.2.5
   - load-env ==0.1.2
   - loch-th ==0.2.1
