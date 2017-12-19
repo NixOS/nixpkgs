@@ -1,8 +1,4 @@
-{ stdenv, fetchurl, coq, coqPackages }:
-
-if !stdenv.lib.versionAtLeast coq.coq-version "8.6"
-then throw "CoLoR is not available for Coq ${coq.coq-version}"
-else
+{ stdenv, fetchurl, coq, bignums }:
 
 stdenv.mkDerivation {
   name = "coq${coq.coq-version}-CoLoR-1.4.0";
@@ -12,7 +8,7 @@ stdenv.mkDerivation {
     sha256 = "1jsp9adsh7w59y41ihbwchryjhjpajgs9bhf8rnb4b3hzccqxgag";
   };
 
-  buildInputs = [ coq coqPackages.bignums ];
+  buildInputs = [ coq bignums ];
   enableParallelBuilding = false;
 
   installPhase = ''
@@ -24,5 +20,9 @@ stdenv.mkDerivation {
     description = "CoLoR is a library of formal mathematical definitions and proofs of theorems on rewriting theory and termination whose correctness has been mechanically checked by the Coq proof assistant.";
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;
+  };
+
+  passthru = {
+    compatibleCoqVersions = v: stdenv.lib.versionAtLeast v "8.6";
   };
 }

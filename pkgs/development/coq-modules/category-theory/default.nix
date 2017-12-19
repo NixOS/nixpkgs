@@ -42,4 +42,8 @@ stdenv.mkDerivation rec {
     platforms = coq.meta.platforms;
   };
 
+  passthru = {
+    compatibleCoqVersions = v: builtins.elem v [ "8.6" "8.7" ];
+  };
+
 }
