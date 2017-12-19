@@ -10,8 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "10y5pbkcj5gkijcgnlvrh6q2prpnvsgihb9asz3zfp66mcjwzsy3";
   };
 
-  nativeBuildInputs = [ flex bison pkgconfig swig which ];
-  buildInputs = [ python2 ];
+  nativeBuildInputs = [ flex bison pkgconfig swig which python2 ];
 
   patches = [
     # Fix 32-bit build
