@@ -994,4 +994,7 @@ self: super: {
   # https://github.com/aisamanra/config-ini/issues/12
   config-ini = dontCheck super.config-ini;
 
+  # doctest >=0.9 && <0.12
+  genvalidity-property = doJailbreak super.genvalidity-property;
+
 }
