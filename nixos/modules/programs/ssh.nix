@@ -56,6 +56,7 @@ in
 
       setXAuthLocation = mkOption {
         type = types.bool;
+        default = false;
         description = ''
           Whether to set the path to <command>xauth</command> for X11-forwarded connections.
           This causes a dependency on X11 packages.
