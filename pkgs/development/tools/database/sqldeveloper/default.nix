@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
       obtain it you need to
 
       - navigate to ${url}
-      - make sure that it says "Version ${version}" above the list of downloads 
+      - make sure that it says "Version ${version}" above the list of downloads
         - if it does not, click on the "Previous Version" link below the downloads
           and repeat until the version is correct. This is necessarry because as the
           time of this writing there exists no permanent link for the current version
