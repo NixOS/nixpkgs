@@ -207,7 +207,7 @@ in
             gitolite setup -pk ${pubkeyFile}
           fi
           if [ -n "${hooks}" ]; then
-            cp ${hooks} .gitolite/hooks/common/
+            cp -f ${hooks} .gitolite/hooks/common/
             chmod +x .gitolite/hooks/common/*
           fi
           gitolite setup # Upgrade if needed
