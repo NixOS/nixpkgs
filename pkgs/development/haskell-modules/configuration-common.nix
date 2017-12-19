@@ -982,6 +982,7 @@ self: super: {
   blaze-markup = doJailbreak super.blaze-markup;
   blaze-html = doJailbreak super.blaze-html;
   attoparsec = dontCheck super.attoparsec;      # 1 out of 67 tests fails
+  int-cast = doJailbreak super.int-cast;
 
   # Needs tasty-quickcheck ==0.8.*, which we don't have.
   cryptohash-sha256 = doJailbreak super.cryptohash-sha256;
