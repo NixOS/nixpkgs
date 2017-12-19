@@ -79,6 +79,11 @@ in
 
       "-Dsysvinit-path="
       "-Dsysvrcnd-path="
+      "-Dkmod-path=${kmod}/bin/kmod"
+      "-Dkexec-path=${kexectools}/bin/kexec"
+      "-Dsulogin-path=${utillinux.bin}/sbin/sulogin"
+      "-Dmount-path=${utillinux.bin}/bin/mount"
+      "-Dumount-path=${utillinux.bin}/bin/umount"
       ];
 
     preConfigure =
