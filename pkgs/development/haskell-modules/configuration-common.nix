@@ -978,4 +978,7 @@ self: super: {
   scalendar = markBroken super.scalendar;
   SCalendar = markBroken super.SCalendar;
 
+  # Needs QuickCheck >=2.4 && <2.10, which we don't have.
+  edit-distance = doJailbreak super.edit-distance;
+
 }
