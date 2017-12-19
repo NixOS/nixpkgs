@@ -978,6 +978,7 @@ self: super: {
   attoparsec = dontCheck super.attoparsec;      # 1 out of 67 tests fails
   int-cast = doJailbreak super.int-cast;
   nix-derivation = doJailbreak super.nix-derivation;
+  graphviz = doJailbreak super.graphviz;
 
   # Needs tasty-quickcheck ==0.8.*, which we don't have.
   cryptohash-sha256 = doJailbreak super.cryptohash-sha256;
