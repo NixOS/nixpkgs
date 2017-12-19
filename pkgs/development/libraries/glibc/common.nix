@@ -219,9 +219,4 @@ stdenv.mkDerivation ({
   dontStrip = true;
 
   separateDebugInfo = false; # this is currently broken for crossDrv
-
-  # To avoid a dependency on the build system 'bash'.
-  preFixup = ''
-    rm -f $bin/bin/{ldd,tzselect,catchsegv,xtrace}
-  '';
 })
