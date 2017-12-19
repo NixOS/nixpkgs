@@ -18,7 +18,7 @@
   </para>
   <para>
     Coq libraries may be compatible with some specific versions of Coq only.
-    The <liberal>compatibleCoqVersions</liberal> attribute is used to
+    The <literal>compatibleCoqVersions</literal> attribute is used to
     precisely select those versions of Coq that are compatible with this
     derivation.
   </para>
