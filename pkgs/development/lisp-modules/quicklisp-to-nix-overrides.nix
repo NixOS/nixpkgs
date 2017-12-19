@@ -30,6 +30,12 @@ in
       configurePhase = ''
         export makeFlags="$makeFlags LISP=common-lisp.sh"
       '';
+      preInstall = ''
+        type gcc
+        mkdir -p "$out/lib/common-lisp/" 
+        cp -r . "$out/lib/common-lisp/cl-fuse/"
+        "gcc" "-x" "c" "$out/lib/common-lisp/cl-fuse/fuse-launcher.c-minus" "-fPIC" "--shared" "-lfuse" "-o" "$out/lib/common-lisp/cl-fuse/libfuse-launcher.so"        
+      '';
     };
   };
   hunchentoot = addNativeLibs [pkgs.openssl];
