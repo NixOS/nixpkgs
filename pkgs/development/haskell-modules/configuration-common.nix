@@ -996,5 +996,6 @@ self: super: {
 
   # doctest >=0.9 && <0.12
   genvalidity-property = doJailbreak super.genvalidity-property;
+  path = dontCheck super.path;
 
 }
