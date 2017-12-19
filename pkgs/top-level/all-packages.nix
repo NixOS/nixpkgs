@@ -7555,7 +7555,7 @@ with pkgs;
 
   msitools = callPackage ../development/tools/misc/msitools { };
 
-  multi-ghc-travis = callPackage ../development/tools/haskell/multi-ghc-travis { };
+  multi-ghc-travis = callPackage ../development/tools/haskell/multi-ghc-travis { ghc = haskell.compiler.ghc802; };
 
   neoload = callPackage ../development/tools/neoload {
     licenseAccepted = (config.neoload.accept_license or false);
