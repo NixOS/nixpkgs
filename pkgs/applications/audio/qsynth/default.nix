@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation  rec {
   name = "qsynth-${version}";
-  version = "0.4.4";
+  version = "0.5.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/qsynth/${name}.tar.gz";
-    sha256 = "0qhfnikx3xcllkvs60kj6vcf2rwwzh31y41qkk6kwfhzgd219y8f";
+    sha256 = "1sr6vrz8z9r99j9xcix86lgcqldragb2ajmq1bnhr58d99sda584";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
