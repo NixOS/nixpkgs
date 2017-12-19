@@ -15,13 +15,6 @@ with haskellLib;
 
 self: super: {
 
-  attoparsec-time_1 = super.attoparsec-time_1.override {
-    doctest = super.doctest_0_13_0;
-  };
-  attoparsec-data = super.attoparsec-data.override {
-    attoparsec-time = self.attoparsec-time_1;
-  };
-
   # This used to be a core package provided by GHC, but then the compiler
   # dropped it. We define the name here to make sure that old packages which
   # depend on this library still evaluate (even though they won't compile
@@ -980,14 +973,13 @@ self: super: {
   # Newer hpack's needs newer HUnit, but we cannot easily override the version
   # used in the build, so we take the easy way out and disable the test suite.
   hpack_0_20_0 = dontCheck super.hpack_0_20_0;
-  hpack_0_21_2 = dontCheck super.hpack_0_21_2;
 
   # Stack 1.6.1 needs newer versions than LTS-9 provides.
   stack = super.stack.overrideScope (self: super: {
     hpack = super.hpack_0_20_0;
   });
 
-  # Hoogle needs a newer version than lts-9 provides.
+  # Hoogle needs a newer version than lts-10 provides.
   hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_20_1; };
 
 }
