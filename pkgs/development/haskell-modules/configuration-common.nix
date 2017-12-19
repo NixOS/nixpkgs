@@ -987,5 +987,6 @@ self: super: {
   cryptohash-sha256 = doJailbreak super.cryptohash-sha256;
   cryptohash-sha1 = doJailbreak super.cryptohash-sha1;
   cryptohash-md5 = doJailbreak super.cryptohash-md5;
+  text-short = doJailbreak super.text-short;
 
 }
