@@ -64,6 +64,7 @@ self: super: {
   nanospec = dontCheck super.nanospec;
   options = dontCheck super.options;
   statistics = dontCheck super.statistics;
+  vector-builder = dontCheck super.vector-builder;
 
   # https://github.com/gilith/hol/pull/1
   hol = appendPatch (doJailbreak super.hol) (pkgs.fetchpatch {
