@@ -1,0 +1,9 @@
+[
+  "bower"
+, "coffee-script"
+, "grunt-cli"
+, "mocha"
+, "nijs"
+, "semver"
+, "sloc"
+]

@@ -2,7 +2,7 @@
 
 {pkgs ? import <nixpkgs> {
     inherit system;
-  }, system ? builtins.currentSystem, nodejs ? pkgs."nodejs-4_x"}:
+  }, system ? builtins.currentSystem, nodejs ? pkgs."nodejs-8_x"}:
 
 let
   nodeEnv = import ./node-env.nix {
@@ -10,7 +10,7 @@ let
     inherit nodejs;
   };
 in
-import ./node-packages-v4.nix {
+import ./node-packages-v8.nix {
   inherit (pkgs) fetchurl fetchgit;
   inherit nodeEnv;
 }
