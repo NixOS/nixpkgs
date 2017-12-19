@@ -9793,8 +9793,6 @@ with pkgs;
 
   libui = callPackage ../development/libraries/libui { };
 
-  libunity = callPackage ../development/libraries/libunity { };
-
   libunistring = callPackage ../development/libraries/libunistring { };
 
   libupnp = callPackage ../development/libraries/pupnp { };
