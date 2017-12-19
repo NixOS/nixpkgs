@@ -961,14 +961,8 @@ self: super: {
     testToolDepends = drv.testToolDepends or [] ++ [pkgs.procps];
   });
 
-  # Newer hpack's needs newer HUnit, but we cannot easily override the version
-  # used in the build, so we take the easy way out and disable the test suite.
-  hpack_0_20_0 = dontCheck super.hpack_0_20_0;
-
-  # Stack 1.6.1 needs newer versions than LTS-9 provides.
-  stack = super.stack.overrideScope (self: super: {
-    hpack = super.hpack_0_20_0;
-  });
+  # https://github.com/fpco/stackage/issues/3126
+  stack = doJailbreak super.stack;
 
   # Hoogle needs a newer version than lts-10 provides.
   hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_20_1; };
