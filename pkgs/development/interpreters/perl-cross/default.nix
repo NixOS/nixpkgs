@@ -27,6 +27,8 @@ let common = {perlVersion, perlSha256}:
 
     enableParallelBuilding = false;
 
+    passthru.libPrefix = "lib/perl5/site_perl";
+
     meta = {
       homepage = https://arsv.github.io/perl-cross;
       description = "Cross-compilation standard implementation of the Perl 5 programmming language";
