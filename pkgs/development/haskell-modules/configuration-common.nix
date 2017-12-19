@@ -88,9 +88,7 @@ self: super: {
 
   # The Hackage tarball is purposefully broken, because it's not intended to be, like, useful.
   # https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
-  git-annex = (overrideCabal (super.git-annex.overrideScope (self: super: {
-      optparse-applicative = self.optparse-applicative_0_14_0_0;
-    })) (drv: {
+  git-annex = (overrideCabal (drv: {
     src = pkgs.fetchgit {
       name = "git-annex-${drv.version}-src";
       url = "git://git-annex.branchable.com/";
@@ -452,11 +450,6 @@ self: super: {
 
   # https://github.com/basvandijk/threads/issues/10
   threads = dontCheck super.threads;
-
-  # https://github.com/NixOS/nixpkgs/issues/32138
-  purescript = super.purescript.override {
-    optparse-applicative = self.optparse-applicative_0_14_0_0;
-  };
 
   # Missing module.
   rematch = dontCheck super.rematch;            # https://github.com/tcrayford/rematch/issues/5
@@ -976,11 +969,9 @@ self: super: {
   # test suite requires git and does a bunch of git operations
   restless-git = dontCheck super.restless-git;
 
-  # This tool needs the latest hackage-db version. Using the latest version of
-  # optparse-applicative allows us to generate completions for fish and zsh.
+  # This tool needs the latest hackage-db version.
   cabal2nix = super.cabal2nix.overrideScope (self: super: {
     hackage-db = self.hackage-db_2_0;
-    optparse-applicative = self.optparse-applicative_0_14_0_0;
   });
 
   # Depends on broken fluid.
