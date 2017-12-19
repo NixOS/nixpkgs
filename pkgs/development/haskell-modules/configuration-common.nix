@@ -32,9 +32,8 @@ self: super: {
   # compiled on Linux. We provide the name to avoid evaluation errors.
   unbuildable = throw "package depends on meta package 'unbuildable'";
 
-  # cabal-install needs Cabal 2.x. hackage-security's test suite does not compile with
-  # Cabal 2.x, though. See https://github.com/haskell/hackage-security/issues/188.
-  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_2_0_1_1; });
+  # hackage-security's test suite does not compile with Cabal 2.x.
+  # See https://github.com/haskell/hackage-security/issues/188.
   hackage-security = dontCheck super.hackage-security;
 
   # Link statically to avoid runtime dependency on GHC.
