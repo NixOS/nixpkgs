@@ -63,7 +63,7 @@ in
     system.build.sdImage = pkgs.stdenv.mkDerivation {
       name = "sd-image-${pkgs.stdenv.system}.img";
 
-      buildInputs = with pkgs; [ dosfstools e2fsprogs mtools libfaketime utillinux ];
+      nativeBuildInputs = with pkgs; [ dosfstools e2fsprogs mtools libfaketime utillinux ];
 
       buildCommand = ''
         # Create the image file sized to fit /boot and /, plus 20M of slack
