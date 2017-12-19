@@ -5389,6 +5389,8 @@ with pkgs;
 
   zsh-command-time = callPackage ../shells/zsh-command-time { };
 
+  zssh = callPackage ../tools/networking/zssh { };
+
   zstd = callPackage ../tools/compression/zstd { };
   zstdmt = callPackage ../tools/compression/zstdmt { };
 
