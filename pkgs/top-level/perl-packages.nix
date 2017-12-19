@@ -664,7 +664,7 @@ let self = _self // overrides; _self = with self; {
     };
     propagatedBuildInputs = [ BFlags IPCRun Opcodes ];
     meta = {
-      homepage = http://www.perl-compiler.org;
+      homepage = https://github.com/rurban/perl-compiler;
       description = "Perl compiler";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
