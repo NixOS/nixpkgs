@@ -982,4 +982,8 @@ self: super: {
   # Hoogle needs a newer version than lts-10 provides.
   hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_20_1; };
 
+  # These packages depend on each other, forming an infinte loop.
+  scalendar = markBroken super.scalendar;
+  SCalendar = markBroken super.SCalendar;
+
 }
