@@ -998,4 +998,7 @@ self: super: {
   genvalidity-property = doJailbreak super.genvalidity-property;
   path = dontCheck super.path;
 
+  # Duplicate instance with smallcheck.
+  store = dontCheck super.store;
+
 }
