@@ -1,8 +1,4 @@
-{ stdenv, fetchFromGitHub, coq, coqPackages }:
-
-if ! stdenv.lib.versionAtLeast coq.coq-version "8.6" then
-  throw "Math-Classes requires Coq 8.6 or later."
-else
+{ stdenv, fetchFromGitHub, coq, bignums }:
 
 stdenv.mkDerivation rec {
 
@@ -16,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "0wgnczacvkb2pc3vjbni9bwjijfyd5jcdnyyjg8185hkf9zzabgi";
   };
 
-  buildInputs = [ coq coqPackages.bignums ];
+  buildInputs = [ coq bignums ];
   enableParallelBuilding = true;
   installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
 
@@ -26,4 +22,9 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ siddharthist jwiegley ];
     platforms = coq.meta.platforms;
   };
+
+  passthru = {
+    compatibleCoqVersions = v: stdenv.lib.versionAtLeast v "8.6";
+  };
+
 }

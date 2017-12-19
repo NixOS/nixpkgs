@@ -9,7 +9,7 @@
 , ocamlPackages, ncurses
 , buildIde ? true
 , csdp ? null
-, version ? "8.6.1"
+, version ? "8.7.1"
 }:
 
 let
@@ -19,7 +19,6 @@ let
    "8.5pl3"    = "15c3rdk59nifzihsp97z4vjxis5xmsnrvpb86qiazj143z2fmdgw";
    "8.6"       = "148mb48zpdax56c0blfi7v67lx014lnmrvxxasi28hsibyz2lvg4";
    "8.6.1"     = "0llrxcxwy5j87vbbjnisw42rfw1n1pm5602ssx64xaxx3k176g6l";
-   "8.7+beta2" = "1r274m44z774xigvj43g211ms9z9bwgyp1g43rvq4fswb3gzxc4b";
    "8.7.0"     = "1h18b7xpnx3ix9vsi5fx4zdcbxy7bhra7gd5c5yzxmk53cgf1p9m";
    "8.7.1"     = "0gjn59jkbxwrihk8fx9d823wjyjh5m9gvj9l31nv6z6bcqhgdqi8";
   }."${version}";
