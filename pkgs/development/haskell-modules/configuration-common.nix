@@ -980,6 +980,7 @@ self: super: {
   # Needs QuickCheck <2.10, which we don't have.
   edit-distance = doJailbreak super.edit-distance;
   blaze-markup = doJailbreak super.blaze-markup;
+  blaze-html = doJailbreak super.blaze-html;
   attoparsec = dontCheck super.attoparsec;      # 1 out of 67 tests fails
 
   # Needs tasty-quickcheck ==0.8.*, which we don't have.
