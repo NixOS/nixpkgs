@@ -991,4 +991,7 @@ self: super: {
   cryptohash-md5 = doJailbreak super.cryptohash-md5;
   text-short = doJailbreak super.text-short;
 
+  # https://github.com/aisamanra/config-ini/issues/12
+  config-ini = dontCheck super.config-ini;
+
 }
