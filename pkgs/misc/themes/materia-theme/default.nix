@@ -13,7 +13,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gnome3.glib libxml2 ];
 
-  buildInputs = [ gnome3.gnome_themes_standard gtk-engine-murrine gdk_pixbuf librsvg ];
+  buildInputs = [ gnome3.gnome_themes_standard gdk_pixbuf librsvg ];
+
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   dontBuild = true;
 

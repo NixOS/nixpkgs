@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook sass glib libxml2 gdk_pixbuf librsvg ];
 
-  buildInputs = [ gtk-engine-murrine ];
-  
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
+
   meta = {
     description = "Grey and blue theme (Gtk, Xfce, Emerald, Metacity, Mutter, Unity)";
     homepage = https://github.com/shimmerproject/Greybird;

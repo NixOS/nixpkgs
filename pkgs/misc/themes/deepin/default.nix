@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1hb0y72fzmcj2yl6q7mbc0c7yxkd1qgnyw4vixdqxnxk2c82sxzw";
   };
 
-  buildInputs = [ gtk-engine-murrine ];
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
