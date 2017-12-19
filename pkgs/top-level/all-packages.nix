@@ -10312,6 +10312,8 @@ with pkgs;
 
   osm-gps-map = callPackage ../development/libraries/osm-gps-map { };
 
+  osinfo-db-tools = callPackage ../tools/misc/osinfo-db-tools { };
+
   p11_kit = callPackage ../development/libraries/p11-kit { };
 
   paperkey = callPackage ../tools/security/paperkey { };
