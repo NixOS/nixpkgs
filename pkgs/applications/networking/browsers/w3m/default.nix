@@ -40,8 +40,8 @@ stdenv.mkDerivation rec {
     })
   ] ++ optional (graphicsSupport && !x11Support) [ ./no-x11.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ncurses boehmgc gettext zlib ]
+  nativeBuildInputs = [ pkgconfig gettext stdenv.cc ];
+  buildInputs = [ ncurses boehmgc zlib ]
     ++ optional sslSupport openssl
     ++ optional mouseSupport gpm-ncurses
     ++ optional graphicsSupport imlib2
@@ -57,10 +57,15 @@ stdenv.mkDerivation rec {
     [ "--with-ssl=${openssl.dev}" "--with-gc=${boehmgc.dev}" ]
     ++ optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
       "ac_cv_func_setpgrp_void=yes"
+      "AR=${stdenv.cc.bintools.targetPrefix}arc"
     ]
     ++ optional graphicsSupport "--enable-image=${optionalString x11Support "x11,"}fb";
 
   preConfigure = ''
+    substituteInPlace Makefile.in --replace "AR=ar" ""
+    substituteInPlace libwc/Makefile.in --replace "AR=ar" ""
+    substituteInPlace w3mimg/Makefile.in --replace "AR=ar" ""
+
     substituteInPlace ./configure --replace "/lib /usr/lib /usr/local/lib /usr/ucblib /usr/ccslib /usr/ccs/lib /lib64 /usr/lib64" /no-such-path
     substituteInPlace ./configure --replace /usr /no-such-path
   '';
