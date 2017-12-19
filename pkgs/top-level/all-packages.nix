@@ -13972,6 +13972,8 @@ with pkgs;
 
   ao = callPackage ../applications/graphics/ao {};
 
+  apache-directory-studio = callPackage ../applications/networking/apache-directory-studio {};
+
   aqemu = libsForQt5.callPackage ../applications/virtualization/aqemu { };
 
   ardour = callPackage ../applications/audio/ardour {
