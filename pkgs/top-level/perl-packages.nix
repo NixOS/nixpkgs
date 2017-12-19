@@ -4849,6 +4849,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/authors/id/J/JG/JGMYERS/${name}.tar.gz";
       sha256 = "834d893aa7db6ce3f158afbd0e432d6ed15a276e0940db0a74be13fd9c4bbbf1";
     };
+    nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
     propagatedBuildInputs = [ ModuleBuild ];
     meta = {
       description = "An Encode::Encoding subclass that detects the encoding of data";
@@ -5162,6 +5163,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/modules/by-module/ExtUtils/${name}.tar.gz";
       sha256 = "1a77hxf2pa8ia9na72rijv1yhpn2bjrdsybwk2dj2l938pl3xn0w";
     };
+    nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
     propagatedBuildInputs = [ CaptureTiny ];
   };
 
@@ -8488,6 +8490,7 @@ let self = _self // overrides; _self = with self; {
       url = "mirror://cpan/modules/by-module/Math/${name}.tar.gz";
       sha256 = "0i9wzvig7ayijc9nvh5x5rryk1jrcj1hcvfmlcj449rnnxx24dav";
     };
+    nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
     propagatedBuildInputs = [ ModuleBuildWithXSpp ExtUtilsXSpp ExtUtilsTypemapsDefault TestDeep ];
   };
 
