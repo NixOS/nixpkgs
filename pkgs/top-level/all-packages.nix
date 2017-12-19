@@ -6450,7 +6450,6 @@ with pkgs;
   urweb = callPackage ../development/compilers/urweb { };
 
   inherit (callPackage ../development/compilers/vala { })
-    vala_0_23
     vala_0_26
     vala_0_28
     vala_0_32
