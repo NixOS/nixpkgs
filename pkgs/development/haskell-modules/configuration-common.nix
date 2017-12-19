@@ -977,8 +977,10 @@ self: super: {
   scalendar = markBroken super.scalendar;
   SCalendar = markBroken super.SCalendar;
 
-  # Needs QuickCheck >=2.4 && <2.10, which we don't have.
+  # Needs QuickCheck <2.10, which we don't have.
   edit-distance = doJailbreak super.edit-distance;
+  attoparsec = doJailbreak super.attoparsec;
+  blaze-markup = doJailbreak super.blaze-markup;
 
   # Needs tasty-quickcheck ==0.8.*, which we don't have.
   cryptohash-sha256 = doJailbreak super.cryptohash-sha256;
