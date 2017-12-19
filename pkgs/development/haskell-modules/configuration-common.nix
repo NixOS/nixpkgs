@@ -144,8 +144,6 @@ self: super: {
     extraLibraries = [ pkgs.openblasCompat ];
   });
 
-  LambdaHack = super.LambdaHack.override { sdl2-ttf = super.sdl2-ttf_2_0_2; };
-
   # The Haddock phase fails for one reason or another.
   acme-one = dontHaddock super.acme-one;
   attoparsec-conduit = dontHaddock super.attoparsec-conduit;
@@ -908,9 +906,6 @@ self: super: {
   # missing dependencies: doctest ==0.12.*
   html-entities = doJailbreak super.html-entities;
 
-  # Needs a version that's newer than what we have in lts-9.
-  sbv = super.sbv.override { doctest = self.doctest_0_13_0; };
-
   # https://github.com/takano-akio/filelock/issues/5
   filelock = dontCheck super.filelock;
 
@@ -942,9 +937,6 @@ self: super: {
   # Depends on broken fluid.
   fluid-idl-http-client = markBroken super.fluid-idl-http-client;
   fluid-idl-scotty = markBroken super.fluid-idl-scotty;
-
-  # depends on amqp >= 0.17
-  amqp-utils = super.amqp-utils.override { amqp = dontCheck super.amqp_0_18_1; };
 
   # Build with gi overloading feature disabled.
   ltk = super.ltk.overrideScope (self: super: { haskell-gi-overloading = self.haskell-gi-overloading_0_0; });
