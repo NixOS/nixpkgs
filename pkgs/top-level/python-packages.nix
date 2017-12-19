@@ -23304,6 +23304,7 @@ EOF
 
   ephem = callPackage ../development/python-modules/ephem { };
 
+  camxes = callPackage ../development/python-modules/camxes { };
 });
 
 in fix' (extends overrides packages)
