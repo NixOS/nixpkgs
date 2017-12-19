@@ -42,14 +42,14 @@ let
     libstdcxxClang = ccWrapperFun {
       cc = self.clang-unwrapped;
       /* FIXME is this right? */
-      inherit (stdenv.cc) libc nativeTools nativeLibc;
+      inherit (stdenv.cc) bintools libc nativeTools nativeLibc;
       extraPackages = [ libstdcxxHook ];
     };
 
     libcxxClang = ccWrapperFun {
       cc = self.clang-unwrapped;
       /* FIXME is this right? */
-      inherit (stdenv.cc) libc nativeTools nativeLibc;
+      inherit (stdenv.cc) bintools libc nativeTools nativeLibc;
       extraPackages = [ self.libcxx self.libcxxabi ];
     };
 

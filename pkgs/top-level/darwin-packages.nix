@@ -10,8 +10,14 @@ in
 
   apple_sdk = callPackage ../os-specific/darwin/apple-sdk { };
 
-  binutils = callPackage ../os-specific/darwin/binutils {
-    inherit (darwin) cctools;
+  binutils = pkgs.wrapBintoolsWith {
+    libc =
+      if pkgs.targetPlatform != pkgs.hostPlatform
+      then pkgs.libcCross
+      else pkgs.stdenv.cc.libc;
+    bintools = callPackage ../os-specific/darwin/binutils {
+      inherit (darwin) cctools;
+    };
   };
 
   cctools = callPackage ../os-specific/darwin/cctools/port.nix {

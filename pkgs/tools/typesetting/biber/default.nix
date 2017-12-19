@@ -32,10 +32,6 @@ buildPerlModule rec {
   # Tests depend on the precise Unicode-Collate version (expects 1.19, but we have 1.25)
   doCheck = false;
 
-  postUnpack = ''
-    sed '1s/env perl/perl/' -i */bin/biber
-  '';
-
   meta = {
     description = "Backend for BibLaTeX";
     license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];

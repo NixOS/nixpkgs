@@ -7,7 +7,7 @@
 , unzip
 , ensureNewerSourcesHook
 # Whether the derivation provides a Python module or not.
-, pythonModule
+, toPythonModule
 , namePrefix
 }:
 
@@ -40,6 +40,12 @@
 # Skip wrapping of python programs altogether
 , dontWrapPythonPrograms ? false
 
+# Remove bytecode from bin folder.
+# When a Python script has the extension `.py`, bytecode is generated
+# Typically, executables in bin have no extension, so no bytecode is generated.
+# However, some packages do provide executables with extensions, and thus bytecode is generated.
+, removeBinBytecode ? true
+
 , meta ? {}
 
 , passthru ? {}
@@ -54,7 +60,7 @@ if disabled
 then throw "${name} not supported for interpreter ${python.executable}"
 else
 
-python.stdenv.mkDerivation (builtins.removeAttrs attrs [
+toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
     "disabled" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts"
   ] // {
 
@@ -77,6 +83,11 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs [
 
   postFixup = lib.optionalString (!dontWrapPythonPrograms) ''
     wrapPythonPrograms
+  '' + lib.optionalString removeBinBytecode ''
+    if [ -d "$out/bin" ]; then
+      rm -rf "$out/bin/__pycache__"                 # Python 3
+      find "$out/bin" -type f -name "*.pyc" -delete # Python 2
+    fi
   '' + lib.optionalString catchConflicts ''
     # Check if we have two packages with the same name in the closure and fail.
     # If this happens, something went wrong with the dependencies specs.
@@ -84,14 +95,9 @@ python.stdenv.mkDerivation (builtins.removeAttrs attrs [
     ${python.interpreter} ${./catch_conflicts}/catch_conflicts.py
   '' + attrs.postFixup or '''';
 
-  passthru = {
-    inherit python; # The python interpreter
-    inherit pythonModule;
-  } // passthru;
-
   meta = {
     # default to python's platforms
     platforms = python.meta.platforms;
     isBuildPythonPackage = python.meta.platforms;
   } // meta;
-})
+}))
