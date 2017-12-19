@@ -8021,7 +8021,8 @@ with pkgs;
   boost163 = callPackage ../development/libraries/boost/1.63.nix { };
   boost164 = callPackage ../development/libraries/boost/1.64.nix { };
   boost165 = callPackage ../development/libraries/boost/1.65.nix { };
-  boost16x = boost165;
+  boost166 = callPackage ../development/libraries/boost/1.66.nix { };
+  boost16x = boost166;
   boost = boost16x;
 
   boost_process = callPackage ../development/libraries/boost-process { };
