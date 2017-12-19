@@ -4,6 +4,8 @@ let
   version = "1.7.9";
   name = "electron-${version}";
 
+  throwSystem = throw "Unsupported system: ${stdenv.system}";
+
   meta = with stdenv.lib; {
     description = "Cross platform desktop application shell";
     homepage = https://github.com/electron/electron;
@@ -28,7 +30,7 @@ let
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-armv7l.zip";
         sha256 = "17jkma50d6az8dbyrym8z2lsw2n0r6jhdlm8pb5c928bzgshryqm";
       };
-    }.${stdenv.system};
+    }.${stdenv.system} or throwSystem;
 
     buildInputs = [ unzip makeWrapper ];
 
