@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   # -DNDEBUG for speed
   configureFlags = [ "CXXFLAGS=-DNDEBUG" ];
+  
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
   # SIGILL on darwin
   doCheck = !stdenv.isDarwin;
