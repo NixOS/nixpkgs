@@ -17,7 +17,7 @@ in
     time = {
 
       timeZone = mkOption {
-        default = null;
+        default = "GMT";
         type = timezone;
         example = "America/New_York";
         description = ''
