@@ -58,10 +58,6 @@ in rec {
     ghc784 = callPackage ../development/compilers/ghc/7.8.4.nix {
       ghc = compiler.ghc742Binary;
     };
-    ghc7102 = callPackage ../development/compilers/ghc/7.10.2.nix rec {
-      bootPkgs = packages.ghc784;
-      inherit (bootPkgs) hscolour;
-    };
     ghc7103 = callPackage ../development/compilers/ghc/7.10.3.nix rec {
       bootPkgs = packages.ghc784;
       inherit (bootPkgs) hscolour;
@@ -149,10 +145,6 @@ in rec {
     ghc784 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc784;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.8.x.nix { };
-    };
-    ghc7102 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc7102;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.10.x.nix { };
     };
     ghc7103 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc7103;
