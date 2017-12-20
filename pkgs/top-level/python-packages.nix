@@ -9095,6 +9095,8 @@ in {
     };
   };
 
+  google_auth = callPackage ../development/python-modules/google_auth { };
+
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
   greenlet = buildPythonPackage rec {
