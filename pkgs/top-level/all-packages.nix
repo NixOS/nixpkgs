@@ -1504,7 +1504,6 @@ with pkgs;
 
   collectd = callPackage ../tools/system/collectd {
     libmysql = mysql.lib;
-    libsigrok = libsigrok-0-3-0; # not compatible with >= 0.4.0 yet
   };
 
   collectd-data = callPackage ../tools/system/collectd/data.nix { };
@@ -7270,12 +7269,10 @@ with pkgs;
 
   libstdcxx5 = callPackage ../development/libraries/libstdc++5 { };
 
-  libsigrok = callPackage ../development/tools/libsigrok { };
-  # old version:
-  libsigrok-0-3-0 = libsigrok.override {
-    version = "0.3.0";
-    sha256 = "0l3h7zvn3w4c1b9dgvl3hirc4aj1csfkgbk87jkpl7bgl03nk4j3";
-  };
+  inherit (callPackages ../development/tools/libsigrok { })
+    libsigrok_0_3
+    libsigrok_0_5;
+  libsigrok = libsigrok_0_5;
 
   libsigrokdecode = callPackage ../development/tools/libsigrokdecode { };
 
