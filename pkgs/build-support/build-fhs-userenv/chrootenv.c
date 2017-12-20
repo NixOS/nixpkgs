@@ -10,6 +10,7 @@
 #include <ftw.h>
 #include <sched.h>
 #include <stdarg.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -43,33 +44,80 @@ char **env_build(char *names[], size_t len) {
   return ret;
 }
 
-struct bind {
-  char *from;
-  char *to;
-};
+void bind(char *from, char *to) {
+  if (mkdir(to, 0755) < 0)
+    errorf(EX_IOERR, "mkdir");
 
-struct bind binds[] = {{"/", "host"},   {"/proc", "proc"}, {"/sys", "sys"},
-                       {"/nix", "nix"}, {"/tmp", "tmp"},   {"/var", "var"},
-                       {"/run", "run"}, {"/dev", "dev"},   {"/home", "home"}};
+  if (mount(from, to, "bind", MS_BIND | MS_REC, NULL) < 0)
+    errorf(EX_OSERR, "mount");
+}
 
-void bind(struct bind *bind) {
-  DIR *src = opendir(bind->from);
+char *strjoin(char *dir, char *name) {
+  char *path = malloc(strlen(dir) + strlen(name) + 1);
 
-  if (src) {
-    if (closedir(src) < 0)
-      errorf(EX_IOERR, "closedir");
+  if (path == NULL)
+    errorf(EX_OSERR, "malloc");
 
-    if (mkdir(bind->to, 0755) < 0)
-      errorf(EX_IOERR, "mkdir");
+  if (strcpy(path, dir) < 0)
+    errorf(EX_IOERR, "strcpy");
 
-    if (mount(bind->from, bind->to, "bind", MS_BIND | MS_REC, NULL) < 0)
-      errorf(EX_OSERR, "mount");
+  if (strcat(path, name) < 0)
+    errorf(EX_IOERR, "strcat");
 
-  } else {
-    // https://github.com/NixOS/nixpkgs/issues/31104
-    if (errno != ENOENT)
-      errorf(EX_OSERR, "opendir");
+  return path;
+}
+
+#define LEN(x) sizeof(x) / sizeof(*x)
+
+char *bind_blacklist[] = {".", "..", "bin", "etc", "host", "usr"};
+
+bool bind_blacklisted(char *name) {
+  for (size_t i = 0; i < LEN(bind_blacklist); i++) {
+    if (!strcmp(bind_blacklist[i], name))
+      return true;
   }
+
+  return false;
+}
+
+bool isdir(char *path) {
+  struct stat buf;
+  stat(path, &buf);
+  return S_ISDIR(buf.st_mode);
+}
+
+void bind_to_cwd(char *prefix) {
+  DIR *prefix_dir = opendir(prefix);
+
+  if (prefix_dir == NULL)
+    errorf(EX_OSERR, "opendir");
+
+  struct dirent *prefix_dirent;
+
+  while (prefix_dirent = readdir(prefix_dir)) {
+    if (bind_blacklisted(prefix_dirent->d_name))
+      continue;
+
+    char *prefix_dirent_path = strjoin(prefix, prefix_dirent->d_name);
+
+    if (isdir(prefix_dirent_path)) {
+      bind(prefix_dirent_path, prefix_dirent->d_name);
+    } else {
+      char *host_target = strjoin("host/", prefix_dirent->d_name);
+
+      if (symlink(host_target, prefix_dirent->d_name) < 0)
+        errorf(EX_IOERR, "symlink");
+
+      free(host_target);
+    }
+
+    free(prefix_dirent_path);
+  }
+
+  bind(prefix, "host");
+
+  if (closedir(prefix_dir) < 0)
+    errorf(EX_IOERR, "closedir");
 }
 
 void spitf(char *path, char *fmt, ...) {
@@ -95,8 +143,6 @@ int nftw_rm(const char *path, const struct stat *sb, int type,
 
   return 0;
 }
-
-#define LEN(x) sizeof(x) / sizeof(*x)
 
 #define REQUIREMENTS "Linux version >= 3.19 built with CONFIG_USER_NS option"
 
@@ -157,8 +203,7 @@ int main(int argc, char *argv[]) {
     if (chdir(root) < 0)
       errorf(EX_IOERR, "chdir");
 
-    for (size_t i = 0; i < LEN(binds); i++)
-      bind(&binds[i]);
+    bind_to_cwd("/");
 
     if (chroot(root) < 0)
       errorf(EX_OSERR, "chroot");
