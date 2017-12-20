@@ -14026,6 +14026,8 @@ with pkgs;
 
   libbitcoin-explorer = callPackage ../tools/misc/libbitcoin/libbitcoin-explorer.nix { };
 
+  libbitcoin-protocol = callPackage ../tools/misc/libbitcoin/libbitcoin-protocol.nix { };
+
   go-ethereum = self.altcoins.go-ethereum;
   ethabi = self.altcoins.ethabi;
   ethrun = self.altcoins.ethrun;
