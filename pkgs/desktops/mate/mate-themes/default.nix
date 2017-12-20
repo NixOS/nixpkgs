@@ -21,8 +21,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig intltool ];
 
-  buildInputs = [ mate.mate-icon-theme gtk2 gtk_engines gtk-engine-murrine
-    gdk_pixbuf librsvg ];
+  buildInputs = [ mate.mate-icon-theme gtk2 gtk_engines gdk_pixbuf librsvg ];
+
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   meta = {
     description = "A set of themes from MATE";
