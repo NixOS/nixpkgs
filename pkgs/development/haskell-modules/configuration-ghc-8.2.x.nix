@@ -71,11 +71,4 @@ self: super: {
   # https://github.com/aristidb/aws/issues/238
   aws = doJailbreak super.aws;
 
-  # LTS-9 versions do not compile.
-  path = dontCheck super.path;
-  path-io = super.path-io_1_3_3;
-  trifecta = super.trifecta_1_7_1_1;
-  aeson-compat = dontCheck super.aeson-compat_0_3_7_1;  # test suite needs QuickCheck 2.10.*
-  binary-orphans = dontCheck super.binary-orphans_0_1_8_0; # test suite needs QuickCheck 2.10.*
-
 }

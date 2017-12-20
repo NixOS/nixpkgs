@@ -3870,7 +3870,7 @@ with pkgs;
 
   pandoc = haskell.lib.overrideCabal (haskell.lib.justStaticExecutables haskellPackages.pandoc) (drv: {
     configureFlags = drv.configureFlags or [] ++ ["-fembed_data_files"];
-    buildTools = drv.buildTools or [] ++ [haskellPackages.hsb2hs];
+    buildTools = drv.buildTools or [] ++ [haskellPackages.file-embed];
   });
 
   pamtester = callPackage ../tools/security/pamtester { };
@@ -5929,7 +5929,7 @@ with pkgs;
 
   haskell = callPackage ./haskell-packages.nix { };
 
-  haskellPackages = haskell.packages.ghc802.override {
+  haskellPackages = haskell.packages.ghc822.override {
     overrides = config.haskellPackageOverrides or (self: super: {});
   };
 
@@ -7555,7 +7555,7 @@ with pkgs;
 
   msitools = callPackage ../development/tools/misc/msitools { };
 
-  multi-ghc-travis = callPackage ../development/tools/haskell/multi-ghc-travis { };
+  multi-ghc-travis = callPackage ../development/tools/haskell/multi-ghc-travis { ghc = haskell.compiler.ghc802; };
 
   neoload = callPackage ../development/tools/neoload {
     licenseAccepted = (config.neoload.accept_license or false);
