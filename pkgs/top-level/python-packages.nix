@@ -9130,6 +9130,8 @@ in {
       pythonPackages = self;
     }));
 
+  grpcio = callPackage ../development/python-modules/grpcio { };
+
   gspread = buildPythonPackage rec {
     version = "0.2.3";
     name = "gspread-${version}";
