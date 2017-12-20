@@ -921,12 +921,6 @@ self: super: {
   # https://github.com/graknlabs/grakn-haskell/pull/1
   grakn = dontCheck (doJailbreak super.grakn);
 
-  # cryptonite == 0.24.x, protolude == 0.2.x
-  wai-secure-cookies = super.wai-secure-cookies.override {
-    cryptonite = super.cryptonite_0_24;
-    protolude = super.protolude_0_2;
-  };
-
   # test suite requires git and does a bunch of git operations
   restless-git = dontCheck super.restless-git;
 
