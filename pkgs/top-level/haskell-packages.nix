@@ -116,32 +116,6 @@ in rec {
 
   packages = {
 
-    # Support for this compiler is broken, because it can't deal with directory-based package databases.
-    # ghc6104 = callPackage ../development/haskell-modules { ghc = compiler.ghc6104; };
-    ghc6123 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc6123;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-6.12.x.nix { };
-    };
-    ghc704 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc704;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.0.x.nix { };
-    };
-    ghc722 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc722;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.2.x.nix { };
-    };
-    ghc742 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc742;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.4.x.nix { };
-    };
-    ghc763 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc763;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.6.x.nix { };
-    };
-    ghc783 = callPackage ../development/haskell-modules {
-      ghc = compiler.ghc783;
-      compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.8.x.nix { };
-    };
     ghc784 = callPackage ../development/haskell-modules {
       ghc = compiler.ghc784;
       compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-7.8.x.nix { };
