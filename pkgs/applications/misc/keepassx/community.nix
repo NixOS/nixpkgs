@@ -74,8 +74,9 @@ stdenv.mkDerivation rec {
   ++ stdenv.lib.optionals stdenv.isDarwin [ clang ];
 
   meta = {
-    description = "Fork of the keepassX password-manager with additional http-interface to allow browser-integration an use with plugins such as PasslFox (https://github.com/pfn/passifox). See also keepassX2.";
-    homepage = https://github.com/keepassxreboot/keepassxc;
+    description = "Password manager to store your passwords safely and auto-type them into your everyday websites and applications";
+    longDescription = "A community fork of KeePassX, which is itself a port of KeePass Password Safe. The goal is to extend and improve KeePassX with new features and bugfixes to provide a feature-rich, fully cross-platform and modern open-source password manager. Accessible via native cross-platform GUI and via CLI. Includes optional http-interface to allow browser-integration with plugins like PassIFox (https://github.com/pfn/passifox).";
+    homepage = https://keepassxc.org/;
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ s1lvester jonafato ];
     platforms = with stdenv.lib.platforms; linux ++ darwin;
