@@ -1,4 +1,4 @@
-{ buildGoPackage, fetchgit }:
+{ lib, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
   name = "pup-${version}";
@@ -11,5 +11,11 @@ buildGoPackage rec {
     inherit rev;
     url = "https://${goPackagePath}";
     sha256 = "0mnhw0yph5fvcnrcmj1kfbyw1a4lcg3k9f6y28kf44ihlq8h1dfz";
+  };
+
+  meta = with lib; {
+    description = "Streaming HTML processor/selector";
+    license = licenses.mit;
+    maintainers = with maintainers; [ yegortimoshenko ];
   };
 }
