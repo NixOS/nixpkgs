@@ -6586,7 +6586,12 @@ with pkgs;
 
   guile = guile_2_2;
 
-  hadoop = callPackage ../applications/networking/cluster/hadoop { };
+  inherit (callPackages ../applications/networking/cluster/hadoop { })
+    hadoop_2_7
+    hadoop_2_8
+    hadoop_2_9
+    hadoop_3_0;
+  hadoop = hadoop_2_7;
 
   io = callPackage ../development/interpreters/io { };
 
