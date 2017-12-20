@@ -463,9 +463,6 @@ self: super: builtins.intersectAttrs super {
   # This propagates this to everything depending on haskell-gi-base
   haskell-gi-base = addBuildDepend super.haskell-gi-base pkgs.gobjectIntrospection;
 
-  # Requires gi-javascriptcore API version 4
-  gi-webkit2 = super.gi-webkit2.override { gi-javascriptcore = self.gi-javascriptcore_4_0_14; };
-
   # requires valid, writeable $HOME
   hatex-guide = overrideCabal super.hatex-guide (drv: {
     preConfigure = ''
