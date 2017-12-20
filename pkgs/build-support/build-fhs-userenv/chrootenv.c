@@ -21,27 +21,38 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 
-char *env_whitelist[] = {"TERM",
-                         "DISPLAY",
-                         "XAUTHORITY",
-                         "HOME",
-                         "XDG_RUNTIME_DIR",
-                         "LANG",
-                         "SSL_CERT_FILE",
-                         "DBUS_SESSION_BUS_ADDRESS"};
+#define LEN(x) sizeof(x) / sizeof(*x)
 
-char **env_build(char *names[], size_t len) {
-  char *env, **ret = malloc((len + 1) * sizeof(char *)), **ptr = ret;
+char *env_blacklist[] = {};
 
-  for (size_t i = 0; i < len; i++) {
-    if ((env = getenv(names[i]))) {
-      if (asprintf(ptr++, "%s=%s", names[i], env) < 0)
-        errorf(EX_OSERR, "asprintf");
+char **env_filter(char *envp[]) {
+  char **filtered_envp = malloc(sizeof(*envp));
+  size_t n = 0;
+
+  while (*envp != NULL) {
+    bool blacklisted = false;
+
+    for (size_t i = 0; i < LEN(env_blacklist); i++) {
+      if (!strncmp(*envp, env_blacklist[i], strlen(env_blacklist[i]))) {
+        blacklisted = true;
+        break;
+      }
     }
+
+    if (!blacklisted) {
+      filtered_envp = realloc(filtered_envp, (n + 2) * sizeof(*envp));
+
+      if (filtered_envp == NULL)
+        errorf(EX_OSERR, "realloc");
+
+      filtered_envp[n++] = *envp;
+    }
+
+    envp++;
   }
 
-  *ptr = NULL;
-  return ret;
+  filtered_envp[n] = NULL;
+  return filtered_envp;
 }
 
 void bind(char *from, char *to) {
@@ -66,8 +77,6 @@ char *strjoin(char *dir, char *name) {
 
   return path;
 }
-
-#define LEN(x) sizeof(x) / sizeof(*x)
 
 char *bind_blacklist[] = {".", "..", "bin", "etc", "host", "usr"};
 
@@ -146,7 +155,7 @@ int nftw_rm(const char *path, const struct stat *sb, int type,
 
 #define REQUIREMENTS "Linux version >= 3.19 built with CONFIG_USER_NS option"
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[], char *envp[]) {
   if (argc < 2) {
     fprintf(stderr, "Usage: %s command [arguments...]\n"
                     "Requires " REQUIREMENTS ".\n",
@@ -213,7 +222,7 @@ int main(int argc, char *argv[]) {
 
     argv++;
 
-    if (execvpe(*argv, argv, env_build(env_whitelist, LEN(env_whitelist))) < 0)
+    if (execvpe(*argv, argv, env_filter(envp)) < 0)
       errorf(EX_OSERR, "execvpe");
   }
 
