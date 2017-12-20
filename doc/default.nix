@@ -23,11 +23,12 @@ pkgs.stdenv.mkDerivation {
 
   buildCommand = let toDocbook = { useChapters ? false, inputFile, outputFile }:
     let
-      extraHeader = ''xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" '';
+      extraHeader = lib.optionalString (!useChapters)
+        ''xmlns="http://docbook.org/ns/docbook" xmlns:xlink="http://www.w3.org/1999/xlink" '';
     in ''
       {
-        pandoc '${inputFile}' -w docbook ${lib.optionalString useChapters "--top-level-division=chapter"} \
-          --smart \
+        pandoc '${inputFile}' -w docbook+smart ${lib.optionalString useChapters "--top-level-division=chapter"} \
+          -f markdown+smart \
           | sed -e 's|<ulink url=|<link xlink:href=|' \
               -e 's|</ulink>|</link>|' \
               -e 's|<sect. id=|<section xml:id=|' \
