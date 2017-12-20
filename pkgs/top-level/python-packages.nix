@@ -9101,6 +9101,8 @@ in {
 
   google_cloud_core = callPackage ../development/python-modules/google_cloud_core { };
 
+  google_gax = callPackage ../development/python-modules/google_gax { };
+
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
   greenlet = buildPythonPackage rec {
