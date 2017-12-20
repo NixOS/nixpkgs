@@ -9099,6 +9099,8 @@ in {
 
   google_auth = callPackage ../development/python-modules/google_auth { };
 
+  google_cloud_core = callPackage ../development/python-modules/google_cloud_core { };
+
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
   greenlet = buildPythonPackage rec {
