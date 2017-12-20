@@ -9047,6 +9047,8 @@ in {
 
   googleapis_common_protos = callPackage ../development/python-modules/googleapis_common_protos { };
 
+  google_api_core = callPackage ../development/python-modules/google_api_core { };
+
   google_api_python_client = buildPythonPackage rec {
     name = "google-api-python-client-${version}";
     version = "1.5.1";
