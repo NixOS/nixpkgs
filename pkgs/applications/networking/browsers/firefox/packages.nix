@@ -1,4 +1,4 @@
-{ lib, callPackage, stdenv, overrideCC, gcc5, fetchurl, fetchFromGitHub, fetchpatch }:
+{ lib, callPackage, stdenv, overrideCC, gcc5, fetchurl, fetchFromGitHub }:
 
 let common = opts: callPackage (import ./common.nix opts); in
 
@@ -13,11 +13,7 @@ rec {
     };
 
     patches =
-      [ ./no-buildconfig.patch ]
-      ++ lib.optional stdenv.isi686 (fetchpatch {
-        url = "https://hg.mozilla.org/mozilla-central/raw-rev/15517c5a5d37";
-        sha256 = "1ba487p3hk4w2w7qqfxgv1y57vp86b8g3xhav2j20qd3j3phbbn7";
-      });
+      [ ./no-buildconfig.patch ];
 
     meta = {
       description = "A web browser built from Firefox source tree";
