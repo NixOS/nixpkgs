@@ -20,13 +20,15 @@ stdenv.mkDerivation rec {
   buildInputs = [ libdaemon dbus perl perlXMLParser glib expat libiconv ]
     ++ (stdenv.lib.optional qt4Support qt4);
 
-  nativeBuildInputs = [ pkgconfig gettext intltool ];
+  nativeBuildInputs = [ pkgconfig gettext intltool glib ];
 
   configureFlags =
     [ "--disable-qt3" "--disable-gdbm" "--disable-mono"
       "--disable-gtk" "--disable-gtk3"
       "--${if qt4Support then "enable" else "disable"}-qt4"
-      "--disable-python" "--localstatedir=/var" "--with-distro=none" ]
+      "--disable-python" "--localstatedir=/var" "--with-distro=none"
+      # A systemd unit is provided by the avahi-daemon NixOS module
+      "--with-systemdsystemunitdir=no" ]
     ++ stdenv.lib.optional withLibdnssdCompat "--enable-compat-libdns_sd"
     # autoipd won't build on darwin
     ++ stdenv.lib.optional stdenv.isDarwin "--disable-autoipd";
