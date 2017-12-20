@@ -1,11 +1,11 @@
 { coreutils, fetchurl, db, openssl, pcre, perl, pkgconfig, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "exim-4.89.1";
+  name = "exim-4.90";
 
   src = fetchurl {
     url = "http://ftp.exim.org/pub/exim/exim4/${name}.tar.xz";
-    sha256 = "157syn472gnp1x2lrazwdvqsg3zgwyv87952sq5rrnp220m3488s";
+    sha256 = "101syariyvv2xxhjyx1zfdvad6303ihp67800s8n4083km98nm4k";
   };
 
   nativeBuildInputs = [ pkgconfig ];
