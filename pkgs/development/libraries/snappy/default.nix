@@ -23,6 +23,15 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  postInstall = let
+    shared-lib = stdenv.mkDerivation {
+      inherit name src nativeBuildInputs configureFlags;
+      cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
+    };
+  in ''
+    cp -dpR ${shared-lib}/* $out
+  '';
+
   meta = with stdenv.lib; {
     homepage = https://google.github.io/snappy/;
     license = licenses.bsd3;
