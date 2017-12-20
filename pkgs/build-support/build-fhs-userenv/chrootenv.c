@@ -98,10 +98,12 @@ int nftw_rm(const char *path, const struct stat *sb, int type,
 
 #define LEN(x) sizeof(x) / sizeof(*x)
 
+#define REQUIREMENTS "Linux version >= 3.19 built with CONFIG_USER_NS option"
+
 int main(int argc, char *argv[]) {
   if (argc < 2) {
     fprintf(stderr, "Usage: %s command [arguments...]\n"
-                    "Requires Linux kernel >= 3.19 with CONFIG_USER_NS.\n",
+                    "Requires " REQUIREMENTS ".\n",
             argv[0]);
     exit(EX_USAGE);
   }
@@ -128,7 +130,7 @@ int main(int argc, char *argv[]) {
     // If we are root, no need to create new user namespace.
     if (uid == 0) {
       if (unshare(CLONE_NEWNS) < 0)
-        errorf(EX_OSERR, "unshare() failed: You may have an old kernel or have CLONE_NEWUSER disabled by your distribution security settings.");
+        errorf(EX_OSERR, "unshare: requires " REQUIREMENTS);
       // Mark all mounted filesystems as slave so changes
       // don't propagate to the parent mount namespace.
       if (mount(NULL, "/", NULL, MS_REC | MS_SLAVE, NULL) < 0)
@@ -136,8 +138,13 @@ int main(int argc, char *argv[]) {
     } else {
       // Create new mount and user namespaces. CLONE_NEWUSER
       // requires a program to be non-threaded.
-      if (unshare(CLONE_NEWNS | CLONE_NEWUSER) < 0)
-        errorf(EX_OSERR, "unshare");
+      if (unshare(CLONE_NEWNS | CLONE_NEWUSER) < 0) {
+        if (access("/tmp/proc/sys/kernel/unprivileged_userns_clone", F_OK) < 0)
+          errorf(EX_OSERR, "unshare: requires " REQUIREMENTS);
+        else
+          errorf(EX_OSERR, "unshare: run `sudo sysctl -w "
+                           "kernel.unprivileged_userns_clone=1`");
+      }
 
       // Map users and groups to the parent namespace.
       // setgroups is only available since Linux 3.19:
@@ -170,7 +177,8 @@ int main(int argc, char *argv[]) {
   if (waitpid(cpid, &status, 0) < 0)
     errorf(EX_OSERR, "waitpid");
 
-  if (nftw(root, nftw_rm, getdtablesize(), FTW_DEPTH | FTW_MOUNT | FTW_PHYS) < 0)
+  if (nftw(root, nftw_rm, getdtablesize(), FTW_DEPTH | FTW_MOUNT | FTW_PHYS) <
+      0)
     errorf(EX_IOERR, "nftw");
 
   if (WIFEXITED(status))
