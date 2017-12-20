@@ -11,7 +11,7 @@ gnome3.vte.overrideAttrs (oldAttrs: rec {
     sha256 = "0i6hfzw9sq8521kz0l7lld2km56r0bfp1hw6kxq3j1msb8z8svcf";
   };
 
-  preConfigure = oldAttrs.preConfigure + "; ./autogen.sh";
+  preConfigure = oldAttrs.preConfigure + "; NOCONFIGURE=1 ./autogen.sh";
 
   nativeBuildInputs = oldAttrs.nativeBuildInputs or []
     ++ [ gtk_doc autoconf automake gettext libtool gperf ];
