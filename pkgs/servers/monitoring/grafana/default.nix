@@ -13,7 +13,7 @@ buildGoPackage rec {
   };
 
   srcStatic = fetchurl {
-    url = "https://s3-us-west-2.amazonaws.com/grafana-releases/release/grafana-${version}.linux-x64.tar.gz";
+    url = "https://grafana-releases.s3.amazonaws.com/release/grafana-${version}.linux-x64.tar.gz";
     sha256 = "01f50w57n7p7if37rhj8zy0y0x84qajbxrrdcfrsbi2qi1kzfz03";
   };
 
