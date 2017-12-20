@@ -27,8 +27,9 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gdk_pixbuf
     librsvg
-    gtk-engine-murrine
   ];
+
+  propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   postPatch = "patchShebangs .";
 

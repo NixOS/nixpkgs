@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     ./disambiguate-arm-targets.patch
   ];
 
-  outputs = [ "out" "info" ];
+  outputs = [ "out" "info" "man" ];
 
   nativeBuildInputs = [ bison buildPackages.stdenv.cc ];
   buildInputs = [ zlib ];

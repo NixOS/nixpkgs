@@ -1,22 +1,26 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig }:
 
 stdenv.mkDerivation rec {
   name = "fribidi-${version}";
   version = "0.19.7";
 
-  src = fetchurl {
-    url = "http://fribidi.org/download/${name}.tar.bz2";
-    sha256 = "13jsb5qadlhsaxkbrb49nqslmbh904vvzhsm5mm2ghmv29i2l8h8";
+  src = fetchFromGitHub {
+    owner = "fribidi";
+    repo = "fribidi";
+    rev = version;
+    sha256 = "10q5jfch5qzrj2w4fbkr086ank66plx8hp7ra9a01irj80pbk96d";
   };
 
-  hardeningDisable = [ "format" ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+
+  # Configure script checks for glib, but it is only used for tests.
 
   outputs = [ "out" "devdoc" ];
 
   meta = with stdenv.lib; {
-    homepage = http://fribidi.org/;
+    homepage = https://github.com/fribidi/fribidi;
     description = "GNU implementation of the Unicode Bidirectional Algorithm (bidi)";
-    license = licenses.gpl2;
+    license = licenses.lgpl21;
     platforms = platforms.unix;
   };
 }

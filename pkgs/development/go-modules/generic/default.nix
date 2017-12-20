@@ -220,6 +220,7 @@ go.stdenv.mkDerivation (
 
   meta = {
     # Add default meta information
+    homepage = "https://${goPackagePath}";
     platforms = go.meta.platforms or lib.platforms.all;
   } // meta // {
     # add an extra maintainer to every package

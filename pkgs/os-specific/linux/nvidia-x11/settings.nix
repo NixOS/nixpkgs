@@ -41,11 +41,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig m4 ];
 
-  buildInputs = [ jansson libXv libXrandr libvdpau nvidia_x11 gtk2 dbus ]
+  buildInputs = [ jansson libXv libXrandr libvdpau nvidia_x11 gtk2 dbus libXv ]
              ++ lib.optionals withGtk3 [ gtk3 librsvg wrapGAppsHook ];
-
-# This next line makes the nvidia-settings binary fail to compile as of version 387.22
-# NIX_LDFLAGS = [ "-lvdpau" "-lXrandr" "-lXv" "-lnvidia-ml" ];
 
   makeFlags = [ "NV_USE_BUNDLED_LIBJANSSON=0" ];
   installFlags = [ "PREFIX=$(out)" ];
@@ -74,7 +71,7 @@ stdenv.mkDerivation rec {
   binaryName = if withGtk3 then ".nvidia-settings-wrapped" else "nvidia-settings";
 
   postFixup = ''
-    patchelf --set-rpath "$(patchelf --print-rpath $out/bin/$binaryName):$out/lib" \
+    patchelf --set-rpath "$(patchelf --print-rpath $out/bin/$binaryName):$out/lib:${libXv}/lib" \
       $out/bin/$binaryName
   '';
 

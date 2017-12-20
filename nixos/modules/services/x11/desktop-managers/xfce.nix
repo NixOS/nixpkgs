@@ -5,6 +5,7 @@ with lib;
 let
 
   xcfg = config.services.xserver;
+  pcfg = config.hardware.pulseaudio;
   cfg = xcfg.desktopManager.xfce;
 
 in
@@ -96,8 +97,8 @@ in
         pkgs.xfce.xfce4icontheme
         pkgs.xfce.xfce4session
         pkgs.xfce.xfce4settings
-        pkgs.xfce.xfce4mixer
-        pkgs.xfce.xfce4volumed
+       (if pcfg.enable then pkgs.xfce.xfce4mixer_pulse else pkgs.xfce.xfce4mixer)
+       (if pcfg.enable then pkgs.xfce.xfce4volumed_pulse else pkgs.xfce.xfce4volumed)
         pkgs.xfce.xfce4-screenshooter
         pkgs.xfce.xfconf
         # This supplies some "abstract" icons such as
@@ -124,6 +125,9 @@ in
       [ "/share/xfce4" "/share/themes" "/share/mime" "/share/desktop-directories" "/share/gtksourceview-2.0" ];
 
     environment.variables.GIO_EXTRA_MODULES = [ "${pkgs.xfce.gvfs}/lib/gio/modules" ];
+    environment.variables.GDK_PIXBUF_MODULE_FILE = [
+      "$(echo ${pkgs.librsvg.out}/lib/gdk-pixbuf-*/*/loaders.cache)"
+    ];
 
     # Enable helpful DBus services.
     services.udisks2.enable = true;

@@ -30,7 +30,9 @@ stdenv.mkDerivation rec {
     description = "A library for the Coq proof assistant for synthesizing efficient correct-by-construction programs from declarative specifications";
     maintainers = with maintainers; [ jwiegley ];
     platforms = coq.meta.platforms;
-    broken = stdenv.lib.versionAtLeast coq.coq-version "8.6";
   };
 
+  passthru = {
+    compatibleCoqVersions = v: v == "8.5";
+  };
 }

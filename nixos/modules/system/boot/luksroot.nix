@@ -434,7 +434,9 @@ in
       ["firewire_ohci" "firewire_core" "firewire_sbp2"];
 
     # Some modules that may be needed for mounting anything ciphered
-    boot.initrd.availableKernelModules = [ "dm_mod" "dm_crypt" "cryptd" ] ++ luks.cryptoModules;
+    # Also load input_leds to get caps lock light working (#12456)
+    boot.initrd.availableKernelModules = [ "dm_mod" "dm_crypt" "cryptd" "input_leds" ]
+      ++ luks.cryptoModules;
 
     # copy the cryptsetup binary and it's dependencies
     boot.initrd.extraUtilsCommands = ''

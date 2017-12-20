@@ -60,6 +60,7 @@ mapAliases (rec {
   gettextWithExpat = gettext; # 2016-02-19
   gdb-multitarget = gdb; # added 2017-11-13
   git-hub = gitAndTools.git-hub; # added 2016-04-29
+  go-pup = pup; # added 2017-12-19
   googleAuthenticator = google-authenticator; # added 2016-10-16
   grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
   gst_ffmpeg = gst-ffmpeg;  # added 2017-02

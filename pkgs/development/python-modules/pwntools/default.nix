@@ -17,6 +17,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ Mako packaging pysocks pygments ROPGadget capstone paramiko pip psutil pyelftools pypandoc pyserial dateutil requests tox pandoc unicorn intervaltree ];
 
   disabled = isPy3k;
+  doCheck = false; # no setuptools tests for the package
 
   meta = with stdenv.lib; {
     homepage = "http://pwntools.com";

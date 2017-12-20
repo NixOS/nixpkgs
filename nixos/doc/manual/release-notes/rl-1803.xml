@@ -137,6 +137,14 @@ following incompatible changes:</para>
       Previously the default behaviour was to listen on all interfaces.
     </para>
   </listitem>
+  <listitem>
+    <para>
+      <literal>services.btrfs.autoScrub</literal> has been added, to
+      periodically check btrfs filesystems for data corruption.
+      If there's a correct copy available, it will automatically repair
+      corrupted blocks.
+    </para>
+  </listitem>
 </itemizedlist>
 
 </section>
