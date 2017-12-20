@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   name = "snpeff-${version}";
-  version = "4.3p";
+  version = "4.3t";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/snpeff/snpEff_v4_3p_core.zip";
-    sha256 = "1xb3k0yxd634znw2q083ligm2ww4p6v64041r9sdy3930lhjvxb1";
+    url = "mirror://sourceforge/project/snpeff/snpEff_v4_3t_core.zip";
+    sha256 = "0i12mv93bfv8xjwc3rs2x73d6hkvi7kgbbbx3ry984l3ly4p6nnm";
   };
 
   buildInputs = [ unzip jre makeWrapper ];
