@@ -996,4 +996,8 @@ self: super: {
   # Duplicate instance with smallcheck.
   store = dontCheck super.store;
 
+  # With ghc-8.2.x haddock would time out for unknown reason
+  # See https://github.com/haskell/haddock/issues/679
+  language-puppet = dontHaddock super.language-puppet;
+
 }
