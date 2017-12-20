@@ -155,13 +155,21 @@ int nftw_rm(const char *path, const struct stat *sb, int type,
 
 #define REQUIREMENTS "Linux version >= 3.19 built with CONFIG_USER_NS option"
 
-int main(int argc, char *argv[], char *envp[]) {
+extern char **environ;
+
+int main(int argc, char *argv[]) {
   if (argc < 2) {
     fprintf(stderr, "Usage: %s command [arguments...]\n"
                     "Requires " REQUIREMENTS ".\n",
             argv[0]);
     exit(EX_USAGE);
   }
+
+  if (getenv("NIX_CHROOTENV") != NULL)
+    errorf(EX_USAGE, "can't create chrootenv inside chrootenv");
+
+  if (setenv("NIX_CHROOTENV", "1", false) < 0)
+    errorf(EX_IOERR, "setenv");
 
   char tmpl[] = "/tmp/chrootenvXXXXXX";
   char *root = mkdtemp(tmpl);
@@ -222,7 +230,7 @@ int main(int argc, char *argv[], char *envp[]) {
 
     argv++;
 
-    if (execvpe(*argv, argv, env_filter(envp)) < 0)
+    if (execvpe(*argv, argv, env_filter(environ)) < 0)
       errorf(EX_OSERR, "execvpe");
   }
 
