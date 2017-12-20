@@ -5,13 +5,16 @@ overrideDerivation collectd (oldAttrs: {
   name = "libcollectdclient-${collectd.version}";
   buildInputs = [ ];
 
-  configureFlags = [
-    "--without-daemon"
+  NIX_CFLAGS_COMPILE = oldAttrs.NIX_CFLAGS_COMPILE ++ [
+    "-Wno-error=unused-function"
   ];
 
-  makeFlags = [
-    "-C src/libcollectdclient/"
+  configureFlags = oldAttrs.configureFlags ++ [
+    "--disable-daemon"
+    "--disable-all-plugins"
   ];
+
+  postInstall = "rm -rf $out/{bin,etc,sbin,share}";
 
 }) // {
   meta = with stdenv.lib; {
