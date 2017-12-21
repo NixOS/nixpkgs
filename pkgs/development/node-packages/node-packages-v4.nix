@@ -1084,13 +1084,22 @@ let
         sha512 = "1jsaqma4ycl2iq0761i1w7758z1kq7gbsij4xfb7p5cnw0qa62pszv6pr3j856n3pbxww7wwxs5wvcg2cb6vy020kw3bchashqs9clr";
       };
     };
-    "extend-shallow-3.0.1" = {
+    "extend-shallow-3.0.2" = {
       name = "extend-shallow";
       packageName = "extend-shallow";
-      version = "3.0.1";
+      version = "3.0.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/extend-shallow/-/extend-shallow-3.0.1.tgz";
-        sha512 = "1jp0639kai5450m1hlh0anrhakpxv88pprlkp005b21ind0bbxczabyfsr902pznlckp4z5ndqhrasa373i92bqq2fp5agy1df7238n";
+        url = "https://registry.npmjs.org/extend-shallow/-/extend-shallow-3.0.2.tgz";
+        sha1 = "26a71aaf073b39fb2127172746131c2704028db8";
+      };
+    };
+    "assign-symbols-1.0.0" = {
+      name = "assign-symbols";
+      packageName = "assign-symbols";
+      version = "1.0.0";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/assign-symbols/-/assign-symbols-1.0.0.tgz";
+        sha1 = "59667f41fadd4f20ccbc2bb96b8d4f7f78ec0367";
       };
     };
     "is-extendable-1.0.1" = {
@@ -1633,13 +1642,13 @@ let
         sha1 = "3a7f868334b407dea06da16d88d5cd29e435fecf";
       };
     };
-    "parse-filepath-1.0.1" = {
+    "parse-filepath-1.0.2" = {
       name = "parse-filepath";
       packageName = "parse-filepath";
-      version = "1.0.1";
+      version = "1.0.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/parse-filepath/-/parse-filepath-1.0.1.tgz";
-        sha1 = "159d6155d43904d16c10ef698911da1e91969b73";
+        url = "https://registry.npmjs.org/parse-filepath/-/parse-filepath-1.0.2.tgz";
+        sha1 = "a632127f53aaf3d15876f5872f3ffac763d6c891";
       };
     };
     "array-each-1.0.1" = {
@@ -1669,13 +1678,13 @@ let
         sha1 = "c63332f415cedc4b04dbfe70cf836494c53cb44b";
       };
     };
-    "is-absolute-0.2.6" = {
+    "is-absolute-1.0.0" = {
       name = "is-absolute";
       packageName = "is-absolute";
-      version = "0.2.6";
+      version = "1.0.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/is-absolute/-/is-absolute-0.2.6.tgz";
-        sha1 = "20de69f3db942ef2d87b9c2da36f172235b1b5eb";
+        url = "https://registry.npmjs.org/is-absolute/-/is-absolute-1.0.0.tgz";
+        sha512 = "02g5p9wfcx3f1p0zq01ycrx5biwg79qg1mdw1cv6li7kxpny5hxsp34ynam7w2g6nvah73f0kzdkh6pxxmx1ymd8m02fwvgz6lsirbl";
       };
     };
     "path-root-0.1.1" = {
@@ -1687,31 +1696,22 @@ let
         sha1 = "9a4a6814cac1c0cd73360a95f32083c8ea4745b7";
       };
     };
-    "is-relative-0.2.1" = {
+    "is-relative-1.0.0" = {
       name = "is-relative";
       packageName = "is-relative";
-      version = "0.2.1";
+      version = "1.0.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/is-relative/-/is-relative-0.2.1.tgz";
-        sha1 = "d27f4c7d516d175fb610db84bbeef23c3bc97aa5";
+        url = "https://registry.npmjs.org/is-relative/-/is-relative-1.0.0.tgz";
+        sha512 = "0c1pd4414iy40xq652p1zgqgmncmm7xcns96pfazd63v439vyc1z93bvzvbw5r2qc4fp24414ydnj4gdsqlq223pfg05ar2mmwd23rb";
       };
     };
-    "is-windows-0.2.0" = {
-      name = "is-windows";
-      packageName = "is-windows";
-      version = "0.2.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/is-windows/-/is-windows-0.2.0.tgz";
-        sha1 = "de1aa6d63ea29dd248737b69f1ff8b8002d2108c";
-      };
-    };
-    "is-unc-path-0.1.2" = {
+    "is-unc-path-1.0.0" = {
       name = "is-unc-path";
       packageName = "is-unc-path";
-      version = "0.1.2";
+      version = "1.0.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/is-unc-path/-/is-unc-path-0.1.2.tgz";
-        sha1 = "6ab053a72573c10250ff416a3814c35178af39b9";
+        url = "https://registry.npmjs.org/is-unc-path/-/is-unc-path-1.0.0.tgz";
+        sha512 = "2asak63h3kc1vackrpai7qfiv15ndr231w1yc753m1dy7fd6ywxsr0rvh88b9ppyxhmc373fqk89a0pw3dllv7m5nbbbcqzvmaskccs";
       };
     };
     "unc-path-regex-0.1.2" = {
@@ -4766,8 +4766,9 @@ in
                       })
                       (sources."split-string-3.1.0" // {
                         dependencies = [
-                          (sources."extend-shallow-3.0.1" // {
+                          (sources."extend-shallow-3.0.2" // {
                             dependencies = [
+                              sources."assign-symbols-1.0.0"
                               sources."is-extendable-1.0.1"
                             ];
                           })
@@ -4918,8 +4919,9 @@ in
                                   sources."is-extendable-0.1.1"
                                   (sources."split-string-3.1.0" // {
                                     dependencies = [
-                                      (sources."extend-shallow-3.0.1" // {
+                                      (sources."extend-shallow-3.0.2" // {
                                         dependencies = [
+                                          sources."assign-symbols-1.0.0"
                                           sources."is-extendable-1.0.1"
                                         ];
                                       })
@@ -5223,20 +5225,20 @@ in
                   sources."isobject-3.0.1"
                 ];
               })
-              (sources."parse-filepath-1.0.1" // {
+              (sources."parse-filepath-1.0.2" // {
                 dependencies = [
-                  (sources."is-absolute-0.2.6" // {
+                  (sources."is-absolute-1.0.0" // {
                     dependencies = [
-                      (sources."is-relative-0.2.1" // {
+                      (sources."is-relative-1.0.0" // {
                         dependencies = [
-                          (sources."is-unc-path-0.1.2" // {
+                          (sources."is-unc-path-1.0.0" // {
                             dependencies = [
                               sources."unc-path-regex-0.1.2"
                             ];
                           })
                         ];
                       })
-                      sources."is-windows-0.2.0"
+                      sources."is-windows-1.0.1"
                     ];
                   })
                   sources."map-cache-0.2.2"
