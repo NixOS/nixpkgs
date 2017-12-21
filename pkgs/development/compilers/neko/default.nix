@@ -20,11 +20,12 @@ stdenv.mkDerivation rec {
                                                 pkgs.darwin.apple_sdk.frameworks.Carbon];
   cmakeFlags = [ "-DRUN_LDCONFIG=OFF" ];
 
-  checkPhase = ''
+  installCheckPhase = ''
     bin/neko bin/test.n
   '';
 
-  doCheck = true;
+  doInstallCheck = true;
+  dontPatchELF = true;
   dontStrip = true;
 
   meta = with stdenv.lib; {
