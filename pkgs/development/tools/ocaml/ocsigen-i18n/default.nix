@@ -7,9 +7,8 @@ stdenv.mkDerivation rec
 
   buildInputs = with ocamlPackages; [ ocaml findlib ];
 
-  preBuild = ''
-   substituteInPlace Makefile --replace "OCAMLC=ocamlfind ocamlc" "OCAMLC=ocamlfind ocamlopt"
-  '';
+
+  dontStrip = true;
 
   installPhase = ''
     mkdir -p $out/bin
