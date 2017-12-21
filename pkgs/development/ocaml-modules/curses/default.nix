@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ncurses }:
+{ stdenv, fetchurl, ocaml, findlib, ncurses5 }:
 
 stdenv.mkDerivation rec {
   name = "ocaml-curses-${version}";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0fxya4blx4zcp9hy8gxxm2z7aas7hfvwnjdlj9pmh0s5gijpwsll";
   };
 
-  propagatedBuildInputs = [ ncurses ];
+  propagatedBuildInputs = [ ncurses5 ];
 
   buildInputs = [ ocaml findlib ];
 
@@ -27,6 +27,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = [ maintainers.volth ];
     platforms = ocaml.meta.platforms or [];
-    broken = true;
   };
 }
