@@ -1,0 +1,52 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c8fac52..5289a68 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -9,6 +9,7 @@ option (USE_NEON "Use NEON instructions")
+ option (USE_SSE "Use SSE3 instructions")
+ option (USE_THREADS "Enable multithreading" ON)
+ option (USE_FAAD2 "AAC decoding with FAAD2" ON)
++option (USE_FAAD2_EXT "Use precompiled FAAD2 decoder with hdc patch" OFF)
+ 
+ find_program (AUTOCONF autoconf)
+ if (NOT AUTOCONF)
+@@ -54,34 +55,14 @@ check_symbol_exists (_Imaginary_I complex.h HAVE_IMAGINARY_I)
+ check_symbol_exists (_Complex_I complex.h HAVE_COMPLEX_I)
+ 
+ if (USE_FAAD2)
+-    # libao only used if we have FAAD2
+     find_library (AO_LIBRARY ao)
+-
+-    set (FAAD2_PREFIX "${CMAKE_BINARY_DIR}/faad2-prefix")
+-    ExternalProject_Add (
+-        faad2_external
+-        GIT_REPOSITORY "https://github.com/dsvensson/faad2.git"
+-        GIT_TAG b7aa099fd3220b71180ed2b0bc19dc6209a1b418
+-        PREFIX ${FAAD2_PREFIX}
+-
+-        UPDATE_COMMAND ""
+-        PATCH_COMMAND patch -p1 -Ni "${CMAKE_SOURCE_DIR}/support/faad2-hdc-support.patch" || exit 0
+-        COMMAND sh ./bootstrap
+-
+-        CONFIGURE_COMMAND ${FAAD2_PREFIX}/src/faad2_external/configure --prefix=${FAAD2_PREFIX} --with-hdc "CFLAGS=-O3 ${CMAKE_C_FLAGS}"
+-
+-        BUILD_COMMAND make
+-    )
+-
+-    add_library (faad2 STATIC IMPORTED)
+-    set_property (TARGET faad2 PROPERTY IMPORTED_LOCATION "${FAAD2_PREFIX}/lib/libfaad.a")
+-    add_dependencies (faad2 faad2_external)
+-    include_directories ("${FAAD2_PREFIX}/include")
+-
+-    set (FAAD2_LIBRARY faad2)
++    find_path(FAAD2_INCLUDE_PATH faad.h)
++    include_directories ("${FAAD2_INCLUDE_PATH}")
++    find_library (FAAD2_LIBRARY faad)
++    set (FAAD2_LIBRARY faad)
+     add_definitions (-DHAVE_FAAD2)
+ endif()
+-
++    
+ if(EXISTS "${CMAKE_SOURCE_DIR}/.git")
+   execute_process(
+     COMMAND git log -1 --format=%h

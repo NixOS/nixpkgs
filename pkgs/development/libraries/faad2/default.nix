@@ -1,5 +1,6 @@
 {stdenv, fetchurl
 , drmSupport ? false # Digital Radio Mondiale
+, hdcSupport ? false # HD-Radio  
 }:
 
 with stdenv.lib;
@@ -12,8 +13,11 @@ stdenv.mkDerivation rec {
     sha256 = "1db37ydb6mxhshbayvirm5vz6j361bjim4nkpwjyhmy4ddfinmhl";
   };
 
+  patches = [ optional hdcSupport ./faad2-hdc-support.patch ];
+
   configureFlags = []
-    ++ optional drmSupport "--with-drm";
+    ++ optional drmSupport "--with-drm"
+    ++ optional hdcSupport "--with-hdc";
 
   meta = {
     description = "An open source MPEG-4 and MPEG-2 AAC decoder";
