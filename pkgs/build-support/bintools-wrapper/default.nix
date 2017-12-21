@@ -162,6 +162,11 @@ stdenv.mkDerivation {
         ln -s $ldPath/${targetPrefix}strip $out/bin/${targetPrefix}strip
       fi
 
+      # Create a symlink to nm
+      if [ -e $ldPath/${targetPrefix}nm ]; then
+        ln -s $ldPath/${targetPrefix}nm $out/bin/${targetPrefix}nm
+      fi
+
     '' + (if !useMacosReexportHack then ''
       wrap ${targetPrefix}ld ${./ld-wrapper.sh} ''${ld:-$ldPath/${targetPrefix}ld}
     '' else ''
