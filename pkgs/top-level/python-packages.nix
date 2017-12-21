@@ -4643,6 +4643,8 @@ in {
     };
   });
 
+  elasticsearch-curator = callPackage ../development/python-modules/elasticsearch-curator { };
+
   entrypoints = callPackage ../development/python-modules/entrypoints { };
 
   enzyme = callPackage ../development/python-modules/enzyme {};
