@@ -192,7 +192,9 @@ let
       then callPackage ../development/ocaml-modules/csv { }
       else callPackage ../development/ocaml-modules/csv/1.5.nix { };
 
-    curses = callPackage ../development/ocaml-modules/curses { };
+    curses = callPackage ../development/ocaml-modules/curses {
+      ncurses = pkgs.ncurses5;
+    };
 
     custom_printf = callPackage ../development/ocaml-modules/custom_printf { };
 
