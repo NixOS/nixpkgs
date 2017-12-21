@@ -6,8 +6,7 @@ let
   cfg = config.programs.sway;
   sway = pkgs.sway;
 
-  swayWrapped = pkgs.writeScriptBin "sway" ''
-    #! ${pkgs.stdenv.shell}
+  swayWrapped = pkgs.writeShellScriptBin "sway" ''
     if [ "$1" != "" ]; then
       sway-setcap "$@"
       exit
@@ -65,8 +64,10 @@ in
     };
 
     users.extraGroups.sway = {};
+    security.pam.services.swaylock = {};
 
     hardware.opengl.enable = mkDefault true;
     fonts.enableDefaultFonts = mkDefault true;
+    programs.dconf.enable = mkDefault true;
   };
 }
