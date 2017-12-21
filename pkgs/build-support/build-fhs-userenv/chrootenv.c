@@ -21,101 +21,75 @@
 #include <sys/stat.h>
 #include <sys/wait.h>
 
-#define LEN(x) sizeof(x) / sizeof(*x)
+#define LEN(x) (sizeof(x) / sizeof(*x))
 
-char *env_blacklist[] = {};
+// TODO: fill together with @abbradar when he gets better
+const char *environ_blacklist[] = {};
 
-char **env_filter(char *envp[]) {
-  char **filtered_envp = malloc(sizeof(*envp));
-  size_t n = 0;
-
-  while (*envp != NULL) {
-    bool blacklisted = false;
-
-    for (size_t i = 0; i < LEN(env_blacklist); i++) {
-      if (!strncmp(*envp, env_blacklist[i], strlen(env_blacklist[i]))) {
-        blacklisted = true;
-        break;
-      }
-    }
-
-    if (!blacklisted) {
-      filtered_envp = realloc(filtered_envp, (n + 2) * sizeof(*envp));
-
-      if (filtered_envp == NULL)
-        errorf(EX_OSERR, "realloc");
-
-      filtered_envp[n++] = *envp;
-    }
-
-    envp++;
+void environ_blacklist_filter() {
+  for (size_t i = 0; i < LEN(environ_blacklist); i++) {
+    if (unsetenv(environ_blacklist[i]) < 0)
+      errorf(EX_OSERR, "unsetenv(%s)", environ_blacklist[i]);
   }
-
-  filtered_envp[n] = NULL;
-  return filtered_envp;
 }
 
-void bind(char *from, char *to) {
+void bind(const char *from, const char *to) {
   if (mkdir(to, 0755) < 0)
-    errorf(EX_IOERR, "mkdir");
+    errorf(EX_IOERR, "mkdir(%s)", to);
 
   if (mount(from, to, "bind", MS_BIND | MS_REC, NULL) < 0)
-    errorf(EX_OSERR, "mount");
+    errorf(EX_OSERR, "mount(%s, %s)", from, to);
 }
 
-char *strjoin(char *dir, char *name) {
-  char *path = malloc(strlen(dir) + strlen(name) + 1);
+const char *bind_blacklist[] = {".", "..", "bin", "etc", "host", "usr"};
 
-  if (path == NULL)
-    errorf(EX_OSERR, "malloc");
-
-  if (strcpy(path, dir) < 0)
-    errorf(EX_IOERR, "strcpy");
-
-  if (strcat(path, name) < 0)
-    errorf(EX_IOERR, "strcat");
-
-  return path;
-}
-
-char *bind_blacklist[] = {".", "..", "bin", "etc", "host", "usr"};
-
-bool bind_blacklisted(char *name) {
-  for (size_t i = 0; i < LEN(bind_blacklist); i++) {
-    if (!strcmp(bind_blacklist[i], name))
+bool str_contains(const char *needle, const char **haystack, size_t len) {
+  for (size_t i = 0; i < len; i++) {
+    if (!strcmp(needle, haystack[i]))
       return true;
   }
 
   return false;
 }
 
-bool isdir(char *path) {
+bool is_dir(const char *path) {
   struct stat buf;
-  stat(path, &buf);
+
+  if (stat(path, &buf) < 0)
+    errorf(EX_IOERR, "stat(%s)", path);
+
   return S_ISDIR(buf.st_mode);
 }
 
-void bind_to_cwd(char *prefix) {
+void bind_to_cwd(const char *prefix) {
   DIR *prefix_dir = opendir(prefix);
 
   if (prefix_dir == NULL)
-    errorf(EX_OSERR, "opendir");
+    errorf(EX_IOERR, "opendir(%s)", prefix);
 
   struct dirent *prefix_dirent;
 
   while (prefix_dirent = readdir(prefix_dir)) {
-    if (bind_blacklisted(prefix_dirent->d_name))
+    if (str_contains(prefix_dirent->d_name, bind_blacklist,
+                     LEN(bind_blacklist)))
       continue;
 
-    char *prefix_dirent_path = strjoin(prefix, prefix_dirent->d_name);
+    char *prefix_dirent_path;
 
-    if (isdir(prefix_dirent_path)) {
+    if (asprintf(&prefix_dirent_path, "%s%s", prefix, prefix_dirent->d_name) <
+        0)
+      errorf(EX_IOERR, "asprintf");
+
+    if (is_dir(prefix_dirent_path)) {
       bind(prefix_dirent_path, prefix_dirent->d_name);
     } else {
-      char *host_target = strjoin("host/", prefix_dirent->d_name);
+      char *host_target;
+
+      if (asprintf(&host_target, "host/%s", prefix_dirent->d_name) < 0)
+        errorf(EX_IOERR, "asprintf");
 
       if (symlink(host_target, prefix_dirent->d_name) < 0)
-        errorf(EX_IOERR, "symlink");
+        errorf(EX_IOERR, "symlink(%s, %s)", host_target, prefix_dirent->d_name);
 
       free(host_target);
     }
@@ -126,10 +100,10 @@ void bind_to_cwd(char *prefix) {
   bind(prefix, "host");
 
   if (closedir(prefix_dir) < 0)
-    errorf(EX_IOERR, "closedir");
+    errorf(EX_IOERR, "closedir(%s)", prefix);
 }
 
-void spitf(char *path, char *fmt, ...) {
+void spitf(const char *path, char *fmt, ...) {
   va_list args;
   va_start(args, fmt);
 
@@ -145,41 +119,58 @@ void spitf(char *path, char *fmt, ...) {
     errorf(EX_IOERR, "spitf(%s): fclose", path);
 }
 
-int nftw_rm(const char *path, const struct stat *sb, int type,
-            struct FTW *ftw) {
-  if (remove(path) < 0)
-    errorf(EX_IOERR, "nftw_rm");
-
-  return 0;
+int nftw_remove(const char *path, const struct stat *sb, int type,
+                struct FTW *ftw) {
+  return remove(path);
 }
 
-#define REQUIREMENTS "Linux version >= 3.19 built with CONFIG_USER_NS option"
+char *root;
 
-extern char **environ;
+void root_cleanup() {
+  if (nftw(root, nftw_remove, getdtablesize(),
+           FTW_DEPTH | FTW_MOUNT | FTW_PHYS) < 0)
+    errorf(EX_IOERR, "nftw(%s)", root);
+
+  free(root);
+}
+
+#define REQUIREMENTS                                                           \
+  "Requires Linux version >= 3.19 built with CONFIG_USER_NS option.\n"
 
 int main(int argc, char *argv[]) {
+  const char *self = *argv++;
+
   if (argc < 2) {
-    fprintf(stderr, "Usage: %s command [arguments...]\n"
-                    "Requires " REQUIREMENTS ".\n",
-            argv[0]);
+    fprintf(stderr, "Usage: %s command [arguments...]\n" REQUIREMENTS, self);
     exit(EX_USAGE);
   }
 
-  if (getenv("NIX_CHROOTENV") != NULL)
-    errorf(EX_USAGE, "can't create chrootenv inside chrootenv");
+  if (getenv("NIX_CHROOTENV") != NULL) {
+    fputs("Can't create chrootenv inside chrootenv!\n", stderr);
+    exit(EX_USAGE);
+  }
 
   if (setenv("NIX_CHROOTENV", "1", false) < 0)
-    errorf(EX_IOERR, "setenv");
+    errorf(EX_OSERR, "setenv(NIX_CHROOTENV, 1)");
 
-  char tmpl[] = "/tmp/chrootenvXXXXXX";
-  char *root = mkdtemp(tmpl);
+  const char *temp = getenv("TMPDIR");
+
+  if (temp == NULL)
+    temp = "/tmp";
+
+  if (asprintf(&root, "%s/chrootenvXXXXXX", temp) < 0)
+    errorf(EX_IOERR, "asprintf");
+
+  root = mkdtemp(root);
 
   if (root == NULL)
-    errorf(EX_IOERR, "mkdtemp");
+    errorf(EX_IOERR, "mkdtemp(%s)", root);
+
+  atexit(root_cleanup);
 
   // Don't make root private so that privilege drops inside chroot are possible:
   if (chmod(root, 0755) < 0)
-    errorf(EX_IOERR, "chmod");
+    errorf(EX_IOERR, "chmod(%s, 0755)", root);
 
   pid_t cpid = fork();
 
@@ -192,8 +183,10 @@ int main(int argc, char *argv[]) {
 
     // If we are root, no need to create new user namespace.
     if (uid == 0) {
-      if (unshare(CLONE_NEWNS) < 0)
-        errorf(EX_OSERR, "unshare: requires " REQUIREMENTS);
+      if (unshare(CLONE_NEWNS) < 0) {
+        fputs(REQUIREMENTS, stderr);
+        errorf(EX_OSERR, "unshare");
+      }
       // Mark all mounted filesystems as slave so changes
       // don't propagate to the parent mount namespace.
       if (mount(NULL, "/", NULL, MS_REC | MS_SLAVE, NULL) < 0)
@@ -202,11 +195,11 @@ int main(int argc, char *argv[]) {
       // Create new mount and user namespaces. CLONE_NEWUSER
       // requires a program to be non-threaded.
       if (unshare(CLONE_NEWNS | CLONE_NEWUSER) < 0) {
-        if (access("/tmp/proc/sys/kernel/unprivileged_userns_clone", F_OK) < 0)
-          errorf(EX_OSERR, "unshare: requires " REQUIREMENTS);
-        else
-          errorf(EX_OSERR, "unshare: run `sudo sysctl -w "
-                           "kernel.unprivileged_userns_clone=1`");
+        fputs(access("/proc/sys/kernel/unprivileged_userns_clone", F_OK)
+                  ? REQUIREMENTS
+                  : "Run: sudo sysctl -w kernel.unprivileged_userns_clone=1\n",
+              stderr);
+        errorf(EX_OSERR, "unshare");
       }
 
       // Map users and groups to the parent namespace.
@@ -218,35 +211,32 @@ int main(int argc, char *argv[]) {
     }
 
     if (chdir(root) < 0)
-      errorf(EX_IOERR, "chdir");
+      errorf(EX_IOERR, "chdir(%s)", root);
 
     bind_to_cwd("/");
 
     if (chroot(root) < 0)
-      errorf(EX_OSERR, "chroot");
+      errorf(EX_OSERR, "chroot(%s)", root);
 
     if (chdir("/") < 0)
-      errorf(EX_OSERR, "chdir");
+      errorf(EX_IOERR, "chdir(/)");
 
-    argv++;
+    environ_blacklist_filter();
 
-    if (execvpe(*argv, argv, env_filter(environ)) < 0)
-      errorf(EX_OSERR, "execvpe");
+    if (execvp(*argv, argv) < 0)
+      errorf(EX_OSERR, "execvp(%s)", *argv);
   }
 
   int status;
 
   if (waitpid(cpid, &status, 0) < 0)
-    errorf(EX_OSERR, "waitpid");
+    errorf(EX_OSERR, "waitpid(%d)", cpid);
 
-  if (nftw(root, nftw_rm, getdtablesize(), FTW_DEPTH | FTW_MOUNT | FTW_PHYS) <
-      0)
-    errorf(EX_IOERR, "nftw");
-
-  if (WIFEXITED(status))
+  if (WIFEXITED(status)) {
     return WEXITSTATUS(status);
-  else if (WIFSIGNALED(status))
+  } else if (WIFSIGNALED(status)) {
     kill(getpid(), WTERMSIG(status));
+  }
 
   return EX_OSERR;
 }
