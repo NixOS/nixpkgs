@@ -6225,7 +6225,7 @@ dont-distribute-packages:
   language-ninja:                               [ i686-linux, x86_64-linux, x86_64-darwin ]
   language-objc:                                [ i686-linux, x86_64-linux, x86_64-darwin ]
   language-pig:                                 [ i686-linux, x86_64-linux, x86_64-darwin ]
-  language-puppet:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
+  language-puppet:                              [ i686-linux, x86_64-darwin ]
   language-python-colour:                       [ i686-linux, x86_64-linux, x86_64-darwin ]
   language-python-test:                         [ i686-linux, x86_64-linux, x86_64-darwin ]
   language-python:                              [ i686-linux, x86_64-linux, x86_64-darwin ]
