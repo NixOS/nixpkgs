@@ -2753,6 +2753,8 @@ package-maintainers:
     - lambdabot
   alunduil:
     - collection-json
+    - network-uri-json
+    - siren-json
 
 dont-distribute-packages:
   # hard restrictions that really belong into meta.platforms
