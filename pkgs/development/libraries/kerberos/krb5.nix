@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig perl ]
     ++ optional (!libOnly) yacc
     # Provides the mig command used by the build scripts
-    ++ optional (stdenv.isDarwin && !libOnly) bootstrap_cmds;
+    ++ optional stdenv.isDarwin bootstrap_cmds;
   buildInputs = [ openssl ]
     ++ optionals (!libOnly) [ openldap libedit ];
 
