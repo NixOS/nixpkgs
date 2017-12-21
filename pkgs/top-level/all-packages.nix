@@ -9287,7 +9287,9 @@ with pkgs;
 
   libserialport = callPackage ../development/libraries/libserialport { };
 
-  libsoundio = callPackage ../development/libraries/libsoundio { };
+  libsoundio = callPackage ../development/libraries/libsoundio {
+    inherit (darwin.apple_sdk.frameworks) AudioUnit;
+  };
 
   libgtop = callPackage ../development/libraries/libgtop {};
 
