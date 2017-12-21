@@ -5106,11 +5106,13 @@ in {
   edward = callPackage ../development/python-modules/edward { };
 
   elasticsearch = buildPythonPackage (rec {
-    name = "elasticsearch-1.9.0";
+    pname = "elasticsearch";
+    version = "6.0.0";
+    name = "${pname}-${version}";
 
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/e/elasticsearch/${name}.tar.gz";
-      sha256 = "091s60ziwhyl9kjfm833i86rcpjx46v9h16jkgjgkk5441dln3gb";
+    src = fetchPypi {
+      inherit pname version;
+      sha256 = "029q603g95fzkh87xkbxxmjfq5s9xkr9y27nfik6d4prsl0zxmlz";
     };
 
     # Check is disabled because running them destroy the content of the local cluster!
@@ -5126,7 +5128,6 @@ in {
       maintainers = with maintainers; [ desiderius ];
     };
   });
-
 
   elasticsearchdsl = buildPythonPackage (rec {
     name = "elasticsearch-dsl-0.0.9";
