@@ -23290,6 +23290,7 @@ EOF
 
   ephem = callPackage ../development/python-modules/ephem { };
 
+  voluptuous = callPackage ../development/python-modules/voluptuous { };
 });
 
 in fix' (extends overrides packages)
