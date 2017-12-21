@@ -36,6 +36,7 @@
 , "istanbul"
 , "javascript-typescript-langserver"
 , "jayschema"
+, "jsdoc"
 , "jshint"
 , "json"
 , "js-beautify"
