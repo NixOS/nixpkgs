@@ -38,8 +38,8 @@ Bundle idris together with a list of packages. Example usage:
 
     $ nix-shell -p "idrisPackages.with-packages [ idrisPackages.lightyear ]"
 
-Note that you still have to explicitly make the packages available to
-idris when you run the interpreter, so to make lightyear accessible you
-would start idris with the following command:
+Note that it's still necessary to explicitly make the packages available to
+idris when running the interpreter, i.e. to make lightyear accessible,
+start idris with the following command:
 
     $ idris -p lightyear
