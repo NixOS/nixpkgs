@@ -2375,6 +2375,7 @@ with pkgs;
   gnuplot = libsForQt5.callPackage ../tools/graphics/gnuplot { };
 
   gnuplot_qt = gnuplot.override { withQt = true; };
+  gnuplot_full = gnuplot.override { withTeXLive = true; withLua = true; withQt = true; };
 
   # must have AquaTerm installed separately
   gnuplot_aquaterm = gnuplot.override { aquaterm = true; };
@@ -20105,6 +20106,8 @@ with pkgs;
     cc-multilib-clang = callPackage ../test/cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
 
     macOSSierraShared = callPackage ../test/macos-sierra-shared {};
+
+    gnuplot = callPackage ../test/gnuplot { };
   };
 
   duti = callPackage ../os-specific/darwin/duti {};
