@@ -1,23 +1,22 @@
 { stdenv, lib, fetchFromGitHub, pkgconfig, autoreconfHook
-, boost, secp256k1 }:
+, boost, libbitcoin, zeromq }:
 
 let
-  pname = "libbitcoin";
+  pname = "libbitcoin-network";
   version = "3.4.0";
 
 in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = "libbitcoin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1h6h7cxbwkdk8bzbkfvnrrdzajw1d4lr8wqs66is735bksh6gk1y";
+    sha256 = "1zlhyh5z0fla1yc6kwkx65ycwgmrcrkvzj8119wbkxy3xhzpwxpv";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-
-  propagatedBuildInputs = [ secp256k1 ];
+  buildInputs = [ libbitcoin zeromq ];
 
   enableParallelBuilding = true;
 
@@ -28,10 +27,10 @@ in stdenv.mkDerivation {
   ];
 
   meta = with stdenv.lib; {
-    description = "C++ library for building bitcoin applications";
+    description = "Bitcoin P2P Network Library";
     homepage = https://libbitcoin.org/;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ chris-martin ];
+    maintainers = with maintainers; [ asymmetric ];
 
     # AGPL with a lesser clause
     license = licenses.agpl3;

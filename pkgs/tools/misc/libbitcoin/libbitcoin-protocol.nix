@@ -1,23 +1,23 @@
 { stdenv, lib, fetchFromGitHub, pkgconfig, autoreconfHook
-, boost, secp256k1 }:
+, boost, libbitcoin, secp256k1, zeromq }:
 
 let
-  pname = "libbitcoin";
+  pname = "libbitcoin-protocol";
   version = "3.4.0";
 
 in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = "libbitcoin";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1h6h7cxbwkdk8bzbkfvnrrdzajw1d4lr8wqs66is735bksh6gk1y";
+    sha256 = "1wrlzani3wdjkmxqwjh30i8lg3clrzwcx2di7c9sdpnsbda985gb";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-
-  propagatedBuildInputs = [ secp256k1 ];
+  buildInputs = [ libbitcoin secp256k1 ];
+  propagatedBuildInputs = [ zeromq ];
 
   enableParallelBuilding = true;
 
@@ -28,10 +28,10 @@ in stdenv.mkDerivation {
   ];
 
   meta = with stdenv.lib; {
-    description = "C++ library for building bitcoin applications";
+    description = "Bitcoin Blockchain Query Protocol";
     homepage = https://libbitcoin.org/;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ chris-martin ];
+    maintainers = with maintainers; [ asymmetric ];
 
     # AGPL with a lesser clause
     license = licenses.agpl3;

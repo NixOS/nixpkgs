@@ -14027,9 +14027,11 @@ with pkgs;
     secp256k1 = secp256k1.override { enableECDH = true; };
   };
 
-  libbitcoin-client = callPackage ../tools/misc/libbitcoin/libbitcoin-client.nix { };
-
+  libbitcoin-protocol = callPackage ../tools/misc/libbitcoin/libbitcoin-protocol.nix { };
+  libbitcoin-client   = callPackage ../tools/misc/libbitcoin/libbitcoin-client.nix { };
+  libbitcoin-network  = callPackage ../tools/misc/libbitcoin/libbitcoin-network.nix { };
   libbitcoin-explorer = callPackage ../tools/misc/libbitcoin/libbitcoin-explorer.nix { };
+
 
   go-ethereum = self.altcoins.go-ethereum;
   ethabi = self.altcoins.ethabi;
