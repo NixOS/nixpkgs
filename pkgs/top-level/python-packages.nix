@@ -27001,6 +27001,7 @@ EOF
 
   parse-type = callPackage ../development/python-modules/parse-type { };
 
+  voluptuous = callPackage ../development/python-modules/voluptuous { };
 });
 
 in fix' (extends overrides packages)
