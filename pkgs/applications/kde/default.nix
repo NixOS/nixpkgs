@@ -102,6 +102,7 @@ let
       kdepim-apps-libs = callPackage ./kdepim-apps-libs {};
       kdf = callPackage ./kdf.nix {};
       keditbookmarks = callPackage ./keditbookmarks.nix {};
+      kget = callPackage ./kget.nix {};
       kgpg = callPackage ./kgpg.nix {};
       khelpcenter = callPackage ./khelpcenter.nix {};
       kholidays = callPackage ./kholidays.nix {};
