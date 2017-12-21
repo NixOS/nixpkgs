@@ -628,6 +628,8 @@ with pkgs;
 
   pass = callPackage ../tools/security/pass { };
 
+  gopass = callPackage ../tools/security/gopass { };
+
   browserpass = callPackage ../tools/security/browserpass { };
 
   oracle-instantclient = callPackage ../development/libraries/oracle-instantclient { };
