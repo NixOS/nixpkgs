@@ -15,15 +15,16 @@ mariadb = everything // {
 };
 
 common = rec { # attributes common to both builds
-  version = "10.2.9";
+  version = "10.2.11";
 
   src = fetchurl {
     url    = "https://downloads.mariadb.org/f/mariadb-${version}/source/mariadb-${version}.tar.gz/from/http%3A//ftp.hosteurope.de/mirror/archive.mariadb.org/?serve";
-    sha256 = "093115vdaj302730h3y72vx5fi02vxjzwh7ry1yff7jra8fa1q0j";
+    sha256 = "1s53ravbrxcc8ixvkm56rwgs3cfifzngc56pidd1f1dr1n0mlmb3";
     name   = "mariadb-${version}.tar.gz";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
+
   buildInputs = [
     ncurses openssl zlib pcre jemalloc
   ] ++ stdenv.lib.optionals stdenv.isLinux [ libaio systemd ]
@@ -47,7 +48,7 @@ common = rec { # attributes common to both builds
 
     "-DWITH_ZLIB=system"
     "-DWITH_SSL=system"
-    "-DWITH_PCRE=system"
+    "-DWITH_PCRE=bundled"
 
     # On Darwin without sandbox, CMake will find the system java and attempt to build with java support, but
     # then it will fail during the actual build. Let's just disable the flag explicitly until someone decides
@@ -104,8 +105,10 @@ client = stdenv.mkDerivation (common // {
 
   # prevent cycle; it needs to reference $dev
   postInstall = common.postInstall + ''
-    moveToOutput bin/mysql_config "$dev"
     moveToOutput bin/mariadb_config "$dev"
+    mv $bin/bin/mysql_config $dev/bin
+    mv $out/nix/store/*/include/mysql/*.h $dev/include/mysql
+    rm -r $out/nix
   '';
 
   enableParallelBuilding = true; # the client should be OK
@@ -153,6 +156,7 @@ everything = stdenv.mkDerivation (common // {
   postInstall = common.postInstall + ''
     rm -r "$out"/{mysql-test,sql-bench,data} # Don't need testing data
     rm "$out"/share/man/man1/mysql-test-run.pl.1
+    rm "$out"/bin/rcmysql
   '';
 
   CXXFLAGS = optionalString stdenv.isi686 "-fpermissive";
