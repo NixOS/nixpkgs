@@ -14328,26 +14328,6 @@ in {
     };
   };
 
-  pyelasticsearch = buildPythonPackage (rec {
-    name = "pyelasticsearch-1.4";
-
-    src = pkgs.fetchurl {
-      url = "mirror://pypi/p/pyelasticsearch/${name}.tar.gz";
-      sha256 = "18wp6llfjv6hvyhr3f6i8dm9wc5rf46wiqsfxwpvnf6mdrvk6xr7";
-    };
-
-    # Tests require a local instance of elasticsearch
-    doCheck = false;
-    propagatedBuildInputs = with self; [ elasticsearch six simplejson certifi ];
-    buildInputs = with self; [ nose mock ];
-
-    meta = {
-      description = "A clean, future-proof, high-scale API to elasticsearch";
-      homepage = https://pyelasticsearch.readthedocs.org;
-      license = licenses.bsd3;
-    };
-  });
-
   pyelftools = buildPythonPackage rec {
     pname = "pyelftools";
     version = "0.24";
