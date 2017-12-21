@@ -69,7 +69,7 @@ let lispPackages = rec {
     deps = [];
     system-info = quicklisp-to-nix-system-info;
     buildPhase = ''
-      ${sbcl}/bin/sbcl --eval '(load #P"${asdf}/lib/common-lisp/asdf/build/asdf.lisp")' --load $src/ql-to-nix.lisp --eval '(ql-to-nix::dump-image)'
+      ${clwrapper}/bin/cl-wrapper.sh "${sbcl}/bin/sbcl" --eval '(load #P"${asdf}/lib/common-lisp/asdf/build/asdf.lisp")' --load $src/ql-to-nix.lisp --eval '(ql-to-nix::dump-image)'
     '';
     installPhase = ''
       mkdir -p $out/bin

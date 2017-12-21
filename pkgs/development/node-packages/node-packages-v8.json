@@ -1,0 +1,13 @@
+[
+  "bower"
+, "coffee-script"
+, "dat"
+, "grunt-cli"
+, "mocha"
+, "nijs"
+, "node-gyp"
+, "node-gyp-build"
+, "node-pre-gyp"
+, "semver"
+, "sloc"
+]

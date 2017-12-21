@@ -226,6 +226,7 @@ let self = {
   # 17.09.2356.cb751f9b1c3
   "17.09".eu-west-1.hvm-ebs = "ami-d40185ad";
   "17.09".eu-west-2.hvm-ebs = "ami-c5445da1";
+  "17.09".eu-west-3.hvm-ebs = "ami-2636815b";
   "17.09".eu-central-1.hvm-ebs = "ami-e758d388";
   "17.09".us-east-1.hvm-ebs = "ami-865327fc";
   "17.09".us-east-2.hvm-ebs = "ami-074d6562";

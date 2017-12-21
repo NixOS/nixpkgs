@@ -314,6 +314,8 @@ with pkgs;
       inherit kernel rootModules allowMissing;
     };
 
+  mkShell = callPackage ../build-support/mkshell { };
+
   nixBufferBuilders = import ../build-support/emacs/buffer.nix { inherit (pkgs) lib writeText; inherit (emacsPackagesNg) inherit-local; };
 
   pathsFromGraph = ../build-support/kernel/paths-from-graph.pl;
@@ -629,6 +631,8 @@ with pkgs;
 
   pass = callPackage ../tools/security/pass { };
 
+  gopass = callPackage ../tools/security/gopass { };
+
   browserpass = callPackage ../tools/security/browserpass { };
 
   oracle-instantclient = callPackage ../development/libraries/oracle-instantclient { };
@@ -776,6 +780,10 @@ with pkgs;
   };
 
   blockdiag = pythonPackages.blockdiag;
+
+  blsd = callPackage ../tools/misc/blsd {
+    libgit2 = libgit2_0_25;
+  };
 
   bluez-tools = callPackage ../tools/bluetooth/bluez-tools { };
 
@@ -1127,9 +1135,7 @@ with pkgs;
 
   geekbench = callPackage ../tools/misc/geekbench { };
 
-  gencfsm = callPackage ../tools/security/gencfsm {
-    vala = vala_0_34;
-  };
+  gencfsm = callPackage ../tools/security/gencfsm { };
 
   genromfs = callPackage ../tools/filesystems/genromfs { };
 
@@ -1532,8 +1538,7 @@ with pkgs;
   libpinyin = callPackage ../development/libraries/libpinyin { };
 
   libskk = callPackage ../development/libraries/libskk {
-    gnome_common = gnome3.gnome_common;
-    vala = vala_0_34;
+    inherit (gnome3) gnome_common libgee;
   };
 
   m17n_db = callPackage ../tools/inputmethods/m17n-db { };
@@ -2396,8 +2401,6 @@ with pkgs;
 
   go-mtpfs = callPackage ../tools/filesystems/go-mtpfs { };
 
-  go-pup = callPackage ../development/tools/pup { };
-
   go-sct = callPackage ../tools/X11/go-sct { };
 
   # rename to upower-notify?
@@ -3128,6 +3131,10 @@ with pkgs;
 
   nodejs-9_x = callPackage ../development/web/nodejs/v9.nix {};
   nodejs-slim-9_x = callPackage ../development/web/nodejs/v9.nix { enableNpm = false; };
+
+  nodePackages_8_x = callPackage ../development/node-packages/default-v8.nix {
+    nodejs = pkgs.nodejs-8_x;
+  };
 
   nodePackages_6_x = callPackage ../development/node-packages/default-v6.nix {
     nodejs = pkgs.nodejs-6_x;
@@ -3871,7 +3878,7 @@ with pkgs;
 
   pandoc = haskell.lib.overrideCabal (haskell.lib.justStaticExecutables haskellPackages.pandoc) (drv: {
     configureFlags = drv.configureFlags or [] ++ ["-fembed_data_files"];
-    buildTools = drv.buildTools or [] ++ [haskellPackages.hsb2hs];
+    buildTools = drv.buildTools or [] ++ [haskellPackages.file-embed];
   });
 
   pamtester = callPackage ../tools/security/pamtester { };
@@ -5396,6 +5403,8 @@ with pkgs;
 
   zsh-command-time = callPackage ../shells/zsh-command-time { };
 
+  zssh = callPackage ../tools/networking/zssh { };
+
   zstd = callPackage ../tools/compression/zstd { };
   zstdmt = callPackage ../tools/compression/zstdmt { };
 
@@ -5928,7 +5937,7 @@ with pkgs;
 
   haskell = callPackage ./haskell-packages.nix { };
 
-  haskellPackages = haskell.packages.ghc802.override {
+  haskellPackages = haskell.packages.ghc822.override {
     overrides = config.haskellPackageOverrides or (self: super: {});
   };
 
@@ -6027,7 +6036,6 @@ with pkgs;
         haskellPackages = self.haskellPackages.override {
           overrides = self: super: {
             binary = lib.dontCheck self.binary_0_8_5_1;
-            cheapskate = self.cheapskate_0_1_1;
             parsers = lib.dontCheck super.parsers;
             semigroupoids = lib.dontCheck super.semigroupoids;
             trifecta = lib.dontCheck super.trifecta;
@@ -6455,7 +6463,6 @@ with pkgs;
   urweb = callPackage ../development/compilers/urweb { };
 
   inherit (callPackage ../development/compilers/vala { })
-    vala_0_23
     vala_0_26
     vala_0_28
     vala_0_32
@@ -7555,7 +7562,7 @@ with pkgs;
 
   msitools = callPackage ../development/tools/misc/msitools { };
 
-  multi-ghc-travis = callPackage ../development/tools/haskell/multi-ghc-travis { };
+  multi-ghc-travis = callPackage ../development/tools/haskell/multi-ghc-travis { ghc = haskell.compiler.ghc802; };
 
   neoload = callPackage ../development/tools/neoload {
     licenseAccepted = (config.neoload.accept_license or false);
@@ -7655,6 +7662,8 @@ with pkgs;
   premake = premake4;
 
   procodile = callPackage ../tools/system/procodile { };
+
+  pup = callPackage ../development/tools/pup { };
 
   qtcreator = libsForQt5.callPackage ../development/qtcreator { };
 
@@ -9287,7 +9296,9 @@ with pkgs;
 
   libserialport = callPackage ../development/libraries/libserialport { };
 
-  libsoundio = callPackage ../development/libraries/libsoundio { };
+  libsoundio = callPackage ../development/libraries/libsoundio {
+    inherit (darwin.apple_sdk.frameworks) AudioUnit;
+  };
 
   libgtop = callPackage ../development/libraries/libgtop {};
 
@@ -9801,8 +9812,6 @@ with pkgs;
   libuecc = callPackage ../development/libraries/libuecc { };
 
   libui = callPackage ../development/libraries/libui { };
-
-  libunity = callPackage ../development/libraries/libunity { };
 
   libunistring = callPackage ../development/libraries/libunistring { };
 
@@ -10320,6 +10329,9 @@ with pkgs;
 
   osm-gps-map = callPackage ../development/libraries/osm-gps-map { };
 
+  osinfo-db = callPackage ../data/misc/osinfo-db { };
+  osinfo-db-tools = callPackage ../tools/misc/osinfo-db-tools { };
+
   p11_kit = callPackage ../development/libraries/p11-kit { };
 
   paperkey = callPackage ../tools/security/paperkey { };
@@ -10427,6 +10439,7 @@ with pkgs;
   protobuf = callPackage ../development/libraries/protobuf/3.4.nix { };
 
   protobuf3_1 = callPackage ../development/libraries/protobuf/3.1.nix { };
+  protobuf2_5 = callPackage ../development/libraries/protobuf/2.5.nix { };
 
   protobufc = callPackage ../development/libraries/protobufc/1.3.nix { };
 
@@ -13972,6 +13985,8 @@ with pkgs;
 
   ao = callPackage ../applications/graphics/ao {};
 
+  apache-directory-studio = callPackage ../applications/networking/apache-directory-studio {};
+
   aqemu = libsForQt5.callPackage ../applications/virtualization/aqemu { };
 
   ardour = callPackage ../applications/audio/ardour {
@@ -14023,9 +14038,11 @@ with pkgs;
     secp256k1 = secp256k1.override { enableECDH = true; };
   };
 
-  libbitcoin-client = callPackage ../tools/misc/libbitcoin/libbitcoin-client.nix { };
-
+  libbitcoin-protocol = callPackage ../tools/misc/libbitcoin/libbitcoin-protocol.nix { };
+  libbitcoin-client   = callPackage ../tools/misc/libbitcoin/libbitcoin-client.nix { };
+  libbitcoin-network  = callPackage ../tools/misc/libbitcoin/libbitcoin-network.nix { };
   libbitcoin-explorer = callPackage ../tools/misc/libbitcoin/libbitcoin-explorer.nix { };
+
 
   go-ethereum = self.altcoins.go-ethereum;
   ethabi = self.altcoins.ethabi;
@@ -14267,7 +14284,7 @@ with pkgs;
 
   clfswm = callPackage ../applications/window-managers/clfswm { };
 
-  cligh = callPackage ../development/tools/github/cligh {};
+  cligh = python3Packages.callPackage ../development/tools/github/cligh {};
 
   clipgrab = callPackage ../applications/video/clipgrab { };
 
@@ -14404,8 +14421,6 @@ with pkgs;
   djview4 = pkgs.djview;
 
   dmenu = callPackage ../applications/misc/dmenu { };
-
-  dmenu-wayland = callPackage ../applications/misc/dmenu/wayland.nix { };
 
   dmenu2 = callPackage ../applications/misc/dmenu2 { };
 
@@ -14908,6 +14923,8 @@ with pkgs;
 
   wavrsocvt = callPackage ../applications/misc/audio/wavrsocvt { };
 
+  welle-io = libsForQt5.callPackage ../applications/misc/welle-io { };
+
   wireshark-cli = callPackage ../applications/networking/sniffers/wireshark {
     withQt = false;
     withGtk = false;
@@ -15344,11 +15361,11 @@ with pkgs;
   wlroots = callPackage ../development/libraries/wlroots { };
   orbment = callPackage ../applications/window-managers/orbment { };
   sway = callPackage ../applications/window-managers/sway { };
-  swaylock = callPackage ../applications/window-managers/sway { };
 
-  swc = callPackage ../development/libraries/swc { };
-  wld = callPackage ../development/libraries/wld { };
-  velox = callPackage ../applications/window-managers/velox { };
+  velox = callPackage ../applications/window-managers/velox {
+    stConf = config.st.conf or null;
+    stPatches = config.st.patches or null;
+  };
 
   i3 = callPackage ../applications/window-managers/i3 {
     xcb-util-cursor = if stdenv.isDarwin then xcb-util-cursor-HEAD else xcb-util-cursor;
@@ -16800,11 +16817,6 @@ with pkgs;
     extraLibs = config.st.extraLibs or [];
   };
 
-  st-wayland = callPackage ../applications/misc/st/wayland.nix {
-    conf = config.st.conf or null;
-    patches = config.st.patches or null;
-  };
-
   xst = callPackage ../applications/misc/st/xst.nix { };
 
   stag = callPackage ../applications/misc/stag {
@@ -17054,7 +17066,6 @@ with pkgs;
   deepin-terminal = callPackage ../applications/misc/deepin-terminal {
     inherit (gnome3) libgee vte;
     wnck = libwnck3;
-    vala = vala_0_34;
   };
 
   termite = callPackage ../applications/misc/termite {
@@ -19940,6 +19951,7 @@ with pkgs;
 
   xsane = callPackage ../applications/graphics/sane/xsane.nix {
     libpng = libpng12;
+    sane-backends = sane-backends.override { libpng = libpng12; };
   };
 
   xsw = callPackage ../applications/misc/xsw {

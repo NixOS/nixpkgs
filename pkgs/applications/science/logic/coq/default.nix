@@ -9,7 +9,7 @@
 , ocamlPackages, ncurses
 , buildIde ? true
 , csdp ? null
-, version ? "8.7.1"
+, version
 }:
 
 let

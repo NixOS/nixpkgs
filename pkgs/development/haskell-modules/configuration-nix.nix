@@ -463,9 +463,6 @@ self: super: builtins.intersectAttrs super {
   # This propagates this to everything depending on haskell-gi-base
   haskell-gi-base = addBuildDepend super.haskell-gi-base pkgs.gobjectIntrospection;
 
-  # Requires gi-javascriptcore API version 4
-  gi-webkit2 = super.gi-webkit2.override { gi-javascriptcore = self.gi-javascriptcore_4_0_14; };
-
   # requires valid, writeable $HOME
   hatex-guide = overrideCabal super.hatex-guide (drv: {
     preConfigure = ''
@@ -500,9 +497,6 @@ self: super: builtins.intersectAttrs super {
 
   # Without this override, the builds lacks pkg-config.
   opencv-extra = addPkgconfigDepend super.opencv-extra (pkgs.opencv3.override { enableContrib = true; });
-
-  # Written against the 6.X series of megaparsec
-  htoml-megaparsec = super.htoml-megaparsec.override { megaparsec = self.megaparsec_6_2_0; };
 
   # Break cyclic reference that results in an infinite recursion.
   partial-semigroup = dontCheck super.partial-semigroup;

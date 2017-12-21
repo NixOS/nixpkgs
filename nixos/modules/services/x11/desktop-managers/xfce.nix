@@ -5,6 +5,7 @@ with lib;
 let
 
   xcfg = config.services.xserver;
+  pcfg = config.hardware.pulseaudio;
   cfg = xcfg.desktopManager.xfce;
 
 in
@@ -96,8 +97,8 @@ in
         pkgs.xfce.xfce4icontheme
         pkgs.xfce.xfce4session
         pkgs.xfce.xfce4settings
-        pkgs.xfce.xfce4mixer
-        pkgs.xfce.xfce4volumed
+       (if pcfg.enable then pkgs.xfce.xfce4mixer_pulse else pkgs.xfce.xfce4mixer)
+       (if pcfg.enable then pkgs.xfce.xfce4volumed_pulse else pkgs.xfce.xfce4volumed)
         pkgs.xfce.xfce4-screenshooter
         pkgs.xfce.xfconf
         # This supplies some "abstract" icons such as

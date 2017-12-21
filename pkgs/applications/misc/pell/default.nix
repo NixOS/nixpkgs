@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "pell";
-  version = "0.0.2";
+  version = "0.0.3";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "ebzzry";
     repo = pname;
-    rev = "ec14de0a9b666433954184167bf3b82cf21193f8";
-    sha256 = "0r2gbb4l9rr5x99m62zicknsp1gf9fr124xpyd8ak9izr5hvskn9";
+    rev = "c25ddd257dd1d1481df5ccac0f99f6bee1ee1ebb";
+    sha256 = "0fharadbf63mgpmafs8d4k9h83jj9naxldp240xnc5gkna32a07y";
   };
 
   installPhase = ''

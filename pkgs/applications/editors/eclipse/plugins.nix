@@ -362,12 +362,12 @@ rec {
 
   jdt = buildEclipseUpdateSite rec {
     name = "jdt-${version}";
-    version = "4.7.1a";
+    version = "4.7.2";
 
     src = fetchzip {
       stripRoot = false;
-      url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.7.1a-201710090410/org.eclipse.jdt-4.7.1a.zip;
-      sha256 = "1hpvpj8ghfk8aqbzfrpcxw3wxrczq6zd3bpx4sxjrsi926jsjaf4";
+      url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.7.2-201711300510/org.eclipse.jdt-4.7.2.zip;
+      sha256 = "1yzqnjs88cdyyqv8f1g8fbfyccci29f3pzxxvaz7szxicwzn59mz";
     };
 
     meta = with stdenv.lib; {

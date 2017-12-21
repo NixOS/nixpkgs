@@ -1,35 +1,40 @@
 { stdenv, fetchurl, gcc, makeWrapper
 , db, gmp, ncurses }:
 
-let version = {
-  maj = "2.0";
-  min = "rc-2";
-};
-in 
+let
+  version = "2.2";
+  lib = stdenv.lib;
+in
 stdenv.mkDerivation rec {
-  name = "gnu-cobol-${version.maj}${version.min}";
+  name = "gnu-cobol-${version}";
+  inherit version;
 
   src = fetchurl {
-    url = "https://sourceforge.com/projects/open-cobol/files/gnu-cobol/${version.maj}/gnu-cobol-${version.maj}_${version.min}.tar.gz";
-    sha256 = "1pj7mjnp3l76zvzrh1xa6d4kw3jkvzqh39sbf02kiinq4y65s7zj";
+    url = "https://sourceforge.com/projects/open-cobol/files/gnu-cobol/${version}/gnucobol-${version}.tar.gz";
+    sha256 = "1jrjmdx0swssjh388pp08awhiisbrs2i7gx4lcm4p1k5rpg3hn4j";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [ db gmp ncurses ];
 
+  cflags  = stdenv.lib.concatMapStringsSep " " (p: "-L" + (lib.getLib p) + "/lib ") buildInputs;
+  ldflags = stdenv.lib.concatMapStringsSep " " (p: "-I" + (lib.getDev p) + "/include ") buildInputs;
+
+  cobolCCFlags = "-I$out/include ${ldflags} -L$out/lib ${cflags}";
+
   postInstall = with stdenv.lib; ''
     wrapProgram "$out/bin/cobc" \
-      --prefix PATH ':' "${gcc}/bin" \
-      --prefix NIX_LDFLAGS ' ' "'$NIX_LDFLAGS'" \
-      --prefix NIX_CFLAGS_COMPILE ' ' "'$NIX_CFLAGS_COMPILE'"
+      --set COB_CC "${gcc}/bin/gcc" \
+      --prefix COB_LDFLAGS " " "${cobolCCFlags}" \
+      --prefix COB_CFLAGS " " "${cobolCCFlags}"
   '';
 
   meta = with stdenv.lib; {
     description = "An open-source COBOL compiler";
     homepage = https://sourceforge.net/projects/open-cobol/;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ ericsagnes ];
+    maintainers = with maintainers; [ ericsagnes the-kenny ];
     platforms = platforms.linux;
   };
 }
