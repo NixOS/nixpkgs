@@ -32,7 +32,11 @@ stdenv.mkDerivation {
     glib cppunit fontconfig freetype ftgl glew libogg libvorbis makeWrapper mesa_glu ];
 
   configurePhase = ''
-    cmake -DCMAKE_INSTALL_PREFIX=$out
+    cmake -DCMAKE_INSTALL_PREFIX=$out \
+          -DBUILD_MEGAGLEST=On \
+          -DBUILD_MEGAGLEST_MAP_EDITOR=On \
+          -DBUILD_MEGAGLEST_MODEL_IMPORT_EXPORT_TOOLS=On \
+          -DBUILD_MEGAGLEST_MODEL_VIEWER=On
   '';
 
   postInstall =  ''
