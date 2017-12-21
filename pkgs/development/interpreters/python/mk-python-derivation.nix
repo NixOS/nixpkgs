@@ -13,7 +13,10 @@
 
 { name ? "${attrs.pname}-${attrs.version}"
 
-# Dependencies for building the package
+# Build-time dependencies for the package
+, nativeBuildInputs ? []
+
+# Run-time dependencies for the package
 , buildInputs ? []
 
 # Dependencies needed for running the checkPhase.
@@ -66,13 +69,15 @@ toPythonModule (python.stdenv.mkDerivation (builtins.removeAttrs attrs [
 
   name = namePrefix + name;
 
-  buildInputs = ([ wrapPython (ensureNewerSourcesHook { year = "1980"; }) ]
-    ++ (lib.optional (lib.hasSuffix "zip" attrs.src.name or "") unzip)
+  nativeBuildInputs = [ (ensureNewerSourcesHook { year = "1980"; }) ]
+    ++ nativeBuildInputs;
+
+  buildInputs = [ wrapPython ]
+    ++ lib.optional (lib.hasSuffix "zip" (attrs.src.name or "")) unzip
     ++ lib.optionals doCheck checkInputs
-    ++ lib.optional catchConflicts setuptools # If we nog longer propagate setuptools
+    ++ lib.optional catchConflicts setuptools # If we no longer propagate setuptools
     ++ buildInputs
-    ++ pythonPath
-  );
+    ++ pythonPath;
 
   # Propagate python and setuptools. We should stop propagating setuptools.
   propagatedBuildInputs = propagatedBuildInputs ++ [ python setuptools ];
