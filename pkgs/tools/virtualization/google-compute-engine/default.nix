@@ -7,7 +7,6 @@
 , utillinux
 , boto
 , setuptools
-, mock
 }:
 
 buildPythonApplication rec {
@@ -21,8 +20,6 @@ buildPythonApplication rec {
     rev = version;
     sha256 = "0hlzcrf6yhzan25f4wzy1vbncak9whhqzrzza026ly3sq0smmjpg";
   };
-
-  buildInputs = [ mock ];
 
   postPatch = ''
     for file in $(find google_compute_engine -type f); do
@@ -47,6 +44,8 @@ buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [ boto setuptools ];
+
+  doCheck = false;
 
   meta = with lib; {
     description = "Google Compute Engine tools and services";
