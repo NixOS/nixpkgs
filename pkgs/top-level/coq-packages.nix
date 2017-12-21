@@ -33,6 +33,7 @@ let
       paco = callPackage ../development/coq-modules/paco {};
       QuickChick = callPackage ../development/coq-modules/QuickChick {};
       ssreflect = callPackage ../development/coq-modules/ssreflect { };
+      contribs = callPackage ../development/coq-modules/contribs { };
     };
 
   filterCoqPackages = coq:
