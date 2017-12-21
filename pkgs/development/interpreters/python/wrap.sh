@@ -67,7 +67,7 @@ wrapPythonProgramsIn() {
                     # (see pkgs/build-support/setup-hooks/make-wrapper.sh)
                     local -a wrap_args=("$f"
                                     --prefix PATH ':' "$program_PATH"
-                                    --set PYTHONNOUSERSITE "true"
+                                    --add-flags '-s'
                                     )
 
                     # Add any additional arguments provided by makeWrapperArgs
