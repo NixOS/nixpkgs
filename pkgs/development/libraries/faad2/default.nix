@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "1db37ydb6mxhshbayvirm5vz6j361bjim4nkpwjyhmy4ddfinmhl";
   };
 
-  patches = [ optional hdcSupport ./faad2-hdc-support.patch ];
+  patches = optional hdcSupport ./faad2-hdc-support.patch;
 
   configureFlags = []
     ++ optional drmSupport "--with-drm"
