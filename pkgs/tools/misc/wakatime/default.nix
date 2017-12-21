@@ -1,7 +1,7 @@
 { stdenv, buildPythonApplication, fetchFromGitHub }:
 
 buildPythonApplication rec {
-  name = "wakatime-${version}";
+  pname = "wakatime";
   version = "10.0.1";
 
   src = fetchFromGitHub {
@@ -10,6 +10,10 @@ buildPythonApplication rec {
     rev = version;
     sha256 = "1bg8fzd3rdc6na0a7z1d55m2gbnfq6d72mf2jlyzc817r6dr4bfx";
   };
+
+  checkPhase = ''
+    $out/bin/wakatime --version 2>&1 | grep -q "${version}"
+  '';
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
