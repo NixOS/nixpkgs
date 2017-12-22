@@ -3,9 +3,6 @@
 {
   imports = [ ../intel.nix ];
 
-  # TPM chip countains a RNG
-  security.rngd.enable = true;
-
   boot = {
     kernelModules = [ "tp_smapi" ];
     extraModulePackages = with config.boot.kernelPackages; [ tp_smapi ];
