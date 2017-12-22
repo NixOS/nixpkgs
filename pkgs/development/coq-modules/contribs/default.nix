@@ -189,10 +189,10 @@ let mkContrib = repo: revs: param:
     sha256 = "1ddwzg12pbzpnz3njin4zhpph92kscrbsn3bzds26yj8fp76zc33";
   };
 
-  containers = mkContrib "containers" [ ] {
-    version = "v8.6.0-10-g2432994";
-    rev = "2432994b4a0a63f28b21aad23d0c3c90c7630890";
-    sha256 = "1q0i20qag2c8jh6jw63s09d8nr6m1zaz4hqblg5mmmp5zh6fllk6";
+  containers = mkContrib "containers" [ "8.6" ] {
+    version = "8.6.0";
+    rev = "fa1fec7";
+    sha256 = "1ns0swlr8hzb1zc7fsyd3vws1vbq0vvfxcf0lszqnca9c9hfkfy4";
   };
 
   continuations = mkContrib "continuations" [ ] {
