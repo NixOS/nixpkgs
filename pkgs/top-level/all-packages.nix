@@ -15524,8 +15524,6 @@ with pkgs;
 
   k9copy = libsForQt5.callPackage ../applications/video/k9copy {};
 
-  kadu = kde4.callPackage ../applications/networking/instant-messengers/kadu { };
-
   kanboard = callPackage ../applications/misc/kanboard { };
 
   kdeApplications =
