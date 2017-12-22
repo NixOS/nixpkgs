@@ -5216,7 +5216,7 @@ with pkgs;
 
   which = callPackage ../tools/system/which { };
 
-  winusb = callPackage ../tools/misc/winusb { };
+  woeusb = callPackage ../tools/misc/woeusb { };
 
   chase = callPackage ../tools/system/chase { };
 
