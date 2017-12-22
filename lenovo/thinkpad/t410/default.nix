@@ -1,8 +1,6 @@
 { config, pkgs, ... }:
 
 {
-  imports = [ ../intel.nix ];
-
   boot = {
     kernelParams = [
       "drm.debug=0"
@@ -86,4 +84,5 @@
     # ${pkgs.ethtool}/bin/ethtool -s enp0s25 wol d || true
   };
 
+  services.xserver.videoDrivers = [ "intel" ];
 }

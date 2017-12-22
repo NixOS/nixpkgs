@@ -3,7 +3,6 @@
 {
   imports = [
     ../lib/kernel-version.nix
-    ./general-intel.nix
   ];
 
   # Use the gummiboot efi boot loader. (From default generated configuration.nix)
@@ -26,4 +25,6 @@
   # Aspect Ratio: 16 × 9 (1.78:1)
   # Pixel Count: 3,686,400
   # Megapixels: 3.69MP
+
+  services.xserver.videoDrivers = [ "intel" ];
 }
