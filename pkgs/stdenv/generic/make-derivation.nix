@@ -60,6 +60,7 @@ rec {
           then builtins.unsafeGetAttrPos "description" attrs.meta
           else builtins.unsafeGetAttrPos "name" attrs)
     , separateDebugInfo ? false
+    , outputHash ? null
     , outputs ? [ "out" ]
     , __impureHostDeps ? []
     , __propagatedImpureHostDeps ? []
@@ -143,12 +144,19 @@ rec {
               (lib.concatLists propagatedDependencies));
         in
         {
-          # A hack to make `nix-env -qa` and `nix search` ignore broken packages.
-          # TODO(@oxij): remove this assert when something like NixOS/nix#1771 gets merged into nix.
-          name = assert validity.handled; name + lib.optionalString
-            (stdenv.hostPlatform != stdenv.buildPlatform)
-            ("-" + stdenv.hostPlatform.config);
-
+          name =
+            let
+              # Fixed-output derivations like source tarballs shouldn't get a
+              # host suffix. See #32986.
+              isHostSensitive =
+                stdenv.hostPlatform != stdenv.buildPlatform &&
+                (builtins.length buildInputs != 0 ||
+                 builtins.length propagatedBuildInputs != 0) &&
+                 outputHash == null;
+              hostSuffix =
+                lib.optionalString isHostSensitive ("-" + stdenv.hostPlatform.config);
+            in
+              assert validity.handled; name + hostSuffix;
           builder = attrs.realBuilder or stdenv.shell;
           args = attrs.args or ["-e" (attrs.builder or ./default-builder.sh)];
           inherit stdenv;
