@@ -8955,8 +8955,6 @@ with pkgs;
     in
       recurseIntoAttrs (makeOverridable mkFrameworks attrs);
 
-  kdelibs4 = kdeApplications.kdelibs;
-
   keybinder = callPackage ../development/libraries/keybinder {
     automake = automake111x;
     lua = lua5_1;
