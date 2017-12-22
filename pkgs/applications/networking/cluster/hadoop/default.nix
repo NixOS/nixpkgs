@@ -72,13 +72,18 @@ let
         nativeBuildInputs = [ makeWrapper ];
 
         installPhase = ''
-          mkdir -p $out/share/doc/hadoop/
+          mkdir -p $out/share/doc/hadoop
           cp -dpR * $out/
           mv $out/*.txt $out/share/doc/hadoop/
 
+          #
+          # Do not use `wrapProgram` here, script renaming may result to weird things: http://i.imgur.com/0Xee013.png
+          #
+          mkdir -p $out/bin.wrapped
           for n in $out/bin/*; do
             if [ -f "$n" ]; then # only regular files
-              wrapProgram "$n" \
+              mv $n $out/bin.wrapped/
+              makeWrapper $out/bin.wrapped/$(basename $n) $n \
                 --prefix PATH : "${stdenv.lib.makeBinPath [ which jre bash coreutils ]}" \
                 --prefix JAVA_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ openssl snappy zlib bzip2 ]}" \
                 --set JAVA_HOME "${jre}" \
