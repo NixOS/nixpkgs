@@ -1,0 +1,12 @@
+diff --git a/config/speechd.conf b/config/speechd.conf
+index 140de3a..5fdfc32 100644
+--- a/config/speechd.conf
++++ b/config/speechd.conf
+@@ -212,6 +212,7 @@ DefaultVolume 100
+ 
+ #AddModule "espeak"       "sd_espeak"   "espeak.conf"
+ #AddModule "espeak-ng"    "sd_espeak-ng" "espeak-ng.conf"
++AddModule "rhvoice"      "sd_rhvoice"   "RHVoice.conf"
+ #AddModule "festival"     "sd_festival"  "festival.conf"
+ #AddModule "flite"        "sd_flite"     "flite.conf"
+ #AddModule "ivona"	 "sd_ivona"    "ivona.conf"

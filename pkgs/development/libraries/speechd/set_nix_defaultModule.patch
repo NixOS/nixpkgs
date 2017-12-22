@@ -1,0 +1,18 @@
+diff --git a/config/speechd.conf b/config/speechd.conf
+index 140de3a..5fdfc32 100644
+--- a/config/speechd.conf
++++ b/config/speechd.conf
+@@ -240,12 +241,12 @@ DefaultVolume 100
+ # The DefaultModule selects which output module is the default.  You
+ # must use one of the names of the modules loaded with AddModule.
+ 
+-DefaultModule espeak
++DefaultModule nixDefault
+ 
+ # The LanguageDefaultModule selects which output modules are prefered
+ # for specified languages.
+ 
+-#LanguageDefaultModule "en"  "espeak"
++#LanguageDefaultModule "en"  "nixDefault"
+ #LanguageDefaultModule "cs"  "festival"
+ #LanguageDefaultModule "es"  "festival"

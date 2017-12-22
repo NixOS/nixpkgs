@@ -9,7 +9,8 @@
 # , withFestival ? false, festival-freebsoft-utils
 , withEspeak ? true, espeak, sonic, pcaudiolib
 , withPico ? true, svox
-# , withIvona ? false, libdumbtts
+#, withIvona ? false # TODO: , libdumbtts
+, withRhvoice ? true, rhvoice
 }:
 
 let
@@ -24,6 +25,8 @@ let
       "pico"
     else if withFlite then
       "flite"
+    else if withRhvoice then
+      "rhvoice"
     else
       throw "You need to enable at least one output module.";
 in stdenv.mkDerivation rec {
@@ -41,6 +44,7 @@ in stdenv.mkDerivation rec {
     ++ optionals withEspeak [ espeak sonic pcaudiolib ]
     ++ optional withFlite flite
     ++ optional withPico svox
+    ++ optional withRhvoice rhvoice
     # TODO: add flint/festival support with festival-freebsoft-utils package
     # ++ optional withFestival festival-freebsoft-utils
     # TODO: add Ivona support with libdumbtts package
@@ -62,9 +66,15 @@ in stdenv.mkDerivation rec {
     # ++ optional withIvona "--with-ivona"
   ;
 
+  patches = [ ./add_rhvoice_module.patch ./set_nix_defaultModule.patch ];
+
   postPatch = ''
-    substituteInPlace config/speechd.conf --replace "DefaultModule espeak" "DefaultModule ${selectedDefaultModule}"
+    substituteInPlace config/speechd.conf --replace "nixDefault" "${selectedDefaultModule}"
+    substituteInPlace config/speechd.conf --replace "sd_rhvoice" "${rhvoice}/bin/sd_rhvoice"
+    substituteInPlace config/speechd.conf --replace "RHVoice.conf" "${rhvoice}/etc/RHVoice/RHVoice.conf"
+    ${stdenv.lib.optionalString withPico ''
     substituteInPlace src/modules/pico.c --replace "/usr/share/pico/lang" "${svox}/share/pico/lang"
+    ''}
   '';
 
   postInstall = ''
