@@ -41,7 +41,6 @@ buildPythonApplication rec {
     homepage = https://docs.docker.com/compose/;
     description = "Multi-container orchestration for Docker";
     license = licenses.asl20;
-    platforms = platforms.linux;
     maintainers = with maintainers; [
       jgeerds
     ];
